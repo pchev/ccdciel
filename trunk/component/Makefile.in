@@ -1,0 +1,60 @@
+#   File generated automatically by Lazarus Package Manager
+#
+#   Makefile.fpc for components 0.0
+#
+#   This file was generated on 8-10-08
+
+[package]
+name=components
+version=0.0
+
+[target]
+dirs=synapse/source/lib \
+     indiclient
+units=components.pas
+
+[compiler]
+unittargetdir=lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)
+unitdir=indiclient/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)/ synapse/source/lib/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)/ $(LAZDIR)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/ $(LAZDIR)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM)/ $(LAZDIR)/components/lazutils/lib/$(CPU_TARGET)-$(OS_TARGET)  $(LAZDIR)/packager/units/$(CPU_TARGET)-$(OS_TARGET)/ ./
+includedir=./
+options=  $(fpcopts) -dUseCThreads -dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Sgi
+
+[clean]
+files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*$(PPUEXT)) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*$(RSTEXT)) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*.compiled) \
+      $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
+
+[prerules]
+LAZDIR=%LAZDIR%
+# Compiler options
+ifndef fpcopts 
+fpcopts=-O3 -OoREGVAR -Ch524288 -CX -XX -Xs 
+endif
+# LCL Platform
+ifndef LCL_PLATFORM
+ifeq ($(OS_TARGET),win32)
+LCL_PLATFORM=win32
+else
+ifeq ($(OS_TARGET),win64)
+LCL_PLATFORM=win32
+else
+ifeq ($(OS_TARGET),darwin)
+LCL_PLATFORM=carbon
+else
+LCL_PLATFORM=gtk2
+endif
+endif
+endif
+endif
+export LCL_PLATFORM
+
+[rules]
+.PHONY: all
+
+outdir:
+	mkdir -p lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)
+
+all: outdir synapse/source/lib_all indiclient_all components$(PPUEXT)
+

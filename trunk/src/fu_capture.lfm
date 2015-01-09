@@ -1,0 +1,234 @@
+object f_capture: Tf_capture
+  Left = 0
+  Height = 161
+  Top = 0
+  Width = 113
+  AutoSize = True
+  ChildSizing.ControlsPerLine = 1
+  ClientHeight = 161
+  ClientWidth = 113
+  OnEndDrag = FrameEndDrag
+  OnResize = FrameResize
+  TabOrder = 0
+  DesignLeft = 203
+  DesignTop = 87
+  object Panel1: TPanel
+    Left = 0
+    Height = 141
+    Top = 20
+    Width = 113
+    Align = alClient
+    AutoSize = True
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 141
+    ClientWidth = 113
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 0
+      Height = 22
+      Top = 0
+      Width = 106
+      Caption = ' '
+      ClientHeight = 22
+      ClientWidth = 106
+      TabOrder = 1
+      object ExpTime: TComboBox
+        Left = 40
+        Height = 21
+        Hint = 'Exposure time in secondes'
+        Top = 0
+        Width = 65
+        Color = clBlack
+        Font.Color = clRed
+        ItemHeight = 0
+        ItemIndex = 5
+        Items.Strings = (
+          '0.01'
+          '0.05'
+          '0.1'
+          '0.2'
+          '0.5'
+          '1'
+          '2'
+          '5'
+          '10'
+          '30'
+          '60'
+          '120'
+          '240'
+          '300'
+          '600'
+        )
+        ParentFont = False
+        TabOrder = 0
+        Text = '1'
+      end
+      object Label1: TLabel
+        Left = 2
+        Height = 15
+        Top = 4
+        Width = 20
+        Caption = 'Exp'
+        ParentColor = False
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 22
+      Top = 22
+      Width = 106
+      Caption = ' '
+      ClientHeight = 22
+      ClientWidth = 106
+      TabOrder = 2
+      object Binning: TComboBox
+        Left = 40
+        Height = 21
+        Hint = 'Camera binning'
+        Top = 0
+        Width = 65
+        Color = clBlack
+        Font.Color = clRed
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          '1x1'
+        )
+        ParentFont = False
+        TabOrder = 0
+        Text = '1x1'
+      end
+      object Label2: TLabel
+        Left = 2
+        Height = 15
+        Top = 4
+        Width = 21
+        Caption = 'Bin.'
+        ParentColor = False
+      end
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 22
+      Top = 44
+      Width = 106
+      Caption = ' '
+      ClientHeight = 22
+      ClientWidth = 106
+      TabOrder = 3
+      object Fname: TEdit
+        Left = 40
+        Height = 21
+        Hint = 'Name of the files saved for this sequence'
+        Top = 0
+        Width = 65
+        Color = clBlack
+        Font.Color = clRed
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Label3: TLabel
+        Left = 2
+        Height = 15
+        Top = 4
+        Width = 33
+        Caption = 'Name'
+        ParentColor = False
+      end
+    end
+    object Panel5: TPanel
+      Left = 0
+      Height = 22
+      Top = 66
+      Width = 106
+      Caption = ' '
+      ClientHeight = 22
+      ClientWidth = 106
+      TabOrder = 4
+      object SeqNum: TEdit
+        Left = 40
+        Height = 21
+        Hint = 'Number of exposure in this sequence'
+        Top = 0
+        Width = 65
+        Color = clBlack
+        Font.Color = clRed
+        ParentFont = False
+        TabOrder = 0
+        Text = '1'
+      end
+      object Label4: TLabel
+        Left = 2
+        Height = 15
+        Top = 4
+        Width = 35
+        Caption = 'Count'
+        ParentColor = False
+      end
+    end
+    object Panel6: TPanel
+      Left = 0
+      Height = 22
+      Top = 88
+      Width = 106
+      ClientHeight = 22
+      ClientWidth = 106
+      TabOrder = 5
+      object Label5: TLabel
+        Left = 2
+        Height = 15
+        Top = 4
+        Width = 26
+        Caption = 'Type'
+        ParentColor = False
+      end
+      object FrameType: TComboBox
+        Left = 40
+        Height = 21
+        Top = 0
+        Width = 65
+        Color = clBlack
+        Font.Color = clRed
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'Light'
+          'Bias'
+          'Dark'
+          'Flat'
+        )
+        ParentFont = False
+        TabOrder = 0
+        Text = 'Light'
+      end
+    end
+    object BtnStart: TButton
+      Left = 0
+      Height = 24
+      Hint = 'Start the capture sequence'
+      Top = 110
+      Width = 106
+      Caption = 'Start'
+      OnClick = BtnStartClick
+      ParentFont = False
+      TabOrder = 0
+    end
+  end
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 113
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Capture'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    OnStartDrag = StaticText1StartDrag
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 1
+  end
+end
