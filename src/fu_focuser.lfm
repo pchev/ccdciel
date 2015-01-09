@@ -1,0 +1,185 @@
+object f_focuser: Tf_focuser
+  Left = 0
+  Height = 92
+  Top = 0
+  Width = 114
+  AutoSize = True
+  ClientHeight = 92
+  ClientWidth = 114
+  TabOrder = 0
+  DesignLeft = 204
+  DesignTop = 94
+  object Panel1: TPanel
+    Left = 0
+    Height = 72
+    Top = 20
+    Width = 114
+    Align = alClient
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 72
+    ClientWidth = 114
+    TabOrder = 1
+    object PanelParam: TPanel
+      Left = 0
+      Height = 44
+      Top = 0
+      Width = 109
+      Caption = 'PanelParam'
+      ClientHeight = 44
+      ClientWidth = 109
+      TabOrder = 1
+      object PanelTimerMove: TPanel
+        Left = 0
+        Height = 42
+        Top = 0
+        Width = 108
+        BevelOuter = bvNone
+        ClientHeight = 42
+        ClientWidth = 108
+        TabOrder = 1
+        Visible = False
+        object Label3: TLabel
+          Left = 0
+          Height = 16
+          Top = 5
+          Width = 39
+          Caption = 'Speed'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          Left = 2
+          Height = 16
+          Top = 24
+          Width = 34
+          Caption = 'Timer'
+          ParentColor = False
+        end
+        object speed: TEdit
+          Left = 46
+          Height = 22
+          Top = 0
+          Width = 60
+          Color = clBlack
+          Font.Color = clRed
+          ParentFont = False
+          TabOrder = 0
+        end
+        object timer: TEdit
+          Left = 46
+          Height = 22
+          Top = 22
+          Width = 60
+          Color = clBlack
+          Font.Color = clRed
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object PanelAbsPos: TPanel
+        Left = 0
+        Height = 43
+        Top = 0
+        Width = 107
+        BevelOuter = bvNone
+        ClientHeight = 43
+        ClientWidth = 107
+        TabOrder = 0
+        object Position: TEdit
+          Left = 46
+          Height = 22
+          Hint = 'Current focuser position'
+          Top = 0
+          Width = 65
+          Color = clBlack
+          Font.Color = clRed
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Label1: TLabel
+          Left = 2
+          Height = 16
+          Top = 5
+          Width = 25
+          Caption = 'Pos.'
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 2
+          Height = 16
+          Top = 24
+          Width = 29
+          Caption = 'Step'
+          ParentColor = False
+        end
+        object PosIncr: TComboBox
+          Left = 46
+          Height = 22
+          Hint = 'Increment step for the inward or outward movement'
+          Top = 22
+          Width = 65
+          Color = clBlack
+          Font.Color = clRed
+          ItemHeight = 0
+          ItemIndex = 4
+          Items.Strings = (
+            '1000'
+            '2000'
+            '3000'
+            '4000'
+            '5000'
+            '10000'
+          )
+          ParentFont = False
+          TabOrder = 1
+          Text = '5000'
+        end
+      end
+    end
+    object PanelBtn: TPanel
+      Left = 0
+      Height = 26
+      Top = 44
+      Width = 109
+      ClientHeight = 26
+      ClientWidth = 109
+      TabOrder = 0
+      object BtnDown: TButton
+        Left = 8
+        Height = 25
+        Hint = 'Move focuser inward'
+        Top = 0
+        Width = 35
+        Caption = '<'
+        OnClick = BtnDownClick
+        TabOrder = 0
+      end
+      object BtnUp: TButton
+        Left = 64
+        Height = 25
+        Hint = 'Move focuser outward'
+        Top = 0
+        Width = 35
+        Caption = '>'
+        OnClick = BtnUpClick
+        TabOrder = 1
+      end
+    end
+  end
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 114
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Focuser'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    OnStartDrag = StaticText1StartDrag
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+end

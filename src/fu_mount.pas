@@ -1,0 +1,63 @@
+unit fu_mount;
+
+{$mode objfpc}{$H+}
+
+{
+Copyright (C) 2015 Patrick Chevalley
+
+http://www.ap-i.net
+pch@ap-i.net
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+
+interface
+
+uses
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+
+type
+
+  { Tf_mount }
+
+  Tf_mount = class(TFrame)
+    Label1: TLabel;
+    Label2: TLabel;
+    RA: TEdit;
+    DE: TEdit;
+    Panel1: TPanel;
+    StaticText1: TStaticText;
+    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
+      );
+  private
+    { private declarations }
+  public
+    { public declarations }
+  end;
+
+implementation
+
+{$R *.lfm}
+
+{ Tf_mount }
+
+procedure Tf_mount.StaticText1StartDrag(Sender: TObject;
+  var DragObject: TDragObject);
+begin
+  DragObject := TDragObject.Create(self as TControl);
+end;
+
+
+end.
+

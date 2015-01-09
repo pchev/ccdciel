@@ -1,0 +1,290 @@
+object f_main: Tf_main
+  Left = 202
+  Height = 373
+  Top = 192
+  Width = 800
+  ActiveControl = PanelTop
+  Caption = 'CCD Ciel'
+  ClientHeight = 353
+  ClientWidth = 800
+  Menu = MainMenu1
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  ShowHint = True
+  LCLVersion = '1.3'
+  object PanelTop: TPanel
+    Left = 0
+    Height = 2
+    Top = 0
+    Width = 800
+    Align = alTop
+    AutoSize = True
+    ChildSizing.LeftRightSpacing = 3
+    ChildSizing.TopBottomSpacing = 3
+    ChildSizing.HorizontalSpacing = 3
+    ChildSizing.VerticalSpacing = 3
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 99
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 0
+    OnDragDrop = PanelDragDrop
+    OnDragOver = PanelDragOver
+  end
+  object PanelLeft: TPanel
+    Tag = 1
+    Left = 0
+    Height = 331
+    Top = 2
+    Width = 2
+    Align = alLeft
+    AutoSize = True
+    ChildSizing.LeftRightSpacing = 3
+    ChildSizing.TopBottomSpacing = 3
+    ChildSizing.HorizontalSpacing = 3
+    ChildSizing.VerticalSpacing = 3
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 1
+    OnDragDrop = PanelDragDrop
+    OnDragOver = PanelDragOver
+  end
+  object PanelRight: TPanel
+    Tag = 1
+    Left = 794
+    Height = 331
+    Top = 2
+    Width = 6
+    Align = alRight
+    AutoSize = True
+    BevelWidth = 3
+    ChildSizing.LeftRightSpacing = 3
+    ChildSizing.TopBottomSpacing = 3
+    ChildSizing.HorizontalSpacing = 3
+    ChildSizing.VerticalSpacing = 3
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 2
+    OnDragDrop = PanelDragDrop
+    OnDragOver = PanelDragOver
+  end
+  object PanelCenter: TPanel
+    Left = 2
+    Height = 331
+    Top = 2
+    Width = 792
+    Align = alClient
+    AutoSize = True
+    ClientHeight = 331
+    ClientWidth = 792
+    Color = 4197901
+    ParentColor = False
+    TabOrder = 3
+    object Image1: TImage
+      Cursor = crCross
+      Left = 1
+      Height = 329
+      Top = 1
+      Width = 790
+      Align = alClient
+      OnDblClick = Image1DblClick
+      OnMouseDown = Image1MouseDown
+      OnMouseMove = Image1MouseMove
+      OnMouseUp = Image1MouseUp
+      OnPaint = Image1Paint
+      OnResize = Image1Resize
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 20
+    Top = 333
+    Width = 800
+    Panels = <    
+      item
+        Width = 100
+      end    
+      item
+        Width = 150
+      end    
+      item
+        Width = 600
+      end>
+    SimplePanel = False
+  end
+  object MainMenu1: TMainMenu
+    left = 178
+    top = 147
+    object MenuItem1: TMenuItem
+      Caption = 'File'
+      object MenuSetup: TMenuItem
+        Caption = 'Devices Setup...'
+        OnClick = MenuSetupClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object MenuOpen: TMenuItem
+        Caption = 'Open FITS file...'
+        OnClick = MenuOpenClick
+      end
+      object MenuSave: TMenuItem
+        Caption = 'Save FITS file...'
+        OnClick = MenuSaveClick
+      end
+      object N6: TMenuItem
+        Caption = '-'
+      end
+      object MenuQuit: TMenuItem
+        Caption = 'Quit'
+        OnClick = MenuQuitClick
+      end
+    end
+    object MenuItem2: TMenuItem
+      Caption = 'Edit'
+      object MenuOptions: TMenuItem
+        Caption = 'Preferences...'
+        OnClick = MenuOptionsClick
+      end
+      object MenuFilterName: TMenuItem
+        Caption = 'Change filter names...'
+        OnClick = MenuFilterNameClick
+      end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object MenuIndiSettings: TMenuItem
+        Caption = 'INDI settings'
+        OnClick = MenuIndiSettingsClick
+      end
+      object MenuAscomSettings: TMenuItem
+        Caption = 'ASCOM settings'
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object MenuViewhdr: TMenuItem
+        Caption = 'View header'
+        OnClick = MenuViewhdrClick
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+    end
+    object MenuItem4: TMenuItem
+      Caption = 'Tools'
+      object MenuViewConnection: TMenuItem
+        AutoCheck = True
+        Caption = 'Connection'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewConnectionClick
+      end
+      object MenuViewPreview: TMenuItem
+        AutoCheck = True
+        Caption = 'Preview'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewPreviewClick
+      end
+      object MenuViewCapture: TMenuItem
+        AutoCheck = True
+        Caption = 'Capture'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewCaptureClick
+      end
+      object MenuViewFrame: TMenuItem
+        AutoCheck = True
+        Caption = 'Frame'
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewFrameClick
+      end
+      object MenuViewHistogram: TMenuItem
+        AutoCheck = True
+        Caption = 'Visualisation'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewHistogramClick
+      end
+      object MenuViewStarProfile: TMenuItem
+        AutoCheck = True
+        Caption = 'Star profile'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewStarProfileClick
+      end
+      object MenuViewFocuser: TMenuItem
+        AutoCheck = True
+        Caption = 'Focuser'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewFocuserClick
+      end
+      object MenuViewFilters: TMenuItem
+        AutoCheck = True
+        Caption = 'Filters'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewFiltersClick
+      end
+      object MenuViewCCDtemp: TMenuItem
+        Caption = 'CCD Temperature'
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewCCDtempClick
+      end
+      object MenuViewMount: TMenuItem
+        AutoCheck = True
+        Caption = 'Telescope mount'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewMountClick
+      end
+      object MenuViewMessages: TMenuItem
+        AutoCheck = True
+        Caption = 'Messages'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewMessagesClick
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object MenuResetTools: TMenuItem
+        Caption = 'Reset to default'
+        OnClick = MenuResetToolsClick
+      end
+    end
+    object MenuItem3: TMenuItem
+      Caption = 'Help'
+    end
+  end
+  object ConnectTimer: TTimer
+    Enabled = False
+    OnTimer = ConnectTimerTimer
+    left = 282
+    top = 147
+  end
+  object StatusbarTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = StatusbarTimerTimer
+    left = 416
+    top = 152
+  end
+  object OpenDialog1: TOpenDialog
+    left = 72
+    top = 234
+  end
+  object SaveDialog1: TSaveDialog
+    left = 184
+    top = 232
+  end
+end

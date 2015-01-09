@@ -1,0 +1,84 @@
+unit u_global;
+
+{$mode objfpc}{$H+}
+
+{
+Copyright (C) 2015 Patrick Chevalley
+
+http://www.ap-i.net
+pch@ap-i.net
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+
+interface
+
+uses XMLConf, DOM,
+  Classes, SysUtils;
+
+type
+  TNotifyMsg = procedure(msg:string) of object;
+  TNotifyNum = procedure(d: double) of object;
+  TDeviceStatus = (devDisconnected, devConnecting, devConnected);
+
+  TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
+  TFrameType =(LIGHT, BIAS, DARK, FLAT);
+
+  TNumRange = record
+               min,max,step: double;
+              end;
+
+  TCCDconfig = class(TXMLConfig)
+     function  GetValue(const APath: String; const ADefault: String): String; overload;
+     procedure SetValue(const APath: String; const AValue: String); overload;
+  end;
+
+const
+  blank=' ';
+  clOrange=$1080EF;
+  clDarkBlue=$300D0E;
+  CR = #$0d;
+  LF = #$0a;
+  CRLF = CR + LF;
+  secperday = 3600*24;
+  {$ifdef mswindows}
+  defCapturePath='C:\';
+  {$else}
+  defCapturePath='/tmp';
+  {$endif}
+  UnitRange:TNumRange = (min:1;max:1;step:1);
+  NullRange:TNumRange = (min:0;max:0;step:0);
+  dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
+  f0 = '0';
+  f1 = '0.0';
+  b80 ='                                                                                ';
+
+
+var
+  config: TCCDConfig;
+
+implementation
+
+function  TCCDconfig.GetValue(const APath: String; const ADefault: String): String;
+begin
+   Result:=string(GetValue(DOMString(APath),DOMString(ADefault)));
+end;
+
+procedure TCCDconfig.SetValue(const APath: String; const AValue: String);
+begin
+  SetValue(DOMString(APath),DOMString(AValue))
+end;
+
+end.
+

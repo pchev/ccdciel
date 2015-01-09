@@ -1,0 +1,34 @@
+#
+#   Makefile.fpc for CCDciel
+#
+
+[package]
+name=ccdciel
+version=0
+
+[target]
+dirs=component src
+
+[require]
+libc=y
+packages=rtl
+
+[prerules]
+PREFIX=%PREFIX%
+
+[rules]
+.PHONY: all
+
+all: component_all src_all
+
+ifeq ($(OS_TARGET),darwin)
+install: 
+	./install_darwin.sh $(PREFIX)
+else
+install: 
+	./install.sh $(PREFIX) $(CPU_TARGET)
+install_win: 
+	./install_win.sh win32 $(PREFIX)
+revision:
+	\$(MAKE) -C src revision
+endif
