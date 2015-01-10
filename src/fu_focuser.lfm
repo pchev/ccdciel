@@ -1,24 +1,24 @@
 object f_focuser: Tf_focuser
   Left = 0
-  Height = 92
+  Height = 103
   Top = 0
-  Width = 114
+  Width = 116
   AutoSize = True
-  ClientHeight = 92
-  ClientWidth = 114
+  ClientHeight = 103
+  ClientWidth = 116
   TabOrder = 0
-  DesignLeft = 204
-  DesignTop = 94
+  DesignLeft = 238
+  DesignTop = 124
   object Panel1: TPanel
     Left = 0
-    Height = 72
+    Height = 83
     Top = 20
-    Width = 114
+    Width = 116
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 72
-    ClientWidth = 114
+    ClientHeight = 83
+    ClientWidth = 116
     TabOrder = 1
     object PanelParam: TPanel
       Left = 0
@@ -43,7 +43,7 @@ object f_focuser: Tf_focuser
           Left = 0
           Height = 15
           Top = 5
-          Width = 34
+          Width = 32
           Caption = 'Speed'
           ParentColor = False
         end
@@ -51,13 +51,14 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 24
-          Width = 33
+          Width = 31
           Caption = 'Timer'
           ParentColor = False
         end
         object speed: TEdit
           Left = 46
-          Height = 21
+          Height = 23
+          Hint = 'Focus speed'
           Top = 0
           Width = 60
           Color = clBlack
@@ -67,7 +68,8 @@ object f_focuser: Tf_focuser
         end
         object timer: TEdit
           Left = 46
-          Height = 21
+          Height = 23
+          Hint = 'Focus movement duration'
           Top = 22
           Width = 60
           Color = clBlack
@@ -87,8 +89,8 @@ object f_focuser: Tf_focuser
         TabOrder = 0
         object Position: TEdit
           Left = 46
-          Height = 21
-          Hint = 'Current focuser position'
+          Height = 23
+          Hint = 'Current focuser absolute position'
           Top = 0
           Width = 65
           Color = clBlack
@@ -100,7 +102,7 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 5
-          Width = 23
+          Width = 22
           Caption = 'Pos.'
           ParentColor = False
         end
@@ -108,19 +110,19 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 24
-          Width = 26
+          Width = 23
           Caption = 'Step'
           ParentColor = False
         end
         object PosIncr: TComboBox
           Left = 46
-          Height = 21
+          Height = 23
           Hint = 'Increment step for the inward or outward movement'
           Top = 22
           Width = 65
           Color = clBlack
           Font.Color = clRed
-          ItemHeight = 0
+          ItemHeight = 15
           ItemIndex = 4
           Items.Strings = (
             '1000'
@@ -132,6 +134,46 @@ object f_focuser: Tf_focuser
           )
           ParentFont = False
           TabOrder = 1
+          Text = '5000'
+        end
+      end
+      object PanelRelPos: TPanel
+        Left = 0
+        Height = 43
+        Top = 0
+        Width = 107
+        BevelOuter = bvNone
+        ClientHeight = 43
+        ClientWidth = 107
+        TabOrder = 2
+        object Label6: TLabel
+          Left = 2
+          Height = 15
+          Top = 10
+          Width = 23
+          Caption = 'Incr.'
+          ParentColor = False
+        end
+        object RelIncr: TComboBox
+          Left = 46
+          Height = 23
+          Hint = 'Relative increment for the inward or outward movement'
+          Top = 8
+          Width = 65
+          Color = clBlack
+          Font.Color = clRed
+          ItemHeight = 15
+          ItemIndex = 4
+          Items.Strings = (
+            '1000'
+            '2000'
+            '3000'
+            '4000'
+            '5000'
+            '10000'
+          )
+          ParentFont = False
+          TabOrder = 0
           Text = '5000'
         end
       end
@@ -170,7 +212,7 @@ object f_focuser: Tf_focuser
     Left = 0
     Height = 20
     Top = 0
-    Width = 114
+    Width = 116
     Align = alTop
     Alignment = taCenter
     Caption = 'Focuser'

@@ -34,7 +34,10 @@ type
   Tf_focuser = class(TFrame)
     BtnDown: TButton;
     BtnUp: TButton;
+    Label6: TLabel;
+    PanelRelPos: TPanel;
     PanelParam: TPanel;
+    RelIncr: TComboBox;
     speed: TEdit;
     timer: TEdit;
     Label1: TLabel;

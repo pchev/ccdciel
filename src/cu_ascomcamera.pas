@@ -338,7 +338,7 @@ end;
 Procedure T_ascomcamera.SetBinning(binX,binY: integer);
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    V.BinX:=binX;
    V.BinY:=binY;
@@ -352,7 +352,7 @@ end;
 procedure T_ascomcamera.SetFrame(x,y,width,height: integer);
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    V.StartX:=x;
    V.StartY:=y;
@@ -368,7 +368,7 @@ end;
 procedure T_ascomcamera.GetFrame(out x,y,width,height: integer);
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    x      := V.StartX;
    y      := V.StartY;
@@ -385,7 +385,7 @@ procedure T_ascomcamera.GetFrameRange(out xr,yr,widthr,heightr: TNumRange);
 begin
  xr:=NullRange;yr:=NullRange;widthr:=NullRange;heightr:=NullRange;
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    xr.min:=0;
    xr.max:=V.CameraXSize-1;
@@ -412,7 +412,7 @@ var w,h: integer;
 {$endif}
 begin
 {$ifdef mswindows}
-if not VarIsEmpty(V) then begin
+if Connected then begin
   try
   w:=V.CameraXSize;
   h:=V.CameraYSize;
@@ -428,7 +428,7 @@ end;
 Procedure T_ascomcamera.AbortExposure;
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
     V.AbortExposure;
    except
@@ -452,7 +452,7 @@ function T_ascomcamera.GetBinX:integer;
 begin
  result:=1;
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    result:=V.BinX;
    except
@@ -466,7 +466,7 @@ function T_ascomcamera.GetBinY:integer;
 begin
  result:=1;
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    result:=V.BinY;
    except
@@ -490,7 +490,7 @@ function T_ascomcamera.GetBinXrange:TNumRange;
 begin
  result:=UnitRange;
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    result.max:=V.MaxBinX;
    except
@@ -504,7 +504,7 @@ function T_ascomcamera.GetBinYrange:TNumRange;
 begin
  result:=UnitRange;
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    result.max:=V.MaxBinY;
    except
@@ -518,7 +518,7 @@ function T_ascomcamera.GetExposureRange:TNumRange;
 begin
   result:=NullRange;
   {$ifdef mswindows}
-  if not VarIsEmpty(V) then begin
+  if Connected then begin
     try
     result.max:=V.ExposureMax;
     result.min:=V.ExposureMin;
@@ -541,7 +541,7 @@ end;
 procedure T_ascomcamera.SetFilter(num:integer);
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    V.Position:=num-1;
    except
@@ -554,7 +554,7 @@ end;
 function  T_ascomcamera.GetFilter:integer;
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    result:=V.Position+1;
    except
@@ -579,7 +579,7 @@ end;
 function  T_ascomcamera.GetTemperature: double;
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    if V.CanSetCCDTemperature then
       result:=V.CCDTemperature
@@ -595,7 +595,7 @@ end;
 procedure T_ascomcamera.SetTemperature(value:double);
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    if V.CanSetCCDTemperature then begin
       V.CoolerOn:=true;
@@ -607,7 +607,6 @@ begin
  end;
  {$endif}
 end;
-
 
 end.
 

@@ -66,11 +66,15 @@ T_indifocuser = class(TIndiBaseClient)
    procedure ServerDisconnected(Sender: TObject);
    procedure SetPosition(p:integer);
    function  GetPosition:integer;
+   procedure SetRelPosition(p:integer);
+   function  GetRelPosition:integer;
    procedure SetSpeed(p:integer);
    function  GetSpeed:integer;
    procedure SetTimer(p:integer);
    function  GetTimer:integer;
    function  GethasAbsolutePosition: boolean;
+   function  GethasRelativePosition: boolean;
+   function  GethasTimerSpeed: boolean;
    procedure msg(txt: string);
  public
    constructor Create;
@@ -84,7 +88,10 @@ T_indifocuser = class(TIndiBaseClient)
    property indidevice: string read Findidevice write Findidevice;
    property indideviceport: string read Findideviceport write Findideviceport;
    property hasAbsolutePosition: boolean read GethasAbsolutePosition;
+   property hasRelativePosition: boolean read GethasRelativePosition;
+   property hasTimerSpeed: boolean read GethasTimerSpeed;
    property Position: integer read GetPosition write SetPosition;
+   property RelPosition: integer read GetRelPosition write SetRelPosition;
    property Speed: integer read GetSpeed write SetSpeed;
    property Timer: integer read GetTimer write SetTimer;
    property Status: TDeviceStatus read FStatus;
@@ -281,6 +288,9 @@ begin
   if nvp=FocusAbsolutePosition then begin
      if Assigned(FonPositionChange) then FonPositionChange(nvp.np[0].value);
   end
+  else if (FocusAbsolutePosition=nil)and(nvp=FocusRelativePosition) then begin
+     if Assigned(FonPositionChange) then FonPositionChange(nvp.np[0].value);
+  end
   else if nvp=FocusSpeed then begin
      if Assigned(FonSpeedChange) then FonSpeedChange(nvp.np[0].value);
   end
@@ -320,6 +330,24 @@ if FocusAbsolutePosition<>nil then begin;
 end
 else result:=0;
 end;
+
+procedure T_indifocuser.SetRelPosition(p:integer);
+begin
+if FocusRelativePosition<>nil then begin
+  FocusRelativePosition.np[0].value:=p;
+  sendNewNumber(FocusRelativePosition);
+  WaitBusy(FocusRelativePosition);
+end;
+end;
+
+function  T_indifocuser.GetRelPosition:integer;
+begin
+if FocusRelativePosition<>nil then begin;
+  result:=round(FocusRelativePosition.np[0].value);
+end
+else result:=0;
+end;
+
 
 procedure T_indifocuser.SetSpeed(p:integer);
 begin
@@ -378,6 +406,16 @@ end;
 function  T_indifocuser.GethasAbsolutePosition: boolean;
 begin
  result:=FocusAbsolutePosition<>nil;
+end;
+
+function  T_indifocuser.GethasRelativePosition: boolean;
+begin
+  result:=FocusRelativePosition<>nil;
+end;
+
+function  T_indifocuser.GethasTimerSpeed: boolean;
+begin
+  result:=(FocusSpeed<>nil)and(FocusTimer<>nil);
 end;
 
 end.

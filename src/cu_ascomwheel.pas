@@ -177,7 +177,7 @@ end;
 procedure T_ascomwheel.SetFilter(num:integer);
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    V.Position:=num-1;
    except
@@ -190,7 +190,7 @@ end;
 function  T_ascomwheel.GetFilter:integer;
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    result:=V.Position+1;
    except
@@ -217,7 +217,7 @@ var fnames: array of WideString;
     i: integer;
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if Connected then begin
    try
    fnames:=V.Names;
    n:=Length(fnames);

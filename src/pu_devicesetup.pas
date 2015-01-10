@@ -39,12 +39,20 @@ type
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
+    BtnAboutCamera1: TButton;
+    BtnAboutCamera2: TButton;
+    BtnAboutCamera3: TButton;
+    BtnSetupCamera1: TButton;
+    BtnSetupCamera2: TButton;
+    BtnSetupCamera3: TButton;
     Button1: TButton;
     BtnChooseCamera: TButton;
+    BtnSetupCamera: TButton;
     Button3: TButton;
     BtnChooseFilter: TButton;
     BtnChooseFocuser: TButton;
     BtnChooseMount: TButton;
+    BtnAboutCamera: TButton;
     IndiSensor: TComboBox;
     FilterWheelInCameraBox: TCheckBox;
     FocuserInMountBox: TCheckBox;
@@ -97,7 +105,11 @@ type
     IndiTimer: TTimer;
     Camera: TTabSheet;
     Filterwheel: TTabSheet;
+    procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
+    procedure BtnSetupAscomClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
     procedure FilterWheelInCameraBoxClick(Sender: TObject);
     procedure FocuserInMountBoxClick(Sender: TObject);
@@ -110,7 +122,7 @@ type
     { private declarations }
     indiclient: TIndiBaseClient;
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,FCameraSensor: string;
-    FRestartRequired, LockInterfaceChange: boolean;
+    FRestartRequired, LockInterfaceChange,InitialLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection: TDevInterface;
     procedure IndiNewDevice(dp: Basedevice);
     procedure SetConnectionInterface(value: TDevInterface);
@@ -144,6 +156,7 @@ procedure Tf_setup.FormCreate(Sender: TObject);
 begin
   FRestartRequired:=false;
   LockInterfaceChange:=false;
+  InitialLock:=true;
   Pagecontrol1.ActivePage:=DeviceInterface;
 end;
 
@@ -159,7 +172,7 @@ begin
     exit;
   end;
   if InterfaceSelectionBox.ItemIndex=0 then begin
-     if sender<>nil then FRestartRequired:=true;
+     if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
      FConnectionInterface:=INDI;
      PanelIndiServer.Visible:=true;
      FCameraConnection:=INDI;
@@ -185,7 +198,7 @@ begin
  end;
 {$ifdef mswindows}
   if InterfaceSelectionBox.ItemIndex=1 then begin
-     if sender<>nil then FRestartRequired:=true;
+     if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
      FConnectionInterface:=ASCOM;
      PanelIndiServer.Visible:=false;
      FCameraConnection:=ASCOM;
@@ -295,7 +308,7 @@ end;
 
 procedure Tf_setup.FilterWheelInCameraBoxClick(Sender: TObject);
 begin
-  if sender<>nil then FRestartRequired:=true;
+  if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
   if FilterWheelInCameraBox.Checked then begin
     SetWheelConnection(INCAMERA);
   end else begin
@@ -305,7 +318,7 @@ end;
 
 procedure Tf_setup.FocuserInMountBoxClick(Sender: TObject);
 begin
-  if sender<>nil then FRestartRequired:=true;
+  if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
   if FocuserInMountBox.Checked then begin
     SetFocuserConnection(INTELESCOPE);
   end else begin
@@ -350,6 +363,70 @@ begin
     end;
   end;
 {$endif}
+end;
+
+procedure Tf_setup.BtnAboutAscomClick(Sender: TObject);
+{$ifdef mswindows}
+var buf : string;
+  V: variant;
+  t,dev: WideString;
+  err: string;
+{$endif}
+begin
+{$ifdef mswindows}
+  case TButton(Sender).Tag of
+    1 : begin t:='Camera'; dev:=AscomCamera.Text; end;
+    2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
+    3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
+    4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
+  end;
+
+  try
+    V := CreateOleObject(widestring(dev));
+    buf:=V.Description;
+    buf:=buf+crlf+V.DriverInfo;
+    V:=Unassigned;
+    ShowMessage(buf);
+  except
+    on E: EOleException do ShowMessage('Error : ' + E.Message);
+  end;
+{$endif}
+end;
+
+procedure Tf_setup.BtnSetupAscomClick(Sender: TObject);
+{$ifdef mswindows}
+var
+  V: variant;
+  t,dev: WideString;
+  err: string;
+{$endif}
+begin
+{$ifdef mswindows}
+  case TButton(Sender).Tag of
+    1 : begin t:='Camera'; dev:=AscomCamera.Text; end;
+    2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
+    3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
+    4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
+  end;
+
+  try
+    V := CreateOleObject(widestring(dev));
+    V.SetupDialog;
+    V:=Unassigned;
+  except
+    on E: EOleException do ShowMessage('Error : ' + E.Message);
+  end;
+{$endif}
+end;
+
+procedure Tf_setup.Button1Click(Sender: TObject);
+begin
+
+end;
+
+procedure Tf_setup.FormShow(Sender: TObject);
+begin
+  InitialLock:=false;
 end;
 
 procedure Tf_setup.IndiSensorChange(Sender: TObject);

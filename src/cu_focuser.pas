@@ -54,11 +54,15 @@ T_focuser = class(TObject)
     procedure SetonStatusChange(value: TNotifyEvent);
     function  GetPosition:integer;
     procedure SetPosition(p:integer);
+    function  GetRelPosition:integer;
+    procedure SetRelPosition(p:integer);
     procedure SetSpeed(p:integer);
     function  GetSpeed:integer;
     procedure SetTimer(p:integer);
     function  GetTimer:integer;
-    function GethasAbsolutePosition: boolean;
+    function  GethasAbsolutePosition: boolean;
+    function  GethasRelativePosition: boolean;
+    function  GethasTimerSpeed: boolean;
   public
     constructor Create(devinterface: TDevInterface);
     destructor  Destroy; override;
@@ -70,7 +74,10 @@ T_focuser = class(TObject)
     property FocuserInterface: TDevInterface read FFocuserInterface;
     property Status: TDeviceStatus read GetFocuserStatus;
     property hasAbsolutePosition: boolean read GethasAbsolutePosition;
+    property hasRelativePosition: boolean read GethasRelativePosition;
+    property hasTimerSpeed: boolean read GethasTimerSpeed;
     property Position: integer read GetPosition write SetPosition;
+    property RelPosition: integer read GetRelPosition write SetRelPosition;
     property Speed: integer read GetSpeed write SetSpeed;
     property Timer: integer read GetTimer write SetTimer;
     property onMsg: TNotifyMsg read GetonMsg write SetonMsg;
@@ -154,18 +161,6 @@ begin
  end;
 end;
 
-function  T_focuser.GetPosition:integer;
-begin
- case FFocuserInterface of
-    INDI : begin
-             if indiready then result:=indifocuser.Position;
-           end;
-    ASCOM: begin
-             result:=ascomfocuser.Position;
-           end;
- end;
-end;
-
 procedure T_focuser.FocusIn;
 begin
  case FFocuserInterface of
@@ -190,6 +185,18 @@ begin
  end;
 end;
 
+function  T_focuser.GetPosition:integer;
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then result:=indifocuser.Position;
+           end;
+    ASCOM: begin
+             result:=ascomfocuser.Position;
+           end;
+ end;
+end;
+
 procedure  T_focuser.SetPosition(p:integer);
 begin
  case FFocuserInterface of
@@ -198,6 +205,30 @@ begin
            end;
     ASCOM: begin
              ascomfocuser.Position:=p;
+           end;
+ end;
+end;
+
+function  T_focuser.GetRelPosition:integer;
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then result:=indifocuser.RelPosition;
+           end;
+    ASCOM: begin
+             result:=ascomfocuser.RelPosition;
+           end;
+ end;
+end;
+
+procedure  T_focuser.SetRelPosition(p:integer);
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then indifocuser.RelPosition:=p;
+           end;
+    ASCOM: begin
+             ascomfocuser.RelPosition:=p;
            end;
  end;
 end;
@@ -258,6 +289,30 @@ begin
            end;
     ASCOM: begin
              result:=ascomfocuser.hasAbsolutePosition;
+           end;
+ end;
+end;
+
+function  T_focuser.GethasRelativePosition: boolean;
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then result:=indifocuser.hasRelativePosition;
+           end;
+    ASCOM: begin
+             result:=ascomfocuser.hasRelativePosition;
+           end;
+ end;
+end;
+
+function  T_focuser.GethasTimerSpeed: boolean;
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then result:=indifocuser.hasTimerSpeed;
+           end;
+    ASCOM: begin
+             result:=ascomfocuser.hasTimerSpeed;
            end;
  end;
 end;

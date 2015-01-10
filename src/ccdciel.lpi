@@ -173,6 +173,7 @@
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_ascomfocuser"/>
       </Unit10>
       <Unit11>
         <Filename Value="cu_focuser.pas"/>
@@ -263,6 +264,7 @@
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
