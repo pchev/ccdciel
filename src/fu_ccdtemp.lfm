@@ -20,7 +20,6 @@ object f_ccdtemp: Tf_ccdtemp
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
-    OnStartDrag = StaticText1StartDrag
     ParentFont = False
     ParentColor = False
     TabOrder = 0

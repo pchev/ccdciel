@@ -50,7 +50,6 @@ type
     StaticText1: TStaticText;
     procedure BtnDownClick(Sender: TObject);
     procedure BtnUpClick(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject);
   private
     { private declarations }
     FonFocusIN, FonFocusOUT: TNotifyEvent;
@@ -65,12 +64,6 @@ implementation
 {$R *.lfm}
 
 { Tf_focuser }
-
-procedure Tf_focuser.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-  DragObject := TDragObject.Create(self as TControl);
-end;
 
 procedure Tf_focuser.BtnDownClick(Sender: TObject);
 begin

@@ -52,8 +52,6 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure graphDblClick(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     FFindStar: boolean;
@@ -82,17 +80,11 @@ implementation
 
 { Tf_starprofile }
 
-procedure Tf_starprofile.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-  DragObject := TDragObject.Create(self as TControl);
-end;
-
 procedure Tf_starprofile.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
 begin
  if Target is TPanel then begin
     if TPanel(Target).Width>TPanel(Target).Height then begin
-      Panel1.ChildSizing.ControlsPerLine:=2;
+       Panel1.ChildSizing.ControlsPerLine:=2;
        Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
     end else begin
         Panel1.ChildSizing.ControlsPerLine:=99;

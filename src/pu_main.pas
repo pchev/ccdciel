@@ -29,7 +29,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   pu_devicesetup, pu_options, pu_filtername, pu_indigui, cu_fits, cu_camera,
   cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   lazutf8sysutils, Classes, SysUtils, FileUtil, Forms, Controls,
-  Math, Graphics, Dialogs, ExtCtrls, Menus, ComCtrls;
+  Math, Graphics, Dialogs, StdCtrls, ExtCtrls, Menus, ComCtrls;
 
 type
 
@@ -1405,23 +1405,59 @@ end;
 procedure Tf_main.PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
 begin
 if sender is TPanel then begin
-  TFrame(TDragObject(Source).Control).Parent:=TPanel(Sender);
-  TFrame(TDragObject(Source).Control).Top:=Y;
-  TFrame(TDragObject(Source).Control).Left:=X;
-  if TPanel(Sender).Width>TPanel(Sender).Height then begin
-     TFrame(TDragObject(Source).Control).Align:=alLeft;
-  end else begin
-     TFrame(TDragObject(Source).Control).Align:=alTop;
-  end;
+  if sender is TPanel then begin
+    if source is TStaticText then begin
+     TFrame(TStaticText(Source).Parent).Parent:=TPanel(Sender);
+     TFrame(TStaticText(Source).Parent).Top:=Y;
+     TFrame(TStaticText(Source).Parent).Left:=X;
+     if TPanel(Sender).Width>TPanel(Sender).Height then begin
+        TFrame(TStaticText(Source).Parent).Align:=alLeft;
+     end else begin
+        TFrame(TStaticText(Source).Parent).Align:=alTop;
+     end;
+    end
+    else if source is TMemo then begin
+      TFrame(TPanel(TMemo(Source).Parent).Parent).Parent:=TPanel(Sender);
+      TFrame(TPanel(TMemo(Source).Parent).Parent).Top:=Y;
+      TFrame(TPanel(TMemo(Source).Parent).Parent).Left:=X;
+      if TPanel(Sender).Width>TPanel(Sender).Height then begin
+         TFrame(TPanel(TMemo(Source).Parent).Parent).Align:=alLeft;
+      end else begin
+         TFrame(TPanel(TMemo(Source).Parent).Parent).Align:=alTop;
+      end;
+     end
+    else if source is TDragObject then begin
+      TFrame(TDragObject(Source).Control).Parent:=TPanel(Sender);
+      TFrame(TDragObject(Source).Control).Top:=Y;
+      TFrame(TDragObject(Source).Control).Left:=X;
+      if TPanel(Sender).Width>TPanel(Sender).Height then begin
+         TFrame(TDragObject(Source).Control).Align:=alLeft;
+      end else begin
+         TFrame(TDragObject(Source).Control).Align:=alTop;
+      end;
+    end
+    else if source is TFrame then begin
+     TFrame(Source).Parent:=TPanel(Sender);
+     TFrame(Source).Top:=Y;
+     TFrame(Source).Left:=X;
+     if TPanel(Sender).Width>TPanel(Sender).Height then begin
+        TFrame(Source).Align:=alLeft;
+     end else begin
+        TFrame(Source).Align:=alTop;
+     end;
+    end;
+   end;
 end;
 end;
 
 procedure Tf_main.PanelDragOver(Sender, Source: TObject; X, Y: Integer;
   State: TDragState; var Accept: Boolean);
 begin
- if Source is TDragObject then begin
-   Accept:=TDragObject(Source).Control is TFrame;
- end;
+ if Source is TStaticText then Accept:=TStaticText(Source).Parent is TFrame
+ else if Source is TMemo then Accept:=TPanel(TMemo(Source).Parent).Parent is TFrame
+ else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
+ else if source is TFrame then Accept:=true
+ else Accept:=false;
 end;
 
 Procedure Tf_main.AbortExposure(Sender: TObject);

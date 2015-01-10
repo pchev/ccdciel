@@ -59,8 +59,6 @@ type
       );
     procedure HistogramMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     FimgMin, FimgMax: integer;
@@ -251,12 +249,6 @@ begin
             else ImgMin:=X;
   StartUpd:=false;
   if Assigned(FRedraw) then FRedraw(self);
-end;
-
-procedure Tf_visu.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-   DragObject := TDragObject.Create(self as TControl);
 end;
 
 end.

@@ -36,7 +36,6 @@ type
     Panel1: TPanel;
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
-    procedure msgStartDrag(Sender: TObject; var DragObject: TDragObject);
   private
     { private declarations }
   public
@@ -48,11 +47,6 @@ type
 implementation
 
 {$R *.lfm}
-
-procedure Tf_msg.msgStartDrag(Sender: TObject; var DragObject: TDragObject);
-begin
-    DragObject := TDragObject.Create(self as TControl);
-end;
 
 procedure Tf_msg.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
 begin

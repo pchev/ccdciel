@@ -32,7 +32,6 @@ object f_msg: Tf_msg
       Constraints.MinWidth = 500
       DragMode = dmAutomatic
       Font.Color = clRed
-      OnStartDrag = msgStartDrag
       ParentFont = False
       ReadOnly = True
       ScrollBars = ssAutoVertical

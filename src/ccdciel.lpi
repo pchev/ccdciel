@@ -127,6 +127,7 @@
         <ComponentName Value="f_preview"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_preview"/>
       </Unit3>
       <Unit4>
         <Filename Value="fu_msg.pas"/>
@@ -134,6 +135,7 @@
         <ComponentName Value="f_msg"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_msg"/>
       </Unit4>
       <Unit5>
         <Filename Value="u_utils.pas"/>
@@ -145,6 +147,7 @@
         <ComponentName Value="f_visu"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_visu"/>
       </Unit6>
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
@@ -157,6 +160,7 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
@@ -186,6 +190,7 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -193,6 +198,7 @@
         <ComponentName Value="f_filterwheel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_filterwheel"/>
       </Unit14>
       <Unit15>
         <Filename Value="fu_focuser.pas"/>
@@ -200,6 +206,7 @@
         <ComponentName Value="f_focuser"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_focuser"/>
       </Unit15>
       <Unit16>
         <Filename Value="fu_mount.pas"/>
@@ -207,6 +214,7 @@
         <ComponentName Value="f_mount"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_mount"/>
       </Unit16>
       <Unit17>
         <Filename Value="cu_fits.pas"/>
@@ -274,6 +282,7 @@
         <ComponentName Value="f_ccdtemp"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_ccdtemp"/>
       </Unit29>
       <Unit30>
         <Filename Value="pu_indigui.pas"/>
@@ -295,6 +304,7 @@
         <ComponentName Value="f_frame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_frame"/>
       </Unit32>
     </Units>
   </ProjectOptions>

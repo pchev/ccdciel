@@ -53,8 +53,6 @@ type
     procedure BtnStartClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     FSeqCount: integer;
@@ -132,12 +130,6 @@ begin
          Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
      end;
   end;
-end;
-
-procedure Tf_capture.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-   DragObject := TDragObject.Create(self as TControl);
 end;
 
 procedure Tf_capture.Stop;
