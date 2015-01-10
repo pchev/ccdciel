@@ -44,7 +44,6 @@ type
     MenuItem4: TMenuItem;
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
-    MenuAscomSettings: TMenuItem;
     MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
     N6: TMenuItem;
@@ -420,7 +419,6 @@ begin
   Preview:=false;
   PreviewLoop:=false;
   MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
-  MenuAscomSettings.Enabled:=(camera.CameraInterface=ASCOM);
 
   NewMessage('Initialized');
 end;
@@ -997,9 +995,17 @@ procedure Tf_main.SetFocusMode;
 begin
   if focuser.hasAbsolutePosition then begin
      f_focuser.PanelAbsPos.Visible:=true;
+     f_focuser.PanelRelPos.Visible:=false;
      f_focuser.PanelTimerMove.Visible:=false;
-  end else begin
+  end
+  else if focuser.hasRelativePosition then begin
      f_focuser.PanelAbsPos.Visible:=false;
+     f_focuser.PanelRelPos.Visible:=true;
+     f_focuser.PanelTimerMove.Visible:=false;
+  end
+  else begin
+     f_focuser.PanelAbsPos.Visible:=false;
+     f_focuser.PanelRelPos.Visible:=false;
      f_focuser.PanelTimerMove.Visible:=true;
   end;
 end;
@@ -1173,7 +1179,12 @@ var n:integer;
 begin
  if focuser.hasAbsolutePosition then begin
     focuser.Position:=focuser.Position-StrToIntDef(f_focuser.PosIncr.Text,1000);
- end else begin
+ end
+ else if focuser.hasRelativePosition then begin
+    focuser.FocusIn;
+    focuser.RelPosition:=StrToIntDef(f_focuser.RelIncr.Text,1000);
+ end
+ else begin
     n:=StrToIntDef(f_focuser.speed.Text,-1);
     if n>0 then focuser.Speed:=n;
     focuser.FocusIn;
@@ -1187,7 +1198,12 @@ var n:integer;
 begin
  if focuser.hasAbsolutePosition then begin
    focuser.Position:=focuser.Position+StrToIntDef(f_focuser.PosIncr.Text,1000);
- end else begin
+ end
+ else if focuser.hasRelativePosition then begin
+    focuser.FocusIn;
+    focuser.RelPosition:=StrToIntDef(f_focuser.RelIncr.Text,1000);
+ end
+ else begin
    n:=StrToIntDef(f_focuser.speed.Text,-1);
    if n>0 then focuser.Speed:=n;
    focuser.FocusOut;

@@ -1,13 +1,14 @@
 object f_setup: Tf_setup
-  Left = 282
+  Left = 132
   Height = 301
-  Top = 88
+  Top = 125
   Width = 352
   Caption = 'f_setup'
   ClientHeight = 301
   ClientWidth = 352
   OnCreate = FormCreate
-  LCLVersion = '1.2.2.0'
+  OnShow = FormShow
+  LCLVersion = '1.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 40
@@ -24,6 +25,7 @@ object f_setup: Tf_setup
       Width = 75
       Caption = 'OK'
       ModalResult = 1
+      OnClick = Button1Click
       TabOrder = 0
     end
     object Button3: TButton
@@ -271,6 +273,26 @@ object f_setup: Tf_setup
           Width = 138
           TabOrder = 1
         end
+        object BtnSetupCamera: TButton
+          Tag = 1
+          Left = 166
+          Height = 25
+          Top = 48
+          Width = 107
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          TabOrder = 2
+        end
+        object BtnAboutCamera: TButton
+          Tag = 1
+          Left = 168
+          Height = 25
+          Top = 80
+          Width = 107
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          TabOrder = 3
+        end
       end
     end
     object Filterwheel: TTabSheet
@@ -360,6 +382,26 @@ object f_setup: Tf_setup
           Top = 17
           Width = 138
           TabOrder = 1
+        end
+        object BtnAboutCamera1: TButton
+          Tag = 2
+          Left = 168
+          Height = 25
+          Top = 80
+          Width = 107
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          TabOrder = 2
+        end
+        object BtnSetupCamera1: TButton
+          Tag = 2
+          Left = 166
+          Height = 25
+          Top = 48
+          Width = 107
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          TabOrder = 3
         end
       end
       object FilterWheelInCameraBox: TCheckBox
@@ -466,6 +508,26 @@ object f_setup: Tf_setup
           Width = 138
           TabOrder = 1
         end
+        object BtnAboutCamera2: TButton
+          Tag = 3
+          Left = 168
+          Height = 25
+          Top = 80
+          Width = 107
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          TabOrder = 2
+        end
+        object BtnSetupCamera2: TButton
+          Tag = 3
+          Left = 166
+          Height = 25
+          Top = 48
+          Width = 107
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          TabOrder = 3
+        end
       end
       object FocuserInMountBox: TCheckBox
         Left = 8
@@ -550,6 +612,26 @@ object f_setup: Tf_setup
           Top = 17
           Width = 138
           TabOrder = 1
+        end
+        object BtnAboutCamera3: TButton
+          Tag = 4
+          Left = 168
+          Height = 25
+          Top = 80
+          Width = 107
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          TabOrder = 2
+        end
+        object BtnSetupCamera3: TButton
+          Tag = 4
+          Left = 166
+          Height = 25
+          Top = 48
+          Width = 107
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          TabOrder = 3
         end
       end
     end
