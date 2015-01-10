@@ -44,8 +44,6 @@ type
     StaticText1: TStaticText;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     Frunning,FLoop: boolean;
@@ -117,12 +115,6 @@ begin
      FLoop:=False;
      if Assigned(FonMsg) then FonMsg('Stop preview loop');
   end;
-end;
-
-procedure Tf_preview.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-   DragObject := TDragObject.Create(self as TControl);
 end;
 
 procedure Tf_preview.Stop;

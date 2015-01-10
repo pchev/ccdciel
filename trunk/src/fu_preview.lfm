@@ -132,7 +132,6 @@ object f_preview: Tf_preview
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
-    OnStartDrag = StaticText1StartDrag
     ParentFont = False
     ParentColor = False
     TabOrder = 1

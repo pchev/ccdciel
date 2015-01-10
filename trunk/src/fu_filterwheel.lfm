@@ -22,7 +22,7 @@ object f_filterwheel: Tf_filterwheel
     TabOrder = 0
     object Filters: TComboBox
       Left = 0
-      Height = 22
+      Height = 21
       Hint = 'Filter name'
       Top = 0
       Width = 100
@@ -34,9 +34,9 @@ object f_filterwheel: Tf_filterwheel
     end
     object BtnSetFilter: TButton
       Left = 0
-      Height = 25
+      Height = 24
       Hint = 'Set the selected filter'
-      Top = 22
+      Top = 21
       Width = 100
       Caption = 'Set'
       OnClick = BtnSetFilterClick
@@ -54,7 +54,6 @@ object f_filterwheel: Tf_filterwheel
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
-    OnStartDrag = StaticText1StartDrag
     ParentFont = False
     ParentColor = False
     TabOrder = 1

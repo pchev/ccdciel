@@ -42,8 +42,6 @@ type
     Panel3: TPanel;
     StaticText1: TStaticText;
     procedure Button1Click(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     FonSetTemperature: TNotifyEvent;
@@ -73,12 +71,6 @@ end;
 procedure Tf_ccdtemp.Button1Click(Sender: TObject);
 begin
   if Assigned(FonSetTemperature) then FonSetTemperature(self);
-end;
-
-procedure Tf_ccdtemp.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-  DragObject := TDragObject.Create(self as TControl);
 end;
 
 end.

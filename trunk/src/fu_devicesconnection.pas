@@ -42,8 +42,6 @@ type
     PanelDev: TPanel;
     StaticText1: TStaticText;
     procedure BtnConnectClick(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     FonConnect: TNotifyEvent;
@@ -73,12 +71,6 @@ end;
 procedure Tf_devicesconnection.BtnConnectClick(Sender: TObject);
 begin
   if Assigned(FonConnect) then FonConnect(self);
-end;
-
-procedure Tf_devicesconnection.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
- DragObject := TDragObject.Create(self as TControl);
 end;
 
 end.

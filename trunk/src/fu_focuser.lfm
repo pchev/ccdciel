@@ -41,23 +41,23 @@ object f_focuser: Tf_focuser
         Visible = False
         object Label3: TLabel
           Left = 0
-          Height = 16
+          Height = 15
           Top = 5
-          Width = 39
+          Width = 34
           Caption = 'Speed'
           ParentColor = False
         end
         object Label4: TLabel
           Left = 2
-          Height = 16
+          Height = 15
           Top = 24
-          Width = 34
+          Width = 33
           Caption = 'Timer'
           ParentColor = False
         end
         object speed: TEdit
           Left = 46
-          Height = 22
+          Height = 21
           Top = 0
           Width = 60
           Color = clBlack
@@ -67,7 +67,7 @@ object f_focuser: Tf_focuser
         end
         object timer: TEdit
           Left = 46
-          Height = 22
+          Height = 21
           Top = 22
           Width = 60
           Color = clBlack
@@ -87,7 +87,7 @@ object f_focuser: Tf_focuser
         TabOrder = 0
         object Position: TEdit
           Left = 46
-          Height = 22
+          Height = 21
           Hint = 'Current focuser position'
           Top = 0
           Width = 65
@@ -98,23 +98,23 @@ object f_focuser: Tf_focuser
         end
         object Label1: TLabel
           Left = 2
-          Height = 16
+          Height = 15
           Top = 5
-          Width = 25
+          Width = 23
           Caption = 'Pos.'
           ParentColor = False
         end
         object Label2: TLabel
           Left = 2
-          Height = 16
+          Height = 15
           Top = 24
-          Width = 29
+          Width = 26
           Caption = 'Step'
           ParentColor = False
         end
         object PosIncr: TComboBox
           Left = 46
-          Height = 22
+          Height = 21
           Hint = 'Increment step for the inward or outward movement'
           Top = 22
           Width = 65
@@ -177,7 +177,6 @@ object f_focuser: Tf_focuser
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
-    OnStartDrag = StaticText1StartDrag
     ParentFont = False
     ParentColor = False
     TabOrder = 0

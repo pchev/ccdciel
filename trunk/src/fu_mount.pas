@@ -38,8 +38,6 @@ type
     DE: TEdit;
     Panel1: TPanel;
     StaticText1: TStaticText;
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
   public
@@ -51,12 +49,6 @@ implementation
 {$R *.lfm}
 
 { Tf_mount }
-
-procedure Tf_mount.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-  DragObject := TDragObject.Create(self as TControl);
-end;
 
 
 end.

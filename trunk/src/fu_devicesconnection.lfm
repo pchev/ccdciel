@@ -7,8 +7,8 @@ object f_devicesconnection: Tf_devicesconnection
   ClientHeight = 109
   ClientWidth = 115
   TabOrder = 0
-  DesignLeft = 251
-  DesignTop = 122
+  DesignLeft = 377
+  DesignTop = 344
   object Panel1: TPanel
     Left = 0
     Height = 89
@@ -54,19 +54,19 @@ object f_devicesconnection: Tf_devicesconnection
       Visible = False
       object LabelCamera: TLabel
         Left = 4
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 48
+        Width = 45
         Caption = 'Camera'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelWheel: TLabel
-        Left = 60
-        Height = 16
+        Left = 57
+        Height = 15
         Top = 4
-        Width = 39
+        Width = 38
         Caption = 'Filters'
         Font.Color = clRed
         ParentColor = False
@@ -74,19 +74,19 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelFocuser: TLabel
         Left = 4
-        Height = 16
-        Top = 28
-        Width = 48
+        Height = 15
+        Top = 27
+        Width = 45
         Caption = 'Focuser'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelMount: TLabel
-        Left = 60
-        Height = 16
-        Top = 28
-        Width = 39
+        Left = 57
+        Height = 15
+        Top = 27
+        Width = 38
         Caption = 'Mount'
         Font.Color = clRed
         ParentColor = False
@@ -105,7 +105,6 @@ object f_devicesconnection: Tf_devicesconnection
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
-    OnStartDrag = StaticText1StartDrag
     ParentFont = False
     ParentColor = False
     TabOrder = 1

@@ -22,7 +22,6 @@ object f_starprofile: Tf_starprofile
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
-    OnStartDrag = StaticText1StartDrag
     ParentFont = False
     ParentColor = False
     TabOrder = 0
@@ -106,9 +105,9 @@ object f_starprofile: Tf_starprofile
       end
       object Label1: TLabel
         Left = 1
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 41
+        Width = 39
         Caption = 'FWHM:'
         ParentColor = False
       end
@@ -123,9 +122,9 @@ object f_starprofile: Tf_starprofile
       TabOrder = 3
       object Label2: TLabel
         Left = 0
-        Height = 16
+        Height = 15
         Top = 2
-        Width = 56
+        Width = 53
         Caption = 'Intensity:'
         ParentColor = False
       end

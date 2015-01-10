@@ -42,8 +42,6 @@ type
     StaticText1: TStaticText;
     procedure BtnResetClick(Sender: TObject);
     procedure BtnSetClick(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject
-      );
   private
     { private declarations }
     FonSet, FonReset: TNotifyEvent;
@@ -67,12 +65,6 @@ end;
 procedure Tf_frame.BtnResetClick(Sender: TObject);
 begin
   if Assigned(FonReset) then FonReset(self);
-end;
-
-procedure Tf_frame.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-  DragObject := TDragObject.Create(self as TControl);
 end;
 
 end.

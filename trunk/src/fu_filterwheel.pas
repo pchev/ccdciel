@@ -37,7 +37,6 @@ type
     Panel1: TPanel;
     StaticText1: TStaticText;
     procedure BtnSetFilterClick(Sender: TObject);
-    procedure StaticText1StartDrag(Sender: TObject; var DragObject: TDragObject);
   private
     { private declarations }
     FonSetFilter: TNotifyEvent;
@@ -67,12 +66,6 @@ end;
 procedure Tf_filterwheel.BtnSetFilterClick(Sender: TObject);
 begin
   if Assigned(FonSetFilter) then FonSetFilter(self);
-end;
-
-procedure Tf_filterwheel.StaticText1StartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-begin
-  DragObject := TDragObject.Create(self as TControl);
 end;
 
 end.
