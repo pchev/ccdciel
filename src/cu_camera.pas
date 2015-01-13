@@ -78,6 +78,12 @@ T_camera = class(TObject)
     function  GetFilter:integer;
     procedure SetFilterNames(value:TStringList);
     function  GetFilterNames:TStringList;
+    function GetMaxX: double;
+    function GetMaxY: double;
+    function GetPixelSize: double;
+    function GetPixelSizeX: double;
+    function GetPixelSizeY: double;
+    function GetBitperPixel: double;
   public
     constructor Create(devinterface: TDevInterface);
     destructor  Destroy; override;
@@ -103,6 +109,12 @@ T_camera = class(TObject)
     property BinYrange: TNumRange read GetbinYrange;
     property ExposureRange: TNumRange read GetExposureRange;
     property TemperatureRange: TNumRange read GetTemperatureRange;
+    property MaxX: double read GetMaxX;
+    property MaxY: double read GetMaxY;
+    property PixelSize: double read GetPixelSize;
+    property PixelSizeX: double read GetPixelSizeX;
+    property PixelSizeY: double read GetPixelSizeY;
+    property BitperPixel: double read GetBitperPixel;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read GetFilterNames write SetFilterNames;
     property onMsg: TNotifyMsg read GetonMsg write SetonMsg;
@@ -700,6 +712,78 @@ begin
            end;
     ASCOM: begin
              result:=ascomcamera.FilterNames;
+           end;
+ end;
+end;
+
+function T_camera.GetMaxX: double;
+begin
+ case FCameraInterface of
+    INDI : begin
+             if indiready then result:=indicamera.MaxX;
+           end;
+    ASCOM: begin
+             result:=ascomcamera.MaxX;
+           end;
+ end;
+end;
+
+function T_camera.GetMaxY: double;
+begin
+ case FCameraInterface of
+    INDI : begin
+             if indiready then result:=indicamera.MaxY;
+           end;
+    ASCOM: begin
+             result:=ascomcamera.MaxY;
+           end;
+ end;
+end;
+
+function T_camera.GetPixelSize: double;
+begin
+ case FCameraInterface of
+    INDI : begin
+             if indiready then result:=indicamera.PixelSize;
+           end;
+    ASCOM: begin
+             result:=ascomcamera.PixelSize;
+           end;
+ end;
+end;
+
+function T_camera.GetPixelSizeX: double;
+begin
+ case FCameraInterface of
+    INDI : begin
+             if indiready then result:=indicamera.PixelSizeX;
+           end;
+    ASCOM: begin
+             result:=ascomcamera.PixelSizeX;
+           end;
+ end;
+end;
+
+function T_camera.GetPixelSizeY: double;
+begin
+ case FCameraInterface of
+    INDI : begin
+             if indiready then result:=indicamera.PixelSizeY;
+           end;
+    ASCOM: begin
+             result:=ascomcamera.PixelSizeY;
+           end;
+ end;
+end;
+
+function T_camera.GetBitperPixel: double;
+begin
+ case FCameraInterface of
+    INDI : begin
+             if indiready then result:=indicamera.BitperPixel;
+           end;
+    ASCOM: begin
+             result:=ascomcamera.BitperPixel;
            end;
  end;
 end;

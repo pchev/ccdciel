@@ -27,12 +27,13 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, sysutils, pu_main, fu_devicesconnection, fu_preview, fu_msg, u_utils, fu_visu,
-  cu_indimount, fu_capture, pu_devicesetup, cu_ascomfocuser, cu_focuser, u_global,
-  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, u_modelisation,
-  cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser, cu_indicamera, cu_fits,
-  cu_camera, cu_ascomwheel, cu_ascommount, cu_ascomcamera, pu_filtername, 
-fu_ccdtemp, pu_indigui, pu_options, fu_frame
+  Forms, sysutils, pu_main, fu_devicesconnection, fu_preview, fu_msg, u_utils,
+  fu_visu, cu_indimount, fu_capture, pu_devicesetup, cu_ascomfocuser,
+  cu_focuser, u_global, fu_starprofile, fu_filterwheel, fu_focuser, fu_mount,
+  u_modelisation, cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser,
+  cu_indicamera, cu_fits, cu_camera, cu_ascomwheel, cu_ascommount,
+  cu_ascomcamera, pu_filtername, fu_ccdtemp, pu_indigui, pu_options, fu_frame,
+  cu_astrometry, cu_cdcclient, uniqueinstance_package
   { you can add units after this };
 
 {$R *.res}

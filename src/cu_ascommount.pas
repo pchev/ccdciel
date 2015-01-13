@@ -47,6 +47,8 @@ T_ascommount = class(TObject)
    procedure StatusTimerTimer(sender: TObject);
    function  GetRA:double;
    function  GetDec:double;
+   function  GetAperture:double;
+   function  GetFocaleLength:double;
    procedure msg(txt: string);
 public
    constructor Create;
@@ -56,6 +58,8 @@ public
    property Device: string read Fdevice write Fdevice;
    property RA: double read GetRA;
    property Dec: double read GetDec;
+   property Aperture: double read GetAperture;
+   property FocaleLength: double read GetFocaleLength;
    property Status: TDeviceStatus read FStatus;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
    property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -175,6 +179,34 @@ begin
     on E: EOleException do msg('Error: ' + E.Message);
    end;
  end;
+ {$endif}
+end;
+
+function  T_ascommount.GetAperture:double;
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result:=V.ApertureDiameter*1000;
+   except
+    result:=-1;
+   end;
+ end
+ else result:=-1;
+ {$endif}
+end;
+
+function  T_ascommount.GetFocaleLength:double;
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result:=V.FocalLength*1000;
+   except
+    result:=-1;
+   end;
+ end
+ else result:=-1;
  {$endif}
 end;
 

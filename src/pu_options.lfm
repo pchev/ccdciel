@@ -1,21 +1,21 @@
 object f_option: Tf_option
-  Left = 196
-  Height = 275
-  Top = 211
-  Width = 358
+  Left = 367
+  Height = 442
+  Top = 146
+  Width = 400
   Caption = 'Options'
-  ClientHeight = 275
-  ClientWidth = 358
-  LCLVersion = '1.3'
+  ClientHeight = 442
+  ClientWidth = 400
+  LCLVersion = '1.4.0.1'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 112
     Top = 0
-    Width = 358
+    Width = 400
     Align = alTop
     Caption = 'Files'
     ClientHeight = 80
-    ClientWidth = 354
+    ClientWidth = 396
     TabOrder = 0
     object CaptureDir: TDirectoryEdit
       Left = 104
@@ -51,11 +51,11 @@ object f_option: Tf_option
     Left = 0
     Height = 112
     Top = 112
-    Width = 358
+    Width = 400
     Align = alTop
     Caption = 'Star profile'
     ClientHeight = 80
-    ClientWidth = 354
+    ClientWidth = 396
     TabOrder = 1
     object StarWindow: TEdit
       Left = 200
@@ -92,11 +92,11 @@ object f_option: Tf_option
   object Panel1: TPanel
     Left = 0
     Height = 40
-    Top = 235
-    Width = 358
+    Top = 402
+    Width = 400
     Align = alBottom
     ClientHeight = 40
-    ClientWidth = 358
+    ClientWidth = 400
     TabOrder = 2
     object Button1: TButton
       Left = 256
@@ -116,6 +116,89 @@ object f_option: Tf_option
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 0
+    Height = 173
+    Top = 224
+    Width = 401
+    Caption = 'Astrometry'
+    ClientHeight = 141
+    ClientWidth = 397
+    TabOrder = 3
+    object PixelSizeFromCamera: TCheckBox
+      Left = 112
+      Height = 26
+      Top = 8
+      Width = 146
+      Caption = 'From camera driver'
+      OnChange = PixelSizeFromCameraChange
+      TabOrder = 0
+    end
+    object Label3: TLabel
+      Left = 7
+      Height = 16
+      Top = 15
+      Width = 56
+      Caption = 'Pixel size'
+      ParentColor = False
+    end
+    object PixelSize: TEdit
+      Left = 288
+      Height = 22
+      Top = 9
+      Width = 80
+      TabOrder = 1
+    end
+    object Label4: TLabel
+      Left = 8
+      Height = 16
+      Top = 48
+      Width = 85
+      Caption = 'Focale length'
+      ParentColor = False
+    end
+    object FocaleFromTelescope: TCheckBox
+      Left = 112
+      Height = 26
+      Top = 40
+      Width = 164
+      Caption = 'From telescope driver'
+      OnChange = FocaleFromTelescopeChange
+      TabOrder = 2
+    end
+    object Focale: TEdit
+      Left = 288
+      Height = 22
+      Top = 42
+      Width = 80
+      TabOrder = 3
+    end
+    object Label5: TLabel
+      Left = 10
+      Height = 16
+      Top = 81
+      Width = 53
+      Caption = 'RA / DEC'
+      ParentColor = False
+    end
+    object RaDecFromTelescope: TRadioButton
+      Left = 112
+      Height = 26
+      Top = 75
+      Width = 164
+      Caption = 'From telescope driver'
+      Checked = True
+      TabOrder = 4
+    end
+    object RaDecFromFits: TRadioButton
+      Left = 112
+      Height = 26
+      Top = 100
+      Width = 133
+      Caption = 'From FITS header'
+      TabOrder = 5
     end
   end
 end

@@ -28,8 +28,9 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp,
   pu_devicesetup, pu_options, pu_filtername, pu_indigui, cu_fits, cu_camera,
   cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
-  lazutf8sysutils, Classes, SysUtils, FileUtil, Forms, Controls,
-  Math, Graphics, Dialogs, StdCtrls, ExtCtrls, Menus, ComCtrls;
+  cu_astrometry, cu_cdcclient, UniqueInstance, lazutf8sysutils, Classes,
+  SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, Menus, ComCtrls;
 
 type
 
@@ -44,6 +45,7 @@ type
     MenuItem4: TMenuItem;
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
+    MenuShowSkychart: TMenuItem;
     MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
     N6: TMenuItem;
@@ -73,10 +75,13 @@ type
     PanelRight: TPanel;
     PanelLeft: TPanel;
     PanelTop: TPanel;
+    ImagePopupMenu: TPopupMenu;
     SaveDialog1: TSaveDialog;
     StatusBar1: TStatusBar;
     ConnectTimer: TTimer;
     StatusbarTimer: TTimer;
+    CdCTimer: TTimer;
+    procedure CdCTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -98,6 +103,7 @@ type
     procedure MenuOptionsClick(Sender: TObject);
     procedure MenuResetToolsClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
+    procedure MenuShowSkychartClick(Sender: TObject);
     procedure MenuViewCCDtempClick(Sender: TObject);
     procedure MenuViewConnectionClick(Sender: TObject);
     procedure MenuViewFiltersClick(Sender: TObject);
@@ -122,6 +128,8 @@ type
     wheel: T_wheel;
     focuser: T_focuser;
     mount: T_mount;
+    cdc:TCdCClient;
+    astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
     WantCamera,WantWheel,WantFocuser,WantMount: boolean;
     f_devicesconnection: Tf_devicesconnection;
@@ -146,7 +154,8 @@ type
     Capture,Preview,PreviewLoop: boolean;
     LogToFile,LogFileOpen: Boolean;
     NeedRestart, GUIready: boolean;
-    LogFile: string;
+    ConfigDir,TmpDir: UTF8String;
+    LogFile: UTF8String;
     MsgLog: Textfile;
     Procedure InitLog;
     Procedure CloseLog;
@@ -154,6 +163,8 @@ type
     procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; amenu: TMenuItem);
     procedure SetConfig;
     procedure SetOptions;
+    procedure OptionGetPixelSize(Sender: TObject);
+    procedure OptionGetFocaleLength(Sender: TObject);
     procedure Restart;
     procedure GUIdestroy(Sender: TObject);
     Procedure Connect(Sender: TObject);
@@ -210,6 +221,8 @@ type
     procedure Screen2Fits(x,y: integer; out xx,yy:integer);
     procedure Screen2CCD(x,y: integer; out xx,yy:integer);
     procedure Fits2Screen(x,y: integer; out xx,yy: integer);
+    procedure AstrometryTerminated(Sender: TObject);
+    procedure SkychartConnected(Sender: TObject);
   public
     { public declarations }
   end;
@@ -226,7 +239,7 @@ implementation
 Procedure Tf_main.InitLog;
 begin
   try
-     LogFile:=slash(GetAppConfigDirUTF8(false,true))+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
+     LogFile:=slash(ConfigDir)+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
      Filemode:=2;
      AssignFile(MsgLog,LogFile);
      Rewrite(MsgLog);
@@ -321,8 +334,11 @@ begin
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   config.Filename:=GetAppConfigFileUTF8(false,true,true);
-  LogFile:=slash(GetAppConfigDirUTF8(false,true))+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
+  ConfigDir:=GetAppConfigDirUTF8(false,true);
+  LogFile:=slash(ConfigDir)+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
   LogFileOpen:=false;
+  TmpDir:=slash(ConfigDir)+'tmp';
+  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
 
   Top:=config.GetValue('/Window/Top',0);
   Left:=config.GetValue('/Window/Left',0);
@@ -1028,6 +1044,7 @@ end;
 
 procedure Tf_main.NewMessage(msg: string);
 begin
+ if msg<>'' then begin
   if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
   f_msg.msg.Lines.Add(FormatDateTime('hh:nn:ss',now)+':'+msg);
   f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
@@ -1036,6 +1053,7 @@ begin
   if LogToFile then begin
     WriteLog(msg);
   end;
+ end;
 end;
 
 Procedure Tf_main.CameraStatus(Sender: TObject);
@@ -1343,11 +1361,22 @@ end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 begin
+   f_option.onGetPixelSize:=@OptionGetPixelSize;
+   f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
+   f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
+   f_option.Focale.Text:=config.GetValue('/Astrometry/FocaleLength','');
+   f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
+   if f_option.PixelSizeFromCamera.Checked and (camera.PixelSizeX>0) then
+      f_option.PixelSize.Text:=FormatFloat(f2,camera.PixelSizeX);
+   f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
+   if f_option.FocaleFromTelescope.Checked and (mount.FocaleLength>0) then
+      f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
+   f_option.RaDecFromTelescope.Checked:=config.GetValue('/Astrometry/RaDecFromTelescope',true);
 
    f_option.ShowModal;
 
@@ -1356,11 +1385,28 @@ begin
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
+     config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
+     config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
+     config.SetValue('/Astrometry/RaDecFromTelescope',f_option.RaDecFromTelescope.Checked);
+     config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Text);
+     config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
 
      config.Flush;
 
      SetOptions;
    end;
+end;
+
+procedure Tf_main.OptionGetPixelSize(Sender: TObject);
+begin
+   if camera.PixelSizeX>0 then
+      f_option.PixelSize.Text:=FormatFloat(f2,camera.PixelSizeX);
+end;
+
+procedure Tf_main.OptionGetFocaleLength(Sender: TObject);
+begin
+   if mount.FocaleLength>0 then
+      f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
 end;
 
 procedure Tf_main.MenuViewConnectionClick(Sender: TObject);
@@ -1908,6 +1954,85 @@ end;
 procedure Tf_main.GUIdestroy(Sender: TObject);
 begin
   GUIready:=false;
+end;
+
+procedure Tf_main.MenuShowSkychartClick(Sender: TObject);
+var pixsize,pixscale,telescope_focal_length,fov,ra,de: double;
+begin
+ if fits.HeaderInfo.naxis>0 then begin
+   DeleteFileUTF8(slash(TmpDir)+'ccdcielsolved.fits');
+   DeleteFileUTF8(slash(TmpDir)+'ccdcieltmp.solved');
+   fits.Stream.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+   astrometry:=TAstrometry.Create;
+   astrometry.onCmdTerminate:=@AstrometryTerminated;
+   astrometry.LogFile:=slash(TmpDir)+'ccdcieltmp.log';
+   astrometry.InFile:=slash(TmpDir)+'ccdcieltmp.fits';
+   astrometry.OutFile:=slash(TmpDir)+'ccdcielsolved.fits';
+   if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
+   then
+      pixsize:=camera.PixelSizeX
+   else
+      pixsize:=config.GetValue('/Astrometry/PixelSize',5);
+   if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+   then
+      telescope_focal_length:=mount.FocaleLength
+   else
+      telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000);
+   if config.GetValue('/Astrometry/RaDecFromTelescope',true)
+   then begin
+      ra:=15*mount.RA;
+      de:=mount.Dec;
+   end
+   else begin
+//      ra:=15*fits.HeaderInfo.ra;
+//      de:=fits.HeaderInfo.dec;
+   end;
+   pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
+   astrometry.scalelow:=0.95*pixscale;
+   astrometry.scalehigh:=1.05*pixscale;
+   astrometry.ra:=ra;
+   astrometry.de:=de;
+   astrometry.radius:=pixscale*fits.HeaderInfo.naxis1/3600;
+   astrometry.Resolve;
+   NewMessage('Resolving...');
+ end;
+end;
+
+procedure Tf_main.AstrometryTerminated(Sender: TObject);
+begin
+if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(TmpDir)+'ccdcieltmp.solved') then begin
+  cdc:=TCdCClient.Create;
+  cdc.Tag:=1;
+  cdc.onShowMessage:=@NewMessage;
+  cdc.onConnect:=@SkychartConnected;
+  cdc.TargetHost:='localhost';
+  cdc.TargetPort:='3292';
+  cdc.Start;
+end
+else begin
+  NewMessage('Astrometry.net resolve error.');
+end;
+end;
+
+procedure Tf_main.SkychartConnected(Sender: TObject);
+begin
+CdCTimer.Enabled:=true;
+end;
+
+procedure Tf_main.CdCTimerTimer(Sender: TObject);
+begin
+ CdCTimer.Enabled:=false;
+ case cdc.tag of
+   1: begin
+       NewMessage('Send image to CdC');
+       cdc.Send('SHOWBGIMAGE OFF');
+       cdc.Send('LOADBGIMAGE '+slash(TmpDir)+'ccdcielsolved.fits');
+       cdc.Send('SHOWBGIMAGE ON');
+       cdc.onShowMessage:=nil;
+       cdc.Send('quit');
+       cdc.Terminate;
+      end;
+ end;
 end;
 
 end.

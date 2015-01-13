@@ -52,6 +52,8 @@ const
   LF = #$0a;
   CRLF = CR + LF;
   secperday = 3600*24;
+  rad2deg=180/pi;
+  deg2rad=pi/180;
   {$ifdef mswindows}
   defCapturePath='C:\';
   {$else}
@@ -62,6 +64,7 @@ const
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
   f0 = '0';
   f1 = '0.0';
+  f2 = '0.00';
   b80 ='                                                                                ';
 
 

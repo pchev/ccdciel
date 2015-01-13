@@ -74,6 +74,12 @@ T_ascomcamera = class(TObject)
    function Connected: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
+   function GetMaxX: double;
+   function GetMaxY: double;
+   function GetPixelSize: double;
+   function GetPixelSizeX: double;
+   function GetPixelSizeY: double;
+   function GetBitperPixel: double;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -100,6 +106,12 @@ T_ascomcamera = class(TObject)
    property TemperatureRange: TNumRange read GetTemperatureRange;
    property Filter: integer read GetFilter write SetFilter;
    property FilterNames: TStringList read FFilterNames write SetFilterNames;
+   property MaxX: double read GetMaxX;
+   property MaxY: double read GetMaxY;
+   property PixelSize: double read GetPixelSize;
+   property PixelSizeX: double read GetPixelSizeX;
+   property PixelSizeY: double read GetPixelSizeY;
+   property BitperPixel: double read GetBitperPixel;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
    property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
    property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -606,6 +618,83 @@ begin
    end;
  end;
  {$endif}
+end;
+
+function T_ascomcamera.GetMaxX: double;
+begin
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.CameraXSize;
+  except
+     result:=-1;
+  end;
+end
+else result:=-1;
+{$endif}
+end;
+
+function T_ascomcamera.GetMaxY: double;
+begin
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.CameraYSize;
+  except
+     result:=-1;
+  end;
+end
+else result:=-1;
+{$endif}
+end;
+
+function T_ascomcamera.GetPixelSize: double;
+begin
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.PixelSizeX;
+  except
+     result:=-1;
+  end;
+end
+else result:=-1;
+{$endif}
+end;
+
+function T_ascomcamera.GetPixelSizeX: double;
+begin
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.PixelSizeX;
+  except
+     result:=-1;
+  end;
+end
+else result:=-1;
+{$endif}
+end;
+
+function T_ascomcamera.GetPixelSizeY: double;
+begin
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.PixelSizeY;
+  except
+     result:=-1;
+  end;
+end
+else result:=-1;
+{$endif}
+end;
+
+function T_ascomcamera.GetBitperPixel: double;
+begin
+{$ifdef mswindows}
+result:=16;
+{$endif}
 end;
 
 end.
