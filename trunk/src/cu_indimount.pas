@@ -37,6 +37,8 @@ T_indimount = class(TIndiBaseClient)
    coord_prop: INumberVectorProperty;
    coord_ra:   INumber;
    coord_dec:  INumber;
+   TelescopeInfo: INumberVectorProperty;
+   TelescopeAperture, TelescopeFocale: INumber;
    eod_coord:  boolean;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
@@ -59,6 +61,8 @@ T_indimount = class(TIndiBaseClient)
    procedure ServerDisconnected(Sender: TObject);
    function  GetRA:double;
    function  GetDec:double;
+   function  GetAperture:double;
+   function  GetFocaleLength:double;
    procedure msg(txt: string);
  public
    constructor Create;
@@ -71,6 +75,8 @@ T_indimount = class(TIndiBaseClient)
    property indideviceport: string read Findideviceport write Findideviceport;
    property RA: double read GetRA;
    property Dec: double read GetDec;
+   property Aperture: double read GetAperture;
+   property FocaleLength: double read GetFocaleLength;
    property Status: TDeviceStatus read FStatus;
    property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -124,6 +130,7 @@ procedure T_indimount.ClearStatus;
 begin
     MountDevice:=nil;
     Mountport:=nil;
+    TelescopeInfo:=nil;
     coord_prop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -231,7 +238,13 @@ begin
       coord_dec:=IUFindNumber(coord_prop,'DEC');
       eod_coord:=false;
       if (coord_ra=nil)or(coord_dec=nil) then coord_prop:=nil;
-   end;
+   end
+  else if (proptype=INDI_NUMBER)and(propname='TELESCOPE_INFO') then begin
+     TelescopeInfo:=indiProp.getNumber;
+     TelescopeAperture:=IUFindNumber(TelescopeInfo,'TELESCOPE_APERTURE');
+     TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
+     if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
+  end;
   CheckStatus;
 end;
 
@@ -271,6 +284,22 @@ if coord_prop<>nil then begin;
   result:=coord_dec.value;
 end
 else result:=0;
+end;
+
+function  T_indimount.GetAperture:double;
+begin
+if TelescopeInfo<>nil then begin;
+  result:=TelescopeAperture.value;
+end
+else result:=-1;
+end;
+
+function  T_indimount.GetFocaleLength:double;
+begin
+if TelescopeInfo<>nil then begin;
+  result:=TelescopeFocale.value;
+end
+else result:=-1;
 end;
 
 end.

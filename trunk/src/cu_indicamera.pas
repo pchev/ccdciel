@@ -48,6 +48,8 @@ T_indicamera = class(TIndiBaseClient)
    CCDAbortExposure: ISwitchVectorProperty;
    CCDAbort: ISwitch;
    CCDTemperature: INumberVectorProperty;
+   CCDinfo: INumberVectorProperty;
+   CCDmaxx,CCDmaxy,CCDpixelsize,CCDpixelsizex,CCDpixelsizey,CCDbitperpixel : INumber;
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
    Guiderbinning: INumberVectorProperty;
@@ -56,6 +58,8 @@ T_indicamera = class(TIndiBaseClient)
    Guidercompress, Guiderraw: ISwitch;
    GuiderAbortExposure: ISwitchVectorProperty;
    GuiderAbort: ISwitch;
+   Guiderinfo: INumberVectorProperty;
+   Guidermaxx,Guidermaxy,Guiderpixelsize,Guiderpixelsizex,Guiderpixelsizey,Guiderbitperpixel : INumber;
    WheelSlot: INumberVectorProperty;
    Slot: INumber;
    FilterName: ITextVectorProperty;
@@ -105,6 +109,12 @@ T_indicamera = class(TIndiBaseClient)
    procedure SetFilterNames(value:TStringList);
    function  GetTemperature: double;
    procedure SetTemperature(value:double);
+   function GetMaxX: double;
+   function GetMaxY: double;
+   function GetPixelSize: double;
+   function GetPixelSizeX: double;
+   function GetPixelSizeY: double;
+   function GetBitperPixel: double;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -135,6 +145,12 @@ T_indicamera = class(TIndiBaseClient)
    property TemperatureRange: TNumRange read GetTemperatureRange;
    property Filter: integer read GetFilter write SetFilter;
    property FilterNames: TStringList read FFilterNames write SetFilterNames;
+   property MaxX: double read GetMaxX;
+   property MaxY: double read GetMaxY;
+   property PixelSize: double read GetPixelSize;
+   property PixelSizeX: double read GetPixelSizeX;
+   property PixelSizeY: double read GetPixelSizeY;
+   property BitperPixel: double read GetBitperPixel;
    property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
    property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
@@ -207,10 +223,12 @@ begin
     CCDCompression:=nil;
     CCDAbortExposure:=nil;
     CCDTemperature:=nil;
+    CCDinfo:=nil;
     Guiderexpose:=nil;
     Guiderbinning:=nil;
     GuiderCompression:=nil;
     GuiderAbortExposure:=nil;
+    Guiderinfo:=nil;
     WheelSlot:=nil;
     FilterName:=nil;
     ActiveDevices:=nil;
@@ -378,6 +396,16 @@ begin
   else if (proptype=INDI_NUMBER)and(propname='CCD_TEMPERATURE') then begin
      CCDTemperature:=indiProp.getNumber;
   end
+  else if (proptype=INDI_NUMBER)and(propname='CCD_INFO') then begin
+     CCDinfo:=indiProp.getNumber;
+     CCDmaxx:=IUFindNumber(CCDinfo,'CCD_MAX_X');
+     CCDmaxy:=IUFindNumber(CCDinfo,'CCD_MAX_Y');
+     CCDpixelsize:=IUFindNumber(CCDinfo,'CCD_PIXEL_SIZE');
+     CCDpixelsizex:=IUFindNumber(CCDinfo,'CCD_PIXEL_SIZE_X');
+     CCDpixelsizey:=IUFindNumber(CCDinfo,'CCD_PIXEL_SIZE_Y');
+     CCDbitperpixel:=IUFindNumber(CCDinfo,'CCD_BITSPERPIXEL');
+     if (CCDmaxx=nil)or(CCDmaxy=nil)or(CCDpixelsize=nil)or(CCDpixelsizex=nil)or(CCDpixelsizey=nil)or(CCDbitperpixel=nil) then CCDinfo:=nil;
+  end
   else if (proptype=INDI_NUMBER)and(propname='GUIDER_EXPOSURE') then begin
      Guiderexpose:=indiProp.getNumber;
      GuiderexposeValue:=IUFindNumber(Guiderexpose,'GUIDER_EXPOSURE_VALUE');
@@ -401,6 +429,16 @@ begin
      GuiderAbortExposure:=indiProp.getSwitch;
      GuiderAbort:=IUFindSwitch(GuiderAbortExposure,'ABORT');
      if (GuiderAbort=nil) then GuiderAbortExposure:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='GUIDER_INFO') then begin
+     Guiderinfo:=indiProp.getNumber;
+     Guidermaxx:=IUFindNumber(CCDinfo,'GUIDER_MAX_X');
+     Guidermaxy:=IUFindNumber(CCDinfo,'GUIDER_MAX_Y');
+     Guiderpixelsize:=IUFindNumber(CCDinfo,'GUIDER_PIXEL_SIZE');
+     Guiderpixelsizex:=IUFindNumber(CCDinfo,'GUIDER_PIXEL_SIZE_X');
+     Guiderpixelsizey:=IUFindNumber(CCDinfo,'GUIDER_PIXEL_SIZE_Y');
+     Guiderbitperpixel:=IUFindNumber(CCDinfo,'GUIDER_BITSPERPIXEL');
+     if (Guidermaxx=nil)or(Guidermaxy=nil)or(Guiderpixelsize=nil)or(Guiderpixelsizex=nil)or(Guiderpixelsizey=nil)or(Guiderbitperpixel=nil) then Guiderinfo:=nil;
   end
   else if (proptype=INDI_NUMBER)and(propname='FILTER_SLOT') then begin
      WheelSlot:=indiProp.getNumber;
@@ -811,6 +849,97 @@ if (FilterName<>nil)and(value.Count=FilterName.ntp) then begin
   WaitBusy(FilterName);
 end;
 end;
+
+function T_indicamera.GetMaxX: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=CCDmaxx.value;
+   end
+   else result:=-1;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=Guidermaxx.value;
+     end
+     else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetMaxY: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=CCDmaxy.value;
+   end
+   else result:=-1;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=Guidermaxy.value;
+     end
+     else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetPixelSize: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=CCDpixelsize.value;
+   end
+   else result:=-1;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=Guiderpixelsize.value;
+     end
+     else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetPixelSizeX: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=CCDpixelsizex.value;
+   end
+   else result:=-1;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=Guiderpixelsizex.value;
+     end
+     else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetPixelSizeY: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=CCDpixelsizey.value;
+   end
+   else result:=-1;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=Guiderpixelsizey.value;
+     end
+     else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetBitperPixel: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=CCDbitperpixel.value;
+   end
+   else result:=-1;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=Guiderbitperpixel.value;
+     end
+     else result:=-1;
+  end;
+end;
+
 
 end.
 

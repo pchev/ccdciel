@@ -48,6 +48,8 @@ T_mount = class(TObject)
     procedure SetonStatusChange(value: TNotifyEvent);
     function  GetRA:double;
     function  GetDec:double;
+    function  GetAperture:double;
+    function  GetFocaleLength:double;
   public
     constructor Create(devinterface: TDevInterface);
     destructor  Destroy; override;
@@ -58,6 +60,8 @@ T_mount = class(TObject)
     property Status: TDeviceStatus read GetMountStatus;
     property RA: double read GetRA;
     property Dec: double read GetDec;
+    property Aperture: double read GetAperture;
+    property FocaleLength: double read GetFocaleLength;
     property onMsg: TNotifyMsg read GetonMsg write SetonMsg;
     property onCoordChange: TNotifyEvent read GetonCoordChange write SetonCoordChange;
     property onStatusChange: TNotifyEvent read GetonStatusChange write SetonStatusChange;
@@ -155,6 +159,30 @@ begin
            end;
     ASCOM: begin
              result:=ascommount.Dec;
+           end;
+ end;
+end;
+
+function  T_mount.GetAperture:double;
+begin
+ case FMountInterface of
+    INDI : begin
+             if indiready then result:=indimount.Aperture;
+           end;
+    ASCOM: begin
+             result:=ascommount.Aperture;
+           end;
+ end;
+end;
+
+function  T_mount.GetFocaleLength:double;
+begin
+ case FMountInterface of
+    INDI : begin
+             if indiready then result:=indimount.FocaleLength;
+           end;
+    ASCOM: begin
+             result:=ascommount.FocaleLength;
            end;
  end;
 end;
