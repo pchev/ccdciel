@@ -36,6 +36,15 @@ type
     Button1: TButton;
     Button2: TButton;
     CaptureDir: TDirectoryEdit;
+    Plot: TCheckBox;
+    Downsample: TEdit;
+    SourcesLimit: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    Tolerance: TEdit;
+    Label7: TLabel;
+    MinRadius: TEdit;
+    Label6: TLabel;
     PixelSizeFromCamera: TCheckBox;
     FocaleFromTelescope: TCheckBox;
     PixelSize: TEdit;

@@ -1,12 +1,12 @@
 object f_option: Tf_option
-  Left = 367
-  Height = 442
-  Top = 146
+  Left = 363
+  Height = 541
+  Top = 225
   Width = 400
   Caption = 'Options'
-  ClientHeight = 442
+  ClientHeight = 541
   ClientWidth = 400
-  LCLVersion = '1.4.0.1'
+  LCLVersion = '1.2.4.0'
   object GroupBox1: TGroupBox
     Left = 0
     Height = 112
@@ -14,12 +14,12 @@ object f_option: Tf_option
     Width = 400
     Align = alTop
     Caption = 'Files'
-    ClientHeight = 80
+    ClientHeight = 81
     ClientWidth = 396
     TabOrder = 0
     object CaptureDir: TDirectoryEdit
       Left = 104
-      Height = 22
+      Height = 21
       Top = 8
       Width = 176
       ShowHidden = False
@@ -30,9 +30,9 @@ object f_option: Tf_option
     end
     object Label1: TLabel
       Left = 8
-      Height = 16
+      Height = 15
       Top = 8
-      Width = 91
+      Width = 83
       Caption = 'Capture folder'
       ParentColor = False
     end
@@ -40,7 +40,7 @@ object f_option: Tf_option
       Left = 8
       Height = 26
       Top = 40
-      Width = 175
+      Width = 162
       Caption = 'Log all messages to file '
       ParentShowHint = False
       ShowHint = True
@@ -54,36 +54,36 @@ object f_option: Tf_option
     Width = 400
     Align = alTop
     Caption = 'Star profile'
-    ClientHeight = 80
+    ClientHeight = 81
     ClientWidth = 396
     TabOrder = 1
     object StarWindow: TEdit
       Left = 200
-      Height = 22
+      Height = 21
       Top = 8
       Width = 51
       TabOrder = 0
     end
     object Label14: TLabel
       Left = 16
-      Height = 16
+      Height = 15
       Top = 8
-      Width = 165
+      Width = 156
       Caption = 'Star detection window size '
       ParentColor = False
     end
     object Label2: TLabel
       Left = 16
-      Height = 16
+      Height = 15
       Top = 40
-      Width = 108
+      Width = 103
       Caption = 'Focus window size'
       ParentColor = False
       ParentFont = False
     end
     object FocusWindow: TEdit
       Left = 200
-      Height = 22
+      Height = 21
       Top = 34
       Width = 51
       TabOrder = 1
@@ -92,7 +92,7 @@ object f_option: Tf_option
   object Panel1: TPanel
     Left = 0
     Height = 40
-    Top = 402
+    Top = 501
     Width = 400
     Align = alBottom
     ClientHeight = 40
@@ -120,42 +120,42 @@ object f_option: Tf_option
   end
   object GroupBox3: TGroupBox
     Left = 0
-    Height = 173
+    Height = 272
     Top = 224
     Width = 401
     Caption = 'Astrometry'
-    ClientHeight = 141
+    ClientHeight = 241
     ClientWidth = 397
     TabOrder = 3
     object PixelSizeFromCamera: TCheckBox
       Left = 112
       Height = 26
       Top = 8
-      Width = 146
+      Width = 137
       Caption = 'From camera driver'
       OnChange = PixelSizeFromCameraChange
       TabOrder = 0
     end
     object Label3: TLabel
       Left = 7
-      Height = 16
+      Height = 15
       Top = 15
-      Width = 56
+      Width = 51
       Caption = 'Pixel size'
       ParentColor = False
     end
     object PixelSize: TEdit
       Left = 288
-      Height = 22
+      Height = 21
       Top = 9
       Width = 80
       TabOrder = 1
     end
     object Label4: TLabel
-      Left = 8
-      Height = 16
+      Left = 7
+      Height = 15
       Top = 48
-      Width = 85
+      Width = 76
       Caption = 'Focale length'
       ParentColor = False
     end
@@ -163,23 +163,23 @@ object f_option: Tf_option
       Left = 112
       Height = 26
       Top = 40
-      Width = 164
+      Width = 152
       Caption = 'From telescope driver'
       OnChange = FocaleFromTelescopeChange
       TabOrder = 2
     end
     object Focale: TEdit
       Left = 288
-      Height = 22
+      Height = 21
       Top = 42
       Width = 80
       TabOrder = 3
     end
     object Label5: TLabel
-      Left = 10
-      Height = 16
+      Left = 7
+      Height = 15
       Top = 81
-      Width = 53
+      Width = 50
       Caption = 'RA / DEC'
       ParentColor = False
     end
@@ -187,18 +187,91 @@ object f_option: Tf_option
       Left = 112
       Height = 26
       Top = 75
-      Width = 164
+      Width = 152
       Caption = 'From telescope driver'
       Checked = True
       TabOrder = 4
+      TabStop = True
     end
     object RaDecFromFits: TRadioButton
       Left = 112
       Height = 26
       Top = 100
-      Width = 133
+      Width = 124
       Caption = 'From FITS header'
       TabOrder = 5
+    end
+    object Label6: TLabel
+      Left = 7
+      Height = 15
+      Top = 170
+      Width = 131
+      Anchors = [akTop, akRight]
+      Caption = 'Minimum search radius'
+      ParentColor = False
+    end
+    object MinRadius: TEdit
+      Left = 151
+      Height = 21
+      Top = 168
+      Width = 48
+      TabOrder = 6
+    end
+    object Label7: TLabel
+      Left = 231
+      Height = 15
+      Top = 170
+      Width = 87
+      Anchors = [akTop, akRight]
+      Caption = 'Scale tolerance'
+      ParentColor = False
+    end
+    object Tolerance: TEdit
+      Left = 327
+      Height = 21
+      Top = 168
+      Width = 48
+      TabOrder = 7
+    end
+    object Label8: TLabel
+      Left = 66
+      Height = 15
+      Top = 208
+      Width = 72
+      Anchors = [akTop, akRight]
+      Caption = 'Downsample'
+      ParentColor = False
+    end
+    object Downsample: TEdit
+      Left = 151
+      Height = 21
+      Top = 206
+      Width = 48
+      TabOrder = 8
+    end
+    object Label9: TLabel
+      Left = 215
+      Height = 15
+      Top = 208
+      Width = 103
+      Anchors = [akTop, akRight]
+      Caption = 'Maximum sources'
+      ParentColor = False
+    end
+    object SourcesLimit: TEdit
+      Left = 327
+      Height = 21
+      Top = 206
+      Width = 48
+      TabOrder = 9
+    end
+    object Plot: TCheckBox
+      Left = 112
+      Height = 26
+      Top = 128
+      Width = 168
+      Caption = 'Create plot of the result'
+      TabOrder = 10
     end
   end
 end

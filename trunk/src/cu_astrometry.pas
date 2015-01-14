@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses
+uses  u_global,
   UTF8Process, process, Classes, SysUtils;
 
 type
@@ -32,16 +32,20 @@ TAstrometry = class(TThread)
    private
      FInFile, FOutFile, FLogFile: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius: double;
+     FObjs,FDown: integer;
+     Fplot: boolean;
      Fresult:integer;
      Fcmd: string;
      Fparam: TStringList;
      process: TProcessUTF8;
      FCmdTerminate: TNotifyEvent;
+   protected
      procedure Execute; override;
    public
      constructor Create;
      destructor Destroy; override;
      procedure Resolve;
+     procedure Stop;
      property InFile: string read FInFile write FInFile;
      property OutFile: string read FOutFile write FOutFile;
      property LogFile: string read FLogFile write FLogFile;
@@ -50,6 +54,9 @@ TAstrometry = class(TThread)
      property ra: double read Fra write Fra;
      property de: double read Fde write Fde;
      property radius: double read Fradius write Fradius;
+     property objs: integer read FObjs write FObjs;
+     property downsample: integer read FDown write FDown;
+     property plot: boolean read Fplot write Fplot;
      property result: integer read Fresult;
      property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
@@ -63,6 +70,14 @@ begin
   FInFile:='';
   FOutFile:='';
   Fcmd:='';
+  Fplot:=false;
+  Fra:=NullCoord;
+  Fde:=NullCoord;
+  Fradius:=NullCoord;
+  FObjs:=0;
+  FDown:=0;
+  Fscalelow:=0;
+  Fscalehigh:=0;
   Fparam:=TStringList.Create;
   process:=TProcessUTF8.Create(nil);
   FreeOnTerminate:=true;
@@ -74,31 +89,50 @@ begin
   process.Free;
 end;
 
+procedure TAstrometry.Stop;
+begin
+  if process.Running then process.Active:=false;
+end;
+
 procedure TAstrometry.Resolve;
 begin
   Fcmd:='solve-field';
   Fparam.Add('--overwrite');
- // Fparam.Add('--no-plots');
-  Fparam.Add('--index-xyls');
+  if (Fscalelow>0)and(Fscalehigh>0) then begin
+    Fparam.Add('--scale-low');
+    Fparam.Add(FloatToStr(Fscalelow));
+    Fparam.Add('--scale-high');
+    Fparam.Add(FloatToStr(Fscalehigh));
+    Fparam.Add('--scale-units');
+    Fparam.Add('arcsecperpix');
+  end;
+  if (Fra<>NullCoord)and(Fde<>NullCoord)and(Fradius<>NullCoord) then begin
+    Fparam.Add('--ra');
+    Fparam.Add(FloatToStr(Fra));
+    Fparam.Add('--dec');
+    Fparam.Add(FloatToStr(Fde));
+    Fparam.Add('--radius');
+    Fparam.Add(FloatToStr(Fradius));
+  end;
+  if FObjs>0 then begin
+    Fparam.Add('--objs');
+    Fparam.Add(inttostr(FObjs));
+  end;
+  if FDown>1 then begin
+    Fparam.Add('--downsample');
+    Fparam.Add(inttostr(FDown));
+  end;
+  if not Fplot then begin
+     Fparam.Add('--no-plots');
+  end;
+{  Fparam.Add('--index-xyls');
   Fparam.Add('none');
-  Fparam.Add('--scale-low');
-  Fparam.Add(FloatToStr(Fscalelow));
-  Fparam.Add('--scale-high');
-  Fparam.Add(FloatToStr(Fscalehigh));
-  Fparam.Add('--scale-units');
-  Fparam.Add('arcsecperpix');
-  Fparam.Add('--ra');
-  Fparam.Add(FloatToStr(Fra));
-  Fparam.Add('--dec');
-  Fparam.Add(FloatToStr(Fde));
-  Fparam.Add('--radius');
-  Fparam.Add(FloatToStr(Fradius));
   Fparam.Add('--rdls');
   Fparam.Add('none');
   Fparam.Add('--corr');
   Fparam.Add('none');
   Fparam.Add('--match');
-  Fparam.Add('none');
+  Fparam.Add('none');  }
   Fparam.Add('--new-fits');
   Fparam.Add(FOutFile);
   Fparam.Add(FInFile);
@@ -106,20 +140,37 @@ begin
 end;
 
 procedure TAstrometry.Execute;
-var l: TStringList;
+const READ_BYTES = 2048;
+var n: LongInt;
+    f: file;
+    logok: boolean;
+    cbuf: array[0..READ_BYTES] of char;
 begin
+  cbuf:='';
+  if (LogFile<>'') then begin
+    AssignFile(f,FLogFile);
+    rewrite(f,1);
+    logok:=true;
+  end
+  else
+    logok:=false;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   process.Options:=[poUsePipes,poStderrToOutPut];
   process.Execute;
-  process.WaitOnExit;
-  Fresult:=process.ExitStatus;
-  if (LogFile<>'')and(process.Output<>nil) then begin
-    l:=TStringList.Create;
-    l.LoadFromStream(process.Output);
-    l.SaveToFile(FLogFile);
-    l.Free;
+  while process.Running do begin
+    if logok and (process.Output<>nil) then begin
+      n := process.Output.Read(cbuf, READ_BYTES);
+      if n>=0 then BlockWrite(f,cbuf,n);
+    end;
+    sleep(100);
   end;
+  Fresult:=process.ExitStatus;
+  if (logok)and(Fresult<>127)and(process.Output<>nil) then repeat
+    n := process.Output.Read(cbuf, READ_BYTES);
+    if n>=0 then BlockWrite(f,cbuf,n);
+  until (n<=0)or(process.Output=nil);
+  if logok then CloseFile(f);
   if Assigned(FCmdTerminate) then FCmdTerminate(self);
 end;
 

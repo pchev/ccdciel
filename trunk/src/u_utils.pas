@@ -43,6 +43,7 @@ Function sgn(x:Double):Double ;
 Function RAToStr(ar: Double) : string;
 Function DEToStr(de: Double) : string;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
+function GetCdCPort:string;
 
 implementation
 
@@ -197,6 +198,40 @@ begin
     end;
 end;
 {$endif}
+
+function GetCdCPort:string;
+var
+{$ifdef mswindows}
+Registry1: TRegistry;
+{$else}
+   f: textfile;
+   fn: string;
+{$endif}
+begin
+result:='3292';
+{$ifdef mswindows}
+  Registry1 := TRegistry.Create;
+  with Registry1 do begin
+    if Openkey('Software\Astro_PC\Ciel\Status',false) then begin
+      if ValueExists('TcpPort') then result:=ReadString('TcpPort');
+      CloseKey;
+    end;
+  end;
+  Registry1.Free;
+{$else}
+  {$ifdef darwin}
+   fn:=ExpandFileName('~/Library/Application Support/skychart/tmp/tcpport');
+  {$else}
+   fn:=ExpandFileName('~/.skychart/tmp/tcpport');
+  {$endif}
+  if FileExists(fn) then begin
+    AssignFile(f,fn);
+    Reset(f);
+    read(f,result);
+    CloseFile(f);
+  end;
+{$endif}
+end;
 
 end.
 

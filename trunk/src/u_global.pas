@@ -41,7 +41,9 @@ type
 
   TCCDconfig = class(TXMLConfig)
      function  GetValue(const APath: String; const ADefault: String): String; overload;
+     function  GetValue(const APath: String; const ADefault: Double): Double; overload;
      procedure SetValue(const APath: String; const AValue: String); overload;
+     procedure SetValue(const APath: String; const AValue: Double); overload;
   end;
 
 const
@@ -61,6 +63,7 @@ const
   {$endif}
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
+  NullCoord=-9999;
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
   f0 = '0';
   f1 = '0.0';
@@ -73,6 +76,8 @@ var
 
 implementation
 
+/////////////////////  TCCDconfig  /////////////////////////////////
+
 function  TCCDconfig.GetValue(const APath: String; const ADefault: String): String;
 begin
    Result:=string(GetValue(DOMString(APath),DOMString(ADefault)));
@@ -81,6 +86,16 @@ end;
 procedure TCCDconfig.SetValue(const APath: String; const AValue: String);
 begin
   SetValue(DOMString(APath),DOMString(AValue))
+end;
+
+function  TCCDconfig.GetValue(const APath: String; const ADefault: Double): Double; overload;
+begin
+   Result:=StrToFloatDef(String(GetValue(DOMString(APath),DOMString(FloatToStr(ADefault)))),ADefault);
+end;
+
+procedure TCCDconfig.SetValue(const APath: String; const AValue: Double); overload;
+begin
+  SetValue(DOMString(APath),DOMString(FloatToStr(AValue)))
 end;
 
 end.
