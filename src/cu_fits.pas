@@ -33,7 +33,8 @@ type
             valid: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             bzero,bscale,dmax,dmin,blank : double;
-            objects : string;
+            objra,objdec,crval1,crval2: double;
+            objects,ctype1,ctype2 : string;
             end;
 
  THeaderBlock = array[1..36,1..80] of char;
@@ -367,6 +368,7 @@ try
  setlength(imai16,0,0,0);
  setlength(imai32,0,0,0);
  setlength(Fimage,0,0,0);
+ FStream.Clear;
  FStream.Position:=0;
  value.Position:=0;
  FStream.CopyFrom(value,value.Size);
@@ -431,8 +433,8 @@ var   header : THeaderBlock;
 begin
 with FFitsInfo do begin
  valid:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
- bzero:=0 ; bscale:=1;
- objects:='';
+ bzero:=0 ; bscale:=1; objra:=NullCoord; objdec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
+ objects:=''; ctype1:=''; ctype2:='';
  for i:=1 to FHeader.Rows.Count-1 do begin
     keyword:=FHeader.Keys[i];
     buf:=FHeader.Values[i];
@@ -452,6 +454,12 @@ with FFitsInfo do begin
     if (keyword='THRESL') then dmin:=strtofloat(buf);
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
+    if (keyword='OBJCTRA') then objra:=strtofloat(buf);
+    if (keyword='OBJCTDEC') then objdec:=strtofloat(buf);
+    if (keyword='CTYPE1') then ctype1:=buf;
+    if (keyword='CTYPE2') then ctype2:=buf;
+    if (keyword='CRVAL1') then crval1:=strtofloat(buf);
+    if (keyword='CRVAL2') then crval2:=strtofloat(buf);
     if keyword='CONTRAS1' then
          try
            dmin:=strtoint(words(buf,'',1,1));   // low value for good contrast
@@ -462,6 +470,15 @@ with FFitsInfo do begin
            dmax:=strtoint(words(buf,'',9,1));   // high value for good contrast
          except
          end;
+ end;
+ // very crude coordinates to help astrometry if telescope is not available
+ if objra=NullCoord then begin
+   if (copy(ctype1,1,3)='RA-')and(crval1<>NullCoord) then
+      objra:=crval1/15;
+ end;
+ if objdec=NullCoord then begin
+   if (copy(ctype2,1,4)='DEC-')and(crval2<>NullCoord) then
+      objdec:=crval2;
  end;
  colormode:=1;
  if (naxis=3)and(naxis1=3) then begin // contiguous color

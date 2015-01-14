@@ -163,9 +163,10 @@ begin
    try
    result:=V.RightAscension;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    result:=NullCoord;
    end;
- end;
+ end
+ else result:=NullCoord;
  {$endif}
 end;
 
@@ -176,9 +177,10 @@ begin
    try
    result:=V.Declination;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    result:=NullCoord;
    end;
- end;
+ end
+ else result:=NullCoord;
  {$endif}
 end;
 

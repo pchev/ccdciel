@@ -275,7 +275,7 @@ begin
 if coord_prop<>nil then begin;
   result:=coord_ra.value;
 end
-else result:=0;
+else result:=NullCoord;
 end;
 
 function  T_indimount.GetDec:double;
@@ -283,7 +283,7 @@ begin
 if coord_prop<>nil then begin;
   result:=coord_dec.value;
 end
-else result:=0;
+else result:=NullCoord;
 end;
 
 function  T_indimount.GetAperture:double;

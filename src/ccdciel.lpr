@@ -33,8 +33,7 @@ uses
   u_modelisation, cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser,
   cu_indicamera, cu_fits, cu_camera, cu_ascomwheel, cu_ascommount,
   cu_ascomcamera, pu_filtername, fu_ccdtemp, pu_indigui, pu_options, fu_frame,
-  cu_astrometry, cu_cdcclient, uniqueinstance_package
-  { you can add units after this };
+  cu_astrometry, cu_cdcclient, uniqueinstance_package, pu_viewtext;
 
 {$R *.res}
 
@@ -50,6 +49,7 @@ begin
   Application.CreateForm(Tf_setup, f_setup);
   Application.CreateForm(Tf_filtername, f_filtername);
   Application.CreateForm(Tf_option, f_option);
+  Application.CreateForm(Tf_viewtext, f_viewtext);
   Application.Run;
 end.
 

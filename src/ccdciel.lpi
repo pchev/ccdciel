@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -107,7 +109,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="35">
+    <Units Count="36">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -144,6 +146,7 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -170,7 +173,6 @@
         <ComponentName Value="f_setup"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_devicesetup"/>
       </Unit9>
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
@@ -216,6 +218,7 @@
       <Unit17>
         <Filename Value="cu_fits.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_fits"/>
       </Unit17>
       <Unit18>
         <Filename Value="u_modelisation.pas"/>
@@ -251,7 +254,6 @@
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomcamera"/>
       </Unit25>
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
@@ -305,8 +307,14 @@
       <Unit34>
         <Filename Value="cu_cdcclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_cdcclient"/>
       </Unit34>
+      <Unit35>
+        <Filename Value="pu_viewtext.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_viewtext"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_viewtext"/>
+      </Unit35>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -327,6 +335,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

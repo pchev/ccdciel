@@ -27,8 +27,8 @@ interface
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp,
   pu_devicesetup, pu_options, pu_filtername, pu_indigui, cu_fits, cu_camera,
-  cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
-  cu_astrometry, cu_cdcclient, UniqueInstance, lazutf8sysutils, Classes,
+  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
+  cu_astrometry, cu_cdcclient, lazutf8sysutils, Classes,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -45,6 +45,8 @@ type
     MenuItem4: TMenuItem;
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
+    MenuViewAstrometryLog: TMenuItem;
+    MenuStopAstrometry: TMenuItem;
     MenuShowSkychart: TMenuItem;
     MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
@@ -104,6 +106,8 @@ type
     procedure MenuResetToolsClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuShowSkychartClick(Sender: TObject);
+    procedure MenuStopAstrometryClick(Sender: TObject);
+    procedure MenuViewAstrometryLogClick(Sender: TObject);
     procedure MenuViewCCDtempClick(Sender: TObject);
     procedure MenuViewConnectionClick(Sender: TObject);
     procedure MenuViewFiltersClick(Sender: TObject);
@@ -329,6 +333,7 @@ begin
   {$else}
   DefaultInterface:=INDI;
   {$endif}
+  DefaultFormatSettings.DecimalSeparator:='.';
   NeedRestart:=false;
   GUIready:=false;
   ConfigExtension:= '.conf';
@@ -1377,6 +1382,11 @@ begin
    if f_option.FocaleFromTelescope.Checked and (mount.FocaleLength>0) then
       f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
    f_option.RaDecFromTelescope.Checked:=config.GetValue('/Astrometry/RaDecFromTelescope',true);
+   f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
+   f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',5.0));
+   f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
+   f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
+   f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
 
    f_option.ShowModal;
 
@@ -1390,6 +1400,11 @@ begin
      config.SetValue('/Astrometry/RaDecFromTelescope',f_option.RaDecFromTelescope.Checked);
      config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Text);
      config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
+     config.SetValue('/Astrometry/ScaleTolerance',StrToFloatDef(f_option.Tolerance.Text,0.1 ));
+     config.SetValue('/Astrometry/MinRadius',StrToFloatDef(f_option.MinRadius.Text,5.0));
+     config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
+     config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
+     config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);
 
      config.Flush;
 
@@ -1957,9 +1972,25 @@ begin
 end;
 
 procedure Tf_main.MenuShowSkychartClick(Sender: TObject);
-var pixsize,pixscale,telescope_focal_length,fov,ra,de: double;
+var pixsize,pixscale,telescope_focal_length,fov,ra,de,tolerance,MinRadius: double;
 begin
  if fits.HeaderInfo.naxis>0 then begin
+   ra:=NullCoord;
+   de:=NullCoord;
+   if config.GetValue('/Astrometry/RaDecFromTelescope',true)
+    then begin
+      if (mount.RA<>NullCoord) then ra:=15*mount.RA;
+      if (mount.Dec<>NullCoord) then de:=mount.Dec;
+   end
+   else begin
+      if (fits.HeaderInfo.objra<>NullCoord) then ra:=15*fits.HeaderInfo.objra;
+      if (fits.HeaderInfo.objdec<>NullCoord) then de:=fits.HeaderInfo.objdec;
+   end;
+   if (ra=NullCoord)or(de=NullCoord) then begin
+       if MessageDlg('Cannot find approximate coordinates for this image.'+crlf+'The astrometry resolution may take a very long time.'+crlf+'Do you want to continue?',mtConfirmation,mbYesNo,0)=mrNo then begin
+          exit;
+       end;
+   end;
    DeleteFileUTF8(slash(TmpDir)+'ccdcielsolved.fits');
    DeleteFileUTF8(slash(TmpDir)+'ccdcieltmp.solved');
    fits.Stream.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -1968,45 +1999,61 @@ begin
    astrometry.LogFile:=slash(TmpDir)+'ccdcieltmp.log';
    astrometry.InFile:=slash(TmpDir)+'ccdcieltmp.fits';
    astrometry.OutFile:=slash(TmpDir)+'ccdcielsolved.fits';
+   tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
+   MinRadius:=config.GetValue('/Astrometry/MinRadius',5.0);
    if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
    then
       pixsize:=camera.PixelSizeX
    else
-      pixsize:=config.GetValue('/Astrometry/PixelSize',5);
+      pixsize:=config.GetValue('/Astrometry/PixelSize',5.0);
    if config.GetValue('/Astrometry/FocaleFromTelescope',true)
    then
       telescope_focal_length:=mount.FocaleLength
    else
-      telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000);
-   if config.GetValue('/Astrometry/RaDecFromTelescope',true)
-   then begin
-      ra:=15*mount.RA;
-      de:=mount.Dec;
-   end
-   else begin
-//      ra:=15*fits.HeaderInfo.ra;
-//      de:=fits.HeaderInfo.dec;
+      telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
+   if (pixsize>0)and(telescope_focal_length>0)  then begin
+      pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
+      astrometry.scalelow:=(1-tolerance)*pixscale;
+      astrometry.scalehigh:=(1+tolerance)*pixscale;
    end;
-   pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
-   astrometry.scalelow:=0.95*pixscale;
-   astrometry.scalehigh:=1.05*pixscale;
+   astrometry.downsample:=config.GetValue('/Astrometry/DownSample',4);
+   astrometry.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
+   astrometry.plot:=config.GetValue('/Astrometry/Plot',false);
    astrometry.ra:=ra;
    astrometry.de:=de;
-   astrometry.radius:=pixscale*fits.HeaderInfo.naxis1/3600;
+   astrometry.radius:=max(MinRadius,pixscale*fits.HeaderInfo.naxis1/3600);
    astrometry.Resolve;
    NewMessage('Resolving...');
+   MenuShowSkychart.Enabled:=false;
+   MenuStopAstrometry.Visible:=true;
  end;
+end;
+
+procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
+begin
+  astrometry.Stop;
+  MenuStopAstrometry.Visible:=false;
+end;
+
+procedure Tf_main.MenuViewAstrometryLogClick(Sender: TObject);
+begin
+  f_viewtext.Caption:='Astrometry resolver log';
+  f_viewtext.Memo1.Clear;
+  f_viewtext.Memo1.Lines.LoadFromFile(slash(TmpDir)+'ccdcieltmp.log');
+  f_viewtext.Show;
 end;
 
 procedure Tf_main.AstrometryTerminated(Sender: TObject);
 begin
+MenuStopAstrometry.Visible:=false;
+MenuShowSkychart.Enabled:=true;
 if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(TmpDir)+'ccdcieltmp.solved') then begin
   cdc:=TCdCClient.Create;
   cdc.Tag:=1;
   cdc.onShowMessage:=@NewMessage;
   cdc.onConnect:=@SkychartConnected;
   cdc.TargetHost:='localhost';
-  cdc.TargetPort:='3292';
+  cdc.TargetPort:=GetCdCPort;
   cdc.Start;
 end
 else begin
