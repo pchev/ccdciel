@@ -33,7 +33,7 @@ uses
   u_modelisation, cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser,
   cu_indicamera, cu_fits, cu_camera, cu_ascomwheel, cu_ascommount,
   cu_ascomcamera, pu_filtername, fu_ccdtemp, pu_indigui, pu_options, fu_frame,
-  cu_astrometry, cu_cdcclient, uniqueinstance_package, pu_viewtext;
+  cu_astrometry, cu_cdcclient, pu_viewtext;
 
 {$R *.res}
 
