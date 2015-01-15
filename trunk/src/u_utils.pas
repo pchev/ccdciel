@@ -31,18 +31,20 @@ uses u_global,
      {$ifdef unix}
        unix,
      {$endif}
-     SysUtils, Classes, LCLType, FileUtil,
+     process, SysUtils, Classes, LCLType, FileUtil,
      Forms,Graphics;
 
 function InvertF32(X : LongWord) : Single;
 function InvertF64(X : Int64) : Double;
 Procedure FormPos(form : Tform; x,y : integer);
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
+Procedure SplitCmd(S : String; List : TStringList);
 function Slash(nom : string) : string;
 Function sgn(x:Double):Double ;
 Function RAToStr(ar: Double) : string;
 Function DEToStr(de: Double) : string;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
+Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 function GetCdCPort:string;
 
 implementation
@@ -102,6 +104,54 @@ for i:=1 to n do begin
  result:=result+trim(copy(str,1,j-1))+sep;
  str:=trim(copy(str,j+1,length(str)));
 end;
+end;
+
+Procedure SplitCmd(S : String; List : TStringList);
+  Function GetNextWord : String;
+  Const
+    WhiteSpace = [' ',#9,#10,#13];
+    Literals = ['"',''''];
+  Var
+    Wstart,wend : Integer;
+    InLiteral : Boolean;
+    LastLiteral : char;
+  begin
+    WStart:=1;
+    While (WStart<=Length(S)) and (S[WStart] in WhiteSpace) do
+      Inc(WStart);
+    WEnd:=WStart;
+    InLiteral:=False;
+    LastLiteral:=#0;
+    While (Wend<=Length(S)) and (Not (S[Wend] in WhiteSpace) or InLiteral) do
+      begin
+      if S[Wend] in Literals then
+        If InLiteral then
+          InLiteral:=Not (S[Wend]=LastLiteral)
+        else
+          begin
+          InLiteral:=True;
+          LastLiteral:=S[Wend];
+          end;
+       inc(wend);
+       end;
+     Result:=Copy(S,WStart,WEnd-WStart);
+     if  (Length(Result) > 0)
+     and (Result[1] = Result[Length(Result)]) // if 1st char = last char and..
+     and (Result[1] in Literals) then // it's one of the literals, then
+       Result:=Copy(Result, 2, Length(Result) - 2); //delete the 2 (but not others in it)
+     While (WEnd<=Length(S)) and (S[Wend] in WhiteSpace) do
+       inc(Wend);
+     Delete(S,1,WEnd-1);
+  end;
+Var
+  W : String;
+begin
+  While Length(S)>0 do
+    begin
+    W:=GetNextWord;
+    If (W<>'') then
+      List.Add(W);
+    end;
 end;
 
 function Slash(nom : string) : string;
@@ -198,6 +248,67 @@ begin
     end;
 end;
 {$endif}
+
+Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
+const READ_BYTES = 2048;
+var
+  M: TMemoryStream;
+  P: TProcess;
+  param: TStringList;
+  n: LongInt;
+  BytesRead: LongInt;
+begin
+M := TMemoryStream.Create;
+P := TProcess.Create(nil);
+param:=TStringList.Create;
+result:=1;
+try
+  BytesRead := 0;
+  SplitCmd(cmd,param);
+  cmd:= param[0];
+  param.Delete(0);
+  P.Executable:=cmd;
+  P.Parameters:=param;
+  if ShowConsole then begin
+     P.ShowWindow:=swoShowNormal;
+     P.StartupOptions:=[suoUseShowWindow];
+  end else begin
+     P.ShowWindow:=swoHIDE;
+  end;
+  P.Options := [poUsePipes, poStdErrToOutPut];
+  P.Execute;
+  while P.Running do begin
+    Application.ProcessMessages;
+    if P.Output<>nil then begin
+      M.SetSize(BytesRead + READ_BYTES);
+      n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
+      if n > 0 then inc(BytesRead, n);
+    end;
+  end;
+  result:=P.ExitStatus;
+  if (result<>127)and(P.Output<>nil) then repeat
+    M.SetSize(BytesRead + READ_BYTES);
+    n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
+    if n > 0
+    then begin
+      Inc(BytesRead, n);
+    end;
+  until (n<=0)or(P.Output=nil);
+  M.SetSize(BytesRead);
+  output.LoadFromStream(M);
+  P.Free;
+  M.Free;
+  param.Free;
+except
+  on E: Exception do begin
+    result:=-1;
+    output.add(E.Message);
+    P.Free;
+    M.Free;
+    param.Free;
+  end;
+end;
+end;
 
 function GetCdCPort:string;
 var

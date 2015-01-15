@@ -46,7 +46,6 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -76,7 +75,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -155,7 +153,6 @@
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -224,12 +221,10 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_camera"/>
       </Unit20>
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
@@ -242,7 +237,6 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -255,7 +249,6 @@
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
@@ -287,7 +280,6 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_options"/>
       </Unit31>
       <Unit32>
         <Filename Value="fu_frame.pas"/>
@@ -310,7 +302,6 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_viewtext"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_viewtext"/>
       </Unit35>
     </Units>
   </ProjectOptions>
@@ -332,7 +323,6 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>
