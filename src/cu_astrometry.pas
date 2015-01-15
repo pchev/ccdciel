@@ -24,7 +24,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses  u_global,
+uses  u_global, u_utils,
+  {$ifdef unix}
+  Unix, BaseUnix,
+  {$endif}
   UTF8Process, process, Classes, SysUtils;
 
 type
@@ -90,8 +93,39 @@ begin
 end;
 
 procedure TAstrometry.Stop;
+{$ifdef unix}
+const maxchild=100;
+var hnd: Thandle;
+    childs: array [0..maxchild] of THandle;
+    i,childnum:integer;
+    resp: Tstringlist;
+{$endif}
 begin
+{$ifdef unix}
+  // Kill all child process
+  if process.Running then begin
+    resp:=Tstringlist.Create;
+    hnd:=process.Handle;
+    childnum:=0;
+    childs[childnum]:=hnd;
+    while (hnd>0)and(childnum<maxchild) do begin
+      resp.clear;
+      if (ExecProcess('pgrep -P '+inttostr(hnd),resp)=0)and(resp.count>0) then begin
+         hnd:=StrToIntDef(resp[0],0);
+      end else
+         hnd:=0;
+      if hnd>0 then begin
+         inc(childnum);
+         childs[childnum]:=hnd;
+      end;
+    end;
+    for i:=childnum downto 0 do
+       FpKill(childs[i],SIGKILL);
+    resp.Free;
+  end;
+{$else}
   if process.Running then process.Active:=false;
+{$endif}
 end;
 
 procedure TAstrometry.Resolve;
@@ -125,14 +159,6 @@ begin
   if not Fplot then begin
      Fparam.Add('--no-plots');
   end;
-{  Fparam.Add('--index-xyls');
-  Fparam.Add('none');
-  Fparam.Add('--rdls');
-  Fparam.Add('none');
-  Fparam.Add('--corr');
-  Fparam.Add('none');
-  Fparam.Add('--match');
-  Fparam.Add('none');  }
   Fparam.Add('--new-fits');
   Fparam.Add(FOutFile);
   Fparam.Add(FInFile);
