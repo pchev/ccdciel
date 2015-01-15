@@ -46,7 +46,10 @@ type
      procedure SetValue(const APath: String; const AValue: Double); overload;
   end;
 
+  {$i revision.inc}
+
 const
+  ccdciel_version='Version Alpha 0.0.1';
   blank=' ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;
@@ -73,6 +76,7 @@ const
 
 var
   config: TCCDConfig;
+  compile_time, compile_version, compile_system, lclver: string;
 
 implementation
 

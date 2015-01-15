@@ -45,6 +45,7 @@ type
     MenuItem4: TMenuItem;
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
+    MenuHelpAbout: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
     MenuStopAstrometry: TMenuItem;
     MenuShowSkychart: TMenuItem;
@@ -100,6 +101,7 @@ type
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
     procedure MenuFilterNameClick(Sender: TObject);
+    procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
     procedure MenuOptionsClick(Sender: TObject);
@@ -1159,6 +1161,22 @@ begin
      end;
   end
   else NewMessage('Please connect the filter wheel first');
+end;
+
+procedure Tf_main.MenuHelpAboutClick(Sender: TObject);
+var aboutmsg: string;
+begin
+aboutmsg:='CCDciel '+crlf;
+aboutmsg:=aboutmsg+ccdciel_version+'-'+RevisionStr+blank+compile_time+crlf;
+aboutmsg:=aboutmsg+'Compiled with:'+crlf;
+aboutmsg:=aboutmsg+blank+compile_version+crlf+crlf;
+aboutmsg:=aboutmsg+'Copyright (C) 2015 Patrick Chevalley'+crlf;
+aboutmsg:=aboutmsg+'http://www.ap-i.net'+crlf+crlf;
+aboutmsg:=aboutmsg+'This program is free software; you can redistribute it and/or'+crlf;
+aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'+crlf;
+aboutmsg:=aboutmsg+'as published by the Free Software Foundation; either version 2'+crlf;
+aboutmsg:=aboutmsg+'of the License, or (at your option) any later version.'+crlf;
+ShowMessage(aboutmsg);
 end;
 
 Procedure Tf_main.FocuserStatus(Sender: TObject);
