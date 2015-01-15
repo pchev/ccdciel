@@ -27,6 +27,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
+  InterfaceBase, LCLVersion, // version
   Forms, sysutils, pu_main, fu_devicesconnection, fu_preview, fu_msg, u_utils,
   fu_visu, cu_indimount, fu_capture, pu_devicesetup, cu_ascomfocuser,
   cu_focuser, u_global, fu_starprofile, fu_filterwheel, fu_focuser, fu_mount,
@@ -42,6 +43,11 @@ begin
   DeleteFile('/tmp/ccdciel_heap.trc');
   SetHeapTraceOutput('/tmp/ccdciel_heap.trc');
   {$endif}
+
+  lclver:=lcl_version;
+  compile_time:={$I %DATE%}+' '+{$I %TIME%};
+  compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
+  compile_system:={$I %FPCTARGETOS%};
 
   RequireDerivedFormResource := True;
   Application.Initialize;

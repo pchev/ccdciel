@@ -262,6 +262,10 @@ object f_main: Tf_main
     end
     object MenuItem3: TMenuItem
       Caption = 'Help'
+      object MenuHelpAbout: TMenuItem
+        Caption = 'About'
+        OnClick = MenuHelpAboutClick
+      end
     end
   end
   object ConnectTimer: TTimer
