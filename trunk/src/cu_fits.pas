@@ -64,12 +64,18 @@ type
       function ReadHeader(ff:TMemoryStream): integer;
       function GetStream: TMemoryStream;
       function Indexof(key: string): integer;
+      function Valueof(key: string; var val: string): boolean; overload;
+      function Valueof(key: string; var val: integer): boolean; overload;
+      function Valueof(key: string; var val: double): boolean; overload;
+      function Valueof(key: string; var val: boolean): boolean; overload;
       function Add(key,val,comment: string): integer; overload;
       function Add(key:string; val:integer; comment: string): integer; overload;
       function Add(key:string; val:double; comment: string): integer; overload;
-      function Insert(idx: integer; key,val,comment: string):integer; overload;
+      function Add(key:string; val:boolean; comment: string): integer; overload;
+      function Insert(idx: integer; key,val,comment: string; quotedval:boolean=true):integer; overload;
       function Insert(idx: integer; key:string; val:integer; comment: string):integer; overload;
       function Insert(idx: integer; key:string; val:double; comment: string):integer; overload;
+      function Insert(idx: integer; key:string; val:boolean; comment: string):integer; overload;
       procedure Delete(idx: integer);
       property Rows:   TStringList read FRows;
       property Keys:   TStringList read FKeys;
@@ -108,7 +114,7 @@ type
     // Fits header values
     FFitsInfo : TFitsInfo;
     //
-    n_axis,cur_axis,Fwidth,Fheight,hdr_end,colormode : Integer;
+    n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode : Integer;
     Fimg_width,Fimg_Height,Frotation : double;
     FTitle : string;
     Fmean,Fsigma,dmin,dmax : double;
@@ -123,6 +129,7 @@ type
     Procedure ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
     Procedure ViewHeadersBtnClose(Sender: TObject);
     procedure SetStream(value:TMemoryStream);
+    function GetStream: TMemoryStream;
     procedure GetFitsInfo;
     Procedure ReadFitsImage;
     Procedure GetImage;
@@ -137,11 +144,12 @@ type
      Procedure ViewHeaders;
      procedure GetIntfImg;
      procedure GetBitmap(var imabmp:Tbitmap);
+     procedure SaveToFile(fn: string);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
      property Header: TFitsHeader read FHeader write FHeader;
-     Property Stream : TMemoryStream read FStream write SetStream;
+     Property Stream : TMemoryStream read GetStream write SetStream;
      property Histogram : THistogram read FHistogram;
      Property Img_Width : double read Fimg_width;
      Property Img_Height : double read Fimg_Height;
@@ -190,7 +198,8 @@ function TFitsHeader.ReadHeader(ff:TMemoryStream): integer;
 var   header : THeaderBlock;
       i,p1,p2 : integer;
       eoh : boolean;
-      row,keyword,value,comment : string;
+      row,keyword,value,comment,buf : string;
+      P: PChar;
 begin
 ClearHeader;
 eoh:=false;
@@ -214,6 +223,9 @@ repeat
       if (not Fvalid)and(keyword='SIMPLE')and(copy(value,1,1)<>'T') then Fvalid:=true;
       if (keyword='END') then
          eoh:=true;
+      P:=PChar(value);
+      buf:=AnsiExtractQuotedStr(P,'''');
+      if buf<>'' then value:=buf;
       FRows.add(row);
       FKeys.add(keyword);
       FValues.add(value);
@@ -245,6 +257,42 @@ begin
   result:=FKeys.IndexOf(key);
 end;
 
+function TFitsHeader.Valueof(key: string; var val: string): boolean; overload;
+var k: integer;
+begin
+  val:='';
+  k:=FKeys.IndexOf(key);
+  result:=(k>=0);
+  if result then val:=FValues[k];
+end;
+
+function TFitsHeader.Valueof(key: string; var val: integer): boolean; overload;
+var k: integer;
+begin
+  val:=0;
+  k:=FKeys.IndexOf(key);
+  result:=(k>=0);
+  if result then val:=StrToIntDef(FValues[k],0);
+end;
+
+function TFitsHeader.Valueof(key: string; var val: double): boolean; overload;
+var k: integer;
+begin
+  val:=0;
+  k:=FKeys.IndexOf(key);
+  result:=(k>=0);
+  if result then val:=StrToFloatDef(FValues[k],0);
+end;
+
+function TFitsHeader.Valueof(key: string; var val: boolean): boolean; overload;
+var k: integer;
+begin
+  val:=false;
+  k:=FKeys.IndexOf(key);
+  result:=(k>=0);
+  if result then val:=(FValues[k]='T');
+end;
+
 function TFitsHeader.Add(key,val,comment: string): integer;
 begin
  result:=Insert(-1,key,val,comment);
@@ -260,25 +308,41 @@ begin
  result:=Insert(-1,key,val,comment);
 end;
 
-function TFitsHeader.Insert(idx: integer; key,val,comment: string): integer;
+function TFitsHeader.Add(key:string; val:boolean; comment: string): integer;
+begin
+ result:=Insert(-1,key,val,comment);
+end;
+
+function TFitsHeader.Insert(idx: integer; key,val,comment: string; quotedval:boolean=true): integer;
 var row: string;
 begin
+ // The END keyword
  if (trim(key)='END') then begin
    row:=copy('END'+b80,1,80);
    val:='';
    comment:='';
  end
+ // Comments with keyword
  else if (trim(key)='COMMENT') then begin
+   val:=val+comment;
+   comment:='';
    row:=Format('%0:-8s',[key])+
-        Format('  %0:-70s',[val+comment]);
-   val:=val+comment;
-   comment:='';
+        Format('  %0:-70s',[val]);
  end
+ // Comment without keyword
  else if (trim(key)='') then begin
-   row:=Format('          %0:-70s',[val+comment]);
    val:=val+comment;
    comment:='';
- end else begin
+   row:=Format('          %0:-70s',[val]);
+ end
+ // Quoted string
+ else if quotedval then begin
+    row:=Format('%0:-8s',[key])+
+         Format('= %0:-20s',[QuotedStr(val)])+
+         Format(' / %0:-47s',[comment]);
+ end
+ // Other unquoted values
+ else begin
     row:=Format('%0:-8s',[key])+
          Format('= %0:-20s',[val])+
          Format(' / %0:-47s',[comment]);
@@ -301,14 +365,23 @@ function TFitsHeader.Insert(idx: integer; key:string; val:integer; comment: stri
 var txt: string;
 begin
   txt:=Format('%20d',[val]);
-  result:=Insert(idx,key,txt,comment);
+  result:=Insert(idx,key,txt,comment,false);
 end;
 
 function TFitsHeader.Insert(idx: integer; key:string; val:double; comment: string):integer;
 var txt: string;
 begin
   txt:=Format('%20.10g',[val]);
-  result:=Insert(idx,key,txt,comment);
+  result:=Insert(idx,key,txt,comment,false);
+end;
+
+function TFitsHeader.Insert(idx: integer; key:string; val:boolean; comment: string):integer;
+var txt,v: string;
+begin
+  if val then v:='T' else v:='F';
+  txt:=Format('%0:20s',[v]);
+  result:=Insert(idx,key,txt,comment,false);
+  if (not Fvalid)and(key='SIMPLE')and(val) then Fvalid:=true;
 end;
 
 procedure TFitsHeader.Delete(idx: integer);
@@ -372,13 +445,28 @@ try
  FStream.Position:=0;
  value.Position:=0;
  FStream.CopyFrom(value,value.Size);
- hdr_end:=FHeader.ReadHeader(FStream);
+ Fhdr_end:=FHeader.ReadHeader(FStream);
  GetFitsInfo;
  ReadFitsImage;
  GetIntfImg;
 except
  FFitsInfo.valid:=false;
 end;
+end;
+
+function TFits.GetStream: TMemoryStream;
+begin
+  result:=FHeader.GetStream;
+  FStream.Position:=Fhdr_end;
+  result.CopyFrom(FStream,FStream.Size-Fhdr_end);
+end;
+
+procedure TFits.SaveToFile(fn: string);
+var mem: TMemoryStream;
+begin
+  mem:=GetStream;
+  mem.SaveToFile(fn);
+  mem.Free;
 end;
 
 Procedure TFits.ViewHeaders;
@@ -511,23 +599,23 @@ FStream.Position:=0;
 case FFitsInfo.bitpix of
   -64 : begin
         setlength(imar64,n_axis,Fheight,Fwidth);
-        FStream.Seek(hdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*8*(cur_axis-1),soFromBeginning);
+        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*8*(cur_axis-1),soFromBeginning);
         end;
   -32 : begin
         setlength(imar32,n_axis,Fheight,Fwidth);
-        FStream.Seek(hdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*4*(cur_axis-1),soFromBeginning);
+        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*4*(cur_axis-1),soFromBeginning);
         end;
     8 : begin
         setlength(imai8,n_axis,Fheight,Fwidth);
-        FStream.Seek(hdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*(cur_axis-1),soFromBeginning);
+        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*(cur_axis-1),soFromBeginning);
         end;
    16 : begin
         setlength(imai16,n_axis,Fheight,Fwidth);
-        FStream.Seek(hdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*2*(cur_axis-1),soFromBeginning);
+        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*2*(cur_axis-1),soFromBeginning);
         end;
    32 : begin
         setlength(imai32,n_axis,Fheight,Fwidth);
-        FStream.Seek(hdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*4*(cur_axis-1),soFromBeginning);
+        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*4*(cur_axis-1),soFromBeginning);
         end;
 end;
 npix:=0;

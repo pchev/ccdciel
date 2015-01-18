@@ -26,7 +26,7 @@ interface
 
 uses u_global,
      {$ifdef mswindows}
-       Windows,
+       Windows, registry,
      {$endif}
      {$ifdef unix}
        unix,

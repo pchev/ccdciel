@@ -260,7 +260,7 @@ procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 var ok: boolean;
     i,j,c,sz,xs,ys: integer;
     nax1,nax2,pix,piy: integer;
-    dateobs,ccdname,framename:string;
+    dateobs,ccdname,frname:string;
     img: array of array of LongInt;
     ii: smallint;
     b: char;
@@ -286,23 +286,16 @@ begin
    pix:=V.PixelSizeX;
    piy:=V.PixelSizeX;
    ccdname:=V.Name+'-'+V.SensorName;
-   case FFrametype of
-      LIGHT: framename:='Light';
-      BIAS : framename:='Bias';
-      DARK : framename:='Dark';
-      FLAT : framename:='Flat';
-   end;
-   dateobs:=''''+FormatDateTime(dateiso,timestart)+'''';
+   frname:=FrameName[ord(FFrametype)];
+   dateobs:=FormatDateTime(dateisoshort,timestart);
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
-   hdr.Add('SIMPLE','T','file does conform to FITS standard');
+   hdr.Add('SIMPLE',true,'file does conform to FITS standard');
    hdr.Add('BITPIX',16,'number of bits per data pixel');
    hdr.Add('NAXIS',2,'number of data axes');
    hdr.Add('NAXIS1',nax1 ,'length of data axis 1');
    hdr.Add('NAXIS2',nax2 ,'length of data axis 2');
-   hdr.Add('EXTEND','F','no extensions');
-   hdr.Add('COMMENT','FITS (Flexible Image Transport System) format is defined in ''Astronomy','');
-   hdr.Add('COMMENT','and Astrophysics'', volume 376, page 359; bibcode: 2001A&A...376..359H','');
+   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
    hdr.Add('EXPTIME',Fexptime,'Total Exposure Time (s)');
@@ -310,12 +303,7 @@ begin
    hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
    hdr.Add('XBINNING',BinX ,'Binning factor in width');
    hdr.Add('YBINNING',BinY ,'Binning factor in height');
-   hdr.Add('FRAME',framename,'Frame Type');
-//   hdr.Add('FILTER','red','Filter');
-//  hdr.Add('DATAMIN','0','Minimum value');
-//   hdr.Add('DATAMAX','2000','Maximum value');
-//   hdr.Add('OBJCTRA','0','Object RA');
-//   hdr.Add('OBJCTDEC','0','Object DEC');
+   hdr.Add('FRAME',frname,'Frame Type');
    hdr.Add('INSTRUME',ccdname,'CCD Name');
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
@@ -596,9 +584,9 @@ begin
    if V.CanSetCCDTemperature then
       result:=V.CCDTemperature
    else
-      result:=0;
+      result:=NullCoord;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+     result:=NullCoord;
    end;
  end;
  {$endif}

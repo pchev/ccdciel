@@ -290,7 +290,7 @@ object f_main: Tf_main
     top = 232
   end
   object ImagePopupMenu: TPopupMenu
-    left = 389
+    left = 178
     top = 38
     object MenuShowSkychart: TMenuItem
       Caption = 'Resolve and show in Skychart'
