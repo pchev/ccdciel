@@ -132,8 +132,8 @@ object f_capture: Tf_capture
         Left = 2
         Height = 15
         Top = 4
-        Width = 33
-        Caption = 'Name'
+        Width = 39
+        Caption = 'Object'
         ParentColor = False
       end
     end

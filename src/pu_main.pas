@@ -220,6 +220,7 @@ type
     Procedure RedrawHistogram(Sender: TObject);
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
+    procedure WriteHeaders;
     Procedure ClearImage;
     Procedure DrawImage;
     Procedure PlotImage;
@@ -1674,10 +1675,104 @@ begin
   end;
 end;
 
+procedure Tf_main.WriteHeaders;
+var k:integer;
+    origin,observer,telname,objname: string;
+    focal_length,pixscale1,pixscale2,ccdtemp: double;
+    hbitpix,hnaxis,hnaxis1,hnaxis2,hbin1,hbin2: integer;
+    hfilter,hframe,hinstr,hdateobs : string;
+    hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
+begin
+  // get header values from camera
+  if not fits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=fits.HeaderInfo.bitpix;
+  if not fits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=fits.HeaderInfo.naxis;
+  if not fits.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=fits.HeaderInfo.naxis1;
+  if not fits.Header.Valueof('NAXIS2',hnaxis2) then hnaxis2:=fits.HeaderInfo.naxis2;
+  if not fits.Header.Valueof('BZERO',hbzero)   then hbzero:=fits.HeaderInfo.bzero;
+  if not fits.Header.Valueof('BSCALE',hbscale) then hbscale:=fits.HeaderInfo.bscale;
+  if not fits.Header.Valueof('EXPTIME',hexp)   then hexp:=-1;
+  if not fits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
+  if not fits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
+  if not fits.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
+  if not fits.Header.Valueof('YBINNING',hbin2) then hbin2:=-1;
+  if not fits.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';
+  if not fits.Header.Valueof('FILTER',hfilter) then hfilter:='';
+  if not fits.Header.Valueof('DATAMIN',hdmin)  then hdmin:=fits.HeaderInfo.dmin;
+  if not fits.Header.Valueof('DATAMAX',hdmax)  then hdmax:=fits.HeaderInfo.dmax;
+  if not fits.Header.Valueof('OBJCTRA',hra)    then hra:=NullCoord else hra:=15*hra;
+  if not fits.Header.Valueof('OBJCTDEC',hdec)  then hdec:=NullCoord;
+  if not fits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
+  if not fits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
+  // get other values
+  if ((hra=NullCoord)or(hdec=NullCoord))and(mount.Status=devConnected) then begin
+     hra:=15*mount.RA;
+     hdec:=mount.Dec;
+  end;
+  if (hfilter='')and(wheel.Status=devConnected) then begin
+     hfilter:=wheel.FilterNames[wheel.Filter-1];
+  end;
+  ccdtemp:=camera.Temperature;
+  objname:=f_capture.Fname.Text;
+  origin:=config.GetValue('/Info/ObservatoryName','');
+  observer:=config.GetValue('/Info/ObserverName','');
+  telname:=config.GetValue('/Info/TelescopeName','');
+  if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+  then
+     focal_length:=mount.FocaleLength
+  else
+     focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
+
+  // write new header
+  fits.Header.ClearHeader;
+  fits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
+  fits.Header.Add('BITPIX',hbitpix,'number of bits per data pixel');
+  fits.Header.Add('NAXIS',hnaxis,'number of data axes');
+  fits.Header.Add('NAXIS1',hnaxis1 ,'length of data axis 1');
+  fits.Header.Add('NAXIS2',hnaxis2 ,'length of data axis 2');
+  fits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
+  fits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
+  fits.Header.Add('BSCALE',hbscale,'default scaling factor');
+  fits.Header.Add('DATAMIN',hdmin,'Minimum value');
+  fits.Header.Add('DATAMAX',hdmax,'Maximum value');
+  fits.Header.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  if origin<>'' then fits.Header.Add('ORIGIN',origin,'Observatory name');
+  if observer<>'' then fits.Header.Add('OBSERVER',observer,'Observer name');
+  if telname<>'' then fits.Header.Add('TELESCOP',telname,'Telescope used for acquisition');
+  if hinstr<>'' then fits.Header.Add('INSTRUME',hinstr,'Instrument used for acquisition');
+  if hfilter<>'' then fits.Header.Add('FILTER',hfilter,'Filter');
+  fits.Header.Add('SOFTWARE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  if objname<>'' then fits.Header.Add('OBJECT',objname,'Observed object name');
+  fits.Header.Add('FRAME',hframe,'Frame Type');
+  fits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
+  if hexp>0 then fits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
+  if hpix1>0 then fits.Header.Add('PIXSIZE1',hpix1 ,'[um] Pixel Size X');
+  if hpix2>0 then fits.Header.Add('PIXSIZE2',hpix2 ,'[um] Pixel Size Y');
+  if hbin1>0 then fits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
+  if hbin2>0 then fits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
+  fits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
+  if ccdtemp<>NullCoord then fits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
+  if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+    fits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
+    fits.Header.Add('DEC',hdec,'[deg] Telescope pointing DEC');
+    if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
+       pixscale1:=rad2deg*arctan(hpix1/1000/focal_length);
+       pixscale2:=rad2deg*arctan(hpix2/1000/focal_length);
+       fits.Header.Add('CTYPE1','RA---TAN','Pixel coordinate system');
+       fits.Header.Add('CTYPE2','DEC--TAN','Pixel coordinate system');
+       fits.Header.Add('CRVAL1',hra,'value of ref pixel');
+       fits.Header.Add('CRVAL2',hdec,'value of ref pixel');
+       fits.Header.Add('CRPIX1',hnaxis1 div 2,'ref pixel');
+       fits.Header.Add('CRPIX2',hnaxis2 div 2,'ref pixel');
+       fits.Header.Add('CDELT1',pixscale1,'coordinate scale');
+       fits.Header.Add('CDELT2',pixscale2,'coordinate scale');
+    end;
+  end;
+  fits.Header.Add('END','','');
+end;
+
 procedure Tf_main.CameraNewImage(Sender: TObject);
 var dt: Tdatetime;
     fn,imgsize: string;
-    i:integer;
 begin
   dt:=NowUTC;
   ImgFrameX:=FrameX;
@@ -1685,16 +1780,7 @@ begin
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
   fits.Stream:=camera.ImgStream;
-  i:=fits.Header.Indexof('END');
-  fits.Header.Insert(i,'TESTS','''Toto''','Test');
-  inc(i);
-  fits.Header.Insert(i,'TESTI',45,'Test');
-  inc(i);
-  fits.Header.Insert(i,'TESTF',45.56,'Test');
-  inc(i);
-  fits.Header.Insert(i,'COMMENT','Commentaire','');
-  inc(i);
-  fits.Header.Insert(i,'','Commentaire 2','');
+  WriteHeaders;
   imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
   DrawImage;
   DrawHistogram;
@@ -1705,8 +1791,7 @@ begin
          fn:=fn+wheel.FilterNames[wheel.Filter-1]+'_';
      fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
          +'.fits';
-     camera.ImgStream.Position:=0;
-     camera.ImgStream.SaveToFile(fn);
+     fits.SaveToFile(fn);
      NewMessage('Saved file '+fn);
      StatusBar1.Panels[2].Text:='Saved '+fn+' '+imgsize;
      f_capture.SeqCount:=f_capture.SeqCount+1;
@@ -1948,7 +2033,7 @@ begin
 if fits.HeaderInfo.naxis>0 then begin
    if SaveDialog1.Execute then begin
       fn:=SaveDialog1.FileName;
-      fits.Stream.SaveToFile(fn);
+      fits.SaveToFile(fn);
    end;
 end;
 end;
@@ -2011,7 +2096,7 @@ begin
    end;
    DeleteFileUTF8(slash(TmpDir)+'ccdcielsolved.fits');
    DeleteFileUTF8(slash(TmpDir)+'ccdcieltmp.solved');
-   fits.Stream.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+   fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
    astrometry:=TAstrometry.Create;
    astrometry.onCmdTerminate:=@AstrometryTerminated;
    astrometry.LogFile:=slash(TmpDir)+'ccdcieltmp.log';

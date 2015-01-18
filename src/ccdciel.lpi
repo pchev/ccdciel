@@ -162,6 +162,7 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
@@ -223,10 +224,12 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_camera"/>
       </Unit20>
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
@@ -243,10 +246,12 @@
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_wheel"/>
       </Unit24>
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_ascomcamera"/>
       </Unit25>
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>

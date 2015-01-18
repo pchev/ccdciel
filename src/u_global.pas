@@ -68,11 +68,12 @@ const
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord=-9999;
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
+  dateisoshort = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss';
   f0 = '0';
   f1 = '0.0';
   f2 = '0.00';
   b80 ='                                                                                ';
-
+  FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
 
 var
   config: TCCDConfig;

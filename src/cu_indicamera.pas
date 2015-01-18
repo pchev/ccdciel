@@ -781,7 +781,7 @@ begin
  if CCDTemperature<>nil then begin
     result:=CCDTemperature.np[0].value;
  end
- else result:=0;
+ else result:=NullCoord;
 //end;
 end;
 
