@@ -196,7 +196,7 @@ end;
 
 function TFitsHeader.ReadHeader(ff:TMemoryStream): integer;
 var   header : THeaderBlock;
-      i,p1,p2 : integer;
+      i,p1,p2,n : integer;
       eoh : boolean;
       row,keyword,value,comment,buf : string;
       P: PChar;
@@ -205,7 +205,9 @@ ClearHeader;
 eoh:=false;
 ff.Position:=0;
 repeat
-   ff.Read(header,sizeof(THeaderBlock));
+   n:=ff.Read(header,sizeof(THeaderBlock));
+   if n<>sizeof(THeaderBlock) then
+      Break;
    for i:=1 to 36 do begin
       row:=header[i];
       if trim(row)='' then continue;
@@ -220,9 +222,17 @@ repeat
          value:=trim(copy(row,p1+1,99));
          comment:='';
       end;
-      if (not Fvalid)and(keyword='SIMPLE')and(copy(value,1,1)<>'T') then Fvalid:=true;
-      if (keyword='END') then
+      if (keyword='SIMPLE') then
+         if (copy(value,1,1)='T') then begin
+           Fvalid:=true;
+         end
+         else begin
+           Fvalid:=false;
+           Break;
+         end;
+      if (keyword='END') then begin
          eoh:=true;
+      end;
       P:=PChar(value);
       buf:=AnsiExtractQuotedStr(P,'''');
       if buf<>'' then value:=buf;
@@ -247,9 +257,11 @@ begin
     buf:=FRows[i];
     result.Write(buf,80);
   end;
-  buf:=b80;
-  c:=36 - FRows.Count mod 36;
-  for i:=1 to c do result.Write(buf,80);
+  if (FRows.Count mod 36)>0 then begin
+    buf:=b80;
+    c:=36 - (FRows.Count mod 36);
+    for i:=1 to c do result.Write(buf,80);
+  end;
 end;
 
 function TFitsHeader.Indexof(key: string): integer;
