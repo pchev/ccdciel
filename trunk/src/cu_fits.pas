@@ -554,22 +554,12 @@ with FFitsInfo do begin
     if (keyword='THRESL') then dmin:=strtofloat(buf);
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
-    if (keyword='OBJCTRA') then objra:=strtofloat(buf);
-    if (keyword='OBJCTDEC') then objdec:=strtofloat(buf);
+    if (keyword='OBJCTRA') then objra:=StrToFloatDef(buf,NullCoord);
+    if (keyword='OBJCTDEC') then objdec:=StrToFloatDef(buf,NullCoord);
     if (keyword='CTYPE1') then ctype1:=buf;
     if (keyword='CTYPE2') then ctype2:=buf;
     if (keyword='CRVAL1') then crval1:=strtofloat(buf);
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
-    if keyword='CONTRAS1' then
-         try
-           dmin:=strtoint(words(buf,'',1,1));   // low value for good contrast
-         except
-         end;
-    if keyword='CONTRAS9' then
-         try
-           dmax:=strtoint(words(buf,'',9,1));   // high value for good contrast
-         except
-         end;
  end;
  // very crude coordinates to help astrometry if telescope is not available
  if objra=NullCoord then begin
