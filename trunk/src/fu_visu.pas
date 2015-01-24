@@ -68,12 +68,13 @@ type
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
+    procedure SetZoom(value: double);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure DrawHistogram(hist:Thistogram);
-    property Zoom: double read FZoom;
+    property Zoom: double read FZoom write SetZoom;
     property ImgMin: integer read FimgMin write FimgMin;
     property ImgMax: integer read FimgMax write FimgMax;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
@@ -208,6 +209,17 @@ begin
      end;
   end;
   if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
+end;
+
+procedure Tf_visu.SetZoom(value: double);
+begin
+ if FZoom<>value then begin
+    FZoom:=value;
+    if FZoom=0 then BtnZoomAdjust.Down:=true
+    else if FZoom=0.5 then BtnZoom05.Down:=true
+    else if FZoom=1 then BtnZoom1.Down:=true
+    else if FZoom=2 then BtnZoom2.Down:=true;
+ end;
 end;
 
 procedure Tf_visu.BtnZoomClick(Sender: TObject);

@@ -151,7 +151,7 @@ type
     f_msg: Tf_msg;
     fits: TFits;
     ImaBmp: TBitmap;
-    ImgScale0: double;
+    ImgScale0,SaveFocusZoom: double;
     ImgCx, ImgCy, OrigX, OrigY, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
@@ -579,9 +579,7 @@ procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y: integer;
 begin
  Screen2fits(Mx,My,x,y);
- x:=x-(Starwindow div 2);
- y:=y-(Starwindow div 2);
- f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2);
+ f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
  Image1.Invalidate;
 end;
 
@@ -1899,7 +1897,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.GetIntfImg;
   fits.GetBitmap(ImaBmp);
   if f_starprofile.FindStar then
-    f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2);
+    f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
   PlotImage;
 end;
 end;
@@ -2052,6 +2050,8 @@ begin
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;
      NewMessage('Focus aid started');
+     SaveFocusZoom:=f_visu.Zoom;
+     f_visu.Zoom:=0;
      StartPreviewExposure(nil);
   end
   else begin
@@ -2065,6 +2065,7 @@ begin
    camera.ResetFrame;
    f_preview.Running:=false;
    f_preview.Loop:=false;
+   f_visu.Zoom:=SaveFocusZoom;
    StartPreviewExposure(nil);
    NewMessage('Focus aid stoped');
 end;
