@@ -1,16 +1,16 @@
 object f_starprofile: Tf_starprofile
   Left = 0
-  Height = 271
+  Height = 330
   Top = 0
   Width = 106
   AutoSize = True
-  ClientHeight = 271
+  ClientHeight = 330
   ClientWidth = 106
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 149
-  DesignTop = 56
+  DesignLeft = 424
+  DesignTop = 136
   object StaticText1: TStaticText
     Left = 0
     Height = 20
@@ -28,14 +28,14 @@ object f_starprofile: Tf_starprofile
   end
   object Panel1: TPanel
     Left = 0
-    Height = 251
+    Height = 310
     Top = 20
     Width = 106
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 251
+    ClientHeight = 310
     ClientWidth = 106
     TabOrder = 1
     object Panel2: TPanel
@@ -91,10 +91,10 @@ object f_starprofile: Tf_starprofile
       ClientHeight = 50
       ClientWidth = 100
       TabOrder = 2
-      object LabelFWHM: TLabel
+      object LabelHFD: TLabel
         Left = 1
         Height = 33
-        Hint = 'The Full Width at Half Maximum value'
+        Hint = 'The Half Flux Diameter value'
         Top = 16
         Width = 7
         Caption = ' '
@@ -107,6 +107,36 @@ object f_starprofile: Tf_starprofile
         Left = 1
         Height = 15
         Top = 0
+        Width = 26
+        Caption = 'HFD:'
+        ParentColor = False
+      end
+    end
+    object Panel6: TPanel
+      Left = 0
+      Height = 43
+      Top = 170
+      Width = 100
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 43
+      ClientWidth = 100
+      TabOrder = 5
+      object LabelFWHM: TLabel
+        Left = 1
+        Height = 26
+        Hint = 'The Full Width at Half Maximum value'
+        Top = 16
+        Width = 5
+        Caption = ' '
+        Font.Height = 22
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 1
+        Height = 15
+        Top = 0
         Width = 39
         Caption = 'FWHM:'
         ParentColor = False
@@ -115,7 +145,7 @@ object f_starprofile: Tf_starprofile
     object Panel5: TPanel
       Left = 0
       Height = 50
-      Top = 170
+      Top = 213
       Width = 100
       ClientHeight = 50
       ClientWidth = 100
@@ -144,7 +174,7 @@ object f_starprofile: Tf_starprofile
     object focus: TCheckBox
       Left = 0
       Height = 26
-      Top = 220
+      Top = 263
       Width = 100
       Caption = 'Focus aid'
       OnChange = focusChange

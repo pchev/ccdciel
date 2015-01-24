@@ -28,7 +28,7 @@ uses  u_modelisation, u_global,
   Graphics, Classes, SysUtils, FPImage, cu_fits,
   FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
-const maxhist=20;
+const maxhist=50;
 
 type
 
@@ -39,11 +39,14 @@ type
     graph: TImage;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
+    LabelFWHM: TLabel;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
     profile: TImage;
-    LabelFWHM: TLabel;
+    LabelHFD: TLabel;
     LabelImax: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
@@ -59,14 +62,14 @@ type
     FFocusStart,FFocusStop: TNotifyEvent;
     emptybmp:Tbitmap;
     histfwhm, histimax: array[0..maxhist] of double;
-    maxfwhm,maximax,curflux: double;
-    curhist,curx,cury: integer;
+    maxfwhm,maximax: double;
+    curhist: integer;
     procedure ClearGraph;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer);
+    procedure ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
     property FindStar : boolean read FFindStar;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
@@ -149,10 +152,9 @@ begin
  emptybmp.SetSize(1,1);
  FFindStar:=false;
  curhist:=0;
- curx:=0;
- cury:=0;
  maxfwhm:=0;
  maximax:=0;
+ LabelHFD.Caption:='-';
  LabelFWHM.Caption:='-';
  LabelImax.Caption:='-';
  ClearGraph;
@@ -164,59 +166,115 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_starprofile.ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer);
-var simg:TPiw16;
+procedure Tf_starprofile.ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
+var Val,ValMax: double;
+  i,j,rs,i0,x1,x2,y1,y2,xm,ym: integer;
+  bg,snr,r,Xg,Yg,fxg,fyg,SumVal,SumValX,SumValY,SumValR,xs,ys,hfd,fwhm,fwhmarcsec:double;
+  txt: string;
+  simg:TPiw16;
   imgdata: Tiw16;
-  Valeur,ValMax: integer;
-  i,j,xx,yy,x1,x2,y1,y2: integer;
   PSF:TPSF;
-  xs,ys,vx:double;
 begin
+ rs:= s div 2;
+ if (x-s)<1 then x:=s+1;
+ if (x+s)>(xmax-1) then x:=xmax-s-1;
+ if (y-s)<1 then y:=s+1;
+ if (y+s)>(ymax-1) then y:=ymax-s-1;
+ // Center on brightest pixel
  ValMax:=0;
- for i:=0 to s-1 do
-   for j:=0 to s-1 do
-      if ((x+i)>0)and((x+i)<xmax)and((y+j)>0)and((y+j)<ymax) then begin
-         Valeur:=Img[0,y+j,x+i];
-         if Valeur>ValMax then begin
-              ValMax:=Valeur;
-              xx:=i;
-              yy:=j;
-         end;
-      end;
+ for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     Val:=min+Img[0,y+j,x+i]/c;
+     if Val>ValMax then begin
+          ValMax:=Val;
+          xm:=i;
+          ym:=j;
+     end;
+   end;
  if ValMax=0 then exit;
- vx:=min+ValMax/c;
- x:=x+xx - s div 2;
- y:=y+yy - s div 2;
+ x:=x+xm;
+ y:=y+ym;
+ // Get center of gravity
+ SumVal:=0;
+ SumValX:=0;
+ SumValY:=0;
+ for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     Val:=min+Img[0,y+j,x+i]/c;
+     SumVal:=SumVal+Val;
+     SumValX:=SumValX+Val*i;
+     SumValY:=SumValY+Val*j;
+   end;
+ Xg:=SumValX/SumVal;
+ Yg:=SumValY/SumVal;
+ x:=trunc(x+Xg);
+ y:=trunc(y+Yg);
+ fxg:=frac(x+Xg);
+ fyg:=frac(y+Yg);
+ // Get HFD
+ hfd:=-1;
+ SumVal:=0;
+ SumValR:=0;
+ bg:=min+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) div 4)/c;
+ valmax:=valmax-bg;
+ snr:=valmax/bg;
+ if snr>2 then begin
+   for i:=-rs to rs do
+     for j:=-rs to rs do begin
+       Val:=min+Img[0,y+j,x+i]/c-bg;
+       xs:=i-fxg;
+       ys:=j-fyg;
+       r:=sqrt(xs*xs+ys*ys);
+       if val>(1.1*bg) then begin
+         SumVal:=SumVal+Val;
+         SumValR:=SumValR+Val*r;
+       end;
+     end;
+   hfd:=2*SumValR/SumVal;
+ end;
+ // Get gaussian psf
  setlength(imgdata,s,s);
  simg:=addr(imgdata);
  for i:=0 to s-1 do
    for j:=0 to s-1 do begin
-     xx:=x+i;
-     yy:=y+j;
-     if (xx>0)and(xx<xmax)and(yy>0)and(y<ymax) then
-        imgdata[i,j]:=trunc(min+img[0,yy,xx]/c)
+     x1:=x+i-rs;
+     y1:=y+j-rs;
+     if (x1>0)and(x1<xmax)and(y1>0)and(y1<ymax) then
+        imgdata[i,j]:=trunc(min+img[0,y1,x1]/c)
      else imgdata[i,j]:=trunc(min);
    end;
  ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
- if PSF.Flux>0 then begin
+ if psf.Flux>0 then begin
+   fwhm:=PSF.Sigma;
+   if (focal>0)and(pxsize>0) then begin
+     fwhmarcsec:=fwhm*3600*rad2deg*arctan(pxsize/1000/focal);
+   end
+   else fwhmarcsec:=-1;
+ end
+ else fwhm:=-1;
+ // Plot result
+ if (hfd>0) then begin
    FFindStar:=true;
-   FStarX:=x+psf.X;
-   FStarY:=y+psf.Y;
-   LabelFWHM.Caption:=FormatFloat(f1,PSF.Sigma);
-   LabelImax.Caption:=FormatFloat(f0,PSF.IntensiteMax);
-   curflux:=PSF.Flux;
-   curx:=x;
-   cury:=y;
+   FStarX:=round(x+fxg);
+   FStarY:=round(y+fyg);
+   LabelHFD.Caption:=FormatFloat(f1,hfd);
+   LabelImax.Caption:=FormatFloat(f0,ValMax);
+   if fwhm>0 then begin
+     txt:=FormatFloat(f1,fwhm);
+     if fwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,fwhmarcsec)+'"';
+     LabelFWHM.Caption:=txt;
+   end;
    if curhist>maxhist then
      for i:=0 to maxhist-1 do begin
        histfwhm[i]:=histfwhm[i+1];
        histimax[i]:=histimax[i+1];
        curhist:=maxhist;
      end;
-   histfwhm[curhist]:=PSF.Sigma;
-   histimax[curhist]:=PSF.IntensiteMax;
+   histfwhm[curhist]:=hfd;
+   histimax[curhist]:=ValMax;
    if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
    if histimax[curhist] > maximax then maximax:=histimax[curhist];
+   // Star profile
    profile.Picture.Bitmap.Width:=profile.Width;
    profile.Picture.Bitmap.Height:=profile.Height;
    with profile.Picture.Bitmap do begin
@@ -224,26 +282,28 @@ begin
      Canvas.Pen.Color:=clBlack;
      Canvas.Pen.Mode:=pmCopy;
      Canvas.FillRect(0,0,Width,Height);
-     if PSF.IntensiteMax>0 then begin
+     if ValMax>0 then begin
        Canvas.Pen.Color:=clRed;
-       j:=trunc(PSF.Y);
        xs:=Width/s;
-       ys:=Height/vx;
+       ys:=Height/(ValMax+bg);
+       j:=trunc(FStarY);
+       i0:=trunc(FStarX)-(s div 2);
        x1:=0;
-       y1:=Height-trunc(imgdata[0,j]*ys);
-       for i:=1 to s-1 do begin
+       y1:=Height-trunc((min+(img[0,j,i0]-bg)/c)*ys);
+       for i:=0 to s-1 do begin
          x2:=trunc(i*xs);
-         y2:=imgdata[i,j];
-         y2:=Height-trunc(y2*ys);
+         y2:=trunc((min+(img[0,j,i0+i]-bg)/c)*ys);
+         y2:=Height-y2;
          Canvas.Line(x1,y1,x2,y2);
          x1:=x2;
          y1:=y2;
        end;
      end;
    end;
+   // History graph
    graph.Picture.Bitmap.Width:=graph.Width;
    graph.Picture.Bitmap.Height:=graph.Height;
-   if PSF.IntensiteMax>0 then with graph.Picture.Bitmap do begin
+   if ValMax>0 then with graph.Picture.Bitmap do begin
      Canvas.Brush.Color:=clBlack;
      Canvas.Pen.Color:=clBlack;
      Canvas.Pen.Mode:=pmCopy;
@@ -269,11 +329,11 @@ begin
    inc(curhist);
  end else begin
    FFindStar:=false;
+   LabelHFD.Caption:='-';
    LabelFWHM.Caption:='-';
    LabelImax.Caption:='-';
    ClearGraph;
  end;
- setlength(imgdata,0,0);
 end;
 
 end.

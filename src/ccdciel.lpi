@@ -151,6 +151,7 @@
         <ComponentName Value="f_visu"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_visu"/>
       </Unit6>
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
@@ -190,6 +191,7 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
