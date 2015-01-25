@@ -26,7 +26,7 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp,
-  pu_devicesetup, pu_options, pu_filtername, pu_indigui, cu_fits, cu_camera,
+  pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_astrometry, cu_cdcclient, lazutf8sysutils, Classes,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
@@ -1140,20 +1140,23 @@ var i:integer;
     fn:TStringList;
 begin
   if wheel.Status=devConnected then begin
-     f_filtername.FilterList.Clear;
-     f_filtername.FilterList.RowCount:=wheel.FilterNames.Count+1;
+     f_valueseditor.Caption:='Edit filter name';
+     f_valueseditor.ValuesList.TitleCaptions[0]:='Position';
+     f_valueseditor.ValuesList.TitleCaptions[0]:='Filter name';
+     f_valueseditor.ValuesList.Clear;
+     f_valueseditor.ValuesList.RowCount:=wheel.FilterNames.Count+1;
      for i:=1 to wheel.FilterNames.Count do begin
         k:=inttostr(i);
-        f_filtername.FilterList.Keys[i]:=k;
-        f_filtername.FilterList.Values[k]:=wheel.FilterNames[i-1];
+        f_valueseditor.ValuesList.Keys[i]:=k;
+        f_valueseditor.ValuesList.Values[k]:=wheel.FilterNames[i-1];
      end;
-     f_filtername.ShowModal;
-     if f_filtername.ModalResult=mrOK then begin
+     f_valueseditor.ShowModal;
+     if f_valueseditor.ModalResult=mrOK then begin
        fn:=TStringList.Create;
        fn.Clear;
        for i:=1 to wheel.FilterNames.Count do begin
           k:=inttostr(i);
-          fn.Add(f_filtername.FilterList.Values[k]);
+          fn.Add(f_valueseditor.ValuesList.Values[k]);
        end;
        wheel.FilterNames:=fn;
        fn.Free;

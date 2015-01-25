@@ -33,7 +33,7 @@ uses
   cu_focuser, u_global, fu_starprofile, fu_filterwheel, fu_focuser, fu_mount,
   u_modelisation, cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser,
   cu_indicamera, cu_fits, cu_camera, cu_ascomwheel, cu_ascommount,
-  cu_ascomcamera, pu_filtername, fu_ccdtemp, pu_indigui, pu_options, fu_frame,
+  cu_ascomcamera, pu_valueseditor, fu_ccdtemp, pu_indigui, pu_options, fu_frame,
   cu_astrometry, cu_cdcclient, pu_viewtext;
 
 {$R *.res}
@@ -53,7 +53,7 @@ begin
   Application.Initialize;
   Application.CreateForm(Tf_main, f_main);
   Application.CreateForm(Tf_setup, f_setup);
-  Application.CreateForm(Tf_filtername, f_filtername);
+  Application.CreateForm(Tf_valueseditor, f_valueseditor);
   Application.CreateForm(Tf_option, f_option);
   Application.CreateForm(Tf_viewtext, f_viewtext);
   Application.Run;
