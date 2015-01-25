@@ -1,103 +1,22 @@
 object f_option: Tf_option
-  Left = 363
-  Height = 541
-  Top = 225
-  Width = 400
+  Left = 1175
+  Height = 435
+  Top = 212
+  Width = 416
   Caption = 'Options'
-  ClientHeight = 541
-  ClientWidth = 400
+  ClientHeight = 435
+  ClientWidth = 416
+  OnCreate = FormCreate
   LCLVersion = '1.2.4.0'
-  object GroupBox1: TGroupBox
-    Left = 0
-    Height = 112
-    Top = 0
-    Width = 400
-    Align = alTop
-    Caption = 'Files'
-    ClientHeight = 81
-    ClientWidth = 396
-    TabOrder = 0
-    object CaptureDir: TDirectoryEdit
-      Left = 104
-      Height = 21
-      Top = 8
-      Width = 176
-      ShowHidden = False
-      ButtonWidth = 23
-      NumGlyphs = 1
-      MaxLength = 0
-      TabOrder = 0
-    end
-    object Label1: TLabel
-      Left = 8
-      Height = 15
-      Top = 8
-      Width = 83
-      Caption = 'Capture folder'
-      ParentColor = False
-    end
-    object Logtofile: TCheckBox
-      Left = 8
-      Height = 26
-      Top = 40
-      Width = 162
-      Caption = 'Log all messages to file '
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
-    end
-  end
-  object GroupBox2: TGroupBox
-    Left = 0
-    Height = 112
-    Top = 112
-    Width = 400
-    Align = alTop
-    Caption = 'Star profile'
-    ClientHeight = 81
-    ClientWidth = 396
-    TabOrder = 1
-    object StarWindow: TEdit
-      Left = 200
-      Height = 21
-      Top = 8
-      Width = 51
-      TabOrder = 0
-    end
-    object Label14: TLabel
-      Left = 16
-      Height = 15
-      Top = 8
-      Width = 156
-      Caption = 'Star detection window size '
-      ParentColor = False
-    end
-    object Label2: TLabel
-      Left = 16
-      Height = 15
-      Top = 40
-      Width = 103
-      Caption = 'Focus window size'
-      ParentColor = False
-      ParentFont = False
-    end
-    object FocusWindow: TEdit
-      Left = 200
-      Height = 21
-      Top = 34
-      Width = 51
-      TabOrder = 1
-    end
-  end
   object Panel1: TPanel
     Left = 0
     Height = 40
-    Top = 501
-    Width = 400
+    Top = 395
+    Width = 416
     Align = alBottom
     ClientHeight = 40
-    ClientWidth = 400
-    TabOrder = 2
+    ClientWidth = 416
+    TabOrder = 0
     object Button1: TButton
       Left = 256
       Height = 25
@@ -118,160 +37,393 @@ object f_option: Tf_option
       TabOrder = 1
     end
   end
-  object GroupBox3: TGroupBox
+  object PageControl1: TPageControl
     Left = 0
-    Height = 272
-    Top = 224
-    Width = 401
-    Caption = 'Astrometry'
-    ClientHeight = 241
-    ClientWidth = 397
-    TabOrder = 3
-    object PixelSizeFromCamera: TCheckBox
-      Left = 112
-      Height = 26
-      Top = 8
-      Width = 137
-      Caption = 'From camera driver'
-      OnChange = PixelSizeFromCameraChange
-      TabOrder = 0
+    Height = 395
+    Top = 0
+    Width = 416
+    ActivePage = TabSheet4
+    Align = alClient
+    TabIndex = 3
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'Files'
+      ClientHeight = 358
+      ClientWidth = 408
+      object GroupBox1: TGroupBox
+        Left = 0
+        Height = 144
+        Top = 0
+        Width = 400
+        Caption = 'Files'
+        ClientHeight = 127
+        ClientWidth = 396
+        TabOrder = 0
+        object CaptureDir: TDirectoryEdit
+          Left = 104
+          Height = 21
+          Top = 8
+          Width = 176
+          ShowHidden = False
+          ButtonWidth = 23
+          NumGlyphs = 1
+          MaxLength = 0
+          TabOrder = 0
+        end
+        object Label1: TLabel
+          Left = 8
+          Height = 15
+          Top = 8
+          Width = 83
+          Caption = 'Capture folder'
+          ParentColor = False
+        end
+        object Logtofile: TCheckBox
+          Left = 8
+          Height = 26
+          Top = 56
+          Width = 162
+          Caption = 'Log all messages to file '
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+      end
     end
-    object Label3: TLabel
-      Left = 7
-      Height = 15
-      Top = 15
-      Width = 51
-      Caption = 'Pixel size'
-      ParentColor = False
+    object TabSheet2: TTabSheet
+      Caption = 'Informations'
+      ClientHeight = 358
+      ClientWidth = 408
+      object Label5: TLabel
+        Left = 8
+        Height = 15
+        Top = 27
+        Width = 85
+        Caption = 'Observer name'
+        ParentColor = False
+      end
+      object ObserverName: TEdit
+        Left = 144
+        Height = 21
+        Top = 24
+        Width = 218
+        TabOrder = 0
+      end
+      object Label10: TLabel
+        Left = 8
+        Height = 15
+        Top = 75
+        Width = 102
+        Caption = 'Observatory name'
+        ParentColor = False
+      end
+      object ObservatoryName: TEdit
+        Left = 144
+        Height = 21
+        Top = 72
+        Width = 218
+        TabOrder = 1
+      end
+      object Label11: TLabel
+        Left = 8
+        Height = 15
+        Top = 123
+        Width = 91
+        Caption = 'Telescope name'
+        ParentColor = False
+      end
+      object TelescopeName: TEdit
+        Left = 144
+        Height = 21
+        Top = 120
+        Width = 218
+        TabOrder = 2
+      end
     end
-    object PixelSize: TEdit
-      Left = 288
-      Height = 21
-      Top = 9
-      Width = 80
-      TabOrder = 1
+    object TabSheet3: TTabSheet
+      Caption = 'Focus'
+      ClientHeight = 358
+      ClientWidth = 408
+      object GroupBox2: TGroupBox
+        Left = 0
+        Height = 120
+        Top = 0
+        Width = 400
+        Caption = 'Star profile'
+        ClientHeight = 103
+        ClientWidth = 396
+        TabOrder = 0
+        object StarWindow: TEdit
+          Left = 200
+          Height = 21
+          Top = 8
+          Width = 51
+          TabOrder = 0
+        end
+        object Label14: TLabel
+          Left = 16
+          Height = 15
+          Top = 8
+          Width = 156
+          Caption = 'Star detection window size '
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 16
+          Height = 15
+          Top = 46
+          Width = 103
+          Caption = 'Focus window size'
+          ParentColor = False
+          ParentFont = False
+        end
+        object FocusWindow: TEdit
+          Left = 200
+          Height = 21
+          Top = 40
+          Width = 51
+          TabOrder = 1
+        end
+      end
     end
-    object Label4: TLabel
-      Left = 7
-      Height = 15
-      Top = 48
-      Width = 76
-      Caption = 'Focale length'
-      ParentColor = False
-    end
-    object FocaleFromTelescope: TCheckBox
-      Left = 112
-      Height = 26
-      Top = 40
-      Width = 152
-      Caption = 'From telescope driver'
-      OnChange = FocaleFromTelescopeChange
-      TabOrder = 2
-    end
-    object Focale: TEdit
-      Left = 288
-      Height = 21
-      Top = 42
-      Width = 80
-      TabOrder = 3
-    end
-    object Label5: TLabel
-      Left = 7
-      Height = 15
-      Top = 81
-      Width = 50
-      Caption = 'RA / DEC'
-      ParentColor = False
-    end
-    object RaDecFromTelescope: TRadioButton
-      Left = 112
-      Height = 26
-      Top = 75
-      Width = 152
-      Caption = 'From telescope driver'
-      Checked = True
-      TabOrder = 4
-      TabStop = True
-    end
-    object RaDecFromFits: TRadioButton
-      Left = 112
-      Height = 26
-      Top = 100
-      Width = 124
-      Caption = 'From FITS header'
-      TabOrder = 5
-    end
-    object Label6: TLabel
-      Left = 7
-      Height = 15
-      Top = 170
-      Width = 131
-      Anchors = [akTop, akRight]
-      Caption = 'Minimum search radius'
-      ParentColor = False
-    end
-    object MinRadius: TEdit
-      Left = 151
-      Height = 21
-      Top = 168
-      Width = 48
-      TabOrder = 6
-    end
-    object Label7: TLabel
-      Left = 231
-      Height = 15
-      Top = 170
-      Width = 87
-      Anchors = [akTop, akRight]
-      Caption = 'Scale tolerance'
-      ParentColor = False
-    end
-    object Tolerance: TEdit
-      Left = 327
-      Height = 21
-      Top = 168
-      Width = 48
-      TabOrder = 7
-    end
-    object Label8: TLabel
-      Left = 66
-      Height = 15
-      Top = 208
-      Width = 72
-      Anchors = [akTop, akRight]
-      Caption = 'Downsample'
-      ParentColor = False
-    end
-    object Downsample: TEdit
-      Left = 151
-      Height = 21
-      Top = 206
-      Width = 48
-      TabOrder = 8
-    end
-    object Label9: TLabel
-      Left = 215
-      Height = 15
-      Top = 208
-      Width = 103
-      Anchors = [akTop, akRight]
-      Caption = 'Maximum sources'
-      ParentColor = False
-    end
-    object SourcesLimit: TEdit
-      Left = 327
-      Height = 21
-      Top = 206
-      Width = 48
-      TabOrder = 9
-    end
-    object Plot: TCheckBox
-      Left = 112
-      Height = 26
-      Top = 128
-      Width = 168
-      Caption = 'Create plot of the result'
-      TabOrder = 10
+    object TabSheet4: TTabSheet
+      Caption = 'Astrometry'
+      ClientHeight = 358
+      ClientWidth = 408
+      object GroupBox4: TGroupBox
+        Left = 0
+        Height = 160
+        Top = 0
+        Width = 400
+        Caption = 'Astrometry options'
+        ClientHeight = 129
+        ClientWidth = 396
+        TabOrder = 0
+        object Focale: TEdit
+          Left = 288
+          Height = 21
+          Top = 26
+          Width = 80
+          TabOrder = 0
+        end
+        object FocaleFromTelescope: TCheckBox
+          Left = 112
+          Height = 26
+          Top = 24
+          Width = 152
+          Caption = 'From telescope driver'
+          OnChange = FocaleFromTelescopeChange
+          TabOrder = 1
+        end
+        object Label4: TLabel
+          Left = 7
+          Height = 15
+          Top = 32
+          Width = 76
+          Caption = 'Focale length'
+          ParentColor = False
+        end
+        object PixelSize: TEdit
+          Left = 288
+          Height = 21
+          Top = 1
+          Width = 80
+          TabOrder = 2
+        end
+        object Label3: TLabel
+          Left = 7
+          Height = 15
+          Top = 7
+          Width = 51
+          Caption = 'Pixel size'
+          ParentColor = False
+        end
+        object PixelSizeFromCamera: TCheckBox
+          Left = 112
+          Height = 26
+          Top = 0
+          Width = 137
+          Caption = 'From camera driver'
+          OnChange = PixelSizeFromCameraChange
+          TabOrder = 3
+        end
+        object ResolverBox: TRadioGroup
+          Left = 0
+          Height = 71
+          Top = 56
+          Width = 400
+          AutoFill = True
+          Caption = 'Software'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 2
+          ClientHeight = 40
+          ClientWidth = 396
+          Columns = 2
+          ItemIndex = 0
+          Items.Strings = (
+            'Astrometry.Net'
+            'Elbrus Star Locator'
+          )
+          OnClick = ResolverBoxClick
+          TabOrder = 4
+        end
+      end
+      object Notebook1: TNotebook
+        Left = 0
+        Height = 187
+        Top = 173
+        Width = 400
+        PageIndex = 1
+        TabOrder = 1
+        TabStop = True
+        object Page1: TPage
+          object astrometrynet: TGroupBox
+            Left = 0
+            Height = 168
+            Top = 0
+            Width = 400
+            Caption = 'Astrometry.Net'
+            ClientHeight = 137
+            ClientWidth = 396
+            TabOrder = 0
+            object Label6: TLabel
+              Left = 7
+              Height = 15
+              Top = 10
+              Width = 131
+              Anchors = [akTop, akRight]
+              Caption = 'Minimum search radius'
+              ParentColor = False
+            end
+            object MinRadius: TEdit
+              Left = 152
+              Height = 21
+              Top = 8
+              Width = 48
+              TabOrder = 0
+            end
+            object Label7: TLabel
+              Left = 231
+              Height = 15
+              Top = 10
+              Width = 87
+              Anchors = [akTop, akRight]
+              Caption = 'Scale tolerance'
+              ParentColor = False
+            end
+            object Tolerance: TEdit
+              Left = 328
+              Height = 21
+              Top = 8
+              Width = 48
+              TabOrder = 1
+            end
+            object Label8: TLabel
+              Left = 66
+              Height = 15
+              Top = 48
+              Width = 72
+              Anchors = [akTop, akRight]
+              Caption = 'Downsample'
+              ParentColor = False
+            end
+            object Downsample: TEdit
+              Left = 152
+              Height = 21
+              Top = 46
+              Width = 48
+              TabOrder = 2
+            end
+            object Label9: TLabel
+              Left = 215
+              Height = 15
+              Top = 48
+              Width = 103
+              Anchors = [akTop, akRight]
+              Caption = 'Maximum sources'
+              ParentColor = False
+            end
+            object SourcesLimit: TEdit
+              Left = 328
+              Height = 21
+              Top = 46
+              Width = 48
+              TabOrder = 3
+            end
+            object Plot: TCheckBox
+              Left = 9
+              Height = 26
+              Top = 80
+              Width = 168
+              Caption = 'Create plot of the result'
+              TabOrder = 4
+            end
+          end
+        end
+        object Page2: TPage
+          object elbrus: TGroupBox
+            Left = 0
+            Height = 184
+            Top = 0
+            Width = 400
+            Caption = 'Elbrus Star Locator'
+            ClientHeight = 153
+            ClientWidth = 396
+            TabOrder = 0
+            object ElbrusFolder: TEdit
+              Left = 168
+              Height = 21
+              Hint = 'The Elbrus Images folder as set in the Elbrus parameters.'
+              Top = 10
+              Width = 200
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+            end
+            object Label12: TLabel
+              Left = 8
+              Height = 15
+              Top = 14
+              Width = 118
+              Caption = 'Elbrus Images folder '
+              ParentColor = False
+            end
+            object Label13: TLabel
+              Left = 10
+              Height = 15
+              Top = 45
+              Width = 133
+              Caption = 'Images folder Unix path'
+              ParentColor = False
+            end
+            object ElbrusUnixpath: TEdit
+              Left = 168
+              Height = 21
+              Hint = 'The Unix path equivalent to the Elbrus Images folder.'
+              Top = 43
+              Width = 200
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object Label15: TLabel
+              Left = 10
+              Height = 80
+              Top = 72
+              Width = 378
+              AutoSize = False
+              Caption = 'Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.'#10'Also be sure to set the parameter: "Add the WCS in the FITS header".'
+              ParentColor = False
+              WordWrap = True
+            end
+          end
+        end
+      end
     end
   end
 end

@@ -57,8 +57,10 @@ const
   LF = #$0a;
   CRLF = CR + LF;
   secperday = 3600*24;
+  pi2 = 2 * pi;
   rad2deg=180/pi;
   deg2rad=pi/180;
+  jd2000 = 2451545.0;
   {$ifdef mswindows}
   defCapturePath='C:\';
   {$else}

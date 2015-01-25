@@ -156,6 +156,7 @@
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -171,6 +172,7 @@
         <ComponentName Value="f_setup"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_devicesetup"/>
       </Unit9>
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
@@ -244,6 +246,7 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -258,6 +261,7 @@
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
@@ -313,7 +317,9 @@
         <Filename Value="pu_viewtext.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_viewtext"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_viewtext"/>
       </Unit35>
     </Units>
   </ProjectOptions>

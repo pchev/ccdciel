@@ -28,14 +28,14 @@ uses  u_global, u_utils,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
-  UTF8Process, process, Classes, SysUtils;
+  UTF8Process, process, FileUtil, Classes, SysUtils;
 
 type
 TAstrometry = class(TThread)
    private
-     FInFile, FOutFile, FLogFile: string;
+     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath : string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius: double;
-     FObjs,FDown: integer;
+     FObjs,FDown,FResolver: integer;
      Fplot: boolean;
      Fresult:integer;
      Fcmd: string;
@@ -49,6 +49,7 @@ TAstrometry = class(TThread)
      destructor Destroy; override;
      procedure Resolve;
      procedure Stop;
+     property Resolver: integer read FResolver write FResolver;
      property InFile: string read FInFile write FInFile;
      property OutFile: string read FOutFile write FOutFile;
      property LogFile: string read FLogFile write FLogFile;
@@ -63,8 +64,15 @@ TAstrometry = class(TThread)
      property result: integer read Fresult;
      property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
+     property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
+     property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
      property onCmdTerminate: TNotifyEvent read FCmdTerminate write FCmdTerminate;
 end;
+
+const
+  ResolverAstrometryNet=0;
+  ResolverElbrus=1;
+  ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
 
 implementation
 
@@ -77,6 +85,7 @@ begin
   Fra:=NullCoord;
   Fde:=NullCoord;
   Fradius:=NullCoord;
+  FResolver:=ResolverAstrometryNet;
   FObjs:=0;
   FDown:=0;
   Fscalelow:=0;
@@ -101,6 +110,7 @@ var hnd: Thandle;
     resp: Tstringlist;
 {$endif}
 begin
+if FResolver=ResolverAstrometryNet then begin
 {$ifdef unix}
   // Kill all child process
   if process.Running then begin
@@ -127,9 +137,11 @@ begin
   if process.Running then process.Active:=false;
 {$endif}
 end;
+end;
 
 procedure TAstrometry.Resolve;
 begin
+if FResolver=ResolverAstrometryNet then begin
   Fcmd:='solve-field';
   Fparam.Add('--overwrite');
   if (Fscalelow>0)and(Fscalehigh>0) then begin
@@ -163,6 +175,19 @@ begin
   Fparam.Add(FOutFile);
   Fparam.Add(FInFile);
   Start;
+end
+else if FResolver=ResolverElbrus then begin
+  FElbrusFile:=ExtractFileName(FInFile);
+  {$ifdef mswindows}
+    FElbrusDir:=FElbrusFolder;
+  {$else}
+    FElbrusDir:=FElbrusUnixpath;
+  {$endif}
+  DeleteFileUTF8(slash(FElbrusDir)+'elbrus.pos');
+  DeleteFileUTF8(slash(FElbrusDir)+'elbrus.sta');
+  Copyfile(FInFile,slash(FElbrusDir)+FElbrusFile,[cffOverwriteFile]);
+  Start;
+end;
 end;
 
 procedure TAstrometry.Execute;
@@ -171,9 +196,14 @@ var n: LongInt;
     f: file;
     logok: boolean;
     cbuf: array[0..READ_BYTES] of char;
+    ft,fl: TextFile;
+    fn,imgdir,txt: string;
+    nside: integer;
+    timeout: double;
 begin
+if FResolver=ResolverAstrometryNet then begin
   cbuf:='';
-  if (LogFile<>'') then begin
+  if (FLogFile<>'') then begin
     AssignFile(f,FLogFile);
     rewrite(f,1);
     logok:=true;
@@ -198,6 +228,71 @@ begin
   until (n<=0)or(process.Output=nil);
   if logok then CloseFile(f);
   if Assigned(FCmdTerminate) then FCmdTerminate(self);
+end
+else if FResolver=ResolverElbrus then begin
+  fn:=slash(FElbrusDir)+'elbrus.txt';
+  imgdir:=trim(FElbrusFolder);
+  if copy(imgdir,length(imgdir),1)<>'\' then imgdir:=imgdir+'\';
+  AssignFile(ft,fn);
+  rewrite(ft);
+  write(ft,'1.- Elbrus command file'+crlf);    // CR+LF also on Linux
+  write(ft,'2.- commands from CCDciel'+crlf);
+  write(ft,'**SET imagePath'+crlf);
+  write(ft,imgdir+FElbrusFile+crlf);
+  write(ft,'**SET searchingCoordinatesFrom'+crlf);
+  write(ft,'1'+crlf);
+  write(ft,'**EXE analyze'+crlf);
+  write(ft,'space'+crlf);
+  CloseFile(ft);
+  timeout:=now+10/3600/24;
+  repeat
+    sleep(500);
+  until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>timeout);
+  sleep(1000);
+  if (FLogFile<>'') then begin
+    if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then begin
+       AssignFile(ft,slash(FElbrusDir)+'elbrus.sta');
+       AssignFile(fl,FLogFile);
+       Reset(ft);
+       Rewrite(fl);
+       repeat
+         ReadLn(ft,txt);
+         txt:=StringReplace(txt,#$b0,'d',[rfReplaceAll]);
+         writeln(fl,txt);
+       until eof(ft);
+       CloseFile(ft);
+       CloseFile(fl);
+    end;
+  end;
+  if FileExistsUTF8(slash(FElbrusDir)+'elbrus.pos') then begin
+    AssignFile(ft,slash(FElbrusDir)+'elbrus.pos');
+    reset(ft);
+    ReadLn(ft,txt);
+    CloseFile(ft);
+    nside:=StrToIntDef(copy(txt,1,3),0);
+    if nside>=10 then begin
+      Copyfile(slash(FElbrusDir)+FElbrusFile,FOutFile,[cffOverwriteFile]);
+      fn:=ChangeFileExt(FInFile,'.solved');
+      AssignFile(ft,fn);
+      rewrite(ft);
+      write(ft,' ');
+      CloseFile(ft);
+    end;
+  end else begin
+    if (FLogFile<>'') then begin
+      AssignFile(ft,FLogFile);
+      if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then
+        Append(ft)
+      else
+        Rewrite(ft);
+      WriteLn(ft,'Timeout!');
+      WriteLn(ft,'No response from Elbrus after 10 seconds.');
+      WriteLn(ft,'Is Elbrus running and waiting for messages?');
+      CloseFile(ft);
+    end;
+  end;
+  if Assigned(FCmdTerminate) then FCmdTerminate(self);
+end;
 end;
 
 end.

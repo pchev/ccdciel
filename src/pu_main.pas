@@ -1391,22 +1391,29 @@ begin
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
+   f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
+   f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
+   f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
    f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
    f_option.Focale.Text:=config.GetValue('/Astrometry/FocaleLength','');
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
+   f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    if f_option.PixelSizeFromCamera.Checked and (camera.PixelSizeX>0) then
       f_option.PixelSize.Text:=FormatFloat(f2,camera.PixelSizeX);
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
    if f_option.FocaleFromTelescope.Checked and (mount.FocaleLength>0) then
       f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
-   f_option.RaDecFromTelescope.Checked:=config.GetValue('/Astrometry/RaDecFromTelescope',true);
    f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
    f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',5.0));
    f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
    f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
    f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
+   f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
+   {$ifdef unix}
+   f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
+   {$endif}
 
    f_option.ShowModal;
 
@@ -1415,9 +1422,12 @@ begin
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
+     config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
+     config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
+     config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
+     config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
-     config.SetValue('/Astrometry/RaDecFromTelescope',f_option.RaDecFromTelescope.Checked);
      config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Text);
      config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
      config.SetValue('/Astrometry/ScaleTolerance',StrToFloatDef(f_option.Tolerance.Text,0.1 ));
@@ -1425,6 +1435,10 @@ begin
      config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
      config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
      config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);
+     config.SetValue('/Astrometry/ElbrusFolder',f_option.ElbrusFolder.Text);
+     {$ifdef unix}
+     config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
+     {$endif}
 
      config.Flush;
 
@@ -1678,13 +1692,14 @@ end;
 
 procedure Tf_main.WriteHeaders;
 var k:integer;
+    dy,dm,dd: word;
     origin,observer,telname,objname: string;
-    focal_length,pixscale1,pixscale2,ccdtemp: double;
+    focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hbin1,hbin2: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
 begin
-  // get header values from camera
+  // get header values from camera (set by INDI driver)
   if not fits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=fits.HeaderInfo.bitpix;
   if not fits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=fits.HeaderInfo.naxis;
   if not fits.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=fits.HeaderInfo.naxis1;
@@ -1700,14 +1715,27 @@ begin
   if not fits.Header.Valueof('FILTER',hfilter) then hfilter:='';
   if not fits.Header.Valueof('DATAMIN',hdmin)  then hdmin:=fits.HeaderInfo.dmin;
   if not fits.Header.Valueof('DATAMAX',hdmax)  then hdmax:=fits.HeaderInfo.dmax;
-  if not fits.Header.Valueof('OBJCTRA',hra)    then hra:=NullCoord else hra:=15*hra;
-  if not fits.Header.Valueof('OBJCTDEC',hdec)  then hdec:=NullCoord;
   if not fits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
   if not fits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   // get other values
-  if ((hra=NullCoord)or(hdec=NullCoord))and(mount.Status=devConnected) then begin
+  hra:=NullCoord; hdec:=NullCoord;
+  if (mount.Status=devConnected) then begin
      hra:=15*mount.RA;
      hdec:=mount.Dec;
+     equinox:=mount.Equinox;
+     if equinox<>2000 then begin
+       if equinox=0 then begin
+         DecodeDate(now,dy,dm,dd);
+         jd1:=jd(dy,dm,dd,0);
+       end else begin
+         jd1:=jd(trunc(equinox),1,1,0);
+       end;
+       hra:=deg2rad*hra;
+       hdec:=deg2rad*hdec;
+       PrecessionFK5(jd1,jd2000,hra,hdec);
+       hra:=rad2deg*hra;
+       hdec:=rad2deg*hdec;
+     end;
   end;
   if (hfilter='')and(wheel.Status=devConnected) then begin
      hfilter:=wheel.FilterNames[wheel.Filter-1];
@@ -1741,18 +1769,19 @@ begin
   if telname<>'' then fits.Header.Add('TELESCOP',telname,'Telescope used for acquisition');
   if hinstr<>'' then fits.Header.Add('INSTRUME',hinstr,'Instrument used for acquisition');
   if hfilter<>'' then fits.Header.Add('FILTER',hfilter,'Filter');
-  fits.Header.Add('SOFTWARE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  fits.Header.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
   if objname<>'' then fits.Header.Add('OBJECT',objname,'Observed object name');
-  fits.Header.Add('FRAME',hframe,'Frame Type');
+  fits.Header.Add('IMAGETYP',hframe,'Image Type');
   fits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   if hexp>0 then fits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
-  if hpix1>0 then fits.Header.Add('PIXSIZE1',hpix1 ,'[um] Pixel Size X');
-  if hpix2>0 then fits.Header.Add('PIXSIZE2',hpix2 ,'[um] Pixel Size Y');
+  if hpix1>0 then fits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X');
+  if hpix2>0 then fits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y');
   if hbin1>0 then fits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
   if hbin2>0 then fits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
   fits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
   if ccdtemp<>NullCoord then fits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+    fits.Header.Add('EQUINOX',2000.0,'');
     fits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
     fits.Header.Add('DEC',hdec,'[deg] Telescope pointing DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
@@ -1769,6 +1798,7 @@ begin
     end;
   end;
   fits.Header.Add('END','','');
+  fits.GetFitsInfo;
 end;
 
 procedure Tf_main.CameraNewImage(Sender: TObject);
@@ -2084,15 +2114,8 @@ begin
  if fits.HeaderInfo.naxis>0 then begin
    ra:=NullCoord;
    de:=NullCoord;
-   if config.GetValue('/Astrometry/RaDecFromTelescope',true)
-    then begin
-      if (mount.RA<>NullCoord) then ra:=15*mount.RA;
-      if (mount.Dec<>NullCoord) then de:=mount.Dec;
-   end
-   else begin
-      if (fits.HeaderInfo.objra<>NullCoord) then ra:=15*fits.HeaderInfo.objra;
-      if (fits.HeaderInfo.objdec<>NullCoord) then de:=fits.HeaderInfo.objdec;
-   end;
+   if (fits.HeaderInfo.ra<>NullCoord) then ra:=fits.HeaderInfo.ra;
+   if (fits.HeaderInfo.dec<>NullCoord) then de:=fits.HeaderInfo.dec;
    if (ra=NullCoord)or(de=NullCoord) then begin
        if MessageDlg('Cannot find approximate coordinates for this image.'+crlf+'The astrometry resolution may take a very long time.'+crlf+'Do you want to continue?',mtConfirmation,mbYesNo,0)=mrNo then begin
           exit;
@@ -2103,6 +2126,9 @@ begin
    fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
    astrometry:=TAstrometry.Create;
    astrometry.onCmdTerminate:=@AstrometryTerminated;
+   astrometry.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+   astrometry.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
+   astrometry.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
    astrometry.LogFile:=slash(TmpDir)+'ccdcieltmp.log';
    astrometry.InFile:=slash(TmpDir)+'ccdcieltmp.fits';
    astrometry.OutFile:=slash(TmpDir)+'ccdcielsolved.fits';
@@ -2130,7 +2156,7 @@ begin
    astrometry.de:=de;
    astrometry.radius:=max(MinRadius,pixscale*fits.HeaderInfo.naxis1/3600);
    astrometry.Resolve;
-   NewMessage('Resolving...');
+   NewMessage('Resolving using '+ResolverName[astrometry.Resolver]+' ...');
    MenuShowSkychart.Enabled:=false;
    MenuStopAstrometry.Visible:=true;
  end;
@@ -2143,11 +2169,15 @@ begin
 end;
 
 procedure Tf_main.MenuViewAstrometryLogClick(Sender: TObject);
+var logf: string;
 begin
-  f_viewtext.Caption:='Astrometry resolver log';
-  f_viewtext.Memo1.Clear;
-  f_viewtext.Memo1.Lines.LoadFromFile(slash(TmpDir)+'ccdcieltmp.log');
-  f_viewtext.Show;
+  logf:=slash(TmpDir)+'ccdcieltmp.log';
+  if FileExistsUTF8(logf) then begin
+    f_viewtext.Caption:='Astrometry resolver log';
+    f_viewtext.Memo1.Clear;
+    f_viewtext.Memo1.Lines.LoadFromFile(logf);
+    f_viewtext.Show;
+  end;
 end;
 
 procedure Tf_main.AstrometryTerminated(Sender: TObject);
@@ -2164,7 +2194,7 @@ if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(T
   cdc.Start;
 end
 else begin
-  NewMessage('Astrometry.net resolve error.');
+  NewMessage(ResolverName[astrometry.Resolver]+' resolve error.');
 end;
 end;
 

@@ -33,7 +33,7 @@ type
             valid: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             bzero,bscale,dmax,dmin,blank : double;
-            objra,objdec,crval1,crval2: double;
+            equinox,ra,dec,crval1,crval2: double;
             objects,ctype1,ctype2 : string;
             end;
 
@@ -68,7 +68,7 @@ type
       function Valueof(key: string; var val: integer): boolean; overload;
       function Valueof(key: string; var val: double): boolean; overload;
       function Valueof(key: string; var val: boolean): boolean; overload;
-      function Add(key,val,comment: string): integer; overload;
+      function Add(key,val,comment: string; quotedval:boolean=true): integer; overload;
       function Add(key:string; val:integer; comment: string): integer; overload;
       function Add(key:string; val:double; comment: string): integer; overload;
       function Add(key:string; val:boolean; comment: string): integer; overload;
@@ -130,7 +130,6 @@ type
     Procedure ViewHeadersBtnClose(Sender: TObject);
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
-    procedure GetFitsInfo;
     Procedure ReadFitsImage;
     Procedure GetImage;
     function Citt(value: Word):Word;
@@ -143,6 +142,7 @@ type
      destructor  Destroy; override;
      Procedure ViewHeaders;
      procedure GetIntfImg;
+     procedure GetFitsInfo;
      procedure GetBitmap(var imabmp:Tbitmap);
      procedure SaveToFile(fn: string);
      property IntfImg: TLazIntfImage read FIntfImg;
@@ -305,9 +305,9 @@ begin
   if result then val:=(FValues[k]='T');
 end;
 
-function TFitsHeader.Add(key,val,comment: string): integer;
+function TFitsHeader.Add(key,val,comment: string; quotedval:boolean=true): integer;
 begin
- result:=Insert(-1,key,val,comment);
+ result:=Insert(-1,key,val,comment,quotedval);
 end;
 
 function TFitsHeader.Add(key:string; val:integer; comment: string): integer;
@@ -533,7 +533,7 @@ var   header : THeaderBlock;
 begin
 with FFitsInfo do begin
  valid:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
- bzero:=0 ; bscale:=1; objra:=NullCoord; objdec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
+ bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
  objects:=''; ctype1:=''; ctype2:='';
  for i:=1 to FHeader.Rows.Count-1 do begin
     keyword:=FHeader.Keys[i];
@@ -554,21 +554,22 @@ with FFitsInfo do begin
     if (keyword='THRESL') then dmin:=strtofloat(buf);
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
-    if (keyword='OBJCTRA') then objra:=StrToFloatDef(buf,NullCoord);
-    if (keyword='OBJCTDEC') then objdec:=StrToFloatDef(buf,NullCoord);
+    if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
+    if (keyword='DEC') then dec:=StrToFloatDef(buf,NullCoord);
+    if (keyword='EQUINOX') then equinox:=StrToFloatDef(buf,2000);
     if (keyword='CTYPE1') then ctype1:=buf;
     if (keyword='CTYPE2') then ctype2:=buf;
     if (keyword='CRVAL1') then crval1:=strtofloat(buf);
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
  end;
  // very crude coordinates to help astrometry if telescope is not available
- if objra=NullCoord then begin
+ if ra=NullCoord then begin
    if (copy(ctype1,1,3)='RA-')and(crval1<>NullCoord) then
-      objra:=crval1/15;
+      ra:=crval1/15;
  end;
- if objdec=NullCoord then begin
+ if dec=NullCoord then begin
    if (copy(ctype2,1,4)='DEC-')and(crval2<>NullCoord) then
-      objdec:=crval2;
+      dec:=crval2;
  end;
  colormode:=1;
  if (naxis=3)and(naxis1=3) then begin // contiguous color
