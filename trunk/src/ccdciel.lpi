@@ -264,10 +264,12 @@
         <IsPartOfProject Value="True"/>
       </Unit27>
       <Unit28>
-        <Filename Value="pu_filtername.pas"/>
+        <Filename Value="pu_valueseditor.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="f_filtername"/>
+        <ComponentName Value="f_valueseditor"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_valueseditor"/>
       </Unit28>
       <Unit29>
         <Filename Value="fu_ccdtemp.pas"/>

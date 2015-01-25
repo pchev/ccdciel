@@ -1,4 +1,4 @@
-unit pu_filtername;
+unit pu_valueseditor;
 
 {$mode objfpc}{$H+}
 
@@ -30,14 +30,14 @@ uses
 
 type
 
-  { Tf_filtername }
+  { Tf_valueseditor }
 
-  Tf_filtername = class(TForm)
+  Tf_valueseditor = class(TForm)
     Button1: TButton;
     Button2: TButton;
     Panel1: TPanel;
     Panel2: TPanel;
-    FilterList: TValueListEditor;
+    ValuesList: TValueListEditor;
   private
     { private declarations }
   public
@@ -45,7 +45,7 @@ type
   end;
 
 var
-  f_filtername: Tf_filtername;
+  f_valueseditor: Tf_valueseditor;
 
 implementation
 

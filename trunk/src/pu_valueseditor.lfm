@@ -1,4 +1,4 @@
-object f_filtername: Tf_filtername
+object f_valueseditor: Tf_valueseditor
   Left = 294
   Height = 254
   Top = 33
@@ -6,7 +6,7 @@ object f_filtername: Tf_filtername
   Caption = 'Edit filter name'
   ClientHeight = 254
   ClientWidth = 252
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.2.4.0'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -45,7 +45,7 @@ object f_filtername: Tf_filtername
     ClientHeight = 204
     ClientWidth = 252
     TabOrder = 1
-    object FilterList: TValueListEditor
+    object ValuesList: TValueListEditor
       Left = 1
       Height = 202
       Top = 1
