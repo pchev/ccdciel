@@ -26,7 +26,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, EditBtn,
-  StdCtrls, ExtCtrls;
+  StdCtrls, ExtCtrls, ComCtrls;
 
 type
 
@@ -36,11 +36,33 @@ type
     Button1: TButton;
     Button2: TButton;
     CaptureDir: TDirectoryEdit;
+    ElbrusFolder: TEdit;
+    ElbrusUnixpath: TEdit;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label15: TLabel;
+    Notebook1: TNotebook;
+    ObserverName: TEdit;
+    ObservatoryName: TEdit;
+    Page1: TPage;
+    Page2: TPage;
+    TelescopeName: TEdit;
+    GroupBox4: TGroupBox;
+    elbrus: TGroupBox;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label5: TLabel;
+    PageControl1: TPageControl;
     Plot: TCheckBox;
     Downsample: TEdit;
+    ResolverBox: TRadioGroup;
     SourcesLimit: TEdit;
     Label8: TLabel;
     Label9: TLabel;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
     Tolerance: TEdit;
     Label7: TLabel;
     MinRadius: TEdit;
@@ -50,27 +72,29 @@ type
     PixelSize: TEdit;
     Focale: TEdit;
     FocusWindow: TEdit;
-    GroupBox3: TGroupBox;
+    astrometrynet: TGroupBox;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
     Logtofile: TCheckBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Label14: TLabel;
     Panel1: TPanel;
-    RaDecFromTelescope: TRadioButton;
-    RaDecFromFits: TRadioButton;
     StarWindow: TEdit;
     procedure FocaleFromTelescopeChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
+    procedure ResolverBoxClick(Sender: TObject);
   private
     { private declarations }
     FGetPixelSize, FGetFocale: TNotifyEvent;
+    function GetResolver: integer;
+    procedure SetResolver(value:integer);
   public
     { public declarations }
+    property Resolver: integer read GetResolver write SetResolver;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
   end;
@@ -83,6 +107,16 @@ implementation
 {$R *.lfm}
 
 { Tf_option }
+
+
+procedure Tf_option.FormCreate(Sender: TObject);
+begin
+  {$ifdef mswindows}
+    ElbrusUnixpath.Visible:=false;
+    Label13.Visible:=false;
+  {$endif}
+  PageControl1.ActivePageIndex:=0;
+end;
 
 procedure Tf_option.PixelSizeFromCameraChange(Sender: TObject);
 begin
@@ -97,6 +131,24 @@ begin
   if (not Focale.Enabled) and (assigned(FGetFocale)) then
       FGetFocale(self);
 end;
+
+function Tf_option.GetResolver: integer;
+begin
+  result:=ResolverBox.ItemIndex;
+end;
+
+procedure Tf_option.SetResolver(value:integer);
+begin
+  if (value<0)or(value>1) then exit;
+  ResolverBox.ItemIndex:=value;
+  ResolverBoxClick(nil);
+end;
+
+procedure Tf_option.ResolverBoxClick(Sender: TObject);
+begin
+  Notebook1.PageIndex:=ResolverBox.ItemIndex;
+end;
+
 
 end.
 

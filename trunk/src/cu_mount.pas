@@ -48,6 +48,7 @@ T_mount = class(TObject)
     procedure SetonStatusChange(value: TNotifyEvent);
     function  GetRA:double;
     function  GetDec:double;
+    function  GetEquinox: double;
     function  GetAperture:double;
     function  GetFocaleLength:double;
   public
@@ -60,6 +61,7 @@ T_mount = class(TObject)
     property Status: TDeviceStatus read GetMountStatus;
     property RA: double read GetRA;
     property Dec: double read GetDec;
+    property Equinox: double read GetEquinox;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
     property onMsg: TNotifyMsg read GetonMsg write SetonMsg;
@@ -159,6 +161,18 @@ begin
            end;
     ASCOM: begin
              result:=ascommount.Dec;
+           end;
+ end;
+end;
+
+function  T_mount.GetEquinox: double;
+begin
+ case FMountInterface of
+    INDI : begin
+             if indiready then result:=indimount.Equinox;
+           end;
+    ASCOM: begin
+             result:=ascommount.Equinox;
            end;
  end;
 end;

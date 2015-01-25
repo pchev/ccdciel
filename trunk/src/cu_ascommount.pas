@@ -47,6 +47,7 @@ T_ascommount = class(TObject)
    procedure StatusTimerTimer(sender: TObject);
    function  GetRA:double;
    function  GetDec:double;
+   function  GetEquinox: double;
    function  GetAperture:double;
    function  GetFocaleLength:double;
    procedure msg(txt: string);
@@ -58,6 +59,7 @@ public
    property Device: string read Fdevice write Fdevice;
    property RA: double read GetRA;
    property Dec: double read GetDec;
+   property Equinox: double read GetEquinox;
    property Aperture: double read GetAperture;
    property FocaleLength: double read GetFocaleLength;
    property Status: TDeviceStatus read FStatus;
@@ -182,6 +184,28 @@ begin
  end
  else result:=NullCoord;
  {$endif}
+end;
+
+function  T_ascommount.GetEquinox: double;
+var i: Integer;
+begin
+{$ifdef mswindows}
+if Connected then begin
+  try
+  i:=V.EquatorialSystem;
+  case i of
+  0 : result:=0;
+  1 : result:=0;
+  2 : result:=2000;
+  3 : result:=2050;
+  4 : result:=1950;
+  end;
+  except
+   result:=0;
+  end;
+end
+else result:=0;
+{$endif}
 end;
 
 function  T_ascommount.GetAperture:double;

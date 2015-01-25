@@ -32,7 +32,7 @@ uses u_global,
        unix,
      {$endif}
      process, SysUtils, Classes, LCLType, FileUtil,
-     Forms,Graphics;
+     Math, Forms,Graphics;
 
 function InvertF32(X : LongWord) : Single;
 function InvertF64(X : Int64) : Double;
@@ -43,11 +43,21 @@ function Slash(nom : string) : string;
 Function sgn(x:Double):Double ;
 Function RAToStr(ar: Double) : string;
 Function DEToStr(de: Double) : string;
+Function RAToStrB(ar: Double) : string;
+Function DEToStrB(de: Double) : string;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 function GetCdCPort:string;
+function  Rmod(x,y:Double):Double;
+function Jd(annee,mois,jour :INTEGER; Heure:double):double;
+PROCEDURE Djd(jd:Double;VAR annee,mois,jour:INTEGER; VAR Heure:double);
+PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 
 implementation
+
+const
+  GregorianStart=15821015;
+  GregorianStartJD=2299161;
 
 function InvertF32(X : LongWord) : Single;
 var  P : PbyteArray;
@@ -157,7 +167,7 @@ end;
 function Slash(nom : string) : string;
 begin
 result:=trim(nom);
-if copy(result,length(nom),1)<>PathDelim then result:=result+PathDelim;
+if copy(result,length(result),1)<>PathDelim then result:=result+PathDelim;
 end;
 
 Function sgn(x:Double):Double ;
@@ -218,6 +228,57 @@ begin
     str(sec:2:0,s);
     if abs(sec)<9.5 then s:='0'+trim(s);
     result := d+'d'+m+'m'+s+'s';
+end;
+
+Function RAToStrB(ar: Double) : string;
+var dd,min1,min,sec: Double;
+    d,m,s : string;
+begin
+    dd:=Int(ar);
+    min1:=abs(ar-dd)*60;
+    if min1>=59.999166667 then begin
+       dd:=dd+sgn(ar);
+       if dd=24 then dd:=0;
+       min1:=0.0;
+    end;
+    min:=Int(min1);
+    sec:=(min1-min)*60;
+    if sec>=59.95 then begin
+       min:=min+1;
+       sec:=0.0;
+    end;
+    str(dd:3:0,d);
+    str(min:2:0,m);
+    if abs(min)<10 then m:='0'+trim(m);
+    str(sec:2:0,s);
+    if abs(sec)<9.95 then s:='0'+trim(s);
+    result := d+' '+m+' '+s;
+end;
+
+Function DEToStrB(de: Double) : string;
+var dd,min1,min,sec: Double;
+    d,m,s : string;
+begin
+    dd:=Int(de);
+    min1:=abs(de-dd)*60;
+    if min1>=59.99166667 then begin
+       dd:=dd+sgn(de);
+       min1:=0.0;
+    end;
+    min:=Int(min1);
+    sec:=(min1-min)*60;
+    if sec>=59.5 then begin
+       min:=min+1;
+       sec:=0.0;
+    end;
+    str(abs(dd):2:0,d);
+    if abs(dd)<10 then d:='0'+trim(d);
+    if de<0 then d:='-'+d else d:='+'+d;
+    str(min:2:0,m);
+    if abs(min)<10 then m:='0'+trim(m);
+    str(sec:2:0,s);
+    if abs(sec)<9.5 then s:='0'+trim(s);
+    result := d+' '+m+' '+s;
 end;
 
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
@@ -343,6 +404,72 @@ result:='3292';
   end;
 {$endif}
 end;
+
+function  Rmod(x,y:Double):Double;
+BEGIN
+    Rmod := x - Int(x/y) * y ;
+END  ;
+
+function Jd(annee,mois,jour :INTEGER; Heure:double):double;
+var u,u0,u1,u2 : double;
+	gregorian : boolean;
+begin
+if annee*10000+mois*100+jour >= GregorianStart then gregorian:=true else gregorian:=false;
+u:=annee;
+if mois<3 then u:=u-1;
+u0:=u+4712;
+u1:=mois+1;
+if u1<4 then u1:=u1+12;
+result:=floor(u0*365.25)+floor(30.6*u1+0.000001)+jour+heure/24-63.5;
+if gregorian then begin
+   u2:=floor(abs(u)/100)-floor(abs(u)/400);
+   if u<0 then u2:=-u2;
+   result:=result-u2+2;
+   if (u<0)and((u/100)=floor(u/100))and((u/400)<>floor(u/400)) then result:=result-1;
+end;
+end;
+
+PROCEDURE Djd(jd:Double;VAR annee,mois,jour:INTEGER; VAR Heure:double);
+var u0,u1,u2,u3,u4 : double;
+	gregorian : boolean;
+begin
+u0:=jd+0.5;
+if int(u0)>=GregorianStartJD then gregorian:=true else gregorian:=false;
+u0:=jd+32082.5;
+if gregorian then begin
+   u1:=u0+floor(u0/36525)-floor(u0/146100)-38;
+   if jd>=1830691.5 then u1:=u1+1;
+   u0:=u0+floor(u1/36525)-floor(u1/146100)-38;
+end;
+u2:=floor(u0+123);
+u3:=floor((u2-122.2)/365.25);
+u4:=floor((u2-floor(365.25*u3))/30.6001);
+mois:=round(u4-1);
+if mois>12 then mois:=mois-12;
+jour:=round(u2-floor(365.25*u3)-floor(30.6001*u4));
+annee:=round(u3+floor((u4-2)/12)-4800);
+heure:=(jd-floor(jd+0.5)+0.5)*24;
+end;
+
+PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
+var i1,i2,i3,i4,i5,i6,i7 : double ;
+   BEGIN
+   if abs(ti-tf)<0.01 then exit;
+      I1:=(TI-2451545.0)/36525 ;
+      I2:=(TF-TI)/36525;
+      I3:=deg2rad*((2306.2181+1.39656*i1-1.39e-4*i1*i1)*i2+(0.30188-3.44e-4*i1)*i2*i2+1.7998e-2*i2*i2*i2)/3600 ;
+      I4:=deg2rad*((2306.2181+1.39656*i1-1.39e-4*i1*i1)*i2+(1.09468+6.6e-5*i1)*i2*i2+1.8203e-2*i2*i2*i2)/3600 ;
+      I5:=deg2rad*((2004.3109-0.85330*i1-2.17e-4*i1*i1)*i2-(0.42665+2.17e-4*i1)*i2*i2-4.1833e-2*i2*i2*i2)/3600 ;
+      I6:=COS(DEI)*SIN(ARI+I3) ;
+      I7:=COS(I5)*COS(DEI)*COS(ARI+I3)-SIN(I5)*SIN(DEI) ;
+      i1:=(SIN(I5)*COS(DEI)*COS(ARI+I3)+COS(I5)*SIN(DEI));
+      if i1>1 then i1:=1;
+      if i1<-1 then i1:=-1;
+      DEI:=ArcSIN(i1);
+      ARI:=ARCTAN2(I6,I7) ;
+      ARI:=ARI+I4;
+      ARI:=RMOD(ARI+pi2,pi2);
+   END  ;
 
 end.
 

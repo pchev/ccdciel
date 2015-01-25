@@ -61,6 +61,7 @@ T_indimount = class(TIndiBaseClient)
    procedure ServerDisconnected(Sender: TObject);
    function  GetRA:double;
    function  GetDec:double;
+   function  GetEquinox: double;
    function  GetAperture:double;
    function  GetFocaleLength:double;
    procedure msg(txt: string);
@@ -75,6 +76,7 @@ T_indimount = class(TIndiBaseClient)
    property indideviceport: string read Findideviceport write Findideviceport;
    property RA: double read GetRA;
    property Dec: double read GetDec;
+   property Equinox: double read GetEquinox;
    property Aperture: double read GetAperture;
    property FocaleLength: double read GetFocaleLength;
    property Status: TDeviceStatus read FStatus;
@@ -284,6 +286,12 @@ if coord_prop<>nil then begin;
   result:=coord_dec.value;
 end
 else result:=NullCoord;
+end;
+
+function  T_indimount.GetEquinox: double;
+begin
+ if eod_coord then result:=0
+              else result:=2000;
 end;
 
 function  T_indimount.GetAperture:double;
