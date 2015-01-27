@@ -46,7 +46,6 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -76,7 +75,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -106,7 +104,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="36">
+    <Units Count="39">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -151,12 +149,10 @@
         <ComponentName Value="f_visu"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_visu"/>
       </Unit6>
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -164,7 +160,6 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
@@ -172,7 +167,6 @@
         <ComponentName Value="f_setup"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_devicesetup"/>
       </Unit9>
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
@@ -185,7 +179,6 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -193,7 +186,6 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -215,6 +207,7 @@
         <ComponentName Value="f_mount"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_mount"/>
       </Unit16>
       <Unit17>
         <Filename Value="cu_fits.pas"/>
@@ -228,12 +221,10 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_camera"/>
       </Unit20>
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
@@ -246,22 +237,18 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_wheel"/>
       </Unit24>
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomcamera"/>
       </Unit25>
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
@@ -273,7 +260,6 @@
         <ComponentName Value="f_valueseditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_valueseditor"/>
       </Unit28>
       <Unit29>
         <Filename Value="fu_ccdtemp.pas"/>
@@ -312,6 +298,7 @@
       <Unit34>
         <Filename Value="cu_cdcclient.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_cdcclient"/>
       </Unit34>
       <Unit35>
         <Filename Value="pu_viewtext.pas"/>
@@ -319,8 +306,24 @@
         <ComponentName Value="f_viewtext"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_viewtext"/>
       </Unit35>
+      <Unit36>
+        <Filename Value="cu_autoguider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_autoguider"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="cu_tcpclient.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_tcpclient"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="fu_autoguider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_autoguider"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_autoguider"/>
+      </Unit38>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -341,7 +344,6 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

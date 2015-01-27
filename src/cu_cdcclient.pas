@@ -28,26 +28,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses blcksock, Classes, SysUtils,
+uses cu_tcpclient, blcksock, Classes, SysUtils,
     Forms;
 
 type
-  TTCPclient = class(TSynaClient)
-  private
-    FSock: TTCPBlockSocket;
-    FSendBuffer,FResultBuffer: string;
-  public
-    constructor Create;
-    destructor Destroy; override;
-    function Connect: Boolean;
-    procedure Disconnect;
-    function RecvString: string;
-    function GetErrorDesc: string;
-  published
-    property Sock: TTCPBlockSocket read FSock;
-    property SendBuffer: string read FSendBuffer write FSendBuffer;
-    property ResultBuffer: string read FResultBuffer write FResultBuffer;
-  end;
 
   TNotifyMsg = procedure(msg:string) of object;
 
@@ -97,46 +81,6 @@ const msgTimeout='Timeout!';
       msgBye='Bye!';
 
 implementation
-
-/////////////////// TTCPclient ///////////////////////////
-
-constructor TTCPclient.Create;
-begin
-  inherited Create;
-  FSock := TTCPBlockSocket.Create;
-  Fsendbuffer:='';
-  Fresultbuffer:='';
-end;
-
-destructor TTCPclient.Destroy;
-begin
-  FSock.Free;
-  inherited Destroy;
-end;
-
-function TTCPclient.Connect: Boolean;
-begin
-  FSock.CloseSocket;
-  FSock.LineBuffer := '';
-  FSock.Bind(FIPInterface, cAnyPort);
-  FSock.Connect(FTargetHost, FTargetPort);
-  Result := FSock.LastError = 0;
-end;
-
-procedure TTCPclient.Disconnect;
-begin
-  FSock.CloseSocket;
-end;
-
-function TTCPclient.RecvString: string;
-begin
-  Result := FSock.RecvTerminated(FTimeout, crlf);
-end;
-
-function TTCPclient.GetErrorDesc: string;
-begin
-  Result := FSock.GetErrorDesc(FSock.LastError);
-end;
 
 /////////////////// TCdCClient ///////////////////////////
 
@@ -202,7 +146,7 @@ try
      if terminated then break;
      // handle unattended messages (mouseclick...)
      buf:=tcpclient.recvstring;
-     if ending and (tcpclient.FSock.LastError<>0) then break; // finish to read data before to exit
+     if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'')and(buf<>'.') then ProcessData(buf);
      if buf=msgBye then ending:=true;
      // handle synchronous command and response
@@ -210,7 +154,7 @@ try
         tcpclient.resultbuffer:='';
         // send command
         tcpclient.Sock.SendString(tcpclient.sendbuffer+crlf);
-        if tcpclient.FSock.LastError<>0 then begin
+        if tcpclient.Sock.LastError<>0 then begin
            terminate;
            break;
         end;

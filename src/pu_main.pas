@@ -25,10 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
-  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp,
+  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
-  cu_astrometry, cu_cdcclient, lazutf8sysutils, Classes,
+  cu_astrometry, cu_cdcclient, cu_autoguider, lazutf8sysutils, Classes,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -46,6 +46,7 @@ type
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
+    MenuViewAutoguider: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
     MenuStopAstrometry: TMenuItem;
     MenuShowSkychart: TMenuItem;
@@ -110,6 +111,7 @@ type
     procedure MenuShowSkychartClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuViewAstrometryLogClick(Sender: TObject);
+    procedure MenuViewAutoguiderClick(Sender: TObject);
     procedure MenuViewCCDtempClick(Sender: TObject);
     procedure MenuViewConnectionClick(Sender: TObject);
     procedure MenuViewFiltersClick(Sender: TObject);
@@ -134,6 +136,7 @@ type
     wheel: T_wheel;
     focuser: T_focuser;
     mount: T_mount;
+    autoguider:TPHDClient;
     cdc:TCdCClient;
     astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
@@ -147,6 +150,7 @@ type
     f_starprofile: Tf_starprofile;
     f_focuser: Tf_focuser;
     f_mount: Tf_mount;
+    f_autoguider: Tf_autoguider;
     f_visu: Tf_visu;
     f_msg: Tf_msg;
     fits: TFits;
@@ -213,6 +217,8 @@ type
     procedure FocusOUT(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
+    Procedure AutoguiderConnect(Sender: TObject);
+    Procedure AutoguiderStatus(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -380,6 +386,9 @@ begin
   mount.onCoordChange:=@MountCoordChange;
   mount.onStatusChange:=@MountStatus;
 
+  autoguider:=TPHDClient.Create;
+  autoguider.onStatusChange:=@AutoguiderStatus;
+
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
 
@@ -419,6 +428,9 @@ begin
   f_ccdtemp.onSetTemperature:=@SetTemperature;
 
   f_mount:=Tf_mount.Create(self);
+
+  f_autoguider:=Tf_autoguider.Create(self);
+  f_autoguider.onConnect:=@AutoguiderConnect;
 
   fits:=TFits.Create(self);
 
@@ -462,6 +474,7 @@ begin
   SetTool(f_starprofile,'Starprofile',PanelLeft,f_focuser.top+1,MenuViewStarProfile);
   SetTool(f_ccdtemp,'CCDTemp',PanelLeft,f_starprofile.top+1,MenuViewCCDtemp);
   SetTool(f_mount,'Mount',PanelLeft,f_ccdtemp.top+1,MenuViewMount);
+  SetTool(f_autoguider,'Autoguider',PanelLeft,f_mount.top+1,MenuViewAutoguider);
 
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
@@ -488,6 +501,7 @@ begin
   SetTool(f_starprofile,'',PanelLeft,f_focuser.top+1,MenuViewStarProfile);
   SetTool(f_ccdtemp,'',PanelLeft,f_starprofile.top+1,MenuViewCCDtemp);
   SetTool(f_mount,'',PanelLeft,f_ccdtemp.top+1,MenuViewMount);
+  SetTool(f_autoguider,'',PanelLeft,f_mount.top+1,MenuViewAutoguider);
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -546,6 +560,11 @@ begin
   config.SetValue('/Tools/Mount/Visible',f_mount.Visible);
   config.SetValue('/Tools/Mount/Top',f_mount.Top);
   config.SetValue('/Tools/Mount/Left',f_mount.Left);
+
+  config.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
+  config.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
+  config.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
+  config.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
 
   config.SetValue('/Window/Top',Top);
   config.SetValue('/Window/Left',Left);
@@ -1280,6 +1299,16 @@ begin
  f_mount.DE.Text:=DEToStr(mount.Dec);
 end;
 
+Procedure Tf_main.AutoguiderConnect(Sender: TObject);
+begin
+ autoguider.Start;
+end;
+
+Procedure Tf_main.AutoguiderStatus(Sender: TObject);
+begin
+ f_autoguider.Status.Text:=autoguider.Status;
+end;
+
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
 begin
   fits.ViewHeaders;
@@ -1414,6 +1443,9 @@ begin
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
    {$endif}
+   f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
+   f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
+   f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
 
    f_option.ShowModal;
 
@@ -1439,6 +1471,9 @@ begin
      {$ifdef unix}
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
      {$endif}
+     config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
+     config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
+     config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
 
      config.Flush;
 
@@ -1511,6 +1546,11 @@ end;
 procedure Tf_main.MenuViewStarProfileClick(Sender: TObject);
 begin
   f_starprofile.Visible:=MenuViewStarProfile.Checked;
+end;
+
+procedure Tf_main.MenuViewAutoguiderClick(Sender: TObject);
+begin
+  f_autoguider.Visible:=MenuViewAutoguider.Checked;
 end;
 
 procedure Tf_main.PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -1861,7 +1901,6 @@ Procedure Tf_main.ZoomImage(Sender: TObject);
 begin
   PlotImage;
 end;
-
 
 procedure Tf_main.Screen2Fits(x,y: integer; out xx,yy:integer);
 begin
