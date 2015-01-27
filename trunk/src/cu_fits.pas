@@ -482,14 +482,12 @@ begin
 end;
 
 Procedure TFits.ViewHeaders;
-var hdr: Tstringlist;
 begin
 f_ViewHeaders:=TForm.create(self);
 f_ViewHeaders.OnClose:=ViewHeadersClose;
 m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
 p_ViewHeaders:=TPanel.Create(f_ViewHeaders);
 b_ViewHeaders:=Tbutton.Create(f_ViewHeaders);
-hdr:=Tstringlist.Create;
 f_ViewHeaders.Width:=650;
 f_ViewHeaders.Height:=450;
 p_ViewHeaders.Parent:=f_ViewHeaders;
@@ -513,7 +511,6 @@ m_ViewHeaders.Lines:=FHeader.Rows;
 FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
 f_ViewHeaders.Caption:=SysToUTF8(FTitle);
 f_ViewHeaders.Show;
-hdr.free;
 end;
 
 Procedure TFits.ViewHeadersBtnClose(Sender: TObject);
