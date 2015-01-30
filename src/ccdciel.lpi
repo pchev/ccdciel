@@ -141,7 +141,6 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -212,7 +211,6 @@
       <Unit17>
         <Filename Value="cu_fits.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_fits"/>
       </Unit17>
       <Unit18>
         <Filename Value="u_modelisation.pas"/>
@@ -281,7 +279,6 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_options"/>
       </Unit31>
       <Unit32>
         <Filename Value="fu_frame.pas"/>
@@ -293,12 +290,10 @@
       <Unit33>
         <Filename Value="cu_astrometry.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_astrometry"/>
       </Unit33>
       <Unit34>
         <Filename Value="cu_cdcclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_cdcclient"/>
       </Unit34>
       <Unit35>
         <Filename Value="pu_viewtext.pas"/>
@@ -315,12 +310,12 @@
       <Unit37>
         <Filename Value="cu_tcpclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_tcpclient"/>
       </Unit37>
       <Unit38>
         <Filename Value="fu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_autoguider"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="fu_autoguider"/>
       </Unit38>
