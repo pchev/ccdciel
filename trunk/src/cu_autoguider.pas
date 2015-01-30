@@ -15,7 +15,6 @@ type
   private
     FTargetHost,FTargetPort,FErrorDesc,FRecvData : string;
     FPHDVersion,FMsgVersion,FStatus : String;
-    FLockshiftenable,FLockshiftaxes,FLockshiftrate0,FLockshiftrate1,FLockshiftunits: string;
     FTimeout : integer;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
@@ -34,6 +33,11 @@ type
     Constructor Create;
     procedure Execute; override;
     procedure Send(const Value: string);
+    procedure ConnectGear;
+    procedure Calibrate;
+    procedure Guide(onoff:boolean; recalibrate:boolean=false);
+    procedure Pause(onoff:boolean);
+    procedure Dither;
   published
     property Terminated;
     property TargetHost : string read FTargetHost write FTargetHost;
@@ -83,15 +87,6 @@ try
      buf:=tcpclient.recvstring;
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'') then ProcessData(buf);
-     if tcpclient.sendbuffer<>'' then begin
-        // send command
-        tcpclient.Sock.SendString(tcpclient.sendbuffer);
-        if tcpclient.Sock.LastError<>0 then begin
-           terminate;
-           break;
-        end;
-        tcpclient.sendbuffer:='';
-     end;
    until false;
  end
  else begin
@@ -132,8 +127,12 @@ end;
 procedure TPHDClient.Send(const Value: string);
 var dateto:double;
 begin
+writeln('>>'+Value);
  if Value>'' then begin
-   tcpclient.sendbuffer:=tcpclient.sendbuffer+Value+crlf;
+   tcpclient.Sock.SendString(Value+crlf);
+   if tcpclient.Sock.LastError<>0 then begin
+      Terminate;
+   end;
  end;
 end;
 
@@ -185,6 +184,7 @@ var eventname,rpcid,rpcresult,rpcerror,buf,fullmsg: string;
     attrib,value:Tstringlist;
     p,i:integer;
 begin
+writeln('=='+txt);
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
 try
@@ -193,8 +193,8 @@ JsontoStringlist(txt,attrib,value);
 p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
-   if eventname='GuideStep' then FStatus:='Guiding'
-   else if eventname='StartGuiding' then FStatus:='Guiding'
+   if (eventname='GuideStep')and(FStatus<>'Settling') then FStatus:='Guiding'
+   else if eventname='StartGuiding' then FStatus:='Start Guiding'
    else if eventname='GuidingStopped' then FStatus:='Stopped'
    else if eventname='StarSelected' then FStatus:='Star Selected'
    else if eventname='StarLost' then FStatus:='Star lost'
@@ -244,47 +244,37 @@ end else begin
        end
        else rpcresult:='ok';
      end;
-     if rpcid='1000' then begin   // get_app_state
+     if rpcid='1000' then begin  // set_connected
+       if rpcresult='error' then begin
+          if assigned(FonShowMessage) then FonShowMessage('set_connected'+' '+rpcresult+' '+rpcerror);
+       end;
+     end
+     else if rpcid='1001' then begin   // get_app_state
        if rpcresult='error' then begin
           if assigned(FonShowMessage) then FonShowMessage('get_app_state'+' '+rpcresult+' '+rpcerror);
        end else FStatus:=rpcresult;
      end
-     else if rpcid='1001' then begin  // set_lock_shift_params
+     else if rpcid='2002' then begin  // set_paused
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('set_lock_shift_params'+' '+rpcresult+' '+rpcerror);
+          if assigned(FonShowMessage) then FonShowMessage('set_paused'+' '+rpcresult+' '+rpcerror);
        end;
      end
-     else if rpcid='1002' then begin  // set_lock_shift_enabled
+     else if rpcid='2003' then begin  // guide
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('set_lock_shift_enabled'+' '+rpcresult+' '+rpcerror);
+          if assigned(FonShowMessage) then FonShowMessage('guide'+' '+rpcresult+' '+rpcerror);
        end;
      end
-     else if rpcid='1003' then begin  // get_lock_shift_params
+     else if rpcid='2004' then begin  // stop_capture
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('get_lock_shift_params'+' '+rpcresult+' '+rpcerror);
-       end else begin
-         i:=attrib.IndexOf('result.enabled');
-         if i>=0 then begin
-           FLockshiftenable:=value[i];
-         end
-         else FLockshiftenable:='?';
-         i:=attrib.IndexOf('result.axes');
-         if i>=0 then FLockshiftaxes:=value[i] else FLockshiftaxes:='?';
-         buf:='?';
-         i:=attrib.IndexOf('result.rate.0');
-         if i>=0 then FLockshiftrate0:=value[i];
-         i:=attrib.IndexOf('result.rate.1');
-         if i>=0 then FLockshiftrate1:=value[i];
-         i:=attrib.IndexOf('result.units');
-         if i>=0 then FLockshiftunits:=value[i] else FLockshiftunits:='?';
+          if assigned(FonShowMessage) then FonShowMessage('stop_capture'+' '+rpcresult+' '+rpcerror);
        end;
      end
-     else if rpcid='1004' then begin  // get_lock_shift_enabled
+     else if rpcid='2010' then begin  // dither
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('get_lock_shift_enabled'+' '+rpcresult+' '+rpcerror);
-       end else
-         FLockshiftenable:=rpcresult;
+          if assigned(FonShowMessage) then FonShowMessage('dither'+' '+rpcresult+' '+rpcerror);
+       end;
      end;
+
   end;
 end;
 if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -292,6 +282,65 @@ finally
  attrib.Free;
  value.Free;
 end;
+end;
+
+procedure TPHDClient.ConnectGear;
+var buf:string;
+begin
+ buf:='{"method": "set_connected", "params": [';
+ buf:=buf+'true';
+ buf:=buf+'], "id": 1000}';
+ Send(buf);
+ buf:='{"method": "get_app_state", "id": 1001}';
+ Send(buf);
+end;
+
+procedure TPHDClient.Calibrate;
+begin
+  Guide(true,true);
+end;
+
+procedure TPHDClient.Guide(onoff:boolean; recalibrate:boolean=false);
+var buf:string;
+begin
+  if onoff then begin
+    buf:='{"method": "guide", "params": [';
+    buf:=buf+'{"pixels": '+'1.0'+',';      // settle tolerance
+    buf:=buf+'"time": 5,';                 // min time
+    buf:=buf+'"timeout": '+'30'+'},';     // max time
+    if recalibrate then buf:=buf+'true' else buf:=buf+'false';
+    buf:=buf+'],';
+    buf:=buf+'"id": 2003}';
+    Send(buf);
+  end else begin
+    buf:='{"method": "stop_capture","id":2004}';
+    Send(buf);
+  end;
+end;
+
+procedure TPHDClient.Pause(onoff:boolean);
+var buf:string;
+begin
+  if onoff then begin
+    buf:='{"method": "set_paused","params":[true,"full"],"id":2002}';
+    Send(buf);
+  end else begin
+    buf:='{"method": "set_paused","params":[false],"id":2002}';
+    Send(buf);
+  end;
+end;
+
+procedure TPHDClient.Dither;
+var buf:string;
+begin
+  buf:='{"method": "dither", "params": [';
+  buf:=buf+'5'+',';                    // pixels
+  buf:=buf+'true,';                    // ra only
+  buf:=buf+'{"pixels": '+'1.0'+',';      // settle tolerance
+  buf:=buf+'"time": 5,';                 // min time
+  buf:=buf+'"timeout": '+'30'+'}],';     // max time
+  buf:=buf+'"id": 2010}';
+  Send(buf);
 end;
 
 end.

@@ -1,10 +1,10 @@
 object f_autoguider: Tf_autoguider
   Left = 0
-  Height = 78
+  Height = 155
   Top = 0
-  Width = 96
-  ClientHeight = 78
-  ClientWidth = 96
+  Width = 102
+  ClientHeight = 155
+  ClientWidth = 102
   TabOrder = 0
   DesignLeft = 296
   DesignTop = 335
@@ -12,7 +12,7 @@ object f_autoguider: Tf_autoguider
     Left = 0
     Height = 20
     Top = 0
-    Width = 96
+    Width = 102
     Align = alTop
     Alignment = taCenter
     Caption = 'Autoguider'
@@ -25,14 +25,14 @@ object f_autoguider: Tf_autoguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 58
+    Height = 135
     Top = 20
-    Width = 96
+    Width = 102
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 58
-    ClientWidth = 96
+    ClientHeight = 135
+    ClientWidth = 102
     TabOrder = 1
     object Status: TEdit
       Left = 0
@@ -55,6 +55,33 @@ object f_autoguider: Tf_autoguider
       Caption = 'Connect'
       OnClick = BtnConnectClick
       TabOrder = 1
+    end
+    object BtnCal: TButton
+      Left = 0
+      Height = 25
+      Top = 47
+      Width = 80
+      Caption = 'Calibrate'
+      OnClick = BtnCalClick
+      TabOrder = 2
+    end
+    object BtnGuide: TButton
+      Left = 0
+      Height = 25
+      Top = 72
+      Width = 80
+      Caption = 'Guide'
+      OnClick = BtnGuideClick
+      TabOrder = 3
+    end
+    object BtnDither: TButton
+      Left = 0
+      Height = 25
+      Top = 97
+      Width = 80
+      Caption = 'Dither'
+      OnClick = BtnDitherClick
+      TabOrder = 4
     end
   end
 end

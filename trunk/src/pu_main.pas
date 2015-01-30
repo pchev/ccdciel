@@ -217,7 +217,12 @@ type
     procedure FocusOUT(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
+    Procedure AutoguiderConnectClick(Sender: TObject);
+    Procedure AutoguiderCalibrateClick(Sender: TObject);
+    Procedure AutoguiderGuideClick(Sender: TObject);
+    Procedure AutoguiderDitherClick(Sender: TObject);
     Procedure AutoguiderConnect(Sender: TObject);
+    Procedure AutoguiderDisconnect(Sender: TObject);
     Procedure AutoguiderStatus(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     Procedure AbortExposure(Sender: TObject);
@@ -388,6 +393,9 @@ begin
 
   autoguider:=TPHDClient.Create;
   autoguider.onStatusChange:=@AutoguiderStatus;
+  autoguider.onConnect:=@AutoguiderConnect;
+  autoguider.onDisconnect:=@AutoguiderDisconnect;
+  autoguider.onShowMessage:=@NewMessage;
 
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
@@ -430,7 +438,11 @@ begin
   f_mount:=Tf_mount.Create(self);
 
   f_autoguider:=Tf_autoguider.Create(self);
-  f_autoguider.onConnect:=@AutoguiderConnect;
+  f_autoguider.onConnect:=@AutoguiderConnectClick;
+  f_autoguider.onCalibrate:=@AutoguiderCalibrateClick;
+  f_autoguider.onGuide:=@AutoguiderGuideClick;
+  f_autoguider.onDither:=@AutoguiderDitherClick;
+  f_autoguider.Status.Text:='Disconnected';
 
   fits:=TFits.Create(self);
 
@@ -866,7 +878,7 @@ begin
     INDI : camera.Connect(config.GetValue('/INDI/Server',''),
                           config.GetValue('/INDI/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
-                          config.GetValue('/INDIcamera/Sensor',''),
+                          config.GetValue('/INDIcamera/Sensor','CCD1'),
                           config.GetValue('/INDIcamera/DevicePort',''));
     ASCOM: camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
   end;
@@ -1299,9 +1311,49 @@ begin
  f_mount.DE.Text:=DEToStr(mount.Dec);
 end;
 
-Procedure Tf_main.AutoguiderConnect(Sender: TObject);
+Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 begin
  autoguider.Start;
+ f_autoguider.Status.Text:='Connecting';
+end;
+
+Procedure Tf_main.AutoguiderCalibrateClick(Sender: TObject);
+begin
+ autoguider.Calibrate;
+end;
+
+Procedure Tf_main.AutoguiderGuideClick(Sender: TObject);
+var onoff:boolean;
+begin
+ if f_autoguider.BtnGuide.Caption='Guide' then begin
+    f_autoguider.BtnGuide.Caption:='Stop';
+    onoff:=true;
+ end else begin
+   f_autoguider.BtnGuide.Caption:='Guide';
+   onoff:=false;
+ end;
+ autoguider.Guide(onoff);
+end;
+
+Procedure Tf_main.AutoguiderDitherClick(Sender: TObject);
+begin
+ autoguider.Dither;
+end;
+
+Procedure Tf_main.AutoguiderConnect(Sender: TObject);
+begin
+ autoguider.ConnectGear;
+end;
+
+Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
+begin
+ // autoguider will be free automatically, create a new one
+ autoguider:=TPHDClient.Create;
+ autoguider.onStatusChange:=@AutoguiderStatus;
+ autoguider.onConnect:=@AutoguiderConnect;
+ autoguider.onDisconnect:=@AutoguiderDisconnect;
+ autoguider.onShowMessage:=@NewMessage;
+ f_autoguider.Status.Text:='Disconnected'
 end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
@@ -1341,7 +1393,7 @@ begin
     f_setup.CameraIndiDevice.ItemIndex:=0;
   end;
   f_setup.CameraIndiDevice.Text:=config.GetValue('/INDIcamera/Device','');
-  f_setup.CameraSensor:=config.GetValue('/INDIcamera/Sensor','');
+  f_setup.CameraSensor:=config.GetValue('/INDIcamera/Sensor','CCD1');
   f_setup.CameraIndiDevPort.Text:=config.GetValue('/INDIcamera/DevicePort','');
   f_setup.AscomCamera.Text:=config.GetValue('/ASCOMcamera/Device','');
 

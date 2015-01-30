@@ -432,7 +432,7 @@ end;
 procedure Tf_setup.IndiSensorChange(Sender: TObject);
 begin
 case IndiSensor.ItemIndex of
-  0: FCameraSensor:='';
+  0: FCameraSensor:='CCD1';
   1: FCameraSensor:='CCD2';
 end;
 end;
