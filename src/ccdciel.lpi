@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -178,6 +180,7 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -339,6 +342,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

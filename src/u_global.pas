@@ -50,6 +50,7 @@ type
 
 const
   ccdciel_version='Version Alpha 0.0.1';
+  ccdcielver = '0.0.1a';
   blank=' ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;

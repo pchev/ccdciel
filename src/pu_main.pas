@@ -75,9 +75,13 @@ type
     N2: TMenuItem;
     N1: TMenuItem;
     OpenDialog1: TOpenDialog;
+    PageControlRight: TPageControl;
     PanelCenter: TPanel;
-    PanelRight: TPanel;
     PanelLeft: TPanel;
+    PanelRight1: TPanel;
+    PanelRight2: TPanel;
+    PanelRight3: TPanel;
+    PanelRight4: TPanel;
     PanelTop: TPanel;
     ImagePopupMenu: TPopupMenu;
     SaveDialog1: TSaveDialog;
@@ -85,6 +89,10 @@ type
     ConnectTimer: TTimer;
     StatusbarTimer: TTimer;
     CdCTimer: TTimer;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
     procedure CdCTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -171,6 +179,7 @@ type
     Procedure CloseLog;
     Procedure WriteLog( buf : string);
     procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; amenu: TMenuItem);
+    procedure UpdConfig(oldver:string);
     procedure SetConfig;
     procedure SetOptions;
     procedure OptionGetPixelSize(Sender: TObject);
@@ -341,6 +350,7 @@ end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
 var DefaultInterface: TDevInterface;
+    configver: string;
 begin
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
@@ -350,6 +360,7 @@ begin
   DefaultFormatSettings.DecimalSeparator:='.';
   NeedRestart:=false;
   GUIready:=false;
+  PageControlRight.ActivePageIndex:=0;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   config.Filename:=GetAppConfigFileUTF8(false,true,true);
@@ -358,6 +369,10 @@ begin
   LogFileOpen:=false;
   TmpDir:=slash(ConfigDir)+'tmp';
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
+
+  configver:=config.GetValue('/Configuration/Version','');
+
+  UpdConfig(configver);
 
   Top:=config.GetValue('/Window/Top',0);
   Left:=config.GetValue('/Window/Left',0);
@@ -477,16 +492,17 @@ begin
   SetTool(f_visu,'Histogram',PanelTop,f_devicesconnection.left+1,MenuViewHistogram);
   SetTool(f_msg,'Messages',PanelTop,f_visu.left+1,MenuViewMessages);
 
-  SetTool(f_preview,'Preview',PanelRight,0,MenuViewPreview);
-  SetTool(f_capture,'Capture',PanelRight,f_preview.top+1,MenuViewCapture);
-  SetTool(f_filterwheel,'Filters',PanelRight,f_capture.top+1,MenuViewFilters);
-  SetTool(f_frame,'Frame',PanelRight,f_filterwheel.top+1,MenuViewFrame);
+  SetTool(f_preview,'Preview',PanelRight1,0,MenuViewPreview);
+  SetTool(f_mount,'Mount',PanelRight1,f_preview.top+1,MenuViewMount);
+  SetTool(f_autoguider,'Autoguider',PanelRight1,f_mount.top+1,MenuViewAutoguider);
 
-  SetTool(f_focuser,'Focuser',PanelLeft,0,MenuViewFocuser);
-  SetTool(f_starprofile,'Starprofile',PanelLeft,f_focuser.top+1,MenuViewStarProfile);
-  SetTool(f_ccdtemp,'CCDTemp',PanelLeft,f_starprofile.top+1,MenuViewCCDtemp);
-  SetTool(f_mount,'Mount',PanelLeft,f_ccdtemp.top+1,MenuViewMount);
-  SetTool(f_autoguider,'Autoguider',PanelLeft,f_mount.top+1,MenuViewAutoguider);
+  SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser);
+  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
+
+  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture);
+  SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters);
+  SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame);
+  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_frame.top+1,MenuViewCCDtemp);
 
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
@@ -504,20 +520,31 @@ begin
   SetTool(f_visu,'',PanelTop,f_devicesconnection.left+1,MenuViewHistogram);
   SetTool(f_msg,'',PanelTop,f_visu.left+1,MenuViewMessages);
 
-  SetTool(f_preview,'',PanelRight,0,MenuViewPreview);
-  SetTool(f_capture,'',PanelRight,f_preview.top+1,MenuViewCapture);
-  SetTool(f_filterwheel,'',PanelRight,f_capture.top+1,MenuViewFilters);
-  SetTool(f_frame,'',PanelRight,f_filterwheel.top+1,MenuViewFrame);
+  SetTool(f_preview,'',PanelRight1,0,MenuViewPreview);
+  SetTool(f_mount,'',PanelRight1,f_preview.top+1,MenuViewMount);
+  SetTool(f_autoguider,'',PanelRight1,f_mount.top+1,MenuViewAutoguider);
 
-  SetTool(f_focuser,'',PanelLeft,0,MenuViewFocuser);
-  SetTool(f_starprofile,'',PanelLeft,f_focuser.top+1,MenuViewStarProfile);
-  SetTool(f_ccdtemp,'',PanelLeft,f_starprofile.top+1,MenuViewCCDtemp);
-  SetTool(f_mount,'',PanelLeft,f_ccdtemp.top+1,MenuViewMount);
-  SetTool(f_autoguider,'',PanelLeft,f_mount.top+1,MenuViewAutoguider);
+  SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser);
+  SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
+
+  SetTool(f_capture,'',PanelRight3,0,MenuViewCapture);
+  SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters);
+  SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame);
+  SetTool(f_ccdtemp,'',PanelRight3,f_frame.top+1,MenuViewCCDtemp);
+end;
+
+procedure Tf_main.UpdConfig(oldver:string);
+begin
+  if oldver<'0.0.1a' then begin
+     config.DeletePath('/Tools');
+     config.Flush;
+  end;
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  config.SetValue('/Configuration/Version',ccdcielver);
+
   config.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
   config.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
   config.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
