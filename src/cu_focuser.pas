@@ -56,6 +56,8 @@ T_focuser = class(TObject)
     procedure SetPosition(p:integer);
     function  GetRelPosition:integer;
     procedure SetRelPosition(p:integer);
+    function  GetPositionRange: TNumRange;
+    function  GetRelPositionRange: TNumRange;
     procedure SetSpeed(p:integer);
     function  GetSpeed:integer;
     procedure SetTimer(p:integer);
@@ -78,6 +80,8 @@ T_focuser = class(TObject)
     property hasTimerSpeed: boolean read GethasTimerSpeed;
     property Position: integer read GetPosition write SetPosition;
     property RelPosition: integer read GetRelPosition write SetRelPosition;
+    property PositionRange: TNumRange read GetPositionRange;
+    property RelPositionRange: TNumRange read GetRelPositionRange;
     property Speed: integer read GetSpeed write SetSpeed;
     property Timer: integer read GetTimer write SetTimer;
     property onMsg: TNotifyMsg read GetonMsg write SetonMsg;
@@ -205,6 +209,30 @@ begin
            end;
     ASCOM: begin
              ascomfocuser.Position:=p;
+           end;
+ end;
+end;
+
+function  T_focuser.GetPositionRange: TNumRange;
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then result:=indifocuser.PositionRange;
+           end;
+    ASCOM: begin
+             result:=ascomfocuser.PositionRange;
+           end;
+ end;
+end;
+
+function  T_focuser.GetRelPositionRange: TNumRange;
+begin
+ case FFocuserInterface of
+    INDI : begin
+             if indiready then result:=indifocuser.RelPositionRange;
+           end;
+    ASCOM: begin
+             result:=ascomfocuser.RelPositionRange;
            end;
  end;
 end;
