@@ -58,6 +58,8 @@ T_ascomfocuser = class(TObject)
    function  GethasAbsolutePosition: boolean;
    function  GethasRelativePosition: boolean;
    function  GethasTimerSpeed: boolean;
+   function  GetPositionRange: TNumRange;
+   function  GetRelPositionRange: TNumRange;
    procedure msg(txt: string);
  public
    constructor Create;
@@ -73,6 +75,8 @@ T_ascomfocuser = class(TObject)
    property hasTimerSpeed: boolean read GethasTimerSpeed;
    property Position: integer read GetPosition write SetPosition;
    property RelPosition: integer read GetRelPosition write SetRelPosition;
+   property PositionRange: TNumRange read GetPositionRange;
+   property RelPositionRange: TNumRange read GetRelPositionRange;
    property Speed: integer read GetSpeed write SetSpeed;
    property Timer: integer read GetTimer write SetTimer;
    property Status: TDeviceStatus read FStatus;
@@ -213,6 +217,38 @@ begin
     on E: EOleException do msg('Error: ' + E.Message);
    end;
  end;
+ {$endif}
+end;
+
+function  T_ascomfocuser.GetPositionRange: TNumRange;
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result.min:=0;
+   result.max:=V.MaxStep;
+   result.step:=1;
+   except
+    result:=NullRange;
+   end;
+ end
+ else result:=NullRange;
+ {$endif}
+end;
+
+function  T_ascomfocuser.GetRelPositionRange: TNumRange;
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result.min:=0;
+   result.max:=V.MaxStep;
+   result.step:=1;
+   except
+    result:=NullRange;
+   end;
+ end
+ else result:=NullRange;
  {$endif}
 end;
 

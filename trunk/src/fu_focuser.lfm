@@ -43,7 +43,7 @@ object f_focuser: Tf_focuser
           Left = 0
           Height = 15
           Top = 5
-          Width = 32
+          Width = 34
           Caption = 'Speed'
           ParentColor = False
         end
@@ -51,13 +51,13 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 24
-          Width = 31
+          Width = 33
           Caption = 'Timer'
           ParentColor = False
         end
         object speed: TEdit
           Left = 46
-          Height = 23
+          Height = 21
           Hint = 'Focus speed'
           Top = 0
           Width = 60
@@ -68,7 +68,7 @@ object f_focuser: Tf_focuser
         end
         object timer: TEdit
           Left = 46
-          Height = 23
+          Height = 21
           Hint = 'Focus movement duration'
           Top = 22
           Width = 60
@@ -89,7 +89,7 @@ object f_focuser: Tf_focuser
         TabOrder = 0
         object Position: TEdit
           Left = 46
-          Height = 23
+          Height = 21
           Hint = 'Current focuser absolute position'
           Top = 0
           Width = 65
@@ -102,7 +102,7 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 5
-          Width = 22
+          Width = 23
           Caption = 'Pos.'
           ParentColor = False
         end
@@ -110,19 +110,19 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 24
-          Width = 23
+          Width = 26
           Caption = 'Step'
           ParentColor = False
         end
         object PosIncr: TComboBox
           Left = 46
-          Height = 23
+          Height = 21
           Hint = 'Increment step for the inward or outward movement'
           Top = 22
           Width = 65
           Color = clBlack
           Font.Color = clRed
-          ItemHeight = 15
+          ItemHeight = 0
           ItemIndex = 4
           Items.Strings = (
             '1000'
@@ -150,19 +150,19 @@ object f_focuser: Tf_focuser
           Left = 2
           Height = 15
           Top = 10
-          Width = 23
+          Width = 24
           Caption = 'Incr.'
           ParentColor = False
         end
         object RelIncr: TComboBox
-          Left = 46
-          Height = 23
+          Left = 48
+          Height = 21
           Hint = 'Relative increment for the inward or outward movement'
           Top = 8
           Width = 65
           Color = clBlack
           Font.Color = clRed
-          ItemHeight = 15
+          ItemHeight = 0
           ItemIndex = 4
           Items.Strings = (
             '1000'

@@ -75,6 +75,8 @@ T_indifocuser = class(TIndiBaseClient)
    function  GethasAbsolutePosition: boolean;
    function  GethasRelativePosition: boolean;
    function  GethasTimerSpeed: boolean;
+   function  GetPositionRange: TNumRange;
+   function  GetRelPositionRange: TNumRange;
    procedure msg(txt: string);
  public
    constructor Create;
@@ -92,6 +94,8 @@ T_indifocuser = class(TIndiBaseClient)
    property hasTimerSpeed: boolean read GethasTimerSpeed;
    property Position: integer read GetPosition write SetPosition;
    property RelPosition: integer read GetRelPosition write SetRelPosition;
+   property PositionRange: TNumRange read GetPositionRange;
+   property RelPositionRange: TNumRange read GetRelPositionRange;
    property Speed: integer read GetSpeed write SetSpeed;
    property Timer: integer read GetTimer write SetTimer;
    property Status: TDeviceStatus read FStatus;
@@ -331,6 +335,16 @@ end
 else result:=0;
 end;
 
+function  T_indifocuser.GetPositionRange: TNumRange;
+begin
+if FocusAbsolutePosition<>nil then begin;
+  result.min:=FocusAbsolutePosition.np[0].min;
+  result.max:=FocusAbsolutePosition.np[0].max;
+  result.step:=FocusAbsolutePosition.np[0].step;
+end
+else result:=NullRange;
+end;
+
 procedure T_indifocuser.SetRelPosition(p:integer);
 begin
 if FocusRelativePosition<>nil then begin
@@ -348,6 +362,15 @@ end
 else result:=0;
 end;
 
+function  T_indifocuser.GetRelPositionRange: TNumRange;
+begin
+if FocusRelativePosition<>nil then begin;
+  result.min:=FocusRelativePosition.np[0].min;
+  result.max:=FocusRelativePosition.np[0].max;
+  result.step:=FocusRelativePosition.np[0].step;
+end
+else result:=NullRange;
+end;
 
 procedure T_indifocuser.SetSpeed(p:integer);
 begin

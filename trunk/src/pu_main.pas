@@ -1240,6 +1240,8 @@ ShowMessage(aboutmsg);
 end;
 
 Procedure Tf_main.FocuserStatus(Sender: TObject);
+var i,n: integer;
+    r: TNumRange;
 begin
 case focuser.Status of
   devDisconnected:begin
@@ -1253,8 +1255,30 @@ case focuser.Status of
                       NewMessage('Focuser connected');
                       f_devicesconnection.LabelFocuser.Font.Color:=clGreen;
                       f_focuser.Position.Text:=inttostr(focuser.Position);
+                      r:=focuser.PositionRange;
+                      if r.step>0 then begin
+                       f_focuser.Position.Hint:='Current focuser absolute position, '+
+                                       IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
+                        n:=round(max(1000,r.step));
+                        f_focuser.PosIncr.Clear;
+                        for i:=1 to 5 do begin
+                          f_focuser.PosIncr.Items.Add(inttostr(i*n));
+                        end;
+                        f_focuser.PosIncr.ItemIndex:=0;
+                      end;
                       f_focuser.speed.Text:=inttostr(focuser.Speed);
                       f_focuser.timer.Text:=inttostr(focuser.Timer);
+                      r:=focuser.RelPositionRange;
+                      if r.step>0 then begin
+                        f_focuser.RelIncr.Hint:='Relative increment for the inward or outward movement, '+
+                                        IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
+                        n:=round(max(1000,r.step));
+                        f_focuser.RelIncr.Clear;
+                        for i:=1 to 5 do begin
+                          f_focuser.RelIncr.Items.Add(inttostr(i*n));
+                        end;
+                        f_focuser.RelIncr.ItemIndex:=0;
+                      end;
                    end;
 end;
 CheckConnectionStatus;
