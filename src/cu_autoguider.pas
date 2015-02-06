@@ -291,8 +291,8 @@ begin
  buf:=buf+'true';
  buf:=buf+'], "id": 1000}';
  Send(buf);
- buf:='{"method": "get_app_state", "id": 1001}';
- Send(buf);
+// buf:='{"method": "get_app_state", "id": 1001}';
+// Send(buf);
 end;
 
 procedure TPHDClient.Calibrate;

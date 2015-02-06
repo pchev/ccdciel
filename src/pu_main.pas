@@ -76,6 +76,7 @@ type
     N1: TMenuItem;
     OpenDialog1: TOpenDialog;
     PageControlRight: TPageControl;
+    Panel1: TPanel;
     PanelCenter: TPanel;
     PanelLeft: TPanel;
     PanelRight1: TPanel;

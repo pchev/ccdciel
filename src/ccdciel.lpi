@@ -225,7 +225,6 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
