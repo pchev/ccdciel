@@ -38,6 +38,7 @@ type
 
   Tf_main = class(TForm)
     Image1: TImage;
+    ImageList1: TImageList;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
