@@ -1,9 +1,8 @@
 object f_main: Tf_main
-  Left = 707
+  Left = 659
   Height = 373
   Top = 136
   Width = 800
-  ActiveControl = PanelTop
   Caption = 'CCD Ciel'
   ClientHeight = 354
   ClientWidth = 800
@@ -15,109 +14,25 @@ object f_main: Tf_main
   OnShow = FormShow
   ShowHint = True
   LCLVersion = '1.2.4.0'
-  object PanelTop: TPanel
-    Left = 0
-    Height = 2
-    Top = 0
-    Width = 800
-    Align = alTop
-    AutoSize = True
-    ChildSizing.LeftRightSpacing = 3
-    ChildSizing.TopBottomSpacing = 3
-    ChildSizing.HorizontalSpacing = 3
-    ChildSizing.VerticalSpacing = 3
-    ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 99
-    ParentColor = False
-    ParentFont = False
-    TabOrder = 0
-    OnDragDrop = PanelDragDrop
-    OnDragOver = PanelDragOver
-  end
-  object PanelLeft: TPanel
-    Tag = 1
-    Left = 0
-    Height = 333
-    Top = 2
-    Width = 2
-    Align = alLeft
-    AutoSize = True
-    ChildSizing.LeftRightSpacing = 3
-    ChildSizing.TopBottomSpacing = 3
-    ChildSizing.HorizontalSpacing = 3
-    ChildSizing.VerticalSpacing = 3
-    ChildSizing.Layout = cclTopToBottomThenLeftToRight
-    ChildSizing.ControlsPerLine = 99
-    ParentColor = False
-    ParentFont = False
-    TabOrder = 1
-    OnDragDrop = PanelDragDrop
-    OnDragOver = PanelDragOver
-  end
-  object PanelCenter: TPanel
-    Left = 2
-    Height = 333
-    Top = 2
-    Width = 670
-    Align = alClient
-    AutoSize = True
-    ClientHeight = 333
-    ClientWidth = 670
-    Color = 4197901
-    ParentColor = False
-    TabOrder = 2
-    object Image1: TImage
-      Cursor = crCross
-      Left = 1
-      Height = 331
-      Top = 1
-      Width = 668
-      Align = alClient
-      OnDblClick = Image1DblClick
-      OnMouseDown = Image1MouseDown
-      OnMouseMove = Image1MouseMove
-      OnMouseUp = Image1MouseUp
-      OnPaint = Image1Paint
-      OnResize = Image1Resize
-      PopupMenu = ImagePopupMenu
-    end
-  end
-  object StatusBar1: TStatusBar
-    Left = 0
-    Height = 19
-    Top = 335
-    Width = 800
-    Panels = <    
-      item
-        Width = 100
-      end    
-      item
-        Width = 150
-      end    
-      item
-        Width = 600
-      end>
-    SimplePanel = False
-  end
   object PageControlRight: TPageControl
     Left = 672
-    Height = 333
-    Top = 2
+    Height = 335
+    Top = 0
     Width = 128
     ActivePage = TabSheet1
     Align = alRight
     MultiLine = True
     TabIndex = 0
-    TabOrder = 4
+    TabOrder = 0
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       Caption = 'Centering'
-      ClientHeight = 296
+      ClientHeight = 298
       ClientWidth = 120
       object PanelRight1: TPanel
         Tag = 1
         Left = 0
-        Height = 296
+        Height = 298
         Top = 0
         Width = 120
         Align = alClient
@@ -138,7 +53,7 @@ object f_main: Tf_main
     end
     object TabSheet2: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 296
+      ClientHeight = 298
       ClientWidth = 120
       object PanelRight2: TPanel
         Tag = 1
@@ -164,7 +79,7 @@ object f_main: Tf_main
     end
     object TabSheet3: TTabSheet
       Caption = 'Capture'
-      ClientHeight = 296
+      ClientHeight = 298
       ClientWidth = 120
       object PanelRight3: TPanel
         Tag = 1
@@ -190,7 +105,7 @@ object f_main: Tf_main
     end
     object TabSheet4: TTabSheet
       Caption = 'Plan'
-      ClientHeight = 296
+      ClientHeight = 298
       ClientWidth = 120
       object PanelRight4: TPanel
         Tag = 1
@@ -214,6 +129,101 @@ object f_main: Tf_main
         OnDragOver = PanelDragOver
       end
     end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 335
+    Top = 0
+    Width = 672
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 335
+    ClientWidth = 672
+    TabOrder = 1
+    object PanelLeft: TPanel
+      Tag = 1
+      Left = 0
+      Height = 333
+      Top = 2
+      Width = 2
+      Align = alLeft
+      AutoSize = True
+      ChildSizing.LeftRightSpacing = 3
+      ChildSizing.TopBottomSpacing = 3
+      ChildSizing.HorizontalSpacing = 3
+      ChildSizing.VerticalSpacing = 3
+      ChildSizing.Layout = cclTopToBottomThenLeftToRight
+      ChildSizing.ControlsPerLine = 99
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 0
+      OnDragDrop = PanelDragDrop
+      OnDragOver = PanelDragOver
+    end
+    object PanelTop: TPanel
+      Left = 0
+      Height = 2
+      Top = 0
+      Width = 672
+      Align = alTop
+      AutoSize = True
+      ChildSizing.LeftRightSpacing = 3
+      ChildSizing.TopBottomSpacing = 3
+      ChildSizing.HorizontalSpacing = 3
+      ChildSizing.VerticalSpacing = 3
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 99
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 1
+      OnDragDrop = PanelDragDrop
+      OnDragOver = PanelDragOver
+    end
+    object PanelCenter: TPanel
+      Left = 2
+      Height = 333
+      Top = 2
+      Width = 670
+      Align = alClient
+      AutoSize = True
+      ClientHeight = 333
+      ClientWidth = 670
+      Color = 4197901
+      ParentColor = False
+      TabOrder = 2
+      object Image1: TImage
+        Cursor = crCross
+        Left = 1
+        Height = 331
+        Top = 1
+        Width = 668
+        Align = alClient
+        OnDblClick = Image1DblClick
+        OnMouseDown = Image1MouseDown
+        OnMouseMove = Image1MouseMove
+        OnMouseUp = Image1MouseUp
+        OnPaint = Image1Paint
+        OnResize = Image1Resize
+        PopupMenu = ImagePopupMenu
+      end
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 19
+    Top = 335
+    Width = 800
+    Panels = <    
+      item
+        Width = 100
+      end    
+      item
+        Width = 150
+      end    
+      item
+        Width = 600
+      end>
+    SimplePanel = False
   end
   object MainMenu1: TMainMenu
     left = 178
