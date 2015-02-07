@@ -86,6 +86,7 @@ type
     PanelRight4: TPanel;
     PanelTop: TPanel;
     ImagePopupMenu: TPopupMenu;
+    PanelBottom: TPanel;
     SaveDialog1: TSaveDialog;
     StatusBar1: TStatusBar;
     ConnectTimer: TTimer;
@@ -490,11 +491,11 @@ end;
 
 procedure Tf_main.FormShow(Sender: TObject);
 begin
-  SetTool(f_devicesconnection,'Connection',PanelTop,0,MenuViewConnection);
-  SetTool(f_visu,'Histogram',PanelTop,f_devicesconnection.left+1,MenuViewHistogram);
-  SetTool(f_msg,'Messages',PanelTop,f_visu.left+1,MenuViewMessages);
+  SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram);
+  SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages);
 
-  SetTool(f_preview,'Preview',PanelRight1,0,MenuViewPreview);
+  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection);
+  SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview);
   SetTool(f_mount,'Mount',PanelRight1,f_preview.top+1,MenuViewMount);
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_mount.top+1,MenuViewAutoguider);
 
@@ -518,11 +519,11 @@ end;
 
 procedure Tf_main.MenuResetToolsClick(Sender: TObject);
 begin
-  SetTool(f_devicesconnection,'',PanelTop,0,MenuViewConnection);
-  SetTool(f_visu,'',PanelTop,f_devicesconnection.left+1,MenuViewHistogram);
-  SetTool(f_msg,'',PanelTop,f_visu.left+1,MenuViewMessages);
+  SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram);
+  SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages);
 
-  SetTool(f_preview,'',PanelRight1,0,MenuViewPreview);
+  SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection);
+  SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview);
   SetTool(f_mount,'',PanelRight1,f_preview.top+1,MenuViewMount);
   SetTool(f_autoguider,'',PanelRight1,f_mount.top+1,MenuViewAutoguider);
 
