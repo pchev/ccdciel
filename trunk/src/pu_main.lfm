@@ -148,7 +148,7 @@ object f_main: Tf_main
     object PanelLeft: TPanel
       Tag = 1
       Left = 0
-      Height = 333
+      Height = 331
       Top = 2
       Width = 2
       Align = alLeft
@@ -186,12 +186,12 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 2
-      Height = 333
+      Height = 331
       Top = 2
       Width = 662
       Align = alClient
       AutoSize = True
-      ClientHeight = 333
+      ClientHeight = 331
       ClientWidth = 662
       Color = 4197901
       ParentColor = False
@@ -199,7 +199,7 @@ object f_main: Tf_main
       object Image1: TImage
         Cursor = crCross
         Left = 1
-        Height = 331
+        Height = 329
         Top = 1
         Width = 660
         Align = alClient
@@ -211,6 +211,25 @@ object f_main: Tf_main
         OnResize = Image1Resize
         PopupMenu = ImagePopupMenu
       end
+    end
+    object PanelBottom: TPanel
+      Left = 0
+      Height = 2
+      Top = 333
+      Width = 664
+      Align = alBottom
+      AutoSize = True
+      ChildSizing.LeftRightSpacing = 3
+      ChildSizing.TopBottomSpacing = 3
+      ChildSizing.HorizontalSpacing = 3
+      ChildSizing.VerticalSpacing = 3
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 99
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 3
+      OnDragDrop = PanelDragDrop
+      OnDragOver = PanelDragOver
     end
   end
   object StatusBar1: TStatusBar
