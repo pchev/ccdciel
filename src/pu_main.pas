@@ -353,7 +353,7 @@ end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
 var DefaultInterface: TDevInterface;
-    configver: string;
+    configver,configfile: string;
 begin
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
@@ -366,8 +366,12 @@ begin
   PageControlRight.ActivePageIndex:=0;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
-  config.Filename:=GetAppConfigFileUTF8(false,true,true);
   ConfigDir:=GetAppConfigDirUTF8(false,true);
+  if Application.HasOption('c', 'config') then begin
+    configfile:='ccdciel_'+Application.GetOptionValue('c', 'config')+'.conf';
+  end
+  else configfile:='ccdciel.conf';
+  config.Filename:=slash(ConfigDir)+configfile;
   LogFile:=slash(ConfigDir)+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
   LogFileOpen:=false;
   TmpDir:=slash(ConfigDir)+'tmp';
