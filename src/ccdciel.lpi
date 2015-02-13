@@ -46,7 +46,6 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -76,7 +75,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -106,7 +104,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="39">
+    <Units Count="40">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -150,6 +148,7 @@
         <ComponentName Value="f_visu"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_visu"/>
       </Unit6>
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
@@ -172,17 +171,14 @@
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomfocuser"/>
       </Unit10>
       <Unit11>
         <Filename Value="cu_focuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_focuser"/>
       </Unit11>
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -204,7 +200,6 @@
         <ComponentName Value="f_focuser"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_focuser"/>
       </Unit15>
       <Unit16>
         <Filename Value="fu_mount.pas"/>
@@ -233,7 +228,6 @@
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indifocuser"/>
       </Unit21>
       <Unit22>
         <Filename Value="cu_indiwheel.pas"/>
@@ -286,7 +280,6 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_options"/>
       </Unit31>
       <Unit32>
         <Filename Value="fu_frame.pas"/>
@@ -313,7 +306,6 @@
       <Unit36>
         <Filename Value="cu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_autoguider"/>
       </Unit36>
       <Unit37>
         <Filename Value="cu_tcpclient.pas"/>
@@ -327,6 +319,14 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="fu_autoguider"/>
       </Unit38>
+      <Unit39>
+        <Filename Value="fu_sequence.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_sequence"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_sequence"/>
+      </Unit39>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -347,7 +347,6 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

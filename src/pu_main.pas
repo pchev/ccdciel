@@ -26,6 +26,7 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
+  fu_sequence,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_astrometry, cu_cdcclient, cu_autoguider, lazutf8sysutils, Classes,
@@ -47,6 +48,7 @@ type
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
+    MenuViewSequence: TMenuItem;
     MenuViewAutoguider: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
     MenuStopAstrometry: TMenuItem;
@@ -136,6 +138,7 @@ type
     procedure MenuViewMountClick(Sender: TObject);
     procedure MenuViewPreviewClick(Sender: TObject);
     procedure MenuViewCaptureClick(Sender: TObject);
+    procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;
@@ -158,6 +161,7 @@ type
     f_frame: Tf_frame;
     f_preview: Tf_preview;
     f_capture: Tf_capture;
+    f_sequence: Tf_sequence;
     f_starprofile: Tf_starprofile;
     f_focuser: Tf_focuser;
     f_mount: Tf_mount;
@@ -242,6 +246,7 @@ type
     Procedure StartCaptureExposure(Sender: TObject);
     Procedure RedrawHistogram(Sender: TObject);
     Procedure Redraw(Sender: TObject);
+    Procedure ImgFullRange(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     procedure WriteHeaders;
     Procedure ClearImage;
@@ -426,6 +431,7 @@ begin
   f_visu.onRedraw:=@Redraw;
   f_visu.onZoom:=@ZoomImage;
   f_visu.onRedrawHistogram:=@RedrawHistogram;
+  f_visu.onFullRange:=@ImgFullRange;
 
   f_msg:=Tf_msg.Create(self);
 
@@ -465,6 +471,8 @@ begin
   f_autoguider.onGuide:=@AutoguiderGuideClick;
   f_autoguider.onDither:=@AutoguiderDitherClick;
   f_autoguider.Status.Text:='Disconnected';
+
+  f_sequence:=Tf_sequence.Create(self);
 
   fits:=TFits.Create(self);
 
@@ -511,6 +519,8 @@ begin
   SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame);
   SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_frame.top+1,MenuViewCCDtemp);
 
+  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence);
+
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
 end;
@@ -538,6 +548,8 @@ begin
   SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters);
   SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame);
   SetTool(f_ccdtemp,'',PanelRight3,f_frame.top+1,MenuViewCCDtemp);
+
+  SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence);
 end;
 
 procedure Tf_main.UpdConfig(oldver:string);
@@ -622,6 +634,11 @@ begin
   config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
   config.SetValue('/Capture/FileName',f_capture.Fname.Text);
   config.SetValue('/Capture/Count',f_capture.SeqNum.Text);
+
+  config.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
+  config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
+  config.SetValue('/Tools/Sequence/Top',f_sequence.Top);
+  config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
 
   config.Flush;
   NewMessage('Program exit');
@@ -1653,6 +1670,11 @@ begin
   f_capture.Visible:=MenuViewCapture.Checked;
 end;
 
+procedure Tf_main.MenuViewSequenceClick(Sender: TObject);
+begin
+  f_sequence.Visible:=MenuViewSequence.Checked;
+end;
+
 procedure Tf_main.MenuViewStarProfileClick(Sender: TObject);
 begin
   f_starprofile.Visible:=MenuViewStarProfile.Checked;
@@ -2010,6 +2032,13 @@ end;
 Procedure Tf_main.ZoomImage(Sender: TObject);
 begin
   PlotImage;
+end;
+
+Procedure Tf_main.ImgFullRange(Sender: TObject);
+begin
+  fits.ImgFullRange:=f_visu.FullRange.Down;
+  DrawImage;
+  DrawHistogram;
 end;
 
 procedure Tf_main.Screen2Fits(x,y: integer; out xx,yy:integer);

@@ -1,0 +1,72 @@
+object f_sequence: Tf_sequence
+  Left = 0
+  Height = 427
+  Top = 0
+  Width = 128
+  ClientHeight = 427
+  ClientWidth = 128
+  TabOrder = 0
+  DesignLeft = 296
+  DesignTop = 151
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 128
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Sequence'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 114
+    Top = 24
+    Width = 154
+    BevelOuter = bvNone
+    ClientHeight = 114
+    ClientWidth = 154
+    TabOrder = 1
+    object StringGrid1: TStringGrid
+      Left = 0
+      Height = 114
+      Top = 0
+      Width = 154
+      Align = alClient
+      ColCount = 6
+      DefaultRowHeight = 18
+      FixedCols = 0
+      Flat = True
+      RowCount = 2
+      TabOrder = 0
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 200
+    Top = 180
+    Width = 154
+    BevelOuter = bvNone
+    ClientHeight = 200
+    ClientWidth = 154
+    TabOrder = 2
+    object StringGrid2: TStringGrid
+      Left = 0
+      Height = 200
+      Top = 0
+      Width = 154
+      Align = alClient
+      ColCount = 4
+      DefaultRowHeight = 18
+      FixedCols = 0
+      Flat = True
+      RowCount = 2
+      TabOrder = 0
+    end
+  end
+end
