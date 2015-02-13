@@ -117,8 +117,9 @@ type
     n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode : Integer;
     Fimg_width,Fimg_Height,Frotation : double;
     FTitle : string;
-    Fmean,Fsigma,dmin,dmax : double;
+    Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
+    FImgFullRange: Boolean;
     Fitt : Titt;
     emptybmp:Tbitmap;
     clog,csqrt:double;
@@ -133,6 +134,7 @@ type
     Procedure ReadFitsImage;
     Procedure GetImage;
     function Citt(value: Word):Word;
+    procedure SetImgFullRange(value: boolean);
   protected
     { Protected declarations }
   public
@@ -160,6 +162,7 @@ type
      property image : Timaw16 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
+     property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
   end;
 
 implementation
@@ -411,8 +414,11 @@ constructor TFits.Create(AOwner:TComponent);
 begin
 inherited Create(AOwner);
 Fitt:=ittramp;
+Fheight:=0;
+Fwidth:=0;
 ImgDmin:=0;
 ImgDmax:=MaxWord;
+FImgFullRange:=false;
 FFitsInfo.naxis1:=0;
 FHeader:=TFitsHeader.Create;
 FStream:=TMemoryStream.Create;
@@ -581,7 +587,7 @@ end;
 
 Procedure TFits.ReadFitsImage;
 var i,ii,j,npix,k : integer;
-    x : double;
+    x,dmin,dmax : double;
     ni,sum,sum2 : extended;
 begin
 if FFitsInfo.naxis1=0 then exit;
@@ -770,99 +776,106 @@ var i,j: integer;
     xx: extended;
     c: double;
 begin
+if FImgFullRange then begin
+  Fdmin:=0;
+  Fdmax:=MaxWord;
+end else begin
+  Fdmin:=FFitsInfo.dmin;
+  Fdmax:=FFitsInfo.dmax;
+end;
 setlength(Fimage,n_axis,Fheight,Fwidth);
 for i:=0 to 255 do FHistogram[i]:=1; // minimum 1 to take the log
 case FFitsInfo.bitpix of
      -64 : begin
-           c:=MaxWord/(dmax-dmin);
+           c:=MaxWord/(Fdmax-Fdmin);
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                inc(FHistogram[x div 256]);
                if n_axis=3 then begin
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                end;
            end;
            end;
            end;
      -32 : begin
-           c:=MaxWord/(dmax-dmin);
+           c:=MaxWord/(Fdmax-Fdmin);
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                inc(FHistogram[x div 256]);
                if n_axis=3 then begin
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                end;
            end;
            end;
            end;
        8 : begin
-           c:=MaxWord/(dmax-dmin);
+           c:=MaxWord/(Fdmax-Fdmin);
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                inc(FHistogram[x div 256]);
                if n_axis=3 then begin
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                end;
            end;
            end;
            end;
       16 : begin
-           c:=MaxWord/(dmax-dmin);
+           c:=MaxWord/(Fdmax-Fdmin);
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                inc(FHistogram[x div 256]);
                if n_axis=3 then begin
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                end;
            end;
            end;
            end;
       32 : begin
-           c:=MaxWord/(dmax-dmin);
+           c:=MaxWord/(Fdmax-Fdmin);
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                inc(FHistogram[x div 256]);
                if n_axis=3 then begin
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-dmin) * c )) );
+                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                end;
            end;
@@ -870,7 +883,13 @@ case FFitsInfo.bitpix of
            end;
       end;
 FimageC:=c;
-FimageMin:=dmin;
+FimageMin:=Fdmin;
+end;
+
+procedure TFits.SetImgFullRange(value: boolean);
+begin
+  FImgFullRange:=value;
+  if (Fheight>0)and(Fwidth>0) then GetImage;
 end;
 
 function TFits.Citt(value: Word):Word;

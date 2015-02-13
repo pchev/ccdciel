@@ -33,6 +33,7 @@ type
 
   Tf_visu = class(TFrame)
     BtnZoom05: TSpeedButton;
+    FullRange: TSpeedButton;
     Histogram: TImage;
     Panel1: TPanel;
     histlinear: TSpeedButton;
@@ -51,6 +52,7 @@ type
     procedure BtnIttChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
+    procedure FullRangeClick(Sender: TObject);
     procedure histbtnClick(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
@@ -68,6 +70,7 @@ type
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
+    FFullRange: TNotifyEvent;
     procedure SetZoom(value: double);
   public
     { public declarations }
@@ -80,6 +83,7 @@ type
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
+    property onFullRange: TNotifyEvent read FFullRange write FFullRange;
   end;
 
 implementation
@@ -209,6 +213,11 @@ begin
      end;
   end;
   if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
+end;
+
+procedure Tf_visu.FullRangeClick(Sender: TObject);
+begin
+  if Assigned(FFullRange) then FFullRange(self);
 end;
 
 procedure Tf_visu.SetZoom(value: double);
