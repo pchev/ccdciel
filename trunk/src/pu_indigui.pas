@@ -280,6 +280,7 @@ begin
   groupname:=indiProp.getGroupName;
   propname:=indiProp.getName;
   proplbl:=indiProp.getLabel;
+  if proplbl='' then proplbl:=propname;
   proptype:=indiProp.getType;
   iprop:=TIndiProp.Create;
   i:=devlist.IndexOf(devname);
