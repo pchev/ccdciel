@@ -36,8 +36,11 @@ type
     ALT: TEdit;
     BtnTrackSidereal: TSpeedButton;
     BtnTrackLunar: TSpeedButton;
+    BtnTrackStop: TSpeedButton;
     BtnTrackSolar: TSpeedButton;
     BtnTrackCustom: TSpeedButton;
+    Panel4: TPanel;
+    PanelCustTrack: TPanel;
     ReverseDec: TCheckBox;
     SlewPreset: TComboBox;
     GroupBox10: TGroupBox;
@@ -69,6 +72,7 @@ type
     RArate: TTrackBar;
     DErate: TTrackBar;
     IndiSetup: TSpeedButton;
+    BtnSetTrackRate: TSpeedButton;
     TrackDEC: TEdit;
     TRackRA: TEdit;
     RA: TEdit;
@@ -86,7 +90,6 @@ type
     BtnEast: TSpeedButton;
     BtnWest: TSpeedButton;
     BtnSouth: TSpeedButton;
-    BtnTrackStop: TSpeedButton;
     StaticText1: TStaticText;
     TopPanel: TPanel;
     IndiBtn: TPanel;
@@ -114,6 +117,7 @@ type
     procedure SetupBtnClick(Sender: TObject);
     procedure SlewPresetChange(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure BtnSetTrackRateClick(Sender: TObject);
   private
     { private declarations }
     eqmod: T_indieqmod;
@@ -135,7 +139,8 @@ type
     Procedure SlewModeChange(Sender: TObject);
     procedure FillSlewPreset;
     procedure SlewSpeedRange;
-    Procedure TrackModeChange(Sender: TObject);
+    procedure TrackModeChange(Sender: TObject);
+    procedure TrackRateChange(Sender: TObject);
   public
     { public declarations }
   end;
@@ -147,6 +152,7 @@ implementation
 
 const
   clOrange=$1080EF;
+  f5='0.00000';
 
 {$R *.lfm}
 
@@ -192,6 +198,7 @@ begin
    eqmod.onSlewSpeedChange:=@SlewSpeedChange;
    eqmod.onSlewModeChange:=@SlewModeChange;
    eqmod.onTrackModeChange:=@TrackModeChange;
+   eqmod.onTrackRateChange:=@TrackRateChange;
    if indiserver<>'' then eqmod.indiserver:=indiserver;
    if indiserverport<>'' then eqmod.indiserverport:=indiserverport;
    if indidevice<>'' then eqmod.indidevice:=indidevice;
@@ -307,30 +314,32 @@ case eqmod.Status of
                       SlewSpeedChange(Sender);
                       SlewPresetChange(Sender);
                       TrackModeChange(Sender);
+                      TrackRateChange(Sender);
                    end;
 end;
 end;
 
 Procedure Tf_eqmod.CoordChange(Sender: TObject);
 begin
- RA.Text:=RAToStr(eqmod.RA);
- DE.Text:=DEToStr(eqmod.Dec);
+ RA.Text:=SXToStr(eqmod.RA);
+ DE.Text:=SXToStr(eqmod.Dec);
 end;
 
 Procedure Tf_eqmod.AltAzChange(Sender: TObject);
 begin
- AZ.Text:=DEToStr(eqmod.AZ);
- ALT.Text:=DEToStr(eqmod.ALT);
+ AZ.Text:=SXToStr(eqmod.AZ);
+ ALT.Text:=SXToStr(eqmod.ALT);
 end;
 
 Procedure Tf_eqmod.LSTChange(Sender: TObject);
 begin
- LST.Text:=RAToStr(eqmod.LST);
+ LST.Text:=SXToStr(eqmod.LST);
 end;
 
 Procedure Tf_eqmod.PierSideChange(Sender: TObject);
 begin
   PierSide.Text:=eqmod.PierSideLbl;
+  TrackModeChange(Sender);
 end;
 
 procedure Tf_eqmod.BtnNorthMouseDown(Sender: TObject; Button: TMouseButton;
@@ -441,21 +450,47 @@ end;
 
 Procedure Tf_eqmod.TrackModeChange(Sender: TObject);
 begin
+ BtnTrackStop.Down:=false;
+ BtnTrackSidereal.Down:=false;
+ BtnTrackLunar.Down:=false;
+ BtnTrackSolar.Down:=false;
+ BtnTrackCustom.Down:=false;
+ PanelCustTrack.Visible:=false;
   case eqmod.TrackMode of
     -1 : BtnTrackStop.Down:=true;
      0 : BtnTrackSidereal.Down:=true;
      1 : BtnTrackLunar.Down:=true;
      2 : BtnTrackSolar.Down:=true;
-     3 : BtnTrackCustom.Down:=true;
+     3 : begin
+         BtnTrackCustom.Down:=true;
+         PanelCustTrack.Visible:=true;
+         end;
   end;
 end;
 
 procedure Tf_eqmod.SetTrackModeClick(Sender: TObject);
+
 begin
 if sender is TSpeedButton then
   eqmod.TrackMode:=TSpeedButton(sender).tag;
+  PanelCustTrack.Visible:=(TSpeedButton(sender).tag=3);
 end;
 
+procedure Tf_eqmod.BtnSetTrackRateClick(Sender: TObject);
+var x,y: double;
+begin
+x:=StrToFloatDef(TrackRA.Text,-99999);
+y:=StrToFloatDef(TrackDEC.Text,-99999);
+if (x>-99999)and(y>=-99999) then begin
+   eqmod.SetTrackRate(x,y);
+end;
+end;
+
+Procedure Tf_eqmod.TrackRateChange(Sender: TObject);
+begin
+  TRackRA.Text:=FormatFloat(f5,eqmod.RATrackRate);
+  TRackDEC.Text:=FormatFloat(f5,eqmod.DETrackRate);
+end;
 
 end.
 

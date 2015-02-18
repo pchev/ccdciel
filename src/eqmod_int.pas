@@ -80,6 +80,7 @@ T_indieqmod = class(TIndiBaseClient)
    FSimulation: Boolean;
    FSlewPreset: TStringList;
    FStatus: TDeviceStatus;
+   FonDestroy: TNotifyEvent;
    FonMsg: TNotifyMsg;
    FonStatusChange: TNotifyEvent;
    FonCoordChange: TNotifyEvent;
@@ -90,7 +91,7 @@ T_indieqmod = class(TIndiBaseClient)
    FonSlewModeChange: TNotifyEvent;
    FonRevDecChange: TNotifyEvent;
    FonTrackModeChange: TNotifyEvent;
-   FonDestroy: TNotifyEvent;
+   FonTrackRateChange:TNotifyEvent;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -125,6 +126,8 @@ T_indieqmod = class(TIndiBaseClient)
    function  GetTrackmode: integer;
    procedure SetTrackmode(value: integer);
    procedure msg(txt: string);
+   function  GetRATrackRate: double;
+   function  GetDETrackRate: double;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -135,10 +138,12 @@ T_indieqmod = class(TIndiBaseClient)
    procedure MotionWest;
    procedure MotionEast;
    procedure MotionStop;
+   procedure SetTrackRate(tra,tde: double);
    property indiserver: string read Findiserver write Findiserver;
    property indiserverport: string read Findiserverport write Findiserverport;
    property indidevice: string read Findidevice write Findidevice;
    property indideviceport: string read Findideviceport write Findideviceport;
+   property Status: TDeviceStatus read FStatus;
    property Simulation: Boolean read FSimulation write FSimulation;
    property RA: double read GetRA;
    property Dec: double read GetDec;
@@ -157,7 +162,8 @@ T_indieqmod = class(TIndiBaseClient)
    property RASlewSpeed: integer read GetRASlewSpeed write SetRASlewSpeed;
    property DESlewSpeed: integer read GetDESlewSpeed write SetDESlewSpeed;
    property TrackMode: integer read GetTrackmode write SetTrackmode;
-   property Status: TDeviceStatus read FStatus;
+   property RATrackRate: double read GetRATrackRate;
+   property DETrackRate: double read GetDETrackRate;
    property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
    property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -169,6 +175,7 @@ T_indieqmod = class(TIndiBaseClient)
    property onSlewSpeedChange: TNotifyEvent read FonSlewSpeedChange write FonSlewSpeedChange;
    property onSlewModeChange: TNotifyEvent read FonSlewModeChange write FonSlewModeChange;
    property onTrackModeChange: TNotifyEvent read FonTrackModeChange write FonTrackModeChange;
+   property onTrackRateChange: TNotifyEvent read FonTrackRateChange write FonTrackRateChange;
 end;
 
 implementation
@@ -438,6 +445,8 @@ begin
      if Assigned(FonLSTChange) then FonLSTChange(self);
   end else if nvp=SlewSpeed then begin
      if Assigned(FonSlewSpeedChange) then FonSlewSpeedChange(self);
+  end else if nvp=TrackR then begin
+     if Assigned(FonTrackRateChange) then FonTrackRateChange(self);
   end;
 end;
 
@@ -676,17 +685,48 @@ begin
  if TrackM<>nil then begin
    result:=-1;
    for i := 0 to TrackM.nsp-1 do
-    if SlewMode.sp[i].s = ISS_ON then
+    if TrackM.sp[i].s = ISS_ON then
        result:=i;
  end;
 end;
 
 procedure T_indieqmod.SetTrackmode(value: integer);
+var sp: ISwitch;
 begin
  if TrackM<>nil then begin
+    sp:=IUFindOnSwitch(TrackM);
+    if sp<>nil then begin
+      sendNewSwitch(TrackM);
+      WaitBusy(TrackM);
+    end;
     IUResetSwitch(TrackM);
-    if value>=0 then TrackM.sp[value].s:=ISS_ON;
-    sendNewSwitch(TrackM);
+    if value>=0 then begin
+      TrackM.sp[value].s:=ISS_ON;
+      sendNewSwitch(TrackM);
+    end;
+ end;
+end;
+
+function  T_indieqmod.GetRATrackRate: double;
+begin
+ if TrackR<>nil then begin
+   result:=TrackRra.value;
+ end;
+end;
+
+procedure T_indieqmod.SetTrackRate(tra,tde: double);
+begin
+ if TrackR<>nil then begin
+    TrackRra.value:=tra;
+    TrackRde.value:=tde;
+    sendNewNumber(TrackR);
+ end;
+end;
+
+function  T_indieqmod.GetDETrackRate: double;
+begin
+ if TrackR<>nil then begin
+   result:=TrackRde.value;
  end;
 end;
 
