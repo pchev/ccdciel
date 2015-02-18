@@ -80,7 +80,7 @@ type
     { private declarations }
     indiclient: TIndiBaseClient;
     devlist: Tstringlist;
-    FIndiServer,FIndiPort: string;
+    FIndiServer,FIndiPort,FIndiDevice: string;
     FonDestroy: TNotifyEvent;
     FButtonGroup: integer;
     procedure NewDevice(dp: Basedevice);
@@ -111,6 +111,7 @@ type
     { public declarations }
     property IndiServer: string read FIndiServer write FIndiServer;
     property IndiPort: string read FIndiPort write FIndiPort;
+    property IndiDevice: string read FIndiDevice write FIndiDevice;
     property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
   end;
 
@@ -203,12 +204,16 @@ end;
 procedure Tf_indigui.FormShow(Sender: TObject);
 begin
   indiclient.SetServer(FIndiServer,FIndiPort);
+  if FIndiDevice<>'' then indiclient.watchDevice(FIndiDevice);
   indiclient.ConnectServer;
 end;
 
 procedure Tf_indigui.FormCreate(Sender: TObject);
 begin
   FButtonGroup:=1;
+  FIndiServer:='localhost';
+  FIndiPort:='7624';
+  FIndiDevice:='';
   indiclient:=TIndiBaseClient.Create;
   devlist:=Tstringlist.Create;
   indiclient.onNewDevice:=@NewDevice;

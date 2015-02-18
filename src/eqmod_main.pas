@@ -229,6 +229,7 @@ begin
     f_indigui.onDestroy:=@GUIdestroy;
     f_indigui.IndiServer:=indiserver;
     f_indigui.IndiPort:=indiserverport;
+    f_indigui.IndiDevice:=indidevice;
     GUIready:=true;
  end;
  f_indigui.Show;
