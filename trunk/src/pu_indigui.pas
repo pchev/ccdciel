@@ -389,32 +389,6 @@ begin
   end;
 end;
 
-Function SXToStr(de: Double) : string;
-var dd,min1,min,sec: Double;
-    d,m,s : string;
-begin
-    dd:=Int(de);
-    min1:=abs(de-dd)*60;
-    if min1>=59.99166667 then begin
-       dd:=dd+sgn(de);
-       min1:=0.0;
-    end;
-    min:=Int(min1);
-    sec:=(min1-min)*60;
-    if sec>=59.5 then begin
-       min:=min+1;
-       sec:=0.0;
-    end;
-    str(abs(dd):2:0,d);
-    if abs(dd)<10 then d:='0'+trim(d);
-    if de<0 then d:='-'+d;
-    str(min:2:0,m);
-    if abs(min)<10 then m:='0'+trim(m);
-    str(sec:2:0,s);
-    if abs(sec)<9.5 then s:='0'+trim(s);
-    result := d+':'+m+':'+s;
-end;
-
 function IndiFormatFloat(x: double; fmt:string):string;
 begin
   if copy(fmt,Length(fmt),1)='m'
