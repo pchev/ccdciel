@@ -58,9 +58,27 @@ T_indieqmod = class(TIndiBaseClient)
    TelescopeAperture, TelescopeFocale: INumber;
    Mlst: INumberVectorProperty;
    PierSide: ISwitchVectorProperty;
+   Sim: ISwitchVectorProperty;
+   AbortMotion: ISwitchVectorProperty;
+   MotionNS: ISwitchVectorProperty;
+   MotionN: ISwitch;
+   MotionS: ISwitch;
+   MotionWE: ISwitchVectorProperty;
+   MotionW: ISwitch;
+   MotionE: ISwitch;
+   RevDec: ISwitchVectorProperty;
+   SlewMode: ISwitchVectorProperty;
+   SlewSpeed: INumberVectorProperty;
+   RAslew, DEslew: INumber;
+   TrackM: ISwitchVectorProperty;
+   TrackSidereal,TrackLunar,TrackSolar,TrackCustom: ISwitch;
+   TrackR: INumberVectorProperty;
+   TrackRra, TrackRde: INumber;
    eod_coord:  boolean;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
+   FSimulation: Boolean;
+   FSlewPreset: TStringList;
    FStatus: TDeviceStatus;
    FonMsg: TNotifyMsg;
    FonStatusChange: TNotifyEvent;
@@ -68,6 +86,10 @@ T_indieqmod = class(TIndiBaseClient)
    FonAltAZChange: TNotifyEvent;
    FonLSTChange: TNotifyEvent;
    FonPierSideChange: TNotifyEvent;
+   FonSlewSpeedChange: TNotifyEvent;
+   FonSlewModeChange: TNotifyEvent;
+   FonRevDecChange: TNotifyEvent;
+   FonTrackModeChange: TNotifyEvent;
    FonDestroy: TNotifyEvent;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
@@ -90,16 +112,34 @@ T_indieqmod = class(TIndiBaseClient)
    function  GetAperture:double;
    function  GetPierSideLbl: string;
    function  GetFocaleLength:double;
+   function  GetRevDec: boolean;
+   procedure SetRevDec(value: boolean);
+   function  GetRASlewSpeed:integer;
+   procedure SetRASlewSpeed(value:integer);
+   function  GetDESlewSpeed:integer;
+   procedure SetDESlewSpeed(value:integer);
+   function  GetActiveSlewPreset: integer;
+   procedure SetActiveSlewPreset(value: integer);
+   function  GetRASlewSpeedRange: TNumRange;
+   function  GetDESlewSpeedRange: TNumRange;
+   function  GetTrackmode: integer;
+   procedure SetTrackmode(value: integer);
    procedure msg(txt: string);
  public
    constructor Create;
    destructor  Destroy; override;
    Procedure Connect;
    Procedure Disconnect;
+   procedure MotionNorth;
+   procedure MotionSouth;
+   procedure MotionWest;
+   procedure MotionEast;
+   procedure MotionStop;
    property indiserver: string read Findiserver write Findiserver;
    property indiserverport: string read Findiserverport write Findiserverport;
    property indidevice: string read Findidevice write Findidevice;
    property indideviceport: string read Findideviceport write Findideviceport;
+   property Simulation: Boolean read FSimulation write FSimulation;
    property RA: double read GetRA;
    property Dec: double read GetDec;
    property AZ: double read GetAZ;
@@ -109,6 +149,14 @@ T_indieqmod = class(TIndiBaseClient)
    property Equinox: double read GetEquinox;
    property Aperture: double read GetAperture;
    property FocaleLength: double read GetFocaleLength;
+   property ReverseDec: Boolean read GetRevDec write SetRevDec;
+   property SlewPreset: TStringList read FSlewPreset;
+   property ActiveSlewPreset: integer read GetActiveSlewPreset write SetActiveSlewPreset;
+   property RASlewSpeedRange: TNumRange read GetRASlewSpeedRange;
+   property DESlewSpeedRange: TNumRange read GetDESlewSpeedRange;
+   property RASlewSpeed: integer read GetRASlewSpeed write SetRASlewSpeed;
+   property DESlewSpeed: integer read GetDESlewSpeed write SetDESlewSpeed;
+   property TrackMode: integer read GetTrackmode write SetTrackmode;
    property Status: TDeviceStatus read FStatus;
    property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -117,6 +165,10 @@ T_indieqmod = class(TIndiBaseClient)
    property onAltAZChange: TNotifyEvent read FonAltAZChange write FonAltAZChange;
    property onLSTChange: TNotifyEvent read FonLSTChange write FonLSTChange;
    property onPierSideChange: TNotifyEvent read FonPierSideChange write FonPierSideChange;
+   property onRevDecChange: TNotifyEvent read FonRevDecChange write FonRevDecChange;
+   property onSlewSpeedChange: TNotifyEvent read FonSlewSpeedChange write FonSlewSpeedChange;
+   property onSlewModeChange: TNotifyEvent read FonSlewModeChange write FonSlewModeChange;
+   property onTrackModeChange: TNotifyEvent read FonTrackModeChange write FonTrackModeChange;
 end;
 
 implementation
@@ -124,6 +176,7 @@ implementation
 constructor T_indieqmod.Create;
 begin
  inherited Create;
+ FSlewPreset:=TStringList.Create;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -131,7 +184,7 @@ begin
  Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
- InitTimer.Interval:=10000;
+ InitTimer.Interval:=3000;
  InitTimer.OnTimer:=@InitTimerTimer;
  onNewDevice:=@NewDevice;
  onNewMessage:=@NewMessage;
@@ -158,6 +211,7 @@ begin
  onServerConnected:=nil;
  onServerDisconnected:=nil;
  if InitTimer<>nil then FreeAndNil(InitTimer);
+ FSlewPreset.Free;
  inherited Destroy;
 end;
 
@@ -169,21 +223,43 @@ begin
     coord_prop:=nil;
     horz_prop:=nil;
     PierSide:=nil;
+    Sim:=nil;
     Mlst:=nil;
+    AbortMotion:=nil;
+    MotionNS:=nil;
+    MotionWE:=nil;
+    RevDec:=nil;
+    SlewMode:=nil;
+    SlewSpeed:=nil;
+    TrackM:=nil;
+    TrackR:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
+    FSlewPreset.Clear;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
 procedure T_indieqmod.CheckStatus;
 begin
     if Fconnected and
-       (coord_prop<>nil)
+       (coord_prop<>nil) and
+       (horz_prop<>nil) and
+       (Mlst<>nil) and
+       (PierSide<>nil) and
+       (Sim<>nil) and
+       (AbortMotion<>nil) and
+       (MotionNS<>nil) and
+       (MotionWE<>nil) and
+       (RevDec<>nil) and
+       (TrackM<>nil) and
+       (TrackR<>nil) and
+       (SlewMode<>nil) and
+       (SlewSpeed<>nil)
     then begin
        FStatus := devConnected;
-      if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
-      Fready:=true;
+       if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
+       Fready:=true;
     end;
 end;
 
@@ -229,6 +305,11 @@ begin
       Mountport.tp[0].text:=Findideviceport;
       sendNewText(Mountport);
    end;
+   if (Sim<>nil) and FSimulation then begin
+     IUResetSwitch(Sim);
+     Sim.sp[0].s:=ISS_ON;
+     sendNewSwitch(Sim);
+   end;
    connectDevice(Findidevice);
 end;
 
@@ -256,6 +337,7 @@ end;
 procedure T_indieqmod.NewProperty(indiProp: IndiProperty);
 var propname: string;
     proptype: INDI_TYPE;
+    i: integer;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
@@ -295,6 +377,53 @@ begin
   else if (proptype=INDI_SWITCH)and(propname='PIERSIDE') then begin
      PierSide:=indiProp.getSwitch;
   end
+  else if (proptype=INDI_SWITCH)and(propname='SIMULATION') then begin
+     Sim:=indiProp.getSwitch;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_ABORT_MOTION') then begin
+     AbortMotion:=indiProp.getSwitch;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_MOTION_NS') then begin
+     MotionNS:=indiProp.getSwitch;
+     MotionN:=IUFindSwitch(MotionNS,'MOTION_NORTH');
+     MotionS:=IUFindSwitch(MotionNS,'MOTION_SOUTH');
+     if (MotionN=nil)or(MotionS=nil) then MotionNS:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_MOTION_WE') then begin
+     MotionWE:=indiProp.getSwitch;
+     MotionW:=IUFindSwitch(MotionWE,'MOTION_WEST');
+     MotionE:=IUFindSwitch(MotionWE,'MOTION_EAST');
+     if (MotionW=nil)or(MotionE=nil) then MotionWE:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='REVERSEDEC') then begin
+     RevDec:=indiProp.getSwitch;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='SLEWMODE') then begin
+     SlewMode:=indiProp.getSwitch;
+     for i:=0 to SlewMode.nsp-1 do begin
+       FSlewPreset.Add(SlewMode.sp[i].lbl);
+     end;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='SLEWSPEEDS') then begin
+     SlewSpeed:=indiProp.getNumber;
+     RAslew:=IUFindNumber(SlewSpeed,'RASLEW');
+     DEslew:=IUFindNumber(SlewSpeed,'DESLEW');
+     if (RAslew=nil)or(DEslew=nil) then SlewSpeed:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='TRACKRATES') then begin
+     TrackR:=indiProp.getNumber;
+     TrackRra:=IUFindNumber(TrackR,'RATRACKRATE');
+     TrackRde:=IUFindNumber(TrackR,'DETRACKRATE');
+     if (TrackRra=nil)or(TrackRde=nil) then TrackR:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='TRACKMODE') then begin
+     TrackM:=indiProp.getSwitch;
+     TrackSidereal:=IUFindSwitch(TrackM,'SIDEREAL');
+     TrackLunar:=IUFindSwitch(TrackM,'LUNAR');
+     TrackSolar:=IUFindSwitch(TrackM,'SOLAR');
+     TrackCustom:=IUFindSwitch(TrackM,'CUSTOM');
+     if (TrackSidereal=nil)or(TrackLunar=nil)or(TrackSolar=nil)or(TrackCustom=nil) then TrackM:=nil;
+  end
   ;
   CheckStatus;
 end;
@@ -306,7 +435,9 @@ begin
   end else if nvp=horz_prop then begin
      if Assigned(FonAltAZChange) then FonAltAZChange(self);
   end else if nvp=Mlst then begin
-   if Assigned(FonLSTChange) then FonLSTChange(self);
+     if Assigned(FonLSTChange) then FonLSTChange(self);
+  end else if nvp=SlewSpeed then begin
+     if Assigned(FonSlewSpeedChange) then FonSlewSpeedChange(self);
   end;
 end;
 
@@ -319,6 +450,12 @@ procedure T_indieqmod.NewSwitch(svp: ISwitchVectorProperty);
 begin
   if svp=PierSide then begin
      if Assigned(FonPierSideChange) then FonPierSideChange(self);
+  end else if svp=SlewMode then begin
+        if Assigned(FonSlewModeChange) then FonSlewModeChange(self);
+  end else if svp=RevDec then begin
+        if Assigned(FonRevDecChange) then FonRevDecChange(self);
+  end else if svp=TrackM then begin
+        if Assigned(FonTrackModeChange) then FonTrackModeChange(self);
   end;
 end;
 
@@ -397,6 +534,160 @@ begin
     result:=sw.lbl;
  end
  else result:='?';
+end;
+
+function  T_indieqmod.GetRevDec: boolean;
+begin
+ if RevDec<>nil then begin
+   result:=RevDec.sp[0].s=ISS_ON;
+ end;
+end;
+
+procedure T_indieqmod.SetRevDec(value: boolean);
+begin
+ if RevDec<>nil then begin
+   IUResetSwitch(RevDec);
+   if value then
+      RevDec.sp[0].s:=ISS_ON
+   else
+      RevDec.sp[1].s:=ISS_ON;
+   sendNewSwitch(RevDec);
+ end;
+end;
+
+procedure T_indieqmod.MotionNorth;
+begin
+if MotionNS<>nil then begin;
+  IUResetSwitch(MotionNS);
+  MotionN.s:=ISS_ON;
+  sendNewSwitch(MotionNS);
+end;
+end;
+
+procedure T_indieqmod.MotionSouth;
+begin
+if MotionNS<>nil then begin;
+  IUResetSwitch(MotionNS);
+  MotionS.s:=ISS_ON;
+  sendNewSwitch(MotionNS);
+end;
+end;
+
+procedure T_indieqmod.MotionWest;
+begin
+if MotionWE<>nil then begin;
+  IUResetSwitch(MotionWE);
+  MotionW.s:=ISS_ON;
+  sendNewSwitch(MotionWE);
+end;
+end;
+
+procedure T_indieqmod.MotionEast;
+begin
+if MotionWE<>nil then begin;
+  IUResetSwitch(MotionWE);
+  MotionE.s:=ISS_ON;
+  sendNewSwitch(MotionWE);
+end;
+end;
+
+procedure T_indieqmod.MotionStop;
+begin
+if (MotionNS<>nil)and(MotionWE<>nil) then begin;
+  IUResetSwitch(MotionNS);
+  sendNewSwitch(MotionNS);
+  IUResetSwitch(MotionWE);
+  sendNewSwitch(MotionWE);
+end;
+end;
+
+function  T_indieqmod.GetRASlewSpeed:integer;
+begin
+  if SlewSpeed<>nil then begin
+     result:=trunc(RAslew.value);
+     if result=0 then result:=1;
+  end;
+end;
+
+procedure T_indieqmod.SetRASlewSpeed(value:integer);
+begin
+  if SlewSpeed<>nil then begin
+     RAslew.value:=value;
+     sendNewNumber(SlewSpeed);
+  end;
+end;
+
+function  T_indieqmod.GetDESlewSpeed:integer;
+begin
+  if SlewSpeed<>nil then begin
+     result:=trunc(DEslew.value);
+     if result=0 then result:=1;
+  end;
+end;
+
+procedure T_indieqmod.SetDESlewSpeed(value:integer);
+begin
+  if SlewSpeed<>nil then begin
+     DEslew.value:=value;
+     sendNewNumber(SlewSpeed);
+  end;
+end;
+
+function T_indieqmod.GetRASlewSpeedRange: TNumRange;
+begin
+  if SlewSpeed<>nil then begin
+     result.min:=RAslew.min;
+     result.max:=RAslew.max;
+     result.step:=RAslew.step;
+  end;
+end;
+
+function T_indieqmod.GetDESlewSpeedRange: TNumRange;
+begin
+  if SlewSpeed<>nil then begin
+     result.min:=DEslew.min;
+     result.max:=DEslew.max;
+     result.step:=DEslew.step;
+  end;
+end;
+
+function T_indieqmod.GetActiveSlewPreset: integer;
+var i: integer;
+begin
+ if SlewMode<>nil then begin
+   for i := 0 to SlewMode.nsp-1 do
+    if SlewMode.sp[i].s = ISS_ON then
+       exit(i);
+ end;
+end;
+
+procedure T_indieqmod.SetActiveSlewPreset(value: integer);
+begin
+ if SlewMode<>nil then begin
+    IUResetSwitch(SlewMode);
+    SlewMode.sp[value].s := ISS_ON;
+    sendNewSwitch(SlewMode);
+ end;
+end;
+
+function  T_indieqmod.GetTrackmode: integer;
+var i: integer;
+begin
+ if TrackM<>nil then begin
+   result:=-1;
+   for i := 0 to TrackM.nsp-1 do
+    if SlewMode.sp[i].s = ISS_ON then
+       result:=i;
+ end;
+end;
+
+procedure T_indieqmod.SetTrackmode(value: integer);
+begin
+ if TrackM<>nil then begin
+    IUResetSwitch(TrackM);
+    if value>=0 then TrackM.sp[value].s:=ISS_ON;
+    sendNewSwitch(TrackM);
+ end;
 end;
 
 end.

@@ -1,8 +1,9 @@
 object f_eqmod: Tf_eqmod
-  Left = 322
+  Left = 389
   Height = 613
-  Top = 192
+  Top = 191
   Width = 746
+  ActiveControl = Panel1
   AutoSize = True
   Caption = 'Eqmod'
   ClientHeight = 613
@@ -57,6 +58,8 @@ object f_eqmod: Tf_eqmod
         Width = 30
         Caption = 'N'
         Font.Color = clBtnText
+        OnMouseDown = BtnNorthMouseDown
+        OnMouseUp = BtnMotionMouseUp
         ParentFont = False
       end
       object BtnStop: TSpeedButton
@@ -66,6 +69,7 @@ object f_eqmod: Tf_eqmod
         Width = 30
         Caption = 'O'
         Font.Color = clBtnText
+        OnClick = BtnStopClick
         ParentFont = False
       end
       object BtnEast: TSpeedButton
@@ -75,6 +79,8 @@ object f_eqmod: Tf_eqmod
         Width = 30
         Caption = 'E'
         Font.Color = clBtnText
+        OnMouseDown = BtnEastMouseDown
+        OnMouseUp = BtnMotionMouseUp
         ParentFont = False
       end
       object BtnWest: TSpeedButton
@@ -84,6 +90,8 @@ object f_eqmod: Tf_eqmod
         Width = 30
         Caption = 'W'
         Font.Color = clBtnText
+        OnMouseDown = BtnWestMouseDown
+        OnMouseUp = BtnMotionMouseUp
         ParentFont = False
       end
       object BtnSouth: TSpeedButton
@@ -93,27 +101,64 @@ object f_eqmod: Tf_eqmod
         Width = 30
         Caption = 'S'
         Font.Color = clBtnText
+        OnMouseDown = BtnSouthMouseDown
+        OnMouseUp = BtnMotionMouseUp
         ParentFont = False
       end
-      object RArate: TTrackBar
-        Left = 104
-        Height = 78
-        Top = 0
-        Width = 29
-        Orientation = trVertical
-        Position = 0
-        ScalePos = trLeft
+      object PanelSlewRate: TPanel
+        Left = 96
+        Height = 80
+        Top = 28
+        Width = 114
+        BevelOuter = bvSpace
+        ClientHeight = 80
+        ClientWidth = 114
         TabOrder = 0
+        Visible = False
+        object RArate: TTrackBar
+          Left = 0
+          Height = 78
+          Top = 0
+          Width = 55
+          OnChange = RArateChange
+          Orientation = trVertical
+          Position = 0
+          ScalePos = trLeft
+          TabOrder = 0
+        end
+        object DErate: TTrackBar
+          Left = 56
+          Height = 78
+          Top = 0
+          Width = 55
+          OnChange = DErateChange
+          Orientation = trVertical
+          Position = 0
+          ScalePos = trLeft
+          TabOrder = 1
+        end
       end
-      object DECrate: TTrackBar
-        Left = 160
-        Height = 78
+      object SlewPreset: TComboBox
+        Left = 96
+        Height = 24
         Top = 0
-        Width = 29
-        Orientation = trVertical
-        Position = 0
-        ScalePos = trLeft
+        Width = 112
+        AutoSize = False
+        ItemHeight = 0
+        OnChange = SlewPresetChange
+        ParentColor = True
+        ParentFont = False
+        Style = csDropDownList
         TabOrder = 1
+      end
+      object ReverseDec: TCheckBox
+        Left = 1
+        Height = 26
+        Top = 82
+        Width = 78
+        Caption = 'Rev. DEC'
+        OnChange = ReverseDecChange
+        TabOrder = 2
       end
     end
     object TopPanel: TPanel
@@ -220,6 +265,7 @@ object f_eqmod: Tf_eqmod
             Font.Style = [fsBold]
             ParentColor = True
             ParentFont = False
+            ReadOnly = True
             TabOrder = 0
           end
           object DE: TEdit
@@ -232,6 +278,7 @@ object f_eqmod: Tf_eqmod
             Font.Style = [fsBold]
             ParentColor = True
             ParentFont = False
+            ReadOnly = True
             TabOrder = 1
           end
           object Label1: TLabel
@@ -280,6 +327,7 @@ object f_eqmod: Tf_eqmod
             Font.Style = [fsBold]
             ParentColor = True
             ParentFont = False
+            ReadOnly = True
             TabOrder = 2
           end
           object Label4: TLabel
@@ -304,6 +352,7 @@ object f_eqmod: Tf_eqmod
             Font.Style = [fsBold]
             ParentColor = True
             ParentFont = False
+            ReadOnly = True
             TabOrder = 3
           end
           object Label5: TLabel
@@ -328,6 +377,7 @@ object f_eqmod: Tf_eqmod
             Font.Style = [fsBold]
             ParentColor = True
             ParentFont = False
+            ReadOnly = True
             TabOrder = 4
           end
           object PierSide: TEdit
@@ -338,6 +388,7 @@ object f_eqmod: Tf_eqmod
             Font.Color = clRed
             ParentColor = True
             ParentFont = False
+            ReadOnly = True
             TabOrder = 5
           end
           object Label6: TLabel
@@ -375,6 +426,7 @@ object f_eqmod: Tf_eqmod
             BorderSpacing.Bottom = 5
             BorderStyle = bsNone
             Color = clBlack
+            ScrollBars = ssAutoVertical
             TabOrder = 0
           end
         end
@@ -390,12 +442,15 @@ object f_eqmod: Tf_eqmod
       ClientWidth = 216
       TabOrder = 3
       object BtnTrackStop: TSpeedButton
+        Tag = -1
         Left = 8
         Height = 30
         Top = 0
         Width = 30
         Caption = 'O'
         Font.Color = clBtnText
+        GroupIndex = 108
+        OnClick = SetTrackModeClick
         ParentFont = False
       end
       object BtnTrackSidereal: TSpeedButton
@@ -405,33 +460,44 @@ object f_eqmod: Tf_eqmod
         Width = 30
         Caption = 'S'
         Font.Color = clBtnText
+        GroupIndex = 108
+        OnClick = SetTrackModeClick
         ParentFont = False
       end
       object BtnTrackLunar: TSpeedButton
+        Tag = 1
         Left = 92
         Height = 30
         Top = 0
         Width = 30
-        Caption = 'M'
+        Caption = 'L'
         Font.Color = clBtnText
+        GroupIndex = 108
+        OnClick = SetTrackModeClick
         ParentFont = False
       end
       object BtnTrackSolar: TSpeedButton
-        Left = 134
+        Tag = 2
+        Left = 136
         Height = 30
         Top = 0
         Width = 30
         Caption = 'S'
         Font.Color = clBtnText
+        GroupIndex = 108
+        OnClick = SetTrackModeClick
         ParentFont = False
       end
       object BtnTrackCustom: TSpeedButton
+        Tag = 3
         Left = 176
         Height = 30
         Top = 0
         Width = 30
         Caption = 'C'
         Font.Color = clBtnText
+        GroupIndex = 108
+        OnClick = SetTrackModeClick
         ParentFont = False
       end
       object TrackDEC: TEdit
@@ -470,6 +536,23 @@ object f_eqmod: Tf_eqmod
         Caption = 'DEC'
         ParentColor = False
       end
+    end
+    object led: TShape
+      Left = 70
+      Height = 14
+      Top = 58
+      Width = 14
+      Brush.Color = clRed
+      Shape = stCircle
+    end
+    object IndiSetup: TSpeedButton
+      Left = 96
+      Height = 22
+      Top = 54
+      Width = 54
+      Caption = 'Setup'
+      OnClick = IndiSetupClick
+      ParentFont = False
     end
   end
   object Panel2: TPanel
