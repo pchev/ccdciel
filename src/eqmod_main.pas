@@ -25,7 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses eqmod_int, eqmod_setup, pu_indigui, u_utils,
-  XMLConf, DOM, Classes, SysUtils, FileUtil, Forms, Controls,
+  XMLConf, DOM,
+  Classes, SysUtils, FileUtil, Forms, Controls, LCLType,
   Graphics, Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls;
 
 type
@@ -33,12 +34,40 @@ type
   { Tf_eqmod }
 
   Tf_eqmod = class(TForm)
+    SyncModeCombo: TComboBox;
+    AlignModeCombo: TComboBox;
+    DeltaRa: TEdit;
+    DeltaDe: TEdit;
     ALT: TEdit;
+    BtnClearAlignment: TSpeedButton;
+    BtnClearDelta: TSpeedButton;
     BtnTrackSidereal: TSpeedButton;
     BtnTrackLunar: TSpeedButton;
     BtnTrackStop: TSpeedButton;
     BtnTrackSolar: TSpeedButton;
     BtnTrackCustom: TSpeedButton;
+    AlignPoints: TEdit;
+    AlignTriangles: TEdit;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    SiteName: TComboBox;
+    LatNS: TComboBox;
+    LongWE: TComboBox;
+    LatDeg: TEdit;
+    LatMin: TEdit;
+    LatSec: TEdit;
+    LongDeg: TEdit;
+    LongMin: TEdit;
+    LongSec: TEdit;
+    Elevation: TEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label9: TLabel;
     Panel4: TPanel;
     PanelCustTrack: TPanel;
     ReverseDec: TCheckBox;
@@ -73,6 +102,8 @@ type
     DErate: TTrackBar;
     IndiSetup: TSpeedButton;
     BtnSetTrackRate: TSpeedButton;
+    BtnSaveSite: TSpeedButton;
+    SetSite: TSpeedButton;
     TrackDEC: TEdit;
     TRackRA: TEdit;
     RA: TEdit;
@@ -94,12 +125,23 @@ type
     TopPanel: TPanel;
     IndiBtn: TPanel;
     TitlePanel: TPanel;
+    procedure AlignModeComboChange(Sender: TObject);
+    procedure BtnClearAlignmentClick(Sender: TObject);
+    procedure BtnClearDeltaClick(Sender: TObject);
     procedure BtnEastMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure BtnNorthMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure BtnSouthMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure BtnTrackPaint(Sender: TObject);
+    procedure ElevationChange(Sender: TObject);
+    procedure LatChange(Sender: TObject);
+    procedure LatKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure LongChange(Sender: TObject);
+    procedure LongKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+      );
+    procedure SetSiteClick(Sender: TObject);
     procedure SetTrackModeClick(Sender: TObject);
     procedure BtnWestMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -118,13 +160,16 @@ type
     procedure SlewPresetChange(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure BtnSetTrackRateClick(Sender: TObject);
+    procedure SyncModeComboChange(Sender: TObject);
   private
     { private declarations }
     eqmod: T_indieqmod;
     f_indigui: Tf_indigui;
     config: TXMLConfig;
     configfile,indiserver,indiserverport,indidevice,indideviceport:string;
-    ready, GUIready, indisimulation: boolean;
+    ready, GUIready, indisimulation, obslock: boolean;
+    TrackMode: integer;
+    ObsLat, ObsLon, ObsElev: double;
     procedure Connect;
     procedure GUIdestroy(Sender: TObject);
     procedure eqmodDestroy(Sender: TObject);
@@ -141,6 +186,14 @@ type
     procedure SlewSpeedRange;
     procedure TrackModeChange(Sender: TObject);
     procedure TrackRateChange(Sender: TObject);
+    procedure GeoCoordChange(Sender: TObject);
+    procedure ShowObsCoord;
+    procedure AlignCountChange(Sender: TObject);
+    procedure SyncDeltaChange(Sender: TObject);
+    procedure FillSyncMode;
+    procedure FillAlignMode;
+    procedure SyncModeChange(Sender: TObject);
+    procedure AlignModeChange(Sender: TObject);
   public
     { public declarations }
   end;
@@ -152,6 +205,7 @@ implementation
 
 const
   clOrange=$1080EF;
+  f1='0.0';
   f5='0.00000';
 
 {$R *.lfm}
@@ -166,6 +220,8 @@ begin
  config.Filename:=configfile;
  ready:=false;
  GUIready:=false;
+ obslock:=false;
+ TrackMode:=-999;
 end;
 
 procedure Tf_eqmod.FormDestroy(Sender: TObject);
@@ -199,6 +255,11 @@ begin
    eqmod.onSlewModeChange:=@SlewModeChange;
    eqmod.onTrackModeChange:=@TrackModeChange;
    eqmod.onTrackRateChange:=@TrackRateChange;
+   eqmod.onGeoCoordChange:=@GeoCoordChange;
+   eqmod.onAlignCountChange:=@AlignCountChange;
+   eqmod.onSyncDeltaChange:=@SyncDeltaChange;
+   eqmod.onSyncModeChange:=@SyncModeChange;
+   eqmod.onAlignmentModeChange:=@AlignModeChange;
    if indiserver<>'' then eqmod.indiserver:=indiserver;
    if indiserverport<>'' then eqmod.indiserverport:=indiserverport;
    if indidevice<>'' then eqmod.indidevice:=indidevice;
@@ -308,6 +369,8 @@ case eqmod.Status of
                       LSTChange(Sender);
                       PierSideChange(Sender);
                       FillSlewPreset;
+                      FillSyncMode;
+                      FillAlignMode;
                       SlewModeChange(Sender);
                       SlewSpeedRange;
                       RevDecChange(Sender);
@@ -315,9 +378,16 @@ case eqmod.Status of
                       SlewPresetChange(Sender);
                       TrackModeChange(Sender);
                       TrackRateChange(Sender);
+                      GeoCoordChange(Sender);
+                      AlignCountChange(Sender);
+                      SyncDeltaChange(Sender);
+                      SyncModeChange(Sender);
+                      AlignModeChange(Sender);
                    end;
 end;
 end;
+
+//////////////////  Mount position box ////////////////////////
 
 Procedure Tf_eqmod.CoordChange(Sender: TObject);
 begin
@@ -341,6 +411,8 @@ begin
   PierSide.Text:=eqmod.PierSideLbl;
   TrackModeChange(Sender);
 end;
+
+//////////////////  Slew control box ////////////////////////
 
 procedure Tf_eqmod.BtnNorthMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
@@ -375,6 +447,16 @@ end;
 procedure Tf_eqmod.BtnStopClick(Sender: TObject);
 begin
   eqmod.MotionStop;
+end;
+
+procedure Tf_eqmod.RArateChange(Sender: TObject);
+begin
+  eqmod.RASlewSpeed:=RArate.Position;
+end;
+
+procedure Tf_eqmod.DErateChange(Sender: TObject);
+begin
+  eqmod.DESlewSpeed:=DErate.Position;
 end;
 
 procedure Tf_eqmod.RevDecChange(Sender: TObject);
@@ -421,16 +503,6 @@ begin
   DErate.Position:=eqmod.DESlewSpeed;
 end;
 
-procedure Tf_eqmod.RArateChange(Sender: TObject);
-begin
-  eqmod.RASlewSpeed:=RArate.Position;
-end;
-
-procedure Tf_eqmod.DErateChange(Sender: TObject);
-begin
-  eqmod.DESlewSpeed:=DErate.Position;
-end;
-
 procedure Tf_eqmod.FillSlewPreset;
 begin
   SlewPreset.Clear;
@@ -448,24 +520,29 @@ begin
   eqmod.ActiveSlewPreset:=SlewPreset.ItemIndex;
 end;
 
+//////////////////  Track rate box ////////////////////////
+
 Procedure Tf_eqmod.TrackModeChange(Sender: TObject);
 begin
- BtnTrackStop.Down:=false;
- BtnTrackSidereal.Down:=false;
- BtnTrackLunar.Down:=false;
- BtnTrackSolar.Down:=false;
- BtnTrackCustom.Down:=false;
- PanelCustTrack.Visible:=false;
-  case eqmod.TrackMode of
-    -1 : BtnTrackStop.Down:=true;
-     0 : BtnTrackSidereal.Down:=true;
-     1 : BtnTrackLunar.Down:=true;
-     2 : BtnTrackSolar.Down:=true;
-     3 : begin
-         BtnTrackCustom.Down:=true;
-         PanelCustTrack.Visible:=true;
-         end;
-  end;
+ if eqmod.TrackMode<>TrackMode then begin
+     TrackMode:=eqmod.TrackMode;
+     BtnTrackStop.Down:=false;
+     BtnTrackSidereal.Down:=false;
+     BtnTrackLunar.Down:=false;
+     BtnTrackSolar.Down:=false;
+     BtnTrackCustom.Down:=false;
+     PanelCustTrack.Visible:=false;
+      case TrackMode of
+        -1 : BtnTrackStop.Down:=true;
+         0 : BtnTrackSidereal.Down:=true;
+         1 : BtnTrackLunar.Down:=true;
+         2 : BtnTrackSolar.Down:=true;
+         3 : begin
+             BtnTrackCustom.Down:=true;
+             PanelCustTrack.Visible:=true;
+             end;
+      end;
+ end;
 end;
 
 procedure Tf_eqmod.SetTrackModeClick(Sender: TObject);
@@ -488,9 +565,180 @@ end;
 
 Procedure Tf_eqmod.TrackRateChange(Sender: TObject);
 begin
-  TRackRA.Text:=FormatFloat(f5,eqmod.RATrackRate);
-  TRackDEC.Text:=FormatFloat(f5,eqmod.DETrackRate);
+  if ActiveControl<>TRackRA then
+     TRackRA.Text:=FormatFloat(f5,eqmod.RATrackRate);
+  if ActiveControl<>TRackDEC then
+     TRackDEC.Text:=FormatFloat(f5,eqmod.DETrackRate);
 end;
 
+procedure Tf_eqmod.BtnTrackPaint(Sender: TObject);
+begin
+with (Sender as TSpeedButton) do begin
+  if Down then begin
+    Canvas.Brush.Color:=clGray;
+    Canvas.FillRect(0,0,Canvas.Width,Canvas.Height);
+    Canvas.Draw(4,4,Glyph);
+  end;
+end;
+end;
+
+//////////////////  Site information box ////////////////////////
+
+procedure Tf_eqmod.GeoCoordChange(Sender: TObject);
+begin
+  ObsLat:=eqmod.Latitude;
+  ObsLon:=eqmod.Longitude;
+  ObsElev:=eqmod.Elevation;
+  ShowObsCoord;
+end;
+
+Procedure Tf_eqmod.ShowObsCoord;
+var d,m,s : string;
+begin
+try
+obslock:=true;
+Elevation.Text:=IntToStr(round(ObsElev));
+ArToStr4(abs(ObsLat),f1,d,m,s);
+LatDeg.Text:=d;
+LatMin.Text:=m;
+LatSec.Text:=s;
+ArToStr4(abs(ObsLon),f1,d,m,s);
+LongDeg.Text:=d;
+LongMin.Text:=m;
+LongSec.Text:=s;
+if ObsLat>=0 then LatNS.Itemindex:=0
+             else LatNS.Itemindex:=1;
+if ObsLon>=0 then LongWE.Itemindex:=0
+             else LongWE.Itemindex:=1;
+finally
+obslock:=false;
+end;
+end;
+
+procedure Tf_eqmod.LatChange(Sender: TObject);
+var d,m,s: double;
+    n: integer;
+begin
+  if obslock then exit;
+  val(LatDeg.Text,d,n);
+  if n>0 then exit;
+  val(LatMin.Text,m,n);
+  if n>0 then exit;
+  val(LatSec.Text,s,n);
+  if n>0 then exit;
+  if frac(d)>0 then
+    ObsLat:=d
+  else
+    ObsLat:=d+m/60+s/3600;
+  if LatNS.Itemindex>0 then ObsLat:=-ObsLat;
+  ShowObsCoord;
+end;
+
+procedure Tf_eqmod.LatKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key=VK_RETURN then LatChange(Sender);
+end;
+
+procedure Tf_eqmod.LongChange(Sender: TObject);
+var d,m,s: double;
+    n: integer;
+begin
+  if obslock then exit;
+  val(LongDeg.Text,d,n);
+  if n>0 then exit;
+  val(LongMin.Text,m,n);
+  if n>0 then exit;
+  val(LongSec.Text,s,n);
+  if n>0 then exit;
+  if frac(d)>0 then
+    ObsLon:=d
+  else
+    ObsLon:=d+m/60+s/3600;
+  if LongWE.Itemindex>0 then ObsLon:=-ObsLon;
+  ShowObsCoord;
+end;
+
+procedure Tf_eqmod.LongKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key=VK_RETURN then LongChange(Sender);
+end;
+
+procedure Tf_eqmod.ElevationChange(Sender: TObject);
+var e: double;
+    n: integer;
+begin
+  val(Elevation.Text,e,n);
+  if n=0 then ObsElev:=e;
+end;
+
+procedure Tf_eqmod.SetSiteClick(Sender: TObject);
+begin
+  eqmod.SetSite(ObsLat,ObsLon,ObsElev);
+end;
+
+//////////////////  Alignment / Sync  box ////////////////////////
+
+procedure Tf_eqmod.AlignCountChange(Sender: TObject);
+begin
+ AlignPoints.Text:=inttostr(eqmod.PointCount);
+ AlignTriangles.Text:=inttostr(eqmod.TriangleCount);
+end;
+
+procedure Tf_eqmod.BtnClearAlignmentClick(Sender: TObject);
+begin
+  if MessageDlg('Clear all the alignment points?',mtConfirmation,mbYesNo,0)=mrYes then begin
+     eqmod.ClearAlignment;
+  end;
+end;
+
+procedure Tf_eqmod.SyncDeltaChange(Sender: TObject);
+begin
+   DeltaRa.Text:=SXToStr(eqmod.DeltaRa);
+   DeltaDe.Text:=SXToStr(eqmod.DeltaDe);
+end;
+
+procedure Tf_eqmod.BtnClearDeltaClick(Sender: TObject);
+begin
+  if MessageDlg('Clear Sync delta?',mtConfirmation,mbYesNo,0)=mrYes then begin
+     eqmod.ClearSyncDelta;
+  end;
+end;
+
+procedure Tf_eqmod.FillSyncMode;
+begin
+SyncModeCombo.Clear;
+SyncModeCombo.Items.Assign(eqmod.SyncMode);
+end;
+
+procedure Tf_eqmod.FillAlignMode;
+begin
+AlignModeCombo.Clear;
+AlignModeCombo.Items.Assign(eqmod.AlignmentMode);
+end;
+
+procedure Tf_eqmod.SyncModeChange(Sender: TObject);
+begin
+  SyncModeCombo.ItemIndex:=eqmod.ActiveSyncMode;
+end;
+
+procedure Tf_eqmod.AlignModeChange(Sender: TObject);
+begin
+ AlignModeCombo.ItemIndex:=eqmod.ActiveAlignmentMode;
+end;
+
+procedure Tf_eqmod.SyncModeComboChange(Sender: TObject);
+begin
+  eqmod.ActiveSyncMode:=SyncModeCombo.ItemIndex;
+end;
+
+procedure Tf_eqmod.AlignModeComboChange(Sender: TObject);
+begin
+  eqmod.ActiveAlignmentMode:=AlignModeCombo.ItemIndex
+end;
+
+
 end.
+
 

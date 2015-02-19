@@ -1,7 +1,7 @@
 object f_eqmod: Tf_eqmod
-  Left = 352
+  Left = 389
   Height = 613
-  Top = 142
+  Top = 139
   Width = 746
   ActiveControl = Panel1
   AutoSize = True
@@ -275,7 +275,7 @@ object f_eqmod: Tf_eqmod
           Width = 154
           Align = alClient
           Alignment = taCenter
-          Caption = 'EQMOD INDI'#10'Version 0.0.0'
+          Caption = 'EQMod Mount'#10'Version 0.0.0'
           Font.Color = clRed
           Font.Height = -16
           Font.Style = [fsBold]
@@ -592,6 +592,7 @@ object f_eqmod: Tf_eqmod
           }
           GroupIndex = 108
           OnClick = SetTrackModeClick
+          OnPaint = BtnTrackPaint
           ParentFont = False
         end
         object BtnTrackSolar: TSpeedButton
@@ -665,6 +666,7 @@ object f_eqmod: Tf_eqmod
           }
           GroupIndex = 108
           OnClick = SetTrackModeClick
+          OnPaint = BtnTrackPaint
           ParentFont = False
         end
         object BtnTrackLunar: TSpeedButton
@@ -738,10 +740,11 @@ object f_eqmod: Tf_eqmod
           }
           GroupIndex = 108
           OnClick = SetTrackModeClick
+          OnPaint = BtnTrackPaint
           ParentFont = False
         end
         object BtnTrackSidereal: TSpeedButton
-          Left = 50
+          Left = 48
           Height = 30
           Hint = 'Track at sidereal speed'
           Top = 0
@@ -751,65 +754,68 @@ object f_eqmod: Tf_eqmod
           Font.Color = clBtnText
           Glyph.Data = {
             1A070000424D1A07000000000000360000002800000015000000150000000100
-            200000000000E406000064000000640000000000000000000000F0F0F000F0F0
-            F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0
-            F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0F000F0F0
-            F000F0F0F000F0F0F000F0F0F00095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB00AEC6D1FFB0C0CDFFADCAD3FF95C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00AEC7D1FFB1BF
-            CDFFADCAD3FF95C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB00AFC4D0FFBBBBCBFFE3E5EBFFD3DEE5FFADCED5FF95C1CB0095C1CB0095C1
-            CB0095C1CB00ACCCD4FFB4C4D0FFDBDCE4FFDADBE3FFAECAD3FF95C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00ACCAD3FFBABCCDFFF7F8
-            F9FFFEFEFFFFE6EAEFFFB5CFD6FF95C1CB0095C1CB00AEC7D1FFBFC5D3FFEDEE
-            F2FFFFFFFFFFE8EBEFFFABCDD4EE95C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB00B2BCCBFFE5E9EEFFFEFEFEFFFEFEFEFFF4F5
-            F7FFC3D3DBFFB2C2CFFFCDCEDBFFF7F9FAFFFEFEFEFFFEFEFEFFD0DBE2FF95C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB00AFC4CFFFD0D3DDFFFCFDFDFFFFFFFFFFFEFEFFFFFBFBFCFFE9E9EFFFFBFC
-            FDFFFEFFFFFFFFFFFFFFFBFBFCFFB9D1D8FF95C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00ACCAD3FFBFC2D0FFFBFC
+            200000000000E406000064000000640000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000AEC6D1FFB0C0CDFFADCAD3FF000000000000
+            0000000000000000000000000000000000000000000000000000AEC7D1FFB1BF
+            CDFFADCAD3FF0000000000000000000000000000000000000000000000000000
+            0000AFC4D0FFBBBBCBFFE3E5EBFFD3DEE5FFADCED5FF00000000000000000000
+            000000000000ACCCD4FFB4C4D0FFDBDCE4FFDADBE3FFAECAD3FF000000000000
+            00000000000000000000000000000000000000000000ACCAD3FFBABCCDFFF7F8
+            F9FFFEFEFFFFE6EAEFFFB5CFD6FF0000000000000000AEC7D1FFBFC5D3FFEDEE
+            F2FFFFFFFFFFE8EBEFFFABCDD4EE000000000000000000000000000000000000
+            0000000000000000000000000000B2BCCBFFE5E9EEFFFEFEFEFFFEFEFEFFF4F5
+            F7FFC3D3DBFFB2C2CFFFCDCEDBFFF7F9FAFFFEFEFEFFFEFEFEFFD0DBE2FF0000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000AFC4CFFFD0D3DDFFFCFDFDFFFFFFFFFFFEFEFFFFFBFBFCFFE9E9EFFFFBFC
+            FDFFFEFFFFFFFFFFFFFFFBFBFCFFB9D1D8FF0000000000000000000000000000
+            00000000000000000000000000000000000000000000ACCAD3FFBFC2D0FFFBFC
             FCFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFFFFFFFFFFFFFFFFFFFEFFFFFFF1F3
-            F5FFAECFD5FF95C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB00B4BCCBFFEEF0F4FFFEFEFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFEFFD9E1E8FF95C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00ADCA
+            F5FFAECFD5FF0000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000B4BCCBFFEEF0F4FFFEFEFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFEFFD9E1E8FF00000000000000000000
+            000000000000000000000000000000000000000000000000000000000000ADCA
             D3FFB7BECDFFE9ECF0FFFCFDFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFDFDFEFFDBE1E8FFAECDD5FF95C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB00ABCDD5EEAFC4D0FFBEC4D1FFE9EDF1FFFAFCFDFFFEFF
+            FFFFFDFDFEFFDBE1E8FFAECDD5FF000000000000000000000000000000000000
+            00000000000000000000ABCDD5EEAFC4D0FFBEC4D1FFE9EDF1FFFAFCFDFFFEFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFFFBFCFCFFE2E5
-            EBFFB6CCD5FF95C1CB0095C1CB0095C1CB0095C1CB0095C1CB00ACCBD3FFB2C0
+            EBFFB6CCD5FF0000000000000000000000000000000000000000ACCBD3FFB2C0
             CEFFCACED9FFF5F7F9FFFBFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFDFFF1F2F5FFC1CFD9FFACCC
-            D4FF95C1CB0095C1CB00AEC7D1FFB7BCCCFFD8DCE4FFFCFDFDFFFEFEFEFFFFFF
+            D4FF0000000000000000AEC7D1FFB7BCCCFFD8DCE4FFFCFDFDFFFEFEFEFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFDFEFEFFFAFAFBFFD1D7E0FFADCAD3FF95C1CB00B4B9
+            FFFFFFFFFFFFFFFFFFFFFDFEFEFFFAFAFBFFD1D7E0FFADCAD3FF00000000B4B9
             CAFFBBBBCCFFF3F4F6FFFEFEFEFFFDFDFDFFFCFCFDFFFCFCFDFFFCFCFDFFFDFE
             FEFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFCFFF8F9FBFFF8F9FBFFF8F9FBFFFBFB
-            FCFFFEFEFEFFECECF0FFB3BECCFF95C1CB00AEC7D1FFAFC5D0FFBAC8D3FFBFCB
+            FCFFFEFEFEFFECECF0FFB3BECCFF00000000AEC7D1FFAFC5D0FFBAC8D3FFBFCB
             D6FFBFCBD6FFBFCBD6FFBFCBD6FFC4C8D5FFF5F7F9FFFEFFFFFFFFFFFFFFFDFD
             FEFFE8EBF0FFBFCBD6FFBFCBD6FFBFCBD6FFBFCBD6FFBECCD6FFB8CBD5FFADC8
-            D2FF95C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB00AFC3CFFFDFE2E9FFFCFDFDFFFFFFFFFFFDFDFDFFC9DCE2FF95C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00ACCBD3FFC7CAD6FFFAFC
-            FDFFFFFFFFFFF8F9FBFFB3D3D9FF95C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB00B8BFCEFFF3F6F8FFFEFEFFFFE8EDF1FF95C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB00AFC2CFFFDFE2E9FFFFFFFFFFCBDCE2FF95C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00ACCAD3FFC6C7D5FFEDEE
-            F2FFB3D2D8FF95C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB00B1BFCDFFB2C7D1FF95C1CB0095C1CB0095C1
-            CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB0095C1CB00
+            D2FF000000000000000000000000000000000000000000000000000000000000
+            0000AFC3CFFFDFE2E9FFFCFDFDFFFFFFFFFFFDFDFDFFC9DCE2FF000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000ACCBD3FFC7CAD6FFFAFC
+            FDFFFFFFFFFFF8F9FBFFB3D3D9FF000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000B8BFCEFFF3F6F8FFFEFEFFFFE8EDF1FF0000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000AFC2CFFFDFE2E9FFFFFFFFFFCBDCE2FF0000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000ACCAD3FFC6C7D5FFEDEE
+            F2FFB3D2D8FF0000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000B1BFCDFFB2C7D1FF00000000000000000000
+            000000000000000000000000000000000000000000000000000000000000
           }
           GroupIndex = 108
+          Layout = blGlyphTop
           OnClick = SetTrackModeClick
+          OnPaint = BtnTrackPaint
+          ShowCaption = False
           ParentFont = False
         end
         object BtnTrackStop: TSpeedButton
@@ -883,6 +889,7 @@ object f_eqmod: Tf_eqmod
           }
           GroupIndex = 108
           OnClick = SetTrackModeClick
+          OnPaint = BtnTrackPaint
           ParentFont = False
         end
       end
@@ -1012,7 +1019,177 @@ object f_eqmod: Tf_eqmod
       Top = 0
       Width = 248
       Caption = 'Site Information'
+      ClientHeight = 178
+      ClientWidth = 244
       TabOrder = 0
+      object BtnSaveSite: TSpeedButton
+        Left = 56
+        Height = 26
+        Top = 0
+        Width = 26
+      end
+      object SiteName: TComboBox
+        Left = 92
+        Height = 21
+        Top = 3
+        Width = 147
+        ItemHeight = 0
+        ParentColor = True
+        TabOrder = 0
+      end
+      object Label9: TLabel
+        Left = 4
+        Height = 15
+        Top = 40
+        Width = 48
+        Caption = 'Latitude'
+        ParentColor = False
+      end
+      object Label10: TLabel
+        Left = 4
+        Height = 15
+        Top = 72
+        Width = 57
+        Caption = 'Longitude'
+        ParentColor = False
+      end
+      object Label11: TLabel
+        Left = 4
+        Height = 15
+        Top = 102
+        Width = 51
+        Caption = 'Elevation'
+        ParentColor = False
+      end
+      object LatNS: TComboBox
+        Left = 79
+        Height = 23
+        Top = 35
+        Width = 48
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'N'
+          'S'
+        )
+        OnChange = LatChange
+        ParentColor = True
+        ParentFont = False
+        Style = csDropDownList
+        TabOrder = 1
+        Text = 'N'
+      end
+      object LatDeg: TEdit
+        Left = 130
+        Height = 21
+        Top = 35
+        Width = 32
+        OnExit = LatChange
+        OnKeyDown = LatKeyDown
+        ParentColor = True
+        TabOrder = 2
+        Text = ' '
+      end
+      object LatMin: TEdit
+        Left = 165
+        Height = 21
+        Top = 35
+        Width = 32
+        OnExit = LatChange
+        OnKeyDown = LatKeyDown
+        ParentColor = True
+        TabOrder = 3
+        Text = ' '
+      end
+      object LatSec: TEdit
+        Left = 201
+        Height = 21
+        Top = 35
+        Width = 38
+        OnExit = LatChange
+        OnKeyDown = LatKeyDown
+        ParentColor = True
+        TabOrder = 4
+        Text = ' '
+      end
+      object Label12: TLabel
+        Left = 4
+        Height = 15
+        Top = 5
+        Width = 33
+        Caption = 'Name'
+        ParentColor = False
+      end
+      object LongWE: TComboBox
+        Left = 79
+        Height = 23
+        Top = 72
+        Width = 48
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'W'
+          'E'
+        )
+        OnChange = LongChange
+        ParentColor = True
+        ParentFont = False
+        Style = csDropDownList
+        TabOrder = 5
+        Text = 'W'
+      end
+      object LongDeg: TEdit
+        Left = 130
+        Height = 21
+        Top = 72
+        Width = 32
+        OnExit = LongChange
+        OnKeyDown = LongKeyDown
+        ParentColor = True
+        TabOrder = 6
+        Text = ' '
+      end
+      object LongMin: TEdit
+        Left = 165
+        Height = 21
+        Top = 72
+        Width = 32
+        OnExit = LongChange
+        OnKeyDown = LongKeyDown
+        ParentColor = True
+        TabOrder = 7
+        Text = ' '
+      end
+      object LongSec: TEdit
+        Left = 201
+        Height = 21
+        Top = 72
+        Width = 38
+        OnExit = LongChange
+        OnKeyDown = LongKeyDown
+        ParentColor = True
+        TabOrder = 8
+        Text = ' '
+      end
+      object Elevation: TEdit
+        Left = 79
+        Height = 21
+        Top = 102
+        Width = 49
+        OnChange = ElevationChange
+        ParentColor = True
+        TabOrder = 9
+        Text = ' '
+      end
+      object SetSite: TSpeedButton
+        Left = 79
+        Height = 22
+        Top = 135
+        Width = 160
+        Caption = 'Set'
+        OnClick = SetSiteClick
+        ParentFont = False
+      end
     end
     object GroupBox7: TGroupBox
       Left = 0
@@ -1020,7 +1197,127 @@ object f_eqmod: Tf_eqmod
       Top = 216
       Width = 248
       Caption = 'Alignment / Sync'
+      ClientHeight = 169
+      ClientWidth = 244
       TabOrder = 1
+      object BtnClearAlignment: TSpeedButton
+        Left = 8
+        Height = 26
+        Top = 0
+        Width = 26
+        Caption = 'x'
+        OnClick = BtnClearAlignmentClick
+      end
+      object Label13: TLabel
+        Left = 40
+        Height = 15
+        Top = 6
+        Width = 36
+        Caption = 'Points'
+        ParentColor = False
+      end
+      object AlignPoints: TEdit
+        Left = 83
+        Height = 21
+        Top = 4
+        Width = 44
+        ParentColor = True
+        TabOrder = 0
+      end
+      object Label14: TLabel
+        Left = 136
+        Height = 15
+        Top = 5
+        Width = 51
+        Caption = 'Triangles'
+        ParentColor = False
+      end
+      object AlignTriangles: TEdit
+        Left = 192
+        Height = 21
+        Top = 4
+        Width = 45
+        ParentColor = True
+        TabOrder = 1
+      end
+      object BtnClearDelta: TSpeedButton
+        Left = 8
+        Height = 26
+        Top = 32
+        Width = 26
+        Caption = 'x'
+        OnClick = BtnClearDeltaClick
+      end
+      object Label15: TLabel
+        Left = 40
+        Height = 15
+        Top = 38
+        Width = 22
+        Caption = 'dRA'
+        ParentColor = False
+      end
+      object DeltaRa: TEdit
+        Left = 72
+        Height = 21
+        Top = 36
+        Width = 65
+        ParentColor = True
+        TabOrder = 2
+      end
+      object Label16: TLabel
+        Left = 144
+        Height = 15
+        Top = 37
+        Width = 23
+        Caption = 'dDe'
+        ParentColor = False
+      end
+      object DeltaDe: TEdit
+        Left = 176
+        Height = 21
+        Top = 36
+        Width = 65
+        ParentColor = True
+        TabOrder = 3
+      end
+      object Label17: TLabel
+        Left = 8
+        Height = 15
+        Top = 72
+        Width = 60
+        Caption = 'Sync mode'
+        ParentColor = False
+      end
+      object SyncModeCombo: TComboBox
+        Left = 4
+        Height = 27
+        Top = 94
+        Width = 180
+        ItemHeight = 0
+        OnChange = SyncModeComboChange
+        ParentFont = False
+        Style = csDropDownList
+        TabOrder = 4
+      end
+      object Label18: TLabel
+        Left = 8
+        Height = 15
+        Top = 123
+        Width = 108
+        Caption = 'Alignment behavior'
+        ParentColor = False
+      end
+      object AlignModeCombo: TComboBox
+        Left = 4
+        Height = 27
+        Top = 144
+        Width = 180
+        ItemHeight = 0
+        OnChange = AlignModeComboChange
+        ParentFont = False
+        Style = csDropDownList
+        TabOrder = 5
+      end
     end
     object GroupBox8: TGroupBox
       Left = 0
