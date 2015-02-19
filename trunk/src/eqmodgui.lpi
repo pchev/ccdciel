@@ -58,7 +58,6 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_eqmodsetup"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="eqmod_setup"/>
       </Unit3>
     </Units>
   </ProjectOptions>

@@ -74,6 +74,20 @@ T_indieqmod = class(TIndiBaseClient)
    TrackSidereal,TrackLunar,TrackSolar,TrackCustom: ISwitch;
    TrackR: INumberVectorProperty;
    TrackRra, TrackRde: INumber;
+   geo_coord: INumberVectorProperty;
+   geo_lat:  INumber;
+   geo_lon:  INumber;
+   geo_ele:  INumber;
+   AlignCount: INumberVectorProperty;
+   AlignCountPoint,AlignCountTriangle: INumber;
+   StandardSync: INumberVectorProperty;
+   SyncDeltaRA, SyncDeltaDE: INumber;
+   AlignMode: ISwitchVectorProperty;
+   AlignList: ISwitchVectorProperty;
+   AlignListAdd, AlignListClear, AlignListWrite, AlignListLoad: ISwitch;
+   AlignSyncMode: ISwitchVectorProperty;
+   SyncManage: ISwitchVectorProperty;
+   SyncClearDelta: ISwitch;
    eod_coord:  boolean;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
@@ -92,6 +106,13 @@ T_indieqmod = class(TIndiBaseClient)
    FonRevDecChange: TNotifyEvent;
    FonTrackModeChange: TNotifyEvent;
    FonTrackRateChange:TNotifyEvent;
+   FonGeoCoordChange:TNotifyEvent;
+   FonAlignCountChange: TNotifyEvent;
+   FonSyncDeltaChange: TNotifyEvent;
+   FonAlignmentModeChange: TNotifyEvent;
+   FonSyncModeChange: TNotifyEvent;
+   FAlignmentMode: TStringList;
+   FSyncMode: TStringList;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -128,6 +149,17 @@ T_indieqmod = class(TIndiBaseClient)
    procedure msg(txt: string);
    function  GetRATrackRate: double;
    function  GetDETrackRate: double;
+   function  GetLatitude: double;
+   function  GetLongitude: double;
+   function  GetElevation: double;
+   function  GetPointCount: integer;
+   function  GetTriangleCount: integer;
+   function  GetDeltaRa: double;
+   function  GetDeltaDe: double;
+   function  GetActiveAlignmentMode: integer;
+   procedure SetActiveAlignmentMode(value: integer);
+   function  GetActiveSyncMode: integer;
+   procedure SetActiveSyncMode(value: integer);
  public
    constructor Create;
    destructor  Destroy; override;
@@ -139,6 +171,9 @@ T_indieqmod = class(TIndiBaseClient)
    procedure MotionEast;
    procedure MotionStop;
    procedure SetTrackRate(tra,tde: double);
+   procedure SetSite(ObsLat,ObsLon,ObsElev: double);
+   procedure ClearAlignment;
+   procedure ClearSyncDelta;
    property indiserver: string read Findiserver write Findiserver;
    property indiserverport: string read Findiserverport write Findiserverport;
    property indidevice: string read Findidevice write Findidevice;
@@ -164,6 +199,17 @@ T_indieqmod = class(TIndiBaseClient)
    property TrackMode: integer read GetTrackmode write SetTrackmode;
    property RATrackRate: double read GetRATrackRate;
    property DETrackRate: double read GetDETrackRate;
+   property Latitude: double read GetLatitude;
+   property Longitude: double read GetLongitude;
+   property Elevation: double read GetElevation;
+   property PointCount: integer read GetPointCount;
+   property TriangleCount: integer read GetTriangleCount;
+   property DeltaRa: double read GetDeltaRa;
+   property DeltaDe: double read GetDeltaDe;
+   property AlignmentMode: TStringList read FAlignmentMode;
+   property ActiveAlignmentMode: integer read GetActiveAlignmentMode write SetActiveAlignmentMode;
+   property SyncMode: TStringList read FSyncMode;
+   property ActiveSyncMode: integer read GetActiveSyncMode write SetActiveSyncMode;
    property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
    property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -176,6 +222,11 @@ T_indieqmod = class(TIndiBaseClient)
    property onSlewModeChange: TNotifyEvent read FonSlewModeChange write FonSlewModeChange;
    property onTrackModeChange: TNotifyEvent read FonTrackModeChange write FonTrackModeChange;
    property onTrackRateChange: TNotifyEvent read FonTrackRateChange write FonTrackRateChange;
+   property onGeoCoordChange:TNotifyEvent read FonGeoCoordChange write FonGeoCoordChange;
+   property onAlignCountChange:TNotifyEvent read FonAlignCountChange write FonAlignCountChange;
+   property onSyncDeltaChange: TNotifyEvent read FonSyncDeltaChange write FonSyncDeltaChange;
+   property onAlignmentModeChange: TNotifyEvent read FonAlignmentModeChange write FonAlignmentModeChange;
+   property onSyncModeChange: TNotifyEvent read FonSyncModeChange write FonSyncModeChange;
 end;
 
 implementation
@@ -184,6 +235,8 @@ constructor T_indieqmod.Create;
 begin
  inherited Create;
  FSlewPreset:=TStringList.Create;
+ FAlignmentMode:=TStringList.Create;
+ FSyncMode:=TStringList.Create;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -219,6 +272,8 @@ begin
  onServerDisconnected:=nil;
  if InitTimer<>nil then FreeAndNil(InitTimer);
  FSlewPreset.Free;
+ FAlignmentMode.Free;
+ FSyncMode.Free;
  inherited Destroy;
 end;
 
@@ -240,10 +295,19 @@ begin
     SlewSpeed:=nil;
     TrackM:=nil;
     TrackR:=nil;
+    geo_coord:=nil;
+    AlignCount:=nil;
+    StandardSync:=nil;
+    AlignMode:=nil;
+    AlignList:=nil;
+    AlignSyncMode:=nil;
+    SyncManage:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
     FSlewPreset.Clear;
+    FAlignmentMode.Clear;
+    FSyncMode.Clear;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
@@ -262,7 +326,14 @@ begin
        (TrackM<>nil) and
        (TrackR<>nil) and
        (SlewMode<>nil) and
-       (SlewSpeed<>nil)
+       (SlewSpeed<>nil) and
+       (geo_coord<>nil) and
+       (AlignCount<>nil) and
+       (StandardSync<>nil) and
+       (AlignMode<>nil) and
+       (AlignList<>nil) and
+       (AlignSyncMode<>nil) and
+       (SyncManage<>nil)
     then begin
        FStatus := devConnected;
        if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
@@ -431,6 +502,50 @@ begin
      TrackCustom:=IUFindSwitch(TrackM,'CUSTOM');
      if (TrackSidereal=nil)or(TrackLunar=nil)or(TrackSolar=nil)or(TrackCustom=nil) then TrackM:=nil;
   end
+  else if (proptype=INDI_NUMBER)and(propname='GEOGRAPHIC_COORD') then begin
+     geo_coord:=indiProp.getNumber;
+     geo_lat:=IUFindNumber(geo_coord,'LAT');
+     geo_lon:=IUFindNumber(geo_coord,'LONG');
+     geo_ele:=IUFindNumber(geo_coord,'ELEV');
+     if (geo_lat=nil)or(geo_lon=nil)or(geo_ele=nil) then geo_coord:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='ALIGNMODE') then begin
+     AlignMode:=indiProp.getSwitch;
+     for i:=0 to AlignMode.nsp-1 do begin
+       FAlignmentMode.Add(AlignMode.sp[i].lbl);
+     end;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='ALIGNCOUNT') then begin
+     AlignCount:=indiProp.getNumber;
+     AlignCountPoint:=IUFindNumber(AlignCount,'ALIGNCOUNT_POINTS');
+     AlignCountTriangle:=IUFindNumber(AlignCount,'ALIGNCOUNT_TRIANGLES');
+     if (AlignCountPoint=nil)or(AlignCountTriangle=nil) then AlignCount:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='ALIGNLIST') then begin
+     AlignList:=indiProp.getSwitch;
+     AlignListAdd:=IUFindSwitch(AlignList,'ALIGNLISTADD');
+     AlignListClear:=IUFindSwitch(AlignList,'ALIGNLISTCLEAR');
+     AlignListWrite:=IUFindSwitch(AlignList,'ALIGNWRITEFILE');
+     AlignListLoad:=IUFindSwitch(AlignList,'ALIGNLOADFILE');
+     if (AlignListAdd=nil)or(AlignListClear=nil)or(AlignListWrite=nil)or(AlignListLoad=nil) then AlignList:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='ALIGNSYNCMODE') then begin
+     AlignSyncMode:=indiProp.getSwitch;
+     for i:=0 to AlignSyncMode.nsp-1 do begin
+       FSyncMode.Add(AlignSyncMode.sp[i].lbl);
+     end;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='SYNCMANAGE') then begin
+     SyncManage:=indiProp.getSwitch;
+     SyncClearDelta:=IUFindSwitch(SyncManage,'SYNCCLEARDELTA');
+     if (SyncClearDelta=nil) then SyncManage:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='STANDARDSYNC') then begin
+     StandardSync:=indiProp.getNumber;
+     SyncDeltaRA:=IUFindNumber(StandardSync,'STANDARDSYNC_RA');
+     SyncDeltaDE:=IUFindNumber(StandardSync,'STANDARDSYNC_DE');
+     if (SyncDeltaRA=nil)or(SyncDeltaDE=nil) then StandardSync:=nil;
+  end
   ;
   CheckStatus;
 end;
@@ -447,6 +562,12 @@ begin
      if Assigned(FonSlewSpeedChange) then FonSlewSpeedChange(self);
   end else if nvp=TrackR then begin
      if Assigned(FonTrackRateChange) then FonTrackRateChange(self);
+  end else if nvp=geo_coord then begin
+     if Assigned(FonGeoCoordChange) then FonGeoCoordChange(self);
+  end else if nvp=AlignCount then begin
+     if Assigned(FonAlignCountChange) then FonAlignCountChange(self);
+  end else if nvp=StandardSync then begin
+     if Assigned(FonSyncDeltaChange) then FonSyncDeltaChange(self);
   end;
 end;
 
@@ -465,6 +586,10 @@ begin
         if Assigned(FonRevDecChange) then FonRevDecChange(self);
   end else if svp=TrackM then begin
         if Assigned(FonTrackModeChange) then FonTrackModeChange(self);
+  end else if svp=AlignMode then begin
+        if Assigned(FonAlignmentModeChange) then FonAlignmentModeChange(self);
+  end else if svp=AlignSyncMode then begin
+        if Assigned(FonSyncModeChange) then FonSyncModeChange(self);
   end;
 end;
 
@@ -727,6 +852,121 @@ function  T_indieqmod.GetDETrackRate: double;
 begin
  if TrackR<>nil then begin
    result:=TrackRde.value;
+ end;
+end;
+
+function  T_indieqmod.GetLatitude: double;
+begin
+ if geo_coord<>nil then begin
+   result:=geo_lat.value;
+ end;
+end;
+
+function  T_indieqmod.GetLongitude: double;
+begin
+ if geo_coord<>nil then begin
+   result:=geo_lon.value;
+ end;
+end;
+
+function  T_indieqmod.GetElevation: double;
+begin
+ if geo_coord<>nil then begin
+   result:=geo_ele.value;
+ end;
+end;
+
+procedure T_indieqmod.SetSite(ObsLat,ObsLon,ObsElev: double);
+begin
+ if geo_coord<>nil then begin
+    geo_lat.value:=ObsLat;
+    geo_lon.value:=ObsLon;
+    geo_ele.value:=ObsElev;
+    sendNewNumber(geo_coord);
+ end;
+end;
+
+function  T_indieqmod.GetPointCount: integer;
+begin
+ if AlignCount<>nil then begin
+   result:=round(AlignCountPoint.value);
+ end;
+end;
+
+function  T_indieqmod.GetTriangleCount: integer;
+begin
+ if AlignCount<>nil then begin
+   result:=round(AlignCountTriangle.value);
+ end;
+end;
+
+procedure T_indieqmod.ClearAlignment;
+begin
+ if AlignList<>nil then begin
+   IUResetSwitch(AlignList);
+   AlignListClear.s:=ISS_ON;
+   sendNewSwitch(AlignList);
+ end;
+end;
+
+function  T_indieqmod.GetDeltaRa: double;
+begin
+ if StandardSync<>nil then begin
+   result:=SyncDeltaRA.value;
+ end;
+end;
+
+function  T_indieqmod.GetDeltaDe: double;
+begin
+ if StandardSync<>nil then begin
+   result:=SyncDeltaDE.value;
+ end;
+end;
+
+procedure T_indieqmod.ClearSyncDelta;
+begin
+ if SyncManage<>nil then begin
+   IUResetSwitch(SyncManage);
+   SyncClearDelta.s:=ISS_ON;
+   sendNewSwitch(SyncManage);
+ end;
+end;
+
+function  T_indieqmod.GetActiveAlignmentMode: integer;
+var i: integer;
+begin
+ if AlignMode<>nil then begin
+   for i := 0 to AlignMode.nsp-1 do
+    if AlignMode.sp[i].s = ISS_ON then
+       exit(i);
+ end;
+end;
+
+procedure T_indieqmod.SetActiveAlignmentMode(value: integer);
+begin
+ if AlignMode<>nil then begin
+    IUResetSwitch(AlignMode);
+    AlignMode.sp[value].s := ISS_ON;
+    sendNewSwitch(AlignMode);
+ end;
+end;
+
+function  T_indieqmod.GetActiveSyncMode: integer;
+var i: integer;
+begin
+ if AlignSyncMode<>nil then begin
+   for i := 0 to AlignSyncMode.nsp-1 do
+    if AlignSyncMode.sp[i].s = ISS_ON then
+       exit(i);
+ end;
+end;
+
+procedure T_indieqmod.SetActiveSyncMode(value: integer);
+begin
+ if AlignSyncMode<>nil then begin
+    IUResetSwitch(AlignSyncMode);
+    AlignSyncMode.sp[value].s := ISS_ON;
+    sendNewSwitch(AlignSyncMode);
  end;
 end;
 
