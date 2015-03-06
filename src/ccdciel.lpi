@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -104,7 +106,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="40">
+    <Units Count="41">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -179,6 +181,7 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -327,6 +330,11 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="fu_sequence"/>
       </Unit39>
+      <Unit40>
+        <Filename Value="u_ccdconfig.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="u_ccdconfig"/>
+      </Unit40>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -347,6 +355,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

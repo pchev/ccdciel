@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses XMLConf, DOM,
+uses u_ccdconfig,
   Classes, SysUtils;
 
 type
@@ -38,13 +38,6 @@ type
   TNumRange = record
                min,max,step: double;
               end;
-
-  TCCDconfig = class(TXMLConfig)
-     function  GetValue(const APath: String; const ADefault: String): String; overload;
-     function  GetValue(const APath: String; const ADefault: Double): Double; overload;
-     procedure SetValue(const APath: String; const AValue: String); overload;
-     procedure SetValue(const APath: String; const AValue: Double); overload;
-  end;
 
   {$i revision.inc}
 
@@ -83,28 +76,6 @@ var
   compile_time, compile_version, compile_system, lclver: string;
 
 implementation
-
-/////////////////////  TCCDconfig  /////////////////////////////////
-
-function  TCCDconfig.GetValue(const APath: String; const ADefault: String): String;
-begin
-   Result:=string(GetValue(DOMString(APath),DOMString(ADefault)));
-end;
-
-procedure TCCDconfig.SetValue(const APath: String; const AValue: String);
-begin
-  SetValue(DOMString(APath),DOMString(AValue))
-end;
-
-function  TCCDconfig.GetValue(const APath: String; const ADefault: Double): Double; overload;
-begin
-   Result:=StrToFloatDef(String(GetValue(DOMString(APath),DOMString(FloatToStr(ADefault)))),ADefault);
-end;
-
-procedure TCCDconfig.SetValue(const APath: String; const AValue: Double); overload;
-begin
-  SetValue(DOMString(APath),DOMString(FloatToStr(AValue)))
-end;
 
 end.
 

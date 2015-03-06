@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=EQmod
+Comment=GUI for INDI Eqmod driver
+Exec=eqmodgui
+Icon=eqmodgui
+Terminal=false
+Type=Application
+Categories=Education;Science;Astronomy;
+GenericName=EQmod

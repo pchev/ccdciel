@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses eqmod_int, eqmod_setup, pu_indigui, u_utils,
-  XMLConf, DOM,
+  u_ccdconfig, XMLConf, DOM,
   Classes, SysUtils, FileUtil, Forms, Controls, LCLType,
   Graphics, Dialogs, ExtCtrls, StdCtrls, Buttons, ComCtrls;
 
@@ -34,6 +34,7 @@ type
   { Tf_eqmod }
 
   Tf_eqmod = class(TForm)
+    LblPark: TLabel;
     SyncModeCombo: TComboBox;
     AlignModeCombo: TComboBox;
     DeltaRa: TEdit;
@@ -97,7 +98,7 @@ type
     Notebook1: TNotebook;
     Page1: TPage;
     Page2: TPage;
-    SpeedButton2: TSpeedButton;
+    BtnPark: TSpeedButton;
     RArate: TTrackBar;
     DErate: TTrackBar;
     IndiSetup: TSpeedButton;
@@ -132,6 +133,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure BtnNorthMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure BtnSaveSiteClick(Sender: TObject);
     procedure BtnSouthMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure BtnTrackPaint(Sender: TObject);
@@ -157,19 +159,22 @@ type
     procedure RArateChange(Sender: TObject);
     procedure ReverseDecChange(Sender: TObject);
     procedure SetupBtnClick(Sender: TObject);
+    procedure SiteNameChange(Sender: TObject);
     procedure SlewPresetChange(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure BtnSetTrackRateClick(Sender: TObject);
+    procedure BtnParkClick(Sender: TObject);
     procedure SyncModeComboChange(Sender: TObject);
   private
     { private declarations }
     eqmod: T_indieqmod;
     f_indigui: Tf_indigui;
-    config: TXMLConfig;
+    config: TCCDconfig;
     configfile,indiserver,indiserverport,indidevice,indideviceport:string;
     ready, GUIready, indisimulation, obslock: boolean;
     TrackMode: integer;
     ObsLat, ObsLon, ObsElev: double;
+    procedure ReadConfig;
     procedure Connect;
     procedure GUIdestroy(Sender: TObject);
     procedure eqmodDestroy(Sender: TObject);
@@ -186,6 +191,7 @@ type
     procedure SlewSpeedRange;
     procedure TrackModeChange(Sender: TObject);
     procedure TrackRateChange(Sender: TObject);
+    procedure ParkChange(Sender: TObject);
     procedure GeoCoordChange(Sender: TObject);
     procedure ShowObsCoord;
     procedure AlignCountChange(Sender: TObject);
@@ -214,9 +220,10 @@ const
 
 procedure Tf_eqmod.FormCreate(Sender: TObject);
 begin
+ DefaultFormatSettings.DecimalSeparator:='.';
  Notebook1.PageIndex:=0;
  configfile:=GetAppConfigFileUTF8(false,true,true);
- config:=TXMLConfig.Create(self);
+ config:=TCCDconfig.Create(self);
  config.Filename:=configfile;
  ready:=false;
  GUIready:=false;
@@ -231,17 +238,32 @@ end;
 
 procedure Tf_eqmod.FormShow(Sender: TObject);
 begin
+  ReadConfig;
   Connect;
+end;
+
+procedure Tf_eqmod.ReadConfig;
+var n,i: integer;
+  buf: string;
+begin
+ indiserver:=config.GetValue('/INDI/server','localhost');
+ indiserverport:=config.GetValue('/INDI/serverport','7624');
+ indidevice:=config.GetValue('/INDI/device','EQMod Mount');
+ indideviceport:=config.GetValue('/INDI/deviceport','/dev/ttyUSB0');
+ indisimulation:=config.GetValue('/INDI/simulation',false);
+ SiteName.Clear;
+ n:=config.GetValue('/Site/Number',0);
+ for i:=1 to n do begin
+   buf:=config.GetValue('/Site/Site'+inttostr(i)+'/SiteName','');
+   if buf<>'' then begin
+     SiteName.Items.Add(buf);
+   end;
+ end;
 end;
 
 procedure Tf_eqmod.Connect;
 begin
  if not ready then begin
-   indiserver:=config.GetValue('/INDI/server','localhost');
-   indiserverport:=config.GetValue('/INDI/serverport','7624');
-   indidevice:=config.GetValue('/INDI/device','EQMod Mount');
-   indideviceport:=config.GetValue('/INDI/deviceport','/dev/ttyUSB0');
-   indisimulation:=config.GetValue('/INDI/simulation',false);
    eqmod:=T_indieqmod.create;
    eqmod.onDestroy:=@eqmodDestroy;
    eqmod.onMsg:=@NewMessage;
@@ -378,6 +400,7 @@ case eqmod.Status of
                       SlewPresetChange(Sender);
                       TrackModeChange(Sender);
                       TrackRateChange(Sender);
+                      ParkChange(Sender);
                       GeoCoordChange(Sender);
                       AlignCountChange(Sender);
                       SyncDeltaChange(Sender);
@@ -546,7 +569,6 @@ begin
 end;
 
 procedure Tf_eqmod.SetTrackModeClick(Sender: TObject);
-
 begin
 if sender is TSpeedButton then
   eqmod.TrackMode:=TSpeedButton(sender).tag;
@@ -582,18 +604,60 @@ with (Sender as TSpeedButton) do begin
 end;
 end;
 
+//////////////////  Park/Unpark box ////////////////////////
+
+Procedure Tf_eqmod.ParkChange(Sender: TObject);
+begin
+  if eqmod.Park then begin
+     BtnPark.Caption:='Unpark';
+     LblPark.Caption:='Parked';
+  end
+  else begin
+     BtnPark.Caption:='Park';
+     LblPark.Caption:='Unparked';
+  end;
+end;
+
+procedure Tf_eqmod.BtnParkClick(Sender: TObject);
+begin
+ if BtnPark.Caption='Unpark' then begin
+   eqmod.Park:=false;
+   BtnPark.Caption:='Park';
+   LblPark.Caption:='Unparked';
+ end
+ else begin
+   eqmod.Park:=true;
+   BtnPark.Caption:='Unpark';
+   LblPark.Caption:='Parked';
+ end;
+end;
+
+
 //////////////////  Site information box ////////////////////////
 
 procedure Tf_eqmod.GeoCoordChange(Sender: TObject);
+var i,n,s:integer;
+    la,lo,el:double;
 begin
   ObsLat:=eqmod.Latitude;
   ObsLon:=eqmod.Longitude;
   ObsElev:=eqmod.Elevation;
   ShowObsCoord;
+  n:=config.GetValue('/Site/Number',0);
+  for i:=1 to n do begin
+    la:=config.GetValue('/Site/Site'+inttostr(i)+'/Latitude',0.0);
+    lo:=config.GetValue('/Site/Site'+inttostr(i)+'/Longitude',0.0);
+    el:=config.GetValue('/Site/Site'+inttostr(i)+'/Elevation',0.0);
+    if (la=ObsLat)and(lo=ObsLon)and(el=ObsElev) then begin
+      SiteName.Text:=config.GetValue('/Site/Site'+inttostr(i)+'/SiteName','');
+      break;
+    end;
+  end;
 end;
 
 Procedure Tf_eqmod.ShowObsCoord;
 var d,m,s : string;
+    long: double;
 begin
 try
 obslock:=true;
@@ -602,14 +666,18 @@ ArToStr4(abs(ObsLat),f1,d,m,s);
 LatDeg.Text:=d;
 LatMin.Text:=m;
 LatSec.Text:=s;
-ArToStr4(abs(ObsLon),f1,d,m,s);
+if ObsLon<180 then
+  long:=ObsLon
+  else
+  long:=ObsLon-360;
+ArToStr4(abs(long),f1,d,m,s);
 LongDeg.Text:=d;
 LongMin.Text:=m;
 LongSec.Text:=s;
 if ObsLat>=0 then LatNS.Itemindex:=0
              else LatNS.Itemindex:=1;
-if ObsLon>=0 then LongWE.Itemindex:=0
-             else LongWE.Itemindex:=1;
+if long>=0 then LongWE.Itemindex:=0
+           else LongWE.Itemindex:=1;
 finally
 obslock:=false;
 end;
@@ -655,7 +723,7 @@ begin
     ObsLon:=d
   else
     ObsLon:=d+m/60+s/3600;
-  if LongWE.Itemindex>0 then ObsLon:=-ObsLon;
+  if LongWE.Itemindex>0 then ObsLon:=360-ObsLon;
   ShowObsCoord;
 end;
 
@@ -675,7 +743,54 @@ end;
 
 procedure Tf_eqmod.SetSiteClick(Sender: TObject);
 begin
+  LatChange(Sender);
+  LongChange(Sender);
+  ElevationChange(Sender);
   eqmod.SetSite(ObsLat,ObsLon,ObsElev);
+end;
+
+procedure Tf_eqmod.BtnSaveSiteClick(Sender: TObject);
+var i,n,s:integer;
+    buf:string;
+begin
+LatChange(Sender);
+LongChange(Sender);
+ElevationChange(Sender);
+s:=-1;
+n:=config.GetValue('/Site/Number',0);
+for i:=1 to n do begin
+  buf:=config.GetValue('/Site/Site'+inttostr(i)+'/SiteName','');
+  if buf=SiteName.Text then begin
+    s:=i;
+    break;
+  end;
+end;
+if s<0 then begin
+ s:=n+1;
+ SiteName.Items.Add(SiteName.Text);
+end;
+config.SetValue('/Site/Site'+inttostr(s)+'/SiteName',SiteName.Text);
+config.SetValue('/Site/Site'+inttostr(s)+'/Latitude',ObsLat);
+config.SetValue('/Site/Site'+inttostr(s)+'/Longitude',ObsLon);
+config.SetValue('/Site/Site'+inttostr(s)+'/Elevation',ObsElev);
+config.SetValue('/Site/Number',s);
+config.Flush;
+end;
+
+procedure Tf_eqmod.SiteNameChange(Sender: TObject);
+var i,n,s:integer;
+    buf:string;
+begin
+n:=config.GetValue('/Site/Number',0);
+for i:=1 to n do begin
+  buf:=config.GetValue('/Site/Site'+inttostr(i)+'/SiteName','');
+  if buf=SiteName.Text then begin
+    ObsLat:=config.GetValue('/Site/Site'+inttostr(i)+'/Latitude',0.0);
+    ObsLon:=config.GetValue('/Site/Site'+inttostr(i)+'/Longitude',0.0);
+    ObsElev:=config.GetValue('/Site/Site'+inttostr(i)+'/Elevation',0.0);
+    ShowObsCoord;
+  end;
+end;
 end;
 
 //////////////////  Alignment / Sync  box ////////////////////////
