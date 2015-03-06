@@ -34,4 +34,6 @@ install -v -m 644 system_integration/Linux/share/doc/ccdciel/copyright $destdir/
 install -v -m 644 system_integration/Linux/share/pixmaps/ccdciel.png $destdir/share/pixmaps/ccdciel.png
 install -v -m 644 system_integration/Linux/share/icons/hicolor/48x48/apps/ccdciel.png $destdir/share/icons/hicolor/48x48/apps/ccdciel.png
 install -v -m 644 system_integration/Linux/share/icons/hicolor/scalable/apps/ccdciel.svg $destdir/share/icons/hicolor/scalable/apps/ccdciel.svg
-
+install -v -m 644 system_integration/Linux/share/applications/eqmodgui.desktop $destdir/share/applications/eqmodgui.desktop
+install -v -m 644 system_integration/Linux/share/pixmaps/eqmodgui.png $destdir/share/pixmaps/eqmodgui.png
+install -v -m 644 system_integration/Linux/share/icons/hicolor/48x48/apps/eqmodgui.png $destdir/share/icons/hicolor/48x48/apps/eqmodgui.png

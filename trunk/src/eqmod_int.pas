@@ -74,6 +74,9 @@ T_indieqmod = class(TIndiBaseClient)
    TrackSidereal,TrackLunar,TrackSolar,TrackCustom: ISwitch;
    TrackR: INumberVectorProperty;
    TrackRra, TrackRde: INumber;
+   CoordSet: ISwitchVectorProperty;
+   CoordSetTrack,CoordSetSlew,CoordSetSync: ISwitch;
+   Park_opt: ISwitchVectorProperty;
    geo_coord: INumberVectorProperty;
    geo_lat:  INumber;
    geo_lon:  INumber;
@@ -106,6 +109,7 @@ T_indieqmod = class(TIndiBaseClient)
    FonRevDecChange: TNotifyEvent;
    FonTrackModeChange: TNotifyEvent;
    FonTrackRateChange:TNotifyEvent;
+   FonParkChange:TNotifyEvent;
    FonGeoCoordChange:TNotifyEvent;
    FonAlignCountChange: TNotifyEvent;
    FonSyncDeltaChange: TNotifyEvent;
@@ -149,6 +153,8 @@ T_indieqmod = class(TIndiBaseClient)
    procedure msg(txt: string);
    function  GetRATrackRate: double;
    function  GetDETrackRate: double;
+   function  GetPark: boolean;
+   procedure SetPark(value:boolean);
    function  GetLatitude: double;
    function  GetLongitude: double;
    function  GetElevation: double;
@@ -199,6 +205,7 @@ T_indieqmod = class(TIndiBaseClient)
    property TrackMode: integer read GetTrackmode write SetTrackmode;
    property RATrackRate: double read GetRATrackRate;
    property DETrackRate: double read GetDETrackRate;
+   property Park: boolean read GetPark write SetPark;
    property Latitude: double read GetLatitude;
    property Longitude: double read GetLongitude;
    property Elevation: double read GetElevation;
@@ -222,6 +229,7 @@ T_indieqmod = class(TIndiBaseClient)
    property onSlewModeChange: TNotifyEvent read FonSlewModeChange write FonSlewModeChange;
    property onTrackModeChange: TNotifyEvent read FonTrackModeChange write FonTrackModeChange;
    property onTrackRateChange: TNotifyEvent read FonTrackRateChange write FonTrackRateChange;
+   property onParkChange: TNotifyEvent read FonParkChange write FonParkChange;
    property onGeoCoordChange:TNotifyEvent read FonGeoCoordChange write FonGeoCoordChange;
    property onAlignCountChange:TNotifyEvent read FonAlignCountChange write FonAlignCountChange;
    property onSyncDeltaChange: TNotifyEvent read FonSyncDeltaChange write FonSyncDeltaChange;
@@ -295,6 +303,8 @@ begin
     SlewSpeed:=nil;
     TrackM:=nil;
     TrackR:=nil;
+    CoordSet:=nil;
+    Park_opt:=nil;
     geo_coord:=nil;
     AlignCount:=nil;
     StandardSync:=nil;
@@ -325,8 +335,10 @@ begin
        (RevDec<>nil) and
        (TrackM<>nil) and
        (TrackR<>nil) and
+       (CoordSet<>nil) and
        (SlewMode<>nil) and
        (SlewSpeed<>nil) and
+       (Park_opt<>nil) and
        (geo_coord<>nil) and
        (AlignCount<>nil) and
        (StandardSync<>nil) and
@@ -502,6 +514,16 @@ begin
      TrackCustom:=IUFindSwitch(TrackM,'CUSTOM');
      if (TrackSidereal=nil)or(TrackLunar=nil)or(TrackSolar=nil)or(TrackCustom=nil) then TrackM:=nil;
   end
+  else if (proptype=INDI_SWITCH)and(propname='ON_COORD_SET') then begin
+     CoordSet:=indiProp.getSwitch;
+     CoordSetTrack:=IUFindSwitch(CoordSet,'TRACK');
+     CoordSetSlew:=IUFindSwitch(CoordSet,'SLEW');
+     CoordSetSync:=IUFindSwitch(CoordSet,'SYNC');
+     if (CoordSetTrack=nil)or(CoordSetSlew=nil)or(CoordSetSync=nil) then CoordSet:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_PARK') then begin
+     Park_opt:=indiProp.getSwitch;
+  end
   else if (proptype=INDI_NUMBER)and(propname='GEOGRAPHIC_COORD') then begin
      geo_coord:=indiProp.getNumber;
      geo_lat:=IUFindNumber(geo_coord,'LAT');
@@ -586,6 +608,8 @@ begin
         if Assigned(FonRevDecChange) then FonRevDecChange(self);
   end else if svp=TrackM then begin
         if Assigned(FonTrackModeChange) then FonTrackModeChange(self);
+  end else if svp=Park_opt then begin
+        if Assigned(FonParkChange) then FonParkChange(self);
   end else if svp=AlignMode then begin
         if Assigned(FonAlignmentModeChange) then FonAlignmentModeChange(self);
   end else if svp=AlignSyncMode then begin
@@ -819,6 +843,14 @@ procedure T_indieqmod.SetTrackmode(value: integer);
 var sp: ISwitch;
 begin
  if TrackM<>nil then begin
+    if value>=0 then begin
+      if CoordSet<>nil then begin  // set tracking on
+        IUResetSwitch(CoordSet);
+        CoordSetTrack.s:=ISS_ON;
+        sendNewSwitch(CoordSet);
+        sendNewNumber(coord_prop);
+      end;
+    end;
     sp:=IUFindOnSwitch(TrackM);
     if sp<>nil then begin
       sendNewSwitch(TrackM);
@@ -967,6 +999,22 @@ begin
     IUResetSwitch(AlignSyncMode);
     AlignSyncMode.sp[value].s := ISS_ON;
     sendNewSwitch(AlignSyncMode);
+ end;
+end;
+
+function  T_indieqmod.GetPark: boolean;
+begin
+ if Park_opt<>nil then begin
+   result:=Park_opt.sp[0].s=ISS_ON;
+ end;
+end;
+
+procedure T_indieqmod.SetPark(value:boolean);
+begin
+ if Park_opt<>nil then begin
+   IUResetSwitch(Park_opt);
+   if value then Park_opt.sp[0].s:=ISS_ON;
+   sendNewSwitch(Park_opt);
  end;
 end;
 

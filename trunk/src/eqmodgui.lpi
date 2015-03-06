@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="eqmodgui.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -59,6 +59,11 @@
         <ComponentName Value="f_eqmodsetup"/>
         <ResourceBaseClass Value="Form"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="u_ccdconfig.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="u_ccdconfig"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
