@@ -1,0 +1,8 @@
+object f_EditPlan: Tf_EditPlan
+  Left = 399
+  Height = 240
+  Top = 440
+  Width = 320
+  Caption = 'f_EditPlan'
+  LCLVersion = '1.4.0.3'
+end

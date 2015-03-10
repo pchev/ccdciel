@@ -1,18 +1,18 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 427
+  Height = 465
   Top = 0
-  Width = 128
-  ClientHeight = 427
-  ClientWidth = 128
+  Width = 180
+  ClientHeight = 465
+  ClientWidth = 180
   TabOrder = 0
-  DesignLeft = 296
-  DesignTop = 151
+  DesignLeft = 412
+  DesignTop = 152
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 128
+    Width = 180
     Align = alTop
     Alignment = taCenter
     Caption = 'Sequence'
@@ -25,48 +25,136 @@ object f_sequence: Tf_sequence
   end
   object Panel1: TPanel
     Left = 0
-    Height = 114
+    Height = 200
     Top = 24
-    Width = 154
+    Width = 180
     BevelOuter = bvNone
-    ClientHeight = 114
-    ClientWidth = 154
+    ClientHeight = 200
+    ClientWidth = 180
     TabOrder = 1
-    object StringGrid1: TStringGrid
+    object TargetGrid: TStringGrid
       Left = 0
-      Height = 114
-      Top = 0
-      Width = 154
+      Height = 146
+      Top = 20
+      Width = 180
       Align = alClient
       ColCount = 6
       DefaultRowHeight = 18
       FixedCols = 0
       Flat = True
-      RowCount = 2
+      RowCount = 1
       TabOrder = 0
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 34
+      Top = 166
+      Width = 180
+      Align = alBottom
+      ClientHeight = 34
+      ClientWidth = 180
+      TabOrder = 1
+      object BtnEditTargets: TButton
+        Left = 120
+        Height = 25
+        Top = 4
+        Width = 56
+        Caption = 'Edit'
+        OnClick = BtnEditTargetsClick
+        TabOrder = 0
+      end
+      object BtnSaveTargets: TButton
+        Left = 64
+        Height = 25
+        Top = 4
+        Width = 56
+        Caption = 'Save'
+        OnClick = BtnSaveTargetsClick
+        TabOrder = 1
+      end
+      object BtnLoadTargets: TButton
+        Left = 8
+        Height = 25
+        Top = 4
+        Width = 56
+        Caption = 'Load'
+        OnClick = BtnLoadTargetsClick
+        TabOrder = 2
+      end
+    end
+    object StaticText3: TStaticText
+      Left = 0
+      Height = 20
+      Top = 0
+      Width = 180
+      Align = alTop
+      Alignment = taCenter
+      Caption = 'Targets'
+      Color = clGray
+      Font.Color = clBlack
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 2
     end
   end
   object Panel2: TPanel
     Left = 0
-    Height = 200
-    Top = 180
-    Width = 154
+    Height = 236
+    Top = 224
+    Width = 180
     BevelOuter = bvNone
-    ClientHeight = 200
-    ClientWidth = 154
+    ClientHeight = 236
+    ClientWidth = 180
     TabOrder = 2
-    object StringGrid2: TStringGrid
+    object PlanGrid: TStringGrid
       Left = 0
-      Height = 200
-      Top = 0
-      Width = 154
+      Height = 182
+      Top = 20
+      Width = 180
       Align = alClient
       ColCount = 4
       DefaultRowHeight = 18
       FixedCols = 0
       Flat = True
-      RowCount = 2
+      RowCount = 1
       TabOrder = 0
     end
+    object StaticText2: TStaticText
+      Left = 0
+      Height = 20
+      Top = 0
+      Width = 180
+      Align = alTop
+      Alignment = taCenter
+      Caption = 'Current plan'
+      Color = clGray
+      Font.Color = clBlack
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 1
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 34
+      Top = 202
+      Width = 180
+      Align = alBottom
+      TabOrder = 2
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Title = 'Open target list'
+    DefaultExt = '.targets'
+    Filter = 'targets|*.targets'
+    Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
+    left = 32
+    top = 120
+  end
+  object SaveDialog1: TSaveDialog
+    Title = 'Save target list as'
+    DefaultExt = '.targets'
+    Filter = 'targets|*.targets'
+    left = 120
+    top = 120
   end
 end

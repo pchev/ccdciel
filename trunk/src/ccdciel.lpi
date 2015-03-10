@@ -106,7 +106,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="41">
+    <Units Count="43">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -143,6 +143,7 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -150,7 +151,6 @@
         <ComponentName Value="f_visu"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_visu"/>
       </Unit6>
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
@@ -210,7 +210,6 @@
         <ComponentName Value="f_mount"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_mount"/>
       </Unit16>
       <Unit17>
         <Filename Value="cu_fits.pas"/>
@@ -320,7 +319,6 @@
         <ComponentName Value="f_autoguider"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_autoguider"/>
       </Unit38>
       <Unit39>
         <Filename Value="fu_sequence.pas"/>
@@ -333,8 +331,23 @@
       <Unit40>
         <Filename Value="u_ccdconfig.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_ccdconfig"/>
       </Unit40>
+      <Unit41>
+        <Filename Value="pu_edittargets.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_EditTargets"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_edittargets"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="pu_editplan.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_EditPlan"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_editplan"/>
+      </Unit42>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

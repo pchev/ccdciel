@@ -39,6 +39,18 @@ type
                min,max,step: double;
               end;
 
+  TTarget = Class(TObject)
+              objectname, plan: string;
+              starttime,endtime,ra,de: double;
+            end;
+
+  TPlan   = Class(TObject)
+              exposure, delay: double;
+              count, repeatcount: integer;
+              filter: integer;
+              frtype: TFrameType;
+            end;
+
   {$i revision.inc}
 
 const
@@ -72,6 +84,7 @@ const
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
 
 var
+  ConfigDir,LogDir,TmpDir: UTF8String;
   config: TCCDConfig;
   compile_time, compile_version, compile_system, lclver: string;
 
