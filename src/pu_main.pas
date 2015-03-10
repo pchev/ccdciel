@@ -179,7 +179,6 @@ type
     Capture,Preview,PreviewLoop: boolean;
     LogToFile,LogFileOpen: Boolean;
     NeedRestart, GUIready: boolean;
-    ConfigDir,TmpDir: UTF8String;
     LogFile: UTF8String;
     MsgLog: Textfile;
     Procedure InitLog;
@@ -274,7 +273,7 @@ implementation
 Procedure Tf_main.InitLog;
 begin
   try
-     LogFile:=slash(ConfigDir)+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
+     LogFile:=slash(LogDir)+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
      Filemode:=2;
      AssignFile(MsgLog,LogFile);
      Rewrite(MsgLog);
@@ -366,6 +365,7 @@ begin
   DefaultInterface:=INDI;
   {$endif}
   DefaultFormatSettings.DecimalSeparator:='.';
+  DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
   GUIready:=false;
   PageControlRight.ActivePageIndex:=0;
@@ -381,6 +381,8 @@ begin
   LogFileOpen:=false;
   TmpDir:=slash(ConfigDir)+'tmp';
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
+  LogDir:=slash(ConfigDir)+'Log';
+  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
 
   configver:=config.GetValue('/Configuration/Version','');
 

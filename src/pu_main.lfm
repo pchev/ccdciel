@@ -5,7 +5,7 @@ object f_main: Tf_main
   Width = 800
   ActiveControl = Panel1
   Caption = 'CCD Ciel'
-  ClientHeight = 356
+  ClientHeight = 353
   ClientWidth = 800
   Menu = MainMenu1
   OnClose = FormClose
@@ -14,12 +14,12 @@ object f_main: Tf_main
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.4.0.3'
   object PageControlRight: TPageControl
-    Left = 664
-    Height = 339
+    Left = 612
+    Height = 333
     Top = 0
-    Width = 136
+    Width = 188
     ActivePage = TabSheet4
     Align = alRight
     Images = ImageList1
@@ -29,15 +29,15 @@ object f_main: Tf_main
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       Hint = 'Centering'
-      ClientHeight = 301
-      ClientWidth = 128
+      ClientHeight = 295
+      ClientWidth = 180
       ImageIndex = 0
       object PanelRight1: TPanel
         Tag = 1
         Left = 0
         Height = 295
         Top = 0
-        Width = 128
+        Width = 180
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -54,8 +54,8 @@ object f_main: Tf_main
     end
     object TabSheet2: TTabSheet
       Hint = 'Focus'
-      ClientHeight = 301
-      ClientWidth = 128
+      ClientHeight = 295
+      ClientWidth = 180
       ImageIndex = 1
       object PanelRight2: TPanel
         Tag = 1
@@ -79,8 +79,8 @@ object f_main: Tf_main
     end
     object TabSheet3: TTabSheet
       Hint = 'Capture'
-      ClientHeight = 301
-      ClientWidth = 128
+      ClientHeight = 295
+      ClientWidth = 180
       ImageIndex = 2
       object PanelRight3: TPanel
         Tag = 1
@@ -104,15 +104,15 @@ object f_main: Tf_main
     end
     object TabSheet4: TTabSheet
       Hint = 'Plan'
-      ClientHeight = 301
-      ClientWidth = 128
+      ClientHeight = 295
+      ClientWidth = 180
       ImageIndex = 3
       object PanelRight4: TPanel
         Tag = 1
         Left = 0
-        Height = 301
+        Height = 295
         Top = 0
-        Width = 128
+        Width = 180
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -130,20 +130,20 @@ object f_main: Tf_main
   end
   object Panel1: TPanel
     Left = 0
-    Height = 339
+    Height = 333
     Top = 0
-    Width = 664
+    Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 339
-    ClientWidth = 664
+    ClientHeight = 333
+    ClientWidth = 612
     TabOrder = 1
     object PanelLeft: TPanel
       Tag = 1
       Left = 0
-      Height = 335
-      Top = 2
-      Width = 2
+      Height = 331
+      Top = 1
+      Width = 1
       Align = alLeft
       AutoSize = True
       ChildSizing.TopBottomSpacing = 3
@@ -158,9 +158,9 @@ object f_main: Tf_main
     end
     object PanelTop: TPanel
       Left = 0
-      Height = 2
+      Height = 1
       Top = 0
-      Width = 664
+      Width = 612
       Align = alTop
       AutoSize = True
       ChildSizing.LeftRightSpacing = 3
@@ -174,23 +174,23 @@ object f_main: Tf_main
       OnDragOver = PanelDragOver
     end
     object PanelCenter: TPanel
-      Left = 2
-      Height = 335
-      Top = 2
-      Width = 662
+      Left = 1
+      Height = 331
+      Top = 1
+      Width = 611
       Align = alClient
       AutoSize = True
-      ClientHeight = 335
-      ClientWidth = 662
+      ClientHeight = 331
+      ClientWidth = 611
       Color = 4197901
       ParentColor = False
       TabOrder = 2
       object Image1: TImage
         Cursor = crCross
         Left = 1
-        Height = 333
+        Height = 329
         Top = 1
-        Width = 660
+        Width = 609
         Align = alClient
         OnDblClick = Image1DblClick
         OnMouseDown = Image1MouseDown
@@ -203,9 +203,9 @@ object f_main: Tf_main
     end
     object PanelBottom: TPanel
       Left = 0
-      Height = 2
-      Top = 337
-      Width = 664
+      Height = 1
+      Top = 332
+      Width = 612
       Align = alBottom
       AutoSize = True
       ChildSizing.LeftRightSpacing = 3
@@ -221,8 +221,8 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 17
-    Top = 339
+    Height = 20
+    Top = 333
     Width = 800
     Panels = <    
       item

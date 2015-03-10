@@ -47,6 +47,8 @@ Function DEToStr(de: Double) : string;
 Function RAToStrB(ar: Double) : string;
 Function DEToStrB(de: Double) : string;
 Function ARToStr4(ar: Double; f: string; var d,m,s : string) : string;
+Function StrToAR(dms : string) : double;
+Function StrToDE(dms : string) : double;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 function GetCdCPort:string;
@@ -331,6 +333,56 @@ begin
     if abs(min)<10 then m:='0'+trim(m);
     s:=FormatFloat(f,sec);
     result := d+'h'+m+'m'+s+'s';
+end;
+
+Function StrToAR(dms : string) : double;
+var s,p : integer;
+    t : string;
+begin
+try
+dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
+if copy(dms,1,1)='-' then s:=-1 else s:=1;
+p:=pos('h',dms);
+if p=0 then
+  result:=StrToFloatDef(dms,0)
+else begin
+  t:=copy(dms,1,p-1); delete(dms,1,p);
+  result:=StrToIntDef(t,0);
+  p:=pos('m',dms);
+  t:=copy(dms,1,p-1); delete(dms,1,p);
+  result:=result+ s * StrToIntDef(t,0) / 60;
+  p:=pos('s',dms);
+  t:=copy(dms,1,p-1);
+  result:=result+ s * StrToFloatDef(t,0) / 3600;
+end;
+except
+result:=0;
+end;
+end;
+
+Function StrToDE(dms : string) : double;
+var s,p : integer;
+    t : string;
+begin
+try
+dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
+if copy(dms,1,1)='-' then s:=-1 else s:=1;
+p:=pos('d',dms);
+if p=0 then
+  result:=StrToFloatDef(dms,0)
+else begin
+t:=copy(dms,1,p-1); delete(dms,1,p);
+result:=StrToIntDef(t,0);
+p:=pos('m',dms);
+t:=copy(dms,1,p-1); delete(dms,1,p);
+result:=result+ s * StrToIntDef(t,0) / 60;
+p:=pos('s',dms);
+t:=copy(dms,1,p-1);
+result:=result+ s * StrToFloatDef(t,0) / 3600;
+end;
+except
+result:=0;
+end;
 end;
 
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
