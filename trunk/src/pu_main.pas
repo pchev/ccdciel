@@ -504,6 +504,7 @@ begin
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
+var str: string;
 begin
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages);
@@ -525,6 +526,10 @@ begin
 
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
+
+  str:=config.GetValue('/Sequence/Targets','');
+  if str<>'' then f_sequence.LoadTargets(str);
+
 end;
 
 procedure Tf_main.StatusbarTimerTimer(Sender: TObject);
@@ -641,6 +646,8 @@ begin
   config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
   config.SetValue('/Tools/Sequence/Top',f_sequence.Top);
   config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
+
+  config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
 
   config.Flush;
   NewMessage('Program exit');

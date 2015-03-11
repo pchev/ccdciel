@@ -3,64 +3,66 @@ object f_EditTargets: Tf_EditTargets
   Height = 275
   Top = 564
   Width = 403
+  ActiveControl = PlanList
   Caption = 'Edit target list'
   ClientHeight = 275
   ClientWidth = 403
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  LCLVersion = '1.2.4.0'
+  Position = poDefaultPosOnly
+  LCLVersion = '1.4.0.3'
   object Label1: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 32
-    Width = 39
+    Width = 42
     Caption = 'Object'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 66
-    Width = 23
+    Width = 26
     Caption = 'Plan'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 98
-    Width = 59
+    Width = 62
     Caption = 'Start time'
     ParentColor = False
   end
   object Label4: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 130
-    Width = 51
+    Width = 53
     Caption = 'End time'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 166
-    Width = 15
+    Width = 17
     Caption = 'RA'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 198
-    Width = 24
+    Width = 25
     Caption = 'DEC'
     ParentColor = False
   end
   object PlanList: TComboBox
-    Left = 98
-    Height = 27
+    Left = 96
+    Height = 28
     Top = 66
     Width = 126
     ItemHeight = 0
@@ -74,18 +76,18 @@ object f_EditTargets: Tf_EditTargets
     Top = 65
     Width = 75
     Caption = 'New'
-    OnClick = BtnNewPlanClick
-    TabOrder = 1
+    OnClick = BtnPlanClick
+    TabOrder = 8
   end
   object ObjectList: TComboBox
     Left = 98
-    Height = 27
+    Height = 28
     Top = 32
     Width = 126
     ItemHeight = 0
     OnChange = ObjectListChange
     Style = csDropDownList
-    TabOrder = 2
+    TabOrder = 1
   end
   object BtnNewObject: TButton
     Left = 240
@@ -94,11 +96,11 @@ object f_EditTargets: Tf_EditTargets
     Width = 75
     Caption = 'New'
     OnClick = BtnNewObjectClick
-    TabOrder = 3
+    TabOrder = 6
   end
   object PointRA: TEdit
     Left = 98
-    Height = 21
+    Height = 22
     Top = 166
     Width = 126
     OnChange = TargetChange
@@ -106,7 +108,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object PointDEC: TEdit
     Left = 98
-    Height = 21
+    Height = 22
     Top = 200
     Width = 126
     OnChange = TargetChange
@@ -118,8 +120,8 @@ object f_EditTargets: Tf_EditTargets
     Top = 65
     Width = 75
     Caption = 'Edit'
-    OnClick = BtnEditPlanClick
-    TabOrder = 6
+    OnClick = BtnPlanClick
+    TabOrder = 9
   end
   object BtnDeleteObject: TButton
     Left = 320
@@ -132,28 +134,28 @@ object f_EditTargets: Tf_EditTargets
   end
   object StartTime: TMaskEdit
     Left = 98
-    Height = 21
+    Height = 22
     Top = 98
     Width = 70
     CharCase = ecNormal
     MaxLength = 8
-    TabOrder = 8
+    TabOrder = 2
     OnChange = TargetChange
     EditMask = '00:00:00;1;_'
-    Text = '00:00:00'
+    Text = '  :  :  '
     SpaceChar = '_'
   end
   object EndTime: TMaskEdit
     Left = 98
-    Height = 21
+    Height = 22
     Top = 130
     Width = 70
     CharCase = ecNormal
     MaxLength = 8
-    TabOrder = 9
+    TabOrder = 3
     OnChange = TargetChange
     EditMask = '00:00:00;1;_'
-    Text = '23:59:59'
+    Text = '  :  :  '
     SpaceChar = '_'
   end
   object BtnAnytime: TButton
@@ -176,17 +178,17 @@ object f_EditTargets: Tf_EditTargets
   end
   object Label7: TLabel
     Left = 14
-    Height = 15
+    Height = 16
     Top = 7
-    Width = 55
+    Width = 60
     Caption = 'Sequence'
     ParentColor = False
   end
   object LabelSeq: TLabel
     Left = 98
-    Height = 15
+    Height = 16
     Top = 8
-    Width = 49
+    Width = 57
     Caption = 'LabelSeq'
     ParentColor = False
   end

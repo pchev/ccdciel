@@ -54,6 +54,8 @@ type
     { private declarations }
   public
     { public declarations }
+    CurrentName, CurrentFile: string;
+    procedure LoadTargets(fn: string);
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
   end;
@@ -108,14 +110,14 @@ begin
    end;
 end;
 
-procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
+procedure Tf_sequence.LoadTargets(fn: string);
 var tfile: TCCDconfig;
     i,n: integer;
 begin
- OpenDialog1.InitialDir:=ConfigDir;
- if OpenDialog1.Execute then begin
    tfile:=TCCDconfig.Create(self);
-   tfile.Filename:=OpenDialog1.FileName;
+   tfile.Filename:=fn;
+   CurrentName:=ExtractFileNameOnly(fn);
+   CurrentFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
    if n>0 then begin
      TargetGrid.RowCount:=n+1;
@@ -128,6 +130,13 @@ begin
        TargetGrid.Cells[5,i]:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Dec','');
      end;
    end;
+end;
+
+procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
+begin
+ OpenDialog1.InitialDir:=ConfigDir;
+ if OpenDialog1.Execute then begin
+   LoadTargets(OpenDialog1.FileName);
  end;
 end;
 
@@ -141,7 +150,9 @@ begin
     tfile:=TCCDconfig.Create(self);
     tfile.Filename:=SaveDialog1.FileName;
     tfile.Clear;
-    tfile.SetValue('/ListName',ExtractFileNameWithoutExt(SaveDialog1.FileName));
+    CurrentName:=ExtractFileNameOnly(SaveDialog1.FileName);
+    CurrentFile:=SaveDialog1.FileName;
+    tfile.SetValue('/ListName',CurrentName);
     tfile.SetValue('/TargetNum',TargetGrid.RowCount-1);
     for i:=1 to TargetGrid.RowCount-1 do begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',TargetGrid.Cells[0,i]);
