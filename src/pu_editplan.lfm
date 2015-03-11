@@ -1,8 +1,159 @@
 object f_EditPlan: Tf_EditPlan
-  Left = 399
-  Height = 240
-  Top = 440
-  Width = 320
-  Caption = 'f_EditPlan'
+  Left = 389
+  Height = 285
+  Top = 644
+  Width = 298
+  Caption = 'Edit plan'
+  ClientHeight = 285
+  ClientWidth = 298
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poDefaultPosOnly
   LCLVersion = '1.4.0.3'
+  object Label1: TLabel
+    Left = 16
+    Height = 16
+    Top = 11
+    Width = 65
+    Caption = 'Plan name '
+    ParentColor = False
+  end
+  object PlanName: TLabel
+    Left = 110
+    Height = 16
+    Top = 11
+    Width = 61
+    Caption = 'PlanName'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 16
+    Height = 16
+    Top = 104
+    Width = 56
+    Caption = 'Exposure'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 16
+    Height = 16
+    Top = 200
+    Width = 37
+    Caption = 'Count'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 16
+    Height = 16
+    Top = 72
+    Width = 30
+    Caption = 'Type'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 16
+    Height = 16
+    Top = 168
+    Width = 33
+    Caption = 'Filter'
+    ParentColor = False
+  end
+  object Exposure: TEdit
+    Left = 110
+    Height = 22
+    Top = 104
+    Width = 80
+    TabOrder = 0
+    Text = '1'
+  end
+  object Filter: TComboBox
+    Left = 110
+    Height = 28
+    Top = 168
+    Width = 100
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 1
+  end
+  object Count: TEdit
+    Left = 110
+    Height = 22
+    Top = 201
+    Width = 80
+    TabOrder = 2
+    Text = '1'
+  end
+  object BtnClose: TButton
+    Left = 110
+    Height = 25
+    Top = 240
+    Width = 75
+    Caption = 'Close'
+    ModalResult = 11
+    TabOrder = 3
+  end
+  object FrameType: TComboBox
+    Left = 110
+    Height = 24
+    Top = 72
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'Light'
+      'Bias'
+      'Dark'
+      'Flat'
+    )
+    Style = csDropDownList
+    TabOrder = 4
+    Text = 'Light'
+  end
+  object Label6: TLabel
+    Left = 16
+    Height = 16
+    Top = 136
+    Width = 43
+    Caption = 'Binning'
+    ParentColor = False
+  end
+  object Binning: TComboBox
+    Left = 110
+    Height = 28
+    Top = 136
+    Width = 100
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 5
+  end
+  object Label7: TLabel
+    Left = 16
+    Height = 16
+    Top = 40
+    Width = 29
+    Caption = 'Step'
+    ParentColor = False
+  end
+  object Step: TComboBox
+    Left = 110
+    Height = 22
+    Top = 40
+    Width = 100
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      '1'
+    )
+    Style = csDropDownList
+    TabOrder = 6
+    Text = '1'
+  end
+  object BtnAddStep: TButton
+    Left = 216
+    Height = 25
+    Top = 40
+    Width = 75
+    Caption = 'Add'
+    TabOrder = 7
+  end
 end

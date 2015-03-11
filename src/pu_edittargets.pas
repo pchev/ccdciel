@@ -38,8 +38,7 @@ type
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
-    procedure BtnEditPlanClick(Sender: TObject);
-    procedure BtnNewPlanClick(Sender: TObject);
+    procedure BtnPlanClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -48,6 +47,8 @@ type
   private
     { private declarations }
     LockTarget: boolean;
+    Function FormEntry(lbl,defaultstr:string):string;
+    procedure LoadPlanList;
   public
     { public declarations }
     procedure ClearObjectList;
@@ -73,19 +74,27 @@ begin
 end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
-var i: integer;
-    fs : TSearchRec;
 begin
+  LoadPlanList;
   if ObjectList.Items.Count>0 then begin
      ObjectList.ItemIndex:=0;
      ObjectListChange(nil);
   end
-  else
+  else begin
     LabelSeq.Caption:='0';
+    StartTime.Text:='00:00:00';
+    EndTime.Text:='23:59:59';
+  end;
+end;
+
+procedure Tf_EditTargets.LoadPlanList;
+var i: integer;
+    fs : TSearchRec;
+begin
   PlanList.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.plan',0,fs);
   while i=0 do begin
-    PlanList.Items.Add(ExtractFileNameWithoutExt(fs.Name));
+    PlanList.Items.Add(ExtractFileNameOnly(fs.Name));
     i:=FindNextUTF8(fs);
   end;
   FindCloseUTF8(fs);
@@ -100,17 +109,7 @@ begin
   ObjectList.Clear;
 end;
 
-procedure Tf_EditTargets.BtnNewPlanClick(Sender: TObject);
-begin
-
-end;
-
-procedure Tf_EditTargets.BtnEditPlanClick(Sender: TObject);
-begin
-  f_EditPlan.ShowModal;
-end;
-
-procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
+Function Tf_EditTargets.FormEntry(lbl,defaultstr:string):string;
 var f: TForm;
     l: Tlabel;
     e: Tedit;
@@ -122,9 +121,9 @@ begin
   l:=TLabel.Create(f);
   e:=TEdit.Create(f);
   b:=TButton.Create(f);
-  l.Caption:='Object name';
+  l.Caption:=lbl;
   l.Parent:=f;
-  e.Text:='None';
+  e.Text:=defaultstr;
   e.Parent:=f;
   b.Caption:='OK';
   b.ModalResult:=mrOK;
@@ -134,15 +133,38 @@ begin
   f.AutoSize:=true;
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
   f.ShowModal;
-  if f.ModalResult=mrOK then begin
-    t:=TTarget.Create;
-    i:=ObjectList.Items.AddObject(e.text,t);
-    ObjectList.ItemIndex:=i;
-    PointRA.Text:='-';
-    PointDEC.Text:='-';
-    TargetChange(nil);
+  if f.ModalResult=mrOK then
+    result:=e.Text
+  else
+    result:=defaultstr;
+  f.free;
+end;
+
+procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
+begin
+  if Sender=BtnNewPlan then
+    f_EditPlan.PlanName.Caption:=FormEntry('New plan','Plan')
+  else
+    f_EditPlan.PlanName.Caption:=PlanList.Text;
+  f_EditPlan.ShowModal;
+  if Sender=BtnNewPlan then begin
+     LoadPlanList;
+     PlanList.Text:=f_EditPlan.PlanName.Caption;
   end;
-  f.Free;
+end;
+
+procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
+var txt:string;
+    i: integer;
+    t: TTarget;
+begin
+  txt:=FormEntry('Object name','None');
+  t:=TTarget.Create;
+  i:=ObjectList.Items.AddObject(txt,t);
+  ObjectList.ItemIndex:=i;
+  PointRA.Text:='-';
+  PointDEC.Text:='-';
+  TargetChange(nil);
 end;
 
 procedure Tf_EditTargets.BtnDeleteObjectClick(Sender: TObject);
