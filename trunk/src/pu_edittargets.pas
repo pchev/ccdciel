@@ -6,7 +6,7 @@ interface
 
 uses pu_editplan, u_ccdconfig, u_global, u_utils, Classes, SysUtils,
   FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  EditBtn, maskedit;
+  EditBtn, maskedit, ValEdit, Grids;
 
 type
 
@@ -20,12 +20,12 @@ type
     BtnAnytime: TButton;
     BtnCurrentCoord: TButton;
     BtnClose: TButton;
+    ObjectName: TEdit;
     Label7: TLabel;
     LabelSeq: TLabel;
     StartTime: TMaskEdit;
     EndTime: TMaskEdit;
     PlanList: TComboBox;
-    ObjectList: TComboBox;
     PointRA: TEdit;
     PointDEC: TEdit;
     Label1: TLabel;
@@ -34,6 +34,7 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    TargetList: TStringGrid;
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
@@ -42,16 +43,16 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ObjectListChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
+    procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
   private
     { private declarations }
     LockTarget: boolean;
-    Function FormEntry(lbl,defaultstr:string):string;
     procedure LoadPlanList;
+    procedure ResetSequences;
   public
     { public declarations }
-    procedure ClearObjectList;
+    procedure ClearTargetList;
   end;
 
 var
@@ -70,15 +71,15 @@ end;
 
 procedure Tf_EditTargets.FormDestroy(Sender: TObject);
 begin
-  ClearObjectList;
+  ClearTargetList;
 end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
   LoadPlanList;
-  if ObjectList.Items.Count>0 then begin
-     ObjectList.ItemIndex:=0;
-     ObjectListChange(nil);
+  if TargetList.RowCount>1 then begin
+     TargetList.Row:=1;
+     TargetListSelection(nil,0,1);
   end
   else begin
     LabelSeq.Caption:='0';
@@ -100,52 +101,23 @@ begin
   FindCloseUTF8(fs);
 end;
 
-procedure Tf_EditTargets.ClearObjectList;
+procedure Tf_EditTargets.ClearTargetList;
 var i: integer;
 begin
-  for i:=0 to ObjectList.Items.Count-1 do begin
-    ObjectList.Items.Objects[i].Free;
+  for i:=1 to TargetList.RowCount-1 do begin
+    if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free;
+    TargetList.Objects[0,i]:=nil;
   end;
-  ObjectList.Clear;
-end;
-
-Function Tf_EditTargets.FormEntry(lbl,defaultstr:string):string;
-var f: TForm;
-    l: Tlabel;
-    e: Tedit;
-    b: TButton;
-    i: integer;
-    t: TTarget;
-begin
-  f:=TForm.Create(self);
-  l:=TLabel.Create(f);
-  e:=TEdit.Create(f);
-  b:=TButton.Create(f);
-  l.Caption:=lbl;
-  l.Parent:=f;
-  e.Text:=defaultstr;
-  e.Parent:=f;
-  b.Caption:='OK';
-  b.ModalResult:=mrOK;
-  b.Parent:=f;
-  f.ChildSizing.ControlsPerLine:=2;
-  f.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
-  f.AutoSize:=true;
-  FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
-  f.ShowModal;
-  if f.ModalResult=mrOK then
-    result:=e.Text
-  else
-    result:=defaultstr;
-  f.free;
+  TargetList.RowCount:=1;
 end;
 
 procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
 begin
   if Sender=BtnNewPlan then
-    f_EditPlan.PlanName.Caption:=FormEntry('New plan','Plan')
+    f_EditPlan.PlanName.Caption:=FormEntry(self,'New plan','Plan')
   else
     f_EditPlan.PlanName.Caption:=PlanList.Text;
+  FormPos(f_EditPlan,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_EditPlan.ShowModal;
   if Sender=BtnNewPlan then begin
      LoadPlanList;
@@ -158,18 +130,42 @@ var txt:string;
     i: integer;
     t: TTarget;
 begin
-  txt:=FormEntry('Object name','None');
+  txt:=FormEntry(self,'Object name','None');
   t:=TTarget.Create;
-  i:=ObjectList.Items.AddObject(txt,t);
-  ObjectList.ItemIndex:=i;
+  TargetList.RowCount:=TargetList.RowCount+1;
+  i:=TargetList.RowCount-1;
+  TargetList.Cells[0,i]:=IntToStr(i);
+  TargetList.Cells[1,i]:=txt;
+  TargetList.Objects[0,i]:=t;
+  TargetList.Row:=i;
+  ObjectName.Text:=txt;
   PointRA.Text:='-';
   PointDEC.Text:='-';
   TargetChange(nil);
 end;
 
 procedure Tf_EditTargets.BtnDeleteObjectClick(Sender: TObject);
+var i: integer;
+    str: string;
 begin
+  i:=TargetList.Row;
+  if i>0 then begin
+     str:=TargetList.Cells[0,i]+', '+TargetList.Cells[1,i];
+     if MessageDlg('Delete sequence '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+        if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free;
+        TargetList.Objects[0,i]:=nil;
+        TargetList.DeleteRow(i);
+     end;
+  end;
+  ResetSequences;
+end;
 
+procedure Tf_EditTargets.ResetSequences;
+var i: integer;
+begin
+  for i:=1 to TargetList.RowCount-1 do begin
+    TargetList.Cells[0,i]:=IntToStr(i);
+  end;
 end;
 
 procedure Tf_EditTargets.BtnAnytimeClick(Sender: TObject);
@@ -184,14 +180,15 @@ begin
   PointDEC.Text:='-';
 end;
 
-procedure Tf_EditTargets.ObjectListChange(Sender: TObject);
+procedure Tf_EditTargets.TargetListSelection(Sender: TObject; aCol, aRow: Integer);
 var n:integer;
     t: TTarget;
 begin
   LockTarget:=true;
-  n:=ObjectList.ItemIndex;
-  LabelSeq.Caption:=IntToStr(n+1);
-  t:=TTarget(ObjectList.Items.Objects[n]);
+  n:=aRow;
+  LabelSeq.Caption:=IntToStr(n);
+  t:=TTarget(TargetList.Objects[0,n]);
+  ObjectName.Text:=t.objectname;
   PlanList.Text:=t.plan;
   StartTime.Text:=TimeToStr(t.starttime);
   EndTime.Text:=TimeToStr(t.endtime);
@@ -211,10 +208,10 @@ var n:integer;
     t: TTarget;
 begin
   if LockTarget then exit;
-  n:=ObjectList.ItemIndex;
-  if n < 0 then exit;
-  t:=TTarget(ObjectList.Items.Objects[n]);
-  t.objectname:=ObjectList.Text;
+  n:=TargetList.Row;
+  if n < 1 then exit;
+  t:=TTarget(TargetList.Objects[0,n]);
+  t.objectname:=ObjectName.Text;
   t.plan:=PlanList.Text;
   t.starttime:=StrToTime(StartTime.Text);
   t.endtime:=StrToTime(EndTime.Text);
@@ -226,7 +223,9 @@ begin
     t.de:=NullCoord
   else
     t.de:=StrToDE(PointDEC.Text);
+  TargetList.Cells[1,n]:=t.objectname;
 end;
+
 
 end.
 

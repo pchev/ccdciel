@@ -32,11 +32,12 @@ uses u_global,
        unix,
      {$endif}
      process, SysUtils, Classes, LCLType, FileUtil,
-     Math, Forms,Graphics;
+     Math, Forms, Controls, StdCtrls, Graphics;
 
 function InvertF32(X : LongWord) : Single;
 function InvertF64(X : Int64) : Double;
 Procedure FormPos(form : Tform; x,y : integer);
+Function FormEntry(aOwner:TComponent; lbl,defaultstr:string):string;
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
 Procedure SplitCmd(S : String; List : TStringList);
 function Slash(nom : string) : string;
@@ -100,6 +101,37 @@ with Form do begin
   if top+height>(Screen.height-margin) then top:=Screen.height-height-margin;
   if top<0 then top:=0;
 end;
+end;
+
+Function FormEntry(aOwner:TComponent; lbl,defaultstr:string):string;
+var f: TForm;
+    l: Tlabel;
+    e: Tedit;
+    b: TButton;
+    i: integer;
+    t: TTarget;
+begin
+  f:=TForm.Create(aOwner);
+  l:=TLabel.Create(f);
+  e:=TEdit.Create(f);
+  b:=TButton.Create(f);
+  l.Caption:=lbl;
+  l.Parent:=f;
+  e.Text:=defaultstr;
+  e.Parent:=f;
+  b.Caption:='OK';
+  b.ModalResult:=mrOK;
+  b.Parent:=f;
+  f.ChildSizing.ControlsPerLine:=2;
+  f.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
+  f.AutoSize:=true;
+  FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f.ShowModal;
+  if f.ModalResult=mrOK then
+    result:=e.Text
+  else
+    result:=defaultstr;
+  f.free;
 end;
 
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
