@@ -4,8 +4,8 @@ unit pu_editplan;
 
 interface
 
-uses u_ccdconfig, u_global, u_utils,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+uses u_ccdconfig, u_global, u_utils, Classes, SysUtils, FileUtil, Forms,
+  Controls, Graphics, Dialogs, StdCtrls, ValEdit, Grids, ExtCtrls;
 
 type
 
@@ -14,7 +14,14 @@ type
   Tf_EditPlan = class(TForm)
     BtnClose: TButton;
     BtnAddStep: TButton;
-    Step: TComboBox;
+    BtnDeleteStep: TButton;
+    Desc: TEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    RepeatCount: TEdit;
+    Delay: TEdit;
     FrameType: TComboBox;
     Filter: TComboBox;
     Binning: TComboBox;
@@ -27,13 +34,28 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
+    Label8: TLabel;
+    lblStepNum: TLabel;
+    Notebook1: TNotebook;
+    Page1: TPage;
     PlanName: TLabel;
+    StepList: TStringGrid;
+    procedure BtnAddStepClick(Sender: TObject);
+    procedure BtnDeleteStepClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FrameTypeChange(Sender: TObject);
+    procedure StepChange(Sender: TObject);
+    procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
   private
     { private declarations }
+    LockStep: boolean;
+    procedure ResetSteps;
   public
     { public declarations }
+    procedure ClearStepList;
   end;
 
 var
@@ -45,51 +67,208 @@ implementation
 
 { Tf_EditPlan }
 
+procedure Tf_EditPlan.FormCreate(Sender: TObject);
+begin
+ LockStep:=false;
+end;
+
+procedure Tf_EditPlan.FormDestroy(Sender: TObject);
+begin
+ ClearStepList;
+end;
+
 procedure Tf_EditPlan.FormShow(Sender: TObject);
 var pfile: TCCDconfig;
-    fn,str: string;
-    i:integer;
+    fn,str,buf: string;
+    i,j,n:integer;
+    p: TPlan;
 begin
+  ClearStepList;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   if FileExistsUTF8(fn) then begin
     pfile:=TCCDconfig.Create(self);
     pfile.Filename:=fn;
-    str:=pfile.GetValue('/FrameType','Light');
-    i:=FrameType.Items.IndexOf(str);
-    if i<0 then i:=0;
-    FrameType.ItemIndex:=i;
-    str:=pfile.GetValue('/Binning','1x1');
-    i:=Binning.Items.IndexOf(str);
-    if i<0 then i:=0;
-    Binning.ItemIndex:=i;
-    str:=pfile.GetValue('/Filter','');
-    i:=Filter.Items.IndexOf(str);
-    if i<0 then i:=0;
-    Filter.ItemIndex:=i;
-    Exposure.Text:=pfile.GetValue('/Exposure','1');
-    Count.Text:=pfile.GetValue('/Count','1');
+    n:=pfile.GetValue('/StepNum',0);
+    StepList.RowCount:=n+1;
+    for i:=1 to n do begin
+      p:=TPlan.Create;
+      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
+      StepList.Cells[0,i]:=IntToStr(i);
+      StepList.Cells[1,i]:=str;
+      StepList.Objects[0,i]:=p;
+      p.description:=str;
+      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light');
+      j:=FrameType.Items.IndexOf(str);
+      if j<0 then j:=0;
+      p.frtype:=TFrameType(j);
+      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1');
+      j:=Binning.Items.IndexOf(str);
+      if j<0 then j:=0;
+      j:=pos('x',str);
+      if j>0 then begin
+         buf:=trim(copy(str,1,j-1));
+         p.binx:=StrToIntDef(buf,1);
+         buf:=trim(copy(str,j+1,9));
+         p.biny:=StrToIntDef(buf,1);
+      end else begin
+        p.binx:=1;
+        p.biny:=1;
+      end;
+      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
+      j:=Filter.Items.IndexOf(str);
+      if j<0 then j:=0;
+      p.filter:=j+1;
+      p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
+      p.count:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1);
+      p.repeatcount:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1);
+      p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
+    end;
     pfile.Free;
+    StepListSelection(nil,0,1);
+  end;
+end;
+
+procedure Tf_EditPlan.ClearStepList;
+var i: integer;
+begin
+  for i:=1 to StepList.RowCount-1 do begin
+    if StepList.Objects[0,i]<>nil then StepList.Objects[0,i].Free;
+    StepList.Objects[0,i]:=nil;
+  end;
+  StepList.RowCount:=1;
+end;
+
+procedure Tf_EditPlan.FrameTypeChange(Sender: TObject);
+begin
+  case FrameType.ItemIndex of
+    0..3 : Notebook1.PageIndex:=0;
+
+  end;
+  StepChange(Sender);
+end;
+
+procedure Tf_EditPlan.StepListSelection(Sender: TObject; aCol, aRow: Integer);
+var n:integer;
+    p: TPlan;
+begin
+  LockStep:=true;
+  n:=aRow;
+  lblStepNum.Caption:=IntToStr(n);
+  p:=TPlan(StepList.Objects[0,n]);
+  Desc.Text:=p.description;
+  FrameType.ItemIndex:=ord(p.frtype);
+  Exposure.Text:=FloatToStr(p.exposure);
+  Binning.Text:=IntToStr(p.binx)+'x'+IntToStr(p.biny);
+  Filter.ItemIndex:=p.filter-1;
+  Count.Text:=IntToStr(p.count);
+  RepeatCount.Text:=IntToStr(p.repeatcount);
+  Delay.Text:=FloatToStr(p.delay);
+  LockStep:=false;
+end;
+
+procedure Tf_EditPlan.StepChange(Sender: TObject);
+var n,j:integer;
+    p: TPlan;
+    str,buf: string;
+begin
+  if LockStep then exit;
+  n:=StepList.Row;
+  if n < 1 then exit;
+  p:=TPlan(StepList.Objects[0,n]);
+  p.description:=Desc.Text;
+  p.frtype:=TFrameType(FrameType.ItemIndex);
+  p.exposure:=StrToFloatDef(Exposure.Text,1);
+  str:=Binning.Text;
+  j:=pos('x',str);
+  if j>0 then begin
+     buf:=trim(copy(str,1,j-1));
+     p.binx:=StrToIntDef(buf,1);
+     buf:=trim(copy(str,j+1,9));
+     p.biny:=StrToIntDef(buf,1);
+  end else begin
+    p.binx:=1;
+    p.biny:=1;
+  end;
+  p.filter:=Filter.ItemIndex+1;
+  p.count:=StrToIntDef(Count.Text,1);
+  p.repeatcount:=StrToIntDef(RepeatCount.Text,1);
+  p.delay:=StrToFloatDef(Delay.Text,1);
+  StepList.Cells[1,n]:=p.description;
+end;
+
+procedure Tf_EditPlan.BtnAddStepClick(Sender: TObject);
+var txt:string;
+    i: integer;
+    p: TPlan;
+begin
+  txt:=FormEntry(self,'Step description','');
+  p:=TPlan.Create;
+  StepList.RowCount:=StepList.RowCount+1;
+  i:=StepList.RowCount-1;
+  StepList.Cells[0,i]:=IntToStr(i);
+  StepList.Cells[1,i]:=txt;
+  StepList.Objects[0,i]:=p;
+  StepList.Row:=i;
+  Desc.Text:=txt;
+  StepChange(nil);
+end;
+
+procedure Tf_EditPlan.BtnDeleteStepClick(Sender: TObject);
+var i: integer;
+    str: string;
+begin
+  i:=StepList.Row;
+  if i>0 then begin
+     str:=StepList.Cells[0,i]+', '+StepList.Cells[1,i];
+     if MessageDlg('Delete step '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+        if StepList.Objects[0,i]<>nil then StepList.Objects[0,i].Free;
+        StepList.Objects[0,i]:=nil;
+        StepList.DeleteRow(i);
+     end;
+  end;
+  ResetSteps;
+end;
+
+procedure Tf_EditPlan.ResetSteps;
+var i: integer;
+begin
+  for i:=1 to StepList.RowCount-1 do begin
+    StepList.Cells[0,i]:=IntToStr(i);
   end;
 end;
 
 procedure Tf_EditPlan.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 var pfile: TCCDconfig;
     fn,str: string;
-    i:integer;
+    i,n,k: integer;
+    p: TPlan;
 begin
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   pfile:=TCCDconfig.Create(self);
   pfile.Filename:=fn;
   pfile.Clear;
-  pfile.SetValue('/FrameType',FrameType.Text);
-  pfile.SetValue('/Binning',Binning.Text);
-  pfile.SetValue('/Filter',Filter.Text);
-  pfile.SetValue('/Exposure',Exposure.Text);
-  pfile.SetValue('/Count',Count.Text);
+  n:=StepList.RowCount-1;
+  pfile.SetValue('/PlanName',PlanName.Caption);
+  pfile.SetValue('/StepNum',n);
+  for i:=1 to n do begin
+    p:=TPlan(StepList.Objects[0,i]);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',FrameType.Items[ord(p.frtype)]);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
+    k:=p.filter-1;
+    if (k<0)or(k>Filter.Items.Count-1) then str:=''
+       else str:=Filter.Items[k];
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Filter',str);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',IntToStr(p.count));
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',IntToStr(p.repeatcount));
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
+  end;
   pfile.Flush;
   pfile.Free;
   ModalResult:=mrOK;
 end;
+
 
 end.
 

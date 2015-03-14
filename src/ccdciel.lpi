@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -88,6 +90,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="--config=simulation"/>
       </local>
     </RunParams>
     <RequiredPackages Count="4">
@@ -194,6 +197,7 @@
         <ComponentName Value="f_filterwheel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_filterwheel"/>
       </Unit14>
       <Unit15>
         <Filename Value="fu_focuser.pas"/>
@@ -259,6 +263,7 @@
         <ComponentName Value="f_valueseditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_valueseditor"/>
       </Unit28>
       <Unit29>
         <Filename Value="fu_ccdtemp.pas"/>
@@ -366,6 +371,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

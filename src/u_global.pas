@@ -48,7 +48,9 @@ type
               exposure, delay: double;
               count, repeatcount: integer;
               filter: integer;
+              binx,biny: integer;
               frtype: TFrameType;
+              description: string;
             end;
 
   {$i revision.inc}

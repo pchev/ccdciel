@@ -34,6 +34,7 @@ type
 
   Tf_sequence = class(TFrame)
     BtnEditTargets: TButton;
+    BtnNewTargets: TButton;
     BtnSaveTargets: TButton;
     BtnLoadTargets: TButton;
     OpenDialog1: TOpenDialog;
@@ -71,8 +72,8 @@ procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i:integer;
     t:TTarget;
 begin
-   f_EditTargets.ClearObjectList;
-   if TargetGrid.RowCount>1 then begin
+   f_EditTargets.ClearTargetList;
+   if (Sender=BtnEditTargets)and(TargetGrid.RowCount>1) then begin
      for i:=1 to TargetGrid.RowCount-1 do begin
        t:=TTarget.Create;
        t.objectname:=TargetGrid.Cells[0,i];
@@ -87,25 +88,29 @@ begin
          t.de:=NullCoord
        else
          t.de:=StrToDE(TargetGrid.Cells[5,i]);
-       f_EditTargets.ObjectList.Items.AddObject(TargetGrid.Cells[0,i],t);
+       f_EditTargets.TargetList.RowCount:=i+1;
+       f_EditTargets.TargetList.Cells[0,i]:=IntToStr(i);
+       f_EditTargets.TargetList.Cells[1,i]:=t.objectname;
+       f_EditTargets.TargetList.Objects[0,i]:=t;
      end;
    end;
+   FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_EditTargets.ShowModal;
-   TargetGrid.RowCount:=f_EditTargets.ObjectList.Items.Count+1;
-   for i:=0 to f_EditTargets.ObjectList.Items.Count-1 do begin
-     with f_EditTargets.ObjectList.Items.Objects[i] as TTarget do begin
-       TargetGrid.Cells[0,i+1]:=objectname;
-       TargetGrid.Cells[1,i+1]:=plan;
-       TargetGrid.Cells[2,i+1]:=FormatDateTime('hh:nn:ss',starttime);
-       TargetGrid.Cells[3,i+1]:=FormatDateTime('hh:nn:ss',endtime);;
+   TargetGrid.RowCount:=f_EditTargets.TargetList.RowCount;
+   for i:=1 to f_EditTargets.TargetList.RowCount-1 do begin
+     with f_EditTargets.TargetList.Objects[0,i] as TTarget do begin
+       TargetGrid.Cells[0,i]:=objectname;
+       TargetGrid.Cells[1,i]:=plan;
+       TargetGrid.Cells[2,i]:=FormatDateTime('hh:nn:ss',starttime);
+       TargetGrid.Cells[3,i]:=FormatDateTime('hh:nn:ss',endtime);;
        if ra=NullCoord then
-         TargetGrid.Cells[4,i+1]:='-'
+         TargetGrid.Cells[4,i]:='-'
        else
-         TargetGrid.Cells[4,i+1]:=RAToStr(ra);
+         TargetGrid.Cells[4,i]:=RAToStr(ra);
        if de=NullCoord then
-         TargetGrid.Cells[5,i+1]:='-'
+         TargetGrid.Cells[5,i]:='-'
        else
-         TargetGrid.Cells[5,i+1]:=DEToStr(de);
+         TargetGrid.Cells[5,i]:=DEToStr(de);
      end;
    end;
 end;
@@ -135,6 +140,7 @@ end;
 procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
 begin
  OpenDialog1.InitialDir:=ConfigDir;
+ OpenDialog1.FileName:='*.targets';
  if OpenDialog1.Execute then begin
    LoadTargets(OpenDialog1.FileName);
  end;
