@@ -147,7 +147,10 @@ end;
 
 function TPlan.filter_str: string;
 begin
-  Result:=Filters[filter-1];
+  if Filters.Count=0 then
+    Result:=''
+  else
+    Result:=Filters[filter-1];
 end;
 
 function TPlan.binning_str: string;
