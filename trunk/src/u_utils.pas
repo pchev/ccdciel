@@ -393,22 +393,34 @@ end;
 end;
 
 Function StrToDE(dms : string) : double;
-var s,p : integer;
+type tseplist=array[1..3] of string;
+var s,p,d1 : integer;
     t : string;
+    sep: tseplist;
+const
+    sep1: tseplist = ('d','m','s');
+    sep2: tseplist = ('°','''','"');
 begin
 try
 dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
 if copy(dms,1,1)='-' then s:=-1 else s:=1;
-p:=pos('d',dms);
+sep:=sep1;
+d1:=length(sep[1])-1;
+p:=pos(sep[1],dms);
+if p=0 then begin
+  sep:=sep2;
+  d1:=length(sep[1])-1;
+  p:=pos(sep[1],dms);
+end;
 if p=0 then
   result:=StrToFloatDef(dms,0)
 else begin
-t:=copy(dms,1,p-1); delete(dms,1,p);
+t:=copy(dms,1,p-1); delete(dms,1,p+d1);
 result:=StrToIntDef(t,0);
-p:=pos('m',dms);
+p:=pos(sep[2],dms);
 t:=copy(dms,1,p-1); delete(dms,1,p);
 result:=result+ s * StrToIntDef(t,0) / 60;
-p:=pos('s',dms);
+p:=pos(sep[3],dms);
 t:=copy(dms,1,p-1);
 result:=result+ s * StrToFloatDef(t,0) / 3600;
 end;
