@@ -476,6 +476,10 @@ begin
   f_autoguider.Status.Text:='Disconnected';
 
   f_sequence:=Tf_sequence.Create(self);
+  f_sequence.onMsg:=@NewMessage;
+  f_sequence.Preview:=f_preview;
+  f_sequence.Capture:=f_capture;
+  f_sequence.Filter:=f_filterwheel;
 
   fits:=TFits.Create(self);
 
@@ -1580,6 +1584,9 @@ begin
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
+   f_option.SubfolderSequence.Checked:=config.GetValue('/Files/SubfolderSequence',false);
+   f_option.SubfolderObjname.Checked:=config.GetValue('/Files/SubfolderObjname',false);
+   f_option.SubfolderFrametype.Checked:=config.GetValue('/Files/SubfolderFrametype',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -1613,6 +1620,9 @@ begin
 
    if f_option.ModalResult=mrOK then begin
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
+     config.SetValue('/Files/SubfolderSequence',f_option.SubfolderSequence.Checked);
+     config.SetValue('/Files/SubfolderObjname',f_option.SubfolderObjname.Checked);
+     config.SetValue('/Files/SubfolderFrametype',f_option.SubfolderFrametype.Checked);
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
@@ -1796,7 +1806,7 @@ if (camera.Status=devConnected) and (not Capture) then begin
   Preview:=true;
   PreviewLoop:=f_preview.Loop;
   e:=StrToFloatDef(f_preview.ExpTime.Text,-1);
-  if (e<camera.ExposureRange.min)or(e>camera.ExposureRange.max) then begin
+  if e<0 then begin
     NewMessage('Invalid exposure time '+f_preview.ExpTime.Text);
     f_preview.stop;
     Preview:=false;
@@ -2011,6 +2021,7 @@ end;
 procedure Tf_main.CameraNewImage(Sender: TObject);
 var dt: Tdatetime;
     fn,imgsize: string;
+    subseq,subobj,subfrt: boolean;
 begin
   dt:=NowUTC;
   ImgFrameX:=FrameX;
@@ -2023,9 +2034,19 @@ begin
   DrawImage;
   DrawHistogram;
   if Capture then begin
-     fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath))
-         +f_capture.Fname.Text+'_';
-     if wheel.Status=devConnected then
+     subseq:=config.GetValue('/Files/SubfolderSequence',false);
+     subobj:=config.GetValue('/Files/SubfolderObjname',false);
+     subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
+     fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+     if subseq and f_sequence.Running then fn:=slash(fn+f_sequence.CurrentName);
+     if subfrt then fn:=slash(fn+f_capture.FrameType.Text);
+     if subobj then fn:=slash(fn+f_capture.Fname.Text);
+     ForceDirectoriesUTF8(fn);
+     if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then
+         fn:=fn+f_capture.Fname.Text+'_'
+     else
+         fn:=fn+f_capture.FrameType.Text+'_';
+     if (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
          fn:=fn+wheel.FilterNames[wheel.Filter-1]+'_';
      fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
          +'.fits';
