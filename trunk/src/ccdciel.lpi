@@ -157,6 +157,7 @@
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -214,6 +215,7 @@
         <ComponentName Value="f_mount"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_mount"/>
       </Unit16>
       <Unit17>
         <Filename Value="cu_fits.pas"/>
@@ -243,6 +245,7 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -255,6 +258,7 @@
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>

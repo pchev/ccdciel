@@ -37,6 +37,8 @@ T_indimount = class(TIndiBaseClient)
    coord_prop: INumberVectorProperty;
    coord_ra:   INumber;
    coord_dec:  INumber;
+   CoordSet: ISwitchVectorProperty;
+   CoordSetTrack,CoordSetSlew,CoordSetSync: ISwitch;
    TelescopeInfo: INumberVectorProperty;
    TelescopeAperture, TelescopeFocale: INumber;
    eod_coord:  boolean;
@@ -70,6 +72,8 @@ T_indimount = class(TIndiBaseClient)
    destructor  Destroy; override;
    Procedure Connect;
    Procedure Disconnect;
+   procedure Slew(ra,de: double);
+   procedure Sync(ra,de: double);
    property indiserver: string read Findiserver write Findiserver;
    property indiserverport: string read Findiserverport write Findiserverport;
    property indidevice: string read Findidevice write Findidevice;
@@ -134,6 +138,7 @@ begin
     Mountport:=nil;
     TelescopeInfo:=nil;
     coord_prop:=nil;
+    CoordSet:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -241,13 +246,19 @@ begin
       eod_coord:=false;
       if (coord_ra=nil)or(coord_dec=nil) then coord_prop:=nil;
    end
-  else if (proptype=INDI_NUMBER)and(propname='TELESCOPE_INFO') then begin
-     TelescopeInfo:=indiProp.getNumber;
-     TelescopeAperture:=IUFindNumber(TelescopeInfo,'TELESCOPE_APERTURE');
-     TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
-     if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
-  end;
-  CheckStatus;
+   else if (proptype=INDI_SWITCH)and(propname='ON_COORD_SET') then begin
+      CoordSet:=indiProp.getSwitch;
+      CoordSetTrack:=IUFindSwitch(CoordSet,'TRACK');
+      CoordSetSlew:=IUFindSwitch(CoordSet,'SLEW');
+      CoordSetSync:=IUFindSwitch(CoordSet,'SYNC');
+   end
+   else if (proptype=INDI_NUMBER)and(propname='TELESCOPE_INFO') then begin
+      TelescopeInfo:=indiProp.getNumber;
+      TelescopeAperture:=IUFindNumber(TelescopeInfo,'TELESCOPE_APERTURE');
+      TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
+      if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
+   end;
+   CheckStatus;
 end;
 
 procedure T_indimount.NewNumber(nvp: INumberVectorProperty);
@@ -308,6 +319,32 @@ if TelescopeInfo<>nil then begin;
   result:=TelescopeFocale.value;
 end
 else result:=-1;
+end;
+
+procedure T_indimount.Slew(ra,de: double);
+begin
+  if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    IUResetSwitch(CoordSet);
+    CoordSetTrack.s:=ISS_ON;
+    sendNewSwitch(CoordSet);
+    coord_ra.value:=ra;
+    coord_dec.value:=de;
+    sendNewNumber(coord_prop);
+    WaitBusy(coord_prop,120000);
+  end;
+end;
+
+procedure T_indimount.Sync(ra,de: double);
+begin
+  if (CoordSet<>nil) and (CoordSetSync<>nil) and (coord_prop<>nil) then begin
+    IUResetSwitch(CoordSet);
+    CoordSetSync.s:=ISS_ON;
+    sendNewSwitch(CoordSet);
+    coord_ra.value:=ra;
+    coord_dec.value:=de;
+    sendNewNumber(coord_prop);
+    WaitBusy(coord_prop);
+  end;
 end;
 
 end.

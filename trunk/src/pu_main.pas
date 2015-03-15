@@ -480,6 +480,7 @@ begin
   f_sequence.Preview:=f_preview;
   f_sequence.Capture:=f_capture;
   f_sequence.Filter:=f_filterwheel;
+  f_sequence.Mount:=mount;
 
   fits:=TFits.Create(self);
 

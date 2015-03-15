@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils,
-  fu_capture, fu_preview, fu_filterwheel,
+  fu_capture, fu_preview, fu_filterwheel, cu_mount,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -73,6 +73,7 @@ type
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
     Ffilter: Tf_filterwheel;
+    Fmount: T_mount;
     procedure InitTarget;
     procedure StartPlan;
     procedure StartStep;
@@ -90,6 +91,7 @@ type
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
     property Filter: Tf_filterwheel read Ffilter write Ffilter;
+    property Mount: T_mount read Fmount write Fmount;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -342,10 +344,17 @@ begin
 end;
 
 procedure Tf_sequence.InitTarget;
+var t: TTarget;
 begin
-  msg('Initialize target '+TTarget(TargetGrid.Objects[0,TargetRow]).objectname);
+  t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+  msg('Initialize target '+t.objectname);
+  { TODO :  }
   // check if current time in range
   // slew to coordinates
+  if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
+     Mount.Slew(t.ra, t.de);
+     // astrometry
+  end;
   // start guiding
   // etc...
 end;
