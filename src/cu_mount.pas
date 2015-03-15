@@ -57,6 +57,8 @@ T_mount = class(TObject)
     Procedure Connect(indiserver, indiserverport, indidevice, indideviceport: string);
     Procedure Connect(ascomdevice: string);
     Procedure Disconnect;
+    procedure Slew(ra,de: double);
+    procedure Sync(ra,de: double);
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read GetMountStatus;
     property RA: double read GetRA;
@@ -288,6 +290,31 @@ begin
            end;
  end;
 end;
+
+procedure T_mount.Slew(ra,de: double);
+begin
+ case FMountInterface of
+    INDI : begin
+             if indiready then indimount.Slew(ra,de);
+           end;
+    ASCOM: begin
+             //ascommount.Slew(ra,de);
+           end;
+ end;
+end;
+
+procedure T_mount.Sync(ra,de: double);
+begin
+ case FMountInterface of
+    INDI : begin
+             if indiready then indimount.Sync(ra,de);
+           end;
+    ASCOM: begin
+             //ascommount.Sync(ra,de);
+           end;
+ end;
+end;
+
 
 end.
 
