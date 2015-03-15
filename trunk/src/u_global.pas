@@ -40,17 +40,27 @@ type
               end;
 
   TTarget = Class(TObject)
+              public
               objectname, plan: string;
               starttime,endtime,ra,de: double;
             end;
 
   TPlan   = Class(TObject)
+              public
               exposure, delay: double;
               count, repeatcount: integer;
               filter: integer;
               binx,biny: integer;
               frtype: TFrameType;
               description: string;
+              function exposure_str: string;
+              function delay_str: string;
+              function count_str: string;
+              function repeatcount_str: string;
+              function filter_str: string;
+              function binning_str: string;
+              function frtype_str: string;
+              function description_str: string;
             end;
 
   {$i revision.inc}
@@ -88,9 +98,53 @@ const
 var
   ConfigDir,LogDir,TmpDir: UTF8String;
   config: TCCDConfig;
+  Filters: TStringList;
   compile_time, compile_version, compile_system, lclver: string;
 
 implementation
+
+////////////////////  TPlan  /////////////////////////////
+
+function TPlan.exposure_str: string;
+begin
+ Result:=FloatToStr(exposure);
+end;
+
+function TPlan.delay_str: string;
+begin
+  Result:=FloatToStr(delay);
+end;
+
+function TPlan.count_str: string;
+begin
+  Result:=IntToStr(count);
+end;
+
+function TPlan.repeatcount_str: string;
+begin
+  Result:=IntToStr(repeatcount);
+end;
+
+function TPlan.filter_str: string;
+begin
+  Result:=Filters[filter-1];
+end;
+
+function TPlan.binning_str: string;
+begin
+  Result:=IntToStr(binx)+'x'+IntToStr(biny);
+end;
+
+function TPlan.frtype_str: string;
+begin
+  Result:=FrameName[ord(frtype)];
+end;
+
+function TPlan.description_str: string;
+begin
+  Result:=description;
+end;
+
 
 end.
 

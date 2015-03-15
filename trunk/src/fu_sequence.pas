@@ -34,9 +34,14 @@ type
 
   Tf_sequence = class(TFrame)
     BtnEditTargets: TButton;
+    BtnLoadTargets1: TButton;
+    BtnLoadTargets2: TButton;
+    BtnLoadTargets3: TButton;
+    BtnLoadTargets4: TButton;
     BtnNewTargets: TButton;
     BtnSaveTargets: TButton;
     BtnLoadTargets: TButton;
+    StatusMsg: TLabel;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
     Panel2: TPanel;
@@ -56,9 +61,12 @@ type
   public
     { public declarations }
     CurrentName, CurrentFile: string;
-    procedure LoadTargets(fn: string);
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure ClearTargetGrid;
+    procedure ClearPlanGrid;
+    procedure LoadTargets(fn: string);
+    procedure LoadPlan(plan:string);
   end;
 
 var
@@ -67,6 +75,26 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure Tf_sequence.ClearTargetGrid;
+var i:integer;
+begin
+   for i:=1 to TargetGrid.RowCount-1 do begin
+    if TargetGrid.Objects[0,i]<>nil then TargetGrid.Objects[0,i].Free;
+    TargetGrid.Objects[0,i]:=nil;
+  end;
+  TargetGrid.RowCount:=1;
+end;
+
+procedure Tf_sequence.ClearPlanGrid;
+var i:integer;
+begin
+   for i:=1 to PlanGrid.RowCount-1 do begin
+    if PlanGrid.Objects[0,i]<>nil then PlanGrid.Objects[0,i].Free;
+    PlanGrid.Objects[0,i]:=nil;
+  end;
+  PlanGrid.RowCount:=1;
+end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i:integer;
@@ -96,8 +124,10 @@ begin
    end;
    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_EditTargets.ShowModal;
+   ClearTargetGrid;
    TargetGrid.RowCount:=f_EditTargets.TargetList.RowCount;
    for i:=1 to f_EditTargets.TargetList.RowCount-1 do begin
+     TargetGrid.Objects[0,i]:=f_EditTargets.TargetList.Objects[0,i];
      with f_EditTargets.TargetList.Objects[0,i] as TTarget do begin
        TargetGrid.Cells[0,i]:=objectname;
        TargetGrid.Cells[1,i]:=plan;
@@ -113,10 +143,12 @@ begin
          TargetGrid.Cells[5,i]:=DEToStr(de);
      end;
    end;
+   LoadPlan(TargetGrid.Cells[1,1]);
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);
 var tfile: TCCDconfig;
+    t:TTarget;
     i,n: integer;
 begin
    tfile:=TCCDconfig.Create(self);
@@ -125,6 +157,8 @@ begin
    CurrentFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
    if n>0 then begin
+     t:=TTarget.Create;
+     ClearTargetGrid;
      TargetGrid.RowCount:=n+1;
      for i:=1 to n do begin
        TargetGrid.Cells[0,i]:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName','');
@@ -133,8 +167,49 @@ begin
        TargetGrid.Cells[3,i]:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime','');
        TargetGrid.Cells[4,i]:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
        TargetGrid.Cells[5,i]:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Dec','');
+       t.objectname:=TargetGrid.Cells[0,i];
+       t.plan:=TargetGrid.Cells[1,i];
+       t.starttime:=StrToTime(TargetGrid.Cells[2,i]);
+       t.endtime:=StrToTime(TargetGrid.Cells[3,i]);
+       if TargetGrid.Cells[4,i]='-' then
+         t.ra:=NullCoord
+       else
+         t.ra:=StrToAR(TargetGrid.Cells[4,i]);
+       if TargetGrid.Cells[5,i]='-' then
+         t.de:=NullCoord
+       else
+         t.de:=StrToDE(TargetGrid.Cells[5,i]);
+       TargetGrid.Objects[0,i]:=t;
      end;
+     LoadPlan(TargetGrid.Cells[1,1]);
    end;
+end;
+
+procedure Tf_sequence.LoadPlan(plan:string);
+var fn,str,buf: string;
+    i,j,n:integer;
+    pfile: TCCDconfig;
+    p: TPlan;
+begin
+  fn:=slash(ConfigDir)+plan+'.plan';
+  if FileExistsUTF8(fn) then begin
+     pfile:=TCCDconfig.Create(self);
+     pfile.Filename:=fn;
+     n:=pfile.GetValue('/StepNum',0);
+     ClearPlanGrid;
+     PlanGrid.RowCount:=n+1;
+     for i:=1 to n do begin
+       p:=TPlan.Create;
+       f_EditPlan.ReadStep(pfile,i,p);
+       PlanGrid.Objects[0,i]:=p;
+       PlanGrid.Cells[0,i]:=p.description_str;
+       PlanGrid.Cells[1,i]:=p.exposure_str;
+       PlanGrid.Cells[2,i]:=p.count_str;
+       PlanGrid.Cells[3,i]:=p.repeatcount_str;
+       PlanGrid.Cells[4,i]:=p.frtype_str;
+       PlanGrid.Cells[5,i]:=p.filter_str;
+     end;
+  end;
 end;
 
 procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
@@ -183,14 +258,18 @@ begin
  TargetGrid.Cells[3,0]:='End';
  TargetGrid.Cells[4,0]:='RA';
  TargetGrid.Cells[5,0]:='DEC';
- PlanGrid.Cells[0,0]:='Exp.';
- PlanGrid.Cells[1,0]:='Count';
- PlanGrid.Cells[2,0]:='Filter';
- PlanGrid.Cells[3,0]:='Type';
+ PlanGrid.Cells[0,0]:='Desc.';
+ PlanGrid.Cells[1,0]:='Exp.';
+ PlanGrid.Cells[2,0]:='Count';
+ PlanGrid.Cells[3,0]:='Repeat';
+ PlanGrid.Cells[4,0]:='Type';
+ PlanGrid.Cells[5,0]:='Filter';
 end;
 
 destructor  Tf_sequence.Destroy;
 begin
+ ClearTargetGrid;
+ ClearPlanGrid;
  inherited Destroy;
 end;
 

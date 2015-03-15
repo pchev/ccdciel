@@ -26,7 +26,7 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
-  fu_sequence, u_ccdconfig,
+  fu_sequence, u_ccdconfig, pu_editplan,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_astrometry, cu_cdcclient, cu_autoguider, lazutf8sysutils, Classes,
@@ -368,6 +368,7 @@ begin
   DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
   GUIready:=false;
+  Filters:=TStringList.Create;
   PageControlRight.ActivePageIndex:=0;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
@@ -505,6 +506,7 @@ end;
 
 procedure Tf_main.FormShow(Sender: TObject);
 var str: string;
+    i,n: integer;
 begin
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages);
@@ -526,6 +528,15 @@ begin
 
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
+
+  n:=config.GetValue('/Filters/Num',0);
+  Filters.Clear;
+  for i:=1 to n do begin
+     str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
+     Filters.Add(str);
+  end;
+  f_filterwheel.Filters.Items.Assign(Filters);
+  f_EditPlan.Filter.Items.Assign(Filters);
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -568,6 +579,7 @@ begin
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var i,n: integer;
 begin
   config.SetValue('/Configuration/Version',ccdcielver);
 
@@ -649,6 +661,11 @@ begin
 
   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
 
+  n:=Filters.Count;
+  config.SetValue('/Filters/Num',n);
+  for i:=1 to n do
+     config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i-1]);
+
   config.Flush;
   NewMessage('Program exit');
   CloseLog;
@@ -663,6 +680,7 @@ begin
   mount.Free;
   ImaBmp.Free;
   config.Free;
+  Filters.Free;
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
@@ -1038,6 +1056,7 @@ end;
 procedure Tf_main.ShowBinningRange;
 var rxmin,rxmax,rxstep,rymin,rymax,rystep: integer;
     i,j:integer;
+    binstr:string;
 begin
  rxmin:=round(camera.BinXrange.min);
  rxmax:=round(camera.BinXrange.max);
@@ -1060,8 +1079,10 @@ begin
    j:=rymin;
    while j<=rymax do begin
      if i=j then begin  // only "square" binning in combobox list
-       f_preview.Binning.Items.Add(inttostr(i)+'x'+inttostr(j));
-       f_capture.Binning.Items.Add(inttostr(i)+'x'+inttostr(j));
+       binstr:=inttostr(i)+'x'+inttostr(j);
+       f_preview.Binning.Items.Add(binstr);
+       f_capture.Binning.Items.Add(binstr);
+       f_editplan.Binning.Items.Add(binstr);
      end;
      inc(j,rystep);
    end;
@@ -1069,6 +1090,7 @@ begin
  end;
  f_preview.Binning.ItemIndex:=0;
  f_capture.Binning.ItemIndex:=0;
+ f_editplan.Binning.ItemIndex:=0;
 end;
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);
@@ -1200,6 +1222,8 @@ case wheel.Status of
                       NewMessage('Filter wheel connected');
                       f_devicesconnection.LabelWheel.Font.Color:=clGreen;
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
+                      f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
+                      Filters.Assign(wheel.FilterNames);
                       if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
                          f_filterwheel.Filters.ItemIndex:=round(wheel.Filter)-1;
                    end;
@@ -1221,6 +1245,8 @@ end;
 procedure Tf_main.FilterNameChange(Sender: TObject);
 begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
+f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
+Filters.Assign(wheel.FilterNames);
 if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
    f_filterwheel.Filters.ItemIndex:=round(wheel.Filter)-1;
 end;
