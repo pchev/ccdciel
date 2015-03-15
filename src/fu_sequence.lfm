@@ -1,13 +1,13 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 504
+  Height = 531
   Top = 0
   Width = 180
-  ClientHeight = 504
+  ClientHeight = 531
   ClientWidth = 180
   TabOrder = 0
-  DesignLeft = 412
-  DesignTop = 152
+  DesignLeft = 328
+  DesignTop = 150
   object StaticText1: TStaticText
     Left = 0
     Height = 20
@@ -90,37 +90,23 @@ object f_sequence: Tf_sequence
         OnClick = BtnEditTargetsClick
         TabOrder = 3
       end
-      object BtnLoadTargets1: TButton
+      object BtnStart: TButton
         Left = 0
         Height = 25
         Top = 32
-        Width = 45
+        Width = 86
         Caption = 'Start'
+        OnClick = BtnStartClick
         TabOrder = 4
       end
-      object BtnLoadTargets2: TButton
-        Left = 45
-        Height = 25
-        Top = 32
-        Width = 45
-        Caption = 'Pause'
-        TabOrder = 5
-      end
-      object BtnLoadTargets3: TButton
+      object BtnStop: TButton
         Left = 90
         Height = 25
         Top = 32
-        Width = 45
+        Width = 86
         Caption = 'Stop'
-        TabOrder = 6
-      end
-      object BtnLoadTargets4: TButton
-        Left = 135
-        Height = 25
-        Top = 32
-        Width = 45
-        Caption = 'Rewind'
-        TabOrder = 7
+        OnClick = BtnStopClick
+        TabOrder = 5
       end
     end
     object StaticText3: TStaticText
@@ -140,16 +126,16 @@ object f_sequence: Tf_sequence
   end
   object Panel2: TPanel
     Left = 0
-    Height = 236
+    Height = 254
     Top = 258
     Width = 180
     BevelOuter = bvNone
-    ClientHeight = 236
+    ClientHeight = 254
     ClientWidth = 180
     TabOrder = 2
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 182
+      Height = 188
       Top = 20
       Width = 180
       Align = alClient
@@ -176,20 +162,29 @@ object f_sequence: Tf_sequence
     end
     object Panel4: TPanel
       Left = 0
-      Height = 34
-      Top = 202
+      Height = 46
+      Top = 208
       Width = 180
       Align = alBottom
-      ClientHeight = 34
+      ClientHeight = 46
       ClientWidth = 180
       TabOrder = 2
       object StatusMsg: TLabel
         Left = 1
-        Height = 32
+        Height = 43
         Top = 1
         Width = 178
         Align = alClient
         AutoSize = False
+        ParentColor = False
+        WordWrap = True
+      end
+      object DelayMsg: TLabel
+        Left = 1
+        Height = 1
+        Top = 44
+        Width = 178
+        Align = alBottom
         ParentColor = False
       end
     end
@@ -208,5 +203,23 @@ object f_sequence: Tf_sequence
     Filter = 'targets|*.targets'
     left = 120
     top = 120
+  end
+  object TargetTimer: TTimer
+    Enabled = False
+    OnTimer = TargetTimerTimer
+    left = 32
+    top = 72
+  end
+  object PlanTimer: TTimer
+    Enabled = False
+    OnTimer = PlanTimerTimer
+    left = 22
+    top = 320
+  end
+  object RepeatTimer: TTimer
+    Enabled = False
+    OnTimer = RepeatTimerTimer
+    left = 104
+    top = 320
   end
 end

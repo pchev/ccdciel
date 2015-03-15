@@ -48,20 +48,20 @@ object f_option: Tf_option
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 358
-      ClientWidth = 408
+      ClientHeight = 366
+      ClientWidth = 412
       object GroupBox1: TGroupBox
         Left = 0
-        Height = 144
+        Height = 240
         Top = 0
         Width = 400
         Caption = 'Files'
-        ClientHeight = 113
+        ClientHeight = 223
         ClientWidth = 396
         TabOrder = 0
         object CaptureDir: TDirectoryEdit
           Left = 104
-          Height = 21
+          Height = 23
           Top = 8
           Width = 176
           ShowHidden = False
@@ -80,20 +80,44 @@ object f_option: Tf_option
         end
         object Logtofile: TCheckBox
           Left = 8
-          Height = 26
-          Top = 56
-          Width = 162
+          Height = 23
+          Top = 184
+          Width = 159
           Caption = 'Log all messages to file '
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
         end
+        object SubfolderSequence: TCheckBox
+          Left = 104
+          Height = 23
+          Top = 40
+          Width = 152
+          Caption = 'Subfolder by Sequence'
+          TabOrder = 2
+        end
+        object SubfolderObjname: TCheckBox
+          Left = 104
+          Height = 23
+          Top = 88
+          Width = 170
+          Caption = 'Subfolder by Object name'
+          TabOrder = 3
+        end
+        object SubfolderFrametype: TCheckBox
+          Left = 104
+          Height = 23
+          Top = 64
+          Width = 160
+          Caption = 'Subfolder by Frame type'
+          TabOrder = 4
+        end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Informations'
-      ClientHeight = 358
-      ClientWidth = 408
+      ClientHeight = 366
+      ClientWidth = 412
       object Label5: TLabel
         Left = 8
         Height = 16
@@ -142,15 +166,15 @@ object f_option: Tf_option
     end
     object TabSheet3: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 358
-      ClientWidth = 408
+      ClientHeight = 366
+      ClientWidth = 412
       object GroupBox2: TGroupBox
         Left = 0
         Height = 120
         Top = 0
         Width = 400
         Caption = 'Star profile'
-        ClientHeight = 89
+        ClientHeight = 103
         ClientWidth = 396
         TabOrder = 0
         object StarWindow: TEdit
@@ -188,8 +212,8 @@ object f_option: Tf_option
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 358
-      ClientWidth = 408
+      ClientHeight = 366
+      ClientWidth = 412
       object GroupBox4: TGroupBox
         Left = 0
         Height = 160
@@ -427,8 +451,8 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 358
-      ClientWidth = 408
+      ClientHeight = 366
+      ClientWidth = 412
       object AutoguiderBox: TRadioGroup
         Left = 0
         Height = 87
@@ -443,7 +467,7 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 56
+        ClientHeight = 70
         ClientWidth = 396
         Columns = 2
         ItemIndex = 0
@@ -458,7 +482,7 @@ object f_option: Tf_option
         Top = 96
         Width = 401
         Caption = 'PHD2'
-        ClientHeight = 130
+        ClientHeight = 144
         ClientWidth = 397
         TabOrder = 1
         object Label16: TLabel

@@ -36,6 +36,9 @@ type
     Button1: TButton;
     Button2: TButton;
     CaptureDir: TDirectoryEdit;
+    SubfolderSequence: TCheckBox;
+    SubfolderObjname: TCheckBox;
+    SubfolderFrametype: TCheckBox;
     PHDhostname: TEdit;
     PHDport: TEdit;
     ElbrusFolder: TEdit;

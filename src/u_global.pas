@@ -43,17 +43,20 @@ type
               public
               objectname, plan: string;
               starttime,endtime,ra,de: double;
+              procedure Assign(Source: TTarget);
             end;
 
   TPlan   = Class(TObject)
               public
-              exposure, delay: double;
+              exposure, delay, previewexposure: double;
               count, repeatcount: integer;
+              preview: boolean;
               filter: integer;
               binx,biny: integer;
               frtype: TFrameType;
               description: string;
               function exposure_str: string;
+              function previewexposure_str: string;
               function delay_str: string;
               function count_str: string;
               function repeatcount_str: string;
@@ -103,11 +106,28 @@ var
 
 implementation
 
+////////////////////  TTarget  /////////////////////////////
+
+procedure TTarget.Assign(Source: TTarget);
+begin
+  objectname:=Source.objectname;
+  plan:=Source.plan;
+  starttime:=Source.starttime;
+  endtime:=Source.endtime;
+  ra:=Source.ra;
+  de:=Source.de;
+end;
+
 ////////////////////  TPlan  /////////////////////////////
 
 function TPlan.exposure_str: string;
 begin
  Result:=FloatToStr(exposure);
+end;
+
+function TPlan.previewexposure_str: string;
+begin
+ Result:=FloatToStr(previewexposure);
 end;
 
 function TPlan.delay_str: string;

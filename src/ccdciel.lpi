@@ -133,6 +133,7 @@
         <ComponentName Value="f_preview"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_preview"/>
       </Unit3>
       <Unit4>
         <Filename Value="fu_msg.pas"/>
@@ -163,6 +164,7 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
@@ -236,6 +238,7 @@
       <Unit22>
         <Filename Value="cu_indiwheel.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indiwheel"/>
       </Unit22>
       <Unit23>
         <Filename Value="cu_mount.pas"/>
@@ -285,6 +288,7 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_options"/>
       </Unit31>
       <Unit32>
         <Filename Value="fu_frame.pas"/>

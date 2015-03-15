@@ -15,11 +15,19 @@ type
     BtnClose: TButton;
     BtnAddStep: TButton;
     BtnDeleteStep: TButton;
+    Preview: TCheckBox;
     Desc: TEdit;
+    PreviewExposure: TEdit;
     Label10: TLabel;
     Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    Label9: TLabel;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
     RepeatCount: TEdit;
     Delay: TEdit;
     FrameType: TComboBox;
@@ -106,6 +114,8 @@ begin
   if j<0 then j:=0;
   p.filter:=j+1;
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
+  p.previewexposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',1.0);
+  p.preview:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Preview',false);
   p.count:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1);
   p.repeatcount:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1);
   p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
@@ -171,6 +181,8 @@ begin
   Count.Text:=p.count_str;
   RepeatCount.Text:=p.repeatcount_str;
   Delay.Text:=p.delay_str;
+  PreviewExposure.Text:=p.previewexposure_str;
+  Preview.Checked:=p.preview;
   LockStep:=false;
 end;
 
@@ -201,6 +213,8 @@ begin
   p.count:=StrToIntDef(Count.Text,1);
   p.repeatcount:=StrToIntDef(RepeatCount.Text,1);
   p.delay:=StrToFloatDef(Delay.Text,1);
+  p.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
+  p.preview:=Preview.Checked;
   StepList.Cells[1,n]:=p.description;
 end;
 
@@ -271,6 +285,8 @@ begin
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',IntToStr(p.count));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',IntToStr(p.repeatcount));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',p.previewexposure);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Preview',p.preview);
   end;
   pfile.Flush;
   pfile.Free;
