@@ -5,7 +5,7 @@ unit pu_editplan;
 interface
 
 uses u_ccdconfig, u_global, u_utils, Classes, SysUtils, FileUtil, Forms,
-  Controls, Graphics, Dialogs, StdCtrls, ValEdit, Grids, ExtCtrls;
+  Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls;
 
 type
 
@@ -56,6 +56,7 @@ type
   public
     { public declarations }
     procedure ClearStepList;
+    procedure ReadStep(pfile:TCCDconfig; i: integer; var p:Tplan);
   end;
 
 var
@@ -77,10 +78,43 @@ begin
  ClearStepList;
 end;
 
+procedure Tf_EditPlan.ReadStep(pfile:TCCDconfig; i: integer; var p:Tplan);
+var str,buf: string;
+    j:integer;
+begin
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
+  p.description:=str;
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light');
+  j:=FrameType.Items.IndexOf(str);
+  if j<0 then j:=0;
+  p.frtype:=TFrameType(j);
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1');
+  j:=Binning.Items.IndexOf(str);
+  if j<0 then j:=0;
+  j:=pos('x',str);
+  if j>0 then begin
+     buf:=trim(copy(str,1,j-1));
+     p.binx:=StrToIntDef(buf,1);
+     buf:=trim(copy(str,j+1,9));
+     p.biny:=StrToIntDef(buf,1);
+  end else begin
+    p.binx:=1;
+    p.biny:=1;
+  end;
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
+  j:=Filter.Items.IndexOf(str);
+  if j<0 then j:=0;
+  p.filter:=j+1;
+  p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
+  p.count:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1);
+  p.repeatcount:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1);
+  p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
+end;
+
 procedure Tf_EditPlan.FormShow(Sender: TObject);
 var pfile: TCCDconfig;
-    fn,str,buf: string;
-    i,j,n:integer;
+    fn: string;
+    i,n:integer;
     p: TPlan;
 begin
   ClearStepList;
@@ -92,36 +126,10 @@ begin
     StepList.RowCount:=n+1;
     for i:=1 to n do begin
       p:=TPlan.Create;
-      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
+      ReadStep(pfile,i,p);
       StepList.Cells[0,i]:=IntToStr(i);
-      StepList.Cells[1,i]:=str;
+      StepList.Cells[1,i]:=p.description_str;
       StepList.Objects[0,i]:=p;
-      p.description:=str;
-      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light');
-      j:=FrameType.Items.IndexOf(str);
-      if j<0 then j:=0;
-      p.frtype:=TFrameType(j);
-      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1');
-      j:=Binning.Items.IndexOf(str);
-      if j<0 then j:=0;
-      j:=pos('x',str);
-      if j>0 then begin
-         buf:=trim(copy(str,1,j-1));
-         p.binx:=StrToIntDef(buf,1);
-         buf:=trim(copy(str,j+1,9));
-         p.biny:=StrToIntDef(buf,1);
-      end else begin
-        p.binx:=1;
-        p.biny:=1;
-      end;
-      str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
-      j:=Filter.Items.IndexOf(str);
-      if j<0 then j:=0;
-      p.filter:=j+1;
-      p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
-      p.count:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1);
-      p.repeatcount:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1);
-      p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
     end;
     pfile.Free;
     StepListSelection(nil,0,1);
@@ -155,14 +163,14 @@ begin
   n:=aRow;
   lblStepNum.Caption:=IntToStr(n);
   p:=TPlan(StepList.Objects[0,n]);
-  Desc.Text:=p.description;
+  Desc.Text:=p.description_str;
   FrameType.ItemIndex:=ord(p.frtype);
-  Exposure.Text:=FloatToStr(p.exposure);
-  Binning.Text:=IntToStr(p.binx)+'x'+IntToStr(p.biny);
+  Exposure.Text:=p.exposure_str;
+  Binning.Text:=p.binning_str;
   Filter.ItemIndex:=p.filter-1;
-  Count.Text:=IntToStr(p.count);
-  RepeatCount.Text:=IntToStr(p.repeatcount);
-  Delay.Text:=FloatToStr(p.delay);
+  Count.Text:=p.count_str;
+  RepeatCount.Text:=p.repeatcount_str;
+  Delay.Text:=p.delay_str;
   LockStep:=false;
 end;
 

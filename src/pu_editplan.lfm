@@ -125,7 +125,6 @@ object f_EditPlan: Tf_EditPlan
         Width = 100
         ItemHeight = 0
         OnChange = StepChange
-        Style = csDropDownList
         TabOrder = 0
       end
       object Label6: TLabel
