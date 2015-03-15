@@ -60,6 +60,7 @@ type
   private
     { private declarations }
     LockStep: boolean;
+    originalFilter: array[0..99] of string;
     procedure ResetSteps;
   public
     { public declarations }
@@ -110,6 +111,7 @@ begin
     p.biny:=1;
   end;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
+  originalFilter[i]:=str;
   j:=Filter.Items.IndexOf(str);
   if j<0 then j:=0;
   p.filter:=j+1;
@@ -278,9 +280,13 @@ begin
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',FrameType.Items[ord(p.frtype)]);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
-    k:=p.filter-1;
-    if (k<0)or(k>Filter.Items.Count-1) then str:=''
-       else str:=Filter.Items[k];
+    if Filter.Items.Count>0 then begin // do not erase the filters if the filter wheel is not connected
+      k:=p.filter-1;
+      if (k<0)or(k>Filter.Items.Count-1) then str:=''
+         else str:=Filter.Items[k];
+    end else begin
+      str:=originalFilter[i];
+    end;
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Filter',str);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',IntToStr(p.count));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',IntToStr(p.repeatcount));
