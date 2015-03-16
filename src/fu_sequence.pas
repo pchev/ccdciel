@@ -246,8 +246,8 @@ begin
 end;
 
 procedure Tf_sequence.LoadPlan(plan:string);
-var fn,str,buf: string;
-    i,j,n:integer;
+var fn: string;
+    i,n:integer;
     pfile: TCCDconfig;
     p: TPlan;
 begin

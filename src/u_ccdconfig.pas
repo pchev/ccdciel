@@ -46,7 +46,7 @@ end;
 
 procedure TCCDconfig.SetValue(const APath: String; const AValue: String);
 begin
-  SetValue(DOMString(APath),DOMString(AValue))
+  SetValue(DOMString(APath),DOMString(AValue));
 end;
 
 function  TCCDconfig.GetValue(const APath: String; const ADefault: Double): Double; overload;
@@ -56,7 +56,7 @@ end;
 
 procedure TCCDconfig.SetValue(const APath: String; const AValue: Double); overload;
 begin
-  SetValue(DOMString(APath),DOMString(FloatToStr(AValue)))
+  SetValue(DOMString(APath),DOMString(FloatToStr(AValue)));
 end;
 
 end.

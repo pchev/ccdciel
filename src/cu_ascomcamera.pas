@@ -203,7 +203,9 @@ end;
 end;
 
 procedure T_ascomcamera.StatusTimerTimer(sender: TObject);
+{$ifdef mswindows}
 var x,y,width,height: integer;
+{$endif}
 begin
  {$ifdef mswindows}
   if not Connected then begin
@@ -565,7 +567,9 @@ begin
 end;
 
 procedure T_ascomcamera.SetFilterNames(value:TStringList);
+{$ifdef mswindows}
 var i:integer;
+{$endif}
 begin
  {$ifdef mswindows}
   if (value.Count=nf) then begin

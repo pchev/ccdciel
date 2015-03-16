@@ -11,58 +11,58 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.4.0.3'
   object Label1: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 33
-    Width = 39
+    Width = 42
     Caption = 'Object'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 67
-    Width = 23
+    Width = 26
     Caption = 'Plan'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 99
-    Width = 59
+    Width = 62
     Caption = 'Start time'
     ParentColor = False
   end
   object Label4: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 131
-    Width = 51
+    Width = 53
     Caption = 'End time'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 167
-    Width = 15
+    Width = 17
     Caption = 'RA'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 199
-    Width = 24
+    Width = 25
     Caption = 'DEC'
     ParentColor = False
   end
   object PlanList: TComboBox
     Left = 298
-    Height = 25
+    Height = 28
     Top = 67
     Width = 126
     ItemHeight = 0
@@ -90,7 +90,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object PointRA: TEdit
     Left = 300
-    Height = 23
+    Height = 22
     Top = 167
     Width = 100
     OnChange = TargetChange
@@ -98,7 +98,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object PointDEC: TEdit
     Left = 300
-    Height = 23
+    Height = 22
     Top = 201
     Width = 100
     OnChange = TargetChange
@@ -124,7 +124,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object StartTime: TMaskEdit
     Left = 300
-    Height = 23
+    Height = 22
     Top = 99
     Width = 70
     CharCase = ecNormal
@@ -137,7 +137,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object EndTime: TMaskEdit
     Left = 300
-    Height = 23
+    Height = 22
     Top = 131
     Width = 70
     CharCase = ecNormal
@@ -168,17 +168,17 @@ object f_EditTargets: Tf_EditTargets
   end
   object Label7: TLabel
     Left = 216
-    Height = 15
+    Height = 16
     Top = 8
-    Width = 55
+    Width = 60
     Caption = 'Sequence'
     ParentColor = False
   end
   object LabelSeq: TLabel
     Left = 300
-    Height = 15
+    Height = 16
     Top = 9
-    Width = 49
+    Width = 57
     Caption = 'LabelSeq'
     ParentColor = False
   end
@@ -214,7 +214,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object ObjectName: TEdit
     Left = 300
-    Height = 23
+    Height = 22
     Top = 31
     Width = 126
     OnChange = TargetChange

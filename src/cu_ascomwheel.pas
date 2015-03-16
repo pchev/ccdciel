@@ -143,10 +143,12 @@ end;
 end;
 
 procedure T_ascomwheel.StatusTimerTimer(sender: TObject);
+{$ifdef mswindows}
 var fnum: integer;
     fnam:Tstringlist;
     i,n: integer;
     fnchanged:  boolean;
+{$endif}
 begin
  {$ifdef mswindows}
   if not Connected then begin
@@ -201,7 +203,9 @@ begin
 end;
 
 procedure T_ascomwheel.SetFilterNames(value:TStringList);
+{$ifdef mswindows}
 var i:integer;
+{$endif}
 begin
  {$ifdef mswindows}
   if (value.Count=FFilterNum) then begin
@@ -213,8 +217,10 @@ begin
 end;
 
 procedure T_ascomwheel.GetFilterNames(var value:TStringList; var n: integer);
+{$ifdef mswindows}
 var fnames: array of WideString;
     i: integer;
+{$endif}
 begin
  {$ifdef mswindows}
  if Connected then begin
