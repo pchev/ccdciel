@@ -34,7 +34,13 @@ type
   { Tf_eqmod }
 
   Tf_eqmod = class(TForm)
-    LblPark: TLabel;
+    BtnPark: TSpeedButton;
+    BtnINDIgui: TButton;
+    BtnSaveAlign: TSpeedButton;
+    BtnSaveIndiSettings: TSpeedButton;
+    BtnSaveSite2: TSpeedButton;
+    BtnLoadAlign: TSpeedButton;
+    Label19: TLabel;
     SyncModeCombo: TComboBox;
     AlignModeCombo: TComboBox;
     DeltaRa: TEdit;
@@ -73,15 +79,12 @@ type
     PanelCustTrack: TPanel;
     ReverseDec: TCheckBox;
     SlewPreset: TComboBox;
-    GroupBox10: TGroupBox;
     GroupBox11: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
-    GroupBox8: TGroupBox;
-    GroupBox9: TGroupBox;
     Label7: TLabel;
     Label8: TLabel;
     led: TShape;
@@ -98,7 +101,7 @@ type
     Notebook1: TNotebook;
     Page1: TPage;
     Page2: TPage;
-    BtnPark: TSpeedButton;
+    BtnUnPark: TSpeedButton;
     RArate: TTrackBar;
     DErate: TTrackBar;
     IndiSetup: TSpeedButton;
@@ -111,7 +114,6 @@ type
     GroupBox1: TGroupBox;
     Panel1: TPanel;
     Panel2: TPanel;
-    Panel3: TPanel;
     DE: TEdit;
     AZ: TEdit;
     LST: TEdit;
@@ -131,8 +133,12 @@ type
     procedure BtnClearDeltaClick(Sender: TObject);
     procedure BtnEastMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure BtnLoadAlignClick(Sender: TObject);
     procedure BtnNorthMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure BtnParkClick(Sender: TObject);
+    procedure BtnSaveAlignClick(Sender: TObject);
+    procedure BtnSaveIndiSettingsClick(Sender: TObject);
     procedure BtnSaveSiteClick(Sender: TObject);
     procedure BtnSouthMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -163,7 +169,7 @@ type
     procedure SlewPresetChange(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure BtnSetTrackRateClick(Sender: TObject);
-    procedure BtnParkClick(Sender: TObject);
+    procedure BtnUnParkClick(Sender: TObject);
     procedure SyncModeComboChange(Sender: TObject);
   private
     { private declarations }
@@ -229,6 +235,7 @@ begin
  GUIready:=false;
  obslock:=false;
  TrackMode:=-999;
+ Width:=226;
 end;
 
 procedure Tf_eqmod.FormDestroy(Sender: TObject);
@@ -277,6 +284,7 @@ begin
    eqmod.onSlewModeChange:=@SlewModeChange;
    eqmod.onTrackModeChange:=@TrackModeChange;
    eqmod.onTrackRateChange:=@TrackRateChange;
+   eqmod.onParkChange:=@ParkChange;
    eqmod.onGeoCoordChange:=@GeoCoordChange;
    eqmod.onAlignCountChange:=@AlignCountChange;
    eqmod.onSyncDeltaChange:=@SyncDeltaChange;
@@ -325,6 +333,11 @@ begin
  f_indigui.Show;
 end;
 
+procedure Tf_eqmod.BtnSaveIndiSettingsClick(Sender: TObject);
+begin
+  eqmod.SaveConfig;
+end;
+
 procedure Tf_eqmod.GUIdestroy(Sender: TObject);
 begin
   GUIready:=false;
@@ -335,11 +348,9 @@ begin
  if setupbtn.Caption='>>>' then begin
    setupbtn.Caption:='<<<';
    panel2.Visible:=true;
-   panel3.Visible:=true;
  end else begin
    setupbtn.Caption:='>>>';
    panel2.Visible:=false;
-   panel3.Visible:=false;
  end;
  AutoSize:=false;
  AutoSize:=true;
@@ -608,28 +619,27 @@ end;
 
 Procedure Tf_eqmod.ParkChange(Sender: TObject);
 begin
-  if eqmod.Park then begin
-     BtnPark.Caption:='Unpark';
+// Park status is useles for now (version 1.0) returning always off for both switch
+
+ { if eqmod.Park then begin
+     BtnUnPark.Caption:='Unpark';
      LblPark.Caption:='Parked';
   end
   else begin
-     BtnPark.Caption:='Park';
+     BtnUnPark.Caption:='Park';
      LblPark.Caption:='Unparked';
-  end;
+  end;   }
 end;
 
 procedure Tf_eqmod.BtnParkClick(Sender: TObject);
 begin
- if BtnPark.Caption='Unpark' then begin
-   eqmod.Park:=false;
-   BtnPark.Caption:='Park';
-   LblPark.Caption:='Unparked';
- end
- else begin
-   eqmod.Park:=true;
-   BtnPark.Caption:='Unpark';
-   LblPark.Caption:='Parked';
- end;
+  if MessageDlg('Park the telescope now?',mtConfirmation,mbYesNo,0)=mrYes then
+     eqmod.Park:=true;
+end;
+
+procedure Tf_eqmod.BtnUnParkClick(Sender: TObject);
+begin
+  eqmod.Park:=false;
 end;
 
 
@@ -819,6 +829,25 @@ begin
   if MessageDlg('Clear Sync delta?',mtConfirmation,mbYesNo,0)=mrYes then begin
      eqmod.ClearSyncDelta;
   end;
+end;
+
+procedure Tf_eqmod.BtnSaveAlignClick(Sender: TObject);
+var fn,site: string;
+begin
+  fn:=ExpandFileNameUTF8('~/.indi');
+  site:=trim(SiteName.Text);
+  ForceDirectoriesUTF8(fn);
+  fn:=fn+'/AlignData'+site+'.xml';
+  eqmod.SaveAlignment(fn);
+end;
+
+procedure Tf_eqmod.BtnLoadAlignClick(Sender: TObject);
+var fn,site: string;
+begin
+  fn:=ExpandFileNameUTF8('~/.indi');
+  site:=trim(SiteName.Text);
+  fn:=fn+'/AlignData'+site+'.xml';
+  eqmod.LoadAlignment(fn);
 end;
 
 procedure Tf_eqmod.FillSyncMode;

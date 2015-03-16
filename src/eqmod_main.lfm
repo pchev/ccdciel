@@ -2,19 +2,18 @@ object f_eqmod: Tf_eqmod
   Left = 96
   Height = 573
   Top = 0
-  Width = 746
+  Width = 484
   ActiveControl = Panel1
-  AutoSize = True
-  Caption = 'Eqmod'
+  Caption = 'EQMod Mount'
   ClientHeight = 573
-  ClientWidth = 746
+  ClientWidth = 484
   Color = clBlack
   Font.Color = clRed
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.2.6.0'
+  LCLVersion = '1.4.0.3'
   object Panel1: TPanel
     Left = 0
     Height = 600
@@ -29,29 +28,28 @@ object f_eqmod: Tf_eqmod
       Height = 65
       Top = 510
       Width = 220
-      Caption = 'Park Status'
-      ClientHeight = 36
+      Caption = 'Park'
+      ClientHeight = 33
       ClientWidth = 216
       TabOrder = 4
-      object BtnPark: TSpeedButton
-        Left = 104
+      object BtnUnPark: TSpeedButton
+        Left = 112
         Height = 22
         Top = 0
         Width = 90
         Caption = 'Unpark'
         Font.Color = clBtnText
-        OnClick = BtnParkClick
+        OnClick = BtnUnParkClick
         ParentFont = False
       end
-      object LblPark: TLabel
-        Left = 21
-        Height = 13
-        Top = 4
-        Width = 36
-        Caption = 'Parked'
-        Font.Color = clRed
-        Font.Style = [fsBold]
-        ParentColor = False
+      object BtnPark: TSpeedButton
+        Left = 8
+        Height = 22
+        Top = 0
+        Width = 90
+        Caption = 'Park'
+        Font.Color = clBtnText
+        OnClick = BtnParkClick
         ParentFont = False
       end
     end
@@ -61,7 +59,7 @@ object f_eqmod: Tf_eqmod
       Top = 270
       Width = 220
       Caption = 'Slew Controls'
-      ClientHeight = 113
+      ClientHeight = 110
       ClientWidth = 216
       TabOrder = 2
       object BtnNorth: TSpeedButton
@@ -235,7 +233,7 @@ object f_eqmod: Tf_eqmod
         Height = 26
         Hint = 'Revert declination direction'
         Top = 82
-        Width = 73
+        Width = 82
         Caption = 'Rev. DEC'
         OnChange = ReverseDecChange
         TabOrder = 2
@@ -335,7 +333,7 @@ object f_eqmod: Tf_eqmod
           Width = 220
           Align = alClient
           Caption = 'Mount Position'
-          ClientHeight = 167
+          ClientHeight = 164
           ClientWidth = 216
           TabOrder = 0
           object RA: TEdit
@@ -465,7 +463,7 @@ object f_eqmod: Tf_eqmod
           end
           object PierSide: TEdit
             Left = 96
-            Height = 19
+            Height = 22
             Top = 129
             Width = 112
             Font.Color = clRed
@@ -476,9 +474,9 @@ object f_eqmod: Tf_eqmod
           end
           object Label6: TLabel
             Left = 21
-            Height = 13
+            Height = 16
             Top = 132
-            Width = 44
+            Width = 56
             Caption = 'Pier side'
             Font.Color = clRed
             Font.Style = [fsBold]
@@ -495,7 +493,7 @@ object f_eqmod: Tf_eqmod
           Width = 220
           Align = alClient
           Caption = 'Messages'
-          ClientHeight = 185
+          ClientHeight = 182
           ClientWidth = 216
           TabOrder = 0
           object msg: TMemo
@@ -521,7 +519,7 @@ object f_eqmod: Tf_eqmod
       Top = 414
       Width = 220
       Caption = 'Track Rate:'
-      ClientHeight = 67
+      ClientHeight = 64
       ClientWidth = 216
       TabOrder = 3
       object Panel4: TPanel
@@ -917,7 +915,7 @@ object f_eqmod: Tf_eqmod
         Visible = False
         object TrackDEC: TEdit
           Left = 124
-          Height = 19
+          Height = 22
           Hint = 'Custom DEC track speed'
           Top = 4
           Width = 62
@@ -928,15 +926,15 @@ object f_eqmod: Tf_eqmod
         end
         object Label8: TLabel
           Left = 98
-          Height = 13
+          Height = 16
           Top = 7
-          Width = 24
+          Width = 28
           Caption = 'DEC '
           ParentColor = False
         end
         object TRackRA: TEdit
           Left = 22
-          Height = 19
+          Height = 22
           Hint = 'Custom RA track speed'
           Top = 4
           Width = 73
@@ -947,9 +945,9 @@ object f_eqmod: Tf_eqmod
         end
         object Label7: TLabel
           Left = 2
-          Height = 13
+          Height = 16
           Top = 7
-          Width = 17
+          Width = 20
           Caption = 'RA '
           ParentColor = False
         end
@@ -1031,7 +1029,7 @@ object f_eqmod: Tf_eqmod
       Top = 0
       Width = 248
       Caption = 'Site Information'
-      ClientHeight = 180
+      ClientHeight = 177
       ClientWidth = 244
       TabOrder = 0
       object BtnSaveSite: TSpeedButton
@@ -1079,7 +1077,7 @@ object f_eqmod: Tf_eqmod
       end
       object SiteName: TComboBox
         Left = 92
-        Height = 20
+        Height = 22
         Top = 3
         Width = 147
         ItemHeight = 0
@@ -1089,31 +1087,31 @@ object f_eqmod: Tf_eqmod
       end
       object Label9: TLabel
         Left = 4
-        Height = 13
+        Height = 16
         Top = 40
-        Width = 43
+        Width = 52
         Caption = 'Latitude'
         ParentColor = False
       end
       object Label10: TLabel
         Left = 4
-        Height = 13
+        Height = 16
         Top = 72
-        Width = 50
+        Width = 62
         Caption = 'Longitude'
         ParentColor = False
       end
       object Label11: TLabel
         Left = 4
-        Height = 13
+        Height = 16
         Top = 102
-        Width = 46
+        Width = 57
         Caption = 'Elevation'
         ParentColor = False
       end
       object LatNS: TComboBox
         Left = 79
-        Height = 21
+        Height = 24
         Top = 35
         Width = 48
         ItemHeight = 0
@@ -1131,7 +1129,7 @@ object f_eqmod: Tf_eqmod
       end
       object LatDeg: TEdit
         Left = 130
-        Height = 19
+        Height = 22
         Top = 35
         Width = 32
         OnExit = LatChange
@@ -1142,7 +1140,7 @@ object f_eqmod: Tf_eqmod
       end
       object LatMin: TEdit
         Left = 165
-        Height = 19
+        Height = 22
         Top = 35
         Width = 32
         OnExit = LatChange
@@ -1153,7 +1151,7 @@ object f_eqmod: Tf_eqmod
       end
       object LatSec: TEdit
         Left = 201
-        Height = 19
+        Height = 22
         Top = 35
         Width = 38
         OnExit = LatChange
@@ -1164,15 +1162,15 @@ object f_eqmod: Tf_eqmod
       end
       object Label12: TLabel
         Left = 4
-        Height = 13
+        Height = 16
         Top = 5
-        Width = 29
+        Width = 35
         Caption = 'Name'
         ParentColor = False
       end
       object LongWE: TComboBox
         Left = 79
-        Height = 21
+        Height = 24
         Top = 72
         Width = 48
         ItemHeight = 0
@@ -1190,7 +1188,7 @@ object f_eqmod: Tf_eqmod
       end
       object LongDeg: TEdit
         Left = 130
-        Height = 19
+        Height = 22
         Top = 72
         Width = 32
         OnExit = LongChange
@@ -1201,7 +1199,7 @@ object f_eqmod: Tf_eqmod
       end
       object LongMin: TEdit
         Left = 165
-        Height = 19
+        Height = 22
         Top = 72
         Width = 32
         OnExit = LongChange
@@ -1212,7 +1210,7 @@ object f_eqmod: Tf_eqmod
       end
       object LongSec: TEdit
         Left = 201
-        Height = 19
+        Height = 22
         Top = 72
         Width = 38
         OnExit = LongChange
@@ -1223,7 +1221,7 @@ object f_eqmod: Tf_eqmod
       end
       object Elevation: TEdit
         Left = 79
-        Height = 19
+        Height = 22
         Top = 102
         Width = 49
         OnChange = ElevationChange
@@ -1244,10 +1242,10 @@ object f_eqmod: Tf_eqmod
     object GroupBox7: TGroupBox
       Left = 0
       Height = 200
-      Top = 216
+      Top = 212
       Width = 248
       Caption = 'Alignment / Sync'
-      ClientHeight = 171
+      ClientHeight = 168
       ClientWidth = 244
       TabOrder = 1
       object BtnClearAlignment: TSpeedButton
@@ -1260,15 +1258,15 @@ object f_eqmod: Tf_eqmod
       end
       object Label13: TLabel
         Left = 40
-        Height = 13
+        Height = 16
         Top = 6
-        Width = 32
+        Width = 38
         Caption = 'Points'
         ParentColor = False
       end
       object AlignPoints: TEdit
         Left = 83
-        Height = 19
+        Height = 22
         Top = 4
         Width = 44
         ParentColor = True
@@ -1276,15 +1274,15 @@ object f_eqmod: Tf_eqmod
       end
       object Label14: TLabel
         Left = 136
-        Height = 13
+        Height = 16
         Top = 5
-        Width = 44
+        Width = 54
         Caption = 'Triangles'
         ParentColor = False
       end
       object AlignTriangles: TEdit
         Left = 192
-        Height = 19
+        Height = 22
         Top = 4
         Width = 45
         ParentColor = True
@@ -1300,15 +1298,15 @@ object f_eqmod: Tf_eqmod
       end
       object Label15: TLabel
         Left = 40
-        Height = 13
+        Height = 16
         Top = 38
-        Width = 20
+        Width = 25
         Caption = 'dRA'
         ParentColor = False
       end
       object DeltaRa: TEdit
         Left = 72
-        Height = 19
+        Height = 22
         Top = 36
         Width = 65
         ParentColor = True
@@ -1316,15 +1314,15 @@ object f_eqmod: Tf_eqmod
       end
       object Label16: TLabel
         Left = 144
-        Height = 13
+        Height = 16
         Top = 37
-        Width = 20
+        Width = 25
         Caption = 'dDe'
         ParentColor = False
       end
       object DeltaDe: TEdit
         Left = 176
-        Height = 19
+        Height = 22
         Top = 36
         Width = 65
         ParentColor = True
@@ -1332,17 +1330,17 @@ object f_eqmod: Tf_eqmod
       end
       object Label17: TLabel
         Left = 8
-        Height = 13
+        Height = 16
         Top = 72
-        Width = 52
+        Width = 66
         Caption = 'Sync mode'
         ParentColor = False
       end
       object SyncModeCombo: TComboBox
         Left = 4
-        Height = 25
+        Height = 28
         Top = 94
-        Width = 180
+        Width = 156
         ItemHeight = 0
         OnChange = SyncModeComboChange
         ParentFont = False
@@ -1351,66 +1349,225 @@ object f_eqmod: Tf_eqmod
       end
       object Label18: TLabel
         Left = 8
-        Height = 13
+        Height = 16
         Top = 123
-        Width = 96
+        Width = 120
         Caption = 'Alignment behavior'
         ParentColor = False
       end
       object AlignModeCombo: TComboBox
         Left = 4
-        Height = 25
+        Height = 28
         Top = 144
-        Width = 180
+        Width = 157
         ItemHeight = 0
         OnChange = AlignModeComboChange
         ParentFont = False
         Style = csDropDownList
         TabOrder = 5
       end
-    end
-    object GroupBox8: TGroupBox
-      Left = 0
-      Height = 150
-      Top = 416
-      Width = 248
-      Caption = 'Park / Unpark'
-      TabOrder = 2
-    end
-  end
-  object Panel3: TPanel
-    Left = 488
-    Height = 600
-    Top = 0
-    Width = 250
-    BevelOuter = bvNone
-    ClientHeight = 600
-    ClientWidth = 250
-    TabOrder = 2
-    Visible = False
-    object GroupBox9: TGroupBox
-      Left = 0
-      Height = 209
-      Top = 0
-      Width = 248
-      Caption = 'PulseGuide Settings'
-      TabOrder = 0
-    end
-    object GroupBox10: TGroupBox
-      Left = 0
-      Height = 200
-      Top = 216
-      Width = 248
-      Caption = 'Mount Limits'
-      TabOrder = 1
+      object BtnSaveAlign: TSpeedButton
+        Left = 208
+        Height = 26
+        Top = 94
+        Width = 26
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000EBEBEBFFEBEB
+          EBFF8C525AFF8C525AFF8C525AFF845252FF8C525AFF8C525AFF845252FF8C52
+          5AFF845252FF845252FF845252FF8C525AFF845252FFEBEBEBFFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFD66363FFFF8CADFFEBEBEBFFEBEBEBFFCECE
+          CEFFEBEBEBFFFFC6FFFFEBEBEBFF8C525AFFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFD66B6BFFEBEBEBFFD6D6D6FFEBEB
+          EBFFCEC6CEFFFFEFFFFFC6BDC6FFFF0000FFFF8CADFF8C525AFFEBEBEBFF8C52
+          52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFFF8CADFFEBEBEBFFEBEBEBFFFFCE
+          FFFFEBEBEBFFC6C6C6FFEBEBEBFFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFD66B6BFFEBEBEBFFD6D6D6FFFFF7
+          FFFFCEC6CEFFEBEBEBFFC6BDC6FFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFCECE
+          CEFFEBEBEBFFFFC6FFFFFFE7FFFFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF6363FFFF6363FFFF6363FFFF6363FFFF6363FFFF6363FFFF63
+          63FFFF6363FFFF6363FFFF6363FFFF6B6BFFFF8CADFF8C525AFFEBEBEBFF8C52
+          52FFFF8CADFFD66363FF8C5252FF8C5252FF845252FF845252FF845252FF8452
+          52FF845252FF845252FF845252FF845252FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFD65252FFFFEFD6FFEBEBEBFFFFE7CEFFEBEBEBFFFFE7C6FFFFFF
+          FFFFFFDEBDFFFFFFFFFFFFDEB5FF845252FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFFFE7
+          CEFFEBEBEBFFFFDEFFFFFFFFFFFF8C525AFFFF8CADFF8C525AFFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFFFEFDEFFEBEBEBFFFFEFD6FFEBEB
+          EBFFFFE7CEFFEBEBEBFFFFDEC6FF8C525AFFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFFFE7CEFFFFFFFFFF8C525AFFFF8CADFF8C525AFFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFFFEFDEFFEBEB
+          EBFFFFEFD6FFEBEBEBFFFFE7CEFF845252FF8C5252FF8C525AFFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFF8C525AFFFFFFFFFF8C525AFFEBEBEBFF8452
+          52FF845252FF845252FF845252FF845252FF845252FF845252FF8C5252FF8C52
+          52FF845252FF845252FF8C5252FF8C525AFF845252FF845252FFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF
+        }
+        OnClick = BtnSaveAlignClick
+      end
+      object BtnLoadAlign: TSpeedButton
+        Left = 171
+        Height = 26
+        Top = 94
+        Width = 26
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000EBEBEBFF0063
+          E7FF00639CFF0063E7FF00639CFF0063E7FF00639CFF0063E7FF00639CFF006B
+          EFFF00639CFF006BEFFF00639CFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF7BF7
+          FFFFBDFFFFFF7BF7FFFFBDFFFFFF7BF7FFFFBDFFFFFF7BEFFFFFC6FFFFFF73EF
+          FFFFC6FFFFFF73E7FFFFFFFFFFFF00639CFFEBEBEBFFEBEBEBFFEBEBEBFF009C
+          FFFFA5FFFFFFE7FFFFFFA5FFFFFFE7FFFFFFA5F7FFFFE7FFFFFF9CF7FFFFEFFF
+          FFFF9CEFFFFFEFFFFFFF9CEFFFFF006BEFFFEBEBEBFFEBEBEBFFEBEBEBFFA5FF
+          FFFF00BDFFFFA5FFFFFFE7FFFFFFA5F7FFFFE7FFFFFFA5F7FFFFEFFFFFFF9CEF
+          FFFFEFFFFFFF9CEFFFFFEFFFFFFFFFF7FFFF008CEFFFEBEBEBFFEBEBEBFFE7FF
+          FFFF009CD6FFE7FFFFFFA5FFFFFFE7FFFFFFA5F7FFFFE7FFFFFF9CEFFFFFEFFF
+          FFFF9CEFFFFFEFFFFFFF9CE7FFFFEFFFFFFF00639CFFEBEBEBFFEBEBEBFFA5F7
+          FFFFE7FFFFFF009CFFFFE7FFFFFFA5F7FFFFE7FFFFFFA5F7FFFFEFFFFFFF9CEF
+          FFFFEFFFFFFF9CE7FFFFEFFFFFFF9CE7FFFFFFFFFFFF00639CFF9CE7FFFFE7FF
+          FFFFA5F7FFFF009CFFFFA5F7FFFFE7FFFFFFA5F7FFFFE7FFFFFF9CEFFFFFEFFF
+          FFFF9CEFFFFFEFFFFFFF9CE7FFFFEFFFFFFF9CE7FFFF006BEFFF009CFFFFA5EF
+          FFFFE7FFFFFFA5F7FFFF00BDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFFFFFFFFFF7FFFF00639CFFEFFF
+          FFFF9CE7FFFFEFFFFFFF9CF7FFFF00B5FFFF9CF7FFFFEFFFFFFFA5FFFFFFE7FF
+          FFFFA5FFFFFFE7FFFFFFA5FFFFFFE7FFFFFF009CD6FFEBEBEBFF008CEFFF9CDE
+          FFFFEFFFFFFF94FFFFFFE7FFFFFF94FFFFFF0094C6FFFFFFFFFF00B5FFFF0094
+          C6FF00B5FFFF0094FFFF00BDFFFF009CD6FF00B5FFFFEBEBEBFFEBEBEBFF0063
+          EFFF9CDEFFFFDEFFFFFF94F7FFFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFF00C6FFFF008CBDFF00B5FFFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFF000000FF000000FF000000FF000000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFF000000FF000000FF000000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFF000000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFF000000FF000000FF000000FF000000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF000000FF000000FF000000FF0000
+          00FF000000FF000000FFEBEBEBFF000000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF000000FF000000FF0000
+          00FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF
+        }
+        OnClick = BtnLoadAlignClick
+      end
     end
     object GroupBox11: TGroupBox
       Left = 0
       Height = 150
-      Top = 416
+      Top = 414
       Width = 248
       Caption = 'Other Settings'
+      ClientHeight = 118
+      ClientWidth = 244
       TabOrder = 2
+      object BtnINDIgui: TButton
+        Left = 48
+        Height = 25
+        Top = 72
+        Width = 115
+        Caption = 'INDI settings'
+        OnClick = IndiBtnClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Label19: TLabel
+        Left = 5
+        Height = 80
+        Top = 0
+        Width = 234
+        AutoSize = False
+        Caption = 'All the other settings like joystick, guide rate, park position, horizon limit, can be set directly in the standard INDI dialog. '
+        ParentColor = False
+        WordWrap = True
+      end
+      object BtnSaveIndiSettings: TSpeedButton
+        Left = 192
+        Height = 26
+        Top = 72
+        Width = 26
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000EBEBEBFFEBEB
+          EBFF8C525AFF8C525AFF8C525AFF845252FF8C525AFF8C525AFF845252FF8C52
+          5AFF845252FF845252FF845252FF8C525AFF845252FFEBEBEBFFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFD66363FFFF8CADFFEBEBEBFFEBEBEBFFCECE
+          CEFFEBEBEBFFFFC6FFFFEBEBEBFF8C525AFFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFD66B6BFFEBEBEBFFD6D6D6FFEBEB
+          EBFFCEC6CEFFFFEFFFFFC6BDC6FFFF0000FFFF8CADFF8C525AFFEBEBEBFF8C52
+          52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFFF8CADFFEBEBEBFFEBEBEBFFFFCE
+          FFFFEBEBEBFFC6C6C6FFEBEBEBFFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFD66B6BFFEBEBEBFFD6D6D6FFFFF7
+          FFFFCEC6CEFFEBEBEBFFC6BDC6FFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF0000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFCECE
+          CEFFEBEBEBFFFFC6FFFFFFE7FFFFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFFF6363FFFF6363FFFF6363FFFF6363FFFF6363FFFF6363FFFF63
+          63FFFF6363FFFF6363FFFF6363FFFF6B6BFFFF8CADFF8C525AFFEBEBEBFF8C52
+          52FFFF8CADFFD66363FF8C5252FF8C5252FF845252FF845252FF845252FF8452
+          52FF845252FF845252FF845252FF845252FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CADFFD65252FFFFEFD6FFEBEBEBFFFFE7CEFFEBEBEBFFFFE7C6FFFFFF
+          FFFFFFDEBDFFFFFFFFFFFFDEB5FF845252FFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFFFE7
+          CEFFEBEBEBFFFFDEFFFFFFFFFFFF8C525AFFFF8CADFF8C525AFFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFFFEFDEFFEBEBEBFFFFEFD6FFEBEB
+          EBFFFFE7CEFFEBEBEBFFFFDEC6FF8C525AFFFF8CADFF845252FFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFFFE7CEFFFFFFFFFF8C525AFFFF8CADFF8C525AFFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFFFEFDEFFEBEB
+          EBFFFFEFD6FFEBEBEBFFFFE7CEFF845252FF8C5252FF8C525AFFEBEBEBFF8452
+          52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFF8C525AFFFFFFFFFF8C525AFFEBEBEBFF8452
+          52FF845252FF845252FF845252FF845252FF845252FF845252FF8C5252FF8C52
+          52FF845252FF845252FF8C5252FF8C525AFF845252FF845252FFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+          EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF
+        }
+        OnClick = BtnSaveIndiSettingsClick
+      end
     end
+  end
+  object BtnSaveSite2: TSpeedButton
+    Left = 56
+    Height = 26
+    Top = 0
+    Width = 26
+    Glyph.Data = {
+      36040000424D3604000000000000360000002800000010000000100000000100
+      2000000000000004000064000000640000000000000000000000EBEBEBFFEBEB
+      EBFF8C525AFF8C525AFF8C525AFF845252FF8C525AFF8C525AFF845252FF8C52
+      5AFF845252FF845252FF845252FF8C525AFF845252FFEBEBEBFFEBEBEBFF8452
+      52FFFF8CADFFFF0000FFEBEBEBFFD66363FFFF8CADFFEBEBEBFFEBEBEBFFCECE
+      CEFFEBEBEBFFFFC6FFFFEBEBEBFF8C525AFFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFD66B6BFFEBEBEBFFD6D6D6FFEBEB
+      EBFFCEC6CEFFFFEFFFFFC6BDC6FFFF0000FFFF8CADFF8C525AFFEBEBEBFF8C52
+      52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFFF8CADFFEBEBEBFFEBEBEBFFFFCE
+      FFFFEBEBEBFFC6C6C6FFEBEBEBFFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CADFFFF0000FFEBEBEBFFFF6363FFD66B6BFFEBEBEBFFD6D6D6FFFFF7
+      FFFFCEC6CEFFEBEBEBFFC6BDC6FFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CADFFFF0000FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFCECE
+      CEFFEBEBEBFFFFC6FFFFFFE7FFFFFF0000FFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CADFFFF6363FFFF6363FFFF6363FFFF6363FFFF6363FFFF6363FFFF63
+      63FFFF6363FFFF6363FFFF6363FFFF6B6BFFFF8CADFF8C525AFFEBEBEBFF8C52
+      52FFFF8CADFFD66363FF8C5252FF8C5252FF845252FF845252FF845252FF8452
+      52FF845252FF845252FF845252FF845252FFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CADFFD65252FFFFEFD6FFEBEBEBFFFFE7CEFFEBEBEBFFFFE7C6FFFFFF
+      FFFFFFDEBDFFFFFFFFFFFFDEB5FF845252FFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFFFE7
+      CEFFEBEBEBFFFFDEFFFFFFFFFFFF8C525AFFFF8CADFF8C525AFFEBEBEBFF8452
+      52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFFFEFDEFFEBEBEBFFFFEFD6FFEBEB
+      EBFFFFE7CEFFEBEBEBFFFFDEC6FF8C525AFFFF8CADFF845252FFEBEBEBFF8452
+      52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+      EBFFEBEBEBFFFFE7CEFFFFFFFFFF8C525AFFFF8CADFF8C525AFFEBEBEBFF8452
+      52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFFFEFDEFFEBEB
+      EBFFFFEFD6FFEBEBEBFFFFE7CEFF845252FF8C5252FF8C525AFFEBEBEBFF8452
+      52FFFF8CB5FF845252FFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+      EBFFEBEBEBFFEBEBEBFFEBEBEBFF8C525AFFFFFFFFFF8C525AFFEBEBEBFF8452
+      52FF845252FF845252FF845252FF845252FF845252FF845252FF8C5252FF8C52
+      52FF845252FF845252FF8C5252FF8C525AFF845252FF845252FFEBEBEBFFEBEB
+      EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEB
+      EBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFFEBEBEBFF
+    }
+    OnClick = BtnSaveSiteClick
   end
 end
