@@ -89,8 +89,11 @@ T_indieqmod = class(TIndiBaseClient)
    AlignList: ISwitchVectorProperty;
    AlignListAdd, AlignListClear, AlignListWrite, AlignListLoad: ISwitch;
    AlignSyncMode: ISwitchVectorProperty;
+   AlignDataFile: ITextVectorProperty;
    SyncManage: ISwitchVectorProperty;
    SyncClearDelta: ISwitch;
+   configprop: ISwitchVectorProperty;
+   configload,configsave,configdefault: ISwitch;
    eod_coord:  boolean;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
@@ -179,6 +182,10 @@ T_indieqmod = class(TIndiBaseClient)
    procedure SetTrackRate(tra,tde: double);
    procedure SetSite(ObsLat,ObsLon,ObsElev: double);
    procedure ClearAlignment;
+   procedure SaveAlignment(fn: string);
+   procedure LoadAlignment(fn: string);
+   procedure SaveConfig;
+   procedure LoadConfig;
    procedure ClearSyncDelta;
    property indiserver: string read Findiserver write Findiserver;
    property indiserverport: string read Findiserverport write Findiserverport;
@@ -310,8 +317,10 @@ begin
     StandardSync:=nil;
     AlignMode:=nil;
     AlignList:=nil;
+    AlignDataFile:=nil;
     AlignSyncMode:=nil;
     SyncManage:=nil;
+    configprop:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -345,6 +354,8 @@ begin
        (AlignMode<>nil) and
        (AlignList<>nil) and
        (AlignSyncMode<>nil) and
+       (AlignDataFile<>nil) and
+       (configprop<>nil) and
        (SyncManage<>nil)
     then begin
        FStatus := devConnected;
@@ -488,7 +499,7 @@ begin
   else if (proptype=INDI_SWITCH)and(propname='REVERSEDEC') then begin
      RevDec:=indiProp.getSwitch;
   end
-  else if (proptype=INDI_SWITCH)and(propname='SLEWMODE') then begin
+  else if (proptype=INDI_SWITCH)and((propname='TELESCOPE_SLEW_RATE')or(propname='SLEWMODE')) then begin
      SlewMode:=indiProp.getSwitch;
      for i:=0 to SlewMode.nsp-1 do begin
        FSlewPreset.Add(SlewMode.sp[i].lbl);
@@ -506,12 +517,16 @@ begin
      TrackRde:=IUFindNumber(TrackR,'DETRACKRATE');
      if (TrackRra=nil)or(TrackRde=nil) then TrackR:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='TRACKMODE') then begin
+  else if (proptype=INDI_SWITCH)and((propname='TELESCOPE_TRACK_RATE')or(propname='TRACKMODE')) then begin
      TrackM:=indiProp.getSwitch;
-     TrackSidereal:=IUFindSwitch(TrackM,'SIDEREAL');
-     TrackLunar:=IUFindSwitch(TrackM,'LUNAR');
-     TrackSolar:=IUFindSwitch(TrackM,'SOLAR');
-     TrackCustom:=IUFindSwitch(TrackM,'CUSTOM');
+     TrackSidereal:=IUFindSwitch(TrackM,'TRACK_SIDEREAL');
+     if TrackSidereal=nil then TrackSidereal:=IUFindSwitch(TrackM,'SIDEREAL');
+     TrackLunar:=IUFindSwitch(TrackM,'TRACK_LUNAR');
+     if TrackLunar=nil then TrackLunar:=IUFindSwitch(TrackM,'LUNAR');
+     TrackSolar:=IUFindSwitch(TrackM,'TRACK_SOLAR');
+     if TrackSolar=nil then TrackSolar:=IUFindSwitch(TrackM,'SOLAR');
+     TrackCustom:=IUFindSwitch(TrackM,'TRACK_CUSTOM');
+     if TrackCustom=nil then TrackCustom:=IUFindSwitch(TrackM,'CUSTOM');
      if (TrackSidereal=nil)or(TrackLunar=nil)or(TrackSolar=nil)or(TrackCustom=nil) then TrackM:=nil;
   end
   else if (proptype=INDI_SWITCH)and(propname='ON_COORD_SET') then begin
@@ -551,6 +566,9 @@ begin
      AlignListLoad:=IUFindSwitch(AlignList,'ALIGNLOADFILE');
      if (AlignListAdd=nil)or(AlignListClear=nil)or(AlignListWrite=nil)or(AlignListLoad=nil) then AlignList:=nil;
   end
+  else if (proptype=INDI_TEXT)and(propname='ALIGNDATAFILE') then begin
+     AlignDataFile:=indiProp.getText;
+  end
   else if (proptype=INDI_SWITCH)and(propname='ALIGNSYNCMODE') then begin
      AlignSyncMode:=indiProp.getSwitch;
      for i:=0 to AlignSyncMode.nsp-1 do begin
@@ -567,6 +585,13 @@ begin
      SyncDeltaRA:=IUFindNumber(StandardSync,'STANDARDSYNC_RA');
      SyncDeltaDE:=IUFindNumber(StandardSync,'STANDARDSYNC_DE');
      if (SyncDeltaRA=nil)or(SyncDeltaDE=nil) then StandardSync:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+     configprop:=indiProp.getSwitch;
+     configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
+     configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
+     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
+     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
   ;
   CheckStatus;
@@ -941,6 +966,46 @@ begin
  end;
 end;
 
+procedure T_indieqmod.SaveAlignment(fn: string);
+begin
+ if (AlignList<>nil)and(AlignDataFile<>nil) then begin
+   AlignDataFile.tp[0].text:=fn;
+   sendNewText(AlignDataFile);
+   IUResetSwitch(AlignList);
+   AlignListWrite.s:=ISS_ON;
+   sendNewSwitch(AlignList);
+ end;
+end;
+
+procedure T_indieqmod.LoadAlignment(fn: string);
+begin
+ if (AlignList<>nil)and(AlignDataFile<>nil) then begin
+   AlignDataFile.tp[0].text:=fn;
+   sendNewText(AlignDataFile);
+   IUResetSwitch(AlignList);
+   AlignListLoad.s:=ISS_ON;
+   sendNewSwitch(AlignList);
+ end;
+end;
+
+procedure T_indieqmod.SaveConfig;
+begin
+  if configprop<>nil then begin
+    IUResetSwitch(configprop);
+    configsave.s:=ISS_ON;
+    sendNewSwitch(configprop);
+  end;
+end;
+
+procedure T_indieqmod.LoadConfig;
+begin
+  if configprop<>nil then begin
+    IUResetSwitch(configprop);
+    configload.s:=ISS_ON;
+    sendNewSwitch(configprop);
+  end;
+end;
+
 function  T_indieqmod.GetDeltaRa: double;
 begin
  if StandardSync<>nil then begin
@@ -1013,7 +1078,12 @@ procedure T_indieqmod.SetPark(value:boolean);
 begin
  if Park_opt<>nil then begin
    IUResetSwitch(Park_opt);
-   if value then Park_opt.sp[0].s:=ISS_ON;
+   if value then
+      Park_opt.sp[0].s:=ISS_ON
+   else begin
+      if Park_opt.nsp>1 then
+         Park_opt.sp[1].s:=ISS_ON;
+   end;
    sendNewSwitch(Park_opt);
  end;
 end;

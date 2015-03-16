@@ -62,7 +62,6 @@
       <Unit4>
         <Filename Value="u_ccdconfig.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_ccdconfig"/>
       </Unit4>
     </Units>
   </ProjectOptions>
@@ -84,7 +83,6 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>
