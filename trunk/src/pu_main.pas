@@ -1909,8 +1909,7 @@ begin
 end;
 
 procedure Tf_main.WriteHeaders;
-var k:integer;
-    dy,dm,dd: word;
+var dy,dm,dd: word;
     origin,observer,telname,objname: string;
     focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hbin1,hbin2: integer;
@@ -2344,7 +2343,7 @@ begin
 end;
 
 procedure Tf_main.MenuShowSkychartClick(Sender: TObject);
-var pixsize,pixscale,telescope_focal_length,fov,ra,de,tolerance,MinRadius: double;
+var pixsize,pixscale,telescope_focal_length,ra,de,tolerance,MinRadius: double;
 begin
  if fits.HeaderInfo.naxis>0 then begin
    ra:=NullCoord;

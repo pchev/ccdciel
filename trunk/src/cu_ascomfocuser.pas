@@ -158,8 +158,10 @@ end;
 end;
 
 procedure T_ascomfocuser.StatusTimerTimer(sender: TObject);
+{$ifdef mswindows}
 var x,y: double;
     p: integer;
+{$endif}
 begin
  {$ifdef mswindows}
   if not Connected then begin
@@ -253,7 +255,9 @@ begin
 end;
 
 procedure T_ascomfocuser.SetRelPosition(p:integer);
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
  {$ifdef mswindows}
  if Connected then begin

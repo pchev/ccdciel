@@ -530,8 +530,7 @@ CloseAction:=caFree;
 end;
 
 procedure TFits.GetFitsInfo;
-var   header : THeaderBlock;
-      i,n,p1,p2 : integer;
+var   i : integer;
       keyword,buf : string;
 begin
 with FFitsInfo do begin

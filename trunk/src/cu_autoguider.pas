@@ -4,7 +4,7 @@ unit cu_autoguider;
 
 interface
 
-uses cu_tcpclient, u_global, u_utils, blcksock, fpjson, jsonparser,
+uses cu_tcpclient, u_global, blcksock, fpjson, jsonparser,
   Forms, Classes, SysUtils;
 
 type
@@ -68,8 +68,6 @@ end;
 
 procedure TPHDClient.Execute;
 var buf:string;
-    dateto : double;
-    i : integer;
     ending : boolean;
 begin
 ending:=false;
@@ -125,7 +123,6 @@ begin
 end;
 
 procedure TPHDClient.Send(const Value: string);
-var dateto:double;
 begin
 writeln('>>'+Value);
  if Value>'' then begin
@@ -179,8 +176,7 @@ J.Free;
 end;
 
 Procedure TPHDClient.ProcessEvent(txt:string);
-var eventname,rpcid,rpcresult,rpcerror,buf,fullmsg: string;
-    PHDVersion,MsgVersion: string;
+var eventname,rpcid,rpcresult,rpcerror: string;
     attrib,value:Tstringlist;
     p,i:integer;
 begin
@@ -188,7 +184,6 @@ writeln('=='+txt);
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
 try
-fullmsg:=txt;
 JsontoStringlist(txt,attrib,value);
 p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin

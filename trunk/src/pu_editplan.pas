@@ -2,9 +2,30 @@ unit pu_editplan;
 
 {$mode objfpc}{$H+}
 
+{
+Copyright (C) 2015 Patrick Chevalley
+
+http://www.ap-i.net
+pch@ap-i.net
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+
 interface
 
-uses u_ccdconfig, u_global, u_utils, Classes, SysUtils, FileUtil, Forms,
+uses  u_global, u_utils, u_ccdconfig, XMLConf,
+  Classes, SysUtils, FileUtil, Forms,
   Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls;
 
 type
@@ -118,8 +139,8 @@ begin
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
   p.previewexposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',1.0);
   p.preview:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Preview',false);
-  p.count:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1);
-  p.repeatcount:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1);
+  p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
+  p.repeatcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1));
   p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
 end;
 
@@ -288,8 +309,8 @@ begin
       str:=originalFilter[i];
     end;
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Filter',str);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',IntToStr(p.count));
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',IntToStr(p.repeatcount));
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',p.count);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',p.repeatcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',p.previewexposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Preview',p.preview);

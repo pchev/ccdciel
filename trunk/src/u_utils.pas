@@ -108,8 +108,6 @@ var f: TForm;
     l: Tlabel;
     e: Tedit;
     b: TButton;
-    i: integer;
-    t: TTarget;
 begin
   f:=TForm.Create(aOwner);
   l:=TLabel.Create(f);

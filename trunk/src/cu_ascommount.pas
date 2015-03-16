@@ -139,7 +139,9 @@ end;
 end;
 
 procedure T_ascommount.StatusTimerTimer(sender: TObject);
+{$ifdef mswindows}
 var x,y: double;
+  {$endif}
 begin
  {$ifdef mswindows}
   if not Connected then begin
@@ -187,7 +189,9 @@ begin
 end;
 
 function  T_ascommount.GetEquinox: double;
+{$ifdef mswindows}
 var i: Integer;
+{$endif}
 begin
 {$ifdef mswindows}
 if Connected then begin
