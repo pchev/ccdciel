@@ -1,13 +1,13 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 531
+  Height = 492
   Top = 0
   Width = 180
-  ClientHeight = 531
+  ClientHeight = 492
   ClientWidth = 180
   TabOrder = 0
-  DesignLeft = 328
-  DesignTop = 150
+  DesignLeft = 339
+  DesignTop = 127
   object StaticText1: TStaticText
     Left = 0
     Height = 20
@@ -126,16 +126,16 @@ object f_sequence: Tf_sequence
   end
   object Panel2: TPanel
     Left = 0
-    Height = 254
+    Height = 230
     Top = 258
     Width = 180
     BevelOuter = bvNone
-    ClientHeight = 254
+    ClientHeight = 230
     ClientWidth = 180
     TabOrder = 2
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 188
+      Height = 164
       Top = 20
       Width = 180
       Align = alClient
@@ -163,7 +163,7 @@ object f_sequence: Tf_sequence
     object Panel4: TPanel
       Left = 0
       Height = 46
-      Top = 208
+      Top = 184
       Width = 180
       Align = alBottom
       ClientHeight = 46
