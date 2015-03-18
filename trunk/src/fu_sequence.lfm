@@ -44,6 +44,7 @@ object f_sequence: Tf_sequence
       Flat = True
       RowCount = 1
       TabOrder = 0
+      OnDrawCell = TargetGridDrawCell
     end
     object Panel3: TPanel
       Left = 0
@@ -135,7 +136,7 @@ object f_sequence: Tf_sequence
     TabOrder = 2
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 164
+      Height = 160
       Top = 20
       Width = 180
       Align = alClient
@@ -145,6 +146,7 @@ object f_sequence: Tf_sequence
       Flat = True
       RowCount = 1
       TabOrder = 0
+      OnDrawCell = PlanGridDrawCell
     end
     object StaticText2: TStaticText
       Left = 0
@@ -162,16 +164,16 @@ object f_sequence: Tf_sequence
     end
     object Panel4: TPanel
       Left = 0
-      Height = 46
-      Top = 184
+      Height = 50
+      Top = 180
       Width = 180
       Align = alBottom
-      ClientHeight = 46
+      ClientHeight = 50
       ClientWidth = 180
       TabOrder = 2
       object StatusMsg: TLabel
         Left = 1
-        Height = 43
+        Height = 47
         Top = 1
         Width = 178
         Align = alClient
@@ -182,7 +184,7 @@ object f_sequence: Tf_sequence
       object DelayMsg: TLabel
         Left = 1
         Height = 1
-        Top = 44
+        Top = 48
         Width = 178
         Align = alBottom
         ParentColor = False

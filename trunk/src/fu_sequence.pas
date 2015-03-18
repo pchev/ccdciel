@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils,
-  fu_capture, fu_preview, fu_filterwheel, cu_mount,
+  fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -61,19 +61,24 @@ type
     procedure BtnLoadTargetsClick(Sender: TObject);
     procedure BtnSaveTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
+    procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
+      aRect: TRect; aState: TGridDrawState);
     procedure PlanTimerTimer(Sender: TObject);
     procedure RepeatTimerTimer(Sender: TObject);
+    procedure TargetGridDrawCell(Sender: TObject; aCol, aRow: Integer;
+      aRect: TRect; aState: TGridDrawState);
     procedure TargetTimerTimer(Sender: TObject);
   private
     { private declarations }
     FRunning, PlanRunning, StepRunning: boolean;
     TargetRow, PlanRow, RepeatCount: integer;
-    DelayEnd: TDateTime;
+    TimeStart,DelayEnd: TDateTime;
     FonMsg: TNotifyMsg;
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
     Ffilter: Tf_filterwheel;
     Fmount: T_mount;
+    Fcamera: T_camera;
     procedure InitTarget;
     procedure StartPlan;
     procedure StartStep;
@@ -92,6 +97,7 @@ type
     property Capture: Tf_capture read Fcapture write Fcapture;
     property Filter: Tf_filterwheel read Ffilter write Ffilter;
     property Mount: T_mount read Fmount write Fmount;
+    property Camera: T_camera read Fcamera write Fcamera;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -311,52 +317,81 @@ begin
  end;
 end;
 
+procedure Tf_sequence.TargetGridDrawCell(Sender: TObject; aCol, aRow: Integer;
+  aRect: TRect; aState: TGridDrawState);
+begin
+ if (TargetRow>0)and(aCol=0)and(aRow=TargetRow) then begin
+    TargetGrid.Canvas.Brush.Color := clNavy;
+    TargetGrid.Canvas.Font.Color := clWhite;
+    TargetGrid.Canvas.FillRect(aRect);
+    TargetGrid.Canvas.TextOut(aRect.Left,aRect.Top,TargetGrid.Cells[aCol,aRow]);
+ end;
+end;
+
+procedure Tf_sequence.PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
+  aRect: TRect; aState: TGridDrawState);
+begin
+ if (PlanRow>0)and(aCol=0)and(aRow=PlanRow) then begin
+    PlanGrid.Canvas.Brush.Color := clNavy;
+    PlanGrid.Canvas.Font.Color := clWhite;
+    PlanGrid.Canvas.FillRect(aRect);
+    PlanGrid.Canvas.TextOut(aRect.Left,aRect.Top,PlanGrid.Cells[aCol,aRow]);
+ end;
+end;
+
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
 begin
- if FRunning then begin
-   PlanRunning:=false;
+ if FRunning and PlanRunning then begin
    FRunning:=false;
+   PlanRunning:=false;
    if RepeatTimer.Enabled and Preview.Running then Preview.BtnLoop.Click;
    RepeatTimer.Enabled:=false;
    if Capture.Running then Capture.BtnStart.Click;
- end;
+ end
+ else msg('Cannot stop now.');
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
 begin
- if Fcapture.Running then begin
-   msg('Capture already running! please stop it first if you want to start a new sequence.');
+ if (Fcamera.Status=devConnected) then begin
+   if Fcapture.Running then begin
+     msg('Capture already running! please stop it first if you want to start a new sequence.');
+   end
+   else if TargetGrid.RowCount<2 then begin
+     msg('Please load or create a target list first.');
+   end
+   else begin
+     TargetRow:=1;
+     FRunning:=true;
+     PlanRunning:=false;
+     StepRunning:=false;
+     msg('Starting sequence '+CurrentName);
+     TargetGrid.Row:=TargetRow;
+     TargetGrid.Invalidate;
+     InitTarget;
+     StartPlan;
+     TargetTimer.Enabled:=true;
+   end;
  end
- else if TargetGrid.RowCount<2 then begin
-   msg('Please load or create a target list first.');
- end
- else begin
-   TargetRow:=1;
-   FRunning:=true;
-   PlanRunning:=false;
-   StepRunning:=false;
-   msg('Starting sequence '+CurrentName);
-   TargetGrid.Row:=TargetRow;
-   InitTarget;
-   StartPlan;
-   TargetTimer.Enabled:=true;
- end;
+ else msg('Camera is not connected');
 end;
 
 procedure Tf_sequence.InitTarget;
 var t: TTarget;
 begin
   t:=TTarget(TargetGrid.Objects[0,TargetRow]);
-  msg('Initialize target '+t.objectname);
-  { TODO :  }
-  // check if current time in range
-  // slew to coordinates
-  if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
-     Mount.Slew(t.ra, t.de);
-     // astrometry
+  if t<>nil then begin
+    msg('Initialize target '+t.objectname);
+    { TODO :  }
+    // check if current time in range
+    // slew to coordinates
+    if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
+       Mount.Slew(t.ra, t.de);
+       // astrometry
+    end;
+    // start guiding
+    // etc...
   end;
-  // start guiding
-  // etc...
 end;
 
 procedure Tf_sequence.TargetTimerTimer(Sender: TObject);
@@ -366,36 +401,49 @@ begin
      inc(TargetRow);
      if TargetRow<TargetGrid.RowCount then begin
         TargetGrid.Row:=TargetRow;
+        TargetGrid.Invalidate;
         InitTarget;
         StartPlan;
      end
      else begin
         FRunning:=false;
         TargetTimer.Enabled:=false;
+        TargetRow:=0;
         msg('Sequence '+CurrentName+' terminated.');
+        TargetGrid.Invalidate;
      end;
   end;
  end
  else begin
   TargetTimer.Enabled:=false;
+  TargetRow:=0;
   msg('Sequence '+CurrentName+' stopped.');
+  TargetGrid.Invalidate;
  end;
 end;
 
 procedure Tf_sequence.StartPlan;
+var t: TTarget;
 begin
-  if PlanRunning then exit;
-  PlanRunning:=true;
-  msg('Start plan '+TTarget(TargetGrid.Objects[0,TargetRow]).plan);
-  LoadPlan(TTarget(TargetGrid.Objects[0,TargetRow]).plan);
-  PlanRow:=1;
-  StartStep;
-  PlanTimer.Enabled:=true;
+  t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+  if t<>nil then begin
+    if PlanRunning then exit;
+    PlanRunning:=true;
+    msg('Start plan '+t.plan);
+    LoadPlan(t.plan);
+    PlanRow:=1;
+    PlanGrid.Row:=PlanRow;
+    PlanGrid.Invalidate;
+    StartStep;
+    PlanTimer.Enabled:=true;
+  end;
 end;
 
 procedure Tf_sequence.PlanTimerTimer(Sender: TObject);
 var tt: double;
+    str: string;
     p: TPlan;
+    t: TTarget;
 begin
  if PlanRunning then begin
    p:=TPlan(PlanGrid.Objects[0,PlanRow]);
@@ -403,13 +451,14 @@ begin
      StepRunning:=Capture.Running;
      if not StepRunning then begin
        inc(RepeatCount);
-       if RepeatCount<=p.repeatcount then begin
-          tt:=p.delay;
-          msg('Wait '+FormatFloat(f1,tt)+' seconds before next repeated sequence');
+       if (p<>nil)and(RepeatCount<=p.repeatcount) then begin
+          tt:=p.delay-(Now-TimeStart)*secperday;
+          if tt<0.1 then tt:=0.1;
+          msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated sequence '+IntToStr(RepeatCount));
           RepeatTimer.Interval:=trunc(1000*tt);
           RepeatTimer.Enabled:=true;
-          DelayEnd:=now+tt/86400;
-          if p.preview then begin
+          DelayEnd:=now+tt/secperday;
+          if p.preview and (tt>5)and(tt>(2*p.previewexposure)) then begin
             Preview.ExpTime.Text:=p.previewexposure_str;
             Preview.Binning.Text:=p.binning_str;
             Preview.BtnLoop.Click;
@@ -419,26 +468,35 @@ begin
          inc(PlanRow);
          if PlanRow<PlanGrid.RowCount then begin
            PlanGrid.Row:=PlanRow;
+           PlanGrid.Invalidate;
            StartStep;
          end
          else begin
            PlanRunning:=false;
            PlanTimer.Enabled:=false;
-           msg('Plan '+TTarget(TargetGrid.Objects[0,TargetRow]).plan+' terminated.');
+           PlanRow:=0;
+           t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+           if t<> nil then str:=t.plan else str:='';
+           msg('Plan '+str+' terminated.');
+           PlanGrid.Invalidate;
          end;
        end;
      end;
    end
    else begin
-     tt:=(DelayEnd-Now)*86400;
+     tt:=(DelayEnd-Now)*secperday;
      DelayMsg.Caption:='Continue in '+FormatFloat(f0,tt)+' seconds';
    end;
  end
  else begin
     PlanTimer.Enabled:=false;
     RepeatTimer.Enabled:=false;
-    msg('Plan '+TTarget(TargetGrid.Objects[0,TargetRow]).plan+' stopped.');
+    PlanRow:=0;
+    t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+    if t<> nil then str:=t.plan else str:='';
+    msg('Plan '+str+' stopped.');
     DelayMsg.Caption:='';
+    PlanGrid.Invalidate;
  end;
 end;
 
@@ -450,27 +508,39 @@ begin
     RepeatTimer.Enabled:=false;
     DelayMsg.Caption:='';
     p:=TPlan(PlanGrid.Objects[0,PlanRow]);
-    msg('Repeat '+inttostr(RepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
-    if p.preview and Preview.Running then Preview.BtnLoop.Click;
-    Fcapture.BtnStart.Click;
+    if p<>nil then begin
+      msg('Repeat '+inttostr(RepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
+      if p.preview and Preview.Running then Preview.BtnLoop.Click;
+      TimeStart:=now;
+      Fcapture.BtnStart.Click;
+    end
+    else PlanRunning:=false;
  end;
 end;
 
 procedure Tf_sequence.StartStep;
 var p: TPlan;
+    t: TTarget;
 begin
   StepRunning:=true;
   RepeatCount:=1;
   p:=TPlan(PlanGrid.Objects[0,PlanRow]);
-  Fcapture.ExpTime.Text:=p.exposure_str;
-  Fcapture.Binning.Text:=p.binning_str;
-  Fcapture.Fname.Text:=TTarget(TargetGrid.Objects[0,TargetRow]).objectname;
-  Fcapture.SeqNum.Text:=p.count_str;
-  Fcapture.FrameType.ItemIndex:=ord(p.frtype);
-  Ffilter.Filters.ItemIndex:=p.filter-1;
-  Ffilter.BtnSetFilter.Click;
-  msg('Start step '+p.description_str);
-  Fcapture.BtnStart.Click;
+  if p<>nil then begin
+    Fcapture.ExpTime.Text:=p.exposure_str;
+    Fcapture.Binning.Text:=p.binning_str;
+    t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+    if t<> nil then
+       Fcapture.Fname.Text:=t.objectname
+    else
+       Fcapture.Fname.Text:='Unknow';
+    Fcapture.SeqNum.Text:=p.count_str;
+    Fcapture.FrameType.ItemIndex:=ord(p.frtype);
+    Ffilter.Filters.ItemIndex:=p.filter-1;
+    Ffilter.BtnSetFilter.Click;
+    TimeStart:=now;
+    msg('Start step '+p.description_str);
+    Fcapture.BtnStart.Click;
+  end;
 end;
 
 end.
