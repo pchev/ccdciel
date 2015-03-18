@@ -322,15 +322,17 @@ else result:=-1;
 end;
 
 procedure T_indimount.Slew(ra,de: double);
+var waittime:integer;
 begin
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     sendNewSwitch(CoordSet);
+    if (abs(coord_ra.value-ra)+abs(coord_dec.value-de))>0.01 then waittime:=60000 else waittime:=1000;
     coord_ra.value:=ra;
     coord_dec.value:=de;
     sendNewNumber(coord_prop);
-    WaitBusy(coord_prop,120000);
+    WaitBusy(coord_prop,waittime);
   end;
 end;
 
@@ -343,7 +345,7 @@ begin
     coord_ra.value:=ra;
     coord_dec.value:=de;
     sendNewNumber(coord_prop);
-    WaitBusy(coord_prop);
+    WaitBusy(coord_prop,1000);
   end;
 end;
 

@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -131,6 +133,7 @@
         <ComponentName Value="f_preview"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_preview"/>
       </Unit3>
       <Unit4>
         <Filename Value="fu_msg.pas"/>
@@ -150,11 +153,11 @@
         <ComponentName Value="f_visu"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_visu"/>
       </Unit6>
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -173,7 +176,6 @@
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomfocuser"/>
       </Unit10>
       <Unit11>
         <Filename Value="cu_focuser.pas"/>
@@ -190,7 +192,6 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -216,7 +217,6 @@
       <Unit17>
         <Filename Value="cu_fits.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_fits"/>
       </Unit17>
       <Unit18>
         <Filename Value="u_modelisation.pas"/>
@@ -241,6 +241,7 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -249,17 +250,14 @@
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomcamera"/>
       </Unit25>
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomwheel"/>
       </Unit27>
       <Unit28>
         <Filename Value="pu_valueseditor.pas"/>
@@ -303,6 +301,7 @@
       <Unit34>
         <Filename Value="cu_cdcclient.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_cdcclient"/>
       </Unit34>
       <Unit35>
         <Filename Value="pu_viewtext.pas"/>
@@ -314,7 +313,6 @@
       <Unit36>
         <Filename Value="cu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_autoguider"/>
       </Unit36>
       <Unit37>
         <Filename Value="cu_tcpclient.pas"/>
@@ -338,7 +336,6 @@
       <Unit40>
         <Filename Value="u_ccdconfig.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_ccdconfig"/>
       </Unit40>
       <Unit41>
         <Filename Value="pu_edittargets.pas"/>
@@ -376,6 +373,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

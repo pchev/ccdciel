@@ -481,6 +481,7 @@ begin
   f_sequence.Capture:=f_capture;
   f_sequence.Filter:=f_filterwheel;
   f_sequence.Mount:=mount;
+  f_sequence.Camera:=camera;
 
   fits:=TFits.Create(self);
 
