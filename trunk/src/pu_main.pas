@@ -1540,7 +1540,9 @@ begin
   f_setup.MountIndiDevPort.Text:=config.GetValue('/INDImount/DevicePort','');
   f_setup.AscomMount.Text:=config.GetValue('/ASCOMmount/Device','');
 
+  FormPos(f_setup,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_setup.ShowModal;
+
   if f_setup.ModalResult=mrOK then begin
     config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
@@ -1588,7 +1590,11 @@ begin
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.SubfolderSequence.Checked:=config.GetValue('/Files/SubfolderSequence',false);
    f_option.SubfolderObjname.Checked:=config.GetValue('/Files/SubfolderObjname',false);
+   f_option.SubfolderStep.Checked:=config.GetValue('/Files/SubfolderStep',false);
    f_option.SubfolderFrametype.Checked:=config.GetValue('/Files/SubfolderFrametype',false);
+   f_option.FileObjname.Checked:=config.GetValue('/Files/FilenameObjname',true);
+   f_option.FileFiltername.Checked:=config.GetValue('/Files/FilenameFilter',true);
+   f_option.FileDate.Checked:=config.GetValue('/Files/FilenameDate',true);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -1618,13 +1624,18 @@ begin
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
 
+   FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/SubfolderSequence',f_option.SubfolderSequence.Checked);
      config.SetValue('/Files/SubfolderObjname',f_option.SubfolderObjname.Checked);
+     config.SetValue('/Files/SubfolderStep',f_option.SubfolderStep.Checked);
      config.SetValue('/Files/SubfolderFrametype',f_option.SubfolderFrametype.Checked);
+     config.SetValue('/Files/FilenameObjname',f_option.FileObjname.Checked);
+     config.SetValue('/Files/FilenameFilter',f_option.FileFiltername.Checked);
+     config.SetValue('/Files/FilenameDate',f_option.FileDate.Checked);
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
@@ -2022,7 +2033,9 @@ end;
 procedure Tf_main.CameraNewImage(Sender: TObject);
 var dt: Tdatetime;
     fn,imgsize: string;
-    subseq,subobj,subfrt: boolean;
+    subseq,subobj,substep,subfrt: boolean;
+    fnobj,fnfilter,fndate: boolean;
+    fileseqnum,i: integer;
 begin
   dt:=NowUTC;
   ImgFrameX:=FrameX;
@@ -2038,19 +2051,40 @@ begin
      subseq:=config.GetValue('/Files/SubfolderSequence',false);
      subobj:=config.GetValue('/Files/SubfolderObjname',false);
      subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
+     substep:=config.GetValue('/Files/SubfolderStep',false);
      fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
      if subseq and f_sequence.Running then fn:=slash(fn+f_sequence.CurrentName);
      if subfrt then fn:=slash(fn+f_capture.FrameType.Text);
      if subobj then fn:=slash(fn+f_capture.Fname.Text);
+     if substep and f_sequence.Running then begin
+        if f_sequence.TotalCount>1 then begin
+          fn:=slash(fn+f_sequence.CurrentStep+'_'+IntToStr(f_sequence.RepeatCount))
+        end
+        else begin
+          fn:=slash(fn+f_sequence.CurrentStep);
+        end;
+     end;
      ForceDirectoriesUTF8(fn);
-     if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then
-         fn:=fn+f_capture.Fname.Text+'_'
-     else
-         fn:=fn+f_capture.FrameType.Text+'_';
-     if (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
+     fnobj:=config.GetValue('/Files/FilenameObjname',true);
+     fnfilter:=config.GetValue('/Files/FilenameFilter',true);
+     fndate:=config.GetValue('/Files/FilenameDate',true);
+     if fnobj then begin
+       if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then
+           fn:=fn+f_capture.Fname.Text+'_'
+       else
+           fn:=fn+f_capture.FrameType.Text+'_';
+     end;
+     if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
          fn:=fn+wheel.FilterNames[wheel.Filter-1]+'_';
-     fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
-         +'.fits';
+     if fndate then
+        fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
+     else begin
+        fileseqnum:=1;
+        while FileExistsUTF8(fn+IntToStr(fileseqnum)+'.fits') do
+          inc(fileseqnum);
+        fn:=fn+IntToStr(fileseqnum);
+     end;
+     fn:=fn+'.fits';
      fits.SaveToFile(fn);
      NewMessage('Saved file '+fn);
      StatusBar1.Panels[2].Text:='Saved '+fn+' '+imgsize;
@@ -2272,6 +2306,7 @@ begin
      f_indigui.IndiPort:=config.GetValue('/INDI/ServerPort','');
      GUIready:=true;
   end;
+  FormPos(f_indigui,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_indigui.Show;
 end;
 
@@ -2411,6 +2446,7 @@ begin
     f_viewtext.Caption:='Astrometry resolver log';
     f_viewtext.Memo1.Clear;
     f_viewtext.Memo1.Lines.LoadFromFile(logf);
+    FormPos(f_viewtext,mouse.CursorPos.X,mouse.CursorPos.Y);
     f_viewtext.Show;
   end;
 end;
