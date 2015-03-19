@@ -36,6 +36,12 @@ type
     Button1: TButton;
     Button2: TButton;
     CaptureDir: TDirectoryEdit;
+    FileFiltername: TCheckBox;
+    FileDate: TCheckBox;
+    Label18: TLabel;
+    Label19: TLabel;
+    FileObjname: TCheckBox;
+    SubfolderStep: TCheckBox;
     SubfolderSequence: TCheckBox;
     SubfolderObjname: TCheckBox;
     SubfolderFrametype: TCheckBox;

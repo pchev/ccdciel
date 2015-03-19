@@ -71,7 +71,7 @@ type
   private
     { private declarations }
     FRunning, PlanRunning, StepRunning: boolean;
-    TargetRow, PlanRow, RepeatCount: integer;
+    TargetRow, PlanRow: integer;
     TimeStart,DelayEnd: TDateTime;
     FonMsg: TNotifyMsg;
     Fcapture: Tf_capture;
@@ -88,7 +88,8 @@ type
     procedure msg(txt:string);
   public
     { public declarations }
-    CurrentName, CurrentFile: string;
+    CurrentName, CurrentFile, CurrentStep: string;
+    RepeatCount, TotalCount: integer;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure LoadTargets(fn: string);
@@ -526,6 +527,8 @@ begin
   RepeatCount:=1;
   p:=TPlan(PlanGrid.Objects[0,PlanRow]);
   if p<>nil then begin
+    CurrentStep:=p.description_str;
+    TotalCount:=p.repeatcount;
     Fcapture.ExpTime.Text:=p.exposure_str;
     Fcapture.Binning.Text:=p.binning_str;
     t:=TTarget(TargetGrid.Objects[0,TargetRow]);
