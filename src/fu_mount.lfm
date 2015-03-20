@@ -2,18 +2,18 @@ object f_mount: Tf_mount
   Left = 0
   Height = 72
   Top = 0
-  Width = 110
+  Width = 163
   AutoSize = True
   ClientHeight = 72
-  ClientWidth = 110
+  ClientWidth = 163
   TabOrder = 0
-  DesignLeft = 274
-  DesignTop = 173
+  DesignLeft = 389
+  DesignTop = 175
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 110
+    Width = 163
     Align = alTop
     Alignment = taCenter
     Caption = 'Telescope position'
@@ -28,24 +28,24 @@ object f_mount: Tf_mount
     Left = 0
     Height = 52
     Top = 20
-    Width = 110
+    Width = 163
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
     ClientHeight = 52
-    ClientWidth = 110
+    ClientWidth = 163
     TabOrder = 1
     object Label1: TLabel
       Left = 0
-      Height = 21
+      Height = 22
       Top = 0
-      Width = 23
-      Caption = 'RA'
+      Width = 33
+      Caption = 'RA     '
       ParentColor = False
     end
     object RA: TEdit
-      Left = 23
-      Height = 21
+      Left = 33
+      Height = 22
       Hint = 'Current telescope Right Ascension'
       Top = 0
       Width = 80
@@ -57,17 +57,17 @@ object f_mount: Tf_mount
     end
     object Label2: TLabel
       Left = 0
-      Height = 21
-      Top = 21
-      Width = 23
-      Caption = 'Dec'
+      Height = 22
+      Top = 22
+      Width = 33
+      Caption = 'Dec   '
       ParentColor = False
     end
     object DE: TEdit
-      Left = 23
-      Height = 21
+      Left = 33
+      Height = 22
       Hint = 'Current telescope declination'
-      Top = 21
+      Top = 22
       Width = 80
       Color = clBlack
       Font.Color = clRed

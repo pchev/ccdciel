@@ -1,39 +1,39 @@
 object f_preview: Tf_preview
   Left = 0
-  Height = 112
+  Height = 127
   Top = 0
-  Width = 104
+  Width = 138
   AutoSize = True
-  ClientHeight = 112
-  ClientWidth = 104
+  ClientHeight = 127
+  ClientWidth = 138
   TabOrder = 0
-  DesignLeft = 269
-  DesignTop = 51
+  DesignLeft = 389
+  DesignTop = 103
   object Panel1: TPanel
     Left = 0
-    Height = 92
+    Height = 107
     Top = 20
-    Width = 104
+    Width = 138
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 92
-    ClientWidth = 104
+    ClientHeight = 107
+    ClientWidth = 138
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 22
+      Height = 23
       Top = 0
-      Width = 106
-      ClientHeight = 22
-      ClientWidth = 106
+      Width = 131
+      ClientHeight = 23
+      ClientWidth = 131
       TabOrder = 2
       object ExpTime: TComboBox
         Left = 40
-        Height = 21
+        Height = 22
         Hint = 'Exposure time in seconds'
         Top = 0
-        Width = 65
+        Width = 90
         Color = clBlack
         Font.Color = clRed
         ItemHeight = 0
@@ -56,27 +56,27 @@ object f_preview: Tf_preview
       end
       object Label1: TLabel
         Left = 0
-        Height = 15
+        Height = 16
         Top = 4
-        Width = 20
+        Width = 22
         Caption = 'Exp'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 22
-      Top = 22
-      Width = 106
-      ClientHeight = 22
-      ClientWidth = 106
+      Height = 23
+      Top = 23
+      Width = 131
+      ClientHeight = 23
+      ClientWidth = 131
       TabOrder = 3
       object Binning: TComboBox
         Left = 40
-        Height = 21
+        Height = 22
         Hint = 'Camera binning'
         Top = 0
-        Width = 65
+        Width = 90
         Color = clBlack
         Font.Color = clRed
         ItemHeight = 0
@@ -90,7 +90,7 @@ object f_preview: Tf_preview
       end
       object Label2: TLabel
         Left = 0
-        Height = 15
+        Height = 16
         Top = 4
         Width = 21
         Caption = 'Bin.'
@@ -99,10 +99,10 @@ object f_preview: Tf_preview
     end
     object BtnPreview: TButton
       Left = 0
-      Height = 24
+      Height = 25
       Hint = 'Start one preview exposure'
-      Top = 44
-      Width = 106
+      Top = 46
+      Width = 131
       Caption = 'Preview'
       OnClick = BtnPreviewClick
       ParentFont = False
@@ -111,10 +111,10 @@ object f_preview: Tf_preview
     object BtnLoop: TButton
       Tag = 1
       Left = 0
-      Height = 24
+      Height = 25
       Hint = 'Loop preview exposures'
-      Top = 68
-      Width = 106
+      Top = 71
+      Width = 131
       Caption = 'Loop'
       OnClick = BtnLoopClick
       ParentFont = False
@@ -125,7 +125,7 @@ object f_preview: Tf_preview
     Left = 0
     Height = 20
     Top = 0
-    Width = 104
+    Width = 138
     Align = alTop
     Alignment = taCenter
     Caption = 'Preview'
