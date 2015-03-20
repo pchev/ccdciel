@@ -460,7 +460,7 @@ begin
           RepeatTimer.Enabled:=true;
           DelayEnd:=now+tt/secperday;
           if p.preview and (tt>5)and(tt>(2*p.previewexposure)) then begin
-            Preview.ExpTime.Text:=p.previewexposure_str;
+            if p.previewexposure>0 then Preview.ExpTime.Text:=p.previewexposure_str;
             Preview.Binning.Text:=p.binning_str;
             Preview.BtnLoop.Click;
           end;
@@ -529,7 +529,7 @@ begin
   if p<>nil then begin
     CurrentStep:=p.description_str;
     TotalCount:=p.repeatcount;
-    Fcapture.ExpTime.Text:=p.exposure_str;
+    if p.exposure>0 then Fcapture.ExpTime.Text:=p.exposure_str;
     Fcapture.Binning.Text:=p.binning_str;
     t:=TTarget(TargetGrid.Objects[0,TargetRow]);
     if t<> nil then
