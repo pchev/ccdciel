@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses u_ccdconfig,
+uses u_ccdconfig, dynlibs,
   Classes, SysUtils;
 
 type
@@ -66,6 +66,36 @@ type
               function description_str: string;
             end;
 
+  // libcdcwcs
+ type
+    TcdcWCScoord = record
+      ra, dec, x, y: double;
+      n: integer;
+    end;
+    PcdcWCScoord = ^TcdcWCScoord;
+
+    TcdcWCSinfo = record
+      cra, cdec, dra, ddec, secpix, eqout, rot: double;
+      wp, hp, sysout: integer;
+    end;
+    PcdcWCSinfo = ^TcdcWCSinfo;
+    Tcdcwcs_initfitsfile = function(fn: PChar; wcsnum:integer): integer; cdecl;
+    Tcdcwcs_release = function(wcsnum:integer): integer; cdecl;
+    Tcdcwcs_sky2xy = function(p: PcdcWCScoord; wcsnum:integer): integer; cdecl;
+    Tcdcwcs_xy2sky = function(p: PcdcWCScoord; wcsnum:integer): integer; cdecl;
+    Tcdcwcs_getinfo = function(p: PcdcWCSinfo; wcsnum:integer): integer; cdecl;
+
+  var
+    cdcwcslib: TLibHandle;
+    cdcwcs_initfitsfile: Tcdcwcs_initfitsfile;
+    cdcwcs_release: Tcdcwcs_release;
+    cdcwcs_getinfo: Tcdcwcs_getinfo;
+    cdcwcs_sky2xy: Tcdcwcs_sky2xy;
+    cdcwcs_xy2sky: Tcdcwcs_xy2sky;
+
+  const
+    maxfitslist=15;  // must corespond to value in cdcwcs.c
+
   {$i revision.inc}
 
 const
@@ -82,11 +112,6 @@ const
   rad2deg=180/pi;
   deg2rad=pi/180;
   jd2000 = 2451545.0;
-  {$ifdef mswindows}
-  defCapturePath='C:\';
-  {$else}
-  defCapturePath='/tmp';
-  {$endif}
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord=-9999;
@@ -97,6 +122,21 @@ const
   f2 = '0.00';
   b80 ='                                                                                ';
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
+  {$ifdef linux}
+    defCapturePath='/tmp';
+    libcdcwcs = 'libcdcwcs.so';
+    libz = 'libz.so.1';
+  {$endif}
+  {$ifdef darwin}
+    defCapturePath='/tmp';
+    libcdcwcs = 'libcdcwcs.dylib';
+    libz = 'libz.dylib';
+  {$endif}
+  {$ifdef mswindows}
+    defCapturePath='C:\';
+    libcdcwcs = 'libcdcwcs.dll';
+    libz = 'zlib1.dll';
+  {$endif}
 
 var
   ConfigDir,LogDir,TmpDir: UTF8String;

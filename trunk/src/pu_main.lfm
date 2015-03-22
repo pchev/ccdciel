@@ -419,6 +419,14 @@ object f_main: Tf_main
       Caption = 'Resolve and show in Skychart'
       OnClick = MenuShowSkychartClick
     end
+    object MenuResolveSync: TMenuItem
+      Caption = 'Resolve and Sync'
+      OnClick = MenuResolveSyncClick
+    end
+    object MenuResolveSlew: TMenuItem
+      Caption = 'Resolve and Slew to cursor'
+      OnClick = MenuResolveSlewClick
+    end
     object MenuViewAstrometryLog: TMenuItem
       Caption = 'View last resolver log'
       OnClick = MenuViewAstrometryLogClick
