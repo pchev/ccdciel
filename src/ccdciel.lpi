@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -305,6 +307,7 @@
       <Unit33>
         <Filename Value="cu_astrometry.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_astrometry"/>
       </Unit33>
       <Unit34>
         <Filename Value="cu_cdcclient.pas"/>
@@ -331,6 +334,7 @@
         <ComponentName Value="f_autoguider"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_autoguider"/>
       </Unit38>
       <Unit39>
         <Filename Value="fu_sequence.pas"/>
@@ -379,6 +383,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

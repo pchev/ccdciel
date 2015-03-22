@@ -54,6 +54,7 @@ procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 function GetCdCPort:string;
 function  Rmod(x,y:Double):Double;
+function DateTimetoJD(date: Tdatetime): double;
 function Jd(annee,mois,jour :INTEGER; Heure:double):double;
 PROCEDURE Djd(jd:Double;VAR annee,mois,jour:INTEGER; VAR Heure:double);
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
@@ -555,6 +556,13 @@ function  Rmod(x,y:Double):Double;
 BEGIN
     Rmod := x - Int(x/y) * y ;
 END  ;
+
+function DateTimetoJD(date: Tdatetime): double;
+var Year, Month, Day: Word;
+begin
+DecodeDate(Date, Year, Month, Day);
+result:=jd(Year,Month,Day,frac(date)*24);
+end;
 
 function Jd(annee,mois,jour :INTEGER; Heure:double):double;
 var u,u0,u1,u2 : double;

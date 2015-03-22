@@ -26,7 +26,7 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
-  fu_sequence, u_ccdconfig, pu_editplan,
+  fu_sequence, u_ccdconfig, pu_editplan, dynlibs,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_astrometry, cu_cdcclient, cu_autoguider, lazutf8sysutils, Classes,
@@ -48,6 +48,8 @@ type
     MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
+    MenuResolveSlew: TMenuItem;
+    MenuResolveSync: TMenuItem;
     MenuViewSequence: TMenuItem;
     MenuViewAutoguider: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
@@ -120,6 +122,8 @@ type
     procedure MenuOpenClick(Sender: TObject);
     procedure MenuOptionsClick(Sender: TObject);
     procedure MenuResetToolsClick(Sender: TObject);
+    procedure MenuResolveSlewClick(Sender: TObject);
+    procedure MenuResolveSyncClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuShowSkychartClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
@@ -155,6 +159,7 @@ type
     astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
     WantCamera,WantWheel,WantFocuser,WantMount: boolean;
+    AstrometryBusy: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
     f_ccdtemp: Tf_ccdtemp;
@@ -172,7 +177,7 @@ type
     ImaBmp: TBitmap;
     ImgScale0,SaveFocusZoom: double;
     ImgCx, ImgCy, OrigX, OrigY, Mx, My,Starwindow,Focuswindow: integer;
-    StartX, StartY, EndX, EndY: integer;
+    StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
@@ -255,8 +260,12 @@ type
     procedure Screen2Fits(x,y: integer; out xx,yy:integer);
     procedure Screen2CCD(x,y: integer; out xx,yy:integer);
     procedure Fits2Screen(x,y: integer; out xx,yy: integer);
-    procedure AstrometryTerminated(Sender: TObject);
+    procedure StartAstrometry(TerminatedCmd: TNotifyEvent);
+    function  AstrometryResult: boolean;
+    procedure AstrometryToSkychart(Sender: TObject);
     procedure SkychartConnected(Sender: TObject);
+    procedure AstrometrySync(Sender: TObject);
+    procedure AstrometrySlewCursor(Sender: TObject);
   public
     { public declarations }
   end;
@@ -368,8 +377,24 @@ begin
   DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
   GUIready:=false;
+  AstrometryBusy:=false;
   Filters:=TStringList.Create;
   PageControlRight.ActivePageIndex:=0;
+  cdcwcs_initfitsfile:=nil;
+  cdcwcs_release:=nil;
+  cdcwcs_sky2xy:=nil;
+  cdcwcs_xy2sky:=nil;
+  cdcwcslib:=LoadLibrary(libcdcwcs);
+  if cdcwcslib<>0 then begin
+    cdcwcs_initfitsfile:= Tcdcwcs_initfitsfile(GetProcedureAddress(cdcwcslib,'cdcwcs_initfitsfile'));
+    cdcwcs_release:= Tcdcwcs_release(GetProcedureAddress(cdcwcslib,'cdcwcs_release'));
+    cdcwcs_sky2xy:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_sky2xy'));
+    cdcwcs_xy2sky:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_xy2sky'));
+    cdcwcs_getinfo:= Tcdcwcs_getinfo(GetProcedureAddress(cdcwcslib,'cdcwcs_getinfo'));
+  end;
+  if (@cdcwcs_initfitsfile=nil)or(@cdcwcs_release=nil)or(@cdcwcs_sky2xy=nil)or(@cdcwcs_xy2sky=nil)or(@cdcwcs_getinfo=nil) then begin
+     ShowMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
+  end;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   ConfigDir:=GetAppConfigDirUTF8(false,true);
@@ -701,6 +726,8 @@ end;
 procedure Tf_main.Image1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+MouseDownX:=X;
+MouseDownY:=Y;
 if Shift=[ssLeft] then begin
    if f_visu.Zoom>0 then begin
      Mx:=X;
@@ -2346,7 +2373,7 @@ begin
      s:=Focuswindow;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     Screen2CCD(x,y,xc,yc);
+     Screen2Fits(x,y,xc,yc);
      camera.SetFrame(xc-s2,yc-s2,s,s);
      f_preview.Loop:=true;
      f_preview.Running:=true;
@@ -2378,10 +2405,10 @@ begin
   GUIready:=false;
 end;
 
-procedure Tf_main.MenuShowSkychartClick(Sender: TObject);
+procedure Tf_main.StartAstrometry(TerminatedCmd: TNotifyEvent);
 var pixsize,pixscale,telescope_focal_length,ra,de,tolerance,MinRadius: double;
 begin
- if fits.HeaderInfo.naxis>0 then begin
+ if (not AstrometryBusy) and (fits.HeaderInfo.naxis>0) then begin
    ra:=NullCoord;
    de:=NullCoord;
    if (fits.HeaderInfo.ra<>NullCoord) then ra:=fits.HeaderInfo.ra;
@@ -2394,8 +2421,9 @@ begin
    DeleteFileUTF8(slash(TmpDir)+'ccdcielsolved.fits');
    DeleteFileUTF8(slash(TmpDir)+'ccdcieltmp.solved');
    fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+   AstrometryBusy:=true;
    astrometry:=TAstrometry.Create;
-   astrometry.onCmdTerminate:=@AstrometryTerminated;
+   astrometry.onCmdTerminate:=TerminatedCmd;
    astrometry.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    astrometry.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
    astrometry.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
@@ -2427,9 +2455,25 @@ begin
    astrometry.radius:=max(MinRadius,pixscale*fits.HeaderInfo.naxis1/3600);
    astrometry.Resolve;
    NewMessage('Resolving using '+ResolverName[astrometry.Resolver]+' ...');
+   // update menu
    MenuShowSkychart.Enabled:=false;
    MenuStopAstrometry.Visible:=true;
  end;
+end;
+
+function Tf_main.AstrometryResult: boolean;
+begin
+AstrometryBusy:=false;
+// update menu
+MenuStopAstrometry.Visible:=false;
+MenuShowSkychart.Enabled:=true;
+if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(TmpDir)+'ccdcieltmp.solved') then begin
+  result:=true;
+end
+else begin
+  result:=false;
+  NewMessage(ResolverName[astrometry.Resolver]+' resolve error.');
+end;
 end;
 
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
@@ -2451,11 +2495,97 @@ begin
   end;
 end;
 
-procedure Tf_main.AstrometryTerminated(Sender: TObject);
+procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
-MenuStopAstrometry.Visible:=false;
-MenuShowSkychart.Enabled:=true;
-if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(TmpDir)+'ccdcieltmp.solved') then begin
+ StartAstrometry(@AstrometrySync);
+end;
+
+procedure Tf_main.AstrometrySync(Sender: TObject);
+var astrometryOK: Boolean;
+    fn: string;
+    x,y,n,m: integer;
+    ra,de,jd0,jd1: double;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+astrometryOK:=AstrometryResult;
+if astrometryOK and (cdcwcs_xy2sky<>nil) then begin
+   fn:=slash(TmpDir)+'ccdcielsolved.fits';
+   n:=cdcwcs_initfitsfile(pchar(fn),0);
+   n:=cdcwcs_getinfo(addr(i),0);
+   if (n=0)and(i.secpix<>0) then begin
+     c.x:=0.5+i.wp/2;
+     c.y:=0.5+i.hp/2;
+     m:=cdcwcs_xy2sky(@c,0);
+     if m=0 then begin
+       ra:=c.ra;
+       de:=c.dec;
+       if mount.Equinox=0 then begin
+         jd0:=Jd(trunc(i.eqout),0,0,0);
+         jd1:=DateTimetoJD(now);
+         ra:=deg2rad*ra;
+         de:=deg2rad*de;
+         PrecessionFK5(jd0,jd1,ra,de);
+         ra:=rad2deg*ra;
+         de:=rad2deg*de;
+       end;
+       mount.Sync(ra/15,de);
+     end;
+   end;
+end;
+end;
+
+procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
+begin
+  StartAstrometry(@AstrometrySlewCursor);
+end;
+
+procedure Tf_main.AstrometrySlewCursor(Sender: TObject);
+var astrometryOK: Boolean;
+    fn: string;
+    xx,yy,n,m: integer;
+    ra,de,jd0,jd1: double;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+astrometryOK:=AstrometryResult;
+if astrometryOK and (cdcwcs_xy2sky<>nil) then begin
+   fn:=slash(TmpDir)+'ccdcielsolved.fits';
+   n:=cdcwcs_initfitsfile(pchar(fn),0);
+   n:=cdcwcs_getinfo(addr(i),0);
+   if (n=0)and(i.secpix<>0) then begin
+     Screen2fits(MouseDownX,MouseDownY,xx,yy);
+     c.x:=xx;
+     c.y:=i.hp-yy;
+     m:=cdcwcs_xy2sky(@c,0);
+     if m=0 then begin
+       ra:=c.ra;
+       de:=c.dec;
+       if mount.Equinox=0 then begin
+         jd0:=Jd(trunc(i.eqout),0,0,0);
+         jd1:=DateTimetoJD(now);
+         ra:=deg2rad*ra;
+         de:=deg2rad*de;
+         PrecessionFK5(jd0,jd1,ra,de);
+         ra:=rad2deg*ra;
+         de:=rad2deg*de;
+       end;
+       mount.Slew(ra/15,de);
+     end;
+   end;
+end;
+end;
+
+procedure Tf_main.MenuShowSkychartClick(Sender: TObject);
+begin
+ StartAstrometry(@AstrometryToSkychart);
+end;
+
+procedure Tf_main.AstrometryToSkychart(Sender: TObject);
+var astrometryOK: Boolean;
+begin
+astrometryOK:=AstrometryResult;
+if astrometryOK then begin
   cdc:=TCdCClient.Create;
   cdc.Tag:=1;
   cdc.onShowMessage:=@NewMessage;
@@ -2463,9 +2593,6 @@ if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(T
   cdc.TargetHost:='localhost';
   cdc.TargetPort:=GetCdCPort;
   cdc.Start;
-end
-else begin
-  NewMessage(ResolverName[astrometry.Resolver]+' resolve error.');
 end;
 end;
 
