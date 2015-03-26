@@ -24,13 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_focuser, indibaseclient, indibasedevice, indiapi, indicom,
      u_global, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
-T_indifocuser = class(TIndiBaseClient)
+T_indifocuser = class(T_focuser)
  private
+   indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    FocuserDevice: Basedevice;
    Focuserport: ITextVectorProperty;
@@ -45,13 +46,7 @@ T_indifocuser = class(TIndiBaseClient)
    FocusGotoPreset: ISwitchVectorProperty;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
-   FStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonStatusChange: TNotifyEvent;
-   FonPositionChange: TNotifyNum;
-   FonTimerChange: TNotifyNum;
-   FonSpeedChange: TNotifyNum;
-   FonDestroy: TNotifyEvent;
+   procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -64,54 +59,51 @@ T_indifocuser = class(TIndiBaseClient)
    procedure NewLight(lvp: ILightVectorProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
-   procedure SetPosition(p:integer);
-   function  GetPosition:integer;
-   procedure SetRelPosition(p:integer);
-   function  GetRelPosition:integer;
-   procedure SetSpeed(p:integer);
-   function  GetSpeed:integer;
-   procedure SetTimer(p:integer);
-   function  GetTimer:integer;
-   function  GethasAbsolutePosition: boolean;
-   function  GethasRelativePosition: boolean;
-   function  GethasTimerSpeed: boolean;
-   function  GetPositionRange: TNumRange;
-   function  GetRelPositionRange: TNumRange;
    procedure msg(txt: string);
+ protected
+   procedure SetPosition(p:integer); override;
+   function  GetPosition:integer; override;
+   procedure SetRelPosition(p:integer); override;
+   function  GetRelPosition:integer; override;
+   procedure SetSpeed(p:integer); override;
+   function  GetSpeed:integer; override;
+   procedure SetTimer(p:integer); override;
+   function  GetTimer:integer; override;
+   function  GethasAbsolutePosition: boolean; override;
+   function  GethasRelativePosition: boolean; override;
+   function  GethasTimerSpeed: boolean; override;
+   function  GetPositionRange: TNumRange; override;
+   function  GetRelPositionRange: TNumRange; override;
  public
    constructor Create;
    destructor  Destroy; override;
-   Procedure Connect;
-   Procedure Disconnect;
-   procedure FocusIn;
-   procedure FocusOut;
-   property indiserver: string read Findiserver write Findiserver;
-   property indiserverport: string read Findiserverport write Findiserverport;
-   property indidevice: string read Findidevice write Findidevice;
-   property indideviceport: string read Findideviceport write Findideviceport;
-   property hasAbsolutePosition: boolean read GethasAbsolutePosition;
-   property hasRelativePosition: boolean read GethasRelativePosition;
-   property hasTimerSpeed: boolean read GethasTimerSpeed;
-   property Position: integer read GetPosition write SetPosition;
-   property RelPosition: integer read GetRelPosition write SetRelPosition;
-   property PositionRange: TNumRange read GetPositionRange;
-   property RelPositionRange: TNumRange read GetRelPositionRange;
-   property Speed: integer read GetSpeed write SetSpeed;
-   property Timer: integer read GetTimer write SetTimer;
-   property Status: TDeviceStatus read FStatus;
-   property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
-   property onSpeedChange: TNotifyNum read FonSpeedChange write FonSpeedChange;
-   property onTimerChange: TNotifyNum read FonTimerChange write FonTimerChange;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   Procedure Disconnect; override;
+   procedure FocusIn; override;
+   procedure FocusOut; override;
 end;
 
 implementation
 
+procedure T_indifocuser.CreateIndiClient;
+begin
+if csDestroying in ComponentState then exit;
+  indiclient:=TIndiBaseClient.Create;
+  indiclient.onNewDevice:=@NewDevice;
+  indiclient.onNewMessage:=@NewMessage;
+  indiclient.onNewProperty:=@NewProperty;
+  indiclient.onNewNumber:=@NewNumber;
+  indiclient.onNewText:=@NewText;
+  indiclient.onNewSwitch:=@NewSwitch;
+  indiclient.onNewLight:=@NewLight;
+  indiclient.onServerConnected:=@ServerConnected;
+  indiclient.onServerDisconnected:=@ServerDisconnected;
+  ClearStatus;
+end;
+
 constructor T_indifocuser.Create;
 begin
- inherited Create;
+ inherited Create(nil);
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -121,30 +113,12 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
- onNewDevice:=@NewDevice;
- onNewMessage:=@NewMessage;
- onNewProperty:=@NewProperty;
- onNewNumber:=@NewNumber;
- onNewText:=@NewText;
- onNewSwitch:=@NewSwitch;
- onNewLight:=@NewLight;
- onServerConnected:=@ServerConnected;
- onServerDisconnected:=@ServerDisconnected;
+ CreateIndiClient;
 end;
 
 destructor  T_indifocuser.Destroy;
 begin
- if assigned(FonDestroy) then FonDestroy(self);
- onNewDevice:=nil;
- onNewMessage:=nil;
- onNewProperty:=nil;
- onNewNumber:=nil;
- onNewText:=nil;
- onNewSwitch:=nil;
- onNewLight:=nil;
- onNewBlob:=nil;
- onServerConnected:=nil;
- onServerDisconnected:=nil;
+ indiclient.Free;
  if InitTimer<>nil then FreeAndNil(InitTimer);
  inherited Destroy;
 end;
@@ -186,14 +160,19 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-Procedure T_indifocuser.Connect;
+Procedure T_indifocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
-if not Connected then begin
+if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+if not indiclient.Connected then begin
+  Findiserver:=cp1;
+  Findiserverport:=cp2;
+  Findidevice:=cp3;
+  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  SetServer(indiserver,indiserverport);
-  watchDevice(indidevice);
-  ConnectServer;
+  indiclient.SetServer(Findiserver,Findiserverport);
+  indiclient.watchDevice(Findidevice);
+  indiclient.ConnectServer;
   FStatus := devConnecting;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
@@ -206,14 +185,14 @@ begin
   InitTimer.Enabled:=false;
   if (FocuserDevice=nil)or(not Fready) then begin
      msg('No response from server');
-     msg('Is "'+indidevice+'" a running focuser driver?');
+     msg('Is "'+Findidevice+'" a running focuser driver?');
      Disconnect;
   end;
 end;
 
 Procedure T_indifocuser.Disconnect;
 begin
-Terminate;
+indiclient.Terminate;
 ClearStatus;
 end;
 
@@ -221,9 +200,9 @@ procedure T_indifocuser.ServerConnected(Sender: TObject);
 begin
    if (Focuserport<>nil)and(Findideviceport<>'') then begin
       Focuserport.tp[0].text:=Findideviceport;
-      sendNewText(Focuserport);
+      indiclient.sendNewText(Focuserport);
    end;
-   connectDevice(Findidevice);
+   indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indifocuser.ServerDisconnected(Sender: TObject);
@@ -231,6 +210,7 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Focuser server disconnected');
+  CreateIndiClient;
 end;
 
 procedure T_indifocuser.NewDevice(dp: Basedevice);
@@ -322,8 +302,8 @@ procedure T_indifocuser.SetPosition(p:integer);
 begin
 if FocusAbsolutePosition<>nil then begin
   FocusAbsolutePosition.np[0].value:=p;
-  sendNewNumber(FocusAbsolutePosition);
-  WaitBusy(FocusAbsolutePosition);
+  indiclient.sendNewNumber(FocusAbsolutePosition);
+  indiclient.WaitBusy(FocusAbsolutePosition);
 end;
 end;
 
@@ -349,8 +329,8 @@ procedure T_indifocuser.SetRelPosition(p:integer);
 begin
 if FocusRelativePosition<>nil then begin
   FocusRelativePosition.np[0].value:=p;
-  sendNewNumber(FocusRelativePosition);
-  WaitBusy(FocusRelativePosition);
+  indiclient.sendNewNumber(FocusRelativePosition);
+  indiclient.WaitBusy(FocusRelativePosition);
 end;
 end;
 
@@ -376,8 +356,8 @@ procedure T_indifocuser.SetSpeed(p:integer);
 begin
 if (FocusSpeed<>nil)and(FocusSpeed.np[0].value<>p) then begin
   FocusSpeed.np[0].value:=p;
-  sendNewNumber(FocusSpeed);
-  WaitBusy(FocusSpeed);
+  indiclient.sendNewNumber(FocusSpeed);
+  indiclient.WaitBusy(FocusSpeed);
 end;
 end;
 
@@ -393,8 +373,8 @@ procedure T_indifocuser.SetTimer(p:integer);
 begin
 if (FocusTimer<>nil) then begin
   FocusTimer.np[0].value:=p;
-  sendNewNumber(FocusTimer);
-  WaitBusy(FocusTimer);
+  indiclient.sendNewNumber(FocusTimer);
+  indiclient.WaitBusy(FocusTimer);
 end;
 end;
 
@@ -411,8 +391,8 @@ begin
  if (FocusMotion<>nil)and(FocusInward.s=ISS_OFF) then begin
    IUResetSwitch(FocusMotion);
    FocusInward.s:=ISS_ON;
-   sendNewSwitch(FocusMotion);
-   WaitBusy(FocusMotion);
+   indiclient.sendNewSwitch(FocusMotion);
+   indiclient.WaitBusy(FocusMotion);
  end;
 end;
 
@@ -421,8 +401,8 @@ begin
  if (FocusMotion<>nil)and(FocusOutward.s=ISS_OFF) then begin
    IUResetSwitch(FocusMotion);
    FocusOutward.s:=ISS_ON;
-   sendNewSwitch(FocusMotion);
-   WaitBusy(FocusMotion);
+   indiclient.sendNewSwitch(FocusMotion);
+   indiclient.WaitBusy(FocusMotion);
  end;
 end;
 

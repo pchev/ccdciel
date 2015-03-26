@@ -24,13 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_wheel, indibaseclient, indibasedevice, indiapi, indicom,
      u_global, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
-T_indiwheel = class(TIndiBaseClient)
+T_indiwheel = class(T_wheel)
  private
+   indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    WheelDevice: Basedevice;
    Wheelport: ITextVectorProperty;
@@ -39,13 +40,7 @@ T_indiwheel = class(TIndiBaseClient)
    FilterName: ITextVectorProperty;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
-   FStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonStatusChange: TNotifyEvent;
-   FonFilterChange: TNotifyNum;
-   FonFilterNameChange: TNotifyEvent;
-   FonDestroy: TNotifyEvent;
-   FFilterNames: TStringList;
+   procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -58,34 +53,39 @@ T_indiwheel = class(TIndiBaseClient)
    procedure NewLight(lvp: ILightVectorProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
-   procedure SetFilter(num:integer);
-   function  GetFilter:integer;
-   procedure SetFilterNames(value:TStringList);
    procedure msg(txt: string);
+ protected
+   procedure SetFilter(num:integer); override;
+   function  GetFilter:integer; override;
+   procedure SetFilterNames(value:TStringList); override;
  public
    constructor Create;
    destructor  Destroy; override;
-   Procedure Connect;
-   Procedure Disconnect;
-   property indiserver: string read Findiserver write Findiserver;
-   property indiserverport: string read Findiserverport write Findiserverport;
-   property indidevice: string read Findidevice write Findidevice;
-   property indideviceport: string read Findideviceport write Findideviceport;
-   property Filter: integer read GetFilter write SetFilter;
-   property FilterNames: TStringList read FFilterNames write SetFilterNames;
-   property Status: TDeviceStatus read FStatus;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
-   property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
-   property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   Procedure Disconnect; override;
 end;
 
 implementation
 
+procedure T_indiwheel.CreateIndiClient;
+begin
+if csDestroying in ComponentState then exit;
+  indiclient:=TIndiBaseClient.Create;
+  indiclient.onNewDevice:=@NewDevice;
+  indiclient.onNewMessage:=@NewMessage;
+  indiclient.onNewProperty:=@NewProperty;
+  indiclient.onNewNumber:=@NewNumber;
+  indiclient.onNewText:=@NewText;
+  indiclient.onNewSwitch:=@NewSwitch;
+  indiclient.onNewLight:=@NewLight;
+  indiclient.onServerConnected:=@ServerConnected;
+  indiclient.onServerDisconnected:=@ServerDisconnected;
+  ClearStatus;
+end;
+
 constructor T_indiwheel.Create;
 begin
- inherited Create;
+ inherited Create(nil);
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -96,30 +96,12 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
- onNewDevice:=@NewDevice;
- onNewMessage:=@NewMessage;
- onNewProperty:=@NewProperty;
- onNewNumber:=@NewNumber;
- onNewText:=@NewText;
- onNewSwitch:=@NewSwitch;
- onNewLight:=@NewLight;
- onServerConnected:=@ServerConnected;
- onServerDisconnected:=@ServerDisconnected;
+ CreateIndiClient;
 end;
 
 destructor  T_indiwheel.Destroy;
 begin
- if assigned(FonDestroy) then FonDestroy(self);
- onNewDevice:=nil;
- onNewMessage:=nil;
- onNewProperty:=nil;
- onNewNumber:=nil;
- onNewText:=nil;
- onNewSwitch:=nil;
- onNewLight:=nil;
- onNewBlob:=nil;
- onServerConnected:=nil;
- onServerDisconnected:=nil;
+ indiclient.Free;
  if FFilterNames<>nil then FreeAndNil(FFilterNames);
  if InitTimer<>nil then FreeAndNil(InitTimer);
  inherited Destroy;
@@ -154,14 +136,19 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-Procedure T_indiwheel.Connect;
+Procedure T_indiwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
-if not Connected then begin
+if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+if not indiclient.Connected then begin
+  Findiserver:=cp1;
+  Findiserverport:=cp2;
+  Findidevice:=cp3;
+  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  SetServer(indiserver,indiserverport);
-  watchDevice(indidevice);
-  ConnectServer;
+  indiclient.SetServer(Findiserver,Findiserverport);
+  indiclient.watchDevice(Findidevice);
+  indiclient.ConnectServer;
   FStatus := devConnecting;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
@@ -174,14 +161,14 @@ begin
   InitTimer.Enabled:=false;
   if (WheelDevice=nil)or(not Fready) then begin
      msg('No response from server');
-     msg('Is "'+indidevice+'" a running wheel driver?');
+     msg('Is "'+Findidevice+'" a running wheel driver?');
      Disconnect;
   end;
 end;
 
 Procedure T_indiwheel.Disconnect;
 begin
-Terminate;
+indiclient.Terminate;
 ClearStatus;
 end;
 
@@ -189,9 +176,9 @@ procedure T_indiwheel.ServerConnected(Sender: TObject);
 begin
    if (Wheelport<>nil)and(Findideviceport<>'') then begin
       Wheelport.tp[0].text:=Findideviceport;
-      sendNewText(Wheelport);
+      indiclient.sendNewText(Wheelport);
    end;
-   connectDevice(Findidevice);
+   indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indiwheel.ServerDisconnected(Sender: TObject);
@@ -199,6 +186,7 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Filter wheel server disconnected');
+  CreateIndiClient;
 end;
 
 procedure T_indiwheel.NewDevice(dp: Basedevice);
@@ -277,8 +265,8 @@ procedure T_indiwheel.SetFilter(num:integer);
 begin
 if WheelSlot<>nil then begin;
   Slot.value:=num;
-  sendNewNumber(WheelSlot);
-  WaitBusy(WheelSlot);
+  indiclient.sendNewNumber(WheelSlot);
+  indiclient.WaitBusy(WheelSlot);
 end;
 end;
 
@@ -297,8 +285,8 @@ if (FilterName<>nil)and(value.Count=FilterName.ntp) then begin
   for i:=0 to value.Count-1 do begin
      FilterName.tp[i].text:=value[i];
   end;
-  sendNewText(FilterName);
-  WaitBusy(FilterName);
+  indiclient.sendNewText(FilterName);
+  indiclient.WaitBusy(FilterName);
 end;
 end;
 
