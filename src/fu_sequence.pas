@@ -55,7 +55,8 @@ type
     PlanGrid: TStringGrid;
     TargetTimer: TTimer;
     PlanTimer: TTimer;
-    RepeatTimer: TTimer;
+    StepRepeatTimer: TTimer;
+    TargetRepeatTimer: TTimer;
     procedure BtnEditTargetsClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
@@ -64,15 +65,17 @@ type
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure PlanTimerTimer(Sender: TObject);
-    procedure RepeatTimerTimer(Sender: TObject);
+    procedure StepRepeatTimerTimer(Sender: TObject);
     procedure TargetGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure TargetRepeatTimerTimer(Sender: TObject);
     procedure TargetTimerTimer(Sender: TObject);
   private
     { private declarations }
     FRunning, PlanRunning, StepRunning: boolean;
     TargetRow, PlanRow: integer;
-    TimeStart,DelayEnd: TDateTime;
+    StepTimeStart,StepDelayEnd: TDateTime;
+    TargetTimeStart,TargetDelayEnd: TDateTime;
     FonMsg: TNotifyMsg;
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
@@ -89,7 +92,8 @@ type
   public
     { public declarations }
     CurrentName, CurrentFile, CurrentStep: string;
-    RepeatCount, TotalCount: integer;
+    StepRepeatCount, StepTotalCount: integer;
+    TargetRepeatCount, TargetTotalCount: integer;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure LoadTargets(fn: string);
@@ -164,23 +168,10 @@ procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i:integer;
     t:TTarget;
 begin
-   f_EditTargets.ClearTargetList;
+   f_EditTargets.TargetList.RowCount:=TargetGrid.RowCount;
    if (Sender=BtnEditTargets)and(TargetGrid.RowCount>1) then begin
      for i:=1 to TargetGrid.RowCount-1 do begin
-       t:=TTarget.Create;
-       t.objectname:=TargetGrid.Cells[0,i];
-       t.plan:=TargetGrid.Cells[1,i];
-       t.starttime:=StrToTime(TargetGrid.Cells[2,i]);
-       t.endtime:=StrToTime(TargetGrid.Cells[3,i]);
-       if TargetGrid.Cells[4,i]='-' then
-         t.ra:=NullCoord
-       else
-         t.ra:=StrToAR(TargetGrid.Cells[4,i]);
-       if TargetGrid.Cells[5,i]='-' then
-         t.de:=NullCoord
-       else
-         t.de:=StrToDE(TargetGrid.Cells[5,i]);
-       f_EditTargets.TargetList.RowCount:=i+1;
+       t:=TTarget(TargetGrid.Objects[0,i]);
        f_EditTargets.TargetList.Cells[0,i]:=IntToStr(i);
        f_EditTargets.TargetList.Cells[1,i]:=t.objectname;
        f_EditTargets.TargetList.Objects[0,i]:=t;
@@ -188,11 +179,9 @@ begin
    end;
    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_EditTargets.ShowModal;
-   ClearTargetGrid;
    TargetGrid.RowCount:=f_EditTargets.TargetList.RowCount;
    for i:=1 to f_EditTargets.TargetList.RowCount-1 do begin
-     t:=TTarget.Create;
-     t.assign(TTarget(f_EditTargets.TargetList.Objects[0,i]));
+     t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
      TargetGrid.Objects[0,i]:=t;
      with t do begin
        TargetGrid.Cells[0,i]:=objectname;
@@ -246,6 +235,10 @@ begin
          t.de:=NullCoord
        else
          t.de:=StrToDE(TargetGrid.Cells[5,i]);
+       t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
+       t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
+       t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
+       t.delay:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Delay',1.0);
        TargetGrid.Objects[0,i]:=t;
      end;
      LoadPlan(TargetGrid.Cells[1,1]);
@@ -291,6 +284,7 @@ end;
 
 procedure Tf_sequence.BtnSaveTargetsClick(Sender: TObject);
 var tfile: TCCDconfig;
+    t:TTarget;
     i: integer;
 begin
  if TargetGrid.RowCount>1 then begin
@@ -305,12 +299,17 @@ begin
     tfile.SetValue('/ListName',CurrentName);
     tfile.SetValue('/TargetNum',TargetGrid.RowCount-1);
     for i:=1 to TargetGrid.RowCount-1 do begin
+      t:=TTarget(TargetGrid.Objects[0,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',TargetGrid.Cells[0,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan',TargetGrid.Cells[1,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TargetGrid.Cells[2,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TargetGrid.Cells[3,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',TargetGrid.Cells[4,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Dec',TargetGrid.Cells[5,i]);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/Delay',t.delay);
     end;
     tfile.Flush;
     tfile.Free;
@@ -345,8 +344,8 @@ begin
  if FRunning and PlanRunning then begin
    FRunning:=false;
    PlanRunning:=false;
-   if RepeatTimer.Enabled and Preview.Running then Preview.BtnLoop.Click;
-   RepeatTimer.Enabled:=false;
+   if StepRepeatTimer.Enabled and Preview.Running then Preview.BtnLoop.Click;
+   StepRepeatTimer.Enabled:=false;
    if Capture.Running then Capture.BtnStart.Click;
  end
  else msg('Cannot stop now.');
@@ -363,6 +362,7 @@ begin
    end
    else begin
      TargetRow:=1;
+     TargetRepeatCount:=1;
      FRunning:=true;
      PlanRunning:=false;
      StepRunning:=false;
@@ -396,9 +396,28 @@ begin
 end;
 
 procedure Tf_sequence.TargetTimerTimer(Sender: TObject);
+var tt: double;
+    t: TTarget;
 begin
  if FRunning then begin
+  t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+  if not TargetRepeatTimer.Enabled then begin
   if not PlanRunning then begin
+    inc(TargetRepeatCount);
+    if (t<>nil)and(TargetRepeatCount<=t.repeatcount) then begin
+       tt:=t.delay-(Now-TargetTimeStart)*secperday;
+       if tt<0.1 then tt:=0.1;
+       msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated target '+IntToStr(TargetRepeatCount));
+       TargetRepeatTimer.Interval:=trunc(1000*tt);
+       TargetRepeatTimer.Enabled:=true;
+       TargetDelayEnd:=now+tt/secperday;
+       if t.preview and (tt>5)and(tt>(2*t.previewexposure)) then begin
+         if t.previewexposure>0 then Preview.ExpTime.Text:=t.previewexposure_str;
+         Preview.Binning.Text:=Capture.Binning.Text;
+         Preview.BtnLoop.Click;
+       end;
+    end
+    else begin
      inc(TargetRow);
      if TargetRow<TargetGrid.RowCount then begin
         TargetGrid.Row:=TargetRow;
@@ -413,7 +432,16 @@ begin
         msg('Sequence '+CurrentName+' terminated.');
         TargetGrid.Invalidate;
      end;
+    end;
   end;
+
+     end
+   else begin
+     tt:=(TargetDelayEnd-Now)*secperday;
+     DelayMsg.Caption:='Continue in '+FormatFloat(f0,tt)+' seconds';
+   end;
+
+
  end
  else begin
   TargetTimer.Enabled:=false;
@@ -422,6 +450,24 @@ begin
   TargetGrid.Invalidate;
  end;
 end;
+
+procedure Tf_sequence.TargetRepeatTimerTimer(Sender: TObject);
+var t: TTarget;
+begin
+ if FRunning then begin
+    TargetRepeatTimer.Enabled:=false;
+    DelayMsg.Caption:='';
+    t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+    if t<>nil then begin
+      msg('Repeat '+inttostr(TargetRepeatCount)+'/'+t.repeatcount_str+' '+t.objectname);
+      if t.preview and Preview.Running then Preview.BtnLoop.Click;
+      TargetTimeStart:=now;
+      StartPlan;
+    end
+    else FRunning:=false;
+ end;
+end;
+
 
 procedure Tf_sequence.StartPlan;
 var t: TTarget;
@@ -448,17 +494,17 @@ var tt: double;
 begin
  if PlanRunning then begin
    p:=TPlan(PlanGrid.Objects[0,PlanRow]);
-   if not RepeatTimer.Enabled then begin
+   if not StepRepeatTimer.Enabled then begin
      StepRunning:=Capture.Running;
      if not StepRunning then begin
-       inc(RepeatCount);
-       if (p<>nil)and(RepeatCount<=p.repeatcount) then begin
-          tt:=p.delay-(Now-TimeStart)*secperday;
+       inc(StepRepeatCount);
+       if (p<>nil)and(StepRepeatCount<=p.repeatcount) then begin
+          tt:=p.delay-(Now-StepTimeStart)*secperday;
           if tt<0.1 then tt:=0.1;
-          msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated sequence '+IntToStr(RepeatCount));
-          RepeatTimer.Interval:=trunc(1000*tt);
-          RepeatTimer.Enabled:=true;
-          DelayEnd:=now+tt/secperday;
+          msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated sequence '+IntToStr(StepRepeatCount));
+          StepRepeatTimer.Interval:=trunc(1000*tt);
+          StepRepeatTimer.Enabled:=true;
+          StepDelayEnd:=now+tt/secperday;
           if p.preview and (tt>5)and(tt>(2*p.previewexposure)) then begin
             if p.previewexposure>0 then Preview.ExpTime.Text:=p.previewexposure_str;
             Preview.Binning.Text:=p.binning_str;
@@ -485,13 +531,13 @@ begin
      end;
    end
    else begin
-     tt:=(DelayEnd-Now)*secperday;
+     tt:=(StepDelayEnd-Now)*secperday;
      DelayMsg.Caption:='Continue in '+FormatFloat(f0,tt)+' seconds';
    end;
  end
  else begin
     PlanTimer.Enabled:=false;
-    RepeatTimer.Enabled:=false;
+    StepRepeatTimer.Enabled:=false;
     PlanRow:=0;
     t:=TTarget(TargetGrid.Objects[0,TargetRow]);
     if t<> nil then str:=t.plan else str:='';
@@ -501,18 +547,18 @@ begin
  end;
 end;
 
-procedure Tf_sequence.RepeatTimerTimer(Sender: TObject);
+procedure Tf_sequence.StepRepeatTimerTimer(Sender: TObject);
 var p: TPlan;
 begin
  if FRunning then begin
     StepRunning:=true;
-    RepeatTimer.Enabled:=false;
+    StepRepeatTimer.Enabled:=false;
     DelayMsg.Caption:='';
     p:=TPlan(PlanGrid.Objects[0,PlanRow]);
     if p<>nil then begin
-      msg('Repeat '+inttostr(RepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
+      msg('Repeat '+inttostr(StepRepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
       if p.preview and Preview.Running then Preview.BtnLoop.Click;
-      TimeStart:=now;
+      StepTimeStart:=now;
       Fcapture.BtnStart.Click;
     end
     else PlanRunning:=false;
@@ -524,11 +570,11 @@ var p: TPlan;
     t: TTarget;
 begin
   StepRunning:=true;
-  RepeatCount:=1;
+  StepRepeatCount:=1;
   p:=TPlan(PlanGrid.Objects[0,PlanRow]);
   if p<>nil then begin
     CurrentStep:=p.description_str;
-    TotalCount:=p.repeatcount;
+    StepTotalCount:=p.repeatcount;
     if p.exposure>0 then Fcapture.ExpTime.Text:=p.exposure_str;
     Fcapture.Binning.Text:=p.binning_str;
     t:=TTarget(TargetGrid.Objects[0,TargetRow]);
@@ -540,7 +586,7 @@ begin
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Ffilter.Filters.ItemIndex:=p.filter-1;
     Ffilter.BtnSetFilter.Click;
-    TimeStart:=now;
+    StepTimeStart:=now;
     msg('Start step '+p.description_str);
     Fcapture.BtnStart.Click;
   end;

@@ -126,7 +126,6 @@
         <ComponentName Value="f_devicesconnection"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_devicesconnection"/>
       </Unit2>
       <Unit3>
         <Filename Value="fu_preview.pas"/>
@@ -134,7 +133,6 @@
         <ComponentName Value="f_preview"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_preview"/>
       </Unit3>
       <Unit4>
         <Filename Value="fu_msg.pas"/>
@@ -166,7 +164,6 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
@@ -194,7 +191,6 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -202,7 +198,6 @@
         <ComponentName Value="f_filterwheel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_filterwheel"/>
       </Unit14>
       <Unit15>
         <Filename Value="fu_focuser.pas"/>
@@ -210,7 +205,6 @@
         <ComponentName Value="f_focuser"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_focuser"/>
       </Unit15>
       <Unit16>
         <Filename Value="fu_mount.pas"/>
@@ -279,7 +273,6 @@
         <ComponentName Value="f_ccdtemp"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_ccdtemp"/>
       </Unit29>
       <Unit30>
         <Filename Value="pu_indigui.pas"/>
@@ -302,7 +295,6 @@
         <ComponentName Value="f_frame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_frame"/>
       </Unit32>
       <Unit33>
         <Filename Value="cu_astrometry.pas"/>
@@ -323,6 +315,7 @@
       <Unit36>
         <Filename Value="cu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_autoguider"/>
       </Unit36>
       <Unit37>
         <Filename Value="cu_tcpclient.pas"/>
@@ -347,6 +340,7 @@
       <Unit40>
         <Filename Value="u_ccdconfig.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_ccdconfig"/>
       </Unit40>
       <Unit41>
         <Filename Value="pu_edittargets.pas"/>
@@ -362,6 +356,7 @@
         <ComponentName Value="f_EditPlan"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_editplan"/>
       </Unit42>
     </Units>
   </ProjectOptions>

@@ -40,9 +40,17 @@ type
     BtnAnytime: TButton;
     BtnCurrentCoord: TButton;
     BtnClose: TButton;
+    Delay: TEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label13: TLabel;
+    Label9: TLabel;
     ObjectName: TEdit;
     Label7: TLabel;
     LabelSeq: TLabel;
+    Preview: TCheckBox;
+    PreviewExposure: TEdit;
+    RepeatCount: TEdit;
     StartTime: TMaskEdit;
     EndTime: TMaskEdit;
     PlanList: TComboBox;
@@ -72,7 +80,6 @@ type
     procedure ResetSequences;
   public
     { public declarations }
-    procedure ClearTargetList;
   end;
 
 var
@@ -91,7 +98,7 @@ end;
 
 procedure Tf_EditTargets.FormDestroy(Sender: TObject);
 begin
-  ClearTargetList;
+  // objects are destroyed in fu_sequence
 end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
@@ -119,16 +126,6 @@ begin
     i:=FindNextUTF8(fs);
   end;
   FindCloseUTF8(fs);
-end;
-
-procedure Tf_EditTargets.ClearTargetList;
-var i: integer;
-begin
-  for i:=1 to TargetList.RowCount-1 do begin
-    if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free;
-    TargetList.Objects[0,i]:=nil;
-  end;
-  TargetList.RowCount:=1;
 end;
 
 procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
@@ -220,6 +217,10 @@ begin
     PointDEC.Text:='-'
   else
     PointDEC.Text:=DEToStr(t.de);
+  RepeatCount.Text:=t.repeatcount_str;
+  Delay.Text:=t.delay_str;
+  PreviewExposure.Text:=t.previewexposure_str;
+  Preview.Checked:=t.preview;
   LockTarget:=false;
 end;
 
@@ -243,6 +244,10 @@ begin
     t.de:=NullCoord
   else
     t.de:=StrToDE(PointDEC.Text);
+  t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
+  t.delay:=StrToFloatDef(Delay.Text,1);
+  t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
+  t.preview:=Preview.Checked;
   TargetList.Cells[1,n]:=t.objectname;
 end;
 

@@ -34,6 +34,7 @@ type
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
+  TAutoguider=(PHD);
 
   TNumRange = record
                min,max,step: double;
@@ -43,7 +44,13 @@ type
               public
               objectname, plan: string;
               starttime,endtime,ra,de: double;
+              repeatcount: integer;
+              preview: boolean;
+              delay, previewexposure: double;
               procedure Assign(Source: TTarget);
+              function previewexposure_str: string;
+              function delay_str: string;
+              function repeatcount_str: string;
             end;
 
   TPlan   = Class(TObject)
@@ -143,6 +150,7 @@ var
   config: TCCDConfig;
   Filters: TStringList;
   compile_time, compile_version, compile_system, lclver: string;
+  Guider: TAutoguider;
 
 implementation
 
@@ -156,6 +164,25 @@ begin
   endtime:=Source.endtime;
   ra:=Source.ra;
   de:=Source.de;
+  repeatcount:=Source.repeatcount;
+  preview:=Source.preview;
+  delay:=Source.delay;
+  previewexposure:=Source.previewexposure;
+end;
+
+function TTarget.previewexposure_str: string;
+begin
+ Result:=FloatToStr(previewexposure);
+end;
+
+function TTarget.delay_str: string;
+begin
+  Result:=FloatToStr(delay);
+end;
+
+function TTarget.repeatcount_str: string;
+begin
+  Result:=IntToStr(repeatcount);
 end;
 
 ////////////////////  TPlan  /////////////////////////////
