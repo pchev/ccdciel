@@ -24,14 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses u_global,
+uses cu_focuser, u_global,
     {$ifdef mswindows}
     Variants, comobj,
     {$endif}
     ExtCtrls,Classes, SysUtils;
 
 type
-T_ascomfocuser = class(TObject)
+T_ascomfocuser = class(T_focuser)
  private
    {$ifdef mswindows}
    V: variant;
@@ -39,52 +39,31 @@ T_ascomfocuser = class(TObject)
    FSpeed,FFocusdirection,FRelIncr: integer;
    stPosition,stRelpos: integer;
    Fdevice: string;
-   FStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonStatusChange: TNotifyEvent;
-   FonPositionChange: TNotifyNum;
-   FonTimerChange: TNotifyNum;
-   FonSpeedChange: TNotifyNum;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
-   procedure SetPosition(p:integer);
-   function  GetPosition:integer;
-   procedure SetRelPosition(p:integer);
-   function  GetRelPosition:integer;
-   procedure SetSpeed(p:integer);
-   function  GetSpeed:integer;
-   procedure SetTimer(p:integer);
-   function  GetTimer:integer;
-   function  GethasAbsolutePosition: boolean;
-   function  GethasRelativePosition: boolean;
-   function  GethasTimerSpeed: boolean;
-   function  GetPositionRange: TNumRange;
-   function  GetRelPositionRange: TNumRange;
    procedure msg(txt: string);
+   function  Connected: boolean;
+ protected
+   procedure SetPosition(p:integer); override;
+   function  GetPosition:integer; override;
+   procedure SetRelPosition(p:integer); override;
+   function  GetRelPosition:integer; override;
+   procedure SetSpeed(p:integer); override;
+   function  GetSpeed:integer; override;
+   procedure SetTimer(p:integer); override;
+   function  GetTimer:integer; override;
+   function  GethasAbsolutePosition: boolean; override;
+   function  GethasRelativePosition: boolean; override;
+   function  GethasTimerSpeed: boolean; override;
+   function  GetPositionRange: TNumRange; override;
+   function  GetRelPositionRange: TNumRange; override;
  public
    constructor Create;
    destructor  Destroy; override;
-   procedure Connect;
-   procedure Disconnect;
-   function  Connected: boolean;
-   procedure FocusIn;
-   procedure FocusOut;
-   property Device: string read Fdevice write Fdevice;
-   property hasAbsolutePosition: boolean read GethasAbsolutePosition;
-   property hasRelativePosition: boolean read GethasRelativePosition;
-   property hasTimerSpeed: boolean read GethasTimerSpeed;
-   property Position: integer read GetPosition write SetPosition;
-   property RelPosition: integer read GetRelPosition write SetRelPosition;
-   property PositionRange: TNumRange read GetPositionRange;
-   property RelPositionRange: TNumRange read GetRelPositionRange;
-   property Speed: integer read GetSpeed write SetSpeed;
-   property Timer: integer read GetTimer write SetTimer;
-   property Status: TDeviceStatus read FStatus;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
-   property onSpeedChange: TNotifyNum read FonSpeedChange write FonSpeedChange;
-   property onTimerChange: TNotifyNum read FonTimerChange write FonTimerChange;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   procedure Disconnect; override;
+   procedure FocusIn; override;
+   procedure FocusOut; override;
 end;
 
 
@@ -92,7 +71,7 @@ implementation
 
 constructor T_ascomfocuser.Create;
 begin
- inherited Create;
+ inherited Create(nil);
  FStatus := devDisconnected;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
@@ -106,10 +85,11 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascomfocuser.Connect;
+procedure T_ascomfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
  {$ifdef mswindows}
   try
+  Fdevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(WideString(Fdevice));
   V.connected:=true;

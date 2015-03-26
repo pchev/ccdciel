@@ -24,13 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom,
      u_global, ExtCtrls, Classes, SysUtils;
 
 type
 
-T_indicamera = class(TIndiBaseClient)
- private
+T_indicamera = class(T_camera)
+private
+   indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    CCDDevice: Basedevice;
    CCDport: ITextVectorProperty;
@@ -68,20 +69,7 @@ T_indicamera = class(TIndiBaseClient)
    UploadClient, UploadLocal, UploadBoth: ISwitch;
    FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
-   FImgStream: TMemoryStream;
-   FStatus: TDeviceStatus;
-   FWheelStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonExposureProgress: TNotifyNum;
-   FonTemperatureChange: TNotifyNum;
-   FonFrameChange: TNotifyEvent;
-   FonFilterChange: TNotifyNum;
-   FonStatusChange: TNotifyEvent;
-   FonWheelStatusChange: TNotifyEvent;
-   FonFilterNameChange: TNotifyEvent;
-   FonNewImage: TNotifyEvent;
-   FonDestroy: TNotifyEvent;
-   FFilterNames: TStringList;
+   procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -96,78 +84,63 @@ T_indicamera = class(TIndiBaseClient)
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure msg(txt: string);
-   function GetBinX:integer;
-   function GetBinY:integer;
-   procedure SetFrametype(f:TFrameType);
-   function  GetFrametype:TFrameType;
-   function GetBinXrange:TNumRange;
-   function GetBinYrange:TNumRange;
-   function GetExposureRange:TNumRange;
-   function GetTemperatureRange:TNumRange;
-   procedure SetFilter(num:integer);
-   function  GetFilter:integer;
-   procedure SetFilterNames(value:TStringList);
-   function  GetTemperature: double;
-   procedure SetTemperature(value:double);
-   function GetMaxX: double;
-   function GetMaxY: double;
-   function GetPixelSize: double;
-   function GetPixelSizeX: double;
-   function GetPixelSizeY: double;
-   function GetBitperPixel: double;
+ protected
+   function GetBinX:integer; override;
+   function GetBinY:integer; override;
+   procedure SetFrametype(f:TFrameType); override;
+   function  GetFrametype:TFrameType; override;
+   function GetBinXrange:TNumRange; override;
+   function GetBinYrange:TNumRange; override;
+   function GetExposureRange:TNumRange; override;
+   function GetTemperatureRange:TNumRange; override;
+   procedure SetFilter(num:integer); override;
+   function  GetFilter:integer; override;
+   procedure SetFilterNames(value:TStringList); override;
+   function  GetTemperature: double; override;
+   procedure SetTemperature(value:double); override;
+   function GetMaxX: double; override;
+   function GetMaxY: double; override;
+   function GetPixelSize: double; override;
+   function GetPixelSizeX: double; override;
+   function GetPixelSizeY: double; override;
+   function GetBitperPixel: double; override;
  public
    constructor Create;
    destructor  Destroy; override;
-   Procedure Connect;
-   Procedure Disconnect;
-   Procedure StartExposure(exptime: double);
-   Procedure SetBinning(binX,binY: integer);
-   procedure SetFrame(x,y,width,height: integer);
-   procedure GetFrame(out x,y,width,height: integer);
-   procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange);
-   procedure ResetFrame;
-   Procedure AbortExposure;
-   Procedure SetActiveDevices(focuser,filters,telescope: string);
-   property indiserver: string read Findiserver write Findiserver;
-   property indiserverport: string read Findiserverport write Findiserverport;
-   property indidevice: string read Findidevice write Findidevice;
-   property indisensor: string read Findisensor write Findisensor;
-   property indideviceport: string read Findideviceport write Findideviceport;
-   property Status: TDeviceStatus read FStatus;
-   property ImgStream: TMemoryStream read FImgStream;
-   property Temperature: double read GetTemperature write SetTemperature;
-   property BinX: Integer read getBinX;
-   property BinY: Integer read getBinY;
-   property FrameType: TFrameType read GetFrametype write SetFrametype;
-   property BinXrange: TNumRange read GetbinXrange;
-   property BinYrange: TNumRange read GetbinYrange;
-   property ExposureRange: TNumRange read GetExposureRange;
-   property TemperatureRange: TNumRange read GetTemperatureRange;
-   property Filter: integer read GetFilter write SetFilter;
-   property FilterNames: TStringList read FFilterNames write SetFilterNames;
-   property MaxX: double read GetMaxX;
-   property MaxY: double read GetMaxY;
-   property PixelSize: double read GetPixelSize;
-   property PixelSizeX: double read GetPixelSizeX;
-   property PixelSizeY: double read GetPixelSizeY;
-   property BitperPixel: double read GetBitperPixel;
-   property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
-   property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
-   property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
-   property onWheelStatusChange: TNotifyEvent read FonWheelStatusChange write FonWheelStatusChange;
-   property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
-   property onNewImage: TNotifyEvent read FonNewImage write FonNewImage;
-   property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
+   Procedure Disconnect; override;
+   Procedure StartExposure(exptime: double); override;
+   Procedure SetBinning(sbinX,sbinY: integer); override;
+   procedure SetFrame(x,y,width,height: integer); override;
+   procedure GetFrame(out x,y,width,height: integer); override;
+   procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
+   procedure ResetFrame; override;
+   Procedure AbortExposure; override;
+   Procedure SetActiveDevices(focuser,filters,telescope: string); override;
 end;
 
 implementation
 
+procedure T_indicamera.CreateIndiClient;
+begin
+if csDestroying in ComponentState then exit;
+  indiclient:=TIndiBaseClient.Create;
+  indiclient.onNewDevice:=@NewDevice;
+  indiclient.onNewMessage:=@NewMessage;
+  indiclient.onNewProperty:=@NewProperty;
+  indiclient.onNewNumber:=@NewNumber;
+  indiclient.onNewText:=@NewText;
+  indiclient.onNewSwitch:=@NewSwitch;
+  indiclient.onNewLight:=@NewLight;
+  indiclient.onNewBlob:=@NewBlob;
+  indiclient.onServerConnected:=@ServerConnected;
+  indiclient.onServerDisconnected:=@ServerDisconnected;
+  ClearStatus;
+end;
+
 constructor T_indicamera.Create;
 begin
- inherited Create;
+ inherited Create(nil);
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -180,31 +153,12 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
- onNewDevice:=@NewDevice;
- onNewMessage:=@NewMessage;
- onNewProperty:=@NewProperty;
- onNewNumber:=@NewNumber;
- onNewText:=@NewText;
- onNewSwitch:=@NewSwitch;
- onNewLight:=@NewLight;
- onNewBlob:=@NewBlob;
- onServerConnected:=@ServerConnected;
- onServerDisconnected:=@ServerDisconnected;
+ CreateIndiClient;
 end;
 
 destructor  T_indicamera.Destroy;
 begin
- if assigned(FonDestroy) then FonDestroy(self);
- onNewDevice:=nil;
- onNewMessage:=nil;
- onNewProperty:=nil;
- onNewNumber:=nil;
- onNewText:=nil;
- onNewSwitch:=nil;
- onNewLight:=nil;
- onNewBlob:=nil;
- onServerConnected:=nil;
- onServerDisconnected:=nil;
+ indiclient.Free;
  if FImgStream<>nil then FreeAndNil(FImgStream);
  if FFilterNames<>nil then FreeAndNil(FFilterNames);
  if InitTimer<>nil then FreeAndNil(InitTimer);
@@ -265,16 +219,22 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-Procedure T_indicamera.Connect;
+Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
 begin
-if not Connected then begin
+if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+if not indiclient.Connected then begin
+  Findiserver:=cp1;
+  Findiserverport:=cp2;
+  Findidevice:=cp3;
+  Findisensor:=cp4;
+  Findideviceport:=cp5;
   FStatus := devDisconnected;
   FWheelStatus:=devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-  SetServer(Findiserver,Findiserverport);
-  watchDevice(Findidevice);
-  ConnectServer;
+  indiclient.SetServer(Findiserver,Findiserverport);
+  indiclient.watchDevice(Findidevice);
+  indiclient.ConnectServer;
   FStatus := devConnecting;
   FWheelStatus := devConnecting;
   if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -289,14 +249,14 @@ begin
   InitTimer.Enabled:=false;
   if (not Fready) then begin
      msg('No response from server');
-     msg('Is "'+indidevice+'" a running camera driver?');
+     msg('Is "'+Findidevice+'" a running camera driver?');
      Disconnect;
   end;
 end;
 
 Procedure T_indicamera.Disconnect;
 begin
-Terminate;
+indiclient.Terminate;
 ClearStatus;
 end;
 
@@ -304,13 +264,13 @@ procedure T_indicamera.ServerConnected(Sender: TObject);
 begin
    if (CCDport<>nil)and(Findideviceport<>'') then begin
       CCDport.tp[0].text:=Findideviceport;
-      sendNewText(CCDport);
+      indiclient.sendNewText(CCDport);
    end;
-   connectDevice(Findidevice);
+   indiclient.connectDevice(Findidevice);
    if (Findisensor='CCD1')or(Findisensor='CCD2') then
-       setBLOBMode(B_ALSO,Findidevice,Findisensor)
+       indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
    else
-       setBLOBMode(B_ALSO,Findidevice);
+       indiclient.setBLOBMode(B_ALSO,Findidevice);
 end;
 
 procedure T_indicamera.ServerDisconnected(Sender: TObject);
@@ -320,6 +280,7 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   msg('Camera server disconnected');
+  CreateIndiClient;
 end;
 
 procedure T_indicamera.NewDevice(dp: Basedevice);
@@ -522,29 +483,29 @@ begin
 if (UploadMode<>nil)and(UploadLocal.s=ISS_ON) then begin
    IUResetSwitch(UploadMode);
    UploadClient.s:=ISS_ON;
-   sendNewSwitch(UploadMode);
+   indiclient.sendNewSwitch(UploadMode);
 end;
 if UseMainSensor then begin
   if (CCDCompression<>nil)and(CCDcompress.s=ISS_ON) then begin
     IUResetSwitch(CCDCompression);
     CCDraw.s:=ISS_ON;
-    sendNewSwitch(CCDCompression);
-    WaitBusy(CCDCompression);
+    indiclient.sendNewSwitch(CCDCompression);
+    indiclient.WaitBusy(CCDCompression);
   end;
   if CCDexpose<>nil then begin;
     CCDexposeValue.value:=exptime;
-    sendNewNumber(CCDexpose);
+    indiclient.sendNewNumber(CCDexpose);
   end;
 end else begin
   if (GuiderCompression<>nil)and(Guidercompress.s=ISS_ON) then begin
      IUResetSwitch(GuiderCompression);
      Guiderraw.s:=ISS_ON;
-     sendNewSwitch(GuiderCompression);
-     WaitBusy(GuiderCompression);
+     indiclient.sendNewSwitch(GuiderCompression);
+     indiclient.WaitBusy(GuiderCompression);
    end;
    if Guiderexpose<>nil then begin;
      GuiderexposeValue.value:=exptime;
-     sendNewNumber(Guiderexpose);
+     indiclient.sendNewNumber(Guiderexpose);
    end;
 end;
 end;
@@ -574,13 +535,13 @@ if UseMainSensor then begin
   if CCDAbortExposure<>nil then begin
     IUResetSwitch(CCDAbortExposure);
     CCDAbort.s:=ISS_ON;
-    sendNewSwitch(CCDAbortExposure);
+    indiclient.sendNewSwitch(CCDAbortExposure);
   end;
 end else begin
    if GuiderAbortExposure<>nil then begin
      IUResetSwitch(GuiderAbortExposure);
      GuiderAbort.s:=ISS_ON;
-     sendNewSwitch(GuiderAbortExposure);
+     indiclient.sendNewSwitch(GuiderAbortExposure);
    end;
 end;
 end;
@@ -653,21 +614,21 @@ end else begin
 end;
 end;
 
-Procedure T_indicamera.SetBinning(binX,binY: integer);
+Procedure T_indicamera.SetBinning(sbinX,sbinY: integer);
 begin
 if UseMainSensor then begin
  if CCDbinning<>nil then begin
-    CCDbinX.value:=binX;
-    CCDbinY.value:=binY;
-    sendNewNumber(CCDbinning);
-    WaitBusy(CCDbinning);
+    CCDbinX.value:=sbinX;
+    CCDbinY.value:=sbinY;
+    indiclient.sendNewNumber(CCDbinning);
+    indiclient.WaitBusy(CCDbinning);
  end;
 end else begin
  if Guiderbinning<>nil then begin
-    GuiderbinX.value:=binX;
-    GuiderbinY.value:=binY;
-    sendNewNumber(Guiderbinning);
-    WaitBusy(Guiderbinning);
+    GuiderbinX.value:=sbinX;
+    GuiderbinY.value:=sbinY;
+    indiclient.sendNewNumber(Guiderbinning);
+    indiclient.WaitBusy(Guiderbinning);
  end;
 end;
 end;
@@ -683,7 +644,7 @@ begin
         FLAT  : FrameFlat.s:=ISS_ON;
         else FrameLight.s:=ISS_ON;
      end;
-     sendNewSwitch(CCDFrameType);
+     indiclient.sendNewSwitch(CCDFrameType);
   end;
 end;
 
@@ -705,7 +666,7 @@ begin
      CCDframeY.value:=y;
      CCDframeWidth.value:=width;
      CCDframeHeight.value:=height;
-     sendNewNumber(CCDframe);
+     indiclient.sendNewNumber(CCDframe);
   end;
 end;
 
@@ -752,13 +713,13 @@ begin
   if UseMainSensor then begin
     if CCDframeReset<>nil then begin
        CCDframeReset.sp[0].s:=ISS_ON;
-       sendNewSwitch(CCDframeReset);
+       indiclient.sendNewSwitch(CCDframeReset);
     end else if CCDframe<>nil then begin
        CCDframeX.value:=CCDframeX.min;
        CCDframeY.value:=CCDframeY.min;
        CCDframeWidth.value:=CCDframeWidth.max;
        CCDframeHeight.value:=CCDframeHeight.max;
-       sendNewNumber(CCDframe);
+       indiclient.sendNewNumber(CCDframe);
     end;
   end;
 end;
@@ -790,7 +751,7 @@ begin
 //if UseMainSensor then begin
  if CCDTemperature<>nil then begin
     CCDTemperature.np[0].value:=value;
-    sendNewNumber(CCDTemperature);
+    indiclient.sendNewNumber(CCDTemperature);
  end;
 //end;
 end;
@@ -817,7 +778,7 @@ begin
            tp.text:=telescope;
         end;
      end;
-     sendNewText(ActiveDevices);
+     indiclient.sendNewText(ActiveDevices);
   end;
 end;
 
@@ -825,8 +786,8 @@ procedure T_indicamera.SetFilter(num:integer);
 begin
 if WheelSlot<>nil then begin;
   Slot.value:=num;
-  sendNewNumber(WheelSlot);
-  WaitBusy(WheelSlot);
+  indiclient.sendNewNumber(WheelSlot);
+  indiclient.WaitBusy(WheelSlot);
 end;
 end;
 
@@ -845,8 +806,8 @@ if (FilterName<>nil)and(value.Count=FilterName.ntp) then begin
   for i:=0 to value.Count-1 do begin
      FilterName.tp[i].text:=FFilterNames[i];
   end;
-  sendNewText(FilterName);
-  WaitBusy(FilterName);
+  indiclient.sendNewText(FilterName);
+  indiclient.WaitBusy(FilterName);
 end;
 end;
 

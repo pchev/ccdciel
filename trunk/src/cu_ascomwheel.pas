@@ -24,49 +24,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses  u_global,
+uses  cu_wheel, u_global,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
    ExtCtrls, Classes, SysUtils;
 
 type
-T_ascomwheel = class(TObject)
+T_ascomwheel = class(T_wheel)
  private
    {$ifdef mswindows}
    V: variant;
    {$endif}
    Fdevice: string;
-   FFilterNames: TStringList;
    FFilterNum: integer;
    stFilter: integer;
    sfFilterNames: TStringList;
-   FStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonStatusChange: TNotifyEvent;
-   FonFilterChange: TNotifyNum;
-   FonFilterNameChange: TNotifyEvent;
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
-   procedure SetFilter(num:integer);
-   function  GetFilter:integer;
-   procedure SetFilterNames(value:TStringList);
-   procedure GetFilterNames(var value:TStringList; var n: integer);
    procedure msg(txt: string);
+   procedure GetFilterNames(var value:TStringList; var n: integer);
+ protected
+   procedure SetFilter(num:integer); override;
+   function  GetFilter:integer; override;
+   procedure SetFilterNames(value:TStringList); override;
  public
    constructor Create;
    destructor  Destroy; override;
-   procedure Connect;
-   procedure Disconnect;
-   property Device: string read Fdevice write Fdevice;
-   property Filter: integer read GetFilter write SetFilter;
-   property FilterNames: TStringList read FFilterNames write SetFilterNames;
-   property Status: TDeviceStatus read FStatus;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
-   property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   procedure Disconnect; override;
 end;
 
 
@@ -74,7 +61,7 @@ implementation
 
 constructor T_ascomwheel.Create;
 begin
- inherited Create;
+ inherited Create(nil);
  FFilterNames:=TStringList.Create;
  FStatus := devDisconnected;
  StatusTimer:=TTimer.Create(nil);
@@ -90,10 +77,11 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascomwheel.Connect;
+procedure T_ascomwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
  {$ifdef mswindows}
   try
+  Fdevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(WideString(Fdevice));
   V.connected:=true;

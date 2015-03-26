@@ -24,48 +24,38 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses  u_global,
+uses  cu_mount, u_global,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
   ExtCtrls, Classes, SysUtils;
 
 type
-T_ascommount = class(TObject)
+T_ascommount = class(T_mount)
  private
    {$ifdef mswindows}
    V: variant;
    {$endif}
    Fdevice: string;
    stRA,stDE: double;
-   FStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonStatusChange: TNotifyEvent;
-   FonCoordChange: TNotifyEvent;
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
-   function  GetRA:double;
-   function  GetDec:double;
-   function  GetEquinox: double;
-   function  GetAperture:double;
-   function  GetFocaleLength:double;
    procedure msg(txt: string);
+ protected
+   function  GetRA:double; override;
+   function  GetDec:double; override;
+   function  GetEquinox: double; override;
+   function  GetAperture:double; override;
+   function  GetFocaleLength:double; override;
 public
    constructor Create;
    destructor  Destroy; override;
-   procedure Connect;
-   procedure Disconnect;
-   property Device: string read Fdevice write Fdevice;
-   property RA: double read GetRA;
-   property Dec: double read GetDec;
-   property Equinox: double read GetEquinox;
-   property Aperture: double read GetAperture;
-   property FocaleLength: double read GetFocaleLength;
-   property Status: TDeviceStatus read FStatus;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
-   property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
+   procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   procedure Disconnect; override;
+   procedure Slew(sra,sde: double); override;
+   procedure Sync(sra,sde: double); override;
+
 end;
 
 
@@ -73,7 +63,8 @@ implementation
 
 constructor T_ascommount.Create;
 begin
- inherited Create;
+ inherited Create(nil);
+ FMountInterface:=ASCOM;
  FStatus := devDisconnected;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
@@ -87,10 +78,11 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascommount.Connect;
+procedure T_ascommount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
  {$ifdef mswindows}
   try
+  FDevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(WideString(Fdevice));
   V.connected:=true;
@@ -245,6 +237,37 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
+procedure T_ascommount.Slew(sra,sde: double);
+begin
+ {$ifdef mswindows}
+ if Connected and V.CanSlew then begin
+   try
+   if not V.tracking then begin
+      V.tracking:=true;
+   end;
+   V.SlewToCoordinates(sra,sde);
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascommount.Sync(sra,sde: double);
+begin
+ {$ifdef mswindows}
+ if Connected and V.CanSync then begin
+   try
+   if not V.tracking then begin
+      V.tracking:=true;
+   end;
+   V.SyncToCoordinates(sra,sde);
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
 
 end.
 

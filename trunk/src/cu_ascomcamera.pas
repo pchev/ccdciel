@@ -24,32 +24,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses  u_global, cu_fits, lazutf8sysutils,
+uses  cu_camera, u_global, cu_fits, lazutf8sysutils,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils;
 
 type
-T_ascomcamera = class(TObject)
+T_ascomcamera = class(T_camera)
  private
    {$ifdef mswindows}
    V: variant;
    {$endif}
    Fdevice: string;
-   FImgStream: TMemoryStream;
-   FStatus: TDeviceStatus;
-   FWheelStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonExposureProgress: TNotifyNum;
-   FonTemperatureChange: TNotifyNum;
-   FonFrameChange: TNotifyEvent;
-   FonFilterChange: TNotifyNum;
-   FonStatusChange: TNotifyEvent;
-   FonWheelStatusChange: TNotifyEvent;
-   FonFilterNameChange: TNotifyEvent;
-   FonNewImage: TNotifyEvent;
-   FFilterNames: TStringList;
    nf: integer;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
@@ -57,70 +44,43 @@ T_ascomcamera = class(TObject)
    timestart,timeend,timeout,Fexptime:double;
    stCCDtemp : double;
    stX,stY,stWidth,stHeight: integer;
-   procedure msg(txt: string);
-   function GetBinX:integer;
-   function GetBinY:integer;
-   procedure SetFrametype(f:TFrameType);
-   function  GetFrametype:TFrameType;
-   function GetBinXrange:TNumRange;
-   function GetBinYrange:TNumRange;
-   function GetExposureRange:TNumRange;
-   function GetTemperatureRange:TNumRange;
-   procedure SetFilter(num:integer);
-   function  GetFilter:integer;
-   procedure SetFilterNames(value:TStringList);
-   function  GetTemperature: double;
-   procedure SetTemperature(value:double);
    function Connected: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
-   function GetMaxX: double;
-   function GetMaxY: double;
-   function GetPixelSize: double;
-   function GetPixelSizeX: double;
-   function GetPixelSizeY: double;
-   function GetBitperPixel: double;
+   procedure msg(txt: string);
+  protected
+   function GetBinX:integer; override;
+   function GetBinY:integer; override;
+   procedure SetFrametype(f:TFrameType); override;
+   function  GetFrametype:TFrameType; override;
+   function GetBinXrange:TNumRange; override;
+   function GetBinYrange:TNumRange; override;
+   function GetExposureRange:TNumRange; override;
+   function GetTemperatureRange:TNumRange; override;
+   procedure SetFilter(num:integer); override;
+   function  GetFilter:integer; override;
+   procedure SetFilterNames(value:TStringList); override;
+   function  GetTemperature: double; override;
+   procedure SetTemperature(value:double); override;
+   function GetMaxX: double; override;
+   function GetMaxY: double; override;
+   function GetPixelSize: double; override;
+   function GetPixelSizeX: double; override;
+   function GetPixelSizeY: double; override;
+   function GetBitperPixel: double; override;
  public
    constructor Create;
    destructor  Destroy; override;
-   procedure Connect;
-   procedure Disconnect;
-   Procedure StartExposure(exptime: double);
-   Procedure SetBinning(binX,binY: integer);
-   procedure SetFrame(x,y,width,height: integer);
-   procedure GetFrame(out x,y,width,height: integer);
-   procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange);
-   procedure ResetFrame;
-   Procedure AbortExposure;
-   Procedure SetActiveDevices(focuser,filters,telescope: string);
-   property Device: string read Fdevice write Fdevice;
-   property Status: TDeviceStatus read FStatus;
-   property ImgStream: TMemoryStream read FImgStream;
-   property Temperature: double read GetTemperature write SetTemperature;
-   property BinX: Integer read getBinX;
-   property BinY: Integer read getBinY;
-   property FrameType: TFrameType read GetFrametype write SetFrametype;
-   property BinXrange: TNumRange read GetbinXrange;
-   property BinYrange: TNumRange read GetbinYrange;
-   property ExposureRange: TNumRange read GetExposureRange;
-   property TemperatureRange: TNumRange read GetTemperatureRange;
-   property Filter: integer read GetFilter write SetFilter;
-   property FilterNames: TStringList read FFilterNames write SetFilterNames;
-   property MaxX: double read GetMaxX;
-   property MaxY: double read GetMaxY;
-   property PixelSize: double read GetPixelSize;
-   property PixelSizeX: double read GetPixelSizeX;
-   property PixelSizeY: double read GetPixelSizeY;
-   property BitperPixel: double read GetBitperPixel;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
-   property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
-   property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
-   property onWheelStatusChange: TNotifyEvent read FonWheelStatusChange write FonWheelStatusChange;
-   property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
-   property onNewImage: TNotifyEvent read FonNewImage write FonNewImage;
-   property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
+   procedure Disconnect;  override;
+   Procedure StartExposure(exptime: double); override;
+   Procedure SetBinning(sbinX,sbinY: integer); override;
+   procedure SetFrame(x,y,width,height: integer); override;
+   procedure GetFrame(out x,y,width,height: integer); override;
+   procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
+   procedure ResetFrame; override;
+   Procedure AbortExposure; override;
+   Procedure SetActiveDevices(focuser,filters,telescope: string); override;
 end;
 
 
@@ -128,7 +88,7 @@ implementation
 
 constructor T_ascomcamera.Create;
 begin
- inherited Create;
+ inherited Create(nil);
  FStatus := devDisconnected;
  FFilterNames:=TStringList.Create;
  FImgStream:=TMemoryStream.Create;
@@ -151,10 +111,11 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascomcamera.Connect;
+procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
 begin
 {$ifdef mswindows}
  try
+ Fdevice:=cp1;
  V:=Unassigned;
  V:=CreateOleObject(WideString(Fdevice));
  V.connected:=true;
@@ -337,13 +298,13 @@ begin
  {$endif}
 end;
 
-Procedure T_ascomcamera.SetBinning(binX,binY: integer);
+Procedure T_ascomcamera.SetBinning(sbinX,sbinY: integer);
 begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   V.BinX:=binX;
-   V.BinY:=binY;
+   V.BinX:=sbinX;
+   V.BinY:=sbinY;
    except
     on E: EOleException do msg('Error: ' + E.Message);
    end;

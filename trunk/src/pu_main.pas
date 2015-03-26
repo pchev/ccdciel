@@ -29,6 +29,8 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_sequence, u_ccdconfig, pu_editplan, dynlibs,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
+  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
+  cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera,
   cu_astrometry, cu_cdcclient, cu_autoguider, lazutf8sysutils, Classes,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
@@ -365,7 +367,7 @@ amenu.Checked:=tool.Visible;
 end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
-var DefaultInterface: TDevInterface;
+var DefaultInterface,aInt: TDevInterface;
     configver,configfile: string;
 begin
   {$ifdef mswindows}
@@ -416,7 +418,11 @@ begin
   Width:=config.GetValue('/Window/Width',1024);
   Height:=config.GetValue('/Window/Height',768);
 
-  camera:=T_camera.Create(TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface))));
+  aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
+  case aInt of
+    INDI:  camera:=T_indicamera.Create;
+    ASCOM: camera:=T_ascomcamera.Create;
+  end;
   camera.onMsg:=@NewMessage;
   camera.onExposureProgress:=@CameraProgress;
   camera.onFrameChange:=@FrameChange;
@@ -424,21 +430,32 @@ begin
   camera.onNewImage:=@CameraNewImage;
   camera.onStatusChange:=@CameraStatus;
 
-  wheel:=T_wheel.Create(TDevInterface(config.GetValue('/FilterWheelInterface',ord(DefaultInterface))));
-  wheel.camera:=camera;
+  aInt:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(DefaultInterface)));
+  case aInt of
+    INDI:  wheel:=T_indiwheel.Create;
+    ASCOM: wheel:=T_ascomwheel.Create;
+  end;
   wheel.onMsg:=@NewMessage;
   wheel.onFilterChange:=@FilterChange;
   wheel.onFilterNameChange:=@FilterNameChange;
   wheel.onStatusChange:=@WheelStatus;
 
-  focuser:=T_focuser.Create(TDevInterface(config.GetValue('/FocuserInterface',ord(DefaultInterface))));
+  aInt:=TDevInterface(config.GetValue('/FocuserInterface',ord(DefaultInterface)));
+  case aInt of
+    INDI:  focuser:=T_indifocuser.Create;
+    ASCOM: focuser:=T_ascomfocuser.Create;
+  end;
   focuser.onMsg:=@NewMessage;
   focuser.onPositionChange:=@FocuserPositionChange;
   focuser.onSpeedChange:=@FocuserSpeedChange;
   focuser.onTimerChange:=@FocuserTimerChange;
   focuser.onStatusChange:=@FocuserStatus;
 
-  mount:=T_mount.Create(TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface))));
+  aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
+  case aInt of
+    INDI:  mount:=T_indimount.Create;
+    ASCOM: mount:=T_ascommount.Create;
+  end;
   mount.onMsg:=@NewMessage;
   mount.onCoordChange:=@MountCoordChange;
   mount.onStatusChange:=@MountStatus;
@@ -1131,7 +1148,7 @@ end;
 Procedure Tf_main.ConnectWheel(Sender: TObject);
 begin
   case wheel.WheelInterface of
-    INCAMERA : wheel.Connect;
+    INCAMERA : wheel.Connect('');
     INDI : wheel.Connect(config.GetValue('/INDI/Server',''),
                           config.GetValue('/INDI/ServerPort',''),
                           config.GetValue('/INDIwheel/Device',''),

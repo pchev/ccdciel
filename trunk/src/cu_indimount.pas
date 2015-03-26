@@ -24,13 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_mount, indibaseclient, indibasedevice, indiapi, indicom,
      u_global, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
-T_indimount = class(TIndiBaseClient)
+T_indimount = class(T_mount)
  private
+   indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    MountDevice: Basedevice;
    Mountport: ITextVectorProperty;
@@ -44,11 +45,7 @@ T_indimount = class(TIndiBaseClient)
    eod_coord:  boolean;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
-   FStatus: TDeviceStatus;
-   FonMsg: TNotifyMsg;
-   FonStatusChange: TNotifyEvent;
-   FonCoordChange: TNotifyEvent;
-   FonDestroy: TNotifyEvent;
+   procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -61,40 +58,44 @@ T_indimount = class(TIndiBaseClient)
    procedure NewLight(lvp: ILightVectorProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
-   function  GetRA:double;
-   function  GetDec:double;
-   function  GetEquinox: double;
-   function  GetAperture:double;
-   function  GetFocaleLength:double;
    procedure msg(txt: string);
+ protected
+   function  GetRA:double; override;
+   function  GetDec:double; override;
+   function  GetEquinox: double;  override;
+   function  GetAperture:double;  override;
+   function  GetFocaleLength:double; override;
  public
    constructor Create;
    destructor  Destroy; override;
-   Procedure Connect;
-   Procedure Disconnect;
-   procedure Slew(ra,de: double);
-   procedure Sync(ra,de: double);
-   property indiserver: string read Findiserver write Findiserver;
-   property indiserverport: string read Findiserverport write Findiserverport;
-   property indidevice: string read Findidevice write Findidevice;
-   property indideviceport: string read Findideviceport write Findideviceport;
-   property RA: double read GetRA;
-   property Dec: double read GetDec;
-   property Equinox: double read GetEquinox;
-   property Aperture: double read GetAperture;
-   property FocaleLength: double read GetFocaleLength;
-   property Status: TDeviceStatus read FStatus;
-   property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
-   property onMsg: TNotifyMsg read FonMsg write FonMsg;
-   property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
-   property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   Procedure Disconnect; override;
+   procedure Slew(sra,sde: double); override;
+   procedure Sync(sra,sde: double); override;
 end;
 
 implementation
 
+procedure T_indimount.CreateIndiClient;
+begin
+if csDestroying in ComponentState then exit;
+  indiclient:=TIndiBaseClient.Create;
+  indiclient.onNewDevice:=@NewDevice;
+  indiclient.onNewMessage:=@NewMessage;
+  indiclient.onNewProperty:=@NewProperty;
+  indiclient.onNewNumber:=@NewNumber;
+  indiclient.onNewText:=@NewText;
+  indiclient.onNewSwitch:=@NewSwitch;
+  indiclient.onNewLight:=@NewLight;
+  indiclient.onServerConnected:=@ServerConnected;
+  indiclient.onServerDisconnected:=@ServerDisconnected;
+  ClearStatus;
+end;
+
 constructor T_indimount.Create;
 begin
- inherited Create;
+ inherited Create(nil);
+ FMountInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -104,30 +105,12 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
- onNewDevice:=@NewDevice;
- onNewMessage:=@NewMessage;
- onNewProperty:=@NewProperty;
- onNewNumber:=@NewNumber;
- onNewText:=@NewText;
- onNewSwitch:=@NewSwitch;
- onNewLight:=@NewLight;
- onServerConnected:=@ServerConnected;
- onServerDisconnected:=@ServerDisconnected;
+ CreateIndiClient;
 end;
 
 destructor  T_indimount.Destroy;
 begin
- if assigned(FonDestroy) then FonDestroy(self);
- onNewDevice:=nil;
- onNewMessage:=nil;
- onNewProperty:=nil;
- onNewNumber:=nil;
- onNewText:=nil;
- onNewSwitch:=nil;
- onNewLight:=nil;
- onNewBlob:=nil;
- onServerConnected:=nil;
- onServerDisconnected:=nil;
+ indiclient.Free;
  if InitTimer<>nil then FreeAndNil(InitTimer);
  inherited Destroy;
 end;
@@ -161,14 +144,19 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-Procedure T_indimount.Connect;
+Procedure T_indimount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
-if not Connected then begin
+if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+if not indiclient.Connected then begin
+  Findiserver:=cp1;
+  Findiserverport:=cp2;
+  Findidevice:=cp3;
+  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  SetServer(indiserver,indiserverport);
-  watchDevice(indidevice);
-  ConnectServer;
+  indiclient.SetServer(Findiserver,Findiserverport);
+  indiclient.watchDevice(Findidevice);
+  indiclient.ConnectServer;
   FStatus := devConnecting;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
@@ -181,14 +169,14 @@ begin
   InitTimer.Enabled:=false;
   if (MountDevice=nil)or(not Fready) then begin
      msg('No response from server');
-     msg('Is "'+indidevice+'" a running telescope mount driver?');
+     msg('Is "'+Findidevice+'" a running telescope mount driver?');
      Disconnect;
   end;
 end;
 
 Procedure T_indimount.Disconnect;
 begin
-Terminate;
+indiclient.Terminate;
 ClearStatus;
 end;
 
@@ -196,9 +184,9 @@ procedure T_indimount.ServerConnected(Sender: TObject);
 begin
    if (Mountport<>nil)and(Findideviceport<>'') then begin
       Mountport.tp[0].text:=Findideviceport;
-      sendNewText(Mountport);
+      indiclient.sendNewText(Mountport);
    end;
-   connectDevice(Findidevice);
+   indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indimount.ServerDisconnected(Sender: TObject);
@@ -206,6 +194,7 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg('Mount server disconnected');
+  CreateIndiClient;
 end;
 
 procedure T_indimount.NewDevice(dp: Basedevice);
@@ -321,31 +310,31 @@ end
 else result:=-1;
 end;
 
-procedure T_indimount.Slew(ra,de: double);
+procedure T_indimount.Slew(sra,sde: double);
 var waittime:integer;
 begin
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
-    sendNewSwitch(CoordSet);
-    if (abs(coord_ra.value-ra)+abs(coord_dec.value-de))>0.01 then waittime:=60000 else waittime:=1000;
-    coord_ra.value:=ra;
-    coord_dec.value:=de;
-    sendNewNumber(coord_prop);
-    WaitBusy(coord_prop,waittime);
+    indiclient.sendNewSwitch(CoordSet);
+    if (abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.01 then waittime:=60000 else waittime:=1000;
+    coord_ra.value:=sra;
+    coord_dec.value:=sde;
+    indiclient.sendNewNumber(coord_prop);
+    indiclient.WaitBusy(coord_prop,waittime);
   end;
 end;
 
-procedure T_indimount.Sync(ra,de: double);
+procedure T_indimount.Sync(sra,sde: double);
 begin
   if (CoordSet<>nil) and (CoordSetSync<>nil) and (coord_prop<>nil) then begin
     IUResetSwitch(CoordSet);
     CoordSetSync.s:=ISS_ON;
-    sendNewSwitch(CoordSet);
-    coord_ra.value:=ra;
-    coord_dec.value:=de;
-    sendNewNumber(coord_prop);
-    WaitBusy(coord_prop,1000);
+    indiclient.sendNewSwitch(CoordSet);
+    coord_ra.value:=sra;
+    coord_dec.value:=sde;
+    indiclient.sendNewNumber(coord_prop);
+    indiclient.WaitBusy(coord_prop,1000);
   end;
 end;
 
