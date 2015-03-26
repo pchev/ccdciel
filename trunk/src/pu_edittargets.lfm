@@ -1,12 +1,12 @@
 object f_EditTargets: Tf_EditTargets
   Left = 351
-  Height = 281
+  Height = 404
   Top = 144
-  Width = 544
+  Width = 553
   ActiveControl = PlanList
   Caption = 'Edit target list'
-  ClientHeight = 281
-  ClientWidth = 544
+  ClientHeight = 404
+  ClientWidth = 553
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
@@ -185,7 +185,7 @@ object f_EditTargets: Tf_EditTargets
   object BtnClose: TButton
     Left = 432
     Height = 25
-    Top = 250
+    Top = 368
     Width = 75
     Caption = 'Close'
     ModalResult = 11
@@ -219,5 +219,74 @@ object f_EditTargets: Tf_EditTargets
     Width = 126
     OnChange = TargetChange
     TabOrder = 13
+  end
+  object RepeatCount: TEdit
+    Left = 300
+    Height = 22
+    Top = 240
+    Width = 80
+    OnChange = TargetChange
+    TabOrder = 14
+    Text = '1'
+  end
+  object Delay: TEdit
+    Left = 300
+    Height = 22
+    Top = 269
+    Width = 80
+    OnChange = TargetChange
+    TabOrder = 15
+    Text = '0'
+  end
+  object Label10: TLabel
+    Left = 216
+    Height = 16
+    Top = 243
+    Width = 45
+    Caption = 'Repeat'
+    ParentColor = False
+  end
+  object Label11: TLabel
+    Left = 216
+    Height = 16
+    Top = 272
+    Width = 35
+    Caption = 'Delay'
+    ParentColor = False
+  end
+  object Label13: TLabel
+    Left = 396
+    Height = 16
+    Top = 272
+    Width = 58
+    Caption = '[seconds]'
+    ParentColor = False
+  end
+  object Preview: TCheckBox
+    Left = 298
+    Height = 26
+    Top = 296
+    Width = 219
+    Caption = 'Preview when waiting to repeat'
+    OnChange = TargetChange
+    ParentBidiMode = False
+    TabOrder = 16
+  end
+  object Label9: TLabel
+    Left = 300
+    Height = 16
+    Top = 326
+    Width = 108
+    Caption = 'Preview exposure'
+    ParentColor = False
+  end
+  object PreviewExposure: TEdit
+    Left = 413
+    Height = 22
+    Top = 322
+    Width = 80
+    OnChange = TargetChange
+    TabOrder = 17
+    Text = '1'
   end
 end

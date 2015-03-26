@@ -42,9 +42,9 @@ object f_option: Tf_option
     Height = 395
     Top = 0
     Width = 416
-    ActivePage = TabSheet1
+    ActivePage = TabSheet5
     Align = alClient
-    TabIndex = 0
+    TabIndex = 4
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
@@ -222,7 +222,7 @@ object f_option: Tf_option
         Top = 0
         Width = 400
         Caption = 'Star profile'
-        ClientHeight = 88
+        ClientHeight = 102
         ClientWidth = 396
         TabOrder = 0
         object StarWindow: TEdit
@@ -268,7 +268,7 @@ object f_option: Tf_option
         Top = 0
         Width = 400
         Caption = 'Astrometry options'
-        ClientHeight = 128
+        ClientHeight = 142
         ClientWidth = 396
         TabOrder = 0
         object Focale: TEdit
@@ -333,7 +333,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 39
+          ClientHeight = 53
           ClientWidth = 396
           Columns = 2
           ItemIndex = 0
@@ -360,7 +360,7 @@ object f_option: Tf_option
             Top = 0
             Width = 400
             Caption = 'Astrometry.Net'
-            ClientHeight = 136
+            ClientHeight = 150
             ClientWidth = 396
             TabOrder = 0
             object Label6: TLabel

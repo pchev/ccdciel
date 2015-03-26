@@ -392,9 +392,6 @@ begin
     cdcwcs_xy2sky:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_xy2sky'));
     cdcwcs_getinfo:= Tcdcwcs_getinfo(GetProcedureAddress(cdcwcslib,'cdcwcs_getinfo'));
   end;
-  if (@cdcwcs_initfitsfile=nil)or(@cdcwcs_release=nil)or(@cdcwcs_sky2xy=nil)or(@cdcwcs_xy2sky=nil)or(@cdcwcs_getinfo=nil) then begin
-     ShowMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
-  end;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   ConfigDir:=GetAppConfigDirUTF8(false,true);
@@ -539,6 +536,10 @@ procedure Tf_main.FormShow(Sender: TObject);
 var str: string;
     i,n: integer;
 begin
+  if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
+     NewMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
+  end;
+
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages);
 
@@ -874,6 +875,7 @@ begin
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
+  Guider:=TAutoguider(config.GetValue('/Autoguider/Software',0));
 end;
 
 Procedure Tf_main.Connect(Sender: TObject);
@@ -1456,13 +1458,15 @@ end;
 
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 begin
- autoguider.Start;
- f_autoguider.Status.Text:='Connecting';
+  autoguider.TargetHost:=config.GetValue('/Autoguider/PHDhostname','localhost');
+  autoguider.TargetPort:=config.GetValue('/Autoguider/PHDport','4400');
+  autoguider.Start;
+  f_autoguider.Status.Text:='Connecting';
 end;
 
 Procedure Tf_main.AutoguiderCalibrateClick(Sender: TObject);
 begin
- autoguider.Calibrate;
+  autoguider.Calibrate;
 end;
 
 Procedure Tf_main.AutoguiderGuideClick(Sender: TObject);
@@ -1490,13 +1494,13 @@ end;
 
 Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
 begin
- // autoguider will be free automatically, create a new one
+ // autoguider will be free automatically, create a new one for next connection
  autoguider:=TPHDClient.Create;
  autoguider.onStatusChange:=@AutoguiderStatus;
  autoguider.onConnect:=@AutoguiderConnect;
  autoguider.onDisconnect:=@AutoguiderDisconnect;
  autoguider.onShowMessage:=@NewMessage;
- f_autoguider.Status.Text:='Disconnected'
+ f_autoguider.Status.Text:='Disconnected';
 end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
@@ -2084,8 +2088,8 @@ begin
      if subfrt then fn:=slash(fn+f_capture.FrameType.Text);
      if subobj then fn:=slash(fn+f_capture.Fname.Text);
      if substep and f_sequence.Running then begin
-        if f_sequence.TotalCount>1 then begin
-          fn:=slash(fn+f_sequence.CurrentStep+'_'+IntToStr(f_sequence.RepeatCount))
+        if f_sequence.StepTotalCount>1 then begin
+          fn:=slash(fn+f_sequence.CurrentStep+'_'+IntToStr(f_sequence.StepRepeatCount))
         end
         else begin
           fn:=slash(fn+f_sequence.CurrentStep);

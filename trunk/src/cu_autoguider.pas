@@ -59,6 +59,7 @@ begin
 // start suspended to let time to the main thread to set the parameters
 inherited create(true);
 freeonterminate:=true;
+FStatus:='Disconnected';
 FTargetHost:='localhost';
 FTargetPort:='4400';
 FTimeout:=500;
@@ -95,6 +96,7 @@ DisplayMessage(tcpclient.GetErrorDesc);
 finally
 terminate;
 tcpclient.Disconnect;
+FStatus:='Disconnected';
 if assigned(FonDisconnect) then FonDisconnect(self);
 tcpclient.Free;
 end;
@@ -124,7 +126,7 @@ end;
 
 procedure TPHDClient.Send(const Value: string);
 begin
-writeln('>>'+Value);
+//writeln('>>'+Value);
  if Value>'' then begin
    tcpclient.Sock.SendString(Value+crlf);
    if tcpclient.Sock.LastError<>0 then begin
@@ -180,7 +182,7 @@ var eventname,rpcid,rpcresult,rpcerror: string;
     attrib,value:Tstringlist;
     p,i:integer;
 begin
-writeln('=='+txt);
+//writeln('=='+txt);
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
 try
@@ -189,7 +191,7 @@ p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
    if (eventname='GuideStep')and(FStatus<>'Settling') then FStatus:='Guiding'
-   else if eventname='StartGuiding' then FStatus:='Start Guiding'
+   else if eventname='StartGuiding' then FStatus:='Guiding'
    else if eventname='GuidingStopped' then FStatus:='Stopped'
    else if eventname='StarSelected' then FStatus:='Star Selected'
    else if eventname='StarLost' then FStatus:='Star lost'

@@ -218,10 +218,15 @@ object f_sequence: Tf_sequence
     left = 22
     top = 320
   end
-  object RepeatTimer: TTimer
+  object StepRepeatTimer: TTimer
     Enabled = False
-    OnTimer = RepeatTimerTimer
+    OnTimer = StepRepeatTimerTimer
     left = 104
     top = 320
+  end
+  object TargetRepeatTimer: TTimer
+    OnTimer = TargetRepeatTimerTimer
+    left = 107
+    top = 75
   end
 end
