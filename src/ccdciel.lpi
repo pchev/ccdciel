@@ -124,7 +124,6 @@
         <ComponentName Value="f_devicesconnection"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_devicesconnection"/>
       </Unit2>
       <Unit3>
         <Filename Value="fu_preview.pas"/>
@@ -143,6 +142,7 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -173,12 +173,10 @@
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomfocuser"/>
       </Unit10>
       <Unit11>
         <Filename Value="cu_focuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_focuser"/>
       </Unit11>
       <Unit12>
         <Filename Value="u_global.pas"/>
@@ -224,47 +222,38 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_camera"/>
       </Unit20>
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indifocuser"/>
       </Unit21>
       <Unit22>
         <Filename Value="cu_indiwheel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indiwheel"/>
       </Unit22>
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_wheel"/>
       </Unit24>
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomcamera"/>
       </Unit25>
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascommount"/>
       </Unit26>
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomwheel"/>
       </Unit27>
       <Unit28>
         <Filename Value="pu_valueseditor.pas"/>
@@ -293,7 +282,6 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_options"/>
       </Unit31>
       <Unit32>
         <Filename Value="fu_frame.pas"/>
@@ -305,6 +293,7 @@
       <Unit33>
         <Filename Value="cu_astrometry.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_astrometry"/>
       </Unit33>
       <Unit34>
         <Filename Value="cu_cdcclient.pas"/>
@@ -332,7 +321,6 @@
         <ComponentName Value="f_autoguider"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_autoguider"/>
       </Unit38>
       <Unit39>
         <Filename Value="fu_sequence.pas"/>
