@@ -225,6 +225,7 @@ object f_sequence: Tf_sequence
     top = 320
   end
   object TargetRepeatTimer: TTimer
+    Enabled = False
     OnTimer = TargetRepeatTimerTimer
     left = 107
     top = 75
