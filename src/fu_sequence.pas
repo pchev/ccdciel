@@ -6,9 +6,10 @@ Copyright (C) 2015 Patrick Chevalley
 http://www.ap-i.net
 pch@ap-i.net
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,8 +17,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+
 }
 
 {$mode objfpc}{$H+}
@@ -388,13 +389,24 @@ begin
     msg('Initialize target '+t.objectname);
     { TODO :  }
     // check if current time in range
+    // stop guiding
+    if Autoguider.State<>GUIDER_DISCONNECTED then begin
+      Autoguider.Guide(false);
+      Autoguider.WaitBusy;
+    end;
     // slew to coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
        Mount.Slew(t.ra, t.de);
        // astrometry
+       Wait;
     end;
     // start guiding
+    if Autoguider.State<>GUIDER_DISCONNECTED then begin
+      Autoguider.Guide(true);
+      Autoguider.WaitBusy(SettleMaxTime+5);
+    end;
     // etc...
+    Wait;
   end;
 end;
 

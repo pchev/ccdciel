@@ -2,6 +2,27 @@ unit cu_autoguider_phd;
 
 {$mode objfpc}{$H+}
 
+{
+Copyright (C) 2015 Patrick Chevalley
+
+http://www.ap-i.net
+pch@ap-i.net
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+
+}
+
 interface
 
 uses cu_autoguider, cu_tcpclient, u_global, blcksock, synsock, fpjson, jsonparser,
@@ -28,6 +49,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean); override;
     procedure Dither(pixel:double; raonly:boolean); override;
+    function WaitBusy(maxwait:integer=5):boolean; override;
   end;
 
 implementation
@@ -156,7 +178,7 @@ p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
    if (eventname='GuideStep')and(FStatus<>'Settling') then FStatus:='Guiding'
-   else if eventname='StartGuiding' then FStatus:='Guiding'
+   else if eventname='StartGuiding' then FStatus:='Start Guiding'
    else if eventname='GuidingStopped' then FStatus:='Stopped'
    else if eventname='StarSelected' then FStatus:='Star Selected'
    else if eventname='StarLost' then FStatus:='Star lost'
@@ -246,6 +268,7 @@ end;
 procedure T_autoguider_phd.SetState;
 begin
   if FStatus='Guiding' then FState:=GUIDER_GUIDING
+  else if FStatus='Start Guiding' then FState:=GUIDER_BUSY
   else if FStatus='Stopped' then FState:=GUIDER_IDLE
   else if FStatus='Star Selected' then FState:=FState
   else if FStatus='Star lost' then FState:=GUIDER_ALERT
@@ -262,7 +285,7 @@ begin
   else if FStatus='Settling' then FState:=GUIDER_BUSY
   else if FStatus='Settle Done' then FState:=FState
   else if FStatus='Guiding Dithered' then FState:=GUIDER_BUSY
-  else if FStatus='Lock Position Lost' then FState:=GUIDER_ALERT
+  else if FStatus='Lock Position Lost' then FState:=FState
   else if FStatus='Alert' then FState:=GUIDER_ALERT;
 end;
 
@@ -280,6 +303,18 @@ begin
 FSettlePix:=FormatFloat(f1,pixel);
 FSettleTmin:=IntToStr(mintime);
 FSettleTmax:=IntToStr(maxtime);
+end;
+
+function T_autoguider_phd.WaitBusy(maxwait:integer=5):boolean;
+var endt: TDateTime;
+begin
+  endt:=now+maxwait/secperday;
+  while now<endt do begin
+    Sleep(2000);
+    Application.ProcessMessages;
+    if FState<>GUIDER_BUSY then break;
+  end;
+  result:=(FState<>GUIDER_BUSY);
 end;
 
 procedure T_autoguider_phd.Calibrate;
@@ -303,6 +338,7 @@ begin
     buf:='{"method": "stop_capture","id":2004}';
     Send(buf);
   end;
+  FState:=GUIDER_BUSY;
 end;
 
 procedure T_autoguider_phd.Pause(onoff:boolean);
@@ -330,6 +366,7 @@ begin
   buf:=buf+'"timeout": '+FSettleTmax+'}],';   // max time
   buf:=buf+'"id": 2010}';
   Send(buf);
+  FState:=GUIDER_BUSY;
 end;
 
 end.
