@@ -56,7 +56,7 @@ object f_option: Tf_option
         Top = 0
         Width = 400
         Caption = 'Files'
-        ClientHeight = 304
+        ClientHeight = 318
         ClientWidth = 396
         TabOrder = 0
         object CaptureDir: TDirectoryEdit
@@ -503,7 +503,7 @@ object f_option: Tf_option
       ClientWidth = 408
       object AutoguiderBox: TRadioGroup
         Left = 0
-        Height = 87
+        Height = 64
         Top = 8
         Width = 400
         AutoFill = True
@@ -515,7 +515,7 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 55
+        ClientHeight = 32
         ClientWidth = 396
         Columns = 2
         ItemIndex = 0
@@ -526,42 +526,134 @@ object f_option: Tf_option
       end
       object GroupBox3: TGroupBox
         Left = 0
-        Height = 161
-        Top = 96
+        Height = 112
+        Top = 72
         Width = 401
         Caption = 'PHD2'
-        ClientHeight = 129
+        ClientHeight = 80
         ClientWidth = 397
         TabOrder = 1
         object Label16: TLabel
-          Left = 20
+          Left = 16
           Height = 16
-          Top = 16
+          Top = 10
           Width = 62
           Caption = 'Hostname'
           ParentColor = False
         end
         object Label17: TLabel
-          Left = 20
+          Left = 16
           Height = 16
-          Top = 60
+          Top = 46
           Width = 27
           Caption = 'Port'
           ParentColor = False
         end
         object PHDhostname: TEdit
-          Left = 128
+          Left = 124
           Height = 22
-          Top = 14
+          Top = 8
           Width = 186
           TabOrder = 0
         end
         object PHDport: TEdit
-          Left = 128
+          Left = 124
           Height = 22
-          Top = 56
+          Top = 42
           Width = 186
           TabOrder = 1
+        end
+      end
+      object GroupBox5: TGroupBox
+        Left = 0
+        Height = 166
+        Top = 184
+        Width = 200
+        Caption = 'Dithering'
+        ClientHeight = 134
+        ClientWidth = 196
+        TabOrder = 2
+        object Label23: TLabel
+          Left = 16
+          Height = 16
+          Top = 11
+          Width = 36
+          Caption = 'Pixels'
+          ParentColor = False
+        end
+        object DitherPixel: TEdit
+          Left = 96
+          Height = 22
+          Top = 8
+          Width = 80
+          TabOrder = 0
+          Text = ' '
+        end
+        object DitherRAonly: TCheckBox
+          Left = 96
+          Height = 26
+          Top = 50
+          Width = 74
+          Caption = 'RA only'
+          TabOrder = 1
+        end
+      end
+      object GroupBox6: TGroupBox
+        Left = 201
+        Height = 166
+        Top = 184
+        Width = 200
+        Caption = 'Settle tolerance'
+        ClientHeight = 134
+        ClientWidth = 196
+        TabOrder = 3
+        object SettlePixel: TEdit
+          Left = 97
+          Height = 22
+          Top = 8
+          Width = 80
+          TabOrder = 0
+          Text = ' '
+        end
+        object SettleMinTime: TEdit
+          Left = 97
+          Height = 22
+          Top = 50
+          Width = 80
+          TabOrder = 1
+          Text = ' '
+        end
+        object SettleMaxTime: TEdit
+          Left = 97
+          Height = 22
+          Top = 86
+          Width = 80
+          TabOrder = 2
+          Text = ' '
+        end
+        object Label20: TLabel
+          Left = 17
+          Height = 16
+          Top = 11
+          Width = 36
+          Caption = 'Pixels'
+          ParentColor = False
+        end
+        object Label21: TLabel
+          Left = 17
+          Height = 16
+          Top = 53
+          Width = 55
+          Caption = 'Min. time'
+          ParentColor = False
+        end
+        object Label22: TLabel
+          Left = 16
+          Height = 16
+          Top = 89
+          Width = 50
+          Caption = 'Timeout'
+          ParentColor = False
         end
       end
     end

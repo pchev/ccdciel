@@ -25,7 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 interface
 
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils,
-  fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera,
+  fu_capture, fu_preview, fu_filterwheel,
+  cu_mount, cu_camera, cu_autoguider,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -82,6 +83,7 @@ type
     Ffilter: Tf_filterwheel;
     Fmount: T_mount;
     Fcamera: T_camera;
+    Fautoguider: T_autoguider;
     procedure InitTarget;
     procedure StartPlan;
     procedure StartStep;
@@ -103,6 +105,7 @@ type
     property Filter: Tf_filterwheel read Ffilter write Ffilter;
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
+    property Autoguider: T_autoguider read Fautoguider write Fautoguider;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 

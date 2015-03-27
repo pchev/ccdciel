@@ -37,6 +37,10 @@ type
     BtnGuide: TButton;
     BtnDither: TButton;
     Panel1: TPanel;
+    led: TShape;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
     Status: TEdit;
     StaticText1: TStaticText;
     procedure BtnCalClick(Sender: TObject);

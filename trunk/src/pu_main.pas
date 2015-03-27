@@ -31,7 +31,8 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera,
-  cu_astrometry, cu_cdcclient, cu_autoguider, lazutf8sysutils, Classes,
+  cu_autoguider, cu_autoguider_phd,
+  cu_astrometry, cu_cdcclient,  lazutf8sysutils, Classes,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -156,7 +157,7 @@ type
     wheel: T_wheel;
     focuser: T_focuser;
     mount: T_mount;
-    autoguider:TPHDClient;
+    autoguider:T_autoguider;
     cdc:TCdCClient;
     astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
@@ -460,7 +461,10 @@ begin
   mount.onCoordChange:=@MountCoordChange;
   mount.onStatusChange:=@MountStatus;
 
-  autoguider:=TPHDClient.Create;
+  Guider:=TAutoguiderType(config.GetValue('/Autoguider/Software',0));
+  case Guider of
+    PHD: autoguider:=T_autoguider_phd.Create;
+  end;
   autoguider.onStatusChange:=@AutoguiderStatus;
   autoguider.onConnect:=@AutoguiderConnect;
   autoguider.onDisconnect:=@AutoguiderDisconnect;
@@ -521,6 +525,7 @@ begin
   f_sequence.Filter:=f_filterwheel;
   f_sequence.Mount:=mount;
   f_sequence.Camera:=camera;
+  f_sequence.Autoguider:=autoguider;
 
   fits:=TFits.Create(self);
 
@@ -892,7 +897,13 @@ begin
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
-  Guider:=TAutoguider(config.GetValue('/Autoguider/Software',0));
+  Guider:=TAutoguiderType(config.GetValue('/Autoguider/Software',0));
+  DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
+  DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
+  SettlePixel:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
+  SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
+  SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
+  if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
 end;
 
 Procedure Tf_main.Connect(Sender: TObject);
@@ -1475,10 +1486,15 @@ end;
 
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 begin
-  autoguider.TargetHost:=config.GetValue('/Autoguider/PHDhostname','localhost');
-  autoguider.TargetPort:=config.GetValue('/Autoguider/PHDport','4400');
-  autoguider.Start;
-  f_autoguider.Status.Text:='Connecting';
+ if f_autoguider.BtnConnect.Caption='Connect' then begin
+   autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
+                      config.GetValue('/Autoguider/PHDport','4400'));
+   f_autoguider.BtnConnect.Caption:='Disconnect';
+ end else begin
+   autoguider.Disconnect;
+ end;
+ f_autoguider.Status.Text:=autoguider.Status;
+ NewMessage('Autoguider: '+autoguider.Status);
 end;
 
 Procedure Tf_main.AutoguiderCalibrateClick(Sender: TObject);
@@ -1501,28 +1517,58 @@ end;
 
 Procedure Tf_main.AutoguiderDitherClick(Sender: TObject);
 begin
- autoguider.Dither;
+ autoguider.Dither(DitherPixel, DitherRAonly);
 end;
 
 Procedure Tf_main.AutoguiderConnect(Sender: TObject);
 begin
  autoguider.ConnectGear;
+ autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
 end;
 
 Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
+var i: integer;
 begin
  // autoguider will be free automatically, create a new one for next connection
- autoguider:=TPHDClient.Create;
+ case Guider of
+   PHD: autoguider:=T_autoguider_phd.Create;
+ end;
  autoguider.onStatusChange:=@AutoguiderStatus;
  autoguider.onConnect:=@AutoguiderConnect;
  autoguider.onDisconnect:=@AutoguiderDisconnect;
  autoguider.onShowMessage:=@NewMessage;
- f_autoguider.Status.Text:='Disconnected';
+ f_autoguider.Status.Text:=autoguider.Status;
+ NewMessage('Autoguider: '+autoguider.Status);
+ f_autoguider.BtnConnect.Caption:='Connect';
+ f_autoguider.BtnGuide.Caption:='Guide';
+ f_autoguider.led.Brush.Color:=clGray;
 end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
 begin
+ if f_autoguider.Status.Text<>autoguider.Status then NewMessage('Autoguider: '+autoguider.Status);
  f_autoguider.Status.Text:=autoguider.Status;
+ case autoguider.State of
+   GUIDER_DISCONNECTED:begin
+                       f_autoguider.led.Brush.Color:=clGray;
+                       f_autoguider.BtnGuide.Caption:='Guide';
+                       end;
+   GUIDER_IDLE        :begin
+                       f_autoguider.led.Brush.Color:=clYellow;
+                       f_autoguider.BtnGuide.Caption:='Guide';
+                       end;
+   GUIDER_GUIDING     :begin
+                       f_autoguider.led.Brush.Color:=clLime;
+                       f_autoguider.BtnGuide.Caption:='Stop';
+                       end;
+   GUIDER_BUSY        :begin
+                       f_autoguider.led.Brush.Color:=clOrange;
+                       end;
+   GUIDER_ALERT       :begin
+                       f_autoguider.led.Brush.Color:=clRed;
+                       end;
+ end;
+
 end;
 
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
@@ -1671,6 +1717,11 @@ begin
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
+   f_option.DitherPixel.Text:=config.GetValue('/Autoguider/Dither/Pixel','1.0');
+   f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
+   f_option.SettlePixel.Text:=config.GetValue('/Autoguider/Settle/Pixel','1.0');
+   f_option.SettleMinTime.Text:=config.GetValue('/Autoguider/Settle/MinTime','5');
+   f_option.SettleMaxTime.Text:=config.GetValue('/Autoguider/Settle/MaxTime','30');
 
    FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_option.ShowModal;
@@ -1707,6 +1758,11 @@ begin
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
+     config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Text);
+     config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
+     config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Text);
+     config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Text);
+     config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Text);
 
      config.Flush;
 

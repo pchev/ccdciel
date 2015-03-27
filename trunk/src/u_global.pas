@@ -34,7 +34,8 @@ type
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
-  TAutoguider=(PHD);
+  TAutoguiderType=(PHD);
+  TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
 
   TNumRange = record
                min,max,step: double;
@@ -150,7 +151,10 @@ var
   config: TCCDConfig;
   Filters: TStringList;
   compile_time, compile_version, compile_system, lclver: string;
-  Guider: TAutoguider;
+  Guider: TAutoguiderType;
+  DitherPixel, SettlePixel: double;
+  DitherRAonly: boolean;
+  SettleMinTime, SettleMaxTime: integer;
 
 implementation
 

@@ -1,18 +1,18 @@
 object f_autoguider: Tf_autoguider
   Left = 0
-  Height = 140
+  Height = 111
   Top = 0
-  Width = 96
-  ClientHeight = 140
-  ClientWidth = 96
+  Width = 153
+  ClientHeight = 111
+  ClientWidth = 153
   TabOrder = 0
-  DesignLeft = 362
-  DesignTop = 512
+  DesignLeft = 422
+  DesignTop = 502
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 96
+    Width = 153
     Align = alTop
     Alignment = taCenter
     Caption = 'Autoguider'
@@ -25,63 +25,98 @@ object f_autoguider: Tf_autoguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 120
+    Height = 91
     Top = 20
-    Width = 96
+    Width = 153
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 120
-    ClientWidth = 96
+    ClientHeight = 91
+    ClientWidth = 153
     TabOrder = 1
-    object Status: TEdit
+    object Panel2: TPanel
       Left = 0
-      Height = 22
-      Hint = 'Current telescope Right Ascension'
+      Height = 26
       Top = 0
-      Width = 80
-      AutoSize = False
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
-      ReadOnly = True
+      Width = 143
+      ClientHeight = 26
+      ClientWidth = 143
       TabOrder = 0
+      object led: TShape
+        Left = 128
+        Height = 14
+        Top = 4
+        Width = 14
+        Brush.Color = clGray
+        Shape = stCircle
+      end
+      object Status: TEdit
+        Left = 0
+        Height = 25
+        Hint = 'Current telescope Right Ascension'
+        Top = 0
+        Width = 120
+        AutoSize = False
+        Color = clBlack
+        Font.Color = clRed
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+      end
     end
-    object BtnConnect: TButton
+    object Panel3: TPanel
       Left = 0
-      Height = 25
-      Top = 22
-      Width = 80
-      Caption = 'Connect'
-      OnClick = BtnConnectClick
+      Height = 26
+      Top = 26
+      Width = 143
+      ClientHeight = 26
+      ClientWidth = 143
       TabOrder = 1
+      object BtnConnect: TButton
+        Left = 0
+        Height = 25
+        Top = 0
+        Width = 70
+        Caption = 'Connect'
+        OnClick = BtnConnectClick
+        TabOrder = 0
+      end
+      object BtnCal: TButton
+        Left = 72
+        Height = 25
+        Top = 0
+        Width = 70
+        Caption = 'Calibrate'
+        OnClick = BtnCalClick
+        TabOrder = 1
+      end
     end
-    object BtnCal: TButton
+    object Panel4: TPanel
       Left = 0
-      Height = 25
-      Top = 47
-      Width = 80
-      Caption = 'Calibrate'
-      OnClick = BtnCalClick
+      Height = 26
+      Top = 52
+      Width = 143
+      ClientHeight = 26
+      ClientWidth = 143
       TabOrder = 2
-    end
-    object BtnGuide: TButton
-      Left = 0
-      Height = 25
-      Top = 72
-      Width = 80
-      Caption = 'Guide'
-      OnClick = BtnGuideClick
-      TabOrder = 3
-    end
-    object BtnDither: TButton
-      Left = 0
-      Height = 25
-      Top = 97
-      Width = 80
-      Caption = 'Dither'
-      OnClick = BtnDitherClick
-      TabOrder = 4
+      object BtnGuide: TButton
+        Left = 0
+        Height = 25
+        Top = 0
+        Width = 70
+        Caption = 'Guide'
+        OnClick = BtnGuideClick
+        TabOrder = 0
+      end
+      object BtnDither: TButton
+        Left = 72
+        Height = 25
+        Top = 0
+        Width = 70
+        Caption = 'Dither'
+        OnClick = BtnDitherClick
+        TabOrder = 1
+      end
     end
   end
 end

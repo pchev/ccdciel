@@ -46,7 +46,6 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -76,7 +75,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -107,7 +105,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="43">
+    <Units Count="44">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -171,7 +169,6 @@
         <ComponentName Value="f_setup"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_devicesetup"/>
       </Unit9>
       <Unit10>
         <Filename Value="cu_ascomfocuser.pas"/>
@@ -296,6 +293,7 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_options"/>
       </Unit31>
       <Unit32>
         <Filename Value="fu_frame.pas"/>
@@ -320,8 +318,9 @@
         <ResourceBaseClass Value="Form"/>
       </Unit35>
       <Unit36>
-        <Filename Value="cu_autoguider.pas"/>
+        <Filename Value="cu_autoguider_phd.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_autoguider_phd"/>
       </Unit36>
       <Unit37>
         <Filename Value="cu_tcpclient.pas"/>
@@ -333,6 +332,7 @@
         <ComponentName Value="f_autoguider"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_autoguider"/>
       </Unit38>
       <Unit39>
         <Filename Value="fu_sequence.pas"/>
@@ -360,6 +360,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit42>
+      <Unit43>
+        <Filename Value="cu_autoguider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_autoguider"/>
+      </Unit43>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -380,7 +385,6 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>
