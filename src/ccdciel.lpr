@@ -34,9 +34,10 @@ uses
   fu_focuser, fu_mount, u_modelisation, cu_wheel, cu_mount, cu_indiwheel,
   cu_indifocuser, cu_indicamera, cu_fits, cu_camera, cu_ascomwheel,
   cu_ascommount, cu_ascomcamera, pu_valueseditor, fu_ccdtemp, pu_indigui,
-  pu_options, fu_frame, cu_astrometry, cu_cdcclient, pu_viewtext, cu_autoguider,
+  pu_options, fu_frame, cu_astrometry, cu_cdcclient, pu_viewtext, 
+cu_autoguider_phd,
   cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig, pu_edittargets,
-  pu_editplan;
+  pu_editplan, cu_autoguider;
 
 {$R *.res}
 
