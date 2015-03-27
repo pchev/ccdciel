@@ -85,13 +85,12 @@ end;
 
 constructor T_indiwheel.Create;
 begin
- inherited Create(nil);
+ inherited Create;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
  Findidevice:='';
  Findideviceport:='';
- FFilterNames:=TStringList.Create;
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
@@ -101,9 +100,9 @@ end;
 
 destructor  T_indiwheel.Destroy;
 begin
+ InitTimer.Enabled:=false;
  indiclient.Free;
- if FFilterNames<>nil then FreeAndNil(FFilterNames);
- if InitTimer<>nil then FreeAndNil(InitTimer);
+ FreeAndNil(InitTimer);
  inherited Destroy;
 end;
 

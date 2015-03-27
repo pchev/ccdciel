@@ -63,9 +63,8 @@ implementation
 
 constructor T_ascommount.Create;
 begin
- inherited Create(nil);
+ inherited Create;
  FMountInterface:=ASCOM;
- FStatus := devDisconnected;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;

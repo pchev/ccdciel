@@ -94,7 +94,7 @@ end;
 
 constructor T_indimount.Create;
 begin
- inherited Create(nil);
+ inherited Create;
  FMountInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';
@@ -110,8 +110,9 @@ end;
 
 destructor  T_indimount.Destroy;
 begin
+ InitTimer.Enabled:=false;
  indiclient.Free;
- if InitTimer<>nil then FreeAndNil(InitTimer);
+ FreeAndNil(InitTimer);
  inherited Destroy;
 end;
 

@@ -65,6 +65,8 @@ T_camera = class(TComponent)
     function GetPixelSizeY: double; virtual; abstract;
     function GetBitperPixel: double; virtual; abstract;
   public
+    constructor Create;
+    destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     Procedure SetBinning(binX,binY: integer); virtual; abstract;
@@ -107,6 +109,21 @@ T_camera = class(TComponent)
 end;
 
 implementation
+
+constructor T_camera.Create;
+begin
+  inherited Create(nil);
+  FStatus := devDisconnected;
+  FFilterNames:=TStringList.Create;
+  FImgStream:=TMemoryStream.Create;
+end;
+
+destructor  T_camera.Destroy;
+begin
+  FImgStream.Free;
+  FFilterNames.Free;
+  inherited Destroy;
+end;
 
 end.
 

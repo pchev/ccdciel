@@ -42,6 +42,8 @@ T_mount = class(TComponent)
     function  GetAperture:double; virtual; abstract;
     function  GetFocaleLength:double; virtual; abstract;
   public
+    constructor Create;
+    destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     procedure Slew(sra,sde: double); virtual; abstract;
@@ -59,6 +61,17 @@ T_mount = class(TComponent)
 end;
 
 implementation
+
+constructor T_mount.Create;
+begin
+  inherited Create(nil);
+  FStatus := devDisconnected;
+end;
+
+destructor  T_mount.Destroy;
+begin
+  inherited Destroy;
+end;
 
 end.
 

@@ -88,10 +88,8 @@ implementation
 
 constructor T_ascomcamera.Create;
 begin
- inherited Create(nil);
- FStatus := devDisconnected;
- FFilterNames:=TStringList.Create;
- FImgStream:=TMemoryStream.Create;
+ inherited Create;
+ FCameraInterface:=ASCOM;
  ExposureTimer:=TTimer.Create(nil);
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=10;
@@ -104,10 +102,8 @@ end;
 
 destructor  T_ascomcamera.Destroy;
 begin
- FImgStream.Free;
  ExposureTimer.Free;
  StatusTimer.Free;
- FFilterNames.Free;
  inherited Destroy;
 end;
 

@@ -71,8 +71,8 @@ implementation
 
 constructor T_ascomfocuser.Create;
 begin
- inherited Create(nil);
- FStatus := devDisconnected;
+ inherited Create;
+ FFocuserInterface:=ASCOM;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;
