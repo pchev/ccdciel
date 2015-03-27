@@ -42,6 +42,8 @@ T_wheel = class(TComponent)
     function  GetFilter:integer; virtual; abstract;
     procedure SetFilterNames(value:TStringList); virtual; abstract;
   public
+    constructor Create;
+    destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     property WheelInterface: TDevInterface read FWheelInterface;
@@ -55,6 +57,19 @@ T_wheel = class(TComponent)
 end;
 
 implementation
+
+constructor T_wheel.Create;
+begin
+  inherited Create(nil);
+  FFilterNames:=TStringList.Create;
+  FStatus := devDisconnected;
+end;
+
+destructor  T_wheel.Destroy;
+begin
+  FFilterNames.Free;
+  inherited Destroy;
+end;
 
 end.
 

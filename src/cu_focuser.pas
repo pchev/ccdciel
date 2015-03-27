@@ -52,6 +52,8 @@ T_focuser = class(TComponent)
     function  GethasRelativePosition: boolean; virtual; abstract;
     function  GethasTimerSpeed: boolean; virtual; abstract;
   public
+    constructor Create;
+    destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     procedure FocusIn; virtual; abstract;
@@ -75,6 +77,17 @@ T_focuser = class(TComponent)
 end;
 
 implementation
+
+constructor T_focuser.Create;
+begin
+  inherited Create(nil);
+  FStatus := devDisconnected;
+end;
+
+destructor  T_focuser.Destroy;
+begin
+  inherited Destroy;
+end;
 
 end.
 

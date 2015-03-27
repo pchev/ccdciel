@@ -103,7 +103,8 @@ end;
 
 constructor T_indifocuser.Create;
 begin
- inherited Create(nil);
+ inherited Create;
+ FFocuserInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -118,8 +119,9 @@ end;
 
 destructor  T_indifocuser.Destroy;
 begin
+ InitTimer.Enabled:=false;
  indiclient.Free;
- if InitTimer<>nil then FreeAndNil(InitTimer);
+ FreeAndNil(InitTimer);
  inherited Destroy;
 end;
 

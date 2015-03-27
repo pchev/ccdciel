@@ -61,9 +61,7 @@ implementation
 
 constructor T_ascomwheel.Create;
 begin
- inherited Create(nil);
- FFilterNames:=TStringList.Create;
- FStatus := devDisconnected;
+ inherited Create;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;
@@ -73,7 +71,6 @@ end;
 destructor  T_ascomwheel.Destroy;
 begin
  StatusTimer.Free;
- FFilterNames.Free;
  inherited Destroy;
 end;
 
