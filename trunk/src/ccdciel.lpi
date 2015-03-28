@@ -198,6 +198,7 @@
         <ComponentName Value="f_filterwheel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_filterwheel"/>
       </Unit14>
       <Unit15>
         <Filename Value="fu_focuser.pas"/>
@@ -236,6 +237,7 @@
       <Unit22>
         <Filename Value="cu_indiwheel.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indiwheel"/>
       </Unit22>
       <Unit23>
         <Filename Value="cu_mount.pas"/>
@@ -244,6 +246,7 @@
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_wheel"/>
       </Unit24>
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
@@ -256,6 +259,7 @@
       <Unit27>
         <Filename Value="cu_ascomwheel.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_ascomwheel"/>
       </Unit27>
       <Unit28>
         <Filename Value="pu_valueseditor.pas"/>

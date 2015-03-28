@@ -40,7 +40,6 @@ T_ascomwheel = class(T_wheel)
    Fdevice: string;
    FFilterNum: integer;
    stFilter: integer;
-   sfFilterNames: TStringList;
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
@@ -165,7 +164,7 @@ end;
 procedure T_ascomwheel.SetFilter(num:integer);
 begin
  {$ifdef mswindows}
- if Connected then begin
+ if Connected and (num>0) then begin
    try
    V.Position:=num-1;
    except
@@ -178,6 +177,7 @@ end;
 function  T_ascomwheel.GetFilter:integer;
 begin
  {$ifdef mswindows}
+ result:=0;
  if Connected then begin
    try
    result:=V.Position+1;
@@ -214,6 +214,7 @@ begin
    fnames:=V.Names;
    n:=Length(fnames);
    value.Clear;
+   value.Add(Filter0);
    for i:=0 to n-1 do begin
      value.Add(fnames[i]);
    end;

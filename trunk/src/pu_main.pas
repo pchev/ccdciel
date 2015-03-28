@@ -49,7 +49,6 @@ type
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
-    MenuFilterName: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
     MenuResolveSlew: TMenuItem;
@@ -120,7 +119,6 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
-    procedure MenuFilterNameClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
@@ -586,11 +584,13 @@ begin
 
   n:=config.GetValue('/Filters/Num',0);
   Filters.Clear;
+  Filters.Add(Filter0);
   for i:=1 to n do begin
      str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
      Filters.Add(str);
   end;
   f_filterwheel.Filters.Items.Assign(Filters);
+  f_filterwheel.Filters.ItemIndex:=0;
   f_EditPlan.Filter.Items.Assign(Filters);
 
   str:=config.GetValue('/Sequence/Targets','');
@@ -716,10 +716,10 @@ begin
 
   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
 
-  n:=Filters.Count;
+  n:=Filters.Count-1;
   config.SetValue('/Filters/Num',n);
   for i:=1 to n do
-     config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i-1]);
+     config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
 
   config.Flush;
   NewMessage('Program exit');
@@ -1289,7 +1289,7 @@ case wheel.Status of
                       f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
                       Filters.Assign(wheel.FilterNames);
                       if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
-                         f_filterwheel.Filters.ItemIndex:=round(wheel.Filter)-1;
+                         f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
                    end;
 end;
 CheckConnectionStatus;
@@ -1297,13 +1297,13 @@ end;
 
 Procedure Tf_main.SetFilter(Sender: TObject);
 begin
-  wheel.Filter:=f_filterwheel.Filters.ItemIndex+1;
+  wheel.Filter:=f_filterwheel.Filters.ItemIndex;
 end;
 
 procedure Tf_main.FilterChange(n:double);
 begin
-if (n>0)and(n<=f_filterwheel.Filters.Items.Count) then
-   f_filterwheel.Filters.ItemIndex:=round(n)-1;
+if (n>=0)and(n<=f_filterwheel.Filters.Items.Count) then
+   f_filterwheel.Filters.ItemIndex:=round(n);
 end;
 
 procedure Tf_main.FilterNameChange(Sender: TObject);
@@ -1311,39 +1311,8 @@ begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
 f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
 Filters.Assign(wheel.FilterNames);
-if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
-   f_filterwheel.Filters.ItemIndex:=round(wheel.Filter)-1;
-end;
-
-procedure Tf_main.MenuFilterNameClick(Sender: TObject);
-var i:integer;
-    k: string;
-    fn:TStringList;
-begin
-  if wheel.Status=devConnected then begin
-     f_valueseditor.Caption:='Edit filter name';
-     f_valueseditor.ValuesList.TitleCaptions[0]:='Position';
-     f_valueseditor.ValuesList.TitleCaptions[0]:='Filter name';
-     f_valueseditor.ValuesList.Clear;
-     f_valueseditor.ValuesList.RowCount:=wheel.FilterNames.Count+1;
-     for i:=1 to wheel.FilterNames.Count do begin
-        k:=inttostr(i);
-        f_valueseditor.ValuesList.Keys[i]:=k;
-        f_valueseditor.ValuesList.Values[k]:=wheel.FilterNames[i-1];
-     end;
-     f_valueseditor.ShowModal;
-     if f_valueseditor.ModalResult=mrOK then begin
-       fn:=TStringList.Create;
-       fn.Clear;
-       for i:=1 to wheel.FilterNames.Count do begin
-          k:=inttostr(i);
-          fn.Add(f_valueseditor.ValuesList.Values[k]);
-       end;
-       wheel.FilterNames:=fn;
-       fn.Free;
-     end;
-  end
-  else NewMessage('Please connect the filter wheel first');
+if (wheel.Filter>=0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
+   f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
 end;
 
 procedure Tf_main.MenuHelpAboutClick(Sender: TObject);
@@ -2073,7 +2042,7 @@ begin
      end;
   end;
   if (hfilter='')and(wheel.Status=devConnected) then begin
-     hfilter:=wheel.FilterNames[wheel.Filter-1];
+     hfilter:=wheel.FilterNames[wheel.Filter];
   end;
   ccdtemp:=camera.Temperature;
   objname:=f_capture.Fname.Text;
@@ -2181,7 +2150,7 @@ begin
            fn:=fn+f_capture.FrameType.Text+'_';
      end;
      if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-         fn:=fn+wheel.FilterNames[wheel.Filter-1]+'_';
+         fn:=fn+wheel.FilterNames[wheel.Filter]+'_';
      if fndate then
         fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
      else begin

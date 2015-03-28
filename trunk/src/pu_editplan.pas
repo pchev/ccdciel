@@ -136,7 +136,7 @@ begin
   originalFilter[i]:=str;
   j:=Filter.Items.IndexOf(str);
   if j<0 then j:=0;
-  p.filter:=j+1;
+  p.filter:=j;
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
   p.previewexposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',1.0);
   p.preview:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Preview',false);
@@ -216,7 +216,7 @@ begin
   FrameType.ItemIndex:=ord(p.frtype);
   Exposure.Text:=p.exposure_str;
   Binning.Text:=p.binning_str;
-  Filter.ItemIndex:=p.filter-1;
+  Filter.ItemIndex:=p.filter;
   Count.Text:=p.count_str;
   RepeatCount.Text:=p.repeatcount_str;
   Delay.Text:=p.delay_str;
@@ -248,7 +248,7 @@ begin
     p.binx:=1;
     p.biny:=1;
   end;
-  p.filter:=Filter.ItemIndex+1;
+  p.filter:=Filter.ItemIndex;
   p.count:=StrToIntDef(Count.Text,1);
   p.repeatcount:=StrToIntDef(RepeatCount.Text,1);
   p.delay:=StrToFloatDef(Delay.Text,1);
@@ -318,7 +318,7 @@ begin
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
     if Filter.Items.Count>0 then begin // do not erase the filters if the filter wheel is not connected
-      k:=p.filter-1;
+      k:=p.filter;
       if (k<0)or(k>Filter.Items.Count-1) then str:=''
          else str:=Filter.Items[k];
     end else begin

@@ -1,7 +1,7 @@
 object f_EditPlan: Tf_EditPlan
-  Left = 213
+  Left = 321
   Height = 370
-  Top = 310
+  Top = 264
   Width = 528
   Caption = 'Edit plan'
   ClientHeight = 370
