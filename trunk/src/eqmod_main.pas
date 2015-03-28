@@ -41,7 +41,9 @@ type
     BtnSaveIndiSettings: TSpeedButton;
     BtnSaveSite2: TSpeedButton;
     BtnLoadAlign: TSpeedButton;
+    LastMsg: TEdit;
     Label19: TLabel;
+    LblPark: TLabel;
     SyncModeCombo: TComboBox;
     AlignModeCombo: TComboBox;
     DeltaRa: TEdit;
@@ -102,7 +104,6 @@ type
     Notebook1: TNotebook;
     Page1: TPage;
     Page2: TPage;
-    BtnUnPark: TSpeedButton;
     RArate: TTrackBar;
     DErate: TTrackBar;
     IndiSetup: TSpeedButton;
@@ -170,7 +171,6 @@ type
     procedure SlewPresetChange(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure BtnSetTrackRateClick(Sender: TObject);
-    procedure BtnUnParkClick(Sender: TObject);
     procedure SyncModeComboChange(Sender: TObject);
   private
     { private declarations }
@@ -374,6 +374,7 @@ end;
 procedure Tf_eqmod.NewMessage(txt: string);
 begin
  if txt<>'' then begin
+  LastMsg.Text:=txt;
   if msg.Lines.Count>100 then msg.Lines.Delete(0);
   msg.Lines.Add(FormatDateTime('hh:nn:ss',now)+':'+txt);
   msg.SelStart:=msg.GetTextLen-1;
@@ -620,29 +621,26 @@ end;
 
 Procedure Tf_eqmod.ParkChange(Sender: TObject);
 begin
-// Park status is useles for now (version 1.0) returning always off for both switch
-
- { if eqmod.Park then begin
-     BtnUnPark.Caption:='Unpark';
+// Park status require INDI r2162
+  if eqmod.Park then begin
+     BtnPark.Caption:='Unpark';
      LblPark.Caption:='Parked';
   end
   else begin
-     BtnUnPark.Caption:='Park';
+     BtnPark.Caption:='Park';
      LblPark.Caption:='Unparked';
-  end;   }
+  end;
 end;
 
 procedure Tf_eqmod.BtnParkClick(Sender: TObject);
 begin
+ if BtnPark.Caption='Park' then begin
   if MessageDlg('Park the telescope now?',mtConfirmation,mbYesNo,0)=mrYes then
      eqmod.Park:=true;
+ end else begin
+   eqmod.Park:=false;
+ end;
 end;
-
-procedure Tf_eqmod.BtnUnParkClick(Sender: TObject);
-begin
-  eqmod.Park:=false;
-end;
-
 
 //////////////////  Site information box ////////////////////////
 
