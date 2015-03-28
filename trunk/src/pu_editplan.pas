@@ -37,6 +37,11 @@ type
     BtnClose: TButton;
     BtnAddStep: TButton;
     BtnDeleteStep: TButton;
+    CheckBoxRepeat: TCheckBox;
+    Label14: TLabel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    PanelRepeat: TPanel;
     Preview: TCheckBox;
     Desc: TEdit;
     PreviewExposure: TEdit;
@@ -66,12 +71,11 @@ type
     Label7: TLabel;
     Label8: TLabel;
     lblStepNum: TLabel;
-    Notebook1: TNotebook;
-    Page1: TPage;
     PlanName: TLabel;
     StepList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnDeleteStepClick(Sender: TObject);
+    procedure CheckBoxRepeatChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -198,8 +202,21 @@ end;
 procedure Tf_EditPlan.FrameTypeChange(Sender: TObject);
 begin
   case FrameType.ItemIndex of
-    0..3 : Notebook1.PageIndex:=0;
+    0 : begin   // Light
 
+        end;
+    1 : begin   // Bias
+           Exposure.Text:='0.01';
+           Filter.ItemIndex:=0;
+           CheckBoxRepeat.Checked:=false;
+        end;
+    2 : begin   // Dark
+           Filter.ItemIndex:=0;
+           CheckBoxRepeat.Checked:=false;
+        end;
+    3 : begin   // Flat
+           CheckBoxRepeat.Checked:=false;
+        end;
   end;
   StepChange(Sender);
 end;
@@ -222,6 +239,8 @@ begin
   Delay.Text:=p.delay_str;
   PreviewExposure.Text:=p.previewexposure_str;
   Preview.Checked:=p.preview;
+  CheckBoxRepeat.Checked:=(p.repeatcount>1);
+  PanelRepeat.Visible:=CheckBoxRepeat.Checked;
   LockStep:=false;
 end;
 
@@ -255,6 +274,18 @@ begin
   p.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
   p.preview:=Preview.Checked;
   StepList.Cells[1,n]:=p.description;
+end;
+
+procedure Tf_EditPlan.CheckBoxRepeatChange(Sender: TObject);
+begin
+  if CheckBoxRepeat.Checked then begin
+     PanelRepeat.Visible:=true;
+     RepeatCount.Text:='2';
+  end else begin
+     PanelRepeat.Visible:=false;
+     RepeatCount.Text:='1';
+  end;
+  StepChange(nil);
 end;
 
 procedure Tf_EditPlan.BtnAddStepClick(Sender: TObject);

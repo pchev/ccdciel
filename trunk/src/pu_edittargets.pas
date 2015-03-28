@@ -27,13 +27,15 @@ interface
 
 uses pu_editplan, u_global, u_utils, Classes, SysUtils,
   FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  maskedit, Grids;
+  maskedit, Grids, ExtCtrls;
 
 type
 
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
+    BtnCdCCoord: TButton;
+    BtnCdCTime: TButton;
     BtnNewPlan: TButton;
     BtnNewObject: TButton;
     BtnEditPlan: TButton;
@@ -41,14 +43,21 @@ type
     BtnAnytime: TButton;
     BtnCurrentCoord: TButton;
     BtnClose: TButton;
+    CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
     Label10: TLabel;
     Label11: TLabel;
     Label13: TLabel;
+    Label14: TLabel;
     Label9: TLabel;
     ObjectName: TEdit;
     Label7: TLabel;
     LabelSeq: TLabel;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    PanelRepeat: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
     Preview: TCheckBox;
     PreviewExposure: TEdit;
     RepeatCount: TEdit;
@@ -69,6 +78,7 @@ type
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnPlanClick(Sender: TObject);
+    procedure CheckBoxRepeatChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -164,6 +174,18 @@ begin
   end;
 end;
 
+procedure Tf_EditTargets.CheckBoxRepeatChange(Sender: TObject);
+begin
+  if CheckBoxRepeat.Checked then begin
+     PanelRepeat.Visible:=true;
+     RepeatCount.Text:='2';
+  end else begin
+     PanelRepeat.Visible:=false;
+     RepeatCount.Text:='1';
+  end;
+  TargetChange(nil);
+end;
+
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var txt:string;
     i: integer;
@@ -175,6 +197,7 @@ begin
   i:=TargetList.RowCount-1;
   TargetList.Cells[0,i]:=IntToStr(i);
   TargetList.Cells[1,i]:=txt;
+  TargetList.Cells[2,i]:=t.plan;
   TargetList.Objects[0,i]:=t;
   TargetList.Row:=i;
   ObjectName.Text:=txt;
@@ -243,6 +266,8 @@ begin
   Delay.Text:=t.delay_str;
   PreviewExposure.Text:=t.previewexposure_str;
   Preview.Checked:=t.preview;
+  CheckBoxRepeat.Checked:=(t.repeatcount>1);
+  PanelRepeat.Visible:=CheckBoxRepeat.Checked;
   LockTarget:=false;
 end;
 
@@ -271,6 +296,7 @@ begin
   t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
   t.preview:=Preview.Checked;
   TargetList.Cells[1,n]:=t.objectname;
+  TargetList.Cells[2,n]:=t.plan;
 end;
 
 
