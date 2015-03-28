@@ -150,6 +150,15 @@ var pfile: TCCDconfig;
     fn: string;
     i,n:integer;
     p: TPlan;
+  procedure NewPlan;
+  begin
+    StepList.RowCount:=2;
+    p:=TPlan.Create;
+    StepList.Cells[0,1]:='1';
+    StepList.Cells[1,1]:=p.description_str;
+    StepList.Objects[0,1]:=p;
+    StepListSelection(nil,0,1);
+  end;
 begin
   ClearStepList;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
@@ -157,16 +166,22 @@ begin
     pfile:=TCCDconfig.Create(self);
     pfile.Filename:=fn;
     n:=pfile.GetValue('/StepNum',0);
-    StepList.RowCount:=n+1;
-    for i:=1 to n do begin
-      p:=TPlan.Create;
-      ReadStep(pfile,i,p);
-      StepList.Cells[0,i]:=IntToStr(i);
-      StepList.Cells[1,i]:=p.description_str;
-      StepList.Objects[0,i]:=p;
+    if n=0 then begin
+      NewPlan;
+    end else begin
+      StepList.RowCount:=n+1;
+      for i:=1 to n do begin
+        p:=TPlan.Create;
+        ReadStep(pfile,i,p);
+        StepList.Cells[0,i]:=IntToStr(i);
+        StepList.Cells[1,i]:=p.description_str;
+        StepList.Objects[0,i]:=p;
+      end;
+      pfile.Free;
+      StepListSelection(nil,0,1);
     end;
-    pfile.Free;
-    StepListSelection(nil,0,1);
+  end else begin
+    NewPlan;
   end;
 end;
 

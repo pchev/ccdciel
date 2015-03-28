@@ -78,6 +78,7 @@ type
     { private declarations }
     LockTarget: boolean;
     procedure LoadPlanList;
+    procedure SetPlanList(pl:string);
     procedure ResetSequences;
   public
     { public declarations }
@@ -129,17 +130,37 @@ begin
   FindCloseUTF8(fs);
 end;
 
-procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
+procedure Tf_EditTargets.SetPlanList(pl:string);
+var i:integer;
 begin
-  if Sender=BtnNewPlan then
-    f_EditPlan.PlanName.Caption:=FormEntry(self,'New plan','Plan')
-  else
+  i:=PlanList.Items.IndexOf(pl);
+  if i>=0 then PlanList.ItemIndex:=i;
+end;
+
+procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
+var txt,fn: string;
+    newplan: boolean;
+begin
+  newplan:=(Sender=BtnNewPlan)or(PlanList.Text='');
+  if newplan then begin
+    txt:=FormEntry(self,'New plan','');
+    if txt='' then exit;
+    fn:=slash(ConfigDir)+txt+'.plan';
+    if FileExistsUTF8(fn) then begin
+       if MessageDlg('Plan '+txt+' already exist. Do you want to edit this plan?',mtConfirmation,mbYesNo,0)<>mrYes then exit;
+    end;
+    f_EditPlan.PlanName.Caption:=txt;
+  end
+  else begin
+    if PlanList.Text='' then exit;
     f_EditPlan.PlanName.Caption:=PlanList.Text;
+  end;
   FormPos(f_EditPlan,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_EditPlan.ShowModal;
-  if Sender=BtnNewPlan then begin
+  if newplan then begin
      LoadPlanList;
-     PlanList.Text:=f_EditPlan.PlanName.Caption;
+     SetPlanList(f_EditPlan.PlanName.Caption);
+     TargetChange(nil);
   end;
 end;
 
@@ -207,7 +228,7 @@ begin
   LabelSeq.Caption:=IntToStr(n);
   t:=TTarget(TargetList.Objects[0,n]);
   ObjectName.Text:=t.objectname;
-  PlanList.Text:=t.plan;
+  SetPlanList(t.plan);
   StartTime.Text:=TimeToStr(t.starttime);
   EndTime.Text:=TimeToStr(t.endtime);
   if t.ra=NullCoord then

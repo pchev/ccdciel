@@ -11,7 +11,7 @@ object f_EditPlan: Tf_EditPlan
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.4.0.3'
+  LCLVersion = '1.2.4.0'
   object Panel1: TPanel
     Left = 202
     Height = 331
@@ -33,7 +33,7 @@ object f_EditPlan: Tf_EditPlan
       object Page1: TPage
         object Binning: TComboBox
           Left = 96
-          Height = 22
+          Height = 21
           Top = 37
           Width = 100
           ItemHeight = 0
@@ -42,15 +42,15 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label6: TLabel
           Left = 4
-          Height = 16
+          Height = 15
           Top = 41
-          Width = 43
+          Width = 42
           Caption = 'Binning'
           ParentColor = False
         end
         object Count: TEdit
           Left = 96
-          Height = 22
+          Height = 21
           Top = 99
           Width = 80
           OnChange = StepChange
@@ -59,7 +59,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Filter: TComboBox
           Left = 96
-          Height = 28
+          Height = 27
           Top = 68
           Width = 100
           ItemHeight = 0
@@ -69,7 +69,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Exposure: TEdit
           Left = 96
-          Height = 22
+          Height = 21
           Top = 8
           Width = 80
           OnChange = StepChange
@@ -78,31 +78,31 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label5: TLabel
           Left = 4
-          Height = 16
+          Height = 15
           Top = 72
-          Width = 33
+          Width = 30
           Caption = 'Filter'
           ParentColor = False
         end
         object Label3: TLabel
           Left = 4
-          Height = 16
+          Height = 15
           Top = 102
-          Width = 37
+          Width = 35
           Caption = 'Count'
           ParentColor = False
         end
         object Label2: TLabel
           Left = 4
-          Height = 16
+          Height = 15
           Top = 12
-          Width = 56
+          Width = 52
           Caption = 'Exposure'
           ParentColor = False
         end
         object RepeatCount: TEdit
           Left = 96
-          Height = 22
+          Height = 21
           Top = 128
           Width = 80
           OnChange = StepChange
@@ -111,7 +111,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Delay: TEdit
           Left = 96
-          Height = 22
+          Height = 21
           Top = 157
           Width = 80
           OnChange = StepChange
@@ -120,33 +120,33 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label10: TLabel
           Left = 4
-          Height = 16
+          Height = 15
           Top = 131
-          Width = 45
+          Width = 41
           Caption = 'Repeat'
           ParentColor = False
         end
         object Label11: TLabel
           Left = 4
-          Height = 16
+          Height = 15
           Top = 160
-          Width = 35
+          Width = 30
           Caption = 'Delay'
           ParentColor = False
         end
         object Label12: TLabel
           Left = 184
-          Height = 16
+          Height = 15
           Top = 12
-          Width = 58
+          Width = 55
           Caption = '[seconds]'
           ParentColor = False
         end
         object Label13: TLabel
           Left = 184
-          Height = 16
+          Height = 15
           Top = 160
-          Width = 58
+          Width = 55
           Caption = '[seconds]'
           ParentColor = False
         end
@@ -154,7 +154,7 @@ object f_EditPlan: Tf_EditPlan
           Left = 96
           Height = 26
           Top = 184
-          Width = 219
+          Width = 205
           Caption = 'Preview when waiting to repeat'
           OnChange = StepChange
           ParentBidiMode = False
@@ -162,15 +162,15 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label9: TLabel
           Left = 96
-          Height = 16
+          Height = 15
           Top = 214
-          Width = 108
+          Width = 98
           Caption = 'Preview exposure'
           ParentColor = False
         end
         object PreviewExposure: TEdit
           Left = 209
-          Height = 22
+          Height = 21
           Top = 210
           Width = 80
           OnChange = StepChange
@@ -190,23 +190,23 @@ object f_EditPlan: Tf_EditPlan
       TabOrder = 1
       object lblStepNum: TLabel
         Left = 96
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 56
+        Width = 53
         Caption = 'StepNum'
         ParentColor = False
       end
       object Label8: TLabel
         Left = 4
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 29
+        Width = 26
         Caption = 'Step'
         ParentColor = False
       end
       object Desc: TEdit
         Left = 94
-        Height = 22
+        Height = 21
         Top = 24
         Width = 100
         OnChange = StepChange
@@ -214,15 +214,15 @@ object f_EditPlan: Tf_EditPlan
       end
       object Label7: TLabel
         Left = 4
-        Height = 16
+        Height = 15
         Top = 24
-        Width = 70
+        Width = 67
         Caption = 'Description'
         ParentColor = False
       end
       object FrameType: TComboBox
         Left = 94
-        Height = 24
+        Height = 23
         Top = 53
         Width = 100
         ItemHeight = 0
@@ -240,9 +240,9 @@ object f_EditPlan: Tf_EditPlan
       end
       object Label4: TLabel
         Left = 4
-        Height = 16
+        Height = 15
         Top = 53
-        Width = 30
+        Width = 26
         Caption = 'Type'
         ParentColor = False
       end
@@ -327,17 +327,17 @@ object f_EditPlan: Tf_EditPlan
       TabOrder = 1
       object PlanName: TLabel
         Left = 72
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 61
+        Width = 56
         Caption = 'PlanName'
         ParentColor = False
       end
       object Label1: TLabel
         Left = 4
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 65
+        Width = 60
         Caption = 'Plan name '
         ParentColor = False
       end
