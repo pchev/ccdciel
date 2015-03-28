@@ -126,6 +126,7 @@ const
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord=-9999;
+  Filter0 = 'No change';
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
   dateisoshort = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss';
   f0 = '0';
@@ -217,7 +218,7 @@ begin
   count:=1;
   repeatcount:=1;
   preview:=false;
-  filter:=1;
+  filter:=0;
   binx:=1;
   biny:=1;
   frtype:=LIGHT;
@@ -254,7 +255,7 @@ begin
   if Filters.Count=0 then
     Result:=''
   else
-    Result:=Filters[filter-1];
+    Result:=Filters[filter];
 end;
 
 function TPlan.binning_str: string;

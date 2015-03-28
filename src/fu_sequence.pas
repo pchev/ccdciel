@@ -399,6 +399,7 @@ begin
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
       Autoguider.Guide(false);
       Autoguider.WaitBusy;
+      Wait(2);
     end;
     // slew to coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
@@ -410,9 +411,9 @@ begin
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
       Autoguider.Guide(true);
       Autoguider.WaitBusy(SettleMaxTime+5);
+      Wait;
     end;
     // etc...
-    Wait;
   end;
 end;
 
@@ -599,13 +600,11 @@ begin
     if p.exposure>0 then Fcapture.ExpTime.Text:=p.exposure_str;
     Fcapture.Binning.Text:=p.binning_str;
     t:=TTarget(TargetGrid.Objects[0,TargetRow]);
-    if t<> nil then
-       Fcapture.Fname.Text:=t.objectname
-    else
-       Fcapture.Fname.Text:='Unknow';
+    if (t<>nil)and(t.objectname<>'None') then
+       Fcapture.Fname.Text:=t.objectname;
     Fcapture.SeqNum.Text:=p.count_str;
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
-    Ffilter.Filters.ItemIndex:=p.filter-1;
+    Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.BtnSetFilter.Click;
     StepTimeStart:=now;
     msg('Start step '+p.description_str);

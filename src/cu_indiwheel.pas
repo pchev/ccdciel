@@ -222,6 +222,7 @@ begin
   else if (proptype=INDI_TEXT)and(propname='FILTER_NAME') then begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
+     FFilterNames.Add(Filter0);
      for i:=0 to FilterName.ntp-1 do begin
         FFilterNames.Add(FilterName.tp[i].text);
      end;
@@ -244,6 +245,7 @@ begin
  propname:=tvp.name;
  if (propname='FILTER_NAME') then begin
      FFilterNames.Clear;
+     FFilterNames.Add(Filter0);
      for i:=0 to tvp.ntp-1 do begin
         FFilterNames.Add(tvp.tp[i].text);
      end;
@@ -263,7 +265,7 @@ end;
 
 procedure T_indiwheel.SetFilter(num:integer);
 begin
-if WheelSlot<>nil then begin;
+if (WheelSlot<>nil)and(num>0) then begin;
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
   indiclient.WaitBusy(WheelSlot);
@@ -282,8 +284,8 @@ procedure T_indiwheel.SetFilterNames(value:TStringList);
 var i:integer;
 begin
 if (FilterName<>nil)and(value.Count=FilterName.ntp) then begin
-  for i:=0 to value.Count-1 do begin
-     FilterName.tp[i].text:=value[i];
+  for i:=1 to value.Count-1 do begin  // skip filter0
+     FilterName.tp[i-1].text:=value[i];
   end;
   indiclient.sendNewText(FilterName);
   indiclient.WaitBusy(FilterName);
