@@ -178,6 +178,7 @@ begin
        t:=TTarget(TargetGrid.Objects[0,i]);
        f_EditTargets.TargetList.Cells[0,i]:=IntToStr(i);
        f_EditTargets.TargetList.Cells[1,i]:=t.objectname;
+       f_EditTargets.TargetList.Cells[2,i]:=t.plan;
        f_EditTargets.TargetList.Objects[0,i]:=t;
      end;
    end else begin
@@ -185,6 +186,7 @@ begin
      f_EditTargets.TargetList.RowCount:=2;
      f_EditTargets.TargetList.Cells[0,1]:='1';
      f_EditTargets.TargetList.Cells[1,1]:=t.objectname;
+     f_EditTargets.TargetList.Cells[2,1]:=t.plan;
      f_EditTargets.TargetList.Objects[0,1]:=t;
    end;
    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
