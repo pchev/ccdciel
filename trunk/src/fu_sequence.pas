@@ -172,14 +172,20 @@ procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i:integer;
     t:TTarget;
 begin
-   f_EditTargets.TargetList.RowCount:=TargetGrid.RowCount;
    if (Sender=BtnEditTargets)and(TargetGrid.RowCount>1) then begin
+     f_EditTargets.TargetList.RowCount:=TargetGrid.RowCount;
      for i:=1 to TargetGrid.RowCount-1 do begin
        t:=TTarget(TargetGrid.Objects[0,i]);
        f_EditTargets.TargetList.Cells[0,i]:=IntToStr(i);
        f_EditTargets.TargetList.Cells[1,i]:=t.objectname;
        f_EditTargets.TargetList.Objects[0,i]:=t;
      end;
+   end else begin
+     t:=TTarget.Create;
+     f_EditTargets.TargetList.RowCount:=2;
+     f_EditTargets.TargetList.Cells[0,1]:='1';
+     f_EditTargets.TargetList.Cells[1,1]:=t.objectname;
+     f_EditTargets.TargetList.Objects[0,1]:=t;
    end;
    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_EditTargets.ShowModal;

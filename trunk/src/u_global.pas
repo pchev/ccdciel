@@ -49,6 +49,7 @@ type
               repeatcount: integer;
               preview: boolean;
               delay, previewexposure: double;
+              constructor Create;
               procedure Assign(Source: TTarget);
               function previewexposure_str: string;
               function delay_str: string;
@@ -64,6 +65,7 @@ type
               binx,biny: integer;
               frtype: TFrameType;
               description: string;
+              constructor Create;
               function exposure_str: string;
               function previewexposure_str: string;
               function delay_str: string;
@@ -161,6 +163,21 @@ implementation
 
 ////////////////////  TTarget  /////////////////////////////
 
+constructor TTarget.Create;
+begin
+  inherited Create;
+  objectname:='None';
+  plan:='';
+  starttime:=0.0;
+  endtime:=23.99999;
+  ra:=NullCoord;
+  de:=NullCoord;
+  repeatcount:=1;
+  preview:=False;
+  delay:=1;
+  previewexposure:=1;
+end;
+
 procedure TTarget.Assign(Source: TTarget);
 begin
   objectname:=Source.objectname;
@@ -191,6 +208,21 @@ begin
 end;
 
 ////////////////////  TPlan  /////////////////////////////
+
+constructor TPlan.Create;
+begin
+  exposure:=1;
+  delay:=1;
+  previewexposure:=1;
+  count:=1;
+  repeatcount:=1;
+  preview:=false;
+  filter:=1;
+  binx:=1;
+  biny:=1;
+  frtype:=LIGHT;
+  description:='Step description';
+end;
 
 function TPlan.exposure_str: string;
 begin
