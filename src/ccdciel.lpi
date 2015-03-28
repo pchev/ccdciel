@@ -164,6 +164,7 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
