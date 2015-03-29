@@ -34,6 +34,14 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    CheckBoxLocalCdc: TCheckBox;
+    GroupBox7: TGroupBox;
+    Label24: TLabel;
+    Label25: TLabel;
+    PanelRemoteCdc: TPanel;
+    CdChostname: TEdit;
+    CdCport: TEdit;
+    PlanetariumBox: TRadioGroup;
     Button1: TButton;
     Button2: TButton;
     CaptureDir: TDirectoryEdit;
@@ -74,6 +82,7 @@ type
     Page2: TPage;
     AutoguiderBox: TRadioGroup;
     TabSheet5: TTabSheet;
+    TabSheet6: TTabSheet;
     TelescopeName: TEdit;
     GroupBox4: TGroupBox;
     elbrus: TGroupBox;
@@ -111,6 +120,7 @@ type
     Label14: TLabel;
     Panel1: TPanel;
     StarWindow: TEdit;
+    procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
@@ -158,6 +168,17 @@ begin
   Focale.Enabled:=not FocaleFromTelescope.Checked;
   if (not Focale.Enabled) and (assigned(FGetFocale)) then
       FGetFocale(self);
+end;
+
+procedure Tf_option.CheckBoxLocalCdcChange(Sender: TObject);
+begin
+  if CheckBoxLocalCdc.Checked then begin
+    CdChostname.Text:='localhost';
+    CdCport.Text:='';
+    PanelRemoteCdc.Visible:=false;
+  end else begin
+    PanelRemoteCdc.Visible:=true;
+  end;
 end;
 
 function Tf_option.GetResolver: integer;

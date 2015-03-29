@@ -364,6 +364,13 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewAutoguiderClick
       end
+      object MenuViewPlanetarium: TMenuItem
+        AutoCheck = True
+        Caption = 'Planetarium'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewPlanetariumClick
+      end
       object MenuViewMessages: TMenuItem
         AutoCheck = True
         Caption = 'Messages'
@@ -411,9 +418,9 @@ object f_main: Tf_main
   object ImagePopupMenu: TPopupMenu
     left = 178
     top = 38
-    object MenuShowSkychart: TMenuItem
-      Caption = 'Resolve and show in Skychart'
-      OnClick = MenuShowSkychartClick
+    object MenuShowPlanetarium: TMenuItem
+      Caption = 'Resolve and show in planetarium'
+      OnClick = MenuShowPlanetariumClick
     end
     object MenuResolveSync: TMenuItem
       Caption = 'Resolve and Sync'
@@ -432,13 +439,6 @@ object f_main: Tf_main
       Visible = False
       OnClick = MenuStopAstrometryClick
     end
-  end
-  object CdCTimer: TTimer
-    Enabled = False
-    Interval = 10
-    OnTimer = CdCTimerTimer
-    left = 283
-    top = 226
   end
   object ImageList1: TImageList
     left = 704

@@ -1,6 +1,6 @@
-unit cu_cdcclient;
+unit cu_planetarium_cdc;
 
-{$MODE Delphi}
+{$mode objfpc}{$H+}
 
 {                                        
 Copyright (C) 2015 Patrick Chevalley
@@ -28,51 +28,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_tcpclient, blcksock, Classes, SysUtils,
+uses u_global, u_utils, cu_planetarium, cu_tcpclient, blcksock, Classes, SysUtils,
     Forms;
 
 type
 
-  TNotifyMsg = procedure(msg:string) of object;
-
-  TCdCClient = class(TThread)
+  TPlanetarium_cdc = class(TPlanetarium)
   private
-    FTargetHost,FTargetPort,FErrorDesc,FRecvData,FClientId,FClientName : string;
-    FTimeout : integer;
-    FCmdTimeout : double;
-    procedure SetCmdTimeout(value:double);
-    function GetCmdTimeout:double;
-    procedure DisplayMessagesyn;
-    procedure ProcessDataSyn;
-    procedure DisplayMessage(msg:string);
-    procedure ProcessData(line:string);
-  public
-    FonShowMessage: TNotifyMsg;
-    FonReceiveData: TNotifyMsg;
-    FonConnect: TNotifyEvent;
-    FonConnectError: TNotifyEvent;
-    FonDisconnect: TNotifyEvent;
     TcpClient : TTcpclient;
     FTag:Integer;
-    Constructor Create;
     procedure Execute; override;
-    function Send(const Value: string):string;
-  published
-    property Terminated;
-    property TargetHost : string read FTargetHost write FTargetHost;
-    property TargetPort : string read FTargetPort write FTargetPort;
-    property Timeout : integer read FTimeout write FTimeout;
-    property CmdTimeout: double read GetCmdTimeout write SetCmdTimeout;
-    property Tag: integer read FTag write FTag;
-    property ErrorDesc : string read FErrorDesc;
-    property RecvData : string read FRecvData;
-    property ClientId : string read FClientId;
-    property ClientName : string read FClientName;
-    property onConnect: TNotifyEvent read FonConnect  write FonConnect;
-    property onConnectError: TNotifyEvent read FonConnectError  write FonConnectError;
-    property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
-    property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
-    property onReceiveData: TNotifyMsg read FonReceiveData write FonReceiveData;
+  public
+    Constructor Create;
+    procedure Connect(cp1: string; cp2:string=''); override;
+    procedure Disconnect; override;
+    function Cmd(const Value: string):string; override;
   end;
 
 const msgTimeout='Timeout!';
@@ -82,25 +52,36 @@ const msgTimeout='Timeout!';
 
 implementation
 
-/////////////////// TCdCClient ///////////////////////////
+{$ifdef mswindows}
+  uses  Registry;
+{$endif}
 
-Constructor TCdCClient.Create ;
+/////////////////// TPlanetarium_cdc ///////////////////////////
+
+Constructor TPlanetarium_cdc.Create ;
 begin
-// start suspended to let time to the main thread to set the parameters
-inherited create(true);
-freeonterminate:=true;
-FTag:=0;
+inherited Create;
+FPlanetariumType:=CDC;
 FTargetHost:='localhost';
 FTargetPort:='3292';
 FTimeout:=500;
 FCmdTimeout:=10/86400;
-FErrorDesc:='';
-FRecvData:='';
-FClientId:='';
-FClientName:='';
 end;
 
-procedure TCdCClient.Execute;
+procedure TPlanetarium_cdc.Connect(cp1: string; cp2:string='');
+begin
+  FTargetHost:=cp1;
+  if cp2='' then FTargetPort:=GetCdCPort
+            else FTargetPort:=cp2;
+  Start;
+end;
+
+procedure TPlanetarium_cdc.Disconnect;
+begin
+ Terminate;
+end;
+
+procedure TPlanetarium_cdc.Execute;
 var buf:string;
     dateto : double;
     i : integer;
@@ -130,6 +111,7 @@ try
            buf:=copy(buf,i+6,999)+' ';
            i:=pos(' ',buf);
            FclientName:=trim(copy(buf,1,i-1));
+           FStatus:=true;
            if assigned(FonConnect) then FonConnect(self);
            break;
         end else begin
@@ -173,61 +155,35 @@ try
  end
  else begin
    DisplayMessage('Cannot connect to CdC, Is CdC running and the server active?');
-   if assigned(FonConnectError) then FonConnectError(self);
+
  end;
+FStatus:=false;
 DisplayMessage(tcpclient.GetErrorDesc);
 finally
-terminate;
+if assigned(FonDisconnect) then FonDisconnect(self); terminate;
 tcpclient.Disconnect;
 tcpclient.Free;
 end;
 end;
 
-procedure TCdCClient.SetCmdTimeout(value:double);
-begin
- FCmdTimeout := value / 86400;  // store timeout value in days
-end;
-
-function TCdCClient.GetCmdTimeout:double;
-begin
- result := FCmdTimeout * 86400;
-end;
-
-procedure TCdCClient.DisplayMessage(msg:string);
-begin
-FErrorDesc:=msg;
-Synchronize(DisplayMessageSyn);
-end;
-
-procedure TCdCClient.DisplayMessageSyn;
-begin
-if assigned(FonShowMessage) then FonShowMessage(FErrorDesc);
-end;
-
-procedure TCdCClient.ProcessData(line:string);
-begin
-FRecvData:=line;
-Synchronize(ProcessDataSyn);
-end;
-
-procedure TCdCClient.ProcessDataSyn;
-begin
-if assigned(FonReceiveData) then FonReceiveData(FRecvData);
-end;
-
-function TCdCClient.Send(const Value: string):string;
+function TPlanetarium_cdc.Cmd(const Value: string):string;
 // this function is called in the main thread only!
+// do not use in a planetarium event.
 var dateto:double;
 begin
- tcpclient.resultbuffer:='';
- if Value>'' then begin
-   tcpclient.sendbuffer:=Value;
-   // set a double timeout just in case Execute is no more running.
-   dateto:=now+2*Fcmdtimeout;
-   while (tcpclient.resultbuffer='')and(now<dateto) do application.ProcessMessages;
- end;
- if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
- result:=tcpclient.resultbuffer;
+  if TcpClient<>nil then begin
+     tcpclient.resultbuffer:='';
+     if Value>'' then begin
+       tcpclient.sendbuffer:=Value;
+       dateto:=now+Fcmdtimeout;
+       while (tcpclient.resultbuffer='')and(now<dateto) do begin
+          sleep(100);
+          application.ProcessMessages;
+       end;
+       if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
+       result:=tcpclient.resultbuffer;
+     end;
+  end;
 end;
 
 end.

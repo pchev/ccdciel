@@ -37,6 +37,7 @@ type
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
   TAutoguiderType=(PHD);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
+  TPlanetariumType=(CDC, SAMP);
 
   TNumRange = record
                min,max,step: double;
@@ -155,7 +156,6 @@ var
   config: TCCDConfig;
   Filters: TStringList;
   compile_time, compile_version, compile_system, lclver: string;
-  Guider: TAutoguiderType;
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime: integer;
