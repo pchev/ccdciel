@@ -2677,15 +2677,7 @@ begin
 astrometryOK:=AstrometryResult;
 if astrometryOK and planetarium.Connected then begin
   NewMessage('Send image to planetarium');
-  case planetarium.PlanetariumType of
-    CDC : begin
-            planetarium.Cmd('SHOWBGIMAGE OFF');
-            planetarium.Cmd('LOADBGIMAGE '+slash(TmpDir)+'ccdcielsolved.fits');
-            planetarium.Cmd('SHOWBGIMAGE ON');
-          end;
-    SAMP: begin
-          end;
-  end;
+  planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
 end;
 end;
 
