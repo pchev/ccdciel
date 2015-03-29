@@ -418,9 +418,9 @@ object f_main: Tf_main
   object ImagePopupMenu: TPopupMenu
     left = 178
     top = 38
-    object MenuShowPlanetarium: TMenuItem
+    object MenuResolvePlanetarium: TMenuItem
       Caption = 'Resolve and show in planetarium'
-      OnClick = MenuShowPlanetariumClick
+      OnClick = MenuResolvePlanetariumClick
     end
     object MenuResolveSync: TMenuItem
       Caption = 'Resolve and Sync'

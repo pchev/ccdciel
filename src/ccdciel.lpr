@@ -35,10 +35,10 @@ uses
   fu_focuser, fu_mount, u_modelisation, cu_wheel, cu_mount, cu_indiwheel,
   cu_indifocuser, cu_indicamera, cu_fits, cu_camera, cu_ascomwheel,
   cu_ascommount, cu_ascomcamera, pu_valueseditor, fu_ccdtemp, pu_indigui,
-  pu_options, fu_frame, cu_astrometry, cu_planetarium_cdc, pu_viewtext, 
+  pu_options, fu_frame, cu_astrometry_engine, cu_planetarium_cdc, pu_viewtext, 
 cu_autoguider_phd,
   cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig, pu_edittargets,
-  pu_editplan, cu_autoguider, cu_planetarium, fu_planetarium;
+  pu_editplan, cu_autoguider, cu_planetarium, fu_planetarium, cu_astrometry;
 
 {$R *.res}
 

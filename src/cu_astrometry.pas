@@ -19,281 +19,143 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
 interface
 
-uses  u_global, u_utils,
-  {$ifdef unix}
-  Unix, BaseUnix,
-  {$endif}
-  UTF8Process, process, FileUtil, Classes, SysUtils;
+uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera,
+      math, FileUtil, Classes, SysUtils;
 
 type
-TAstrometry = class(TThread)
-   private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath : string;
-     Fscalelow,Fscalehigh,Fra,Fde,Fradius: double;
-     FObjs,FDown,FResolver: integer;
-     Fplot: boolean;
-     Fresult:integer;
-     Fcmd: string;
-     Fparam: TStringList;
-     process: TProcessUTF8;
-     FCmdTerminate: TNotifyEvent;
-   protected
-     procedure Execute; override;
-   public
-     constructor Create;
-     destructor Destroy; override;
-     procedure Resolve;
-     procedure Stop;
-     property Resolver: integer read FResolver write FResolver;
-     property InFile: string read FInFile write FInFile;
-     property OutFile: string read FOutFile write FOutFile;
-     property LogFile: string read FLogFile write FLogFile;
-     property scalelow: double read Fscalelow write Fscalelow;
-     property scalehigh: double read Fscalehigh write Fscalehigh;
-     property ra: double read Fra write Fra;
-     property de: double read Fde write Fde;
-     property radius: double read Fradius write Fradius;
-     property objs: integer read FObjs write FObjs;
-     property downsample: integer read FDown write FDown;
-     property plot: boolean read Fplot write Fplot;
-     property result: integer read Fresult;
-     property cmd: string read Fcmd write Fcmd;
-     property param: TStringList read Fparam write Fparam;
-     property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
-     property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
-     property onCmdTerminate: TNotifyEvent read FCmdTerminate write FCmdTerminate;
-end;
 
-const
-  ResolverAstrometryNet=0;
-  ResolverElbrus=1;
-  ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
+TAstrometry = class(TComponent)
+  private
+    engine: TAstrometry_engine;
+    Fterminatecmd: TNotifyEvent;
+    FonStartAstrometry: TNotifyEvent;
+    FonEndAstrometry: TNotifyEvent;
+    FonShowMessage: TNotifyMsg;
+    FBusy, FLastResult: Boolean;
+    Fmount: T_mount;
+    Fcamera: T_camera;
+    FResolverName: string;
+    logfile,solvefile,savefile: string;
+    procedure msg(txt:string);
+    procedure AstrometryDone(Sender: TObject);
+  public
+    constructor Create;
+    function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
+    procedure StopAstrometry;
+    property Busy: Boolean read FBusy;
+    property LastResult: Boolean read FLastResult;
+    property Resolver: string read FResolverName;
+    property Mount: T_mount read Fmount write Fmount;
+    property Camera: T_camera read Fcamera write Fcamera;
+    property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
+    property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
+    property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
+end;
 
 implementation
 
 constructor TAstrometry.Create;
 begin
-  FInFile:='';
-  FOutFile:='';
-  Fcmd:='';
-  Fplot:=false;
-  Fra:=NullCoord;
-  Fde:=NullCoord;
-  Fradius:=NullCoord;
-  FResolver:=ResolverAstrometryNet;
-  FObjs:=0;
-  FDown:=0;
-  Fscalelow:=0;
-  Fscalehigh:=0;
-  Fparam:=TStringList.Create;
-  process:=TProcessUTF8.Create(nil);
-  FreeOnTerminate:=true;
-  inherited create(true);
+  Inherited create(nil);
+  FBusy:=false;
+  FLastResult:=false;
 end;
 
-destructor TAstrometry.Destroy;
+procedure TAstrometry.msg(txt:string);
 begin
-  process.Free;
+ if assigned(FonShowMessage) then FonShowMessage(txt);
 end;
 
-procedure TAstrometry.Stop;
-{$ifdef unix}
-const maxchild=100;
-var hnd: Thandle;
-    childs: array [0..maxchild] of THandle;
-    i,childnum:integer;
-    resp: Tstringlist;
-{$endif}
+function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
+var pixsize,pixscale,telescope_focal_length,tolerance,MinRadius,ra,de: double;
+    n,iwidth:integer;
+    info: TcdcWCSinfo;
 begin
-if FResolver=ResolverAstrometryNet then begin
-{$ifdef unix}
-  // Kill all child process
-  if process.Running then begin
-    resp:=Tstringlist.Create;
-    hnd:=process.Handle;
-    childnum:=0;
-    childs[childnum]:=hnd;
-    while (hnd>0)and(childnum<maxchild) do begin
-      resp.clear;
-      if (ExecProcess('pgrep -P '+inttostr(hnd),resp)=0)and(resp.count>0) then begin
-         hnd:=StrToIntDef(resp[0],0);
-      end else
-         hnd:=0;
-      if hnd>0 then begin
-         inc(childnum);
-         childs[childnum]:=hnd;
-      end;
-    end;
-    for i:=childnum downto 0 do
-       FpKill(childs[i],SIGKILL);
-    resp.Free;
-  end;
-{$else}
-  if process.Running then process.Active:=false;
-{$endif}
-end;
+ if (not FBusy) then begin
+   Fterminatecmd:=terminatecmd;
+   n:=cdcwcs_initfitsfile(PChar(infile),0);
+   ra:=NullCoord;
+   de:=NullCoord;
+   iwidth:=1000;
+   if n=0 then begin
+     n:=cdcwcs_getinfo(addr(info),0);
+     if n=0 then begin
+       ra:=info.cra;
+       de:=info.cdec;
+       iwidth:=info.wp;
+     end;
+   end;
+   if (ra=NullCoord)or(de=NullCoord) then begin
+       msg('Cannot find approximate coordinates for this image.'+crlf+'The astrometry resolution may take a very long time.');
+   end;
+   logfile:=ChangeFileExt(infile,'.log');
+   solvefile:=ChangeFileExt(infile,'.solved');
+   savefile:=outfile;
+   DeleteFileUTF8(outfile);
+   DeleteFileUTF8(solvefile);
+   engine:=TAstrometry_engine.Create;
+   engine.onCmdTerminate:=@AstrometryDone;
+   engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+   FResolverName:=ResolverName[engine.Resolver];
+   engine.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
+   engine.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
+   engine.LogFile:=logfile;
+   engine.InFile:=infile;
+   engine.OutFile:=outfile;
+   tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
+   MinRadius:=config.GetValue('/Astrometry/MinRadius',5.0);
+   if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
+   then
+      pixsize:=camera.PixelSizeX / camera.BinX
+   else
+      pixsize:=config.GetValue('/Astrometry/PixelSize',5.0);
+   if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+   then
+      telescope_focal_length:=mount.FocaleLength
+   else
+      telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
+   if (pixsize>0)and(telescope_focal_length>0)  then begin
+      pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
+      engine.scalelow:=(1-tolerance)*pixscale;
+      engine.scalehigh:=(1+tolerance)*pixscale;
+   end;
+   engine.downsample:=config.GetValue('/Astrometry/DownSample',4);
+   engine.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
+   engine.plot:=config.GetValue('/Astrometry/Plot',false);
+   engine.ra:=ra;
+   engine.de:=de;
+   engine.radius:=max(MinRadius,pixscale*iwidth/3600);
+   FBusy:=true;
+   engine.Resolve;
+   msg('Resolving using '+ResolverName[engine.Resolver]+' ...');
+   if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
+   result:=true;
+ end else begin
+   result:=false;
+ end;
 end;
 
-procedure TAstrometry.Resolve;
+procedure TAstrometry.AstrometryDone(Sender: TObject);
 begin
-if FResolver=ResolverAstrometryNet then begin
-  Fcmd:='solve-field';
-  Fparam.Add('--overwrite');
-  if (Fscalelow>0)and(Fscalehigh>0) then begin
-    Fparam.Add('--scale-low');
-    Fparam.Add(FloatToStr(Fscalelow));
-    Fparam.Add('--scale-high');
-    Fparam.Add(FloatToStr(Fscalehigh));
-    Fparam.Add('--scale-units');
-    Fparam.Add('arcsecperpix');
-  end;
-  if (Fra<>NullCoord)and(Fde<>NullCoord)and(Fradius<>NullCoord) then begin
-    Fparam.Add('--ra');
-    Fparam.Add(FloatToStr(Fra));
-    Fparam.Add('--dec');
-    Fparam.Add(FloatToStr(Fde));
-    Fparam.Add('--radius');
-    Fparam.Add(FloatToStr(Fradius));
-  end;
-  if FObjs>0 then begin
-    Fparam.Add('--objs');
-    Fparam.Add(inttostr(FObjs));
-  end;
-  if FDown>1 then begin
-    Fparam.Add('--downsample');
-    Fparam.Add(inttostr(FDown));
-  end;
-  if not Fplot then begin
-     Fparam.Add('--no-plots');
-  end;
-  Fparam.Add('--new-fits');
-  Fparam.Add(FOutFile);
-  Fparam.Add(FInFile);
-  Start;
-end
-else if FResolver=ResolverElbrus then begin
-  FElbrusFile:=ExtractFileName(FInFile);
-  {$ifdef mswindows}
-    FElbrusDir:=FElbrusFolder;
-  {$else}
-    FElbrusDir:=FElbrusUnixpath;
-  {$endif}
-  DeleteFileUTF8(slash(FElbrusDir)+'elbrus.pos');
-  DeleteFileUTF8(slash(FElbrusDir)+'elbrus.sta');
-  Copyfile(FInFile,slash(FElbrusDir)+FElbrusFile,[cffOverwriteFile]);
-  Start;
-end;
+ if FileExistsUTF8(savefile) and FileExistsUTF8(solvefile) then
+   FLastResult:=true
+ else
+   FLastResult:=false;
+ FBusy:=false;
+ if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
+ if Assigned(Fterminatecmd) then Fterminatecmd(self);
+ Fterminatecmd:=nil;
 end;
 
-procedure TAstrometry.Execute;
-const READ_BYTES = 2048;
-var n: LongInt;
-    f: file;
-    logok: boolean;
-    cbuf: array[0..READ_BYTES] of char;
-    ft,fl: TextFile;
-    fn,imgdir,txt: string;
-    nside: integer;
-    timeout: double;
+procedure TAstrometry.StopAstrometry;
 begin
-if FResolver=ResolverAstrometryNet then begin
-  cbuf:='';
-  if (FLogFile<>'') then begin
-    AssignFile(f,FLogFile);
-    rewrite(f,1);
-    logok:=true;
-  end
-  else
-    logok:=false;
-  process.Executable:=Fcmd;
-  process.Parameters:=Fparam;
-  process.Options:=[poUsePipes,poStderrToOutPut];
-  process.Execute;
-  while process.Running do begin
-    if logok and (process.Output<>nil) then begin
-      n := process.Output.Read(cbuf, READ_BYTES);
-      if n>=0 then BlockWrite(f,cbuf,n);
-    end;
-    sleep(100);
-  end;
-  Fresult:=process.ExitStatus;
-  if (logok)and(Fresult<>127)and(process.Output<>nil) then repeat
-    n := process.Output.Read(cbuf, READ_BYTES);
-    if n>=0 then BlockWrite(f,cbuf,n);
-  until (n<=0)or(process.Output=nil);
-  if logok then CloseFile(f);
-  if Assigned(FCmdTerminate) then FCmdTerminate(self);
-end
-else if FResolver=ResolverElbrus then begin
-  fn:=slash(FElbrusDir)+'elbrus.txt';
-  imgdir:=trim(FElbrusFolder);
-  if copy(imgdir,length(imgdir),1)<>'\' then imgdir:=imgdir+'\';
-  AssignFile(ft,fn);
-  rewrite(ft);
-  write(ft,'1.- Elbrus command file'+crlf);    // CR+LF also on Linux
-  write(ft,'2.- commands from CCDciel'+crlf);
-  write(ft,'**SET imagePath'+crlf);
-  write(ft,imgdir+FElbrusFile+crlf);
-  write(ft,'**SET searchingCoordinatesFrom'+crlf);
-  write(ft,'1'+crlf);
-  write(ft,'**EXE analyze'+crlf);
-  write(ft,'space'+crlf);
-  CloseFile(ft);
-  timeout:=now+10/3600/24;
-  repeat
-    sleep(500);
-  until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>timeout);
-  sleep(1000);
-  if (FLogFile<>'') then begin
-    if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then begin
-       AssignFile(ft,slash(FElbrusDir)+'elbrus.sta');
-       AssignFile(fl,FLogFile);
-       Reset(ft);
-       Rewrite(fl);
-       repeat
-         ReadLn(ft,txt);
-         txt:=StringReplace(txt,#$b0,'d',[rfReplaceAll]);
-         writeln(fl,txt);
-       until eof(ft);
-       CloseFile(ft);
-       CloseFile(fl);
-    end;
-  end;
-  if FileExistsUTF8(slash(FElbrusDir)+'elbrus.pos') then begin
-    AssignFile(ft,slash(FElbrusDir)+'elbrus.pos');
-    reset(ft);
-    ReadLn(ft,txt);
-    CloseFile(ft);
-    nside:=StrToIntDef(copy(txt,1,3),0);
-    if nside>=10 then begin
-      Copyfile(slash(FElbrusDir)+FElbrusFile,FOutFile,[cffOverwriteFile]);
-      fn:=ChangeFileExt(FInFile,'.solved');
-      AssignFile(ft,fn);
-      rewrite(ft);
-      write(ft,' ');
-      CloseFile(ft);
-    end;
-  end else begin
-    if (FLogFile<>'') then begin
-      AssignFile(ft,FLogFile);
-      if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then
-        Append(ft)
-      else
-        Rewrite(ft);
-      WriteLn(ft,'Timeout!');
-      WriteLn(ft,'No response from Elbrus after 10 seconds.');
-      WriteLn(ft,'Is Elbrus running and waiting for messages?');
-      CloseFile(ft);
-    end;
-  end;
-  if Assigned(FCmdTerminate) then FCmdTerminate(self);
-end;
+  if FBusy then engine.Stop;
 end;
 
 end.

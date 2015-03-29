@@ -31,9 +31,9 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
-  cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera,
+  cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc,
-  cu_astrometry, lazutf8sysutils, Classes, dynlibs,
+  lazutf8sysutils, Classes, dynlibs,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -58,7 +58,7 @@ type
     MenuViewAutoguider: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
     MenuStopAstrometry: TMenuItem;
-    MenuShowPlanetarium: TMenuItem;
+    MenuResolvePlanetarium: TMenuItem;
     MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
     N6: TMenuItem;
@@ -126,7 +126,7 @@ type
     procedure MenuResolveSlewClick(Sender: TObject);
     procedure MenuResolveSyncClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
-    procedure MenuShowPlanetariumClick(Sender: TObject);
+    procedure MenuResolvePlanetariumClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuViewAstrometryLogClick(Sender: TObject);
     procedure MenuViewAutoguiderClick(Sender: TObject);
@@ -161,7 +161,6 @@ type
     astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
     WantCamera,WantWheel,WantFocuser,WantMount: boolean;
-    AstrometryBusy: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
     f_ccdtemp: Tf_ccdtemp;
@@ -266,8 +265,9 @@ type
     procedure Screen2Fits(x,y: integer; out xx,yy:integer);
     procedure Screen2CCD(x,y: integer; out xx,yy:integer);
     procedure Fits2Screen(x,y: integer; out xx,yy: integer);
-    procedure StartAstrometry(TerminatedCmd: TNotifyEvent);
-    function  AstrometryResult: boolean;
+    procedure AstrometryStart(Sender: TObject);
+    procedure AstrometryEnd(Sender: TObject);
+
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
     procedure AstrometrySlewCursor(Sender: TObject);
@@ -383,7 +383,6 @@ begin
   DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
   GUIready:=false;
-  AstrometryBusy:=false;
   Filters:=TStringList.Create;
   PageControlRight.ActivePageIndex:=0;
   cdcwcs_initfitsfile:=nil;
@@ -463,6 +462,13 @@ begin
   mount.onMsg:=@NewMessage;
   mount.onCoordChange:=@MountCoordChange;
   mount.onStatusChange:=@MountStatus;
+
+  astrometry:=TAstrometry.Create;
+  astrometry.Camera:=camera;
+  astrometry.Mount:=mount;
+  astrometry.onAstrometryStart:=@AstrometryStart;
+  astrometry.onAstrometryEnd:=@AstrometryEnd;
+  astrometry.onShowMessage:=@NewMessage;
 
   i:=config.GetValue('/Autoguider/Software',0);
   case TAutoguiderType(i) of
@@ -761,6 +767,7 @@ begin
   Filters.Free;
   autoguider.Free;
   planetarium.Free;
+  astrometry.Free;
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
@@ -2491,81 +2498,28 @@ begin
   GUIready:=false;
 end;
 
-procedure Tf_main.StartAstrometry(TerminatedCmd: TNotifyEvent);
-var pixsize,pixscale,telescope_focal_length,ra,de,tolerance,MinRadius: double;
+procedure Tf_main.AstrometryStart(Sender: TObject);
 begin
- if (not AstrometryBusy) and (fits.HeaderInfo.naxis>0) then begin
-   ra:=NullCoord;
-   de:=NullCoord;
-   if (fits.HeaderInfo.ra<>NullCoord) then ra:=fits.HeaderInfo.ra;
-   if (fits.HeaderInfo.dec<>NullCoord) then de:=fits.HeaderInfo.dec;
-   if (ra=NullCoord)or(de=NullCoord) then begin
-       if MessageDlg('Cannot find approximate coordinates for this image.'+crlf+'The astrometry resolution may take a very long time.'+crlf+'Do you want to continue?',mtConfirmation,mbYesNo,0)=mrNo then begin
-          exit;
-       end;
-   end;
-   DeleteFileUTF8(slash(TmpDir)+'ccdcielsolved.fits');
-   DeleteFileUTF8(slash(TmpDir)+'ccdcieltmp.solved');
-   fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-   AstrometryBusy:=true;
-   astrometry:=TAstrometry.Create;
-   astrometry.onCmdTerminate:=TerminatedCmd;
-   astrometry.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
-   astrometry.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
-   astrometry.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
-   astrometry.LogFile:=slash(TmpDir)+'ccdcieltmp.log';
-   astrometry.InFile:=slash(TmpDir)+'ccdcieltmp.fits';
-   astrometry.OutFile:=slash(TmpDir)+'ccdcielsolved.fits';
-   tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
-   MinRadius:=config.GetValue('/Astrometry/MinRadius',5.0);
-   if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
-   then
-      pixsize:=camera.PixelSizeX
-   else
-      pixsize:=config.GetValue('/Astrometry/PixelSize',5.0);
-   if config.GetValue('/Astrometry/FocaleFromTelescope',true)
-   then
-      telescope_focal_length:=mount.FocaleLength
-   else
-      telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
-   if (pixsize>0)and(telescope_focal_length>0)  then begin
-      pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
-      astrometry.scalelow:=(1-tolerance)*pixscale;
-      astrometry.scalehigh:=(1+tolerance)*pixscale;
-   end;
-   astrometry.downsample:=config.GetValue('/Astrometry/DownSample',4);
-   astrometry.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
-   astrometry.plot:=config.GetValue('/Astrometry/Plot',false);
-   astrometry.ra:=ra;
-   astrometry.de:=de;
-   astrometry.radius:=max(MinRadius,pixscale*fits.HeaderInfo.naxis1/3600);
-   astrometry.Resolve;
-   NewMessage('Resolving using '+ResolverName[astrometry.Resolver]+' ...');
-   // update menu
-   MenuShowPlanetarium.Enabled:=false;
-   MenuStopAstrometry.Visible:=true;
- end;
+  // update menu
+  MenuResolvePlanetarium.Enabled:=false;
+  MenuResolveSync.Enabled:=false;
+  MenuResolveSlew.Enabled:=false;
+  MenuStopAstrometry.Visible:=true;
 end;
 
-function Tf_main.AstrometryResult: boolean;
+procedure Tf_main.AstrometryEnd(Sender: TObject);
 begin
- // always call this function in TerminatedCmd
-AstrometryBusy:=false;
-// update menu
-MenuStopAstrometry.Visible:=false;
-MenuShowPlanetarium.Enabled:=true;
-if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(TmpDir)+'ccdcieltmp.solved') then begin
-  result:=true;
-end
-else begin
-  result:=false;
-  NewMessage(ResolverName[astrometry.Resolver]+' resolve error.');
-end;
+  // update menu
+  MenuStopAstrometry.Visible:=false;
+  MenuResolvePlanetarium.Enabled:=true;
+  MenuResolveSync.Enabled:=true;
+  MenuResolveSlew.Enabled:=true;
+  if not astrometry.LastResult then NewMessage(astrometry.Resolver+' resolve error.');
 end;
 
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
 begin
-  astrometry.Stop;
+  astrometry.StopAstrometry;
   MenuStopAstrometry.Visible:=false;
 end;
 
@@ -2584,19 +2538,20 @@ end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
- StartAstrometry(@AstrometrySync);
+  if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+    fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync);
+  end;
 end;
 
 procedure Tf_main.AstrometrySync(Sender: TObject);
-var astrometryOK: Boolean;
-    fn: string;
+var fn: string;
     x,y,n,m: integer;
     ra,de,jd0,jd1: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-astrometryOK:=AstrometryResult;
-if astrometryOK and (cdcwcs_xy2sky<>nil) then begin
+if astrometry.LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    n:=cdcwcs_getinfo(addr(i),0);
@@ -2624,19 +2579,20 @@ end;
 
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
 begin
-  StartAstrometry(@AstrometrySlewCursor);
+  if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+    fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewCursor);
+  end;
 end;
 
 procedure Tf_main.AstrometrySlewCursor(Sender: TObject);
-var astrometryOK: Boolean;
-    fn: string;
+var fn: string;
     xx,yy,n,m: integer;
     ra,de,jd0,jd1: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-astrometryOK:=AstrometryResult;
-if astrometryOK and (cdcwcs_xy2sky<>nil) then begin
+if astrometry.LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    n:=cdcwcs_getinfo(addr(i),0);
@@ -2663,19 +2619,21 @@ if astrometryOK and (cdcwcs_xy2sky<>nil) then begin
 end;
 end;
 
-procedure Tf_main.MenuShowPlanetariumClick(Sender: TObject);
+procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);
 begin
- if planetarium.Connected then
-    StartAstrometry(@AstrometryToPlanetarium)
+ if planetarium.Connected then begin
+    if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+      fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+      astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium);
+    end;
+ end
  else
     NewMessage('Planetarium is not connected');
 end;
 
 procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
-var astrometryOK: Boolean;
 begin
-astrometryOK:=AstrometryResult;
-if astrometryOK and planetarium.Connected then begin
+if astrometry.LastResult and planetarium.Connected then begin
   NewMessage('Send image to planetarium');
   planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
 end;
