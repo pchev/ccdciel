@@ -36,13 +36,14 @@ type
   TPlanetarium_cdc = class(TPlanetarium)
   private
     TcpClient : TTcpclient;
-    FTag:Integer;
+  protected
     procedure Execute; override;
   public
     Constructor Create;
     procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
     function Cmd(const Value: string):string; override;
+    function ShowImage(fn: string):boolean; override;
   end;
 
 const msgTimeout='Timeout!';
@@ -184,6 +185,14 @@ begin
        result:=tcpclient.resultbuffer;
      end;
   end;
+end;
+
+function TPlanetarium_cdc.ShowImage(fn: string):boolean;
+begin
+  Cmd('SHOWBGIMAGE OFF');
+  Cmd('LOADBGIMAGE '+fn);
+  Cmd('SHOWBGIMAGE ON');
+  result:=true;
 end;
 
 end.
