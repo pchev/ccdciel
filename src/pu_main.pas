@@ -27,13 +27,13 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
-  fu_sequence, u_ccdconfig, pu_editplan, dynlibs,
+  fu_sequence, fu_planetarium, u_ccdconfig, pu_editplan,
   pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera,
-  cu_autoguider, cu_autoguider_phd,
-  cu_astrometry, cu_cdcclient,  lazutf8sysutils, Classes,
+  cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc,
+  cu_astrometry, lazutf8sysutils, Classes, dynlibs,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -51,13 +51,14 @@ type
     MenuItem4: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
+    MenuViewPlanetarium: TMenuItem;
     MenuResolveSlew: TMenuItem;
     MenuResolveSync: TMenuItem;
     MenuViewSequence: TMenuItem;
     MenuViewAutoguider: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
     MenuStopAstrometry: TMenuItem;
-    MenuShowSkychart: TMenuItem;
+    MenuShowPlanetarium: TMenuItem;
     MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
     N6: TMenuItem;
@@ -98,12 +99,10 @@ type
     StatusBar1: TStatusBar;
     ConnectTimer: TTimer;
     StatusbarTimer: TTimer;
-    CdCTimer: TTimer;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     TabSheet4: TTabSheet;
-    procedure CdCTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -127,7 +126,7 @@ type
     procedure MenuResolveSlewClick(Sender: TObject);
     procedure MenuResolveSyncClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
-    procedure MenuShowSkychartClick(Sender: TObject);
+    procedure MenuShowPlanetariumClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuViewAstrometryLogClick(Sender: TObject);
     procedure MenuViewAutoguiderClick(Sender: TObject);
@@ -142,6 +141,7 @@ type
     procedure MenuViewHistogramClick(Sender: TObject);
     procedure MenuViewMessagesClick(Sender: TObject);
     procedure MenuViewMountClick(Sender: TObject);
+    procedure MenuViewPlanetariumClick(Sender: TObject);
     procedure MenuViewPreviewClick(Sender: TObject);
     procedure MenuViewCaptureClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
@@ -157,7 +157,7 @@ type
     focuser: T_focuser;
     mount: T_mount;
     autoguider:T_autoguider;
-    cdc:TCdCClient;
+    planetarium:TPlanetarium;
     astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
     WantCamera,WantWheel,WantFocuser,WantMount: boolean;
@@ -173,6 +173,7 @@ type
     f_focuser: Tf_focuser;
     f_mount: Tf_mount;
     f_autoguider: Tf_autoguider;
+    f_planetarium: Tf_planetarium;
     f_visu: Tf_visu;
     f_msg: Tf_msg;
     fits: TFits;
@@ -246,6 +247,9 @@ type
     Procedure AutoguiderConnect(Sender: TObject);
     Procedure AutoguiderDisconnect(Sender: TObject);
     Procedure AutoguiderStatus(Sender: TObject);
+    Procedure PlanetariumConnectClick(Sender: TObject);
+    Procedure PlanetariumConnect(Sender: TObject);
+    Procedure PlanetariumDisconnect(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -264,8 +268,7 @@ type
     procedure Fits2Screen(x,y: integer; out xx,yy: integer);
     procedure StartAstrometry(TerminatedCmd: TNotifyEvent);
     function  AstrometryResult: boolean;
-    procedure AstrometryToSkychart(Sender: TObject);
-    procedure SkychartConnected(Sender: TObject);
+    procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
     procedure AstrometrySlewCursor(Sender: TObject);
   public
@@ -369,6 +372,7 @@ end;
 procedure Tf_main.FormCreate(Sender: TObject);
 var DefaultInterface,aInt: TDevInterface;
     configver,configfile: string;
+    i:integer;
 begin
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
@@ -460,14 +464,22 @@ begin
   mount.onCoordChange:=@MountCoordChange;
   mount.onStatusChange:=@MountStatus;
 
-  Guider:=TAutoguiderType(config.GetValue('/Autoguider/Software',0));
-  case Guider of
+  i:=config.GetValue('/Autoguider/Software',0);
+  case TAutoguiderType(i) of
     PHD: autoguider:=T_autoguider_phd.Create;
   end;
   autoguider.onStatusChange:=@AutoguiderStatus;
   autoguider.onConnect:=@AutoguiderConnect;
   autoguider.onDisconnect:=@AutoguiderDisconnect;
   autoguider.onShowMessage:=@NewMessage;
+
+  i:=config.GetValue('/Planetarium/Software',0);
+  case TPlanetariumType(i) of
+    CDC: planetarium:=TPlanetarium_cdc.Create;
+  end;
+  planetarium.onConnect:=@PlanetariumConnect;
+  planetarium.onDisconnect:=@PlanetariumDisconnect;
+  planetarium.onShowMessage:=@NewMessage;
 
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
@@ -526,6 +538,10 @@ begin
   f_sequence.Camera:=camera;
   f_sequence.Autoguider:=autoguider;
 
+  f_planetarium:=Tf_planetarium.Create(self);
+  f_planetarium.onConnect:=@PlanetariumConnectClick;
+  f_planetarium.Status.Text:='Disconnected';
+
   fits:=TFits.Create(self);
 
   SetConfig;
@@ -568,6 +584,7 @@ begin
   SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview);
   SetTool(f_mount,'Mount',PanelRight1,f_preview.top+1,MenuViewMount);
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_mount.top+1,MenuViewAutoguider);
+  SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium);
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser);
   SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
@@ -613,6 +630,7 @@ begin
   SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview);
   SetTool(f_mount,'',PanelRight1,f_preview.top+1,MenuViewMount);
   SetTool(f_autoguider,'',PanelRight1,f_mount.top+1,MenuViewAutoguider);
+  SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium);
 
   SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser);
   SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
@@ -698,6 +716,11 @@ begin
   config.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
   config.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
 
+  config.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
+  config.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
+  config.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
+  config.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
+
   config.SetValue('/Window/Top',Top);
   config.SetValue('/Window/Left',Left);
   config.SetValue('/Window/Width',Width);
@@ -736,6 +759,8 @@ begin
   ImaBmp.Free;
   config.Free;
   Filters.Free;
+  autoguider.Free;
+  planetarium.Free;
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
@@ -898,7 +923,6 @@ begin
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
-  Guider:=TAutoguiderType(config.GetValue('/Autoguider/Software',0));
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
   SettlePixel:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
@@ -1500,7 +1524,8 @@ Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
 var i: integer;
 begin
  // autoguider will be free automatically, create a new one for next connection
- case Guider of
+ i:=config.GetValue('/Autoguider/Software',0);
+ case TAutoguiderType(i) of
    PHD: autoguider:=T_autoguider_phd.Create;
  end;
  autoguider.onStatusChange:=@AutoguiderStatus;
@@ -1693,6 +1718,11 @@ begin
    f_option.SettlePixel.Text:=config.GetValue('/Autoguider/Settle/Pixel','1.0');
    f_option.SettleMinTime.Text:=config.GetValue('/Autoguider/Settle/MinTime','5');
    f_option.SettleMaxTime.Text:=config.GetValue('/Autoguider/Settle/MaxTime','30');
+   f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
+   f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
+   f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
+   f_option.CheckBoxLocalCdc.Checked:=f_option.CdCport.Text='';
+   f_option.PanelRemoteCdc.Visible:=not f_option.CheckBoxLocalCdc.Checked;
 
    FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_option.ShowModal;
@@ -1734,6 +1764,9 @@ begin
      config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Text);
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Text);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Text);
+     config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
+     config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
+     config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
 
      config.Flush;
 
@@ -1791,6 +1824,11 @@ end;
 procedure Tf_main.MenuViewMountClick(Sender: TObject);
 begin
   f_mount.Visible:=MenuViewMount.Checked;
+end;
+
+procedure Tf_main.MenuViewPlanetariumClick(Sender: TObject);
+begin
+  f_planetarium.Visible:=MenuViewPlanetarium.Checked;
 end;
 
 procedure Tf_main.MenuViewPreviewClick(Sender: TObject);
@@ -2504,17 +2542,18 @@ begin
    astrometry.Resolve;
    NewMessage('Resolving using '+ResolverName[astrometry.Resolver]+' ...');
    // update menu
-   MenuShowSkychart.Enabled:=false;
+   MenuShowPlanetarium.Enabled:=false;
    MenuStopAstrometry.Visible:=true;
  end;
 end;
 
 function Tf_main.AstrometryResult: boolean;
 begin
+ // always call this function in TerminatedCmd
 AstrometryBusy:=false;
 // update menu
 MenuStopAstrometry.Visible:=false;
-MenuShowSkychart.Enabled:=true;
+MenuShowPlanetarium.Enabled:=true;
 if FileExistsUTF8(slash(TmpDir)+'ccdcielsolved.fits') and FileExistsUTF8(slash(TmpDir)+'ccdcieltmp.solved') then begin
   result:=true;
 end
@@ -2624,45 +2663,65 @@ if astrometryOK and (cdcwcs_xy2sky<>nil) then begin
 end;
 end;
 
-procedure Tf_main.MenuShowSkychartClick(Sender: TObject);
+procedure Tf_main.MenuShowPlanetariumClick(Sender: TObject);
 begin
- StartAstrometry(@AstrometryToSkychart);
+ if planetarium.Connected then
+    StartAstrometry(@AstrometryToPlanetarium)
+ else
+    NewMessage('Planetarium is not connected');
 end;
 
-procedure Tf_main.AstrometryToSkychart(Sender: TObject);
+procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
 var astrometryOK: Boolean;
 begin
 astrometryOK:=AstrometryResult;
-if astrometryOK then begin
-  cdc:=TCdCClient.Create;
-  cdc.Tag:=1;
-  cdc.onShowMessage:=@NewMessage;
-  cdc.onConnect:=@SkychartConnected;
-  cdc.TargetHost:='localhost';
-  cdc.TargetPort:=GetCdCPort;
-  cdc.Start;
+if astrometryOK and planetarium.Connected then begin
+  NewMessage('Send image to planetarium');
+  case planetarium.PlanetariumType of
+    CDC : begin
+            planetarium.Cmd('SHOWBGIMAGE OFF');
+            planetarium.Cmd('LOADBGIMAGE '+slash(TmpDir)+'ccdcielsolved.fits');
+            planetarium.Cmd('SHOWBGIMAGE ON');
+          end;
+    SAMP: begin
+          end;
+  end;
 end;
 end;
 
-procedure Tf_main.SkychartConnected(Sender: TObject);
-begin
-CdCTimer.Enabled:=true;
-end;
 
-procedure Tf_main.CdCTimerTimer(Sender: TObject);
+Procedure Tf_main.PlanetariumConnectClick(Sender: TObject);
 begin
- CdCTimer.Enabled:=false;
- case cdc.tag of
-   1: begin
-       NewMessage('Send image to CdC');
-       cdc.Send('SHOWBGIMAGE OFF');
-       cdc.Send('LOADBGIMAGE '+slash(TmpDir)+'ccdcielsolved.fits');
-       cdc.Send('SHOWBGIMAGE ON');
-       cdc.onShowMessage:=nil;
-       cdc.Send('quit');
-       cdc.Terminate;
-      end;
+ if f_planetarium.BtnConnect.Caption='Connect' then begin
+   planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
+                      config.GetValue('/Planetarium/CdCport',''));
+   f_planetarium.BtnConnect.Caption:='Disconnect';
+ end else begin
+   planetarium.Disconnect;
  end;
+end;
+
+Procedure Tf_main.PlanetariumConnect(Sender: TObject);
+begin
+ f_planetarium.led.Brush.Color:=clLime;
+ f_planetarium.Status.Text:='Connected';
+ NewMessage('Planetarium: Connected');
+end;
+
+Procedure Tf_main.PlanetariumDisconnect(Sender: TObject);
+var i: integer;
+begin
+ f_planetarium.led.Brush.Color:=clGray;
+ f_planetarium.Status.Text:='Disconnected';
+ f_planetarium.BtnConnect.Caption:='Connect';
+ NewMessage('Planetarium: Disconnected');
+ i:=config.GetValue('/Planetarium/Software',0);
+ case TPlanetariumType(i) of
+   CDC: planetarium:=TPlanetarium_cdc.Create;
+ end;
+ planetarium.onConnect:=@PlanetariumConnect;
+ planetarium.onDisconnect:=@PlanetariumDisconnect;
+ planetarium.onShowMessage:=@NewMessage;
 end;
 
 end.

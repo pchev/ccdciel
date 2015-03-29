@@ -36,6 +36,7 @@ type
     FVersion,FMsgVersion,FStatus : String;
     FSettlePix,FSettleTmin,FSettleTmax: string;
     FState: TAutoguiderState;
+    FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
@@ -58,6 +59,7 @@ type
     procedure Pause(onoff:boolean); virtual; abstract;
     procedure Dither(pixel:double; raonly:boolean); virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
+    property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
     property TargetHost : string read FTargetHost;
     property TargetPort : string read FTargetPort;

@@ -56,7 +56,8 @@ implementation
 
 Constructor T_autoguider_phd.Create ;
 begin
-inherited Create;
+  inherited Create;
+  FAutoguiderType:=PHD;
   FTargetHost:='localhost';
   FTargetPort:='4400';
   FTimeout:=500;
