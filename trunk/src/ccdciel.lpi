@@ -107,7 +107,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="46">
+    <Units Count="47">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -193,6 +193,7 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -208,6 +209,7 @@
         <ComponentName Value="f_focuser"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_focuser"/>
       </Unit15>
       <Unit16>
         <Filename Value="fu_mount.pas"/>
@@ -300,9 +302,9 @@
         <ResourceBaseClass Value="Frame"/>
       </Unit32>
       <Unit33>
-        <Filename Value="cu_astrometry.pas"/>
+        <Filename Value="cu_astrometry_engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_astrometry"/>
+        <UnitName Value="cu_astrometry_engine"/>
       </Unit33>
       <Unit34>
         <Filename Value="cu_planetarium_cdc.pas"/>
@@ -378,6 +380,11 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="fu_planetarium"/>
       </Unit45>
+      <Unit46>
+        <Filename Value="cu_astrometry.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_astrometry"/>
+      </Unit46>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

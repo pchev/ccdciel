@@ -135,6 +135,9 @@ const
   f2 = '0.00';
   b80 ='                                                                                ';
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
+  ResolverAstrometryNet=0;
+  ResolverElbrus=1;
+  ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
   {$ifdef linux}
     defCapturePath='/tmp';
     libcdcwcs = 'libcdcwcs.so';

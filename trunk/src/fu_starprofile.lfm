@@ -93,7 +93,7 @@ object f_starprofile: Tf_starprofile
       object LabelHFD: TLabel
         Left = 1
         Height = 44
-        Hint = 'The Half Flux Diameter value'
+        Hint = 'The Half Flux Diameter value in pixels'
         Top = 16
         Width = 9
         Caption = ' '
@@ -104,9 +104,9 @@ object f_starprofile: Tf_starprofile
       end
       object Label1: TLabel
         Left = 1
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 28
+        Width = 26
         Caption = 'HFD:'
         ParentColor = False
       end
@@ -123,7 +123,7 @@ object f_starprofile: Tf_starprofile
       object LabelFWHM: TLabel
         Left = 1
         Height = 44
-        Hint = 'The Full Width at Half Maximum value'
+        Hint = 'The Full Width at Half Maximum value in pixels / arc seconds'
         Top = 16
         Width = 9
         Caption = ' '
@@ -134,9 +134,9 @@ object f_starprofile: Tf_starprofile
       end
       object Label3: TLabel
         Left = 1
-        Height = 16
+        Height = 15
         Top = 0
-        Width = 41
+        Width = 39
         Caption = 'FWHM:'
         ParentColor = False
       end
@@ -151,9 +151,9 @@ object f_starprofile: Tf_starprofile
       TabOrder = 3
       object Label2: TLabel
         Left = 0
-        Height = 16
+        Height = 15
         Top = 2
-        Width = 56
+        Width = 53
         Caption = 'Intensity:'
         ParentColor = False
       end
