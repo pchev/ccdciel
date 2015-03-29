@@ -288,6 +288,7 @@ object f_eqmod: Tf_eqmod
           Font.Color = clRed
           Font.Height = -16
           Font.Style = [fsBold]
+          OnClick = StaticText1Click
           ParentFont = False
           TabOrder = 0
         end
@@ -507,7 +508,7 @@ object f_eqmod: Tf_eqmod
           Width = 218
           Align = alClient
           Caption = 'Messages'
-          ClientHeight = 175
+          ClientHeight = 189
           ClientWidth = 214
           TabOrder = 0
           object msg: TMemo

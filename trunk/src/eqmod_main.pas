@@ -171,6 +171,7 @@ type
     procedure SlewPresetChange(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure BtnSetTrackRateClick(Sender: TObject);
+    procedure StaticText1Click(Sender: TObject);
     procedure SyncModeComboChange(Sender: TObject);
   private
     { private declarations }
@@ -213,13 +214,22 @@ type
 
 var
   f_eqmod: Tf_eqmod;
+  compile_time, compile_version, compile_system, lclver: string;
 
 implementation
+
+uses InterfaceBase,LCLVersion;
 
 const
   clOrange=$1080EF;
   f1='0.0';
   f5='0.00000';
+  CR = #$0d;
+  LF = #$0a;
+  CRLF = CR + LF;
+  eq_version='Version 0.0.1';
+
+{$i revision.inc}
 
 {$R *.lfm}
 
@@ -237,6 +247,11 @@ begin
  obslock:=false;
  TrackMode:=-999;
  Width:=226;
+ lclver:=lcl_version;
+ compile_time:={$I %DATE%}+' '+{$I %TIME%};
+ compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
+ compile_system:={$I %FPCTARGETOS%};
+ StaticText1.Caption:='EQMod Mount'+crlf+eq_version;
 end;
 
 procedure Tf_eqmod.FormDestroy(Sender: TObject);
@@ -596,6 +611,28 @@ y:=StrToFloatDef(TrackDEC.Text,-99999);
 if (x>-99999)and(y>=-99999) then begin
    eqmod.SetTrackRate(x,y);
 end;
+end;
+
+procedure Tf_eqmod.StaticText1Click(Sender: TObject);
+var aboutmsg: string;
+begin
+  aboutmsg:='EQMod Mount '+crlf;
+  aboutmsg:=aboutmsg+eq_version+'-'+RevisionStr+' '+compile_time+crlf;
+  aboutmsg:=aboutmsg+'Compiled with:'+crlf;
+  aboutmsg:=aboutmsg+' '+compile_version+crlf+crlf;
+  aboutmsg:=aboutmsg+'Copyright (C) 2015 Patrick Chevalley'+crlf;
+  aboutmsg:=aboutmsg+'pch@ap-i.net , http://www.ap-i.net'+crlf+crlf;
+  aboutmsg:=aboutmsg+'This program is free software; you can redistribute it and/or'+crlf;
+  aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'+crlf;
+  aboutmsg:=aboutmsg+'as published by the Free Software Foundation; either version 3'+crlf;
+  aboutmsg:=aboutmsg+'of the License, or (at your option) any later version.'+crlf+crlf;
+  aboutmsg:=aboutmsg+'Notice:'+crlf;
+  aboutmsg:=aboutmsg+'This software as nothing to do with ASCOM Eqmod.'+crlf;
+  aboutmsg:=aboutmsg+'In case of problem with the GUI you can contact the author'+crlf;
+  aboutmsg:=aboutmsg+'mentioned above.'+crlf;
+  aboutmsg:=aboutmsg+'In case of problem with the INDI eqmod driver'+crlf;
+  aboutmsg:=aboutmsg+'look at http://www.indilib.org/'+crlf;
+  ShowMessage(aboutmsg);
 end;
 
 Procedure Tf_eqmod.TrackRateChange(Sender: TObject);
