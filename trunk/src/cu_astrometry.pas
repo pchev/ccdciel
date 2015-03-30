@@ -112,7 +112,7 @@ begin
    MinRadius:=config.GetValue('/Astrometry/MinRadius',5.0);
    if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
    then
-      pixsize:=camera.PixelSizeX / camera.BinX
+      pixsize:=camera.PixelSizeX * camera.BinX
    else
       pixsize:=config.GetValue('/Astrometry/PixelSize',5.0);
    if config.GetValue('/Astrometry/FocaleFromTelescope',true)
