@@ -288,7 +288,7 @@ begin
    b:=' ';
    c:=sz mod 2880;
    for i:=1 to c do FImgStream.Write(b,1);
-   if Assigned(FonNewImage) then FonNewImage(self);
+   NewImage;
  end;
  except
     on E: EOleException do msg('Error: ' + E.Message);

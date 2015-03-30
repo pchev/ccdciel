@@ -470,10 +470,11 @@ procedure T_indicamera.NewBlob(bp: IBLOB);
 begin
  if bp.bloblen>0 then begin
    { TODO : uncompress }
+   FImgStream.Clear;
    FImgStream.Position:=0;
    bp.blob.Position:=0;
-   FImgStream.CopyFrom(bp.blob,bp.bloblen);
-   if Assigned(FonNewImage) then FonNewImage(self);
+   FImgStream.CopyFrom(bp.blob,bp.size);
+   NewImage;
  end;
 end;
 

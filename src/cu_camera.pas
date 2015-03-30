@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global,
-  Classes, SysUtils;
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,
+  lazutf8sysutils, Classes, SysUtils;
 
 type
 
@@ -46,6 +46,12 @@ T_camera = class(TComponent)
     FonNewImage: TNotifyEvent;
     FImgStream: TMemoryStream;
     FFilterNames: TStringList;
+    FObjectName: string;
+    FFits: TFits;
+    FMount: T_mount;
+    Fwheel: T_wheel;
+    procedure NewImage;
+    procedure WriteHeaders;
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
     procedure SetFrametype(f:TFrameType); virtual; abstract;
@@ -78,6 +84,10 @@ T_camera = class(TComponent)
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
+    property Fits: TFits read FFits write FFits;
+    property Mount: T_mount read FMount write FMount;
+    property wheel: T_wheel read Fwheel write Fwheel;
+    property ObjectName: string read FObjectName write FObjectName;
     property CameraInterface: TDevInterface read FCameraInterface;
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
@@ -124,6 +134,125 @@ begin
   FImgStream.Free;
   FFilterNames.Free;
   inherited Destroy;
+end;
+
+procedure T_camera.NewImage;
+begin
+  Ffits.Stream:=ImgStream;
+  WriteHeaders;
+  if Assigned(FonNewImage) then FonNewImage(self);
+end;
+
+procedure T_camera.WriteHeaders;
+var dy,dm,dd: word;
+    origin,observer,telname,objname: string;
+    focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
+    hbitpix,hnaxis,hnaxis1,hnaxis2,hbin1,hbin2: integer;
+    hfilter,hframe,hinstr,hdateobs : string;
+    hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
+begin
+  // get header values from camera (set by INDI driver)
+  if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
+  if not Ffits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=Ffits.HeaderInfo.naxis;
+  if not Ffits.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=Ffits.HeaderInfo.naxis1;
+  if not Ffits.Header.Valueof('NAXIS2',hnaxis2) then hnaxis2:=Ffits.HeaderInfo.naxis2;
+  if not Ffits.Header.Valueof('BZERO',hbzero)   then hbzero:=Ffits.HeaderInfo.bzero;
+  if not Ffits.Header.Valueof('BSCALE',hbscale) then hbscale:=Ffits.HeaderInfo.bscale;
+  if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=-1;
+  if not Ffits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
+  if not Ffits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
+  if not Ffits.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
+  if not Ffits.Header.Valueof('YBINNING',hbin2) then hbin2:=-1;
+  if not Ffits.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';
+  if not Ffits.Header.Valueof('FILTER',hfilter) then hfilter:='';
+  if not Ffits.Header.Valueof('DATAMIN',hdmin)  then hdmin:=Ffits.HeaderInfo.dmin;
+  if not Ffits.Header.Valueof('DATAMAX',hdmax)  then hdmax:=Ffits.HeaderInfo.dmax;
+  if not Ffits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
+  if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
+  // get other values
+  hra:=NullCoord; hdec:=NullCoord;
+  if (Fmount.Status=devConnected) then begin
+     hra:=15*Fmount.RA;
+     hdec:=Fmount.Dec;
+     equinox:=Fmount.Equinox;
+     if equinox<>2000 then begin
+       if equinox=0 then begin
+         DecodeDate(now,dy,dm,dd);
+         jd1:=jd(dy,dm,dd,0);
+       end else begin
+         jd1:=jd(trunc(equinox),1,1,0);
+       end;
+       hra:=deg2rad*hra;
+       hdec:=deg2rad*hdec;
+       PrecessionFK5(jd1,jd2000,hra,hdec);
+       hra:=rad2deg*hra;
+       hdec:=rad2deg*hdec;
+     end;
+  end;
+  if (hfilter='')and(Fwheel.Status=devConnected) then begin
+     hfilter:=Fwheel.FilterNames[Fwheel.Filter];
+  end;
+  ccdtemp:=Temperature;
+  objname:=FObjectName;
+  origin:=config.GetValue('/Info/ObservatoryName','');
+  observer:=config.GetValue('/Info/ObserverName','');
+  telname:=config.GetValue('/Info/TelescopeName','');
+  if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+  then
+     focal_length:=Fmount.FocaleLength
+  else
+     focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
+
+  // write new header
+  Ffits.Header.ClearHeader;
+  Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
+  Ffits.Header.Add('BITPIX',hbitpix,'number of bits per data pixel');
+  Ffits.Header.Add('NAXIS',hnaxis,'number of data axes');
+  Ffits.Header.Add('NAXIS1',hnaxis1 ,'length of data axis 1');
+  Ffits.Header.Add('NAXIS2',hnaxis2 ,'length of data axis 2');
+  Ffits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
+  Ffits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
+  Ffits.Header.Add('BSCALE',hbscale,'default scaling factor');
+  Ffits.Header.Add('DATAMIN',hdmin,'Minimum value');
+  Ffits.Header.Add('DATAMAX',hdmax,'Maximum value');
+  Ffits.Header.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  if origin<>'' then Ffits.Header.Add('ORIGIN',origin,'Observatory name');
+  if observer<>'' then Ffits.Header.Add('OBSERVER',observer,'Observer name');
+  if telname<>'' then Ffits.Header.Add('TELESCOP',telname,'Telescope used for acquisition');
+  if hinstr<>'' then Ffits.Header.Add('INSTRUME',hinstr,'Instrument used for acquisition');
+  if hfilter<>'' then Ffits.Header.Add('FILTER',hfilter,'Filter');
+  Ffits.Header.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  if objname<>'' then Ffits.Header.Add('OBJECT',objname,'Observed object name');
+  Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
+  Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
+  if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
+  if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X');
+  if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y');
+  if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
+  if hbin2>0 then Ffits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
+  Ffits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
+  if ccdtemp<>NullCoord then Ffits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
+  if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+    Ffits.Header.Add('EQUINOX',2000.0,'');
+    Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
+    Ffits.Header.Add('DEC',hdec,'[deg] Telescope pointing DEC');
+    if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
+       if hbin1>0 then hpix1:=hpix1*hbin1;
+       if hbin2>0 then hpix2:=hpix2*hbin2;
+       pixscale1:=rad2deg*arctan(hpix1/1000/focal_length);
+       pixscale2:=rad2deg*arctan(hpix2/1000/focal_length);
+       Ffits.Header.Add('CTYPE1','RA---TAN','Pixel coordinate system');
+       Ffits.Header.Add('CTYPE2','DEC--TAN','Pixel coordinate system');
+       Ffits.Header.Add('CRVAL1',hra,'value of ref pixel');
+       Ffits.Header.Add('CRVAL2',hdec,'value of ref pixel');
+       Ffits.Header.Add('CRPIX1',hnaxis1 div 2,'ref pixel');
+       Ffits.Header.Add('CRPIX2',hnaxis2 div 2,'ref pixel');
+       Ffits.Header.Add('CDELT1',pixscale1,'coordinate scale');
+       Ffits.Header.Add('CDELT2',pixscale2,'coordinate scale');
+    end;
+  end;
+  Ffits.Header.Add('END','','');
+  Ffits.GetFitsInfo;
 end;
 
 end.
