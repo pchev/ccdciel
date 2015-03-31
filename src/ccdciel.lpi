@@ -46,6 +46,7 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -75,6 +76,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -241,6 +243,7 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -297,6 +300,7 @@
       <Unit33>
         <Filename Value="cu_astrometry_engine.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_astrometry_engine"/>
       </Unit33>
       <Unit34>
         <Filename Value="cu_planetarium_cdc.pas"/>
@@ -392,6 +396,7 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
+      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

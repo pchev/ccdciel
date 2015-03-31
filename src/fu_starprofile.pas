@@ -219,7 +219,7 @@ begin
  bg:=min+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) div 4)/c;
  valmax:=valmax-bg;
  snr:=valmax/bg;
- if snr>2 then begin
+ if snr>1 then begin
    for i:=-rs to rs do
      for j:=-rs to rs do begin
        Val:=min+Img[0,y+j,x+i]/c-bg;
@@ -234,25 +234,27 @@ begin
    hfd:=2*SumValR/SumVal;
  end;
  // Get gaussian psf
- setlength(imgdata,s,s);
- simg:=addr(imgdata);
- for i:=0 to s-1 do
-   for j:=0 to s-1 do begin
-     x1:=x+i-rs;
-     y1:=y+j-rs;
-     if (x1>0)and(x1<xmax)and(y1>0)and(y1<ymax) then
-        imgdata[i,j]:=trunc(min+img[0,y1,x1]/c)
-     else imgdata[i,j]:=trunc(min);
+ fwhm:=-1;
+ if (hfd>0) then begin
+   setlength(imgdata,s,s);
+   simg:=addr(imgdata);
+   for i:=0 to s-1 do
+     for j:=0 to s-1 do begin
+       x1:=x+i-rs;
+       y1:=y+j-rs;
+       if (x1>0)and(x1<xmax)and(y1>0)and(y1<ymax) then
+          imgdata[i,j]:=trunc(min+img[0,y1,x1]/c)
+       else imgdata[i,j]:=trunc(min);
+     end;
+   ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
+   if psf.Flux>0 then begin
+     fwhm:=PSF.Sigma;
+     if (focal>0)and(pxsize>0) then begin
+       fwhmarcsec:=fwhm*3600*rad2deg*arctan(pxsize/1000/focal);
+     end
+     else fwhmarcsec:=-1;
    end;
- ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
- if psf.Flux>0 then begin
-   fwhm:=PSF.Sigma;
-   if (focal>0)and(pxsize>0) then begin
-     fwhmarcsec:=fwhm*3600*rad2deg*arctan(pxsize/1000/focal);
-   end
-   else fwhmarcsec:=-1;
- end
- else fwhm:=-1;
+ end;
  // Plot result
  if (hfd>0) then begin
    FFindStar:=true;

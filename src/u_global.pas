@@ -133,6 +133,7 @@ const
   f0 = '0';
   f1 = '0.0';
   f2 = '0.00';
+  f5 = '0.00000';
   b80 ='                                                                                ';
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
   ResolverAstrometryNet=0;
@@ -162,6 +163,10 @@ var
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime: integer;
+  OrigX, OrigY,img_Height,img_Width : integer;
+  ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
+  ImgScale0: double;
+  ImgZoom: double;
 
 implementation
 
