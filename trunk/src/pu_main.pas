@@ -177,11 +177,10 @@ type
     f_msg: Tf_msg;
     fits: TFits;
     ImaBmp: TBitmap;
-    ImgScale0,SaveFocusZoom: double;
-    ImgCx, ImgCy, OrigX, OrigY, Mx, My,Starwindow,Focuswindow: integer;
+    SaveFocusZoom: double;
+    ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
-    ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
     Capture,Preview,PreviewLoop: boolean;
     LogToFile,LogFileOpen: Boolean;
@@ -261,15 +260,9 @@ type
     Procedure DrawImage;
     Procedure PlotImage;
     Procedure DrawHistogram;
-    procedure Screen2Fits(x,y: integer; out xx,yy:integer);
-    procedure Screen2CCD(x,y: integer; out xx,yy:integer);
-    procedure Fits2Screen(x,y: integer; out xx,yy: integer);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
-
     procedure AstrometryToPlanetarium(Sender: TObject);
-    procedure AstrometrySync(Sender: TObject);
-    procedure AstrometrySlewCursor(Sender: TObject);
   public
     { public declarations }
   end;
@@ -470,6 +463,7 @@ begin
   astrometry:=TAstrometry.Create;
   astrometry.Camera:=camera;
   astrometry.Mount:=mount;
+  astrometry.Fits:=fits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
   astrometry.onShowMessage:=@NewMessage;
@@ -547,6 +541,7 @@ begin
   f_sequence.Mount:=mount;
   f_sequence.Camera:=camera;
   f_sequence.Autoguider:=autoguider;
+  f_sequence.Astrometry:=astrometry;
 
   f_planetarium:=Tf_planetarium.Create(self);
   f_planetarium.onConnect:=@PlanetariumConnectClick;
@@ -787,7 +782,7 @@ begin
 MouseDownX:=X;
 MouseDownY:=Y;
 if Shift=[ssLeft] then begin
-   if f_visu.Zoom>0 then begin
+   if ImgZoom>0 then begin
      Mx:=X;
      My:=y;
      MouseMoving:=true;
@@ -814,8 +809,8 @@ begin
 if LockMouse then exit;
  if MouseMoving then begin
     LockMouse:=true;
-    ImgCx:=ImgCx+round((X-Mx) / f_visu.Zoom);
-    ImgCy:=ImgCy+round((Y-My) / f_visu.Zoom);
+    ImgCx:=ImgCx+round((X-Mx) / ImgZoom);
+    ImgCy:=ImgCy+round((Y-My) / ImgZoom);
     PlotImage;
     LockMouse:=false;
  end
@@ -2039,7 +2034,7 @@ begin
       StatusBar1.Panels[1].Text := 'Seq: '+inttostr(f_capture.SeqCount)
                                    +'  Exp: '+txt+' sec.';
   end
-  else if Preview then begin
+  else begin
      StatusBar1.Panels[1].Text := 'Exp: '+txt+' sec.';
   end;
 end;
@@ -2134,6 +2129,7 @@ end;
 
 Procedure Tf_main.ZoomImage(Sender: TObject);
 begin
+  ImgZoom:=f_visu.Zoom;
   PlotImage;
 end;
 
@@ -2142,62 +2138,6 @@ begin
   fits.ImgFullRange:=f_visu.FullRange.Down;
   DrawImage;
   DrawHistogram;
-end;
-
-procedure Tf_main.Screen2Fits(x,y: integer; out xx,yy:integer);
-begin
-  if f_visu.Zoom=0.5 then begin
-     xx:=(x * 2)-OrigX;
-     yy:=(y * 2)-OrigY;
-  end else if f_visu.Zoom=1 then begin
-      xx:=x-OrigX;
-      yy:=y-OrigY;
-  end else if f_visu.Zoom=2 then begin
-     xx:=(x div 2)-OrigX;
-     yy:=(y div 2)-OrigY;
-  end else  begin
-     xx:=trunc(x/ImgScale0);
-     yy:=trunc(y/ImgScale0);
-  end;
-end;
-
-procedure Tf_main.Fits2Screen(x,y: integer; out xx,yy: integer);
-begin
-  if f_visu.Zoom=0 then begin
-    xx:=round(x * ImgScale0);
-    yy:=round(y * ImgScale0);
-  end
-  else if f_visu.Zoom=0.5 then begin
-    xx:=(x+OrigX) div 2;
-    yy:=(y+OrigY) div 2;
-  end
-  else if f_visu.Zoom=1 then begin
-    xx:=x+OrigX;
-    yy:=y+OrigY;
-  end
-  else if f_visu.Zoom=2 then begin
-    xx:=2*(x+OrigX);
-    yy:=2*(y+OrigY);
-  end;
-end;
-
-procedure Tf_main.Screen2CCD(x,y: integer; out xx,yy:integer);
-begin
-   if f_visu.Zoom=0.5 then begin
-     xx:=(x * 2)-OrigX;
-     yy:=imabmp.Height-(y*2)+OrigY;
-   end else if f_visu.Zoom=1 then begin
-     xx:=x-OrigX;
-     yy:=imabmp.Height-y+OrigY;
-   end else if f_visu.Zoom=2 then begin
-     xx:=(x div 2)-OrigX;
-     yy:=imabmp.Height-(y div 2)+OrigY;
-   end else  begin
-     xx:=trunc(x/ImgScale0);
-     yy:=trunc((image1.Height-y)/ImgScale0);
-   end;
-   xx:=xx+ImgFrameX;
-   yy:=yy+ImgFrameY;
 end;
 
 Procedure Tf_main.DrawImage;
@@ -2210,6 +2150,8 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.ImgDmin:=f_visu.ImgMin*256;
   fits.GetIntfImg;
   fits.GetBitmap(ImaBmp);
+  img_Width:=ImaBmp.Width;
+  img_Height:=ImaBmp.Height;
   if f_starprofile.FindStar then
     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
   PlotImage;
@@ -2229,53 +2171,53 @@ var r1,r2: double;
     bmp2:Tbitmap;
 begin
 ClearImage;
-if f_visu.Zoom=0 then begin
+if ImgZoom=0 then begin
   // adjust
-  r1:=ImaBmp.Width/ImaBmp.Height;
+  r1:=img_Width/img_Height;
   w:=image1.width;
   h:=image1.height;
   r2:=w/h;
   if r1>r2 then begin
     h:=trunc(w/r1);
-    ImgScale0:=h/ImaBmp.Height;
+    ImgScale0:=h/img_Height;
   end else begin
     w:=trunc(h*r1);
-    ImgScale0:=w/ImaBmp.Width;
+    ImgScale0:=w/img_Width;
   end;
   image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,w,h),ImaBmp);
 end
-else if f_visu.Zoom=0.5 then begin
+else if ImgZoom=0.5 then begin
    // zoom 0.5
    bmp2:=Tbitmap.Create;
    bmp2.SetSize(Image1.Width * 2,Image1.Height * 2);
    bmp2.Canvas.Brush.Color:=clDarkBlue;
    bmp2.Canvas.Pen.Color:=clBlack;
    bmp2.Canvas.FillRect(0,0,bmp2.Width,bmp2.Height);
-   px:=ImgCx-((ImaBmp.Width-bmp2.Width) div 2);
-   py:=ImgCy-((ImaBmp.Height-bmp2.Height) div 2);
+   px:=ImgCx-((img_Width-bmp2.Width) div 2);
+   py:=ImgCy-((img_Height-bmp2.Height) div 2);
    OrigX:=px;
    OrigY:=py;
    bmp2.Canvas.Draw(px,py,ImaBmp);
    image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,image1.width,image1.Height),bmp2);
    bmp2.Free;
 end
-else if f_visu.Zoom=1 then begin
+else if ImgZoom=1 then begin
    // zoom 1
-   px:=ImgCx-((ImaBmp.Width-Image1.Width) div 2);
-   py:=ImgCy-((ImaBmp.Height-Image1.Height) div 2);
+   px:=ImgCx-((img_Width-Image1.Width) div 2);
+   py:=ImgCy-((img_Height-Image1.Height) div 2);
    OrigX:=px;
    OrigY:=py;
    image1.Picture.Bitmap.Canvas.Draw(px,py,ImaBmp);
 end
-else if f_visu.Zoom=2 then begin
+else if ImgZoom=2 then begin
    // zoom 2
    bmp2:=Tbitmap.Create;
    bmp2.SetSize(Image1.Width div 2,Image1.Height div 2);
    bmp2.Canvas.Brush.Color:=clDarkBlue;
    bmp2.Canvas.Pen.Color:=clBlack;
    bmp2.Canvas.FillRect(0,0,bmp2.Width,bmp2.Height);
-   px:=ImgCx-((ImaBmp.Width-bmp2.Width) div 2);
-   py:=ImgCy-((ImaBmp.Height-bmp2.Height) div 2);
+   px:=ImgCx-((img_Width-bmp2.Width) div 2);
+   py:=ImgCy-((img_Height-bmp2.Height) div 2);
    OrigX:=px;
    OrigY:=py;
    bmp2.Canvas.Draw(px,py,ImaBmp);
@@ -2291,10 +2233,10 @@ begin
   Inherited paint;
   if f_starprofile.FindStar then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     if f_visu.Zoom=0      then s:=round(Starwindow * ImgScale0)
-     else if f_visu.Zoom=0.5 then s:=Starwindow div 2
-     else if f_visu.Zoom=1 then s:=Starwindow
-     else if f_visu.Zoom=2 then s:=2*Starwindow;
+     if ImgZoom=0      then s:=round(Starwindow * ImgScale0)
+     else if ImgZoom=0.5 then s:=Starwindow div 2
+     else if ImgZoom=1 then s:=Starwindow
+     else if ImgZoom=2 then s:=2*Starwindow;
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         Frame(x-s,y-s,x+s,y+s);
@@ -2367,6 +2309,7 @@ begin
      NewMessage('Focus aid started');
      SaveFocusZoom:=f_visu.Zoom;
      f_visu.Zoom:=0;
+     ImgZoom:=0;
      StartPreviewExposure(nil);
   end
   else begin
@@ -2381,6 +2324,7 @@ begin
    f_preview.Running:=false;
    f_preview.Loop:=false;
    f_visu.Zoom:=SaveFocusZoom;
+   ImgZoom:=f_visu.Zoom;
    StartPreviewExposure(nil);
    NewMessage('Focus aid stoped');
 end;
@@ -2430,85 +2374,12 @@ end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
-  if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-    fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync);
-  end;
-end;
-
-procedure Tf_main.AstrometrySync(Sender: TObject);
-var fn: string;
-    x,y,n,m: integer;
-    ra,de,jd0,jd1: double;
-    i: TcdcWCSinfo;
-    c: TcdcWCScoord;
-begin
-if astrometry.LastResult and (cdcwcs_xy2sky<>nil) then begin
-   fn:=slash(TmpDir)+'ccdcielsolved.fits';
-   n:=cdcwcs_initfitsfile(pchar(fn),0);
-   n:=cdcwcs_getinfo(addr(i),0);
-   if (n=0)and(i.secpix<>0) then begin
-     c.x:=0.5+i.wp/2;
-     c.y:=0.5+i.hp/2;
-     m:=cdcwcs_xy2sky(@c,0);
-     if m=0 then begin
-       ra:=c.ra;
-       de:=c.dec;
-       if mount.Equinox=0 then begin
-         jd0:=Jd(trunc(i.eqout),0,0,0);
-         jd1:=DateTimetoJD(now);
-         ra:=deg2rad*ra;
-         de:=deg2rad*de;
-         PrecessionFK5(jd0,jd1,ra,de);
-         ra:=rad2deg*ra;
-         de:=rad2deg*de;
-       end;
-       mount.Sync(ra/15,de);
-     end;
-   end;
-end;
+  astrometry.SyncCurrentImage(false);
 end;
 
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
 begin
-  if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-    fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewCursor);
-  end;
-end;
-
-procedure Tf_main.AstrometrySlewCursor(Sender: TObject);
-var fn: string;
-    xx,yy,n,m: integer;
-    ra,de,jd0,jd1: double;
-    i: TcdcWCSinfo;
-    c: TcdcWCScoord;
-begin
-if astrometry.LastResult and (cdcwcs_xy2sky<>nil) then begin
-   fn:=slash(TmpDir)+'ccdcielsolved.fits';
-   n:=cdcwcs_initfitsfile(pchar(fn),0);
-   n:=cdcwcs_getinfo(addr(i),0);
-   if (n=0)and(i.secpix<>0) then begin
-     Screen2fits(MouseDownX,MouseDownY,xx,yy);
-     c.x:=xx;
-     c.y:=i.hp-yy;
-     m:=cdcwcs_xy2sky(@c,0);
-     if m=0 then begin
-       ra:=c.ra;
-       de:=c.dec;
-       if mount.Equinox=0 then begin
-         jd0:=Jd(trunc(i.eqout),0,0,0);
-         jd1:=DateTimetoJD(now);
-         ra:=deg2rad*ra;
-         de:=deg2rad*de;
-         PrecessionFK5(jd0,jd1,ra,de);
-         ra:=rad2deg*ra;
-         de:=rad2deg*de;
-       end;
-       mount.Slew(ra/15,de);
-     end;
-   end;
-end;
+  astrometry.SlewScreenXY(MouseDownX,MouseDownY,false);
 end;
 
 procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);

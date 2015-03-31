@@ -116,7 +116,6 @@ type
     FFitsInfo : TFitsInfo;
     //
     n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode : Integer;
-    Fimg_width,Fimg_Height,Frotation : double;
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
@@ -154,9 +153,6 @@ type
      property Header: TFitsHeader read FHeader write FHeader;
      Property Stream : TMemoryStream read GetStream write SetStream;
      property Histogram : THistogram read FHistogram;
-     Property Img_Width : double read Fimg_width;
-     Property Img_Height : double read Fimg_Height;
-     Property Rotation  : double read Frotation;
      property ImgDmin : Word read FImgDmin write FImgDmin;
      property ImgDmax : Word read FImgDmax write FImgDmax;
      property itt : Titt read Fitt write Fitt;

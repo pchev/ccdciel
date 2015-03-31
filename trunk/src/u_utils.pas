@@ -32,8 +32,10 @@ uses u_global,
      {$ifdef unix}
        unix,
      {$endif}
-     process, SysUtils, Classes, LCLType, FileUtil,
-     Math, Forms, Controls, StdCtrls, Graphics;
+     process, Classes, LCLType, FileUtil,
+     Math, SysUtils, Forms, Controls, StdCtrls, Graphics;
+
+
 
 function InvertF32(X : LongWord) : Single;
 function InvertF64(X : Int64) : Double;
@@ -60,6 +62,10 @@ function DateTimetoJD(date: Tdatetime): double;
 function Jd(annee,mois,jour :INTEGER; Heure:double):double;
 PROCEDURE Djd(jd:Double;VAR annee,mois,jour:INTEGER; VAR Heure:double);
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
+function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
+procedure Screen2Fits(x,y: integer; out xx,yy:integer);
+procedure Fits2Screen(x,y: integer; out xx,yy: integer);
+procedure Screen2CCD(x,y: integer; out xx,yy:integer);
 
 implementation
 
@@ -636,6 +642,82 @@ var i1,i2,i3,i4,i5,i6,i7 : double ;
       ARI:=ARI+I4;
       ARI:=RMOD(ARI+pi2,pi2);
    END  ;
+
+Function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
+var s1,s2,c1,c2,c3: extended;
+begin
+s1:=0;s2:=0;c1:=0;c2:=0;
+try
+if (ar1=ar2) and (de1=de2) then result:=0.0
+else begin
+    sincos(de1,s1,c1);
+    sincos(de2,s2,c2);
+    c3:=(s1*s2)+(c1*c2*cos((ar1-ar2)));
+    if abs(c3)<=1 then
+       result:=arccos(c3)
+    else
+       result:=pi2;
+end;
+except
+  result:=pi2;
+end;
+end;
+
+procedure Screen2Fits(x,y: integer; out xx,yy:integer);
+begin
+  if ImgZoom=0.5 then begin
+     xx:=(x * 2)-OrigX;
+     yy:=(y * 2)-OrigY;
+  end else if ImgZoom=1 then begin
+      xx:=x-OrigX;
+      yy:=y-OrigY;
+  end else if ImgZoom=2 then begin
+     xx:=(x div 2)-OrigX;
+     yy:=(y div 2)-OrigY;
+  end else  begin
+     xx:=trunc(x/ImgScale0);
+     yy:=trunc(y/ImgScale0);
+  end;
+end;
+
+procedure Fits2Screen(x,y: integer; out xx,yy: integer);
+begin
+  if ImgZoom=0 then begin
+    xx:=round(x * ImgScale0);
+    yy:=round(y * ImgScale0);
+  end
+  else if ImgZoom=0.5 then begin
+    xx:=(x+OrigX) div 2;
+    yy:=(y+OrigY) div 2;
+  end
+  else if ImgZoom=1 then begin
+    xx:=x+OrigX;
+    yy:=y+OrigY;
+  end
+  else if ImgZoom=2 then begin
+    xx:=2*(x+OrigX);
+    yy:=2*(y+OrigY);
+  end;
+end;
+
+procedure Screen2CCD(x,y: integer; out xx,yy:integer);
+begin
+   if ImgZoom=0.5 then begin
+     xx:=(x * 2)-OrigX;
+     yy:=img_Height-(y*2)+OrigY;
+   end else if ImgZoom=1 then begin
+     xx:=x-OrigX;
+     yy:=img_Height-y+OrigY;
+   end else if ImgZoom=2 then begin
+     xx:=(x div 2)-OrigX;
+     yy:=img_Height-(y div 2)+OrigY;
+   end else  begin
+     xx:=trunc(x/ImgScale0);
+     yy:=trunc((img_Height-y)/ImgScale0);
+   end;
+   xx:=xx+ImgFrameX;
+   yy:=yy+ImgFrameY;
+end;
 
 end.
 

@@ -27,7 +27,7 @@ interface
 
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils,
   fu_capture, fu_preview, fu_filterwheel,
-  cu_mount, cu_camera, cu_autoguider,
+  cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -85,6 +85,7 @@ type
     Fmount: T_mount;
     Fcamera: T_camera;
     Fautoguider: T_autoguider;
+    Fastrometry: TAstrometry;
     procedure InitTarget;
     procedure StartPlan;
     procedure StartStep;
@@ -107,6 +108,7 @@ type
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
     property Autoguider: T_autoguider read Fautoguider write Fautoguider;
+    property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -382,6 +384,7 @@ begin
      TargetGrid.Row:=TargetRow;
      TargetGrid.Invalidate;
      InitTarget;
+     { TODO :  what to do if it fail? next target? }
      StartPlan;
      TargetTimer.Enabled:=true;
    end;
@@ -395,27 +398,31 @@ begin
   t:=TTarget(TargetGrid.Objects[0,TargetRow]);
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
-    { TODO :  }
-    // check if current time in range
+    { TODO :  check if current time in range   }
     // stop guiding
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
+      msg('Stop autoguider');
       Autoguider.Guide(false);
       Autoguider.WaitBusy;
       Wait(2);
     end;
     // slew to coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
-       Mount.Slew(t.ra, t.de);
-       // astrometry
+     // if precisionslew then
+       astrometry.PrecisionSlew(t.ra,t.de,0.01,5,1,1,3);
+       { TODO : check slew result  }
+     //else
+     //  Mount.Slew(t.ra, t.de);
        Wait;
     end;
     // start guiding
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
+      msg('Start autoguider');
       Autoguider.Guide(true);
       Autoguider.WaitBusy(SettleMaxTime+5);
+      { TODO : check guiding is ok  }
       Wait;
     end;
-    // etc...
   end;
 end;
 

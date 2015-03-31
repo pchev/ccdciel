@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera,
-      math, FileUtil, Classes, SysUtils;
+uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera, cu_fits,
+      math, Forms, FileUtil, Classes, SysUtils;
 
 type
 
@@ -40,19 +40,32 @@ TAstrometry = class(TComponent)
     FBusy, FLastResult: Boolean;
     Fmount: T_mount;
     Fcamera: T_camera;
+    FFits: TFits;
     FResolverName: string;
     logfile,solvefile,savefile: string;
+    Xslew, Yslew: integer;
+    WaitExposure: boolean;
     procedure msg(txt:string);
+    procedure ControlExposure(exp:double; binx,biny: integer);
+    procedure EndExposure(Sender: TObject);
+    function WaitBusy(Timeout:integer=60): boolean;
     procedure AstrometryDone(Sender: TObject);
+    procedure AstrometrySync(Sender: TObject);
+    procedure AstrometrySlewScreenXY(Sender: TObject);
   public
     constructor Create;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
     procedure StopAstrometry;
+    function  CurrentCoord(var cra,cde,eq: double):boolean;
+    procedure SyncCurrentImage(wait: boolean);
+    procedure SlewScreenXY(x,y: integer; wait: boolean);
+    function PrecisionSlew(ra,de,prec,exp:double; binx,biny,maxslew: integer):boolean;
     property Busy: Boolean read FBusy;
     property LastResult: Boolean read FLastResult;
     property Resolver: string read FResolverName;
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
+    property Fits: TFits read FFits write FFits;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
@@ -70,6 +83,17 @@ end;
 procedure TAstrometry.msg(txt:string);
 begin
  if assigned(FonShowMessage) then FonShowMessage(txt);
+end;
+
+function TAstrometry.WaitBusy(Timeout:integer=60): boolean;
+var endt: TDateTime;
+begin
+  endt:=now+Timeout/secperday;
+  while (FBusy)and(now<endt) do begin
+     sleep(100);
+     Application.ProcessMessages;
+  end;
+  result:=not FBusy;
 end;
 
 function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
@@ -147,9 +171,9 @@ begin
    FLastResult:=true
  else
    FLastResult:=false;
+ if Assigned(Fterminatecmd) then Fterminatecmd(self);
  FBusy:=false;
  if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
- if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
 
@@ -157,6 +181,180 @@ procedure TAstrometry.StopAstrometry;
 begin
   if FBusy then engine.Stop;
 end;
+
+function TAstrometry.CurrentCoord(var cra,cde,eq: double):boolean;
+var n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+  result:=false;
+  if cdcwcs_xy2sky<>nil then begin
+    n:=cdcwcs_getinfo(addr(i),0);
+    if (n=0)and(i.secpix<>0) then begin
+      c.x:=0.5+i.wp/2;
+      c.y:=0.5+i.hp/2;
+      m:=cdcwcs_xy2sky(@c,0);
+      if m=0 then begin
+        cra:=c.ra/15;
+        cde:=c.dec;
+        eq:=i.eqout;
+        result:=true;
+      end;
+    end;
+  end;
+end;
+
+procedure TAstrometry.SyncCurrentImage(wait: boolean);
+begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+    FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync);
+    if wait then WaitBusy;
+  end;
+end;
+
+procedure TAstrometry.AstrometrySync(Sender: TObject);
+var fn: string;
+    ra,de,eq,jd0,jd1: double;
+    n:integer;
+begin
+if LastResult and (cdcwcs_xy2sky<>nil) then begin
+   fn:=slash(TmpDir)+'ccdcielsolved.fits';
+   n:=cdcwcs_initfitsfile(pchar(fn),0);
+   if CurrentCoord(ra,de,eq) then begin
+       if mount.Equinox=0 then begin
+         jd0:=Jd(trunc(eq),0,0,0);
+         jd1:=DateTimetoJD(now);
+         ra:=deg2rad*15*ra;
+         de:=deg2rad*de;
+         PrecessionFK5(jd0,jd1,ra,de);
+         ra:=rad2deg*ra/15;
+         de:=rad2deg*de;
+       end;
+       mount.Sync(ra,de);
+   end;
+end;
+end;
+
+procedure TAstrometry.SlewScreenXY(x,y: integer; wait: boolean);
+begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+    Xslew:=x;
+    Yslew:=y;
+    FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewScreenXY);
+    if wait then WaitBusy;
+  end;
+end;
+
+procedure TAstrometry.AstrometrySlewScreenXY(Sender: TObject);
+var fn: string;
+    xx,yy,n,m: integer;
+    ra,de,jd0,jd1: double;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+if LastResult and (cdcwcs_xy2sky<>nil) then begin
+   fn:=slash(TmpDir)+'ccdcielsolved.fits';
+   n:=cdcwcs_initfitsfile(pchar(fn),0);
+   n:=cdcwcs_getinfo(addr(i),0);
+   if (n=0)and(i.secpix<>0) then begin
+     Screen2fits(Xslew,Yslew,xx,yy);
+     c.x:=xx;
+     c.y:=i.hp-yy;
+     m:=cdcwcs_xy2sky(@c,0);
+     if m=0 then begin
+       ra:=c.ra;
+       de:=c.dec;
+       if mount.Equinox=0 then begin
+         jd0:=Jd(trunc(i.eqout),0,0,0);
+         jd1:=DateTimetoJD(now);
+         ra:=deg2rad*ra;
+         de:=deg2rad*de;
+         PrecessionFK5(jd0,jd1,ra,de);
+         ra:=rad2deg*ra;
+         de:=rad2deg*de;
+       end;
+       mount.Slew(ra/15,de);
+     end;
+   end;
+end;
+end;
+
+procedure TAstrometry.ControlExposure(exp:double; binx,biny: integer);
+var SaveonNewImage: TNotifyEvent;
+    savebinx,savebiny: integer;
+begin
+  SaveonNewImage:=Camera.onNewImage;
+  savebinx:=Camera.BinX;
+  savebiny:=Camera.BinY;
+  Camera.onNewImage:=@EndExposure;
+  if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
+  WaitExposure:=true;
+  Camera.StartExposure(exp);
+  while WaitExposure do begin
+    Sleep(100);
+    Application.ProcessMessages;
+  end;
+  Camera.onNewImage:=SaveonNewImage;
+  if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
+  if Assigned(SaveonNewImage) then SaveonNewImage(self);
+end;
+
+procedure TAstrometry.EndExposure(Sender: TObject);
+begin
+  WaitExposure:=false;
+end;
+
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,maxslew: integer): boolean;
+var cra,cde,eq,ar1,ar2,de1,de2,dist: double;
+    jd0,jd1: double;
+    fn:string;
+    n,i:integer;
+begin
+  ar1:=deg2rad*15*ra;
+  de1:=deg2rad*de;
+  msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+  Mount.Slew(ra, de);
+  i:=1;
+  dist:=MaxInt;
+  repeat
+    msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
+    ControlExposure(exp,binx,biny);
+    msg('Resolve control exposure');
+    FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
+    WaitBusy;
+    if not LastResult then break;
+    fn:=slash(TmpDir)+'ccdcielsolved.fits';
+    n:=cdcwcs_initfitsfile(pchar(fn),0);
+    if not CurrentCoord(cra,cde,eq) then break;
+    if mount.Equinox=0 then begin
+      jd0:=Jd(trunc(eq),0,0,0);
+      jd1:=DateTimetoJD(now);
+      cra:=deg2rad*15*cra;
+      cde:=deg2rad*cde;
+      PrecessionFK5(jd0,jd1,cra,cde);
+      cra:=rad2deg*cra/15;
+      cde:=rad2deg*cde;
+    end;
+    ar2:=deg2rad*15*cra;
+    de2:=deg2rad*cde;
+    dist:=rad2deg*AngularDistance(ar1,de1,ar2,de2);
+    msg('Distance to target: '+FormatFloat(f5,dist)+' degree');
+    if dist>prec then begin
+       msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
+       mount.Sync(cra,cde);
+       msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+       Mount.Slew(ra, de);
+    end;
+    inc(i);
+  until (dist<=prec)or(i>maxslew);
+  result:=(dist<=prec);
+  if result then msg('Precision slew terminated.')
+            else msg('Precision slew failed!');
+end;
+
 
 end.
 
