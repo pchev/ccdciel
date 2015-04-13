@@ -32,15 +32,16 @@ type
   TNotifyMsg = procedure(msg:string) of object;
   TNotifyNum = procedure(d: double) of object;
   TDeviceStatus = (devDisconnected, devConnecting, devConnected);
+  TTrackMode =(trStop, trSidereal, trLunar, trSolar, trCustom);
   TNumRange = record
                min,max,step: double;
               end;
 
 const
+  TrackModeName :array [0..4] of string = ('TRACK_STOP','TRACK_SIDEREAL','TRACK_LUNAR','TRACK_SOLAR','TRACK_CUSTOM');
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord=-9999;
-
 
 type
 
@@ -152,8 +153,8 @@ T_indieqmod = class(TIndiBaseClient)
    procedure SetActiveSlewPreset(value: integer);
    function  GetRASlewSpeedRange: TNumRange;
    function  GetDESlewSpeedRange: TNumRange;
-   function  GetTrackmode: integer;
-   procedure SetTrackmode(value: integer);
+   function  GetTrackmode: TTrackMode;
+   procedure SetTrackmode(value: TTrackMode);
    procedure msg(txt: string);
    function  GetRATrackRate: double;
    function  GetDETrackRate: double;
@@ -210,7 +211,7 @@ T_indieqmod = class(TIndiBaseClient)
    property DESlewSpeedRange: TNumRange read GetDESlewSpeedRange;
    property RASlewSpeed: integer read GetRASlewSpeed write SetRASlewSpeed;
    property DESlewSpeed: integer read GetDESlewSpeed write SetDESlewSpeed;
-   property TrackMode: integer read GetTrackmode write SetTrackmode;
+   property TrackMode: TTrackMode read GetTrackmode write SetTrackmode;
    property RATrackRate: double read GetRATrackRate;
    property DETrackRate: double read GetDETrackRate;
    property Park: boolean read GetPark write SetPark;
@@ -854,37 +855,45 @@ begin
  end;
 end;
 
-function  T_indieqmod.GetTrackmode: integer;
-var i: integer;
+function  T_indieqmod.GetTrackmode: TTrackMode;
+var sp: ISwitch;
+    i:integer;
 begin
+ result:=trStop;
  if TrackM<>nil then begin
-   result:=-1;
-   for i := 0 to TrackM.nsp-1 do
-    if TrackM.sp[i].s = ISS_ON then
-       result:=i;
+   sp:=IUFindOnSwitch(TrackM);
+   if sp<>nil then begin
+     for i:=0 to ord(High(TTrackMode)) do begin
+       if sp.name=TrackModeName[i] then begin
+         result:=TTrackMode(i);
+         break;
+       end;
+     end;
+   end;
  end;
 end;
 
-procedure T_indieqmod.SetTrackmode(value: integer);
+procedure T_indieqmod.SetTrackmode(value: TTrackMode);
 var sp: ISwitch;
+    i:integer;
+    n:string;
 begin
  if TrackM<>nil then begin
-    if value>=0 then begin
-      if CoordSet<>nil then begin  // set tracking on
-        IUResetSwitch(CoordSet);
-        CoordSetTrack.s:=ISS_ON;
-        sendNewSwitch(CoordSet);
-        sendNewNumber(coord_prop);
-      end;
-    end;
     sp:=IUFindOnSwitch(TrackM);
     if sp<>nil then begin
       sendNewSwitch(TrackM);
       WaitBusy(TrackM);
     end;
-    IUResetSwitch(TrackM);
-    if value>=0 then begin
-      TrackM.sp[value].s:=ISS_ON;
+    if value<>trStop then begin
+      IUResetSwitch(TrackM);
+      i:=ord(value);
+      n:=TrackModeName[i];
+      for i:=0 to TrackM.nsp-1 do begin
+        if TrackM.sp[i].name=n then begin
+          TrackM.sp[i].s:=ISS_ON;
+          break;
+        end;
+      end;
       sendNewSwitch(TrackM);
     end;
  end;
