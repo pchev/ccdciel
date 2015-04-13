@@ -180,7 +180,7 @@ type
     config: TCCDconfig;
     configfile,indiserver,indiserverport,indidevice,indideviceport:string;
     ready, GUIready, indisimulation, obslock: boolean;
-    TrackMode: integer;
+    TrackMode: TTrackMode;
     ObsLat, ObsLon, ObsElev: double;
     procedure ReadConfig;
     procedure Connect;
@@ -245,7 +245,7 @@ begin
  ready:=false;
  GUIready:=false;
  obslock:=false;
- TrackMode:=-999;
+ TrackMode:=trStop;
  Width:=226;
  lclver:=lcl_version;
  compile_time:={$I %DATE%}+' '+{$I %TIME%};
@@ -584,11 +584,11 @@ begin
      BtnTrackCustom.Down:=false;
      PanelCustTrack.Visible:=false;
       case TrackMode of
-        -1 : BtnTrackStop.Down:=true;
-         0 : BtnTrackSidereal.Down:=true;
-         1 : BtnTrackLunar.Down:=true;
-         2 : BtnTrackSolar.Down:=true;
-         3 : begin
+        trStop     : BtnTrackStop.Down:=true;
+        trSidereal : BtnTrackSidereal.Down:=true;
+        trLunar    : BtnTrackLunar.Down:=true;
+        trSolar    : BtnTrackSolar.Down:=true;
+        trCustom   : begin
              BtnTrackCustom.Down:=true;
              PanelCustTrack.Visible:=true;
              end;
@@ -599,8 +599,8 @@ end;
 procedure Tf_eqmod.SetTrackModeClick(Sender: TObject);
 begin
 if sender is TSpeedButton then
-  eqmod.TrackMode:=TSpeedButton(sender).tag;
-  PanelCustTrack.Visible:=(TSpeedButton(sender).tag=3);
+  eqmod.TrackMode:=TTrackMode(TSpeedButton(sender).tag);
+  PanelCustTrack.Visible:=(eqmod.TrackMode=trCustom);
 end;
 
 procedure Tf_eqmod.BtnSetTrackRateClick(Sender: TObject);
