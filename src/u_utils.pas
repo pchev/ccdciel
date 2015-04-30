@@ -425,6 +425,7 @@ var s,p,d1 : integer;
 const
     sep1: tseplist = ('d','m','s');
     sep2: tseplist = ('°','''','"');
+    sep3: tseplist = (#176,'''','"');
 begin
 try
 dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
@@ -434,6 +435,11 @@ d1:=length(sep[1])-1;
 p:=pos(sep[1],dms);
 if p=0 then begin
   sep:=sep2;
+  d1:=length(sep[1])-1;
+  p:=pos(sep[1],dms);
+end;
+if p=0 then begin
+  sep:=sep3;
   d1:=length(sep[1])-1;
   p:=pos(sep[1],dms);
 end;
