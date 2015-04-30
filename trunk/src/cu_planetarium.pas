@@ -36,6 +36,8 @@ protected
   FTimeout : integer;
   FCmdTimeout : double;
   FStatus: boolean;
+  Fra, Fde: double;
+  Fobjname: string;
   FPlanetariumType: TPlanetariumType;
   FonShowMessage: TNotifyMsg;
   FonReceiveData: TNotifyMsg;
@@ -44,7 +46,7 @@ protected
   procedure SetCmdTimeout(value:double);
   function GetCmdTimeout:double;
   procedure DisplayMessagesyn;
-  procedure ProcessDataSyn;
+  procedure ProcessDataSyn; virtual; abstract;
   procedure DisplayMessage(msg:string);
   procedure ProcessData(line:string);
 public
@@ -61,6 +63,9 @@ public
   property RecvData : string read FRecvData;
   property ClientId : string read FClientId;
   property ClientName : string read FClientName;
+  property RA: double read Fra;
+  property DE: double read Fde;
+  property Objname: string read Fobjname;
   property PlanetariumType: TPlanetariumType read FPlanetariumType;
   property onConnect: TNotifyEvent read FonConnect  write FonConnect;
   property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
@@ -79,6 +84,9 @@ FTimeout:=500;
 FCmdTimeout:=10/86400;
 FErrorDesc:='';
 FRecvData:='';
+Fra:=0;
+Fde:=0;
+Fobjname:='';
 end;
 
 procedure TPlanetarium.SetCmdTimeout(value:double);
@@ -106,11 +114,6 @@ procedure TPlanetarium.ProcessData(line:string);
 begin
 FRecvData:=line;
 Synchronize(@ProcessDataSyn);
-end;
-
-procedure TPlanetarium.ProcessDataSyn;
-begin
-if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
 
 end.

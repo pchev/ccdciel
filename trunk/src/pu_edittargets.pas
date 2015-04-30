@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, u_global, u_utils, Classes, SysUtils,
+uses pu_editplan, pu_planetariuminfo, u_global, u_utils, Classes, SysUtils,
   FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   maskedit, Grids, ExtCtrls;
 
@@ -74,6 +74,7 @@ type
     Label6: TLabel;
     TargetList: TStringGrid;
     procedure BtnAnytimeClick(Sender: TObject);
+    procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
@@ -234,6 +235,20 @@ procedure Tf_EditTargets.BtnAnytimeClick(Sender: TObject);
 begin
   StartTime.Text:='00:00:00';
   EndTime.Text:='23:59:59';
+end;
+
+procedure Tf_EditTargets.BtnCdCCoordClick(Sender: TObject);
+begin
+  f_planetariuminfo.Ra.Text  := PointRA.Text;
+  f_planetariuminfo.De.Text  := PointDEC.Text;
+  f_planetariuminfo.Obj.Text := ObjectName.Text;
+  FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_planetariuminfo.ShowModal;
+  if f_planetariuminfo.ModalResult=mrOK then begin
+     PointRA.Text:=f_planetariuminfo.Ra.Text;
+     PointDEC.Text:=f_planetariuminfo.De.Text;
+     if f_planetariuminfo.Obj.Text<>'' then ObjectName.Text:=f_planetariuminfo.Obj.Text;
+  end;
 end;
 
 procedure Tf_EditTargets.BtnCurrentCoordClick(Sender: TObject);

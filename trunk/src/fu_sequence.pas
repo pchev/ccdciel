@@ -126,6 +126,8 @@ begin
  TargetGrid.Cells[1,0]:='Plan';
  TargetGrid.Cells[2,0]:='Start';
  TargetGrid.Cells[3,0]:='End';
+ TargetGrid.ColWidths[2]:=0;
+ TargetGrid.ColWidths[3]:=0;
  TargetGrid.Cells[4,0]:='RA';
  TargetGrid.Cells[5,0]:='DEC';
  PlanGrid.Cells[0,0]:='Desc.';

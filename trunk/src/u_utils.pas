@@ -42,6 +42,7 @@ function InvertF64(X : Int64) : Double;
 Procedure FormPos(form : Tform; x,y : integer);
 Function FormEntry(aOwner:TComponent; lbl,defaultstr:string):string;
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
+procedure SplitRec(buf,sep:string; var arg: TStringList);
 Procedure SplitCmd(S : String; List : TStringList);
 function Slash(nom : string) : string;
 Function sgn(x:Double):Double ;
@@ -157,6 +158,23 @@ for i:=1 to n do begin
  result:=result+trim(copy(str,1,j-1))+sep;
  str:=trim(copy(str,j+1,length(str)));
 end;
+end;
+
+procedure SplitRec(buf,sep:string; var arg: TStringList);
+var i,l:integer;
+begin
+arg.clear;
+l:=length(sep);
+while pos(sep,buf)<>0 do begin
+ for i:=1 to length(buf) do begin
+  if copy(buf,i,l) = sep then begin
+      arg.add(copy(buf,1,i-1));
+      delete(buf,1,i-1+l);
+      break;
+  end;
+ end;
+end;
+arg.add(buf);
 end;
 
 Procedure SplitCmd(S : String; List : TStringList);
