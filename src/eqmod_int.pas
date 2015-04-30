@@ -171,6 +171,7 @@ T_indieqmod = class(TIndiBaseClient)
    procedure SetActiveAlignmentMode(value: integer);
    function  GetActiveSyncMode: integer;
    procedure SetActiveSyncMode(value: integer);
+   function  GetStatusError: string;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -226,6 +227,7 @@ T_indieqmod = class(TIndiBaseClient)
    property ActiveAlignmentMode: integer read GetActiveAlignmentMode write SetActiveAlignmentMode;
    property SyncMode: TStringList read FSyncMode;
    property ActiveSyncMode: integer read GetActiveSyncMode write SetActiveSyncMode;
+   property StatusError: string read GetStatusError;
    property onDestroy: TNotifyEvent read FonDestroy write FonDestroy;
    property onMsg: TNotifyMsg read FonMsg write FonMsg;
    property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -366,6 +368,39 @@ begin
     end;
 end;
 
+function  T_indieqmod.GetStatusError: string;
+begin
+if Fconnected then begin
+   Result:='Missing properties: ';
+   if (coord_prop=nil) then Result:=Result+'EQUATORIAL_(EOD)_COORD, ';
+   if (horz_prop=nil) then Result:=Result+'HORIZONTAL_COORD, ';
+   if (Mlst=nil) then Result:=Result+'TIME_LST, ';
+   if (PierSide=nil) then Result:=Result+'PIERSIDE, ';
+   if (Sim=nil) then Result:=Result+'SIMULATION, ';
+   if (AbortMotion=nil) then Result:=Result+'TELESCOPE_ABORT_MOTION, ';
+   if (MotionNS=nil) then Result:=Result+'TELESCOPE_MOTION_NS, ';
+   if (MotionWE=nil) then Result:=Result+'TELESCOPE_MOTION_WE, ';
+   if (RevDec=nil) then Result:=Result+'REVERSEDEC, ';
+   if (TrackM=nil) then Result:=Result+'TELESCOPE_TRACK_RATE, ';
+   if (TrackR=nil) then Result:=Result+'TRACKRATES, ';
+   if (CoordSet=nil) then Result:=Result+'ON_COORD_SET, ';
+   if (SlewMode=nil) then Result:=Result+'TELESCOPE_SLEW_RATE, ';
+   if (SlewSpeed=nil) then Result:=Result+'SLEWSPEEDS, ';
+   if (Park_opt=nil) then Result:=Result+'TELESCOPE_PARK, ';
+   if (geo_coord=nil) then Result:=Result+'GEOGRAPHIC_COORD, ';
+   if (AlignCount=nil) then Result:=Result+'ALIGNCOUNT, ';
+   if (StandardSync=nil) then Result:=Result+'STANDARDSYNC, ';
+   if (AlignMode=nil) then Result:=Result+'ALIGNMODE, ';
+   if (AlignList=nil) then Result:=Result+'ALIGNLIST, ';
+   if (AlignSyncMode=nil) then Result:=Result+'ALIGNSYNCMODE, ';
+   if (AlignDataFile=nil) then Result:=Result+'ALIGNDATAFILE, ';
+   if (configprop=nil) then Result:=Result+'CONFIG_PROCESS, ';
+   if (SyncManage=nil) then Result:=Result+'SYNCMANAGE, ';
+end else
+  Result:='Not connected';
+end;
+
+
 procedure T_indieqmod.msg(txt: string);
 begin
   if Assigned(FonMsg) then FonMsg(txt);
@@ -390,8 +425,8 @@ procedure T_indieqmod.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (MountDevice=nil)or(not Fready) then begin
-     msg('No response from server');
-     msg('Is "'+indidevice+'" a running telescope mount driver?');
+     msg('Initialisation failed.');
+     msg(GetStatusError);
      Disconnect;
   end;
 end;
