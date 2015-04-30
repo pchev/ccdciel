@@ -62,6 +62,7 @@ implementation
 constructor T_ascomwheel.Create;
 begin
  inherited Create;
+ FWheelInterface:=ASCOM;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;

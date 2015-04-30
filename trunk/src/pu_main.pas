@@ -765,9 +765,9 @@ begin
   ImaBmp.Free;
   config.Free;
   Filters.Free;
-  autoguider.Free;
-  planetarium.Free;
   astrometry.Free;
+  autoguider.Terminate;
+  planetarium.Terminate;
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
