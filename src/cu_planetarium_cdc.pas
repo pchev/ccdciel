@@ -38,6 +38,7 @@ type
     TcpClient : TTcpclient;
   protected
     procedure Execute; override;
+    procedure ProcessDataSyn; override;
   public
     Constructor Create;
     procedure Connect(cp1: string; cp2:string=''); override;
@@ -166,6 +167,25 @@ tcpclient.Disconnect;
 tcpclient.Free;
 end;
 end;
+
+procedure TPlanetarium_cdc.ProcessDataSyn;
+var p:Tstringlist;
+begin
+if FRecvData<>'' then begin
+  p:=Tstringlist.Create;
+  SplitRec(FRecvData,#9,p);
+  if (p.Count>=4)and(p[0]='>') then begin
+    Fra:=StrToAR(p[2]);
+    Fde:=StrToDE(p[3]);
+  end;
+  if (p.Count>=6)and(p[0]='>') then begin
+    Fobjname:=p[5];
+  end;
+  p.free;
+end;
+if assigned(FonReceiveData) then FonReceiveData(FRecvData);
+end;
+
 
 function TPlanetarium_cdc.Cmd(const Value: string):string;
 // this function is called in the main thread only!

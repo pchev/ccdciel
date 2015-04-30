@@ -46,7 +46,6 @@
           <Other>
             <CustomOptions Value="-dUseCThreads 
 -dUseHeapTrc"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -76,7 +75,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -107,7 +105,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="47">
+    <Units Count="48">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -156,7 +154,6 @@
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -216,7 +213,6 @@
       <Unit17>
         <Filename Value="cu_fits.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_fits"/>
       </Unit17>
       <Unit18>
         <Filename Value="u_modelisation.pas"/>
@@ -225,12 +221,10 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_camera"/>
       </Unit20>
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
@@ -243,7 +237,6 @@
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -252,7 +245,6 @@
       <Unit25>
         <Filename Value="cu_ascomcamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_ascomcamera"/>
       </Unit25>
       <Unit26>
         <Filename Value="cu_ascommount.pas"/>
@@ -305,6 +297,7 @@
       <Unit34>
         <Filename Value="cu_planetarium_cdc.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_planetarium_cdc"/>
       </Unit34>
       <Unit35>
         <Filename Value="pu_viewtext.pas"/>
@@ -316,7 +309,6 @@
       <Unit36>
         <Filename Value="cu_autoguider_phd.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_autoguider_phd"/>
       </Unit36>
       <Unit37>
         <Filename Value="cu_tcpclient.pas"/>
@@ -347,6 +339,7 @@
         <ComponentName Value="f_EditTargets"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_edittargets"/>
       </Unit41>
       <Unit42>
         <Filename Value="pu_editplan.pas"/>
@@ -354,15 +347,16 @@
         <ComponentName Value="f_EditPlan"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_editplan"/>
       </Unit42>
       <Unit43>
         <Filename Value="cu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_autoguider"/>
       </Unit43>
       <Unit44>
         <Filename Value="cu_planetarium.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_planetarium"/>
       </Unit44>
       <Unit45>
         <Filename Value="fu_planetarium.pas"/>
@@ -374,8 +368,15 @@
       <Unit46>
         <Filename Value="cu_astrometry.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_astrometry"/>
       </Unit46>
+      <Unit47>
+        <Filename Value="pu_planetariuminfo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_planetariuminfo"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_planetariuminfo"/>
+      </Unit47>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -396,7 +397,6 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dUseCThreads"/>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>
