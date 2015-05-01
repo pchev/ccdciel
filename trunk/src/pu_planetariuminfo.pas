@@ -42,8 +42,10 @@ implementation
 
 procedure Tf_planetariuminfo.FormShow(Sender: TObject);
 begin
-  if (planetarium=nil) or (not planetarium.Connected) then
-    ModalResult:=mrAbort
+  if (planetarium=nil) or (not planetarium.Connected) then begin
+    ShowMessage('Please connect the planetarium first');
+    ModalResult:=mrAbort;
+  end
   else begin
     planetarium.onReceiveData:=@recvdata;
     recvdata('');

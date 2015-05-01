@@ -340,7 +340,7 @@ begin
     end;
     ar2:=deg2rad*15*cra;
     de2:=deg2rad*cde;
-    dist:=rad2deg*AngularDistance(ar1,de1,ar2,de2);
+    dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
     msg('Distance to target: '+FormatFloat(f5,dist)+' degree');
     if dist>prec then begin
        msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));

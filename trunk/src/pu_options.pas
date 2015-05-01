@@ -35,9 +35,11 @@ type
 
   Tf_option = class(TForm)
     CheckBoxLocalCdc: TCheckBox;
+    CalibrationDelay: TEdit;
     GroupBox7: TGroupBox;
     Label24: TLabel;
     Label25: TLabel;
+    Label26: TLabel;
     PanelRemoteCdc: TPanel;
     CdChostname: TEdit;
     CdCport: TEdit;
