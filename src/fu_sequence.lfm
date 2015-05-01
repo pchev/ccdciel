@@ -1,9 +1,9 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 492
+  Height = 519
   Top = 0
   Width = 180
-  ClientHeight = 492
+  ClientHeight = 519
   ClientWidth = 180
   TabOrder = 0
   DesignLeft = 339
@@ -34,7 +34,7 @@ object f_sequence: Tf_sequence
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 151
+      Height = 130
       Top = 20
       Width = 180
       Align = alClient
@@ -48,11 +48,11 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 64
-      Top = 171
+      Height = 85
+      Top = 150
       Width = 180
       Align = alBottom
-      ClientHeight = 64
+      ClientHeight = 85
       ClientWidth = 180
       TabOrder = 1
       object BtnEditTargets: TButton
@@ -109,6 +109,17 @@ object f_sequence: Tf_sequence
         OnClick = BtnStopClick
         TabOrder = 5
       end
+      object Unattended: TCheckBox
+        Left = 1
+        Height = 24
+        Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
+        Top = 56
+        Width = 127
+        Caption = 'Run unattended'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 6
+      end
     end
     object StaticText3: TStaticText
       Left = 0
@@ -128,7 +139,7 @@ object f_sequence: Tf_sequence
   object Panel2: TPanel
     Left = 0
     Height = 230
-    Top = 258
+    Top = 259
     Width = 180
     BevelOuter = bvNone
     ClientHeight = 230

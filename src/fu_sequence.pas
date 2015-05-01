@@ -42,6 +42,7 @@ type
     BtnNewTargets: TButton;
     BtnSaveTargets: TButton;
     BtnLoadTargets: TButton;
+    Unattended: TCheckBox;
     DelayMsg: TLabel;
     StatusMsg: TLabel;
     OpenDialog1: TOpenDialog;
@@ -86,8 +87,13 @@ type
     Fcamera: T_camera;
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
-    procedure InitTarget;
+    procedure NextTarget;
+    function StopGuider:boolean;
+    function StartGuider:boolean;
+    function Slew(ra,de: double; precision:boolean):boolean;
+    function InitTarget:boolean;
     procedure StartPlan;
+    procedure NextStep;
     procedure StartStep;
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
@@ -95,7 +101,7 @@ type
     procedure msg(txt:string);
   public
     { public declarations }
-    CurrentName, CurrentFile, CurrentStep: string;
+    CurrentName, CurrentTarget, CurrentFile, CurrentStep: string;
     StepRepeatCount, StepTotalCount: integer;
     TargetRepeatCount, TargetTotalCount: integer;
     constructor Create(aOwner: TComponent); override;
@@ -251,6 +257,7 @@ begin
          t.de:=NullCoord
        else
          t.de:=StrToDE(TargetGrid.Cells[5,i]);
+       t.astrometrypointing:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
@@ -322,6 +329,7 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TargetGrid.Cells[3,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',TargetGrid.Cells[4,i]);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Dec',TargetGrid.Cells[5,i]);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
@@ -370,61 +378,132 @@ end;
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
 begin
  if (Fcamera.Status=devConnected) then begin
-   if Fcapture.Running then begin
+   if FRunning or Fcapture.Running then begin
      msg('Capture already running! please stop it first if you want to start a new sequence.');
    end
    else if TargetGrid.RowCount<2 then begin
      msg('Please load or create a target list first.');
    end
    else begin
-     TargetRow:=1;
-     TargetRepeatCount:=1;
+     TargetRow:=0;
      FRunning:=true;
      PlanRunning:=false;
      StepRunning:=false;
      msg('Starting sequence '+CurrentName);
-     TargetGrid.Row:=TargetRow;
-     TargetGrid.Invalidate;
-     InitTarget;
-     { TODO :  what to do if it fail? next target? }
-     StartPlan;
-     TargetTimer.Enabled:=true;
+     NextTarget;
    end;
  end
  else msg('Camera is not connected');
 end;
 
-procedure Tf_sequence.InitTarget;
+procedure Tf_sequence.NextTarget;
+begin
+  inc(TargetRow);
+  { TODO :  select best target based on current time }
+  if TargetRow<TargetGrid.RowCount then begin
+     TargetRepeatCount:=1;
+     TargetGrid.Row:=TargetRow;
+     TargetGrid.Invalidate;
+     if not InitTarget then begin
+       msg(CurrentTarget+', Target initialisation failed!');
+       if Unattended.Checked then begin
+         NextTarget;
+         exit;
+       end else begin
+         if MessageDlg('Initialisation failed','Target initialisation failed for '+CurrentTarget+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
+            Dec(TargetRow);
+         end;
+         NextTarget;
+         exit;
+       end;
+     end;
+     StartPlan;
+     TargetTimer.Enabled:=true;
+  end
+  else begin
+     FRunning:=false;
+     TargetTimer.Enabled:=false;
+     TargetRow:=0;
+     msg('Sequence '+CurrentName+' terminated.');
+     TargetGrid.Invalidate;
+  end;
+end;
+
+function Tf_sequence.StopGuider:boolean;
+begin
+  msg('Stop autoguider');
+  Autoguider.Guide(false);
+  result:=Autoguider.WaitBusy(15);
+  if (not result)and(not Unattended.Checked) then begin
+    if MessageDlg('Autoguider Stop','Autoguider is still active 15 seconds after a stop request.'+crlf+'Do you want to wait more?',mtConfirmation,mbYesNo,0)=mrYes then begin
+       result:=StopGuider();
+       exit;
+    end;
+  end;
+end;
+
+function Tf_sequence.StartGuider:boolean;
+begin
+  msg('Start autoguider');
+  Autoguider.Guide(true);
+  result:=Autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
+  if (not result)and(not Unattended.Checked) then begin
+    if MessageDlg('Autoguider Start','Autoguider not guiding '+inttostr(CalibrationDelay+SettleMaxTime)+' seconds after requested to start.'+crlf+'Do you want to wait more?',mtConfirmation,mbYesNo,0)=mrYes then begin
+       result:=StartGuider();
+       exit;
+    end;
+  end;
+end;
+
+function Tf_sequence.Slew(ra,de: double; precision:boolean):boolean;
+var err: double;
+const maxerr = 5/60;
+begin
+  result:=false;
+  if (Mount=nil)or(Mount.Status<>devConnected) then begin
+    msg('Error! Mount not connected');
+    exit;
+  end;
+  if precision then begin
+    astrometry.PrecisionSlew(ra,de,0.01,5,1,1,3);
+  end
+  else begin
+    Mount.Slew(ra, de);
+  end;
+  err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
+  result:=(err<maxerr);
+  if (not result)and(not Unattended.Checked) then begin
+    if MessageDlg('Telescope slew','After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?',mtConfirmation,mbYesNo,0)=mrYes then begin
+       result:=Slew(ra,de,precision);
+       exit;
+    end;
+  end;
+end;
+
+function Tf_sequence.InitTarget:boolean;
 var t: TTarget;
 begin
+  result:=false;
   t:=TTarget(TargetGrid.Objects[0,TargetRow]);
   if t<>nil then begin
+    CurrentTarget:=t.objectname;
     msg('Initialize target '+t.objectname);
-    { TODO :  check if current time in range   }
     // stop guiding
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
-      msg('Stop autoguider');
-      Autoguider.Guide(false);
-      Autoguider.WaitBusy;
+      if not StopGuider then exit;
       Wait(2);
     end;
     // slew to coordinates
-    if (t.ra<>NullCoord)and(t.de<>NullCoord)and(Mount<>nil)and(Mount.Status=devConnected) then begin
-     // if precisionslew then
-       astrometry.PrecisionSlew(t.ra,t.de,0.01,5,1,1,3);
-       { TODO : check slew result  }
-     //else
-     //  Mount.Slew(t.ra, t.de);
-       Wait;
+    if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+      if not Slew(t.ra,t.de,t.astrometrypointing) then exit;
+      Wait;
     end;
     // start guiding
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
-      msg('Start autoguider');
-      Autoguider.Guide(true);
-      Autoguider.WaitBusy(SettleMaxTime+5);
-      { TODO : check guiding is ok  }
+      if not StartGuider then exit;
       Wait;
     end;
+    result:=true;
   end;
 end;
 
@@ -433,48 +512,32 @@ var tt: double;
     t: TTarget;
 begin
  if FRunning then begin
-  t:=TTarget(TargetGrid.Objects[0,TargetRow]);
-  if not TargetRepeatTimer.Enabled then begin
-  if not PlanRunning then begin
-    inc(TargetRepeatCount);
-    if (t<>nil)and(TargetRepeatCount<=t.repeatcount) then begin
-       tt:=t.delay-(Now-TargetTimeStart)*secperday;
-       if tt<0.1 then tt:=0.1;
-       msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated target '+IntToStr(TargetRepeatCount));
-       TargetRepeatTimer.Interval:=trunc(1000*tt);
-       TargetRepeatTimer.Enabled:=true;
-       TargetDelayEnd:=now+tt/secperday;
-       if t.preview and (tt>5)and(tt>(2*t.previewexposure)) then begin
-         if t.previewexposure>0 then Preview.ExpTime.Text:=t.previewexposure_str;
-         Preview.Binning.Text:=Capture.Binning.Text;
-         Preview.BtnLoop.Click;
-       end;
-    end
-    else begin
-     inc(TargetRow);
-     if TargetRow<TargetGrid.RowCount then begin
-        TargetGrid.Row:=TargetRow;
-        TargetGrid.Invalidate;
-        InitTarget;
-        StartPlan;
-     end
-     else begin
-        FRunning:=false;
-        TargetTimer.Enabled:=false;
-        TargetRow:=0;
-        msg('Sequence '+CurrentName+' terminated.');
-        TargetGrid.Invalidate;
-     end;
-    end;
-  end;
-
-     end
+   t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+   if not TargetRepeatTimer.Enabled then begin
+      if not PlanRunning then begin
+        inc(TargetRepeatCount);
+        if (t<>nil)and(TargetRepeatCount<=t.repeatcount) then begin
+           tt:=t.delay-(Now-TargetTimeStart)*secperday;
+           if tt<0.1 then tt:=0.1;
+           msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated target '+IntToStr(TargetRepeatCount));
+           TargetRepeatTimer.Interval:=trunc(1000*tt);
+           TargetRepeatTimer.Enabled:=true;
+           TargetDelayEnd:=now+tt/secperday;
+           if t.preview and (tt>5)and(tt>(2*t.previewexposure)) then begin
+             if t.previewexposure>0 then Preview.ExpTime.Text:=t.previewexposure_str;
+             Preview.Binning.Text:=Capture.Binning.Text;
+             Preview.BtnLoop.Click;
+           end;
+        end
+        else begin
+         NextTarget;
+        end;
+      end;
+   end
    else begin
      tt:=(TargetDelayEnd-Now)*secperday;
      DelayMsg.Caption:='Continue in '+FormatFloat(f0,tt)+' seconds';
    end;
-
-
  end
  else begin
   TargetTimer.Enabled:=false;
@@ -501,6 +564,27 @@ begin
  end;
 end;
 
+procedure Tf_sequence.NextStep;
+var t: TTarget;
+    str: string;
+begin
+  inc(PlanRow);
+  if PlanRow<PlanGrid.RowCount then begin
+    PlanGrid.Row:=PlanRow;
+    PlanGrid.Invalidate;
+    StartStep;
+    PlanTimer.Enabled:=true;
+  end
+  else begin
+    PlanRunning:=false;
+    PlanTimer.Enabled:=false;
+    PlanRow:=0;
+    t:=TTarget(TargetGrid.Objects[0,TargetRow]);
+    if t<> nil then str:=t.plan else str:='';
+    msg('Plan '+str+' terminated.');
+    PlanGrid.Invalidate;
+  end;
+end;
 
 procedure Tf_sequence.StartPlan;
 var t: TTarget;
@@ -511,11 +595,8 @@ begin
     PlanRunning:=true;
     msg('Start plan '+t.plan);
     LoadPlan(t.plan);
-    PlanRow:=1;
-    PlanGrid.Row:=PlanRow;
-    PlanGrid.Invalidate;
-    StartStep;
-    PlanTimer.Enabled:=true;
+    PlanRow:=0;
+    NextStep;
   end;
 end;
 
@@ -545,21 +626,7 @@ begin
           end;
        end
        else begin
-         inc(PlanRow);
-         if PlanRow<PlanGrid.RowCount then begin
-           PlanGrid.Row:=PlanRow;
-           PlanGrid.Invalidate;
-           StartStep;
-         end
-         else begin
-           PlanRunning:=false;
-           PlanTimer.Enabled:=false;
-           PlanRow:=0;
-           t:=TTarget(TargetGrid.Objects[0,TargetRow]);
-           if t<> nil then str:=t.plan else str:='';
-           msg('Plan '+str+' terminated.');
-           PlanGrid.Invalidate;
-         end;
+         NextStep;
        end;
      end;
    end

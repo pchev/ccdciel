@@ -43,6 +43,7 @@ type
     BtnAnytime: TButton;
     BtnCurrentCoord: TButton;
     BtnClose: TButton;
+    PointAstrometry: TCheckBox;
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
     Label10: TLabel;
@@ -277,6 +278,7 @@ begin
     PointDEC.Text:='-'
   else
     PointDEC.Text:=DEToStr(t.de);
+  PointAstrometry.Checked:=t.astrometrypointing;
   RepeatCount.Text:=t.repeatcount_str;
   Delay.Text:=t.delay_str;
   PreviewExposure.Text:=t.previewexposure_str;
@@ -306,6 +308,8 @@ begin
     t.de:=NullCoord
   else
     t.de:=StrToDE(PointDEC.Text);
+  if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
+  t.astrometrypointing:=PointAstrometry.Checked;
   t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
   t.delay:=StrToFloatDef(Delay.Text,1);
   t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);

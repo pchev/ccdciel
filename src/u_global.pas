@@ -48,7 +48,7 @@ type
               objectname, plan: string;
               starttime,endtime,ra,de: double;
               repeatcount: integer;
-              preview: boolean;
+              preview,astrometrypointing: boolean;
               delay, previewexposure: double;
               constructor Create;
               procedure Assign(Source: TTarget);
@@ -111,8 +111,8 @@ type
   {$i revision.inc}
 
 const
-  ccdciel_version='Version Alpha 0.0.1';
-  ccdcielver = '0.0.1a';
+  ccdciel_version='Version beta 0.1.0';
+  ccdcielver = '0.1.0';
   blank=' ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;
@@ -162,7 +162,7 @@ var
   compile_time, compile_version, compile_system, lclver: string;
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;
-  SettleMinTime, SettleMaxTime: integer;
+  SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
   OrigX, OrigY,img_Height,img_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0: double;

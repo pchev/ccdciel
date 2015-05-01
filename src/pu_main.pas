@@ -935,6 +935,7 @@ begin
   SettlePixel:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
+  CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
 end;
 
@@ -1725,6 +1726,7 @@ begin
    f_option.SettlePixel.Text:=config.GetValue('/Autoguider/Settle/Pixel','1.0');
    f_option.SettleMinTime.Text:=config.GetValue('/Autoguider/Settle/MinTime','5');
    f_option.SettleMaxTime.Text:=config.GetValue('/Autoguider/Settle/MaxTime','30');
+   f_option.CalibrationDelay.Text:=config.GetValue('/Autoguider/Settle/CalibrationDelay','300');
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
@@ -1771,6 +1773,7 @@ begin
      config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Text);
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Text);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Text);
+     config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Text);
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
@@ -1959,8 +1962,10 @@ if (camera.Status=devConnected) and (not Capture) then begin
            Preview:=false;
            exit;
          end;
-     if (camera.BinX<>binx)or(camera.BinY<>biny) then
+     if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
+        NewMessage('Set Binning '+inttostr(binx)+'x'+inttostr(biny));
         camera.SetBinning(binx,biny);
+     end;
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=f_capture.Fname.Text;
@@ -2009,8 +2014,10 @@ if (camera.Status=devConnected) then begin
           Capture:=false;
           exit;
         end;
-     if (camera.BinX<>binx)or(camera.BinY<>biny) then
+     if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
+        NewMessage('Set Binning '+inttostr(binx)+'x'+inttostr(biny));
         camera.SetBinning(binx,biny);
+     end;
   end;
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then begin
     ftype:=TFrameType(f_capture.FrameType.ItemIndex);

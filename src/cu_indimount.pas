@@ -319,7 +319,7 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    if (abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.01 then waittime:=60000 else waittime:=1000;
+    if (abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.01 then waittime:=60000 else waittime:=5000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
@@ -336,7 +336,7 @@ begin
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
-    indiclient.WaitBusy(coord_prop,1000);
+    indiclient.WaitBusy(coord_prop,5000);
   end;
 end;
 
