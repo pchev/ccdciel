@@ -45,6 +45,8 @@ type
     FonStatusChange: TNotifyEvent;
     procedure DisplayMessagesyn;
     procedure ProcessDataSyn;
+    procedure ProcessDisconnectSyn;
+    procedure ProcessDisconnect;
     procedure DisplayMessage(msg:string);
     procedure ProcessData(line:string);
     Procedure ProcessEvent(txt:string); virtual; abstract;
@@ -111,6 +113,16 @@ end;
 procedure T_autoguider.ProcessDataSyn;
 begin
  ProcessEvent(FRecvData);
+end;
+
+procedure T_autoguider.ProcessDisconnect;
+begin
+Synchronize(@ProcessDisconnectSyn);
+end;
+
+procedure T_autoguider.ProcessDisconnectSyn;
+begin
+ if assigned(FonDisconnect) then FonDisconnect(self);
 end;
 
 end.

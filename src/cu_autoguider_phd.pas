@@ -105,7 +105,7 @@ finally
 terminate;
 tcpclient.Disconnect;
 FStatus:='Disconnected';
-if assigned(FonDisconnect) then FonDisconnect(self);
+ProcessDisconnect;
 tcpclient.Free;
 end;
 end;
@@ -311,7 +311,7 @@ var endt: TDateTime;
 begin
   endt:=now+maxwait/secperday;
   while now<endt do begin
-    Sleep(2000);
+    Sleep(100);
     Application.ProcessMessages;
     if FState<>GUIDER_BUSY then break;
   end;
@@ -325,7 +325,9 @@ end;
 
 procedure T_autoguider_phd.Guide(onoff:boolean; recalibrate:boolean=false);
 var buf:string;
+    cguide: boolean;
 begin
+  cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
     buf:='{"method": "guide", "params": [';
     buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
@@ -339,7 +341,7 @@ begin
     buf:='{"method": "stop_capture","id":2004}';
     Send(buf);
   end;
-  FState:=GUIDER_BUSY;
+  if cguide<>onoff then FState:=GUIDER_BUSY;
 end;
 
 procedure T_autoguider_phd.Pause(onoff:boolean);

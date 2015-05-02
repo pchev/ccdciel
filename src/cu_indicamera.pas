@@ -240,7 +240,7 @@ if not indiclient.Connected then begin
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Already connected');
+else msg('Camera already connected');
 end;
 
 procedure T_indicamera.InitTimerTimer(Sender: TObject);
@@ -457,8 +457,28 @@ end;
 end;
 
 procedure T_indicamera.NewSwitch(svp: ISwitchVectorProperty);
+var propname: string;
+    sw: ISwitch;
 begin
-//  writeln('NewSwitch: '+svp.name);
+  //  writeln('NewSwitch: '+svp.name);
+  propname:=svp.name;
+  if (propname='CONNECTION') then begin
+    sw:=IUFindOnSwitch(svp);
+    if (sw<>nil)and(sw.name='DISCONNECT') then begin
+      if Assigned(FonCameraDisconnected) then FonCameraDisconnected(self);
+    end;
+  end
+  else if (propname='CCD_ABORT_EXPOSURE') then begin
+    if UseMainSensor then begin
+      if Assigned(FonAbortExposure) then FonAbortExposure(self);
+    end;
+  end
+  else if (propname='GUIDER_ABORT_EXPOSURE') then begin
+    if (not UseMainSensor) then begin
+      if Assigned(FonAbortExposure) then FonAbortExposure(self);
+    end;
+  end
+  ;
 end;
 
 procedure T_indicamera.NewLight(lvp: ILightVectorProperty);

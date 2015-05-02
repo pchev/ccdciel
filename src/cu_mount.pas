@@ -49,6 +49,7 @@ T_mount = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     procedure Slew(sra,sde: double); virtual; abstract;
     procedure Sync(sra,sde: double); virtual; abstract;
+    procedure AbortMotion; virtual; abstract;
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
     property RA: double read GetRA;

@@ -98,6 +98,7 @@ type
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
     procedure LoadPlan(plan:string);
+    procedure StopSequence;
     procedure msg(txt:string);
   public
     { public declarations }
@@ -106,6 +107,10 @@ type
     TargetRepeatCount, TargetTotalCount: integer;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure AutoguiderDisconnected;
+    procedure AutoguiderIddle;
+    procedure ExposureAborted;
+    procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
     property Running: boolean read FRunning;
     property Preview: Tf_preview read Fpreview write Fpreview;
@@ -365,14 +370,7 @@ end;
 
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
 begin
- if FRunning and PlanRunning then begin
-   FRunning:=false;
-   PlanRunning:=false;
-   if StepRepeatTimer.Enabled and Preview.Running then Preview.BtnLoop.Click;
-   StepRepeatTimer.Enabled:=false;
-   if Capture.Running then Capture.BtnStart.Click;
- end
- else msg('Cannot stop now.');
+ StopSequence;
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
@@ -397,14 +395,20 @@ begin
 end;
 
 procedure Tf_sequence.NextTarget;
+var initok: boolean;
 begin
   inc(TargetRow);
   { TODO :  select best target based on current time }
-  if TargetRow<TargetGrid.RowCount then begin
+  if FRunning and (TargetRow<TargetGrid.RowCount) then begin
      TargetRepeatCount:=1;
      TargetGrid.Row:=TargetRow;
      TargetGrid.Invalidate;
-     if not InitTarget then begin
+     initok:=InitTarget;
+     if not FRunning then begin
+       NextTarget;
+       exit;
+     end;
+     if not initok then begin
        msg(CurrentTarget+', Target initialisation failed!');
        if Unattended.Checked then begin
          NextTarget;
@@ -470,6 +474,7 @@ begin
   else begin
     Mount.Slew(ra, de);
   end;
+  if not FRunning then exit;
   err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
   result:=(err<maxerr);
   if (not result)and(not Unattended.Checked) then begin
@@ -484,6 +489,7 @@ function Tf_sequence.InitTarget:boolean;
 var t: TTarget;
 begin
   result:=false;
+  if not FRunning then exit;
   t:=TTarget(TargetGrid.Objects[0,TargetRow]);
   if t<>nil then begin
     CurrentTarget:=t.objectname;
@@ -492,16 +498,19 @@ begin
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
       if not StopGuider then exit;
       Wait(2);
+      if not FRunning then exit;
     end;
     // slew to coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
       if not Slew(t.ra,t.de,t.astrometrypointing) then exit;
       Wait;
+      if not FRunning then exit;
     end;
     // start guiding
     if Autoguider.State<>GUIDER_DISCONNECTED then begin
       if not StartGuider then exit;
       Wait;
+      if not FRunning then exit;
     end;
     result:=true;
   end;
@@ -690,5 +699,53 @@ begin
   end;
 end;
 
+procedure Tf_sequence.StopSequence;
+begin
+ msg('Request to stop the current sequence');
+ if FRunning then begin
+   if PlanRunning then begin
+     FRunning:=false;
+     PlanRunning:=false;
+     if StepRepeatTimer.Enabled and Preview.Running then Preview.BtnLoop.Click;
+     StepRepeatTimer.Enabled:=false;
+     if Capture.Running then Capture.BtnStart.Click;
+     msg('Sequence stopped as requested.');
+   end
+   else begin
+     FRunning:=false;
+     Mount.AbortMotion;
+     if Astrometry.Busy then Astrometry.StopAstrometry;
+     StopGuider;
+     msg('Sequence stopped as requested.');
+   end;
+ end
+ else msg('Not running, nothing to do.');
+end;
+
+procedure Tf_sequence.AutoguiderDisconnected;
+begin
+  if FRunning then StopSequence;
+end;
+
+procedure Tf_sequence.AutoguiderIddle;
+begin
+  if FRunning and PlanRunning then begin
+    msg('Autoguiding stopped unexpectedly!');
+    StopSequence;
+  end;
+end;
+
+procedure Tf_sequence.ExposureAborted;
+begin
+  if FRunning and PlanRunning then StopSequence;
+end;
+
+procedure Tf_sequence.CameraDisconnected;
+begin
+ if FRunning then StopSequence;
+end;
+
+
 end.
+
 

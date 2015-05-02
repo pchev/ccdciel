@@ -41,6 +41,7 @@ T_indimount = class(T_mount)
    coord_dec:  INumber;
    CoordSet: ISwitchVectorProperty;
    CoordSetTrack,CoordSetSlew,CoordSetSync: ISwitch;
+   AbortmotionProp: ISwitchVectorProperty;
    TelescopeInfo: INumberVectorProperty;
    TelescopeAperture, TelescopeFocale: INumber;
    eod_coord:  boolean;
@@ -73,6 +74,7 @@ T_indimount = class(T_mount)
    Procedure Disconnect; override;
    procedure Slew(sra,sde: double); override;
    procedure Sync(sra,sde: double); override;
+   procedure AbortMotion; override;
 end;
 
 implementation
@@ -124,6 +126,7 @@ begin
     TelescopeInfo:=nil;
     coord_prop:=nil;
     CoordSet:=nil;
+    AbortmotionProp:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -163,7 +166,7 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Already connected');
+else msg('Mount already connected');
 end;
 
 procedure T_indimount.InitTimerTimer(Sender: TObject);
@@ -242,6 +245,9 @@ begin
       CoordSetTrack:=IUFindSwitch(CoordSet,'TRACK');
       CoordSetSlew:=IUFindSwitch(CoordSet,'SLEW');
       CoordSetSync:=IUFindSwitch(CoordSet,'SYNC');
+   end
+   else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_ABORT_MOTION') then begin
+      AbortmotionProp:=indiProp.getSwitch;
    end
    else if (proptype=INDI_NUMBER)and(propname='TELESCOPE_INFO') then begin
       TelescopeInfo:=indiProp.getNumber;
@@ -338,6 +344,19 @@ begin
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop,5000);
   end;
+end;
+
+procedure T_indimount.AbortMotion;
+var ab: ISwitch;
+begin
+ if AbortmotionProp<>nil then begin
+   ab:=IUFindSwitch(AbortmotionProp,'ABORT');
+   if ab<>nil then begin
+     ab.s:=ISS_ON;
+     indiclient.sendNewSwitch(AbortmotionProp);
+     msg('Stop telescope motion.');
+   end;
+ end;
 end;
 
 end.

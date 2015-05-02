@@ -224,6 +224,8 @@ type
     Procedure SetFilter(Sender: TObject);
     Procedure NewMessage(msg: string);
     Procedure CameraStatus(Sender: TObject);
+    Procedure CameraDisconnected(Sender: TObject);
+    Procedure CameraExposureAborted(Sender: TObject);
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
     Procedure WheelStatus(Sender: TObject);
@@ -460,6 +462,8 @@ begin
   camera.onTemperatureChange:=@CameraTemperatureChange;
   camera.onNewImage:=@CameraNewImage;
   camera.onStatusChange:=@CameraStatus;
+  camera.onCameraDisconnected:=@CameraDisconnected;
+  camera.onAbortExposure:=@CameraExposureAborted;
 
   astrometry:=TAstrometry.Create;
   astrometry.Camera:=camera;
@@ -1280,6 +1284,7 @@ begin
                    f_preview.stop;
                    f_capture.stop;
                    Capture:=false;
+                   f_sequence.CameraDisconnected;
                    StatusBar1.Panels[1].Text:='';
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
                    end;
@@ -1297,6 +1302,23 @@ begin
                    end;
  end;
  CheckConnectionStatus;
+end;
+
+Procedure Tf_main.CameraDisconnected(Sender: TObject);
+begin
+ // device disconnected from server.
+ // disconnect from server to allow a clean reconnection
+ NewMessage('Camera disconnected!');
+ camera.Disconnect;
+end;
+
+Procedure Tf_main.CameraExposureAborted(Sender: TObject);
+begin
+ NewMessage('Exposure aborted!');
+ f_preview.stop;
+ f_capture.stop;
+ Capture:=false;
+ f_sequence.ExposureAborted;
 end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
@@ -1531,6 +1553,8 @@ end;
 Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
 var i: integer;
 begin
+ NewMessage('Disconnected from autoguider software!');
+ f_sequence.AutoguiderDisconnected;
  // autoguider will be free automatically, create a new one for next connection
  i:=config.GetValue('/Autoguider/Software',0);
  case TAutoguiderType(i) of
@@ -1560,6 +1584,7 @@ begin
    GUIDER_IDLE        :begin
                        f_autoguider.led.Brush.Color:=clYellow;
                        f_autoguider.BtnGuide.Caption:='Guide';
+                       f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;

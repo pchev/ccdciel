@@ -179,7 +179,10 @@ end;
 
 procedure TAstrometry.StopAstrometry;
 begin
-  if FBusy then engine.Stop;
+  if FBusy then begin
+    engine.Stop;
+    msg('Stop astrometry resolver.');
+  end;
 end;
 
 function TAstrometry.CurrentCoord(var cra,cde,eq: double):boolean;
@@ -312,12 +315,12 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist: double;
     fn:string;
     n,i:integer;
 begin
+  dist:=MaxInt;
   ar1:=deg2rad*15*ra;
   de1:=deg2rad*de;
   msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
   Mount.Slew(ra, de);
   i:=1;
-  dist:=MaxInt;
   repeat
     msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
     ControlExposure(exp,binx,biny);

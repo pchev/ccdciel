@@ -153,7 +153,7 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Already connected');
+else msg('Filters already connected');
 end;
 
 procedure T_indiwheel.InitTimerTimer(Sender: TObject);
