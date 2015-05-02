@@ -105,7 +105,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="48">
+    <Units Count="47">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -131,7 +131,6 @@
         <ComponentName Value="f_preview"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_preview"/>
       </Unit3>
       <Unit4>
         <Filename Value="fu_msg.pas"/>
@@ -143,7 +142,6 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -155,7 +153,6 @@
       <Unit7>
         <Filename Value="cu_indimount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indimount"/>
       </Unit7>
       <Unit8>
         <Filename Value="fu_capture.pas"/>
@@ -163,7 +160,6 @@
         <ComponentName Value="f_capture"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_capture"/>
       </Unit8>
       <Unit9>
         <Filename Value="pu_devicesetup.pas"/>
@@ -183,7 +179,6 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -224,27 +219,22 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_camera"/>
       </Unit20>
       <Unit21>
         <Filename Value="cu_indifocuser.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indifocuser"/>
       </Unit21>
       <Unit22>
         <Filename Value="cu_indiwheel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indiwheel"/>
       </Unit22>
       <Unit23>
         <Filename Value="cu_mount.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_mount"/>
       </Unit23>
       <Unit24>
         <Filename Value="cu_wheel.pas"/>
@@ -277,113 +267,100 @@
         <ResourceBaseClass Value="Frame"/>
       </Unit29>
       <Unit30>
-        <Filename Value="pu_indigui.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="f_indigui"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit30>
-      <Unit31>
         <Filename Value="pu_options.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit31>
-      <Unit32>
+      </Unit30>
+      <Unit31>
         <Filename Value="fu_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_frame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit32>
-      <Unit33>
+      </Unit31>
+      <Unit32>
         <Filename Value="cu_astrometry_engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_astrometry_engine"/>
-      </Unit33>
-      <Unit34>
+      </Unit32>
+      <Unit33>
         <Filename Value="cu_planetarium_cdc.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit34>
-      <Unit35>
+      </Unit33>
+      <Unit34>
         <Filename Value="pu_viewtext.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_viewtext"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit35>
-      <Unit36>
+      </Unit34>
+      <Unit35>
         <Filename Value="cu_autoguider_phd.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_autoguider_phd"/>
-      </Unit36>
-      <Unit37>
+      </Unit35>
+      <Unit36>
         <Filename Value="cu_tcpclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_tcpclient"/>
-      </Unit37>
-      <Unit38>
+      </Unit36>
+      <Unit37>
         <Filename Value="fu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_autoguider"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit38>
-      <Unit39>
+      </Unit37>
+      <Unit38>
         <Filename Value="fu_sequence.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_sequence"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_sequence"/>
-      </Unit39>
-      <Unit40>
+      </Unit38>
+      <Unit39>
         <Filename Value="u_ccdconfig.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit40>
-      <Unit41>
+      </Unit39>
+      <Unit40>
         <Filename Value="pu_edittargets.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_EditTargets"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit41>
-      <Unit42>
+      </Unit40>
+      <Unit41>
         <Filename Value="pu_editplan.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_EditPlan"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit42>
-      <Unit43>
+      </Unit41>
+      <Unit42>
         <Filename Value="cu_autoguider.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_autoguider"/>
-      </Unit43>
-      <Unit44>
+      </Unit42>
+      <Unit43>
         <Filename Value="cu_planetarium.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit44>
-      <Unit45>
+      </Unit43>
+      <Unit44>
         <Filename Value="fu_planetarium.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_planetarium"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit45>
-      <Unit46>
+      </Unit44>
+      <Unit45>
         <Filename Value="cu_astrometry.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_astrometry"/>
-      </Unit46>
-      <Unit47>
+      </Unit45>
+      <Unit46>
         <Filename Value="pu_planetariuminfo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_planetariuminfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit47>
+      </Unit46>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
