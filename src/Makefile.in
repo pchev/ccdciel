@@ -7,7 +7,7 @@ name=ccdciel
 version=0
 
 [target]
-programs=ccdciel eqmodgui
+programs=ccdciel
 
 [require]
 libc=y
@@ -62,7 +62,7 @@ export LCL_PLATFORM
 outdir:
 	mkdir -p units/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)
 
-all: outdir ccdciel$(EXEEXT) eqmodgui$(EXEEXT)
+all: outdir ccdciel$(EXEEXT)
 
 revision:
 	$(LAZDIR)/tools/svn2revisioninc . revision.inc
