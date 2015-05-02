@@ -44,6 +44,7 @@ T_camera = class(TComponent)
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
     FonNewImage: TNotifyEvent;
+    FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
     FImgStream: TMemoryStream;
     FFilterNames: TStringList;
     FObjectName: string;
@@ -117,6 +118,8 @@ T_camera = class(TComponent)
     property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
     property onWheelStatusChange: TNotifyEvent read FonWheelStatusChange write FonWheelStatusChange;
     property onNewImage: TNotifyEvent read FonNewImage write FonNewImage;
+    property onCameraDisconnected: TNotifyEvent read FonCameraDisconnected write FonCameraDisconnected;
+    property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
 end;
 
 implementation

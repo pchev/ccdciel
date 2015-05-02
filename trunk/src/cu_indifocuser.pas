@@ -180,7 +180,7 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Already connected');
+else msg('Focuser already connected');
 end;
 
 procedure T_indifocuser.InitTimerTimer(Sender: TObject);
