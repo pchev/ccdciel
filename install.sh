@@ -32,4 +32,3 @@ install -v -m 644 system_integration/Linux/share/doc/ccdciel/changelog $destdir/
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/copyright $destdir/share/doc/ccdciel/copyright
 install -v -m 644 system_integration/Linux/share/pixmaps/ccdciel.png $destdir/share/pixmaps/ccdciel.png
 install -v -m 644 system_integration/Linux/share/icons/hicolor/48x48/apps/ccdciel.png $destdir/share/icons/hicolor/48x48/apps/ccdciel.png
-install -v -m 644 system_integration/Linux/share/icons/hicolor/scalable/apps/ccdciel.svg $destdir/share/icons/hicolor/scalable/apps/ccdciel.svg
