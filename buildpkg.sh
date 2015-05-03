@@ -14,7 +14,7 @@ arch=$(arch)
 unset extratarget
 
 unset make_linux32
-#make_linux32=1
+make_linux32=1
 unset make_linux64
 if [[ $arch == x86_64 ]]; then 
    make_linux64=1
