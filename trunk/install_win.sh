@@ -17,8 +17,10 @@ install -m 755 -d $destdir
 
 if [ $OS_TARGET = win32 ]; then 
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
+  strip -v -o $destdir/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
 fi
 if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
+  strip -v -o $destdir/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
 fi
 

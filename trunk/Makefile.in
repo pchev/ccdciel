@@ -7,7 +7,7 @@ name=ccdciel
 version=0
 
 [target]
-dirs=component src
+dirs=component library src
 
 [require]
 libc=y
@@ -19,7 +19,7 @@ PREFIX=%PREFIX%
 [rules]
 .PHONY: all
 
-all: component_all src_all
+all: component_all library_all src_all
 
 ifeq ($(OS_TARGET),darwin)
 install: 

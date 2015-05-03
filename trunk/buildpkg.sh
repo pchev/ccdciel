@@ -25,6 +25,10 @@ make_win32=1
 unset make_win64
 #make_win64=1
 
+# For win32 and win64 target you must also install the corresponding mingw-w64 to build the C library
+mingw32=/opt/mingw-w32/bin/
+mingw64=/opt/mingw-w64/bin/
+
 if [[ -n $1 ]]; then
   configopt="fpc=$1"
 fi
@@ -69,7 +73,7 @@ if [[ $make_linux32 ]]; then
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
   mv bin debian/ccdciel/usr/
- # mv lib debian/ccdciel/usr/
+  mv lib debian/ccdciel/usr/
   mv share debian/ccdciel/usr/
   cd debian
   sz=$(du -s ccdciel/usr | cut -f1)
@@ -117,7 +121,7 @@ if [[ $make_linux64 ]]; then
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
   mv bin debian/ccdciel64/usr/
-  #mv lib debian/ccdciel64/usr/
+  mv lib debian/ccdciel64/usr/
   mv share debian/ccdciel64/usr/
   cd debian
   sz=$(du -s ccdciel64/usr | cut -f1)
@@ -133,7 +137,7 @@ if [[ $make_linux64 ]]; then
   cd $builddir
   mv debian/ccdciel64/usr/* rpm/ccdciel/usr/
   # Redhat 64bits lib is lib64 
-  #mv rpm/ccdciel/usr/lib rpm/ccdciel/usr/lib64
+  mv rpm/ccdciel/usr/lib rpm/ccdciel/usr/lib64
   cd rpm
   sed -i "/Version:/ s/3/$version/"  SPECS/ccdciel64.spec
   sed -i "/Release:/ s/1/$currentrev/" SPECS/ccdciel64.spec
@@ -150,6 +154,7 @@ fi
 # make Windows i386 version
 if [[ $make_win32 ]]; then
   rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
+  export PATH=$mingw32:$save_PATH
   ./configure $configopt prefix=$builddir/Data target=i386-win32$extratarget
   if [[ $? -ne 0 ]]; then exit 1;fi
   make OS_TARGET=win32 CPU_TARGET=i386 clean
@@ -177,6 +182,7 @@ fi
 # make Windows x86_64 version
 if [[ $make_win64 ]]; then
   rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
+  export PATH=$mingw64:$save_PATH
   ./configure $configopt prefix=$builddir/Data target=x86_64-win64$extratarget
   if [[ $? -ne 0 ]]; then exit 1;fi
   make OS_TARGET=win64 CPU_TARGET=x86_64 clean

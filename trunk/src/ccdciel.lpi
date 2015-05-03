@@ -179,6 +179,7 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>

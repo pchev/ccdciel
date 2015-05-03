@@ -14,6 +14,7 @@ fi
 dirs="component/synapse/source/lib \
      component/indiclient \
      component \
+     library \
      src \
      . "
 
