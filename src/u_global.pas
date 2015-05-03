@@ -141,18 +141,15 @@ const
   ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
   {$ifdef linux}
     defCapturePath='/tmp';
-    libcdcwcs = 'libcdcwcs.so';
-    libz = 'libz.so.1';
+    libwcs = 'libccdcielwcs.so';
   {$endif}
   {$ifdef darwin}
     defCapturePath='/tmp';
-    libcdcwcs = 'libcdcwcs.dylib';
-    libz = 'libz.dylib';
+    libwcs = 'libccdcielwcs.dylib';
   {$endif}
   {$ifdef mswindows}
     defCapturePath='C:\';
-    libcdcwcs = 'libcdcwcs.dll';
-    libz = 'zlib1.dll';
+    libwcs = 'libccdcielwcs.dll';
   {$endif}
 
 var

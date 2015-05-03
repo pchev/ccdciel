@@ -384,7 +384,7 @@ begin
   cdcwcs_release:=nil;
   cdcwcs_sky2xy:=nil;
   cdcwcs_xy2sky:=nil;
-  cdcwcslib:=LoadLibrary(libcdcwcs);
+  cdcwcslib:=LoadLibrary(libwcs);
   if cdcwcslib<>0 then begin
     cdcwcs_initfitsfile:= Tcdcwcs_initfitsfile(GetProcedureAddress(cdcwcslib,'cdcwcs_initfitsfile'));
     cdcwcs_release:= Tcdcwcs_release(GetProcedureAddress(cdcwcslib,'cdcwcs_release'));
