@@ -142,6 +142,7 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -179,7 +180,6 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -187,6 +187,7 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -220,6 +221,7 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
@@ -280,6 +282,7 @@
         <ComponentName Value="f_frame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_frame"/>
       </Unit31>
       <Unit32>
         <Filename Value="cu_astrometry_engine.pas"/>

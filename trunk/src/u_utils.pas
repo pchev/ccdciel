@@ -737,7 +737,7 @@ begin
      yy:=img_Height-(y div 2)+OrigY;
    end else  begin
      xx:=trunc(x/ImgScale0);
-     yy:=trunc((img_Height-y)/ImgScale0);
+     yy:=trunc(img_Height-(y/ImgScale0));
    end;
    xx:=xx+ImgFrameX;
    yy:=yy+ImgFrameY;

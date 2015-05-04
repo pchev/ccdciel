@@ -37,48 +37,60 @@ object f_frame: Tf_frame
     object FX: TEdit
       Left = 0
       Height = 22
+      Hint = 'X'
       Top = 0
       Width = 55
       AutoSize = False
       Color = clBlack
       Font.Color = clRed
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Text = ' '
     end
     object FY: TEdit
       Left = 56
       Height = 22
+      Hint = 'Y'
       Top = 0
       Width = 55
       AutoSize = False
       Color = clBlack
       Font.Color = clRed
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
       Text = ' '
     end
     object FWidth: TEdit
       Left = 0
       Height = 22
+      Hint = 'Width'
       Top = 22
       Width = 55
       AutoSize = False
       Color = clBlack
       Font.Color = clRed
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
       Text = ' '
     end
     object FHeight: TEdit
       Left = 56
       Height = 22
+      Hint = 'Height'
       Top = 22
       Width = 55
       AutoSize = False
       Color = clBlack
       Font.Color = clRed
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
       Text = ' '
     end
