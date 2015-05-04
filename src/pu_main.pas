@@ -2335,7 +2335,7 @@ begin
      s:=Focuswindow;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     Screen2Fits(x,y,xc,yc);
+     Screen2CCD(x,y,xc,yc);
      camera.SetFrame(xc-s2,yc-s2,s,s);
      f_preview.Loop:=true;
      f_preview.Running:=true;
