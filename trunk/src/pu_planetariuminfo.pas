@@ -4,7 +4,7 @@ unit pu_planetariuminfo;
 
 interface
 
-uses  cu_planetarium, u_utils,
+uses  cu_planetarium, u_utils, u_global,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -54,9 +54,13 @@ end;
 
 procedure Tf_planetariuminfo.recvdata(msg:string);
 begin
+ if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
   Ra.Text:=RAToStr(planetarium.RA);
   De.Text:=DEToStr(planetarium.DE);
+ end;
+ if planetarium.Objname<>'' then begin
   Obj.Text:=planetarium.Objname;
+ end;
 end;
 
 end.

@@ -32,7 +32,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
-  cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc,
+  cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   pu_planetariuminfo,
   lazutf8sysutils, Classes, dynlibs,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
@@ -185,7 +185,7 @@ type
     MouseMoving, MouseFrame, LockMouse: boolean;
     Capture,Preview,PreviewLoop: boolean;
     LogToFile,LogFileOpen: Boolean;
-    NeedRestart, GUIready: boolean;
+    NeedRestart, GUIready, AppClose: boolean;
     LogFile: UTF8String;
     MsgLog: Textfile;
     Procedure InitLog;
@@ -374,6 +374,7 @@ begin
   {$else}
   DefaultInterface:=INDI;
   {$endif}
+  AppClose:=false;
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
@@ -485,6 +486,7 @@ begin
   i:=config.GetValue('/Planetarium/Software',0);
   case TPlanetariumType(i) of
     CDC: planetarium:=TPlanetarium_cdc.Create;
+    SAMP:planetarium:=TPlanetarium_samp.Create;
   end;
   planetarium.onConnect:=@PlanetariumConnect;
   planetarium.onDisconnect:=@PlanetariumDisconnect;
@@ -664,6 +666,8 @@ end;
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 var i,n: integer;
 begin
+  AppClose:=true;
+
   config.SetValue('/Configuration/Version',ccdcielver);
 
   config.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
@@ -757,6 +761,8 @@ begin
   config.Flush;
   NewMessage('Program exit');
   CloseLog;
+  planetarium.Disconnect;
+  autoguider.Disconnect;
   CloseAction:=caFree;
 end;
 
@@ -1555,21 +1561,23 @@ var i: integer;
 begin
  NewMessage('Disconnected from autoguider software!');
  f_sequence.AutoguiderDisconnected;
- // autoguider will be free automatically, create a new one for next connection
- i:=config.GetValue('/Autoguider/Software',0);
- case TAutoguiderType(i) of
-   PHD: autoguider:=T_autoguider_phd.Create;
+ if not AppClose then begin
+   // autoguider will be free automatically, create a new one for next connection
+   i:=config.GetValue('/Autoguider/Software',0);
+   case TAutoguiderType(i) of
+     PHD: autoguider:=T_autoguider_phd.Create;
+   end;
+   autoguider.onStatusChange:=@AutoguiderStatus;
+   autoguider.onConnect:=@AutoguiderConnect;
+   autoguider.onDisconnect:=@AutoguiderDisconnect;
+   autoguider.onShowMessage:=@NewMessage;
+   f_sequence.Autoguider:=autoguider;
+   f_autoguider.Status.Text:=autoguider.Status;
+   NewMessage('Autoguider: '+autoguider.Status);
+   f_autoguider.BtnConnect.Caption:='Connect';
+   f_autoguider.BtnGuide.Caption:='Guide';
+   f_autoguider.led.Brush.Color:=clGray;
  end;
- autoguider.onStatusChange:=@AutoguiderStatus;
- autoguider.onConnect:=@AutoguiderConnect;
- autoguider.onDisconnect:=@AutoguiderDisconnect;
- autoguider.onShowMessage:=@NewMessage;
- f_sequence.Autoguider:=autoguider;
- f_autoguider.Status.Text:=autoguider.Status;
- NewMessage('Autoguider: '+autoguider.Status);
- f_autoguider.BtnConnect.Caption:='Connect';
- f_autoguider.BtnGuide.Caption:='Guide';
- f_autoguider.led.Brush.Color:=clGray;
 end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
@@ -2439,11 +2447,16 @@ end;
 
 
 Procedure Tf_main.PlanetariumConnectClick(Sender: TObject);
+var i: integer;
 begin
  if f_planetarium.BtnConnect.Caption='Connect' then begin
-   planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
-                      config.GetValue('/Planetarium/CdCport',''));
    f_planetarium.BtnConnect.Caption:='Disconnect';
+   i:=config.GetValue('/Planetarium/Software',0);
+   case TPlanetariumType(i) of
+     CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
+                      config.GetValue('/Planetarium/CdCport',''));
+     SAMP: planetarium.Connect('');
+   end;
  end else begin
    planetarium.Disconnect;
  end;
@@ -2463,14 +2476,17 @@ begin
  f_planetarium.Status.Text:='Disconnected';
  f_planetarium.BtnConnect.Caption:='Connect';
  NewMessage('Planetarium: Disconnected');
- i:=config.GetValue('/Planetarium/Software',0);
- case TPlanetariumType(i) of
-   CDC: planetarium:=TPlanetarium_cdc.Create;
+ if not AppClose then begin
+   i:=config.GetValue('/Planetarium/Software',0);
+   case TPlanetariumType(i) of
+     CDC: planetarium:=TPlanetarium_cdc.Create;
+     SAMP:planetarium:=TPlanetarium_samp.Create;
+   end;
+   planetarium.onConnect:=@PlanetariumConnect;
+   planetarium.onDisconnect:=@PlanetariumDisconnect;
+   planetarium.onShowMessage:=@NewMessage;
+   f_planetariuminfo.planetarium:=planetarium;
  end;
- planetarium.onConnect:=@PlanetariumConnect;
- planetarium.onDisconnect:=@PlanetariumDisconnect;
- planetarium.onShowMessage:=@NewMessage;
- f_planetariuminfo.planetarium:=planetarium;
 end;
 
 end.

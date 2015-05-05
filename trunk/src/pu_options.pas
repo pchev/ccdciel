@@ -36,10 +36,14 @@ type
   Tf_option = class(TForm)
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
-    GroupBox7: TGroupBox;
+    GroupBoxSamp: TGroupBox;
+    GroupBoxSkychart: TGroupBox;
     Label24: TLabel;
     Label25: TLabel;
     Label26: TLabel;
+    Notebook2: TNotebook;
+    PageSkychart: TPage;
+    PageSamp: TPage;
     PanelRemoteCdc: TPanel;
     CdChostname: TEdit;
     CdCport: TEdit;
@@ -126,6 +130,7 @@ type
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
+    procedure PlanetariumBoxClick(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
   private
     { private declarations }
@@ -170,6 +175,11 @@ begin
   Focale.Enabled:=not FocaleFromTelescope.Checked;
   if (not Focale.Enabled) and (assigned(FGetFocale)) then
       FGetFocale(self);
+end;
+
+procedure Tf_option.PlanetariumBoxClick(Sender: TObject);
+begin
+  Notebook2.PageIndex:=PlanetariumBox.ItemIndex;
 end;
 
 procedure Tf_option.CheckBoxLocalCdcChange(Sender: TObject);
