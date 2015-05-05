@@ -45,24 +45,24 @@ object f_planetariuminfo: Tf_planetariuminfo
     Left = 19
     Height = 16
     Top = 36
-    Width = 41
-    Caption = 'Label1'
+    Width = 63
+    Caption = 'Center RA'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 19
     Height = 16
     Top = 74
-    Width = 41
-    Caption = 'Label2'
+    Width = 70
+    Caption = 'Center Dec'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 19
     Height = 16
     Top = 110
-    Width = 41
-    Caption = 'Label3'
+    Width = 78
+    Caption = 'Object name'
     ParentColor = False
   end
   object Button2: TButton

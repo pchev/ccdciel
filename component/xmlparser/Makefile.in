@@ -1,25 +1,21 @@
 #   File generated automatically by Lazarus Package Manager
 #
-#   Makefile.fpc for components 0.0
+#   Makefile.fpc for XmlParser 0.0
 #
-#   This file was generated on 8-10-08
+#   This file was generated on 9-10-08
 
 [package]
-name=components
+name=xmlparser
 version=0.0
-
-[target]
-dirs=synapse/source/lib \
-     indiclient \
-     xmlparser \
-     vosamp
-units=components.pas
 
 [compiler]
 unittargetdir=lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)
-unitdir=indiclient/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)/ synapse/source/lib/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)/ $(LAZDIR)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/ $(LAZDIR)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM)/ $(LAZDIR)/components/lazutils/lib/$(CPU_TARGET)-$(OS_TARGET)  $(LAZDIR)/packager/units/$(CPU_TARGET)-$(OS_TARGET)/ ./
+unitdir=$(LAZDIR)/packager/units/$(CPU_TARGET)-$(OS_TARGET)/ ./
 includedir=./
-options=  $(fpcopts) -dUseCThreads -dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Sgi
+options= $(fpcopts) -MObjFPC -Sgi
+
+[target]
+units=xmlparser.pas
 
 [clean]
 files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
@@ -27,7 +23,6 @@ files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
       $(wildcard $(COMPILER_UNITTARGETDIR)/*$(RSTEXT)) \
       $(wildcard $(COMPILER_UNITTARGETDIR)/*.compiled) \
       $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
-
 [prerules]
 LAZDIR=%LAZDIR%
 # Compiler options
@@ -53,10 +48,9 @@ endif
 export LCL_PLATFORM
 
 [rules]
-.PHONY: all
+.PHONY: cleartarget all
 
-outdir:
-	mkdir -p lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)
+cleartarget:
+        -$(DEL) $(COMPILER_UNITTARGETDIR)/xmlparser$(PPUEXT)
 
-all: outdir synapse/source/lib_all indiclient_all xmlparser_all vosamp_all components$(PPUEXT)
-
+all: cleartarget $(COMPILER_UNITTARGETDIR) xmlparser$(PPUEXT)

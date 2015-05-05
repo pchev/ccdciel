@@ -91,21 +91,24 @@
         <CommandLineParams Value="--config=simulation"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="5">
       <Item1>
-        <PackageName Value="LazUtils"/>
+        <PackageName Value="vosamp"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
+        <PackageName Value="LazUtils"/>
       </Item2>
       <Item3>
-        <PackageName Value="indiclient"/>
+        <PackageName Value="FCL"/>
       </Item3>
       <Item4>
-        <PackageName Value="LCL"/>
+        <PackageName Value="indiclient"/>
       </Item4>
+      <Item5>
+        <PackageName Value="LCL"/>
+      </Item5>
     </RequiredPackages>
-    <Units Count="47">
+    <Units Count="48">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -142,7 +145,6 @@
       <Unit5>
         <Filename Value="u_utils.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_utils"/>
       </Unit5>
       <Unit6>
         <Filename Value="fu_visu.pas"/>
@@ -180,6 +182,7 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -187,7 +190,6 @@
         <ComponentName Value="f_starprofile"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_starprofile"/>
       </Unit13>
       <Unit14>
         <Filename Value="fu_filterwheel.pas"/>
@@ -221,7 +223,6 @@
       <Unit19>
         <Filename Value="cu_indicamera.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_indicamera"/>
       </Unit19>
       <Unit20>
         <Filename Value="cu_camera.pas"/>
@@ -275,6 +276,7 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_options"/>
       </Unit30>
       <Unit31>
         <Filename Value="fu_frame.pas"/>
@@ -282,15 +284,15 @@
         <ComponentName Value="f_frame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_frame"/>
       </Unit31>
       <Unit32>
         <Filename Value="cu_astrometry_engine.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit32>
       <Unit33>
-        <Filename Value="cu_planetarium_cdc.pas"/>
+        <Filename Value="cu_planetarium_samp.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_planetarium_samp"/>
       </Unit33>
       <Unit34>
         <Filename Value="pu_viewtext.pas"/>
@@ -331,6 +333,7 @@
         <ComponentName Value="f_EditTargets"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_edittargets"/>
       </Unit40>
       <Unit41>
         <Filename Value="pu_editplan.pas"/>
@@ -346,6 +349,7 @@
       <Unit43>
         <Filename Value="cu_planetarium.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_planetarium"/>
       </Unit43>
       <Unit44>
         <Filename Value="fu_planetarium.pas"/>
@@ -353,6 +357,7 @@
         <ComponentName Value="f_planetarium"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fu_planetarium"/>
       </Unit44>
       <Unit45>
         <Filename Value="cu_astrometry.pas"/>
@@ -364,7 +369,13 @@
         <ComponentName Value="f_planetariuminfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="pu_planetariuminfo"/>
       </Unit46>
+      <Unit47>
+        <Filename Value="cu_planetarium_cdc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="cu_planetarium_cdc"/>
+      </Unit47>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -84,8 +84,8 @@ FTimeout:=500;
 FCmdTimeout:=10/86400;
 FErrorDesc:='';
 FRecvData:='';
-Fra:=0;
-Fde:=0;
+Fra:=NullCoord;
+Fde:=NullCoord;
 Fobjname:='';
 end;
 

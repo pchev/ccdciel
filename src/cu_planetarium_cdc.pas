@@ -54,10 +54,6 @@ const msgTimeout='Timeout!';
 
 implementation
 
-{$ifdef mswindows}
-  uses  Registry;
-{$endif}
-
 /////////////////// TPlanetarium_cdc ///////////////////////////
 
 Constructor TPlanetarium_cdc.Create ;
@@ -162,7 +158,8 @@ try
 FStatus:=false;
 DisplayMessage(tcpclient.GetErrorDesc);
 finally
-if assigned(FonDisconnect) then FonDisconnect(self); terminate;
+if assigned(FonDisconnect) then FonDisconnect(self);
+terminate;
 tcpclient.Disconnect;
 tcpclient.Free;
 end;
