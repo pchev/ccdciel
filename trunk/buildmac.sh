@@ -18,8 +18,7 @@ wd=`pwd`
 currentrev=$(LANG=C svn info . | grep Revision: | sed 's/Revision: //')
 
 # delete old files
-  rm ccdciel-3*.dmg
-  rm bin-*.bz2
+  rm ccdciel*.dmg
   rm -rf $basedir
 
 # make i386 Mac version
