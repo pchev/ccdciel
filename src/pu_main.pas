@@ -1048,7 +1048,22 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
     devConnecting: inc(concount);
   end;
  end;
-
+ if WantFocuser then begin
+  inc(allcount);
+  case focuser.Status of
+    devConnected: inc(upcount);
+    devDisconnected: inc(downcount);
+    devConnecting: inc(concount);
+  end;
+ end;
+ if WantMount then begin
+  inc(allcount);
+  case mount.Status of
+    devConnected: inc(upcount);
+    devDisconnected: inc(downcount);
+    devConnecting: inc(concount);
+  end;
+ end;
  if allcount=0 then SetDisconnected
  else if (upcount=allcount) then begin
    SetConnected;
