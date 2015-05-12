@@ -82,6 +82,8 @@ private
    procedure NewSwitch(svp: ISwitchVectorProperty);
    procedure NewLight(lvp: ILightVectorProperty);
    procedure NewBlob(bp: IBLOB);
+   procedure DeleteDevice(dp: Basedevice);
+   procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure msg(txt: string);
@@ -134,6 +136,8 @@ if csDestroying in ComponentState then exit;
   indiclient.onNewSwitch:=@NewSwitch;
   indiclient.onNewLight:=@NewLight;
   indiclient.onNewBlob:=@NewBlob;
+  indiclient.onDeleteDevice:=@DeleteDevice;
+  indiclient.onDeleteProperty:=@DeleteProperty;
   indiclient.onServerConnected:=@ServerConnected;
   indiclient.onServerDisconnected:=@ServerDisconnected;
   ClearStatus;
@@ -289,6 +293,18 @@ begin
      Fconnected:=true;
      CCDDevice:=dp;
   end;
+end;
+
+procedure T_indicamera.DeleteDevice(dp: Basedevice);
+begin
+  if dp.getDeviceName=Findidevice then begin
+     Disconnect;
+  end;
+end;
+
+procedure T_indicamera.DeleteProperty(indiProp: IndiProperty);
+begin
+  { TODO :  check if a vital property is removed ? }
 end;
 
 procedure T_indicamera.NewMessage(txt: string);

@@ -763,6 +763,8 @@ begin
   CloseLog;
   planetarium.Disconnect;
   autoguider.Disconnect;
+  autoguider.Terminate;
+  planetarium.Terminate;
   CloseAction:=caFree;
 end;
 
@@ -776,8 +778,8 @@ begin
   config.Free;
   Filters.Free;
   astrometry.Free;
-  autoguider.Terminate;
-  planetarium.Terminate;
+  autoguider.Free;
+  planetarium.Free;
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 

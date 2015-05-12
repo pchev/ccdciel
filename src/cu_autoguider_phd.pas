@@ -41,6 +41,7 @@ type
     procedure Execute; override;
   public
     Constructor Create;
+    Destructor Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
     procedure ConnectGear; override;
@@ -61,6 +62,11 @@ begin
   FTargetHost:='localhost';
   FTargetPort:='4400';
   FTimeout:=500;
+end;
+
+Destructor T_autoguider_phd.Destroy;
+begin
+  inherited Destroy;
 end;
 
 Procedure T_autoguider_phd.Connect(cp1: string; cp2:string='');
