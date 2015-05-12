@@ -66,6 +66,7 @@ end;
 
 Destructor TPlanetarium_samp.Destroy;
 begin
+  ClientChangeTimer.Enabled:=false;
   ClientChangeTimer.Free;
   if SampClient<>nil then Disconnect;
   inherited Destroy;

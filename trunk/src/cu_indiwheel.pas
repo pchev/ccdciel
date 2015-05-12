@@ -52,6 +52,8 @@ T_indiwheel = class(T_wheel)
    procedure NewText(tvp: ITextVectorProperty);
    procedure NewSwitch(svp: ISwitchVectorProperty);
    procedure NewLight(lvp: ILightVectorProperty);
+   procedure DeleteDevice(dp: Basedevice);
+   procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure msg(txt: string);
@@ -79,6 +81,8 @@ if csDestroying in ComponentState then exit;
   indiclient.onNewText:=@NewText;
   indiclient.onNewSwitch:=@NewSwitch;
   indiclient.onNewLight:=@NewLight;
+  indiclient.onDeleteDevice:=@DeleteDevice;
+  indiclient.onDeleteProperty:=@DeleteProperty;
   indiclient.onServerConnected:=@ServerConnected;
   indiclient.onServerDisconnected:=@ServerDisconnected;
   ClearStatus;
@@ -196,6 +200,18 @@ begin
      Fconnected:=true;
      WheelDevice:=dp;
   end;
+end;
+
+procedure T_indiwheel.DeleteDevice(dp: Basedevice);
+begin
+  if dp.getDeviceName=Findidevice then begin
+     Disconnect;
+  end;
+end;
+
+procedure T_indiwheel.DeleteProperty(indiProp: IndiProperty);
+begin
+  { TODO :  check if a vital property is removed ? }
 end;
 
 procedure T_indiwheel.NewMessage(txt: string);

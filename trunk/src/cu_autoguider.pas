@@ -52,6 +52,7 @@ type
     Procedure ProcessEvent(txt:string); virtual; abstract;
   public
     Constructor Create;
+    Destructor Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
     procedure Disconnect; virtual; abstract;
     procedure ConnectGear; virtual; abstract;
@@ -91,6 +92,11 @@ FRecvData:='';
 FSettlePix:='1.0';
 FSettleTmin:='5';
 FSettleTmax:='30';
+end;
+
+Destructor T_autoguider.Destroy;
+begin
+  inherited Destroy;
 end;
 
 procedure T_autoguider.DisplayMessage(msg:string);
