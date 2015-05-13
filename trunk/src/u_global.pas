@@ -105,6 +105,15 @@ type
     cdcwcs_sky2xy: Tcdcwcs_sky2xy;
     cdcwcs_xy2sky: Tcdcwcs_xy2sky;
 
+  //  zlib
+  type
+    Tuncompress = function(dest:Pointer; destLen: Pointer; source: Pointer; sourceLen: UInt64):longint; cdecl;
+  var
+    uncompress: Tuncompress;
+    zlibok: boolean;
+    zlib: TLibHandle;
+
+
   const
     maxfitslist=15;  // must corespond to value in cdcwcs.c
 
@@ -142,14 +151,17 @@ const
   {$ifdef linux}
     defCapturePath='/tmp';
     libwcs = 'libccdcielwcs.so';
+    libz = 'libz.so.1';
   {$endif}
   {$ifdef darwin}
     defCapturePath='/tmp';
     libwcs = 'libccdcielwcs.dylib';
+    libz = 'libz.dylib';
   {$endif}
   {$ifdef mswindows}
     defCapturePath='C:\';
     libwcs = 'libccdcielwcs.dll';
+    libz = 'zlib1.dll';
   {$endif}
 
 var

@@ -503,13 +503,31 @@ begin
 end;
 
 procedure T_indicamera.NewBlob(bp: IBLOB);
+var source,dest: array of char;
+    sourceLen,destLen:UInt64;
+    i: integer;
 begin
  if bp.bloblen>0 then begin
-   { TODO : uncompress }
    FImgStream.Clear;
    FImgStream.Position:=0;
    bp.blob.Position:=0;
-   FImgStream.CopyFrom(bp.blob,bp.size);
+   if pos('.z',bp.format)>0 then begin //compressed
+       if zlibok then begin
+         sourceLen:=bp.bloblen;
+         destLen:=bp.size;
+         SetLength(source,sourceLen);
+         SetLength(dest,destLen);
+         bp.blob.Read(source[0],sourceLen);
+         i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
+         if i=0 then
+            FImgStream.Write(dest[0],destLen);
+         SetLength(source,0);
+         SetLength(dest,0);
+       end;
+   end
+   else begin  //uncompressed
+      FImgStream.CopyFrom(bp.blob,bp.size);
+   end;
    NewImage;
  end;
 end;
@@ -522,7 +540,7 @@ if (UploadMode<>nil)and(UploadLocal.s=ISS_ON) then begin
    indiclient.sendNewSwitch(UploadMode);
 end;
 if UseMainSensor then begin
-  if (CCDCompression<>nil)and(CCDcompress.s=ISS_ON) then begin
+  if (not zlibok)and(CCDCompression<>nil)and(CCDcompress.s=ISS_ON) then begin
     IUResetSwitch(CCDCompression);
     CCDraw.s:=ISS_ON;
     indiclient.sendNewSwitch(CCDCompression);
@@ -533,16 +551,16 @@ if UseMainSensor then begin
     indiclient.sendNewNumber(CCDexpose);
   end;
 end else begin
-  if (GuiderCompression<>nil)and(Guidercompress.s=ISS_ON) then begin
-     IUResetSwitch(GuiderCompression);
-     Guiderraw.s:=ISS_ON;
-     indiclient.sendNewSwitch(GuiderCompression);
-     indiclient.WaitBusy(GuiderCompression);
-   end;
-   if Guiderexpose<>nil then begin;
-     GuiderexposeValue.value:=exptime;
-     indiclient.sendNewNumber(Guiderexpose);
-   end;
+  if (not zlibok)and(GuiderCompression<>nil)and(Guidercompress.s=ISS_ON) then begin
+    IUResetSwitch(GuiderCompression);
+    Guiderraw.s:=ISS_ON;
+    indiclient.sendNewSwitch(GuiderCompression);
+    indiclient.WaitBusy(GuiderCompression);
+  end;
+  if Guiderexpose<>nil then begin;
+    GuiderexposeValue.value:=exptime;
+    indiclient.sendNewNumber(Guiderexpose);
+  end;
 end;
 end;
 
