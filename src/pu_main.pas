@@ -393,6 +393,13 @@ begin
     cdcwcs_xy2sky:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_xy2sky'));
     cdcwcs_getinfo:= Tcdcwcs_getinfo(GetProcedureAddress(cdcwcslib,'cdcwcs_getinfo'));
   end;
+  zlibok:=false;
+  uncompress:=nil;
+  zlib:=LoadLibrary(libz);
+  if zlib<>0 then begin
+    uncompress:= Tuncompress(GetProcedureAddress(zlib,'uncompress'));
+    if uncompress<>nil then zlibok:=true;
+  end;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   ConfigDir:=GetAppConfigDirUTF8(false,true);
