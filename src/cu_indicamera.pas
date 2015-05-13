@@ -508,6 +508,7 @@ var source,dest: array of char;
     i: integer;
 begin
  if bp.bloblen>0 then begin
+   if assigned(FonExposureProgress) then FonExposureProgress(0);
    FImgStream.Clear;
    FImgStream.Position:=0;
    bp.blob.Position:=0;

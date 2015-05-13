@@ -282,6 +282,8 @@ end;
 procedure T_indiwheel.SetFilter(num:integer);
 begin
 if (WheelSlot<>nil)and(num>0) then begin;
+  if num>Slot.max then num:=round(Slot.max);
+  if num<Slot.min then num:=round(Slot.min);
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
   indiclient.WaitBusy(WheelSlot);
@@ -292,6 +294,8 @@ function  T_indiwheel.GetFilter:integer;
 begin
 if WheelSlot<>nil then begin;
   result:=round(Slot.value);
+  if result>Slot.max then result:=round(Slot.max);
+  if result<Slot.min then result:=round(Slot.min);
 end
 else result:=0;
 end;

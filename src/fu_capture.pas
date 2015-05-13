@@ -100,9 +100,11 @@ begin
   if (not Frunning) and Assigned(FonAbortExposure) then FonAbortExposure(self);
   if Frunning then begin
     BtnStart.Font.Color:=clGreen;
+    BtnStart.Caption:='Stop';
     if Assigned(FonMsg) then FonMsg('Start capture');
   end else begin
     BtnStart.Font.Color:=clDefault;
+    BtnStart.Caption:='Start';
     if Assigned(FonMsg) then FonMsg('Stop capture');
   end;
 end;
@@ -137,6 +139,7 @@ procedure Tf_capture.Stop;
 begin
   Frunning:=false;
   BtnStart.Font.Color:=clDefault;
+  BtnStart.Caption:='Start';
 end;
 
 end.
