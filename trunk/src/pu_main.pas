@@ -784,9 +784,11 @@ begin
   ImaBmp.Free;
   config.Free;
   Filters.Free;
+  {$ifndef mswindows}
   astrometry.Free;
   autoguider.Free;
   planetarium.Free;
+  {$endif}
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
@@ -2094,6 +2096,18 @@ end;
 procedure Tf_main.CameraProgress(n:double);
 var txt: string;
 begin
+ if (n=0) then begin
+   if ((f_capture.Running)or(f_preview.Running)) then begin
+     txt := 'Downloading...';
+     if Capture then begin
+       if f_capture.Running then
+         StatusBar1.Panels[1].Text := 'Seq: '+inttostr(f_capture.SeqCount)+' '+txt;
+     end
+     else begin
+        StatusBar1.Panels[1].Text := txt;
+     end;
+   end;
+ end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
   if Capture then begin
@@ -2104,6 +2118,7 @@ begin
   else begin
      StatusBar1.Panels[1].Text := 'Exp: '+txt+' sec.';
   end;
+ end;
 end;
 
 procedure Tf_main.CameraNewImage(Sender: TObject);

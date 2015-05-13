@@ -104,6 +104,7 @@ begin
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
         BtnLoop.Font.Color:=clGreen;
+        BtnLoop.Caption:='Stop Loop';
         FLoop:=True;
         if Assigned(FonMsg) then FonMsg('Start preview loop');
      end else begin
@@ -113,6 +114,7 @@ begin
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
      BtnLoop.Font.Color:=clDefault;
+     BtnLoop.Caption:='Loop';
      FLoop:=False;
      if Assigned(FonMsg) then FonMsg('Stop preview loop');
   end;
@@ -123,6 +125,7 @@ begin
   Frunning:=false;
   FLoop:=false;
   BtnLoop.Font.Color:=clDefault;
+  BtnLoop.Caption:='Loop';
 end;
 
 end.
