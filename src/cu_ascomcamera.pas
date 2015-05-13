@@ -234,14 +234,16 @@ begin
  try
  c:=0;
  repeat
+    if (not VarIsEmpty(V)) then
     ok:=V.ImageReady;
-    if ok then break;
+    if ok or VarIsEmpty(V) then break;
     if assigned(FonExposureProgress)and((c mod 10)=0) then FonExposureProgress(secperday*(timeend-now));
     Sleep(100);
     Application.ProcessMessages;
     inc(c);
  until now>timeout;
  if ok then begin
+   if assigned(FonExposureProgress) then FonExposureProgress(0);
    nax1:=V.NumX;
    nax2:=V.NumY;
    pix:=V.PixelSizeX;
