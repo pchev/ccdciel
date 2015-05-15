@@ -2096,7 +2096,7 @@ end;
 procedure Tf_main.CameraProgress(n:double);
 var txt: string;
 begin
- if (n=0) then begin
+ if (n<=0) then begin
    if ((f_capture.Running)or(f_preview.Running)) then begin
      txt := 'Downloading...';
      if Capture then begin

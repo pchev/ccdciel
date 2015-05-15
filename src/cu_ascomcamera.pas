@@ -94,7 +94,7 @@ begin
  FCameraInterface:=ASCOM;
  ExposureTimer:=TTimer.Create(nil);
  ExposureTimer.Enabled:=false;
- ExposureTimer.Interval:=10;
+ ExposureTimer.Interval:=100;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
@@ -208,6 +208,10 @@ if Connected then begin
      timeend:=now+(exptime)/secperday;
      timeout:=now+(exptime+10)/secperday;
      Fexptime:=exptime;
+     if exptime>=10 then ExposureTimer.Interval:=1000
+     else if exptime>=1 then ExposureTimer.Interval:=500
+     else if exptime>=0.5 then ExposureTimer.Interval:=100
+     else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
      on E: EOleException do msg('Error: ' + E.Message);
@@ -220,7 +224,7 @@ procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var ok: boolean;
     i,j,c,sz,xs,ys: integer;
-    nax1,nax2,pix,piy: integer;
+    nax1,nax2,pix,piy,state: integer;
     dateobs,ccdname,frname:string;
     img: array of array of LongInt;
     ii: smallint;
@@ -232,16 +236,17 @@ begin
  ExposureTimer.Enabled:=false;
  {$ifdef mswindows}
  try
- c:=0;
- repeat
-    if (not VarIsEmpty(V)) then
+ if (now<timeout)and(not VarIsEmpty(V)) then begin
+    state:=V.CameraState;
     ok:=V.ImageReady;
-    if ok or VarIsEmpty(V) then break;
-    if assigned(FonExposureProgress)and((c mod 10)=0) then FonExposureProgress(secperday*(timeend-now));
-    Sleep(100);
-    Application.ProcessMessages;
-    inc(c);
- until now>timeout;
+    if (not ok)and(state>=1)and(state<=4) then begin
+      if assigned(FonExposureProgress) then FonExposureProgress(secperday*(timeend-now));
+      ExposureTimer.Enabled:=true;
+      exit;
+    end;
+ end
+ else ok:=false;
+
  if ok then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
    nax1:=V.NumX;
