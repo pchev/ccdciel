@@ -5,7 +5,7 @@ object f_main: Tf_main
   Width = 800
   ActiveControl = Panel1
   Caption = 'CCD Ciel'
-  ClientHeight = 353
+  ClientHeight = 350
   ClientWidth = 800
   Menu = MainMenu1
   OnClose = FormClose
@@ -14,7 +14,7 @@ object f_main: Tf_main
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.4.1.0'
+  LCLVersion = '1.4.0.4'
   object PageControlRight: TPageControl
     Left = 612
     Height = 333
@@ -28,15 +28,15 @@ object f_main: Tf_main
     TabOrder = 0
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
-      ClientHeight = 295
-      ClientWidth = 180
+      ClientHeight = 303
+      ClientWidth = 184
       ImageIndex = 0
       object PanelRight1: TPanel
         Tag = 1
         Left = 0
-        Height = 295
+        Height = 303
         Top = 0
-        Width = 180
+        Width = 184
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -52,8 +52,8 @@ object f_main: Tf_main
       end
     end
     object TabSheet2: TTabSheet
-      ClientHeight = 295
-      ClientWidth = 180
+      ClientHeight = 303
+      ClientWidth = 184
       ImageIndex = 1
       object PanelRight2: TPanel
         Tag = 1
@@ -76,8 +76,8 @@ object f_main: Tf_main
       end
     end
     object TabSheet3: TTabSheet
-      ClientHeight = 295
-      ClientWidth = 180
+      ClientHeight = 303
+      ClientWidth = 184
       ImageIndex = 2
       object PanelRight3: TPanel
         Tag = 1
@@ -100,8 +100,8 @@ object f_main: Tf_main
       end
     end
     object TabSheet4: TTabSheet
-      ClientHeight = 295
-      ClientWidth = 180
+      ClientHeight = 303
+      ClientWidth = 184
       ImageIndex = 3
       object PanelRight4: TPanel
         Tag = 1
@@ -217,12 +217,12 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
+    Height = 17
     Top = 333
     Width = 800
     Panels = <    
       item
-        Width = 100
+        Width = 150
       end    
       item
         Width = 150

@@ -170,7 +170,7 @@ end;
 procedure Tf_starprofile.ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
 var Val,ValMax: double;
   i,j,rs,i0,x1,x2,y1,y2,xm,ym: integer;
-  bg,snr,r,Xg,Yg,fxg,fyg,SumVal,SumValX,SumValY,SumValR,xs,ys,hfd,fwhm,fwhmarcsec:double;
+  bg,noise,snr,r,Xg,Yg,fxg,fyg,SumVal,SumValX,SumValY,SumValR,xs,ys,hfd,fwhm,fwhmarcsec:double;
   txt: string;
   simg:TPiw16;
   imgdata: Tiw16;
@@ -218,15 +218,16 @@ begin
  SumValR:=0;
  bg:=min+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) div 4)/c;
  valmax:=valmax-bg;
- snr:=valmax/bg;
- if snr>1 then begin
+ noise:=sqrt(bg);
+ snr:=valmax/noise;
+ if snr>3 then begin
    for i:=-rs to rs do
      for j:=-rs to rs do begin
        Val:=min+Img[0,y+j,x+i]/c-bg;
-       xs:=i-fxg;
-       ys:=j-fyg;
+       xs:=i+0.5-fxg;
+       ys:=j+0.5-fyg;
        r:=sqrt(xs*xs+ys*ys);
-       if val>(1.1*bg) then begin
+       if val>(2*noise) then begin
          SumVal:=SumVal+Val;
          SumValR:=SumValR+Val*r;
        end;
@@ -288,14 +289,14 @@ begin
      if ValMax>0 then begin
        Canvas.Pen.Color:=clRed;
        xs:=Width/s;
-       ys:=Height/(ValMax+bg);
+       ys:=Height/(1.05*ValMax);
        j:=trunc(FStarY);
        i0:=trunc(FStarX)-(s div 2);
        x1:=0;
-       y1:=Height-trunc((min+(img[0,j,i0]-bg)/c)*ys);
+       y1:=Height-trunc((min+(img[0,j,i0]/c)-bg)*ys);
        for i:=0 to s-1 do begin
          x2:=trunc(i*xs);
-         y2:=trunc((min+(img[0,j,i0+i]-bg)/c)*ys);
+         y2:=trunc((min+(img[0,j,i0+i]/c)-bg)*ys);
          y2:=Height-y2;
          Canvas.Line(x1,y1,x2,y2);
          x1:=x2;
