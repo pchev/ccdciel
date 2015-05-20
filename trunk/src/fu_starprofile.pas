@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_modelisation, u_global,
+uses  u_modelisation, u_global, math,
   Graphics, Classes, SysUtils, FPImage, cu_fits,
   FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -70,7 +70,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
+    procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
     property FindStar : boolean read FFindStar;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
@@ -167,9 +167,9 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_starprofile.ShowProfile(img:Timaw16; c,min: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
+procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
 var Val,ValMax: double;
-  i,j,rs,i0,x1,x2,y1,y2,xm,ym: integer;
+  i,j,rs,rrs,i0,x1,x2,y1,y2,xm,ym: integer;
   bg,noise,snr,r,Xg,Yg,fxg,fyg,SumVal,SumValX,SumValY,SumValR,xs,ys,hfd,fwhm,fwhmarcsec:double;
   txt: string;
   simg:TPiw16;
@@ -185,7 +185,7 @@ begin
  ValMax:=0;
  for i:=-rs to rs do
    for j:=-rs to rs do begin
-     Val:=min+Img[0,y+j,x+i]/c;
+     Val:=vmin+Img[0,y+j,x+i]/c;
      if Val>ValMax then begin
           ValMax:=Val;
           xm:=i;
@@ -195,65 +195,67 @@ begin
  if ValMax=0 then exit;
  x:=x+xm;
  y:=y+ym;
- // Get center of gravity
- SumVal:=0;
- SumValX:=0;
- SumValY:=0;
- for i:=-rs to rs do
-   for j:=-rs to rs do begin
-     Val:=min+Img[0,y+j,x+i]/c;
-     SumVal:=SumVal+Val;
-     SumValX:=SumValX+Val*i;
-     SumValY:=SumValY+Val*j;
-   end;
- Xg:=SumValX/SumVal;
- Yg:=SumValY/SumVal;
- x:=trunc(x+Xg);
- y:=trunc(y+Yg);
- fxg:=frac(x+Xg);
- fyg:=frac(y+Yg);
- // Get HFD
- hfd:=-1;
- SumVal:=0;
- SumValR:=0;
- bg:=min+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) div 4)/c;
- valmax:=valmax-bg;
- noise:=sqrt(bg);
- snr:=valmax/noise;
- if snr>3 then begin
-   for i:=-rs to rs do
-     for j:=-rs to rs do begin
-       Val:=min+Img[0,y+j,x+i]/c-bg;
-       xs:=i+0.5-fxg;
-       ys:=j+0.5-fyg;
-       r:=sqrt(xs*xs+ys*ys);
-       if val>(2*noise) then begin
-         SumVal:=SumVal+Val;
-         SumValR:=SumValR+Val*r;
-       end;
-     end;
-   hfd:=2*SumValR/SumVal;
- end;
  // Get gaussian psf
+ hfd:=-1;
  fwhm:=-1;
- if (hfd>0) then begin
-   setlength(imgdata,s,s);
-   simg:=addr(imgdata);
-   for i:=0 to s-1 do
-     for j:=0 to s-1 do begin
-       x1:=x+i-rs;
-       y1:=y+j-rs;
-       if (x1>0)and(x1<xmax)and(y1>0)and(y1<ymax) then
-          imgdata[i,j]:=trunc(min+img[0,y1,x1]/c)
-       else imgdata[i,j]:=trunc(min);
+ setlength(imgdata,s,s);
+ simg:=addr(imgdata);
+ for i:=0 to s-1 do
+   for j:=0 to s-1 do begin
+     x1:=x+i-rs;
+     y1:=y+j-rs;
+     if (x1>0)and(x1<xmax)and(y1>0)and(y1<ymax) then
+        imgdata[i,j]:=trunc(vmin+img[0,y1,x1]/c)
+     else imgdata[i,j]:=trunc(vmin);
+   end;
+ ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
+ if psf.Flux>0 then begin
+   fwhm:=PSF.Sigma;
+   if (focal>0)and(pxsize>0) then begin
+     fwhmarcsec:=fwhm*3600*rad2deg*arctan(pxsize/1000/focal);
+   end
+   else fwhmarcsec:=-1;
+ end;
+ if fwhm>0 then begin
+   // crop star region of interest
+   rrs:=round(min(rs,max(3,2*fwhm)));
+   // Get center of gravity
+   SumVal:=0;
+   SumValX:=0;
+   SumValY:=0;
+   for i:=-rrs to rrs do
+     for j:=-rrs to rrs do begin
+       Val:=vmin+Img[0,y+j,x+i]/c;
+       SumVal:=SumVal+Val;
+       SumValX:=SumValX+Val*i;
+       SumValY:=SumValY+Val*j;
      end;
-   ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
-   if psf.Flux>0 then begin
-     fwhm:=PSF.Sigma;
-     if (focal>0)and(pxsize>0) then begin
-       fwhmarcsec:=fwhm*3600*rad2deg*arctan(pxsize/1000/focal);
-     end
-     else fwhmarcsec:=-1;
+   Xg:=SumValX/SumVal;
+   Yg:=SumValY/SumVal;
+   x:=trunc(x+Xg);
+   y:=trunc(y+Yg);
+   fxg:=frac(x+Xg);
+   fyg:=frac(y+Yg);
+   // Get HFD
+   SumVal:=0;
+   SumValR:=0;
+   bg:=vmin+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) div 4)/c;
+   valmax:=valmax-bg;
+   noise:=sqrt(bg);
+   snr:=valmax/noise;
+   if snr>3 then begin
+     for i:=-rrs to rrs do
+       for j:=-rrs to rrs do begin
+         Val:=vmin+Img[0,y+j,x+i]/c-bg;
+         xs:=i+0.5-fxg;
+         ys:=j+0.5-fyg;
+         r:=sqrt(xs*xs+ys*ys);
+         if val>(2*noise) then begin
+           SumVal:=SumVal+Val;
+           SumValR:=SumValR+Val*r;
+         end;
+       end;
+     hfd:=2*SumValR/SumVal;
    end;
  end;
  // Plot result
@@ -293,10 +295,10 @@ begin
        j:=trunc(FStarY);
        i0:=trunc(FStarX)-(s div 2);
        x1:=0;
-       y1:=Height-trunc((min+(img[0,j,i0]/c)-bg)*ys);
+       y1:=Height-trunc((vmin+(img[0,j,i0]/c)-bg)*ys);
        for i:=0 to s-1 do begin
          x2:=trunc(i*xs);
-         y2:=trunc((min+(img[0,j,i0+i]/c)-bg)*ys);
+         y2:=trunc((vmin+(img[0,j,i0+i]/c)-bg)*ys);
          y2:=Height-y2;
          Canvas.Line(x1,y1,x2,y2);
          x1:=x2;
