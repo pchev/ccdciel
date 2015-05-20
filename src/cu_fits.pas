@@ -410,7 +410,7 @@ end;
 constructor TFits.Create(AOwner:TComponent);
 begin
 inherited Create(AOwner);
-Fitt:=ittramp;
+Fitt:=ittlinear;
 Fheight:=0;
 Fwidth:=0;
 ImgDmin:=0;
