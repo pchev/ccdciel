@@ -39,6 +39,7 @@ type
     procedure SetState;
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
+    procedure StarLostTimerTimer(Sender: TObject); override;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -84,7 +85,6 @@ end;
 
 procedure T_autoguider_phd.Execute;
 var buf:string;
-    ending : boolean;
 begin
 tcpclient:=TTCPClient.Create;
 try
@@ -93,6 +93,7 @@ try
  tcpclient.Timeout := FTimeout;
  // connect
  if tcpclient.Connect then begin
+   FRunning:=true;
    if assigned(FonConnect) then FonConnect(self);
    // main loop
    repeat
@@ -108,6 +109,8 @@ try
  end;
 DisplayMessage(tcpclient.GetErrorDesc);
 finally
+FRunning:=false;
+StarLostTimer.Enabled:=false;
 terminate;
 tcpclient.Disconnect;
 FStatus:='Disconnected';
@@ -119,7 +122,7 @@ end;
 procedure T_autoguider_phd.Send(const Value: string);
 begin
 //writeln('>>'+Value);
- if Value>'' then begin
+ if (tcpclient<>nil)and(Value>'') then begin
    tcpclient.Sock.SendString(Value+crlf);
    if tcpclient.Sock.LastError<>0 then begin
       Terminate;
@@ -163,50 +166,96 @@ end;
 
 procedure T_autoguider_phd.JsonToStringlist(jsontxt:string; var SK,SV: TStringList);
 var  J: TJSONData;
+     i,p: integer;
+     c1,c2: string;
+     b1: string;
 begin
 jsontxt:=StringReplace(jsontxt,chr(10),' ',[rfReplaceAll]);
 jsontxt:=StringReplace(jsontxt,chr(13),' ',[rfReplaceAll]);
+for i:=1 to length(jsontxt)-1 do begin
+  c1:=copy(jsontxt,i,1);
+  c2:=copy(jsontxt,i+1,1);
+  if (c1=',')and(c2>='0')and(c2<='9') then begin
+     b1:=copy(jsontxt,1,i-1);
+     delete(jsontxt,1,i);
+     jsontxt:=b1+'.'+jsontxt;
+  end;
+end;
 J:=GetJSON(jsontxt);
 JsonDataToStringlist(SK,SV,'',J);
 J.Free;
 end;
 
 Procedure T_autoguider_phd.ProcessEvent(txt:string);
-var eventname,rpcid,rpcresult,rpcerror: string;
+var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
-    p,i:integer;
+    p,i,s:integer;
 begin
-//writeln('=='+txt);
+writeln('=='+txt);
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
+FLastError:='';
 try
 JsontoStringlist(txt,attrib,value);
 p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
-   if (eventname='GuideStep')and(FStatus<>'Settling') then FStatus:='Guiding'
+   if (eventname='GuideStep') then begin
+     if (FStatus<>'Settling') then FStatus:='Guiding';
+     i:=attrib.IndexOf('ErrorCode');
+     if i>=0 then FLastError:=value[i];
+   end
    else if eventname='StartGuiding' then FStatus:='Start Guiding'
    else if eventname='GuidingStopped' then FStatus:='Stopped'
    else if eventname='StarSelected' then FStatus:='Star Selected'
-   else if eventname='StarLost' then FStatus:='Star lost'
+   else if eventname='StarLost' then begin
+      i:=attrib.IndexOf('Status');
+      if i>=0 then FLastError:=value[i];
+      if (FStatus='Guiding')and(not StarLostTimer.Enabled) then begin
+        FStarLostTime:=now;
+        StarLostTimer.Enabled:=true;
+      end;
+      FStatus:='Star lost';
+   end
    else if eventname='Paused' then FStatus:='Paused'
    else if eventname='Resumed' then FStatus:='Resumed'
    else if eventname='LockPositionSet' then FStatus:='Lock Position Set'
    else if eventname='CalibrationComplete' then FStatus:='Calibration Complete'
    else if eventname='StarSelected' then FStatus:='Star Selected'
    else if eventname='StartCalibration' then FStatus:='Start Calibration'
-   else if eventname='CalibrationFailed' then FStatus:='Calibration Failed'
+   else if eventname='CalibrationFailed' then begin
+     FStatus:='Calibration Failed';
+     i:=attrib.IndexOf('Reason');
+     if i>=0 then FLastError:=value[i];
+   end
    else if eventname='CalibrationDataFlipped' then FStatus:='Calibration Data Flipped'
    else if eventname='LoopingExposures' then FStatus:='Looping Exposures'
    else if eventname='LoopingExposuresStopped' then FStatus:='Looping Exposures Stopped'
    else if eventname='Settling' then FStatus:='Settling'
-   else if eventname='SettleDone' then FStatus:='Settle Done'
+   else if eventname='SettleDone' then begin
+     i:=attrib.IndexOf('Status');
+     if i>=0 then s:=StrToIntDef(value[i],0) else s:=0;
+     if s=0 then
+       FStatus:='Settle Done'
+     else begin
+       i:=attrib.IndexOf('Error');
+       if i>=0 then err:=value[i] else err:='?';
+       FStatus:='Error: '+err;
+     end;
+   end
    else if eventname='GuidingDithered' then FStatus:='Guiding Dithered'
    else if eventname='LockPositionLost' then FStatus:='Lock Position Lost'
-   else if eventname='Alert' then FStatus:='Alert'
+   else if eventname='Alert' then begin
+     FStatus:='Alert';
+     i:=attrib.IndexOf('Type');
+     if i>=0 then err:=value[i]+', ' else err:='';
+     i:=attrib.IndexOf('Msg');
+     if i>=0 then err:=err+value[i];
+     FLastError:=err;
+   end
    else if eventname='AppState' then begin
      i:=attrib.IndexOf('State');
-     FStatus:=value[i];
+     if i>=0 then FStatus:=value[i];
    end
    else if eventname='Version' then begin
      i:=attrib.IndexOf('PHDVersion');
@@ -289,11 +338,12 @@ begin
   else if FStatus='Calibration Data Flipped' then FState:=FState
   else if FStatus='Looping Exposures' then FState:=FState
   else if FStatus='Looping Exposures Stopped' then FState:=GUIDER_IDLE
-  else if FStatus='Settling' then FState:=GUIDER_BUSY
+  else if FStatus='Settling' then FState:=FState
   else if FStatus='Settle Done' then FState:=FState
   else if FStatus='Guiding Dithered' then FState:=GUIDER_BUSY
   else if FStatus='Lock Position Lost' then FState:=FState
-  else if FStatus='Alert' then FState:=GUIDER_ALERT;
+  else if FStatus='Alert' then FState:=GUIDER_ALERT
+  else if copy(FStatus,1,6)='Error:' then FState:=GUIDER_ALERT;
 end;
 
 procedure T_autoguider_phd.ConnectGear;
@@ -376,6 +426,35 @@ begin
   buf:=buf+'"id": 2010}';
   Send(buf);
   FState:=GUIDER_BUSY;
+end;
+
+procedure T_autoguider_phd.StarLostTimerTimer(Sender: TObject);
+var losttime: integer;
+begin
+ if FState=GUIDER_GUIDING then begin
+    if assigned(FonShowMessage) then FonShowMessage('Guiding recovered from star lost');
+    StarLostTimer.Enabled:=false;
+ end
+ else begin
+    losttime:=round(secperday*(now-FStarLostTime));
+    FonShowMessage('Star lost for '+inttostr(losttime)+' seconds...');
+    if losttime>FStarLostTimeout2 then begin
+       if assigned(FonShowMessage) then FonShowMessage('Cannot recover from star lost. Stop guiding now.');
+       StarLostTimer.Enabled:=false;
+       guide(false);
+    end
+    else if (FState<>GUIDER_BUSY)and(losttime>FStarLostTimeout1) then begin
+       if assigned(FonShowMessage) then FonShowMessage('Try to restart guiding');
+       StarLostTimer.Enabled:=false;
+       guide(false);
+       WaitBusy();
+       Sleep(1000);
+       guide(true);
+       WaitBusy();
+       Sleep(1000);
+       StarLostTimer.Enabled:=true;
+    end;
+ end;
 end;
 
 end.

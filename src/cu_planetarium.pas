@@ -36,6 +36,7 @@ protected
   FTimeout : integer;
   FCmdTimeout : double;
   FStatus: boolean;
+  FRunning: boolean;
   Fra, Fde: double;
   Fobjname: string;
   FPlanetariumType: TPlanetariumType;
@@ -56,6 +57,7 @@ public
   function Cmd(const Value: string):string; virtual; abstract;
   function ShowImage(fn: string):boolean; virtual; abstract;
   property Terminated;
+  property Running: boolean read FRunning;
   property Connected: boolean read FStatus;
   property Timeout : integer read FTimeout write FTimeout;
   property CmdTimeout: double read GetCmdTimeout write SetCmdTimeout;
@@ -79,6 +81,7 @@ Constructor TPlanetarium.Create ;
 begin
 inherited create(true);
 freeonterminate:=true;
+FRunning:=false;
 FStatus:=false;
 FTimeout:=500;
 FCmdTimeout:=10/86400;

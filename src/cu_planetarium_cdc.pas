@@ -62,7 +62,7 @@ inherited Create;
 FPlanetariumType:=CDC;
 FTargetHost:='localhost';
 FTargetPort:='3292';
-FTimeout:=500;
+FTimeout:=200;
 FCmdTimeout:=10/86400;
 end;
 
@@ -93,6 +93,7 @@ try
  tcpclient.Timeout := FTimeout;
  // connect
  if tcpclient.Connect then begin
+    FRunning:=true;
     // wait connect message
     dateto:=now+Fcmdtimeout;
     repeat
@@ -155,13 +156,14 @@ try
    DisplayMessage('Cannot connect to CdC, Is CdC running and the server active?');
 
  end;
+FRunning:=false;
 FStatus:=false;
 DisplayMessage(tcpclient.GetErrorDesc);
 finally
-if assigned(FonDisconnect) then FonDisconnect(self);
-terminate;
-tcpclient.Disconnect;
-tcpclient.Free;
+  if assigned(FonDisconnect) then FonDisconnect(self);
+  terminate;
+  tcpclient.Disconnect;
+  tcpclient.Free;
 end;
 end;
 

@@ -768,10 +768,22 @@ begin
   config.Flush;
   NewMessage('Program exit');
   CloseLog;
-  planetarium.Disconnect;
-  autoguider.Disconnect;
-  autoguider.Terminate;
-  planetarium.Terminate;
+  if autoguider.Running then begin
+    autoguider.Disconnect;
+    autoguider.Terminate;
+  end else begin
+    autoguider.Free;
+  end;
+  if planetarium.Running then begin
+    planetarium.Disconnect;
+  end else begin
+    planetarium.Free;
+  end;
+  if astrometry.Busy then begin
+    astrometry.StopAstrometry;
+  end;
+  sleep(1000); // time for other thread to terminate
+  astrometry.Free;
   CloseAction:=caFree;
 end;
 
@@ -784,11 +796,6 @@ begin
   ImaBmp.Free;
   config.Free;
   Filters.Free;
-  {$ifndef mswindows}
-  astrometry.Free;
-  autoguider.Free;
-  planetarium.Free;
-  {$endif}
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
@@ -1562,10 +1569,8 @@ Procedure Tf_main.AutoguiderGuideClick(Sender: TObject);
 var onoff:boolean;
 begin
  if f_autoguider.BtnGuide.Caption='Guide' then begin
-    f_autoguider.BtnGuide.Caption:='Stop';
     onoff:=true;
  end else begin
-   f_autoguider.BtnGuide.Caption:='Guide';
    onoff:=false;
  end;
  autoguider.Guide(onoff);
@@ -1585,9 +1590,9 @@ end;
 Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
 var i: integer;
 begin
- NewMessage('Disconnected from autoguider software!');
- f_sequence.AutoguiderDisconnected;
  if not AppClose then begin
+   NewMessage('Disconnected from autoguider software!');
+   f_sequence.AutoguiderDisconnected;
    // autoguider will be free automatically, create a new one for next connection
    i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
@@ -1626,11 +1631,13 @@ begin
                        end;
    GUIDER_BUSY        :begin
                        f_autoguider.led.Brush.Color:=clOrange;
+                       f_autoguider.BtnGuide.Caption:='Stop';
                        end;
    GUIDER_ALERT       :begin
                        f_autoguider.led.Brush.Color:=clRed;
                        end;
  end;
+ if autoguider.LastError<>'' then NewMessage(autoguider.LastError);
 
 end;
 
@@ -2511,11 +2518,11 @@ end;
 Procedure Tf_main.PlanetariumDisconnect(Sender: TObject);
 var i: integer;
 begin
- f_planetarium.led.Brush.Color:=clGray;
- f_planetarium.Status.Text:='Disconnected';
- f_planetarium.BtnConnect.Caption:='Connect';
- NewMessage('Planetarium: Disconnected');
  if not AppClose then begin
+   f_planetarium.led.Brush.Color:=clGray;
+   f_planetarium.Status.Text:='Disconnected';
+   f_planetarium.BtnConnect.Caption:='Connect';
+   NewMessage('Planetarium: Disconnected');
    i:=config.GetValue('/Planetarium/Software',0);
    case TPlanetariumType(i) of
      CDC: planetarium:=TPlanetarium_cdc.Create;

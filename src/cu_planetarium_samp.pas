@@ -36,8 +36,9 @@ type
   TPlanetarium_samp = class(TPlanetarium)
   private
     SampClient : TSampClient;
-    ClientChangeTimer: TTimer;
-    procedure ClientChangeTimerTimer(Sender: TObject);
+    FClientChange: boolean;
+    procedure Execute; override;
+    procedure DoClientChange;
     procedure ClientChange(Sender: TObject);
     procedure ClientDisconnected(Sender: TObject);
     procedure coordpointAtsky(cra,cdec:double);
@@ -58,56 +59,63 @@ implementation
 Constructor TPlanetarium_samp.Create ;
 begin
 inherited Create;
-ClientChangeTimer:=TTimer.Create(nil);
-ClientChangeTimer.Enabled:=false;
-ClientChangeTimer.Interval:=100;
-ClientChangeTimer.OnTimer:=@ClientChangeTimerTimer;
+FClientChange:=false;
 end;
 
 Destructor TPlanetarium_samp.Destroy;
 begin
-  ClientChangeTimer.Enabled:=false;
-  ClientChangeTimer.Free;
-  if SampClient<>nil then Disconnect;
   inherited Destroy;
+end;
+
+procedure TPlanetarium_samp.Execute;
+begin
+ try
+  SampClient:=TSampClient.Create;
+  SampClient.appname:='ccdciel';
+  SampClient.appdesc:='CCDciel image capture software';
+  SampClient.appicon:='http://a.fsdn.com/allura/p/ccdciel/icon';
+  SampClient.appdoc:='http://sourceforge.net/projects/ccdciel/';
+  SampClient.onClientChange:=@ClientChange;
+  SampClient.onDisconnect:=@ClientDisconnected;
+  SampClient.oncoordpointAtsky:=@coordpointAtsky;
+  SampClient.onImageLoadFits:=@ImageLoadFits;
+  if SampClient.SampReadProfile then begin
+    if not SampClient.SampHubConnect then DisplayMessage('SAMP '+SampClient.LastError);
+    if SampClient.Connected then begin
+      DisplayMessage('SAMP connected to '+SampClient.HubUrl);
+      if not SampClient.SampHubSendMetadata then DisplayMessage('SAMP '+SampClient.LastError);
+      if not SampClient.SampSubscribe(true,false,false) then DisplayMessage('SAMP '+SampClient.LastError);
+      DisplayMessage('SAMP listen on port '+inttostr(SampClient.ListenPort));
+      FStatus:=true;
+      FRunning:=true;
+      if assigned(FonConnect) then FonConnect(self);
+      repeat
+        if FClientChange then DoClientChange;
+        sleep(200);
+      until terminated or (not SampClient.Connected);
+    end;
+  end else begin
+      DisplayMessage('SAMP '+SampClient.LastError);
+      Terminate;
+  end;
+  FStatus:=false;
+  FRunning:=false;
+  SampClient.onDisconnect:=nil;
+ finally
+   if assigned(FonDisconnect) then FonDisconnect(self);
+   if SampClient.Connected then SampClient.SampHubDisconnect;
+   SampClient.free;
+   Terminate;
+ end;
 end;
 
 procedure TPlanetarium_samp.Connect(cp1: string; cp2:string='');
 begin
- SampClient:=TSampClient.Create;
- SampClient.appname:='ccdciel';
- SampClient.appdesc:='CCDciel image capture software';
- SampClient.appicon:='http://a.fsdn.com/allura/p/ccdciel/icon';
- SampClient.appdoc:='http://sourceforge.net/projects/ccdciel/';
- SampClient.onClientChange:=@ClientChange;
- SampClient.onDisconnect:=@ClientDisconnected;
- SampClient.oncoordpointAtsky:=@coordpointAtsky;
- SampClient.onImageLoadFits:=@ImageLoadFits;
- if SampClient.SampReadProfile then begin
-   if not SampClient.SampHubConnect then DisplayMessage('SAMP '+SampClient.LastError);
-   if SampClient.Connected then begin
-    DisplayMessage('SAMP connected to '+SampClient.HubUrl);
-     if not SampClient.SampHubSendMetadata then DisplayMessage('SAMP '+SampClient.LastError);
-     if not SampClient.SampSubscribe(true,false,false) then DisplayMessage('SAMP '+SampClient.LastError);
-     DisplayMessage('SAMP listen on port '+inttostr(SampClient.ListenPort));
-     FStatus:=true;
-     if assigned(FonConnect) then FonConnect(self);
-   end;
- end else begin
-     DisplayMessage('SAMP '+SampClient.LastError);
-     FStatus:=false;
-     if assigned(FonDisconnect) then FonDisconnect(self);
-     Terminate;
- end;
+ Start;
 end;
 
 procedure TPlanetarium_samp.Disconnect;
 begin
- FStatus:=false;
- if SampClient<>nil then begin;
-   SampClient.SampHubDisconnect;
- end;
- if assigned(FonDisconnect) then FonDisconnect(self);
  Terminate;
 end;
 
@@ -134,13 +142,13 @@ end;
 
 procedure TPlanetarium_samp.ClientChange(Sender: TObject);
 begin
-  ClientChangeTimer.Enabled:=true;
+  FClientChange:=true;
 end;
 
-procedure TPlanetarium_samp.ClientChangeTimerTimer(Sender: TObject);
+procedure TPlanetarium_samp.DoClientChange;
 var i,n: integer;
 begin
-  ClientChangeTimer.Enabled:=false;
+  FClientChange:=false;
   if SampClient.SampHubGetClientList then begin
      n:=SampClient.Clients.Count;
      if n=0 then DisplayMessage('No SAMP clients')

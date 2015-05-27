@@ -26,30 +26,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global,
-  Forms, Classes, SysUtils;
+  Forms, Classes, SysUtils, ExtCtrls;
 
 type
 
   T_autoguider = class(TThread)
   protected
-    FTargetHost,FTargetPort,FErrorDesc,FRecvData : string;
+    FTargetHost,FTargetPort,FErrorDesc,FRecvData,FLastError : string;
     FVersion,FMsgVersion,FStatus : String;
     FSettlePix,FSettleTmin,FSettleTmax: string;
+    FRunning: boolean;
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
+    FStarLostTimeout1,FStarLostTimeout2: integer;
+    FStarLostTime: double;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
     FonConnectError: TNotifyEvent;
     FonDisconnect: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
+    StarLostTimer: TTimer;
+    procedure StarLostTimerTimer(Sender: TObject);
     procedure DisplayMessagesyn;
     procedure ProcessDataSyn;
     procedure ProcessDisconnectSyn;
     procedure ProcessDisconnect;
     procedure DisplayMessage(msg:string);
     procedure ProcessData(line:string);
-    Procedure ProcessEvent(txt:string); virtual; abstract;
+    procedure ProcessEvent(txt:string); virtual; abstract;
+    procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -64,9 +70,11 @@ type
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
+    property Running: boolean read FRunning;
     property TargetHost : string read FTargetHost;
     property TargetPort : string read FTargetPort;
     property Timeout : integer read FTimeout write FTimeout;
+    property LastError : string read FLastError;
     property ErrorDesc : string read FErrorDesc;
     property Status : string read FStatus;
     property State : TAutoguiderState read FState;
@@ -84,18 +92,28 @@ begin
 // start suspended to let time to the main thread to set the parameters
 inherited create(true);
 freeonterminate:=true;
+FRunning:=false;
 FStatus:='Disconnected';
 FState:=GUIDER_DISCONNECTED;
 FTimeout:=500;
+FLastError:='';
 FErrorDesc:='';
 FRecvData:='';
 FSettlePix:='1.0';
 FSettleTmin:='5';
 FSettleTmax:='30';
+StarLostTimer:=TTimer.Create(nil);
+StarLostTimer.Enabled:=false;
+StarLostTimer.Interval:=10000;
+StarLostTimer.OnTimer:=@StarLostTimerTimer;
+FStarLostTimeout1:=15;
+FStarLostTimeout2:=90;
+FStarLostTime:=0;
 end;
 
 Destructor T_autoguider.Destroy;
 begin
+  StarLostTimer.Free;
   inherited Destroy;
 end;
 
@@ -130,6 +148,7 @@ procedure T_autoguider.ProcessDisconnectSyn;
 begin
  if assigned(FonDisconnect) then FonDisconnect(self);
 end;
+
 
 end.
 
