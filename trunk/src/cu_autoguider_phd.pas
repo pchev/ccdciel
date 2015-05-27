@@ -191,7 +191,6 @@ var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
     p,i,s:integer;
 begin
-writeln('=='+txt);
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
 FLastError:='';

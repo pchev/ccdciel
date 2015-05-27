@@ -771,13 +771,17 @@ begin
   if autoguider.Running then begin
     autoguider.Disconnect;
     autoguider.Terminate;
+ {$ifndef mswindows}
   end else begin
     autoguider.Free;
+ {$endif}
   end;
   if planetarium.Running then begin
     planetarium.Disconnect;
+ {$ifndef mswindows}
   end else begin
     planetarium.Free;
+ {$endif}
   end;
   if astrometry.Busy then begin
     astrometry.StopAstrometry;
