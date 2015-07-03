@@ -21,8 +21,8 @@ currentrev=$(LANG=C svn info . | grep Revision: | sed 's/Revision: //')
   rm ccdciel*.dmg
   rm -rf $basedir
 
-# make i386 Mac version
-  ./configure $configopt prefix=$builddir target=i386-darwin
+# make x86_64 Mac version
+  ./configure $configopt prefix=$builddir target=x86_64-darwin
   if [[ $? -ne 0 ]]; then exit 1;fi
   make clean
   make
@@ -32,13 +32,14 @@ currentrev=$(LANG=C svn info . | grep Revision: | sed 's/Revision: //')
   # pkg
   sed -i.bak "18s/1.0/$version/"  $builddir/ccdciel.app/Contents/Info.plist
   rm $builddir/ccdciel.app/Contents/Info.plist.bak
+  macdeployqt $builddir/ccdciel.app -no-plugins
   cp system_integration/MacOSX/ccdciel.packproj $basedir
   cp system_integration/MacOSX/readme.txt $basedir
   cd $basedir
   mv ccdciel "CCDciel"
   freeze -v ccdciel.packproj
   if [[ $? -ne 0 ]]; then exit 1;fi
-  hdiutil create -anyowners -volname ccdciel-$version-$currentrev-i386-macosx -imagekey zlib-level=9 -format UDZO -srcfolder ./build ccdciel-$version-$currentrev-i386-macosx.dmg
+  hdiutil create -anyowners -volname ccdciel-$version-$currentrev-x86_64-macosx -imagekey zlib-level=9 -format UDZO -srcfolder ./build ccdciel-$version-$currentrev-x86_64-macosx.dmg
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.dmg $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
