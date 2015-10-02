@@ -6,8 +6,8 @@ object f_sequence: Tf_sequence
   ClientHeight = 519
   ClientWidth = 180
   TabOrder = 0
-  DesignLeft = 339
-  DesignTop = 127
+  DesignLeft = 281
+  DesignTop = 121
   object StaticText1: TStaticText
     Left = 0
     Height = 20
@@ -217,28 +217,10 @@ object f_sequence: Tf_sequence
     left = 120
     top = 120
   end
-  object TargetTimer: TTimer
+  object StatusTimer: TTimer
     Enabled = False
-    OnTimer = TargetTimerTimer
+    OnTimer = StatusTimerTimer
     left = 32
     top = 72
-  end
-  object PlanTimer: TTimer
-    Enabled = False
-    OnTimer = PlanTimerTimer
-    left = 22
-    top = 320
-  end
-  object StepRepeatTimer: TTimer
-    Enabled = False
-    OnTimer = StepRepeatTimerTimer
-    left = 104
-    top = 320
-  end
-  object TargetRepeatTimer: TTimer
-    Enabled = False
-    OnTimer = TargetRepeatTimerTimer
-    left = 107
-    top = 75
   end
 end

@@ -43,21 +43,7 @@ type
                min,max,step: double;
               end;
 
-  TTarget = Class(TObject)
-              public
-              objectname, plan: string;
-              starttime,endtime,ra,de: double;
-              repeatcount: integer;
-              preview,astrometrypointing: boolean;
-              delay, previewexposure: double;
-              constructor Create;
-              procedure Assign(Source: TTarget);
-              function previewexposure_str: string;
-              function delay_str: string;
-              function repeatcount_str: string;
-            end;
-
-  TPlan   = Class(TObject)
+  TStep   = Class(TObject)
               public
               exposure, delay, previewexposure: double;
               count, repeatcount: integer;
@@ -76,6 +62,22 @@ type
               function binning_str: string;
               function frtype_str: string;
               function description_str: string;
+            end;
+
+  TTarget = Class(TObject)
+              public
+              objectname, planname: string;
+              starttime,endtime,ra,de: double;
+              repeatcount: integer;
+              preview,astrometrypointing: boolean;
+              delay, previewexposure: double;
+              plan :TComponent;
+              constructor Create;
+              destructor Destroy; override;
+              procedure Assign(Source: TTarget);
+              function previewexposure_str: string;
+              function delay_str: string;
+              function repeatcount_str: string;
             end;
 
   // libcdcwcs
@@ -184,8 +186,9 @@ implementation
 constructor TTarget.Create;
 begin
   inherited Create;
+  plan:=nil;
   objectname:='None';
-  plan:='';
+  planname:='';
   starttime:=0.0;
   endtime:=23.99999;
   ra:=NullCoord;
@@ -196,9 +199,17 @@ begin
   previewexposure:=1;
 end;
 
+destructor TTarget.Destroy;
+begin
+  if plan<>nil then FreeAndNil(plan);
+  Inherited Destroy;
+end;
+
 procedure TTarget.Assign(Source: TTarget);
 begin
   objectname:=Source.objectname;
+  planname:=Source.planname;
+  plan.free;
   plan:=Source.plan;
   starttime:=Source.starttime;
   endtime:=Source.endtime;
@@ -225,9 +236,9 @@ begin
   Result:=IntToStr(repeatcount);
 end;
 
-////////////////////  TPlan  /////////////////////////////
+////////////////////  TStep  /////////////////////////////
 
-constructor TPlan.Create;
+constructor TStep.Create;
 begin
   exposure:=1;
   delay:=1;
@@ -242,32 +253,32 @@ begin
   description:='Step description';
 end;
 
-function TPlan.exposure_str: string;
+function TStep.exposure_str: string;
 begin
  Result:=FloatToStr(exposure);
 end;
 
-function TPlan.previewexposure_str: string;
+function TStep.previewexposure_str: string;
 begin
  Result:=FloatToStr(previewexposure);
 end;
 
-function TPlan.delay_str: string;
+function TStep.delay_str: string;
 begin
   Result:=FloatToStr(delay);
 end;
 
-function TPlan.count_str: string;
+function TStep.count_str: string;
 begin
   Result:=IntToStr(count);
 end;
 
-function TPlan.repeatcount_str: string;
+function TStep.repeatcount_str: string;
 begin
   Result:=IntToStr(repeatcount);
 end;
 
-function TPlan.filter_str: string;
+function TStep.filter_str: string;
 begin
   if Filters.Count=0 then
     Result:=''
@@ -275,17 +286,17 @@ begin
     Result:=Filters[filter];
 end;
 
-function TPlan.binning_str: string;
+function TStep.binning_str: string;
 begin
   Result:=IntToStr(binx)+'x'+IntToStr(biny);
 end;
 
-function TPlan.frtype_str: string;
+function TStep.frtype_str: string;
 begin
   Result:=FrameName[ord(frtype)];
 end;
 
-function TPlan.description_str: string;
+function TStep.description_str: string;
 begin
   Result:=description;
 end;

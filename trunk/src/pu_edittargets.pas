@@ -199,7 +199,7 @@ begin
   i:=TargetList.RowCount-1;
   TargetList.Cells[0,i]:=IntToStr(i);
   TargetList.Cells[1,i]:=txt;
-  TargetList.Cells[2,i]:=t.plan;
+  TargetList.Cells[2,i]:=t.planname;
   TargetList.Objects[0,i]:=t;
   TargetList.Row:=i;
   ObjectName.Text:=txt;
@@ -267,7 +267,7 @@ begin
   LabelSeq.Caption:=IntToStr(n);
   t:=TTarget(TargetList.Objects[0,n]);
   ObjectName.Text:=t.objectname;
-  SetPlanList(t.plan);
+  SetPlanList(t.planname);
   StartTime.Text:=TimeToStr(t.starttime);
   EndTime.Text:=TimeToStr(t.endtime);
   if t.ra=NullCoord then
@@ -297,7 +297,7 @@ begin
   if n < 1 then exit;
   t:=TTarget(TargetList.Objects[0,n]);
   t.objectname:=ObjectName.Text;
-  t.plan:=PlanList.Text;
+  t.planname:=PlanList.Text;
   t.starttime:=StrToTime(StartTime.Text);
   t.endtime:=StrToTime(EndTime.Text);
   if PointRA.Text='-' then
@@ -315,7 +315,7 @@ begin
   t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
   t.preview:=Preview.Checked;
   TargetList.Cells[1,n]:=t.objectname;
-  TargetList.Cells[2,n]:=t.plan;
+  TargetList.Cells[2,n]:=t.planname;
 end;
 
 
