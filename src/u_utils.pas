@@ -270,6 +270,9 @@ Function RAToStr(ar: Double) : string;
 var dd,min1,min,sec: Double;
     d,m,s : string;
 begin
+ if ar=NullCoord then
+   result:='-'
+ else begin
     dd:=Int(ar);
     min1:=abs(ar-dd)*60;
     if min1>=59.999166667 then begin
@@ -289,12 +292,16 @@ begin
     str(sec:2:0,s);
     if abs(sec)<9.95 then s:='0'+trim(s);
     result := d+'h'+m+'m'+s+'s';
+ end;
 end;
 
 Function DEToStr(de: Double) : string;
 var dd,min1,min,sec: Double;
     d,m,s : string;
 begin
+ if de=NullCoord then
+   result:='-'
+ else begin
     dd:=Int(de);
     min1:=abs(de-dd)*60;
     if min1>=59.99166667 then begin
@@ -315,6 +322,7 @@ begin
     str(sec:2:0,s);
     if abs(sec)<9.5 then s:='0'+trim(s);
     result := d+'d'+m+'m'+s+'s';
+ end;
 end;
 
 Function RAToStrB(ar: Double) : string;

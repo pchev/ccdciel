@@ -108,7 +108,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="48">
+    <Units Count="50">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -119,7 +119,6 @@
         <ComponentName Value="f_main"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_main"/>
       </Unit1>
       <Unit2>
         <Filename Value="fu_devicesconnection.pas"/>
@@ -182,7 +181,6 @@
       <Unit12>
         <Filename Value="u_global.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="u_global"/>
       </Unit12>
       <Unit13>
         <Filename Value="fu_starprofile.pas"/>
@@ -276,7 +274,6 @@
         <ComponentName Value="f_option"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_options"/>
       </Unit30>
       <Unit31>
         <Filename Value="fu_frame.pas"/>
@@ -292,7 +289,6 @@
       <Unit33>
         <Filename Value="cu_planetarium_samp.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_planetarium_samp"/>
       </Unit33>
       <Unit34>
         <Filename Value="pu_viewtext.pas"/>
@@ -333,7 +329,6 @@
         <ComponentName Value="f_EditTargets"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_edittargets"/>
       </Unit40>
       <Unit41>
         <Filename Value="pu_editplan.pas"/>
@@ -349,7 +344,6 @@
       <Unit43>
         <Filename Value="cu_planetarium.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_planetarium"/>
       </Unit43>
       <Unit44>
         <Filename Value="fu_planetarium.pas"/>
@@ -357,7 +351,6 @@
         <ComponentName Value="f_planetarium"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fu_planetarium"/>
       </Unit44>
       <Unit45>
         <Filename Value="cu_astrometry.pas"/>
@@ -369,13 +362,19 @@
         <ComponentName Value="f_planetariuminfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="pu_planetariuminfo"/>
       </Unit46>
       <Unit47>
         <Filename Value="cu_planetarium_cdc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="cu_planetarium_cdc"/>
       </Unit47>
+      <Unit48>
+        <Filename Value="cu_targets.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="cu_plan.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit49>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

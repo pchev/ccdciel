@@ -91,7 +91,7 @@ type
   public
     { public declarations }
     procedure ClearStepList;
-    procedure ReadStep(pfile:TCCDconfig; i: integer; var p:Tplan);
+    procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
   end;
 
 var
@@ -113,7 +113,7 @@ begin
  ClearStepList;
 end;
 
-procedure Tf_EditPlan.ReadStep(pfile:TCCDconfig; i: integer; var p:Tplan);
+procedure Tf_EditPlan.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
 var str,buf: string;
     j:integer;
 begin
@@ -153,11 +153,11 @@ procedure Tf_EditPlan.FormShow(Sender: TObject);
 var pfile: TCCDconfig;
     fn: string;
     i,n:integer;
-    p: TPlan;
+    p: TStep;
   procedure NewPlan;
   begin
     StepList.RowCount:=2;
-    p:=TPlan.Create;
+    p:=TStep.Create;
     StepList.Cells[0,1]:='1';
     StepList.Cells[1,1]:=p.description_str;
     StepList.Objects[0,1]:=p;
@@ -175,7 +175,7 @@ begin
     end else begin
       StepList.RowCount:=n+1;
       for i:=1 to n do begin
-        p:=TPlan.Create;
+        p:=TStep.Create;
         ReadStep(pfile,i,p);
         StepList.Cells[0,i]:=IntToStr(i);
         StepList.Cells[1,i]:=p.description_str;
@@ -223,12 +223,12 @@ end;
 
 procedure Tf_EditPlan.StepListSelection(Sender: TObject; aCol, aRow: Integer);
 var n:integer;
-    p: TPlan;
+    p: TStep;
 begin
   LockStep:=true;
   n:=aRow;
   lblStepNum.Caption:=IntToStr(n);
-  p:=TPlan(StepList.Objects[0,n]);
+  p:=TStep(StepList.Objects[0,n]);
   Desc.Text:=p.description_str;
   FrameType.ItemIndex:=ord(p.frtype);
   Exposure.Text:=p.exposure_str;
@@ -246,13 +246,13 @@ end;
 
 procedure Tf_EditPlan.StepChange(Sender: TObject);
 var n,j:integer;
-    p: TPlan;
+    p: TStep;
     str,buf: string;
 begin
   if LockStep then exit;
   n:=StepList.Row;
   if n < 1 then exit;
-  p:=TPlan(StepList.Objects[0,n]);
+  p:=TStep(StepList.Objects[0,n]);
   p.description:=Desc.Text;
   p.frtype:=TFrameType(FrameType.ItemIndex);
   p.exposure:=StrToFloatDef(Exposure.Text,1);
@@ -291,10 +291,10 @@ end;
 procedure Tf_EditPlan.BtnAddStepClick(Sender: TObject);
 var txt:string;
     i: integer;
-    p: TPlan;
+    p: TStep;
 begin
   txt:=FormEntry(self,'Step description','');
-  p:=TPlan.Create;
+  p:=TStep.Create;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
   StepList.Cells[0,i]:=IntToStr(i);
@@ -333,7 +333,7 @@ procedure Tf_EditPlan.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 var pfile: TCCDconfig;
     fn,str: string;
     i,n,k: integer;
-    p: TPlan;
+    p: TStep;
 begin
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   pfile:=TCCDconfig.Create(self);
@@ -343,7 +343,7 @@ begin
   pfile.SetValue('/PlanName',PlanName.Caption);
   pfile.SetValue('/StepNum',n);
   for i:=1 to n do begin
-    p:=TPlan(StepList.Objects[0,i]);
+    p:=TStep(StepList.Objects[0,i]);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',FrameType.Items[ord(p.frtype)]);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
