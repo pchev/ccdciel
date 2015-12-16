@@ -152,7 +152,7 @@ const
   ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
   {$ifdef linux}
     defCapturePath='/tmp';
-    libwcs = 'libccdcielwcs.so';
+    libwcs = 'libccdcielwcs.so.3.8';
     libz = 'libz.so.1';
   {$endif}
   {$ifdef darwin}
