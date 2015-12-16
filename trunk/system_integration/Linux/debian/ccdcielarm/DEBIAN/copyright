@@ -6,7 +6,7 @@ Name        : ccdciel
 Version     : 0.1.0
 Release     : 1
 Group       : Sciences/Astronomy
-License     : GPL-3
+License     : GPL-3+
 Packager    : Patrick Chevalley
 URL         : http://ccdciel.sourceforge.net
 Summary     : A CCD capture software intended for the amateur astronomer.
