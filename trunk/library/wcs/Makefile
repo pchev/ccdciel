@@ -6,7 +6,7 @@ ifneq ($(findstring Darwin,$(OSTYPE)),)
 SO_Name       = libccdcielwcs.dylib
 LIBFLAGS      = -Wl,-single_module -dynamiclib  -lc -lm -mmacosx-version-min=10.6
 else
-SO_Name       = libccdcielwcs.so
+SO_Name       = libccdcielwcs.so.3.8
 LIBFLAGS      = -shared -Wl,-soname,$(SO_Name) -lc -lm
 endif
 ifneq ($(findstring W32,$(OSTYPE)),)
