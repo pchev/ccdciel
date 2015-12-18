@@ -54,7 +54,6 @@ if [[ $make_linuxarm ]]; then
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
   mv bin debian/ccdcielarm/usr/
-  mv lib debian/ccdcielarm/usr/
   mv share debian/ccdcielarm/usr/
   cd debian
   sz=$(du -s ccdciel/usr | cut -f1)
