@@ -12,7 +12,6 @@ echo Install ccdciel to $destdir
 
 install -m 755 -d $destdir
 install -m 755 -d $destdir/bin
-install -m 755 -d $destdir/lib
 install -m 755 -d $destdir/share
 install -m 755 -d $destdir/share/appdata
 install -m 755 -d $destdir/share/applications
@@ -27,7 +26,6 @@ install -m 755 -d $destdir/share/icons/hicolor/scalable
 install -m 755 -d $destdir/share/icons/hicolor/scalable/apps
 
 install -v -m 755 -s src/ccdciel  $destdir/bin/ccdciel
-install -v -m 644 -s library/wcs/libccdcielwcs.so.3.8  $destdir/lib/libccdcielwcs.so.3.8
 install -v -m 644 system_integration/Linux/share/applications/ccdciel.desktop $destdir/share/applications/ccdciel.desktop
 install -v -m 644 system_integration/Linux/share/appdata/ccdciel.appdata.xml $destdir/share/appdata/ccdciel.appdata.xml
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/changelog $destdir/share/doc/ccdciel/changelog

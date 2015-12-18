@@ -8,8 +8,8 @@ URL: http://ccdciel.sourceforge.net
 Packager: Patrick Chevalley
 BuildRoot: %_topdir/%{name}
 BuildArch: i386
-Provides: ccdciel libccdcielwcs.so
-Requires: gtk2 glib2 pango libjpeg libpng
+Provides: ccdciel
+Requires: libpasastro gtk2 glib2 pango libjpeg libpng
 AutoReqProv: no
 
 %description
@@ -19,7 +19,6 @@ Using the standard drivers protocol INDI and ASCOM it can connect and control th
 %files
 %defattr(-,root,root)
 /usr/bin/ccdciel
-/usr/lib/libccdcielwcs.so.3.8
 /usr/share/appdata/ccdciel.appdata.xml
 /usr/share/applications/ccdciel.desktop
 /usr/share/pixmaps/ccdciel.png

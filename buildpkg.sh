@@ -76,7 +76,6 @@ if [[ $make_linux32 ]]; then
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
   mv bin debian/ccdciel/usr/
-  mv lib debian/ccdciel/usr/
   mv share debian/ccdciel/usr/
   cd debian
   sz=$(du -s ccdciel/usr | cut -f1)
@@ -124,7 +123,6 @@ if [[ $make_linux64 ]]; then
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
   mv bin debian/ccdciel64/usr/
-  mv lib debian/ccdciel64/usr/
   mv share debian/ccdciel64/usr/
   cd debian
   sz=$(du -s ccdciel64/usr | cut -f1)
@@ -139,8 +137,6 @@ if [[ $make_linux64 ]]; then
   rsync -a --exclude=.svn system_integration/Linux/rpm $builddir
   cd $builddir
   mv debian/ccdciel64/usr/* rpm/ccdciel/usr/
-  # Redhat 64bits lib is lib64 
-  mv rpm/ccdciel/usr/lib rpm/ccdciel/usr/lib64
   cd rpm
   sed -i "/Version:/ s/3/$version/"  SPECS/ccdciel64.spec
   sed -i "/Release:/ s/1/$currentrev/" SPECS/ccdciel64.spec
