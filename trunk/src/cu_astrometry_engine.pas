@@ -153,6 +153,14 @@ if FResolver=ResolverAstrometryNet then begin
     Fparam.Add('--scale-units');
     Fparam.Add('arcsecperpix');
   end;
+  if (Fra<>NullCoord)and(Fde<>NullCoord)and(Fradius<>NullCoord) then begin
+    Fparam.Add('--ra');
+    Fparam.Add(FloatToStr(Fra));
+    Fparam.Add('--dec');
+    Fparam.Add(FloatToStr(Fde));
+    Fparam.Add('--radius');
+    Fparam.Add(FloatToStr(Fradius));
+  end;
   if FObjs>0 then begin
     Fparam.Add('--objs');
     Fparam.Add(inttostr(FObjs));
