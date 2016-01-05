@@ -1783,6 +1783,7 @@ begin
    f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
    f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
    f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
+   f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','');
    f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
@@ -1830,6 +1831,7 @@ begin
      config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
      config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
      config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);
+     config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
      config.SetValue('/Astrometry/ElbrusFolder',f_option.ElbrusFolder.Text);
      {$ifdef unix}
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
