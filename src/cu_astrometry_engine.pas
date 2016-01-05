@@ -227,6 +227,7 @@ if FResolver=ResolverAstrometryNet then begin
   process.Parameters:=Fparam;
   process.Options:=[poUsePipes,poStderrToOutPut];
   timeout:=now+30/secperday;
+  try
   process.Execute;
   while process.Running do begin
     if logok and (process.Output<>nil) then begin
@@ -248,6 +249,14 @@ if FResolver=ResolverAstrometryNet then begin
     n := process.Output.Read(cbuf, READ_BYTES);
     if n>=0 then BlockWrite(f,cbuf,n);
   until (n<=0)or(process.Output=nil);
+  except
+     Fresult:=1;
+     if logok then begin
+       buf:='Error starting command: '+Fcmd;
+       cbuf:=buf;
+       BlockWrite(f,cbuf,Length(buf));
+     end;
+  end;
   if logok then CloseFile(f);
   if Assigned(FCmdTerminate) then FCmdTerminate(self);
 end
