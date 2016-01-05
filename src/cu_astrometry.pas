@@ -152,6 +152,7 @@ begin
    engine.downsample:=config.GetValue('/Astrometry/DownSample',4);
    engine.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
    engine.plot:=config.GetValue('/Astrometry/Plot',false);
+   engine.OtherOptions:=config.GetValue('/Astrometry/OtherOptions','');
    engine.ra:=ra;
    engine.de:=de;
    engine.radius:=max(MinRadius,pixscale*iwidth/3600);

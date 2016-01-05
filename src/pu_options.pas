@@ -36,11 +36,13 @@ type
   Tf_option = class(TForm)
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
+    OtherOptions: TEdit;
     GroupBoxSamp: TGroupBox;
     GroupBoxSkychart: TGroupBox;
     Label24: TLabel;
     Label25: TLabel;
     Label26: TLabel;
+    Label27: TLabel;
     Notebook2: TNotebook;
     PageSkychart: TPage;
     PageSamp: TPage;

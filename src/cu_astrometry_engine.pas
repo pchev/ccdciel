@@ -40,6 +40,7 @@ TAstrometry_engine = class(TThread)
      Fplot: boolean;
      Fresult:integer;
      Fcmd: string;
+     FOtherOptions: string;
      Fparam: TStringList;
      process: TProcessUTF8;
      FCmdTerminate: TNotifyEvent;
@@ -62,6 +63,7 @@ TAstrometry_engine = class(TThread)
      property objs: integer read FObjs write FObjs;
      property downsample: integer read FDown write FDown;
      property plot: boolean read Fplot write Fplot;
+     property OtherOptions: string read FOtherOptions write FOtherOptions;
      property result: integer read Fresult;
      property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
@@ -78,6 +80,7 @@ begin
   FOutFile:='';
   Fcmd:='';
   Fplot:=false;
+  FOtherOptions:='';
   Fra:=NullCoord;
   Fde:=NullCoord;
   Fradius:=NullCoord;
@@ -136,6 +139,8 @@ end;
 end;
 
 procedure TAstrometry_engine.Resolve;
+var str: TStringList;
+    i: integer;
 begin
 if FResolver=ResolverAstrometryNet then begin
   Fcmd:='solve-field';
@@ -148,14 +153,6 @@ if FResolver=ResolverAstrometryNet then begin
     Fparam.Add('--scale-units');
     Fparam.Add('arcsecperpix');
   end;
-  if (Fra<>NullCoord)and(Fde<>NullCoord)and(Fradius<>NullCoord) then begin
-    Fparam.Add('--ra');
-    Fparam.Add(FloatToStr(Fra));
-    Fparam.Add('--dec');
-    Fparam.Add(FloatToStr(Fde));
-    Fparam.Add('--radius');
-    Fparam.Add(FloatToStr(Fradius));
-  end;
   if FObjs>0 then begin
     Fparam.Add('--objs');
     Fparam.Add(inttostr(FObjs));
@@ -166,6 +163,12 @@ if FResolver=ResolverAstrometryNet then begin
   end;
   if not Fplot then begin
      Fparam.Add('--no-plots');
+  end;
+  if FOtherOptions<>'' then begin
+    str:=TStringList.Create;
+    SplitRec(FOtherOptions,' ',str);
+    for i:=0 to str.Count-1 do Fparam.Add(str[i]);
+    str.Free;
   end;
   Fparam.Add('--new-fits');
   Fparam.Add(FOutFile);
@@ -190,11 +193,12 @@ procedure TAstrometry_engine.Execute;
 const READ_BYTES = 2048;
 var n: LongInt;
     f: file;
+    buf: string;
     logok: boolean;
     cbuf: array[0..READ_BYTES] of char;
     ft,fl: TextFile;
     fn,imgdir,txt: string;
-    nside: integer;
+    i,nside: integer;
     timeout: double;
 begin
 if FResolver=ResolverAstrometryNet then begin
@@ -202,6 +206,11 @@ if FResolver=ResolverAstrometryNet then begin
   if (FLogFile<>'') then begin
     AssignFile(f,FLogFile);
     rewrite(f,1);
+    buf:=Fcmd;
+    for i:=0 to Fparam.Count-1 do buf:=buf+' '+Fparam[i];
+    buf:=buf+CRLF;
+    cbuf:=buf;
+    BlockWrite(f,cbuf,Length(buf));
     logok:=true;
   end
   else
@@ -209,11 +218,20 @@ if FResolver=ResolverAstrometryNet then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   process.Options:=[poUsePipes,poStderrToOutPut];
+  timeout:=now+30/secperday;
   process.Execute;
   while process.Running do begin
     if logok and (process.Output<>nil) then begin
       n := process.Output.Read(cbuf, READ_BYTES);
       if n>=0 then BlockWrite(f,cbuf,n);
+    end;
+    if now>timeout then begin
+       Stop;
+       if logok then begin
+         buf:='Timeout!';
+         cbuf:=buf;
+         BlockWrite(f,cbuf,Length(buf));
+       end;
     end;
     sleep(100);
   end;
@@ -240,7 +258,7 @@ else if FResolver=ResolverElbrus then begin
   write(ft,'**EXE analyze'+crlf);
   write(ft,'space'+crlf);
   CloseFile(ft);
-  timeout:=now+10/3600/24;
+  timeout:=now+10/secperday;
   repeat
     sleep(500);
   until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>timeout);
