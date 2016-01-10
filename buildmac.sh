@@ -32,7 +32,7 @@ currentrev=$(LANG=C svn info . | grep Revision: | sed 's/Revision: //')
   # pkg
   sed -i.bak "18s/1.0/$version/"  $builddir/ccdciel.app/Contents/Info.plist
   rm $builddir/ccdciel.app/Contents/Info.plist.bak
-  macdeployqt $builddir/ccdciel.app -no-plugins
+  macdeployqt $builddir/ccdciel.app
   cp system_integration/MacOSX/ccdciel.packproj $basedir
   cp system_integration/MacOSX/readme.txt $basedir
   cd $basedir
