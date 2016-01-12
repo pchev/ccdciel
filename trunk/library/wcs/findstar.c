@@ -1,6 +1,6 @@
 /*** File libwcs/findstar.c
  *** October 19, 2007
- *** By Doug Mink, after Elwood Downey
+ *** By Jessica Mink, after Elwood Downey
  *** Copyright (C) 1996-2007
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
 
@@ -19,8 +19,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
     Correspondence concerning WCSTools should be addressed as follows:
-           Internet email: dmink@cfa.harvard.edu
-           Postal address: Doug Mink
+           Internet email: jmink@cfa.harvard.edu
+           Postal address: Jessica Mink
                            Smithsonian Astrophysical Observatory
                            60 Garden St.
                            Cambridge, MA 02138 USA

@@ -1,6 +1,6 @@
 /*** File libwcs/sortstar.c
  *** January 11, 2007
- *** By Doug Mink, dmink@cfa.harvard.edu
+ *** By Jessica Mink, jmink@cfa.harvard.edu
  *** Harvard-Smithsonian Center for Astrophysics
  *** Copyright (C) 1996-2009
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
@@ -20,8 +20,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
     Correspondence concerning WCSTools should be addressed as follows:
-           Internet email: dmink@cfa.harvard.edu
-           Postal address: Doug Mink
+           Internet email: jmink@cfa.harvard.edu
+           Postal address: Jessica Mink
                            Smithsonian Astrophysical Observatory
                            60 Garden St.
                            Cambridge, MA 02138 USA
@@ -417,6 +417,8 @@ int	nm;		/* Number of magnitudes per star */
 	hasnum = 1;
     if (spra != NULL && spdec != NULL)
 	haspm = 1;
+    else
+	haspm = 0;
     if (sx != NULL && sy != NULL)
 	hasxy = 1;
     else

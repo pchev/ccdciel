@@ -1,8 +1,8 @@
 /*** File libwcs/hput.c
- *** September 9, 2011
+ *** August 20, 2007
  *** By Jessica Mink, jmink@cfa.harvard.edu
  *** Harvard-Smithsonian Center for Astrophysics
- *** Copyright (C) 1995-2011
+ *** Copyright (C) 1995-2007
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
 
     This library is free software; you can redistribute it and/or
@@ -282,10 +282,8 @@ const char *cval;	/* character string containing the value for variable
     /*  If COMMENT or HISTORY, use the same keyword on every line */
     lkw = (int) strlen (keyword);
     if (lkw == 7 && (strncmp (keyword,"COMMENT",7) == 0 ||
-	strncmp (keyword,"HISTORY",7) == 0)) {
+	strncmp (keyword,"HISTORY",7) == 0))
 	comment = 1;
-	lroot = 0;
-	}
 
     /* Set up keyword root, shortening it to 6 characters, if necessary */
     else {
@@ -512,17 +510,13 @@ const char *value; /* character string containing the value for variable
 
 	/*  check for quoted value */
 	q1 = strchr (line, squot);
-	if (q1 != NULL) {
+	if (q1 != NULL)
 	    q2 = strchr (q1+1,squot);
-	    if (q2 != NULL)
-		c1 = strchr (q2,'/');
-	    else
-		c1 = strrchr (line+79,'/');
-	    }
 	else
-	    c1 = strchr (line,'/');
+	    q2 = line;
 
 	/*  extract comment and discount trailing spaces */
+	c1 = strchr (q2,'/');
 	if (c1 != NULL) {
 	    lcom = 80 - (c1 + 2 - line);
 	    strncpy (newcom, c1+2, lcom);
@@ -598,14 +592,12 @@ hputcom (hstring,keyword,comment)
   const char *keyword;
   const char *comment;
 {
-    char squot, slash, space;
+    char squot;
     char line[100];
     int lkeyword, lcom, lhead, i, lblank, ln, nc, lc;
     char *vp, *v1, *v2, *c0, *c1, *q1, *q2;
 
-    squot = (char) 39;
-    slash = (char) 47;
-    space = (char) 32;
+    squot = 39;
 
     /*  Find length of variable name */
     lkeyword = (int) strlen (keyword);
@@ -665,39 +657,12 @@ hputcom (hstring,keyword,comment)
 
 	/* check for quoted value */
 	q1 = strchr (line,squot);
-	c1 = strchr (line,slash);
-	if (q1 != NULL) {
-	    if (c1 != NULL && q1 < c1) {
-		q2 = strchr (q1+1, squot);
-		if (q2 == NULL) {
-		    q2 = c1 - 1;
-		    while (*q2 == space)
-			q2--;
-		    q2++;
-		    }
-		else if (c1 < q2)
-		    c1 = strchr (q2, slash);
-		}
-	    else if (c1 == NULL) {
-		q2 = strchr (q1+1, squot);
-		if (q2 == NULL) {
-		    q2 = line + 79;
-		    while (*q2 == space)
-			q2--;
-		    q2++;
-		    }
-		}
-	    else
-		q1 = NULL;
-		q2 = NULL;
-	    }
-
+	if (q1 != NULL)
+	    q2 = strchr (q1+1,squot);
 	else
 	    q2 = NULL;
 
-	if (c1 != NULL)
-	    c0 = v1 + (c1 - line) - 1;
-	else if (q2 == NULL || q2-line < 30)
+	if (q2 == NULL || q2-line < 30)
 	    c0 = v1 + 30;
 	else
 	    c0 = v1 + (q2 - line) + 1; /* allan: 1997-09-30, was c0=q2+2 */
@@ -711,7 +676,7 @@ hputcom (hstring,keyword,comment)
     /* Create new entry */
     if (lcom > 0) {
 	c1 = c0 + 3;
-	lblank = v1 + 79 - c1;
+	lblank = v2 - c1;
 	if (lcom > lblank)
 	    lcom = lblank;
 	for (i = 0; i < lblank; i++)
@@ -1310,7 +1275,4 @@ int	ndec;		/* Number of decimal places in degree string */
  * Jan  5 2007	Drop ksearch() declarations; it is now in fitshead.h
  * Jan 16 2007	Fix bugs in ra2str() and dec2str() so ndec=0 works
  * Aug 20 2007	Fix bug so comments after quoted keywords work
- * Aug 22 2007	If closing quote not found, make one up
- *
- * Sep  9 2011	Always initialize q2 and lroot
  */

@@ -1,6 +1,6 @@
 /*** File libwcs/distort.c
  *** January 4, 2007
- *** By Doug Mink, dmink@cfa.harvard.edu, 
+ *** By Jessica Mink, jmink@cfa.harvard.edu, 
  *** Based on code written by Jing Li, IPAC
  *** Harvard-Smithsonian Center for Astrophysics
  *** Copyright (C) 2004-2007
@@ -21,8 +21,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
     Correspondence concerning WCSTools should be addressed as follows:
-           Internet email: dmink@cfa.harvard.edu
-           Postal address: Doug Mink
+           Internet email: jmink@cfa.harvard.edu
+           Postal address: Jessica Mink
                            Smithsonian Astrophysical Observatory
                            60 Garden St.
                            Cambridge, MA 02138 USA

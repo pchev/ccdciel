@@ -40,12 +40,12 @@
 *   pixel coordinate a hybrid routine, wcsmix(), iteratively solves for the
 *   unknown elements.
 *
-*   An initialization routine, wcsset1(), computes indices from the ctype
+*   An initialization routine, wcsset111(), computes indices from the ctype
 *   array but need not be called explicitly - see the explanation of
 *   wcs.flag below.
 *
 *
-*   Initialization routine; wcsset1()
+*   Initialization routine; wcsset111()
 *   --------------------------------
 *   Initializes elements of a wcsprm data structure which holds indices into
 *   the coordinate arrays.  Note that this routine need not be called directly;
@@ -317,7 +317,7 @@
 *             three-dimensional structure using a "CUBEFACE" axis indexed from
 *             0 to 5 as above.
 *
-*       These routines support both methods; wcsset1() determines which is
+*       These routines support both methods; wcsset111() determines which is
 *       being used by the presence or absence of a CUBEFACE axis in ctype[].
 *       wcsfwd() and wcsrev1() translate the CUBEFACE axis representation to
 *       the single plane representation understood by the lower-level WCSLIB
@@ -332,7 +332,7 @@
 *         The wcsprm struct contains indexes and other information derived
 *         from the CTYPEn.  Whenever any of the ctype[] are set or changed
 *         this flag must be set to zero to signal the initialization routine,
-*         wcsset1() to redetermine the indices.  The flag is set to 999 if
+*         wcsset111() to redetermine the indices.  The flag is set to 999 if
 *         there is no celestial axis pair in the CTYPEn.
 *
 *      char pcode[4]
@@ -392,7 +392,7 @@
 #include "wcslib.h"
 
 /* Map error number to error message for each function. */
-const char *wcsset1_errmsg[] = {
+const char *wcsset111_errmsg[] = {
    0,
    "Inconsistent or unrecognized coordinate axis types"};
 
@@ -421,7 +421,7 @@ const char *wcsmix_errmsg[] = {
 #define signb(X) ((X) < 0.0 ? 1 : 0)
 
 int
-wcsset1 (naxis, ctype, wcs)
+wcsset111 (naxis, ctype, wcs)
 
 const int naxis;
 const char ctype[][9];
@@ -570,7 +570,7 @@ double pixcrd[];
 
    /* Initialize if required. */
    if (wcs->flag != WCSSET) {
-      if (wcsset1(lin->naxis, ctype, wcs)) return 1;
+      if (wcsset111(lin->naxis, ctype, wcs)) return 1;
    }
 
    /* Convert to relative physical coordinates. */
@@ -660,7 +660,7 @@ double world[];
 
    /* Initialize if required. */
    if (wcs->flag != WCSSET) {
-      if (wcsset1(lin->naxis, ctype, wcs)) return 1;
+      if (wcsset111(lin->naxis, ctype, wcs)) return 1;
    }
 
    /* Apply reverse linear transformation. */
@@ -774,7 +774,7 @@ double pixcrd[];
 
    /* Initialize if required. */
    if (wcs->flag != WCSSET) {
-      if (wcsset1(lin->naxis, ctype, wcs)) return 1;
+      if (wcsset111(lin->naxis, ctype, wcs)) return 1;
    }
 
    /* Check vspan. */

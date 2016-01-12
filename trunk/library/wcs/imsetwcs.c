@@ -1,6 +1,6 @@
 /*** File libwcs/imsetwcs.c
  *** May 19, 2010
- *** By Doug Mink, dmink@cfa.harvard.edu (based on UIowa code)
+ *** By Jessica Mink, jmink@cfa.harvard.edu (based on UIowa code)
  *** Harvard-Smithsonian Center for Astrophysics
  *** Copyright (C) 1996-2010
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
@@ -20,8 +20,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
     Correspondence concerning WCSTools should be addressed as follows:
-           Internet email: dmink@cfa.harvard.edu
-           Postal address: Doug Mink
+           Internet email: jmink@cfa.harvard.edu
+           Postal address: Jessica Mink
                            Smithsonian Astrophysical Observatory
                            60 Garden St.
                            Cambridge, MA 02138 USA

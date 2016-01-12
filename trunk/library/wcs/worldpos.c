@@ -2,7 +2,7 @@
  *  September 1, 2011
  *  Copyright (C) 1994-2011
  *  Associated Universities, Inc. Washington DC, USA.
- *  With code added by Doug Mink, Smithsonian Astrophysical Observatory
+ *  With code added by Jessica Mink, Smithsonian Astrophysical Observatory
  *                 and Allan Brighton and Andreas Wicenec, ESO
  *                 and Frank Valdes, NOAO
 

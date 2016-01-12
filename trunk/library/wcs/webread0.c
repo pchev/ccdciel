@@ -1,9 +1,9 @@
 /*** File webread.c
- *** February 6, 2015
+ *** January 5, 2008
  *** By Jessica Mink, jmink@cfa.harvard.edu
  *** Harvard-Smithsonian Center for Astrophysics
  *** (http code from John Roll)
- *** Copyright (C) 2000-2015
+ *** Copyright (C) 2000-2008
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
 
     This library is free software; you can redistribute it and/or
@@ -49,18 +49,13 @@
 
 #include <sys/time.h>
 #include <sys/types.h>
-
-/* for MinGW */
-#ifdef MSWIN
-#include <winsock2.h>
-#else
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#endif
 
 /* static int FileINetParse (char *file,int port,struct sockaddr_in *adrinet);*/
 static int FileINetParse();
+static void movebuff();
 
 static FILE *SokOpen();
 #define XFREAD  1
@@ -296,7 +291,6 @@ int	nnum;		/* Number of stars to find */
 int	sysout;		/* Search coordinate system */
 double	eqout;		/* Search coordinate equinox */
 double	epout;		/* Proper motion epoch (0.0 for no proper motion) */
-int	match;		/* 1 to match star number exactly, else sequence num */
 double	*unum;		/* Array of UA numbers to find */
 double	*ura;		/* Array of right ascensions (returned) */
 double	*udec;		/* Array of declinations (returned) */
@@ -435,7 +429,6 @@ int	nlog;		/* 1 to print diagnostic messages */
     /* Open port to HTTP server, send command, and fill buffer with return */
     if ((tabbuff = webbuff (srchurl, diag, &lbuff)) == NULL) {
 	fprintf (stderr,"WEBOPEN: cannot read URL %s\n", srchurl);
-	free (srchurl);
 	return (NULL);
 	}
     if (!strchr (tabbuff, '	') && !strchr (tabbuff, ',') && !strchr (tabbuff, '|')) {
@@ -443,7 +436,6 @@ int	nlog;		/* 1 to print diagnostic messages */
 	    fprintf (stderr,"Message returned from %s\n", srchurl);
 	    fprintf (stderr,"%s\n", tabbuff);
 	    }
-	free (srchurl);
 	return (NULL);
 	}
 
@@ -500,7 +492,6 @@ int	nlog;		/* 1 to print diagnostic messages */
     if ((tabtable = (struct TabTable *) calloc (1, ltab)) == NULL) {
 	fprintf (stderr,"WEBOPEN: cannot allocate Tab Table structure for %s",
 	         srchurl);
-	free (srchurl);
 	return (NULL);
 	}
 
@@ -515,7 +506,6 @@ int	nlog;		/* 1 to print diagnostic messages */
 	fprintf (stderr,"WEBOPEN: cannot allocate filename %s in structure",
 	         caturl);
 	tabclose (tabtable);
-	free (srchurl);
 	return (NULL);
 	}
     strcpy (tabtable->filename, caturl);
@@ -526,7 +516,6 @@ int	nlog;		/* 1 to print diagnostic messages */
 	fprintf (stderr,"WEBOPEN: cannot allocate tabname %s in structure",
 	         srchurl);
 	tabclose (tabtable);
-	free (srchurl);
 	return (NULL);
 	}
     strcpy (tabtable->tabname, srchpar);
@@ -541,7 +530,6 @@ int	nlog;		/* 1 to print diagnostic messages */
     if (*tabline != '-') {
 	fprintf (stderr,"WEBOPEN: No - line in tab table %s",srchurl);
 	tabclose (tabtable);
-	free (srchurl);
 	return (NULL);
 	}
     tabtable->tabhead = lastline;
@@ -551,7 +539,6 @@ int	nlog;		/* 1 to print diagnostic messages */
     if (!tabparse (tabtable)) {
 	fprintf (stderr,"TABOPEN: No columns in tab table %s\n",srchurl);
 	tabclose (tabtable);
-	free (srchurl);
 	return (NULL);
 	}
 
@@ -575,8 +562,6 @@ int	nlog;		/* 1 to print diagnostic messages */
 
     tabtable->tabline = tabtable->tabdata;
     tabtable->iline = 1;
-
-    free (srchurl);
     return (tabtable);
 }
 
@@ -590,7 +575,7 @@ char	*url;	/* URL to read */
 int	diag;	/* 1 to print diagnostic messages */
 int	*lbuff;	/* Length of buffer (returned) */
 {
-    File sok;
+    File sok,*sok1;
     char *server;
     char linebuff[LINE];
     char *buff;
@@ -598,131 +583,95 @@ int	*lbuff;	/* Length of buffer (returned) */
     char *newbuff;
     char *urlpath;
     char *servurl;
-    char *port;
     int	status;
     int lserver;
+    int chunked = 0;
     int lread;
     int lchunk, lline;
+    int nbcont = 0;
     int lcbuff;
-    int lb;
+    int lb, i, j;
     int ltbuff;
     int lcom;
-    int i;
-    int chunked = 0;
-    int nport = 80;
-    int nbcont = 0;
     char *cbcont;
     char *newserver;
+    char *command;
     char *sokptr;
-    char *newpath;
-    char *encodeURL();
-    char czero;
 
     *lbuff = 0;
     newbuff = NULL;
     diag = 0;
-    czero = (char) 0;
 
     /* Extract server name and path from URL */
     servurl = url;
     if (!strncmp(url, "http://", 7))
 	servurl = servurl + 7;
     urlpath = strchr (servurl, '/');
-    if (urlpath != NULL) {
-	lserver = urlpath - servurl;
-	if ((server = (char *) malloc (lserver+2)) == NULL)
-	    return (NULL);
-	strncpy (server, servurl, lserver);
-	server[lserver] = (char) 0;
-	if ( port = strchr (servurl,':') ) {
-	    *port = '\0';
-	    port++;
-	    nport = atoi (port);
-	    }
-	}
-    else {
-	if ((server = (char *) malloc (4)) == NULL)
-	    return (NULL);
-	server[0] = '/';
-	server[1] = '\0';
-	}
+    lserver = urlpath - servurl;
+    if ((server = (char *) malloc (lserver+2)) == NULL)
+	return (NULL);
+    strncpy (server, servurl, lserver);
+    server[lserver] = (char) 0;
 
     /* Open port to HTTP server */
-    if ( !(sok = SokOpen (server, nport, XFREAD | XFWRITE)) ) {
-	if (port != NULL)
-	    fprintf(stderr, "Can't read URL %s:%s\n", server, port);
-	else
-	    fprintf(stderr, "Can't read URL %s\n", server);
+    if ( !(sok = SokOpen (server, 80, XFREAD | XFWRITE)) ) {
 	free (server);
 	return (NULL);
 	}
 
-    /* Make sure that URL contains only legal characters */
-    /* newpath = encodeURL (urlpath); */
-    newpath = urlpath;
-
     /* Send HTTP GET command */
-    fprintf (sok, "GET %s HTTP/1.1\r\nHost: %s\n\n", newpath, server);
-    fflush (sok);
+    lcom = 32 + strlen (urlpath) + strlen (server);
+    command = (char *) calloc (lcom, 1);
+    sprintf (command, "GET %s HTTP/1.1\r\nHost: %s\r\n\r\n",urlpath,server);
+    fprintf (sok, command);
+    fflush(sok);
     free (server);
-    if (newpath != urlpath) {
-	free (newpath);
-	}
+    for (i = 0; i < lcom; i++)
+	command[i] = (char) 0;
+    free (command);
 
-    for (i = 0; i < LINE; i++)
-	linebuff[i] = czero;
-    (void) fscanf(sok, "%*s %d %s\r\n", &status, linebuff);
+    (void) fscanf(sok, "%*s %d %*s\r\n", &status);
 
     /* If Redirect code encounter, go to alternate URL at Location: */
     if ( status == 301 || status == 302 || status == 303 || status == 307 ) {
-	char redirect[LINE];
-	while ((servurl = fgets (redirect, LINE, sok))) {
-	    if (!(strncmp (redirect, "Location:", 9)))
-		break;
-	    }
-	(void) fclose (sok);
-	if (servurl == NULL) {
-	    if (diag)
-		fprintf (stderr,"WEBBUFF: No forward for HTTP Code %d\n", status);
+	sokptr = strsrch ((char *) sok->_ptr, "Location:") + 10;
+	newserver = strsrch (sokptr, "http");
+	j = 7;
+	while (newserver[j] != '/')
+	    j = j + 1;
+	if ((server = (char *) malloc (j+2)) == NULL) {
+	    (void) fclose (sok);
 	    return (NULL);
 	    }
-	if ((servurl = strsrch (servurl, "http://")) == NULL) {
-	    if (diag)
-		fprintf (stderr,"WEBBUFF: No forward URL for HTTP Code %d\n", status);
-	    return (NULL);
-	    }
-	servurl = servurl + 7;
-	urlpath = strchr (servurl, '/');
-	lserver = urlpath - servurl;
-	if ((server = (char *) malloc (lserver+2)) == NULL) {
-	    return (NULL);
-	    }
-	strncpy (server, servurl, lserver);
-	server[lserver] = (char) 0;
+	strncpy (server, sokptr, j);
+	server[j] = (char) 0;
 
 	if (diag)
-	    fprintf (stderr,"WEBBUFF: HTTP Code %d: Temporary Redirect to %s\n",
+	    fprintf (stderr,"HTTP Code %d: Temporary Redirect to %s\n",
 		     status, server);
 
 	/* Open port to HTTP server */
-	if ( (sok = SokOpen (server, 80, XFREAD | XFWRITE)) == NULL ) {
+	if ( (sok1 = SokOpen (server, 80, XFREAD | XFWRITE)) == NULL ) {
 	    free (server);
 	    return (NULL);
 	    }
 
-	/* Make sure that URL contains only legal characters */
-	/* newpath = encodeURL (urlpath); */
-	newpath = urlpath;
-
 	/* Send HTTP GET command (simbad forward fails if HTTP/1.1 included) */
-	fprintf(sok, "GET %s HTTP/1.1\r\nHost: %s\n\n", newpath, server);
-	fflush (sok);
+	lcom = 32 + strlen (urlpath) + strlen (server);
+	command = (char *) calloc (lcom, 1);
+	sprintf(command, "GET %s\r\nHost: %s\r\n\r\n",urlpath,server);
+	fprintf(sok1, command);
+	fflush(sok1);
 	free (server);
-	if (newpath != urlpath) {
-	    free (newpath);
-	    }
+	for (i = 0; i < lcom; i++)
+	    command[i] = (char) 0;
+	free (command);
 
-	(void) fscanf(sok, "%*s %d %*s\r\n", &status);
+	(void) fscanf(sok1, "%*s %d %*s\r\n", &status);
+
+	/* Close old socket structure and assign new structure to it */
+	(void) fclose (sok);
+	sok = sok1;
 	}
 
     /* Skip continue lines
@@ -737,8 +686,6 @@ int	*lbuff;	/* Length of buffer (returned) */
 	    fprintf (stderr,"HTTP Code %d from  %s\n", status, server);
 	return (NULL);
 	}
-    for (i = 0; i < LINE; i++)
-	linebuff[i] = czero;
 
     /* Skip over http header of returned stuff */
     while (fgets (linebuff, LINE, sok) ) {
@@ -752,14 +699,10 @@ int	*lbuff;	/* Length of buffer (returned) */
 	    }
 	if (*linebuff == '\n') break;
 	if (*linebuff == '\r') break;
-	for (i = 0; i < LINE; i++)
-	    linebuff[i] = czero;
 	}
 
     /* Read table into buffer in memory a chunk at a time */
     tabbuff = NULL;
-    for (i = 0; i < LINE; i++)
-	linebuff[i] = czero;
     lb = 0;
     if (chunked) {
 	lchunk = 1;
@@ -798,7 +741,7 @@ int	*lbuff;	/* Length of buffer (returned) */
 	    else if (ltbuff > lb) {
 		lb = lb * 10;
 		newbuff = (char *) calloc ((size_t)lb, (size_t)1); 
-		movebuff (tabbuff, newbuff, lcbuff, 0, 0);
+		movebuff (newbuff, tabbuff, lcbuff, 0, 0);
 		free (tabbuff);
 		tabbuff = newbuff;
 		buff = tabbuff + lcbuff;
@@ -812,8 +755,6 @@ int	*lbuff;	/* Length of buffer (returned) */
 	    if (diag)
 		fprintf (stderr, "%s\n", buff);
 	    *lbuff = ltbuff;
-	    for (i = 0; i < LINE; i++)
-		linebuff[i] = czero;
 	    }
 	}
 
@@ -832,42 +773,46 @@ int	*lbuff;	/* Length of buffer (returned) */
 	lchunk = 8192;
 	*lbuff = 0;
 	buff = (char *) calloc (1, lchunk+8);
-	if (buff == NULL) {
-	    fprintf (stderr, "WEBBUFF: unable to allocate chunk buffer of %d bytes\n", lchunk + 8);
-	    return (NULL);
-	    }
 	while ( (lread = fread (buff, 1, lchunk, sok)) > 0 ) {
 	    lcbuff = *lbuff;
 	    *lbuff = *lbuff + lread;
 	    if (tabbuff == NULL) {
 		tabbuff = (char *) malloc (*lbuff+8);
-		if (tabbuff == NULL) {
-		    fprintf (stderr, "WEBBUFF: unable to allocate buffer of %d bytes\n", *lbuff + 8);
-		    return (NULL);
-		    }
-		movebuff (buff, tabbuff, lread, 0, 0);
+		movebuff (tabbuff, buff, lread, 0, 0);
 		}
 	    else {
 		newbuff = (char *) malloc (*lbuff+8);
-		if (newbuff == NULL) {
-		    fprintf (stderr, "WEBBUFF: unable to allocate new buffer of %d bytes\n", *lbuff + 8);
-		    return (NULL);
-		    }
-		movebuff (tabbuff, newbuff, lcbuff, 0, 0);
+		movebuff (newbuff, tabbuff, lcbuff, 0, 0);
 		free (tabbuff);
 		tabbuff = newbuff;
-		movebuff (buff, tabbuff, lread, 0, lcbuff);
+		movebuff (tabbuff, buff, lread, lcbuff, 0);
 		}
 	    if (diag)
 		fprintf (stderr, "%s\n", buff);
 	    }
-	free (buff);
-	buff = NULL;
 	}
     (void) fclose (sok);
 
     return (tabbuff);
 }
+
+static void
+movebuff (dest, source, nbytes, offd, offs)
+
+char	*dest;		/* First byte of destination buffer */
+char	*source;	/* First byte of source buffer */
+int	nbytes;		/* Number of bytes to move */
+int	offd;		/* Offset from first byte of destination buffer */
+int	offs;		/* Offset from first byte of source buffer */
+{
+char *from, *last, *to;
+        from = source + offs;
+        to = dest + offd;
+        last = from + nbytes;
+        while (from < last) *(to++) = *(from++);
+        return;
+}
+
 
 /* sokFile.c
  * copyright 1991, 1993, 1995, 1999 John B. Roll jr.
@@ -980,7 +925,7 @@ char *
 space2tab (tabbuff)
     char *tabbuff;	/* Tab table filled with spaces */
 {
-    char *newbuff, *line0, *line1, *ic, *icn;
+    char *newbuff, *line0, *line1, *ic, *icn, *tstart;
     char cspace, ctab, cdash;
     int lbuff;
     int alltab = 0;
@@ -1028,33 +973,6 @@ space2tab (tabbuff)
 	    }
 	}
     return (newbuff);
-}
-
-/* The following two subroutines are from Fred Bulback, who has put them
- * in the public domain. */
-
-/* Converts an integer value to its hex character*/
-char char2hex (char code) {
-    static char hex[] = "0123456789ABCDEF";
-    return hex[code & 15];
-}
-
-/* Returns a url-encoded version of str */
-/* IMPORTANT: be sure to free() the returned string after use */
-char *encodeURL (char *str) {
-    char *pstr = str, *buf = malloc(strlen(str) * 3 + 1), *pbuf = buf;
-  
-    while (*pstr) {
-	if (isalnum(*pstr) || *pstr == '-' || *pstr == '_' || *pstr == '.' || *pstr == '~' || *pstr == '/' || *pstr == '?') 
-	    *pbuf++ = *pstr;
-	else if (*pstr == ' ') 
-	    *pbuf++ = '+';
-	else 
-	    *pbuf++ = '%', *pbuf++ = char2hex(*pstr >> 4), *pbuf++ = char2hex(*pstr & 15);
-	pstr++;
-	}
-    *pbuf = '\0';
-    return buf;
 }
 
 /* Nov 29 2000	New subroutines
@@ -1111,17 +1029,5 @@ char *encodeURL (char *str) {
  * Aug 28 2007	Fix space2tab() declarations which passed on Solaris, not Linux
  * Dec 31 2007	Fix chunk reading code in webbuff()
  *
- * Jan  8 2008	Forward automatically if status=301|302|303|307 (code from Ed Los)
- *
- * Sep 25 2009	Reverse movebuff() source, destination arguments for compatibility
- * Sep 25 2009	Free allocated pointers before returning after Douglas Burke
- *
- * Oct 29 2010	Declare match int in webrnum()
- *
- * Sep 16 2011	Add winsock2.h include for MinGW MSWindows C
- *
- * Sep 29 2014	Translate characters in URL to those legal for web use using
- *		http://geekhideout.com/urlcode.shtml
- * 
- * Feb  6 2015	Drop URL encoding because GSC2 search fails when used.
+ * Jan  5 2008	Add code to forward automatically if status=301|302|303|307
  */
