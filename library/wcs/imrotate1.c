@@ -1,5 +1,5 @@
 /*** File libwcs/imrotate.c
- *** June 26, 2008
+ *** June 30, 2008
  *** By Jessica Mink, jmink@cfa.harvard.edu
  *** Harvard-Smithsonian Center for Astrophysics
  *** Copyright (C) 1996-2008
@@ -42,7 +42,8 @@ static void RotWCSFITS();	/* rotate all the C* fields */
  */
 
 char *
-RotFITS (pathname,header,image0,xshift,yshift,rotate,mirror,bitpix2,rotwcs,verbose)
+RotFITS (pathname,header,image0,xshift,yshift,rotate,mirror,bitpix2,rotwcs,
+	 verbose)
 
 char	*pathname;	/* Name of file which is being changed */
 char	*header;	/* FITS header */
@@ -366,7 +367,7 @@ RotWCSFITS (header, angle, mirror, verbose)
 
 char	*header;	/* FITS header */
 int	angle;		/* Angle to be rotated (0, 90, 180, 270) */
-int	mirror;		/* 1 if mirrored left to right, else 0 */
+int	mirror;		/* Reflect image around 1=vertical, 2=horizontal axis */
 int	verbose;	/* Print progress if 1 */
 
 {
@@ -423,8 +424,8 @@ int	verbose;	/* Print progress if 1 */
 	    }
 	}
 
-    /* Negate rotation angle if mirrored */
-    if (mirror) {
+    /* Negate rotation angle if mirrored or flipped */
+    if (mirror > 0) {
 	if (hgetr8 (header, "CROTA1", &ctemp1)) {
 	    hgetndec (header, "CROTA1", &ndec1);
 	    hputnr8 (header, "CROTA1", ndec1, -ctemp1);
@@ -437,8 +438,14 @@ int	verbose;	/* Print progress if 1 */
 	    hgetndec (header, "LTM1_1", &ndec1);
 	    hputnr8 (header, "LTM1_1", ndec1, -ctemp1);
 	    }
-	if (hgetr8 (header, "CD1_1", &ctemp1))
-	    hputr8 (header, "CD1_1", -ctemp1);
+	if (mirror == 1) {
+	    if (hgetr8 (header, "CD1_1", &ctemp1))
+		hputr8 (header, "CD1_1", -ctemp1);
+	    }
+	if (mirror == 2) {
+	    if (hgetr8 (header, "CD2_2", &ctemp1))
+		hputr8 (header, "CD2_2", -ctemp1);
+	    }
 	if (hgetr8 (header, "CD1_2", &ctemp1))
 	    hputr8 (header, "CD1_2", -ctemp1);
 	if (hgetr8 (header, "CD2_1", &ctemp1))
@@ -562,7 +569,7 @@ int	verbose;	/* Print progress if 1 */
 	hgetndec (header, "CD1_2", &ndec2);
 	hgetndec (header, "CD2_1", &ndec3);
 	hgetndec (header, "CD2_2", &ndec4);
-	if (mirror) {
+	if (mirror == 1) {
 	    if (angle == 0) {
 		hputnr8 (header, "CD1_2", ndec2, -ctemp2);
 		hputnr8 (header, "CD2_1", ndec3, -ctemp3);
@@ -588,10 +595,10 @@ int	verbose;	/* Print progress if 1 */
 	    }
 	else {
 	    if (angle == 90) {
-		hputnr8 (header, "CD1_1", ndec4, -ctemp4);
-		hputnr8 (header, "CD1_2", ndec3, -ctemp3);
-		hputnr8 (header, "CD2_1", ndec2, ctemp2);
-		hputnr8 (header, "CD2_2", ndec1, ctemp1);
+		hputnr8 (header, "CD1_1", ndec2, -ctemp2);
+		hputnr8 (header, "CD1_2", ndec1, ctemp1);
+		hputnr8 (header, "CD2_1", ndec4, -ctemp4);
+		hputnr8 (header, "CD2_2", ndec3, ctemp3);
 		}
 	    else if (angle == 180) {
 		hputnr8 (header, "CD1_1", ndec1, -ctemp1);
@@ -600,10 +607,10 @@ int	verbose;	/* Print progress if 1 */
 		hputnr8 (header, "CD2_2", ndec4, -ctemp4);
 		}
 	    else if (angle == 270) {
-		hputnr8 (header, "CD1_1", ndec4, ctemp4);
-		hputnr8 (header, "CD1_2", ndec3, ctemp3);
-		hputnr8 (header, "CD2_1", ndec2, -ctemp2);
-		hputnr8 (header, "CD2_2", ndec1, -ctemp1);
+		hputnr8 (header, "CD1_1", ndec2, ctemp2);
+		hputnr8 (header, "CD1_2", ndec1, -ctemp1);
+		hputnr8 (header, "CD2_1", ndec4, ctemp4);
+		hputnr8 (header, "CD2_2", ndec3, -ctemp3);
 		}
 	    }
 	}
@@ -657,4 +664,5 @@ int	verbose;	/* Print progress if 1 */
  * Aug 17 2005	Add mirror = 2 flag indicating a flip across x axis
  *
  * Jun 26 2008	Shift pixels if either xshift or yshift is not zero
+ * Jun 30 2008	Correct WCS changes as suggested by Ed Los
  */
