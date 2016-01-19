@@ -1,5 +1,5 @@
 CCDciel
-Version 0.1.0 beta
+Version 0.3.0 beta
 
 A CCD capture software intended for the amateur astronomer.
 It include all the features required to perform digital imaging CCD observation of celestial objects.
