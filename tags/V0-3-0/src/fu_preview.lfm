@@ -1,0 +1,139 @@
+object f_preview: Tf_preview
+  Left = 0
+  Height = 127
+  Top = 0
+  Width = 138
+  AutoSize = True
+  ClientHeight = 127
+  ClientWidth = 138
+  TabOrder = 0
+  DesignLeft = 389
+  DesignTop = 103
+  object Panel1: TPanel
+    Left = 0
+    Height = 107
+    Top = 20
+    Width = 138
+    Align = alClient
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 107
+    ClientWidth = 138
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 131
+      ClientHeight = 23
+      ClientWidth = 131
+      TabOrder = 2
+      object ExpTime: TComboBox
+        Left = 40
+        Height = 22
+        Hint = 'Exposure time in seconds'
+        Top = 0
+        Width = 90
+        Color = clBlack
+        Font.Color = clRed
+        ItemHeight = 0
+        ItemIndex = 5
+        Items.Strings = (
+          '0.01'
+          '0.05'
+          '0.1'
+          '0.2'
+          '0.5'
+          '1'
+          '2'
+          '5'
+          '10'
+          '20'
+        )
+        ParentFont = False
+        TabOrder = 0
+        Text = '1'
+      end
+      object Label1: TLabel
+        Left = 0
+        Height = 16
+        Top = 4
+        Width = 22
+        Caption = 'Exp'
+        ParentColor = False
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 23
+      Top = 23
+      Width = 131
+      ClientHeight = 23
+      ClientWidth = 131
+      TabOrder = 3
+      object Binning: TComboBox
+        Left = 40
+        Height = 22
+        Hint = 'Camera binning'
+        Top = 0
+        Width = 90
+        Color = clBlack
+        Font.Color = clRed
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          '1x1'
+        )
+        ParentFont = False
+        TabOrder = 0
+        Text = '1x1'
+      end
+      object Label2: TLabel
+        Left = 0
+        Height = 16
+        Top = 4
+        Width = 21
+        Caption = 'Bin.'
+        ParentColor = False
+      end
+    end
+    object BtnPreview: TButton
+      Left = 0
+      Height = 25
+      Hint = 'Start one preview exposure'
+      Top = 46
+      Width = 131
+      Caption = 'Preview'
+      OnClick = BtnPreviewClick
+      ParentFont = False
+      TabOrder = 0
+    end
+    object BtnLoop: TButton
+      Tag = 1
+      Left = 0
+      Height = 25
+      Hint = 'Loop preview exposures'
+      Top = 71
+      Width = 131
+      Caption = 'Loop'
+      OnClick = BtnLoopClick
+      ParentFont = False
+      TabOrder = 1
+    end
+  end
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 138
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Preview'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 1
+  end
+end

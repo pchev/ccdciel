@@ -1,0 +1,183 @@
+object f_starprofile: Tf_starprofile
+  Left = 0
+  Height = 359
+  Top = 0
+  Width = 170
+  AutoSize = True
+  ClientHeight = 359
+  ClientWidth = 170
+  OnEndDrag = FrameEndDrag
+  OnResize = FrameResize
+  TabOrder = 0
+  DesignLeft = 424
+  DesignTop = 136
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 170
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Star profile'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 339
+    Top = 20
+    Width = 170
+    Align = alClient
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 339
+    ClientWidth = 170
+    TabOrder = 1
+    object Panel2: TPanel
+      Left = 0
+      Height = 80
+      Top = 0
+      Width = 170
+      ClientHeight = 80
+      ClientWidth = 170
+      Constraints.MaxHeight = 80
+      Constraints.MaxWidth = 170
+      Constraints.MinHeight = 80
+      Constraints.MinWidth = 170
+      ParentColor = False
+      TabOrder = 0
+      object profile: TImage
+        Left = 1
+        Height = 78
+        Hint = 'The selected star luminosity profile'
+        Top = 1
+        Width = 168
+        Align = alClient
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 40
+      Top = 80
+      Width = 170
+      ClientHeight = 40
+      ClientWidth = 170
+      Constraints.MaxHeight = 40
+      Constraints.MaxWidth = 170
+      Constraints.MinHeight = 40
+      Constraints.MinWidth = 170
+      TabOrder = 1
+      object graph: TImage
+        Left = 1
+        Height = 38
+        Hint = 'History of the last FWHM and Intensity measurement'
+        Top = 1
+        Width = 168
+        Align = alClient
+        OnDblClick = graphDblClick
+      end
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 61
+      Top = 120
+      Width = 170
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 61
+      ClientWidth = 170
+      TabOrder = 2
+      object LabelHFD: TLabel
+        Left = 1
+        Height = 44
+        Hint = 'The Half Flux Diameter value in pixels'
+        Top = 16
+        Width = 9
+        Caption = ' '
+        Font.Height = 38
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label1: TLabel
+        Left = 1
+        Height = 15
+        Top = 0
+        Width = 26
+        Caption = 'HFD:'
+        ParentColor = False
+      end
+    end
+    object Panel6: TPanel
+      Left = 0
+      Height = 61
+      Top = 181
+      Width = 170
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 61
+      ClientWidth = 170
+      TabOrder = 5
+      object LabelFWHM: TLabel
+        Left = 1
+        Height = 44
+        Hint = 'The Full Width at Half Maximum value in pixels / arc seconds'
+        Top = 16
+        Width = 9
+        Caption = ' '
+        Font.Height = 38
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 1
+        Height = 15
+        Top = 0
+        Width = 39
+        Caption = 'FWHM:'
+        ParentColor = False
+      end
+    end
+    object Panel5: TPanel
+      Left = 0
+      Height = 61
+      Top = 242
+      Width = 170
+      ClientHeight = 61
+      ClientWidth = 170
+      TabOrder = 3
+      object Label2: TLabel
+        Left = 0
+        Height = 15
+        Top = 2
+        Width = 53
+        Caption = 'Intensity:'
+        ParentColor = False
+      end
+      object LabelImax: TLabel
+        Left = 0
+        Height = 44
+        Hint = 'The maximum intensity value'
+        Top = 16
+        Width = 9
+        Caption = ' '
+        Font.Height = 38
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+    object focus: TCheckBox
+      Left = 0
+      Height = 26
+      Top = 303
+      Width = 170
+      Caption = 'Focus aid'
+      OnChange = focusChange
+      TabOrder = 4
+    end
+  end
+end

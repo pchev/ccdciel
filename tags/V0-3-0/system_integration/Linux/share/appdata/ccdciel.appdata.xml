@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+ <id type="desktop">ccdciel.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-3.0+</project_license>
+ <name>CCDciel</name>
+ <summary>CCD capture software for the amateur astronomer</summary>
+ <description>
+  <p>
+    A CCD capture software intended for the amateur astronomer.
+  </p>
+  <p>
+    It include all the features required to perform digital imaging CCD observation of celestial objects.
+  </p>
+  <p>
+    Using the standard drivers protocol INDI and ASCOM it can connect and control the CCD camera, 
+    the focuser, the filter wheel and the telescope mount.
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default">
+      <image>http://www.ap-i.net/ccdciel/_media/en/ccdciel.png</image>
+      <caption>The main window of CCDciel</caption>
+  </screenshot>
+ </screenshots>
+ <url type="homepage">http://www.ap-i.net/ccdciel/</url>
+ <updatecontact>pch@ap-i.net</updatecontact>
+</application>

@@ -1,0 +1,15 @@
+
+Copyright: 2003-2015 Patrick Chevalley <pch@ap-i.net>
+
+Information :
+Name        : ccdciel
+Version     : 0.1.0
+Release     : 1
+Group       : Sciences/Astronomy
+License     : GPL-3
+Packager    : Patrick Chevalley
+URL         : http://ccdciel.sourceforge.net
+Summary     : A CCD capture software intended for the amateur astronomer.
+Description :
+It include all the features required to perform digital imaging CCD observation of celestial objects.
+Using the standard drivers protocol INDI and ASCOM it can connect and control the CCD camera, the focuser, the filter wheel and the telescope mount.

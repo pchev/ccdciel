@@ -1,0 +1,41 @@
+object f_msg: Tf_msg
+  Left = 0
+  Height = 93
+  Top = 0
+  Width = 320
+  AutoSize = True
+  ClientHeight = 93
+  ClientWidth = 320
+  OnEndDrag = FrameEndDrag
+  OnResize = FrameResize
+  TabOrder = 0
+  DesignLeft = 347
+  DesignTop = 169
+  object Panel1: TPanel
+    Left = 0
+    Height = 93
+    Top = 0
+    Width = 320
+    Align = alClient
+    ClientHeight = 93
+    ClientWidth = 320
+    TabOrder = 0
+    object msg: TMemo
+      Left = 1
+      Height = 91
+      Top = 1
+      Width = 500
+      Align = alClient
+      Color = clBlack
+      Constraints.MaxWidth = 500
+      Constraints.MinHeight = 75
+      Constraints.MinWidth = 500
+      DragMode = dmAutomatic
+      Font.Color = clRed
+      ParentFont = False
+      ReadOnly = True
+      ScrollBars = ssAutoVertical
+      TabOrder = 0
+    end
+  end
+end

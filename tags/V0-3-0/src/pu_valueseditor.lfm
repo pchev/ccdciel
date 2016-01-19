@@ -1,0 +1,70 @@
+object f_valueseditor: Tf_valueseditor
+  Left = 294
+  Height = 254
+  Top = 33
+  Width = 252
+  Caption = 'Edit filter name'
+  ClientHeight = 254
+  ClientWidth = 252
+  LCLVersion = '1.2.4.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 204
+    Width = 252
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 252
+    TabOrder = 0
+    object Button1: TButton
+      Left = 152
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'OK'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 52
+      Height = 25
+      Top = 8
+      Width = 75
+      Cancel = True
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 204
+    Top = 0
+    Width = 252
+    Align = alClient
+    ClientHeight = 204
+    ClientWidth = 252
+    TabOrder = 1
+    object ValuesList: TValueListEditor
+      Left = 1
+      Height = 202
+      Top = 1
+      Width = 250
+      Align = alClient
+      FixedCols = 0
+      RowCount = 2
+      TabOrder = 0
+      Strings.Strings = (
+        ''
+      )
+      TitleCaptions.Strings = (
+        'Position'
+        'Name'
+      )
+      ColWidths = (
+        64
+        182
+      )
+    end
+  end
+end

@@ -1,0 +1,226 @@
+object f_sequence: Tf_sequence
+  Left = 0
+  Height = 519
+  Top = 0
+  Width = 180
+  ClientHeight = 519
+  ClientWidth = 180
+  TabOrder = 0
+  DesignLeft = 281
+  DesignTop = 121
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 180
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Sequence'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 235
+    Top = 24
+    Width = 180
+    BevelOuter = bvNone
+    ClientHeight = 235
+    ClientWidth = 180
+    TabOrder = 1
+    object TargetGrid: TStringGrid
+      Left = 0
+      Height = 130
+      Top = 20
+      Width = 180
+      Align = alClient
+      ColCount = 6
+      DefaultRowHeight = 18
+      FixedCols = 0
+      Flat = True
+      RowCount = 1
+      TabOrder = 0
+      OnDrawCell = TargetGridDrawCell
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 85
+      Top = 150
+      Width = 180
+      Align = alBottom
+      ClientHeight = 85
+      ClientWidth = 180
+      TabOrder = 1
+      object BtnEditTargets: TButton
+        Left = 135
+        Height = 25
+        Top = 4
+        Width = 45
+        Caption = 'Edit'
+        OnClick = BtnEditTargetsClick
+        TabOrder = 0
+      end
+      object BtnSaveTargets: TButton
+        Left = 45
+        Height = 25
+        Top = 4
+        Width = 45
+        Caption = 'Save'
+        OnClick = BtnSaveTargetsClick
+        TabOrder = 1
+      end
+      object BtnLoadTargets: TButton
+        Left = 0
+        Height = 25
+        Top = 4
+        Width = 45
+        Caption = 'Load'
+        OnClick = BtnLoadTargetsClick
+        TabOrder = 2
+      end
+      object BtnNewTargets: TButton
+        Left = 90
+        Height = 25
+        Top = 4
+        Width = 45
+        Caption = 'New'
+        OnClick = BtnEditTargetsClick
+        TabOrder = 3
+      end
+      object BtnStart: TButton
+        Left = 0
+        Height = 25
+        Top = 32
+        Width = 86
+        Caption = 'Start'
+        OnClick = BtnStartClick
+        TabOrder = 4
+      end
+      object BtnStop: TButton
+        Left = 90
+        Height = 25
+        Top = 32
+        Width = 86
+        Caption = 'Stop'
+        OnClick = BtnStopClick
+        TabOrder = 5
+      end
+      object Unattended: TCheckBox
+        Left = 1
+        Height = 24
+        Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
+        Top = 56
+        Width = 127
+        Caption = 'Run unattended'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 6
+      end
+    end
+    object StaticText3: TStaticText
+      Left = 0
+      Height = 20
+      Top = 0
+      Width = 180
+      Align = alTop
+      Alignment = taCenter
+      Caption = 'Targets'
+      Color = clGray
+      Font.Color = clBlack
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 230
+    Top = 259
+    Width = 180
+    BevelOuter = bvNone
+    ClientHeight = 230
+    ClientWidth = 180
+    TabOrder = 2
+    object PlanGrid: TStringGrid
+      Left = 0
+      Height = 160
+      Top = 20
+      Width = 180
+      Align = alClient
+      ColCount = 6
+      DefaultRowHeight = 18
+      FixedCols = 0
+      Flat = True
+      RowCount = 1
+      TabOrder = 0
+      OnDrawCell = PlanGridDrawCell
+    end
+    object StaticText2: TStaticText
+      Left = 0
+      Height = 20
+      Top = 0
+      Width = 180
+      Align = alTop
+      Alignment = taCenter
+      Caption = 'Current plan'
+      Color = clGray
+      Font.Color = clBlack
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 1
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 50
+      Top = 180
+      Width = 180
+      Align = alBottom
+      ClientHeight = 50
+      ClientWidth = 180
+      TabOrder = 2
+      object StatusMsg: TLabel
+        Left = 1
+        Height = 47
+        Top = 1
+        Width = 178
+        Align = alClient
+        AutoSize = False
+        ParentColor = False
+        WordWrap = True
+      end
+      object DelayMsg: TLabel
+        Left = 1
+        Height = 1
+        Top = 48
+        Width = 178
+        Align = alBottom
+        ParentColor = False
+      end
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    Title = 'Open target list'
+    DefaultExt = '.targets'
+    Filter = 'targets|*.targets'
+    Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
+    left = 32
+    top = 120
+  end
+  object SaveDialog1: TSaveDialog
+    Title = 'Save target list as'
+    DefaultExt = '.targets'
+    Filter = 'targets|*.targets'
+    left = 120
+    top = 120
+  end
+  object StatusTimer: TTimer
+    Enabled = False
+    OnTimer = StatusTimerTimer
+    left = 32
+    top = 72
+  end
+end

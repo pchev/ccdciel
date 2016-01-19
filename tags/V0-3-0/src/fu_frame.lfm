@@ -1,0 +1,116 @@
+object f_frame: Tf_frame
+  Left = 0
+  Height = 97
+  Top = 0
+  Width = 118
+  AutoSize = True
+  ClientHeight = 97
+  ClientWidth = 118
+  TabOrder = 0
+  DesignLeft = 199
+  DesignTop = 437
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 118
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Frame'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 77
+    Top = 20
+    Width = 118
+    Align = alClient
+    ChildSizing.ControlsPerLine = 2
+    ClientHeight = 77
+    ClientWidth = 118
+    TabOrder = 1
+    object FX: TEdit
+      Left = 0
+      Height = 22
+      Hint = 'X'
+      Top = 0
+      Width = 55
+      AutoSize = False
+      Color = clBlack
+      Font.Color = clRed
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      Text = ' '
+    end
+    object FY: TEdit
+      Left = 56
+      Height = 22
+      Hint = 'Y'
+      Top = 0
+      Width = 55
+      AutoSize = False
+      Color = clBlack
+      Font.Color = clRed
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      Text = ' '
+    end
+    object FWidth: TEdit
+      Left = 0
+      Height = 22
+      Hint = 'Width'
+      Top = 22
+      Width = 55
+      AutoSize = False
+      Color = clBlack
+      Font.Color = clRed
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Text = ' '
+    end
+    object FHeight: TEdit
+      Left = 56
+      Height = 22
+      Hint = 'Height'
+      Top = 22
+      Width = 55
+      AutoSize = False
+      Color = clBlack
+      Font.Color = clRed
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Text = ' '
+    end
+    object BtnSet: TButton
+      Left = 0
+      Height = 25
+      Top = 44
+      Width = 55
+      Caption = 'Set'
+      OnClick = BtnSetClick
+      TabOrder = 4
+    end
+    object BtnReset: TButton
+      Left = 56
+      Height = 25
+      Top = 44
+      Width = 55
+      Caption = 'Reset'
+      OnClick = BtnResetClick
+      TabOrder = 5
+    end
+  end
+end

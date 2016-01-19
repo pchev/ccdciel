@@ -1,0 +1,93 @@
+object f_planetarium: Tf_planetarium
+  Left = 0
+  Height = 111
+  Top = 0
+  Width = 153
+  ClientHeight = 111
+  ClientWidth = 153
+  TabOrder = 0
+  DesignLeft = 320
+  DesignTop = 536
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 153
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Planetarium'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 91
+    Top = 20
+    Width = 153
+    Align = alClient
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 91
+    ClientWidth = 153
+    TabOrder = 1
+    object Panel2: TPanel
+      Left = 0
+      Height = 26
+      Top = 0
+      Width = 143
+      ClientHeight = 26
+      ClientWidth = 143
+      TabOrder = 0
+      object led: TShape
+        Left = 128
+        Height = 14
+        Top = 4
+        Width = 14
+        Brush.Color = clGray
+        Shape = stCircle
+      end
+      object Status: TEdit
+        Left = 0
+        Height = 25
+        Hint = 'Current telescope Right Ascension'
+        Top = 0
+        Width = 120
+        AutoSize = False
+        Color = clBlack
+        Font.Color = clRed
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 26
+      Top = 26
+      Width = 143
+      ClientHeight = 26
+      ClientWidth = 143
+      TabOrder = 1
+      object BtnConnect: TButton
+        Left = 0
+        Height = 25
+        Top = 0
+        Width = 70
+        Caption = 'Connect'
+        OnClick = BtnConnectClick
+        TabOrder = 0
+      end
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 2
+      Top = 52
+      Width = 143
+      TabOrder = 2
+    end
+  end
+end

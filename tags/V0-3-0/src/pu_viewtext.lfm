@@ -1,0 +1,19 @@
+object f_viewtext: Tf_viewtext
+  Left = 367
+  Height = 421
+  Top = 127
+  Width = 537
+  Caption = 'View text'
+  ClientHeight = 421
+  ClientWidth = 537
+  LCLVersion = '1.4.0.1'
+  object Memo1: TMemo
+    Left = 0
+    Height = 421
+    Top = 0
+    Width = 537
+    Align = alClient
+    ScrollBars = ssAutoBoth
+    TabOrder = 0
+  end
+end
