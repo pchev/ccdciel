@@ -512,24 +512,31 @@ begin
    FImgStream.Clear;
    FImgStream.Position:=0;
    bp.blob.Position:=0;
-   if pos('.z',bp.format)>0 then begin //compressed
-       if zlibok then begin
-         sourceLen:=bp.bloblen;
-         destLen:=bp.size;
-         SetLength(source,sourceLen);
-         SetLength(dest,destLen);
-         bp.blob.Read(source[0],sourceLen);
-         i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
-         if i=0 then
-            FImgStream.Write(dest[0],destLen);
-         SetLength(source,0);
-         SetLength(dest,0);
-       end;
+   if pos('.fits',bp.format)>0 then begin // require a FITS file
+     if pos('.z',bp.format)>0 then begin //compressed
+         if zlibok then begin
+           sourceLen:=bp.bloblen;
+           destLen:=bp.size;
+           SetLength(source,sourceLen);
+           SetLength(dest,destLen);
+           bp.blob.Read(source[0],sourceLen);
+           i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
+           if i=0 then
+              FImgStream.Write(dest[0],destLen);
+           SetLength(source,0);
+           SetLength(dest,0);
+         end;
+     end
+     else begin  //uncompressed
+        FImgStream.CopyFrom(bp.blob,bp.size);
+     end;
+     NewImage;
    end
-   else begin  //uncompressed
-      FImgStream.CopyFrom(bp.blob,bp.size);
+   else begin
+        msg('Invalid file format '+bp.format+', a FITS file is required');
+        AbortExposure;
+        NewImage;
    end;
-   NewImage;
  end;
 end;
 
