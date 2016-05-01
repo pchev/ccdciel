@@ -34,7 +34,7 @@ T_focuser = class(TComponent)
   protected
     FFocuserInterface: TDevInterface;
     FStatus: TDeviceStatus;
-    FonMsg: TNotifyMsg;
+    FonMsg,FonDeviceMsg: TNotifyMsg;
     FonPositionChange: TNotifyNum;
     FonTimerChange: TNotifyNum;
     FonSpeedChange: TNotifyNum;
@@ -71,6 +71,7 @@ T_focuser = class(TComponent)
     property Speed: integer read GetSpeed write SetSpeed;
     property Timer: integer read GetTimer write SetTimer;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
     property onSpeedChange: TNotifyNum read FonSpeedChange write FonSpeedChange;
     property onTimerChange: TNotifyNum read FonTimerChange write FonTimerChange;

@@ -309,7 +309,7 @@ end;
 
 procedure T_indicamera.NewMessage(txt: string);
 begin
-  msg(txt);
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
 end;
 
 procedure T_indicamera.NewProperty(indiProp: IndiProperty);

@@ -229,7 +229,7 @@ end;
 
 procedure T_indimount.NewMessage(txt: string);
 begin
-  msg(txt);
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
 end;
 
 procedure T_indimount.NewProperty(indiProp: IndiProperty);
