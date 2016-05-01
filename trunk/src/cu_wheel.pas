@@ -35,7 +35,7 @@ T_wheel = class(TComponent)
     FWheelInterface: TDevInterface;
     FFilterNames: TStringList;
     FStatus: TDeviceStatus;
-    FonMsg: TNotifyMsg;
+    FonMsg,FonDeviceMsg: TNotifyMsg;
     FonFilterChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
@@ -52,6 +52,7 @@ T_wheel = class(TComponent)
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
     property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;

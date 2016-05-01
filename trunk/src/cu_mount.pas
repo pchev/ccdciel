@@ -33,7 +33,7 @@ type
 T_mount = class(TComponent)
   protected
     FMountInterface: TDevInterface;
-    FonMsg: TNotifyMsg;
+    FonMsg,FonDeviceMsg: TNotifyMsg;
     FonCoordChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
@@ -58,6 +58,7 @@ T_mount = class(TComponent)
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;

@@ -184,13 +184,15 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
     Capture,Preview,PreviewLoop: boolean;
-    LogToFile,LogFileOpen: Boolean;
+    LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
-    LogFile: UTF8String;
-    MsgLog: Textfile;
+    LogFile,DeviceLogFile : UTF8String;
+    MsgLog,MsgDeviceLog: Textfile;
     Procedure InitLog;
+    Procedure InitDeviceLog;
     Procedure CloseLog;
     Procedure WriteLog( buf : string);
+    Procedure WriteDeviceLog( buf : string);
     procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; amenu: TMenuItem);
     procedure UpdConfig(oldver:string);
     procedure SetConfig;
@@ -223,6 +225,7 @@ type
     Procedure DisconnectMount(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure NewMessage(msg: string);
+    Procedure DeviceMessage(msg: string);
     Procedure CameraStatus(Sender: TObject);
     Procedure CameraDisconnected(Sender: TObject);
     Procedure CameraExposureAborted(Sender: TObject);
@@ -298,12 +301,35 @@ begin
   end;
 end;
 
+Procedure Tf_main.InitDeviceLog;
+begin
+  try
+     DeviceLogFile:=slash(LogDir)+'Devices_Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
+     Filemode:=2;
+     AssignFile(MsgDeviceLog,DeviceLogFile);
+     Rewrite(MsgDeviceLog);
+     WriteLn(MsgDeviceLog,FormatDateTime(dateiso,Now)+'  Start new log');
+     DeviceLogFileOpen:=true;
+  except
+  {$I-}
+     DeviceLogFileOpen:=false;
+     LogToFile:=false;
+     CloseFile(MsgDeviceLog);
+     IOResult;
+  {$I+}
+  end;
+end;
+
 Procedure Tf_main.CloseLog;
 begin
   try
     if LogFileOpen then begin
       LogFileOpen:=false;
       CloseFile(MsgLog);
+    end;
+    if DeviceLogFileOpen then begin
+      DeviceLogFileOpen:=false;
+      CloseFile(MsgDeviceLog);
     end;
   except
     {$I-}
@@ -328,6 +354,26 @@ begin
     LogFileOpen:=false;
     LogToFile:=false;
     CloseFile(MsgLog);
+    {$I+}
+  end;
+end;
+
+Procedure Tf_main.WriteDeviceLog( buf : string);
+begin
+  try
+    if LogToFile then begin
+     if not DeviceLogFileOpen then begin
+        InitDeviceLog;
+        if not DeviceLogFileOpen then exit;
+     end;
+     WriteLn(MsgDeviceLog,FormatDateTime(dateiso,Now)+'  '+UTF8ToSys(buf));
+     Flush(MsgDeviceLog);
+    end;
+  except
+    {$I-}
+    DeviceLogFileOpen:=false;
+    LogToFile:=false;
+    CloseFile(MsgDeviceLog);
     {$I+}
   end;
 end;
@@ -430,6 +476,7 @@ begin
     ASCOM: wheel:=T_ascomwheel.Create;
   end;
   wheel.onMsg:=@NewMessage;
+  wheel.onDeviceMsg:=@DeviceMessage;
   wheel.onFilterChange:=@FilterChange;
   wheel.onFilterNameChange:=@FilterNameChange;
   wheel.onStatusChange:=@WheelStatus;
@@ -440,6 +487,7 @@ begin
     ASCOM: focuser:=T_ascomfocuser.Create;
   end;
   focuser.onMsg:=@NewMessage;
+  focuser.onDeviceMsg:=@DeviceMessage;
   focuser.onPositionChange:=@FocuserPositionChange;
   focuser.onSpeedChange:=@FocuserSpeedChange;
   focuser.onTimerChange:=@FocuserTimerChange;
@@ -451,6 +499,7 @@ begin
     ASCOM: mount:=T_ascommount.Create;
   end;
   mount.onMsg:=@NewMessage;
+  mount.onDeviceMsg:=@DeviceMessage;
   mount.onCoordChange:=@MountCoordChange;
   mount.onStatusChange:=@MountStatus;
 
@@ -465,6 +514,7 @@ begin
   camera.wheel:=wheel;
   camera.Fits:=fits;
   camera.onMsg:=@NewMessage;
+  camera.onDeviceMsg:=@DeviceMessage;
   camera.onExposureProgress:=@CameraProgress;
   camera.onFrameChange:=@FrameChange;
   camera.onTemperatureChange:=@CameraTemperatureChange;
@@ -1313,6 +1363,15 @@ begin
   f_msg.msg.SelLength:=0;
   if LogToFile then begin
     WriteLog(msg);
+  end;
+ end;
+end;
+
+procedure Tf_main.DeviceMessage(msg: string);
+begin
+ if msg<>'' then begin
+  if LogToFile then begin
+    WriteDeviceLog(msg);
   end;
  end;
 end;
