@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global,
+uses u_global, u_utils,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider,
   ExtCtrls, Classes, SysUtils;
 
@@ -189,6 +189,7 @@ begin
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.BtnSetFilter.Click;
+    Wait;
     StepTimeStart:=now;
     msg('Start step '+p.description_str);
     Fcapture.BtnStart.Click;

@@ -368,6 +368,7 @@ begin
   Mount.Slew(ra, de);
   i:=1;
   repeat
+    Wait;
     msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
     ControlExposure(exp,binx,biny);
     msg('Resolve control exposure');
@@ -394,6 +395,7 @@ begin
     if dist>prec then begin
        msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
        mount.Sync(cra,cde);
+       Wait(1);
        msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
        Mount.Slew(ra, de);
     end;
