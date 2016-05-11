@@ -269,6 +269,7 @@ type
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
+    procedure LoadFitsFile(fn:string);
   public
     { public declarations }
   end;
@@ -2418,20 +2419,11 @@ begin
 end;
 
 procedure Tf_main.MenuOpenClick(Sender: TObject);
-var mem: TMemoryStream;
-    fn,imgsize: string;
+var fn: string;
 begin
   if OpenDialog1.Execute then begin
      fn:=OpenDialog1.FileName;
-     mem:=TMemoryStream.Create;
-     mem.LoadFromFile(fn);
-     fits.Stream:=mem;
-     mem.free;
-     DrawImage;
-     DrawHistogram;
-     imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
-     NewMessage('Open file '+fn);
-     StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
+     LoadFitsFile(fn);
   end;
 end;
 
@@ -2503,7 +2495,11 @@ begin
   MenuResolvePlanetarium.Enabled:=true;
   MenuResolveSync.Enabled:=true;
   MenuResolveSlew.Enabled:=true;
-  if not astrometry.LastResult then NewMessage(astrometry.Resolver+' resolve error.');
+  if astrometry.LastResult then begin
+     LoadFitsFile(astrometry.ResultFile);
+  end else begin
+    NewMessage(astrometry.Resolver+' resolve error.');
+  end;
 end;
 
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
@@ -2537,14 +2533,22 @@ end;
 
 procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);
 begin
- if planetarium.Connected then begin
-    if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-      fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-      astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium);
-    end;
- end
- else
-    NewMessage('Planetarium is not connected');
+  if fits.HeaderInfo.valid then begin
+   if planetarium.Connected then begin
+      if fits.HeaderInfo.solved then begin
+        NewMessage('Send image to planetarium');
+        fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
+      end else begin
+        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium);
+        end;
+      end;
+   end
+   else
+      NewMessage('Planetarium is not connected');
+  end;
 end;
 
 procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
@@ -2597,6 +2601,21 @@ begin
    planetarium.onShowMessage:=@NewMessage;
    f_planetariuminfo.planetarium:=planetarium;
  end;
+end;
+
+procedure Tf_main.LoadFitsFile(fn:string);
+var mem: TMemoryStream;
+    imgsize: string;
+begin
+   mem:=TMemoryStream.Create;
+   mem.LoadFromFile(fn);
+   fits.Stream:=mem;
+   mem.free;
+   DrawImage;
+   DrawHistogram;
+   imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+   NewMessage('Open file '+fn);
+   StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
 end;
 
 end.

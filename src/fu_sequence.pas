@@ -236,7 +236,8 @@ begin
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
      f_EditTargets.TargetList.RowCount:=Targets.Count+1;
      for i:=1 to Targets.Count do begin
-       t:=Targets.Targets[i-1];
+       t:=TTarget.Create;
+       t.Assign(Targets.Targets[i-1]);
        f_EditTargets.TargetList.Cells[0,i]:=IntToStr(i);
        f_EditTargets.TargetList.Cells[1,i]:=t.objectname;
        f_EditTargets.TargetList.Cells[2,i]:=t.planname;

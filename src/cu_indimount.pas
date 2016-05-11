@@ -341,7 +341,7 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    if (abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.01 then waittime:=60000 else waittime:=5000;
+    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then waittime:=60000 else waittime:=5000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);

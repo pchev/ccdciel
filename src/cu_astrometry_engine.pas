@@ -29,7 +29,7 @@ uses  u_global, u_utils,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
-  UTF8Process, process, FileUtil, Classes, SysUtils;
+  math, UTF8Process, process, FileUtil, Classes, SysUtils;
 
 type
 TAstrometry_engine = class(TThread)
@@ -44,6 +44,7 @@ TAstrometry_engine = class(TThread)
      Fparam: TStringList;
      process: TProcessUTF8;
      FCmdTerminate: TNotifyEvent;
+     procedure SyncCmdTerminate;
    protected
      procedure Execute; override;
    public
@@ -76,6 +77,7 @@ implementation
 
 constructor TAstrometry_engine.Create;
 begin
+  inherited create(true);
   FInFile:='';
   FOutFile:='';
   Fcmd:='';
@@ -92,12 +94,13 @@ begin
   Fparam:=TStringList.Create;
   process:=TProcessUTF8.Create(nil);
   FreeOnTerminate:=true;
-  inherited create(true);
 end;
 
 destructor TAstrometry_engine.Destroy;
 begin
   process.Free;
+  Fparam.Free;
+  inherited Destroy;
 end;
 
 procedure TAstrometry_engine.Stop;
@@ -112,7 +115,7 @@ begin
 if FResolver=ResolverAstrometryNet then begin
 {$ifdef unix}
   // Kill all child process
-  if process.Running then begin
+  if (process<>nil) and process.Running then begin
     resp:=Tstringlist.Create;
     hnd:=process.Handle;
     childnum:=0;
@@ -133,7 +136,7 @@ if FResolver=ResolverAstrometryNet then begin
     resp.Free;
   end;
 {$else}
-  if process.Running then process.Active:=false;
+  if (process<>nil) and process.Running then process.Active:=false;
 {$endif}
 end;
 end;
@@ -198,7 +201,7 @@ end;
 end;
 
 procedure TAstrometry_engine.Execute;
-const READ_BYTES = 2048;
+const READ_BYTES = 65536;
 var n: LongInt;
     f: file;
     buf: string;
@@ -206,7 +209,7 @@ var n: LongInt;
     cbuf: array[0..READ_BYTES] of char;
     ft,fl: TextFile;
     fn,imgdir,txt: string;
-    i,nside: integer;
+    i,nside,available: integer;
     timeout: double;
 begin
 if FResolver=ResolverAstrometryNet then begin
@@ -231,8 +234,12 @@ if FResolver=ResolverAstrometryNet then begin
   process.Execute;
   while process.Running do begin
     if logok and (process.Output<>nil) then begin
-      n := process.Output.Read(cbuf, READ_BYTES);
-      if n>=0 then BlockWrite(f,cbuf,n);
+      available:=process.Output.NumBytesAvailable;
+      if available>0 then begin
+        available:=min(available,READ_BYTES);
+        n := process.Output.Read(cbuf, available);
+        if n>=0 then BlockWrite(f,cbuf,n);
+      end;
     end;
     if now>timeout then begin
        Stop;
@@ -249,6 +256,8 @@ if FResolver=ResolverAstrometryNet then begin
     n := process.Output.Read(cbuf, READ_BYTES);
     if n>=0 then BlockWrite(f,cbuf,n);
   until (n<=0)or(process.Output=nil);
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
   except
      Fresult:=1;
      if logok then begin
@@ -258,7 +267,7 @@ if FResolver=ResolverAstrometryNet then begin
      end;
   end;
   if logok then CloseFile(f);
-  if Assigned(FCmdTerminate) then FCmdTerminate(self);
+  Synchronize(@SyncCmdTerminate);
 end
 else if FResolver=ResolverElbrus then begin
   fn:=slash(FElbrusDir)+'elbrus.txt';
@@ -322,8 +331,13 @@ else if FResolver=ResolverElbrus then begin
       CloseFile(ft);
     end;
   end;
-  if Assigned(FCmdTerminate) then FCmdTerminate(self);
+  Synchronize(@SyncCmdTerminate);
 end;
+end;
+
+procedure TAstrometry_engine.SyncCmdTerminate;
+begin
+  if Assigned(FCmdTerminate) then FCmdTerminate(self);
 end;
 
 end.

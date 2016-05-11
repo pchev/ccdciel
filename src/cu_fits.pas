@@ -31,7 +31,7 @@ uses SysUtils, Classes, FileUtil, u_utils, u_global,
 type
 
  TFitsInfo = record
-            valid: boolean;
+            valid, solved: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             bzero,bscale,dmax,dmin,blank : double;
             equinox,ra,dec,crval1,crval2: double;
@@ -449,6 +449,7 @@ procedure TFits.SetStream(value:TMemoryStream);
 begin
 try
  FFitsInfo.valid:=false;
+ FFitsInfo.solved:=false;
  cur_axis:=1;
  setlength(imar64,0,0,0);
  setlength(imar32,0,0,0);
@@ -534,9 +535,9 @@ with FFitsInfo do begin
  valid:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
  objects:=''; ctype1:=''; ctype2:='';
- for i:=1 to FHeader.Rows.Count-1 do begin
-    keyword:=FHeader.Keys[i];
-    buf:=FHeader.Values[i];
+ for i:=0 to FHeader.Rows.Count-1 do begin
+    keyword:=trim(FHeader.Keys[i]);
+    buf:=trim(FHeader.Values[i]);
     if (keyword='SIMPLE') then if (copy(buf,1,1)<>'T')
        then begin valid:=false;Break;end
        else begin valid:=true;end;
@@ -560,6 +561,7 @@ with FFitsInfo do begin
     if (keyword='CTYPE2') then ctype2:=buf;
     if (keyword='CRVAL1') then crval1:=strtofloat(buf);
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
+    if (keyword='A_ORDER') then solved:=true; // polynomial present, the image must be astrometry solved.
  end;
  // very crude coordinates to help astrometry if telescope is not available
  if ra=NullCoord then begin
