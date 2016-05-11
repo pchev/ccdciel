@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera, cu_fits,
-      math, Forms, FileUtil, Classes, SysUtils;
+      math, Forms, FileUtil, Classes, SysUtils, ExtCtrls;
 
 type
 
@@ -45,6 +45,10 @@ TAstrometry = class(TComponent)
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
     WaitExposure: boolean;
+    TimerAstrometryDone, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
+    procedure AstrometryDoneonTimer(Sender: TObject);
+    procedure AstrometrySynconTimer(Sender: TObject);
+    procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
     procedure msg(txt:string);
     procedure ControlExposure(exp:double; binx,biny: integer);
     procedure EndExposure(Sender: TObject);
@@ -62,6 +66,7 @@ TAstrometry = class(TComponent)
     function PrecisionSlew(ra,de,prec,exp:double; binx,biny,maxslew: integer):boolean;
     property Busy: Boolean read FBusy;
     property LastResult: Boolean read FLastResult;
+    property ResultFile: string read savefile;
     property Resolver: string read FResolverName;
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
@@ -78,6 +83,18 @@ begin
   Inherited create(nil);
   FBusy:=false;
   FLastResult:=false;
+  TimerAstrometryDone:=TTimer.Create(self);
+  TimerAstrometrySync:=TTimer.Create(self);
+  TimerAstrometrySlewScreenXY:=TTimer.Create(self);
+  TimerAstrometryDone.Enabled:=false;
+  TimerAstrometrySync.Enabled:=false;
+  TimerAstrometrySlewScreenXY.Enabled:=false;
+  TimerAstrometryDone.Interval:=100;
+  TimerAstrometrySync.Interval:=100;
+  TimerAstrometrySlewScreenXY.Interval:=100;
+  TimerAstrometryDone.OnTimer:=@AstrometryDoneonTimer;
+  TimerAstrometrySync.OnTimer:=@AstrometrySynconTimer;
+  TimerAstrometrySlewScreenXY.OnTimer:=@AstrometrySlewScreenXYonTimer;
 end;
 
 procedure TAstrometry.msg(txt:string);
@@ -168,6 +185,12 @@ end;
 
 procedure TAstrometry.AstrometryDone(Sender: TObject);
 begin
+  TimerAstrometryDone.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometryDoneonTimer(Sender: TObject);
+begin
+ TimerAstrometryDone.Enabled:=false;
  if FileExistsUTF8(savefile) and FileExistsUTF8(solvefile) then
    FLastResult:=true
  else
@@ -211,17 +234,28 @@ end;
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+   if fits.HeaderInfo.solved then begin
+     FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+     AstrometrySync(nil);
+   end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync);
     if wait then WaitBusy;
+   end;
   end;
 end;
 
 procedure TAstrometry.AstrometrySync(Sender: TObject);
+begin
+  TimerAstrometrySync.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometrySynconTimer(Sender: TObject);
 var fn: string;
     ra,de,eq,jd0,jd1: double;
     n:integer;
 begin
+TimerAstrometrySync.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
@@ -243,21 +277,32 @@ end;
 procedure TAstrometry.SlewScreenXY(x,y: integer; wait: boolean);
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
-    Xslew:=x;
-    Yslew:=y;
+   Xslew:=x;
+   Yslew:=y;
+   if fits.HeaderInfo.solved then begin
+    FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+    AstrometrySlewScreenXY(nil);
+   end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewScreenXY);
     if wait then WaitBusy;
+   end;
   end;
 end;
 
 procedure TAstrometry.AstrometrySlewScreenXY(Sender: TObject);
+begin
+  TimerAstrometrySlewScreenXY.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometrySlewScreenXYonTimer(Sender: TObject);
 var fn: string;
     xx,yy,n,m: integer;
     ra,de,jd0,jd1: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
+TimerAstrometrySlewScreenXY.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);

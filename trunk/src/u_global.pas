@@ -215,6 +215,7 @@ begin
   endtime:=Source.endtime;
   ra:=Source.ra;
   de:=Source.de;
+  astrometrypointing:=source.astrometrypointing;
   repeatcount:=Source.repeatcount;
   preview:=Source.preview;
   delay:=Source.delay;

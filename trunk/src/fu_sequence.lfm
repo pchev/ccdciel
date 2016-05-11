@@ -6,8 +6,6 @@ object f_sequence: Tf_sequence
   ClientHeight = 519
   ClientWidth = 180
   TabOrder = 0
-  DesignLeft = 281
-  DesignTop = 121
   object StaticText1: TStaticText
     Left = 0
     Height = 20
