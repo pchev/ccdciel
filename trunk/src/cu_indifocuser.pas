@@ -243,7 +243,7 @@ end;
 
 procedure T_indifocuser.NewMessage(txt: string);
 begin
-  if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+  if Assigned(FonMsg) then FonMsg(txt);
 end;
 
 procedure T_indifocuser.NewProperty(indiProp: IndiProperty);

@@ -216,7 +216,7 @@ end;
 
 procedure T_indiwheel.NewMessage(txt: string);
 begin
-  if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+  if Assigned(FonMsg) then FonMsg(txt);
 end;
 
 procedure T_indiwheel.NewProperty(indiProp: IndiProperty);

@@ -228,8 +228,20 @@ begin
 end;
 
 procedure T_indimount.NewMessage(txt: string);
+const k=2;
+  blacklist: array[1..k] of string =('Timed guide','End Timed guide');
+var ok: boolean;
+    i: integer;
 begin
-  if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+  ok:=true;
+  for i:=1 to k do begin
+    if pos(blacklist[i],txt)>0 then ok:=false;
+  end;
+  if ok then begin
+     if Assigned(FonMsg) then FonMsg(txt);
+  end else begin
+    if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+  end;
 end;
 
 procedure T_indimount.NewProperty(indiProp: IndiProperty);
