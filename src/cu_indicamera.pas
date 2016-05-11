@@ -308,8 +308,20 @@ begin
 end;
 
 procedure T_indicamera.NewMessage(txt: string);
+const k=1;
+  blacklist: array[1..k] of string =('TELESCOPE_TIMED_GUIDE');
+var ok: boolean;
+    i: integer;
 begin
-  if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+  ok:=true;
+  for i:=1 to k do begin
+    if pos(blacklist[i],txt)>0 then ok:=false;
+  end;
+  if ok then begin
+     if Assigned(FonMsg) then FonMsg(txt);
+  end else begin
+    if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+  end;
 end;
 
 procedure T_indicamera.NewProperty(indiProp: IndiProperty);
