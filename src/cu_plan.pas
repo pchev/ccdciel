@@ -223,11 +223,11 @@ begin
           StepRepeatTimer.Interval:=trunc(1000*tt);
           StepRepeatTimer.Enabled:=true;
           StepDelayEnd:=now+tt/secperday;
-          if p.preview and (tt>5)and(tt>(2*p.previewexposure)) then begin
+          {if p.preview and (tt>5)and(tt>(2*p.previewexposure)) then begin
             if p.previewexposure>0 then Preview.ExpTime.Text:=p.previewexposure_str;
             Preview.Binning.Text:=p.binning_str;
             Preview.BtnLoop.Click;
-          end;
+          end;}
        end
        else begin
          NextStep;
@@ -258,7 +258,7 @@ begin
     p:=Steps[CurrentStep];
     if p<>nil then begin
       msg('Repeat '+inttostr(StepRepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
-      if p.preview and Preview.Running then Preview.BtnLoop.Click;
+      //if p.preview and Preview.Running then Preview.BtnLoop.Click;
       StepTimeStart:=now;
       StartCapture;
     end
