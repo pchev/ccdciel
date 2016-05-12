@@ -283,7 +283,7 @@ begin
    if n>0 then begin
      for i:=1 to n do begin
        t:=TTarget.Create;
-       t.objectname:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName','');
+       t.objectname:=trim(tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName',''));
        t.planname:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
        t.starttime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''));
        t.endtime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''));

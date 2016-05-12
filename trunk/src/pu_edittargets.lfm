@@ -3,6 +3,7 @@ object f_EditTargets: Tf_EditTargets
   Height = 452
   Top = 87
   Width = 614
+  ActiveControl = BtnClose
   Caption = 'Edit target list'
   ClientHeight = 452
   ClientWidth = 614

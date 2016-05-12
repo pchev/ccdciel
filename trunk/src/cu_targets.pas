@@ -353,7 +353,7 @@ begin
     p:=T_Plan(t.plan);
     if p.Running then exit;
     if t.objectname<>'None' then
-       Fcapture.Fname.Text:=t.objectname;
+       Fcapture.Fname.Text:=trim(t.objectname);
     TargetTimeStart:=now;
     p.Start;
   end;

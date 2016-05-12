@@ -206,7 +206,7 @@ begin
   TargetList.Cells[2,i]:=t.planname;
   TargetList.Objects[0,i]:=t;
   TargetList.Row:=i;
-  ObjectName.Text:=txt;
+  ObjectName.Text:=trim(txt);
   PointRA.Text:='-';
   PointDEC.Text:='-';
   TargetChange(nil);
@@ -252,7 +252,7 @@ begin
   if f_planetariuminfo.ModalResult=mrOK then begin
      PointRA.Text:=f_planetariuminfo.Ra.Text;
      PointDEC.Text:=f_planetariuminfo.De.Text;
-     if f_planetariuminfo.Obj.Text<>'' then ObjectName.Text:=f_planetariuminfo.Obj.Text;
+     if f_planetariuminfo.Obj.Text<>'' then ObjectName.Text:=trim(f_planetariuminfo.Obj.Text);
   end;
 end;
 
@@ -300,7 +300,7 @@ begin
   n:=TargetList.Row;
   if n < 1 then exit;
   t:=TTarget(TargetList.Objects[0,n]);
-  t.objectname:=ObjectName.Text;
+  t.objectname:=trim(ObjectName.Text);
   t.planname:=PlanList.Text;
   t.starttime:=StrToTime(StartTime.Text);
   t.endtime:=StrToTime(EndTime.Text);
