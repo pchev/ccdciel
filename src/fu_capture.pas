@@ -66,7 +66,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure Stop;
-    property Running: boolean read Frunning;
+    property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
@@ -101,7 +101,6 @@ begin
   if Frunning then begin
     BtnStart.Font.Color:=clGreen;
     BtnStart.Caption:='Stop';
-    if Assigned(FonMsg) then FonMsg('Start capture');
   end else begin
     BtnStart.Font.Color:=clDefault;
     BtnStart.Caption:='Start';
@@ -134,6 +133,7 @@ begin
      end;
   end;
 end;
+
 
 procedure Tf_capture.Stop;
 begin

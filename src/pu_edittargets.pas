@@ -34,45 +34,46 @@ type
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
+    BtnAnytime: TButton;
     BtnCdCCoord: TButton;
     BtnCdCTime: TButton;
-    BtnNewPlan: TButton;
-    BtnNewObject: TButton;
-    BtnEditPlan: TButton;
-    BtnDeleteObject: TButton;
-    BtnAnytime: TButton;
     BtnCurrentCoord: TButton;
+    BtnEditPlan: TButton;
+    BtnNewObject: TButton;
+    BtnDeleteObject: TButton;
     BtnClose: TButton;
-    PointAstrometry: TCheckBox;
+    BtnNewPlan: TButton;
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
+    EndTime: TMaskEdit;
+    Label1: TLabel;
     Label10: TLabel;
     Label11: TLabel;
     Label13: TLabel;
     Label14: TLabel;
-    Label9: TLabel;
-    ObjectName: TEdit;
-    Label7: TLabel;
-    LabelSeq: TLabel;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    PanelRepeat: TPanel;
-    Panel4: TPanel;
-    Panel5: TPanel;
-    Preview: TCheckBox;
-    PreviewExposure: TEdit;
-    RepeatCount: TEdit;
-    StartTime: TMaskEdit;
-    EndTime: TMaskEdit;
-    PlanList: TComboBox;
-    PointRA: TEdit;
-    PointDEC: TEdit;
-    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
+    Label9: TLabel;
+    LabelSeq: TLabel;
+    ObjectName: TEdit;
+    Panel3: TPanel;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    PanelRepeat: TPanel;
+    PlanList: TComboBox;
+    PointAstrometry: TCheckBox;
+    PointDEC: TEdit;
+    PointRA: TEdit;
+    Preview: TCheckBox;
+    PreviewExposure: TEdit;
+    RepeatCount: TEdit;
+    StartTime: TMaskEdit;
     TargetList: TStringGrid;
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
@@ -85,6 +86,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure TargetChange(Sender: TObject);
+    procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
+      tIndex: Integer);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
   private
     { private declarations }
@@ -117,6 +120,7 @@ end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
+  TargetList.Cells[0,0]:='Seq';
   LoadPlanList;
   if TargetList.RowCount>1 then begin
      TargetList.Row:=1;
@@ -316,6 +320,15 @@ begin
   t.preview:=Preview.Checked;
   TargetList.Cells[1,n]:=t.objectname;
   TargetList.Cells[2,n]:=t.planname;
+end;
+
+procedure Tf_EditTargets .TargetListColRowMoved(Sender: TObject;
+  IsColumn: Boolean; sIndex, tIndex: Integer);
+var i,n: integer;
+begin
+  ResetSequences;
+  val(LabelSeq.Caption,i,n);
+  if n=0 then TargetListSelection(Sender,0,i);
 end;
 
 

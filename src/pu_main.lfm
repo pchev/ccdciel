@@ -406,7 +406,7 @@ object f_main: Tf_main
     Interval = 100
     OnTimer = StatusbarTimerTimer
     left = 416
-    top = 152
+    top = 144
   end
   object OpenDialog1: TOpenDialog
     left = 72
@@ -575,5 +575,19 @@ object f_main: Tf_main
       EB00EBEBEB00EBEBEB00EBEBEB00EBEBEB00EBEBEB00EBEBEB00EBEBEB00EBEB
       EB00EBEBEB00EBEBEB00EBEBEB00
     }
+  end
+  object AbortTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = AbortTimerTimer
+    left = 416
+    top = 224
+  end
+  object StartTimer: TTimer
+    Enabled = False
+    Interval = 5000
+    OnTimer = StartTimerTimer
+    left = 280
+    top = 224
   end
 end

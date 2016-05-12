@@ -43,6 +43,7 @@ type
     BtnNewTargets: TButton;
     BtnLoadTargets: TButton;
     StatusTimer: TTimer;
+    StartTimer: TTimer;
     Unattended: TCheckBox;
     DelayMsg: TLabel;
     StatusMsg: TLabel;
@@ -63,9 +64,11 @@ type
     procedure BtnStopClick(Sender: TObject);
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure StartTimerTimer(Sender: TObject);
     procedure StatusTimerTimer(Sender: TObject);
     procedure TargetGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure TargetGridSelection(Sender: TObject; aCol, aRow: Integer);
     procedure TargetsChange(Sender: TObject);
     procedure PlanChange(Sender: TObject);
   private
@@ -420,6 +423,15 @@ begin
  end;
 end;
 
+procedure Tf_sequence.TargetGridSelection(Sender: TObject; aCol, aRow: Integer);
+var p : T_plan;
+begin
+  if not Running then begin
+    p:=T_Plan(Targets.Targets[arow-1].plan);
+    if p<>nil then PlanChange(p);
+  end;
+end;
+
 procedure Tf_sequence.PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 begin
@@ -436,8 +448,21 @@ begin
   result:=Targets.Running;
 end;
 
+procedure Tf_sequence.StartTimerTimer(Sender: TObject);
+begin
+  StartTimer.Enabled:=false;
+  StartSequence;
+end;
+
 procedure Tf_sequence.StartSequence;
 begin
+ if preview.Running then begin
+     msg('Stop preview');
+     camera.AbortExposure;
+     preview.stop;
+     StartTimer.Enabled:=true;
+     exit;
+ end;
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
  Targets.Start;
@@ -473,9 +498,21 @@ begin
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
+var buf1,buf2:string;
+    i:integer;
+    p: T_Plan;
 begin
   TargetRow:=Targets.CurrentTarget+1;
   if TargetRow>0 then begin
+    buf1:=Targets.Targets[Targets.CurrentTarget].planname;
+    buf2:=StaticText2.Caption;
+    i:=pos(blank,buf2);
+    delete(buf2,1,i);
+    buf2:=trim(buf2);
+    if buf1<>buf2 then begin
+      p:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan);
+      if p<>nil then PlanChange(p);
+    end;
     PlanRow:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep+1;
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;

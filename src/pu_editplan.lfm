@@ -2,22 +2,24 @@ object f_EditPlan: Tf_EditPlan
   Left = 320
   Height = 417
   Top = 252
-  Width = 466
+  Width = 467
+  ActiveControl = Desc
   Caption = 'Edit plan'
   ClientHeight = 417
-  ClientWidth = 466
+  ClientWidth = 467
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.6.0.3'
+  Visible = False
   object Panel1: TPanel
-    Left = 202
+    Left = 203
     Height = 378
     Top = 0
     Width = 264
-    Align = alClient
+    Align = alRight
     ClientHeight = 378
     ClientWidth = 264
     TabOrder = 0
@@ -32,9 +34,9 @@ object f_EditPlan: Tf_EditPlan
       TabOrder = 0
       object lblStepNum: TLabel
         Left = 102
-        Height = 15
+        Height = 18
         Top = 5
-        Width = 53
+        Width = 62
         Caption = 'StepNum'
         Font.Style = [fsBold]
         ParentColor = False
@@ -42,15 +44,15 @@ object f_EditPlan: Tf_EditPlan
       end
       object Label8: TLabel
         Left = 8
-        Height = 15
+        Height = 18
         Top = 5
-        Width = 26
+        Width = 27
         Caption = 'Step'
         ParentColor = False
       end
       object Desc: TEdit
         Left = 100
-        Height = 21
+        Height = 24
         Top = 29
         Width = 100
         OnChange = StepChange
@@ -58,15 +60,15 @@ object f_EditPlan: Tf_EditPlan
       end
       object Label7: TLabel
         Left = 8
-        Height = 15
+        Height = 18
         Top = 29
-        Width = 67
+        Width = 68
         Caption = 'Description'
         ParentColor = False
       end
       object FrameType: TComboBox
         Left = 100
-        Height = 23
+        Height = 28
         Top = 58
         Width = 100
         ItemHeight = 0
@@ -84,9 +86,9 @@ object f_EditPlan: Tf_EditPlan
       end
       object Label4: TLabel
         Left = 8
-        Height = 15
+        Height = 18
         Top = 58
-        Width = 26
+        Width = 29
         Caption = 'Type'
         ParentColor = False
       end
@@ -110,58 +112,61 @@ object f_EditPlan: Tf_EditPlan
         TabOrder = 0
         object PreviewExposure: TEdit
           Left = 117
-          Height = 21
+          Height = 24
           Top = 93
           Width = 59
           OnChange = StepChange
           TabOrder = 0
           Text = '1'
+          Visible = False
         end
         object Label9: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 97
-          Width = 98
+          Width = 106
           Caption = 'Preview exposure'
           ParentColor = False
+          Visible = False
         end
         object Preview: TCheckBox
           Left = 8
-          Height = 26
+          Height = 22
           Top = 64
-          Width = 205
+          Width = 212
           Caption = 'Preview when waiting to repeat'
           OnChange = StepChange
           ParentBidiMode = False
           TabOrder = 1
+          Visible = False
         end
         object Label13: TLabel
           Left = 184
-          Height = 15
+          Height = 18
           Top = 40
-          Width = 55
+          Width = 57
           Caption = '[seconds]'
           ParentColor = False
         end
         object Label11: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 40
-          Width = 30
+          Width = 33
           Caption = 'Delay'
           ParentColor = False
         end
         object Label10: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 11
-          Width = 41
+          Width = 42
           Caption = 'Repeat'
           ParentColor = False
         end
         object Delay: TEdit
           Left = 96
-          Height = 21
+          Height = 24
           Top = 37
           Width = 80
           OnChange = StepChange
@@ -170,7 +175,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object RepeatCount: TEdit
           Left = 96
-          Height = 21
+          Height = 24
           Top = 8
           Width = 80
           OnChange = StepChange
@@ -179,11 +184,12 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label14: TLabel
           Left = 184
-          Height = 15
+          Height = 18
           Top = 97
-          Width = 55
+          Width = 57
           Caption = '[seconds]'
           ParentColor = False
+          Visible = False
         end
       end
       object Panel7: TPanel
@@ -196,7 +202,7 @@ object f_EditPlan: Tf_EditPlan
         TabOrder = 1
         object Count: TEdit
           Left = 96
-          Height = 21
+          Height = 24
           Top = 64
           Width = 80
           OnChange = StepChange
@@ -205,15 +211,15 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label3: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 67
-          Width = 35
+          Width = 37
           Caption = 'Count'
           ParentColor = False
         end
         object Binning: TComboBox
           Left = 96
-          Height = 21
+          Height = 30
           Top = 37
           Width = 100
           ItemHeight = 0
@@ -222,23 +228,23 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label6: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 41
-          Width = 42
+          Width = 46
           Caption = 'Binning'
           ParentColor = False
         end
         object Label12: TLabel
           Left = 184
-          Height = 15
+          Height = 18
           Top = 12
-          Width = 55
+          Width = 57
           Caption = '[seconds]'
           ParentColor = False
         end
         object Exposure: TEdit
           Left = 96
-          Height = 21
+          Height = 24
           Top = 8
           Width = 80
           OnChange = StepChange
@@ -247,15 +253,15 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label2: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 12
-          Width = 52
+          Width = 56
           Caption = 'Exposure'
           ParentColor = False
         end
         object Filter: TComboBox
           Left = 96
-          Height = 27
+          Height = 32
           Top = 93
           Width = 100
           ItemHeight = 0
@@ -265,7 +271,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Label5: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 97
           Width = 30
           Caption = 'Filter'
@@ -273,9 +279,9 @@ object f_EditPlan: Tf_EditPlan
         end
         object CheckBoxRepeat: TCheckBox
           Left = 8
-          Height = 26
+          Height = 22
           Top = 128
-          Width = 123
+          Width = 120
           Caption = 'Repeat this step'
           OnChange = CheckBoxRepeatChange
           TabOrder = 4
@@ -287,10 +293,10 @@ object f_EditPlan: Tf_EditPlan
     Left = 0
     Height = 39
     Top = 378
-    Width = 466
+    Width = 467
     Align = alBottom
     ClientHeight = 39
-    ClientWidth = 466
+    ClientWidth = 467
     TabOrder = 1
     object BtnClose: TButton
       Left = 318
@@ -324,47 +330,45 @@ object f_EditPlan: Tf_EditPlan
     Left = 0
     Height = 378
     Top = 0
-    Width = 202
-    Align = alLeft
+    Width = 203
+    Align = alClient
     ClientHeight = 378
-    ClientWidth = 202
+    ClientWidth = 203
     TabOrder = 2
     object StepList: TStringGrid
       Left = 1
       Height = 351
       Top = 26
-      Width = 200
+      Width = 201
       Align = alClient
       ColCount = 2
       Columns = <      
         item
-          Title.Caption = 'Step'
-        end      
-        item
           Title.Caption = 'Description'
-          Width = 132
+          Width = 164
         end>
-      FixedCols = 0
+      DefaultColWidth = 30
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goThumbTracking, goCellEllipsis]
       RowCount = 1
       ScrollBars = ssAutoVertical
       TabOrder = 0
+      OnColRowMoved = StepListColRowMoved
       OnSelection = StepListSelection
     end
     object Panel5: TPanel
       Left = 1
       Height = 25
       Top = 1
-      Width = 200
+      Width = 201
       Align = alTop
       ClientHeight = 25
-      ClientWidth = 200
+      ClientWidth = 201
       TabOrder = 1
       object PlanName: TLabel
         Left = 72
-        Height = 15
+        Height = 18
         Top = 0
-        Width = 59
+        Width = 69
         Caption = 'PlanName'
         Font.Style = [fsBold]
         ParentColor = False
@@ -372,9 +376,9 @@ object f_EditPlan: Tf_EditPlan
       end
       object Label1: TLabel
         Left = 4
-        Height = 15
+        Height = 18
         Top = 0
-        Width = 60
+        Width = 66
         Caption = 'Plan name '
         ParentColor = False
       end
