@@ -54,40 +54,31 @@ object f_sequence: Tf_sequence
       ClientWidth = 180
       TabOrder = 1
       object BtnEditTargets: TButton
-        Left = 135
+        Left = 122
         Height = 25
         Top = 4
-        Width = 45
+        Width = 54
         Caption = 'Edit'
         OnClick = BtnEditTargetsClick
         TabOrder = 0
-      end
-      object BtnSaveTargets: TButton
-        Left = 45
-        Height = 25
-        Top = 4
-        Width = 45
-        Caption = 'Save'
-        OnClick = BtnSaveTargetsClick
-        TabOrder = 1
       end
       object BtnLoadTargets: TButton
         Left = 0
         Height = 25
         Top = 4
-        Width = 45
+        Width = 54
         Caption = 'Load'
         OnClick = BtnLoadTargetsClick
-        TabOrder = 2
+        TabOrder = 1
       end
       object BtnNewTargets: TButton
-        Left = 90
+        Left = 62
         Height = 25
         Top = 4
-        Width = 45
+        Width = 54
         Caption = 'New'
         OnClick = BtnEditTargetsClick
-        TabOrder = 3
+        TabOrder = 2
       end
       object BtnStart: TButton
         Left = 0
@@ -96,7 +87,7 @@ object f_sequence: Tf_sequence
         Width = 86
         Caption = 'Start'
         OnClick = BtnStartClick
-        TabOrder = 4
+        TabOrder = 3
       end
       object BtnStop: TButton
         Left = 90
@@ -105,18 +96,18 @@ object f_sequence: Tf_sequence
         Width = 86
         Caption = 'Stop'
         OnClick = BtnStopClick
-        TabOrder = 5
+        TabOrder = 4
       end
       object Unattended: TCheckBox
         Left = 1
-        Height = 24
+        Height = 22
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
         Top = 56
-        Width = 127
+        Width = 122
         Caption = 'Run unattended'
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 6
+        TabOrder = 5
       end
     end
     object StaticText3: TStaticText
