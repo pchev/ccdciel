@@ -1,41 +1,39 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 174
+  Height = 204
   Top = 0
   Width = 140
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 174
+  ClientHeight = 204
   ClientWidth = 140
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 389
-  DesignTop = 115
   object Panel1: TPanel
     Left = 0
-    Height = 154
+    Height = 184
     Top = 20
     Width = 140
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 154
+    ClientHeight = 184
     ClientWidth = 140
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 22
+      Height = 31
       Top = 0
       Width = 131
       Caption = ' '
-      ClientHeight = 22
+      ClientHeight = 31
       ClientWidth = 131
       TabOrder = 1
       object ExpTime: TComboBox
         Left = 40
-        Height = 21
+        Height = 30
         Hint = 'Exposure time in secondes'
         Top = 0
         Width = 90
@@ -66,25 +64,25 @@ object f_capture: Tf_capture
       end
       object Label1: TLabel
         Left = 2
-        Height = 15
+        Height = 18
         Top = 4
-        Width = 20
+        Width = 22
         Caption = 'Exp'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 22
-      Top = 22
+      Height = 31
+      Top = 31
       Width = 131
       Caption = ' '
-      ClientHeight = 22
+      ClientHeight = 31
       ClientWidth = 131
       TabOrder = 2
       object Binning: TComboBox
         Left = 40
-        Height = 21
+        Height = 30
         Hint = 'Camera binning'
         Top = 0
         Width = 90
@@ -101,25 +99,25 @@ object f_capture: Tf_capture
       end
       object Label2: TLabel
         Left = 2
-        Height = 15
+        Height = 18
         Top = 4
-        Width = 21
+        Width = 22
         Caption = 'Bin.'
         ParentColor = False
       end
     end
     object Panel4: TPanel
       Left = 0
-      Height = 22
-      Top = 44
+      Height = 25
+      Top = 62
       Width = 131
       Caption = ' '
-      ClientHeight = 22
+      ClientHeight = 25
       ClientWidth = 131
       TabOrder = 3
       object Fname: TEdit
         Left = 40
-        Height = 21
+        Height = 24
         Hint = 'Name of the files saved for this sequence'
         Top = 0
         Width = 90
@@ -130,7 +128,7 @@ object f_capture: Tf_capture
       end
       object Label3: TLabel
         Left = 2
-        Height = 15
+        Height = 18
         Top = 4
         Width = 39
         Caption = 'Object'
@@ -139,16 +137,16 @@ object f_capture: Tf_capture
     end
     object Panel5: TPanel
       Left = 0
-      Height = 22
-      Top = 66
+      Height = 25
+      Top = 87
       Width = 131
       Caption = ' '
-      ClientHeight = 22
+      ClientHeight = 25
       ClientWidth = 131
       TabOrder = 4
       object SeqNum: TEdit
         Left = 40
-        Height = 21
+        Height = 24
         Hint = 'Number of exposure in this sequence'
         Top = 0
         Width = 90
@@ -160,32 +158,32 @@ object f_capture: Tf_capture
       end
       object Label4: TLabel
         Left = 2
-        Height = 15
+        Height = 18
         Top = 4
-        Width = 35
+        Width = 37
         Caption = 'Count'
         ParentColor = False
       end
     end
     object Panel6: TPanel
       Left = 0
-      Height = 22
-      Top = 88
+      Height = 31
+      Top = 112
       Width = 131
-      ClientHeight = 22
+      ClientHeight = 31
       ClientWidth = 131
       TabOrder = 5
       object Label5: TLabel
         Left = 2
-        Height = 15
+        Height = 18
         Top = 4
-        Width = 26
+        Width = 29
         Caption = 'Type'
         ParentColor = False
       end
       object FrameType: TComboBox
         Left = 40
-        Height = 21
+        Height = 30
         Top = 0
         Width = 90
         Color = clBlack
@@ -205,9 +203,9 @@ object f_capture: Tf_capture
     end
     object BtnStart: TButton
       Left = 0
-      Height = 24
+      Height = 30
       Hint = 'Start the capture sequence'
-      Top = 110
+      Top = 143
       Width = 131
       Caption = 'Start'
       OnClick = BtnStartClick

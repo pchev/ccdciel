@@ -104,6 +104,9 @@ type
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     TabSheet4: TTabSheet;
+    AbortTimer: TTimer;
+    StartTimer: TTimer;
+    procedure AbortTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -150,6 +153,7 @@ type
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
+    procedure StartTimerTimer(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -1416,11 +1420,17 @@ end;
 
 Procedure Tf_main.CameraExposureAborted(Sender: TObject);
 begin
- NewMessage('Exposure aborted!');
- f_preview.stop;
- f_capture.stop;
- Capture:=false;
- f_sequence.ExposureAborted;
+ AbortTimer.Enabled:=true;
+end;
+
+procedure Tf_main.AbortTimerTimer(Sender: TObject);
+begin
+  AbortTimer.Enabled:=false;
+  if Capture and f_capture.Running then NewMessage('Exposure aborted!');
+  f_preview.stop;
+  f_capture.stop;
+  Capture:=false;
+  Preview:=false;
 end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
@@ -2109,6 +2119,12 @@ else begin
 end;
 end;
 
+procedure Tf_main.StartTimerTimer(Sender: TObject);
+begin
+  StartTimer.Enabled:=false;
+  StartCaptureExposure(Sender);
+end;
+
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 var e: double;
     buf: string;
@@ -2116,12 +2132,16 @@ var e: double;
     ftype:TFrameType;
 begin
 if (camera.Status=devConnected) then begin
-  if Preview then begin
+  if f_preview.Running then begin
+    NewMessage('Stop preview');
+    StatusBar1.Panels[1].Text:='Stop preview';
     camera.AbortExposure;
     f_preview.stop;
-    NewMessage('Stop preview');
-    StatusBar1.Panels[1].Text:='';
+    StartTimer.Enabled:=true;
+    exit;
   end;
+  NewMessage('Start capture');
+  f_capture.Running:=true;
   Preview:=false;
   Capture:=true;
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
@@ -2178,6 +2198,9 @@ begin
      else begin
         StatusBar1.Panels[1].Text := txt;
      end;
+   end
+   else begin
+      StatusBar1.Panels[1].Text := '';
    end;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)

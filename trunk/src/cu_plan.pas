@@ -37,6 +37,7 @@ T_Plan = class(TComponent)
   private
     StepRepeatTimer: TTimer;
     PlanTimer: TTimer;
+    StartTimer: TTimer;
     FPlanChange: TNotifyEvent;
     FonMsg,FDelayMsg: TNotifyMsg;
     Fcapture: Tf_capture;
@@ -52,6 +53,8 @@ T_Plan = class(TComponent)
     procedure ShowDelayMsg(txt:string);
     procedure PlanTimerTimer(Sender: TObject);
     procedure StepRepeatTimerTimer(Sender: TObject);
+    procedure StartTimerTimer(Sender: TObject);
+    procedure StartCapture;
   protected
     FSteps: T_Steps;
     NumSteps: integer;
@@ -101,6 +104,10 @@ begin
   StepRepeatTimer.Enabled:=false;
   StepRepeatTimer.Interval:=1000;
   StepRepeatTimer.OnTimer:=@StepRepeatTimerTimer;
+  StartTimer:=TTimer.Create(self);
+  StartTimer.Enabled:=false;
+  StartTimer.Interval:=5000;
+  StartTimer.OnTimer:=@StartTimerTimer;
 end;
 
 destructor  T_Plan.Destroy;
@@ -192,7 +199,8 @@ begin
     Wait;
     StepTimeStart:=now;
     msg('Start step '+p.description_str);
-    Fcapture.BtnStart.Click;
+    ShowDelayMsg('');
+    StartCapture;
   end;
 end;
 
@@ -252,12 +260,29 @@ begin
       msg('Repeat '+inttostr(StepRepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
       if p.preview and Preview.Running then Preview.BtnLoop.Click;
       StepTimeStart:=now;
-      Fcapture.BtnStart.Click;
+      StartCapture;
     end
     else FRunning:=false;
  end;
 end;
 
+procedure T_Plan.StartTimerTimer(Sender: TObject);
+begin
+ StartTimer.Enabled:=false;
+ StartCapture;
+end;
+
+procedure T_Plan.StartCapture;
+begin
+ if preview.Running then begin
+     msg('Stop preview');
+     camera.AbortExposure;
+     preview.stop;
+     StartTimer.Enabled:=true;
+     exit;
+ end;
+  Fcapture.BtnStart.Click;
+end;
 
 end.
 

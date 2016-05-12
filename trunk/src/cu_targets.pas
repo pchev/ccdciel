@@ -46,6 +46,7 @@ type
       Fcamera: T_camera;
       Fautoguider: T_autoguider;
       Fastrometry: TAstrometry;
+      StartPlanTimer: TTimer;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
       procedure SetCapture(val: Tf_capture);
@@ -65,6 +66,7 @@ type
       function Slew(ra,de: double; precision:boolean):boolean;
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
+      procedure StartPlanTimerTimer(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -115,6 +117,10 @@ begin
   TargetRepeatTimer.Enabled:=false;
   TargetRepeatTimer.Interval:=1000;
   TargetRepeatTimer.OnTimer:=@TargetRepeatTimerTimer;
+  StartPlanTimer:=TTimer.Create(self);
+  StartPlanTimer.Enabled:=false;
+  StartPlanTimer.Interval:=5000;
+  StartPlanTimer.OnTimer:=@StartPlanTimerTimer;
 end;
 
 destructor  T_Targets.Destroy;
@@ -247,6 +253,7 @@ begin
      if Astrometry.Busy then Astrometry.StopAstrometry;
      StopGuider;
      msg('Sequence stopped as requested.');
+     ShowDelayMsg('');
    end;
  end
  else msg('Not running, nothing to do.');
@@ -259,6 +266,7 @@ begin
   inc(FCurrentTarget);
   { TODO :  select best target based on current time }
   if FRunning and (FCurrentTarget<NumTargets) then begin
+     ShowDelayMsg('');
      TargetRepeatCount:=1;
      initok:=InitTarget;
      if not FRunning then begin
@@ -323,16 +331,30 @@ begin
   end;
 end;
 
+procedure T_Targets.StartPlanTimerTimer(Sender: TObject);
+begin
+  StartPlanTimer.Enabled:=false;
+  StartPlan;
+end;
+
 procedure T_Targets.StartPlan;
 var t: TTarget;
     p: T_Plan;
 begin
+  if preview.Running then begin
+      msg('Stop preview');
+      camera.AbortExposure;
+      preview.stop;
+      StartPlanTimer.Enabled:=true;
+      exit;
+  end;
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     p:=T_Plan(t.plan);
     if p.Running then exit;
     if t.objectname<>'None' then
        Fcapture.Fname.Text:=t.objectname;
+    TargetTimeStart:=now;
     p.Start;
   end;
 end;

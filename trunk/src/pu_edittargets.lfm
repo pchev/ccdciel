@@ -1,97 +1,26 @@
 object f_EditTargets: Tf_EditTargets
   Left = 1006
-  Height = 430
+  Height = 452
   Top = 87
-  Width = 524
-  ActiveControl = PlanList
+  Width = 614
   Caption = 'Edit target list'
-  ClientHeight = 430
-  ClientWidth = 524
+  ClientHeight = 452
+  ClientWidth = 614
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
   LCLVersion = '1.6.0.3'
   Visible = False
-  object Label1: TLabel
-    Left = 216
-    Height = 18
-    Top = 33
-    Width = 39
-    Caption = 'Object'
-    ParentColor = False
-  end
-  object Label2: TLabel
-    Left = 216
-    Height = 18
-    Top = 62
-    Width = 26
-    Caption = 'Plan'
-    ParentColor = False
-  end
-  object PlanList: TComboBox
-    Left = 298
-    Height = 32
-    Top = 56
-    Width = 126
-    ItemHeight = 0
-    OnChange = TargetChange
-    Style = csDropDownList
-    TabOrder = 0
-  end
-  object BtnNewPlan: TButton
-    Left = 473
-    Height = 25
-    Top = 57
-    Width = 48
-    Caption = 'New'
-    OnClick = BtnPlanClick
-    TabOrder = 1
-  end
-  object BtnEditPlan: TButton
-    Left = 426
-    Height = 25
-    Top = 57
-    Width = 46
-    Caption = 'Edit'
-    OnClick = BtnPlanClick
-    TabOrder = 2
-  end
-  object Label7: TLabel
-    Left = 216
-    Height = 18
-    Top = 8
-    Width = 58
-    Caption = 'Sequence'
-    ParentColor = False
-  end
-  object LabelSeq: TLabel
-    Left = 298
-    Height = 18
-    Top = 9
-    Width = 58
-    Caption = 'LabelSeq'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
-  object ObjectName: TEdit
-    Left = 298
-    Height = 24
-    Top = 31
-    Width = 126
-    OnChange = TargetChange
-    TabOrder = 3
-  end
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 391
-    Width = 524
+    Top = 413
+    Width = 614
     Align = alBottom
     ClientHeight = 39
-    ClientWidth = 524
-    TabOrder = 4
+    ClientWidth = 614
+    TabOrder = 0
     object BtnClose: TButton
       Left = 432
       Height = 25
@@ -122,270 +51,348 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel2: TPanel
     Left = 0
-    Height = 391
+    Height = 413
     Top = 0
-    Width = 200
-    Align = alLeft
-    ClientHeight = 391
-    ClientWidth = 200
-    TabOrder = 5
+    Width = 286
+    Align = alClient
+    ClientHeight = 413
+    ClientWidth = 286
+    TabOrder = 1
     object TargetList: TStringGrid
       Left = 1
-      Height = 389
+      Height = 411
       Top = 1
-      Width = 198
+      Width = 284
       Align = alClient
       ColCount = 3
       Columns = <      
         item
-          Title.Caption = 'Seq.'
-          Width = 30
-        end      
-        item
           Title.Caption = 'Object name'
-          Width = 100
+          Width = 120
         end      
         item
           Title.Caption = 'Plan'
+          Width = 128
         end>
-      FixedCols = 0
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goThumbTracking, goCellEllipsis]
+      DefaultColWidth = 30
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goColSizing, goRowMoving, goThumbTracking, goCellEllipsis]
       RowCount = 1
       ScrollBars = ssAutoVertical
       TabOrder = 0
+      OnColRowMoved = TargetListColRowMoved
       OnSelection = TargetListSelection
     end
   end
-  object PanelRepeat: TPanel
-    Left = 208
-    Height = 125
-    Top = 261
-    Width = 312
-    ClientHeight = 125
-    ClientWidth = 312
-    TabOrder = 6
-    object PreviewExposure: TEdit
-      Left = 113
-      Height = 24
-      Top = 91
-      Width = 59
+  object Panel3: TPanel
+    Left = 286
+    Height = 413
+    Top = 0
+    Width = 328
+    Align = alRight
+    ClientHeight = 413
+    ClientWidth = 328
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 16
+      Height = 18
+      Top = 25
+      Width = 39
+      Caption = 'Object'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 16
+      Height = 18
+      Top = 54
+      Width = 26
+      Caption = 'Plan'
+      ParentColor = False
+    end
+    object PlanList: TComboBox
+      Left = 98
+      Height = 32
+      Top = 48
+      Width = 126
+      ItemHeight = 0
       OnChange = TargetChange
-      TabOrder = 0
-      Text = '1'
-    end
-    object Label9: TLabel
-      Left = 8
-      Height = 18
-      Top = 94
-      Width = 106
-      Caption = 'Preview exposure'
-      ParentColor = False
-    end
-    object Preview: TCheckBox
-      Left = 8
-      Height = 22
-      Top = 60
-      Width = 212
-      Caption = 'Preview when waiting to repeat'
-      OnChange = TargetChange
-      ParentBidiMode = False
-      TabOrder = 1
-    end
-    object Label13: TLabel
-      Left = 188
-      Height = 18
-      Top = 40
-      Width = 57
-      Caption = '[seconds]'
-      ParentColor = False
-    end
-    object Label11: TLabel
-      Left = 8
-      Height = 18
-      Top = 40
-      Width = 33
-      Caption = 'Delay'
-      ParentColor = False
-    end
-    object Label10: TLabel
-      Left = 8
-      Height = 18
-      Top = 11
-      Width = 42
-      Caption = 'Repeat'
-      ParentColor = False
-    end
-    object Delay: TEdit
-      Left = 92
-      Height = 24
-      Top = 37
-      Width = 80
-      OnChange = TargetChange
-      TabOrder = 2
-      Text = '0'
-    end
-    object RepeatCount: TEdit
-      Left = 92
-      Height = 24
-      Top = 8
-      Width = 80
-      OnChange = TargetChange
-      TabOrder = 3
-      Text = '1'
-    end
-    object Label14: TLabel
-      Left = 188
-      Height = 18
-      Top = 94
-      Width = 57
-      Caption = '[seconds]'
-      ParentColor = False
-    end
-  end
-  object CheckBoxRepeat: TCheckBox
-    Left = 216
-    Height = 22
-    Top = 232
-    Width = 203
-    Caption = 'Repeat the plan for this object'
-    OnChange = CheckBoxRepeatChange
-    TabOrder = 7
-  end
-  object Panel4: TPanel
-    Left = 208
-    Height = 68
-    Top = 89
-    Width = 312
-    ClientHeight = 68
-    ClientWidth = 312
-    TabOrder = 8
-    Visible = False
-    object BtnAnytime: TButton
-      Left = 200
-      Height = 25
-      Top = 7
-      Width = 91
-      Caption = 'Any time'
-      OnClick = BtnAnytimeClick
+      Style = csDropDownList
       TabOrder = 0
     end
-    object EndTime: TMaskEdit
-      Left = 92
-      Height = 24
-      Top = 40
-      Width = 70
-      CharCase = ecNormal
-      MaxLength = 8
-      TabOrder = 1
-      OnChange = TargetChange
-      EditMask = '00:00:00;1;_'
-      Text = '  :  :  '
-      SpaceChar = '_'
-    end
-    object StartTime: TMaskEdit
-      Left = 92
-      Height = 24
-      Top = 8
-      Width = 70
-      CharCase = ecNormal
-      MaxLength = 8
-      TabOrder = 2
-      OnChange = TargetChange
-      EditMask = '00:00:00;1;_'
-      Text = '  :  :  '
-      SpaceChar = '_'
-    end
-    object Label4: TLabel
-      Left = 8
-      Height = 18
-      Top = 42
-      Width = 53
-      Caption = 'End time'
-      ParentColor = False
-    end
-    object Label3: TLabel
-      Left = 8
-      Height = 18
-      Top = 10
-      Width = 59
-      Caption = 'Start time'
-      ParentColor = False
-    end
-    object BtnCdCTime: TButton
-      Left = 202
+    object BtnNewPlan: TButton
+      Left = 273
       Height = 25
-      Top = 38
-      Width = 91
-      Caption = 'Planetarium'
-      TabOrder = 3
-    end
-  end
-  object Panel5: TPanel
-    Left = 208
-    Height = 96
-    Top = 136
-    Width = 312
-    ClientHeight = 96
-    ClientWidth = 312
-    TabOrder = 9
-    object BtnCurrentCoord: TButton
-      Left = 202
-      Height = 25
-      Top = 7
-      Width = 91
-      Caption = 'No move'
-      OnClick = BtnCurrentCoordClick
-      TabOrder = 0
-    end
-    object PointDEC: TEdit
-      Left = 92
-      Height = 24
-      Top = 42
-      Width = 100
-      OnChange = TargetChange
+      Top = 49
+      Width = 48
+      Caption = 'New'
+      OnClick = BtnPlanClick
       TabOrder = 1
     end
-    object PointRA: TEdit
-      Left = 92
-      Height = 24
-      Top = 8
-      Width = 100
-      OnChange = TargetChange
+    object BtnEditPlan: TButton
+      Left = 226
+      Height = 25
+      Top = 49
+      Width = 46
+      Caption = 'Edit'
+      OnClick = BtnPlanClick
       TabOrder = 2
     end
-    object Label6: TLabel
-      Left = 8
+    object Label7: TLabel
+      Left = 16
       Height = 18
-      Top = 44
-      Width = 67
-      Caption = 'Center DEC'
+      Top = 0
+      Width = 58
+      Caption = 'Sequence'
       ParentColor = False
     end
-    object Label5: TLabel
-      Left = 8
+    object LabelSeq: TLabel
+      Left = 98
       Height = 18
-      Top = 10
-      Width = 59
-      Caption = 'Center RA'
+      Top = 1
+      Width = 58
+      Caption = 'LabelSeq'
+      Font.Style = [fsBold]
       ParentColor = False
+      ParentFont = False
     end
-    object BtnCdCCoord: TButton
-      Left = 202
-      Height = 25
-      Top = 44
-      Width = 91
-      Caption = 'Planetarium'
-      OnClick = BtnCdCCoordClick
+    object ObjectName: TEdit
+      Left = 98
+      Height = 24
+      Top = 23
+      Width = 126
+      OnChange = TargetChange
       TabOrder = 3
     end
-    object PointAstrometry: TCheckBox
+    object PanelRepeat: TPanel
       Left = 8
-      Height = 22
-      Top = 69
-      Width = 246
-      Caption = 'Use astrometry to refine the position'
-      OnChange = TargetChange
+      Height = 125
+      Top = 280
+      Width = 312
+      ClientHeight = 125
+      ClientWidth = 312
       TabOrder = 4
+      object PreviewExposure: TEdit
+        Left = 113
+        Height = 24
+        Top = 91
+        Width = 59
+        OnChange = TargetChange
+        TabOrder = 0
+        Text = '1'
+      end
+      object Label9: TLabel
+        Left = 8
+        Height = 18
+        Top = 94
+        Width = 106
+        Caption = 'Preview exposure'
+        ParentColor = False
+      end
+      object Preview: TCheckBox
+        Left = 8
+        Height = 22
+        Top = 60
+        Width = 212
+        Caption = 'Preview when waiting to repeat'
+        OnChange = TargetChange
+        ParentBidiMode = False
+        TabOrder = 1
+      end
+      object Label13: TLabel
+        Left = 188
+        Height = 18
+        Top = 40
+        Width = 57
+        Caption = '[seconds]'
+        ParentColor = False
+      end
+      object Label11: TLabel
+        Left = 8
+        Height = 18
+        Top = 40
+        Width = 33
+        Caption = 'Delay'
+        ParentColor = False
+      end
+      object Label10: TLabel
+        Left = 8
+        Height = 18
+        Top = 11
+        Width = 42
+        Caption = 'Repeat'
+        ParentColor = False
+      end
+      object Delay: TEdit
+        Left = 92
+        Height = 24
+        Top = 37
+        Width = 80
+        OnChange = TargetChange
+        TabOrder = 2
+        Text = '0'
+      end
+      object RepeatCount: TEdit
+        Left = 92
+        Height = 24
+        Top = 8
+        Width = 80
+        OnChange = TargetChange
+        TabOrder = 3
+        Text = '1'
+      end
+      object Label14: TLabel
+        Left = 188
+        Height = 18
+        Top = 94
+        Width = 57
+        Caption = '[seconds]'
+        ParentColor = False
+      end
+    end
+    object CheckBoxRepeat: TCheckBox
+      Left = 8
+      Height = 22
+      Top = 248
+      Width = 203
+      Caption = 'Repeat the plan for this object'
+      OnChange = CheckBoxRepeatChange
+      TabOrder = 5
+    end
+    object Panel4: TPanel
+      Left = 8
+      Height = 68
+      Top = 81
+      Width = 312
+      ClientHeight = 68
+      ClientWidth = 312
+      TabOrder = 6
+      Visible = False
+      object BtnAnytime: TButton
+        Left = 200
+        Height = 25
+        Top = 7
+        Width = 91
+        Caption = 'Any time'
+        OnClick = BtnAnytimeClick
+        TabOrder = 0
+      end
+      object EndTime: TMaskEdit
+        Left = 92
+        Height = 24
+        Top = 40
+        Width = 70
+        CharCase = ecNormal
+        MaxLength = 8
+        TabOrder = 1
+        OnChange = TargetChange
+        EditMask = '00:00:00;1;_'
+        Text = '  :  :  '
+        SpaceChar = '_'
+      end
+      object StartTime: TMaskEdit
+        Left = 92
+        Height = 24
+        Top = 8
+        Width = 70
+        CharCase = ecNormal
+        MaxLength = 8
+        TabOrder = 2
+        OnChange = TargetChange
+        EditMask = '00:00:00;1;_'
+        Text = '  :  :  '
+        SpaceChar = '_'
+      end
+      object Label4: TLabel
+        Left = 8
+        Height = 18
+        Top = 42
+        Width = 53
+        Caption = 'End time'
+        ParentColor = False
+      end
+      object Label3: TLabel
+        Left = 8
+        Height = 18
+        Top = 10
+        Width = 59
+        Caption = 'Start time'
+        ParentColor = False
+      end
+      object BtnCdCTime: TButton
+        Left = 202
+        Height = 25
+        Top = 38
+        Width = 91
+        Caption = 'Planetarium'
+        TabOrder = 3
+      end
+    end
+    object Panel5: TPanel
+      Left = 8
+      Height = 96
+      Top = 152
+      Width = 312
+      ClientHeight = 96
+      ClientWidth = 312
+      TabOrder = 7
+      object BtnCurrentCoord: TButton
+        Left = 202
+        Height = 25
+        Top = 7
+        Width = 91
+        Caption = 'No move'
+        OnClick = BtnCurrentCoordClick
+        TabOrder = 0
+      end
+      object PointDEC: TEdit
+        Left = 92
+        Height = 24
+        Top = 42
+        Width = 100
+        OnChange = TargetChange
+        TabOrder = 1
+      end
+      object PointRA: TEdit
+        Left = 92
+        Height = 24
+        Top = 8
+        Width = 100
+        OnChange = TargetChange
+        TabOrder = 2
+      end
+      object Label6: TLabel
+        Left = 8
+        Height = 18
+        Top = 44
+        Width = 67
+        Caption = 'Center DEC'
+        ParentColor = False
+      end
+      object Label5: TLabel
+        Left = 8
+        Height = 18
+        Top = 10
+        Width = 59
+        Caption = 'Center RA'
+        ParentColor = False
+      end
+      object BtnCdCCoord: TButton
+        Left = 202
+        Height = 25
+        Top = 44
+        Width = 91
+        Caption = 'Planetarium'
+        OnClick = BtnCdCCoordClick
+        TabOrder = 3
+      end
+      object PointAstrometry: TCheckBox
+        Left = 8
+        Height = 22
+        Top = 69
+        Width = 246
+        Caption = 'Use astrometry to refine the position'
+        OnChange = TargetChange
+        TabOrder = 4
+      end
     end
   end
 end

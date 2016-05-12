@@ -82,6 +82,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure FrameTypeChange(Sender: TObject);
     procedure StepChange(Sender: TObject);
+    procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
+      tIndex: Integer);
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
   private
     { private declarations }
@@ -164,6 +166,7 @@ var pfile: TCCDconfig;
     StepListSelection(nil,0,1);
   end;
 begin
+  StepList.Cells[0,0]:='Seq';
   ClearStepList;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   if FileExistsUTF8(fn) then begin
@@ -271,9 +274,18 @@ begin
   p.count:=StrToIntDef(Count.Text,1);
   p.repeatcount:=StrToIntDef(RepeatCount.Text,1);
   p.delay:=StrToFloatDef(Delay.Text,1);
-  p.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
-  p.preview:=Preview.Checked;
+  p.previewexposure:=1;//StrToFloatDef(PreviewExposure.Text,1);
+  p.preview:=false; //Preview.Checked;
   StepList.Cells[1,n]:=p.description;
+end;
+
+procedure Tf_EditPlan.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
+  sIndex, tIndex: Integer);
+var i,n: integer;
+begin
+  ResetSteps;
+  val(lblStepNum.Caption,i,n);
+  if n=0 then StepListSelection(Sender,0,i);
 end;
 
 procedure Tf_EditPlan.CheckBoxRepeatChange(Sender: TObject);
