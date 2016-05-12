@@ -59,7 +59,7 @@ begin
   De.Text:=DEToStr(planetarium.DE);
  end;
  if planetarium.Objname<>'' then begin
-  Obj.Text:=planetarium.Objname;
+  Obj.Text:=trim(planetarium.Objname);
  end;
 end;
 

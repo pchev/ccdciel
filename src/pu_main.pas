@@ -2237,15 +2237,15 @@ begin
      subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
      substep:=config.GetValue('/Files/SubfolderStep',false);
      fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-     if subseq and f_sequence.Running then fn:=slash(fn+f_sequence.CurrentName);
-     if subfrt then fn:=slash(fn+f_capture.FrameType.Text);
-     if subobj then fn:=slash(fn+f_capture.Fname.Text);
+     if subseq and f_sequence.Running then fn:=slash(fn+trim(f_sequence.CurrentName));
+     if subfrt then fn:=slash(fn+trim(f_capture.FrameType.Text));
+     if subobj then fn:=slash(fn+trim(f_capture.Fname.Text));
      if substep and f_sequence.Running then begin
         if f_sequence.StepTotalCount>1 then begin
-          fn:=slash(fn+f_sequence.CurrentStep+'_'+IntToStr(f_sequence.StepRepeatCount))
+          fn:=slash(fn+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
         end
         else begin
-          fn:=slash(fn+f_sequence.CurrentStep);
+          fn:=slash(fn+trim(f_sequence.CurrentStep));
         end;
      end;
      ForceDirectoriesUTF8(fn);
@@ -2254,12 +2254,12 @@ begin
      fndate:=config.GetValue('/Files/FilenameDate',true);
      if fnobj then begin
        if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then
-           fn:=fn+f_capture.Fname.Text+'_'
+           fn:=fn+trim(f_capture.Fname.Text)+'_'
        else
-           fn:=fn+f_capture.FrameType.Text+'_';
+           fn:=fn+trim(f_capture.FrameType.Text)+'_';
      end;
      if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-         fn:=fn+wheel.FilterNames[wheel.Filter]+'_';
+         fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
      if fndate then
         fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
      else begin
