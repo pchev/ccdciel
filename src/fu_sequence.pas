@@ -41,7 +41,6 @@ type
     BtnStart: TButton;
     BtnStop: TButton;
     BtnNewTargets: TButton;
-    BtnSaveTargets: TButton;
     BtnLoadTargets: TButton;
     StatusTimer: TTimer;
     Unattended: TCheckBox;
@@ -61,7 +60,6 @@ type
     procedure BtnEditTargetsClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
-    procedure BtnSaveTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
@@ -90,6 +88,7 @@ type
     procedure SetAutoguider(val: T_autoguider);
     procedure SetAstrometry(val: TAstrometry);
     function GetRunning: boolean;
+    procedure SaveTargets(fn:string);
     procedure StartSequence;
     procedure StopSequence;
     procedure ClearTargetGrid;
@@ -244,6 +243,8 @@ begin
        f_EditTargets.TargetList.Objects[0,i]:=t;
      end;
    end else begin
+     CurrentFile:='';
+     CurrentName:='';
      t:=TTarget.Create;
      f_EditTargets.TargetList.RowCount:=2;
      f_EditTargets.TargetList.Cells[0,1]:='1';
@@ -260,6 +261,7 @@ begin
      Targets.Add(t);
      LoadPlan(T_Plan(t.plan), t.planname);
    end;
+   SaveTargets(CurrentFile);
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);
@@ -271,11 +273,11 @@ begin
    tfile:=TCCDconfig.Create(self);
    tfile.Filename:=fn;
    CurrentName:=ExtractFileNameOnly(fn);
+   Targets.Clear;
    Targets.TargetName:=CurrentName;
    CurrentFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
    if n>0 then begin
-     Targets.Clear;
      for i:=1 to n do begin
        t:=TTarget.Create;
        t.objectname:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName','');
@@ -367,20 +369,25 @@ begin
  end;
 end;
 
-procedure Tf_sequence.BtnSaveTargetsClick(Sender: TObject);
+procedure Tf_sequence.SaveTargets(fn:string);
 var tfile: TCCDconfig;
     t:TTarget;
     i: integer;
 begin
  if TargetGrid.RowCount>1 then begin
-  SaveDialog1.InitialDir:=ConfigDir;
-  if SaveDialog1.Execute then begin
+    if fn='' then begin
+      SaveDialog1.InitialDir:=ConfigDir;
+      if SaveDialog1.Execute then begin
+        fn:=SaveDialog1.FileName;
+      end
+      else exit;
+    end;
     tfile:=TCCDconfig.Create(self);
-    tfile.Filename:=SaveDialog1.FileName;
+    tfile.Filename:=fn;
     tfile.Clear;
-    CurrentName:=ExtractFileNameOnly(SaveDialog1.FileName);
+    CurrentFile:=fn;
+    CurrentName:=ExtractFileNameOnly(fn);
     Targets.TargetName:=CurrentName;
-    CurrentFile:=SaveDialog1.FileName;
     tfile.SetValue('/ListName',CurrentName);
     tfile.SetValue('/TargetNum',Targets.Count);
     for i:=1 to Targets.Count do begin
@@ -399,7 +406,6 @@ begin
     end;
     tfile.Flush;
     tfile.Free;
-  end;
  end;
 end;
 
