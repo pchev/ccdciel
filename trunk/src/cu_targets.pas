@@ -391,8 +391,9 @@ begin
 end;
 
 function T_Targets.Slew(ra,de: double; precision:boolean):boolean;
-var err: double;
-const maxerr = 5/60;
+var err,maxerr: double;
+    prec,exp:double;
+    cormethod,bin,maxretry: integer;
 begin
   result:=false;
   if (Mount=nil)or(Mount.Status<>devConnected) then begin
@@ -400,9 +401,16 @@ begin
     exit;
   end;
   if precision then begin
-    astrometry.PrecisionSlew(ra,de,0.01,5,1,1,3);
+    cormethod:=config.GetValue('/PrecSlew/Method',0);
+    prec:=config.GetValue('/PrecSlew/Precision',1.0)/60;
+    maxretry:=config.GetValue('/PrecSlew/Retry',3);
+    exp:=config.GetValue('/PrecSlew/Exposure',15.0);
+    bin:=config.GetValue('/PrecSlew/Binning',1);
+    maxerr:=5*prec;
+    astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry);
   end
   else begin
+    maxerr:=5/60;
     Mount.Slew(ra, de);
   end;
   if not FRunning then exit;

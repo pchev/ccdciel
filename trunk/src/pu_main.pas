@@ -1858,6 +1858,11 @@ begin
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
    {$endif}
+   f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
+   f_option.SlewPrec.Text:=FormatFloat(f2,config.GetValue('/PrecSlew/Precision',1.0));
+   f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
+   f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',15));
+   f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
@@ -1906,6 +1911,11 @@ begin
      {$ifdef unix}
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
      {$endif}
+     config.SetValue('/PrecSlew/Method',f_option.PrecSlewBox.ItemIndex);
+     config.SetValue('/PrecSlew/Precision',StrToFloatDef(f_option.SlewPrec.Text,1.0));
+     config.SetValue('/PrecSlew/Retry',StrToIntDef(f_option.SlewRetry.Text,3));
+     config.SetValue('/PrecSlew/Exposure',StrToFloatDef(f_option.SlewExp.Text,15.0));
+     config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
