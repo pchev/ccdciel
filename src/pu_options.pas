@@ -36,6 +36,16 @@ type
   Tf_option = class(TForm)
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
+    SlewPrec: TEdit;
+    SlewRetry: TEdit;
+    SlewExp: TEdit;
+    SlewBin: TEdit;
+    GroupBox7: TGroupBox;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
     OtherOptions: TEdit;
     GroupBoxSamp: TGroupBox;
     GroupBoxSkychart: TGroupBox;
@@ -55,6 +65,7 @@ type
     CaptureDir: TDirectoryEdit;
     DitherRAonly: TCheckBox;
     Label23: TLabel;
+    PrecSlewBox: TRadioGroup;
     SettlePixel: TEdit;
     SettleMinTime: TEdit;
     SettleMaxTime: TEdit;
@@ -91,6 +102,7 @@ type
     AutoguiderBox: TRadioGroup;
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
+    TabSheet7: TTabSheet;
     TelescopeName: TEdit;
     GroupBox4: TGroupBox;
     elbrus: TGroupBox;

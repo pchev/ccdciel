@@ -63,7 +63,7 @@ TAstrometry = class(TComponent)
     function  CurrentCoord(var cra,cde,eq: double):boolean;
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer; wait: boolean);
-    function PrecisionSlew(ra,de,prec,exp:double; binx,biny,maxslew: integer):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer):boolean;
     property Busy: Boolean read FBusy;
     property LastResult: Boolean read FLastResult;
     property ResultFile: string read savefile;
@@ -355,8 +355,8 @@ begin
   WaitExposure:=false;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,maxslew: integer): boolean;
-var cra,cde,eq,ar1,ar2,de1,de2,dist: double;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer): boolean;
+var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset: double;
     jd0,jd1: double;
     fn:string;
     n,i:integer;
@@ -391,13 +391,23 @@ begin
     ar2:=deg2rad*15*cra;
     de2:=deg2rad*cde;
     dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
-    msg('Distance to target: '+FormatFloat(f5,dist)+' degree');
+    msg('Distance to target: '+FormatFloat(f5,60*dist)+' arcmin');
     if dist>prec then begin
-       msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
-       mount.Sync(cra,cde);
-       Wait(1);
-       msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
-       Mount.Slew(ra, de);
+      case method of
+       0: begin
+             msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
+             mount.Sync(cra,cde);
+             Wait(1);
+             msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+             Mount.Slew(ra, de);
+          end;
+       else begin
+             raoffset:=ra-cra;
+             deoffset:=de-cde;
+             msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
+             Mount.Slew(ra+raoffset, de+deoffset);
+          end;
+       end;
     end;
     inc(i);
   until (dist<=prec)or(i>maxslew);
