@@ -77,6 +77,7 @@ T_indifocuser = class(T_focuser)
    function  GethasTimerSpeed: boolean; override;
    function  GetPositionRange: TNumRange; override;
    function  GetRelPositionRange: TNumRange; override;
+   procedure SetTimeout(num:integer); override;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -92,6 +93,7 @@ procedure T_indifocuser.CreateIndiClient;
 begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
+  indiclient.Timeout:=FTimeOut;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
@@ -438,6 +440,12 @@ end;
 function  T_indifocuser.GethasTimerSpeed: boolean;
 begin
   result:=(FocusSpeed<>nil)and(FocusTimer<>nil);
+end;
+
+procedure T_indifocuser.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
+ indiclient.Timeout:=FTimeOut;
 end;
 
 end.

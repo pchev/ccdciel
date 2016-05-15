@@ -37,18 +37,21 @@ type
   private
     SampClient : TSampClient;
     FClientChange: boolean;
-    procedure Execute; override;
     procedure DoClientChange;
     procedure ClientChange(Sender: TObject);
     procedure ClientDisconnected(Sender: TObject);
     procedure coordpointAtsky(cra,cdec:double);
     procedure ImageLoadFits(image_name,image_id,url:string);
+  protected
+    procedure Execute; override;
+    procedure ProcessDataSyn; override;
   public
     Constructor Create;
     Destructor Destroy; override;
     procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
     function ShowImage(fn: string):boolean; override;
+    function Cmd(const Value: string):string; override;
   end;
 
 
@@ -65,6 +68,16 @@ end;
 Destructor TPlanetarium_samp.Destroy;
 begin
   inherited Destroy;
+end;
+
+procedure TPlanetarium_samp.ProcessDataSyn;
+begin
+ // todo
+end;
+
+function TPlanetarium_samp.Cmd(const Value: string):string;
+begin
+ // todo
 end;
 
 procedure TPlanetarium_samp.Execute;

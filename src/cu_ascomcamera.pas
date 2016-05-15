@@ -43,7 +43,7 @@ T_ascomcamera = class(T_camera)
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
-   timestart,timeend,timeout,Fexptime:double;
+   timestart,timeend,timedout,Fexptime:double;
    stCCDtemp : double;
    stX,stY,stWidth,stHeight: integer;
    function Connected: boolean;
@@ -70,6 +70,7 @@ T_ascomcamera = class(T_camera)
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   procedure SetTimeout(num:integer); override;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -206,7 +207,7 @@ if Connected then begin
      V.StartExposure(exptime,li);
      timestart:=NowUTC;
      timeend:=now+(exptime)/secperday;
-     timeout:=now+(exptime+10)/secperday;
+     timedout:=now+(exptime+10)/secperday;
      Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
      else if exptime>=1 then ExposureTimer.Interval:=500
@@ -236,7 +237,7 @@ begin
  ExposureTimer.Enabled:=false;
  {$ifdef mswindows}
  try
- if (now<timeout)and(not VarIsEmpty(V)) then begin
+ if (now<timedout)and(not VarIsEmpty(V)) then begin
     state:=V.CameraState;
     ok:=V.ImageReady;
     if (not ok)and(state>=1)and(state<=4) then begin
@@ -653,6 +654,11 @@ begin
 {$ifdef mswindows}
 result:=16;
 {$endif}
+end;
+
+procedure T_ascomcamera.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
 end;
 
 end.

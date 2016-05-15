@@ -58,7 +58,8 @@ T_ascomfocuser = class(T_focuser)
    function  GethasTimerSpeed: boolean; override;
    function  GetPositionRange: TNumRange; override;
    function  GetRelPositionRange: TNumRange; override;
- public
+   procedure SetTimeout(num:integer); override;
+public
    constructor Create;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
@@ -314,6 +315,10 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
+procedure T_ascomfocuser.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
+end;
 
 end.
 

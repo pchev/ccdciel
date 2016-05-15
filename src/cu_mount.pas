@@ -37,12 +37,14 @@ T_mount = class(TComponent)
     FonCoordChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
+    FTimeOut: integer;
     function  GetRA:double; virtual; abstract;
     function  GetDec:double; virtual; abstract;
     function  GetEquinox: double; virtual; abstract;
     function  GetAperture:double; virtual; abstract;
     function  GetFocaleLength:double; virtual; abstract;
-  public
+    procedure SetTimeout(num:integer); virtual; abstract;
+ public
     constructor Create;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
@@ -57,6 +59,7 @@ T_mount = class(TComponent)
     property Equinox: double read GetEquinox;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
+    property Timeout: integer read FTimeout write SetTimeout;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
@@ -69,6 +72,7 @@ constructor T_mount.Create;
 begin
   inherited Create(nil);
   FStatus := devDisconnected;
+  FTimeOut:=100;
 end;
 
 destructor  T_mount.Destroy;

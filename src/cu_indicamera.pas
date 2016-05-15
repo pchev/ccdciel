@@ -107,6 +107,7 @@ private
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   procedure SetTimeout(num:integer); override;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -128,6 +129,7 @@ procedure T_indicamera.CreateIndiClient;
 begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
+  indiclient.Timeout:=FTimeOut;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
@@ -975,6 +977,11 @@ begin
   end;
 end;
 
+procedure T_indicamera.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
+ indiclient.Timeout:=FTimeOut;
+end;
 
 end.
 

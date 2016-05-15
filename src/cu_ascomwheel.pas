@@ -49,6 +49,7 @@ T_ascomwheel = class(T_wheel)
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
    procedure SetFilterNames(value:TStringList); override;
+   procedure SetTimeout(num:integer); override;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -231,6 +232,10 @@ begin
  if Assigned(FonMsg) then FonMsg(txt);
 end;
 
+procedure T_ascomwheel.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
+end;
 
 end.
 
