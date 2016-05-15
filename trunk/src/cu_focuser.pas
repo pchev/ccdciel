@@ -39,6 +39,7 @@ T_focuser = class(TComponent)
     FonTimerChange: TNotifyNum;
     FonSpeedChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
+    FTimeOut: integer;
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -52,6 +53,7 @@ T_focuser = class(TComponent)
     function  GethasAbsolutePosition: boolean; virtual; abstract;
     function  GethasRelativePosition: boolean; virtual; abstract;
     function  GethasTimerSpeed: boolean; virtual; abstract;
+    procedure SetTimeout(num:integer); virtual; abstract;
   public
     constructor Create;
     destructor  Destroy; override;
@@ -70,6 +72,7 @@ T_focuser = class(TComponent)
     property RelPositionRange: TNumRange read GetRelPositionRange;
     property Speed: integer read GetSpeed write SetSpeed;
     property Timer: integer read GetTimer write SetTimer;
+    property Timeout: integer read FTimeout write SetTimeout;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
@@ -84,6 +87,7 @@ constructor T_focuser.Create;
 begin
   inherited Create(nil);
   FStatus := devDisconnected;
+  FTimeOut:=100;
 end;
 
 destructor  T_focuser.Destroy;

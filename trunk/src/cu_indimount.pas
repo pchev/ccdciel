@@ -69,6 +69,7 @@ T_indimount = class(T_mount)
    function  GetEquinox: double;  override;
    function  GetAperture:double;  override;
    function  GetFocaleLength:double; override;
+   procedure SetTimeout(num:integer); override;
  public
    constructor Create;
    destructor  Destroy; override;
@@ -85,6 +86,7 @@ procedure T_indimount.CreateIndiClient;
 begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
+  indiclient.Timeout:=FTimeOut;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
@@ -385,6 +387,12 @@ begin
      msg('Stop telescope motion.');
    end;
  end;
+end;
+
+procedure T_indimount.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
+ indiclient.Timeout:=FTimeOut;
 end;
 
 end.

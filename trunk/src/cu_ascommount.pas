@@ -49,6 +49,7 @@ T_ascommount = class(T_mount)
    function  GetEquinox: double; override;
    function  GetAperture:double; override;
    function  GetFocaleLength:double; override;
+   procedure SetTimeout(num:integer); override;
 public
    constructor Create;
    destructor  Destroy; override;
@@ -56,7 +57,7 @@ public
    procedure Disconnect; override;
    procedure Slew(sra,sde: double); override;
    procedure Sync(sra,sde: double); override;
-
+   procedure AbortMotion; override;
 end;
 
 
@@ -267,6 +268,24 @@ begin
    end;
  end;
  {$endif}
+end;
+
+procedure T_ascommount.AbortMotion;
+begin
+ {$ifdef mswindows}
+ if Connected and V.CanSlew then begin
+   try
+   V.AbortSlew;
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascommount.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
 end;
 
 end.

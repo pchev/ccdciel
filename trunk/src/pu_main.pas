@@ -186,6 +186,7 @@ type
     ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
+    DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
     Capture,Preview,PreviewLoop: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
@@ -1009,6 +1010,11 @@ case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
 end;
+DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
+camera.Timeout:=DeviceTimeout;
+focuser.Timeout:=DeviceTimeout;
+wheel.Timeout:=DeviceTimeout;
+mount.Timeout:=DeviceTimeout;
 end;
 
 procedure Tf_main.SetOptions;
@@ -1734,6 +1740,7 @@ begin
   f_setup.ConnectionInterface:=TDevInterface(config.GetValue('/Interface',ord(camera.CameraInterface)));
   f_setup.IndiServer.Text:=config.GetValue('/INDI/Server','localhost');
   f_setup.IndiPort.Text:=config.GetValue('/INDI/ServerPort','7624');
+  f_setup.IndiTimeout.Text:=config.GetValue('/Devices/Timeout','100');
 
   f_setup.DeviceList.Checked[0]:=true;
   f_setup.DeviceList.Checked[1]:=config.GetValue('/Devices/FilterWheel',false);
@@ -1784,6 +1791,7 @@ begin
     config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
     config.SetValue('/INDI/ServerPort',f_setup.IndiPort.Text);
+    config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
 
     config.SetValue('/Devices/Camera',f_setup.DeviceList.Checked[0]);
     config.SetValue('/Devices/FilterWheel',f_setup.DeviceList.Checked[1]);

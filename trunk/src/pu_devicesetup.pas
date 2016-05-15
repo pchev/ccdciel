@@ -54,6 +54,7 @@ type
     BtnChooseFocuser: TButton;
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
+    IndiTimeout: TEdit;
     IndiSensor: TComboBox;
     FilterWheelInCameraBox: TCheckBox;
     FocuserInMountBox: TCheckBox;
@@ -62,6 +63,7 @@ type
     IndiServer: TEdit;
     DeviceList: TCheckGroup;
     GetIndiDevices: TButton;
+    Label1: TLabel;
     Label15: TLabel;
     Label16: TLabel;
     Label17: TLabel;
@@ -109,7 +111,6 @@ type
     procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
     procedure FilterWheelInCameraBoxClick(Sender: TObject);
@@ -418,11 +419,6 @@ begin
     on E: EOleException do ShowMessage('Error : ' + E.Message);
   end;
 {$endif}
-end;
-
-procedure Tf_setup.Button1Click(Sender: TObject);
-begin
-
 end;
 
 procedure Tf_setup.FormShow(Sender: TObject);

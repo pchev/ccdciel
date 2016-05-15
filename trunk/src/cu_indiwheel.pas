@@ -61,7 +61,8 @@ T_indiwheel = class(T_wheel)
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
    procedure SetFilterNames(value:TStringList); override;
- public
+   procedure SetTimeout(num:integer); override;
+public
    constructor Create;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
@@ -74,6 +75,7 @@ procedure T_indiwheel.CreateIndiClient;
 begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
+  indiclient.Timeout:=FTimeOut;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
@@ -310,6 +312,12 @@ if (FilterName<>nil)and(value.Count=FilterName.ntp) then begin
   indiclient.sendNewText(FilterName);
   indiclient.WaitBusy(FilterName);
 end;
+end;
+
+procedure T_indiwheel.SetTimeout(num:integer);
+begin
+ FTimeOut:=num;
+ indiclient.Timeout:=FTimeOut;
 end;
 
 end.

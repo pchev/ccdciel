@@ -51,6 +51,7 @@ T_camera = class(TComponent)
     FFits: TFits;
     FMount: T_mount;
     Fwheel: T_wheel;
+    FTimeOut: integer;
     procedure NewImage;
     procedure WriteHeaders;
     function GetBinX:integer; virtual; abstract;
@@ -72,6 +73,7 @@ T_camera = class(TComponent)
     function GetPixelSizeX: double; virtual; abstract;
     function GetPixelSizeY: double; virtual; abstract;
     function GetBitperPixel: double; virtual; abstract;
+    procedure SetTimeout(num:integer); virtual; abstract;
   public
     constructor Create;
     destructor  Destroy; override;
@@ -109,6 +111,7 @@ T_camera = class(TComponent)
     property BitperPixel: double read GetBitperPixel;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
+    property Timeout: integer read FTimeout write SetTimeout;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -128,6 +131,7 @@ implementation
 constructor T_camera.Create;
 begin
   inherited Create(nil);
+  FTimeOut:=100;
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
