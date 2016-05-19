@@ -45,6 +45,8 @@ T_indifocuser = class(T_focuser)
    FocusAbort: ISwitchVectorProperty;
    FocusPreset: INumberVectorProperty;
    FocusGotoPreset: ISwitchVectorProperty;
+   configprop: ISwitchVectorProperty;
+   configload,configsave,configdefault: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -62,6 +64,7 @@ T_indifocuser = class(T_focuser)
    procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
+   procedure LoadConfig;
    procedure msg(txt: string);
  protected
    procedure SetPosition(p:integer); override;
@@ -146,6 +149,7 @@ begin
     FocusAbort:=nil;
     FocusPreset:=nil;
     FocusGotoPreset:=nil;
+    configprop:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -155,12 +159,16 @@ end;
 procedure T_indifocuser.CheckStatus;
 begin
     if Fconnected and
+       (configprop<>nil) and
        (FocusMotion<>nil) and
        (FocusAbsolutePosition<>nil)
     then begin
        FStatus := devConnected;
       if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
       Fready:=true;
+      if FAutoloadConfig then begin
+        LoadConfig;
+      end;
     end;
 end;
 
@@ -257,6 +265,13 @@ begin
 
   if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
      Focuserport:=indiProp.getText;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+     configprop:=indiProp.getSwitch;
+     configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
+     configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
+     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
+     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
   else if (proptype=INDI_SWITCH)and(propname='FOCUS_MOTION') then begin
      FocusMotion:=indiProp.getSwitch;
@@ -446,6 +461,15 @@ procedure T_indifocuser.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
  indiclient.Timeout:=FTimeOut;
+end;
+
+procedure T_indifocuser.LoadConfig;
+begin
+  if configprop<>nil then begin
+    IUResetSwitch(configprop);
+    configload.s:=ISS_ON;
+    indiclient.sendNewSwitch(configprop);
+  end;
 end;
 
 end.

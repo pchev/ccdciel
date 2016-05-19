@@ -1010,6 +1010,10 @@ case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
 end;
+wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
+focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
+mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
+camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
@@ -1755,6 +1759,7 @@ begin
   f_setup.CameraIndiDevice.Text:=config.GetValue('/INDIcamera/Device','');
   f_setup.CameraSensor:=config.GetValue('/INDIcamera/Sensor','CCD1');
   f_setup.CameraIndiDevPort.Text:=config.GetValue('/INDIcamera/DevicePort','');
+  f_setup.CameraAutoLoadConfig.Checked:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
   f_setup.AscomCamera.Text:=config.GetValue('/ASCOMcamera/Device','');
 
   f_setup.WheelConnection:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(wheel.WheelInterface)));
@@ -1764,6 +1769,7 @@ begin
   end;
   f_setup.WheelIndiDevice.Text:=config.GetValue('/INDIwheel/Device','');
   f_setup.WheelIndiDevPort.Text:=config.GetValue('/INDIwheel/DevicePort','');
+  f_setup.WheelAutoLoadConfig.Checked:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
   f_setup.AscomWheel.Text:=config.GetValue('/ASCOMwheel/Device','');
 
   f_setup.FocuserConnection:=TDevInterface(config.GetValue('/FocuserInterface',ord(focuser.FocuserInterface)));
@@ -1773,6 +1779,7 @@ begin
   end;
   f_setup.FocuserIndiDevice.Text:=config.GetValue('/INDIfocuser/Device','');
   f_setup.FocuserIndiDevPort.Text:=config.GetValue('/INDIfocuser/DevicePort','');
+  f_setup.FocuserAutoLoadConfig.Checked:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
   f_setup.AscomFocuser.Text:=config.GetValue('/ASCOMfocuser/Device','');
 
   f_setup.MountConnection:=TDevInterface(config.GetValue('/MountInterface',ord(mount.MountInterface)));
@@ -1782,6 +1789,7 @@ begin
   end;
   f_setup.MountIndiDevice.Text:=config.GetValue('/INDImount/Device','');
   f_setup.MountIndiDevPort.Text:=config.GetValue('/INDImount/DevicePort','');
+  f_setup.MountAutoLoadConfig.Checked:=config.GetValue('/INDImount/AutoLoadConfig',false);
   f_setup.AscomMount.Text:=config.GetValue('/ASCOMmount/Device','');
 
   FormPos(f_setup,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -1802,21 +1810,25 @@ begin
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
     config.SetValue('/INDIcamera/Sensor',f_setup.CameraSensor);
     config.SetValue('/INDIcamera/DevicePort',f_setup.CameraIndiDevPort.Text);
+    config.SetValue('/INDIcamera/AutoLoadConfig',f_setup.CameraAutoLoadConfig.Checked);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     if f_setup.WheelIndiDevice.Text<>'' then config.SetValue('/INDIwheel/Device',f_setup.WheelIndiDevice.Text);
     config.SetValue('/INDIwheel/DevicePort',f_setup.WheelIndiDevPort.Text);
+    config.SetValue('/INDIwheel/AutoLoadConfig',f_setup.WheelAutoLoadConfig.Checked);
     config.SetValue('/ASCOMwheel/Device',f_setup.AscomWheel.Text);
 
     config.SetValue('/FocuserInterface',ord(f_setup.FocuserConnection));
     if f_setup.FocuserIndiDevice.Text<>'' then config.SetValue('/INDIfocuser/Device',f_setup.FocuserIndiDevice.Text);
     config.SetValue('/INDIfocuser/DevicePort',f_setup.FocuserIndiDevPort.Text);
+    config.SetValue('/INDIfocuser/AutoLoadConfig',f_setup.FocuserAutoLoadConfig.Checked);
     config.SetValue('/ASCOMfocuser/Device',f_setup.AscomFocuser.Text);
 
     config.SetValue('/MountInterface',ord(f_setup.MountConnection));
     if f_setup.MountIndiDevice.Text<>'' then config.SetValue('/INDImount/Device',f_setup.MountIndiDevice.Text);
     config.SetValue('/INDImount/DevicePort',f_setup.MountIndiDevPort.Text);
+    config.SetValue('/INDImount/AutoLoadConfig',f_setup.MountAutoLoadConfig.Checked);
     config.SetValue('/ASCOMmount/Device',f_setup.AscomMount.Text);
 
     config.Flush;

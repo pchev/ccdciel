@@ -40,6 +40,7 @@ T_wheel = class(TComponent)
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
     FTimeOut: integer;
+    FAutoLoadConfig: boolean;
     procedure SetFilter(num:integer);  virtual; abstract;
     function  GetFilter:integer; virtual; abstract;
     procedure SetFilterNames(value:TStringList); virtual; abstract;
@@ -54,6 +55,7 @@ T_wheel = class(TComponent)
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
+    property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
@@ -69,6 +71,7 @@ begin
   FFilterNames:=TStringList.Create;
   FStatus := devDisconnected;
   FTimeOut:=100;
+  FAutoLoadConfig:=false;
 end;
 
 destructor  T_wheel.Destroy;

@@ -40,6 +40,7 @@ type
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
+    CameraAutoLoadConfig: TCheckBox;
     BtnAboutCamera1: TButton;
     BtnAboutCamera2: TButton;
     BtnAboutCamera3: TButton;
@@ -54,6 +55,9 @@ type
     BtnChooseFocuser: TButton;
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
+    MountAutoLoadConfig: TCheckBox;
+    FocuserAutoLoadConfig: TCheckBox;
+    WheelAutoLoadConfig: TCheckBox;
     IndiTimeout: TEdit;
     IndiSensor: TComboBox;
     FilterWheelInCameraBox: TCheckBox;

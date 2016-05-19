@@ -39,6 +39,8 @@ T_indiwheel = class(T_wheel)
    WheelSlot: INumberVectorProperty;
    Slot: INumber;
    FilterName: ITextVectorProperty;
+   configprop: ISwitchVectorProperty;
+   configload,configsave,configdefault: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -56,6 +58,7 @@ T_indiwheel = class(T_wheel)
    procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
+   procedure LoadConfig;
    procedure msg(txt: string);
  protected
    procedure SetFilter(num:integer); override;
@@ -119,6 +122,7 @@ begin
     Wheelport:=nil;
     WheelSlot:=nil;
     FilterName:=nil;
+    configprop:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -128,12 +132,16 @@ end;
 procedure T_indiwheel.CheckStatus;
 begin
     if Fconnected and
+       (configprop<>nil) and
        (WheelSlot<>nil) and
        (FilterName<>nil)
     then begin
        FStatus := devConnected;
       if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
       Fready:=true;
+      if FAutoloadConfig then begin
+        LoadConfig;
+      end;
     end;
 end;
 
@@ -232,6 +240,13 @@ begin
   if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
      Wheelport:=indiProp.getText;
   end
+  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+      configprop:=indiProp.getSwitch;
+      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
+      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
+      configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
+      if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
+  end
   else if (proptype=INDI_NUMBER)and(propname='FILTER_SLOT') then begin
      WheelSlot:=indiProp.getNumber;
      Slot:=IUFindNumber(WheelSlot,'FILTER_SLOT_VALUE');
@@ -318,6 +333,15 @@ procedure T_indiwheel.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
  indiclient.Timeout:=FTimeOut;
+end;
+
+procedure T_indiwheel.LoadConfig;
+begin
+  if configprop<>nil then begin
+    IUResetSwitch(configprop);
+    configload.s:=ISS_ON;
+    indiclient.sendNewSwitch(configprop);
+  end;
 end;
 
 end.
