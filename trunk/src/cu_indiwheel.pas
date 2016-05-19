@@ -147,7 +147,7 @@ end;
 
 procedure T_indiwheel.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
 end;
 
 Procedure T_indiwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
@@ -226,7 +226,7 @@ end;
 
 procedure T_indiwheel.NewMessage(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
 end;
 
 procedure T_indiwheel.NewProperty(indiProp: IndiProperty);

@@ -174,7 +174,7 @@ end;
 
 procedure T_indifocuser.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
 end;
 
 Procedure T_indifocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
@@ -253,7 +253,7 @@ end;
 
 procedure T_indifocuser.NewMessage(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
 end;
 
 procedure T_indifocuser.NewProperty(indiProp: IndiProperty);

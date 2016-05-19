@@ -229,7 +229,7 @@ end;
 
 procedure T_indicamera.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
 end;
 
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
@@ -328,9 +328,9 @@ begin
     if pos(blacklist[i],txt)>0 then ok:=false;
   end;
   if ok then begin
-     if Assigned(FonMsg) then FonMsg(txt);
+     if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
   end else begin
-    if Assigned(FonDeviceMsg) then FonDeviceMsg(txt);
+    if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+txt);
   end;
 end;
 
