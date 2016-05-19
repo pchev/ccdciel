@@ -40,6 +40,7 @@ T_focuser = class(TComponent)
     FonSpeedChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
     FTimeOut: integer;
+    FAutoLoadConfig: boolean;
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -73,6 +74,7 @@ T_focuser = class(TComponent)
     property Speed: integer read GetSpeed write SetSpeed;
     property Timer: integer read GetTimer write SetTimer;
     property Timeout: integer read FTimeout write SetTimeout;
+    property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;

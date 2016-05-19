@@ -68,6 +68,8 @@ private
    ActiveDevices: ITextVectorProperty;
    UploadMode: ISwitchVectorProperty;
    UploadClient, UploadLocal, UploadBoth: ISwitch;
+   configprop: ISwitchVectorProperty;
+   configload,configsave,configdefault: ISwitch;
    FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    procedure CreateIndiClient;
@@ -86,6 +88,7 @@ private
    procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
+   procedure LoadConfig;
    procedure msg(txt: string);
  protected
    function GetBinX:integer; override;
@@ -192,6 +195,7 @@ begin
     FilterName:=nil;
     ActiveDevices:=nil;
     UploadMode:=nil;
+    configprop:=nil;
     FhasBlob:=false;
     Fready:=false;
     Fconnected := false;
@@ -204,6 +208,7 @@ end;
 procedure T_indicamera.CheckStatus;
 begin
     if Fconnected and
+       (configprop<>nil) and
        FhasBlob and (
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
        ((Findisensor<>'CCD2')and(CCDexpose<>nil)) )
@@ -212,6 +217,9 @@ begin
        UseMainSensor:=(Findisensor<>'CCD2');
       if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
       Fready:=true;
+      if FAutoloadConfig then begin
+        LoadConfig;
+      end;
       if (WheelSlot<>nil) and (FilterName<>nil) then begin
         FWheelStatus:=devConnected;
         if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
@@ -339,6 +347,13 @@ begin
   end
   else if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
      CCDport:=indiProp.getText;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+     configprop:=indiProp.getSwitch;
+     configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
+     configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
+     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
+     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
   else if (proptype=INDI_NUMBER)and(propname='CCD_EXPOSURE') then begin
      CCDexpose:=indiProp.getNumber;
@@ -981,6 +996,15 @@ procedure T_indicamera.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
  indiclient.Timeout:=FTimeOut;
+end;
+
+procedure T_indicamera.LoadConfig;
+begin
+  if configprop<>nil then begin
+    IUResetSwitch(configprop);
+    configload.s:=ISS_ON;
+    indiclient.sendNewSwitch(configprop);
+  end;
 end;
 
 end.

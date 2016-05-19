@@ -45,6 +45,8 @@ T_indimount = class(T_mount)
    TelescopeInfo: INumberVectorProperty;
    TelescopeAperture, TelescopeFocale: INumber;
    eod_coord:  boolean;
+   configprop: ISwitchVectorProperty;
+   configload,configsave,configdefault: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -62,6 +64,7 @@ T_indimount = class(T_mount)
    procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
+   procedure LoadConfig;
    procedure msg(txt: string);
  protected
    function  GetRA:double; override;
@@ -133,6 +136,7 @@ begin
     coord_prop:=nil;
     CoordSet:=nil;
     AbortmotionProp:=nil;
+    configprop:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -142,11 +146,15 @@ end;
 procedure T_indimount.CheckStatus;
 begin
     if Fconnected and
+       (configprop<>nil) and
        (coord_prop<>nil)
     then begin
        FStatus := devConnected;
       if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
       Fready:=true;
+      if FAutoloadConfig then begin
+        LoadConfig;
+      end;
     end;
 end;
 
@@ -255,6 +263,13 @@ begin
 
   if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
      Mountport:=indiProp.getText;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+     configprop:=indiProp.getSwitch;
+     configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
+     configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
+     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
+     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
   else if (proptype=INDI_NUMBER)and(propname='EQUATORIAL_EOD_COORD') then begin
       coord_prop:=indiProp.getNumber;
@@ -393,6 +408,15 @@ procedure T_indimount.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
  indiclient.Timeout:=FTimeOut;
+end;
+
+procedure T_indimount.LoadConfig;
+begin
+  if configprop<>nil then begin
+    IUResetSwitch(configprop);
+    configload.s:=ISS_ON;
+    indiclient.sendNewSwitch(configprop);
+  end;
 end;
 
 end.

@@ -38,6 +38,7 @@ T_mount = class(TComponent)
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
     FTimeOut: integer;
+    FAutoLoadConfig: boolean;
     function  GetRA:double; virtual; abstract;
     function  GetDec:double; virtual; abstract;
     function  GetEquinox: double; virtual; abstract;
@@ -60,6 +61,7 @@ T_mount = class(TComponent)
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
     property Timeout: integer read FTimeout write SetTimeout;
+    property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;

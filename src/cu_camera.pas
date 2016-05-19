@@ -52,6 +52,7 @@ T_camera = class(TComponent)
     FMount: T_mount;
     Fwheel: T_wheel;
     FTimeOut: integer;
+    FAutoLoadConfig: boolean;
     procedure NewImage;
     procedure WriteHeaders;
     function GetBinX:integer; virtual; abstract;
@@ -112,6 +113,7 @@ T_camera = class(TComponent)
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
+    property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
