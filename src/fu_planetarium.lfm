@@ -1,18 +1,16 @@
 object f_planetarium: Tf_planetarium
   Left = 0
-  Height = 111
+  Height = 73
   Top = 0
-  Width = 153
-  ClientHeight = 111
-  ClientWidth = 153
+  Width = 147
+  ClientHeight = 73
+  ClientWidth = 147
   TabOrder = 0
-  DesignLeft = 320
-  DesignTop = 536
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 153
+    Width = 147
     Align = alTop
     Alignment = taCenter
     Caption = 'Planetarium'
@@ -25,14 +23,14 @@ object f_planetarium: Tf_planetarium
   end
   object Panel1: TPanel
     Left = 0
-    Height = 91
+    Height = 53
     Top = 20
-    Width = 153
+    Width = 147
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 91
-    ClientWidth = 153
+    ClientHeight = 53
+    ClientWidth = 147
     TabOrder = 1
     object Panel2: TPanel
       Left = 0
@@ -84,7 +82,7 @@ object f_planetarium: Tf_planetarium
     end
     object Panel4: TPanel
       Left = 0
-      Height = 2
+      Height = 1
       Top = 52
       Width = 143
       TabOrder = 2

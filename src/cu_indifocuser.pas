@@ -164,11 +164,13 @@ begin
        (FocusAbsolutePosition<>nil)
     then begin
        FStatus := devConnected;
-      if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
-      Fready:=true;
-      if FAutoloadConfig then begin
-        LoadConfig;
-      end;
+       if (not Fready) then begin
+         if Assigned(FonStatusChange) then FonStatusChange(self);
+         Fready:=true;
+         if FAutoloadConfig then begin
+           LoadConfig;
+         end;
+       end;
     end;
 end;
 

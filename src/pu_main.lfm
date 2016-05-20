@@ -59,9 +59,9 @@ object f_main: Tf_main
       object PanelRight2: TPanel
         Tag = 1
         Left = 0
-        Height = 295
+        Height = 265
         Top = 0
-        Width = 180
+        Width = 184
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -83,9 +83,9 @@ object f_main: Tf_main
       object PanelRight3: TPanel
         Tag = 1
         Left = 0
-        Height = 295
+        Height = 265
         Top = 0
-        Width = 180
+        Width = 184
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -107,9 +107,9 @@ object f_main: Tf_main
       object PanelRight4: TPanel
         Tag = 1
         Left = 0
-        Height = 295
+        Height = 265
         Top = 0
-        Width = 180
+        Width = 184
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -138,15 +138,16 @@ object f_main: Tf_main
     object PanelLeft: TPanel
       Tag = 1
       Left = 0
-      Height = 294
-      Top = 1
-      Width = 1
+      Height = 292
+      Top = 2
+      Width = 2
       Align = alLeft
       AutoSize = True
       ChildSizing.TopBottomSpacing = 3
       ChildSizing.VerticalSpacing = 3
       ChildSizing.Layout = cclTopToBottomThenLeftToRight
       ChildSizing.ControlsPerLine = 99
+      Constraints.MinWidth = 2
       ParentColor = False
       ParentFont = False
       TabOrder = 0
@@ -155,7 +156,7 @@ object f_main: Tf_main
     end
     object PanelTop: TPanel
       Left = 0
-      Height = 1
+      Height = 2
       Top = 0
       Width = 612
       Align = alTop
@@ -164,6 +165,7 @@ object f_main: Tf_main
       ChildSizing.HorizontalSpacing = 3
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 99
+      Constraints.MinHeight = 2
       ParentColor = False
       ParentFont = False
       TabOrder = 1
@@ -171,23 +173,23 @@ object f_main: Tf_main
       OnDragOver = PanelDragOver
     end
     object PanelCenter: TPanel
-      Left = 1
-      Height = 294
-      Top = 1
-      Width = 611
+      Left = 2
+      Height = 292
+      Top = 2
+      Width = 610
       Align = alClient
       AutoSize = True
-      ClientHeight = 294
-      ClientWidth = 611
+      ClientHeight = 292
+      ClientWidth = 610
       Color = 4197901
       ParentColor = False
       TabOrder = 2
       object Image1: TImage
         Cursor = crCross
         Left = 1
-        Height = 292
+        Height = 290
         Top = 1
-        Width = 609
+        Width = 608
         Align = alClient
         OnDblClick = Image1DblClick
         OnMouseDown = Image1MouseDown
@@ -200,8 +202,8 @@ object f_main: Tf_main
     end
     object PanelBottom: TPanel
       Left = 0
-      Height = 1
-      Top = 295
+      Height = 2
+      Top = 294
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -209,6 +211,7 @@ object f_main: Tf_main
       ChildSizing.HorizontalSpacing = 3
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 99
+      Constraints.MinHeight = 2
       ParentColor = False
       ParentFont = False
       TabOrder = 3
