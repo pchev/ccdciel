@@ -215,15 +215,17 @@ begin
     then begin
        FStatus := devConnected;
        UseMainSensor:=(Findisensor<>'CCD2');
-      if (not Fready) and Assigned(FonStatusChange) then FonStatusChange(self);
-      Fready:=true;
-      if FAutoloadConfig then begin
-        LoadConfig;
-      end;
-      if (WheelSlot<>nil) and (FilterName<>nil) then begin
-        FWheelStatus:=devConnected;
-        if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-      end;
+       if (not Fready) then begin
+         if Assigned(FonStatusChange) then FonStatusChange(self);
+         Fready:=true;
+         if FAutoloadConfig then begin
+           LoadConfig;
+         end;
+         if (WheelSlot<>nil) and (FilterName<>nil) then begin
+           FWheelStatus:=devConnected;
+           if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
+         end;
+       end;
     end;
 end;
 

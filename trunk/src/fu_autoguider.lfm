@@ -1,18 +1,16 @@
 object f_autoguider: Tf_autoguider
   Left = 0
-  Height = 111
+  Height = 100
   Top = 0
-  Width = 153
-  ClientHeight = 111
-  ClientWidth = 153
+  Width = 147
+  ClientHeight = 100
+  ClientWidth = 147
   TabOrder = 0
-  DesignLeft = 422
-  DesignTop = 502
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 153
+    Width = 147
     Align = alTop
     Alignment = taCenter
     Caption = 'Autoguider'
@@ -25,14 +23,14 @@ object f_autoguider: Tf_autoguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 91
+    Height = 80
     Top = 20
-    Width = 153
+    Width = 147
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 91
-    ClientWidth = 153
+    ClientHeight = 80
+    ClientWidth = 147
     TabOrder = 1
     object Panel2: TPanel
       Left = 0

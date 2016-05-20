@@ -39,6 +39,8 @@ type
     FY: TEdit;
     FWidth: TEdit;
     FHeight: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
     Panel1: TPanel;
     StaticText1: TStaticText;
     procedure BtnResetClick(Sender: TObject);
