@@ -406,16 +406,15 @@ begin
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
     exp:=config.GetValue('/PrecSlew/Exposure',15.0);
     bin:=config.GetValue('/PrecSlew/Binning',1);
-    maxerr:=5*prec;
-    astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry);
+    result:=astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry);
   end
   else begin
     maxerr:=5/60;
     Mount.Slew(ra, de);
+    err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
+    result:=(err<maxerr);
   end;
   if not FRunning then exit;
-  err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
-  result:=(err<maxerr);
   if (not result)and(not Unattended) then begin
     if MessageDlg('Telescope slew','After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?',mtConfirmation,mbYesNo,0)=mrYes then begin
        result:=Slew(ra,de,precision);
