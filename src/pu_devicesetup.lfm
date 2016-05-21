@@ -4,7 +4,7 @@ object f_setup: Tf_setup
   Top = 125
   Width = 352
   ActiveControl = Button1
-  Caption = 'f_setup'
+  Caption = 'Devices setup'
   ClientHeight = 301
   ClientWidth = 352
   OnCreate = FormCreate
