@@ -397,7 +397,7 @@ begin
        0: begin
              msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
              mount.Sync(cra,cde);
-             Wait(1);
+             Wait(2);
              msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
              Mount.Slew(ra, de);
           end;

@@ -273,21 +273,23 @@ begin
        NextTarget;
        exit;
      end;
-     if not initok then begin
+     if initok then begin
+       StartPlan;
+       TargetTimer.Enabled:=true;
+     end
+     else begin
        msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
        if FUnattended then begin
          NextTarget;
          exit;
        end else begin
-         if MessageDlg('Initialisation failed','Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
+         if MessageDlg('Target failed','Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
             Dec(FCurrentTarget);
          end;
          NextTarget;
          exit;
        end;
      end;
-     StartPlan;
-     TargetTimer.Enabled:=true;
   end
   else begin
      FRunning:=false;
