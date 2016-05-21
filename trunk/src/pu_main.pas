@@ -34,7 +34,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   pu_planetariuminfo,
-  lazutf8sysutils, Classes, dynlibs,
+  lazutf8sysutils, Classes, dynlibs, LCLType,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -112,6 +112,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
@@ -857,6 +858,18 @@ begin
   config.Free;
   Filters.Free;
   if NeedRestart then ExecNoWait(paramstr(0));
+end;
+
+procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+  );
+begin
+  case Key of
+    VK_F1 : PageControlRight.ActivePageIndex:=0;
+    VK_F2 : PageControlRight.ActivePageIndex:=1;
+    VK_F3 : PageControlRight.ActivePageIndex:=2;
+    VK_F4 : PageControlRight.ActivePageIndex:=3;
+
+  end;
 end;
 
 procedure Tf_main.Image1DblClick(Sender: TObject);
