@@ -197,6 +197,7 @@ begin
     Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.BtnSetFilter.Click;
     Wait;
+    if not FRunning then exit;
     StepTimeStart:=now;
     msg('Start step '+p.description_str);
     ShowDelayMsg('');
