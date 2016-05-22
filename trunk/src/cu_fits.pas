@@ -513,7 +513,10 @@ b_ViewHeaders.Default:=true;
 b_ViewHeaders.OnClick:=ViewHeadersBtnClose;
 m_ViewHeaders.Lines:=FHeader.Rows;
 FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
-f_ViewHeaders.Caption:=SysToUTF8(FTitle);
+if trim(FTitle)='' then
+   f_ViewHeaders.Caption:='FITS header'
+else
+   f_ViewHeaders.Caption:=SysToUTF8(FTitle);
 f_ViewHeaders.Show;
 end;
 
