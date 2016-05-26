@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
-  pu_planetariuminfo,
+  pu_planetariuminfo, indiapi,
   lazutf8sysutils, Classes, dynlibs, LCLType,
   SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi,
   lazutf8sysutils, Classes, SysUtils;
 
 type
