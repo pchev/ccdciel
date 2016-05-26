@@ -31,7 +31,6 @@ uses u_ccdconfig, dynlibs,
 type
   TNotifyMsg = procedure(msg:string) of object;
   TNotifyNum = procedure(d: double) of object;
-  TDeviceStatus = (devDisconnected, devConnecting, devConnected);
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);

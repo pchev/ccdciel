@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils,
+uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi,
   fu_capture, fu_preview, fu_filterwheel,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   cu_targets, cu_plan,

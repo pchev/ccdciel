@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils,
+uses u_global, cu_plan, u_utils, indiapi,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   Controls, Dialogs, ExtCtrls,Classes, SysUtils;
 
