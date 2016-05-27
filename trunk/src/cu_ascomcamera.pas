@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_camera, u_global, cu_fits, lazutf8sysutils,
+uses  cu_camera, u_global, cu_fits, lazutf8sysutils, indiapi,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
