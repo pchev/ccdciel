@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_focuser, u_global,
+uses cu_focuser, u_global, indiapi,
     {$ifdef mswindows}
     Variants, comobj,
     {$endif}
