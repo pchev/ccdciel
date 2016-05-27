@@ -211,7 +211,8 @@ begin
   then
      focal_length:=Fmount.FocaleLength
   else
-     focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
+     focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+  if (focal_length<1) and Assigned(FonMsg) then FonMsg('Error: Unknow telescope focal length');
 
   // write new header
   Ffits.Header.ClearHeader;

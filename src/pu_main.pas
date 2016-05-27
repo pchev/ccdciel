@@ -1879,7 +1879,7 @@ begin
    if f_option.PixelSizeFromCamera.Checked and (camera.PixelSizeX>0) then
       f_option.PixelSize.Text:=FormatFloat(f2,camera.PixelSizeX);
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
-   if f_option.FocaleFromTelescope.Checked and (mount.FocaleLength>0) then
+   if f_option.FocaleFromTelescope.Checked then
       f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
    f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
    f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',5.0));
