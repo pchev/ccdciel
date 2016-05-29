@@ -36,6 +36,8 @@ type
   Tf_option = class(TForm)
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
+    AstrometryTimeout: TEdit;
+    Label33: TLabel;
     SlewPrec: TEdit;
     SlewRetry: TEdit;
     SlewExp: TEdit;
