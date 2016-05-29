@@ -45,6 +45,7 @@ TAstrometry = class(TComponent)
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
     WaitExposure: boolean;
+    AstrometryTimeout: double;
     TimerAstrometryDone, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
     procedure AstrometryDoneonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
@@ -52,7 +53,7 @@ TAstrometry = class(TComponent)
     procedure msg(txt:string);
     procedure ControlExposure(exp:double; binx,biny: integer);
     procedure EndExposure(Sender: TObject);
-    function WaitBusy(Timeout:integer=60): boolean;
+    function WaitBusy(Timeout:double=60): boolean;
     procedure AstrometryDone(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
     procedure AstrometrySlewScreenXY(Sender: TObject);
@@ -83,6 +84,7 @@ begin
   Inherited create(nil);
   FBusy:=false;
   FLastResult:=false;
+  AstrometryTimeout:=60;
   TimerAstrometryDone:=TTimer.Create(self);
   TimerAstrometrySync:=TTimer.Create(self);
   TimerAstrometrySlewScreenXY:=TTimer.Create(self);
@@ -102,7 +104,7 @@ begin
  if assigned(FonShowMessage) then FonShowMessage(txt);
 end;
 
-function TAstrometry.WaitBusy(Timeout:integer=60): boolean;
+function TAstrometry.WaitBusy(Timeout:double=60): boolean;
 var endt: TDateTime;
 begin
   endt:=now+Timeout/secperday;
@@ -151,6 +153,7 @@ begin
    engine.OutFile:=outfile;
    tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
    MinRadius:=config.GetValue('/Astrometry/MinRadius',5.0);
+   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
    if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
    then
       pixsize:=camera.PixelSizeX * camera.BinX
@@ -173,6 +176,7 @@ begin
    engine.ra:=ra;
    engine.de:=de;
    engine.radius:=max(MinRadius,pixscale*iwidth/3600);
+   engine.timeout:=AstrometryTimeout;
    FBusy:=true;
    engine.Resolve;
    msg('Resolving using '+ResolverName[engine.Resolver]+' ...');
@@ -240,7 +244,7 @@ begin
    end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync);
-    if wait then WaitBusy;
+    if wait then WaitBusy(AstrometryTimeout+30);
    end;
   end;
 end;
@@ -285,7 +289,7 @@ begin
    end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewScreenXY);
-    if wait then WaitBusy;
+    if wait then WaitBusy(AstrometryTimeout+30);
    end;
   end;
 end;
@@ -374,7 +378,7 @@ begin
     msg('Resolve control exposure');
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
-    WaitBusy;
+    WaitBusy(AstrometryTimeout+30);
     if not LastResult then break;
     fn:=slash(TmpDir)+'ccdcielsolved.fits';
     n:=cdcwcs_initfitsfile(pchar(fn),0);

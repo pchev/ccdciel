@@ -1883,6 +1883,7 @@ begin
       f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
    f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
    f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',5.0));
+   f_option.AstrometryTimeout.Text:=FormatFloat(f0,config.GetValue('/Astrometry/Timeout',60.0));
    f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
    f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
    f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
@@ -1936,6 +1937,7 @@ begin
      config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
      config.SetValue('/Astrometry/ScaleTolerance',StrToFloatDef(f_option.Tolerance.Text,0.1 ));
      config.SetValue('/Astrometry/MinRadius',StrToFloatDef(f_option.MinRadius.Text,5.0));
+     config.SetValue('/Astrometry/Timeout',StrToFloatDef(f_option.AstrometryTimeout.Text,60.0));
      config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
      config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
      config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);

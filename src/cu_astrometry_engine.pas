@@ -35,7 +35,7 @@ type
 TAstrometry_engine = class(TThread)
    private
      FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath : string;
-     Fscalelow,Fscalehigh,Fra,Fde,Fradius: double;
+     Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout: double;
      FObjs,FDown,FResolver: integer;
      Fplot: boolean;
      Fresult:integer;
@@ -61,6 +61,7 @@ TAstrometry_engine = class(TThread)
      property ra: double read Fra write Fra;
      property de: double read Fde write Fde;
      property radius: double read Fradius write Fradius;
+     property timeout: double read FTimeout write FTimeout;
      property objs: integer read FObjs write FObjs;
      property downsample: integer read FDown write FDown;
      property plot: boolean read Fplot write Fplot;
@@ -210,7 +211,7 @@ var n: LongInt;
     ft,fl: TextFile;
     fn,imgdir,txt: string;
     i,nside,available: integer;
-    timeout: double;
+    endtime: double;
 begin
 if FResolver=ResolverAstrometryNet then begin
   cbuf:='';
@@ -229,7 +230,7 @@ if FResolver=ResolverAstrometryNet then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   process.Options:=[poUsePipes,poStderrToOutPut];
-  timeout:=now+30/secperday;
+  endtime:=now+FTimeout/secperday;
   try
   process.Execute;
   while process.Running do begin
@@ -241,7 +242,7 @@ if FResolver=ResolverAstrometryNet then begin
         if n>=0 then BlockWrite(f,cbuf,n);
       end;
     end;
-    if now>timeout then begin
+    if now>endtime then begin
        Stop;
        if logok then begin
          buf:='Timeout!';
@@ -284,10 +285,10 @@ else if FResolver=ResolverElbrus then begin
   write(ft,'**EXE analyze'+crlf);
   write(ft,'space'+crlf);
   CloseFile(ft);
-  timeout:=now+10/secperday;
+  endtime:=now+FTimeout/secperday;
   repeat
     sleep(500);
-  until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>timeout);
+  until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>endtime);
   sleep(1000);
   if (FLogFile<>'') then begin
     if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then begin
