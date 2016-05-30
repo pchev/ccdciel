@@ -37,7 +37,10 @@ type
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
     AstrometryTimeout: TEdit;
+    CygwinPath: TEdit;
     Label33: TLabel;
+    CygwinPanel: TPanel;
+    Label34: TLabel;
     SlewPrec: TEdit;
     SlewRetry: TEdit;
     SlewExp: TEdit;
@@ -173,6 +176,7 @@ implementation
 procedure Tf_option.FormCreate(Sender: TObject);
 begin
   {$ifdef mswindows}
+    CygwinPanel.Visible:=true;
     ElbrusUnixpath.Visible:=false;
     Label13.Visible:=false;
   {$endif}

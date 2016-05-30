@@ -34,7 +34,7 @@ uses  u_global, u_utils,
 type
 TAstrometry_engine = class(TThread)
    private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath : string;
+     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath : string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout: double;
      FObjs,FDown,FResolver: integer;
      Fplot: boolean;
@@ -69,6 +69,7 @@ TAstrometry_engine = class(TThread)
      property result: integer read Fresult;
      property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
+     property CygwinPath: string read FCygwinPath write FCygwinPath;
      property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
      property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
      property onCmdTerminate: TNotifyEvent read FCmdTerminate write FCmdTerminate;
@@ -144,9 +145,55 @@ end;
 
 procedure TAstrometry_engine.Resolve;
 var str: TStringList;
+    buf: string;
     i: integer;
 begin
 if FResolver=ResolverAstrometryNet then begin
+  {$ifdef mswindows}
+  Fcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
+  Fparam.Add('--login');
+  Fparam.Add('-c');
+  buf:='"';
+  buf:=buf+' solve-field ';
+  buf:=buf+' --overwrite ';
+  if (Fscalelow>0)and(Fscalehigh>0) then begin
+    buf:=buf+'--scale-low ';
+    buf:=buf+FloatToStr(Fscalelow);
+    buf:=buf+' --scale-high ';
+    buf:=buf+FloatToStr(Fscalehigh);
+    buf:=buf+' --scale-units ';
+    buf:=buf+' arcsecperpix ';
+  end;
+  if (Fra<>NullCoord)and(Fde<>NullCoord)and(Fradius<>NullCoord) then begin
+    buf:=buf+' --ra ';
+    buf:=buf+FloatToStr(Fra);
+    buf:=buf+' --dec ';
+    buf:=buf+FloatToStr(Fde);
+    buf:=buf+' --radius ';
+    buf:=buf+FloatToStr(Fradius);
+  end;
+  if FObjs>0 then begin
+    buf:=buf+' --objs ';
+    buf:=buf+inttostr(FObjs);
+  end;
+  if FDown>1 then begin
+    buf:=buf+' --downsample ';
+    buf:=buf+inttostr(FDown);
+  end;
+  if not Fplot then begin
+     buf:=buf+' --no-plots ';
+  end;
+  if FOtherOptions<>'' then begin
+    str:=TStringList.Create;
+    SplitRec(FOtherOptions,' ',str);
+    for i:=0 to str.Count-1 do buf:=buf+blank+str[i];
+    str.Free;
+  end;
+  buf:=buf+' --new-fits ';
+  buf:=buf+StringReplace(FOutFile,'\','/',[rfReplaceAll])+blank;
+  buf:=buf+StringReplace(FInFile,'\','/',[rfReplaceAll])+blank;
+  Fparam.Add(buf+'"');
+  {$else}
   Fcmd:='solve-field';
   Fparam.Add('--overwrite');
   if (Fscalelow>0)and(Fscalehigh>0) then begin
@@ -185,6 +232,7 @@ if FResolver=ResolverAstrometryNet then begin
   Fparam.Add('--new-fits');
   Fparam.Add(FOutFile);
   Fparam.Add(FInFile);
+  {$endif}
   Start;
 end
 else if FResolver=ResolverElbrus then begin
@@ -230,6 +278,9 @@ if FResolver=ResolverAstrometryNet then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   process.Options:=[poUsePipes,poStderrToOutPut];
+  {$ifdef mswindows}
+  process.ShowWindow:=swoHIDE;
+  {$endif}
   endtime:=now+FTimeout/secperday;
   try
   process.Execute;
