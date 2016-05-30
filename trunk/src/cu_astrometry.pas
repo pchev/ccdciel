@@ -146,6 +146,7 @@ begin
    engine.onCmdTerminate:=@AstrometryDone;
    engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    FResolverName:=ResolverName[engine.Resolver];
+   engine.CygwinPath:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    engine.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
    engine.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
    engine.LogFile:=logfile;
