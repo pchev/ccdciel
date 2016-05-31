@@ -26,8 +26,10 @@ object f_main: Tf_main
     ActivePage = TabSheet1
     Align = alRight
     Images = ImageList1
+    MultiLine = True
     TabIndex = 0
     TabOrder = 0
+    Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       ClientHeight = 266
       ClientWidth = 186
