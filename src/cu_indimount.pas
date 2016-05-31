@@ -34,6 +34,7 @@ T_indimount = class(T_mount)
  private
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
+   ConnectTimer: TTimer;
    MountDevice: Basedevice;
    Mountport: ITextVectorProperty;
    coord_prop: INumberVectorProperty;
@@ -51,6 +52,7 @@ T_indimount = class(T_mount)
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
+   procedure ConnectTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -117,14 +119,20 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
+ ConnectTimer:=TTimer.Create(nil);
+ ConnectTimer.Enabled:=false;
+ ConnectTimer.Interval:=3000;
+ ConnectTimer.OnTimer:=@ConnectTimerTimer;
  CreateIndiClient;
 end;
 
 destructor  T_indimount.Destroy;
 begin
  InitTimer.Enabled:=false;
+ ConnectTimer.Enabled:=false;
  indiclient.Free;
  FreeAndNil(InitTimer);
+ FreeAndNil(ConnectTimer);
  inherited Destroy;
 end;
 
@@ -203,11 +211,17 @@ end;
 
 procedure T_indimount.ServerConnected(Sender: TObject);
 begin
-   if (Mountport<>nil)and(Findideviceport<>'') then begin
-      Mountport.tp[0].text:=Findideviceport;
-      indiclient.sendNewText(Mountport);
-   end;
-   indiclient.connectDevice(Findidevice);
+   ConnectTimer.Enabled:=True;
+end;
+
+procedure T_indimount.ConnectTimerTimer(Sender: TObject);
+begin
+ ConnectTimer.Enabled:=False;
+  if (Mountport<>nil)and(Findideviceport<>'') then begin
+     Mountport.tp[0].text:=Findideviceport;
+     indiclient.sendNewText(Mountport);
+  end;
+ indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indimount.ServerDisconnected(Sender: TObject);
