@@ -34,6 +34,7 @@ T_indicamera = class(T_camera)
 private
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
+   ConnectTimer: TTimer;
    CCDDevice: Basedevice;
    CCDport: ITextVectorProperty;
    CCDexpose: INumberVectorProperty;
@@ -74,6 +75,7 @@ private
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
+   procedure ConnectTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -162,14 +164,20 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
+ ConnectTimer:=TTimer.Create(nil);
+ ConnectTimer.Enabled:=false;
+ ConnectTimer.Interval:=3000;
+ ConnectTimer.OnTimer:=@ConnectTimerTimer;
  CreateIndiClient;
 end;
 
 destructor  T_indicamera.Destroy;
 begin
  InitTimer.Enabled:=false;
+ ConnectTimer.Enabled:=false;
  indiclient.Free;
  FreeAndNil(InitTimer);
+ FreeAndNil(ConnectTimer);
  inherited Destroy;
 end;
 
@@ -277,15 +285,21 @@ end;
 
 procedure T_indicamera.ServerConnected(Sender: TObject);
 begin
-   if (CCDport<>nil)and(Findideviceport<>'') then begin
-      CCDport.tp[0].text:=Findideviceport;
-      indiclient.sendNewText(CCDport);
-   end;
-   indiclient.connectDevice(Findidevice);
-   if (Findisensor='CCD1')or(Findisensor='CCD2') then
-       indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
-   else
-       indiclient.setBLOBMode(B_ALSO,Findidevice);
+   ConnectTimer.Enabled:=True;
+end;
+
+procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
+begin
+ ConnectTimer.Enabled:=False;
+ if (CCDport<>nil)and(Findideviceport<>'') then begin
+     CCDport.tp[0].text:=Findideviceport;
+     indiclient.sendNewText(CCDport);
+ end;
+ indiclient.connectDevice(Findidevice);
+ if (Findisensor='CCD1')or(Findisensor='CCD2') then
+     indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
+ else
+     indiclient.setBLOBMode(B_ALSO,Findidevice);
 end;
 
 procedure T_indicamera.ServerDisconnected(Sender: TObject);

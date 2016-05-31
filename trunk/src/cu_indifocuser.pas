@@ -34,6 +34,7 @@ T_indifocuser = class(T_focuser)
  private
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
+   ConnectTimer: TTimer;
    FocuserDevice: Basedevice;
    Focuserport: ITextVectorProperty;
    FocusMotion: ISwitchVectorProperty;
@@ -51,6 +52,7 @@ T_indifocuser = class(T_focuser)
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
+   procedure ConnectTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -124,14 +126,20 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
+ ConnectTimer:=TTimer.Create(nil);
+ ConnectTimer.Enabled:=false;
+ ConnectTimer.Interval:=3000;
+ ConnectTimer.OnTimer:=@ConnectTimerTimer;
  CreateIndiClient;
 end;
 
 destructor  T_indifocuser.Destroy;
 begin
  InitTimer.Enabled:=false;
+ ConnectTimer.Enabled:=false;
  indiclient.Free;
  FreeAndNil(InitTimer);
+ FreeAndNil(ConnectTimer);
  inherited Destroy;
 end;
 
@@ -217,11 +225,17 @@ end;
 
 procedure T_indifocuser.ServerConnected(Sender: TObject);
 begin
-   if (Focuserport<>nil)and(Findideviceport<>'') then begin
-      Focuserport.tp[0].text:=Findideviceport;
-      indiclient.sendNewText(Focuserport);
-   end;
-   indiclient.connectDevice(Findidevice);
+   ConnectTimer.Enabled:=True;
+end;
+
+procedure T_indifocuser.ConnectTimerTimer(Sender: TObject);
+begin
+ ConnectTimer.Enabled:=False;
+  if (Focuserport<>nil)and(Findideviceport<>'') then begin
+     Focuserport.tp[0].text:=Findideviceport;
+     indiclient.sendNewText(Focuserport);
+  end;
+ indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indifocuser.ServerDisconnected(Sender: TObject);

@@ -34,6 +34,7 @@ T_indiwheel = class(T_wheel)
  private
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
+   ConnectTimer: TTimer;
    WheelDevice: Basedevice;
    Wheelport: ITextVectorProperty;
    WheelSlot: INumberVectorProperty;
@@ -45,6 +46,7 @@ T_indiwheel = class(T_wheel)
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
+   procedure ConnectTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -105,14 +107,20 @@ begin
  InitTimer.Enabled:=false;
  InitTimer.Interval:=10000;
  InitTimer.OnTimer:=@InitTimerTimer;
+ ConnectTimer:=TTimer.Create(nil);
+ ConnectTimer.Enabled:=false;
+ ConnectTimer.Interval:=3000;
+ ConnectTimer.OnTimer:=@ConnectTimerTimer;
  CreateIndiClient;
 end;
 
 destructor  T_indiwheel.Destroy;
 begin
  InitTimer.Enabled:=false;
+ ConnectTimer.Enabled:=false;
  indiclient.Free;
  FreeAndNil(InitTimer);
+ FreeAndNil(ConnectTimer);
  inherited Destroy;
 end;
 
@@ -190,11 +198,17 @@ end;
 
 procedure T_indiwheel.ServerConnected(Sender: TObject);
 begin
-   if (Wheelport<>nil)and(Findideviceport<>'') then begin
-      Wheelport.tp[0].text:=Findideviceport;
-      indiclient.sendNewText(Wheelport);
-   end;
-   indiclient.connectDevice(Findidevice);
+   ConnectTimer.Enabled:=True;
+end;
+
+procedure T_indiwheel.ConnectTimerTimer(Sender: TObject);
+begin
+ ConnectTimer.Enabled:=False;
+  if (Wheelport<>nil)and(Findideviceport<>'') then begin
+     Wheelport.tp[0].text:=Findideviceport;
+     indiclient.sendNewText(Wheelport);
+  end;
+ indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indiwheel.ServerDisconnected(Sender: TObject);
