@@ -178,7 +178,7 @@ if FRecvData<>'' then begin
     Fde:=StrToDE(p[3]);
   end;
   if (p.Count>=6)and(p[0]='>') then begin
-    Fobjname:=p[5];
+    Fobjname:=StringReplace(p[5],' ','',[rfReplaceAll]);
   end;
   p.free;
 end;
