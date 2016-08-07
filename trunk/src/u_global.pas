@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_ccdconfig, dynlibs,
+uses u_ccdconfig, dynlibs, LMessages,
   Classes, SysUtils;
 
 type
@@ -42,18 +42,23 @@ type
                min,max,step: double;
               end;
 
+  TScriptDir = Class(TObject)
+               public
+                 path: string;
+               end;
+
   TStep   = Class(TObject)
               public
-              exposure, delay, previewexposure: double;
+              exposure, delay : double;
               count, repeatcount: integer;
-              preview: boolean;
+              dither: boolean;
+              dithercount: integer;
               filter: integer;
               binx,biny: integer;
               frtype: TFrameType;
               description: string;
               constructor Create;
               function exposure_str: string;
-              function previewexposure_str: string;
               function delay_str: string;
               function count_str: string;
               function repeatcount_str: string;
@@ -61,11 +66,12 @@ type
               function binning_str: string;
               function frtype_str: string;
               function description_str: string;
+              function dithercount_str: string;
             end;
 
   TTarget = Class(TObject)
               public
-              objectname, planname: string;
+              objectname, planname, path: string;
               starttime,endtime,ra,de: double;
               repeatcount: integer;
               preview,astrometrypointing: boolean;
@@ -129,8 +135,10 @@ const
   CR = #$0d;
   LF = #$0a;
   CRLF = CR + LF;
+  tab = #09;
   secperday = 3600*24;
   pi2 = 2 * pi;
+  pid2 = pi / 2;
   rad2deg=180/pi;
   deg2rad=pi/180;
   jd2000 = 2451545.0;
@@ -149,24 +157,44 @@ const
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
   ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
+  LM_CCDCIEL=LM_USER + 1;
+  M_AutoguiderStatusChange=1000;
+  M_AutoguiderMessage=1001;
+  M_AstrometryDone=1100;
+  MaxCmdArg = 10;
+  MaxScriptDir=2;
+  msgOK = 'OK!';
+  msgFailed = 'Failed!';
+  ldeg = 'd';
+  lmin = 'm';
+  lsec = 's';
   {$ifdef linux}
+    SharedDir = '../share/ccdciel';
     defCapturePath='/tmp';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
   {$endif}
   {$ifdef darwin}
+    SharedDir = './';
     defCapturePath='/tmp';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
   {$endif}
   {$ifdef mswindows}
+    SharedDir = '.\';
     defCapturePath='C:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
   {$endif}
+  {$ifdef darwin}
+    OpenFileCMD: string = 'open';
+  {$else}
+    OpenFileCMD: string = 'xdg-open';   // default FreeDesktop.org
+  {$endif}
 
 var
-  ConfigDir,LogDir,TmpDir: UTF8String;
+  Appdir,ConfigDir,LogDir,TmpDir: UTF8String;
+  ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   Filters: TStringList;
   compile_time, compile_version, compile_system, lclver: string;
@@ -177,6 +205,8 @@ var
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0: double;
   ImgZoom: double;
+  MsgHandle: THandle;
+  ObsLongitude, ObsLatitude, ObsTimeZone: double;
 
 implementation
 
@@ -188,6 +218,7 @@ begin
   plan:=nil;
   objectname:='None';
   planname:='';
+  path:='';
   starttime:=0.0;
   endtime:=23.99999;
   ra:=NullCoord;
@@ -200,7 +231,10 @@ end;
 
 destructor TTarget.Destroy;
 begin
-  if plan<>nil then FreeAndNil(plan);
+  try
+  if (plan<>nil) then FreeAndNil(plan);
+  except
+  end;
   Inherited Destroy;
 end;
 
@@ -208,7 +242,8 @@ procedure TTarget.Assign(Source: TTarget);
 begin
   objectname:=Source.objectname;
   planname:=Source.planname;
-  plan.free;
+  path:=Source.path;
+  if plan<>nil then FreeAndNil(plan);
   plan:=Source.plan;
   starttime:=Source.starttime;
   endtime:=Source.endtime;
@@ -242,25 +277,20 @@ constructor TStep.Create;
 begin
   exposure:=1;
   delay:=1;
-  previewexposure:=1;
   count:=1;
   repeatcount:=1;
-  preview:=false;
   filter:=0;
   binx:=1;
   biny:=1;
   frtype:=LIGHT;
+  dither:=false;
+  dithercount:=1;
   description:='Step description';
 end;
 
 function TStep.exposure_str: string;
 begin
  Result:=FloatToStr(exposure);
-end;
-
-function TStep.previewexposure_str: string;
-begin
- Result:=FloatToStr(previewexposure);
 end;
 
 function TStep.delay_str: string;
@@ -276,6 +306,11 @@ end;
 function TStep.repeatcount_str: string;
 begin
   Result:=IntToStr(repeatcount);
+end;
+
+function TStep.dithercount_str: string;
+begin
+  Result:=IntToStr(dithercount);
 end;
 
 function TStep.filter_str: string;

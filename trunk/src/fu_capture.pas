@@ -35,6 +35,7 @@ type
   Tf_capture = class(TFrame)
     Binning: TComboBox;
     BtnStart: TButton;
+    CheckBoxDither: TCheckBox;
     FrameType: TComboBox;
     ExpTime: TComboBox;
     Label1: TLabel;
@@ -48,8 +49,10 @@ type
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
+    Panel7: TPanel;
     SeqNum: TEdit;
     Fname: TEdit;
+    DitherCount: TEdit;
     StaticText1: TStaticText;
     procedure BtnStartClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -57,6 +60,7 @@ type
   private
     { private declarations }
     FSeqCount: integer;
+    FDitherNum: integer;
     Frunning: boolean;
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
@@ -68,6 +72,7 @@ type
     procedure Stop;
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
+    property DitherNum: Integer read FDitherNum write FDitherNum;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -95,6 +100,7 @@ begin
   Frunning:=not Frunning;
   if Frunning then begin
     FSeqCount:=1;
+    FDitherNum:=0;
     if Assigned(FonStartExposure) then FonStartExposure(self);
   end;
   if (not Frunning) and Assigned(FonAbortExposure) then FonAbortExposure(self);

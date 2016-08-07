@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, u_ccdconfig, XMLConf,
-  Classes, SysUtils, FileUtil, Forms,
+  LazFileUtils, Classes, SysUtils, Forms,
   Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls;
 
 type
@@ -37,19 +37,17 @@ type
     BtnClose: TButton;
     BtnAddStep: TButton;
     BtnDeleteStep: TButton;
+    CheckBoxDither: TCheckBox;
     CheckBoxRepeat: TCheckBox;
-    Label14: TLabel;
+    DitherCount: TEdit;
     Panel6: TPanel;
     Panel7: TPanel;
     PanelRepeat: TPanel;
-    Preview: TCheckBox;
     Desc: TEdit;
-    PreviewExposure: TEdit;
     Label10: TLabel;
     Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
-    Label9: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
@@ -144,11 +142,11 @@ begin
   if j<0 then j:=0;
   p.filter:=j;
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
-  p.previewexposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',1.0);
-  p.preview:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Preview',false);
   p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
   p.repeatcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1));
   p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
+  p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
+  p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
 end;
 
 procedure Tf_EditPlan.FormShow(Sender: TObject);
@@ -240,10 +238,10 @@ begin
   Count.Text:=p.count_str;
   RepeatCount.Text:=p.repeatcount_str;
   Delay.Text:=p.delay_str;
-  PreviewExposure.Text:=p.previewexposure_str;
-  Preview.Checked:=p.preview;
   CheckBoxRepeat.Checked:=(p.repeatcount>1);
   PanelRepeat.Visible:=CheckBoxRepeat.Checked;
+  CheckBoxDither.Checked:=p.dither;
+  DitherCount.Text:=p.dithercount_str;
   LockStep:=false;
 end;
 
@@ -274,8 +272,8 @@ begin
   p.count:=StrToIntDef(Count.Text,1);
   p.repeatcount:=StrToIntDef(RepeatCount.Text,1);
   p.delay:=StrToFloatDef(Delay.Text,1);
-  p.previewexposure:=1;//StrToFloatDef(PreviewExposure.Text,1);
-  p.preview:=false; //Preview.Checked;
+  p.dither:=CheckBoxDither.Checked;
+  p.dithercount:=StrToIntDef(DitherCount.Text,1);
   StepList.Cells[1,n]:=p.description;
 end;
 
@@ -369,10 +367,10 @@ begin
     end;
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Filter',str);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',p.count);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Dither',p.dither);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/DitherCount',p.dithercount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',p.repeatcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/PreviewExposure',p.previewexposure);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Preview',p.preview);
   end;
   pfile.Flush;
   pfile.Free;

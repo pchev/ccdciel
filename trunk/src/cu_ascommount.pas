@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_mount, u_global, indiapi,
+uses  cu_mount, u_global,
   {$ifdef mswindows}
-    Variants, comobj,
+    indiapi, Variants, comobj,
   {$endif}
   ExtCtrls, Classes, SysUtils;
 
@@ -36,14 +36,16 @@ T_ascommount = class(T_mount)
  private
    {$ifdef mswindows}
    V: variant;
-   {$endif}
    Fdevice: string;
    stRA,stDE: double;
+   {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
  protected
+   procedure SetPark(value:Boolean); override;
+   function  GetPark:Boolean; override;
    function  GetRA:double; override;
    function  GetDec:double; override;
    function  GetEquinox: double; override;
@@ -51,21 +53,22 @@ T_ascommount = class(T_mount)
    function  GetFocaleLength:double; override;
    procedure SetTimeout(num:integer); override;
 public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    procedure Disconnect; override;
-   procedure Slew(sra,sde: double); override;
-   procedure Sync(sra,sde: double); override;
+   function Slew(sra,sde: double):boolean; override;
+   function Sync(sra,sde: double):boolean; override;
+   function Track:boolean; override;
    procedure AbortMotion; override;
 end;
 
 
 implementation
 
-constructor T_ascommount.Create;
+constructor T_ascommount.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FMountInterface:=ASCOM;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
@@ -153,8 +156,37 @@ begin
  {$endif}
 end;
 
+procedure T_ascommount.SetPark(value:Boolean);
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   V.Park:=value;
+   except
+    on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
+
+function  T_ascommount.GetPark:Boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result:=V.Park;
+   except
+    result:=false;
+   end;
+ end
+ else result:=false;
+ {$endif}
+end;
+
 function  T_ascommount.GetRA:double;
 begin
+ result:=NullCoord;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -169,6 +201,7 @@ end;
 
 function  T_ascommount.GetDec:double;
 begin
+ result:=NullCoord;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -186,6 +219,7 @@ function  T_ascommount.GetEquinox: double;
 var i: Integer;
 {$endif}
 begin
+ result:=0;
 {$ifdef mswindows}
 if Connected then begin
   try
@@ -207,6 +241,7 @@ end;
 
 function  T_ascommount.GetAperture:double;
 begin
+ result:=-1;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -221,6 +256,7 @@ end;
 
 function  T_ascommount.GetFocaleLength:double;
 begin
+ result:=-1;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -238,15 +274,20 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-procedure T_ascommount.Slew(sra,sde: double);
+function T_ascommount.Slew(sra,sde: double):boolean;
 begin
+ result:=false;
  {$ifdef mswindows}
+ result:=false;
  if Connected and V.CanSlew then begin
    try
    if not V.tracking then begin
       V.tracking:=true;
    end;
+   FMountSlewing:=true;
    V.SlewToCoordinates(sra,sde);
+   FMountSlewing:=false;
+   result:=true;
    except
      on E: EOleException do msg('Error: ' + E.Message);
    end;
@@ -254,15 +295,36 @@ begin
  {$endif}
 end;
 
-procedure T_ascommount.Sync(sra,sde: double);
+function T_ascommount.Sync(sra,sde: double):boolean;
 begin
+ result:=false;
  {$ifdef mswindows}
+ result:=false;
  if Connected and V.CanSync then begin
    try
    if not V.tracking then begin
       V.tracking:=true;
    end;
    V.SyncToCoordinates(sra,sde);
+   result:=true;
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.Track:boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ result:=false;
+ if Connected then begin
+   try
+   if not V.tracking then begin
+      V.tracking:=true;
+   end;
+   result:=true;
    except
      on E: EOleException do msg('Error: ' + E.Message);
    end;

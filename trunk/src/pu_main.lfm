@@ -16,11 +16,11 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.6.0.3'
+  LCLVersion = '1.6.0.4'
   Visible = False
   object PageControlRight: TPageControl
     Left = 612
-    Height = 292
+    Height = 296
     Top = 0
     Width = 188
     ActivePage = TabSheet1
@@ -31,15 +31,15 @@ object f_main: Tf_main
     TabOrder = 0
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
-      ClientHeight = 266
-      ClientWidth = 186
+      ClientHeight = 265
+      ClientWidth = 184
       ImageIndex = 0
       object PanelRight1: TPanel
         Tag = 1
         Left = 0
-        Height = 266
+        Height = 265
         Top = 0
-        Width = 186
+        Width = 184
         Align = alClient
         AutoSize = True
         BevelOuter = bvNone
@@ -55,8 +55,8 @@ object f_main: Tf_main
       end
     end
     object TabSheet2: TTabSheet
-      ClientHeight = 266
-      ClientWidth = 186
+      ClientHeight = 265
+      ClientWidth = 184
       ImageIndex = 1
       object PanelRight2: TPanel
         Tag = 1
@@ -79,8 +79,8 @@ object f_main: Tf_main
       end
     end
     object TabSheet3: TTabSheet
-      ClientHeight = 266
-      ClientWidth = 186
+      ClientHeight = 265
+      ClientWidth = 184
       ImageIndex = 2
       object PanelRight3: TPanel
         Tag = 1
@@ -103,8 +103,8 @@ object f_main: Tf_main
       end
     end
     object TabSheet4: TTabSheet
-      ClientHeight = 266
-      ClientWidth = 186
+      ClientHeight = 265
+      ClientWidth = 184
       ImageIndex = 3
       object PanelRight4: TPanel
         Tag = 1
@@ -129,18 +129,18 @@ object f_main: Tf_main
   end
   object Panel1: TPanel
     Left = 0
-    Height = 292
+    Height = 296
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 292
+    ClientHeight = 296
     ClientWidth = 612
     TabOrder = 1
     object PanelLeft: TPanel
       Tag = 1
       Left = 0
-      Height = 288
+      Height = 292
       Top = 2
       Width = 2
       Align = alLeft
@@ -176,12 +176,12 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 2
-      Height = 288
+      Height = 292
       Top = 2
       Width = 610
       Align = alClient
       AutoSize = True
-      ClientHeight = 288
+      ClientHeight = 292
       ClientWidth = 610
       Color = 4197901
       ParentColor = False
@@ -189,7 +189,7 @@ object f_main: Tf_main
       object Image1: TImage
         Cursor = crCross
         Left = 1
-        Height = 286
+        Height = 290
         Top = 1
         Width = 608
         Align = alClient
@@ -205,7 +205,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 2
-      Top = 290
+      Top = 294
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -223,8 +223,8 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 292
+    Height = 21
+    Top = 296
     Width = 800
     Panels = <    
       item
@@ -376,6 +376,13 @@ object f_main: Tf_main
         Checked = True
         ShowAlwaysCheckable = True
         OnClick = MenuViewPlanetariumClick
+      end
+      object MenuViewScript: TMenuItem
+        AutoCheck = True
+        Caption = 'Script'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewScriptClick
       end
       object MenuViewMessages: TMenuItem
         AutoCheck = True

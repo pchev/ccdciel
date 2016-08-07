@@ -1,0 +1,75 @@
+var maxtime,nloop,waitloop,timeunit,tempnow, tempstep, tempset, ramp: integer;
+    ccdtemp,tempstepd: double;
+    rampdown,to_be_configured: boolean;
+    arg: TStringList;
+
+procedure SetParameters;
+begin
+// comment or remove the next row after you set yours parameters
+ to_be_configured:=true;
+
+///////////  Parameters //////////////////////
+ tempset  := 0;    // final desired temperature
+ ramp     := 2;    // degrees per time unit
+ timeunit := 10;   // time unit in seconds
+ maxtime  := 20;   // maxmimum number of time unit to wait
+///////////  Parameters //////////////////////
+end;
+
+procedure exiterror;
+var errtxt: string;
+begin
+getS('LastError',errtxt);
+raiseexception(erCustomError, errtxt);
+end;
+
+begin
+
+ // get a stringlist
+ GetSL('STRL1',arg);
+
+ SetParameters;
+
+if to_be_configured then begin
+  logMsg('This is a script template!');
+  logMsg('You need to edit this script to set your parameters');
+  logMsg('before it can be run.');
+  logMsg('Then remove the row: "to_be_configured:=true;"');
+  raiseexception(erCustomError, 'Configuration need');
+end;
+
+ // in tenth of degree:
+ tempset:=10*tempset;
+ ramp:=10*ramp;
+
+ // initial condition
+ GetD('CCDTEMP',ccdtemp);
+ tempnow:=round(10*ccdtemp);
+ rampdown:=(tempnow>tempset);
+
+ // main loop
+ nloop:=0;
+ while ((tempnow<>tempset)or(nloop>maxtime)) do begin
+   inc(nloop);
+   if rampdown then begin
+      tempstep:=tempnow-ramp;
+      if tempstep<tempset then tempstep:=tempset;
+   end else begin
+      tempstep:=tempnow+ramp;
+      if tempstep>tempset then tempstep:=tempset;
+   end;
+   tempstepd:=tempstep/10;
+   arg.clear;
+   arg.add(formatfloat('0.0',tempstepd));
+   logMsg('Ramp CCD temperature to '+arg[0]+' and wait '+inttostr(timeunit)+' seconds');
+   if CmdArg('CCD_SETTEMPERATURE',arg)<>msgOK then exiterror;
+   waitloop:=0;
+   repeat
+     if waitloop>0 then logMsg('Still waiting for temperature to reach '+arg[0]);
+     wait(timeunit);
+     GetD('CCDTEMP',ccdtemp);
+     tempnow:=round(10*ccdtemp);
+     inc(waitloop);
+   until (tempnow=tempstep);
+ end;
+end.

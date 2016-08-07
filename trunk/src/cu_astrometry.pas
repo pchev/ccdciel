@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera, cu_fits,
-      math, Forms, FileUtil, Classes, SysUtils, ExtCtrls;
+      LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
 
@@ -46,22 +46,24 @@ TAstrometry = class(TComponent)
     Xslew, Yslew: integer;
     WaitExposure: boolean;
     AstrometryTimeout: double;
-    TimerAstrometryDone, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
-    procedure AstrometryDoneonTimer(Sender: TObject);
+    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
+    procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
     procedure msg(txt:string);
     procedure ControlExposure(exp:double; binx,biny: integer);
     procedure EndExposure(Sender: TObject);
     function WaitBusy(Timeout:double=60): boolean;
-    procedure AstrometryDone(Sender: TObject);
+    procedure AstrometrySolve(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
     procedure AstrometrySlewScreenXY(Sender: TObject);
   public
-    constructor Create;
+    constructor Create(AOwner: TComponent);override;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
     procedure StopAstrometry;
-    function  CurrentCoord(var cra,cde,eq: double):boolean;
+    procedure AstrometryDone;
+    function  CurrentCoord(out cra,cde,eq: double):boolean;
+    procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer; wait: boolean);
     function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer):boolean;
@@ -79,23 +81,23 @@ end;
 
 implementation
 
-constructor TAstrometry.Create;
+constructor TAstrometry.Create(AOwner: TComponent);
 begin
-  Inherited create(nil);
+  Inherited create(AOwner);
   FBusy:=false;
   FLastResult:=false;
   AstrometryTimeout:=60;
-  TimerAstrometryDone:=TTimer.Create(self);
+  TimerAstrometrySolve:=TTimer.Create(self);
+  TimerAstrometrySolve.Enabled:=false;
+  TimerAstrometrySolve.Interval:=100;
+  TimerAstrometrySolve.OnTimer:=@AstrometrySolveonTimer;
   TimerAstrometrySync:=TTimer.Create(self);
-  TimerAstrometrySlewScreenXY:=TTimer.Create(self);
-  TimerAstrometryDone.Enabled:=false;
   TimerAstrometrySync.Enabled:=false;
-  TimerAstrometrySlewScreenXY.Enabled:=false;
-  TimerAstrometryDone.Interval:=100;
   TimerAstrometrySync.Interval:=100;
-  TimerAstrometrySlewScreenXY.Interval:=100;
-  TimerAstrometryDone.OnTimer:=@AstrometryDoneonTimer;
   TimerAstrometrySync.OnTimer:=@AstrometrySynconTimer;
+  TimerAstrometrySlewScreenXY:=TTimer.Create(self);
+  TimerAstrometrySlewScreenXY.Enabled:=false;
+  TimerAstrometrySlewScreenXY.Interval:=100;
   TimerAstrometrySlewScreenXY.OnTimer:=@AstrometrySlewScreenXYonTimer;
 end;
 
@@ -143,7 +145,6 @@ begin
    DeleteFileUTF8(outfile);
    DeleteFileUTF8(solvefile);
    engine:=TAstrometry_engine.Create;
-   engine.onCmdTerminate:=@AstrometryDone;
    engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    FResolverName:=ResolverName[engine.Resolver];
    engine.CygwinPath:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
@@ -188,14 +189,8 @@ begin
  end;
 end;
 
-procedure TAstrometry.AstrometryDone(Sender: TObject);
+procedure TAstrometry.AstrometryDone;
 begin
-  TimerAstrometryDone.Enabled:=true;
-end;
-
-procedure TAstrometry.AstrometryDoneonTimer(Sender: TObject);
-begin
- TimerAstrometryDone.Enabled:=false;
  if FileExistsUTF8(savefile) and FileExistsUTF8(solvefile) then
    FLastResult:=true
  else
@@ -214,7 +209,7 @@ begin
   end;
 end;
 
-function TAstrometry.CurrentCoord(var cra,cde,eq: double):boolean;
+function TAstrometry.CurrentCoord(out cra,cde,eq: double):boolean;
 var n,m: integer;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
@@ -234,6 +229,27 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TAstrometry.SolveCurrentImage(wait: boolean);
+begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+   if not fits.HeaderInfo.solved then begin
+    FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolve);
+    if wait then WaitBusy(AstrometryTimeout+30);
+   end;
+  end;
+end;
+
+procedure TAstrometry.AstrometrySolve(Sender: TObject);
+begin
+  TimerAstrometrySolve.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometrySolveonTimer(Sender: TObject);
+begin
+TimerAstrometrySolve.Enabled:=false;
 end;
 
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
@@ -264,7 +280,7 @@ TimerAstrometrySync.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
-   if CurrentCoord(ra,de,eq) then begin
+   if (n=0) and CurrentCoord(ra,de,eq) then begin
        if mount.Equinox=0 then begin
          jd0:=Jd(trunc(eq),0,0,0);
          jd1:=DateTimetoJD(now);
@@ -383,7 +399,7 @@ begin
     if not LastResult then break;
     fn:=slash(TmpDir)+'ccdcielsolved.fits';
     n:=cdcwcs_initfitsfile(pchar(fn),0);
-    if not CurrentCoord(cra,cde,eq) then break;
+    if (n<>0) or (not CurrentCoord(cra,cde,eq)) then break;
     if mount.Equinox=0 then begin
       jd0:=Jd(trunc(eq),0,0,0);
       jd1:=DateTimetoJD(now);

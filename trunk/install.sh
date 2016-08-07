@@ -24,8 +24,15 @@ install -m 755 -d $destdir/share/icons/hicolor/48x48
 install -m 755 -d $destdir/share/icons/hicolor/48x48/apps
 install -m 755 -d $destdir/share/icons/hicolor/scalable
 install -m 755 -d $destdir/share/icons/hicolor/scalable/apps
+install -m 755 -d $destdir/share/ccdciel
+install -m 755 -d $destdir/share/ccdciel/scripts
 
 install -v -m 755 -s src/ccdciel  $destdir/bin/ccdciel
+install -v -m 644 scripts/scope_park.script  $destdir/share/ccdciel/scripts/scope_park.script
+install -v -m 644 scripts/scope_unpark.script  $destdir/share/ccdciel/scripts/scope_unpark.script
+install -v -m 644 scripts/T_ccd_temp_down.script  $destdir/share/ccdciel/scripts/T_ccd_temp_down.script
+install -v -m 644 scripts/T_ccd_temp_up.script  $destdir/share/ccdciel/scripts/T_ccd_temp_up.script
+install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
 install -v -m 644 system_integration/Linux/share/applications/ccdciel.desktop $destdir/share/applications/ccdciel.desktop
 install -v -m 644 system_integration/Linux/share/appdata/ccdciel.appdata.xml $destdir/share/appdata/ccdciel.appdata.xml
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/changelog $destdir/share/doc/ccdciel/changelog

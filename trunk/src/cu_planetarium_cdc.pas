@@ -35,6 +35,7 @@ type
 
   TPlanetarium_cdc = class(TPlanetarium)
   private
+    started: boolean;
     TcpClient : TTcpclient;
   protected
     procedure Execute; override;
@@ -59,6 +60,7 @@ implementation
 Constructor TPlanetarium_cdc.Create ;
 begin
 inherited Create;
+started:=false;
 FPlanetariumType:=CDC;
 FTargetHost:='localhost';
 FTargetPort:='3292';
@@ -68,6 +70,7 @@ end;
 
 procedure TPlanetarium_cdc.Connect(cp1: string; cp2:string='');
 begin
+  if started or Terminated then exit;
   FTargetHost:=cp1;
   if cp2='' then FTargetPort:=GetCdCPort
             else FTargetPort:=cp2;
@@ -85,6 +88,7 @@ var buf:string;
     i : integer;
     ending : boolean;
 begin
+started:=true;
 ending:=false;
 tcpclient:=TTCPClient.Create;
 try

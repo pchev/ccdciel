@@ -35,10 +35,14 @@ T_mount = class(TComponent)
     FMountInterface: TDevInterface;
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonCoordChange: TNotifyEvent;
+    FonParkChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
+    FMountSlewing: boolean;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
+    function  GetPark:Boolean; virtual; abstract;
+    procedure SetPark(value:Boolean); virtual; abstract;
     function  GetRA:double; virtual; abstract;
     function  GetDec:double; virtual; abstract;
     function  GetEquinox: double; virtual; abstract;
@@ -46,15 +50,18 @@ T_mount = class(TComponent)
     function  GetFocaleLength:double; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
  public
-    constructor Create;
+    constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
-    procedure Slew(sra,sde: double); virtual; abstract;
-    procedure Sync(sra,sde: double); virtual; abstract;
+    function Slew(sra,sde: double):boolean; virtual; abstract;
+    function Sync(sra,sde: double):boolean; virtual; abstract;
+    function Track:boolean; virtual; abstract;
     procedure AbortMotion; virtual; abstract;
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
+    property Park: Boolean read GetPark write SetPark;
+    property MountSlewing: boolean read FMountSlewing;
     property RA: double read GetRA;
     property Dec: double read GetDec;
     property Equinox: double read GetEquinox;
@@ -65,14 +72,16 @@ T_mount = class(TComponent)
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
+    property onParkChange: TNotifyEvent read FonParkChange write FonParkChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;
 
 implementation
 
-constructor T_mount.Create;
+constructor T_mount.Create(AOwner: TComponent);
 begin
-  inherited Create(nil);
+  inherited Create(AOwner);
+  FMountSlewing:=false;
   FStatus := devDisconnected;
   FTimeOut:=100;
 end;

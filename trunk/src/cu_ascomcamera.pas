@@ -26,8 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_camera, u_global, cu_fits, lazutf8sysutils, indiapi,
+uses  cu_camera, u_global,
   {$ifdef mswindows}
+    cu_fits, lazutf8sysutils, indiapi,
     Variants, comobj,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils;
@@ -37,15 +38,15 @@ T_ascomcamera = class(T_camera)
  private
    {$ifdef mswindows}
    V: variant;
-   {$endif}
    Fdevice: string;
    nf: integer;
-   FFrametype:TFrameType;
-   ExposureTimer: TTimer;
-   StatusTimer: TTimer;
    timestart,timeend,timedout,Fexptime:double;
    stCCDtemp : double;
    stX,stY,stWidth,stHeight: integer;
+   {$endif}
+   FFrametype:TFrameType;
+   ExposureTimer: TTimer;
+   StatusTimer: TTimer;
    function Connected: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
@@ -72,7 +73,7 @@ T_ascomcamera = class(T_camera)
    function GetBitperPixel: double; override;
    procedure SetTimeout(num:integer); override;
  public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
    procedure Disconnect;  override;
@@ -89,9 +90,9 @@ end;
 
 implementation
 
-constructor T_ascomcamera.Create;
+constructor T_ascomcamera.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FCameraInterface:=ASCOM;
  ExposureTimer:=TTimer.Create(nil);
  ExposureTimer.Enabled:=false;
@@ -522,6 +523,7 @@ end;
 
 function  T_ascomcamera.GetFilter:integer;
 begin
+ result:=0;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -549,6 +551,7 @@ end;
 
 function  T_ascomcamera.GetTemperature: double;
 begin
+ result:=NullCoord;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -581,6 +584,7 @@ end;
 
 function T_ascomcamera.GetMaxX: double;
 begin
+ result:=-1;
 {$ifdef mswindows}
 if Connected then begin
   try
@@ -595,6 +599,7 @@ end;
 
 function T_ascomcamera.GetMaxY: double;
 begin
+ result:=-1;
 {$ifdef mswindows}
 if Connected then begin
   try
@@ -609,6 +614,7 @@ end;
 
 function T_ascomcamera.GetPixelSize: double;
 begin
+ result:=-1;
 {$ifdef mswindows}
 if Connected then begin
   try
@@ -623,6 +629,7 @@ end;
 
 function T_ascomcamera.GetPixelSizeX: double;
 begin
+ result:=-1;
 {$ifdef mswindows}
 if Connected then begin
   try
@@ -637,6 +644,7 @@ end;
 
 function T_ascomcamera.GetPixelSizeY: double;
 begin
+ result:=-1;
 {$ifdef mswindows}
 if Connected then begin
   try
@@ -651,6 +659,7 @@ end;
 
 function T_ascomcamera.GetBitperPixel: double;
 begin
+ result:=-1;
 {$ifdef mswindows}
 result:=16;
 {$endif}

@@ -13,6 +13,7 @@ fi
 
 dirs="component/synapse/source/lib \
      component/indiclient \
+     component/enhedits \
      component/xmlparser \
      component/vosamp \
      component \

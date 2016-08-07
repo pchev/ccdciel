@@ -9,8 +9,6 @@ object f_starprofile: Tf_starprofile
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 424
-  DesignTop = 136
   object StaticText1: TStaticText
     Left = 0
     Height = 20

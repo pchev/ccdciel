@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_wheel, u_global, indiapi,
+uses  cu_wheel, u_global,
   {$ifdef mswindows}
-    Variants, comobj,
+    indiapi, Variants, comobj,
   {$endif}
    ExtCtrls, Classes, SysUtils;
 
@@ -36,10 +36,10 @@ T_ascomwheel = class(T_wheel)
  private
    {$ifdef mswindows}
    V: variant;
-   {$endif}
    Fdevice: string;
    FFilterNum: integer;
    stFilter: integer;
+   {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
@@ -51,7 +51,7 @@ T_ascomwheel = class(T_wheel)
    procedure SetFilterNames(value:TStringList); override;
    procedure SetTimeout(num:integer); override;
  public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    procedure Disconnect; override;
@@ -60,9 +60,9 @@ end;
 
 implementation
 
-constructor T_ascomwheel.Create;
+constructor T_ascomwheel.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FWheelInterface:=ASCOM;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
@@ -178,8 +178,8 @@ end;
 
 function  T_ascomwheel.GetFilter:integer;
 begin
- {$ifdef mswindows}
  result:=0;
+ {$ifdef mswindows}
  if Connected then begin
    try
    result:=V.Position+1;

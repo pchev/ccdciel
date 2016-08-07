@@ -30,7 +30,7 @@ uses u_global,
        Windows, registry,
      {$endif}
      {$ifdef unix}
-       unix,
+       unix,baseunix,
      {$endif}
      process, Classes, LCLType, FileUtil,
      Math, SysUtils, Forms, Controls, StdCtrls, Graphics;
@@ -46,24 +46,40 @@ procedure SplitRec(buf,sep:string; var arg: TStringList);
 Procedure SplitCmd(S : String; List : TStringList);
 function Slash(nom : string) : string;
 Function sgn(x:Double):Double ;
+function ScriptListCompare(List: TStringList; Index1, Index2: Integer): Integer;
 Function SXToStr(de: Double) : string;
 Function RAToStr(ar: Double) : string;
 Function DEToStr(de: Double) : string;
 Function RAToStrB(ar: Double) : string;
 Function DEToStrB(de: Double) : string;
-Function ARToStr4(ar: Double; f: string; var d,m,s : string) : string;
+Function ARToStr4(ar: Double; f: string; out d,m,s : string) : string;
 Function StrToAR(dms : string) : double;
 Function StrToDE(dms : string) : double;
+Function ARToStr3(ar: Double) : string;
+Function Str3ToAR(dms : string) : double;
+Function DEToStr3(de: Double) : string;
+Function Str3ToDE(dms : string) : double;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
-procedure Wait(wait:integer=5);
+Function ExecuteFile(const FileName: string): integer;
+procedure Wait(wt:integer=5);
 function GetCdCPort:string;
 function  Rmod(x,y:Double):Double;
+function IsNumber(n : string) : boolean;
+Function PadZeros(x : string ; l :integer) : string;
 function DateTimetoJD(date: Tdatetime): double;
 function Jd(annee,mois,jour :INTEGER; Heure:double):double;
-PROCEDURE Djd(jd:Double;VAR annee,mois,jour:INTEGER; VAR Heure:double);
+PROCEDURE Djd(jd:Double;OUT annee,mois,jour:INTEGER; OUT Heure:double);
+function isodate(a,m,d : integer) : string;
+function jddate(jd: double) : string;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
+function SidTim(jd0,ut,long : double; eqeq: double=0): double;
+Procedure Refraction(var h : double; flag:boolean);
+PROCEDURE Eq2Hz(HH,DE : double ; VAR A,h : double);
+Procedure Hz2Eq(A,h : double; var hh,de : double);
+Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
+Procedure cmdHz2Eq(a,h : double; var ra,de : double);
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 procedure Fits2Screen(x,y: integer; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; out xx,yy:integer);
@@ -73,6 +89,9 @@ implementation
 const
   GregorianStart=15821015;
   GregorianStartJD=2299161;
+
+var
+  dummy_ext : extended;
 
 function InvertF32(X : LongWord) : Single;
 var  P : PbyteArray;
@@ -240,6 +259,19 @@ else
    sgn:=  1 ;
 end ;
 
+function ScriptListCompare(List: TStringList; Index1, Index2: Integer): Integer;
+var buf1,buf2: string;
+const ff=#$ff;
+begin
+  buf1:=List[Index1];
+  buf2:=List[Index2];
+  if copy(buf1,1,2)='T_' then buf1:=ff+buf1;
+  if copy(buf2,1,2)='T_' then buf2:=ff+buf2;
+  if  buf1=buf2 then result:=0
+  else if  buf1>buf2 then result:=1
+  else result:=-1;
+end;
+
 Function SXToStr(de: Double) : string;
 var dd,min1,min,sec: Double;
     d,m,s : string;
@@ -376,7 +408,7 @@ begin
     result := d+' '+m+' '+s;
 end;
 
-Function ARToStr4(ar: Double; f: string; var d,m,s : string) : string;
+Function ARToStr4(ar: Double; f: string; out d,m,s : string) : string;
 var dd,min1,min,sec: Double;
 begin
     dd:=Int(ar);
@@ -468,6 +500,108 @@ result:=0;
 end;
 end;
 
+Function DEToStr3(de: Double) : string;
+var dd,min1,min,sec: Double;
+    d,m,s : string;
+begin
+    dd:=Int(de);
+    min1:=abs(de-dd)*60;
+    if min1>=59.99166667 then begin
+       dd:=dd+sgn(de);
+       min1:=0.0;
+    end;
+    min:=Int(min1);
+    sec:=(min1-min)*60;
+    if sec>=59.5 then begin
+       min:=min+1;
+       sec:=0.0;
+    end;
+    str(abs(dd):2:0,d);
+    if abs(dd)<10 then d:='0'+trim(d);
+    if de<0 then d:='-'+d else d:='+'+d;
+    str(min:2:0,m);
+    if abs(min)<10 then m:='0'+trim(m);
+    str(sec:2:0,s);
+    if abs(sec)<9.5 then s:='0'+trim(s);
+    result := d+'d'+m+'m'+s+'s';
+end;
+
+Function ARToStr3(ar: Double) : string;
+var dd,min1,min,sec: Double;
+    d,m,s : string;
+begin
+    dd:=Int(ar);
+    min1:=abs(ar-dd)*60;
+    if min1>=59.99166667 then begin
+       dd:=dd+sgn(ar);
+       if dd=24 then dd:=0;
+       min1:=0.0;
+    end;
+    min:=Int(min1);
+    sec:=(min1-min)*60;
+    if sec>=59.5 then begin
+       min:=min+1;
+       sec:=0.0;
+    end;
+    str(dd:2:0,d);
+    if abs(dd)<10 then d:='0'+trim(d);
+    str(min:2:0,m);
+    if abs(min)<10 then m:='0'+trim(m);
+    str(sec:2:0,s);
+    if abs(sec)<9.5 then s:='0'+trim(s);
+    result := d+'h'+m+'m'+s+'s';
+end;
+
+Function Str3ToAR(dms : string) : double;
+var s,p : integer;
+    t : string;
+begin
+try
+dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
+if copy(dms,1,1)='-' then s:=-1 else s:=1;
+p:=pos('h',dms);
+if p=0 then
+  result:=StrToFloatDef(dms,0)
+else begin
+  t:=copy(dms,1,p-1); delete(dms,1,p);
+  result:=StrToIntDef(t,0);
+  p:=pos('m',dms);
+  t:=copy(dms,1,p-1); delete(dms,1,p);
+  result:=result+ s * StrToIntDef(t,0) / 60;
+  p:=pos('s',dms);
+  t:=copy(dms,1,p-1);
+  result:=result+ s * StrToFloatDef(t,0) / 3600;
+end;
+except
+result:=0;
+end;
+end;
+
+Function Str3ToDE(dms : string) : double;
+var s,p : integer;
+    t : string;
+begin
+try
+dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
+if copy(dms,1,1)='-' then s:=-1 else s:=1;
+p:=pos('d',dms);
+if p=0 then
+  result:=StrToFloatDef(dms,0)
+else begin
+t:=copy(dms,1,p-1); delete(dms,1,p);
+result:=StrToIntDef(t,0);
+p:=pos('m',dms);
+t:=copy(dms,1,p-1); delete(dms,1,p);
+result:=result+ s * StrToIntDef(t,0) / 60;
+p:=pos('s',dms);
+t:=copy(dms,1,p-1);
+result:=result+ s * StrToFloatDef(t,0) / 3600;
+end;
+except
+result:=0;
+end;
+end;
+
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 {$ifdef unix}
 begin
@@ -523,18 +657,18 @@ try
   end else begin
      P.ShowWindow:=swoHIDE;
   end;
-  P.Options := [poUsePipes, poStdErrToOutPut];
+  if output<>nil then P.Options := [poUsePipes, poStdErrToOutPut];
   P.Execute;
   while P.Running do begin
     Application.ProcessMessages;
-    if P.Output<>nil then begin
+    if (output<>nil) and (P.Output<>nil) then begin
       M.SetSize(BytesRead + READ_BYTES);
       n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
       if n > 0 then inc(BytesRead, n);
     end;
   end;
   result:=P.ExitStatus;
-  if (result<>127)and(P.Output<>nil) then repeat
+  if (output<>nil) and (result<>127)and(P.Output<>nil) then repeat
     M.SetSize(BytesRead + READ_BYTES);
     n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
     if n > 0
@@ -542,15 +676,17 @@ try
       Inc(BytesRead, n);
     end;
   until (n<=0)or(P.Output=nil);
-  M.SetSize(BytesRead);
-  output.LoadFromStream(M);
+  if (output<>nil) then begin
+    M.SetSize(BytesRead);
+    output.LoadFromStream(M);
+  end;
   P.Free;
   M.Free;
   param.Free;
 except
   on E: Exception do begin
     result:=-1;
-    output.add(E.Message);
+    if (output<>nil) then output.add(E.Message);
     P.Free;
     M.Free;
     param.Free;
@@ -558,10 +694,59 @@ except
 end;
 end;
 
-procedure Wait(wait:integer=5);
+{$ifdef unix}
+function ExecFork(cmd:string;p1:string='';p2:string='';p3:string='';p4:string='';p5:string=''):integer;
+var
+  parg: array[1..7] of PChar;
+begin
+  result := fpFork;
+  if result = 0 then
+  begin
+    parg[1] := Pchar(cmd);
+    if p1='' then parg[2]:=nil else parg[2] := PChar(p1);
+    if p2='' then parg[3]:=nil else parg[3] := PChar(p2);
+    if p3='' then parg[4]:=nil else parg[4] := PChar(p3);
+    if p4='' then parg[5]:=nil else parg[5] := PChar(p4);
+    if p5='' then parg[6]:=nil else parg[6] := PChar(p5);
+    parg[7] := nil;
+    if fpExecVP(cmd,PPChar(@parg[1])) = -1 then
+    begin
+      //writetrace('Could not launch '+cmd);
+    end;
+  end;
+end;
+{$endif}
+
+Function ExecuteFile(const FileName: string): integer;
+{$ifdef mswindows}
+var
+  zFileName, zParams, zDir: array[0..255] of Char;
+begin
+  writetrace('Try to launch: '+FileName);
+  Result := ShellExecute(Application.MainForm.Handle, nil, StrPCopy(zFileName, FileName),
+                         StrPCopy(zParams, ''), StrPCopy(zDir, ''), SW_SHOWNOACTIVATE);
+{$endif}
+{$ifdef unix}
+var cmd,p1,p2,p3,p4: string;
+begin
+  cmd:=trim(words(OpenFileCMD,blank,1,1));
+  p1:=trim(words(OpenFileCMD,blank,2,1));
+  p2:=trim(words(OpenFileCMD,blank,3,1));
+  p3:=trim(words(OpenFileCMD,blank,4,1));
+  p4:=trim(words(OpenFileCMD,blank,5,1));
+  if p1='' then result:=ExecFork(cmd,FileName)
+  else if p2='' then result:=ExecFork(cmd,p1,FileName)
+  else if p3='' then result:=ExecFork(cmd,p1,p2,FileName)
+  else if p4='' then result:=ExecFork(cmd,p1,p2,p3,FileName)
+  else result:=ExecFork(cmd,p1,p2,p3,p4,FileName);
+{$endif}
+end;
+
+
+procedure Wait(wt:integer=5);
 var endt: TDateTime;
 begin
-  endt:=now+wait/secperday;
+  endt:=now+wt/secperday;
   while now<endt do begin
     Sleep(100);
     Application.ProcessMessages;
@@ -607,6 +792,20 @@ BEGIN
     Rmod := x - Int(x/y) * y ;
 END  ;
 
+function IsNumber(n : string) : boolean;
+begin
+result:=TextToFloat(PChar(n),Dummy_ext);
+end;
+
+Function PadZeros(x : string ; l :integer) : string;
+const zero = '000000000000';
+var p : integer;
+begin
+x:=trim(x);
+p:=l-length(x);
+result:=copy(zero,1,p)+x;
+end;
+
 function DateTimetoJD(date: Tdatetime): double;
 var Year, Month, Day: Word;
 begin
@@ -633,7 +832,7 @@ if gregorian then begin
 end;
 end;
 
-PROCEDURE Djd(jd:Double;VAR annee,mois,jour:INTEGER; VAR Heure:double);
+PROCEDURE Djd(jd:Double;OUT annee,mois,jour:INTEGER; OUT Heure:double);
 var u0,u1,u2,u3,u4 : double;
 	gregorian : boolean;
 begin
@@ -653,6 +852,19 @@ if mois>12 then mois:=mois-12;
 jour:=round(u2-floor(365.25*u3)-floor(30.6001*u4));
 annee:=round(u3+floor((u4-2)/12)-4800);
 heure:=(jd-floor(jd+0.5)+0.5)*24;
+end;
+
+function isodate(a,m,d : integer) : string;
+begin
+result:=padzeros(inttostr(a),4)+'-'+padzeros(inttostr(m),2)+'-'+padzeros(inttostr(d),2);
+end;
+
+function jddate(jd: double) : string;
+var a,m,d : integer;
+    h:double;
+begin
+djd(jd,a,m,d,h);
+result:=isodate(a,m,d);
 end;
 
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
@@ -694,6 +906,99 @@ except
   result:=pi2;
 end;
 end;
+
+function SidTim(jd0,ut,long : double; eqeq: double=0): double;
+VAR t,te: double;
+BEGIN
+t:=(jd0-2451545.0)/36525;
+te:=100.46061837 + 36000.770053608*t + 0.000387933*t*t - t*t*t/38710000;
+te:=te+rad2deg*eqeq;
+result := deg2rad*Rmod(te - long + 1.00273790935*ut*15,360) ;
+END ;
+
+Procedure Refraction(var h : double; flag:boolean);
+var h1,R : double;
+begin
+{ Bennett 2010, meeus91 15.3, 15.4 }
+if flag then begin   // true -> apparent
+     h1:=rad2deg*h;
+     if h1>-1 then begin
+        R:=cotan(deg2rad*(h1+9.48/(h1+4.8)));
+        R:=R-0.06*sin(deg2rad*(14.7*R+13));
+        h:=min(pid2,h);
+     end
+      else h:=h;
+end
+else begin      // apparent -> true
+     h1:=rad2deg*h;
+     if h1>-0.347259404573 then begin
+        R:=cotan(deg2rad*(0.99914*h1+(7.31/(h1+4.4))));
+        R:=R-0.06*sin(deg2rad*(14.7*R+13));
+        h:=min(pid2,h)
+     end
+      else h:=h;
+end;
+end;
+
+PROCEDURE Eq2Hz(HH,DE : double ; VAR A,h : double);
+var l1,d1,h1,sh : double;
+BEGIN
+l1:=deg2rad*ObsLatitude;
+d1:=DE;
+h1:=HH;
+sh := sin(l1)*sin(d1)+cos(l1)*cos(d1)*cos(h1);
+if abs(sh)<1 then
+ h:=arcsin(sh)
+else
+ h:=sgn(sh)*pi/2;
+A:= arctan2(sin(h1),cos(h1)*sin(l1)-tan(d1)*cos(l1));
+A:=Rmod(A+pi2,pi2);
+Refraction(h,true);
+END ;
+
+Procedure Hz2Eq(A,h : double; var hh,de : double);
+var l1,a1,h1,sd : double;
+BEGIN
+Refraction(h,false);
+l1:=deg2rad*ObsLatitude;
+a1:=A;
+h1:=h;
+sd:=sin(l1)*sin(h1)-cos(l1)*cos(h1)*cos(a1);
+if abs(sd)<1 then
+de:= arcsin(sd)
+else
+ h:=sgn(sd)*pi/2;
+hh:= arctan2(sin(a1),cos(a1)*sin(l1)+tan(h1)*cos(l1));
+hh:=Rmod(hh+pi2,pi2);
+END ;
+
+Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
+var jd0,CurSt,CurTime: double;
+    Year, Month, Day: Word;
+begin
+DecodeDate(now, Year, Month, Day);
+CurTime:=frac(now)*24;
+jd0:=jd(Year,Month,Day,0);
+CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+Eq2Hz(CurSt-deg2rad*15*ra,deg2rad*de,a,h) ;
+a:=rad2deg*rmod(a+pi,pi2);
+h:=rad2deg*h;
+end;
+
+Procedure cmdHz2Eq(a,h : double; var ra,de : double);
+var jd0,CurSt,CurTime: double;
+    Year, Month, Day: Word;
+begin
+DecodeDate(now, Year, Month, Day);
+CurTime:=frac(now)*24;
+jd0:=jd(Year,Month,Day,0);
+CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+a:=rmod(deg2rad*a-pi,pi2);
+Hz2Eq(a,deg2rad*h,ra,de);
+ra:=rad2deg*Rmod(CurST-ra+pi2,pi2)/15;
+de:=rad2deg*de;
+end;
+
 
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 begin
@@ -750,6 +1055,7 @@ begin
    xx:=xx+ImgFrameX;
    yy:=yy+ImgFrameY;
 end;
+
 
 end.
 

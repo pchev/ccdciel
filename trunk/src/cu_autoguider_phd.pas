@@ -100,7 +100,7 @@ try
      if terminated then break;
      buf:=tcpclient.recvstring;
      if (tcpclient.Sock.lastError<>0)and(tcpclient.Sock.lastError<>WSAETIMEDOUT) then break;
-     if (buf<>'') then ProcessData(buf);
+     if (buf<>'') then ProcessEvent(buf);
    until false;
  end
  else begin
@@ -166,7 +166,7 @@ end;
 
 procedure T_autoguider_phd.JsonToStringlist(jsontxt:string; var SK,SV: TStringList);
 var  J: TJSONData;
-     i,p: integer;
+     i: integer;
      c1,c2: string;
      b1: string;
 begin
@@ -285,35 +285,35 @@ end else begin
      end;
      if rpcid='1000' then begin  // set_connected
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('set_connected'+' '+rpcresult+' '+rpcerror);
+          DisplayMessage('set_connected'+' '+rpcresult+' '+rpcerror);
        end
        else FState:=GUIDER_IDLE;
      end
      else if rpcid='2002' then begin  // set_paused
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('set_paused'+' '+rpcresult+' '+rpcerror);
+          DisplayMessage('set_paused'+' '+rpcresult+' '+rpcerror);
        end;
      end
      else if rpcid='2003' then begin  // guide
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('guide'+' '+rpcresult+' '+rpcerror);
+          DisplayMessage('guide'+' '+rpcresult+' '+rpcerror);
        end;
      end
      else if rpcid='2004' then begin  // stop_capture
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('stop_capture'+' '+rpcresult+' '+rpcerror);
+          DisplayMessage('stop_capture'+' '+rpcresult+' '+rpcerror);
        end;
      end
      else if rpcid='2010' then begin  // dither
        if rpcresult='error' then begin
-          if assigned(FonShowMessage) then FonShowMessage('dither'+' '+rpcresult+' '+rpcerror);
+          DisplayMessage('dither'+' '+rpcresult+' '+rpcerror);
        end;
      end;
 
   end;
 end;
 SetState;
-if Assigned(FonStatusChange) then FonStatusChange(self);
+StatusChange;
 finally
  attrib.Free;
  value.Free;
@@ -420,7 +420,7 @@ begin
   buf:=buf+pix+',';                    // pixels
   buf:=buf+rao+',';                    // ra only
   buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
-  buf:=buf+'"time": '+FSettleTmax+',';        // min time
+  buf:=buf+'"time": '+FSettleTmin+',';        // min time
   buf:=buf+'"timeout": '+FSettleTmax+'}],';   // max time
   buf:=buf+'"id": 2010}';
   Send(buf);

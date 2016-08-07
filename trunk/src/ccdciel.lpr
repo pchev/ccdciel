@@ -29,16 +29,17 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   InterfaceBase, LCLVersion, // version
-  Forms, sysutils, pu_main, fu_devicesconnection, fu_preview, fu_msg, u_utils,
-  fu_visu, cu_indimount, fu_capture, pu_devicesetup, cu_ascomfocuser,
-  cu_focuser, u_global, fu_starprofile, fu_filterwheel, fu_focuser, fu_mount,
-  u_modelisation, cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser,
-  cu_indicamera, cu_fits, cu_camera, cu_ascomwheel, cu_ascommount,
-  cu_ascomcamera, pu_valueseditor, fu_ccdtemp, pu_options, fu_frame,
-  cu_astrometry_engine, cu_planetarium_samp, pu_viewtext, cu_autoguider_phd,
-  cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig, pu_edittargets,
-  pu_editplan, cu_autoguider, cu_planetarium, fu_planetarium, cu_astrometry,
-  pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan;
+  Forms, pascalscript, sysutils, pu_main, fu_devicesconnection, fu_preview,
+  fu_msg, u_utils, fu_visu, cu_indimount, fu_capture, pu_devicesetup,
+  cu_ascomfocuser, cu_focuser, u_global, fu_starprofile, fu_filterwheel,
+  fu_focuser, fu_script, u_modelisation, cu_wheel, cu_mount, cu_indiwheel,
+  cu_indifocuser, cu_indicamera, cu_fits, cu_camera, cu_ascomwheel,
+  cu_ascommount, cu_ascomcamera, fu_ccdtemp, pu_options,
+  fu_frame, cu_astrometry_engine, cu_planetarium_samp, pu_viewtext,
+  cu_autoguider_phd, cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig,
+  pu_edittargets, pu_editplan, cu_autoguider, cu_planetarium, fu_planetarium,
+  cu_astrometry, pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan,
+  pu_pascaleditor, pu_scriptengine, fu_mount, enhedit;
 
 {$R *.res}
 
@@ -57,7 +58,6 @@ begin
   Application.Initialize;
   Application.CreateForm(Tf_main, f_main);
   Application.CreateForm(Tf_setup, f_setup);
-  Application.CreateForm(Tf_valueseditor, f_valueseditor);
   Application.CreateForm(Tf_option, f_option);
   Application.CreateForm(Tf_viewtext, f_viewtext);
   Application.CreateForm(Tf_EditTargets, f_EditTargets);

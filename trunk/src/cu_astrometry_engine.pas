@@ -29,7 +29,7 @@ uses  u_global, u_utils,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
-  math, UTF8Process, process, FileUtil, Classes, SysUtils;
+  LCLIntf, math, UTF8Process, process, FileUtil, Classes, SysUtils;
 
 type
 TAstrometry_engine = class(TThread)
@@ -43,7 +43,7 @@ TAstrometry_engine = class(TThread)
      FOtherOptions: string;
      Fparam: TStringList;
      process: TProcessUTF8;
-     FCmdTerminate: TNotifyEvent;
+//     FCmdTerminate: TNotifyEvent;
      procedure SyncCmdTerminate;
    protected
      procedure Execute; override;
@@ -72,10 +72,10 @@ TAstrometry_engine = class(TThread)
      property CygwinPath: string read FCygwinPath write FCygwinPath;
      property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
      property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
-     property onCmdTerminate: TNotifyEvent read FCmdTerminate write FCmdTerminate;
 end;
 
 implementation
+uses LazFileUtils;
 
 constructor TAstrometry_engine.Create;
 begin
@@ -145,8 +145,10 @@ end;
 
 procedure TAstrometry_engine.Resolve;
 var str: TStringList;
-    buf: string;
     i: integer;
+    {$ifdef mswindows}
+    buf: string;
+    {$endif}
 begin
 if FResolver=ResolverAstrometryNet then begin
   {$ifdef mswindows}
@@ -319,7 +321,8 @@ if FResolver=ResolverAstrometryNet then begin
      end;
   end;
   if logok then CloseFile(f);
-  Synchronize(@SyncCmdTerminate);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  //Synchronize(@SyncCmdTerminate);
 end
 else if FResolver=ResolverElbrus then begin
   fn:=slash(FElbrusDir)+'elbrus.txt';
@@ -383,13 +386,14 @@ else if FResolver=ResolverElbrus then begin
       CloseFile(ft);
     end;
   end;
-  Synchronize(@SyncCmdTerminate);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  //Synchronize(@SyncCmdTerminate);
 end;
 end;
 
 procedure TAstrometry_engine.SyncCmdTerminate;
 begin
-  if Assigned(FCmdTerminate) then FCmdTerminate(self);
+ // if Assigned(FCmdTerminate) then FCmdTerminate(self);
 end;
 
 end.

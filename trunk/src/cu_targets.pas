@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils, indiapi,
+uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  Controls, Dialogs, ExtCtrls,Classes, SysUtils;
+  Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
   TTargetList = array of TTarget;
@@ -61,6 +61,7 @@ type
       procedure NextTarget;
       function InitTarget:boolean;
       procedure StartPlan;
+      function RunScript(sname,path: string):boolean;
       function StopGuider:boolean;
       function StartGuider:boolean;
       function Slew(ra,de: double; precision:boolean):boolean;
@@ -77,7 +78,7 @@ type
       FName: string;
     public
       TargetRepeatCount, TargetTotalCount: integer;
-      constructor Create;
+      constructor Create(AOwner: TComponent); override;
       destructor  Destroy; override;
       procedure Clear;
       function Add(t: TTarget):integer;
@@ -104,9 +105,9 @@ type
 
 implementation
 
-constructor T_Targets.Create;
+constructor T_Targets.Create(AOwner: TComponent);
 begin
-  inherited Create(nil);
+  inherited Create(AOwner);
   NumTargets := 0;
   Frunning:=false;
   TargetTimer:=TTimer.Create(self);
@@ -195,7 +196,7 @@ end;
 procedure  T_Targets.Clear;
 var i: integer;
 begin
-  for i:=0 to NumTargets-1 do FTargets[i].Free;
+  for i:=0 to NumTargets-1 do if FTargets[i]<>nil then FTargets[i].Free;
   SetLength(Ftargets,0);
   NumTargets := 0;
   FName:='';
@@ -205,7 +206,7 @@ end;
 function T_Targets.Add(t: TTarget):integer;
 var p:T_Plan;
 begin
-  p:=T_Plan.Create;
+  p:=T_Plan.Create(nil);
   p.onPlanChange:=FPlanChange;
   p.Preview:=Fpreview;
   p.Capture:=Fcapture;
@@ -233,26 +234,35 @@ end;
 
 procedure T_Targets.Stop;
 begin
+  msg('Request to stop the current sequence');
   StopSequence;
 end;
 
 procedure T_Targets.StopSequence;
 var p: T_Plan;
 begin
- msg('Request to stop the current sequence');
  if FRunning then begin
    p:=t_plan(Ftargets[FCurrentTarget].plan);
    if p.Running then begin
      p.Stop;
      FRunning:=false;
-     msg('Sequence stopped as requested.');
+     msg('Sequence stopped.');
    end
    else begin
      FRunning:=false;
-     Mount.AbortMotion;
+     if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
+     if Capture.Running then begin
+        Camera.AbortExposure;
+        Capture.Stop;
+     end;
+     if Preview.Running then begin
+        Camera.AbortExposure;
+        Preview.Stop;
+     end;
      StopGuider;
-     msg('Sequence stopped as requested.');
+     if f_scriptengine.scr.Running then f_scriptengine.scr.Stop;
+     msg('Sequence stopped.');
      ShowDelayMsg('');
    end;
  end
@@ -266,6 +276,25 @@ begin
   inc(FCurrentTarget);
   { TODO :  select best target based on current time }
   if FRunning and (FCurrentTarget<NumTargets) then begin
+   if Targets[FCurrentTarget].objectname='Script' then begin
+     if not RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
+       msg('Script '+Targets[FCurrentTarget].planname+' failed!');
+       if FUnattended then begin
+         StopSequence;
+         exit;
+       end else begin
+         if MessageDlg('Script '+Targets[FCurrentTarget].planname+' failed!'+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
+            Dec(FCurrentTarget);
+         end else begin
+            StopSequence;
+            exit;
+         end;
+       end;
+     end;
+     NextTarget;
+     exit;
+   end
+   else begin
      ShowDelayMsg('');
      TargetRepeatCount:=1;
      initok:=InitTarget;
@@ -290,6 +319,7 @@ begin
          exit;
        end;
      end;
+   end;
   end
   else begin
      FRunning:=false;
@@ -301,6 +331,7 @@ end;
 
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
+    ok:boolean;
 begin
   result:=false;
   if not FRunning then exit;
@@ -317,7 +348,8 @@ begin
     end;
     // slew to coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-      if not Slew(t.ra,t.de,t.astrometrypointing) then exit;
+      ok:=Slew(t.ra,t.de,t.astrometrypointing);
+      if not ok then exit;
       Wait;
       if not FRunning then exit;
     end;
@@ -365,7 +397,7 @@ end;
 function T_Targets.StopGuider:boolean;
 begin
   result:=false;
-  if Autoguider=nil then exit;
+  if (Autoguider=nil)or(not Autoguider.Running) then exit;
   msg('Stop autoguider');
   Autoguider.Guide(false);
   result:=Autoguider.WaitBusy(15);
@@ -480,6 +512,31 @@ begin
     else FRunning:=false;
  end;
 end;
+
+function T_Targets.RunScript(sname,path: string):boolean;
+var fn: string;
+    i: integer;
+    ok: boolean;
+begin
+  msg('Run script '+sname);
+  fn:=slash(path)+sname+'.script';
+  f_scriptengine.scr.Script.LoadFromFile(fn);
+  ok:=f_scriptengine.scr.Compile;
+  if ok then begin
+    Application.ProcessMessages;
+    result:=f_scriptengine.scr.Execute;
+    if result then
+       msg('Script '+sname+' terminated')
+    else
+       msg('Script execution error, row '+inttostr(f_scriptengine.scr.ExecErrorRow)+': '+f_scriptengine.scr.ExecErrorToString);
+  end else begin
+    for i:=0 to f_scriptengine.scr.CompilerMessageCount-1 do begin
+       msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
+    end;
+    result:=false;
+  end;
+end;
+
 
 end.
 

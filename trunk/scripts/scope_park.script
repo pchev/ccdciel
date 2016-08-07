@@ -1,0 +1,19 @@
+var parked: boolean;
+    arg: TStringList;
+    r: string;
+begin
+
+// get park status
+  GetB('TELESCOPE_PARKED',parked);
+
+  if parked then begin
+    logMsg('Telescope already parked');
+  end
+  else begin
+    getSl('STRL1',arg);
+    arg.clear;
+    arg.add('ON');
+    r:=cmdArg('TELESCOPE_PARK',arg);
+    if r<>msgOK then logMsg('Telescope park: '+r);
+  end;
+end.

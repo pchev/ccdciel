@@ -42,6 +42,8 @@ T_indimount = class(T_mount)
    coord_dec:  INumber;
    CoordSet: ISwitchVectorProperty;
    CoordSetTrack,CoordSetSlew,CoordSetSync: ISwitch;
+   parkprop: ISwitchVectorProperty;
+   swpark,swunpark: ISwitch;
    AbortmotionProp: ISwitchVectorProperty;
    TelescopeInfo: INumberVectorProperty;
    TelescopeAperture, TelescopeFocale: INumber;
@@ -69,6 +71,8 @@ T_indimount = class(T_mount)
    procedure LoadConfig;
    procedure msg(txt: string);
  protected
+   procedure SetPark(value:Boolean); override;
+   function  GetPark:Boolean; override;
    function  GetRA:double; override;
    function  GetDec:double; override;
    function  GetEquinox: double;  override;
@@ -76,12 +80,13 @@ T_indimount = class(T_mount)
    function  GetFocaleLength:double; override;
    procedure SetTimeout(num:integer); override;
  public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    Procedure Disconnect; override;
-   procedure Slew(sra,sde: double); override;
-   procedure Sync(sra,sde: double); override;
+   function Slew(sra,sde: double):boolean; override;
+   function Sync(sra,sde: double):boolean; override;
+   function Track:boolean; override;
    procedure AbortMotion; override;
 end;
 
@@ -106,9 +111,9 @@ if csDestroying in ComponentState then exit;
   ClearStatus;
 end;
 
-constructor T_indimount.Create;
+constructor T_indimount.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FMountInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';
@@ -141,6 +146,7 @@ begin
     MountDevice:=nil;
     Mountport:=nil;
     TelescopeInfo:=nil;
+    parkprop:=nil;
     coord_prop:=nil;
     CoordSet:=nil;
     AbortmotionProp:=nil;
@@ -307,6 +313,13 @@ begin
       CoordSetSlew:=IUFindSwitch(CoordSet,'SLEW');
       CoordSetSync:=IUFindSwitch(CoordSet,'SYNC');
    end
+   else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_PARK') then begin
+      parkprop:=indiProp.getSwitch;
+      swpark:=IUFindSwitch(parkprop,'PARK');
+      swunpark:=IUFindSwitch(parkprop,'UNPARK');
+      if (swpark=nil)or(swunpark=nil) then parkprop:=nil;
+      if Assigned(FonParkChange) then FonParkChange(self);
+   end
    else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_ABORT_MOTION') then begin
       AbortmotionProp:=indiProp.getSwitch;
    end
@@ -333,7 +346,9 @@ end;
 
 procedure T_indimount.NewSwitch(svp: ISwitchVectorProperty);
 begin
-//  writeln('NewSwitch: '+svp.name);
+  if svp=parkprop then begin
+     if Assigned(FonParkChange) then FonParkChange(self);
+  end;
 end;
 
 procedure T_indimount.NewLight(lvp: ILightVectorProperty);
@@ -341,9 +356,30 @@ begin
 //  writeln('NewLight: '+lvp.name);
 end;
 
+procedure T_indimount.SetPark(value:Boolean);
+begin
+if parkprop<>nil then begin
+ IUResetSwitch(parkprop);
+ if value then
+    swpark.s:=ISS_ON
+ else
+    swunpark.s:=ISS_ON;
+ indiclient.sendNewSwitch(parkprop);
+ indiclient.WaitBusy(parkprop,120000);
+end;
+end;
+
+function T_indimount.GetPark:Boolean;
+begin
+if parkprop<>nil then begin
+  result:=(swpark.s=ISS_ON);
+end
+else result:=false;
+end;
+
 function  T_indimount.GetRA:double;
 begin
-if coord_prop<>nil then begin;
+if coord_prop<>nil then begin
   result:=coord_ra.value;
 end
 else result:=NullCoord;
@@ -351,7 +387,7 @@ end;
 
 function  T_indimount.GetDec:double;
 begin
-if coord_prop<>nil then begin;
+if coord_prop<>nil then begin
   result:=coord_dec.value;
 end
 else result:=NullCoord;
@@ -365,7 +401,7 @@ end;
 
 function  T_indimount.GetAperture:double;
 begin
-if TelescopeInfo<>nil then begin;
+if TelescopeInfo<>nil then begin
   result:=TelescopeAperture.value;
 end
 else result:=-1;
@@ -373,29 +409,34 @@ end;
 
 function  T_indimount.GetFocaleLength:double;
 begin
-if TelescopeInfo<>nil then begin;
+if TelescopeInfo<>nil then begin
   result:=TelescopeFocale.value;
 end
 else result:=-1;
 end;
 
-procedure T_indimount.Slew(sra,sde: double);
+function T_indimount.Slew(sra,sde: double):Boolean;
 var waittime:integer;
 begin
+  result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    FMountSlewing:=true;
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then waittime:=60000 else waittime:=5000;
+    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then waittime:=120000 else waittime:=15000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop,waittime);
+    FMountSlewing:=false;
+    result:=true;
   end;
 end;
 
-procedure T_indimount.Sync(sra,sde: double);
+function T_indimount.Sync(sra,sde: double):Boolean;
 begin
+  result:=false;
   if (CoordSet<>nil) and (CoordSetSync<>nil) and (coord_prop<>nil) then begin
     IUResetSwitch(CoordSet);
     CoordSetSync.s:=ISS_ON;
@@ -404,6 +445,21 @@ begin
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop,5000);
+    result:=true;
+  end;
+end;
+
+function T_indimount.Track:Boolean;
+var waittime:integer;
+begin
+  result:=false;
+  if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    IUResetSwitch(CoordSet);
+    CoordSetTrack.s:=ISS_ON;
+    indiclient.sendNewSwitch(CoordSet);
+    indiclient.sendNewNumber(coord_prop);
+    indiclient.WaitBusy(coord_prop);
+    result:=true;
   end;
 end;
 

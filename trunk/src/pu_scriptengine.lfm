@@ -1,0 +1,66 @@
+object f_scriptengine: Tf_scriptengine
+  Left = 0
+  Height = 317
+  Top = 0
+  Width = 409
+  Caption = 'f_scriptengine'
+  ClientHeight = 317
+  ClientWidth = 409
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '1.6.0.4'
+  Visible = False
+  object TplPSScript: TPSScript
+    CompilerOptions = []
+    OnLine = TplPSScriptLine
+    OnCompile = TplPSScriptCompile
+    Plugins = <    
+      item
+        Plugin = PSImport_Classes1
+      end    
+      item
+        Plugin = PSImport_Controls1
+      end    
+      item
+        Plugin = PSImport_DateUtils1
+      end    
+      item
+        Plugin = PSImport_Forms1
+      end    
+      item
+        Plugin = PSImport_StdCtrls1
+      end>
+    UsePreProcessor = False
+    left = 48
+    top = 29
+  end
+  object PSImport_Classes1: TPSImport_Classes
+    EnableStreams = True
+    EnableClasses = True
+    left = 56
+    top = 104
+  end
+  object PSImport_DateUtils1: TPSImport_DateUtils
+    left = 56
+    top = 176
+  end
+  object PSImport_Forms1: TPSImport_Forms
+    EnableForms = True
+    EnableMenus = True
+    left = 56
+    top = 240
+  end
+  object PSImport_Controls1: TPSImport_Controls
+    EnableStreams = True
+    EnableGraphics = True
+    EnableControls = True
+    left = 224
+    top = 104
+  end
+  object PSImport_StdCtrls1: TPSImport_StdCtrls
+    EnableExtCtrls = True
+    EnableButtons = True
+    left = 224
+    top = 176
+  end
+end

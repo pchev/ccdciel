@@ -56,7 +56,7 @@ T_focuser = class(TComponent)
     function  GethasTimerSpeed: boolean; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
-    constructor Create;
+    constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
@@ -85,9 +85,9 @@ end;
 
 implementation
 
-constructor T_focuser.Create;
+constructor T_focuser.Create(AOwner: TComponent);
 begin
-  inherited Create(nil);
+  inherited Create(AOwner);
   FStatus := devDisconnected;
   FTimeOut:=100;
 end;

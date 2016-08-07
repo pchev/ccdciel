@@ -46,7 +46,7 @@ T_wheel = class(TComponent)
     procedure SetFilterNames(value:TStringList); virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
-    constructor Create;
+    constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
@@ -65,9 +65,9 @@ end;
 
 implementation
 
-constructor T_wheel.Create;
+constructor T_wheel.Create(AOwner: TComponent);
 begin
-  inherited Create(nil);
+  inherited Create(AOwner);
   FFilterNames:=TStringList.Create;
   FStatus := devDisconnected;
   FTimeOut:=100;
