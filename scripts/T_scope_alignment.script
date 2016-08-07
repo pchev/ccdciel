@@ -1,0 +1,98 @@
+ var i: integer;
+     arg: TStringList;
+     al_east,al_west: array[0..2]of array[0..1]of double;
+     do_east, do_west, to_be_configured: boolean;
+     exposure,binning,filter_num: string;
+const f5='0.00000';
+
+procedure SetParameters;
+begin
+// comment or remove the next row after you set yours parameters
+ to_be_configured:=true;
+
+///////////  Parameters //////////////////////
+ exposure  := '5';    // seconds
+ binning   := '1x1';  // binning can speedup the process
+ filter_num:= '1';    // position of clear filter (-1 if no filters)
+
+ do_east   :=true;    // do alignment on east azimut
+ do_west   :=false;   // do alignment on west azimut
+  //            Azimut                Elevation
+ al_east[0][0]:=40.0;  al_east[0][1]:=30.0;
+ al_east[1][0]:=90.0;  al_east[1][1]:=65.0;
+ al_east[2][0]:=150.0; al_east[2][1]:=30.0;
+ al_west[0][0]:=320.0; al_west[0][1]:=30.0;
+ al_west[1][0]:=270.0; al_west[1][1]:=65.0;
+ al_west[2][0]:=210.0; al_west[2][1]:=30.0;
+///////////  Parameters //////////////////////
+end;
+
+procedure exiterror;
+var errtxt: string;
+begin
+getS('LastError',errtxt);
+raiseexception(erCustomError, errtxt);
+end;
+
+function SyncAltAz(alt,elev: double):boolean;
+var ra,de: double;
+begin
+  // convert to RA/DEC
+  Hz2Eq(alt,elev,ra,de);
+  // move the telescope
+  arg.clear;
+  arg.add(FormatFloat(f5,ra));
+  arg.add(FormatFloat(f5,de));
+  if not(CmdArg('TELESCOPE_SLEW',arg)=msgOK) then exiterror;
+  // take control exposure
+  if not(Cmd('PREVIEW_SINGLE')=msgOK) then exiterror;
+  // Solve image
+  if not(Cmd('ASTROMETRY_SOLVE')=msgOK) then exiterror;
+  // Sync telescope to image
+  if not(Cmd('ASTROMETRY_SYNC')=msgOK) then exiterror;
+end;
+
+begin
+
+// get a stringlist
+ GetSL('STRL1',arg);
+
+ SetParameters;
+
+if to_be_configured then begin
+  logMsg('This is a script template!');
+  logMsg('You need to edit this script to set your parameters');
+  logMsg('before it can be run.');
+  logMsg('Then remove the row: "to_be_configured:=true;"');
+  raiseexception(erCustomError, 'Configuration need');
+end;
+
+ // Set filter
+ arg.clear;
+ arg.add(filter_num);
+ CmdArg('WHEEL_SETFILTER',arg);
+
+ // Set camera exposure time
+ arg.clear;
+ arg.add(exposure);
+ CmdArg('PREVIEW_SETEXPOSURE',arg);
+ // Set camera binning
+ arg.clear;
+ arg.add(binning);
+ CmdArg('PREVIEW_SETBINNING',arg);
+
+// East alignment
+ if do_east then begin
+   for i:=0 to 2 do begin
+     SyncAltAz(al_east[i][0],al_east[i][1]);
+   end;
+ end;
+
+ // West alignment
+ if do_west then begin
+   for i:=0 to 2 do begin
+     SyncAltAz(al_west[i][0],al_west[i][1]);
+   end;
+ end;
+
+end.

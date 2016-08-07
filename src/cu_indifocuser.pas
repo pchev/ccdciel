@@ -84,7 +84,7 @@ T_indifocuser = class(T_focuser)
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
  public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
    Procedure Disconnect; override;
@@ -113,9 +113,9 @@ if csDestroying in ComponentState then exit;
   ClearStatus;
 end;
 
-constructor T_indifocuser.Create;
+constructor T_indifocuser.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FFocuserInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';

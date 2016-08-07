@@ -32,8 +32,10 @@ type
   TCCDconfig = class(TXMLConfig)
      function  GetValue(const APath: String; const ADefault: String): String; overload;
      function  GetValue(const APath: String; const ADefault: Double): Double; overload;
+     function  GetValue(const APath: String; const ADefault: Boolean): Boolean; overload;
      procedure SetValue(const APath: String; const AValue: String); overload;
      procedure SetValue(const APath: String; const AValue: Double); overload;
+     procedure SetValue(const APath: String; const AValue: Boolean); overload;
   end;
 
 implementation
@@ -58,6 +60,27 @@ end;
 procedure TCCDconfig.SetValue(const APath: String; const AValue: Double); overload;
 begin
   SetValue(DOMString(APath),DOMString(FloatToStr(AValue)));
+end;
+
+function  TCCDconfig.GetValue(const APath: String; const ADefault: Boolean): Boolean; overload;
+var
+  s: String;
+begin
+  s := String(GetValue(DOMString(APath), DOMString('')));
+  if SameText(s, 'TRUE') then
+    Result := True
+  else if SameText(s, 'FALSE') then
+    Result := False
+  else
+    Result := ADefault;
+end;
+
+procedure TCCDconfig.SetValue(const APath: String; const AValue: Boolean); overload;
+begin
+if AValue then
+  SetValue(DOMString(APath),DOMString('True'))
+else
+  SetValue(DOMString(APath),DOMString('False'));
 end;
 
 end.

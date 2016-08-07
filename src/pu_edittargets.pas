@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, pu_planetariuminfo, u_global, u_utils, Classes, SysUtils,
-  FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  maskedit, Grids, ExtCtrls;
+uses pu_editplan, pu_planetariuminfo, u_global, u_utils, pu_pascaleditor, pu_scriptengine,
+  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  maskedit, Grids, ExtCtrls, ComCtrls;
 
 type
 
@@ -39,9 +39,12 @@ type
     BtnCdCTime: TButton;
     BtnCurrentCoord: TButton;
     BtnEditPlan: TButton;
+    BtnEditScript: TButton;
     BtnNewObject: TButton;
     BtnDeleteObject: TButton;
     BtnClose: TButton;
+    BtnEditNewScript: TButton;
+    BtnNewScript: TButton;
     BtnNewPlan: TButton;
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
@@ -51,15 +54,19 @@ type
     Label11: TLabel;
     Label13: TLabel;
     Label14: TLabel;
+    Label15: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
+    Label8: TLabel;
     Label9: TLabel;
     LabelSeq: TLabel;
+    LabelSeq1: TLabel;
     ObjectName: TEdit;
+    PageControl1: TPageControl;
     Panel3: TPanel;
     Panel1: TPanel;
     Panel2: TPanel;
@@ -67,6 +74,7 @@ type
     Panel5: TPanel;
     PanelRepeat: TPanel;
     PlanList: TComboBox;
+    ScriptList: TComboBox;
     PointAstrometry: TCheckBox;
     PointDEC: TEdit;
     PointRA: TEdit;
@@ -74,12 +82,16 @@ type
     PreviewExposure: TEdit;
     RepeatCount: TEdit;
     StartTime: TMaskEdit;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     TargetList: TStringGrid;
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
+    procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
+    procedure BtnNewScriptClick(Sender: TObject);
     procedure BtnPlanClick(Sender: TObject);
     procedure CheckBoxRepeatChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -94,6 +106,8 @@ type
     LockTarget: boolean;
     procedure LoadPlanList;
     procedure SetPlanList(pl:string);
+    procedure LoadScriptList;
+    procedure SetScriptList(sl:string);
     procedure ResetSequences;
   public
     { public declarations }
@@ -122,12 +136,15 @@ procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
   TargetList.Cells[0,0]:='Seq';
   LoadPlanList;
+  LoadScriptList;
   if TargetList.RowCount>1 then begin
      TargetList.Row:=1;
      TargetListSelection(nil,0,1);
   end
   else begin
+    PageControl1.ActivePageIndex:=0;
     LabelSeq.Caption:='0';
+    LabelSeq1.Caption:='0';
     StartTime.Text:='00:00:00';
     EndTime.Text:='23:59:59';
   end;
@@ -151,6 +168,33 @@ var i:integer;
 begin
   i:=PlanList.Items.IndexOf(pl);
   if i>=0 then PlanList.ItemIndex:=i;
+end;
+
+procedure Tf_EditTargets.LoadScriptList;
+var i,k: integer;
+    fs : TSearchRec;
+    s: TStringlist;
+begin
+  s:=TStringlist.Create;
+  ScriptList.Clear;
+  for k:=1 to MaxScriptDir do begin
+    i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
+    while i=0 do begin
+      s.AddObject(ExtractFileNameOnly(fs.Name),ScriptDir[k]);
+      i:=FindNextUTF8(fs);
+    end;
+    FindCloseUTF8(fs);
+  end;
+  s.CustomSort(@ScriptListCompare);
+  ScriptList.Items.Assign(s);
+  ScriptList.ItemIndex:=0;
+end;
+
+procedure Tf_EditTargets.SetScriptList(sl:string);
+var i:integer;
+begin
+  i:=ScriptList.Items.IndexOf(sl);
+  if i>=0 then ScriptList.ItemIndex:=i;
 end;
 
 procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
@@ -197,7 +241,9 @@ var txt:string;
     i: integer;
     t: TTarget;
 begin
+  PageControl1.ActivePageIndex:=0;
   txt:=FormEntry(self,'Object name','None');
+  if txt='Script' then txt:='_Script';
   t:=TTarget.Create;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
@@ -211,6 +257,93 @@ begin
   PointDEC.Text:='-';
   TargetChange(nil);
 end;
+
+procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
+var txt:string;
+    i: integer;
+    t: TTarget;
+begin
+  PageControl1.ActivePageIndex:=1;
+  txt:='Script';
+  t:=TTarget.Create;
+  t.objectname:=txt;
+  TargetList.RowCount:=TargetList.RowCount+1;
+  i:=TargetList.RowCount-1;
+  TargetList.Cells[0,i]:=IntToStr(i);
+  TargetList.Cells[1,i]:=txt;
+  TargetList.Cells[2,i]:=t.planname;
+  TargetList.Objects[0,i]:=t;
+  TargetList.Row:=i;
+  TargetChange(nil);
+end;
+
+procedure Tf_EditTargets.BtnScriptClick(Sender: TObject);
+var txt,fn: string;
+    scdir:TScriptDir;
+    i:integer;
+    newscript: boolean;
+    s: TStringList;
+begin
+  newscript:=(Sender=BtnEditNewScript)or(ScriptList.Text='');
+  s:=TStringList.Create;
+  if f_pascaleditor=nil then begin
+     f_pascaleditor:=Tf_pascaleditor.Create(self);
+     f_pascaleditor.DebugScript:=f_scriptengine.dbgscr;
+  end;
+  if newscript then begin
+    s.Clear;
+    txt:=FormEntry(self,'New script','');
+    if txt='' then exit;
+    scdir:=ScriptDir[1];
+    if copy(txt,1,2)='T_' then delete(txt,1,2);
+    fn:=scdir.path+txt+'.script';
+    if FileExistsUTF8(fn) then begin
+       if MessageDlg('Script '+txt+' already exist. Do you want to edit this script?',mtConfirmation,mbYesNo,0)=mrYes then
+         s.LoadFromFile(fn)
+       else
+         exit;
+    end;
+    f_pascaleditor.ScriptName:=txt;
+  end
+  else begin
+      i:=ScriptList.ItemIndex;
+      if i<0 then exit;
+      txt:=ScriptList.Items[i];
+      scdir:=TScriptDir(ScriptList.Items.Objects[i]);
+      if (txt='')or(scdir=nil) then exit;
+      fn:=scdir.path+txt+'.script';
+      s.LoadFromFile(fn);
+      if scdir<>ScriptDir[1] then begin
+         if copy(txt,1,2)='T_' then
+            delete(txt,1,2)
+         else begin
+           if txt[1]<>'_' then txt:='_'+txt
+         end;
+         scdir:=ScriptDir[1];
+         fn:=scdir.path+txt+'.script';
+         newscript:=true;
+         if FileExistsUTF8(fn) then begin
+            if MessageDlg('Script '+fn+' already exist. Do you want to replace this custom script by the template?',mtConfirmation,mbYesNo,0)<>mrYes then
+              exit;
+         end;
+      end;
+      f_pascaleditor.ScriptName:=txt;
+  end;
+  f_pascaleditor.SynEdit1.Lines.Assign(s);
+  FormPos(f_pascaleditor,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_pascaleditor.ShowModal;
+  if f_pascaleditor.ModalResult=mrOK then begin
+    s.Assign(f_pascaleditor.SynEdit1.Lines);
+    s.SaveToFile(fn);
+    if newscript then begin
+     LoadScriptList;
+     SetScriptList(f_pascaleditor.ScriptName);
+     TargetChange(nil);
+    end;
+  end;
+  s.Free;
+end;
+
 
 procedure Tf_EditTargets.BtnDeleteObjectClick(Sender: TObject);
 var i: integer;
@@ -227,6 +360,7 @@ begin
   end;
   ResetSequences;
 end;
+
 
 procedure Tf_EditTargets.ResetSequences;
 var i: integer;
@@ -269,66 +403,86 @@ begin
   LockTarget:=true;
   n:=aRow;
   LabelSeq.Caption:=IntToStr(n);
+  LabelSeq1.Caption:=IntToStr(n);
   t:=TTarget(TargetList.Objects[0,n]);
-  ObjectName.Text:=t.objectname;
-  SetPlanList(t.planname);
-  StartTime.Text:=TimeToStr(t.starttime);
-  EndTime.Text:=TimeToStr(t.endtime);
-  if t.ra=NullCoord then
-    PointRA.Text:='-'
-  else
-    PointRA.Text:=RAToStr(t.ra);
-  if t.de=NullCoord then
-    PointDEC.Text:='-'
-  else
-    PointDEC.Text:=DEToStr(t.de);
-  PointAstrometry.Checked:=t.astrometrypointing;
-  RepeatCount.Text:=t.repeatcount_str;
-  Delay.Text:=t.delay_str;
-  PreviewExposure.Text:=t.previewexposure_str;
-  Preview.Checked:=t.preview;
-  CheckBoxRepeat.Checked:=(t.repeatcount>1);
-  PanelRepeat.Visible:=CheckBoxRepeat.Checked;
+  if t.objectname='Script' then begin
+    PageControl1.ActivePageIndex:=1;
+    SetScriptList(t.planname);
+  end
+  else begin
+    PageControl1.ActivePageIndex:=0;
+    ObjectName.Text:=t.objectname;
+    SetPlanList(t.planname);
+    StartTime.Text:=TimeToStr(t.starttime);
+    EndTime.Text:=TimeToStr(t.endtime);
+    if t.ra=NullCoord then
+      PointRA.Text:='-'
+    else
+      PointRA.Text:=RAToStr(t.ra);
+    if t.de=NullCoord then
+      PointDEC.Text:='-'
+    else
+      PointDEC.Text:=DEToStr(t.de);
+    PointAstrometry.Checked:=t.astrometrypointing;
+    RepeatCount.Text:=t.repeatcount_str;
+    Delay.Text:=t.delay_str;
+    PreviewExposure.Text:=t.previewexposure_str;
+    Preview.Checked:=t.preview;
+    CheckBoxRepeat.Checked:=(t.repeatcount>1);
+    PanelRepeat.Visible:=CheckBoxRepeat.Checked;
+  end;
   LockTarget:=false;
 end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
-var n:integer;
+var i,n:integer;
+    scdir:TScriptDir;
+    sname: string;
     t: TTarget;
 begin
   if LockTarget then exit;
   n:=TargetList.Row;
   if n < 1 then exit;
   t:=TTarget(TargetList.Objects[0,n]);
-  t.objectname:=trim(ObjectName.Text);
-  t.planname:=PlanList.Text;
-  t.starttime:=StrToTime(StartTime.Text);
-  t.endtime:=StrToTime(EndTime.Text);
-  if PointRA.Text='-' then
-    t.ra:=NullCoord
-  else
-    t.ra:=StrToAR(PointRA.Text);
-  if PointDEC.Text='-' then
-    t.de:=NullCoord
-  else
-    t.de:=StrToDE(PointDEC.Text);
-  if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
-  t.astrometrypointing:=PointAstrometry.Checked;
-  t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
-  t.delay:=StrToFloatDef(Delay.Text,1);
-  t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
-  t.preview:=Preview.Checked;
-  TargetList.Cells[1,n]:=t.objectname;
-  TargetList.Cells[2,n]:=t.planname;
+  if t.objectname='Script' then begin
+    PageControl1.ActivePageIndex:=1;
+    i:=ScriptList.ItemIndex;
+    sname:=ScriptList.Items[i];
+    scdir:=TScriptDir(ScriptList.Items.Objects[i]);
+    t.planname:=sname;
+    if scdir=nil then t.path:=''
+                 else t.path:=scdir.path;
+  end
+  else begin
+    PageControl1.ActivePageIndex:=0;
+    t.objectname:=trim(ObjectName.Text);
+    t.planname:=PlanList.Text;
+    t.starttime:=StrToTime(StartTime.Text);
+    t.endtime:=StrToTime(EndTime.Text);
+    if PointRA.Text='-' then
+      t.ra:=NullCoord
+    else
+      t.ra:=StrToAR(PointRA.Text);
+    if PointDEC.Text='-' then
+      t.de:=NullCoord
+    else
+      t.de:=StrToDE(PointDEC.Text);
+    if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
+    t.astrometrypointing:=PointAstrometry.Checked;
+    t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
+    t.delay:=StrToFloatDef(Delay.Text,1);
+    t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
+    t.preview:=Preview.Checked;
+    TargetList.Cells[1,n]:=t.objectname;
+    TargetList.Cells[2,n]:=t.planname;
+  end;
 end;
 
-procedure Tf_EditTargets .TargetListColRowMoved(Sender: TObject;
+procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;
   IsColumn: Boolean; sIndex, tIndex: Integer);
-var i,n: integer;
 begin
   ResetSequences;
-  val(LabelSeq.Caption,i,n);
-  if n=0 then TargetListSelection(Sender,0,i);
+  TargetListSelection(Sender,0,tIndex);
 end;
 
 

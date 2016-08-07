@@ -28,8 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, cu_planetarium, cu_sampclient, cu_sampserver, Classes, SysUtils,
-    FileUtil, ExtCtrls, Forms;
+uses u_global, cu_planetarium, cu_sampclient, Classes, SysUtils,
+    LazFileUtils, ExtCtrls, Forms;
 
 type
 
@@ -78,6 +78,7 @@ end;
 function TPlanetarium_samp.Cmd(const Value: string):string;
 begin
  // todo
+  result:=msgFailed;
 end;
 
 procedure TPlanetarium_samp.Execute;
@@ -159,19 +160,14 @@ begin
 end;
 
 procedure TPlanetarium_samp.DoClientChange;
-var i,n: integer;
+var n: integer;
 begin
   FClientChange:=false;
   if SampClient.SampHubGetClientList then begin
      n:=SampClient.Clients.Count;
      if n=0 then DisplayMessage('No SAMP clients')
             else DisplayMessage('SAMP clients: '+inttostr(n));
-     {
-     if n=0 then DisplayMessage('No SAMP clients')
-     else for i:=0 to n-1 do begin
-        DisplayMessage(SampClient.Clients[i]+', '+SampClient.ClientNames[i]+', '+SampClient.ClientDesc[i]);
-     end;}
-  end
+   end
   else DisplayMessage('SAMP error '+inttostr(SampClient.LastErrorcode)+SampClient.LastError);
 end;
 
@@ -182,7 +178,7 @@ begin
   imgname:=ExtractFileNameOnly(fn);
   imgid:='ccdciel_'+imgname;
   url:='file://'+fn;
-  SampClient.SampSendImageFits(client,imgname,imgid,url);
+  result:=SampClient.SampSendImageFits(client,imgname,imgid,url);
 end;
 
 end.

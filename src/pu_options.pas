@@ -25,22 +25,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, EditBtn,
-  StdCtrls, ExtCtrls, ComCtrls;
+uses u_utils,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, ComCtrls, enhedits;
 
 type
 
   { Tf_option }
 
   Tf_option = class(TForm)
+    ButtonDir: TButton;
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
     AstrometryTimeout: TEdit;
     CygwinPath: TEdit;
+    CaptureDir: TEdit;
+    hemis: TComboBox;
     Label33: TLabel;
     CygwinPanel: TPanel;
     Label34: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    latdeg: TFloatEdit;
+    LatitudeGroup: TGroupBox;
+    latmin: TLongEdit;
+    latsec: TFloatEdit;
+    long: TComboBox;
+    longdeg: TFloatEdit;
+    LongitudeGroup: TGroupBox;
+    longmin: TLongEdit;
+    longsec: TFloatEdit;
+    SelectDirectoryDialog1: TSelectDirectoryDialog;
     SlewPrec: TEdit;
     SlewRetry: TEdit;
     SlewExp: TEdit;
@@ -67,7 +82,6 @@ type
     PlanetariumBox: TRadioGroup;
     Button1: TButton;
     Button2: TButton;
-    CaptureDir: TDirectoryEdit;
     DitherRAonly: TCheckBox;
     Label23: TLabel;
     PrecSlewBox: TRadioGroup;
@@ -145,20 +159,29 @@ type
     Label14: TLabel;
     Panel1: TPanel;
     StarWindow: TEdit;
+    procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure latChange(Sender: TObject);
+    procedure longChange(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
   private
     { private declarations }
     FGetPixelSize, FGetFocale: TNotifyEvent;
+    Flatitude, Flongitude: double;
+    Lockchange: boolean;
     function GetResolver: integer;
     procedure SetResolver(value:integer);
+    procedure SetLatitude(value:double);
+    procedure SetLongitude(value:double);
   public
     { public declarations }
     property Resolver: integer read GetResolver write SetResolver;
+    property Latitude: double read Flatitude write SetLatitude;
+    property Longitude: double read Flongitude write SetLongitude;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
   end;
@@ -180,7 +203,62 @@ begin
     ElbrusUnixpath.Visible:=false;
     Label13.Visible:=false;
   {$endif}
+  Lockchange:=false;
   PageControl1.ActivePageIndex:=0;
+end;
+
+procedure Tf_option.latChange(Sender: TObject);
+begin
+  if LockChange then exit;
+  if frac(latdeg.Value)>0 then
+    Flatitude:=latdeg.value
+  else
+    Flatitude:=latdeg.value+latmin.value/60+latsec.value/3600;
+  if hemis.Itemindex>0 then Flatitude:=-Flatitude;
+end;
+
+procedure Tf_option.longChange(Sender: TObject);
+begin
+  if LockChange then exit;
+  if frac(longdeg.Value)>0 then
+     Flongitude:=longdeg.value
+  else
+     Flongitude:=longdeg.value+longmin.value/60+longsec.value/3600;
+  if long.Itemindex>0 then Flongitude:=-Flongitude;
+end;
+
+procedure Tf_option.SetLatitude(value:double);
+var d,m,s : string;
+begin
+try
+  LockChange:=true;
+  Flatitude:=value;
+  ArToStr4(abs(value),'0.0',d,m,s);
+  latdeg.Text:=d;
+  latmin.Text:=m;
+  latsec.Text:=s;
+  if value>=0 then hemis.Itemindex:=0
+              else hemis.Itemindex:=1;
+finally
+  LockChange:=false;
+end;
+end;
+
+procedure Tf_option.SetLongitude(value:double);
+var d,m,s : string;
+begin
+try
+  LockChange:=true;
+  Flongitude:=value;
+  ArToStr4(abs(value),'0.0',d,m,s);
+  longdeg.Text:=d;
+  longmin.Text:=m;
+  longsec.Text:=s;
+  if value>=0 then long.Itemindex:=0
+                   else long.Itemindex:=1;
+finally
+  LockChange:=false;
+end;
 end;
 
 procedure Tf_option.PixelSizeFromCameraChange(Sender: TObject);
@@ -211,6 +289,13 @@ begin
   end else begin
     PanelRemoteCdc.Visible:=true;
   end;
+end;
+
+procedure Tf_option.ButtonDirClick(Sender: TObject);
+begin
+SelectDirectoryDialog1.InitialDir:=CaptureDir.text;
+SelectDirectoryDialog1.FileName:=CaptureDir.text;
+if SelectDirectoryDialog1.Execute then CaptureDir.text:=SelectDirectoryDialog1.FileName;
 end;
 
 function Tf_option.GetResolver: integer;

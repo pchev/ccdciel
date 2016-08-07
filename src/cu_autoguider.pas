@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global,
+uses u_global, LCLIntf,
   Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -48,12 +48,10 @@ type
     FonStatusChange: TNotifyEvent;
     StarLostTimer: TTimer;
     procedure StarLostTimerTimer(Sender: TObject);
-    procedure DisplayMessagesyn;
-    procedure ProcessDataSyn;
+    procedure StatusChange;
     procedure ProcessDisconnectSyn;
     procedure ProcessDisconnect;
     procedure DisplayMessage(msg:string);
-    procedure ProcessData(line:string);
     procedure ProcessEvent(txt:string); virtual; abstract;
     procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
   public
@@ -75,7 +73,7 @@ type
     property TargetPort : string read FTargetPort;
     property Timeout : integer read FTimeout write FTimeout;
     property LastError : string read FLastError;
-    property ErrorDesc : string read FErrorDesc;
+    property ErrorDesc : string read FErrorDesc write FErrorDesc;
     property Status : string read FStatus;
     property State : TAutoguiderState read FState;
     property onConnect: TNotifyEvent read FonConnect  write FonConnect;
@@ -119,24 +117,16 @@ end;
 
 procedure T_autoguider.DisplayMessage(msg:string);
 begin
-FErrorDesc:=msg;
-Synchronize(@DisplayMessageSyn);
+if FErrorDesc='' then
+  FErrorDesc:=msg
+else
+  FErrorDesc:=FErrorDesc+crlf+msg;
+PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderMessage, 0);
 end;
 
-procedure T_autoguider.DisplayMessageSyn;
+procedure T_autoguider.StatusChange;
 begin
-if assigned(FonShowMessage) then FonShowMessage(FErrorDesc);
-end;
-
-procedure T_autoguider.ProcessData(line:string);
-begin
-FRecvData:=line;
-Synchronize(@ProcessDataSyn);
-end;
-
-procedure T_autoguider.ProcessDataSyn;
-begin
- ProcessEvent(FRecvData);
+ PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderStatusChange, 0);
 end;
 
 procedure T_autoguider.ProcessDisconnect;

@@ -68,7 +68,7 @@ T_indiwheel = class(T_wheel)
    procedure SetFilterNames(value:TStringList); override;
    procedure SetTimeout(num:integer); override;
 public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    Procedure Disconnect; override;
@@ -95,9 +95,9 @@ if csDestroying in ComponentState then exit;
   ClearStatus;
 end;
 
-constructor T_indiwheel.Create;
+constructor T_indiwheel.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';

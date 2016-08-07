@@ -208,6 +208,7 @@ begin
         imgdata[i,j]:=trunc(vmin+img[0,y1,x1]/c)
      else imgdata[i,j]:=trunc(vmin);
    end;
+ psf.Flux:=0;
  ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
  if psf.Flux>0 then begin
    fwhm:=PSF.Sigma;

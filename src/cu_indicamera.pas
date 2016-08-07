@@ -114,7 +114,7 @@ private
    function GetBitperPixel: double; override;
    procedure SetTimeout(num:integer); override;
  public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
    Procedure Disconnect; override;
@@ -150,9 +150,9 @@ if csDestroying in ComponentState then exit;
   ClearStatus;
 end;
 
-constructor T_indicamera.Create;
+constructor T_indicamera.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FCameraInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';
@@ -833,34 +833,28 @@ end;
 
 function T_indicamera.GetTemperatureRange:TNumRange;
 begin
-//if UseMainSensor then begin
  if CCDTemperature<>nil then begin
     result.min:=CCDTemperature.np[0].min;
     result.max:=CCDTemperature.np[0].max;
     result.step:=CCDTemperature.np[0].step;
  end
  else result:=NullRange;
-//end;
 end;
 
 function  T_indicamera.GetTemperature: double;
 begin
-//if UseMainSensor then begin
  if CCDTemperature<>nil then begin
     result:=CCDTemperature.np[0].value;
  end
  else result:=NullCoord;
-//end;
 end;
 
 procedure T_indicamera.SetTemperature(value:double);
 begin
-//if UseMainSensor then begin
  if CCDTemperature<>nil then begin
     CCDTemperature.np[0].value:=value;
     indiclient.sendNewNumber(CCDTemperature);
  end;
-//end;
 end;
 
 Procedure T_indicamera.SetActiveDevices(focuser,filters,telescope: string);

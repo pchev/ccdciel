@@ -1,10 +1,10 @@
 object f_mount: Tf_mount
   Left = 0
-  Height = 77
+  Height = 112
   Top = 0
   Width = 147
   AutoSize = True
-  ClientHeight = 77
+  ClientHeight = 112
   ClientWidth = 147
   TabOrder = 0
   object StaticText1: TStaticText
@@ -24,12 +24,12 @@ object f_mount: Tf_mount
   end
   object Panel1: TPanel
     Left = 0
-    Height = 57
+    Height = 92
     Top = 20
     Width = 147
     Align = alClient
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 57
+    ClientHeight = 92
     ClientWidth = 147
     TabOrder = 1
     object Label1: TLabel
@@ -73,6 +73,24 @@ object f_mount: Tf_mount
       ParentFont = False
       ReadOnly = True
       TabOrder = 1
+    end
+    object BtnPark: TButton
+      Left = 2
+      Height = 25
+      Top = 56
+      Width = 73
+      Caption = 'Park'
+      OnClick = BtnParkClick
+      TabOrder = 2
+    end
+    object BtnTrack: TButton
+      Left = 80
+      Height = 25
+      Top = 56
+      Width = 60
+      Caption = 'Track'
+      OnClick = BtnTrackClick
+      TabOrder = 3
     end
   end
 end

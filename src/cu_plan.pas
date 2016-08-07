@@ -65,7 +65,7 @@ T_Plan = class(TComponent)
     FName: string;
     FRunning: boolean;
   public
-    constructor Create;
+    constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure Clear;
     function Add(s: TStep):integer;
@@ -91,9 +91,9 @@ end;
 
 implementation
 
-constructor T_Plan.Create;
+constructor T_Plan.Create(AOwner: TComponent);
 begin
-  inherited Create(nil);
+  inherited Create(AOwner);
   NumSteps:=0;
   FRunning:=false;
   PlanTimer:=TTimer.Create(self);
@@ -194,6 +194,8 @@ begin
     Fcapture.Binning.Text:=p.binning_str;
     Fcapture.SeqNum.Text:=p.count_str;
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
+    Fcapture.CheckBoxDither.Checked:=p.dither;
+    Fcapture.DitherCount.Text:=p.dithercount_str;
     Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.BtnSetFilter.Click;
     Wait;
@@ -208,7 +210,6 @@ end;
 
 procedure T_Plan.PlanTimerTimer(Sender: TObject);
 var tt: double;
-    str: string;
     p: TStep;
 begin
  if FRunning then begin
@@ -224,11 +225,6 @@ begin
           StepRepeatTimer.Interval:=trunc(1000*tt);
           StepRepeatTimer.Enabled:=true;
           StepDelayEnd:=now+tt/secperday;
-          {if p.preview and (tt>5)and(tt>(2*p.previewexposure)) then begin
-            if p.previewexposure>0 then Preview.ExpTime.Text:=p.previewexposure_str;
-            Preview.Binning.Text:=p.binning_str;
-            Preview.BtnLoop.Click;
-          end;}
        end
        else begin
          NextStep;
@@ -259,7 +255,6 @@ begin
     p:=Steps[CurrentStep];
     if p<>nil then begin
       msg('Repeat '+inttostr(StepRepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
-      //if p.preview and Preview.Running then Preview.BtnLoop.Click;
       StepTimeStart:=now;
       StartCapture;
     end

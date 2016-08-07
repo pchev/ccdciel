@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, FileUtil, u_utils, u_global,
-  Graphics,Math, FPImage, Controls, LCLType, Forms, StdCtrls, ExtCtrls, Buttons, IntfGraphics;
+  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms,
+  StdCtrls, ExtCtrls, Buttons, IntfGraphics;
 
 type
 
@@ -65,10 +66,10 @@ type
       function ReadHeader(ff:TMemoryStream): integer;
       function GetStream: TMemoryStream;
       function Indexof(key: string): integer;
-      function Valueof(key: string; var val: string): boolean; overload;
-      function Valueof(key: string; var val: integer): boolean; overload;
-      function Valueof(key: string; var val: double): boolean; overload;
-      function Valueof(key: string; var val: boolean): boolean; overload;
+      function Valueof(key: string; out val: string): boolean; overload;
+      function Valueof(key: string; out val: integer): boolean; overload;
+      function Valueof(key: string; out val: double): boolean; overload;
+      function Valueof(key: string; out val: boolean): boolean; overload;
       function Add(key,val,comment: string; quotedval:boolean=true): integer; overload;
       function Add(key:string; val:integer; comment: string): integer; overload;
       function Add(key:string; val:double; comment: string): integer; overload;
@@ -204,6 +205,7 @@ begin
 ClearHeader;
 eoh:=false;
 ff.Position:=0;
+header[1,1]:=chr(0);
 repeat
    n:=ff.Read(header,sizeof(THeaderBlock));
    if n<>sizeof(THeaderBlock) then
@@ -269,7 +271,7 @@ begin
   result:=FKeys.IndexOf(key);
 end;
 
-function TFitsHeader.Valueof(key: string; var val: string): boolean; overload;
+function TFitsHeader.Valueof(key: string; out val: string): boolean; overload;
 var k: integer;
 begin
   val:='';
@@ -278,7 +280,7 @@ begin
   if result then val:=FValues[k];
 end;
 
-function TFitsHeader.Valueof(key: string; var val: integer): boolean; overload;
+function TFitsHeader.Valueof(key: string; out val: integer): boolean; overload;
 var k: integer;
 begin
   val:=0;
@@ -287,7 +289,7 @@ begin
   if result then val:=StrToIntDef(FValues[k],0);
 end;
 
-function TFitsHeader.Valueof(key: string; var val: double): boolean; overload;
+function TFitsHeader.Valueof(key: string; out val: double): boolean; overload;
 var k: integer;
 begin
   val:=0;
@@ -296,7 +298,7 @@ begin
   if result then val:=StrToFloatDef(FValues[k],0);
 end;
 
-function TFitsHeader.Valueof(key: string; var val: boolean): boolean; overload;
+function TFitsHeader.Valueof(key: string; out val: boolean): boolean; overload;
 var k: integer;
 begin
   val:=false;
@@ -904,16 +906,16 @@ ittramp: begin
           // Ramp
           result:=value;
          end;
-ittsqrt: begin
-          // sqrt
-          if value=0 then result:=0
-          else result:=round(csqrt*sqrt(value));
-         end;
 ittlog:  begin
           // Log
           if value=0 then result:=0
           else result:=round(clog*ln(value));
           end;
+ittsqrt: begin
+          // sqrt
+          if value=0 then result:=0
+          else result:=round(csqrt*sqrt(value));
+         end;
 end;
 end;
 

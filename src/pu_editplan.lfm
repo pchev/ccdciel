@@ -1,11 +1,11 @@
 object f_EditPlan: Tf_EditPlan
   Left = 320
-  Height = 417
+  Height = 403
   Top = 252
   Width = 467
   ActiveControl = Desc
   Caption = 'Edit plan'
-  ClientHeight = 417
+  ClientHeight = 403
   ClientWidth = 467
   OnClose = FormClose
   OnCreate = FormCreate
@@ -16,11 +16,11 @@ object f_EditPlan: Tf_EditPlan
   Visible = False
   object Panel1: TPanel
     Left = 203
-    Height = 378
+    Height = 364
     Top = 0
     Width = 264
     Align = alRight
-    ClientHeight = 378
+    ClientHeight = 364
     ClientWidth = 264
     TabOrder = 0
     object Panel2: TPanel
@@ -95,51 +95,21 @@ object f_EditPlan: Tf_EditPlan
     end
     object Panel6: TPanel
       Left = 1
-      Height = 286
+      Height = 272
       Top = 91
       Width = 262
       Align = alClient
-      ClientHeight = 286
+      ClientHeight = 272
       ClientWidth = 262
       TabOrder = 1
       object PanelRepeat: TPanel
         Left = 0
-        Height = 123
-        Top = 160
+        Height = 76
+        Top = 196
         Width = 260
-        ClientHeight = 123
+        ClientHeight = 76
         ClientWidth = 260
         TabOrder = 0
-        object PreviewExposure: TEdit
-          Left = 117
-          Height = 27
-          Top = 93
-          Width = 59
-          OnChange = StepChange
-          TabOrder = 0
-          Text = '1'
-          Visible = False
-        end
-        object Label9: TLabel
-          Left = 8
-          Height = 17
-          Top = 97
-          Width = 122
-          Caption = 'Preview exposure'
-          ParentColor = False
-          Visible = False
-        end
-        object Preview: TCheckBox
-          Left = 8
-          Height = 24
-          Top = 64
-          Width = 243
-          Caption = 'Preview when waiting to repeat'
-          OnChange = StepChange
-          ParentBidiMode = False
-          TabOrder = 1
-          Visible = False
-        end
         object Label13: TLabel
           Left = 184
           Height = 17
@@ -170,7 +140,7 @@ object f_EditPlan: Tf_EditPlan
           Top = 37
           Width = 80
           OnChange = StepChange
-          TabOrder = 2
+          TabOrder = 0
           Text = '0'
         end
         object RepeatCount: TEdit
@@ -179,25 +149,16 @@ object f_EditPlan: Tf_EditPlan
           Top = 8
           Width = 80
           OnChange = StepChange
-          TabOrder = 3
+          TabOrder = 1
           Text = '1'
-        end
-        object Label14: TLabel
-          Left = 184
-          Height = 17
-          Top = 97
-          Width = 66
-          Caption = '[seconds]'
-          ParentColor = False
-          Visible = False
         end
       end
       object Panel7: TPanel
         Left = 0
-        Height = 160
+        Height = 192
         Top = 0
         Width = 260
-        ClientHeight = 160
+        ClientHeight = 192
         ClientWidth = 260
         TabOrder = 1
         object Count: TEdit
@@ -280,11 +241,29 @@ object f_EditPlan: Tf_EditPlan
         object CheckBoxRepeat: TCheckBox
           Left = 8
           Height = 24
-          Top = 128
+          Top = 158
           Width = 136
           Caption = 'Repeat this step'
           OnChange = CheckBoxRepeatChange
           TabOrder = 4
+        end
+        object CheckBoxDither: TCheckBox
+          Left = 8
+          Height = 24
+          Top = 128
+          Width = 113
+          Caption = 'Dither every '
+          OnChange = StepChange
+          TabOrder = 5
+        end
+        object DitherCount: TEdit
+          Left = 136
+          Height = 27
+          Top = 128
+          Width = 40
+          OnChange = StepChange
+          TabOrder = 6
+          Text = '1'
         end
       end
     end
@@ -292,7 +271,7 @@ object f_EditPlan: Tf_EditPlan
   object Panel3: TPanel
     Left = 0
     Height = 39
-    Top = 378
+    Top = 364
     Width = 467
     Align = alBottom
     ClientHeight = 39
@@ -328,16 +307,16 @@ object f_EditPlan: Tf_EditPlan
   end
   object Panel4: TPanel
     Left = 0
-    Height = 378
+    Height = 364
     Top = 0
     Width = 203
     Align = alClient
-    ClientHeight = 378
+    ClientHeight = 364
     ClientWidth = 203
     TabOrder = 2
     object StepList: TStringGrid
       Left = 1
-      Height = 351
+      Height = 337
       Top = 26
       Width = 201
       Align = alClient

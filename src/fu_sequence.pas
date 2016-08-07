@@ -29,7 +29,7 @@ uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi,
   fu_capture, fu_preview, fu_filterwheel,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   cu_targets, cu_plan,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
 type
@@ -132,7 +132,7 @@ implementation
 constructor Tf_sequence.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
- Targets:=T_Targets.Create;
+ Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
  Targets.Mount:=Fmount;

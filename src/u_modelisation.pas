@@ -572,6 +572,7 @@ Case Precision of
 if alamda<0 then
    begin
    alamda:=1;
+   MrqminBeta[1]:=0;
    if not mrqcof(Img,a,alpha,MrqminBeta,chisq,TypeModele,Degre) then
       begin
       Result:=False;
@@ -1088,6 +1089,7 @@ CoefAlamda:=10;
 if alamda<0 then
    begin
    alamda:=1;
+   MrqminBeta[1]:=0;
    if not mrqcof(LigDouble,a,alpha,MrqminBeta,chisq) then
       begin
       Result:=False;

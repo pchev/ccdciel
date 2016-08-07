@@ -26,23 +26,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Dialogs, Graphics;
 
 type
 
   { Tf_mount }
 
   Tf_mount = class(TFrame)
+    BtnPark: TButton;
+    BtnTrack: TButton;
     Label1: TLabel;
     Label2: TLabel;
     RA: TEdit;
     DE: TEdit;
     Panel1: TPanel;
     StaticText1: TStaticText;
+    procedure BtnParkClick(Sender: TObject);
+    procedure BtnTrackClick(Sender: TObject);
   private
     { private declarations }
+    FonPark  : TNotifyEvent;
+    FonTrack  : TNotifyEvent;
   public
     { public declarations }
+    property onPark  : TNotifyEvent read FonPark write FonPark;
+    property onTrack  : TNotifyEvent read FonTrack write FonTrack;
   end;
 
 implementation
@@ -51,6 +59,18 @@ implementation
 
 { Tf_mount }
 
+procedure Tf_mount.BtnParkClick(Sender: TObject);
+begin
+  if BtnPark.Font.Color=clGreen then begin
+     if MessageDlg('Park the telescope now?',mtConfirmation,mbYesNo,0)<>mrYes then exit;
+  end;
+  if assigned(FonPark) then FonPark(self);
+end;
+
+procedure Tf_mount.BtnTrackClick(Sender: TObject);
+begin
+  if assigned(FonTrack) then FonTrack(self);
+end;
 
 end.
 

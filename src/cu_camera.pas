@@ -76,7 +76,7 @@ T_camera = class(TComponent)
     function GetBitperPixel: double; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
-    constructor Create;
+    constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
@@ -130,9 +130,9 @@ end;
 
 implementation
 
-constructor T_camera.Create;
+constructor T_camera.Create(AOwner: TComponent);
 begin
-  inherited Create(nil);
+  inherited Create(AOwner);
   FTimeOut:=100;
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
@@ -157,7 +157,7 @@ procedure T_camera.WriteHeaders;
 var dy,dm,dd: word;
     origin,observer,telname,objname: string;
     focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
-    hbitpix,hnaxis,hnaxis1,hnaxis2,hbin1,hbin2: integer;
+    hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
 begin
@@ -166,6 +166,7 @@ begin
   if not Ffits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=Ffits.HeaderInfo.naxis;
   if not Ffits.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=Ffits.HeaderInfo.naxis1;
   if not Ffits.Header.Valueof('NAXIS2',hnaxis2) then hnaxis2:=Ffits.HeaderInfo.naxis2;
+  if not Ffits.Header.Valueof('NAXIS3',hnaxis3) then hnaxis3:=Ffits.HeaderInfo.naxis3;
   if not Ffits.Header.Valueof('BZERO',hbzero)   then hbzero:=Ffits.HeaderInfo.bzero;
   if not Ffits.Header.Valueof('BSCALE',hbscale) then hbscale:=Ffits.HeaderInfo.bscale;
   if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=-1;
@@ -221,6 +222,7 @@ begin
   Ffits.Header.Add('NAXIS',hnaxis,'number of data axes');
   Ffits.Header.Add('NAXIS1',hnaxis1 ,'length of data axis 1');
   Ffits.Header.Add('NAXIS2',hnaxis2 ,'length of data axis 2');
+  if hnaxis=3 then Ffits.Header.Add('NAXIS3',hnaxis3 ,'length of data axis 3');;
   Ffits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
   Ffits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
   Ffits.Header.Add('BSCALE',hbscale,'default scaling factor');

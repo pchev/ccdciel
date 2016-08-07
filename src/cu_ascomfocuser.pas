@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_focuser, u_global, indiapi,
+uses cu_focuser, u_global,
     {$ifdef mswindows}
-    Variants, comobj,
+    indiapi, Variants, comobj,
     {$endif}
     ExtCtrls,Classes, SysUtils;
 
@@ -36,10 +36,11 @@ T_ascomfocuser = class(T_focuser)
  private
    {$ifdef mswindows}
    V: variant;
-   {$endif}
-   FSpeed,FFocusdirection,FRelIncr: integer;
+   FSpeed: integer;
    stPosition,stRelpos: integer;
    Fdevice: string;
+   {$endif}
+   FFocusdirection,FRelIncr: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
@@ -60,7 +61,7 @@ T_ascomfocuser = class(T_focuser)
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
 public
-   constructor Create;
+   constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
    procedure Disconnect; override;
@@ -71,9 +72,9 @@ end;
 
 implementation
 
-constructor T_ascomfocuser.Create;
+constructor T_ascomfocuser.Create(AOwner: TComponent);
 begin
- inherited Create;
+ inherited Create(AOwner);
  FFocuserInterface:=ASCOM;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
@@ -193,6 +194,7 @@ end;
 
 function  T_ascomfocuser.GetPosition:integer;
 begin
+ result:=0;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -206,6 +208,7 @@ end;
 
 function  T_ascomfocuser.GetPositionRange: TNumRange;
 begin
+ result:=NullRange;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -222,6 +225,7 @@ end;
 
 function  T_ascomfocuser.GetRelPositionRange: TNumRange;
 begin
+ result:=NullRange;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -267,6 +271,7 @@ end;
 function  T_ascomfocuser.GetSpeed:integer;
 begin
  // not implemented in ASCOM
+ result:=0;
 end;
 
 procedure T_ascomfocuser.SetTimer(p:integer);
@@ -277,10 +282,12 @@ end;
 function  T_ascomfocuser.GetTimer:integer;
 begin
  // not implemented in ASCOM
+ result:=0;
 end;
 
 function  T_ascomfocuser.GethasAbsolutePosition: boolean;
 begin
+ result:=False;
  {$ifdef mswindows}
  if Connected then begin
    try
@@ -294,6 +301,7 @@ end;
 
 function  T_ascomfocuser.GethasRelativePosition: boolean;
 begin
+ result:=False;
  {$ifdef mswindows}
  if Connected then begin
    try

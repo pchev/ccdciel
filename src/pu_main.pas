@@ -27,15 +27,15 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
-  fu_sequence, fu_planetarium, u_ccdconfig, pu_editplan,
-  pu_devicesetup, pu_options, pu_valueseditor, pu_indigui, cu_fits, cu_camera,
+  fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_scriptengine,
+  pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   pu_planetariuminfo, indiapi,
-  lazutf8sysutils, Classes, dynlibs, LCLType,
-  SysUtils, FileUtil, Forms, Controls, Math, Graphics, Dialogs,
+  LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages,
+  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
 type
@@ -52,6 +52,7 @@ type
     MenuItem4: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
+    MenuViewScript: TMenuItem;
     MenuViewPlanetarium: TMenuItem;
     MenuResolveSlew: TMenuItem;
     MenuResolveSync: TMenuItem;
@@ -149,6 +150,7 @@ type
     procedure MenuViewPlanetariumClick(Sender: TObject);
     procedure MenuViewPreviewClick(Sender: TObject);
     procedure MenuViewCaptureClick(Sender: TObject);
+    procedure MenuViewScriptClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -179,6 +181,7 @@ type
     f_mount: Tf_mount;
     f_autoguider: Tf_autoguider;
     f_planetarium: Tf_planetarium;
+    f_script: Tf_script;
     f_visu: Tf_visu;
     f_msg: Tf_msg;
     fits: TFits;
@@ -194,6 +197,7 @@ type
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
     MsgLog,MsgDeviceLog: Textfile;
+    Procedure GetAppDir;
     Procedure InitLog;
     Procedure InitDeviceLog;
     Procedure CloseLog;
@@ -222,6 +226,8 @@ type
     procedure ShowExposureRange;
     procedure ShowTemperatureRange;
     procedure SetTemperature(Sender: TObject);
+    procedure SetMountPark(Sender: TObject);
+    procedure SetMountTrack(Sender: TObject);
     procedure SetFocusMode;
     Procedure ConnectWheel(Sender: TObject);
     Procedure DisconnectWheel(Sender: TObject);
@@ -250,6 +256,7 @@ type
     procedure FocusOUT(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
+    Procedure MountParkChange(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
     Procedure AutoguiderCalibrateClick(Sender: TObject);
     Procedure AutoguiderGuideClick(Sender: TObject);
@@ -276,6 +283,7 @@ type
     procedure AstrometryEnd(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure LoadFitsFile(fn:string);
+    procedure CCDCIELMessageHandler(var Message: TLMessage); message LM_CCDCIEL;
   public
     { public declarations }
   end;
@@ -417,6 +425,75 @@ tool.Visible:=config.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
 amenu.Checked:=tool.Visible;
 end;
 
+Procedure Tf_main.GetAppDir;
+var buf:string;
+begin
+ {$ifdef darwin}
+ Appdir:=getcurrentdir;
+ if not DirectoryExists(slash(Appdir)+slash('scripts')) then begin
+    Appdir:=ExtractFilePath(ParamStr(0));
+    i:=pos('.app/',Appdir);
+    if i>0 then begin
+      Appdir:=ExtractFilePath(copy(Appdir,1,i));
+    end;
+ end;
+ {$else}
+ Appdir:=getcurrentdir;
+ if not DirectoryExists(slash(Appdir)+slash('scripts')) then begin
+     Appdir:=ExtractFilePath(ParamStr(0));
+ end;
+ {$endif}
+ {$ifdef unix}
+ Appdir:=expandfilename(Appdir);
+ {$endif}
+ // Be sur the script directory exists
+ if (not directoryexists(slash(appdir)+slash('scripts'))) then begin
+   // try under the current directory
+   buf:=GetCurrentDir;
+   if (directoryexists(slash(buf)+slash('scripts'))) then
+      appdir:=buf
+   else begin
+      // try under the program directory
+      buf:=ExtractFilePath(ParamStr(0));
+      if (directoryexists(slash(buf)+slash('scripts'))) then
+         appdir:=buf
+      else begin
+          // try share directory under current location
+          buf:=ExpandFileName(slash(GetCurrentDir)+SharedDir);
+          if (directoryexists(slash(buf)+slash('scripts'))) then
+             appdir:=buf
+          else begin
+             // try share directory at the same location as the program
+             buf:=ExpandFileName(slash(ExtractFilePath(ParamStr(0)))+SharedDir);
+             if (directoryexists(slash(buf)+slash('scripts'))) then
+                appdir:=buf
+          else begin
+             // try in /usr
+             buf:=ExpandFileName(slash('/usr/bin')+SharedDir);
+             if (directoryexists(slash(buf)+slash('scripts'))) then
+                appdir:=buf
+          else begin
+             // try /usr/local
+             buf:=ExpandFileName(slash('/usr/local/bin')+SharedDir);
+             if (directoryexists(slash(buf)+slash('scripts'))) then
+                appdir:=buf
+
+             else begin
+                Appdir:='nodata';
+             end;
+          end;
+          end;
+          end;
+      end;
+   end;
+ end;
+ ConfigDir:=GetAppConfigDirUTF8(false,true);
+ TmpDir:=slash(ConfigDir)+'tmp';
+ if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
+ LogDir:=slash(ConfigDir)+'Log';
+ if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
+end;
+
 procedure Tf_main.FormCreate(Sender: TObject);
 var DefaultInterface,aInt: TDevInterface;
     configver,configfile: string;
@@ -432,6 +509,7 @@ begin
   DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
   GUIready:=false;
+  MsgHandle:=handle;
   Filters:=TStringList.Create;
   PageControlRight.ActivePageIndex:=0;
   cdcwcs_initfitsfile:=nil;
@@ -453,20 +531,19 @@ begin
     uncompress:= Tuncompress(GetProcedureAddress(zlib,'uncompress'));
     if uncompress<>nil then zlibok:=true;
   end;
+  GetAppDir;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
-  ConfigDir:=GetAppConfigDirUTF8(false,true);
   if Application.HasOption('c', 'config') then begin
     configfile:='ccdciel_'+Application.GetOptionValue('c', 'config')+'.conf';
   end
   else configfile:='ccdciel.conf';
   config.Filename:=slash(ConfigDir)+configfile;
-  LogFile:=slash(ConfigDir)+'Log_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.log';
   LogFileOpen:=false;
-  TmpDir:=slash(ConfigDir)+'tmp';
-  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
-  LogDir:=slash(ConfigDir)+'Log';
-  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
+
+  for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
+  ScriptDir[1].path:=slash(ConfigDir);
+  ScriptDir[2].path:=slash(Appdir)+slash('scripts');
 
   configver:=config.GetValue('/Configuration/Version','');
 
@@ -479,8 +556,8 @@ begin
 
   aInt:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(DefaultInterface)));
   case aInt of
-    INDI:  wheel:=T_indiwheel.Create;
-    ASCOM: wheel:=T_ascomwheel.Create;
+    INDI:  wheel:=T_indiwheel.Create(nil);
+    ASCOM: wheel:=T_ascomwheel.Create(nil);
   end;
   wheel.onMsg:=@NewMessage;
   wheel.onDeviceMsg:=@DeviceMessage;
@@ -490,8 +567,8 @@ begin
 
   aInt:=TDevInterface(config.GetValue('/FocuserInterface',ord(DefaultInterface)));
   case aInt of
-    INDI:  focuser:=T_indifocuser.Create;
-    ASCOM: focuser:=T_ascomfocuser.Create;
+    INDI:  focuser:=T_indifocuser.Create(nil);
+    ASCOM: focuser:=T_ascomfocuser.Create(nil);
   end;
   focuser.onMsg:=@NewMessage;
   focuser.onDeviceMsg:=@DeviceMessage;
@@ -502,20 +579,22 @@ begin
 
   aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
   case aInt of
-    INDI:  mount:=T_indimount.Create;
-    ASCOM: mount:=T_ascommount.Create;
+    INDI:  mount:=T_indimount.Create(nil);
+    ASCOM: mount:=T_ascommount.Create(nil);
   end;
   mount.onMsg:=@NewMessage;
   mount.onDeviceMsg:=@DeviceMessage;
   mount.onCoordChange:=@MountCoordChange;
+  mount.onParkChange:=@MountParkChange;
   mount.onStatusChange:=@MountStatus;
+
 
   fits:=TFits.Create(self);
 
   aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
   case aInt of
-    INDI:  camera:=T_indicamera.Create;
-    ASCOM: camera:=T_ascomcamera.Create;
+    INDI:  camera:=T_indicamera.Create(nil);
+    ASCOM: camera:=T_ascomcamera.Create(nil);
   end;
   camera.Mount:=mount;
   camera.wheel:=wheel;
@@ -530,7 +609,7 @@ begin
   camera.onCameraDisconnected:=@CameraDisconnected;
   camera.onAbortExposure:=@CameraExposureAborted;
 
-  astrometry:=TAstrometry.Create;
+  astrometry:=TAstrometry.Create(nil);
   astrometry.Camera:=camera;
   astrometry.Mount:=mount;
   astrometry.Fits:=fits;
@@ -596,6 +675,8 @@ begin
   f_ccdtemp.onSetTemperature:=@SetTemperature;
 
   f_mount:=Tf_mount.Create(self);
+  f_mount.onPark:=@SetMountPark;
+  f_mount.onTrack:=@SetMountTrack;
 
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
@@ -618,6 +699,30 @@ begin
   f_planetarium.onConnect:=@PlanetariumConnectClick;
   f_planetarium.Status.Text:='Disconnected';
 
+  f_scriptengine:=Tf_scriptengine.Create(self);
+  f_scriptengine.Fits:=fits;
+  f_scriptengine.onMsg:=@NewMessage;
+  f_scriptengine.Preview:=f_preview;
+  f_scriptengine.Capture:=f_capture;
+  f_scriptengine.Ccdtemp:=f_ccdtemp;
+  f_scriptengine.Filter:=wheel;
+  f_scriptengine.Mount:=mount;
+  f_scriptengine.Camera:=camera;
+  f_scriptengine.Focuser:=focuser;
+  f_scriptengine.Autoguider:=autoguider;
+  f_scriptengine.Astrometry:=astrometry;
+  f_scriptengine.Planetarium:=planetarium;
+
+  f_script:=Tf_script.Create(self);
+  f_script.onMsg:=@NewMessage;
+  f_script.Camera:=camera;
+  f_script.Preview:=f_preview;
+  f_script.Capture:=f_capture;
+  f_script.Mount:=mount;
+  f_script.Autoguider:=autoguider;
+  f_script.Astrometry:=astrometry;
+  f_script.LoadScriptList;
+
   SetConfig;
   SetOptions;
 
@@ -639,6 +744,7 @@ begin
   Preview:=false;
   PreviewLoop:=false;
   MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
+  ObsTimeZone:=-GetLocalTimeOffset/60;
 
   NewMessage('Initialized');
 end;
@@ -659,6 +765,7 @@ begin
   SetTool(f_mount,'Mount',PanelRight1,f_preview.top+1,MenuViewMount);
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_mount.top+1,MenuViewAutoguider);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium);
+  SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript);
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser);
   SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
@@ -687,7 +794,9 @@ begin
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
 
-   f_planetariuminfo.planetarium:=planetarium;
+  f_planetariuminfo.planetarium:=planetarium;
+
+  f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
 
 end;
 
@@ -707,6 +816,7 @@ begin
   SetTool(f_mount,'',PanelRight1,f_preview.top+1,MenuViewMount);
   SetTool(f_autoguider,'',PanelRight1,f_mount.top+1,MenuViewAutoguider);
   SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium);
+  SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript);
 
   SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser);
   SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
@@ -799,6 +909,12 @@ begin
   config.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
   config.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
 
+  config.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
+  config.SetValue('/Tools/Script/Visible',f_script.Visible);
+  config.SetValue('/Tools/Script/Top',f_script.Top);
+  config.SetValue('/Tools/Script/Left',f_script.Left);
+  config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
+
   config.SetValue('/Window/Top',Top);
   config.SetValue('/Window/Left',Left);
   config.SetValue('/Window/Width',Width);
@@ -849,6 +965,7 @@ begin
 end;
 
 procedure Tf_main.FormDestroy(Sender: TObject);
+var i: integer;
 begin
   camera.Free;
   wheel.Free;
@@ -857,6 +974,7 @@ begin
   ImaBmp.Free;
   config.Free;
   Filters.Free;
+  for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then ExecNoWait(paramstr(0));
 end;
 
@@ -1036,6 +1154,8 @@ end;
 
 procedure Tf_main.SetOptions;
 begin
+  ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
+  ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',6.0);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
@@ -1643,6 +1763,28 @@ begin
  f_mount.DE.Text:=DEToStr(mount.Dec);
 end;
 
+Procedure Tf_main.MountParkChange(Sender: TObject);
+begin
+ if mount.Park then begin
+    f_mount.BtnPark.Caption:='Parked';
+    f_mount.BtnPark.Font.Color:=clRed
+ end
+ else begin
+    f_mount.BtnPark.Caption:='Unparked';
+    f_mount.BtnPark.Font.Color:=clGreen;
+ end;
+end;
+
+procedure Tf_main.SetMountPark(Sender: TObject);
+begin
+ mount.Park:=not mount.Park;
+end;
+
+procedure Tf_main.SetMountTrack(Sender: TObject);
+begin
+ mount.Track;
+end;
+
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 begin
  if f_autoguider.BtnConnect.Caption='Connect' then begin
@@ -1868,6 +2010,8 @@ begin
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
+   f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
+   f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',6.0);
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
@@ -1929,6 +2073,8 @@ begin
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
+     config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
+     config.SetValue('/Info/ObservatoryLongitude',f_option.Longitude);
      config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
@@ -2037,6 +2183,11 @@ end;
 procedure Tf_main.MenuViewCaptureClick(Sender: TObject);
 begin
   f_capture.Visible:=MenuViewCapture.Checked;
+end;
+
+procedure Tf_main.MenuViewScriptClick(Sender: TObject);
+begin
+  f_script.Visible:=MenuViewScript.Checked;
 end;
 
 procedure Tf_main.MenuViewSequenceClick(Sender: TObject);
@@ -2220,6 +2371,19 @@ if (camera.Status=devConnected) then begin
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then begin
     ftype:=TFrameType(f_capture.FrameType.ItemIndex);
     if camera.FrameType<>ftype then camera.FrameType:=ftype;
+    if ftype<>LIGHT then f_capture.CheckBoxDither.Checked:=false;
+  end;
+  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=StrToIntDef(f_capture.DitherCount.Text,1)) then begin
+    f_capture.DitherNum:=0;
+    if autoguider.State=GUIDER_GUIDING then begin
+      NewMessage('Dithering...');
+      StatusBar1.Panels[1].Text:='Dithering...';
+      autoguider.Dither(DitherPixel, DitherRAonly);
+      autoguider.WaitBusy(SettleMaxTime);
+      Wait(1);
+    end else begin
+      NewMessage('Not autoguiding! dithering ignored.');
+    end;
   end;
   camera.ObjectName:=f_capture.Fname.Text;
   NewMessage('Starting '+f_capture.FrameType.Text+' exposure '+inttostr(f_capture.SeqCount)+' for '+f_capture.ExpTime.Text+' seconds');
@@ -2268,7 +2432,7 @@ var dt: Tdatetime;
     fn,imgsize: string;
     subseq,subobj,substep,subfrt: boolean;
     fnobj,fnfilter,fndate: boolean;
-    fileseqnum,i: integer;
+    fileseqnum: integer;
 begin
   dt:=NowUTC;
   ImgFrameX:=FrameX;
@@ -2320,6 +2484,7 @@ begin
      NewMessage('Saved file '+fn);
      StatusBar1.Panels[2].Text:='Saved '+fn+' '+imgsize;
      f_capture.SeqCount:=f_capture.SeqCount+1;
+     f_capture.DitherNum:=f_capture.DitherNum+1;
      if f_capture.SeqCount<=StrToInt(f_capture.SeqNum.Text) then begin
         if f_capture.Running then StartCaptureExposure(nil);
      end else begin
@@ -2648,6 +2813,7 @@ end;
 
 Procedure Tf_main.PlanetariumConnect(Sender: TObject);
 begin
+ f_planetarium.BtnConnect.Caption:='Disconnect';
  f_planetarium.led.Brush.Color:=clLime;
  f_planetarium.Status.Text:='Connected';
  NewMessage('Planetarium: Connected');
@@ -2670,6 +2836,7 @@ begin
    planetarium.onDisconnect:=@PlanetariumDisconnect;
    planetarium.onShowMessage:=@NewMessage;
    f_planetariuminfo.planetarium:=planetarium;
+   f_scriptengine.Planetarium:=planetarium;
  end;
 end;
 
@@ -2686,6 +2853,20 @@ begin
    imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
    NewMessage('Open file '+fn);
    StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
+end;
+
+procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
+begin
+  case Message.wParam of
+    M_AutoguiderStatusChange: AutoguiderStatus(nil);
+    M_AutoguiderMessage: if autoguider.ErrorDesc<>'' then begin
+                          NewMessage(autoguider.ErrorDesc);
+                          autoguider.ErrorDesc:='';
+                         end;
+    M_AstrometryDone: astrometry.AstrometryDone;
+    else
+      NewMessage('Receive unknow message: '+inttostr(Message.wParam));
+  end;
 end;
 
 end.
