@@ -1,0 +1,84 @@
+object f_script: Tf_script
+  Left = 0
+  Height = 112
+  Top = 0
+  Width = 189
+  AutoSize = True
+  ClientHeight = 112
+  ClientWidth = 189
+  TabOrder = 0
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 189
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Run script'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 92
+    Top = 20
+    Width = 189
+    Align = alClient
+    ChildSizing.ControlsPerLine = 2
+    ClientHeight = 92
+    ClientWidth = 189
+    ParentColor = False
+    TabOrder = 1
+    object ComboBoxScript: TComboBox
+      Left = 2
+      Height = 29
+      Top = 2
+      Width = 174
+      Color = clBlack
+      Font.Color = clRed
+      ItemHeight = 0
+      ParentFont = False
+      TabOrder = 0
+    end
+    object BtnRun: TButton
+      Left = 2
+      Height = 25
+      Top = 34
+      Width = 66
+      Caption = 'Run'
+      OnClick = BtnRunClick
+      TabOrder = 1
+    end
+    object BtnEdit: TButton
+      Left = 2
+      Height = 25
+      Top = 62
+      Width = 66
+      Caption = 'Edit'
+      OnClick = BtnScriptClick
+      TabOrder = 2
+    end
+    object BtnNew: TButton
+      Left = 78
+      Height = 25
+      Top = 62
+      Width = 66
+      Caption = 'New'
+      OnClick = BtnScriptClick
+      TabOrder = 3
+    end
+    object BtnStop: TButton
+      Left = 78
+      Height = 25
+      Top = 34
+      Width = 66
+      Caption = 'Stop'
+      OnClick = BtnStopClick
+      TabOrder = 4
+    end
+  end
+end
