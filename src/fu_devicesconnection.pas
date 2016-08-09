@@ -45,12 +45,15 @@ type
     procedure BtnConnectClick(Sender: TObject);
   private
     { private declarations }
-    FonConnect: TNotifyEvent;
+    FonConnect,FonDisconnect: TNotifyEvent;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure Connect;
+    procedure Disconnect(confirm:boolean);
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
+    property onDisconnect: TNotifyEvent read FonDisconnect write FonDisconnect;
   end;
 
 implementation
@@ -71,7 +74,26 @@ end;
 
 procedure Tf_devicesconnection.BtnConnectClick(Sender: TObject);
 begin
+  if BtnConnect.Caption='Disconnect' then begin
+    Disconnect(true);
+  end else begin
+    Connect;
+  end;
+end;
+
+procedure Tf_devicesconnection.Connect;
+begin
   if Assigned(FonConnect) then FonConnect(self);
+end;
+
+procedure Tf_devicesconnection.Disconnect(confirm:boolean);
+begin
+  if Assigned(FonDisconnect) then begin
+    if confirm then
+      FonDisconnect(self)
+    else
+      FonDisconnect(nil);
+  end;
 end;
 
 end.

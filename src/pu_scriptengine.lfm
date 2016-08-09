@@ -8,7 +8,7 @@ object f_scriptengine: Tf_scriptengine
   ClientWidth = 409
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '1.6.0.3'
+  LCLVersion = '1.6.0.4'
   Visible = False
   object TplPSScript: TPSScript
     CompilerOptions = []
@@ -62,5 +62,11 @@ object f_scriptengine: Tf_scriptengine
     EnableButtons = True
     left = 224
     top = 176
+  end
+  object ShutdownTimer: TTimer
+    Enabled = False
+    OnTimer = ShutdownTimerTimer
+    left = 209
+    top = 37
   end
 end
