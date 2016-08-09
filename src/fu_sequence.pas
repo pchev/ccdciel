@@ -93,7 +93,6 @@ type
     function GetRunning: boolean;
     procedure SaveTargets(fn:string);
     procedure StartSequence;
-    procedure StopSequence;
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
     procedure LoadPlan(p: T_Plan; plan:string);
@@ -111,6 +110,7 @@ type
     procedure ExposureAborted;
     procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
+    procedure StopSequence;
     property Running: boolean read GetRunning;
     property Preview: Tf_preview read Fpreview write SetPreview;
     property Capture: Tf_capture read Fcapture write SetCapture;

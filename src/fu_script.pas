@@ -54,10 +54,12 @@ type
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
     procedure msg(txt:string);
+    function RunScript(sname,path: string):boolean;
  public
     { public declarations }
     procedure LoadScriptList;
     procedure SetScriptList(sl:string);
+    procedure RunShutdownScript;
     property Camera: T_camera read Fcamera write Fcamera;
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
@@ -78,11 +80,44 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
+function Tf_script.RunScript(sname,path: string):boolean;
+var fn: string;
+    i: integer;
+    ok: boolean;
+begin
+  msg('Run script '+sname);
+  fn:=slash(path)+sname+'.script';
+  f_scriptengine.scr.Script.LoadFromFile(fn);
+  ok:=f_scriptengine.scr.Compile;
+  if ok then begin
+    Application.ProcessMessages;
+    result:=f_scriptengine.scr.Execute;
+    if result then
+       msg('Script '+sname+' terminated')
+    else
+       msg('Script execution error, row '+inttostr(f_scriptengine.scr.ExecErrorRow)+': '+f_scriptengine.scr.ExecErrorToString);
+  end else begin
+    for i:=0 to f_scriptengine.scr.CompilerMessageCount-1 do begin
+       msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
+    end;
+    result:=false;
+  end;
+end;
+
+procedure Tf_script.RunShutdownScript;
+var path,sname: string;
+begin
+  path:=ScriptDir[1].path;
+  sname:='shutdown';
+  if FileExistsUTF8(slash(path)+sname+'.script') then begin
+    RunScript(sname,path);
+  end;
+end;
+
 procedure Tf_script.BtnRunClick(Sender: TObject);
-var sname,fn: string;
+var sname: string;
     scdir:TScriptDir;
     i: integer;
-    ok,rc: boolean;
 begin
 if (Fcamera.Status<>devConnected) then begin
    msg('Camera is not connected');
@@ -95,22 +130,7 @@ end else begin
   sname:=ComboBoxScript.Items[i];
   scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
   if (sname='')or(scdir=nil) then exit;
-  fn:=scdir.path+sname+'.script';;
-  msg('Run script '+fn);
-  f_scriptengine.scr.Script.LoadFromFile(fn);
-  ok:=f_scriptengine.scr.Compile;
-  if ok then begin
-    Application.ProcessMessages;
-    rc:=f_scriptengine.scr.Execute;
-    if rc then
-       msg('Script '+sname+' terminated')
-    else
-       msg('Script execution error, row '+inttostr(f_scriptengine.scr.ExecErrorRow)+': '+f_scriptengine.scr.ExecErrorToString);
-  end else begin
-    for i:=0 to f_scriptengine.scr.CompilerMessageCount-1 do begin
-       msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
-    end;
-  end;
+  RunScript(sname,scdir.path);
 end;
 end;
 

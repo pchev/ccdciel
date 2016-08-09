@@ -16,7 +16,7 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.6.0.3'
+  LCLVersion = '1.6.0.4'
   Visible = False
   object PageControlRight: TPageControl
     Left = 612
