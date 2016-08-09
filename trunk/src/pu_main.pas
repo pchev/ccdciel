@@ -427,6 +427,9 @@ end;
 
 Procedure Tf_main.GetAppDir;
 var buf:string;
+    {$ifdef darwin}
+    i:integer;
+    {$endif}
 begin
  {$ifdef darwin}
  Appdir:=getcurrentdir;
