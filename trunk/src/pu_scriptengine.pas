@@ -66,6 +66,7 @@ type
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
     FonMsg: TNotifyMsg;
+    FonStartSequence: TNotifyMsg;
     ilist: array of Integer;
     dlist: array of Double;
     slist: array of String;
@@ -143,13 +144,14 @@ type
     function cmd_PlanetariumConnect:string;
     function cmd_PlanetariumShowImage:string;
     function cmd_ProgramShutdown:string;
-
+    function cmd_SequenceStart(seq:string):string;
   public
     { public declarations }
     dbgscr: TPSScriptDebugger;
     scr: TPSScript;
     procedure StopScript;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onStartSequence: TNotifyMsg read FonStartSequence write FonStartSequence;
     property fits: TFits read Ffits write Ffits;
     property DevicesConnection: Tf_devicesconnection read Fdevicesconnection write Fdevicesconnection;
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
@@ -627,6 +629,7 @@ else if cname='CAPTURE_SETOBJECTNAME' then result:=cmd_Capture_SetObjectName(arg
 else if cname='CAPTURE_SETCOUNT' then result:=cmd_Capture_SetCount(arg[0])
 else if cname='CAPTURE_SETFRAMETYPE' then result:=cmd_Capture_SetFrameType(arg[0])
 else if cname='CAPTURE_SETDITHER' then result:=cmd_Capture_SetDither(arg[0])
+else if cname='SEQUENCE_START' then result:=cmd_SequenceStart(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1164,6 +1167,12 @@ result:=msgOK;
 except
   result:=msgFailed;
 end;
+end;
+
+function Tf_scriptengine.cmd_SequenceStart(seq:string):string;
+begin
+  if Assigned(FonStartSequence) then FonStartSequence(seq);
+  result:=msgOK;
 end;
 
 function Tf_scriptengine.cmd_ProgramShutdown:string;

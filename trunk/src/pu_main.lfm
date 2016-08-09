@@ -606,7 +606,13 @@ object f_main: Tf_main
     Enabled = False
     Interval = 500
     OnTimer = StartupTimerTimer
-    left = 277
-    top = 42
+    left = 282
+    top = 40
+  end
+  object StartSequenceTimer: TTimer
+    Enabled = False
+    OnTimer = StartSequenceTimerTimer
+    left = 408
+    top = 38
   end
 end

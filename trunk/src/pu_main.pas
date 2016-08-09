@@ -108,6 +108,7 @@ type
     AbortTimer: TTimer;
     StartCaptureTimer: TTimer;
     StartupTimer: TTimer;
+    StartSequenceTimer: TTimer;
     procedure AbortTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -158,6 +159,7 @@ type
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure StartCaptureTimerTimer(Sender: TObject);
+    procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
   private
@@ -286,6 +288,7 @@ type
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure LoadFitsFile(fn:string);
     procedure CCDCIELMessageHandler(var Message: TLMessage); message LM_CCDCIEL;
+    Procedure StartSequence(SeqName: string);
   public
     { public declarations }
   end;
@@ -709,6 +712,7 @@ begin
   f_scriptengine:=Tf_scriptengine.Create(self);
   f_scriptengine.Fits:=fits;
   f_scriptengine.onMsg:=@NewMessage;
+  f_scriptengine.onStartSequence:=@StartSequence;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
@@ -813,6 +817,19 @@ procedure Tf_main.StartupTimerTimer(Sender: TObject);
 begin
   StartupTimer.Enabled:=false;
   f_script.RunStartupScript;
+end;
+
+
+Procedure Tf_main.StartSequence(SeqName: string);
+begin
+  f_sequence.LoadTargets(slash(ConfigDir)+SeqName+'.targets');
+  StartSequenceTimer.Enabled:=true;
+end;
+
+procedure Tf_main.StartSequenceTimerTimer(Sender: TObject);
+begin
+  StartSequenceTimer.Enabled:=false;
+  f_sequence.BtnStartClick(nil);
 end;
 
 procedure Tf_main.StatusbarTimerTimer(Sender: TObject);
