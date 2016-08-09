@@ -130,10 +130,6 @@ var sname: string;
     scdir:TScriptDir;
     i: integer;
 begin
-if (Fcamera.Status<>devConnected) then begin
-   msg('Camera is not connected');
-   exit;
-end;
 if f_scriptengine.scr.Running then begin
    msg('Another script is already running');
 end else begin

@@ -35,7 +35,7 @@ object f_script: Tf_script
     TabOrder = 1
     object ComboBoxScript: TComboBox
       Left = 2
-      Height = 29
+      Height = 24
       Top = 2
       Width = 174
       Color = clBlack
