@@ -800,7 +800,7 @@ begin
   f_planetariuminfo.planetarium:=planetarium;
 
   f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
-
+  f_script.RunStartupScript;
 end;
 
 procedure Tf_main.StatusbarTimerTimer(Sender: TObject);

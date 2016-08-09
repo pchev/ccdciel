@@ -59,6 +59,7 @@ type
     { public declarations }
     procedure LoadScriptList;
     procedure SetScriptList(sl:string);
+    procedure RunStartupScript;
     procedure RunShutdownScript;
     property Camera: T_camera read Fcamera write Fcamera;
     property Preview: Tf_preview read Fpreview write Fpreview;
@@ -101,6 +102,16 @@ begin
        msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
     end;
     result:=false;
+  end;
+end;
+
+procedure Tf_script.RunStartupScript;
+var path,sname: string;
+begin
+  path:=ScriptDir[1].path;
+  sname:='startup';
+  if FileExistsUTF8(slash(path)+sname+'.script') then begin
+    RunScript(sname,path);
   end;
 end;
 
