@@ -50,6 +50,14 @@ T_indimount = class(T_mount)
    eod_coord:  boolean;
    configprop: ISwitchVectorProperty;
    configload,configsave,configdefault: ISwitch;
+   SyncManage: ISwitchVectorProperty;
+   SyncClearDelta: ISwitch;
+   AlignList: ISwitchVectorProperty;
+   AlignListClear: ISwitch;
+   AlignSyncMode: ISwitchVectorProperty;
+   AlignStdSync,AlignAppendSync: ISwitch;
+   AlignMode: ISwitchVectorProperty;
+   AlignNo,AlignNearest,AlignNstar: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -79,6 +87,8 @@ T_indimount = class(T_mount)
    function  GetAperture:double;  override;
    function  GetFocaleLength:double; override;
    procedure SetTimeout(num:integer); override;
+   function  GetSyncMode:TEqmodAlign; override;
+   procedure SetSyncMode(value:TEqmodAlign); override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -88,6 +98,8 @@ T_indimount = class(T_mount)
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
+   function ClearAlignment:boolean; override;
+   function ClearDelta:boolean; override;
 end;
 
 implementation
@@ -151,6 +163,10 @@ begin
     CoordSet:=nil;
     AbortmotionProp:=nil;
     configprop:=nil;
+    SyncManage:=nil;
+    AlignList:=nil;
+    AlignSyncMode:=nil;
+    AlignMode:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -172,7 +188,8 @@ begin
          end;
        end;
     end;
-end;
+    FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
+ end;
 
 procedure T_indimount.msg(txt: string);
 begin
@@ -328,6 +345,29 @@ begin
       TelescopeAperture:=IUFindNumber(TelescopeInfo,'TELESCOPE_APERTURE');
       TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
       if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
+   end
+   else if (proptype=INDI_SWITCH)and(propname='ALIGNMODE') then begin
+      AlignMode:=indiProp.getSwitch;
+      AlignNo:=IUFindSwitch(AlignMode,'NOALIGN');
+      AlignNearest:=IUFindSwitch(AlignMode,'ALIGNNEAREST');
+      AlignNstar:=IUFindSwitch(AlignMode,'ALIGNNSTAR');
+      if (AlignNo=nil)or(AlignNearest=nil)or(AlignNstar=nil) then AlignMode:=nil;
+   end
+   else if (proptype=INDI_SWITCH)and(propname='ALIGNLIST') then begin
+      AlignList:=indiProp.getSwitch;
+      AlignListClear:=IUFindSwitch(AlignList,'ALIGNLISTCLEAR');
+      if AlignListClear=nil then AlignList:=nil;
+   end
+   else if (proptype=INDI_SWITCH)and(propname='ALIGNSYNCMODE') then begin
+      AlignSyncMode:=indiProp.getSwitch;
+      AlignStdSync:=IUFindSwitch(AlignSyncMode,'ALIGNSTANDARDSYNC');
+      AlignAppendSync:=IUFindSwitch(AlignSyncMode,'ALIGNAPPENDSYNC');
+      if (AlignStdSync=nil)or(AlignAppendSync=nil) then AlignSyncMode:=nil;
+   end
+   else if (proptype=INDI_SWITCH)and(propname='SYNCMANAGE') then begin
+      SyncManage:=indiProp.getSwitch;
+      SyncClearDelta:=IUFindSwitch(SyncManage,'SYNCCLEARDELTA');
+      if (SyncClearDelta=nil) then SyncManage:=nil;
    end;
    CheckStatus;
 end;
@@ -450,7 +490,6 @@ begin
 end;
 
 function T_indimount.Track:Boolean;
-var waittime:integer;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
@@ -490,6 +529,50 @@ begin
     indiclient.sendNewSwitch(configprop);
   end;
 end;
+
+// Eqmod specific
+
+function  T_indimount.GetSyncMode:TEqmodAlign;
+begin
+  result:=alUNSUPPORTED;
+  if AlignSyncMode<>nil then begin
+    if AlignStdSync.s = ISS_ON then result:=alSTDSYNC
+    else if AlignAppendSync.s = ISS_ON then result:=alADDPOINT;
+  end;
+end;
+
+procedure T_indimount.SetSyncMode(value:TEqmodAlign);
+begin
+  if (AlignSyncMode<>nil)and(value<>alUNSUPPORTED) then begin
+     IUResetSwitch(AlignSyncMode);
+     if value=alSTDSYNC then AlignStdSync.s := ISS_ON
+     else if value=alADDPOINT then AlignAppendSync.s := ISS_ON;
+     indiclient.sendNewSwitch(AlignSyncMode);
+  end;
+end;
+
+function T_indimount.ClearAlignment:boolean;
+begin
+  result:=false;
+  if AlignList<>nil then begin
+    IUResetSwitch(AlignList);
+    AlignListClear.s:=ISS_ON;
+    indiclient.sendNewSwitch(AlignList);
+    result:=true;
+  end;
+end;
+
+function T_indimount.ClearDelta:boolean;
+begin
+  result:=false;
+  if SyncManage<>nil then begin
+    IUResetSwitch(SyncManage);
+    SyncClearDelta.s:=ISS_ON;
+    indiclient.sendNewSwitch(SyncManage);
+    result:=true;
+  end;
+end;
+
 
 end.
 

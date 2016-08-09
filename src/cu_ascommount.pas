@@ -43,6 +43,7 @@ T_ascommount = class(T_mount)
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
+   procedure CheckEqmod;
  protected
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
@@ -52,6 +53,8 @@ T_ascommount = class(T_mount)
    function  GetAperture:double; override;
    function  GetFocaleLength:double; override;
    procedure SetTimeout(num:integer); override;
+   function  GetSyncMode:TEqmodAlign; override;
+   procedure SetSyncMode(value:TEqmodAlign); override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -61,6 +64,8 @@ public
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
+   function ClearAlignment:boolean; override;
+   function ClearDelta:boolean; override;
 end;
 
 
@@ -88,10 +93,11 @@ begin
   try
   FDevice:=cp1;
   V:=Unassigned;
-  V:=CreateOleObject(WideString(Fdevice));
+  V:=CreateOleObject(Fdevice);
   V.connected:=true;
   if V.connected then begin
      FStatus := devConnected;
+     CheckEqmod;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
   end
@@ -348,6 +354,93 @@ end;
 procedure T_ascommount.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
+end;
+
+// Eqmod specific
+
+procedure T_ascommount.CheckEqmod;
+{$ifdef mswindows}
+var buf:string;
+{$endif}
+begin
+  FIsEqmod:=false;
+  {$ifdef mswindows}
+  if Connected then begin
+    try
+    buf:=V.CommandString(':MOUNTVER#');
+    if length(buf)=8 then FIsEqmod:=true;
+    except
+     FIsEqmod:=false;
+    end;
+  end
+  {$endif}
+end;
+
+function  T_ascommount.GetSyncMode:TEqmodAlign;
+{$ifdef mswindows}
+var buf:string;
+{$endif}
+begin
+ result:=alUNSUPPORTED;
+ {$ifdef mswindows}
+ if Connected and IsEqmod then begin
+   try
+   buf:=V.CommandString(':ALIGN_MODE#');
+   if buf='1#' then result:=alADDPOINT
+   else if buf='0#' then result:=alSTDSYNC;
+   except
+    result:=alUNSUPPORTED;
+   end;
+ end
+ else result:=alUNSUPPORTED;
+ {$endif}
+end;
+
+procedure T_ascommount.SetSyncMode(value:TEqmodAlign);
+begin
+ {$ifdef mswindows}
+ if Connected and IsEqmod and (value<>alUNSUPPORTED) then begin
+   try
+   if value=alSTDSYNC then
+     V.CommandString(':ALIGN_MODE,0#')
+   else if value=alADDPOINT then
+     V.CommandString(':ALIGN_MODE,1#');
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.ClearAlignment:boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected and IsEqmod then begin
+   try
+   V.CommandString(':ALIGN_CLEAR_POINTS#');
+   result:=true;
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+
+end;
+
+function T_ascommount.ClearDelta:boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected and IsEqmod then begin
+   try
+   V.CommandString(':ALIGN_CLEAR_SYNC#');
+   result:=true;
+   except
+     on E: EOleException do msg('Error: ' + E.Message);
+   end;
+ end;
+ {$endif}
 end;
 
 end.

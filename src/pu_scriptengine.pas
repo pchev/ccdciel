@@ -106,6 +106,10 @@ type
     function cmd_MountSlew(RA,DE:string):string;
     function cmd_MountSync(RA,DE:string):string;
     function cmd_MountAbortMotion:string;
+    function cmd_EqmodClearPoints:string;
+    function cmd_EqmodClearSyncDelta:string;
+    function cmd_EqmodStdSync:string;
+    function cmd_EqmodAppendSync:string;
     function cmd_AutoguiderCalibrate:string;
     function cmd_AutoguiderStartGuiding:string;
     function cmd_AutoguiderStopGuiding:string;
@@ -347,6 +351,7 @@ begin
   varname:=uppercase(varname);
   if varname='TELESCOPE_CONNECTED' then x:=(mount.Status=devConnected)
   else if varname='TELESCOPE_PARKED' then x:=mount.Park
+  else if varname='TELESCOPE_EQMOD' then x:=mount.IsEqmod
   else if varname='AUTOGUIDER_CONNECTED' then x:=(Autoguider.State<>GUIDER_DISCONNECTED)
   else if varname='AUTOGUIDER_RUNNING' then x:=Autoguider.Running
   else if varname='AUTOGUIDER_GUIDING' then x:=(Autoguider.State=GUIDER_GUIDING)
@@ -570,6 +575,10 @@ cname:=uppercase(cname);
 result:=msgFailed;
 if cname='TELESCOPE_ABORTMOTION' then result:=cmd_MountAbortMotion
 else if cname='TELESCOPE_TRACK' then result:=cmd_MountTrack
+else if cname='EQMOD_CLEARPOINTS' then result:= cmd_EqmodClearPoints
+else if cname='EQMOD_CLEARSYNCDELTA' then result:= cmd_EqmodClearSyncDelta
+else if cname='EQMOD_STDSYNC' then result:= cmd_EqmodStdSync
+else if cname='EQMOD_APPENDSYNC' then result:= cmd_EqmodAppendSync
 else if cname='AUTOGUIDER_CALIBRATE' then result:=cmd_AutoguiderCalibrate
 else if cname='AUTOGUIDER_STARTGUIDING' then result:=cmd_AutoguiderStartGuiding
 else if cname='AUTOGUIDER_STOPGUIDING' then result:=cmd_AutoguiderStopGuiding
@@ -685,6 +694,62 @@ try
 Fmount.AbortMotion;
 wait(2);
 result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_EqmodClearPoints:string;
+begin
+try
+  result:=msgFailed;
+  if mount.IsEqmod then begin
+     if mount.ClearAlignment then
+       result:=msgOK;
+  end
+  else result:=msgFailed+' not an eqmod mount';
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_EqmodClearSyncDelta:string;
+begin
+try
+  result:=msgFailed;
+  if mount.IsEqmod then begin
+     if mount.ClearDelta then
+       result:=msgOK;
+  end
+  else result:=msgFailed+' not an eqmod mount';
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_EqmodStdSync:string;
+begin
+try
+  result:=msgFailed;
+  if mount.IsEqmod then begin
+     mount.SyncMode:=alSTDSYNC;
+     result:=msgOK;
+  end
+  else result:=msgFailed+' not an eqmod mount';
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_EqmodAppendSync:string;
+begin
+try
+  result:=msgFailed;
+  if mount.IsEqmod then begin
+     mount.SyncMode:=alADDPOINT;
+     result:=msgOK;
+  end
+  else result:=msgFailed+' not an eqmod mount';
 except
   result:=msgFailed;
 end;

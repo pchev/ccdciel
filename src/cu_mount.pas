@@ -41,6 +41,7 @@ T_mount = class(TComponent)
     FMountSlewing: boolean;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
+    FIsEqmod: boolean;
     function  GetPark:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
     function  GetRA:double; virtual; abstract;
@@ -49,6 +50,8 @@ T_mount = class(TComponent)
     function  GetAperture:double; virtual; abstract;
     function  GetFocaleLength:double; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
+    function  GetSyncMode:TEqmodAlign; virtual; abstract;
+    procedure SetSyncMode(value:TEqmodAlign); virtual; abstract;
  public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -58,6 +61,12 @@ T_mount = class(TComponent)
     function Sync(sra,sde: double):boolean; virtual; abstract;
     function Track:boolean; virtual; abstract;
     procedure AbortMotion; virtual; abstract;
+    // Eqmod specific
+    function ClearAlignment:boolean; virtual; abstract;
+    function ClearDelta:boolean; virtual; abstract;
+    property IsEqmod: boolean read FIsEqmod;
+    property SyncMode:TEqmodAlign read GetSyncMode write SetSyncMode;
+    // Eqmod specific
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
     property Park: Boolean read GetPark write SetPark;
@@ -81,6 +90,7 @@ implementation
 constructor T_mount.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FIsEqmod:=false;
   FMountSlewing:=false;
   FStatus := devDisconnected;
   FTimeOut:=100;
