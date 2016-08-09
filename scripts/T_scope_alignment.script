@@ -2,6 +2,8 @@
   This script can be used to create a pointing model for you mount.
   You must set the mount driver in the correct mode to record a pointing model before to run this script.
   
+  Use the script eqmod_alignment if you use an EQMOD mount.
+  
   Edit the parameters below according to your needs, then comment the indicated row.
   
 }
@@ -18,16 +20,20 @@ begin
  to_be_configured:=true;
 
 ///////////  Parameters //////////////////////
- exposure  := '5';    // seconds
+ exposure  := '15';    // seconds
  binning   := '1x1';  // binning can speedup the process
  filter_num:= '1';    // position of clear filter (-1 if no filters)
 
+ // East side alignment 
  do_east   :=true;    // do alignment on east azimut
- do_west   :=false;   // do alignment on west azimut
   //            Azimut                Elevation
  al_east[0][0]:=40.0;  al_east[0][1]:=30.0;
  al_east[1][0]:=90.0;  al_east[1][1]:=65.0;
  al_east[2][0]:=150.0; al_east[2][1]:=30.0;
+
+ // West side alignment 
+ do_west   :=false;   // do alignment on west azimut
+  //            Azimut                Elevation
  al_west[0][0]:=320.0; al_west[0][1]:=30.0;
  al_west[1][0]:=270.0; al_west[1][1]:=65.0;
  al_west[2][0]:=210.0; al_west[2][1]:=30.0;
@@ -60,6 +66,7 @@ begin
 end;
 
 begin
+ to_be_configured:=false;
 
 // get a stringlist
  GetSL('STRL1',arg);
