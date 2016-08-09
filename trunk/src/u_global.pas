@@ -37,6 +37,7 @@ type
   TAutoguiderType=(PHD);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP);
+  TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
 
   TNumRange = record
                min,max,step: double;

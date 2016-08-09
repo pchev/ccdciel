@@ -722,7 +722,7 @@ Function ExecuteFile(const FileName: string): integer;
 var
   zFileName, zParams, zDir: array[0..255] of Char;
 begin
-  writetrace('Try to launch: '+FileName);
+  //writetrace('Try to launch: '+FileName);
   Result := ShellExecute(Application.MainForm.Handle, nil, StrPCopy(zFileName, FileName),
                          StrPCopy(zParams, ''), StrPCopy(zDir, ''), SW_SHOWNOACTIVATE);
 {$endif}

@@ -74,6 +74,9 @@
             </Options>
           </Linking>
           <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5024="True"/>
+            </CompilerMessages>
             <CustomOptions Value="-dUseCThreads"/>
           </Other>
         </CompilerOptions>

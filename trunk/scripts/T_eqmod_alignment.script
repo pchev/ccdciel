@@ -1,20 +1,22 @@
 {
-  This script can be used to create a pointing model for you mount.
-  You must set the mount driver in the correct mode to record a pointing model before to run this script.
-  
+  This script can be used to create a pointing model for EQMOD.
+  All the alignment data are cleared and a new model is automatically build.
+  After the model is ready the "sync mode" is automatically switched to allow delta sync 
+  for precision pointing.
+   
   Edit the parameters below according to your needs, then comment the indicated row.
   
 }
  var i: integer;
      arg: TStringList;
      al_east,al_west: array[0..2]of array[0..1]of double;
-     do_east, do_west, to_be_configured: boolean;
+     do_east, do_west, to_be_configured, ok: boolean;
      exposure,binning,filter_num: string;
 const f5='0.00000';
 
 procedure SetParameters;
 begin
-// comment or remove the next row after you set your parameters
+// comment or remove the next row after you set yours parameters
  to_be_configured:=true;
 
 ///////////  Parameters //////////////////////
@@ -74,6 +76,12 @@ if to_be_configured then begin
   raiseexception(erCustomError, 'Configuration need');
 end;
 
+ getB('TELESCOPE_EQMOD',ok);
+ if not ok then begin
+   logMsg('This script can only be run with an EQMOD mount!');
+   raiseexception(erCustomError, 'Not EQMOD');
+ end;
+ 
  // Set filter
  arg.clear;
  arg.add(filter_num);
@@ -88,6 +96,13 @@ end;
  arg.add(binning);
  CmdArg('PREVIEW_SETBINNING',arg);
 
+ // Clear all alignment
+ Cmd('EQMOD_CLEARPOINTS');
+ Cmd('EQMOD_CLEARSYNCDELTA');
+ 
+ // Set Sync mode to Append
+ Cmd('EQMOD_APPENDSYNC');
+
 // East alignment
  if do_east then begin
    for i:=0 to 2 do begin
@@ -101,5 +116,9 @@ end;
      SyncAltAz(al_west[i][0],al_west[i][1]);
    end;
  end;
+ 
+ // Set Sync mode to Standard
+ Cmd('EQMOD_STDSYNC');
+ 
 
 end.

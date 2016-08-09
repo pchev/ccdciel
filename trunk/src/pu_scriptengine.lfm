@@ -8,7 +8,7 @@ object f_scriptengine: Tf_scriptengine
   ClientWidth = 409
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.0.3'
   Visible = False
   object TplPSScript: TPSScript
     CompilerOptions = []

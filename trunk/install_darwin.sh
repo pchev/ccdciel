@@ -27,3 +27,4 @@ install -v -m 644 scripts/scope_unpark.script  $destdir/scripts/scope_unpark.scr
 install -v -m 644 scripts/T_ccd_temp_down.script  $destdir/scripts/T_ccd_temp_down.script
 install -v -m 644 scripts/T_ccd_temp_up.script  $destdir/scripts/T_ccd_temp_up.script
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/scripts/T_scope_alignment.script 
+install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/scripts/T_eqmod_alignment.script 
