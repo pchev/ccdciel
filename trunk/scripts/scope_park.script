@@ -1,9 +1,14 @@
+{
+  This script park the telescope mount.
+  Beware the action is immediate and without confirmation message!
+}
+
 var parked: boolean;
     arg: TStringList;
     r: string;
 begin
 
-// get park status
+  // get park status
   GetB('TELESCOPE_PARKED',parked);
 
   if parked then begin

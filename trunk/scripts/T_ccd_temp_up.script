@@ -1,3 +1,10 @@
+{
+  You can use this script to warmup your CCD camera if it require bearing to avoid termal shock 
+  
+  Edit the parameters below according to your needs, then comment the indicated row.
+  
+}
+
 var maxtime,nloop,waitloop,timeunit,tempnow, tempstep, tempset, ramp: integer;
     ccdtemp,tempstepd: double;
     rampdown,to_be_configured: boolean;
@@ -9,10 +16,10 @@ begin
  to_be_configured:=true;
 
 ///////////  Parameters //////////////////////
- tempset  := 10;    // final desired temperature
- ramp     := 2;    // degrees per time unit
- timeunit := 10;   // time unit in seconds
- maxtime  := 20;   // maxmimum number of time unit to wait
+ tempset  := 10;   // final desired temperature (ambient temperature)
+ ramp     := 5;    // degrees per time unit
+ timeunit := 60;   // time unit in seconds
+ maxtime  := 15;   // maxmimum number of time unit to wait
 ///////////  Parameters //////////////////////
 end;
 
@@ -24,6 +31,7 @@ raiseexception(erCustomError, errtxt);
 end;
 
 begin
+ to_be_configured:=false;
 
  // get a stringlist
  GetSL('STRL1',arg);
