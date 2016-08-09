@@ -822,6 +822,7 @@ end;
 
 Procedure Tf_main.StartSequence(SeqName: string);
 begin
+  if f_sequence.Running then exit;
   f_sequence.LoadTargets(slash(ConfigDir)+SeqName+'.targets');
   StartSequenceTimer.Enabled:=true;
 end;
