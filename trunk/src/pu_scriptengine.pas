@@ -27,11 +27,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 interface
 
-uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp,
+uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection,
   fu_capture, fu_preview, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms,
-  Controls, Graphics, Dialogs;
+  Controls, Graphics, Dialogs, ExtCtrls;
 
 type
 
@@ -43,15 +43,18 @@ type
     PSImport_DateUtils1: TPSImport_DateUtils;
     PSImport_Forms1: TPSImport_Forms;
     PSImport_StdCtrls1: TPSImport_StdCtrls;
+    ShutdownTimer: TTimer;
     TplPSScript: TPSScript;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ShutdownTimerTimer(Sender: TObject);
     procedure TplPSScriptCompile(Sender: TPSScript);
     procedure TplPSScriptLine(Sender: TObject);
   private
     { private declarations }
     FScriptFilename: string;
     Ffits : TFits;
+    Fdevicesconnection:Tf_devicesconnection;
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
     Fccdtemp: Tf_ccdtemp;
@@ -101,6 +104,7 @@ type
     function Cmd(cname:string):string;
     function CmdArg(cname:string; var arg:Tstringlist):string;
     function CompileScripts: boolean;
+    function cmd_DevicesConnection(onoff:string):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
     function cmd_MountSlew(RA,DE:string):string;
@@ -138,6 +142,7 @@ type
     function cmd_AstrometrySync:string;
     function cmd_PlanetariumConnect:string;
     function cmd_PlanetariumShowImage:string;
+    function cmd_ProgramShutdown:string;
 
   public
     { public declarations }
@@ -146,6 +151,7 @@ type
     procedure StopScript;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property fits: TFits read Ffits write Ffits;
+    property DevicesConnection: Tf_devicesconnection read Fdevicesconnection write Fdevicesconnection;
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
@@ -197,7 +203,6 @@ begin
   for i:=0 to 9 do strllist[i].Free;
   SetLength(strllist,0);
 end;
-
 
 procedure Tf_scriptengine.TplPSScriptLine(Sender: TObject);
 begin
@@ -595,6 +600,7 @@ else if cname='ASTROMETRY_SOLVE' then result:=cmd_AstrometrySolve
 else if cname='ASTROMETRY_SYNC' then result:=cmd_AstrometrySync
 else if cname='PLANETARIUM_CONNECT' then result:=cmd_PlanetariumConnect
 else if cname='PLANETARIUM_SHOWIMAGE' then result:=cmd_PlanetariumShowImage
+else if cname='PROGRAM_SHUTDOWN' then result:=cmd_ProgramShutdown
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -605,7 +611,8 @@ begin
 cname:=uppercase(cname);
 for i:=arg.count to MaxCmdArg do arg.add('');
 result:=msgFailed;
-if cname='TELESCOPE_SLEW' then result:=cmd_MountSlew(arg[0],arg[1])
+if cname='DEVICES_CONNECTION' then result:=cmd_DevicesConnection(arg[0])
+else if cname='TELESCOPE_SLEW' then result:=cmd_MountSlew(arg[0],arg[1])
 else if cname='TELESCOPE_SYNC' then result:=cmd_MountSync(arg[0],arg[1])
 else if cname='TELESCOPE_PARK' then result:=cmd_MountPark(arg[0])
 else if cname='WHEEL_SETFILTER' then result:=cmd_Wheel_SetFilter(arg[0])
@@ -622,6 +629,23 @@ else if cname='CAPTURE_SETFRAMETYPE' then result:=cmd_Capture_SetFrameType(arg[0
 else if cname='CAPTURE_SETDITHER' then result:=cmd_Capture_SetDither(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
+end;
+
+function Tf_scriptengine.cmd_DevicesConnection(onoff:string):string;
+var connect: boolean;
+begin
+try
+result:=msgFailed;
+connect:=(onoff='ON');
+if connect then
+ Fdevicesconnection.Connect
+else
+ Fdevicesconnection.Disconnect(false);
+wait(10);
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
 end;
 
 function Tf_scriptengine.cmd_MountPark(onoff:string):string;
@@ -1140,6 +1164,19 @@ result:=msgOK;
 except
   result:=msgFailed;
 end;
+end;
+
+function Tf_scriptengine.cmd_ProgramShutdown:string;
+begin
+  ConfirmClose:=false;
+  ShutdownTimer.Enabled:=true;
+  result:=msgOK;
+end;
+
+procedure Tf_scriptengine.ShutdownTimerTimer(Sender: TObject);
+begin
+ ShutdownTimer.Enabled:=false;
+ Application.MainForm.Close;
 end;
 
 end.

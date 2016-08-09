@@ -195,6 +195,7 @@ const
 
 var
   Appdir,ConfigDir,LogDir,TmpDir: UTF8String;
+  ConfirmClose: boolean;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   Filters: TStringList;

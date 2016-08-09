@@ -106,7 +106,8 @@ type
     TabSheet3: TTabSheet;
     TabSheet4: TTabSheet;
     AbortTimer: TTimer;
-    StartTimer: TTimer;
+    StartCaptureTimer: TTimer;
+    StartupTimer: TTimer;
     procedure AbortTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -156,7 +157,8 @@ type
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
-    procedure StartTimerTimer(Sender: TObject);
+    procedure StartCaptureTimerTimer(Sender: TObject);
+    procedure StartupTimerTimer(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -508,6 +510,7 @@ begin
   DefaultInterface:=INDI;
   {$endif}
   AppClose:=false;
+  ConfirmClose:=true;
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
   NeedRestart:=false;
@@ -640,6 +643,7 @@ begin
 
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
+  f_devicesconnection.onDisconnect:=@Disconnect;
 
   f_visu:=Tf_visu.Create(self);
   f_visu.onRedraw:=@Redraw;
@@ -705,6 +709,7 @@ begin
   f_scriptengine:=Tf_scriptengine.Create(self);
   f_scriptengine.Fits:=fits;
   f_scriptengine.onMsg:=@NewMessage;
+  f_scriptengine.DevicesConnection:=f_devicesconnection;
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
   f_scriptengine.Ccdtemp:=f_ccdtemp;
@@ -800,6 +805,13 @@ begin
   f_planetariuminfo.planetarium:=planetarium;
 
   f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
+  StartupTimer.Enabled:=true;
+
+end;
+
+procedure Tf_main.StartupTimerTimer(Sender: TObject);
+begin
+  StartupTimer.Enabled:=false;
   f_script.RunStartupScript;
 end;
 
@@ -1108,7 +1120,7 @@ end;
 
 procedure Tf_main.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-if camera.Status<>devDisconnected then begin
+if (camera.Status<>devDisconnected)and(ConfirmClose) then begin
    CanClose:=(MessageDlg('The camera is connected. Do you want to exit the program now?',mtConfirmation,mbYesNo,0)=mrYes);
 end else begin
    CanClose:=true;
@@ -1176,9 +1188,6 @@ end;
 
 Procedure Tf_main.Connect(Sender: TObject);
 begin
-if f_devicesconnection.BtnConnect.Caption='Disconnect' then begin
-  Disconnect(Sender);
-end else begin
   WantCamera:=true;
   WantWheel:=config.GetValue('/Devices/FilterWheel',false);
   WantFocuser:=config.GetValue('/Devices/Focuser',false);;
@@ -1215,7 +1224,6 @@ end else begin
   if WantWheel   then ConnectWheel(Sender);
   if WantFocuser then ConnectFocuser(Sender);
   if WantMount   then ConnectMount(Sender);
-end;
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
@@ -2322,9 +2330,9 @@ else begin
 end;
 end;
 
-procedure Tf_main.StartTimerTimer(Sender: TObject);
+procedure Tf_main.StartCaptureTimerTimer(Sender: TObject);
 begin
-  StartTimer.Enabled:=false;
+  StartCaptureTimer.Enabled:=false;
   StartCaptureExposure(Sender);
 end;
 
@@ -2340,7 +2348,7 @@ if (camera.Status=devConnected) then begin
     StatusBar1.Panels[1].Text:='Stop preview';
     camera.AbortExposure;
     f_preview.stop;
-    StartTimer.Enabled:=true;
+    StartCaptureTimer.Enabled:=true;
     exit;
   end;
   NewMessage('Start capture');

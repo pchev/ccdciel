@@ -7,8 +7,6 @@ object f_devicesconnection: Tf_devicesconnection
   ClientHeight = 110
   ClientWidth = 147
   TabOrder = 0
-  DesignLeft = 377
-  DesignTop = 344
   object Panel1: TPanel
     Left = 0
     Height = 90

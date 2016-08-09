@@ -595,11 +595,18 @@ object f_main: Tf_main
     left = 416
     top = 224
   end
-  object StartTimer: TTimer
+  object StartCaptureTimer: TTimer
     Enabled = False
     Interval = 5000
-    OnTimer = StartTimerTimer
+    OnTimer = StartCaptureTimerTimer
     left = 280
     top = 224
+  end
+  object StartupTimer: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = StartupTimerTimer
+    left = 277
+    top = 42
   end
 end
