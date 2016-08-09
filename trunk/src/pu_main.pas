@@ -1115,6 +1115,8 @@ end else begin
 end;
 if CanClose then begin
  AbortExposure(nil);
+ if f_sequence.Running then f_sequence.StopSequence;
+ f_script.RunShutdownScript;
 end;
 end;
 

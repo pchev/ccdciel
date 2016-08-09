@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
+  LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
   TTargetList = array of TTarget;
@@ -62,6 +62,7 @@ type
       function InitTarget:boolean;
       procedure StartPlan;
       function RunScript(sname,path: string):boolean;
+      procedure RunErrorScript;
       function StopGuider:boolean;
       function StartGuider:boolean;
       function Slew(ra,de: double; precision:boolean):boolean;
@@ -281,6 +282,7 @@ begin
        msg('Script '+Targets[FCurrentTarget].planname+' failed!');
        if FUnattended then begin
          StopSequence;
+         RunErrorScript;
          exit;
        end else begin
          if MessageDlg('Script '+Targets[FCurrentTarget].planname+' failed!'+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
@@ -309,7 +311,8 @@ begin
      else begin
        msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
        if FUnattended then begin
-         NextTarget;
+         StopSequence;
+         RunErrorScript;
          exit;
        end else begin
          if MessageDlg('Target failed','Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
@@ -537,6 +540,15 @@ begin
   end;
 end;
 
+procedure T_Targets.RunErrorScript;
+var path,sname: string;
+begin
+  path:=ScriptDir[1].path;
+  sname:='unattended_error';
+  if FileExistsUTF8(slash(path)+sname+'.script') then begin
+    RunScript(sname,path);
+  end;
+end;
 
 end.
 
