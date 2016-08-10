@@ -38,6 +38,7 @@ T_ascommount = class(T_mount)
    V: variant;
    Fdevice: string;
    stRA,stDE: double;
+   stPark:boolean;
    {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
@@ -99,6 +100,7 @@ begin
      FStatus := devConnected;
      CheckEqmod;
      if Assigned(FonStatusChange) then FonStatusChange(self);
+     if Assigned(FonParkChange) then FonParkChange(self);
      StatusTimer.Enabled:=true;
   end
   else
@@ -143,6 +145,7 @@ end;
 procedure T_ascommount.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var x,y: double;
+    pk: boolean;
   {$endif}
 begin
  {$ifdef mswindows}
@@ -153,10 +156,15 @@ begin
   else begin
     x:=GetRA;
     y:=GetDec;
+    pk:=GetPark;
     if (x<>stRA)or(y<>stDE) then begin
        stRA:=x;
        stDE:=y;
        if Assigned(FonCoordChange) then FonCoordChange(self);
+    end;
+    if pk<>stPark then begin
+       stPark:=pk;
+       if Assigned(FonParkChange) then FonParkChange(self);
     end;
   end;
  {$endif}
@@ -167,7 +175,10 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   V.Park:=value;
+   if V.CanPark then begin
+      if value then V.Park
+               else V.UnPark
+   end;
    except
     on E: EOleException do msg('Error: ' + E.Message);
    end;
@@ -181,7 +192,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   result:=V.Park;
+   result:=V.AtPark;
    except
     result:=false;
    end;
