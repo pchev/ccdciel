@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
-  pu_planetariuminfo, indiapi,
+  pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
@@ -1191,6 +1191,8 @@ procedure Tf_main.SetOptions;
 begin
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',6.0);
+  BayerColor:=config.GetValue('/Color/Bayer',false);
+  BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
@@ -2045,6 +2047,8 @@ begin
    f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',6.0);
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
+   f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
+   f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
    f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
@@ -2108,6 +2112,8 @@ begin
      config.SetValue('/Info/ObservatoryLongitude',f_option.Longitude);
      config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
+     config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
+     config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
@@ -2560,7 +2566,141 @@ begin
   DrawHistogram;
 end;
 
+procedure debayer(raw: TBGRABitmap; t:TBayerMode; var ima:TBGRABitmap) ;
+var
+ i,j,k:integer;
+ pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:byte;
+ p,p1,p2,p3: PBGRAPixel;
+ imgW,imgH:Integer;
+ pixel:TBGRAPixel;
+begin
+imgW:=raw.width;
+imgH:=raw.height;
+ima.SetSize(imgW,imgH);
+pixel:=BGRABlack;
+k:=1;
+for i:=0 to imgH-1 do begin
+ p:=ima.scanline[i];
+ p1:=raw.ScanLine[max(i-1,0)];
+ p2:=raw.ScanLine[i];
+ p3:=raw.ScanLine[min(i+1,imgH-1)];
+ for j:=0 to imgW-1 do begin
+   pix1:= p1[max(j-1,0)*k].red;
+   pix2:= p1[j*k].red;
+   pix3:= p1[min(j+1,imgW-1)*k].red;
+   pix4:= p2[max(j-1,0)*k].red;
+   pix5:= p2[j*k].red;
+   pix6:= p2[min(j+1,imgW-1)*k].red;
+   pix7:= p3[max(j-1,0)*k].red;
+   pix8:= p3[j*k].red;
+   pix9:= p3[min(j+1,imgW-1)*k].red;
+   if (i mod 2)>0 then begin //ligne paire
+      if (j mod 2)>0 then begin //colonne paire et ligne paire
+        case t of
+        bayerGR: begin
+            pixel.red:= round((pix2+pix8)/2);
+            pixel.green:= pix5;
+            pixel.blue:= round((pix4+pix6)/2);
+           end;
+        bayerRG: begin
+            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=pix5;
+           end;
+        bayerBG: begin
+            pixel.red:= pix5;
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+           end;
+        bayerGB: begin
+            pixel.red:= round((pix4+pix6)/2);
+            pixel.green:= pix5;
+            pixel.blue:= round((pix2+pix8)/2);
+           end;
+        end;
+      end
+      else begin //colonne impaire et ligne paire
+        case t of
+        bayerGR: begin
+            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=pix5;
+           end;
+        bayerRG: begin
+            pixel.red:= round((pix2+pix8)/2);
+            pixel.green:=pix5;
+            pixel.blue:=round((pix4+pix6)/2);
+           end;
+        bayerBG: begin
+            pixel.red:= round((pix4+pix6)/2);
+            pixel.green:=pix5;
+            pixel.blue:=round((pix2+pix8)/2);
+           end;
+        bayerGB: begin
+            pixel.red:=pix5;
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+           end;
+        end;
+      end;
+   end
+   else begin //ligne impaire
+      if (j mod 2)>0 then begin //colonne paire et ligne impaire
+        case t of
+        bayerGR: begin
+            pixel.red:=pix5;
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+           end;
+        bayerRG: begin
+            pixel.red:= round((pix4+pix6)/2);
+            pixel.green:=pix5;
+            pixel.blue:=round((pix2+pix8)/2);
+           end;
+        bayerBG: begin
+            pixel.red:=round((pix2+pix8)/2);
+            pixel.green:=pix5;
+            pixel.blue:= round((pix4+pix6)/2);
+           end;
+        bayerGB: begin
+            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=pix5;
+           end;
+        end;
+      end
+      else begin //colonne impaire et ligne impaire
+        case t of
+        bayerGR: begin
+            pixel.red:= round((pix4+pix6)/2);
+            pixel.green:=pix5;
+            pixel.blue:= round((pix2+pix8)/2);
+           end;
+        bayerRG: begin
+            pixel.red:=pix5;
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+           end;
+        bayerBG: begin
+            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=pix5;
+           end;
+        bayerGB: begin
+            pixel.red:= round((pix2+pix8)/2);
+            pixel.green:=pix5;
+            pixel.blue:= round((pix4+pix6)/2);
+           end;
+        end;
+      end;
+   end;
+   p[j]:=pixel;
+end;
+end;
+end;
+
 Procedure Tf_main.DrawImage;
+var rawbmp,colorbmp:TBGRABitmap;
 begin
 if fits.HeaderInfo.naxis>0 then begin
   if f_visu.BtnLinear.Checked then fits.itt:=ittlinear
@@ -2570,6 +2710,22 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.ImgDmin:=f_visu.ImgMin*256;
   fits.GetIntfImg;
   fits.GetBitmap(ImaBmp);
+  if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
+     rawbmp:=TBGRABitmap.Create(ImaBmp);
+     if BayerColor then begin
+       colorbmp:=TBGRABitmap.Create;
+       debayer(rawbmp,BayerMode,colorbmp);
+       rawbmp.Assign(colorbmp);
+       colorbmp.Free;
+     end;
+     if (fits.HeaderInfo.pixratio=1) then begin
+       ImaBmp.Assign(rawbmp);
+     end else begin
+       ImaBmp.Width:=round(fits.HeaderInfo.pixratio*ImaBmp.Width);
+       ImaBMP.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),rawbmp.Bitmap);
+     end;
+     rawbmp.Free;
+  end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
   if f_starprofile.FindStar then

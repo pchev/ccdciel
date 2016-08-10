@@ -44,36 +44,36 @@ object f_option: Tf_option
     Height = 397
     Top = 0
     Width = 433
-    ActivePage = TabSheet1
+    ActivePage = TabSheet8
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object GroupBox1: TGroupBox
         Left = 8
         Height = 336
-        Top = 0
+        Top = 4
         Width = 400
         Caption = 'Files'
         ClientHeight = 317
-        ClientWidth = 396
+        ClientWidth = 398
         TabOrder = 0
         object Label1: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 8
-          Width = 100
+          Width = 86
           Caption = 'Capture folder'
           ParentColor = False
         end
         object Logtofile: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 264
-          Width = 187
+          Width = 165
           Caption = 'Log all messages to file '
           ParentShowHint = False
           ShowHint = True
@@ -81,79 +81,79 @@ object f_option: Tf_option
         end
         object SubfolderSequence: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 40
-          Width = 222
+          Width = 197
           Caption = 'Subfolder by sequence name'
           TabOrder = 1
         end
         object SubfolderObjname: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 88
-          Width = 200
+          Width = 177
           Caption = 'Subfolder by object name'
           TabOrder = 2
         end
         object SubfolderFrametype: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 64
-          Width = 190
+          Width = 168
           Caption = 'Subfolder by frame type'
           TabOrder = 3
         end
         object SubfolderStep: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 112
-          Width = 179
+          Width = 158
           Caption = 'Subfolder by plan step'
           TabOrder = 4
         end
         object Label18: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 45
-          Width = 100
+          Width = 87
           Caption = 'Folder options'
           ParentColor = False
         end
         object Label19: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 157
-          Width = 80
+          Width = 69
           Caption = 'File options'
           ParentColor = False
         end
         object FileObjname: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 152
-          Width = 113
+          Width = 100
           Caption = 'Object name'
           TabOrder = 5
         end
         object FileFiltername: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 176
-          Width = 62
+          Width = 54
           Caption = 'Filter'
           TabOrder = 6
         end
         object FileDate: TCheckBox
           Left = 120
-          Height = 24
+          Height = 21
           Top = 202
-          Width = 137
+          Width = 121
           Caption = 'Date / Sequence'
           TabOrder = 7
         end
         object CaptureDir: TEdit
           Left = 120
-          Height = 27
+          Height = 24
           Top = 4
           Width = 200
           TabOrder = 8
@@ -171,49 +171,49 @@ object f_option: Tf_option
     end
     object TabSheet2: TTabSheet
       Caption = 'Informations'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object Label5: TLabel
         Left = 8
-        Height = 17
+        Height = 18
         Top = 27
-        Width = 105
+        Width = 92
         Caption = 'Observer name'
         ParentColor = False
       end
       object ObserverName: TEdit
         Left = 144
-        Height = 27
+        Height = 24
         Top = 24
         Width = 218
         TabOrder = 0
       end
       object Label10: TLabel
         Left = 8
-        Height = 17
+        Height = 18
         Top = 75
-        Width = 127
+        Width = 112
         Caption = 'Observatory name'
         ParentColor = False
       end
       object ObservatoryName: TEdit
         Left = 144
-        Height = 27
+        Height = 24
         Top = 72
         Width = 218
         TabOrder = 1
       end
       object Label11: TLabel
         Left = 8
-        Height = 17
+        Height = 18
         Top = 123
-        Width = 108
+        Width = 96
         Caption = 'Telescope name'
         ParentColor = False
       end
       object TelescopeName: TEdit
         Left = 144
-        Height = 27
+        Height = 24
         Top = 120
         Width = 218
         TabOrder = 2
@@ -223,8 +223,8 @@ object f_option: Tf_option
         Height = 41
         Top = 170
         Width = 218
-        ClientHeight = 37
-        ClientWidth = 214
+        ClientHeight = 39
+        ClientWidth = 216
         TabOrder = 3
         object hemis: TComboBox
           Left = 112
@@ -245,7 +245,7 @@ object f_option: Tf_option
         end
         object latdeg: TFloatEdit
           Left = 4
-          Height = 27
+          Height = 24
           Hint = '0..90'
           Top = 2
           Width = 44
@@ -262,7 +262,7 @@ object f_option: Tf_option
         end
         object latmin: TLongEdit
           Left = 48
-          Height = 27
+          Height = 24
           Hint = '0..59'
           Top = 2
           Width = 25
@@ -276,7 +276,7 @@ object f_option: Tf_option
         end
         object latsec: TFloatEdit
           Left = 72
-          Height = 27
+          Height = 24
           Hint = '0..59.99'
           Top = 2
           Width = 42
@@ -295,8 +295,8 @@ object f_option: Tf_option
         Height = 41
         Top = 230
         Width = 218
-        ClientHeight = 37
-        ClientWidth = 214
+        ClientHeight = 39
+        ClientWidth = 216
         TabOrder = 4
         object long: TComboBox
           Left = 112
@@ -317,7 +317,7 @@ object f_option: Tf_option
         end
         object longdeg: TFloatEdit
           Left = 4
-          Height = 27
+          Height = 24
           Hint = '0..180'
           Top = 2
           Width = 46
@@ -334,7 +334,7 @@ object f_option: Tf_option
         end
         object longmin: TLongEdit
           Left = 48
-          Height = 27
+          Height = 24
           Hint = '0..59'
           Top = 2
           Width = 25
@@ -348,7 +348,7 @@ object f_option: Tf_option
         end
         object longsec: TFloatEdit
           Left = 72
-          Height = 27
+          Height = 24
           Hint = '0..59.99'
           Top = 2
           Width = 42
@@ -364,61 +364,109 @@ object f_option: Tf_option
       end
       object Label35: TLabel
         Left = 8
-        Height = 17
+        Height = 18
         Top = 184
-        Width = 58
+        Width = 50
         Caption = 'Latitude'
         ParentColor = False
       end
       object Label36: TLabel
         Left = 8
-        Height = 17
+        Height = 18
         Top = 240
-        Width = 71
+        Width = 62
         Caption = 'Longitude'
         ParentColor = False
       end
     end
+    object TabSheet8: TTabSheet
+      Caption = 'Preview'
+      ClientHeight = 371
+      ClientWidth = 431
+      object GroupBox8: TGroupBox
+        Left = 8
+        Height = 120
+        Top = 4
+        Width = 400
+        Caption = 'Color preview'
+        ClientHeight = 101
+        ClientWidth = 398
+        TabOrder = 0
+        object Label38: TLabel
+          Left = 16
+          Height = 18
+          Top = 46
+          Width = 124
+          Caption = 'Bayer matrix pattern'
+          ParentColor = False
+          ParentFont = False
+        end
+        object DebayerPreview: TCheckBox
+          Left = 16
+          Height = 21
+          Top = 8
+          Width = 187
+          Caption = 'Debayer the preview image'
+          TabOrder = 0
+        end
+        object BayerMode: TComboBox
+          Left = 168
+          Height = 24
+          Top = 42
+          Width = 92
+          ItemHeight = 0
+          ItemIndex = 0
+          Items.Strings = (
+            'GR'
+            'RG'
+            'BG'
+            'GB'
+          )
+          TabOrder = 1
+          Text = 'GR'
+        end
+      end
+    end
     object TabSheet3: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object GroupBox2: TGroupBox
         Left = 8
         Height = 120
-        Top = 0
+        Top = 4
         Width = 400
         Caption = 'Star profile'
         ClientHeight = 101
-        ClientWidth = 396
+        ClientWidth = 398
         TabOrder = 0
         object StarWindow: TEdit
           Left = 200
-          Height = 27
+          Height = 24
           Top = 8
           Width = 51
           TabOrder = 0
         end
         object Label14: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 8
-          Width = 187
+          Width = 162
           Caption = 'Star detection window size '
           ParentColor = False
         end
         object Label2: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 46
-          Width = 127
+          Width = 110
           Caption = 'Focus window size'
           ParentColor = False
           ParentFont = False
         end
         object FocusWindow: TEdit
           Left = 200
-          Height = 27
+          Height = 24
           Top = 40
           Width = 51
           TabOrder = 1
@@ -427,61 +475,61 @@ object f_option: Tf_option
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object GroupBox4: TGroupBox
         Left = 8
         Height = 168
-        Top = 0
+        Top = 4
         Width = 400
         Caption = 'Astrometry options'
         ClientHeight = 149
-        ClientWidth = 396
+        ClientWidth = 398
         TabOrder = 0
         object Focale: TEdit
           Left = 288
-          Height = 27
+          Height = 24
           Top = 27
           Width = 80
           TabOrder = 0
         end
         object FocaleFromTelescope: TCheckBox
           Left = 112
-          Height = 24
+          Height = 21
           Top = 24
-          Width = 175
+          Width = 154
           Caption = 'From telescope driver'
           OnChange = FocaleFromTelescopeChange
           TabOrder = 1
         end
         object Label4: TLabel
           Left = 7
-          Height = 17
+          Height = 18
           Top = 29
-          Width = 92
+          Width = 80
           Caption = 'Focale length'
           ParentColor = False
         end
         object PixelSize: TEdit
           Left = 288
-          Height = 27
+          Height = 24
           Top = 2
           Width = 80
           TabOrder = 2
         end
         object Label3: TLabel
           Left = 7
-          Height = 17
+          Height = 18
           Top = 6
-          Width = 62
+          Width = 53
           Caption = 'Pixel size'
           ParentColor = False
         end
         object PixelSizeFromCamera: TCheckBox
           Left = 112
-          Height = 24
+          Height = 21
           Top = 0
-          Width = 159
+          Width = 141
           Caption = 'From camera driver'
           OnChange = PixelSizeFromCameraChange
           TabOrder = 3
@@ -501,7 +549,7 @@ object f_option: Tf_option
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
           ClientHeight = 46
-          ClientWidth = 388
+          ClientWidth = 390
           Columns = 2
           ItemIndex = 0
           Items.Strings = (
@@ -512,17 +560,17 @@ object f_option: Tf_option
           TabOrder = 4
         end
         object Label33: TLabel
-          Left = 7
-          Height = 17
+          Left = 16
+          Height = 18
           Top = 52
-          Width = 57
+          Width = 50
           Anchors = [akTop, akRight]
           Caption = 'Timeout'
           ParentColor = False
         end
         object AstrometryTimeout: TEdit
           Left = 112
-          Height = 27
+          Height = 24
           Top = 50
           Width = 48
           TabOrder = 5
@@ -544,91 +592,91 @@ object f_option: Tf_option
             Width = 400
             Caption = 'Astrometry.Net'
             ClientHeight = 181
-            ClientWidth = 396
+            ClientWidth = 398
             TabOrder = 0
             object Label6: TLabel
-              Left = 2
-              Height = 17
+              Left = 23
+              Height = 18
               Top = 10
-              Width = 159
+              Width = 140
               Anchors = [akTop, akRight]
               Caption = 'Minimum search radius'
               ParentColor = False
             end
             object MinRadius: TEdit
               Left = 162
-              Height = 27
+              Height = 24
               Top = 8
               Width = 48
               TabOrder = 0
             end
             object Label7: TLabel
-              Left = 228
-              Height = 17
+              Left = 244
+              Height = 18
               Top = 10
-              Width = 103
+              Width = 89
               Anchors = [akTop, akRight]
               Caption = 'Scale tolerance'
               ParentColor = False
             end
             object Tolerance: TEdit
               Left = 338
-              Height = 27
+              Height = 24
               Top = 8
               Width = 48
               TabOrder = 1
             end
             object Label8: TLabel
-              Left = 56
-              Height = 17
+              Left = 70
+              Height = 18
               Top = 48
-              Width = 90
+              Width = 78
               Anchors = [akTop, akRight]
               Caption = 'Downsample'
               ParentColor = False
             end
             object Downsample: TEdit
               Left = 162
-              Height = 27
+              Height = 24
               Top = 46
               Width = 48
               TabOrder = 2
             end
             object Label9: TLabel
-              Left = 210
-              Height = 17
+              Left = 226
+              Height = 18
               Top = 48
-              Width = 124
+              Width = 110
               Anchors = [akTop, akRight]
               Caption = 'Maximum sources'
               ParentColor = False
             end
             object SourcesLimit: TEdit
               Left = 338
-              Height = 27
+              Height = 24
               Top = 46
               Width = 48
               TabOrder = 3
             end
             object Plot: TCheckBox
               Left = 9
-              Height = 24
+              Height = 21
               Top = 80
-              Width = 189
+              Width = 165
               Caption = 'Create plot of the result'
               TabOrder = 4
             end
             object Label27: TLabel
               Left = 12
-              Height = 17
+              Height = 18
               Top = 116
-              Width = 100
+              Width = 87
               Caption = 'Other options '
               ParentColor = False
             end
             object OtherOptions: TEdit
               Left = 112
-              Height = 27
+              Height = 24
               Top = 112
               Width = 272
               TabOrder = 5
@@ -639,21 +687,21 @@ object f_option: Tf_option
               Top = 141
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 31
-              ClientWidth = 383
+              ClientHeight = 35
+              ClientWidth = 387
               TabOrder = 6
               Visible = False
               object Label34: TLabel
                 Left = 14
-                Height = 17
+                Height = 18
                 Top = 7
-                Width = 85
+                Width = 75
                 Caption = 'Cygwin path'
                 ParentColor = False
               end
               object CygwinPath: TEdit
                 Left = 112
-                Height = 27
+                Height = 24
                 Top = 6
                 Width = 272
                 TabOrder = 0
@@ -669,7 +717,7 @@ object f_option: Tf_option
             Width = 400
             Caption = 'Elbrus Star Locator'
             ClientHeight = 173
-            ClientWidth = 396
+            ClientWidth = 398
             TabOrder = 0
             object ElbrusFolder: TEdit
               Left = 168
@@ -723,54 +771,54 @@ object f_option: Tf_option
     end
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object GroupBox7: TGroupBox
         Left = 8
         Height = 281
-        Top = 0
+        Top = 4
         Width = 385
         Caption = 'Precision slewing options'
         ClientHeight = 262
-        ClientWidth = 381
+        ClientWidth = 383
         TabOrder = 0
         object Label28: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 80
-          Width = 173
+          Width = 150
           Caption = 'Target precision [arcmin] '
           ParentColor = False
         end
         object Label29: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 112
-          Width = 179
+          Width = 159
           Caption = 'Maximum number of retry'
           ParentColor = False
         end
         object Label30: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 172
-          Width = 168
+          Width = 146
           Caption = 'Exposure time [seconds]'
           ParentColor = False
         end
         object Label31: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 204
-          Width = 54
+          Width = 46
           Caption = 'Binning'
           ParentColor = False
         end
         object Label32: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 144
-          Width = 119
+          Width = 104
           Caption = 'Control exposure'
           ParentColor = False
         end
@@ -789,7 +837,7 @@ object f_option: Tf_option
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
           ClientHeight = 38
-          ClientWidth = 308
+          ClientWidth = 310
           Columns = 2
           Items.Strings = (
             'Mount sync'
@@ -799,28 +847,28 @@ object f_option: Tf_option
         end
         object SlewPrec: TEdit
           Left = 225
-          Height = 27
+          Height = 24
           Top = 78
           Width = 80
           TabOrder = 1
         end
         object SlewRetry: TEdit
           Left = 225
-          Height = 27
+          Height = 24
           Top = 110
           Width = 80
           TabOrder = 2
         end
         object SlewExp: TEdit
           Left = 224
-          Height = 27
+          Height = 24
           Top = 170
           Width = 80
           TabOrder = 3
         end
         object SlewBin: TEdit
           Left = 224
-          Height = 27
+          Height = 24
           Top = 202
           Width = 80
           TabOrder = 4
@@ -829,12 +877,12 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object AutoguiderBox: TRadioGroup
         Left = 8
         Height = 64
-        Top = 0
+        Top = 4
         Width = 400
         AutoFill = True
         Caption = 'Software'
@@ -846,7 +894,7 @@ object f_option: Tf_option
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
         ClientHeight = 45
-        ClientWidth = 396
+        ClientWidth = 398
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -861,34 +909,34 @@ object f_option: Tf_option
         Width = 401
         Caption = 'PHD2'
         ClientHeight = 93
-        ClientWidth = 397
+        ClientWidth = 399
         TabOrder = 1
         object Label16: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 10
-          Width = 71
+          Width = 63
           Caption = 'Hostname'
           ParentColor = False
         end
         object Label17: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 46
-          Width = 30
+          Width = 26
           Caption = 'Port'
           ParentColor = False
         end
         object PHDhostname: TEdit
           Left = 124
-          Height = 27
+          Height = 24
           Top = 8
           Width = 186
           TabOrder = 0
         end
         object PHDport: TEdit
           Left = 124
-          Height = 27
+          Height = 24
           Top = 42
           Width = 186
           TabOrder = 1
@@ -901,19 +949,19 @@ object f_option: Tf_option
         Width = 200
         Caption = 'Dithering'
         ClientHeight = 155
-        ClientWidth = 196
+        ClientWidth = 198
         TabOrder = 2
         object Label23: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 11
-          Width = 40
+          Width = 34
           Caption = 'Pixels'
           ParentColor = False
         end
         object DitherPixel: TEdit
           Left = 96
-          Height = 27
+          Height = 24
           Top = 8
           Width = 80
           TabOrder = 0
@@ -921,9 +969,9 @@ object f_option: Tf_option
         end
         object DitherRAonly: TCheckBox
           Left = 96
-          Height = 24
+          Height = 21
           Top = 50
-          Width = 77
+          Width = 69
           Caption = 'RA only'
           TabOrder = 1
         end
@@ -935,11 +983,11 @@ object f_option: Tf_option
         Width = 200
         Caption = 'Settle tolerance'
         ClientHeight = 155
-        ClientWidth = 196
+        ClientWidth = 198
         TabOrder = 3
         object SettlePixel: TEdit
           Left = 97
-          Height = 27
+          Height = 24
           Top = 8
           Width = 80
           TabOrder = 0
@@ -947,7 +995,7 @@ object f_option: Tf_option
         end
         object SettleMinTime: TEdit
           Left = 97
-          Height = 27
+          Height = 24
           Top = 45
           Width = 80
           TabOrder = 1
@@ -955,7 +1003,7 @@ object f_option: Tf_option
         end
         object SettleMaxTime: TEdit
           Left = 97
-          Height = 27
+          Height = 24
           Top = 82
           Width = 80
           TabOrder = 2
@@ -963,40 +1011,40 @@ object f_option: Tf_option
         end
         object Label20: TLabel
           Left = 17
-          Height = 17
+          Height = 18
           Top = 11
-          Width = 40
+          Width = 34
           Caption = 'Pixels'
           ParentColor = False
         end
         object Label21: TLabel
           Left = 17
-          Height = 17
+          Height = 18
           Top = 53
-          Width = 64
+          Width = 56
           Caption = 'Min. time'
           ParentColor = False
         end
         object Label22: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 89
-          Width = 57
+          Width = 50
           Caption = 'Timeout'
           ParentColor = False
         end
         object CalibrationDelay: TEdit
           Left = 97
-          Height = 27
+          Height = 24
           Top = 119
           Width = 80
           TabOrder = 3
         end
         object Label26: TLabel
           Left = 16
-          Height = 34
+          Height = 36
           Top = 116
-          Width = 79
+          Width = 68
           Caption = 'Calibration '#10'delay'
           ParentColor = False
         end
@@ -1004,12 +1052,12 @@ object f_option: Tf_option
     end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 366
-      ClientWidth = 429
+      ClientHeight = 371
+      ClientWidth = 431
       object PlanetariumBox: TRadioGroup
         Left = 4
         Height = 64
-        Top = 0
+        Top = 4
         Width = 400
         AutoFill = True
         Caption = 'Software'
@@ -1021,7 +1069,7 @@ object f_option: Tf_option
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
         ClientHeight = 45
-        ClientWidth = 396
+        ClientWidth = 398
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -1048,13 +1096,13 @@ object f_option: Tf_option
             Align = alClient
             Caption = 'Skychart / Cartes du Ciel'
             ClientHeight = 255
-            ClientWidth = 396
+            ClientWidth = 398
             TabOrder = 0
             object CheckBoxLocalCdc: TCheckBox
               Left = 22
-              Height = 24
+              Height = 21
               Top = 0
-              Width = 211
+              Width = 187
               Caption = 'Skychart on local computer'
               OnChange = CheckBoxLocalCdcChange
               TabOrder = 0
@@ -1064,35 +1112,35 @@ object f_option: Tf_option
               Height = 80
               Top = 32
               Width = 333
-              ClientHeight = 76
-              ClientWidth = 329
+              ClientHeight = 80
+              ClientWidth = 333
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124
-                Height = 27
+                Height = 24
                 Top = 42
                 Width = 186
                 TabOrder = 0
               end
               object Label25: TLabel
                 Left = 16
-                Height = 17
+                Height = 18
                 Top = 46
-                Width = 30
+                Width = 26
                 Caption = 'Port'
                 ParentColor = False
               end
               object Label24: TLabel
                 Left = 16
-                Height = 17
+                Height = 18
                 Top = 10
-                Width = 71
+                Width = 63
                 Caption = 'Hostname'
                 ParentColor = False
               end
               object CdChostname: TEdit
                 Left = 124
-                Height = 27
+                Height = 24
                 Top = 8
                 Width = 186
                 TabOrder = 1

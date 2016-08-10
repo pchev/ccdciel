@@ -254,7 +254,7 @@ begin
    nax1:=V.NumX;
    nax2:=V.NumY;
    pix:=V.PixelSizeX;
-   piy:=V.PixelSizeX;
+   piy:=V.PixelSizeY;
    ccdname:=V.Name+'-'+V.SensorName;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,timestart);

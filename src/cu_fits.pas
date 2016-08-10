@@ -36,6 +36,7 @@ type
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             bzero,bscale,dmax,dmin,blank : double;
             equinox,ra,dec,crval1,crval2: double;
+            pixsz1,pixsz2,pixratio: double;
             objects,ctype1,ctype2 : string;
             end;
 
@@ -539,7 +540,7 @@ begin
 with FFitsInfo do begin
  valid:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
- objects:=''; ctype1:=''; ctype2:='';
+ objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1;
  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
@@ -558,6 +559,8 @@ with FFitsInfo do begin
     if (keyword='THRESH') then dmax:=strtofloat(buf);
     if (keyword='THRESL') then dmin:=strtofloat(buf);
     if (keyword='BLANK') then blank:=strtofloat(buf);
+    if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
+    if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
     if (keyword='DEC') then dec:=StrToFloatDef(buf,NullCoord);
@@ -568,6 +571,7 @@ with FFitsInfo do begin
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
     if (keyword='A_ORDER') then solved:=true; // polynomial present, the image must be astrometry solved.
  end;
+ if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
  // very crude coordinates to help astrometry if telescope is not available
  if ra=NullCoord then begin
    if (copy(ctype1,1,3)='RA-')and(crval1<>NullCoord) then
@@ -790,7 +794,10 @@ setlength(Fimage,n_axis,Fheight,Fwidth);
 for i:=0 to 255 do FHistogram[i]:=1; // minimum 1 to take the log
 case FFitsInfo.bitpix of
      -64 : begin
-           c:=MaxWord/(Fdmax-Fdmin);
+           if Fdmax>Fdmin then
+             c:=MaxWord/(Fdmax-Fdmin)
+           else
+             c:=1;
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[0,i,j];
@@ -809,7 +816,10 @@ case FFitsInfo.bitpix of
            end;
            end;
      -32 : begin
-           c:=MaxWord/(Fdmax-Fdmin);
+           if Fdmax>Fdmin then
+             c:=MaxWord/(Fdmax-Fdmin)
+           else
+             c:=1;
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[0,i,j];
@@ -828,7 +838,10 @@ case FFitsInfo.bitpix of
            end;
            end;
        8 : begin
-           c:=MaxWord/(Fdmax-Fdmin);
+           if Fdmax>Fdmin then
+             c:=MaxWord/(Fdmax-Fdmin)
+           else
+             c:=1;
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j];
@@ -847,7 +860,10 @@ case FFitsInfo.bitpix of
            end;
            end;
       16 : begin
-           c:=MaxWord/(Fdmax-Fdmin);
+           if Fdmax>Fdmin then
+              c:=MaxWord/(Fdmax-Fdmin)
+           else
+              c:=1;
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j];
@@ -866,7 +882,10 @@ case FFitsInfo.bitpix of
            end;
            end;
       32 : begin
-           c:=MaxWord/(Fdmax-Fdmin);
+           if Fdmax>Fdmin then
+             c:=MaxWord/(Fdmax-Fdmin)
+           else
+             c:=1;
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[0,i,j];
