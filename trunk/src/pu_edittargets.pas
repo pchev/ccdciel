@@ -473,9 +473,9 @@ begin
     t.delay:=StrToFloatDef(Delay.Text,1);
     t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
     t.preview:=Preview.Checked;
-    TargetList.Cells[1,n]:=t.objectname;
-    TargetList.Cells[2,n]:=t.planname;
   end;
+  TargetList.Cells[1,n]:=t.objectname;
+  TargetList.Cells[2,n]:=t.planname;
 end;
 
 procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;

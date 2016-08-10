@@ -105,8 +105,8 @@ object f_EditTargets: Tf_EditTargets
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
-      ClientHeight = 402
-      ClientWidth = 326
+      ClientHeight = 404
+      ClientWidth = 328
       object Panel3: TPanel
         Left = 0
         Height = 402
@@ -422,13 +422,13 @@ object f_EditTargets: Tf_EditTargets
     end
     object TabSheet2: TTabSheet
       Caption = 'Script'
-      ClientHeight = 402
-      ClientWidth = 326
+      ClientHeight = 404
+      ClientWidth = 328
       object LabelSeq1: TLabel
         Left = 98
-        Height = 17
+        Height = 18
         Top = 1
-        Width = 75
+        Width = 65
         Caption = 'LabelSeq1'
         Font.Style = [fsBold]
         ParentColor = False
@@ -436,23 +436,23 @@ object f_EditTargets: Tf_EditTargets
       end
       object Label8: TLabel
         Left = 16
-        Height = 17
+        Height = 18
         Top = 0
-        Width = 66
+        Width = 58
         Caption = 'Sequence'
         ParentColor = False
       end
       object Label15: TLabel
         Left = 16
-        Height = 17
+        Height = 18
         Top = 54
-        Width = 40
+        Width = 34
         Caption = 'Script'
         ParentColor = False
       end
       object ScriptList: TComboBox
         Left = 98
-        Height = 31
+        Height = 26
         Top = 48
         Width = 126
         ItemHeight = 0
