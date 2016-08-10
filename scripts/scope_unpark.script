@@ -18,6 +18,6 @@ begin
     if r<>msgOK then logMsg('Telescope park: '+r);
   end
   else begin
-    logMsg('Telescope already parked');
+    logMsg('Telescope already unparked');
   end;
 end.
