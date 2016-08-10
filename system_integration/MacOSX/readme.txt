@@ -1,5 +1,5 @@
 CCDciel
-Version 0.6.0 beta
+Version 0.6.1 beta
 
 
 Copyright (C) 2016 Patrick Chevalley
