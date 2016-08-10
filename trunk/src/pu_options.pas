@@ -35,17 +35,21 @@ type
 
   Tf_option = class(TForm)
     ButtonDir: TButton;
+    BayerMode: TComboBox;
+    DebayerPreview: TCheckBox;
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
     AstrometryTimeout: TEdit;
     CygwinPath: TEdit;
     CaptureDir: TEdit;
+    GroupBox8: TGroupBox;
     hemis: TComboBox;
     Label33: TLabel;
     CygwinPanel: TPanel;
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
+    Label38: TLabel;
     latdeg: TFloatEdit;
     LatitudeGroup: TGroupBox;
     latmin: TLongEdit;
@@ -122,6 +126,7 @@ type
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
     TabSheet7: TTabSheet;
+    TabSheet8: TTabSheet;
     TelescopeName: TEdit;
     GroupBox4: TGroupBox;
     elbrus: TGroupBox;

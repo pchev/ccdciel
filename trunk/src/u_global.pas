@@ -38,6 +38,7 @@ type
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
+  TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
 
   TNumRange = record
                min,max,step: double;
@@ -209,6 +210,8 @@ var
   ImgZoom: double;
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsTimeZone: double;
+  BayerColor: boolean;
+  BayerMode:TBayerMode;
 
 implementation
 

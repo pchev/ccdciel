@@ -10,6 +10,7 @@ version=0.0
 
 [target]
 dirs=synapse/source/lib \
+     bgrabitmap \
      enhedits \
      indiclient \
      xmlparser \
@@ -59,5 +60,5 @@ export LCL_PLATFORM
 outdir:
 	mkdir -p lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM)
 
-all: outdir synapse/source/lib_all  enhedits_all indiclient_all xmlparser_all vosamp_all components$(PPUEXT)
+all: outdir synapse/source/lib_all bgrabitmap_all enhedits_all indiclient_all xmlparser_all vosamp_all components$(PPUEXT)
 
