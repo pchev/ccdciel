@@ -958,8 +958,10 @@ if Assigned(Preview.onStartExposure) then
   exit;
 Preview.Running:=true;
 if Assigned(FonMsg) then FonMsg('Start single preview');
-while Preview.Running do
+while Preview.Running do begin
+  sleep(10);
   Application.ProcessMessages;
+end;
 wait(1);
 result:=msgOK;
 except
