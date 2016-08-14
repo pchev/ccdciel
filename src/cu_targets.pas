@@ -438,10 +438,10 @@ begin
     exit;
   end;
   if precision then begin
-    cormethod:=config.GetValue('/PrecSlew/Method',0);
-    prec:=config.GetValue('/PrecSlew/Precision',1.0)/60;
+    cormethod:=config.GetValue('/PrecSlew/Method',1);
+    prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
-    exp:=config.GetValue('/PrecSlew/Exposure',15.0);
+    exp:=config.GetValue('/PrecSlew/Exposure',10.0);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     result:=astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry);
   end
