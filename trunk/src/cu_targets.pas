@@ -530,8 +530,10 @@ begin
     result:=f_scriptengine.scr.Execute;
     if result then
        msg('Script '+sname+' terminated')
-    else
+    else begin
        msg('Script execution error, row '+inttostr(f_scriptengine.scr.ExecErrorRow)+': '+f_scriptengine.scr.ExecErrorToString);
+       msg('Script '+sname+' terminated');
+    end;
   end else begin
     for i:=0 to f_scriptengine.scr.CompilerMessageCount-1 do begin
        msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
