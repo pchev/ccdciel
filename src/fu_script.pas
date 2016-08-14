@@ -132,15 +132,18 @@ var sname: string;
     scdir:TScriptDir;
     i: integer;
 begin
-if f_scriptengine.scr.Running then begin
-   msg('Another script is already running');
-end else begin
   i:=ComboBoxScript.ItemIndex;
-  sname:=ComboBoxScript.Items[i];
-  scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
-  if (sname='')or(scdir=nil) then exit;
-  RunScript(sname,scdir.path);
-end;
+  if i>=0 then begin
+    if f_scriptengine.scr.Running then begin
+      msg('Another script is already running');
+    end else begin
+      sname:=ComboBoxScript.Items[i];
+      scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
+      if (sname='')or(scdir=nil) then exit;
+      RunScript(sname,scdir.path);
+   end;
+  end
+  else msg('Please select a script!');
 end;
 
 procedure Tf_script.BtnStopClick(Sender: TObject);
