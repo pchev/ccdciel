@@ -456,7 +456,7 @@ else result:=-1;
 end;
 
 function T_indimount.Slew(sra,sde: double):Boolean;
-var waittime:integer;
+var slewtimeout:integer;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
@@ -464,11 +464,12 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then waittime:=120000 else waittime:=15000;
+    indiclient.WaitBusy(CoordSet);
+    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then slewtimeout:=120000 else slewtimeout:=15000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
-    indiclient.WaitBusy(coord_prop,waittime);
+    indiclient.WaitBusy(coord_prop,slewtimeout,5000);
     FMountSlewing:=false;
     result:=true;
   end;
@@ -481,10 +482,11 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetSync.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
+    indiclient.WaitBusy(CoordSet);
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
-    indiclient.WaitBusy(coord_prop,5000);
+    indiclient.WaitBusy(coord_prop);
     result:=true;
   end;
 end;
@@ -496,6 +498,7 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
+    indiclient.WaitBusy(CoordSet);
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop);
     result:=true;
