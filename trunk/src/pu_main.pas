@@ -1190,7 +1190,7 @@ end;
 procedure Tf_main.SetOptions;
 begin
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
-  ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',6.0);
+  ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
   BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
@@ -2044,7 +2044,7 @@ begin
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
    f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
-   f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',6.0);
+   f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
@@ -2061,7 +2061,7 @@ begin
    if f_option.FocaleFromTelescope.Checked then
       f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
    f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
-   f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',5.0));
+   f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',15.0));
    f_option.AstrometryTimeout.Text:=FormatFloat(f0,config.GetValue('/Astrometry/Timeout',60.0));
    f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
    f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
@@ -2072,10 +2072,10 @@ begin
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
    {$endif}
-   f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
-   f_option.SlewPrec.Text:=FormatFloat(f2,config.GetValue('/PrecSlew/Precision',1.0));
+   f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',1);
+   f_option.SlewPrec.Text:=FormatFloat(f2,config.GetValue('/PrecSlew/Precision',5.0));
    f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
-   f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',15));
+   f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',10));
    f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
@@ -2120,7 +2120,7 @@ begin
      config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Text);
      config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
      config.SetValue('/Astrometry/ScaleTolerance',StrToFloatDef(f_option.Tolerance.Text,0.1 ));
-     config.SetValue('/Astrometry/MinRadius',StrToFloatDef(f_option.MinRadius.Text,5.0));
+     config.SetValue('/Astrometry/MinRadius',StrToFloatDef(f_option.MinRadius.Text,15.0));
      config.SetValue('/Astrometry/Timeout',StrToFloatDef(f_option.AstrometryTimeout.Text,60.0));
      config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
      config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
@@ -2132,9 +2132,9 @@ begin
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
      {$endif}
      config.SetValue('/PrecSlew/Method',f_option.PrecSlewBox.ItemIndex);
-     config.SetValue('/PrecSlew/Precision',StrToFloatDef(f_option.SlewPrec.Text,1.0));
+     config.SetValue('/PrecSlew/Precision',StrToFloatDef(f_option.SlewPrec.Text,5.0));
      config.SetValue('/PrecSlew/Retry',StrToIntDef(f_option.SlewRetry.Text,3));
-     config.SetValue('/PrecSlew/Exposure',StrToFloatDef(f_option.SlewExp.Text,15.0));
+     config.SetValue('/PrecSlew/Exposure',StrToFloatDef(f_option.SlewExp.Text,10.0));
      config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);

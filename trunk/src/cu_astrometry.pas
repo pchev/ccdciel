@@ -154,7 +154,7 @@ begin
    engine.InFile:=infile;
    engine.OutFile:=outfile;
    tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
-   MinRadius:=config.GetValue('/Astrometry/MinRadius',5.0);
+   MinRadius:=config.GetValue('/Astrometry/MinRadius',15.0);
    AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
    if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
    then
