@@ -685,6 +685,7 @@ result:=msgFailed;
 r:=StrToFloatDef(RA,9999);
 d:=StrToFloatDef(DE,9999);
 if (abs(r)<=24)and(abs(d)<=90) then begin
+ doLogmsg('Slew telescope to '+ra+' '+de);
  if Fmount.Slew(r,d) then begin
    wait(2);
    result:=msgOK;
