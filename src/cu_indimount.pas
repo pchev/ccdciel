@@ -465,11 +465,11 @@ begin
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
     indiclient.WaitBusy(CoordSet);
-    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then slewtimeout:=120000 else slewtimeout:=15000;
+    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then slewtimeout:=240000 else slewtimeout:=30000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
-    indiclient.WaitBusy(coord_prop,slewtimeout,5000);
+    indiclient.WaitBusy(coord_prop,slewtimeout,10000);
     FMountSlewing:=false;
     result:=true;
   end;
