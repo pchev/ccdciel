@@ -383,6 +383,8 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset: double;
     n,i:integer;
 begin
   dist:=MaxInt;
+  raoffset:=0;
+  deoffset:=0;
   ar1:=deg2rad*15*ra;
   de1:=deg2rad*de;
   msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
@@ -423,8 +425,8 @@ begin
              Mount.Slew(ra, de);
           end;
        else begin
-             raoffset:=ra-cra;
-             deoffset:=de-cde;
+             raoffset:=ra+raoffset-cra;
+             deoffset:=de+raoffset-cde;
              msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
              Mount.Slew(ra+raoffset, de+deoffset);
           end;
