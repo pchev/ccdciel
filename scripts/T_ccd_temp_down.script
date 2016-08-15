@@ -66,7 +66,7 @@ end;
       tempstep:=tempnow+ramp;
       if tempstep>tempset then tempstep:=tempset;
    end;
-   tempstepd:=tempstep/10;
+   tempstepd:=double(tempstep)/10;
    arg.clear;
    arg.add(formatfloat('0.0',tempstepd));
    logMsg('Ramp CCD temperature to '+arg[0]+' and wait '+inttostr(timeunit)+' seconds');
@@ -78,6 +78,6 @@ end;
      GetD('CCDTEMP',ccdtemp);
      tempnow:=round(10*ccdtemp);
      inc(waitloop);
-   until (tempnow=tempstep);
+   until (tempnow<=tempstep)or(abs(tempnow-tempstep)<5);
  end;
 end.
