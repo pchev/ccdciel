@@ -83,12 +83,26 @@ if to_be_configured then begin
   raiseexception(erCustomError, 'Configuration need');
 end;
 
+  // telescope connected?
+  GetB('TELESCOPE_CONNECTED',ok);
+  if not ok then begin
+    logMsg('Telescope not connected!');
+    exit;
+  end;
+
  getB('TELESCOPE_EQMOD',ok);
  if not ok then begin
    logMsg('This script can only be run with an EQMOD mount!');
-   raiseexception(erCustomError, 'Not EQMOD');
+   exit;
  end;
  
+ // camera connected?
+ GetB('CAMERA_CONNECTED',ok);
+ if not ok then begin
+   logMsg('Camera not connected!');
+   exit;
+ end;
+
  // Set filter
  arg.clear;
  arg.add(filter_num);

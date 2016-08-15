@@ -7,7 +7,7 @@
 
 var maxtime,nloop,waitloop,timeunit,tempnow, tempstep, tempset, ramp: integer;
     ccdtemp,tempstepd: double;
-    rampdown,to_be_configured: boolean;
+    rampdown,to_be_configured,ok: boolean;
     arg: TStringList;
 
 procedure SetParameters;
@@ -45,6 +45,13 @@ if to_be_configured then begin
   logMsg('Then remove the row: "to_be_configured:=true;"');
   raiseexception(erCustomError, 'Configuration need');
 end;
+
+  // camera connected?
+  GetB('CAMERA_CONNECTED',ok);
+  if not ok then begin
+    logMsg('Camera not connected!');
+    exit;
+  end;
 
  // in tenth of degree:
  tempset:=10*tempset;
