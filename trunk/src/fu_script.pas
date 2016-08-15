@@ -39,6 +39,7 @@ type
     BtnNew: TButton;
     BtnStop: TButton;
     ComboBoxScript: TComboBox;
+    led: TShape;
     Panel1: TPanel;
     StaticText1: TStaticText;
     procedure BtnScriptClick(Sender: TObject);
@@ -54,7 +55,6 @@ type
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
     procedure msg(txt:string);
-    function RunScript(sname,path: string):boolean;
  public
     { public declarations }
     procedure LoadScriptList;
@@ -81,39 +81,13 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-function Tf_script.RunScript(sname,path: string):boolean;
-var fn: string;
-    i: integer;
-    ok: boolean;
-begin
-  msg('Run script '+sname);
-  fn:=slash(path)+sname+'.script';
-  f_scriptengine.scr.Script.LoadFromFile(fn);
-  ok:=f_scriptengine.scr.Compile;
-  if ok then begin
-    Application.ProcessMessages;
-    result:=f_scriptengine.scr.Execute;
-    if result then
-       msg('Script '+sname+' terminated')
-    else begin
-       msg('Script execution error, row '+inttostr(f_scriptengine.scr.ExecErrorRow)+': '+f_scriptengine.scr.ExecErrorToString);
-       msg('Script '+sname+' terminated');
-    end;
-  end else begin
-    for i:=0 to f_scriptengine.scr.CompilerMessageCount-1 do begin
-       msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
-    end;
-    result:=false;
-  end;
-end;
-
 procedure Tf_script.RunStartupScript;
 var path,sname: string;
 begin
   path:=ScriptDir[1].path;
   sname:='startup';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    RunScript(sname,path);
+    f_scriptengine.RunScript(sname,path);
   end;
 end;
 
@@ -123,7 +97,7 @@ begin
   path:=ScriptDir[1].path;
   sname:='shutdown';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    RunScript(sname,path);
+    f_scriptengine.RunScript(sname,path);
   end;
 end;
 
@@ -140,7 +114,7 @@ begin
       sname:=ComboBoxScript.Items[i];
       scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
       if (sname='')or(scdir=nil) then exit;
-      RunScript(sname,scdir.path);
+      f_scriptengine.RunScript(sname,scdir.path);
    end;
   end
   else msg('Please select a script!');
@@ -165,7 +139,7 @@ begin
       Autoguider.WaitBusy(15);
     end;
     f_scriptengine.scr.Stop;
-    msg('Script stopped.');
+    msg('Script terminating...');
   end
   else msg('No script are running.');
 end;

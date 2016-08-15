@@ -289,6 +289,8 @@ type
     procedure LoadFitsFile(fn:string);
     procedure CCDCIELMessageHandler(var Message: TLMessage); message LM_CCDCIEL;
     Procedure StartSequence(SeqName: string);
+    procedure ScriptExecute(Sender: TObject);
+    procedure ScriptAfterExecute(Sender: TObject);
   public
     { public declarations }
   end;
@@ -713,6 +715,8 @@ begin
   f_scriptengine.Fits:=fits;
   f_scriptengine.onMsg:=@NewMessage;
   f_scriptengine.onStartSequence:=@StartSequence;
+  f_scriptengine.onScriptExecute:=@ScriptExecute;
+  f_scriptengine.onScriptAfterExecute:=@ScriptAfterExecute;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
@@ -819,6 +823,20 @@ begin
   f_script.RunStartupScript;
 end;
 
+procedure Tf_main.ScriptExecute(Sender: TObject);
+begin
+  f_script.led.Brush.Color:=clLime;
+  if (f_scriptengine.ScriptFilename<>'startup')and
+     (f_scriptengine.ScriptFilename<>'shutdown') and
+     (f_scriptengine.ScriptFilename<>'unattended_error')
+     then
+      f_script.ComboBoxScript.Text:=f_scriptengine.ScriptFilename;
+end;
+
+procedure Tf_main.ScriptAfterExecute(Sender: TObject);
+begin
+  f_script.led.Brush.Color:=clGray;
+end;
 
 Procedure Tf_main.StartSequence(SeqName: string);
 begin
