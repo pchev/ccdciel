@@ -2,10 +2,17 @@
   This script unpark the telescope mount
 }
 
-var parked: boolean;
+var ok,parked: boolean;
     arg: TStringList;
     r: string;
 begin
+
+  // telescope connected?
+  GetB('TELESCOPE_CONNECTED',ok);
+  if not ok then begin
+    logMsg('Telescope not connected!');
+    exit;
+  end;
 
   // get park status
   GetB('TELESCOPE_PARKED',parked);

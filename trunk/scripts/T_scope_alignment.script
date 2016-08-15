@@ -10,7 +10,7 @@
  var i: integer;
      arg: TStringList;
      al_east,al_west: array[0..2]of array[0..1]of double;
-     do_east, do_west, to_be_configured: boolean;
+     do_east, do_west, to_be_configured,ok: boolean;
      exposure,binning,filter_num: string;
 const f5='0.00000';
 
@@ -80,6 +80,20 @@ if to_be_configured then begin
   logMsg('Then remove the row: "to_be_configured:=true;"');
   raiseexception(erCustomError, 'Configuration need');
 end;
+
+  // telescope connected?
+  GetB('TELESCOPE_CONNECTED',ok);
+  if not ok then begin
+    logMsg('Telescope not connected!');
+    exit;
+  end;
+
+ // camera connected?
+ GetB('CAMERA_CONNECTED',ok);
+ if not ok then begin
+   logMsg('Camera not connected!');
+   exit;
+ end;
 
  // Set filter
  arg.clear;
