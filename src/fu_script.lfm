@@ -80,5 +80,13 @@ object f_script: Tf_script
       OnClick = BtnStopClick
       TabOrder = 4
     end
+    object led: TShape
+      Left = 156
+      Height = 14
+      Top = 38
+      Width = 14
+      Brush.Color = clGray
+      Shape = stCircle
+    end
   end
 end

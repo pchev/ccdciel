@@ -17,7 +17,7 @@ object f_devicesconnection: Tf_devicesconnection
     ClientWidth = 147
     TabOrder = 0
     object BtnConnect: TButton
-      Left = 32
+      Left = 8
       Height = 25
       Hint = 'Connect all devices'
       Top = 8
@@ -27,7 +27,7 @@ object f_devicesconnection: Tf_devicesconnection
       TabOrder = 0
     end
     object led: TShape
-      Left = 8
+      Left = 100
       Height = 14
       Top = 12
       Width = 14
@@ -52,19 +52,19 @@ object f_devicesconnection: Tf_devicesconnection
       Visible = False
       object LabelCamera: TLabel
         Left = 4
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 48
+        Width = 47
         Caption = 'Camera'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelWheel: TLabel
-        Left = 60
-        Height = 16
+        Left = 59
+        Height = 18
         Top = 4
-        Width = 39
+        Width = 41
         Caption = 'Filters'
         Font.Color = clRed
         ParentColor = False
@@ -72,19 +72,19 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelFocuser: TLabel
         Left = 4
-        Height = 16
-        Top = 28
-        Width = 48
+        Height = 18
+        Top = 30
+        Width = 47
         Caption = 'Focuser'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelMount: TLabel
-        Left = 60
-        Height = 16
-        Top = 28
-        Width = 39
+        Left = 59
+        Height = 18
+        Top = 30
+        Width = 41
         Caption = 'Mount'
         Font.Color = clRed
         ParentColor = False

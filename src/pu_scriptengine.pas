@@ -49,6 +49,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure ShutdownTimerTimer(Sender: TObject);
     procedure TplPSScriptCompile(Sender: TPSScript);
+    procedure TplPSScriptExecute(Sender: TPSScript);
+    procedure TplPSScriptAfterExecute(Sender: TPSScript);
     procedure TplPSScriptLine(Sender: TObject);
   private
     { private declarations }
@@ -67,11 +69,14 @@ type
     Fplanetarium: TPlanetarium;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyMsg;
+    FonScriptExecute: TNotifyEvent;
+    FonScriptAfterExecute: TNotifyEvent;
     ilist: array of Integer;
     dlist: array of Double;
     slist: array of String;
     LastErr:string;
     strllist: array of TStringList;
+    procedure msg(str:string);
     function doGetS(varname:string; var str: string):Boolean;
     function doSetS(varname:string; str: string):Boolean;
     function doGetSL(varname:string; var strl: TStringList):Boolean;
@@ -149,9 +154,12 @@ type
     { public declarations }
     dbgscr: TPSScriptDebugger;
     scr: TPSScript;
+    function  RunScript(sname,path: string):boolean;
     procedure StopScript;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onStartSequence: TNotifyMsg read FonStartSequence write FonStartSequence;
+    property onScriptExecute: TNotifyEvent read FonScriptExecute write FonScriptExecute;
+    property onScriptAfterExecute: TNotifyEvent read FonScriptAfterExecute write FonScriptAfterExecute;
     property fits: TFits read Ffits write Ffits;
     property DevicesConnection: Tf_devicesconnection read Fdevicesconnection write Fdevicesconnection;
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
@@ -186,6 +194,8 @@ begin
   for i:=0 to 9 do strllist[i]:=TStringList.Create;
   scr:=TPSScriptDebugger.Create(self);
   scr.OnCompile:=@TplPSScriptCompile;
+  scr.OnExecute:=@TplPSScriptExecute;
+  scr.OnAfterExecute:=@TplPSScriptAfterExecute;
   scr.OnLine:=@TplPSScriptLine;
   scr.Plugins.Assign(TplPSScript.Plugins);
   dbgscr:=TPSScriptDebugger.Create(self);
@@ -417,6 +427,11 @@ begin
   ShowMessage(aMsg);
 end;
 
+procedure Tf_scriptengine.msg(str:string);
+begin
+  doLogmsg(str);
+end;
+
 procedure Tf_scriptengine.doLogmsg(str:string);
 begin
   if Assigned(FonMsg) then FonMsg(str);
@@ -524,6 +539,33 @@ begin
   Wait(wt);
 end;
 
+function Tf_scriptengine.RunScript(sname,path: string):boolean;
+var fn: string;
+    i: integer;
+    ok: boolean;
+begin
+  msg('Run script '+sname);
+  FScriptFilename:=sname;
+  fn:=slash(path)+sname+'.script';
+  scr.Script.LoadFromFile(fn);
+  ok:=scr.Compile;
+  if ok then begin
+    Application.ProcessMessages;
+    result:=scr.Execute;
+    if result then
+       msg('Script '+sname+' terminated')
+    else begin
+       msg('Script execution error, row '+inttostr(scr.ExecErrorRow)+': '+scr.ExecErrorToString);
+       msg('Script '+sname+' terminated');
+    end;
+  end else begin
+    for i:=0 to scr.CompilerMessageCount-1 do begin
+       msg('Compilation error: '+ scr.CompilerErrorToStr(i));
+    end;
+    result:=false;
+  end;
+end;
+
 Procedure Tf_scriptengine.StopScript;
 begin
 scr.Stop;
@@ -532,6 +574,16 @@ end;
 function Tf_scriptengine.CompileScripts: boolean;
 begin
  result:=scr.Compile;
+end;
+
+procedure Tf_scriptengine.TplPSScriptExecute(Sender: TPSScript);
+begin
+ if assigned(FonScriptExecute) then FonScriptExecute(self);
+end;
+
+procedure Tf_scriptengine.TplPSScriptAfterExecute(Sender: TPSScript);
+begin
+ if assigned(FonScriptAfterExecute) then FonScriptAfterExecute(self);
 end;
 
 procedure Tf_scriptengine.TplPSScriptCompile(Sender: TPSScript);
@@ -685,7 +737,7 @@ result:=msgFailed;
 r:=StrToFloatDef(RA,9999);
 d:=StrToFloatDef(DE,9999);
 if (abs(r)<=24)and(abs(d)<=90) then begin
- doLogmsg('Slew telescope to '+ra+' '+de);
+ msg('Slew telescope to '+ra+' '+de);
  if Fmount.Slew(r,d) then begin
    wait(2);
    result:=msgOK;

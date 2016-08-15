@@ -61,7 +61,6 @@ type
       procedure NextTarget;
       function InitTarget:boolean;
       procedure StartPlan;
-      function RunScript(sname,path: string):boolean;
       procedure RunErrorScript;
       function StopGuider:boolean;
       function StartGuider:boolean;
@@ -278,7 +277,7 @@ begin
   { TODO :  select best target based on current time }
   if FRunning and (FCurrentTarget<NumTargets) then begin
    if Targets[FCurrentTarget].objectname='Script' then begin
-     if not RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
+     if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
        msg('Script '+Targets[FCurrentTarget].planname+' failed!');
        if FUnattended then begin
          StopSequence;
@@ -516,39 +515,13 @@ begin
  end;
 end;
 
-function T_Targets.RunScript(sname,path: string):boolean;
-var fn: string;
-    i: integer;
-    ok: boolean;
-begin
-  msg('Run script '+sname);
-  fn:=slash(path)+sname+'.script';
-  f_scriptengine.scr.Script.LoadFromFile(fn);
-  ok:=f_scriptengine.scr.Compile;
-  if ok then begin
-    Application.ProcessMessages;
-    result:=f_scriptengine.scr.Execute;
-    if result then
-       msg('Script '+sname+' terminated')
-    else begin
-       msg('Script execution error, row '+inttostr(f_scriptengine.scr.ExecErrorRow)+': '+f_scriptengine.scr.ExecErrorToString);
-       msg('Script '+sname+' terminated');
-    end;
-  end else begin
-    for i:=0 to f_scriptengine.scr.CompilerMessageCount-1 do begin
-       msg('Compilation error: '+ f_scriptengine.scr.CompilerErrorToStr(i));
-    end;
-    result:=false;
-  end;
-end;
-
 procedure T_Targets.RunErrorScript;
 var path,sname: string;
 begin
   path:=ScriptDir[1].path;
   sname:='unattended_error';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    RunScript(sname,path);
+    f_scriptengine.RunScript(sname,path);
   end;
 end;
 

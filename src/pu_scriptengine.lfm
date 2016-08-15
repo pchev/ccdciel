@@ -14,6 +14,8 @@ object f_scriptengine: Tf_scriptengine
     CompilerOptions = []
     OnLine = TplPSScriptLine
     OnCompile = TplPSScriptCompile
+    OnExecute = TplPSScriptExecute
+    OnAfterExecute = TplPSScriptAfterExecute
     Plugins = <    
       item
         Plugin = PSImport_Classes1
