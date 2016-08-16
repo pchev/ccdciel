@@ -66,7 +66,7 @@ TAstrometry = class(TComponent)
     procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer; wait: boolean);
-    function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double):boolean;
     property Busy: Boolean read FBusy;
     property LastResult: Boolean read FLastResult;
     property ResultFile: string read savefile;
@@ -376,7 +376,7 @@ begin
   WaitExposure:=false;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer): boolean;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset: double;
     jd0,jd1: double;
     fn:string;
@@ -435,6 +435,7 @@ begin
     inc(i);
   until (dist<=prec)or(i>maxslew);
   result:=(dist<=prec);
+  err:=dist;
   if result then msg('Precision slew terminated.')
             else msg('Precision slew failed!');
 end;
