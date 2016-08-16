@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
+  math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
   TTargetList = array of TTarget;
@@ -436,25 +436,28 @@ begin
     msg('Error! Mount not connected');
     exit;
   end;
+  prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
   if precision then begin
     cormethod:=config.GetValue('/PrecSlew/Method',1);
-    prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
     exp:=config.GetValue('/PrecSlew/Exposure',10.0);
     bin:=config.GetValue('/PrecSlew/Binning',1);
-    result:=astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry);
+    result:=astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry,err);
   end
   else begin
-    maxerr:=5/60;
+    maxerr:=max(2*prec,1/60);
     Mount.Slew(ra, de);
     err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
     result:=(err<maxerr);
   end;
   if not FRunning then exit;
-  if (not result)and(not Unattended) then begin
-    if MessageDlg('Telescope slew','After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?',mtConfirmation,mbYesNo,0)=mrYes then begin
-       result:=Slew(ra,de,precision);
-       exit;
+  if not result then begin
+    msg('Telescope slew error: '+FormatFloat(f2,err*60)+' arcminutes.');
+    if not Unattended then begin
+      if MessageDlg('Telescope slew','After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?',mtConfirmation,mbYesNo,0)=mrYes then begin
+         result:=Slew(ra,de,precision);
+         exit;
+      end;
     end;
   end;
 end;
