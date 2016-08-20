@@ -199,6 +199,7 @@ var
   ConfirmClose: boolean;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
+  profile: string;
   Filters: TStringList;
   compile_time, compile_version, compile_system, lclver: string;
   DitherPixel, SettlePixel: double;
