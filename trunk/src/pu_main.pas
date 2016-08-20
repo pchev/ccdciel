@@ -658,6 +658,7 @@ begin
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
   f_devicesconnection.onDisconnect:=@Disconnect;
+  f_devicesconnection.ProfileLabel.Caption:='Profile: '+profile;
 
   f_visu:=Tf_visu.Create(self);
   f_visu.onRedraw:=@Redraw;
@@ -1996,6 +1997,7 @@ begin
          configfile:='ccdciel_'+profile+'.conf';
       loadopt:=FileExistsUTF8(slash(ConfigDir)+configfile);
       OpenConfig(configfile);
+      f_devicesconnection.ProfileLabel.Caption:='Profile: '+profile;
     end;
     config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);

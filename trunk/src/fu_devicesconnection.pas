@@ -34,6 +34,7 @@ type
 
   Tf_devicesconnection = class(TFrame)
     BtnConnect: TButton;
+    ProfileLabel: TLabel;
     LabelCamera: TLabel;
     LabelWheel: TLabel;
     LabelFocuser: TLabel;

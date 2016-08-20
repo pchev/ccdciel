@@ -20,7 +20,7 @@ object f_devicesconnection: Tf_devicesconnection
       Left = 8
       Height = 25
       Hint = 'Connect all devices'
-      Top = 8
+      Top = 16
       Width = 80
       Caption = 'Connect'
       OnClick = BtnConnectClick
@@ -29,7 +29,7 @@ object f_devicesconnection: Tf_devicesconnection
     object led: TShape
       Left = 100
       Height = 14
-      Top = 12
+      Top = 20
       Width = 14
       Brush.Color = clRed
       Shape = stCircle
@@ -37,7 +37,7 @@ object f_devicesconnection: Tf_devicesconnection
     object PanelDev: TPanel
       Left = 0
       Height = 50
-      Top = 32
+      Top = 40
       Width = 112
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 4
@@ -90,6 +90,14 @@ object f_devicesconnection: Tf_devicesconnection
         ParentColor = False
         ParentFont = False
       end
+    end
+    object ProfileLabel: TLabel
+      Left = 8
+      Height = 18
+      Top = 0
+      Width = 42
+      Caption = 'Profile:'
+      ParentColor = False
     end
   end
   object StaticText1: TStaticText
