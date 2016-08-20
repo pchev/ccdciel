@@ -34,7 +34,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes,
-  LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages,
+  LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
 
@@ -212,6 +212,8 @@ type
     procedure UpdConfig(oldver:string);
     procedure SetConfig;
     procedure SetOptions;
+    procedure OpenConfig(n: string);
+    procedure SaveConfig;
     procedure OptionGetPixelSize(Sender: TObject);
     procedure OptionGetFocaleLength(Sender: TObject);
     procedure Restart;
@@ -507,6 +509,7 @@ end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
 var DefaultInterface,aInt: TDevInterface;
+    inif: TIniFile;
     configver,configfile: string;
     i:integer;
 begin
@@ -547,20 +550,24 @@ begin
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   if Application.HasOption('c', 'config') then begin
-    configfile:='ccdciel_'+Application.GetOptionValue('c', 'config')+'.conf';
+    profile:=Application.GetOptionValue('c', 'config');
   end
-  else configfile:='ccdciel.conf';
+  else begin
+    inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
+    profile:=inif.ReadString('main','profile','default');
+    inif.Free;
+  end;
+  if profile='default' then
+     configfile:='ccdciel.conf'
+  else
+     configfile:='ccdciel_'+profile+'.conf';
   FOpenSetup:=not FileExistsUTF8(slash(ConfigDir)+configfile);
-  config.Filename:=slash(ConfigDir)+configfile;
-  LogFileOpen:=false;
+  OpenConfig(configfile);
 
+  LogFileOpen:=false;
   for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
   ScriptDir[1].path:=slash(ConfigDir);
   ScriptDir[2].path:=slash(Appdir)+slash('scripts');
-
-  configver:=config.GetValue('/Configuration/Version','');
-
-  UpdConfig(configver);
 
   Top:=config.GetValue('/Window/Top',0);
   Left:=config.GetValue('/Window/Left',0);
@@ -992,7 +999,8 @@ begin
   for i:=1 to n do
      config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
 
-  config.Flush;
+  SaveConfig;
+
   NewMessage('Program exit');
   CloseLog;
   if autoguider.Running then begin
@@ -1225,6 +1233,24 @@ begin
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
+end;
+
+procedure Tf_main.SaveConfig;
+var inif:TIniFile;
+begin
+  config.Flush;
+  inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
+  inif.WriteString('main','profile',profile);
+  inif.UpdateFile;
+  inif.Free;
+end;
+
+procedure Tf_main.OpenConfig(n: string);
+var configver: string;
+begin
+ config.Filename:=slash(ConfigDir)+n;
+ configver:=config.GetValue('/Configuration/Version','');
+ UpdConfig(configver);
 end;
 
 Procedure Tf_main.Connect(Sender: TObject);
@@ -1944,67 +1970,33 @@ begin
 end;
 
 procedure Tf_main.MenuSetupClick(Sender: TObject);
+var configfile: string;
+    loadopt: boolean;
 begin
   if camera.Status<>devDisconnected then begin
     ShowMessage('Disconnect the camera before to change the configuration.');
     exit;
   end;
-
-  f_setup.ConnectionInterface:=TDevInterface(config.GetValue('/Interface',ord(camera.CameraInterface)));
-  f_setup.IndiServer.Text:=config.GetValue('/INDI/Server','localhost');
-  f_setup.IndiPort.Text:=config.GetValue('/INDI/ServerPort','7624');
-  f_setup.IndiTimeout.Text:=config.GetValue('/Devices/Timeout','100');
-
-  f_setup.DeviceList.Checked[0]:=true;
-  f_setup.DeviceList.Checked[1]:=config.GetValue('/Devices/FilterWheel',false);
-  f_setup.DeviceList.Checked[2]:=config.GetValue('/Devices/Focuser',false);;
-  f_setup.DeviceList.Checked[3]:=config.GetValue('/Devices/Mount',false);;
-
-  f_setup.CameraConnection:=TDevInterface(config.GetValue('/CameraInterface',ord(camera.CameraInterface)));
-  if f_setup.CameraIndiDevice.Items.Count=0 then begin
-    f_setup.CameraIndiDevice.Items.Add(config.GetValue('/INDIcamera/Device',''));
-    f_setup.CameraIndiDevice.ItemIndex:=0;
-  end;
-  f_setup.CameraIndiDevice.Text:=config.GetValue('/INDIcamera/Device','');
-  f_setup.CameraSensor:=config.GetValue('/INDIcamera/Sensor','CCD1');
-  f_setup.CameraIndiDevPort.Text:=config.GetValue('/INDIcamera/DevicePort','');
-  f_setup.CameraAutoLoadConfig.Checked:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
-  f_setup.AscomCamera.Text:=config.GetValue('/ASCOMcamera/Device','');
-
-  f_setup.WheelConnection:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(wheel.WheelInterface)));
-  if f_setup.WheelIndiDevice.Items.Count=0 then begin
-    f_setup.WheelIndiDevice.Items.Add(config.GetValue('/INDIwheel/Device',''));
-    f_setup.WheelIndiDevice.ItemIndex:=0;
-  end;
-  f_setup.WheelIndiDevice.Text:=config.GetValue('/INDIwheel/Device','');
-  f_setup.WheelIndiDevPort.Text:=config.GetValue('/INDIwheel/DevicePort','');
-  f_setup.WheelAutoLoadConfig.Checked:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
-  f_setup.AscomWheel.Text:=config.GetValue('/ASCOMwheel/Device','');
-
-  f_setup.FocuserConnection:=TDevInterface(config.GetValue('/FocuserInterface',ord(focuser.FocuserInterface)));
-  if f_setup.FocuserIndiDevice.Items.Count=0 then begin
-    f_setup.FocuserIndiDevice.Items.Add(config.GetValue('/INDIfocuser/Device',''));
-    f_setup.FocuserIndiDevice.ItemIndex:=0;
-  end;
-  f_setup.FocuserIndiDevice.Text:=config.GetValue('/INDIfocuser/Device','');
-  f_setup.FocuserIndiDevPort.Text:=config.GetValue('/INDIfocuser/DevicePort','');
-  f_setup.FocuserAutoLoadConfig.Checked:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
-  f_setup.AscomFocuser.Text:=config.GetValue('/ASCOMfocuser/Device','');
-
-  f_setup.MountConnection:=TDevInterface(config.GetValue('/MountInterface',ord(mount.MountInterface)));
-  if f_setup.MountIndiDevice.Items.Count=0 then begin
-    f_setup.MountIndiDevice.Items.Add(config.GetValue('/INDImount/Device',''));
-    f_setup.MountIndiDevice.ItemIndex:=0;
-  end;
-  f_setup.MountIndiDevice.Text:=config.GetValue('/INDImount/Device','');
-  f_setup.MountIndiDevPort.Text:=config.GetValue('/INDImount/DevicePort','');
-  f_setup.MountAutoLoadConfig.Checked:=config.GetValue('/INDImount/AutoLoadConfig',false);
-  f_setup.AscomMount.Text:=config.GetValue('/ASCOMmount/Device','');
-
+  f_setup.DefaultCameraInterface:=camera.CameraInterface;
+  f_setup.DefaultMountInterface:=mount.MountInterface;
+  f_setup.DefaultWheelInterface:=wheel.WheelInterface;
+  f_setup.DefaultFocuserInterface:=focuser.FocuserInterface;
+  f_setup.profile:=profile;
+  f_setup.LoadProfileList;
+  f_setup.Loadconfig(config);
   FormPos(f_setup,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_setup.ShowModal;
 
   if f_setup.ModalResult=mrOK then begin
+    if profile<>f_setup.profile then begin
+      profile:=f_setup.profile;
+      if profile='default' then
+         configfile:='ccdciel.conf'
+      else
+         configfile:='ccdciel_'+profile+'.conf';
+      loadopt:=FileExistsUTF8(slash(ConfigDir)+configfile);
+      OpenConfig(configfile);
+    end;
     config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
     config.SetValue('/INDI/ServerPort',f_setup.IndiPort.Text);
@@ -2040,12 +2032,13 @@ begin
     config.SetValue('/INDImount/AutoLoadConfig',f_setup.MountAutoLoadConfig.Checked);
     config.SetValue('/ASCOMmount/Device',f_setup.AscomMount.Text);
 
-    config.Flush;
+    SaveConfig;
 
     if f_setup.RestartRequired then
        Restart
     else
        SetConfig;
+       if loadopt then SetOptions;
   end;
 end;
 
@@ -2170,7 +2163,7 @@ begin
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
 
-     config.Flush;
+     SaveConfig;
 
      SetOptions;
    end;

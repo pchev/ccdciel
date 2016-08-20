@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses indibaseclient, indibasedevice, u_global,
+uses indibaseclient, indibasedevice, u_global, u_utils, u_ccdconfig,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
@@ -40,6 +40,7 @@ type
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
+    BtnNewProfile: TButton;
     CameraAutoLoadConfig: TCheckBox;
     BtnAboutCamera1: TButton;
     BtnAboutCamera2: TButton;
@@ -55,6 +56,8 @@ type
     BtnChooseFocuser: TButton;
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
+    ProfileList: TComboBox;
+    Label2: TLabel;
     MountAutoLoadConfig: TCheckBox;
     FocuserAutoLoadConfig: TCheckBox;
     WheelAutoLoadConfig: TCheckBox;
@@ -72,7 +75,6 @@ type
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;
-    Label19: TLabel;
     LabelIndiDevCount: TLabel;
     Label22: TLabel;
     PanelIndiServer: TPanel;
@@ -114,6 +116,7 @@ type
     Filterwheel: TTabSheet;
     procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
+    procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
@@ -124,11 +127,12 @@ type
     procedure DeviceListItemClick(Sender: TObject; Index: integer);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
+    procedure ProfileListChange(Sender: TObject);
   private
     { private declarations }
     indiclient: TIndiBaseClient;
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,FCameraSensor: string;
-    FRestartRequired, LockInterfaceChange,InitialLock: boolean;
+    FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection: TDevInterface;
     procedure IndiNewDevice(dp: Basedevice);
     procedure SetConnectionInterface(value: TDevInterface);
@@ -139,6 +143,10 @@ type
     procedure SetCameraSensor(value: string);
   public
     { public declarations }
+    DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface: TDevInterface;
+    profile: string;
+    procedure LoadProfileList;
+    procedure Loadconfig(conf: TCCDConfig);
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
     property RestartRequired: boolean read FRestartRequired;
     property ConnectionInterface: TDevInterface read FConnectionInterface write SetConnectionInterface;
@@ -153,6 +161,8 @@ var
 
 implementation
 
+uses LazFileUtils;
+
 {$R *.lfm}
 
 { Tf_setup }
@@ -164,6 +174,85 @@ begin
   LockInterfaceChange:=false;
   InitialLock:=true;
   Pagecontrol1.ActivePage:=DeviceInterface;
+end;
+
+procedure Tf_setup.LoadProfileList;
+var fs : TSearchRec;
+    i,j,n: integer;
+    buf:string;
+begin
+ProfileLock:=true;
+try
+ProfileList.Clear;
+ProfileList.Items.Add('default');
+n:=0;
+i:=FindFirstUTF8(slash(ConfigDir)+'ccdciel_*.conf',0,fs);
+while i=0 do begin
+  buf:=ExtractFileNameOnly(fs.Name);
+  delete(buf,1,8);
+  j:=ProfileList.Items.Add(buf);
+  if buf=profile then n:=j;
+  i:=FindNextUTF8(fs);
+end;
+FindCloseUTF8(fs);
+ProfileList.ItemIndex:=n;
+finally
+  ProfileLock:=false;
+end;
+end;
+
+procedure Tf_setup.Loadconfig(conf: TCCDConfig);
+begin
+ConnectionInterface:=TDevInterface(conf.GetValue('/Interface',ord(DefaultCameraInterface)));
+IndiServer.Text:=conf.GetValue('/INDI/Server','localhost');
+IndiPort.Text:=conf.GetValue('/INDI/ServerPort','7624');
+IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
+
+DeviceList.Checked[0]:=true;
+DeviceList.Checked[1]:=conf.GetValue('/Devices/FilterWheel',false);
+DeviceList.Checked[2]:=conf.GetValue('/Devices/Focuser',false);;
+DeviceList.Checked[3]:=conf.GetValue('/Devices/Mount',false);;
+
+CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
+if CameraIndiDevice.Items.Count=0 then begin
+  CameraIndiDevice.Items.Add(conf.GetValue('/INDIcamera/Device',''));
+  CameraIndiDevice.ItemIndex:=0;
+end;
+CameraIndiDevice.Text:=conf.GetValue('/INDIcamera/Device','');
+CameraSensor:=conf.GetValue('/INDIcamera/Sensor','CCD1');
+CameraIndiDevPort.Text:=conf.GetValue('/INDIcamera/DevicePort','');
+CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',false);
+AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
+
+WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
+if WheelIndiDevice.Items.Count=0 then begin
+  WheelIndiDevice.Items.Add(conf.GetValue('/INDIwheel/Device',''));
+  WheelIndiDevice.ItemIndex:=0;
+end;
+WheelIndiDevice.Text:=conf.GetValue('/INDIwheel/Device','');
+WheelIndiDevPort.Text:=conf.GetValue('/INDIwheel/DevicePort','');
+WheelAutoLoadConfig.Checked:=conf.GetValue('/INDIwheel/AutoLoadConfig',false);
+AscomWheel.Text:=conf.GetValue('/ASCOMwheel/Device','');
+
+FocuserConnection:=TDevInterface(conf.GetValue('/FocuserInterface',ord(DefaultFocuserInterface)));
+if FocuserIndiDevice.Items.Count=0 then begin
+  FocuserIndiDevice.Items.Add(conf.GetValue('/INDIfocuser/Device',''));
+  FocuserIndiDevice.ItemIndex:=0;
+end;
+FocuserIndiDevice.Text:=conf.GetValue('/INDIfocuser/Device','');
+FocuserIndiDevPort.Text:=conf.GetValue('/INDIfocuser/DevicePort','');
+FocuserAutoLoadConfig.Checked:=conf.GetValue('/INDIfocuser/AutoLoadConfig',false);
+AscomFocuser.Text:=conf.GetValue('/ASCOMfocuser/Device','');
+
+MountConnection:=TDevInterface(conf.GetValue('/MountInterface',ord(DefaultMountInterface)));
+if MountIndiDevice.Items.Count=0 then begin
+  MountIndiDevice.Items.Add(conf.GetValue('/INDImount/Device',''));
+  MountIndiDevice.ItemIndex:=0;
+end;
+MountIndiDevice.Text:=conf.GetValue('/INDImount/Device','');
+MountIndiDevPort.Text:=conf.GetValue('/INDImount/DevicePort','');
+MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
+AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
 end;
 
 procedure Tf_setup.DeviceListItemClick(Sender: TObject; Index: integer);
@@ -467,7 +556,6 @@ begin
   Screen.Cursor:=crHourGlass;
 end;
 
-
 procedure Tf_setup.IndiTimerTimer(Sender: TObject);
 var i: integer;
 begin
@@ -485,13 +573,56 @@ begin
   LabelIndiDevCount.Caption:='Found '+IntToStr(CameraIndiDevice.Items.Count)+' devices';
 end;
 
-
 procedure Tf_setup.IndiNewDevice(dp: Basedevice);
 begin
    CameraIndiDevice.Items.Add(dp.getDeviceName);
    WheelIndiDevice.Items.Add(dp.getDeviceName);
    FocuserIndiDevice.Items.Add(dp.getDeviceName);
    MountIndiDevice.Items.Add(dp.getDeviceName);
+end;
+
+procedure Tf_setup.ProfileListChange(Sender: TObject);
+var chkconf:TCCDconfig;
+    configfile:string;
+begin
+  if ProfileLock then exit;
+  if profile<>ProfileList.Text then  begin
+    profile:=ProfileList.Text;
+    if profile='default' then
+       configfile:='ccdciel.conf'
+    else
+       configfile:='ccdciel_'+profile+'.conf';
+    chkconf:=TCCDConfig.Create(nil);
+    try
+    chkconf.Filename:=slash(ConfigDir)+configfile;
+    Loadconfig(chkconf);
+    finally
+      chkconf.Free;
+    end;
+  end;
+end;
+
+procedure Tf_setup.BtnNewProfileClick(Sender: TObject);
+var newp,curconfig,newconfig:string;
+  n:integer;
+begin
+  newp:=FormEntry(self,'New profile','');
+  newp:=trim(newp);
+  if (newp<>'')and(newp<>'default') then begin
+    if profile='default' then
+       curconfig:='ccdciel.conf'
+    else
+       curconfig:='ccdciel_'+profile+'.conf';
+    curconfig:=slash(ConfigDir)+curconfig;
+    newconfig:=slash(ConfigDir)+'ccdciel_'+newp+'.conf';
+    if CopyFile(curconfig,newconfig) then begin
+       LoadProfileList;
+       n:=ProfileList.Items.IndexOf(newp);
+       ProfileList.ItemIndex:=n;
+       ProfileListChange(Sender);
+    end
+    else ShowMessage('Error creating file '+newconfig);
+  end;
 end;
 
 end.
