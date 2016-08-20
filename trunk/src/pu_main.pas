@@ -173,6 +173,7 @@ type
     astrometry:TAstrometry;
     CameraName,WheelName,FocuserName,MountName: string;
     WantCamera,WantWheel,WantFocuser,WantMount: boolean;
+    FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
     f_ccdtemp: Tf_ccdtemp;
@@ -549,6 +550,7 @@ begin
     configfile:='ccdciel_'+Application.GetOptionValue('c', 'config')+'.conf';
   end
   else configfile:='ccdciel.conf';
+  FOpenSetup:=not FileExistsUTF8(slash(ConfigDir)+configfile);
   config.Filename:=slash(ConfigDir)+configfile;
   LogFileOpen:=false;
 
@@ -820,7 +822,8 @@ end;
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
 begin
   StartupTimer.Enabled:=false;
-  f_script.RunStartupScript;
+  if FOpenSetup then MenuSetup.Click
+    else f_script.RunStartupScript;
 end;
 
 procedure Tf_main.ScriptExecute(Sender: TObject);
