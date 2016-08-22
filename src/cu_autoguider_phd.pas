@@ -172,15 +172,6 @@ var  J: TJSONData;
 begin
 jsontxt:=StringReplace(jsontxt,chr(10),' ',[rfReplaceAll]);
 jsontxt:=StringReplace(jsontxt,chr(13),' ',[rfReplaceAll]);
-for i:=1 to length(jsontxt)-1 do begin
-  c1:=copy(jsontxt,i,1);
-  c2:=copy(jsontxt,i+1,1);
-  if (c1=',')and(c2>='0')and(c2<='9') then begin
-     b1:=copy(jsontxt,1,i-1);
-     delete(jsontxt,1,i);
-     jsontxt:=b1+'.'+jsontxt;
-  end;
-end;
 J:=GetJSON(jsontxt);
 JsonDataToStringlist(SK,SV,'',J);
 J.Free;
@@ -299,9 +290,14 @@ end else begin
           DisplayMessage('guide'+' '+rpcresult+' '+rpcerror);
        end;
      end
-     else if rpcid='2004' then begin  // stop_capture
+     else if rpcid='2004' then begin  // loop (stop guiding)
        if rpcresult='error' then begin
-          DisplayMessage('stop_capture'+' '+rpcresult+' '+rpcerror);
+          DisplayMessage('loop'+' '+rpcresult+' '+rpcerror);
+       end;
+     end
+     else if rpcid='2005' then begin  // find_star
+       if rpcresult='error' then begin
+          DisplayMessage('find_star'+' '+rpcresult+' '+rpcerror);
        end;
      end
      else if rpcid='2010' then begin  // dither
@@ -384,6 +380,8 @@ var buf:string;
 begin
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
+    buf:='{"method": "find_star","id":2005}';
+    Send(buf);
     buf:='{"method": "guide", "params": [';
     buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
     buf:=buf+'"time": '+FSettleTmin+',';       // min time
@@ -393,7 +391,7 @@ begin
     buf:=buf+'"id": 2003}';
     Send(buf);
   end else begin
-    buf:='{"method": "stop_capture","id":2004}';
+    buf:='{"method": "loop","id":2004}';
     Send(buf);
   end;
   if cguide<>onoff then FState:=GUIDER_BUSY;

@@ -1954,6 +1954,7 @@ begin
                        end;
    GUIDER_ALERT       :begin
                        f_autoguider.led.Brush.Color:=clRed;
+                       f_autoguider.BtnGuide.Caption:='Guide';
                        end;
  end;
  if autoguider.LastError<>'' then NewMessage(autoguider.LastError);
