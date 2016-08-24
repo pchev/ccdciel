@@ -261,6 +261,17 @@ object f_main: Tf_main
       object N6: TMenuItem
         Caption = '-'
       end
+      object MenuRefimage: TMenuItem
+        Caption = 'Open reference image'
+        OnClick = MenuRefimageClick
+      end
+      object MenuClearRef: TMenuItem
+        Caption = 'Clear reference image'
+        OnClick = MenuClearRefClick
+      end
+      object N7: TMenuItem
+        Caption = '-'
+      end
       object MenuQuit: TMenuItem
         Caption = 'Quit'
         OnClick = MenuQuitClick
