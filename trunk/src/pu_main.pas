@@ -3075,10 +3075,12 @@ end;
 procedure Tf_main.MenuResolveSlewCenterClick(Sender: TObject);
 var xx,yy,x,y: integer;
 begin
-  xx:=fits.HeaderInfo.naxis1 div 2;
-  yy:=fits.HeaderInfo.naxis2 div 2;
-  Fits2Screen(xx,yy,x,y);
-  astrometry.SlewScreenXY(x,y,false);
+ if fits.HeaderInfo.valid then begin
+   xx:=fits.HeaderInfo.naxis1 div 2;
+   yy:=fits.HeaderInfo.naxis2 div 2;
+   Fits2Screen(xx,yy,x,y);
+   astrometry.SlewScreenXY(x,y,false);
+ end;
 end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
