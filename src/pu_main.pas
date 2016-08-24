@@ -204,6 +204,7 @@ type
     reftreshold,refcolor: integer;
     reffile: string;
     refbmp:TBGRABitmap;
+    cdcWCSinfo: TcdcWCSinfo;
     SaveFocusZoom: double;
     ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -1106,8 +1107,10 @@ end;
 
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
-var xx,yy: integer;
+var xx,yy,n: integer;
     val:integer;
+    ra,de,jd0,jd1: double;
+    c: TcdcWCScoord;
 begin
 if LockMouse then exit;
  if MouseMoving then begin
@@ -1132,8 +1135,27 @@ if LockMouse then exit;
     if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
        val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC)
     else val:=0;
+    if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin
+      c.x:=xx;
+      c.y:=cdcWCSinfo.hp-yy;
+      n:=cdcwcs_xy2sky(@c,0);
+      if n=0 then begin
+        ra:=c.ra;
+        de:=c.dec;
+        if mount.Equinox=0 then begin
+          jd0:=Jd(trunc(cdcWCSinfo.eqout),0,0,0);
+          jd1:=DateTimetoJD(now);
+          ra:=deg2rad*ra;
+          de:=deg2rad*de;
+          PrecessionFK5(jd0,jd1,ra,de);
+          ra:=rad2deg*ra;
+          de:=rad2deg*de;
+        end;
+        StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
+      end;
+    end;
     StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+inttostr(val);
-end;
+ end;
 Mx:=X;
 My:=Y;
 end;
@@ -3170,11 +3192,18 @@ end;
 procedure Tf_main.LoadFitsFile(fn:string);
 var mem: TMemoryStream;
     imgsize: string;
+    n:integer;
 begin
    mem:=TMemoryStream.Create;
    mem.LoadFromFile(fn);
    fits.Stream:=mem;
    mem.free;
+   if fits.HeaderInfo.solved then begin
+     n:=cdcwcs_initfitsfile(pchar(fn),0);
+     if n=0 then n:=cdcwcs_getinfo(addr(cdcWCSinfo),0);
+     if n<>0 then cdcWCSinfo.secpix:=0;
+   end
+     else cdcWCSinfo.secpix:=0;
    DrawImage;
    DrawHistogram;
    imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
