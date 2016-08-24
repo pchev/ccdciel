@@ -442,6 +442,10 @@ object f_main: Tf_main
   object ImagePopupMenu: TPopupMenu
     left = 178
     top = 38
+    object MenuResolve: TMenuItem
+      Caption = 'Resolve'
+      OnClick = MenuResolveClick
+    end
     object MenuResolvePlanetarium: TMenuItem
       Caption = 'Resolve and show in planetarium'
       OnClick = MenuResolvePlanetariumClick
@@ -449,6 +453,10 @@ object f_main: Tf_main
     object MenuResolveSync: TMenuItem
       Caption = 'Resolve and Sync'
       OnClick = MenuResolveSyncClick
+    end
+    object MenuResolveSlewCenter: TMenuItem
+      Caption = 'Resolve and Slew to image center'
+      OnClick = MenuResolveSlewCenterClick
     end
     object MenuResolveSlew: TMenuItem
       Caption = 'Resolve and Slew to cursor'

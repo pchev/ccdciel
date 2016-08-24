@@ -53,6 +53,8 @@ type
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
     MenuClearRef: TMenuItem;
+    MenuResolveSlewCenter: TMenuItem;
+    MenuResolve: TMenuItem;
     MenuRefimage: TMenuItem;
     N7: TMenuItem;
     MenuViewScript: TMenuItem;
@@ -136,6 +138,8 @@ type
     procedure MenuOptionsClick(Sender: TObject);
     procedure MenuRefimageClick(Sender: TObject);
     procedure MenuResetToolsClick(Sender: TObject);
+    procedure MenuResolveClick(Sender: TObject);
+    procedure MenuResolveSlewCenterClick(Sender: TObject);
     procedure MenuResolveSlewClick(Sender: TObject);
     procedure MenuResolveSyncClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
@@ -3023,6 +3027,8 @@ begin
   MenuResolvePlanetarium.Enabled:=false;
   MenuResolveSync.Enabled:=false;
   MenuResolveSlew.Enabled:=false;
+  MenuResolve.Enabled:=false;
+  MenuResolveSlewCenter.Enabled:=false;
   MenuStopAstrometry.Visible:=true;
 end;
 
@@ -3033,6 +3039,8 @@ begin
   MenuResolvePlanetarium.Enabled:=true;
   MenuResolveSync.Enabled:=true;
   MenuResolveSlew.Enabled:=true;
+  MenuResolve.Enabled:=true;
+  MenuResolveSlewCenter.Enabled:=true;
   if astrometry.LastResult then begin
      LoadFitsFile(astrometry.ResultFile);
   end else begin
@@ -3057,6 +3065,20 @@ begin
     FormPos(f_viewtext,mouse.CursorPos.X,mouse.CursorPos.Y);
     f_viewtext.Show;
   end;
+end;
+
+procedure Tf_main.MenuResolveClick(Sender: TObject);
+begin
+  astrometry.SolveCurrentImage(false);
+end;
+
+procedure Tf_main.MenuResolveSlewCenterClick(Sender: TObject);
+var xx,yy,x,y: integer;
+begin
+  xx:=fits.HeaderInfo.naxis1 div 2;
+  yy:=fits.HeaderInfo.naxis2 div 2;
+  Fits2Screen(xx,yy,x,y);
+  astrometry.SlewScreenXY(x,y,false);
 end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
