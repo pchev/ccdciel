@@ -43,13 +43,16 @@ type
     CygwinPath: TEdit;
     CaptureDir: TEdit;
     GroupBox8: TGroupBox;
+    GroupBox9: TGroupBox;
     hemis: TComboBox;
     Label33: TLabel;
     CygwinPanel: TPanel;
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
+    Label37: TLabel;
     Label38: TLabel;
+    Label39: TLabel;
     latdeg: TFloatEdit;
     LatitudeGroup: TGroupBox;
     latmin: TLongEdit;
@@ -59,6 +62,7 @@ type
     LongitudeGroup: TGroupBox;
     longmin: TLongEdit;
     longsec: TFloatEdit;
+    RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SlewPrec: TEdit;
     SlewRetry: TEdit;
@@ -164,6 +168,7 @@ type
     Label14: TLabel;
     Panel1: TPanel;
     StarWindow: TEdit;
+    RefTreshold: TTrackBar;
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);

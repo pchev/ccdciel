@@ -277,7 +277,7 @@ object f_option: Tf_option
         object latsec: TFloatEdit
           Left = 72
           Height = 24
-          Hint = '0..59.99'
+          Hint = '0..59,99'
           Top = 2
           Width = 42
           ParentShowHint = False
@@ -349,7 +349,7 @@ object f_option: Tf_option
         object longsec: TFloatEdit
           Left = 72
           Height = 24
-          Hint = '0..59.99'
+          Hint = '0..59,99'
           Top = 2
           Width = 42
           ParentShowHint = False
@@ -385,11 +385,11 @@ object f_option: Tf_option
       ClientWidth = 431
       object GroupBox8: TGroupBox
         Left = 8
-        Height = 120
+        Height = 108
         Top = 4
         Width = 400
         Caption = 'Color preview'
-        ClientHeight = 101
+        ClientHeight = 89
         ClientWidth = 398
         TabOrder = 0
         object Label38: TLabel
@@ -424,6 +424,67 @@ object f_option: Tf_option
           )
           TabOrder = 1
           Text = 'GR'
+        end
+      end
+      object GroupBox9: TGroupBox
+        Left = 8
+        Height = 129
+        Top = 128
+        Width = 400
+        Caption = 'Reference image'
+        ClientHeight = 110
+        ClientWidth = 398
+        TabOrder = 1
+        object RefColor: TRadioGroup
+          Left = 104
+          Height = 26
+          Top = 50
+          Width = 237
+          AutoFill = True
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 3
+          ClientHeight = 24
+          ClientWidth = 235
+          Columns = 3
+          Items.Strings = (
+            'red'
+            'green'
+            'blue'
+          )
+          TabOrder = 0
+        end
+        object Label37: TLabel
+          Left = 14
+          Height = 18
+          Top = 52
+          Width = 38
+          Caption = 'Color :'
+          ParentColor = False
+        end
+        object Label39: TLabel
+          Left = 14
+          Height = 18
+          Top = 8
+          Width = 58
+          Caption = 'Treshold :'
+          ParentColor = False
+        end
+        object RefTreshold: TTrackBar
+          Left = 104
+          Height = 40
+          Top = 4
+          Width = 237
+          Max = 254
+          Min = 1
+          PageSize = 20
+          Position = 1
+          TickStyle = tsNone
+          TabOrder = 1
         end
       end
     end
@@ -687,8 +748,8 @@ object f_option: Tf_option
               Top = 141
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 35
-              ClientWidth = 387
+              ClientHeight = 31
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -1112,8 +1173,8 @@ object f_option: Tf_option
               Height = 80
               Top = 32
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

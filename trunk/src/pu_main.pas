@@ -52,6 +52,9 @@ type
     MenuItem4: TMenuItem;
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
+    MenuClearRef: TMenuItem;
+    MenuRefimage: TMenuItem;
+    N7: TMenuItem;
     MenuViewScript: TMenuItem;
     MenuViewPlanetarium: TMenuItem;
     MenuResolveSlew: TMenuItem;
@@ -126,10 +129,12 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
+    procedure MenuClearRefClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
     procedure MenuOptionsClick(Sender: TObject);
+    procedure MenuRefimageClick(Sender: TObject);
     procedure MenuResetToolsClick(Sender: TObject);
     procedure MenuResolveSlewClick(Sender: TObject);
     procedure MenuResolveSyncClick(Sender: TObject);
@@ -191,6 +196,10 @@ type
     f_msg: Tf_msg;
     fits: TFits;
     ImaBmp: TBitmap;
+    refmask: boolean;
+    reftreshold,refcolor: integer;
+    reffile: string;
+    refbmp:TBGRABitmap;
     SaveFocusZoom: double;
     ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -217,6 +226,7 @@ type
     procedure OptionGetPixelSize(Sender: TObject);
     procedure OptionGetFocaleLength(Sender: TObject);
     procedure Restart;
+    procedure SetRefImage;
     procedure GUIdestroy(Sender: TObject);
     Procedure Connect(Sender: TObject);
     Procedure Disconnect(Sender: TObject);
@@ -525,6 +535,9 @@ begin
   NeedRestart:=false;
   GUIready:=false;
   MsgHandle:=handle;
+  refmask:=false;
+  reftreshold:=128;
+  refbmp:=TBGRABitmap.Create;
   Filters:=TStringList.Create;
   PageControlRight.ActivePageIndex:=0;
   cdcwcs_initfitsfile:=nil;
@@ -1035,6 +1048,7 @@ begin
   focuser.Free;
   mount.Free;
   ImaBmp.Free;
+  refbmp.Free;
   config.Free;
   Filters.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
@@ -1223,6 +1237,8 @@ begin
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
   BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
+  reftreshold:=config.GetValue('/RefImage/Treshold',128);
+  refcolor:=config.GetValue('/RefImage/Color',0);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
@@ -1234,6 +1250,7 @@ begin
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
+  if refmask then SetRefImage;
 end;
 
 procedure Tf_main.SaveConfig;
@@ -2066,6 +2083,8 @@ begin
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
+   f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
+   f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
    f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
@@ -2131,6 +2150,8 @@ begin
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
+     config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
+     config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
@@ -2171,6 +2192,7 @@ begin
      SetOptions;
    end;
 end;
+
 
 procedure Tf_main.OptionGetPixelSize(Sender: TObject);
 begin
@@ -2743,6 +2765,12 @@ if fits.HeaderInfo.naxis>0 then begin
      end;
      rawbmp.Free;
   end;
+  if refmask then begin
+    rawbmp:=TBGRABitmap.Create(ImaBmp);
+    rawbmp.BlendImage(0,0,refbmp,boLighten);
+    ImaBmp.Assign(rawbmp);
+    rawbmp.Free;
+  end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
   if f_starprofile.FindStar then
@@ -2875,6 +2903,77 @@ if fits.HeaderInfo.naxis>0 then begin
       fits.SaveToFile(fn);
    end;
 end;
+end;
+
+procedure Tf_main.SetRefImage;
+var mem: TMemoryStream;
+    bmp: TBitmap;
+    i: integer;
+    p: PBGRAPixel;
+    f: TFits;
+begin
+if refmask then begin
+  refmask:=false;
+  mem:=TMemoryStream.Create;
+  bmp:=TBitmap.Create;
+  f:=TFits.Create(nil);
+  try
+  mem.LoadFromFile(reffile);
+  f.Stream:=mem;
+  if f.HeaderInfo.naxis>0 then begin
+    f.itt:=ittsqrt;
+    f.ImgDmax:=round(f.HeaderInfo.dmax);
+    f.ImgDmin:=round(f.HeaderInfo.dmin);
+    f.GetIntfImg;
+    f.GetBitmap(bmp);
+    refbmp.Assign(bmp);
+    p:=refbmp.data;
+    for i:=0 to refbmp.NbPixels-1 do begin
+     case refcolor of
+       0: begin
+          p[i].blue:=0;
+          p[i].green:=0;
+          if p[i].red<reftreshold then p[i].red:=0 else p[i].red:=180;
+          end;
+       1: begin
+          p[i].blue:=0;
+          p[i].red:=0;
+          if p[i].green<reftreshold then p[i].green:=0 else p[i].green:=180;
+          end;
+       2: begin
+          p[i].red:=0;
+          p[i].green:=0;
+          if p[i].blue<reftreshold then p[i].blue:=0 else p[i].blue:=180;
+          end;
+       end;
+    end;
+    refbmp.InvalidateBitmap;
+    refmask:=true;
+    DrawImage;
+  end;
+  finally
+    mem.Free;
+    bmp.Free;
+    f.free;
+  end;
+end;
+end;
+
+procedure Tf_main.MenuRefimageClick(Sender: TObject);
+begin
+  if OpenDialog1.Execute then begin
+    reffile:=OpenDialog1.FileName;
+    refmask:=true;
+    SetRefImage;
+  end;
+end;
+
+procedure Tf_main.MenuClearRefClick(Sender: TObject);
+begin
+   refmask:=false;
+   reffile:='';
+   refbmp.SetSize(0,0);
+   DrawImage;
 end;
 
 Procedure Tf_main.FocusStart(Sender: TObject);
