@@ -9,8 +9,6 @@ object f_visu: Tf_visu
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 212
-  DesignTop = 76
   object Panel1: TPanel
     Left = 0
     Height = 92
