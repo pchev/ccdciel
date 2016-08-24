@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits,
+uses Graphics, cu_fits, math,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons;
 
 type
@@ -267,8 +267,8 @@ end;
 procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if Updmax then ImgMax:=X
-            else ImgMin:=X;
+  if Updmax then ImgMax:=min(255,X)
+            else ImgMin:=max(0,X);
   StartUpd:=false;
   if Assigned(FRedraw) then FRedraw(self);
 end;
