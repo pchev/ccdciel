@@ -322,6 +322,8 @@ var fn: string;
     ra,de,jd0,jd1: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
+    err,prec,exp:double;
+    cormethod,bin,maxretry: integer;
 begin
 TimerAstrometrySlewScreenXY.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
@@ -345,7 +347,12 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
          ra:=rad2deg*ra;
          de:=rad2deg*de;
        end;
-       mount.Slew(ra/15,de);
+       prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
+       cormethod:=config.GetValue('/PrecSlew/Method',1);
+       maxretry:=config.GetValue('/PrecSlew/Retry',3);
+       exp:=config.GetValue('/PrecSlew/Exposure',10.0);
+       bin:=config.GetValue('/PrecSlew/Binning',1);
+       PrecisionSlew(ra/15,de,prec,exp,bin,bin,cormethod,maxretry,err);
      end;
    end;
 end;
