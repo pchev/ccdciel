@@ -65,7 +65,7 @@ TAstrometry = class(TComponent)
     function  CurrentCoord(out cra,cde,eq: double):boolean;
     procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
-    procedure SlewScreenXY(x,y: integer; wait: boolean);
+    procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double):boolean;
     property Busy: Boolean read FBusy;
     property LastResult: Boolean read FLastResult;
@@ -139,6 +139,7 @@ begin
    if (ra=NullCoord)or(de=NullCoord) then begin
        msg('Cannot find approximate coordinates for this image.'+crlf+'The astrometry resolution may take a very long time.');
    end;
+   FLastResult:=false;
    logfile:=ChangeFileExt(infile,'.log');
    solvefile:=ChangeFileExt(infile,'.solved');
    savefile:=outfile;
@@ -295,7 +296,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
 end;
 end;
 
-procedure TAstrometry.SlewScreenXY(x,y: integer; wait: boolean);
+procedure TAstrometry.SlewScreenXY(x,y: integer);
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
    Xslew:=x;
@@ -306,7 +307,6 @@ begin
    end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewScreenXY);
-    if wait then WaitBusy(AstrometryTimeout+30);
    end;
   end;
 end;
@@ -405,7 +405,11 @@ begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
     WaitBusy(AstrometryTimeout+30);
-    if not LastResult then break;
+    if not LastResult then begin
+       StopAstrometry;
+       msg('Fail to resolve control exposure');
+       break;
+    end;
     fn:=slash(TmpDir)+'ccdcielsolved.fits';
     n:=cdcwcs_initfitsfile(pchar(fn),0);
     if (n<>0) or (not CurrentCoord(cra,cde,eq)) then break;
