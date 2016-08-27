@@ -33,11 +33,10 @@ type
   { Tf_filterwheel }
 
   Tf_filterwheel = class(TFrame)
-    BtnSetFilter: TButton;
     Filters: TComboBox;
     Panel1: TPanel;
     StaticText1: TStaticText;
-    procedure BtnSetFilterClick(Sender: TObject);
+    procedure FiltersChange(Sender: TObject);
   private
     { private declarations }
     FonSetFilter: TNotifyEvent;
@@ -64,7 +63,7 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_filterwheel.BtnSetFilterClick(Sender: TObject);
+procedure Tf_filterwheel.FiltersChange(Sender: TObject);
 begin
   if Assigned(FonSetFilter) then FonSetFilter(self);
 end;
