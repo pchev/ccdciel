@@ -2793,7 +2793,7 @@ if fits.HeaderInfo.naxis>0 then begin
   end;
   if refmask then begin
     rawbmp:=TBGRABitmap.Create(ImaBmp);
-    rawbmp.BlendImage(0,0,refbmp,boLighten);
+    rawbmp.StretchPutImage(rect(0,0,rawbmp.Width,rawbmp.Height),refbmp,dmLinearBlend);
     ImaBmp.Assign(rawbmp);
     rawbmp.Free;
   end;
@@ -2955,6 +2955,7 @@ if refmask then begin
     refbmp.Assign(bmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
+     p[i].alpha:=128;
      case refcolor of
        0: begin
           p[i].blue:=0;
