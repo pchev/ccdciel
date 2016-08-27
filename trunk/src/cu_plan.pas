@@ -197,7 +197,7 @@ begin
     Fcapture.CheckBoxDither.Checked:=p.dither;
     Fcapture.DitherCount.Text:=p.dithercount_str;
     Ffilter.Filters.ItemIndex:=p.filter;
-    Ffilter.BtnSetFilter.Click;
+    Ffilter.FiltersChange(self);
     Wait;
     if not FRunning then exit;
     StepTimeStart:=now;

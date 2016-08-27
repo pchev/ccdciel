@@ -1,21 +1,21 @@
 object f_filterwheel: Tf_filterwheel
   Left = 0
-  Height = 74
+  Height = 49
   Top = 0
   Width = 147
   AutoSize = True
-  ClientHeight = 74
+  ClientHeight = 49
   ClientWidth = 147
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 54
+    Height = 29
     Top = 20
     Width = 147
     Align = alClient
     AutoSize = True
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 54
+    ClientHeight = 29
     ClientWidth = 147
     TabOrder = 0
     object Filters: TComboBox
@@ -28,18 +28,9 @@ object f_filterwheel: Tf_filterwheel
       Color = clBlack
       Font.Color = clRed
       ItemHeight = 0
+      OnChange = FiltersChange
       ParentFont = False
       TabOrder = 0
-    end
-    object BtnSetFilter: TButton
-      Left = 1
-      Height = 25
-      Hint = 'Set the selected filter'
-      Top = 23
-      Width = 140
-      Caption = 'Set'
-      OnClick = BtnSetFilterClick
-      TabOrder = 1
     end
   end
   object StaticText1: TStaticText
@@ -49,7 +40,7 @@ object f_filterwheel: Tf_filterwheel
     Width = 147
     Align = alTop
     Alignment = taCenter
-    Caption = 'Filters'
+    Caption = 'Filter'
     Color = clGray
     DragMode = dmAutomatic
     Font.Color = clBlack
