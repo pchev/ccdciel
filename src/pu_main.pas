@@ -3102,7 +3102,7 @@ begin
    xx:=fits.HeaderInfo.naxis1 div 2;
    yy:=fits.HeaderInfo.naxis2 div 2;
    Fits2Screen(xx,yy,x,y);
-   astrometry.SlewScreenXY(x,y,false);
+   astrometry.SlewScreenXY(x,y);
  end;
 end;
 
@@ -3113,7 +3113,7 @@ end;
 
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
 begin
-  astrometry.SlewScreenXY(MouseDownX,MouseDownY,false);
+  astrometry.SlewScreenXY(MouseDownX,MouseDownY);
 end;
 
 procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);
