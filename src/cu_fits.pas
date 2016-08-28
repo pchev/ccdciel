@@ -466,8 +466,10 @@ try
  FStream.CopyFrom(value,value.Size);
  Fhdr_end:=FHeader.ReadHeader(FStream);
  GetFitsInfo;
- ReadFitsImage;
- GetIntfImg;
+ if FFitsInfo.valid then begin
+   ReadFitsImage;
+   GetIntfImg;
+ end;
 except
  FFitsInfo.valid:=false;
 end;
