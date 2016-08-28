@@ -3,11 +3,12 @@ object f_planetariuminfo: Tf_planetariuminfo
   Height = 191
   Top = 160
   Width = 228
+  ActiveControl = Ra
   Caption = 'Planetarium position'
   ClientHeight = 191
   ClientWidth = 228
   OnShow = FormShow
-  LCLVersion = '1.6.0.3'
+  LCLVersion = '1.6.0.4'
   Visible = False
   object Ra: TEdit
     Left = 139
