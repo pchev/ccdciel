@@ -441,7 +441,7 @@ dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
 if copy(dms,1,1)='-' then s:=-1 else s:=1;
 p:=pos('h',dms);
 if p=0 then
-  result:=StrToFloatDef(dms,0)
+  result:=StrToFloatDef(dms,NullCoord)
 else begin
   t:=copy(dms,1,p-1); delete(dms,1,p);
   result:=StrToIntDef(t,0);
@@ -453,7 +453,7 @@ else begin
   result:=result+ s * StrToFloatDef(t,0) / 3600;
 end;
 except
-result:=0;
+result:=NullCoord;
 end;
 end;
 
@@ -484,7 +484,7 @@ if p=0 then begin
   p:=pos(sep[1],dms);
 end;
 if p=0 then
-  result:=StrToFloatDef(dms,0)
+  result:=StrToFloatDef(dms,NullCoord)
 else begin
 t:=copy(dms,1,p-1); delete(dms,1,p+d1);
 result:=StrToIntDef(t,0);
@@ -496,7 +496,7 @@ t:=copy(dms,1,p-1);
 result:=result+ s * StrToFloatDef(t,0) / 3600;
 end;
 except
-result:=0;
+result:=NullCoord;
 end;
 end;
 

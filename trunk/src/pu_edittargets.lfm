@@ -98,10 +98,10 @@ object f_EditTargets: Tf_EditTargets
     Height = 406
     Top = 0
     Width = 330
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alRight
     ShowTabs = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
@@ -109,32 +109,32 @@ object f_EditTargets: Tf_EditTargets
       ClientWidth = 328
       object Panel3: TPanel
         Left = 0
-        Height = 402
+        Height = 404
         Top = 0
-        Width = 326
+        Width = 328
         Align = alClient
-        ClientHeight = 402
-        ClientWidth = 326
+        ClientHeight = 404
+        ClientWidth = 328
         TabOrder = 0
         object Label1: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 25
-          Width = 46
+          Width = 39
           Caption = 'Object'
           ParentColor = False
         end
         object Label2: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 54
-          Width = 30
+          Width = 26
           Caption = 'Plan'
           ParentColor = False
         end
         object PlanList: TComboBox
           Left = 98
-          Height = 31
+          Height = 26
           Top = 48
           Width = 126
           ItemHeight = 0
@@ -162,17 +162,17 @@ object f_EditTargets: Tf_EditTargets
         end
         object Label7: TLabel
           Left = 16
-          Height = 17
+          Height = 18
           Top = 0
-          Width = 66
+          Width = 58
           Caption = 'Sequence'
           ParentColor = False
         end
         object LabelSeq: TLabel
           Left = 98
-          Height = 17
+          Height = 18
           Top = 1
-          Width = 66
+          Width = 58
           Caption = 'LabelSeq'
           Font.Style = [fsBold]
           ParentColor = False
@@ -180,7 +180,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object ObjectName: TEdit
           Left = 98
-          Height = 27
+          Height = 24
           Top = 23
           Width = 126
           OnChange = TargetChange
@@ -196,7 +196,7 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 4
           object PreviewExposure: TEdit
             Left = 113
-            Height = 27
+            Height = 24
             Top = 91
             Width = 59
             OnChange = TargetChange
@@ -205,17 +205,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label9: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 94
-            Width = 122
+            Width = 106
             Caption = 'Preview exposure'
             ParentColor = False
           end
           object Preview: TCheckBox
             Left = 8
-            Height = 24
+            Height = 21
             Top = 60
-            Width = 243
+            Width = 212
             Caption = 'Preview when waiting to repeat'
             OnChange = TargetChange
             ParentBidiMode = False
@@ -223,31 +223,31 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label13: TLabel
             Left = 188
-            Height = 17
+            Height = 18
             Top = 40
-            Width = 66
+            Width = 57
             Caption = '[seconds]'
             ParentColor = False
           end
           object Label11: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 40
-            Width = 38
+            Width = 33
             Caption = 'Delay'
             ParentColor = False
           end
           object Label10: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 11
-            Width = 48
+            Width = 42
             Caption = 'Repeat'
             ParentColor = False
           end
           object Delay: TEdit
             Left = 92
-            Height = 27
+            Height = 24
             Top = 37
             Width = 80
             OnChange = TargetChange
@@ -256,7 +256,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object RepeatCount: TEdit
             Left = 92
-            Height = 27
+            Height = 24
             Top = 8
             Width = 80
             OnChange = TargetChange
@@ -265,18 +265,18 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label14: TLabel
             Left = 188
-            Height = 17
+            Height = 18
             Top = 94
-            Width = 66
+            Width = 57
             Caption = '[seconds]'
             ParentColor = False
           end
         end
         object CheckBoxRepeat: TCheckBox
           Left = 8
-          Height = 24
+          Height = 21
           Top = 248
-          Width = 232
+          Width = 203
           Caption = 'Repeat the plan for this object'
           OnChange = CheckBoxRepeatChange
           TabOrder = 5
@@ -301,7 +301,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object EndTime: TMaskEdit
             Left = 92
-            Height = 27
+            Height = 24
             Top = 40
             Width = 70
             CharCase = ecNormal
@@ -314,7 +314,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object StartTime: TMaskEdit
             Left = 92
-            Height = 27
+            Height = 24
             Top = 8
             Width = 70
             CharCase = ecNormal
@@ -327,17 +327,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label4: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 42
-            Width = 61
+            Width = 53
             Caption = 'End time'
             ParentColor = False
           end
           object Label3: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 10
-            Width = 68
+            Width = 59
             Caption = 'Start time'
             ParentColor = False
           end
@@ -369,7 +369,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointDEC: TEdit
             Left = 92
-            Height = 27
+            Height = 24
             Top = 42
             Width = 100
             OnChange = TargetChange
@@ -377,7 +377,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointRA: TEdit
             Left = 92
-            Height = 27
+            Height = 24
             Top = 8
             Width = 100
             OnChange = TargetChange
@@ -385,17 +385,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label6: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 44
-            Width = 78
+            Width = 67
             Caption = 'Center DEC'
             ParentColor = False
           end
           object Label5: TLabel
             Left = 8
-            Height = 17
+            Height = 18
             Top = 10
-            Width = 68
+            Width = 59
             Caption = 'Center RA'
             ParentColor = False
           end
@@ -410,9 +410,9 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointAstrometry: TCheckBox
             Left = 8
-            Height = 24
+            Height = 21
             Top = 69
-            Width = 278
+            Width = 246
             Caption = 'Use astrometry to refine the position'
             OnChange = TargetChange
             TabOrder = 4

@@ -1,16 +1,16 @@
 object f_planetarium: Tf_planetarium
   Left = 0
-  Height = 73
+  Height = 76
   Top = 0
-  Width = 147
-  ClientHeight = 73
-  ClientWidth = 147
+  Width = 162
+  ClientHeight = 76
+  ClientWidth = 162
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 147
+    Width = 162
     Align = alTop
     Alignment = taCenter
     Caption = 'Planetarium'
@@ -23,22 +23,22 @@ object f_planetarium: Tf_planetarium
   end
   object Panel1: TPanel
     Left = 0
-    Height = 53
+    Height = 56
     Top = 20
-    Width = 147
+    Width = 162
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 53
-    ClientWidth = 147
+    ClientHeight = 56
+    ClientWidth = 162
     TabOrder = 1
     object Panel2: TPanel
       Left = 0
       Height = 26
       Top = 0
-      Width = 143
+      Width = 156
       ClientHeight = 26
-      ClientWidth = 143
+      ClientWidth = 156
       TabOrder = 0
       object led: TShape
         Left = 128
@@ -66,9 +66,9 @@ object f_planetarium: Tf_planetarium
       Left = 0
       Height = 26
       Top = 26
-      Width = 143
+      Width = 156
       ClientHeight = 26
-      ClientWidth = 143
+      ClientWidth = 156
       TabOrder = 1
       object BtnConnect: TButton
         Left = 0
@@ -79,12 +79,21 @@ object f_planetarium: Tf_planetarium
         OnClick = BtnConnectClick
         TabOrder = 0
       end
+      object BtnNewTarget: TButton
+        Left = 72
+        Height = 25
+        Top = 0
+        Width = 83
+        Caption = 'New target'
+        OnClick = BtnNewTargetClick
+        TabOrder = 1
+      end
     end
     object Panel4: TPanel
       Left = 0
       Height = 1
       Top = 52
-      Width = 143
+      Width = 156
       TabOrder = 2
     end
   end

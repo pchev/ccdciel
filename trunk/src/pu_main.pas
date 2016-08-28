@@ -289,6 +289,7 @@ type
     Procedure PlanetariumConnectClick(Sender: TObject);
     Procedure PlanetariumConnect(Sender: TObject);
     Procedure PlanetariumDisconnect(Sender: TObject);
+    Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -741,6 +742,7 @@ begin
 
   f_planetarium:=Tf_planetarium.Create(self);
   f_planetarium.onConnect:=@PlanetariumConnectClick;
+  f_planetarium.onNewTarget:=@PlanetariumNewTarget;
   f_planetarium.Status.Text:='Disconnected';
 
   f_scriptengine:=Tf_scriptengine.Create(self);
@@ -3212,6 +3214,48 @@ begin
    planetarium.onShowMessage:=@NewMessage;
    f_planetariuminfo.planetarium:=planetarium;
    f_scriptengine.Planetarium:=planetarium;
+ end;
+end;
+
+Procedure Tf_main.PlanetariumNewTarget(Sender: TObject);
+var ra,de,err,prec,exp:double;
+    cormethod,bin,maxretry: integer;
+    tra,tde,objn: string;
+begin
+ if planetarium.Connected and (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+    f_planetariuminfo.Ra.Text  := '-';
+    f_planetariuminfo.De.Text  := '-';
+    f_planetariuminfo.Obj.Text := '';
+    FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
+    f_planetariuminfo.ShowModal;
+    if f_planetariuminfo.ModalResult=mrOK then begin
+      tra:= f_planetariuminfo.Ra.Text;
+      tde:=f_planetariuminfo.De.Text;
+      objn:=trim(f_planetariuminfo.Obj.Text);
+       if tra='-' then
+         ra:=NullCoord
+       else
+         ra:=StrToAR(tra);
+       if tde='-' then
+         de:=NullCoord
+       else
+         de:=StrToDE(tde);
+      if (ra<>NullCoord) and (de<>NullCoord) then begin
+        if MessageDlg('Please confirm you want to slew the telescope to '+objn+' at coordinates '+tra+'/'+tde,mtConfirmation,mbOKCancel,0)=mrOK then begin
+          prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
+          cormethod:=config.GetValue('/PrecSlew/Method',1);
+          maxretry:=config.GetValue('/PrecSlew/Retry',3);
+          exp:=config.GetValue('/PrecSlew/Exposure',10.0);
+          bin:=config.GetValue('/PrecSlew/Binning',1);
+          if astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry,err) then begin
+            f_capture.Fname.Text:=objn;
+            NewMessage('Planetarium target set to '+objn);
+          end
+          else NewMessage('Planetarium target slew fail');
+        end;
+      end
+      else NewMessage('Invalid coordinates');
+    end;
  end;
 end;
 
