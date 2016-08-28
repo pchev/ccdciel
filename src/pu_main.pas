@@ -304,7 +304,11 @@ type
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
+    procedure ResolveSlewCenter(Sender: TObject);
     procedure LoadFitsFile(fn:string);
+    procedure SaveFitsFile(fn:string);
+    procedure OpenRefImage(fn:string);
+    procedure ClearRefImage(Sender: TObject);
     procedure CCDCIELMessageHandler(var Message: TLMessage); message LM_CCDCIEL;
     Procedure StartSequence(SeqName: string);
     procedure ScriptExecute(Sender: TObject);
@@ -745,6 +749,11 @@ begin
   f_scriptengine.onStartSequence:=@StartSequence;
   f_scriptengine.onScriptExecute:=@ScriptExecute;
   f_scriptengine.onScriptAfterExecute:=@ScriptAfterExecute;
+  f_scriptengine.onOpenFitsFile:=@LoadFitsFile;
+  f_scriptengine.onSaveFitsFile:=@SaveFitsFile;
+  f_scriptengine.onOpenReferenceImage:=@OpenRefImage;
+  f_scriptengine.onClearReferenceImage:=@ClearRefImage;
+  f_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
@@ -2927,7 +2936,7 @@ begin
 if fits.HeaderInfo.naxis>0 then begin
    if SaveDialog1.Execute then begin
       fn:=SaveDialog1.FileName;
-      fits.SaveToFile(fn);
+      SaveFitsFile(fn);
    end;
 end;
 end;
@@ -2990,18 +2999,13 @@ end;
 procedure Tf_main.MenuRefimageClick(Sender: TObject);
 begin
   if OpenDialog1.Execute then begin
-    reffile:=OpenDialog1.FileName;
-    refmask:=true;
-    SetRefImage;
+    OpenRefImage(OpenDialog1.FileName);
   end;
 end;
 
 procedure Tf_main.MenuClearRefClick(Sender: TObject);
 begin
-   refmask:=false;
-   reffile:='';
-   refbmp.SetSize(0,0);
-   DrawImage;
+  ClearRefImage(Sender);
 end;
 
 Procedure Tf_main.FocusStart(Sender: TObject);
@@ -3096,15 +3100,35 @@ begin
   astrometry.SolveCurrentImage(false);
 end;
 
-procedure Tf_main.MenuResolveSlewCenterClick(Sender: TObject);
-var xx,yy,x,y: integer;
+procedure Tf_main.ResolveSlewCenter(Sender: TObject);
+var xx,yy,x,y,Timeout: integer;
+    wt: boolean;
+    endt: TDateTime;
 begin
+ if (Mount.Status<>devConnected)or(Camera.Status<>devConnected) then begin
+   NewMessage('Camera and mount must be connected!');
+   exit;
+ end;
+ wt:= (Sender=f_scriptengine);
  if fits.HeaderInfo.valid then begin
    xx:=fits.HeaderInfo.naxis1 div 2;
    yy:=fits.HeaderInfo.naxis2 div 2;
    Fits2Screen(xx,yy,x,y);
    astrometry.SlewScreenXY(x,y);
+   if wt then begin
+     Timeout:=600;
+     endt:=now+Timeout/secperday;
+     while (astrometry.SlewBusy)and(now<endt) do begin
+        sleep(100);
+        Application.ProcessMessages;
+     end;
+   end;
  end;
+end;
+
+procedure Tf_main.MenuResolveSlewCenterClick(Sender: TObject);
+begin
+ ResolveSlewCenter(Sender);
 end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
@@ -3191,6 +3215,12 @@ begin
  end;
 end;
 
+procedure Tf_main.SaveFitsFile(fn:string);
+begin
+  if fits.HeaderInfo.valid then
+     fits.SaveToFile(fn);
+end;
+
 procedure Tf_main.LoadFitsFile(fn:string);
 var mem: TMemoryStream;
     imgsize: string;
@@ -3216,6 +3246,21 @@ begin
    else begin
     NewMessage('Invalid FITS file '+fn);
    end;
+end;
+
+procedure Tf_main.OpenRefImage(fn:string);
+begin
+  reffile:=fn;
+  refmask:=true;
+  SetRefImage;
+end;
+
+procedure Tf_main.ClearRefImage(Sender: TObject);
+begin
+   refmask:=false;
+   reffile:='';
+   refbmp.SetSize(0,0);
+   DrawImage;
 end;
 
 procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);

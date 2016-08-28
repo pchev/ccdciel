@@ -71,6 +71,11 @@ type
     FonStartSequence: TNotifyMsg;
     FonScriptExecute: TNotifyEvent;
     FonScriptAfterExecute: TNotifyEvent;
+    FonSaveFitsFile: TNotifyMsg;
+    FonOpenFitsFile: TNotifyMsg;
+    FonOpenReferenceImage: TNotifyMsg;
+    FonClearReferenceImage: TNotifyEvent;
+    FonSlewImageCenter: TNotifyEvent;
     ilist: array of Integer;
     dlist: array of Double;
     slist: array of String;
@@ -146,10 +151,15 @@ type
     function cmd_Capture_Stop:string;
     function cmd_AstrometrySolve:string;
     function cmd_AstrometrySync:string;
+    function cmd_AstrometrySlewImageCenter:string;
     function cmd_PlanetariumConnect:string;
     function cmd_PlanetariumShowImage:string;
     function cmd_ProgramShutdown:string;
     function cmd_SequenceStart(seq:string):string;
+    function cmd_SaveFitsFile(fn:string):string;
+    function cmd_OpenFitsFile(fn:string):string;
+    function cmd_OpenReferenceImage(fn:string):string;
+    function cmd_ClearReferenceImage:string;
   public
     { public declarations }
     dbgscr: TPSScriptDebugger;
@@ -160,6 +170,11 @@ type
     property onStartSequence: TNotifyMsg read FonStartSequence write FonStartSequence;
     property onScriptExecute: TNotifyEvent read FonScriptExecute write FonScriptExecute;
     property onScriptAfterExecute: TNotifyEvent read FonScriptAfterExecute write FonScriptAfterExecute;
+    property onSaveFitsFile: TNotifyMsg read FonSaveFitsFile  write FonSaveFitsFile;
+    property onOpenFitsFile: TNotifyMsg read FonOpenFitsFile  write FonOpenFitsFile;
+    property onOpenReferenceImage: TNotifyMsg read FonOpenReferenceImage write FonOpenReferenceImage;
+    property onClearReferenceImage: TNotifyEvent read FonClearReferenceImage write FonClearReferenceImage;
+    property onSlewImageCenter: TNotifyEvent read FonSlewImageCenter write FonSlewImageCenter;
     property fits: TFits read Ffits write Ffits;
     property DevicesConnection: Tf_devicesconnection read Fdevicesconnection write Fdevicesconnection;
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
@@ -652,9 +667,11 @@ else if cname='CAPTURE_START' then result:=cmd_Capture_Start
 else if cname='CAPTURE_STOP' then result:=cmd_Capture_Stop
 else if cname='ASTROMETRY_SOLVE' then result:=cmd_AstrometrySolve
 else if cname='ASTROMETRY_SYNC' then result:=cmd_AstrometrySync
+else if cname='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=cmd_AstrometrySlewImageCenter
 else if cname='PLANETARIUM_CONNECT' then result:=cmd_PlanetariumConnect
 else if cname='PLANETARIUM_SHOWIMAGE' then result:=cmd_PlanetariumShowImage
 else if cname='PROGRAM_SHUTDOWN' then result:=cmd_ProgramShutdown
+else if cname='CLEAR_REFERENCE_IMAGE' then result:=cmd_ClearReferenceImage
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -682,6 +699,9 @@ else if cname='CAPTURE_SETCOUNT' then result:=cmd_Capture_SetCount(arg[0])
 else if cname='CAPTURE_SETFRAMETYPE' then result:=cmd_Capture_SetFrameType(arg[0])
 else if cname='CAPTURE_SETDITHER' then result:=cmd_Capture_SetDither(arg[0])
 else if cname='SEQUENCE_START' then result:=cmd_SequenceStart(arg[0])
+else if cname='SAVE_FITS_FILE' then result:=cmd_SaveFitsFile(arg[0])
+else if cname='OPEN_FITS_FILE' then result:=cmd_OpenFitsFile(arg[0])
+else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1009,14 +1029,15 @@ if Assigned(Preview.onStartExposure) then
   Preview.onStartExposure(Self)
  else
   exit;
-Preview.Running:=true;
-if Assigned(FonMsg) then FonMsg('Start single preview');
-while Preview.Running do begin
-  sleep(10);
-  Application.ProcessMessages;
+if Preview.Running then begin
+  if Assigned(FonMsg) then FonMsg('Start single preview');
+  while Preview.Running do begin
+    sleep(10);
+    Application.ProcessMessages;
+  end;
+  wait(1);
+  result:=msgOK;
 end;
-wait(1);
-result:=msgOK;
 except
   result:=msgFailed;
 end;
@@ -1191,6 +1212,12 @@ except
 end;
 end;
 
+function Tf_scriptengine.cmd_AstrometrySlewImageCenter:string;
+begin
+  if Assigned(FonSlewImageCenter) then FonSlewImageCenter(self);
+  result:=msgOK;
+end;
+
 function Tf_scriptengine.cmd_PlanetariumConnect:string;
 var i: integer;
 begin
@@ -1227,6 +1254,30 @@ end;
 function Tf_scriptengine.cmd_SequenceStart(seq:string):string;
 begin
   if Assigned(FonStartSequence) then FonStartSequence(seq);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_SaveFitsFile(fn:string):string;
+begin
+  if Assigned(FonSaveFitsFile) then FonSaveFitsFile(fn);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_OpenFitsFile(fn:string):string;
+begin
+  if Assigned(FonOpenFitsFile) then FonOpenFitsFile(fn);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_OpenReferenceImage(fn:string):string;
+begin
+  if Assigned(FonOpenReferenceImage) then FonOpenReferenceImage(fn);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_ClearReferenceImage:string;
+begin
+  if Assigned(FonClearReferenceImage) then FonClearReferenceImage(self);
   result:=msgOK;
 end;
 

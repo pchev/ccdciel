@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera, cu_fits,
+uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera, cu_fits, indiapi,
       LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
@@ -37,7 +37,7 @@ TAstrometry = class(TComponent)
     FonStartAstrometry: TNotifyEvent;
     FonEndAstrometry: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
-    FBusy, FLastResult: Boolean;
+    FBusy, FSlewBusy, FLastResult: Boolean;
     Fmount: T_mount;
     Fcamera: T_camera;
     FFits: TFits;
@@ -68,6 +68,7 @@ TAstrometry = class(TComponent)
     procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double):boolean;
     property Busy: Boolean read FBusy;
+    property SlewBusy: Boolean read FSlewBusy;
     property LastResult: Boolean read FLastResult;
     property ResultFile: string read savefile;
     property Resolver: string read FResolverName;
@@ -85,6 +86,7 @@ constructor TAstrometry.Create(AOwner: TComponent);
 begin
   Inherited create(AOwner);
   FBusy:=false;
+  FSlewBusy:=false;
   FLastResult:=false;
   AstrometryTimeout:=60;
   TimerAstrometrySolve:=TTimer.Create(self);
@@ -255,7 +257,7 @@ end;
 
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
 begin
-  if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) and (Mount.Status=devConnected) then begin
    if fits.HeaderInfo.solved then begin
      FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
      AstrometrySync(nil);
@@ -298,7 +300,8 @@ end;
 
 procedure TAstrometry.SlewScreenXY(x,y: integer);
 begin
-  if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+  if (not FSlewBusy) and (not FBusy) and (FFits.HeaderInfo.naxis>0) and (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+   FSlewBusy:=true;
    Xslew:=x;
    Yslew:=y;
    if fits.HeaderInfo.solved then begin
@@ -326,6 +329,7 @@ var fn: string;
     cormethod,bin,maxretry: integer;
 begin
 TimerAstrometrySlewScreenXY.Enabled:=false;
+try
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
@@ -356,12 +360,17 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
      end;
    end;
 end;
+finally
+  FSlewBusy:=false;
+end;
 end;
 
 procedure TAstrometry.ControlExposure(exp:double; binx,biny: integer);
 var SaveonNewImage: TNotifyEvent;
     savebinx,savebiny: integer;
+    endt: TDateTime;
 begin
+if Camera.Status=devConnected then begin
   SaveonNewImage:=Camera.onNewImage;
   savebinx:=Camera.BinX;
   savebiny:=Camera.BinY;
@@ -369,13 +378,15 @@ begin
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
   WaitExposure:=true;
   Camera.StartExposure(exp);
-  while WaitExposure do begin
+  endt:=now+60/secperday;
+  while WaitExposure and(now<endt) do begin
     Sleep(100);
     Application.ProcessMessages;
   end;
   Camera.onNewImage:=SaveonNewImage;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
   if Assigned(SaveonNewImage) then SaveonNewImage(self);
+end;
 end;
 
 procedure TAstrometry.EndExposure(Sender: TObject);
@@ -390,61 +401,63 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset: double;
     n,i:integer;
 begin
   dist:=MaxInt;
-  raoffset:=0;
-  deoffset:=0;
-  ar1:=deg2rad*15*ra;
-  de1:=deg2rad*de;
-  msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
-  Mount.Slew(ra, de);
-  i:=1;
-  repeat
-    Wait;
-    msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
-    ControlExposure(exp,binx,biny);
-    msg('Resolve control exposure');
-    FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
-    WaitBusy(AstrometryTimeout+30);
-    if not LastResult then begin
-       StopAstrometry;
-       msg('Fail to resolve control exposure');
-       break;
-    end;
-    fn:=slash(TmpDir)+'ccdcielsolved.fits';
-    n:=cdcwcs_initfitsfile(pchar(fn),0);
-    if (n<>0) or (not CurrentCoord(cra,cde,eq)) then break;
-    if mount.Equinox=0 then begin
-      jd0:=Jd(trunc(eq),0,0,0);
-      jd1:=DateTimetoJD(now);
-      cra:=deg2rad*15*cra;
-      cde:=deg2rad*cde;
-      PrecessionFK5(jd0,jd1,cra,cde);
-      cra:=rad2deg*cra/15;
-      cde:=rad2deg*cde;
-    end;
-    ar2:=deg2rad*15*cra;
-    de2:=deg2rad*cde;
-    dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
-    msg('Distance to target: '+FormatFloat(f5,60*dist)+' arcmin');
-    if dist>prec then begin
-      case method of
-       0: begin
-             msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
-             mount.Sync(cra,cde);
-             Wait(2);
-             msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
-             Mount.Slew(ra, de);
-          end;
-       else begin
-             raoffset:=ra+raoffset-cra;
-             deoffset:=de+raoffset-cde;
-             msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
-             Mount.Slew(ra+raoffset, de+deoffset);
-          end;
-       end;
-    end;
-    inc(i);
-  until (dist<=prec)or(i>maxslew);
+  if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+    raoffset:=0;
+    deoffset:=0;
+    ar1:=deg2rad*15*ra;
+    de1:=deg2rad*de;
+    msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+    Mount.Slew(ra, de);
+    i:=1;
+    repeat
+      Wait;
+      msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
+      ControlExposure(exp,binx,biny);
+      msg('Resolve control exposure');
+      FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+      StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
+      WaitBusy(AstrometryTimeout+30);
+      if not LastResult then begin
+         StopAstrometry;
+         msg('Fail to resolve control exposure');
+         break;
+      end;
+      fn:=slash(TmpDir)+'ccdcielsolved.fits';
+      n:=cdcwcs_initfitsfile(pchar(fn),0);
+      if (n<>0) or (not CurrentCoord(cra,cde,eq)) then break;
+      if mount.Equinox=0 then begin
+        jd0:=Jd(trunc(eq),0,0,0);
+        jd1:=DateTimetoJD(now);
+        cra:=deg2rad*15*cra;
+        cde:=deg2rad*cde;
+        PrecessionFK5(jd0,jd1,cra,cde);
+        cra:=rad2deg*cra/15;
+        cde:=rad2deg*cde;
+      end;
+      ar2:=deg2rad*15*cra;
+      de2:=deg2rad*cde;
+      dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
+      msg('Distance to target: '+FormatFloat(f5,60*dist)+' arcmin');
+      if dist>prec then begin
+        case method of
+         0: begin
+               msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
+               mount.Sync(cra,cde);
+               Wait(2);
+               msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+               Mount.Slew(ra, de);
+            end;
+         else begin
+               raoffset:=ra+raoffset-cra;
+               deoffset:=de+raoffset-cde;
+               msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
+               Mount.Slew(ra+raoffset, de+deoffset);
+            end;
+         end;
+      end;
+      inc(i);
+    until (dist<=prec)or(i>maxslew);
+  end;
   result:=(dist<=prec);
   err:=dist;
   if result then msg('Precision slew terminated.')
