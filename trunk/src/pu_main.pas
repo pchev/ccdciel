@@ -1075,6 +1075,7 @@ end;
 procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y: integer;
 begin
+ if not fits.HeaderInfo.valid then exit;
  Screen2fits(Mx,My,x,y);
  f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
  Image1.Invalidate;
@@ -1113,7 +1114,7 @@ var xx,yy,n: integer;
     c: TcdcWCScoord;
 begin
 if LockMouse then exit;
- if MouseMoving then begin
+ if MouseMoving and fits.HeaderInfo.valid then begin
     LockMouse:=true;
     ImgCx:=ImgCx+round((X-Mx) / ImgZoom);
     ImgCy:=ImgCy+round((Y-My) / ImgZoom);
@@ -1164,14 +1165,14 @@ procedure Tf_main.Image1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var xx,x1,y1,x2,y2,w,h: integer;
 begin
-if MouseMoving then begin
+if MouseMoving and fits.HeaderInfo.valid then begin
   ImgCx:=ImgCx+X-Mx;
   ImgCy:=ImgCy+Y-My;
   PlotImage;
   Mx:=X;
   My:=Y;
 end;
-if MouseFrame then begin
+if MouseFrame and fits.HeaderInfo.valid then begin
   EndX:=X;
   EndY:=Y;
   Screen2CCD(StartX,StartY,x1,y1);
@@ -3199,17 +3200,22 @@ begin
    mem.LoadFromFile(fn);
    fits.Stream:=mem;
    mem.free;
-   if fits.HeaderInfo.solved then begin
-     n:=cdcwcs_initfitsfile(pchar(fn),0);
-     if n=0 then n:=cdcwcs_getinfo(addr(cdcWCSinfo),0);
-     if n<>0 then cdcWCSinfo.secpix:=0;
+   if fits.HeaderInfo.valid then begin
+     if fits.HeaderInfo.solved then begin
+       n:=cdcwcs_initfitsfile(pchar(fn),0);
+       if n=0 then n:=cdcwcs_getinfo(addr(cdcWCSinfo),0);
+       if n<>0 then cdcWCSinfo.secpix:=0;
+     end
+       else cdcWCSinfo.secpix:=0;
+     DrawImage;
+     DrawHistogram;
+     imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+     NewMessage('Open file '+fn);
+     StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
    end
-     else cdcWCSinfo.secpix:=0;
-   DrawImage;
-   DrawHistogram;
-   imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
-   NewMessage('Open file '+fn);
-   StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
+   else begin
+    NewMessage('Invalid FITS file '+fn);
+   end;
 end;
 
 procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
