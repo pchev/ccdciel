@@ -1,17 +1,17 @@
 object f_ccdtemp: Tf_ccdtemp
   Left = 0
-  Height = 114
+  Height = 79
   Top = 0
-  Width = 147
+  Width = 180
   AutoSize = True
-  ClientHeight = 114
-  ClientWidth = 147
+  ClientHeight = 79
+  ClientWidth = 180
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 147
+    Width = 180
     Align = alTop
     Alignment = taCenter
     Caption = 'CCD Temperature'
@@ -24,26 +24,24 @@ object f_ccdtemp: Tf_ccdtemp
   end
   object Panel1: TPanel
     Left = 0
-    Height = 94
+    Height = 59
     Top = 20
-    Width = 147
+    Width = 180
     Align = alClient
-    ChildSizing.Layout = cclTopToBottomThenLeftToRight
-    ChildSizing.ControlsPerLine = 99
-    ClientHeight = 94
-    ClientWidth = 147
+    ClientHeight = 59
+    ClientWidth = 180
     TabOrder = 1
     object Panel2: TPanel
       Left = 0
-      Height = 28
+      Height = 25
       Top = 0
-      Width = 138
-      ClientHeight = 28
-      ClientWidth = 138
+      Width = 130
+      ClientHeight = 25
+      ClientWidth = 130
       TabOrder = 1
       object Current: TEdit
-        Left = 72
-        Height = 27
+        Left = 64
+        Height = 24
         Top = 0
         Width = 65
         Color = clBlack
@@ -53,25 +51,25 @@ object f_ccdtemp: Tf_ccdtemp
       end
       object Label1: TLabel
         Left = 4
-        Height = 17
+        Height = 18
         Top = 4
-        Width = 53
+        Width = 46
         Caption = 'Current'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 32
-      Top = 28
-      Width = 138
-      ClientHeight = 32
-      ClientWidth = 138
+      Height = 29
+      Top = 25
+      Width = 130
+      ClientHeight = 29
+      ClientWidth = 130
       TabOrder = 2
       object Setpoint: TEdit
-        Left = 72
-        Height = 27
-        Top = 4
+        Left = 64
+        Height = 24
+        Top = 2
         Width = 65
         Color = clBlack
         Font.Color = clRed
@@ -81,18 +79,18 @@ object f_ccdtemp: Tf_ccdtemp
       end
       object Label2: TLabel
         Left = 4
-        Height = 17
+        Height = 18
         Top = 4
-        Width = 59
+        Width = 51
         Caption = 'Setpoint'
         ParentColor = False
       end
     end
     object Button1: TButton
-      Left = 0
-      Height = 29
-      Top = 60
-      Width = 138
+      Left = 132
+      Height = 24
+      Top = 27
+      Width = 50
       Caption = 'Set'
       OnClick = Button1Click
       TabOrder = 0
