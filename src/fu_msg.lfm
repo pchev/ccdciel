@@ -9,8 +9,6 @@ object f_msg: Tf_msg
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 347
-  DesignTop = 169
   object Panel1: TPanel
     Left = 0
     Height = 93

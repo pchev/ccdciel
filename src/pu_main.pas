@@ -53,6 +53,45 @@ type
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
     MenuClearRef: TMenuItem;
+    MenuTabSequence: TMenuItem;
+    MenuTabCapture: TMenuItem;
+    MenuTabFocus: TMenuItem;
+    MenuTabConnect: TMenuItem;
+    MenuConnect: TMenuItem;
+    MenuCaptureStart: TMenuItem;
+    MenuFrameSet: TMenuItem;
+    MenuFrameReset: TMenuItem;
+    MenuFocusaid: TMenuItem;
+    MenuFocuserIn: TMenuItem;
+    MenuFocuserOut: TMenuItem;
+    MenuFilter1: TMenuItem;
+    MenuCCDtempSet: TMenuItem;
+    MenuAutoguiderConnect: TMenuItem;
+    MenuAutoguiderCalibrate: TMenuItem;
+    MenuAutoguiderGuide: TMenuItem;
+    MenuAutoguiderDither: TMenuItem;
+    MenuScriptStop: TMenuItem;
+    MenuScriptEdit: TMenuItem;
+    MenuScriptNew: TMenuItem;
+    MenuScriptRun: TMenuItem;
+    MenuPlanetariumNewtarget: TMenuItem;
+    MenuPlanetariumConnect: TMenuItem;
+    MenuMountTrack: TMenuItem;
+    MenuMountPark: TMenuItem;
+    MenuVisuZoomAdjust: TMenuItem;
+    MenuVisuZoom2: TMenuItem;
+    MenuVisuZoom1: TMenuItem;
+    MenuVisuZoom12: TMenuItem;
+    MenuVisuLinear: TMenuItem;
+    MenuVisuLog: TMenuItem;
+    MenuVisuSqrt: TMenuItem;
+    MenuSequenceNew: TMenuItem;
+    MenuSequenceEdit: TMenuItem;
+    MenuSequenceStart: TMenuItem;
+    MenuSequenceStop: TMenuItem;
+    MenuSequenceLoad: TMenuItem;
+    MenuPreviewLoop: TMenuItem;
+    MenuPreviewStart: TMenuItem;
     MenuResolveSlewCenter: TMenuItem;
     MenuResolve: TMenuItem;
     MenuRefimage: TMenuItem;
@@ -90,6 +129,20 @@ type
     MenuSetup: TMenuItem;
     N2: TMenuItem;
     N1: TMenuItem;
+    MenuConnection: TMenuItem;
+    MenuPreview: TMenuItem;
+    MenuCapture: TMenuItem;
+    MenuSequence: TMenuItem;
+    MenuFrame: TMenuItem;
+    MenuHistogram: TMenuItem;
+    MenuStarProfile: TMenuItem;
+    MenuFocuser: TMenuItem;
+    MenuFilters: TMenuItem;
+    MenuCCDtemp: TMenuItem;
+    MenuMount: TMenuItem;
+    MenuAutoguider: TMenuItem;
+    MenuPlanetarium: TMenuItem;
+    MenuScript: TMenuItem;
     OpenDialog1: TOpenDialog;
     PageControlRight: TPageControl;
     Panel1: TPanel;
@@ -106,10 +159,10 @@ type
     StatusBar1: TStatusBar;
     ConnectTimer: TTimer;
     StatusbarTimer: TTimer;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    TabSheet3: TTabSheet;
-    TabSheet4: TTabSheet;
+    PageConnect: TTabSheet;
+    PageFocus: TTabSheet;
+    PageCapture: TTabSheet;
+    PageSequence: TTabSheet;
     AbortTimer: TTimer;
     StartCaptureTimer: TTimer;
     StartupTimer: TTimer;
@@ -131,11 +184,30 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
+    procedure MenuAutoguiderCalibrateClick(Sender: TObject);
+    procedure MenuAutoguiderConnectClick(Sender: TObject);
+    procedure MenuAutoguiderDitherClick(Sender: TObject);
+    procedure MenuAutoguiderGuideClick(Sender: TObject);
+    procedure MenuCaptureStartClick(Sender: TObject);
+    procedure MenuCCDtempSetClick(Sender: TObject);
     procedure MenuClearRefClick(Sender: TObject);
+    procedure MenuConnectClick(Sender: TObject);
+    procedure MenuFilterClick(Sender: TObject);
+    procedure MenuFocusaidClick(Sender: TObject);
+    procedure MenuFocuserInClick(Sender: TObject);
+    procedure MenuFocuserOutClick(Sender: TObject);
+    procedure MenuFrameResetClick(Sender: TObject);
+    procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuMountParkClick(Sender: TObject);
+    procedure MenuMountTrackClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
     procedure MenuOptionsClick(Sender: TObject);
+    procedure MenuPlanetariumConnectClick(Sender: TObject);
+    procedure MenuPlanetariumNewtargetClick(Sender: TObject);
+    procedure MenuPreviewLoopClick(Sender: TObject);
+    procedure MenuPreviewStartClick(Sender: TObject);
     procedure MenuRefimageClick(Sender: TObject);
     procedure MenuResetToolsClick(Sender: TObject);
     procedure MenuResolveClick(Sender: TObject);
@@ -144,7 +216,17 @@ type
     procedure MenuResolveSyncClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuResolvePlanetariumClick(Sender: TObject);
+    procedure MenuScriptEditClick(Sender: TObject);
+    procedure MenuScriptNewClick(Sender: TObject);
+    procedure MenuScriptRunClick(Sender: TObject);
+    procedure MenuScriptStopClick(Sender: TObject);
+    procedure MenuSequenceEditClick(Sender: TObject);
+    procedure MenuSequenceLoadClick(Sender: TObject);
+    procedure MenuSequenceNewClick(Sender: TObject);
+    procedure MenuSequenceStartClick(Sender: TObject);
+    procedure MenuSequenceStopClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
+    procedure MenuTabClick(Sender: TObject);
     procedure MenuViewAstrometryLogClick(Sender: TObject);
     procedure MenuViewAutoguiderClick(Sender: TObject);
     procedure MenuViewCCDtempClick(Sender: TObject);
@@ -164,6 +246,13 @@ type
     procedure MenuViewScriptClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
+    procedure MenuVisuLinearClick(Sender: TObject);
+    procedure MenuVisuLogClick(Sender: TObject);
+    procedure MenuVisuSqrtClick(Sender: TObject);
+    procedure MenuVisuZoom12Click(Sender: TObject);
+    procedure MenuVisuZoom1Click(Sender: TObject);
+    procedure MenuVisuZoom2Click(Sender: TObject);
+    procedure MenuVisuZoomAdjustClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
@@ -222,7 +311,7 @@ type
     Procedure CloseLog;
     Procedure WriteLog( buf : string);
     Procedure WriteDeviceLog( buf : string);
-    procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; amenu: TMenuItem);
+    procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem);
     procedure UpdConfig(oldver:string);
     procedure SetConfig;
     procedure SetOptions;
@@ -258,6 +347,7 @@ type
     Procedure ConnectMount(Sender: TObject);
     Procedure DisconnectMount(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
+    Procedure SetFilterMenu;
     Procedure NewMessage(msg: string);
     Procedure DeviceMessage(msg: string);
     Procedure CameraStatus(Sender: TObject);
@@ -430,10 +520,11 @@ begin
   Close;
 end;
 
-procedure Tf_main.SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; amenu: TMenuItem);
+procedure Tf_main.SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem);
 var pn: string;
     i: integer;
     par: Tpanel;
+    opm,npm: Tmenuitem;
 begin
 pn:=config.GetValue('/Tools/'+configname+'/Parent',defaultParent.Name);
 par:=defaultParent;
@@ -452,7 +543,17 @@ tool.Top:=config.GetValue('/Tools/'+widestring(configname)+'/Top',defaultpos);
 tool.Left:=config.GetValue('/Tools/'+widestring(configname)+'/Left',defaultpos);
 tool.Parent:=par;
 tool.Visible:=config.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
-amenu.Checked:=tool.Visible;
+chkmenu.Checked:=tool.Visible;
+tool.Tag:=PtrInt(toolmenu);
+if (toolmenu<>nil)and(par.tag>0) then begin
+   npm:=TMenuItem(par.tag);
+   opm:=toolmenu.Parent;
+   if npm<>opm then begin
+     i:=opm.IndexOf(toolmenu);
+     opm.Delete(i);
+     npm.Add(toolmenu);
+   end;
+end;
 end;
 
 Procedure Tf_main.GetAppDir;
@@ -812,25 +913,31 @@ begin
      NewMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
   end;
 
-  SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram);
-  SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages);
+  PanelBottom.Tag:=PtrInt(MenuTabConnect);
+  PanelRight1.Tag:=PtrInt(MenuTabConnect);
+  PanelRight2.Tag:=PtrInt(MenuTabFocus);
+  PanelRight3.Tag:=PtrInt(MenuTabCapture);
+  PanelRight4.Tag:=PtrInt(MenuTabSequence);
 
-  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection);
-  SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview);
-  SetTool(f_mount,'Mount',PanelRight1,f_preview.top+1,MenuViewMount);
-  SetTool(f_autoguider,'Autoguider',PanelRight1,f_mount.top+1,MenuViewAutoguider);
-  SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium);
-  SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript);
+  SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram);
+  SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil);
 
-  SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser);
-  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
+  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection,MenuConnection);
+  SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview);
+  SetTool(f_autoguider,'Autoguider',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
+  SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
+  SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
 
-  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture);
-  SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters);
-  SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame);
-  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_frame.top+1,MenuViewCCDtemp);
+  SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser);
+  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
 
-  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence);
+  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture);
+  SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
+  SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame);
+  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_frame.top+1,MenuViewCCDtemp,MenuCCDtemp);
+  SetTool(f_mount,'Mount',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
+
+  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence);
 
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
@@ -845,6 +952,7 @@ begin
   f_filterwheel.Filters.Items.Assign(Filters);
   f_filterwheel.Filters.ItemIndex:=0;
   f_EditPlan.Filter.Items.Assign(Filters);
+  SetFilterMenu;
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -899,25 +1007,25 @@ end;
 
 procedure Tf_main.MenuResetToolsClick(Sender: TObject);
 begin
-  SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram);
-  SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages);
+  SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram);
+  SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil);
 
-  SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection);
-  SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview);
-  SetTool(f_mount,'',PanelRight1,f_preview.top+1,MenuViewMount);
-  SetTool(f_autoguider,'',PanelRight1,f_mount.top+1,MenuViewAutoguider);
-  SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium);
-  SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript);
+  SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection);
+  SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview);
+  SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
+  SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
+  SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
 
-  SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser);
-  SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile);
+  SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser);
+  SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
 
-  SetTool(f_capture,'',PanelRight3,0,MenuViewCapture);
-  SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters);
-  SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame);
-  SetTool(f_ccdtemp,'',PanelRight3,f_frame.top+1,MenuViewCCDtemp);
+  SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture);
+  SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
+  SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame);
+  SetTool(f_ccdtemp,'',PanelRight3,f_frame.top+1,MenuViewCCDtemp,MenuCCDtemp);
+  SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
 
-  SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence);
+  SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence);
 end;
 
 procedure Tf_main.UpdConfig(oldver:string);
@@ -1239,6 +1347,36 @@ begin
   DrawImage;
 end;
 
+procedure Tf_main.MenuAutoguiderCalibrateClick(Sender: TObject);
+begin
+ AutoguiderCalibrateClick(Sender);
+end;
+
+procedure Tf_main.MenuAutoguiderConnectClick(Sender: TObject);
+begin
+ AutoguiderConnectClick(Sender);
+end;
+
+procedure Tf_main.MenuAutoguiderDitherClick(Sender: TObject);
+begin
+ AutoguiderDitherClick(Sender);
+end;
+
+procedure Tf_main.MenuAutoguiderGuideClick(Sender: TObject);
+begin
+ AutoguiderGuideClick(Sender);
+end;
+
+procedure Tf_main.MenuCaptureStartClick(Sender: TObject);
+begin
+  f_capture.BtnStart.Click;
+end;
+
+procedure Tf_main.MenuCCDtempSetClick(Sender: TObject);
+begin
+  SetTemperature(Sender);
+end;
+
 procedure Tf_main.SetConfig;
 begin
 case camera.CameraInterface of
@@ -1370,18 +1508,21 @@ Procedure Tf_main.CheckConnectionStatus;
 var allcount, upcount, downcount, concount: integer;
 procedure SetDisconnected;
 begin
-f_devicesconnection.led.Brush.Color:=clRed;
-f_devicesconnection.BtnConnect.Caption:='Connect';
+ f_devicesconnection.led.Brush.Color:=clRed;
+ f_devicesconnection.BtnConnect.Caption:='Connect';
+ MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 procedure SetConnected;
 begin
-f_devicesconnection.led.Brush.Color:=clLime;
-f_devicesconnection.BtnConnect.Caption:='Disconnect';
+ f_devicesconnection.led.Brush.Color:=clLime;
+ f_devicesconnection.BtnConnect.Caption:='Disconnect';
+ MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 procedure SetConnecting;
 begin
-f_devicesconnection.led.Brush.Color:=clYellow;
-f_devicesconnection.BtnConnect.Caption:='Disconnect';
+ f_devicesconnection.led.Brush.Color:=clYellow;
+ f_devicesconnection.BtnConnect.Caption:='Disconnect';
+ MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 
 begin
@@ -1710,6 +1851,7 @@ begin
   f_capture.stop;
   Capture:=false;
   Preview:=false;
+  MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
 end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
@@ -1733,6 +1875,7 @@ case wheel.Status of
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
                       f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
                       Filters.Assign(wheel.FilterNames);
+                      SetFilterMenu;
                       if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
                          f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
                    end;
@@ -1756,8 +1899,24 @@ begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
 f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
 Filters.Assign(wheel.FilterNames);
+SetFilterMenu;
 if (wheel.Filter>=0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
    f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
+end;
+
+Procedure Tf_main.SetFilterMenu;
+var i:integer;
+    m: TMenuItem;
+begin
+ for i:=MenuFilters.Count-1 downto 0 do
+   MenuFilters.Delete(i);
+ for i:=0 to Filters.Count-1 do begin
+   m:=TMenuItem.Create(Self);
+   m.Caption:=Filters[i];
+   m.OnClick:=@MenuFilterClick;
+   m.Tag:=i;
+   MenuFilters.Add(m);
+ end;
 end;
 
 procedure Tf_main.MenuHelpAboutClick(Sender: TObject);
@@ -1909,6 +2068,7 @@ begin
     f_mount.BtnPark.Caption:='Unparked';
     f_mount.BtnPark.Font.Color:=clGreen;
  end;
+ MenuMountPark.Caption:=f_mount.BtnPark.Caption;
 end;
 
 procedure Tf_main.SetMountPark(Sender: TObject);
@@ -1927,6 +2087,7 @@ begin
    autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
                       config.GetValue('/Autoguider/PHDport','4400'));
    f_autoguider.BtnConnect.Caption:='Disconnect';
+   MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
  end else begin
    autoguider.Disconnect;
  end;
@@ -1982,6 +2143,8 @@ begin
    f_autoguider.BtnConnect.Caption:='Connect';
    f_autoguider.BtnGuide.Caption:='Guide';
    f_autoguider.led.Brush.Color:=clGray;
+   MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
+   MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
  end;
 end;
 
@@ -1993,23 +2156,28 @@ begin
    GUIDER_DISCONNECTED:begin
                        f_autoguider.led.Brush.Color:=clGray;
                        f_autoguider.BtnGuide.Caption:='Guide';
+                       MenuAutoguiderGuide.Caption:='Guide';
                        end;
    GUIDER_IDLE        :begin
                        f_autoguider.led.Brush.Color:=clYellow;
                        f_autoguider.BtnGuide.Caption:='Guide';
+                       MenuAutoguiderGuide.Caption:='Guide';
                        f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;
                        f_autoguider.BtnGuide.Caption:='Stop';
+                       MenuAutoguiderGuide.Caption:='Stop guiding';
                        end;
    GUIDER_BUSY        :begin
                        f_autoguider.led.Brush.Color:=clOrange;
                        f_autoguider.BtnGuide.Caption:='Stop';
+                       MenuAutoguiderGuide.Caption:='Stop guiding';
                        end;
    GUIDER_ALERT       :begin
                        f_autoguider.led.Brush.Color:=clRed;
                        f_autoguider.BtnGuide.Caption:='Guide';
+                       MenuAutoguiderGuide.Caption:='Guide';
                        end;
  end;
  if autoguider.LastError<>'' then NewMessage(autoguider.LastError);
@@ -2231,6 +2399,25 @@ begin
    end;
 end;
 
+procedure Tf_main.MenuPlanetariumConnectClick(Sender: TObject);
+begin
+  PlanetariumConnectClick(Sender);
+end;
+
+procedure Tf_main.MenuPlanetariumNewtargetClick(Sender: TObject);
+begin
+  PlanetariumNewTarget(Sender);
+end;
+
+procedure Tf_main.MenuPreviewLoopClick(Sender: TObject);
+begin
+  f_preview.BtnLoop.Click;
+end;
+
+procedure Tf_main.MenuPreviewStartClick(Sender: TObject);
+begin
+  f_preview.BtnPreview.Click;
+end;
 
 procedure Tf_main.OptionGetPixelSize(Sender: TObject);
 begin
@@ -2314,16 +2501,57 @@ begin
   f_starprofile.Visible:=MenuViewStarProfile.Checked;
 end;
 
+procedure Tf_main.MenuVisuLinearClick(Sender: TObject);
+begin
+  f_visu.BtnLinear.Checked:=True;
+end;
+
+procedure Tf_main.MenuVisuLogClick(Sender: TObject);
+begin
+  f_visu.BtnLog.Checked:=True;
+end;
+
+procedure Tf_main.MenuVisuSqrtClick(Sender: TObject);
+begin
+  f_visu.BtnSqrt.Checked:=True;
+end;
+
+procedure Tf_main.MenuVisuZoom12Click(Sender: TObject);
+begin
+  f_visu.BtnZoom05.Click;
+end;
+
+procedure Tf_main.MenuVisuZoom1Click(Sender: TObject);
+begin
+  f_visu.BtnZoom1.Click;
+end;
+
+procedure Tf_main.MenuVisuZoom2Click(Sender: TObject);
+begin
+  f_visu.BtnZoom2.Click;
+end;
+
+procedure Tf_main.MenuVisuZoomAdjustClick(Sender: TObject);
+begin
+  f_visu.BtnZoomAdjust.Click;
+end;
+
 procedure Tf_main.MenuViewAutoguiderClick(Sender: TObject);
 begin
   f_autoguider.Visible:=MenuViewAutoguider.Checked;
 end;
 
 procedure Tf_main.PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
+var toolmenu,opm,npm: TMenuItem;
+    i: integer;
 begin
+npm:=nil;
+opm:=nil;
 if sender is TPanel then begin
   if sender is TPanel then begin
+    if TPanel(Sender).Tag>0 then npm:=TMenuItem(TPanel(Sender).tag);
     if source is TStaticText then begin
+     if TFrame(TStaticText(Source).Parent).tag>0 then toolmenu:=TMenuItem(TFrame(TStaticText(Source).Parent).tag);
      TFrame(TStaticText(Source).Parent).Parent:=TPanel(Sender);
      TFrame(TStaticText(Source).Parent).Top:=Y;
      TFrame(TStaticText(Source).Parent).Left:=X;
@@ -2334,6 +2562,7 @@ if sender is TPanel then begin
      end;
     end
     else if source is TMemo then begin
+      if TFrame(TPanel(TMemo(Source).Parent).Parent).tag>0 then toolmenu:=TMenuItem(TFrame(TPanel(TMemo(Source).Parent).Parent).tag);
       TFrame(TPanel(TMemo(Source).Parent).Parent).Parent:=TPanel(Sender);
       TFrame(TPanel(TMemo(Source).Parent).Parent).Top:=Y;
       TFrame(TPanel(TMemo(Source).Parent).Parent).Left:=X;
@@ -2344,6 +2573,7 @@ if sender is TPanel then begin
       end;
      end
     else if source is TDragObject then begin
+      if TFrame(TDragObject(Source).Control).tag>0 then toolmenu:=TMenuItem(TFrame(TDragObject(Source).Control).tag);
       TFrame(TDragObject(Source).Control).Parent:=TPanel(Sender);
       TFrame(TDragObject(Source).Control).Top:=Y;
       TFrame(TDragObject(Source).Control).Left:=X;
@@ -2354,6 +2584,7 @@ if sender is TPanel then begin
       end;
     end
     else if source is TFrame then begin
+     if TFrame(Source).tag>0 then toolmenu:=TMenuItem(TFrame(Source).tag);
      TFrame(Source).Parent:=TPanel(Sender);
      TFrame(Source).Top:=Y;
      TFrame(Source).Left:=X;
@@ -2362,6 +2593,14 @@ if sender is TPanel then begin
      end else begin
         TFrame(Source).Align:=alTop;
      end;
+    end;
+    if (npm<>nil)and(toolmenu<>nil) then begin
+      opm:=toolmenu.Parent;
+      if npm<>opm then begin
+        i:=opm.IndexOf(toolmenu);
+        opm.Delete(i);
+        npm.Add(toolmenu);
+      end;
     end;
    end;
 end;
@@ -2454,6 +2693,7 @@ if (camera.Status=devConnected) then begin
   end;
   NewMessage('Start capture');
   f_capture.Running:=true;
+  MenuCaptureStart.Caption:='Stop';
   Preview:=false;
   Capture:=true;
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
@@ -2606,6 +2846,7 @@ begin
         f_capture.Stop;
         NewMessage('Stop capture');
         StatusBar1.Panels[1].Text := 'Seq: '+inttostr(f_capture.SeqCount-1)+' Finished';
+        MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
      end;
   end
   else if Preview then begin
@@ -2923,6 +3164,16 @@ begin
   f_indigui.Show;
 end;
 
+procedure Tf_main.MenuMountParkClick(Sender: TObject);
+begin
+  f_mount.BtnPark.Click;
+end;
+
+procedure Tf_main.MenuMountTrackClick(Sender: TObject);
+begin
+  f_mount.BtnTrack.Click;
+end;
+
 procedure Tf_main.MenuOpenClick(Sender: TObject);
 var fn: string;
 begin
@@ -3010,6 +3261,41 @@ begin
   ClearRefImage(Sender);
 end;
 
+procedure Tf_main.MenuConnectClick(Sender: TObject);
+begin
+  f_devicesconnection.BtnConnect.Click;
+end;
+
+procedure Tf_main.MenuFilterClick(Sender: TObject);
+begin
+  wheel.Filter:=TMenuItem(Sender).Tag;
+end;
+
+procedure Tf_main.MenuFocusaidClick(Sender: TObject);
+begin
+  f_starprofile.focus.Checked:=not f_starprofile.focus.Checked;
+end;
+
+procedure Tf_main.MenuFocuserInClick(Sender: TObject);
+begin
+  FocusIN(Sender);
+end;
+
+procedure Tf_main.MenuFocuserOutClick(Sender: TObject);
+begin
+  FocusOUT(Sender);
+end;
+
+procedure Tf_main.MenuFrameResetClick(Sender: TObject);
+begin
+   ResetFrame(Sender);
+end;
+
+procedure Tf_main.MenuFrameSetClick(Sender: TObject);
+begin
+  SetFrame(Sender);
+end;
+
 Procedure Tf_main.FocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
 begin
@@ -3053,7 +3339,7 @@ end;
 
 procedure Tf_main.AstrometryStart(Sender: TObject);
 begin
-  // update menu
+  // update Menu
   MenuResolvePlanetarium.Enabled:=false;
   MenuResolveSync.Enabled:=false;
   MenuResolveSlew.Enabled:=false;
@@ -3064,7 +3350,7 @@ end;
 
 procedure Tf_main.AstrometryEnd(Sender: TObject);
 begin
-  // update menu
+  // update Menu
   MenuStopAstrometry.Visible:=false;
   MenuResolvePlanetarium.Enabled:=true;
   MenuResolveSync.Enabled:=true;
@@ -3082,6 +3368,13 @@ procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
 begin
   astrometry.StopAstrometry;
   MenuStopAstrometry.Visible:=false;
+end;
+
+procedure Tf_main.MenuTabClick(Sender: TObject);
+var i: integer;
+begin
+  i:=TMenuItem(Sender).Tag;
+  PageControlRight.ActivePageIndex:=i;
 end;
 
 procedure Tf_main.MenuViewAstrometryLogClick(Sender: TObject);
@@ -3163,6 +3456,51 @@ begin
   end;
 end;
 
+procedure Tf_main.MenuScriptEditClick(Sender: TObject);
+begin
+  f_script.BtnEdit.Click;
+end;
+
+procedure Tf_main.MenuScriptNewClick(Sender: TObject);
+begin
+  f_script.BtnNew.Click;
+end;
+
+procedure Tf_main.MenuScriptRunClick(Sender: TObject);
+begin
+  f_script.BtnRun.Click;
+end;
+
+procedure Tf_main.MenuScriptStopClick(Sender: TObject);
+begin
+  f_script.BtnStop.Click;
+end;
+
+procedure Tf_main.MenuSequenceEditClick(Sender: TObject);
+begin
+  f_sequence.BtnEditTargets.Click;
+end;
+
+procedure Tf_main.MenuSequenceLoadClick(Sender: TObject);
+begin
+  f_sequence.BtnLoadTargets.Click;
+end;
+
+procedure Tf_main.MenuSequenceNewClick(Sender: TObject);
+begin
+  f_sequence.BtnNewTargets.Click;
+end;
+
+procedure Tf_main.MenuSequenceStartClick(Sender: TObject);
+begin
+  f_sequence.BtnStart.Click;
+end;
+
+procedure Tf_main.MenuSequenceStopClick(Sender: TObject);
+begin
+  f_sequence.BtnStop.Click;
+end;
+
 procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
 begin
 if astrometry.LastResult and planetarium.Connected then begin
@@ -3177,6 +3515,7 @@ var i: integer;
 begin
  if f_planetarium.BtnConnect.Caption='Connect' then begin
    f_planetarium.BtnConnect.Caption:='Disconnect';
+   MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    i:=config.GetValue('/Planetarium/Software',0);
    case TPlanetariumType(i) of
      CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
@@ -3191,6 +3530,7 @@ end;
 Procedure Tf_main.PlanetariumConnect(Sender: TObject);
 begin
  f_planetarium.BtnConnect.Caption:='Disconnect';
+ MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
  f_planetarium.led.Brush.Color:=clLime;
  f_planetarium.Status.Text:='Connected';
  NewMessage('Planetarium: Connected');
@@ -3203,6 +3543,7 @@ begin
    f_planetarium.led.Brush.Color:=clGray;
    f_planetarium.Status.Text:='Disconnected';
    f_planetarium.BtnConnect.Caption:='Connect';
+   MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    NewMessage('Planetarium: Disconnected');
    i:=config.GetValue('/Planetarium/Software',0);
    case TPlanetariumType(i) of

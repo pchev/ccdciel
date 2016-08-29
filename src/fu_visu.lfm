@@ -93,30 +93,30 @@ object f_visu: Tf_visu
       end
       object BtnSqrt: TRadioButton
         Left = 0
-        Height = 26
+        Height = 21
         Hint = 'Use a square root scale to display the image'
         Top = 60
-        Width = 54
+        Width = 49
         Caption = 'Sqrt'
         OnChange = BtnIttChange
         TabOrder = 0
       end
       object BtnLog: TRadioButton
         Left = 0
-        Height = 26
+        Height = 21
         Hint = 'Use a logarithmic scale to display the image'
         Top = 40
-        Width = 51
+        Width = 47
         Caption = 'Log'
         OnChange = BtnIttChange
         TabOrder = 1
       end
       object BtnLinear: TRadioButton
         Left = 0
-        Height = 26
+        Height = 21
         Hint = 'Use a linear scale to display the image'
         Top = 20
-        Width = 65
+        Width = 61
         Caption = 'Linear'
         Checked = True
         OnChange = BtnIttChange
@@ -257,7 +257,7 @@ object f_visu: Tf_visu
         Left = 88
         Height = 22
         Hint = 'Zoom to original scale'
-        Top = 20
+        Top = 19
         Width = 23
         AllowAllUp = True
         Caption = '1:1'

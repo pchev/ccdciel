@@ -34,6 +34,7 @@ type
 
   Tf_filterwheel = class(TFrame)
     Filters: TComboBox;
+    Label1: TLabel;
     Panel1: TPanel;
     StaticText1: TStaticText;
     procedure FiltersChange(Sender: TObject);

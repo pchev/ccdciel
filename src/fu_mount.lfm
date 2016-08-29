@@ -1,17 +1,17 @@
 object f_mount: Tf_mount
   Left = 0
-  Height = 112
+  Height = 101
   Top = 0
-  Width = 147
+  Width = 180
   AutoSize = True
-  ClientHeight = 112
-  ClientWidth = 147
+  ClientHeight = 101
+  ClientWidth = 180
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 147
+    Width = 180
     Align = alTop
     Alignment = taCenter
     Caption = 'Telescope position'
@@ -24,25 +24,25 @@ object f_mount: Tf_mount
   end
   object Panel1: TPanel
     Left = 0
-    Height = 92
+    Height = 81
     Top = 20
-    Width = 147
+    Width = 180
     Align = alClient
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 92
-    ClientWidth = 147
+    ClientHeight = 81
+    ClientWidth = 180
     TabOrder = 1
     object Label1: TLabel
       Left = 0
-      Height = 17
+      Height = 18
       Top = 0
-      Width = 34
+      Width = 31
       Caption = 'RA     '
       ParentColor = False
     end
     object RA: TEdit
       Left = 35
-      Height = 27
+      Height = 24
       Hint = 'Current telescope Right Ascension'
       Top = 0
       Width = 100
@@ -55,15 +55,15 @@ object f_mount: Tf_mount
     end
     object Label2: TLabel
       Left = 0
-      Height = 17
+      Height = 18
       Top = 27
-      Width = 35
+      Width = 31
       Caption = 'Dec   '
       ParentColor = False
     end
     object DE: TEdit
       Left = 35
-      Height = 27
+      Height = 24
       Hint = 'Current telescope declination'
       Top = 27
       Width = 100
@@ -76,8 +76,8 @@ object f_mount: Tf_mount
     end
     object BtnPark: TButton
       Left = 2
-      Height = 25
-      Top = 56
+      Height = 22
+      Top = 52
       Width = 73
       Caption = 'Park'
       OnClick = BtnParkClick
@@ -85,8 +85,8 @@ object f_mount: Tf_mount
     end
     object BtnTrack: TButton
       Left = 80
-      Height = 25
-      Top = 56
+      Height = 22
+      Top = 52
       Width = 60
       Caption = 'Track'
       OnClick = BtnTrackClick

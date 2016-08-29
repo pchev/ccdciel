@@ -52,12 +52,12 @@ implementation
 procedure Tf_msg.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
 begin
   if Target is TPanel then begin
-     if TPanel(Target).tag=0 then begin
-        msg.Constraints.MaxWidth:=500;
-        msg.Constraints.MinWidth:=500;
+     if TPanel(Target).Width>TPanel(Target).Height then begin
+        msg.Constraints.MaxWidth:=600;
+        msg.Constraints.MinWidth:=600;
      end else begin
-        msg.Constraints.MaxWidth:=120;
-        msg.Constraints.MinWidth:=120;
+        msg.Constraints.MaxWidth:=180;
+        msg.Constraints.MinWidth:=180;
      end;
   end;
 end;
@@ -65,12 +65,12 @@ end;
 procedure Tf_msg.FrameResize(Sender: TObject);
 begin
   if Parent is TPanel then begin
-     if TPanel(Parent).tag=0 then begin
-        msg.Constraints.MaxWidth:=500;
-        msg.Constraints.MinWidth:=500;
+     if TPanel(Parent).Width>TPanel(Parent).Height then begin
+        msg.Constraints.MaxWidth:=600;
+        msg.Constraints.MinWidth:=600;
      end else begin
-        msg.Constraints.MaxWidth:=120;
-        msg.Constraints.MinWidth:=120;
+        msg.Constraints.MaxWidth:=180;
+        msg.Constraints.MinWidth:=180;
      end;
   end;
 end;
