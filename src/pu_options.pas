@@ -42,6 +42,7 @@ type
     AstrometryTimeout: TEdit;
     CygwinPath: TEdit;
     CaptureDir: TEdit;
+    MinutesPastMeridian: TEdit;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
     hemis: TComboBox;
@@ -53,6 +54,7 @@ type
     Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
+    Label40: TLabel;
     latdeg: TFloatEdit;
     LatitudeGroup: TGroupBox;
     latmin: TLongEdit;
@@ -62,6 +64,7 @@ type
     LongitudeGroup: TGroupBox;
     longmin: TLongEdit;
     longsec: TFloatEdit;
+    MeridianOption: TRadioGroup;
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SlewPrec: TEdit;
@@ -131,6 +134,7 @@ type
     TabSheet6: TTabSheet;
     TabSheet7: TTabSheet;
     TabSheet8: TTabSheet;
+    TabSheet9: TTabSheet;
     TelescopeName: TEdit;
     GroupBox4: TGroupBox;
     elbrus: TGroupBox;

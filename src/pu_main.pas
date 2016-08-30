@@ -167,6 +167,7 @@ type
     StartCaptureTimer: TTimer;
     StartupTimer: TTimer;
     StartSequenceTimer: TTimer;
+    StatusTimer: TTimer;
     procedure AbortTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -260,6 +261,7 @@ type
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
+    procedure StatusTimerTimer(Sender: TObject);
   private
     { private declarations }
     camera: T_camera;
@@ -300,7 +302,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
-    Capture,Preview,PreviewLoop: boolean;
+    Capture,Preview,PreviewLoop,meridianflipping: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -368,6 +370,7 @@ type
     procedure FocusOUT(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
+    Procedure MountPiersideChange(Sender: TObject);
     Procedure MountParkChange(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
     Procedure AutoguiderCalibrateClick(Sender: TObject);
@@ -404,6 +407,7 @@ type
     Procedure StartSequence(SeqName: string);
     procedure ScriptExecute(Sender: TObject);
     procedure ScriptAfterExecute(Sender: TObject);
+    function CheckMeridianFlip(nextexposure:double=0):integer;
   public
     { public declarations }
   end;
@@ -646,6 +650,7 @@ begin
   NeedRestart:=false;
   GUIready:=false;
   MsgHandle:=handle;
+  meridianflipping:=false;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -729,6 +734,7 @@ begin
   mount.onMsg:=@NewMessage;
   mount.onDeviceMsg:=@DeviceMessage;
   mount.onCoordChange:=@MountCoordChange;
+  mount.onPiersideChange:=@MountPiersideChange;
   mount.onParkChange:=@MountParkChange;
   mount.onStatusChange:=@MountStatus;
 
@@ -1159,7 +1165,7 @@ begin
   if astrometry.Busy then begin
     astrometry.StopAstrometry;
   end;
-  sleep(1000); // time for other thread to terminate
+  wait(2); // time for other thread to terminate
   astrometry.Free;
   CloseAction:=caFree;
 end;
@@ -1334,7 +1340,9 @@ end else begin
    CanClose:=true;
 end;
 if CanClose then begin
- AbortExposure(nil);
+ if f_capture.Running or f_preview.Running then begin
+   AbortExposure(nil);
+ end;
  if f_sequence.Running then f_sequence.StopSequence;
  f_script.RunShutdownScript;
 end;
@@ -1425,6 +1433,8 @@ begin
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
+  MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
+  MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',0);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
 end;
@@ -1492,6 +1502,7 @@ begin
 if camera.Status<>devDisconnected then begin
    if (sender=nil) or (MessageDlg('Are you sure you want to disconnect all the devices now?',mtConfirmation,mbYesNo,0)=mrYes) then begin
      camera.AbortExposure;
+     StartCaptureTimer.Enabled:=false;
      f_preview.stop;
      f_capture.stop;
      Capture:=false;
@@ -1810,6 +1821,7 @@ begin
                    f_preview.stop;
                    f_capture.stop;
                    Capture:=false;
+                   StartCaptureTimer.Enabled:=false;
                    f_sequence.CameraDisconnected;
                    StatusBar1.Panels[1].Text:='';
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
@@ -1846,6 +1858,7 @@ end;
 procedure Tf_main.AbortTimerTimer(Sender: TObject);
 begin
   AbortTimer.Enabled:=false;
+  StartCaptureTimer.Enabled:=false;
   if Capture and f_capture.Running then NewMessage('Exposure aborted!');
   f_preview.stop;
   f_capture.stop;
@@ -2044,9 +2057,11 @@ case mount.Status of
                       f_devicesconnection.LabelMount.Font.Color:=clOrange;
                    end;
   devConnected:   begin
+                      wait(1);
                       NewMessage('Mount connected');
                       f_devicesconnection.LabelMount.Font.Color:=clGreen;
                       MountCoordChange(Sender);
+                      CheckMeridianFlip;
                    end;
 end;
 CheckConnectionStatus;
@@ -2056,6 +2071,15 @@ Procedure Tf_main.MountCoordChange(Sender: TObject);
 begin
  f_mount.RA.Text:=RAToStr(mount.RA);
  f_mount.DE.Text:=DEToStr(mount.Dec);
+end;
+
+Procedure Tf_main.MountPiersideChange(Sender: TObject);
+begin
+  case mount.PierSide of
+    pierEast: f_mount.Pierside.Text:='East (Pointing West)';
+    pierWest: f_mount.Pierside.Text:='West (Pointing East)';
+    pierUnknown: f_mount.Pierside.Text:='Unknow pier side';
+  end;
 end;
 
 Procedure Tf_main.MountParkChange(Sender: TObject);
@@ -2319,6 +2343,8 @@ begin
    f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
    f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',10));
    f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
+   f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
+   f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
@@ -2380,6 +2406,8 @@ begin
      config.SetValue('/PrecSlew/Retry',StrToIntDef(f_option.SlewRetry.Text,3));
      config.SetValue('/PrecSlew/Exposure',StrToFloatDef(f_option.SlewExp.Text,10.0));
      config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
+     config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
+     config.SetValue('/Meridian/MinutesPast',StrToIntDef(f_option.MinutesPastMeridian.Text,0));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -2618,6 +2646,7 @@ end;
 
 Procedure Tf_main.AbortExposure(Sender: TObject);
 begin
+  StartCaptureTimer.Enabled:=false;
   camera.AbortExposure;
   Preview:=false;
   Capture:=false;
@@ -2679,8 +2708,9 @@ end;
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 var e: double;
     buf: string;
-    p,binx,biny: integer;
+    p,binx,biny,waittime: integer;
     ftype:TFrameType;
+    flipped: boolean;
 begin
 if (camera.Status=devConnected) then begin
   if f_preview.Running then begin
@@ -2688,10 +2718,10 @@ if (camera.Status=devConnected) then begin
     StatusBar1.Panels[1].Text:='Stop preview';
     camera.AbortExposure;
     f_preview.stop;
+    StartCaptureTimer.Interval:=5000;
     StartCaptureTimer.Enabled:=true;
     exit;
   end;
-  NewMessage('Start capture');
   f_capture.Running:=true;
   MenuCaptureStart.Caption:='Stop';
   Preview:=false;
@@ -2727,6 +2757,19 @@ if (camera.Status=devConnected) then begin
     if camera.FrameType<>ftype then camera.FrameType:=ftype;
     if ftype<>LIGHT then f_capture.CheckBoxDither.Checked:=false;
   end;
+  waittime:=CheckMeridianFlip(e); // check meridian
+  if not f_capture.Running then begin // meridian abort
+    NewMessage('Meridian aborted!');
+    f_capture.Stop;
+    Capture:=false;
+    exit;
+  end;
+  if waittime>0 then begin  // wait meridian flip
+    f_capture.DitherNum:=0; // no dither after flip
+    StartCaptureTimer.Interval:=waittime*1000;
+    StartCaptureTimer.Enabled:=true;
+    exit;
+  end;
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=StrToIntDef(f_capture.DitherCount.Text,1)) then begin
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
@@ -2754,6 +2797,7 @@ procedure Tf_main.CameraProgress(n:double);
 var txt: string;
 begin
  if (n<=0) then begin
+   if meridianflipping then exit;
    if ((f_capture.Running)or(f_preview.Running)) then begin
      txt := 'Downloading...';
      if Capture then begin
@@ -2837,6 +2881,7 @@ begin
      fits.SaveToFile(fn);
      NewMessage('Saved file '+fn);
      StatusBar1.Panels[2].Text:='Saved '+fn+' '+imgsize;
+     StatusBar1.Panels[1].Text := '';
      f_capture.SeqCount:=f_capture.SeqCount+1;
      f_capture.DitherNum:=f_capture.DitherNum+1;
      if f_capture.SeqCount<=StrToInt(f_capture.SeqNum.Text) then begin
@@ -3404,7 +3449,7 @@ begin
    NewMessage('Camera and mount must be connected!');
    exit;
  end;
- wt:= (Sender=f_scriptengine);
+ wt:=(Sender<>nil);
  if fits.HeaderInfo.valid then begin
    xx:=fits.HeaderInfo.naxis1 div 2;
    yy:=fits.HeaderInfo.naxis2 div 2;
@@ -3423,7 +3468,7 @@ end;
 
 procedure Tf_main.MenuResolveSlewCenterClick(Sender: TObject);
 begin
- ResolveSlewCenter(Sender);
+ ResolveSlewCenter(nil);
 end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
@@ -3659,6 +3704,115 @@ begin
     M_AstrometryDone: astrometry.AstrometryDone;
     else
       NewMessage('Receive unknow message: '+inttostr(Message.wParam));
+  end;
+end;
+
+procedure Tf_main.StatusTimerTimer(Sender: TObject);
+begin
+ // Periodic 1 minute check
+ StatusTimer.Enabled:=false;
+ if not f_capture.Running then CheckMeridianFlip;
+ StatusTimer.Enabled:=true;
+end;
+
+function Tf_main.CheckMeridianFlip(nextexposure:double=0):integer;
+var ra,de,hh,a,h: double;
+    jd0,CurSt,CurTime: double;
+    Year, Month, Day: Word;
+    MeridianDelay,NextDelay,hhmin: integer;
+    slewtoimg, restartguider: boolean;
+begin
+  result:=-1;
+  if (mount.Status=devConnected) and (not mount.MountSlewing) then begin
+    DecodeDate(now, Year, Month, Day);
+    CurTime:=frac(now)*24;
+    jd0:=jd(Year,Month,Day,0);
+    CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+    ra:=mount.RA;
+    de:=mount.Dec;
+    ra:=deg2rad*15*ra;
+    hh:=CurSt-ra;
+    Eq2Hz(hh,deg2rad*de,a,h) ;
+    a:=rad2deg*rmod(a+pi,pi2);
+    h:=rad2deg*h;
+    if hh>pi then hh:=hh-pi2;
+    if hh<-pi then hh:=hh+pi2;
+    hhmin:=round(rad2deg*60*hh/15);
+    f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
+    if hhmin<=0 then f_mount.LabelMeridian.Caption:='Meridian in'
+                else f_mount.LabelMeridian.Caption:='Meridian since';
+    if MeridianOption=0 then exit; // fork mount
+    MeridianDelay:=MinutesPastMeridian-hhmin;
+    NextDelay:=ceil(nextexposure/60);
+    if MeridianDelay>0  then begin // before meridian limit
+      if MeridianDelay>NextDelay then begin // enough time for next exposure or no capture in progress
+         result:=-1;
+         exit;
+      end else if (NextDelay>0)and(MeridianDelay>0) then begin // too short for next exposure
+        if (MeridianOption=1) then begin   // if autoflip, wait
+           wait(2);
+           meridianflipping:=true;
+           NewMessage('Wait meridian flip for '+inttostr(MeridianDelay)+' minutes');
+           StatusBar1.Panels[1].Text := 'Wait meridian flip';
+           result:=60*MeridianDelay; // time to wait for meridian
+           exit;
+        end else begin
+         result:=-1;   // if abort, continue
+         exit;
+        end;
+      end;
+    end;
+    if ((MeridianDelay<=0)and(mount.PierSide=pierWest)) or
+       (MeridianDelay=0)
+      then begin                    // Do meridian action
+      if MeridianOption=1 then begin
+        meridianflipping:=true;
+        // save current image if any
+        if (f_capture.Running) and fits.HeaderInfo.valid then begin
+          fits.SaveToFile(slash(TmpDir)+'meridianflip.fits');
+          slewtoimg:=true;
+        end
+        else slewtoimg:=false;
+        // stop autoguider
+        restartguider:=(autoguider.State=GUIDER_GUIDING);
+        if restartguider then begin
+          autoguider.Guide(false);
+          autoguider.WaitBusy(15);
+        end;
+        wait(2);
+        // flip
+        NewMessage('Meridian flip now');
+        StatusBar1.Panels[1].Text := 'Meridian flip';
+        mount.FlipMeridian;
+        wait(2);
+        meridianflipping:=false;
+        // precision slew with saved image
+        if slewtoimg then begin
+          try
+          Capture:=false;  // do not save the control images
+          LoadFitsFile(slash(TmpDir)+'meridianflip.fits');
+          ResolveSlewCenter(Self);
+          wait(2);
+          finally
+            Capture:=true;
+          end;
+        end;
+        // start autoguider
+        if restartguider then begin
+          autoguider.Guide(true);
+          autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
+        end;
+        Wait(2);
+        NewMessage('Meridian flip terminated');
+        StatusBar1.Panels[1].Text := '';
+      end else begin
+        NewMessage('Meridian abort!');
+        if f_capture.Running then CameraExposureAborted(nil);
+        if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
+        mount.AbortMotion;
+      end;
+    end;
+
   end;
 end;
 

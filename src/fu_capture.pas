@@ -101,6 +101,7 @@ begin
   if Frunning then begin
     FSeqCount:=1;
     FDitherNum:=0;
+    if Assigned(FonMsg) then FonMsg('Start capture');
     if Assigned(FonStartExposure) then FonStartExposure(self);
   end;
   if (not Frunning) and Assigned(FonAbortExposure) then FonAbortExposure(self);

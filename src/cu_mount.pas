@@ -35,6 +35,7 @@ T_mount = class(TComponent)
     FMountInterface: TDevInterface;
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonCoordChange: TNotifyEvent;
+    FonPiersideChange: TNotifyEvent;
     FonParkChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
@@ -52,6 +53,8 @@ T_mount = class(TComponent)
     procedure SetTimeout(num:integer); virtual; abstract;
     function  GetSyncMode:TEqmodAlign; virtual; abstract;
     procedure SetSyncMode(value:TEqmodAlign); virtual; abstract;
+    function GetMountSlewing:boolean; virtual; abstract;
+    function GetPierSide: TPierSide; virtual; abstract;
  public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -61,6 +64,7 @@ T_mount = class(TComponent)
     function Sync(sra,sde: double):boolean; virtual; abstract;
     function Track:boolean; virtual; abstract;
     procedure AbortMotion; virtual; abstract;
+    function FlipMeridian:boolean; virtual; abstract;
     // Eqmod specific
     function ClearAlignment:boolean; virtual; abstract;
     function ClearDelta:boolean; virtual; abstract;
@@ -70,9 +74,10 @@ T_mount = class(TComponent)
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
     property Park: Boolean read GetPark write SetPark;
-    property MountSlewing: boolean read FMountSlewing;
+    property MountSlewing: boolean read GetMountSlewing;
     property RA: double read GetRA;
     property Dec: double read GetDec;
+    property PierSide: TPierSide read GetPierSide;
     property Equinox: double read GetEquinox;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
@@ -81,6 +86,7 @@ T_mount = class(TComponent)
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
+    property onPiersideChange: TNotifyEvent read FonPiersideChange write FonPiersideChange;
     property onParkChange: TNotifyEvent read FonParkChange write FonParkChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;

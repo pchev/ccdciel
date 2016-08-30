@@ -235,8 +235,8 @@ object f_main: Tf_main
   end
   object MainMenu1: TMainMenu
     Images = ImageList1
-    left = 178
-    top = 147
+    left = 40
+    top = 32
     object MenuItem1: TMenuItem
       Caption = 'File'
       object MenuSetup: TMenuItem
@@ -298,7 +298,7 @@ object f_main: Tf_main
       end
     end
     object MenuItem4: TMenuItem
-      Caption = 'Tool box'
+      Caption = 'Tools'
       object MenuViewConnection: TMenuItem
         AutoCheck = True
         Caption = 'Connection'
@@ -767,27 +767,27 @@ object f_main: Tf_main
   object ConnectTimer: TTimer
     Enabled = False
     OnTimer = ConnectTimerTimer
-    left = 282
-    top = 147
+    left = 160
+    top = 112
   end
   object StatusbarTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = StatusbarTimerTimer
-    left = 416
-    top = 144
+    left = 160
+    top = 184
   end
   object OpenDialog1: TOpenDialog
-    left = 72
-    top = 234
+    left = 48
+    top = 184
   end
   object SaveDialog1: TSaveDialog
-    left = 184
-    top = 232
+    left = 40
+    top = 248
   end
   object ImagePopupMenu: TPopupMenu
-    left = 178
-    top = 38
+    left = 40
+    top = 112
     object MenuResolve: TMenuItem
       Caption = 'Resolve'
       OnClick = MenuResolveClick
@@ -957,27 +957,33 @@ object f_main: Tf_main
     Enabled = False
     Interval = 100
     OnTimer = AbortTimerTimer
-    left = 416
-    top = 224
+    left = 272
+    top = 112
   end
   object StartCaptureTimer: TTimer
     Enabled = False
     Interval = 5000
     OnTimer = StartCaptureTimerTimer
-    left = 280
-    top = 224
+    left = 272
+    top = 32
   end
   object StartupTimer: TTimer
     Enabled = False
     Interval = 500
     OnTimer = StartupTimerTimer
-    left = 282
-    top = 40
+    left = 160
+    top = 32
   end
   object StartSequenceTimer: TTimer
     Enabled = False
     OnTimer = StartSequenceTimerTimer
-    left = 408
-    top = 38
+    left = 416
+    top = 32
+  end
+  object StatusTimer: TTimer
+    Interval = 15000
+    OnTimer = StatusTimerTimer
+    left = 272
+    top = 184
   end
 end

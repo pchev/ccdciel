@@ -913,7 +913,7 @@ BEGIN
 t:=(jd0-2451545.0)/36525;
 te:=100.46061837 + 36000.770053608*t + 0.000387933*t*t - t*t*t/38710000;
 te:=te+rad2deg*eqeq;
-result := deg2rad*Rmod(te - long + 1.00273790935*ut*15,360) ;
+result := deg2rad*Rmod(te - long + 1.00273790935*ut*15 + 360,360);
 END ;
 
 Procedure Refraction(var h : double; flag:boolean);
