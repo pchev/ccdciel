@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_mount, indibaseclient, indibasedevice, indiapi, indicom,
-     u_global, ExtCtrls, Forms, Classes, SysUtils;
+     u_global, u_utils, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
@@ -58,6 +58,8 @@ T_indimount = class(T_mount)
    AlignStdSync,AlignAppendSync: ISwitch;
    AlignMode: ISwitchVectorProperty;
    AlignNo,AlignNearest,AlignNstar: ISwitch;
+   Pier_Side: ISwitchVectorProperty;
+   Pier_East,Pier_West: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -83,17 +85,20 @@ T_indimount = class(T_mount)
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
    function  GetDec:double; override;
+   function  GetPierSide: TPierSide; override;
    function  GetEquinox: double;  override;
    function  GetAperture:double;  override;
    function  GetFocaleLength:double; override;
    procedure SetTimeout(num:integer); override;
    function  GetSyncMode:TEqmodAlign; override;
    procedure SetSyncMode(value:TEqmodAlign); override;
+   function GetMountSlewing:boolean; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    Procedure Disconnect; override;
+   function FlipMeridian:boolean; override;
    function Slew(sra,sde: double):boolean; override;
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
@@ -167,6 +172,7 @@ begin
     AlignList:=nil;
     AlignSyncMode:=nil;
     AlignMode:=nil;
+    Pier_Side:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -346,6 +352,13 @@ begin
       TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
       if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
    end
+   else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_PIER_SIDE') then begin
+      Pier_Side:=indiProp.getSwitch;
+      Pier_East:=IUFindSwitch(Pier_Side,'PIER_EAST');
+      Pier_West:=IUFindSwitch(Pier_Side,'PIER_WEST');
+      if (Pier_East=nil)or(Pier_West=nil) then Pier_Side:=nil;
+      if Assigned(FonPiersideChange) then FonPiersideChange(self);
+   end
    else if (proptype=INDI_SWITCH)and(propname='ALIGNMODE') then begin
       AlignMode:=indiProp.getSwitch;
       AlignNo:=IUFindSwitch(AlignMode,'NOALIGN');
@@ -388,6 +401,9 @@ procedure T_indimount.NewSwitch(svp: ISwitchVectorProperty);
 begin
   if svp=parkprop then begin
      if Assigned(FonParkChange) then FonParkChange(self);
+  end
+  else if svp=Pier_Side then begin
+     if Assigned(FonPiersideChange) then FonPiersideChange(self);
   end;
 end;
 
@@ -420,7 +436,7 @@ end;
 function  T_indimount.GetRA:double;
 begin
 if coord_prop<>nil then begin
-  result:=coord_ra.value;
+  result:=rmod(coord_ra.value+24,24);
 end
 else result:=NullCoord;
 end;
@@ -431,6 +447,15 @@ if coord_prop<>nil then begin
   result:=coord_dec.value;
 end
 else result:=NullCoord;
+end;
+
+function  T_indimount.GetPierSide:TPierSide;
+begin
+result:=pierUnknown;
+if Pier_Side<>nil then begin
+  if Pier_East.s=ISS_ON then result:=pierEast
+  else if Pier_West.s=ISS_ON then result:=pierWest;
+end;
 end;
 
 function  T_indimount.GetEquinox: double;
@@ -473,6 +498,44 @@ begin
     FMountSlewing:=false;
     result:=true;
   end;
+end;
+
+function T_indimount.GetMountSlewing:boolean;
+var islewing: boolean;
+begin
+  if coord_prop=nil then
+    islewing:=false
+  else
+    islewing:=coord_prop.s=IPS_BUSY;
+  result:=(islewing or FMountSlewing);
+end;
+
+function T_indimount.FlipMeridian:boolean;
+var sra,sde,ra1,ra2: double;
+    pierside1,pierside2:TPierSide;
+begin
+  result:=false;
+  sra:=GetRA;
+  sde:=GetDec;
+  pierside1:=GetPierSide;
+  if pierside1=pierEast then exit; // already right side
+  if (sra=NullCoord)or(sde=NullCoord) then exit;
+  // point one hour to the east
+  ra1:=sra+1;
+  if ra1>=24 then ra1:=ra1-24;
+  slew(ra1,sde);
+  Wait(2);
+  // point one hour to the west to force the flip
+  ra2:=sra-1;
+  if ra2<0 then ra2:=ra2+24;
+  slew(ra2,sde);
+  Wait(2);
+  // return to position
+  slew(sra,sde);
+  Wait(2);
+  // check result
+  pierside2:=GetPierSide;
+  result:=(pierside2<>pierside1)
 end;
 
 function T_indimount.Sync(sra,sde: double):Boolean;

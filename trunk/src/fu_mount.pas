@@ -35,8 +35,12 @@ type
   Tf_mount = class(TFrame)
     BtnPark: TButton;
     BtnTrack: TButton;
+    Pierside: TEdit;
+    Label4: TLabel;
+    TimeToMeridian: TEdit;
     Label1: TLabel;
     Label2: TLabel;
+    LabelMeridian: TLabel;
     RA: TEdit;
     DE: TEdit;
     Panel1: TPanel;

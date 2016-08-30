@@ -44,9 +44,9 @@ object f_option: Tf_option
     Height = 397
     Top = 0
     Width = 433
-    ActivePage = TabSheet8
+    ActivePage = TabSheet9
     Align = alClient
-    TabIndex = 2
+    TabIndex = 6
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
@@ -934,6 +934,50 @@ object f_option: Tf_option
           Width = 80
           TabOrder = 4
         end
+      end
+    end
+    object TabSheet9: TTabSheet
+      Caption = 'Mount limit'
+      ClientHeight = 371
+      ClientWidth = 431
+      object MeridianOption: TRadioGroup
+        Left = 8
+        Height = 57
+        Top = 4
+        Width = 401
+        AutoFill = True
+        Caption = 'On Meridian limit'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 3
+        ClientHeight = 38
+        ClientWidth = 399
+        Columns = 3
+        Items.Strings = (
+          'Do nothing'
+          'Automatic flip'
+          'Abort'
+        )
+        TabOrder = 0
+      end
+      object Label40: TLabel
+        Left = 8
+        Height = 18
+        Top = 72
+        Width = 216
+        Caption = 'Minutes past meridian before action'
+        ParentColor = False
+      end
+      object MinutesPastMeridian: TEdit
+        Left = 232
+        Height = 24
+        Top = 68
+        Width = 80
+        TabOrder = 1
       end
     end
     object TabSheet5: TTabSheet

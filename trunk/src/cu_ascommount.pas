@@ -25,11 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_mount, u_global,
+uses  cu_mount, u_global, indiapi,
   {$ifdef mswindows}
-    indiapi, Variants, comobj,
+    Variants, comobj,
   {$endif}
-  ExtCtrls, Classes, SysUtils;
+  Forms, ExtCtrls, Classes, SysUtils;
 
 type
 T_ascommount = class(T_mount)
@@ -39,29 +39,34 @@ T_ascommount = class(T_mount)
    Fdevice: string;
    stRA,stDE: double;
    stPark:boolean;
+   stPierside: TPierSide;
    {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
    procedure CheckEqmod;
+   function WaitMountSlewing(maxtime:integer):boolean;
  protected
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
    function  GetDec:double; override;
+   function  GetPierSide: TPierSide; override;
    function  GetEquinox: double; override;
    function  GetAperture:double; override;
    function  GetFocaleLength:double; override;
    procedure SetTimeout(num:integer); override;
    function  GetSyncMode:TEqmodAlign; override;
    procedure SetSyncMode(value:TEqmodAlign); override;
+   function GetMountSlewing:boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    procedure Disconnect; override;
    function Slew(sra,sde: double):boolean; override;
+   function FlipMeridian: boolean; override;
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
@@ -101,6 +106,7 @@ begin
      CheckEqmod;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
+     if Assigned(FonPiersideChange) then FonPiersideChange(self);
      StatusTimer.Enabled:=true;
   end
   else
@@ -146,6 +152,7 @@ procedure T_ascommount.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var x,y: double;
     pk: boolean;
+    ps: TPierSide;
   {$endif}
 begin
  {$ifdef mswindows}
@@ -157,6 +164,7 @@ begin
     x:=GetRA;
     y:=GetDec;
     pk:=GetPark;
+    ps:=GetPierSide;
     if (x<>stRA)or(y<>stDE) then begin
        stRA:=x;
        stDE:=y;
@@ -165,6 +173,10 @@ begin
     if pk<>stPark then begin
        stPark:=pk;
        if Assigned(FonParkChange) then FonParkChange(self);
+    end;
+    if ps<>stPierside then begin
+       stPierside:=ps;
+       if Assigned(FonPiersideChange) then FonPiersideChange(self);
     end;
   end;
  {$endif}
@@ -228,6 +240,29 @@ begin
    end;
  end
  else result:=NullCoord;
+ {$endif}
+end;
+
+function  T_ascommount.GetPierSide:TPierSide;
+{$ifdef mswindows}
+var i: integer;
+{$endif}
+begin
+ result:=pierUnknown;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   i:=V.SideOfPier;  // pascal enum may have different size
+   case i of
+     -1: result:=pierUnknown;
+      0: result:=pierEast;
+      1: result:=pierWest;
+   end;
+   except
+    result:=pierUnknown;
+   end;
+ end
+ else result:=pierUnknown;
  {$endif}
 end;
 
@@ -302,7 +337,10 @@ begin
       V.tracking:=true;
    end;
    FMountSlewing:=true;
-   V.SlewToCoordinates(sra,sde);
+   if V.CanSlewAsync then
+     V.SlewToCoordinatesAsync(sra,sde)
+   else
+     V.SlewToCoordinates(sra,sde);
    FMountSlewing:=false;
    result:=true;
    except
@@ -310,6 +348,87 @@ begin
    end;
  end;
  {$endif}
+end;
+
+function T_ascommount.GetMountSlewing:boolean;
+{$ifdef mswindows}
+var islewing: boolean;
+{$endif}
+begin
+ result:=false;
+ {$ifdef mswindows}
+ islewing:=false;
+  if V.CanSlewAsync then
+    islewing:=V.Slewing
+  else
+    islewing:=false;
+  result:=(islewing or FMountSlewing);
+ {$endif}
+end;
+
+function T_ascommount.WaitMountSlewing(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=false;
+ {$ifdef mswindows}
+ maxcount:=timeout div 100;
+ count:=0;
+ while (MountSlewing)and(count<maxcount) do begin
+    sleep(100);
+    Application.ProcessMessages;
+    inc(count);
+ end;
+ result:=(count<maxcount);
+ {$endif}
+end;
+
+function T_ascommount.FlipMeridian:boolean;
+{$ifdef mswindows}
+var sra,sde,ra1,ra2: double;
+    pierside1,pierside2:TPierSide;
+{$endif}
+begin
+  result:=false;
+  {$ifdef mswindows}
+  if Connected then begin
+    sra:=GetRA;
+    sde:=GetDec;
+    pierside1:=GetPierSide;
+    if pierside1=pierEast then exit; // already right side
+    if (sra=NullCoord)or(sde=NullCoord) then exit;
+    if V.CanSetPierSide then begin
+       // do the flip
+       V.SideOfPier:=0; // pierEast
+       WaitMountSlewing(240000);
+       // return to position
+       slew(sra,sde);
+       WaitMountSlewing(240000);
+       // check result
+       pierside2:=GetPierSide;
+       result:=(pierside2<>pierside1);
+    end
+    else begin
+      // point one hour to the east
+      ra1:=sra+1;
+      if ra1>=24 then ra1:=ra1-24;
+      slew(ra1,sde);
+      WaitMountSlewing(240000);
+      // point one hour to the west to force the flip
+      ra2:=sra-1;
+      if ra2<0 then ra2:=ra2+24;
+      slew(ra2,sde);
+      WaitMountSlewing(240000);
+      // return to position
+      slew(sra,sde);
+      WaitMountSlewing(240000);
+      // check result
+      pierside2:=GetPierSide;
+      result:=(pierside2<>pierside1);
+    end;
+  end;
+  {$endif}
 end;
 
 function T_ascommount.Sync(sra,sde: double):boolean;
@@ -355,6 +474,7 @@ begin
  if Connected and V.CanSlew then begin
    try
    V.AbortSlew;
+   V.tracking:=false;
    except
      on E: EOleException do msg('Error: ' + E.Message);
    end;
