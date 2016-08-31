@@ -1,10 +1,10 @@
 object f_mount: Tf_mount
   Left = 0
-  Height = 161
+  Height = 133
   Top = 0
   Width = 180
   AutoSize = True
-  ClientHeight = 161
+  ClientHeight = 133
   ClientWidth = 180
   TabOrder = 0
   object StaticText1: TStaticText
@@ -24,12 +24,12 @@ object f_mount: Tf_mount
   end
   object Panel1: TPanel
     Left = 0
-    Height = 141
+    Height = 113
     Top = 20
     Width = 180
     Align = alClient
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 141
+    ClientHeight = 113
     ClientWidth = 180
     TabOrder = 1
     object Label1: TLabel
@@ -45,7 +45,7 @@ object f_mount: Tf_mount
       Height = 24
       Hint = 'Current telescope Right Ascension'
       Top = 0
-      Width = 100
+      Width = 80
       Alignment = taRightJustify
       Color = clBlack
       Font.Color = clRed
@@ -65,8 +65,8 @@ object f_mount: Tf_mount
       Left = 35
       Height = 24
       Hint = 'Current telescope declination'
-      Top = 27
-      Width = 100
+      Top = 25
+      Width = 80
       Alignment = taRightJustify
       Color = clBlack
       Font.Color = clRed
@@ -75,19 +75,19 @@ object f_mount: Tf_mount
       TabOrder = 1
     end
     object BtnPark: TButton
-      Left = 0
+      Left = 120
       Height = 22
-      Top = 114
-      Width = 73
+      Top = 29
+      Width = 58
       Caption = 'Park'
       OnClick = BtnParkClick
       TabOrder = 2
     end
     object BtnTrack: TButton
-      Left = 78
+      Left = 120
       Height = 22
-      Top = 114
-      Width = 60
+      Top = 2
+      Width = 58
       Caption = 'Track'
       OnClick = BtnTrackClick
       TabOrder = 3
@@ -95,17 +95,17 @@ object f_mount: Tf_mount
     object LabelMeridian: TLabel
       Left = 0
       Height = 18
-      Top = 91
+      Top = 78
       Width = 67
       Caption = 'Meridian in'
       ParentColor = False
     end
     object TimeToMeridian: TEdit
-      Left = 96
+      Left = 85
       Height = 24
       Hint = 'Current telescope declination'
-      Top = 88
-      Width = 39
+      Top = 75
+      Width = 30
       Alignment = taRightJustify
       Color = clBlack
       Font.Color = clRed
@@ -114,9 +114,9 @@ object f_mount: Tf_mount
       TabOrder = 4
     end
     object Label4: TLabel
-      Left = 141
+      Left = 120
       Height = 18
-      Top = 91
+      Top = 78
       Width = 26
       Caption = 'min.'
       ParentColor = False
@@ -125,8 +125,8 @@ object f_mount: Tf_mount
       Left = 3
       Height = 24
       Hint = 'Current telescope declination'
-      Top = 56
-      Width = 132
+      Top = 50
+      Width = 112
       Alignment = taRightJustify
       Color = clBlack
       Font.Color = clRed
