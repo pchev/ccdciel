@@ -36,12 +36,14 @@ type
   Tf_option = class(TForm)
     ButtonDir: TButton;
     BayerMode: TComboBox;
+    MeridianFlipPauseBefore: TCheckBox;
     DebayerPreview: TCheckBox;
     CheckBoxLocalCdc: TCheckBox;
     CalibrationDelay: TEdit;
     AstrometryTimeout: TEdit;
     CygwinPath: TEdit;
     CaptureDir: TEdit;
+    MeridianFlipPauseAfter: TCheckBox;
     MinutesPastMeridian: TEdit;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;

@@ -973,11 +973,27 @@ object f_option: Tf_option
         ParentColor = False
       end
       object MinutesPastMeridian: TEdit
-        Left = 232
+        Left = 248
         Height = 24
         Top = 68
         Width = 80
         TabOrder = 1
+      end
+      object MeridianFlipPauseBefore: TCheckBox
+        Left = 16
+        Height = 21
+        Top = 112
+        Width = 183
+        Caption = 'Pause before meridian flip '
+        TabOrder = 2
+      end
+      object MeridianFlipPauseAfter: TCheckBox
+        Left = 16
+        Height = 21
+        Top = 144
+        Width = 172
+        Caption = 'Pause after meridian flip '
+        TabOrder = 3
       end
     end
     object TabSheet5: TTabSheet

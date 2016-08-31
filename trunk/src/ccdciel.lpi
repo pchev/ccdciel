@@ -155,7 +155,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="52">
+    <Units Count="53">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -436,6 +436,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit51>
+      <Unit52>
+        <Filename Value="pu_pause.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_pause"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit52>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

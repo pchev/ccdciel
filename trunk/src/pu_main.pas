@@ -28,7 +28,7 @@ interface
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_scriptengine,
-  pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera,
+  pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
@@ -1452,6 +1452,8 @@ begin
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',0);
+  MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
+  MeridianFlipPauseAfter:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
 end;
@@ -2362,6 +2364,8 @@ begin
    f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
    f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
+   f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
+   f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
@@ -2425,6 +2429,8 @@ begin
      config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',StrToIntDef(f_option.MinutesPastMeridian.Text,0));
+     config.SetValue('/Meridian/MeridianFlipPauseBefore',f_option.MeridianFlipPauseBefore.Checked);
+     config.SetValue('/Meridian/MeridianFlipPauseAfter',f_option.MeridianFlipPauseAfter.Checked);
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -3726,7 +3732,7 @@ end;
 
 procedure Tf_main.StatusTimerTimer(Sender: TObject);
 begin
- // Periodic 1 minute check
+ // Periodic check
  StatusTimer.Enabled:=false;
  if not f_capture.Running then CheckMeridianFlip;
  StatusTimer.Enabled:=true;
@@ -3759,6 +3765,7 @@ begin
     if hhmin<=0 then f_mount.LabelMeridian.Caption:='Meridian in'
                 else f_mount.LabelMeridian.Caption:='Meridian since';
     if MeridianOption=0 then exit; // fork mount
+    if mount.PierSide=pierEast then exit; // already on the right side
     MeridianDelay:=MinutesPastMeridian-hhmin;
     NextDelay:=ceil(nextexposure/60);
     if MeridianDelay>0  then begin // before meridian limit
@@ -3797,12 +3804,26 @@ begin
           autoguider.WaitBusy(15);
         end;
         wait(2);
+        if MeridianFlipPauseBefore then begin
+          f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready.';
+          if not f_pause.Wait then begin
+            NewMessage('Meridian flip canceled before flip');
+            exit;
+          end;
+        end;
         // flip
         NewMessage('Meridian flip now');
         StatusBar1.Panels[1].Text := 'Meridian flip';
         mount.FlipMeridian;
         wait(2);
         meridianflipping:=false;
+        if MeridianFlipPauseAfter then begin
+          f_pause.Text:='Meridian flip done.'+crlf+'Click Continue when ready.';
+          if not f_pause.Wait then begin
+            NewMessage('Meridian flip canceled after flip');
+            exit;
+          end;
+        end;
         // precision slew with saved image
         if slewtoimg then begin
           try
