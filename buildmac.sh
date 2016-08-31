@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=0.6.2
+version=0.7.0
 
 basedir=/tmp/ccdciel   # Be sure this is set to a non existent directory, it is removed after the run!
 
