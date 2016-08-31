@@ -33,7 +33,7 @@ uses u_global,
        unix,baseunix,
      {$endif}
      process, Classes, LCLType, FileUtil,
-     Math, SysUtils, Forms, Controls, StdCtrls, Graphics;
+     Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
 
 
@@ -46,6 +46,7 @@ procedure SplitRec(buf,sep:string; var arg: TStringList);
 Procedure SplitCmd(S : String; List : TStringList);
 function Slash(nom : string) : string;
 Function sgn(x:Double):Double ;
+procedure SetMenuAccelerator(Amenu: TMenuItem; level: integer; var AccelList: array of string);
 function ScriptListCompare(List: TStringList; Index1, Index2: Integer): Integer;
 Function SXToStr(de: Double) : string;
 Function RAToStr(ar: Double) : string;
@@ -248,6 +249,35 @@ function Slash(nom : string) : string;
 begin
 result:=trim(nom);
 if copy(result,length(result),1)<>PathDelim then result:=result+PathDelim;
+end;
+
+procedure SetMenuAccelerator(Amenu: TMenuItem; level: integer; var AccelList: array of string);
+var k,p: integer;
+    txt,c: string;
+begin
+  if level>MaxMenulevel then exit;
+  txt:=StringReplace(Amenu.Caption,'&','',[rfReplaceAll]);
+  if (txt<>'')and(txt<>'-') then begin
+    p:=1;
+    c:=UpperCase(copy(txt,p,1));
+    while (pos(c,AccelList[level])>0)or(c<'A')or(c>'Z') do begin
+      inc(p);
+      if p>=length(txt) then begin
+         p:=1;
+         c:=UpperCase(copy(txt,p,1));
+         break;
+      end;
+      c:=UpperCase(copy(txt,p,1));
+    end;
+    if Amenu.Action<>nil
+      then  TAction(Amenu.Action).Caption:=copy(txt,1,p-1)+'&'+copy(txt,p,999)
+      else Amenu.Caption:=copy(txt,1,p-1)+'&'+copy(txt,p,999);
+    AccelList[level]:=AccelList[level]+c;
+  end;
+  AccelList[level+1]:='';
+  for k:=0 to Amenu.Count-1 do begin
+     SetMenuAccelerator(Amenu[k],level+1,AccelList);
+  end;
 end;
 
 Function sgn(x:Double):Double ;
