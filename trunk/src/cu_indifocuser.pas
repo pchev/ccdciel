@@ -137,6 +137,7 @@ destructor  T_indifocuser.Destroy;
 begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
+ indiclient.onServerDisconnected:=nil;
  indiclient.Free;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
