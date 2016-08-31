@@ -307,6 +307,7 @@ type
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
     MsgLog,MsgDeviceLog: Textfile;
+    AccelList: array[0..MaxMenulevel] of string;
     Procedure GetAppDir;
     Procedure InitLog;
     Procedure InitDeviceLog;
@@ -945,6 +946,9 @@ begin
 
   SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence);
 
+  for i:=0 to MaxMenulevel do AccelList[i]:='';
+  SetMenuAccelerator(MainMenu1.items,0,AccelList);
+
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
 
@@ -1015,6 +1019,7 @@ begin
 end;
 
 procedure Tf_main.MenuResetToolsClick(Sender: TObject);
+var i: integer;
 begin
   SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram);
   SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil);
@@ -1035,6 +1040,9 @@ begin
   SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
 
   SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence);
+
+  for i:=0 to MaxMenulevel do AccelList[i]:='';
+  SetMenuAccelerator(MainMenu1.items,0,AccelList);
 end;
 
 procedure Tf_main.UpdConfig(oldver:string);

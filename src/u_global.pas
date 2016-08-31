@@ -165,6 +165,7 @@ const
   M_AstrometryDone=1100;
   MaxCmdArg = 10;
   MaxScriptDir=2;
+  MaxMenulevel=10;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
   ldeg = 'd';
