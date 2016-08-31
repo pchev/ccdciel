@@ -1144,9 +1144,8 @@ begin
      config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
 
   SaveConfig;
+  NewMessage('Configuration saved');
 
-  NewMessage('Program exit');
-  CloseLog;
   if autoguider.Running then begin
     autoguider.Disconnect;
     autoguider.Terminate;
@@ -1182,7 +1181,12 @@ begin
   config.Free;
   Filters.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
-  if NeedRestart then ExecNoWait(paramstr(0));
+  if NeedRestart then begin
+     ExecNoWait(paramstr(0));
+     NewMessage('Program restart');
+  end
+  else NewMessage('Program exit');
+  CloseLog;
 end;
 
 procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -1345,6 +1349,8 @@ if CanClose then begin
  end;
  if f_sequence.Running then f_sequence.StopSequence;
  f_script.RunShutdownScript;
+ NewMessage('Disconnecting devices ...');
+ Disconnect(nil);
 end;
 end;
 
