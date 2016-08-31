@@ -973,7 +973,10 @@ end;
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
 begin
   StartupTimer.Enabled:=false;
-  if FOpenSetup then MenuSetup.Click
+  if FOpenSetup then begin
+     MenuSetup.Click;
+     MenuOptions.Click;
+  end
     else f_script.RunStartupScript;
 end;
 
