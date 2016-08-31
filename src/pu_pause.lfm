@@ -1,0 +1,46 @@
+object f_pause: Tf_pause
+  Left = 0
+  Height = 100
+  Top = 0
+  Width = 320
+  ActiveControl = Button1
+  Caption = 'Pause'
+  ClientHeight = 100
+  ClientWidth = 320
+  Constraints.MaxHeight = 100
+  Constraints.MaxWidth = 320
+  Constraints.MinHeight = 100
+  Constraints.MinWidth = 320
+  FormStyle = fsStayOnTop
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '1.6.0.4'
+  Visible = False
+  object Button1: TButton
+    Left = 216
+    Height = 25
+    Top = 64
+    Width = 91
+    Caption = 'Continue...'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object PauseLabel: TLabel
+    Left = 8
+    Height = 18
+    Top = 8
+    Width = 36
+    Caption = 'Pause'
+    ParentColor = False
+  end
+  object Button2: TButton
+    Left = 112
+    Height = 25
+    Top = 64
+    Width = 75
+    Caption = 'Cancel'
+    OnClick = Button2Click
+    TabOrder = 1
+  end
+end
