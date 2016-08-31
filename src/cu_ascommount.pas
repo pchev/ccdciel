@@ -40,6 +40,7 @@ T_ascommount = class(T_mount)
    stRA,stDE: double;
    stPark:boolean;
    stPierside: TPierSide;
+   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync: boolean;
    {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
@@ -104,6 +105,11 @@ begin
   if V.connected then begin
      FStatus := devConnected;
      CheckEqmod;
+     CanPark:=V.CanPark;
+     CanSlew:=V.CanSlew;
+     CanSlewAsync:=V.CanSlewAsync;
+     CanSetPierSide:=V.CanSetPierSide;
+     CanSync:=V.CanSync;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
@@ -187,7 +193,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   if V.CanPark then begin
+   if CanPark then begin
       if value then V.Park
                else V.UnPark
    end;
@@ -331,13 +337,13 @@ begin
  result:=false;
  {$ifdef mswindows}
  result:=false;
- if Connected and V.CanSlew then begin
+ if Connected and CanSlew then begin
    try
    if not V.tracking then begin
       V.tracking:=true;
    end;
    FMountSlewing:=true;
-   if V.CanSlewAsync then
+   if CanSlewAsync then
      V.SlewToCoordinatesAsync(sra,sde)
    else
      V.SlewToCoordinates(sra,sde);
@@ -358,7 +364,7 @@ begin
  result:=false;
  {$ifdef mswindows}
  islewing:=false;
-  if V.CanSlewAsync then
+  if CanSlewAsync then
     islewing:=V.Slewing
   else
     islewing:=false;
@@ -373,7 +379,7 @@ var count,maxcount:integer;
 begin
  result:=false;
  {$ifdef mswindows}
- maxcount:=timeout div 100;
+ maxcount:=maxtime div 100;
  count:=0;
  while (MountSlewing)and(count<maxcount) do begin
     sleep(100);
@@ -398,7 +404,8 @@ begin
     pierside1:=GetPierSide;
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
-    if V.CanSetPierSide then begin
+    {TODO: someone with a mount that support this feature can test it}
+{    if CanSetPierSide then begin
        // do the flip
        V.SideOfPier:=0; // pierEast
        WaitMountSlewing(240000);
@@ -409,7 +416,7 @@ begin
        pierside2:=GetPierSide;
        result:=(pierside2<>pierside1);
     end
-    else begin
+    else} begin
       // point one hour to the east
       ra1:=sra+1;
       if ra1>=24 then ra1:=ra1-24;
@@ -436,7 +443,7 @@ begin
  result:=false;
  {$ifdef mswindows}
  result:=false;
- if Connected and V.CanSync then begin
+ if Connected and CanSync then begin
    try
    if not V.tracking then begin
       V.tracking:=true;
@@ -471,7 +478,7 @@ end;
 procedure T_ascommount.AbortMotion;
 begin
  {$ifdef mswindows}
- if Connected and V.CanSlew then begin
+ if Connected and CanSlew then begin
    try
    V.AbortSlew;
    V.tracking:=false;
