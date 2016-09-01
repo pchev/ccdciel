@@ -1456,6 +1456,7 @@ begin
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',0);
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
   MeridianFlipPauseAfter:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
+  MeridianFlipPauseTimeout:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
 end;
@@ -2368,6 +2369,7 @@ begin
    f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
+   f_option.MeridianFlipPauseTimeout.Text:=IntToStr(config.GetValue('/Meridian/MeridianFlipPauseTimeout',0));
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
@@ -2434,6 +2436,7 @@ begin
      config.SetValue('/Meridian/MinutesPast',StrToIntDef(f_option.MinutesPastMeridian.Text,0));
      config.SetValue('/Meridian/MeridianFlipPauseBefore',f_option.MeridianFlipPauseBefore.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseAfter',f_option.MeridianFlipPauseAfter.Checked);
+     config.SetValue('/Meridian/MeridianFlipPauseTimeout',StrToIntDef(f_option.MeridianFlipPauseTimeout.Text,0));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -3760,7 +3763,7 @@ var ra,de,hh,a,h: double;
     jd0,CurSt,CurTime: double;
     Year, Month, Day: Word;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
-    slewtoimg, restartguider: boolean;
+    slewtoimg, restartguider, SaveCapture: boolean;
 begin
   result:=-1;
   if (mount.Status=devConnected) and (not mount.MountSlewing) and (not meridianflipping) then begin
@@ -3823,9 +3826,10 @@ begin
           autoguider.WaitBusy(15);
         end;
         wait(2);
+        // Pause before
         if MeridianFlipPauseBefore then begin
           waittimeout:=60*MeridianDelay2;
-          f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready, or wait it continue automatically in '+inttostr(waittimeout)+' seconds.';
+          f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready';
           if not f_pause.Wait(waittimeout) then begin
             meridianflipping:=false;
             NewMessage('Meridian flip canceled before flip');
@@ -3838,15 +3842,26 @@ begin
         mount.FlipMeridian;
         wait(2);
         meridianflipping:=false;
+        NewMessage('Meridian flip done');
+        // Pause after
         if MeridianFlipPauseAfter then begin
+          SaveCapture:=Capture;
+          try
+          Capture:=false; // allow preview and refocusing
+          waittimeout:=60*MeridianFlipPauseTimeout;
           f_pause.Text:='Meridian flip done.'+crlf+'Click Continue when ready.';
-          if not f_pause.Wait then begin
+          if not f_pause.Wait(waittimeout) then begin
+            Capture:=SaveCapture;
             NewMessage('Meridian flip canceled after flip');
             exit;
+          end;
+          finally
+            Capture:=SaveCapture;
           end;
         end;
         // precision slew with saved image
         if slewtoimg then begin
+          NewMessage('Recenter on last image');
           try
           Capture:=false;  // do not save the control images
           LoadFitsFile(slash(TmpDir)+'meridianflip.fits');
@@ -3858,6 +3873,7 @@ begin
         end;
         // start autoguider
         if restartguider then begin
+          NewMessage('Restart autoguider');
           autoguider.Guide(true);
           autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
         end;

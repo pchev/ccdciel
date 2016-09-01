@@ -46,7 +46,7 @@ type
     function GetText: string;
   public
     { public declarations }
-    function Wait(timeout:integer=-1): boolean;
+    function Wait(timeout:integer=0): boolean;
     property Text: string read GetText write SetText;
   end;
 
@@ -92,11 +92,15 @@ begin
   CanClose:=FContinue;
 end;
 
-function Tf_pause.Wait(timeout:integer=-1): boolean;
+function Tf_pause.Wait(timeout:integer=0): boolean;
 var endt: TDateTime;
 begin
-  if timeout>0 then endt:=now+timeout/secperday
-               else endt:=MaxInt;
+  if timeout>0 then begin
+    endt:=now+timeout/secperday;
+    PauseLabel.Caption:=PauseLabel.Caption+crlf+'Continue automatically in '+inttostr(timeout)+' seconds.';
+  end
+  else
+    endt:=MaxInt;
   Show;
   while (not FContinue) do begin
     Application.ProcessMessages;

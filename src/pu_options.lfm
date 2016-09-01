@@ -967,10 +967,10 @@ object f_option: Tf_option
       end
       object MeridianFlipPanel: TPanel
         Left = 8
-        Height = 122
+        Height = 144
         Top = 72
         Width = 368
-        ClientHeight = 122
+        ClientHeight = 144
         ClientWidth = 368
         TabOrder = 1
         object Label40: TLabel
@@ -1011,6 +1011,29 @@ object f_option: Tf_option
           Width = 172
           Caption = 'Pause after meridian flip '
           TabOrder = 2
+        end
+        object Label42: TLabel
+          Left = 80
+          Height = 18
+          Top = 112
+          Width = 50
+          Caption = 'Timeout'
+          ParentColor = False
+        end
+        object MeridianFlipPauseTimeout: TEdit
+          Left = 152
+          Height = 24
+          Top = 108
+          Width = 32
+          TabOrder = 3
+        end
+        object Label43: TLabel
+          Left = 200
+          Height = 18
+          Top = 112
+          Width = 49
+          Caption = 'minutes'
+          ParentColor = False
         end
       end
     end

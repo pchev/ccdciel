@@ -206,7 +206,7 @@ var
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
-  MeridianOption,MinutesPastMeridian: integer;
+  MeridianOption,MinutesPastMeridian, MeridianFlipPauseTimeout: integer;
   MeridianFlipPauseBefore, MeridianFlipPauseAfter: boolean;
   OrigX, OrigY,img_Height,img_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
