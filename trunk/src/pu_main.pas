@@ -2208,7 +2208,7 @@ begin
                        f_autoguider.led.Brush.Color:=clYellow;
                        f_autoguider.BtnGuide.Caption:='Guide';
                        MenuAutoguiderGuide.Caption:='Guide';
-                       f_sequence.AutoguiderIddle;
+                       if not meridianflipping then f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;
