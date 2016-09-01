@@ -140,6 +140,7 @@ type
     function cmd_Preview_SetBinning(bin:string):string;
     function cmd_Preview_Single:string;
     function cmd_Preview_Loop:string;
+    function cmd_Preview_WaitLoop:string;
     function cmd_Preview_Stop:string;
     function cmd_Capture_SetExposure(exp:string):string;
     function cmd_Capture_SetBinning(bin:string):string;
@@ -662,6 +663,7 @@ else if cname='AUTOGUIDER_DITHER' then result:=cmd_AutoguiderDither
 else if cname='WHEEL_GETFILTER' then result:=cmd_Wheel_GetFilter
 else if cname='PREVIEW_SINGLE' then result:=cmd_Preview_Single
 else if cname='PREVIEW_LOOP' then result:=cmd_Preview_Loop
+else if cname='PREVIEW_WAITLOOP' then result:=cmd_Preview_WaitLoop
 else if cname='PREVIEW_STOP' then result:=cmd_Preview_Stop
 else if cname='CAPTURE_START' then result:=cmd_Capture_Start
 else if cname='CAPTURE_STOP' then result:=cmd_Capture_Stop
@@ -1025,6 +1027,7 @@ begin
 try
 result:=msgFailed;
 if Preview.Running or Preview.Loop then exit;
+Preview.Running:=true;
 if Assigned(Preview.onStartExposure) then
   Preview.onStartExposure(Self)
  else
@@ -1049,12 +1052,31 @@ try
 result:=msgFailed;
 if Preview.Running then exit;
 Preview.Loop:=True;
+Preview.Running:=true;
 if Assigned(Preview.onStartExposure) then
   Preview.onStartExposure(Self)
  else
   exit;
-if Assigned(FonMsg) then FonMsg('Start preview loop');
+if Preview.Running then begin
+ Preview.BtnLoop.Font.Color:=clGreen;
+ Preview.BtnLoop.Caption:='Stop Loop';
+ if Assigned(FonMsg) then FonMsg('Start preview loop');
+end;
 wait(1);
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Preview_WaitLoop:string;
+begin
+try
+result:=msgFailed;
+while Preview.Running and Preview.Loop do begin
+  Sleep(100);
+  Application.ProcessMessages;
+end;
 result:=msgOK;
 except
   result:=msgFailed;
