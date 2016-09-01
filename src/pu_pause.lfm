@@ -4,13 +4,10 @@ object f_pause: Tf_pause
   Top = 0
   Width = 320
   ActiveControl = Button1
+  AutoSize = True
   Caption = 'Pause'
   ClientHeight = 100
   ClientWidth = 320
-  Constraints.MaxHeight = 100
-  Constraints.MaxWidth = 320
-  Constraints.MinHeight = 100
-  Constraints.MinWidth = 320
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
@@ -20,7 +17,7 @@ object f_pause: Tf_pause
   object Button1: TButton
     Left = 216
     Height = 25
-    Top = 64
+    Top = 70
     Width = 91
     Caption = 'Continue...'
     OnClick = Button1Click
@@ -28,16 +25,18 @@ object f_pause: Tf_pause
   end
   object PauseLabel: TLabel
     Left = 8
-    Height = 18
+    Height = 56
     Top = 8
-    Width = 36
+    Width = 312
+    AutoSize = False
     Caption = 'Pause'
     ParentColor = False
+    WordWrap = True
   end
   object Button2: TButton
     Left = 112
     Height = 25
-    Top = 64
+    Top = 70
     Width = 75
     Caption = 'Cancel'
     OnClick = Button2Click
