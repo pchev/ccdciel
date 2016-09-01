@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     ButtonDir: TButton;
     BayerMode: TComboBox;
+    Label41: TLabel;
     MeridianFlipPauseBefore: TCheckBox;
     DebayerPreview: TCheckBox;
     CheckBoxLocalCdc: TCheckBox;
@@ -67,6 +68,7 @@ type
     longmin: TLongEdit;
     longsec: TFloatEdit;
     MeridianOption: TRadioGroup;
+    MeridianFlipPanel: TPanel;
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SlewPrec: TEdit;
@@ -181,6 +183,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure latChange(Sender: TObject);
     procedure longChange(Sender: TObject);
+    procedure MeridianOptionClick(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
@@ -241,6 +244,11 @@ begin
   else
      Flongitude:=longdeg.value+longmin.value/60+longsec.value/3600;
   if long.Itemindex>0 then Flongitude:=-Flongitude;
+end;
+
+procedure Tf_option.MeridianOptionClick(Sender: TObject);
+begin
+  MeridianFlipPanel.Visible:=(MeridianOption.ItemIndex=1);
 end;
 
 procedure Tf_option.SetLatitude(value:double);

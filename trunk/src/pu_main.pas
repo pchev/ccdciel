@@ -255,8 +255,7 @@ type
     procedure MenuVisuZoom2Click(Sender: TObject);
     procedure MenuVisuZoomAdjustClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
-    procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;
-      State: TDragState; var Accept: Boolean);
+    procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;State: TDragState; var Accept: Boolean);
     procedure StartCaptureTimerTimer(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
@@ -385,9 +384,12 @@ type
     Procedure PlanetariumDisconnect(Sender: TObject);
     Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
+    procedure CameraNewImageAsync(Data: PtrInt);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
+    Procedure StartPreviewExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposure(Sender: TObject);
+    procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure RedrawHistogram(Sender: TObject);
     Procedure Redraw(Sender: TObject);
     Procedure ImgFullRange(Sender: TObject);
@@ -2366,6 +2368,7 @@ begin
    f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
+   f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
@@ -2677,6 +2680,11 @@ begin
   StatusBar1.Panels[1].Text:='Stop';
 end;
 
+Procedure Tf_main.StartPreviewExposureAsync(Data: PtrInt);
+begin
+  StartPreviewExposure(nil);
+end;
+
 Procedure Tf_main.StartPreviewExposure(Sender: TObject);
 var e: double;
     buf: string;
@@ -2728,12 +2736,16 @@ begin
   StartCaptureExposure(Sender);
 end;
 
+procedure Tf_main.StartCaptureExposureAsync(Data: PtrInt);
+begin
+  StartCaptureExposure(nil);
+end;
+
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 var e: double;
     buf: string;
     p,binx,biny,waittime: integer;
     ftype:TFrameType;
-    flipped: boolean;
 begin
 if (camera.Status=devConnected) then begin
   if f_preview.Running then begin
@@ -2849,6 +2861,11 @@ begin
 end;
 
 procedure Tf_main.CameraNewImage(Sender: TObject);
+begin
+ Application.QueueAsyncCall(@CameraNewImageAsync,0);
+end;
+
+procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var dt: Tdatetime;
     fn,imgsize: string;
     subseq,subobj,substep,subfrt: boolean;
@@ -2908,7 +2925,7 @@ begin
      f_capture.SeqCount:=f_capture.SeqCount+1;
      f_capture.DitherNum:=f_capture.DitherNum+1;
      if f_capture.SeqCount<=StrToInt(f_capture.SeqNum.Text) then begin
-        if f_capture.Running then StartCaptureExposure(nil);
+        if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
      end else begin
         Capture:=false;
         f_capture.Stop;
@@ -2919,7 +2936,7 @@ begin
   end
   else if Preview then begin
     StatusBar1.Panels[2].Text:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+imgsize;
-    if f_preview.Loop and f_preview.Running then StartPreviewExposure(nil)
+    if f_preview.Loop and f_preview.Running then Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
        else begin
          f_preview.stop;
          NewMessage('End preview');
@@ -3734,7 +3751,7 @@ procedure Tf_main.StatusTimerTimer(Sender: TObject);
 begin
  // Periodic check
  StatusTimer.Enabled:=false;
- if not f_capture.Running then CheckMeridianFlip;
+ CheckMeridianFlip;
  StatusTimer.Enabled:=true;
 end;
 
@@ -3742,11 +3759,11 @@ function Tf_main.CheckMeridianFlip(nextexposure:double=0):integer;
 var ra,de,hh,a,h: double;
     jd0,CurSt,CurTime: double;
     Year, Month, Day: Word;
-    MeridianDelay,NextDelay,hhmin: integer;
+    MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
     slewtoimg, restartguider: boolean;
 begin
   result:=-1;
-  if (mount.Status=devConnected) and (not mount.MountSlewing) then begin
+  if (mount.Status=devConnected) and (not mount.MountSlewing) and (not meridianflipping) then begin
     DecodeDate(now, Year, Month, Day);
     CurTime:=frac(now)*24;
     jd0:=jd(Year,Month,Day,0);
@@ -3764,21 +3781,23 @@ begin
     f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
     if hhmin<=0 then f_mount.LabelMeridian.Caption:='Meridian in'
                 else f_mount.LabelMeridian.Caption:='Meridian since';
+    if f_capture.Running and (nextexposure=0) then exit;
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
-    MeridianDelay:=MinutesPastMeridian-hhmin;
+    MeridianDelay1:=-hhmin;
+    MeridianDelay2:=MinutesPastMeridian-hhmin;
     NextDelay:=ceil(nextexposure/60);
-    if MeridianDelay>0  then begin // before meridian limit
-      if MeridianDelay>NextDelay then begin // enough time for next exposure or no capture in progress
+    if MeridianDelay1>0  then begin // before meridian limit
+      if MeridianDelay2>NextDelay then begin // enough time for next exposure or no capture in progress
          result:=-1;
          exit;
-      end else if (NextDelay>0)and(MeridianDelay>0) then begin // too short for next exposure
+      end else if (NextDelay>0)and(MeridianDelay1>0) then begin // too short for next exposure
         if (MeridianOption=1) then begin   // if autoflip, wait
            wait(2);
            meridianflipping:=true;
-           NewMessage('Wait meridian flip for '+inttostr(MeridianDelay)+' minutes');
+           NewMessage('Wait meridian flip for '+inttostr(MeridianDelay1)+' minutes');
            StatusBar1.Panels[1].Text := 'Wait meridian flip';
-           result:=60*MeridianDelay; // time to wait for meridian
+           result:=60*MeridianDelay1; // time to wait for meridian
            exit;
         end else begin
          result:=-1;   // if abort, continue
@@ -3786,10 +3805,10 @@ begin
         end;
       end;
     end;
-    if ((MeridianDelay<=0)and(mount.PierSide=pierWest)) or
-       (MeridianDelay=0)
+    if ((MeridianDelay1<=0)and(mount.PierSide=pierWest)) or
+       (MeridianDelay1=0)
       then begin                    // Do meridian action
-      if MeridianOption=1 then begin
+      if MeridianOption=1 then begin  // Flip
         meridianflipping:=true;
         // save current image if any
         if (f_capture.Running) and fits.HeaderInfo.valid then begin
@@ -3805,8 +3824,10 @@ begin
         end;
         wait(2);
         if MeridianFlipPauseBefore then begin
-          f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready.';
-          if not f_pause.Wait then begin
+          waittimeout:=60*MeridianDelay2;
+          f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready, or wait it continue automatically in '+inttostr(waittimeout)+' seconds.';
+          if not f_pause.Wait(waittimeout) then begin
+            meridianflipping:=false;
             NewMessage('Meridian flip canceled before flip');
             exit;
           end;
@@ -3843,7 +3864,7 @@ begin
         Wait(2);
         NewMessage('Meridian flip terminated');
         StatusBar1.Panels[1].Text := '';
-      end else begin
+      end else begin  // Abort
         NewMessage('Meridian abort!');
         if f_capture.Running then CameraExposureAborted(nil);
         if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);

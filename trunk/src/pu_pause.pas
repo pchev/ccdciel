@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses  u_global,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -46,7 +46,7 @@ type
     function GetText: string;
   public
     { public declarations }
-    function Wait: boolean;
+    function Wait(timeout:integer=-1): boolean;
     property Text: string read GetText write SetText;
   end;
 
@@ -92,12 +92,19 @@ begin
   CanClose:=FContinue;
 end;
 
-function Tf_pause.Wait: boolean;
+function Tf_pause.Wait(timeout:integer=-1): boolean;
+var endt: TDateTime;
 begin
+  if timeout>0 then endt:=now+timeout/secperday
+               else endt:=MaxInt;
   Show;
-  while not FContinue do begin
+  while (not FContinue) do begin
     Application.ProcessMessages;
     Sleep(100);
+    if now>endt then begin
+       Fresult:=true;
+       FContinue:=true;
+    end;
   end;
   result:=Fresult;
   Close;
