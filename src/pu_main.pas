@@ -3387,7 +3387,11 @@ end;
 Procedure Tf_main.FocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
 begin
-  if f_starprofile.FindStar then begin
+  if  f_capture.Running then begin
+    f_starprofile.focus.Checked:=false;
+    exit;
+  end;
+  if f_starprofile.FindStar and (not f_capture.Running) then begin
      s:=Focuswindow;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
@@ -3411,6 +3415,7 @@ end;
 
 Procedure Tf_main.FocusStop(Sender: TObject);
 begin
+   if  f_capture.Running then exit;
    camera.ResetFrame;
    f_preview.Running:=false;
    f_preview.Loop:=false;
