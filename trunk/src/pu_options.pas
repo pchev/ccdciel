@@ -36,7 +36,10 @@ type
   Tf_option = class(TForm)
     ButtonDir: TButton;
     BayerMode: TComboBox;
+    MeridianFlipPauseTimeout: TEdit;
     Label41: TLabel;
+    Label42: TLabel;
+    Label43: TLabel;
     MeridianFlipPauseBefore: TCheckBox;
     DebayerPreview: TCheckBox;
     CheckBoxLocalCdc: TCheckBox;
