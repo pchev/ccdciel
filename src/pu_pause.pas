@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global,
+uses  u_global, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -38,6 +38,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -90,6 +91,11 @@ end;
 procedure Tf_pause.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   CanClose:=FContinue;
+end;
+
+procedure Tf_pause.FormCreate(Sender: TObject);
+begin
+  ScaleDPI(Self);
 end;
 
 function Tf_pause.Wait(timeout:integer=0): boolean;

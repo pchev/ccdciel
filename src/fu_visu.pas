@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits, math,
+uses Graphics, cu_fits, math, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons;
 
 type
@@ -96,6 +96,7 @@ implementation
 constructor Tf_visu.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
  ImgMax:=255;
  ImgMin:=0;
  with Histogram.Picture.Bitmap do begin

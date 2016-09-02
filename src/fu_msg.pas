@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -78,6 +78,7 @@ end;
 constructor Tf_msg.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
 end;
 
 destructor  Tf_msg.Destroy;

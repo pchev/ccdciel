@@ -29,7 +29,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_scriptengine,
   pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
-  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global,
+  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
@@ -308,6 +308,7 @@ type
     MsgLog,MsgDeviceLog: Textfile;
     AccelList: array[0..MaxMenulevel] of string;
     Procedure GetAppDir;
+    procedure ScaleMainForm;
     Procedure InitLog;
     Procedure InitDeviceLog;
     Procedure CloseLog;
@@ -635,10 +636,31 @@ begin
  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
 end;
 
+procedure Tf_main.ScaleMainForm;
+var inif: TMemIniFile;
+    rl: integer;
+const teststr = 'The Lazy Fox Jumps';
+      designlen = 120;
+begin
+  ScreenScaling:=true;
+  UScaleDPI.UseScaling:=ScreenScaling;
+  {$ifdef SCALE_BY_DPI_ONLY}
+  UScaleDPI.DesignDPI:=96;
+  UScaleDPI.RunDPI:=Screen.PixelsPerInch;
+  {$else}
+  rl:=Canvas.TextWidth(teststr);
+  if abs(rl-designlen)<20 then rl:=designlen;
+  UScaleDPI.DesignDPI:=designlen;
+  UScaleDPI.RunDPI:=rl;
+  {$endif}
+  ScaleDPI(Self);
+  ScaleImageList(ImageList1);
+end;
+
 procedure Tf_main.FormCreate(Sender: TObject);
 var DefaultInterface,aInt: TDevInterface;
     inif: TIniFile;
-    configver,configfile: string;
+    configfile: string;
     i:integer;
 begin
   {$ifdef mswindows}
@@ -650,6 +672,7 @@ begin
   ConfirmClose:=true;
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
+  ScaleMainForm;
   NeedRestart:=false;
   GUIready:=false;
   MsgHandle:=handle;

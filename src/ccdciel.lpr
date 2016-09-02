@@ -39,7 +39,7 @@ uses
   cu_autoguider_phd, cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig,
   pu_edittargets, pu_editplan, cu_autoguider, cu_planetarium, fu_planetarium,
   cu_astrometry, pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan,
-  pu_pascaleditor, pu_scriptengine, fu_mount, enhedit, pu_pause;
+  pu_pascaleditor, pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI;
 
 {$R *.res}
 

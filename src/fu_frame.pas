@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses  UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -50,6 +50,8 @@ type
     FonSet, FonReset: TNotifyEvent;
   public
     { public declarations }
+    constructor Create(aOwner: TComponent); override;
+    destructor  Destroy; override;
     property onSet: TNotifyEvent read FonSet write FonSet;
     property onReset: TNotifyEvent read FonReset write FonReset;
   end;
@@ -59,6 +61,17 @@ implementation
 {$R *.lfm}
 
 { Tf_frame }
+
+constructor Tf_frame.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ ScaleDPI(Self);
+end;
+
+destructor  Tf_frame.Destroy;
+begin
+ inherited Destroy;
+end;
 
 procedure Tf_frame.BtnSetClick(Sender: TObject);
 begin

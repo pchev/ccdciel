@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, indiapi,
+uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, indiapi, UScaleDPI,
   fu_capture, fu_preview, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   Classes, Dialogs, SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -57,6 +57,8 @@ type
     procedure msg(txt:string);
  public
     { public declarations }
+    constructor Create(aOwner: TComponent); override;
+    destructor  Destroy; override;
     procedure LoadScriptList;
     procedure SetScriptList(sl:string);
     procedure RunStartupScript;
@@ -75,6 +77,17 @@ implementation
 {$R *.lfm}
 
 { Tf_script }
+
+constructor Tf_script.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ ScaleDPI(Self);
+end;
+
+destructor  Tf_script.Destroy;
+begin
+ inherited Destroy;
+end;
 
 procedure Tf_script.msg(txt:string);
 begin

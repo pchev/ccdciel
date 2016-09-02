@@ -4,7 +4,7 @@ unit pu_planetariuminfo;
 
 interface
 
-uses  cu_planetarium, u_utils, u_global,
+uses  cu_planetarium, u_utils, u_global, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -21,6 +21,7 @@ type
     Ra: TEdit;
     De: TEdit;
     Obj: TEdit;
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -50,6 +51,11 @@ begin
     planetarium.onReceiveData:=@recvdata;
     recvdata('');
   end;
+end;
+
+procedure Tf_planetariuminfo.FormCreate(Sender: TObject);
+begin
+  ScaleDPI(Self);
 end;
 
 procedure Tf_planetariuminfo.recvdata(msg:string);

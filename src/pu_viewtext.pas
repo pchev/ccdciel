@@ -4,7 +4,7 @@ unit pu_viewtext;
 
 interface
 
-uses
+uses  UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -13,6 +13,7 @@ type
 
   Tf_viewtext = class(TForm)
     Memo1: TMemo;
+    procedure FormCreate(Sender: TObject);
   private
     { private declarations }
   public
@@ -25,6 +26,13 @@ var
 implementation
 
 {$R *.lfm}
+
+{ Tf_viewtext }
+
+procedure Tf_viewtext.FormCreate(Sender: TObject);
+begin
+  ScaleDPI(Self);
+end;
 
 end.
 

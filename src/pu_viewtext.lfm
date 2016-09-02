@@ -3,10 +3,13 @@ object f_viewtext: Tf_viewtext
   Height = 421
   Top = 127
   Width = 537
+  ActiveControl = Memo1
   Caption = 'View text'
   ClientHeight = 421
   ClientWidth = 537
-  LCLVersion = '1.4.0.1'
+  OnCreate = FormCreate
+  LCLVersion = '1.6.0.4'
+  Visible = False
   object Memo1: TMemo
     Left = 0
     Height = 421

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics,
+uses u_global, Graphics, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -72,6 +72,7 @@ implementation
 constructor Tf_preview.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
  Frunning:=false;
 end;
 

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, pu_pascaleditor, pu_scriptengine,
-  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   maskedit, Grids, ExtCtrls, ComCtrls;
 
 type
@@ -124,6 +124,7 @@ implementation
 
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   LockTarget:=false;
 end;
 

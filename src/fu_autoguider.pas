@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses  UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -53,6 +53,8 @@ type
     FonConnect,FonCalibrate,FonGuide,FonDither: TNotifyEvent;
   public
     { public declarations }
+    constructor Create(aOwner: TComponent); override;
+    destructor  Destroy; override;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onGuide: TNotifyEvent read FonGuide write FonGuide;
@@ -64,6 +66,17 @@ implementation
 {$R *.lfm}
 
 { Tf_autoguider }
+
+constructor Tf_autoguider.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ ScaleDPI(Self);
+end;
+
+destructor  Tf_autoguider.Destroy;
+begin
+ inherited Destroy;
+end;
 
 procedure Tf_autoguider.BtnConnectClick(Sender: TObject);
 begin

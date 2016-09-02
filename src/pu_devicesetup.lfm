@@ -51,7 +51,7 @@ object f_setup: Tf_setup
     TabOrder = 1
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 235
+      ClientHeight = 229
       ClientWidth = 350
       object InterfaceSelectionBox: TRadioGroup
         Left = 16
@@ -68,7 +68,7 @@ object f_setup: Tf_setup
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 35
+        ClientHeight = 29
         ClientWidth = 286
         Columns = 2
         ItemIndex = 0
@@ -91,7 +91,7 @@ object f_setup: Tf_setup
         TabOrder = 1
         object IndiServer: TEdit
           Left = 8
-          Height = 24
+          Height = 30
           Top = 24
           Width = 120
           TabOrder = 0
@@ -99,7 +99,7 @@ object f_setup: Tf_setup
         end
         object IndiPort: TEdit
           Left = 136
-          Height = 24
+          Height = 30
           Top = 24
           Width = 80
           TabOrder = 1
@@ -116,17 +116,17 @@ object f_setup: Tf_setup
         end
         object Label18: TLabel
           Left = 13
-          Height = 18
+          Height = 24
           Top = 5
-          Width = 38
+          Width = 53
           Caption = 'Server'
           ParentColor = False
         end
         object Label22: TLabel
           Left = 143
-          Height = 18
+          Height = 24
           Top = 5
-          Width = 26
+          Width = 36
           Caption = 'Port'
           ParentColor = False
         end
@@ -139,15 +139,15 @@ object f_setup: Tf_setup
         end
         object Label1: TLabel
           Left = 224
-          Height = 18
+          Height = 24
           Top = 5
-          Width = 50
+          Width = 71
           Caption = 'Timeout'
           ParentColor = False
         end
         object IndiTimeout: TEdit
           Left = 224
-          Height = 24
+          Height = 30
           Top = 24
           Width = 48
           TabOrder = 3
@@ -155,7 +155,7 @@ object f_setup: Tf_setup
       end
       object ProfileList: TComboBox
         Left = 104
-        Height = 22
+        Height = 28
         Top = 14
         Width = 120
         ItemHeight = 0
@@ -170,9 +170,9 @@ object f_setup: Tf_setup
       end
       object Label2: TLabel
         Left = 21
-        Height = 18
+        Height = 24
         Top = 16
-        Width = 45
+        Width = 65
         Caption = 'Profile :'
         ParentColor = False
       end
@@ -188,7 +188,7 @@ object f_setup: Tf_setup
     end
     object Devices: TTabSheet
       Caption = 'Devices'
-      ClientHeight = 235
+      ClientHeight = 229
       ClientWidth = 350
       object DeviceList: TCheckGroup
         Left = 16
@@ -205,7 +205,7 @@ object f_setup: Tf_setup
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 143
+        ClientHeight = 137
         ClientWidth = 286
         Items.Strings = (
           'Camera (mandatory)'
@@ -222,7 +222,7 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 235
+      ClientHeight = 229
       ClientWidth = 350
       object PanelCameraAscom: TPanel
         Left = 16
@@ -345,7 +345,7 @@ object f_setup: Tf_setup
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 235
+      ClientHeight = 229
       ClientWidth = 350
       object PanelWheelAscom: TPanel
         Left = 16
@@ -475,7 +475,7 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 235
+      ClientHeight = 229
       ClientWidth = 350
       object PanelFocuserInMount: TPanel
         Left = 18
@@ -608,7 +608,7 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 235
+      ClientHeight = 229
       ClientWidth = 350
       object PanelMountAscom: TPanel
         Left = 16

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses  UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -49,6 +49,8 @@ type
     FonConnect,FonNewTarget: TNotifyEvent;
   public
     { public declarations }
+    constructor Create(aOwner: TComponent); override;
+    destructor  Destroy; override;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onNewTarget: TNotifyEvent read FonNewTarget write FonNewTarget;
   end;
@@ -58,6 +60,17 @@ implementation
 {$R *.lfm}
 
 { Tf_planetarium }
+
+constructor Tf_planetarium.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ ScaleDPI(Self);
+end;
+
+destructor  Tf_planetarium.Destroy;
+begin
+ inherited Destroy;
+end;
 
 procedure Tf_planetarium.BtnConnectClick(Sender: TObject);
 begin

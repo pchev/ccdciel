@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses indibaseclient, indibasedevice, u_global, u_utils, u_ccdconfig,
+uses indibaseclient, indibasedevice, u_global, u_utils, u_ccdconfig, UScaleDPI,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
@@ -170,6 +170,7 @@ uses LazFileUtils;
 
 procedure Tf_setup.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   FRestartRequired:=false;
   LockInterfaceChange:=false;
   InitialLock:=true;
