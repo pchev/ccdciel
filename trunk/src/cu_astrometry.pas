@@ -395,7 +395,7 @@ begin
 end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double): boolean;
-var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset: double;
+var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
     jd0,jd1: double;
     fn:string;
     n,i:integer;
@@ -450,8 +450,12 @@ begin
          else begin
                raoffset:=ra+raoffset-cra;
                deoffset:=de+deoffset-cde;
+               newra:=rmod(ra+raoffset+24,24.0);
+               newde:=de+deoffset;
+               if de>90.0 then de:=90;
+               if de<-90.0 then de:=-90;
                msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
-               Mount.Slew(ra+raoffset, de+deoffset);
+               Mount.Slew(newra,newde);
             end;
          end;
       end;
