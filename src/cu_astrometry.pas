@@ -449,7 +449,7 @@ begin
             end;
          else begin
                raoffset:=ra+raoffset-cra;
-               deoffset:=de+raoffset-cde;
+               deoffset:=de+deoffset-cde;
                msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
                Mount.Slew(ra+raoffset, de+deoffset);
             end;
