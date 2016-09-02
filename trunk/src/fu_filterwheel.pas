@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses  UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -57,6 +57,7 @@ implementation
 constructor Tf_filterwheel.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
 end;
 
 destructor  Tf_filterwheel.Destroy;

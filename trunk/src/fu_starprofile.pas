@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_modelisation, u_global, math,
+uses  u_modelisation, u_global, math, UScaleDPI,
   Graphics, Classes, SysUtils, FPImage, cu_fits,
   FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -149,6 +149,7 @@ end;
 constructor Tf_starprofile.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
  emptybmp:=Tbitmap.Create;
  emptybmp.SetSize(1,1);
  FFindStar:=false;

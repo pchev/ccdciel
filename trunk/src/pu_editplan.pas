@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, u_ccdconfig, XMLConf,
+uses  u_global, u_utils, u_ccdconfig, XMLConf, UScaleDPI,
   LazFileUtils, Classes, SysUtils, Forms,
   Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls;
 
@@ -105,7 +105,8 @@ implementation
 
 procedure Tf_EditPlan.FormCreate(Sender: TObject);
 begin
- LockStep:=false;
+  ScaleDPI(Self);
+  LockStep:=false;
 end;
 
 procedure Tf_EditPlan.FormDestroy(Sender: TObject);

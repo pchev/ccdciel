@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 interface
 
-uses  Classes, SysUtils, FileUtil, SynEdit,
+uses  Classes, SysUtils, FileUtil, SynEdit, UScaleDPI,
   SynHighlighterPas, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   Menus, ActnList, StdActns, Buttons, ComCtrls, uPSComponent, uPSDebugger,
   uPSRuntime, SynEditMarks, SynEditTypes;
@@ -118,7 +118,7 @@ const
 
 procedure Tf_pascaleditor.FormCreate(Sender: TObject);
 begin
-  //ScaleDPI(Self);
+  ScaleDPI(Self);
   FDebugResume:=false;
   SetLang;
 end;

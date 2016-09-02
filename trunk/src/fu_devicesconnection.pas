@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -66,6 +66,7 @@ implementation
 constructor Tf_devicesconnection.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ ScaleDPI(Self);
 end;
 
 destructor  Tf_devicesconnection.Destroy;

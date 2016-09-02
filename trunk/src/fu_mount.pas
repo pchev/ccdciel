@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses
+uses UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Dialogs, Graphics;
 
 type
@@ -53,6 +53,8 @@ type
     FonTrack  : TNotifyEvent;
   public
     { public declarations }
+    constructor Create(aOwner: TComponent); override;
+    destructor  Destroy; override;
     property onPark  : TNotifyEvent read FonPark write FonPark;
     property onTrack  : TNotifyEvent read FonTrack write FonTrack;
   end;
@@ -62,6 +64,17 @@ implementation
 {$R *.lfm}
 
 { Tf_mount }
+
+constructor Tf_mount.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ ScaleDPI(Self);
+end;
+
+destructor  Tf_mount.Destroy;
+begin
+ inherited Destroy;
+end;
 
 procedure Tf_mount.BtnParkClick(Sender: TObject);
 begin

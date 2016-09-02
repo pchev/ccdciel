@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils,
+uses u_utils, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, enhedits;
 
@@ -225,6 +225,7 @@ begin
     ElbrusUnixpath.Visible:=false;
     Label13.Visible:=false;
   {$endif}
+  ScaleDPI(Self);
   Lockchange:=false;
   PageControl1.ActivePageIndex:=0;
 end;

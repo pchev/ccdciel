@@ -70,9 +70,9 @@ object f_pascaleditor: Tf_pascaleditor
     end
     object Label1: TLabel
       Left = 8
-      Height = 17
+      Height = 24
       Top = 9
-      Width = 45
+      Width = 55
       Caption = 'Label1'
       ParentColor = False
     end
