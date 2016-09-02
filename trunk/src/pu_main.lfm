@@ -369,7 +369,9 @@ object f_main: Tf_main
         OnClick = MenuViewFrameClick
       end
       object MenuViewCCDtemp: TMenuItem
+        AutoCheck = True
         Caption = 'CCD Temperature'
+        Checked = True
         ShowAlwaysCheckable = True
         OnClick = MenuViewCCDtempClick
       end
@@ -381,7 +383,10 @@ object f_main: Tf_main
         OnClick = MenuViewMountClick
       end
       object MenuViewSequence: TMenuItem
+        AutoCheck = True
         Caption = 'Sequence'
+        Checked = True
+        ShowAlwaysCheckable = True
         OnClick = MenuViewSequenceClick
       end
       object MenuViewHistogram: TMenuItem
