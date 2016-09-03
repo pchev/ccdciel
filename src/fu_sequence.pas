@@ -29,7 +29,7 @@ uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScal
   fu_capture, fu_preview, fu_filterwheel,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   cu_targets, cu_plan,
-  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
 type
@@ -42,6 +42,8 @@ type
     BtnStop: TButton;
     BtnNewTargets: TButton;
     BtnLoadTargets: TButton;
+    BtnCopy: TButton;
+    BtnDelete: TButton;
     StatusTimer: TTimer;
     StartTimer: TTimer;
     Unattended: TCheckBox;
@@ -58,6 +60,8 @@ type
     StaticText3: TStaticText;
     TargetGrid: TStringGrid;
     PlanGrid: TStringGrid;
+    procedure BtnCopyClick(Sender: TObject);
+    procedure BtnDeleteClick(Sender: TObject);
     procedure BtnEditTargetsClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
@@ -126,6 +130,8 @@ var
   f_sequence: Tf_sequence;
 
 implementation
+
+uses LazFileUtils;
 
 {$R *.lfm}
 
@@ -230,6 +236,41 @@ end;
 procedure Tf_sequence.ShowDelayMsg(txt:string);
 begin
   DelayMsg.Caption:=txt;
+end;
+
+procedure Tf_sequence.BtnCopyClick(Sender: TObject);
+var txt,fn1,fn2: string;
+    tfile: TCCDconfig;
+begin
+  fn1:=CurrentFile;
+  txt:=FormEntry(self,'Copy to ','');
+  if txt='' then exit;
+  fn2:=slash(ConfigDir)+txt+'.targets';
+  if FileExistsUTF8(fn2) then begin
+     if MessageDlg('Sequence '+fn2+' already exist. Do you want to replace this file?',mtConfirmation,mbYesNo,0)<>mrYes then
+       exit;
+  end;
+  if CopyFile(fn1,fn2,false) then begin
+    tfile:=TCCDconfig.Create(self);
+    tfile.Filename:=fn2;
+    tfile.SetValue('/ListName',txt);
+    tfile.Flush;
+    tfile.Free;
+    LoadTargets(fn2);
+  end;
+end;
+
+procedure Tf_sequence.BtnDeleteClick(Sender: TObject);
+var fn: string;
+begin
+   fn:=CurrentFile;
+   if MessageDlg('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+      DeleteFileUTF8(fn);
+      ClearTargetGrid;
+      ClearPlanGrid;
+      f_EditTargets.TargetList.RowCount:=1;
+      Targets.Clear;
+   end;
 end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);

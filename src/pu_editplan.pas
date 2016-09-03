@@ -317,19 +317,25 @@ begin
 end;
 
 procedure Tf_EditPlan.BtnDeleteStepClick(Sender: TObject);
-var i: integer;
+var i,j: integer;
     str: string;
 begin
   i:=StepList.Row;
   if i>0 then begin
      str:=StepList.Cells[0,i]+', '+StepList.Cells[1,i];
      if MessageDlg('Delete step '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+        j:=i-1;
+        if j<1 then j:=i+1;
+        if j>=StepList.RowCount then j:=StepList.RowCount-1;
+        StepList.Row:=j;
+        StepListSelection(StepList,0,j);
+        Application.ProcessMessages;
         if StepList.Objects[0,i]<>nil then StepList.Objects[0,i].Free;
         StepList.Objects[0,i]:=nil;
         StepList.DeleteRow(i);
      end;
+     ResetSteps;
   end;
-  ResetSteps;
 end;
 
 procedure Tf_EditPlan.ResetSteps;

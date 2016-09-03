@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, pu_planetariuminfo, u_global, u_utils, pu_pascaleditor, pu_scriptengine,
-  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
+uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, pu_scriptengine,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   maskedit, Grids, ExtCtrls, ComCtrls;
 
 type
@@ -46,6 +46,8 @@ type
     BtnEditNewScript: TButton;
     BtnNewScript: TButton;
     BtnNewPlan: TButton;
+    BtnCopyPlan: TButton;
+    BtnDeletePlan: TButton;
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
     EndTime: TMaskEdit;
@@ -87,7 +89,9 @@ type
     TargetList: TStringGrid;
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
+    procedure BtnCopyPlanClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
+    procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
@@ -117,6 +121,8 @@ var
   f_EditTargets: Tf_EditTargets;
 
 implementation
+
+uses LazFileUtils;
 
 {$R *.lfm}
 
@@ -198,13 +204,52 @@ begin
   if i>=0 then ScriptList.ItemIndex:=i;
 end;
 
+procedure Tf_EditTargets.BtnCopyPlanClick(Sender: TObject);
+var txt,fn1,fn2: string;
+    pfile: TCCDconfig;
+begin
+  txt:=PlanList.Text;
+  fn1:=slash(ConfigDir)+txt+'.plan';
+  txt:=FormEntry(self,'Copy to ','');
+  if txt='' then exit;
+  fn2:=slash(ConfigDir)+txt+'.plan';
+  if FileExistsUTF8(fn2) then begin
+     if MessageDlg('Plan '+fn2+' already exist. Do you want to replace this file?',mtConfirmation,mbYesNo,0)<>mrYes then
+       exit;
+  end;
+  if CopyFile(fn1,fn2,false) then begin
+     pfile:=TCCDconfig.Create(self);
+     pfile.Filename:=fn2;
+     pfile.SetValue('/PlanName',txt);
+     pfile.Flush;
+     pfile.Free;
+     LoadPlanList;
+     SetPlanList(txt);
+     BtnPlanClick(Sender);
+     TargetChange(nil);
+  end;
+end;
+
+procedure Tf_EditTargets.BtnDeletePlanClick(Sender: TObject);
+var txt,fn: string;
+begin
+  txt:=PlanList.Text;
+  fn:=slash(ConfigDir)+txt+'.plan';
+  if MessageDlg('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+     DeleteFileUTF8(fn);
+     LoadPlanList;
+     PlanList.Text:='';
+     TargetChange(nil);
+  end;
+end;
+
 procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
 var txt,fn: string;
     newplan: boolean;
 begin
   newplan:=(Sender=BtnNewPlan)or(PlanList.Text='');
   if newplan then begin
-    txt:=FormEntry(self,'New plan','');
+    txt:=FormEntry(self,'New plan ','');
     if txt='' then exit;
     fn:=slash(ConfigDir)+txt+'.plan';
     if FileExistsUTF8(fn) then begin
@@ -347,19 +392,32 @@ end;
 
 
 procedure Tf_EditTargets.BtnDeleteObjectClick(Sender: TObject);
-var i: integer;
+var i,j: integer;
     str: string;
 begin
   i:=TargetList.Row;
   if i>0 then begin
      str:=TargetList.Cells[0,i]+', '+TargetList.Cells[1,i];
      if MessageDlg('Delete sequence '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+        j:=i-1;
+        if j<1 then j:=i+1;
+        if j>=TargetList.RowCount then j:=TargetList.RowCount-1;
+        TargetList.Row:=j;
+        Application.ProcessMessages;
+        LockTarget:=true;
         if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free;
         TargetList.Objects[0,i]:=nil;
         TargetList.DeleteRow(i);
+        Application.ProcessMessages;
+        ResetSequences;
+        if i>TargetList.RowCount then i:=TargetList.RowCount-1;
+        TargetList.Row:=i;
+        Application.ProcessMessages;
+        LockTarget:=false;
+        TargetChange(nil);
      end;
   end;
-  ResetSequences;
+
 end;
 
 
