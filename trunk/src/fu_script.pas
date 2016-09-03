@@ -27,7 +27,7 @@ interface
 
 uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, indiapi, UScaleDPI,
   fu_capture, fu_preview, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  Classes, Dialogs, SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls;
+  LCLType, Classes, Dialogs, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
 
@@ -38,13 +38,17 @@ type
     BtnEdit: TButton;
     BtnNew: TButton;
     BtnStop: TButton;
+    BtnCopy: TButton;
     ComboBoxScript: TComboBox;
     led: TShape;
     Panel1: TPanel;
     StaticText1: TStaticText;
+    procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnRunClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
+    procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -75,6 +79,7 @@ type
 implementation
 
 {$R *.lfm}
+uses LazFileUtils;
 
 { Tf_script }
 
@@ -155,6 +160,56 @@ begin
     msg('Script terminating...');
   end
   else msg('No script are running.');
+end;
+
+procedure Tf_script.ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var txt,fn: string;
+    scdir:TScriptDir;
+    i:integer;
+begin
+  if key=VK_DELETE then begin
+   i:=ComboBoxScript.ItemIndex;
+   if i<0 then exit;
+   txt:=ComboBoxScript.Items[i];
+   scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
+   if (txt='')or(scdir=nil) then exit;
+   if scdir<>ScriptDir[1] then exit;
+   fn:=scdir.path+txt+'.script';
+   if MessageDlg('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+      DeleteFileUTF8(fn);
+      LoadScriptList;
+   end;
+  end;
+end;
+
+procedure Tf_script.BtnCopyClick(Sender: TObject);
+var txt,fn1,fn2: string;
+    scdir:TScriptDir;
+    i:integer;
+begin
+  i:=ComboBoxScript.ItemIndex;
+  if i<0 then exit;
+  txt:=ComboBoxScript.Items[i];
+  scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
+  if (txt='')or(scdir=nil) then exit;
+  fn1:=scdir.path+txt+'.script';
+  txt:=FormEntry(self,'Copy to ','');
+  if txt='' then exit;
+  scdir:=ScriptDir[1];
+  fn2:=scdir.path+txt+'.script';
+  if FileExistsUTF8(fn2) then begin
+     if MessageDlg('Script '+fn2+' already exist. Do you want to replace this file?',mtConfirmation,mbYesNo,0)<>mrYes then
+       exit;
+  end;
+  if CopyFile(fn1,fn2,false) then begin
+     LoadScriptList;
+     SetScriptList(txt);
+     i:=ComboBoxScript.ItemIndex;
+     if i<0 then exit;
+     if txt=ComboBoxScript.Items[i] then
+        BtnScriptClick(self);
+  end;
 end;
 
 procedure Tf_script.BtnScriptClick(Sender: TObject);

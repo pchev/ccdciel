@@ -32,7 +32,7 @@ object f_sequence: Tf_sequence
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 130
+      Height = 115
       Top = 20
       Width = 180
       Align = alClient
@@ -47,16 +47,16 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 85
-      Top = 150
+      Height = 100
+      Top = 135
       Width = 180
       Align = alBottom
-      ClientHeight = 85
+      ClientHeight = 100
       ClientWidth = 180
       TabOrder = 1
       object BtnEditTargets: TButton
         Left = 122
-        Height = 25
+        Height = 22
         Top = 4
         Width = 54
         Caption = 'Edit'
@@ -65,7 +65,7 @@ object f_sequence: Tf_sequence
       end
       object BtnLoadTargets: TButton
         Left = 0
-        Height = 25
+        Height = 22
         Top = 4
         Width = 54
         Caption = 'Load'
@@ -74,7 +74,7 @@ object f_sequence: Tf_sequence
       end
       object BtnNewTargets: TButton
         Left = 62
-        Height = 25
+        Height = 22
         Top = 4
         Width = 54
         Caption = 'New'
@@ -83,32 +83,50 @@ object f_sequence: Tf_sequence
       end
       object BtnStart: TButton
         Left = 0
-        Height = 25
-        Top = 32
-        Width = 86
+        Height = 22
+        Top = 56
+        Width = 80
         Caption = 'Start'
         OnClick = BtnStartClick
         TabOrder = 3
       end
       object BtnStop: TButton
-        Left = 90
-        Height = 25
-        Top = 32
-        Width = 86
+        Left = 96
+        Height = 22
+        Top = 56
+        Width = 80
         Caption = 'Stop'
         OnClick = BtnStopClick
         TabOrder = 4
       end
       object Unattended: TCheckBox
         Left = 1
-        Height = 22
+        Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 56
+        Top = 72
         Width = 122
         Caption = 'Run unattended'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 5
+      end
+      object BtnCopy: TButton
+        Left = 0
+        Height = 22
+        Top = 30
+        Width = 54
+        Caption = 'Copy'
+        OnClick = BtnCopyClick
+        TabOrder = 6
+      end
+      object BtnDelete: TButton
+        Left = 62
+        Height = 22
+        Top = 30
+        Width = 54
+        Caption = 'Delete'
+        OnClick = BtnDeleteClick
+        TabOrder = 7
       end
     end
     object StaticText3: TStaticText

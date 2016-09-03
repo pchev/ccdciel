@@ -1,11 +1,11 @@
 object f_EditTargets: Tf_EditTargets
   Left = 1006
-  Height = 445
+  Height = 480
   Top = 87
   Width = 614
   ActiveControl = BtnClose
   Caption = 'Edit target list'
-  ClientHeight = 445
+  ClientHeight = 480
   ClientWidth = 614
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -16,7 +16,7 @@ object f_EditTargets: Tf_EditTargets
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 406
+    Top = 441
     Width = 614
     Align = alBottom
     ClientHeight = 39
@@ -61,16 +61,16 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel2: TPanel
     Left = 0
-    Height = 406
+    Height = 441
     Top = 0
     Width = 284
     Align = alClient
-    ClientHeight = 406
+    ClientHeight = 441
     ClientWidth = 284
     TabOrder = 1
     object TargetList: TStringGrid
       Left = 1
-      Height = 404
+      Height = 439
       Top = 1
       Width = 282
       Align = alClient
@@ -95,7 +95,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object PageControl1: TPageControl
     Left = 284
-    Height = 406
+    Height = 441
     Top = 0
     Width = 330
     ActivePage = TabSheet1
@@ -105,36 +105,36 @@ object f_EditTargets: Tf_EditTargets
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
-      ClientHeight = 404
+      ClientHeight = 439
       ClientWidth = 328
       object Panel3: TPanel
         Left = 0
-        Height = 404
+        Height = 439
         Top = 0
         Width = 328
         Align = alClient
-        ClientHeight = 404
+        ClientHeight = 439
         ClientWidth = 328
         TabOrder = 0
         object Label1: TLabel
           Left = 16
-          Height = 24
+          Height = 18
           Top = 25
-          Width = 56
+          Width = 39
           Caption = 'Object'
           ParentColor = False
         end
         object Label2: TLabel
           Left = 16
-          Height = 24
+          Height = 18
           Top = 54
-          Width = 37
+          Width = 26
           Caption = 'Plan'
           ParentColor = False
         end
         object PlanList: TComboBox
           Left = 98
-          Height = 32
+          Height = 26
           Top = 48
           Width = 126
           ItemHeight = 0
@@ -143,7 +143,7 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 0
         end
         object BtnNewPlan: TButton
-          Left = 273
+          Left = 275
           Height = 25
           Top = 49
           Width = 48
@@ -155,24 +155,24 @@ object f_EditTargets: Tf_EditTargets
           Left = 226
           Height = 25
           Top = 49
-          Width = 46
+          Width = 48
           Caption = 'Edit'
           OnClick = BtnPlanClick
           TabOrder = 2
         end
         object Label7: TLabel
           Left = 16
-          Height = 24
+          Height = 18
           Top = 0
-          Width = 82
+          Width = 58
           Caption = 'Sequence'
           ParentColor = False
         end
         object LabelSeq: TLabel
           Left = 98
-          Height = 24
+          Height = 18
           Top = 1
-          Width = 81
+          Width = 58
           Caption = 'LabelSeq'
           Font.Style = [fsBold]
           ParentColor = False
@@ -180,7 +180,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object ObjectName: TEdit
           Left = 98
-          Height = 30
+          Height = 24
           Top = 23
           Width = 126
           OnChange = TargetChange
@@ -189,14 +189,14 @@ object f_EditTargets: Tf_EditTargets
         object PanelRepeat: TPanel
           Left = 8
           Height = 125
-          Top = 280
+          Top = 303
           Width = 312
           ClientHeight = 125
           ClientWidth = 312
           TabOrder = 4
           object PreviewExposure: TEdit
             Left = 113
-            Height = 30
+            Height = 24
             Top = 91
             Width = 59
             OnChange = TargetChange
@@ -205,17 +205,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label9: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 94
-            Width = 150
+            Width = 106
             Caption = 'Preview exposure'
             ParentColor = False
           end
           object Preview: TCheckBox
             Left = 8
-            Height = 26
+            Height = 21
             Top = 60
-            Width = 292
+            Width = 212
             Caption = 'Preview when waiting to repeat'
             OnChange = TargetChange
             ParentBidiMode = False
@@ -223,31 +223,31 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label13: TLabel
             Left = 188
-            Height = 24
+            Height = 18
             Top = 40
-            Width = 82
+            Width = 57
             Caption = '[seconds]'
             ParentColor = False
           end
           object Label11: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 40
-            Width = 47
+            Width = 33
             Caption = 'Delay'
             ParentColor = False
           end
           object Label10: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 11
-            Width = 59
+            Width = 42
             Caption = 'Repeat'
             ParentColor = False
           end
           object Delay: TEdit
             Left = 92
-            Height = 30
+            Height = 24
             Top = 37
             Width = 80
             OnChange = TargetChange
@@ -256,7 +256,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object RepeatCount: TEdit
             Left = 92
-            Height = 30
+            Height = 24
             Top = 8
             Width = 80
             OnChange = TargetChange
@@ -265,18 +265,18 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label14: TLabel
             Left = 188
-            Height = 24
+            Height = 18
             Top = 94
-            Width = 82
+            Width = 57
             Caption = '[seconds]'
             ParentColor = False
           end
         end
         object CheckBoxRepeat: TCheckBox
           Left = 8
-          Height = 26
-          Top = 248
-          Width = 282
+          Height = 21
+          Top = 271
+          Width = 203
           Caption = 'Repeat the plan for this object'
           OnChange = CheckBoxRepeatChange
           TabOrder = 5
@@ -284,7 +284,7 @@ object f_EditTargets: Tf_EditTargets
         object Panel4: TPanel
           Left = 8
           Height = 68
-          Top = 81
+          Top = 104
           Width = 312
           ClientHeight = 68
           ClientWidth = 312
@@ -301,7 +301,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object EndTime: TMaskEdit
             Left = 92
-            Height = 30
+            Height = 24
             Top = 40
             Width = 70
             CharCase = ecNormal
@@ -314,7 +314,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object StartTime: TMaskEdit
             Left = 92
-            Height = 30
+            Height = 24
             Top = 8
             Width = 70
             CharCase = ecNormal
@@ -327,17 +327,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label4: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 42
-            Width = 76
+            Width = 53
             Caption = 'End time'
             ParentColor = False
           end
           object Label3: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 10
-            Width = 85
+            Width = 59
             Caption = 'Start time'
             ParentColor = False
           end
@@ -353,7 +353,7 @@ object f_EditTargets: Tf_EditTargets
         object Panel5: TPanel
           Left = 8
           Height = 96
-          Top = 152
+          Top = 175
           Width = 312
           ClientHeight = 96
           ClientWidth = 312
@@ -369,7 +369,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointDEC: TEdit
             Left = 92
-            Height = 30
+            Height = 24
             Top = 42
             Width = 100
             OnChange = TargetChange
@@ -377,7 +377,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointRA: TEdit
             Left = 92
-            Height = 30
+            Height = 24
             Top = 8
             Width = 100
             OnChange = TargetChange
@@ -385,17 +385,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label6: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 44
-            Width = 95
+            Width = 67
             Caption = 'Center DEC'
             ParentColor = False
           end
           object Label5: TLabel
             Left = 8
-            Height = 24
+            Height = 18
             Top = 10
-            Width = 84
+            Width = 59
             Caption = 'Center RA'
             ParentColor = False
           end
@@ -410,19 +410,37 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointAstrometry: TCheckBox
             Left = 8
-            Height = 26
+            Height = 21
             Top = 69
-            Width = 340
+            Width = 246
             Caption = 'Use astrometry to refine the position'
             OnChange = TargetChange
             TabOrder = 4
           end
         end
+        object BtnCopyPlan: TButton
+          Left = 226
+          Height = 25
+          Top = 78
+          Width = 48
+          Caption = 'Copy'
+          OnClick = BtnCopyPlanClick
+          TabOrder = 8
+        end
+        object BtnDeletePlan: TButton
+          Left = 275
+          Height = 25
+          Top = 78
+          Width = 48
+          Caption = 'Delete'
+          OnClick = BtnDeletePlanClick
+          TabOrder = 9
+        end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Script'
-      ClientHeight = 404
+      ClientHeight = 439
       ClientWidth = 328
       object LabelSeq1: TLabel
         Left = 98

@@ -2249,7 +2249,7 @@ begin
                        MenuAutoguiderGuide.Caption:='Guide';
                        end;
  end;
- if autoguider.LastError<>'' then NewMessage(autoguider.LastError);
+ if autoguider.LastError<>'' then NewMessage('Autoguider: '+autoguider.LastError);
 
 end;
 

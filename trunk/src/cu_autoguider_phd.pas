@@ -180,7 +180,7 @@ end;
 Procedure T_autoguider_phd.ProcessEvent(txt:string);
 var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
-    p,i,s:integer;
+    p,i,s,k:integer;
 begin
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
@@ -193,14 +193,26 @@ if p>=0 then begin
    if (eventname='GuideStep') then begin
      if (FStatus<>'Settling') then FStatus:='Guiding';
      i:=attrib.IndexOf('ErrorCode');
-     if i>=0 then FLastError:=value[i];
+     if i>=0 then begin
+       k:=StrToIntDef(trim(value[i]),-1);
+       case k of
+         0: FLastError:='STAR_OK';
+         1: FLastError:='STAR_SATURATED';
+         2: FLastError:='STAR_LOWSNR';
+         3: FLastError:='STAR_LOWMASS';
+         4: FLastError:='STAR_TOO_NEAR_EDGE';
+         5: FLastError:='STAR_MASSCHANGE';
+         6: FLastError:='STAR_ERROR';
+         else FLastError:='';
+       end;
+     end;
    end
    else if eventname='StartGuiding' then FStatus:='Start Guiding'
    else if eventname='GuidingStopped' then FStatus:='Stopped'
    else if eventname='StarSelected' then FStatus:='Star Selected'
    else if eventname='StarLost' then begin
       i:=attrib.IndexOf('Status');
-      if i>=0 then FLastError:=value[i];
+      if i>=0 then FLastError:='StarLost '+value[i];
       if (FStatus='Guiding')and(not StarLostTimer.Enabled) then begin
         FStarLostTime:=now;
         StarLostTimer.Enabled:=true;
@@ -216,7 +228,7 @@ if p>=0 then begin
    else if eventname='CalibrationFailed' then begin
      FStatus:='Calibration Failed';
      i:=attrib.IndexOf('Reason');
-     if i>=0 then FLastError:=value[i];
+     if i>=0 then FLastError:='CalibrationFailed '+value[i];
    end
    else if eventname='CalibrationDataFlipped' then FStatus:='Calibration Data Flipped'
    else if eventname='LoopingExposures' then FStatus:='Looping Exposures'
@@ -241,7 +253,7 @@ if p>=0 then begin
      if i>=0 then err:=value[i]+', ' else err:='';
      i:=attrib.IndexOf('Msg');
      if i>=0 then err:=err+value[i];
-     FLastError:=err;
+     FLastError:='Alert '+err;
    end
    else if eventname='AppState' then begin
      i:=attrib.IndexOf('State');

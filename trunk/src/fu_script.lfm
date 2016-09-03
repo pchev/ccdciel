@@ -41,6 +41,7 @@ object f_script: Tf_script
       Color = clBlack
       Font.Color = clRed
       ItemHeight = 0
+      OnKeyDown = ComboBoxScriptKeyDown
       ParentFont = False
       TabOrder = 0
     end
@@ -57,16 +58,16 @@ object f_script: Tf_script
       Left = 2
       Height = 22
       Top = 56
-      Width = 66
+      Width = 56
       Caption = 'Edit'
       OnClick = BtnScriptClick
       TabOrder = 2
     end
     object BtnNew: TButton
-      Left = 78
+      Left = 64
       Height = 22
       Top = 56
-      Width = 66
+      Width = 56
       Caption = 'New'
       OnClick = BtnScriptClick
       TabOrder = 3
@@ -87,6 +88,15 @@ object f_script: Tf_script
       Width = 14
       Brush.Color = clGray
       Shape = stCircle
+    end
+    object BtnCopy: TButton
+      Left = 128
+      Height = 22
+      Top = 56
+      Width = 56
+      Caption = 'Copy'
+      OnClick = BtnCopyClick
+      TabOrder = 5
     end
   end
 end
