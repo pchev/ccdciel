@@ -38,6 +38,7 @@ TAstrometry = class(TComponent)
     FonEndAstrometry: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
+    FLastSlewErr: double;
     Fmount: T_mount;
     Fcamera: T_camera;
     FFits: TFits;
@@ -69,6 +70,7 @@ TAstrometry = class(TComponent)
     function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double):boolean;
     property Busy: Boolean read FBusy;
     property SlewBusy: Boolean read FSlewBusy;
+    property LastSlewErr: double read FLastSlewErr;
     property LastResult: Boolean read FLastResult;
     property ResultFile: string read savefile;
     property Resolver: string read FResolverName;
@@ -88,6 +90,7 @@ begin
   FBusy:=false;
   FSlewBusy:=false;
   FLastResult:=false;
+  FLastSlewErr:=0;
   AstrometryTimeout:=60;
   TimerAstrometrySolve:=TTimer.Create(self);
   TimerAstrometrySolve.Enabled:=false;
@@ -400,13 +403,14 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
     fn:string;
     n,i:integer;
 begin
-  dist:=MaxInt;
+  dist:=abs(NullCoord/60);
+  FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
     raoffset:=0;
     deoffset:=0;
     ar1:=deg2rad*15*ra;
     de1:=deg2rad*de;
-    msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+    msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
     Mount.Slew(ra, de);
     i:=1;
     repeat
@@ -441,10 +445,10 @@ begin
       if dist>prec then begin
         case method of
          0: begin
-               msg('Sync to '+FormatFloat(f5,cra)+'/'+FormatFloat(f5,cde));
+               msg('Sync to '+ARToStr3(cra)+'/'+DEToStr(cde));
                mount.Sync(cra,cde);
                Wait(2);
-               msg('Slew to '+FormatFloat(f5,ra)+'/'+FormatFloat(f5,de));
+               msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
                Mount.Slew(ra, de);
             end;
          else begin
@@ -464,6 +468,7 @@ begin
   end;
   result:=(dist<=prec);
   err:=dist;
+  FLastSlewErr:=dist;
   if result then msg('Precision slew terminated.')
             else msg('Precision slew failed!');
 end;

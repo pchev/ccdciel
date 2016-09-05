@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi,
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, BGRABitmap,
   lazutf8sysutils, Classes, SysUtils;
 
 type
@@ -44,16 +44,20 @@ T_camera = class(TComponent)
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
     FonNewImage: TNotifyEvent;
+    FonVideoFrame: TNotifyEvent;
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
     FImgStream: TMemoryStream;
+    FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
     FObjectName: string;
     FFits: TFits;
+    FVideoFrame: TBGRABitmap;
     FMount: T_mount;
     Fwheel: T_wheel;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     procedure NewImage;
+    procedure NewVideoFrame;
     procedure WriteHeaders;
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
@@ -75,6 +79,8 @@ T_camera = class(TComponent)
     function GetPixelSizeY: double; virtual; abstract;
     function GetBitperPixel: double; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
+  private
+    lockvideoframe: boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -96,6 +102,8 @@ T_camera = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
     property ImgStream: TMemoryStream read FImgStream;
+    property VideoStream: TMemoryStream read FVideoStream;
+    property VideoFrame: TBGRABitmap read FVideoFrame;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
@@ -124,6 +132,7 @@ T_camera = class(TComponent)
     property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
     property onWheelStatusChange: TNotifyEvent read FonWheelStatusChange write FonWheelStatusChange;
     property onNewImage: TNotifyEvent read FonNewImage write FonNewImage;
+    property onVideoFrame: TNotifyEvent read FonVideoFrame write FonVideoFrame;
     property onCameraDisconnected: TNotifyEvent read FonCameraDisconnected write FonCameraDisconnected;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
 end;
@@ -137,12 +146,17 @@ begin
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
+  FVideoStream:=TMemoryStream.Create;;
+  FVideoFrame:=TBGRABitmap.Create;
+  lockvideoframe:=false;
 end;
 
 destructor  T_camera.Destroy;
 begin
   FImgStream.Free;
   FFilterNames.Free;
+  FVideoStream.Free;
+  FVideoFrame.Free;
   inherited Destroy;
 end;
 
@@ -151,6 +165,24 @@ begin
   Ffits.Stream:=ImgStream;
   WriteHeaders;
   if Assigned(FonNewImage) then FonNewImage(self);
+end;
+
+procedure T_camera.NewVideoFrame;
+var i,j,x,y,w,h: integer;
+begin
+  if lockvideoframe then exit;
+  lockvideoframe:=true;
+  try
+  GetFrame(x,y,w,h);
+  FVideoFrame.SetSize(w,h);
+  FVideoStream.Position:=0;
+  for i := 0 to h-1 do
+    FVideoStream.read(FVideoFrame.ScanLine[i]^, w*4);
+  FVideoFrame.SwapRedBlue;
+  if Assigned(FonVideoFrame) then FonVideoFrame(self);
+  finally
+    lockvideoframe:=false;
+  end;
 end;
 
 procedure T_camera.WriteHeaders;

@@ -73,6 +73,7 @@ private
    configload,configsave,configdefault: ISwitch;
    FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
+   lockvideostream:boolean;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -169,6 +170,7 @@ begin
  ConnectTimer.Interval:=3000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
  CreateIndiClient;
+ lockvideostream:=false;
 end;
 
 destructor  T_indicamera.Destroy;
@@ -555,11 +557,11 @@ var source,dest: array of char;
 begin
  if bp.bloblen>0 then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
-   FImgStream.Clear;
-   FImgStream.Position:=0;
    bp.blob.Position:=0;
-   if pos('.fits',bp.format)>0 then begin // require a FITS file
+   if pos('.fits',bp.format)>0 then begin // receive a FITS file
      if pos('.z',bp.format)>0 then begin //compressed
+         FImgStream.Clear;
+         FImgStream.Position:=0;
          if zlibok then begin
            sourceLen:=bp.bloblen;
            destLen:=bp.size;
@@ -574,9 +576,41 @@ begin
          end;
      end
      else begin  //uncompressed
+        FImgStream.Clear;
+        FImgStream.Position:=0;
         FImgStream.CopyFrom(bp.blob,bp.size);
      end;
      NewImage;
+   end
+   else if pos('.stream',bp.format)>0 then begin // video stream
+     if lockvideostream then exit; // skip extra frames if we cannot follow the rate
+     lockvideostream:=true;
+     try
+     if pos('.z',bp.format)>0 then begin //compressed
+         if zlibok then begin
+           FVideoStream.Clear;
+           FVideoStream.Position:=0;
+           sourceLen:=bp.bloblen;
+           destLen:=bp.size;
+           SetLength(source,sourceLen);
+           SetLength(dest,destLen);
+           bp.blob.Read(source[0],sourceLen);
+           i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
+           if i=0 then
+              FVideoStream.Write(dest[0],destLen);
+           SetLength(source,0);
+           SetLength(dest,0);
+         end;
+     end
+     else begin  //uncompressed
+       FVideoStream.Clear;
+       FVideoStream.Position:=0;
+       FVideoStream.CopyFrom(bp.blob,bp.size);
+     end;
+     NewVideoFrame;
+     finally
+       lockvideostream:=false;
+     end;
    end
    else begin
         msg('Invalid file format '+bp.format+', a FITS file is required');

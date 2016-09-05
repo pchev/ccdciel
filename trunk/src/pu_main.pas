@@ -386,6 +386,8 @@ type
     Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
+    procedure CameraVideoFrame(Sender: TObject);
+    procedure CameraVideoFrameAsync(Data: PtrInt);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
@@ -781,6 +783,7 @@ begin
   camera.onFrameChange:=@FrameChange;
   camera.onTemperatureChange:=@CameraTemperatureChange;
   camera.onNewImage:=@CameraNewImage;
+  camera.onVideoFrame:=@CameraVideoFrame;
   camera.onStatusChange:=@CameraStatus;
   camera.onCameraDisconnected:=@CameraDisconnected;
   camera.onAbortExposure:=@CameraExposureAborted;
@@ -1480,6 +1483,7 @@ begin
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
   MeridianFlipPauseAfter:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
   MeridianFlipPauseTimeout:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
+  astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
 end;
@@ -2388,6 +2392,7 @@ begin
    f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
    f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',10));
    f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
+   if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
    f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
@@ -2969,6 +2974,19 @@ begin
          StatusBar1.Panels[1].Text:='';
     end;
   end;
+end;
+
+procedure Tf_main.CameraVideoFrame(Sender: TObject);
+begin
+  Application.QueueAsyncCall(@CameraVideoFrameAsync,0);
+end;
+
+procedure Tf_main.CameraVideoFrameAsync(Data: PtrInt);
+begin
+  ImaBmp.Assign(camera.VideoFrame);
+  img_Width:=ImaBmp.Width;
+  img_Height:=ImaBmp.Height;
+  PlotImage;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
@@ -3791,10 +3809,17 @@ var ra,de,hh,a,h: double;
     jd0,CurSt,CurTime: double;
     Year, Month, Day: Word;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
-    slewtoimg, restartguider, SaveCapture: boolean;
+    slewtoimg, restartguider, SaveCapture, ok: boolean;
+  procedure DoAbort;
+  begin
+    NewMessage('Meridian abort!');
+    mount.AbortMotion;
+    if f_capture.Running then CameraExposureAborted(nil);
+    if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
+  end;
 begin
   result:=-1;
-  if (mount.Status=devConnected) and (not mount.MountSlewing) and (not meridianflipping) then begin
+  if (mount.Status=devConnected) and (not mount.MountSlewing) and ((not meridianflipping)or(nextexposure<>0)) then begin
     DecodeDate(now, Year, Month, Day);
     CurTime:=frac(now)*24;
     jd0:=jd(Year,Month,Day,0);
@@ -3816,7 +3841,9 @@ begin
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
     MeridianDelay1:=-hhmin;
-    MeridianDelay2:=MinutesPastMeridian-hhmin;
+    if mount.PierSide=pierUnknown
+      then MeridianDelay2:=MeridianDelay1
+      else MeridianDelay2:=MinutesPastMeridian-hhmin;
     NextDelay:=ceil(nextexposure/60);
     if MeridianDelay1>0  then begin // before meridian limit
       if MeridianDelay2>NextDelay then begin // enough time for next exposure or no capture in progress
@@ -3828,7 +3855,7 @@ begin
            meridianflipping:=true;
            NewMessage('Wait meridian flip for '+inttostr(MeridianDelay1)+' minutes');
            StatusBar1.Panels[1].Text := 'Wait meridian flip';
-           result:=60*MeridianDelay1; // time to wait for meridian
+           result:=15+abs(round(rad2deg*3600*hh/15)); // time to wait for meridian
            exit;
         end else begin
          result:=-1;   // if abort, continue
@@ -3841,8 +3868,12 @@ begin
       then begin                    // Do meridian action
       if MeridianOption=1 then begin  // Flip
         meridianflipping:=true;
+        if mount.PierSide=pierUnknown then begin
+          NewMessage('Mount is not reporting pier side, meridian flip can be unreliable.');
+        end;
         // save current image if any
-        if (f_capture.Running) and fits.HeaderInfo.valid then begin
+        if (f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
+          DeleteFileUTF8(slash(TmpDir)+'meridianflip.fits');
           fits.SaveToFile(slash(TmpDir)+'meridianflip.fits');
           slewtoimg:=true;
         end
@@ -3857,10 +3888,12 @@ begin
         // Pause before
         if MeridianFlipPauseBefore then begin
           waittimeout:=60*MeridianDelay2;
+          if waittimeout<=0 then waittimeout:=30;
           f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready';
           if not f_pause.Wait(waittimeout) then begin
             meridianflipping:=false;
             NewMessage('Meridian flip canceled before flip');
+            DoAbort;
             exit;
           end;
         end;
@@ -3869,6 +3902,18 @@ begin
         StatusBar1.Panels[1].Text := 'Meridian flip';
         mount.FlipMeridian;
         wait(2);
+        if mount.PierSide=pierWest then begin
+          f_pause.Text:='Meridian flip error!';
+          NewMessage(f_pause.Text);
+          if not f_pause.Wait then begin
+             DoAbort;
+             exit;
+          end;
+        end;
+        if mount.PierSide=pierUnknown then begin
+          NewMessage('Wait 1 minute ...');
+          wait(60); // ensure we not do the flip two time
+        end;
         meridianflipping:=false;
         NewMessage('Meridian flip done');
         // Pause after
@@ -3878,25 +3923,35 @@ begin
           Capture:=false; // allow preview and refocusing
           waittimeout:=60*MeridianFlipPauseTimeout;
           f_pause.Text:='Meridian flip done.'+crlf+'Click Continue when ready.';
-          if not f_pause.Wait(waittimeout) then begin
-            Capture:=SaveCapture;
-            NewMessage('Meridian flip canceled after flip');
-            exit;
-          end;
+          ok:=f_pause.Wait(waittimeout);
           finally
             Capture:=SaveCapture;
           end;
+          if not ok then begin
+            NewMessage('Meridian flip canceled after flip');
+            DoAbort;
+            exit;
+          end;
         end;
         // precision slew with saved image
-        if slewtoimg then begin
+        if slewtoimg  then begin
           NewMessage('Recenter on last image');
           try
           Capture:=false;  // do not save the control images
           LoadFitsFile(slash(TmpDir)+'meridianflip.fits');
+          DeleteFileUTF8(slash(TmpDir)+'meridianflip.fits');
           ResolveSlewCenter(Self);
           wait(2);
           finally
             Capture:=true;
+          end;
+          if (astrometry.LastResult)and(astrometry.LastSlewErr>config.GetValue('/PrecSlew/Precision',5.0)/60) then begin
+            f_pause.Text:='Recenter image error!'+crlf+'distance: '+FormatFloat(f1,astrometry.LastSlewErr);
+            NewMessage(f_pause.Text);
+            if not f_pause.Wait then begin
+               DoAbort;
+               exit;
+            end;
           end;
         end;
         // start autoguider
@@ -3904,18 +3959,22 @@ begin
           NewMessage('Restart autoguider');
           autoguider.Guide(true);
           autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
+          if autoguider.State<>GUIDER_GUIDING then begin
+            f_pause.Text:='Failed to start guiding!';
+            NewMessage(f_pause.Text);
+            if not f_pause.Wait then begin
+               DoAbort;
+               exit;
+            end;
+          end;
         end;
         Wait(2);
         NewMessage('Meridian flip terminated');
         StatusBar1.Panels[1].Text := '';
       end else begin  // Abort
-        NewMessage('Meridian abort!');
-        if f_capture.Running then CameraExposureAborted(nil);
-        if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
-        mount.AbortMotion;
+        DoAbort;
       end;
     end;
-
   end;
 end;
 
