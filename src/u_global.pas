@@ -158,7 +158,8 @@ const
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
-  ResolverName: array[0..1] of string =('Astrometry.Net','Elbrus');
+  ResolverNone=2;
+  ResolverName: array[0..2] of string =('Astrometry.Net','Elbrus','No resolver');
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;
@@ -208,6 +209,7 @@ var
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
   MeridianOption,MinutesPastMeridian, MeridianFlipPauseTimeout: integer;
   MeridianFlipPauseBefore, MeridianFlipPauseAfter: boolean;
+  astrometryResolver: integer;
   OrigX, OrigY,img_Height,img_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0: double;

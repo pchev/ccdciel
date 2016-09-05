@@ -36,6 +36,8 @@ type
   Tf_option = class(TForm)
     ButtonDir: TButton;
     BayerMode: TComboBox;
+    Label44: TLabel;
+    MeridianWarning: TLabel;
     MeridianFlipPauseTimeout: TEdit;
     Label41: TLabel;
     Label42: TLabel;
@@ -72,6 +74,7 @@ type
     longsec: TFloatEdit;
     MeridianOption: TRadioGroup;
     MeridianFlipPanel: TPanel;
+    Page3: TPage;
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SlewPrec: TEdit;
@@ -333,7 +336,7 @@ end;
 
 procedure Tf_option.SetResolver(value:integer);
 begin
-  if (value<0)or(value>1) then exit;
+  if (value<0)or(value>2) then exit;
   ResolverBox.ItemIndex:=value;
   ResolverBoxClick(nil);
 end;

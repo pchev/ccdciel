@@ -20,6 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+{
+  non blocking pause message
+}
+
 {$mode objfpc}{$H+}
 
 interface

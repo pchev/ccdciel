@@ -43,8 +43,6 @@ TAstrometry_engine = class(TThread)
      FOtherOptions: string;
      Fparam: TStringList;
      process: TProcessUTF8;
-//     FCmdTerminate: TNotifyEvent;
-     procedure SyncCmdTerminate;
    protected
      procedure Execute; override;
    public
@@ -248,6 +246,9 @@ else if FResolver=ResolverElbrus then begin
   DeleteFileUTF8(slash(FElbrusDir)+'elbrus.sta');
   Copyfile(FInFile,slash(FElbrusDir)+FElbrusFile,[cffOverwriteFile]);
   Start;
+end
+else if FResolver=ResolverNone then begin
+  Start;
 end;
 end;
 
@@ -387,13 +388,16 @@ else if FResolver=ResolverElbrus then begin
     end;
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
-  //Synchronize(@SyncCmdTerminate);
+end
+else if FResolver=ResolverNone then begin
+  if (FLogFile<>'') then begin
+    AssignFile(ft,FLogFile);
+    rewrite(ft);
+    WriteLn(ft,'No astrometry resolver configured!');
+    CloseFile(ft);
+  end;
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
 end;
-end;
-
-procedure TAstrometry_engine.SyncCmdTerminate;
-begin
- // if Assigned(FCmdTerminate) then FCmdTerminate(self);
 end;
 
 end.

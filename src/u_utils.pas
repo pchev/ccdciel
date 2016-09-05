@@ -1032,6 +1032,7 @@ end;
 
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 begin
+try
   if ImgZoom=0.5 then begin
      xx:=(x * 2)-OrigX;
      yy:=(y * 2)-OrigY;
@@ -1045,10 +1046,15 @@ begin
      xx:=trunc(x/ImgScale0);
      yy:=trunc(y/ImgScale0);
   end;
+except
+  xx:=-1;
+  yy:=-1;
+end;
 end;
 
 procedure Fits2Screen(x,y: integer; out xx,yy: integer);
 begin
+try
   if ImgZoom=0 then begin
     xx:=round(x * ImgScale0);
     yy:=round(y * ImgScale0);
@@ -1065,6 +1071,10 @@ begin
     xx:=2*(x+OrigX);
     yy:=2*(y+OrigY);
   end;
+except
+  xx:=-1;
+  yy:=-1;
+end;
 end;
 
 procedure Screen2CCD(x,y: integer; out xx,yy:integer);

@@ -34,15 +34,15 @@ object f_mount: Tf_mount
     TabOrder = 1
     object Label1: TLabel
       Left = 0
-      Height = 24
+      Height = 17
       Top = 0
-      Width = 48
+      Width = 34
       Caption = 'RA     '
       ParentColor = False
     end
     object RA: TEdit
       Left = 35
-      Height = 30
+      Height = 27
       Hint = 'Current telescope Right Ascension'
       Top = 0
       Width = 80
@@ -55,15 +55,15 @@ object f_mount: Tf_mount
     end
     object Label2: TLabel
       Left = 0
-      Height = 24
+      Height = 17
       Top = 27
-      Width = 47
+      Width = 35
       Caption = 'Dec   '
       ParentColor = False
     end
     object DE: TEdit
       Left = 35
-      Height = 30
+      Height = 27
       Hint = 'Current telescope declination'
       Top = 25
       Width = 80
@@ -94,19 +94,18 @@ object f_mount: Tf_mount
     end
     object LabelMeridian: TLabel
       Left = 0
-      Height = 24
+      Height = 17
       Top = 78
-      Width = 96
+      Width = 77
       Caption = 'Meridian in'
       ParentColor = False
     end
     object TimeToMeridian: TEdit
-      Left = 85
-      Height = 30
-      Hint = 'Current telescope declination'
+      Left = 96
+      Height = 27
+      Hint = 'Time from meridian transit (hour angle)'
       Top = 75
       Width = 30
-      Alignment = taRightJustify
       Color = clBlack
       Font.Color = clRed
       ParentFont = False
@@ -114,25 +113,25 @@ object f_mount: Tf_mount
       TabOrder = 4
     end
     object Label4: TLabel
-      Left = 120
-      Height = 24
+      Left = 131
+      Height = 17
       Top = 78
-      Width = 38
+      Width = 30
       Caption = 'min.'
       ParentColor = False
     end
     object Pierside: TEdit
       Left = 3
-      Height = 30
-      Hint = 'Current telescope declination'
+      Height = 27
+      Hint = 'Current telescope pier side'
       Top = 50
-      Width = 112
-      Alignment = taRightJustify
+      Width = 173
       Color = clBlack
       Font.Color = clRed
       ParentFont = False
       ReadOnly = True
       TabOrder = 5
+      Text = 'Unknow pier side'
     end
   end
 end
