@@ -389,6 +389,7 @@ if Camera.Status=devConnected then begin
   Camera.onNewImage:=SaveonNewImage;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
   if Assigned(SaveonNewImage) then SaveonNewImage(self);
+  Wait(1);
 end;
 end;
 
