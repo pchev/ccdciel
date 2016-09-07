@@ -3784,6 +3784,7 @@ end;
 
 procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
 begin
+  if AppClose then exit;
   case Message.wParam of
     M_AutoguiderStatusChange: AutoguiderStatus(nil);
     M_AutoguiderMessage: if autoguider.ErrorDesc<>'' then begin
