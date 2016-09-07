@@ -44,6 +44,7 @@ type
     Constructor Create;
     procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
+    procedure Shutdown; override;
     function Cmd(const Value: string):string; override;
     function ShowImage(fn: string):boolean; override;
   end;
@@ -80,6 +81,11 @@ end;
 procedure TPlanetarium_cdc.Disconnect;
 begin
  Terminate;
+end;
+
+procedure TPlanetarium_cdc.Shutdown;
+begin
+ Cmd('SHUTDOWN');
 end;
 
 procedure TPlanetarium_cdc.Execute;

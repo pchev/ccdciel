@@ -45,6 +45,7 @@ type
     Destructor Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
+    procedure Shutdown; override;
     procedure ConnectGear; override;
     procedure SettleTolerance(pixel:double; mintime,maxtime: integer); override;
     procedure Calibrate; override;
@@ -292,6 +293,11 @@ end else begin
        end
        else FState:=GUIDER_IDLE;
      end
+     else if rpcid='1001' then begin  // shutdown
+       if rpcresult='error' then begin
+          DisplayMessage('shutdown'+' '+rpcresult+' '+rpcerror);
+       end;
+     end
      else if rpcid='2001' then begin  // stop capture
        if rpcresult='error' then begin
           DisplayMessage('stop capture'+' '+rpcresult+' '+rpcerror);
@@ -364,6 +370,13 @@ begin
  buf:='{"method": "set_connected", "params": [';
  buf:=buf+'true';
  buf:=buf+'], "id": 1000}';
+ Send(buf);
+end;
+
+procedure T_autoguider_phd.Shutdown;
+var buf:string;
+begin
+ buf:='{"method": "shutdown","id":1001}';
  Send(buf);
 end;
 

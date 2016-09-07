@@ -54,6 +54,7 @@ public
   Constructor Create;
   Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
   procedure Disconnect; virtual; abstract;
+  procedure Shutdown; virtual; abstract;
   function Cmd(const Value: string):string; virtual; abstract;
   function ShowImage(fn: string):boolean; virtual; abstract;
   property Terminated;
