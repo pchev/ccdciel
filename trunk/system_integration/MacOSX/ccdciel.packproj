@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+?<xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -481,7 +481,7 @@
 						<key>IFPkgDescriptionTitle</key>
 						<string>CCDciel</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>0.7.2</string>
+						<string>0.7.3</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
@@ -497,7 +497,7 @@
 					<key>CFBundleName</key>
 					<string>CCDciel</string>
 					<key>CFBundleShortVersionString</key>
-					<string>0.7.2</string>
+					<string>0.7.3</string>
 				</dict>
 				<key>Options</key>
 				<dict>
