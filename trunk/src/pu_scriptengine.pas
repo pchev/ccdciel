@@ -560,6 +560,8 @@ var fn: string;
     i: integer;
     ok: boolean;
 begin
+ try
+  result:=false;
   msg('Run script '+sname);
   FScriptFilename:=sname;
   fn:=slash(path)+sname+'.script';
@@ -580,6 +582,11 @@ begin
     end;
     result:=false;
   end;
+ except
+   on E: Exception do begin
+    msg('Script error: '+E.Message);
+   end;
+ end;
 end;
 
 Procedure Tf_scriptengine.StopScript;
