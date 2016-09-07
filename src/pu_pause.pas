@@ -38,6 +38,7 @@ type
   Tf_pause = class(TForm)
     Button1: TButton;
     Button2: TButton;
+    Label1: TLabel;
     PauseLabel: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -104,15 +105,28 @@ end;
 
 function Tf_pause.Wait(timeout:integer=0): boolean;
 var endt: TDateTime;
+    n,t:integer;
 begin
   if timeout>0 then begin
     endt:=now+timeout/secperday;
-    PauseLabel.Caption:=PauseLabel.Caption+crlf+'Continue automatically in '+inttostr(timeout)+' seconds.';
+    PauseLabel.Caption:=PauseLabel.Caption;
+    label1.Caption:='Continue automatically in '+inttostr(timeout)+' seconds.';
   end
-  else
+  else begin
     endt:=MaxInt;
+    label1.Caption:='';
+  end;
   Show;
+  n:=0;
   while (not FContinue) do begin
+    if timeout>0 then begin
+      inc(n);
+      if (n mod 20) = 0 then begin
+        t:=round((endt-now)*secperday);
+        label1.Caption:='Continue automatically in '+inttostr(t)+' seconds.';
+        n:=0;
+      end;
+    end;
     Application.ProcessMessages;
     Sleep(100);
     if now>endt then begin

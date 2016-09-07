@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 interface
 
-uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection,
+uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms,
@@ -112,6 +112,7 @@ type
     Procedure doShowMessage(const aMsg: string);
     procedure doLogmsg(str:string);
     procedure doWait(wt:integer);
+    function doWaitTill(hour:string; showdialog: boolean):boolean;
     function Cmd(cname:string):string;
     function CmdArg(cname:string; var arg:Tstringlist):string;
     function CompileScripts: boolean;
@@ -557,6 +558,41 @@ begin
   Wait(wt);
 end;
 
+function Tf_scriptengine.doWaitTill(hour:string; showdialog: boolean):boolean;
+var endt,nowt,nowd: TDateTime;
+    daystr:string;
+    wt:integer;
+begin
+ try
+  daystr:='';
+  endt:=StrToTime(hour,':');
+  nowd:=now;
+  nowt:=frac(nowd);
+  nowd:=trunc(nowd);
+  if (nowt>endt)and(abs(nowt-endt)>0.5) then begin
+    endt:=nowd+1+endt;
+    daystr:='tomorrow ';
+  end
+  else begin
+    endt:=nowd+endt;
+  end;
+  wt:=round((endt-now)*secperday);
+  if wt>0 then begin
+    if showdialog then begin
+      f_pause.Text:='Need to wait until '+daystr+hour;
+      result:=f_pause.Wait(wt)
+    end
+    else begin
+      msg('Need to wait until '+daystr+hour);
+      wait(wt);
+      result:=true;
+    end;
+  end;
+ except
+   result:=false;
+ end;
+end;
+
 function Tf_scriptengine.RunScript(sname,path: string):boolean;
 var fn: string;
     i: integer;
@@ -650,6 +686,7 @@ with Sender as TPSScript do begin
   AddMethod(self, @Tf_scriptengine.doRunWait,'function RunWait(cmdline:string):boolean;');
   AddMethod(self, @Tf_scriptengine.doRunOutput,'function RunOutput(cmdline:string; var output:TStringlist):boolean;');
   AddMethod(self, @Tf_scriptengine.doWait,'procedure Wait(wt:integer);');
+  AddMethod(self, @Tf_scriptengine.doWaitTill,'function WaitTill(hour:string; showdialog: boolean):boolean;');
 end;
 end;
 
