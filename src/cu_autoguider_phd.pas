@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, cu_tcpclient, u_global, blcksock, synsock, fpjson, jsonparser,
+uses cu_autoguider, cu_tcpclient, u_global, u_utils, blcksock, synsock, fpjson, jsonparser,
   Forms, Classes, SysUtils;
 
 type
@@ -292,6 +292,11 @@ end else begin
        end
        else FState:=GUIDER_IDLE;
      end
+     else if rpcid='2001' then begin  // stop capture
+       if rpcresult='error' then begin
+          DisplayMessage('stop capture'+' '+rpcresult+' '+rpcerror);
+       end;
+     end
      else if rpcid='2002' then begin  // set_paused
        if rpcresult='error' then begin
           DisplayMessage('set_paused'+' '+rpcresult+' '+rpcerror);
@@ -333,7 +338,7 @@ begin
   if FStatus='Guiding' then FState:=GUIDER_GUIDING
   else if FStatus='Start Guiding' then FState:=GUIDER_BUSY
   else if FStatus='Stopped' then FState:=GUIDER_IDLE
-  else if FStatus='Star Selected' then FState:=FState
+  else if FStatus='Star Selected' then FState:=GUIDER_IDLE
   else if FStatus='Star lost' then FState:=GUIDER_ALERT
   else if FStatus='Paused' then FState:=GUIDER_IDLE
   else if FStatus='Resumed' then FState:=GUIDER_GUIDING
@@ -343,7 +348,7 @@ begin
   else if FStatus='Start Calibration' then FState:=GUIDER_BUSY
   else if FStatus='Calibration Failed' then FState:=GUIDER_ALERT
   else if FStatus='Calibration Data Flipped' then FState:=FState
-  else if FStatus='Looping Exposures' then FState:=FState
+  else if FStatus='Looping Exposures' then FState:=GUIDER_IDLE
   else if FStatus='Looping Exposures Stopped' then FState:=GUIDER_IDLE
   else if FStatus='Settling' then FState:=FState
   else if FStatus='Settle Done' then FState:=FState
@@ -392,8 +397,16 @@ var buf:string;
 begin
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
-    buf:='{"method": "find_star","id":2005}';
+    buf:='{"method": "loop","id":2004}';
+    FState:=GUIDER_BUSY;
     Send(buf);
+    WaitBusy(60);
+    Wait(10); //enough time for a new guide exposure
+    buf:='{"method": "find_star","id":2005}';
+    FState:=GUIDER_BUSY;
+    Send(buf);
+    WaitBusy(60);
+    Wait(2);
     buf:='{"method": "guide", "params": [';
     buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
     buf:=buf+'"time": '+FSettleTmin+',';       // min time
@@ -403,7 +416,7 @@ begin
     buf:=buf+'"id": 2003}';
     Send(buf);
   end else begin
-    buf:='{"method": "loop","id":2004}';
+    buf:='{"method": "stop_capture","id":2001}';
     Send(buf);
   end;
   if cguide<>onoff then FState:=GUIDER_BUSY;

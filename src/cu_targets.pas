@@ -326,6 +326,7 @@ begin
   else begin
      FRunning:=false;
      TargetTimer.Enabled:=false;
+     StopGuider;
      msg('Sequence '+FName+' terminated.');
      FCurrentTarget:=-1;
   end;
