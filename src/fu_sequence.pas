@@ -327,6 +327,7 @@ begin
        t:=TTarget.Create;
        t.objectname:=trim(tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName',''));
        t.planname:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
+       t.path:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
        t.starttime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''));
        t.endtime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''));
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
@@ -439,6 +440,7 @@ begin
       t:=Targets.Targets[i-1];
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan',t.planname);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/Path',t.path);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TimetoStr(t.endtime));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
