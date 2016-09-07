@@ -59,6 +59,7 @@ type
     Destructor Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
     procedure Disconnect; virtual; abstract;
+    procedure Shutdown; virtual; abstract;
     procedure ConnectGear; virtual; abstract;
     procedure SettleTolerance(pixel:double; mintime,maxtime: integer); virtual; abstract;
     procedure Calibrate; virtual; abstract;

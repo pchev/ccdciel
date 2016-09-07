@@ -131,6 +131,7 @@ type
     function cmd_AutoguiderPause:string;
     function cmd_AutoguiderUnPause:string;
     function cmd_AutoguiderDither:string;
+    function cmd_AutoguiderShutdown:string;
     function cmd_Wheel_GetFilter:string;
     function cmd_Wheel_SetFilter(num:string):string;
     function cmd_Wheel_GetFiltersName(var fl:TStringList):string;
@@ -155,6 +156,7 @@ type
     function cmd_AstrometrySlewImageCenter:string;
     function cmd_PlanetariumConnect:string;
     function cmd_PlanetariumShowImage:string;
+    function cmd_PlanetariumShutdown:string;
     function cmd_ProgramShutdown:string;
     function cmd_SequenceStart(seq:string):string;
     function cmd_SaveFitsFile(fn:string):string;
@@ -667,6 +669,7 @@ else if cname='AUTOGUIDER_STOPGUIDING' then result:=cmd_AutoguiderStopGuiding
 else if cname='AUTOGUIDER_PAUSE' then result:=cmd_AutoguiderPause
 else if cname='AUTOGUIDER_UNPAUSE' then result:=cmd_AutoguiderUnPause
 else if cname='AUTOGUIDER_DITHER' then result:=cmd_AutoguiderDither
+else if cname='AUTOGUIDER_SHUTDOWN' then result:=cmd_AutoguiderShutdown
 else if cname='WHEEL_GETFILTER' then result:=cmd_Wheel_GetFilter
 else if cname='PREVIEW_SINGLE' then result:=cmd_Preview_Single
 else if cname='PREVIEW_LOOP' then result:=cmd_Preview_Loop
@@ -679,6 +682,7 @@ else if cname='ASTROMETRY_SYNC' then result:=cmd_AstrometrySync
 else if cname='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=cmd_AstrometrySlewImageCenter
 else if cname='PLANETARIUM_CONNECT' then result:=cmd_PlanetariumConnect
 else if cname='PLANETARIUM_SHOWIMAGE' then result:=cmd_PlanetariumShowImage
+else if cname='PLANETARIUM_SHUTDOWN' then result:=cmd_PlanetariumShutdown
 else if cname='PROGRAM_SHUTDOWN' then result:=cmd_ProgramShutdown
 else if cname='CLEAR_REFERENCE_IMAGE' then result:=cmd_ClearReferenceImage
 ;
@@ -940,6 +944,13 @@ begin
  except
    result:=msgFailed;
  end;
+end;
+
+function Tf_scriptengine.cmd_AutoguiderShutdown:string;
+begin
+ result:=msgOK;
+ if Autoguider=nil then exit;
+ Autoguider.Shutdown;
 end;
 
 function Tf_scriptengine.cmd_Wheel_GetFilter:string;
@@ -1274,6 +1285,16 @@ if astrometry.LastResult and planetarium.Connected then begin
   planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
 end;
 wait(1);
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_PlanetariumShutdown:string;
+begin
+try
+Planetarium.Shutdown;
 result:=msgOK;
 except
   result:=msgFailed;

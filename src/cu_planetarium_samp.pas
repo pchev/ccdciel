@@ -50,6 +50,7 @@ type
     Destructor Destroy; override;
     procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
+    procedure Shutdown; override;
     function ShowImage(fn: string):boolean; override;
     function Cmd(const Value: string):string; override;
   end;
@@ -79,6 +80,11 @@ function TPlanetarium_samp.Cmd(const Value: string):string;
 begin
  // todo
   result:=msgFailed;
+end;
+
+procedure TPlanetarium_samp.Shutdown;
+begin
+ // todo ?? maybe not possible ??
 end;
 
 procedure TPlanetarium_samp.Execute;
