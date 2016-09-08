@@ -47,6 +47,7 @@ type
       Fautoguider: T_autoguider;
       Fastrometry: TAstrometry;
       StartPlanTimer: TTimer;
+      function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
       procedure SetCapture(val: Tf_capture);
@@ -74,6 +75,7 @@ type
       FCurrentTarget: integer;
       TargetTimeStart,TargetDelayEnd: TDateTime;
       FRunning: boolean;
+      FInitializing: boolean;
       FUnattended: boolean;
       FName: string;
     public
@@ -88,6 +90,7 @@ type
       property Count: integer read NumTargets;
       property CurrentTarget: integer read FCurrentTarget;
       property TargetName: string read FName write SetTargetName;
+      property Busy: boolean read GetBusy;
       property Running: boolean read FRunning;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
@@ -110,6 +113,7 @@ begin
   inherited Create(AOwner);
   NumTargets := 0;
   Frunning:=false;
+  FInitializing:=false;
   TargetTimer:=TTimer.Create(self);
   TargetTimer.Enabled:=false;
   TargetTimer.Interval:=1000;
@@ -296,6 +300,7 @@ begin
      exit;
    end
    else begin
+     FInitializing:=true;
      ShowDelayMsg('');
      TargetRepeatCount:=1;
      initok:=InitTarget;
@@ -310,10 +315,12 @@ begin
      else begin
        msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
        if FUnattended then begin
+         FInitializing:=false;
          StopSequence;
          RunErrorScript;
          exit;
        end else begin
+         FInitializing:=false;
          if MessageDlg('Target failed','Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
             Dec(FCurrentTarget);
          end;
@@ -396,6 +403,19 @@ begin
   end;
 end;
 
+function T_Targets.GetBusy: boolean;
+var t: TTarget;
+    p: T_Plan;
+begin
+  result:= FInitializing ;
+  if FRunning and(FCurrentTarget>=0) then begin
+    t:=Targets[FCurrentTarget];
+    if t<>nil then begin
+      p:=T_Plan(t.plan);
+      result:=result or p.Running;
+    end;
+  end;
+end;
 
 function T_Targets.StopGuider:boolean;
 begin
@@ -468,6 +488,7 @@ var tt: double;
     t: TTarget;
 begin
  if FRunning then begin
+   FInitializing:=false;
    t:=Targets[FCurrentTarget];
    if not TargetRepeatTimer.Enabled then begin
       if not T_Plan(t.plan).Running then begin
