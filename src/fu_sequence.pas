@@ -95,6 +95,7 @@ type
     procedure SetAutoguider(val: T_autoguider);
     procedure SetAstrometry(val: TAstrometry);
     function GetRunning: boolean;
+    function GetBusy: boolean;
     procedure SaveTargets(fn:string);
     procedure StartSequence;
     procedure ClearTargetGrid;
@@ -115,6 +116,7 @@ type
     procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
     procedure StopSequence;
+    property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
     property Preview: Tf_preview read Fpreview write SetPreview;
     property Capture: Tf_capture read Fcapture write SetCapture;
@@ -487,6 +489,11 @@ begin
  end;
 end;
 
+function Tf_sequence.GetBusy: boolean;
+begin
+  result:=Targets.Busy;
+end;
+
 function Tf_sequence.GetRunning: boolean;
 begin
   result:=Targets.Running;
@@ -546,6 +553,7 @@ var buf1,buf2:string;
     i:integer;
     p: T_Plan;
 begin
+ try
   TargetRow:=Targets.CurrentTarget+1;
   if TargetRow>0 then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
@@ -562,6 +570,9 @@ begin
     PlanGrid.Invalidate;
   end
   else PlanRow:=-1;
+except
+  PlanRow:=-1;
+end;
 end;
 
 

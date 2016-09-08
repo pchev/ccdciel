@@ -3838,7 +3838,7 @@ begin
     f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
     if hhmin<=0 then f_mount.LabelMeridian.Caption:='Meridian in'
                 else f_mount.LabelMeridian.Caption:='Meridian since';
-    if f_capture.Running and (nextexposure=0) then exit;
+    if (f_capture.Running  or f_sequence.Busy) and (nextexposure=0) then exit;
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
     MeridianDelay1:=-hhmin;
@@ -3915,7 +3915,6 @@ begin
           NewMessage('Wait 1 minute ...');
           wait(60); // ensure we not do the flip two time
         end;
-        meridianflipping:=false;
         NewMessage('Meridian flip done');
         // Pause after
         if MeridianFlipPauseAfter then begin
@@ -3958,7 +3957,10 @@ begin
         // start autoguider
         if restartguider then begin
           NewMessage('Restart autoguider');
+          autoguider.Guide(false);
+          wait(5);
           autoguider.Guide(true);
+          wait(5);
           autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
           if autoguider.State<>GUIDER_GUIDING then begin
             f_pause.Text:='Failed to start guiding!';
@@ -3970,6 +3972,7 @@ begin
           end;
         end;
         Wait(2);
+        meridianflipping:=false;
         NewMessage('Meridian flip terminated');
         StatusBar1.Panels[1].Text := '';
       end else begin  // Abort
