@@ -562,6 +562,7 @@ function Tf_scriptengine.doWaitTill(hour:string; showdialog: boolean):boolean;
 var endt,nowt,nowd: TDateTime;
     daystr:string;
     wt:integer;
+    pause:Tf_pause;
 begin
  try
   daystr:='';
@@ -579,8 +580,13 @@ begin
   wt:=round((endt-now)*secperday);
   if wt>0 then begin
     if showdialog then begin
-      f_pause.Text:='Need to wait until '+daystr+hour;
-      result:=f_pause.Wait(wt)
+      pause:=Tf_pause.Create(self);
+      try
+      pause.Text:='Need to wait until '+daystr+hour;
+      result:=pause.Wait(wt)
+      finally
+      pause.Free;
+      end;
     end
     else begin
       msg('Need to wait until '+daystr+hour);
