@@ -608,6 +608,7 @@ begin
   if ok then begin
     Application.ProcessMessages;
     result:=scr.Execute;
+    wait(2);
     if result then
        msg('Script '+sname+' terminated')
     else begin
