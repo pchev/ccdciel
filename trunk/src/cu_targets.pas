@@ -281,6 +281,7 @@ begin
   { TODO :  select best target based on current time }
   if FRunning and (FCurrentTarget<NumTargets) then begin
    if Targets[FCurrentTarget].objectname='Script' then begin
+     FInitializing:=false;
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
        msg('Script '+Targets[FCurrentTarget].planname+' failed!');
        if FUnattended then begin
