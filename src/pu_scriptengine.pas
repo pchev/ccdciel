@@ -30,7 +30,7 @@ interface
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default,
-  uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms,
+  uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   Controls, Graphics, Dialogs, ExtCtrls;
 
 type
@@ -67,6 +67,7 @@ type
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
+    pause:Tf_pause;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyMsg;
     FonScriptExecute: TNotifyEvent;
@@ -81,6 +82,9 @@ type
     slist: array of String;
     LastErr:string;
     strllist: array of TStringList;
+    Waitrunning, cancelWait: boolean;
+    WaitTillrunning, cancelWaitTill: boolean;
+    RunProcess: TProcess;
     procedure msg(str:string);
     function doGetS(varname:string; var str: string):Boolean;
     function doSetS(varname:string; str: string):Boolean;
@@ -93,6 +97,7 @@ type
     function doGetB(varname:string; var x: Boolean):Boolean;
     function doOpenFile(fn:string):boolean;
     function doRun(cmdline:string):boolean;
+    Function ExecPr(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
     function doRunWait(cmdline:string):boolean;
     function doRunOutput(cmdline:string; var output:TStringlist):boolean;
     Function doJDtoStr(var jd: Double) : string;
@@ -211,6 +216,10 @@ begin
   SetLength(slist,10);
   SetLength(strllist,10);
   for i:=0 to 9 do strllist[i]:=TStringList.Create;
+  Waitrunning:=false;
+  cancelWait:=false;
+  WaitTillrunning:=false;
+  cancelWaitTill:=false;
   scr:=TPSScriptDebugger.Create(self);
   scr.OnCompile:=@TplPSScriptCompile;
   scr.OnExecute:=@TplPSScriptExecute;
@@ -470,10 +479,72 @@ begin
   result:=true;
 end;
 
+Function Tf_scriptengine.ExecPr(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
+const READ_BYTES = 2048;
+var
+  M: TMemoryStream;
+  param: TStringList;
+  n: LongInt;
+  BytesRead: LongInt;
+begin
+M := TMemoryStream.Create;
+RunProcess := TProcess.Create(nil);
+param:=TStringList.Create;
+result:=1;
+try
+  BytesRead := 0;
+  SplitCmd(cmd,param);
+  cmd:= param[0];
+  param.Delete(0);
+  RunProcess.Executable:=cmd;
+  RunProcess.Parameters:=param;
+  if ShowConsole then begin
+     RunProcess.ShowWindow:=swoShowNormal;
+     RunProcess.StartupOptions:=[suoUseShowWindow];
+  end else begin
+     RunProcess.ShowWindow:=swoHIDE;
+  end;
+  if output<>nil then RunProcess.Options := [poUsePipes, poStdErrToOutPut];
+  RunProcess.Execute;
+  while RunProcess.Running do begin
+    Application.ProcessMessages;
+    if (output<>nil) and (RunProcess.Output<>nil) then begin
+      M.SetSize(BytesRead + READ_BYTES);
+      n := RunProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
+      if n > 0 then inc(BytesRead, n);
+    end;
+  end;
+  result:=RunProcess.ExitStatus;
+  if (output<>nil) and (result<>127)and(RunProcess.Output<>nil) then repeat
+    M.SetSize(BytesRead + READ_BYTES);
+    n := RunProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
+    if n > 0
+    then begin
+      Inc(BytesRead, n);
+    end;
+  until (n<=0)or(RunProcess.Output=nil);
+  if (output<>nil) then begin
+    M.SetSize(BytesRead);
+    output.LoadFromStream(M);
+  end;
+  FreeAndNil(RunProcess);
+  M.Free;
+  param.Free;
+except
+  on E: Exception do begin
+    result:=-1;
+    if (output<>nil) then output.add(E.Message);
+    FreeAndNil(RunProcess);
+    M.Free;
+    param.Free;
+  end;
+end;
+end;
+
 function Tf_scriptengine.doRunWait(cmdline:string):boolean;
 var i: integer;
 begin
-  i:=ExecProcess(cmdline,nil,false);
+  i:=ExecPr(cmdline,nil,false);
   wait(1);
   result:=(i=0);
 end;
@@ -481,7 +552,7 @@ end;
 function Tf_scriptengine.doRunOutput(cmdline:string; var output:TStringlist):boolean;
 var i: integer;
 begin
-  i:=ExecProcess(cmdline,output,false);
+  i:=ExecPr(cmdline,output,false);
   wait(1);
   result:=(i=0);
 end;
@@ -554,15 +625,29 @@ jdt:=jd(y,m,d,h);
 end;
 
 procedure Tf_scriptengine.doWait(wt:integer);
+var endt: TDateTime;
 begin
-  Wait(wt);
+  endt:=now+wt/secperday;
+  try
+  Waitrunning:=true;
+  while now<endt do begin
+    Sleep(100);
+    Application.ProcessMessages;
+    if cancelWait then begin
+      Waitrunning:=false;
+      cancelWait:=false;
+      exit;
+    end;
+  end;
+  finally
+    Waitrunning:=false;
+  end;
 end;
 
 function Tf_scriptengine.doWaitTill(hour:string; showdialog: boolean):boolean;
 var endt,nowt,nowd: TDateTime;
     daystr:string;
     wt:integer;
-    pause:Tf_pause;
 begin
  try
   daystr:='';
@@ -579,22 +664,36 @@ begin
   end;
   wt:=round((endt-now)*secperday);
   if wt>0 then begin
+    WaitTillrunning:=true;
     if showdialog then begin
       pause:=Tf_pause.Create(self);
       try
       pause.Text:='Need to wait until '+daystr+hour;
       result:=pause.Wait(wt)
       finally
-      pause.Free;
+      WaitTillrunning:=false;
+      FreeAndNil(pause);
       end;
     end
     else begin
       msg('Need to wait until '+daystr+hour);
-      wait(wt);
-      result:=true;
+      while now<endt do begin
+        Sleep(100);
+        Application.ProcessMessages;
+        if cancelWaitTill then begin
+          WaitTillrunning:=false;
+          cancelWaitTill:=false;
+          result:=false;
+          exit;
+        end;
+      end;
+     WaitTillrunning:=false;
+     result:=true;
     end;
   end;
  except
+   WaitTillrunning:=false;
+   cancelWaitTill:=false;
    result:=false;
  end;
 end;
@@ -636,7 +735,30 @@ end;
 
 Procedure Tf_scriptengine.StopScript;
 begin
-scr.Stop;
+  if Mount.MountSlewing then Mount.AbortMotion;
+  if Astrometry.Busy then Astrometry.StopAstrometry;
+  if Capture.Running then begin
+     Camera.AbortExposure;
+     Capture.Stop;
+  end;
+  if Preview.Running then begin
+     Camera.AbortExposure;
+     Preview.Stop;
+  end;
+  if Autoguider.Running then begin
+    msg('Stop autoguider');
+    Autoguider.Guide(false);
+    Autoguider.WaitBusy(15);
+  end;
+  msg('Script terminating...');
+  scr.Stop;
+  if Waitrunning then cancelWait:=true;
+  if WaitTillrunning then begin
+    if pause<>nil
+     then pause.BtnCancel.Click
+     else cancelWaitTill:=true;
+  end;
+  if RunProcess<>nil then RunProcess.Active:=false;
 end;
 
 function Tf_scriptengine.CompileScripts: boolean;

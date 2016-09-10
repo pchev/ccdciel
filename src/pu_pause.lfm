@@ -3,7 +3,7 @@ object f_pause: Tf_pause
   Height = 113
   Top = 0
   Width = 320
-  ActiveControl = Button1
+  ActiveControl = BtnContinue
   AutoSize = True
   Caption = 'Pause'
   ClientHeight = 113
@@ -15,13 +15,13 @@ object f_pause: Tf_pause
   Position = poMainFormCenter
   LCLVersion = '1.6.0.4'
   Visible = False
-  object Button1: TButton
+  object BtnContinue: TButton
     Left = 208
     Height = 25
     Top = 80
     Width = 91
     Caption = 'Continue...'
-    OnClick = Button1Click
+    OnClick = BtnContinueClick
     TabOrder = 0
   end
   object PauseLabel: TLabel
@@ -34,13 +34,13 @@ object f_pause: Tf_pause
     ParentColor = False
     WordWrap = True
   end
-  object Button2: TButton
+  object BtnCancel: TButton
     Left = 96
     Height = 25
     Top = 80
     Width = 75
     Caption = 'Cancel'
-    OnClick = Button2Click
+    OnClick = BtnCancelClick
     TabOrder = 1
   end
   object Label1: TLabel

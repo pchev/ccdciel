@@ -141,23 +141,7 @@ end;
 procedure Tf_script.BtnStopClick(Sender: TObject);
 begin
   if f_scriptengine.scr.Running then begin
-    if Mount.MountSlewing then Mount.AbortMotion;
-    if Astrometry.Busy then Astrometry.StopAstrometry;
-    if Capture.Running then begin
-       Camera.AbortExposure;
-       Capture.Stop;
-    end;
-    if Preview.Running then begin
-       Camera.AbortExposure;
-       Preview.Stop;
-    end;
-    if Autoguider.Running then begin
-      msg('Stop autoguider');
-      Autoguider.Guide(false);
-      Autoguider.WaitBusy(15);
-    end;
-    f_scriptengine.scr.Stop;
-    msg('Script terminating...');
+    f_scriptengine.StopScript;
   end
   else msg('No script are running.');
 end;
