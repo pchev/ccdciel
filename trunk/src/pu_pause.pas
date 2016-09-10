@@ -36,12 +36,12 @@ type
   { Tf_pause }
 
   Tf_pause = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
+    BtnContinue: TButton;
+    BtnCancel: TButton;
     Label1: TLabel;
     PauseLabel: TLabel;
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    procedure BtnContinueClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -81,13 +81,13 @@ begin
   Fresult:=false;
 end;
 
-procedure Tf_pause.Button1Click(Sender: TObject);
+procedure Tf_pause.BtnContinueClick(Sender: TObject);
 begin
   Fresult:=true;
   FContinue:=true;
 end;
 
-procedure Tf_pause.Button2Click(Sender: TObject);
+procedure Tf_pause.BtnCancelClick(Sender: TObject);
 begin
   Fresult:=false;
   FContinue:=true;

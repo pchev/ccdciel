@@ -265,7 +265,7 @@ begin
         Preview.Stop;
      end;
      StopGuider;
-     if f_scriptengine.scr.Running then f_scriptengine.scr.Stop;
+     if f_scriptengine.scr.Running then f_scriptengine.StopScript;
      msg('Sequence stopped.');
      ShowDelayMsg('');
    end;
