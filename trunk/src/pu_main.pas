@@ -2083,7 +2083,7 @@ begin
    focuser.Position:=focuser.Position+StrToIntDef(f_focuser.PosIncr.Text,1000);
  end
  else if focuser.hasRelativePosition then begin
-    focuser.FocusIn;
+    focuser.FocusOut;
     focuser.RelPosition:=StrToIntDef(f_focuser.RelIncr.Text,1000);
  end
  else begin
