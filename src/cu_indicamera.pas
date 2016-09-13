@@ -55,6 +55,16 @@ private
    CCDmaxx,CCDmaxy,CCDpixelsize,CCDpixelsizex,CCDpixelsizey,CCDbitperpixel : INumber;
    CCDColorSpace: ISwitchVectorProperty;
    CCDColorGray,CCDColorRGB: ISwitch;
+   CCDVideoStream: ISwitchVectorProperty;
+   VideoStreamOn,VideoStreamOff: ISwitch;
+   RecordOptions: INumberVectorProperty;
+   RecordOptionDuration,RecordOptionFrames: INumber;
+   RecordFile: ITextVectorProperty;
+   RecordFileDir,RecordFilename: IText;
+   RecordStream: ISwitchVectorProperty;
+   RecordStreamOn,RecordStreamOff,RecordDuration,RecordFrames: ISwitch;
+
+
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
    Guiderbinning: INumberVectorProperty;
@@ -117,6 +127,7 @@ private
    function GetBitperPixel: double; override;
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
+   function GetVideoPreviewRunning: boolean;  override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -130,6 +141,8 @@ private
    procedure ResetFrame; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(focuser,filters,telescope: string); override;
+   procedure StartVideoPreview; override;
+   procedure StopVideoPreview; override;
 end;
 
 implementation
@@ -200,6 +213,10 @@ begin
     CCDCompression:=nil;
     CCDAbortExposure:=nil;
     CCDColorSpace:=nil;
+    CCDVideoStream:=nil;
+    RecordOptions:=nil;
+    RecordFile:=nil;
+    RecordStream:=nil;
     CCDTemperature:=nil;
     CCDinfo:=nil;
     Guiderexpose:=nil;
@@ -213,6 +230,7 @@ begin
     UploadMode:=nil;
     configprop:=nil;
     FhasBlob:=false;
+    FhasVideo:=false;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -243,6 +261,15 @@ begin
          end;
        end;
     end;
+    if Fconnected and
+       (not hasVideo) and
+       (CCDVideoStream<>nil) and
+       (RecordOptions <>nil) and
+       (RecordFile<>nil) and
+       (RecordStream<>nil)then begin
+         FhasVideo:=true;
+         if Assigned(FonStatusChange) then FonStatusChange(self);
+       end;
 end;
 
 procedure T_indicamera.msg(txt: string);
@@ -494,6 +521,32 @@ begin
      UploadBoth:=IUFindSwitch(UploadMode,'UPLOAD_BOTH');
      if (UploadClient=nil)or(UploadLocal=nil)or(UploadBoth=nil) then UploadMode:=nil;
   end
+  else if (proptype=INDI_SWITCH)and(propname='CCD_VIDEO_STREAM') then begin
+     CCDVideoStream:=indiProp.getSwitch;
+     VideoStreamOn:=IUFindSwitch(CCDVideoStream,'STREAM_ON');
+     VideoStreamOff:=IUFindSwitch(CCDVideoStream,'STREAM_OFF');
+     if (VideoStreamOn=nil)or(VideoStreamOff=nil) then CCDVideoStream:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='RECORD_OPTIONS') then begin
+     RecordOptions:=indiProp.getNumber;
+     RecordOptionDuration:=IUFindNumber(RecordOptions,'RECORD_DURATION');
+     RecordOptionFrames:=IUFindNumber(RecordOptions,'RECORD_FRAME_TOTAL');
+     if (RecordOptionDuration=nil)or(RecordOptionFrames=nil) then RecordOptions:=nil;
+  end
+  else if (proptype=INDI_TEXT)and(propname='RECORD_FILE') then begin
+     RecordFile:=indiProp.getText();
+     RecordFileDir:=IUFindText(RecordFile,'RECORD_FILE_DIR');
+     RecordFilename:=IUFindText(RecordFile,'RECORD_FILE_NAME');
+     if (RecordFileDir=nil)or(RecordFilename=nil) then RecordFile:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='RECORD_STREAM') then begin
+     RecordStream:=indiProp.getSwitch;
+     RecordStreamOn:=IUFindSwitch(RecordStream,'RECORD_ON');
+     RecordStreamOff:=IUFindSwitch(RecordStream,'RECORD_OFF');
+     RecordDuration:=IUFindSwitch(RecordStream,'RECORD_DURATION_ON');
+     RecordFrames:=IUFindSwitch(RecordStream,'RECORD_FRAME_ON');
+     if (RecordStreamOn=nil)or(RecordStreamOff=nil)or(RecordDuration=nil)or(RecordFrames=nil) then RecordStream:=nil;
+  end
   else if (proptype=INDI_TEXT)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
   end;
@@ -552,6 +605,9 @@ begin
     if (not UseMainSensor) then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
+  end
+  else if (propname='CCD_VIDEO_STREAM') then begin
+      if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);
   end
   ;
 end;
@@ -1071,6 +1127,32 @@ begin
     configload.s:=ISS_ON;
     indiclient.sendNewSwitch(configprop);
   end;
+end;
+
+procedure T_indicamera.StartVideoPreview;
+begin
+ if CCDVideoStream<>nil then begin
+  IUResetSwitch(CCDVideoStream);
+  VideoStreamOn.s:=ISS_ON;
+  indiclient.sendNewSwitch(CCDVideoStream);
+ end;
+end;
+
+procedure T_indicamera.StopVideoPreview;
+begin
+ if CCDVideoStream<>nil then begin
+  IUResetSwitch(CCDVideoStream);
+  VideoStreamOff.s:=ISS_ON;
+  indiclient.sendNewSwitch(CCDVideoStream);
+ end;
+end;
+
+function T_indicamera.GetVideoPreviewRunning: boolean;
+begin
+ result:=false;
+ if CCDVideoStream<>nil then begin
+   result:=(VideoStreamOn.s=ISS_ON);
+ end;
 end;
 
 end.

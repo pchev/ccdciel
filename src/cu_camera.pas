@@ -46,6 +46,7 @@ T_camera = class(TComponent)
     FonNewImage: TNotifyEvent;
     FonVideoFrame: TNotifyEvent;
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
+    FonVideoPreviewChange: TNotifyEvent;
     FImgStream: TMemoryStream;
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
@@ -56,6 +57,7 @@ T_camera = class(TComponent)
     Fwheel: T_wheel;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
+    FhasVideo: boolean;
     procedure NewImage;
     procedure NewVideoFrame;
     procedure WriteHeaders;
@@ -80,6 +82,7 @@ T_camera = class(TComponent)
     function GetBitperPixel: double; virtual; abstract;
     function GetColor: boolean;  virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
+    function GetVideoPreviewRunning: boolean;  virtual; abstract;
   private
     lockvideoframe: boolean;
   public
@@ -95,6 +98,8 @@ T_camera = class(TComponent)
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
+    procedure StartVideoPreview; virtual; abstract;
+    procedure StopVideoPreview; virtual; abstract;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property wheel: T_wheel read Fwheel write Fwheel;
@@ -103,8 +108,10 @@ T_camera = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
     property ImgStream: TMemoryStream read FImgStream;
+    property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
     property VideoFrame: TBGRABitmap read FVideoFrame;
+    property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
@@ -137,6 +144,7 @@ T_camera = class(TComponent)
     property onVideoFrame: TNotifyEvent read FonVideoFrame write FonVideoFrame;
     property onCameraDisconnected: TNotifyEvent read FonCameraDisconnected write FonCameraDisconnected;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
+    property onVideoPreviewChange: TNotifyEvent read FonVideoPreviewChange write FonVideoPreviewChange;
 end;
 
 implementation
@@ -148,6 +156,7 @@ begin
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
+  FhasVideo:=false;
   FVideoStream:=TMemoryStream.Create;;
   FVideoFrame:=TBGRABitmap.Create;
   lockvideoframe:=false;

@@ -1,0 +1,44 @@
+object f_video: Tf_video
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 180
+  ClientHeight = 240
+  ClientWidth = 180
+  TabOrder = 0
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 180
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Video'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 220
+    Top = 20
+    Width = 180
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 220
+    ClientWidth = 180
+    TabOrder = 1
+    object Preview: TCheckBox
+      Left = 8
+      Height = 21
+      Top = 4
+      Width = 71
+      Caption = 'Preview'
+      OnChange = PreviewChange
+      TabOrder = 0
+    end
+  end
+end

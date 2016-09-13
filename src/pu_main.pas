@@ -28,7 +28,7 @@ interface
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_scriptengine,
-  pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
+  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser,
   cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
@@ -53,6 +53,9 @@ type
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
     MenuClearRef: TMenuItem;
+    MenuVideo: TMenuItem;
+    MenuTabVideo: TMenuItem;
+    MenuViewVideo: TMenuItem;
     MenuTabSequence: TMenuItem;
     MenuTabCapture: TMenuItem;
     MenuTabFocus: TMenuItem;
@@ -146,6 +149,7 @@ type
     OpenDialog1: TOpenDialog;
     PageControlRight: TPageControl;
     Panel1: TPanel;
+    PanelRight5: TPanel;
     PanelCenter: TPanel;
     PanelLeft: TPanel;
     PanelRight1: TPanel;
@@ -168,6 +172,7 @@ type
     StartupTimer: TTimer;
     StartSequenceTimer: TTimer;
     StatusTimer: TTimer;
+    PageVideo: TTabSheet;
     procedure AbortTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -279,6 +284,7 @@ type
     f_frame: Tf_frame;
     f_preview: Tf_preview;
     f_capture: Tf_capture;
+    f_video: Tf_video;
     f_sequence: Tf_sequence;
     f_starprofile: Tf_starprofile;
     f_focuser: Tf_focuser;
@@ -387,6 +393,7 @@ type
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
     procedure CameraVideoFrame(Sender: TObject);
+    procedure CameraVideoPreviewChange(Sender: TObject);
     procedure CameraVideoFrameAsync(Data: PtrInt);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -784,6 +791,7 @@ begin
   camera.onTemperatureChange:=@CameraTemperatureChange;
   camera.onNewImage:=@CameraNewImage;
   camera.onVideoFrame:=@CameraVideoFrame;
+  camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
   camera.onStatusChange:=@CameraStatus;
   camera.onCameraDisconnected:=@CameraDisconnected;
   camera.onAbortExposure:=@CameraExposureAborted;
@@ -840,6 +848,10 @@ begin
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@AbortExposure;
   f_capture.onMsg:=@NewMessage;
+
+  f_video:=Tf_video.Create(self);
+  f_video.camera:=camera;
+  f_video.onMsg:=@NewMessage;
 
   f_filterwheel:=Tf_filterwheel.Create(self);
   f_filterwheel.onSetFilter:=@SetFilter;
@@ -974,6 +986,8 @@ begin
 
   SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence);
 
+  SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo);
+
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
 
@@ -1068,6 +1082,8 @@ begin
   SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
 
   SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence);
+
+  SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo);
 
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -1385,6 +1401,9 @@ end;
 if CanClose then begin
  if f_capture.Running or f_preview.Running then begin
    AbortExposure(nil);
+ end;
+ if f_video.Running then begin
+  Camera.StopVideoPreview;
  end;
  if f_sequence.Running then f_sequence.StopSequence;
  f_script.RunShutdownScript;
@@ -1880,12 +1899,16 @@ begin
                    f_devicesconnection.LabelCamera.Font.Color:=clOrange;
                    end;
    devConnected:   begin
-                   NewMessage('Camera connected');
+                   if f_devicesconnection.LabelCamera.Font.Color<>clGreen then NewMessage('Camera connected');
                    bx:=camera.BinX;
                    by:=camera.BinY;
                    buf:=inttostr(bx)+'x'+inttostr(by);
                    f_preview.Binning.Text:=buf;
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
+                   if camera.hasVideo then begin
+                      PageVideo.TabVisible:=true;
+                      CameraVideoPreviewChange(nil);
+                   end;
                    end;
  end;
  CheckConnectionStatus;
@@ -2986,7 +3009,13 @@ begin
   ImaBmp.Assign(camera.VideoFrame);
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
+  image1.Picture.Bitmap.SetSize(image1.Width,image1.Height);
   PlotImage;
+end;
+
+procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
+begin
+  f_video.Preview.Checked:=camera.VideoPreviewRunning;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);

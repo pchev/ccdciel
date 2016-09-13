@@ -73,7 +73,8 @@ T_ascomcamera = class(T_camera)
    function GetBitperPixel: double; override;
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
- public
+   function GetVideoPreviewRunning: boolean;  override;
+  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
@@ -86,6 +87,8 @@ T_ascomcamera = class(T_camera)
    procedure ResetFrame; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(focuser,filters,telescope: string); override;
+   procedure StartVideoPreview; override;
+   procedure StopVideoPreview; override;
 end;
 
 
@@ -685,6 +688,23 @@ procedure T_ascomcamera.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
 end;
+
+procedure T_ascomcamera.StartVideoPreview;
+begin
+// todo
+end;
+
+procedure T_ascomcamera.StopVideoPreview;
+begin
+// todo
+end;
+
+function T_ascomcamera.GetVideoPreviewRunning: boolean;
+begin
+ result:=false;
+ // todo
+end;
+
 
 end.
 
