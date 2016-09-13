@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, BGRABitmap,
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, BGRABitmap, BGRABitmapTypes,
   lazutf8sysutils, Classes, SysUtils;
 
 type
@@ -78,6 +78,7 @@ T_camera = class(TComponent)
     function GetPixelSizeX: double; virtual; abstract;
     function GetPixelSizeY: double; virtual; abstract;
     function GetBitperPixel: double; virtual; abstract;
+    function GetColor: boolean;  virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   private
     lockvideoframe: boolean;
@@ -118,6 +119,7 @@ T_camera = class(TComponent)
     property PixelSizeX: double read GetPixelSizeX;
     property PixelSizeY: double read GetPixelSizeY;
     property BitperPixel: double read GetBitperPixel;
+    property Color: boolean read GetColor;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
@@ -168,7 +170,9 @@ begin
 end;
 
 procedure T_camera.NewVideoFrame;
-var i,j,x,y,w,h: integer;
+var i,j,x,y,w,h,bp: integer;
+    bx: array[0..65535] of Byte;
+    px:PBGRAPixel;
 begin
   if lockvideoframe then exit;
   lockvideoframe:=true;
@@ -176,9 +180,27 @@ begin
   GetFrame(x,y,w,h);
   FVideoFrame.SetSize(w,h);
   FVideoStream.Position:=0;
-  for i := 0 to h-1 do
-    FVideoStream.read(FVideoFrame.ScanLine[i]^, w*4);
-  FVideoFrame.SwapRedBlue;
+  if Color then begin
+    bp:=4;
+    for i := 0 to h-1 do
+      FVideoStream.read(FVideoFrame.ScanLine[i]^, w*bp);
+    FVideoFrame.SwapRedBlue;
+  end else begin
+    bp:=1;
+    if w>65535 then exit;
+    for i:=0 to h-1 do begin
+      FVideoStream.read(bx,w);
+      px:=FVideoFrame.Scanline[i];
+      for j:=0 to w-1 do begin
+          px^.red:=bx[j];
+          px^.green:=bx[j];
+          px^.blue:=bx[j];
+          px^.alpha:=255;
+          inc(px);
+      end;
+    end;
+    FVideoFrame.InvalidateBitmap;
+  end;
   if Assigned(FonVideoFrame) then FonVideoFrame(self);
   finally
     lockvideoframe:=false;
