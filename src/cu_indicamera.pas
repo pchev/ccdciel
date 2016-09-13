@@ -53,6 +53,8 @@ private
    CCDTemperature: INumberVectorProperty;
    CCDinfo: INumberVectorProperty;
    CCDmaxx,CCDmaxy,CCDpixelsize,CCDpixelsizex,CCDpixelsizey,CCDbitperpixel : INumber;
+   CCDColorSpace: ISwitchVectorProperty;
+   CCDColorGray,CCDColorRGB: ISwitch;
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
    Guiderbinning: INumberVectorProperty;
@@ -113,6 +115,7 @@ private
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
  public
    constructor Create(AOwner: TComponent);override;
@@ -136,6 +139,7 @@ begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
   indiclient.Timeout:=FTimeOut;
+  indiclient.AllowFrameSkipping:=true;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
@@ -195,6 +199,7 @@ begin
     CCDFrameType:=nil;
     CCDCompression:=nil;
     CCDAbortExposure:=nil;
+    CCDColorSpace:=nil;
     CCDTemperature:=nil;
     CCDinfo:=nil;
     Guiderexpose:=nil;
@@ -429,6 +434,12 @@ begin
      CCDpixelsizey:=IUFindNumber(CCDinfo,'CCD_PIXEL_SIZE_Y');
      CCDbitperpixel:=IUFindNumber(CCDinfo,'CCD_BITSPERPIXEL');
      if (CCDmaxx=nil)or(CCDmaxy=nil)or(CCDpixelsize=nil)or(CCDpixelsizex=nil)or(CCDpixelsizey=nil)or(CCDbitperpixel=nil) then CCDinfo:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CCD_COLOR_SPACE') then begin
+     CCDColorSpace:=indiProp.getSwitch;
+     CCDColorGray:=IUFindSwitch(CCDColorSpace,'CCD_COLOR_GRAY');
+     CCDColorRGB:=IUFindSwitch(CCDColorSpace,'CCD_COLOR_RGB');
+     if (CCDColorGray=nil)or(CCDColorRGB=nil) then CCDColorSpace:=nil;
   end
   else if (proptype=INDI_NUMBER)and(propname='GUIDER_EXPOSURE') then begin
      Guiderexpose:=indiProp.getNumber;
@@ -1034,6 +1045,16 @@ begin
         result:=Guiderbitperpixel.value;
      end
      else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetColor: boolean;
+begin
+  if CCDColorSpace<>nil then begin
+     result:=(CCDColorRGB.s=ISS_ON);
+  end
+  else begin
+    result:=false;
   end;
 end;
 

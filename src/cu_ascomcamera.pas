@@ -71,6 +71,7 @@ T_ascomcamera = class(T_camera)
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
  public
    constructor Create(AOwner: TComponent);override;
@@ -663,6 +664,21 @@ begin
 {$ifdef mswindows}
 result:=16;
 {$endif}
+end;
+
+function T_ascomcamera.GetColor: boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+      result:=(V.SensorType=1);  // Camera produces color image directly, requiring not Bayer decoding
+   except
+      result:=false;
+   end;
+ end
+ else result:=false;
+ {$endif}
 end;
 
 procedure T_ascomcamera.SetTimeout(num:integer);
