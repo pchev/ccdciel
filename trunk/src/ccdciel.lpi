@@ -156,7 +156,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="54">
+    <Units Count="55">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -449,6 +449,12 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UScaleDPI"/>
       </Unit53>
+      <Unit54>
+        <Filename Value="fu_video.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_video"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit54>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
