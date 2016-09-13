@@ -124,6 +124,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <WorkingDirectory Value="/usr/local/bin"/>
       </local>
     </RunParams>
     <RequiredPackages Count="9">
