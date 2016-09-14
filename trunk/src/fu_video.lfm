@@ -40,5 +40,74 @@ object f_video: Tf_video
       OnChange = PreviewChange
       TabOrder = 0
     end
+    object Duration: TCheckBox
+      Left = 8
+      Height = 21
+      Top = 134
+      Width = 77
+      Caption = 'Duration'
+      OnClick = DurationClick
+      TabOrder = 1
+    end
+    object RecDuration: TComboBox
+      Left = 100
+      Height = 24
+      Top = 133
+      Width = 76
+      ItemHeight = 0
+      ItemIndex = 2
+      Items.Strings = (
+        '10'
+        '30'
+        '60'
+        '120'
+      )
+      TabOrder = 2
+      Text = '60'
+    end
+    object Frames: TCheckBox
+      Left = 8
+      Height = 21
+      Top = 160
+      Width = 68
+      Caption = 'Frames'
+      OnClick = FramesClick
+      TabOrder = 3
+    end
+    object RecFrames: TComboBox
+      Left = 100
+      Height = 24
+      Top = 160
+      Width = 76
+      ItemHeight = 0
+      ItemIndex = 2
+      Items.Strings = (
+        '50'
+        '100'
+        '500'
+        '1000'
+        '2000'
+      )
+      TabOrder = 4
+      Text = '500'
+    end
+    object BtnStartRec: TButton
+      Left = 8
+      Height = 25
+      Top = 190
+      Width = 75
+      Caption = 'Start'
+      OnClick = BtnStartRecClick
+      TabOrder = 5
+    end
+    object BtnStopRec: TButton
+      Left = 101
+      Height = 25
+      Top = 190
+      Width = 75
+      Caption = 'Stop'
+      OnClick = BtnStopRecClick
+      TabOrder = 6
+    end
   end
 end

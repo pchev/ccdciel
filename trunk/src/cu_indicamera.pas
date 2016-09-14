@@ -129,6 +129,10 @@ private
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
    function GetMissedFrameCount: cardinal; override;
+   function GetVideoRecordDuration:integer; override;
+   procedure SetVideoRecordDuration(value:integer); override;
+   function GetVideoRecordFrames:integer; override;
+   procedure SetVideoRecordFrames(value:integer); override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -144,6 +148,8 @@ private
    Procedure SetActiveDevices(focuser,filters,telescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
+   procedure StartVideoRecord(mode:TVideoRecordMode); override;
+   procedure StopVideoRecord; override;
 end;
 
 implementation
@@ -1159,6 +1165,61 @@ function T_indicamera.GetMissedFrameCount: cardinal;
 begin
  result:=indiclient.MissedFrameCount;
 end;
+
+function T_indicamera.GetVideoRecordDuration:integer;
+begin
+ result:=0;
+ if RecordOptions<>nil then begin
+    result:=round(RecordOptionDuration.value);
+ end;
+end;
+
+procedure T_indicamera.SetVideoRecordDuration(value:integer);
+begin
+ if RecordOptions<>nil then begin;
+   RecordOptionDuration.value:=value;
+   indiclient.sendNewNumber(RecordOptions);
+ end;
+end;
+
+function T_indicamera.GetVideoRecordFrames:integer;
+begin
+  result:=0;
+  if RecordOptions<>nil then begin
+     result:=round(RecordOptionFrames.value);
+  end;
+end;
+
+procedure T_indicamera.SetVideoRecordFrames(value:integer);
+begin
+  if RecordOptions<>nil then begin;
+    RecordOptionFrames.value:=value;
+    indiclient.sendNewNumber(RecordOptions);
+  end;
+end;
+
+procedure T_indicamera.StartVideoRecord(mode:TVideoRecordMode);
+begin
+  if RecordStream<>nil then begin
+    IUResetSwitch(RecordStream);
+    case mode of
+       rmDuration : RecordDuration.s:=ISS_ON;
+       rmFrame    : RecordFrames.s:=ISS_ON;
+       rmUnlimited: RecordStreamOn.s:=ISS_ON;
+    end;
+    indiclient.sendNewSwitch(RecordStream);
+  end;
+end;
+
+procedure T_indicamera.StopVideoRecord;
+begin
+  if RecordStream<>nil then begin
+    IUResetSwitch(RecordStream);
+    RecordStreamOff.s:=ISS_ON;
+    indiclient.sendNewSwitch(RecordStream);
+  end;
+end;
+
 
 end.
 

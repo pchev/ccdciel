@@ -75,6 +75,10 @@ T_ascomcamera = class(T_camera)
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
    function GetMissedFrameCount: cardinal; override;
+   function GetVideoRecordDuration:integer; override;
+   procedure SetVideoRecordDuration(value:integer); override;
+   function GetVideoRecordFrames:integer; override;
+   procedure SetVideoRecordFrames(value:integer); override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -90,6 +94,8 @@ public
    Procedure SetActiveDevices(focuser,filters,telescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
+   procedure StartVideoRecord(mode:TVideoRecordMode); override;
+   procedure StopVideoRecord; override;
 end;
 
 
@@ -709,6 +715,38 @@ end;
 function T_ascomcamera.GetMissedFrameCount: cardinal;
 begin
  result:=0;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoRecordDuration:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoRecordDuration(value:integer);
+begin
+ // todo
+end;
+
+function T_ascomcamera.GetVideoRecordFrames:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoRecordFrames(value:integer);
+begin
+ // todo
+end;
+
+procedure T_ascomcamera.StartVideoRecord(mode:TVideoRecordMode);
+begin
+ // todo
+end;
+
+procedure T_ascomcamera.StopVideoRecord;
+begin
  // todo
 end;
 
