@@ -204,6 +204,7 @@ object f_main: Tf_main
         Height = 286
         Top = 1
         Width = 608
+        AntialiasingMode = amOff
         Align = alClient
         OnDblClick = Image1DblClick
         OnMouseDown = Image1MouseDown

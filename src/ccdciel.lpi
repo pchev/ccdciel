@@ -18,38 +18,7 @@
     </VersionInfo>
     <BuildModes Count="4">
       <Item1 Name="Default" Default="True"/>
-      <Item2 Name="mem leak">
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="ccdciel"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <UnitOutputDirectory Value="units/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
-          </SearchPaths>
-          <CodeGeneration>
-            <Optimizations>
-              <OptimizationLevel Value="0"/>
-            </Optimizations>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <UseHeaptrc Value="True"/>
-            </Debugging>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
-          </Linking>
-          <Other>
-            <CustomOptions Value="-dUseCThreads 
--dUseHeapTrc"/>
-          </Other>
-        </CompilerOptions>
-      </Item2>
-      <Item3 Name="win32">
+      <Item2 Name="win32">
         <MacroValues Count="1">
           <Macro1 Name="LCLWidgetType" Value="win32"/>
         </MacroValues>
@@ -80,8 +49,8 @@
             <CustomOptions Value="-dUseCThreads"/>
           </Other>
         </CompilerOptions>
-      </Item3>
-      <Item4 Name="Release">
+      </Item2>
+      <Item3 Name="Release">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -111,6 +80,48 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dUseCThreads"/>
+          </Other>
+        </CompilerOptions>
+      </Item3>
+      <Item4 Name="memleak">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="ccdciel"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <IncludeAssertionCode Value="True"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <Checks>
+              <IOChecks Value="True"/>
+              <RangeChecks Value="True"/>
+              <OverflowChecks Value="True"/>
+              <StackChecks Value="True"/>
+            </Checks>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <UseHeaptrc Value="True"/>
+              <UseExternalDbgSyms Value="True"/>
+            </Debugging>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5024="True"/>
+            </CompilerMessages>
+            <CustomOptions Value="-dUseCThreads -dUseHeapTrc"/>
           </Other>
         </CompilerOptions>
       </Item4>
@@ -453,6 +464,7 @@
         <Filename Value="fu_video.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_video"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit54>
     </Units>

@@ -3229,6 +3229,7 @@ var r1,r2: double;
     bmp2:Tbitmap;
 begin
 ClearImage;
+ImaBmp.Transparent:=false;
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;

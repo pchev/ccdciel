@@ -152,7 +152,6 @@ begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
   indiclient.Timeout:=FTimeOut;
-  indiclient.AllowFrameSkipping:=true;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
