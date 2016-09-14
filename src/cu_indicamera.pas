@@ -128,6 +128,7 @@ private
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
+   function GetMissedFrameCount: cardinal; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -1152,6 +1153,11 @@ begin
  if CCDVideoStream<>nil then begin
    result:=(VideoStreamOn.s=ISS_ON);
  end;
+end;
+
+function T_indicamera.GetMissedFrameCount: cardinal;
+begin
+ result:=indiclient.MissedFrameCount;
 end;
 
 end.
