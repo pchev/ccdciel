@@ -2129,9 +2129,10 @@ case mount.Status of
                       f_devicesconnection.LabelMount.Font.Color:=clOrange;
                    end;
   devConnected:   begin
-                      wait(1);
-                      NewMessage('Mount connected');
+                      if f_devicesconnection.LabelMount.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelMount.Font.Color:=clGreen;
+                      NewMessage('Mount connected');
+                      wait(1);
                       MountCoordChange(Sender);
                       CheckMeridianFlip;
                    end;
