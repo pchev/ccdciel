@@ -74,7 +74,8 @@ T_ascomcamera = class(T_camera)
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
-  public
+   function GetMissedFrameCount: cardinal; override;
+public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
@@ -705,6 +706,11 @@ begin
  // todo
 end;
 
+function T_ascomcamera.GetMissedFrameCount: cardinal;
+begin
+ result:=0;
+ // todo
+end;
 
 end.
 

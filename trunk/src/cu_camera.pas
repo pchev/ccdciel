@@ -83,6 +83,7 @@ T_camera = class(TComponent)
     function GetColor: boolean;  virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetVideoPreviewRunning: boolean;  virtual; abstract;
+    function GetMissedFrameCount: cardinal; virtual; abstract;
   private
     lockvideoframe: boolean;
   public
@@ -112,6 +113,7 @@ T_camera = class(TComponent)
     property VideoStream: TMemoryStream read FVideoStream;
     property VideoFrame: TBGRABitmap read FVideoFrame;
     property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
+    property MissedFrameCount: Cardinal read GetMissedFrameCount;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
