@@ -33,9 +33,19 @@ type
   { Tf_video }
 
   Tf_video = class(TFrame)
+    BtnStartRec: TButton;
+    BtnStopRec: TButton;
+    Duration: TCheckBox;
+    Frames: TCheckBox;
+    RecDuration: TComboBox;
+    RecFrames: TComboBox;
     Preview: TCheckBox;
     Panel1: TPanel;
     StaticText1: TStaticText;
+    procedure BtnStartRecClick(Sender: TObject);
+    procedure BtnStopRecClick(Sender: TObject);
+    procedure DurationClick(Sender: TObject);
+    procedure FramesClick(Sender: TObject);
     procedure PreviewChange(Sender: TObject);
   private
     { private declarations }
@@ -66,6 +76,36 @@ begin
       Camera.StopVideoPreview;
       Frunning:=false;
    end;
+  end;
+end;
+
+procedure Tf_video.BtnStopRecClick(Sender: TObject);
+begin
+  camera.StopVideoRecord;
+end;
+
+procedure Tf_video.DurationClick(Sender: TObject);
+begin
+   if Duration.Checked then Frames.Checked:=false;
+end;
+
+procedure Tf_video.FramesClick(Sender: TObject);
+begin
+   if Frames.Checked then Duration.Checked:=false;
+end;
+
+procedure Tf_video.BtnStartRecClick(Sender: TObject);
+begin
+  if Duration.Checked then begin
+    camera.VideoRecordDuration:=StrToIntDef(RecDuration.Text,10);
+    camera.StartVideoRecord(rmDuration);
+  end
+  else if Frames.Checked then begin
+    camera.VideoRecordFrames:=StrToIntDef(RecFrames.Text,50);
+    camera.StartVideoRecord(rmFrame);
+  end
+  else begin
+    camera.StartVideoRecord(rmUnlimited);
   end;
 end;
 

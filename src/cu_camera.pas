@@ -30,6 +30,8 @@ uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, BGRABitmap, BGRA
 
 type
 
+TVideoRecordMode=(rmDuration,rmFrame,rmUnlimited);
+
 T_camera = class(TComponent)
   protected
     FCameraInterface: TDevInterface;
@@ -84,6 +86,10 @@ T_camera = class(TComponent)
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetVideoPreviewRunning: boolean;  virtual; abstract;
     function GetMissedFrameCount: cardinal; virtual; abstract;
+    function GetVideoRecordDuration:integer; virtual; abstract;
+    procedure SetVideoRecordDuration(value:integer); virtual; abstract;
+    function GetVideoRecordFrames:integer; virtual; abstract;
+    procedure SetVideoRecordFrames(value:integer); virtual; abstract;
   private
     lockvideoframe: boolean;
   public
@@ -101,6 +107,8 @@ T_camera = class(TComponent)
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
     procedure StartVideoPreview; virtual; abstract;
     procedure StopVideoPreview; virtual; abstract;
+    procedure StartVideoRecord(mode:TVideoRecordMode); virtual; abstract;
+    procedure StopVideoRecord; virtual; abstract;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property wheel: T_wheel read Fwheel write Fwheel;
@@ -114,6 +122,8 @@ T_camera = class(TComponent)
     property VideoFrame: TBGRABitmap read FVideoFrame;
     property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
     property MissedFrameCount: Cardinal read GetMissedFrameCount;
+    property VideoRecordDuration: integer read GetVideoRecordDuration write SetVideoRecordDuration;
+    property VideoRecordFrames: integer read GetVideoRecordFrames write SetVideoRecordFrames;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
