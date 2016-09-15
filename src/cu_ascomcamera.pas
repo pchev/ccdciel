@@ -79,6 +79,28 @@ T_ascomcamera = class(T_camera)
    procedure SetVideoRecordDuration(value:integer); override;
    function GetVideoRecordFrames:integer; override;
    procedure SetVideoRecordFrames(value:integer); override;
+   function GetVideoSize:string; override;
+   procedure SetVideoSize(value:string); override;
+   function GetVideoRate:string;override;
+   procedure SetVideoRate(value:string); override;
+   function GetFPS:double; override;
+   function GetVideoRecordDir:string; override;
+   procedure SetVideoRecordDir(value:string); override;
+   function GetVideoRecordFile:string; override;
+   procedure SetVideoRecordFile(value:string); override;
+   function GetVideoExposure:integer; override;
+   function GetVideoGain:integer; override;
+   function GetVideoGamma:integer; override;
+   function GetVideoBrightness:integer; override;
+   procedure SetVideoExposure(value:integer); override;
+   procedure SetVideoGain(value:integer); override;
+   procedure SetVideoGamma(value:integer); override;
+   procedure SetVideoBrightness(value:integer); override;
+   function GetVideoExposureRange:TNumRange; override;
+   function GetVideoGainRange:TNumRange; override;
+   function GetVideoGammaRange:TNumRange; override;
+   function GetVideoBrightnessRange:TNumRange; override;
+
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -749,6 +771,125 @@ procedure T_ascomcamera.StopVideoRecord;
 begin
  // todo
 end;
+
+function T_ascomcamera.GetVideoSize:string;
+begin
+ result:='';
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoSize(value:string);
+begin
+ // todo
+end;
+
+function T_ascomcamera.GetVideoRate:string;
+begin
+ result:='';
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoRate(value:string);
+begin
+ // todo
+end;
+
+function T_ascomcamera.GetFPS:double;
+begin
+ result:=0;
+ //todo
+end;
+
+function T_ascomcamera.GetVideoRecordDir:string;
+begin
+ result:='';
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoRecordDir(value:string);
+begin
+ // todo
+end;
+
+function T_ascomcamera.GetVideoRecordFile:string;
+begin
+ result:='';
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoRecordFile(value:string);
+begin
+ // todo
+end;
+
+function T_ascomcamera.GetVideoExposure:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoGain:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoGamma:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoBrightness:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoExposure(value:integer);
+begin
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoGain(value:integer);
+begin
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoGamma(value:integer);
+begin
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoBrightness(value:integer);
+begin
+ // todo
+end;
+
+function T_ascomcamera.GetVideoExposureRange:TNumRange;
+begin
+ result:=NullRange;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoGainRange:TNumRange;
+begin
+ result:=NullRange;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoGammaRange:TNumRange;
+begin
+ result:=NullRange;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoBrightnessRange:TNumRange;
+begin
+ result:=NullRange;
+ // todo
+end;
+
 
 end.
 

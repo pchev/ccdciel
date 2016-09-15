@@ -1,16 +1,16 @@
 object f_video: Tf_video
   Left = 0
-  Height = 240
+  Height = 421
   Top = 0
-  Width = 180
-  ClientHeight = 240
-  ClientWidth = 180
+  Width = 184
+  ClientHeight = 421
+  ClientWidth = 184
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 184
     Align = alTop
     Alignment = taCenter
     Caption = 'Video'
@@ -23,18 +23,17 @@ object f_video: Tf_video
   end
   object Panel1: TPanel
     Left = 0
-    Height = 220
+    Height = 387
     Top = 20
-    Width = 180
-    Align = alClient
+    Width = 184
     BevelOuter = bvNone
-    ClientHeight = 220
-    ClientWidth = 180
+    ClientHeight = 387
+    ClientWidth = 184
     TabOrder = 1
     object Preview: TCheckBox
       Left = 8
       Height = 21
-      Top = 4
+      Top = 1
       Width = 71
       Caption = 'Preview'
       OnChange = PreviewChange
@@ -43,16 +42,16 @@ object f_video: Tf_video
     object Duration: TCheckBox
       Left = 8
       Height = 21
-      Top = 134
+      Top = 279
       Width = 77
       Caption = 'Duration'
       OnClick = DurationClick
       TabOrder = 1
     end
     object RecDuration: TComboBox
-      Left = 100
+      Left = 104
       Height = 24
-      Top = 133
+      Top = 278
       Width = 76
       ItemHeight = 0
       ItemIndex = 2
@@ -68,16 +67,16 @@ object f_video: Tf_video
     object Frames: TCheckBox
       Left = 8
       Height = 21
-      Top = 160
+      Top = 305
       Width = 68
       Caption = 'Frames'
       OnClick = FramesClick
       TabOrder = 3
     end
     object RecFrames: TComboBox
-      Left = 100
+      Left = 104
       Height = 24
-      Top = 160
+      Top = 305
       Width = 76
       ItemHeight = 0
       ItemIndex = 2
@@ -94,20 +93,161 @@ object f_video: Tf_video
     object BtnStartRec: TButton
       Left = 8
       Height = 25
-      Top = 190
+      Top = 361
       Width = 75
       Caption = 'Start'
       OnClick = BtnStartRecClick
       TabOrder = 5
     end
     object BtnStopRec: TButton
-      Left = 101
+      Left = 100
       Height = 25
-      Top = 190
+      Top = 361
       Width = 75
       Caption = 'Stop'
       OnClick = BtnStopRecClick
       TabOrder = 6
+    end
+    object FrameRate: TComboBox
+      Left = 104
+      Height = 26
+      Top = 249
+      Width = 75
+      ItemHeight = 0
+      OnChange = FrameRateChange
+      Style = csDropDownList
+      TabOrder = 7
+    end
+    object VideoSize: TComboBox
+      Left = 104
+      Height = 26
+      Top = 221
+      Width = 75
+      ItemHeight = 0
+      OnChange = VideoSizeChange
+      Style = csDropDownList
+      TabOrder = 8
+    end
+    object Label1: TLabel
+      Left = 8
+      Height = 18
+      Top = 252
+      Width = 65
+      Caption = 'Frame rate'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 8
+      Height = 18
+      Top = 224
+      Width = 23
+      Caption = 'Size'
+      ParentColor = False
+    end
+    object FPS: TLabel
+      Left = 100
+      Height = 18
+      Top = 1
+      Width = 57
+      Caption = '                   '
+      ParentColor = False
+    end
+    object ObjectName: TEdit
+      Left = 68
+      Height = 24
+      Top = 333
+      Width = 111
+      TabOrder = 9
+    end
+    object Label3: TLabel
+      Left = 8
+      Height = 18
+      Top = 337
+      Width = 39
+      Caption = 'Object'
+      ParentColor = False
+    end
+    object Exposure: TTrackBar
+      Left = 80
+      Height = 40
+      Top = 37
+      Width = 100
+      Position = 0
+      OnMouseUp = ExposureMouseUp
+      OnKeyUp = ExposureKeyUp
+      TabOrder = 10
+    end
+    object Gain: TTrackBar
+      Left = 80
+      Height = 40
+      Top = 85
+      Width = 100
+      Position = 0
+      OnMouseUp = GainMouseUp
+      OnKeyUp = GainKeyUp
+      TabOrder = 11
+    end
+    object Gamma: TTrackBar
+      Left = 80
+      Height = 40
+      Top = 133
+      Width = 100
+      Position = 0
+      OnMouseUp = GammaMouseUp
+      OnKeyUp = GammaKeyUp
+      TabOrder = 12
+    end
+    object Brightness: TTrackBar
+      Left = 80
+      Height = 40
+      Top = 181
+      Width = 100
+      Position = 0
+      OnMouseUp = BrightnessMouseUp
+      OnKeyUp = BrightnessKeyUp
+      TabOrder = 13
+    end
+    object Label4: TLabel
+      Left = 8
+      Height = 18
+      Top = 37
+      Width = 56
+      Caption = 'Exposure'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 8
+      Height = 18
+      Top = 85
+      Width = 27
+      Caption = 'Gain'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 8
+      Height = 18
+      Top = 133
+      Width = 47
+      Caption = 'Gamma'
+      ParentColor = False
+    end
+    object Label7: TLabel
+      Left = 8
+      Height = 18
+      Top = 181
+      Width = 64
+      Caption = 'Brightness'
+      ParentColor = False
+    end
+    object Exprange: TComboBox
+      Left = 1
+      Height = 26
+      Top = 55
+      Width = 79
+      ItemHeight = 0
+      OnChange = ExprangeChange
+      Style = csDropDownList
+      TabOrder = 14
     end
   end
 end

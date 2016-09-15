@@ -63,7 +63,12 @@ private
    RecordFileDir,RecordFilename: IText;
    RecordStream: ISwitchVectorProperty;
    RecordStreamOn,RecordStreamOff,RecordDuration,RecordFrames: ISwitch;
-
+   CCDVideoSize:ISwitchVectorProperty;
+   CCDVideoRates:ISwitchVectorProperty;
+   VideoFPS: INumberVectorProperty;
+   FPSest,FPSavg: INumber;
+   ImageAdjustments: INumberVectorProperty;
+   Brightness,Gamma,Gain,Exposure:INumber;
 
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
@@ -133,6 +138,27 @@ private
    procedure SetVideoRecordDuration(value:integer); override;
    function GetVideoRecordFrames:integer; override;
    procedure SetVideoRecordFrames(value:integer); override;
+   function GetVideoSize:string; override;
+   procedure SetVideoSize(value:string); override;
+   function GetVideoRate:string;override;
+   procedure SetVideoRate(value:string); override;
+   function GetFPS:double; override;
+   function GetVideoRecordDir:string; override;
+   procedure SetVideoRecordDir(value:string); override;
+   function GetVideoRecordFile:string; override;
+   procedure SetVideoRecordFile(value:string); override;
+   function GetVideoExposure:integer; override;
+   function GetVideoGain:integer; override;
+   function GetVideoGamma:integer; override;
+   function GetVideoBrightness:integer; override;
+   procedure SetVideoExposure(value:integer); override;
+   procedure SetVideoGain(value:integer); override;
+   procedure SetVideoGamma(value:integer); override;
+   procedure SetVideoBrightness(value:integer); override;
+   function GetVideoExposureRange:TNumRange; override;
+   function GetVideoGainRange:TNumRange; override;
+   function GetVideoGammaRange:TNumRange; override;
+   function GetVideoBrightnessRange:TNumRange; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -223,6 +249,15 @@ begin
     RecordOptions:=nil;
     RecordFile:=nil;
     RecordStream:=nil;
+    CCDVideoSize:=nil;
+    CCDVideoRates:=nil;
+    VideoFPS:=nil;
+    ImageAdjustments:=nil;
+    Brightness:=nil;
+    Gamma:=nil;
+    Gain:=nil;
+    Exposure:=nil;
+
     CCDTemperature:=nil;
     CCDinfo:=nil;
     Guiderexpose:=nil;
@@ -553,6 +588,34 @@ begin
      RecordFrames:=IUFindSwitch(RecordStream,'RECORD_FRAME_ON');
      if (RecordStreamOn=nil)or(RecordStreamOff=nil)or(RecordDuration=nil)or(RecordFrames=nil) then RecordStream:=nil;
   end
+  else if (proptype=INDI_SWITCH)and(propname='V4L2_SIZE_DISCRETE') then begin
+     CCDVideoSize:=indiProp.getSwitch;
+     FVideoSizes.Clear;
+     if CCDVideoSize<>nil then for i:=0 to CCDVideoSize.nsp-1 do begin
+        FVideoSizes.Add(CCDVideoSize.sp[i].name);
+     end;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='V4L2_FRAMEINT_DISCRETE') then begin
+     CCDVideoRates:=indiProp.getSwitch;
+     FVideoRates.Clear;
+     if CCDVideoRates<>nil then for i:=0 to CCDVideoRates.nsp-1 do begin
+        FVideoRates.Add(CCDVideoRates.sp[i].name);
+     end;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='FPS') then begin
+     VideoFPS:=indiProp.getNumber;
+     FPSest:=IUFindNumber(VideoFPS,'EST_FPS');
+     FPSavg:=IUFindNumber(VideoFPS,'AVG_FPS');
+     if (FPSest=nil)or(FPSavg=nil) then VideoFPS:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='Image Adjustments') then begin
+     ImageAdjustments:=indiProp.getNumber;
+     Brightness:=IUFindNumber(ImageAdjustments,'Brightness');
+     Gamma:=IUFindNumber(ImageAdjustments,'Gamma');
+     Gain:=IUFindNumber(ImageAdjustments,'Gain');
+     Exposure:=IUFindNumber(ImageAdjustments,'Exposure');
+     if Exposure=nil then Exposure:=IUFindNumber(ImageAdjustments,'Exposure (Absolute)');
+  end
   else if (proptype=INDI_TEXT)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
   end;
@@ -572,16 +635,20 @@ begin
   end
   else if nvp=CCDTemperature then begin
      if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
-  end;
+  end
+  else if nvp=VideoFPS then begin
+     if Assigned(FonFPSChange) then FonFPSChange(self);
+  end
+  else if nvp=ImageAdjustments then begin
+     if Assigned(FonVideoExposureChange) then FonVideoExposureChange(self);
+  end
+  ;
  end;
 
 procedure T_indicamera.NewText(tvp: ITextVectorProperty);
-var propname: string;
-    i: integer;
+var i: integer;
 begin
-//  writeln('NewText: '+tvp.name+' '+tvp.tp[0].text);
-propname:=tvp.name;
-if (propname='FILTER_NAME') then begin
+if tvp=FilterName then begin
     FFilterNames.Clear;
     for i:=0 to tvp.ntp-1 do begin
        FFilterNames.Add(tvp.tp[i].text);
@@ -602,18 +669,24 @@ begin
       if Assigned(FonCameraDisconnected) then FonCameraDisconnected(self);
     end;
   end
-  else if (propname='CCD_ABORT_EXPOSURE') then begin
+  else if svp=CCDAbortExposure then begin
     if UseMainSensor then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
   end
-  else if (propname='GUIDER_ABORT_EXPOSURE') then begin
+  else if svp=GuiderAbortExposure then begin
     if (not UseMainSensor) then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
   end
-  else if (propname='CCD_VIDEO_STREAM') then begin
+  else if svp=CCDVideoStream then begin
       if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);
+  end
+  else if svp=CCDVideoSize then begin
+      if Assigned(FonVideoSizeChange) then FonVideoSizeChange(self);
+  end
+  else if svp=CCDVideoRates then begin
+      if Assigned(FonVideoRateChange) then FonVideoRateChange(self);
   end
   ;
 end;
@@ -1220,6 +1293,196 @@ begin
   end;
 end;
 
+function T_indicamera.GetVideoSize:string;
+var sw:ISwitch;
+begin
+  result:='';
+  if CCDVideoSize<>nil then begin
+     sw:=IUFindOnSwitch(CCDVideoSize);
+     if sw<>nil then result:=sw.name;
+  end;
+end;
+
+procedure T_indicamera.SetVideoSize(value:string);
+var sw:ISwitch;
+begin
+  if CCDVideoSize<>nil then begin
+    sw:=IUFindSwitch(CCDVideoSize,value);
+    if sw<>nil then begin
+      IUResetSwitch(CCDVideoSize);
+      sw.s:=ISS_ON;
+      indiclient.sendNewSwitch(CCDVideoSize);
+    end;
+  end;
+end;
+
+function T_indicamera.GetVideoRate:string;
+var sw:ISwitch;
+begin
+  result:='';
+  if CCDVideoRates<>nil then begin
+     sw:=IUFindOnSwitch(CCDVideoRates);
+     if sw<>nil then result:=sw.name;
+  end;
+end;
+
+procedure T_indicamera.SetVideoRate(value:string);
+var sw:ISwitch;
+begin
+  if CCDVideoRates<>nil then begin
+    sw:=IUFindSwitch(CCDVideoRates,value);
+    if sw<>nil then begin
+      IUResetSwitch(CCDVideoRates);
+      sw.s:=ISS_ON;
+      indiclient.sendNewSwitch(CCDVideoRates);
+    end;
+  end;
+end;
+
+function T_indicamera.GetFPS:double;
+begin
+ result:=0;
+ if VideoFPS<>nil then begin
+   result:=FPSavg.value;
+ end;
+end;
+
+function T_indicamera.GetVideoRecordDir:string;
+begin
+ result:='';
+ if RecordFile<>nil then begin
+   result:=RecordFileDir.text;
+ end;
+end;
+
+procedure T_indicamera.SetVideoRecordDir(value:string);
+begin
+ if RecordFile<>nil then begin
+   RecordFileDir.text:=value;
+   indiclient.sendNewText(RecordFile);
+ end;
+end;
+
+function T_indicamera.GetVideoRecordFile:string;
+begin
+ result:='';
+ if RecordFile<>nil then begin
+   result:=RecordFilename.text;
+ end;
+end;
+
+procedure T_indicamera.SetVideoRecordFile(value:string);
+begin
+ if RecordFile<>nil then begin
+   RecordFilename.text:=value;
+   indiclient.sendNewText(RecordFile);
+ end;
+end;
+
+
+function T_indicamera.GetVideoExposure:integer;
+begin
+ result:=0;
+ if Exposure<>nil then begin
+    result:=round(Exposure.value);
+ end;
+end;
+
+function T_indicamera.GetVideoGain:integer;
+begin
+ result:=0;
+ if Gain<>nil then begin
+    result:=round(Gain.value);
+ end;
+end;
+
+function T_indicamera.GetVideoGamma:integer;
+begin
+ result:=0;
+ if Gamma<>nil then begin
+    result:=round(Gamma.value);
+ end;
+end;
+
+function T_indicamera.GetVideoBrightness:integer;
+begin
+ result:=0;
+ if Brightness<>nil then begin
+    result:=round(Brightness.value);
+ end;
+end;
+
+procedure T_indicamera.SetVideoExposure(value:integer);
+begin
+ if Exposure<>nil then begin;
+   Exposure.value:=value;
+   indiclient.sendNewNumber(ImageAdjustments);
+ end;
+end;
+
+procedure T_indicamera.SetVideoGain(value:integer);
+begin
+ if Gain<>nil then begin;
+   Gain.value:=value;
+   indiclient.sendNewNumber(ImageAdjustments);
+ end;
+end;
+
+procedure T_indicamera.SetVideoGamma(value:integer);
+begin
+ if Gamma<>nil then begin;
+   Gamma.value:=value;
+   indiclient.sendNewNumber(ImageAdjustments);
+ end;
+end;
+
+procedure T_indicamera.SetVideoBrightness(value:integer);
+begin
+ if Brightness<>nil then begin;
+   Brightness.value:=value;
+   indiclient.sendNewNumber(ImageAdjustments);
+ end;
+end;
+
+function T_indicamera.GetVideoExposureRange:TNumRange;
+begin
+ result:=NullRange;
+ if Exposure<>nil then begin
+    result.min:=Exposure.min;
+    result.max:=Exposure.max;
+    result.step:=Exposure.step;
+ end
+end;
+
+function T_indicamera.GetVideoGainRange:TNumRange;
+begin
+ result:=NullRange;
+ if Gain<>nil then begin
+    result.min:=Gain.min;
+    result.max:=Gain.max;
+    result.step:=Gain.step;
+ end
+end;
+
+function T_indicamera.GetVideoGammaRange:TNumRange;
+begin
+ result:=NullRange;
+ if Gamma<>nil then begin
+    result.min:=Gamma.min;
+    result.max:=Gamma.max;
+    result.step:=Gamma.step;
+ end
+end;
+
+function T_indicamera.GetVideoBrightnessRange:TNumRange;
+begin
+ result:=NullRange;
+ if Brightness<>nil then begin
+    result.min:=Brightness.min;
+    result.max:=Brightness.max;
+    result.step:=Brightness.step;
+ end
+end;
 
 end.
 

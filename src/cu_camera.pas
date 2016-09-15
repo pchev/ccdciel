@@ -48,7 +48,8 @@ T_camera = class(TComponent)
     FonNewImage: TNotifyEvent;
     FonVideoFrame: TNotifyEvent;
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
-    FonVideoPreviewChange: TNotifyEvent;
+    FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange: TNotifyEvent;
+    FonFPSChange,FonVideoExposureChange : TNotifyEvent;
     FImgStream: TMemoryStream;
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
@@ -60,6 +61,7 @@ T_camera = class(TComponent)
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
+    FVideoSizes, FVideoRates:TStringList;
     procedure NewImage;
     procedure NewVideoFrame;
     procedure WriteHeaders;
@@ -90,6 +92,28 @@ T_camera = class(TComponent)
     procedure SetVideoRecordDuration(value:integer); virtual; abstract;
     function GetVideoRecordFrames:integer; virtual; abstract;
     procedure SetVideoRecordFrames(value:integer); virtual; abstract;
+    function GetVideoSize:string;virtual; abstract;
+    procedure SetVideoSize(value:string); virtual; abstract;
+    function GetVideoRate:string;virtual; abstract;
+    procedure SetVideoRate(value:string); virtual; abstract;
+    function GetFPS:double;virtual; abstract;
+    function GetVideoRecordDir:string; virtual; abstract;
+    procedure SetVideoRecordDir(value:string); virtual; abstract;
+    function GetVideoRecordFile:string; virtual; abstract;
+    procedure SetVideoRecordFile(value:string); virtual; abstract;
+    function GetVideoExposure:integer; virtual; abstract;
+    function GetVideoGain:integer; virtual; abstract;
+    function GetVideoGamma:integer; virtual; abstract;
+    function GetVideoBrightness:integer; virtual; abstract;
+    procedure SetVideoExposure(value:integer); virtual; abstract;
+    procedure SetVideoGain(value:integer); virtual; abstract;
+    procedure SetVideoGamma(value:integer); virtual; abstract;
+    procedure SetVideoBrightness(value:integer); virtual; abstract;
+    function GetVideoExposureRange:TNumRange; virtual; abstract;
+    function GetVideoGainRange:TNumRange; virtual; abstract;
+    function GetVideoGammaRange:TNumRange; virtual; abstract;
+    function GetVideoBrightnessRange:TNumRange; virtual; abstract;
+
   private
     lockvideoframe: boolean;
   public
@@ -124,6 +148,20 @@ T_camera = class(TComponent)
     property MissedFrameCount: Cardinal read GetMissedFrameCount;
     property VideoRecordDuration: integer read GetVideoRecordDuration write SetVideoRecordDuration;
     property VideoRecordFrames: integer read GetVideoRecordFrames write SetVideoRecordFrames;
+    property VideoSizes:TStringList read FVideoSizes;
+    property VideoRates:TStringList read FVideoRates;
+    property VideoSize:string read GetVideoSize write SetVideoSize;
+    property VideoRate:string read GetVideoRate write SetVideoRate;
+    property VideoRecordDir:string read GetVideoRecordDir write SetVideoRecordDir;
+    property VideoRecordFile:string read GetVideoRecordFile write SetVideoRecordFile;
+    property VideoExposure: integer read GetVideoExposure write SetVideoExposure;
+    property VideoExposureRange: TNumRange read GetVideoExposureRange;
+    property VideoGain: integer read GetVideoGain write SetVideoGain;
+    property VideoGainRange: TNumRange read GetVideoGainRange;
+    property VideoGamma: integer read GetVideoGamma write SetVideoGamma;
+    property VideoGammaRange: TNumRange read GetVideoGammaRange;
+    property VideoBrightness: integer read GetVideoBrightness write SetVideoBrightness;
+    property VideoBrightnessRange: TNumRange read GetVideoBrightnessRange;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
@@ -139,6 +177,7 @@ T_camera = class(TComponent)
     property PixelSizeY: double read GetPixelSizeY;
     property BitperPixel: double read GetBitperPixel;
     property Color: boolean read GetColor;
+    property FPS: double read GetFPS;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
@@ -157,6 +196,11 @@ T_camera = class(TComponent)
     property onCameraDisconnected: TNotifyEvent read FonCameraDisconnected write FonCameraDisconnected;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onVideoPreviewChange: TNotifyEvent read FonVideoPreviewChange write FonVideoPreviewChange;
+    property onVideoSizeChange: TNotifyEvent read FonVideoSizeChange write FonVideoSizeChange;
+    property onVideoRateChange: TNotifyEvent read FonVideoRateChange write FonVideoRateChange;
+    property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;
+    property onVideoExposureChange: TNotifyEvent read FonVideoExposureChange write FonVideoExposureChange;
+
 end;
 
 implementation
@@ -172,6 +216,8 @@ begin
   FVideoStream:=TMemoryStream.Create;;
   FVideoFrame:=TBGRABitmap.Create;
   lockvideoframe:=false;
+  FVideoSizes:=TStringList.Create;
+  FVideoRates:=TStringList.Create;
 end;
 
 destructor  T_camera.Destroy;
@@ -180,6 +226,8 @@ begin
   FFilterNames.Free;
   FVideoStream.Free;
   FVideoFrame.Free;
+  FVideoSizes.Free;
+  FVideoRates.Free;
   inherited Destroy;
 end;
 
