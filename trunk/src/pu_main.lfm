@@ -133,10 +133,13 @@ object f_main: Tf_main
         Top = 0
         Width = 186
         Align = alClient
+        AutoSize = True
         BevelOuter = bvNone
         ParentColor = False
         ParentFont = False
         TabOrder = 0
+        OnDragDrop = PanelDragDrop
+        OnDragOver = PanelDragOver
       end
     end
   end

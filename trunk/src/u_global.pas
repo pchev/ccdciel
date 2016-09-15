@@ -22,6 +22,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
 }
+{$modeswitch advancedrecords}
 
 interface
 
@@ -42,7 +43,13 @@ type
 
   TNumRange = record
                min,max,step: double;
+               class operator =(a,b : TNumRange) : Boolean;
               end;
+
+  TONumRange = Class(TObject)
+               public
+                 range: TNumRange;
+               end;
 
   TScriptDir = Class(TObject)
                public
@@ -220,6 +227,12 @@ var
   BayerMode:TBayerMode;
 
 implementation
+
+class operator TNumRange.=(a,b : TNumRange) : Boolean;
+begin
+  result:=(a.min=b.min)and(a.max=b.max)and(a.step=b.step);
+end;
+
 
 ////////////////////  TTarget  /////////////////////////////
 

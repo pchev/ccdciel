@@ -32,7 +32,7 @@ uses u_global,
      {$ifdef unix}
        unix,baseunix,
      {$endif}
-     process, Classes, LCLType, FileUtil,
+     process, Classes, LCLType, FileUtil, ComCtrls,
      Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
 
@@ -84,6 +84,7 @@ Procedure cmdHz2Eq(a,h : double; var ra,de : double);
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 procedure Fits2Screen(x,y: integer; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; out xx,yy:integer);
+procedure ResetTrackBar(tb:TTrackBar);
 
 implementation
 
@@ -1096,6 +1097,12 @@ begin
    yy:=yy+ImgFrameY;
 end;
 
+procedure ResetTrackBar(tb:TTrackBar);
+begin
+  tb.min:=0;
+  tb.position:=0;
+  tb.max:=maxint;
+end;
 
 end.
 

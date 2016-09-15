@@ -395,6 +395,10 @@ type
     procedure CameraVideoFrame(Sender: TObject);
     procedure CameraVideoPreviewChange(Sender: TObject);
     procedure CameraVideoFrameAsync(Data: PtrInt);
+    procedure CameraVideoSizeChange(Sender: TObject);
+    procedure CameraVideoRateChange(Sender: TObject);
+    procedure CameraVideoExposureChange(Sender: TObject);
+    procedure CameraFPSChange(Sender: TObject);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
@@ -646,8 +650,7 @@ begin
 end;
 
 procedure Tf_main.ScaleMainForm;
-var inif: TMemIniFile;
-    rl: integer;
+var rl: integer;
 const teststr = 'The Lazy Fox Jumps';
       designlen = 120;
 begin
@@ -792,6 +795,10 @@ begin
   camera.onNewImage:=@CameraNewImage;
   camera.onVideoFrame:=@CameraVideoFrame;
   camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
+  camera.onVideoSizeChange:=@CameraVideoSizeChange;
+  camera.onVideoRateChange:=@CameraVideoRateChange;
+  camera.onFPSChange:=@CameraFPSChange;
+  camera.onVideoExposureChange:=@CameraVideoExposureChange;
   camera.onStatusChange:=@CameraStatus;
   camera.onCameraDisconnected:=@CameraDisconnected;
   camera.onAbortExposure:=@CameraExposureAborted;
@@ -851,6 +858,7 @@ begin
 
   f_video:=Tf_video.Create(self);
   f_video.camera:=camera;
+  f_video.wheel:=wheel;
   f_video.onMsg:=@NewMessage;
 
   f_filterwheel:=Tf_filterwheel.Create(self);
@@ -1893,6 +1901,10 @@ begin
                    f_sequence.CameraDisconnected;
                    StatusBar1.Panels[1].Text:='';
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
+                   if PageVideo.TabVisible then begin
+                     PageVideo.TabVisible:=false;
+                     PageControlRight.ActivePageIndex:=0;
+                   end;
                    end;
    devConnecting:  begin
                    NewMessage('Connecting camera...');
@@ -1906,8 +1918,14 @@ begin
                    f_preview.Binning.Text:=buf;
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
                    if camera.hasVideo then begin
+                      wait(1);
                       PageVideo.TabVisible:=true;
                       CameraVideoPreviewChange(nil);
+                      f_video.FrameRate.Items.Assign(camera.VideoRates);
+                      f_video.VideoSize.Items.Assign(camera.VideoSizes);
+                      CameraVideoSizeChange(nil);
+                      CameraVideoRateChange(nil);
+                      f_video.SetImageControls;
                    end;
                    end;
  end;
@@ -1942,6 +1960,38 @@ end;
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
  f_ccdtemp.Current.Text:=FormatFloat(f1,t);
+end;
+
+procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
+begin
+  f_video.Preview.Checked:=camera.VideoPreviewRunning;
+end;
+
+procedure Tf_main.CameraVideoSizeChange(Sender: TObject);
+var i: integer;
+begin
+  i:=f_video.VideoSize.Items.IndexOf(camera.VideoSize);
+  if i>=0 then f_video.VideoSize.ItemIndex:=i;
+end;
+
+procedure Tf_main.CameraVideoRateChange(Sender: TObject);
+var i: integer;
+begin
+  i:=f_video.FrameRate.Items.IndexOf(camera.VideoRate);
+  if i>=0 then f_video.FrameRate.ItemIndex:=i;
+end;
+
+procedure Tf_main.CameraFPSChange(Sender: TObject);
+begin
+  f_video.FPS.caption:=FormatFloat(f1,camera.FPS)+' fps';
+end;
+
+procedure Tf_main.CameraVideoExposureChange(Sender: TObject);
+begin
+  f_video.ShowExposure(round(camera.VideoExposure));
+  f_video.Gain.Position:=round(camera.VideoGain);
+  f_video.Gamma.Position:=round(camera.VideoGamma);
+  f_video.Brightness.Position:=round(camera.VideoBrightness);
 end;
 
 Procedure Tf_main.WheelStatus(Sender: TObject);
@@ -3012,11 +3062,6 @@ begin
   img_Height:=ImaBmp.Height;
   image1.Picture.Bitmap.SetSize(image1.Width,image1.Height);
   PlotImage;
-end;
-
-procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
-begin
-  f_video.Preview.Checked:=camera.VideoPreviewRunning;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
