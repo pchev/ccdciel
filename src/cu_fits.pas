@@ -133,6 +133,7 @@ type
     Procedure ViewHeadersBtnClose(Sender: TObject);
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
+    procedure SetVideoStream(value:TMemoryStream);
     Procedure ReadFitsImage;
     Procedure GetImage;
     function Citt(value: Word):Word;
@@ -154,6 +155,7 @@ type
      Property HeaderInfo : TFitsInfo read FFitsInfo;
      property Header: TFitsHeader read FHeader write FHeader;
      Property Stream : TMemoryStream read GetStream write SetStream;
+     Property VideoStream : TMemoryStream write SetVideoStream;
      property Histogram : THistogram read FHistogram;
      property ImgDmin : Word read FImgDmin write FImgDmin;
      property ImgDmax : Word read FImgDmax write FImgDmax;
@@ -448,6 +450,26 @@ except
 end;
 end;
 
+procedure TFits.SetVideoStream(value:TMemoryStream);
+begin
+// other header previously set by caller
+FFitsInfo.solved:=false;
+cur_axis:=1;
+setlength(imar64,0,0,0);
+setlength(imar32,0,0,0);
+setlength(imai8,0,0,0);
+setlength(imai16,0,0,0);
+setlength(imai32,0,0,0);
+setlength(Fimage,0,0,0);
+FStream.Clear;
+FStream.Position:=0;
+value.Position:=0;
+FStream.CopyFrom(value,value.Size);
+Fhdr_end:=0;
+ReadFitsImage;
+GetIntfImg;
+end;
+
 procedure TFits.SetStream(value:TMemoryStream);
 begin
 try
@@ -584,18 +606,24 @@ with FFitsInfo do begin
       dec:=crval2;
  end;
  colormode:=1;
- if (naxis=3)and(naxis1=3) then begin // contiguous color
+ if (naxis=3)and(naxis1=3) then begin // contiguous color RGB
   naxis1:=naxis2;
   naxis2:=naxis3;
   naxis3:=3;
   colormode:=2;
+ end;
+ if (naxis=3)and(naxis1=4) then begin // contiguous color RGBA
+  naxis1:=naxis2;
+  naxis2:=naxis3;
+  naxis3:=3;
+  colormode:=3;
  end;
  if (naxis=3)and(naxis3=3) then n_axis:=3 else n_axis:=1;
 end;
 end;
 
 Procedure TFits.ReadFitsImage;
-var i,ii,j,npix,k : integer;
+var i,ii,j,npix,k,km,kk : integer;
     x,dmin,dmax : double;
     ni,sum,sum2 : extended;
 begin
@@ -698,27 +726,36 @@ case FFitsInfo.bitpix of
            ni:=ni+1;
          end;
          end;
-         end else
-        for i:=0 to FFitsInfo.naxis2-1 do begin
-         ii:=FFitsInfo.naxis2-1-i;
-         for j := 0 to FFitsInfo.naxis1-1 do begin
-           for k:=cur_axis+n_axis-2 downto cur_axis-1 do begin
-           if (npix mod 2880 = 0) then begin
-             FStream.Read(d8,sizeof(d8));
-             npix:=0;
+         end else begin
+          kk:=0;
+          if colormode=3 then begin  // output RGB from RGBA
+             n_axis:=4;
+             kk:=1;
+          end;
+          for i:=0 to FFitsInfo.naxis2-1 do begin
+           ii:=FFitsInfo.naxis2-1-i;
+           for j := 0 to FFitsInfo.naxis1-1 do begin
+             for k:=cur_axis+n_axis-2 downto cur_axis-1 do begin
+             if (npix mod 2880 = 0) then begin
+               FStream.Read(d8,sizeof(d8));
+               npix:=0;
+             end;
+             inc(npix);
+             km:=k-kk;
+             if km<0 then continue; // skip A
+             x:=d8[npix];
+             if x=FFitsInfo.blank then x:=0;
+             if (ii<=maxl-1) and (j<=maxl-1) then imai8[km,ii,j] := round(x);
+             x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+             dmin:=min(x,dmin);
+             dmax:=max(x,dmax);
+             sum:=sum+x;
+             sum2:=sum2+x*x;
+             ni:=ni+1;
+             end;
            end;
-           inc(npix);
-           x:=d8[npix];
-           if x=FFitsInfo.blank then x:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imai8[k,ii,j] := round(x);
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
-           dmin:=min(x,dmin);
-           dmax:=max(x,dmax);
-           sum:=sum+x;
-           sum2:=sum2+x*x;
-           ni:=ni+1;
-           end;
-         end;
+          end;
+          if colormode=3 then n_axis:=3; // restore value
          end;
 
      16 : for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
@@ -782,12 +819,16 @@ end;
 procedure TFits.GetImage;
 var i,j: integer;
     x : word;
+    h: integer;
     xx: extended;
     c: double;
 begin
 if FImgFullRange then begin
   Fdmin:=0;
-  Fdmax:=MaxWord;
+  if FFitsInfo.bitpix=8 then
+    Fdmax:=MaxByte
+  else
+    Fdmax:=MaxWord;
 end else begin
   Fdmin:=FFitsInfo.dmin;
   Fdmax:=FFitsInfo.dmax;
@@ -805,15 +846,18 @@ case FFitsInfo.bitpix of
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[0,i,j];
                x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
-               inc(FHistogram[x div 256]);
                if n_axis=3 then begin
+                 h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[1,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
+                 h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[2,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
+                 x:=(h+x) div 3;
                end;
+               inc(FHistogram[x div 256]);
            end;
            end;
            end;
@@ -827,15 +871,18 @@ case FFitsInfo.bitpix of
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[0,i,j];
                x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
-               inc(FHistogram[x div 256]);
                if n_axis=3 then begin
+                 h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[1,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
+                 h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[2,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
+                 x:=(h+x) div 3;
                end;
+               inc(FHistogram[x div 256]);
            end;
            end;
            end;
@@ -849,15 +896,18 @@ case FFitsInfo.bitpix of
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j];
                x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
-               inc(FHistogram[x div 256]);
                if n_axis=3 then begin
+                 h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[1,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
+                 h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[2,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
+                 x:=(h+x) div 3;
                end;
+               inc(FHistogram[x div 256]);
            end;
            end;
            end;
@@ -871,15 +921,18 @@ case FFitsInfo.bitpix of
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j];
                x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
-               inc(FHistogram[x div 256]);
                if n_axis=3 then begin
+                 h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[1,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
+                 h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[2,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
+                 x:=(h+x) div 3;
                end;
+               inc(FHistogram[x div 256]);
            end;
            end;
            end;
@@ -893,15 +946,18 @@ case FFitsInfo.bitpix of
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[0,i,j];
                x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
-               inc(FHistogram[x div 256]);
                if n_axis=3 then begin
+                 h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[1,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
+                 h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[2,i,j];
                  x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
+                 x:=(h+x) div 3;
                end;
+               inc(FHistogram[x div 256]);
            end;
            end;
            end;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, BGRABitmap, BGRABitmapTypes,
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi,
   lazutf8sysutils, Classes, SysUtils;
 
 type
@@ -55,7 +55,6 @@ T_camera = class(TComponent)
     FFilterNames: TStringList;
     FObjectName: string;
     FFits: TFits;
-    FVideoFrame: TBGRABitmap;
     FMount: T_mount;
     Fwheel: T_wheel;
     FTimeOut: integer;
@@ -63,8 +62,9 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVideoSizes, FVideoRates:TStringList;
     procedure NewImage;
-    procedure NewVideoFrame;
     procedure WriteHeaders;
+    procedure NewVideoFrame;
+    procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
     procedure SetFrametype(f:TFrameType); virtual; abstract;
@@ -143,7 +143,6 @@ T_camera = class(TComponent)
     property ImgStream: TMemoryStream read FImgStream;
     property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
-    property VideoFrame: TBGRABitmap read FVideoFrame;
     property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
     property MissedFrameCount: Cardinal read GetMissedFrameCount;
     property VideoRecordDuration: integer read GetVideoRecordDuration write SetVideoRecordDuration;
@@ -214,7 +213,6 @@ begin
   FImgStream:=TMemoryStream.Create;
   FhasVideo:=false;
   FVideoStream:=TMemoryStream.Create;;
-  FVideoFrame:=TBGRABitmap.Create;
   lockvideoframe:=false;
   FVideoSizes:=TStringList.Create;
   FVideoRates:=TStringList.Create;
@@ -225,7 +223,6 @@ begin
   FImgStream.Free;
   FFilterNames.Free;
   FVideoStream.Free;
-  FVideoFrame.Free;
   FVideoSizes.Free;
   FVideoRates.Free;
   inherited Destroy;
@@ -236,44 +233,6 @@ begin
   Ffits.Stream:=ImgStream;
   WriteHeaders;
   if Assigned(FonNewImage) then FonNewImage(self);
-end;
-
-procedure T_camera.NewVideoFrame;
-var i,j,x,y,w,h,bp: integer;
-    bx: array[0..65535] of Byte;
-    px:PBGRAPixel;
-begin
-  if lockvideoframe then exit;
-  lockvideoframe:=true;
-  try
-  GetFrame(x,y,w,h);
-  FVideoFrame.SetSize(w,h);
-  FVideoStream.Position:=0;
-  if Color then begin
-    bp:=4;
-    for i := 0 to h-1 do
-      FVideoStream.read(FVideoFrame.ScanLine[i]^, w*bp);
-    FVideoFrame.SwapRedBlue;
-  end else begin
-    bp:=1;
-    if w>65535 then exit;
-    for i:=0 to h-1 do begin
-      FVideoStream.read(bx,w);
-      px:=FVideoFrame.Scanline[i];
-      for j:=0 to w-1 do begin
-          px^.red:=bx[j];
-          px^.green:=bx[j];
-          px^.blue:=bx[j];
-          px^.alpha:=255;
-          inc(px);
-      end;
-    end;
-    FVideoFrame.InvalidateBitmap;
-  end;
-  if Assigned(FonVideoFrame) then FonVideoFrame(self);
-  finally
-    lockvideoframe:=false;
-  end;
 end;
 
 procedure T_camera.WriteHeaders;
@@ -387,6 +346,71 @@ begin
        Ffits.Header.Add('CDELT2',pixscale2,'coordinate scale');
     end;
   end;
+  Ffits.Header.Add('END','','');
+  Ffits.GetFitsInfo;
+end;
+
+procedure T_camera.NewVideoFrame;
+var x,y,w,h: integer;
+begin
+  if lockvideoframe then exit;
+  lockvideoframe:=true;
+  try
+  GetFrame(x,y,w,h);
+  FVideoStream.Position:=0;
+  if Color then begin
+    WriteVideoHeader(w,h,3,8);
+  end else begin
+    WriteVideoHeader(w,h,2,8);
+  end;
+  FFits.VideoStream:=FVideoStream;
+  if Assigned(FonVideoFrame) then FonVideoFrame(self);
+  finally
+    lockvideoframe:=false;
+  end;
+end;
+
+procedure T_camera.WriteVideoHeader(width,height,naxis,bitpix: integer);
+var
+    hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3: integer;
+    hframe,hdateobs : string;
+    hbzero,hbscale,hdmin,hdmax: double;
+begin
+  // simplified video header
+  hbitpix:=bitpix;
+  hnaxis:=naxis;
+  if naxis=2 then begin
+    hnaxis1:=width;
+    hnaxis2:=height;
+  end;
+  if naxis=3 then begin
+     hnaxis1:=4;       // 32bit video stream from INDI
+     hnaxis2:=width;
+     hnaxis3:=height;
+  end;
+  hframe:='Video   ';
+  hbzero:=0;
+  hbscale:=1;
+  hdmin:=0;
+  hdmax:=0;
+  hdateobs:=FormatDateTime(dateisoshort,NowUTC);
+  // write new header
+  Ffits.Header.ClearHeader;
+  Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
+  Ffits.Header.Add('BITPIX',hbitpix,'number of bits per data pixel');
+  Ffits.Header.Add('NAXIS',hnaxis,'number of data axes');
+  Ffits.Header.Add('NAXIS1',hnaxis1 ,'length of data axis 1');
+  Ffits.Header.Add('NAXIS2',hnaxis2 ,'length of data axis 2');
+  if hnaxis=3 then Ffits.Header.Add('NAXIS3',hnaxis3 ,'length of data axis 3');;
+  Ffits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
+  Ffits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
+  Ffits.Header.Add('BSCALE',hbscale,'default scaling factor');
+  Ffits.Header.Add('DATAMIN',hdmin,'Minimum value');
+  Ffits.Header.Add('DATAMAX',hdmax,'Maximum value');
+  Ffits.Header.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  Ffits.Header.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
+  Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   Ffits.Header.Add('END','','');
   Ffits.GetFitsInfo;
 end;
