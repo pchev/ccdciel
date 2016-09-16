@@ -1302,6 +1302,7 @@ procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 var xx,yy,n: integer;
     val:integer;
+    sval:string;
     ra,de,jd0,jd1: double;
     c: TcdcWCScoord;
 begin
@@ -1326,8 +1327,19 @@ if LockMouse then exit;
  else if (fits.HeaderInfo.naxis1>0) then begin
     Screen2fits(x,y,xx,yy);
     if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
-       val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC)
-    else val:=0;
+       if fits.HeaderInfo.naxis=2 then begin
+         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+         sval:=inttostr(val);
+       end
+       else if (fits.HeaderInfo.naxis=3)and(fits.HeaderInfo.naxis3=3) then begin
+         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+         sval:=inttostr(val);
+         val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
+         sval:=sval+'/'+inttostr(val);
+         val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
+         sval:=sval+'/'+inttostr(val);
+       end
+    else sval:='';
     if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin
       c.x:=xx;
       c.y:=cdcWCSinfo.hp-yy;
@@ -1347,7 +1359,7 @@ if LockMouse then exit;
         StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
       end;
     end;
-    StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+inttostr(val);
+    StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
  end;
 Mx:=X;
 My:=Y;
@@ -3057,11 +3069,12 @@ end;
 
 procedure Tf_main.CameraVideoFrameAsync(Data: PtrInt);
 begin
-  ImaBmp.Assign(camera.VideoFrame);
-  img_Width:=ImaBmp.Width;
-  img_Height:=ImaBmp.Height;
-  image1.Picture.Bitmap.SetSize(image1.Width,image1.Height);
-  PlotImage;
+ImgFrameX:=FrameX;
+ImgFrameY:=FrameY;
+ImgFrameW:=FrameW;
+ImgFrameH:=FrameH;
+DrawImage;
+DrawHistogram;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
