@@ -215,6 +215,7 @@ end;
 procedure Tf_video.ShowExposure(value:integer);
 var sr:TONumRange;
 begin
+if PanelExposure.visible then begin
  if Exprange.Visible then begin
    if value<10 then begin
       Exprange.ItemIndex:=0;
@@ -243,11 +244,13 @@ begin
  else
    Exposure.Position:=value;
 end;
+end;
 
 procedure Tf_video.ExprangeChange(Sender: TObject);
 var sr:TONumRange;
     exp:integer;
 begin
+if PanelExposure.visible then begin
   exp:=camera.VideoExposure;
   sr:=TONumRange(Exprange.Items.Objects[Exprange.ItemIndex]);
   if exp>sr.range.max then
@@ -256,6 +259,7 @@ begin
      camera.VideoExposure:=round(sr.range.min)
   else
      ShowExposure(camera.VideoExposure);
+end;
 end;
 
 procedure Tf_video.PreviewChange(Sender: TObject);
