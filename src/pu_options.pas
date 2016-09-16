@@ -36,7 +36,10 @@ type
   Tf_option = class(TForm)
     ButtonDir: TButton;
     BayerMode: TComboBox;
+    VideoPreviewRate: TEdit;
+    GroupBox10: TGroupBox;
     Label44: TLabel;
+    Label45: TLabel;
     MeridianWarning: TLabel;
     MeridianFlipPauseTimeout: TEdit;
     Label41: TLabel;

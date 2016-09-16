@@ -69,6 +69,8 @@ private
    FPSest,FPSavg: INumber;
    ImageAdjustments: INumberVectorProperty;
    Brightness,Gamma,Gain,Exposure:INumber;
+   StreamOptions: INumberVectorProperty;
+   StreamRate:INumber;
 
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
@@ -159,6 +161,9 @@ private
    function GetVideoGainRange:TNumRange; override;
    function GetVideoGammaRange:TNumRange; override;
    function GetVideoBrightnessRange:TNumRange; override;
+   function GetVideoPreviewDivisor:integer; override;
+   procedure SetVideoPreviewDivisor(value:integer); override;
+
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -257,6 +262,7 @@ begin
     Gamma:=nil;
     Gain:=nil;
     Exposure:=nil;
+    StreamOptions:=nil;
 
     CCDTemperature:=nil;
     CCDinfo:=nil;
@@ -607,6 +613,11 @@ begin
      FPSest:=IUFindNumber(VideoFPS,'EST_FPS');
      FPSavg:=IUFindNumber(VideoFPS,'AVG_FPS');
      if (FPSest=nil)or(FPSavg=nil) then VideoFPS:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='STREAM_OPTIONS') then begin
+     StreamOptions:=indiProp.getNumber;
+     StreamRate:=IUFindNumber(StreamOptions,'STREAM_RATE');
+     if (StreamRate=nil) then StreamOptions:=nil;
   end
   else if (proptype=INDI_NUMBER)and(propname='Image Adjustments') then begin
      ImageAdjustments:=indiProp.getNumber;
@@ -1482,6 +1493,22 @@ begin
     result.max:=Brightness.max;
     result.step:=Brightness.step;
  end
+end;
+
+function T_indicamera.GetVideoPreviewDivisor:integer;
+begin
+  result:=0;
+  if StreamOptions<>nil then begin
+     result:=round(StreamRate.value);
+  end;
+end;
+
+procedure T_indicamera.SetVideoPreviewDivisor(value:integer);
+begin
+ if StreamOptions<>nil then begin;
+   StreamRate.value:=value;
+   indiclient.sendNewNumber(StreamOptions);
+ end;
 end;
 
 end.

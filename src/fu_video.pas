@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, Classes,
-  SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
+uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi,
+  Classes, SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
 
@@ -42,7 +42,7 @@ type
     Label7: TLabel;
     ObjectName: TEdit;
     FrameRate: TComboBox;
-    FPS: TLabel;
+    FPSlabel: TLabel;
     Label3: TLabel;
     Exposure: TTrackBar;
     Gain: TTrackBar;
@@ -85,6 +85,9 @@ type
     Fwheel: T_wheel;
     Frunning: boolean;
     FonMsg: TNotifyMsg;
+    Ffps: double;
+    Ifps,RateDivisor: integer;
+    procedure SetFps(value:double);
     procedure SetRecordFile;
     procedure BrightnessChange;
     procedure GainChange;
@@ -98,6 +101,7 @@ type
     property camera: T_camera read FCamera write FCamera;
     property wheel: T_wheel read Fwheel write Fwheel;
     property Running: boolean read Frunning;
+    property FPS: double read Ffps write SetFps;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -110,6 +114,7 @@ begin
  inherited Create(aOwner);
  ScaleDPI(Self);
  Frunning:=false;
+ Ffps:=1;
 end;
 
 destructor  Tf_video.Destroy;
@@ -244,6 +249,7 @@ procedure Tf_video.PreviewChange(Sender: TObject);
 begin
   if FCamera<>nil then begin
    if Preview.Checked then begin
+      Ifps:=0;
       Camera.StartVideoPreview;
       Frunning:=true;
    end
@@ -404,6 +410,24 @@ begin
   end;
 end;
 
+procedure Tf_video.SetFps(value:double);
+var i,j,r: integer;
+begin
+  j:=trunc(10*value);
+  if j<>Ifps then begin
+    Ifps:=j;
+    Ffps:=value;
+    FPSlabel.Caption:=FormatFloat(f1,Ffps)+' fps';
+    i:=trunc(value);
+    r:=i div MaxVideoPreviewRate; // target preview fps
+    if r>i then r:=i;
+    if r<0 then r:=0;
+    if r<>RateDivisor then begin
+      RateDivisor:=r;
+      camera.VideoPreviewDivisor:=RateDivisor;
+    end;
+  end;
+end;
 
 end.
 

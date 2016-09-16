@@ -113,6 +113,8 @@ T_camera = class(TComponent)
     function GetVideoGainRange:TNumRange; virtual; abstract;
     function GetVideoGammaRange:TNumRange; virtual; abstract;
     function GetVideoBrightnessRange:TNumRange; virtual; abstract;
+    function GetVideoPreviewDivisor:integer; virtual; abstract;
+    procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
 
   private
     lockvideoframe: boolean;
@@ -161,6 +163,7 @@ T_camera = class(TComponent)
     property VideoGammaRange: TNumRange read GetVideoGammaRange;
     property VideoBrightness: integer read GetVideoBrightness write SetVideoBrightness;
     property VideoBrightnessRange: TNumRange read GetVideoBrightnessRange;
+    property VideoPreviewDivisor: integer read GetVideoPreviewDivisor write SetVideoPreviewDivisor;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
