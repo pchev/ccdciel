@@ -205,6 +205,7 @@ const
 
 var
   Appdir,ConfigDir,LogDir,TmpDir: UTF8String;
+  CameraName,WheelName,FocuserName,MountName: string;
   ConfirmClose, ScreenScaling: boolean;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;

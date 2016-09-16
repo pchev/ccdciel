@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi,
+uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui,
   Classes, SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
@@ -35,6 +35,7 @@ type
   Tf_video = class(TFrame)
     BtnStartRec: TButton;
     BtnStopRec: TButton;
+    BtnOptions: TButton;
     Exprange: TComboBox;
     Label4: TLabel;
     Label5: TLabel;
@@ -48,6 +49,14 @@ type
     Gain: TTrackBar;
     Gamma: TTrackBar;
     Brightness: TTrackBar;
+    PanelMore: TPanel;
+    PanelRecord: TPanel;
+    PanelOptions: TPanel;
+    PanelBrightness: TPanel;
+    PanelGamma: TPanel;
+    PanelGain: TPanel;
+    PanelPreview: TPanel;
+    PanelExposure: TPanel;
     VideoSize: TComboBox;
     Duration: TCheckBox;
     Frames: TCheckBox;
@@ -62,6 +71,7 @@ type
       );
     procedure BrightnessMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure BtnOptionsClick(Sender: TObject);
     procedure BtnStartRecClick(Sender: TObject);
     procedure BtnStopRecClick(Sender: TObject);
     procedure DurationClick(Sender: TObject);
@@ -83,10 +93,13 @@ type
     { private declarations }
     FCamera: T_camera;
     Fwheel: T_wheel;
+    FVideoindigui:Tf_indigui;
+    FVideoGUIready: boolean;
     Frunning: boolean;
     FonMsg: TNotifyMsg;
     Ffps: double;
     Ifps,RateDivisor: integer;
+    procedure GUIdestroy(Sender: TObject);
     procedure SetFps(value:double);
     procedure SetRecordFile;
     procedure BrightnessChange;
@@ -114,6 +127,7 @@ begin
  inherited Create(aOwner);
  ScaleDPI(Self);
  Frunning:=false;
+ FVideoGUIready:=false;
  Ffps:=1;
 end;
 
@@ -127,9 +141,8 @@ var r: TNumRange;
     sr:TONumRange;
 begin
  r:=camera.VideoExposureRange;
- Exposure.Visible:=not(r=NullRange);
- Exprange.Visible:=Exposure.Visible;
- if Exposure.Visible then begin
+ PanelExposure.Visible:=not(r=NullRange);
+ if PanelExposure.Visible then begin
    if r.max<=100 then begin
      Exprange.Visible:=false;
      ResetTrackBar(Exposure);
@@ -167,8 +180,8 @@ begin
    ShowExposure(camera.VideoExposure);
  end;
  r:=camera.VideoGainRange;
- Gain.Visible:=not(r=NullRange);
- if Gain.Visible then begin
+ PanelGain.Visible:=not(r=NullRange);
+ if PanelGain.Visible then begin
    ResetTrackBar(Gain);
    Gain.Min:=round(r.min);
    Gain.Max:=round(r.max);
@@ -177,8 +190,8 @@ begin
    Gain.Position:=camera.VideoGain;
  end;
  r:=camera.VideoGammaRange;
- Gamma.Visible:=not(r=NullRange);
- if Gamma.Visible then begin
+ PanelGamma.Visible:=not(r=NullRange);
+ if PanelGamma.Visible then begin
    ResetTrackBar(Gamma);
    Gamma.Min:=round(r.min);
    Gamma.Max:=round(r.max);
@@ -187,8 +200,8 @@ begin
    Gamma.Position:=camera.VideoGamma;
  end;
  r:=camera.VideoBrightnessRange;
- Brightness.Visible:=not(r=NullRange);
- if Brightness.Visible then begin
+ PanelBrightness.Visible:=not(r=NullRange);
+ if PanelBrightness.Visible then begin
    ResetTrackBar(Brightness);
    Brightness.Min:=round(r.min);
    Brightness.Max:=round(r.max);
@@ -377,6 +390,26 @@ procedure Tf_video.BrightnessMouseUp(Sender: TObject; Button: TMouseButton;
 begin
   BrightnessChange;
 end;
+
+procedure Tf_video.BtnOptionsClick(Sender: TObject);
+begin
+  if not FVideoGUIready then begin
+    FVideoindigui:=Tf_indigui.Create(Application.MainForm);
+    FVideoindigui.onDestroy:=@GUIdestroy;
+    FVideoindigui.IndiServer:=config.GetValue('/INDI/Server','');
+    FVideoindigui.IndiPort:=config.GetValue('/INDI/ServerPort','');
+    FVideoindigui.IndiDevice:=CameraName;
+    FVideoGUIready:=true;
+  end;
+  FVideoindigui.Show;
+  FormPos(FVideoindigui,mouse.CursorPos.X,mouse.CursorPos.Y);
+end;
+
+procedure Tf_video.GUIdestroy(Sender: TObject);
+begin
+  FVideoGUIready:=false;
+end;
+
 
 procedure Tf_video.FrameRateChange(Sender: TObject);
 var prw: boolean;

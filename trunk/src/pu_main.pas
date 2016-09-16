@@ -275,7 +275,6 @@ type
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    CameraName,WheelName,FocuserName,MountName: string;
     WantCamera,WantWheel,WantFocuser,WantMount: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
@@ -1108,6 +1107,7 @@ end;
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 var i,n: integer;
 begin
+  if AppClose then exit;
   AppClose:=true;
 
   config.SetValue('/Configuration/Version',ccdcielver);
@@ -1413,6 +1413,7 @@ end;
 
 procedure Tf_main.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
+if AppClose then exit;
 if (camera.Status<>devDisconnected)and(ConfirmClose) then begin
    CanClose:=(MessageDlg('The camera is connected. Do you want to exit the program now?',mtConfirmation,mbYesNo,0)=mrYes);
 end else begin
