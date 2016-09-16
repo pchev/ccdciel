@@ -1507,6 +1507,7 @@ begin
   BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
+  MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   LogToFile:=config.GetValue('/Log/Messages',true);
@@ -1995,7 +1996,7 @@ end;
 
 procedure Tf_main.CameraFPSChange(Sender: TObject);
 begin
-  f_video.FPS.caption:=FormatFloat(f1,camera.FPS)+' fps';
+  f_video.FPS:=camera.FPS;
 end;
 
 procedure Tf_main.CameraVideoExposureChange(Sender: TObject);
@@ -2448,6 +2449,7 @@ begin
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
+   f_option.VideoPreviewRate.Text:=inttostr(config.GetValue('/Video/PreviewRate',5));
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
@@ -2522,6 +2524,7 @@ begin
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
+     config.SetValue('/Video/PreviewRate',StrToIntDef(f_option.VideoPreviewRate.Text,MaxVideoPreviewRate));
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);

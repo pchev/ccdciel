@@ -100,6 +100,8 @@ T_ascomcamera = class(T_camera)
    function GetVideoGainRange:TNumRange; override;
    function GetVideoGammaRange:TNumRange; override;
    function GetVideoBrightnessRange:TNumRange; override;
+   function GetVideoPreviewDivisor:integer; override;
+   procedure SetVideoPreviewDivisor(value:integer); override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -887,6 +889,17 @@ end;
 function T_ascomcamera.GetVideoBrightnessRange:TNumRange;
 begin
  result:=NullRange;
+ // todo
+end;
+
+function T_ascomcamera.GetVideoPreviewDivisor:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoPreviewDivisor(value:integer);
+begin
  // todo
 end;
 

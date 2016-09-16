@@ -225,6 +225,7 @@ var
   ObsLongitude, ObsLatitude, ObsTimeZone: double;
   BayerColor: boolean;
   BayerMode:TBayerMode;
+  MaxVideoPreviewRate: integer;
 
 implementation
 
