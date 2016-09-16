@@ -37,7 +37,7 @@ type
     ButtonDir: TButton;
     BayerMode: TComboBox;
     VideoPreviewRate: TEdit;
-    GroupBox10: TGroupBox;
+    VideoGroup: TGroupBox;
     Label44: TLabel;
     Label45: TLabel;
     MeridianWarning: TLabel;
