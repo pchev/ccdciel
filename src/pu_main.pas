@@ -53,6 +53,9 @@ type
     MenuIndiSettings: TMenuItem;
     MenuHelpAbout: TMenuItem;
     MenuClearRef: TMenuItem;
+    MenuVideoPreview: TMenuItem;
+    MenuVideoStart: TMenuItem;
+    MenuVideoStop: TMenuItem;
     MenuVideo: TMenuItem;
     MenuTabVideo: TMenuItem;
     MenuViewVideo: TMenuItem;
@@ -233,6 +236,9 @@ type
     procedure MenuSequenceStopClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuTabClick(Sender: TObject);
+    procedure MenuVideoPreviewClick(Sender: TObject);
+    procedure MenuVideoStartClick(Sender: TObject);
+    procedure MenuVideoStopClick(Sender: TObject);
     procedure MenuViewAstrometryLogClick(Sender: TObject);
     procedure MenuViewAutoguiderClick(Sender: TObject);
     procedure MenuViewCCDtempClick(Sender: TObject);
@@ -1917,6 +1923,7 @@ begin
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
                    if PageVideo.TabVisible then begin
                      PageVideo.TabVisible:=false;
+                     MenuTabVideo.Visible:=false;
                      PageControlRight.ActivePageIndex:=0;
                    end;
                    end;
@@ -1934,6 +1941,7 @@ begin
                    if camera.hasVideo then begin
                       wait(1);
                       PageVideo.TabVisible:=true;
+                      MenuTabVideo.Visible:=true;
                       CameraVideoPreviewChange(nil);
                       f_video.FrameRate.Items.Assign(camera.VideoRates);
                       f_video.VideoSize.Items.Assign(camera.VideoSizes);
@@ -3603,6 +3611,21 @@ var i: integer;
 begin
   i:=TMenuItem(Sender).Tag;
   PageControlRight.ActivePageIndex:=i;
+end;
+
+procedure Tf_main.MenuVideoPreviewClick(Sender: TObject);
+begin
+  f_video.Preview.Checked:=not f_video.Preview.Checked;
+end;
+
+procedure Tf_main.MenuVideoStartClick(Sender: TObject);
+begin
+  f_video.BtnStartRec.Click;
+end;
+
+procedure Tf_main.MenuVideoStopClick(Sender: TObject);
+begin
+  f_video.BtnStopRec.Click;
 end;
 
 procedure Tf_main.MenuViewAstrometryLogClick(Sender: TObject);

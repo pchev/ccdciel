@@ -790,8 +790,22 @@ object f_main: Tf_main
     end
     object MenuTabVideo: TMenuItem
       Caption = 'Video'
+      ImageIndex = 4
+      Visible = False
       object MenuVideo: TMenuItem
         Caption = 'Video'
+        object MenuVideoPreview: TMenuItem
+          Caption = 'Preview'
+          OnClick = MenuVideoPreviewClick
+        end
+        object MenuVideoStart: TMenuItem
+          Caption = 'Start record'
+          OnClick = MenuVideoStartClick
+        end
+        object MenuVideoStop: TMenuItem
+          Caption = 'Stop record'
+          OnClick = MenuVideoStopClick
+        end
       end
     end
     object MenuItem3: TMenuItem
