@@ -36,6 +36,10 @@ type
     BtnDown: TButton;
     BtnUp: TButton;
     Label6: TLabel;
+    Notebook1: TNotebook;
+    PageTimerMove: TPage;
+    PageRelPos: TPage;
+    PageAbsPos: TPage;
     PanelRelPos: TPanel;
     PanelParam: TPanel;
     RelIncr: TComboBox;

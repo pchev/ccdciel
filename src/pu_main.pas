@@ -1854,19 +1854,13 @@ end;
 procedure Tf_main.SetFocusMode;
 begin
   if focuser.hasAbsolutePosition then begin
-     f_focuser.PanelAbsPos.Visible:=true;
-     f_focuser.PanelRelPos.Visible:=false;
-     f_focuser.PanelTimerMove.Visible:=false;
+     f_focuser.Notebook1.PageIndex:=2;
   end
   else if focuser.hasRelativePosition then begin
-     f_focuser.PanelAbsPos.Visible:=false;
-     f_focuser.PanelRelPos.Visible:=true;
-     f_focuser.PanelTimerMove.Visible:=false;
+     f_focuser.Notebook1.PageIndex:=1;
   end
   else begin
-     f_focuser.PanelAbsPos.Visible:=false;
-     f_focuser.PanelRelPos.Visible:=false;
-     f_focuser.PanelTimerMove.Visible:=true;
+     f_focuser.Notebook1.PageIndex:=0;
   end;
 end;
 
