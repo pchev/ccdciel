@@ -21,13 +21,13 @@ object f_devicesconnection: Tf_devicesconnection
       Height = 25
       Hint = 'Connect all devices'
       Top = 16
-      Width = 80
+      Width = 85
       Caption = 'Connect'
       OnClick = BtnConnectClick
       TabOrder = 0
     end
     object led: TShape
-      Left = 100
+      Left = 110
       Height = 14
       Top = 20
       Width = 14

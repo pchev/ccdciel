@@ -36,9 +36,9 @@ object f_planetarium: Tf_planetarium
       Left = 0
       Height = 26
       Top = 0
-      Width = 156
+      Width = 163
       ClientHeight = 26
-      ClientWidth = 156
+      ClientWidth = 163
       TabOrder = 0
       object led: TShape
         Left = 128
@@ -66,24 +66,24 @@ object f_planetarium: Tf_planetarium
       Left = 0
       Height = 26
       Top = 26
-      Width = 156
+      Width = 163
       ClientHeight = 26
-      ClientWidth = 156
+      ClientWidth = 163
       TabOrder = 1
       object BtnConnect: TButton
         Left = 0
         Height = 25
         Top = 0
-        Width = 70
+        Width = 75
         Caption = 'Connect'
         OnClick = BtnConnectClick
         TabOrder = 0
       end
       object BtnNewTarget: TButton
-        Left = 72
+        Left = 77
         Height = 25
         Top = 0
-        Width = 83
+        Width = 85
         Caption = 'New target'
         OnClick = BtnNewTargetClick
         TabOrder = 1
@@ -93,7 +93,7 @@ object f_planetarium: Tf_planetarium
       Left = 0
       Height = 1
       Top = 52
-      Width = 156
+      Width = 163
       TabOrder = 2
     end
   end

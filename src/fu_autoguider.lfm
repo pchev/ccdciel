@@ -36,9 +36,9 @@ object f_autoguider: Tf_autoguider
       Left = 0
       Height = 26
       Top = 0
-      Width = 156
+      Width = 166
       ClientHeight = 26
-      ClientWidth = 156
+      ClientWidth = 166
       TabOrder = 0
       object led: TShape
         Left = 128
@@ -66,15 +66,15 @@ object f_autoguider: Tf_autoguider
       Left = 0
       Height = 26
       Top = 26
-      Width = 156
+      Width = 166
       ClientHeight = 26
-      ClientWidth = 156
+      ClientWidth = 166
       TabOrder = 1
       object BtnConnect: TButton
         Left = 0
         Height = 25
         Top = 0
-        Width = 70
+        Width = 80
         Caption = 'Connect'
         OnClick = BtnConnectClick
         TabOrder = 0
@@ -83,7 +83,7 @@ object f_autoguider: Tf_autoguider
         Left = 85
         Height = 25
         Top = 0
-        Width = 70
+        Width = 80
         Caption = 'Calibrate'
         OnClick = BtnCalClick
         TabOrder = 1
@@ -93,15 +93,15 @@ object f_autoguider: Tf_autoguider
       Left = 0
       Height = 26
       Top = 52
-      Width = 156
+      Width = 166
       ClientHeight = 26
-      ClientWidth = 156
+      ClientWidth = 166
       TabOrder = 2
       object BtnGuide: TButton
         Left = 0
         Height = 25
         Top = 0
-        Width = 70
+        Width = 80
         Caption = 'Guide'
         OnClick = BtnGuideClick
         TabOrder = 0
@@ -110,7 +110,7 @@ object f_autoguider: Tf_autoguider
         Left = 85
         Height = 25
         Top = 0
-        Width = 70
+        Width = 80
         Caption = 'Dither'
         OnClick = BtnDitherClick
         TabOrder = 1
