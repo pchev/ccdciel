@@ -47,7 +47,7 @@ object f_script: Tf_script
     end
     object BtnRun: TButton
       Left = 2
-      Height = 22
+      Height = 25
       Top = 30
       Width = 66
       Caption = 'Run'
@@ -56,25 +56,25 @@ object f_script: Tf_script
     end
     object BtnEdit: TButton
       Left = 2
-      Height = 22
-      Top = 56
-      Width = 56
+      Height = 25
+      Top = 58
+      Width = 60
       Caption = 'Edit'
       OnClick = BtnScriptClick
       TabOrder = 2
     end
     object BtnNew: TButton
-      Left = 64
-      Height = 22
-      Top = 56
-      Width = 56
+      Left = 65
+      Height = 25
+      Top = 58
+      Width = 60
       Caption = 'New'
       OnClick = BtnScriptClick
       TabOrder = 3
     end
     object BtnStop: TButton
       Left = 78
-      Height = 22
+      Height = 25
       Top = 30
       Width = 66
       Caption = 'Stop'
@@ -91,9 +91,9 @@ object f_script: Tf_script
     end
     object BtnCopy: TButton
       Left = 128
-      Height = 22
-      Top = 56
-      Width = 56
+      Height = 25
+      Top = 58
+      Width = 60
       Caption = 'Copy'
       OnClick = BtnCopyClick
       TabOrder = 5

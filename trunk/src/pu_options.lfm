@@ -44,10 +44,11 @@ object f_option: Tf_option
     Height = 397
     Top = 0
     Width = 433
-    ActivePage = TabSheet8
+    ActivePage = TabSheet1
     Align = alClient
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 1
+    OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = 'Files'
       ClientHeight = 371
@@ -220,17 +221,18 @@ object f_option: Tf_option
       end
       object LatitudeGroup: TGroupBox
         Left = 144
-        Height = 41
-        Top = 170
-        Width = 218
-        ClientHeight = 39
-        ClientWidth = 216
+        Height = 26
+        Top = 178
+        Width = 230
+        AutoSize = True
+        ClientHeight = 24
+        ClientWidth = 228
         TabOrder = 3
         object hemis: TComboBox
-          Left = 112
-          Height = 26
-          Top = 2
-          Width = 88
+          Left = 160
+          Height = 24
+          Top = 0
+          Width = 68
           AutoCompleteText = [cbactSearchAscending]
           AutoSize = False
           ItemHeight = 0
@@ -240,15 +242,16 @@ object f_option: Tf_option
             'South'
           )
           OnChange = latChange
+          Style = csDropDownList
           TabOrder = 3
           Text = 'North'
         end
         object latdeg: TFloatEdit
-          Left = 4
+          Left = 0
           Height = 24
           Hint = '0..90'
-          Top = 2
-          Width = 44
+          Top = 0
+          Width = 51
           MaxLength = 12
           ParentShowHint = False
           ShowHint = True
@@ -261,11 +264,11 @@ object f_option: Tf_option
           NumericType = ntFixed
         end
         object latmin: TLongEdit
-          Left = 48
+          Left = 54
           Height = 24
           Hint = '0..59'
-          Top = 2
-          Width = 25
+          Top = 0
+          Width = 51
           MaxLength = 2
           ParentShowHint = False
           ShowHint = True
@@ -275,11 +278,11 @@ object f_option: Tf_option
           MaxValue = 59
         end
         object latsec: TFloatEdit
-          Left = 72
+          Left = 108
           Height = 24
           Hint = '0..59.99'
-          Top = 2
-          Width = 42
+          Top = 0
+          Width = 51
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
@@ -292,17 +295,18 @@ object f_option: Tf_option
       end
       object LongitudeGroup: TGroupBox
         Left = 144
-        Height = 41
+        Height = 26
         Top = 230
-        Width = 218
-        ClientHeight = 39
-        ClientWidth = 216
+        Width = 230
+        AutoSize = True
+        ClientHeight = 24
+        ClientWidth = 228
         TabOrder = 4
         object long: TComboBox
-          Left = 112
-          Height = 26
-          Top = 2
-          Width = 88
+          Left = 160
+          Height = 24
+          Top = 0
+          Width = 68
           AutoCompleteText = [cbactSearchAscending]
           AutoSize = False
           ItemHeight = 0
@@ -312,15 +316,16 @@ object f_option: Tf_option
             'East'
           )
           OnChange = longChange
+          Style = csDropDownList
           TabOrder = 3
           Text = 'East'
         end
         object longdeg: TFloatEdit
-          Left = 4
+          Left = 0
           Height = 24
           Hint = '0..180'
-          Top = 2
-          Width = 46
+          Top = 0
+          Width = 51
           MaxLength = 12
           ParentShowHint = False
           ShowHint = True
@@ -333,11 +338,11 @@ object f_option: Tf_option
           NumericType = ntFixed
         end
         object longmin: TLongEdit
-          Left = 48
+          Left = 54
           Height = 24
           Hint = '0..59'
-          Top = 2
-          Width = 25
+          Top = 0
+          Width = 51
           MaxLength = 2
           ParentShowHint = False
           ShowHint = True
@@ -347,11 +352,11 @@ object f_option: Tf_option
           MaxValue = 59
         end
         object longsec: TFloatEdit
-          Left = 72
+          Left = 108
           Height = 24
           Hint = '0..59.99'
-          Top = 2
-          Width = 42
+          Top = 0
+          Width = 51
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
@@ -774,8 +779,8 @@ object f_option: Tf_option
               Top = 141
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 31
-              ClientWidth = 383
+              ClientHeight = 35
+              ClientWidth = 387
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -1013,70 +1018,70 @@ object f_option: Tf_option
         TabOrder = 1
         object Label40: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 12
-          Width = 185
+          Width = 161
           Caption = 'Can track past meridian for'
           ParentColor = False
         end
         object MinutesPastMeridian: TEdit
           Left = 192
-          Height = 27
+          Height = 24
           Top = 8
           Width = 32
           TabOrder = 0
         end
         object Label41: TLabel
           Left = 240
-          Height = 17
+          Height = 18
           Top = 12
-          Width = 56
+          Width = 49
           Caption = 'minutes'
           ParentColor = False
         end
         object MeridianFlipPauseBefore: TCheckBox
           Left = 16
-          Height = 24
+          Height = 21
           Top = 52
-          Width = 209
+          Width = 183
           Caption = 'Pause before meridian flip '
           TabOrder = 1
         end
         object MeridianFlipPauseAfter: TCheckBox
           Left = 16
-          Height = 24
+          Height = 21
           Top = 84
-          Width = 197
+          Width = 172
           Caption = 'Pause after meridian flip '
           TabOrder = 2
         end
         object Label42: TLabel
           Left = 80
-          Height = 17
+          Height = 18
           Top = 112
-          Width = 57
+          Width = 50
           Caption = 'Timeout'
           ParentColor = False
         end
         object MeridianFlipPauseTimeout: TEdit
           Left = 152
-          Height = 27
+          Height = 24
           Top = 108
           Width = 32
           TabOrder = 3
         end
         object Label43: TLabel
           Left = 200
-          Height = 17
+          Height = 18
           Top = 112
-          Width = 56
+          Width = 49
           Caption = 'minutes'
           ParentColor = False
         end
       end
       object MeridianWarning: TLabel
         Left = 4
-        Height = 17
+        Height = 18
         Top = 64
         Width = 132
         Caption = '                                            '
@@ -1320,8 +1325,8 @@ object f_option: Tf_option
               Height = 80
               Top = 32
               Width = 333
-              ClientHeight = 76
-              ClientWidth = 329
+              ClientHeight = 80
+              ClientWidth = 333
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124
