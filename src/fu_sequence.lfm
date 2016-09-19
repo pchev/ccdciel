@@ -115,16 +115,16 @@ object f_sequence: Tf_sequence
         Left = 0
         Height = 25
         Top = 32
-        Width = 58
+        Width = 80
         Caption = 'Copy'
         OnClick = BtnCopyClick
         TabOrder = 6
       end
       object BtnDelete: TButton
-        Left = 62
+        Left = 96
         Height = 25
         Top = 32
-        Width = 58
+        Width = 80
         Caption = 'Delete'
         OnClick = BtnDeleteClick
         TabOrder = 7

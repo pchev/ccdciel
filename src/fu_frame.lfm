@@ -2,16 +2,16 @@ object f_frame: Tf_frame
   Left = 0
   Height = 71
   Top = 0
-  Width = 180
+  Width = 192
   AutoSize = True
   ClientHeight = 71
-  ClientWidth = 180
+  ClientWidth = 192
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 192
     Align = alTop
     Alignment = taCenter
     Caption = 'Frame'
@@ -26,13 +26,13 @@ object f_frame: Tf_frame
     Left = 0
     Height = 51
     Top = 20
-    Width = 180
+    Width = 192
     Align = alClient
     ClientHeight = 51
-    ClientWidth = 180
+    ClientWidth = 192
     TabOrder = 1
     object FX: TEdit
-      Left = 24
+      Left = 20
       Height = 22
       Hint = 'X'
       Top = 0
@@ -47,7 +47,7 @@ object f_frame: Tf_frame
       Text = ' '
     end
     object FY: TEdit
-      Left = 24
+      Left = 20
       Height = 22
       Hint = 'Y'
       Top = 22
@@ -62,7 +62,7 @@ object f_frame: Tf_frame
       Text = ' '
     end
     object FWidth: TEdit
-      Left = 80
+      Left = 75
       Height = 22
       Hint = 'Width'
       Top = 0
@@ -77,7 +77,7 @@ object f_frame: Tf_frame
       Text = ' '
     end
     object FHeight: TEdit
-      Left = 80
+      Left = 75
       Height = 22
       Hint = 'Height'
       Top = 22
@@ -92,19 +92,19 @@ object f_frame: Tf_frame
       Text = ' '
     end
     object BtnSet: TButton
-      Left = 136
+      Left = 130
       Height = 22
       Top = 0
-      Width = 50
+      Width = 60
       Caption = 'Set'
       OnClick = BtnSetClick
       TabOrder = 4
     end
     object BtnReset: TButton
-      Left = 136
+      Left = 130
       Height = 22
       Top = 24
-      Width = 50
+      Width = 60
       Caption = 'Reset'
       OnClick = BtnResetClick
       TabOrder = 5
