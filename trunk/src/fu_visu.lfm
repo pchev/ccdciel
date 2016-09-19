@@ -15,6 +15,7 @@ object f_visu: Tf_visu
     Top = 20
     Width = 371
     Align = alClient
+    AutoSize = True
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 92
