@@ -1354,7 +1354,7 @@ if LockMouse then exit;
         ra:=c.ra;
         de:=c.dec;
         if mount.Equinox=0 then begin
-          jd0:=Jd(trunc(cdcWCSinfo.eqout),0,0,0);
+          jd0:=jd2000;
           jd1:=DateTimetoJD(now);
           ra:=deg2rad*ra;
           de:=deg2rad*de;
