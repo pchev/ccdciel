@@ -96,22 +96,27 @@ type
 
   // libcdcwcs
  type
+   {$ifdef cpu32}
+    Intwcs=Int32;
+   {$else}
+    Intwcs=integer;
+   {$endif}
     TcdcWCScoord = record
       ra, dec, x, y: double;
-      n: integer;
+      n: Intwcs;
     end;
     PcdcWCScoord = ^TcdcWCScoord;
 
     TcdcWCSinfo = record
       cra, cdec, dra, ddec, secpix, eqout, rot: double;
-      wp, hp, sysout: integer;
+      wp, hp, sysout: Intwcs;
     end;
     PcdcWCSinfo = ^TcdcWCSinfo;
-    Tcdcwcs_initfitsfile = function(fn: PChar; wcsnum:integer): integer; cdecl;
-    Tcdcwcs_release = function(wcsnum:integer): integer; cdecl;
-    Tcdcwcs_sky2xy = function(p: PcdcWCScoord; wcsnum:integer): integer; cdecl;
-    Tcdcwcs_xy2sky = function(p: PcdcWCScoord; wcsnum:integer): integer; cdecl;
-    Tcdcwcs_getinfo = function(p: PcdcWCSinfo; wcsnum:integer): integer; cdecl;
+    Tcdcwcs_initfitsfile = function(fn: PChar; wcsnum:Intwcs): Intwcs; cdecl;
+    Tcdcwcs_release = function(wcsnum:Intwcs): Intwcs; cdecl;
+    Tcdcwcs_sky2xy = function(p: PcdcWCScoord; wcsnum:Intwcs): Intwcs; cdecl;
+    Tcdcwcs_xy2sky = function(p: PcdcWCScoord; wcsnum:Intwcs): Intwcs; cdecl;
+    Tcdcwcs_getinfo = function(p: PcdcWCSinfo; wcsnum:Intwcs): Intwcs; cdecl;
 
   var
     cdcwcslib: TLibHandle;

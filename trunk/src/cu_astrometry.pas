@@ -230,7 +230,7 @@ begin
       if m=0 then begin
         cra:=c.ra/15;
         cde:=c.dec;
-        eq:=i.eqout;
+        eq:=2000;
         result:=true;
       end;
     end;
@@ -346,7 +346,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        ra:=c.ra;
        de:=c.dec;
        if mount.Equinox=0 then begin
-         jd0:=Jd(trunc(i.eqout),0,0,0);
+         jd0:=jd2000;
          jd1:=DateTimetoJD(now);
          ra:=deg2rad*ra;
          de:=deg2rad*de;
