@@ -343,8 +343,10 @@ begin
       V.tracking:=true;
    end;
    FMountSlewing:=true;
-   if CanSlewAsync then
-     V.SlewToCoordinatesAsync(sra,sde)
+   if CanSlewAsync then begin
+     V.SlewToCoordinatesAsync(sra,sde);
+     WaitMountSlewing(120000);
+   end
    else
      V.SlewToCoordinates(sra,sde);
    FMountSlewing:=false;
@@ -377,16 +379,22 @@ function T_ascommount.WaitMountSlewing(maxtime:integer):boolean;
 var count,maxcount:integer;
 {$endif}
 begin
- result:=false;
+ result:=true;
  {$ifdef mswindows}
- maxcount:=maxtime div 100;
- count:=0;
- while (MountSlewing)and(count<maxcount) do begin
-    sleep(100);
-    Application.ProcessMessages;
-    inc(count);
+ try
+ if Connected and CanSlewAsync then begin
+   maxcount:=maxtime div 100;
+   count:=0;
+   while (V.Slewing)and(count<maxcount) do begin
+      sleep(100);
+      Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
  end;
- result:=(count<maxcount);
+ except
+   result:=false;
+ end;
  {$endif}
 end;
 
@@ -421,15 +429,12 @@ begin
       ra1:=sra+1;
       if ra1>=24 then ra1:=ra1-24;
       slew(ra1,sde);
-      WaitMountSlewing(240000);
       // point one hour to the west to force the flip
       ra2:=sra-1;
       if ra2<0 then ra2:=ra2+24;
       slew(ra2,sde);
-      WaitMountSlewing(240000);
       // return to position
       slew(sra,sde);
-      WaitMountSlewing(240000);
       // check result
       pierside2:=GetPierSide;
       result:=(pierside2<>pierside1);
