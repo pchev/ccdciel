@@ -3575,6 +3575,9 @@ begin
   MenuResolveSlew.Enabled:=false;
   MenuResolve.Enabled:=false;
   MenuResolveSlewCenter.Enabled:=false;
+  {$ifdef mswindows}
+  MenuViewAstrometryLog.Enabled:=false;
+  {$endif}
   MenuStopAstrometry.Visible:=true;
 end;
 
@@ -3587,8 +3590,10 @@ begin
   MenuResolveSlew.Enabled:=true;
   MenuResolve.Enabled:=true;
   MenuResolveSlewCenter.Enabled:=true;
+  MenuViewAstrometryLog.Enabled:=true;
   if astrometry.LastResult then begin
      LoadFitsFile(astrometry.ResultFile);
+     NewMessage(astrometry.Resolver+' resolve successful.');
   end else begin
     NewMessage(astrometry.Resolver+' resolve error.');
   end;
