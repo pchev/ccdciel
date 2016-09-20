@@ -110,6 +110,10 @@ var hnd: Thandle;
     childs: array [0..maxchild] of THandle;
     i,childnum:integer;
     resp: Tstringlist;
+{$else}
+var  Kcmd,buf: string;
+     Kparam: TStringList;
+     Kprocess: TProcessUTF8;
 {$endif}
 begin
 if FResolver=ResolverAstrometryNet then begin
@@ -136,6 +140,28 @@ if FResolver=ResolverAstrometryNet then begin
     resp.Free;
   end;
 {$else}
+  Kparam:=TStringList.Create;
+  Kprocess:=TProcessUTF8.Create(nil);
+  try
+  Kcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
+  Kparam.Clear;
+  Kparam.Add('--login');
+  Kparam.Add('-c');
+  Kparam.Add('"ps aux|grep backend| awk ''{print $1}'' | xargs -n1 kill "');
+  Kprocess.Executable:=Kcmd;
+  Kprocess.Parameters:=Kparam;
+  Kprocess.ShowWindow:=swoHIDE;
+  Kprocess.Execute;
+  Kparam.Clear;
+  Kparam.Add('--login');
+  Kparam.Add('-c');
+  Kparam.Add('"ps aux|grep solve-field| awk ''{print $1}'' | xargs -n1 kill "');
+  Kprocess.Parameters:=Kparam;
+  Kprocess.Execute;
+  finally
+    Kprocess.Free;
+    Kparam.Free;
+  end;
   if (process<>nil) and process.Running then process.Active:=false;
 {$endif}
 end;

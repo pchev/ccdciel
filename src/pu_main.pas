@@ -3602,7 +3602,6 @@ end;
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
 begin
   astrometry.StopAstrometry;
-  MenuStopAstrometry.Visible:=false;
 end;
 
 procedure Tf_main.MenuTabClick(Sender: TObject);
