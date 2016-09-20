@@ -137,7 +137,7 @@ type
 
 const
   ccdciel_version='Version beta 0.8.0';
-  ccdcielver = '0.8.0';
+  ccdcielver = '0.8.1';
   blank=' ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;
