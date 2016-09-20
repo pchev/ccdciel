@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_mount, u_global, indiapi,
+uses  cu_mount, u_global, u_utils, indiapi,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
@@ -349,6 +349,7 @@ begin
    end
    else
      V.SlewToCoordinates(sra,sde);
+   wait(2);
    FMountSlewing:=false;
    result:=true;
    except
