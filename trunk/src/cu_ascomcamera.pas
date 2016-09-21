@@ -202,6 +202,7 @@ end;
 procedure T_ascomcamera.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var x,y,width,height: integer;
+    t: double;
 {$endif}
 begin
  {$ifdef mswindows}
@@ -210,10 +211,13 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end
   else begin
-    if V.CanSetCCDTemperature and
-       (V.CCDTemperature<>stCCDtemp) then begin
-         stCCDtemp:=V.CCDTemperature;
+    try
+    if V.CanSetCCDTemperature then begin
+       t:=V.CCDTemperature;
+       if (t<>stCCDtemp) then begin
+         stCCDtemp:=t;
          if Assigned(FonTemperatureChange) then FonTemperatureChange(stCCDtemp);
+    end;
     end;
     GetFrame(x,y,width,height);
     if (x<>stX)or(y<>stY)or(width<>stWidth)or(height<>stHeight) then begin
@@ -222,6 +226,9 @@ begin
        stWidth:=width;
        stHeight:=height;
        if Assigned(FonFrameChange) then FonFrameChange(self);
+    end;
+    except
+     on E: EOleException do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -461,7 +468,7 @@ end;
 
 Procedure T_ascomcamera.SetActiveDevices(focuser,filters,telescope: string);
 begin
-
+  // not in ascom
 end;
 
 procedure T_ascomcamera.msg(txt: string);
@@ -592,10 +599,13 @@ var i:integer;
 {$endif}
 begin
  {$ifdef mswindows}
+ try
   if (value.Count=nf) then begin
     for i:=0 to value.Count-1 do begin
        FFilterNames[i]:=value[i];
     end;
+  end;
+  except
   end;
  {$endif}
 end;

@@ -312,7 +312,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
-    Capture,Preview,PreviewLoop,meridianflipping: boolean;
+    Capture,Preview,meridianflipping: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -958,7 +958,6 @@ begin
   EndY:=0;
   Capture:=false;
   Preview:=false;
-  PreviewLoop:=false;
   MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
@@ -1330,7 +1329,7 @@ if LockMouse then exit;
     EndY:=Y;
     Image1.Canvas.Frame(StartX,StartY,EndX,EndY);
  end
- else if (fits.HeaderInfo.naxis1>0) then begin
+ else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) then begin
     Screen2fits(x,y,xx,yy);
     if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
        if fits.HeaderInfo.naxis=2 then begin
@@ -2816,7 +2815,6 @@ var e: double;
 begin
 if (camera.Status=devConnected) and (not Capture) then begin
   Preview:=true;
-  PreviewLoop:=f_preview.Loop;
   e:=StrToFloatDef(f_preview.ExpTime.Text,-1);
   if e<0 then begin
     NewMessage('Invalid exposure time '+f_preview.ExpTime.Text);
@@ -3534,15 +3532,17 @@ begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
      Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
      camera.SetFrame(xc-s2,yc-s2,s,s);
-     f_preview.Loop:=true;
-     f_preview.Running:=true;
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;
-     NewMessage('Focus aid started');
      SaveFocusZoom:=f_visu.Zoom;
      f_visu.Zoom:=0;
      ImgZoom:=0;
-     StartPreviewExposure(nil);
+     if not f_preview.Running then begin
+       f_preview.Running:=true;
+       StartPreviewExposure(nil);
+     end;
+     if not f_preview.Loop then f_preview.Loop:=true;
+     NewMessage('Focus aid started');
   end
   else begin
     f_starprofile.focus.Checked:=false;
@@ -3556,6 +3556,7 @@ begin
    camera.ResetFrame;
    f_preview.Running:=false;
    f_preview.Loop:=false;
+   camera.AbortExposure;
    f_visu.Zoom:=SaveFocusZoom;
    ImgZoom:=f_visu.Zoom;
    StartPreviewExposure(nil);
