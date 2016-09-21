@@ -169,9 +169,11 @@ end;
 
 procedure T_Plan.NextStep;
 begin
+  PlanTimer.Enabled:=false;
   inc(FCurrentStep);
   if FCurrentStep<NumSteps then begin
     StartStep;
+    wait(2);
     PlanTimer.Enabled:=true;
   end
   else begin
