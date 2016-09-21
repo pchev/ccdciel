@@ -3274,7 +3274,7 @@ if fits.HeaderInfo.naxis>0 then begin
   end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
-  if f_starprofile.FindStar then
+  if f_starprofile.FindStar or f_starprofile.focus.Checked then
     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
   PlotImage;
 end;
