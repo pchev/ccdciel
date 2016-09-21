@@ -1385,8 +1385,8 @@ end;
 if MouseFrame and fits.HeaderInfo.valid then begin
   EndX:=X;
   EndY:=Y;
-  Screen2CCD(StartX,StartY,x1,y1);
-  Screen2CCD(EndX,EndY,x2,y2);
+  Screen2CCD(StartX,StartY,camera.VerticalFlip,x1,y1);
+  Screen2CCD(EndX,EndY,camera.VerticalFlip,x2,y2);
   if x1>x2 then begin
     xx:=x1; x1:=x2; x2:=xx;
   end;
@@ -3532,7 +3532,7 @@ begin
      s:=Focuswindow;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     Screen2CCD(x,y,xc,yc);
+     Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
      camera.SetFrame(xc-s2,yc-s2,s,s);
      f_preview.Loop:=true;
      f_preview.Running:=true;

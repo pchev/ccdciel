@@ -60,6 +60,7 @@ T_camera = class(TComponent)
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
+    FVerticalFlip: boolean;
     FVideoSizes, FVideoRates:TStringList;
     procedure NewImage;
     procedure WriteHeaders;
@@ -115,7 +116,6 @@ T_camera = class(TComponent)
     function GetVideoBrightnessRange:TNumRange; virtual; abstract;
     function GetVideoPreviewDivisor:integer; virtual; abstract;
     procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
-
   private
     lockvideoframe: boolean;
   public
@@ -143,6 +143,7 @@ T_camera = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
     property ImgStream: TMemoryStream read FImgStream;
+    property VerticalFlip: boolean read FVerticalFlip;
     property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
     property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
@@ -211,6 +212,7 @@ constructor T_camera.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FTimeOut:=100;
+  FVerticalFlip:=false;
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
