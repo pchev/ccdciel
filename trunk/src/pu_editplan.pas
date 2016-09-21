@@ -352,6 +352,7 @@ var pfile: TCCDconfig;
     i,n,k: integer;
     p: TStep;
 begin
+try
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   pfile:=TCCDconfig.Create(self);
   pfile.Filename:=fn;
@@ -382,6 +383,8 @@ begin
   pfile.Flush;
   pfile.Free;
   ModalResult:=mrOK;
+except
+end;
 end;
 
 

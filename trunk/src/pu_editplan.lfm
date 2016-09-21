@@ -12,7 +12,7 @@ object f_EditPlan: Tf_EditPlan
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.1.0'
   Visible = False
   object Panel1: TPanel
     Left = 203
