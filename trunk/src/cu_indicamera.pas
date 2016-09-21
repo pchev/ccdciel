@@ -209,6 +209,7 @@ constructor T_indicamera.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
  FCameraInterface:=INDI;
+ FVerticalFlip:=true;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';

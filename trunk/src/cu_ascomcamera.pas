@@ -129,6 +129,7 @@ constructor T_ascomcamera.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
  FCameraInterface:=ASCOM;
+ FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=100;
@@ -260,7 +261,7 @@ end;
 procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var ok: boolean;
-    i,j,c,sz,xs,ys: integer;
+    i,j,c,xs,ys: integer;
     nax1,nax2,pix,piy,state: integer;
     dateobs,ccdname,frname:string;
     img: array of array of LongInt;
@@ -340,12 +341,28 @@ begin
 end;
 
 Procedure T_ascomcamera.SetBinning(sbinX,sbinY: integer);
+var oldx,oldy,fsx,fsy,fnx,fny: integer;
+    scale:double;
 begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   V.BinX:=sbinX;
-   V.BinY:=sbinY;
+   oldx:=V.BinX;
+   oldy:=V.BinY;
+   if (oldx<>sbinX)or(oldy<>sbinY) then begin
+     GetFrame(fsx,fsy,fnx,fny);
+     scale:=oldx/sbinX;
+     fsx:=trunc(fsx*scale);
+     fnx:=trunc(fnx*scale);
+     scale:=oldy/sbinY;
+     fsy:=trunc(fsy*scale);
+     fny:=trunc(fny*scale);
+     if (fsx=0)and(fsy=0)and((abs(V.CameraXSize-fnx)/fnx)<0.1)and((abs(V.CameraYSize-fny)/fny)<0.1)
+        then SetFrame(0,0,V.CameraXSize,V.CameraYSize)
+        else SetFrame(fsx,fsy,fnx,fny);
+     V.BinX:=sbinX;
+     V.BinY:=sbinY;
+   end;
    except
     on E: EOleException do msg('Error: ' + E.Message);
    end;

@@ -83,7 +83,7 @@ Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
 Procedure cmdHz2Eq(a,h : double; var ra,de : double);
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 procedure Fits2Screen(x,y: integer; out xx,yy: integer);
-procedure Screen2CCD(x,y: integer; out xx,yy:integer);
+procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure ResetTrackBar(tb:TTrackBar);
 
 implementation
@@ -1078,20 +1078,24 @@ except
 end;
 end;
 
-procedure Screen2CCD(x,y: integer; out xx,yy:integer);
+procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
 begin
    if ImgZoom=0.5 then begin
      xx:=(x * 2)-OrigX;
-     yy:=img_Height-(y*2)+OrigY;
+     if vflip then yy:=img_Height-(y*2)+OrigY
+              else yy:=(y*2)-OrigY;
    end else if ImgZoom=1 then begin
      xx:=x-OrigX;
-     yy:=img_Height-y+OrigY;
+     if vflip then yy:=img_Height-y+OrigY
+              else yy:=y-OrigY;
    end else if ImgZoom=2 then begin
      xx:=(x div 2)-OrigX;
-     yy:=img_Height-(y div 2)+OrigY;
+     if vflip then yy:=img_Height-(y div 2)+OrigY
+              else yy:=(y div 2)-OrigY;
    end else  begin
      xx:=trunc(x/ImgScale0);
-     yy:=trunc(img_Height-(y/ImgScale0));
+     if vflip then yy:=trunc(img_Height-(y/ImgScale0))
+              else yy:=trunc(y/ImgScale0);
    end;
    xx:=xx+ImgFrameX;
    yy:=yy+ImgFrameY;
