@@ -265,7 +265,7 @@ var ok: boolean;
     dateobs,ccdname,frname:string;
     img: array of array of LongInt;
     ii: smallint;
-    b: char;
+    b: array[0..2880]of char;
     hdr: TFitsHeader;
     hdrmem: TMemoryStream;
     {$endif}
@@ -286,8 +286,11 @@ begin
 
  if ok then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
-   nax1:=V.NumX;
-   nax2:=V.NumY;
+   img:=V.ImageArray;
+   xs:=length(img);
+   ys:=length(img[0]);
+   nax1:=xs;
+   nax2:=ys;
    pix:=V.PixelSizeX;
    piy:=V.PixelSizeY;
    ccdname:=V.Name+'-'+V.SensorName;
@@ -313,15 +316,11 @@ begin
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
+   FImgStream.Clear;
    FImgStream.position:=0;
    hdrmem.Position:=0;
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
-   xs:=V.NumX;
-   ys:=V.NumY;
-   sz:=2*xs*ys;
-   SetLength(img,xs,ys);
-   img:=V.ImageArray;
    for i:=0 to ys-1 do begin
       for j:=0 to xs-1 do begin
         ii:=img[j,ys-1-i]-32768;
@@ -329,9 +328,9 @@ begin
         FImgStream.Write(ii,sizeof(smallint));
       end;
    end;
-   b:=' ';
-   c:=sz mod 2880;
-   for i:=1 to c do FImgStream.Write(b,1);
+   c:=2880-(FImgStream.Size mod 2880);
+   FillChar(b,c,0);
+   FImgStream.Write(b,c);
    NewImage;
  end;
  except
