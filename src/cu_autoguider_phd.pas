@@ -53,6 +53,7 @@ type
     procedure Pause(onoff:boolean); override;
     procedure Dither(pixel:double; raonly:boolean); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
+    function WaitGuiding(maxwait:integer=5):boolean; override;
   end;
 
 implementation
@@ -397,6 +398,18 @@ begin
     if FState<>GUIDER_BUSY then break;
   end;
   result:=(FState<>GUIDER_BUSY);
+end;
+
+function T_autoguider_phd.WaitGuiding(maxwait:integer=5):boolean;
+var endt: TDateTime;
+begin
+  endt:=now+maxwait/secperday;
+  while now<endt do begin
+    Sleep(100);
+    Application.ProcessMessages;
+    if FState=GUIDER_GUIDING then break;
+  end;
+  result:=(FState=GUIDER_GUIDING);
 end;
 
 procedure T_autoguider_phd.Calibrate;

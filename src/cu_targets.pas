@@ -439,7 +439,7 @@ begin
  if Autoguider=nil then exit;
   msg('Start autoguider');
   Autoguider.Guide(true);
-  result:=Autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
+  result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
   if (not result)and(not Unattended) then begin
     if MessageDlg('Autoguider Start','Autoguider not guiding '+inttostr(CalibrationDelay+SettleMaxTime)+' seconds after requested to start.'+crlf+'Do you want to wait more?',mtConfirmation,mbYesNo,0)=mrYes then begin
        result:=StartGuider();

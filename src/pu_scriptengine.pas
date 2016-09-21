@@ -1053,7 +1053,7 @@ begin
  result:=msgFailed;
  if Autoguider=nil then exit;
  Autoguider.Guide(true);
- if Autoguider.WaitBusy(CalibrationDelay+SettleMaxTime) then result:=msgOK;
+ if Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime) then result:=msgOK;
  wait(2);
 except
    result:=msgFailed;

@@ -67,6 +67,7 @@ type
     procedure Pause(onoff:boolean); virtual; abstract;
     procedure Dither(pixel:double; raonly:boolean); virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
+    function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
     property Running: boolean read FRunning;
