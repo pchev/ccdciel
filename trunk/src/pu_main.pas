@@ -4076,8 +4076,7 @@ begin
           autoguider.Guide(false);
           wait(5);
           autoguider.Guide(true);
-          wait(5);
-          autoguider.WaitBusy(CalibrationDelay+SettleMaxTime);
+          autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
           if autoguider.State<>GUIDER_GUIDING then begin
             f_pause.Text:='Failed to start guiding!';
             NewMessage(f_pause.Text);
