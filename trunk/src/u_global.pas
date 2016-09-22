@@ -67,6 +67,7 @@ type
               frtype: TFrameType;
               description: string;
               constructor Create;
+              procedure Assign(Source: Tstep);
               function exposure_str: string;
               function delay_str: string;
               function count_str: string;
@@ -317,6 +318,21 @@ begin
   dither:=false;
   dithercount:=1;
   description:='Step description';
+end;
+
+procedure TStep.Assign(Source: Tstep);
+begin
+  exposure:=Source.exposure;
+  delay:=Source.delay;
+  count:=Source.count;
+  repeatcount:=Source.repeatcount;
+  filter:=Source.filter;
+  binx:=Source.binx;
+  biny:=Source.biny;
+  frtype:=Source.frtype;
+  dither:=Source.dither;
+  dithercount:=Source.dithercount;
+  description:=Source.description;
 end;
 
 function TStep.exposure_str: string;
