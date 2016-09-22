@@ -3602,7 +3602,7 @@ begin
   end;
 end;
 
-procedure AstrometryEndControlExposure(Sender: TObject);
+procedure Tf_main.AstrometryEndControlExposure(Sender: TObject);
 begin
   StatusBar1.Panels[1].Text:='';
 end;
