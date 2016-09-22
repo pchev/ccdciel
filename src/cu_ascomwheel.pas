@@ -29,7 +29,7 @@ uses  cu_wheel, u_global,
   {$ifdef mswindows}
     indiapi, Variants, comobj,
   {$endif}
-   ExtCtrls, Classes, SysUtils;
+   ExtCtrls, Forms, Classes, SysUtils;
 
 type
 T_ascomwheel = class(T_wheel)
@@ -45,6 +45,7 @@ T_ascomwheel = class(T_wheel)
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
    procedure GetFilterNames(var value:TStringList; var n: integer);
+   function WaitFilter(maxtime:integer):boolean;
  protected
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
@@ -167,6 +168,31 @@ begin
  {$endif}
 end;
 
+function T_ascomwheel.WaitFilter(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ try
+ if Connected  then begin
+   maxcount:=maxtime div 100;
+   count:=0;
+   while (V.Position<0)and(count<maxcount) do begin
+      sleep(100);
+      Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+ {$endif}
+end;
+
+
 procedure T_ascomwheel.SetFilter(num:integer);
 begin
  {$ifdef mswindows}
@@ -174,6 +200,7 @@ begin
    try
    msg('Set filter '+inttostr(num));
    V.Position:=num-1;
+   WaitFilter(60000);
    except
     on E: EOleException do msg('Error: ' + E.Message);
    end;
