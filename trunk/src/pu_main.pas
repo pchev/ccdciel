@@ -419,6 +419,7 @@ type
     Procedure DrawHistogram;
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
+    procedure AstrometryEndControlExposure(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
     procedure LoadFitsFile(fn:string);
@@ -814,6 +815,7 @@ begin
   astrometry.Fits:=fits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
+  astrometry.onEndControlExposure:=@AstrometryEndControlExposure;
   astrometry.onShowMessage:=@NewMessage;
 
   i:=config.GetValue('/Autoguider/Software',0);
@@ -3598,6 +3600,11 @@ begin
   end else begin
     NewMessage(astrometry.Resolver+' resolve error.');
   end;
+end;
+
+procedure AstrometryEndControlExposure(Sender: TObject);
+begin
+  StatusBar1.Panels[1].Text:='';
 end;
 
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);

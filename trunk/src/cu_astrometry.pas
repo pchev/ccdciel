@@ -36,6 +36,7 @@ TAstrometry = class(TComponent)
     Fterminatecmd: TNotifyEvent;
     FonStartAstrometry: TNotifyEvent;
     FonEndAstrometry: TNotifyEvent;
+    FonEndControlExposure: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
     FLastSlewErr: double;
@@ -80,6 +81,7 @@ TAstrometry = class(TComponent)
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
+    property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
 end;
 
 implementation
@@ -396,6 +398,7 @@ end;
 procedure TAstrometry.EndExposure(Sender: TObject);
 begin
   WaitExposure:=false;
+  if assigned(FonEndControlExposure) then FonEndControlExposure(self);
 end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double): boolean;
