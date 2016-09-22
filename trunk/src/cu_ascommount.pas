@@ -167,6 +167,7 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end
   else begin
+    try
     x:=GetRA;
     y:=GetDec;
     pk:=GetPark;
@@ -183,6 +184,9 @@ begin
     if ps<>stPierside then begin
        stPierside:=ps;
        if Assigned(FonPiersideChange) then FonPiersideChange(self);
+    end;
+    except
+     on E: EOleException do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -343,6 +347,7 @@ begin
       V.tracking:=true;
    end;
    FMountSlewing:=true;
+   msg('Move telescope to '+ARToStr3(sra)+' '+DEToStr(sde));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
@@ -366,12 +371,16 @@ var islewing: boolean;
 begin
  result:=false;
  {$ifdef mswindows}
+ try
  islewing:=false;
   if CanSlewAsync then
     islewing:=V.Slewing
   else
     islewing:=false;
   result:=(islewing or FMountSlewing);
+  except
+    on E: EOleException do msg('Error: ' + E.Message);
+  end;
  {$endif}
 end;
 
@@ -454,6 +463,7 @@ begin
    if not V.tracking then begin
       V.tracking:=true;
    end;
+   msg('Sync telescope to '+ARToStr3(sra)+' '+DEToStr(sde));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except
@@ -471,7 +481,8 @@ begin
  if Connected then begin
    try
    if not V.tracking then begin
-      V.tracking:=true;
+     msg('Start telescope traking');
+     V.tracking:=true;
    end;
    result:=true;
    except
@@ -486,6 +497,7 @@ begin
  {$ifdef mswindows}
  if Connected and CanSlew then begin
    try
+   msg('Telescope abort motion');
    V.AbortSlew;
    V.tracking:=false;
    except

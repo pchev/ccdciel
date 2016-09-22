@@ -394,6 +394,7 @@ procedure Tf_sequence.PlanChange(Sender: TObject);
 var i: integer;
     p: T_plan;
 begin
+  try
    p:=T_Plan(sender);
    ClearPlanGrid;
    StaticText2.Caption:='Plan: '+p.PlanName;
@@ -406,6 +407,8 @@ begin
      PlanGrid.Cells[4,i]:=T_Plan(sender).Steps[i-1].frtype_str;
      PlanGrid.Cells[5,i]:=T_Plan(sender).Steps[i-1].filter_str;
    end;
+  except
+  end;
 end;
 
 procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
@@ -555,17 +558,18 @@ var buf1,buf2:string;
 begin
  try
   TargetRow:=Targets.CurrentTarget+1;
-  if TargetRow>0 then begin
+  if Targets.Running and (TargetRow>0) then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
     buf2:=StaticText2.Caption;
     i:=pos(blank,buf2);
     delete(buf2,1,i);
     buf2:=trim(buf2);
+    p:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan);
+    if p=nil then exit;
     if buf1<>buf2 then begin
-      p:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan);
-      if p<>nil then PlanChange(p);
+      PlanChange(p);
     end;
-    PlanRow:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep+1;
+    PlanRow:=p.CurrentStep+1;
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;
   end

@@ -152,6 +152,7 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end
   else begin
+    try
     if hasAbsolutePosition then begin
       p:=GetPosition;
       if p<>stPosition then begin
@@ -164,6 +165,9 @@ begin
         stPosition:=p;
         if Assigned(FonPositionChange) then FonPositionChange(p);
       end;
+    end;
+    except
+     on E: EOleException do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
