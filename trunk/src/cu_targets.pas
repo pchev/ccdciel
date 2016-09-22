@@ -349,30 +349,30 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
-    if Autoguider<>nil then begin
-      // stop guiding
-      if Autoguider.State<>GUIDER_DISCONNECTED then begin
-        if not StopGuider then exit;
-        Wait(2);
-        if not FRunning then exit;
-      end;
-    end;
-    // slew to coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+      if Autoguider<>nil then begin
+        // stop guiding
+        if Autoguider.State<>GUIDER_DISCONNECTED then begin
+          if not StopGuider then exit;
+          Wait(2);
+          if not FRunning then exit;
+        end;
+      end;
+      // slew to coordinates
       ok:=Slew(t.ra,t.de,t.astrometrypointing);
       if not ok then exit;
       Wait;
       if not FRunning then exit;
-    end;
-    if Autoguider<>nil then begin
-      // start guiding
-      if Autoguider.State<>GUIDER_DISCONNECTED then begin
-        if not StartGuider then exit;
-        Wait;
-        if not FRunning then exit;
+      if Autoguider<>nil then begin
+        // start guiding
+        if Autoguider.State<>GUIDER_DISCONNECTED then begin
+          if not StartGuider then exit;
+          Wait;
+          if not FRunning then exit;
+        end;
       end;
+      result:=true;
     end;
-    result:=true;
   end;
 end;
 
