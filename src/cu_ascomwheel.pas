@@ -143,6 +143,7 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end
   else begin
+    try
     fnum:=GetFilter;
     if fnum<>stFilter then begin
        stFilter:=fnum;
@@ -159,6 +160,9 @@ begin
        FFilterNames.Assign(fnam);
        if Assigned(FonFilterNameChange) then FonFilterNameChange(self);
     end;
+    except
+     on E: EOleException do msg('Error: ' + E.Message);
+    end;
   end;
  {$endif}
 end;
@@ -168,6 +172,7 @@ begin
  {$ifdef mswindows}
  if Connected and (num>0) then begin
    try
+   msg('Set filter '+inttostr(num));
    V.Position:=num-1;
    except
     on E: EOleException do msg('Error: ' + E.Message);
