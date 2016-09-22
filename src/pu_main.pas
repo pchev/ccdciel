@@ -3985,6 +3985,7 @@ begin
       then begin                    // Do meridian action
       if MeridianOption=1 then begin  // Flip
         meridianflipping:=true;
+        if f_capture.Running then f_capture.DitherNum:=0; // no dither after flip
         if mount.PierSide=pierUnknown then begin
           NewMessage('Mount is not reporting pier side, meridian flip can be unreliable.');
         end;
