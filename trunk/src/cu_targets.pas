@@ -371,8 +371,8 @@ begin
           if not FRunning then exit;
         end;
       end;
-      result:=true;
     end;
+    result:=true;
   end;
 end;
 
