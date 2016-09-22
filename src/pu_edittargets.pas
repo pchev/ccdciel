@@ -284,13 +284,18 @@ end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var txt:string;
-    i: integer;
-    t: TTarget;
+    i,n: integer;
+    t,tt: TTarget;
 begin
   PageControl1.ActivePageIndex:=0;
   txt:=FormEntry(self,'Object name','None');
   if txt='Script' then txt:='_Script';
   t:=TTarget.Create;
+  n:=TargetList.Row;
+  if n>=1 then begin
+    tt:=TTarget(TargetList.Objects[0,n]);
+    if tt.objectname<>'Script' then t.Assign(tt);
+  end;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[0,i]:=IntToStr(i);
@@ -299,8 +304,6 @@ begin
   TargetList.Objects[0,i]:=t;
   TargetList.Row:=i;
   ObjectName.Text:=trim(txt);
-  PointRA.Text:='-';
-  PointDEC.Text:='-';
   TargetChange(nil);
 end;
 

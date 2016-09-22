@@ -301,11 +301,16 @@ end;
 
 procedure Tf_EditPlan.BtnAddStepClick(Sender: TObject);
 var txt:string;
-    i: integer;
-    p: TStep;
+    i,n: integer;
+    p,pp: TStep;
 begin
   txt:=FormEntry(self,'Step description','');
   p:=TStep.Create;
+  n:=StepList.Row;
+  if n >= 1 then begin
+    pp:=TStep(StepList.Objects[0,n]);
+    p.Assign(pp);
+  end;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
   StepList.Cells[0,i]:=IntToStr(i);
