@@ -142,7 +142,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.8.3';
+  ccdcielver = '0.8.4';
   ccdciel_version='Version beta '+ccdcielver;
   blank=' ';
   clOrange=$1080EF;
