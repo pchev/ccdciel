@@ -151,6 +151,7 @@ begin
   b.Caption:='OK';
   b.ModalResult:=mrOK;
   b.Parent:=f;
+  b.Default:=true;
   f.ChildSizing.ControlsPerLine:=2;
   f.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
   f.AutoSize:=true;
