@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_modelisation, u_global, math, UScaleDPI,
+uses  u_modelisation, u_global, u_utils, math, UScaleDPI, fu_preview, fu_focuser,
   Graphics, Classes, SysUtils, FPImage, cu_fits,
   FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -36,7 +36,8 @@ type
   { Tf_starprofile }
 
   Tf_starprofile = class(TFrame)
-    focus: TCheckBox;
+    ChkAutofocus: TCheckBox;
+    ChkFocus: TCheckBox;
     graph: TImage;
     Label1: TLabel;
     Label2: TLabel;
@@ -52,30 +53,59 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     StaticText1: TStaticText;
-    procedure focusChange(Sender: TObject);
+    procedure ChkAutofocusChange(Sender: TObject);
+    procedure ChkFocusChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure graphDblClick(Sender: TObject);
   private
     { private declarations }
     FFindStar: boolean;
-    FStarX,FStarY: double;
+    FStarX,FStarY,FValMax: double;
     FFocusStart,FFocusStop: TNotifyEvent;
+    FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
+    FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
+    FonMsg: TNotifyMsg;
+    Fpreview:Tf_preview;
+    Ffocuser:Tf_focuser;
     emptybmp:Tbitmap;
     histfwhm, histimax: array[0..maxhist] of double;
     maxfwhm,maximax: double;
-    curhist: integer;
+    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd:double;
+    curhist,FfocuserSpeed,FnumHfd: integer;
+    focuserdirection,terminated: boolean;
+    procedure msg(txt:string);
+    function  getRunning:boolean;
+    procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
+    procedure GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
+    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; out xc,yc,hfd,bg,valmax: double);
+    procedure PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
+    procedure PlotHistory;
     procedure ClearGraph;
+    procedure doAutofocusVcurve;
+    procedure doAutofocusIterative;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
+    procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
+    procedure InitAutofocus;
+    property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar;
+    property HFD:double read Fhfd;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
+    property preview:Tf_preview read Fpreview write Fpreview;
+    property focuser:Tf_focuser read Ffocuser write Ffocuser;
+    property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onFocusStart: TNotifyEvent read FFocusStart write FFocusStart;
     property onFocusStop: TNotifyEvent read FFocusStop write FFocusStop;
+    property onAutoFocusStart: TNotifyEvent read FAutoFocusStart write FAutoFocusStart;
+    property onAutoFocusStop: TNotifyEvent read FAutoFocusStop write FAutoFocusStop;
+    property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
+    property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
+    property onAbsolutePosition: TNotifyEvent read FonAbsolutePosition write FonAbsolutePosition;
   end;
 
 implementation
@@ -97,12 +127,52 @@ begin
  end;
 end;
 
-procedure Tf_starprofile.focusChange(Sender: TObject);
+procedure Tf_starprofile.ChkFocusChange(Sender: TObject);
 begin
- if focus.Checked then begin
+ if ChkAutofocus.Checked then begin
+   ChkFocus.Checked:=false;
+   exit;
+ end;
+ if ChkFocus.Checked then begin
     if Assigned(FFocusStart) then FFocusStart(self);
  end else begin
    if Assigned(FFocusStop) then FFocusStop(self);
+ end;
+end;
+
+procedure Tf_starprofile.ChkAutofocusChange(Sender: TObject);
+begin
+ if ChkFocus.Checked then begin
+    ChkAutofocus.Checked:=false;
+    exit;
+ end;
+ if ChkAutofocus.Checked then begin
+    if Assigned(FAutoFocusStart) then FAutoFocusStart(self);
+ end else begin
+   if Assigned(FAutoFocusStop) then FAutoFocusStop(self);
+ end;
+end;
+
+function  Tf_starprofile.getRunning:boolean;
+begin
+ result:=ChkAutofocus.Checked;
+end;
+
+procedure Tf_starprofile.InitAutofocus;
+begin
+ FnumHfd:=0;
+ FSumHfd:=0;
+ terminated:=false;
+ FfocuserSpeed:=AutofocusMaxSpeed;
+ focuser.FocusSpeed:=FfocuserSpeed;
+ focuserdirection:=AutofocusMoveDir;
+ if focuserdirection then
+    AutofocusVcStep:=vcsNearL
+  else
+    AutofocusVcStep:=vcsNearR;
+ case AutofocusMode of
+   afVcurve   : msg('Autofocus start Vcurve');
+   afIterative: msg('Autofocus start Iterative focus');
  end;
 end;
 
@@ -124,6 +194,11 @@ begin
  curhist:=0;
  maxfwhm:=0;
  maximax:=0;
+end;
+
+procedure Tf_starprofile.msg(txt:string);
+begin
+ if assigned(FonMsg) then FonMsg(txt);
 end;
 
 procedure Tf_starprofile.ClearGraph;
@@ -156,6 +231,8 @@ begin
  curhist:=0;
  maxfwhm:=0;
  maximax:=0;
+ focuserdirection:=FocusDirIn;
+ FLastHfd:=MaxInt;
  LabelHFD.Caption:='-';
  LabelFWHM.Caption:='-';
  LabelImax.Caption:='-';
@@ -168,36 +245,37 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
-var Val,ValMax: double;
-  i,j,rs,rrs,i0,x1,x2,y1,y2,xm,ym: integer;
-  bg,noise,snr,r,Xg,Yg,fxg,fyg,SumVal,SumValX,SumValY,SumValR,xs,ys,hfd,fwhm,fwhmarcsec:double;
-  txt: string;
-  simg:TPiw16;
-  imgdata: Tiw16;
-  PSF:TPSF;
+procedure Tf_starprofile.FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
+// brightest pixel in area s*s centered on x,y of image Img of size xmax,ymax
+var i,j,rs,xm,ym: integer;
+    val:double;
 begin
  rs:= s div 2;
  if (x-s)<1 then x:=s+1;
  if (x+s)>(xmax-1) then x:=xmax-s-1;
  if (y-s)<1 then y:=s+1;
  if (y+s)>(ymax-1) then y:=ymax-s-1;
- // Center on brightest pixel
- ValMax:=0;
+ vmax:=0;
  for i:=-rs to rs do
    for j:=-rs to rs do begin
      Val:=vmin+Img[0,y+j,x+i]/c;
-     if Val>ValMax then begin
-          ValMax:=Val;
+     if Val>vmax then begin
+          vmax:=Val;
           xm:=i;
           ym:=j;
      end;
    end;
- if ValMax=0 then exit;
- x:=x+xm;
- y:=y+ym;
- // Get gaussian psf
- hfd:=-1;
+ xc:=x+xm;
+ yc:=y+ym;
+end;
+
+procedure Tf_starprofile.GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
+var simg:TPiw16;
+    imgdata: Tiw16;
+    PSF:TPSF;
+    i,j,rs,x1,y1: integer;
+begin
+ rs:=s div 2;
  fwhm:=-1;
  setlength(imgdata,s,s);
  simg:=addr(imgdata);
@@ -209,132 +287,229 @@ begin
         imgdata[i,j]:=trunc(vmin+img[0,y1,x1]/c)
      else imgdata[i,j]:=trunc(vmin);
    end;
- psf.Flux:=0;
+ PSF.Flux:=0;
+ // Get gaussian psf
  ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
- if psf.Flux>0 then begin
+ if PSF.Flux>0 then begin
    fwhm:=PSF.Sigma;
-   if (focal>0)and(pxsize>0) then begin
-     fwhmarcsec:=fwhm*3600*rad2deg*arctan(pxsize/1000/focal);
-   end
-   else fwhmarcsec:=-1;
  end;
- if fwhm>0 then begin
-   // crop star region of interest
-   rrs:=round(min(rs,max(3,2*fwhm)));
-   // Get center of gravity
-   SumVal:=0;
-   SumValX:=0;
-   SumValY:=0;
-   for i:=-rrs to rrs do
-     for j:=-rrs to rrs do begin
-       Val:=vmin+Img[0,y+j,x+i]/c;
+end;
+
+procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; out xc,yc,hfd,bg,valmax: double);
+var i,j,rs,ri: integer;
+    SumVal,SumValX,SumValY,SumValR: double;
+    Xg,Yg,fxg,fyg: double;
+    r,xs,ys:double;
+    noise,snr,val: double;
+begin
+hfd:=-1;
+rs:=s div 2;
+SumVal:=0;
+SumValX:=0;
+SumValY:=0;
+valmax:=0;
+// Get radius of interest (x,y must be the brightest pixel)
+ri:=rs;
+bg:=vmin+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) / 4)/c;
+for i:=0 to rs do begin
+ for j:=0 to rs do begin
+   val:=vmin+Img[0,y+j,x+i]/c;
+   if val<=bg then begin
+     ri:=ceil(sqrt(i*i+j*j));
+     break;
+   end;
+ end;
+ if ri<>rs then break;
+end;
+if ri<2 then ri:=2; // 5x5 mimimum box
+// Get center of gravity
+for i:=-ri to ri do
+ for j:=-ri to ri do begin
+   val:=vmin+Img[0,y+j,x+i]/c;
+   if val>valmax then valmax:=val;
+   SumVal:=SumVal+val;
+   SumValX:=SumValX+val*i;
+   SumValY:=SumValY+val*j;
+ end;
+Xg:=SumValX/SumVal;
+Yg:=SumValY/SumVal;
+xc:=x+Xg;
+yc:=y+Yg;
+x:=trunc(xc);
+y:=trunc(yc);
+fxg:=frac(xc);
+fyg:=frac(yc);
+// Get HFD
+SumVal:=0;
+SumValR:=0;
+bg:=vmin+((Img[0,y-ri,x-ri]+Img[0,y-ri,x+ri]+Img[0,y+ri,x-ri]+Img[0,y+ri,x+ri]) / 4)/c;
+valmax:=valmax-bg;
+noise:=sqrt(bg);
+snr:=valmax/noise;
+if snr>3 then begin
+ for i:=-ri to ri do
+   for j:=-ri to ri do begin
+     Val:=vmin+Img[0,y+j,x+i]/c-bg;
+     xs:=i+0.5-fxg;
+     ys:=j+0.5-fyg;
+     r:=sqrt(xs*xs+ys*ys);
+     if val>(2*noise) then begin
        SumVal:=SumVal+Val;
-       SumValX:=SumValX+Val*i;
-       SumValY:=SumValY+Val*j;
+       SumValR:=SumValR+Val*r;
      end;
-   Xg:=SumValX/SumVal;
-   Yg:=SumValY/SumVal;
-   x:=trunc(x+Xg);
-   y:=trunc(y+Yg);
-   fxg:=frac(x+Xg);
-   fyg:=frac(y+Yg);
-   // Get HFD
-   SumVal:=0;
-   SumValR:=0;
-   bg:=vmin+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) div 4)/c;
-   valmax:=valmax-bg;
-   noise:=sqrt(bg);
-   snr:=valmax/noise;
-   if snr>3 then begin
-     for i:=-rrs to rrs do
-       for j:=-rrs to rrs do begin
-         Val:=vmin+Img[0,y+j,x+i]/c-bg;
-         xs:=i+0.5-fxg;
-         ys:=j+0.5-fyg;
-         r:=sqrt(xs*xs+ys*ys);
-         if val>(2*noise) then begin
-           SumVal:=SumVal+Val;
-           SumValR:=SumValR+Val*r;
-         end;
-       end;
-     hfd:=2*SumValR/SumVal;
    end;
- end;
+ hfd:=2*SumValR/SumVal;
+end;
+end;
+
+procedure Tf_starprofile.PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
+var i,j,i0,x1,x2,y1,y2:integer;
+    xs,ys: double;
+    txt:string;
+begin
+if (StarX<0)or(StarY<0)or(s<0) then exit;
+// labels
+LabelHFD.Caption:=FormatFloat(f1,Fhfd);
+LabelImax.Caption:=FormatFloat(f0,FValMax);
+if Ffwhm>0 then begin
+  txt:=FormatFloat(f1,Ffwhm);
+  if Ffwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,Ffwhmarcsec)+'"';
+  LabelFWHM.Caption:=txt;
+end
+else
+  LabelFWHM.Caption:='-';
+if curhist>maxhist then
+  for i:=0 to maxhist-1 do begin
+    histfwhm[i]:=histfwhm[i+1];
+    histimax[i]:=histimax[i+1];
+    curhist:=maxhist;
+  end;
+histfwhm[curhist]:=Fhfd;
+histimax[curhist]:=FValMax;
+if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
+if histimax[curhist] > maximax then maximax:=histimax[curhist];
+// Star profile
+profile.Picture.Bitmap.Width:=profile.Width;
+profile.Picture.Bitmap.Height:=profile.Height;
+with profile.Picture.Bitmap do begin
+  Canvas.Brush.Color:=clBlack;
+  Canvas.Pen.Color:=clBlack;
+  Canvas.Pen.Mode:=pmCopy;
+  Canvas.FillRect(0,0,Width,Height);
+  if FValMax>0 then begin
+    Canvas.Pen.Color:=clRed;
+    xs:=Width/s;
+    ys:=Height/(1.05*FValMax);
+    j:=trunc(FStarY);
+    i0:=trunc(FStarX)-(s div 2);
+    x1:=0;
+    y1:=Height-trunc((vmin+(img[0,j,i0]/c)-bg)*ys);
+    for i:=0 to s-1 do begin
+      x2:=trunc(i*xs);
+      y2:=trunc((vmin+(img[0,j,i0+i]/c)-bg)*ys);
+      y2:=Height-y2;
+      Canvas.Line(x1,y1,x2,y2);
+      x1:=x2;
+      y1:=y2;
+    end;
+  end;
+end;
+// History graph
+graph.Picture.Bitmap.Width:=graph.Width;
+graph.Picture.Bitmap.Height:=graph.Height;
+if FValMax>0 then with graph.Picture.Bitmap do begin
+  Canvas.Brush.Color:=clBlack;
+  Canvas.Pen.Color:=clBlack;
+  Canvas.Pen.Mode:=pmCopy;
+  Canvas.FillRect(0,0,Width,Height);
+  xs:=Width/maxhist;
+  ys:=Height/maxfwhm;
+  Canvas.Pen.Color:=clRed;
+  for i:=0 to curhist-1 do begin
+    Canvas.Line( trunc(i*xs),
+                 Height-trunc(histfwhm[i]*ys),
+                 trunc((i+1)*xs),
+                 Height-trunc(histfwhm[i+1]*ys));
+  end;
+  ys:=Height/maximax;
+  Canvas.Pen.Color:=clLime;
+  for i:=0 to curhist-1 do begin
+    Canvas.Line( trunc(i*xs),
+                 Height-trunc(histimax[i]*ys),
+                 trunc((i+1)*xs),
+                 Height-trunc(histimax[i+1]*ys));
+  end;
+end;
+inc(curhist);
+end;
+
+procedure Tf_starprofile.PlotHistory;
+var i:integer;
+    xs,ys: double;
+begin
+if curhist>maxhist then
+  for i:=0 to maxhist-1 do begin
+    histfwhm[i]:=histfwhm[i+1];
+    histimax[i]:=histimax[i+1];
+    curhist:=maxhist;
+  end;
+histfwhm[curhist]:=Fhfd;
+histimax[curhist]:=FValMax;
+if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
+if histimax[curhist] > maximax then maximax:=histimax[curhist];
+// History graph
+graph.Picture.Bitmap.Width:=graph.Width;
+graph.Picture.Bitmap.Height:=graph.Height;
+if FValMax>0 then with graph.Picture.Bitmap do begin
+  Canvas.Brush.Color:=clBlack;
+  Canvas.Pen.Color:=clBlack;
+  Canvas.Pen.Mode:=pmCopy;
+  Canvas.FillRect(0,0,Width,Height);
+  xs:=Width/maxhist;
+  ys:=Height/maxfwhm;
+  Canvas.Pen.Color:=clRed;
+  for i:=0 to curhist-1 do begin
+    Canvas.Line( trunc(i*xs),
+                 Height-trunc(histfwhm[i]*ys),
+                 trunc((i+1)*xs),
+                 Height-trunc(histfwhm[i+1]*ys));
+  end;
+  ys:=Height/maximax;
+  Canvas.Pen.Color:=clLime;
+  for i:=0 to curhist-1 do begin
+    Canvas.Line( trunc(i*xs),
+                 Height-trunc(histimax[i]*ys),
+                 trunc((i+1)*xs),
+                 Height-trunc(histimax[i+1]*ys));
+  end;
+end;
+inc(curhist);
+end;
+
+procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
+var bg: double;
+  xg,yg: double;
+  xm,ym: integer;
+begin
+ if (x<0)or(y<0)or(s<0) then exit;
+ FindBrightestPixel(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax);
+ if FValMax=0 then exit;
+
+ GetPSF(img,c,vmin,xm,ym,s,xmax,ymax,Ffwhm);
+ if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
+   Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
+ end
+ else Ffwhmarcsec:=-1;
+
+ GetHFD(img,c,vmin,xm,ym,s,xg,yg,Fhfd,bg,FValMax);
+
  // Plot result
- if (hfd>0) then begin
+ if (Fhfd>0) then begin
    FFindStar:=true;
-   FStarX:=round(x+fxg);
-   FStarY:=round(y+fyg);
-   LabelHFD.Caption:=FormatFloat(f1,hfd);
-   LabelImax.Caption:=FormatFloat(f0,ValMax);
-   if fwhm>0 then begin
-     txt:=FormatFloat(f1,fwhm);
-     if fwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,fwhmarcsec)+'"';
-     LabelFWHM.Caption:=txt;
-   end;
-   if curhist>maxhist then
-     for i:=0 to maxhist-1 do begin
-       histfwhm[i]:=histfwhm[i+1];
-       histimax[i]:=histimax[i+1];
-       curhist:=maxhist;
-     end;
-   histfwhm[curhist]:=hfd;
-   histimax[curhist]:=ValMax;
-   if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
-   if histimax[curhist] > maximax then maximax:=histimax[curhist];
-   // Star profile
-   profile.Picture.Bitmap.Width:=profile.Width;
-   profile.Picture.Bitmap.Height:=profile.Height;
-   with profile.Picture.Bitmap do begin
-     Canvas.Brush.Color:=clBlack;
-     Canvas.Pen.Color:=clBlack;
-     Canvas.Pen.Mode:=pmCopy;
-     Canvas.FillRect(0,0,Width,Height);
-     if ValMax>0 then begin
-       Canvas.Pen.Color:=clRed;
-       xs:=Width/s;
-       ys:=Height/(1.05*ValMax);
-       j:=trunc(FStarY);
-       i0:=trunc(FStarX)-(s div 2);
-       x1:=0;
-       y1:=Height-trunc((vmin+(img[0,j,i0]/c)-bg)*ys);
-       for i:=0 to s-1 do begin
-         x2:=trunc(i*xs);
-         y2:=trunc((vmin+(img[0,j,i0+i]/c)-bg)*ys);
-         y2:=Height-y2;
-         Canvas.Line(x1,y1,x2,y2);
-         x1:=x2;
-         y1:=y2;
-       end;
-     end;
-   end;
-   // History graph
-   graph.Picture.Bitmap.Width:=graph.Width;
-   graph.Picture.Bitmap.Height:=graph.Height;
-   if ValMax>0 then with graph.Picture.Bitmap do begin
-     Canvas.Brush.Color:=clBlack;
-     Canvas.Pen.Color:=clBlack;
-     Canvas.Pen.Mode:=pmCopy;
-     Canvas.FillRect(0,0,Width,Height);
-     xs:=Width/maxhist;
-     ys:=Height/maxfwhm;
-     Canvas.Pen.Color:=clRed;
-     for i:=0 to curhist-1 do begin
-       Canvas.Line( trunc(i*xs),
-                    Height-trunc(histfwhm[i]*ys),
-                    trunc((i+1)*xs),
-                    Height-trunc(histfwhm[i+1]*ys));
-     end;
-     ys:=Height/maximax;
-     Canvas.Pen.Color:=clLime;
-     for i:=0 to curhist-1 do begin
-       Canvas.Line( trunc(i*xs),
-                    Height-trunc(histimax[i]*ys),
-                    trunc((i+1)*xs),
-                    Height-trunc(histimax[i+1]*ys));
-     end;
-   end;
-   inc(curhist);
+   FStarX:=round(xg);
+   FStarY:=round(yg);
+   PlotProfile(img,c,vmin,bg,s);
+   PlotHistory;
  end else begin
    FFindStar:=false;
    LabelHFD.Caption:='-';
@@ -342,6 +517,143 @@ begin
    LabelImax.Caption:='-';
    ClearGraph;
  end;
+end;
+
+procedure Tf_starprofile.Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
+var bg,exp,e: double;
+  xg,yg: double;
+  xm,ym: integer;
+begin
+ if (x<0)or(y<0)or(s<0) then exit;
+  FindBrightestPixel(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax);
+  if FValMax=0 then begin
+    if Fpreview.Exposure=AutofocusMaxExposure
+       then begin
+         ChkAutofocus.Checked:=false;
+         exit;
+       end
+       else begin
+          Fpreview.Exposure:=AutofocusMaxExposure;
+          exit;
+       end;
+  end;
+  GetHFD(img,c,vmin,xm,ym,s,xg,yg,Fhfd,bg,FValMax);
+  // adjust exposure time
+  exp:=-1;
+  e:=Fpreview.Exposure;
+  if (FValMax<AutofocusMinIntensity)and(e<AutofocusMaxExposure) then
+    exp:=min(2*Fpreview.Exposure,AutofocusMaxExposure)
+  else if (FValMax>AutofocusMaxIntensity)and(e>AutofocusMinExposure) then
+    exp:=max(Fpreview.Exposure/2,AutofocusMinExposure);
+  if (exp>0)and(not terminated) then begin
+    Fpreview.Exposure:=exp;
+    exit;
+  end;
+  // process this measurement
+  if (Fhfd>0) then begin
+    if (Fhfd<(AutofocusNearHFD+1))and(not terminated) then begin
+      FSumHfd:=FSumHfd+Fhfd;
+      inc(FnumHfd);
+      msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum));
+      if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
+        Fhfd:=FSumHfd/FnumHfd;
+        FnumHfd:=0;
+        FSumHfd:=0;
+      end
+      else begin
+        exit;
+      end;
+    end;
+    // plot progress
+    FFindStar:=true;
+    FStarX:=round(xg);
+    FStarY:=round(yg);
+    Ffwhm:=-1;
+    PlotProfile(img,c,vmin,bg,s);
+    if terminated then begin
+      ChkAutofocus.Checked:=false; // focus reached
+      msg('Autofocus terminated, HFD='+FormatFloat(f1,Fhfd));
+      exit;
+    end;
+    msg('Autofocus running, HFD='+FormatFloat(f1,Fhfd));
+    // do focus
+    case AutofocusMode of
+      afVcurve   : doAutofocusVcurve;
+      afIterative: doAutofocusIterative;
+    end;
+  end;
+end;
+
+procedure Tf_starprofile.doAutofocusVcurve;
+var newpos:double;
+begin
+ case AutofocusVcStep of
+   vcsNearL: begin
+              focuser.FocusPosition:=round(AutofocusVc[PosNearL,1]);
+              msg('Autofocus move to '+focuser.Position.Text);
+              FonAbsolutePosition(self);
+              AutofocusVcStep:=vcsFocusL;
+              wait(1);
+             end;
+   vcsNearR: begin
+              focuser.FocusPosition:=round(AutofocusVc[PosNearR,1]);
+              msg('Autofocus move to '+focuser.Position.Text);
+              FonAbsolutePosition(self);
+              AutofocusVcStep:=vcsFocusR;
+              wait(1);
+             end;
+   vcsFocusL:begin
+              newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeL)-AutofocusVcPID/2;
+              focuser.FocusPosition:=round(newpos);
+              msg('Autofocus move to '+focuser.Position.Text);
+              FonAbsolutePosition(self);
+              AutofocusVcStep:=vcsCheck;
+              wait(1);
+             end;
+   vcsFocusR:begin
+              newpos:=focuser.FocusPosition-Fhfd/AutofocusVcSlopeR+AutofocusVcPID/2;
+              focuser.FocusPosition:=round(newpos);
+              msg('Autofocus move to '+focuser.Position.Text);
+              FonAbsolutePosition(self);
+              AutofocusVcStep:=vcsCheck;
+              wait(1);
+             end;
+   vcsCheck: begin;
+              terminated:=true;
+             end;
+ end;
+end;
+
+procedure Tf_starprofile.doAutofocusIterative;
+begin
+  if Fhfd>AutofocusNearHFD
+     then begin
+       FfocuserSpeed:=AutofocusMaxSpeed;
+       focuser.FocusSpeed:=FfocuserSpeed;
+     end;
+  if Fhfd>FLastHfd then begin  // reverse direction
+    if FfocuserSpeed=AutofocusMinSpeed  then begin
+      // go back one step and terminate
+      focuserdirection:=not focuserdirection;
+      terminated:=true;
+    end else begin
+      if Fhfd<=AutofocusNearHFD then begin
+         FfocuserSpeed:=max(FfocuserSpeed div 2,AutofocusMinSpeed);   // divide speed by 2
+         focuser.FocusSpeed:=FfocuserSpeed; // set new speed
+      end;
+      focuserdirection:=not focuserdirection;
+    end;
+  end;
+  if focuserdirection=FocusDirIn
+     then begin
+        msg('Autofocus focus in by '+inttostr(FfocuserSpeed));
+        FonFocusIN(self);
+      end
+     else begin
+       msg('Autofocus focus out by '+inttostr(FfocuserSpeed));
+       FonFocusOUT(self);
+     end;
+  FLastHfd:=Fhfd;
 end;
 
 end.

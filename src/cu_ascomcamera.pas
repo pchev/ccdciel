@@ -348,8 +348,10 @@ begin
 end;
 
 Procedure T_ascomcamera.SetBinning(sbinX,sbinY: integer);
+{$ifdef mswindows}
 var oldx,oldy,fsx,fsy,fnx,fny: integer;
     scale:double;
+{$endif}
 begin
  {$ifdef mswindows}
  if Connected then begin

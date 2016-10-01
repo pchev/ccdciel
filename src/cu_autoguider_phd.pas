@@ -168,9 +168,6 @@ end;
 
 procedure T_autoguider_phd.JsonToStringlist(jsontxt:string; var SK,SV: TStringList);
 var  J: TJSONData;
-     i: integer;
-     c1,c2: string;
-     b1: string;
 begin
 jsontxt:=StringReplace(jsontxt,chr(10),' ',[rfReplaceAll]);
 jsontxt:=StringReplace(jsontxt,chr(13),' ',[rfReplaceAll]);

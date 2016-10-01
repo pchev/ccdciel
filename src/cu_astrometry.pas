@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, cu_astrometry_engine, cu_mount, cu_camera, cu_fits, indiapi,
+uses  u_global, u_utils, fu_preview, cu_astrometry_engine, cu_mount, cu_camera, cu_fits, indiapi,
       LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
@@ -33,10 +33,10 @@ type
 TAstrometry = class(TComponent)
   private
     engine: TAstrometry_engine;
+    Fpreview:Tf_preview;
     Fterminatecmd: TNotifyEvent;
     FonStartAstrometry: TNotifyEvent;
     FonEndAstrometry: TNotifyEvent;
-    FonEndControlExposure: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
     FLastSlewErr: double;
@@ -46,15 +46,12 @@ TAstrometry = class(TComponent)
     FResolverName: string;
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
-    WaitExposure: boolean;
     AstrometryTimeout: double;
     TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
     procedure msg(txt:string);
-    procedure ControlExposure(exp:double; binx,biny: integer);
-    procedure EndExposure(Sender: TObject);
     function WaitBusy(Timeout:double=60): boolean;
     procedure AstrometrySolve(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
@@ -78,10 +75,10 @@ TAstrometry = class(TComponent)
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
     property Fits: TFits read FFits write FFits;
+    property preview:Tf_preview read Fpreview write Fpreview;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
-    property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
 end;
 
 implementation
@@ -370,37 +367,6 @@ finally
 end;
 end;
 
-procedure TAstrometry.ControlExposure(exp:double; binx,biny: integer);
-var SaveonNewImage: TNotifyEvent;
-    savebinx,savebiny: integer;
-    endt: TDateTime;
-begin
-if Camera.Status=devConnected then begin
-  SaveonNewImage:=Camera.onNewImage;
-  savebinx:=Camera.BinX;
-  savebiny:=Camera.BinY;
-  Camera.onNewImage:=@EndExposure;
-  if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
-  WaitExposure:=true;
-  Camera.StartExposure(exp);
-  endt:=now+60/secperday;
-  while WaitExposure and(now<endt) do begin
-    Sleep(100);
-    Application.ProcessMessages;
-  end;
-  Camera.onNewImage:=SaveonNewImage;
-  if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
-  if Assigned(SaveonNewImage) then SaveonNewImage(self);
-  Wait(1);
-end;
-end;
-
-procedure TAstrometry.EndExposure(Sender: TObject);
-begin
-  WaitExposure:=false;
-  if assigned(FonEndControlExposure) then FonEndControlExposure(self);
-end;
-
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
     jd0,jd1: double;
@@ -419,8 +385,7 @@ begin
     i:=1;
     repeat
       Wait;
-      msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
-      ControlExposure(exp,binx,biny);
+      Fpreview.ControlExposure(exp,binx,biny);
       msg('Resolve control exposure');
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
       StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);

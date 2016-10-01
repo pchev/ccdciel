@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_mount, u_global, u_utils, indiapi,
+uses  cu_mount, u_global,  indiapi,
   {$ifdef mswindows}
-    Variants, comobj,
+    Variants, comobj, u_utils,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils;
 

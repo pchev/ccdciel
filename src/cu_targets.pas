@@ -502,7 +502,7 @@ begin
            TargetRepeatTimer.Enabled:=true;
            TargetDelayEnd:=now+tt/secperday;
            if t.preview and (tt>5)and(tt>(2*t.previewexposure)) then begin
-             if t.previewexposure>0 then Preview.ExpTime.Text:=t.previewexposure_str;
+             if t.previewexposure>0 then Preview.Exposure:=t.previewexposure;
              Preview.Binning.Text:=Capture.Binning.Text;
              Preview.BtnLoop.Click;
            end;

@@ -40,6 +40,8 @@ type
   TPlanetariumType=(CDC, SAMP);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
+  TAutofocusMode=(afVcurve,afIterative,afNone);
+  TAutofocusVcurveStep=(vcsNearL,vcsNearR,vcsFocusL,vcsFocusR,vcsCheck);
 
   TNumRange = record
                min,max,step: double;
@@ -166,8 +168,13 @@ const
   f0 = '0';
   f1 = '0.0';
   f2 = '0.00';
+  f3 = '0.000';
+  f4 = '0.0000';
   f5 = '0.00000';
+  f6 = '0.000000';
   b80 ='                                                                                ';
+  FocusDirIn=true;
+  FocusDirOut=false;
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
@@ -233,6 +240,15 @@ var
   BayerColor: boolean;
   BayerMode:TBayerMode;
   MaxVideoPreviewRate: integer;
+  AutofocusMode:TAutofocusMode;
+  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,AutofocusStartPosition: integer;
+  AutofocusNearHFD,AutofocusStartHFD: double;
+  AutofocusMinExposure,AutofocusMaxExposure,AutofocusMinIntensity,AutofocusMaxIntensity:double;
+  AutofocusMoveDir: boolean;
+  PosStartL,PosStartR,PosNearL,PosNearR,PosFocus,AutofocusVcNum:integer;
+  AutofocusVc: array[0..100]of array[1..2] of double;
+  AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
+  AutofocusVcStep:TAutofocusVcurveStep;
 
 implementation
 

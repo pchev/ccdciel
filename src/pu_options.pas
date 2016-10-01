@@ -34,8 +34,37 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    AutofocusMaxIntensity: TEdit;
+    AutofocusMinIntensity: TEdit;
     ButtonDir: TButton;
     BayerMode: TComboBox;
+    Autofocusmode: TRadioGroup;
+    AutofocusMinSpeed: TEdit;
+    AutofocusMaxSpeed: TEdit;
+    AutofocusNearHFD: TEdit;
+    AutofocusMinExposure: TEdit;
+    AutofocusMaxExposure: TEdit;
+    AutofocusNearNum: TEdit;
+    Label46: TLabel;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
+    Label58: TLabel;
+    AutofocusNotebook: TNotebook;
+    PageNone: TPage;
+    PageVcurve: TPage;
+    PageIterative: TPage;
+    PanelAutofocus: TPanel;
+    AutofocusMoveDirIn: TRadioButton;
+    AutofocusMoveDirOut: TRadioButton;
     VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;
@@ -186,6 +215,7 @@ type
     Panel1: TPanel;
     StarWindow: TEdit;
     RefTreshold: TTrackBar;
+    procedure AutofocusmodeClick(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
@@ -336,6 +366,12 @@ begin
 SelectDirectoryDialog1.InitialDir:=CaptureDir.text;
 SelectDirectoryDialog1.FileName:=CaptureDir.text;
 if SelectDirectoryDialog1.Execute then CaptureDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+procedure Tf_option.AutofocusmodeClick(Sender: TObject);
+begin
+  AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
+  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<2);
 end;
 
 function Tf_option.GetResolver: integer;

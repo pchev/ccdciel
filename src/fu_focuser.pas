@@ -35,6 +35,8 @@ type
   Tf_focuser = class(TFrame)
     BtnDown: TButton;
     BtnUp: TButton;
+    BtnSetAbsPos: TButton;
+    BtnVcurve: TButton;
     Label6: TLabel;
     Notebook1: TNotebook;
     PageTimerMove: TPage;
@@ -57,16 +59,26 @@ type
     Panel1: TPanel;
     StaticText1: TStaticText;
     procedure BtnDownClick(Sender: TObject);
+    procedure BtnSetAbsPosClick(Sender: TObject);
     procedure BtnUpClick(Sender: TObject);
+    procedure BtnVcurveClick(Sender: TObject);
   private
     { private declarations }
-    FonFocusIN, FonFocusOUT: TNotifyEvent;
+    FonFocusIN, FonFocusOUT, FonSetAbsPos,FonVcurveLearning: TNotifyEvent;
+    procedure SetSpeed(value:integer);
+    function GetSpeed:integer;
+    procedure SetPosition(value:integer);
+    function GetPosition:integer;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property FocusSpeed: integer read GetSpeed write SetSpeed;
+    property FocusPosition: integer read GetPosition write SetPosition;
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
+    property onSetAbsolutePosition: TNotifyEvent read FonSetAbsPos write FonSetAbsPos;
+    property onVcurveLearning: TNotifyEvent read FonVcurveLearning write FonVcurveLearning;
   end;
 
 implementation
@@ -91,9 +103,54 @@ begin
   if Assigned(FonFocusIN) then FonFocusIN(self);
 end;
 
+procedure Tf_focuser.BtnSetAbsPosClick(Sender: TObject);
+begin
+  if Assigned(FonSetAbsPos) then FonSetAbsPos(self);
+end;
+
 procedure Tf_focuser.BtnUpClick(Sender: TObject);
 begin
   if Assigned(FonFocusOUT) then FonFocusOUT(self);
+end;
+
+procedure Tf_focuser.BtnVcurveClick(Sender: TObject);
+begin
+  if Assigned(FonVcurveLearning) then FonVcurveLearning(self);
+end;
+
+procedure Tf_focuser.SetSpeed(value:integer);
+begin
+  case Notebook1.PageIndex of
+    0: timer.Text:=inttostr(value);  // Timer
+    1: RelIncr.Text:=inttostr(value);// Relative
+    2: PosIncr.Text:=inttostr(value);// Absolute
+  end;
+end;
+
+function Tf_focuser.GetSpeed:integer;
+begin
+ case Notebook1.PageIndex of
+   0: result:=Strtointdef(timer.Text,-1);  // Timer
+   1: result:=Strtointdef(RelIncr.Text,-1);// Relative
+   2: result:=Strtointdef(PosIncr.Text,-1);// Absolute
+ end;
+end;
+
+procedure Tf_focuser.SetPosition(value:integer);
+begin
+ begin
+   case Notebook1.PageIndex of
+     2: Position.Text:=inttostr(value);// Absolute
+   end;
+ end;
+end;
+
+function Tf_focuser.GetPosition:integer;
+begin
+ case Notebook1.PageIndex of
+   2: result:=Strtointdef(Position.Text,-1);// Absolute
+   else result:=-1;
+ end;
 end;
 
 end.
