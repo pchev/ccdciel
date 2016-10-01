@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, indiapi, UScaleDPI,
+uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, UScaleDPI,
   fu_capture, fu_preview, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   LCLType, Classes, Dialogs, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 

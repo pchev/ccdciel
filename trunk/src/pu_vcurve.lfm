@@ -1,0 +1,211 @@
+object f_vcurve: Tf_vcurve
+  Left = 0
+  Height = 382
+  Top = 0
+  Width = 320
+  ActiveControl = BtnLearnVcurve
+  AlphaBlend = True
+  AlphaBlendValue = 128
+  Caption = 'V curve'
+  ClientHeight = 382
+  ClientWidth = 320
+  FormStyle = fsStayOnTop
+  LCLVersion = '1.6.0.4'
+  Visible = False
+  object BtnLearnVcurve: TButton
+    Left = 16
+    Height = 25
+    Top = 8
+    Width = 75
+    Caption = 'Learn'
+    OnClick = BtnLearnVcurveClick
+    TabOrder = 0
+  end
+  object VcChart: TChart
+    Left = 8
+    Height = 200
+    Top = 88
+    Width = 300
+    AntialiasingMode = amOn
+    AxisList = <    
+      item
+        Minors = <>
+        Title.LabelFont.Orientation = 900
+      end    
+      item
+        Intervals.Count = 15
+        Visible = False
+        Alignment = calBottom
+        Minors = <>
+      end>
+    Extent.UseYMin = True
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
+    )
+    object VcChartL: TFitSeries
+      FitEquation = feLinear
+      ParamCount = 2
+      Pen.Color = clRed
+      Source = FitSourceL
+    end
+    object VcChartR: TFitSeries
+      FitEquation = feLinear
+      ParamCount = 2
+      Pen.Color = clLime
+      Source = FitSourceR
+    end
+    object VcChartPtL: TLineSeries
+      LinePen.Color = clNone
+      LinePen.Style = psClear
+      Pointer.Brush.Style = bsClear
+      Pointer.OverrideColor = []
+      Pointer.Pen.Color = clRed
+      Pointer.Style = psCircle
+      ShowPoints = True
+      Source = PtSourceL
+    end
+    object VcChartPtR: TLineSeries
+      LinePen.Color = clNone
+      LinePen.Style = psClear
+      Pointer.Brush.Style = bsClear
+      Pointer.OverrideColor = []
+      Pointer.Pen.Color = clGreen
+      Pointer.Style = psCircle
+      ShowPoints = True
+      Source = PtSourceR
+    end
+  end
+  object LabelSL: TLabel
+    Left = 43
+    Height = 17
+    Top = 312
+    Width = 53
+    Caption = 'LabelSL'
+    Font.Color = clRed
+    ParentColor = False
+    ParentFont = False
+  end
+  object LabelSR: TLabel
+    Left = 240
+    Height = 17
+    Top = 312
+    Width = 54
+    Caption = 'LabelSR'
+    Font.Color = clGreen
+    ParentColor = False
+    ParentFont = False
+  end
+  object LabelPID: TLabel
+    Left = 136
+    Height = 17
+    Top = 353
+    Width = 61
+    Caption = 'LabelPID'
+    ParentColor = False
+  end
+  object Memo1: TMemo
+    Left = 118
+    Height = 90
+    Top = 0
+    Width = 190
+    Enabled = False
+    ReadOnly = True
+    TabOrder = 2
+  end
+  object Label4: TLabel
+    Left = 43
+    Height = 17
+    Top = 295
+    Width = 49
+    Caption = 'Slope L'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 136
+    Height = 17
+    Top = 336
+    Width = 24
+    Caption = 'PID'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 240
+    Height = 17
+    Top = 295
+    Width = 50
+    Caption = 'Slope R'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 43
+    Height = 17
+    Top = 336
+    Width = 24
+    Caption = 'PI L'
+    ParentColor = False
+  end
+  object LabelPIL: TLabel
+    Left = 43
+    Height = 17
+    Top = 353
+    Width = 58
+    Caption = 'LabelPIL'
+    Font.Color = clRed
+    ParentColor = False
+    ParentFont = False
+  end
+  object LabelPIR: TLabel
+    Left = 240
+    Height = 17
+    Top = 352
+    Width = 59
+    Caption = 'LabelPIR'
+    Font.Color = clGreen
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label10: TLabel
+    Left = 240
+    Height = 17
+    Top = 336
+    Width = 25
+    Caption = 'PI R'
+    ParentColor = False
+  end
+  object Label11: TLabel
+    Left = 136
+    Height = 17
+    Top = 295
+    Width = 46
+    Caption = 'Center'
+    ParentColor = False
+  end
+  object LabelCenter: TLabel
+    Left = 136
+    Height = 17
+    Top = 312
+    Width = 83
+    Caption = 'LabelCenter'
+    ParentColor = False
+  end
+  object FitSourceL: TListChartSource
+    left = 96
+    top = 112
+  end
+  object FitSourceR: TListChartSource
+    left = 96
+    top = 184
+  end
+  object PtSourceL: TListChartSource
+    left = 221
+    top = 112
+  end
+  object PtSourceR: TListChartSource
+    left = 221
+    top = 184
+  end
+end

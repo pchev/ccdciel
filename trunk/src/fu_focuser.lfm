@@ -18,21 +18,22 @@ object f_focuser: Tf_focuser
     TabOrder = 1
     object PanelParam: TPanel
       Left = 0
-      Height = 48
+      Height = 52
       Top = 0
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 48
+      ClientHeight = 52
       ClientWidth = 178
       TabOrder = 1
       object Notebook1: TNotebook
         Left = 0
-        Height = 48
+        Height = 52
         Top = 0
         Width = 178
-        PageIndex = 2
+        PageIndex = 0
         Align = alClient
         TabOrder = 0
+        TabStop = True
         object PageTimerMove: TPage
           object PanelTimerMove: TPanel
             Left = 0
@@ -46,23 +47,23 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label3: TLabel
               Left = 0
-              Height = 18
+              Height = 17
               Top = 4
-              Width = 37
+              Width = 42
               Caption = 'Speed'
               ParentColor = False
             end
             object Label4: TLabel
               Left = 0
-              Height = 18
+              Height = 17
               Top = 24
-              Width = 34
+              Width = 39
               Caption = 'Timer'
               ParentColor = False
             end
             object speed: TEdit
-              Left = 70
-              Height = 24
+              Left = 54
+              Height = 27
               Hint = 'Focus speed'
               Top = 0
               Width = 80
@@ -72,8 +73,8 @@ object f_focuser: Tf_focuser
               TabOrder = 0
             end
             object timer: TEdit
-              Left = 70
-              Height = 24
+              Left = 54
+              Height = 27
               Hint = 'Focus movement duration'
               Top = 22
               Width = 80
@@ -97,15 +98,15 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label6: TLabel
               Left = 2
-              Height = 18
+              Height = 17
               Top = 8
-              Width = 26
+              Width = 29
               Caption = 'Incr.'
               ParentColor = False
             end
             object RelIncr: TComboBox
-              Left = 68
-              Height = 24
+              Left = 54
+              Height = 29
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
               Width = 80
@@ -130,20 +131,20 @@ object f_focuser: Tf_focuser
         object PageAbsPos: TPage
           object PanelAbsPos: TPanel
             Left = 0
-            Height = 48
+            Height = 52
             Top = 0
             Width = 178
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 48
+            ClientHeight = 52
             ClientWidth = 178
             TabOrder = 0
             object Position: TEdit
-              Left = 68
-              Height = 24
+              Left = 54
+              Height = 27
               Hint = 'Current focuser absolute position'
               Top = 0
-              Width = 76
+              Width = 80
               Color = clBlack
               Font.Color = clRed
               ParentFont = False
@@ -151,23 +152,23 @@ object f_focuser: Tf_focuser
             end
             object Label1: TLabel
               Left = 4
-              Height = 18
+              Height = 17
               Top = 4
-              Width = 25
+              Width = 29
               Caption = 'Pos.'
               ParentColor = False
             end
             object Label2: TLabel
               Left = 4
-              Height = 18
-              Top = 24
-              Width = 27
+              Height = 17
+              Top = 28
+              Width = 31
               Caption = 'Step'
               ParentColor = False
             end
             object PosIncr: TComboBox
-              Left = 68
-              Height = 24
+              Left = 54
+              Height = 29
               Hint = 'Increment step for the inward or outward movement'
               Top = 22
               Width = 80
@@ -187,6 +188,26 @@ object f_focuser: Tf_focuser
               TabOrder = 1
               Text = '5000'
             end
+            object BtnSetAbsPos: TButton
+              Left = 136
+              Height = 25
+              Hint = 'Set absolute focuser position'
+              Top = 0
+              Width = 44
+              Caption = 'Set'
+              OnClick = BtnSetAbsPosClick
+              TabOrder = 2
+            end
+            object BtnVcurve: TButton
+              Left = 136
+              Height = 25
+              Hint = 'V curve learning'
+              Top = 24
+              Width = 44
+              Caption = 'V'
+              OnClick = BtnVcurveClick
+              TabOrder = 3
+            end
           end
         end
       end
@@ -194,14 +215,14 @@ object f_focuser: Tf_focuser
     object PanelBtn: TPanel
       Left = 0
       Height = 26
-      Top = 48
+      Top = 52
       Width = 178
       BevelOuter = bvNone
       ClientHeight = 26
       ClientWidth = 178
       TabOrder = 0
       object BtnDown: TButton
-        Left = 36
+        Left = 56
         Height = 25
         Hint = 'Move focuser inward'
         Top = 0
@@ -211,7 +232,7 @@ object f_focuser: Tf_focuser
         TabOrder = 0
       end
       object BtnUp: TButton
-        Left = 114
+        Left = 98
         Height = 25
         Hint = 'Move focuser outward'
         Top = 0

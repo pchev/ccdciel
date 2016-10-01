@@ -77,13 +77,14 @@ PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
 Procedure Refraction(var h : double; flag:boolean);
-PROCEDURE Eq2Hz(HH,DE : double ; VAR A,h : double);
-Procedure Hz2Eq(A,h : double; var hh,de : double);
+PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
+Procedure Hz2Eq(A,h : double; out hh,de : double);
 Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
 Procedure cmdHz2Eq(a,h : double; var ra,de : double);
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 procedure Fits2Screen(x,y: integer; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
+procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure ResetTrackBar(tb:TTrackBar);
 
 implementation
@@ -972,7 +973,7 @@ else begin      // apparent -> true
 end;
 end;
 
-PROCEDURE Eq2Hz(HH,DE : double ; VAR A,h : double);
+PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 var l1,d1,h1,sh : double;
 BEGIN
 l1:=deg2rad*ObsLatitude;
@@ -988,7 +989,7 @@ A:=Rmod(A+pi2,pi2);
 Refraction(h,true);
 END ;
 
-Procedure Hz2Eq(A,h : double; var hh,de : double);
+Procedure Hz2Eq(A,h : double; out hh,de : double);
 var l1,a1,h1,sd : double;
 BEGIN
 Refraction(h,false);
@@ -1100,6 +1101,35 @@ begin
    end;
    xx:=xx+ImgFrameX;
    yy:=yy+ImgFrameY;
+end;
+
+procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
+begin
+try
+  if ImgZoom=0 then begin
+    xx:=round(x * ImgScale0);
+    if vflip then yy:=round((img_Height-y) * ImgScale0)
+             else yy:=round(y * ImgScale0);
+  end
+  else if ImgZoom=0.5 then begin
+    xx:=(x+OrigX) div 2;
+    if vflip then yy:=(img_Height-y+OrigY) div 2
+             else yy:=(y+OrigY) div 2;
+  end
+  else if ImgZoom=1 then begin
+    xx:=x+OrigX;
+    if vflip then yy:=img_Height-y+OrigY
+             else yy:=y+OrigY;
+  end
+  else if ImgZoom=2 then begin
+    xx:=2*(x+OrigX);
+    if vflip then yy:=(img_Height-y+OrigY) * 2
+             else yy:=2*(y+OrigY);
+  end;
+except
+  xx:=-1;
+  yy:=-1;
+end;
 end;
 
 procedure ResetTrackBar(tb:TTrackBar);
