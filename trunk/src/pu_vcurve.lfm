@@ -4,13 +4,12 @@ object f_vcurve: Tf_vcurve
   Top = 0
   Width = 320
   ActiveControl = BtnLearnVcurve
-  AlphaBlend = True
   AlphaBlendValue = 128
   Caption = 'V curve'
   ClientHeight = 382
   ClientWidth = 320
   FormStyle = fsStayOnTop
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.1.0'
   Visible = False
   object BtnLearnVcurve: TButton
     Left = 16
@@ -81,9 +80,9 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSL: TLabel
     Left = 43
-    Height = 17
+    Height = 18
     Top = 312
-    Width = 53
+    Width = 46
     Caption = 'LabelSL'
     Font.Color = clRed
     ParentColor = False
@@ -91,9 +90,9 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSR: TLabel
     Left = 240
-    Height = 17
+    Height = 18
     Top = 312
-    Width = 54
+    Width = 47
     Caption = 'LabelSR'
     Font.Color = clGreen
     ParentColor = False
@@ -101,9 +100,9 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPID: TLabel
     Left = 136
-    Height = 17
+    Height = 18
     Top = 353
-    Width = 61
+    Width = 53
     Caption = 'LabelPID'
     ParentColor = False
   end
@@ -118,41 +117,41 @@ object f_vcurve: Tf_vcurve
   end
   object Label4: TLabel
     Left = 43
-    Height = 17
+    Height = 18
     Top = 295
-    Width = 49
+    Width = 43
     Caption = 'Slope L'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 136
-    Height = 17
+    Height = 18
     Top = 336
-    Width = 24
+    Width = 21
     Caption = 'PID'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 240
-    Height = 17
+    Height = 18
     Top = 295
-    Width = 50
+    Width = 44
     Caption = 'Slope R'
     ParentColor = False
   end
   object Label7: TLabel
     Left = 43
-    Height = 17
+    Height = 18
     Top = 336
-    Width = 24
+    Width = 22
     Caption = 'PI L'
     ParentColor = False
   end
   object LabelPIL: TLabel
     Left = 43
-    Height = 17
+    Height = 18
     Top = 353
-    Width = 58
+    Width = 51
     Caption = 'LabelPIL'
     Font.Color = clRed
     ParentColor = False
@@ -160,9 +159,9 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPIR: TLabel
     Left = 240
-    Height = 17
+    Height = 18
     Top = 352
-    Width = 59
+    Width = 52
     Caption = 'LabelPIR'
     Font.Color = clGreen
     ParentColor = False
@@ -170,25 +169,25 @@ object f_vcurve: Tf_vcurve
   end
   object Label10: TLabel
     Left = 240
-    Height = 17
+    Height = 18
     Top = 336
-    Width = 25
+    Width = 23
     Caption = 'PI R'
     ParentColor = False
   end
   object Label11: TLabel
     Left = 136
-    Height = 17
+    Height = 18
     Top = 295
-    Width = 46
+    Width = 40
     Caption = 'Center'
     ParentColor = False
   end
   object LabelCenter: TLabel
     Left = 136
-    Height = 17
+    Height = 18
     Top = 312
-    Width = 83
+    Width = 72
     Caption = 'LabelCenter'
     ParentColor = False
   end
