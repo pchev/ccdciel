@@ -4364,7 +4364,7 @@ begin
         if mount.PierSide=pierWest then begin
           f_pause.Text:='Meridian flip error!';
           NewMessage(f_pause.Text);
-          if not f_pause.Wait then begin
+          if not f_pause.Wait(120) then begin
              DoAbort;
              exit;
           end;
