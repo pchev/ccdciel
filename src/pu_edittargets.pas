@@ -408,7 +408,7 @@ begin
         TargetList.Row:=j;
         Application.ProcessMessages;
         LockTarget:=true;
-        if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free;
+        //if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free; Cause crash because plan is shared
         TargetList.Objects[0,i]:=nil;
         TargetList.DeleteRow(i);
         Application.ProcessMessages;
