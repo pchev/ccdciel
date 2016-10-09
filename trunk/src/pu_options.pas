@@ -59,6 +59,9 @@ type
     Label57: TLabel;
     Label58: TLabel;
     AutofocusNotebook: TNotebook;
+    Label59: TLabel;
+    Label60: TLabel;
+    MinutesPastMeridianMin: TEdit;
     PageNone: TPage;
     PageVcurve: TPage;
     PageIterative: TPage;

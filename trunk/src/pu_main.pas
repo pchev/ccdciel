@@ -1567,6 +1567,7 @@ begin
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',0);
+  MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',0);
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
   MeridianFlipPauseAfter:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
   MeridianFlipPauseTimeout:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
@@ -2730,6 +2731,7 @@ begin
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
    f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
+   f_option.MinutesPastMeridianMin.Text:=IntToStr(config.GetValue('/Meridian/MinutesPastMin',0));
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
    f_option.MeridianFlipPauseTimeout.Text:=IntToStr(config.GetValue('/Meridian/MeridianFlipPauseTimeout',0));
@@ -2810,6 +2812,7 @@ begin
      config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',StrToIntDef(f_option.MinutesPastMeridian.Text,0));
+     config.SetValue('/Meridian/MinutesPastMin',StrToIntDef(f_option.MinutesPastMeridianMin.Text,0));
      config.SetValue('/Meridian/MeridianFlipPauseBefore',f_option.MeridianFlipPauseBefore.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseAfter',f_option.MeridianFlipPauseAfter.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',StrToIntDef(f_option.MeridianFlipPauseTimeout.Text,0));
@@ -4298,7 +4301,7 @@ begin
     if (f_capture.Running  or f_sequence.Busy) and (nextexposure=0) then exit;
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
-    MeridianDelay1:=-hhmin;
+    MeridianDelay1:=MinutesPastMeridianMin-hhmin;
     if mount.PierSide=pierUnknown
       then MeridianDelay2:=MeridianDelay1
       else MeridianDelay2:=MinutesPastMeridian-hhmin;
