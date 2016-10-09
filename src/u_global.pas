@@ -228,7 +228,7 @@ var
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
-  MeridianOption,MinutesPastMeridian, MeridianFlipPauseTimeout: integer;
+  MeridianOption,MinutesPastMeridian, MinutesPastMeridianMin, MeridianFlipPauseTimeout: integer;
   MeridianFlipPauseBefore, MeridianFlipPauseAfter: boolean;
   astrometryResolver: integer;
   OrigX, OrigY,img_Height,img_Width : integer;
