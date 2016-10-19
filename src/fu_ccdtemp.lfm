@@ -1,10 +1,10 @@
 object f_ccdtemp: Tf_ccdtemp
   Left = 0
-  Height = 79
+  Height = 81
   Top = 0
   Width = 180
   AutoSize = True
-  ClientHeight = 79
+  ClientHeight = 81
   ClientWidth = 180
   TabOrder = 0
   object StaticText1: TStaticText
@@ -24,36 +24,33 @@ object f_ccdtemp: Tf_ccdtemp
   end
   object Panel1: TPanel
     Left = 0
-    Height = 59
+    Height = 61
     Top = 20
     Width = 180
     Align = alClient
-    ClientHeight = 59
+    ClientHeight = 61
     ClientWidth = 180
     TabOrder = 1
     object Panel2: TPanel
       Left = 0
-      Height = 25
+      Height = 27
       Top = 0
       Width = 130
-      ClientHeight = 25
+      ClientHeight = 27
       ClientWidth = 130
       TabOrder = 1
       object Current: TEdit
         Left = 64
-        Height = 24
+        Height = 27
         Top = 0
         Width = 65
-        Color = clBlack
-        Font.Color = clRed
-        ParentFont = False
         TabOrder = 0
       end
       object Label1: TLabel
         Left = 4
-        Height = 18
+        Height = 17
         Top = 4
-        Width = 46
+        Width = 53
         Caption = 'Current'
         ParentColor = False
       end
@@ -61,27 +58,24 @@ object f_ccdtemp: Tf_ccdtemp
     object Panel3: TPanel
       Left = 0
       Height = 29
-      Top = 25
+      Top = 29
       Width = 130
       ClientHeight = 29
       ClientWidth = 130
       TabOrder = 2
       object Setpoint: TEdit
         Left = 64
-        Height = 24
-        Top = 2
+        Height = 27
+        Top = 0
         Width = 65
-        Color = clBlack
-        Font.Color = clRed
-        ParentFont = False
         TabOrder = 0
         Text = '0'
       end
       object Label2: TLabel
         Left = 4
-        Height = 18
+        Height = 17
         Top = 4
-        Width = 51
+        Width = 59
         Caption = 'Setpoint'
         ParentColor = False
       end
@@ -89,7 +83,7 @@ object f_ccdtemp: Tf_ccdtemp
     object Button1: TButton
       Left = 132
       Height = 24
-      Top = 27
+      Top = 29
       Width = 50
       Caption = 'Set'
       OnClick = Button1Click

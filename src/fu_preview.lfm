@@ -32,8 +32,6 @@ object f_preview: Tf_preview
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
         ItemHeight = 0
         ItemIndex = 5
         Items.Strings = (
@@ -48,7 +46,6 @@ object f_preview: Tf_preview
           '10'
           '20'
         )
-        ParentFont = False
         TabOrder = 0
         Text = '1'
       end
@@ -75,8 +72,6 @@ object f_preview: Tf_preview
         Hint = 'Camera binning'
         Top = 0
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (

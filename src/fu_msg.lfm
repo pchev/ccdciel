@@ -24,14 +24,11 @@ object f_msg: Tf_msg
       Height = 110
       Top = 1
       Width = 600
-      Color = clBlack
       Constraints.MaxHeight = 110
       Constraints.MaxWidth = 600
       Constraints.MinHeight = 110
       Constraints.MinWidth = 600
       DragMode = dmAutomatic
-      Font.Color = clRed
-      ParentFont = False
       ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 0

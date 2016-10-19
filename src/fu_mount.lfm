@@ -47,9 +47,6 @@ object f_mount: Tf_mount
       Top = 0
       Width = 80
       Alignment = taRightJustify
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ReadOnly = True
       TabOrder = 0
     end
@@ -68,9 +65,6 @@ object f_mount: Tf_mount
       Top = 25
       Width = 80
       Alignment = taRightJustify
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ReadOnly = True
       TabOrder = 1
     end
@@ -106,9 +100,6 @@ object f_mount: Tf_mount
       Hint = 'Time from meridian transit (hour angle)'
       Top = 75
       Width = 30
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ReadOnly = True
       TabOrder = 4
     end
@@ -126,9 +117,6 @@ object f_mount: Tf_mount
       Hint = 'Current telescope pier side'
       Top = 50
       Width = 173
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ReadOnly = True
       TabOrder = 5
       Text = 'Unknow pier side'

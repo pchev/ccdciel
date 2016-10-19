@@ -237,6 +237,7 @@ procedure T_camera.NewImage;
 begin
   Ffits.Stream:=ImgStream;
   WriteHeaders;
+  Ffits.LoadStream;
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 
@@ -247,6 +248,7 @@ var dy,dm,dd: word;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
+    Frx,Fry,Frwidth,Frheight: integer;
 begin
   // get header values from camera (set by INDI driver)
   if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
@@ -301,7 +303,11 @@ begin
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
   if (focal_length<1) and Assigned(FonMsg) then FonMsg('Error: Unknow telescope focal length');
-
+  try
+   GetFrame(Frx,Fry,Frwidth,Frheight);
+  except
+   Frwidth:=0;
+  end;
   // write new header
   Ffits.Header.ClearHeader;
   Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -332,6 +338,12 @@ begin
   if hbin2>0 then Ffits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
   Ffits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
   if ccdtemp<>NullCoord then Ffits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
+  if Frwidth<>0 then begin
+    Ffits.Header.Add('FRAMEX',Frx,'Frame start x');
+    Ffits.Header.Add('FRAMEY',Fry,'Frame start y');
+    Ffits.Header.Add('FRAMEHGT',Frheight,'Frame height');
+    Ffits.Header.Add('FRAMEWDH',Frwidth,'Frame width');
+  end;
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
     Ffits.Header.Add('EQUINOX',2000.0,'');
     Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');

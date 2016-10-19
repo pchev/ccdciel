@@ -51,13 +51,10 @@ object f_autoguider: Tf_autoguider
       object Status: TEdit
         Left = 0
         Height = 25
-        Hint = 'Current telescope Right Ascension'
+        Hint = 'Autoguider status'
         Top = 0
         Width = 120
         AutoSize = False
-        Color = clBlack
-        Font.Color = clRed
-        ParentFont = False
         ReadOnly = True
         TabOrder = 0
       end

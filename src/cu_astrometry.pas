@@ -383,6 +383,7 @@ begin
     msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
     Mount.Slew(ra, de);
     i:=1;
+    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     repeat
       Wait;
       Fpreview.ControlExposure(exp,binx,biny);
@@ -435,6 +436,7 @@ begin
       inc(i);
     until (dist<=prec)or(i>maxslew);
   end;
+  fits.SetBPM(bpm,0,0,0,0);
   result:=(dist<=prec);
   err:=dist;
   FLastSlewErr:=dist;

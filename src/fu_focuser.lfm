@@ -67,9 +67,6 @@ object f_focuser: Tf_focuser
               Hint = 'Focus speed'
               Top = 0
               Width = 80
-              Color = clBlack
-              Font.Color = clRed
-              ParentFont = False
               TabOrder = 0
             end
             object timer: TEdit
@@ -78,9 +75,6 @@ object f_focuser: Tf_focuser
               Hint = 'Focus movement duration'
               Top = 22
               Width = 80
-              Color = clBlack
-              Font.Color = clRed
-              ParentFont = False
               TabOrder = 1
             end
           end
@@ -110,8 +104,6 @@ object f_focuser: Tf_focuser
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
               Width = 80
-              Color = clBlack
-              Font.Color = clRed
               ItemHeight = 0
               ItemIndex = 4
               Items.Strings = (
@@ -122,8 +114,7 @@ object f_focuser: Tf_focuser
                 '5000'
                 '10000'
               )
-              ParentFont = False
-              TabOrder = 0
+                TabOrder = 0
               Text = '5000'
             end
           end
@@ -145,9 +136,6 @@ object f_focuser: Tf_focuser
               Hint = 'Current focuser absolute position'
               Top = 0
               Width = 80
-              Color = clBlack
-              Font.Color = clRed
-              ParentFont = False
               TabOrder = 0
             end
             object Label1: TLabel
@@ -172,8 +160,6 @@ object f_focuser: Tf_focuser
               Hint = 'Increment step for the inward or outward movement'
               Top = 22
               Width = 80
-              Color = clBlack
-              Font.Color = clRed
               ItemHeight = 0
               ItemIndex = 4
               Items.Strings = (
@@ -184,7 +170,6 @@ object f_focuser: Tf_focuser
                 '5000'
                 '10000'
               )
-              ParentFont = False
               TabOrder = 1
               Text = '5000'
             end

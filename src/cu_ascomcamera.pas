@@ -151,6 +151,7 @@ procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:s
 begin
 {$ifdef mswindows}
  try
+ FStatus := devConnecting;
  Fdevice:=cp1;
  V:=Unassigned;
  V:=CreateOleObject(WideString(Fdevice));

@@ -31,16 +31,13 @@ object f_script: Tf_script
     ChildSizing.ControlsPerLine = 2
     ClientHeight = 85
     ClientWidth = 189
-    ParentColor = False
-    TabOrder = 1
+     TabOrder = 1
     object ComboBoxScript: TComboBox
       Left = 2
       Height = 24
       Top = 2
       Width = 174
-      Color = clBlack
-      Font.Color = clRed
-      ItemHeight = 0
+       ItemHeight = 0
       OnKeyDown = ComboBoxScriptKeyDown
       ParentFont = False
       TabOrder = 0

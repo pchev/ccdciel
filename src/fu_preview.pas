@@ -58,6 +58,7 @@ type
     procedure msg(txt:string);
     function GetExposure:double;
     procedure SetExposure(value:double);
+    function GetBinning: integer;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -68,6 +69,7 @@ type
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
     property Exposure: double read GetExposure write SetExposure;
+    property Bin: integer read GetBinning;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -161,6 +163,18 @@ begin
   else if value>=0.01 then
       ExpTime.Text:=FormatFloat(f3,value)
   else ExpTime.Text:=FormatFloat(f4,value);
+end;
+
+function Tf_preview.GetBinning: integer;
+var buf:string;
+    p:integer;
+begin
+  p:=pos('x',Binning.Text);
+  if p>0 then begin
+     buf:=trim(copy(Binning.Text,1,p-1));
+     result:=StrToIntDef(buf,1);
+  end
+  else result:=1;
 end;
 
 procedure Tf_preview.ControlExposure(exp:double; binx,biny: integer);

@@ -37,8 +37,8 @@ type
     FullRange: TSpeedButton;
     Histogram: TImage;
     Panel1: TPanel;
-    histlinear: TSpeedButton;
-    histlog: TSpeedButton;
+    hist98: TSpeedButton;
+    hist99: TSpeedButton;
     histminmax: TSpeedButton;
     BtnLinear: TRadioButton;
     BtnLog: TRadioButton;
@@ -54,7 +54,8 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure FullRangeClick(Sender: TObject);
-    procedure histbtnClick(Sender: TObject);
+    procedure hist98Click(Sender: TObject);
+    procedure hist99Click(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -68,6 +69,7 @@ type
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
+    l98,h98,l99,h99: integer;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
@@ -114,13 +116,28 @@ begin
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram);
-var i,maxh,h,h2,l: integer;
+var i,maxh,h,h2,l,sum,sl98,sh98,sl99,sh99: integer;
     sh: double;
 begin
 maxh:=0;
-for i:=0 to 255 do
-   if hist[i]>maxh then
+sum:=0;
+for i:=0 to 255 do begin
+  sum:=sum+hist[i];
+  if hist[i]>maxh then
       maxh:=hist[i];
+end;
+sl98:=round(0.02*sum); l98:=0;
+sh98:=round(0.98*sum); h98:=0;
+sl99:=round(0.005*sum); l99:=0;
+sh99:=round(0.995*sum); h99:=0;
+sum:=0;
+for i:=0 to 255 do begin
+  sum:=sum+hist[i];
+  if (l98=0) and (sum>=sl98) then l98:=i;
+  if (l99=0) and (sum>=sl99) then l99:=i;
+  if (h98=0) and (sum>=sh98) then h98:=i;
+  if (h99=0) and (sum>=sh99) then h99:=i;
+end;
 if maxh=0 then exit;
 Histogram.Picture.Bitmap.Width:=Histogram.Width;
 Histogram.Picture.Bitmap.Height:=Histogram.Height;
@@ -129,17 +146,11 @@ with Histogram.Picture.Bitmap do begin
   Canvas.Pen.Color:=clBlack;
   Canvas.Pen.Mode:=pmCopy;
   Canvas.FillRect(0,0,Width,Height);
-  if histlog.Down then
-     sh:=height/ln(maxh)
-  else
-     sh:=height/maxh;
+  sh:=height/ln(maxh);
   Canvas.Pen.Color:=clWhite;
   h2:=0;
   for i:=0 to 255 do begin
-    if histlog.Down then
-       h:=trunc(ln(hist[i])*sh)
-    else
-      h:=trunc(hist[i]*sh);
+    h:=trunc(ln(hist[i])*sh);
     if (Histogram.Width=128) then begin
       if ((i mod 2)=0) then begin
         h:=(h+h2) div 2;
@@ -169,11 +180,6 @@ begin
   Updmax:=dx2<dx1;
   if Updmax then XP:=ImgMax else XP:=ImgMin;
   StartUpd:=true;
-end;
-
-procedure Tf_visu.histbtnClick(Sender: TObject);
-begin
- if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
 end;
 
 procedure Tf_visu.BtnIttChange(Sender: TObject);
@@ -220,6 +226,20 @@ end;
 procedure Tf_visu.FullRangeClick(Sender: TObject);
 begin
   if Assigned(FFullRange) then FFullRange(self);
+end;
+
+procedure Tf_visu.hist98Click(Sender: TObject);
+begin
+ImgMin:=l98;
+ImgMax:=h98;
+if Assigned(FRedraw) then FRedraw(self);
+end;
+
+procedure Tf_visu.hist99Click(Sender: TObject);
+begin
+ImgMin:=l99;
+ImgMax:=h99;
+if Assigned(FRedraw) then FRedraw(self);
 end;
 
 procedure Tf_visu.SetZoom(value: double);

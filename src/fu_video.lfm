@@ -49,7 +49,6 @@ object f_video: Tf_video
         Top = 0
         Width = 56
         Caption = 'Exposure'
-        ParentColor = False
       end
       object Exprange: TComboBox
         Left = 1
@@ -97,8 +96,7 @@ object f_video: Tf_video
         Top = 1
         Width = 57
         Caption = '                   '
-        ParentColor = False
-      end
+       end
     end
     object PanelGain: TPanel
       Left = 0
@@ -116,8 +114,7 @@ object f_video: Tf_video
         Top = 0
         Width = 27
         Caption = 'Gain'
-        ParentColor = False
-      end
+       end
       object Gain: TTrackBar
         Left = 80
         Height = 40
@@ -145,7 +142,6 @@ object f_video: Tf_video
         Top = 0
         Width = 47
         Caption = 'Gamma'
-        ParentColor = False
       end
       object Gamma: TTrackBar
         Left = 80
@@ -174,8 +170,7 @@ object f_video: Tf_video
         Top = 0
         Width = 64
         Caption = 'Brightness'
-        ParentColor = False
-      end
+       end
       object Brightness: TTrackBar
         Left = 80
         Height = 40
@@ -203,7 +198,6 @@ object f_video: Tf_video
         Top = 4
         Width = 23
         Caption = 'Size'
-        ParentColor = False
       end
       object VideoSize: TComboBox
         Left = 88
@@ -221,7 +215,6 @@ object f_video: Tf_video
         Top = 32
         Width = 65
         Caption = 'Frame rate'
-        ParentColor = False
       end
       object FrameRate: TComboBox
         Left = 88
@@ -301,7 +294,6 @@ object f_video: Tf_video
         Top = 60
         Width = 39
         Caption = 'Object'
-        ParentColor = False
       end
       object ObjectName: TEdit
         Left = 67

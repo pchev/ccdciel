@@ -24,11 +24,8 @@ object f_filterwheel: Tf_filterwheel
       Top = 1
       Width = 138
       AutoSize = False
-      Color = clBlack
-      Font.Color = clRed
       ItemHeight = 0
       OnChange = FiltersChange
-      ParentFont = False
       TabOrder = 0
     end
     object Label1: TLabel

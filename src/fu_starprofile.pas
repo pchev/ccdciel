@@ -94,6 +94,7 @@ type
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar;
     property HFD:double read Fhfd;
+    property ValMax: double read FValMax;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
     property preview:Tf_preview read Fpreview write Fpreview;
@@ -166,7 +167,7 @@ begin
  FfocuserSpeed:=AutofocusMaxSpeed;
  focuser.FocusSpeed:=FfocuserSpeed;
  focuserdirection:=AutofocusMoveDir;
- if focuserdirection then
+ if focuserdirection=FocusDirOut then
     AutofocusVcStep:=vcsNearL
   else
     AutofocusVcStep:=vcsNearR;
@@ -304,11 +305,27 @@ var i,j,rs,ri: integer;
 begin
 hfd:=-1;
 rs:=s div 2;
+// Get center of gravity of full search area
 SumVal:=0;
 SumValX:=0;
 SumValY:=0;
 valmax:=0;
-// Get radius of interest (x,y must be the brightest pixel)
+for i:=-rs to rs do
+ for j:=-rs to rs do begin
+   val:=vmin+Img[0,y+j,x+i]/c;
+   if val>valmax then valmax:=val;
+   SumVal:=SumVal+val;
+   SumValX:=SumValX+val*i;
+   SumValY:=SumValY+val*j;
+ end;
+Xg:=SumValX/SumVal;
+Yg:=SumValY/SumVal;
+xc:=x+Xg;
+yc:=y+Yg;
+x:=trunc(xc);
+y:=trunc(yc);
+
+// Get radius of interest (x,y must be the star center)
 ri:=rs;
 bg:=vmin+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) / 4)/c;
 for i:=0 to rs do begin
@@ -323,6 +340,10 @@ for i:=0 to rs do begin
 end;
 if ri<2 then ri:=2; // 5x5 mimimum box
 // Get center of gravity
+SumVal:=0;
+SumValX:=0;
+SumValY:=0;
+valmax:=0;
 for i:=-ri to ri do
  for j:=-ri to ri do begin
    val:=vmin+Img[0,y+j,x+i]/c;
@@ -589,6 +610,8 @@ var newpos:double;
 begin
  case AutofocusVcStep of
    vcsNearL: begin
+              focuser.FocusPosition:=round(AutofocusVc[0,1]);
+              wait(1);
               focuser.FocusPosition:=round(AutofocusVc[PosNearL,1]);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
@@ -596,6 +619,8 @@ begin
               wait(1);
              end;
    vcsNearR: begin
+              focuser.FocusPosition:=round(AutofocusVc[AutofocusVcNum,1]);
+              wait(1);
               focuser.FocusPosition:=round(AutofocusVc[PosNearR,1]);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
@@ -603,7 +628,7 @@ begin
               wait(1);
              end;
    vcsFocusL:begin
-              newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeL)-AutofocusVcPID/2;
+              newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
@@ -611,7 +636,7 @@ begin
               wait(1);
              end;
    vcsFocusR:begin
-              newpos:=focuser.FocusPosition-Fhfd/AutofocusVcSlopeR+AutofocusVcPID/2;
+              newpos:=focuser.FocusPosition-Fhfd/AutofocusVcSlopeR-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
