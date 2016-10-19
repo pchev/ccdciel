@@ -34,6 +34,7 @@ type
  TFitsInfo = record
             valid, solved: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
+            Frx,Fry,Frwidth,Frheight: integer;
             bzero,bscale,dmax,dmin,blank : double;
             equinox,ra,dec,crval1,crval2: double;
             pixsz1,pixsz2,pixratio: double;
@@ -122,6 +123,8 @@ type
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
     FImgFullRange: Boolean;
+    Fbpm: TBpm;
+    FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     Fitt : Titt;
     emptybmp:Tbitmap;
     clog,csqrt:double;
@@ -136,6 +139,7 @@ type
     procedure SetVideoStream(value:TMemoryStream);
     Procedure ReadFitsImage;
     Procedure GetImage;
+    procedure ApplyBPM(bpm:TBpm; count:integer);
     function Citt(value: Word):Word;
     procedure SetImgFullRange(value: boolean);
   protected
@@ -146,10 +150,12 @@ type
      constructor Create(AOwner:TComponent); override;
      destructor  Destroy; override;
      Procedure ViewHeaders;
+     Procedure LoadStream;
      procedure GetIntfImg;
      procedure GetFitsInfo;
      procedure GetBitmap(var imabmp:Tbitmap);
      procedure SaveToFile(fn: string);
+     procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -163,6 +169,8 @@ type
      property image : Timaw16 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
+     property imageMean: double read Fmean;
+     property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
   end;
 
@@ -419,6 +427,7 @@ Fitt:=ittlinear;
 Fheight:=0;
 Fwidth:=0;
 ImgDmin:=0;
+FBPMcount:=0;
 ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FFitsInfo.naxis1:=0;
@@ -488,13 +497,17 @@ try
  FStream.CopyFrom(value,value.Size);
  Fhdr_end:=FHeader.ReadHeader(FStream);
  GetFitsInfo;
- if FFitsInfo.valid then begin
-   ReadFitsImage;
-   GetIntfImg;
- end;
 except
  FFitsInfo.valid:=false;
 end;
+end;
+
+Procedure TFits.LoadStream;
+begin
+  if FFitsInfo.valid then begin
+    ReadFitsImage;
+    GetIntfImg;
+  end;
 end;
 
 function TFits.GetStream: TMemoryStream;
@@ -564,7 +577,7 @@ begin
 with FFitsInfo do begin
  valid:=false; solved:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 65535; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
- objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1;
+ objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
@@ -585,6 +598,10 @@ with FFitsInfo do begin
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
     if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
+    if (keyword='FRAMEX') then Frx:=strtoint(buf);
+    if (keyword='FRAMEY') then Fry:=strtoint(buf);
+    if (keyword='FRAMEHGT') then Frheight:=strtoint(buf);
+    if (keyword='FRAMEWDH') then Frwidth:=strtoint(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
     if (keyword='DEC') then dec:=StrToFloatDef(buf,NullCoord);
@@ -964,6 +981,45 @@ case FFitsInfo.bitpix of
       end;
 FimageC:=c;
 FimageMin:=Fdmin;
+ApplyBPM(Fbpm,FBPMcount);
+end;
+
+procedure TFits.ApplyBPM(bpm:TBpm; count:integer);
+var i,x,y,x0,y0: integer;
+begin
+if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
+  if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) then begin
+    x0:=FFitsInfo.Frx;
+    y0:=FFitsInfo.Fry;
+  end else begin
+    x0:=0;
+    y0:=0;
+  end;
+  for i:=1 to count do begin
+    x:=bpm[i,1]-x0;
+    y:=bpm[i,2]-y0;
+    if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
+      image[0,y,x]:=(image[0,y-1,x]+image[0,y+1,x]+image[0,y,x-1]+image[0,y,x+1]) div 4;
+      if n_axis=3 then begin
+        image[1,y,x]:=(image[1,y-1,x]+image[1,y+1,x]+image[1,y,x-1]+image[1,y,x+1]) div 4;
+        image[2,y,x]:=(image[2,y-1,x]+image[2,y+1,x]+image[2,y,x-1]+image[2,y,x+1]) div 4;
+      end;
+    end;
+  end;
+end;
+end;
+
+procedure TFits.SetBPM(value: TBpm; count,nx,ny,nax:integer);
+var i:integer;
+begin
+ for i:=1 to count do begin
+    Fbpm[i,1]:=value[i,1];
+    Fbpm[i,2]:=value[i,2];
+ end;
+ FBPMcount:=count;
+ FBPMnx:=nx;
+ FBPMny:=ny;
+ FBPMnax:=nax;
 end;
 
 procedure TFits.SetImgFullRange(value: boolean);

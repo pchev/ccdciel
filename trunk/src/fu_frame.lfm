@@ -38,9 +38,6 @@ object f_frame: Tf_frame
       Top = 0
       Width = 55
       AutoSize = False
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -53,9 +50,6 @@ object f_frame: Tf_frame
       Top = 22
       Width = 55
       AutoSize = False
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
@@ -68,9 +62,6 @@ object f_frame: Tf_frame
       Top = 0
       Width = 55
       AutoSize = False
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
@@ -83,9 +74,6 @@ object f_frame: Tf_frame
       Top = 22
       Width = 55
       AutoSize = False
-      Color = clBlack
-      Font.Color = clRed
-      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3

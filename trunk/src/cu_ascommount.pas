@@ -98,6 +98,7 @@ procedure T_ascommount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:st
 begin
  {$ifdef mswindows}
   try
+  FStatus := devConnecting;
   FDevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(Fdevice);

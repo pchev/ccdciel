@@ -1,29 +1,29 @@
 object f_vcurve: Tf_vcurve
   Left = 0
-  Height = 382
+  Height = 500
   Top = 0
   Width = 320
   ActiveControl = BtnLearnVcurve
   AlphaBlendValue = 128
   Caption = 'V curve'
-  ClientHeight = 382
+  ClientHeight = 500
   ClientWidth = 320
   FormStyle = fsStayOnTop
-  LCLVersion = '1.6.1.0'
+  LCLVersion = '1.6.0.4'
   Visible = False
   object BtnLearnVcurve: TButton
-    Left = 16
+    Left = 209
     Height = 25
-    Top = 8
-    Width = 75
+    Top = 72
+    Width = 98
     Caption = 'Learn'
     OnClick = BtnLearnVcurveClick
     TabOrder = 0
   end
   object VcChart: TChart
-    Left = 8
+    Left = 7
     Height = 200
-    Top = 88
+    Top = 112
     Width = 300
     AntialiasingMode = amOn
     AxisList = <    
@@ -48,13 +48,11 @@ object f_vcurve: Tf_vcurve
     object VcChartL: TFitSeries
       FitEquation = feLinear
       ParamCount = 2
-      Pen.Color = clRed
       Source = FitSourceL
     end
     object VcChartR: TFitSeries
       FitEquation = feLinear
       ParamCount = 2
-      Pen.Color = clLime
       Source = FitSourceR
     end
     object VcChartPtL: TLineSeries
@@ -62,7 +60,6 @@ object f_vcurve: Tf_vcurve
       LinePen.Style = psClear
       Pointer.Brush.Style = bsClear
       Pointer.OverrideColor = []
-      Pointer.Pen.Color = clRed
       Pointer.Style = psCircle
       ShowPoints = True
       Source = PtSourceL
@@ -72,139 +69,218 @@ object f_vcurve: Tf_vcurve
       LinePen.Style = psClear
       Pointer.Brush.Style = bsClear
       Pointer.OverrideColor = []
-      Pointer.Pen.Color = clGreen
       Pointer.Style = psCircle
       ShowPoints = True
       Source = PtSourceR
     end
   end
   object LabelSL: TLabel
-    Left = 43
-    Height = 18
-    Top = 312
-    Width = 46
-    Caption = 'LabelSL'
-    Font.Color = clRed
+    Left = 42
+    Height = 17
+    Top = 377
+    Width = 15
+    Caption = '     '
     ParentColor = False
-    ParentFont = False
   end
   object LabelSR: TLabel
-    Left = 240
-    Height = 18
-    Top = 312
-    Width = 47
-    Caption = 'LabelSR'
-    Font.Color = clGreen
+    Left = 239
+    Height = 17
+    Top = 377
+    Width = 15
+    Caption = '     '
     ParentColor = False
-    ParentFont = False
   end
   object LabelPID: TLabel
-    Left = 136
-    Height = 18
-    Top = 353
-    Width = 53
-    Caption = 'LabelPID'
+    Left = 135
+    Height = 17
+    Top = 418
+    Width = 15
+    Caption = '     '
     ParentColor = False
   end
-  object Memo1: TMemo
-    Left = 118
-    Height = 90
-    Top = 0
-    Width = 190
-    Enabled = False
-    ReadOnly = True
-    TabOrder = 2
-  end
   object Label4: TLabel
-    Left = 43
-    Height = 18
-    Top = 295
-    Width = 43
+    Left = 42
+    Height = 17
+    Top = 360
+    Width = 49
     Caption = 'Slope L'
     ParentColor = False
   end
   object Label5: TLabel
-    Left = 136
-    Height = 18
-    Top = 336
-    Width = 21
+    Left = 135
+    Height = 17
+    Top = 401
+    Width = 24
     Caption = 'PID'
     ParentColor = False
   end
   object Label6: TLabel
-    Left = 240
-    Height = 18
-    Top = 295
-    Width = 44
+    Left = 239
+    Height = 17
+    Top = 360
+    Width = 50
     Caption = 'Slope R'
     ParentColor = False
   end
   object Label7: TLabel
-    Left = 43
-    Height = 18
-    Top = 336
-    Width = 22
+    Left = 42
+    Height = 17
+    Top = 401
+    Width = 24
     Caption = 'PI L'
     ParentColor = False
   end
   object LabelPIL: TLabel
-    Left = 43
-    Height = 18
-    Top = 353
-    Width = 51
-    Caption = 'LabelPIL'
-    Font.Color = clRed
+    Left = 42
+    Height = 17
+    Top = 418
+    Width = 15
+    Caption = '     '
     ParentColor = False
-    ParentFont = False
   end
   object LabelPIR: TLabel
-    Left = 240
-    Height = 18
-    Top = 352
-    Width = 52
-    Caption = 'LabelPIR'
-    Font.Color = clGreen
+    Left = 239
+    Height = 17
+    Top = 417
+    Width = 15
+    Caption = '     '
     ParentColor = False
-    ParentFont = False
   end
   object Label10: TLabel
-    Left = 240
-    Height = 18
-    Top = 336
-    Width = 23
+    Left = 239
+    Height = 17
+    Top = 401
+    Width = 25
     Caption = 'PI R'
     ParentColor = False
   end
   object Label11: TLabel
-    Left = 136
-    Height = 18
-    Top = 295
-    Width = 40
+    Left = 135
+    Height = 17
+    Top = 360
+    Width = 46
     Caption = 'Center'
     ParentColor = False
   end
   object LabelCenter: TLabel
-    Left = 136
-    Height = 18
-    Top = 312
+    Left = 135
+    Height = 17
+    Top = 377
+    Width = 15
+    Caption = '     '
+    ParentColor = False
+  end
+  object FocusPos: TEdit
+    Left = 120
+    Height = 27
+    Top = 8
+    Width = 80
+    TabOrder = 2
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 17
+    Top = 12
+    Width = 100
+    Caption = 'Focus position'
+    ParentColor = False
+  end
+  object GetPos: TButton
+    Left = 209
+    Height = 25
+    Top = 8
+    Width = 99
+    Caption = 'Get current'
+    OnClick = GetPosClick
+    TabOrder = 3
+  end
+  object HalfWidth: TEdit
+    Left = 120
+    Height = 27
+    Top = 40
+    Width = 80
+    TabOrder = 4
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 17
+    Top = 46
     Width = 72
-    Caption = 'LabelCenter'
+    Caption = 'Half width'
+    ParentColor = False
+  end
+  object Nsteps: TEdit
+    Left = 144
+    Height = 27
+    Top = 72
+    Width = 56
+    TabOrder = 5
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 17
+    Top = 76
+    Width = 114
+    Caption = 'Number of steps'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 239
+    Height = 17
+    Top = 328
+    Width = 12
+    Caption = '    '
+    ParentColor = False
+  end
+  object TrackBar1: TTrackBar
+    Left = 80
+    Height = 46
+    Top = 312
+    Width = 88
+    OnChange = TrackBar1Change
+    PageSize = 1
+    Position = 0
+    TabOrder = 6
+  end
+  object BtnSave: TButton
+    Left = 234
+    Height = 25
+    Top = 458
+    Width = 75
+    Caption = 'Save'
+    OnClick = BtnSaveClick
+    TabOrder = 7
+  end
+  object Label9: TLabel
+    Left = 42
+    Height = 17
+    Top = 328
+    Width = 18
+    Caption = 'Fit'
+    ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 176
+    Height = 17
+    Top = 328
+    Width = 54
+    Caption = 'Quality:'
     ParentColor = False
   end
   object FitSourceL: TListChartSource
-    left = 96
-    top = 112
+    left = 95
+    top = 136
   end
   object FitSourceR: TListChartSource
-    left = 96
-    top = 184
+    left = 95
+    top = 208
   end
   object PtSourceL: TListChartSource
-    left = 221
-    top = 112
+    left = 220
+    top = 136
   end
   object PtSourceR: TListChartSource
-    left = 221
-    top = 184
+    left = 220
+    top = 208
   end
 end

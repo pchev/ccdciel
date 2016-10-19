@@ -43,6 +43,8 @@ type
   TAutofocusMode=(afVcurve,afIterative,afNone);
   TAutofocusVcurveStep=(vcsNearL,vcsNearR,vcsFocusL,vcsFocusR,vcsCheck);
 
+  TBpm=array[1..1000]of array[1..2] of integer;
+
   TNumRange = record
                min,max,step: double;
                class operator =(a,b : TNumRange) : Boolean;
@@ -245,10 +247,13 @@ var
   AutofocusNearHFD,AutofocusStartHFD: double;
   AutofocusMinExposure,AutofocusMaxExposure,AutofocusMinIntensity,AutofocusMaxIntensity:double;
   AutofocusMoveDir: boolean;
-  PosStartL,PosStartR,PosNearL,PosNearR,PosFocus,AutofocusVcNum:integer;
+  PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;
+  AutofocusVcDir: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
   AutofocusVcStep:TAutofocusVcurveStep;
+  bpm: TBpm;
+  bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
 
 implementation
 

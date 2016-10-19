@@ -37,8 +37,6 @@ object f_capture: Tf_capture
         Hint = 'Exposure time in secondes'
         Top = 1
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
         ItemHeight = 0
         ItemIndex = 5
         Items.Strings = (
@@ -58,7 +56,6 @@ object f_capture: Tf_capture
           '300'
           '600'
         )
-        ParentFont = False
         TabOrder = 0
         Text = '1'
       end
@@ -86,14 +83,11 @@ object f_capture: Tf_capture
         Hint = 'Camera binning'
         Top = 1
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
           '1x1'
         )
-        ParentFont = False
         TabOrder = 0
         Text = '1x1'
       end
@@ -121,9 +115,6 @@ object f_capture: Tf_capture
         Hint = 'Name of the files saved for this sequence'
         Top = 1
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
-        ParentFont = False
         TabOrder = 0
       end
       object Label3: TLabel
@@ -150,9 +141,6 @@ object f_capture: Tf_capture
         Hint = 'Number of exposure in this sequence'
         Top = 1
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
-        ParentFont = False
         TabOrder = 0
         Text = '1'
       end
@@ -186,8 +174,6 @@ object f_capture: Tf_capture
         Height = 29
         Top = 1
         Width = 90
-        Color = clBlack
-        Font.Color = clRed
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
@@ -196,7 +182,6 @@ object f_capture: Tf_capture
           'Dark'
           'Flat'
         )
-        ParentFont = False
         TabOrder = 0
         Text = 'Light'
       end
@@ -220,12 +205,8 @@ object f_capture: Tf_capture
       object DitherCount: TEdit
         Left = 120
         Height = 27
-        Hint = 'Number of exposure in this sequence'
         Top = 0
         Width = 40
-        Color = clBlack
-        Font.Color = clRed
-        ParentFont = False
         TabOrder = 1
         Text = '1'
       end

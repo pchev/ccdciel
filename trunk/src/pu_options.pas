@@ -45,6 +45,8 @@ type
     AutofocusMinExposure: TEdit;
     AutofocusMaxExposure: TEdit;
     AutofocusNearNum: TEdit;
+    BPMsigma: TEdit;
+    GroupBox10: TGroupBox;
     Label46: TLabel;
     Label47: TLabel;
     Label48: TLabel;
@@ -61,6 +63,9 @@ type
     AutofocusNotebook: TNotebook;
     Label59: TLabel;
     Label60: TLabel;
+    Label61: TLabel;
+    Label62: TLabel;
+    Label63: TLabel;
     MinutesPastMeridianMin: TEdit;
     PageNone: TPage;
     PageVcurve: TPage;
