@@ -44,9 +44,9 @@ object f_option: Tf_option
     Height = 397
     Top = 0
     Width = 433
-    ActivePage = TabSheet8
+    ActivePage = TabSheet3
     Align = alClient
-    TabIndex = 2
+    TabIndex = 3
     TabOrder = 1
     OnChange = PageControl1Change
     object TabSheet1: TTabSheet
@@ -599,7 +599,7 @@ object f_option: Tf_option
       object Autofocusmode: TRadioGroup
         Left = 8
         Height = 53
-        Top = 107
+        Top = 96
         Width = 400
         AutoFill = True
         Caption = 'Autofocus methode'
@@ -609,12 +609,13 @@ object f_option: Tf_option
         ChildSizing.ShrinkHorizontal = crsScaleChilds
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 3
+        ChildSizing.ControlsPerLine = 4
         ClientHeight = 34
         ClientWidth = 396
-        Columns = 3
+        Columns = 4
         Items.Strings = (
           'V curve'
+          'Mean'
           'Iterative'
           'None'
         )
@@ -623,27 +624,12 @@ object f_option: Tf_option
       end
       object PanelAutofocus: TPanel
         Left = 8
-        Height = 200
-        Top = 162
+        Height = 216
+        Top = 152
         Width = 400
-        ClientHeight = 200
+        ClientHeight = 216
         ClientWidth = 400
         TabOrder = 2
-        object AutofocusNearHFD: TEdit
-          Left = 212
-          Height = 27
-          Top = 96
-          Width = 60
-          TabOrder = 0
-        end
-        object Label48: TLabel
-          Left = 8
-          Height = 17
-          Top = 100
-          Width = 74
-          Caption = 'Near focus'
-          ParentColor = False
-        end
         object Label49: TLabel
           Left = 8
           Height = 17
@@ -652,130 +638,54 @@ object f_option: Tf_option
           Caption = 'Exposure time'
           ParentColor = False
         end
-        object Label50: TLabel
-          Left = 174
-          Height = 17
-          Top = 4
-          Width = 30
-          Caption = 'Min.'
-          ParentColor = False
-        end
         object Label51: TLabel
-          Left = 278
+          Left = 280
           Height = 17
           Top = 4
-          Width = 33
-          Caption = 'Max.'
+          Width = 56
+          Caption = 'seconds'
           ParentColor = False
         end
-        object AutofocusMinExposure: TEdit
+        object AutofocusExposure: TEdit
           Left = 212
           Height = 27
           Top = 0
           Width = 60
-          TabOrder = 1
-        end
-        object AutofocusMaxExposure: TEdit
-          Left = 320
-          Height = 27
-          Top = 0
-          Width = 60
-          TabOrder = 2
-        end
-        object Label52: TLabel
-          Left = 8
-          Height = 17
-          Top = 36
-          Width = 137
-          Caption = 'Target star intensity'
-          ParentColor = False
-        end
-        object Label53: TLabel
-          Left = 174
-          Height = 17
-          Top = 36
-          Width = 30
-          Caption = 'Min.'
-          ParentColor = False
-        end
-        object AutofocusMinIntensity: TEdit
-          Left = 212
-          Height = 27
-          Top = 32
-          Width = 60
-          TabOrder = 3
-        end
-        object Label54: TLabel
-          Left = 278
-          Height = 17
-          Top = 36
-          Width = 33
-          Caption = 'Max.'
-          ParentColor = False
-        end
-        object AutofocusMaxIntensity: TEdit
-          Left = 320
-          Height = 27
-          Top = 32
-          Width = 60
-          TabOrder = 4
-        end
-        object Label56: TLabel
-          Left = 174
-          Height = 17
-          Top = 100
-          Width = 30
-          Caption = 'HFD'
-          ParentColor = False
-        end
-        object Label57: TLabel
-          Left = 278
-          Height = 17
-          Top = 100
-          Width = 38
-          Caption = 'n.exp'
-          ParentColor = False
-        end
-        object AutofocusNearNum: TEdit
-          Left = 320
-          Height = 27
-          Top = 96
-          Width = 60
-          TabOrder = 5
+          TabOrder = 0
         end
         object Label58: TLabel
           Left = 8
           Height = 17
-          Top = 68
+          Top = 60
           Width = 103
           Caption = 'Move direction'
           ParentColor = False
         end
         object AutofocusMoveDirIn: TRadioButton
-          Left = 174
+          Left = 212
           Height = 24
-          Top = 64
+          Top = 58
           Width = 39
           Caption = 'In'
           Checked = True
-          TabOrder = 7
+          TabOrder = 2
           TabStop = True
         end
         object AutofocusMoveDirOut: TRadioButton
-          Left = 240
+          Left = 280
           Height = 24
-          Top = 64
+          Top = 58
           Width = 53
           Caption = 'Out'
-          TabOrder = 6
+          TabOrder = 1
         end
         object AutofocusNotebook: TNotebook
           Left = 0
-          Height = 60
-          Top = 132
+          Height = 66
+          Top = 138
           Width = 392
-          PageIndex = 0
-          TabOrder = 8
+          PageIndex = 1
+          TabOrder = 3
           TabStop = True
           object PageVcurve: TPage
             object Label61: TLabel
@@ -789,19 +699,51 @@ object f_option: Tf_option
               WordWrap = True
             end
           end
+          object PageMean: TPage
+            object Label64: TLabel
+              Left = 8
+              Height = 17
+              Top = 6
+              Width = 148
+              Caption = 'Number of data point'
+              ParentColor = False
+            end
+            object AutofocusMeanNumPoint: TEdit
+              Left = 212
+              Height = 27
+              Top = 2
+              Width = 60
+              TabOrder = 0
+            end
+            object AutofocusMeanMovement: TEdit
+              Left = 212
+              Height = 27
+              Top = 34
+              Width = 60
+              TabOrder = 1
+            end
+            object Label65: TLabel
+              Left = 8
+              Height = 17
+              Top = 38
+              Width = 184
+              Caption = 'Movement between points'
+              ParentColor = False
+            end
+          end
           object PageIterative: TPage
             object Label46: TLabel
               Left = 8
               Height = 17
-              Top = 4
-              Width = 134
-              Caption = 'Focus speed (steps)'
+              Top = 6
+              Width = 124
+              Caption = 'Movement (steps)'
               ParentColor = False
             end
             object Label47: TLabel
               Left = 174
               Height = 17
-              Top = 4
+              Top = 6
               Width = 30
               Caption = 'Min.'
               ParentColor = False
@@ -809,28 +751,106 @@ object f_option: Tf_option
             object AutofocusMinSpeed: TEdit
               Left = 212
               Height = 27
-              Top = 0
+              Top = 2
               Width = 60
               TabOrder = 0
             end
             object Label55: TLabel
               Left = 278
               Height = 17
-              Top = 4
+              Top = 6
               Width = 33
               Caption = 'Max.'
               ParentColor = False
             end
             object AutofocusMaxSpeed: TEdit
-              Left = 320
+              Left = 325
               Height = 27
-              Top = 0
+              Top = 2
               Width = 60
               TabOrder = 1
             end
           end
           object PageNone: TPage
           end
+        end
+        object PanelNearFocus: TPanel
+          Left = 0
+          Height = 31
+          Top = 110
+          Width = 392
+          BevelOuter = bvNone
+          ClientHeight = 31
+          ClientWidth = 392
+          TabOrder = 4
+          object Label48: TLabel
+            Left = 8
+            Height = 17
+            Top = 4
+            Width = 74
+            Caption = 'Near focus'
+            ParentColor = False
+          end
+          object Label56: TLabel
+            Left = 175
+            Height = 17
+            Top = 4
+            Width = 30
+            Caption = 'HFD'
+            ParentColor = False
+          end
+          object AutofocusNearHFD: TEdit
+            Left = 212
+            Height = 27
+            Top = 0
+            Width = 60
+            TabOrder = 0
+          end
+          object Label57: TLabel
+            Left = 280
+            Height = 17
+            Top = 4
+            Width = 38
+            Caption = 'n.exp'
+            ParentColor = False
+          end
+          object AutofocusNearNum: TEdit
+            Left = 324
+            Height = 27
+            Top = 0
+            Width = 60
+            TabOrder = 1
+          end
+        end
+        object Label50: TLabel
+          Left = 8
+          Height = 17
+          Top = 32
+          Width = 54
+          Caption = 'Binning'
+          ParentColor = False
+        end
+        object AutofocusBinning: TEdit
+          Left = 212
+          Height = 27
+          Top = 28
+          Width = 60
+          TabOrder = 5
+        end
+        object AutofocusBacklash: TEdit
+          Left = 212
+          Height = 27
+          Top = 82
+          Width = 61
+          TabOrder = 6
+        end
+        object Label52: TLabel
+          Left = 10
+          Height = 17
+          Top = 87
+          Width = 61
+          Caption = 'Backlash'
+          ParentColor = False
         end
       end
     end
@@ -1049,8 +1069,8 @@ object f_option: Tf_option
               Top = 141
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 35
-              ClientWidth = 387
+              ClientHeight = 31
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -1618,8 +1638,8 @@ object f_option: Tf_option
               Height = 80
               Top = 32
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

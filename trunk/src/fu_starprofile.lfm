@@ -1,10 +1,10 @@
 object f_starprofile: Tf_starprofile
   Left = 0
-  Height = 371
+  Height = 378
   Top = 0
   Width = 176
   AutoSize = True
-  ClientHeight = 371
+  ClientHeight = 378
   ClientWidth = 176
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
@@ -26,13 +26,13 @@ object f_starprofile: Tf_starprofile
   end
   object Panel1: TPanel
     Left = 0
-    Height = 351
+    Height = 358
     Top = 20
     Width = 176
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 351
+    ClientHeight = 358
     ClientWidth = 176
     TabOrder = 1
     object Panel2: TPanel
@@ -83,10 +83,10 @@ object f_starprofile: Tf_starprofile
       Left = 0
       Height = 59
       Top = 120
-      Width = 170
+      Width = 172
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 59
-      ClientWidth = 170
+      ClientWidth = 172
       TabOrder = 2
       object LabelHFD: TLabel
         Left = 1
@@ -108,15 +108,62 @@ object f_starprofile: Tf_starprofile
         Caption = 'HFD:'
         ParentColor = False
       end
+      object Panel7: TPanel
+        Left = 1
+        Height = 50
+        Top = 0
+        Width = 170
+        ClientHeight = 50
+        ClientWidth = 170
+        TabOrder = 0
+        Visible = False
+        object VcChart: TChart
+          Left = 1
+          Height = 48
+          Top = 1
+          Width = 168
+          AntialiasingMode = amOn
+          AxisList = <          
+            item
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+            end          
+            item
+              Intervals.Count = 15
+              Visible = False
+              Alignment = calBottom
+              Minors = <>
+            end>
+          Extent.UseYMin = True
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+          object VcChartL: TFitSeries
+            FitEquation = feLinear
+            ParamCount = 2
+            Source = FitSourceL
+          end
+          object VcChartR: TFitSeries
+            FitEquation = feLinear
+            ParamCount = 2
+            Source = FitSourceR
+          end
+        end
+      end
     end
     object Panel6: TPanel
       Left = 0
       Height = 59
       Top = 179
-      Width = 170
+      Width = 172
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 59
-      ClientWidth = 170
+      ClientWidth = 172
       TabOrder = 5
       object LabelFWHM: TLabel
         Left = 1
@@ -143,9 +190,9 @@ object f_starprofile: Tf_starprofile
       Left = 0
       Height = 59
       Top = 238
-      Width = 170
+      Width = 172
       ClientHeight = 59
-      ClientWidth = 170
+      ClientWidth = 172
       TabOrder = 3
       object Label2: TLabel
         Left = 0
@@ -172,7 +219,7 @@ object f_starprofile: Tf_starprofile
       Left = 0
       Height = 24
       Top = 297
-      Width = 170
+      Width = 172
       Caption = 'Manual focus aid'
       OnChange = ChkFocusChange
       TabOrder = 4
@@ -181,10 +228,18 @@ object f_starprofile: Tf_starprofile
       Left = 0
       Height = 24
       Top = 321
-      Width = 170
+      Width = 172
       Caption = 'Autofocus'
       OnChange = ChkAutofocusChange
       TabOrder = 6
     end
+  end
+  object FitSourceL: TListChartSource
+    left = 95
+    top = 136
+  end
+  object FitSourceR: TListChartSource
+    left = 95
+    top = 208
   end
 end

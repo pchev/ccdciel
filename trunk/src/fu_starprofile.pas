@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_modelisation, u_global, u_utils, math, UScaleDPI, fu_preview, fu_focuser,
-  Graphics, Classes, SysUtils, FPImage, cu_fits,
-  FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+uses  u_modelisation, u_global, u_utils, math, UScaleDPI, fu_preview,
+  fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, FileUtil, TAGraph,
+  TAFuncSeries, TASeries, TASources, Forms, Controls, StdCtrls, ExtCtrls;
 
 const maxhist=50;
 
@@ -38,6 +38,8 @@ type
   Tf_starprofile = class(TFrame)
     ChkAutofocus: TCheckBox;
     ChkFocus: TCheckBox;
+    FitSourceL: TListChartSource;
+    FitSourceR: TListChartSource;
     graph: TImage;
     Label1: TLabel;
     Label2: TLabel;
@@ -47,12 +49,16 @@ type
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
+    Panel7: TPanel;
     profile: TImage;
     LabelHFD: TLabel;
     LabelImax: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
     StaticText1: TStaticText;
+    VcChart: TChart;
+    VcChartL: TFitSeries;
+    VcChartR: TFitSeries;
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -74,6 +80,9 @@ type
     Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd:double;
     curhist,FfocuserSpeed,FnumHfd: integer;
     focuserdirection,terminated: boolean;
+    ahfd: array of double;
+    aminhfd:double;
+    afmpos,aminpos:integer;
     procedure msg(txt:string);
     function  getRunning:boolean;
     procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
@@ -83,6 +92,7 @@ type
     procedure PlotHistory;
     procedure ClearGraph;
     procedure doAutofocusVcurve;
+    procedure doAutofocusMean;
     procedure doAutofocusIterative;
   public
     { public declarations }
@@ -167,12 +177,14 @@ begin
  FfocuserSpeed:=AutofocusMaxSpeed;
  focuser.FocusSpeed:=FfocuserSpeed;
  focuserdirection:=AutofocusMoveDir;
+ AutofocusMeanStep:=afmStart;
  if focuserdirection=FocusDirOut then
     AutofocusVcStep:=vcsNearL
   else
     AutofocusVcStep:=vcsNearR;
  case AutofocusMode of
    afVcurve   : msg('Autofocus start Vcurve');
+   afMean     : msg('Autofocus start Mean position');
    afIterative: msg('Autofocus start Iterative focus');
  end;
 end;
@@ -541,35 +553,24 @@ begin
 end;
 
 procedure Tf_starprofile.Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
-var bg,exp,e: double;
+var bg: double;
   xg,yg: double;
   xm,ym: integer;
 begin
  if (x<0)or(y<0)or(s<0) then exit;
   FindBrightestPixel(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax);
   if FValMax=0 then begin
-    if Fpreview.Exposure=AutofocusMaxExposure
+    if Fpreview.Exposure=AutofocusExposure
        then begin
          ChkAutofocus.Checked:=false;
          exit;
        end
        else begin
-          Fpreview.Exposure:=AutofocusMaxExposure;
+          Fpreview.Exposure:=AutofocusExposure;
           exit;
        end;
   end;
   GetHFD(img,c,vmin,xm,ym,s,xg,yg,Fhfd,bg,FValMax);
-  // adjust exposure time
-  exp:=-1;
-  e:=Fpreview.Exposure;
-  if (FValMax<AutofocusMinIntensity)and(e<AutofocusMaxExposure) then
-    exp:=min(2*Fpreview.Exposure,AutofocusMaxExposure)
-  else if (FValMax>AutofocusMaxIntensity)and(e>AutofocusMinExposure) then
-    exp:=max(Fpreview.Exposure/2,AutofocusMinExposure);
-  if (exp>0)and(not terminated) then begin
-    Fpreview.Exposure:=exp;
-    exit;
-  end;
   // process this measurement
   if (Fhfd>0) then begin
     if (Fhfd<(AutofocusNearHFD+1))and(not terminated) then begin
@@ -600,6 +601,7 @@ begin
     // do focus
     case AutofocusMode of
       afVcurve   : doAutofocusVcurve;
+      afMean     : doAutofocusMean;
       afIterative: doAutofocusIterative;
     end;
   end;
@@ -632,7 +634,7 @@ begin
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
-              AutofocusVcStep:=vcsCheck;
+              terminated:=true;
               wait(1);
              end;
    vcsFocusR:begin
@@ -640,25 +642,80 @@ begin
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
-              AutofocusVcStep:=vcsCheck;
-              wait(1);
-             end;
-   vcsCheck: begin;
               terminated:=true;
+              wait(1);
              end;
  end;
 end;
 
+procedure Tf_starprofile.doAutofocusMean;
+var i,k,skip,step: integer;
+    VcpiL,VcpiR: double;
+begin
+  case AutofocusMeanStep of
+    afmStart: begin
+              if not odd(AutofocusMeanNumPoint) then
+                inc(AutofocusMeanNumPoint);
+              if AutofocusMeanNumPoint<5 then AutofocusMeanNumPoint:=5;
+              SetLength(ahfd,AutofocusMeanNumPoint);
+              // set initial position
+              k:=AutofocusMeanNumPoint div 2;
+              focuser.FocusSpeed:=AutofocusMeanMovement*k;
+              if AutofocusMoveDir=FocusDirOut then
+                onFocusOUT(self)
+              else
+                onFocusIN(self);
+              Wait(1);
+              afmpos:=-1;
+              aminhfd:=9999;
+              focuser.FocusSpeed:=AutofocusMeanMovement;
+              AutofocusMeanStep:=afmMeasure;
+              end;
+    afmMeasure: begin
+              inc(afmpos);
+              ahfd[afmpos]:=Fhfd;
+              if Fhfd<aminhfd then begin
+                aminhfd:=Fhfd;
+                aminpos:=afmpos;
+              end;
+              if AutofocusMoveDir=FocusDirOut then
+                onFocusIN(self)
+              else
+                onFocusOUT(self);
+              wait(1);
+              if afmpos=(AutofocusMeanNumPoint-1) then AutofocusMeanStep:=afmEnd;
+              end;
+    afmEnd: begin
+              // compute focus
+              k:=aminpos;
+              FitSourceL.DataPoints.Clear;
+              FitSourceR.DataPoints.Clear;
+              for i:=1 to k do
+                FitSourceL.Add(ahfd[i-1],i);
+              for i:=k+2 to AutofocusMeanNumPoint do
+                FitSourceR.Add(ahfd[i-1],i);
+              VcChartL.ExecFit;
+              VcChartR.ExecFit;
+              VcpiL:=VcChartL.Param[0];
+              VcpiR:=VcChartR.Param[0];
+              step:=round(AutofocusMeanMovement*(VcpiL+VcpiR)/2);
+              focuser.FocusSpeed:=step;
+              if AutofocusMoveDir=FocusDirOut then
+                onFocusOUT(self)
+              else
+                onFocusIN(self);
+              wait(1);
+              focuser.FocusSpeed:=AutofocusMeanMovement;
+              terminated:=true;
+              end;
+  end;
+end;
+
 procedure Tf_starprofile.doAutofocusIterative;
 begin
-  if Fhfd>AutofocusNearHFD
-     then begin
-       FfocuserSpeed:=AutofocusMaxSpeed;
-       focuser.FocusSpeed:=FfocuserSpeed;
-     end;
   if Fhfd>FLastHfd then begin  // reverse direction
     if FfocuserSpeed=AutofocusMinSpeed  then begin
-      // go back one step and terminate
+      // we reach focus, go back one step and terminate
       focuserdirection:=not focuserdirection;
       terminated:=true;
     end else begin
