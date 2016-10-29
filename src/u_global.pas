@@ -40,8 +40,9 @@ type
   TPlanetariumType=(CDC, SAMP);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
-  TAutofocusMode=(afVcurve,afIterative,afNone);
-  TAutofocusVcurveStep=(vcsNearL,vcsNearR,vcsFocusL,vcsFocusR,vcsCheck);
+  TAutofocusMode=(afVcurve,afMean,afIterative,afNone);
+  TAutofocusVcurveStep=(vcsNearL,vcsNearR,vcsFocusL,vcsFocusR);
+  TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
 
   TBpm=array[1..1000]of array[1..2] of integer;
 
@@ -243,15 +244,17 @@ var
   BayerMode:TBayerMode;
   MaxVideoPreviewRate: integer;
   AutofocusMode:TAutofocusMode;
-  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,AutofocusStartPosition: integer;
-  AutofocusNearHFD,AutofocusStartHFD: double;
-  AutofocusMinExposure,AutofocusMaxExposure,AutofocusMinIntensity,AutofocusMaxIntensity:double;
+  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,AutofocusBacklash,AutofocusBinning: integer;
+  AutofocusNearHFD: double;
+  AutofocusExposure:double;
   AutofocusMoveDir: boolean;
   PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;
   AutofocusVcDir: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
   AutofocusVcStep:TAutofocusVcurveStep;
+  AutofocusMeanMovement,AutofocusMeanNumPoint: integer;
+  AutofocusMeanStep:TAutofocusMeanStep;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
 

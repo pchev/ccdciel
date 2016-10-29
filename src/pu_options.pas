@@ -34,18 +34,19 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
-    AutofocusMaxIntensity: TEdit;
-    AutofocusMinIntensity: TEdit;
+    AutofocusMeanNumPoint: TEdit;
+    AutofocusMeanMovement: TEdit;
     ButtonDir: TButton;
     BayerMode: TComboBox;
     Autofocusmode: TRadioGroup;
     AutofocusMinSpeed: TEdit;
     AutofocusMaxSpeed: TEdit;
     AutofocusNearHFD: TEdit;
-    AutofocusMinExposure: TEdit;
-    AutofocusMaxExposure: TEdit;
+    AutofocusExposure: TEdit;
     AutofocusNearNum: TEdit;
     BPMsigma: TEdit;
+    AutofocusBinning: TEdit;
+    AutofocusBacklash: TEdit;
     GroupBox10: TGroupBox;
     Label46: TLabel;
     Label47: TLabel;
@@ -54,8 +55,6 @@ type
     Label50: TLabel;
     Label51: TLabel;
     Label52: TLabel;
-    Label53: TLabel;
-    Label54: TLabel;
     Label55: TLabel;
     Label56: TLabel;
     Label57: TLabel;
@@ -66,10 +65,14 @@ type
     Label61: TLabel;
     Label62: TLabel;
     Label63: TLabel;
+    Label64: TLabel;
+    Label65: TLabel;
     MinutesPastMeridianMin: TEdit;
+    PageMean: TPage;
     PageNone: TPage;
     PageVcurve: TPage;
     PageIterative: TPage;
+    PanelNearFocus: TPanel;
     PanelAutofocus: TPanel;
     AutofocusMoveDirIn: TRadioButton;
     AutofocusMoveDirOut: TRadioButton;
@@ -379,7 +382,8 @@ end;
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
-  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<2);
+  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
+  PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
 end;
 
 function Tf_option.GetResolver: integer;

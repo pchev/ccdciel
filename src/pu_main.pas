@@ -324,6 +324,7 @@ type
     LogFile,DeviceLogFile : UTF8String;
     MsgLog,MsgDeviceLog: Textfile;
     AccelList: array[0..MaxMenulevel] of string;
+    SaveAutofocusBinning: string;
     TerminateVcurve: boolean;
     Procedure GetAppDir;
     procedure ScaleMainForm;
@@ -1638,18 +1639,17 @@ begin
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
-  AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',2));
+  AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
   AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
-  AutofocusMinExposure:=config.GetValue('/StarAnalysis/AutofocusMinExposure',1.0);
-  AutofocusMaxExposure:=config.GetValue('/StarAnalysis/AutofocusMaxExposure',5.0);
-  AutofocusMinIntensity:=config.GetValue('/StarAnalysis/AutofocusMinIntensity',100.0);
-  AutofocusMaxIntensity:=config.GetValue('/StarAnalysis/AutofocusMaxIntensity',1000.0);
+  AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
+  AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
+  AutofocusBacklash:=config.GetValue('/StarAnalysis/AutofocusBacklash',0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
-  AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
-  AutofocusStartPosition:=config.GetValue('/StarAnalysis/AutofocusStartPosition',0);
+  AutofocusMeanNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
+  AutofocusMeanMovement:=config.GetValue('/StarAnalysis/AutofocusMeanMovement',100);
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
@@ -2435,7 +2435,7 @@ begin
  // find a bright star
  focuser.Position:=VcCenterpos;
  wait(1);
- bin:=f_preview.Bin;
+ bin:=AutofocusBinning;
  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
  f_preview.ControlExposure(f_preview.Exposure,bin,bin);
  x:=fits.HeaderInfo.naxis1 div 2;
@@ -2444,10 +2444,6 @@ begin
  f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
  if f_starprofile.HFD<0 then begin
    NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the preview binning.');
-   exit;
- end;
- if f_starprofile.ValMax>AutofocusMaxIntensity then begin
-   NewMessage('There is a risk of saturation, please decrease the preview exposure time or select an area with a fainter star.');
    exit;
  end;
  // focus frame
@@ -2809,16 +2805,15 @@ begin
    f_option.AutofocusMinSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed));
    f_option.AutofocusMaxSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed));
    f_option.AutofocusNearHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD));
-   f_option.AutofocusMinExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinExposure',AutofocusMinExposure));
-   f_option.AutofocusMaxExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMaxExposure',AutofocusMaxExposure));
-   f_option.AutofocusMinIntensity.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinIntensity',AutofocusMinIntensity));
-   f_option.AutofocusMaxIntensity.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMaxIntensity',AutofocusMaxIntensity));
+   f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
+   f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
+   f_option.AutofocusBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBacklash',AutofocusBacklash));
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
    f_option.AutofocusNearNum.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum));
-//   f_option.AutofocusStartHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD));
-//   f_option.AutofocusStartPosition.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusStartPosition',AutofocusStartPosition));
+   f_option.AutofocusMeanNumPoint.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',AutofocusMeanNumPoint));
+   f_option.AutofocusMeanMovement.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMeanMovement',AutofocusMeanMovement));
    f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
    f_option.Focale.Text:=config.GetValue('/Astrometry/FocaleLength','');
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
@@ -2886,14 +2881,13 @@ begin
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',StrToIntDef(f_option.AutofocusMinSpeed.Text,AutofocusMinSpeed));
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',StrToIntDef(f_option.AutofocusMaxSpeed.Text,AutofocusMaxSpeed));
      config.SetValue('/StarAnalysis/AutofocusNearHFD',StrToFloatDef(f_option.AutofocusNearHFD.Text,AutofocusNearHFD));
-     config.SetValue('/StarAnalysis/AutofocusMinExposure',StrToFloatDef(f_option.AutofocusMinExposure.Text,AutofocusMinExposure));
-     config.SetValue('/StarAnalysis/AutofocusMaxExposure',StrToFloatDef(f_option.AutofocusMaxExposure.Text,AutofocusMaxExposure));
-     config.SetValue('/StarAnalysis/AutofocusMinIntensity',StrToFloatDef(f_option.AutofocusMinIntensity.Text,AutofocusMinIntensity));
-     config.SetValue('/StarAnalysis/AutofocusMaxIntensity',StrToFloatDef(f_option.AutofocusMaxIntensity.Text,AutofocusMaxIntensity));
+     config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
+     config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
+     config.SetValue('/StarAnalysis/AutofocusBacklash',StrToIntDef(f_option.AutofocusBacklash.Text,AutofocusBacklash));
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',StrToIntDef(f_option.AutofocusNearNum.Text,AutofocusNearNum));
- //    config.SetValue('/StarAnalysis/AutofocusStartHFD',StrToFloatDef(f_option.AutofocusStartHFD.Text,AutofocusStartHFD));
- //    config.SetValue('/StarAnalysis/AutofocusStartPosition',StrToIntDef(f_option.AutofocusStartPosition.Text,AutofocusStartPosition));
+     config.SetValue('/StarAnalysis/AutofocusMeanNumPoint',StrToIntDef(f_option.AutofocusMeanNumPoint.Text,AutofocusMeanNumPoint));
+     config.SetValue('/StarAnalysis/AutofocusMeanMovement',StrToIntDef(f_option.AutofocusMeanMovement.Text,AutofocusMeanMovement));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
@@ -3959,7 +3953,6 @@ end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
-    e:double;
 begin
   if (AutofocusMode=afNone) or f_capture.Running then begin
     f_starprofile.ChkAutofocus.Checked:=false;
@@ -3971,25 +3964,15 @@ begin
     exit;
   end;
   // start a new exposure as the current frame is probably not a preview
-  e:=f_preview.Exposure;
-  if e<AutofocusMinExposure then e:=AutofocusMinExposure;
-  if e>AutofocusMaxExposure then e:=AutofocusMaxExposure;
-  f_preview.Exposure:=e;
+  f_preview.Exposure:=AutofocusExposure;
+  SaveAutofocusBinning:=f_preview.Binning.Text;
+  f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-  f_preview.ControlExposure(e,1,1);
+  f_preview.ControlExposure(AutofocusExposure,AutofocusBinning,AutofocusBinning);
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
   f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
-  if not f_starprofile.FindStar then begin // cannot find a star on current image, take new preview with max exposure
-    NewMessage('No suitable star found, try with max exposure.');
-    f_preview.ExpTime.Text:=FormatFloat(f1,AutofocusMaxExposure);
-    f_preview.ControlExposure(AutofocusMaxExposure,1,1);
-    x:=fits.HeaderInfo.naxis1 div 2;
-    y:=fits.HeaderInfo.naxis2 div 2;
-    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-    f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
-  end;
   if f_starprofile.FindStar then begin  // star selected OK
      s:=Focuswindow;
      s2:=s div 2;
@@ -4009,7 +3992,7 @@ begin
      end;
      NewMessage('AutoFocus started');
   end
-  else begin                             // Still no star, manual action is required
+  else begin                             // no star, manual action is required
     f_starprofile.ChkAutofocus.Checked:=false;
     NewMessage('Autofocus cannot find a star!'+crlf+'Please adjust your parameters');
   end;
@@ -4022,6 +4005,7 @@ begin
    camera.ResetFrame;
    f_preview.Running:=false;
    f_preview.Loop:=false;
+   f_preview.Binning.Text:=SaveAutofocusBinning;
    camera.AbortExposure;
    f_visu.Zoom:=SaveFocusZoom;
    ImgZoom:=f_visu.Zoom;
