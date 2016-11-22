@@ -9,7 +9,7 @@ object f_vcurve: Tf_vcurve
   ClientHeight = 500
   ClientWidth = 320
   FormStyle = fsStayOnTop
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.2.0'
   Visible = False
   object BtnLearnVcurve: TButton
     Left = 209
@@ -59,7 +59,7 @@ object f_vcurve: Tf_vcurve
       LinePen.Color = clNone
       LinePen.Style = psClear
       Pointer.Brush.Style = bsClear
-      Pointer.OverrideColor = []
+      Pointer.OverrideColor = [ocPen]
       Pointer.Style = psCircle
       ShowPoints = True
       Source = PtSourceL
@@ -68,7 +68,7 @@ object f_vcurve: Tf_vcurve
       LinePen.Color = clNone
       LinePen.Style = psClear
       Pointer.Brush.Style = bsClear
-      Pointer.OverrideColor = []
+      Pointer.OverrideColor = [ocPen]
       Pointer.Style = psCircle
       ShowPoints = True
       Source = PtSourceR
@@ -76,7 +76,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSL: TLabel
     Left = 42
-    Height = 17
+    Height = 18
     Top = 377
     Width = 15
     Caption = '     '
@@ -84,7 +84,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSR: TLabel
     Left = 239
-    Height = 17
+    Height = 18
     Top = 377
     Width = 15
     Caption = '     '
@@ -92,7 +92,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPID: TLabel
     Left = 135
-    Height = 17
+    Height = 18
     Top = 418
     Width = 15
     Caption = '     '
@@ -100,39 +100,39 @@ object f_vcurve: Tf_vcurve
   end
   object Label4: TLabel
     Left = 42
-    Height = 17
+    Height = 18
     Top = 360
-    Width = 49
+    Width = 43
     Caption = 'Slope L'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 135
-    Height = 17
+    Height = 18
     Top = 401
-    Width = 24
+    Width = 21
     Caption = 'PID'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 239
-    Height = 17
+    Height = 18
     Top = 360
-    Width = 50
+    Width = 44
     Caption = 'Slope R'
     ParentColor = False
   end
   object Label7: TLabel
     Left = 42
-    Height = 17
+    Height = 18
     Top = 401
-    Width = 24
+    Width = 22
     Caption = 'PI L'
     ParentColor = False
   end
   object LabelPIL: TLabel
     Left = 42
-    Height = 17
+    Height = 18
     Top = 418
     Width = 15
     Caption = '     '
@@ -140,7 +140,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPIR: TLabel
     Left = 239
-    Height = 17
+    Height = 18
     Top = 417
     Width = 15
     Caption = '     '
@@ -148,23 +148,23 @@ object f_vcurve: Tf_vcurve
   end
   object Label10: TLabel
     Left = 239
-    Height = 17
+    Height = 18
     Top = 401
-    Width = 25
+    Width = 23
     Caption = 'PI R'
     ParentColor = False
   end
   object Label11: TLabel
     Left = 135
-    Height = 17
+    Height = 18
     Top = 360
-    Width = 46
+    Width = 40
     Caption = 'Center'
     ParentColor = False
   end
   object LabelCenter: TLabel
     Left = 135
-    Height = 17
+    Height = 18
     Top = 377
     Width = 15
     Caption = '     '
@@ -172,16 +172,16 @@ object f_vcurve: Tf_vcurve
   end
   object FocusPos: TEdit
     Left = 120
-    Height = 27
+    Height = 24
     Top = 8
     Width = 80
     TabOrder = 2
   end
   object Label1: TLabel
     Left = 8
-    Height = 17
+    Height = 18
     Top = 12
-    Width = 100
+    Width = 87
     Caption = 'Focus position'
     ParentColor = False
   end
@@ -196,37 +196,37 @@ object f_vcurve: Tf_vcurve
   end
   object HalfWidth: TEdit
     Left = 120
-    Height = 27
+    Height = 24
     Top = 40
     Width = 80
     TabOrder = 4
   end
   object Label2: TLabel
     Left = 8
-    Height = 17
+    Height = 18
     Top = 46
-    Width = 72
+    Width = 61
     Caption = 'Half width'
     ParentColor = False
   end
   object Nsteps: TEdit
     Left = 144
-    Height = 27
+    Height = 24
     Top = 72
     Width = 56
     TabOrder = 5
   end
   object Label3: TLabel
     Left = 8
-    Height = 17
+    Height = 18
     Top = 76
-    Width = 114
+    Width = 100
     Caption = 'Number of steps'
     ParentColor = False
   end
   object Label8: TLabel
     Left = 239
-    Height = 17
+    Height = 18
     Top = 328
     Width = 12
     Caption = '    '
@@ -253,17 +253,17 @@ object f_vcurve: Tf_vcurve
   end
   object Label9: TLabel
     Left = 42
-    Height = 17
+    Height = 18
     Top = 328
-    Width = 18
+    Width = 15
     Caption = 'Fit'
     ParentColor = False
   end
   object Label12: TLabel
     Left = 176
-    Height = 17
+    Height = 18
     Top = 328
-    Width = 54
+    Width = 46
     Caption = 'Quality:'
     ParentColor = False
   end

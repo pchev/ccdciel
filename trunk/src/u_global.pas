@@ -46,6 +46,8 @@ type
 
   TBpm=array[1..1000]of array[1..2] of integer;
 
+  TDouble2 = array[1..2] of double;
+
   TNumRange = record
                min,max,step: double;
                class operator =(a,b : TNumRange) : Boolean;
