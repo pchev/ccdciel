@@ -4,7 +4,7 @@ unit pu_vcurve;
 
 interface
 
-uses fu_starprofile, fu_focuser, fu_preview, u_global, Classes, SysUtils,
+uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils,
   FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, Forms, Controls,
   Math, Graphics, Dialogs, StdCtrls, ComCtrls, TACustomSeries, TASeries;
 
@@ -128,44 +128,62 @@ end;
 end;
 
 Procedure Tf_vcurve.LoadCurve;
-var i: integer;
-  g:double;
+var i,nl,nr: integer;
+  g,gl,gr,bl,br,x:double;
+  pl,pr:array of TDouble2;
+  col: TColor;
 begin
 try
 if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
   TrackBar1.Max:=max(AutofocusVcSkipNum,round(1+AutofocusVcNum/4));
   TrackBar1.Position:=AutofocusVcSkipNum;
-  FitSourceL.DataPoints.Clear;
-  FitSourceR.DataPoints.Clear;
-  for i:=0 to PosFocus-AutofocusVcSkipNum do
-    FitSourceL.Add(AutofocusVc[i,2],AutofocusVc[i,1]);
-  for i:=PosFocus+AutofocusVcSkipNum to AutofocusVcNum do
-    FitSourceR.Add(AutofocusVc[i,2],AutofocusVc[i,1]);
-  VcChartL.ExecFit;
-  VcChartR.ExecFit;
-  AutofocusVcpiL:=VcChartL.Param[0];
-  AutofocusVcpiR:=VcChartR.Param[0];
+
+  nl:=PosFocus-AutofocusVcSkipNum+1;
+  SetLength(pl,nl);
+  nr:=AutofocusVcNum-(PosFocus+AutofocusVcSkipNum)+1;
+  SetLength(pr,nr);
+  for i:=0 to nl-1 do begin
+    pl[i,2]:=AutofocusVc[i,1];
+    pl[i,1]:=AutofocusVc[i,2];
+  end;
+  LeastSquares(pl,x,AutofocusVcpiL,gl);
+  for i:=0 to nr-1 do begin
+    pr[i,2]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,1];
+    pr[i,1]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,2];
+  end;
+  LeastSquares(pr,x,AutofocusVcpiR,gr);
   AutofocusVcPID:=abs(AutofocusVcpiL-AutofocusVcpiR);
-  if AutofocusVcDir then g:=VcChartR.GoodnessOfFit else g:=VcChartL.GoodnessOfFit;
+  if AutofocusVcDir then g:=gr*gr else g:=gl*gl;
   label8.Caption:=FormatFloat(f4,g);
+
+  for i:=0 to nl-1 do begin
+    pl[i,1]:=AutofocusVc[i,1];
+    pl[i,2]:=AutofocusVc[i,2];
+  end;
+  LeastSquares(pl,AutofocusVcSlopeL,bl,gl);
+  for i:=0 to nr-1 do begin
+    pr[i,1]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,1];
+    pr[i,2]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,2];
+  end;
+  LeastSquares(pr,AutofocusVcSlopeR,br,gr);
 
   FitSourceL.DataPoints.Clear;
   FitSourceR.DataPoints.Clear;
-  for i:=0 to PosFocus-AutofocusVcSkipNum do
-    FitSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
-  for i:=PosFocus+AutofocusVcSkipNum to AutofocusVcNum do
-    FitSourceR.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
-  VcChartL.ExecFit;
-  VcChartR.ExecFit;
-  AutofocusVcSlopeL:=VcChartL.Param[1];
-  AutofocusVcSlopeR:=VcChartR.Param[1];
+  FitSourceL.Add(AutofocusVc[0,1],AutofocusVc[0,1]*AutofocusVcSlopeL+bl);
+  FitSourceL.Add(AutofocusVcpiL,0);
+  FitSourceR.Add(AutofocusVcpiR,0);
+  FitSourceR.Add(AutofocusVc[AutofocusVcNum,1],AutofocusVc[AutofocusVcNum,1]*AutofocusVcSlopeR+br);
 
   PtSourceL.DataPoints.Clear;
   PtSourceR.DataPoints.Clear;
-  for i:=0 to PosFocus do
-    PtSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
-  for i:=PosFocus to AutofocusVcNum do
-    PtSourceR.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
+  for i:=0 to PosFocus do begin
+    if i<nl then col:=clLime  else col:=clRed;
+    PtSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
+  end;
+  for i:=PosFocus to AutofocusVcNum do begin
+    if i>=(PosFocus+AutofocusVcSkipNum) then col:=clLime else col:=clRed;
+    PtSourceR.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
+  end;
 
   LabelSL.Caption:=FormatFloat(f6,AutofocusVcSlopeL);
   LabelSR.Caption:=FormatFloat(f6,AutofocusVcSlopeR);

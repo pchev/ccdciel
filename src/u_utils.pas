@@ -86,6 +86,7 @@ procedure Fits2Screen(x,y: integer; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure ResetTrackBar(tb:TTrackBar);
+procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 
 implementation
 
@@ -1138,6 +1139,42 @@ begin
   tb.position:=0;
   tb.max:=maxint;
 end;
+
+procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
+// https://en.wikipedia.org/wiki/Simple_linear_regression
+// -> y = a*x + b
+var
+ X,Y,Sx,Sy,SumX,SumY,SumX2,SumY2,SumXY: double;
+ n, i: Integer;
+begin
+ n:=Length(data);
+ SumX:=0.0;
+ SumY:=0.0;
+ SumX2:=0.0;
+ SumY2:=0.0;
+ SumXY:=0.0;
+ for i:=0 to n-1 do begin
+   X:=data[i,1];
+   Y:=data[i,2];
+   SumX:=SumX+X;
+   SumY:=SumY+Y;
+   SumX2:=SumX2+X*X;
+   SumY2:=SumY2+Y*Y;
+   SumXY:=SumXY+X*Y;
+ end;
+ if (n*SumX2=SumX*SumX) or (n*SumY2=SumY*SumY) then begin
+   a:=0;
+   b:=0;
+   r:=0;
+ end else begin
+   a:=((n*SumXY)-(SumX*SumY))/((n*SumX2)-(SumX*SumX));
+   b:=(SumY-a*SumX)/n;
+   Sx:=sqrt(Sumx2-sqr(SumX)/n);
+   Sy:=Sqrt(Sumy2-sqr(SumY)/n);
+   r:=(Sumxy-Sumx*SumY/n)/(Sx*sy);
+ end;
+end;
+
 
 end.
 
