@@ -81,7 +81,7 @@ type
     curhist,FfocuserSpeed,FnumHfd: integer;
     focuserdirection,terminated: boolean;
     ahfd: array of double;
-    aminhfd:double;
+    aminhfd,amaxhfd:double;
     afmpos,aminpos:integer;
     procedure msg(txt:string);
     function  getRunning:boolean;
@@ -649,8 +649,27 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusMean;
-var i,k,skip,step: integer;
-    VcpiL,VcpiR: double;
+var i,k,n,skip,step: integer;
+    VcpiL,VcpiR,al,bl,rl,ar,br,rr: double;
+    p:array of TDouble2;
+  procedure ResetPos;
+  begin
+    k:=AutofocusMeanNumPoint div 2;
+    focuser.FocusSpeed:=AutofocusMeanMovement*(k+1);
+    if AutofocusMoveDir=FocusDirIn then begin
+      onFocusOUT(self);
+      Wait(1);
+      focuser.FocusSpeed:=AutofocusMeanMovement;
+      onFocusIN(self)
+    end
+    else begin
+      onFocusIN(self);
+      Wait(1);
+      focuser.FocusSpeed:=AutofocusMeanMovement;
+      onFocusOUT(self);
+    end;
+    Wait(1);
+  end;
 begin
   case AutofocusMeanStep of
     afmStart: begin
@@ -660,25 +679,38 @@ begin
               SetLength(ahfd,AutofocusMeanNumPoint);
               // set initial position
               k:=AutofocusMeanNumPoint div 2;
-              focuser.FocusSpeed:=AutofocusMeanMovement*k;
-              if AutofocusMoveDir=FocusDirOut then
-                onFocusOUT(self)
-              else
+              focuser.FocusSpeed:=AutofocusMeanMovement*(k+1);
+              if AutofocusMoveDir=FocusDirIn then begin
+                onFocusOUT(self);
+                Wait(1);
+                focuser.FocusSpeed:=AutofocusMeanMovement;
+                onFocusIN(self)
+              end
+              else begin
                 onFocusIN(self);
+                Wait(1);
+                focuser.FocusSpeed:=AutofocusMeanMovement;
+                onFocusOUT(self);
+              end;
               Wait(1);
               afmpos:=-1;
               aminhfd:=9999;
-              focuser.FocusSpeed:=AutofocusMeanMovement;
+              amaxhfd:=-1;
               AutofocusMeanStep:=afmMeasure;
               end;
     afmMeasure: begin
+              // store hfd
               inc(afmpos);
               ahfd[afmpos]:=Fhfd;
               if Fhfd<aminhfd then begin
                 aminhfd:=Fhfd;
                 aminpos:=afmpos;
               end;
-              if AutofocusMoveDir=FocusDirOut then
+              if Fhfd>amaxhfd then begin
+                amaxhfd:=Fhfd;
+              end;
+              // increment position
+              if AutofocusMoveDir=FocusDirIn then
                 onFocusIN(self)
               else
                 onFocusOUT(self);
@@ -686,26 +718,56 @@ begin
               if afmpos=(AutofocusMeanNumPoint-1) then AutofocusMeanStep:=afmEnd;
               end;
     afmEnd: begin
+              // check measure validity
+              if (aminpos<2)or((AutofocusMeanNumPoint-aminpos-1)<2) then begin
+                 msg('Not enough points on left or right of focus position,');
+                 msg('Try to start with a better position or increase the movement.');
+                 ResetPos;
+                 terminated:=true;
+                 exit;
+              end;
+              if (amaxhfd<(3*aminhfd)) then begin
+                 msg('Too small HFD difference,');
+                 msg('Try to increase the number of point or the movement.');
+                 ResetPos;
+                 terminated:=true;
+                 exit;
+              end;
               // compute focus
               k:=aminpos;
-              FitSourceL.DataPoints.Clear;
-              FitSourceR.DataPoints.Clear;
-              for i:=1 to k do
-                FitSourceL.Add(ahfd[i-1],i);
-              for i:=k+2 to AutofocusMeanNumPoint do
-                FitSourceR.Add(ahfd[i-1],i);
-              VcChartL.ExecFit;
-              VcChartR.ExecFit;
-              VcpiL:=VcChartL.Param[0];
-              VcpiR:=VcChartR.Param[0];
+              // left part
+              SetLength(p,k);
+              for i:=0 to k-1 do begin
+                p[i,1]:=i+1;
+                p[i,2]:=ahfd[i];
+              end;
+              LeastSquares(p,al,bl,rl);
+              VcpiL:=-bl/al;
+              // right part
+              k:=AutofocusMeanNumPoint-k-1;
+              SetLength(p,k);
+              for i:=0 to k-1 do begin
+                p[i,1]:=aminpos+2+i;
+                p[i,2]:=ahfd[aminpos+1+i];
+              end;
+              LeastSquares(p,ar,br,rr);
+              VcpiR:=-br/ar;
+              // focus position
               step:=round(AutofocusMeanMovement*(VcpiL+VcpiR)/2);
-              focuser.FocusSpeed:=step;
-              if AutofocusMoveDir=FocusDirOut then
-                onFocusOUT(self)
-              else
+              focuser.FocusSpeed:=step+AutofocusMeanMovement;
+              if AutofocusMoveDir=FocusDirIn then begin
+                onFocusOUT(self);
+                wait(1);
+                focuser.FocusSpeed:=AutofocusMeanMovement;
                 onFocusIN(self);
+              end
+              else begin
+                onFocusIN(self);
+                wait(1);
+                focuser.FocusSpeed:=AutofocusMeanMovement;
+                onFocusOUT(self)
+              end;
               wait(1);
-              focuser.FocusSpeed:=AutofocusMeanMovement;
               terminated:=true;
               end;
   end;

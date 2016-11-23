@@ -72,6 +72,7 @@ type
     PageNone: TPage;
     PageVcurve: TPage;
     PageIterative: TPage;
+    PanelBacklash: TPanel;
     PanelNearFocus: TPanel;
     PanelAutofocus: TPanel;
     AutofocusMoveDirIn: TRadioButton;
@@ -384,6 +385,7 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
   PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
+  PanelBacklash.Visible:=(Autofocusmode.ItemIndex<>0);
 end;
 
 function Tf_option.GetResolver: integer;
