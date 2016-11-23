@@ -9,6 +9,7 @@ object f_vcurve: Tf_vcurve
   ClientHeight = 500
   ClientWidth = 320
   FormStyle = fsStayOnTop
+  OnShow = FormShow
   LCLVersion = '1.6.2.0'
   Visible = False
   object BtnLearnVcurve: TButton
@@ -23,7 +24,7 @@ object f_vcurve: Tf_vcurve
   object VcChart: TChart
     Left = 7
     Height = 200
-    Top = 112
+    Top = 128
     Width = 300
     AntialiasingMode = amOn
     AxisList = <    
@@ -45,16 +46,6 @@ object f_vcurve: Tf_vcurve
     Title.Text.Strings = (
       'TAChart'
     )
-    object VcChartL: TFitSeries
-      FitEquation = feLinear
-      ParamCount = 2
-      Source = FitSourceL
-    end
-    object VcChartR: TFitSeries
-      FitEquation = feLinear
-      ParamCount = 2
-      Source = FitSourceR
-    end
     object VcChartPtL: TLineSeries
       LinePen.Color = clNone
       LinePen.Style = psClear
@@ -73,11 +64,21 @@ object f_vcurve: Tf_vcurve
       ShowPoints = True
       Source = PtSourceR
     end
+    object VcChartRegL: TLineSeries
+      Source = FitSourceL
+    end
+    object VcChartRegR: TLineSeries
+      Source = FitSourceR
+    end
+    object VcChartRef: TLineSeries
+      LinePen.Color = clBlue
+      Source = RefSource
+    end
   end
   object LabelSL: TLabel
     Left = 42
     Height = 18
-    Top = 377
+    Top = 393
     Width = 15
     Caption = '     '
     ParentColor = False
@@ -85,7 +86,7 @@ object f_vcurve: Tf_vcurve
   object LabelSR: TLabel
     Left = 239
     Height = 18
-    Top = 377
+    Top = 393
     Width = 15
     Caption = '     '
     ParentColor = False
@@ -93,7 +94,7 @@ object f_vcurve: Tf_vcurve
   object LabelPID: TLabel
     Left = 135
     Height = 18
-    Top = 418
+    Top = 434
     Width = 15
     Caption = '     '
     ParentColor = False
@@ -101,7 +102,7 @@ object f_vcurve: Tf_vcurve
   object Label4: TLabel
     Left = 42
     Height = 18
-    Top = 360
+    Top = 376
     Width = 43
     Caption = 'Slope L'
     ParentColor = False
@@ -109,7 +110,7 @@ object f_vcurve: Tf_vcurve
   object Label5: TLabel
     Left = 135
     Height = 18
-    Top = 401
+    Top = 417
     Width = 21
     Caption = 'PID'
     ParentColor = False
@@ -117,7 +118,7 @@ object f_vcurve: Tf_vcurve
   object Label6: TLabel
     Left = 239
     Height = 18
-    Top = 360
+    Top = 376
     Width = 44
     Caption = 'Slope R'
     ParentColor = False
@@ -125,7 +126,7 @@ object f_vcurve: Tf_vcurve
   object Label7: TLabel
     Left = 42
     Height = 18
-    Top = 401
+    Top = 417
     Width = 22
     Caption = 'PI L'
     ParentColor = False
@@ -133,7 +134,7 @@ object f_vcurve: Tf_vcurve
   object LabelPIL: TLabel
     Left = 42
     Height = 18
-    Top = 418
+    Top = 434
     Width = 15
     Caption = '     '
     ParentColor = False
@@ -141,7 +142,7 @@ object f_vcurve: Tf_vcurve
   object LabelPIR: TLabel
     Left = 239
     Height = 18
-    Top = 417
+    Top = 433
     Width = 15
     Caption = '     '
     ParentColor = False
@@ -149,7 +150,7 @@ object f_vcurve: Tf_vcurve
   object Label10: TLabel
     Left = 239
     Height = 18
-    Top = 401
+    Top = 417
     Width = 23
     Caption = 'PI R'
     ParentColor = False
@@ -157,7 +158,7 @@ object f_vcurve: Tf_vcurve
   object Label11: TLabel
     Left = 135
     Height = 18
-    Top = 360
+    Top = 376
     Width = 40
     Caption = 'Center'
     ParentColor = False
@@ -165,7 +166,7 @@ object f_vcurve: Tf_vcurve
   object LabelCenter: TLabel
     Left = 135
     Height = 18
-    Top = 377
+    Top = 393
     Width = 15
     Caption = '     '
     ParentColor = False
@@ -224,18 +225,18 @@ object f_vcurve: Tf_vcurve
     Caption = 'Number of steps'
     ParentColor = False
   end
-  object Label8: TLabel
+  object LabelQuality: TLabel
     Left = 239
     Height = 18
-    Top = 328
+    Top = 344
     Width = 12
     Caption = '    '
     ParentColor = False
   end
   object TrackBar1: TTrackBar
-    Left = 80
+    Left = 72
     Height = 46
-    Top = 312
+    Top = 320
     Width = 88
     OnChange = TrackBar1Change
     PageSize = 1
@@ -254,7 +255,7 @@ object f_vcurve: Tf_vcurve
   object Label9: TLabel
     Left = 42
     Height = 18
-    Top = 328
+    Top = 344
     Width = 15
     Caption = 'Fit'
     ParentColor = False
@@ -262,25 +263,39 @@ object f_vcurve: Tf_vcurve
   object Label12: TLabel
     Left = 176
     Height = 18
-    Top = 328
+    Top = 344
     Width = 46
     Caption = 'Quality:'
     ParentColor = False
   end
+  object LabelFocusdir: TLabel
+    Left = 32
+    Height = 18
+    Top = 112
+    Width = 272
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Focus direction'
+    ParentColor = False
+  end
   object FitSourceL: TListChartSource
     left = 95
-    top = 136
+    top = 152
   end
   object FitSourceR: TListChartSource
     left = 95
-    top = 208
+    top = 224
   end
   object PtSourceL: TListChartSource
     left = 220
-    top = 136
+    top = 152
   end
   object PtSourceR: TListChartSource
     left = 220
-    top = 208
+    top = 224
+  end
+  object RefSource: TListChartSource
+    left = 152
+    top = 264
   end
 end
