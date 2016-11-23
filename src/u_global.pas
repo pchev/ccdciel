@@ -246,7 +246,7 @@ var
   BayerMode:TBayerMode;
   MaxVideoPreviewRate: integer;
   AutofocusMode:TAutofocusMode;
-  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,AutofocusBacklash,AutofocusBinning: integer;
+  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
   AutofocusNearHFD: double;
   AutofocusExposure:double;
   AutofocusMoveDir: boolean;

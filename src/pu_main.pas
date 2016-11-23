@@ -1645,7 +1645,7 @@ begin
   AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
-  AutofocusBacklash:=config.GetValue('/StarAnalysis/AutofocusBacklash',0);
+  FocuserBacklash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusMeanNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
@@ -2296,7 +2296,7 @@ begin
  else if focuser.hasRelativePosition then begin
     val(f_focuser.RelIncr.Text,p,n);
     if n=0 then begin
-      if focuser.LastDirection<>FocusDirIn then p:=p+AutofocusBacklash;
+      if focuser.LastDirection<>FocusDirIn then p:=p+FocuserBacklash;
       focuser.FocusIn;
       focuser.RelPosition:=p;
     end;
@@ -2308,7 +2308,7 @@ begin
       focuser.FocusIn;
       val(f_focuser.timer.Text,p,n);
       if n=0 then begin
-        if focuser.LastDirection<>FocusDirOut then p:=p+AutofocusBacklash;
+        if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
         focuser.Timer:=p;
       end;
     end;
@@ -2329,7 +2329,7 @@ begin
  else if focuser.hasRelativePosition then begin
     val(f_focuser.RelIncr.Text,p,n);
     if n=0 then begin
-      if focuser.LastDirection<>FocusDirOut then p:=p+AutofocusBacklash;
+      if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
       focuser.FocusOut;
       focuser.RelPosition:=p;
     end;
@@ -2341,7 +2341,7 @@ begin
       focuser.FocusOut;
       val(f_focuser.timer.Text,p,n);
       if n=0 then begin
-        if focuser.LastDirection<>FocusDirOut then p:=p+AutofocusBacklash;
+        if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
         focuser.Timer:=p;
       end;
     end;
@@ -2855,7 +2855,8 @@ begin
    f_option.AutofocusNearHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD));
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
-   f_option.AutofocusBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBacklash',AutofocusBacklash));
+   f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
+   f_option.PanelBacklash.Visible:=(focuser.Status=devConnected)and(not focuser.hasAbsolutePosition);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
@@ -2931,7 +2932,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusNearHFD',StrToFloatDef(f_option.AutofocusNearHFD.Text,AutofocusNearHFD));
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
-     config.SetValue('/StarAnalysis/AutofocusBacklash',StrToIntDef(f_option.AutofocusBacklash.Text,AutofocusBacklash));
+     config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',StrToIntDef(f_option.AutofocusNearNum.Text,AutofocusNearNum));
      config.SetValue('/StarAnalysis/AutofocusMeanNumPoint',StrToIntDef(f_option.AutofocusMeanNumPoint.Text,AutofocusMeanNumPoint));

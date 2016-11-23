@@ -557,11 +557,11 @@ object f_option: Tf_option
       ClientWidth = 431
       object GroupBox2: TGroupBox
         Left = 8
-        Height = 92
+        Height = 132
         Top = 4
         Width = 400
         Caption = 'Star profile'
-        ClientHeight = 73
+        ClientHeight = 113
         ClientWidth = 398
         TabOrder = 0
         object StarWindow: TEdit
@@ -595,11 +595,36 @@ object f_option: Tf_option
           Width = 51
           TabOrder = 1
         end
+        object PanelBacklash: TPanel
+          Left = 1
+          Height = 34
+          Top = 72
+          Width = 378
+          BevelOuter = bvNone
+          ClientHeight = 34
+          ClientWidth = 378
+          TabOrder = 2
+          object Label52: TLabel
+            Left = 8
+            Height = 18
+            Top = 9
+            Width = 102
+            Caption = 'Focuser backlash'
+            ParentColor = False
+          end
+          object FocuserBacklash: TEdit
+            Left = 212
+            Height = 24
+            Top = 4
+            Width = 61
+            TabOrder = 0
+          end
+        end
       end
       object Autofocusmode: TRadioGroup
         Left = 8
         Height = 53
-        Top = 96
+        Top = 138
         Width = 400
         AutoFill = True
         Caption = 'Autofocus methode'
@@ -624,11 +649,11 @@ object f_option: Tf_option
       end
       object PanelAutofocus: TPanel
         Left = 8
-        Height = 216
-        Top = 152
+        Height = 176
+        Top = 190
         Width = 400
         BevelOuter = bvNone
-        ClientHeight = 216
+        ClientHeight = 176
         ClientWidth = 400
         TabOrder = 2
         object Label49: TLabel
@@ -683,7 +708,7 @@ object f_option: Tf_option
         object AutofocusNotebook: TNotebook
           Left = 0
           Height = 66
-          Top = 138
+          Top = 110
           Width = 392
           PageIndex = 0
           TabOrder = 3
@@ -778,7 +803,7 @@ object f_option: Tf_option
         object PanelNearFocus: TPanel
           Left = 1
           Height = 31
-          Top = 110
+          Top = 82
           Width = 392
           BevelOuter = bvNone
           ClientHeight = 31
@@ -837,31 +862,6 @@ object f_option: Tf_option
           Top = 28
           Width = 60
           TabOrder = 5
-        end
-        object PanelBacklash: TPanel
-          Left = 1
-          Height = 34
-          Top = 80
-          Width = 378
-          BevelOuter = bvNone
-          ClientHeight = 34
-          ClientWidth = 378
-          TabOrder = 6
-          object Label52: TLabel
-            Left = 8
-            Height = 18
-            Top = 9
-            Width = 52
-            Caption = 'Backlash'
-            ParentColor = False
-          end
-          object AutofocusBacklash: TEdit
-            Left = 212
-            Height = 24
-            Top = 4
-            Width = 61
-            TabOrder = 0
-          end
         end
       end
     end
