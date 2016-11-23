@@ -1667,6 +1667,7 @@ begin
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
+  if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
 end;
 
 procedure Tf_main.SaveConfig;

@@ -170,7 +170,7 @@ begin
     if Fconnected and
        (configprop<>nil) and
        (FocusMotion<>nil) and
-       (FocusAbsolutePosition<>nil)
+       ((FocusAbsolutePosition<>nil)or(FocusRelativePosition<>nil)or(FocusTimer<>nil))
     then begin
        FStatus := devConnected;
        if (not Fready) then begin
