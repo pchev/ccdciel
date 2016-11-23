@@ -1987,6 +1987,8 @@ focuser.Disconnect;
 end;
 
 procedure Tf_main.SetFocusMode;
+var i,n: integer;
+    r: TNumRange;
 begin
   if focuser.hasAbsolutePosition then begin
      f_focuser.Notebook1.PageIndex:=2;
@@ -1996,6 +1998,33 @@ begin
   end
   else begin
      f_focuser.Notebook1.PageIndex:=0;
+  end;
+  f_focuser.Position.Text:=inttostr(focuser.Position);
+  r:=focuser.PositionRange;
+  if r.step>0 then begin
+   f_focuser.Position.Hint:='Current focuser absolute position, '+
+                   IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
+    n:=round(r.max-r.min) div 100;
+    n:=round(max(n,r.step));
+    f_focuser.PosIncr.Clear;
+    for i:=1 to 5 do begin
+      f_focuser.PosIncr.Items.Add(inttostr(i*n));
+    end;
+    f_focuser.PosIncr.ItemIndex:=0;
+  end;
+  f_focuser.speed.Text:=inttostr(focuser.Speed);
+  f_focuser.timer.Text:=inttostr(focuser.Timer);
+  r:=focuser.RelPositionRange;
+  if r.step>0 then begin
+    f_focuser.RelIncr.Hint:='Relative increment for the inward or outward movement, '+
+                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
+    n:=round(r.max-r.min) div 100;
+    n:=round(max(n,r.step));
+    f_focuser.RelIncr.Clear;
+    for i:=1 to 5 do begin
+      f_focuser.RelIncr.Items.Add(inttostr(i*n));
+    end;
+    f_focuser.RelIncr.ItemIndex:=0;
   end;
 end;
 
@@ -2222,8 +2251,6 @@ ShowMessage(aboutmsg);
 end;
 
 Procedure Tf_main.FocuserStatus(Sender: TObject);
-var i,n: integer;
-    r: TNumRange;
 begin
 case focuser.Status of
   devDisconnected:begin
@@ -2236,33 +2263,6 @@ case focuser.Status of
   devConnected:   begin
                       NewMessage('Focuser connected');
                       f_devicesconnection.LabelFocuser.Font.Color:=clGreen;
-                      f_focuser.Position.Text:=inttostr(focuser.Position);
-                      r:=focuser.PositionRange;
-                      if r.step>0 then begin
-                       f_focuser.Position.Hint:='Current focuser absolute position, '+
-                                       IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-                        n:=round(r.max-r.min) div 100;
-                        n:=round(max(n,r.step));
-                        f_focuser.PosIncr.Clear;
-                        for i:=1 to 5 do begin
-                          f_focuser.PosIncr.Items.Add(inttostr(i*n));
-                        end;
-                        f_focuser.PosIncr.ItemIndex:=0;
-                      end;
-                      f_focuser.speed.Text:=inttostr(focuser.Speed);
-                      f_focuser.timer.Text:=inttostr(focuser.Timer);
-                      r:=focuser.RelPositionRange;
-                      if r.step>0 then begin
-                        f_focuser.RelIncr.Hint:='Relative increment for the inward or outward movement, '+
-                                        IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-                        n:=round(r.max-r.min) div 100;
-                        n:=round(max(n,r.step));
-                        f_focuser.RelIncr.Clear;
-                        for i:=1 to 5 do begin
-                          f_focuser.RelIncr.Items.Add(inttostr(i*n));
-                        end;
-                        f_focuser.RelIncr.ItemIndex:=0;
-                      end;
                    end;
 end;
 CheckConnectionStatus;
@@ -2296,6 +2296,7 @@ begin
  else if focuser.hasRelativePosition then begin
     val(f_focuser.RelIncr.Text,p,n);
     if n=0 then begin
+      if focuser.LastDirection<>FocusDirIn then p:=p+AutofocusBacklash;
       focuser.FocusIn;
       focuser.RelPosition:=p;
     end;
@@ -2306,7 +2307,10 @@ begin
       focuser.Speed:=p;
       focuser.FocusIn;
       val(f_focuser.timer.Text,p,n);
-      if n=0 then focuser.Timer:=p;
+      if n=0 then begin
+        if focuser.LastDirection<>FocusDirOut then p:=p+AutofocusBacklash;
+        focuser.Timer:=p;
+      end;
     end;
  end;
  if n<>0 then NewMessage('Invalid numeric value');
@@ -2325,6 +2329,7 @@ begin
  else if focuser.hasRelativePosition then begin
     val(f_focuser.RelIncr.Text,p,n);
     if n=0 then begin
+      if focuser.LastDirection<>FocusDirOut then p:=p+AutofocusBacklash;
       focuser.FocusOut;
       focuser.RelPosition:=p;
     end;
@@ -2335,7 +2340,10 @@ begin
       focuser.Speed:=p;
       focuser.FocusOut;
       val(f_focuser.timer.Text,p,n);
-      if n=0 then focuser.Timer:=p;
+      if n=0 then begin
+        if focuser.LastDirection<>FocusDirOut then p:=p+AutofocusBacklash;
+        focuser.Timer:=p;
+      end;
     end;
  end;
  if n<>0 then NewMessage('Invalid numeric value');

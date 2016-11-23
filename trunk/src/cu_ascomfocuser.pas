@@ -177,11 +177,13 @@ end;
 procedure T_ascomfocuser.FocusIn;
 begin
  FFocusdirection:=-1;
+ FLastDirection:=FocusDirIn;
 end;
 
 procedure T_ascomfocuser.FocusOut;
 begin
  FFocusdirection:=1;
+ FLastDirection:=FocusDirOut;
 end;
 
 procedure T_ascomfocuser.SetPosition(p:integer);
