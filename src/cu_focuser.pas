@@ -41,6 +41,7 @@ T_focuser = class(TComponent)
     FonStatusChange: TNotifyEvent;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
+    FLastDirection: boolean;
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -62,6 +63,7 @@ T_focuser = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     procedure FocusIn; virtual; abstract;
     procedure FocusOut; virtual; abstract;
+    property LastDirection: boolean read FLastDirection;
     property FocuserInterface: TDevInterface read FFocuserInterface;
     property Status: TDeviceStatus read FStatus;
     property hasAbsolutePosition: boolean read GethasAbsolutePosition;

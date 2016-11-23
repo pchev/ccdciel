@@ -447,6 +447,7 @@ begin
    indiclient.sendNewSwitch(FocusMotion);
    indiclient.WaitBusy(FocusMotion);
  end;
+ FLastDirection:=FocusDirIn;
 end;
 
 procedure T_indifocuser.FocusOut;
@@ -457,6 +458,7 @@ begin
    indiclient.sendNewSwitch(FocusMotion);
    indiclient.WaitBusy(FocusMotion);
  end;
+ FLastDirection:=FocusDirOut;
 end;
 
 function  T_indifocuser.GethasAbsolutePosition: boolean;
