@@ -2283,41 +2283,61 @@ begin
 end;
 
 procedure Tf_main.FocusIN(Sender: TObject);
-var n:integer;
+var n,p:integer;
 begin
+ n:=0;
  if focuser.hasAbsolutePosition then begin
-    focuser.Position:=focuser.Position-StrToIntDef(f_focuser.PosIncr.Text,1000);
+    val(f_focuser.PosIncr.Text,p,n);
+    if n=0 then begin
+       focuser.Position:=focuser.Position-p;
+    end;
  end
  else if focuser.hasRelativePosition then begin
-    focuser.FocusIn;
-    focuser.RelPosition:=StrToIntDef(f_focuser.RelIncr.Text,1000);
+    val(f_focuser.RelIncr.Text,p,n);
+    if n=0 then begin
+      focuser.FocusIn;
+      focuser.RelPosition:=p;
+    end;
  end
  else begin
-    n:=StrToIntDef(f_focuser.speed.Text,-1);
-    if n>0 then focuser.Speed:=n;
-    focuser.FocusIn;
-    n:=StrToIntDef(f_focuser.timer.Text,-1);
-    if n>0 then focuser.Timer:=n;
+    val(f_focuser.speed.Text,p,n);
+    if n=0 then begin
+      focuser.Speed:=p;
+      focuser.FocusIn;
+      val(f_focuser.timer.Text,p,n);
+      if n=0 then focuser.Timer:=p;
+    end;
  end;
+ if n<>0 then NewMessage('Invalid numeric value');
 end;
 
 procedure Tf_main.FocusOUT(Sender: TObject);
-var n:integer;
+var n,p:integer;
 begin
+ n:=0;
  if focuser.hasAbsolutePosition then begin
-   focuser.Position:=focuser.Position+StrToIntDef(f_focuser.PosIncr.Text,1000);
+    val(f_focuser.PosIncr.Text,p,n);
+    if n=0 then begin
+       focuser.Position:=focuser.Position+p;
+    end;
  end
  else if focuser.hasRelativePosition then begin
-    focuser.FocusOut;
-    focuser.RelPosition:=StrToIntDef(f_focuser.RelIncr.Text,1000);
+    val(f_focuser.RelIncr.Text,p,n);
+    if n=0 then begin
+      focuser.FocusOut;
+      focuser.RelPosition:=p;
+    end;
  end
  else begin
-   n:=StrToIntDef(f_focuser.speed.Text,-1);
-   if n>0 then focuser.Speed:=n;
-   focuser.FocusOut;
-   n:=StrToIntDef(f_focuser.timer.Text,-1);
-   if n>0 then focuser.Timer:=n;
+    val(f_focuser.speed.Text,p,n);
+    if n=0 then begin
+      focuser.Speed:=p;
+      focuser.FocusOut;
+      val(f_focuser.timer.Text,p,n);
+      if n=0 then focuser.Timer:=p;
+    end;
  end;
+ if n<>0 then NewMessage('Invalid numeric value');
 end;
 
 procedure Tf_main.FocusSetAbsolutePosition(Sender: TObject);
