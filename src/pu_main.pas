@@ -2366,7 +2366,17 @@ begin
  PosNearR:=-1;
  NewMessage('From: '+IntToStr(minpos)+' to '+IntToStr(centerp)+' by '+IntToStr(step));
  hfdmin:=9999;
+ // initial focuser position in right direction
+  if AutofocusMoveDir=FocusDirOut then begin
+    focuser.Position:=minpos-step;
+  end
+  else begin
+    focuser.Position:=maxpos+step;
+  end;
+  wait(1);
+ // main loop for n measurement
  for i:=0 to n do begin
+   // set new focuser position
    if AutofocusMoveDir=FocusDirOut then begin
      focuser.Position:=minpos+i*step;
      k:=i;
@@ -2377,7 +2387,9 @@ begin
    end;
    wait(1);
    hfdsum:=0;
+   // use bad pixel map
    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+   // average hfd for nsum exposures
    for j:=1 to nsum do begin
      f_preview.ControlExposure(exp,bin,bin);
      if TerminateVcurve then exit;
@@ -2385,9 +2397,11 @@ begin
      hfdsum:=hfdsum+f_starprofile.HFD;
    end;
    hfd:=hfdsum/nsum;
+   // store result always from left to right
    AutofocusVc[k,1]:=focuser.Position;
    AutofocusVc[k,2]:=hfd;
    NewMessage('Vcurve n'+inttostr(i)+' '+FormatFloat(f0,AutofocusVc[k,1])+' '+FormatFloat(f1,AutofocusVc[k,2]));
+   // use minimal hfd a rought focus position
    if AutofocusVc[k,2]<hfdmin then begin
      hfdmin:=AutofocusVc[k,2];
      PosFocus:=k;
@@ -2399,7 +2413,7 @@ begin
    NewMessage('Cannot detect star.');
    exit;
  end;
- //  search near focus pos
+ //  search near focus pos, cancel if we not reach enough defocalisation
  for i:=0 to PosFocus do begin
    if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearL:=i;
  end;
@@ -2417,17 +2431,13 @@ begin
  result:=true;
 end;
 
-procedure Tf_main.doSaveVcurve(Sender: TObject);
-begin
- SaveVcurve;
-end;
-
 procedure Tf_main.LearnVcurve(Sender: TObject);
 var bin: integer;
     x,y,xc,yc,s,s2: integer;
     SaveZoom: double;
 begin
  if not focuser.hasAbsolutePosition then exit;
+ // read parameters
  VcCenterpos:=StrToIntDef(f_vcurve.FocusPos.Text,NullCoord);
  VcHalfwidth:=StrToIntDef(f_vcurve.HalfWidth.Text,NullCoord);
  VcNsteps:=StrToIntDef(f_vcurve.Nsteps.Text,30);
@@ -2436,6 +2446,7 @@ begin
  focuser.Position:=VcCenterpos;
  wait(1);
  bin:=AutofocusBinning;
+ // use bad pixel map
  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
  f_preview.ControlExposure(f_preview.Exposure,bin,bin);
  x:=fits.HeaderInfo.naxis1 div 2;
@@ -2443,10 +2454,10 @@ begin
  s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
  f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
  if f_starprofile.HFD<0 then begin
-   NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the preview binning.');
+   NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
    exit;
  end;
- // focus frame
+ // set focus frame around the star
  s:=Focuswindow;
  s2:=s div 2;
  Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
@@ -2457,12 +2468,15 @@ begin
  SaveZoom:=f_visu.Zoom;
  f_visu.Zoom:=0;
  ImgZoom:=0;
+ // do vcurve exposures
  NewMessage('Start learning V curve');
  if not doVcurve(VcCenterpos,VcHalfwidth,VcNsteps,AutofocusNearNum,f_preview.Exposure,bin) then exit;
  focuser.Position:=round(AutofocusVc[PosFocus,1]);
  wait(1);
+ // compute and save the curve
  ComputeVcSlope;
  SaveVcurve;
+ // reset camera
  camera.ResetFrame;
  f_visu.Zoom:=SaveZoom;
  ImgZoom:=f_visu.Zoom;
@@ -2475,6 +2489,11 @@ procedure Tf_main.ComputeVcSlope;
 begin
  f_vcurve.FindLinearPart;
  f_vcurve.LoadCurve;
+end;
+
+procedure Tf_main.doSaveVcurve(Sender: TObject);
+begin
+ SaveVcurve;
 end;
 
 Procedure Tf_main.SaveVcurve;

@@ -16,8 +16,10 @@ type
     BtnLearnVcurve: TButton;
     BtnSave: TButton;
     Label12: TLabel;
-    Label8: TLabel;
+    LabelFocusdir: TLabel;
+    LabelQuality: TLabel;
     Label9: TLabel;
+    RefSource: TListChartSource;
     Nsteps: TEdit;
     GetPos: TButton;
     FocusPos: TEdit;
@@ -43,12 +45,14 @@ type
     PtSourceR: TListChartSource;
     TrackBar1: TTrackBar;
     VcChart: TChart;
-    VcChartL: TFitSeries;
+    VcChartRef: TLineSeries;
+    VcChartRegR: TLineSeries;
+    VcChartRegL: TLineSeries;
     VcChartPtR: TLineSeries;
     VcChartPtL: TLineSeries;
-    VcChartR: TFitSeries;
     procedure BtnLearnVcurveClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure GetPosClick(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
   private
@@ -88,6 +92,15 @@ begin
   Close;
 end;
 
+procedure Tf_vcurve.FormShow(Sender: TObject);
+begin
+  LabelFocusdir.Caption:='Focus direction';
+  if AutofocusMoveDir=FocusDirIn then
+     LabelFocusdir.Caption:=LabelFocusdir.Caption+' <='
+  else
+     LabelFocusdir.Caption:=LabelFocusdir.Caption+' =>';
+end;
+
 procedure Tf_vcurve.GetPosClick(Sender: TObject);
 begin
   FocusPos.Text:=Ffocuser.Position.Text;
@@ -100,73 +113,80 @@ begin
 end;
 
 Procedure Tf_vcurve.FindLinearPart;
-var i,a: integer;
-  g1,g2: double;
+var i,n,s: integer;
+  a,b,r,r1,r2: double;
+  p:array of TDouble2;
 begin
 try
 if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
-  g1:=0;
-  a:=-1;
+  r1:=0;
+  s:=-1;
+  // search flat central part
   repeat
-    g2:=g1;
-    inc(a);
-    FitSourceL.DataPoints.Clear;
+    r2:=r1;
+    inc(s);
     if AutofocusVcDir then begin
-      for i:=0 to PosFocus-a do
-        FitSourceL.Add(AutofocusVc[i,2],AutofocusVc[i,1]);
+      // focus IN, use right part
+      n:=AutofocusVcNum-(PosFocus+s)+1;
+      SetLength(p,n);
+      for i:=0 to n-1 do begin
+        p[i,1]:=AutofocusVc[PosFocus+s+i,1];
+        p[i,2]:=AutofocusVc[PosFocus+s+i,2];
+      end;
     end else begin
-      for i:=PosFocus+a to AutofocusVcNum do
-        FitSourceL.Add(AutofocusVc[i,2],AutofocusVc[i,1]);
+      // focus OUT, use left part
+      n:=PosFocus-s+1;
+      SetLength(p,n);
+      for i:=0 to n-1 do begin
+        p[i,1]:=AutofocusVc[i,1];
+        p[i,2]:=AutofocusVc[i,2];
+      end;
     end;
-    VcChartL.ExecFit;
-    g1:=VcChartL.GoodnessOfFit;
-  until (a>=(AutofocusVcNum/4))or((g1>0.97)and(abs(g1-g2)<0.01));
+    LeastSquares(p,a,b,r);
+    r1:=r*r;
+  until (s>=(AutofocusVcNum/4))or((r1>0.97)and(abs(r1-r2)<0.01));
 end;
-AutofocusVcSkipNum:=a;
+AutofocusVcSkipNum:=s;
 except
 end;
 end;
 
 Procedure Tf_vcurve.LoadCurve;
 var i,nl,nr: integer;
-  g,gl,gr,bl,br,x:double;
+  r2,rl,rr,bl,br,x:double;
   pl,pr:array of TDouble2;
   col: TColor;
 begin
 try
 if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
+  // skip flat central part
   TrackBar1.Max:=max(AutofocusVcSkipNum,round(1+AutofocusVcNum/4));
   TrackBar1.Position:=AutofocusVcSkipNum;
 
+  // fit left part
   nl:=PosFocus-AutofocusVcSkipNum+1;
   SetLength(pl,nl);
-  nr:=AutofocusVcNum-(PosFocus+AutofocusVcSkipNum)+1;
-  SetLength(pr,nr);
-  for i:=0 to nl-1 do begin
-    pl[i,2]:=AutofocusVc[i,1];
-    pl[i,1]:=AutofocusVc[i,2];
-  end;
-  LeastSquares(pl,x,AutofocusVcpiL,gl);
-  for i:=0 to nr-1 do begin
-    pr[i,2]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,1];
-    pr[i,1]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,2];
-  end;
-  LeastSquares(pr,x,AutofocusVcpiR,gr);
-  AutofocusVcPID:=abs(AutofocusVcpiL-AutofocusVcpiR);
-  if AutofocusVcDir then g:=gr*gr else g:=gl*gl;
-  label8.Caption:=FormatFloat(f4,g);
-
   for i:=0 to nl-1 do begin
     pl[i,1]:=AutofocusVc[i,1];
     pl[i,2]:=AutofocusVc[i,2];
   end;
-  LeastSquares(pl,AutofocusVcSlopeL,bl,gl);
+  LeastSquares(pl,AutofocusVcSlopeL,bl,rl);
+  AutofocusVcpiL:=-bl/AutofocusVcSlopeL;
+
+  // fit right part
+  nr:=AutofocusVcNum-(PosFocus+AutofocusVcSkipNum)+1;
+  SetLength(pr,nr);
   for i:=0 to nr-1 do begin
     pr[i,1]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,1];
     pr[i,2]:=AutofocusVc[PosFocus+AutofocusVcSkipNum+i,2];
   end;
-  LeastSquares(pr,AutofocusVcSlopeR,br,gr);
+  LeastSquares(pr,AutofocusVcSlopeR,br,rr);
+  AutofocusVcpiR:=-br/AutofocusVcSlopeR;
 
+  AutofocusVcPID:=abs(AutofocusVcpiL-AutofocusVcpiR);
+  if AutofocusVcDir then r2:=rr*rr else r2:=rl*rl;
+
+  // draw linear regression
   FitSourceL.DataPoints.Clear;
   FitSourceR.DataPoints.Clear;
   FitSourceL.Add(AutofocusVc[0,1],AutofocusVc[0,1]*AutofocusVcSlopeL+bl);
@@ -174,17 +194,26 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
   FitSourceR.Add(AutofocusVcpiR,0);
   FitSourceR.Add(AutofocusVc[AutofocusVcNum,1],AutofocusVc[AutofocusVcNum,1]*AutofocusVcSlopeR+br);
 
+  // draw data points
   PtSourceL.DataPoints.Clear;
   PtSourceR.DataPoints.Clear;
   for i:=0 to PosFocus do begin
-    if i<nl then col:=clLime  else col:=clRed;
+    if i<nl then col:=clGreen  else col:=clRed;
     PtSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
   end;
   for i:=PosFocus to AutofocusVcNum do begin
-    if i>=(PosFocus+AutofocusVcSkipNum) then col:=clLime else col:=clRed;
+    if i>=(PosFocus+AutofocusVcSkipNum) then col:=clGreen else col:=clRed;
     PtSourceR.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
   end;
 
+  // draw near focus reference
+  RefSource.DataPoints.Clear;
+  RefSource.Add(AutofocusVc[0,1],AutofocusNearHFD);
+  RefSource.Add(AutofocusVc[AutofocusVcNum,1],AutofocusNearHFD);
+
+
+  // print data
+  LabelQuality.Caption:=FormatFloat(f4,r2);
   LabelSL.Caption:=FormatFloat(f6,AutofocusVcSlopeL);
   LabelSR.Caption:=FormatFloat(f6,AutofocusVcSlopeR);
   LabelCenter.Caption:=inttostr(round((AutofocusVcpiL+AutofocusVcpiR)/2));
