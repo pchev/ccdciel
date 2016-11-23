@@ -46,7 +46,7 @@ type
     AutofocusNearNum: TEdit;
     BPMsigma: TEdit;
     AutofocusBinning: TEdit;
-    AutofocusBacklash: TEdit;
+    FocuserBacklash: TEdit;
     GroupBox10: TGroupBox;
     Label46: TLabel;
     Label47: TLabel;
@@ -385,7 +385,6 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
   PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
-  PanelBacklash.Visible:=(Autofocusmode.ItemIndex<>0);
 end;
 
 function Tf_option.GetResolver: integer;
