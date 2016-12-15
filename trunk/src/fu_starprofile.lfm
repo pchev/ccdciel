@@ -1,10 +1,10 @@
 object f_starprofile: Tf_starprofile
   Left = 0
-  Height = 378
+  Height = 386
   Top = 0
   Width = 176
   AutoSize = True
-  ClientHeight = 378
+  ClientHeight = 386
   ClientWidth = 176
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
@@ -26,17 +26,17 @@ object f_starprofile: Tf_starprofile
   end
   object Panel1: TPanel
     Left = 0
-    Height = 358
+    Height = 366
     Top = 20
     Width = 176
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 358
+    ClientHeight = 366
     ClientWidth = 176
     TabOrder = 1
     object Panel2: TPanel
-      Left = 0
+      Left = 3
       Height = 80
       Top = 0
       Width = 170
@@ -58,7 +58,7 @@ object f_starprofile: Tf_starprofile
       end
     end
     object Panel3: TPanel
-      Left = 0
+      Left = 3
       Height = 40
       Top = 80
       Width = 170
@@ -80,20 +80,20 @@ object f_starprofile: Tf_starprofile
       end
     end
     object Panel4: TPanel
-      Left = 0
-      Height = 59
+      Left = 3
+      Height = 61
       Top = 120
       Width = 172
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 59
+      ClientHeight = 61
       ClientWidth = 172
       TabOrder = 2
       object LabelHFD: TLabel
         Left = 1
-        Height = 42
+        Height = 44
         Hint = 'The Half Flux Diameter value in pixels'
         Top = 16
-        Width = 9
+        Width = 13
         Caption = ' '
         Font.Height = 38
         Font.Style = [fsBold]
@@ -102,9 +102,9 @@ object f_starprofile: Tf_starprofile
       end
       object Label1: TLabel
         Left = 1
-        Height = 17
+        Height = 15
         Top = 0
-        Width = 34
+        Width = 31
         Caption = 'HFD:'
         ParentColor = False
       end
@@ -157,20 +157,20 @@ object f_starprofile: Tf_starprofile
       end
     end
     object Panel6: TPanel
-      Left = 0
-      Height = 59
-      Top = 179
+      Left = 3
+      Height = 61
+      Top = 181
       Width = 172
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 59
+      ClientHeight = 61
       ClientWidth = 172
       TabOrder = 5
       object LabelFWHM: TLabel
         Left = 1
-        Height = 42
+        Height = 44
         Hint = 'The Full Width at Half Maximum value in pixels / arc seconds'
         Top = 16
-        Width = 9
+        Width = 13
         Caption = ' '
         Font.Height = 38
         Font.Style = [fsBold]
@@ -179,35 +179,35 @@ object f_starprofile: Tf_starprofile
       end
       object Label3: TLabel
         Left = 1
-        Height = 17
+        Height = 15
         Top = 0
-        Width = 50
+        Width = 43
         Caption = 'FWHM:'
         ParentColor = False
       end
     end
     object Panel5: TPanel
-      Left = 0
-      Height = 59
-      Top = 238
+      Left = 3
+      Height = 61
+      Top = 242
       Width = 172
-      ClientHeight = 59
+      ClientHeight = 61
       ClientWidth = 172
       TabOrder = 3
       object Label2: TLabel
         Left = 0
-        Height = 17
+        Height = 15
         Top = 2
-        Width = 64
+        Width = 57
         Caption = 'Intensity:'
         ParentColor = False
       end
       object LabelImax: TLabel
         Left = 0
-        Height = 42
+        Height = 44
         Hint = 'The maximum intensity value'
         Top = 16
-        Width = 9
+        Width = 13
         Caption = ' '
         Font.Height = 38
         Font.Style = [fsBold]
@@ -216,21 +216,31 @@ object f_starprofile: Tf_starprofile
       end
     end
     object ChkFocus: TCheckBox
-      Left = 0
-      Height = 24
-      Top = 297
+      Left = 3
+      Height = 21
+      Hint = 'Frame the selected star and start looping exposure for manual focus adjustement'
+      Top = 309
       Width = 172
+      BorderSpacing.Top = 3
+      BorderSpacing.Around = 3
       Caption = 'Manual focus aid'
       OnChange = ChkFocusChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
     end
     object ChkAutofocus: TCheckBox
-      Left = 0
-      Height = 24
-      Top = 321
+      Left = 3
+      Height = 21
+      Hint = 'Start autofocus, you must configure and calibrate your focuser before to use this button'
+      Top = 336
       Width = 172
+      BorderSpacing.Top = 3
+      BorderSpacing.Around = 3
       Caption = 'Autofocus'
       OnChange = ChkAutofocusChange
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 6
     end
   end
