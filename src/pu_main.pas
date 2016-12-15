@@ -2308,7 +2308,7 @@ begin
       focuser.FocusIn;
       val(f_focuser.timer.Text,p,n);
       if n=0 then begin
-        if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
+        if focuser.LastDirection<>FocusDirIn then p:=p+FocuserBacklash;
         focuser.Timer:=p;
       end;
     end;
@@ -2394,6 +2394,7 @@ begin
  PosFocus:=-1;
  PosNearR:=-1;
  NewMessage('From: '+IntToStr(minpos)+' to '+IntToStr(centerp)+' by '+IntToStr(step));
+ if step<1 then exit;
  hfdmin:=9999;
  // initial focuser position in right direction
   if AutofocusMoveDir=FocusDirOut then begin
