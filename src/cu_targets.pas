@@ -277,6 +277,7 @@ end;
 procedure T_Targets.NextTarget;
 var initok: boolean;
 begin
+  TargetTimer.Enabled:=false;
   inc(FCurrentTarget);
   { TODO :  select best target based on current time }
   if FRunning and (FCurrentTarget<NumTargets) then begin
