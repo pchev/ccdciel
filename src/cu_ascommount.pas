@@ -95,6 +95,9 @@ begin
 end;
 
 procedure T_ascommount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+{$ifdef mswindows}
+var buf: string;
+{$endif}
 begin
  {$ifdef mswindows}
   try
@@ -111,6 +114,15 @@ begin
      CanSlewAsync:=V.CanSlewAsync;
      CanSetPierSide:=V.CanSetPierSide;
      CanSync:=V.CanSync;
+     buf:='';
+     if IsEqmod then buf:=buf+'EQmod ';
+     if CanPark then buf:=buf+'CanPark ';
+     if CanSlew then buf:=buf+'CanSlew ';
+     if CanSlewAsync then buf:=buf+'CanSlewAsync ';
+     if CanSetPierSide then buf:=buf+'CanSetPierSide ';
+     if CanSync then buf:=buf+'CanSync ';
+     msg('Mount '+Fdevice+' connected');
+     msg('Mount capabilities: '+buf);
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
@@ -132,6 +144,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
+     msg('Mount '+Fdevice+' disconnected');
      V.connected:=false;
      V:=Unassigned;
    end;
@@ -199,8 +212,13 @@ begin
  if Connected then begin
    try
    if CanPark then begin
-      if value then V.Park
-               else V.UnPark
+      if value then begin
+         msg('Mount '+Fdevice+' park');
+         V.Park;
+      end else begin
+         msg('Mount '+Fdevice+' unpark');
+         V.UnPark;
+      end;
    end;
    except
     on E: EOleException do msg('Error: ' + E.Message);
@@ -348,7 +366,7 @@ begin
       V.tracking:=true;
    end;
    FMountSlewing:=true;
-   msg('Move telescope to '+ARToStr3(sra)+' '+DEToStr(sde));
+   msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
@@ -356,6 +374,7 @@ begin
    else
      V.SlewToCoordinates(sra,sde);
    wait(2);
+   msg('Mount '+Fdevice+' move terminated.');
    FMountSlewing:=false;
    result:=true;
    except
@@ -423,6 +442,7 @@ begin
     pierside1:=GetPierSide;
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
+    msg('Mount '+Fdevice+' meridian flip');
     {TODO: someone with a mount that support this feature can test it}
 {    if CanSetPierSide then begin
        // do the flip
@@ -464,7 +484,7 @@ begin
    if not V.tracking then begin
       V.tracking:=true;
    end;
-   msg('Sync telescope to '+ARToStr3(sra)+' '+DEToStr(sde));
+   msg('Mount '+Fdevice+' sync to '+ARToStr3(sra)+' '+DEToStr(sde));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except
@@ -482,7 +502,7 @@ begin
  if Connected then begin
    try
    if not V.tracking then begin
-     msg('Start telescope traking');
+     msg('Mount '+Fdevice+' start traking');
      V.tracking:=true;
    end;
    result:=true;
@@ -498,7 +518,7 @@ begin
  {$ifdef mswindows}
  if Connected and CanSlew then begin
    try
-   msg('Telescope abort motion');
+   msg('Mount '+Fdevice+' abort motion');
    V.AbortSlew;
    V.tracking:=false;
    except
@@ -558,10 +578,14 @@ begin
  {$ifdef mswindows}
  if Connected and IsEqmod and (value<>alUNSUPPORTED) then begin
    try
-   if value=alSTDSYNC then
-     V.CommandString(':ALIGN_MODE,0#')
-   else if value=alADDPOINT then
+   if value=alSTDSYNC then begin
+     msg('Mount '+Fdevice+' align mode Std Sync');
+     V.CommandString(':ALIGN_MODE,0#');
+   end
+   else if value=alADDPOINT then begin
+     msg('Mount '+Fdevice+' align mode Add Point');
      V.CommandString(':ALIGN_MODE,1#');
+   end;
    except
      on E: EOleException do msg('Error: ' + E.Message);
    end;
@@ -575,6 +599,7 @@ begin
  {$ifdef mswindows}
  if Connected and IsEqmod then begin
    try
+   msg('Mount '+Fdevice+' clear alignment');
    V.CommandString(':ALIGN_CLEAR_POINTS#');
    result:=true;
    except
@@ -591,6 +616,7 @@ begin
  {$ifdef mswindows}
  if Connected and IsEqmod then begin
    try
+   msg('Mount '+Fdevice+' clear delta sync');
    V.CommandString(':ALIGN_CLEAR_SYNC#');
    result:=true;
    except
