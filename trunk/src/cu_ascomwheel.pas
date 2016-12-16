@@ -87,6 +87,7 @@ begin
   V:=CreateOleObject(WideString(Fdevice));
   V.connected:=true;
   if V.connected then begin
+     msg('Filter wheel '+Fdevice+' connected.');
      GetFilterNames(FFilterNames,FFilterNum);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -108,6 +109,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
+     msg('Filter wheel '+Fdevice+' disconnected.');
      V.connected:=false;
      V:=Unassigned;
    end;
@@ -199,7 +201,7 @@ begin
  {$ifdef mswindows}
  if Connected and (num>0) then begin
    try
-   msg('Set filter '+inttostr(num));
+   msg('Filter wheel '+Fdevice+' set filter position '+inttostr(num));
    V.Position:=num-1;
    WaitFilter(60000);
    except

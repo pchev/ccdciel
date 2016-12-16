@@ -470,7 +470,8 @@ begin
      Filemode:=2;
      AssignFile(MsgLog,LogFile);
      Rewrite(MsgLog);
-     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  Start new log');
+     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_time);
+     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  Compiled with: '+compile_version);
      LogFileOpen:=true;
   except
   {$I-}
@@ -2512,6 +2513,7 @@ begin
  ImgZoom:=f_visu.Zoom;
  f_starprofile.StarX:=-1;
  f_starprofile.StarY:=-1;
+ f_starprofile.FindStar:=false;
  StartPreviewExposure(nil);
 end;
 
@@ -3988,15 +3990,16 @@ end;
 Procedure Tf_main.FocusStop(Sender: TObject);
 begin
    if  f_capture.Running then exit;
-   fits.SetBPM(bpm,0,0,0,0);
-   camera.ResetFrame;
    f_preview.Running:=false;
    f_preview.Loop:=false;
    camera.AbortExposure;
+   fits.SetBPM(bpm,0,0,0,0);
+   camera.ResetFrame;
    f_visu.Zoom:=SaveFocusZoom;
    ImgZoom:=f_visu.Zoom;
    f_starprofile.StarX:=-1;
    f_starprofile.StarY:=-1;
+   f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
    NewMessage('Focus aid stoped');
 end;
@@ -4051,16 +4054,17 @@ end;
 Procedure Tf_main.AutoFocusStop(Sender: TObject);
 begin
    if  f_capture.Running then exit;
-   fits.SetBPM(bpm,0,0,0,0);
-   camera.ResetFrame;
    f_preview.Running:=false;
    f_preview.Loop:=false;
-   f_preview.Binning.Text:=SaveAutofocusBinning;
    camera.AbortExposure;
+   fits.SetBPM(bpm,0,0,0,0);
+   camera.ResetFrame;
+   f_preview.Binning.Text:=SaveAutofocusBinning;
    f_visu.Zoom:=SaveFocusZoom;
    ImgZoom:=f_visu.Zoom;
    f_starprofile.StarX:=-1;
    f_starprofile.StarY:=-1;
+   f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
    NewMessage('AutoFocus stoped');
 end;

@@ -98,6 +98,7 @@ begin
   V:=CreateOleObject(WideString(Fdevice));
   V.connected:=true;
   if V.connected then begin
+     msg('Focuser '+Fdevice+' connected.');
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
@@ -118,6 +119,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
+     msg('Focuser '+Fdevice+' disconnected.');
      V.connected:=false;
      V:=Unassigned;
    end;
@@ -176,14 +178,20 @@ end;
 
 procedure T_ascomfocuser.FocusIn;
 begin
+ {$ifdef mswindows}
  FFocusdirection:=-1;
  FLastDirection:=FocusDirIn;
+ msg('Focuser '+Fdevice+' set direction in.');
+ {$endif}
 end;
 
 procedure T_ascomfocuser.FocusOut;
 begin
+ {$ifdef mswindows}
  FFocusdirection:=1;
  FLastDirection:=FocusDirOut;
+ msg('Focuser '+Fdevice+' set direction out.');
+ {$endif}
 end;
 
 procedure T_ascomfocuser.SetPosition(p:integer);
@@ -191,6 +199,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   msg('Focuser '+Fdevice+' move to '+inttostr(p));
    V.Move(p);
    except
     on E: EOleException do msg('Error: ' + E.Message);
@@ -257,6 +266,7 @@ begin
    try
    FRelIncr:=p;
    i:=FFocusdirection*FRelIncr;
+   msg('Focuser '+Fdevice+' move by '+inttostr(i));
    V.Move(i);
    except
     on E: EOleException do msg('Error: ' + E.Message);

@@ -154,12 +154,13 @@ begin
  FStatus := devConnecting;
  Fdevice:=cp1;
  V:=Unassigned;
- V:=CreateOleObject(WideString(Fdevice));
+ V:=CreateOleObject(Fdevice);
  V.connected:=true;
  if V.connected then begin
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
+    msg('Camera '+Fdevice+' connected.');
  end
  else
     Disconnect;
@@ -179,6 +180,7 @@ begin
   if not VarIsEmpty(V) then begin
     V.connected:=false;
     V:=Unassigned;
+    msg('Camera '+Fdevice+' disconnected.');
   end;
   except
     on E: EOleException do msg('Error: ' + E.Message);
@@ -249,6 +251,7 @@ if Connected then begin
     FLAT : li:=true;
   end;
   try
+     msg('Camera '+Fdevice+' start exposure.');
      V.StartExposure(exptime,li);
      timestart:=NowUTC;
      timeend:=now+(exptime)/secperday;
@@ -295,6 +298,7 @@ begin
 
  if ok then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
+   msg('Camera '+Fdevice+' read image.');
    img:=V.ImageArray;
    xs:=length(img);
    ys:=length(img[0]);
@@ -360,6 +364,7 @@ begin
    oldx:=V.BinX;
    oldy:=V.BinY;
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
+     msg('Camera '+Fdevice+' set binning '+inttostr(sbinX)+'x'+inttostr(sbinY));
      GetFrame(fsx,fsy,fnx,fny);
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
@@ -385,6 +390,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   msg('Camera '+Fdevice+' set frame '+inttostr(width)+'x'+inttostr(height));
    V.StartX:=x;
    V.StartY:=y;
    V.NumX:=width;
@@ -461,6 +467,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
+    msg('Camera '+Fdevice+' abort exposure');
     V.AbortExposure;
    except
     on E: EOleException do msg('Error: ' + E.Message);
@@ -509,7 +516,10 @@ end;
 
 procedure T_ascomcamera.SetFrametype(f:TFrameType);
 begin
+ {$ifdef mswindows}
+  msg('Camera '+Fdevice+' set frame type '+FrameName[ord(f)]);
   FFrametype:=f;
+ {$endif}
 end;
 
 function  T_ascomcamera.GetFrametype:TFrameType;
@@ -574,6 +584,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   msg('Camera '+Fdevice+' set filter position '+inttostr(num));
    V.Position:=num-1;
    except
     on E: EOleException do msg('Error: ' + E.Message);
@@ -636,6 +647,7 @@ begin
  if Connected then begin
    try
    if V.CanSetCCDTemperature then begin
+      msg('Camera '+Fdevice+' set temperature '+formatfloat(f1,value));
       V.CoolerOn:=true;
       V.SetCCDTemperature:=value;
    end;

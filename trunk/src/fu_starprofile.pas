@@ -102,7 +102,7 @@ type
     procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
     procedure InitAutofocus;
     property AutofocusRunning: boolean read getRunning;
-    property FindStar : boolean read FFindStar;
+    property FindStar : boolean read FFindStar write FFindStar;
     property HFD:double read Fhfd;
     property ValMax: double read FValMax;
     property StarX: double read FStarX write FStarX;
