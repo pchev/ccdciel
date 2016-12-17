@@ -306,7 +306,7 @@ type
     f_visu: Tf_visu;
     f_msg: Tf_msg;
     fits: TFits;
-    ImaBmp: TBitmap;
+    ImaBmp: TBGRABitmap;
     refmask: boolean;
     reftreshold,refcolor: integer;
     reffile: string;
@@ -984,7 +984,7 @@ begin
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Text:=config.GetValue('/Capture/Count','1');
 
-  ImaBmp:=TBitmap.Create;
+  ImaBmp:=TBGRABitmap.Create;
   LockMouse:=false;
   ImgCx:=0;
   ImgCy:=0;
@@ -3674,8 +3674,7 @@ if fits.HeaderInfo.naxis>0 then begin
   else if f_visu.BtnSqrt.Checked then fits.itt:=ittsqrt;
   fits.ImgDmax:=f_visu.ImgMax*256;
   fits.ImgDmin:=f_visu.ImgMin*256;
-  fits.GetIntfImg;
-  fits.GetBitmap(ImaBmp);
+  fits.GetBGRABitmap(ImaBmp);
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
      rawbmp:=TBGRABitmap.Create(ImaBmp);
      if BayerColor then begin
@@ -3687,7 +3686,7 @@ if fits.HeaderInfo.naxis>0 then begin
      if (fits.HeaderInfo.pixratio=1) then begin
        ImaBmp.Assign(rawbmp);
      end else begin
-       ImaBmp.Width:=round(fits.HeaderInfo.pixratio*ImaBmp.Width);
+       ImaBmp.SetSize(round(fits.HeaderInfo.pixratio*ImaBmp.Width),ImaBmp.Height);
        ImaBMP.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),rawbmp.Bitmap);
      end;
      rawbmp.Free;
@@ -3723,7 +3722,6 @@ var r1,r2: double;
     bmp2:Tbitmap;
 begin
 ClearImage;
-ImaBmp.Transparent:=false;
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
@@ -3737,7 +3735,7 @@ if ImgZoom=0 then begin
     w:=trunc(h*r1);
     ImgScale0:=w/img_Width;
   end;
-  image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,w,h),ImaBmp);
+  image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,w,h),ImaBmp.Bitmap);
 end
 else if ImgZoom=0.5 then begin
    // zoom 0.5
@@ -3750,7 +3748,7 @@ else if ImgZoom=0.5 then begin
    py:=ImgCy-((img_Height-bmp2.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   bmp2.Canvas.Draw(px,py,ImaBmp);
+   bmp2.Canvas.Draw(px,py,ImaBmp.Bitmap);
    image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,image1.width,image1.Height),bmp2);
    bmp2.Free;
 end
@@ -3760,7 +3758,7 @@ else if ImgZoom=1 then begin
    py:=ImgCy-((img_Height-Image1.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   image1.Picture.Bitmap.Canvas.Draw(px,py,ImaBmp);
+   image1.Picture.Bitmap.Canvas.Draw(px,py,ImaBmp.Bitmap);
 end
 else if ImgZoom=2 then begin
    // zoom 2
@@ -3773,7 +3771,7 @@ else if ImgZoom=2 then begin
    py:=ImgCy-((img_Height-bmp2.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   bmp2.Canvas.Draw(px,py,ImaBmp);
+   bmp2.Canvas.Draw(px,py,ImaBmp.Bitmap);
    image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,image1.width,image1.Height),bmp2);
    bmp2.Free;
 end;
@@ -3849,7 +3847,6 @@ end;
 
 procedure Tf_main.SetRefImage;
 var mem: TMemoryStream;
-    bmp: TBitmap;
     i: integer;
     p: PBGRAPixel;
     f: TFits;
@@ -3857,19 +3854,18 @@ begin
 if refmask then begin
   refmask:=false;
   mem:=TMemoryStream.Create;
-  bmp:=TBitmap.Create;
   f:=TFits.Create(nil);
   try
   mem.LoadFromFile(reffile);
   f.Stream:=mem;
   f.LoadStream;
   if f.HeaderInfo.naxis>0 then begin
-    f.itt:=ittsqrt;
-    f.ImgDmax:=round(f.HeaderInfo.dmax);
-    f.ImgDmin:=round(f.HeaderInfo.dmin);
-    f.GetIntfImg;
-    f.GetBitmap(bmp);
-    refbmp.Assign(bmp);
+    if f_visu.BtnLinear.Checked then f.itt:=ittlinear
+    else if f_visu.BtnLog.Checked then f.itt:=ittlog
+    else if f_visu.BtnSqrt.Checked then f.itt:=ittsqrt;
+    f.ImgDmax:=f_visu.ImgMax*256;
+    f.ImgDmin:=f_visu.ImgMin*256;
+    f.GetBGRABitmap(refbmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
      p[i].alpha:=128;
@@ -3877,7 +3873,10 @@ if refmask then begin
        0: begin
           p[i].blue:=0;
           p[i].green:=0;
-          if p[i].red<reftreshold then p[i].red:=0 else p[i].red:=180;
+          if p[i].red<reftreshold then
+             p[i].red:=0
+          else
+               p[i].red:=180;
           end;
        1: begin
           p[i].blue:=0;
@@ -3897,7 +3896,6 @@ if refmask then begin
   end;
   finally
     mem.Free;
-    bmp.Free;
     f.free;
   end;
 end;
