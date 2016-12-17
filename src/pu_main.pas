@@ -1330,7 +1330,9 @@ if Shift=[ssLeft] then begin
    end;
  end else if ssShift in Shift then begin
    if EndX>0 then begin
-      Image1.Canvas.Frame(StartX,StartY,EndX,EndY);
+     Image1.Canvas.Pen.Color:=clWhite;
+     Image1.Canvas.Pen.Mode:=pmXor;
+     Image1.Canvas.Frame(StartX,StartY,EndX,EndY);
    end;
    MouseFrame:=true;
    Startx:=X;
@@ -1420,6 +1422,8 @@ if MouseMoving and fits.HeaderInfo.valid then begin
   My:=Y;
 end;
 if MouseFrame and fits.HeaderInfo.valid then begin
+  Image1.Canvas.Pen.Color:=clBlack;
+  Image1.Canvas.Pen.Mode:=pmCopy;
   EndX:=X;
   EndY:=Y;
   Screen2CCD(StartX,StartY,camera.VerticalFlip,x1,y1);
@@ -3709,6 +3713,7 @@ begin
 image1.Picture.Bitmap.Canvas.Brush.Color:=clDarkBlue;
 image1.Picture.Bitmap.Canvas.Pen.Color:=clBlack;
 image1.Picture.Bitmap.Canvas.FillRect(0,0,image1.Width,image1.Height);
+EndX:=-1;
 end;
 
 Procedure Tf_main.PlotImage;
