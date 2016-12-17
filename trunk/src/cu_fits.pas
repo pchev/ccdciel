@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses SysUtils, Classes, FileUtil, u_utils, u_global,
+uses SysUtils, Classes, FileUtil, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms,
   StdCtrls, ExtCtrls, Buttons, IntfGraphics;
 
@@ -88,6 +88,10 @@ type
  end;
 
 const    maxl = 20000;
+  Cittsqrt=MaxWord/sqrt(MaxWord);
+  Cittlog=MaxWord/ln(MaxWord);
+  Cittsqrt8=MAXBYTE/sqrt(MaxWord);
+  Cittlog8=MAXBYTE/ln(MaxWord);
 
 type
   TFits = class(TComponent)
@@ -127,7 +131,6 @@ type
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     Fitt : Titt;
     emptybmp:Tbitmap;
-    clog,csqrt:double;
     f_ViewHeaders: TForm;
     m_ViewHeaders: TMemo;
     p_ViewHeaders: TPanel;
@@ -141,19 +144,18 @@ type
     Procedure GetImage;
     procedure ApplyBPM(bpm:TBpm; count:integer);
     function Citt(value: Word):Word;
+    function Citt8(value: Word):byte;
     procedure SetImgFullRange(value: boolean);
   protected
     { Protected declarations }
   public
     { Public declarations }
-     invertx, inverty : boolean;
      constructor Create(AOwner:TComponent); override;
      destructor  Destroy; override;
      Procedure ViewHeaders;
      Procedure LoadStream;
-     procedure GetIntfImg;
      procedure GetFitsInfo;
-     procedure GetBitmap(var imabmp:Tbitmap);
+     procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToFile(fn: string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      property IntfImg: TLazIntfImage read FIntfImg;
@@ -436,8 +438,6 @@ FStream:=TMemoryStream.Create;
 FIntfImg:=TLazIntfImage.Create(0,0);
 emptybmp:=Tbitmap.Create;
 emptybmp.SetSize(1,1);
-clog:=MaxWord/ln(MaxWord);
-csqrt:=MaxWord/sqrt(MaxWord);
 end;
 
 destructor  TFits.Destroy; 
@@ -476,7 +476,6 @@ value.Position:=0;
 FStream.CopyFrom(value,value.Size);
 Fhdr_end:=0;
 ReadFitsImage;
-GetIntfImg;
 end;
 
 procedure TFits.SetStream(value:TMemoryStream);
@@ -506,7 +505,6 @@ Procedure TFits.LoadStream;
 begin
   if FFitsInfo.valid then begin
     ReadFitsImage;
-    GetIntfImg;
   end;
 end;
 
@@ -1042,67 +1040,73 @@ ittramp: begin
 ittlog:  begin
           // Log
           if value=0 then result:=0
-          else result:=round(clog*ln(value));
+          else result:=round(Cittlog*ln(value));
           end;
 ittsqrt: begin
           // sqrt
           if value=0 then result:=0
-          else result:=round(csqrt*sqrt(value));
+          else result:=round(Cittsqrt*sqrt(value));
          end;
 end;
 end;
 
-procedure TFits.GetIntfImg;
-var i,j,row : integer;
-    x : word;
-    xx: extended;
-    c: double;
-    color: TFPColor;
+function TFits.Citt8(value: Word):byte;
 begin
-FIntfImg.LoadFromBitmap(emptybmp.Handle,0);
-FIntfImg.SetSize(Fwidth,Fheight);
-if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
-c:=MaxWord/(FImgDmax-FImgDmin);
-color.alpha:=65535;
-for i:=0 to Fheight-1 do begin
-   if invertY then row:=Fheight-1-i
-              else row:=i;
-   for j := 0 to Fwidth-1 do begin
-       xx:=Fimage[0,i,j];
-       x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
-       color.red:=Citt(x);
-       if n_axis=3 then begin
-         xx:=Fimage[1,i,j];
-         x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
-         color.green:=Citt(x);
-         xx:=Fimage[2,i,j];
-         x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
-         color.blue:=Citt(x);
-       end else begin
-         color.green:=color.red;
-         color.blue:=color.red;
-       end;
-       if invertX then begin
-          FIntfImg.Colors[Fwidth-j,row]:=color;
-       end else begin
-          FIntfImg.Colors[j,row]:=color;
-       end;
-   end;
+case Fitt of
+ittlinear: begin
+          // Linear
+         result:=value div 256;
+         end;
+ittramp: begin
+          // Ramp
+          result:=value div 256;
+         end;
+ittsqrt: begin
+          // sqrt
+          if value=0 then result:=0
+          else result:=round(Cittsqrt8*sqrt(value));
+         end;
+ittlog:  begin
+          // Log
+          if value=0 then result:=0
+          else result:=round(Cittlog8*ln(value));
+          end;
 end;
 end;
 
-procedure TFits.GetBitmap(var imabmp:Tbitmap);
-var
-    ImgHandle,ImgMaskHandle: HBitmap;
+procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
+var i,j : integer;
+    x : word;
+    xx: extended;
+    c: double;
+    p: PBGRAPixel;
 begin
-imabmp.freeimage;
-imabmp.height:=1;
-imabmp.width:=1;
-if FFitsInfo.naxis1>0 then begin
-  FIntfImg.CreateBitmaps(ImgHandle,ImgMaskHandle,false);
-  imabmp.freeimage;
-  imabmp.SetHandles(ImgHandle,ImgMaskHandle);
+bgra.SetSize(Fwidth,Fheight);
+if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
+c:=MaxWord/(FImgDmax-FImgDmin);
+for i:=0 to Fheight-1 do begin
+   p := bgra.Scanline[i];
+   for j := 0 to Fwidth-1 do begin
+       xx:=Fimage[0,i,j];
+       x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+       p^.red:=Citt8(x);
+       if n_axis=3 then begin
+         xx:=Fimage[1,i,j];
+         x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+         p^.green:=Citt8(x);
+         xx:=Fimage[2,i,j];
+         x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+         p^.blue:=Citt8(x);
+       end else begin
+         p^.green:=p^.red;
+         p^.blue:=p^.red;
+       end;
+       p^.alpha:=255;
+       inc(p);
+   end;
 end;
+bgra.InvalidateBitmap;
 end;
+
 
 end.
