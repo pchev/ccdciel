@@ -34,7 +34,6 @@ type
 
   Tf_visu = class(TFrame)
     BtnZoom05: TSpeedButton;
-    FullRange: TSpeedButton;
     Histogram: TImage;
     Panel1: TPanel;
     hist98: TSpeedButton;
@@ -53,7 +52,6 @@ type
     procedure BtnIttChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
-    procedure FullRangeClick(Sender: TObject);
     procedure hist98Click(Sender: TObject);
     procedure hist99Click(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
@@ -73,20 +71,18 @@ type
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
-    FFullRange: TNotifyEvent;
     procedure SetZoom(value: double);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure DrawHistogram(hist:Thistogram);
+    procedure DrawHistogram(hist:Thistogram; SetLevel: boolean);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: integer read FimgMin write FimgMin;
     property ImgMax: integer read FimgMax write FimgMax;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
-    property onFullRange: TNotifyEvent read FFullRange write FFullRange;
   end;
 
 implementation
@@ -115,7 +111,7 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_visu.DrawHistogram(hist:Thistogram);
+procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);
 var i,maxh,h,h2,l,sum,sl98,sh98,sl99,sh99: integer;
     sh: double;
 begin
@@ -126,6 +122,7 @@ for i:=0 to 255 do begin
   if hist[i]>maxh then
       maxh:=hist[i];
 end;
+if maxh=0 then exit;
 sl98:=round(0.02*sum); l98:=0;
 sh98:=round(0.98*sum); h98:=0;
 sl99:=round(0.005*sum); l99:=0;
@@ -138,7 +135,16 @@ for i:=0 to 255 do begin
   if (h98=0) and (sum>=sh98) then h98:=i;
   if (h99=0) and (sum>=sh99) then h99:=i;
 end;
-if maxh=0 then exit;
+if SetLevel then begin
+  if hist98.Down then begin
+    FimgMin:=l98;
+    FImgMax:=h98;
+  end;
+  if hist99.Down then begin
+    FImgMin:=l99;
+    FImgMax:=h99;
+  end;
+end;
 Histogram.Picture.Bitmap.Width:=Histogram.Width;
 Histogram.Picture.Bitmap.Height:=Histogram.Height;
 with Histogram.Picture.Bitmap do begin
@@ -223,22 +229,17 @@ begin
   if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
 end;
 
-procedure Tf_visu.FullRangeClick(Sender: TObject);
-begin
-  if Assigned(FFullRange) then FFullRange(self);
-end;
-
 procedure Tf_visu.hist98Click(Sender: TObject);
 begin
-ImgMin:=l98;
-ImgMax:=h98;
+FimgMin:=l98;
+FImgMax:=h98;
 if Assigned(FRedraw) then FRedraw(self);
 end;
 
 procedure Tf_visu.hist99Click(Sender: TObject);
 begin
-ImgMin:=l99;
-ImgMax:=h99;
+FImgMin:=l99;
+FImgMax:=h99;
 if Assigned(FRedraw) then FRedraw(self);
 end;
 

@@ -93,30 +93,30 @@ object f_visu: Tf_visu
       end
       object BtnSqrt: TRadioButton
         Left = 0
-        Height = 24
+        Height = 21
         Hint = 'Use a square root scale to display the image'
         Top = 60
-        Width = 55
+        Width = 51
         Caption = 'Sqrt'
         OnChange = BtnIttChange
         TabOrder = 0
       end
       object BtnLog: TRadioButton
         Left = 0
-        Height = 24
+        Height = 21
         Hint = 'Use a logarithmic scale to display the image'
         Top = 40
-        Width = 52
+        Width = 47
         Caption = 'Log'
         OnChange = BtnIttChange
         TabOrder = 1
       end
       object BtnLinear: TRadioButton
         Left = 0
-        Height = 24
+        Height = 21
         Hint = 'Use a linear scale to display the image'
         Top = 20
-        Width = 69
+        Width = 63
         Caption = 'Linear'
         Checked = True
         OnChange = BtnIttChange
@@ -124,12 +124,12 @@ object f_visu: Tf_visu
         TabStop = True
       end
       object histminmax: TSpeedButton
-        Left = 44
+        Left = 56
         Height = 22
         Hint = 'Reset the visualisation treshold'
         Top = 0
         Width = 23
-        AllowAllUp = True
+        Down = True
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000640000006400000000000000000000007A7E7F808485
@@ -164,12 +164,11 @@ object f_visu: Tf_visu
         ShowCaption = False
       end
       object hist99: TSpeedButton
-        Left = 22
+        Left = 28
         Height = 22
         Hint = 'Show 99% of the histogram'
         Top = 0
         Width = 23
-        AllowAllUp = True
         Caption = '99'
         GroupIndex = 101
         Transparent = False
@@ -181,7 +180,6 @@ object f_visu: Tf_visu
         Hint = 'Show 96% of the histogram'
         Top = 0
         Width = 23
-        AllowAllUp = True
         Caption = '96'
         GroupIndex = 101
         Transparent = False
@@ -219,46 +217,6 @@ object f_visu: Tf_visu
         Caption = '1:2'
         GroupIndex = 102
         OnClick = BtnZoomClick
-      end
-      object FullRange: TSpeedButton
-        Left = 66
-        Height = 22
-        Hint = 'Full range histogram'
-        Top = 0
-        Width = 23
-        AllowAllUp = True
-        Glyph.Data = {
-          36030000424D3603000000000000360000002800000010000000100000000100
-          18000000000000030000640000006400000000000000000000007A7E7F808485
-          7C81808B908F868B8A7A7F7E8287858B908E868B89858A888A8C8C8D8D8D8181
-          818A8A8A898B8C7F81828D9192FBFFFFFBFFFFFBFFFFF5FAF9F8FDFCFBFFFEF9
-          FEFCFBFFFEF4F9F7FDFDFDF5F5F5FFFFFFFDFDFDFCFEFF8E90917D8182FBFFFF
-          E8EDECDDE2E1F6FBF9F2F7F5E4E9E7EEF3F1EDF3EEF3F8F6FBFBFBEFEFEFFCFC
-          FCFDFDFDF1F3F48486877C8081FAFEFFE7ECEB9196957A7F7D848987878C8A8C
-          918F838984868C878080809898987C7C7CFFFFFFF8FAFB868889848889FAFEFF
-          EBF0EF838887EAEFEDF1F6F4EAF0EBE7EDE88B918CECF2EDFBFBFBEEEEEE8D8D
-          8DF9F9F9FCFEFF838586858787FFFEFDEBE8E3F2ECE5F6EDE3F4EBDDFFF4E4FF
-          F8E5FFF2DFFFF7E5FFF2E9FFF5EFFFFDF9F3EEEBFAF8F78C8E8E8F8C88FFFDF4
-          F9E9D979614B8C6A4D88603D8F6237966535A26D3A9562378E6245866250745A
-          4AFFF7EBFFFFF8868987908C87FFFDF1FFECDA84624A8D62419C683FC49873CC
-          A582C8A581CFA180E2C8B4EDCDBDFDEBD9FFF3E3FFFFF7848A858F8C87FFFDF3
-          FDEADB785D49967359FFE6CBFCEAD9F6E8DAEEE5D8F7E3D5F2DECDFBE1D3FFEF
-          DEFEF3E5FFFFF8828A838F8C87FFFDF4F5E7DB705B4CB39786FFEAD5FAE5D7F9
-          E8DCF5E9DBF2E7DAECD6C9FFF8EEFFF4E7FDF7EAF7FDF27D89838D8C88FFFCF7
-          EFE6DD66574EA08D85F1DDD2F8E4D9FAE9E0F8E7DAFFF2E5F2DCD1FFFFF7F1E8
-          DEF5F4EAF5FDF67D8B858D8B8AFFFBF8E9E3DE6A615DE6DBD7E8DCDAF2E9E6EF
-          E7E7DBD7D6F2EDECF6EBE7FAEFEBEEEBE6E8ECE7F8FFFC808E8A8D8B8AFFFCF8
-          E3DEDB66615EEAE5E4E6E1E2E2E1E5DBDEE3EDF3FAD9DFE4EAE7E9E4E2E2EEF0
-          F0E4EAE9F8FFFF848F8C8B8C8AFFFCF8E5E0DDE1DCDBE4DFE0E6E5E7DDE0E5E1
-          E9F0D8E2ECD9E4ECE2E5EDE8E9EDE6E9EDE9EEEFF0F8F8878F8E878886FFFFFC
-          FFFDFAFFFDFAFFFDFCFDFDFDF9FCFFF4FDFFF1FDFFF1FCFFF7FDFFF7F9FFF5F9
-          FEFAFFFFF4F9FA8489887A7B79918E8A8F8A87918A878F8A898C8A89888A8B85
-          8A8D7F8B8D7F8A8E858B9284878F80848983868B8F92967C7E7F
-        }
-        GroupIndex = 101
-        Transparent = False
-        OnClick = FullRangeClick
-        ShowCaption = False
       end
     end
   end

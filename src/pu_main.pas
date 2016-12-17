@@ -430,12 +430,11 @@ type
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure RedrawHistogram(Sender: TObject);
     Procedure Redraw(Sender: TObject);
-    Procedure ImgFullRange(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     Procedure ClearImage;
     Procedure DrawImage;
     Procedure PlotImage;
-    Procedure DrawHistogram;
+    Procedure DrawHistogram(SetLevel: boolean);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
@@ -864,7 +863,6 @@ begin
   f_visu.onRedraw:=@Redraw;
   f_visu.onZoom:=@ZoomImage;
   f_visu.onRedrawHistogram:=@RedrawHistogram;
-  f_visu.onFullRange:=@ImgFullRange;
 
   f_msg:=Tf_msg.Create(self);
 
@@ -3429,8 +3427,8 @@ begin
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
   imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+  DrawHistogram(true);
   DrawImage;
-  DrawHistogram;
   if Capture then begin
      subseq:=config.GetValue('/Files/SubfolderSequence',false);
      subobj:=config.GetValue('/Files/SubfolderObjname',false);
@@ -3508,32 +3506,25 @@ ImgFrameX:=FrameX;
 ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
+DrawHistogram(true);
 DrawImage;
-DrawHistogram;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
 begin
-  DrawHistogram;
+  DrawHistogram(false);
 end;
 
 Procedure Tf_main.Redraw(Sender: TObject);
 begin
+  DrawHistogram(false);
   DrawImage;
-  DrawHistogram;
 end;
 
 Procedure Tf_main.ZoomImage(Sender: TObject);
 begin
   ImgZoom:=f_visu.Zoom;
   PlotImage;
-end;
-
-Procedure Tf_main.ImgFullRange(Sender: TObject);
-begin
-  fits.ImgFullRange:=f_visu.FullRange.Down;
-  DrawImage;
-  DrawHistogram;
 end;
 
 procedure debayer(raw: TBGRABitmap; t:TBayerMode; var ima:TBGRABitmap) ;
@@ -3793,10 +3784,10 @@ begin
   end;
 end;
 
-Procedure Tf_main.DrawHistogram;
+Procedure Tf_main.DrawHistogram(SetLevel: boolean);
 begin
   if fits.HeaderInfo.naxis>0 then begin
-     f_visu.DrawHistogram(fits.Histogram);
+     f_visu.DrawHistogram(fits.Histogram,SetLevel);
   end;
 end;
 
@@ -4381,8 +4372,8 @@ begin
        if n<>0 then cdcWCSinfo.secpix:=0;
      end
        else cdcWCSinfo.secpix:=0;
+     DrawHistogram(true);
      DrawImage;
-     DrawHistogram;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage('Open file '+fn);
      StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
