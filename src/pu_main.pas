@@ -3666,7 +3666,7 @@ end;
 end;
 
 Procedure Tf_main.DrawImage;
-var rawbmp,colorbmp:TBGRABitmap;
+var tmpbmp:TBGRABitmap;
 begin
 if fits.HeaderInfo.naxis>0 then begin
   if f_visu.BtnLinear.Checked then fits.itt:=ittlinear
@@ -3676,26 +3676,21 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.ImgDmin:=f_visu.ImgMin*256;
   fits.GetBGRABitmap(ImaBmp);
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
-     rawbmp:=TBGRABitmap.Create(ImaBmp);
      if BayerColor then begin
-       colorbmp:=TBGRABitmap.Create;
-       debayer(rawbmp,BayerMode,colorbmp);
-       rawbmp.Assign(colorbmp);
-       colorbmp.Free;
+       tmpbmp:=TBGRABitmap.Create;
+       debayer(ImaBmp,BayerMode,tmpbmp);
+       ImaBmp.Assign(tmpbmp);
+       tmpbmp.Free;
      end;
-     if (fits.HeaderInfo.pixratio=1) then begin
-       ImaBmp.Assign(rawbmp);
-     end else begin
+     if (fits.HeaderInfo.pixratio<>1) then begin
+       tmpbmp:=TBGRABitmap.Create(ImaBmp);
        ImaBmp.SetSize(round(fits.HeaderInfo.pixratio*ImaBmp.Width),ImaBmp.Height);
-       ImaBMP.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),rawbmp.Bitmap);
+       ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
+       tmpbmp.Free;
      end;
-     rawbmp.Free;
   end;
   if refmask then begin
-    rawbmp:=TBGRABitmap.Create(ImaBmp);
-    rawbmp.StretchPutImage(rect(0,0,rawbmp.Width,rawbmp.Height),refbmp,dmLinearBlend);
-    ImaBmp.Assign(rawbmp);
-    rawbmp.Free;
+    ImaBmp.StretchPutImage(rect(0,0,ImaBmp.Width,ImaBmp.Height),refbmp,dmLinearBlend);
   end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
@@ -3719,7 +3714,7 @@ end;
 Procedure Tf_main.PlotImage;
 var r1,r2: double;
     w,h,px,py: integer;
-    bmp2:Tbitmap;
+    tmpbmp,str: TBGRABitmap;
 begin
 ClearImage;
 if ImgZoom=0 then begin
@@ -3735,22 +3730,22 @@ if ImgZoom=0 then begin
     w:=trunc(h*r1);
     ImgScale0:=w/img_Width;
   end;
-  image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,w,h),ImaBmp.Bitmap);
+  str:=ImaBmp.Resample(w,h,rmSimpleStretch) as TBGRABitmap;
+  str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
+  str.Free;
 end
 else if ImgZoom=0.5 then begin
    // zoom 0.5
-   bmp2:=Tbitmap.Create;
-   bmp2.SetSize(Image1.Width * 2,Image1.Height * 2);
-   bmp2.Canvas.Brush.Color:=clDarkBlue;
-   bmp2.Canvas.Pen.Color:=clBlack;
-   bmp2.Canvas.FillRect(0,0,bmp2.Width,bmp2.Height);
-   px:=ImgCx-((img_Width-bmp2.Width) div 2);
-   py:=ImgCy-((img_Height-bmp2.Height) div 2);
+   tmpbmp:=TBGRABitmap.Create(Image1.Width * 2,Image1.Height * 2,clDarkBlue);
+   px:=ImgCx-((img_Width-tmpbmp.Width) div 2);
+   py:=ImgCy-((img_Height-tmpbmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   bmp2.Canvas.Draw(px,py,ImaBmp.Bitmap);
-   image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,image1.width,image1.Height),bmp2);
-   bmp2.Free;
+   tmpbmp.PutImage(px,py,ImaBmp,dmSet);
+   str:=tmpbmp.Resample(image1.Width,image1.Height,rmSimpleStretch) as TBGRABitmap;
+   str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
+   str.Free;
+   tmpbmp.Free;
 end
 else if ImgZoom=1 then begin
    // zoom 1
@@ -3758,22 +3753,20 @@ else if ImgZoom=1 then begin
    py:=ImgCy-((img_Height-Image1.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   image1.Picture.Bitmap.Canvas.Draw(px,py,ImaBmp.Bitmap);
+   ImaBmp.Draw(image1.Picture.Bitmap.Canvas,px,py,True);
 end
 else if ImgZoom=2 then begin
    // zoom 2
-   bmp2:=Tbitmap.Create;
-   bmp2.SetSize(Image1.Width div 2,Image1.Height div 2);
-   bmp2.Canvas.Brush.Color:=clDarkBlue;
-   bmp2.Canvas.Pen.Color:=clBlack;
-   bmp2.Canvas.FillRect(0,0,bmp2.Width,bmp2.Height);
-   px:=ImgCx-((img_Width-bmp2.Width) div 2);
-   py:=ImgCy-((img_Height-bmp2.Height) div 2);
+   tmpbmp:=TBGRABitmap.Create(Image1.Width div 2,Image1.Height div 2,clDarkBlue);
+   px:=ImgCx-((img_Width-tmpbmp.Width) div 2);
+   py:=ImgCy-((img_Height-tmpbmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   bmp2.Canvas.Draw(px,py,ImaBmp.Bitmap);
-   image1.Picture.Bitmap.Canvas.StretchDraw(rect(0,0,image1.width,image1.Height),bmp2);
-   bmp2.Free;
+   tmpbmp.PutImage(px,py,ImaBmp,dmSet);
+   str:=tmpbmp.Resample(image1.Width,image1.Height,rmSimpleStretch) as TBGRABitmap;
+   str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
+   str.Free;
+   tmpbmp.Free;
 end;
 Application.ProcessMessages;
 end;
