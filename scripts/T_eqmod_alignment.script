@@ -3,42 +3,58 @@
   All the alignment data are cleared and a new model is automatically build.
   After the model is ready the "sync mode" is automatically switched to allow delta sync 
   for precision pointing.
+  This new version allow for an unlimited number of points.
   
   Use the script scope_alignment if you not use an EQMOD mount.
    
   Edit the parameters below according to your needs, then comment the indicated row.
   
 }
+
+//// Configure number of points on each side of the meridian: ////
+ const npointE=9;
+       npointW=5;
+///////////////////////////////////////////////       
+
  var i: integer;
      arg: TStringList;
-     al_east,al_west: array[0..2]of array[0..1]of double;
+     al_east: array[0..npointE-1]of array[0..1]of double;
+     al_west: array[0..npointW-1]of array[0..1]of double;
      do_east, do_west, to_be_configured, ok: boolean;
      exposure,binning,filter_num: string;
 const f5='0.00000';
 
 procedure SetParameters;
 begin
-// comment or remove the next row after you set yours parameters
- to_be_configured:=true;
+// comment or remove the next row after you set your parameters
+to_be_configured:=true;
 
 ///////////  Parameters //////////////////////
- exposure  := '15';    // seconds
+ exposure  := '8';    // seconds
  binning   := '1x1';  // binning can speedup the process
  filter_num:= '1';    // position of clear filter (-1 if no filters)
 
  // East side alignment 
  do_east   :=true;    // do alignment on east azimut
   //            Azimut                Elevation
- al_east[0][0]:=40.0;  al_east[0][1]:=30.0;
- al_east[1][0]:=90.0;  al_east[1][1]:=65.0;
- al_east[2][0]:=150.0; al_east[2][1]:=30.0;
+ al_east[0][0]:=45.0;  al_east[0][1]:=35.0;
+ al_east[1][0]:=90.0;  al_east[1][1]:=60.0;
+ al_east[2][0]:=110.0; al_east[2][1]:=30.0;
+ al_east[3][0]:=140.0; al_east[3][1]:=30.0;
+ al_east[4][0]:=170.0; al_east[4][1]:=30.0;
+ al_east[5][0]:=170.0; al_east[5][1]:=50.0;
+ al_east[6][0]:=170.0; al_east[6][1]:=70.0;
+ al_east[7][0]:=90.0;  al_east[7][1]:=80.0;
+ al_east[8][0]:=10.0;  al_east[8][1]:=60.0;
 
  // West side alignment 
- do_west   :=false;   // do alignment on west azimut
+ do_west   :=true;   // do alignment on west azimut
   //            Azimut                Elevation
- al_west[0][0]:=320.0; al_west[0][1]:=30.0;
- al_west[1][0]:=270.0; al_west[1][1]:=65.0;
+ al_west[0][0]:=340.0; al_west[0][1]:=60.0;
+ al_west[1][0]:=240.0; al_west[1][1]:=75.0;
  al_west[2][0]:=210.0; al_west[2][1]:=30.0;
+ al_west[3][0]:=245.0; al_west[3][1]:=30.0;
+ al_west[4][0]:=300.0; al_west[4][1]:=60.0;
 ///////////  Parameters //////////////////////
 end;
 
@@ -65,6 +81,7 @@ begin
   if not(Cmd('ASTROMETRY_SOLVE')=msgOK) then exiterror;
   // Sync telescope to image
   if not(Cmd('ASTROMETRY_SYNC')=msgOK) then exiterror;
+
 end;
 
 begin
@@ -83,26 +100,12 @@ if to_be_configured then begin
   raiseexception(erCustomError, 'Configuration need');
 end;
 
-  // telescope connected?
-  GetB('TELESCOPE_CONNECTED',ok);
-  if not ok then begin
-    logMsg('Telescope not connected!');
-    exit;
-  end;
-
  getB('TELESCOPE_EQMOD',ok);
  if not ok then begin
    logMsg('This script can only be run with an EQMOD mount!');
-   exit;
+   raiseexception(erCustomError, 'Not EQMOD');
  end;
  
- // camera connected?
- GetB('CAMERA_CONNECTED',ok);
- if not ok then begin
-   logMsg('Camera not connected!');
-   exit;
- end;
-
  // Set filter
  arg.clear;
  arg.add(filter_num);
@@ -126,14 +129,14 @@ end;
 
 // East alignment
  if do_east then begin
-   for i:=0 to 2 do begin
+   for i:=0 to npointE-1 do begin
      SyncAltAz(al_east[i][0],al_east[i][1]);
    end;
  end;
 
  // West alignment
  if do_west then begin
-   for i:=0 to 2 do begin
+   for i:=0 to npointW-1 do begin
      SyncAltAz(al_west[i][0],al_west[i][1]);
    end;
  end;
