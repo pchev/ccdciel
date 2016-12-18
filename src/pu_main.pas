@@ -1809,7 +1809,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
    SetConnected;
    ConnectTimer.Enabled:=true;
  end
- else if concount>0 then SetConnecting
+ else if (concount>0)or(upcount>0) then SetConnecting
  else SetDisconnected;
 end;
 
