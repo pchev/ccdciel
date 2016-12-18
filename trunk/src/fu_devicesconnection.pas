@@ -79,6 +79,7 @@ begin
   if BtnConnect.Caption='Disconnect' then begin
     Disconnect(true);
   end else begin
+    BtnConnect.Caption:='Disconnect';
     Connect;
   end;
 end;
