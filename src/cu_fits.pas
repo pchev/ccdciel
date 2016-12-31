@@ -100,7 +100,7 @@ type
     FStream : TMemoryStream;
     // Fits read buffers
     d8  : array[1..2880] of byte;
-    d16 : array[1..1440] of word;
+    d16 : array[1..1440] of smallint;
     d32 : array[1..720] of Longword;
     d64 : array[1..360] of Int64;
     // Original image data
@@ -641,6 +641,8 @@ Procedure TFits.ReadFitsImage;
 var i,ii,j,npix,k,km,kk : integer;
     x,dmin,dmax : double;
     ni,sum,sum2 : extended;
+    x16,b16:smallint;
+    x8,b8:byte;
 begin
 if FFitsInfo.naxis1=0 then exit;
 dmin:=1.0E100;
@@ -677,6 +679,8 @@ case FFitsInfo.bitpix of
         end;
 end;
 npix:=0;
+b8:=round(FFitsInfo.blank);
+b16:=round(FFitsInfo.blank);
 case FFitsInfo.bitpix of
     -64:for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
         for i:=0 to FFitsInfo.naxis2-1 do begin
@@ -730,10 +734,10 @@ case FFitsInfo.bitpix of
              npix:=0;
            end;
            inc(npix);
-           x:=d8[npix];
-           if x=FFitsInfo.blank then x:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imai8[k,ii,j] := round(x);
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+           x8:=d8[npix];
+           if x8=b8 then x8:=0;
+           if (ii<=maxl-1) and (j<=maxl-1) then imai8[k,ii,j] := x8;
+           x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -758,10 +762,10 @@ case FFitsInfo.bitpix of
              inc(npix);
              km:=k-kk;
              if km<0 then continue; // skip A
-             x:=d8[npix];
-             if x=FFitsInfo.blank then x:=0;
-             if (ii<=maxl-1) and (j<=maxl-1) then imai8[km,ii,j] := round(x);
-             x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+             x8:=d8[npix];
+             if x8=b8 then x8:=0;
+             if (ii<=maxl-1) and (j<=maxl-1) then imai8[km,ii,j] := x8;
+             x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
              dmin:=min(x,dmin);
              dmax:=max(x,dmax);
              sum:=sum+x;
@@ -782,10 +786,10 @@ case FFitsInfo.bitpix of
              npix:=0;
            end;
            inc(npix);
-           x:=BEtoN(SmallInt(d16[npix]));
-           if x=FFitsInfo.blank then x:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imai16[k,ii,j] := round(x);
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+           x16:=BEtoN(d16[npix]);
+           if x16=b16 then x16:=0;
+           if (ii<=maxl-1) and (j<=maxl-1) then imai16[k,ii,j] := x16;
+           x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
