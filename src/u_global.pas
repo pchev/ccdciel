@@ -43,6 +43,7 @@ type
   TAutofocusMode=(afVcurve,afMean,afIterative,afNone);
   TAutofocusVcurveStep=(vcsNearL,vcsNearR,vcsFocusL,vcsFocusR);
   TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
+  TIndiTransfert=(itNetwork,itDisk);
 
   TBpm=array[1..1000]of array[1..2] of integer;
 

@@ -1817,11 +1817,15 @@ end;
 Procedure Tf_main.ConnectCamera(Sender: TObject);
 begin
    case camera.CameraInterface of
-    INDI : camera.Connect(config.GetValue('/INDI/Server',''),
+    INDI : begin
+           camera.IndiTransfert:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
+           camera.IndiTransfertDir:=config.GetValue('/INDIcamera/IndiTransfertDir','/tmp');
+           camera.Connect(config.GetValue('/INDI/Server',''),
                           config.GetValue('/INDI/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
                           config.GetValue('/INDIcamera/Sensor','CCD1'),
                           config.GetValue('/INDIcamera/DevicePort',''));
+           end;
     ASCOM: camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
   end;
 end;
@@ -2796,6 +2800,8 @@ begin
     config.SetValue('/INDIcamera/Sensor',f_setup.CameraSensor);
     config.SetValue('/INDIcamera/DevicePort',f_setup.CameraIndiDevPort.Text);
     config.SetValue('/INDIcamera/AutoLoadConfig',f_setup.CameraAutoLoadConfig.Checked);
+    config.SetValue('/INDIcamera/IndiTransfert',f_setup.CameraIndiTransfert.ItemIndex);
+    config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));

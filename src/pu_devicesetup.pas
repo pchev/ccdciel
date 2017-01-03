@@ -56,10 +56,14 @@ type
     BtnChooseFocuser: TButton;
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
+    CameraIndiTransfertDir: TEdit;
+    Label5: TLabel;
+    CameraDiskPanel: TPanel;
     ProfileList: TComboBox;
     Label2: TLabel;
     MountAutoLoadConfig: TCheckBox;
     FocuserAutoLoadConfig: TCheckBox;
+    CameraIndiTransfert: TRadioGroup;
     WheelAutoLoadConfig: TCheckBox;
     IndiTimeout: TEdit;
     IndiSensor: TComboBox;
@@ -118,6 +122,7 @@ type
     procedure BtnChooseClick(Sender: TObject);
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
+    procedure CameraIndiTransfertClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
     procedure FilterWheelInCameraBoxClick(Sender: TObject);
@@ -223,7 +228,10 @@ CameraIndiDevice.Text:=conf.GetValue('/INDIcamera/Device','');
 CameraSensor:=conf.GetValue('/INDIcamera/Sensor','CCD1');
 CameraIndiDevPort.Text:=conf.GetValue('/INDIcamera/DevicePort','');
 CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',false);
+CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork));
+CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir','/tmp');
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
+CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
 if WheelIndiDevice.Items.Count=0 then begin
@@ -513,6 +521,11 @@ begin
     on E: EOleException do ShowMessage('Error : ' + E.Message);
   end;
 {$endif}
+end;
+
+procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
+begin
+  CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 end;
 
 procedure Tf_setup.FormShow(Sender: TObject);

@@ -62,6 +62,8 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVerticalFlip: boolean;
     FVideoSizes, FVideoRates:TStringList;
+    FIndiTransfert: TIndiTransfert;
+    FIndiTransfertDir,FIndiTransfertPrefix: string;
     procedure NewImage;
     procedure WriteHeaders;
     procedure NewVideoFrame;
@@ -185,6 +187,8 @@ T_camera = class(TComponent)
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    property IndiTransfert: TIndiTransfert read FIndiTransfert write FIndiTransfert;
+    property IndiTransfertDir: string read FIndiTransfertDir write FIndiTransfertDir;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -212,6 +216,9 @@ constructor T_camera.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FTimeOut:=100;
+  FIndiTransfert:=itNetwork;
+  FIndiTransfertDir:='/tmp';
+  FIndiTransfertPrefix:='ccdciel_tmp';
   FVerticalFlip:=false;
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
