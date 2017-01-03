@@ -139,6 +139,7 @@ type
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,FCameraSensor: string;
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection: TDevInterface;
+    IndiTimerCount:integer;
     procedure IndiNewDevice(dp: Basedevice);
     procedure SetConnectionInterface(value: TDevInterface);
     procedure SetCameraConnection(value: TDevInterface);
@@ -553,6 +554,8 @@ end;
 
 procedure Tf_setup.GetIndiDevicesClick(Sender: TObject);
 begin
+  if IndiTimer.Enabled then exit;
+  IndiTimerCount:=0;
   camsavedev:=CameraIndiDevice.Text;
   wheelsavedev:=WheelIndiDevice.Text;
   focusersavedev:=FocuserIndiDevice.Text;
@@ -573,6 +576,8 @@ end;
 procedure Tf_setup.IndiTimerTimer(Sender: TObject);
 var i: integer;
 begin
+  inc(IndiTimerCount);
+  if (CameraIndiDevice.Items.Count=0)and(IndiTimerCount<=5) then exit;
   IndiTimer.Enabled:=false;
   indiclient.DisconnectServer;
   for i:=0 to CameraIndiDevice.Items.Count-1 do
