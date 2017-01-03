@@ -88,6 +88,9 @@ private
    ActiveDevices: ITextVectorProperty;
    UploadMode: ISwitchVectorProperty;
    UploadClient, UploadLocal, UploadBoth: ISwitch;
+   UploadSettings: ITextVectorProperty;
+   UploadDir, UploadPrefix: IText;
+   CCDfilepath: ITextVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave,configdefault: ISwitch;
    FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
@@ -276,6 +279,8 @@ begin
     FilterName:=nil;
     ActiveDevices:=nil;
     UploadMode:=nil;
+    UploadSettings:=nil;
+    CCDfilepath:=nil;
     configprop:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
@@ -569,6 +574,15 @@ begin
      UploadBoth:=IUFindSwitch(UploadMode,'UPLOAD_BOTH');
      if (UploadClient=nil)or(UploadLocal=nil)or(UploadBoth=nil) then UploadMode:=nil;
   end
+  else if (proptype=INDI_TEXT)and(propname='UPLOAD_SETTINGS') then begin
+     UploadSettings:=indiProp.getText;
+     UploadDir:=IUFindText(UploadSettings,'UPLOAD_DIR');
+     UploadPrefix:=IUFindText(UploadSettings,'UPLOAD_PREFIX');
+     if (UploadDir=nil)or(UploadPrefix=nil) then UploadSettings:=nil;
+  end
+  else if (proptype=INDI_TEXT)and(propname='CCD_FILE_PATH') then begin
+     CCDfilepath:=indiProp.getText;
+  end
   else if (proptype=INDI_SWITCH)and(propname='CCD_VIDEO_STREAM') then begin
      CCDVideoStream:=indiProp.getSwitch;
      VideoStreamOn:=IUFindSwitch(CCDVideoStream,'STREAM_ON');
@@ -660,7 +674,14 @@ begin
 procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
 begin
-if tvp=FilterName then begin
+if tvp=CCDfilepath then begin
+  FImgStream.Clear;
+  FImgStream.Position:=0;
+  FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
+  DeleteFile(CCDfilepath.tp[0].text);
+  NewImage;
+end
+else if tvp=FilterName then begin
     FFilterNames.Clear;
     for i:=0 to tvp.ntp-1 do begin
        FFilterNames.Add(tvp.tp[i].text);
@@ -780,10 +801,30 @@ end;
 
 Procedure T_indicamera.StartExposure(exptime: double);
 begin
-if (UploadMode<>nil)and(UploadLocal.s=ISS_ON) then begin
-   IUResetSwitch(UploadMode);
-   UploadClient.s:=ISS_ON;
-   indiclient.sendNewSwitch(UploadMode);
+if FIndiTransfert=itDisk then begin
+   if (UploadSettings=nil)or(UploadMode=nil) then
+      FIndiTransfert:=itNetwork;
+end;
+case FIndiTransfert of
+  itNetwork:begin
+            if (UploadMode<>nil)and(UploadLocal.s=ISS_ON) then begin
+               IUResetSwitch(UploadMode);
+               UploadClient.s:=ISS_ON;
+               indiclient.sendNewSwitch(UploadMode);
+            end;
+            end;
+  itDisk:   begin
+            if (UploadClient.s=ISS_ON) then begin
+               IUResetSwitch(UploadMode);
+               UploadLocal.s:=ISS_ON;
+               indiclient.sendNewSwitch(UploadMode);
+            end;
+            if (UploadDir.text<>FIndiTransfertDir)or(UploadPrefix.text<>FIndiTransfertPrefix) then begin
+               UploadDir.text:=FIndiTransfertDir;
+               UploadPrefix.text:=FIndiTransfertPrefix;
+               indiclient.sendNewText(UploadSettings);
+            end;
+            end;
 end;
 if UseMainSensor then begin
   if (not zlibok)and(CCDCompression<>nil)and(CCDcompress.s=ISS_ON) then begin
