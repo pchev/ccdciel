@@ -217,7 +217,7 @@ begin
   inherited Create(AOwner);
   FTimeOut:=100;
   FIndiTransfert:=itNetwork;
-  FIndiTransfertDir:='/tmp';
+  FIndiTransfertDir:=defTransfertPath;
   FIndiTransfertPrefix:='ccdciel_tmp';
   FVerticalFlip:=false;
   FStatus := devDisconnected;

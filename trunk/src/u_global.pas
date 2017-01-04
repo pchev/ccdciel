@@ -150,7 +150,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.8.5';
+  ccdcielver = '0.8.6';
   ccdciel_version='Version beta '+ccdcielver;
   blank=' ';
   clOrange=$1080EF;
@@ -201,18 +201,21 @@ const
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
     defCapturePath='/tmp';
+    defTransfertPath='/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
     defCapturePath='/tmp';
+    defTransfertPath='/tmp';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
     defCapturePath='C:\';
+    defTransfertPath='C:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
   {$endif}
