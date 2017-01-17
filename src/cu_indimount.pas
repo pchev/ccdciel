@@ -227,9 +227,16 @@ procedure T_indimount.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (MountDevice=nil)or(not Fready) then begin
-     msg('No response from server');
-     msg('Is "'+Findidevice+'" a running telescope mount driver?');
-     Disconnect;
+    msg('Error');
+    if not Fconnected then begin
+      msg('No response from server');
+      msg('Is "'+Findidevice+'" a running telescope mount driver?');
+    end
+    else if (configprop=nil) then
+       msg('Missing property CONFIG_PROCESS')
+    else if (coord_prop=nil) then
+       msg('Missing property EQUATORIAL_EOD_COORD or EQUATORIAL_COORD');
+    Disconnect;
   end;
 end;
 

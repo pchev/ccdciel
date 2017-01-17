@@ -212,9 +212,18 @@ procedure T_indifocuser.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (FocuserDevice=nil)or(not Fready) then begin
-     msg('No response from server');
-     msg('Is "'+Findidevice+'" a running focuser driver?');
-     Disconnect;
+    msg('Error');
+    if not Fconnected then begin
+      msg('No response from server');
+      msg('Is "'+Findidevice+'" a running focuser driver?');
+    end
+    else if (configprop=nil) then
+       msg('Missing property CONFIG_PROCESS')
+    else if (FocusMotion=nil) then
+       msg('Missing property FOCUS_MOTION')
+    else if ((FocusAbsolutePosition=nil)and(FocusRelativePosition=nil)and(FocusTimer=nil)) then
+       msg('One of the properties ABS_FOCUS_POSITION, REL_FOCUS_POSITION, FOCUS_TIMER is required');
+    Disconnect;
   end;
 end;
 
