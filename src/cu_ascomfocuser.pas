@@ -36,11 +36,11 @@ T_ascomfocuser = class(T_focuser)
  private
    {$ifdef mswindows}
    V: variant;
-   FSpeed: integer;
+   FSpeed,FFocusdirection: integer;
    stPosition,stRelpos: integer;
    Fdevice: string;
    {$endif}
-   FFocusdirection,FRelIncr: integer;
+   FRelIncr: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);

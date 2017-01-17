@@ -66,7 +66,10 @@ T_indiwheel = class(T_wheel)
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
    procedure SetFilterNames(value:TStringList); override;
+   function  GetFilterNames:TStringList; override;
    procedure SetTimeout(num:integer); override;
+   procedure SetCamera(value: TObject); override;
+   function  GetStatus: TDeviceStatus; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -98,6 +101,7 @@ end;
 constructor T_indiwheel.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
+ FWheelInterface:=INDI;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -355,6 +359,16 @@ if (FilterName<>nil)and(value.Count=FilterName.ntp) then begin
 end;
 end;
 
+function  T_indiwheel.GetFilterNames:TStringList;
+begin
+  result:=FFilterNames;
+end;
+
+function  T_indiwheel.GetStatus: TDeviceStatus;
+begin
+  result:=FStatus;
+end;
+
 procedure T_indiwheel.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
@@ -368,6 +382,11 @@ begin
     configload.s:=ISS_ON;
     indiclient.sendNewSwitch(configprop);
   end;
+end;
+
+procedure T_indiwheel.SetCamera(value: TObject);
+begin
+ Fcameraobj:=value;
 end;
 
 end.

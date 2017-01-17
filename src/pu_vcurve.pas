@@ -153,7 +153,7 @@ end;
 
 Procedure Tf_vcurve.LoadCurve;
 var i,nl,nr: integer;
-  r2,rl,rr,bl,br,x:double;
+  r2,rl,rr,bl,br:double;
   pl,pr:array of TDouble2;
   col: TColor;
 begin
