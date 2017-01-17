@@ -359,9 +359,20 @@ procedure T_indicamera.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (not Fready) then begin
-     msg('No response from server');
-     msg('Is "'+Findidevice+'" a running camera driver?');
-     Disconnect;
+    msg('Error');
+    if not Fconnected then begin
+       msg('No response from server');
+       msg('Is "'+Findidevice+'" a running camera driver?');
+    end
+    else if (configprop=nil) then
+       msg('Missing property CONFIG_PROCESS')
+    else if not FhasBlob then
+       msg('Missing property INDI_BLOB')
+    else if ((Findisensor='CCD2')and(Guiderexpose=nil)) then
+       msg(Findisensor+' missing property GUIDER_EXPOSURE')
+    else if ((Findisensor<>'CCD2')and(CCDexpose=nil)) then
+       msg(Findisensor+' missing property CCD_EXPOSURE');
+    Disconnect;
   end;
 end;
 

@@ -185,9 +185,18 @@ procedure T_indiwheel.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (WheelDevice=nil)or(not Fready) then begin
-     msg('No response from server');
-     msg('Is "'+Findidevice+'" a running wheel driver?');
-     Disconnect;
+    msg('Error');
+    if not Fconnected then begin
+      msg('No response from server');
+      msg('Is "'+Findidevice+'" a running wheel driver?');
+    end
+    else if (configprop=nil) then
+       msg('Missing property CONFIG_PROCESS')
+    else if (WheelSlot=nil) then
+       msg('Missing property FILTER_SLOT')
+    else if (FilterName=nil) then
+       msg('Missing property FILTER_NAME');
+    Disconnect;
   end;
 end;
 
