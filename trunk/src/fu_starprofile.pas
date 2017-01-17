@@ -649,7 +649,7 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusMean;
-var i,k,n,skip,step: integer;
+var i,k,step: integer;
     VcpiL,VcpiR,al,bl,rl,ar,br,rr: double;
     p:array of TDouble2;
   procedure ResetPos;

@@ -31,7 +31,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
-  cu_indiwheel, cu_ascomwheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
+  cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
@@ -770,6 +770,7 @@ begin
   case aInt of
     INDI:  wheel:=T_indiwheel.Create(nil);
     ASCOM: wheel:=T_ascomwheel.Create(nil);
+    INCAMERA: wheel:=T_incamerawheel.Create(nil);
   end;
   wheel.onMsg:=@NewMessage;
   wheel.onDeviceMsg:=@DeviceMessage;
@@ -809,6 +810,7 @@ begin
     INDI:  camera:=T_indicamera.Create(nil);
     ASCOM: camera:=T_ascomcamera.Create(nil);
   end;
+  if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
   camera.Mount:=mount;
   camera.wheel:=wheel;
   camera.Fits:=fits;
@@ -2114,6 +2116,10 @@ begin
                       CameraVideoSizeChange(nil);
                       CameraVideoRateChange(nil);
                       f_video.SetImageControls;
+                   end;
+                   if wheel.WheelInterface=INCAMERA then begin
+                     wait(1);
+                     WheelStatus(Sender);
                    end;
                    end;
  end;

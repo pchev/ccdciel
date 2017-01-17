@@ -41,19 +41,24 @@ T_wheel = class(TComponent)
     FonFilterNameChange: TNotifyEvent;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
+    Fcameraobj: TObject;
+    function  GetStatus: TDeviceStatus; virtual; abstract;
     procedure SetFilter(num:integer);  virtual; abstract;
     function  GetFilter:integer; virtual; abstract;
     procedure SetFilterNames(value:TStringList); virtual; abstract;
+    function  GetFilterNames:TStringList; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
+    procedure SetCamera(value: TObject);virtual; abstract;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     property WheelInterface: TDevInterface read FWheelInterface;
-    property Status: TDeviceStatus read FStatus;
+    property Camera: TObject read Fcameraobj write SetCamera;
+    property Status: TDeviceStatus read GetStatus;
     property Filter: integer read GetFilter write SetFilter;
-    property FilterNames: TStringList read FFilterNames write SetFilterNames;
+    property FilterNames: TStringList read GetFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;

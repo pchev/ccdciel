@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_wheel, u_global,
+uses  cu_wheel, u_global, indiapi,
   {$ifdef mswindows}
-    indiapi, Variants, comobj,
+     Variants, comobj,
   {$endif}
    ExtCtrls, Forms, Classes, SysUtils;
 
@@ -44,13 +44,16 @@ T_ascomwheel = class(T_wheel)
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
-   procedure GetFilterNames(var value:TStringList; var n: integer);
+   procedure GetAscomFilterNames(var value:TStringList; var n: integer);
    function WaitFilter(maxtime:integer):boolean;
  protected
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
    procedure SetFilterNames(value:TStringList); override;
+   function  GetFilterNames:TStringList; override;
    procedure SetTimeout(num:integer); override;
+   procedure SetCamera(value: TObject); override;
+   function  GetStatus: TDeviceStatus; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -88,7 +91,7 @@ begin
   V.connected:=true;
   if V.connected then begin
      msg('Filter wheel '+Fdevice+' connected.');
-     GetFilterNames(FFilterNames,FFilterNum);
+     GetAscomFilterNames(FFilterNames,FFilterNum);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
@@ -154,7 +157,7 @@ begin
        if Assigned(FonFilterChange) then FonFilterChange(stFilter);
     end;
     fnam:=Tstringlist.Create;
-    GetFilterNames(fnam,n);
+    GetAscomFilterNames(fnam,n);
     fnchanged:=n<>FFilterNum;
     if not fnchanged then
       for i:=0 to n-1 do
@@ -239,7 +242,12 @@ begin
  {$endif}
 end;
 
-procedure T_ascomwheel.GetFilterNames(var value:TStringList; var n: integer);
+function  T_ascomwheel.GetFilterNames:TStringList;
+begin
+  result:=FFilterNames;
+end;
+
+procedure T_ascomwheel.GetAscomFilterNames(var value:TStringList; var n: integer);
 {$ifdef mswindows}
 var fnames: array of WideString;
     i: integer;
@@ -262,6 +270,11 @@ begin
  {$endif}
 end;
 
+function  T_ascomwheel.GetStatus: TDeviceStatus;
+begin
+  result:=FStatus;
+end;
+
 procedure T_ascomwheel.msg(txt: string);
 begin
  if Assigned(FonMsg) then FonMsg(txt);
@@ -270,6 +283,11 @@ end;
 procedure T_ascomwheel.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
+end;
+
+procedure T_ascomwheel.SetCamera(value: TObject);
+begin
+ Fcameraobj:=value;
 end;
 
 end.

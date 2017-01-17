@@ -574,6 +574,7 @@ begin
   else if (proptype=INDI_TEXT)and(propname='FILTER_NAME') then begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
+     FFilterNames.Add(Filter0);
      for i:=0 to FilterName.ntp-1 do begin
         FFilterNames.Add(FilterName.tp[i].text);
      end;
@@ -694,6 +695,7 @@ if tvp=CCDfilepath then begin
 end
 else if tvp=FilterName then begin
     FFilterNames.Clear;
+    FFilterNames.Add(Filter0);
     for i:=0 to tvp.ntp-1 do begin
        FFilterNames.Add(tvp.tp[i].text);
     end;
