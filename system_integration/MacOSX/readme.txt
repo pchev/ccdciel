@@ -1,8 +1,8 @@
 CCDciel
-Version 0.8.6 beta
+Version 0.8.7 beta
 
 
-Copyright (C) 2016 Patrick Chevalley
+Copyright (C) 2017 Patrick Chevalley
 
 http://ap-i.net/ccdciel
 http://ccdciel.sourceforge.net
