@@ -221,7 +221,7 @@ begin
  Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
- InitTimer.Interval:=10000;
+ InitTimer.Interval:=60000;
  InitTimer.OnTimer:=@InitTimerTimer;
  ConnectTimer:=TTimer.Create(nil);
  ConnectTimer.Enabled:=false;
@@ -378,6 +378,8 @@ end;
 
 Procedure T_indicamera.Disconnect;
 begin
+InitTimer.Enabled:=False;
+ConnectTimer.Enabled:=False;
 indiclient.Terminate;
 ClearStatus;
 end;
@@ -390,15 +392,22 @@ end;
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
 begin
  ConnectTimer.Enabled:=False;
+ if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
+   ConnectTimer.Enabled:=true;
+ end;
  if (CCDport<>nil)and(Findideviceport<>'') then begin
      CCDport.tp[0].text:=Findideviceport;
      indiclient.sendNewText(CCDport);
+     msg('Set port '+Findideviceport);
  end;
  indiclient.connectDevice(Findidevice);
- if (Findisensor='CCD1')or(Findisensor='CCD2') then
-     indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
- else
-     indiclient.setBLOBMode(B_ALSO,Findidevice);
+ if FhasBlob then begin
+   msg('Set BlobMode '+Findisensor);
+   if (Findisensor='CCD1')or(Findisensor='CCD2') then
+       indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
+   else
+       indiclient.setBLOBMode(B_ALSO,Findidevice);
+ end;
 end;
 
 procedure T_indicamera.ServerDisconnected(Sender: TObject);
