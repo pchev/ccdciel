@@ -1,11 +1,11 @@
 CCDciel
-Version 0.8.6 beta
+Version 0.8.7 beta
 
 A CCD capture software intended for the amateur astronomer.
 It include all the features required to perform digital imaging CCD observation of celestial objects.
 Using the standard drivers protocol INDI and ASCOM it can connect and control the CCD camera, the focuser, the filter wheel and the telescope mount.
 
-Copyright (C) 2016 Patrick Chevalley
+Copyright (C) 2017 Patrick Chevalley
 
 http://sourceforge.net/projects/ccdciel
 
