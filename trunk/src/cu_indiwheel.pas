@@ -109,7 +109,7 @@ begin
  Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
- InitTimer.Interval:=10000;
+ InitTimer.Interval:=60000;
  InitTimer.OnTimer:=@InitTimerTimer;
  ConnectTimer:=TTimer.Create(nil);
  ConnectTimer.Enabled:=false;
@@ -206,6 +206,8 @@ end;
 
 Procedure T_indiwheel.Disconnect;
 begin
+InitTimer.Enabled:=False;
+ConnectTimer.Enabled:=False;
 indiclient.Terminate;
 ClearStatus;
 end;
@@ -217,10 +219,14 @@ end;
 
 procedure T_indiwheel.ConnectTimerTimer(Sender: TObject);
 begin
- ConnectTimer.Enabled:=False;
+  ConnectTimer.Enabled:=False;
+  if (Wheelport=nil) and (not Fready) and InitTimer.Enabled then begin
+    ConnectTimer.Enabled:=true;
+  end;
   if (Wheelport<>nil)and(Findideviceport<>'') then begin
      Wheelport.tp[0].text:=Findideviceport;
      indiclient.sendNewText(Wheelport);
+     msg('Set port '+Findideviceport);
   end;
  indiclient.connectDevice(Findidevice);
 end;
