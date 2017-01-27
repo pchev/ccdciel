@@ -216,8 +216,8 @@ if FResolver=ResolverAstrometryNet then begin
     str.Free;
   end;
   buf:=buf+' --new-fits ';
-  buf:=buf+StringReplace(FOutFile,'\','/',[rfReplaceAll])+blank;
-  buf:=buf+StringReplace(FInFile,'\','/',[rfReplaceAll])+blank;
+  buf:=buf+'""'+StringReplace(FOutFile,'\','/',[rfReplaceAll])+'""'+blank;
+  buf:=buf+'""'+StringReplace(FInFile,'\','/',[rfReplaceAll])+'""'+blank;
   Fparam.Add(buf+'"');
   {$else}
   Fcmd:='solve-field';
