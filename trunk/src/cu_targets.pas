@@ -251,6 +251,7 @@ begin
      p.Stop;
      FRunning:=false;
      msg('Sequence stopped.');
+     ShowDelayMsg('');
    end
    else begin
      FRunning:=false;
@@ -337,6 +338,7 @@ begin
      TargetTimer.Enabled:=false;
      StopGuider;
      msg('Sequence '+FName+' terminated.');
+     ShowDelayMsg('');
      FCurrentTarget:=-1;
   end;
 end;
@@ -522,6 +524,7 @@ begin
   TargetTimer.Enabled:=false;
   FCurrentTarget:=-1;
   msg('Sequence '+FName+' stopped.');
+  ShowDelayMsg('');
  end;
 end;
 
@@ -533,7 +536,8 @@ begin
     ShowDelayMsg('');
     t:=Targets[FCurrentTarget];
     if t<>nil then begin
-      msg('Repeat '+inttostr(TargetRepeatCount)+'/'+t.repeatcount_str+' '+t.objectname);
+      Msg('Repeat target'+inttostr(TargetRepeatCount)+'/'+t.repeatcount_str+' '+t.objectname);
+      ShowDelayMsg('Repeat target'+inttostr(TargetRepeatCount)+'/'+t.repeatcount_str+' '+t.objectname);
       if t.preview and Preview.Running then Preview.BtnLoop.Click;
       TargetTimeStart:=now;
       StartPlan;
