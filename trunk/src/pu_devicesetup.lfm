@@ -51,8 +51,8 @@ object f_setup: Tf_setup
     TabOrder = 1
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 238
-      ClientWidth = 350
+      ClientHeight = 233
+      ClientWidth = 348
       object InterfaceSelectionBox: TRadioGroup
         Left = 16
         Height = 54
@@ -68,7 +68,7 @@ object f_setup: Tf_setup
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 38
+        ClientHeight = 39
         ClientWidth = 286
         Columns = 2
         ItemIndex = 0
@@ -91,7 +91,7 @@ object f_setup: Tf_setup
         TabOrder = 1
         object IndiServer: TEdit
           Left = 8
-          Height = 21
+          Height = 20
           Top = 24
           Width = 120
           TabOrder = 0
@@ -99,7 +99,7 @@ object f_setup: Tf_setup
         end
         object IndiPort: TEdit
           Left = 136
-          Height = 21
+          Height = 20
           Top = 24
           Width = 80
           TabOrder = 1
@@ -116,15 +116,15 @@ object f_setup: Tf_setup
         end
         object Label18: TLabel
           Left = 13
-          Height = 15
+          Height = 14
           Top = 5
-          Width = 42
+          Width = 40
           Caption = 'Server'
           ParentColor = False
         end
         object Label22: TLabel
           Left = 143
-          Height = 15
+          Height = 14
           Top = 5
           Width = 26
           Caption = 'Port'
@@ -139,15 +139,15 @@ object f_setup: Tf_setup
         end
         object Label1: TLabel
           Left = 224
-          Height = 15
+          Height = 14
           Top = 5
-          Width = 52
+          Width = 50
           Caption = 'Timeout'
           ParentColor = False
         end
         object IndiTimeout: TEdit
           Left = 224
-          Height = 21
+          Height = 20
           Top = 24
           Width = 48
           TabOrder = 3
@@ -155,7 +155,7 @@ object f_setup: Tf_setup
       end
       object ProfileList: TComboBox
         Left = 104
-        Height = 19
+        Height = 25
         Top = 14
         Width = 120
         ItemHeight = 0
@@ -170,7 +170,7 @@ object f_setup: Tf_setup
       end
       object Label2: TLabel
         Left = 21
-        Height = 15
+        Height = 14
         Top = 16
         Width = 47
         Caption = 'Profile :'
@@ -188,8 +188,8 @@ object f_setup: Tf_setup
     end
     object Devices: TTabSheet
       Caption = 'Devices'
-      ClientHeight = 238
-      ClientWidth = 350
+      ClientHeight = 233
+      ClientWidth = 348
       object DeviceList: TCheckGroup
         Left = 16
         Height = 162
@@ -205,7 +205,7 @@ object f_setup: Tf_setup
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 146
+        ClientHeight = 147
         ClientWidth = 286
         Items.Strings = (
           'Camera (mandatory)'
@@ -222,8 +222,8 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 238
-      ClientWidth = 350
+      ClientHeight = 233
+      ClientWidth = 348
       object PanelCameraAscom: TPanel
         Left = 16
         Height = 216
@@ -245,7 +245,7 @@ object f_setup: Tf_setup
         end
         object AscomCamera: TEdit
           Left = 14
-          Height = 21
+          Height = 20
           Top = 17
           Width = 138
           TabOrder = 1
@@ -281,7 +281,7 @@ object f_setup: Tf_setup
         TabOrder = 1
         object CameraIndiDevice: TComboBox
           Left = 88
-          Height = 23
+          Height = 28
           Top = 16
           Width = 168
           ItemHeight = 0
@@ -290,22 +290,22 @@ object f_setup: Tf_setup
         end
         object CameraIndiDevPort: TEdit
           Left = 89
-          Height = 21
+          Height = 20
           Top = 80
           Width = 168
           TabOrder = 1
         end
         object Label3: TLabel
           Left = 13
-          Height = 15
+          Height = 14
           Top = 24
-          Width = 43
+          Width = 41
           Caption = 'Device'
           ParentColor = False
         end
         object Label4: TLabel
           Left = 14
-          Height = 15
+          Height = 14
           Top = 86
           Width = 26
           Caption = 'Port'
@@ -313,15 +313,15 @@ object f_setup: Tf_setup
         end
         object Label15: TLabel
           Left = 13
-          Height = 15
+          Height = 14
           Top = 54
-          Width = 45
+          Width = 44
           Caption = 'Sensor'
           ParentColor = False
         end
         object IndiSensor: TComboBox
           Left = 88
-          Height = 23
+          Height = 28
           Top = 48
           Width = 168
           ItemHeight = 0
@@ -335,15 +335,16 @@ object f_setup: Tf_setup
         end
         object CameraAutoLoadConfig: TCheckBox
           Left = 13
-          Height = 21
+          Height = 24
           Top = 112
-          Width = 212
+          Width = 213
           Caption = 'Load configuration on startup'
           TabOrder = 3
         end
         object CameraIndiTransfert: TRadioGroup
           Left = 13
           Height = 40
+          Hint = 'Make test to determine the most performant '#10'option depending on your computer '#10'(Network is mandatory if the camera is '#10'connected to a remote Indi server)'
           Top = 140
           Width = 244
           AutoFill = True
@@ -355,14 +356,16 @@ object f_setup: Tf_setup
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 24
+          ClientHeight = 25
           ClientWidth = 242
           Columns = 2
           Items.Strings = (
             'Network'
-            'Disk'
+            'RAM Disk'
           )
           OnClick = CameraIndiTransfertClick
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 4
         end
         object CameraDiskPanel: TPanel
@@ -376,27 +379,30 @@ object f_setup: Tf_setup
           TabOrder = 5
           object Label5: TLabel
             Left = 8
-            Height = 15
+            Height = 14
             Top = 6
-            Width = 58
+            Width = 56
             Caption = 'Directory'
             ParentColor = False
           end
           object CameraIndiTransfertDir: TEdit
             Left = 85
-            Height = 21
+            Height = 20
+            Hint = 'The temporary RAM disk used to transfert the images '#10'from the Indi server'
             Top = 4
             Width = 166
+            ParentShowHint = False
+            ShowHint = True
             TabOrder = 0
-            Text = '/tmp'
+            Text = '/mnt/ramdisk'
           end
         end
       end
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 238
-      ClientWidth = 350
+      ClientHeight = 233
+      ClientWidth = 348
       object PanelWheelAscom: TPanel
         Left = 16
         Height = 112
@@ -525,8 +531,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 238
-      ClientWidth = 350
+      ClientHeight = 233
+      ClientWidth = 348
       object PanelFocuserInMount: TPanel
         Left = 18
         Height = 112
@@ -658,8 +664,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 238
-      ClientWidth = 350
+      ClientHeight = 233
+      ClientWidth = 348
       object PanelMountAscom: TPanel
         Left = 16
         Height = 112
