@@ -256,7 +256,7 @@ begin
     ShowDelayMsg('');
     p:=Steps[CurrentStep];
     if p<>nil then begin
-      msg('Repeat '+inttostr(StepRepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
+      msg('Repeat step '+inttostr(StepRepeatCount)+'/'+p.repeatcount_str+' '+p.description_str);
       StepTimeStart:=now;
       StartCapture;
     end
