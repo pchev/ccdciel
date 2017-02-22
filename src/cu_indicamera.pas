@@ -442,8 +442,8 @@ begin
 end;
 
 procedure T_indicamera.NewMessage(txt: string);
-const k=1;
-  blacklist: array[1..k] of string =('TELESCOPE_TIMED_GUIDE');
+const k=2;
+  blacklist: array[1..k] of string =('TELESCOPE_TIMED_GUIDE','Image saved to ');
 var ok: boolean;
     i: integer;
 begin
