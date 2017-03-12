@@ -2,6 +2,8 @@ unit cu_ascomcamera;
 
 {$mode objfpc}{$H+}
 
+//{$define debug_ascom}
+
 {
 Copyright (C) 2015 Patrick Chevalley
 
@@ -26,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_camera, u_global,
+uses  cu_camera, u_global, u_utils,
   {$ifdef mswindows}
     cu_fits, lazutf8sysutils, indiapi,
     Variants, comobj,
@@ -255,7 +257,7 @@ if Connected then begin
      V.StartExposure(exptime,li);
      timestart:=NowUTC;
      timeend:=now+(exptime)/secperday;
-     timedout:=now+(exptime+10)/secperday;
+     timedout:=now+(exptime+60)/secperday;
      Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
      else if exptime>=1 then ExposureTimer.Interval:=500
@@ -288,20 +290,27 @@ begin
  if (now<timedout)and(not VarIsEmpty(V)) then begin
     state:=V.CameraState;
     ok:=V.ImageReady;
-    if (not ok)and(state>=1)and(state<=4) then begin
+    {$ifdef debug_ascom}msg('Camera '+Fdevice+' status:'+inttostr(state)+', image ready:'+BoolToStr(ok,true));{$endif}
+    if (not ok) then begin
+      // in progress
       if assigned(FonExposureProgress) then FonExposureProgress(secperday*(timeend-now));
       ExposureTimer.Enabled:=true;
       exit;
     end;
  end
- else ok:=false;
+ else begin
+   ok:=false;
+   msg('Camera '+Fdevice+' timeout');
+   if assigned(FonAbortExposure) then FonAbortExposure(self);
+ end;
 
  if ok then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
-   msg('Camera '+Fdevice+' read image.');
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' read image.');{$endif}
    img:=V.ImageArray;
    xs:=length(img);
    ys:=length(img[0]);
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
    nax1:=xs;
    nax2:=ys;
    pix:=V.PixelSizeX;
@@ -309,6 +318,7 @@ begin
    ccdname:=V.Name+'-'+V.SensorName;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,timestart);
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' set fits header');{$endif}
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
    hdr.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -332,8 +342,10 @@ begin
    FImgStream.Clear;
    FImgStream.position:=0;
    hdrmem.Position:=0;
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' write header');{$endif}
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' write image');{$endif}
    for i:=0 to ys-1 do begin
       for j:=0 to xs-1 do begin
         ii:=img[j,ys-1-i]-32768;
@@ -341,9 +353,11 @@ begin
         FImgStream.Write(ii,sizeof(smallint));
       end;
    end;
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' pad fits');{$endif}
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
+   {$ifdef debug_ascom}msg('Camera '+Fdevice+' display image');{$endif}
    NewImage;
  end;
  except
@@ -377,6 +391,7 @@ begin
         else SetFrame(fsx,fsy,fnx,fny);
      V.BinX:=sbinX;
      V.BinY:=sbinY;
+     Wait(1);
    end;
    except
     on E: EOleException do msg('Error: ' + E.Message);
@@ -395,6 +410,7 @@ begin
    V.StartY:=y;
    V.NumX:=width;
    V.NumY:=height;
+   Wait(1);
    except
     on E: EOleException do msg('Error: ' + E.Message);
    end;
@@ -455,6 +471,7 @@ if Connected then begin
   h:=V.CameraYSize;
   SetBinning(1,1);
   SetFrame(0,0,w,h);
+  Wait(1);
   except
    on E: EOleException do msg('Error: ' + E.Message);
   end;
@@ -586,6 +603,7 @@ begin
    try
    msg('Camera '+Fdevice+' set filter position '+inttostr(num));
    V.Position:=num-1;
+   Wait(1);
    except
     on E: EOleException do msg('Error: ' + E.Message);
    end;
