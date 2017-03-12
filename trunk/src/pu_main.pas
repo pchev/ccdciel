@@ -2148,6 +2148,7 @@ begin
   f_capture.stop;
   Capture:=false;
   Preview:=false;
+  StatusBar1.Panels[1].Text:='Stop';
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
 end;
 
