@@ -36,8 +36,9 @@ T_ascomfocuser = class(T_focuser)
  private
    {$ifdef mswindows}
    V: variant;
-   FSpeed,FFocusdirection: integer;
-   stPosition,stRelpos: integer;
+   FFocusdirection: integer;
+   FInterfaceVersion: integer;
+   stPosition: integer;
    Fdevice: string;
    {$endif}
    FRelIncr: integer;
@@ -45,6 +46,7 @@ T_ascomfocuser = class(T_focuser)
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
    function  Connected: boolean;
+   function  InterfaceVersion: integer;
  protected
    procedure SetPosition(p:integer); override;
    function  GetPosition:integer; override;
@@ -76,6 +78,7 @@ constructor T_ascomfocuser.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
  FFocuserInterface:=ASCOM;
+ FInterfaceVersion:=1;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;
@@ -88,6 +91,20 @@ begin
  inherited Destroy;
 end;
 
+function  T_ascomfocuser.InterfaceVersion: integer;
+begin
+ result:=1;
+ {$ifdef mswindows}
+  try
+  if not VarIsEmpty(V) then begin
+   result:=V.InterfaceVersion;
+  end;
+  except
+    result:=1;
+  end;
+ {$endif}
+end;
+
 procedure T_ascomfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
  {$ifdef mswindows}
@@ -96,8 +113,12 @@ begin
   Fdevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(WideString(Fdevice));
-  V.connected:=true;
-  if V.connected then begin
+  FInterfaceVersion:=InterfaceVersion;
+  if FInterfaceVersion=1 then
+    V.Link:=true
+  else
+    V.Connected:=true;
+  if Connected then begin
      msg('Focuser '+Fdevice+' connected.');
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -120,7 +141,10 @@ begin
    try
    if not VarIsEmpty(V) then begin
      msg('Focuser '+Fdevice+' disconnected.');
-     V.connected:=false;
+     if FInterfaceVersion=1 then
+       V.Link:=false
+     else
+       V.Connected:=false;
      V:=Unassigned;
    end;
    except
@@ -135,7 +159,10 @@ result:=false;
 {$ifdef mswindows}
 if not VarIsEmpty(V) then begin
   try
-  result:=V.connected;
+  if FInterfaceVersion=1 then
+     result:=V.Link
+  else
+     result:=V.connected;
   except
    result:=false;
   end;
