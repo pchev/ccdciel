@@ -93,30 +93,30 @@ object f_visu: Tf_visu
       end
       object BtnSqrt: TRadioButton
         Left = 0
-        Height = 21
+        Height = 23
         Hint = 'Use a square root scale to display the image'
         Top = 60
-        Width = 51
+        Width = 52
         Caption = 'Sqrt'
         OnChange = BtnIttChange
         TabOrder = 0
       end
       object BtnLog: TRadioButton
         Left = 0
-        Height = 21
+        Height = 23
         Hint = 'Use a logarithmic scale to display the image'
         Top = 40
-        Width = 47
+        Width = 48
         Caption = 'Log'
         OnChange = BtnIttChange
         TabOrder = 1
       end
       object BtnLinear: TRadioButton
         Left = 0
-        Height = 21
+        Height = 23
         Hint = 'Use a linear scale to display the image'
         Top = 20
-        Width = 63
+        Width = 64
         Caption = 'Linear'
         Checked = True
         OnChange = BtnIttChange
@@ -124,7 +124,7 @@ object f_visu: Tf_visu
         TabStop = True
       end
       object histminmax: TSpeedButton
-        Left = 56
+        Left = 64
         Height = 22
         Hint = 'Reset the visualisation treshold'
         Top = 0
@@ -164,12 +164,12 @@ object f_visu: Tf_visu
         ShowCaption = False
       end
       object hist99: TSpeedButton
-        Left = 28
+        Left = 32
         Height = 22
-        Hint = 'Show 99% of the histogram'
+        Hint = 'Show 99.8% of the histogram'
         Top = 0
-        Width = 23
-        Caption = '99'
+        Width = 32
+        Caption = '99.8'
         GroupIndex = 101
         Transparent = False
         OnClick = hist99Click
@@ -177,10 +177,10 @@ object f_visu: Tf_visu
       object hist98: TSpeedButton
         Left = 0
         Height = 22
-        Hint = 'Show 96% of the histogram'
+        Hint = 'Show 99.5% of the histogram'
         Top = 0
-        Width = 23
-        Caption = '96'
+        Width = 32
+        Caption = '99.5'
         GroupIndex = 101
         Transparent = False
         OnClick = hist98Click

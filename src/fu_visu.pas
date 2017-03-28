@@ -123,10 +123,10 @@ for i:=0 to 255 do begin
       maxh:=hist[i];
 end;
 if maxh=0 then exit;
-sl98:=round(0.02*sum); l98:=0;
-sh98:=round(0.98*sum); h98:=0;
-sl99:=round(0.005*sum); l99:=0;
-sh99:=round(0.995*sum); h99:=0;
+sl98:=round(0.005*sum); l98:=0;
+sh98:=round(0.995*sum); h98:=0;
+sl99:=round(0.002*sum); l99:=0;
+sh99:=round(0.998*sum); h99:=0;
 sum:=0;
 for i:=0 to 255 do begin
   sum:=sum+hist[i];
