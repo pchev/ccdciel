@@ -86,8 +86,9 @@ type
     procedure msg(txt:string);
     function  getRunning:boolean;
     procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
+    procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax,bg: double);
     procedure GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
-    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; out xc,yc,hfd,bg,valmax: double);
+    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; var bg: double; out xc,yc,hfd,valmax: double);
     procedure PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
     procedure PlotHistory;
     procedure ClearGraph;
@@ -282,6 +283,51 @@ begin
  yc:=y+ym;
 end;
 
+procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax,bg: double);
+// center of gravity in area s*s centered on x,y of image Img of size xmax,ymax
+var i,j,rs: integer;
+    SumVal,SumValX,SumValY: double;
+    val,xg,yg:double;
+begin
+  rs:=s div 2;
+  if (x-s)<1 then x:=s+1;
+  if (x+s)>(xmax-1) then x:=xmax-s-1;
+  if (y-s)<1 then y:=s+1;
+  if (y+s)>(ymax-1) then y:=ymax-s-1;
+  // Compute mean value of the image area
+  SumVal:=0;
+  for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     val:=vmin+Img[0,y+j,x+i]/c;
+     SumVal:=SumVal+val;
+   end;
+  bg:=sumval/(4*rs*rs);
+  // Get center of gravity of binarized image above mean value
+  SumVal:=0;
+  SumValX:=0;
+  SumValY:=0;
+  vmax:=0;
+  for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     val:=vmin+Img[0,y+j,x+i]/c-bg;
+     if val>0 then begin
+       if val>vmax then vmax:=val;
+       SumVal:=SumVal+1;
+       SumValX:=SumValX+(i);
+       SumValY:=SumValY+(j);
+     end;
+   end;
+  if SumVal>0 then begin
+    Xg:=SumValX/SumVal;
+    Yg:=SumValY/SumVal;
+  end
+  else begin
+    xg:=0; yg:=0;
+  end;
+  xc:=round(x+Xg);
+  yc:=round(y+Yg);
+end;
+
 procedure Tf_starprofile.GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
 var simg:TPiw16;
     imgdata: Tiw16;
@@ -308,38 +354,17 @@ begin
  end;
 end;
 
-procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; out xc,yc,hfd,bg,valmax: double);
+procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; var bg: double; out xc,yc,hfd,valmax: double);
 var i,j,rs,ri: integer;
     SumVal,SumValX,SumValY,SumValR: double;
     Xg,Yg,fxg,fyg: double;
     r,xs,ys:double;
     noise,snr,val: double;
 begin
+// x,y must be the star center, bg the mean image value computed by FindStarPos
 hfd:=-1;
 rs:=s div 2;
-// Get center of gravity of full search area
-SumVal:=0;
-SumValX:=0;
-SumValY:=0;
-valmax:=0;
-for i:=-rs to rs do
- for j:=-rs to rs do begin
-   val:=vmin+Img[0,y+j,x+i]/c;
-   if val>valmax then valmax:=val;
-   SumVal:=SumVal+val;
-   SumValX:=SumValX+val*i;
-   SumValY:=SumValY+val*j;
- end;
-Xg:=SumValX/SumVal;
-Yg:=SumValY/SumVal;
-xc:=x+Xg;
-yc:=y+Yg;
-x:=trunc(xc);
-y:=trunc(yc);
-
 // Get radius of interest (x,y must be the star center)
-ri:=rs;
-bg:=vmin+((Img[0,y-rs,x-rs]+Img[0,y-rs,x+rs]+Img[0,y+rs,x-rs]+Img[0,y+rs,x+rs]) / 4)/c;
 for i:=0 to rs do begin
  for j:=0 to rs do begin
    val:=vmin+Img[0,y+j,x+i]/c;
@@ -350,19 +375,23 @@ for i:=0 to rs do begin
  end;
  if ri<>rs then break;
 end;
-if ri<2 then ri:=2; // 5x5 mimimum box
-// Get center of gravity
+if ri<2 then ri:=rs; // Probable central obstruction, use full width instead
+
+// New background from corner values
+bg:=vmin+((Img[0,y-ri,x-ri]+Img[0,y-ri,x+ri]+Img[0,y+ri,x-ri]+Img[0,y+ri,x+ri]) / 4)/c;
+// Get center of gravity whithin radius of interest
 SumVal:=0;
 SumValX:=0;
 SumValY:=0;
 valmax:=0;
 for i:=-ri to ri do
  for j:=-ri to ri do begin
-   val:=vmin+Img[0,y+j,x+i]/c;
+   val:=vmin+Img[0,y+j,x+i]/c-bg;
+   if val<0 then val:=0;
    if val>valmax then valmax:=val;
    SumVal:=SumVal+val;
-   SumValX:=SumValX+val*i;
-   SumValY:=SumValY+val*j;
+   SumValX:=SumValX+val*(i);
+   SumValY:=SumValY+val*(j);
  end;
 Xg:=SumValX/SumVal;
 Yg:=SumValY/SumVal;
@@ -370,19 +399,19 @@ xc:=x+Xg;
 yc:=y+Yg;
 x:=trunc(xc);
 y:=trunc(yc);
+
+// Get HFD
 fxg:=frac(xc);
 fyg:=frac(yc);
-// Get HFD
 SumVal:=0;
 SumValR:=0;
-bg:=vmin+((Img[0,y-ri,x-ri]+Img[0,y-ri,x+ri]+Img[0,y+ri,x-ri]+Img[0,y+ri,x+ri]) / 4)/c;
-valmax:=valmax-bg;
 noise:=sqrt(bg);
 snr:=valmax/noise;
 if snr>3 then begin
  for i:=-ri to ri do
    for j:=-ri to ri do begin
      Val:=vmin+Img[0,y+j,x+i]/c-bg;
+     if val<0 then val:=0;
      xs:=i+0.5-fxg;
      ys:=j+0.5-fyg;
      r:=sqrt(xs*xs+ys*ys);
@@ -525,7 +554,8 @@ var bg: double;
   xm,ym: integer;
 begin
  if (x<0)or(y<0)or(s<0) then exit;
- FindBrightestPixel(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax);
+
+ FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax,bg);
  if FValMax=0 then exit;
 
  GetPSF(img,c,vmin,xm,ym,s,xmax,ymax,Ffwhm);
@@ -534,7 +564,7 @@ begin
  end
  else Ffwhmarcsec:=-1;
 
- GetHFD(img,c,vmin,xm,ym,s,xg,yg,Fhfd,bg,FValMax);
+ GetHFD(img,c,vmin,xm,ym,s,bg,xg,yg,Fhfd,FValMax);
 
  // Plot result
  if (Fhfd>0) then begin
@@ -558,7 +588,7 @@ var bg: double;
   xm,ym: integer;
 begin
  if (x<0)or(y<0)or(s<0) then exit;
-  FindBrightestPixel(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax);
+  FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax,bg);
   if FValMax=0 then begin
     if Fpreview.Exposure=AutofocusExposure
        then begin
@@ -570,7 +600,7 @@ begin
           exit;
        end;
   end;
-  GetHFD(img,c,vmin,xm,ym,s,xg,yg,Fhfd,bg,FValMax);
+  GetHFD(img,c,vmin,xm,ym,s,bg,xg,yg,Fhfd,FValMax);
   // process this measurement
   if (Fhfd>0) then begin
     if (Fhfd<(AutofocusNearHFD+1))and(not terminated) then begin
