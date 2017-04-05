@@ -3782,18 +3782,21 @@ Application.ProcessMessages;
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,s: integer;
+var x,y,s,r: integer;
 begin
   Inherited paint;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     if ImgZoom=0      then s:=round(Starwindow * ImgScale0)
-     else if ImgZoom=0.5 then s:=Starwindow div 2
-     else if ImgZoom=1 then s:=Starwindow
-     else if ImgZoom=2 then s:=2*Starwindow;
+     if ImgZoom=0      then begin s:=round(Starwindow * ImgScale0); r:=round(f_starprofile.HFD*ImgScale0/2); end
+     else if ImgZoom=0.5 then begin s:=Starwindow div 2; r:=round(f_starprofile.HFD/4); end
+     else if ImgZoom=1 then begin s:=Starwindow; r:=round(f_starprofile.HFD/2); end
+     else if ImgZoom=2 then begin s:=2*Starwindow; r:=round(f_starprofile.HFD); end;
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         Frame(x-s,y-s,x+s,y+s);
+        brush.Style:=bsClear;
+        if r>0 then EllipseC(x,y,r,r);
+        brush.Style:=bsSolid;
      end;
   end;
 end;
