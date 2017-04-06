@@ -131,6 +131,7 @@ begin
    n:=cdcwcs_initfitsfile(PChar(infile),0);
    ra:=NullCoord;
    de:=NullCoord;
+   pixscale:=NullCoord;
    iwidth:=1000;
    if n=0 then begin
      n:=cdcwcs_getinfo(addr(info),0);
@@ -138,6 +139,7 @@ begin
        ra:=info.cra;
        de:=info.cdec;
        iwidth:=info.wp;
+       pixscale:=info.secpix;
      end;
    end;
    if (ra=NullCoord)or(de=NullCoord) then begin
@@ -161,18 +163,22 @@ begin
    tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
    MinRadius:=config.GetValue('/Astrometry/MinRadius',15.0);
    AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
-   if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
-   then
-      pixsize:=camera.PixelSizeX * camera.BinX
-   else
-      pixsize:=config.GetValue('/Astrometry/PixelSize',5.0);
-   if config.GetValue('/Astrometry/FocaleFromTelescope',true)
-   then
-      telescope_focal_length:=mount.FocaleLength
-   else
-      telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
-   if (pixsize>0)and(telescope_focal_length>0)  then begin
-      pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
+   if pixscale=NullCoord then begin
+     if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
+     then
+        pixsize:=camera.PixelSizeX * camera.BinX
+     else
+        pixsize:=config.GetValue('/Astrometry/PixelSize',5.0);
+     if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+     then
+        telescope_focal_length:=mount.FocaleLength
+     else
+        telescope_focal_length:=config.GetValue('/Astrometry/FocaleLength',1000.0);
+     if (pixsize>0)and(telescope_focal_length>0)  then begin
+        pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
+     end;
+   end;
+   if pixscale<>NullCoord then begin
       engine.scalelow:=(1-tolerance)*pixscale;
       engine.scalehigh:=(1+tolerance)*pixscale;
    end;
