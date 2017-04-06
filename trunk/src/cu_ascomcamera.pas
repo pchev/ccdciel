@@ -275,7 +275,8 @@ procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var ok: boolean;
     i,j,c,xs,ys: integer;
-    nax1,nax2,pix,piy,state: integer;
+    nax1,nax2,state: integer;
+    pix,piy: double;
     dateobs,ccdname,frname:string;
     img: array of array of LongInt;
     ii: smallint;
@@ -368,7 +369,7 @@ end;
 
 Procedure T_ascomcamera.SetBinning(sbinX,sbinY: integer);
 {$ifdef mswindows}
-var oldx,oldy,fsx,fsy,fnx,fny: integer;
+var oldx,oldy,newx,newy,fsx,fsy,fnx,fny: integer;
     scale:double;
 {$endif}
 begin
@@ -386,8 +387,10 @@ begin
      scale:=oldy/sbinY;
      fsy:=trunc(fsy*scale);
      fny:=trunc(fny*scale);
-     if (fsx=0)and(fsy=0)and((abs(V.CameraXSize-fnx)/fnx)<0.1)and((abs(V.CameraYSize-fny)/fny)<0.1)
-        then SetFrame(0,0,V.CameraXSize,V.CameraYSize)
+     newx:=V.CameraXSize div sbinX;
+     newy:=V.CameraYSize div sbinY;
+     if (fsx=0)and(fsy=0)and((abs(newx-fnx)/fnx)<0.1)and((abs(newy-fny)/fny)<0.1)
+        then SetFrame(0,0,newx,newy)
         else SetFrame(fsx,fsy,fnx,fny);
      V.BinX:=sbinX;
      V.BinY:=sbinY;
