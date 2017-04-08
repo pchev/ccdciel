@@ -99,7 +99,7 @@ begin
   else
      Disconnect;
   except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -117,7 +117,7 @@ begin
      V:=Unassigned;
    end;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -208,7 +208,7 @@ begin
    V.Position:=num-1;
    WaitFilter(60000);
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Set filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -222,7 +222,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Get filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -264,7 +264,7 @@ begin
      value.Add(fnames[i]);
    end;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('List filter names error: ' + E.Message);
    end;
  end;
  {$endif}

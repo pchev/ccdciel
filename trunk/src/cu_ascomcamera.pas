@@ -167,7 +167,7 @@ begin
  else
     Disconnect;
  except
-   on E: EOleException do msg('Error: ' + E.Message);
+   on E: EOleException do msg('Connection error: ' + E.Message);
  end;
 {$endif}
 end;
@@ -185,7 +185,7 @@ begin
     msg('Camera '+Fdevice+' disconnected.');
   end;
   except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Disconnection error: ' + E.Message);
   end;
 {$endif}
 end;
@@ -265,7 +265,7 @@ if Connected then begin
      else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Start exposure error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -289,8 +289,19 @@ begin
  {$ifdef mswindows}
  try
  if (now<timedout)and(not VarIsEmpty(V)) then begin
-    state:=V.CameraState;
-    ok:=V.ImageReady;
+    state:=5;
+    try
+      state:=V.CameraState;
+    except
+      msg('Error reading camera state');
+    end;
+    ok:=false;
+    try
+      ok:=V.ImageReady;
+    except
+      msg('Error reading camera image availability');
+      exit;
+    end;
     {$ifdef debug_ascom}msg('Camera '+Fdevice+' status:'+inttostr(state)+', image ready:'+BoolToStr(ok,true));{$endif}
     if (not ok) then begin
       // in progress
@@ -308,15 +319,31 @@ begin
  if ok then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
    {$ifdef debug_ascom}msg('Camera '+Fdevice+' read image.');{$endif}
+   try
    img:=V.ImageArray;
+   except
+     msg('Error: image data not available from camera');
+     exit;
+   end;
    xs:=length(img);
    ys:=length(img[0]);
    {$ifdef debug_ascom}msg('Camera '+Fdevice+' width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
    nax1:=xs;
    nax2:=ys;
-   pix:=V.PixelSizeX;
-   piy:=V.PixelSizeY;
-   ccdname:=V.Name+'-'+V.SensorName;
+   pix:=0;
+   piy:=0;
+   ccdname:='Unknow CCD';
+   try
+     pix:=V.PixelSizeX;
+     piy:=V.PixelSizeY;
+   except
+     msg('Error: cannot get pixel size from camera');
+   end;
+   try
+     ccdname:=V.Name;
+     ccdname:=ccdname+'-'+V.SensorName;
+   except
+   end;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,timestart);
    {$ifdef debug_ascom}msg('Camera '+Fdevice+' set fits header');{$endif}
@@ -362,7 +389,7 @@ begin
    NewImage;
  end;
  except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Error reading image: ' + E.Message);
  end;
  {$endif}
 end;
@@ -397,7 +424,7 @@ begin
      Wait(1);
    end;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Set binning error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -415,7 +442,7 @@ begin
    V.NumY:=height;
    Wait(1);
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Set frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -431,7 +458,7 @@ begin
    width  := V.NumX;
    height := V.NumY;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Get frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -456,7 +483,7 @@ begin
    heightr.max:=V.CameraYSize;
    heightr.step:=1;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Get frame range error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -476,7 +503,7 @@ if Connected then begin
   SetFrame(0,0,w,h);
   Wait(1);
   except
-   on E: EOleException do msg('Error: ' + E.Message);
+   on E: EOleException do msg('Reset frame error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -490,7 +517,7 @@ begin
     msg('Camera '+Fdevice+' abort exposure');
     V.AbortExposure;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Abort exposure error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -608,7 +635,7 @@ begin
    V.Position:=num-1;
    Wait(1);
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Set filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -622,7 +649,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Get filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -673,7 +700,7 @@ begin
       V.SetCCDTemperature:=value;
    end;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Set temperature error: ' + E.Message);
    end;
  end;
  {$endif}
