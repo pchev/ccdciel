@@ -40,7 +40,7 @@ T_ascommount = class(T_mount)
    stRA,stDE: double;
    stPark:boolean;
    stPierside: TPierSide;
-   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync: boolean;
+   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
    {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
@@ -114,6 +114,7 @@ begin
      CanSlewAsync:=V.CanSlewAsync;
      CanSetPierSide:=V.CanSetPierSide;
      CanSync:=V.CanSync;
+     CanSetTracking:=V.CanSetTracking;
      buf:='';
      if IsEqmod then buf:=buf+'EQmod ';
      if CanPark then buf:=buf+'CanPark ';
@@ -121,6 +122,7 @@ begin
      if CanSlewAsync then buf:=buf+'CanSlewAsync ';
      if CanSetPierSide then buf:=buf+'CanSetPierSide ';
      if CanSync then buf:=buf+'CanSync ';
+     if CanSetTracking then buf:=buf+'CanSetTracking ';
      msg('Mount '+Fdevice+' connected');
      msg('Mount capabilities: '+buf);
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -131,7 +133,7 @@ begin
   else
      Disconnect;
   except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -149,7 +151,7 @@ begin
      V:=Unassigned;
    end;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -221,7 +223,7 @@ begin
       end;
    end;
    except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Park error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -362,8 +364,12 @@ begin
  result:=false;
  if Connected and CanSlew then begin
    try
-   if not V.tracking then begin
+   if CanSetTracking and (not V.tracking) then begin
+     try
       V.tracking:=true;
+     except
+       on E: EOleException do msg('Set tracking error: ' + E.Message);
+     end;
    end;
    FMountSlewing:=true;
    msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
@@ -378,7 +384,7 @@ begin
    FMountSlewing:=false;
    result:=true;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Slew error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -399,7 +405,7 @@ begin
     islewing:=false;
   result:=(islewing or FMountSlewing);
   except
-    on E: EOleException do msg('Error: ' + E.Message);
+    on E: EOleException do msg('Get slewing error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -481,8 +487,12 @@ begin
  result:=false;
  if Connected and CanSync then begin
    try
-   if not V.tracking then begin
+   if CanSetTracking and (not V.tracking) then begin
+     try
       V.tracking:=true;
+     except
+       on E: EOleException do msg('Set tracking error: ' + E.Message);
+     end;
    end;
    msg('Mount '+Fdevice+' sync to '+ARToStr3(sra)+' '+DEToStr(sde));
    V.SyncToCoordinates(sra,sde);
@@ -501,13 +511,17 @@ begin
  result:=false;
  if Connected then begin
    try
-   if not V.tracking then begin
-     msg('Mount '+Fdevice+' start traking');
-     V.tracking:=true;
+   if CanSetTracking and (not V.tracking) then begin
+     try
+      msg('Mount '+Fdevice+' start traking');
+      V.tracking:=true;
+     except
+       on E: EOleException do msg('Set tracking error: ' + E.Message);
+     end;
    end;
    result:=true;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Track error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -520,9 +534,9 @@ begin
    try
    msg('Mount '+Fdevice+' abort motion');
    V.AbortSlew;
-   V.tracking:=false;
+   if CanSetTracking  then V.tracking:=false;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Abort motion error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -587,7 +601,7 @@ begin
      V.CommandString(':ALIGN_MODE,1#');
    end;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Eqmod set sync mode error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -603,7 +617,7 @@ begin
    V.CommandString(':ALIGN_CLEAR_POINTS#');
    result:=true;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Eqmod clear alignment error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -620,7 +634,7 @@ begin
    V.CommandString(':ALIGN_CLEAR_SYNC#');
    result:=true;
    except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: EOleException do msg('Eqmod clear delta error: ' + E.Message);
    end;
  end;
  {$endif}
