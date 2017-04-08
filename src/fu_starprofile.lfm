@@ -217,7 +217,7 @@ object f_starprofile: Tf_starprofile
     end
     object ChkFocus: TCheckBox
       Left = 3
-      Height = 21
+      Height = 23
       Hint = 'Frame the selected star and start looping exposure for manual focus adjustement'
       Top = 309
       Width = 172
@@ -231,9 +231,9 @@ object f_starprofile: Tf_starprofile
     end
     object ChkAutofocus: TCheckBox
       Left = 3
-      Height = 21
+      Height = 23
       Hint = 'Start autofocus, you must configure and calibrate your focuser before to use this button'
-      Top = 336
+      Top = 338
       Width = 172
       BorderSpacing.Top = 3
       BorderSpacing.Around = 3
