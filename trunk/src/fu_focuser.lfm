@@ -30,40 +30,40 @@ object f_focuser: Tf_focuser
         Height = 52
         Top = 0
         Width = 178
-        PageIndex = 0
+        PageIndex = 2
         Align = alClient
         TabOrder = 0
         TabStop = True
         object PageTimerMove: TPage
           object PanelTimerMove: TPanel
             Left = 0
-            Height = 48
+            Height = 52
             Top = 0
             Width = 178
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 48
+            ClientHeight = 52
             ClientWidth = 178
             TabOrder = 0
             object Label3: TLabel
               Left = 0
-              Height = 17
+              Height = 15
               Top = 4
-              Width = 42
+              Width = 41
               Caption = 'Speed'
               ParentColor = False
             end
             object Label4: TLabel
               Left = 0
-              Height = 17
+              Height = 15
               Top = 24
-              Width = 39
+              Width = 36
               Caption = 'Timer'
               ParentColor = False
             end
             object speed: TEdit
               Left = 54
-              Height = 27
+              Height = 23
               Hint = 'Focus speed'
               Top = 0
               Width = 80
@@ -71,7 +71,7 @@ object f_focuser: Tf_focuser
             end
             object timer: TEdit
               Left = 54
-              Height = 27
+              Height = 23
               Hint = 'Focus movement duration'
               Top = 22
               Width = 80
@@ -82,39 +82,38 @@ object f_focuser: Tf_focuser
         object PageRelPos: TPage
           object PanelRelPos: TPanel
             Left = 0
-            Height = 48
+            Height = 52
             Top = 0
             Width = 178
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 48
+            ClientHeight = 52
             ClientWidth = 178
             TabOrder = 0
             object Label6: TLabel
               Left = 2
-              Height = 17
+              Height = 15
               Top = 8
-              Width = 29
+              Width = 26
               Caption = 'Incr.'
               ParentColor = False
             end
             object RelIncr: TComboBox
               Left = 54
-              Height = 29
+              Height = 23
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
               Width = 80
               ItemHeight = 0
-              ItemIndex = 4
               Items.Strings = (
+                '10'
+                '50'
+                '100'
+                '200'
+                '500'
                 '1000'
-                '2000'
-                '3000'
-                '4000'
-                '5000'
-                '10000'
               )
-                TabOrder = 0
+              TabOrder = 0
               Text = '5000'
             end
           end
@@ -132,7 +131,7 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Position: TEdit
               Left = 54
-              Height = 27
+              Height = 23
               Hint = 'Current focuser absolute position'
               Top = 0
               Width = 80
@@ -140,35 +139,34 @@ object f_focuser: Tf_focuser
             end
             object Label1: TLabel
               Left = 4
-              Height = 17
+              Height = 15
               Top = 4
-              Width = 29
+              Width = 27
               Caption = 'Pos.'
               ParentColor = False
             end
             object Label2: TLabel
               Left = 4
-              Height = 17
+              Height = 15
               Top = 28
-              Width = 31
+              Width = 30
               Caption = 'Step'
               ParentColor = False
             end
             object PosIncr: TComboBox
               Left = 54
-              Height = 29
+              Height = 23
               Hint = 'Increment step for the inward or outward movement'
               Top = 22
               Width = 80
               ItemHeight = 0
-              ItemIndex = 4
               Items.Strings = (
+                '10'
+                '50'
+                '100'
+                '200'
+                '500'
                 '1000'
-                '2000'
-                '3000'
-                '4000'
-                '5000'
-                '10000'
               )
               TabOrder = 1
               Text = '5000'
