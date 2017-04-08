@@ -15,6 +15,7 @@ type
   Tf_vcurve = class(TForm)
     BtnLearnVcurve: TButton;
     BtnSave: TButton;
+    BtnStopVcurve: TButton;
     Label12: TLabel;
     LabelFocusdir: TLabel;
     LabelQuality: TLabel;
@@ -52,6 +53,7 @@ type
     VcChartPtL: TLineSeries;
     procedure BtnLearnVcurveClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
+    procedure BtnStopVcurveClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GetPosClick(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
@@ -61,6 +63,7 @@ type
     Ffocuser: Tf_focuser;
     Fpreview: Tf_preview;
     FonLearnVcurve: TNotifyEvent;
+    FonStopVcurve: TNotifyEvent;
     FonSaveVcurve: TNotifyEvent;
   public
     { public declarations }
@@ -70,6 +73,7 @@ type
     property focuser:Tf_focuser read Ffocuser write Ffocuser;
     property starprofile:Tf_starprofile read Fstarprofile write Fstarprofile;
     property onLearnVcurve: TNotifyEvent read FonLearnVcurve write FonLearnVcurve;
+    property onStopVcurve: TNotifyEvent read FonStopVcurve write FonStopVcurve;
     property onSaveVcurve: TNotifyEvent read FonSaveVcurve write FonSaveVcurve;
   end;
 
@@ -83,13 +87,20 @@ implementation
 
 procedure Tf_vcurve.BtnLearnVcurveClick(Sender: TObject);
 begin
+  BtnStopVcurve.Visible:=true;
   if Assigned(FonLearnVcurve) then FonLearnVcurve(self);
+  BtnStopVcurve.Visible:=false;
 end;
 
 procedure Tf_vcurve.BtnSaveClick(Sender: TObject);
 begin
   if Assigned(FonSaveVcurve) then FonSaveVcurve(self);
   Close;
+end;
+
+procedure Tf_vcurve.BtnStopVcurveClick(Sender: TObject);
+begin
+  if Assigned(FonStopVcurve) then FonStopVcurve(self);
 end;
 
 procedure Tf_vcurve.FormShow(Sender: TObject);

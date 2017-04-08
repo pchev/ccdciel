@@ -397,6 +397,7 @@ type
     procedure FocusSetAbsolutePosition(Sender: TObject);
     procedure FocusVcurveLearning(Sender: TObject);
     procedure LearnVcurve(Sender: TObject);
+    procedure StopVcurve(Sender: TObject);
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
     Procedure MountStatus(Sender: TObject);
@@ -2385,6 +2386,7 @@ begin
     f_vcurve.starprofile:=f_starprofile;
     f_vcurve.preview:=f_preview;
     f_vcurve.onLearnVcurve:=@LearnVcurve;
+    f_vcurve.onStopVcurve:=@StopVcurve;
     f_vcurve.onSaveVcurve:=@doSaveVcurve;
     if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Text:=IntToStr(VcCenterpos) else f_vcurve.FocusPos.Text:='';
     if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Text:=IntToStr(VcHalfwidth) else f_vcurve.HalfWidth.Text:='';
@@ -2437,7 +2439,10 @@ begin
    // average hfd for nsum exposures
    for j:=1 to nsum do begin
      f_preview.ControlExposure(exp,bin,bin);
-     if TerminateVcurve then exit;
+     if TerminateVcurve then begin
+       NewMessage('Stop Vcurve learning');
+       exit;
+     end;
      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
      hfdsum:=hfdsum+f_starprofile.HFD;
    end;
@@ -2534,6 +2539,11 @@ begin
  f_starprofile.StarY:=-1;
  f_starprofile.FindStar:=false;
  StartPreviewExposure(nil);
+end;
+
+procedure Tf_main.StopVcurve(Sender: TObject);
+begin
+  TerminateVcurve:=true;
 end;
 
 procedure Tf_main.ComputeVcSlope;
