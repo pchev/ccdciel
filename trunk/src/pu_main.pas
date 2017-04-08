@@ -2479,7 +2479,7 @@ end;
 procedure Tf_main.LearnVcurve(Sender: TObject);
 var bin: integer;
     x,y,xc,yc,s,s2: integer;
-    SaveZoom: double;
+    SaveZoom,vmax: double;
 begin
  if not focuser.hasAbsolutePosition then exit;
  // read parameters
@@ -2493,12 +2493,17 @@ begin
  bin:=AutofocusBinning;
  // use bad pixel map
  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
- f_preview.ControlExposure(f_preview.Exposure,bin,bin);
- x:=fits.HeaderInfo.naxis1 div 2;
- y:=fits.HeaderInfo.naxis2 div 2;
- s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
- f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
- if f_starprofile.HFD<0 then begin
+ if (not f_starprofile.FindStar) then begin
+   f_preview.ControlExposure(f_preview.Exposure,bin,bin);
+   x:=fits.HeaderInfo.naxis1 div 2;
+   y:=fits.HeaderInfo.naxis2 div 2;
+   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc,yc,vmax);
+   f_starprofile.FindStar:=(vmax>0);
+   f_starprofile.StarX:=xc;
+   f_starprofile.StarY:=yc;
+ end;
+ if not f_starprofile.FindStar then begin
    NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
    exit;
  end;
@@ -3956,6 +3961,7 @@ end;
 
 Procedure Tf_main.FocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
+    vmax:double;
 begin
   if  f_capture.Running then begin
     f_starprofile.ChkFocus.Checked:=false;
@@ -3965,7 +3971,10 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-    f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+    f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc,yc,vmax);
+    f_starprofile.FindStar:=(vmax>0);
+    f_starprofile.StarX:=xc;
+    f_starprofile.StarY:=yc;
   end;
   if f_starprofile.FindStar then begin
      s:=Focuswindow;
@@ -4010,6 +4019,7 @@ end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
+    vmax: double;
 begin
   if (AutofocusMode=afNone) or f_capture.Running then begin
     f_starprofile.ChkAutofocus.Checked:=false;
@@ -4029,7 +4039,10 @@ begin
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-  f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc,yc,vmax);
+  f_starprofile.FindStar:=(vmax>0);
+  f_starprofile.StarX:=xc;
+  f_starprofile.StarY:=yc;
   if f_starprofile.FindStar then begin  // star selected OK
      s:=Focuswindow;
      s2:=s div 2;

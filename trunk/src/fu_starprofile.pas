@@ -85,7 +85,6 @@ type
     afmpos,aminpos:integer;
     procedure msg(txt:string);
     function  getRunning:boolean;
-    procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
     procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax,bg: double);
     procedure GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
     procedure GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; var bg: double; out xc,yc,hfd,valmax: double);
@@ -99,6 +98,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
     procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
     procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
     procedure InitAutofocus;
