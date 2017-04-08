@@ -603,7 +603,7 @@ begin
   GetHFD(img,c,vmin,xm,ym,s,bg,xg,yg,Fhfd,FValMax);
   // process this measurement
   if (Fhfd>0) then begin
-    if (Fhfd<(AutofocusNearHFD+1))and(not terminated) then begin
+    if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not terminated) then begin
       FSumHfd:=FSumHfd+Fhfd;
       inc(FnumHfd);
       msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum));
