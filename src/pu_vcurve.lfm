@@ -10,13 +10,13 @@ object f_vcurve: Tf_vcurve
   ClientWidth = 320
   FormStyle = fsStayOnTop
   OnShow = FormShow
-  LCLVersion = '1.6.2.0'
+  LCLVersion = '1.6.4.0'
   Visible = False
   object BtnLearnVcurve: TButton
-    Left = 209
+    Left = 112
     Height = 25
     Hint = 'Start the Vcurve learning process'
-    Top = 72
+    Top = 458
     Width = 98
     Caption = 'Learn'
     OnClick = BtnLearnVcurveClick
@@ -176,7 +176,7 @@ object f_vcurve: Tf_vcurve
   end
   object FocusPos: TEdit
     Left = 120
-    Height = 21
+    Height = 23
     Hint = 'The approximate focus position, it is important this value is as precise as possible.'
     Top = 8
     Width = 80
@@ -206,7 +206,7 @@ object f_vcurve: Tf_vcurve
   end
   object HalfWidth: TEdit
     Left = 120
-    Height = 21
+    Height = 23
     Hint = 'The maximum offset we will move the focuser in and out. '#10'The focuser must move enough to get a big defocused star '#10'with a HFD of at least 20, or 2-3x the "Near focus" HFD value.'
     Top = 40
     Width = 80
@@ -224,7 +224,7 @@ object f_vcurve: Tf_vcurve
   end
   object Nsteps: TEdit
     Left = 144
-    Height = 21
+    Height = 23
     Hint = 'The number of measurement point for this curve'
     Top = 72
     Width = 56
@@ -295,6 +295,16 @@ object f_vcurve: Tf_vcurve
     AutoSize = False
     Caption = 'Focus direction'
     ParentColor = False
+  end
+  object BtnStopVcurve: TButton
+    Left = 11
+    Height = 25
+    Top = 458
+    Width = 75
+    Caption = 'Stop'
+    OnClick = BtnStopVcurveClick
+    TabOrder = 8
+    Visible = False
   end
   object FitSourceL: TListChartSource
     left = 95
