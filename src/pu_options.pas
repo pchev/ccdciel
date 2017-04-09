@@ -55,7 +55,6 @@ type
     Label50: TLabel;
     Label51: TLabel;
     Label52: TLabel;
-    Label55: TLabel;
     Label56: TLabel;
     Label57: TLabel;
     Label58: TLabel;
