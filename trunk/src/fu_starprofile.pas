@@ -185,7 +185,7 @@ begin
     AutofocusVcStep:=vcsNearR;
  case AutofocusMode of
    afVcurve   : msg('Autofocus start Vcurve');
-   afMean     : msg('Autofocus start Mean position');
+   afMean     : msg('Autofocus start Dynamic curve');
    afIterative: msg('Autofocus start Iterative focus');
  end;
 end;
@@ -750,7 +750,7 @@ begin
     afmEnd: begin
               // check measure validity
               if (aminpos<2)or((AutofocusMeanNumPoint-aminpos-1)<2) then begin
-                 msg('Not enough points on left or right of focus position,');
+                 msg('Not enough points in or out of focus position,');
                  msg('Try to start with a better position or increase the movement.');
                  ResetPos;
                  terminated:=true;
