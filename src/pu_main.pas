@@ -4041,6 +4041,8 @@ begin
   f_starprofile.FindStar:=(vmax>0);
   f_starprofile.StarX:=xc;
   f_starprofile.StarY:=yc;
+  Image1.Invalidate;
+  wait(1);
   if f_starprofile.FindStar then begin  // star selected OK
      s:=Focuswindow;
      s2:=s div 2;
