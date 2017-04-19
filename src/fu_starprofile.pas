@@ -409,7 +409,7 @@ SumVal:=0;
 SumValR:=0;
 noise:=sqrt(bg);
 snr:=valmax/sqrt(valmax+2*bg);
-if snr>8 then begin
+if snr>3 then begin
  for i:=-ri to ri do
    for j:=-ri to ri do begin
      Val:=vmin+Img[0,y+j,x+i]/c-bg;
