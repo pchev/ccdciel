@@ -2015,12 +2015,6 @@ begin
   if r.step>0 then begin
    f_focuser.Position.Hint:='Current focuser absolute position, '+
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-    n:=round(r.max-r.min) div 100;
-    n:=round(max(n,r.step));
-    f_focuser.PosIncr.Clear;
-    for i:=1 to 5 do begin
-      f_focuser.PosIncr.Items.Add(inttostr(i*n));
-    end;
     f_focuser.PosIncr.ItemIndex:=0;
   end;
   f_focuser.speed.Text:=inttostr(focuser.Speed);
@@ -2029,12 +2023,6 @@ begin
   if r.step>0 then begin
     f_focuser.RelIncr.Hint:='Relative increment for the inward or outward movement, '+
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-    n:=round(r.max-r.min) div 100;
-    n:=round(max(n,r.step));
-    f_focuser.RelIncr.Clear;
-    for i:=1 to 5 do begin
-      f_focuser.RelIncr.Items.Add(inttostr(i*n));
-    end;
     f_focuser.RelIncr.ItemIndex:=0;
   end;
 end;
