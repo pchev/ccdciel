@@ -289,6 +289,8 @@ var i,j,rs: integer;
     SumVal,SumValX,SumValY: double;
     val,xg,yg:double;
 begin
+ vmax:=0;
+ bg:=0;
   rs:=s div 2;
   if (x-s)<1 then x:=s+1;
   if (x+s)>(xmax-1) then x:=xmax-s-1;
@@ -406,8 +408,8 @@ fyg:=frac(yc);
 SumVal:=0;
 SumValR:=0;
 noise:=sqrt(bg);
-snr:=valmax/noise;
-if snr>3 then begin
+snr:=valmax/sqrt(valmax+2*bg);
+if snr>8 then begin
  for i:=-ri to ri do
    for j:=-ri to ri do begin
      Val:=vmin+Img[0,y+j,x+i]/c-bg;
