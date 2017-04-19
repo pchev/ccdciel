@@ -606,9 +606,13 @@ begin
   // process this measurement
   if (Fhfd>0) then begin
     if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not terminated) then begin
+      FFindStar:=true;
+      FStarX:=round(xg);
+      FStarY:=round(yg);
+      PlotProfile(img,c,vmin,bg,s);
       FSumHfd:=FSumHfd+Fhfd;
       inc(FnumHfd);
-      msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum));
+      msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', HFD='+FormatFloat(f1,Fhfd));
       if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
         Fhfd:=FSumHfd/FnumHfd;
         FnumHfd:=0;
