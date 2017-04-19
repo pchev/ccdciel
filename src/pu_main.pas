@@ -3802,10 +3802,10 @@ begin
   Inherited paint;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     if ImgZoom=0      then begin s:=round(Starwindow * ImgScale0); r:=round(f_starprofile.HFD*ImgScale0/2); end
-     else if ImgZoom=0.5 then begin s:=Starwindow div 2; r:=round(f_starprofile.HFD/4); end
-     else if ImgZoom=1 then begin s:=Starwindow; r:=round(f_starprofile.HFD/2); end
-     else if ImgZoom=2 then begin s:=2*Starwindow; r:=round(f_starprofile.HFD); end;
+     if ImgZoom=0      then begin s:=round((Starwindow/2)*ImgScale0); r:=round(f_starprofile.HFD*ImgScale0/2); end
+     else if ImgZoom=0.5 then begin s:=round(Starwindow/4); r:=round(f_starprofile.HFD/4); end
+     else if ImgZoom=1 then begin s:=round(Starwindow/2); r:=round(f_starprofile.HFD/2); end
+     else if ImgZoom=2 then begin s:=Starwindow; r:=round(f_starprofile.HFD); end;
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         Frame(x-s,y-s,x+s,y+s);
