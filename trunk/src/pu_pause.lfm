@@ -1,24 +1,24 @@
 object f_pause: Tf_pause
   Left = 0
-  Height = 113
+  Height = 130
   Top = 0
   Width = 320
   ActiveControl = BtnContinue
   AutoSize = True
   Caption = 'Pause'
-  ClientHeight = 113
+  ClientHeight = 130
   ClientWidth = 320
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.4.0'
   Visible = False
   object BtnContinue: TButton
     Left = 208
     Height = 25
-    Top = 80
+    Top = 96
     Width = 91
     Caption = 'Continue...'
     OnClick = BtnContinueClick
@@ -26,18 +26,18 @@ object f_pause: Tf_pause
   end
   object PauseLabel: TLabel
     Left = 0
-    Height = 56
+    Height = 64
     Top = 0
     Width = 312
     AutoSize = False
-    Caption = 'Pause'#10'2'#10'3'
+    Caption = 'Pause'#10'2'#10'3'#10'4'
     ParentColor = False
     WordWrap = True
   end
   object BtnCancel: TButton
     Left = 96
     Height = 25
-    Top = 80
+    Top = 96
     Width = 75
     Caption = 'Cancel'
     OnClick = BtnCancelClick
@@ -45,9 +45,10 @@ object f_pause: Tf_pause
   end
   object Label1: TLabel
     Left = 0
-    Height = 1
-    Top = 56
-    Width = 1
+    Height = 15
+    Top = 72
+    Width = 20
+    Caption = '     '
     ParentColor = False
   end
 end

@@ -35,7 +35,7 @@ type
     FTargetHost,FTargetPort,FErrorDesc,FRecvData,FLastError : string;
     FVersion,FMsgVersion,FStatus : String;
     FSettlePix,FSettleTmin,FSettleTmax: string;
-    FRunning: boolean;
+    FRunning, FRecovering: boolean;
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
@@ -71,6 +71,7 @@ type
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
     property Running: boolean read FRunning;
+    property Recovering: boolean read FRecovering;
     property TargetHost : string read FTargetHost;
     property TargetPort : string read FTargetPort;
     property Timeout : integer read FTimeout write FTimeout;
@@ -93,6 +94,7 @@ begin
 inherited create(true);
 freeonterminate:=true;
 FRunning:=false;
+FRecovering:=false;
 FStatus:='Disconnected';
 FState:=GUIDER_DISCONNECTED;
 FTimeout:=500;
@@ -101,13 +103,13 @@ FErrorDesc:='';
 FRecvData:='';
 FSettlePix:='1.0';
 FSettleTmin:='5';
-FSettleTmax:='30';
+FSettleTmax:='60';
 StarLostTimer:=TTimer.Create(nil);
 StarLostTimer.Enabled:=false;
 StarLostTimer.Interval:=10000;
 StarLostTimer.OnTimer:=@StarLostTimerTimer;
-FStarLostTimeout1:=15;
-FStarLostTimeout2:=90;
+FStarLostTimeout1:=30;
+FStarLostTimeout2:=120;
 FStarLostTime:=0;
 end;
 

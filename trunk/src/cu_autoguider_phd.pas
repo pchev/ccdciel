@@ -399,12 +399,17 @@ end;
 
 function T_autoguider_phd.WaitGuiding(maxwait:integer=5):boolean;
 var endt: TDateTime;
+    n: integer;
 begin
   endt:=now+maxwait/secperday;
+  n:=0;
   while now<endt do begin
     Sleep(100);
     Application.ProcessMessages;
     if FState=GUIDER_GUIDING then break;
+    inc(n);
+    if ((n mod 150)=0) and assigned(FonShowMessage) then
+        FonShowMessage('Waiting for autoguider to start...');
   end;
   result:=(FState=GUIDER_GUIDING);
 end;
@@ -479,6 +484,7 @@ begin
  if FState=GUIDER_GUIDING then begin
     if assigned(FonShowMessage) then FonShowMessage('Guiding recovered from star lost');
     StarLostTimer.Enabled:=false;
+    FRecovering:=false;
  end
  else begin
     losttime:=round(secperday*(now-FStarLostTime));
@@ -486,11 +492,13 @@ begin
     if losttime>FStarLostTimeout2 then begin
        if assigned(FonShowMessage) then FonShowMessage('Cannot recover from star lost. Stop guiding now.');
        StarLostTimer.Enabled:=false;
+       FRecovering:=false;
        guide(false);
     end
     else if (FState<>GUIDER_BUSY)and(losttime>FStarLostTimeout1) then begin
        if assigned(FonShowMessage) then FonShowMessage('Try to restart guiding');
        StarLostTimer.Enabled:=false;
+       FRecovering:=true;
        guide(false);
        WaitBusy();
        Sleep(1000);

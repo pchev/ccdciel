@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine,
+uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
@@ -58,7 +58,7 @@ type
       procedure SetAstrometry(val: TAstrometry);
       procedure msg(txt:string);
       procedure ShowDelayMsg(txt:string);
-      procedure StopSequence;
+      procedure StopSequence(abort: boolean);
       procedure NextTarget;
       function InitTarget:boolean;
       procedure StartPlan;
@@ -86,6 +86,8 @@ type
       function Add(t: TTarget):integer;
       procedure Start;
       procedure Stop;
+      procedure Abort;
+      procedure ForceNextTarget;
       property Targets: TTargetList read Ftargets;
       property Count: integer read NumTargets;
       property CurrentTarget: integer read FCurrentTarget;
@@ -239,15 +241,21 @@ end;
 procedure T_Targets.Stop;
 begin
   msg('Request to stop the current sequence');
-  StopSequence;
+  StopSequence(false);
 end;
 
-procedure T_Targets.StopSequence;
+procedure T_Targets.Abort;
+begin
+  msg('Abort the current sequence');
+  StopSequence(true);
+end;
+
+procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
 begin
  if FRunning then begin
    p:=t_plan(Ftargets[FCurrentTarget].plan);
-   if p.Running then begin
+   if (not abort) and p.Running then begin
      p.Stop;
      FRunning:=false;
      msg('Sequence stopped.');
@@ -267,13 +275,28 @@ begin
      end;
      StopGuider;
      if f_scriptengine.scr.Running then f_scriptengine.StopScript;
-     msg('Sequence stopped.');
+     msg('Sequence aborted.');
      ShowDelayMsg('');
    end;
  end
  else msg('Not running, nothing to do.');
 end;
 
+procedure T_Targets.ForceNextTarget;
+var p: T_Plan;
+begin
+ msg('Try next target');
+ if FRunning then begin
+   p:=t_plan(Ftargets[FCurrentTarget].plan);
+   if p.Running then begin
+     p.Stop;
+     msg('Plan '+Ftargets[FCurrentTarget].planname+' stopped.');
+     ShowDelayMsg('');
+   end;
+   NextTarget;
+ end
+ else msg('Not running, nothing to do.');
+end;
 
 procedure T_Targets.NextTarget;
 var initok: boolean;
@@ -287,14 +310,16 @@ begin
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
        msg('Script '+Targets[FCurrentTarget].planname+' failed!');
        if FUnattended then begin
-         StopSequence;
-         RunErrorScript;
+         StopSequence(true);
+         //RunErrorScript;
          exit;
        end else begin
-         if MessageDlg('Script '+Targets[FCurrentTarget].planname+' failed!'+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
+         f_pause.Caption:='Script failed';
+         f_pause.Text:='Script '+Targets[FCurrentTarget].planname+' failed!'+crlf+'Do you want to retry?';
+         if f_pause.Wait(WaitResponseTime) then begin
             Dec(FCurrentTarget);
          end else begin
-            StopSequence;
+            StopSequence(false);
             exit;
          end;
        end;
@@ -319,12 +344,14 @@ begin
        msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
        if FUnattended then begin
          FInitializing:=false;
-         StopSequence;
-         RunErrorScript;
+         StopSequence(true);
+         //RunErrorScript;
          exit;
        end else begin
          FInitializing:=false;
-         if MessageDlg('Target failed','Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?',mtConfirmation,mbYesNo,0)=mrYes then begin
+         f_pause.Caption:='Target failed';
+         f_pause.Text:='Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?';
+         if f_pause.Wait(WaitResponseTime) then begin
             Dec(FCurrentTarget);
          end;
          NextTarget;
@@ -427,9 +454,11 @@ begin
   if (Autoguider=nil)or(not Autoguider.Running) then exit;
   msg('Stop autoguider');
   Autoguider.Guide(false);
-  result:=Autoguider.WaitBusy(15);
+  result:=Autoguider.WaitBusy(60);
   if (not result)and(not Unattended) then begin
-    if MessageDlg('Autoguider Stop','Autoguider is still active 15 seconds after a stop request.'+crlf+'Do you want to wait more?',mtConfirmation,mbYesNo,0)=mrYes then begin
+    f_pause.Caption:='Autoguider Stop';
+    f_pause.Text:='Autoguider is still active 60 seconds after a stop request.'+crlf+'Do you want to wait more?';
+    if f_pause.Wait(WaitResponseTime) then begin
        result:=StopGuider();
        exit;
     end;
@@ -444,7 +473,9 @@ begin
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
   if (not result)and(not Unattended) then begin
-    if MessageDlg('Autoguider Start','Autoguider not guiding '+inttostr(CalibrationDelay+SettleMaxTime)+' seconds after requested to start.'+crlf+'Do you want to wait more?',mtConfirmation,mbYesNo,0)=mrYes then begin
+    f_pause.Caption:='Autoguider Start';
+    f_pause.Text:='Autoguider not guiding '+inttostr(CalibrationDelay+SettleMaxTime)+' seconds after requested to start.'+crlf+'Do you want to retry?';
+    if f_pause.Wait(WaitResponseTime) then begin
        result:=StartGuider();
        exit;
     end;
@@ -479,7 +510,9 @@ begin
   if not result then begin
     msg('Telescope slew error: '+FormatFloat(f2,err*60)+' arcminutes.');
     if not Unattended then begin
-      if MessageDlg('Telescope slew','After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?',mtConfirmation,mbYesNo,0)=mrYes then begin
+      f_pause.Caption:='Telescope slew';
+      f_pause.Text:='After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?';
+      if f_pause.Wait(WaitResponseTime) then begin
          result:=Slew(ra,de,precision);
          exit;
       end;
