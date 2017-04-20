@@ -63,6 +63,7 @@ type
       function InitTarget:boolean;
       procedure StartPlan;
       procedure RunErrorScript;
+      procedure RunEndScript;
       function StopGuider:boolean;
       function StartGuider:boolean;
       function Slew(ra,de: double; precision:boolean):boolean;
@@ -259,6 +260,7 @@ begin
      p.Stop;
      FRunning:=false;
      msg('Sequence stopped.');
+     RunEndScript;
      ShowDelayMsg('');
    end
    else begin
@@ -276,6 +278,7 @@ begin
      StopGuider;
      if f_scriptengine.scr.Running then f_scriptengine.StopScript;
      msg('Sequence aborted.');
+     RunErrorScript;
      ShowDelayMsg('');
    end;
  end
@@ -311,7 +314,6 @@ begin
        msg('Script '+Targets[FCurrentTarget].planname+' failed!');
        if FUnattended then begin
          StopSequence(true);
-         //RunErrorScript;
          exit;
        end else begin
          f_pause.Caption:='Script failed';
@@ -345,7 +347,6 @@ begin
        if FUnattended then begin
          FInitializing:=false;
          StopSequence(true);
-         //RunErrorScript;
          exit;
        end else begin
          FInitializing:=false;
@@ -365,6 +366,7 @@ begin
      TargetTimer.Enabled:=false;
      StopGuider;
      msg('Sequence '+FName+' terminated.');
+     RunEndScript;
      ShowDelayMsg('');
      FCurrentTarget:=-1;
   end;
@@ -584,6 +586,16 @@ var path,sname: string;
 begin
   path:=ScriptDir[1].path;
   sname:='unattended_error';
+  if FileExistsUTF8(slash(path)+sname+'.script') then begin
+    f_scriptengine.RunScript(sname,path);
+  end;
+end;
+
+procedure T_Targets.RunEndScript;
+var path,sname: string;
+begin
+  path:=ScriptDir[1].path;
+  sname:='end_sequence';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
     f_scriptengine.RunScript(sname,path);
   end;
