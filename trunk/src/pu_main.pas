@@ -713,6 +713,7 @@ begin
   ScaleMainForm;
   NeedRestart:=false;
   GUIready:=false;
+  filteroffset_initialized:=false;
   MsgHandle:=handle;
   meridianflipping:=false;
   refmask:=false;
@@ -1044,9 +1045,11 @@ begin
   StatusbarTimer.Enabled:=true;
 
   n:=config.GetValue('/Filters/Num',0);
+  for i:=0 to MaxFilter do FilterOffset[i]:=0;
   Filters.Clear;
   Filters.Add(Filter0);
   for i:=1 to n do begin
+     FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
      str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
      Filters.Add(str);
   end;
@@ -1245,8 +1248,10 @@ begin
 
   n:=Filters.Count-1;
   config.SetValue('/Filters/Num',n);
-  for i:=1 to n do
+  for i:=1 to n do begin
      config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
+     config.SetValue('/Filters/Offset'+IntToStr(i),FilterOffset[i]);
+  end;
 
   SaveConfig;
   NewMessage('Configuration saved');
@@ -1635,6 +1640,7 @@ mount.Timeout:=DeviceTimeout;
 end;
 
 procedure Tf_main.SetOptions;
+var i,n: integer;
 begin
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
@@ -1646,6 +1652,11 @@ begin
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
+  n:=config.GetValue('/Filters/Num',0);
+  for i:=0 to MaxFilter do FilterOffset[i]:=0;
+  for i:=1 to n do begin
+     FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
+  end;
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
@@ -2208,9 +2219,29 @@ begin
 end;
 
 procedure Tf_main.FilterChange(n:double);
+var o: integer;
 begin
+// show new filter name
 if (n>=0)and(n<=f_filterwheel.Filters.Items.Count) then
    f_filterwheel.Filters.ItemIndex:=round(n);
+// adjust focus
+if (n>0)and(n<=MaxFilter)and(focuser.Status=devConnected) then begin
+ if CurrentFilterOffset<>FilterOffset[round(n)] then begin
+   if filteroffset_initialized then begin
+    o:=FilterOffset[round(n)]-CurrentFilterOffset;
+    f_focuser.FocusSpeed:=abs(o);
+    if o>0 then
+      FocusOUT(nil)
+    else
+      FocusIN(nil);
+    CurrentFilterOffset:=FilterOffset[round(n)];
+   end
+   else begin
+    CurrentFilterOffset:=FilterOffset[round(n)];
+    filteroffset_initialized:=true;
+   end;
+ end;
+end;
 end;
 
 procedure Tf_main.FilterNameChange(Sender: TObject);
@@ -2844,6 +2875,8 @@ end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 var ok:boolean;
+    i,n: integer;
+    buf:string;
 begin
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
@@ -2871,6 +2904,12 @@ begin
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
+   f_option.FilterList.Clear;
+   for i:=1 to Filters.Count-1 do begin
+     if Filters[i]<>'' then f_option.FilterList.InsertRow(Filters[i],config.GetValue('/Filters/Offset'+IntToStr(i),'0'),true);
+   end;
+   f_option.FilterList.Row:=0;
+   f_option.FilterList.Col:=0;
    f_option.Autofocusmode.ItemIndex:=config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode));
    f_option.AutofocusMinSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed));
    f_option.AutofocusMaxSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed));
@@ -2878,7 +2917,7 @@ begin
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
    f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
-   f_option.PanelBacklash.Visible:=(focuser.Status=devConnected)and(not focuser.hasAbsolutePosition);
+   f_option.GroupBacklash.Visible:=(focuser.Status=devConnected)and(not focuser.hasAbsolutePosition);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
@@ -2948,6 +2987,14 @@ begin
      config.SetValue('/Files/FilenameDate',f_option.FileDate.Checked);
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
+     n:=Filters.Count-1;
+     config.SetValue('/Filters/Num',n);
+     for i:=1 to n do begin
+        buf:=f_option.FilterList.Values[Filters[i]];
+        if not IsNumber(buf) then buf:='0';
+        config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
+        config.SetValue('/Filters/Offset'+IntToStr(i),buf);
+     end;
      config.SetValue('/StarAnalysis/AutoFocusMode',f_option.Autofocusmode.ItemIndex);
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',StrToIntDef(f_option.AutofocusMinSpeed.Text,AutofocusMinSpeed));
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',StrToIntDef(f_option.AutofocusMaxSpeed.Text,AutofocusMaxSpeed));

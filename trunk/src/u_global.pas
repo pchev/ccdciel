@@ -193,6 +193,7 @@ const
   MaxCmdArg = 10;
   MaxScriptDir=2;
   MaxMenulevel=10;
+  MaxFilter=20;
   WaitResponseTime=120;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
@@ -234,6 +235,9 @@ var
   config: TCCDConfig;
   profile: string;
   Filters: TStringList;
+  FilterOffset: array [0..MaxFilter] of integer;
+  CurrentFilterOffset: integer;
+  filteroffset_initialized: boolean;
   compile_time, compile_version, compile_system, lclver: string;
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;

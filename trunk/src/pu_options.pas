@@ -27,7 +27,7 @@ interface
 
 uses u_utils, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, ValEdit, enhedits;
 
 type
 
@@ -48,6 +48,8 @@ type
     AutofocusBinning: TEdit;
     FocuserBacklash: TEdit;
     GroupBox10: TGroupBox;
+    GroupBacklash: TGroupBox;
+    GroupBox12: TGroupBox;
     Label46: TLabel;
     Label47: TLabel;
     Label48: TLabel;
@@ -71,11 +73,12 @@ type
     PageNone: TPage;
     PageVcurve: TPage;
     PageIterative: TPage;
-    PanelBacklash: TPanel;
     PanelNearFocus: TPanel;
     PanelAutofocus: TPanel;
     AutofocusMoveDirIn: TRadioButton;
     AutofocusMoveDirOut: TRadioButton;
+    TabSheet10: TTabSheet;
+    FilterList: TValueListEditor;
     VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;
