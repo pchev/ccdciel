@@ -193,6 +193,7 @@ const
   MaxCmdArg = 10;
   MaxScriptDir=2;
   MaxMenulevel=10;
+  WaitResponseTime=120;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
   ldeg = 'd';

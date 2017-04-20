@@ -102,10 +102,10 @@ object f_sequence: Tf_sequence
       end
       object Unattended: TCheckBox
         Left = 1
-        Height = 21
+        Height = 23
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
         Top = 92
-        Width = 122
+        Width = 126
         Caption = 'Run unattended'
         ParentShowHint = False
         ShowHint = True

@@ -103,6 +103,7 @@ type
     procedure LoadPlan(p: T_Plan; plan:string);
     procedure msg(txt:string);
     procedure ShowDelayMsg(txt:string);
+    procedure StopSequence;
   public
     { public declarations }
     CurrentName, CurrentTarget, CurrentFile, CurrentStep: string;
@@ -115,7 +116,7 @@ type
     procedure ExposureAborted;
     procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
-    procedure StopSequence;
+    procedure AbortSequence;
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
     property Preview: Tf_preview read Fpreview write SetPreview;
@@ -530,6 +531,15 @@ begin
  PlanRow:=-1;
 end;
 
+procedure Tf_sequence.AbortSequence;
+begin
+ StatusTimer.Enabled:=false;
+ Targets.Abort;
+ TargetRow:=-1;
+ PlanRow:=-1;
+ if Unattended.Checked then mount.AbortMotion;
+end;
+
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
 begin
  StopSequence;
@@ -582,27 +592,27 @@ end;
 
 procedure Tf_sequence.AutoguiderDisconnected;
 begin
-  if Targets.Running then  StopSequence;
+  if Targets.Running then  AbortSequence;
 end;
 
 procedure Tf_sequence.AutoguiderIddle;
 begin
-  if Targets.Running and T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running then begin
+  if Targets.Running and T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and (not Fautoguider.Recovering) then begin
     msg('Autoguiding stopped unexpectedly!');
-    StopSequence;
+    Targets.ForceNextTarget;
   end;
 end;
 
 procedure Tf_sequence.ExposureAborted;
 begin
   if Targets.Running and T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running then begin
-    StopSequence;
+    AbortSequence;
   end;
 end;
 
 procedure Tf_sequence.CameraDisconnected;
 begin
- if Targets.Running then StopSequence;
+ if Targets.Running then AbortSequence;
 end;
 
 

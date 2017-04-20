@@ -1476,7 +1476,7 @@ if CanClose then begin
  if f_video.Running then begin
   Camera.StopVideoPreview;
  end;
- if f_sequence.Running then f_sequence.StopSequence;
+ if f_sequence.Running then f_sequence.AbortSequence;
  f_script.RunShutdownScript;
  NewMessage('Disconnecting devices ...');
  Disconnect(nil);
