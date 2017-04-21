@@ -27,7 +27,7 @@ interface
 
 uses u_utils, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, ValEdit, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, ValEdit, Grids, enhedits;
 
 type
 
@@ -77,8 +77,8 @@ type
     PanelAutofocus: TPanel;
     AutofocusMoveDirIn: TRadioButton;
     AutofocusMoveDirOut: TRadioButton;
+    FilterList: TStringGrid;
     TabSheet10: TTabSheet;
-    FilterList: TValueListEditor;
     VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;

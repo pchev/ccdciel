@@ -639,28 +639,17 @@ object f_option: Tf_option
         ClientHeight = 175
         ClientWidth = 396
         TabOrder = 2
-        object FilterList: TValueListEditor
+        object FilterList: TStringGrid
           Left = 0
           Height = 175
           Top = 0
           Width = 396
           Align = alClient
-          DefaultColWidth = 200
-          FixedCols = 0
-          RowCount = 2
+          ColCount = 2
+          DefaultColWidth = 180
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
+          RowCount = 21
           TabOrder = 0
-          KeyOptions = [keyUnique]
-          Strings.Strings = (
-            ''
-          )
-          TitleCaptions.Strings = (
-            'Filter name'
-            'Focuser offset'
-          )
-          ColWidths = (
-            200
-            192
-          )
         end
       end
     end
@@ -1152,8 +1141,8 @@ object f_option: Tf_option
               Top = 141
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 35
-              ClientWidth = 387
+              ClientHeight = 31
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -1721,8 +1710,8 @@ object f_option: Tf_option
               Height = 80
               Top = 32
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

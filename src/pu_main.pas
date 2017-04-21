@@ -1656,6 +1656,7 @@ begin
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
   for i:=1 to n do begin
      FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
+     if wheel.Filter=i then CurrentFilterOffset:=FilterOffset[i];
   end;
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
@@ -2904,9 +2905,15 @@ begin
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
-   f_option.FilterList.Clear;
+   f_option.FilterList.Cells[0,0]:='Filter name';
+   f_option.FilterList.Cells[1,0]:='Focuser offset';
+   for i:=1 to f_option.FilterList.RowCount-1 do begin
+     f_option.FilterList.Cells[0,i]:='';
+     f_option.FilterList.Cells[1,i]:='';
+   end;
    for i:=1 to Filters.Count-1 do begin
-     if Filters[i]<>'' then f_option.FilterList.InsertRow(Filters[i],config.GetValue('/Filters/Offset'+IntToStr(i),'0'),true);
+     f_option.FilterList.Cells[0,i]:=Filters[i];
+     f_option.FilterList.Cells[1,i]:=config.GetValue('/Filters/Offset'+IntToStr(i),'0');
    end;
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
@@ -2990,7 +2997,7 @@ begin
      n:=Filters.Count-1;
      config.SetValue('/Filters/Num',n);
      for i:=1 to n do begin
-        buf:=f_option.FilterList.Values[Filters[i]];
+        buf:=f_option.FilterList.Cells[1,i];
         if not IsNumber(buf) then buf:='0';
         config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
         config.SetValue('/Filters/Offset'+IntToStr(i),buf);
