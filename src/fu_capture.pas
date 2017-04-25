@@ -36,6 +36,8 @@ type
     Binning: TComboBox;
     BtnStart: TButton;
     CheckBoxDither: TCheckBox;
+    CheckBoxFocus: TCheckBox;
+    FocusCount: TEdit;
     FrameType: TComboBox;
     ExpTime: TComboBox;
     Label1: TLabel;
@@ -50,6 +52,7 @@ type
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
+    Panel8: TPanel;
     SeqNum: TEdit;
     Fname: TEdit;
     DitherCount: TEdit;
@@ -61,6 +64,7 @@ type
     { private declarations }
     FSeqCount: integer;
     FDitherNum: integer;
+    FFocusNum: integer;
     Frunning: boolean;
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
@@ -73,6 +77,7 @@ type
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property DitherNum: Integer read FDitherNum write FDitherNum;
+    property FocusNum: Integer read FFocusNum write FFocusNum;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -102,6 +107,7 @@ begin
   if Frunning then begin
     FSeqCount:=1;
     FDitherNum:=0;
+    FFocusNum:=0;
     if Assigned(FonMsg) then FonMsg('Start capture');
     if Assigned(FonStartExposure) then FonStartExposure(self);
   end;

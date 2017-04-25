@@ -103,6 +103,12 @@ type
               function repeatcount_str: string;
             end;
 
+  TFocusStar = record
+                 ra,de: double;
+                 id: string;
+               end;
+
+
   // libcdcwcs
  type
    {$ifdef cpu32}
@@ -228,7 +234,7 @@ const
   {$endif}
 
 var
-  Appdir,ConfigDir,LogDir,TmpDir: UTF8String;
+  Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
   CameraName,WheelName,FocuserName,MountName: string;
   ConfirmClose, ScreenScaling: boolean;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
@@ -268,6 +274,8 @@ var
   AutofocusMeanStep:TAutofocusMeanStep;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
+  NFocusStars: integer;
+  FocusStars: array of TFocusStar;
 
 implementation
 

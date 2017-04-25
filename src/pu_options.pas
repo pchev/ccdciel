@@ -46,9 +46,11 @@ type
     AutofocusNearNum: TEdit;
     BPMsigma: TEdit;
     AutofocusBinning: TEdit;
+    FocusStarMag: TComboBox;
     FocuserBacklash: TEdit;
     GroupBox10: TGroupBox;
     GroupBacklash: TGroupBox;
+    GroupBox11: TGroupBox;
     GroupBox12: TGroupBox;
     Label46: TLabel;
     Label47: TLabel;
@@ -57,6 +59,7 @@ type
     Label50: TLabel;
     Label51: TLabel;
     Label52: TLabel;
+    Label53: TLabel;
     Label56: TLabel;
     Label57: TLabel;
     Label58: TLabel;

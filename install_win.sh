@@ -15,6 +15,8 @@ echo Install ccdciel $OS_TARGET to $destdir
 
 install -m 755 -d $destdir
 install -m 755 -d $destdir/scripts
+install -m 755 -d $destdir/data
+install -m 755 -d $destdir/data/stars
 
 if [ $OS_TARGET = win32 ]; then 
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
@@ -31,4 +33,9 @@ install -v -m 644 scripts/T_ccd_temp_down.script  $destdir/scripts/T_ccd_temp_do
 install -v -m 644 scripts/T_ccd_temp_up.script  $destdir/scripts/T_ccd_temp_up.script
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/scripts/T_scope_alignment.script 
 install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/scripts/T_eqmod_alignment.script 
+install -v -m 644 data/stars/focus_star_4   $destdir/data/stars/focus_star_4
+install -v -m 644 data/stars/focus_star_5   $destdir/data/stars/focus_star_5
+install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6
+install -v -m 644 data/stars/focus_star_7   $destdir/data/stars/focus_star_7
+install -v -m 644 data/stars/focus_star_8   $destdir/data/stars/focus_star_8
 
