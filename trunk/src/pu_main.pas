@@ -318,13 +318,14 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
-    Capture,Preview,meridianflipping: boolean;
+    Capture,Preview,meridianflipping,autofocusing: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
     MsgLog,MsgDeviceLog: Textfile;
     AccelList: array[0..MaxMenulevel] of string;
     SaveAutofocusBinning: string;
+    SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     TerminateVcurve: boolean;
     Procedure GetAppDir;
     procedure ScaleMainForm;
@@ -388,6 +389,9 @@ type
     Procedure FocusStop(Sender: TObject);
     Procedure AutoFocusStart(Sender: TObject);
     Procedure AutoFocusStop(Sender: TObject);
+    procedure LoadFocusStar;
+    function  FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
+    function  AutoAutofocus: Boolean;
     Procedure FocuserStatus(Sender: TObject);
     procedure FocuserPositionChange(n:double);
     procedure FocuserSpeedChange(n:double);
@@ -668,6 +672,7 @@ begin
       end;
    end;
  end;
+ DataDir:=slash(Appdir)+slash('data');
  ConfigDir:=GetAppConfigDirUTF8(false,true);
  TmpDir:=slash(ConfigDir)+'tmp';
  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
@@ -716,6 +721,7 @@ begin
   filteroffset_initialized:=false;
   MsgHandle:=handle;
   meridianflipping:=false;
+  autofocusing:=false;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -1066,6 +1072,7 @@ begin
   f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
   StartupTimer.Enabled:=true;
 
+  LoadFocusStar;
 end;
 
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
@@ -2010,8 +2017,7 @@ focuser.Disconnect;
 end;
 
 procedure Tf_main.SetFocusMode;
-var i,n: integer;
-    r: TNumRange;
+var r: TNumRange;
 begin
   if focuser.hasAbsolutePosition then begin
      f_focuser.Notebook1.PageIndex:=2;
@@ -2876,7 +2882,7 @@ end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 var ok:boolean;
-    i,n: integer;
+    i,n,FocusStarMagIndex: integer;
     buf:string;
 begin
    f_option.onGetPixelSize:=@OptionGetPixelSize;
@@ -2924,6 +2930,9 @@ begin
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
    f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
+   FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
+   if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
+   f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
    f_option.GroupBacklash.Visible:=(focuser.Status=devConnected)and(not focuser.hasAbsolutePosition);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
@@ -3009,6 +3018,8 @@ begin
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
      config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
+     config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
+     if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',StrToIntDef(f_option.AutofocusNearNum.Text,AutofocusNearNum));
      config.SetValue('/StarAnalysis/AutofocusMeanNumPoint',StrToIntDef(f_option.AutofocusMeanNumPoint.Text,AutofocusMeanNumPoint));
@@ -3409,7 +3420,10 @@ if (camera.Status=devConnected) then begin
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then begin
     ftype:=TFrameType(f_capture.FrameType.ItemIndex);
     if camera.FrameType<>ftype then camera.FrameType:=ftype;
-    if ftype<>LIGHT then f_capture.CheckBoxDither.Checked:=false;
+    if ftype<>LIGHT then begin
+       f_capture.CheckBoxDither.Checked:=false;
+       f_capture.CheckBoxFocus.Checked:=false;
+    end;
   end;
   waittime:=CheckMeridianFlip(e); // check meridian
   if not f_capture.Running then begin // meridian abort
@@ -3423,6 +3437,15 @@ if (camera.Status=devConnected) then begin
     StartCaptureTimer.Interval:=waittime*1000;
     StartCaptureTimer.Enabled:=true;
     exit;
+  end;
+  if f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=StrToIntDef(f_capture.FocusCount.Text,1)) then begin
+     f_capture.FocusNum:=0;
+     if not AutoAutofocus then begin
+       NewMessage('Autofocus failed!');
+       f_capture.Stop;
+       Capture:=false;
+       exit;
+     end;
   end;
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=StrToIntDef(f_capture.DitherCount.Text,1)) then begin
     f_capture.DitherNum:=0;
@@ -3452,7 +3475,7 @@ procedure Tf_main.CameraProgress(n:double);
 var txt: string;
 begin
  if (n<=0) then begin
-   if meridianflipping then exit;
+   if meridianflipping or autofocusing then exit;
    if ((f_capture.Running)or(f_preview.Running)) then begin
      txt := 'Downloading...';
      if Capture then begin
@@ -3544,6 +3567,7 @@ begin
      StatusBar1.Panels[1].Text := '';
      f_capture.SeqCount:=f_capture.SeqCount+1;
      f_capture.DitherNum:=f_capture.DitherNum+1;
+     f_capture.FocusNum:=f_capture.FocusNum+1;
      if f_capture.SeqCount<=StrToInt(f_capture.SeqNum.Text) then begin
         if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
      end else begin
@@ -4069,11 +4093,218 @@ begin
    NewMessage('Focus aid stoped');
 end;
 
+procedure Tf_main.LoadFocusStar;
+var f: textfile;
+    buf,fn,id: string;
+    ra,de,jd1: double;
+    focusmag: integer;
+begin
+ fn:='focus_star_4';
+ SetLength(FocusStars,1000);
+ NFocusStars:=0;
+ jd1:=DateTimetoJD(now);
+ focusmag:=config.GetValue('/StarAnalysis/AutofocusStarMag',4);
+ if (focusmag<4)or(focusmag>8) then focusmag:=4;
+ case focusmag of
+  4: fn:='focus_star_4';
+  5: fn:='focus_star_5';
+  6: fn:='focus_star_6';
+  7: fn:='focus_star_7';
+  8: fn:='focus_star_8';
+ end;
+ try
+ AssignFile(f,slash(DataDir)+slash('stars')+fn);
+ reset(f);
+ repeat
+   readln(f,buf);
+   ra:=StrToFloatDef(copy(buf,8,12),NullCoord);
+   de:=StrToFloatDef(copy(buf,21,12),NullCoord);
+   id:='HIP '+trim(copy(buf,1,6));
+   if (ra<>NullCoord)and(de<>NullCoord) then begin
+     inc(NFocusStars);
+     if NFocusStars>=Length(FocusStars) then
+        SetLength(FocusStars,NFocusStars+1000);
+     ra:=deg2rad*ra;
+     de:=deg2rad*de;
+     // store coordinates of the date
+     PrecessionFK5(jd2000,jd1,ra,de);
+     FocusStars[NFocusStars].ra:=ra;
+     FocusStars[NFocusStars].de:=de;
+     FocusStars[NFocusStars].id:=id;
+   end;
+ until eof(f);
+ CloseFile(f);
+ except
+   NewMessage('Error loading focus star list '+fn);
+ end;
+end;
+
+function Tf_main.FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
+var i: integer;
+    jd0,CurSt,CurTime: double;
+    Year, Month, Day: Word;
+    d,dmin,hh,hl,ta,th,a,h: double;
+    tm,sm: TPierSide;
+begin
+  // all parameters coordinates of the date
+  result:=false;
+  dmin:=pi2;
+  DecodeDate(now, Year, Month, Day);
+  CurTime:=frac(now)*24;
+  jd0:=jd(Year,Month,Day,0);
+  CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+  tm:=mount.PierSide;
+  if tm=pierUnknown then begin
+    hh:=CurSt-tra;
+    Eq2Hz(hh,tde,ta,th);
+    if (ta>0)and(ta<pi) then
+      tm:=pierEast
+    else
+      tm:=pierWest;
+  end;
+  hl:=30*deg2rad;
+  for i:=1 to NFocusStars do begin
+    d:=AngularDistance(tra,tde,FocusStars[i].ra,FocusStars[i].de);
+    if d<dmin then begin
+      hh:=CurSt-FocusStars[i].ra;
+      Eq2Hz(hh,FocusStars[i].de,a,h);
+      if (a>0)and(a<pi) then
+        sm:=pierEast
+      else
+        sm:=pierWest;
+      if (h>hl)and(tm=sm) then begin
+        sra:=FocusStars[i].ra;
+        sde:=FocusStars[i].de;
+        id:=FocusStars[i].id;
+        dmin:=d;
+        result:=true;
+      end;
+    end;
+  end;
+end;
+
+function Tf_main.AutoAutofocus: Boolean;
+var tra,tde,teq,sra,sde,jd0,jd1: double;
+    sid: string;
+    err,prec,exp:double;
+    cormethod,bin,maxretry: integer;
+    pslew,savecapture,restartguider: boolean;
+begin
+ if autofocusing then exit;
+ autofocusing:=true;
+ result:=false;
+ prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
+ cormethod:=config.GetValue('/PrecSlew/Method',1);
+ maxretry:=config.GetValue('/PrecSlew/Retry',3);
+ exp:=config.GetValue('/PrecSlew/Exposure',10.0);
+ bin:=config.GetValue('/PrecSlew/Binning',1);
+ savecapture:=Capture;
+ try
+ Capture:=false;
+ NewMessage('Autofocus now');
+ // get current position from last capture image
+ if (f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
+   NewMessage('Get current position from last image');
+   astrometry.SolveCurrentImage(true);
+   if astrometry.LastResult then begin
+     astrometry.CurrentCoord(tra,tde,teq);
+     jd0:=Jd(trunc(teq),0,0,0);
+     jd1:=DateTimetoJD(now);
+     tra:=deg2rad*15*tra;
+     tde:=deg2rad*tde;
+     PrecessionFK5(jd0,jd1,tra,tde);
+     pslew:=true;
+   end
+   else begin
+    NewMessage('Cannot solve current image.');
+    exit;
+   end;
+ end
+ // get current position from telescope
+ else begin
+  NewMessage('Get current position from telescope');
+  tra:=deg2rad*15*mount.RA;
+  tde:=deg2rad*mount.Dec;
+  if mount.Equinox<>0 then begin
+    jd0:=Jd(trunc(mount.Equinox),0,0,0);
+    jd1:=DateTimetoJD(now);
+    PrecessionFK5(jd0,jd1,tra,tde);
+  end;
+  pslew:=false;
+ end;
+ // stop autoguider
+ restartguider:=(autoguider.State=GUIDER_GUIDING);
+ if restartguider then begin
+   NewMessage('Stop autoguider');
+   autoguider.Guide(false);
+   autoguider.WaitBusy(15);
+ end;
+ // search focus star
+ if FindFocusStar(tra,tde,sra,sde,sid) then begin
+   // slew to star
+   NewMessage('Slew to focus star '+sid);
+   if mount.Equinox<>0 then begin
+     jd0:=Jd(trunc(mount.Equinox),0,0,0);
+     jd1:=DateTimetoJD(now);
+     PrecessionFK5(jd1,jd0,sra,sde);
+   end;
+   if pslew then
+     astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,prec,exp,bin,bin,cormethod,maxretry,err)
+   else
+     mount.Slew(rad2deg*sra/15,rad2deg*sde);
+ end
+ else begin
+  NewMessage('Cannot find a focus star.');
+  exit;
+ end;
+ wait(1);
+ // do autofocus
+ f_starprofile.ChkAutofocus.Checked:=true;
+ while f_starprofile.ChkAutofocus.Checked do begin
+  sleep(100);
+  Application.ProcessMessages;
+ end;
+ // recenter to previous position
+ NewMessage('Return to target position');
+ if mount.Equinox<>0 then begin
+   jd0:=Jd(trunc(mount.Equinox),0,0,0);
+   jd1:=DateTimetoJD(now);
+   PrecessionFK5(jd1,jd0,tra,tde);
+ end;
+ if pslew then begin
+    result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,prec,exp,bin,bin,cormethod,maxretry,err);
+ end else begin
+    result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
+ end;
+ // start autoguider
+ if restartguider then begin
+   NewMessage('Restart autoguider');
+   autoguider.Guide(false);
+   wait(5);
+   autoguider.Guide(true);
+   autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+   if autoguider.State<>GUIDER_GUIDING then begin
+     f_pause.Caption:='Pause';
+     f_pause.Text:='Failed to start guiding!';
+     NewMessage(f_pause.Text);
+     if not f_pause.Wait(120) then begin
+        NewMessage('Failed to start guiding!');
+        exit;
+     end;
+   end;
+ end;
+ Wait(2);
+ finally
+   autofocusing:=false;
+   Capture:=savecapture;
+ end;
+end;
+
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
-  if (AutofocusMode=afNone) or f_capture.Running then begin
+  if (AutofocusMode=afNone) or (f_capture.Running and (not autofocusing)) then begin
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;
@@ -4085,6 +4316,9 @@ begin
   // start a new exposure as the current frame is probably not a preview
   f_preview.Exposure:=AutofocusExposure;
   SaveAutofocusBinning:=f_preview.Binning.Text;
+  SaveAutofocusBX:=camera.BinX;
+  SaveAutofocusBY:=camera.BinY;
+  camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   f_preview.ControlExposure(AutofocusExposure,AutofocusBinning,AutofocusBinning);
@@ -4124,19 +4358,20 @@ end;
 
 Procedure Tf_main.AutoFocusStop(Sender: TObject);
 begin
-   if  f_capture.Running then exit;
+   if  f_capture.Running and (not autofocusing) then exit;
    f_preview.Running:=false;
    f_preview.Loop:=false;
-   camera.AbortExposure;
+   if not f_capture.Running then camera.AbortExposure;
    fits.SetBPM(bpm,0,0,0,0);
-   camera.ResetFrame;
    f_preview.Binning.Text:=SaveAutofocusBinning;
+   camera.SetBinning(SaveAutofocusBX,SaveAutofocusBY);
+   camera.SetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
    f_visu.Zoom:=SaveFocusZoom;
    ImgZoom:=f_visu.Zoom;
    f_starprofile.StarX:=-1;
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
-   StartPreviewExposure(nil);
+   if not f_capture.Running then StartPreviewExposure(nil);
    NewMessage('AutoFocus stoped');
 end;
 

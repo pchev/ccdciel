@@ -379,6 +379,7 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
     fn:string;
     n,i:integer;
 begin
+// ra,de parameters use equinox of the mount (local or 2000), same as slew()
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin

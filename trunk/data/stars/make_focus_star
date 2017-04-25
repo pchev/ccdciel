@@ -1,0 +1,10 @@
+# get data
+wget ftp://cdsarc.u-strasbg.fr/pub/cats/I/239/hip_main.dat.gz
+wget ftp://cdsarc.u-strasbg.fr/pub/cats/I/239/ReadMe
+gunzip hip_main.dat.gz
+
+# compile program
+fpc focus_star.pp
+
+# run
+./focus_star
