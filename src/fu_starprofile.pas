@@ -79,7 +79,7 @@ type
     maxfwhm,maximax: double;
     Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd:double;
     curhist,FfocuserSpeed,FnumHfd: integer;
-    focuserdirection,terminated: boolean;
+    focuserdirection,terminated,FirstFrame: boolean;
     ahfd: array of double;
     aminhfd,amaxhfd:double;
     afmpos,aminpos:integer;
@@ -175,6 +175,7 @@ begin
  FnumHfd:=0;
  FSumHfd:=0;
  terminated:=false;
+ FirstFrame:=true;
  FfocuserSpeed:=AutofocusMaxSpeed;
  focuser.FocusSpeed:=FfocuserSpeed;
  focuserdirection:=AutofocusMoveDir;
@@ -605,7 +606,7 @@ begin
   GetHFD(img,c,vmin,xm,ym,s,bg,xg,yg,Fhfd,FValMax);
   // process this measurement
   if (Fhfd>0) then begin
-    if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not terminated) then begin
+    if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not FirstFrame)and(not terminated) then begin
       FFindStar:=true;
       FStarX:=round(xg);
       FStarY:=round(yg);
@@ -641,6 +642,7 @@ begin
       afIterative: doAutofocusIterative;
     end;
   end;
+  FirstFrame:=false;
 end;
 
 procedure Tf_starprofile.doAutofocusVcurve;
