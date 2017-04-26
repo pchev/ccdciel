@@ -271,6 +271,7 @@ object f_EditPlan: Tf_EditPlan
           Top = 128
           Width = 185
           Caption = 'Autofocus before to start'
+          OnChange = StepChange
           TabOrder = 7
         end
         object CheckBoxAutofocus: TCheckBox
@@ -279,6 +280,7 @@ object f_EditPlan: Tf_EditPlan
           Top = 156
           Width = 128
           Caption = 'Autofocus every'
+          OnChange = StepChange
           TabOrder = 8
         end
         object AutofocusCount: TEdit
@@ -286,6 +288,7 @@ object f_EditPlan: Tf_EditPlan
           Height = 23
           Top = 156
           Width = 40
+          OnChange = StepChange
           TabOrder = 9
           Text = '10'
         end

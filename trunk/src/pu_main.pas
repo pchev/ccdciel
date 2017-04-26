@@ -4207,26 +4207,30 @@ begin
 end;
 
 function Tf_main.AutoAutofocus: Boolean;
-var tra,tde,teq,sra,sde,jd0,jd1: double;
+var tra,tde,teq,sra,sde,jd0,jd1,err: double;
     sid: string;
-    err,prec,exp:double;
-    cormethod,bin,maxretry: integer;
-    pslew,savecapture,restartguider: boolean;
+    tpos,pslew,savecapture,restartguider: boolean;
 begin
  if autofocusing then exit;
  autofocusing:=true;
  result:=false;
- prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
- cormethod:=config.GetValue('/PrecSlew/Method',1);
- maxretry:=config.GetValue('/PrecSlew/Retry',3);
- exp:=config.GetValue('/PrecSlew/Exposure',10.0);
- bin:=config.GetValue('/PrecSlew/Binning',1);
  savecapture:=Capture;
  try
  Capture:=false;
  NewMessage('Autofocus now');
+ tpos:=false;
+ pslew:=false;
+ // get current position from target object
+ if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
+   if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
+     tra:=f_sequence.TargetRA;
+     tde:=f_sequence.TargetDE;
+     tpos:=true;
+     pslew:=true;
+   end;
+ end;
  // get current position from last capture image
- if (f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
+ if (not tpos)and(f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
    NewMessage('Get current position from last image');
    astrometry.SolveCurrentImage(true);
    if astrometry.LastResult then begin
@@ -4236,15 +4240,15 @@ begin
      tra:=deg2rad*15*tra;
      tde:=deg2rad*tde;
      PrecessionFK5(jd0,jd1,tra,tde);
+     tpos:=true;
      pslew:=true;
    end
    else begin
     NewMessage('Cannot solve current image.');
-    exit;
    end;
- end
+ end;
  // get current position from telescope
- else begin
+ if (not tpos) then begin
   NewMessage('Get current position from telescope');
   tra:=deg2rad*15*mount.RA;
   tde:=deg2rad*mount.Dec;
@@ -4254,6 +4258,7 @@ begin
     PrecessionFK5(jd0,jd1,tra,tde);
   end;
   pslew:=false;
+  tpos:=true;
  end;
  // stop autoguider
  restartguider:=(autoguider.State=GUIDER_GUIDING);
@@ -4272,7 +4277,7 @@ begin
      PrecessionFK5(jd1,jd0,sra,sde);
    end;
    if pslew then
-     astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,prec,exp,bin,bin,cormethod,maxretry,err)
+     astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err)
    else
      mount.Slew(rad2deg*sra/15,rad2deg*sde);
  end
@@ -4295,7 +4300,7 @@ begin
    PrecessionFK5(jd1,jd0,tra,tde);
  end;
  if pslew then begin
-    result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,prec,exp,bin,bin,cormethod,maxretry,err);
+    result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
  end else begin
     result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
  end;
@@ -4649,8 +4654,7 @@ begin
 end;
 
 Procedure Tf_main.PlanetariumNewTarget(Sender: TObject);
-var ra,de,err,prec,exp:double;
-    cormethod,bin,maxretry: integer;
+var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if planetarium.Connected and (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
@@ -4673,12 +4677,7 @@ begin
          de:=StrToDE(tde);
       if (ra<>NullCoord) and (de<>NullCoord) then begin
         if MessageDlg('Please confirm you want to slew the telescope to '+objn+' at coordinates '+tra+'/'+tde,mtConfirmation,mbOKCancel,0)=mrOK then begin
-          prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
-          cormethod:=config.GetValue('/PrecSlew/Method',1);
-          maxretry:=config.GetValue('/PrecSlew/Retry',3);
-          exp:=config.GetValue('/PrecSlew/Exposure',10.0);
-          bin:=config.GetValue('/PrecSlew/Binning',1);
-          if astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry,err) then begin
+          if astrometry.PrecisionSlew(ra,de,err) then begin
             f_capture.Fname.Text:=objn;
             NewMessage('Planetarium target set to '+objn);
           end
@@ -4764,11 +4763,11 @@ begin
 end;
 
 function Tf_main.CheckMeridianFlip(nextexposure:double=0):integer;
-var ra,de,hh,a,h: double;
+var ra,de,hh,a,h,tra,tde,err: double;
     jd0,CurSt,CurTime: double;
     Year, Month, Day: Word;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
-    slewtoimg, restartguider, SaveCapture, ok: boolean;
+    slewtopos,slewtoimg, restartguider, SaveCapture, ok: boolean;
   procedure DoAbort;
   begin
     NewMessage('Meridian abort!');
@@ -4830,13 +4829,23 @@ begin
         if mount.PierSide=pierUnknown then begin
           NewMessage('Mount is not reporting pier side, meridian flip can be unreliable.');
         end;
-        // save current image if any
-        if (f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
+        slewtopos:=false; slewtoimg:=false;
+        // get current position from target object
+        if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
+          if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
+            tra:=f_sequence.TargetRA;
+            tde:=f_sequence.TargetDE;
+            slewtopos:=true;
+            slewtoimg:=false;
+          end;
+        end;
+        // get current position from last capture image
+        if (not slewtopos) and (f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
           DeleteFileUTF8(slash(TmpDir)+'meridianflip.fits');
           fits.SaveToFile(slash(TmpDir)+'meridianflip.fits');
+          slewtopos:=false;
           slewtoimg:=true;
-        end
-        else slewtoimg:=false;
+        end;
         // stop autoguider
         restartguider:=(autoguider.State=GUIDER_GUIDING);
         if restartguider then begin
@@ -4892,6 +4901,26 @@ begin
             NewMessage('Meridian flip canceled after flip');
             DoAbort;
             exit;
+          end;
+        end;
+        // precision slew with saved coordinates
+        if slewtopos then begin
+          NewMessage('Recenter on last position');
+          try
+          Capture:=false;  // do not save the control images
+          astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
+          wait(2);
+          finally
+            Capture:=true;
+          end;
+          if (astrometry.LastResult)and(astrometry.LastSlewErr>config.GetValue('/PrecSlew/Precision',5.0)/60) then begin
+            f_pause.Caption:='Pause';
+            f_pause.Text:='Recenter image error!'+crlf+'distance: '+FormatFloat(f1,astrometry.LastSlewErr);
+            NewMessage(f_pause.Text);
+            if not f_pause.Wait(120) then begin
+               DoAbort;
+               exit;
+            end;
           end;
         end;
         // precision slew with saved image

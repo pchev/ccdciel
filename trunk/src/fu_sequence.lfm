@@ -107,6 +107,7 @@ object f_sequence: Tf_sequence
         Top = 92
         Width = 126
         Caption = 'Run unattended'
+        OnChange = UnattendedChange
         ParentShowHint = False
         ShowHint = True
         TabOrder = 5
