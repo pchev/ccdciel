@@ -2772,7 +2772,7 @@ begin
                        f_autoguider.led.Brush.Color:=clYellow;
                        f_autoguider.BtnGuide.Caption:='Guide';
                        MenuAutoguiderGuide.Caption:='Guide';
-                       if not meridianflipping then f_sequence.AutoguiderIddle;
+                       if (not meridianflipping)and(not autofocusing) then f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;
@@ -3378,11 +3378,13 @@ var e: double;
     ftype:TFrameType;
 begin
 if (camera.Status=devConnected) then begin
+  // check if we need to cancel running preview
   if f_preview.Running then begin
     NewMessage('Stop preview');
     StatusBar1.Panels[1].Text:='Stop preview';
     camera.AbortExposure;
     f_preview.stop;
+    // retry after 5 sec.
     StartCaptureTimer.Interval:=5000;
     StartCaptureTimer.Enabled:=true;
     exit;
@@ -3391,6 +3393,7 @@ if (camera.Status=devConnected) then begin
   MenuCaptureStart.Caption:='Stop';
   Preview:=false;
   Capture:=true;
+  // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
     NewMessage('Invalid exposure time '+f_capture.ExpTime.Text);
@@ -3398,6 +3401,7 @@ if (camera.Status=devConnected) then begin
     Capture:=false;
     exit;
   end;
+  // check and set binning
   p:=pos('x',f_capture.Binning.Text);
   if p>0 then begin
      buf:=trim(copy(f_capture.Binning.Text,1,p-1));
@@ -3417,6 +3421,7 @@ if (camera.Status=devConnected) then begin
         camera.SetBinning(binx,biny);
      end;
   end;
+  // check and set frame
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then begin
     ftype:=TFrameType(f_capture.FrameType.ItemIndex);
     if camera.FrameType<>ftype then camera.FrameType:=ftype;
@@ -3425,28 +3430,42 @@ if (camera.Status=devConnected) then begin
        f_capture.CheckBoxFocus.Checked:=false;
     end;
   end;
-  waittime:=CheckMeridianFlip(e); // check meridian
-  if not f_capture.Running then begin // meridian abort
+  // check for meridian and do flip now if required
+  waittime:=CheckMeridianFlip(e);
+  if not f_capture.Running then begin
+    // stop current capture if meridian flip failed
     NewMessage('Meridian aborted!');
     f_capture.Stop;
     Capture:=false;
     exit;
   end;
-  if waittime>0 then begin  // wait meridian flip
+  // check if we need to wait for flip before to continue (time to meridian < exposure time)
+  if waittime>0 then begin
     f_capture.DitherNum:=0; // no dither after flip
+    // wait meridian
     StartCaptureTimer.Interval:=waittime*1000;
     StartCaptureTimer.Enabled:=true;
     exit;
   end;
-  if f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=StrToIntDef(f_capture.FocusCount.Text,1)) then begin
+  // check if refocusing is required
+  if f_capture.FocusNow or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=StrToIntDef(f_capture.FocusCount.Text,1))) then begin
      f_capture.FocusNum:=0;
-     if not AutoAutofocus then begin
+     f_capture.FocusNow:=false;
+     // do autofocus
+     if AutoAutofocus then begin
+       // ok, retry exposure
+       f_capture.DitherNum:=0; // no dither after focus
+       Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       exit;
+     end else begin
+       // failed, cancel current capture
        NewMessage('Autofocus failed!');
        f_capture.Stop;
        Capture:=false;
        exit;
      end;
   end;
+  // check if dithering is required
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=StrToIntDef(f_capture.DitherCount.Text,1)) then begin
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
@@ -3459,12 +3478,16 @@ if (camera.Status=devConnected) then begin
       NewMessage('Not autoguiding! dithering ignored.');
     end;
   end;
+  // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
   NewMessage('Starting '+f_capture.FrameType.Text+' exposure '+inttostr(f_capture.SeqCount)+' for '+f_capture.ExpTime.Text+' seconds');
+  // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
+  // start exposure for time e
   camera.StartExposure(e);
 end
 else begin
+   // camera not connected
    f_capture.Stop;
    Capture:=false;
    StatusBar1.Panels[1].Text := '';
@@ -4755,7 +4778,7 @@ var ra,de,hh,a,h: double;
   end;
 begin
   result:=-1;
-  if (mount.Status=devConnected) and (not mount.MountSlewing) and ((not meridianflipping)or(nextexposure<>0)) then begin
+  if (mount.Status=devConnected) and (not mount.MountSlewing) and (not autofocusing) and ((not meridianflipping)or(nextexposure<>0)) then begin
     DecodeDate(now, Year, Month, Day);
     CurTime:=frac(now)*24;
     jd0:=jd(Year,Month,Day,0);
@@ -4804,7 +4827,6 @@ begin
       then begin                    // Do meridian action
       if MeridianOption=1 then begin  // Flip
         meridianflipping:=true;
-        if f_capture.Running then f_capture.DitherNum:=0; // no dither after flip
         if mount.PierSide=pierUnknown then begin
           NewMessage('Mount is not reporting pier side, meridian flip can be unreliable.');
         end;
@@ -4912,6 +4934,7 @@ begin
           end;
         end;
         Wait(2);
+        f_capture.DitherNum:=0; // no dither after flip
         meridianflipping:=false;
         NewMessage('Meridian flip terminated');
         StatusBar1.Panels[1].Text := '';

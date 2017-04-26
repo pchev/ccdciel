@@ -65,6 +65,7 @@ type
     FSeqCount: integer;
     FDitherNum: integer;
     FFocusNum: integer;
+    FFocusNow: boolean;
     Frunning: boolean;
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
@@ -78,6 +79,7 @@ type
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property DitherNum: Integer read FDitherNum write FDitherNum;
     property FocusNum: Integer read FFocusNum write FFocusNum;
+    property FocusNow: boolean read FFocusNow write FFocusNow;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -94,6 +96,7 @@ begin
  inherited Create(aOwner);
  ScaleDPI(Self);
  Frunning:=false;
+ FFocusNow:=false;
 end;
 
 destructor  Tf_capture.Destroy;

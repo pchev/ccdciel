@@ -37,9 +37,12 @@ type
     BtnClose: TButton;
     BtnAddStep: TButton;
     BtnDeleteStep: TButton;
+    CheckBoxAutofocusStart: TCheckBox;
+    CheckBoxAutofocus: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxRepeat: TCheckBox;
     DitherCount: TEdit;
+    AutofocusCount: TEdit;
     Panel6: TPanel;
     Panel7: TPanel;
     PanelRepeat: TPanel;
@@ -148,6 +151,9 @@ begin
   p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
   p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
   p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
+  p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
+  p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
+  p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
 end;
 
 procedure Tf_EditPlan.FormShow(Sender: TObject);
@@ -243,6 +249,9 @@ begin
   PanelRepeat.Visible:=CheckBoxRepeat.Checked;
   CheckBoxDither.Checked:=p.dither;
   DitherCount.Text:=p.dithercount_str;
+  CheckBoxAutofocusStart.Checked:=p.autofocusstart;
+  CheckBoxAutofocus.Checked:=p.autofocus;
+  AutofocusCount.Text:=p.autofocuscount_str;
   LockStep:=false;
 end;
 
@@ -275,6 +284,9 @@ begin
   p.delay:=StrToFloatDef(Delay.Text,1);
   p.dither:=CheckBoxDither.Checked;
   p.dithercount:=StrToIntDef(DitherCount.Text,1);
+  p.autofocusstart:=CheckBoxAutofocusStart.Checked;
+  p.autofocus:=CheckBoxAutofocus.Checked;
+  p.autofocuscount:=StrToIntDef(AutofocusCount.Text,10);
   StepList.Cells[1,n]:=p.description;
 end;
 
@@ -382,6 +394,9 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',p.count);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Dither',p.dither);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/DitherCount',p.dithercount);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',p.autofocusstart);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Autofocus',p.autofocus);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',p.autofocuscount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',p.repeatcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
   end;

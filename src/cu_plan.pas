@@ -198,6 +198,9 @@ begin
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Fcapture.CheckBoxDither.Checked:=p.dither;
     Fcapture.DitherCount.Text:=p.dithercount_str;
+    Fcapture.CheckBoxFocus.Checked:=p.autofocus;
+    Fcapture.FocusCount.Text:=p.autofocuscount_str;
+    if p.autofocusstart then Fcapture.FocusNow:=true;
     Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.FiltersChange(self);
     Wait;

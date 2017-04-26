@@ -70,6 +70,9 @@ type
               count, repeatcount: integer;
               dither: boolean;
               dithercount: integer;
+              autofocusstart: boolean;
+              autofocus: boolean;
+              autofocuscount: integer;
               filter: integer;
               binx,biny: integer;
               frtype: TFrameType;
@@ -85,6 +88,7 @@ type
               function frtype_str: string;
               function description_str: string;
               function dithercount_str: string;
+              function autofocuscount_str: string;
             end;
 
   TTarget = Class(TObject)
@@ -360,6 +364,9 @@ begin
   frtype:=LIGHT;
   dither:=false;
   dithercount:=1;
+  autofocusstart:=false;
+  autofocus:=false;
+  autofocuscount:=10;
   description:='Step description';
 end;
 
@@ -375,6 +382,9 @@ begin
   frtype:=Source.frtype;
   dither:=Source.dither;
   dithercount:=Source.dithercount;
+  autofocusstart:=Source.autofocusstart;
+  autofocus:=Source.autofocus;
+  autofocuscount:=Source.autofocuscount;
   description:=Source.description;
 end;
 
@@ -401,6 +411,11 @@ end;
 function TStep.dithercount_str: string;
 begin
   Result:=IntToStr(dithercount);
+end;
+
+function TStep.autofocuscount_str: string;
+begin
+  Result:=IntToStr(autofocuscount);
 end;
 
 function TStep.filter_str: string;
