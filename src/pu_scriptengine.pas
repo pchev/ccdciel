@@ -131,6 +131,7 @@ type
     function cmd_EqmodClearSyncDelta:string;
     function cmd_EqmodStdSync:string;
     function cmd_EqmodAppendSync:string;
+    function cmd_AutoguiderConnect:string;
     function cmd_AutoguiderCalibrate:string;
     function cmd_AutoguiderStartGuiding:string;
     function cmd_AutoguiderStopGuiding:string;
@@ -829,6 +830,7 @@ else if cname='EQMOD_CLEARPOINTS' then result:= cmd_EqmodClearPoints
 else if cname='EQMOD_CLEARSYNCDELTA' then result:= cmd_EqmodClearSyncDelta
 else if cname='EQMOD_STDSYNC' then result:= cmd_EqmodStdSync
 else if cname='EQMOD_APPENDSYNC' then result:= cmd_EqmodAppendSync
+else if cname='AUTOGUIDER_CONNECT' then result:=cmd_AutoguiderConnect
 else if cname='AUTOGUIDER_CALIBRATE' then result:=cmd_AutoguiderCalibrate
 else if cname='AUTOGUIDER_STARTGUIDING' then result:=cmd_AutoguiderStartGuiding
 else if cname='AUTOGUIDER_STOPGUIDING' then result:=cmd_AutoguiderStopGuiding
@@ -1032,6 +1034,20 @@ try
 except
   result:=msgFailed;
 end;
+end;
+
+function Tf_scriptengine.cmd_AutoguiderConnect:string;
+begin
+try
+ result:=msgFailed;
+ if Autoguider=nil then exit;
+ autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
+                    config.GetValue('/Autoguider/PHDport','4400'));
+ result:=msgOK;
+ wait(2);
+except
+   result:=msgFailed;
+ end;
 end;
 
 function Tf_scriptengine.cmd_AutoguiderCalibrate:string;

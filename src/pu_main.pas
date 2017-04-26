@@ -2696,8 +2696,6 @@ begin
  if f_autoguider.BtnConnect.Caption='Connect' then begin
    autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
                       config.GetValue('/Autoguider/PHDport','4400'));
-   f_autoguider.BtnConnect.Caption:='Disconnect';
-   MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
  end else begin
    autoguider.Disconnect;
  end;
@@ -2728,6 +2726,8 @@ end;
 
 Procedure Tf_main.AutoguiderConnect(Sender: TObject);
 begin
+ f_autoguider.BtnConnect.Caption:='Disconnect';
+ MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
  autoguider.ConnectGear;
  autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
 end;
