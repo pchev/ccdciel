@@ -47,6 +47,8 @@ type
       Fautoguider: T_autoguider;
       Fastrometry: TAstrometry;
       StartPlanTimer: TTimer;
+      FTargetCoord: boolean;
+      FTargetRA,FTargetDE: double;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -95,6 +97,9 @@ type
       property TargetName: string read FName write SetTargetName;
       property Busy: boolean read GetBusy;
       property Running: boolean read FRunning;
+      property TargetCoord: boolean read FTargetCoord;
+      property TargetRA: double read FTargetRA;
+      property TargetDE: double read FTargetDE;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
       property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
@@ -117,6 +122,9 @@ begin
   NumTargets := 0;
   Frunning:=false;
   FInitializing:=false;
+  FTargetCoord:=false;
+  FTargetRA:=NullCoord;
+  FTargetDE:=NullCoord;
   TargetTimer:=TTimer.Create(self);
   TargetTimer.Enabled:=false;
   TargetTimer.Interval:=1000;
@@ -233,10 +241,12 @@ end;
 procedure T_Targets.Start;
 begin
   FCurrentTarget:=-1;
+  FTargetCoord:=false;
+  FTargetRA:=NullCoord;
+  FTargetDE:=NullCoord;
   FRunning:=true;
   msg('Starting sequence '+FName);
   NextTarget;
-
 end;
 
 procedure T_Targets.Stop;
@@ -490,6 +500,7 @@ var err,maxerr: double;
     cormethod,bin,maxretry: integer;
 begin
   result:=false;
+  FTargetCoord:=false;
   if (Mount=nil)or(Mount.Status<>devConnected) then begin
     msg('Error! Mount not connected');
     exit;
@@ -501,6 +512,11 @@ begin
     exp:=config.GetValue('/PrecSlew/Exposure',10.0);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     result:=astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry,err);
+    if result then begin
+      FTargetCoord:=true;
+      FTargetRA:=deg2rad*15*ra;
+      FTargetDE:=deg2rad*de;
+    end;
   end
   else begin
     maxerr:=max(2*prec,1/60);

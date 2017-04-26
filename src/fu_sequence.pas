@@ -75,6 +75,7 @@ type
     procedure TargetGridSelection(Sender: TObject; aCol, aRow: Integer);
     procedure TargetsChange(Sender: TObject);
     procedure PlanChange(Sender: TObject);
+    procedure UnattendedChange(Sender: TObject);
   private
     { private declarations }
     TargetRow, PlanRow: integer;
@@ -96,6 +97,9 @@ type
     procedure SetAstrometry(val: TAstrometry);
     function GetRunning: boolean;
     function GetBusy: boolean;
+    function GetTargetCoord: boolean;
+    function GetTargetRA: double;
+    function GetTargetDE: double;
     procedure SaveTargets(fn:string);
     procedure StartSequence;
     procedure ClearTargetGrid;
@@ -119,6 +123,9 @@ type
     procedure AbortSequence;
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
+    property TargetCoord: boolean read GetTargetCoord;
+    property TargetRA: double read GetTargetRA;
+    property TargetDE: double read GetTargetDE;
     property Preview: Tf_preview read Fpreview write SetPreview;
     property Capture: Tf_capture read Fcapture write SetCapture;
     property Mount: T_mount read Fmount write SetMount;
@@ -412,6 +419,11 @@ begin
   end;
 end;
 
+procedure Tf_sequence.UnattendedChange(Sender: TObject);
+begin
+ Targets.Unattended:=Unattended.Checked;
+end;
+
 procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
 begin
  OpenDialog1.InitialDir:=ConfigDir;
@@ -501,6 +513,21 @@ end;
 function Tf_sequence.GetRunning: boolean;
 begin
   result:=Targets.Running;
+end;
+
+function Tf_sequence.GetTargetCoord: boolean;
+begin
+  result:=Targets.TargetCoord;
+end;
+
+function Tf_sequence.GetTargetRA: double;
+begin
+  result:=Targets.TargetRA;
+end;
+
+function Tf_sequence.GetTargetDE: double;
+begin
+  result:=Targets.TargetDE;
 end;
 
 procedure Tf_sequence.StartTimerTimer(Sender: TObject);
