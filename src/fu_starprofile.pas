@@ -80,6 +80,7 @@ type
     Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd:double;
     curhist,FfocuserSpeed,FnumHfd: integer;
     focuserdirection,terminated,FirstFrame: boolean;
+    FAutofocusResult: boolean;
     ahfd: array of double;
     aminhfd,amaxhfd:double;
     afmpos,aminpos:integer;
@@ -108,6 +109,7 @@ type
     property ValMax: double read FValMax;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
+    property AutofocusResult: boolean read FAutofocusResult write FAutofocusResult;
     property preview:Tf_preview read Fpreview write Fpreview;
     property focuser:Tf_focuser read Ffocuser write Ffocuser;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -176,6 +178,7 @@ begin
  FSumHfd:=0;
  terminated:=false;
  FirstFrame:=true;
+ FAutofocusResult:=false;
  FfocuserSpeed:=AutofocusMaxSpeed;
  focuser.FocusSpeed:=FfocuserSpeed;
  focuserdirection:=AutofocusMoveDir;
@@ -632,6 +635,7 @@ begin
     if terminated then begin
       ChkAutofocus.Checked:=false; // focus reached
       msg('Autofocus terminated, HFD='+FormatFloat(f1,Fhfd));
+      if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
       exit;
     end;
     msg('Autofocus running, HFD='+FormatFloat(f1,Fhfd));

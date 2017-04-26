@@ -1676,6 +1676,7 @@ begin
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusMeanNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
   AutofocusMeanMovement:=config.GetValue('/StarAnalysis/AutofocusMeanMovement',100);
+  AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99);
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
@@ -2930,6 +2931,7 @@ begin
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
    f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
+   f_option.AutofocusTolerance.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
@@ -3018,6 +3020,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
      config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
+     config.SetValue('/StarAnalysis/AutofocusTolerance',StrToIntDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
      if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
@@ -3453,7 +3456,7 @@ if (camera.Status=devConnected) then begin
      f_capture.FocusNow:=false;
      // do autofocus
      if AutoAutofocus then begin
-       // ok, retry exposure
+       // ok, restart exposure
        f_capture.DitherNum:=0; // no dither after focus
        Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
        exit;
@@ -4187,6 +4190,7 @@ begin
   end;
   hl:=30*deg2rad;
   for i:=1 to NFocusStars do begin
+    if pos(' '+FocusStars[i].id+' ',FocusStarsBlacklist)>0 then continue;
     d:=AngularDistance(tra,tde,FocusStars[i].ra,FocusStars[i].de);
     if d<dmin then begin
       hh:=CurSt-FocusStars[i].ra;
@@ -4209,11 +4213,22 @@ end;
 function Tf_main.AutoAutofocus: Boolean;
 var tra,tde,teq,sra,sde,jd0,jd1,err: double;
     sid: string;
+    focusretry: integer;
     tpos,pslew,savecapture,restartguider: boolean;
 begin
- if autofocusing then exit;
- autofocusing:=true;
  result:=false;
+ if autofocusing then exit;
+ if (AutofocusMode=afNone) then begin
+   NewMessage('Please configure the Autofocus options.');
+   f_starprofile.ChkAutofocus.Checked:=false;
+   exit;
+ end;
+ if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
+   NewMessage('Please run Vcurve learning for this focuser direction.');
+   f_starprofile.ChkAutofocus.Checked:=false;
+   exit;
+ end;
+ autofocusing:=true;
  savecapture:=Capture;
  try
  Capture:=false;
@@ -4267,30 +4282,46 @@ begin
    autoguider.Guide(false);
    autoguider.WaitBusy(15);
  end;
- // search focus star
- if FindFocusStar(tra,tde,sra,sde,sid) then begin
-   // slew to star
-   NewMessage('Slew to focus star '+sid);
-   if mount.Equinox<>0 then begin
-     jd0:=Jd(trunc(mount.Equinox),0,0,0);
-     jd1:=DateTimetoJD(now);
-     PrecessionFK5(jd1,jd0,sra,sde);
+ // Loop until focus success
+ focusretry:=0;
+ FocusStarsBlacklist:='';
+ repeat
+   inc(focusretry);
+   // search focus star
+   if FindFocusStar(tra,tde,sra,sde,sid) then begin
+     // slew to star
+     NewMessage('Slew to focus star '+sid);
+     if mount.Equinox<>0 then begin
+       jd0:=Jd(trunc(mount.Equinox),0,0,0);
+       jd1:=DateTimetoJD(now);
+       PrecessionFK5(jd1,jd0,sra,sde);
+     end;
+     if pslew then
+       astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err)
+     else
+       mount.Slew(rad2deg*sra/15,rad2deg*sde);
+   end
+   else begin
+    NewMessage('Cannot find a focus star.');
+    exit;
    end;
-   if pslew then
-     astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err)
-   else
-     mount.Slew(rad2deg*sra/15,rad2deg*sde);
- end
- else begin
-  NewMessage('Cannot find a focus star.');
-  exit;
- end;
- wait(1);
- // do autofocus
- f_starprofile.ChkAutofocus.Checked:=true;
- while f_starprofile.ChkAutofocus.Checked do begin
-  sleep(100);
-  Application.ProcessMessages;
+   wait(1);
+   // do autofocus
+   f_starprofile.ChkAutofocus.Checked:=true;
+   while f_starprofile.ChkAutofocus.Checked do begin
+    sleep(100);
+    Application.ProcessMessages;
+   end;
+   // if not successful, blacklist the current star and try another
+   if not f_starprofile.AutofocusResult then begin
+      FocusStarsBlacklist:=FocusStarsBlacklist+' '+sid+' ';
+      NewMessage('Autofocus failed, try with another star...');
+   end;
+ until f_starprofile.AutofocusResult or (focusretry>=5);
+ if not f_starprofile.AutofocusResult then begin
+    NewMessage('Autofocus failed after 5 retries, aborting.');
+    result:=false;
+    exit;
  end;
  // recenter to previous position
  NewMessage('Return to target position');
@@ -4332,7 +4363,9 @@ Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
+  f_starprofile.AutofocusResult:=false;
   if (AutofocusMode=afNone) or (f_capture.Running and (not autofocusing)) then begin
+    NewMessage('Please configure the Autofocus options.');
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;

@@ -280,6 +280,8 @@ var
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
   NFocusStars: integer;
   FocusStars: array of TFocusStar;
+  FocusStarsBlacklist: string;
+  AutofocusTolerance: integer;
 
 implementation
 
