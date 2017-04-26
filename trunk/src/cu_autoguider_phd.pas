@@ -74,6 +74,7 @@ end;
 
 Procedure T_autoguider_phd.Connect(cp1: string; cp2:string='');
 begin
+  if FRunning then exit;
   FTargetHost:=cp1;
   FTargetPort:=cp2;
   FStatus:='Connecting';
