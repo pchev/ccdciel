@@ -722,6 +722,7 @@ begin
   MsgHandle:=handle;
   meridianflipping:=false;
   autofocusing:=false;
+  AutofocusExposureFact:=1;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -1052,10 +1053,12 @@ begin
 
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
+  for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
   Filters.Clear;
   Filters.Add(Filter0);
   for i:=1 to n do begin
      FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
+     FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
      str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
      Filters.Add(str);
   end;
@@ -1258,6 +1261,7 @@ begin
   for i:=1 to n do begin
      config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
      config.SetValue('/Filters/Offset'+IntToStr(i),FilterOffset[i]);
+     config.SetValue('/Filters/ExpFact'+IntToStr(i),FilterExpFact[i]);
   end;
 
   SaveConfig;
@@ -1661,10 +1665,13 @@ begin
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
+  for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
   for i:=1 to n do begin
      FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
+     FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
      if wheel.Filter=i then CurrentFilterOffset:=FilterOffset[i];
   end;
+  AutofocusExposureFact:=FilterExpFact[wheel.Filter];
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
@@ -2232,6 +2239,8 @@ begin
 // show new filter name
 if (n>=0)and(n<=f_filterwheel.Filters.Items.Count) then
    f_filterwheel.Filters.ItemIndex:=round(n);
+// set exposure factor
+AutofocusExposureFact:=FilterExpFact[round(n)];
 // adjust focus
 if (n>0)and(n<=MaxFilter)and(focuser.Status=devConnected) then begin
  if CurrentFilterOffset<>FilterOffset[round(n)] then begin
@@ -2914,13 +2923,16 @@ begin
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
    f_option.FilterList.Cells[0,0]:='Filter name';
    f_option.FilterList.Cells[1,0]:='Focuser offset';
+   f_option.FilterList.Cells[2,0]:='Exposure factor';
    for i:=1 to f_option.FilterList.RowCount-1 do begin
      f_option.FilterList.Cells[0,i]:='';
      f_option.FilterList.Cells[1,i]:='';
+     f_option.FilterList.Cells[2,i]:='';
    end;
    for i:=1 to Filters.Count-1 do begin
      f_option.FilterList.Cells[0,i]:=Filters[i];
      f_option.FilterList.Cells[1,i]:=config.GetValue('/Filters/Offset'+IntToStr(i),'0');
+     f_option.FilterList.Cells[2,i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),'1.0');
    end;
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
@@ -3008,10 +3020,13 @@ begin
      n:=Filters.Count-1;
      config.SetValue('/Filters/Num',n);
      for i:=1 to n do begin
-        buf:=f_option.FilterList.Cells[1,i];
-        if not IsNumber(buf) then buf:='0';
         config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
+        buf:=trim(f_option.FilterList.Cells[1,i]);
+        if not IsNumber(buf) then buf:='0';
         config.SetValue('/Filters/Offset'+IntToStr(i),buf);
+        buf:=trim(f_option.FilterList.Cells[2,i]);
+        if not IsNumber(buf) then buf:='1.0';
+        config.SetValue('/Filters/ExpFact'+IntToStr(i),buf);
      end;
      config.SetValue('/StarAnalysis/AutoFocusMode',f_option.Autofocusmode.ItemIndex);
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',StrToIntDef(f_option.AutofocusMinSpeed.Text,AutofocusMinSpeed));
@@ -4375,14 +4390,14 @@ begin
     exit;
   end;
   // start a new exposure as the current frame is probably not a preview
-  f_preview.Exposure:=AutofocusExposure;
+  f_preview.Exposure:=AutofocusExposure*AutofocusExposureFact;
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
   SaveAutofocusBY:=camera.BinY;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-  f_preview.ControlExposure(AutofocusExposure,AutofocusBinning,AutofocusBinning);
+  f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning);
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;

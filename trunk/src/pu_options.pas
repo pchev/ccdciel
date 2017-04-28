@@ -243,7 +243,6 @@ type
     procedure latChange(Sender: TObject);
     procedure longChange(Sender: TObject);
     procedure MeridianOptionClick(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
@@ -310,11 +309,6 @@ end;
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
 begin
   MeridianFlipPanel.Visible:=(MeridianOption.ItemIndex=1);
-end;
-
-procedure Tf_option.PageControl1Change(Sender: TObject);
-begin
-
 end;
 
 procedure Tf_option.SetLatitude(value:double);
