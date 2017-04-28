@@ -44,9 +44,9 @@ object f_option: Tf_option
     Height = 408
     Top = 0
     Width = 433
-    ActivePage = TabSheet10
+    ActivePage = TabSheet7
     Align = alClient
-    TabIndex = 3
+    TabIndex = 6
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
@@ -1205,8 +1205,8 @@ object f_option: Tf_option
               Top = 141
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 31
-              ClientWidth = 383
+              ClientHeight = 35
+              ClientWidth = 387
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -1305,11 +1305,11 @@ object f_option: Tf_option
       ClientWidth = 429
       object GroupBox7: TGroupBox
         Left = 8
-        Height = 281
+        Height = 305
         Top = 4
         Width = 385
         Caption = 'Precision slewing options'
-        ClientHeight = 264
+        ClientHeight = 288
         ClientWidth = 381
         TabOrder = 0
         object Label28: TLabel
@@ -1402,6 +1402,23 @@ object f_option: Tf_option
           Top = 202
           Width = 80
           TabOrder = 4
+        end
+        object Label66: TLabel
+          Left = 16
+          Height = 15
+          Top = 242
+          Width = 30
+          Caption = 'Filter'
+          ParentColor = False
+        end
+        object SlewFilter: TComboBox
+          Left = 149
+          Height = 25
+          Top = 238
+          Width = 156
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 5
         end
       end
     end
