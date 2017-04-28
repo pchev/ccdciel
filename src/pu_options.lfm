@@ -44,11 +44,10 @@ object f_option: Tf_option
     Height = 408
     Top = 0
     Width = 433
-    ActivePage = TabSheet3
+    ActivePage = TabSheet10
     Align = alClient
-    TabIndex = 4
+    TabIndex = 3
     TabOrder = 1
-    OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = 'Files'
       ClientHeight = 379
@@ -645,8 +644,8 @@ object f_option: Tf_option
           Top = 0
           Width = 396
           Align = alClient
-          ColCount = 2
-          DefaultColWidth = 180
+          ColCount = 3
+          DefaultColWidth = 122
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
           RowCount = 21
           TabOrder = 0

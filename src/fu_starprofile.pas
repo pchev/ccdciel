@@ -596,13 +596,13 @@ begin
  if (x<0)or(y<0)or(s<0) then exit;
   FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax,bg);
   if FValMax=0 then begin
-    if Fpreview.Exposure=AutofocusExposure
+    if Fpreview.Exposure=AutofocusExposure*AutofocusExposureFact
        then begin
          ChkAutofocus.Checked:=false;
          exit;
        end
        else begin
-          Fpreview.Exposure:=AutofocusExposure;
+          Fpreview.Exposure:=AutofocusExposure*AutofocusExposureFact;
           exit;
        end;
   end;

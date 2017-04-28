@@ -246,6 +246,7 @@ var
   profile: string;
   Filters: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;
+  FilterExpFact: array [0..MaxFilter] of double;
   CurrentFilterOffset: integer;
   filteroffset_initialized: boolean;
   compile_time, compile_version, compile_system, lclver: string;
@@ -267,7 +268,7 @@ var
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
   AutofocusNearHFD: double;
-  AutofocusExposure:double;
+  AutofocusExposure,AutofocusExposureFact:double;
   AutofocusMoveDir: boolean;
   PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;
