@@ -497,7 +497,7 @@ end;
 function T_Targets.Slew(ra,de: double; precision:boolean):boolean;
 var err,maxerr: double;
     prec,exp:double;
-    cormethod,bin,maxretry: integer;
+    fi,cormethod,bin,maxretry: integer;
 begin
   result:=false;
   FTargetCoord:=false;
@@ -511,7 +511,8 @@ begin
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
     exp:=config.GetValue('/PrecSlew/Exposure',10.0);
     bin:=config.GetValue('/PrecSlew/Binning',1);
-    result:=astrometry.PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry,err);
+    fi:=config.GetValue('/PrecSlew/Filter',0);
+    result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,err);
     if result then begin
       FTargetCoord:=true;
       FTargetRA:=deg2rad*15*ra;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, fu_preview, cu_astrometry_engine, cu_mount, cu_camera, cu_fits, indiapi,
+uses  u_global, u_utils, fu_preview, cu_astrometry_engine, cu_mount, cu_camera, cu_wheel, cu_fits, indiapi,
       LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
@@ -42,6 +42,7 @@ TAstrometry = class(TComponent)
     FLastSlewErr: double;
     Fmount: T_mount;
     Fcamera: T_camera;
+    Fwheel: T_wheel;
     FFits: TFits;
     FResolverName: string;
     logfile,solvefile,savefile: string;
@@ -65,7 +66,7 @@ TAstrometry = class(TComponent)
     procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
-    function PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double):boolean;
     property Busy: Boolean read FBusy;
     property SlewBusy: Boolean read FSlewBusy;
@@ -75,6 +76,7 @@ TAstrometry = class(TComponent)
     property Resolver: string read FResolverName;
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
+    property Wheel: T_wheel read Fwheel write Fwheel;
     property Fits: TFits read FFits write FFits;
     property preview:Tf_preview read Fpreview write Fpreview;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -335,7 +337,7 @@ var fn: string;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
     err,prec,exp:double;
-    cormethod,bin,maxretry: integer;
+    fi,cormethod,bin,maxretry: integer;
 begin
 TimerAstrometrySlewScreenXY.Enabled:=false;
 try
@@ -365,7 +367,8 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        maxretry:=config.GetValue('/PrecSlew/Retry',3);
        exp:=config.GetValue('/PrecSlew/Exposure',10.0);
        bin:=config.GetValue('/PrecSlew/Binning',1);
-       PrecisionSlew(ra/15,de,prec,exp,bin,bin,cormethod,maxretry,err);
+       fi:=config.GetValue('/PrecSlew/Filter',0);
+       PrecisionSlew(ra/15,de,prec,exp,fi,bin,bin,cormethod,maxretry,err);
      end;
    end;
 end;
@@ -374,16 +377,21 @@ finally
 end;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; binx,biny,method,maxslew: integer; out err: double): boolean;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
     jd0,jd1: double;
     fn:string;
-    n,i:integer;
+    n,i,oldfilter:integer;
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+    oldfilter:=0;
+    if filter>0 then begin
+      oldfilter:=Fwheel.Filter;
+      Fwheel.Filter:=filter;
+    end;
     raoffset:=0;
     deoffset:=0;
     ar1:=deg2rad*15*ra;
@@ -443,6 +451,7 @@ begin
       end;
       inc(i);
     until (dist<=prec)or(i>maxslew);
+    if oldfilter>0 then Fwheel.Filter:=oldfilter;
   end;
   fits.SetBPM(bpm,0,0,0,0);
   result:=(dist<=prec);
@@ -454,14 +463,15 @@ end;
 
 function TAstrometry.PrecisionSlew(ra,de:double; out err: double):boolean;
 var prec,exp:double;
-    cormethod,bin,maxretry: integer;
+    fi,cormethod,bin,maxretry: integer;
 begin
   prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
   cormethod:=config.GetValue('/PrecSlew/Method',1);
   maxretry:=config.GetValue('/PrecSlew/Retry',3);
   exp:=config.GetValue('/PrecSlew/Exposure',10.0);
   bin:=config.GetValue('/PrecSlew/Binning',1);
-  result:=PrecisionSlew(ra,de,prec,exp,bin,bin,cormethod,maxretry,err);
+  fi:=config.GetValue('/PrecSlew/Filter',0);
+  result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,err);
 end;
 
 end.

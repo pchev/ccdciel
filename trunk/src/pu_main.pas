@@ -842,6 +842,7 @@ begin
   astrometry:=TAstrometry.Create(nil);
   astrometry.Camera:=camera;
   astrometry.Mount:=mount;
+  astrometry.Wheel:=wheel;
   astrometry.Fits:=fits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
@@ -2980,6 +2981,8 @@ begin
    f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
    f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',10));
    f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
+   f_option.SlewFilter.Items.Assign(Filters);
+   f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
    f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
@@ -3076,6 +3079,7 @@ begin
      config.SetValue('/PrecSlew/Retry',StrToIntDef(f_option.SlewRetry.Text,3));
      config.SetValue('/PrecSlew/Exposure',StrToFloatDef(f_option.SlewExp.Text,10.0));
      config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
+     config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',StrToIntDef(f_option.MinutesPastMeridian.Text,0));
      config.SetValue('/Meridian/MinutesPastMin',StrToIntDef(f_option.MinutesPastMeridianMin.Text,0));

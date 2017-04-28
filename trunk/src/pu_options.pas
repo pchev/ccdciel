@@ -47,6 +47,7 @@ type
     BPMsigma: TEdit;
     AutofocusBinning: TEdit;
     AutofocusTolerance: TEdit;
+    SlewFilter: TComboBox;
     FocusStarMag: TComboBox;
     FocuserBacklash: TEdit;
     GroupBox10: TGroupBox;
@@ -74,6 +75,7 @@ type
     Label63: TLabel;
     Label64: TLabel;
     Label65: TLabel;
+    Label66: TLabel;
     MinutesPastMeridianMin: TEdit;
     PageMean: TPage;
     PageNone: TPage;
