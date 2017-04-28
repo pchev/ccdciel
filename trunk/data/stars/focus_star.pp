@@ -9,6 +9,7 @@ uses
 var f,f4,f5,f6,f7,f8:textfile;
     buf,proxy,ccdm,mag,ra,de,hip: string;
     m: integer;
+    bv:double;
 
 begin
   assignfile(f,'hip_main.dat');
@@ -30,9 +31,10 @@ begin
      mag:=copy(buf,42,5);
      ra:=copy(buf,52,12);
      de:=copy(buf,65,12);
+     bv:=StrToFloatDef(copy(buf,246,6),99);
      ccdm:=trim(copy(buf,328,10));
      m:=trunc(StrToFloatDef(mag,0));
-     if (proxy='')and(ccdm='') then begin
+     if (proxy='')and(ccdm='')and(bv>-0.1)and(bv<1.3) then begin
        buf:=hip+' '+ra+' '+de+' '+mag;
        case m of
          4: writeln(f4,buf);
