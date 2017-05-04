@@ -42,6 +42,7 @@ T_camera = class(TComponent)
     FonFilterChange: TNotifyNum;
     FonFrameChange: TNotifyEvent;
     FonTemperatureChange: TNotifyNum;
+    FonCoolerChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
@@ -78,6 +79,8 @@ T_camera = class(TComponent)
     function GetTemperatureRange:TNumRange; virtual; abstract;
     function  GetTemperature: double; virtual; abstract;
     procedure SetTemperature(value:double); virtual; abstract;
+    function  GetCooler: boolean; virtual; abstract;
+    procedure SetCooler(value:boolean); virtual; abstract;
     procedure SetFilter(num:integer); virtual; abstract;
     function  GetFilter:integer; virtual; abstract;
     procedure SetFilterNames(value:TStringList); virtual; abstract;
@@ -167,6 +170,7 @@ T_camera = class(TComponent)
     property VideoBrightness: integer read GetVideoBrightness write SetVideoBrightness;
     property VideoBrightnessRange: TNumRange read GetVideoBrightnessRange;
     property VideoPreviewDivisor: integer read GetVideoPreviewDivisor write SetVideoPreviewDivisor;
+    property Cooler: boolean read GetCooler write SetCooler;
     property Temperature: double read GetTemperature write SetTemperature;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
@@ -193,6 +197,7 @@ T_camera = class(TComponent)
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
     property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
+    property onCoolerChange: TNotifyEvent read FonCoolerChange write FonCoolerChange;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
     property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;

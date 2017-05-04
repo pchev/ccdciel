@@ -133,7 +133,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Connection error: ' + E.Message);
+    on E: Exception do msg('Mount '+Fdevice+' Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -151,7 +151,7 @@ begin
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Disconnection error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -202,7 +202,7 @@ begin
        if Assigned(FonPiersideChange) then FonPiersideChange(self);
     end;
     except
-     on E: Exception do msg('Error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -223,7 +223,7 @@ begin
       end;
    end;
    except
-    on E: Exception do msg('Park error: ' + E.Message);
+    on E: Exception do msg('Mount '+Fdevice+' Park error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -368,7 +368,7 @@ begin
      try
       V.tracking:=true;
      except
-       on E: Exception do msg('Set tracking error: ' + E.Message);
+       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
      end;
    end;
    FMountSlewing:=true;
@@ -384,7 +384,7 @@ begin
    FMountSlewing:=false;
    result:=true;
    except
-     on E: Exception do msg('Slew error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Slew error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -405,7 +405,7 @@ begin
     islewing:=false;
   result:=(islewing or FMountSlewing);
   except
-    on E: Exception do msg('Get slewing error: ' + E.Message);
+    on E: Exception do msg('Mount '+Fdevice+' Get slewing error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -491,14 +491,14 @@ begin
      try
       V.tracking:=true;
      except
-       on E: Exception do msg('Set tracking error: ' + E.Message);
+       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
      end;
    end;
    msg('Mount '+Fdevice+' sync to '+ARToStr3(sra)+' '+DEToStr(sde));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except
-     on E: Exception do msg('Error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -516,12 +516,12 @@ begin
       msg('Mount '+Fdevice+' start traking');
       V.tracking:=true;
      except
-       on E: Exception do msg('Set tracking error: ' + E.Message);
+       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
      end;
    end;
    result:=true;
    except
-     on E: Exception do msg('Track error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Track error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -536,7 +536,7 @@ begin
    V.AbortSlew;
    if CanSetTracking  then V.tracking:=false;
    except
-     on E: Exception do msg('Abort motion error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Abort motion error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -601,7 +601,7 @@ begin
      V.CommandString(':ALIGN_MODE,1#');
    end;
    except
-     on E: Exception do msg('Eqmod set sync mode error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Eqmod set sync mode error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -617,7 +617,7 @@ begin
    V.CommandString(':ALIGN_CLEAR_POINTS#');
    result:=true;
    except
-     on E: Exception do msg('Eqmod clear alignment error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Eqmod clear alignment error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -634,7 +634,7 @@ begin
    V.CommandString(':ALIGN_CLEAR_SYNC#');
    result:=true;
    except
-     on E: Exception do msg('Eqmod clear delta error: ' + E.Message);
+     on E: Exception do msg('Mount '+Fdevice+' Eqmod clear delta error: ' + E.Message);
    end;
  end;
  {$endif}

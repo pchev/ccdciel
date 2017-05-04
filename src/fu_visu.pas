@@ -34,6 +34,7 @@ type
 
   Tf_visu = class(TFrame)
     BtnZoom05: TSpeedButton;
+    BtnBullsEye: TSpeedButton;
     Histogram: TImage;
     Panel1: TPanel;
     hist98: TSpeedButton;
@@ -48,6 +49,7 @@ type
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
     StaticText1: TStaticText;
+    procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure BtnIttChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -64,6 +66,7 @@ type
   private
     { private declarations }
     FimgMin, FimgMax: integer;
+    FBullsEye: Boolean;
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
@@ -80,6 +83,7 @@ type
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: integer read FimgMin write FimgMin;
     property ImgMax: integer read FimgMax write FimgMax;
+    property BullsEye: boolean read FBullsEye;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
@@ -97,6 +101,7 @@ begin
  ScaleDPI(Self);
  ImgMax:=255;
  ImgMin:=0;
+ FBullsEye:=false;
  with Histogram.Picture.Bitmap do begin
    Width:=Histogram.Width;
    Height:=Histogram.Height;
@@ -263,6 +268,12 @@ begin
     3: FZoom:=2;
   end;
   if Assigned(FonZoom) then FonZoom(self);
+end;
+
+procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
+begin
+  FBullsEye:=not FBullsEye;
+  if Assigned(FRedraw) then FRedraw(self);
 end;
 
 procedure Tf_visu.histminmaxClick(Sender: TObject);

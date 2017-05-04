@@ -364,6 +364,7 @@ type
     procedure ShowExposureRange;
     procedure ShowTemperatureRange;
     procedure SetTemperature(Sender: TObject);
+    procedure SetCooler(Sender: TObject);
     procedure SetMountPark(Sender: TObject);
     procedure SetMountTrack(Sender: TObject);
     procedure SetFocusMode;
@@ -382,6 +383,7 @@ type
     Procedure CameraExposureAborted(Sender: TObject);
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
+    procedure CameraCoolerChange(Sender: TObject);
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
@@ -828,6 +830,7 @@ begin
   camera.onExposureProgress:=@CameraProgress;
   camera.onFrameChange:=@FrameChange;
   camera.onTemperatureChange:=@CameraTemperatureChange;
+  camera.onCoolerChange:=@CameraCoolerChange;
   camera.onNewImage:=@CameraNewImage;
   camera.onVideoFrame:=@CameraVideoFrame;
   camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
@@ -923,6 +926,7 @@ begin
 
   f_ccdtemp:=Tf_ccdtemp.Create(self);
   f_ccdtemp.onSetTemperature:=@SetTemperature;
+  f_ccdtemp.onSetCooler:=@SetCooler;
 
   f_mount:=Tf_mount.Create(self);
   f_mount.onPark:=@SetMountPark;
@@ -1892,6 +1896,13 @@ begin
   end;
 end;
 
+procedure Tf_main.SetCooler(Sender: TObject);
+var onoff: boolean;
+begin
+  onoff:=f_ccdtemp.CCDcooler.Checked;
+  camera.Cooler:=onoff;
+end;
+
 procedure Tf_main.ShowExposureRange;
 var buf: string;
 begin
@@ -2171,6 +2182,14 @@ end;
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
  f_ccdtemp.Current.Text:=FormatFloat(f1,t);
+end;
+
+procedure Tf_main.CameraCoolerChange(Sender: TObject);
+var c: boolean;
+begin
+ c:=camera.Cooler;
+ if f_ccdtemp.CCDcooler.Checked<>c then
+    f_ccdtemp.CCDcooler.Checked:=c;
 end;
 
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
@@ -3802,6 +3821,8 @@ end;
 
 Procedure Tf_main.DrawImage;
 var tmpbmp:TBGRABitmap;
+    co: TBGRAPixel;
+    s,cx,cy: integer;
 begin
 if fits.HeaderInfo.naxis>0 then begin
   if f_visu.BtnLinear.Checked then fits.itt:=ittlinear
@@ -3834,6 +3855,17 @@ if fits.HeaderInfo.naxis>0 then begin
        f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
     else if f_starprofile.FindStar or f_starprofile.ChkFocus.Checked then
       f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+  end;
+  if f_visu.BullsEye then begin
+    co:=ColorToBGRA(clRed);
+    cx:=img_Width div 2;
+    cy:=img_Height div 2;
+    imabmp.DrawHorizLine(0,cy,img_Width,co);
+    imabmp.DrawVertLine(cx,0,img_Height,co);
+    s:=min(img_Height,img_Width) div 3;
+    imabmp.EllipseAntialias(cx,cy,s,s,co,1);
+    s:=min(img_Height,img_Width) div 8;
+    imabmp.EllipseAntialias(cx,cy,s,s,co,1);
   end;
   PlotImage;
 end;
@@ -4719,6 +4751,7 @@ begin
       tra:= f_planetariuminfo.Ra.Text;
       tde:=f_planetariuminfo.De.Text;
       objn:=trim(f_planetariuminfo.Obj.Text);
+      NewMessage('Move to new planetarium object '+objn);
        if tra='-' then
          ra:=NullCoord
        else
