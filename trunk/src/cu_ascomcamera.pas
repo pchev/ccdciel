@@ -43,10 +43,10 @@ T_ascomcamera = class(T_camera)
    Fdevice: string;
    nf: integer;
    timestart,timeend,timedout,Fexptime:double;
-   stCCDtemp : double;
-   stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
    {$endif}
+   stCCDtemp : double;
+   stCooler : boolean;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
