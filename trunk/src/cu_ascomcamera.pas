@@ -167,7 +167,7 @@ begin
  else
     Disconnect;
  except
-   on E: EOleException do msg('Connection error: ' + E.Message);
+   on E: Exception do msg('Connection error: ' + E.Message);
  end;
 {$endif}
 end;
@@ -185,7 +185,7 @@ begin
     msg('Camera '+Fdevice+' disconnected.');
   end;
   except
-    on E: EOleException do msg('Disconnection error: ' + E.Message);
+    on E: Exception do msg('Disconnection error: ' + E.Message);
   end;
 {$endif}
 end;
@@ -233,7 +233,7 @@ begin
        if Assigned(FonFrameChange) then FonFrameChange(self);
     end;
     except
-     on E: EOleException do msg('Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -265,7 +265,7 @@ if Connected then begin
      else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
-     on E: EOleException do msg('Start exposure error: ' + E.Message);
+     on E: Exception do msg('Start exposure error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -389,7 +389,7 @@ begin
    NewImage;
  end;
  except
-    on E: EOleException do msg('Error reading image: ' + E.Message);
+    on E: Exception do msg('Error reading image: ' + E.Message);
  end;
  {$endif}
 end;
@@ -424,7 +424,7 @@ begin
      Wait(1);
    end;
    except
-    on E: EOleException do msg('Set binning error: ' + E.Message);
+    on E: Exception do msg('Set binning error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -442,7 +442,7 @@ begin
    V.NumY:=height;
    Wait(1);
    except
-    on E: EOleException do msg('Set frame error: ' + E.Message);
+    on E: Exception do msg('Set frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -458,7 +458,7 @@ begin
    width  := V.NumX;
    height := V.NumY;
    except
-    on E: EOleException do msg('Get frame error: ' + E.Message);
+    on E: Exception do msg('Get frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -483,7 +483,7 @@ begin
    heightr.max:=V.CameraYSize;
    heightr.step:=1;
    except
-    on E: EOleException do msg('Get frame range error: ' + E.Message);
+    on E: Exception do msg('Get frame range error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -503,7 +503,7 @@ if Connected then begin
   SetFrame(0,0,w,h);
   Wait(1);
   except
-   on E: EOleException do msg('Reset frame error: ' + E.Message);
+   on E: Exception do msg('Reset frame error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -517,7 +517,7 @@ begin
     msg('Camera '+Fdevice+' abort exposure');
     V.AbortExposure;
    except
-    on E: EOleException do msg('Abort exposure error: ' + E.Message);
+    on E: Exception do msg('Abort exposure error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -635,7 +635,7 @@ begin
    V.Position:=num-1;
    Wait(1);
    except
-    on E: EOleException do msg('Set filter error: ' + E.Message);
+    on E: Exception do msg('Set filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -649,7 +649,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: EOleException do msg('Get filter error: ' + E.Message);
+    on E: Exception do msg('Get filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -700,7 +700,7 @@ begin
       V.SetCCDTemperature:=value;
    end;
    except
-    on E: EOleException do msg('Set temperature error: ' + E.Message);
+    on E: Exception do msg('Set temperature error: ' + E.Message);
    end;
  end;
  {$endif}

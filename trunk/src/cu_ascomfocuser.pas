@@ -127,7 +127,7 @@ begin
   else
      Disconnect;
   except
-    on E: EOleException do msg('Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -148,7 +148,7 @@ begin
      V:=Unassigned;
    end;
    except
-     on E: EOleException do msg('Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -197,7 +197,7 @@ begin
       end;
     end;
     except
-     on E: EOleException do msg('Status error: ' + E.Message);
+     on E: Exception do msg('Status error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -229,7 +229,7 @@ begin
    msg('Focuser '+Fdevice+' move to '+inttostr(p));
    V.Move(p);
    except
-    on E: EOleException do msg('Set position error: ' + E.Message);
+    on E: Exception do msg('Set position error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -243,7 +243,7 @@ begin
    try
    result:=V.Position;
    except
-    on E: EOleException do msg('Get position error: ' + E.Message);
+    on E: Exception do msg('Get position error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -296,7 +296,7 @@ begin
    msg('Focuser '+Fdevice+' move by '+inttostr(i));
    V.Move(i);
    except
-    on E: EOleException do msg('Set relative position error: ' + E.Message);
+    on E: Exception do msg('Set relative position error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -337,7 +337,7 @@ begin
    try
    result:=V.Absolute;
    except
-    on E: EOleException do msg('GethasAbsolutePosition error: ' + E.Message);
+    on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -351,7 +351,7 @@ begin
    try
    result:=not V.Absolute;
    except
-    on E: EOleException do msg('GethasRelativePosition error: ' + E.Message);
+    on E: Exception do msg('GethasRelativePosition error: ' + E.Message);
    end;
  end;
  {$endif}
