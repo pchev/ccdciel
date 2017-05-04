@@ -80,12 +80,6 @@ end;
 
 procedure Tf_ccdtemp.CCDcoolerChange(Sender: TObject);
 begin
-  if not CCDcooler.Checked then begin
-    if MessageDlg('Really stop camera cooler now?',mtConfirmation,mbYesNo,0)<>mrYes then begin
-      CCDcooler.Checked:=true;
-      exit;
-    end;
-  end;
   if Assigned(FonSetCooler) then FonSetCooler(self);
 end;
 

@@ -745,7 +745,7 @@ begin
     end;
   end
   else if svp=CCDCooler then begin
-      if Assigned(FonCoolerChange) then FonCoolerChange(self);
+      if Assigned(FonCoolerChange) then FonCoolerChange(GetCooler);
   end
   else if svp=CCDVideoStream then begin
       if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);
@@ -1121,6 +1121,7 @@ end;
 procedure T_indicamera.SetTemperature(value:double);
 begin
  if CCDTemperature<>nil then begin
+    msg('Set temperature '+formatfloat(f1,value));
     CCDTemperature.np[0].value:=value;
     indiclient.sendNewNumber(CCDTemperature);
  end;
@@ -1129,7 +1130,7 @@ end;
 function  T_indicamera.GetCooler: boolean;
 begin
  if CCDCooler<>nil then begin
-    result:=(CCDCoolerOn.s=ISS_ON);
+    result:=(CCDCoolerOn.s=ISS_ON)and((CCDCoolerOn.s=ISS_ON)xor(CCDCoolerOff.s=ISS_ON)); // sometime both are ON, bug in driver?
  end
  else result:=false;
 end;
@@ -1137,6 +1138,7 @@ end;
 procedure T_indicamera.SetCooler(value:boolean);
 begin
  if CCDCooler<>nil then begin
+    msg('Set cooler '+BoolToStr(value,True));
     IUResetSwitch(CCDCooler);
     if value then CCDCoolerOn.s:=ISS_ON
              else CCDCoolerOff.s:=ISS_ON;

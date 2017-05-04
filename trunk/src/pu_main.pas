@@ -383,7 +383,7 @@ type
     Procedure CameraExposureAborted(Sender: TObject);
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
-    procedure CameraCoolerChange(Sender: TObject);
+    procedure CameraCoolerChange(v:boolean);
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
@@ -1897,10 +1897,14 @@ begin
 end;
 
 procedure Tf_main.SetCooler(Sender: TObject);
-var onoff: boolean;
+var onoff,coolerstatus: boolean;
 begin
   onoff:=f_ccdtemp.CCDcooler.Checked;
-  camera.Cooler:=onoff;
+  coolerstatus:=camera.Cooler;
+  if coolerstatus<>onoff then begin
+    camera.Cooler:=onoff;
+    if onoff then SetTemperature(Sender);
+  end;
 end;
 
 procedure Tf_main.ShowExposureRange;
@@ -2133,6 +2137,8 @@ begin
                    buf:=inttostr(bx)+'x'+inttostr(by);
                    f_preview.Binning.Text:=buf;
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
+                   wait(1);
+                   CameraCoolerChange(camera.Cooler);
                    if camera.hasVideo then begin
                       wait(1);
                       PageVideo.TabVisible:=true;
@@ -2184,12 +2190,11 @@ begin
  f_ccdtemp.Current.Text:=FormatFloat(f1,t);
 end;
 
-procedure Tf_main.CameraCoolerChange(Sender: TObject);
-var c: boolean;
+procedure Tf_main.CameraCoolerChange(v:boolean);
 begin
- c:=camera.Cooler;
- if f_ccdtemp.CCDcooler.Checked<>c then
-    f_ccdtemp.CCDcooler.Checked:=c;
+ if f_ccdtemp.CCDcooler.Checked<>v then
+    f_ccdtemp.CCDcooler.Checked:=v;
+ NewMessage('Camera cooler '+BoolToStr(v,true));
 end;
 
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
