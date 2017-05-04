@@ -286,6 +286,8 @@ begin
      FMountConnection:=INDI;
      PanelMountIndi.Visible:=true;
      PanelMountAscom.Visible:=false;
+     // INDI internal filter use same driver as camera
+     FilterWheelInCameraBox.Visible:=true;
      if (not FilterWheelInCameraBox.Checked) then begin
         FWheelConnection:=INDI;
         PanelWheelIndi.Visible:=true;
@@ -312,6 +314,8 @@ begin
      PanelMountIndi.Visible:=false;
      PanelMountAscom.Visible:=true;
      FilterWheelInCameraBox.Checked:=false;
+     // ASCOM internal filter use separate driver
+     FilterWheelInCameraBox.Visible:=false;
      FWheelConnection:=ASCOM;
      PanelWheelIndi.Visible:=false;
      PanelWheelAscom.Visible:=true;
