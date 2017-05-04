@@ -226,7 +226,7 @@ begin
     c:=GetCooler;
     if c<>stCooler then begin
        stCooler:=c;
-       if Assigned(FonCoolerChange) then FonCoolerChange(self);
+       if Assigned(FonCoolerChange) then FonCoolerChange(stCooler);
     end;
     if V.CanSetCCDTemperature then begin
        t:=GetTemperature;
