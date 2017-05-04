@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI,
+uses   UScaleDPI, Dialogs,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -34,6 +34,7 @@ type
 
   Tf_ccdtemp = class(TFrame)
     Button1: TButton;
+    CCDcooler: TCheckBox;
     Current: TEdit;
     Setpoint: TEdit;
     Label1: TLabel;
@@ -43,14 +44,16 @@ type
     Panel3: TPanel;
     StaticText1: TStaticText;
     procedure Button1Click(Sender: TObject);
+    procedure CCDcoolerChange(Sender: TObject);
   private
     { private declarations }
-    FonSetTemperature: TNotifyEvent;
+    FonSetTemperature,FonSetCooler: TNotifyEvent;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
+    property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
   end;
 
 implementation
@@ -73,6 +76,17 @@ end;
 procedure Tf_ccdtemp.Button1Click(Sender: TObject);
 begin
   if Assigned(FonSetTemperature) then FonSetTemperature(self);
+end;
+
+procedure Tf_ccdtemp.CCDcoolerChange(Sender: TObject);
+begin
+  if not CCDcooler.Checked then begin
+    if MessageDlg('Really stop camera cooler now?',mtConfirmation,mbYesNo,0)<>mrYes then begin
+      CCDcooler.Checked:=true;
+      exit;
+    end;
+  end;
+  if Assigned(FonSetCooler) then FonSetCooler(self);
 end;
 
 end.

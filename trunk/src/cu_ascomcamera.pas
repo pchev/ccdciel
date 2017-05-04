@@ -44,6 +44,7 @@ T_ascomcamera = class(T_camera)
    nf: integer;
    timestart,timeend,timedout,Fexptime:double;
    stCCDtemp : double;
+   stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
    {$endif}
    FFrametype:TFrameType;
@@ -67,6 +68,8 @@ T_ascomcamera = class(T_camera)
    procedure SetFilterNames(value:TStringList); override;
    function  GetTemperature: double; override;
    procedure SetTemperature(value:double); override;
+   function  GetCooler: boolean; override;
+   procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
    function GetMaxY: double; override;
    function GetPixelSize: double; override;
@@ -130,6 +133,8 @@ implementation
 constructor T_ascomcamera.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
+ stCooler:=false;
+ stCCDtemp:=NullCoord;
  FCameraInterface:=ASCOM;
  FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);
@@ -167,7 +172,7 @@ begin
  else
     Disconnect;
  except
-   on E: Exception do msg('Connection error: ' + E.Message);
+   on E: Exception do msg('Camera '+Fdevice+' Connection error: ' + E.Message);
  end;
 {$endif}
 end;
@@ -185,7 +190,7 @@ begin
     msg('Camera '+Fdevice+' disconnected.');
   end;
   except
-    on E: Exception do msg('Disconnection error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Disconnection error: ' + E.Message);
   end;
 {$endif}
 end;
@@ -208,6 +213,7 @@ procedure T_ascomcamera.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var x,y,width,height: integer;
     t: double;
+    c: boolean;
 {$endif}
 begin
  {$ifdef mswindows}
@@ -217,8 +223,13 @@ begin
   end
   else begin
     try
+    c:=GetCooler;
+    if c<>stCooler then begin
+       stCooler:=c;
+       if Assigned(FonCoolerChange) then FonCoolerChange(self);
+    end;
     if V.CanSetCCDTemperature then begin
-       t:=V.CCDTemperature;
+       t:=GetTemperature;
        if (t<>stCCDtemp) then begin
          stCCDtemp:=t;
          if Assigned(FonTemperatureChange) then FonTemperatureChange(stCCDtemp);
@@ -233,7 +244,7 @@ begin
        if Assigned(FonFrameChange) then FonFrameChange(self);
     end;
     except
-     on E: Exception do msg('Error: ' + E.Message);
+     on E: Exception do msg('Camera '+Fdevice+' Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -265,7 +276,7 @@ if Connected then begin
      else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
-     on E: Exception do msg('Start exposure error: ' + E.Message);
+     on E: Exception do msg('Camera '+Fdevice+' Start exposure error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -389,7 +400,7 @@ begin
    NewImage;
  end;
  except
-    on E: Exception do msg('Error reading image: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Error reading image: ' + E.Message);
  end;
  {$endif}
 end;
@@ -424,7 +435,7 @@ begin
      Wait(1);
    end;
    except
-    on E: Exception do msg('Set binning error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Set binning error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -442,7 +453,7 @@ begin
    V.NumY:=height;
    Wait(1);
    except
-    on E: Exception do msg('Set frame error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Set frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -458,7 +469,7 @@ begin
    width  := V.NumX;
    height := V.NumY;
    except
-    on E: Exception do msg('Get frame error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Get frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -483,7 +494,7 @@ begin
    heightr.max:=V.CameraYSize;
    heightr.step:=1;
    except
-    on E: Exception do msg('Get frame range error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Get frame range error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -503,7 +514,7 @@ if Connected then begin
   SetFrame(0,0,w,h);
   Wait(1);
   except
-   on E: Exception do msg('Reset frame error: ' + E.Message);
+   on E: Exception do msg('Camera '+Fdevice+' Reset frame error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -517,7 +528,7 @@ begin
     msg('Camera '+Fdevice+' abort exposure');
     V.AbortExposure;
    except
-    on E: Exception do msg('Abort exposure error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Abort exposure error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -635,7 +646,7 @@ begin
    V.Position:=num-1;
    Wait(1);
    except
-    on E: Exception do msg('Set filter error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Set filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -649,7 +660,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: Exception do msg('Get filter error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Get filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -696,14 +707,42 @@ begin
    try
    if V.CanSetCCDTemperature then begin
       msg('Camera '+Fdevice+' set temperature '+formatfloat(f1,value));
-      V.CoolerOn:=true;
+      SetCooler(true);
       V.SetCCDTemperature:=value;
    end;
    except
-    on E: Exception do msg('Set temperature error: ' + E.Message);
+    on E: Exception do msg('Camera '+Fdevice+' Set temperature error: ' + E.Message);
    end;
  end;
  {$endif}
+end;
+
+function  T_ascomcamera.GetCooler: boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+     result:=V.CoolerOn;
+   except
+     result:=false;
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascomcamera.SetCooler(value:boolean);
+begin
+{$ifdef mswindows}
+if Connected and (V.CoolerOn<>value) then begin
+  try
+     msg('Camera '+Fdevice+' set cooler '+BoolToStr(value,True));
+     V.CoolerOn:=value;
+  except
+   on E: Exception do msg('Camera '+Fdevice+' Set cooler error: ' + E.Message);
+  end;
+end;
+{$endif}
 end;
 
 function T_ascomcamera.GetMaxX: double;

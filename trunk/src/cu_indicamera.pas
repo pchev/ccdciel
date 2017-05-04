@@ -50,6 +50,8 @@ private
    CCDcompress, CCDraw: ISwitch;
    CCDAbortExposure: ISwitchVectorProperty;
    CCDAbort: ISwitch;
+   CCDCooler: ISwitchVectorProperty;
+   CCDCoolerOn,CCDCoolerOff: ISwitch;
    CCDTemperature: INumberVectorProperty;
    CCDinfo: INumberVectorProperty;
    CCDmaxx,CCDmaxy,CCDpixelsize,CCDpixelsizex,CCDpixelsizey,CCDbitperpixel : INumber;
@@ -129,6 +131,8 @@ private
    procedure SetFilterNames(value:TStringList); override;
    function  GetTemperature: double; override;
    procedure SetTemperature(value:double); override;
+   function  GetCooler: boolean; override;
+   procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
    function GetMaxY: double; override;
    function GetPixelSize: double; override;
@@ -267,7 +271,7 @@ begin
     Gain:=nil;
     Exposure:=nil;
     StreamOptions:=nil;
-
+    CCDCooler:=nil;
     CCDTemperature:=nil;
     CCDinfo:=nil;
     Guiderexpose:=nil;
@@ -522,6 +526,12 @@ begin
      CCDAbort:=IUFindSwitch(CCDAbortExposure,'ABORT');
      if (CCDAbort=nil) then CCDAbortExposure:=nil;
   end
+  else if (proptype=INDI_SWITCH)and(propname='CCD_COOLER') then begin
+     CCDCooler:=indiProp.getSwitch;
+     CCDCoolerOn:=IUFindSwitch(CCDCooler,'COOLER_ON');
+     CCDCoolerOff:=IUFindSwitch(CCDCooler,'COOLER_OFF');
+     if (CCDCoolerOn=nil)or(CCDCoolerOff=nil) then CCDCooler:=nil;
+  end
   else if (proptype=INDI_NUMBER)and(propname='CCD_TEMPERATURE') then begin
      CCDTemperature:=indiProp.getNumber;
   end
@@ -733,6 +743,9 @@ begin
     if (not UseMainSensor) then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
+  end
+  else if svp=CCDCooler then begin
+      if Assigned(FonCoolerChange) then FonCoolerChange(self);
   end
   else if svp=CCDVideoStream then begin
       if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);
@@ -1110,6 +1123,24 @@ begin
  if CCDTemperature<>nil then begin
     CCDTemperature.np[0].value:=value;
     indiclient.sendNewNumber(CCDTemperature);
+ end;
+end;
+
+function  T_indicamera.GetCooler: boolean;
+begin
+ if CCDCooler<>nil then begin
+    result:=(CCDCoolerOn.s=ISS_ON);
+ end
+ else result:=false;
+end;
+
+procedure T_indicamera.SetCooler(value:boolean);
+begin
+ if CCDCooler<>nil then begin
+    IUResetSwitch(CCDCooler);
+    if value then CCDCoolerOn.s:=ISS_ON
+             else CCDCoolerOff.s:=ISS_ON;
+    indiclient.sendNewSwitch(CCDCooler);
  end;
 end;
 

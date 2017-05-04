@@ -384,6 +384,8 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
     n,i,oldfilter:integer;
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
+  result:=false;
+  try
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
@@ -397,7 +399,7 @@ begin
     ar1:=deg2rad*15*ra;
     de1:=deg2rad*de;
     msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
-    Mount.Slew(ra, de);
+    if not Mount.Slew(ra, de) then exit;
     i:=1;
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     repeat
@@ -435,7 +437,7 @@ begin
                mount.Sync(cra,cde);
                Wait(2);
                msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
-               Mount.Slew(ra, de);
+               if not Mount.Slew(ra, de) then exit;
             end;
          else begin
                raoffset:=ra+raoffset-cra;
@@ -445,7 +447,7 @@ begin
                if de>90.0 then de:=90;
                if de<-90.0 then de:=-90;
                msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
-               Mount.Slew(newra,newde);
+               if not Mount.Slew(newra,newde) then exit;
             end;
          end;
       end;
@@ -457,8 +459,10 @@ begin
   result:=(dist<=prec);
   err:=dist;
   FLastSlewErr:=dist;
-  if result then msg('Precision slew terminated.')
-            else msg('Precision slew failed!');
+  finally
+    if result then msg('Precision slew terminated.')
+              else msg('Precision slew failed!');
+  end;
 end;
 
 function TAstrometry.PrecisionSlew(ra,de:double; out err: double):boolean;
