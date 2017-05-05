@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_modelisation, u_global, u_utils, math, UScaleDPI, fu_preview,
+uses BGRABitmap, BGRABitmapTypes,
+  u_modelisation, u_global, u_utils, math, UScaleDPI, fu_preview,
   fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, FileUtil, TAGraph,
   TAFuncSeries, TASeries, TASources, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -86,9 +87,9 @@ type
     afmpos,aminpos:integer;
     procedure msg(txt:string);
     function  getRunning:boolean;
-    procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax,bg: double);
+    procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
     procedure GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
-    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; var bg: double; out xc,yc,hfd,valmax: double);
+    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,valmax: double);
     procedure PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
     procedure PlotHistory;
     procedure ClearGraph;
@@ -287,42 +288,81 @@ begin
  yc:=y+ym;
 end;
 
-procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax,bg: double);
+procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
 // center of gravity in area s*s centered on x,y of image Img of size xmax,ymax
 var i,j,rs: integer;
     SumVal,SumValX,SumValY: double;
     val,xg,yg:double;
+    b:TBGRABitmap;
+    p: PBGRAPixel;
+    xm,ym,tol:integer;
+    imin,xx,yy: double;
 begin
- vmax:=0;
- bg:=0;
+  vmax:=0;
+  bg:=0;
   rs:=s div 2;
-  if (x-s)<1 then x:=s+1;
-  if (x+s)>(xmax-1) then x:=xmax-s-1;
-  if (y-s)<1 then y:=s+1;
-  if (y+s)>(ymax-1) then y:=ymax-s-1;
-  // Compute mean value of the image area
+  if (x-rs)<1 then x:=rs+1;
+  if (x+rs)>(xmax-1) then x:=xmax-rs-1;
+  if (y-rs)<1 then y:=rs+1;
+  if (y+rs)>(ymax-1) then y:=ymax-rs-1;
+  // find brightest point position, max and min values
+  vmax:=0;
+  imin:=MaxInt;
   SumVal:=0;
   for i:=-rs to rs do
+    for j:=-rs to rs do begin
+      Val:=vmin+Img[0,y+j,x+i]/c;
+      SumVal:=SumVal+val;
+      if val<imin then imin:=val;
+      if Val>vmax then begin
+           vmax:=Val;
+           xm:=j;
+           ym:=i;
+      end;
+    end;
+  xm:=rs+xm;
+  ym:=rs+ym;
+  // average of image
+  bg:=sumval/(4*rs*rs);
+  // copy to bitmap
+  b:=TBGRABitmap.Create(s+1,s+1);
+  for i:=-rs to rs do  begin
+   p := b.Scanline[i+rs];
    for j:=-rs to rs do begin
      val:=vmin+Img[0,y+j,x+i]/c;
-     SumVal:=SumVal+val;
+     val:=(val-imin)*250/(vmax-imin);
+     p^.red:=round(val);
+     p^.green:=p^.red;
+     p^.blue:=p^.red;
+     p^.alpha:=255;
+     inc(p);
    end;
-  bg:=sumval/(4*rs*rs);
-  // Get center of gravity of binarized image above mean value
+  end;
+  b.InvalidateBitmap;
+  b.SaveToFile('/tmp/a1.bmp');
+  // fill values above average, connected to brightest pixel
+  tol:=round((vmax-bg)*250/(vmax-imin));
+  if tol<1 then tol:=1;
+  if tol>245 then tol:=245;
+  b.FloodFill(xm,ym,BGRAWhite,fmSet,tol);
+  b.SaveToFile('/tmp/a2.bmp');
+  // center of gravity of filled values
   SumVal:=0;
   SumValX:=0;
   SumValY:=0;
-  vmax:=0;
-  for i:=-rs to rs do
+  ri:=0;
+  for i:=-rs to rs do begin
+   p := b.Scanline[i+rs];
    for j:=-rs to rs do begin
-     val:=vmin+Img[0,y+j,x+i]/c-bg;
-     if val>0 then begin
-       if val>vmax then vmax:=val;
+     val:=p^.red;
+     if val>254 then begin
        SumVal:=SumVal+1;
        SumValX:=SumValX+(i);
        SumValY:=SumValY+(j);
      end;
+     inc(p);
    end;
+  end;
   if SumVal>0 then begin
     Xg:=SumValX/SumVal;
     Yg:=SumValY/SumVal;
@@ -330,8 +370,24 @@ begin
   else begin
     xg:=0; yg:=0;
   end;
+  // radius of interest
+  for i:=-rs to rs do begin
+   xx:=i-xg;
+   p := b.Scanline[i+rs];
+   for j:=-rs to rs do begin
+     val:=p^.red;
+     if val>254 then begin
+       yy:=j-yg;
+       ri:=max(ri,2+ceil(sqrt(xx*xx+yy*yy)));
+     end;
+     inc(p);
+   end;
+  end;
+  if ri=0 then ri:=rs;
+  if ri<3 then ri:=3;
   xc:=round(x+Xg);
   yc:=round(y+Yg);
+  b.free;
 end;
 
 procedure Tf_starprofile.GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
@@ -360,29 +416,15 @@ begin
  end;
 end;
 
-procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,s: integer; var bg: double; out xc,yc,hfd,valmax: double);
-var i,j,rs,ri: integer;
+procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,valmax: double);
+var i,j: integer;
     SumVal,SumValX,SumValY,SumValR: double;
     Xg,Yg,fxg,fyg: double;
     r,xs,ys:double;
     noise,snr,val: double;
 begin
-// x,y must be the star center, bg the mean image value computed by FindStarPos
+// x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
 hfd:=-1;
-rs:=s div 2;
-// Get radius of interest (x,y must be the star center)
-for i:=0 to rs do begin
- for j:=0 to rs do begin
-   val:=vmin+Img[0,y+j,x+i]/c;
-   if val<=bg then begin
-     ri:=ceil(sqrt(i*i+j*j));
-     break;
-   end;
- end;
- if ri<>rs then break;
-end;
-if ri<2 then ri:=rs; // Probable central obstruction, use full width instead
-
 // New background from corner values
 bg:=vmin+((Img[0,y-ri,x-ri]+Img[0,y-ri,x+ri]+Img[0,y+ri,x-ri]+Img[0,y+ri,x+ri]) / 4)/c;
 // Get center of gravity whithin radius of interest
@@ -557,11 +599,14 @@ end;
 procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
 var bg: double;
   xg,yg: double;
-  xm,ym: integer;
+  xm,ym,ri: integer;
 begin
  if (x<0)or(y<0)or(s<0) then exit;
 
- FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax,bg);
+ if s>=(xmax div 2) then s:=xmax div 2;
+ if s>=(ymax div 2) then s:=ymax div 2;
+
+ FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg);
  if FValMax=0 then exit;
 
  GetPSF(img,c,vmin,xm,ym,s,xmax,ymax,Ffwhm);
@@ -570,7 +615,7 @@ begin
  end
  else Ffwhmarcsec:=-1;
 
- GetHFD(img,c,vmin,xm,ym,s,bg,xg,yg,Fhfd,FValMax);
+ GetHFD(img,c,vmin,xm,ym,ri,bg,xg,yg,Fhfd,FValMax);
 
  // Plot result
  if (Fhfd>0) then begin
@@ -591,10 +636,10 @@ end;
 procedure Tf_starprofile.Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
 var bg: double;
   xg,yg: double;
-  xm,ym: integer;
+  xm,ym,ri: integer;
 begin
  if (x<0)or(y<0)or(s<0) then exit;
-  FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,FValMax,bg);
+  FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg);
   if FValMax=0 then begin
     if Fpreview.Exposure=AutofocusExposure*AutofocusExposureFact
        then begin
@@ -606,7 +651,7 @@ begin
           exit;
        end;
   end;
-  GetHFD(img,c,vmin,xm,ym,s,bg,xg,yg,Fhfd,FValMax);
+  GetHFD(img,c,vmin,xm,ym,ri,bg,xg,yg,Fhfd,FValMax);
   // process this measurement
   if (Fhfd>0) then begin
     if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not FirstFrame)and(not terminated) then begin
