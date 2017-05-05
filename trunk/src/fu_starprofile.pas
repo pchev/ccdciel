@@ -339,13 +339,11 @@ begin
    end;
   end;
   b.InvalidateBitmap;
-  b.SaveToFile('/tmp/a1.bmp');
   // fill values above average, connected to brightest pixel
   tol:=round((vmax-bg)*250/(vmax-imin));
   if tol<1 then tol:=1;
   if tol>245 then tol:=245;
   b.FloodFill(xm,ym,BGRAWhite,fmSet,tol);
-  b.SaveToFile('/tmp/a2.bmp');
   // center of gravity of filled values
   SumVal:=0;
   SumValX:=0;
