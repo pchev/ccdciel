@@ -259,7 +259,7 @@ var
   astrometryResolver: integer;
   OrigX, OrigY,img_Height,img_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
-  ImgScale0: double;
+  ImgScale0,ImgPixRatio: double;
   ImgZoom: double;
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsTimeZone: double;
