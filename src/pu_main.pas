@@ -725,6 +725,7 @@ begin
   meridianflipping:=false;
   autofocusing:=false;
   AutofocusExposureFact:=1;
+  ImgPixRatio:=1;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -3836,6 +3837,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.ImgDmax:=f_visu.ImgMax*256;
   fits.ImgDmin:=f_visu.ImgMin*256;
   fits.GetBGRABitmap(ImaBmp);
+  ImgPixRatio:=fits.HeaderInfo.pixratio;
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
      if BayerColor then begin
        tmpbmp:=TBGRABitmap.Create;

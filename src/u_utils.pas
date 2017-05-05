@@ -1038,16 +1038,16 @@ procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 begin
 try
   if ImgZoom=0.5 then begin
-     xx:=(x * 2)-OrigX;
+     xx:=trunc(((x * 2)-OrigX)/ImgPixRatio);
      yy:=(y * 2)-OrigY;
   end else if ImgZoom=1 then begin
-      xx:=x-OrigX;
+      xx:=trunc((x-OrigX)/ImgPixRatio);
       yy:=y-OrigY;
   end else if ImgZoom=2 then begin
-     xx:=(x div 2)-OrigX;
+     xx:=trunc(((x div 2)-OrigX)/ImgPixRatio);
      yy:=(y div 2)-OrigY;
   end else  begin
-     xx:=trunc(x/ImgScale0);
+     xx:=trunc((x/ImgScale0)/ImgPixRatio);
      yy:=trunc(y/ImgScale0);
   end;
 except
@@ -1060,19 +1060,19 @@ procedure Fits2Screen(x,y: integer; out xx,yy: integer);
 begin
 try
   if ImgZoom=0 then begin
-    xx:=round(x * ImgScale0);
+    xx:=round(x * ImgPixRatio * ImgScale0);
     yy:=round(y * ImgScale0);
   end
   else if ImgZoom=0.5 then begin
-    xx:=(x+OrigX) div 2;
+    xx:=trunc(x * ImgPixRatio+OrigX) div 2;
     yy:=(y+OrigY) div 2;
   end
   else if ImgZoom=1 then begin
-    xx:=x+OrigX;
+    xx:=trunc(x * ImgPixRatio)+OrigX;
     yy:=y+OrigY;
   end
   else if ImgZoom=2 then begin
-    xx:=2*(x+OrigX);
+    xx:=2*(trunc(x * ImgPixRatio)+OrigX);
     yy:=2*(y+OrigY);
   end;
 except
