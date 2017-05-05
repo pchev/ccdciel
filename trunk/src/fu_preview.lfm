@@ -20,15 +20,15 @@ object f_preview: Tf_preview
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 30
+      Height = 24
       Top = 0
       Width = 141
-      ClientHeight = 30
+      ClientHeight = 24
       ClientWidth = 141
       TabOrder = 2
       object ExpTime: TComboBox
         Left = 50
-        Height = 29
+        Height = 23
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
@@ -51,24 +51,24 @@ object f_preview: Tf_preview
       end
       object Label1: TLabel
         Left = 0
-        Height = 17
+        Height = 15
         Top = 4
-        Width = 26
+        Width = 23
         Caption = 'Exp'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 30
-      Top = 30
+      Height = 24
+      Top = 24
       Width = 141
-      ClientHeight = 30
+      ClientHeight = 24
       ClientWidth = 141
       TabOrder = 3
       object Binning: TComboBox
         Left = 50
-        Height = 29
+        Height = 23
         Hint = 'Camera binning'
         Top = 0
         Width = 90
@@ -78,23 +78,24 @@ object f_preview: Tf_preview
           '1x1'
         )
         ParentFont = False
+        Style = csDropDownList
         TabOrder = 0
         Text = '1x1'
       end
       object Label2: TLabel
         Left = 0
-        Height = 17
+        Height = 15
         Top = 4
-        Width = 27
+        Width = 24
         Caption = 'Bin.'
         ParentColor = False
       end
     end
     object BtnPreview: TButton
       Left = 0
-      Height = 29
+      Height = 25
       Hint = 'Start one preview exposure'
-      Top = 60
+      Top = 48
       Width = 141
       Caption = 'Preview'
       OnClick = BtnPreviewClick
@@ -104,9 +105,9 @@ object f_preview: Tf_preview
     object BtnLoop: TButton
       Tag = 1
       Left = 0
-      Height = 29
+      Height = 25
       Hint = 'Loop preview exposures'
-      Top = 89
+      Top = 73
       Width = 141
       Caption = 'Loop'
       OnClick = BtnLoopClick
