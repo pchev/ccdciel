@@ -26,13 +26,14 @@ object f_filterwheel: Tf_filterwheel
       AutoSize = False
       ItemHeight = 0
       OnChange = FiltersChange
+      Style = csDropDownList
       TabOrder = 0
     end
     object Label1: TLabel
       Left = 1
-      Height = 18
+      Height = 15
       Top = 5
-      Width = 22
+      Width = 26
       Caption = 'F:    '
       ParentColor = False
     end

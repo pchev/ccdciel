@@ -88,6 +88,7 @@ object f_capture: Tf_capture
         Items.Strings = (
           '1x1'
         )
+        Style = csDropDownList
         TabOrder = 0
         Text = '1x1'
       end
@@ -182,6 +183,7 @@ object f_capture: Tf_capture
           'Dark'
           'Flat'
         )
+        Style = csDropDownList
         TabOrder = 0
         Text = 'Light'
       end

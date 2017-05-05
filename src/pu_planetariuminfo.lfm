@@ -9,29 +9,32 @@ object f_planetariuminfo: Tf_planetariuminfo
   ClientWidth = 228
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.6.4.0'
   Visible = False
   object Ra: TEdit
     Left = 139
-    Height = 30
+    Height = 23
     Top = 30
     Width = 80
+    ReadOnly = True
     TabOrder = 0
     Text = 'Ra'
   end
   object De: TEdit
     Left = 139
-    Height = 30
+    Height = 23
     Top = 68
     Width = 80
+    ReadOnly = True
     TabOrder = 1
     Text = 'De'
   end
   object Obj: TEdit
     Left = 139
-    Height = 30
+    Height = 23
     Top = 104
     Width = 80
+    ReadOnly = True
     TabOrder = 2
     Text = 'Obj'
   end
@@ -46,25 +49,25 @@ object f_planetariuminfo: Tf_planetariuminfo
   end
   object Label1: TLabel
     Left = 19
-    Height = 24
+    Height = 15
     Top = 36
-    Width = 84
+    Width = 63
     Caption = 'Center RA'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 19
-    Height = 24
+    Height = 15
     Top = 74
-    Width = 93
+    Width = 72
     Caption = 'Center Dec'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 19
-    Height = 24
+    Height = 15
     Top = 110
-    Width = 109
+    Width = 82
     Caption = 'Object name'
     ParentColor = False
   end
@@ -79,9 +82,9 @@ object f_planetariuminfo: Tf_planetariuminfo
   end
   object Label4: TLabel
     Left = 19
-    Height = 24
+    Height = 15
     Top = 8
-    Width = 282
+    Width = 227
     Caption = 'Click the object in planetarium'
     Font.Style = [fsBold]
     ParentColor = False
