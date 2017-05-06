@@ -180,7 +180,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Binning: TComboBox
           Left = 96
-          Height = 23
+          Height = 25
           Top = 37
           Width = 100
           ItemHeight = 0

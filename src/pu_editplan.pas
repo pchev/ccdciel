@@ -129,7 +129,8 @@ begin
   p.frtype:=TFrameType(j);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1');
   j:=Binning.Items.IndexOf(str);
-  if j<0 then j:=0;
+  if j<0 then
+    binning.Items.Add(str);
   j:=pos('x',str);
   if j>0 then begin
      buf:=trim(copy(str,1,j-1));
