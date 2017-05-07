@@ -877,10 +877,13 @@ object f_main: Tf_main
     top = 184
   end
   object OpenDialog1: TOpenDialog
+    Filter = 'Fits file|*.fits;*.fit;*.fts|All|*.*'
     left = 48
     top = 184
   end
   object SaveDialog1: TSaveDialog
+    DefaultExt = '.fits'
+    Filter = 'Fits file|*.fits|All|*.*'
     left = 48
     top = 240
   end
