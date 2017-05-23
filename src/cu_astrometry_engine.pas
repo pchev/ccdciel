@@ -180,7 +180,7 @@ var str: TStringList;
 begin
 if FResolver=ResolverAstrometryNet then begin
  if FUseScript then begin
-   Fcmd:=FCustomScript;
+   Fcmd:=ExpandFileNameUTF8(FCustomScript);
    buf:='--overwrite';
    if (Fscalelow>0)and(Fscalehigh>0) then begin
      buf:=buf+' --scale-low';
