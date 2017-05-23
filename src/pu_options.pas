@@ -47,6 +47,8 @@ type
     BPMsigma: TEdit;
     AutofocusBinning: TEdit;
     AutofocusTolerance: TEdit;
+    AstUseScript: TCheckBox;
+    AstCustScript: TEdit;
     SlewFilter: TComboBox;
     FocusStarMag: TComboBox;
     FocuserBacklash: TEdit;
