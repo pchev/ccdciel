@@ -730,6 +730,7 @@ begin
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
   Filters:=TStringList.Create;
+  CurrentFilterOffset:=0;
   PageControlRight.ActivePageIndex:=0;
   cdcwcs_initfitsfile:=nil;
   cdcwcs_release:=nil;
@@ -2554,6 +2555,7 @@ begin
  VcHalfwidth:=StrToIntDef(f_vcurve.HalfWidth.Text,NullCoord);
  VcNsteps:=StrToIntDef(f_vcurve.Nsteps.Text,30);
  if (VcCenterpos=NullCoord)or(VcHalfwidth=NullCoord) then exit;
+ AutofocusVcFilterOffset:=CurrentFilterOffset;
  // find a bright star
  focuser.Position:=VcCenterpos;
  wait(1);
@@ -2625,6 +2627,7 @@ begin
  if AutofocusVcNum>0 then begin
   config.DeletePath('/StarAnalysis/Vcurve');
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusVcDir);
+  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',AutofocusVcFilterOffset);
   config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
   config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
   config.SetValue('/StarAnalysis/Vcurve/VcNsteps',VcNsteps);
@@ -2648,6 +2651,7 @@ Procedure Tf_main.LoadVcurve;
 var i:integer;
 begin
    AutofocusVcDir:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusMoveDir);
+   AutofocusVcFilterOffset:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',0);
    VcCenterpos:=config.GetValue('/StarAnalysis/Vcurve/VcCenterpos',NullCoord);
    VcHalfwidth:=config.GetValue('/StarAnalysis/Vcurve/VcHalfwidth',NullCoord);
    VcNsteps:=config.GetValue('/StarAnalysis/Vcurve/VcNsteps',30);

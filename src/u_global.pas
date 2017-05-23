@@ -276,7 +276,7 @@ var
   AutofocusVcDir: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
   AutofocusVcStep:TAutofocusVcurveStep;
-  AutofocusMeanMovement,AutofocusMeanNumPoint: integer;
+  AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset: integer;
   AutofocusMeanStep:TAutofocusMeanStep;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;

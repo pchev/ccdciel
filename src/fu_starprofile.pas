@@ -699,7 +699,7 @@ begin
    vcsNearL: begin
               focuser.FocusPosition:=round(AutofocusVc[0,1]);
               wait(1);
-              focuser.FocusPosition:=round(AutofocusVc[PosNearL,1]);
+              focuser.FocusPosition:=round(AutofocusVc[PosNearL,1])+(CurrentFilterOffset-AutofocusVcFilterOffset);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsFocusL;
@@ -708,7 +708,7 @@ begin
    vcsNearR: begin
               focuser.FocusPosition:=round(AutofocusVc[AutofocusVcNum,1]);
               wait(1);
-              focuser.FocusPosition:=round(AutofocusVc[PosNearR,1]);
+              focuser.FocusPosition:=round(AutofocusVc[PosNearR,1])+(CurrentFilterOffset-AutofocusVcFilterOffset);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsFocusR;
