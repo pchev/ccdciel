@@ -28,7 +28,6 @@ if [[ $? != 0 ]]; then echo error; exit ; fi
 
 echo ssh $remotehost rm $solvf
 ssh $remotehost rm $solvf
-if [[ $? != 0 ]]; then echo error; exit ; fi
 
 echo ssh $remotehost solve-field $param --new-fits $outf $inf
 ssh $remotehost solve-field $param --new-fits $outf $inf
