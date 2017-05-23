@@ -4,7 +4,7 @@
 #
 
 # configure the remote host name
-remotehost=api
+remotehost=127.0.0.1
 # configure the temporary path in the remote host
 remotepath=/tmp
 
