@@ -189,6 +189,8 @@ begin
    engine.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
    engine.plot:=config.GetValue('/Astrometry/Plot',false);
    engine.OtherOptions:=config.GetValue('/Astrometry/OtherOptions','');
+   engine.UseScript:=config.GetValue('/Astrometry/AstUseScript',false);
+   engine.CustomScript:=config.GetValue('/Astrometry/AstCustScript','');
    engine.ra:=ra;
    engine.de:=de;
    engine.radius:=max(MinRadius,pixscale*iwidth/3600);

@@ -3000,6 +3000,8 @@ begin
    f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
    f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
    f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','--no-fits2fits');
+   f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);
+   f_option.AstCustScript.Text:=config.GetValue('/Astrometry/AstCustScript','');
    f_option.CygwinPath.Text:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
    {$ifdef unix}
@@ -3098,6 +3100,8 @@ begin
      config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
      config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);
      config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
+     config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked);
+     config.SetValue('/Astrometry/AstCustScript',f_option.AstCustScript.Text);
      config.SetValue('/Astrometry/CygwinPath',f_option.CygwinPath.Text);
      config.SetValue('/Astrometry/ElbrusFolder',f_option.ElbrusFolder.Text);
      {$ifdef unix}

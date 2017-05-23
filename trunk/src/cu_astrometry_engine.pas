@@ -41,6 +41,8 @@ TAstrometry_engine = class(TThread)
      Fresult:integer;
      Fcmd: string;
      FOtherOptions: string;
+     FUseScript:Boolean;
+     FCustomScript: string;
      Fparam: TStringList;
      process: TProcessUTF8;
    protected
@@ -64,6 +66,8 @@ TAstrometry_engine = class(TThread)
      property downsample: integer read FDown write FDown;
      property plot: boolean read Fplot write Fplot;
      property OtherOptions: string read FOtherOptions write FOtherOptions;
+     property UseScript: boolean read FUseScript write FUseScript;
+     property CustomScript: string read FCustomScript write FCustomScript;
      property result: integer read Fresult;
      property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
@@ -83,6 +87,8 @@ begin
   Fcmd:='';
   Fplot:=false;
   FOtherOptions:='';
+  FUseScript:=false;
+  FCustomScript:='';
   Fra:=NullCoord;
   Fde:=NullCoord;
   Fradius:=NullCoord;
@@ -170,11 +176,50 @@ end;
 procedure TAstrometry_engine.Resolve;
 var str: TStringList;
     i: integer;
-    {$ifdef mswindows}
     buf: string;
-    {$endif}
 begin
 if FResolver=ResolverAstrometryNet then begin
+ if FUseScript then begin
+   Fcmd:=FCustomScript;
+   buf:='--overwrite';
+   if (Fscalelow>0)and(Fscalehigh>0) then begin
+     buf:=buf+' --scale-low';
+     buf:=buf+blank+FloatToStr(Fscalelow);
+     buf:=buf+' --scale-high';
+     buf:=buf+blank+FloatToStr(Fscalehigh);
+     buf:=buf+' --scale-units';
+     buf:=buf+' arcsecperpix';
+   end;
+   if (Fra<>NullCoord)and(Fde<>NullCoord)and(Fradius<>NullCoord) then begin
+     buf:=buf+' --ra';
+     buf:=buf+blank+FloatToStr(Fra);
+     buf:=buf+' --dec';
+     buf:=buf+blank+FloatToStr(Fde);
+     buf:=buf+' --radius';
+     buf:=buf+blank+FloatToStr(Fradius);
+   end;
+   if FObjs>0 then begin
+     buf:=buf+' --objs';
+     buf:=buf+blank+inttostr(FObjs);
+   end;
+   if FDown>1 then begin
+     buf:=buf+' --downsample';
+     buf:=buf+blank+inttostr(FDown);
+   end;
+   if not Fplot then begin
+      buf:=buf+' --no-plots';
+   end;
+   if FOtherOptions<>'' then begin
+     str:=TStringList.Create;
+     SplitRec(FOtherOptions,' ',str);
+     for i:=0 to str.Count-1 do buf:=buf+blank+str[i];
+     str.Free;
+   end;
+   Fparam.Add(FInFile);
+   Fparam.Add(FOutFile);
+   Fparam.Add(buf);
+   Start;
+ end else begin
   {$ifdef mswindows}
   Fcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
   Fparam.Add('--login');
@@ -260,6 +305,7 @@ if FResolver=ResolverAstrometryNet then begin
   Fparam.Add(FInFile);
   {$endif}
   Start;
+ end;
 end
 else if FResolver=ResolverElbrus then begin
   FElbrusFile:=ExtractFileName(FInFile);
