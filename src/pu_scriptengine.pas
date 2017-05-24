@@ -77,6 +77,8 @@ type
     FonOpenReferenceImage: TNotifyMsg;
     FonClearReferenceImage: TNotifyEvent;
     FonSlewImageCenter: TNotifyEvent;
+    FonAutofocus: TNotifyBool;
+    FonAutomaticAutofocus: TNotifyBool;
     ilist: array of Integer;
     dlist: array of Double;
     slist: array of String;
@@ -170,6 +172,8 @@ type
     function cmd_OpenFitsFile(fn:string):string;
     function cmd_OpenReferenceImage(fn:string):string;
     function cmd_ClearReferenceImage:string;
+    function cmd_AutoFocus:string;
+    function cmd_AutomaticAutoFocus:string;
   public
     { public declarations }
     dbgscr: TPSScriptDebugger;
@@ -185,6 +189,8 @@ type
     property onOpenReferenceImage: TNotifyMsg read FonOpenReferenceImage write FonOpenReferenceImage;
     property onClearReferenceImage: TNotifyEvent read FonClearReferenceImage write FonClearReferenceImage;
     property onSlewImageCenter: TNotifyEvent read FonSlewImageCenter write FonSlewImageCenter;
+    property onAutofocus: TNotifyBool read FonAutofocus write FonAutofocus;
+    property onAutomaticAutofocus: TNotifyBool read FonAutomaticAutofocus write FonAutomaticAutofocus;
     property fits: TFits read Ffits write Ffits;
     property DevicesConnection: Tf_devicesconnection read Fdevicesconnection write Fdevicesconnection;
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
@@ -853,6 +859,8 @@ else if cname='PLANETARIUM_SHOWIMAGE' then result:=cmd_PlanetariumShowImage
 else if cname='PLANETARIUM_SHUTDOWN' then result:=cmd_PlanetariumShutdown
 else if cname='PROGRAM_SHUTDOWN' then result:=cmd_ProgramShutdown
 else if cname='CLEAR_REFERENCE_IMAGE' then result:=cmd_ClearReferenceImage
+else if cname='AUTOFOCUS' then result:=cmd_AutoFocus
+else if cname='AUTOMATICAUTOFOCUS' then result:=cmd_AutomaticAutoFocus
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -1511,6 +1519,28 @@ function Tf_scriptengine.cmd_ClearReferenceImage:string;
 begin
   if Assigned(FonClearReferenceImage) then FonClearReferenceImage(self);
   result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_AutoFocus: string;
+var ok:boolean;
+begin
+  result:=msgFailed;
+  try
+  if Assigned(FonAutofocus) then FonAutofocus(ok);
+  if ok then result:=msgOK;
+  finally
+  end;
+end;
+
+function Tf_scriptengine.cmd_AutomaticAutoFocus: string;
+var ok:boolean;
+begin
+  result:=msgFailed;
+  try
+  if Assigned(FonAutomaticAutofocus) then FonAutomaticAutofocus(ok);
+  if ok then result:=msgOK;
+  finally
+  end;
 end;
 
 function Tf_scriptengine.cmd_ProgramShutdown:string;

@@ -725,6 +725,7 @@ end;
 procedure T_indicamera.NewSwitch(svp: ISwitchVectorProperty);
 var propname: string;
     sw: ISwitch;
+    cool: boolean;
 begin
   //  writeln('NewSwitch: '+svp.name);
   propname:=svp.name;
@@ -745,7 +746,8 @@ begin
     end;
   end
   else if svp=CCDCooler then begin
-      if Assigned(FonCoolerChange) then FonCoolerChange(GetCooler);
+      cool:=GetCooler;
+      if Assigned(FonCoolerChange) then FonCoolerChange(cool);
   end
   else if svp=CCDVideoStream then begin
       if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);

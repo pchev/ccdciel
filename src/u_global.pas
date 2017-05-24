@@ -32,7 +32,7 @@ uses u_ccdconfig, dynlibs, LMessages,
 type
   TNotifyMsg = procedure(msg:string) of object;
   TNotifyNum = procedure(d: double) of object;
-  TNotifyBool= procedure(v: boolean) of object;
+  TNotifyBool= procedure(var v: boolean) of object;
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
