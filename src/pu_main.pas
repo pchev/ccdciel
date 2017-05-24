@@ -4368,10 +4368,7 @@ begin
        jd1:=DateTimetoJD(now);
        PrecessionFK5(jd1,jd0,sra,sde);
      end;
-     if pslew then
-       astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err)
-     else
-       mount.Slew(rad2deg*sra/15,rad2deg*sde);
+     astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
    end
    else begin
     NewMessage('Cannot find a focus star.');
