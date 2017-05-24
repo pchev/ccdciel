@@ -383,7 +383,7 @@ type
     Procedure CameraExposureAborted(Sender: TObject);
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
-    procedure CameraCoolerChange(v:boolean);
+    procedure CameraCoolerChange(var v:boolean);
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
@@ -394,6 +394,8 @@ type
     procedure LoadFocusStar;
     function  FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
     function  AutoAutofocus: Boolean;
+    procedure cmdAutomaticAutofocus(var ok: boolean);
+    procedure cmdAutofocus(var ok: boolean);
     Procedure FocuserStatus(Sender: TObject);
     procedure FocuserPositionChange(n:double);
     procedure FocuserSpeedChange(n:double);
@@ -967,6 +969,8 @@ begin
   f_scriptengine.onOpenReferenceImage:=@OpenRefImage;
   f_scriptengine.onClearReferenceImage:=@ClearRefImage;
   f_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
+  f_scriptengine.onAutomaticAutofocus:=@cmdAutomaticAutofocus;
+  f_scriptengine.onAutofocus:=@cmdAutofocus;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
@@ -2112,6 +2116,7 @@ end;
 Procedure Tf_main.CameraStatus(Sender: TObject);
 var bx,by: integer;
     buf: string;
+    cool:boolean;
 begin
  case camera.Status of
    devDisconnected:begin
@@ -2140,7 +2145,8 @@ begin
                    f_preview.Binning.Text:=buf;
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
                    wait(1);
-                   CameraCoolerChange(camera.Cooler);
+                   cool:=camera.Cooler;
+                   CameraCoolerChange(cool);
                    if camera.hasVideo then begin
                       wait(1);
                       PageVideo.TabVisible:=true;
@@ -2192,7 +2198,7 @@ begin
  f_ccdtemp.Current.Text:=FormatFloat(f1,t);
 end;
 
-procedure Tf_main.CameraCoolerChange(v:boolean);
+procedure Tf_main.CameraCoolerChange(var v:boolean);
 begin
  if f_ccdtemp.CCDcooler.Checked<>v then
     f_ccdtemp.CCDcooler.Checked:=v;
@@ -4423,6 +4429,21 @@ begin
    autofocusing:=false;
    Capture:=savecapture;
  end;
+end;
+
+procedure Tf_main.cmdAutomaticAutofocus(var ok: boolean);
+begin
+  ok:=AutoAutofocus;
+end;
+
+procedure Tf_main.cmdAutofocus(var ok: boolean);
+begin
+ f_starprofile.ChkAutofocus.Checked:=true;
+ while f_starprofile.ChkAutofocus.Checked do begin
+  sleep(100);
+  Application.ProcessMessages;
+ end;
+ ok:=f_starprofile.AutofocusResult;
 end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
