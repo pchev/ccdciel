@@ -697,24 +697,33 @@ var newpos:double;
 begin
  case AutofocusVcStep of
    vcsNearL: begin
+              // move to curve start position to clear backlash
               focuser.FocusPosition:=round(AutofocusVc[0,1]);
+              FonAbsolutePosition(self);
               wait(1);
-              focuser.FocusPosition:=round(AutofocusVc[PosNearL,1])+(CurrentFilterOffset-AutofocusVcFilterOffset);
+              // move back to near focus position
+              newpos:=AutofocusVcpiL+(AutofocusNearHFD/AutofocusVcSlopeL);
+              focuser.FocusPosition:=round(newpos+(CurrentFilterOffset-AutofocusVcFilterOffset));
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsFocusL;
               wait(1);
              end;
    vcsNearR: begin
+              // move to curve end position to clear backlash
               focuser.FocusPosition:=round(AutofocusVc[AutofocusVcNum,1]);
+              FonAbsolutePosition(self);
               wait(1);
-              focuser.FocusPosition:=round(AutofocusVc[PosNearR,1])+(CurrentFilterOffset-AutofocusVcFilterOffset);
+              // move back to near focus position
+              newpos:=AutofocusVcpiR+(AutofocusNearHFD/AutofocusVcSlopeR);
+              focuser.FocusPosition:=round(newpos+(CurrentFilterOffset-AutofocusVcFilterOffset));
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsFocusR;
               wait(1);
              end;
    vcsFocusL:begin
+              // move to focus
               newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to '+focuser.Position.Text);
@@ -723,7 +732,8 @@ begin
               wait(1);
              end;
    vcsFocusR:begin
-              newpos:=focuser.FocusPosition-Fhfd/AutofocusVcSlopeR-AutofocusVcPID/2;
+              // move to focus
+              newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to '+focuser.Position.Text);
               FonAbsolutePosition(self);

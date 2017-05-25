@@ -2520,7 +2520,7 @@ begin
    AutofocusVc[k,1]:=focuser.Position;
    AutofocusVc[k,2]:=hfd;
    NewMessage('Vcurve n'+inttostr(i)+' '+FormatFloat(f0,AutofocusVc[k,1])+' '+FormatFloat(f1,AutofocusVc[k,2]));
-   // use minimal hfd a rought focus position
+   // use minimal hfd as a rought focus position used to split right and left curve
    if AutofocusVc[k,2]<hfdmin then begin
      hfdmin:=AutofocusVc[k,2];
      PosFocus:=k;
@@ -2649,6 +2649,8 @@ begin
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeL',AutofocusVcSlopeL);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeR',AutofocusVcSlopeR);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcPID',AutofocusVcPID);
+  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiR',AutofocusVcpiR);
+  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiL',AutofocusVcpiL);
   config.Flush;
  end;
 end;
@@ -2674,6 +2676,8 @@ begin
      AutofocusVcSlopeL:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeL',-1.0);
      AutofocusVcSlopeR:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcSlopeR',-1.0);
      AutofocusVcPID:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcPID',-1.0);
+     AutofocusVcpiR:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcpiR',-1.0);
+     AutofocusVcpiL:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcpiL',-1.0);
    end;
 end;
 
@@ -4448,22 +4452,22 @@ var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
   f_starprofile.AutofocusResult:=false;
+  SaveAutofocusBinning:=f_preview.Binning.Text;
+  SaveAutofocusBX:=camera.BinX;
+  SaveAutofocusBY:=camera.BinY;
+  camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   if (AutofocusMode=afNone) or (f_capture.Running and (not autofocusing)) then begin
     NewMessage('Please configure the Autofocus options.');
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;
-  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
+  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
     NewMessage('Please run Vcurve learning for this focuser direction.');
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;
   // start a new exposure as the current frame is probably not a preview
   f_preview.Exposure:=AutofocusExposure*AutofocusExposureFact;
-  SaveAutofocusBinning:=f_preview.Binning.Text;
-  SaveAutofocusBX:=camera.BinX;
-  SaveAutofocusBY:=camera.BinY;
-  camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning);
