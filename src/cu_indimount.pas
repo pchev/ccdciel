@@ -188,11 +188,11 @@ begin
     then begin
        FStatus := devConnected;
        if (not Fready) then begin
-         if Assigned(FonStatusChange) then FonStatusChange(self);
          Fready:=true;
          if FAutoloadConfig then begin
            LoadConfig;
          end;
+         if Assigned(FonStatusChange) then FonStatusChange(self);
        end;
     end;
     FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);

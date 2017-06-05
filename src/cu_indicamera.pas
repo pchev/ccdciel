@@ -307,11 +307,11 @@ begin
        FStatus := devConnected;
        UseMainSensor:=(Findisensor<>'CCD2');
        if (not Fready) then begin
-         if Assigned(FonStatusChange) then FonStatusChange(self);
          Fready:=true;
          if FAutoloadConfig then begin
            LoadConfig;
          end;
+         if Assigned(FonStatusChange) then FonStatusChange(self);
          if (WheelSlot<>nil) and (FilterName<>nil) then begin
            FWheelStatus:=devConnected;
            if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
