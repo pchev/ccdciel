@@ -446,6 +446,14 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   // force even values
+   x:=round(x+0.5);
+   y:=round(y+0.5);
+   width:=round(width+0.5);
+   height:=round(height+0.5);
+   // check range
+   if (x+width)>V.CameraXSize then width:=round(V.CameraXSize-x);
+   if (y+height)>V.CameraYSize then height:=round(V.CameraYSize-y);
    msg('Camera '+Fdevice+' set frame '+inttostr(width)+'x'+inttostr(height));
    V.StartX:=x;
    V.StartY:=y;
