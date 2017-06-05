@@ -1043,8 +1043,6 @@ begin
      // force even values
      x:=round(x+0.5);
      y:=round(y+0.5);
-     width:=round(width+0.5);
-     height:=round(height+0.5);
      // check range
      if (x+width)>CCDframeWidth.max then width:=round(CCDframeWidth.max-x);
      if (y+height)>CCDframeHeight.max then height:=round(CCDframeHeight.max-y);
