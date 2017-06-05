@@ -265,6 +265,7 @@ var
   ObsLongitude, ObsLatitude, ObsTimeZone: double;
   BayerColor: boolean;
   BayerMode:TBayerMode;
+  RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
