@@ -49,6 +49,9 @@ type
     AutofocusTolerance: TEdit;
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
+    Label67: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
     SlewFilter: TComboBox;
     FocusStarMag: TComboBox;
     FocuserBacklash: TEdit;
@@ -89,6 +92,9 @@ type
     AutofocusMoveDirOut: TRadioButton;
     FilterList: TStringGrid;
     TabSheet10: TTabSheet;
+    RedBalance: TTrackBar;
+    GreenBalance: TTrackBar;
+    BlueBalance: TTrackBar;
     VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;

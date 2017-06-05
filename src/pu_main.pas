@@ -1668,6 +1668,9 @@ begin
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
   BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
+  RedBalance:=config.GetValue('/Color/RedBalance',1.0);
+  GreenBalance:=config.GetValue('/Color/GreenBalance',1.0);
+  BlueBalance:=config.GetValue('/Color/BlueBalance',1.0);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
@@ -2954,6 +2957,9 @@ begin
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
+   f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
+   f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
+   f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
    f_option.BPMsigma.Text:=inttostr(config.GetValue('/BadPixel/Sigma',5));
    f_option.VideoPreviewRate.Text:=inttostr(config.GetValue('/Video/PreviewRate',5));
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
@@ -3094,6 +3100,9 @@ begin
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
+     config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);
+     config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
+     config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
      config.SetValue('/BadPixel/Sigma',StrToIntDef(f_option.BPMsigma.Text,BPMsigma));
      config.SetValue('/Video/PreviewRate',StrToIntDef(f_option.VideoPreviewRate.Text,MaxVideoPreviewRate));
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
@@ -3742,48 +3751,48 @@ for i:=0 to imgH-1 do begin
       if (j mod 2)>0 then begin //colonne paire et ligne paire
         case t of
         bayerGR: begin
-            pixel.red:= round((pix2+pix8)/2);
-            pixel.green:= pix5;
-            pixel.blue:= round((pix4+pix6)/2);
+            pixel.red:= round(RedBalance*(pix2+pix8)/2);
+            pixel.green:= round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
            end;
         bayerRG: begin
-            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=pix5;
+            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=round(BlueBalance*pix5);
            end;
         bayerBG: begin
-            pixel.red:= pix5;
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.red:= round(RedBalance*pix5);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
            end;
         bayerGB: begin
-            pixel.red:= round((pix4+pix6)/2);
-            pixel.green:= pix5;
-            pixel.blue:= round((pix2+pix8)/2);
+            pixel.red:= round(RedBalance*(pix4+pix6)/2);
+            pixel.green:= round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix2+pix8)/2);
            end;
         end;
       end
       else begin //colonne impaire et ligne paire
         case t of
         bayerGR: begin
-            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=pix5;
+            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=round(BlueBalance*pix5);
            end;
         bayerRG: begin
-            pixel.red:= round((pix2+pix8)/2);
-            pixel.green:=pix5;
-            pixel.blue:=round((pix4+pix6)/2);
+            pixel.red:= round(RedBalance*(pix2+pix8)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:=round(BlueBalance*(pix4+pix6)/2);
            end;
         bayerBG: begin
-            pixel.red:= round((pix4+pix6)/2);
-            pixel.green:=pix5;
-            pixel.blue:=round((pix2+pix8)/2);
+            pixel.red:= round(RedBalance*(pix4+pix6)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:=round(BlueBalance*(pix2+pix8)/2);
            end;
         bayerGB: begin
-            pixel.red:=pix5;
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.red:=round(RedBalance*pix5);
+            pixel.green:= round(GreenBalance**(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
            end;
         end;
       end;
@@ -3792,48 +3801,48 @@ for i:=0 to imgH-1 do begin
       if (j mod 2)>0 then begin //colonne paire et ligne impaire
         case t of
         bayerGR: begin
-            pixel.red:=pix5;
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.red:=round(RedBalance*pix5);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
            end;
         bayerRG: begin
-            pixel.red:= round((pix4+pix6)/2);
-            pixel.green:=pix5;
-            pixel.blue:=round((pix2+pix8)/2);
+            pixel.red:= round(RedBalance*(pix4+pix6)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:=round(BlueBalance*(pix2+pix8)/2);
            end;
         bayerBG: begin
-            pixel.red:=round((pix2+pix8)/2);
-            pixel.green:=pix5;
-            pixel.blue:= round((pix4+pix6)/2);
+            pixel.red:=round(RedBalance*(pix2+pix8)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
            end;
         bayerGB: begin
-            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=pix5;
+            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=round(BlueBalance*pix5);
            end;
         end;
       end
       else begin //colonne impaire et ligne impaire
         case t of
         bayerGR: begin
-            pixel.red:= round((pix4+pix6)/2);
-            pixel.green:=pix5;
-            pixel.blue:= round((pix2+pix8)/2);
+            pixel.red:= round(RedBalance*(pix4+pix6)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix2+pix8)/2);
            end;
         bayerRG: begin
-            pixel.red:=pix5;
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round((pix1+pix3+pix7+pix9)/4);
+            pixel.red:=round(RedBalance*pix5);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
            end;
         bayerBG: begin
-            pixel.red:= round((pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round((pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=pix5;
+            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:=round(BlueBalance*pix5);
            end;
         bayerGB: begin
-            pixel.red:= round((pix2+pix8)/2);
-            pixel.green:=pix5;
-            pixel.blue:= round((pix4+pix6)/2);
+            pixel.red:= round(RedBalance*(pix2+pix8)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
            end;
         end;
       end;

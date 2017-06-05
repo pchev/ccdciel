@@ -44,9 +44,9 @@ object f_option: Tf_option
     Height = 408
     Top = 0
     Width = 433
-    ActivePage = TabSheet4
+    ActivePage = TabSheet8
     Align = alClient
-    TabIndex = 5
+    TabIndex = 2
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
@@ -417,7 +417,7 @@ object f_option: Tf_option
           Left = 168
           Height = 23
           Top = 42
-          Width = 92
+          Width = 48
           ItemHeight = 0
           ItemIndex = 0
           Items.Strings = (
@@ -428,6 +428,69 @@ object f_option: Tf_option
           )
           TabOrder = 1
           Text = 'GR'
+        end
+        object RedBalance: TTrackBar
+          Left = 272
+          Height = 36
+          Top = 0
+          Width = 100
+          Max = 100
+          Min = 50
+          PageSize = 10
+          Position = 100
+          ShowSelRange = False
+          TickStyle = tsNone
+          TabOrder = 2
+        end
+        object GreenBalance: TTrackBar
+          Left = 272
+          Height = 36
+          Top = 29
+          Width = 100
+          Max = 100
+          Min = 50
+          PageSize = 10
+          Position = 100
+          ShowSelRange = False
+          TickStyle = tsNone
+          TabOrder = 3
+        end
+        object BlueBalance: TTrackBar
+          Left = 272
+          Height = 36
+          Top = 56
+          Width = 100
+          Max = 100
+          Min = 50
+          PageSize = 10
+          Position = 100
+          ShowSelRange = False
+          TickStyle = tsNone
+          TabOrder = 4
+        end
+        object Label67: TLabel
+          Left = 381
+          Height = 15
+          Top = 11
+          Width = 8
+          Caption = 'R'
+          ParentColor = False
+        end
+        object Label68: TLabel
+          Left = 380
+          Height = 15
+          Top = 40
+          Width = 10
+          Caption = 'G'
+          ParentColor = False
+        end
+        object Label69: TLabel
+          Left = 380
+          Height = 15
+          Top = 65
+          Width = 9
+          Caption = 'B'
+          ParentColor = False
         end
       end
       object GroupBox9: TGroupBox
