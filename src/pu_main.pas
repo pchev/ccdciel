@@ -3919,6 +3919,7 @@ var r1,r2: double;
     tmpbmp,str: TBGRABitmap;
 begin
 ClearImage;
+imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
@@ -3932,7 +3933,7 @@ if ImgZoom=0 then begin
     w:=trunc(h*r1);
     ImgScale0:=w/img_Width;
   end;
-  str:=ImaBmp.Resample(w,h,rmSimpleStretch) as TBGRABitmap;
+  str:=ImaBmp.Resample(w,h) as TBGRABitmap;
   str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
   str.Free;
 end
@@ -3944,7 +3945,7 @@ else if ImgZoom=0.5 then begin
    OrigX:=px;
    OrigY:=py;
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
-   str:=tmpbmp.Resample(image1.Width,image1.Height,rmSimpleStretch) as TBGRABitmap;
+   str:=tmpbmp.Resample(image1.Width,image1.Height) as TBGRABitmap;
    str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
    str.Free;
    tmpbmp.Free;
