@@ -910,6 +910,10 @@ object f_main: Tf_main
       Caption = 'Resolve and Slew to cursor'
       OnClick = MenuResolveSlewClick
     end
+    object MenuShowCCDFrame: TMenuItem
+      Caption = 'Show solved CCD frame in planetarium'
+      OnClick = MenuShowCCDFrameClick
+    end
     object MenuViewAstrometryLog: TMenuItem
       Caption = 'View last resolver log'
       OnClick = MenuViewAstrometryLogClick
@@ -918,6 +922,17 @@ object f_main: Tf_main
       Caption = 'Stop astrometry resolver'
       Visible = False
       OnClick = MenuStopAstrometryClick
+    end
+    object MenuItem5: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemDebayer: TMenuItem
+      Caption = 'Debayer'
+      OnClick = MenuItemDebayerClick
+    end
+    object MenuItemRaw: TMenuItem
+      Caption = 'Raw'
+      OnClick = MenuItemRawClick
     end
   end
   object ImageList1: TImageList
