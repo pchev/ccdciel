@@ -54,6 +54,10 @@ type
     MenuHelpAbout: TMenuItem;
     MenuClearRef: TMenuItem;
     MenuBPM: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuShowCCDFrame: TMenuItem;
+    MenuItemRaw: TMenuItem;
+    MenuItemDebayer: TMenuItem;
     MenuItemBPM: TMenuItem;
     MenuClearBPM: TMenuItem;
     MenuVideoPreview: TMenuItem;
@@ -214,6 +218,8 @@ type
     procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuItemDebayerClick(Sender: TObject);
+    procedure MenuItemRawClick(Sender: TObject);
     procedure MenuMountParkClick(Sender: TObject);
     procedure MenuMountTrackClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
@@ -239,6 +245,7 @@ type
     procedure MenuSequenceNewClick(Sender: TObject);
     procedure MenuSequenceStartClick(Sender: TObject);
     procedure MenuSequenceStopClick(Sender: TObject);
+    procedure MenuShowCCDFrameClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuTabClick(Sender: TObject);
     procedure MenuVideoPreviewClick(Sender: TObject);
@@ -4014,6 +4021,20 @@ begin
   f_indigui.Show;
 end;
 
+procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
+begin
+  BayerColor:=True;
+  DrawImage;
+  NewMessage('Image Debayered');
+end;
+
+procedure Tf_main.MenuItemRawClick(Sender: TObject);
+begin
+  BayerColor:=False;
+  DrawImage;
+  NewMessage('Image Un-debayered');
+end;
+
 procedure Tf_main.MenuMountParkClick(Sender: TObject);
 begin
   f_mount.BtnPark.Click;
@@ -4725,6 +4746,70 @@ end;
 procedure Tf_main.MenuSequenceStopClick(Sender: TObject);
 begin
   f_sequence.BtnStop.Click;
+end;
+
+procedure Tf_main.MenuShowCCDFrameClick(Sender: TObject);
+var cmd: string;
+    ra, dec, rot, sizeH, sizeV, jd0, jd1: Double;
+begin
+  ra:=NullCoord; dec:=NullCoord; rot:=NullCoord; sizeH:=0; sizeV:=0;
+  if(not planetarium.Connected) then
+  begin
+    NewMessage('Planetarium is not connected!');
+    exit;
+  end;
+
+  if(planetarium.PlanetariumType<>CDC) then
+  begin
+    NewMessage('Presently this function works only with CDC');
+    exit;
+  end;
+
+  if not (fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0)) then begin
+    NewMessage('Current image is not solved.');
+    exit;
+  end;
+
+  ra:=cdcWCSinfo.cra;
+  dec:=cdcWCSinfo.cdec;
+  rot:=cdcWCSinfo.rot;
+  sizeH:=cdcWCSinfo.secpix*cdcWCSinfo.wp/3600;
+  sizeV:=cdcWCSinfo.secpix*cdcWCSinfo.hp/3600;
+
+
+  if((ra=NullCoord) or (dec=NullCoord) or (sizeV=0) or (sizeH=0) or (rot=NullCoord)) then
+  begin
+    NewMessage('Unable to find resolve data!');
+  end
+  else
+  begin
+    // send cmd to planetarium
+    jd0:=jd2000;
+    jd1:=DateTimetoJD(now);
+    ra:=deg2rad*ra;
+    dec:=deg2rad*dec;
+    PrecessionFK5(jd0,jd1,ra,dec);
+    ra:=rad2deg*ra;
+    dec:=rad2deg*dec;
+
+    cmd := 'SETRA ' + FormatFloat('0.00000', ra/15.0);
+    planetarium.Cmd(cmd);
+    cmd := 'SETDEC ' + FormatFloat('0.00000', dec);
+    planetarium.Cmd(cmd);
+    cmd := 'SHOWRECTANGLE 10';
+    planetarium.Cmd(cmd);
+    cmd := 'SETRECTANGLE 10 ' + FormatFloat('0.000', sizeH*60) + ' ' +
+      FormatFloat('0.00', sizeV*60) + ' ' +
+      FormatFloat('0.00', rot) + ' 0';
+    planetarium.Cmd(cmd);
+    planetarium.Cmd('MARKCENTER ON');
+    cmd := 'SETFOV ' + FormatFloat('0.000', sizeH*2.2);
+    planetarium.Cmd(cmd);
+    planetarium.Cmd('REDRAW');
+
+    NewMessage('CCD frame sent to planetarium.');
+  end;
+
 end;
 
 procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
