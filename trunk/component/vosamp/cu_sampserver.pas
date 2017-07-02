@@ -248,4 +248,4 @@ begin
      ok:=FProcessNotification(InputData);
 end;
 
-end.Index: component/vosamp/demo/samptest.ico
+end.
