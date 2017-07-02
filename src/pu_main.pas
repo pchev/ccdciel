@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
-  pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes,
+  pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
@@ -474,6 +474,10 @@ var
 
 implementation
 
+{$if (lcl_fullversion >= 1070000)}
+  uses lclplatformdef;
+{$endif}
+
 {$R *.lfm}
 
 { Tf_main }
@@ -717,6 +721,10 @@ var DefaultInterface,aInt: TDevInterface;
     configfile: string;
     i:integer;
 begin
+  lclver:=lcl_version;
+  compile_time:={$I %DATE%}+' '+{$I %TIME%};
+  compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
+  compile_system:={$I %FPCTARGETOS%};
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
   {$else}
