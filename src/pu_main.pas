@@ -4945,7 +4945,7 @@ begin
      StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
    end
    else begin
-    NewMessage('Invalid FITS file '+fn);
+    NewMessage('Invalid or unsupported FITS file '+fn);
    end;
 end;
 

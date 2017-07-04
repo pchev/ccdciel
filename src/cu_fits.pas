@@ -611,6 +611,7 @@ with FFitsInfo do begin
     if (keyword='A_ORDER') then solved:=true; // polynomial present, the image must be astrometry solved.
  end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
+ valid:=valid and (naxis>0); // do not process file without primary array
  // very crude coordinates to help astrometry if telescope is not available
  if ra=NullCoord then begin
    if (copy(ctype1,1,3)='RA-')and(crval1<>NullCoord) then
