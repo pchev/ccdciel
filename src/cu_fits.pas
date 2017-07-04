@@ -984,6 +984,7 @@ case FFitsInfo.bitpix of
       end;
 FimageC:=c;
 FimageMin:=Fdmin;
+if FimageMin<0 then FimageMin:=0;
 ApplyBPM(Fbpm,FBPMcount);
 end;
 
