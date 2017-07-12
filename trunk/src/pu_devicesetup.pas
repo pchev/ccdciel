@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses indibaseclient, indibasedevice, u_global, u_utils, u_ccdconfig, UScaleDPI,
+uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
@@ -140,6 +140,7 @@ type
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection: TDevInterface;
     IndiTimerCount:integer;
+    receiveindidevice:boolean;
     procedure IndiNewDevice(dp: Basedevice);
     procedure SetConnectionInterface(value: TDevInterface);
     procedure SetCameraConnection(value: TDevInterface);
@@ -558,6 +559,7 @@ procedure Tf_setup.GetIndiDevicesClick(Sender: TObject);
 begin
   if IndiTimer.Enabled then exit;
   IndiTimerCount:=0;
+  receiveindidevice:=false;
   camsavedev:=CameraIndiDevice.Text;
   wheelsavedev:=WheelIndiDevice.Text;
   focusersavedev:=FocuserIndiDevice.Text;
@@ -577,11 +579,26 @@ end;
 
 procedure Tf_setup.IndiTimerTimer(Sender: TObject);
 var i: integer;
+    drint:word;
 begin
   inc(IndiTimerCount);
-  if (CameraIndiDevice.Items.Count=0)and(IndiTimerCount<=5) then exit;
+  if (not receiveindidevice)and(IndiTimerCount<=5) then exit;
   IndiTimer.Enabled:=false;
-  indiclient.DisconnectServer;
+  for i:=0 to indiclient.devices.Count-1 do begin
+     drint:=BaseDevice(indiclient.devices[i]).getDriverInterface();
+     if (drint and CCD_INTERFACE)<>0 then
+        CameraIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and FILTER_INTERFACE)<>0 then
+        WheelIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and FOCUSER_INTERFACE)<>0 then
+        FocuserIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and TELESCOPE_INTERFACE)<>0 then
+        MountIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+  end;
+  if CameraIndiDevice.Items.Count>0 then CameraIndiDevice.ItemIndex:=0;
+  if WheelIndiDevice.Items.Count>0 then WheelIndiDevice.ItemIndex:=0;
+  if FocuserIndiDevice.Items.Count>0 then FocuserIndiDevice.ItemIndex:=0;
+  if MountIndiDevice.Items.Count>0 then MountIndiDevice.ItemIndex:=0;
   for i:=0 to CameraIndiDevice.Items.Count-1 do
      if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
   for i:=0 to WheelIndiDevice.Items.Count-1 do
@@ -590,16 +607,14 @@ begin
      if FocuserIndiDevice.Items[i]=focusersavedev then FocuserIndiDevice.ItemIndex:=i;
   for i:=0 to MountIndiDevice.Items.Count-1 do
      if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
+  LabelIndiDevCount.Caption:='Found '+IntToStr(indiclient.devices.Count)+' devices';
+  indiclient.DisconnectServer;
   Screen.Cursor:=crDefault;
-  LabelIndiDevCount.Caption:='Found '+IntToStr(CameraIndiDevice.Items.Count)+' devices';
 end;
 
 procedure Tf_setup.IndiNewDevice(dp: Basedevice);
 begin
-   CameraIndiDevice.Items.Add(dp.getDeviceName);
-   WheelIndiDevice.Items.Add(dp.getDeviceName);
-   FocuserIndiDevice.Items.Add(dp.getDeviceName);
-   MountIndiDevice.Items.Add(dp.getDeviceName);
+   receiveindidevice:=true
 end;
 
 procedure Tf_setup.ProfileListChange(Sender: TObject);
