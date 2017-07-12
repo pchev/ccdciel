@@ -766,7 +766,7 @@ object f_setup: Tf_setup
   end
   object IndiTimer: TTimer
     Enabled = False
-    Interval = 2000
+    Interval = 5000
     OnTimer = IndiTimerTimer
     left = 16
     top = 328
