@@ -596,10 +596,10 @@ with FFitsInfo do begin
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
     if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
-    if (keyword='FRAMEX') then Frx:=strtoint(buf);
-    if (keyword='FRAMEY') then Fry:=strtoint(buf);
-    if (keyword='FRAMEHGT') then Frheight:=strtoint(buf);
-    if (keyword='FRAMEWDH') then Frwidth:=strtoint(buf);
+    if (keyword='FRAMEX') then Frx:=round(StrToFloat(buf));
+    if (keyword='FRAMEY') then Fry:=round(StrToFloat(buf));
+    if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
+    if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
     if (keyword='DEC') then dec:=StrToFloatDef(buf,NullCoord);
