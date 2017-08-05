@@ -288,6 +288,7 @@ var i,n:integer;
     t:TTarget;
 begin
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
+     f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
      f_EditTargets.TargetList.RowCount:=Targets.Count+1;
      for i:=1 to Targets.Count do begin
        t:=TTarget.Create;
@@ -300,6 +301,7 @@ begin
    end else begin
      CurrentFile:='';
      CurrentName:='';
+     f_EditTargets.TargetsRepeat:=1;
      t:=TTarget.Create;
      f_EditTargets.TargetList.RowCount:=2;
      f_EditTargets.TargetList.Cells[0,1]:='1';
@@ -316,6 +318,7 @@ begin
      Targets.Add(t);
      LoadPlan(T_Plan(t.plan), t.planname);
    end;
+   Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
    SaveTargets(CurrentFile);
 end;
 
@@ -332,6 +335,7 @@ begin
    Targets.TargetName:=CurrentName;
    CurrentFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
+   Targets.TargetsRepeat:=tfile.GetValue('/RepeatCount',1);
    if n>0 then begin
      for i:=1 to n do begin
        t:=TTarget.Create;
@@ -388,6 +392,8 @@ begin
    ClearTargetGrid;
    TargetGrid.RowCount:=Targets.count+1;
    StaticText3.Caption:='Targets: '+Targets.TargetName;
+   if Targets.TargetsRepeat>1 then
+     StaticText3.Caption:=StaticText3.Caption+' x'+inttostr(Targets.TargetsRepeat);
    for i:=1 to Targets.count do begin
      TargetGrid.Cells[0,i]:=Targets.Targets[i-1].objectname;
      TargetGrid.Cells[1,i]:=Targets.Targets[i-1].planname;
@@ -454,6 +460,7 @@ begin
     Targets.TargetName:=CurrentName;
     tfile.SetValue('/ListName',CurrentName);
     tfile.SetValue('/TargetNum',Targets.Count);
+    tfile.SetValue('/RepeatCount',Targets.TargetsRepeat);
     for i:=1 to Targets.Count do begin
       t:=Targets.Targets[i-1];
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);
