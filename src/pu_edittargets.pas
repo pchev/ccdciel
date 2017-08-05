@@ -48,8 +48,10 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    CheckBoxRepeatList: TCheckBox;
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
+    RepeatCountList: TEdit;
     EndTime: TMaskEdit;
     Label1: TLabel;
     Label10: TLabel;
@@ -74,6 +76,7 @@ type
     Panel2: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
     PanelRepeat: TPanel;
     PlanList: TComboBox;
     ScriptList: TComboBox;
@@ -98,9 +101,11 @@ type
     procedure BtnNewScriptClick(Sender: TObject);
     procedure BtnPlanClick(Sender: TObject);
     procedure CheckBoxRepeatChange(Sender: TObject);
+    procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure RepeatCountListChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
@@ -108,6 +113,7 @@ type
   private
     { private declarations }
     LockTarget: boolean;
+    FTargetsRepeat: integer;
     procedure LoadPlanList;
     procedure SetPlanList(pl:string);
     procedure LoadScriptList;
@@ -115,6 +121,7 @@ type
     procedure ResetSequences;
   public
     { public declarations }
+    property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
   end;
 
 var
@@ -132,6 +139,7 @@ procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
   LockTarget:=false;
+  FTargetsRepeat:=1;
 end;
 
 procedure Tf_EditTargets.FormDestroy(Sender: TObject);
@@ -155,6 +163,9 @@ begin
     StartTime.Text:='00:00:00';
     EndTime.Text:='23:59:59';
   end;
+  RepeatCountList.Text:=IntToStr(FTargetsRepeat);
+  CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
+  RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
 end;
 
 procedure Tf_EditTargets.LoadPlanList;
@@ -547,6 +558,20 @@ begin
   TargetListSelection(Sender,0,tIndex);
 end;
 
+procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
+begin
+  RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
+  if CheckBoxRepeatList.Checked then
+    FTargetsRepeat:=StrToIntDef(RepeatCountList.Text,1)
+  else
+    FTargetsRepeat:=1;
+end;
+
+procedure Tf_EditTargets.RepeatCountListChange(Sender: TObject);
+begin
+  if CheckBoxRepeatList.Checked then
+    FTargetsRepeat:=StrToIntDef(RepeatCountList.Text,1);
+end;
 
 end.
 

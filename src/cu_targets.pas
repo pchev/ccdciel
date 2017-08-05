@@ -49,6 +49,7 @@ type
       StartPlanTimer: TTimer;
       FTargetCoord: boolean;
       FTargetRA,FTargetDE: double;
+      FTargetsRepeatCount: integer;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -76,6 +77,7 @@ type
       Ftargets: TTargetList;
       NumTargets: integer;
       FCurrentTarget: integer;
+      FTargetsRepeat: integer;
       TargetTimeStart,TargetDelayEnd: TDateTime;
       FRunning: boolean;
       FInitializing: boolean;
@@ -91,6 +93,7 @@ type
       procedure Stop;
       procedure Abort;
       procedure ForceNextTarget;
+      property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
       property Targets: TTargetList read Ftargets;
       property Count: integer read NumTargets;
       property CurrentTarget: integer read FCurrentTarget;
@@ -120,6 +123,7 @@ constructor T_Targets.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   NumTargets := 0;
+  FTargetsRepeat:=1;
   Frunning:=false;
   FInitializing:=false;
   FTargetCoord:=false;
@@ -240,12 +244,16 @@ end;
 
 procedure T_Targets.Start;
 begin
+  FTargetsRepeatCount:=0;
   FCurrentTarget:=-1;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
   FRunning:=true;
-  msg('Starting sequence '+FName);
+  if FTargetsRepeat=1 then
+    msg('Starting sequence '+FName)
+  else
+    msg('Starting sequence '+FName+' repeat '+inttostr(FTargetsRepeatCount+1)+'/'+inttostr(FTargetsRepeat));
   NextTarget;
 end;
 
@@ -316,7 +324,6 @@ var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
   inc(FCurrentTarget);
-  { TODO :  select best target based on current time }
   if FRunning and (FCurrentTarget<NumTargets) then begin
    if Targets[FCurrentTarget].objectname='Script' then begin
      FInitializing:=false;
@@ -372,6 +379,17 @@ begin
    end;
   end
   else begin
+   inc(FTargetsRepeatCount);
+   if FTargetsRepeatCount<FTargetsRepeat then begin
+     FCurrentTarget:=-1;
+     FTargetCoord:=false;
+     FTargetRA:=NullCoord;
+     FTargetDE:=NullCoord;
+     FRunning:=true;
+     msg('Starting sequence '+FName+' repeat '+inttostr(FTargetsRepeatCount+1)+'/'+inttostr(FTargetsRepeat));
+     NextTarget;
+   end
+   else begin
      FRunning:=false;
      TargetTimer.Enabled:=false;
      StopGuider;
@@ -379,6 +397,7 @@ begin
      RunEndScript;
      ShowDelayMsg('');
      FCurrentTarget:=-1;
+   end;
   end;
 end;
 

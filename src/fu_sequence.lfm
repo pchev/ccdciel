@@ -5,6 +5,7 @@ object f_sequence: Tf_sequence
   Width = 180
   ClientHeight = 522
   ClientWidth = 180
+  ParentFont = False
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
@@ -105,7 +106,7 @@ object f_sequence: Tf_sequence
         Height = 23
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
         Top = 92
-        Width = 126
+        Width = 123
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentShowHint = False
