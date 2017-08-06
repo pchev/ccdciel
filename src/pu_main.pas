@@ -2960,9 +2960,13 @@ begin
    f_option.SubfolderObjname.Checked:=config.GetValue('/Files/SubfolderObjname',false);
    f_option.SubfolderStep.Checked:=config.GetValue('/Files/SubfolderStep',false);
    f_option.SubfolderFrametype.Checked:=config.GetValue('/Files/SubfolderFrametype',false);
+   f_option.SubfolderExp.Checked:=config.GetValue('/Files/SubfolderExposure',false);
+   f_option.SubfolderBin.Checked:=config.GetValue('/Files/SubfolderBinning',false);
    f_option.FileObjname.Checked:=config.GetValue('/Files/FilenameObjname',true);
    f_option.FileFiltername.Checked:=config.GetValue('/Files/FilenameFilter',true);
    f_option.FileDate.Checked:=config.GetValue('/Files/FilenameDate',true);
+   f_option.FileExp.Checked:=config.GetValue('/Files/FilenameExposure',false);
+   f_option.FileBin.Checked:=config.GetValue('/Files/FilenameBinning',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -3077,9 +3081,13 @@ begin
      config.SetValue('/Files/SubfolderObjname',f_option.SubfolderObjname.Checked);
      config.SetValue('/Files/SubfolderStep',f_option.SubfolderStep.Checked);
      config.SetValue('/Files/SubfolderFrametype',f_option.SubfolderFrametype.Checked);
+     config.SetValue('/Files/SubfolderExposure',f_option.SubfolderExp.Checked);
+     config.SetValue('/Files/SubfolderBinning',f_option.SubfolderBin.Checked);
      config.SetValue('/Files/FilenameObjname',f_option.FileObjname.Checked);
      config.SetValue('/Files/FilenameFilter',f_option.FileFiltername.Checked);
      config.SetValue('/Files/FilenameDate',f_option.FileDate.Checked);
+     config.SetValue('/Files/FilenameExposure',f_option.FileExp.Checked);
+     config.SetValue('/Files/FilenameBinning',f_option.FileBin.Checked);
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      n:=Filters.Count-1;
@@ -3623,8 +3631,8 @@ end;
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var dt: Tdatetime;
     fn,imgsize: string;
-    subseq,subobj,substep,subfrt: boolean;
-    fnobj,fnfilter,fndate: boolean;
+    subseq,subobj,substep,subfrt,subexp,subbin: boolean;
+    fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
     fileseqnum: integer;
 begin
   dt:=NowUTC;
@@ -3640,6 +3648,8 @@ begin
      subobj:=config.GetValue('/Files/SubfolderObjname',false);
      subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
      substep:=config.GetValue('/Files/SubfolderStep',false);
+     subexp:=config.GetValue('/Files/SubfolderExposure',false);
+     subbin:=config.GetValue('/Files/SubfolderBinning',false);
      fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
      if subseq and f_sequence.Running then fn:=slash(fn+trim(f_sequence.CurrentName));
      if subfrt then fn:=slash(fn+trim(f_capture.FrameType.Text));
@@ -3652,10 +3662,14 @@ begin
           fn:=slash(fn+trim(f_sequence.CurrentStep));
         end;
      end;
+     if subexp then fn:=slash(fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
+     if subbin then fn:=slash(fn+f_capture.Binning.Text);
      ForceDirectoriesUTF8(fn);
      fnobj:=config.GetValue('/Files/FilenameObjname',true);
      fnfilter:=config.GetValue('/Files/FilenameFilter',true);
      fndate:=config.GetValue('/Files/FilenameDate',true);
+     fnexp:=config.GetValue('/Files/FilenameExposure',false);
+     fnbin:=config.GetValue('/Files/FilenameBinning',false);
      if fnobj then begin
        if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then
            fn:=fn+trim(f_capture.Fname.Text)+'_'
@@ -3664,6 +3678,8 @@ begin
      end;
      if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
          fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
+     if fnexp then fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
+     if fnbin then fn:=fn+f_capture.Binning.Text+'_';
      if fndate then
         fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
      else begin
