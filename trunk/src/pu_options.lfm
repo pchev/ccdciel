@@ -8,7 +8,6 @@ object f_option: Tf_option
   ClientHeight = 448
   ClientWidth = 433
   OnCreate = FormCreate
-  LCLVersion = '1.6.4.0'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -44,22 +43,23 @@ object f_option: Tf_option
     Height = 408
     Top = 0
     Width = 433
-    ActivePage = TabSheet8
+    ActivePage = TabSheet1
     Align = alClient
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Files'
       ClientHeight = 379
       ClientWidth = 429
       object GroupBox1: TGroupBox
-        Left = 8
-        Height = 336
-        Top = 4
-        Width = 400
+        Left = 0
+        Height = 379
+        Top = 0
+        Width = 429
+        Align = alClient
         Caption = 'Files'
-        ClientHeight = 319
-        ClientWidth = 396
+        ClientHeight = 362
+        ClientWidth = 425
         TabOrder = 0
         object Label1: TLabel
           Left = 8
@@ -72,7 +72,7 @@ object f_option: Tf_option
         object Logtofile: TCheckBox
           Left = 120
           Height = 23
-          Top = 264
+          Top = 328
           Width = 179
           Caption = 'Log all messages to file '
           ParentShowHint = False
@@ -122,7 +122,7 @@ object f_option: Tf_option
         object Label19: TLabel
           Left = 8
           Height = 15
-          Top = 157
+          Top = 197
           Width = 71
           Caption = 'File options'
           ParentColor = False
@@ -130,7 +130,7 @@ object f_option: Tf_option
         object FileObjname: TCheckBox
           Left = 120
           Height = 23
-          Top = 152
+          Top = 192
           Width = 107
           Caption = 'Object name'
           TabOrder = 5
@@ -138,7 +138,7 @@ object f_option: Tf_option
         object FileFiltername: TCheckBox
           Left = 120
           Height = 23
-          Top = 176
+          Top = 216
           Width = 55
           Caption = 'Filter'
           TabOrder = 6
@@ -146,7 +146,7 @@ object f_option: Tf_option
         object FileDate: TCheckBox
           Left = 120
           Height = 23
-          Top = 202
+          Top = 240
           Width = 132
           Caption = 'Date / Sequence'
           TabOrder = 7
@@ -166,6 +166,38 @@ object f_option: Tf_option
           Caption = '...'
           OnClick = ButtonDirClick
           TabOrder = 9
+        end
+        object SubfolderExp: TCheckBox
+          Left = 120
+          Height = 23
+          Top = 136
+          Width = 201
+          Caption = 'Subfolder by exposure time'
+          TabOrder = 10
+        end
+        object SubfolderBin: TCheckBox
+          Left = 120
+          Height = 23
+          Top = 160
+          Width = 155
+          Caption = 'Subfolder by binning'
+          TabOrder = 11
+        end
+        object FileExp: TCheckBox
+          Left = 120
+          Height = 23
+          Top = 264
+          Width = 117
+          Caption = 'Exposure time'
+          TabOrder = 12
+        end
+        object FileBin: TCheckBox
+          Left = 120
+          Height = 23
+          Top = 288
+          Width = 72
+          Caption = 'Binning'
+          TabOrder = 13
         end
       end
     end
@@ -1268,8 +1300,8 @@ object f_option: Tf_option
               Top = 152
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 35
-              ClientWidth = 387
+              ClientHeight = 31
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
