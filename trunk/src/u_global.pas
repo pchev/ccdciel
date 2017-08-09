@@ -211,6 +211,10 @@ const
   ldeg = 'd';
   lmin = 'm';
   lsec = 's';
+  URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
+  URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
+  URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
+
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
     defCapturePath='/tmp';
