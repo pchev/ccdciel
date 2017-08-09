@@ -66,6 +66,7 @@ type
       destructor  Destroy; override;
       procedure ClearHeader;
       function ReadHeader(ff:TMemoryStream): integer;
+      function NewWCS(ff:TMemoryStream): boolean;
       function GetStream: TMemoryStream;
       function Indexof(key: string): integer;
       function Valueof(key: string; out val: string): boolean; overload;
@@ -206,6 +207,85 @@ begin
   FKeys.Clear;
   FValues.Clear;
   FComments.Clear;
+end;
+
+function TFitsHeader.NewWCS(ff:TMemoryStream): boolean;
+var header : THeaderBlock;
+    i,p1,p2,n : integer;
+    eoh : boolean;
+    row,keyword,value,comment,buf : string;
+    P: PChar;
+const excl1:array[0..18] of string=('CTYPE','WCSAXES','EQUINOX','LONPOLE','LATPOLE','CRVAL','CRPIX','CUNIT','CD','CDELT','A_','B_','AP_','BP_','PV','CROTA','END','IMAGEW','IMAGEH');
+      excl2:array[0..3] of string=('SIMPLE','BITPIX','EXTEND','NAXIS');
+  function IsKeywordIn(k:string; klist:array of string): boolean;
+  var j: integer;
+  begin
+    result:=false;
+    for j:=0 to Length(klist)-1 do begin
+      if pos(klist[j],k)=1 then begin
+        result:=true;
+        break;
+      end;
+    end;
+  end;
+
+begin
+ result:=false;
+ if FKeys.Count>0 then begin
+   // delete old wcs
+   for i:=FKeys.Count-1 downto 0 do begin
+     if IsKeywordIn(FKeys[i],excl1) then begin
+        Delete(i);
+     end;
+   end;
+   // load new wcs
+   eoh:=false;
+   ff.Position:=0;
+   header[1,1]:=chr(0);
+   repeat
+      n:=ff.Read(header,sizeof(THeaderBlock));
+      if n<>sizeof(THeaderBlock) then
+         Break;
+      for i:=1 to 36 do begin
+         row:=header[i];
+         if trim(row)='' then continue;
+         p1:=pos('=',row);
+         if p1=0 then p1:=9;
+         p2:=pos('/',row);
+         keyword:=trim(copy(row,1,p1-1));
+         if p2>0 then begin
+            value:=trim(copy(row,p1+1,p2-p1-1));
+            comment:=trim(copy(row,p2,99));
+         end else begin
+            value:=trim(copy(row,p1+1,99));
+            comment:='';
+         end;
+         if (keyword='SIMPLE') then
+            if (copy(value,1,1)='T') then begin
+              Fvalid:=true;
+            end
+            else begin
+              Fvalid:=false;
+              Break;
+            end;
+         if (keyword='END') then begin
+            eoh:=true;
+         end;
+         P:=PChar(value);
+         buf:=AnsiExtractQuotedStr(P,'''');
+         if buf<>'' then value:=buf;
+         if not IsKeywordIn(keyword,excl2) then begin
+           FRows.add(row);
+           FKeys.add(keyword);
+           FValues.add(value);
+           FComments.add(comment);
+         end;
+      end;
+      if not Fvalid then begin
+        Break;
+      end;
+   until eoh;
+ end;
 end;
 
 function TFitsHeader.ReadHeader(ff:TMemoryStream): integer;
