@@ -232,7 +232,7 @@ if p>=0 then begin
    end
    else if eventname='CalibrationDataFlipped' then FStatus:='Calibration Data Flipped'
    else if eventname='LoopingExposures' then FStatus:='Looping Exposures'
-   else if eventname='LoopingExposuresStopped' then FStatus:='Looping Exposures Stopped'
+   else if eventname='LoopingExposuresStopped' then FStatus:='Exposures Stopped'
    else if eventname='Settling' then FStatus:='Settling'
    else if eventname='SettleDone' then begin
      i:=attrib.IndexOf('Status');
@@ -354,7 +354,7 @@ begin
   else if FStatus='Calibration Failed' then FState:=GUIDER_ALERT
   else if FStatus='Calibration Data Flipped' then FState:=FState
   else if FStatus='Looping Exposures' then FState:=GUIDER_IDLE
-  else if FStatus='Looping Exposures Stopped' then FState:=GUIDER_IDLE
+  else if FStatus='Exposures Stopped' then FState:=GUIDER_IDLE
   else if FStatus='Settling' then FState:=FState
   else if FStatus='Settle Done' then FState:=FState
   else if FStatus='Guiding Dithered' then FState:=GUIDER_BUSY
