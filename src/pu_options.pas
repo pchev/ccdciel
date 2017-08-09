@@ -49,8 +49,15 @@ type
     AutofocusTolerance: TEdit;
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
+    StarLostRestart: TEdit;
+    StarLostCancel: TEdit;
     FileBin: TCheckBox;
     FileExp: TCheckBox;
+    GroupBox13: TGroupBox;
+    Label70: TLabel;
+    Label71: TLabel;
+    Label72: TLabel;
+    Label73: TLabel;
     SubfolderBin: TCheckBox;
     SubfolderExp: TCheckBox;
     Label67: TLabel;

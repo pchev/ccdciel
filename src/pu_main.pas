@@ -3066,6 +3066,8 @@ begin
    f_option.SettleMinTime.Text:=config.GetValue('/Autoguider/Settle/MinTime','5');
    f_option.SettleMaxTime.Text:=config.GetValue('/Autoguider/Settle/MaxTime','30');
    f_option.CalibrationDelay.Text:=config.GetValue('/Autoguider/Settle/CalibrationDelay','300');
+   f_option.StarLostRestart.Text:=IntToStr(config.GetValue('/Autoguider/Recovery/RestartTimeout',0));
+   f_option.StarLostCancel.Text:=IntToStr(config.GetValue('/Autoguider/Recovery/CancelTimeout',1800));
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
@@ -3170,6 +3172,8 @@ begin
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Text);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Text);
      config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Text);
+     config.SetValue('/Autoguider/Recovery/RestartTimeout',StrToIntDef(f_option.StarLostRestart.Text,0));
+     config.SetValue('/Autoguider/Recovery/CancelTimeout',StrToIntDef(f_option.StarLostCancel.Text,1800));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));

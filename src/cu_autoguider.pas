@@ -39,7 +39,7 @@ type
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
-    FStarLostTimeout1,FStarLostTimeout2: integer;
+    FStarLostTimeoutRestart,FStarLostTimeoutCancel: integer;
     FStarLostTime: double;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
@@ -108,8 +108,8 @@ StarLostTimer:=TTimer.Create(nil);
 StarLostTimer.Enabled:=false;
 StarLostTimer.Interval:=10000;
 StarLostTimer.OnTimer:=@StarLostTimerTimer;
-FStarLostTimeout1:=30;
-FStarLostTimeout2:=120;
+FStarLostTimeoutRestart:=0;
+FStarLostTimeoutCancel:=1800;
 FStarLostTime:=0;
 end;
 

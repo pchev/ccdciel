@@ -426,6 +426,8 @@ var buf:string;
 begin
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
+    FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
+    FStarLostTimeoutCancel:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
     buf:='{"method": "loop","id":2004}';
     FState:=GUIDER_BUSY;
     Send(buf);
@@ -490,13 +492,13 @@ begin
  else begin
     losttime:=round(secperday*(now-FStarLostTime));
     FonShowMessage('Star lost for '+inttostr(losttime)+' seconds...');
-    if losttime>FStarLostTimeout2 then begin
+    if losttime>FStarLostTimeoutCancel then begin
        if assigned(FonShowMessage) then FonShowMessage('Cannot recover from star lost. Stop guiding now.');
        StarLostTimer.Enabled:=false;
        FRecovering:=false;
        guide(false);
     end
-    else if (FState<>GUIDER_BUSY)and(losttime>FStarLostTimeout1) then begin
+    else if (FState<>GUIDER_BUSY)and(not FRecovering)and(FStarLostTimeoutRestart>0)and(losttime>FStarLostTimeoutRestart) then begin
        if assigned(FonShowMessage) then FonShowMessage('Try to restart guiding');
        StarLostTimer.Enabled:=false;
        FRecovering:=true;
