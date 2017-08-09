@@ -55,6 +55,9 @@ type
     MenuClearRef: TMenuItem;
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
+    MenuDownload: TMenuItem;
+    MenuOnlineHelp: TMenuItem;
+    MenuBugReport: TMenuItem;
     MenuShowCCDFrame: TMenuItem;
     MenuItemRaw: TMenuItem;
     MenuItemDebayer: TMenuItem;
@@ -205,11 +208,13 @@ type
     procedure MenuAutoguiderDitherClick(Sender: TObject);
     procedure MenuAutoguiderGuideClick(Sender: TObject);
     procedure MenuBPMClick(Sender: TObject);
+    procedure MenuBugReportClick(Sender: TObject);
     procedure MenuCaptureStartClick(Sender: TObject);
     procedure MenuCCDtempSetClick(Sender: TObject);
     procedure MenuClearBPMClick(Sender: TObject);
     procedure MenuClearRefClick(Sender: TObject);
     procedure MenuConnectClick(Sender: TObject);
+    procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
     procedure MenuFocusaidClick(Sender: TObject);
     procedure MenuFocuserInClick(Sender: TObject);
@@ -222,6 +227,7 @@ type
     procedure MenuItemRawClick(Sender: TObject);
     procedure MenuMountParkClick(Sender: TObject);
     procedure MenuMountTrackClick(Sender: TObject);
+    procedure MenuOnlineHelpClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
     procedure MenuOptionsClick(Sender: TObject);
     procedure MenuPlanetariumConnectClick(Sender: TObject);
@@ -2351,6 +2357,21 @@ aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'
 aboutmsg:=aboutmsg+'as published by the Free Software Foundation; either version 3'+crlf;
 aboutmsg:=aboutmsg+'of the License, or (at your option) any later version.'+crlf;
 ShowMessage(aboutmsg);
+end;
+
+procedure Tf_main.MenuDownloadClick(Sender: TObject);
+begin
+  ExecuteFile(URL_DOWNLOAD);
+end;
+
+procedure Tf_main.MenuBugReportClick(Sender: TObject);
+begin
+  ExecuteFile(URL_BUGREPORT);
+end;
+
+procedure Tf_main.MenuOnlineHelpClick(Sender: TObject);
+begin
+  ExecuteFile(URL_ONLINEHELP);
 end;
 
 Procedure Tf_main.FocuserStatus(Sender: TObject);
