@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils,
+uses  u_global, u_utils, cu_fits,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
@@ -34,7 +34,7 @@ uses  u_global, u_utils,
 type
 TAstrometry_engine = class(TThread)
    private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath : string;
+     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile : string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout: double;
      FObjs,FDown,FResolver: integer;
      Fplot: boolean;
@@ -45,6 +45,7 @@ TAstrometry_engine = class(TThread)
      FCustomScript: string;
      Fparam: TStringList;
      process: TProcessUTF8;
+     Ftmpfits: TFits;
    protected
      procedure Execute; override;
    public
@@ -179,6 +180,8 @@ var str: TStringList;
     buf: string;
 begin
 if FResolver=ResolverAstrometryNet then begin
+ wcsfile:=ChangeFileExt(FInFile,'.wcs');
+ DeleteFileUTF8(wcsfile);
  if FUseScript then begin
    Fcmd:=ExpandFileNameUTF8(FCustomScript);
    buf:='--overwrite';
@@ -216,7 +219,6 @@ if FResolver=ResolverAstrometryNet then begin
      str.Free;
    end;
    Fparam.Add(FInFile);
-   Fparam.Add(FOutFile);
    Fparam.Add(buf);
    Start;
  end else begin
@@ -260,8 +262,6 @@ if FResolver=ResolverAstrometryNet then begin
     for i:=0 to str.Count-1 do buf:=buf+blank+str[i];
     str.Free;
   end;
-  buf:=buf+' --new-fits ';
-  buf:=buf+'""'+StringReplace(FOutFile,'\','/',[rfReplaceAll])+'""'+blank;
   buf:=buf+'""'+StringReplace(FInFile,'\','/',[rfReplaceAll])+'""'+blank;
   Fparam.Add(buf+'"');
   {$else}
@@ -300,8 +300,6 @@ if FResolver=ResolverAstrometryNet then begin
     for i:=0 to str.Count-1 do Fparam.Add(str[i]);
     str.Free;
   end;
-  Fparam.Add('--new-fits');
-  Fparam.Add(FOutFile);
   Fparam.Add(FInFile);
   {$endif}
   Start;
@@ -335,6 +333,7 @@ var n: LongInt;
     fn,imgdir,txt: string;
     i,nside,available: integer;
     endtime: double;
+    mem: TMemoryStream;
 begin
 if FResolver=ResolverAstrometryNet then begin
   cbuf:='';
@@ -394,8 +393,23 @@ if FResolver=ResolverAstrometryNet then begin
      end;
   end;
   if logok then CloseFile(f);
+  // merge wcs result
+  if (Fresult=0)and(not FileExistsUTF8(FOutFile))and(FileExistsUTF8(wcsfile)) then begin
+    Ftmpfits:=TFits.Create(nil);
+    mem:=TMemoryStream.Create;
+    try
+    mem.LoadFromFile(FInFile);
+    Ftmpfits.Stream:=mem;
+    mem.clear;
+    mem.LoadFromFile(wcsfile);
+    Ftmpfits.Header.NewWCS(mem);
+    Ftmpfits.SaveToFile(FOutFile);
+    except
+      Ftmpfits.Free;
+      mem.Free;
+    end;
+  end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
-  //Synchronize(@SyncCmdTerminate);
 end
 else if FResolver=ResolverElbrus then begin
   fn:=slash(FElbrusDir)+'elbrus.txt';
