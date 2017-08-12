@@ -262,7 +262,7 @@ if FResolver=ResolverAstrometryNet then begin
     for i:=0 to str.Count-1 do buf:=buf+blank+str[i];
     str.Free;
   end;
-  buf:=buf+'""'+StringReplace(FInFile,'\','/',[rfReplaceAll])+'""'+blank;
+  buf:=buf+' ""'+StringReplace(FInFile,'\','/',[rfReplaceAll])+'""'+blank;
   Fparam.Add(buf+'"');
   {$else}
   Fcmd:='solve-field';
