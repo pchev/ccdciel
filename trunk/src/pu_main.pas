@@ -4393,6 +4393,7 @@ begin
  pslew:=false;
  // get current position from target object
  if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
+   NewMessage('Get current position from current target');
    if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
      tra:=f_sequence.TargetRA;
      tde:=f_sequence.TargetDE;

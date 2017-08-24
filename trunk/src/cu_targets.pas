@@ -69,7 +69,7 @@ type
       procedure RunEndScript;
       function StopGuider:boolean;
       function StartGuider:boolean;
-      function Slew(ra,de: double; precision:boolean):boolean;
+      function Slew(ra,de: double; precision,planprecision: boolean):boolean;
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
       procedure StartPlanTimerTimer(Sender: TObject);
@@ -404,6 +404,7 @@ end;
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok:boolean;
+    autofocusstart, astrometrypointing, autostartguider: boolean;
 begin
   result:=false;
   if not FRunning then exit;
@@ -419,18 +420,20 @@ begin
           if not FRunning then exit;
         end;
       end;
+      // disable astrometrypointing and autoguiding if first step is to move to focus star
+      autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart;
+      astrometrypointing:=t.astrometrypointing and (not autofocusstart);
       // slew to coordinates
-      ok:=Slew(t.ra,t.de,t.astrometrypointing);
+      ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
       if not ok then exit;
       Wait;
       if not FRunning then exit;
-      if Autoguider<>nil then begin
-        // start guiding
-        if Autoguider.State<>GUIDER_DISCONNECTED then begin
-          if not StartGuider then exit;
-          Wait;
-          if not FRunning then exit;
-        end;
+      // start guiding
+      autostartguider:=(Autoguider<>nil) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
+      if autostartguider then begin
+        if not StartGuider then exit;
+        Wait;
+        if not FRunning then exit;
       end;
     end;
     result:=true;
@@ -513,7 +516,7 @@ begin
   end;
 end;
 
-function T_Targets.Slew(ra,de: double; precision:boolean):boolean;
+function T_Targets.Slew(ra,de: double; precision,planprecision: boolean):boolean;
 var err,maxerr: double;
     prec,exp:double;
     fi,cormethod,bin,maxretry: integer;
@@ -543,6 +546,11 @@ begin
     Mount.Slew(ra, de);
     err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
     result:=(err<maxerr);
+    if result and planprecision then begin
+      FTargetCoord:=true;
+      FTargetRA:=deg2rad*15*ra;
+      FTargetDE:=deg2rad*de;
+    end;
   end;
   if not FRunning then exit;
   if not result then begin
@@ -551,7 +559,7 @@ begin
       f_pause.Caption:='Telescope slew';
       f_pause.Text:='After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?';
       if f_pause.Wait(WaitResponseTime) then begin
-         result:=Slew(ra,de,precision);
+         result:=Slew(ra,de,precision,planprecision);
          exit;
       end;
     end;
