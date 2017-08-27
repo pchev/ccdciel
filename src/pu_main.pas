@@ -56,6 +56,7 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
     MenuBugReport: TMenuItem;
     MenuShowCCDFrame: TMenuItem;
@@ -230,6 +231,7 @@ type
     procedure MenuOnlineHelpClick(Sender: TObject);
     procedure MenuOpenClick(Sender: TObject);
     procedure MenuOptionsClick(Sender: TObject);
+    procedure MenuPdfHelpClick(Sender: TObject);
     procedure MenuPlanetariumConnectClick(Sender: TObject);
     procedure MenuPlanetariumNewtargetClick(Sender: TObject);
     procedure MenuPreviewLoopClick(Sender: TObject);
@@ -3204,6 +3206,13 @@ begin
 
      SetOptions;
    end;
+end;
+
+procedure Tf_main.MenuPdfHelpClick(Sender: TObject);
+var pdffn: string;
+begin
+  pdffn:=ExpandFileNameUTF8(slash(Appdir)+slash('doc')+'doc_ccdciel_en.pdf');
+  ExecuteFile(pdffn);
 end;
 
 procedure Tf_main.MenuPlanetariumConnectClick(Sender: TObject);

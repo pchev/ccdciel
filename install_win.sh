@@ -17,6 +17,8 @@ install -m 755 -d $destdir
 install -m 755 -d $destdir/scripts
 install -m 755 -d $destdir/data
 install -m 755 -d $destdir/data/stars
+install -m 755 -d $destdir/doc
+
 
 if [ $OS_TARGET = win32 ]; then 
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
@@ -39,4 +41,5 @@ install -v -m 644 data/stars/focus_star_5   $destdir/data/stars/focus_star_5
 install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6
 install -v -m 644 data/stars/focus_star_7   $destdir/data/stars/focus_star_7
 install -v -m 644 data/stars/focus_star_8   $destdir/data/stars/focus_star_8
+install -v -m 644 doc/doc_ccdciel_en.pdf    $destdir/doc/doc_ccdciel_en.pdf
 
