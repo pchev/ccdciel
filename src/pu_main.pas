@@ -461,6 +461,7 @@ type
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
+    procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
     procedure LoadFitsFile(fn:string);
     procedure SaveFitsFile(fn:string);
@@ -4753,6 +4754,29 @@ begin
   end;
 end;
 
+procedure Tf_main.MenuShowCCDFrameClick(Sender: TObject);
+begin
+  if fits.HeaderInfo.valid then begin
+   if planetarium.Connected then begin
+    if (planetarium.PlanetariumType=CDC) then begin
+      if fits.HeaderInfo.solved then begin
+        fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        AstrometryToPlanetariumFrame(Sender);
+      end else begin
+        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame);
+        end;
+      end;
+    end
+    else
+       NewMessage('Presently this function works only with CDC');
+   end
+   else
+      NewMessage('Planetarium is not connected');
+  end;
+end;
+
 procedure Tf_main.MenuScriptEditClick(Sender: TObject);
 begin
   f_script.BtnEdit.Click;
@@ -4798,33 +4822,25 @@ begin
   f_sequence.BtnStop.Click;
 end;
 
-procedure Tf_main.MenuShowCCDFrameClick(Sender: TObject);
-var cmd: string;
+procedure Tf_main.AstrometryToPlanetariumFrame(Sender: TObject);
+var cmd,fn: string;
     ra, dec, rot, sizeH, sizeV, jd0, jd1: Double;
+    n: integer;
+    wcsinfo: TcdcWCSinfo;
 begin
-  ra:=NullCoord; dec:=NullCoord; rot:=NullCoord; sizeH:=0; sizeV:=0;
-  if(not planetarium.Connected) then
-  begin
-    NewMessage('Planetarium is not connected!');
-    exit;
-  end;
+ra:=NullCoord; dec:=NullCoord; rot:=NullCoord; sizeH:=0; sizeV:=0;
 
-  if(planetarium.PlanetariumType<>CDC) then
-  begin
-    NewMessage('Presently this function works only with CDC');
-    exit;
-  end;
+fn:=slash(TmpDir)+'ccdcielsolved.fits';
+n:=cdcwcs_initfitsfile(pchar(fn),0);
+if n=0 then n:=cdcwcs_getinfo(addr(wcsinfo),0);
 
-  if not (fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0)) then begin
-    NewMessage('Current image is not solved.');
-    exit;
-  end;
+if (n=0) and planetarium.Connected and (planetarium.PlanetariumType=CDC) then begin
 
-  ra:=cdcWCSinfo.cra;
-  dec:=cdcWCSinfo.cdec;
-  rot:=cdcWCSinfo.rot;
-  sizeH:=cdcWCSinfo.secpix*cdcWCSinfo.wp/3600;
-  sizeV:=cdcWCSinfo.secpix*cdcWCSinfo.hp/3600;
+  ra:=wcsinfo.cra;
+  dec:=wcsinfo.cdec;
+  rot:=wcsinfo.rot;
+  sizeH:=wcsinfo.secpix*wcsinfo.wp/3600;
+  sizeV:=wcsinfo.secpix*wcsinfo.hp/3600;
 
 
   if((ra=NullCoord) or (dec=NullCoord) or (sizeV=0) or (sizeH=0) or (rot=NullCoord)) then
@@ -4860,6 +4876,7 @@ begin
     NewMessage('CCD frame sent to planetarium.');
   end;
 
+ end;
 end;
 
 procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
@@ -4967,6 +4984,7 @@ var mem: TMemoryStream;
     imgsize: string;
     n:integer;
 begin
+   StatusBar1.Panels[1].Text:='';
    mem:=TMemoryStream.Create;
    mem.LoadFromFile(fn);
    fits.SetBPM(bpm,0,0,0,0);
