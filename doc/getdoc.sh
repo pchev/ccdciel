@@ -1,0 +1,16 @@
+#!/bin/bash
+
+rm -rf doc wiki_doc
+
+wget -E -r -p -np -nH --timeout=15 --cut-dirs=1 -X */*detail,*/*export,*/playground -R *do=index* -P doc --cache=off --restrict-file-names=windows -k  http://www.ap-i.net/ccdciel/en/documentation/start http://www.ap-i.net/ccdciel/en/documentation/start --header="X-DokuWiki-Do: export_xhtml"
+
+rm doc/robots.txt
+
+mkdir wiki_doc
+cp -R -p doc/* wiki_doc/
+cp print.css wiki_doc/lib/exe/
+cd wiki_doc/lib/exe
+css=$(ls -1 css.php*|head -1)
+rm $css
+mv print.css $css
+cd -
