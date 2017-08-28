@@ -6,6 +6,7 @@ object f_ccdtemp: Tf_ccdtemp
   AutoSize = True
   ClientHeight = 81
   ClientWidth = 180
+  ParentFont = False
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
@@ -90,13 +91,13 @@ object f_ccdtemp: Tf_ccdtemp
         ParentColor = False
       end
     end
-    object Button1: TButton
+    object BtnSet: TButton
       Left = 132
       Height = 24
       Top = 29
       Width = 50
       Caption = 'Set'
-      OnClick = Button1Click
+      OnClick = BtnSetClick
       TabOrder = 0
     end
   end

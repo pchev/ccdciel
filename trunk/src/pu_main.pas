@@ -749,6 +749,7 @@ begin
   filteroffset_initialized:=false;
   MsgHandle:=handle;
   meridianflipping:=false;
+  TemperatureSlope:=0;
   autofocusing:=false;
   AutofocusExposureFact:=1;
   ImgPixRatio:=1;
@@ -1699,6 +1700,7 @@ begin
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
+  TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
   n:=config.GetValue('/Filters/Num',0);
@@ -2174,6 +2176,10 @@ begin
                    wait(1);
                    cool:=camera.Cooler;
                    CameraCoolerChange(cool);
+                   if config.GetValue('/Cooler/CameraAutoCool',false) then begin
+                      f_ccdtemp.Setpoint.Text:=FormatFloat(f1,config.GetValue('/Cooler/CameraAutoCoolTemp',0));
+                      f_ccdtemp.BtnSet.Click;
+                   end;
                    if camera.hasVideo then begin
                       wait(1);
                       PageVideo.TabVisible:=true;
@@ -2223,13 +2229,15 @@ end;
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
  f_ccdtemp.Current.Text:=FormatFloat(f1,t);
+ if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:='Cancel' else f_ccdtemp.BtnSet.Caption:='Set';
 end;
 
 procedure Tf_main.CameraCoolerChange(var v:boolean);
 begin
- if f_ccdtemp.CCDcooler.Checked<>v then
+ if f_ccdtemp.CCDcooler.Checked<>v then begin
     f_ccdtemp.CCDcooler.Checked:=v;
- NewMessage('Camera cooler '+BoolToStr(v,true));
+    NewMessage('Camera cooler '+BoolToStr(v,true));
+ end;
 end;
 
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
@@ -3008,6 +3016,9 @@ begin
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
+   f_option.TemperatureSlope.Text:=FormatFloat(f1,config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope));
+   f_option.CameraAutoCool.Checked:=config.GetValue('/Cooler/CameraAutoCool',false);
+   f_option.CameraAutoCoolTemp.Text:=FormatFloat(f1,config.GetValue('/Cooler/CameraAutoCoolTemp',0));
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
    f_option.FilterList.Cells[0,0]:='Filter name';
@@ -3156,6 +3167,9 @@ begin
      config.SetValue('/Video/PreviewRate',StrToIntDef(f_option.VideoPreviewRate.Text,MaxVideoPreviewRate));
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
+     config.SetValue('/Cooler/TemperatureSlope',StrToFloatDef(f_option.TemperatureSlope.Text,0));
+     config.SetValue('/Cooler/CameraAutoCool',f_option.CameraAutoCool.Checked);
+     config.SetValue('/Cooler/CameraAutoCoolTemp',StrToFloatDef(f_option.CameraAutoCoolTemp.Text,0));
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);

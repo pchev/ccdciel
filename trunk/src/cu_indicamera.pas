@@ -116,8 +116,8 @@ private
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
-   procedure msg(txt: string);
  protected
+   function GetDevicename: string; override;
    function GetBinX:integer; override;
    function GetBinY:integer; override;
    procedure SetFrametype(f:TFrameType); override;
@@ -327,11 +327,6 @@ begin
          FhasVideo:=true;
          if Assigned(FonStatusChange) then FonStatusChange(self);
        end;
-end;
-
-procedure T_indicamera.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
 end;
 
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
@@ -924,6 +919,11 @@ end else begin
 end;
 end;
 
+function T_indicamera.GetDevicename: string;
+begin
+  result:=Findidevice;
+end;
+
 function T_indicamera.GetBinX:integer;
 begin
 if UseMainSensor then begin
@@ -1129,7 +1129,6 @@ end;
 procedure T_indicamera.SetTemperature(value:double);
 begin
  if CCDTemperature<>nil then begin
-    msg('Set temperature '+formatfloat(f1,value));
     CCDTemperature.np[0].value:=value;
     indiclient.sendNewNumber(CCDTemperature);
  end;
