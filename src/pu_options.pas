@@ -49,6 +49,15 @@ type
     AutofocusTolerance: TEdit;
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
+    CameraAutoCool: TCheckBox;
+    TemperatureSlopeActive: TCheckBox;
+    TemperatureSlope: TEdit;
+    CameraAutoCoolTemp: TEdit;
+    GroupBox14: TGroupBox;
+    GroupBox15: TGroupBox;
+    Label74: TLabel;
+    Label75: TLabel;
+    PanelTemperatureSlope: TPanel;
     StarLostRestart: TEdit;
     StarLostCancel: TEdit;
     FileBin: TCheckBox;
@@ -106,6 +115,7 @@ type
     RedBalance: TTrackBar;
     GreenBalance: TTrackBar;
     BlueBalance: TTrackBar;
+    TabSheet11: TTabSheet;
     VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;
@@ -261,17 +271,20 @@ type
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure latChange(Sender: TObject);
     procedure longChange(Sender: TObject);
     procedure MeridianOptionClick(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
+    procedure TemperatureSlopeActiveClick(Sender: TObject);
   private
     { private declarations }
     FGetPixelSize, FGetFocale: TNotifyEvent;
     Flatitude, Flongitude: double;
     Lockchange: boolean;
+    SaveTemperatureSlope: string;
     function GetResolver: integer;
     procedure SetResolver(value:integer);
     procedure SetLatitude(value:double);
@@ -307,6 +320,12 @@ begin
   PageControl1.ActivePageIndex:=0;
 end;
 
+procedure Tf_option.FormShow(Sender: TObject);
+begin
+  SaveTemperatureSlope:=TemperatureSlope.Text;
+  f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Text<>'0.0');
+end;
+
 procedure Tf_option.latChange(Sender: TObject);
 begin
   if LockChange then exit;
@@ -330,6 +349,10 @@ end;
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
 begin
   MeridianFlipPanel.Visible:=(MeridianOption.ItemIndex=1);
+  if MeridianOption.ItemIndex<>1 then begin
+     MinutesPastMeridian.Text:='0';
+     MinutesPastMeridianMin.Text:='0';
+  end;
 end;
 
 procedure Tf_option.SetLatitude(value:double);
@@ -425,6 +448,18 @@ end;
 procedure Tf_option.ResolverBoxClick(Sender: TObject);
 begin
   Notebook1.PageIndex:=ResolverBox.ItemIndex;
+end;
+
+procedure Tf_option.TemperatureSlopeActiveClick(Sender: TObject);
+begin
+  if TemperatureSlopeActive.Checked then begin
+     TemperatureSlope.Text:=SaveTemperatureSlope;
+     PanelTemperatureSlope.Visible:=true;
+  end
+  else begin
+     TemperatureSlope.Text:='0';
+     PanelTemperatureSlope.Visible:=false;
+  end;
 end;
 
 

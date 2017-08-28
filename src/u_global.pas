@@ -271,6 +271,7 @@ var
   BayerMode:TBayerMode;
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
+  TemperatureSlope: double;
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
   AutofocusNearHFD: double;

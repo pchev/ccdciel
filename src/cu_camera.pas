@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi,
-  lazutf8sysutils, Classes, SysUtils;
+  lazutf8sysutils, Classes, Forms, SysUtils;
 
 type
 
@@ -63,12 +63,15 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVerticalFlip: boolean;
     FVideoSizes, FVideoRates:TStringList;
+    FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
+    procedure msg(txt: string);
     procedure NewImage;
     procedure WriteHeaders;
     procedure NewVideoFrame;
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
+    function GetDevicename: string; virtual; abstract;
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
     procedure SetFrametype(f:TFrameType); virtual; abstract;
@@ -79,6 +82,8 @@ T_camera = class(TComponent)
     function GetTemperatureRange:TNumRange; virtual; abstract;
     function  GetTemperature: double; virtual; abstract;
     procedure SetTemperature(value:double); virtual; abstract;
+    procedure SetTemperatureRamp(value:double);
+    procedure SetTemperatureRampAsync(Data: PtrInt);
     function  GetCooler: boolean; virtual; abstract;
     procedure SetCooler(value:boolean); virtual; abstract;
     procedure SetFilter(num:integer); virtual; abstract;
@@ -123,6 +128,7 @@ T_camera = class(TComponent)
     procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
   private
     lockvideoframe: boolean;
+    TempFinal: Double;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -171,7 +177,9 @@ T_camera = class(TComponent)
     property VideoBrightnessRange: TNumRange read GetVideoBrightnessRange;
     property VideoPreviewDivisor: integer read GetVideoPreviewDivisor write SetVideoPreviewDivisor;
     property Cooler: boolean read GetCooler write SetCooler;
-    property Temperature: double read GetTemperature write SetTemperature;
+    property Temperature: double read GetTemperature write SetTemperatureRamp;
+    property TemperatureRampActive: Boolean read FTemperatureRampActive;
+    property DeviceName: string read GetDevicename;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
     property FrameType: TFrameType read GetFrametype write SetFrametype;
@@ -233,6 +241,8 @@ begin
   lockvideoframe:=false;
   FVideoSizes:=TStringList.Create;
   FVideoRates:=TStringList.Create;
+  FTemperatureRampActive:=false;
+  FCancelTemperatureRamp:=false;
 end;
 
 destructor  T_camera.Destroy;
@@ -243,6 +253,63 @@ begin
   FVideoSizes.Free;
   FVideoRates.Free;
   inherited Destroy;
+end;
+
+procedure T_camera.msg(txt: string);
+begin
+ if Assigned(FonMsg) then FonMsg(DeviceName+': '+txt);
+end;
+
+procedure T_camera.SetTemperatureRamp(value:double);
+begin
+  if TemperatureSlope>0 then begin
+    TempFinal:=value;
+    Application.QueueAsyncCall(@SetTemperatureRampAsync,0);
+  end else begin
+    msg('Set temperature '+formatfloat(f1,value));
+    SetTemperature(value);
+  end;
+end;
+
+procedure T_camera.SetTemperatureRampAsync(Data: PtrInt);
+var TempStart,TempNow,TempRamp: double;
+    Nstep,TempStep: integer;
+begin
+  TempStep:=round(60.0/TemperatureSlope);
+  if TempStep<1 then TempStep:=1;
+  if FTemperatureRampActive then begin
+     FCancelTemperatureRamp:=true;
+     msg('Temperature ramp requested to stop');
+     exit;
+  end;
+  msg('Set temperature ramp to '+formatfloat(f1,TempFinal)+' started');
+  try
+  FTemperatureRampActive:=true;
+  TempStart:=GetTemperature;
+  TempNow:=TempStart;
+  if TempFinal>TempStart then
+     TempRamp:=1.0
+  else
+     TempRamp:=-1.0;
+  Nstep:=round(abs(TempStart-TempFinal));
+  while Nstep>0 do begin
+    TempNow:=TempNow+TempRamp;
+    SetTemperature(TempNow);
+    wait(TempStep);
+    if FCancelTemperatureRamp then begin
+       FCancelTemperatureRamp:=false;
+       FTemperatureRampActive:=false;
+       msg('Temperature ramp canceled');
+       exit;
+    end;
+    dec(Nstep);
+  end;
+  SetTemperature(TempFinal);
+  msg('Set temperature ramp terminated');
+  finally
+    FTemperatureRampActive:=false;
+    if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
+  end;
 end;
 
 procedure T_camera.NewImage;
@@ -314,7 +381,7 @@ begin
      focal_length:=Fmount.FocaleLength
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
-  if (focal_length<1) and Assigned(FonMsg) then FonMsg('Error: Unknow telescope focal length');
+  if (focal_length<1) then msg('Error: Unknow telescope focal length');
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
   except

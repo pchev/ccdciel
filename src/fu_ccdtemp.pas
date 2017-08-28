@@ -33,7 +33,7 @@ type
   { Tf_ccdtemp }
 
   Tf_ccdtemp = class(TFrame)
-    Button1: TButton;
+    BtnSet: TButton;
     CCDcooler: TCheckBox;
     Current: TEdit;
     Setpoint: TEdit;
@@ -43,7 +43,7 @@ type
     Panel2: TPanel;
     Panel3: TPanel;
     StaticText1: TStaticText;
-    procedure Button1Click(Sender: TObject);
+    procedure BtnSetClick(Sender: TObject);
     procedure CCDcoolerChange(Sender: TObject);
   private
     { private declarations }
@@ -73,7 +73,7 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_ccdtemp.Button1Click(Sender: TObject);
+procedure Tf_ccdtemp.BtnSetClick(Sender: TObject);
 begin
   if Assigned(FonSetTemperature) then FonSetTemperature(self);
 end;

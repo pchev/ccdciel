@@ -53,8 +53,8 @@ T_ascomcamera = class(T_camera)
    function Connected: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
-   procedure msg(txt: string);
   protected
+   function GetDevicename: string; override;
    function GetBinX:integer; override;
    function GetBinY:integer; override;
    procedure SetFrametype(f:TFrameType); override;
@@ -545,10 +545,15 @@ begin
   // not in ascom
 end;
 
-procedure T_ascomcamera.msg(txt: string);
+function T_ascomcamera.GetDevicename: string;
 begin
- if Assigned(FonMsg) then FonMsg(txt);
+{$ifdef mswindows}
+  result:=fDeviceName;
+{$else}
+  result:='';
+{$endif}
 end;
+
 
 function T_ascomcamera.GetBinX:integer;
 begin
@@ -712,7 +717,6 @@ begin
  if Connected then begin
    try
    if V.CanSetCCDTemperature then begin
-      msg('Camera '+Fdevice+' set temperature '+formatfloat(f1,value));
       SetCooler(true);
       V.SetCCDTemperature:=value;
    end;
