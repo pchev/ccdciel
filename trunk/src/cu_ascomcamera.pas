@@ -548,7 +548,7 @@ end;
 function T_ascomcamera.GetDevicename: string;
 begin
 {$ifdef mswindows}
-  result:=fDeviceName;
+  result:=Fdevice;
 {$else}
   result:='';
 {$endif}
