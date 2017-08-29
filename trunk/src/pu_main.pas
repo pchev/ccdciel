@@ -408,7 +408,7 @@ type
     Procedure AutoFocusStop(Sender: TObject);
     procedure LoadFocusStar;
     function  FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
-    function  AutoAutofocus: Boolean;
+    function  AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
     procedure cmdAutomaticAutofocus(var ok: boolean);
     procedure cmdAutofocus(var ok: boolean);
     Procedure FocuserStatus(Sender: TObject);
@@ -1738,6 +1738,8 @@ begin
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
   MeridianFlipPauseAfter:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
   MeridianFlipPauseTimeout:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
+  MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
+  MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
@@ -3092,6 +3094,8 @@ begin
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
    f_option.MeridianFlipPauseTimeout.Text:=IntToStr(config.GetValue('/Meridian/MeridianFlipPauseTimeout',0));
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
+   f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
+   f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
@@ -3201,6 +3205,8 @@ begin
      config.SetValue('/Meridian/MeridianFlipPauseBefore',f_option.MeridianFlipPauseBefore.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseAfter',f_option.MeridianFlipPauseAfter.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',StrToIntDef(f_option.MeridianFlipPauseTimeout.Text,0));
+     config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
+     config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -4390,7 +4396,7 @@ begin
   end;
 end;
 
-function Tf_main.AutoAutofocus: Boolean;
+function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
 var tra,tde,teq,sra,sde,jd0,jd1,err: double;
     sid: string;
     focusretry: integer;
@@ -4501,32 +4507,34 @@ begin
     result:=false;
     exit;
  end;
- // recenter to previous position
- NewMessage('Return to target position');
- if mount.Equinox<>0 then begin
-   jd0:=Jd(trunc(mount.Equinox),0,0,0);
-   jd1:=DateTimetoJD(now);
-   PrecessionFK5(jd1,jd0,tra,tde);
- end;
- if pslew then begin
-    result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
- end else begin
-    result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
- end;
- // start autoguider
- if restartguider then begin
-   NewMessage('Restart autoguider');
-   autoguider.Guide(false);
-   wait(5);
-   autoguider.Guide(true);
-   autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
-   if autoguider.State<>GUIDER_GUIDING then begin
-     f_pause.Caption:='Pause';
-     f_pause.Text:='Failed to start guiding!';
-     NewMessage(f_pause.Text);
-     if not f_pause.Wait(120) then begin
-        NewMessage('Failed to start guiding!');
-        exit;
+ if ReturnToTarget then begin
+   // recenter to previous position
+   NewMessage('Return to target position');
+   if mount.Equinox<>0 then begin
+     jd0:=Jd(trunc(mount.Equinox),0,0,0);
+     jd1:=DateTimetoJD(now);
+     PrecessionFK5(jd1,jd0,tra,tde);
+   end;
+   if pslew then begin
+      result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
+   end else begin
+      result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
+   end;
+   // start autoguider
+   if restartguider then begin
+     NewMessage('Restart autoguider');
+     autoguider.Guide(false);
+     wait(5);
+     autoguider.Guide(true);
+     autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+     if autoguider.State<>GUIDER_GUIDING then begin
+       f_pause.Caption:='Pause';
+       f_pause.Text:='Failed to start guiding!';
+       NewMessage(f_pause.Text);
+       if not f_pause.Wait(120) then begin
+          NewMessage('Failed to start guiding!');
+          exit;
+       end;
      end;
    end;
  end;
@@ -5211,6 +5219,10 @@ begin
             exit;
           end;
         end;
+        // autofocus
+        if MeridianFlipAutofocus then begin
+          AutoAutofocus(false);
+        end;
         // precision slew with saved coordinates
         if slewtopos then begin
           NewMessage('Recenter on last position');
@@ -5258,7 +5270,10 @@ begin
           NewMessage('Restart autoguider');
           autoguider.Guide(false);
           wait(5);
-          autoguider.Guide(true);
+          if MeridianFlipCalibrate then
+            autoguider.Calibrate
+          else
+            autoguider.Guide(true);
           autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
           if autoguider.State<>GUIDER_GUIDING then begin
             f_pause.Caption:='Pause';

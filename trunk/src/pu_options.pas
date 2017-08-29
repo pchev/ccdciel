@@ -50,6 +50,8 @@ type
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
     CameraAutoCool: TCheckBox;
+    MeridianFlipAutofocus: TCheckBox;
+    MeridianFlipCalibrate: TCheckBox;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
     CameraAutoCoolTemp: TEdit;
