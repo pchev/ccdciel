@@ -2987,6 +2987,7 @@ var ok:boolean;
     i,n,FocusStarMagIndex: integer;
     buf:string;
 begin
+   f_option.Caption:='Options :'+profile;
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
