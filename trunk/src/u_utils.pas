@@ -87,6 +87,9 @@ procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
+procedure Sun(jdn:double; out ra,de:double);
+procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
+function TwilightAstro(dt:TDateTime; HMorning,HEvening:double):boolean;
 
 implementation
 
@@ -1172,6 +1175,100 @@ begin
    Sx:=sqrt(Sumx2-sqr(SumX)/n);
    Sy:=Sqrt(Sumy2-sqr(SumY)/n);
    r:=(Sumxy-Sumx*SumY/n)/(Sx*sy);
+ end;
+end;
+
+Procedure Sun(jdn:double; out ra,de:double);
+var d,ecl,q,g,r,l,xs,ys,xe,ye,ze: double;
+begin
+//Approximate Sun position
+d :=jdn-jd2000;
+// obliquity of the ecliptic
+ecl := deg2rad * (23.439 - 0.00000036 * d);
+// mean anomaly
+g := deg2rad * rmod(357.529 + 0.98560028 * d,360);
+// mean longitude
+q := deg2rad * rmod(280.459 + 0.98564736 * d,360);
+// geocentric apparent ecliptic longitude
+l := q + deg2rad * (1.915 * sin(g) + 0.020 * sin(2*g));
+// Sun distance
+r := 1.00014 - 0.01671 * cos(g) - 0.00014 * cos(2*g);
+// ecliptic rectangular geocentric coordinates
+xs := r * cos(l);
+ys := r * sin(l);
+// equatorial rectangular geocentric coordinates
+xe := xs;
+ye := ys * cos(ecl);
+ze := ys * sin(ecl);
+// Sun Right Ascension and Declination
+ra := arctan2( ye, xe );
+de := arctan2( ze, sqrt(xe*xe+ye*ye) );
+end;
+
+procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
+(*
+   jd       :  date julienne desiree a 0H TU
+   ar       :  ascension droite  radiant
+   de       :  declinaison
+   h        :  hauteur sur l'horizon   degres
+               crepuscule nautique h=-12
+               crepuscule astronomique h=-18
+   hp1      :  heure matin
+   hp2      :  heure soir
+ *)
+var
+  hh, st, st0: double;
+begin
+  hh := (sin(deg2rad * h) - sin(deg2rad * ObsLatitude) * sin(de)) /
+    (cos(deg2rad * ObsLatitude) * cos(de));
+  if abs(hh) <= 1 then
+  begin
+    hh := arccos(hh);
+    st0 := rad2deg * sidtim(jd, 0.0, ObsLongitude) / 15;
+    st := rad2deg * (ar - hh) / 15;
+    hp1 := rmod((st - st0) / 1.002737908 + 24, 24);
+    st := rad2deg * (ar + hh) / 15;
+    hp2 := rmod((st - st0) / 1.002737908 + 24, 24);
+  end
+  else
+  begin
+    if hh > 0 then
+    begin
+      hp1 := -99;      // never above H
+      hp2 := -99;
+    end
+    else
+    begin
+      hp1 := 99;      // always above H
+      hp2 := 99;
+    end;
+  end;
+end;
+
+function TwilightAstro(dt:TDateTime; HMorning,HEvening:double):boolean;
+var jd0,sra,sde,hp1,hp2: double;
+    Year, Month, Day: Word;
+begin
+ DecodeDate(dt, Year, Month, Day);
+ jd0:=jd(Year,Month,Day,0);
+ Sun(jd0+0.5,sra,sde);
+ Time_Alt(jd0, sra, sde, -18, hp1, hp2);
+ if hp1<-90 then      // polar night
+ begin
+   HMorning:=0;
+   HEvening:=24;
+   result:=true;
+ end
+ else if hp1>90 then // polar day
+ begin
+    HMorning:=hp1;
+    HEvening:=hp2;
+    result:=false;
+ end
+ else begin          // day and night
+   HMorning:=rmod(hp1+ObsTimeZone+24,24);
+   HEvening:=rmod(hp2+ObsTimeZone+24,24);
+   result:=true;
  end;
 end;
 
