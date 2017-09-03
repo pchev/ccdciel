@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, UScaleDPI,
+uses  u_global, UScaleDPI, u_utils,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -56,8 +56,10 @@ type
     property Text: string read GetText write SetText;
   end;
 
+  function WaitTill(hour:string; showdialog: boolean):boolean;
+
 var
-  f_pause: Tf_pause;
+  f_pause,wt_pause: Tf_pause;
 
 implementation
 
@@ -136,6 +138,64 @@ begin
   end;
   result:=Fresult;
   Close;
+end;
+
+function WaitTill(hour:string; showdialog: boolean):boolean;
+var endt: TDateTime;
+    daystr:string;
+    nextday: boolean;
+    wt:integer;
+begin
+ result:=false;
+ if wt_pause<>nil then begin
+    globalmsg('Wait dialog already running');
+    exit;
+ end;
+ try
+  endt:=StrToTime(hour,':');
+  SecondsToWait(endt,wt,nextday);
+  if nextday then
+     daystr:='tomorrow '
+  else
+     daystr:='';
+  if wt>0 then begin
+    WaitTillrunning:=true;
+    if showdialog then begin
+      wt_pause:=Tf_pause.Create(nil);
+      try
+      globalmsg('Need to wait until '+daystr+hour);
+      wt_pause.Text:='Need to wait until '+daystr+hour;
+      result:=wt_pause.Wait(wt)
+      finally
+      WaitTillrunning:=false;
+      FreeAndNil(wt_pause);
+      end;
+    end
+    else begin
+      globalmsg('Need to wait until '+daystr+hour);
+      while now<endt do begin
+        Sleep(100);
+        Application.ProcessMessages;
+        if cancelWaitTill then begin
+          WaitTillrunning:=false;
+          cancelWaitTill:=false;
+          result:=false;
+          exit;
+        end;
+      end;
+     WaitTillrunning:=false;
+     result:=true;
+    end;
+  end else begin
+    globalmsg('Time already passed '+daystr+hour);
+    result:=true;
+  end;
+ except
+   WaitTillrunning:=false;
+   cancelWaitTill:=false;
+   if wt_pause<>nil then FreeAndNil(wt_pause);
+   result:=false;
+ end;
 end;
 
 end.

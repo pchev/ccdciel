@@ -11,7 +11,7 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  Visible = False
+  LCLVersion = '1.8.0.4'
   object Panel1: TPanel
     Left = 0
     Height = 39
@@ -69,7 +69,7 @@ object f_EditTargets: Tf_EditTargets
     TabOrder = 1
     object TargetList: TStringGrid
       Left = 1
-      Height = 389
+      Height = 351
       Top = 1
       Width = 282
       Align = alClient
@@ -93,31 +93,91 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel6: TPanel
       Left = 1
-      Height = 50
-      Top = 390
+      Height = 88
+      Top = 352
       Width = 282
       Align = alBottom
-      ClientHeight = 50
+      ClientHeight = 88
       ClientWidth = 282
       TabOrder = 1
       object CheckBoxRepeatList: TCheckBox
         Left = 8
-        Height = 23
-        Top = 8
-        Width = 152
+        Height = 21
+        Top = 56
+        Width = 151
         Caption = 'Repeat the whole list '
         OnChange = CheckBoxRepeatListChange
         TabOrder = 0
       end
       object RepeatCountList: TEdit
         Left = 208
-        Height = 26
-        Top = 8
+        Height = 24
+        Top = 56
         Width = 56
         Enabled = False
         OnChange = RepeatCountListChange
         TabOrder = 1
         Text = '1'
+      end
+      object SeqStart: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 71
+        Caption = 'Start at '
+        OnChange = SeqStartChange
+        TabOrder = 2
+      end
+      object SeqStop: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 70
+        Caption = 'Stop at '
+        OnChange = SeqStopChange
+        TabOrder = 3
+      end
+      object SeqStartAt: TTimeEdit
+        Left = 98
+        Height = 24
+        Top = 8
+        Width = 103
+        ButtonWidth = 23
+        NumGlyphs = 1
+        Enabled = False
+        MaxLength = 0
+        TabOrder = 4
+      end
+      object SeqStopAt: TTimeEdit
+        Left = 98
+        Height = 24
+        Top = 32
+        Width = 103
+        ButtonWidth = 23
+        NumGlyphs = 1
+        Enabled = False
+        MaxLength = 0
+        TabOrder = 5
+      end
+      object SeqStartTwilight: TCheckBox
+        Left = 207
+        Height = 21
+        Top = 8
+        Width = 53
+        Caption = 'dusk'
+        Enabled = False
+        OnChange = SeqStartTwilightChange
+        TabOrder = 6
+      end
+      object SeqStopTwilight: TCheckBox
+        Left = 207
+        Height = 21
+        Top = 32
+        Width = 57
+        Caption = 'dawn'
+        Enabled = False
+        OnChange = SeqStopTwilightChange
+        TabOrder = 7
       end
     end
   end
@@ -133,16 +193,16 @@ object f_EditTargets: Tf_EditTargets
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
-      ClientHeight = 437
-      ClientWidth = 326
+      ClientHeight = 439
+      ClientWidth = 328
       object Panel3: TPanel
         Left = 0
-        Height = 437
+        Height = 439
         Top = 0
-        Width = 326
+        Width = 328
         Align = alClient
-        ClientHeight = 437
-        ClientWidth = 326
+        ClientHeight = 439
+        ClientWidth = 328
         TabOrder = 0
         object Label1: TLabel
           Left = 16
@@ -162,7 +222,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object PlanList: TComboBox
           Left = 98
-          Height = 28
+          Height = 26
           Top = 48
           Width = 126
           ItemHeight = 0
@@ -208,7 +268,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object ObjectName: TEdit
           Left = 98
-          Height = 26
+          Height = 24
           Top = 23
           Width = 126
           OnChange = TargetChange
@@ -224,7 +284,7 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 4
           object PreviewExposure: TEdit
             Left = 113
-            Height = 26
+            Height = 24
             Top = 91
             Width = 59
             OnChange = TargetChange
@@ -241,9 +301,9 @@ object f_EditTargets: Tf_EditTargets
           end
           object Preview: TCheckBox
             Left = 8
-            Height = 23
+            Height = 21
             Top = 60
-            Width = 213
+            Width = 212
             Caption = 'Preview when waiting to repeat'
             OnChange = TargetChange
             ParentBidiMode = False
@@ -275,7 +335,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Delay: TEdit
             Left = 92
-            Height = 26
+            Height = 24
             Top = 37
             Width = 80
             OnChange = TargetChange
@@ -284,7 +344,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object RepeatCount: TEdit
             Left = 92
-            Height = 26
+            Height = 24
             Top = 8
             Width = 80
             OnChange = TargetChange
@@ -302,9 +362,9 @@ object f_EditTargets: Tf_EditTargets
         end
         object CheckBoxRepeat: TCheckBox
           Left = 8
-          Height = 23
+          Height = 21
           Top = 271
-          Width = 204
+          Width = 203
           Caption = 'Repeat the plan for this object'
           OnChange = CheckBoxRepeatChange
           TabOrder = 5
@@ -329,7 +389,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object EndTime: TMaskEdit
             Left = 92
-            Height = 26
+            Height = 24
             Top = 40
             Width = 70
             CharCase = ecNormal
@@ -342,7 +402,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object StartTime: TMaskEdit
             Left = 92
-            Height = 26
+            Height = 24
             Top = 8
             Width = 70
             CharCase = ecNormal
@@ -397,7 +457,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointDEC: TEdit
             Left = 92
-            Height = 26
+            Height = 24
             Top = 42
             Width = 100
             OnChange = TargetChange
@@ -405,7 +465,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointRA: TEdit
             Left = 92
-            Height = 26
+            Height = 24
             Top = 8
             Width = 100
             OnChange = TargetChange
@@ -438,9 +498,9 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointAstrometry: TCheckBox
             Left = 8
-            Height = 23
+            Height = 21
             Top = 69
-            Width = 247
+            Width = 246
             Caption = 'Use astrometry to refine the position'
             OnChange = TargetChange
             TabOrder = 4
@@ -468,8 +528,8 @@ object f_EditTargets: Tf_EditTargets
     end
     object TabSheet2: TTabSheet
       Caption = 'Script'
-      ClientHeight = 437
-      ClientWidth = 326
+      ClientHeight = 439
+      ClientWidth = 328
       object LabelSeq1: TLabel
         Left = 98
         Height = 18

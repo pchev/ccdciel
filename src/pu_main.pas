@@ -752,6 +752,9 @@ begin
   TemperatureSlope:=0;
   autofocusing:=false;
   AutofocusExposureFact:=1;
+  WaitTillrunning:=false;
+  cancelWaitTill:=false;
+  onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
   refmask:=false;
   reftreshold:=128;

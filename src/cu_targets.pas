@@ -36,6 +36,7 @@ type
     private
       TargetTimer: TTimer;
       TargetRepeatTimer: TTimer;
+      StopTimer: TTimer;
       FTargetsChange: TNotifyEvent;
       FPlanChange: TNotifyEvent;
       FonMsg,FDelayMsg: TNotifyMsg;
@@ -73,11 +74,15 @@ type
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
       procedure StartPlanTimerTimer(Sender: TObject);
+      procedure StopTimerTimer(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
       FCurrentTarget: integer;
       FTargetsRepeat: integer;
+      FSeqStartAt,FSeqStopAt: TDateTime;
+      FSeqStart,FSeqStop: boolean;
+      FSeqStartTwilight,FSeqStopTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
       FRunning: boolean;
       FInitializing: boolean;
@@ -94,6 +99,12 @@ type
       procedure Abort;
       procedure ForceNextTarget;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
+      property SeqStartAt: TDateTime read FSeqStartAt write FSeqStartAt;
+      property SeqStopAt: TDateTime read FSeqStopAt write FSeqStopAt;
+      property SeqStart: boolean read FSeqStart write FSeqStart;
+      property SeqStop: boolean read FSeqStop write FSeqStop;
+      property SeqStartTwilight: boolean read FSeqStartTwilight write FSeqStartTwilight;
+      property SeqStopTwilight: boolean read FSeqStopTwilight write FSeqStopTwilight;
       property Targets: TTargetList read Ftargets;
       property Count: integer read NumTargets;
       property CurrentTarget: integer read FCurrentTarget;
@@ -125,6 +136,12 @@ begin
   NumTargets := 0;
   FTargetsRepeat:=1;
   Frunning:=false;
+  FSeqStartAt:=0;
+  FSeqStopAt:=0;
+  FSeqStart:=false;
+  FSeqStop:=false;
+  FSeqStartTwilight:=false;
+  FSeqStopTwilight:=false;
   FInitializing:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
@@ -141,6 +158,9 @@ begin
   StartPlanTimer.Enabled:=false;
   StartPlanTimer.Interval:=5000;
   StartPlanTimer.OnTimer:=@StartPlanTimerTimer;
+  StopTimer:=TTimer.Create(self);
+  StopTimer.Enabled:=false;
+  StopTimer.OnTimer:=@StopTimerTimer;
 end;
 
 destructor  T_Targets.Destroy;
@@ -243,6 +263,9 @@ begin
 end;
 
 procedure T_Targets.Start;
+var hm,he: double;
+    twok,wtok,nd: boolean;
+    stw:integer;
 begin
   FTargetsRepeatCount:=0;
   FCurrentTarget:=-1;
@@ -250,11 +273,44 @@ begin
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
   FRunning:=true;
+  twok:=TwilightAstro(now,hm,he);
+  if FSeqStartTwilight and twok then
+     FSeqStartAt:=he/24;
+  if FSeqStopTwilight and twok then
+     FSeqStopAt:=hm/24;
+  if FSeqStart then begin
+     msg('Wait to start sequence '+FName+' at '+TimeToStr(FSeqStartAt));
+     wtok:=WaitTill(TimeToStr(FSeqStartAt),true);
+     if not wtok then begin
+        msg('Sequence '+FName+' canceled before start');
+        FRunning:=false;
+        exit;
+     end;
+  end;
+  if FSeqStop then begin
+     SecondsToWait(FSeqStopAt,stw,nd);
+     if stw>0 then begin
+        StopTimer.Interval:=1000*stw;
+        StopTimer.Enabled:=true;
+     end else begin
+       msg('Sequence '+FName+' canceled before start');
+       msg('Stop time '+TimeToStr(FSeqStopAt)+' already passed');
+       FRunning:=false;
+       exit;
+     end;
+  end;
   if FTargetsRepeat=1 then
     msg('Starting sequence '+FName)
   else
     msg('Starting sequence '+FName+' repeat '+inttostr(FTargetsRepeatCount+1)+'/'+inttostr(FTargetsRepeat));
   NextTarget;
+end;
+
+procedure T_Targets.StopTimerTimer(Sender: TObject);
+begin
+  StopTimer.Enabled:=false;
+  msg('Stop the current sequence at '+TimeToStr(FSeqStopAt));
+  StopSequence(false);
 end;
 
 procedure T_Targets.Stop;
@@ -272,9 +328,18 @@ end;
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
 begin
+ StopTimer.Enabled:=false;
  if FRunning then begin
-   p:=t_plan(Ftargets[FCurrentTarget].plan);
-   if (not abort) and p.Running then begin
+   if WaitTillrunning then begin
+     if wt_pause<>nil
+      then wt_pause.BtnCancel.Click
+      else cancelWaitTill:=true;
+   end;
+   if FCurrentTarget>=0 then
+      p:=t_plan(Ftargets[FCurrentTarget].plan)
+   else
+      p:=nil;
+   if (not abort) and (p<>nil) and p.Running then begin
      p.Stop;
      FRunning:=false;
      msg('Sequence stopped.');

@@ -290,6 +290,12 @@ begin
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
      f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
      f_EditTargets.TargetList.RowCount:=Targets.Count+1;
+     f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
+     f_EditTargets.SeqStop.Checked:=Targets.SeqStop;
+     f_EditTargets.SeqStartTwilight.Checked:=Targets.SeqStartTwilight;
+     f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
+     f_EditTargets.SeqStartAt.Time:=Targets.SeqStartAt;
+     f_EditTargets.SeqStopAt.Time:=Targets.SeqStopAt;
      for i:=1 to Targets.Count do begin
        t:=TTarget.Create;
        t.Assign(Targets.Targets[i-1]);
@@ -302,6 +308,12 @@ begin
      CurrentFile:='';
      CurrentName:='';
      f_EditTargets.TargetsRepeat:=1;
+     f_EditTargets.SeqStart.Checked:=false;
+     f_EditTargets.SeqStop.Checked:=false;
+     f_EditTargets.SeqStartTwilight.Checked:=false;
+     f_EditTargets.SeqStopTwilight.Checked:=false;
+     f_EditTargets.SeqStartAt.Time:=0.0;
+     f_EditTargets.SeqStopAt.Time:=0.0;
      t:=TTarget.Create;
      f_EditTargets.TargetList.RowCount:=2;
      f_EditTargets.TargetList.Cells[0,1]:='1';
@@ -319,6 +331,12 @@ begin
      LoadPlan(T_Plan(t.plan), t.planname);
    end;
    Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
+   Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
+   Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
+   Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
+   Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
+   Targets.SeqStartAt       := f_EditTargets.SeqStartAt.Time;
+   Targets.SeqStopAt        := f_EditTargets.SeqStopAt.Time;
    SaveTargets(CurrentFile);
 end;
 
@@ -336,6 +354,12 @@ begin
    CurrentFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
    Targets.TargetsRepeat:=tfile.GetValue('/RepeatCount',1);
+   Targets.SeqStart         := tfile.GetValue('/Startup/SeqStart',false);
+   Targets.SeqStop          := tfile.GetValue('/Startup/SeqStop',false);
+   Targets.SeqStartTwilight := tfile.GetValue('/Startup/SeqStartTwilight',false);
+   Targets.SeqStopTwilight  := tfile.GetValue('/Startup/SeqStopTwilight',false);
+   Targets.SeqStartAt       := tfile.GetValue('/Startup/SeqStartAt',0.0);
+   Targets.SeqStopAt        := tfile.GetValue('/Startup/SeqStopAt',0.0);
    if n>0 then begin
      for i:=1 to n do begin
        t:=TTarget.Create;
@@ -461,6 +485,12 @@ begin
     tfile.SetValue('/ListName',CurrentName);
     tfile.SetValue('/TargetNum',Targets.Count);
     tfile.SetValue('/RepeatCount',Targets.TargetsRepeat);
+    tfile.SetValue('/Startup/SeqStart',Targets.SeqStart);
+    tfile.SetValue('/Startup/SeqStop',Targets.SeqStop);
+    tfile.SetValue('/Startup/SeqStartTwilight',Targets.SeqStartTwilight);
+    tfile.SetValue('/Startup/SeqStopTwilight',Targets.SeqStopTwilight);
+    tfile.SetValue('/Startup/SeqStartAt',Targets.SeqStartAt);
+    tfile.SetValue('/Startup/SeqStopAt',Targets.SeqStopAt);
     for i:=1 to Targets.Count do begin
       t:=Targets.Targets[i-1];
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);
