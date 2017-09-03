@@ -243,6 +243,7 @@ const
   {$endif}
 
 var
+  onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
   CameraName,WheelName,FocuserName,MountName: string;
   ConfirmClose, ScreenScaling: boolean;
@@ -290,6 +291,9 @@ var
   FocusStars: array of TFocusStar;
   FocusStarsBlacklist: string;
   AutofocusTolerance: integer;
+  WaitTillrunning, cancelWaitTill: boolean;
+
+  procedure globalmsg(str:string);
 
 implementation
 
@@ -298,6 +302,11 @@ begin
   result:=(a.min=b.min)and(a.max=b.max)and(a.step=b.step);
 end;
 
+
+procedure globalmsg(str:string);
+begin
+  if Assigned(onMsgGlobal) then onMsgGlobal(str);
+end;
 
 ////////////////////  TTarget  /////////////////////////////
 

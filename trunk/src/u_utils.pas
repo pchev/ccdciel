@@ -89,7 +89,8 @@ procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 procedure Sun(jdn:double; out ra,de:double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
-function TwilightAstro(dt:TDateTime; HMorning,HEvening:double):boolean;
+function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
+procedure SecondsToWait(dt: TDateTime; out wt: Integer; out nextday:boolean);
 
 implementation
 
@@ -1245,7 +1246,7 @@ begin
   end;
 end;
 
-function TwilightAstro(dt:TDateTime; HMorning,HEvening:double):boolean;
+function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
 var jd0,sra,sde,hp1,hp2: double;
     Year, Month, Day: Word;
 begin
@@ -1272,6 +1273,23 @@ begin
  end;
 end;
 
+procedure SecondsToWait(dt: TDateTime; out wt: Integer; out nextday:boolean);
+var endt,nowt,nowd: TDateTime;
+begin
+  endt:=dt;
+  nowd:=now;
+  nowt:=frac(nowd);
+  nowd:=trunc(nowd);
+  nextday:=false;
+  if (nowt>endt)and(abs(nowt-endt)>0.5) then begin
+    endt:=nowd+1+endt;
+    nextday:=true;
+  end
+  else begin
+    endt:=nowd+endt;
+  end;
+  wt:=round((endt-now)*secperday);
+end;
 
 end.
 

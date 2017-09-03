@@ -67,7 +67,6 @@ type
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
-    pause:Tf_pause;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyMsg;
     FonScriptExecute: TNotifyEvent;
@@ -85,7 +84,7 @@ type
     LastErr:string;
     strllist: array of TStringList;
     Waitrunning, cancelWait: boolean;
-    WaitTillrunning, cancelWaitTill: boolean;
+
     RunProcess: TProcess;
     procedure msg(str:string);
     function doGetS(varname:string; var str: string):Boolean;
@@ -225,8 +224,6 @@ begin
   for i:=0 to 9 do strllist[i]:=TStringList.Create;
   Waitrunning:=false;
   cancelWait:=false;
-  WaitTillrunning:=false;
-  cancelWaitTill:=false;
   scr:=TPSScriptDebugger.Create(self);
   scr.OnCompile:=@TplPSScriptCompile;
   scr.OnExecute:=@TplPSScriptExecute;
@@ -652,57 +649,8 @@ begin
 end;
 
 function Tf_scriptengine.doWaitTill(hour:string; showdialog: boolean):boolean;
-var endt,nowt,nowd: TDateTime;
-    daystr:string;
-    wt:integer;
 begin
- try
-  daystr:='';
-  endt:=StrToTime(hour,':');
-  nowd:=now;
-  nowt:=frac(nowd);
-  nowd:=trunc(nowd);
-  if (nowt>endt)and(abs(nowt-endt)>0.5) then begin
-    endt:=nowd+1+endt;
-    daystr:='tomorrow ';
-  end
-  else begin
-    endt:=nowd+endt;
-  end;
-  wt:=round((endt-now)*secperday);
-  if wt>0 then begin
-    WaitTillrunning:=true;
-    if showdialog then begin
-      pause:=Tf_pause.Create(self);
-      try
-      pause.Text:='Need to wait until '+daystr+hour;
-      result:=pause.Wait(wt)
-      finally
-      WaitTillrunning:=false;
-      FreeAndNil(pause);
-      end;
-    end
-    else begin
-      msg('Need to wait until '+daystr+hour);
-      while now<endt do begin
-        Sleep(100);
-        Application.ProcessMessages;
-        if cancelWaitTill then begin
-          WaitTillrunning:=false;
-          cancelWaitTill:=false;
-          result:=false;
-          exit;
-        end;
-      end;
-     WaitTillrunning:=false;
-     result:=true;
-    end;
-  end;
- except
-   WaitTillrunning:=false;
-   cancelWaitTill:=false;
-   result:=false;
- end;
+ result:=WaitTill(hour,showdialog);
 end;
 
 function Tf_scriptengine.RunScript(sname,path: string):boolean;
@@ -761,8 +709,8 @@ begin
   scr.Stop;
   if Waitrunning then cancelWait:=true;
   if WaitTillrunning then begin
-    if pause<>nil
-     then pause.BtnCancel.Click
+    if f_pause<>nil
+     then f_pause.BtnCancel.Click
      else cancelWaitTill:=true;
   end;
   if RunProcess<>nil then RunProcess.Active:=false;

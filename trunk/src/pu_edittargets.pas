@@ -27,7 +27,7 @@ interface
 
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, pu_scriptengine,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  maskedit, Grids, ExtCtrls, ComCtrls;
+  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn;
 
 type
 
@@ -48,6 +48,10 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    SeqStart: TCheckBox;
+    SeqStop: TCheckBox;
+    SeqStartTwilight: TCheckBox;
+    SeqStopTwilight: TCheckBox;
     CheckBoxRepeatList: TCheckBox;
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
@@ -90,6 +94,8 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TargetList: TStringGrid;
+    SeqStartAt: TTimeEdit;
+    SeqStopAt: TTimeEdit;
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCopyPlanClick(Sender: TObject);
@@ -106,6 +112,10 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
+    procedure SeqStartChange(Sender: TObject);
+    procedure SeqStartTwilightChange(Sender: TObject);
+    procedure SeqStopChange(Sender: TObject);
+    procedure SeqStopTwilightChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
@@ -571,6 +581,34 @@ procedure Tf_EditTargets.RepeatCountListChange(Sender: TObject);
 begin
   if CheckBoxRepeatList.Checked then
     FTargetsRepeat:=StrToIntDef(RepeatCountList.Text,1);
+end;
+
+procedure Tf_EditTargets.SeqStartChange(Sender: TObject);
+begin
+  SeqStartTwilight.Enabled:=SeqStart.Checked;
+  SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
+end;
+
+procedure Tf_EditTargets.SeqStopChange(Sender: TObject);
+begin
+  SeqStopTwilight.Enabled:=SeqStop.Checked;
+  SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
+end;
+
+procedure Tf_EditTargets.SeqStartTwilightChange(Sender: TObject);
+var he,hm: double;
+begin
+  SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
+  if SeqStartTwilight.Checked and TwilightAstro(now,hm,he) then
+     SeqStartAt.Time:=he/24;
+end;
+
+procedure Tf_EditTargets.SeqStopTwilightChange(Sender: TObject);
+var he,hm: double;
+begin
+  SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
+  if SeqStopTwilight.Checked and TwilightAstro(now,hm,he) then
+     SeqStopAt.Time:=hm/24;
 end;
 
 end.
