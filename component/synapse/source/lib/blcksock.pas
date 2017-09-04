@@ -1,9 +1,9 @@
 {==============================================================================|
-| Project : Ararat Synapse                                       | 009.008.004 |
+| Project : Ararat Synapse                                       | 009.010.000 |
 |==============================================================================|
 | Content: Library base                                                        |
 |==============================================================================|
-| Copyright (c)1999-2011, Lukas Gebauer                                        |
+| Copyright (c)1999-2017, Lukas Gebauer                                        |
 | All rights reserved.                                                         |
 |                                                                              |
 | Redistribution and use in source and binary forms, with or without           |
@@ -33,7 +33,7 @@
 | DAMAGE.                                                                      |
 |==============================================================================|
 | The Initial Developer of the Original Code is Lukas Gebauer (Czech Republic).|
-| Portions created by Lukas Gebauer are Copyright (c)1999-2011.                |
+| Portions created by Lukas Gebauer are Copyright (c)1999-2017.                |
 | All Rights Reserved.                                                         |
 |==============================================================================|
 | Contributor(s):                                                              |
@@ -81,6 +81,8 @@ Core with implementation basic socket classes.
 {$Q-}
 {$H+}
 {$M+}
+{$TYPEDADDRESS OFF}
+
 
 //old Delphi does not have MSWINDOWS define.
 {$IFDEF WIN32}
@@ -111,7 +113,7 @@ uses
 
 const
 
-  SynapseRelease = '38';
+  SynapseRelease = '40';
 
   cLocalhost = '127.0.0.1';
   cAnyHost = '0.0.0.0';
@@ -242,6 +244,7 @@ type
     LT_SSLv3,
     LT_TLSv1,
     LT_TLSv1_1,
+    LT_TLSv1_2,
     LT_SSHv2
     );
 
@@ -312,6 +315,7 @@ type
     FStopFlag: Boolean;
     FNonblockSendTimeout: Integer;
     FHeartbeatRate: integer;
+    FConnectionTimeout: integer;
     {$IFNDEF ONCEWINSOCK}
     FWsaDataOnce: TWSADATA;
     {$ENDIF}
@@ -348,6 +352,7 @@ type
     function TestStopFlag: Boolean;
     procedure InternalSendStream(const Stream: TStream; WithSize, Indy: boolean); virtual;
     function InternalCanRead(Timeout: Integer): Boolean; virtual;
+    function InternalCanWrite(Timeout: Integer): Boolean; virtual;
   public
     constructor Create;
 
@@ -829,6 +834,10 @@ type
     {:Timeout for data sending by non-blocking socket mode.}
     property NonblockSendTimeout: Integer read FNonblockSendTimeout Write FNonblockSendTimeout;
 
+    {:Timeout for @link(Connect) call. Default value 0 means default system timeout.
+     Non-zero value means timeout in millisecond.}
+    property ConnectionTimeout: Integer read FConnectionTimeout write FConnectionTimeout;
+
     {:This event is called by various reasons. It is good for monitoring socket,
      create gauges for data transfers, etc.}
     property OnStatus: THookSocketStatus read FOnStatus write FOnStatus;
@@ -1297,12 +1306,19 @@ type
     {:Return subject of remote SSL peer.}
     function GetPeerSubject: string; virtual;
 
+    {:Return Serial number if remote X509 certificate.}
+    function GetPeerSerialNo: integer; virtual;
+
     {:Return issuer certificate of remote SSL peer.}
     function GetPeerIssuer: string; virtual;
 
     {:Return peer name from remote side certificate. This is good for verify,
      if certificate is generated for remote side IP name.}
     function GetPeerName: string; virtual;
+
+    {:Returns has of peer name from remote side certificate. This is good
+     for fast remote side authentication.}
+    function GetPeerNameHash: cardinal; virtual;
 
     {:Return fingerprint of remote SSL peer.}
     function GetPeerFingerprint: string; virtual;
@@ -1538,6 +1554,7 @@ begin
   FStopFlag := False;
   FNonblockSendTimeout := 15000;
   FHeartbeatRate := 0;
+  FConnectionTimeout := 0;
   FOwner := nil;
 {$IFNDEF ONCEWINSOCK}
   if Stub = '' then
@@ -1905,13 +1922,26 @@ end;
 procedure TBlockSocket.Connect(IP, Port: string);
 var
   Sin: TVarSin;
+  b: boolean;
 begin
   SetSin(Sin, IP, Port);
   if FLastError = 0 then
   begin
     if FSocket = INVALID_SOCKET then
       InternalCreateSocket(Sin);
-    SockCheck(synsock.Connect(FSocket, Sin));
+    if FConnectionTimeout > 0 then
+    begin
+      // connect in non-blocking mode
+      b := NonBlockMode;
+      NonBlockMode := true;
+      SockCheck(synsock.Connect(FSocket, Sin));
+      if (FLastError = WSAEINPROGRESS) OR (FLastError = WSAEWOULDBLOCK) then
+        if not CanWrite(FConnectionTimeout) then
+          FLastError := WSAETIMEDOUT;
+      NonBlockMode := b;
+    end
+    else
+      SockCheck(synsock.Connect(FSocket, Sin));
     if FLastError = 0 then
       GetSins;
     FBuffer := '';
@@ -2682,7 +2712,7 @@ end;
 
 function TBlockSocket.ResolveIPToName(IP: string): string;
 begin
-  if not IsIP(IP) or not IsIp6(IP) then
+  if not IsIP(IP) and not IsIp6(IP) then
     IP := ResolveName(IP);
   Result := synsock.ResolveIPToName(IP, FamilyToAF(FFamily), GetSocketProtocol, GetSocketType);
 end;
@@ -2772,7 +2802,7 @@ begin
     DoStatus(HR_CanRead, '');
 end;
 
-function TBlockSocket.CanWrite(Timeout: Integer): Boolean;
+function TBlockSocket.InternalCanWrite(Timeout: Integer): Boolean;
 {$IFDEF CIL}
 begin
   Result := FSocket.Poll(Timeout * 1000, SelectMode.SelectWrite);
@@ -2795,6 +2825,38 @@ begin
     x := 0;
   Result := x > 0;
 {$ENDIF}
+end;
+
+function TBlockSocket.CanWrite(Timeout: Integer): Boolean;
+var
+  ti, tr: Integer;
+  n: integer;
+begin
+  if (FHeartbeatRate <> 0) and (Timeout <> -1) then
+  begin
+    ti := Timeout div FHeartbeatRate;
+    tr := Timeout mod FHeartbeatRate;
+  end
+  else
+  begin
+    ti := 0;
+    tr := Timeout;
+  end;
+  Result := InternalCanWrite(tr);
+  if not Result then
+    for n := 0 to ti do
+    begin
+      DoHeartbeat;
+      if FStopFlag then
+      begin
+        Result := False;
+        FStopFlag := False;
+        Break;
+      end;
+      Result := InternalCanWrite(FHeartbeatRate);
+      if Result then
+        break;
+    end;
   ExceptCheck;
   if Result then
     DoStatus(HR_CanWrite, '');
@@ -3622,7 +3684,8 @@ begin
   else
   begin
     Multicast.imr_multiaddr.S_addr := swapbytes(strtoip(MCastIP));
-    Multicast.imr_interface.S_addr := INADDR_ANY;
+//    Multicast.imr_interface.S_addr := INADDR_ANY;
+    Multicast.imr_interface.S_addr := FLocalSin.sin_addr.S_addr;
     SockCheck(synsock.SetSockOpt(FSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
       PAnsiChar(@Multicast), SizeOf(Multicast)));
   end;
@@ -3648,7 +3711,8 @@ begin
   else
   begin
     Multicast.imr_multiaddr.S_addr := swapbytes(strtoip(MCastIP));
-    Multicast.imr_interface.S_addr := INADDR_ANY;
+//    Multicast.imr_interface.S_addr := INADDR_ANY;
+    Multicast.imr_interface.S_addr := FLocalSin.sin_addr.S_addr;
     SockCheck(synsock.SetSockOpt(FSocket, IPPROTO_IP, IP_DROP_MEMBERSHIP,
       PAnsiChar(@Multicast), SizeOf(Multicast)));
   end;
@@ -3876,7 +3940,7 @@ begin
       FHTTPTunnel := s[10] = '2';
   until (s = '') or (s = #$0d);
   if (FLasterror = 0) and not FHTTPTunnel then
-    FLastError := WSASYSNOTREADY;
+    FLastError := WSAECONNREFUSED;
   FHTTPTunnelRemoteIP := IP;
   FHTTPTunnelRemotePort := Port;
   ExceptCheck;
@@ -4224,9 +4288,19 @@ begin
   Result := '';
 end;
 
+function TCustomSSL.GetPeerSerialNo: integer;
+begin
+  Result := -1;
+end;
+
 function TCustomSSL.GetPeerName: string;
 begin
   Result := '';
+end;
+
+function TCustomSSL.GetPeerNameHash: cardinal;
+begin
+  Result := 0;
 end;
 
 function TCustomSSL.GetPeerIssuer: string;
