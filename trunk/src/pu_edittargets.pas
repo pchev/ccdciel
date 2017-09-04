@@ -193,8 +193,8 @@ if ObjEndSet.Checked then begin
      ShowMessage('Invalid object coordinates!');
      ObjEndSet.Checked:=false;
   end;
-  ObjRiseSet(ra,de,hr,hs);
-  ObjEndTime.Text:=TimeToStr(hs/24);
+  if ObjRiseSet(ra,de,hr,hs) then
+     ObjEndTime.Text:=TimeToStr(hs/24);
 end;
 TargetChange(Sender);
 end;
@@ -209,8 +209,8 @@ if ObjStartRise.Checked then begin
      ShowMessage('Invalid object coordinates!');
      ObjStartRise.Checked:=false;
   end;
-  ObjRiseSet(ra,de,hr,hs);
-  ObjStartTime.Text:=TimeToStr(hr/24);
+  if ObjRiseSet(ra,de,hr,hs) then
+     ObjStartTime.Text:=TimeToStr(hr/24);
 end;
 TargetChange(Sender);
 end;

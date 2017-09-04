@@ -93,7 +93,8 @@ procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(dt: TDateTime; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
-procedure ObjRiseSet(ra,de: double; out hr,hs:double);
+function ObjRiseSet(ra,de: double; out hr,hs:double):boolean;
+
 
 implementation
 
@@ -1473,12 +1474,19 @@ begin
   end;
 end;
 
-procedure ObjRiseSet(ra,de: double; out hr,hs:double);
-var jd0,ht,azr,azs: double;
+function ObjRiseSet(ra,de: double; out hr,hs:double):boolean;
+var jd0,ht,azr,azs,hhr,hhs: double;
     i: integer;
 begin
+{ TODO : take account for minimum altitude and horizon file }
+  result:=false;
   jd0:=DateTimetoJD0(now);
-  RiseSet(jd0,ra*15*deg2rad,de*deg2rad,hr,ht,hs,azr,azs,i);
+  RiseSet(jd0,ra*15*deg2rad,de*deg2rad,hhr,ht,hhs,azr,azs,i);
+  if i=0 then begin
+     hr:=hhr;
+     hs:=hhs;
+     result:=true;
+  end;
 end;
 
 end.
