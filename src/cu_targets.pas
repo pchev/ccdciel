@@ -37,6 +37,7 @@ type
       TargetTimer: TTimer;
       TargetRepeatTimer: TTimer;
       StopTimer: TTimer;
+      StopTargetTimer: TTimer;
       FTargetsChange: TNotifyEvent;
       FPlanChange: TNotifyEvent;
       FonMsg,FDelayMsg: TNotifyMsg;
@@ -75,6 +76,7 @@ type
       procedure TargetRepeatTimerTimer(Sender: TObject);
       procedure StartPlanTimerTimer(Sender: TObject);
       procedure StopTimerTimer(Sender: TObject);
+      procedure StopTargetTimerTimer(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -161,6 +163,9 @@ begin
   StopTimer:=TTimer.Create(self);
   StopTimer.Enabled:=false;
   StopTimer.OnTimer:=@StopTimerTimer;
+  StopTargetTimer:=TTimer.Create(self);
+  StopTargetTimer.Enabled:=false;
+  StopTargetTimer.OnTimer:=@StopTargetTimerTimer;
 end;
 
 destructor  T_Targets.Destroy;
@@ -348,6 +353,7 @@ procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
 begin
  StopTimer.Enabled:=false;
+ StopTargetTimer.Enabled:=false;
  if FRunning then begin
    if WaitTillrunning then begin
      if wt_pause<>nil
@@ -407,6 +413,7 @@ procedure T_Targets.NextTarget;
 var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
+  StopTargetTimer.Enabled:=false;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
    if Targets[FCurrentTarget].objectname='Script' then begin
@@ -447,7 +454,7 @@ begin
        msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
        if FUnattended then begin
          FInitializing:=false;
-         StopSequence(true);
+         NextTarget;
          exit;
        end else begin
          FInitializing:=false;
@@ -487,7 +494,9 @@ end;
 
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
-    ok:boolean;
+    ok,wtok,nd:boolean;
+    rsok,stw: integer;
+    hr,hs: double;
     autofocusstart, astrometrypointing, autostartguider: boolean;
 begin
   result:=false;
@@ -495,6 +504,35 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
+    // adjust rise/set time
+    if (t.startrise or t.endset)and(t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+       if ObjRiseSet(t.ra,t.de,hr,hs) then begin
+          if t.startrise then t.starttime:=hr/24;
+          if t.endset then t.endtime:=hs/24;
+       end;
+    end;
+    if t.starttime<>0 then begin
+      msg('Wait to start at '+TimeToStr(t.starttime));
+      wtok:=WaitTill(TimeToStr(t.starttime),true);
+      if not wtok then begin
+         msg('Target '+t.objectname+' canceled before start');
+         result:=false;
+         exit;
+      end;
+    end;
+    if t.endtime<>24 then begin
+       SecondsToWait(t.endtime,stw,nd);
+       if stw>0 then begin
+          StopTargetTimer.Interval:=1000*stw;
+          StopTargetTimer.Enabled:=true;
+       end else begin
+         msg('Target '+t.objectname+' canceled before start');
+         msg('Stop time '+TimeToStr(t.endtime)+' already passed');
+         result:=false;
+         exit;
+       end;
+    end;
+
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
       if Autoguider<>nil then begin
         // stop guiding
@@ -522,6 +560,13 @@ begin
     end;
     result:=true;
   end;
+end;
+
+procedure T_Targets.StopTargetTimerTimer(Sender: TObject);
+begin
+  StopTargetTimer.Enabled:=false;
+  msg('Stop the current target at '+TimeToStr(now));
+  ForceNextTarget;
 end;
 
 procedure T_Targets.StartPlanTimerTimer(Sender: TObject);
