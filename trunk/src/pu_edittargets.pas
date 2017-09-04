@@ -27,7 +27,7 @@ interface
 
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, pu_scriptengine,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn;
+  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, ExtDlgs;
 
 type
 
@@ -49,6 +49,7 @@ type
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
     SeqStart: TCheckBox;
+    SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
     SeqStartTwilight: TCheckBox;
     SeqStopTwilight: TCheckBox;
@@ -91,11 +92,10 @@ type
     PreviewExposure: TEdit;
     RepeatCount: TEdit;
     StartTime: TMaskEdit;
+    SeqStartAt: TMaskEdit;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TargetList: TStringGrid;
-    SeqStartAt: TTimeEdit;
-    SeqStopAt: TTimeEdit;
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCopyPlanClick(Sender: TObject);
@@ -600,7 +600,7 @@ var he,hm: double;
 begin
   SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
   if SeqStartTwilight.Checked and TwilightAstro(now,hm,he) then
-     SeqStartAt.Time:=he/24;
+     SeqStartAt.Text:=TimeToStr(he/24);
 end;
 
 procedure Tf_EditTargets.SeqStopTwilightChange(Sender: TObject);
@@ -608,7 +608,7 @@ var he,hm: double;
 begin
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
   if SeqStopTwilight.Checked and TwilightAstro(now,hm,he) then
-     SeqStopAt.Time:=hm/24;
+     SeqStopAt.Text:=TimeToStr(hm/24);
 end;
 
 end.
