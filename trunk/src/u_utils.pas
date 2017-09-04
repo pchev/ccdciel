@@ -1258,7 +1258,7 @@ begin
  begin
    HMorning:=0;
    HEvening:=24;
-   result:=true;
+   result:=false;
  end
  else if hp1>90 then // polar day
  begin

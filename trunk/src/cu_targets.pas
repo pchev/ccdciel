@@ -274,30 +274,49 @@ begin
   FTargetDE:=NullCoord;
   FRunning:=true;
   twok:=TwilightAstro(now,hm,he);
-  if FSeqStartTwilight and twok then
-     FSeqStartAt:=he/24;
-  if FSeqStopTwilight and twok then
-     FSeqStopAt:=hm/24;
-  if FSeqStart then begin
-     msg('Wait to start sequence '+FName+' at '+TimeToStr(FSeqStartAt));
-     wtok:=WaitTill(TimeToStr(FSeqStartAt),true);
-     if not wtok then begin
+  if twok then begin
+    if FSeqStartTwilight then
+       FSeqStartAt:=he/24;
+    if FSeqStopTwilight then
+       FSeqStopAt:=hm/24;
+    if FSeqStart then begin
+       msg('Wait to start sequence '+FName+' at '+TimeToStr(FSeqStartAt));
+       wtok:=WaitTill(TimeToStr(FSeqStartAt),true);
+       if not wtok then begin
+          msg('Sequence '+FName+' canceled before start');
+          FRunning:=false;
+          exit;
+       end;
+    end;
+    if FSeqStop then begin
+       SecondsToWait(FSeqStopAt,stw,nd);
+       if stw>0 then begin
+          StopTimer.Interval:=1000*stw;
+          StopTimer.Enabled:=true;
+       end else begin
+         msg('Sequence '+FName+' canceled before start');
+         msg('Stop time '+TimeToStr(FSeqStopAt)+' already passed');
+         FRunning:=false;
+         exit;
+       end;
+    end;
+  end else begin
+    if FSeqStartTwilight then begin
+      if hm<>0 then begin
         msg('Sequence '+FName+' canceled before start');
+        msg('No dusk today');
         FRunning:=false;
         exit;
-     end;
-  end;
-  if FSeqStop then begin
-     SecondsToWait(FSeqStopAt,stw,nd);
-     if stw>0 then begin
-        StopTimer.Interval:=1000*stw;
-        StopTimer.Enabled:=true;
-     end else begin
-       msg('Sequence '+FName+' canceled before start');
-       msg('Stop time '+TimeToStr(FSeqStopAt)+' already passed');
-       FRunning:=false;
-       exit;
-     end;
+      end else begin
+        msg('Sequence '+FName+' start immediatelly');
+        msg('No dusk today');
+      end;
+    end;
+    if FSeqStopTwilight then begin
+      msg('Sequence '+FName+' ignore stop at dawn');
+      msg('No dawn today');
+      StopTimer.Enabled:=false;
+    end;
   end;
   if FTargetsRepeat=1 then
     msg('Starting sequence '+FName)
