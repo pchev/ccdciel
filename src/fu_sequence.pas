@@ -368,6 +368,8 @@ begin
        t.path:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
        t.starttime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''));
        t.endtime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''));
+       t.startrise:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
+       t.endset:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
        if x='-' then
          t.ra:=NullCoord
@@ -498,6 +500,8 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Path',t.path);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TimetoStr(t.endtime));
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartRise',t.startrise);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);

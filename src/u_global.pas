@@ -96,6 +96,7 @@ type
               public
               objectname, planname, path: string;
               starttime,endtime,ra,de: double;
+              startrise,endset: boolean;
               repeatcount: integer;
               preview,astrometrypointing: boolean;
               delay, previewexposure: double;
@@ -112,6 +113,8 @@ type
                  ra,de: double;
                  id: string;
                end;
+
+  Thorizonlist = array [0..361] of single;
 
 
   // libcdcwcs
@@ -175,6 +178,7 @@ const
   pid2 = pi / 2;
   rad2deg=180/pi;
   deg2rad=pi/180;
+  musec = deg2rad / 3600 / 1000000; // 1 microarcsec for rounding test
   jd2000 = 2451545.0;
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
@@ -292,6 +296,8 @@ var
   FocusStarsBlacklist: string;
   AutofocusTolerance: integer;
   WaitTillrunning, cancelWaitTill: boolean;
+  horizonlist: Thorizonlist;
+  HorizonMax: double;
 
   procedure globalmsg(str:string);
 
@@ -345,6 +351,8 @@ begin
   plan:=Source.plan;
   starttime:=Source.starttime;
   endtime:=Source.endtime;
+  startrise:=Source.startrise;
+  endset:=Source.endset;
   ra:=Source.ra;
   de:=Source.de;
   astrometrypointing:=source.astrometrypointing;

@@ -27,7 +27,7 @@ interface
 
 uses u_utils, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, ValEdit, Grids, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, ValEdit, Grids, EditBtn, enhedits;
 
 type
 
@@ -50,6 +50,8 @@ type
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
     CameraAutoCool: TCheckBox;
+    HorizonFile: TFileNameEdit;
+    Label76: TLabel;
     MeridianFlipAutofocus: TCheckBox;
     MeridianFlipCalibrate: TCheckBox;
     TemperatureSlopeActive: TCheckBox;
