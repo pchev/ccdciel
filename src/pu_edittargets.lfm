@@ -137,47 +137,49 @@ object f_EditTargets: Tf_EditTargets
         OnChange = SeqStopChange
         TabOrder = 3
       end
-      object SeqStartAt: TTimeEdit
-        Left = 98
-        Height = 24
-        Top = 8
-        Width = 103
-        ButtonWidth = 23
-        NumGlyphs = 1
-        Enabled = False
-        MaxLength = 0
-        TabOrder = 4
-      end
-      object SeqStopAt: TTimeEdit
-        Left = 98
-        Height = 24
-        Top = 32
-        Width = 103
-        ButtonWidth = 23
-        NumGlyphs = 1
-        Enabled = False
-        MaxLength = 0
-        TabOrder = 5
-      end
       object SeqStartTwilight: TCheckBox
-        Left = 207
+        Left = 192
         Height = 21
         Top = 8
         Width = 53
         Caption = 'dusk'
         Enabled = False
         OnChange = SeqStartTwilightChange
-        TabOrder = 6
+        TabOrder = 4
       end
       object SeqStopTwilight: TCheckBox
-        Left = 207
+        Left = 192
         Height = 21
         Top = 32
         Width = 57
         Caption = 'dawn'
         Enabled = False
         OnChange = SeqStopTwilightChange
+        TabOrder = 5
+      end
+      object SeqStartAt: TMaskEdit
+        Left = 98
+        Height = 24
+        Top = 8
+        Width = 70
+        CharCase = ecNormal
+        MaxLength = 8
+        TabOrder = 6
+        EditMask = '00:00:00;1;_'
+        Text = '  :  :  '
+        SpaceChar = '_'
+      end
+      object SeqStopAt: TMaskEdit
+        Left = 98
+        Height = 24
+        Top = 32
+        Width = 70
+        CharCase = ecNormal
+        MaxLength = 8
         TabOrder = 7
+        EditMask = '00:00:00;1;_'
+        Text = '  :  :  '
+        SpaceChar = '_'
       end
     end
   end
@@ -377,7 +379,6 @@ object f_EditTargets: Tf_EditTargets
           ClientHeight = 68
           ClientWidth = 312
           TabOrder = 6
-          Visible = False
           object BtnAnytime: TButton
             Left = 200
             Height = 25
