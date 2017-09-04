@@ -36,7 +36,6 @@ type
   Tf_EditTargets = class(TForm)
     BtnAnytime: TButton;
     BtnCdCCoord: TButton;
-    BtnCdCTime: TButton;
     BtnCurrentCoord: TButton;
     BtnEditPlan: TButton;
     BtnEditScript: TButton;
@@ -48,6 +47,8 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    ObjStartRise: TCheckBox;
+    ObjEndSet: TCheckBox;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
@@ -57,7 +58,7 @@ type
     CheckBoxRepeat: TCheckBox;
     Delay: TEdit;
     RepeatCountList: TEdit;
-    EndTime: TMaskEdit;
+    ObjEndTime: TMaskEdit;
     Label1: TLabel;
     Label10: TLabel;
     Label11: TLabel;
@@ -91,7 +92,7 @@ type
     Preview: TCheckBox;
     PreviewExposure: TEdit;
     RepeatCount: TEdit;
-    StartTime: TMaskEdit;
+    ObjStartTime: TMaskEdit;
     SeqStartAt: TMaskEdit;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
@@ -111,6 +112,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ObjEndSetChange(Sender: TObject);
+    procedure ObjStartRiseChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
     procedure SeqStartTwilightChange(Sender: TObject);
@@ -170,12 +173,46 @@ begin
     PageControl1.ActivePageIndex:=0;
     LabelSeq.Caption:='0';
     LabelSeq1.Caption:='0';
-    StartTime.Text:='00:00:00';
-    EndTime.Text:='23:59:59';
+    ObjStartTime.Text:='00:00:00';
+    ObjEndTime.Text:='23:59:59';
+    ObjStartRise.Checked:=false;
+    ObjEndSet.Checked:=false;
   end;
   RepeatCountList.Text:=IntToStr(FTargetsRepeat);
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
+end;
+
+procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
+var ra,de,hr,hs: double;
+begin
+if ObjEndSet.Checked then begin
+  ra:=StrToAR(PointRA.Text);
+  de:=StrToDE(PointDEC.Text);
+  if (ra=NullCoord)or(de=NullCoord) then begin
+     ShowMessage('Invalid object coordinates!');
+     ObjEndSet.Checked:=false;
+  end;
+  ObjRiseSet(ra,de,hr,hs);
+  ObjEndTime.Text:=TimeToStr(hs/24);
+end;
+TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.ObjStartRiseChange(Sender: TObject);
+var ra,de,hr,hs: double;
+begin
+if ObjStartRise.Checked then begin
+  ra:=StrToAR(PointRA.Text);
+  de:=StrToDE(PointDEC.Text);
+  if (ra=NullCoord)or(de=NullCoord) then begin
+     ShowMessage('Invalid object coordinates!');
+     ObjStartRise.Checked:=false;
+  end;
+  ObjRiseSet(ra,de,hr,hs);
+  ObjStartTime.Text:=TimeToStr(hr/24);
+end;
+TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.LoadPlanList;
@@ -455,8 +492,10 @@ end;
 
 procedure Tf_EditTargets.BtnAnytimeClick(Sender: TObject);
 begin
-  StartTime.Text:='00:00:00';
-  EndTime.Text:='23:59:59';
+  ObjStartRise.Checked:=false;
+  ObjEndSet.Checked:=false;
+  ObjStartTime.Text:='00:00:00';
+  ObjEndTime.Text:='23:59:59';
 end;
 
 procedure Tf_EditTargets.BtnCdCCoordClick(Sender: TObject);
@@ -496,8 +535,8 @@ begin
     PageControl1.ActivePageIndex:=0;
     ObjectName.Text:=t.objectname;
     SetPlanList(t.planname);
-    StartTime.Text:=TimeToStr(t.starttime);
-    EndTime.Text:=TimeToStr(t.endtime);
+    ObjStartTime.Text:=TimeToStr(t.starttime);
+    ObjEndTime.Text:=TimeToStr(t.endtime);
     if t.ra=NullCoord then
       PointRA.Text:='-'
     else
@@ -506,6 +545,8 @@ begin
       PointDEC.Text:='-'
     else
       PointDEC.Text:=DEToStr(t.de);
+    ObjStartRise.Checked:=t.startrise;
+    ObjEndSet.Checked:=t.endset;
     PointAstrometry.Checked:=t.astrometrypointing;
     RepeatCount.Text:=t.repeatcount_str;
     Delay.Text:=t.delay_str;
@@ -540,8 +581,8 @@ begin
     PageControl1.ActivePageIndex:=0;
     t.objectname:=trim(ObjectName.Text);
     t.planname:=PlanList.Text;
-    t.starttime:=StrToTime(StartTime.Text);
-    t.endtime:=StrToTime(EndTime.Text);
+    t.starttime:=StrToTime(ObjStartTime.Text);
+    t.endtime:=StrToTime(ObjEndTime.Text);
     if PointRA.Text='-' then
       t.ra:=NullCoord
     else
@@ -550,6 +591,10 @@ begin
       t.de:=NullCoord
     else
       t.de:=StrToDE(PointDEC.Text);
+    t.startrise:=ObjStartRise.Checked;
+    t.endset:=ObjEndSet.Checked;
+    ObjStartTime.Enabled:= not t.startrise;
+    ObjEndTime.Enabled:= not t.endset;
     if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
     t.astrometrypointing:=PointAstrometry.Checked;
     t.repeatcount:=StrToIntDef(RepeatCount.Text,1);

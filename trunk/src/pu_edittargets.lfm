@@ -380,15 +380,15 @@ object f_EditTargets: Tf_EditTargets
           ClientWidth = 312
           TabOrder = 6
           object BtnAnytime: TButton
-            Left = 200
+            Left = 232
             Height = 25
-            Top = 7
-            Width = 91
+            Top = 8
+            Width = 75
             Caption = 'Any time'
             OnClick = BtnAnytimeClick
             TabOrder = 0
           end
-          object EndTime: TMaskEdit
+          object ObjEndTime: TMaskEdit
             Left = 92
             Height = 24
             Top = 40
@@ -401,7 +401,7 @@ object f_EditTargets: Tf_EditTargets
             Text = '  :  :  '
             SpaceChar = '_'
           end
-          object StartTime: TMaskEdit
+          object ObjStartTime: TMaskEdit
             Left = 92
             Height = 24
             Top = 8
@@ -430,13 +430,23 @@ object f_EditTargets: Tf_EditTargets
             Caption = 'Start time'
             ParentColor = False
           end
-          object BtnCdCTime: TButton
-            Left = 202
-            Height = 25
-            Top = 38
-            Width = 91
-            Caption = 'Planetarium'
+          object ObjStartRise: TCheckBox
+            Left = 168
+            Height = 21
+            Top = 10
+            Width = 45
+            Caption = 'rise'
+            OnChange = ObjStartRiseChange
             TabOrder = 3
+          end
+          object ObjEndSet: TCheckBox
+            Left = 168
+            Height = 21
+            Top = 40
+            Width = 45
+            Caption = ' set'
+            OnChange = ObjEndSetChange
+            TabOrder = 4
           end
         end
         object Panel5: TPanel
