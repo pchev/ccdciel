@@ -166,6 +166,7 @@ type
 const
   ccdcielver = '0.9.0';
   ccdciel_version='Version beta '+ccdcielver;
+  TargetFileVersion = 2;
   blank=' ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;

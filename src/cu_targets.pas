@@ -52,6 +52,7 @@ type
       FTargetCoord: boolean;
       FTargetRA,FTargetDE: double;
       FTargetsRepeatCount: integer;
+      FFileVersion: integer;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -100,6 +101,7 @@ type
       procedure Stop;
       procedure Abort;
       procedure ForceNextTarget;
+      property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
       property SeqStartAt: TDateTime read FSeqStartAt write FSeqStartAt;
       property SeqStopAt: TDateTime read FSeqStopAt write FSeqStopAt;
@@ -511,7 +513,7 @@ begin
           if t.endset then t.endtime:=hs/24;
        end;
     end;
-    if t.starttime<>0 then begin
+    if t.starttime>=0 then begin
       msg('Wait to start at '+TimeToStr(t.starttime));
       wtok:=WaitTill(TimeToStr(t.starttime),true);
       if not wtok then begin
@@ -520,7 +522,7 @@ begin
          exit;
       end;
     end;
-    if t.endtime<>24 then begin
+    if t.endtime>=0 then begin
        SecondsToWait(t.endtime,stw,nd);
        if stw>0 then begin
           StopTargetTimer.Interval:=1000*stw;

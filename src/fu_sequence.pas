@@ -353,7 +353,8 @@ begin
    Targets.TargetName:=CurrentName;
    CurrentFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
-   Targets.TargetsRepeat:=tfile.GetValue('/RepeatCount',1);
+   Targets.FileVersion      :=tfile.GetValue('/Version',1);
+   Targets.TargetsRepeat    :=tfile.GetValue('/RepeatCount',1);
    Targets.SeqStart         := tfile.GetValue('/Startup/SeqStart',false);
    Targets.SeqStop          := tfile.GetValue('/Startup/SeqStop',false);
    Targets.SeqStartTwilight := tfile.GetValue('/Startup/SeqStartTwilight',false);
@@ -366,8 +367,13 @@ begin
        t.objectname:=trim(tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName',''));
        t.planname:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
        t.path:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
-       t.starttime:=StrToTimeDef(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''),0);
-       t.endtime:=StrToTimeDef(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''),0);
+       if Targets.FileVersion>=2 then begin
+         t.starttime:=StrToTimeDef(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''),-1);
+         t.endtime:=StrToTimeDef(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''),-1);
+       end else begin
+         t.starttime:=-1;
+         t.endtime:=-1;
+       end;
        t.startrise:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
        t.endset:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
@@ -484,6 +490,7 @@ begin
     CurrentFile:=fn;
     CurrentName:=ExtractFileNameOnly(fn);
     Targets.TargetName:=CurrentName;
+    tfile.SetValue('/Version',TargetFileVersion);
     tfile.SetValue('/ListName',CurrentName);
     tfile.SetValue('/TargetNum',Targets.Count);
     tfile.SetValue('/RepeatCount',Targets.TargetsRepeat);
@@ -498,8 +505,14 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan',t.planname);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Path',t.path);
-      tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime));
-      tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TimetoStr(t.endtime));
+      if t.starttime>=0 then
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime))
+      else
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartTime','');
+      if t.endtime>=0 then
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TimetoStr(t.endtime))
+      else
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime','');
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartRise',t.startrise);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
