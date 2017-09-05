@@ -114,6 +114,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure ObjEndSetChange(Sender: TObject);
     procedure ObjStartRiseChange(Sender: TObject);
+    procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
     procedure SeqStartTwilightChange(Sender: TObject);
@@ -184,7 +185,8 @@ begin
 end;
 
 procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
-var ra,de,hr,hs: double;
+var ra,de,hs: double;
+    i:integer;
 begin
 if ObjEndSet.Checked then begin
   ra:=StrToAR(PointRA.Text);
@@ -194,10 +196,13 @@ if ObjEndSet.Checked then begin
      ObjEndSet.Checked:=false;
      exit;
   end;
-  if ObjRiseSet(ra,de,hr,hs) then
+  if ObjSet(ra,de,hs,i) then
      ObjEndTime.Text:=TimeToStr(hs/24)
   else begin
-     ShowMessage('This object do not rise or set from this location');
+     if i=1 then
+       ShowMessage('This object is never below the requested elevation')
+     else
+       ShowMessage('This object is never above the requested elevation');
      ObjEndTime.Text:='';
   end;
 end;
@@ -205,7 +210,8 @@ TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.ObjStartRiseChange(Sender: TObject);
-var ra,de,hr,hs: double;
+var ra,de,hr: double;
+    i:integer;
 begin
 if ObjStartRise.Checked then begin
   ra:=StrToAR(PointRA.Text);
@@ -215,14 +221,24 @@ if ObjStartRise.Checked then begin
      ObjStartRise.Checked:=false;
      exit;
   end;
-  if ObjRiseSet(ra,de,hr,hs) then
+  if ObjRise(ra,de,hr,i) then
      ObjStartTime.Text:=TimeToStr(hr/24)
-     else begin
-        ShowMessage('This object do not rise or set from this location');
-        ObjStartTime.Text:='';
-     end;
+   else begin
+      if i=1 then
+        ShowMessage('This object is never below the requested elevation')
+      else
+        ShowMessage('This object is never above the requested elevation');
+      ObjStartTime.Text:='';
+   end;
 end;
 TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
+begin
+  if ObjStartRise.Checked then ObjStartRiseChange(Sender);
+  if ObjEndSet.Checked then ObjEndSetChange(Sender);
+  TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.LoadPlanList;

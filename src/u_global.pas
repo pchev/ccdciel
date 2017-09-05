@@ -298,7 +298,7 @@ var
   AutofocusTolerance: integer;
   WaitTillrunning, cancelWaitTill: boolean;
   horizonlist: Thorizonlist;
-  HorizonMax: double;
+  HorizonMax, HorizonMin, ElevationMin: double;
 
   procedure globalmsg(str:string);
 

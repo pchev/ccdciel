@@ -497,7 +497,7 @@ end;
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
-    stw: integer;
+    stw,i: integer;
     hr,hs: double;
     autofocusstart, astrometrypointing, autostartguider: boolean;
 begin
@@ -507,11 +507,11 @@ begin
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
     // adjust rise/set time
-    if (t.startrise or t.endset)and(t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-       if ObjRiseSet(t.ra,t.de,hr,hs) then begin
-          if t.startrise then t.starttime:=hr/24;
-          if t.endset then t.endtime:=hs/24;
-       end;
+    if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+       if t.startrise and ObjRise(t.ra,t.de,hr,i) then
+          t.starttime:=hr/24;
+       if t.endset and ObjSet(t.ra,t.de,hs,i) then
+          t.endtime:=hs/24;
     end;
     if t.starttime>=0 then begin
       msg('Wait to start at '+TimeToStr(t.starttime));

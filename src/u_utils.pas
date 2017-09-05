@@ -93,7 +93,8 @@ procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
-function ObjRiseSet(ra,de: double; out hr,hs:double):boolean;
+function ObjRise(ra,de: double; out hr:double; out i:integer):boolean;
+function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
 
 
 implementation
@@ -1016,7 +1017,7 @@ sd:=sin(l1)*sin(h1)-cos(l1)*cos(h1)*cos(a1);
 if abs(sd)<1 then
 de:= arcsin(sd)
 else
- h:=sgn(sd)*pi/2;
+  h:=sgn(sd)*pi/2;
 hh:= arctan2(sin(a1),cos(a1)*sin(l1)+tan(h1)*cos(l1));
 hh:=Rmod(hh+pi2,pi2);
 END ;
@@ -1310,6 +1311,7 @@ var
   buf: string;
 begin
   HorizonMax := musec;
+  HorizonMin := pid2;
   for i := 1 to 360 do
     horizonlist[i] := 0;
   if fileexists(fname) then
@@ -1365,6 +1367,7 @@ begin
           de := deg2rad * (d1 + (i - i1) * (d2 - d1) / (i2 - i1));
           horizonlist[i + 1] := de;
           HorizonMax := max(HorizonMax, de);
+          HorizonMin := min(HorizonMin, de);
         end;
         i1 := i2;
         d1 := d2;
@@ -1380,6 +1383,7 @@ begin
           de := deg2rad * (d1 + (i - i1) * (d0 - d1) / (359 - i1));
           horizonlist[i + 1] := de;
           HorizonMax := max(HorizonMax, de);
+          HorizonMin := min(HorizonMin, de);
         end;
       end;
       horizonlist[361] := horizonlist[1];
@@ -1387,12 +1391,12 @@ begin
   end;
 end;
 
-procedure RiseSet(jd0, ar, de: double; out hr, ht, hs, azr, azs: double; out irc: integer );
+procedure RiseTime(jd0, ar, de, alt: double; out hr, azr: double; out irc: integer );
 var
-  hoo, hs0, chh0, hh0, m0, m1, m2, a0: double;
+  hoo, hs0, chh0, hh0, m0, m1,  a0: double;
   hsg, hl, h, dm, longref: double;
 begin
-  hoo := 0;
+  hoo := alt;
   Refraction(hoo, False);
   hoo := rad2deg * hoo;
   longref := -ObsTimeZone * 15;
@@ -1404,19 +1408,10 @@ begin
     hh0 := arccos(chh0);
     m0 := (ar + deg2rad * ObsLongitude - deg2rad * longref - hs0) / pi2;
     m1 := m0 - hh0 / pi2;
-    m2 := m0 + hh0 / pi2;
-    while m0 < 0 do
-      m0 := m0 + 1;
-    while m0 > 1 do
-      m0 := m0 - 1;
     while m1 < 0 do
       m1 := m1 + 1;
     while m1 > 1 do
       m1 := m1 - 1;
-    while m2 < 0 do
-      m2 := m2 + 1;
-    while m2 > 1 do
-      m2 := m2 - 1;
     // rise
     hsg := hs0 + deg2rad * 360.985647 * m1;
     hl := hsg - deg2rad * Obslongitude + deg2rad * longref - ar;
@@ -1424,15 +1419,44 @@ begin
       cos(deg2rad * Obslatitude) * cos(de) * cos(hl)));
     dm := (h - hoo) / (360 * cos(de) * cos(deg2rad * Obslatitude) * sin(hl));
     hr := (m1 + dm) * 24;
-    // transit
-    hsg := hs0 + deg2rad * 360.985647 * m0;
-    hl := hsg - deg2rad * Obslongitude + deg2rad * longref - ar;
-    dm := -(hl / pi2);
-    ht := rmod((m0 + dm) * 24 + 24, 24);
-    if (ht < 10) and (m0 > 0.6) then
-      ht := ht + 24;
-    if (ht > 14) and (m0 < 0.4) then
-      ht := ht - 24;
+    // azimuth
+    a0 := arctan2(sin(hh0), cos(hh0) * sin(deg2rad * Obslatitude) -
+      tan(de) * cos(deg2rad * Obslatitude));
+    azr := pi2 - a0;
+    irc := 0;
+  end
+  else
+  begin
+    hr := 0;
+    azr := 0;
+    if sgn(de) = sgn(ObsLatitude) then
+      irc := 1  (* circumpolar *)
+    else
+      irc := 2; (* invisible *)
+  end;
+end;
+
+procedure SetTime(jd0, ar, de, alt: double; out hs, azs: double; out irc: integer );
+var
+  hoo, hs0, chh0, hh0, m0, m2, a0: double;
+  hsg, hl, h, dm, longref: double;
+begin
+  hoo := alt;
+  Refraction(hoo, False);
+  hoo := rad2deg * hoo;
+  longref := -ObsTimeZone * 15;
+  hs0 := sidtim(jd0, -ObsTimeZone, longref);
+  chh0 := (sin(deg2rad * hoo) - sin(deg2rad * ObsLatitude) * sin(de)) /
+    (cos(deg2rad * ObsLatitude) * cos(de));
+  if abs(chh0) <= 1 then
+  begin
+    hh0 := arccos(chh0);
+    m0 := (ar + deg2rad * ObsLongitude - deg2rad * longref - hs0) / pi2;
+    m2 := m0 + hh0 / pi2;
+    while m2 < 0 do
+      m2 := m2 + 1;
+    while m2 > 1 do
+      m2 := m2 - 1;
     // set
     hsg := hs0 + deg2rad * 360.985647 * m2;
     hl := hsg - deg2rad * Obslongitude + deg2rad * longref - ar;
@@ -1443,16 +1467,52 @@ begin
     // azimuth
     a0 := arctan2(sin(hh0), cos(hh0) * sin(deg2rad * Obslatitude) -
       tan(de) * cos(deg2rad * Obslatitude));
-    azr := pi2 - a0;
     azs := a0;
     irc := 0;
   end
   else
   begin
-    hr := 0;
     hs := 0;
-    azr := 0;
     azs := 0;
+    if sgn(de) = sgn(ObsLatitude) then
+      irc := 1  (* circumpolar *)
+    else
+      irc := 2; (* invisible *)
+  end;
+end;
+
+procedure TransitTime(jd0, ar, de: double; out ht: double; out irc: integer );
+var
+  hoo, hs0, chh0,  m0: double;
+  hsg, hl, dm, longref: double;
+begin
+  hoo := 0;
+  Refraction(hoo, False);
+  hoo := rad2deg * hoo;
+  longref := -ObsTimeZone * 15;
+  hs0 := sidtim(jd0, -ObsTimeZone, longref);
+  chh0 := (sin(deg2rad * hoo) - sin(deg2rad * ObsLatitude) * sin(de)) /
+    (cos(deg2rad * ObsLatitude) * cos(de));
+  if abs(chh0) <= 1 then
+  begin
+    m0 := (ar + deg2rad * ObsLongitude - deg2rad * longref - hs0) / pi2;
+    while m0 < 0 do
+      m0 := m0 + 1;
+    while m0 > 1 do
+      m0 := m0 - 1;
+    // transit
+    hsg := hs0 + deg2rad * 360.985647 * m0;
+    hl := hsg - deg2rad * Obslongitude + deg2rad * longref - ar;
+    dm := -(hl / pi2);
+    ht := rmod((m0 + dm) * 24 + 24, 24);
+    if (ht < 10) and (m0 > 0.6) then
+      ht := ht + 24;
+    if (ht > 14) and (m0 < 0.4) then
+      ht := ht - 24;
+    irc := 0;
+  end
+  else
+  begin
     if sgn(de) = sgn(ObsLatitude) then
     begin
       m0 := (ar + deg2rad * ObsLongitude - hs0) / pi2;     (* circumpolar *)
@@ -1474,20 +1534,57 @@ begin
   end;
 end;
 
-function ObjRiseSet(ra,de: double; out hr,hs:double):boolean;
-var jd0,ht,azr,azs,hhr,hhs: double;
-    i: integer;
+
+function ObjRise(ra,de: double; out hr: double; out i:integer):boolean;
+var jd0,azr,hhr,a,h,ch,st: double;
+    aa: integer;
 begin
-{ TODO : take account for minimum altitude and horizon file }
   result:=false;
   jd0:=DateTimetoJD0(now);
-  RiseSet(jd0,ra*15*deg2rad,de*deg2rad,hhr,ht,hhs,azr,azs,i);
+  h:=ElevationMin*deg2rad;
+  RiseTime(jd0,ra*15*deg2rad,de*deg2rad,h,hhr,azr,i);
   if i=0 then begin
-     hr:=hhr;
-     hs:=hhs;
-     result:=true;
+    aa:=round(rmod(azr + pi, pi2)*rad2deg);
+    if (aa<0)or(aa>360) then exit;
+    ch:=horizonlist[aa];
+    while h<ch do begin
+     hhr:=hhr+(1/60);
+     st:=SidTim(jd0,hhr-ObsTimeZone,ObsLongitude);
+     Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
+     aa:=round(rmod(a + pi, pi2)*rad2deg);
+     if (aa>180)or(aa<0)or(aa>360) then exit;
+     ch:=horizonlist[aa];
+    end;
+    hr:=hhr;
+    result:=true;
   end;
 end;
+
+function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
+var jd0,azs,hhs,a,h,ch,st: double;
+    aa: integer;
+begin
+  result:=false;
+  jd0:=DateTimetoJD0(now);
+  h:=ElevationMin*deg2rad;
+  SetTime(jd0,ra*15*deg2rad,de*deg2rad,h,hhs,azs,i);
+  if i=0 then begin
+    aa:=round(rmod(azs + pi, pi2)*rad2deg);
+    if (aa<0)or(aa>360) then exit;
+    ch:=horizonlist[aa];
+    while h<ch do begin
+     hhs:=hhs-(1/60);
+     st:=SidTim(jd0,hhs-ObsTimeZone,ObsLongitude);
+     Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
+     aa:=round(rmod(a + pi, pi2)*rad2deg);
+     if (aa<180)or(aa<0)or(aa>360) then exit;
+     ch:=horizonlist[aa];
+    end;
+    hs:=hhs;
+    result:=true;
+  end;
+end;
+
 
 end.
 
