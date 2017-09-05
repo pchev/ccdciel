@@ -56,7 +56,7 @@ type
     property Text: string read GetText write SetText;
   end;
 
-  function WaitTill(hour:string; showdialog: boolean):boolean;
+  function WaitTill(hour:string; showdialog: boolean; forcenextday: boolean=false):boolean;
 
 var
   f_pause,wt_pause: Tf_pause;
@@ -140,7 +140,7 @@ begin
   Close;
 end;
 
-function WaitTill(hour:string; showdialog: boolean):boolean;
+function WaitTill(hour:string; showdialog: boolean; forcenextday: boolean=false):boolean;
 var endt: TDateTime;
     daystr:string;
     nextday: boolean;
@@ -153,7 +153,7 @@ begin
  end;
  try
   endt:=StrToTime(hour,':');
-  SecondsToWait(endt,wt,nextday);
+  SecondsToWait(endt,forcenextday,wt,nextday);
   if nextday then
      daystr:='tomorrow '
   else
