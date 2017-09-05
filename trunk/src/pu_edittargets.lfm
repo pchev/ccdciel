@@ -165,7 +165,7 @@ object f_EditTargets: Tf_EditTargets
         CharCase = ecNormal
         MaxLength = 8
         TabOrder = 6
-        EditMask = '00:00:00;1;_'
+        EditMask = '99:99:99;1;_'
         Text = '  :  :  '
         SpaceChar = '_'
       end
@@ -177,7 +177,7 @@ object f_EditTargets: Tf_EditTargets
         CharCase = ecNormal
         MaxLength = 8
         TabOrder = 7
-        EditMask = '00:00:00;1;_'
+        EditMask = '99:99:99;1;_'
         Text = '  :  :  '
         SpaceChar = '_'
       end
@@ -397,7 +397,7 @@ object f_EditTargets: Tf_EditTargets
             MaxLength = 8
             TabOrder = 1
             OnChange = TargetChange
-            EditMask = '00:00:00;1;_'
+            EditMask = '99:99:99;1;_'
             Text = '  :  :  '
             SpaceChar = '_'
           end
@@ -410,7 +410,7 @@ object f_EditTargets: Tf_EditTargets
             MaxLength = 8
             TabOrder = 2
             OnChange = TargetChange
-            EditMask = '00:00:00;1;_'
+            EditMask = '99:99:99;1;_'
             Text = '  :  :  '
             SpaceChar = '_'
           end
