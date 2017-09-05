@@ -173,8 +173,8 @@ begin
     PageControl1.ActivePageIndex:=0;
     LabelSeq.Caption:='0';
     LabelSeq1.Caption:='0';
-    ObjStartTime.Text:='00:00:00';
-    ObjEndTime.Text:='23:59:59';
+    ObjStartTime.Text:='';
+    ObjEndTime.Text:='';
     ObjStartRise.Checked:=false;
     ObjEndSet.Checked:=false;
   end;
@@ -192,9 +192,14 @@ if ObjEndSet.Checked then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
      ShowMessage('Invalid object coordinates!');
      ObjEndSet.Checked:=false;
+     exit;
   end;
   if ObjRiseSet(ra,de,hr,hs) then
-     ObjEndTime.Text:=TimeToStr(hs/24);
+     ObjEndTime.Text:=TimeToStr(hs/24)
+  else begin
+     ShowMessage('This object do not rise or set from this location');
+     ObjEndTime.Text:='';
+  end;
 end;
 TargetChange(Sender);
 end;
@@ -208,9 +213,14 @@ if ObjStartRise.Checked then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
      ShowMessage('Invalid object coordinates!');
      ObjStartRise.Checked:=false;
+     exit;
   end;
   if ObjRiseSet(ra,de,hr,hs) then
-     ObjStartTime.Text:=TimeToStr(hr/24);
+     ObjStartTime.Text:=TimeToStr(hr/24)
+     else begin
+        ShowMessage('This object do not rise or set from this location');
+        ObjStartTime.Text:='';
+     end;
 end;
 TargetChange(Sender);
 end;
@@ -494,8 +504,8 @@ procedure Tf_EditTargets.BtnAnytimeClick(Sender: TObject);
 begin
   ObjStartRise.Checked:=false;
   ObjEndSet.Checked:=false;
-  ObjStartTime.Text:='00:00:00';
-  ObjEndTime.Text:='23:59:59';
+  ObjStartTime.Text:='';
+  ObjEndTime.Text:='';
 end;
 
 procedure Tf_EditTargets.BtnCdCCoordClick(Sender: TObject);
@@ -535,8 +545,14 @@ begin
     PageControl1.ActivePageIndex:=0;
     ObjectName.Text:=t.objectname;
     SetPlanList(t.planname);
-    ObjStartTime.Text:=TimeToStr(t.starttime);
-    ObjEndTime.Text:=TimeToStr(t.endtime);
+    if t.starttime>=0 then
+       ObjStartTime.Text:=TimeToStr(t.starttime)
+    else
+       ObjStartTime.Text:='';
+    if t.endtime>=0 then
+       ObjEndTime.Text:=TimeToStr(t.endtime)
+    else
+       ObjEndTime.Text:='';
     if t.ra=NullCoord then
       PointRA.Text:='-'
     else
@@ -581,8 +597,8 @@ begin
     PageControl1.ActivePageIndex:=0;
     t.objectname:=trim(ObjectName.Text);
     t.planname:=PlanList.Text;
-    t.starttime:=StrToTimeDef(ObjStartTime.Text,t.starttime);
-    t.endtime:=StrToTimeDef(ObjEndTime.Text,t.endtime);
+    t.starttime:=StrToTimeDef(ObjStartTime.Text,-1);
+    t.endtime:=StrToTimeDef(ObjEndTime.Text,-1);
     if PointRA.Text='-' then
       t.ra:=NullCoord
     else
