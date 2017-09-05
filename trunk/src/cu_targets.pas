@@ -296,7 +296,7 @@ begin
        end;
     end;
     if FSeqStop then begin
-       SecondsToWait(FSeqStopAt,stw,nd);
+       SecondsToWait(FSeqStopAt,true,stw,nd);
        if stw>0 then begin
           StopTimer.Interval:=1000*stw;
           StopTimer.Enabled:=true;
@@ -523,7 +523,7 @@ begin
       end;
     end;
     if t.endtime>=0 then begin
-       SecondsToWait(t.endtime,stw,nd);
+       SecondsToWait(t.endtime,true,stw,nd);
        if stw>0 then begin
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
@@ -545,7 +545,10 @@ begin
         end;
       end;
       // disable astrometrypointing and autoguiding if first step is to move to focus star
-      autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart;
+      if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
+         autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
+      else
+         autofocusstart:=false;
       astrometrypointing:=t.astrometrypointing and (not autofocusstart);
       // slew to coordinates
       ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);

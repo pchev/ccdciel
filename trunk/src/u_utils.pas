@@ -91,7 +91,7 @@ procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 procedure Sun(jdn:double; out ra,de:double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
-procedure SecondsToWait(dt: TDateTime; out wt: Integer; out nextday:boolean);
+procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
 function ObjRiseSet(ra,de: double; out hr,hs:double):boolean;
 
@@ -1284,7 +1284,7 @@ begin
  end;
 end;
 
-procedure SecondsToWait(dt: TDateTime; out wt: Integer; out nextday:boolean);
+procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 var endt,nowt,nowd: TDateTime;
 begin
   endt:=dt;
@@ -1292,7 +1292,7 @@ begin
   nowt:=frac(nowd);
   nowd:=trunc(nowd);
   nextday:=false;
-  if (nowt>endt)and(abs(nowt-endt)>0.5) then begin
+  if (nowt>endt)and(forcenextday or (abs(nowt-endt)>0.5)) then begin
     endt:=nowd+1+endt;
     nextday:=true;
   end
