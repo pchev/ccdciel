@@ -27,7 +27,7 @@ interface
 
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, pu_scriptengine,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, ExtDlgs;
+  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn;
 
 type
 
@@ -581,8 +581,8 @@ begin
     PageControl1.ActivePageIndex:=0;
     t.objectname:=trim(ObjectName.Text);
     t.planname:=PlanList.Text;
-    t.starttime:=StrToTime(ObjStartTime.Text);
-    t.endtime:=StrToTime(ObjEndTime.Text);
+    t.starttime:=StrToTimeDef(ObjStartTime.Text,t.starttime);
+    t.endtime:=StrToTimeDef(ObjEndTime.Text,t.endtime);
     if PointRA.Text='-' then
       t.ra:=NullCoord
     else

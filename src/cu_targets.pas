@@ -495,7 +495,7 @@ end;
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
-    rsok,stw: integer;
+    stw: integer;
     hr,hs: double;
     autofocusstart, astrometrypointing, autostartguider: boolean;
 begin

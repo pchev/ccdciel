@@ -335,8 +335,8 @@ begin
    Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
    Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
    Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
-   Targets.SeqStartAt       := StrToTime(f_EditTargets.SeqStartAt.Text);
-   Targets.SeqStopAt        := StrToTime(f_EditTargets.SeqStopAt.Text);
+   Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
+   Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
    SaveTargets(CurrentFile);
 end;
 
@@ -358,16 +358,16 @@ begin
    Targets.SeqStop          := tfile.GetValue('/Startup/SeqStop',false);
    Targets.SeqStartTwilight := tfile.GetValue('/Startup/SeqStartTwilight',false);
    Targets.SeqStopTwilight  := tfile.GetValue('/Startup/SeqStopTwilight',false);
-   Targets.SeqStartAt       := StrToTime(tfile.GetValue('/Startup/SeqStartAt','00:00:00'));
-   Targets.SeqStopAt        := StrToTime(tfile.GetValue('/Startup/SeqStopAt','00:00:00'));
+   Targets.SeqStartAt       := StrToTimeDef(tfile.GetValue('/Startup/SeqStartAt','00:00:00'),0);
+   Targets.SeqStopAt        := StrToTimeDef(tfile.GetValue('/Startup/SeqStopAt','00:00:00'),0);
    if n>0 then begin
      for i:=1 to n do begin
        t:=TTarget.Create;
        t.objectname:=trim(tfile.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName',''));
        t.planname:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
        t.path:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
-       t.starttime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''));
-       t.endtime:=StrToTime(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''));
+       t.starttime:=StrToTimeDef(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''),0);
+       t.endtime:=StrToTimeDef(tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''),0);
        t.startrise:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
        t.endset:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
