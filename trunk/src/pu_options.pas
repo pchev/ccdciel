@@ -50,8 +50,10 @@ type
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
     CameraAutoCool: TCheckBox;
+    ElevationMin: TEdit;
     HorizonFile: TFileNameEdit;
     Label76: TLabel;
+    Label77: TLabel;
     MeridianFlipAutofocus: TCheckBox;
     MeridianFlipCalibrate: TCheckBox;
     TemperatureSlopeActive: TCheckBox;

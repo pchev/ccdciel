@@ -1748,6 +1748,7 @@ begin
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
+  ElevationMin:=config.GetValue('/Info/ElevationMin',10);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -3014,6 +3015,7 @@ begin
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
+   f_option.ElevationMin.Text:=FormatFloat(f1,config.GetValue('/Info/ElevationMin',10.0));
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
@@ -3169,6 +3171,7 @@ begin
      config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Info/HorizonFile',f_option.HorizonFile.FileName);
+     config.SetValue('/Info/ElevationMin',StrToFloatDef(f_option.ElevationMin.Text,10.0));
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
      config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);

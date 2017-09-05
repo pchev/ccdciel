@@ -471,7 +471,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 24
             Top = 42
             Width = 100
-            OnChange = TargetChange
+            OnChange = PointCoordChange
             TabOrder = 1
           end
           object PointRA: TEdit
@@ -479,7 +479,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 24
             Top = 8
             Width = 100
-            OnChange = TargetChange
+            OnChange = PointCoordChange
             TabOrder = 2
           end
           object Label6: TLabel

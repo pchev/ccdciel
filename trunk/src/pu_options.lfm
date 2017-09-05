@@ -435,6 +435,21 @@ object f_option: Tf_option
         Caption = 'Horizon profile'
         ParentColor = False
       end
+      object Label77: TLabel
+        Left = 8
+        Height = 18
+        Top = 325
+        Width = 182
+        Caption = 'Minimum observing elevation '
+        ParentColor = False
+      end
+      object ElevationMin: TEdit
+        Left = 208
+        Height = 24
+        Top = 320
+        Width = 56
+        TabOrder = 6
+      end
     end
     object TabSheet8: TTabSheet
       Caption = 'Preview'
