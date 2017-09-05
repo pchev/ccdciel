@@ -391,6 +391,12 @@ begin
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+   if astrometryResolver=ResolverNone then begin
+      msg('No resolver configured!');
+      msg('Do simple slew to '+ARToStr3(ra)+'/'+DEToStr(de));
+      if not Mount.Slew(ra, de) then exit;
+      dist:=0;
+   end else begin
     oldfilter:=0;
     if filter>0 then begin
       oldfilter:=Fwheel.Filter;
@@ -456,11 +462,13 @@ begin
       inc(i);
     until (dist<=prec)or(i>maxslew);
     if oldfilter>0 then Fwheel.Filter:=oldfilter;
+   end;
   end;
   fits.SetBPM(bpm,0,0,0,0);
   result:=(dist<=prec);
   err:=dist;
   FLastSlewErr:=dist;
+
   finally
     if result then msg('Precision slew terminated.')
               else msg('Precision slew failed!');
