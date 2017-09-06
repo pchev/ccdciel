@@ -56,6 +56,7 @@ type
     Label77: TLabel;
     MeridianFlipAutofocus: TCheckBox;
     MeridianFlipCalibrate: TCheckBox;
+    PageHNSKY: TPage;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
     CameraAutoCoolTemp: TEdit;
@@ -177,7 +178,6 @@ type
     Label31: TLabel;
     Label32: TLabel;
     OtherOptions: TEdit;
-    GroupBoxSamp: TGroupBox;
     GroupBoxSkychart: TGroupBox;
     Label24: TLabel;
     Label25: TLabel;

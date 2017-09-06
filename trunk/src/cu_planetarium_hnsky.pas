@@ -1,9 +1,9 @@
-unit cu_planetarium_cdc;
+unit cu_planetarium_hnsky;
 
 {$mode objfpc}{$H+}
 
 {                                        
-Copyright (C) 2015 Patrick Chevalley
+Copyright (C) 2017 Patrick Chevalley
 
 http://www.ap-i.net
 pch@ap-i.net
@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 {
-  TCP/IP client object thread to connect to Cartes du Ciel
+  TCP/IP client object thread to connect to HNSKY
 }
 
 interface
@@ -33,7 +33,7 @@ uses u_global, u_utils, cu_planetarium, cu_tcpclient, blcksock, Classes, SysUtil
 
 type
 
-  TPlanetarium_cdc = class(TPlanetarium)
+  TPlanetarium_hnsky = class(TPlanetarium)
   private
     started: boolean;
     TcpClient : TTcpclient;
@@ -50,46 +50,42 @@ type
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
   end;
 
-const msgTimeout='Timeout!';
+const msgTimeout='Timeout';
       msgOK='OK';
-      msgFailed='Failed!';
-      msgBye='Bye!';
+      msgFailed='?';
 
 implementation
 
-/////////////////// TPlanetarium_cdc ///////////////////////////
+/////////////////// TPlanetarium_hnsky ///////////////////////////
 
-Constructor TPlanetarium_cdc.Create ;
+Constructor TPlanetarium_hnsky.Create ;
 begin
 inherited Create;
 started:=false;
-FPlanetariumType:=CDC;
+FPlanetariumType:=HNSKY;
 FTargetHost:='localhost';
-FTargetPort:='3292';
+FTargetPort:='7700';
 FTimeout:=200;
 FCmdTimeout:=10/86400;
 end;
 
-procedure TPlanetarium_cdc.Connect(cp1: string; cp2:string='');
+procedure TPlanetarium_hnsky.Connect(cp1: string; cp2:string='');
 begin
   if started or Terminated then exit;
-  FTargetHost:=cp1;
-  if cp2='' then FTargetPort:=GetCdCPort
-            else FTargetPort:=cp2;
   Start;
 end;
 
-procedure TPlanetarium_cdc.Disconnect;
+procedure TPlanetarium_hnsky.Disconnect;
 begin
  Terminate;
 end;
 
-procedure TPlanetarium_cdc.Shutdown;
+procedure TPlanetarium_hnsky.Shutdown;
 begin
- Cmd('SHUTDOWN');
+ // not in HNSKY
 end;
 
-procedure TPlanetarium_cdc.Execute;
+procedure TPlanetarium_hnsky.Execute;
 var buf:string;
     dateto : double;
     i : integer;
@@ -104,44 +100,19 @@ try
  tcpclient.Timeout := FTimeout;
  // connect
  if tcpclient.Connect then begin
-    FRunning:=true;
-    // wait connect message
-    dateto:=now+Fcmdtimeout;
-    repeat
-      buf:=tcpclient.recvstring;
-      if (buf='')or(buf='.') then continue;  // keepalive
-      if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
-      else
-        if copy(buf,1,2)=msgOK then begin
-           // success, parse response
-           ProcessData(buf);
-           i:=pos('id=',buf);
-           Fclientid:=trim(copy(buf,i+3,2));
-           i:=pos('chart=',buf);
-           buf:=copy(buf,i+6,999)+' ';
-           i:=pos(' ',buf);
-           FclientName:=trim(copy(buf,1,i-1));
-           FStatus:=true;
-           if assigned(FonConnect) then FonConnect(self);
-           break;
-        end else begin
-           // failure, close thread
-           ProcessData(buf);
-           terminate;
-           break;
-        end;
-   until now>dateto;
-   if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
-   DisplayMessage(tcpclient.GetErrorDesc);
+   FRunning:=true;
+   FStatus:=true;
+   if assigned(FonConnect) then FonConnect(self);
    // main loop
    repeat
      if terminated then break;
      // handle unattended messages (mouseclick...)
-     buf:=tcpclient.recvstring;
+{     buf:=tcpclient.recvstring;
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'')and(buf<>'.') then ProcessData(buf);
-     if buf=msgBye then ending:=true;
+     if buf=msgBye then ending:=true;  }
      // handle synchronous command and response
+     sleep(10);
      if tcpclient.sendbuffer<>'' then begin
         tcpclient.resultbuffer:='';
         // send command
@@ -154,18 +125,17 @@ try
         // wait response
         dateto:=now+Fcmdtimeout;
         repeat
-          buf:=tcpclient.recvstring;
-          if (buf='')or(buf='.') then continue;  // keepalive
-          if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
-             else tcpclient.resultbuffer:=buf;   // set result
+          buf:=tcpclient.RecvPacket;
+          if (buf='') then continue;
+          //if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
+          tcpclient.resultbuffer:=buf;   // set result
         until (tcpclient.resultbuffer>'')or(now>dateto);
         if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
      end;
    until false;
  end
  else begin
-   DisplayMessage('Cannot connect to CdC, Is CdC running and the server active?');
-
+   DisplayMessage('Cannot connect to HNSKY, Is HNSKY running?');
  end;
 FRunning:=false;
 FStatus:=false;
@@ -178,10 +148,10 @@ finally
 end;
 end;
 
-procedure TPlanetarium_cdc.ProcessDataSyn;
+procedure TPlanetarium_hnsky.ProcessDataSyn;
 var p:Tstringlist;
 begin
-if FRecvData<>'' then begin
+{if FRecvData<>'' then begin
   p:=Tstringlist.Create;
   SplitRec(FRecvData,#9,p);
   if (p.Count>=4)and(p[0]='>') then begin
@@ -193,11 +163,11 @@ if FRecvData<>'' then begin
   end;
   p.free;
 end;
-if assigned(FonReceiveData) then FonReceiveData(FRecvData);
+if assigned(FonReceiveData) then FonReceiveData(FRecvData);}
 end;
 
 
-function TPlanetarium_cdc.Cmd(const Value: string):string;
+function TPlanetarium_hnsky.Cmd(const Value: string):string;
 // this function is called in the main thread only!
 // do not use in a planetarium event.
 var dateto:double;
@@ -217,32 +187,24 @@ begin
   end;
 end;
 
-function TPlanetarium_cdc.ShowImage(fn: string):boolean;
+function TPlanetarium_hnsky.ShowImage(fn: string):boolean;
 begin
-  Cmd('SHOWBGIMAGE OFF');
-  Cmd('LOADBGIMAGE '+fn);
-  Cmd('SHOWBGIMAGE ON');
+  Cmd('LOAD_FITS '+fn);
   result:=true;
 end;
 
-function TPlanetarium_cdc.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
-var buf:string;
+function TPlanetarium_hnsky.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
+var buf,r: string;
 begin
-  buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
-  Cmd(buf);
-  buf := 'SETDEC ' + FormatFloat('0.00000', frde);
-  Cmd(buf);
-  buf := 'SHOWRECTANGLE 10';
-  Cmd(buf);
-  buf := 'SETRECTANGLE 10 ' + FormatFloat('0.000', frsizeH*60) + ' ' +
-    FormatFloat('0.00', frsizeV*60) + ' ' +
-    FormatFloat('0.00', frrot) + ' 0';
-  Cmd(buf);
-  Cmd('MARKCENTER ON');
-  buf := 'SETFOV ' + FormatFloat('0.000', frsizeH*2.2);
-  Cmd(buf);
-  Cmd('REDRAW');
-  result:=true;
+   buf:='SET_FRAME '+
+        formatfloat(f5,frsizeH*deg2rad) + blank +
+        formatfloat(f5,frsizeV*deg2rad) + blank +
+        formatfloat(f5,frrot*deg2rad) + blank +
+        formatfloat(f5,frra*deg2rad) +  blank +
+        formatfloat(f5,frde*deg2rad);
+   r:=Cmd(buf);
+   result:=(r=msgOK);
 end;
+
 
 end.

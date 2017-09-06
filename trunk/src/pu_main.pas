@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
-  pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
+  cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls;
@@ -896,6 +896,7 @@ begin
   case TPlanetariumType(i) of
     CDC: planetarium:=TPlanetarium_cdc.Create;
     SAMP:planetarium:=TPlanetarium_samp.Create;
+    HNSKY:planetarium:=TPlanetarium_hnsky.Create;
   end;
   planetarium.onConnect:=@PlanetariumConnect;
   planetarium.onDisconnect:=@PlanetariumDisconnect;
@@ -4799,7 +4800,6 @@ procedure Tf_main.MenuShowCCDFrameClick(Sender: TObject);
 begin
   if fits.HeaderInfo.valid then begin
    if planetarium.Connected then begin
-    if (planetarium.PlanetariumType=CDC) then begin
       if fits.HeaderInfo.solved then begin
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
         AstrometryToPlanetariumFrame(Sender);
@@ -4809,9 +4809,6 @@ begin
           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame);
         end;
       end;
-    end
-    else
-       NewMessage('Presently this function works only with CDC');
    end
    else
       NewMessage('Planetarium is not connected');
@@ -4864,7 +4861,7 @@ begin
 end;
 
 procedure Tf_main.AstrometryToPlanetariumFrame(Sender: TObject);
-var cmd,fn: string;
+var fn: string;
     ra, dec, rot, sizeH, sizeV, jd0, jd1: Double;
     n: integer;
     wcsinfo: TcdcWCSinfo;
@@ -4875,7 +4872,7 @@ fn:=slash(TmpDir)+'ccdcielsolved.fits';
 n:=cdcwcs_initfitsfile(pchar(fn),0);
 if n=0 then n:=cdcwcs_getinfo(addr(wcsinfo),0);
 
-if (n=0) and planetarium.Connected and (planetarium.PlanetariumType=CDC) then begin
+if (n=0) and planetarium.Connected then begin
 
   ra:=wcsinfo.cra;
   dec:=wcsinfo.cdec;
@@ -4898,23 +4895,8 @@ if (n=0) and planetarium.Connected and (planetarium.PlanetariumType=CDC) then be
     PrecessionFK5(jd0,jd1,ra,dec);
     ra:=rad2deg*ra;
     dec:=rad2deg*dec;
-
-    cmd := 'SETRA ' + FormatFloat('0.00000', ra/15.0);
-    planetarium.Cmd(cmd);
-    cmd := 'SETDEC ' + FormatFloat('0.00000', dec);
-    planetarium.Cmd(cmd);
-    cmd := 'SHOWRECTANGLE 10';
-    planetarium.Cmd(cmd);
-    cmd := 'SETRECTANGLE 10 ' + FormatFloat('0.000', sizeH*60) + ' ' +
-      FormatFloat('0.00', sizeV*60) + ' ' +
-      FormatFloat('0.00', rot) + ' 0';
-    planetarium.Cmd(cmd);
-    planetarium.Cmd('MARKCENTER ON');
-    cmd := 'SETFOV ' + FormatFloat('0.000', sizeH*2.2);
-    planetarium.Cmd(cmd);
-    planetarium.Cmd('REDRAW');
-
-    NewMessage('CCD frame sent to planetarium.');
+    if planetarium.DrawFrame(ra,dec,sizeH,sizeV,rot) then
+       NewMessage('CCD frame sent to planetarium.');
   end;
 
  end;
@@ -4940,6 +4922,7 @@ begin
      CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
                       config.GetValue('/Planetarium/CdCport',''));
      SAMP: planetarium.Connect('');
+     HNSKY: planetarium.Connect('');
    end;
  end else begin
    planetarium.Disconnect;
@@ -4968,6 +4951,7 @@ begin
    case TPlanetariumType(i) of
      CDC: planetarium:=TPlanetarium_cdc.Create;
      SAMP:planetarium:=TPlanetarium_samp.Create;
+     HNSKY:planetarium:=TPlanetarium_hnsky.Create;
    end;
    planetarium.onConnect:=@PlanetariumConnect;
    planetarium.onDisconnect:=@PlanetariumDisconnect;

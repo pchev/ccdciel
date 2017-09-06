@@ -38,7 +38,7 @@ type
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
   TAutoguiderType=(PHD);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
-  TPlanetariumType=(CDC, SAMP);
+  TPlanetariumType=(CDC, SAMP, HNSKY);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
   TAutofocusMode=(afVcurve,afMean,afIterative,afNone);
