@@ -52,6 +52,7 @@ type
     procedure Disconnect; override;
     procedure Shutdown; override;
     function ShowImage(fn: string):boolean; override;
+    function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function Cmd(const Value: string):string; override;
   end;
 
@@ -186,5 +187,12 @@ begin
   url:='file://'+fn;
   result:=SampClient.SampSendImageFits(client,imgname,imgid,url);
 end;
+
+function TPlanetarium_samp.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
+begin
+  DisplayMessage('Function not supported by this planetarium');
+  result:=false;
+end;
+
 
 end.

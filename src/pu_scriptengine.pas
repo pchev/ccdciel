@@ -1406,6 +1406,7 @@ case TPlanetariumType(i) of
   CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
                    config.GetValue('/Planetarium/CdCport',''));
   SAMP: planetarium.Connect('');
+  HNSKY: planetarium.Connect('');
 end;
 wait(1);
 result:=msgOK;

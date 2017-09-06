@@ -39,6 +39,7 @@ type
     function Connect: Boolean;
     procedure Disconnect;
     function RecvString: string;
+    function RecvPacket: string;
     function GetErrorDesc: string;
   published
     property Sock: TTCPBlockSocket read FSock;
@@ -82,6 +83,11 @@ end;
 function TTCPclient.RecvString: string;
 begin
   Result := FSock.RecvTerminated(FTimeout, crlf);
+end;
+
+function TTCPclient.RecvPacket: string;
+begin
+  Result := FSock.RecvPacket(FTimeout);
 end;
 
 function TTCPclient.GetErrorDesc: string;

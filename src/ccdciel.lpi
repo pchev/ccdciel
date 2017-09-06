@@ -206,7 +206,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="57">
+    <Units Count="58">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -455,7 +455,7 @@
         <ResourceBaseClass Value="Form"/>
       </Unit45>
       <Unit46>
-        <Filename Value="cu_planetarium_cdc.pas"/>
+        <Filename Value="cu_planetarium_hnsky.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit46>
       <Unit47>
@@ -517,6 +517,10 @@
         <Filename Value="cu_incamerawheel.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit56>
+      <Unit57>
+        <Filename Value="cu_planetarium_cdc.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit57>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
