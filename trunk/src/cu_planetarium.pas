@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global,
-  Forms, Classes, SysUtils;
+uses u_global, u_utils,
+  Forms, Classes, ExtCtrls, SysUtils;
 
 type
 
@@ -38,20 +38,23 @@ protected
   FStatus: boolean;
   FRunning: boolean;
   Fra, Fde: double;
-  FplanetariumJ2000: boolean;
+  FplanetariumEquinox, FplanetariumJD: double;
   Fobjname: string;
   FPlanetariumType: TPlanetariumType;
   FonShowMessage: TNotifyMsg;
   FonReceiveData: TNotifyMsg;
   FonConnect: TNotifyEvent;
   FonDisconnect: TNotifyEvent;
+  procedure InitTimerTimer(Sender: TObject);
   procedure SetCmdTimeout(value:double);
   function GetCmdTimeout:double;
   procedure DisplayMessagesyn;
   procedure ProcessDataSyn; virtual; abstract;
   procedure DisplayMessage(msg:string);
   procedure ProcessData(line:string);
+  function GetEqSys: double; virtual; abstract;
 public
+  InitTimer: TTimer;
   Constructor Create;
   Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
   procedure Disconnect; virtual; abstract;
@@ -70,6 +73,7 @@ public
   property ClientName : string read FClientName;
   property RA: double read Fra;
   property DE: double read Fde;
+  property EqSys: double read FplanetariumEquinox;
   property Objname: string read Fobjname;
   property PlanetariumType: TPlanetariumType read FPlanetariumType;
   property onConnect: TNotifyEvent read FonConnect  write FonConnect;
@@ -93,6 +97,19 @@ FRecvData:='';
 Fra:=NullCoord;
 Fde:=NullCoord;
 Fobjname:='';
+FplanetariumEquinox:=0;  // 0 = equinox of date
+FplanetariumJD:=0;
+InitTimer:=TTimer.Create(nil);
+InitTimer.Enabled:=false;
+InitTimer.Interval:=500;
+InitTimer.OnTimer:=@InitTimerTimer;
+end;
+
+procedure TPlanetarium.InitTimerTimer(Sender: TObject);
+begin
+ InitTimer.Enabled:=false;
+ FplanetariumEquinox:=GetEqSys;
+ if FplanetariumEquinox>0 then FplanetariumJD:=jd(trunc(FplanetariumEquinox),1,1,0);
 end;
 
 procedure TPlanetarium.SetCmdTimeout(value:double);

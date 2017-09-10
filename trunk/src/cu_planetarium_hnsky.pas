@@ -48,6 +48,7 @@ type
     function Cmd(const Value: string):string; override;
     function ShowImage(fn: string):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
+    function GetEqSys: double; override;
   end;
 
 const msgTimeout='Timeout';
@@ -67,7 +68,11 @@ FTargetHost:='localhost';
 FTargetPort:='7700';
 FTimeout:=200;
 FCmdTimeout:=10/86400;
-FplanetariumJ2000:=true;
+end;
+
+function TPlanetarium_hnsky.GetEqSys: double;
+begin
+  result:=2000.0;
 end;
 
 procedure TPlanetarium_hnsky.Connect(cp1: string; cp2:string='');
