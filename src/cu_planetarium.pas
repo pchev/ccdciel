@@ -38,6 +38,7 @@ protected
   FStatus: boolean;
   FRunning: boolean;
   Fra, Fde: double;
+  FplanetariumJ2000: boolean;
   Fobjname: string;
   FPlanetariumType: TPlanetariumType;
   FonShowMessage: TNotifyMsg;

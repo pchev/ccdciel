@@ -67,6 +67,7 @@ FTargetHost:='localhost';
 FTargetPort:='7700';
 FTimeout:=200;
 FCmdTimeout:=10/86400;
+FplanetariumJ2000:=true;
 end;
 
 procedure TPlanetarium_hnsky.Connect(cp1: string; cp2:string='');
@@ -82,7 +83,7 @@ end;
 
 procedure TPlanetarium_hnsky.Shutdown;
 begin
- // not in HNSKY
+ Cmd('SHUTDOWN');
 end;
 
 procedure TPlanetarium_hnsky.Execute;
@@ -107,12 +108,10 @@ try
    repeat
      if terminated then break;
      // handle unattended messages (mouseclick...)
-{     buf:=tcpclient.recvstring;
+     buf:=tcpclient.RecvPacket;
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
-     if (buf<>'')and(buf<>'.') then ProcessData(buf);
-     if buf=msgBye then ending:=true;  }
+     if (buf<>'') then ProcessData(buf);
      // handle synchronous command and response
-     sleep(10);
      if tcpclient.sendbuffer<>'' then begin
         tcpclient.resultbuffer:='';
         // send command
@@ -151,21 +150,23 @@ end;
 procedure TPlanetarium_hnsky.ProcessDataSyn;
 var p:Tstringlist;
 begin
-{if FRecvData<>'' then begin
+if FRecvData<>'' then begin
   p:=Tstringlist.Create;
-  SplitRec(FRecvData,#9,p);
-  if (p.Count>=4)and(p[0]='>') then begin
-    Fra:=StrToAR(p[2]);
-    Fde:=StrToDE(p[3]);
-  end;
-  if (p.Count>=6)and(p[0]='>') then begin
-    Fobjname:=StringReplace(p[5],' ','',[rfReplaceAll]);
+  SplitRec(FRecvData,blank,p);
+  if (p.Count>=3) then begin
+    Fra:=StrToFloatDef(p[0],NullCoord);
+    Fde:=StrToFloatDef(p[1],NullCoord);
+    if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
+      J2000ToApparent(Fra,Fde);
+      Fra:=rad2deg*Fra/15;
+      Fde:=rad2deg*Fde;
+      Fobjname:=p[2];
+    end;
   end;
   p.free;
 end;
-if assigned(FonReceiveData) then FonReceiveData(FRecvData);}
+if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
-
 
 function TPlanetarium_hnsky.Cmd(const Value: string):string;
 // this function is called in the main thread only!
@@ -195,15 +196,19 @@ end;
 
 function TPlanetarium_hnsky.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
 var buf,r: string;
+    fra_2000, fdec_2000: double;
 begin
-   buf:='SET_FRAME '+
-        formatfloat(f5,frsizeH*deg2rad) + blank +
-        formatfloat(f5,frsizeV*deg2rad) + blank +
-        formatfloat(f5,frrot*deg2rad) + blank +
-        formatfloat(f5,frra*deg2rad) +  blank +
-        formatfloat(f5,frde*deg2rad);
-   r:=Cmd(buf);
-   result:=(r=msgOK);
+  fra_2000:=frra*deg2rad;
+  fdec_2000:=frde*deg2rad;
+  ApparentToJ2000(fra_2000,fdec_2000);
+  buf:='SET_FRAME '+
+       formatfloat(f5,frsizeH*deg2rad) + blank +
+       formatfloat(f5,frsizeV*deg2rad) + blank +
+       formatfloat(f5,frrot*deg2rad) + blank +
+       formatfloat(f5,fra_2000) + blank +
+       formatfloat(f5,fdec_2000);
+  r:=Cmd(buf);
+  result:=(r=msgOK);
 end;
 
 
