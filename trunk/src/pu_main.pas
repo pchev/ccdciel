@@ -1113,9 +1113,11 @@ begin
   f_planetariuminfo.planetarium:=planetarium;
 
   f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
-  StartupTimer.Enabled:=true;
 
   LoadFocusStar;
+  InitCoord;
+
+  StartupTimer.Enabled:=true;
 end;
 
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
