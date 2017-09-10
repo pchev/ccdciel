@@ -48,6 +48,7 @@ type
     function Cmd(const Value: string):string; override;
     function ShowImage(fn: string):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
+    function GetEqSys: double; override;
   end;
 
 const msgTimeout='Timeout!';
@@ -84,9 +85,20 @@ begin
  Terminate;
 end;
 
+
 procedure TPlanetarium_cdc.Shutdown;
 begin
  Cmd('SHUTDOWN');
+end;
+
+function TPlanetarium_cdc.GetEqSys: double;
+var r: string;
+begin
+  r:=Cmd('GETCHARTEQSYS');
+  if r='Date' then
+    result:=0
+  else
+    result:=StrToFloatDef(r,0);
 end;
 
 procedure TPlanetarium_cdc.Execute;
@@ -187,6 +199,15 @@ if FRecvData<>'' then begin
   if (p.Count>=4)and(p[0]='>') then begin
     Fra:=StrToAR(p[2]);
     Fde:=StrToDE(p[3]);
+    if FplanetariumEquinox=2000 then begin
+      if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
+        Fra:=Fra*15*deg2rad;
+        Fde:=Fde*deg2rad;
+        J2000ToApparent(Fra,Fde);
+        Fra:=rad2deg*Fra/15;
+        Fde:=rad2deg*Fde;
+      end;
+    end;
   end;
   if (p.Count>=6)and(p[0]='>') then begin
     Fobjname:=StringReplace(p[5],' ','',[rfReplaceAll]);
@@ -228,6 +249,13 @@ end;
 function TPlanetarium_cdc.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
 var buf:string;
 begin
+  if FplanetariumEquinox=2000 then begin
+    frra:=frra*deg2rad;
+    frde:=frde*deg2rad;
+    ApparentToJ2000(frra,frde);
+    frra:=rad2deg*frra;
+    frde:=rad2deg*frde;
+  end;
   buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
   Cmd(buf);
   buf := 'SETDEC ' + FormatFloat('0.00000', frde);

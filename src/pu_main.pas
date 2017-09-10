@@ -4938,6 +4938,7 @@ begin
  f_planetarium.led.Brush.Color:=clLime;
  f_planetarium.Status.Text:='Connected';
  NewMessage('Planetarium: Connected');
+ planetarium.InitTimer.Enabled:=true;
 end;
 
 Procedure Tf_main.PlanetariumDisconnect(Sender: TObject);

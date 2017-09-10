@@ -54,6 +54,7 @@ type
     function ShowImage(fn: string):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function Cmd(const Value: string):string; override;
+    function GetEqSys: double; override;
   end;
 
 
@@ -70,6 +71,11 @@ end;
 Destructor TPlanetarium_samp.Destroy;
 begin
   inherited Destroy;
+end;
+
+function TPlanetarium_samp.GetEqSys: double;
+begin
+  result:=2000.0;
 end;
 
 procedure TPlanetarium_samp.ProcessDataSyn;
