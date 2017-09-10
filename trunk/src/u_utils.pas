@@ -88,13 +88,38 @@ procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
 procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
-procedure Sun(jdn:double; out ra,de:double);
+procedure Sun(jdn:double; out ra,de,l:double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
 function ObjRise(ra,de: double; out hr:double; out i:integer):boolean;
 function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
+procedure sofa_PM(p: coordvector; var r: double);
+procedure sofa_S2C(theta, phi: double; var c: coordvector);
+procedure sofa_C2S(p: coordvector; var theta, phi: double);
+procedure sofa_CP(p: coordvector; var c: coordvector);
+procedure sofa_SXP(s: double; p: coordvector; var sp: coordvector);
+procedure sofa_PN(p: coordvector; var r: double; var u: coordvector);
+procedure sofa_PMP(a, b: coordvector; var amb: coordvector);
+procedure sofa_PPP(a, b: coordvector; var apb: coordvector);
+function sofa_PDP(a, b: coordvector): double;
+procedure sofa_RXP(r: rotmatrix; p: coordvector; var rp: coordvector);
+procedure sofa_TR(r: rotmatrix; var rt: rotmatrix);
+procedure sofa_RXR(a, b: rotmatrix; var atb: rotmatrix);
+procedure sofa_Ir(var r: rotmatrix);
+procedure sofa_Rz(psi: double; var r: rotmatrix);
+procedure sofa_Ry(theta: double; var r: rotmatrix);
+procedure sofa_Rx(phi: double; var r: rotmatrix);
+function ltp_Ecliptic(epj: double): double;
+procedure InitCoord;
+procedure nutationme(j: double; var nutl, nuto: double);
+procedure aberrationme(j: double; var abe, abp: double);
+procedure apparent_equatorial(var ra, de: double);
+procedure apparent_equatorialV(var p1: coordvector);
+procedure mean_equatorial(var ra, de: double);
+procedure J2000ToApparent(var ra, de: double);
+procedure ApparentToJ2000(var ra, de: double);
 
 
 implementation
@@ -1191,8 +1216,8 @@ begin
  end;
 end;
 
-Procedure Sun(jdn:double; out ra,de:double);
-var d,ecl,q,g,r,l,xs,ys,xe,ye,ze: double;
+Procedure Sun(jdn:double; out ra,de,l:double);
+var d,ecl,q,g,r,xs,ys,xe,ye,ze: double;
 begin
 //Approximate Sun position
 d :=jdn-jd2000;
@@ -1259,12 +1284,12 @@ begin
 end;
 
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
-var jd0,sra,sde,hp1,hp2: double;
+var jd0,sra,sde,sl,hp1,hp2: double;
     Year, Month, Day: Word;
 begin
  DecodeDate(dt, Year, Month, Day);
  jd0:=jd(Year,Month,Day,0);
- Sun(jd0+0.5,sra,sde);
+ Sun(jd0+0.5,sra,sde,sl);
  Time_Alt(jd0, sra, sde, -18, hp1, hp2);
  if hp1<-90 then      // polar night
  begin
@@ -1583,6 +1608,584 @@ begin
     hs:=hhs;
     result:=true;
   end;
+end;
+
+procedure InitCoord;
+var dy,dm,dd: word;
+    se,ce,sra,sde: double;
+begin
+  DecodeDate(now,dy,dm,dd);
+  jdtoday:=jd(dy,dm,dd,0);
+  // nutation
+  nutationme(jdtoday,nutl,nuto);
+  // Obliquity of the ecliptic
+  ecl:=ltp_Ecliptic(jdtoday) + nuto;
+  // nutation matrix
+  sincos(ecl, se, ce);
+  NutMAT[1, 1] := 1;
+  NutMAT[1, 2] := -ce * nutl;
+  NutMAT[1, 3] := -se * nutl;
+  NutMAT[2, 1] := ce * nutl;
+  NutMAT[2, 2] := 1;
+  NutMAT[2, 3] := -nuto;
+  NutMAT[3, 1] := se * nutl;
+  NutMAT[3, 2] := nuto;
+  NutMAT[3, 3] := 1;
+  // sun longitude
+  Sun(jdtoday,sra,sde,sunl);
+  // aberration
+  aberrationMe(jdtoday, abe, abp);
+
+end;
+
+procedure nutationme(j: double; var nutl, nuto: double);
+var
+  t, om, me, mas, mam, al: double;
+const
+  minjdnut = 2378496.5; // 1800   //limit for nutation calculation using Meeus function
+  maxjdnut = 2524593.5; // 2200
+begin
+  if (j > minjdnut) and (j < maxjdnut) then
+  begin
+    // use this function only if cu_planet.nutation cannot get nutation from JPL ephemeris
+    t := (j - jd2000) / 36525;
+    // high precision. using meeus91 table 21.A
+    //longitude of the asc.node of the Moon's mean orbit on the ecliptic
+    om := deg2rad * (125.04452 - 1934.136261 * t + 0.0020708 * t *
+      t + t * t * t / 4.5e+5);
+    //mean elongation of the Moon from Sun
+    me := deg2rad * (297.85036 + 445267.11148 * t - 0.0019142 * t *
+      t + t * t * t / 189474);
+    //mean anomaly of the Sun (Earth)
+    mas := deg2rad * (357.52772 + 35999.05034 * t - 1.603e-4 * t * t - t * t * t / 3e+5);
+    //mean anomaly of the Moon
+    mam := deg2rad * (134.96298 + 477198.867398 * t + 0.0086972 * t *
+      t + t * t * t / 56250);
+    //Moon's argument of latitude
+    al := deg2rad * (93.27191 + 483202.017538 * t - 0.0036825 * t *
+      t + t * t * t / 327270);
+    //periodic terms for the nutation in longitude.The unit is 0".0001.
+    nutl := secarc * ((-171996 - 174.2 * t) * sin(1 * om) +
+      (-13187 - 1.6 * t) * sin(-2 * me + 2 * al + 2 * om) +
+      (-2274 - 0.2 * t) * sin(2 * al + 2 * om) + (2062 + 0.2 * t) *
+      sin(2 * om) + (1426 - 3.4 * t) * sin(1 * mas) + (712 + 0.1 * t) *
+      sin(1 * mam) + (-517 + 1.2 * t) * sin(-2 * me + 1 * mas + 2 * al + 2 * om) +
+      (-386 - 0.4 * t) * sin(2 * al + 1 * om) - 301 * sin(1 * mam + 2 * al + 2 * om) +
+      (217 - 0.5 * t) * sin(-2 * me - 1 * mas + 2 * al + 2 * om) -
+      158 * sin(-2 * me + 1 * mam) + (129 + 0.1 * t) *
+      sin(-2 * me + 2 * al + 1 * om) + 123 * sin(-1 * mam + 2 * al + 2 * om) +
+      63 * sin(2 * me) + (63 + 0.1 * t) * sin(1 * mam + 1 * om) - 59 *
+      sin(2 * me - 1 * mam + 2 * al + 2 * om) + (-58 - 0.1 * t) *
+      sin(-1 * mam + 1 * om) - 51 * sin(1 * mam + 2 * al + 1 * om) + 48 *
+      sin(-2 * me + 2 * mam) + 46 * sin(-2 * mam + 2 * al + 1 * om) -
+      38 * sin(2 * me + 2 * al + 2 * om) - 31 * sin(2 * mam + 2 * al + 2 * om) +
+      29 * sin(2 * mam) + 29 * sin(-2 * me + 1 * mam + 2 * al + 2 * om) +
+      26 * sin(2 * al) - 22 * sin(-2 * me + 2 * al) + 21 *
+      sin(-1 * mam + 2 * al + 1 * om) + (17 - 0.1 * t) * sin(2 * mas) +
+      16 * sin(2 * me - 1 * mam + 1 * om) - 16 * sin(-2 * me + 2 *
+      mas + 2 * al + 2 * om) - 15 * sin(1 * mas + 1 * om) - 13 *
+      sin(-2 * me + 1 * mam + 1 * om) - 12 * sin(-1 * mas + 1 * om) +
+      11 * sin(2 * mam - 2 * al) - 10 * sin(2 * me - 1 * mam + 2 * al + 1 * om) -
+      8 * sin(2 * me + 1 * mam + 2 * al + 2 * om) + 7 *
+      sin(1 * mas + 2 * al + 2 * om) - 7 * sin(-2 * me + 1 * mas + 1 * mam) -
+      7 * sin(-1 * mas + 2 * al + 2 * om) - 7 * sin(2 * me + 2 * al + 1 * om) +
+      6 * sin(2 * me + 1 * mam) + 6 * sin(-2 * me + 2 * mam + 2 * al + 2 * om) +
+      6 * sin(-2 * me + 1 * mam + 2 * al + 1 * om) - 6 *
+      sin(2 * me - 2 * mam + 1 * om) - 6 * sin(2 * me + 1 * om) + 5 *
+      sin(-1 * mas + 1 * mam) - 5 * sin(-2 * me - 1 * mas + 2 * al + 1 * om) -
+      5 * sin(-2 * me + 1 * om) - 5 * sin(2 * mam + 2 * al + 1 * om) +
+      4 * sin(-2 * me + 2 * mam + 1 * om) + 4 * sin(-2 * me + 1 *
+      mas + 2 * al + 1 * om) + 4 * sin(1 * mam - 2 * al) - 4 *
+      sin(-1 * me + 1 * mam) - 4 * sin(-2 * me + 1 * mas) - 4 *
+      sin(1 * me) + 3 * sin(1 * mam + 2 * al) - 3 * sin(-2 * mam + 2 * al + 2 * om) -
+      3 * sin(-1 * me - 1 * mas + 1 * mam) - 3 * sin(1 * mas + 1 * mam) -
+      3 * sin(-1 * mas + 1 * mam + 2 * al + 2 * om) - 3 *
+      sin(2 * me - 1 * mas - 1 * mam + 2 * al + 2 * om) - 3 * sin(
+      3 * mam + 2 * al + 2 * om) - 3 * sin(2 * me - 1 * mas + 2 * al + 2 * om));
+    nutl := nutl * 0.0001;
+    // periodic terms for the nutation in obliquity
+    nuto := secarc * ((92025 + 8.9 * t) * cos(1 * om) + (5736 - 3.1 * t) *
+      cos(-2 * me + 2 * al + 2 * om) + (977 - 0.5 * t) * cos(2 * al + 2 * om) +
+      (-895 + 0.5 * t) * cos(2 * om) + (54 - 0.1 * t) * cos(1 * mas) -
+      7 * cos(1 * mam) + (224 - 0.6 * t) * cos(-2 * me + 1 * mas + 2 * al + 2 * om) +
+      200 * cos(2 * al + 1 * om) + (129 - 0.1 * t) * cos(1 * mam + 2 * al + 2 * om) +
+      (-95 + 0.3 * t) * cos(-2 * me + -1 * mas + 2 * al + 2 * om) -
+      70 * cos(-2 * me + 2 * al + 1 * om) - 53 * cos(-1 * mam + 2 * al + 2 * om) -
+      33 * cos(1 * mam + 1 * om) + 26 * cos(2 * me + -1 * mam + 2 * al + 2 * om) +
+      32 * cos(-1 * mam + 1 * om) + 27 * cos(1 * mam + 2 * al + 1 * om) -
+      24 * cos(-2 * mam + 2 * al + 1 * om) + 16 * cos(2 * me + 2 * al + 2 * om) +
+      13 * cos(2 * mam + 2 * al + 2 * om) - 12 * cos(-2 * me + 1 *
+      mam + 2 * al + 2 * om) - 10 * cos(-1 * mam + 2 * al + 1 * om) -
+      8 * cos(2 * me - 1 * mam + 1 * om) + 7 * cos(-2 * me + 2 * mas + 2 * al + 2 * om) +
+      9 * cos(1 * mas + 1 * om) + 7 * cos(-2 * me + 1 * mam + 1 * om) + 6 *
+      cos(-1 * mas + 1 * om) + 5 * cos(2 * me - 1 * mam + 2 * al + 1 * om) +
+      3 * cos(2 * me + 1 * mam + 2 * al + 2 * om) - 3 *
+      cos(1 * mas + 2 * al + 2 * om) + 3 * cos(-1 * mas + 2 * al + 2 * om) +
+      3 * cos(2 * me + 2 * al + 1 * om) - 3 * cos(-2 * me + 2 * mam + 2 * al + 2 * om) -
+      3 * cos(-2 * me + 1 * mam + 2 * al + 1 * om) + 3 *
+      cos(2 * me - 2 * mam + 1 * om) + 3 * cos(2 * me + 1 * om) + 3 *
+      cos(-2 * me - 1 * mas + 2 * al + 1 * om) + 3 * cos(-2 * me + 1 * om) +
+      3 * cos(2 * mam + 2 * al + 1 * om));
+    nuto := nuto * 0.0001;
+  end
+  else
+  begin
+    nutl := 0;
+    nuto := 0;
+  end;
+end;
+
+function ltp_Ecliptic(epj: double): double;
+  // Obliquity of the ecliptic
+  // Using equation 9, table 3.
+  // Only the obliquity is computed here but the term in longitude are kept for clarity.
+const
+  npol = 4;
+  nper = 10;
+  // Polynomials
+  pepol: array[1..npol, 1..2] of double = (
+    (+8134.017132, 84028.206305),
+    (+5043.0520035, +0.3624445),
+    (-0.00710733, -0.00004039),
+    (+0.000000271, -0.000000110));
+  // Periodics
+  peper: array[1..5, 1..nper] of double = (
+    (409.90, 396.15, 537.22, 402.90, 417.15, 288.92, 4043.00, 306.00, 277.00, 203.00),
+    (-6908.287473, -3198.706291, 1453.674527, -857.748557,
+    1173.231614, -156.981465, 371.836550, -216.619040, 193.691479, 11.891524),
+    (753.872780, -247.805823, 379.471484, -53.880558, -90.109153,
+    -353.600190, -63.115353, -28.248187, 17.703387, 38.911307),
+    (-2845.175469, 449.844989, -1255.915323, 886.736783, 418.887514,
+    997.912441, -240.979710, 76.541307, -36.788069, -170.964086),
+    (-1704.720302, -862.308358, 447.832178, -889.571909, 190.402846,
+    -56.564991, -296.222622, -75.859952, 67.473503, 3.014055));
+var
+  as2r, d2pi, t, e, w, a, s, c: extended;
+  i: integer;
+begin
+  d2pi := pi2;
+  //Arcseconds to radians
+  as2r := secarc;
+  // Centuries since J2000.
+  t := (epj - jd2000) / 36525;
+  //p:=0;
+  e := 0;
+  // Periodic terms.
+  for i := 1 to nper do
+  begin
+    W := D2PI * T;
+    A := W / peper[1, I];
+    sincos(A, S, C);
+    //   p := p + C*peper[2,I] + S*peper[4,I];
+    e := e + C * peper[3, I] + S * peper[5, I];
+  end;
+  //Polynomial terms.
+  W := 1;
+  for i := 1 to npol do
+  begin
+    //  p := p + pepol[I,1]*W;
+    e := e + pepol[I, 2] * W;
+    W := W * T;
+  end;
+  // in radiant.
+  //p := p*AS2R;
+  Result := e * AS2R;
+end;
+
+procedure aberrationme(j: double; var abe, abp: double);
+var
+  t: double;
+const
+  minjdabe = 2378496.5; // 1800 limit for abberation calculation using Meeus function
+  maxjdabe = 2524593.5; // 2200
+begin
+  if (j > minjdabe) and (j < maxjdabe) then
+  begin
+    t := (j - jd2000) / 36525;
+    abe := 0.016708617 - 4.2037e-5 * t - 1.236e-7 * t * t;
+    abp := deg2rad * (102.93735 + 1.71953 * t + 4.6e-4 * t * t);
+  end
+  else
+  begin
+    abe := 0;
+    abp := 0;
+  end;
+end;
+
+procedure apparent_equatorialV(var p1: coordvector);
+var
+  ra, de, da, dd: double;
+  cra, sra, cde, sde, ce, se, te, cp, sp, cls, sls: extended;
+  p2: coordvector;
+begin
+  // nutation
+  if (nutl <> 0) or (nuto <> 0) then
+  begin
+    // rotate using nutation matrix
+    sofa_RXP(NutMAT, p1, p2);
+    sofa_CP(p2, p1);
+  end;
+  //aberration
+  if (abp <> 0) or (abe <> 0) then
+  begin
+      sofa_C2S(p1, ra, de);
+      //meeus91 22.3
+      sincos(ra, sra, cra);
+      sincos(de, sde, cde);
+      sincos(ecl, se, ce);
+      sincos(sunl, sls, cls);
+      sincos(abp, sp, cp);
+      te := tan(ecl);
+      da := -abek * (cra * cls * ce + sra * sls) / cde + abe *
+        abek * (cra * cp * ce + sra * sp) / cde;
+      dd := -abek * (cls * ce * (te * cde - sra * sde) + cra * sde * sls) +
+        abe * abek * (cp * ce * (te * cde - sra * sde) + cra * sde * sp);
+      ra := ra + da;
+      de := de + dd;
+      sofa_S2C(ra, de, p1);
+  end;
+end;
+
+procedure apparent_equatorial(var ra, de: double);
+var
+  p: coordvector;
+begin
+  sofa_S2C(ra, de, p);
+  apparent_equatorialV(p);
+  sofa_c2s(p, ra, de);
+  ra := rmod(ra + pi2, pi2);
+end;
+
+procedure mean_equatorial(var ra, de: double);
+var
+  da, dd: double;
+  cra, sra, cde, sde, ce, se, te, cp, sp, cls, sls: extended;
+  p1, p2: coordvector;
+  NutMATR: rotmatrix;
+begin
+  sofa_S2C(ra, de, p1);
+  //aberration
+  if (abp <> 0) or (abe <> 0) then
+  begin
+      sofa_C2S(p1, ra, de);
+      //meeus91 22.3
+      sincos(ra, sra, cra);
+      sincos(de, sde, cde);
+      sincos(ecl, se, ce);
+      sincos(sunl, sls, cls);
+      sincos(abp, sp, cp);
+      te := tan(ecl);
+      da := -abek * (cra * cls * ce + sra * sls) / cde + abe *
+        abek * (cra * cp * ce + sra * sp) / cde;
+      dd := -abek * (cls * ce * (te * cde - sra * sde) + cra * sde * sls) +
+        abe * abek * (cp * ce * (te * cde - sra * sde) + cra * sde * sp);
+      ra := ra - da;
+      de := de - dd;
+      sofa_S2C(ra, de, p1);
+  end;
+  // nutation
+  if (nutl <> 0) or (nuto <> 0) then
+  begin
+    // rotate using transposed nutation matrix
+    sofa_TR(NutMAT, NutMATR);
+    sofa_RXP(NutMATR, p1, p2);
+    sofa_CP(p2, p1);
+  end;
+  sofa_C2S(p1, ra, de);
+  ra := rmod(ra + pi2, pi2);
+end;
+
+procedure J2000ToApparent(var ra, de: double);
+begin
+PrecessionFK5(jd2000,jdtoday,ra,de);
+apparent_equatorial(ra,de);
+end;
+
+procedure ApparentToJ2000(var ra, de: double);
+begin
+mean_equatorial(ra,de);
+PrecessionFK5(jdtoday,jd2000,ra,de);
+end;
+
+////// Required functions adapted from the SOFA library
+
+procedure sofa_PXP(a, b: coordvector; var axb: coordvector);
+// p-vector outer (=vector=cross) product.
+var
+  xa, ya, za, xb, yb, zb: double;
+begin
+  XA := A[1];
+  YA := A[2];
+  ZA := A[3];
+  XB := B[1];
+  YB := B[2];
+  ZB := B[3];
+  AXB[1] := YA * ZB - ZA * YB;
+  AXB[2] := ZA * XB - XA * ZB;
+  AXB[3] := XA * YB - YA * XB;
+end;
+
+procedure sofa_PM(p: coordvector; var r: double);
+// Modulus of p-vector.
+var
+  i: integer;
+  w, c: double;
+begin
+  W := 0;
+  for i := 1 to 3 do
+  begin
+    C := P[I];
+    W := W + C * C;
+  end;
+  R := SQRT(W);
+end;
+
+procedure sofa_ZP(var p: coordvector);
+// Zero a p-vector.
+var
+  i: integer;
+begin
+  for i := 1 to 3 do
+    p[i] := 0;
+end;
+
+procedure sofa_SXP(s: double; p: coordvector; var sp: coordvector);
+//  Multiply a p-vector by a scalar.
+var
+  i: integer;
+begin
+  for i := 1 to 3 do
+    sp[i] := s * p[i];
+end;
+
+procedure sofa_PMP(a, b: coordvector; var amb: coordvector);
+//  P-vector subtraction.
+var
+  i: integer;
+begin
+  for i := 1 to 3 do
+    amb[i] := a[i] - b[i];
+end;
+
+procedure sofa_PPP(a, b: coordvector; var apb: coordvector);
+//  P-vector addition.
+var
+  i: integer;
+begin
+  for i := 1 to 3 do
+    apb[i] := a[i] + b[i];
+end;
+
+procedure sofa_PN(p: coordvector; var r: double; var u: coordvector);
+// Convert a p-vector into modulus and unit vector.
+var
+  w: double;
+begin
+  // Obtain the modulus and test for zero.
+  sofa_PM(P, W);
+  if (W = 0) then
+    //  Null vector.
+    sofa_ZP(U)
+  else
+    //  Unit vector.
+    sofa_SXP(1 / W, P, U);
+  //  Return the modulus.
+  R := W;
+end;
+
+procedure sofa_S2C(theta, phi: double; var c: coordvector);
+// Convert spherical coordinates to Cartesian.
+// THETA    d         longitude angle (radians)
+// PHI      d         latitude angle (radians)
+var
+  sa, ca, sd, cd: extended;
+begin
+  sincos(theta, sa, ca);
+  sincos(phi, sd, cd);
+  c[1] := ca * cd;
+  c[2] := sa * cd;
+  c[3] := sd;
+end;
+
+procedure sofa_c2s(p: coordvector; var theta, phi: double);
+// P-vector to spherical coordinates.
+// THETA    d         longitude angle (radians)
+// PHI      d         latitude angle (radians)
+var
+  x, y, z, d2: double;
+begin
+  X := P[1];
+  Y := P[2];
+  Z := P[3];
+  D2 := X * X + Y * Y;
+  if (D2 = 0) then
+    theta := 0
+  else
+    theta := arctan2(Y, X);
+  if (Z = 0) then
+    phi := 0
+  else
+    phi := arctan2(Z, SQRT(D2));
+end;
+
+procedure sofa_cp(p: coordvector; var c: coordvector);
+// Copy a p-vector.
+var
+  i: integer;
+begin
+  for i := 1 to 3 do
+    c[i] := p[i];
+end;
+
+function sofa_PDP(a, b: coordvector): double;
+  // p-vector inner (=scalar=dot) product.
+begin
+  Result := a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+end;
+
+procedure sofa_cr(r: rotmatrix; var c: rotmatrix);
+// Copy an r-matrix.
+var
+  i, j: integer;
+begin
+  for j := 1 to 3 do
+    for i := 1 to 3 do
+      c[j, i] := r[j, i];
+end;
+
+procedure sofa_rxp(r: rotmatrix; p: coordvector; var rp: coordvector);
+// Multiply a p-vector by an r-matrix.
+var
+  w: double;
+  wrp: coordvector;
+  i, j: integer;
+begin
+  // Matrix R * vector P.
+  for j := 1 to 3 do
+  begin
+    W := 0;
+    for i := 1 to 3 do
+    begin
+      W := W + R[J, I] * P[I];
+    end; //i
+    WRP[J] := W;
+  end; //j
+  // Return the result.
+  sofa_CP(WRP, RP);
+end;
+
+procedure sofa_tr(r: rotmatrix; var rt: rotmatrix);
+// Transpose an r-matrix.
+var
+  wm: rotmatrix;
+  i, j: integer;
+begin
+  for i := 1 to 3 do
+  begin
+    for j := 1 to 3 do
+    begin
+      wm[i, j] := r[j, i];
+    end;
+  end;
+  sofa_cr(wm, rt);
+end;
+
+procedure sofa_rxr(a, b: rotmatrix; var atb: rotmatrix);
+// Multiply two r-matrices.
+var
+  i, j, k: integer;
+  w: double;
+  wm: rotmatrix;
+begin
+  for i := 1 to 3 do
+  begin
+    for j := 1 to 3 do
+    begin
+      W := 0;
+      for k := 1 to 3 do
+      begin
+        W := W + A[I, K] * B[K, J];
+      end; //k
+      WM[I, J] := W;
+    end; //j
+  end; //i
+  sofa_CR(WM, ATB);
+end;
+
+procedure sofa_Zr(var r: rotmatrix);
+// Initialize an r-matrix to the null matrix.
+var
+  i, j: integer;
+begin
+  for i := 1 to 3 do
+    for j := 1 to 3 do
+      r[i, j] := 0;
+end;
+
+procedure sofa_Ir(var r: rotmatrix);
+//   Initialize an r-matrix to the identity matrix.
+begin
+  sofa_Zr(r);
+  r[1, 1] := 1.0;
+  r[2, 2] := 1.0;
+  r[3, 3] := 1.0;
+end;
+
+procedure sofa_Rz(psi: double; var r: rotmatrix);
+//  Rotate an r-matrix about the z-axis.
+var
+  s, c: extended;
+  a, w: rotmatrix;
+begin
+  // Matrix representing new rotation.
+  sincos(psi, s, c);
+  sofa_Ir(a);
+  a[1, 1] := c;
+  a[2, 1] := -s;
+  a[1, 2] := s;
+  a[2, 2] := c;
+  // Rotate.
+  sofa_Rxr(a, r, w);
+  // Return result.
+  sofa_Cr(w, r);
+end;
+
+procedure sofa_Ry(theta: double; var r: rotmatrix);
+//  Rotate an r-matrix about the y-axis.
+var
+  s, c: extended;
+  a, w: rotmatrix;
+begin
+  // Matrix representing new rotation.
+  sincos(theta, s, c);
+  sofa_Ir(a);
+  a[1, 1] := c;
+  a[3, 1] := s;
+  a[1, 3] := -s;
+  a[3, 3] := c;
+  // Rotate.
+  sofa_Rxr(a, r, w);
+  // Return result.
+  sofa_Cr(w, r);
+end;
+
+procedure sofa_Rx(phi: double; var r: rotmatrix);
+//  Rotate an r-matrix about the x-axis.
+var
+  s, c: extended;
+  a, w: rotmatrix;
+begin
+  // Matrix representing new rotation.
+  sincos(phi, s, c);
+  sofa_Ir(a);
+  a[2, 2] := c;
+  a[3, 2] := -s;
+  a[2, 3] := s;
+  a[3, 3] := c;
+  // Rotate.
+  sofa_Rxr(a, r, w);
+  // Return result.
+  sofa_Cr(w, r);
 end;
 
 

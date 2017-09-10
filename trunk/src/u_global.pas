@@ -46,6 +46,9 @@ type
   TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
   TIndiTransfert=(itNetwork,itDisk);
 
+  coordvector = array[1..3] of double;
+  rotmatrix = array[1..3, 1..3] of double;
+
   TBpm=array[1..1000]of array[1..2] of integer;
 
   TDouble2 = array[1..2] of double;
@@ -179,8 +182,10 @@ const
   pid2 = pi / 2;
   rad2deg=180/pi;
   deg2rad=pi/180;
+  secarc = deg2rad / 3600;
   musec = deg2rad / 3600 / 1000000; // 1 microarcsec for rounding test
   jd2000 = 2451545.0;
+  abek = secarc * 20.49552;  // aberration constant
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord=-9999;
@@ -299,6 +304,8 @@ var
   WaitTillrunning, cancelWaitTill: boolean;
   horizonlist: Thorizonlist;
   HorizonMax, HorizonMin, ElevationMin: double;
+  jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
+  NutMAT: rotmatrix;
 
   procedure globalmsg(str:string);
 
