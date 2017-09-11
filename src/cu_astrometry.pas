@@ -126,7 +126,7 @@ end;
 
 function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
 var pixsize,pixscale,telescope_focal_length,tolerance,MinRadius,ra,de: double;
-    n,iwidth:integer;
+    n,iwidth,iheight:integer;
     info: TcdcWCSinfo;
 begin
  if (not FBusy) then begin
@@ -136,12 +136,14 @@ begin
    de:=NullCoord;
    pixscale:=NullCoord;
    iwidth:=1000;
+   iheight:=1000;
    if n=0 then begin
      n:=cdcwcs_getinfo(addr(info),0);
      if n=0 then begin
        ra:=info.cra;
        de:=info.cdec;
        iwidth:=info.wp;
+       iheight:=info.hp;
        pixscale:=info.secpix;
      end;
    end;
@@ -160,6 +162,8 @@ begin
    engine.CygwinPath:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    engine.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
    engine.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
+   engine.PlateSolveFolder:=config.GetValue('/Astrometry/PlatesolveFolder','');
+   engine.PlateSolveWait:=config.GetValue('/Astrometry/PlatesolveWait',0);
    engine.LogFile:=logfile;
    engine.InFile:=infile;
    engine.OutFile:=outfile;
@@ -194,6 +198,10 @@ begin
    engine.ra:=ra;
    engine.de:=de;
    engine.radius:=max(MinRadius,pixscale*iwidth/3600);
+   engine.Xsize:=pixscale*iwidth/3600;
+   engine.Ysize:=pixscale*iheight/3600;
+   engine.iwidth:=iwidth;
+   engine.iheight:=iheight;
    engine.timeout:=AstrometryTimeout;
    FBusy:=true;
    engine.Resolve;
