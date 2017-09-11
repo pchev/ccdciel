@@ -35,7 +35,6 @@ type
   Tf_msg = class(TFrame)
     msg: TMemo;
     Panel1: TPanel;
-    procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }
@@ -49,29 +48,15 @@ implementation
 
 {$R *.lfm}
 
-procedure Tf_msg.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
-begin
-  if Target is TPanel then begin
-     if TPanel(Target).Width>TPanel(Target).Height then begin
-        msg.Constraints.MaxWidth:=600;
-        msg.Constraints.MinWidth:=600;
-     end else begin
-        msg.Constraints.MaxWidth:=180;
-        msg.Constraints.MinWidth:=180;
-     end;
-  end;
-end;
-
 procedure Tf_msg.FrameResize(Sender: TObject);
+var i,w: integer;
 begin
   if Parent is TPanel then begin
-     if TPanel(Parent).Width>TPanel(Parent).Height then begin
-        msg.Constraints.MaxWidth:=600;
-        msg.Constraints.MinWidth:=600;
-     end else begin
-        msg.Constraints.MaxWidth:=180;
-        msg.Constraints.MinWidth:=180;
-     end;
+    w:=TPanel(Parent).Width-Left;
+    for i:=0 to TPanel(Parent).ComponentCount-1 do
+       if TPanel(Parent).Components[i] is TFrame then
+         w:=w-Tframe(TPanel(Parent).Components[i]).Width;
+    Width:=w;
   end;
 end;
 

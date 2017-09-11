@@ -194,6 +194,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
@@ -623,7 +624,7 @@ tool.Tag:=PtrInt(toolmenu);
 if (toolmenu<>nil)and(par.tag>0) then begin
    npm:=TMenuItem(par.tag);
    opm:=toolmenu.Parent;
-   if npm<>opm then begin
+   if (opm<>nil)and(npm<>opm) then begin
      i:=opm.IndexOf(toolmenu);
      opm.Delete(i);
      npm.Add(toolmenu);
@@ -1363,6 +1364,12 @@ begin
     VK_F4 : PageControlRight.ActivePageIndex:=3;
 
   end;
+end;
+
+procedure Tf_main.FormResize(Sender: TObject);
+begin
+  // special tool resizing
+  if (f_msg<>nil) then f_msg.FrameResize(Sender);
 end;
 
 procedure Tf_main.Image1DblClick(Sender: TObject);
@@ -3445,7 +3452,7 @@ if sender is TPanel then begin
     end;
     if (npm<>nil)and(toolmenu<>nil) then begin
       opm:=toolmenu.Parent;
-      if npm<>opm then begin
+      if (opm<>nil)and(npm<>opm) then begin
         i:=opm.IndexOf(toolmenu);
         opm.Delete(i);
         npm.Add(toolmenu);
