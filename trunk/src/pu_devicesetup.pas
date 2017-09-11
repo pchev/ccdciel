@@ -57,6 +57,9 @@ type
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
     CameraIndiTransfertDir: TEdit;
+    DeviceFilterWheel: TCheckBox;
+    DeviceFocuser: TCheckBox;
+    DeviceMount: TCheckBox;
     Label5: TLabel;
     CameraDiskPanel: TPanel;
     ProfileList: TComboBox;
@@ -72,7 +75,6 @@ type
     InterfaceSelectionBox: TRadioGroup;
     IndiPort: TEdit;
     IndiServer: TEdit;
-    DeviceList: TCheckGroup;
     GetIndiDevices: TButton;
     Label1: TLabel;
     Label15: TLabel;
@@ -94,7 +96,6 @@ type
     Mount: TTabSheet;
     PanelFocuserIndi: TPanel;
     PanelMountIndi: TPanel;
-    Devices: TTabSheet;
     DeviceInterface: TTabSheet;
     WheelIndiDevice: TComboBox;
     FocuserIndiDevice: TComboBox;
@@ -129,7 +130,6 @@ type
     procedure FocuserInMountBoxClick(Sender: TObject);
     procedure GetIndiDevicesClick(Sender: TObject);
     procedure InterfaceSelectionBoxClick(Sender: TObject);
-    procedure DeviceListItemClick(Sender: TObject; Index: integer);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
     procedure ProfileListChange(Sender: TObject);
@@ -216,10 +216,9 @@ IndiServer.Text:=conf.GetValue('/INDI/Server','localhost');
 IndiPort.Text:=conf.GetValue('/INDI/ServerPort','7624');
 IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
 
-DeviceList.Checked[0]:=true;
-DeviceList.Checked[1]:=conf.GetValue('/Devices/FilterWheel',false);
-DeviceList.Checked[2]:=conf.GetValue('/Devices/Focuser',false);;
-DeviceList.Checked[3]:=conf.GetValue('/Devices/Mount',false);;
+DeviceFilterWheel.Checked:=conf.GetValue('/Devices/FilterWheel',false);
+DeviceFocuser.Checked:=conf.GetValue('/Devices/Focuser',false);;
+DeviceMount.Checked:=conf.GetValue('/Devices/Mount',false);;
 
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
 if CameraIndiDevice.Items.Count=0 then begin
@@ -264,11 +263,6 @@ MountIndiDevice.Text:=conf.GetValue('/INDImount/Device','');
 MountIndiDevPort.Text:=conf.GetValue('/INDImount/DevicePort','');
 MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
 AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
-end;
-
-procedure Tf_setup.DeviceListItemClick(Sender: TObject; Index: integer);
-begin
-  DeviceList.Checked[0]:=true;
 end;
 
 procedure Tf_setup.InterfaceSelectionBoxClick(Sender: TObject);
