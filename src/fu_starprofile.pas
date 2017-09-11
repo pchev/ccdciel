@@ -164,6 +164,7 @@ begin
  if ChkAutofocus.Checked then begin
     if Assigned(FAutoFocusStart) then FAutoFocusStart(self);
  end else begin
+   terminated:=true;
    if Assigned(FAutoFocusStop) then FAutoFocusStop(self);
  end;
 end;
