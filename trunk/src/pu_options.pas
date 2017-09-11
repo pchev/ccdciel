@@ -50,12 +50,19 @@ type
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
     CameraAutoCool: TCheckBox;
+    PlatesolveWait: TEdit;
+    Label79: TLabel;
+    Label80: TLabel;
+    PlatesolveFolder: TEdit;
     ElevationMin: TEdit;
+    Label78: TLabel;
+    platesolve: TGroupBox;
     HorizonFile: TFileNameEdit;
     Label76: TLabel;
     Label77: TLabel;
     MeridianFlipAutofocus: TCheckBox;
     MeridianFlipCalibrate: TCheckBox;
+    Page4: TPage;
     PageHNSKY: TPage;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
@@ -446,7 +453,7 @@ end;
 
 procedure Tf_option.SetResolver(value:integer);
 begin
-  if (value<0)or(value>2) then exit;
+  if (value<0)or(value>3) then exit;
   ResolverBox.ItemIndex:=value;
   ResolverBoxClick(nil);
 end;

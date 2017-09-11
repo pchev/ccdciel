@@ -171,6 +171,7 @@ const
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 2;
   blank=' ';
+  blank80='                                                                                ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;
   CR = #$0d;
@@ -199,6 +200,7 @@ const
   f4 = '0.0000';
   f5 = '0.00000';
   f6 = '0.000000';
+  e6 = '+0.000000E+00;-0.000000E+00;+0.000000E+00';
   b80 ='                                                                                ';
   FocusDirIn=true;
   FocusDirOut=false;
@@ -206,7 +208,8 @@ const
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
   ResolverNone=2;
-  ResolverName: array[0..2] of string =('Astrometry.Net','Elbrus','No resolver');
+  ResolverPlateSolve=3;
+  ResolverName: array[0..3] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve');
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;

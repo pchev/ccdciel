@@ -3106,6 +3106,8 @@ begin
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
    {$endif}
+   f_option.PlatesolveFolder.Text:=config.GetValue('/Astrometry/PlatesolveFolder','C:\PlateSolve2.28');
+   f_option.PlatesolveWait.Text:=IntToStr(config.GetValue('/Astrometry/PlatesolveWait',0));
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',1);
    f_option.SlewPrec.Text:=FormatFloat(f2,config.GetValue('/PrecSlew/Precision',5.0));
    f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
@@ -3222,6 +3224,8 @@ begin
      {$ifdef unix}
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
      {$endif}
+     config.SetValue('/Astrometry/PlatesolveFolder',f_option.PlatesolveFolder.Text);
+     config.SetValue('/Astrometry/PlatesolveWait',StrToIntDef(f_option.PlatesolveWait.Text,0));
      config.SetValue('/PrecSlew/Method',f_option.PrecSlewBox.ItemIndex);
      config.SetValue('/PrecSlew/Precision',StrToFloatDef(f_option.SlewPrec.Text,5.0));
      config.SetValue('/PrecSlew/Retry',StrToIntDef(f_option.SlewRetry.Text,3));

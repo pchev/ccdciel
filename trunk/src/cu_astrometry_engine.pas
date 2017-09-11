@@ -29,14 +29,15 @@ uses  u_global, u_utils, cu_fits,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
-  LCLIntf, math, UTF8Process, process, FileUtil, Classes, SysUtils;
+  LCLIntf, math, UTF8Process, process, FileUtil, strutils, Classes, SysUtils;
 
 type
 TAstrometry_engine = class(TThread)
    private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile : string;
-     Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout: double;
-     FObjs,FDown,FResolver: integer;
+     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile : string;
+     FPlateSolveFolder: string;
+     Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
+     FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fplot: boolean;
      Fresult:integer;
      Fcmd: string;
@@ -48,6 +49,7 @@ TAstrometry_engine = class(TThread)
      Ftmpfits: TFits;
    protected
      procedure Execute; override;
+     procedure Apm2Wcs;
    public
      constructor Create;
      destructor Destroy; override;
@@ -62,6 +64,10 @@ TAstrometry_engine = class(TThread)
      property ra: double read Fra write Fra;
      property de: double read Fde write Fde;
      property radius: double read Fradius write Fradius;
+     property Xsize: double read FXsize write FXsize;
+     property Ysize: double read FYsize write FYsize;
+     property iwidth: integer read Fiwidth write Fiwidth;
+     property iheight: integer read Fiheight write Fiheight;
      property timeout: double read FTimeout write FTimeout;
      property objs: integer read FObjs write FObjs;
      property downsample: integer read FDown write FDown;
@@ -75,6 +81,8 @@ TAstrometry_engine = class(TThread)
      property CygwinPath: string read FCygwinPath write FCygwinPath;
      property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
      property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
+     property PlateSolveFolder: string read FPlateSolveFolder write FPlateSolveFolder;
+     property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
 end;
 
 implementation
@@ -98,6 +106,7 @@ begin
   FDown:=0;
   Fscalelow:=0;
   Fscalehigh:=0;
+  FPlateSolveWait:=0;
   Fparam:=TStringList.Create;
   process:=TProcessUTF8.Create(nil);
   FreeOnTerminate:=true;
@@ -317,6 +326,23 @@ else if FResolver=ResolverElbrus then begin
   Copyfile(FInFile,slash(FElbrusDir)+FElbrusFile,[cffOverwriteFile]);
   Start;
 end
+else if FResolver=ResolverPlateSolve then begin
+  {$ifdef mswindows}
+    Fcmd:=slash(FPlateSolveFolder)+'PlateSolve2.exe';
+  {$else}
+    Fcmd:='wine';
+    Fparam.Add(slash(FPlateSolveFolder)+'PlateSolve2.exe');
+  {$endif}
+  buf:=FloatToStr(Fra*deg2rad)+','+
+       FloatToStr(Fde*deg2rad)+','+
+       FloatToStr(FXsize*deg2rad)+','+
+       FloatToStr(FYsize*deg2rad)+','+
+       '999,'+
+       FInFile+','+
+       IntToStr(PlateSolveWait);
+  Fparam.Add(buf);
+  Start;
+end
 else if FResolver=ResolverNone then begin
   Start;
 end;
@@ -475,6 +501,39 @@ else if FResolver=ResolverElbrus then begin
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
 end
+else if FResolver=ResolverPlateSolve then begin
+  process.Executable:=Fcmd;
+  process.Parameters:=Fparam;
+  try
+  process.Execute;
+  process.WaitOnExit;
+  Fresult:=process.ExitStatus;
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
+  except
+     Fresult:=1;
+  end;
+  // merge apm result
+  apmfile:=ChangeFileExt(FInFile,'.apm');
+  wcsfile:=ChangeFileExt(FInFile,'.wcs');
+  if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
+    Apm2Wcs;
+    Ftmpfits:=TFits.Create(nil);
+    mem:=TMemoryStream.Create;
+    try
+    mem.LoadFromFile(FInFile);
+    Ftmpfits.Stream:=mem;
+    mem.clear;
+    mem.LoadFromFile(wcsfile);
+    Ftmpfits.Header.NewWCS(mem);
+    Ftmpfits.SaveToFile(FOutFile);
+    except
+      Ftmpfits.Free;
+      mem.Free;
+    end;
+  end;
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+end
 else if FResolver=ResolverNone then begin
   if (FLogFile<>'') then begin
     AssignFile(ft,FLogFile);
@@ -484,6 +543,106 @@ else if FResolver=ResolverNone then begin
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
 end;
+end;
+
+procedure TAstrometry_engine.Apm2Wcs;
+// comunicated by Han Kleijn
+// simplified as ccdciel force decimal separator to .
+var
+   i,pos1,pos2,pos3,sign : integer;
+   f     : textfile;
+   line1, line2,line3 :string;
+   hdr: THeaderBlock;
+   fwcs: file of THeaderBlock;
+   ra_radians,dec_radians,pixel_size,crota1,crota2,yx_ratio,cdelt1,cdelt2:double;
+   cd1_1,cd1_2,cd2_1,cd2_2: double;
+begin
+  assign(f,apmfile);
+ // Reopen the file for reading
+  Reset(f);
+  while not Eof(f) do
+  begin
+    readln(f,line1);
+    readln(f,line2);
+    readln(f,line3);
+  end;
+  closefile(f);
+  if length(line3)=20 then {valid solution}
+  begin
+    pos1:=posex(',',line1,1);
+    pos2:=posex(',',line1,pos1+1);
+
+    ra_radians:=strtofloat(copy(line1,1,pos1-1));
+    dec_radians:=strtofloat(copy(line1,pos1+1,pos2-pos1-1));
+
+
+    pos1:=posex(',',line2,1);
+    pos2:=posex(',',line2,pos1+1);
+    pos3:=posex(',',line2,pos2+1);
+
+    pixel_size:=strtofloat(copy(line2,1,pos1-1));
+    crota2:=strtofloat(copy(line2,pos1+1,pos2-pos1-1));
+    yx_ratio:=strtofloat(copy(line2,pos2+1,pos3-pos2-1));{if positive flipped}
+
+    cdelt1:=-pixel_size/3600;
+    {yx ration is apm file is inverse compared with platesolve window}
+    if yx_ratio>0 then
+    begin
+     cdelt1:=-pixel_size/3600;
+     cdelt2:=+pixel_size/3600;
+    end
+    else
+    begin
+      cdelt1:=+pixel_size/3600;
+      cdelt2:=+pixel_size/3600;
+      crota2:=180-crota2; {very strange angle reporting in Platesolve2 ?? took me whole day to fixs this}
+    end;
+    crota1:=crota2;
+
+    // old_to_new_WCS
+
+    cd1_1:=cdelt1*cos(crota2*pi/180); {note 2013 should be crota1 if skewed}
+    if cdelt1>=0 then sign:=+1 else sign:=-1;
+    cd1_2:=abs(cdelt2)*sign*sin(crota2*pi/180);{note 2013 should be crota1 if skewed}
+    if cdelt2>=0 then sign:=+1 else sign:=-1;
+    cd2_1:=-abs(cdelt1)*sign*sin(crota2*pi/180);
+    cd2_2:= cdelt2*cos(crota2*pi/180);
+
+    // write header
+    for i:=1 to 36 do
+       hdr[i]:=blank80;
+    hdr[1] := 'COMMENT    Solved by Platesolve 2'+blank80;
+    hdr[2] := 'CTYPE1  = '+#39+'RA---TAN'+#39+'           / first parameter RA  ,  projection TANgential'+blank80;
+    hdr[3] := 'CTYPE2  = '+#39+'DEC--TAN'+#39+'           / second parameter DEC,  projection TANgential'+blank80;
+    hdr[4] := 'CUNIT1  = '+#39+'deg     '+#39+'           / Unit of coordinate                          '+blank80;
+    hdr[5] := 'CRPIX1  = '+FormatFloat(e6,1+Fiwidth/2)+'        / X of reference pixel                  '+blank80;
+    hdr[6] := 'CRPIX2  = '+FormatFloat(e6,1+Fiheight/2)+'        / Y of reference pixel                 '+blank80;
+    hdr[7] := 'CRVAL1  = '+FormatFloat(e6,ra_radians*rad2deg)+'        / RA of reference pixel (deg)    '+blank80;
+    hdr[8] := 'CRVAL2  = '+FormatFloat(e6,dec_radians*rad2deg)+'        / DEC of reference pixel (deg)  '+blank80;
+    hdr[9] := 'CDELT1  = '+FormatFloat(e6,cdelt1)+'        / X pixel size (deg)                         '+blank80;
+    hdr[10] := 'CDELT2  = '+FormatFloat(e6,cdelt2)+'        / Y pixel size (deg)                         '+blank80;
+    hdr[11] := 'CROTA1  = '+FormatFloat(e6,crota1)+'        / Image twist of X axis        (deg)        '+blank80;
+    hdr[12] := 'CROTA2  = '+FormatFloat(e6,crota2)+'        / Image twist of Y axis        (deg)        '+blank80;
+    hdr[13] := 'CD1_1   = '+FormatFloat(e6,cd1_1)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
+    hdr[14] := 'CD1_2   = '+FormatFloat(e6,cd1_2)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
+    hdr[15] := 'CD2_1   = '+FormatFloat(e6,cd2_1)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
+    hdr[16] := 'CD2_2   = '+FormatFloat(e6,cd2_2)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
+    hdr[17] := 'END'+blank80;
+
+    // write wcs file
+    assign(fwcs,wcsfile);
+    Rewrite(fwcs,1);
+    BlockWrite(fwcs,hdr,sizeof(THeaderBlock));
+    CloseFile(fwcs);
+
+    // mark as solved
+    AssignFile(f,ChangeFileExt(FInFile,'.solved'));
+    rewrite(f);
+    write(f,' ');
+    CloseFile(f);
+  end;
+
+
 end;
 
 end.
