@@ -4439,7 +4439,7 @@ begin
    exit;
  end;
  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
-   NewMessage('Please run Vcurve learning for this focuser direction.');
+   NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
    f_starprofile.ChkAutofocus.Checked:=false;
    exit;
  end;
@@ -4604,7 +4604,7 @@ begin
     exit;
   end;
   if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
-    NewMessage('Please run Vcurve learning for this focuser direction.');
+    NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;
