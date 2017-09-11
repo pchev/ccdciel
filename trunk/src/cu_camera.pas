@@ -381,7 +381,7 @@ begin
      focal_length:=Fmount.FocaleLength
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
-  if (focal_length<1) then msg('Error: Unknow telescope focal length');
+  if (focal_length<1) then msg('Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY.');
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
   except
