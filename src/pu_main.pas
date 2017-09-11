@@ -2964,10 +2964,10 @@ begin
     config.SetValue('/INDI/ServerPort',f_setup.IndiPort.Text);
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
 
-    config.SetValue('/Devices/Camera',f_setup.DeviceList.Checked[0]);
-    config.SetValue('/Devices/FilterWheel',f_setup.DeviceList.Checked[1]);
-    config.SetValue('/Devices/Focuser',f_setup.DeviceList.Checked[2]);;
-    config.SetValue('/Devices/Mount',f_setup.DeviceList.Checked[3]);;
+    config.SetValue('/Devices/Camera',true);
+    config.SetValue('/Devices/FilterWheel',f_setup.DeviceFilterWheel.Checked);
+    config.SetValue('/Devices/Focuser',f_setup.DeviceFocuser.Checked);
+    config.SetValue('/Devices/Mount',f_setup.DeviceMount.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
