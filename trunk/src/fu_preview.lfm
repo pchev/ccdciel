@@ -6,6 +6,7 @@ object f_preview: Tf_preview
   AutoSize = True
   ClientHeight = 146
   ClientWidth = 147
+  ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
@@ -20,21 +21,23 @@ object f_preview: Tf_preview
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 24
+      Height = 31
       Top = 0
       Width = 141
-      ClientHeight = 24
+      ClientHeight = 31
       ClientWidth = 141
       TabOrder = 2
       object ExpTime: TComboBox
         Left = 50
-        Height = 23
+        Height = 30
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
         ItemHeight = 0
-        ItemIndex = 5
+        ItemIndex = 7
         Items.Strings = (
+          '0.001'
+          '0.005'
           '0.01'
           '0.05'
           '0.1'
@@ -45,30 +48,31 @@ object f_preview: Tf_preview
           '5'
           '10'
           '20'
+          '60'
         )
         TabOrder = 0
         Text = '1'
       end
       object Label1: TLabel
         Left = 0
-        Height = 15
+        Height = 18
         Top = 4
-        Width = 23
+        Width = 22
         Caption = 'Exp'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 24
-      Top = 24
+      Height = 31
+      Top = 31
       Width = 141
-      ClientHeight = 24
+      ClientHeight = 31
       ClientWidth = 141
       TabOrder = 3
       object Binning: TComboBox
         Left = 50
-        Height = 23
+        Height = 30
         Hint = 'Camera binning'
         Top = 0
         Width = 90
@@ -84,18 +88,18 @@ object f_preview: Tf_preview
       end
       object Label2: TLabel
         Left = 0
-        Height = 15
+        Height = 18
         Top = 4
-        Width = 24
+        Width = 22
         Caption = 'Bin.'
         ParentColor = False
       end
     end
     object BtnPreview: TButton
       Left = 0
-      Height = 25
+      Height = 24
       Hint = 'Start one preview exposure'
-      Top = 48
+      Top = 62
       Width = 141
       Caption = 'Preview'
       OnClick = BtnPreviewClick
@@ -105,9 +109,9 @@ object f_preview: Tf_preview
     object BtnLoop: TButton
       Tag = 1
       Left = 0
-      Height = 25
+      Height = 24
       Hint = 'Loop preview exposures'
-      Top = 73
+      Top = 86
       Width = 141
       Caption = 'Loop'
       OnClick = BtnLoopClick
