@@ -1034,6 +1034,11 @@ begin
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Text:=config.GetValue('/Capture/Count','1');
 
+  f_visu.BtnLinear.Checked:=config.GetValue('/Visu/Linear',True);
+  f_visu.BtnLog.Checked:=config.GetValue('/Visu/Log',False);
+  f_visu.BtnSqrt.Checked:=config.GetValue('/Visu/Sqrt',False);
+
+
   ImaBmp:=TBGRABitmap.Create;
   LockMouse:=false;
   ImgCx:=0;
@@ -1298,6 +1303,10 @@ begin
   config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
 
   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
+
+  config.SetValue('/Visu/Linear',f_visu.BtnLinear.Checked);
+  config.SetValue('/Visu/Log',f_visu.BtnLog.Checked);
+  config.SetValue('/Visu/Sqrt',f_visu.BtnSqrt.Checked);
 
   n:=Filters.Count-1;
   config.SetValue('/Filters/Num',n);
