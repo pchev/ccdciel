@@ -78,7 +78,7 @@ type
     emptybmp:Tbitmap;
     histfwhm, histimax: array[0..maxhist] of double;
     maxfwhm,maximax: double;
-    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd:double;
+    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd,Fsnr:double;
     curhist,FfocuserSpeed,FnumHfd: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult: boolean;
@@ -107,6 +107,7 @@ type
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar write FFindStar;
     property HFD:double read Fhfd;
+    property SNR:double read Fsnr;
     property ValMax: double read FValMax;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
@@ -420,7 +421,7 @@ var i,j: integer;
     SumVal,SumValX,SumValY,SumValR: double;
     Xg,Yg,fxg,fyg: double;
     r,xs,ys:double;
-    noise,snr,val: double;
+    noise,val: double;
 begin
 // x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
 hfd:=-1;
@@ -453,8 +454,8 @@ fyg:=frac(yc);
 SumVal:=0;
 SumValR:=0;
 noise:=sqrt(bg);
-snr:=valmax/sqrt(valmax+2*bg);
-if snr>3 then begin
+Fsnr:=valmax/sqrt(valmax+2*bg);
+if Fsnr>3 then begin
  for i:=-ri to ri do
    for j:=-ri to ri do begin
      Val:=vmin+Img[0,y+j,x+i]/c-bg;
@@ -660,7 +661,7 @@ begin
       PlotProfile(img,c,vmin,bg,s);
       FSumHfd:=FSumHfd+Fhfd;
       inc(FnumHfd);
-      msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', HFD='+FormatFloat(f1,Fhfd));
+      msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
       if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
         Fhfd:=FSumHfd/FnumHfd;
         FnumHfd:=0;
@@ -678,11 +679,11 @@ begin
     PlotProfile(img,c,vmin,bg,s);
     if terminated then begin
       ChkAutofocus.Checked:=false; // focus reached
-      msg('Autofocus terminated, HFD='+FormatFloat(f1,Fhfd));
+      msg('Autofocus terminated, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
       if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
       exit;
     end;
-    msg('Autofocus running, HFD='+FormatFloat(f1,Fhfd));
+    msg('Autofocus running, hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
     // do focus
     case AutofocusMode of
       afVcurve   : doAutofocusVcurve;

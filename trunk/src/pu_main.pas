@@ -2590,12 +2590,13 @@ begin
      end;
      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
      hfdsum:=hfdsum+f_starprofile.HFD;
+     NewMessage(inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    end;
    hfd:=hfdsum/nsum;
    // store result always from left to right
    AutofocusVc[k,1]:=focuser.Position;
    AutofocusVc[k,2]:=hfd;
-   NewMessage('Vcurve n'+inttostr(i)+' '+FormatFloat(f0,AutofocusVc[k,1])+' '+FormatFloat(f1,AutofocusVc[k,2]));
+   NewMessage('Vcurve n'+inttostr(i)+' pos:'+FormatFloat(f0,AutofocusVc[k,1])+' hfd:'+FormatFloat(f1,AutofocusVc[k,2])+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    // use minimal hfd as a rought focus position used to split right and left curve
    if AutofocusVc[k,2]<hfdmin then begin
      hfdmin:=AutofocusVc[k,2];
