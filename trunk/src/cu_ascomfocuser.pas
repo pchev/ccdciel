@@ -29,7 +29,7 @@ uses cu_focuser, u_global,
     {$ifdef mswindows}
     indiapi, Variants, comobj,
     {$endif}
-    ExtCtrls,Classes, SysUtils;
+    Forms, ExtCtrls,Classes, SysUtils;
 
 type
 T_ascomfocuser = class(T_focuser)
@@ -62,6 +62,7 @@ T_ascomfocuser = class(T_focuser)
    function  GetPositionRange: TNumRange; override;
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
+   function  WaitFocuserMoving(maxtime:integer):boolean;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -203,6 +204,30 @@ begin
  {$endif}
 end;
 
+function T_ascomfocuser.WaitFocuserMoving(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ try
+ if Connected then begin
+   maxcount:=maxtime div 100;
+   count:=0;
+   while (V.IsMoving)and(count<maxcount) do begin
+      sleep(100);
+      Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+ {$endif}
+end;
+
 procedure T_ascomfocuser.FocusIn;
 begin
  {$ifdef mswindows}
@@ -228,6 +253,8 @@ begin
    try
    msg('Focuser '+Fdevice+' move to '+inttostr(p));
    V.Move(p);
+   WaitFocuserMoving(30000);
+
    except
     on E: Exception do msg('Focuser '+Fdevice+' Set position error: ' + E.Message);
    end;
@@ -295,6 +322,8 @@ begin
    i:=FFocusdirection*FRelIncr;
    msg('Focuser '+Fdevice+' move by '+inttostr(i));
    V.Move(i);
+   WaitFocuserMoving(30000);
+
    except
     on E: Exception do msg('Focuser '+Fdevice+' Set relative position error: ' + E.Message);
    end;
