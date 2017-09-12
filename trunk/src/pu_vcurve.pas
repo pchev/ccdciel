@@ -5,7 +5,7 @@ unit pu_vcurve;
 interface
 
 uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils,
-  FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, Forms, Controls,
+  FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls,
   Math, Graphics, Dialogs, StdCtrls, ComCtrls, TACustomSeries, TASeries;
 
 type
@@ -17,6 +17,7 @@ type
     BtnSave: TButton;
     BtnStopVcurve: TButton;
     Label12: TLabel;
+    LabelCoord: TLabel;
     LabelFocusdir: TLabel;
     LabelQuality: TLabel;
     Label9: TLabel;
@@ -57,6 +58,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure GetPosClick(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
+    procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     { private declarations }
     Fstarprofile: Tf_starprofile;
@@ -65,6 +68,7 @@ type
     FonLearnVcurve: TNotifyEvent;
     FonStopVcurve: TNotifyEvent;
     FonSaveVcurve: TNotifyEvent;
+    procedure LearnVcurveAsync(Data: PtrInt);
   public
     { public declarations }
     Procedure FindLinearPart;
@@ -84,16 +88,41 @@ implementation
 
 { Tf_vcurve }
 
+procedure Tf_vcurve.LearnVcurveAsync(Data: PtrInt);
+begin
+  BtnStopVcurve.Visible:=true;
+  BtnLearnVcurve.Visible:=false;
+  BtnSave.Visible:=false;
+  FocusPos.Enabled:=false;
+  HalfWidth.Enabled:=false;
+  Nsteps.Enabled:=false;
+  try
+   if Assigned(FonLearnVcurve) then FonLearnVcurve(self);
+  finally
+   BtnStopVcurve.Visible:=false;
+   BtnLearnVcurve.Visible:=true;
+   BtnSave.Visible:=true;
+   FocusPos.Enabled:=true;
+   HalfWidth.Enabled:=true;
+   Nsteps.Enabled:=true;
+  end;
+end;
 
 procedure Tf_vcurve.BtnLearnVcurveClick(Sender: TObject);
 begin
-  BtnStopVcurve.Visible:=true;
-  if Assigned(FonLearnVcurve) then FonLearnVcurve(self);
-  BtnStopVcurve.Visible:=false;
+  if BtnStopVcurve.Visible then exit;
+  application.QueueAsyncCall(@LearnVcurveAsync,0);
 end;
 
 procedure Tf_vcurve.BtnSaveClick(Sender: TObject);
+var r2: double;
 begin
+  r2:=StrToFloatDef(LabelQuality.Caption,-1);
+  if r2<0.9 then begin
+    if MessageDlg('V curve quality is low. Do you really want to save this curve?',mtConfirmation,mbYesNo,0)<>mrYes
+    then
+       exit;
+  end;
   if Assigned(FonSaveVcurve) then FonSaveVcurve(self);
   Close;
 end;
@@ -105,11 +134,11 @@ end;
 
 procedure Tf_vcurve.FormShow(Sender: TObject);
 begin
-  LabelFocusdir.Caption:='Focus direction';
+  LabelFocusdir.Caption:='Focus direction: ';
   if AutofocusMoveDir=FocusDirIn then
-     LabelFocusdir.Caption:=LabelFocusdir.Caption+' <='
+     LabelFocusdir.Caption:=LabelFocusdir.Caption+' In <='
   else
-     LabelFocusdir.Caption:=LabelFocusdir.Caption+' =>';
+     LabelFocusdir.Caption:=LabelFocusdir.Caption+' Out =>';
 end;
 
 procedure Tf_vcurve.GetPosClick(Sender: TObject);
@@ -121,6 +150,19 @@ procedure Tf_vcurve.TrackBar1Change(Sender: TObject);
 begin
   AutofocusVcSkipNum:=TrackBar1.Position;
   LoadCurve;
+end;
+
+procedure Tf_vcurve.VcChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var pointi: TPoint;
+    pointg: TDoublePoint;
+begin
+  try
+  pointi.x:=X;
+  pointi.y:=Y;
+  pointg:=VcChart.ImageToGraph(pointi);
+  LabelCoord.Caption:='Pos:'+IntToStr(trunc(pointg.x))+' HFD:'+FormatFloat(f1,pointg.y);
+  except
+  end;
 end;
 
 Procedure Tf_vcurve.FindLinearPart;

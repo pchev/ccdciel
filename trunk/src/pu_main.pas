@@ -2586,6 +2586,7 @@ begin
      f_preview.ControlExposure(exp,bin,bin);
      if TerminateVcurve then begin
        NewMessage('Stop Vcurve learning');
+       LoadVcurve;
        exit;
      end;
      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);

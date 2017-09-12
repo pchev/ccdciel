@@ -1,22 +1,21 @@
 object f_vcurve: Tf_vcurve
   Left = 0
-  Height = 500
+  Height = 511
   Top = 0
   Width = 320
   ActiveControl = BtnLearnVcurve
   AlphaBlendValue = 128
   Caption = 'V curve'
-  ClientHeight = 500
+  ClientHeight = 511
   ClientWidth = 320
   FormStyle = fsStayOnTop
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
   Visible = False
   object BtnLearnVcurve: TButton
-    Left = 112
+    Left = 109
     Height = 25
     Hint = 'Start the Vcurve learning process'
-    Top = 458
+    Top = 472
     Width = 98
     Caption = 'Learn'
     OnClick = BtnLearnVcurveClick
@@ -25,9 +24,9 @@ object f_vcurve: Tf_vcurve
     TabOrder = 0
   end
   object VcChart: TChart
-    Left = 7
+    Left = 8
     Height = 200
-    Top = 128
+    Top = 120
     Width = 300
     AntialiasingMode = amOn
     AxisList = <    
@@ -49,6 +48,7 @@ object f_vcurve: Tf_vcurve
     Title.Text.Strings = (
       'TAChart'
     )
+    OnMouseMove = VcChartMouseMove
     object VcChartPtL: TLineSeries
       LinePen.Color = clNone
       LinePen.Style = psClear
@@ -80,103 +80,103 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSL: TLabel
     Left = 42
-    Height = 15
-    Top = 393
-    Width = 20
+    Height = 18
+    Top = 401
+    Width = 15
     Caption = '     '
     ParentColor = False
   end
   object LabelSR: TLabel
     Left = 239
-    Height = 15
-    Top = 393
-    Width = 20
+    Height = 18
+    Top = 401
+    Width = 15
     Caption = '     '
     ParentColor = False
   end
   object LabelPID: TLabel
     Left = 135
-    Height = 15
-    Top = 434
-    Width = 20
+    Height = 18
+    Top = 442
+    Width = 15
     Caption = '     '
     ParentColor = False
   end
   object Label4: TLabel
     Left = 42
-    Height = 15
-    Top = 376
-    Width = 47
+    Height = 18
+    Top = 384
+    Width = 43
     Caption = 'Slope L'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 135
-    Height = 15
-    Top = 417
+    Height = 18
+    Top = 425
     Width = 21
     Caption = 'PID'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 239
-    Height = 15
-    Top = 376
-    Width = 48
+    Height = 18
+    Top = 384
+    Width = 44
     Caption = 'Slope R'
     ParentColor = False
   end
   object Label7: TLabel
     Left = 42
-    Height = 15
-    Top = 417
+    Height = 18
+    Top = 425
     Width = 22
     Caption = 'PI L'
     ParentColor = False
   end
   object LabelPIL: TLabel
     Left = 42
-    Height = 15
-    Top = 434
-    Width = 20
+    Height = 18
+    Top = 442
+    Width = 15
     Caption = '     '
     ParentColor = False
   end
   object LabelPIR: TLabel
     Left = 239
-    Height = 15
-    Top = 433
-    Width = 20
+    Height = 18
+    Top = 441
+    Width = 15
     Caption = '     '
     ParentColor = False
   end
   object Label10: TLabel
     Left = 239
-    Height = 15
-    Top = 417
+    Height = 18
+    Top = 425
     Width = 23
     Caption = 'PI R'
     ParentColor = False
   end
   object Label11: TLabel
     Left = 135
-    Height = 15
-    Top = 376
-    Width = 43
+    Height = 18
+    Top = 384
+    Width = 40
     Caption = 'Center'
     ParentColor = False
   end
   object LabelCenter: TLabel
     Left = 135
-    Height = 15
-    Top = 393
-    Width = 20
+    Height = 18
+    Top = 401
+    Width = 15
     Caption = '     '
     ParentColor = False
   end
   object FocusPos: TEdit
     Left = 120
-    Height = 23
+    Height = 24
     Hint = 'The approximate focus position, it is important this value is as precise as possible.'
     Top = 8
     Width = 80
@@ -186,9 +186,9 @@ object f_vcurve: Tf_vcurve
   end
   object Label1: TLabel
     Left = 8
-    Height = 15
+    Height = 18
     Top = 12
-    Width = 91
+    Width = 87
     Caption = 'Focus position'
     ParentColor = False
   end
@@ -206,7 +206,7 @@ object f_vcurve: Tf_vcurve
   end
   object HalfWidth: TEdit
     Left = 120
-    Height = 23
+    Height = 24
     Hint = 'The maximum offset we will move the focuser in and out. '#10'The focuser must move enough to get a big defocused star '#10'with a HFD of at least 20, or 2-3x the "Near focus" HFD value.'
     Top = 40
     Width = 80
@@ -216,15 +216,15 @@ object f_vcurve: Tf_vcurve
   end
   object Label2: TLabel
     Left = 8
-    Height = 15
+    Height = 18
     Top = 46
-    Width = 66
+    Width = 63
     Caption = 'Max offset'
     ParentColor = False
   end
   object Nsteps: TEdit
     Left = 144
-    Height = 23
+    Height = 24
     Hint = 'The number of measurement point for this curve'
     Top = 72
     Width = 56
@@ -234,17 +234,17 @@ object f_vcurve: Tf_vcurve
   end
   object Label3: TLabel
     Left = 8
-    Height = 15
+    Height = 18
     Top = 76
-    Width = 107
+    Width = 100
     Caption = 'Number of steps'
     ParentColor = False
   end
   object LabelQuality: TLabel
     Left = 239
-    Height = 15
-    Top = 344
-    Width = 16
+    Height = 18
+    Top = 352
+    Width = 12
     Caption = '    '
     ParentColor = False
   end
@@ -252,7 +252,7 @@ object f_vcurve: Tf_vcurve
     Left = 72
     Height = 46
     Hint = 'After learning is completed you can use this cursor to better adjust to the linear part of the curve. '#10'The fit must be particulary good near the horizontal blue line position.'
-    Top = 320
+    Top = 328
     Width = 88
     OnChange = TrackBar1Change
     PageSize = 1
@@ -262,9 +262,9 @@ object f_vcurve: Tf_vcurve
     TabOrder = 6
   end
   object BtnSave: TButton
-    Left = 234
+    Left = 231
     Height = 25
-    Top = 458
+    Top = 472
     Width = 75
     Caption = 'Save'
     OnClick = BtnSaveClick
@@ -272,24 +272,24 @@ object f_vcurve: Tf_vcurve
   end
   object Label9: TLabel
     Left = 42
-    Height = 15
-    Top = 344
-    Width = 14
+    Height = 18
+    Top = 352
+    Width = 15
     Caption = 'Fit'
     ParentColor = False
   end
   object Label12: TLabel
     Left = 176
-    Height = 15
-    Top = 344
-    Width = 47
+    Height = 18
+    Top = 352
+    Width = 46
     Caption = 'Quality:'
     ParentColor = False
   end
   object LabelFocusdir: TLabel
     Left = 32
     Height = 18
-    Top = 112
+    Top = 104
     Width = 272
     Alignment = taCenter
     AutoSize = False
@@ -297,14 +297,22 @@ object f_vcurve: Tf_vcurve
     ParentColor = False
   end
   object BtnStopVcurve: TButton
-    Left = 11
+    Left = 8
     Height = 25
-    Top = 458
+    Top = 472
     Width = 75
     Caption = 'Stop'
     OnClick = BtnStopVcurveClick
     TabOrder = 8
     Visible = False
+  end
+  object LabelCoord: TLabel
+    Left = 179
+    Height = 18
+    Top = 322
+    Width = 120
+    Caption = '                                        '
+    ParentColor = False
   end
   object FitSourceL: TListChartSource
     left = 95
