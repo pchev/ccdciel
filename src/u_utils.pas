@@ -1337,7 +1337,7 @@ var
 begin
   HorizonMax := musec;
   HorizonMin := pid2;
-  for i := 1 to 360 do
+  for i := 0 to 361 do
     horizonlist[i] := 0;
   if fileexists(fname) then
   begin
@@ -1411,6 +1411,7 @@ begin
           HorizonMin := min(HorizonMin, de);
         end;
       end;
+      horizonlist[0]   := horizonlist[1];
       horizonlist[361] := horizonlist[1];
     end;
   end;
@@ -1561,13 +1562,20 @@ end;
 
 
 function ObjRise(ra,de: double; out hr: double; out i:integer):boolean;
-var jd0,azr,hhr,a,h,ch,st: double;
+var jd0,azr,hhr,hht,a,h,ch,st: double;
     aa: integer;
 begin
   result:=false;
   jd0:=DateTimetoJD0(now);
   h:=ElevationMin*deg2rad;
   RiseTime(jd0,ra*15*deg2rad,de*deg2rad,h,hhr,azr,i);
+  if i=1 then begin
+    // circumpolar, look for minimal altitude
+    TransitTime(jd0,ra*15*deg2rad,de*deg2rad,hht,i);
+    hhr:=rmod(hht+12,24);
+    azr:=pi;
+    i:=0;
+  end;
   if i=0 then begin
     aa:=round(rmod(azr + pi, pi2)*rad2deg);
     if (aa<0)or(aa>360) then exit;
@@ -1577,22 +1585,30 @@ begin
      st:=SidTim(jd0,hhr-ObsTimeZone,ObsLongitude);
      Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
      aa:=round(rmod(a + pi, pi2)*rad2deg);
+     if aa=360 then aa:=0;
      if (aa>180)or(aa<0)or(aa>360) then exit;
      ch:=horizonlist[aa];
     end;
-    hr:=hhr;
+    hr:=rmod(hhr+24,24);
     result:=true;
   end;
 end;
 
 function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
-var jd0,azs,hhs,a,h,ch,st: double;
+var jd0,azs,hhs,hht,a,h,ch,st: double;
     aa: integer;
 begin
   result:=false;
   jd0:=DateTimetoJD0(now);
   h:=ElevationMin*deg2rad;
   SetTime(jd0,ra*15*deg2rad,de*deg2rad,h,hhs,azs,i);
+  if i=1 then begin
+    // circumpolar, look for minimal altitude
+    TransitTime(jd0,ra*15*deg2rad,de*deg2rad,hht,i);
+    hhs:=rmod(hht+12,24);
+    azs:=pi;
+    i:=0;
+  end;
   if i=0 then begin
     aa:=round(rmod(azs + pi, pi2)*rad2deg);
     if (aa<0)or(aa>360) then exit;
@@ -1602,10 +1618,11 @@ begin
      st:=SidTim(jd0,hhs-ObsTimeZone,ObsLongitude);
      Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
      aa:=round(rmod(a + pi, pi2)*rad2deg);
+     if aa=0 then aa:=360;
      if (aa<180)or(aa<0)or(aa>360) then exit;
      ch:=horizonlist[aa];
     end;
-    hs:=hhs;
+    hs:=rmod(hhs+24,24);
     result:=true;
   end;
 end;
