@@ -17,6 +17,7 @@ type
     BtnSave: TButton;
     BtnStopVcurve: TButton;
     Label12: TLabel;
+    LabelStepProgress: TLabel;
     LabelCoord: TLabel;
     LabelFocusdir: TLabel;
     LabelQuality: TLabel;
@@ -73,6 +74,8 @@ type
     { public declarations }
     Procedure FindLinearPart;
     Procedure LoadCurve;
+    Procedure ClearGraph;
+    procedure LearnProgress(n:integer; x,y: double);
     property preview:Tf_preview read Fpreview write Fpreview;
     property focuser:Tf_focuser read Ffocuser write Ffocuser;
     property starprofile:Tf_starprofile read Fstarprofile write Fstarprofile;
@@ -96,9 +99,11 @@ begin
   FocusPos.Enabled:=false;
   HalfWidth.Enabled:=false;
   Nsteps.Enabled:=false;
+  ClearGraph;
   try
    if Assigned(FonLearnVcurve) then FonLearnVcurve(self);
   finally
+   LabelStepProgress.Caption:='';
    BtnStopVcurve.Visible:=false;
    BtnLearnVcurve.Visible:=true;
    BtnSave.Visible:=true;
@@ -156,12 +161,16 @@ procedure Tf_vcurve.VcChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: 
 var pointi: TPoint;
     pointg: TDoublePoint;
 begin
+  if (x>5)and(x<(VcChart.Width-5))and(y>5)and(y<(VcChart.Height-5)) then begin
   try
   pointi.x:=X;
   pointi.y:=Y;
   pointg:=VcChart.ImageToGraph(pointi);
   LabelCoord.Caption:='Pos:'+IntToStr(trunc(pointg.x))+' HFD:'+FormatFloat(f1,pointg.y);
   except
+  end;
+  end else begin
+    LabelCoord.Caption:='';
   end;
 end;
 
@@ -204,6 +213,15 @@ except
 end;
 end;
 
+Procedure Tf_vcurve.ClearGraph;
+begin
+  FitSourceL.DataPoints.Clear;
+  FitSourceR.DataPoints.Clear;
+  PtSourceL.DataPoints.Clear;
+  PtSourceR.DataPoints.Clear;
+  RefSource.DataPoints.Clear;
+end;
+
 Procedure Tf_vcurve.LoadCurve;
 var i,nl,nr: integer;
   r2,rl,rr,bl,br:double;
@@ -212,6 +230,7 @@ var i,nl,nr: integer;
 begin
 try
 if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
+  ClearGraph;
   // skip flat central part
   TrackBar1.Max:=max(AutofocusVcSkipNum,round(1+AutofocusVcNum/4));
   TrackBar1.Position:=AutofocusVcSkipNum;
@@ -240,16 +259,12 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
   if AutofocusVcDir then r2:=rr*rr else r2:=rl*rl;
 
   // draw linear regression
-  FitSourceL.DataPoints.Clear;
-  FitSourceR.DataPoints.Clear;
   FitSourceL.Add(AutofocusVc[0,1],AutofocusVc[0,1]*AutofocusVcSlopeL+bl);
   FitSourceL.Add(AutofocusVcpiL,0);
   FitSourceR.Add(AutofocusVcpiR,0);
   FitSourceR.Add(AutofocusVc[AutofocusVcNum,1],AutofocusVc[AutofocusVcNum,1]*AutofocusVcSlopeR+br);
 
   // draw data points
-  PtSourceL.DataPoints.Clear;
-  PtSourceR.DataPoints.Clear;
   for i:=0 to PosFocus do begin
     if i<nl then col:=clGreen  else col:=clRed;
     PtSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
@@ -260,7 +275,6 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
   end;
 
   // draw near focus reference
-  RefSource.DataPoints.Clear;
   RefSource.Add(AutofocusVc[0,1],AutofocusNearHFD);
   RefSource.Add(AutofocusVc[AutofocusVcNum,1],AutofocusNearHFD);
 
@@ -277,6 +291,13 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
 end;
 except
 end;
+end;
+
+procedure Tf_vcurve.LearnProgress(n:integer; x,y: double);
+begin
+  LabelStepProgress.Caption:='/ '+IntToStr(n+1);
+  PtSourceL.Add(x,y,'',clGreen);
+  FitSourceL.Add(x,y);
 end;
 
 end.

@@ -90,6 +90,7 @@ implementation
 constructor Tf_focuser.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ Notebook1.PageIndex:=1;
  ScaleDPI(Self);
 end;
 

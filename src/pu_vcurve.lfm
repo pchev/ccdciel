@@ -314,6 +314,14 @@ object f_vcurve: Tf_vcurve
     Caption = '                                        '
     ParentColor = False
   end
+  object LabelStepProgress: TLabel
+    Left = 219
+    Height = 18
+    Top = 76
+    Width = 51
+    Caption = '                 '
+    ParentColor = False
+  end
   object FitSourceL: TListChartSource
     left = 95
     top = 152

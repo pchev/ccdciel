@@ -2587,6 +2587,7 @@ begin
      if TerminateVcurve then begin
        NewMessage('Stop Vcurve learning');
        LoadVcurve;
+       f_vcurve.LoadCurve;
        exit;
      end;
      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
@@ -2598,6 +2599,8 @@ begin
    AutofocusVc[k,1]:=focuser.Position;
    AutofocusVc[k,2]:=hfd;
    NewMessage('Vcurve n'+inttostr(i)+' pos:'+FormatFloat(f0,AutofocusVc[k,1])+' hfd:'+FormatFloat(f1,AutofocusVc[k,2])+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+   if f_vcurve<>nil then
+      f_vcurve.LearnProgress(i,AutofocusVc[k,1],AutofocusVc[k,2]);
    // use minimal hfd as a rought focus position used to split right and left curve
    if AutofocusVc[k,2]<hfdmin then begin
      hfdmin:=AutofocusVc[k,2];
