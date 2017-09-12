@@ -94,11 +94,13 @@ implementation
 procedure Tf_vcurve.LearnVcurveAsync(Data: PtrInt);
 begin
   BtnStopVcurve.Visible:=true;
+  GetPos.Visible:=false;
   BtnLearnVcurve.Visible:=false;
   BtnSave.Visible:=false;
   FocusPos.Enabled:=false;
   HalfWidth.Enabled:=false;
   Nsteps.Enabled:=false;
+  TrackBar1.Enabled:=false;
   ClearGraph;
   try
    if Assigned(FonLearnVcurve) then FonLearnVcurve(self);
@@ -106,10 +108,12 @@ begin
    LabelStepProgress.Caption:='';
    BtnStopVcurve.Visible:=false;
    BtnLearnVcurve.Visible:=true;
+   GetPos.Visible:=true;
    BtnSave.Visible:=true;
    FocusPos.Enabled:=true;
    HalfWidth.Enabled:=true;
    Nsteps.Enabled:=true;
+   TrackBar1.Enabled:=true;
   end;
 end;
 
