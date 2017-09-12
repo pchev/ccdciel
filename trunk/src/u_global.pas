@@ -298,6 +298,7 @@ var
   AutofocusVcStep:TAutofocusVcurveStep;
   AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset: integer;
   AutofocusMeanStep:TAutofocusMeanStep;
+  CancelAutofocus: Boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
   NFocusStars: integer;

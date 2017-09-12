@@ -113,8 +113,11 @@ begin
     FFocusNum:=0;
     if Assigned(FonMsg) then FonMsg('Start capture');
     if Assigned(FonStartExposure) then FonStartExposure(self);
+    if (not Frunning) and Assigned(FonMsg) then FonMsg('Cannot start capture now');
+  end else begin
+    CancelAutofocus:=true;
+    if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
-  if (not Frunning) and Assigned(FonAbortExposure) then FonAbortExposure(self);
   if Frunning then begin
     BtnStart.Font.Color:=clGreen;
     BtnStart.Caption:='Stop';

@@ -334,7 +334,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse: boolean;
-    Capture,Preview,meridianflipping,autofocusing: boolean;
+    Capture,Preview,meridianflipping,autofocusing,learningvcurve: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -751,7 +751,9 @@ begin
   MsgHandle:=handle;
   meridianflipping:=false;
   TemperatureSlope:=0;
+  learningvcurve:=false;
   autofocusing:=false;
+  CancelAutofocus:=false;
   AutofocusExposureFact:=1;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
@@ -2663,6 +2665,8 @@ begin
    NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
    exit;
  end;
+ try
+ learningvcurve:=true;
  // set focus frame around the star
  s:=Focuswindow;
  s2:=s div 2;
@@ -2682,7 +2686,9 @@ begin
  // compute and save the curve
  ComputeVcSlope;
  SaveVcurve;
+ finally
  // reset camera
+ learningvcurve:=false;
  camera.ResetFrame;
  f_visu.Zoom:=SaveZoom;
  ImgZoom:=f_visu.Zoom;
@@ -2690,6 +2696,7 @@ begin
  f_starprofile.StarY:=-1;
  f_starprofile.FindStar:=false;
  StartPreviewExposure(nil);
+ end;
 end;
 
 procedure Tf_main.StopVcurve(Sender: TObject);
@@ -3510,7 +3517,7 @@ var e: double;
     buf: string;
     p,binx,biny: integer;
 begin
-if (camera.Status=devConnected) and (not Capture) then begin
+if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
   e:=f_preview.Exposure;
   if e<0 then begin
@@ -3567,7 +3574,7 @@ var e: double;
     p,binx,biny,waittime: integer;
     ftype:TFrameType;
 begin
-if (camera.Status=devConnected) then begin
+if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check if we need to cancel running preview
   if f_preview.Running then begin
     NewMessage('Stop preview');
@@ -3643,10 +3650,17 @@ if (camera.Status=devConnected) then begin
      f_capture.FocusNow:=false;
      // do autofocus
      if AutoAutofocus then begin
-       // ok, restart exposure
-       f_capture.DitherNum:=0; // no dither after focus
-       Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
-       exit;
+       if f_capture.Running then begin
+         // ok, restart exposure
+         f_capture.DitherNum:=0; // no dither after focus
+         Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+         exit;
+       end else begin
+         NewMessage('Capture stopped during autofocus');
+         f_capture.Stop;
+         Capture:=false;
+         exit;
+       end;
      end else begin
        // failed, cancel current capture
        NewMessage('Autofocus failed!');
@@ -4289,7 +4303,8 @@ Procedure Tf_main.FocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax:double;
 begin
-  if  f_capture.Running then begin
+  if  f_capture.Running  then begin
+    NewMessage('Cannot start manual focus now, stop capture and retry');
     f_starprofile.ChkFocus.Checked:=false;
     exit;
   end;
@@ -4441,7 +4456,11 @@ var tra,tde,teq,sra,sde,jd0,jd1,err: double;
     tpos,pslew,savecapture,restartguider: boolean;
 begin
  result:=false;
- if autofocusing then exit;
+ CancelAutofocus:=false;
+ if autofocusing then begin
+   NewMessage('Autofocus already running.');
+   exit;
+ end;
  if (AutofocusMode=afNone) then begin
    NewMessage('Please configure the Autofocus options.');
    f_starprofile.ChkAutofocus.Checked:=false;
@@ -4500,6 +4519,7 @@ begin
   pslew:=false;
   tpos:=true;
  end;
+ if CancelAutofocus then exit;
  // stop autoguider
  restartguider:=(autoguider.State=GUIDER_GUIDING);
  if restartguider then begin
@@ -4507,7 +4527,8 @@ begin
    autoguider.Guide(false);
    autoguider.WaitBusy(15);
  end;
- // Loop until focus success
+ if CancelAutofocus then exit;
+ // Loop star list until focus success
  focusretry:=0;
  FocusStarsBlacklist:='';
  repeat
@@ -4528,23 +4549,30 @@ begin
     exit;
    end;
    wait(1);
+   if CancelAutofocus then exit;
    // do autofocus
    f_starprofile.ChkAutofocus.Checked:=true;
    while f_starprofile.ChkAutofocus.Checked do begin
     sleep(100);
     Application.ProcessMessages;
+    if CancelAutofocus then begin
+      f_starprofile.ChkAutofocus.Checked:=false;
+      exit;
+    end;
    end;
    // if not successful, blacklist the current star and try another
    if not f_starprofile.AutofocusResult then begin
       FocusStarsBlacklist:=FocusStarsBlacklist+' '+sid+' ';
       NewMessage('Autofocus failed, try with another star...');
    end;
+   if CancelAutofocus then exit;
  until f_starprofile.AutofocusResult or (focusretry>=5);
  if not f_starprofile.AutofocusResult then begin
     NewMessage('Autofocus failed after 5 retries, aborting.');
     result:=false;
     exit;
  end;
+ if CancelAutofocus then exit;
  if ReturnToTarget then begin
    // recenter to previous position
    NewMessage('Return to target position');
@@ -4558,6 +4586,7 @@ begin
    end else begin
       result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
    end;
+   if CancelAutofocus then exit;
    // start autoguider
    if restartguider then begin
      NewMessage('Restart autoguider');
@@ -4579,6 +4608,7 @@ begin
  Wait(2);
  finally
    autofocusing:=false;
+   CancelAutofocus:=false;
    Capture:=savecapture;
  end;
 end;
@@ -4602,13 +4632,23 @@ Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
+  if  f_preview.Running then begin
+    NewMessage('Cannot start autofocus now, stop preview and retry');
+    f_starprofile.ChkFocus.Checked:=false;
+    exit;
+  end;
   f_starprofile.AutofocusResult:=false;
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
   SaveAutofocusBY:=camera.BinY;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
-  if (AutofocusMode=afNone) or (f_capture.Running and (not autofocusing)) then begin
+  if (AutofocusMode=afNone) then begin
     NewMessage('Please configure the Autofocus options.');
+    f_starprofile.ChkAutofocus.Checked:=false;
+    exit;
+  end;
+  if (f_capture.Running and (not autofocusing)) then begin
+    NewMessage('Cannot start autofocus now, stop capture and retry');
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;

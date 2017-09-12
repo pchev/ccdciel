@@ -128,7 +128,7 @@ begin
         Msg('Start preview loop');
      end else begin
         FLoop:=False;
-        Msg('Cannot start preview now');
+        Msg('Cannot start preview loop now');
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
