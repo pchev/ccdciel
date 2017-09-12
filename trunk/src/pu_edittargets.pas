@@ -204,6 +204,7 @@ if ObjEndSet.Checked then begin
      else
        ShowMessage('This object is never above the requested elevation');
      ObjEndTime.Text:='';
+     ObjEndSet.Checked:=false;
   end;
 end;
 TargetChange(Sender);
@@ -229,6 +230,7 @@ if ObjStartRise.Checked then begin
       else
         ShowMessage('This object is never above the requested elevation');
       ObjStartTime.Text:='';
+      ObjStartRise.Checked:=false;
    end;
 end;
 TargetChange(Sender);
