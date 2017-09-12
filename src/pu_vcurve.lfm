@@ -249,10 +249,10 @@ object f_vcurve: Tf_vcurve
     ParentColor = False
   end
   object TrackBar1: TTrackBar
-    Left = 72
-    Height = 46
+    Left = 68
+    Height = 42
     Hint = 'After learning is completed you can use this cursor to better adjust to the linear part of the curve. '#10'The fit must be particulary good near the horizontal blue line position.'
-    Top = 328
+    Top = 332
     Width = 88
     OnChange = TrackBar1Change
     PageSize = 1
