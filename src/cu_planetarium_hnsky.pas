@@ -145,8 +145,8 @@ FRunning:=false;
 FStatus:=false;
 DisplayMessage(tcpclient.GetErrorDesc);
 finally
-  if assigned(FonDisconnect) then FonDisconnect(self);
   terminate;
+  if assigned(FonDisconnect) then FonDisconnect(self);
   tcpclient.Disconnect;
   tcpclient.Free;
 end;
@@ -178,25 +178,27 @@ function TPlanetarium_hnsky.Cmd(const Value: string):string;
 // do not use in a planetarium event.
 var dateto:double;
 begin
-  if TcpClient<>nil then begin
+  result:=msgFailed;
+  if (TcpClient<>nil)and(not Terminated) then begin
      tcpclient.resultbuffer:='';
-     if Value>'' then begin
+     if (not Terminated)and(Value>'') then begin
        tcpclient.sendbuffer:=Value;
        dateto:=now+Fcmdtimeout;
-       while (tcpclient.resultbuffer='')and(now<dateto) do begin
+       while (not Terminated)and(tcpclient.resultbuffer='')and(now<dateto) do begin
           sleep(100);
           application.ProcessMessages;
        end;
-       if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
-       result:=tcpclient.resultbuffer;
+       if (not Terminated) then begin
+         if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
+         result:=tcpclient.resultbuffer;
+       end;
      end;
   end;
 end;
 
 function TPlanetarium_hnsky.ShowImage(fn: string):boolean;
 begin
-  Cmd('LOAD_FITS '+fn);
-  result:=true;
+result:=(Cmd('LOAD_FITS '+fn)=msgOK);
 end;
 
 function TPlanetarium_hnsky.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;

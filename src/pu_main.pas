@@ -4850,7 +4850,10 @@ begin
       if fits.HeaderInfo.solved then begin
         NewMessage('Send image to planetarium');
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
-        planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
+        if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
+           NewMessage('Send image to planetarium')
+        else
+           NewMessage('Planetarium error.');
       end else begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -4963,7 +4966,9 @@ if (n=0) and planetarium.Connected then begin
     ra:=rad2deg*ra;
     dec:=rad2deg*dec;
     if planetarium.DrawFrame(ra,dec,sizeH,sizeV,rot) then
-       NewMessage('CCD frame sent to planetarium.');
+       NewMessage('CCD frame sent to planetarium.')
+    else
+       NewMessage('Planetarium error.');
   end;
 
  end;
@@ -4972,8 +4977,10 @@ end;
 procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
 begin
 if astrometry.LastResult and planetarium.Connected then begin
-  NewMessage('Send image to planetarium');
-  planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
+  if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
+     NewMessage('Send image to planetarium')
+  else
+     NewMessage('Planetarium error.');
 end;
 end;
 
