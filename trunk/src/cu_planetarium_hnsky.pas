@@ -159,8 +159,8 @@ if FRecvData<>'' then begin
   p:=Tstringlist.Create;
   SplitRec(FRecvData,blank,p);
   if (p.Count>=3) then begin
-    Fra:=StrToFloatDef(p[0],NullCoord);
-    Fde:=StrToFloatDef(p[1],NullCoord);
+    Fra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
+    Fde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
     if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
       J2000ToApparent(Fra,Fde);
       Fra:=rad2deg*Fra/15;
