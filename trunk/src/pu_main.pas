@@ -5063,6 +5063,8 @@ begin
       end
       else NewMessage('Invalid coordinates');
     end;
+ end else begin
+   NewMessage('Before to use this tool you must connect the camera, the mount and the planetarium');
  end;
 end;
 
