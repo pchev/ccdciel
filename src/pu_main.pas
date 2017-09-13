@@ -1295,7 +1295,9 @@ begin
 
   config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Text);
   config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
+  config.SetValue('/Preview/Binning',f_preview.Binning.Text);
   config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
+  config.SetValue('/Capture/Binning',f_capture.Binning.Text);
   config.SetValue('/Capture/FileName',f_capture.Fname.Text);
   config.SetValue('/Capture/Count',f_capture.SeqNum.Text);
 
@@ -2032,9 +2034,13 @@ end;
 
 procedure Tf_main.ShowBinningRange;
 var rxmin,rxmax,rxstep,rymin,rymax,rystep: integer;
-    i,j:integer;
-    binstr:string;
+    i,j,n,posprev,poscapt:integer;
+    binstr,binprev,bincapt:string;
 begin
+ binprev:=config.GetValue('/Preview/Binning','1x1');
+ bincapt:=config.GetValue('/Capture/Binning','1x1');
+ posprev:=0;
+ poscapt:=0;
  rxmin:=round(camera.BinXrange.min);
  rxmax:=round(camera.BinXrange.max);
  rxstep:=round(camera.BinXrange.step);
@@ -2057,16 +2063,18 @@ begin
    while j<=rymax do begin
      if i=j then begin  // only "square" binning in combobox list
        binstr:=inttostr(i)+'x'+inttostr(j);
-       f_preview.Binning.Items.Add(binstr);
-       f_capture.Binning.Items.Add(binstr);
+       n:=f_preview.Binning.Items.Add(binstr);
+       if binstr=binprev then posprev:=n;
+       n:=f_capture.Binning.Items.Add(binstr);
+       if binstr=bincapt then poscapt:=n;
        f_editplan.Binning.Items.Add(binstr);
      end;
      inc(j,rystep);
    end;
    inc(i,rxstep);
  end;
- f_preview.Binning.ItemIndex:=0;
- f_capture.Binning.ItemIndex:=0;
+ f_preview.Binning.ItemIndex:=posprev;
+ f_capture.Binning.ItemIndex:=poscapt;
  f_editplan.Binning.ItemIndex:=0;
 end;
 
@@ -2196,10 +2204,6 @@ begin
                    end;
    devConnected:   begin
                    if f_devicesconnection.LabelCamera.Font.Color<>clGreen then NewMessage('Camera connected');
-                   bx:=camera.BinX;
-                   by:=camera.BinY;
-                   buf:=inttostr(bx)+'x'+inttostr(by);
-                   f_preview.Binning.Text:=buf;
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
                    wait(1);
                    cool:=camera.Cooler;
