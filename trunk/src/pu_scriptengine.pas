@@ -1421,10 +1421,10 @@ try
 result:=msgFailed;
 Astrometry.SolveCurrentImage(true);
 if astrometry.LastResult and planetarium.Connected then begin
-  planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits');
+  if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
+     result:=msgOK;
 end;
 wait(1);
-result:=msgOK;
 except
   result:=msgFailed;
 end;

@@ -52,7 +52,7 @@ type
   end;
 
 const msgTimeout='Timeout!';
-      msgOK='OK';
+      msgOK='OK!';
       msgFailed='Failed!';
       msgBye='Bye!';
 
@@ -124,7 +124,7 @@ try
       if (buf='')or(buf='.') then continue;  // keepalive
       if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
       else
-        if copy(buf,1,2)=msgOK then begin
+        if copy(buf,1,3)=msgOK then begin
            // success, parse response
            ProcessData(buf);
            i:=pos('id=',buf);
@@ -183,8 +183,8 @@ FRunning:=false;
 FStatus:=false;
 DisplayMessage(tcpclient.GetErrorDesc);
 finally
-  if assigned(FonDisconnect) then FonDisconnect(self);
   terminate;
+  if assigned(FonDisconnect) then FonDisconnect(self);
   tcpclient.Disconnect;
   tcpclient.Free;
 end;
@@ -223,32 +223,37 @@ function TPlanetarium_cdc.Cmd(const Value: string):string;
 // do not use in a planetarium event.
 var dateto:double;
 begin
-  if TcpClient<>nil then begin
+  result:=msgFailed;
+  if (TcpClient<>nil)and(not Terminated) then begin
      tcpclient.resultbuffer:='';
-     if Value>'' then begin
+     if (not Terminated)and(Value>'') then begin
        tcpclient.sendbuffer:=Value;
        dateto:=now+Fcmdtimeout;
-       while (tcpclient.resultbuffer='')and(now<dateto) do begin
+       while (not Terminated)and(tcpclient.resultbuffer='')and(now<dateto) do begin
           sleep(100);
           application.ProcessMessages;
        end;
-       if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
-       result:=tcpclient.resultbuffer;
+       if (not Terminated) then begin
+         if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
+         result:=tcpclient.resultbuffer;
+       end;
      end;
   end;
 end;
 
 function TPlanetarium_cdc.ShowImage(fn: string):boolean;
 begin
-  Cmd('SHOWBGIMAGE OFF');
-  Cmd('LOADBGIMAGE '+fn);
-  Cmd('SHOWBGIMAGE ON');
+  result:=false;
+  if Cmd('SHOWBGIMAGE OFF')<>msgOK then exit;
+  if Cmd('LOADBGIMAGE '+fn)<>msgOK then exit;
+  if Cmd('SHOWBGIMAGE ON')<>msgOK then exit;
   result:=true;
 end;
 
 function TPlanetarium_cdc.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
 var buf:string;
 begin
+  result:=false;
   if FplanetariumEquinox=2000 then begin
     frra:=frra*deg2rad;
     frde:=frde*deg2rad;
@@ -257,19 +262,19 @@ begin
     frde:=rad2deg*frde;
   end;
   buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
-  Cmd(buf);
+  if Cmd(buf)<>msgOK then exit;
   buf := 'SETDEC ' + FormatFloat('0.00000', frde);
-  Cmd(buf);
+  if Cmd(buf)<>msgOK then exit;
   buf := 'SHOWRECTANGLE 10';
-  Cmd(buf);
+  if Cmd(buf)<>msgOK then exit;
   buf := 'SETRECTANGLE 10 ' + FormatFloat('0.000', frsizeH*60) + ' ' +
     FormatFloat('0.00', frsizeV*60) + ' ' +
     FormatFloat('0.00', frrot) + ' 0';
-  Cmd(buf);
-  Cmd('MARKCENTER ON');
+  if Cmd(buf)<>msgOK then exit;
+  if Cmd('MARKCENTER ON')<>msgOK then exit;
   buf := 'SETFOV ' + FormatFloat('0.000', frsizeH*2.2);
-  Cmd(buf);
-  Cmd('REDRAW');
+  if Cmd(buf)<>msgOK then exit;
+  if Cmd('REDRAW')<>msgOK then exit;
   result:=true;
 end;
 
