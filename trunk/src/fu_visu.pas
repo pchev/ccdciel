@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits, math, UScaleDPI,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons;
+uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil,
+  Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin;
 
 type
 
@@ -48,6 +48,8 @@ type
     Panel3: TPanel;
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
+    SpinEditMin: TSpinEdit;
+    SpinEditMax: TSpinEdit;
     StaticText1: TStaticText;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
@@ -63,10 +65,12 @@ type
       );
     procedure HistogramMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure SpinEditMaxChange(Sender: TObject);
+    procedure SpinEditMinChange(Sender: TObject);
   private
     { private declarations }
-    FimgMin, FimgMax: integer;
-    FBullsEye: Boolean;
+    FimgMin, FimgMax: double;
+    FBullsEye, LockSpinEdit: Boolean;
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
@@ -81,8 +85,8 @@ type
     destructor  Destroy; override;
     procedure DrawHistogram(hist:Thistogram; SetLevel: boolean);
     property Zoom: double read FZoom write SetZoom;
-    property ImgMin: integer read FimgMin write FimgMin;
-    property ImgMax: integer read FimgMax write FimgMax;
+    property ImgMin: double read FimgMin write FimgMin;
+    property ImgMax: double read FimgMax write FimgMax;
     property BullsEye: boolean read FBullsEye;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
@@ -102,6 +106,7 @@ begin
  ImgMax:=255;
  ImgMin:=0;
  FBullsEye:=false;
+ LockSpinEdit:=true;
  with Histogram.Picture.Bitmap do begin
    Width:=Histogram.Width;
    Height:=Histogram.Height;
@@ -120,6 +125,8 @@ procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);
 var i,maxh,h,h2,l,sum,sl98,sh98,sl99,sh99: integer;
     sh: double;
 begin
+try
+LockSpinEdit:=true;
 maxh:=0;
 sum:=0;
 for i:=0 to 255 do begin
@@ -150,6 +157,8 @@ if SetLevel then begin
     FImgMax:=h99;
   end;
 end;
+SpinEditMin.Value:=round(FImgMin*256);
+SpinEditMax.Value:=round(FimgMax*256);
 Histogram.Picture.Bitmap.Width:=Histogram.Width;
 Histogram.Picture.Bitmap.Height:=Histogram.Height;
 with Histogram.Picture.Bitmap do begin
@@ -174,22 +183,26 @@ with Histogram.Picture.Bitmap do begin
     else Canvas.Line(i,Height,i,Height-h);
   end;
   Canvas.Pen.Color:=clRed;
-  i:=ImgMin;
+  i:=round(ImgMin);
   Canvas.Line(i,0,i,Height);
   Canvas.Pen.Color:=clGreen;
-  i:=ImgMax-1;
+  i:=round(ImgMax-1);
   Canvas.Line(i,0,i,Height);
+end;
+finally
+  Application.ProcessMessages;
+  LockSpinEdit:=false;
 end;
 end;
 
 procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
-var dx1,dx2: integer;
+var dx1,dx2: double;
 begin
   dx1:=abs(ImgMin-X);
   dx2:=abs(ImgMax-X);
   Updmax:=dx2<dx1;
-  if Updmax then XP:=ImgMax else XP:=ImgMin;
+  if Updmax then XP:=round(ImgMax) else XP:=round(ImgMin);
   StartUpd:=true;
 end;
 
@@ -294,6 +307,9 @@ if StartUpd then begin
     Canvas.Line(X,0,X,Height);
     XP:=X;
   end;
+end else begin
+  SpinEditMin.Visible:=(y<24)and(x<60);
+  SpinEditMax.Visible:=(y<24)and(x>195);
 end;
 end;
 
@@ -303,6 +319,20 @@ begin
   if Updmax then ImgMax:=min(255,X)
             else ImgMin:=max(0,X);
   StartUpd:=false;
+  if Assigned(FRedraw) then FRedraw(self);
+end;
+
+procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
+begin
+  if LockSpinEdit then exit;
+  ImgMax:=SpinEditMax.Value/256;
+  if Assigned(FRedraw) then FRedraw(self);
+end;
+
+procedure Tf_visu.SpinEditMinChange(Sender: TObject);
+begin
+  if LockSpinEdit then exit;
+  ImgMin:=SpinEditMin.Value/256;
   if Assigned(FRedraw) then FRedraw(self);
 end;
 
