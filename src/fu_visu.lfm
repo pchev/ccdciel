@@ -53,6 +53,7 @@ object f_visu: Tf_visu
         Height = 24
         Top = 0
         Width = 60
+        Color = clBlack
         Increment = 10
         MaxValue = 65536
         OnChange = SpinEditMinChange
@@ -64,6 +65,7 @@ object f_visu: Tf_visu
         Height = 24
         Top = 0
         Width = 60
+        Color = clBlack
         Increment = 10
         MaxValue = 65536
         OnChange = SpinEditMaxChange
@@ -298,5 +300,12 @@ object f_visu: Tf_visu
     ParentFont = False
     ParentColor = False
     TabOrder = 1
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 250
+    OnTimer = Timer1Timer
+    left = 15
+    top = 48
   end
 end
