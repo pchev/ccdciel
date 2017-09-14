@@ -380,7 +380,7 @@ begin
    else
      V.SlewToCoordinates(sra,sde);
    wait(2);
-   msg('Mount '+Fdevice+' move terminated.');
+   msg('Mount '+Fdevice+' move finished.');
    FMountSlewing:=false;
    result:=true;
    except

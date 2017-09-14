@@ -180,7 +180,7 @@ begin
     FRunning:=false;
     PlanTimer.Enabled:=false;
     FCurrentStep:=-1;
-    msg('Plan '+FName+' terminated.');
+    msg('Plan '+FName+' finished.');
   end;
 end;
 

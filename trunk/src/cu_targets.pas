@@ -486,7 +486,7 @@ begin
      FRunning:=false;
      TargetTimer.Enabled:=false;
      StopGuider;
-     msg('Sequence '+FName+' terminated.');
+     msg('Sequence '+FName+' finished.');
      RunEndScript;
      ShowDelayMsg('');
      FCurrentTarget:=-1;

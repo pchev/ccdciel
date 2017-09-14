@@ -704,7 +704,7 @@ begin
   // check focus result
   if terminated then begin
     if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
-    msg('Autofocus terminated, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
+    msg('Autofocus finished, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
     if not FAutofocusResult then begin
        msg('Autofocus final HFD is higher than '+FormatFloat(f1,AutofocusTolerance));
     end;
