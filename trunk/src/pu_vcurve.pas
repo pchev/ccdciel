@@ -66,6 +66,7 @@ type
     Fstarprofile: Tf_starprofile;
     Ffocuser: Tf_focuser;
     Fpreview: Tf_preview;
+    FQuality: double;
     FonLearnVcurve: TNotifyEvent;
     FonStopVcurve: TNotifyEvent;
     FonSaveVcurve: TNotifyEvent;
@@ -76,6 +77,7 @@ type
     Procedure LoadCurve;
     Procedure ClearGraph;
     procedure LearnProgress(n:integer; x,y: double);
+    property Quality: double read FQuality;
     property preview:Tf_preview read Fpreview write Fpreview;
     property focuser:Tf_focuser read Ffocuser write Ffocuser;
     property starprofile:Tf_starprofile read Fstarprofile write Fstarprofile;
@@ -284,6 +286,7 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
 
 
   // print data
+  FQuality:=r2;
   LabelQuality.Caption:=FormatFloat(f4,r2);
   LabelSL.Caption:=FormatFloat(f6,AutofocusVcSlopeL);
   LabelSR.Caption:=FormatFloat(f6,AutofocusVcSlopeR);
