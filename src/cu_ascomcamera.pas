@@ -162,6 +162,7 @@ begin
  Fdevice:=cp1;
  V:=Unassigned;
  V:=CreateOleObject(Fdevice);
+ Wait(1);
  V.connected:=true;
  if V.connected then begin
     FStatus := devConnected;
