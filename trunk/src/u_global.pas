@@ -210,6 +210,7 @@ const
   ResolverNone=2;
   ResolverPlateSolve=3;
   ResolverName: array[0..3] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve');
+  PlanetariumName: array[0..2] of string =('Cartes du Ciel', 'SAMP', 'HNSKY');
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;
