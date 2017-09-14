@@ -167,12 +167,12 @@ begin
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
-    msg('Camera '+Fdevice+' connected.');
+    msg('Connected.');
  end
  else
     Disconnect;
  except
-   on E: Exception do msg('Camera '+Fdevice+' Connection error: ' + E.Message);
+   on E: Exception do msg('Connection error: ' + E.Message);
  end;
 {$endif}
 end;
@@ -187,10 +187,10 @@ begin
   if not VarIsEmpty(V) then begin
     V.connected:=false;
     V:=Unassigned;
-    msg('Camera '+Fdevice+' disconnected.');
+    msg('Disconnected.');
   end;
   except
-    on E: Exception do msg('Camera '+Fdevice+' Disconnection error: ' + E.Message);
+    on E: Exception do msg('Disconnection error: ' + E.Message);
   end;
 {$endif}
 end;
@@ -244,7 +244,7 @@ begin
        if Assigned(FonFrameChange) then FonFrameChange(self);
     end;
     except
-     on E: Exception do msg('Camera '+Fdevice+' Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -264,7 +264,7 @@ if Connected then begin
     FLAT : li:=true;
   end;
   try
-     msg('Camera '+Fdevice+' start exposure.');
+     {$ifdef debug_ascom}msg('start exposure.');{$endif}
      V.StartExposure(exptime,li);
      timestart:=NowUTC;
      timeend:=now+(exptime)/secperday;
@@ -276,7 +276,7 @@ if Connected then begin
      else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
-     on E: Exception do msg('Camera '+Fdevice+' Start exposure error: ' + E.Message);
+     on E: Exception do msg('Start exposure error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -313,7 +313,7 @@ begin
       msg('Error reading camera image availability');
       exit;
     end;
-    {$ifdef debug_ascom}msg('Camera '+Fdevice+' status:'+inttostr(state)+', image ready:'+BoolToStr(ok,true));{$endif}
+    {$ifdef debug_ascom}msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok,true));{$endif}
     if (not ok) then begin
       // in progress
       if assigned(FonExposureProgress) then FonExposureProgress(secperday*(timeend-now));
@@ -323,13 +323,13 @@ begin
  end
  else begin
    ok:=false;
-   msg('Camera '+Fdevice+' timeout');
+   msg('Timeout');
    if assigned(FonAbortExposure) then FonAbortExposure(self);
  end;
 
  if ok then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' read image.');{$endif}
+   {$ifdef debug_ascom}msg('read image.');{$endif}
    try
    img:=V.ImageArray;
    except
@@ -338,7 +338,7 @@ begin
    end;
    xs:=length(img);
    ys:=length(img[0]);
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
+   {$ifdef debug_ascom}msg('width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
    nax1:=xs;
    nax2:=ys;
    pix:=0;
@@ -357,7 +357,7 @@ begin
    end;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,timestart);
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' set fits header');{$endif}
+   {$ifdef debug_ascom}msg('set fits header');{$endif}
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
    hdr.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -381,10 +381,10 @@ begin
    FImgStream.Clear;
    FImgStream.position:=0;
    hdrmem.Position:=0;
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' write header');{$endif}
+   {$ifdef debug_ascom}msg('write header');{$endif}
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' write image');{$endif}
+   {$ifdef debug_ascom}msg('write image');{$endif}
    for i:=0 to ys-1 do begin
       for j:=0 to xs-1 do begin
         ii:=img[j,ys-1-i]-32768;
@@ -392,15 +392,15 @@ begin
         FImgStream.Write(ii,sizeof(smallint));
       end;
    end;
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' pad fits');{$endif}
+   {$ifdef debug_ascom}msg('pad fits');{$endif}
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
-   {$ifdef debug_ascom}msg('Camera '+Fdevice+' display image');{$endif}
+   {$ifdef debug_ascom}msg('display image');{$endif}
    NewImage;
  end;
  except
-    on E: Exception do msg('Camera '+Fdevice+' Error reading image: ' + E.Message);
+    on E: Exception do msg('Error reading image: ' + E.Message);
  end;
  {$endif}
 end;
@@ -417,7 +417,7 @@ begin
    oldx:=V.BinX;
    oldy:=V.BinY;
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
-     msg('Camera '+Fdevice+' set binning '+inttostr(sbinX)+'x'+inttostr(sbinY));
+     msg('Set binning '+inttostr(sbinX)+'x'+inttostr(sbinY));
      GetFrame(fsx,fsy,fnx,fny);
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
@@ -452,14 +452,14 @@ begin
    // check range
    if (x+width)>V.CameraXSize then width:=round(V.CameraXSize-x);
    if (y+height)>V.CameraYSize then height:=round(V.CameraYSize-y);
-   msg('Camera '+Fdevice+' set frame '+inttostr(width)+'x'+inttostr(height));
+   {$ifdef debug_ascom}msg('set frame '+inttostr(width)+'x'+inttostr(height));{$endif}
    V.StartX:=x;
    V.StartY:=y;
    V.NumX:=width;
    V.NumY:=height;
    Wait(1);
    except
-    on E: Exception do msg('Camera '+Fdevice+' Set frame error: ' + E.Message);
+    on E: Exception do msg('Set frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -475,7 +475,7 @@ begin
    width  := V.NumX;
    height := V.NumY;
    except
-    on E: Exception do msg('Camera '+Fdevice+' Get frame error: ' + E.Message);
+    on E: Exception do msg('Get frame error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -500,7 +500,7 @@ begin
    heightr.max:=V.CameraYSize;
    heightr.step:=1;
    except
-    on E: Exception do msg('Camera '+Fdevice+' Get frame range error: ' + E.Message);
+    on E: Exception do msg('Get frame range error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -520,7 +520,7 @@ if Connected then begin
   SetFrame(0,0,w,h);
   Wait(1);
   except
-   on E: Exception do msg('Camera '+Fdevice+' Reset frame error: ' + E.Message);
+   on E: Exception do msg('Reset frame error: ' + E.Message);
   end;
 end;
 {$endif}
@@ -531,10 +531,10 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-    msg('Camera '+Fdevice+' abort exposure');
+    msg('Abort exposure');
     V.AbortExposure;
    except
-    on E: Exception do msg('Camera '+Fdevice+' Abort exposure error: ' + E.Message);
+    on E: Exception do msg('Abort exposure error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -586,7 +586,7 @@ end;
 procedure T_ascomcamera.SetFrametype(f:TFrameType);
 begin
  {$ifdef mswindows}
-  msg('Camera '+Fdevice+' set frame type '+FrameName[ord(f)]);
+  msg('Set frame type '+FrameName[ord(f)]);
   FFrametype:=f;
  {$endif}
 end;
@@ -653,11 +653,11 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   msg('Camera '+Fdevice+' set filter position '+inttostr(num));
+   msg('Set filter position '+inttostr(num));
    V.Position:=num-1;
    Wait(1);
    except
-    on E: Exception do msg('Camera '+Fdevice+' Set filter error: ' + E.Message);
+    on E: Exception do msg('Set filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -671,7 +671,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: Exception do msg('Camera '+Fdevice+' Get filter error: ' + E.Message);
+    on E: Exception do msg('Get filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -721,7 +721,7 @@ begin
       V.SetCCDTemperature:=value;
    end;
    except
-    on E: Exception do msg('Camera '+Fdevice+' Set temperature error: ' + E.Message);
+    on E: Exception do msg('Set temperature error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -746,10 +746,10 @@ begin
 {$ifdef mswindows}
 if Connected and (V.CoolerOn<>value) then begin
   try
-     msg('Camera '+Fdevice+' set cooler '+BoolToStr(value,True));
+     msg('Set cooler '+BoolToStr(value,True));
      V.CoolerOn:=value;
   except
-   on E: Exception do msg('Camera '+Fdevice+' Set cooler error: ' + E.Message);
+   on E: Exception do msg('Set cooler error: ' + E.Message);
   end;
 end;
 {$endif}

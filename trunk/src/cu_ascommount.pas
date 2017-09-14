@@ -372,7 +372,7 @@ begin
      end;
    end;
    FMountSlewing:=true;
-   msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
+   {$ifdef debug_ascom}msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde)); {$endif}
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
@@ -380,7 +380,7 @@ begin
    else
      V.SlewToCoordinates(sra,sde);
    wait(2);
-   msg('Mount '+Fdevice+' move finished.');
+   {$ifdef debug_ascom}msg('Mount '+Fdevice+' move finished.'); {$endif}
    FMountSlewing:=false;
    result:=true;
    except
@@ -488,11 +488,8 @@ begin
  if Connected and CanSync then begin
    try
    if CanSetTracking and (not V.tracking) then begin
-     try
-      V.tracking:=true;
-     except
-       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
-     end;
+     msg('Cannot Sync when the mount is not tracking');
+     exit;
    end;
    msg('Mount '+Fdevice+' sync to '+ARToStr3(sra)+' '+DEToStr(sde));
    V.SyncToCoordinates(sra,sde);
