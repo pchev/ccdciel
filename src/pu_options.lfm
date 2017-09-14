@@ -44,10 +44,10 @@ object f_option: Tf_option
     Height = 408
     Top = 0
     Width = 433
-    ActivePage = TabSheet4
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
-    TabIndex = 6
+    TabIndex = 5
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -1069,10 +1069,10 @@ object f_option: Tf_option
           Left = 1
           Height = 31
           Top = 118
-          Width = 392
+          Width = 408
           BevelOuter = bvNone
           ClientHeight = 31
-          ClientWidth = 392
+          ClientWidth = 408
           TabOrder = 4
           object Label48: TLabel
             Left = 8
@@ -1109,7 +1109,7 @@ object f_option: Tf_option
             ParentColor = False
           end
           object AutofocusNearNum: TEdit
-            Left = 324
+            Left = 336
             Height = 24
             Hint = 'The number of exposure we take to get a mean HFD value '#10'when the HFD is smaller than the value to the left.'
             Top = 0
@@ -1156,12 +1156,30 @@ object f_option: Tf_option
         object AutofocusTolerance: TEdit
           Left = 212
           Height = 24
-          Hint = 'The maximal HFD value to consider the autofocus a success. '#10'Beware that a too small value here can cancel an automated sequence! '#10'Set a value high enough to avoid this problem.'
+          Hint = 'The maximal HFD value to consider the autofocus a success. '#10'Beware that a too small value here will return the focuser to it''s initial position.'#10'Set a value high enough to avoid this problem.'
           Top = 84
           Width = 60
           ParentShowHint = False
           ShowHint = True
           TabOrder = 6
+        end
+        object AutofocusMinSNR: TEdit
+          Left = 336
+          Height = 24
+          Hint = 'If a star measurement during autofocus return a SNR ratio value lower than this setting the autofocus is canceled.'#10'Beware that a too big value here will return the focuser to it''s initial position.'#10'Set a value low enough to avoid this problem but enough for a good measurement quality at the Near focus HFP position.'
+          Top = 84
+          Width = 58
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+        end
+        object Label81: TLabel
+          Left = 280
+          Height = 18
+          Top = 88
+          Width = 51
+          Caption = 'min.SNR'
+          ParentColor = False
         end
       end
       object GroupBox11: TGroupBox
@@ -1183,7 +1201,7 @@ object f_option: Tf_option
         end
         object FocusStarMag: TComboBox
           Left = 8
-          Height = 22
+          Height = 30
           Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
           Top = 32
           Width = 80
@@ -1420,8 +1438,8 @@ object f_option: Tf_option
               Top = 152
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 35
-              ClientWidth = 387
+              ClientHeight = 31
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel

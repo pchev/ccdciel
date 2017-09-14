@@ -305,7 +305,7 @@ var
   NFocusStars: integer;
   FocusStars: array of TFocusStar;
   FocusStarsBlacklist: string;
-  AutofocusTolerance: integer;
+  AutofocusTolerance, AutofocusMinSNR: double;
   WaitTillrunning, cancelWaitTill: boolean;
   horizonlist: Thorizonlist;
   HorizonMax, HorizonMin, ElevationMin: double;

@@ -78,8 +78,8 @@ type
     emptybmp:Tbitmap;
     histfwhm, histimax: array[0..maxhist] of double;
     maxfwhm,maximax: double;
-    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd,Fsnr:double;
-    curhist,FfocuserSpeed,FnumHfd: integer;
+    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd,Fsnr,FMinSnr,FminPeak:double;
+    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult: boolean;
     ahfd: array of double;
@@ -109,6 +109,7 @@ type
     property HFD:double read Fhfd;
     property SNR:double read Fsnr;
     property ValMax: double read FValMax;
+    property PreFocusPos: integer read FPreFocusPos write FPreFocusPos;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
     property AutofocusResult: boolean read FAutofocusResult write FAutofocusResult;
@@ -179,12 +180,15 @@ procedure Tf_starprofile.InitAutofocus;
 begin
  FnumHfd:=0;
  FSumHfd:=0;
+ FMinSnr:=99999;
+ FminPeak:=9999999;
  terminated:=false;
  FirstFrame:=true;
  FAutofocusResult:=false;
  FfocuserSpeed:=AutofocusMaxSpeed;
  focuser.FocusSpeed:=FfocuserSpeed;
  focuserdirection:=AutofocusMoveDir;
+ FPreFocusPos:=focuser.FocusPosition;
  AutofocusMeanStep:=afmStart;
  if focuserdirection=FocusDirOut then
     AutofocusVcStep:=vcsNearL
@@ -252,6 +256,7 @@ begin
  curhist:=0;
  maxfwhm:=0;
  maximax:=0;
+ FPreFocusPos:=-1;
  focuserdirection:=FocusDirIn;
  FLastHfd:=MaxInt;
  LabelHFD.Caption:='-';
@@ -638,58 +643,80 @@ var bg: double;
   xg,yg: double;
   xm,ym,ri: integer;
 begin
- if (x<0)or(y<0)or(s<0) then exit;
+  if (x<0)or(y<0)or(s<0) then begin
+    msg('Autofocus canceled because no star was selected.');
+    FAutofocusResult:=false;
+    ChkAutofocus.Checked:=false;
+    exit;
+  end;
   FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg);
   if FValMax=0 then begin
-    if Fpreview.Exposure=AutofocusExposure*AutofocusExposureFact
-       then begin
-         ChkAutofocus.Checked:=false;
-         exit;
-       end
-       else begin
-          Fpreview.Exposure:=AutofocusExposure*AutofocusExposureFact;
-          exit;
-       end;
+     msg('Autofocus canceled because no star was found.');
+     FAutofocusResult:=false;
+     ChkAutofocus.Checked:=false;
+     exit;
   end;
   GetHFD(img,c,vmin,xm,ym,ri,bg,xg,yg,Fhfd,FValMax);
   // process this measurement
-  if (Fhfd>0) then begin
-    if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not FirstFrame)and(not terminated) then begin
-      FFindStar:=true;
-      FStarX:=round(xg);
-      FStarY:=round(yg);
-      PlotProfile(img,c,vmin,bg,s);
-      FSumHfd:=FSumHfd+Fhfd;
-      inc(FnumHfd);
-      msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
-      if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
-        Fhfd:=FSumHfd/FnumHfd;
-        FnumHfd:=0;
-        FSumHfd:=0;
-      end
-      else begin
-        exit;
-      end;
-    end;
-    // plot progress
+  if (Fhfd<=0) then begin
+    msg('Autofocus canceled because the HFD cannot be measured');
+    FAutofocusResult:=false;
+    ChkAutofocus.Checked:=false;
+    exit;
+  end;
+  // sum of multiple exposures
+  if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not FirstFrame)and(not terminated) then begin
     FFindStar:=true;
     FStarX:=round(xg);
     FStarY:=round(yg);
-    Ffwhm:=-1;
     PlotProfile(img,c,vmin,bg,s);
-    if terminated then begin
-      ChkAutofocus.Checked:=false; // focus reached
-      msg('Autofocus terminated, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
-      if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
+    FSumHfd:=FSumHfd+Fhfd;
+    FMinSnr:=min(FMinSnr,Fsnr);
+    FminPeak:=min(FminPeak,FValMax);
+    inc(FnumHfd);
+    msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
+    if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
+      Fhfd:=FSumHfd/FnumHfd;
+      FnumHfd:=0;
+      FSumHfd:=0;
+      Fsnr:=FMinSnr;
+      FValMax:=FminPeak;
+      FMinSnr:=99999;
+      FminPeak:=999999;
+    end
+    else begin
       exit;
     end;
-    msg('Autofocus running, hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
-    // do focus
-    case AutofocusMode of
-      afVcurve   : doAutofocusVcurve;
-      afMean     : doAutofocusMean;
-      afIterative: doAutofocusIterative;
+  end;
+  // plot progress
+  FFindStar:=true;
+  FStarX:=round(xg);
+  FStarY:=round(yg);
+  Ffwhm:=-1;
+  PlotProfile(img,c,vmin,bg,s);
+  // check low snr
+  if fsnr<AutofocusMinSNR then begin
+    msg('Autofocus canceled because of low SNR, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
+    FAutofocusResult:=false;
+    ChkAutofocus.Checked:=false;
+    exit;
+  end;
+  // check focus result
+  if terminated then begin
+    if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
+    msg('Autofocus terminated, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
+    if not FAutofocusResult then begin
+       msg('Autofocus final HFD is higher than '+FormatFloat(f1,AutofocusTolerance));
     end;
+    ChkAutofocus.Checked:=false;
+    exit;
+  end;
+  msg('Autofocus running, hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
+  // do focus and continue
+  case AutofocusMode of
+    afVcurve   : doAutofocusVcurve;
+    afMean     : doAutofocusMean;
+    afIterative: doAutofocusIterative;
   end;
   FirstFrame:=false;
 end;

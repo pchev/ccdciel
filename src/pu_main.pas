@@ -1750,7 +1750,8 @@ begin
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusMeanNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
   AutofocusMeanMovement:=config.GetValue('/StarAnalysis/AutofocusMeanMovement',100);
-  AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99);
+  AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
+  AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',0.0);
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
@@ -3088,7 +3089,8 @@ begin
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
    f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
-   f_option.AutofocusTolerance.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
+   f_option.AutofocusTolerance.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
+   f_option.AutofocusMinSNR.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR));
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
@@ -3194,7 +3196,8 @@ begin
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
      config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
-     config.SetValue('/StarAnalysis/AutofocusTolerance',StrToIntDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
+     config.SetValue('/StarAnalysis/AutofocusTolerance',StrToFloatDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
+     config.SetValue('/StarAnalysis/AutofocusMinSNR',StrToFloatDef(f_option.AutofocusMinSNR.Text,AutofocusMinSNR));
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
      if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
@@ -4473,9 +4476,10 @@ end;
 function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
 var tra,tde,teq,sra,sde,jd0,jd1,err: double;
     sid: string;
-    focusretry: integer;
+    focusretry,maxretry: integer;
     tpos,pslew,savecapture,restartguider: boolean;
 begin
+ maxretry:=3;
  result:=false;
  CancelAutofocus:=false;
  if autofocusing then begin
@@ -4587,11 +4591,9 @@ begin
       NewMessage('Autofocus failed, try with another star...');
    end;
    if CancelAutofocus then exit;
- until f_starprofile.AutofocusResult or (focusretry>=5);
+ until f_starprofile.AutofocusResult or (focusretry>=maxretry);
  if not f_starprofile.AutofocusResult then begin
-    NewMessage('Autofocus failed after 5 retries, aborting.');
-    result:=false;
-    exit;
+    NewMessage('Autofocus failed after '+inttostr(maxretry)+' retries, continue without focusing.');
  end;
  if CancelAutofocus then exit;
  if ReturnToTarget then begin
@@ -4625,6 +4627,9 @@ begin
        end;
      end;
    end;
+ end
+ else begin
+  result:=true;
  end;
  Wait(2);
  finally
@@ -4709,7 +4714,10 @@ begin
        f_preview.Running:=true;
        StartPreviewExposure(nil);
      end;
-     NewMessage('AutoFocus started');
+     if f_starprofile.PreFocusPos>0 then
+        NewMessage('AutoFocus started, initial position: '+inttostr(f_starprofile.PreFocusPos))
+     else
+        NewMessage('AutoFocus started');
   end
   else begin                             // no star, manual action is required
     f_starprofile.ChkAutofocus.Checked:=false;
@@ -4732,8 +4740,19 @@ begin
    f_starprofile.StarX:=-1;
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
+   if f_starprofile.AutofocusResult then begin
+     NewMessage('AutoFocus successful');
+   end
+   else begin
+     NewMessage('AutoFocus error');
+     if f_starprofile.PreFocusPos>0 then begin  // only for absolute position focuser
+       NewMessage('Return the focuser to previous position '+inttostr(f_starprofile.PreFocusPos));
+       f_focuser.FocusPosition:=f_starprofile.PreFocusPos;
+       FocusSetAbsolutePosition(nil);
+       Wait(1);
+     end;
+   end;
    if not f_capture.Running then StartPreviewExposure(nil);
-   NewMessage('AutoFocus stoped');
 end;
 
 procedure Tf_main.GUIdestroy(Sender: TObject);
