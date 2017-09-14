@@ -305,7 +305,7 @@ begin
     dec(Nstep);
   end;
   SetTemperature(TempFinal);
-  msg('Set temperature ramp terminated');
+  msg('Set temperature ramp finished');
   finally
     FTemperatureRampActive:=false;
     if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);

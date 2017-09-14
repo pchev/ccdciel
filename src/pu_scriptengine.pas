@@ -670,10 +670,10 @@ begin
     result:=scr.Execute;
     wait(2);
     if result then
-       msg('Script '+sname+' terminated')
+       msg('Script '+sname+' finished')
     else begin
        msg('Script execution error, row '+inttostr(scr.ExecErrorRow)+': '+scr.ExecErrorToString);
-       msg('Script '+sname+' terminated');
+       msg('Script '+sname+' finished');
     end;
   end else begin
     for i:=0 to scr.CompilerMessageCount-1 do begin

@@ -478,7 +478,7 @@ begin
   FLastSlewErr:=dist;
 
   finally
-    if result then msg('Precision slew terminated.')
+    if result then msg('Precision slew finished.')
               else msg('Precision slew failed!');
   end;
 end;

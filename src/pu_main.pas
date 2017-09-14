@@ -4379,7 +4379,7 @@ begin
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
-   NewMessage('Focus aid stoped');
+   NewMessage('Focus aid stopped');
 end;
 
 procedure Tf_main.LoadFocusStar;
@@ -5399,7 +5399,7 @@ begin
         Wait(2);
         f_capture.DitherNum:=0; // no dither after flip
         meridianflipping:=false;
-        NewMessage('Meridian flip terminated');
+        NewMessage('Meridian flip finished');
         StatusBar1.Panels[1].Text := '';
       end else begin  // Abort
         DoAbort;

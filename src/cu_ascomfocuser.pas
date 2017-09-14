@@ -256,7 +256,7 @@ begin
    WaitFocuserMoving(30000);
 
    except
-    on E: Exception do msg('Focuser '+Fdevice+' Set position error: ' + E.Message);
+    on E: Exception do msg('Focuser '+Fdevice+' Error, can''t move to. ' + E.Message);
    end;
  end;
  {$endif}
