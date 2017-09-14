@@ -66,6 +66,7 @@ Constructor TPlanetarium_samp.Create ;
 begin
 inherited Create;
 FClientChange:=false;
+FPlanetariumType:=SAMP;
 end;
 
 Destructor TPlanetarium_samp.Destroy;

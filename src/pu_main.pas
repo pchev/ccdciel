@@ -2180,9 +2180,7 @@ begin
 end;
 
 Procedure Tf_main.CameraStatus(Sender: TObject);
-var bx,by: integer;
-    buf: string;
-    cool:boolean;
+var cool:boolean;
 begin
  case camera.Status of
    devDisconnected:begin
@@ -3024,10 +3022,11 @@ begin
 end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
-var ok:boolean;
+var ok,PlanetariumChange: boolean;
     i,n,FocusStarMagIndex: integer;
     buf:string;
 begin
+   PlanetariumChange:=false;
    f_option.Caption:='Options :'+profile;
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
@@ -3268,6 +3267,7 @@ begin
      config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Text);
      config.SetValue('/Autoguider/Recovery/RestartTimeout',StrToIntDef(f_option.StarLostRestart.Text,0));
      config.SetValue('/Autoguider/Recovery/CancelTimeout',StrToIntDef(f_option.StarLostCancel.Text,1800));
+     PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',0));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
@@ -3275,6 +3275,22 @@ begin
      SaveConfig;
 
      SetOptions;
+
+     if PlanetariumChange and (not planetarium.Connected) then begin
+        planetarium.Free;
+        i:=config.GetValue('/Planetarium/Software',0);
+        case TPlanetariumType(i) of
+          CDC: planetarium:=TPlanetarium_cdc.Create;
+          SAMP:planetarium:=TPlanetarium_samp.Create;
+          HNSKY:planetarium:=TPlanetarium_hnsky.Create;
+        end;
+        planetarium.onConnect:=@PlanetariumConnect;
+        planetarium.onDisconnect:=@PlanetariumDisconnect;
+        planetarium.onShowMessage:=@NewMessage;
+        f_planetariuminfo.planetarium:=planetarium;
+        f_scriptengine.Planetarium:=planetarium;
+     end;
+
    end;
 end;
 
@@ -4996,7 +5012,7 @@ begin
  if f_planetarium.BtnConnect.Caption='Connect' then begin
    f_planetarium.BtnConnect.Caption:='Disconnect';
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
-   i:=config.GetValue('/Planetarium/Software',0);
+   i:=ord(planetarium.PlanetariumType);
    case TPlanetariumType(i) of
      CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
                       config.GetValue('/Planetarium/CdCport',''));
@@ -5013,8 +5029,8 @@ begin
  f_planetarium.BtnConnect.Caption:='Disconnect';
  MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
  f_planetarium.led.Brush.Color:=clLime;
- f_planetarium.Status.Text:='Connected';
- NewMessage('Planetarium: Connected');
+ f_planetarium.Status.Text:='Connected '+PlanetariumName[ord(planetarium.PlanetariumType)];
+ NewMessage('Planetarium: '+PlanetariumName[ord(planetarium.PlanetariumType)]+' connected');
  planetarium.InitTimer.Enabled:=true;
 end;
 
@@ -5026,7 +5042,7 @@ begin
    f_planetarium.Status.Text:='Disconnected';
    f_planetarium.BtnConnect.Caption:='Connect';
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
-   NewMessage('Planetarium: Disconnected');
+   NewMessage('Planetarium: '+PlanetariumName[ord(planetarium.PlanetariumType)]+' disconnected');
    i:=config.GetValue('/Planetarium/Software',0);
    case TPlanetariumType(i) of
      CDC: planetarium:=TPlanetarium_cdc.Create;
