@@ -28,8 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, cu_planetarium, cu_tcpclient, blcksock, Classes, SysUtils,
-    Forms;
+uses u_global, u_utils, cu_planetarium, cu_tcpclient, blcksock, synsock,
+     Classes, SysUtils, Forms;
 
 type
 
@@ -114,6 +114,7 @@ try
      if terminated then break;
      // handle unattended messages (mouseclick...)
      buf:=tcpclient.RecvPacket;
+     if (tcpclient.Sock.LastError<>0)and(tcpclient.Sock.LastError<>WSAETIMEDOUT) then break; // unexpected error
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'') then ProcessData(buf);
      // handle synchronous command and response
@@ -143,7 +144,7 @@ try
  end;
 FRunning:=false;
 FStatus:=false;
-DisplayMessage(tcpclient.GetErrorDesc);
+if not terminated then DisplayMessage(tcpclient.GetErrorDesc);
 finally
   terminate;
   if assigned(FonDisconnect) then FonDisconnect(self);
