@@ -2543,7 +2543,7 @@ begin
     if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Text:=IntToStr(VcHalfwidth) else f_vcurve.HalfWidth.Text:='';
     f_vcurve.Nsteps.Text:=IntToStr(VcNsteps);
   end;
-  formpos(f_vcurve,left,top);
+  formpos(f_vcurve,mouse.CursorPos.x,mouse.CursorPos.y);
   f_vcurve.Show;
   f_vcurve.LoadCurve;
 end;
@@ -2627,7 +2627,7 @@ begin
    if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearR:=i;
  end;
  if (PosNearL<0)or(PosNearR<0) then begin
-   NewMessage('Cannot reach near focus HFD, please increase Half Width.');
+   NewMessage('Cannot reach near focus HFD, please increase Half Width or better center the curve.');
    exit;
  end;
  AutofocusVcNum:=n;
@@ -2639,7 +2639,7 @@ end;
 
 procedure Tf_main.LearnVcurve(Sender: TObject);
 var bin: integer;
-    x,y,xc,yc,s,s2: integer;
+    x,y,xc,yc,xc1,yc1,s,s2: integer;
     SaveZoom,vmax: double;
 begin
  if not focuser.hasAbsolutePosition then exit;
@@ -2660,10 +2660,10 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc,yc,vmax);
+   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
-   f_starprofile.StarX:=xc;
-   f_starprofile.StarY:=yc;
+   f_starprofile.StarX:=xc1;
+   f_starprofile.StarY:=yc1;
  end;
  if not f_starprofile.FindStar then begin
    NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
@@ -2684,21 +2684,30 @@ begin
  ImgZoom:=0;
  // do vcurve exposures
  NewMessage('Start learning V curve');
- if not doVcurve(VcCenterpos,VcHalfwidth,VcNsteps,AutofocusNearNum,f_preview.Exposure,bin) then exit;
- focuser.Position:=round(AutofocusVc[PosFocus,1]);
- wait(1);
+ if not doVcurve(VcCenterpos,VcHalfwidth,VcNsteps,AutofocusNearNum,f_preview.Exposure,bin) then begin
+   // error return focuser to initial position
+   focuser.Position:=VcCenterpos;
+   wait(1);
+   exit;
+ end;
  // compute and save the curve
  ComputeVcSlope;
  SaveVcurve;
+ // position focuser at new center
+ if f_vcurve.Quality>0.9 then
+    focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2)
+ else
+    focuser.Position:=round(AutofocusVc[PosFocus,1]);
+ wait(1);
  finally
  // reset camera
  learningvcurve:=false;
  camera.ResetFrame;
  f_visu.Zoom:=SaveZoom;
  ImgZoom:=f_visu.Zoom;
- f_starprofile.StarX:=-1;
- f_starprofile.StarY:=-1;
- f_starprofile.FindStar:=false;
+ f_starprofile.StarX:=xc1;
+ f_starprofile.StarY:=yc1;
+ f_starprofile.FindStar:=true;
  StartPreviewExposure(nil);
  end;
 end;
