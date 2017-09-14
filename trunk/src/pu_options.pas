@@ -50,6 +50,8 @@ type
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
     CameraAutoCool: TCheckBox;
+    AutofocusMinSNR: TEdit;
+    Label81: TLabel;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
