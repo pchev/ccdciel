@@ -197,17 +197,6 @@ finally
 end;
 end;
 
-procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-var dx1,dx2: double;
-begin
-  dx1:=abs(ImgMin-X);
-  dx2:=abs(ImgMax-X);
-  Updmax:=dx2<dx1;
-  if Updmax then XP:=round(ImgMax) else XP:=round(ImgMin);
-  StartUpd:=true;
-end;
-
 procedure Tf_visu.BtnIttChange(Sender: TObject);
 begin
   if Assigned(FRedraw) then FRedraw(self);
@@ -298,6 +287,17 @@ begin
   if Assigned(FRedraw) then FRedraw(self);
 end;
 
+procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var dx1,dx2: double;
+begin
+  dx1:=abs(ImgMin-X);
+  dx2:=abs(ImgMax-X);
+  Updmax:=dx2<dx1;
+  if Updmax then XP:=round(ImgMax) else XP:=round(ImgMin);
+  StartUpd:=true;
+end;
+
 procedure Tf_visu.HistogramMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
@@ -321,6 +321,7 @@ begin
   if Updmax then ImgMax:=min(255,X)
             else ImgMin:=max(0,X);
   StartUpd:=false;
+  histminmax.Down:=true;
   if Assigned(FRedraw) then FRedraw(self);
 end;
 
@@ -339,6 +340,7 @@ end;
 procedure Tf_visu.Timer1Timer(Sender: TObject);
 begin
   timer1.Enabled:=false;
+  histminmax.Down:=true;
   ImgMax:=SpinEditMax.Value/256;
   ImgMin:=SpinEditMin.Value/256;
   if Assigned(FRedraw) then FRedraw(self);

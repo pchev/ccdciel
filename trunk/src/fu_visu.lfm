@@ -52,7 +52,7 @@ object f_visu: Tf_visu
         Left = 0
         Height = 24
         Top = 0
-        Width = 60
+        Width = 70
         Color = clBlack
         Increment = 10
         MaxValue = 65536
@@ -61,10 +61,10 @@ object f_visu: Tf_visu
         Visible = False
       end
       object SpinEditMax: TSpinEdit
-        Left = 196
+        Left = 186
         Height = 24
         Top = 0
-        Width = 60
+        Width = 70
         Color = clBlack
         Increment = 10
         MaxValue = 65536
@@ -154,7 +154,7 @@ object f_visu: Tf_visu
       object histminmax: TSpeedButton
         Left = 64
         Height = 22
-        Hint = 'Reset the visualisation treshold'
+        Hint = 'Fix the visualisation treshold to the image data range.'
         Top = 0
         Width = 23
         Down = True
@@ -252,7 +252,7 @@ object f_visu: Tf_visu
         Hint = 'Show bulls eye'
         Top = 22
         Width = 23
-        Down = True
+        AllowAllUp = True
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           1800000000000003000064000000640000000000000000000000FF00FFEBEBEB
