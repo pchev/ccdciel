@@ -731,19 +731,20 @@ var DefaultInterface,aInt: TDevInterface;
     configfile: string;
     i:integer;
 begin
+  DefaultFormatSettings.DecimalSeparator:='.';
+  DefaultFormatSettings.TimeSeparator:=':';
   lclver:=lcl_version;
   compile_time:={$I %DATE%}+' '+{$I %TIME%};
   compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
   compile_system:={$I %FPCTARGETOS%};
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
+  Application.UpdateFormatSettings := False;
   {$else}
   DefaultInterface:=INDI;
   {$endif}
   AppClose:=false;
   ConfirmClose:=true;
-  DefaultFormatSettings.DecimalSeparator:='.';
-  DefaultFormatSettings.TimeSeparator:=':';
   ScaleMainForm;
   NeedRestart:=false;
   GUIready:=false;

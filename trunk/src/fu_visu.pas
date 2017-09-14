@@ -51,6 +51,7 @@ type
     SpinEditMin: TSpinEdit;
     SpinEditMax: TSpinEdit;
     StaticText1: TStaticText;
+    Timer1: TTimer;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure BtnIttChange(Sender: TObject);
@@ -67,6 +68,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure SpinEditMaxChange(Sender: TObject);
     procedure SpinEditMinChange(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     { private declarations }
     FimgMin, FimgMax: double;
@@ -325,13 +327,19 @@ end;
 procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
-  ImgMax:=SpinEditMax.Value/256;
-  if Assigned(FRedraw) then FRedraw(self);
+  timer1.Enabled:=true;
 end;
 
 procedure Tf_visu.SpinEditMinChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
+  timer1.Enabled:=true;
+end;
+
+procedure Tf_visu.Timer1Timer(Sender: TObject);
+begin
+  timer1.Enabled:=false;
+  ImgMax:=SpinEditMax.Value/256;
   ImgMin:=SpinEditMin.Value/256;
   if Assigned(FRedraw) then FRedraw(self);
 end;
