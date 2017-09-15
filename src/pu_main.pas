@@ -3289,7 +3289,7 @@ begin
      SetOptions;
 
      if PlanetariumChange and (not planetarium.Connected) then begin
-        planetarium.Free;
+        planetarium.Terminate;
         i:=config.GetValue('/Planetarium/Software',0);
         case TPlanetariumType(i) of
           CDC: planetarium:=TPlanetarium_cdc.Create;
