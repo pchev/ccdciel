@@ -665,7 +665,12 @@ begin
     exit;
   end;
   // sum of multiple exposures
-  if ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and(not FirstFrame)and(not terminated) then begin
+  if (AutofocusNearNum>1)and
+    ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and
+    (not((AutofocusVcStep=vcsCheckL)or(AutofocusVcStep=vcsCheckR)))and
+    (not FirstFrame)and
+    (not terminated)
+    then begin
     FFindStar:=true;
     FStarX:=round(xg);
     FStarY:=round(yg);
@@ -722,7 +727,7 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusVcurve;
-var newpos,delta:double;
+var newpos,delta,meanhfd:double;
 begin
  case AutofocusVcStep of
    vcsStartL: begin
@@ -771,7 +776,9 @@ begin
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to near focus '+focuser.Position.Text);
               FonAbsolutePosition(self);
-              AutofocusVcStep:=vcsFocusL;
+              AutofocusVcStep:=vcsCheckL;
+              AutofocusVcCheckNum:=0;
+              AutofocusVcCheckHFDsum:=0;
               wait(1);
              end;
    vcsNearR: begin
@@ -782,23 +789,49 @@ begin
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to near focus '+focuser.Position.Text);
               FonAbsolutePosition(self);
-              AutofocusVcStep:=vcsFocusR;
+              AutofocusVcStep:=vcsCheckR;
+              AutofocusVcCheckNum:=0;
+              AutofocusVcCheckHFDsum:=0;
               wait(1);
+             end;
+   vcsCheckL:begin
+              inc(AutofocusVcCheckNum);
+              AutofocusVcCheckHFDsum:=AutofocusVcCheckHFDsum+Fhfd;
+              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
+              msg('Autofocus measurement '+IntToStr(AutofocusVcCheckNum)+' : HFD='+FormatFloat(f3,meanhfd)+' position='+IntToStr(round(newpos)));
+              if AutofocusVcCheckNum>=AutofocusNearNum then begin
+                AutofocusVcStep:=vcsFocusL;
+                doAutofocusVcurve;
+              end;
+             end;
+   vcsCheckR:begin
+              inc(AutofocusVcCheckNum);
+              AutofocusVcCheckHFDsum:=AutofocusVcCheckHFDsum+Fhfd;
+              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
+              msg('Autofocus measurement'+IntToStr(AutofocusVcCheckNum)+' : HFD='+FormatFloat(f3,meanhfd)+' position='+IntToStr(round(newpos)));
+              if AutofocusVcCheckNum>=AutofocusNearNum then begin
+                AutofocusVcStep:=vcsFocusR;
+                doAutofocusVcurve;
+              end;
              end;
    vcsFocusL:begin
               // move to focus
-              newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
+              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to focus '+focuser.Position.Text);
+              msg('Autofocus move to focus position '+focuser.Position.Text);
               FonAbsolutePosition(self);
               terminated:=true;
               wait(1);
              end;
    vcsFocusR:begin
               // move to focus
-              newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
+              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to focus '+focuser.Position.Text);
+              msg('Autofocus move to focus position '+focuser.Position.Text);
               FonAbsolutePosition(self);
               terminated:=true;
               wait(1);

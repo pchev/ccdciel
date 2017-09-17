@@ -42,7 +42,7 @@ type
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
   TAutofocusMode=(afVcurve,afMean,afIterative,afNone);
-  TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsFocusL,vcsFocusR);
+  TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
   TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
   TIndiTransfert=(itNetwork,itDisk);
 
@@ -299,6 +299,8 @@ var
   AutofocusVcStep:TAutofocusVcurveStep;
   AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset: integer;
   AutofocusMeanStep:TAutofocusMeanStep;
+  AutofocusVcCheckNum: integer;
+  AutofocusVcCheckHFDsum: double;
   CancelAutofocus: Boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
