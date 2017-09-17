@@ -191,9 +191,9 @@ begin
  FPreFocusPos:=focuser.FocusPosition;
  AutofocusMeanStep:=afmStart;
  if focuserdirection=FocusDirOut then
-    AutofocusVcStep:=vcsNearL
+    AutofocusVcStep:=vcsStartL
   else
-    AutofocusVcStep:=vcsNearR;
+    AutofocusVcStep:=vcsStartR;
  case AutofocusMode of
    afVcurve   : msg('Autofocus start Vcurve');
    afMean     : msg('Autofocus start Dynamic curve');
@@ -722,31 +722,65 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusVcurve;
-var newpos:double;
+var newpos,delta:double;
 begin
  case AutofocusVcStep of
-   vcsNearL: begin
+   vcsStartL: begin
               // move to curve start position to clear backlash
               focuser.FocusPosition:=round(AutofocusVc[0,1]);
+              msg('Clear focuser backlash');
               FonAbsolutePosition(self);
               wait(1);
-              // move back to near focus position
-              newpos:=AutofocusVcpiL+(AutofocusNearHFD/AutofocusVcSlopeL);
+              // move back to start focus position
+              newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
+              if newpos<AutofocusVc[0,1] then begin
+                 msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
+                 ChkAutofocus.Checked:=false;
+                 exit;
+              end;
               focuser.FocusPosition:=round(newpos+(CurrentFilterOffset-AutofocusVcFilterOffset));
-              msg('Autofocus move to '+focuser.Position.Text);
+              msg('Autofocus move to start position '+focuser.Position.Text);
+              FonAbsolutePosition(self);
+              AutofocusVcStep:=vcsNearL;
+              wait(1);
+             end;
+   vcsStartR: begin
+              // move to curve end position to clear backlash
+              focuser.FocusPosition:=round(AutofocusVc[AutofocusVcNum,1]);
+              msg('Clear focuser backlash');
+              FonAbsolutePosition(self);
+              wait(1);
+              // move back to start focus position
+              newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
+              if newpos>AutofocusVc[AutofocusVcNum,1] then begin
+                 msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
+                 ChkAutofocus.Checked:=false;
+                 exit;
+              end;
+              focuser.FocusPosition:=round(newpos+(CurrentFilterOffset-AutofocusVcFilterOffset));
+              msg('Autofocus move to start position '+focuser.Position.Text);
+              FonAbsolutePosition(self);
+              AutofocusVcStep:=vcsNearR;
+              wait(1);
+             end;
+   vcsNearL: begin
+              // compute near focus position
+              delta:=(AutofocusStartHFD-Fhfd)/AutofocusVcSlopeL;
+              newpos:=AutofocusVcpiL+(AutofocusNearHFD/AutofocusVcSlopeL)+delta;
+              // move to near focus position
+              focuser.FocusPosition:=round(newpos);
+              msg('Autofocus move to near focus '+focuser.Position.Text);
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsFocusL;
               wait(1);
              end;
    vcsNearR: begin
-              // move to curve end position to clear backlash
-              focuser.FocusPosition:=round(AutofocusVc[AutofocusVcNum,1]);
-              FonAbsolutePosition(self);
-              wait(1);
-              // move back to near focus position
-              newpos:=AutofocusVcpiR+(AutofocusNearHFD/AutofocusVcSlopeR);
-              focuser.FocusPosition:=round(newpos+(CurrentFilterOffset-AutofocusVcFilterOffset));
-              msg('Autofocus move to '+focuser.Position.Text);
+              // compute near focus position
+              delta:=(AutofocusStartHFD-Fhfd)/AutofocusVcSlopeR;
+              newpos:=AutofocusVcpiR+(AutofocusNearHFD/AutofocusVcSlopeR)+delta;
+              // move to near focus position
+              focuser.FocusPosition:=round(newpos);
+              msg('Autofocus move to near focus '+focuser.Position.Text);
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsFocusR;
               wait(1);
@@ -755,7 +789,7 @@ begin
               // move to focus
               newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to '+focuser.Position.Text);
+              msg('Autofocus move to focus '+focuser.Position.Text);
               FonAbsolutePosition(self);
               terminated:=true;
               wait(1);
@@ -764,7 +798,7 @@ begin
               // move to focus
               newpos:=focuser.FocusPosition-(Fhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to '+focuser.Position.Text);
+              msg('Autofocus move to focus '+focuser.Position.Text);
               FonAbsolutePosition(self);
               terminated:=true;
               wait(1);

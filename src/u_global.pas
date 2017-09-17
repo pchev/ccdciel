@@ -42,7 +42,7 @@ type
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
   TAutofocusMode=(afVcurve,afMean,afIterative,afNone);
-  TAutofocusVcurveStep=(vcsNearL,vcsNearR,vcsFocusL,vcsFocusR);
+  TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsFocusL,vcsFocusR);
   TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
   TIndiTransfert=(itNetwork,itDisk);
 
@@ -289,10 +289,10 @@ var
   TemperatureSlope: double;
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
-  AutofocusNearHFD: double;
+  AutofocusStartHFD,AutofocusNearHFD: double;
   AutofocusExposure,AutofocusExposureFact:double;
   AutofocusMoveDir: boolean;
-  PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
+  PosStartL,PosStartR,PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;
   AutofocusVcDir: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;

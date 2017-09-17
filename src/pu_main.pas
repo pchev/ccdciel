@@ -1742,6 +1742,7 @@ begin
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
+  AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
   AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
@@ -2558,6 +2559,8 @@ begin
  minpos:=centerp-hw;
  maxpos:=centerp+hw;
  step:=round(2*hw/n);
+ PosStartL:=-1;
+ PosStartR:=-1;
  PosNearL:=-1;
  PosFocus:=-1;
  PosNearR:=-1;
@@ -2622,12 +2625,18 @@ begin
  //  search near focus pos, cancel if we not reach enough defocalisation
  for i:=0 to PosFocus do begin
    if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearL:=i;
+   if AutofocusVc[i,2]>=AutofocusStartHFD then PosStartL:=i;
  end;
  for i:=n downto PosFocus do begin
    if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearR:=i;
+   if AutofocusVc[i,2]>=AutofocusStartHFD then PosStartR:=i;
  end;
  if (PosNearL<0)or(PosNearR<0) then begin
    NewMessage('Cannot reach near focus HFD, please increase Half Width or better center the curve.');
+   exit;
+ end;
+ if (PosNearL<0)or(PosNearR<0) then begin
+   NewMessage('Cannot reach start focus HFD, please increase Half Width or decrease the start HFD');
    exit;
  end;
  AutofocusVcNum:=n;
@@ -3094,6 +3103,7 @@ begin
    f_option.Autofocusmode.ItemIndex:=config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode));
    f_option.AutofocusMinSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed));
    f_option.AutofocusMaxSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed));
+   f_option.AutofocusStartHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD));
    f_option.AutofocusNearHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD));
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
@@ -3201,6 +3211,7 @@ begin
      config.SetValue('/StarAnalysis/AutoFocusMode',f_option.Autofocusmode.ItemIndex);
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',StrToIntDef(f_option.AutofocusMinSpeed.Text,AutofocusMinSpeed));
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',StrToIntDef(f_option.AutofocusMaxSpeed.Text,AutofocusMaxSpeed));
+     config.SetValue('/StarAnalysis/AutofocusStartHFD',StrToFloatDef(f_option.AutofocusStartHFD.Text,AutofocusStartHFD));
      config.SetValue('/StarAnalysis/AutofocusNearHFD',StrToFloatDef(f_option.AutofocusNearHFD.Text,AutofocusNearHFD));
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
