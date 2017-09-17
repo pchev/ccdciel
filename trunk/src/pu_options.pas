@@ -51,7 +51,10 @@ type
     AstCustScript: TEdit;
     CameraAutoCool: TCheckBox;
     AutofocusMinSNR: TEdit;
+    AutofocusStartHFD: TEdit;
     Label81: TLabel;
+    Label82: TLabel;
+    Label83: TLabel;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
@@ -282,6 +285,7 @@ type
     StarWindow: TEdit;
     RefTreshold: TTrackBar;
     procedure AutofocusmodeClick(Sender: TObject);
+    procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
@@ -446,6 +450,15 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
   PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
+end;
+
+procedure Tf_option.CheckStartNearHFD(Sender: TObject);
+var a,b: double;
+begin
+  a:=StrToFloatDef(AutofocusStartHFD.Text,-9999);
+  b:=StrToFloatDef(AutofocusNearHFD.Text,-9999);
+  if (a<0)or(b<0) then exit;
+  if a<=b then ShowMessage('Near HFD must be smaller than Start HFD!');
 end;
 
 function Tf_option.GetResolver: integer;
