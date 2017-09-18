@@ -219,9 +219,9 @@ begin
    FLastResult:=true
  else
    FLastResult:=false;
- if Assigned(Fterminatecmd) then Fterminatecmd(self);
  FBusy:=false;
  if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
+ if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
 
