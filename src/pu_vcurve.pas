@@ -261,7 +261,7 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
   LeastSquares(pr,AutofocusVcSlopeR,br,rr);
   AutofocusVcpiR:=-br/AutofocusVcSlopeR;
 
-  AutofocusVcPID:=abs(AutofocusVcpiL-AutofocusVcpiR);
+  AutofocusVcPID:=AutofocusVcpiR-AutofocusVcpiL;
   if AutofocusVcDir then r2:=rr*rr else r2:=rl*rl;
 
   // draw linear regression
