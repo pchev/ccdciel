@@ -1004,9 +1004,12 @@ object f_option: Tf_option
             object AutofocusStartHFD: TEdit
               Left = 213
               Height = 27
+              Hint = 'The focus starting point on the V curve used to determine the Near focus position. '#10'Use a high value near the top of the V curve but inside the measurement area. '#10'A typical value is 20.0.'
               Top = 0
               Width = 60
               OnChange = CheckStartNearHFD
+              ParentShowHint = False
+              ShowHint = True
               TabOrder = 0
             end
           end
@@ -1134,11 +1137,11 @@ object f_option: Tf_option
             ParentColor = False
           end
           object AutofocusNearNum: TEdit
-            Left = 336
+            Left = 344
             Height = 27
             Hint = 'The number of exposure we take to get a mean HFD value '#10'when the HFD is smaller than the value to the left.'
             Top = 0
-            Width = 60
+            Width = 50
             ParentShowHint = False
             ShowHint = True
             TabOrder = 1
@@ -1189,11 +1192,11 @@ object f_option: Tf_option
           TabOrder = 6
         end
         object AutofocusMinSNR: TEdit
-          Left = 336
+          Left = 344
           Height = 27
           Hint = 'If a star measurement during autofocus return a SNR ratio value lower than this setting the autofocus is canceled.'#10'Beware that a too big value here will return the focuser to it''s initial position.'#10'Set a value low enough to avoid this problem but enough for a good measurement quality at the Near focus HFP position.'
           Top = 84
-          Width = 58
+          Width = 50
           ParentShowHint = False
           ShowHint = True
           TabOrder = 7
