@@ -46,6 +46,7 @@ T_indifocuser = class(T_focuser)
    FocusAbort: ISwitchVectorProperty;
    FocusPreset: INumberVectorProperty;
    FocusGotoPreset: ISwitchVectorProperty;
+   FocusTemperature: INumberVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave,configdefault: ISwitch;
    Fready,Fconnected: boolean;
@@ -83,6 +84,7 @@ T_indifocuser = class(T_focuser)
    function  GetPositionRange: TNumRange; override;
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
+   function  GetTemperature:double; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -158,6 +160,8 @@ begin
     FocusAbort:=nil;
     FocusPreset:=nil;
     FocusGotoPreset:=nil;
+    FocusTemperature:=nil;
+    FhasTemperature:=false;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -331,6 +335,10 @@ begin
   end
   else if (proptype=INDI_SWITCH)and(propname='Goto') then begin
      FocusGotoPreset:=indiProp.getSwitch;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='FOCUS_TEMPERATURE') then begin
+     FocusTemperature:=indiProp.getNumber();
+     FhasTemperature:=true;
   end;
   CheckStatus;
 end;
@@ -504,6 +512,14 @@ begin
     configload.s:=ISS_ON;
     indiclient.sendNewSwitch(configprop);
   end;
+end;
+
+function  T_indifocuser.GetTemperature:double;
+begin
+  if FocusTemperature<>nil then begin;
+    result:=round(FocusTemperature.np[0].value);
+  end
+  else result:=0;
 end;
 
 end.
