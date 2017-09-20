@@ -42,6 +42,7 @@ T_focuser = class(TComponent)
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FLastDirection: boolean;
+    FhasTemperature: boolean;
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -56,6 +57,7 @@ T_focuser = class(TComponent)
     function  GethasRelativePosition: boolean; virtual; abstract;
     function  GethasTimerSpeed: boolean; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
+    function  GetTemperature:double; virtual; abstract;
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -69,6 +71,8 @@ T_focuser = class(TComponent)
     property hasAbsolutePosition: boolean read GethasAbsolutePosition;
     property hasRelativePosition: boolean read GethasRelativePosition;
     property hasTimerSpeed: boolean read GethasTimerSpeed;
+    property hasTemperature: boolean read FhasTemperature;
+    property Temperature: double read GetTemperature;
     property Position: integer read GetPosition write SetPosition;
     property RelPosition: integer read GetRelPosition write SetRelPosition;
     property PositionRange: TNumRange read GetPositionRange;
@@ -92,6 +96,7 @@ begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
   FTimeOut:=100;
+  FhasTemperature:=false;
 end;
 
 destructor  T_focuser.Destroy;

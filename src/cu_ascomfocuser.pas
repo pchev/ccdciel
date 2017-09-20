@@ -63,6 +63,7 @@ T_ascomfocuser = class(T_focuser)
    function  GetRelPositionRange: TNumRange; override;
    procedure SetTimeout(num:integer); override;
    function  WaitFocuserMoving(maxtime:integer):boolean;
+   function  GetTemperature:double; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -120,6 +121,7 @@ begin
   else
     V.Connected:=true;
   if Connected then begin
+     GetTemperature;
      msg('Focuser '+Fdevice+' connected.');
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -399,6 +401,22 @@ end;
 procedure T_ascomfocuser.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
+end;
+
+function  T_ascomfocuser.GetTemperature:double;
+begin
+ result:=0;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result:= V.Temperature;
+   FhasTemperature:=true;
+   except
+    result:=0;
+    FhasTemperature:=false;
+   end;
+ end;
+ {$endif}
 end;
 
 end.
