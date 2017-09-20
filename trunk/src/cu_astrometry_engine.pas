@@ -549,16 +549,16 @@ procedure TAstrometry_engine.Apm2Wcs;
 // comunicated by Han Kleijn
 // simplified as ccdciel force decimal separator to .
 var
-   i,pos1,pos2,pos3,sign : integer;
-   f     : textfile;
-   line1, line2,line3 :string;
-   hdr: THeaderBlock;
-   fwcs: file of THeaderBlock;
-   ra_radians,dec_radians,pixel_size,crota1,crota2,yx_ratio,cdelt1,cdelt2:double;
-   cd1_1,cd1_2,cd2_1,cd2_2: double;
+  i,pos1,pos2,pos3,sign : integer;
+  f : textfile;
+  line1, line2,line3 :string;
+  hdr: THeaderBlock;
+  fwcs: file of THeaderBlock;
+  ra_radians,dec_radians,pixel_size,crota1,crota2,yx_ratio,cdelt1,cdelt2:double;
+  cd1_1,cd1_2,cd2_1,cd2_2: double;
 begin
   assign(f,apmfile);
- // Reopen the file for reading
+  // Reopen the file for reading
   Reset(f);
   while not Eof(f) do
   begin
@@ -575,58 +575,56 @@ begin
     ra_radians:=strtofloat(copy(line1,1,pos1-1));
     dec_radians:=strtofloat(copy(line1,pos1+1,pos2-pos1-1));
 
-
     pos1:=posex(',',line2,1);
     pos2:=posex(',',line2,pos1+1);
     pos3:=posex(',',line2,pos2+1);
 
     pixel_size:=strtofloat(copy(line2,1,pos1-1));
     crota2:=strtofloat(copy(line2,pos1+1,pos2-pos1-1));
-    yx_ratio:=strtofloat(copy(line2,pos2+1,pos3-pos2-1));{if positive flipped}
+    yx_ratio:=strtofloat(copy(line2,pos2+1,pos3-pos2-1));{if positive then flipped}
 
     cdelt1:=-pixel_size/3600;
-    {yx ration is apm file is inverse compared with platesolve window}
+    {In the apm file the yx ratio is reported inverse compared with Platesolve2 window}
     if yx_ratio>0 then
     begin
-     cdelt1:=-pixel_size/3600;
-     cdelt2:=+pixel_size/3600;
+      cdelt1:=-pixel_size/3600;
+      cdelt2:=+pixel_size/3600;
     end
     else
     begin
       cdelt1:=+pixel_size/3600;
       cdelt2:=+pixel_size/3600;
-      crota2:=180-crota2; {very strange angle reporting in Platesolve2 ?? took me whole day to fixs this}
+      crota2:=180-crota2; {Non-standard angle reporting in Platesolve2}
     end;
-    crota1:=crota2;
+    crota1:=crota2; { coordinate grid is not skewed= > crota1=crota2}
 
     // old_to_new_WCS
-
-    cd1_1:=cdelt1*cos(crota2*pi/180); {note 2013 should be crota1 if skewed}
+    cd1_1:=cdelt1*cos(crota1*pi/180);
     if cdelt1>=0 then sign:=+1 else sign:=-1;
-    cd1_2:=abs(cdelt2)*sign*sin(crota2*pi/180);{note 2013 should be crota1 if skewed}
+    cd1_2:=abs(cdelt2)*sign*sin(crota1*pi/180);
     if cdelt2>=0 then sign:=+1 else sign:=-1;
     cd2_1:=-abs(cdelt1)*sign*sin(crota2*pi/180);
     cd2_2:= cdelt2*cos(crota2*pi/180);
 
     // write header
     for i:=1 to 36 do
-       hdr[i]:=blank80;
-    hdr[1] := 'COMMENT    Solved by Platesolve 2'+blank80;
-    hdr[2] := 'CTYPE1  = '+#39+'RA---TAN'+#39+'           / first parameter RA  ,  projection TANgential'+blank80;
-    hdr[3] := 'CTYPE2  = '+#39+'DEC--TAN'+#39+'           / second parameter DEC,  projection TANgential'+blank80;
-    hdr[4] := 'CUNIT1  = '+#39+'deg     '+#39+'           / Unit of coordinate                          '+blank80;
-    hdr[5] := 'CRPIX1  = '+FormatFloat(e6,1+Fiwidth/2)+'        / X of reference pixel                  '+blank80;
-    hdr[6] := 'CRPIX2  = '+FormatFloat(e6,1+Fiheight/2)+'        / Y of reference pixel                 '+blank80;
-    hdr[7] := 'CRVAL1  = '+FormatFloat(e6,ra_radians*rad2deg)+'        / RA of reference pixel (deg)    '+blank80;
-    hdr[8] := 'CRVAL2  = '+FormatFloat(e6,dec_radians*rad2deg)+'        / DEC of reference pixel (deg)  '+blank80;
-    hdr[9] := 'CDELT1  = '+FormatFloat(e6,cdelt1)+'        / X pixel size (deg)                         '+blank80;
-    hdr[10] := 'CDELT2  = '+FormatFloat(e6,cdelt2)+'        / Y pixel size (deg)                         '+blank80;
-    hdr[11] := 'CROTA1  = '+FormatFloat(e6,crota1)+'        / Image twist of X axis        (deg)        '+blank80;
-    hdr[12] := 'CROTA2  = '+FormatFloat(e6,crota2)+'        / Image twist of Y axis        (deg)        '+blank80;
-    hdr[13] := 'CD1_1   = '+FormatFloat(e6,cd1_1)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
-    hdr[14] := 'CD1_2   = '+FormatFloat(e6,cd1_2)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
-    hdr[15] := 'CD2_1   = '+FormatFloat(e6,cd2_1)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
-    hdr[16] := 'CD2_2   = '+FormatFloat(e6,cd2_2)+'        / CD matrix to convert (x,y) to (Ra, Dec)    '+blank80;
+    hdr[i]:=blank80;
+    hdr[1] := 'COMMENT Solved by Platesolve 2'+blank80;
+    hdr[2] := 'CTYPE1 = '+#39+'RA---TAN'+#39+' / first parameter RA , projection TANgential'+blank80;
+    hdr[3] := 'CTYPE2 = '+#39+'DEC--TAN'+#39+' / second parameter DEC, projection TANgential'+blank80;
+    hdr[4] := 'CUNIT1 = '+#39+'deg '+#39+' / Unit of coordinate '+blank80;
+    hdr[5] := 'CRPIX1 = '+FormatFloat(e6,1+Fiwidth/2)+' / X of reference pixel '+blank80;
+    hdr[6] := 'CRPIX2 = '+FormatFloat(e6,1+Fiheight/2)+' / Y of reference pixel '+blank80;
+    hdr[7] := 'CRVAL1 = '+FormatFloat(e6,ra_radians*rad2deg)+' / RA of reference pixel (deg) '+blank80;
+    hdr[8] := 'CRVAL2 = '+FormatFloat(e6,dec_radians*rad2deg)+' / DEC of reference pixel (deg) '+blank80;
+    hdr[9] := 'CDELT1 = '+FormatFloat(e6,cdelt1)+' / X pixel size (deg) '+blank80;
+    hdr[10] := 'CDELT2 = '+FormatFloat(e6,cdelt2)+' / Y pixel size (deg) '+blank80;
+    hdr[11] := 'CROTA1 = '+FormatFloat(e6,crota1)+' / Image twist of X axis (deg) '+blank80;
+    hdr[12] := 'CROTA2 = '+FormatFloat(e6,crota2)+' / Image twist of Y axis (deg) '+blank80;
+    hdr[13] := 'CD1_1 = '+FormatFloat(e6,cd1_1)+' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[14] := 'CD1_2 = '+FormatFloat(e6,cd1_2)+' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[15] := 'CD2_1 = '+FormatFloat(e6,cd2_1)+' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[16] := 'CD2_2 = '+FormatFloat(e6,cd2_2)+' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
     hdr[17] := 'END'+blank80;
 
     // write wcs file
@@ -641,8 +639,6 @@ begin
     write(f,' ');
     CloseFile(f);
   end;
-
-
 end;
 
 end.
