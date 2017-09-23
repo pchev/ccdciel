@@ -763,7 +763,8 @@ begin
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
-  Filters:=TStringList.Create;
+  FilterList:=TStringList.Create;
+  BinningList:=TStringList.Create;
   CurrentFilterOffset:=0;
   PageControlRight.ActivePageIndex:=0;
   cdcwcs_initfitsfile:=nil;
@@ -1061,6 +1062,8 @@ end;
 procedure Tf_main.FormShow(Sender: TObject);
 var str: string;
     i,n: integer;
+    posprev,poscapt:integer;
+    binprev,bincapt:string;
 begin
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
      NewMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
@@ -1103,18 +1106,40 @@ begin
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
   for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
-  Filters.Clear;
-  Filters.Add(Filter0);
+  FilterList.Clear;
+  FilterList.Add(Filter0);
   for i:=1 to n do begin
      FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
      FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
      str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
-     Filters.Add(str);
+     FilterList.Add(str);
   end;
-  f_filterwheel.Filters.Items.Assign(Filters);
+  f_filterwheel.Filters.Items.Assign(FilterList);
   f_filterwheel.Filters.ItemIndex:=0;
-  f_EditPlan.Filter.Items.Assign(Filters);
+  f_EditPlan.Filter.Items.Assign(FilterList);
   SetFilterMenu;
+
+  n:=config.GetValue('/Binning/Num',0);
+  BinningList.Clear;
+  binprev:=config.GetValue('/Preview/Binning','1x1');
+  bincapt:=config.GetValue('/Capture/Binning','1x1');
+  posprev:=0;
+  poscapt:=0;
+  if n>0 then begin
+    for i:=0 to n-1 do begin
+       str:=config.GetValue('/Binning/Binning'+IntToStr(i),'');
+       n:=BinningList.Add(str);
+       if str=binprev then posprev:=n;
+       if str=bincapt then poscapt:=n;
+    end;
+  end
+  else
+    BinningList.Add(Binning0);
+  f_preview.Binning.Items.Assign(BinningList);
+  f_capture.Binning.Items.Assign(BinningList);
+  f_editplan.Binning.Items.Assign(BinningList);
+  f_preview.Binning.ItemIndex:=posprev;
+  f_capture.Binning.ItemIndex:=poscapt;
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -1313,12 +1338,18 @@ begin
   config.SetValue('/Visu/Log',f_visu.BtnLog.Checked);
   config.SetValue('/Visu/Sqrt',f_visu.BtnSqrt.Checked);
 
-  n:=Filters.Count-1;
+  n:=FilterList.Count-1;
   config.SetValue('/Filters/Num',n);
   for i:=1 to n do begin
-     config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
+     config.SetValue('/Filters/Filter'+IntToStr(i),FilterList[i]);
      config.SetValue('/Filters/Offset'+IntToStr(i),FilterOffset[i]);
      config.SetValue('/Filters/ExpFact'+IntToStr(i),FilterExpFact[i]);
+  end;
+
+  n:=BinningList.Count;
+  config.SetValue('/Binning/Num',n);
+  for i:=0 to n-1 do begin
+     config.SetValue('/Binning/Binning'+IntToStr(i),BinningList[i]);
   end;
 
   SaveConfig;
@@ -1358,7 +1389,8 @@ begin
   ImaBmp.Free;
   refbmp.Free;
   config.Free;
-  Filters.Free;
+  FilterList.Free;
+  BinningList.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
@@ -2058,24 +2090,24 @@ begin
  if rymax<rxmin then rymax:=rymin;
  if rymax>8 then rymax:=8;
  if rystep<1 then rystep:=1;
- f_preview.Binning.Clear;
- f_capture.Binning.Clear;
+ BinningList.Clear;
  i:=rxmin;
  while i<=rxmax do begin
    j:=rymin;
    while j<=rymax do begin
      if i=j then begin  // only "square" binning in combobox list
        binstr:=inttostr(i)+'x'+inttostr(j);
-       n:=f_preview.Binning.Items.Add(binstr);
+       n:=BinningList.Add(binstr);
        if binstr=binprev then posprev:=n;
-       n:=f_capture.Binning.Items.Add(binstr);
        if binstr=bincapt then poscapt:=n;
-       f_editplan.Binning.Items.Add(binstr);
      end;
      inc(j,rystep);
    end;
    inc(i,rxstep);
  end;
+ f_preview.Binning.Items.Assign(BinningList);
+ f_capture.Binning.Items.Assign(BinningList);
+ f_editplan.Binning.Items.Assign(BinningList);
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_editplan.Binning.ItemIndex:=0;
@@ -2320,7 +2352,7 @@ case wheel.Status of
                       f_devicesconnection.LabelWheel.Font.Color:=clGreen;
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
                       f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
-                      Filters.Assign(wheel.FilterNames);
+                      FilterList.Assign(wheel.FilterNames);
                       SetFilterMenu;
                       if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
                          f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
@@ -2366,7 +2398,7 @@ procedure Tf_main.FilterNameChange(Sender: TObject);
 begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
 f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
-Filters.Assign(wheel.FilterNames);
+FilterList.Assign(wheel.FilterNames);
 SetFilterMenu;
 if (wheel.Filter>=0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
    f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
@@ -2378,9 +2410,9 @@ var i:integer;
 begin
  for i:=MenuFilters.Count-1 downto 0 do
    MenuFilters.Delete(i);
- for i:=0 to Filters.Count-1 do begin
+ for i:=0 to FilterList.Count-1 do begin
    m:=TMenuItem.Create(Self);
-   m.Caption:=Filters[i];
+   m.Caption:=FilterList[i];
    m.OnClick:=@MenuFilterClick;
    m.Tag:=i;
    MenuFilters.Add(m);
@@ -3093,8 +3125,8 @@ begin
      f_option.FilterList.Cells[1,i]:='';
      f_option.FilterList.Cells[2,i]:='';
    end;
-   for i:=1 to Filters.Count-1 do begin
-     f_option.FilterList.Cells[0,i]:=Filters[i];
+   for i:=1 to FilterList.Count-1 do begin
+     f_option.FilterList.Cells[0,i]:=FilterList[i];
      f_option.FilterList.Cells[1,i]:=config.GetValue('/Filters/Offset'+IntToStr(i),'0');
      f_option.FilterList.Cells[2,i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),'1.0');
    end;
@@ -3150,7 +3182,7 @@ begin
    f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
    f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',10));
    f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
-   f_option.SlewFilter.Items.Assign(Filters);
+   f_option.SlewFilter.Items.Assign(FilterList);
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
@@ -3197,10 +3229,10 @@ begin
      config.SetValue('/Files/FilenameBinning',f_option.FileBin.Checked);
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
-     n:=Filters.Count-1;
+     n:=FilterList.Count-1;
      config.SetValue('/Filters/Num',n);
      for i:=1 to n do begin
-        config.SetValue('/Filters/Filter'+IntToStr(i),Filters[i]);
+        config.SetValue('/Filters/Filter'+IntToStr(i),FilterList[i]);
         buf:=trim(f_option.FilterList.Cells[1,i]);
         if not IsNumber(buf) then buf:='0';
         config.SetValue('/Filters/Offset'+IntToStr(i),buf);

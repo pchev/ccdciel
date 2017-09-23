@@ -405,6 +405,7 @@ try
   pfile.Free;
   ModalResult:=mrOK;
 except
+  on E: Exception do ShowMessage('Error saving plan: '+ E.Message);
 end;
 end;
 
