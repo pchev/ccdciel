@@ -191,6 +191,7 @@ const
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord=-9999;
   Filter0 = 'No change';
+  Binning0 = '1x1';
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
   dateisoshort = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss';
   f0 = '0';
@@ -264,7 +265,7 @@ var
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   profile: string;
-  Filters: TStringList;
+  FilterList,BinningList: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;
   FilterExpFact: array [0..MaxFilter] of double;
   CurrentFilterOffset: integer;
@@ -462,10 +463,10 @@ end;
 
 function TStep.filter_str: string;
 begin
-  if Filters.Count=0 then
+  if FilterList.Count=0 then
     Result:=''
   else
-    Result:=Filters[filter];
+    Result:=FilterList[filter];
 end;
 
 function TStep.binning_str: string;
