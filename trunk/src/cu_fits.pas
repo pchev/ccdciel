@@ -52,7 +52,7 @@ type
 
  Titt = (ittlinear,ittramp,ittlog,ittsqrt);
 
- THistogram = array[0..255] of integer;
+ THistogram = array[0..high(word)] of integer;
 
  TFitsHeader = class(TObject)
     private
@@ -937,7 +937,7 @@ end else begin
   Fdmax:=FFitsInfo.dmax;
 end;
 setlength(Fimage,n_axis,Fheight,Fwidth);
-for i:=0 to 255 do FHistogram[i]:=1; // minimum 1 to take the log
+for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
 case FFitsInfo.bitpix of
      -64 : begin
            if Fdmax>Fdmin then
@@ -960,7 +960,7 @@ case FFitsInfo.bitpix of
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
-               inc(FHistogram[x div 256]);
+               inc(FHistogram[x]);
            end;
            end;
            end;
@@ -985,7 +985,7 @@ case FFitsInfo.bitpix of
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
-               inc(FHistogram[x div 256]);
+               inc(FHistogram[x]);
            end;
            end;
            end;
@@ -1010,7 +1010,7 @@ case FFitsInfo.bitpix of
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
-               inc(FHistogram[x div 256]);
+               inc(FHistogram[x]);
            end;
            end;
            end;
@@ -1035,7 +1035,7 @@ case FFitsInfo.bitpix of
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
-               inc(FHistogram[x div 256]);
+               inc(FHistogram[x]);
            end;
            end;
            end;
@@ -1060,7 +1060,7 @@ case FFitsInfo.bitpix of
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
-               inc(FHistogram[x div 256]);
+               inc(FHistogram[x]);
            end;
            end;
            end;

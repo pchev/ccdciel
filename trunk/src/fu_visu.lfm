@@ -50,7 +50,7 @@ object f_visu: Tf_visu
       end
       object SpinEditMin: TSpinEdit
         Left = 0
-        Height = 24
+        Height = 27
         Top = 0
         Width = 70
         Color = clBlack
@@ -62,7 +62,7 @@ object f_visu: Tf_visu
       end
       object SpinEditMax: TSpinEdit
         Left = 186
-        Height = 24
+        Height = 27
         Top = 0
         Width = 70
         Color = clBlack
@@ -124,7 +124,7 @@ object f_visu: Tf_visu
         Height = 21
         Hint = 'Use a square root scale to display the image'
         Top = 60
-        Width = 49
+        Width = 53
         Caption = 'Sqrt'
         OnChange = BtnIttChange
         TabOrder = 0
@@ -134,7 +134,7 @@ object f_visu: Tf_visu
         Height = 21
         Hint = 'Use a logarithmic scale to display the image'
         Top = 40
-        Width = 47
+        Width = 50
         Caption = 'Log'
         OnChange = BtnIttChange
         TabOrder = 1
@@ -144,7 +144,7 @@ object f_visu: Tf_visu
         Height = 21
         Hint = 'Use a linear scale to display the image'
         Top = 20
-        Width = 61
+        Width = 67
         Caption = 'Linear'
         Checked = True
         OnChange = BtnIttChange
@@ -191,27 +191,27 @@ object f_visu: Tf_visu
         OnClick = histminmaxClick
         ShowCaption = False
       end
-      object hist99: TSpeedButton
-        Left = 32
-        Height = 22
-        Hint = 'Show 99.8% of the histogram'
-        Top = 0
-        Width = 32
-        Caption = '99.8'
-        GroupIndex = 101
-        Transparent = False
-        OnClick = hist99Click
-      end
-      object hist98: TSpeedButton
+      object hist2: TSpeedButton
         Left = 0
         Height = 22
-        Hint = 'Show 99.5% of the histogram'
+        Hint = 'Show 90% of the histogram'
         Top = 0
         Width = 32
-        Caption = '99.5'
+        Caption = '90'
         GroupIndex = 101
         Transparent = False
-        OnClick = hist98Click
+        OnClick = hist2Click
+      end
+      object hist1: TSpeedButton
+        Left = 32
+        Height = 22
+        Hint = 'Show 95% of the histogram'
+        Top = 0
+        Width = 32
+        Caption = '95'
+        GroupIndex = 101
+        Transparent = False
+        OnClick = hist1Click
       end
       object BtnZoom2: TSpeedButton
         Tag = 3
