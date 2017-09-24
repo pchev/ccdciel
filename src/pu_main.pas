@@ -4075,8 +4075,8 @@ if fits.HeaderInfo.naxis>0 then begin
   if f_visu.BtnLinear.Checked then fits.itt:=ittlinear
   else if f_visu.BtnLog.Checked then fits.itt:=ittlog
   else if f_visu.BtnSqrt.Checked then fits.itt:=ittsqrt;
-  fits.ImgDmax:=round(f_visu.ImgMax*256);
-  fits.ImgDmin:=round(f_visu.ImgMin*256);
+  fits.ImgDmax:=round(f_visu.ImgMax);
+  fits.ImgDmin:=round(f_visu.ImgMin);
   fits.GetBGRABitmap(ImaBmp);
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
@@ -4290,8 +4290,8 @@ if refmask then begin
     if f_visu.BtnLinear.Checked then f.itt:=ittlinear
     else if f_visu.BtnLog.Checked then f.itt:=ittlog
     else if f_visu.BtnSqrt.Checked then f.itt:=ittsqrt;
-    f.ImgDmax:=round(f_visu.ImgMax*256);
-    f.ImgDmin:=round(f_visu.ImgMin*256);
+    f.ImgDmax:=round(f_visu.ImgMax);
+    f.ImgDmin:=round(f_visu.ImgMin);
     f.GetBGRABitmap(refbmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
