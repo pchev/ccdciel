@@ -36,6 +36,8 @@ type
   Tf_option = class(TForm)
     AutofocusMeanNumPoint: TEdit;
     AutofocusMeanMovement: TEdit;
+    BtnDisableBacklash: TButton;
+    BtnDisableFocuserTemp: TButton;
     ButtonDir: TButton;
     BayerMode: TComboBox;
     Autofocusmode: TRadioGroup;
@@ -52,9 +54,12 @@ type
     CameraAutoCool: TCheckBox;
     AutofocusMinSNR: TEdit;
     AutofocusStartHFD: TEdit;
+    FocuserTempCoeff: TEdit;
+    GroupBox16: TGroupBox;
     Label81: TLabel;
     Label82: TLabel;
     Label83: TLabel;
+    Label84: TLabel;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
@@ -285,6 +290,8 @@ type
     StarWindow: TEdit;
     RefTreshold: TTrackBar;
     procedure AutofocusmodeClick(Sender: TObject);
+    procedure BtnDisableBacklashClick(Sender: TObject);
+    procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
@@ -450,6 +457,16 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
   PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
+end;
+
+procedure Tf_option.BtnDisableBacklashClick(Sender: TObject);
+begin
+ FocuserBacklash.Text:='0';
+end;
+
+procedure Tf_option.BtnDisableFocuserTempClick(Sender: TObject);
+begin
+  FocuserTempCoeff.Text:='0.0';
 end;
 
 procedure Tf_option.CheckStartNearHFD(Sender: TObject);

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI,
+uses  UScaleDPI, u_global,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -76,6 +76,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    function TempOffset(TempRef,TempNow: double):integer;
     property FocusSpeed: integer read GetSpeed write SetSpeed;
     property FocusPosition: integer read GetPosition write SetPosition;
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
@@ -155,6 +156,13 @@ begin
    2: result:=Strtointdef(Position.Text,-1);// Absolute
    else result:=-1;
  end;
+end;
+
+function Tf_focuser.TempOffset(TempRef,TempNow: double):integer;
+begin
+  // coeff: steps/C , positive = move OUT for temperature drop
+  // result: positive=OUT , negative=IN
+  result:=round((TempRef-TempNow)*FocuserTempCoeff);
 end;
 
 end.

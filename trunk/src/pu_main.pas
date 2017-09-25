@@ -1781,6 +1781,7 @@ begin
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
   FocuserBacklash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
+  FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusMeanNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
@@ -2495,6 +2496,7 @@ end;
 procedure Tf_main.FocuserTemperatureChange(n:double);
 begin
   f_focuser.Temp.Text:=FormatFloat(f1,n);
+  FocuserTemp:=n;
 end;
 
 procedure Tf_main.FocusIN(Sender: TObject);
@@ -2611,6 +2613,10 @@ begin
  PosFocus:=-1;
  PosNearR:=-1;
  NewMessage('From: '+IntToStr(minpos)+' to '+IntToStr(centerp)+' by '+IntToStr(step));
+ if focuser.hasTemperature then begin
+    NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+    AutofocusVcTemp1:=FocuserTemp;
+ end;
  if step<1 then exit;
  hfdmin:=9999;
  // initial focuser position in right direction
@@ -2686,6 +2692,13 @@ begin
    exit;
  end;
  AutofocusVcNum:=n;
+ if focuser.hasTemperature then begin
+   AutofocusVcTemp2:=FocuserTemp;
+   AutofocusVcTemp:=(AutofocusVcTemp1+AutofocusVcTemp2)/2;
+   NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+ end
+ else
+   AutofocusVcTemp:=0;
  NewMessage('Near L:'+inttostr(round(AutofocusVc[PosNearL,1])));
  NewMessage('Center:'+inttostr(round(AutofocusVc[PosFocus,1])));
  NewMessage('Near R:'+inttostr(round(AutofocusVc[PosNearR,1])));
@@ -2789,6 +2802,7 @@ begin
  if AutofocusVcNum>0 then begin
   config.DeletePath('/StarAnalysis/Vcurve');
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusVcDir);
+  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcTemp',AutofocusVcTemp);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',AutofocusVcFilterOffset);
   config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
   config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
@@ -2815,6 +2829,7 @@ Procedure Tf_main.LoadVcurve;
 var i:integer;
 begin
    AutofocusVcDir:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusMoveDir);
+   AutofocusVcTemp:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcTemp',NullCoord);
    AutofocusVcFilterOffset:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',0);
    VcCenterpos:=config.GetValue('/StarAnalysis/Vcurve/VcCenterpos',NullCoord);
    VcHalfwidth:=config.GetValue('/StarAnalysis/Vcurve/VcHalfwidth',NullCoord);
@@ -3154,6 +3169,7 @@ begin
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
    f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
+   f_option.FocuserTempCoeff.text:=FormatFloat(f2,config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff));
    f_option.AutofocusTolerance.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
    f_option.AutofocusMinSNR.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR));
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
@@ -3262,6 +3278,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
      config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
+     config.SetValue('/StarAnalysis/FocuserTempCoeff',StrToFloatDef(f_option.FocuserTempCoeff.text,FocuserTempCoeff));
      config.SetValue('/StarAnalysis/AutofocusTolerance',StrToFloatDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
      config.SetValue('/StarAnalysis/AutofocusMinSNR',StrToFloatDef(f_option.AutofocusMinSNR.Text,AutofocusMinSNR));
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
@@ -4446,6 +4463,7 @@ begin
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
    NewMessage('Focus aid stopped');
+   if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
 end;
 
 procedure Tf_main.LoadFocusStar;
@@ -4642,6 +4660,7 @@ begin
    wait(1);
    if CancelAutofocus then exit;
    // do autofocus
+   if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
    f_starprofile.ChkAutofocus.Checked:=true;
    while f_starprofile.ChkAutofocus.Checked do begin
     sleep(100);
@@ -4780,6 +4799,7 @@ begin
        f_preview.Running:=true;
        StartPreviewExposure(nil);
      end;
+     if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
      if f_starprofile.PreFocusPos>0 then
         NewMessage('AutoFocus started, initial position: '+inttostr(f_starprofile.PreFocusPos))
      else

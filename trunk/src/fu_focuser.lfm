@@ -31,7 +31,7 @@ object f_focuser: Tf_focuser
         Height = 52
         Top = 0
         Width = 178
-        PageIndex = 2
+        PageIndex = 0
         Align = alClient
         TabOrder = 0
         TabStop = True
@@ -48,23 +48,23 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label3: TLabel
               Left = 0
-              Height = 17
+              Height = 15
               Top = 4
-              Width = 42
+              Width = 32
               Caption = 'Speed'
               ParentColor = False
             end
             object Label4: TLabel
               Left = 0
-              Height = 17
+              Height = 15
               Top = 24
-              Width = 39
+              Width = 31
               Caption = 'Timer'
               ParentColor = False
             end
             object speed: TEdit
               Left = 54
-              Height = 27
+              Height = 23
               Hint = 'Focus speed'
               Top = 0
               Width = 80
@@ -72,7 +72,7 @@ object f_focuser: Tf_focuser
             end
             object timer: TEdit
               Left = 54
-              Height = 27
+              Height = 23
               Hint = 'Focus movement duration'
               Top = 22
               Width = 80
@@ -238,7 +238,7 @@ object f_focuser: Tf_focuser
       Visible = False
       object Temp: TEdit
         Left = 56
-        Height = 27
+        Height = 23
         Top = 1
         Width = 48
         ReadOnly = True
@@ -247,9 +247,9 @@ object f_focuser: Tf_focuser
       end
       object Label5: TLabel
         Left = 4
-        Height = 17
+        Height = 15
         Top = 4
-        Width = 41
+        Width = 33
         Caption = 'Temp.'
         ParentColor = False
       end
