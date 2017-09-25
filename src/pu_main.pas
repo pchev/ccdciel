@@ -838,6 +838,7 @@ begin
   focuser.onSpeedChange:=@FocuserSpeedChange;
   focuser.onTimerChange:=@FocuserTimerChange;
   focuser.onStatusChange:=@FocuserStatus;
+  focuser.onTemperatureChange:=@FocuserTemperatureChange;
 
   aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
   case aInt of
