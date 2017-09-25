@@ -2766,6 +2766,7 @@ begin
     focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2)
  else
     focuser.Position:=round(AutofocusVc[PosFocus,1]);
+ FocuserLastTemp:=FocuserTemp;
  wait(1);
  finally
  // reset camera
@@ -3751,6 +3752,26 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     StartCaptureTimer.Enabled:=true;
     exit;
   end;
+  // check focuser temperature compensation
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) then begin
+    // only if temperature change by more than 0.5 C
+    if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
+      if focuser.hasAbsolutePosition then begin
+        p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        focuser.Position:=focuser.Position+p;
+        FocuserLastTemp:=FocuserTemp;
+      end
+      else if focuser.hasRelativePosition then begin
+        p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        if p>0 then focuser.FocusOut else focuser.FocusIn;
+        focuser.RelPosition:=abs(p);
+        FocuserLastTemp:=FocuserTemp;
+      end;
+      wait(1);
+    end;
+  end;
   // check if refocusing is required
   if f_capture.FocusNow or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=StrToIntDef(f_capture.FocusCount.Text,1))) then begin
      f_capture.FocusNum:=0;
@@ -4463,6 +4484,7 @@ begin
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
    NewMessage('Focus aid stopped');
+   FocuserLastTemp:=FocuserTemp;
    if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
 end;
 
@@ -4827,6 +4849,7 @@ begin
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
    if f_starprofile.AutofocusResult then begin
+     FocuserLastTemp:=FocuserTemp;
      NewMessage('AutoFocus successful');
    end
    else begin
