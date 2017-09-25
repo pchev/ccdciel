@@ -288,6 +288,7 @@ var
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
   TemperatureSlope: double;
+  FocuserTemp: double;
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;

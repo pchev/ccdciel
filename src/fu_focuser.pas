@@ -37,6 +37,9 @@ type
     BtnUp: TButton;
     BtnSetAbsPos: TButton;
     BtnVcurve: TButton;
+    Label5: TLabel;
+    PanelTemp: TPanel;
+    Temp: TEdit;
     Label6: TLabel;
     Notebook1: TNotebook;
     PageTimerMove: TPage;

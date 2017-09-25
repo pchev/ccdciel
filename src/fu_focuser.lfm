@@ -48,23 +48,23 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label3: TLabel
               Left = 0
-              Height = 18
+              Height = 17
               Top = 4
-              Width = 37
+              Width = 42
               Caption = 'Speed'
               ParentColor = False
             end
             object Label4: TLabel
               Left = 0
-              Height = 18
+              Height = 17
               Top = 24
-              Width = 34
+              Width = 39
               Caption = 'Timer'
               ParentColor = False
             end
             object speed: TEdit
               Left = 54
-              Height = 24
+              Height = 27
               Hint = 'Focus speed'
               Top = 0
               Width = 80
@@ -72,7 +72,7 @@ object f_focuser: Tf_focuser
             end
             object timer: TEdit
               Left = 54
-              Height = 24
+              Height = 27
               Hint = 'Focus movement duration'
               Top = 22
               Width = 80
@@ -93,15 +93,15 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label6: TLabel
               Left = 2
-              Height = 18
+              Height = 17
               Top = 8
-              Width = 26
+              Width = 29
               Caption = 'Incr.'
               ParentColor = False
             end
             object RelIncr: TComboBox
               Left = 54
-              Height = 30
+              Height = 29
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
               Width = 80
@@ -132,7 +132,7 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Position: TEdit
               Left = 40
-              Height = 24
+              Height = 27
               Hint = 'Current focuser absolute position'
               Top = 1
               Width = 72
@@ -140,23 +140,23 @@ object f_focuser: Tf_focuser
             end
             object Label1: TLabel
               Left = 4
-              Height = 18
+              Height = 17
               Top = 4
-              Width = 25
+              Width = 29
               Caption = 'Pos.'
               ParentColor = False
             end
             object Label2: TLabel
               Left = 4
-              Height = 18
+              Height = 17
               Top = 28
-              Width = 27
+              Width = 31
               Caption = 'Step'
               ParentColor = False
             end
             object PosIncr: TComboBox
               Left = 40
-              Height = 30
+              Height = 29
               Hint = 'Increment step for the inward or outward movement'
               Top = 25
               Width = 72
@@ -197,16 +197,16 @@ object f_focuser: Tf_focuser
       end
     end
     object PanelBtn: TPanel
-      Left = 0
-      Height = 26
+      Left = 112
+      Height = 28
       Top = 52
-      Width = 178
+      Width = 72
       BevelOuter = bvNone
-      ClientHeight = 26
-      ClientWidth = 178
+      ClientHeight = 28
+      ClientWidth = 72
       TabOrder = 0
       object BtnDown: TButton
-        Left = 40
+        Left = 2
         Height = 25
         Hint = 'Move focuser inward'
         Top = 2
@@ -216,7 +216,7 @@ object f_focuser: Tf_focuser
         TabOrder = 0
       end
       object BtnUp: TButton
-        Left = 80
+        Left = 36
         Height = 25
         Hint = 'Move focuser outward'
         Top = 2
@@ -224,6 +224,34 @@ object f_focuser: Tf_focuser
         Caption = '>'
         OnClick = BtnUpClick
         TabOrder = 1
+      end
+    end
+    object PanelTemp: TPanel
+      Left = 0
+      Height = 28
+      Top = 52
+      Width = 112
+      BevelOuter = bvNone
+      ClientHeight = 28
+      ClientWidth = 112
+      TabOrder = 2
+      Visible = False
+      object Temp: TEdit
+        Left = 56
+        Height = 27
+        Top = 1
+        Width = 48
+        ReadOnly = True
+        TabStop = False
+        TabOrder = 0
+      end
+      object Label5: TLabel
+        Left = 4
+        Height = 17
+        Top = 4
+        Width = 41
+        Caption = 'Temp.'
+        ParentColor = False
       end
     end
   end

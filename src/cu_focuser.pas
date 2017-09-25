@@ -38,6 +38,7 @@ T_focuser = class(TComponent)
     FonPositionChange: TNotifyNum;
     FonTimerChange: TNotifyNum;
     FonSpeedChange: TNotifyNum;
+    FonTemperatureChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
@@ -87,6 +88,7 @@ T_focuser = class(TComponent)
     property onSpeedChange: TNotifyNum read FonSpeedChange write FonSpeedChange;
     property onTimerChange: TNotifyNum read FonTimerChange write FonTimerChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
+    property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
 end;
 
 implementation

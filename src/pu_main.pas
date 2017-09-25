@@ -416,6 +416,7 @@ type
     procedure FocuserPositionChange(n:double);
     procedure FocuserSpeedChange(n:double);
     procedure FocuserTimerChange(n:double);
+    procedure FocuserTemperatureChange(n:double);
     procedure FocusIN(Sender: TObject);
     procedure FocusOUT(Sender: TObject);
     procedure FocusSetAbsolutePosition(Sender: TObject);
@@ -2463,6 +2464,13 @@ case focuser.Status of
   devConnected:   begin
                       NewMessage('Focuser connected');
                       f_devicesconnection.LabelFocuser.Font.Color:=clGreen;
+                      FocuserTemp:=focuser.Temperature; // first call to test ascom property
+                      if focuser.hasTemperature then begin
+                         f_focuser.PanelTemp.Visible:=true;
+                         f_focuser.Temp.Text:=FormatFloat(f1,focuser.Temperature);
+                      end
+                      else
+                         f_focuser.PanelTemp.Visible:=false;
                    end;
 end;
 CheckConnectionStatus;
@@ -2481,6 +2489,11 @@ end;
 procedure Tf_main.FocuserTimerChange(n:double);
 begin
   f_focuser.timer.Text:=inttostr(round(n));
+end;
+
+procedure Tf_main.FocuserTemperatureChange(n:double);
+begin
+  f_focuser.Temp.Text:=FormatFloat(f1,n);
 end;
 
 procedure Tf_main.FocusIN(Sender: TObject);
