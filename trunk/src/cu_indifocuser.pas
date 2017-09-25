@@ -356,6 +356,9 @@ begin
   end
   else if nvp=FocusTimer then begin
      if Assigned(FonTimerChange) then FonTimerChange(nvp.np[0].value);
+  end
+  else if nvp=FocusTemperature then begin
+     if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
   end;
 end;
 

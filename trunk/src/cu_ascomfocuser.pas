@@ -38,6 +38,7 @@ T_ascomfocuser = class(T_focuser)
    V: variant;
    FFocusdirection: integer;
    stPosition: integer;
+   stTemperature: double;
    Fdevice: string;
    {$endif}
    FInterfaceVersion: integer;
@@ -175,7 +176,7 @@ end;
 
 procedure T_ascomfocuser.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
-var x,y: double;
+var t: double;
     p: integer;
 {$endif}
 begin
@@ -198,6 +199,13 @@ begin
         stPosition:=p;
         if Assigned(FonPositionChange) then FonPositionChange(p);
       end;
+    end;
+    if hasTemperature then begin
+       t:=GetTemperature;
+       if abs(t-stTemperature)>0.1 then begin
+          stTemperature:=t;
+          if Assigned(FonTemperatureChange) then FonTemperatureChange(t);
+       end;
     end;
     except
      on E: Exception do msg('Focuser '+Fdevice+' Status error: ' + E.Message);
