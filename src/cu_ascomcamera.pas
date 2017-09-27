@@ -443,16 +443,21 @@ begin
 end;
 
 procedure T_ascomcamera.SetFrame(x,y,width,height: integer);
+var Xmax,Ymax: integer;
 begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   Xmax:= V.CameraXSize div V.BinX;
+   Ymax:= V.CameraYSize div V.BinY;
    // force even values
    x:=round(x+0.5);
    y:=round(y+0.5);
    // check range
-   if (x+width)>V.CameraXSize then width:=round(V.CameraXSize-x);
-   if (y+height)>V.CameraYSize then height:=round(V.CameraYSize-y);
+   if x>Xmax then x:=Xmax-1;
+   if y>Ymax then y:=Ymax-1;
+   if (x+width)>Xmax then width:=Xmax-x;
+   if (y+height)>Ymax then height:=Ymax-y;
    {$ifdef debug_ascom}msg('set frame '+inttostr(width)+'x'+inttostr(height));{$endif}
    V.StartX:=x;
    V.StartY:=y;
@@ -515,9 +520,8 @@ begin
 {$ifdef mswindows}
 if Connected then begin
   try
-  w:=V.CameraXSize;
-  h:=V.CameraYSize;
-  SetBinning(1,1);
+  w:=V.CameraXSize div V.BinX;
+  h:=V.CameraYSize div V.BinX;
   SetFrame(0,0,w,h);
   Wait(1);
   except

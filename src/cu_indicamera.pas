@@ -1095,10 +1095,8 @@ end;
 procedure T_indicamera.ResetFrame;
 begin
   if UseMainSensor then begin
-    if CCDframeReset<>nil then begin
-       CCDframeReset.sp[0].s:=ISS_ON;
-       indiclient.sendNewSwitch(CCDframeReset);
-    end else if CCDframe<>nil then begin
+     // Must not set the binning to 1x1 as CCD_FRAME_RESET do
+     if CCDframe<>nil then begin
        CCDframeX.value:=CCDframeX.min;
        CCDframeY.value:=CCDframeY.min;
        CCDframeWidth.value:=CCDframeWidth.max;
