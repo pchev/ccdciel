@@ -1425,7 +1425,7 @@ var x,y: integer;
 begin
  if fits.HeaderInfo.valid and (not f_starprofile.AutofocusRunning) then begin
    Screen2fits(Mx,My,x,y);
-   f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+   f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
    Image1.Invalidate;
  end;
 end;
@@ -1543,6 +1543,13 @@ if MouseFrame and fits.HeaderInfo.valid then begin
   EndY:=Y;
   Screen2CCD(StartX,StartY,camera.VerticalFlip,x1,y1);
   Screen2CCD(EndX,EndY,camera.VerticalFlip,x2,y2);
+  if camera.CameraInterface=INDI then begin
+    // INDI frame in unbinned pixel
+    x1:=x1*camera.BinX;
+    x2:=x2*camera.BinX;
+    y1:=y1*camera.BinY;
+    y2:=y2*camera.BinY;
+  end;
   if x1>x2 then begin
     xx:=x1; x1:=x2; x2:=xx;
   end;
@@ -2651,7 +2658,7 @@ begin
        f_vcurve.LoadCurve;
        exit;
      end;
-     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
      hfdsum:=hfdsum+f_starprofile.HFD;
      NewMessage(inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    end;
@@ -2740,10 +2747,15 @@ begin
  try
  learningvcurve:=true;
  // set focus frame around the star
- s:=Focuswindow;
+ s:=Focuswindow div camera.BinX;
  s2:=s div 2;
  Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
  Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+ if camera.CameraInterface=INDI then begin
+   // INDI frame in unbinned pixel
+   xc:=xc*camera.BinX;
+   yc:=yc*camera.BinY;
+ end;
  camera.SetFrame(xc-s2,yc-s2,s,s);
  f_starprofile.StarX:=s2;
  f_starprofile.StarY:=s2;
@@ -4152,9 +4164,9 @@ if fits.HeaderInfo.naxis>0 then begin
   img_Height:=ImaBmp.Height;
   if Preview or Capture then begin // not on control exposure
     if f_starprofile.AutofocusRunning then
-       f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
+       f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
     else if f_starprofile.FindStar or f_starprofile.ChkFocus.Checked then
-      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
   end;
   if f_visu.BullsEye then begin
     co:=ColorToBGRA(clRed);
@@ -4246,10 +4258,10 @@ begin
   Inherited paint;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     if ImgZoom=0      then begin s:=round((Starwindow/2)*ImgScale0); r:=round(f_starprofile.HFD*ImgScale0/2); end
-     else if ImgZoom=0.5 then begin s:=round(Starwindow/4); r:=round(f_starprofile.HFD/4); end
-     else if ImgZoom=1 then begin s:=round(Starwindow/2); r:=round(f_starprofile.HFD/2); end
-     else if ImgZoom=2 then begin s:=Starwindow; r:=round(f_starprofile.HFD); end;
+     if ImgZoom=0      then begin s:=round((Starwindow/camera.BinX/2)*ImgScale0); r:=round(f_starprofile.HFD*ImgScale0/2); end
+     else if ImgZoom=0.5 then begin s:=round(Starwindow/camera.BinX/4); r:=round(f_starprofile.HFD/4); end
+     else if ImgZoom=1 then begin s:=round(Starwindow/camera.BinX/2); r:=round(f_starprofile.HFD/2); end
+     else if ImgZoom=2 then begin s:=Starwindow div camera.BinX; r:=round(f_starprofile.HFD); end;
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         Frame(x-s,y-s,x+s,y+s);
@@ -4446,10 +4458,15 @@ begin
     f_starprofile.StarY:=yc;
   end;
   if f_starprofile.FindStar then begin
-     s:=Focuswindow;
+     s:=Focuswindow div camera.BinX;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
      Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+     if camera.CameraInterface=INDI then begin
+       // INDI frame in unbinned pixel
+       xc:=xc*camera.BinX;
+       yc:=yc*camera.BinY;
+     end;
      camera.SetFrame(xc-s2,yc-s2,s,s);
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;
@@ -4805,10 +4822,15 @@ begin
   Image1.Invalidate;
   wait(1);
   if f_starprofile.FindStar then begin  // star selected OK
-     s:=Focuswindow;
+     s:=Focuswindow div camera.BinX;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
      Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+     if camera.CameraInterface=INDI then begin
+       // INDI frame in unbinned pixel
+       xc:=xc*camera.BinX;
+       yc:=yc*camera.BinY;
+     end;
      camera.SetFrame(xc-s2,yc-s2,s,s);
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;

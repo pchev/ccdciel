@@ -781,7 +781,7 @@ object f_option: Tf_option
         object StarWindow: TEdit
           Left = 248
           Height = 27
-          Hint = 'The size of the frame used to detect a star. '#10'This must be bigger than the highest HFD you can reach when autofocusing'
+          Hint = 'The size of the frame used to detect a star. '#10'This is in unbinned pixel and must be bigger than the highest HFD you can reach when autofocusing'
           Top = 4
           Width = 54
           ParentShowHint = False
@@ -808,7 +808,7 @@ object f_option: Tf_option
         object FocusWindow: TEdit
           Left = 248
           Height = 27
-          Hint = 'The camera frame used during focus operation to speedup the image download from camera.'#10'This value must be bigger than the star detection window.'
+          Hint = 'The camera frame used during focus operation to speedup the image download from camera.'#10'This value is in unbinned pixel and must be bigger than the star detection window.'
           Top = 33
           Width = 54
           ParentShowHint = False
