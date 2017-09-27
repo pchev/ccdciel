@@ -4782,6 +4782,11 @@ Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
+  if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
+    NewMessage('Camera or focuser are not connected');
+    f_starprofile.ChkFocus.Checked:=false;
+    exit;
+  end;
   if  f_preview.Running then begin
     NewMessage('Cannot start autofocus now, stop preview and retry');
     f_starprofile.ChkFocus.Checked:=false;
@@ -4810,6 +4815,7 @@ begin
   // start a new exposure as the current frame is probably not a preview
   f_preview.Exposure:=AutofocusExposure*AutofocusExposureFact;
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
+  camera.SetBinning(AutofocusBinning,AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning);
   x:=fits.HeaderInfo.naxis1 div 2;
