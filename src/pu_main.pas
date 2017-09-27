@@ -56,6 +56,8 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    TimerStampTimer: TTimer;
+    Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
     MenuBugReport: TMenuItem;
@@ -293,6 +295,7 @@ type
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
     procedure StatusTimerTimer(Sender: TObject);
+    procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
     camera: T_camera;
@@ -5325,6 +5328,11 @@ begin
  StatusTimer.Enabled:=false;
  CheckMeridianFlip;
  StatusTimer.Enabled:=true;
+end;
+
+procedure Tf_main.TimerStampTimerTimer(Sender: TObject);
+begin
+   Timestamp.Caption:=TimeToStr(now);
 end;
 
 function Tf_main.CheckMeridianFlip(nextexposure:double=0):integer;
