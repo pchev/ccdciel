@@ -4565,16 +4565,17 @@ begin
   CurTime:=frac(now)*24;
   jd0:=jd(Year,Month,Day,0);
   CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+  hh:=CurSt-tra;
+  Eq2Hz(hh,tde,ta,th);
   tm:=mount.PierSide;
   if tm=pierUnknown then begin
-    hh:=CurSt-tra;
-    Eq2Hz(hh,tde,ta,th);
     if (ta>0)and(ta<pi) then
       tm:=pierEast
     else
       tm:=pierWest;
   end;
-  hl:=30*deg2rad;
+  hl:=max(th,30*deg2rad);
+  hl:=min(th,70*deg2rad);
   for i:=1 to NFocusStars do begin
     if pos(' '+FocusStars[i].id+' ',FocusStarsBlacklist)>0 then continue;
     d:=AngularDistance(tra,tde,FocusStars[i].ra,FocusStars[i].de);
