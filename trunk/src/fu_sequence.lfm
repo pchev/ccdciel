@@ -106,7 +106,7 @@ object f_sequence: Tf_sequence
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
         Top = 92
-        Width = 122
+        Width = 135
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentShowHint = False
@@ -130,6 +130,14 @@ object f_sequence: Tf_sequence
         Caption = 'Delete'
         OnClick = BtnDeleteClick
         TabOrder = 7
+      end
+      object led: TShape
+        Left = 80
+        Height = 14
+        Top = 62
+        Width = 14
+        Brush.Color = clRed
+        Shape = stCircle
       end
     end
     object StaticText3: TStaticText

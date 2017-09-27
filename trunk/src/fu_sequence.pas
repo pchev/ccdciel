@@ -44,6 +44,7 @@ type
     BtnLoadTargets: TButton;
     BtnCopy: TButton;
     BtnDelete: TButton;
+    led: TShape;
     StatusTimer: TTimer;
     StartTimer: TTimer;
     Unattended: TCheckBox;
@@ -599,6 +600,7 @@ begin
      StartTimer.Enabled:=true;
      exit;
  end;
+ led.Brush.Color:=clLime;
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
  Targets.Start;
@@ -607,9 +609,10 @@ end;
 procedure Tf_sequence.StopSequence;
 begin
  StatusTimer.Enabled:=false;
- Targets.Stop;
+ if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
+ led.Brush.Color:=clRed;
 end;
 
 procedure Tf_sequence.AbortSequence;
@@ -618,6 +621,7 @@ begin
  Targets.Abort;
  TargetRow:=-1;
  PlanRow:=-1;
+ led.Brush.Color:=clRed;
  if Unattended.Checked then mount.AbortMotion;
 end;
 
@@ -664,9 +668,9 @@ begin
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;
   end
-  else PlanRow:=-1;
+  else StopSequence;
 except
-  PlanRow:=-1;
+  AbortSequence;
 end;
 end;
 
