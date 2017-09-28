@@ -206,7 +206,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="58">
+    <Units Count="62">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -521,6 +521,25 @@
         <Filename Value="cu_planetarium_cdc.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit57>
+      <Unit58>
+        <Filename Value="cu_indirotator.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit58>
+      <Unit59>
+        <Filename Value="cu_ascomrotator.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="cu_rotator.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit60>
+      <Unit61>
+        <Filename Value="fu_rotator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_rotator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit61>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -1,0 +1,61 @@
+object f_rotator: Tf_rotator
+  Left = 0
+  Height = 51
+  Top = 0
+  Width = 180
+  AutoSize = True
+  ClientHeight = 51
+  ClientWidth = 180
+  ParentFont = False
+  TabOrder = 0
+  object StaticText1: TStaticText
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 180
+    Align = alTop
+    Alignment = taCenter
+    Caption = 'Rotator'
+    Color = clGray
+    DragMode = dmAutomatic
+    Font.Color = clBlack
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 29
+    Top = 20
+    Width = 180
+    Align = alTop
+    AutoSize = True
+    ClientHeight = 29
+    ClientWidth = 180
+    TabOrder = 1
+    object Label6: TLabel
+      Left = 1
+      Height = 17
+      Top = 5
+      Width = 40
+      Caption = 'Angle'
+      ParentColor = False
+    end
+    object Angle: TEdit
+      Left = 47
+      Height = 27
+      Top = 1
+      Width = 57
+      TabOrder = 0
+    end
+    object BtnRotate: TButton
+      Left = 115
+      Height = 25
+      Top = 1
+      Width = 60
+      Caption = 'Rotate'
+      OnClick = BtnRotateClick
+      TabOrder = 1
+    end
+  end
+end

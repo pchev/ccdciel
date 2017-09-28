@@ -401,6 +401,12 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewFrameClick
       end
+      object MenuViewRotator: TMenuItem
+        AutoCheck = True
+        Caption = 'Rotator'
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewRotatorClick
+      end
       object MenuViewCCDtemp: TMenuItem
         AutoCheck = True
         Caption = 'CCD Temperature'
@@ -714,6 +720,13 @@ object f_main: Tf_main
         object MenuFrameReset: TMenuItem
           Caption = 'Reset'
           OnClick = MenuFrameResetClick
+        end
+      end
+      object MenuRotator: TMenuItem
+        Caption = 'Rotator'
+        object MenuRotatorRotate: TMenuItem
+          Caption = 'Rotate'
+          OnClick = MenuRotatorRotateClick
         end
       end
       object MenuCCDtemp: TMenuItem
