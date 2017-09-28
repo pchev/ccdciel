@@ -36,7 +36,7 @@ T_ascomrotator = class(T_rotator)
  private
    {$ifdef mswindows}
    V: variant;
-   stAngle: integer;
+   stAngle: double;
    Fdevice: string;
    {$endif}
    FInterfaceVersion: integer;
@@ -150,8 +150,7 @@ end;
 
 procedure T_ascomrotator.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
-var t: double;
-    p: integer;
+var p: double;
 {$endif}
 begin
  {$ifdef mswindows}
@@ -202,7 +201,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   msg('Rotator '+Fdevice+' move to '+inttostr(p));
+   msg('Rotator '+Fdevice+' move to '+FormatFloat(f1,p));
    V.MoveAbsolute(p);
    WaitRotatorMoving(30000);
 
