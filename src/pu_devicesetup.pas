@@ -37,10 +37,14 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    AscomRotator: TEdit;
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
+    BtnAboutRotator: TButton;
+    BtnChooseRotator: TButton;
     BtnNewProfile: TButton;
+    BtnSetupRotator: TButton;
     CameraAutoLoadConfig: TCheckBox;
     BtnAboutCamera1: TButton;
     BtnAboutCamera2: TButton;
@@ -59,14 +63,23 @@ type
     CameraIndiTransfertDir: TEdit;
     DeviceFilterWheel: TCheckBox;
     DeviceFocuser: TCheckBox;
+    DeviceRotator: TCheckBox;
     DeviceMount: TCheckBox;
+    PanelRotatorAscom: TPanel;
+    RotatorAutoLoadConfig: TCheckBox;
+    RotatorIndiDevice: TComboBox;
+    RotatorIndiDevPort: TEdit;
+    Label11: TLabel;
+    Label14: TLabel;
     Label5: TLabel;
     CameraDiskPanel: TPanel;
+    PanelRotatorIndi: TPanel;
     ProfileList: TComboBox;
     Label2: TLabel;
     MountAutoLoadConfig: TCheckBox;
     FocuserAutoLoadConfig: TCheckBox;
     CameraIndiTransfert: TRadioGroup;
+    Rotator: TTabSheet;
     WheelAutoLoadConfig: TCheckBox;
     IndiTimeout: TEdit;
     IndiSensor: TComboBox;
@@ -136,9 +149,9 @@ type
   private
     { private declarations }
     indiclient: TIndiBaseClient;
-    camsavedev,wheelsavedev,focusersavedev,mountsavedev,FCameraSensor: string;
+    camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,FCameraSensor: string;
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
-    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection: TDevInterface;
+    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FRotatorConnection: TDevInterface;
     IndiTimerCount:integer;
     receiveindidevice:boolean;
     procedure IndiNewDevice(dp: Basedevice);
@@ -146,11 +159,12 @@ type
     procedure SetCameraConnection(value: TDevInterface);
     procedure SetWheelConnection(value: TDevInterface);
     procedure SetFocuserConnection(value: TDevInterface);
+    procedure SetRotatorConnection(value: TDevInterface);
     procedure SetMountConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
   public
     { public declarations }
-    DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface: TDevInterface;
+    DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface: TDevInterface;
     profile: string;
     procedure LoadProfileList;
     procedure Loadconfig(conf: TCCDConfig);
@@ -160,6 +174,7 @@ type
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
     property FocuserConnection: TDevInterface read FFocuserConnection write SetFocuserConnection;
+    property RotatorConnection: TDevInterface read FRotatorConnection write SetRotatorConnection;
     property MountConnection: TDevInterface read FMountConnection write SetMountConnection;
   end;
 
@@ -218,6 +233,7 @@ IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
 
 DeviceFilterWheel.Checked:=conf.GetValue('/Devices/FilterWheel',false);
 DeviceFocuser.Checked:=conf.GetValue('/Devices/Focuser',false);;
+DeviceRotator.Checked:=conf.GetValue('/Devices/Rotator',false);;
 DeviceMount.Checked:=conf.GetValue('/Devices/Mount',false);;
 
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
@@ -254,6 +270,16 @@ FocuserIndiDevPort.Text:=conf.GetValue('/INDIfocuser/DevicePort','');
 FocuserAutoLoadConfig.Checked:=conf.GetValue('/INDIfocuser/AutoLoadConfig',false);
 AscomFocuser.Text:=conf.GetValue('/ASCOMfocuser/Device','');
 
+RotatorConnection:=TDevInterface(conf.GetValue('/RotatorInterface',ord(DefaultRotatorInterface)));
+if RotatorIndiDevice.Items.Count=0 then begin
+  RotatorIndiDevice.Items.Add(conf.GetValue('/INDIrotator/Device',''));
+  RotatorIndiDevice.ItemIndex:=0;
+end;
+RotatorIndiDevice.Text:=conf.GetValue('/INDIrotator/Device','');
+RotatorIndiDevPort.Text:=conf.GetValue('/INDIrotator/DevicePort','');
+RotatorAutoLoadConfig.Checked:=conf.GetValue('/INDIrotator/AutoLoadConfig',false);
+AscomRotator.Text:=conf.GetValue('/ASCOMrotator/Device','');
+
 MountConnection:=TDevInterface(conf.GetValue('/MountInterface',ord(DefaultMountInterface)));
 if MountIndiDevice.Items.Count=0 then begin
   MountIndiDevice.Items.Add(conf.GetValue('/INDImount/Device',''));
@@ -281,6 +307,9 @@ begin
      FMountConnection:=INDI;
      PanelMountIndi.Visible:=true;
      PanelMountAscom.Visible:=false;
+     FRotatorConnection:=INDI;
+     PanelRotatorIndi.Visible:=true;
+     PanelRotatorAscom.Visible:=false;
      // INDI internal filter use same driver as camera
      FilterWheelInCameraBox.Visible:=true;
      if (not FilterWheelInCameraBox.Checked) then begin
@@ -308,6 +337,9 @@ begin
      FMountConnection:=ASCOM;
      PanelMountIndi.Visible:=false;
      PanelMountAscom.Visible:=true;
+     FRotatorConnection:=ASCOM;
+     PanelRotatorIndi.Visible:=false;
+     PanelRotatorAscom.Visible:=true;
      FilterWheelInCameraBox.Checked:=false;
      // ASCOM internal filter use separate driver
      FilterWheelInCameraBox.Visible:=false;
@@ -350,6 +382,14 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FCameraConnection:=value;
+end;
+
+procedure Tf_setup.SetRotatorConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FRotatorConnection:=value;
 end;
 
 procedure Tf_setup.SetWheelConnection(value: TDevInterface);
@@ -442,6 +482,7 @@ begin
     2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
     3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
     4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
+    5 : begin t:='Rotator'; dev:=AscomRotator.Text; end;
   end;
   try
     try
@@ -457,6 +498,7 @@ begin
       2 : AscomWheel.Text:=dev;
       3 : AscomFocuser.Text:=dev;
       4 : AscomMount.Text:=dev;
+      5 : AscomRotator.Text:=dev;
     end;
   except
     on E: Exception do begin
@@ -481,6 +523,7 @@ begin
     2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
     3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
     4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
+    5 : begin t:='Rotator'; dev:=AscomRotator.Text; end;
   end;
 
   try
@@ -509,6 +552,7 @@ begin
     2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
     3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
     4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
+    5 : begin t:='Rotator'; dev:=AscomRotator.Text; end;
   end;
 
   try
@@ -557,10 +601,12 @@ begin
   camsavedev:=CameraIndiDevice.Text;
   wheelsavedev:=WheelIndiDevice.Text;
   focusersavedev:=FocuserIndiDevice.Text;
+  rotatorsavedev:=RotatorIndiDevice.Text;
   mountsavedev:=MountIndiDevice.Text;
   LabelIndiDevCount.Caption:='...';
   CameraIndiDevice.Clear;
   FocuserIndiDevice.Clear;
+  RotatorIndiDevice.Clear;
   WheelIndiDevice.Clear;
   MountIndiDevice.Clear;
   indiclient:=TIndiBaseClient.Create;
@@ -586,12 +632,15 @@ begin
         WheelIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and FOCUSER_INTERFACE)<>0 then
         FocuserIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and ROTATOR_INTERFACE)<>0 then
+        RotatorIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and TELESCOPE_INTERFACE)<>0 then
         MountIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
   end;
   if CameraIndiDevice.Items.Count>0 then CameraIndiDevice.ItemIndex:=0;
   if WheelIndiDevice.Items.Count>0 then WheelIndiDevice.ItemIndex:=0;
   if FocuserIndiDevice.Items.Count>0 then FocuserIndiDevice.ItemIndex:=0;
+  if RotatorIndiDevice.Items.Count>0 then RotatorIndiDevice.ItemIndex:=0;
   if MountIndiDevice.Items.Count>0 then MountIndiDevice.ItemIndex:=0;
   for i:=0 to CameraIndiDevice.Items.Count-1 do
      if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
@@ -599,6 +648,8 @@ begin
      if WheelIndiDevice.Items[i]=wheelsavedev then WheelIndiDevice.ItemIndex:=i;
   for i:=0 to FocuserIndiDevice.Items.Count-1 do
      if FocuserIndiDevice.Items[i]=focusersavedev then FocuserIndiDevice.ItemIndex:=i;
+  for i:=0 to RotatorIndiDevice.Items.Count-1 do
+     if RotatorIndiDevice.Items[i]=rotatorsavedev then RotatorIndiDevice.ItemIndex:=i;
   for i:=0 to MountIndiDevice.Items.Count-1 do
      if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
   LabelIndiDevCount.Caption:='Found '+IntToStr(indiclient.devices.Count)+' devices';

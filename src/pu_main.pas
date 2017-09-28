@@ -31,6 +31,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
+  fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
@@ -56,6 +57,9 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    MenuRotatorRotate: TMenuItem;
+    MenuRotator: TMenuItem;
+    MenuViewRotator: TMenuItem;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -245,6 +249,7 @@ type
     procedure MenuResolveSlewCenterClick(Sender: TObject);
     procedure MenuResolveSlewClick(Sender: TObject);
     procedure MenuResolveSyncClick(Sender: TObject);
+    procedure MenuRotatorRotateClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuResolvePlanetariumClick(Sender: TObject);
     procedure MenuScriptEditClick(Sender: TObject);
@@ -278,6 +283,7 @@ type
     procedure MenuViewPlanetariumClick(Sender: TObject);
     procedure MenuViewPreviewClick(Sender: TObject);
     procedure MenuViewCaptureClick(Sender: TObject);
+    procedure MenuViewRotatorClick(Sender: TObject);
     procedure MenuViewScriptClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
@@ -301,11 +307,12 @@ type
     camera: T_camera;
     wheel: T_wheel;
     focuser: T_focuser;
+    rotator: T_rotator;
     mount: T_mount;
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    WantCamera,WantWheel,WantFocuser,WantMount: boolean;
+    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
@@ -317,6 +324,7 @@ type
     f_sequence: Tf_sequence;
     f_starprofile: Tf_starprofile;
     f_focuser: Tf_focuser;
+    f_rotator: Tf_rotator;
     f_vcurve:Tf_vcurve;
     f_mount: Tf_mount;
     f_autoguider: Tf_autoguider;
@@ -391,6 +399,8 @@ type
     Procedure DisconnectWheel(Sender: TObject);
     Procedure ConnectFocuser(Sender: TObject);
     Procedure DisconnectFocuser(Sender: TObject);
+    Procedure ConnectRotator(Sender: TObject);
+    Procedure DisconnectRotator(Sender: TObject);
     Procedure ConnectMount(Sender: TObject);
     Procedure DisconnectMount(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
@@ -428,6 +438,9 @@ type
     procedure StopVcurve(Sender: TObject);
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
+    Procedure RotatorStatus(Sender: TObject);
+    Procedure RotatorAngleChange(n:double);
+    Procedure RotatorRotate(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
     Procedure MountPiersideChange(Sender: TObject);
@@ -843,6 +856,15 @@ begin
   focuser.onStatusChange:=@FocuserStatus;
   focuser.onTemperatureChange:=@FocuserTemperatureChange;
 
+  aInt:=TDevInterface(config.GetValue('/RotatorInterface',ord(DefaultInterface)));
+  case aInt of
+    INDI:  rotator:=T_indirotator.Create(nil);
+    ASCOM: rotator:=T_ascomrotator.Create(nil);
+  end;
+  rotator.onMsg:=@NewMessage;
+  rotator.onAngleChange:=@RotatorAngleChange;
+  rotator.onStatusChange:=@RotatorStatus;
+
   aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
   case aInt of
     INDI:  mount:=T_indimount.Create(nil);
@@ -975,6 +997,9 @@ begin
   f_mount.onPark:=@SetMountPark;
   f_mount.onTrack:=@SetMountTrack;
 
+  f_rotator:=Tf_rotator.Create(self);
+  f_rotator.onRotate:=@RotatorRotate;
+
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
   f_autoguider.onCalibrate:=@AutoguiderCalibrateClick;
@@ -1095,7 +1120,8 @@ begin
   SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture);
   SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
   SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame);
-  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_frame.top+1,MenuViewCCDtemp,MenuCCDtemp);
+  SetTool(f_rotator,'Rotator',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator);
+  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp);
   SetTool(f_mount,'Mount',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
 
   SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence);
@@ -1221,7 +1247,8 @@ begin
   SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture);
   SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
   SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame);
-  SetTool(f_ccdtemp,'',PanelRight3,f_frame.top+1,MenuViewCCDtemp,MenuCCDtemp);
+  SetTool(f_rotator,'',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator);
+  SetTool(f_ccdtemp,'',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp);
   SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
 
   SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence);
@@ -1277,6 +1304,11 @@ begin
   config.SetValue('/Tools/Frame/Visible',f_frame.Visible);
   config.SetValue('/Tools/Frame/Top',f_frame.Top);
   config.SetValue('/Tools/Frame/Left',f_frame.Left);
+
+  config.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
+  config.SetValue('/Tools/Rotator/Visible',f_rotator.Visible);
+  config.SetValue('/Tools/Rotator/Top',f_rotator.Top);
+  config.SetValue('/Tools/Rotator/Left',f_rotator.Left);
 
   config.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
   config.SetValue('/Tools/Preview/Visible',f_preview.Visible);
@@ -1390,6 +1422,7 @@ begin
   camera.Free;
   wheel.Free;
   focuser.Free;
+  rotator.Free;
   mount.Free;
   ImaBmp.Free;
   refbmp.Free;
@@ -1742,17 +1775,23 @@ case focuser.FocuserInterface of
    INDI : FocuserName:=config.GetValue('/INDIfocuser/Device','');
    ASCOM: FocuserName:=config.GetValue('/ASCOMfocuser/Device','');
 end;
+case rotator.RotatorInterface of
+   INDI : RotatorName:=config.GetValue('/INDIrotator/Device','');
+   ASCOM: RotatorName:=config.GetValue('/ASCOMrotator/Device','');
+end;
 case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
 end;
 wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
 focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
+rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
 mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
+rotator.Timeout:=DeviceTimeout;
 wheel.Timeout:=DeviceTimeout;
 mount.Timeout:=DeviceTimeout;
 end;
@@ -1845,6 +1884,7 @@ begin
   WantCamera:=true;
   WantWheel:=config.GetValue('/Devices/FilterWheel',false);
   WantFocuser:=config.GetValue('/Devices/Focuser',false);;
+  WantRotator:=config.GetValue('/Devices/Rotator',false);;
   WantMount:=config.GetValue('/Devices/Mount',false);;
 
   if WantCamera and (CameraName='') then begin
@@ -1862,6 +1902,11 @@ begin
     MenuSetup.Click;
     exit;
   end;
+  if WantRotator and (RotatorName='') then begin
+    ShowMessage('Please configure your rotator!');
+    MenuSetup.Click;
+    exit;
+  end;
   if WantMount and (MountName='') then begin
     ShowMessage('Please configure your mount!');
     MenuSetup.Click;
@@ -1871,12 +1916,14 @@ begin
   f_devicesconnection.LabelCamera.Visible:=WantCamera;
   f_devicesconnection.LabelWheel.Visible:=WantWheel;
   f_devicesconnection.LabelFocuser.Visible:=WantFocuser;
+  f_devicesconnection.LabelRotator.Visible:=WantRotator;
   f_devicesconnection.LabelMount.Visible:=WantMount;
   f_devicesconnection.PanelDev.Visible:=true;
 
   if WantCamera  then ConnectCamera(Sender);
   if WantWheel   then ConnectWheel(Sender);
   if WantFocuser then ConnectFocuser(Sender);
+  if WantRotator then ConnectRotator(Sender);
   if WantMount   then ConnectMount(Sender);
 end;
 
@@ -1893,6 +1940,7 @@ if camera.Status<>devDisconnected then begin
      DisconnectCamera(Sender);
      DisconnectWheel(Sender);
      DisconnectFocuser(Sender);
+     DisconnectRotator(Sender);
      DisconnectMount(Sender);
    end;
 end;
@@ -1940,6 +1988,14 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  if WantFocuser then begin
   inc(allcount);
   case focuser.Status of
+    devConnected: inc(upcount);
+    devDisconnected: inc(downcount);
+    devConnecting: inc(concount);
+  end;
+ end;
+ if WantRotator then begin
+  inc(allcount);
+  case rotator.Status of
     devConnected: inc(upcount);
     devDisconnected: inc(downcount);
     devConnecting: inc(concount);
@@ -2186,6 +2242,22 @@ begin
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=0;
   end;
+end;
+
+Procedure Tf_main.ConnectRotator(Sender: TObject);
+begin
+  case rotator.RotatorInterface of
+    INDI : rotator.Connect(config.GetValue('/INDI/Server',''),
+                          config.GetValue('/INDI/ServerPort',''),
+                          config.GetValue('/INDIrotator/Device',''),
+                          config.GetValue('/INDIrotator/DevicePort',''));
+    ASCOM: rotator.Connect(config.GetValue('/ASCOMrotator/Device',''));
+  end;
+end;
+
+Procedure Tf_main.DisconnectRotator(Sender: TObject);
+begin
+ rotator.Disconnect;
 end;
 
 Procedure Tf_main.ConnectMount(Sender: TObject);
@@ -2867,6 +2939,42 @@ begin
    end;
 end;
 
+Procedure Tf_main.RotatorStatus(Sender: TObject);
+begin
+case rotator.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelRotator.Font.Color:=clRed;
+                  end;
+  devConnecting:  begin
+                      NewMessage('Connecting rotator...');
+                      f_devicesconnection.LabelRotator.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelRotator.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelRotator.Font.Color:=clGreen;
+                      NewMessage('Rotator connected');
+                      wait(1);
+                      RotatorAngleChange(rotator.Angle);
+                   end;
+end;
+CheckConnectionStatus;
+end;
+
+Procedure Tf_main.RotatorAngleChange(n:double);
+begin
+ f_rotator.Angle.Text:=FormatFloat(f1,n);
+end;
+
+Procedure Tf_main.RotatorRotate(Sender: TObject);
+var a: double;
+begin
+ a:=StrToFloatDef(f_rotator.Angle.Text,NullCoord);
+ if a<>NullCoord then begin
+  a:=rmod(a+360,360);
+  rotator.Angle:=a;
+ end;
+end;
+
 Procedure Tf_main.MountStatus(Sender: TObject);
 begin
 case mount.Status of
@@ -3052,6 +3160,7 @@ begin
   f_setup.DefaultMountInterface:=mount.MountInterface;
   f_setup.DefaultWheelInterface:=wheel.WheelInterface;
   f_setup.DefaultFocuserInterface:=focuser.FocuserInterface;
+  f_setup.DefaultRotatorInterface:=rotator.RotatorInterface;
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config);
@@ -3077,6 +3186,7 @@ begin
     config.SetValue('/Devices/Camera',true);
     config.SetValue('/Devices/FilterWheel',f_setup.DeviceFilterWheel.Checked);
     config.SetValue('/Devices/Focuser',f_setup.DeviceFocuser.Checked);
+    config.SetValue('/Devices/Rotator',f_setup.DeviceRotator.Checked);
     config.SetValue('/Devices/Mount',f_setup.DeviceMount.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
@@ -3099,6 +3209,12 @@ begin
     config.SetValue('/INDIfocuser/DevicePort',f_setup.FocuserIndiDevPort.Text);
     config.SetValue('/INDIfocuser/AutoLoadConfig',f_setup.FocuserAutoLoadConfig.Checked);
     config.SetValue('/ASCOMfocuser/Device',f_setup.AscomFocuser.Text);
+
+    config.SetValue('/RotatorInterface',ord(f_setup.RotatorConnection));
+    if f_setup.RotatorIndiDevice.Text<>'' then config.SetValue('/INDIrotator/Device',f_setup.RotatorIndiDevice.Text);
+    config.SetValue('/INDIrotator/DevicePort',f_setup.RotatorIndiDevPort.Text);
+    config.SetValue('/INDIrotator/AutoLoadConfig',f_setup.RotatorAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMrotator/Device',f_setup.AscomRotator.Text);
 
     config.SetValue('/MountInterface',ord(f_setup.MountConnection));
     if f_setup.MountIndiDevice.Text<>'' then config.SetValue('/INDImount/Device',f_setup.MountIndiDevice.Text);
@@ -3472,6 +3588,11 @@ end;
 procedure Tf_main.MenuViewMountClick(Sender: TObject);
 begin
   f_mount.Visible:=MenuViewMount.Checked;
+end;
+
+procedure Tf_main.MenuViewRotatorClick(Sender: TObject);
+begin
+  f_rotator.Visible:=MenuViewRotator.Checked;
 end;
 
 procedure Tf_main.MenuViewPlanetariumClick(Sender: TObject);
@@ -5016,6 +5137,11 @@ end;
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
   astrometry.SyncCurrentImage(false);
+end;
+
+procedure Tf_main.MenuRotatorRotateClick(Sender: TObject);
+begin
+  RotatorRotate(Sender);
 end;
 
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
