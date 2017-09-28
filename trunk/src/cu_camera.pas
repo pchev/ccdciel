@@ -315,8 +315,8 @@ end;
 procedure T_camera.NewImage;
 begin
   Ffits.Stream:=ImgStream;
-  WriteHeaders;
   Ffits.LoadStream;
+  WriteHeaders;
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 
@@ -398,8 +398,10 @@ begin
   Ffits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
   Ffits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
   Ffits.Header.Add('BSCALE',hbscale,'default scaling factor');
-  Ffits.Header.Add('DATAMIN',hdmin,'Minimum value');
-  Ffits.Header.Add('DATAMAX',hdmax,'Maximum value');
+  if hdmax>0 then begin
+    Ffits.Header.Add('DATAMIN',hdmin,'Minimum value');
+    Ffits.Header.Add('DATAMAX',hdmax,'Maximum value');
+  end;
   Ffits.Header.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   if origin<>'' then Ffits.Header.Add('ORIGIN',origin,'Observatory name');
   if observer<>'' then Ffits.Header.Add('OBSERVER',observer,'Observer name');
