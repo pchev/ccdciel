@@ -2663,7 +2663,7 @@ begin
      end;
      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
      hfdsum:=hfdsum+f_starprofile.HFD;
-     NewMessage(inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+     NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    end;
    hfd:=hfdsum/nsum;
    // store result always from left to right
@@ -2781,7 +2781,6 @@ begin
     focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2)
  else
     focuser.Position:=round(AutofocusVc[PosFocus,1]);
- FocuserLastTemp:=FocuserTemp;
  wait(1);
  finally
  // reset camera
@@ -3771,18 +3770,15 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   if focuser.hasTemperature and (FocuserTempCoeff<>0.0) then begin
     // only if temperature change by more than 0.5 C
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
-      if focuser.hasAbsolutePosition then begin
-        p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+      p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+      if focuser.hasAbsolutePosition and (p<>0) then begin
         NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
         focuser.Position:=focuser.Position+p;
-        FocuserLastTemp:=FocuserTemp;
       end
-      else if focuser.hasRelativePosition then begin
-        p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+      else if focuser.hasRelativePosition and (p<>0) then begin
         NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
         if p>0 then focuser.FocusOut else focuser.FocusIn;
         focuser.RelPosition:=abs(p);
-        FocuserLastTemp:=FocuserTemp;
       end;
       wait(1);
     end;
@@ -4504,7 +4500,6 @@ begin
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
    NewMessage('Focus aid stopped');
-   FocuserLastTemp:=FocuserTemp;
    if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
 end;
 
@@ -4786,21 +4781,26 @@ Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
-  if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
-    NewMessage('Camera or focuser are not connected');
-    f_starprofile.ChkFocus.Checked:=false;
-    exit;
-  end;
-  if  f_preview.Running then begin
-    NewMessage('Cannot start autofocus now, stop preview and retry');
-    f_starprofile.ChkFocus.Checked:=false;
-    exit;
-  end;
   f_starprofile.AutofocusResult:=false;
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
   SaveAutofocusBY:=camera.BinY;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
+  if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
+   NewMessage('Camera or focuser are not connected');
+   f_starprofile.ChkFocus.Checked:=false;
+   exit;
+  end;
+  if  f_preview.Running then begin
+   NewMessage('Cannot start autofocus now, stop preview and retry');
+   f_starprofile.ChkFocus.Checked:=false;
+   exit;
+  end;
+  if  astrometry.Busy then begin
+   NewMessage('Cannot start autofocus now, astrometry is running');
+   f_starprofile.ChkFocus.Checked:=false;
+   exit;
+  end;
   if (AutofocusMode=afNone) then begin
     NewMessage('Please configure the Autofocus options.');
     f_starprofile.ChkAutofocus.Checked:=false;
@@ -4881,7 +4881,6 @@ begin
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
    if f_starprofile.AutofocusResult then begin
-     FocuserLastTemp:=FocuserTemp;
      NewMessage('AutoFocus successful');
    end
    else begin

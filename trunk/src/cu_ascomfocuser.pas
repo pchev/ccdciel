@@ -263,6 +263,7 @@ begin
    try
    msg('Focuser '+Fdevice+' move to '+inttostr(p));
    V.Move(p);
+   FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(30000);
 
    except
@@ -332,6 +333,7 @@ begin
    i:=FFocusdirection*FRelIncr;
    msg('Focuser '+Fdevice+' move by '+inttostr(i));
    V.Move(i);
+   FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(30000);
 
    except

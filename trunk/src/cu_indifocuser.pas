@@ -382,6 +382,7 @@ begin
 if FocusAbsolutePosition<>nil then begin
   FocusAbsolutePosition.np[0].value:=p;
   indiclient.sendNewNumber(FocusAbsolutePosition);
+  FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusAbsolutePosition);
 end;
 end;
@@ -409,6 +410,7 @@ begin
 if FocusRelativePosition<>nil then begin
   FocusRelativePosition.np[0].value:=p;
   indiclient.sendNewNumber(FocusRelativePosition);
+  FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusRelativePosition);
 end;
 end;
