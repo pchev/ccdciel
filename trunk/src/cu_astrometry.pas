@@ -145,6 +145,7 @@ begin
        iwidth:=info.wp;
        iheight:=info.hp;
        pixscale:=info.secpix;
+       if pixscale>300 then pixscale:=0; // missing or invalid value in header
      end;
    end;
    if (ra=NullCoord)or(de=NullCoord) then begin
@@ -185,7 +186,7 @@ begin
         pixscale:=3600*rad2deg*arctan(pixsize/1000/telescope_focal_length);
      end;
    end;
-   if pixscale<>NullCoord then begin
+   if (pixscale<>NullCoord)and(pixscale>0) then begin
       engine.scalelow:=(1-tolerance)*pixscale;
       engine.scalehigh:=(1+tolerance)*pixscale;
    end;
