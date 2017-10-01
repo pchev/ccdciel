@@ -57,6 +57,7 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    MenuResolveSyncRotator: TMenuItem;
     MenuRotatorRotate: TMenuItem;
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
@@ -231,6 +232,7 @@ type
     procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuResolveSyncRotatorClick(Sender: TObject);
     procedure MenuItemDebayerClick(Sender: TObject);
     procedure MenuItemRawClick(Sender: TObject);
     procedure MenuMountParkClick(Sender: TObject);
@@ -483,6 +485,7 @@ type
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
+    procedure ResolveSyncRotator(Sender: TObject);
     procedure LoadFitsFile(fn:string);
     procedure SaveFitsFile(fn:string);
     procedure OpenRefImage(fn:string);
@@ -5144,6 +5147,26 @@ begin
   RotatorRotate(Sender);
 end;
 
+procedure Tf_main.MenuResolveSyncRotatorClick(Sender: TObject);
+begin
+ if fits.HeaderInfo.valid then begin
+  if rotator.Status=devConnected then begin
+     if fits.HeaderInfo.solved then begin
+       fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+       ResolveSyncRotator(self);
+     end else begin
+       if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+         fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+         astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@ResolveSyncRotator);
+       end;
+     end;
+  end
+  else
+     NewMessage('Rotator is not connected');
+ end;
+
+end;
+
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
 begin
   astrometry.SlewScreenXY(MouseDownX,MouseDownY);
@@ -5234,6 +5257,27 @@ end;
 procedure Tf_main.MenuSequenceStopClick(Sender: TObject);
 begin
   f_sequence.BtnStop.Click;
+end;
+
+procedure Tf_main.ResolveSyncRotator(Sender: TObject);
+var fn: string;
+    rot: Double;
+    n: integer;
+    wcsinfo: TcdcWCSinfo;
+begin
+rot:=NullCoord;
+
+fn:=slash(TmpDir)+'ccdcielsolved.fits';
+n:=cdcwcs_initfitsfile(pchar(fn),0);
+if n=0 then n:=cdcwcs_getinfo(addr(wcsinfo),0);
+
+if (n=0) and (rotator.Status=devConnected) then begin
+
+  rot:=wcsinfo.rot;
+
+  rotator.Sync(rot);
+
+end;
 end;
 
 procedure Tf_main.AstrometryToPlanetariumFrame(Sender: TObject);
