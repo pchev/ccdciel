@@ -99,6 +99,8 @@ begin
  {$ifdef mswindows}
   try
   FStatus := devConnecting;
+  FCalibrationAngle:=0;
+  FReverse:=False;
   Fdevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(WideString(Fdevice));

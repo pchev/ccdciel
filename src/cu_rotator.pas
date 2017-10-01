@@ -110,6 +110,7 @@ begin
   else
     result:=GetAngle+CalibrationAngle;
   result:=Rmod(720+result,360);
+  if result>359 then result:=0;
 end;
 
 procedure T_rotator.SetCalibratedAngle(p:double);
@@ -120,6 +121,7 @@ begin
   else
     p:=p-CalibrationAngle;
   p:=rmod(720+p,360);
+  if p>359 then p:=0;
   SetAngle(p);
 end;
 
@@ -130,6 +132,8 @@ begin
   else
     FCalibrationAngle:=angle-GetAngle;
   FCalibrationAngle:=rmod(720+FCalibrationAngle,360);
+  if FCalibrationAngle>359 then FCalibrationAngle:=0;
+   msg('Rotator sync calibration = '+FormatFloat(f1,FCalibrationAngle));
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
