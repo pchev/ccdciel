@@ -138,6 +138,8 @@ begin
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
+    FCalibrationAngle:=0;
+    FReverse:=False;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
