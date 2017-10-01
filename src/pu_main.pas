@@ -439,7 +439,7 @@ type
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
     Procedure RotatorStatus(Sender: TObject);
-    Procedure RotatorAngleChange(n:double);
+    Procedure RotatorAngleChange(Sender: TObject);
     Procedure RotatorRotate(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
@@ -2954,15 +2954,15 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clGreen;
                       NewMessage('Rotator connected');
                       wait(1);
-                      RotatorAngleChange(rotator.Angle);
+                      RotatorAngleChange(self);
                    end;
 end;
 CheckConnectionStatus;
 end;
 
-Procedure Tf_main.RotatorAngleChange(n:double);
+Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
- f_rotator.Angle.Text:=FormatFloat(f1,n);
+ f_rotator.Angle.Text:=FormatFloat(f1,rotator.Angle);
 end;
 
 Procedure Tf_main.RotatorRotate(Sender: TObject);
