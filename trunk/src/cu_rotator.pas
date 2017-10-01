@@ -44,6 +44,7 @@ T_rotator = class(TComponent)
     FAutoLoadConfig: boolean;
     FCalibrationAngle: double;
     FReverse: Boolean;
+    procedure msg(txt: string);
     procedure SetReverse(value:boolean);
     function GetReverse:boolean;
     procedure SetDriverReverse(value:boolean); virtual; abstract;
@@ -113,6 +114,7 @@ end;
 
 procedure T_rotator.SetCalibratedAngle(p:double);
 begin
+  msg('Rotator move to PA '+FormatFloat(f1,p));
   if FReverse then
     p:=360-p-CalibrationAngle
   else
@@ -129,6 +131,11 @@ begin
     FCalibrationAngle:=angle-GetAngle;
   FCalibrationAngle:=rmod(720+FCalibrationAngle,360);
   if Assigned(FonAngleChange) then FonAngleChange(self);
+end;
+
+procedure T_rotator.msg(txt: string);
+begin
+  if Assigned(FonMsg) then FonMsg(txt);
 end;
 
 end.

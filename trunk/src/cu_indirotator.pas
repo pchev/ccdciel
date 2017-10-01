@@ -62,7 +62,6 @@ T_indirotator = class(T_rotator)
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
-   procedure msg(txt: string);
  protected
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
@@ -159,11 +158,6 @@ begin
     end;
 end;
 
-procedure T_indirotator.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
-end;
-
 Procedure T_indirotator.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
@@ -181,22 +175,22 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Focuser already connected');
+else msg(' Rotator already connected');
 end;
 
 procedure T_indirotator.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (RotatorDevice=nil)or(not Fready) then begin
-    msg('Error');
+    msg('Rotator '+Findidevice+' Error');
     if not Fconnected then begin
       msg('No response from server');
       msg('Is "'+Findidevice+'" a running rotator driver?');
     end
     else if (configprop=nil) then
-       msg('Missing property CONFIG_PROCESS')
+       msg('Rotator '+Findidevice+' Missing property CONFIG_PROCESS')
     else if (RotatorAngle=nil) then
-       msg('Missing property ABS_ROTATOR_ANGLE');
+       msg('Rotator '+Findidevice+' Missing property ABS_ROTATOR_ANGLE');
     Disconnect;
   end;
 end;
@@ -223,7 +217,7 @@ begin
   if (Rotatorport<>nil)and(Findideviceport<>'') then begin
      Rotatorport.tp[0].text:=Findideviceport;
      indiclient.sendNewText(Rotatorport);
-     msg('Set port '+Findideviceport);
+     msg('Rotator '+Findidevice+' Set port '+Findideviceport);
   end;
  indiclient.connectDevice(Findidevice);
 end;
@@ -232,7 +226,7 @@ procedure T_indirotator.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg('Focuser server disconnected');
+  msg('Rotator '+Findidevice+' Focuser server disconnected');
   CreateIndiClient;
 end;
 
