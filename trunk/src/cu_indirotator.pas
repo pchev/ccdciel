@@ -39,6 +39,8 @@ T_indirotator = class(T_rotator)
    Rotatorport: ITextVectorProperty;
    RotatorAngle: INumberVectorProperty;
    RotatorAbort: ISwitchVectorProperty;
+   RotatorReverse: ISwitchVectorProperty;
+   RotatorReverseEnable,RotatorReverseDisable: ISwitch;
    configprop: ISwitchVectorProperty;
    configload,configsave,configdefault: ISwitch;
    Fready,Fconnected: boolean;
@@ -65,11 +67,15 @@ T_indirotator = class(T_rotator)
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
    procedure SetTimeout(num:integer); override;
+   function  GetDriverReverse:boolean; override;
+   procedure SetDriverReverse(value:boolean); override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
    Procedure Disconnect; override;
+   Procedure Halt; override;
+
 end;
 
 implementation
@@ -276,6 +282,12 @@ begin
   else if (proptype=INDI_NUMBER)and(propname='ABS_ROTATOR_ANGLE') then begin
      RotatorAngle:=indiProp.getNumber;
   end
+  else if (proptype=INDI_SWITCH)and(propname='ROTATOR_REVERSE') then begin
+     RotatorReverse:=indiProp.getSwitch;
+     RotatorReverseEnable:=IUFindSwitch(RotatorReverse,'REVERSE_ENABLED');
+     RotatorReverseDisable:=IUFindSwitch(RotatorReverse,'REVERSE_DISABLED');
+     if (RotatorReverseEnable=nil)or(RotatorReverseDisable=nil) then RotatorReverse:=nil;
+  end
   else if (proptype=INDI_SWITCH)and(propname='ROTATOR_ABORT_MOTION') then begin
      RotatorAbort:=indiProp.getSwitch;
   end;
@@ -285,7 +297,7 @@ end;
 procedure T_indirotator.NewNumber(nvp: INumberVectorProperty);
 begin
   if nvp=RotatorAngle then begin
-     if Assigned(FonAngleChange) then FonAngleChange(nvp.np[0].value);
+     if Assigned(FonAngleChange) then FonAngleChange(self);
   end;
 end;
 
@@ -319,6 +331,34 @@ if RotatorAngle<>nil then begin;
   result:=round(RotatorAngle.np[0].value);
 end
 else result:=0;
+end;
+
+function T_indirotator.GetDriverReverse:boolean;
+begin
+  result:=false;
+  if RotatorReverse<>nil then begin
+    result := (RotatorReverseEnable.s=ISS_ON);
+  end;
+end;
+
+procedure T_indirotator.SetDriverReverse(value:boolean);
+begin
+  if RotatorReverse<>nil then begin
+     IUResetSwitch(RotatorReverse);
+     if value then
+        RotatorReverseEnable.s:=ISS_ON
+     else
+       RotatorReverseDisable.s:=ISS_ON;
+     indiclient.sendNewSwitch(RotatorReverse);
+  end;
+end;
+
+Procedure T_indirotator.Halt;
+begin
+  if RotatorAbort<>nil then begin
+     RotatorAbort.sp[0].s:=ISS_ON;
+     indiclient.sendNewSwitch(RotatorAbort);
+  end;
 end;
 
 procedure T_indirotator.SetTimeout(num:integer);

@@ -40,7 +40,6 @@ T_ascomrotator = class(T_rotator)
    Fdevice: string;
    {$endif}
    FInterfaceVersion: integer;
-   FRelIncr: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    procedure msg(txt: string);
@@ -50,12 +49,16 @@ T_ascomrotator = class(T_rotator)
    procedure SetAngle(p:double); override;
    function  GetAngle:double; override;
    procedure SetTimeout(num:integer); override;
+   function  GetDriverReverse:boolean; override;
+   procedure SetDriverReverse(value:boolean); override;
+
    function  WaitRotatorMoving(maxtime:integer):boolean;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
    procedure Disconnect; override;
+   Procedure Halt; override;
 end;
 
 
@@ -163,7 +166,7 @@ begin
       p:=GetAngle;
       if p<>stAngle then begin
         stAngle:=p;
-        if Assigned(FonAngleChange) then FonAngleChange(p);
+        if Assigned(FonAngleChange) then FonAngleChange(self);
       end;
      except
      on E: Exception do msg('Rotator '+Fdevice+' Status error: ' + E.Message);
@@ -225,6 +228,46 @@ begin
  end;
  {$endif}
 end;
+
+function T_ascomrotator.GetDriverReverse:boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   if V.CanReverse then result:=V.Reverse;
+   except
+    result:=false;
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascomrotator.SetDriverReverse(value:boolean);
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   if V.CanReverse then V.Reverse:=value;
+   except
+   end;
+ end;
+ {$endif}
+end;
+
+Procedure T_ascomrotator.Halt;
+begin
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+    V.Halt;
+   except
+    on E: Exception do msg('Rotator '+Fdevice+' Halt error: ' + E.Message);
+   end;
+ end;
+ {$endif}
+end;
+
 
 procedure T_ascomrotator.msg(txt: string);
 begin

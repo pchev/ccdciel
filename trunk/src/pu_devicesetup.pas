@@ -65,6 +65,7 @@ type
     DeviceFocuser: TCheckBox;
     DeviceRotator: TCheckBox;
     DeviceMount: TCheckBox;
+    Label8: TLabel;
     PanelRotatorAscom: TPanel;
     RotatorAutoLoadConfig: TCheckBox;
     RotatorIndiDevice: TComboBox;
