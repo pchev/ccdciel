@@ -42,7 +42,6 @@ T_ascomrotator = class(T_rotator)
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
-   procedure msg(txt: string);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
  protected
@@ -204,7 +203,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   msg('Rotator '+Fdevice+' move to '+FormatFloat(f1,p));
+   //msg('Rotator '+Fdevice+' move to internal '+FormatFloat(f1,p));
    V.MoveAbsolute(p);
    WaitRotatorMoving(30000);
 
@@ -266,12 +265,6 @@ begin
    end;
  end;
  {$endif}
-end;
-
-
-procedure T_ascomrotator.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(txt);
 end;
 
 procedure T_ascomrotator.SetTimeout(num:integer);
