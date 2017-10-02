@@ -2976,7 +2976,7 @@ case rotator.Status of
                       if f_devicesconnection.LabelRotator.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelRotator.Font.Color:=clGreen;
                       NewMessage('Rotator connected');
-                      f_rotator.Reverse.Checked:=config.GetValue('/Rotator/Reverse',false);
+                      f_rotator.SetReverse(config.GetValue('/Rotator/Reverse',false));
                       rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
                       f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
                       wait(1);

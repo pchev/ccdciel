@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics,
+uses  UScaleDPI, u_global, Graphics, Dialogs,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -49,11 +49,13 @@ type
     FonRotate: TNotifyEvent;
     FonReverse: TNotifyEvent;
     FonHalt: TNotifyEvent;
+    lockreverse, noprompt: boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetCalibrated(onoff:boolean);
+    procedure SetReverse(onoff:boolean);
     property onRotate: TNotifyEvent read FonRotate write FonRotate;
     property onReverse: TNotifyEvent read FonReverse write FonReverse;
     property onHalt: TNotifyEvent read FonHalt write FonHalt;
@@ -69,6 +71,8 @@ constructor Tf_rotator.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ noprompt:=false;
+ lockreverse:=false;
 end;
 
 destructor  Tf_rotator.Destroy;
@@ -90,6 +94,13 @@ begin
  end;
 end;
 
+procedure Tf_rotator.SetReverse(onoff:boolean);
+begin
+  noprompt:=true;
+  Reverse.Checked:=onoff;
+  noprompt:=false;
+end;
+
 procedure Tf_rotator.BtnRotateClick(Sender: TObject);
 begin
    if Assigned(FonRotate) then FonRotate(self);
@@ -102,7 +113,18 @@ end;
 
 procedure Tf_rotator.ReverseChange(Sender: TObject);
 begin
-   if Assigned(FonReverse) then FonReverse(self);
+   if lockreverse then exit;
+   if noprompt or
+      (led.Brush.Color=clRed) or
+      (MessageDlg('Warning, reversing the rotator will invalidated the calibration. Do you want to continue?',mtConfirmation,mbYesNo,0)=mrYes)
+   then begin
+      if Assigned(FonReverse) then FonReverse(self);
+   end
+   else begin
+      lockreverse:=true;
+      Reverse.Checked:=not Reverse.Checked;
+      lockreverse:=false;
+   end;
 end;
 
 end.
