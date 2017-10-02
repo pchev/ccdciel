@@ -443,6 +443,8 @@ type
     Procedure RotatorStatus(Sender: TObject);
     Procedure RotatorAngleChange(Sender: TObject);
     Procedure RotatorRotate(Sender: TObject);
+    Procedure RotatorHalt(Sender: TObject);
+    Procedure RotatorReverse(Sender: TObject);
     Procedure MountStatus(Sender: TObject);
     Procedure MountCoordChange(Sender: TObject);
     Procedure MountPiersideChange(Sender: TObject);
@@ -1002,6 +1004,8 @@ begin
 
   f_rotator:=Tf_rotator.Create(self);
   f_rotator.onRotate:=@RotatorRotate;
+  f_rotator.onHalt:=@RotatorHalt;
+  f_rotator.onReverse:=@RotatorReverse;
 
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
@@ -1017,6 +1021,7 @@ begin
   f_sequence.Filter:=f_filterwheel;
   f_sequence.Mount:=mount;
   f_sequence.Camera:=camera;
+  f_sequence.Rotator:=rotator;
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
 
@@ -1391,6 +1396,10 @@ begin
   for i:=0 to n-1 do begin
      config.SetValue('/Binning/Binning'+IntToStr(i),BinningList[i]);
   end;
+
+  config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
+  config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
+
 
   SaveConfig;
   NewMessage('Configuration saved');
@@ -2960,6 +2969,9 @@ case rotator.Status of
                       if f_devicesconnection.LabelRotator.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelRotator.Font.Color:=clGreen;
                       NewMessage('Rotator connected');
+                      f_rotator.Reverse.Checked:=config.GetValue('/Rotator/Reverse',false);
+                      rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0);
+                      f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
                       wait(1);
                       RotatorAngleChange(self);
                    end;
@@ -2980,6 +2992,16 @@ begin
   a:=rmod(a+360,360);
   rotator.Angle:=a;
  end;
+end;
+
+Procedure Tf_main.RotatorHalt(Sender: TObject);
+begin
+  rotator.Halt;
+end;
+
+Procedure Tf_main.RotatorReverse(Sender: TObject);
+begin
+  rotator.Reverse:=f_rotator.Reverse.Checked;
 end;
 
 Procedure Tf_main.MountStatus(Sender: TObject);
@@ -5297,6 +5319,7 @@ if (n=0) and (rotator.Status=devConnected) then begin
   rot:=wcsinfo.rot;
 
   rotator.Sync(rot);
+  f_rotator.SetCalibrated(true);
 
 end;
 end;

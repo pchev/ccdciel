@@ -1,10 +1,10 @@
 object f_rotator: Tf_rotator
   Left = 0
-  Height = 51
+  Height = 83
   Top = 0
   Width = 180
   AutoSize = True
-  ClientHeight = 51
+  ClientHeight = 83
   ClientWidth = 180
   ParentFont = False
   TabOrder = 0
@@ -25,27 +25,29 @@ object f_rotator: Tf_rotator
   end
   object Panel1: TPanel
     Left = 0
-    Height = 29
+    Height = 58
     Top = 20
     Width = 180
     Align = alTop
-    AutoSize = True
-    ClientHeight = 29
+    ClientHeight = 58
     ClientWidth = 180
     TabOrder = 1
     object Label6: TLabel
-      Left = 1
-      Height = 17
-      Top = 5
-      Width = 40
-      Caption = 'Angle'
+      Left = 28
+      Height = 18
+      Top = 3
+      Width = 16
+      AutoSize = False
+      Caption = 'PA'
       ParentColor = False
     end
     object Angle: TEdit
-      Left = 47
-      Height = 27
+      Left = 50
+      Height = 24
+      Hint = 'Uncalibrated'
       Top = 1
       Width = 57
+      AutoSize = False
       TabOrder = 0
     end
     object BtnRotate: TButton
@@ -56,6 +58,34 @@ object f_rotator: Tf_rotator
       Caption = 'Rotate'
       OnClick = BtnRotateClick
       TabOrder = 1
+    end
+    object Reverse: TCheckBox
+      Left = 4
+      Height = 21
+      Top = 32
+      Width = 71
+      AutoSize = False
+      Caption = 'Reverse'
+      OnChange = ReverseChange
+      TabOrder = 2
+    end
+    object BtnHalt: TButton
+      Left = 115
+      Height = 25
+      Top = 32
+      Width = 60
+      Caption = 'Halt'
+      OnClick = BtnHaltClick
+      TabOrder = 3
+    end
+    object led: TShape
+      Left = 4
+      Height = 14
+      Hint = 'Uncalibrated'
+      Top = 7
+      Width = 14
+      Brush.Color = clRed
+      Shape = stCircle
     end
   end
 end

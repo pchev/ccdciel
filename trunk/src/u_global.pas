@@ -98,7 +98,7 @@ type
   TTarget = Class(TObject)
               public
               objectname, planname, path: string;
-              starttime,endtime,ra,de: double;
+              starttime,endtime,ra,de,pa: double;
               startrise,endset: boolean;
               repeatcount: integer;
               preview,astrometrypointing: boolean;
@@ -346,6 +346,7 @@ begin
   endtime:=23.99999;
   ra:=NullCoord;
   de:=NullCoord;
+  pa:=NullCoord;
   repeatcount:=1;
   preview:=False;
   delay:=1;
@@ -374,6 +375,7 @@ begin
   endset:=Source.endset;
   ra:=Source.ra;
   de:=Source.de;
+  pa:=Source.pa;
   astrometrypointing:=source.astrometrypointing;
   repeatcount:=Source.repeatcount;
   preview:=Source.preview;

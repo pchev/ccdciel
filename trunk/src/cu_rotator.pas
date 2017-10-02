@@ -88,6 +88,7 @@ end;
 
 procedure T_rotator.SetReverse(value:boolean);
 begin
+  FCalibrationAngle:=0;               // reset calibration
   if value then begin
     SetDriverReverse(True);           // try to set in driver
     FReverse:= not GetDriverReverse;  // if not use software revert
@@ -106,9 +107,9 @@ end;
 function  T_rotator.GetCalibratedAngle:double;
 begin
   if FReverse then
-    result:=360-GetAngle-CalibrationAngle
+    result:=360-GetAngle-FCalibrationAngle
   else
-    result:=GetAngle+CalibrationAngle;
+    result:=GetAngle+FCalibrationAngle;
   result:=Rmod(720+result,360);
   if result>359 then result:=0;
 end;
@@ -117,9 +118,9 @@ procedure T_rotator.SetCalibratedAngle(p:double);
 begin
   msg('Rotator move to PA '+FormatFloat(f1,p));
   if FReverse then
-    p:=360-p-CalibrationAngle
+    p:=360-p-FCalibrationAngle
   else
-    p:=p-CalibrationAngle;
+    p:=p-FCalibrationAngle;
   p:=rmod(720+p,360);
   if p>359 then p:=0;
   SetAngle(p);

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global,
+uses  UScaleDPI, u_global, Graphics,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -35,18 +35,28 @@ type
   Tf_rotator = class(TFrame)
     BtnRotate: TButton;
     Angle: TEdit;
+    BtnHalt: TButton;
+    Reverse: TCheckBox;
     Label6: TLabel;
+    led: TShape;
     Panel1: TPanel;
     StaticText1: TStaticText;
+    procedure BtnHaltClick(Sender: TObject);
     procedure BtnRotateClick(Sender: TObject);
+    procedure ReverseChange(Sender: TObject);
   private
     { private declarations }
     FonRotate: TNotifyEvent;
+    FonReverse: TNotifyEvent;
+    FonHalt: TNotifyEvent;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetCalibrated(onoff:boolean);
     property onRotate: TNotifyEvent read FonRotate write FonRotate;
+    property onReverse: TNotifyEvent read FonReverse write FonReverse;
+    property onHalt: TNotifyEvent read FonHalt write FonHalt;
   end;
 
 implementation
@@ -66,9 +76,33 @@ begin
  inherited Destroy;
 end;
 
+procedure Tf_rotator.SetCalibrated(onoff:boolean);
+begin
+ if onoff then begin
+   led.Brush.Color:=clLime;
+   led.Hint:='Calibrated';
+   Angle.Hint:='Calibrated';
+ end
+ else begin
+   led.Brush.Color:=clRed;
+   led.Hint:='Uncalibrated';
+   Angle.Hint:='Uncalibrated';
+ end;
+end;
+
 procedure Tf_rotator.BtnRotateClick(Sender: TObject);
 begin
    if Assigned(FonRotate) then FonRotate(self);
+end;
+
+procedure Tf_rotator.BtnHaltClick(Sender: TObject);
+begin
+   if Assigned(FonHalt) then FonHalt(self);
+end;
+
+procedure Tf_rotator.ReverseChange(Sender: TObject);
+begin
+   if Assigned(FonReverse) then FonReverse(self);
 end;
 
 end.

@@ -1,21 +1,21 @@
 object f_EditTargets: Tf_EditTargets
   Left = 1006
-  Height = 480
+  Height = 522
   Top = 87
   Width = 614
   ActiveControl = BtnClose
   Caption = 'Edit target list'
-  ClientHeight = 480
+  ClientHeight = 522
   ClientWidth = 614
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.8.0.4'
+  Visible = False
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 441
+    Top = 483
     Width = 614
     Align = alBottom
     ClientHeight = 39
@@ -60,16 +60,16 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel2: TPanel
     Left = 0
-    Height = 441
+    Height = 483
     Top = 0
     Width = 284
     Align = alClient
-    ClientHeight = 441
+    ClientHeight = 483
     ClientWidth = 284
     TabOrder = 1
     object TargetList: TStringGrid
       Left = 1
-      Height = 351
+      Height = 393
       Top = 1
       Width = 282
       Align = alClient
@@ -94,7 +94,7 @@ object f_EditTargets: Tf_EditTargets
     object Panel6: TPanel
       Left = 1
       Height = 88
-      Top = 352
+      Top = 394
       Width = 282
       Align = alBottom
       ClientHeight = 88
@@ -185,7 +185,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object PageControl1: TPageControl
     Left = 284
-    Height = 441
+    Height = 483
     Top = 0
     Width = 330
     ActivePage = TabSheet1
@@ -195,15 +195,15 @@ object f_EditTargets: Tf_EditTargets
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
-      ClientHeight = 439
+      ClientHeight = 481
       ClientWidth = 328
       object Panel3: TPanel
         Left = 0
-        Height = 439
+        Height = 481
         Top = 0
         Width = 328
         Align = alClient
-        ClientHeight = 439
+        ClientHeight = 481
         ClientWidth = 328
         TabOrder = 0
         object Label1: TLabel
@@ -224,7 +224,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object PlanList: TComboBox
           Left = 98
-          Height = 26
+          Height = 34
           Top = 48
           Width = 126
           ItemHeight = 0
@@ -279,7 +279,7 @@ object f_EditTargets: Tf_EditTargets
         object PanelRepeat: TPanel
           Left = 8
           Height = 125
-          Top = 303
+          Top = 352
           Width = 312
           ClientHeight = 125
           ClientWidth = 312
@@ -363,9 +363,9 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object CheckBoxRepeat: TCheckBox
-          Left = 8
+          Left = 16
           Height = 21
-          Top = 271
+          Top = 320
           Width = 203
           Caption = 'Repeat the plan for this object'
           OnChange = CheckBoxRepeatChange
@@ -535,11 +535,38 @@ object f_EditTargets: Tf_EditTargets
           OnClick = BtnDeletePlanClick
           TabOrder = 9
         end
+        object Panel7: TPanel
+          Left = 8
+          Height = 38
+          Top = 274
+          Width = 312
+          ClientHeight = 38
+          ClientWidth = 312
+          TabOrder = 10
+          object UseRotator: TCheckBox
+            Left = 8
+            Height = 21
+            Top = 8
+            Width = 128
+            Caption = 'Set rotator angle '
+            OnChange = UseRotatorChange
+            TabOrder = 0
+          end
+          object RotatorAngle: TEdit
+            Left = 144
+            Height = 24
+            Top = 6
+            Width = 48
+            Enabled = False
+            OnChange = TargetChange
+            TabOrder = 1
+          end
+        end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Script'
-      ClientHeight = 439
+      ClientHeight = 481
       ClientWidth = 328
       object LabelSeq1: TLabel
         Left = 98
