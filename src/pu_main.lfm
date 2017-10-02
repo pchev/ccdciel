@@ -447,6 +447,13 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewMessagesClick
       end
+      object MenuViewClock: TMenuItem
+        AutoCheck = True
+        Caption = 'Clock'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewClockClick
+      end
       object N3: TMenuItem
         Caption = '-'
       end

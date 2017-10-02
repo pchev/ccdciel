@@ -57,6 +57,7 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    MenuViewClock: TMenuItem;
     MenuResolveSyncRotator: TMenuItem;
     MenuRotatorRotate: TMenuItem;
     MenuRotator: TMenuItem;
@@ -272,6 +273,7 @@ type
     procedure MenuViewAstrometryLogClick(Sender: TObject);
     procedure MenuViewAutoguiderClick(Sender: TObject);
     procedure MenuViewCCDtempClick(Sender: TObject);
+    procedure MenuViewClockClick(Sender: TObject);
     procedure MenuViewConnectionClick(Sender: TObject);
     procedure MenuViewFiltersClick(Sender: TObject);
     procedure MenuViewFocuserClick(Sender: TObject);
@@ -1136,6 +1138,9 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo);
 
+  MenuViewClock.Checked:=config.GetValue('/Tools/Clock/Visible',true);
+  MenuViewClockClick(nil);
+
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
 
@@ -1358,6 +1363,8 @@ begin
   config.SetValue('/Tools/Script/Top',f_script.Top);
   config.SetValue('/Tools/Script/Left',f_script.Left);
   config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
+
+  config.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
   config.SetValue('/Window/Top',Top);
   config.SetValue('/Window/Left',Left);
@@ -3593,6 +3600,13 @@ end;
 procedure Tf_main.MenuViewCCDtempClick(Sender: TObject);
 begin
   f_ccdtemp.Visible:=MenuViewCCDtemp.Checked;
+end;
+
+procedure Tf_main.MenuViewClockClick(Sender: TObject);
+begin
+  Timestamp.Visible:=MenuViewClock.Checked;
+  TimerStampTimer.Enabled:=Timestamp.Visible;
+  TimerStampTimerTimer(nil);
 end;
 
 procedure Tf_main.MenuViewFocuserClick(Sender: TObject);
