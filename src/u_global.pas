@@ -289,6 +289,7 @@ var
   MaxVideoPreviewRate: integer;
   TemperatureSlope: double;
   FocuserTemp, FocuserLastTemp, FocuserTempCoeff: double;
+  FocuserPositionMin, FocuserPositionMax: integer;
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;

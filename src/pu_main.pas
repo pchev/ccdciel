@@ -2231,8 +2231,12 @@ begin
      f_focuser.Notebook1.PageIndex:=0;
   end;
   f_focuser.Position.Text:=inttostr(focuser.Position);
+  FocuserPositionMin:=0;
+  FocuserPositionMax:=MAXWORD;
   r:=focuser.PositionRange;
   if r.step>0 then begin
+   FocuserPositionMin:=round(r.min);
+   FocuserPositionMax:=round(r.max);
    f_focuser.Position.Hint:='Current focuser absolute position, '+
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.PosIncr.ItemIndex:=0;

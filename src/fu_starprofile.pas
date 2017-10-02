@@ -732,7 +732,14 @@ begin
  case AutofocusVcStep of
    vcsStartL: begin
               // move to curve start position to clear backlash
-              focuser.FocusPosition:=round(AutofocusVc[0,1]);
+              newpos:=AutofocusVc[0,1];
+              // correct for filter offset
+              newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
+              // correct for temperature
+              if AutofocusVcTemp<>NullCoord then newpos:=newpos+focuser.TempOffset(AutofocusVcTemp,FocuserTemp);
+              // check in range
+              if newpos<FocuserPositionMin then newpos:=FocuserPositionMin;
+              focuser.FocusPosition:=round(newpos);
               msg('Clear focuser backlash');
               FonAbsolutePosition(self);
               wait(1);
@@ -755,7 +762,14 @@ begin
              end;
    vcsStartR: begin
               // move to curve end position to clear backlash
-              focuser.FocusPosition:=round(AutofocusVc[AutofocusVcNum,1]);
+              newpos:=AutofocusVc[AutofocusVcNum,1];
+              // correct for filter offset
+              newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
+              // correct for temperature
+              if AutofocusVcTemp<>NullCoord then newpos:=newpos+focuser.TempOffset(AutofocusVcTemp,FocuserTemp);
+              // check in range
+              if newpos>FocuserPositionMax then newpos:=FocuserPositionMax;
+              focuser.FocusPosition:=round(newpos);
               msg('Clear focuser backlash');
               FonAbsolutePosition(self);
               wait(1);
