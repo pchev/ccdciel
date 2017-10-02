@@ -35,7 +35,7 @@ object f_rotator: Tf_rotator
     object Label6: TLabel
       Left = 28
       Height = 18
-      Top = 3
+      Top = 4
       Width = 16
       AutoSize = False
       Caption = 'PA'
@@ -62,7 +62,7 @@ object f_rotator: Tf_rotator
     object Reverse: TCheckBox
       Left = 4
       Height = 21
-      Top = 32
+      Top = 34
       Width = 71
       AutoSize = False
       Caption = 'Reverse'
@@ -82,7 +82,7 @@ object f_rotator: Tf_rotator
       Left = 4
       Height = 14
       Hint = 'Uncalibrated'
-      Top = 7
+      Top = 6
       Width = 14
       Brush.Color = clRed
       Shape = stCircle
