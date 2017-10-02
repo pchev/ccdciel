@@ -3814,7 +3814,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Checked) then begin
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Checked) then begin
     // only if temperature change by more than 0.5 C
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
@@ -3949,7 +3949,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) then begin
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (camera.FrameType=LIGHT) then begin
     // only if temperature change by more than 0.5 C
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
