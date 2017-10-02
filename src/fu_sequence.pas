@@ -27,7 +27,7 @@ interface
 
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
   fu_capture, fu_preview, fu_filterwheel,
-  cu_mount, cu_camera, cu_autoguider, cu_astrometry,
+  cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
@@ -87,12 +87,14 @@ type
     Ffilter: Tf_filterwheel;
     Fmount: T_mount;
     Fcamera: T_camera;
+    Frotator: T_rotator;
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     procedure SetPreview(val: Tf_preview);
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);
     procedure SetCamera(val: T_camera);
+    procedure SetRotator(val: T_rotator);
     procedure SetFilter(val: Tf_filterwheel);
     procedure SetAutoguider(val: T_autoguider);
     procedure SetAstrometry(val: TAstrometry);
@@ -131,6 +133,7 @@ type
     property Capture: Tf_capture read Fcapture write SetCapture;
     property Mount: T_mount read Fmount write SetMount;
     property Camera: T_camera read Fcamera write SetCamera;
+    property Rotator: T_rotator read Frotator write SetRotator;
     property Filter: Tf_filterwheel read Ffilter write SetFilter;
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
@@ -208,6 +211,12 @@ procedure Tf_sequence.SetCamera(val: T_camera);
 begin
   Fcamera:=val;
   Targets.Camera:=Fcamera;
+end;
+
+procedure Tf_sequence.SetRotator(val: T_rotator);
+begin
+  Frotator:=val;
+  Targets.Rotaror:=Frotator;
 end;
 
 procedure Tf_sequence.SetFilter(val: Tf_filterwheel);
@@ -387,6 +396,11 @@ begin
          t.de:=NullCoord
        else
          t.de:=StrToDE(x);
+       x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PA','-');
+       if x='-' then
+         t.pa:=NullCoord
+       else
+         t.pa:=StrToFloatDef(x,NullCoord);
        t.astrometrypointing:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
@@ -518,6 +532,10 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
+      if t.pa=NullCoord then
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/PA','-')
+      else
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/PA',FormatFloat(f1,t.pa));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);

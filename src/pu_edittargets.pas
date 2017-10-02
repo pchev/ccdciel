@@ -47,8 +47,11 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    UseRotator: TCheckBox;
+    RotatorAngle: TEdit;
     ObjStartRise: TCheckBox;
     ObjEndSet: TCheckBox;
+    Panel7: TPanel;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
@@ -124,6 +127,7 @@ type
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure UseRotatorChange(Sender: TObject);
   private
     { private declarations }
     LockTarget: boolean;
@@ -582,6 +586,11 @@ begin
     ObjStartRise.Checked:=t.startrise;
     ObjEndSet.Checked:=t.endset;
     PointAstrometry.Checked:=t.astrometrypointing;
+    UseRotator.Checked:=(t.pa<>NullCoord);
+    if t.pa=NullCoord then
+      RotatorAngle.Text:='-'
+    else
+      RotatorAngle.Text:=FormatFloat(f1,t.pa);
     RepeatCount.Text:=t.repeatcount_str;
     Delay.Text:=t.delay_str;
     PreviewExposure.Text:=t.previewexposure_str;
@@ -590,6 +599,17 @@ begin
     PanelRepeat.Visible:=CheckBoxRepeat.Checked;
   end;
   LockTarget:=false;
+end;
+
+procedure Tf_EditTargets.UseRotatorChange(Sender: TObject);
+begin
+  RotatorAngle.Enabled:=UseRotator.Checked;
+  if RotatorAngle.Enabled then begin
+    RotatorAngle.Text:='0.0';
+  end
+  else begin
+    RotatorAngle.Text:='-'
+  end;
 end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
@@ -629,6 +649,10 @@ begin
     t.endset:=ObjEndSet.Checked;
     ObjStartTime.Enabled:= not t.startrise;
     ObjEndTime.Enabled:= not t.endset;
+    if RotatorAngle.Text='-' then
+      t.pa:=NullCoord
+    else
+      t.pa:=StrToFloatDef(RotatorAngle.Text,NullCoord);
     if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
     t.astrometrypointing:=PointAstrometry.Checked;
     t.repeatcount:=StrToIntDef(RepeatCount.Text,1);

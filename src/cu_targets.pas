@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause,
+uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
@@ -46,6 +46,7 @@ type
       Ffilter: Tf_filterwheel;
       Fmount: T_mount;
       Fcamera: T_camera;
+      Frotaror: T_rotator;
       Fautoguider: T_autoguider;
       Fastrometry: TAstrometry;
       StartPlanTimer: TTimer;
@@ -125,6 +126,7 @@ type
       property Capture: Tf_capture read Fcapture write Setcapture;
       property Mount: T_mount read Fmount write SetMount;
       property Camera: T_camera read Fcamera write SetCamera;
+      property Rotaror: T_rotator read Frotaror write Frotaror;
       property Filter: Tf_filterwheel read Ffilter write SetFilter;
       property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
       property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
@@ -535,7 +537,7 @@ begin
        end;
     end;
 
-    if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+    if ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
       if Autoguider<>nil then begin
         // stop guiding
         if Autoguider.State<>GUIDER_DISCONNECTED then begin
@@ -544,16 +546,23 @@ begin
           if not FRunning then exit;
         end;
       end;
-      // disable astrometrypointing and autoguiding if first step is to move to focus star
-      if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
-         autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
-      else
-         autofocusstart:=false;
-      astrometrypointing:=t.astrometrypointing and (not autofocusstart);
-      // slew to coordinates
-      ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
-      if not ok then exit;
-      Wait;
+      // set rotator position
+      if (t.pa<>NullCoord)and(Frotaror.Status=devConnected) then begin
+        Frotaror.Angle:=t.pa;
+      end;
+      // set coordinates
+      if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
+        // disable astrometrypointing and autoguiding if first step is to move to focus star
+        if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
+           autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
+        else
+           autofocusstart:=false;
+        astrometrypointing:=t.astrometrypointing and (not autofocusstart);
+        // slew to coordinates
+        ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
+        if not ok then exit;
+        Wait;
+      end;
       if not FRunning then exit;
       // start guiding
       autostartguider:=(Autoguider<>nil) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
