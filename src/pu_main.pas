@@ -2982,6 +2982,7 @@ end;
 Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
  f_rotator.Angle.Text:=FormatFloat(f1,rotator.Angle);
+ f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
 end;
 
 Procedure Tf_main.RotatorRotate(Sender: TObject);
