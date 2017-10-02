@@ -97,6 +97,7 @@ begin
     if GetDriverReverse then SetDriverReverse(False);   // set in driver
     FReverse:=False;                                    // set in software
   end;
+  if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
 function T_rotator.GetReverse:boolean;
