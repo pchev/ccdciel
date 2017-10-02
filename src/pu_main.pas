@@ -3772,6 +3772,23 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     Preview:=false;
     exit;
   end;
+  // check focuser temperature compensation
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Checked) then begin
+    // only if temperature change by more than 0.5 C
+    if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
+      p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+      if focuser.hasAbsolutePosition and (p<>0) then begin
+        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        focuser.Position:=focuser.Position+p;
+      end
+      else if focuser.hasRelativePosition and (p<>0) then begin
+        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        if p>0 then focuser.FocusOut else focuser.FocusIn;
+        focuser.RelPosition:=abs(p);
+      end;
+      wait(1);
+    end;
+  end;
   p:=pos('x',f_preview.Binning.Text);
   if p>0 then begin
      buf:=trim(copy(f_preview.Binning.Text,1,p-1));
