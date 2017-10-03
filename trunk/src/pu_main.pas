@@ -1520,7 +1520,7 @@ procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
 var xx,yy,n: integer;
     val:integer;
     sval:string;
-    ra,de,jd0,jd1: double;
+    ra,de: double;
     c: TcdcWCScoord;
 begin
 if LockMouse then exit;
@@ -1565,11 +1565,9 @@ if LockMouse then exit;
         ra:=c.ra;
         de:=c.dec;
         if mount.Equinox=0 then begin
-          jd0:=jd2000;
-          jd1:=DateTimetoJD(now);
           ra:=deg2rad*ra;
           de:=deg2rad*de;
-          PrecessionFK5(jd0,jd1,ra,de);
+          J2000ToApparent(ra,de);
           ra:=rad2deg*ra;
           de:=rad2deg*de;
         end;
@@ -4691,13 +4689,12 @@ end;
 procedure Tf_main.LoadFocusStar;
 var f: textfile;
     buf,fn,id: string;
-    ra,de,jd1: double;
+    ra,de: double;
     focusmag: integer;
 begin
  fn:='focus_star_4';
  SetLength(FocusStars,1000);
  NFocusStars:=0;
- jd1:=DateTimetoJD(now);
  focusmag:=config.GetValue('/StarAnalysis/AutofocusStarMag',4);
  if (focusmag<4)or(focusmag>8) then focusmag:=4;
  case focusmag of
@@ -4722,7 +4719,7 @@ begin
      ra:=deg2rad*ra;
      de:=deg2rad*de;
      // store coordinates of the date
-     PrecessionFK5(jd2000,jd1,ra,de);
+     J2000ToApparent(ra,de);
      FocusStars[NFocusStars].ra:=ra;
      FocusStars[NFocusStars].de:=de;
      FocusStars[NFocusStars].id:=id;
@@ -4826,11 +4823,9 @@ begin
    astrometry.SolveCurrentImage(true);
    if astrometry.LastResult then begin
      astrometry.CurrentCoord(tra,tde,teq,tpa);
-     jd0:=Jd(trunc(teq),0,0,0);
-     jd1:=DateTimetoJD(now);
      tra:=deg2rad*15*tra;
      tde:=deg2rad*tde;
-     PrecessionFK5(jd0,jd1,tra,tde);
+     J2000ToApparent(tra,tde);
      tpos:=true;
      pslew:=true;
    end
@@ -5364,7 +5359,7 @@ end;
 
 procedure Tf_main.AstrometryToPlanetariumFrame(Sender: TObject);
 var fn: string;
-    ra, dec, rot, sizeH, sizeV, jd0, jd1: Double;
+    ra, dec, rot, sizeH, sizeV: Double;
     n: integer;
     wcsinfo: TcdcWCSinfo;
 begin
@@ -5390,11 +5385,9 @@ if (n=0) and planetarium.Connected then begin
   else
   begin
     // send cmd to planetarium
-    jd0:=jd2000;
-    jd1:=DateTimetoJD(now);
     ra:=deg2rad*ra;
     dec:=deg2rad*dec;
-    PrecessionFK5(jd0,jd1,ra,dec);
+    J2000ToApparent(ra,dec);
     ra:=rad2deg*ra;
     dec:=rad2deg*dec;
     if planetarium.DrawFrame(ra,dec,sizeH,sizeV,rot) then

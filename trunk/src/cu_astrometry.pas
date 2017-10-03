@@ -274,8 +274,17 @@ begin
 end;
 
 procedure TAstrometry.AstrometrySolveonTimer(Sender: TObject);
+var ra,de,eq,pa: double;
 begin
 TimerAstrometrySolve.Enabled:=false;
+if CurrentCoord(ra,de,eq,pa) then begin
+   ra:=ra*15*deg2rad;
+   de:=de*deg2rad;
+   J2000ToApparent(ra,de);
+   ra:=rad2deg*ra/15;
+   de:=rad2deg*de;
+   msg('Center, apparent coord. RA='+RAToStr(ra)+' DEC='+DEToStr(de)+' PA='+FormatFloat(f1,pa));
+end;
 end;
 
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
@@ -299,7 +308,7 @@ end;
 
 procedure TAstrometry.AstrometrySynconTimer(Sender: TObject);
 var fn: string;
-    ra,de,eq,pa,jd0,jd1: double;
+    ra,de,eq,pa: double;
     n:integer;
 begin
 TimerAstrometrySync.Enabled:=false;
@@ -308,11 +317,9 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
        if mount.Equinox=0 then begin
-         jd0:=Jd(trunc(eq),0,0,0);
-         jd1:=DateTimetoJD(now);
          ra:=deg2rad*15*ra;
          de:=deg2rad*de;
-         PrecessionFK5(jd0,jd1,ra,de);
+         J2000ToApparent(ra,de);
          ra:=rad2deg*ra/15;
          de:=rad2deg*de;
        end;
@@ -345,7 +352,7 @@ end;
 procedure TAstrometry.AstrometrySlewScreenXYonTimer(Sender: TObject);
 var fn: string;
     xx,yy,n,m: integer;
-    ra,de,jd0,jd1: double;
+    ra,de: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
     err,prec,exp:double;
@@ -366,11 +373,9 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        ra:=c.ra;
        de:=c.dec;
        if mount.Equinox=0 then begin
-         jd0:=jd2000;
-         jd1:=DateTimetoJD(now);
          ra:=deg2rad*ra;
          de:=deg2rad*de;
-         PrecessionFK5(jd0,jd1,ra,de);
+         J2000ToApparent(ra,de);
          ra:=rad2deg*ra;
          de:=rad2deg*de;
        end;
@@ -391,7 +396,6 @@ end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa: double;
-    jd0,jd1: double;
     fn:string;
     n,i,oldfilter:integer;
 begin
@@ -436,11 +440,9 @@ begin
       n:=cdcwcs_initfitsfile(pchar(fn),0);
       if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
       if mount.Equinox=0 then begin
-        jd0:=Jd(trunc(eq),0,0,0);
-        jd1:=DateTimetoJD(now);
         cra:=deg2rad*15*cra;
         cde:=deg2rad*cde;
-        PrecessionFK5(jd0,jd1,cra,cde);
+        J2000ToApparent(cra,cde);
         cra:=rad2deg*cra/15;
         cde:=rad2deg*cde;
       end;

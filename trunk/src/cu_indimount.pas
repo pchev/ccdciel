@@ -137,6 +137,7 @@ begin
  Findiserverport:='7624';
  Findidevice:='';
  Findideviceport:='';
+ eod_coord:=true;
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
  InitTimer.Interval:=60000;
