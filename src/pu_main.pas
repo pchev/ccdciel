@@ -3545,6 +3545,7 @@ begin
         planetarium.onShowMessage:=@NewMessage;
         f_planetariuminfo.planetarium:=planetarium;
         f_scriptengine.Planetarium:=planetarium;
+        f_sequence.Planetarium:=planetarium;
      end;
 
    end;
@@ -5471,6 +5472,7 @@ begin
    planetarium.onShowMessage:=@NewMessage;
    f_planetariuminfo.planetarium:=planetarium;
    f_scriptengine.Planetarium:=planetarium;
+   f_sequence.Planetarium:=planetarium;
  end;
 end;
 
