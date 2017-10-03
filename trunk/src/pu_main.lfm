@@ -20,7 +20,7 @@ object f_main: Tf_main
   Visible = False
   object PageControlRight: TPageControl
     Left = 612
-    Height = 282
+    Height = 254
     Top = 0
     Width = 188
     ActivePage = PageConnect
@@ -31,12 +31,12 @@ object f_main: Tf_main
     TabOrder = 0
     Options = [nboMultiLine]
     object PageConnect: TTabSheet
-      ClientHeight = 256
+      ClientHeight = 228
       ClientWidth = 186
       ImageIndex = 0
       object PanelRight1: TPanel
         Left = 0
-        Height = 256
+        Height = 228
         Top = 0
         Width = 186
         Align = alClient
@@ -54,7 +54,7 @@ object f_main: Tf_main
       end
     end
     object PageFocus: TTabSheet
-      ClientHeight = 256
+      ClientHeight = 228
       ClientWidth = 186
       ImageIndex = 1
       object PanelRight2: TPanel
@@ -77,7 +77,7 @@ object f_main: Tf_main
       end
     end
     object PageCapture: TTabSheet
-      ClientHeight = 256
+      ClientHeight = 228
       ClientWidth = 186
       ImageIndex = 2
       object PanelRight3: TPanel
@@ -100,7 +100,7 @@ object f_main: Tf_main
       end
     end
     object PageSequence: TTabSheet
-      ClientHeight = 256
+      ClientHeight = 228
       ClientWidth = 186
       ImageIndex = 3
       object PanelRight4: TPanel
@@ -123,7 +123,7 @@ object f_main: Tf_main
       end
     end
     object PageVideo: TTabSheet
-      ClientHeight = 256
+      ClientHeight = 228
       ClientWidth = 186
       ImageIndex = 4
       TabVisible = False
@@ -145,17 +145,17 @@ object f_main: Tf_main
   end
   object Panel1: TPanel
     Left = 0
-    Height = 282
+    Height = 254
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 282
+    ClientHeight = 254
     ClientWidth = 612
     TabOrder = 1
     object PanelLeft: TPanel
       Left = 0
-      Height = 278
+      Height = 250
       Top = 2
       Width = 2
       Align = alLeft
@@ -191,12 +191,12 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 2
-      Height = 278
+      Height = 250
       Top = 2
       Width = 610
       Align = alClient
       AutoSize = True
-      ClientHeight = 278
+      ClientHeight = 250
       ClientWidth = 610
       Color = 4197901
       ParentColor = False
@@ -204,7 +204,7 @@ object f_main: Tf_main
       object Image1: TImage
         Cursor = crCross
         Left = 1
-        Height = 276
+        Height = 248
         Top = 1
         Width = 608
         AntialiasingMode = amOff
@@ -213,6 +213,7 @@ object f_main: Tf_main
         OnMouseDown = Image1MouseDown
         OnMouseMove = Image1MouseMove
         OnMouseUp = Image1MouseUp
+        OnMouseWheel = Image1MouseWheel
         OnPaint = Image1Paint
         OnResize = Image1Resize
         PopupMenu = ImagePopupMenu
@@ -221,7 +222,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 2
-      Top = 280
+      Top = 252
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -240,7 +241,7 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 20
-    Top = 282
+    Top = 254
     Width = 800
     Panels = <    
       item

@@ -37,7 +37,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, ComCtrls;
+  StdCtrls, ExtCtrls, Menus, ComCtrls, Types;
 
 type
 
@@ -212,6 +212,8 @@ type
       );
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
@@ -350,7 +352,7 @@ type
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, LockMouse: boolean;
+    MouseMoving, MouseFrame, LockMouse, LockMouseWheel: boolean;
     Capture,Preview,meridianflipping,autofocusing,learningvcurve: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -787,6 +789,7 @@ begin
   cancelWaitTill:=false;
   onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
+  ZoomMin:=1;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -1623,6 +1626,33 @@ end;
 MouseMoving:=false;
 MouseFrame:=false;
 screen.Cursor:=crDefault;
+end;
+
+procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+var
+  zf: double;
+begin
+if fits.HeaderInfo.naxis>0 then begin
+  if LockMouseWheel then
+    exit;
+  LockMouseWheel := True;
+  try
+    handled := True;
+    if wheeldelta > 0 then
+      zf := 1.25
+    else
+      zf := 0.8;
+    if ImgZoom=0 then imgzoom:=ZoomMin;
+    ImgZoom:=ImgZoom*zf;
+    if ImgZoom>ZoomMax then ImgZoom:=ZoomMax;
+    if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
+    PlotImage;
+    Application.ProcessMessages;
+  finally
+    LockMouseWheel := False;
+  end;
+end;
 end;
 
 procedure Tf_main.ConnectTimerTimer(Sender: TObject);
@@ -4392,6 +4422,10 @@ var r1,r2: double;
     w,h,px,py: integer;
     tmpbmp,str: TBGRABitmap;
 begin
+r1:=image1.Width/imabmp.Width;
+r2:=image1.Height/imabmp.Height;
+ZoomMin:=min(r1,r2);
+if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.1) then ImgZoom:=0;
 ClearImage;
 imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
@@ -4411,19 +4445,6 @@ if ImgZoom=0 then begin
   str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
   str.Free;
 end
-else if ImgZoom=0.5 then begin
-   // zoom 0.5
-   tmpbmp:=TBGRABitmap.Create(Image1.Width * 2,Image1.Height * 2,clDarkBlue);
-   px:=ImgCx-((img_Width-tmpbmp.Width) div 2);
-   py:=ImgCy-((img_Height-tmpbmp.Height) div 2);
-   OrigX:=px;
-   OrigY:=py;
-   tmpbmp.PutImage(px,py,ImaBmp,dmSet);
-   str:=tmpbmp.Resample(image1.Width,image1.Height) as TBGRABitmap;
-   str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
-   str.Free;
-   tmpbmp.Free;
-end
 else if ImgZoom=1 then begin
    // zoom 1
    px:=ImgCx-((img_Width-Image1.Width) div 2);
@@ -4432,9 +4453,10 @@ else if ImgZoom=1 then begin
    OrigY:=py;
    ImaBmp.Draw(image1.Picture.Bitmap.Canvas,px,py,True);
 end
-else if ImgZoom=2 then begin
-   // zoom 2
-   tmpbmp:=TBGRABitmap.Create(Image1.Width div 2,Image1.Height div 2,clDarkBlue);
+else begin
+   // other zoom
+   if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
+   tmpbmp:=TBGRABitmap.Create(round(Image1.Width/ImgZoom),round(Image1.Height/ImgZoom),clDarkBlue);
    px:=ImgCx-((img_Width-tmpbmp.Width) div 2);
    py:=ImgCy-((img_Height-tmpbmp.Height) div 2);
    OrigX:=px;
@@ -4454,10 +4476,14 @@ begin
   Inherited paint;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     if ImgZoom=0      then begin s:=round((Starwindow/camera.BinX/2)*ImgScale0); r:=round(f_starprofile.HFD*ImgScale0/2); end
-     else if ImgZoom=0.5 then begin s:=round(Starwindow/camera.BinX/4); r:=round(f_starprofile.HFD/4); end
-     else if ImgZoom=1 then begin s:=round(Starwindow/camera.BinX/2); r:=round(f_starprofile.HFD/2); end
-     else if ImgZoom=2 then begin s:=Starwindow div camera.BinX; r:=round(f_starprofile.HFD); end;
+     if ImgZoom=0 then begin
+       s:=round((Starwindow/camera.BinX/2)*ImgScale0);
+       r:=round(f_starprofile.HFD*ImgScale0/2);
+     end
+     else  begin
+       s:=round(ImgZoom*Starwindow/camera.BinX/2);
+       r:=round(ImgZoom*f_starprofile.HFD/2);
+     end;
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         Frame(x-s,y-s,x+s,y+s);

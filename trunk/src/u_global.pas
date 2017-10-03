@@ -221,6 +221,7 @@ const
   MaxMenulevel=10;
   MaxFilter=20;
   WaitResponseTime=120;
+  ZoomMax=15;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
   ldeg = 'd';
@@ -280,7 +281,7 @@ var
   OrigX, OrigY,img_Height,img_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
-  ImgZoom: double;
+  ImgZoom,ZoomMin: double;
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsTimeZone: double;
   BayerColor: boolean;
