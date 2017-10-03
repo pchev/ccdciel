@@ -57,6 +57,7 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    MenuResolveRotate: TMenuItem;
     MenuViewClock: TMenuItem;
     MenuResolveSyncRotator: TMenuItem;
     MenuRotatorRotate: TMenuItem;
@@ -233,6 +234,7 @@ type
     procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuResolveRotateClick(Sender: TObject);
     procedure MenuResolveSyncRotatorClick(Sender: TObject);
     procedure MenuItemDebayerClick(Sender: TObject);
     procedure MenuItemRawClick(Sender: TObject);
@@ -490,6 +492,7 @@ type
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
     procedure ResolveSyncRotator(Sender: TObject);
+    procedure ResolveRotate(Sender: TObject);
     procedure LoadFitsFile(fn:string);
     procedure SaveFitsFile(fn:string);
     procedure OpenRefImage(fn:string);
@@ -4778,7 +4781,7 @@ begin
 end;
 
 function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
-var tra,tde,teq,sra,sde,jd0,jd1,err: double;
+var tra,tde,teq,tpa,sra,sde,jd0,jd1,err: double;
     sid: string;
     focusretry,maxretry: integer;
     tpos,pslew,savecapture,restartguider: boolean;
@@ -4822,7 +4825,7 @@ begin
    NewMessage('Get current position from last image');
    astrometry.SolveCurrentImage(true);
    if astrometry.LastResult then begin
-     astrometry.CurrentCoord(tra,tde,teq);
+     astrometry.CurrentCoord(tra,tde,teq,tpa);
      jd0:=Jd(trunc(teq),0,0,0);
      jd1:=DateTimetoJD(now);
      tra:=deg2rad*15*tra;
@@ -5198,6 +5201,26 @@ end;
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
   astrometry.SyncCurrentImage(false);
+end;
+
+procedure Tf_main.ResolveRotate(Sender: TObject);
+var ra,de,eq,pa: double;
+begin
+ if (rotator.Status<>devConnected)or(Camera.Status<>devConnected) then begin
+   NewMessage('Camera and rotator must be connected!');
+   exit;
+ end;
+ if fits.HeaderInfo.valid then begin
+   astrometry.SolveCurrentImage(true);
+   if astrometry.CurrentCoord(ra,de,eq,pa) then begin
+     rotator.Angle:=pa;
+   end;
+ end;
+end;
+
+procedure Tf_main.MenuResolveRotateClick(Sender: TObject);
+begin
+  ResolveRotate(Sender);
 end;
 
 procedure Tf_main.MenuRotatorRotateClick(Sender: TObject);

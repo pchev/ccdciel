@@ -179,11 +179,14 @@ begin
  PlanGrid.Cells[3,0]:='Repeat';
  PlanGrid.Cells[4,0]:='Type';
  PlanGrid.Cells[5,0]:='Filter';
+ f_EditTargets:=Tf_EditTargets.Create(nil);
+ f_EditTargets.Astrometry:=Fastrometry;
 end;
 
 destructor  Tf_sequence.Destroy;
 begin
  Targets.Free;
+ f_EditTargets.Free;
  ClearTargetGrid;
  ClearPlanGrid;
  inherited Destroy;
@@ -235,6 +238,7 @@ procedure Tf_sequence.SetAstrometry(val: TAstrometry);
 begin
   Fastrometry:=val;
   Targets.Astrometry:=Fastrometry;
+  f_EditTargets.Astrometry:=Fastrometry;
 end;
 
 procedure Tf_sequence.ClearTargetGrid;

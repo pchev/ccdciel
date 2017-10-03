@@ -62,7 +62,7 @@ TAstrometry = class(TComponent)
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
     procedure StopAstrometry;
     procedure AstrometryDone;
-    function  CurrentCoord(out cra,cde,eq: double):boolean;
+    function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
@@ -234,7 +234,7 @@ begin
   end;
 end;
 
-function TAstrometry.CurrentCoord(out cra,cde,eq: double):boolean;
+function TAstrometry.CurrentCoord(out cra,cde,eq,pa: double):boolean;
 var n,m: integer;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
@@ -250,6 +250,7 @@ begin
         cra:=c.ra/15;
         cde:=c.dec;
         eq:=2000;
+        pa:=i.rot;
         result:=true;
       end;
     end;
@@ -298,14 +299,14 @@ end;
 
 procedure TAstrometry.AstrometrySynconTimer(Sender: TObject);
 var fn: string;
-    ra,de,eq,jd0,jd1: double;
+    ra,de,eq,pa,jd0,jd1: double;
     n:integer;
 begin
 TimerAstrometrySync.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
-   if (n=0) and CurrentCoord(ra,de,eq) then begin
+   if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
        if mount.Equinox=0 then begin
          jd0:=Jd(trunc(eq),0,0,0);
          jd1:=DateTimetoJD(now);
@@ -389,7 +390,7 @@ end;
 end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double): boolean;
-var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde: double;
+var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa: double;
     jd0,jd1: double;
     fn:string;
     n,i,oldfilter:integer;
@@ -433,7 +434,7 @@ begin
       end;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
-      if (n<>0) or (not CurrentCoord(cra,cde,eq)) then break;
+      if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
       if mount.Equinox=0 then begin
         jd0:=Jd(trunc(eq),0,0,0);
         jd1:=DateTimetoJD(now);
