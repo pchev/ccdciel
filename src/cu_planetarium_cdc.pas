@@ -213,7 +213,7 @@ if FRecvData<>'' then begin
     end;
   end;
   if (p.Count>=6)and(p[0]='>') then begin
-    Fobjname:=StringReplace(p[5],' ','',[rfReplaceAll]);
+     Fobjname:=trim(p[5]);
   end;
   p.free;
 end;

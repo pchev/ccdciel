@@ -50,6 +50,9 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    UpdateCoord: TCheckBox;
+    Panel8: TPanel;
+    Panel9: TPanel;
     UseRotator: TCheckBox;
     RotatorAngle: TEdit;
     ObjStartRise: TCheckBox;
@@ -162,6 +165,7 @@ uses LazFileUtils;
 
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
+  ShowHint:=true;
   ScaleDPI(Self);
   LockTarget:=false;
   FTargetsRepeat:=1;
@@ -628,6 +632,7 @@ begin
     ObjStartRise.Checked:=t.startrise;
     ObjEndSet.Checked:=t.endset;
     PointAstrometry.Checked:=t.astrometrypointing;
+    UpdateCoord.Checked:=t.updatecoord;
     UseRotator.Checked:=(t.pa<>NullCoord);
     if t.pa=NullCoord then
       RotatorAngle.Text:='-'
@@ -697,6 +702,7 @@ begin
       t.pa:=StrToFloatDef(RotatorAngle.Text,NullCoord);
     if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
     t.astrometrypointing:=PointAstrometry.Checked;
+    t.updatecoord:=UpdateCoord.Checked;
     t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
     t.delay:=StrToFloatDef(Delay.Text,1);
     t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);

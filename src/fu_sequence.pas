@@ -28,7 +28,7 @@ interface
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
   fu_capture, fu_preview, fu_filterwheel,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
-  cu_targets, cu_plan,
+  cu_targets, cu_plan, cu_planetarium,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -90,6 +90,7 @@ type
     Frotator: T_rotator;
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
+    Fplanetarium: TPlanetarium;
     procedure SetPreview(val: Tf_preview);
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);
@@ -98,6 +99,7 @@ type
     procedure SetFilter(val: Tf_filterwheel);
     procedure SetAutoguider(val: T_autoguider);
     procedure SetAstrometry(val: TAstrometry);
+    procedure SetPlanetarium(val: TPlanetarium);
     function GetRunning: boolean;
     function GetBusy: boolean;
     function GetTargetCoord: boolean;
@@ -137,6 +139,7 @@ type
     property Filter: Tf_filterwheel read Ffilter write SetFilter;
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
+    property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -161,6 +164,7 @@ begin
  Targets.Filter:=Ffilter;
  Targets.Autoguider:=Fautoguider;
  Targets.Astrometry:=Fastrometry;
+ Targets.Planetarium:=Fplanetarium;
  Targets.onMsg:=@Msg;
  Targets.DelayMsg:=@ShowDelayMsg;
  Targets.onTargetsChange:=@TargetsChange;
@@ -239,6 +243,12 @@ begin
   Fastrometry:=val;
   Targets.Astrometry:=Fastrometry;
   f_EditTargets.Astrometry:=Fastrometry;
+end;
+
+procedure Tf_sequence.SetPlanetarium(val: TPlanetarium);
+begin
+  Fplanetarium:=val;
+  Targets.Planetarium:=Fplanetarium;
 end;
 
 procedure Tf_sequence.ClearTargetGrid;
@@ -406,6 +416,7 @@ begin
        else
          t.pa:=StrToFloatDef(x,NullCoord);
        t.astrometrypointing:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
+       t.updatecoord:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
@@ -541,6 +552,7 @@ begin
       else
         tfile.SetValue('/Targets/Target'+inttostr(i)+'/PA',FormatFloat(f1,t.pa));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',t.updatecoord);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
