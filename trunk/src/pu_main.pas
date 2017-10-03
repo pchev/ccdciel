@@ -1029,6 +1029,7 @@ begin
   f_sequence.Rotator:=rotator;
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
+  f_sequence.Planetarium:=planetarium;
 
   f_planetarium:=Tf_planetarium.Create(self);
   f_planetarium.onConnect:=@PlanetariumConnectClick;
@@ -4059,7 +4060,7 @@ end;
 
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var dt: Tdatetime;
-    fn,imgsize: string;
+    fn,imgsize,buf: string;
     subseq,subobj,substep,subfrt,subexp,subbin: boolean;
     fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
     fileseqnum: integer;
@@ -4082,7 +4083,14 @@ begin
      fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
      if subseq and f_sequence.Running then fn:=slash(fn+trim(f_sequence.CurrentName));
      if subfrt then fn:=slash(fn+trim(f_capture.FrameType.Text));
-     if subobj then fn:=slash(fn+trim(f_capture.Fname.Text));
+     if subobj then begin
+       buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
+       buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
+       buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
+       buf:=StringReplace(buf,':','_',[rfReplaceAll]);
+       fn:=slash(fn+buf);
+     end;
+
      if substep and f_sequence.Running then begin
         if f_sequence.StepTotalCount>1 then begin
           fn:=slash(fn+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
@@ -4100,8 +4108,13 @@ begin
      fnexp:=config.GetValue('/Files/FilenameExposure',false);
      fnbin:=config.GetValue('/Files/FilenameBinning',false);
      if fnobj then begin
-       if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then
-           fn:=fn+trim(f_capture.Fname.Text)+'_'
+       if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
+           buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
+           buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
+           buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
+           buf:=StringReplace(buf,':','_',[rfReplaceAll]);
+           fn:=fn+buf+'_';
+       end
        else
            fn:=fn+trim(f_capture.FrameType.Text)+'_';
      end;

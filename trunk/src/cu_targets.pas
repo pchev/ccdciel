@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator,
+uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
@@ -49,6 +49,7 @@ type
       Frotaror: T_rotator;
       Fautoguider: T_autoguider;
       Fastrometry: TAstrometry;
+      Fplanetarium: TPlanetarium;
       StartPlanTimer: TTimer;
       FTargetCoord: boolean;
       FTargetRA,FTargetDE: double;
@@ -130,6 +131,7 @@ type
       property Filter: Tf_filterwheel read Ffilter write SetFilter;
       property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
       property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
+      property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
       property DelayMsg: TNotifyMsg read FDelayMsg write FDelayMsg;
       property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
@@ -500,7 +502,7 @@ function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i: integer;
-    hr,hs: double;
+    hr,hs,newra,newde: double;
     autofocusstart, astrometrypointing, autostartguider: boolean;
 begin
   result:=false;
@@ -508,6 +510,14 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
+    // adjust moving object coordinates from planetarium
+    if t.updatecoord then begin
+       if Fplanetarium.Search(t.objectname,newra,newde) then begin
+          msg('New coordinates from planetarium: '+RAToStr(newra)+' '+DEToStr(newde));
+          t.ra:=newra;
+          t.de:=newde;
+       end;
+    end;
     // adjust rise/set time
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
        if t.startrise and ObjRise(t.ra,t.de,hr,i) then

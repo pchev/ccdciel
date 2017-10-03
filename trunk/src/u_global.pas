@@ -101,7 +101,7 @@ type
               starttime,endtime,ra,de,pa: double;
               startrise,endset: boolean;
               repeatcount: integer;
-              preview,astrometrypointing: boolean;
+              preview,astrometrypointing,updatecoord: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -342,11 +342,13 @@ begin
   objectname:='None';
   planname:='';
   path:='';
-  starttime:=0.0;
-  endtime:=23.99999;
+  starttime:=NullCoord;
+  endtime:=NullCoord;
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
+  astrometrypointing:=false;
+  updatecoord:=false;
   repeatcount:=1;
   preview:=False;
   delay:=1;
@@ -377,6 +379,7 @@ begin
   de:=Source.de;
   pa:=Source.pa;
   astrometrypointing:=source.astrometrypointing;
+  updatecoord:=Source.updatecoord;
   repeatcount:=Source.repeatcount;
   preview:=Source.preview;
   delay:=Source.delay;

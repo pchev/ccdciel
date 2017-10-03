@@ -1,9 +1,9 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 522
+  Height = 561
   Top = 0
   Width = 180
-  ClientHeight = 522
+  ClientHeight = 561
   ClientWidth = 180
   ParentFont = False
   TabOrder = 0
@@ -106,7 +106,7 @@ object f_sequence: Tf_sequence
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
         Top = 92
-        Width = 135
+        Width = 122
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentShowHint = False
@@ -167,7 +167,7 @@ object f_sequence: Tf_sequence
     TabOrder = 2
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 160
+      Height = 138
       Top = 20
       Width = 180
       Align = alClient
@@ -195,16 +195,16 @@ object f_sequence: Tf_sequence
     end
     object Panel4: TPanel
       Left = 0
-      Height = 58
-      Top = 180
+      Height = 80
+      Top = 158
       Width = 180
       Align = alBottom
-      ClientHeight = 58
+      ClientHeight = 80
       ClientWidth = 180
       TabOrder = 2
       object StatusMsg: TLabel
         Left = 1
-        Height = 55
+        Height = 77
         Top = 1
         Width = 178
         Align = alClient
@@ -215,7 +215,7 @@ object f_sequence: Tf_sequence
       object DelayMsg: TLabel
         Left = 1
         Height = 1
-        Top = 56
+        Top = 78
         Width = 178
         Align = alBottom
         ParentColor = False
