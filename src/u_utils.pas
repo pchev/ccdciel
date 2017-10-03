@@ -1078,18 +1078,13 @@ end;
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 begin
 try
-  if ImgZoom=0.5 then begin
-     xx:=trunc(((x * 2)-OrigX)/ImgPixRatio);
-     yy:=(y * 2)-OrigY;
-  end else if ImgZoom=1 then begin
-      xx:=trunc((x-OrigX)/ImgPixRatio);
-      yy:=y-OrigY;
-  end else if ImgZoom=2 then begin
-     xx:=trunc(((x div 2)-OrigX)/ImgPixRatio);
-     yy:=(y div 2)-OrigY;
-  end else  begin
+  if ImgZoom=0  then begin
      xx:=trunc((x/ImgScale0)/ImgPixRatio);
      yy:=trunc(y/ImgScale0);
+  end
+  else begin
+     xx:=trunc(((x/ImgZoom)-OrigX)/ImgPixRatio);
+     yy:=trunc((y/ImgZoom)-OrigY);
   end;
 except
   xx:=-1;
@@ -1104,17 +1099,9 @@ try
     xx:=round(x * ImgPixRatio * ImgScale0);
     yy:=round(y * ImgScale0);
   end
-  else if ImgZoom=0.5 then begin
-    xx:=trunc(x * ImgPixRatio+OrigX) div 2;
-    yy:=(y+OrigY) div 2;
-  end
-  else if ImgZoom=1 then begin
-    xx:=trunc(x * ImgPixRatio)+OrigX;
-    yy:=y+OrigY;
-  end
-  else if ImgZoom=2 then begin
-    xx:=2*(trunc(x * ImgPixRatio)+OrigX);
-    yy:=2*(y+OrigY);
+  else begin
+    xx:=round(((x+0.5) * ImgPixRatio+OrigX)*ImgZoom);
+    yy:=round((y+0.5+OrigY)*ImgZoom);
   end;
 except
   xx:=-1;
@@ -1124,25 +1111,18 @@ end;
 
 procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
 begin
-   if ImgZoom=0.5 then begin
-     xx:=(x * 2)-OrigX;
-     if vflip then yy:=img_Height-(y*2)+OrigY
-              else yy:=(y*2)-OrigY;
-   end else if ImgZoom=1 then begin
-     xx:=x-OrigX;
-     if vflip then yy:=img_Height-y+OrigY
-              else yy:=y-OrigY;
-   end else if ImgZoom=2 then begin
-     xx:=(x div 2)-OrigX;
-     if vflip then yy:=img_Height-(y div 2)+OrigY
-              else yy:=(y div 2)-OrigY;
-   end else  begin
-     xx:=trunc(x/ImgScale0);
-     if vflip then yy:=trunc(img_Height-(y/ImgScale0))
-              else yy:=trunc(y/ImgScale0);
-   end;
-   xx:=xx+ImgFrameX;
-   yy:=yy+ImgFrameY;
+  if ImgZoom=0 then  begin
+    xx:=trunc(x/ImgScale0);
+    if vflip then yy:=trunc(img_Height-(y/ImgScale0))
+             else yy:=trunc(y/ImgScale0);
+  end
+  else begin
+    xx:=trunc((x/ImgZoom)-OrigX);
+    if vflip then yy:=trunc(img_Height-(y/ImgZoom)+OrigY)
+             else yy:=trunc((y/ImgZoom)-OrigY);
+  end;
+  xx:=xx+ImgFrameX;
+  yy:=yy+ImgFrameY;
 end;
 
 procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
@@ -1153,20 +1133,10 @@ try
     if vflip then yy:=round((img_Height-y) * ImgScale0)
              else yy:=round(y * ImgScale0);
   end
-  else if ImgZoom=0.5 then begin
-    xx:=(x+OrigX) div 2;
-    if vflip then yy:=(img_Height-y+OrigY) div 2
-             else yy:=(y+OrigY) div 2;
-  end
-  else if ImgZoom=1 then begin
-    xx:=x+OrigX;
-    if vflip then yy:=img_Height-y+OrigY
-             else yy:=y+OrigY;
-  end
-  else if ImgZoom=2 then begin
-    xx:=2*(x+OrigX);
-    if vflip then yy:=(img_Height-y+OrigY) * 2
-             else yy:=2*(y+OrigY);
+  else begin
+    xx:=round((x+OrigX)*ImgZoom);
+    if vflip then yy:=round((img_Height-y+OrigY)*ImgZoom)
+             else yy:=round((y+OrigY)*ImgZoom);
   end;
 except
   xx:=-1;
