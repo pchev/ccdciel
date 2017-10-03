@@ -49,6 +49,7 @@ type
     function ShowImage(fn: string):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
+    function Search(sname: string; out sra,sde: double): boolean; override;
   end;
 
 const msgTimeout='Timeout!';
@@ -102,7 +103,7 @@ begin
 end;
 
 procedure TPlanetarium_cdc.Execute;
-var buf:string;
+var buf,rbuf:string;
     dateto : double;
     i : integer;
     ending : boolean;
@@ -157,6 +158,7 @@ try
      // handle synchronous command and response
      if tcpclient.sendbuffer<>'' then begin
         tcpclient.resultbuffer:='';
+        rbuf:='';
         // send command
         tcpclient.Sock.SendString(tcpclient.sendbuffer+crlf);
         if tcpclient.Sock.LastError<>0 then begin
@@ -169,8 +171,8 @@ try
         repeat
           buf:=tcpclient.recvstring;
           if (buf='')or(buf='.') then continue;  // keepalive
-          if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
-             else tcpclient.resultbuffer:=buf;   // set result
+          if copy(buf,1,1)='>' then rbuf:=buf+rbuf // response data
+             else tcpclient.resultbuffer:=buf+rbuf;   // set result
         until (tcpclient.resultbuffer>'')or(now>dateto);
         if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
      end;
@@ -277,6 +279,38 @@ begin
   if Cmd(buf)<>msgOK then exit;
   if Cmd('REDRAW')<>msgOK then exit;
   result:=true;
+end;
+
+function TPlanetarium_cdc.Search(sname: string; out sra,sde: double): boolean;
+var buf: string;
+    p: TStringList;
+begin
+  result:=false;
+  p:=TStringList.Create;
+  try
+  buf:=Cmd('SEARCH '+sname);
+  if copy(buf,1,3)=msgOK then begin
+     SplitRec(buf,tab,p);
+     if (p.Count>=4) then begin
+       sra:=StrToAR(p[2]);
+       sde:=StrToDE(p[3]);
+       if (sra<>NullCoord)and(sde<>NullCoord) then begin
+         result:=true;
+         if FplanetariumEquinox=2000 then begin
+           if (sra<>NullCoord)and(sde<>NullCoord) then begin
+             sra:=sra*15*deg2rad;
+             sde:=sde*deg2rad;
+             J2000ToApparent(sra,sde);
+             sra:=rad2deg*sra/15;
+             sde:=rad2deg*sde;
+           end;
+         end;
+       end;
+     end;
+  end;
+  finally
+    p.Free;
+  end;
 end;
 
 end.

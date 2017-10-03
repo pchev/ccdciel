@@ -49,6 +49,7 @@ type
     function ShowImage(fn: string):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
+    function Search(sname: string; out sra,sde: double): boolean; override;
   end;
 
 const msgTimeout='Timeout';
@@ -219,5 +220,29 @@ begin
   result:=(r=msgOK);
 end;
 
+
+function TPlanetarium_hnsky.Search(sname: string; out sra,sde: double): boolean;
+var buf: string;
+    p:Tstringlist;
+begin
+  result:=false;
+  p:=Tstringlist.Create;
+  try
+  buf:=Cmd('SEARCH '+sname);
+  SplitRec(buf,blank,p);
+  if (p.Count>=3) then begin
+    sra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
+    sde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
+    if (sra<>NullCoord)and(sde<>NullCoord) then begin
+      J2000ToApparent(sra,sde);
+      sra:=rad2deg*sra/15;
+      sde:=rad2deg*sde;
+      result:=true;
+    end;
+  end;
+  finally
+    p.free;
+  end;
+end;
 
 end.
