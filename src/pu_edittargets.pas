@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, pu_scriptengine,
+uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
+  pu_scriptengine, cu_astrometry,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   maskedit, Grids, ExtCtrls, ComCtrls, EditBtn;
 
@@ -36,9 +37,11 @@ type
   Tf_EditTargets = class(TForm)
     BtnAnytime: TButton;
     BtnCdCCoord: TButton;
+    BtnImgCoord: TButton;
     BtnCurrentCoord: TButton;
     BtnEditPlan: TButton;
     BtnEditScript: TButton;
+    BtnImgRot: TButton;
     BtnNewObject: TButton;
     BtnDeleteObject: TButton;
     BtnClose: TButton;
@@ -106,6 +109,8 @@ type
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
+    procedure BtnImgCoordClick(Sender: TObject);
+    procedure BtnImgRotClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
@@ -130,6 +135,7 @@ type
     procedure UseRotatorChange(Sender: TObject);
   private
     { private declarations }
+    FAstrometry: TAstrometry;
     LockTarget: boolean;
     FTargetsRepeat: integer;
     procedure LoadPlanList;
@@ -140,6 +146,7 @@ type
   public
     { public declarations }
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
+    property Astrometry: TAstrometry read FAstrometry write FAstrometry;
   end;
 
 var
@@ -513,7 +520,6 @@ begin
 
 end;
 
-
 procedure Tf_EditTargets.ResetSequences;
 var i: integer;
 begin
@@ -542,6 +548,37 @@ begin
      PointDEC.Text:=f_planetariuminfo.De.Text;
      if f_planetariuminfo.Obj.Text<>'' then ObjectName.Text:=trim(f_planetariuminfo.Obj.Text);
   end;
+end;
+
+procedure Tf_EditTargets.BtnImgCoordClick(Sender: TObject);
+var ra,de,eq,pa: double;
+begin
+try
+  screen.Cursor:=crHourGlass;
+  FAstrometry.SolveCurrentImage(true);
+  if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
+    PointRA.Text:=RAToStr(ra);
+    PointDEC.Text:=DEToStr(de);
+    PointAstrometry.Checked:=true;
+  end;
+finally
+  screen.Cursor:=crDefault;
+end;
+end;
+
+procedure Tf_EditTargets.BtnImgRotClick(Sender: TObject);
+var ra,de,eq,pa: double;
+begin
+try
+  screen.Cursor:=crHourGlass;
+  FAstrometry.SolveCurrentImage(true);
+  if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
+    UseRotator.Checked:=true;
+    RotatorAngle.Text:=FormatFloat(f1,pa);
+  end;
+finally
+  screen.Cursor:=crDefault;
+end;
 end;
 
 procedure Tf_EditTargets.BtnCurrentCoordClick(Sender: TObject);

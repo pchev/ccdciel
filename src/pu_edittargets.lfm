@@ -1,11 +1,11 @@
 object f_EditTargets: Tf_EditTargets
   Left = 1006
-  Height = 522
+  Height = 557
   Top = 87
   Width = 614
   ActiveControl = BtnClose
   Caption = 'Edit target list'
-  ClientHeight = 522
+  ClientHeight = 557
   ClientWidth = 614
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -15,7 +15,7 @@ object f_EditTargets: Tf_EditTargets
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 483
+    Top = 518
     Width = 614
     Align = alBottom
     ClientHeight = 39
@@ -60,16 +60,16 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel2: TPanel
     Left = 0
-    Height = 483
+    Height = 518
     Top = 0
     Width = 284
     Align = alClient
-    ClientHeight = 483
+    ClientHeight = 518
     ClientWidth = 284
     TabOrder = 1
     object TargetList: TStringGrid
       Left = 1
-      Height = 393
+      Height = 428
       Top = 1
       Width = 282
       Align = alClient
@@ -94,7 +94,7 @@ object f_EditTargets: Tf_EditTargets
     object Panel6: TPanel
       Left = 1
       Height = 88
-      Top = 394
+      Top = 429
       Width = 282
       Align = alBottom
       ClientHeight = 88
@@ -185,7 +185,7 @@ object f_EditTargets: Tf_EditTargets
   end
   object PageControl1: TPageControl
     Left = 284
-    Height = 483
+    Height = 518
     Top = 0
     Width = 330
     ActivePage = TabSheet1
@@ -195,15 +195,15 @@ object f_EditTargets: Tf_EditTargets
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
-      ClientHeight = 481
+      ClientHeight = 516
       ClientWidth = 328
       object Panel3: TPanel
         Left = 0
-        Height = 481
+        Height = 516
         Top = 0
         Width = 328
         Align = alClient
-        ClientHeight = 481
+        ClientHeight = 516
         ClientWidth = 328
         TabOrder = 0
         object Label1: TLabel
@@ -279,7 +279,7 @@ object f_EditTargets: Tf_EditTargets
         object PanelRepeat: TPanel
           Left = 8
           Height = 125
-          Top = 352
+          Top = 382
           Width = 312
           ClientHeight = 125
           ClientWidth = 312
@@ -365,7 +365,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxRepeat: TCheckBox
           Left = 16
           Height = 21
-          Top = 320
+          Top = 350
           Width = 203
           Caption = 'Repeat the plan for this object'
           OnChange = CheckBoxRepeatChange
@@ -451,10 +451,10 @@ object f_EditTargets: Tf_EditTargets
         end
         object Panel5: TPanel
           Left = 8
-          Height = 96
+          Height = 121
           Top = 175
           Width = 312
-          ClientHeight = 96
+          ClientHeight = 121
           ClientWidth = 312
           TabOrder = 7
           object BtnCurrentCoord: TButton
@@ -501,7 +501,7 @@ object f_EditTargets: Tf_EditTargets
           object BtnCdCCoord: TButton
             Left = 202
             Height = 25
-            Top = 44
+            Top = 37
             Width = 91
             Caption = 'Planetarium'
             OnClick = BtnCdCCoordClick
@@ -510,11 +510,20 @@ object f_EditTargets: Tf_EditTargets
           object PointAstrometry: TCheckBox
             Left = 8
             Height = 21
-            Top = 69
+            Top = 96
             Width = 246
             Caption = 'Use astrometry to refine the position'
             OnChange = TargetChange
             TabOrder = 4
+          end
+          object BtnImgCoord: TButton
+            Left = 202
+            Height = 25
+            Top = 65
+            Width = 91
+            Caption = 'Current image'
+            OnClick = BtnImgCoordClick
+            TabOrder = 5
           end
         end
         object BtnCopyPlan: TButton
@@ -538,7 +547,7 @@ object f_EditTargets: Tf_EditTargets
         object Panel7: TPanel
           Left = 8
           Height = 38
-          Top = 274
+          Top = 304
           Width = 312
           ClientHeight = 38
           ClientWidth = 312
@@ -546,7 +555,7 @@ object f_EditTargets: Tf_EditTargets
           object UseRotator: TCheckBox
             Left = 8
             Height = 21
-            Top = 8
+            Top = 4
             Width = 128
             Caption = 'Set rotator angle '
             OnChange = UseRotatorChange
@@ -555,18 +564,27 @@ object f_EditTargets: Tf_EditTargets
           object RotatorAngle: TEdit
             Left = 144
             Height = 24
-            Top = 6
+            Top = 2
             Width = 48
             Enabled = False
             OnChange = TargetChange
             TabOrder = 1
+          end
+          object BtnImgRot: TButton
+            Left = 202
+            Height = 25
+            Top = 2
+            Width = 91
+            Caption = 'Current image'
+            OnClick = BtnImgRotClick
+            TabOrder = 2
           end
         end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Script'
-      ClientHeight = 481
+      ClientHeight = 516
       ClientWidth = 328
       object LabelSeq1: TLabel
         Left = 98
