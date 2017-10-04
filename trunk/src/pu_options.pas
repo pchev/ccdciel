@@ -54,12 +54,15 @@ type
     CameraAutoCool: TCheckBox;
     AutofocusMinSNR: TEdit;
     AutofocusStartHFD: TEdit;
+    AutofocusPrecisionSlew: TEdit;
     FocuserTempCoeff: TEdit;
     GroupBox16: TGroupBox;
     Label81: TLabel;
     Label82: TLabel;
     Label83: TLabel;
     Label84: TLabel;
+    Label85: TLabel;
+    Label86: TLabel;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;

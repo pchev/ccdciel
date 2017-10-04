@@ -9,7 +9,6 @@ object f_option: Tf_option
   ClientWidth = 433
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.6.4.0'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -45,16 +44,16 @@ object f_option: Tf_option
     Height = 408
     Top = 0
     Width = 433
-    ActivePage = TabSheet10
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
-    TabIndex = 4
+    TabIndex = 5
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object GroupBox1: TGroupBox
         Left = 0
         Height = 379
@@ -62,7 +61,7 @@ object f_option: Tf_option
         Width = 429
         Align = alClient
         Caption = 'Files'
-        ClientHeight = 361
+        ClientHeight = 360
         ClientWidth = 427
         TabOrder = 0
         object Label1: TLabel
@@ -207,8 +206,8 @@ object f_option: Tf_option
     end
     object TabSheet2: TTabSheet
       Caption = 'Observatory'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object Label5: TLabel
         Left = 8
         Height = 18
@@ -456,15 +455,15 @@ object f_option: Tf_option
     end
     object TabSheet8: TTabSheet
       Caption = 'Preview'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object GroupBox8: TGroupBox
         Left = 8
         Height = 100
         Top = 4
         Width = 400
         Caption = 'Color preview'
-        ClientHeight = 82
+        ClientHeight = 81
         ClientWidth = 398
         TabOrder = 0
         object Label38: TLabel
@@ -570,7 +569,7 @@ object f_option: Tf_option
         Top = 112
         Width = 400
         Caption = 'Reference image'
-        ClientHeight = 86
+        ClientHeight = 85
         ClientWidth = 398
         TabOrder = 1
         object RefColor: TRadioGroup
@@ -631,7 +630,7 @@ object f_option: Tf_option
         Top = 280
         Width = 400
         Caption = 'Video'
-        ClientHeight = 39
+        ClientHeight = 38
         ClientWidth = 398
         TabOrder = 2
         object Label45: TLabel
@@ -656,7 +655,7 @@ object f_option: Tf_option
         Top = 216
         Width = 400
         Caption = 'Bad pixels detection'
-        ClientHeight = 39
+        ClientHeight = 38
         ClientWidth = 398
         TabOrder = 3
         object BPMsigma: TEdit
@@ -686,15 +685,15 @@ object f_option: Tf_option
     end
     object TabSheet11: TTabSheet
       Caption = 'CCD temperature'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object GroupBox14: TGroupBox
         Left = 16
         Height = 105
         Top = 144
         Width = 385
         Caption = 'Automatic cooling '
-        ClientHeight = 87
+        ClientHeight = 86
         ClientWidth = 383
         TabOrder = 0
         object CameraAutoCool: TCheckBox
@@ -727,7 +726,7 @@ object f_option: Tf_option
         Top = 16
         Width = 385
         Caption = 'Maximum temperature change '
-        ClientHeight = 94
+        ClientHeight = 93
         ClientWidth = 383
         TabOrder = 1
         object TemperatureSlopeActive: TCheckBox
@@ -767,20 +766,20 @@ object f_option: Tf_option
     end
     object TabSheet10: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object GroupBox2: TGroupBox
         Left = 8
         Height = 84
         Top = 4
         Width = 400
         Caption = 'Star profile'
-        ClientHeight = 66
+        ClientHeight = 65
         ClientWidth = 398
         TabOrder = 0
         object StarWindow: TEdit
           Left = 248
-          Height = 27
+          Height = 24
           Hint = 'The size of the frame used to detect a star. '#10'This is in unbinned pixel and must be bigger than the highest HFD you can reach when autofocusing'
           Top = 4
           Width = 54
@@ -790,24 +789,24 @@ object f_option: Tf_option
         end
         object Label14: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 8
-          Width = 187
+          Width = 162
           Caption = 'Star detection window size '
           ParentColor = False
         end
         object Label2: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 37
-          Width = 127
+          Width = 110
           Caption = 'Focus window size'
           ParentColor = False
           ParentFont = False
         end
         object FocusWindow: TEdit
           Left = 248
-          Height = 27
+          Height = 24
           Hint = 'The camera frame used during focus operation to speedup the image download from camera.'#10'This value is in unbinned pixel and must be bigger than the star detection window.'
           Top = 33
           Width = 54
@@ -822,12 +821,12 @@ object f_option: Tf_option
         Top = 88
         Width = 400
         Caption = 'Focuser backlash'
-        ClientHeight = 31
+        ClientHeight = 30
         ClientWidth = 398
         TabOrder = 1
         object FocuserBacklash: TEdit
           Left = 248
-          Height = 27
+          Height = 24
           Hint = 'The amount of backlash to correct when the focus direction change. '#10'Set to zero if you can set the backlash in the focuser driver. '#10'This NOT apply to focuser with absolute position reading.'
           Top = 0
           Width = 54
@@ -837,9 +836,9 @@ object f_option: Tf_option
         end
         object Label52: TLabel
           Left = 8
-          Height = 17
+          Height = 18
           Top = 4
-          Width = 117
+          Width = 101
           Caption = 'Backlash in steps'
           ParentColor = False
         end
@@ -859,12 +858,12 @@ object f_option: Tf_option
         Top = 184
         Width = 400
         Caption = 'Filter offset'
-        ClientHeight = 158
+        ClientHeight = 157
         ClientWidth = 398
         TabOrder = 2
         object FilterList: TStringGrid
           Left = 0
-          Height = 158
+          Height = 157
           Top = 0
           Width = 398
           Align = alClient
@@ -881,20 +880,20 @@ object f_option: Tf_option
         Top = 136
         Width = 400
         Caption = 'Focuser temperature compensation'
-        ClientHeight = 31
+        ClientHeight = 30
         ClientWidth = 398
         TabOrder = 3
         object Label84: TLabel
           Left = 4
-          Height = 17
+          Height = 18
           Top = 4
-          Width = 236
+          Width = 205
           Caption = 'Temperature coefficient in steps/C'
           ParentColor = False
         end
         object FocuserTempCoeff: TEdit
           Left = 248
-          Height = 27
+          Height = 24
           Hint = 'The temperature coefficient of the imaging system in focuser steps per degree Celsius.'#13#10'The coefficient is positive if the focuser need to move OUT when the temperature drop.'
           Top = 0
           Width = 54
@@ -915,8 +914,8 @@ object f_option: Tf_option
     end
     object TabSheet3: TTabSheet
       Caption = 'Autofocus'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object Autofocusmode: TRadioGroup
         Left = 8
         Height = 52
@@ -932,7 +931,7 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
-        ClientHeight = 34
+        ClientHeight = 33
         ClientWidth = 398
         Columns = 4
         Items.Strings = (
@@ -957,23 +956,23 @@ object f_option: Tf_option
         TabOrder = 1
         object Label49: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 4
-          Width = 74
+          Width = 86
           Caption = 'Exposure time'
           ParentColor = False
         end
         object Label51: TLabel
           Left = 280
-          Height = 15
+          Height = 18
           Top = 4
-          Width = 43
+          Width = 49
           Caption = 'seconds'
           ParentColor = False
         end
         object AutofocusExposure: TEdit
           Left = 212
-          Height = 23
+          Height = 24
           Hint = 'The exposure time to use for the autofocus operation.'
           Top = 0
           Width = 60
@@ -983,18 +982,18 @@ object f_option: Tf_option
         end
         object Label58: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 60
-          Width = 80
+          Width = 90
           Caption = 'Move direction'
           ParentColor = False
         end
         object AutofocusMoveDirIn: TRadioButton
           Left = 212
-          Height = 19
+          Height = 21
           Hint = 'The prefered focuser direction for autofocus.'
           Top = 58
-          Width = 30
+          Width = 36
           Caption = 'In'
           Checked = True
           ParentShowHint = False
@@ -1004,10 +1003,10 @@ object f_option: Tf_option
         end
         object AutofocusMoveDirOut: TRadioButton
           Left = 280
-          Height = 19
+          Height = 21
           Hint = 'The prefered focuser direction for autofocus.'
           Top = 58
-          Width = 40
+          Width = 47
           Caption = 'Out'
           ParentShowHint = False
           ShowHint = True
@@ -1024,32 +1023,32 @@ object f_option: Tf_option
           object PageVcurve: TPage
             object Label61: TLabel
               Left = 8
-              Height = 15
+              Height = 18
               Top = 32
-              Width = 279
+              Width = 313
               Caption = 'Run V curve learning again if you change any option.'
               ParentColor = False
               WordWrap = True
             end
             object Label82: TLabel
               Left = 8
-              Height = 15
+              Height = 18
               Top = 4
-              Width = 56
+              Width = 64
               Caption = 'Start focus'
               ParentColor = False
             end
             object Label83: TLabel
               Left = 176
-              Height = 15
+              Height = 18
               Top = 4
-              Width = 23
+              Width = 26
               Caption = 'HFD'
               ParentColor = False
             end
             object AutofocusStartHFD: TEdit
               Left = 213
-              Height = 23
+              Height = 24
               Hint = 'The focus starting point on the V curve used to determine the Near focus position. '#10'Use a high value near the top of the V curve but inside the measurement area. '#10'A typical value is 20.0.'
               Top = 0
               Width = 60
@@ -1149,23 +1148,23 @@ object f_option: Tf_option
           TabOrder = 4
           object Label48: TLabel
             Left = 8
-            Height = 15
+            Height = 18
             Top = 4
-            Width = 57
+            Width = 64
             Caption = 'Near focus'
             ParentColor = False
           end
           object Label56: TLabel
             Left = 176
-            Height = 15
+            Height = 18
             Top = 4
-            Width = 23
+            Width = 26
             Caption = 'HFD'
             ParentColor = False
           end
           object AutofocusNearHFD: TEdit
             Left = 212
-            Height = 23
+            Height = 24
             Hint = 'When a star is smaller than this HFD we consider we are approaching focus. '#10'Note this is NOT the focus HFD, the star must show an extended surface.'#10'This is the reference point for V curve method.'#10'A typical value is from 6 to 10.'
             Top = 0
             Width = 60
@@ -1176,15 +1175,15 @@ object f_option: Tf_option
           end
           object Label57: TLabel
             Left = 280
-            Height = 15
+            Height = 18
             Top = 4
-            Width = 28
+            Width = 33
             Caption = 'n.exp'
             ParentColor = False
           end
           object AutofocusNearNum: TEdit
             Left = 344
-            Height = 23
+            Height = 24
             Hint = 'The number of exposure we take to get a mean HFD value '#10'when the HFD is smaller than the value to the left.'
             Top = 0
             Width = 50
@@ -1195,15 +1194,15 @@ object f_option: Tf_option
         end
         object Label50: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 32
-          Width = 41
+          Width = 46
           Caption = 'Binning'
           ParentColor = False
         end
         object AutofocusBinning: TEdit
           Left = 212
-          Height = 23
+          Height = 24
           Hint = 'The binning to use for autofocus operation.'
           Top = 28
           Width = 60
@@ -1213,23 +1212,23 @@ object f_option: Tf_option
         end
         object Label54: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 88
-          Width = 110
+          Width = 123
           Caption = 'Autofocus tolerance '
           ParentColor = False
         end
         object Label55: TLabel
           Left = 176
-          Height = 15
+          Height = 18
           Top = 88
-          Width = 23
+          Width = 26
           Caption = 'HFD'
           ParentColor = False
         end
         object AutofocusTolerance: TEdit
           Left = 212
-          Height = 23
+          Height = 24
           Hint = 'The maximal HFD value to consider the autofocus a success. '#10'Beware that a too small value here will return the focuser to it''s initial position.'#10'Set a value high enough to avoid this problem.'
           Top = 84
           Width = 60
@@ -1239,7 +1238,7 @@ object f_option: Tf_option
         end
         object AutofocusMinSNR: TEdit
           Left = 344
-          Height = 23
+          Height = 24
           Hint = 'If a star measurement during autofocus return a SNR ratio value lower than this setting the autofocus is canceled.'#10'Beware that a too big value here will return the focuser to it''s initial position.'#10'Set a value low enough to avoid this problem but enough for a good measurement quality at the Near focus HFP position.'
           Top = 84
           Width = 50
@@ -1249,9 +1248,9 @@ object f_option: Tf_option
         end
         object Label81: TLabel
           Left = 280
-          Height = 15
+          Height = 18
           Top = 88
-          Width = 46
+          Width = 51
           Caption = 'min.SNR'
           ParentColor = False
         end
@@ -1262,20 +1261,20 @@ object f_option: Tf_option
         Top = 288
         Width = 400
         Caption = 'Autofocus star list'
-        ClientHeight = 62
+        ClientHeight = 61
         ClientWidth = 398
         TabOrder = 2
         object Label53: TLabel
           Left = 8
-          Height = 15
+          Height = 18
           Top = 16
-          Width = 295
+          Width = 333
           Caption = 'Before automatic focus slew to a near star of magnitude'
           ParentColor = False
         end
         object FocusStarMag: TComboBox
           Left = 8
-          Height = 23
+          Height = 30
           Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
           Top = 32
           Width = 80
@@ -1294,19 +1293,42 @@ object f_option: Tf_option
           TabOrder = 0
           Text = '4'
         end
+        object AutofocusPrecisionSlew: TEdit
+          Left = 279
+          Height = 24
+          Top = 35
+          Width = 51
+          TabOrder = 1
+        end
+        object Label85: TLabel
+          Left = 112
+          Height = 18
+          Top = 38
+          Width = 141
+          Caption = 'Slew with a precision of '
+          ParentColor = False
+        end
+        object Label86: TLabel
+          Left = 336
+          Height = 18
+          Top = 38
+          Width = 49
+          Caption = '[arcmin]'
+          ParentColor = False
+        end
       end
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object GroupBox4: TGroupBox
         Left = 8
         Height = 168
         Top = 4
         Width = 400
         Caption = 'Astrometry options'
-        ClientHeight = 150
+        ClientHeight = 149
         ClientWidth = 398
         TabOrder = 0
         object Focale: TEdit
@@ -1371,7 +1393,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 47
+          ClientHeight = 46
           ClientWidth = 390
           Columns = 3
           ItemIndex = 0
@@ -1416,7 +1438,7 @@ object f_option: Tf_option
             Top = 0
             Width = 400
             Caption = 'Astrometry.Net'
-            ClientHeight = 190
+            ClientHeight = 189
             ClientWidth = 398
             TabOrder = 0
             object Label6: TLabel
@@ -1556,7 +1578,7 @@ object f_option: Tf_option
             Top = 0
             Width = 400
             Caption = 'Elbrus Star Locator'
-            ClientHeight = 174
+            ClientHeight = 173
             ClientWidth = 398
             TabOrder = 0
             object ElbrusFolder: TEdit
@@ -1626,7 +1648,7 @@ object f_option: Tf_option
             Top = 0
             Width = 376
             Caption = 'PlateSolve 2'
-            ClientHeight = 182
+            ClientHeight = 181
             ClientWidth = 374
             TabOrder = 0
             object Label78: TLabel
@@ -1673,15 +1695,15 @@ object f_option: Tf_option
     end
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object GroupBox7: TGroupBox
         Left = 8
         Height = 305
         Top = 4
         Width = 385
         Caption = 'Precision slewing options'
-        ClientHeight = 287
+        ClientHeight = 286
         ClientWidth = 383
         TabOrder = 0
         object Label28: TLabel
@@ -1738,7 +1760,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 39
+          ClientHeight = 38
           ClientWidth = 310
           Columns = 2
           Items.Strings = (
@@ -1785,7 +1807,7 @@ object f_option: Tf_option
         end
         object SlewFilter: TComboBox
           Left = 149
-          Height = 23
+          Height = 34
           Top = 238
           Width = 156
           ItemHeight = 0
@@ -1796,8 +1818,8 @@ object f_option: Tf_option
     end
     object TabSheet9: TTabSheet
       Caption = 'Meridian'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object MeridianOption: TRadioGroup
         Left = 8
         Height = 57
@@ -1812,7 +1834,7 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 39
+        ClientHeight = 38
         ClientWidth = 399
         Columns = 3
         Items.Strings = (
@@ -1944,8 +1966,8 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object AutoguiderBox: TRadioGroup
         Left = 8
         Height = 64
@@ -1960,7 +1982,7 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 46
+        ClientHeight = 45
         ClientWidth = 398
         Columns = 2
         ItemIndex = 0
@@ -1975,7 +1997,7 @@ object f_option: Tf_option
         Top = 68
         Width = 401
         Caption = 'PHD2'
-        ClientHeight = 94
+        ClientHeight = 93
         ClientWidth = 399
         TabOrder = 1
         object Label16: TLabel
@@ -2015,7 +2037,7 @@ object f_option: Tf_option
         Top = 184
         Width = 200
         Caption = 'Dithering'
-        ClientHeight = 68
+        ClientHeight = 67
         ClientWidth = 198
         TabOrder = 2
         object Label23: TLabel
@@ -2049,7 +2071,7 @@ object f_option: Tf_option
         Top = 184
         Width = 200
         Caption = 'Settle tolerance'
-        ClientHeight = 172
+        ClientHeight = 171
         ClientWidth = 198
         TabOrder = 3
         object SettlePixel: TEdit
@@ -2122,7 +2144,7 @@ object f_option: Tf_option
         Top = 272
         Width = 200
         Caption = 'Star lost recovery'
-        ClientHeight = 82
+        ClientHeight = 81
         ClientWidth = 198
         TabOrder = 4
         object StarLostRestart: TEdit
@@ -2175,8 +2197,8 @@ object f_option: Tf_option
     end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 379
-      ClientWidth = 423
+      ClientHeight = 382
+      ClientWidth = 431
       object PlanetariumBox: TRadioGroup
         Left = 4
         Height = 80
@@ -2191,7 +2213,7 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 62
+        ClientHeight = 61
         ClientWidth = 398
         Columns = 3
         ItemIndex = 0
@@ -2219,7 +2241,7 @@ object f_option: Tf_option
             Width = 400
             Align = alClient
             Caption = 'Skychart / Cartes du Ciel'
-            ClientHeight = 230
+            ClientHeight = 229
             ClientWidth = 398
             TabOrder = 0
             object CheckBoxLocalCdc: TCheckBox
