@@ -789,6 +789,7 @@ begin
   CancelAutofocus:=false;
   InplaceAutofocus:=false;
   AutofocusExposureFact:=1;
+  FocuserLastTemp:=NullCoord;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
   onMsgGlobal:=@NewMessage;
@@ -2853,8 +2854,8 @@ var bin: integer;
 begin
  if not focuser.hasAbsolutePosition then exit;
  // read parameters
- VcCenterpos:=StrToIntDef(f_vcurve.FocusPos.Text,NullCoord);
- VcHalfwidth:=StrToIntDef(f_vcurve.HalfWidth.Text,NullCoord);
+ VcCenterpos:=StrToIntDef(f_vcurve.FocusPos.Text,round(NullCoord));
+ VcHalfwidth:=StrToIntDef(f_vcurve.HalfWidth.Text,round(NullCoord));
  VcNsteps:=StrToIntDef(f_vcurve.Nsteps.Text,30);
  if (VcCenterpos=NullCoord)or(VcHalfwidth=NullCoord) then exit;
  AutofocusVcFilterOffset:=CurrentFilterOffset;
@@ -2977,8 +2978,8 @@ begin
    AutofocusVcDir:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusMoveDir);
    AutofocusVcTemp:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcTemp',NullCoord);
    AutofocusVcFilterOffset:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',0);
-   VcCenterpos:=config.GetValue('/StarAnalysis/Vcurve/VcCenterpos',NullCoord);
-   VcHalfwidth:=config.GetValue('/StarAnalysis/Vcurve/VcHalfwidth',NullCoord);
+   VcCenterpos:=config.GetValue('/StarAnalysis/Vcurve/VcCenterpos',round(NullCoord));
+   VcHalfwidth:=config.GetValue('/StarAnalysis/Vcurve/VcHalfwidth',round(NullCoord));
    VcNsteps:=config.GetValue('/StarAnalysis/Vcurve/VcNsteps',30);
    AutofocusVcSkipNum:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcSkipNum',0);
    AutofocusVcNum:=config.GetValue('/StarAnalysis/Vcurve/AutofocusVcNum',-1);
@@ -3853,7 +3854,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Checked) then begin
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Checked) then begin
     // only if temperature change by more than 0.5 C
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
@@ -3988,7 +3989,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (camera.FrameType=LIGHT) then begin
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) then begin
     // only if temperature change by more than 0.5 C
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);

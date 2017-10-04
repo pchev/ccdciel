@@ -189,7 +189,7 @@ const
   abek = secarc * 20.49552;  // aberration constant
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
-  NullCoord=-9999;
+  NullCoord:double=-9999;
   Filter0 = 'No change';
   Binning0 = '1x1';
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
