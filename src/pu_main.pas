@@ -1075,6 +1075,7 @@ begin
   f_script.Astrometry:=astrometry;
   f_script.LoadScriptList;
 
+  InitCoord;
   SetConfig;
   SetOptions;
   LoadVcurve;
@@ -1201,7 +1202,6 @@ begin
   f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
 
   LoadFocusStar;
-  InitCoord;
 
   StartupTimer.Enabled:=true;
 end;
@@ -4848,8 +4848,16 @@ begin
  NewMessage('Autofocus now');
  tpos:=false;
  pslew:=false;
+ // stop autoguider
+ restartguider:=(Autoguider.State<>GUIDER_DISCONNECTED);
+ if restartguider and (Autoguider.State=GUIDER_GUIDING) then begin
+   NewMessage('Stop autoguider');
+   autoguider.Guide(false);
+   autoguider.WaitBusy(15);
+ end;
  if InplaceAutofocus then begin
    NewMessage('Stay at the current position for autofocus');
+   if CancelAutofocus then exit;
    // do autofocus
    if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
    f_starprofile.ChkAutofocus.Checked:=true;
@@ -4866,10 +4874,12 @@ begin
      result:=true;
    end
    else begin
-      NewMessage('Autofocus failed');
+      NewMessage('In place autofocus failed, try with the focus stars list.');
+      f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning);
+      wait(1);
    end;
- end
- else begin
+ end;
+ if (not InplaceAutofocus) or (not result) then begin
    // get current position from target object
    if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
      NewMessage('Get current position from current target');
@@ -4908,14 +4918,6 @@ begin
     end;
     pslew:=false;
     tpos:=true;
-   end;
-   if CancelAutofocus then exit;
-   // stop autoguider
-   restartguider:=(autoguider.State=GUIDER_GUIDING);
-   if restartguider then begin
-     NewMessage('Stop autoguider');
-     autoguider.Guide(false);
-     autoguider.WaitBusy(15);
    end;
    if CancelAutofocus then exit;
    // Loop star list until focus success
@@ -4976,29 +4978,28 @@ begin
         result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
      end;
      if CancelAutofocus then exit;
-     // start autoguider
-     if restartguider then begin
-       NewMessage('Restart autoguider');
-       autoguider.Guide(false);
-       wait(5);
-       autoguider.Guide(true);
-       autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
-       if autoguider.State<>GUIDER_GUIDING then begin
-         f_pause.Caption:='Pause';
-         f_pause.Text:='Failed to start guiding!';
-         NewMessage(f_pause.Text);
-         if not f_pause.Wait(120) then begin
-            NewMessage('Failed to start guiding!');
-            exit;
-         end;
-       end;
-     end;
-   end
+    end
    else begin
     result:=true;
    end;
  end;
-
+ // start autoguider
+ if restartguider then begin
+  NewMessage('Restart autoguider');
+  autoguider.Guide(false);
+  wait(5);
+  autoguider.Guide(true);
+  autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+  if autoguider.State<>GUIDER_GUIDING then begin
+    f_pause.Caption:='Pause';
+    f_pause.Text:='Failed to start guiding!';
+    NewMessage(f_pause.Text);
+    if not f_pause.Wait(120) then begin
+       NewMessage('Failed to start guiding!');
+       result:=false;
+    end;
+  end;
+ end;
  Wait(2);
  finally
    autofocusing:=false;
