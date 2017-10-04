@@ -3379,6 +3379,7 @@ begin
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
+   f_option.AutofocusPrecisionSlew.Text:=FormatFloat(f2,config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0));
    f_option.GroupBacklash.Visible:=(focuser.Status=devConnected)and(not focuser.hasAbsolutePosition);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
@@ -3487,6 +3488,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusMinSNR',StrToFloatDef(f_option.AutofocusMinSNR.Text,AutofocusMinSNR));
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
      if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
+     config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',StrToFloatDef(f_option.AutofocusPrecisionSlew.Text,2.0));
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',StrToIntDef(f_option.AutofocusNearNum.Text,AutofocusNearNum));
      config.SetValue('/StarAnalysis/AutofocusMeanNumPoint',StrToIntDef(f_option.AutofocusMeanNumPoint.Text,AutofocusMeanNumPoint));
@@ -4937,7 +4939,7 @@ begin
          jd1:=DateTimetoJD(now);
          PrecessionFK5(jd1,jd0,sra,sde);
        end;
-       astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
+       astrometry.AutofocusPrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
      end
      else begin
       NewMessage('Cannot find a focus star.');
