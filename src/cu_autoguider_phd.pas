@@ -449,6 +449,8 @@ begin
   end else begin
     buf:='{"method": "stop_capture","id":2001}';
     Send(buf);
+    StarLostTimer.Enabled:=false;
+    FRecovering:=false;
   end;
   if cguide<>onoff then FState:=GUIDER_BUSY;
 end;
