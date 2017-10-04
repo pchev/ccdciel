@@ -4425,7 +4425,7 @@ begin
 r1:=image1.Width/imabmp.Width;
 r2:=image1.Height/imabmp.Height;
 ZoomMin:=min(r1,r2);
-if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.1) then ImgZoom:=0;
+if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01) then ImgZoom:=0;
 ClearImage;
 imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
