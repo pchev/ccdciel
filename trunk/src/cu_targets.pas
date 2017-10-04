@@ -570,7 +570,7 @@ begin
            autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
         else
            autofocusstart:=false;
-        astrometrypointing:=t.astrometrypointing and (not autofocusstart);
+        astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
         // slew to coordinates
         ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
         if not ok then exit;
