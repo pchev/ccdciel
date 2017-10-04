@@ -101,7 +101,7 @@ type
               starttime,endtime,ra,de,pa: double;
               startrise,endset: boolean;
               repeatcount: integer;
-              preview,astrometrypointing,updatecoord: boolean;
+              preview,astrometrypointing,updatecoord,inplaceautofocus: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -306,7 +306,7 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDsum: double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  CancelAutofocus: Boolean;
+  CancelAutofocus, InplaceAutofocus: Boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
   NFocusStars: integer;
@@ -350,6 +350,7 @@ begin
   pa:=NullCoord;
   astrometrypointing:=false;
   updatecoord:=false;
+  inplaceautofocus:=false;
   repeatcount:=1;
   preview:=False;
   delay:=1;
@@ -382,6 +383,7 @@ begin
   astrometrypointing:=source.astrometrypointing;
   updatecoord:=Source.updatecoord;
   repeatcount:=Source.repeatcount;
+  inplaceautofocus:=Source.inplaceautofocus;
   preview:=Source.preview;
   delay:=Source.delay;
   previewexposure:=Source.previewexposure;

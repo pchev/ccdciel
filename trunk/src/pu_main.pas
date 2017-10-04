@@ -784,6 +784,7 @@ begin
   learningvcurve:=false;
   autofocusing:=false;
   CancelAutofocus:=false;
+  InplaceAutofocus:=false;
   AutofocusExposureFact:=1;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
@@ -4847,76 +4848,8 @@ begin
  NewMessage('Autofocus now');
  tpos:=false;
  pslew:=false;
- // get current position from target object
- if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
-   NewMessage('Get current position from current target');
-   if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
-     tra:=f_sequence.TargetRA;
-     tde:=f_sequence.TargetDE;
-     tpos:=true;
-     pslew:=true;
-   end;
- end;
- // get current position from last capture image
- if (not tpos)and(f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
-   NewMessage('Get current position from last image');
-   astrometry.SolveCurrentImage(true);
-   if astrometry.LastResult then begin
-     astrometry.CurrentCoord(tra,tde,teq,tpa);
-     tra:=deg2rad*15*tra;
-     tde:=deg2rad*tde;
-     J2000ToApparent(tra,tde);
-     tpos:=true;
-     pslew:=true;
-   end
-   else begin
-    NewMessage('Cannot solve current image.');
-   end;
- end;
- // get current position from telescope
- if (not tpos) then begin
-  NewMessage('Get current position from telescope');
-  tra:=deg2rad*15*mount.RA;
-  tde:=deg2rad*mount.Dec;
-  if mount.Equinox<>0 then begin
-    jd0:=Jd(trunc(mount.Equinox),0,0,0);
-    jd1:=DateTimetoJD(now);
-    PrecessionFK5(jd0,jd1,tra,tde);
-  end;
-  pslew:=false;
-  tpos:=true;
- end;
- if CancelAutofocus then exit;
- // stop autoguider
- restartguider:=(autoguider.State=GUIDER_GUIDING);
- if restartguider then begin
-   NewMessage('Stop autoguider');
-   autoguider.Guide(false);
-   autoguider.WaitBusy(15);
- end;
- if CancelAutofocus then exit;
- // Loop star list until focus success
- focusretry:=0;
- FocusStarsBlacklist:='';
- repeat
-   inc(focusretry);
-   // search focus star
-   if FindFocusStar(tra,tde,sra,sde,sid) then begin
-     // slew to star
-     NewMessage('Slew to focus star '+sid);
-     if mount.Equinox<>0 then begin
-       jd0:=Jd(trunc(mount.Equinox),0,0,0);
-       jd1:=DateTimetoJD(now);
-       PrecessionFK5(jd1,jd0,sra,sde);
-     end;
-     astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
-   end
-   else begin
-    NewMessage('Cannot find a focus star.');
-    exit;
-   end;
-   wait(1);
-   if CancelAutofocus then exit;
+ if InplaceAutofocus then begin
+   NewMessage('Stay at the current position for autofocus');
    // do autofocus
    if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
    f_starprofile.ChkAutofocus.Checked:=true;
@@ -4928,52 +4861,144 @@ begin
       exit;
     end;
    end;
-   // if not successful, blacklist the current star and try another
-   if not f_starprofile.AutofocusResult then begin
-      FocusStarsBlacklist:=FocusStarsBlacklist+' '+sid+' ';
-      NewMessage('Autofocus failed, try with another star...');
-   end;
-   if CancelAutofocus then exit;
- until f_starprofile.AutofocusResult or (focusretry>=maxretry);
- if not f_starprofile.AutofocusResult then begin
-    NewMessage('Autofocus failed after '+inttostr(maxretry)+' retries, continue without focusing.');
- end;
- if CancelAutofocus then exit;
- if ReturnToTarget then begin
-   // recenter to previous position
-   NewMessage('Return to target position');
-   if mount.Equinox<>0 then begin
-     jd0:=Jd(trunc(mount.Equinox),0,0,0);
-     jd1:=DateTimetoJD(now);
-     PrecessionFK5(jd1,jd0,tra,tde);
-   end;
-   if pslew then begin
-      result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
-   end else begin
-      result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
-   end;
-   if CancelAutofocus then exit;
-   // start autoguider
-   if restartguider then begin
-     NewMessage('Restart autoguider');
-     autoguider.Guide(false);
-     wait(5);
-     autoguider.Guide(true);
-     autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
-     if autoguider.State<>GUIDER_GUIDING then begin
-       f_pause.Caption:='Pause';
-       f_pause.Text:='Failed to start guiding!';
-       NewMessage(f_pause.Text);
-       if not f_pause.Wait(120) then begin
-          NewMessage('Failed to start guiding!');
-          exit;
-       end;
-     end;
+   // check result
+   if f_starprofile.AutofocusResult then begin
+     result:=true;
+   end
+   else begin
+      NewMessage('Autofocus failed');
    end;
  end
  else begin
-  result:=true;
+   // get current position from target object
+   if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
+     NewMessage('Get current position from current target');
+     if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
+       tra:=f_sequence.TargetRA;
+       tde:=f_sequence.TargetDE;
+       tpos:=true;
+       pslew:=true;
+     end;
+   end;
+   // get current position from last capture image
+   if (not tpos)and(f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
+     NewMessage('Get current position from last image');
+     astrometry.SolveCurrentImage(true);
+     if astrometry.LastResult then begin
+       astrometry.CurrentCoord(tra,tde,teq,tpa);
+       tra:=deg2rad*15*tra;
+       tde:=deg2rad*tde;
+       J2000ToApparent(tra,tde);
+       tpos:=true;
+       pslew:=true;
+     end
+     else begin
+      NewMessage('Cannot solve current image.');
+     end;
+   end;
+   // get current position from telescope
+   if (not tpos) then begin
+    NewMessage('Get current position from telescope');
+    tra:=deg2rad*15*mount.RA;
+    tde:=deg2rad*mount.Dec;
+    if mount.Equinox<>0 then begin
+      jd0:=Jd(trunc(mount.Equinox),0,0,0);
+      jd1:=DateTimetoJD(now);
+      PrecessionFK5(jd0,jd1,tra,tde);
+    end;
+    pslew:=false;
+    tpos:=true;
+   end;
+   if CancelAutofocus then exit;
+   // stop autoguider
+   restartguider:=(autoguider.State=GUIDER_GUIDING);
+   if restartguider then begin
+     NewMessage('Stop autoguider');
+     autoguider.Guide(false);
+     autoguider.WaitBusy(15);
+   end;
+   if CancelAutofocus then exit;
+   // Loop star list until focus success
+   focusretry:=0;
+   FocusStarsBlacklist:='';
+   repeat
+     inc(focusretry);
+     // search focus star
+     if FindFocusStar(tra,tde,sra,sde,sid) then begin
+       // slew to star
+       NewMessage('Slew to focus star '+sid);
+       if mount.Equinox<>0 then begin
+         jd0:=Jd(trunc(mount.Equinox),0,0,0);
+         jd1:=DateTimetoJD(now);
+         PrecessionFK5(jd1,jd0,sra,sde);
+       end;
+       astrometry.PrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
+     end
+     else begin
+      NewMessage('Cannot find a focus star.');
+      exit;
+     end;
+     wait(1);
+     if CancelAutofocus then exit;
+     // do autofocus
+     if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+     f_starprofile.ChkAutofocus.Checked:=true;
+     while f_starprofile.ChkAutofocus.Checked do begin
+      sleep(100);
+      Application.ProcessMessages;
+      if CancelAutofocus then begin
+        f_starprofile.ChkAutofocus.Checked:=false;
+        exit;
+      end;
+     end;
+     // if not successful, blacklist the current star and try another
+     if not f_starprofile.AutofocusResult then begin
+        FocusStarsBlacklist:=FocusStarsBlacklist+' '+sid+' ';
+        NewMessage('Autofocus failed, try with another star...');
+     end;
+     if CancelAutofocus then exit;
+   until f_starprofile.AutofocusResult or (focusretry>=maxretry);
+   if not f_starprofile.AutofocusResult then begin
+      NewMessage('Autofocus failed after '+inttostr(maxretry)+' retries, continue without focusing.');
+   end;
+   if CancelAutofocus then exit;
+   if ReturnToTarget then begin
+     // recenter to previous position
+     NewMessage('Return to target position');
+     if mount.Equinox<>0 then begin
+       jd0:=Jd(trunc(mount.Equinox),0,0,0);
+       jd1:=DateTimetoJD(now);
+       PrecessionFK5(jd1,jd0,tra,tde);
+     end;
+     if pslew then begin
+        result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
+     end else begin
+        result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
+     end;
+     if CancelAutofocus then exit;
+     // start autoguider
+     if restartguider then begin
+       NewMessage('Restart autoguider');
+       autoguider.Guide(false);
+       wait(5);
+       autoguider.Guide(true);
+       autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+       if autoguider.State<>GUIDER_GUIDING then begin
+         f_pause.Caption:='Pause';
+         f_pause.Text:='Failed to start guiding!';
+         NewMessage(f_pause.Text);
+         if not f_pause.Wait(120) then begin
+            NewMessage('Failed to start guiding!');
+            exit;
+         end;
+       end;
+     end;
+   end
+   else begin
+    result:=true;
+   end;
  end;
+
  Wait(2);
  finally
    autofocusing:=false;
