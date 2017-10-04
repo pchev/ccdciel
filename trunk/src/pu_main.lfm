@@ -944,8 +944,11 @@ object f_main: Tf_main
       OnClick = MenuResolveSlewClick
     end
     object MenuResolveSync: TMenuItem
-      Caption = 'Resolve and Sync'
+      Caption = 'Resolve and Sync the mount'
       OnClick = MenuResolveSyncClick
+    end
+    object MenuItem6: TMenuItem
+      Caption = '-'
     end
     object MenuResolveRotate: TMenuItem
       Caption = 'Resolve and Rotate'
@@ -955,13 +958,19 @@ object f_main: Tf_main
       Caption = 'Resolve and Sync the rotator'
       OnClick = MenuResolveSyncRotatorClick
     end
+    object MenuItem7: TMenuItem
+      Caption = '-'
+    end
     object MenuResolvePlanetarium: TMenuItem
-      Caption = 'Resolve and show in image planetarium'
+      Caption = 'Resolve and show image in planetarium'
       OnClick = MenuResolvePlanetariumClick
     end
     object MenuShowCCDFrame: TMenuItem
-      Caption = 'Resolve and show CCD frame in planetarium'
+      Caption = 'Resolve and show image frame in planetarium'
       OnClick = MenuShowCCDFrameClick
+    end
+    object MenuItem8: TMenuItem
+      Caption = '-'
     end
     object MenuViewAstrometryLog: TMenuItem
       Caption = 'View last resolver log'
