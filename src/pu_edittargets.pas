@@ -50,6 +50,7 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    InplaceAutofocus: TCheckBox;
     UpdateCoord: TCheckBox;
     Panel8: TPanel;
     Panel9: TPanel;
@@ -634,6 +635,7 @@ begin
     PointAstrometry.Checked:=t.astrometrypointing;
     UpdateCoord.Checked:=t.updatecoord;
     UseRotator.Checked:=(t.pa<>NullCoord);
+    InplaceAutofocus.Checked:=t.inplaceautofocus;
     if t.pa=NullCoord then
       RotatorAngle.Text:='-'
     else
@@ -703,6 +705,7 @@ begin
     if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
     t.astrometrypointing:=PointAstrometry.Checked;
     t.updatecoord:=UpdateCoord.Checked;
+    t.inplaceautofocus:=InplaceAutofocus.Checked;
     t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
     t.delay:=StrToFloatDef(Delay.Text,1);
     t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);

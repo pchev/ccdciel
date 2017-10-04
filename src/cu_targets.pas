@@ -360,6 +360,7 @@ var p: T_Plan;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
+ InplaceAutofocus:=false;
  if FRunning then begin
    if WaitTillrunning then begin
      if wt_pause<>nil
@@ -420,6 +421,7 @@ var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
+  InplaceAutofocus:=false;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
    if Targets[FCurrentTarget].objectname='Script' then begin
@@ -510,6 +512,7 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
+    InplaceAutofocus:=t.inplaceautofocus;
     // adjust moving object coordinates from planetarium
     if t.updatecoord then begin
        if Fplanetarium.Search(t.objectname,newra,newde) then begin

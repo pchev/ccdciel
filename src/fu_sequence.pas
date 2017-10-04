@@ -417,6 +417,7 @@ begin
          t.pa:=StrToFloatDef(x,NullCoord);
        t.astrometrypointing:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
        t.updatecoord:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
+       t.inplaceautofocus:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',false);
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
@@ -553,6 +554,7 @@ begin
         tfile.SetValue('/Targets/Target'+inttostr(i)+'/PA',FormatFloat(f1,t.pa));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',t.updatecoord);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',t.inplaceautofocus);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
