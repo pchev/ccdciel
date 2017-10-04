@@ -314,7 +314,7 @@ object f_EditTargets: Tf_EditTargets
         object Panel4: TPanel
           Left = 1
           Height = 70
-          Top = 109
+          Top = 312
           Width = 326
           Align = alTop
           ClientHeight = 70
@@ -398,14 +398,14 @@ object f_EditTargets: Tf_EditTargets
         object Panel5: TPanel
           Left = 1
           Height = 165
-          Top = 179
+          Top = 109
           Width = 326
           Align = alTop
           ClientHeight = 165
           ClientWidth = 326
           TabOrder = 2
           object BtnCurrentCoord: TButton
-            Left = 202
+            Left = 226
             Height = 25
             Hint = 'Do not move the telescope before to start imaging.'
             Top = 6
@@ -415,7 +415,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 0
           end
           object PointDEC: TEdit
-            Left = 92
+            Left = 98
             Height = 24
             Hint = 'Target declination'
             Top = 42
@@ -424,7 +424,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 1
           end
           object PointRA: TEdit
-            Left = 92
+            Left = 98
             Height = 24
             Hint = 'Target Right Ascension'
             Top = 6
@@ -449,10 +449,10 @@ object f_EditTargets: Tf_EditTargets
             ParentColor = False
           end
           object BtnCdCCoord: TButton
-            Left = 202
+            Left = 226
             Height = 25
             Hint = 'Get the coordinates and object name from the planetarium'
-            Top = 33
+            Top = 32
             Width = 91
             Caption = 'Planetarium'
             OnClick = BtnCdCCoordClick
@@ -469,7 +469,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 4
           end
           object BtnImgCoord: TButton
-            Left = 202
+            Left = 226
             Height = 25
             Hint = 'Solve the current image and get the center coordinates'
             Top = 60
@@ -502,7 +502,7 @@ object f_EditTargets: Tf_EditTargets
         object Panel7: TPanel
           Left = 1
           Height = 38
-          Top = 344
+          Top = 274
           Width = 326
           Align = alTop
           ClientHeight = 38
