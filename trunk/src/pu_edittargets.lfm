@@ -7,7 +7,6 @@ object f_EditTargets: Tf_EditTargets
   Caption = 'Edit target list'
   ClientHeight = 634
   ClientWidth = 614
-  DesignTimePPI = 95
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
