@@ -2273,6 +2273,13 @@ end;
 procedure Tf_main.SetFocusMode;
 var r: TNumRange;
 begin
+   FocuserTemp:=focuser.Temperature; // first call to test ascom property
+   if focuser.hasTemperature then begin
+      f_focuser.PanelTemp.Visible:=true;
+      f_focuser.Temp.Text:=FormatFloat(f1,focuser.Temperature);
+   end
+   else
+      f_focuser.PanelTemp.Visible:=false;
   if focuser.hasAbsolutePosition then begin
      f_focuser.Notebook1.PageIndex:=2;
   end
@@ -2607,13 +2614,6 @@ case focuser.Status of
   devConnected:   begin
                       NewMessage('Focuser connected');
                       f_devicesconnection.LabelFocuser.Font.Color:=clGreen;
-                      FocuserTemp:=focuser.Temperature; // first call to test ascom property
-                      if focuser.hasTemperature then begin
-                         f_focuser.PanelTemp.Visible:=true;
-                         f_focuser.Temp.Text:=FormatFloat(f1,focuser.Temperature);
-                      end
-                      else
-                         f_focuser.PanelTemp.Visible:=false;
                    end;
 end;
 CheckConnectionStatus;
