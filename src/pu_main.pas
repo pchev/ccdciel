@@ -57,6 +57,9 @@ type
     MenuBPM: TMenuItem;
     MenuItem5: TMenuItem;
     MenuDownload: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
     MenuResolveRotate: TMenuItem;
     MenuViewClock: TMenuItem;
     MenuResolveSyncRotator: TMenuItem;
