@@ -2275,6 +2275,7 @@ procedure Tf_main.SetFocusMode;
 var r: TNumRange;
 begin
    FocuserTemp:=focuser.Temperature; // first call to test ascom property
+   FocuserLastTemp:=FocuserTemp;
    if focuser.hasTemperature then begin
       f_focuser.PanelTemp.Visible:=true;
       f_focuser.Temp.Text:=FormatFloat(f1,focuser.Temperature);
