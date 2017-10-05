@@ -1109,7 +1109,7 @@ begin
   MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
-  NewMessage('Initialized');
+  NewMessage('CCDciel '+ccdciel_version+'-'+RevisionStr+' initialized');
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
