@@ -426,13 +426,35 @@ var i,j: integer;
     SumVal,SumValX,SumValY,SumValR: double;
     Xg,Yg,fxg,fyg: double;
     r,xs,ys:double;
-    noise,val: double;
+    val,bg_average,bg_standard_deviation: double;
 begin
 // x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
 hfd:=-1;
 // New background from corner values
-bg:=vmin+((Img[0,y-ri,x-ri]+Img[0,y-ri,x+ri]+Img[0,y+ri,x-ri]+Img[0,y+ri,x+ri]) / 4)/c;
-// Get center of gravity whithin radius of interest
+bg_average:=0;
+for i:=-ri to ri do {calculate average background at the square boundaries of region of interest}
+begin
+  bg_average:=bg_average+Img[0,y-ri,x+i];
+  bg_average:=bg_average+Img[0,y+ri,x+i];
+  bg_average:=bg_average+Img[0,y+i,x-ri];
+  bg_average:=bg_average+Img[0,y+i,x+ri];
+end;
+bg_average:=bg_average/(8*ri);
+
+bg_standard_deviation:=0;
+for i:=-ri to ri do {calculate standard deviation background at the square boundaries of region of interest}
+begin
+  bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y-ri,x+i]);
+  bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+ri,x+i]);
+  bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+i,x-ri]);
+  bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+i,x+ri]);
+end;
+bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*ri))/c;
+
+bg:=vmin+bg_average/c;
+
+
+// Get center of gravity within radius of interest
 SumVal:=0;
 SumValX:=0;
 SumValY:=0;
@@ -458,17 +480,18 @@ fxg:=frac(xc);
 fyg:=frac(yc);
 SumVal:=0;
 SumValR:=0;
-noise:=sqrt(bg);
 Fsnr:=valmax/sqrt(valmax+2*bg);
-if Fsnr>3 then begin
+if Fsnr>3 then
+begin
  for i:=-ri to ri do
    for j:=-ri to ri do begin
      Val:=vmin+Img[0,y+j,x+i]/c-bg;
-     if val<0 then val:=0;
+     if val<0 then val:=0; {required?}
      xs:=i+0.5-fxg;
      ys:=j+0.5-fyg;
      r:=sqrt(xs*xs+ys*ys);
-     if val>(2*noise) then begin
+     if val>(5*bg_standard_deviation) then {5 * sd (σ) should be signal above noise level }
+     begin
        SumVal:=SumVal+Val;
        SumValR:=SumValR+Val*r;
      end;
