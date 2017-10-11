@@ -288,7 +288,7 @@ begin
   result:=false;
   p:=TStringList.Create;
   try
-  buf:=Cmd('SEARCH '+sname);
+  buf:=Cmd('SEARCH "'+sname+'"');
   if copy(buf,1,3)=msgOK then begin
      SplitRec(buf,tab,p);
      if (p.Count>=4) then begin
