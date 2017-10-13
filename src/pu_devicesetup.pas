@@ -341,13 +341,13 @@ begin
      FRotatorConnection:=ASCOM;
      PanelRotatorIndi.Visible:=false;
      PanelRotatorAscom.Visible:=true;
-     FilterWheelInCameraBox.Checked:=false;
-     // ASCOM internal filter use separate driver
-     FilterWheelInCameraBox.Visible:=false;
-     FWheelConnection:=ASCOM;
-     PanelWheelIndi.Visible:=false;
-     PanelWheelAscom.Visible:=true;
-     PanelWheelIncamera.Visible:=false;
+     FilterWheelInCameraBox.Visible:=true;
+     if (not FilterWheelInCameraBox.Checked) then begin
+        FWheelConnection:=ASCOM;
+        PanelWheelIndi.Visible:=true;
+        PanelWheelAscom.Visible:=false;
+        PanelWheelIncamera.Visible:=false;
+     end;
      FocuserInMountBox.Checked:=false;
      FocuserInMountBox.Visible:=false;
      FFocuserConnection:=ASCOM;
