@@ -81,19 +81,19 @@ object f_starprofile: Tf_starprofile
     end
     object Panel4: TPanel
       Left = 3
-      Height = 59
+      Height = 61
       Top = 120
       Width = 172
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 59
+      ClientHeight = 61
       ClientWidth = 172
       TabOrder = 2
       object LabelHFD: TLabel
         Left = 1
-        Height = 42
+        Height = 44
         Hint = 'The Half Flux Diameter value in pixels'
         Top = 16
-        Width = 9
+        Width = 13
         Caption = ' '
         Font.Height = 38
         Font.Style = [fsBold]
@@ -102,9 +102,9 @@ object f_starprofile: Tf_starprofile
       end
       object Label1: TLabel
         Left = 1
-        Height = 17
+        Height = 11
         Top = 0
-        Width = 34
+        Width = 25
         Caption = 'HFD:'
         ParentColor = False
       end
@@ -158,19 +158,19 @@ object f_starprofile: Tf_starprofile
     end
     object Panel6: TPanel
       Left = 3
-      Height = 59
-      Top = 179
+      Height = 61
+      Top = 181
       Width = 172
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 59
+      ClientHeight = 61
       ClientWidth = 172
       TabOrder = 5
       object LabelFWHM: TLabel
         Left = 1
-        Height = 42
+        Height = 44
         Hint = 'The Full Width at Half Maximum value in pixels / arc seconds'
         Top = 16
-        Width = 9
+        Width = 13
         Caption = ' '
         Font.Height = 38
         Font.Style = [fsBold]
@@ -179,35 +179,35 @@ object f_starprofile: Tf_starprofile
       end
       object Label3: TLabel
         Left = 1
-        Height = 17
+        Height = 11
         Top = 0
-        Width = 50
+        Width = 36
         Caption = 'FWHM:'
         ParentColor = False
       end
     end
     object Panel5: TPanel
       Left = 3
-      Height = 59
-      Top = 238
+      Height = 61
+      Top = 242
       Width = 172
-      ClientHeight = 59
+      ClientHeight = 61
       ClientWidth = 172
       TabOrder = 3
       object Label2: TLabel
         Left = 0
-        Height = 17
+        Height = 11
         Top = 2
-        Width = 64
+        Width = 45
         Caption = 'Intensity:'
         ParentColor = False
       end
       object LabelImax: TLabel
         Left = 0
-        Height = 42
+        Height = 44
         Hint = 'The maximum intensity value'
         Top = 16
-        Width = 9
+        Width = 13
         Caption = ' '
         Font.Height = 38
         Font.Style = [fsBold]
@@ -217,9 +217,9 @@ object f_starprofile: Tf_starprofile
     end
     object ChkFocus: TCheckBox
       Left = 3
-      Height = 21
+      Height = 18
       Hint = 'Frame the selected star and start looping exposure for manual focus adjustement'
-      Top = 303
+      Top = 309
       Width = 172
       BorderSpacing.Top = 3
       BorderSpacing.Around = 3
@@ -231,9 +231,9 @@ object f_starprofile: Tf_starprofile
     end
     object ChkAutofocus: TCheckBox
       Left = 3
-      Height = 21
+      Height = 18
       Hint = 'Start autofocus, you must configure and calibrate your focuser before to use this button'
-      Top = 330
+      Top = 333
       Width = 172
       BorderSpacing.Top = 3
       BorderSpacing.Around = 3

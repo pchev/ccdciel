@@ -398,8 +398,9 @@ begin
     end;
   xm:=rs+xm;
   ym:=rs+ym;
+  if imin=vmax then imin:=val-1;
   // average of image
-  bg:=sumval/(4*rs*rs);
+  bg:=sumval/((2*rs+1)*(2*rs+1));
   // copy to bitmap
   b:=TBGRABitmap.Create(s+1,s+1);
   for i:=-rs to rs do  begin
