@@ -2871,7 +2871,7 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc1,yc1,vmax);
+   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*camera.BinX),xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
@@ -4682,7 +4682,7 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-    f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc,yc,vmax);
+    f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*camera.BinX),xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -5078,7 +5078,7 @@ begin
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xc,yc,vmax);
+  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*camera.BinX),xc,yc,vmax);
   f_starprofile.FindStar:=(vmax>0);
   f_starprofile.StarX:=xc;
   f_starprofile.StarY:=yc;

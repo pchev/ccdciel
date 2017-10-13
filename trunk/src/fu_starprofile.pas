@@ -99,7 +99,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
+    procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
     procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
     procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
     procedure InitAutofocus;
@@ -270,28 +270,98 @@ begin
  inherited Destroy;
 end;
 
-procedure Tf_starprofile.FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc:integer; out vmax: double);
-// brightest pixel in area s*s centered on x,y of image Img of size xmax,ymax
+function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean; // double star detection based difference bright_spot and center_of_gravity
+
+var SumVal,SumValX,SumValY,val,valmax,bg, Xg, Yg: double;
+     i,j : integer;
+begin
+  // New background from corner values
+  bg:=0;
+  for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
+  begin
+    bg:=bg+Img[0,y+ri,x+i];{top line, left to right}
+    bg:=bg+Img[0,y+i,x+ri];{right line, top to bottom}
+    bg:=bg+Img[0,y-ri,x-i];{bottom line, right to left}
+    bg:=bg+Img[0,y-i,x-ri];{right line, bottom to top}
+  end;
+  bg:=bg/(8*ri);
+  bg:=vmin+bg/c;
+
+  SumVal:=0;
+  SumValX:=0;
+  SumValY:=0;
+  valmax:=0;
+  for i:=-ri to ri do
+    for j:=-ri to ri do
+    begin
+      val:=vmin+Img[0,y+j,x+i]/c-bg;
+      if val<0 then val:=0;
+      if val>valmax then valmax:=val;
+      SumVal:=SumVal+val;
+      SumValX:=SumValX+val*(i);
+     SumValY:=SumValY+val*(j);
+    end;
+  Xg:=SumValX/SumVal;
+  Yg:=SumValY/SumVal;
+  if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
+    else
+    result:=false;
+end;{double star detection}
+
+procedure Tf_starprofile.FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
+// brightest 3x3 pixels in area s*s centered on x,y of image Img of size xmax,ymax
 var i,j,rs,xm,ym: integer;
-    val:double;
+            val :double;
 begin
  rs:= s div 2;
- if (x-s)<1 then x:=s+1;
- if (x+s)>(xmax-1) then x:=xmax-s-1;
- if (y-s)<1 then y:=s+1;
- if (y+s)>(ymax-1) then y:=ymax-s-1;
+ if (x-rs)<3 then x:=rs+3;
+ if (x+rs)>(xmax-3) then x:=xmax-rs-3;
+ if (y-rs)<3 then y:=rs+3;
+ if (y+rs)>(ymax-3) then y:=ymax-rs-3;
+
  vmax:=0;
+ xm:=0;
+ ym:=0;
+
+ // try with double star exclusion
  for i:=-rs to rs do
    for j:=-rs to rs do begin
-     Val:=vmin+Img[0,y+j,x+i]/c;
-     if Val>vmax then begin
-          vmax:=Val;
-          xm:=i;
-          ym:=j;
+     val:=(Img[0,y+j-1 ,x+i-1]+Img[0,y+j-1 ,x+i]+Img[0,y+j-1 ,x+i+1]+
+           Img[0,y+j ,x+i-1]+Img[0,y+j ,x+i]+Img[0,y+j ,x+i+1]+
+           Img[0,y+j+1 ,x+i-1]+Img[0,y+j+1 ,x+i]+Img[0,y+j+1 ,x+i+1])/9;
+
+     Val:=vmin+Val/c;
+     if Val>vmax then
+     begin
+       if double_star(img,c,vmin,starwindow2, x+i,y+j)=false then
+       begin
+         vmax:=Val;
+         xm:=i;
+         ym:=j;
+       end;
      end;
+ end;
+
+ // if we not find anything repeat with only max value
+ if vmax=0 then
+   for i:=-rs to rs do
+     for j:=-rs to rs do begin
+       val:=(Img[0,y+j-1 ,x+i-1]+Img[0,y+j-1 ,x+i]+Img[0,y+j-1 ,x+i+1]+
+             Img[0,y+j ,x+i-1]+Img[0,y+j ,x+i]+Img[0,y+j ,x+i+1]+
+             Img[0,y+j+1 ,x+i-1]+Img[0,y+j+1 ,x+i]+Img[0,y+j+1 ,x+i+1])/9;
+
+       Val:=vmin+Val/c;
+       if Val>vmax then
+       begin
+         vmax:=Val;
+         xm:=i;
+         ym:=j;
+       end;
    end;
+
  xc:=x+xm;
  yc:=y+ym;
+
 end;
 
 procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
