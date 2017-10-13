@@ -31,7 +31,7 @@ uses
   Forms, pascalscript, tachartlazaruspkg, sysutils, pu_main,
   fu_devicesconnection, fu_preview, fu_msg, u_utils, fu_visu, cu_indimount,
   fu_capture, pu_devicesetup, cu_ascomfocuser, cu_focuser, u_global,
-  fu_starprofile, fu_filterwheel, fu_focuser, fu_script, u_modelisation,
+  fu_starprofile, fu_filterwheel, fu_focuser, fu_script,
   cu_wheel, cu_mount, cu_indiwheel, cu_indifocuser, cu_indicamera, cu_fits,
   cu_camera, cu_ascomwheel, cu_ascommount, cu_ascomcamera, fu_ccdtemp,
   pu_options, fu_frame, cu_astrometry_engine, cu_planetarium_samp, pu_viewtext,

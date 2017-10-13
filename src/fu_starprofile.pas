@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses BGRABitmap, BGRABitmapTypes,
-  u_modelisation, u_global, u_utils, math, UScaleDPI, fu_preview,
+  u_global, u_utils, math, UScaleDPI, fu_preview,
   fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, FileUtil, TAGraph,
   TAFuncSeries, TASeries, TASources, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -88,7 +88,6 @@ type
     procedure msg(txt:string);
     function  getRunning:boolean;
     procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
-    procedure GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
     procedure GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,star_fwhm,valmax: double);
     procedure PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
     procedure PlotHistory;
@@ -395,32 +394,6 @@ begin
   b.free;
 end;
 
-procedure Tf_starprofile.GetPSF(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out fwhm: double);
-var simg:TPiw16;
-    imgdata: Tiw16;
-    PSF:TPSF;
-    i,j,rs,x1,y1: integer;
-begin
- rs:=s div 2;
- fwhm:=-1;
- setlength(imgdata,s,s);
- simg:=addr(imgdata);
- for i:=0 to s-1 do
-   for j:=0 to s-1 do begin
-     x1:=x+i-rs;
-     y1:=y+j-rs;
-     if (x1>0)and(x1<xmax)and(y1>0)and(y1<ymax) then
-        imgdata[i,j]:=trunc(vmin+img[0,y1,x1]/c)
-     else imgdata[i,j]:=trunc(vmin);
-   end;
- PSF.Flux:=0;
- // Get gaussian psf
- ModeliseEtoile(simg,s,TGauss,lowPrecision,LowSelect,0,PSF);
- if PSF.Flux>0 then begin
-   fwhm:=PSF.Sigma;
- end;
-end;
-
 procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,star_fwhm,valmax: double);
 var i,j: integer;
     SumVal,SumValX,SumValY,SumValR: double;
@@ -642,7 +615,7 @@ inc(curhist);
 end;
 
 procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
-var bg,star_fwhm: double;
+var bg: double;
   xg,yg: double;
   xm,ym,ri: integer;
 begin
@@ -654,13 +627,11 @@ begin
  FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg);
  if FValMax=0 then exit;
 
- GetPSF(img,c,vmin,xm,ym,s,xmax,ymax,Ffwhm);
+ GetHFD(img,c,vmin,xm,ym,ri,bg,xg,yg,Fhfd,Ffwhm,FValMax);
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end
  else Ffwhmarcsec:=-1;
-
- GetHFD(img,c,vmin,xm,ym,ri,bg,xg,yg,Fhfd,star_fwhm,FValMax);
 
  // Plot result
  if (Fhfd>0) then begin
