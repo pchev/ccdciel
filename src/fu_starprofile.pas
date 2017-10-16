@@ -399,9 +399,18 @@ begin
   xm:=rs+xm;
   ym:=rs+ym;
   if imin=vmax then imin:=val-1;
-  // average of image
-  bg:=sumval/((2*rs+1)*(2*rs+1));
-  // copy to bitmap
+  // average background
+  bg:=0;
+  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
+  begin
+    bg:=bg+Img[0,y+rs,x+i];{top line, left to right}
+    bg:=bg+Img[0,y+i,x+rs];{right line, top to bottom}
+    bg:=bg+Img[0,y-rs,x-i];{bottom line, right to left}
+    bg:=bg+Img[0,y-i,x-rs];{right line, bottom to top}
+  end;
+  bg:=vmin+bg/(8*rs)/c;
+
+  // copy to bitmap, scale min=0 to max=250
   b:=TBGRABitmap.Create(s+1,s+1);
   for i:=-rs to rs do  begin
    p := b.Scanline[i+rs];
