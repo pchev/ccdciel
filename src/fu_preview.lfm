@@ -21,15 +21,15 @@ object f_preview: Tf_preview
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 31
+      Height = 24
       Top = 0
       Width = 141
-      ClientHeight = 31
+      ClientHeight = 24
       ClientWidth = 141
-      TabOrder = 2
+      TabOrder = 1
       object ExpTime: TComboBox
         Left = 50
-        Height = 30
+        Height = 23
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
@@ -55,24 +55,24 @@ object f_preview: Tf_preview
       end
       object Label1: TLabel
         Left = 0
-        Height = 18
+        Height = 11
         Top = 4
-        Width = 22
+        Width = 18
         Caption = 'Exp'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 31
-      Top = 31
+      Height = 22
+      Top = 24
       Width = 141
-      ClientHeight = 31
+      ClientHeight = 22
       ClientWidth = 141
-      TabOrder = 3
+      TabOrder = 2
       object Binning: TComboBox
         Left = 50
-        Height = 30
+        Height = 21
         Hint = 'Camera binning'
         Top = 0
         Width = 90
@@ -88,35 +88,53 @@ object f_preview: Tf_preview
       end
       object Label2: TLabel
         Left = 0
-        Height = 18
+        Height = 11
         Top = 4
-        Width = 22
+        Width = 19
         Caption = 'Bin.'
         ParentColor = False
       end
     end
     object BtnPreview: TButton
       Left = 0
-      Height = 24
+      Height = 19
       Hint = 'Start one preview exposure'
-      Top = 62
+      Top = 46
       Width = 141
       Caption = 'Preview'
       OnClick = BtnPreviewClick
       ParentFont = False
       TabOrder = 0
     end
-    object BtnLoop: TButton
-      Tag = 1
+    object Panel4: TPanel
       Left = 0
-      Height = 24
-      Hint = 'Loop preview exposures'
-      Top = 86
+      Height = 20
+      Top = 65
       Width = 141
-      Caption = 'Loop'
-      OnClick = BtnLoopClick
-      ParentFont = False
-      TabOrder = 1
+      ClientHeight = 20
+      ClientWidth = 141
+      TabOrder = 3
+      object BtnLoop: TButton
+        Tag = 1
+        Left = 0
+        Height = 19
+        Hint = 'Loop preview exposures'
+        Top = 0
+        Width = 112
+        Caption = 'Loop'
+        OnClick = BtnLoopClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object led: TShape
+        Left = 120
+        Height = 14
+        Hint = 'Uncalibrated'
+        Top = 2
+        Width = 14
+        Brush.Color = clGray
+        Shape = stCircle
+      end
     end
   end
   object StaticText1: TStaticText

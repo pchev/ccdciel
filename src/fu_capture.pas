@@ -45,6 +45,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    led: TShape;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
@@ -53,6 +54,7 @@ type
     Panel6: TPanel;
     Panel7: TPanel;
     Panel8: TPanel;
+    Panel9: TPanel;
     SeqNum: TEdit;
     Fname: TEdit;
     DitherCount: TEdit;
@@ -119,10 +121,10 @@ begin
     if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
   if Frunning then begin
-    BtnStart.Font.Color:=clGreen;
+    led.Brush.Color:=clLime;
     BtnStart.Caption:='Stop';
   end else begin
-    BtnStart.Font.Color:=clDefault;
+    led.Brush.Color:=clGray;
     BtnStart.Caption:='Start';
     if Assigned(FonMsg) then FonMsg('Stop capture');
   end;
@@ -158,7 +160,7 @@ end;
 procedure Tf_capture.Stop;
 begin
   Frunning:=false;
-  BtnStart.Font.Color:=clDefault;
+  led.Brush.Color:=clGray;
   BtnStart.Caption:='Start';
 end;
 
