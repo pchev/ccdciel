@@ -398,11 +398,12 @@ end;
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa: double;
     fn:string;
-    n,i,oldfilter:integer;
+    n,i,oldfilter,delay:integer;
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
   result:=false;
   try
+  delay:=config.GetValue('/PrecSlew/Delay',5);
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
@@ -426,7 +427,7 @@ begin
     i:=1;
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     repeat
-      Wait;
+      Wait(delay);
       Fpreview.ControlExposure(exp,binx,biny);
       msg('Resolve control exposure');
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -477,7 +478,6 @@ begin
     if oldfilter>0 then Fwheel.Filter:=oldfilter;
    end;
   end;
-  fits.SetBPM(bpm,0,0,0,0);
   result:=(dist<=prec);
   err:=dist;
   FLastSlewErr:=dist;
@@ -485,6 +485,7 @@ begin
   finally
     if result then msg('Precision slew finished.')
               else msg('Precision slew failed!');
+    fits.SetBPM(bpm,0,0,0,0);
   end;
 end;
 
