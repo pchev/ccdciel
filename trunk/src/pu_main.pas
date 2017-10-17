@@ -5054,17 +5054,17 @@ begin
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
    NewMessage('Camera or focuser are not connected');
-   f_starprofile.ChkFocus.Checked:=false;
+   f_starprofile.ChkAutofocus.Checked:=false;
    exit;
   end;
   if  f_preview.Running then begin
    NewMessage('Cannot start autofocus now, stop preview and retry');
-   f_starprofile.ChkFocus.Checked:=false;
+   f_starprofile.ChkAutofocus.Checked:=false;
    exit;
   end;
   if  astrometry.Busy then begin
    NewMessage('Cannot start autofocus now, astrometry is running');
-   f_starprofile.ChkFocus.Checked:=false;
+   f_starprofile.ChkAutofocus.Checked:=false;
    exit;
   end;
   if (AutofocusMode=afNone) then begin
