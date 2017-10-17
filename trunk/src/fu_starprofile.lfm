@@ -16,6 +16,7 @@ object f_starprofile: Tf_starprofile
     Width = 176
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Star profile'
     Color = clGray
     DragMode = dmAutomatic

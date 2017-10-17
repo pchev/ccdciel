@@ -15,6 +15,7 @@ object f_ccdtemp: Tf_ccdtemp
     Width = 180
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'CCD Temperature'
     Color = clGray
     DragMode = dmAutomatic

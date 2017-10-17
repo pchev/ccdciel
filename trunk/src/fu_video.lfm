@@ -14,6 +14,7 @@ object f_video: Tf_video
     Width = 184
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Video'
     Color = clGray
     DragMode = dmAutomatic

@@ -14,6 +14,7 @@ object f_frame: Tf_frame
     Width = 192
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Frame'
     Color = clGray
     DragMode = dmAutomatic

@@ -13,6 +13,7 @@ object f_autoguider: Tf_autoguider
     Width = 166
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Autoguider'
     Color = clGray
     DragMode = dmAutomatic

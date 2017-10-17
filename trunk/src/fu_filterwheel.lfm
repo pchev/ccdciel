@@ -47,6 +47,7 @@ object f_filterwheel: Tf_filterwheel
     Width = 180
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Filter'
     Color = clGray
     DragMode = dmAutomatic
