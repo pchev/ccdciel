@@ -87,8 +87,6 @@ type
     afmpos,aminpos:integer;
     procedure msg(txt:string);
     function  getRunning:boolean;
-    procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
-    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,star_fwhm,valmax: double);
     procedure PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
     procedure PlotHistory;
     procedure ClearGraph;
@@ -99,6 +97,8 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,star_fwhm,valmax: double);
+    procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
     procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
     procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
     procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
@@ -489,6 +489,7 @@ var i,j: integer;
     begin
       x_trunc:=trunc(x1);
       y_trunc:=trunc(y1);
+
       x_frac :=frac(x1);
       y_frac :=frac(y1);
       result:= Img[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
