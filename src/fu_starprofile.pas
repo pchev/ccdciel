@@ -558,7 +558,7 @@ begin
       Val:=vmin+value_subpixel(xc+i,yc+j)/c-bg;
       if val<0 then val:=0;{required?}
       r:=sqrt(i*i+j*j);
-      if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+      if val>((3*bg_standard_deviation)) then {3 * sd should be signal }
       begin
         SumVal:=SumVal+Val;
         SumValR:=SumValR+Val*r;
