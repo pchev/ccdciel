@@ -1569,9 +1569,11 @@ if LockMouse then exit;
     else sval:='';
     if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then begin
       f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg);
-      f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,xc,yc,hfd,fwhm,vmax);
-      if hfd>0.8 then begin
-         sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
+      if vmax>0 then begin
+        f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,xc,yc,hfd,fwhm,vmax);
+        if hfd>0.8 then begin
+           sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
+        end;
       end;
     end;
     if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin
