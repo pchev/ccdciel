@@ -721,7 +721,7 @@ begin
                 appdir:=buf
 
              else begin
-                Appdir:='nodata';
+                 Showmessage('Error: Can''t locate the scripts directory !!'+crlf+'Please try to reinstall the software');
              end;
           end;
           end;
@@ -4788,7 +4788,7 @@ begin
  until eof(f);
  CloseFile(f);
  except
-   NewMessage('Error loading focus star list '+fn);
+   NewMessage('Error loading focus star list '+slash(DataDir)+slash('stars')+fn);
  end;
 end;
 
@@ -4958,6 +4958,7 @@ begin
      end
      else begin
       NewMessage('Cannot find a focus star.');
+      if NFocusStars=0 then NewMessage('Star database is empty, check path to star database files!!');
       exit;
      end;
      wait(1);
