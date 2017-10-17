@@ -502,6 +502,7 @@ begin
 // x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
 hfd:=-1;
 star_fwhm:=-1;
+if ri<=0 then exit;
 bg_average:=0;
 for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
 begin
