@@ -366,14 +366,17 @@ end;
 
 procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg: double);
 // center of gravity in area s*s centered on x,y of image Img of size xmax,ymax
+const
+    max_ri=50;
 var i,j,rs: integer;
     SumVal,SumValX,SumValY: double;
     val,xg,yg:double;
-    b:TBGRABitmap;
-    p: PBGRAPixel;
-    xm,ym,tol:integer;
-    imin,xx,yy: double;
+    xm,ym,distance :integer;
+    imin,xx,yy,
+    bg_average,bg_standard_deviation, star_radius : double;
+    distance_histogram : array [0..max_ri] of integer;
 begin
+
   vmax:=0;
   bg:=0;
   rs:=s div 2;
@@ -399,79 +402,82 @@ begin
   xm:=rs+xm;
   ym:=rs+ym;
   if imin=vmax then imin:=val-1;
+
   // average background
-  bg:=0;
+  bg_average:=0;
   for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
   begin
-    bg:=bg+Img[0,y+rs,x+i];{top line, left to right}
-    bg:=bg+Img[0,y+i,x+rs];{right line, top to bottom}
-    bg:=bg+Img[0,y-rs,x-i];{bottom line, right to left}
-    bg:=bg+Img[0,y-i,x-rs];{right line, bottom to top}
+    bg_average:=bg_average+Img[0,y+rs,x+i];{top line, left to right}
+    bg_average:=bg_average+Img[0,y+i,x+rs];{right line, top to bottom}
+    bg_average:=bg_average+Img[0,y-rs,x-i];{bottom line, right to left}
+    bg_average:=bg_average+Img[0,y-i,x-rs];{right line, bottom to top}
   end;
-  bg:=vmin+bg/(8*rs)/c;
+  bg_average:=bg_average/(8*rs);
 
-  // copy to bitmap, scale min=0 to max=250
-  b:=TBGRABitmap.Create(s+1,s+1);
-  for i:=-rs to rs do  begin
-   p := b.Scanline[i+rs];
-   for j:=-rs to rs do begin
-     val:=vmin+Img[0,y+j,x+i]/c;
-     val:=(val-imin)*250/(vmax-imin);
-     p^.red:=round(val);
-     p^.green:=p^.red;
-     p^.blue:=p^.red;
-     p^.alpha:=255;
-     inc(p);
-   end;
+  bg_standard_deviation:=0;
+  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
+  begin
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+rs,x+i]);{top line, left to right}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+i,x+rs]);{right line, top to bottom}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y-rs,x-i]);{bottom line, right to left}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y-i,x-rs]);{left line, bottom to top}
   end;
-  b.InvalidateBitmap;
-  // fill values above average, connected to brightest pixel
-  tol:=round((vmax-bg)*250/(vmax-imin));
-  if tol<1 then tol:=1;
-  if tol>245 then tol:=245;
-  b.FloodFill(xm,ym,BGRAWhite,fmSet,tol);
-  // center of gravity of filled values
+  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*rs))/c;
+
+  bg:=vmin+bg_average/c;
+
+  // Get center of gravity whithin star detection box
   SumVal:=0;
   SumValX:=0;
   SumValY:=0;
-  ri:=0;
-  for i:=-rs to rs do begin
-   p := b.Scanline[i+rs];
+  vmax:=0;
+  for i:=-rs to rs do
    for j:=-rs to rs do begin
-     val:=p^.red;
-     if val>254 then begin
-       SumVal:=SumVal+1;
-       SumValX:=SumValX+(i);
-       SumValY:=SumValY+(j);
+     val:=vmin+Img[0,y+j,x+i]/c-bg;
+     if val<0 then val:=0;
+     if val>vmax then vmax:=val;
+     begin
+       SumVal:=SumVal+val;
+       SumValX:=SumValX+val*(i);
+       SumValY:=SumValY+val*(j);
      end;
-     inc(p);
    end;
+
+  if sumval=0 then
+  begin
+    ri:=3;
+    exit;
   end;
-  if SumVal>0 then begin
-    Xg:=SumValX/SumVal;
-    Yg:=SumValY/SumVal;
-  end
-  else begin
-    xg:=0; yg:=0;
-  end;
-  // radius of interest
-  for i:=-rs to rs do begin
-   xx:=i-xg;
-   p := b.Scanline[i+rs];
-   for j:=-rs to rs do begin
-     val:=p^.red;
-     if val>254 then begin
-       yy:=j-yg;
-       ri:=max(ri,2+ceil(sqrt(xx*xx+yy*yy)));
-     end;
-     inc(p);
-   end;
-  end;
-  if ri=0 then ri:=rs;
-  if ri<3 then ri:=3;
+
+  Xg:=SumValX/SumVal;
+  Yg:=SumValY/SumVal;
   xc:=round(x+Xg);
   yc:=round(y+Yg);
-  b.free;
+
+ // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
+
+ for i:=0 to 50 do distance_histogram[i]:=0;{clear histogram of pixel distances}
+
+ for i:=-rs to rs do begin
+   for j:=-rs to rs do begin
+     val:=vmin+Img[0,yc+j,xc+i]/c-bg;
+     if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+     begin
+       distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
+       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+     end;
+   end;
+  end;
+
+ ri:=0;
+ repeat
+    inc(ri)
+ until ((ri>=max_ri) or (distance_histogram[ri]=0));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+
+ inc(ri,2);
+
+ if ri=0 then ri:=rs;
+ if ri<3 then ri:=3;
 end;
 
 procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg: double; out xc,yc,hfd,star_fwhm,valmax: double);
