@@ -1527,7 +1527,7 @@ end;
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 var xx,yy,n: integer;
-    val,xxc,yyc,rc:integer;
+    val,xxc,yyc,rc,s:integer;
     sval:string;
     ra,de: double;
     c: TcdcWCScoord;
@@ -1567,8 +1567,9 @@ if LockMouse then exit;
          sval:=sval+'/'+inttostr(val);
        end
     else sval:='';
-    if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then begin
-      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg);
+    s:=Starwindow div camera.BinX;
+    if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
+      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg);
       if vmax>0 then begin
         f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,xc,yc,hfd,fwhm,vmax);
         if hfd>0.8 then begin
