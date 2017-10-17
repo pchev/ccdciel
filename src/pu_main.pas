@@ -4498,6 +4498,10 @@ procedure Tf_main.plot_north(bmp:TBGRABitmap);
 var scale,s,c: double;
     xpos,ypos,leng: single;
 begin
+if fits.HeaderInfo.solved and
+ (cdcWCSinfo.secpix<>0) and
+ (abs(cdcWCSinfo.cdec)<89.0)
+ then begin
   scale:=img_Width/image1.Width;
   xpos:=27*scale;
   ypos:=27*scale;
@@ -4510,7 +4514,7 @@ begin
 
   bmp.FontHeight:=round(12*scale);
   bmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clRed);
-
+ end;
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
@@ -5634,7 +5638,7 @@ begin
      if fits.HeaderInfo.solved then begin
        n:=cdcwcs_initfitsfile(pchar(fn),0);
        if n=0 then n:=cdcwcs_getinfo(addr(cdcWCSinfo),0);
-       if n=0 then begin
+       if (n=0) and (abs(cdcWCSinfo.cdec)<89.0) then begin
          c.ra:=cdcWCSinfo.cra;
          c.dec:=cdcWCSinfo.cdec;
          n:=cdcwcs_sky2xy(@c,0);
