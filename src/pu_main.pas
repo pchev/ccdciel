@@ -1769,10 +1769,10 @@ if f_pause.Wait then begin
      end;
   end;
   if bpmnum<1000 then
-     NewMessage('Bad pixel map found '+inttostr(bpmNum)+' bad pixels.')
+     NewMessage('Bad pixel detection found '+inttostr(bpmNum)+' hot pixels.')
   else begin
-     NewMessage('Too many bad pixel map found!');
-     NewMessage('Please increase threshold.');
+     NewMessage('Too many hot pixel found!');
+     NewMessage('Please increase the threshold.');
   end;
   config.DeletePath('/BadPixelMap/');
   config.SetValue('/BadPixelMap/Count',bpmNum);
