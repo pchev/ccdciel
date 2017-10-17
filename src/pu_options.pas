@@ -63,6 +63,7 @@ type
     Label84: TLabel;
     Label85: TLabel;
     Label86: TLabel;
+    Label87: TLabel;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
@@ -77,6 +78,7 @@ type
     MeridianFlipCalibrate: TCheckBox;
     Page4: TPage;
     PageHNSKY: TPage;
+    SlewDelay: TEdit;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
     CameraAutoCoolTemp: TEdit;
