@@ -15,6 +15,7 @@ object f_rotator: Tf_rotator
     Width = 180
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Rotator'
     Color = clGray
     DragMode = dmAutomatic

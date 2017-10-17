@@ -13,6 +13,7 @@ object f_planetarium: Tf_planetarium
     Width = 162
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Planetarium'
     Color = clGray
     DragMode = dmAutomatic

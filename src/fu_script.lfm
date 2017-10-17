@@ -14,6 +14,7 @@ object f_script: Tf_script
     Width = 189
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Run script'
     Color = clGray
     DragMode = dmAutomatic

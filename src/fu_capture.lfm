@@ -261,6 +261,7 @@ object f_capture: Tf_capture
     Width = 166
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Capture'
     Color = clGray
     DragMode = dmAutomatic

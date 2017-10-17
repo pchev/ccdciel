@@ -126,6 +126,7 @@ object f_preview: Tf_preview
     Width = 147
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Preview'
     Color = clGray
     DragMode = dmAutomatic

@@ -262,6 +262,7 @@ object f_focuser: Tf_focuser
     Width = 180
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Focuser'
     Color = clGray
     DragMode = dmAutomatic

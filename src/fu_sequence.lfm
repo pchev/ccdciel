@@ -14,6 +14,7 @@ object f_sequence: Tf_sequence
     Width = 180
     Align = alTop
     Alignment = taCenter
+    BorderStyle = sbsSingle
     Caption = 'Sequence'
     Color = clGray
     DragMode = dmAutomatic
