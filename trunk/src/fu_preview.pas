@@ -39,9 +39,11 @@ type
     Binning: TComboBox;
     Label1: TLabel;
     Label2: TLabel;
+    led: TShape;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    Panel4: TPanel;
     StaticText1: TStaticText;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
@@ -122,7 +124,7 @@ begin
   if Frunning then begin
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
-        BtnLoop.Font.Color:=clGreen;
+        led.Brush.Color:=clLime;
         BtnLoop.Caption:='Stop Loop';
         FLoop:=True;
         Msg('Start preview loop');
@@ -132,7 +134,7 @@ begin
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
-     BtnLoop.Font.Color:=clDefault;
+     led.Brush.Color:=clGray;
      BtnLoop.Caption:='Loop';
      FLoop:=False;
      Msg('Stop preview loop');
@@ -143,7 +145,7 @@ procedure Tf_preview.Stop;
 begin
   Frunning:=false;
   FLoop:=false;
-  BtnLoop.Font.Color:=clDefault;
+  led.Brush.Color:=clGray;
   BtnLoop.Caption:='Loop';
 end;
 
