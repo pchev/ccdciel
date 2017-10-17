@@ -489,6 +489,7 @@ type
     Procedure ClearImage;
     Procedure DrawImage;
     Procedure PlotImage;
+    procedure plot_north(bmp:TBGRABitmap);
     Procedure DrawHistogram(SetLevel: boolean);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
@@ -4425,6 +4426,7 @@ if fits.HeaderInfo.naxis>0 then begin
     imabmp.EllipseAntialias(cx,cy,s,s,co,1);
     s:=min(img_Height,img_Width) div 8;
     imabmp.EllipseAntialias(cx,cy,s,s,co,1);
+    if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then plot_north(imabmp);
   end;
   PlotImage;
 end;
@@ -4489,6 +4491,26 @@ else begin
    tmpbmp.Free;
 end;
 Application.ProcessMessages;
+end;
+
+procedure Tf_main.plot_north(bmp:TBGRABitmap);
+
+var scale,s,c: double;
+    xpos,ypos,leng: single;
+begin
+  scale:=img_Width/image1.Width;
+  xpos:=27*scale;
+  ypos:=27*scale;
+  leng:=24*scale;
+
+  sincos(cdcWCSinfo.xyrot,s,c);
+  bmp.ArrowEndAsClassic(false,false,3);
+  bmp.DrawLineAntialias(xpos,ypos,xpos+leng*s,ypos+leng*c,ColorToBGRA(clRed),scale);
+  bmp.ArrowEndAsNone;
+
+  bmp.FontHeight:=round(12*scale);
+  bmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clRed);
+
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
@@ -5598,6 +5620,8 @@ procedure Tf_main.LoadFitsFile(fn:string);
 var mem: TMemoryStream;
     imgsize: string;
     n:integer;
+    c: TcdcWCScoord;
+    x1,y1,x2,y2: double;
 begin
    StatusBar1.Panels[1].Text:='';
    mem:=TMemoryStream.Create;
@@ -5610,7 +5634,20 @@ begin
      if fits.HeaderInfo.solved then begin
        n:=cdcwcs_initfitsfile(pchar(fn),0);
        if n=0 then n:=cdcwcs_getinfo(addr(cdcWCSinfo),0);
-       if n<>0 then cdcWCSinfo.secpix:=0;
+       if n=0 then begin
+         c.ra:=cdcWCSinfo.cra;
+         c.dec:=cdcWCSinfo.cdec;
+         n:=cdcwcs_sky2xy(@c,0);
+         x1:=c.x;
+         y1:=c.y;
+         c.ra:=cdcWCSinfo.cra;
+         c.dec:=cdcWCSinfo.cdec+0.01;
+         n:=cdcwcs_sky2xy(@c,0);
+         x2:=c.x;
+         y2:=c.y;
+         cdcWCSinfo.xyrot := arctan2((x2 - x1), (y1 - y2));
+       end
+       else cdcWCSinfo.secpix:=0;
      end
        else cdcWCSinfo.secpix:=0;
      DrawHistogram(true);

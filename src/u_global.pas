@@ -134,7 +134,7 @@ type
     PcdcWCScoord = ^TcdcWCScoord;
 
     TcdcWCSinfo = record
-      cra, cdec, dra, ddec, secpix, eqout, rot: double;
+      cra, cdec, dra, ddec, secpix, eqout, rot, xyrot: double;
       wp, hp, sysout: Intwcs;
     end;
     PcdcWCSinfo = ^TcdcWCSinfo;
