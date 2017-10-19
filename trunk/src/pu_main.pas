@@ -350,6 +350,7 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
+    WCSxyrot: double;
     SaveFocusZoom: double;
     ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -4507,7 +4508,7 @@ if fits.HeaderInfo.solved and
   ypos:=27*scale;
   leng:=24*scale;
 
-  sincos(cdcWCSinfo.xyrot,s,c);
+  sincos(WCSxyrot,s,c);
   bmp.ArrowEndAsClassic(false,false,3);
   bmp.DrawLineAntialias(xpos,ypos,xpos+leng*s,ypos+leng*c,ColorToBGRA(clRed),scale);
   bmp.ArrowEndAsNone;
@@ -5649,7 +5650,7 @@ begin
          n:=cdcwcs_sky2xy(@c,0);
          x2:=c.x;
          y2:=c.y;
-         cdcWCSinfo.xyrot := arctan2((x2 - x1), (y1 - y2));
+         WCSxyrot := arctan2((x2 - x1), (y1 - y2));
        end
        else cdcWCSinfo.secpix:=0;
      end
