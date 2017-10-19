@@ -456,7 +456,7 @@ begin
 
  // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
 
- for i:=0 to 50 do distance_histogram[i]:=0;{clear histogram of pixel distances}
+ for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
 
  for i:=-rs to rs do begin
    for j:=-rs to rs do begin
@@ -547,6 +547,7 @@ for i:=-ri to ri do
      SumValY:=SumValY+val*(j);
    end;
  end;
+if SumVal=0 then begin Fsnr:=0; exit; end;{no values, abort. star_fwhm is already -1}
 Xg:=SumValX/SumVal;
 Yg:=SumValY/SumVal;
 xc:=x+Xg;
@@ -565,7 +566,7 @@ begin
       Val:=vmin+value_subpixel(xc+i,yc+j)/c-bg;
       if val<0 then val:=0;{required?}
       r:=sqrt(i*i+j*j);
-      if val>((3*bg_standard_deviation)) then {3 * sd should be signal }
+      if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
       begin
         SumVal:=SumVal+Val;
         SumValR:=SumValR+Val*r;
@@ -575,8 +576,7 @@ begin
     Sumval:=Sumval+0.00001;{prevent divide by zero}
     hfd:=2*SumValR/SumVal;
     hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
-    star_fwhm:=2*sqrt(pixel_counter/pi);{calculate from surface (by counting pixels above half max) the diameter equals FWHM }
-  end;
+    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }  end;
 end;
 
 procedure Tf_starprofile.PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
