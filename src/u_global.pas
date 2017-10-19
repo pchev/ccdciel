@@ -133,8 +133,8 @@ type
     end;
     PcdcWCScoord = ^TcdcWCScoord;
 
-    TcdcWCSinfo = record
-      cra, cdec, dra, ddec, secpix, eqout, rot, xyrot: double;
+    TcdcWCSinfo = record   // this structure must not be changed
+      cra, cdec, dra, ddec, secpix, eqout, rot: double;
       wp, hp, sysout: Intwcs;
     end;
     PcdcWCSinfo = ^TcdcWCSinfo;
