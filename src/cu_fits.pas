@@ -1076,7 +1076,7 @@ begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
   if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) then begin
     x0:=FFitsInfo.Frx;
-    y0:=FFitsInfo.Fry;
+    y0:=FBPMny-FFitsInfo.Fry-FFitsInfo.Frheight;
   end else begin
     x0:=0;
     y0:=0;
