@@ -845,7 +845,7 @@ begin
               focuser.FocusPosition:=round(newpos);
               msg('Clear focuser backlash');
               FonAbsolutePosition(self);
-              wait(1);
+              wait(5);
               // move back to start focus position
               newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
               if newpos<AutofocusVc[0,1] then begin
@@ -875,7 +875,7 @@ begin
               focuser.FocusPosition:=round(newpos);
               msg('Clear focuser backlash');
               FonAbsolutePosition(self);
-              wait(1);
+              wait(5);
               // move back to start focus position
               newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
               if newpos>AutofocusVc[AutofocusVcNum,1] then begin
