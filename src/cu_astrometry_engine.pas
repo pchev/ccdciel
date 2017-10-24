@@ -613,8 +613,8 @@ begin
     hdr[2] := 'CTYPE1 = '+#39+'RA---TAN'+#39+' / first parameter RA , projection TANgential'+blank80;
     hdr[3] := 'CTYPE2 = '+#39+'DEC--TAN'+#39+' / second parameter DEC, projection TANgential'+blank80;
     hdr[4] := 'CUNIT1 = '+#39+'deg '+#39+' / Unit of coordinate '+blank80;
-    hdr[5] := 'CRPIX1 = '+FormatFloat(e6,1+Fiwidth/2)+' / X of reference pixel '+blank80;
-    hdr[6] := 'CRPIX2 = '+FormatFloat(e6,1+Fiheight/2)+' / Y of reference pixel '+blank80;
+    hdr[5] := 'CRPIX1 = '+FormatFloat(e6, 0.5+Fiwidth/2)+' / X of reference pixel '+blank80;
+    hdr[6] := 'CRPIX2 = '+FormatFloat(e6, 0.5+Fiheight/2)+' / Y of reference pixel '+blank80;
     hdr[7] := 'CRVAL1 = '+FormatFloat(e6,ra_radians*rad2deg)+' / RA of reference pixel (deg) '+blank80;
     hdr[8] := 'CRVAL2 = '+FormatFloat(e6,dec_radians*rad2deg)+' / DEC of reference pixel (deg) '+blank80;
     hdr[9] := 'CDELT1 = '+FormatFloat(e6,cdelt1)+' / X pixel size (deg) '+blank80;
