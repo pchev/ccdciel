@@ -438,8 +438,8 @@ begin
        Ffits.Header.Add('CTYPE2','DEC--TAN','Pixel coordinate system');
        Ffits.Header.Add('CRVAL1',hra,'value of ref pixel');
        Ffits.Header.Add('CRVAL2',hdec,'value of ref pixel');
-       Ffits.Header.Add('CRPIX1',hnaxis1 div 2,'ref pixel');
-       Ffits.Header.Add('CRPIX2',hnaxis2 div 2,'ref pixel');
+       Ffits.Header.Add('CRPIX1',0.5+hnaxis1/2,'ref pixel');
+       Ffits.Header.Add('CRPIX2',0.5+hnaxis2/2,'ref pixel');
        Ffits.Header.Add('CDELT1',pixscale1,'coordinate scale');
        Ffits.Header.Add('CDELT2',pixscale2,'coordinate scale');
     end;
