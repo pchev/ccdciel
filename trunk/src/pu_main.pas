@@ -2788,7 +2788,8 @@ end;
 
 function Tf_main.doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
 var i,j,k,minpos,maxpos,step:integer;
-    hfdmin,hfdsum,hfd:double;
+    hfdmin,hfd:double;
+    hfdlist: array of double;
 begin
  result:=false;
  TerminateVcurve:=false;
@@ -2828,7 +2829,7 @@ begin
      k:=n-i;
    end;
    wait(1);
-   hfdsum:=0;
+   SetLength(hfdlist,nsum);
    // use bad pixel map
    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
    // average hfd for nsum exposures
@@ -2841,10 +2842,10 @@ begin
        exit;
      end;
      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
-     hfdsum:=hfdsum+f_starprofile.HFD;
+     hfdlist[j-1]:=f_starprofile.HFD;
      NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    end;
-   hfd:=hfdsum/nsum;
+   hfd:=SMedian(hfdlist);
    // store result always from left to right
    AutofocusVc[k,1]:=focuser.Position;
    AutofocusVc[k,2]:=hfd;

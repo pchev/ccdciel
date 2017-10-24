@@ -78,7 +78,8 @@ type
     emptybmp:Tbitmap;
     histfwhm, histimax: array[0..maxhist] of double;
     maxfwhm,maximax: double;
-    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,FSumHfd,Fsnr,FMinSnr,FminPeak:double;
+    Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,Fsnr,FMinSnr,FminPeak:double;
+    FhfdList: array of double;
     curhist,FfocuserSpeed,FnumHfd,FPreFocusPos: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult: boolean;
@@ -178,7 +179,7 @@ end;
 procedure Tf_starprofile.InitAutofocus;
 begin
  FnumHfd:=0;
- FSumHfd:=0;
+ SetLength(FhfdList,AutofocusNearNum);
  FMinSnr:=99999;
  FminPeak:=9999999;
  terminated:=false;
@@ -778,15 +779,14 @@ begin
     FStarX:=round(xg);
     FStarY:=round(yg);
     PlotProfile(img,c,vmin,bg,s);
-    FSumHfd:=FSumHfd+Fhfd;
+    FhfdList[FnumHfd]:=Fhfd;
     FMinSnr:=min(FMinSnr,Fsnr);
     FminPeak:=min(FminPeak,FValMax);
     inc(FnumHfd);
     msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
     if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
-      Fhfd:=FSumHfd/FnumHfd;
+      Fhfd:=SMedian(FhfdList);
       FnumHfd:=0;
-      FSumHfd:=0;
       Fsnr:=FMinSnr;
       FValMax:=FminPeak;
       FMinSnr:=99999;
@@ -903,7 +903,7 @@ begin
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsCheckL;
               AutofocusVcCheckNum:=0;
-              AutofocusVcCheckHFDsum:=0;
+              SetLength(AutofocusVcCheckHFDlist,0);
               wait(1);
              end;
    vcsNearR: begin
@@ -916,13 +916,14 @@ begin
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsCheckR;
               AutofocusVcCheckNum:=0;
-              AutofocusVcCheckHFDsum:=0;
+              SetLength(AutofocusVcCheckHFDlist,0);
               wait(1);
              end;
    vcsCheckL:begin
               inc(AutofocusVcCheckNum);
-              AutofocusVcCheckHFDsum:=AutofocusVcCheckHFDsum+Fhfd;
-              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              SetLength(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
+              AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               msg('Autofocus measurement '+IntToStr(AutofocusVcCheckNum)+' : HFD='+FormatFloat(f3,meanhfd)+' position='+IntToStr(round(newpos)));
               if AutofocusVcCheckNum>=AutofocusNearNum then begin
@@ -932,8 +933,9 @@ begin
              end;
    vcsCheckR:begin
               inc(AutofocusVcCheckNum);
-              AutofocusVcCheckHFDsum:=AutofocusVcCheckHFDsum+Fhfd;
-              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              SetLength(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
+              AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               msg('Autofocus measurement'+IntToStr(AutofocusVcCheckNum)+' : HFD='+FormatFloat(f3,meanhfd)+' position='+IntToStr(round(newpos)));
               if AutofocusVcCheckNum>=AutofocusNearNum then begin
@@ -943,7 +945,7 @@ begin
              end;
    vcsFocusL:begin
               // move to focus
-              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to focus position '+focuser.Position.Text);
@@ -953,7 +955,7 @@ begin
              end;
    vcsFocusR:begin
               // move to focus
-              meanhfd:=AutofocusVcCheckHFDsum/AutofocusVcCheckNum;
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to focus position '+focuser.Position.Text);

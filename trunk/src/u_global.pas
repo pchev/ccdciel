@@ -304,7 +304,7 @@ var
   AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset: integer;
   AutofocusMeanStep:TAutofocusMeanStep;
   AutofocusVcCheckNum: integer;
-  AutofocusVcCheckHFDsum: double;
+  AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
   CancelAutofocus, InplaceAutofocus: Boolean;
   bpm: TBpm;
