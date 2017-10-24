@@ -50,7 +50,7 @@ object f_visu: Tf_visu
       end
       object SpinEditMin: TSpinEdit
         Left = 0
-        Height = 27
+        Height = 24
         Top = 0
         Width = 70
         Color = clBlack
@@ -62,7 +62,7 @@ object f_visu: Tf_visu
       end
       object SpinEditMax: TSpinEdit
         Left = 186
-        Height = 27
+        Height = 24
         Top = 0
         Width = 70
         Color = clBlack
@@ -124,7 +124,7 @@ object f_visu: Tf_visu
         Height = 21
         Hint = 'Use a square root scale to display the image'
         Top = 60
-        Width = 53
+        Width = 49
         Caption = 'Sqrt'
         OnChange = BtnIttChange
         TabOrder = 0
@@ -134,7 +134,7 @@ object f_visu: Tf_visu
         Height = 21
         Hint = 'Use a logarithmic scale to display the image'
         Top = 40
-        Width = 50
+        Width = 47
         Caption = 'Log'
         OnChange = BtnIttChange
         TabOrder = 1
@@ -144,7 +144,7 @@ object f_visu: Tf_visu
         Height = 21
         Hint = 'Use a linear scale to display the image'
         Top = 20
-        Width = 67
+        Width = 61
         Caption = 'Linear'
         Checked = True
         OnChange = BtnIttChange

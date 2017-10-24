@@ -45,7 +45,8 @@ type
 
   Tf_main = class(TForm)
     Image1: TImage;
-    ImageList1: TImageList;
+    ImageListNight: TImageList;
+    ImageListDay: TImageList;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
@@ -386,6 +387,7 @@ type
     procedure OptionGetPixelSize(Sender: TObject);
     procedure OptionGetFocaleLength(Sender: TObject);
     procedure Restart;
+    procedure SetTheme;
     procedure SetRefImage;
     procedure GUIdestroy(Sender: TObject);
     Procedure Connect(Sender: TObject);
@@ -756,7 +758,8 @@ begin
   UScaleDPI.RunDPI:=rl;
   {$endif}
   ScaleDPI(Self);
-  ScaleImageList(ImageList1);
+  ScaleImageList(ImageListDay);
+  ScaleImageList(ImageListNight);
 end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
@@ -1124,6 +1127,8 @@ begin
      NewMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
   end;
 
+  SetTheme;
+
   PanelBottom.Tag:=PtrInt(MenuTabConnect);
   PanelRight1.Tag:=PtrInt(MenuTabConnect);
   PanelRight2.Tag:=PtrInt(MenuTabFocus);
@@ -1210,6 +1215,34 @@ begin
   LoadFocusStar;
 
   StartupTimer.Enabled:=true;
+end;
+
+procedure Tf_main.SetTheme;
+var c:TBGRAPixel;
+    btn: TPortableNetworkGraphic;
+    i:integer;
+begin
+  // detect if theme color is dark
+  c:=ColorToBGRA(ColorToRGB(clBtnFace));
+  i:=round((c.red+c.green+c.blue)/3);
+  // change imagelist
+  if i>=128 then begin
+    PageControlRight.Images:=ImageListDay;
+    MainMenu1.Images:=ImageListDay;
+  end
+  else begin
+    PageControlRight.Images:=ImageListNight;
+    MainMenu1.Images:=ImageListNight;
+  end;
+  // change individual buttons
+  btn := TPortableNetworkGraphic.Create;
+  PageControlRight.Images.GetBitmap(5, btn);
+  f_visu.BtnZoomAdjust.Glyph.Assign(btn);
+  PageControlRight.Images.GetBitmap(6, btn);
+  f_visu.BtnBullsEye.Glyph.Assign(btn);
+  PageControlRight.Images.GetBitmap(7, btn);
+  f_visu.histminmax.Glyph.Assign(btn);
+  btn.Free;
 end;
 
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
@@ -4446,6 +4479,7 @@ var r1,r2: double;
     w,h,px,py: integer;
     tmpbmp,str: TBGRABitmap;
 begin
+if (img_Height=0)or(img_Width=0) then exit;
 r1:=image1.Width/imabmp.Width;
 r2:=image1.Height/imabmp.Height;
 ZoomMin:=min(r1,r2);
