@@ -50,6 +50,7 @@ type
     BtnNewPlan: TButton;
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
+    BtnCancel: TButton;
     InplaceAutofocus: TCheckBox;
     UpdateCoord: TCheckBox;
     Panel8: TPanel;
@@ -364,11 +365,12 @@ begin
     f_EditPlan.PlanName.Caption:=PlanList.Text;
   end;
   FormPos(f_EditPlan,mouse.CursorPos.X,mouse.CursorPos.Y);
-  f_EditPlan.ShowModal;
-  if newplan then begin
-     LoadPlanList;
-     SetPlanList(f_EditPlan.PlanName.Caption);
-     TargetChange(nil);
+  if f_EditPlan.ShowModal=mrOK then begin
+    if newplan then begin
+       LoadPlanList;
+       SetPlanList(f_EditPlan.PlanName.Caption);
+       TargetChange(nil);
+    end;
   end;
 end;
 

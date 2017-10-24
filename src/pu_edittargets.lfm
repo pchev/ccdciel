@@ -22,13 +22,13 @@ object f_EditTargets: Tf_EditTargets
     ClientWidth = 614
     TabOrder = 0
     object BtnClose: TButton
-      Left = 432
+      Left = 512
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 6
       Width = 75
-      Caption = 'Close'
-      ModalResult = 11
+      Caption = 'Save'
+      ModalResult = 1
       TabOrder = 0
     end
     object BtnNewObject: TButton
@@ -60,6 +60,15 @@ object f_EditTargets: Tf_EditTargets
       Caption = 'New script'
       OnClick = BtnNewScriptClick
       TabOrder = 3
+    end
+    object BtnCancel: TButton
+      Left = 408
+      Height = 25
+      Top = 6
+      Width = 75
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 4
     end
   end
   object Panel2: TPanel
