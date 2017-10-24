@@ -435,11 +435,14 @@ begin
    for j:=-rs to rs do begin
      val:=vmin+Img[0,y+j,x+i]/c-bg;
      if val<0 then val:=0;
-     if val>vmax then vmax:=val;
+     if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
      begin
-       SumVal:=SumVal+val;
-       SumValX:=SumValX+val*(i);
-       SumValY:=SumValY+val*(j);
+       if val>vmax then vmax:=val;
+       begin
+         SumVal:=SumVal+val;
+         SumValX:=SumValX+val*(i);
+         SumValY:=SumValY+val*(j);
+       end;
      end;
    end;
 
