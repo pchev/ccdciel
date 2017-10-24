@@ -317,6 +317,7 @@ begin
   Ffits.Stream:=ImgStream;
   Ffits.LoadStream;
   WriteHeaders;
+  FFits.ApplyBPM;
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 
