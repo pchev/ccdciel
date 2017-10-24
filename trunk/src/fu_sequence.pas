@@ -346,22 +346,23 @@ begin
      f_EditTargets.TargetList.Objects[0,1]:=t;
    end;
    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
-   f_EditTargets.ShowModal;
-   n:=f_EditTargets.TargetList.RowCount;
-   Targets.Clear;
-   for i:=1 to n-1 do begin
-     t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
-     Targets.Add(t);
-     LoadPlan(T_Plan(t.plan), t.planname);
+   if f_EditTargets.ShowModal=mrOK then begin
+     n:=f_EditTargets.TargetList.RowCount;
+     Targets.Clear;
+     for i:=1 to n-1 do begin
+       t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
+       Targets.Add(t);
+       LoadPlan(T_Plan(t.plan), t.planname);
+     end;
+     Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
+     Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
+     Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
+     Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
+     Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
+     Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
+     Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
+     SaveTargets(CurrentFile);
    end;
-   Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
-   Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
-   Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
-   Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
-   Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
-   Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
-   Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
-   SaveTargets(CurrentFile);
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);

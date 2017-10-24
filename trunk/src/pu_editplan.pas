@@ -37,6 +37,7 @@ type
     BtnClose: TButton;
     BtnAddStep: TButton;
     BtnDeleteStep: TButton;
+    BtnCancel: TButton;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -370,6 +371,7 @@ var pfile: TCCDconfig;
     i,n,k: integer;
     p: TStep;
 begin
+if ModalResult=mrOK then begin
 try
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   pfile:=TCCDconfig.Create(self);
@@ -408,7 +410,7 @@ except
   on E: Exception do ShowMessage('Error saving plan: '+ E.Message);
 end;
 end;
-
+end;
 
 end.
 
