@@ -143,7 +143,6 @@ type
     procedure SetVideoStream(value:TMemoryStream);
     Procedure ReadFitsImage;
     Procedure GetImage;
-    procedure ApplyBPM(bpm:TBpm; count:integer);
     function Citt(value: Word):Word;
     function Citt8(value: Word):byte;
     procedure SetImgFullRange(value: boolean);
@@ -159,6 +158,7 @@ type
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToFile(fn: string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
+     procedure ApplyBPM;
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -1068,10 +1068,9 @@ case FFitsInfo.bitpix of
 FimageC:=c;
 FimageMin:=Fdmin;
 if FimageMin<0 then FimageMin:=0;
-ApplyBPM(Fbpm,FBPMcount);
 end;
 
-procedure TFits.ApplyBPM(bpm:TBpm; count:integer);
+procedure TFits.ApplyBPM;
 var i,x,y,x0,y0: integer;
 begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
@@ -1082,9 +1081,9 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     x0:=0;
     y0:=0;
   end;
-  for i:=1 to count do begin
-    x:=bpm[i,1]-x0;
-    y:=bpm[i,2]-y0;
+  for i:=1 to FBPMcount do begin
+    x:=Fbpm[i,1]-x0;
+    y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
       image[0,y,x]:=(image[0,y-1,x]+image[0,y+1,x]+image[0,y,x-1]+image[0,y,x+1]) div 4;
       if n_axis=3 then begin
