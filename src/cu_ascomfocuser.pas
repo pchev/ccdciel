@@ -264,7 +264,7 @@ begin
    msg('Focuser '+Fdevice+' move to '+inttostr(p));
    V.Move(p);
    FocuserLastTemp:=FocuserTemp;
-   WaitFocuserMoving(30000);
+   WaitFocuserMoving(60000);
 
    except
     on E: Exception do msg('Focuser '+Fdevice+' Error, can''t move to. ' + E.Message);
@@ -334,7 +334,7 @@ begin
    msg('Focuser '+Fdevice+' move by '+inttostr(i));
    V.Move(i);
    FocuserLastTemp:=FocuserTemp;
-   WaitFocuserMoving(30000);
+   WaitFocuserMoving(60000);
 
    except
     on E: Exception do msg('Focuser '+Fdevice+' Set relative position error: ' + E.Message);
