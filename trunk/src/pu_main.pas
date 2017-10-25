@@ -2818,7 +2818,7 @@ begin
     i:=min(FocuserPositionMax,maxpos+step);
     focuser.Position:=i;
   end;
-  wait(5);
+  wait(1);
  // main loop for n measurement
  for i:=0 to n do begin
    // set new focuser position
