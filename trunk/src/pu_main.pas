@@ -2811,10 +2811,12 @@ begin
  hfdmin:=9999;
  // initial focuser position in right direction
   if AutofocusMoveDir=FocusDirOut then begin
-    focuser.Position:=minpos-step;
+    i:=max(FocuserPositionMin,minpos-step);
+    focuser.Position:=i;
   end
   else begin
-    focuser.Position:=maxpos+step;
+    i:=min(FocuserPositionMax,maxpos+step);
+    focuser.Position:=i;
   end;
   wait(5);
  // main loop for n measurement
@@ -2897,7 +2899,7 @@ end;
 
 procedure Tf_main.LearnVcurve(Sender: TObject);
 var bin: integer;
-    x,y,xc,yc,xc1,yc1,s,s2: integer;
+    x,y,xc,yc,xc1,yc1,s,s2,s3,s4: integer;
     SaveZoom,vmax: double;
 begin
  if not focuser.hasAbsolutePosition then exit;
@@ -2922,7 +2924,12 @@ begin
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
+ end
+ else begin
+   xc1 := round(f_starprofile.StarX);
+   yc1 := round(f_starprofile.StarY);
  end;
+
  if not f_starprofile.FindStar then begin
    NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
    exit;
@@ -2938,8 +2945,13 @@ begin
    // INDI frame in unbinned pixel
    xc:=xc*camera.BinX;
    yc:=yc*camera.BinY;
+   s3:=s2*camera.BinX;
+   s4:=s*camera.BinX;
+   camera.SetFrame(xc-s3,yc-s3,s4,s4);
+ end
+ else begin
+   camera.SetFrame(xc-s2,yc-s2,s,s);
  end;
- camera.SetFrame(xc-s2,yc-s2,s,s);
  f_starprofile.StarX:=s2;
  f_starprofile.StarY:=s2;
  SaveZoom:=f_visu.Zoom;
