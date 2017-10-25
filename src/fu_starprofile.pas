@@ -381,10 +381,10 @@ begin
   vmax:=0;
   bg:=0;
   rs:=s div 2;
-  if (x-rs)<1 then x:=rs+1;
-  if (x+rs)>(xmax-1) then x:=xmax-rs-1;
-  if (y-rs)<1 then y:=rs+1;
-  if (y+rs)>(ymax-1) then y:=ymax-rs-1;
+  if (x-s)<1 then x:=s+1;
+  if (x+s)>(xmax-1) then x:=xmax-s-1;
+  if (y-s)<1 then y:=s+1;
+  if (y+s)>(ymax-1) then y:=ymax-s-1;
   // find brightest point position, max and min values
   vmax:=0;
   imin:=MaxInt;
