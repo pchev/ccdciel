@@ -6,10 +6,8 @@ object f_starprofile: Tf_starprofile
   AutoSize = True
   ClientHeight = 386
   ClientWidth = 176
-  DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
-  ParentFont = False
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
@@ -149,13 +147,11 @@ object f_starprofile: Tf_starprofile
           object VcChartL: TFitSeries
             FitEquation = feLinear
             ParamCount = 2
-            Pointer.Visible = False
             Source = FitSourceL
           end
           object VcChartR: TFitSeries
             FitEquation = feLinear
             ParamCount = 2
-            Pointer.Visible = False
             Source = FitSourceR
           end
         end
