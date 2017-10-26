@@ -1566,7 +1566,7 @@ var xx,yy,n: integer;
     sval:string;
     ra,de: double;
     c: TcdcWCScoord;
-    bg,xc,yc,hfd,fwhm,vmax: double;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax: double;
 begin
 if LockMouse then exit;
  if MouseMoving and fits.HeaderInfo.valid then begin
@@ -1604,9 +1604,9 @@ if LockMouse then exit;
     else sval:='';
     s:=Starwindow div camera.BinX;
     if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
-      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg);
+      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
       if vmax>0 then begin
-        f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,xc,yc,hfd,fwhm,vmax);
+        f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax);
         if hfd>0.8 then begin
            sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
         end;
