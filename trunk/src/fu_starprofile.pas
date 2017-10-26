@@ -368,13 +368,14 @@ end;
 procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
 // center of gravity in area s*s centered on x,y of image Img of size xmax,ymax
 const
-    max_ri=50;
+    max_ri=100;
 var i,j,rs: integer;
     SumVal,SumValX,SumValY: double;
     val,xg,yg:double;
     distance :integer;
     bg_average : double;
     distance_histogram : array [0..max_ri] of integer;
+    HistStart: boolean;
 begin
 
   vmax:=0;
@@ -452,9 +453,12 @@ begin
   end;
 
  ri:=0;
+ HistStart:=false;
  repeat
-    inc(ri)
- until ((ri>=max_ri) or (distance_histogram[ri]=0));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+    inc(ri);
+    if distance_histogram[ri]>0 then {continue until we found a value>0, center of reflector ring can be black}
+       HistStart:=true;
+ until ((ri>=max_ri) or (HistStart and (distance_histogram[ri]=0)));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
  inc(ri,2);
 
