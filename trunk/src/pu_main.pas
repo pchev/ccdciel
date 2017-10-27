@@ -3012,6 +3012,7 @@ begin
  if AutofocusVcNum>0 then begin
   config.DeletePath('/StarAnalysis/Vcurve');
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusVcDir);
+  config.SetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcTemp',AutofocusVcTemp);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcFilterOffset',AutofocusVcFilterOffset);
   config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
@@ -4933,6 +4934,11 @@ begin
    f_starprofile.ChkAutofocus.Checked:=false;
    exit;
  end;
+ if (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
+   NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
+   f_starprofile.ChkAutofocus.Checked:=false;
+   exit;
+ end;
  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
    NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
    f_starprofile.ChkAutofocus.Checked:=false;
@@ -5147,6 +5153,11 @@ begin
   end;
   if (AutofocusMode=afNone) then begin
     NewMessage('Please configure the Autofocus options.');
+    f_starprofile.ChkAutofocus.Checked:=false;
+    exit;
+  end;
+  if (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
+    NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;
