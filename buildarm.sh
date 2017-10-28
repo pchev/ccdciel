@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=0.9.9
+version=0.9.11
 
 builddir=/tmp/ccdciel  # Be sure this is set to a non existent directory, it is removed after the run!
 
