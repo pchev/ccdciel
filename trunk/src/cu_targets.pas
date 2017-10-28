@@ -374,8 +374,7 @@ begin
    if (not abort) and (p<>nil) and p.Running then begin
      p.Stop;
      FRunning:=false;
-     msg('Sequence stopped.');
-     RunEndScript;
+     msg('Sequence stopped by user request, no termination sript will be run.');
      ShowDelayMsg('');
    end
    else begin
