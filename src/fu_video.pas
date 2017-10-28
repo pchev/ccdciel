@@ -215,21 +215,21 @@ end;
 procedure Tf_video.ShowExposure(value:integer);
 var sr:TONumRange;
 begin
-if PanelExposure.visible then begin
+if (value>0)and PanelExposure.visible then begin
  if Exprange.Visible then begin
-   if value<10 then begin
+   if (value<10)and(Exprange.Items.Count>0) then begin
       Exprange.ItemIndex:=0;
       sr:=TONumRange(Exprange.Items.Objects[0]);
    end
-   else if value<100 then begin
+   else if (value<100)and(Exprange.Items.Count>1) then begin
       Exprange.ItemIndex:=1;
       sr:=TONumRange(Exprange.Items.Objects[1]);
    end
-   else if value<1000 then begin
+   else if (value<1000)and(Exprange.Items.Count>2) then begin
       Exprange.ItemIndex:=2;
       sr:=TONumRange(Exprange.Items.Objects[2]);
    end
-   else if value<=10000 then begin
+   else if (value<=10000)and(Exprange.Items.Count>3) then begin
       Exprange.ItemIndex:=3;
       sr:=TONumRange(Exprange.Items.Objects[3]);
    end
