@@ -660,7 +660,7 @@ begin
      StreamRate:=IUFindNumber(StreamOptions,'STREAM_RATE');
      if (StreamRate=nil) then StreamOptions:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='Image Adjustments') then begin
+  else if (proptype=INDI_NUMBER)and((propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
      Brightness:=IUFindNumber(ImageAdjustments,'Brightness');
      Gamma:=IUFindNumber(ImageAdjustments,'Gamma');
