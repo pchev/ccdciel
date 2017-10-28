@@ -351,7 +351,7 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
-    WCSxyrot: double;
+    WCSxyNrot,WCSxyErot: double;
     SaveFocusZoom: double;
     ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -4548,7 +4548,7 @@ end;
 procedure Tf_main.plot_north(bmp:TBGRABitmap);
 
 var scale,s,c: double;
-    xpos,ypos,leng: single;
+    xpos,ypos,Nleng,Eleng: single;
 begin
 if fits.HeaderInfo.solved and
  (cdcWCSinfo.secpix<>0) and
@@ -4557,12 +4557,15 @@ if fits.HeaderInfo.solved and
   scale:=img_Width/image1.Width;
   xpos:=27*scale;
   ypos:=27*scale;
-  leng:=24*scale;
+  Nleng:=24*scale;
+  Eleng:=6*scale;
 
-  sincos(WCSxyrot,s,c);
+  sincos(WCSxyNrot,s,c);
   bmp.ArrowEndAsClassic(false,false,3);
-  bmp.DrawLineAntialias(xpos,ypos,xpos+leng*s,ypos+leng*c,ColorToBGRA(clRed),scale);
+  bmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*s,ypos+Nleng*c,ColorToBGRA(clRed),scale);
   bmp.ArrowEndAsNone;
+  sincos(WCSxyErot,s,c);
+  bmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*s,ypos+Eleng*c,ColorToBGRA(clRed),scale);
 
   bmp.FontHeight:=round(12*scale);
   bmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clRed);
@@ -5711,7 +5714,13 @@ begin
          n:=cdcwcs_sky2xy(@c,0);
          x2:=c.x;
          y2:=c.y;
-         WCSxyrot := arctan2((x2 - x1), (y1 - y2));
+         WCSxyNrot := arctan2((x2 - x1), (y1 - y2));
+         c.ra:=cdcWCSinfo.cra+0.01;
+         c.dec:=cdcWCSinfo.cdec;
+         n:=cdcwcs_sky2xy(@c,0);
+         x2:=c.x;
+         y2:=c.y;
+         WCSxyErot := arctan2((x2 - x1), (y1 - y2));
        end
        else cdcWCSinfo.secpix:=0;
      end
