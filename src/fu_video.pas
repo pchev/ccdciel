@@ -141,7 +141,7 @@ var r: TNumRange;
     sr:TONumRange;
 begin
  r:=camera.VideoExposureRange;
- PanelExposure.Visible:=not(r=NullRange);
+ PanelExposure.Visible:=(r.max>0);
  if PanelExposure.Visible then begin
    if r.max<=100 then begin
      Exprange.Visible:=false;
@@ -180,7 +180,7 @@ begin
    ShowExposure(camera.VideoExposure);
  end;
  r:=camera.VideoGainRange;
- PanelGain.Visible:=not(r=NullRange);
+ PanelGain.Visible:=(r.max>0);
  if PanelGain.Visible then begin
    ResetTrackBar(Gain);
    Gain.Min:=round(r.min);
@@ -190,7 +190,7 @@ begin
    Gain.Position:=camera.VideoGain;
  end;
  r:=camera.VideoGammaRange;
- PanelGamma.Visible:=not(r=NullRange);
+ PanelGamma.Visible:=(r.max>0);
  if PanelGamma.Visible then begin
    ResetTrackBar(Gamma);
    Gamma.Min:=round(r.min);
@@ -200,7 +200,7 @@ begin
    Gamma.Position:=camera.VideoGamma;
  end;
  r:=camera.VideoBrightnessRange;
- PanelBrightness.Visible:=not(r=NullRange);
+ PanelBrightness.Visible:=(r.max>0);
  if PanelBrightness.Visible then begin
    ResetTrackBar(Brightness);
    Brightness.Min:=round(r.min);
