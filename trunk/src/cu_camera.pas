@@ -328,6 +328,7 @@ var dy,dm,dd: word;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
+    gain,gamma,offset: double;
     Frx,Fry,Frwidth,Frheight: integer;
 begin
   // get header values from camera (set by INDI driver)
@@ -388,6 +389,15 @@ begin
   except
    Frwidth:=0;
   end;
+  try
+   gain:=GetVideoGain;
+   gamma:=GetVideoGamma;
+   offset:=GetVideoBrightness;
+  except
+   gain:=0;
+   gamma:=0;
+   offset:=0;
+  end;
   // write new header
   Ffits.Header.ClearHeader;
   Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -414,6 +424,9 @@ begin
   Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
+  if gain>0 then Ffits.Header.Add('GAIN',gain,'Video gain');
+  if gamma>0 then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
+  if offset>0 then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
   if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X');
   if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y');
   if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
