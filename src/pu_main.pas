@@ -3181,7 +3181,7 @@ begin
    i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
     PHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
-    LINGUIDER: autoguider.Connect(config.GetValue('/Autoguider//Autoguider/LinGuiderSocket','/tmp/lg_ss'));
+    LINGUIDER: autoguider.Connect(config.GetValue('/Autoguider/Autoguider/LinGuiderSocket','/tmp/lg_ss'));
   end;
  end else begin
    autoguider.Disconnect;
