@@ -40,7 +40,7 @@ uses
   cu_astrometry, pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan,
   pu_pascaleditor, pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI,
   fu_video, pu_vcurve, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
-  cu_ascomrotator, cu_rotator, fu_rotator;
+  cu_ascomrotator, cu_rotator, fu_rotator, cu_autoguider_linguider;
 
 {$R *.res}
 

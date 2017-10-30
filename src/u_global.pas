@@ -36,7 +36,7 @@ type
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
-  TAutoguiderType=(PHD);
+  TAutoguiderType=(PHD,LINGUIDER);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP, HNSKY);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
