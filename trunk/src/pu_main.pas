@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
-  cu_autoguider, cu_autoguider_phd, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
+  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
@@ -941,6 +941,7 @@ begin
   i:=config.GetValue('/Autoguider/Software',0);
   case TAutoguiderType(i) of
     PHD: autoguider:=T_autoguider_phd.Create;
+    LINGUIDER: autoguider:=T_autoguider_linguider.Create;
   end;
   autoguider.onStatusChange:=@AutoguiderStatus;
   autoguider.onConnect:=@AutoguiderConnect;
@@ -3174,10 +3175,14 @@ begin
 end;
 
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
+var i: integer;
 begin
  if f_autoguider.BtnConnect.Caption='Connect' then begin
-   autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
-                      config.GetValue('/Autoguider/PHDport','4400'));
+   i:=config.GetValue('/Autoguider/Software',0);
+   case TAutoguiderType(i) of
+    PHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
+    LINGUIDER: autoguider.Connect(config.GetValue('/Autoguider//Autoguider/LinGuiderSocket','/tmp/lg_ss'));
+  end;
  end else begin
    autoguider.Disconnect;
  end;
@@ -3224,6 +3229,7 @@ begin
    i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
      PHD: autoguider:=T_autoguider_phd.Create;
+     LINGUIDER: autoguider:=T_autoguider_linguider.Create;
    end;
    autoguider.onStatusChange:=@AutoguiderStatus;
    autoguider.onConnect:=@AutoguiderConnect;
@@ -3371,11 +3377,12 @@ begin
 end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
-var ok,PlanetariumChange: boolean;
+var ok,PlanetariumChange,AutoguiderChange: boolean;
     i,n,FocusStarMagIndex: integer;
     buf:string;
 begin
    PlanetariumChange:=false;
+   AutoguiderChange:=false;
    f_option.Caption:='Options :'+profile;
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
@@ -3498,6 +3505,7 @@ begin
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
+   f_option.LinGuiderSocket.Text:=config.GetValue('/Autoguider/LinGuiderSocket','/tmp/lg_ss');
    f_option.DitherPixel.Text:=config.GetValue('/Autoguider/Dither/Pixel','1.0');
    f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
    f_option.SettlePixel.Text:=config.GetValue('/Autoguider/Settle/Pixel','1.0');
@@ -3615,9 +3623,11 @@ begin
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',StrToIntDef(f_option.MeridianFlipPauseTimeout.Text,0));
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
+     AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',0));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
+     config.SetValue('/Autoguider/LinGuiderSocket',f_option.LinGuiderSocket.Text);
      config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Text);
      config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
      config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Text);
@@ -3649,6 +3659,27 @@ begin
         f_planetariuminfo.planetarium:=planetarium;
         f_scriptengine.Planetarium:=planetarium;
         f_sequence.Planetarium:=planetarium;
+     end;
+     if AutoguiderChange then begin
+       autoguider.Terminate;
+       f_sequence.AutoguiderDisconnected;
+       i:=config.GetValue('/Autoguider/Software',0);
+       case TAutoguiderType(i) of
+         PHD: autoguider:=T_autoguider_phd.Create;
+         LINGUIDER: autoguider:=T_autoguider_linguider.Create;
+       end;
+       autoguider.onStatusChange:=@AutoguiderStatus;
+       autoguider.onConnect:=@AutoguiderConnect;
+       autoguider.onDisconnect:=@AutoguiderDisconnect;
+       autoguider.onShowMessage:=@NewMessage;
+       f_sequence.Autoguider:=autoguider;
+       f_autoguider.Status.Text:=autoguider.Status;
+       NewMessage('Autoguider: '+autoguider.Status);
+       f_autoguider.BtnConnect.Caption:='Connect';
+       f_autoguider.BtnGuide.Caption:='Guide';
+       f_autoguider.led.Brush.Color:=clGray;
+       MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
+       MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
      end;
 
    end;

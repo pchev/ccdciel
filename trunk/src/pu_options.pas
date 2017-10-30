@@ -57,6 +57,7 @@ type
     AutofocusPrecisionSlew: TEdit;
     FocuserTempCoeff: TEdit;
     GroupBox16: TGroupBox;
+    GroupBox17: TGroupBox;
     Label81: TLabel;
     Label82: TLabel;
     Label83: TLabel;
@@ -64,6 +65,11 @@ type
     Label85: TLabel;
     Label86: TLabel;
     Label87: TLabel;
+    Label88: TLabel;
+    Notebook3: TNotebook;
+    PageLinGuider: TPage;
+    PagePHD: TPage;
+    LinGuiderSocket: TEdit;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
@@ -295,6 +301,7 @@ type
     StarWindow: TEdit;
     RefTreshold: TTrackBar;
     procedure AutofocusmodeClick(Sender: TObject);
+    procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDisableBacklashClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
@@ -462,6 +469,11 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
   PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
+end;
+
+procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
+begin
+  Notebook3.PageIndex:=AutoguiderBox.ItemIndex;
 end;
 
 procedure Tf_option.BtnDisableBacklashClick(Sender: TObject);
