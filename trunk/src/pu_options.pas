@@ -65,11 +65,14 @@ type
     Label85: TLabel;
     Label86: TLabel;
     Label87: TLabel;
-    Label88: TLabel;
+    Label89: TLabel;
+    Label90: TLabel;
     Notebook3: TNotebook;
     PageLinGuider: TPage;
     PagePHD: TPage;
     LinGuiderSocket: TEdit;
+    LinGuiderHostname: TEdit;
+    LinGuiderPort: TEdit;
     PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
@@ -84,6 +87,8 @@ type
     MeridianFlipCalibrate: TCheckBox;
     Page4: TPage;
     PageHNSKY: TPage;
+    rbLinUnixSocket: TRadioButton;
+    rbLinTCP: TRadioButton;
     SlewDelay: TEdit;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
@@ -315,6 +320,7 @@ type
     procedure MeridianOptionClick(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure rbLinSocketChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
   private
@@ -327,11 +333,14 @@ type
     procedure SetResolver(value:integer);
     procedure SetLatitude(value:double);
     procedure SetLongitude(value:double);
+    procedure SetLinGuiderUseUnixSocket(value: boolean);
+    function  GetLinGuiderUseUnixSocket: boolean;
   public
     { public declarations }
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
+    property LinGuiderUseUnixSocket: boolean read GetLinGuiderUseUnixSocket write SetLinGuiderUseUnixSocket;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
   end;
@@ -524,6 +533,29 @@ begin
   end;
 end;
 
+procedure Tf_option.SetLinGuiderUseUnixSocket(value: boolean);
+begin
+{$ifdef mswindows}
+value:=false;
+{$endif}
+rbLinUnixSocket.Checked:=value;
+rbLinTCP.Checked:=not value;
+end;
+
+function Tf_option.GetLinGuiderUseUnixSocket: boolean;
+begin
+result:=rbLinUnixSocket.Checked;
+end;
+
+procedure Tf_option.rbLinSocketChange(Sender: TObject);
+begin
+{$ifdef mswindows}
+   if rbLinUnixSocket.Checked then begin
+      rbLinUnixSocket.Checked:=false;
+      rbLinTCP.Checked:=true;
+   end;
+{$endif}
+end;
 
 end.
 

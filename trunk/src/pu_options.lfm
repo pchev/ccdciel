@@ -1534,8 +1534,8 @@ object f_option: Tf_option
               Top = 152
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 35
-              ClientWidth = 387
+              ClientHeight = 31
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -2230,20 +2230,62 @@ object f_option: Tf_option
             ClientHeight = 76
             ClientWidth = 399
             TabOrder = 0
-            object Label88: TLabel
-              Left = 16
-              Height = 19
-              Top = 10
-              Width = 71
-              Caption = 'Unix Socket'
-              ParentColor = False
-            end
             object LinGuiderSocket: TEdit
-              Left = 124
+              Left = 160
               Height = 25
               Top = 8
               Width = 186
               TabOrder = 0
+            end
+            object LinGuiderHostname: TEdit
+              Left = 160
+              Height = 25
+              Top = 48
+              Width = 94
+              TabOrder = 1
+            end
+            object Label89: TLabel
+              Left = 80
+              Height = 19
+              Top = 51
+              Width = 63
+              Caption = 'Hostname'
+              ParentColor = False
+            end
+            object Label90: TLabel
+              Left = 264
+              Height = 19
+              Top = 51
+              Width = 26
+              Caption = 'Port'
+              ParentColor = False
+            end
+            object LinGuiderPort: TEdit
+              Left = 320
+              Height = 25
+              Top = 48
+              Width = 68
+              TabOrder = 2
+            end
+            object rbLinUnixSocket: TRadioButton
+              Left = 8
+              Height = 21
+              Top = 12
+              Width = 95
+              Caption = 'Unix Socket'
+              Checked = True
+              OnChange = rbLinSocketChange
+              TabOrder = 4
+              TabStop = True
+            end
+            object rbLinTCP: TRadioButton
+              Left = 8
+              Height = 21
+              Top = 50
+              Width = 47
+              Caption = 'TCP'
+              OnChange = rbLinSocketChange
+              TabOrder = 3
             end
           end
         end
