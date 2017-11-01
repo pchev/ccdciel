@@ -33,6 +33,7 @@ type
   { Tf_visu }
 
   Tf_visu = class(TFrame)
+    BtnClipping: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
     Histogram: TImage;
@@ -53,6 +54,7 @@ type
     StaticText1: TStaticText;
     Timer1: TTimer;
     procedure BtnBullsEyeClick(Sender: TObject);
+    procedure BtnClippingClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure BtnIttChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -72,7 +74,7 @@ type
   private
     { private declarations }
     FimgMin, FimgMax: double;
-    FBullsEye, LockSpinEdit: Boolean;
+    FBullsEye, LockSpinEdit, FClipping: Boolean;
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
@@ -90,6 +92,7 @@ type
     property ImgMin: double read FimgMin write FimgMin;
     property ImgMax: double read FimgMax write FimgMax;
     property BullsEye: boolean read FBullsEye;
+    property Clipping: boolean read FClipping;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
@@ -281,6 +284,12 @@ end;
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
 begin
   FBullsEye:=not FBullsEye;
+  if Assigned(FRedraw) then FRedraw(self);
+end;
+
+procedure Tf_visu.BtnClippingClick(Sender: TObject);
+begin
+  FClipping:=not FClipping;
   if Assigned(FRedraw) then FRedraw(self);
 end;
 
