@@ -1243,6 +1243,8 @@ begin
   f_visu.BtnBullsEye.Glyph.Assign(btn);
   PageControlRight.Images.GetBitmap(7, btn);
   f_visu.histminmax.Glyph.Assign(btn);
+  PageControlRight.Images.GetBitmap(8, btn);
+  f_visu.BtnClipping.Glyph.Assign(btn);
   btn.Free;
 end;
 
@@ -1567,7 +1569,7 @@ var xx,yy,n: integer;
     sval:string;
     ra,de: double;
     c: TcdcWCScoord;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax: double;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval: double;
 begin
 if LockMouse then exit;
  if MouseMoving and fits.HeaderInfo.valid then begin
@@ -1591,16 +1593,32 @@ if LockMouse then exit;
     Screen2fits(x,y,xx,yy);
     if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
        if fits.HeaderInfo.naxis=2 then begin
-         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
-         sval:=inttostr(val);
+         if fits.HeaderInfo.bitpix>0 then begin
+           val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+           sval:=inttostr(val);
+         end
+         else begin
+          dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
+          sval:=FormatFloat(f3,dval);
+         end;
        end
        else if (fits.HeaderInfo.naxis=3)and(fits.HeaderInfo.naxis3=3) then begin
-         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
-         sval:=inttostr(val);
-         val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
-         sval:=sval+'/'+inttostr(val);
-         val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
-         sval:=sval+'/'+inttostr(val);
+         if fits.HeaderInfo.bitpix>0 then begin
+           val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+           sval:=inttostr(val);
+           val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
+           sval:=sval+'/'+inttostr(val);
+           val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
+           sval:=sval+'/'+inttostr(val);
+         end
+         else begin
+          dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
+          sval:=FormatFloat(f3,dval);
+          dval:=fits.imageMin+fits.image[1,yy,xx]/fits.imageC;
+          sval:=sval+'/'+FormatFloat(f3,dval);
+          dval:=fits.imageMin+fits.image[2,yy,xx]/fits.imageC;
+          sval:=sval+'/'+FormatFloat(f3,dval);
+         end;
        end
     else sval:='';
     s:=Starwindow div camera.BinX;
@@ -4471,6 +4489,7 @@ if fits.HeaderInfo.naxis>0 then begin
   else if f_visu.BtnSqrt.Checked then fits.itt:=ittsqrt;
   fits.ImgDmax:=round(f_visu.ImgMax);
   fits.ImgDmin:=round(f_visu.ImgMin);
+  fits.MarkOverflow:=f_visu.Clipping;
   fits.GetBGRABitmap(ImaBmp);
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin

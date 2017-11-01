@@ -132,6 +132,7 @@ type
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     Fitt : Titt;
     emptybmp:Tbitmap;
+    FMarkOverflow: boolean;
     f_ViewHeaders: TForm;
     m_ViewHeaders: TMemo;
     p_ViewHeaders: TPanel;
@@ -175,6 +176,7 @@ type
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
+     property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
   end;
 
 implementation
@@ -512,6 +514,7 @@ ImgDmin:=0;
 FBPMcount:=0;
 ImgDmax:=MaxWord;
 FImgFullRange:=false;
+FMarkOverflow:=false;
 FFitsInfo.naxis1:=0;
 FHeader:=TFitsHeader.Create;
 FStream:=TMemoryStream.Create;
@@ -1165,10 +1168,13 @@ end;
 procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
 var i,j : integer;
     x : word;
-    xx: extended;
+    xx,xxg,xxb: extended;
     c: double;
     p: PBGRAPixel;
+    HighOverflow,LowOverflow: TBGRAPixel;
 begin
+HighOverflow:=ColorToBGRA(clFuchsia);
+LowOverflow:=ColorToBGRA(clYellow);
 bgra.SetSize(Fwidth,Fheight);
 if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
 c:=MaxWord/(FImgDmax-FImgDmin);
@@ -1177,17 +1183,32 @@ for i:=0 to Fheight-1 do begin
    for j := 0 to Fwidth-1 do begin
        xx:=Fimage[0,i,j];
        x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
-       p^.red:=Citt8(x);
        if n_axis=3 then begin
-         xx:=Fimage[1,i,j];
-         x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+         // 3 chanel color image
+         p^.red:=Citt8(x);
+         xxg:=Fimage[1,i,j];
+         x:=trunc(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
          p^.green:=Citt8(x);
-         xx:=Fimage[2,i,j];
-         x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+         xxb:=Fimage[2,i,j];
+         x:=trunc(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
          p^.blue:=Citt8(x);
+         if FMarkOverflow then begin
+           if maxvalue([xx,xxg,xxb])>=MAXWORD then
+             p^:=HighOverflow;
+           if minvalue([xx,xxg,xxb])<=0 then
+             p^:=LowOverflow;
+         end;
        end else begin
+         // B/W image
+         p^.red:=Citt8(x);
          p^.green:=p^.red;
          p^.blue:=p^.red;
+         if FMarkOverflow then begin
+           if xx<=0 then
+             p^:=LowOverflow
+           else if xx>=MAXWORD then
+             p^:=HighOverflow
+         end;
        end;
        p^.alpha:=255;
        inc(p);
