@@ -3199,7 +3199,14 @@ begin
    i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
     PHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
-    LINGUIDER: autoguider.Connect(config.GetValue('/Autoguider/Autoguider/LinGuiderSocket','/tmp/lg_ss'));
+    LINGUIDER: begin
+               if config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true) then begin
+                 autoguider.Connect(config.GetValue('/Autoguider/Autoguider/LinGuiderSocket','/tmp/lg_ss'));
+               end
+               else begin
+                autoguider.Connect(config.GetValue('/Autoguider/LinGuiderHostname','localhost'),config.GetValue('/Autoguider/LinGuiderPort','5656'));
+               end;
+    end;
   end;
  end else begin
    autoguider.Disconnect;
@@ -3523,7 +3530,10 @@ begin
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
+   f_option.LinGuiderUseUnixSocket:=config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true);
    f_option.LinGuiderSocket.Text:=config.GetValue('/Autoguider/LinGuiderSocket','/tmp/lg_ss');
+   f_option.LinGuiderHostname.Text:=config.GetValue('/Autoguider/LinGuiderHostname','localhost');
+   f_option.LinGuiderPort.Text:=config.GetValue('/Autoguider/LinGuiderPort','5656');
    f_option.DitherPixel.Text:=config.GetValue('/Autoguider/Dither/Pixel','1.0');
    f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
    f_option.SettlePixel.Text:=config.GetValue('/Autoguider/Settle/Pixel','1.0');
@@ -3645,7 +3655,10 @@ begin
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
+     config.SetValue('/Autoguider/LinGuiderUseUnixSocket',f_option.LinGuiderUseUnixSocket);
      config.SetValue('/Autoguider/LinGuiderSocket',f_option.LinGuiderSocket.Text);
+     config.SetValue('/Autoguider/LinGuiderHostname',f_option.LinGuiderHostname.Text);
+     config.SetValue('/Autoguider/LinGuiderPort',f_option.LinGuiderPort.Text);
      config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Text);
      config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
      config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Text);

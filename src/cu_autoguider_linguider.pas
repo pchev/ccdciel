@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, u_global,u_utils, Sockets,
+uses cu_autoguider, u_global, u_utils, cu_tcpclient, Sockets, blcksock, synsock,
   Forms, Classes, SysUtils;
 
 type
@@ -50,6 +50,8 @@ type
   protected
     FUsock: Integer;
     FUSocket: string;
+    UseUnixSocket: boolean;
+    TcpClient : TTcpclient;
     function LinGuiderCmd(lincmd:LIN_CMD; param:string=''):string;
     procedure SetState;
     Procedure ProcessEvent(txt:string); override;
@@ -79,6 +81,7 @@ begin
   inherited Create;
   FAutoguiderType:=LINGUIDER;
   FUSocket:='/tmp/lg_ss';
+  UseUnixSocket:=true;
   FTimeout:=500;
 end;
 
@@ -97,10 +100,22 @@ var buf: string;
     readbuf: array[0..1024] of char;
 const hdr_sz=8;
 begin
-    cmd:=ord(lincmd);
-    result:=msgFailed;
-    try
-
+ // prepare message
+ cmd:=ord(lincmd);
+ result:=msgFailed;
+  // signature and command
+ for i:=0 to 255 do msg[i]:=chr(0);
+ msg[0] := chr(2);	// SIGNATURE
+ msg[2] := chr(cmd);	// CMD
+  // add parameters
+ buf:=param;
+ n:=length(buf);
+ buffer:=buf;
+ msg[4] := chr(n);	// DATA LEN
+ Move(buffer,msg[hdr_sz],n);
+ msgl:=hdr_sz+n;
+ try
+ if UseUnixSocket then begin
     // Create socket
     srvaddr.sun_family:=AF_UNIX;
     srvaddr.sun_path:=FUSocket;
@@ -111,19 +126,6 @@ begin
     // Connect
     i:=fpconnect(FUsock,@srvaddr,n);
     if i<0 then exit;
-
-    // signature and command
-    for i:=0 to 255 do msg[i]:=chr(0);
-    msg[0] := chr(2);	// SIGNATURE
-    msg[2] := chr(cmd);	// CMD
-
-    // add parameters
-    buf:=param;
-    n:=length(buf);
-    buffer:=buf;
-    msg[4] := chr(n);	// DATA LEN
-    Move(buffer,msg[hdr_sz],n);
-    msgl:=hdr_sz+n;
 
     // send command
     fpsend(FUsock,@msg,msgl,0);
@@ -140,27 +142,58 @@ begin
 
     result:=trim(buf);
 
-    except
-      on e:Exception do begin
-        result:=msgFailed;
-        DisplayMessage('Autoguider: '+e.Message);
-      end;
-    end;
+ end
+ else begin
+   if (tcpclient<>nil) then begin  // connected
+     // send command
+     tcpclient.Sock.SendBuffer(@msg,msgl);
+     if tcpclient.Sock.LastError<>0 then begin
+        Terminate;
+        exit;
+     end;
+
+     // read response length
+     n:=tcpclient.Sock.RecvBufferEx(@readbuf,hdr_sz,FTimeout);
+     to_read:=ord(readbuf[4]);
+
+     // read response
+     n:=tcpclient.Sock.RecvBufferEx(@readbuf,to_read,FTimeout);
+     buf:=copy(readbuf,1,to_read);
+
+     result:=trim(buf);
+
+   end;
+ end;
+ except
+   on e:Exception do begin
+     result:=msgFailed;
+     DisplayMessage('Autoguider: '+e.Message);
+   end;
+ end;
 end;
 
 Procedure T_autoguider_linguider.Connect(cp1: string; cp2:string='');
 var buf: string;
 begin
   if FRunning then exit;
-  FUSocket:=cp1;
-  buf:=LinGuiderCmd(LIN_GET_VER);
-  if buf=msgFailed then begin
-    FStatus:='Disconnected';
-    FState:=GUIDER_DISCONNECTED;
-    if assigned(FonConnectError) then FonConnectError(self);
+  UseUnixSocket:=(cp2='');
+  if UseUnixSocket then begin
+    FUSocket:=cp1;
+    buf:=LinGuiderCmd(LIN_GET_VER);
+    if buf=msgFailed then begin
+      FStatus:='Disconnected';
+      FState:=GUIDER_DISCONNECTED;
+      if assigned(FonConnectError) then FonConnectError(self);
+    end
+    else begin
+      FStatus:='Connected';
+      Start;
+    end;
   end
   else begin
-    FStatus:='Connected';
+    FTargetHost:=cp1;
+    FTargetPort:=cp2;
+    FStatus:='Connecting';
     Start;
   end;
 end;
@@ -173,23 +206,58 @@ end;
 procedure T_autoguider_linguider.Execute;
 var buf:string;
 begin
- try
-  FRunning:=true;
-  if assigned(FonConnect) then FonConnect(self);
-  // main loop
-  repeat
-    if terminated then break;
-    sleep(1000);
-    buf:=LinGuiderCmd(LIN_GET_GUIDER_STATE);
-    if buf=msgFailed then break;
-    ProcessEvent(buf);
-  until false;
-  finally
-  FRunning:=false;
-  terminate;
-  FStatus:='Disconnected';
-  ProcessDisconnect;
-  end;
+ if UseUnixSocket then begin
+   try
+    FRunning:=true;
+    if assigned(FonConnect) then FonConnect(self);
+    // main loop
+    repeat
+      if terminated then break;
+      sleep(1000);
+      buf:=LinGuiderCmd(LIN_GET_GUIDER_STATE);
+      if buf=msgFailed then break;
+      ProcessEvent(buf);
+    until false;
+    finally
+    FRunning:=false;
+    terminate;
+    FStatus:='Disconnected';
+    ProcessDisconnect;
+    end;
+ end else begin
+    tcpclient:=TTCPClient.Create;
+    try
+    tcpclient.TargetHost:=FTargetHost;
+    tcpclient.TargetPort:=FTargetPort;
+    tcpclient.Timeout := FTimeout;
+    // connect
+    if tcpclient.Connect then begin
+      FRunning:=true;
+      if assigned(FonConnect) then FonConnect(self);
+      // main loop
+      repeat
+        if terminated then break;
+        sleep(1000);
+        buf:=LinGuiderCmd(LIN_GET_GUIDER_STATE);
+        if buf=msgFailed then break;
+        ProcessEvent(buf);
+      until false;
+    end
+    else begin
+      DisplayMessage('Cannot connect to Lin_guider, Is Lin_guider running and the TCP server active?');
+      if assigned(FonConnectError) then FonConnectError(self);
+    end;
+    DisplayMessage(tcpclient.GetErrorDesc);
+    finally
+    FRunning:=false;
+    StarLostTimer.Enabled:=false;
+    terminate;
+    tcpclient.Disconnect;
+    FStatus:='Disconnected';
+    ProcessDisconnect;
+    tcpclient.Free;
+    end;
+ end;
 end;
 
 Procedure T_autoguider_linguider.ProcessEvent(txt:string);
