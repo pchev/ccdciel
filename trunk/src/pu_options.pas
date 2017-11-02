@@ -483,6 +483,9 @@ end;
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
 begin
   Notebook3.PageIndex:=AutoguiderBox.ItemIndex;
+  groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
+  groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
+  DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0);
 end;
 
 procedure Tf_option.BtnDisableBacklashClick(Sender: TObject);
