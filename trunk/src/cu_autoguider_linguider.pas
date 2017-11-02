@@ -92,12 +92,12 @@ end;
 
 function T_autoguider_linguider.LinGuiderCmd(lincmd:LIN_CMD; param:string=''):string;
 var buf: string;
-    cmd:byte;
-    n,i,msgl,to_read: integer;
+    cmd,to_read:byte;
+    n,i,msgl: integer;
     srvaddr: sockaddr_un;
     msg: array[0..255] of char;
     buffer: array[0..81] of char;
-    readbuf: array[0..1024] of char;
+    readbuf: array[0..255] of char;  // no response >255 ?
 const hdr_sz=8;
 begin
  // prepare message
@@ -128,13 +128,15 @@ begin
     if i<0 then exit;
 
     // send command
-    fpsend(FUsock,@msg,msgl,0);
+    i:=fpsend(FUsock,@msg,msgl,0);
+    if i<>msgl then exit;
 
     // read response length
-    fprecv(FUsock,@readbuf,hdr_sz,0);
+    i:=fprecv(FUsock,@readbuf,hdr_sz,0);
+    if i<>hdr_sz then exit;
     to_read:=ord(readbuf[4]);
     // read response
-    fprecv(FUsock,@readbuf,to_read,0);
+    i:=fprecv(FUsock,@readbuf,to_read,0);
     buf:=copy(readbuf,1,to_read);
 
     // Close socket
@@ -153,11 +155,12 @@ begin
      end;
 
      // read response length
-     n:=tcpclient.Sock.RecvBufferEx(@readbuf,hdr_sz,FTimeout);
+     i:=tcpclient.Sock.RecvBufferEx(@readbuf,hdr_sz,FTimeout);
+     if i<>hdr_sz then exit;
      to_read:=ord(readbuf[4]);
 
      // read response
-     n:=tcpclient.Sock.RecvBufferEx(@readbuf,to_read,FTimeout);
+     i:=tcpclient.Sock.RecvBufferEx(@readbuf,to_read,FTimeout);
      buf:=copy(readbuf,1,to_read);
 
      result:=trim(buf);
