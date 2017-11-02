@@ -26,6 +26,7 @@ grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/start.h
 
 # remove external links
 sed -i '/http:/ d' fl.txt
+sed -i '/https:/ d' fl.txt
 
 # insert title and doc index
 sed -i '1 i '$lang'\/documentation\/00_title.html\n'$lang'\/documentation\/start.html' fl.txt
