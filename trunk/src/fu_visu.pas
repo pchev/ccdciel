@@ -289,7 +289,7 @@ end;
 
 procedure Tf_visu.BtnClippingClick(Sender: TObject);
 begin
-  FClipping:=not FClipping;
+  FClipping:=BtnClipping.Down;
   if Assigned(FRedraw) then FRedraw(self);
 end;
 
