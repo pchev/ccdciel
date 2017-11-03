@@ -377,6 +377,8 @@ begin
      CancelAutofocus:=true;
      msg('Request to stop autofocus ...');
      Camera.AbortExposure;
+     if Mount.MountSlewing then Mount.AbortMotion;
+     if Astrometry.Busy then Astrometry.StopAstrometry;
    end;
    if FCurrentTarget>=0 then
       p:=t_plan(Ftargets[FCurrentTarget].plan)
@@ -385,7 +387,7 @@ begin
    if (not abort) then begin
      if (p<>nil) and p.Running then p.Stop;
      FRunning:=false;
-     msg('Sequence stopped by user request, no termination sript will be run.');
+     msg('Sequence stopped by user request, no termination script will be run.');
      ShowDelayMsg('');
    end
    else begin
