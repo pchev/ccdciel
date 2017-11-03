@@ -371,13 +371,14 @@ begin
       p:=t_plan(Ftargets[FCurrentTarget].plan)
    else
       p:=nil;
-   if (not abort) and (p<>nil) and p.Running then begin
-     p.Stop;
+   if (not abort) then begin
+     if (p<>nil) and p.Running then p.Stop;
      FRunning:=false;
      msg('Sequence stopped by user request, no termination sript will be run.');
      ShowDelayMsg('');
    end
    else begin
+     if (p<>nil) and p.Running then p.Stop;
      FRunning:=false;
      if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
@@ -450,7 +451,6 @@ begin
      TargetRepeatCount:=1;
      initok:=InitTarget;
      if not FRunning then begin
-       NextTarget;
        exit;
      end;
      if initok then begin
