@@ -429,7 +429,10 @@ begin
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     repeat
       Wait(delay);
-      Fpreview.ControlExposure(exp,binx,biny);
+      if not Fpreview.ControlExposure(exp,binx,biny) then begin
+        msg('Exposure fail!');
+        exit;
+      end;
       if CancelAutofocus then exit;
       msg('Resolve control exposure');
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');

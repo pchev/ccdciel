@@ -1798,46 +1798,49 @@ if f_pause.Wait then begin
   camera.ResetFrame;
   Camera.FrameType:=DARK;
   fits.SetBPM(bpm,0,0,0,0);
-  f_preview.ControlExposure(f_preview.Exposure,bin,bin);
-  lb:=fits.imageMean+BPMsigma*fits.imageSigma;
-  if lb>MAXWORD then lb:=MAXWORD/2;
-  bpmNum:=0;
-  bpmX:=fits.HeaderInfo.naxis1;
-  bpmY:=fits.HeaderInfo.naxis2;
-  bpmAxis:=fits.HeaderInfo.naxis;
-  for x:=0 to fits.HeaderInfo.naxis1-1 do begin
-     for y:=0 to fits.HeaderInfo.naxis2-1 do begin
-        val:=trunc(fits.imageMin+fits.image[0,y,x]/fits.imageC);
-        if fits.HeaderInfo.naxis=3 then begin
-          val1:=trunc(fits.imageMin+fits.image[1,y,x]/fits.imageC);
-          val2:=trunc(fits.imageMin+fits.image[2,y,x]/fits.imageC);
-          val:=maxvalue([val,val1,val2]);
-        end;
-        if val>lb then begin
-           if bpmnum<1000 then begin
-             inc(bpmNum);
-             bpm[bpmnum,1]:=x;
-             bpm[bpmnum,2]:=y;
-           end;
-        end;
-     end;
-  end;
-  if bpmnum<1000 then
-     NewMessage('Bad pixel detection found '+inttostr(bpmNum)+' hot pixels.')
-  else begin
-     NewMessage('Too many hot pixel found!');
-     NewMessage('Please increase the threshold.');
-  end;
-  config.DeletePath('/BadPixelMap/');
-  config.SetValue('/BadPixelMap/Count',bpmNum);
-  config.SetValue('/BadPixelMap/CCDWidth',bpmX);
-  config.SetValue('/BadPixelMap/CCDHeight',bpmY);
-  config.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
-  for i:=1 to bpmnum do begin
-    config.SetValue('/BadPixelMap/BPMX'+IntToStr(i),bpm[i,1]);
-    config.SetValue('/BadPixelMap/BPMY'+IntToStr(i),bpm[i,2]);
-  end;
-  SaveConfig;
+  if f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
+    lb:=fits.imageMean+BPMsigma*fits.imageSigma;
+    if lb>MAXWORD then lb:=MAXWORD/2;
+    bpmNum:=0;
+    bpmX:=fits.HeaderInfo.naxis1;
+    bpmY:=fits.HeaderInfo.naxis2;
+    bpmAxis:=fits.HeaderInfo.naxis;
+    for x:=0 to fits.HeaderInfo.naxis1-1 do begin
+       for y:=0 to fits.HeaderInfo.naxis2-1 do begin
+          val:=trunc(fits.imageMin+fits.image[0,y,x]/fits.imageC);
+          if fits.HeaderInfo.naxis=3 then begin
+            val1:=trunc(fits.imageMin+fits.image[1,y,x]/fits.imageC);
+            val2:=trunc(fits.imageMin+fits.image[2,y,x]/fits.imageC);
+            val:=maxvalue([val,val1,val2]);
+          end;
+          if val>lb then begin
+             if bpmnum<1000 then begin
+               inc(bpmNum);
+               bpm[bpmnum,1]:=x;
+               bpm[bpmnum,2]:=y;
+             end;
+          end;
+       end;
+    end;
+    if bpmnum<1000 then
+       NewMessage('Bad pixel detection found '+inttostr(bpmNum)+' hot pixels.')
+    else begin
+       NewMessage('Too many hot pixel found!');
+       NewMessage('Please increase the threshold.');
+    end;
+    config.DeletePath('/BadPixelMap/');
+    config.SetValue('/BadPixelMap/Count',bpmNum);
+    config.SetValue('/BadPixelMap/CCDWidth',bpmX);
+    config.SetValue('/BadPixelMap/CCDHeight',bpmY);
+    config.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
+    for i:=1 to bpmnum do begin
+      config.SetValue('/BadPixelMap/BPMX'+IntToStr(i),bpm[i,1]);
+      config.SetValue('/BadPixelMap/BPMY'+IntToStr(i),bpm[i,2]);
+    end;
+    SaveConfig;
+  end
+  else
+    NewMessage('BPM exposure fail!');
 end;
 end;
 
@@ -2501,6 +2504,7 @@ begin
   AbortTimer.Enabled:=false;
   StartCaptureTimer.Enabled:=false;
   if Capture and f_capture.Running then NewMessage('Exposure aborted!');
+  if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,0,0,-1,-1,-1,0,0);
   f_preview.stop;
   f_capture.stop;
   Capture:=false;
@@ -2858,7 +2862,10 @@ begin
    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
    // average hfd for nsum exposures
    for j:=1 to nsum do begin
-     f_preview.ControlExposure(exp,bin,bin);
+     if not f_preview.ControlExposure(exp,bin,bin) then begin
+       NewMessage('Exposure fail!');
+       TerminateVcurve:=true;
+     end;
      if TerminateVcurve then begin
        NewMessage('Stop Vcurve learning');
        LoadVcurve;
@@ -2931,6 +2938,7 @@ begin
  VcNsteps:=StrToIntDef(f_vcurve.Nsteps.Text,30);
  if (VcCenterpos=NullCoord)or(VcHalfwidth=NullCoord) then exit;
  AutofocusVcFilterOffset:=CurrentFilterOffset;
+ try
  // find a bright star
  focuser.Position:=VcCenterpos;
  wait(1);
@@ -2938,7 +2946,10 @@ begin
  // use bad pixel map
  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
  if (not f_starprofile.FindStar) then begin
-   f_preview.ControlExposure(f_preview.Exposure,bin,bin);
+   if not f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
+      NewMessage('Exposure fail!');
+      exit;
+   end;
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
@@ -2956,7 +2967,6 @@ begin
    NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
    exit;
  end;
- try
  learningvcurve:=true;
  // set focus frame around the star
  s:=Focuswindow div camera.BinX;
@@ -2998,6 +3008,7 @@ begin
  wait(1);
  finally
  // reset camera
+ fits.SetBPM(bpm,0,0,0,0);
  learningvcurve:=false;
  camera.ResetFrame;
  f_visu.Zoom:=SaveZoom;
@@ -5044,7 +5055,11 @@ begin
    end
    else begin
       NewMessage('In place autofocus failed, try with the focus stars list.');
-      f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning);
+      if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning) then begin
+        NewMessage('Exposure fail!');
+        f_starprofile.ChkAutofocus.Checked:=false;
+        exit;
+      end;
       wait(1);
    end;
  end;
@@ -5242,7 +5257,11 @@ begin
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   camera.SetBinning(AutofocusBinning,AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-  f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning);
+  if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning) then begin
+    NewMessage('Exposure fail!');
+    f_starprofile.ChkAutofocus.Checked:=false;
+    exit;
+  end;
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;

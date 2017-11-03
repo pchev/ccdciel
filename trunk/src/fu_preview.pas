@@ -55,7 +55,7 @@ type
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     FonEndControlExposure: TNotifyEvent;
-    WaitExposure: boolean;
+    WaitExposure, ControlExposureOK: boolean;
     procedure EndExposure(Sender: TObject);
     procedure msg(txt:string);
     function GetExposure:double;
@@ -66,7 +66,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure Stop;
-    procedure ControlExposure(exp:double; binx,biny: integer);
+    function ControlExposure(exp:double; binx,biny: integer):boolean;
     property Running: boolean read Frunning write Frunning;
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
@@ -145,6 +145,7 @@ procedure Tf_preview.Stop;
 begin
   Frunning:=false;
   FLoop:=false;
+  WaitExposure:=false;
   led.Brush.Color:=clGray;
   BtnLoop.Caption:='Loop';
 end;
@@ -179,11 +180,12 @@ begin
   else result:=1;
 end;
 
-procedure Tf_preview.ControlExposure(exp:double; binx,biny: integer);
+function Tf_preview.ControlExposure(exp:double; binx,biny: integer):boolean;
 var SaveonNewImage: TNotifyEvent;
     savebinx,savebiny: integer;
     endt: TDateTime;
 begin
+result:=false;
 if Camera.Status=devConnected then begin
   msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
   SaveonNewImage:=Camera.onNewImage;
@@ -192,21 +194,24 @@ if Camera.Status=devConnected then begin
   Camera.onNewImage:=@EndExposure;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
   WaitExposure:=true;
+  ControlExposureOK:=false;
   Camera.StartExposure(exp);
   endt:=now+60/secperday;
   while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
     Sleep(100);
     Application.ProcessMessages;
   end;
+  result:=ControlExposureOK;
   Camera.onNewImage:=SaveonNewImage;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
-  if Assigned(SaveonNewImage) then SaveonNewImage(self);
+  if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
   Wait(1);
 end;
 end;
 
 procedure Tf_preview.EndExposure(Sender: TObject);
 begin
+  ControlExposureOK:=true;
   WaitExposure:=false;
   if assigned(FonEndControlExposure) then FonEndControlExposure(self);
 end;
