@@ -357,6 +357,7 @@ end;
 
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
+    timeout: TDateTime;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
@@ -366,6 +367,14 @@ begin
      if wt_pause<>nil
       then wt_pause.BtnCancel.Click
       else cancelWaitTill:=true;
+   end;
+   if Autofocusing then begin
+     CancelAutofocus:=true;
+     timeout:=now+60/secperday;
+     msg('Waiting for the autofocus to stop...');
+     while Autofocusing and (now<=timeout) do
+        wait(1);
+     if now>timeout then msg('Autofocus still running, stopping anyway.');
    end;
    if FCurrentTarget>=0 then
       p:=t_plan(Ftargets[FCurrentTarget].plan)
