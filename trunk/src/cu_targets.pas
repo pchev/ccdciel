@@ -376,6 +376,7 @@ begin
    if Autofocusing then begin
      CancelAutofocus:=true;
      msg('Request to stop autofocus ...');
+     Camera.AbortExposure;
    end;
    if FCurrentTarget>=0 then
       p:=t_plan(Ftargets[FCurrentTarget].plan)
