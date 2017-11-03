@@ -113,6 +113,7 @@ type
     procedure msg(txt:string);
     procedure ShowDelayMsg(txt:string);
     procedure StopSequence;
+    procedure EndSequence(Sender: TObject);
   public
     { public declarations }
     CurrentName, CurrentTarget, CurrentFile, CurrentStep: string;
@@ -166,6 +167,7 @@ begin
  Targets.Astrometry:=Fastrometry;
  Targets.Planetarium:=Fplanetarium;
  Targets.onMsg:=@Msg;
+ Targets.onEndSequence:=@EndSequence;
  Targets.DelayMsg:=@ShowDelayMsg;
  Targets.onTargetsChange:=@TargetsChange;
  Targets.onPlanChange:=@PlanChange;
@@ -649,7 +651,7 @@ begin
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
- led.Brush.Color:=clRed;
+ if targets.TargetInitializing then led.Brush.Color:=clRed;
 end;
 
 procedure Tf_sequence.AbortSequence;
@@ -660,6 +662,11 @@ begin
  PlanRow:=-1;
  led.Brush.Color:=clRed;
  if Unattended.Checked then mount.AbortMotion;
+end;
+
+procedure Tf_sequence.EndSequence(Sender: TObject);
+begin
+ led.Brush.Color:=clRed;
 end;
 
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
