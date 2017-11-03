@@ -118,7 +118,7 @@ function TAstrometry.WaitBusy(Timeout:double=60): boolean;
 var endt: TDateTime;
 begin
   endt:=now+Timeout/secperday;
-  while (FBusy)and(now<endt) do begin
+  while (FBusy)and(now<endt)and (not CancelAutofocus) do begin
      sleep(100);
      Application.ProcessMessages;
   end;
@@ -402,6 +402,7 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa: double;
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
   result:=false;
+  oldfilter:=0;
   try
   delay:=config.GetValue('/PrecSlew/Delay',5);
   dist:=abs(NullCoord/60);
@@ -413,7 +414,6 @@ begin
       if not Mount.Slew(ra, de) then exit;
       dist:=0;
    end else begin
-    oldfilter:=0;
     if filter>0 then begin
       oldfilter:=Fwheel.Filter;
       Fwheel.Filter:=filter;
@@ -424,11 +424,13 @@ begin
     de1:=deg2rad*de;
     msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
     if not Mount.Slew(ra, de) then exit;
+    if CancelAutofocus then exit;
     i:=1;
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     repeat
       Wait(delay);
       Fpreview.ControlExposure(exp,binx,biny);
+      if CancelAutofocus then exit;
       msg('Resolve control exposure');
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
       StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
@@ -475,7 +477,7 @@ begin
       end;
       inc(i);
     until (dist<=prec)or(i>maxslew);
-    if oldfilter>0 then Fwheel.Filter:=oldfilter;
+
    end;
   end;
   result:=(dist<=prec);
@@ -486,6 +488,7 @@ begin
     if result then msg('Precision slew finished.')
               else msg('Precision slew failed!');
     fits.SetBPM(bpm,0,0,0,0);
+    if oldfilter>0 then Fwheel.Filter:=oldfilter;
   end;
 end;
 

@@ -41,6 +41,7 @@ type
       FTargetsChange: TNotifyEvent;
       FPlanChange: TNotifyEvent;
       FonMsg,FDelayMsg: TNotifyMsg;
+      FonEndSequence: TNotifyEvent;
       Fcapture: Tf_capture;
       Fpreview: Tf_preview;
       Ffilter: Tf_filterwheel;
@@ -94,6 +95,7 @@ type
       FUnattended: boolean;
       FName: string;
     public
+      FTargetInitializing: boolean;
       TargetRepeatCount, TargetTotalCount: integer;
       constructor Create(AOwner: TComponent); override;
       destructor  Destroy; override;
@@ -120,6 +122,7 @@ type
       property TargetCoord: boolean read FTargetCoord;
       property TargetRA: double read FTargetRA;
       property TargetDE: double read FTargetDE;
+      property TargetInitializing: boolean read FTargetInitializing;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
       property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
@@ -134,6 +137,7 @@ type
       property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
       property DelayMsg: TNotifyMsg read FDelayMsg write FDelayMsg;
       property onMsg: TNotifyMsg read FonMsg write FonMsg;
+      property onEndSequence: TNotifyEvent read FonEndSequence write FonEndSequence;
   end;
 
 implementation
@@ -141,6 +145,7 @@ implementation
 constructor T_Targets.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FTargetInitializing:=false;
   NumTargets := 0;
   FTargetsRepeat:=1;
   Frunning:=false;
@@ -357,12 +362,12 @@ end;
 
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
-    timeout: TDateTime;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
  InplaceAutofocus:=false;
  if FRunning then begin
+   FRunning:=false;
    if WaitTillrunning then begin
      if wt_pause<>nil
       then wt_pause.BtnCancel.Click
@@ -370,11 +375,7 @@ begin
    end;
    if Autofocusing then begin
      CancelAutofocus:=true;
-     timeout:=now+60/secperday;
-     msg('Waiting for the autofocus to stop...');
-     while Autofocusing and (now<=timeout) do
-        wait(1);
-     if now>timeout then msg('Autofocus still running, stopping anyway.');
+     msg('Request to stop autofocus ...');
    end;
    if FCurrentTarget>=0 then
       p:=t_plan(Ftargets[FCurrentTarget].plan)
@@ -517,6 +518,8 @@ var t: TTarget;
 begin
   result:=false;
   if not FRunning then exit;
+  FTargetInitializing:=true;
+  try
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
@@ -594,6 +597,9 @@ begin
       end;
     end;
     result:=true;
+  end;
+  finally
+    FTargetInitializing:=false;
   end;
 end;
 
@@ -767,6 +773,7 @@ begin
   TargetTimer.Enabled:=false;
   FCurrentTarget:=-1;
   msg('Sequence '+FName+' stopped.');
+  if assigned(FonEndSequence) then FonEndSequence(nil);
   ShowDelayMsg('');
  end;
 end;

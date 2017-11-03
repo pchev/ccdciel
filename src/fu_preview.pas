@@ -194,7 +194,7 @@ if Camera.Status=devConnected then begin
   WaitExposure:=true;
   Camera.StartExposure(exp);
   endt:=now+60/secperday;
-  while WaitExposure and(now<endt) do begin
+  while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
     Sleep(100);
     Application.ProcessMessages;
   end;
