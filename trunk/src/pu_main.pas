@@ -358,7 +358,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse, LockMouseWheel: boolean;
-    Capture,Preview,meridianflipping,autofocusing,learningvcurve: boolean;
+    Capture,Preview,meridianflipping,learningvcurve: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;

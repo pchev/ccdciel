@@ -306,7 +306,7 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  CancelAutofocus, InplaceAutofocus: Boolean;
+  CancelAutofocus, InplaceAutofocus, Autofocusing: Boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
   NFocusStars: integer;
