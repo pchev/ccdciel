@@ -790,16 +790,21 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusVcurve;
-var newpos,delta,meanhfd:double;
+var newpos,delta,meanhfd,tempcomp:double;
 begin
  case AutofocusVcStep of
    vcsStartL: begin
+              // temperature compensation
+              if AutofocusVcTemp<>NullCoord then
+                 tempcomp:=focuser.TempOffset(AutofocusVcTemp,FocuserTemp)
+              else
+                 tempcomp:=0;
               // move to curve start position to clear backlash
               newpos:=AutofocusVc[0,1];
               // correct for filter offset
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
-              if AutofocusVcTemp<>NullCoord then newpos:=newpos+focuser.TempOffset(AutofocusVcTemp,FocuserTemp);
+              newpos:=newpos+tempcomp;
               // check in range
               if newpos<FocuserPositionMin then newpos:=FocuserPositionMin;
               focuser.FocusPosition:=round(newpos);
@@ -816,7 +821,7 @@ begin
               // correct for filter offset
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
-              if AutofocusVcTemp<>NullCoord then newpos:=newpos+focuser.TempOffset(AutofocusVcTemp,FocuserTemp);
+              newpos:=newpos+tempcomp;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to start position '+focuser.Position.Text);
               FonAbsolutePosition(self);
@@ -824,12 +829,17 @@ begin
               wait(1);
              end;
    vcsStartR: begin
+              // temperature compensation
+              if AutofocusVcTemp<>NullCoord then
+                 tempcomp:=focuser.TempOffset(AutofocusVcTemp,FocuserTemp)
+              else
+                 tempcomp:=0;
               // move to curve end position to clear backlash
               newpos:=AutofocusVc[AutofocusVcNum,1];
               // correct for filter offset
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
-              if AutofocusVcTemp<>NullCoord then newpos:=newpos+focuser.TempOffset(AutofocusVcTemp,FocuserTemp);
+              newpos:=newpos+tempcomp;
               // check in range
               if newpos>FocuserPositionMax then newpos:=FocuserPositionMax;
               focuser.FocusPosition:=round(newpos);
@@ -846,7 +856,7 @@ begin
               // correct for filter offset
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
-              if AutofocusVcTemp<>NullCoord then newpos:=newpos+focuser.TempOffset(AutofocusVcTemp,FocuserTemp);
+              newpos:=newpos+tempcomp;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to start position '+focuser.Position.Text);
               FonAbsolutePosition(self);
