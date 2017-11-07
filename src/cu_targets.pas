@@ -508,6 +508,7 @@ begin
      RunEndScript;
      ShowDelayMsg('');
      FCurrentTarget:=-1;
+     if assigned(FonEndSequence) then FonEndSequence(nil);
    end;
   end;
 end;
