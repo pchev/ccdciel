@@ -1648,7 +1648,7 @@ if LockMouse then exit;
         StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
       end;
     end;
-    if camera.VerticalFlip then yy:=img_Height-yy;
+    yy:=img_Height-yy;
     StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
  end;
 Mx:=X;
