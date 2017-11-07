@@ -5075,7 +5075,7 @@ begin
      end;
    end;
    // get current position from last capture image
-   if (not tpos)and(f_capture.Running) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
+   if (not tpos)and(f_capture.Running)and(f_capture.SeqCount>1) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
      NewMessage('Get current position from last image');
      astrometry.SolveCurrentImage(true);
      if astrometry.LastResult then begin
