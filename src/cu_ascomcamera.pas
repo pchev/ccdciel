@@ -974,8 +974,17 @@ end;
 
 function T_ascomcamera.GetVideoGain:integer;
 begin
- result:=0;
- // todo
+result:=0;
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.Gain;
+  except
+     result:=0;
+  end;
+end
+else result:=0;
+{$endif}
 end;
 
 function T_ascomcamera.GetVideoGamma:integer;
@@ -1044,7 +1053,6 @@ procedure T_ascomcamera.SetVideoPreviewDivisor(value:integer);
 begin
  // todo
 end;
-
 
 end.
 
