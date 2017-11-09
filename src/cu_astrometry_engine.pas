@@ -546,16 +546,18 @@ end;
 end;
 
 procedure TAstrometry_engine.Apm2Wcs;
-// comunicated by Han Kleijn
-// simplified as ccdciel force decimal separator to .
+// communicated by Han Kleijn
 var
   i,pos1,pos2,pos3,sign : integer;
   f : textfile;
   line1, line2,line3 :string;
   hdr: THeaderBlock;
   fwcs: file of THeaderBlock;
-  ra_radians,dec_radians,pixel_size,crota1,crota2,yx_ratio,cdelt1,cdelt2:double;
+  ra_radians,dec_radians,pixel_size,crota1,crota2,cdelt1,cdelt2:double;
   cd1_1,cd1_2,cd2_1,cd2_2: double;
+  flipped: boolean;
+  List: TStrings;
+
 begin
   assign(f,apmfile);
   // Reopen the file for reading
@@ -569,32 +571,51 @@ begin
   closefile(f);
   if length(line3)=20 then {valid solution}
   begin
-    pos1:=posex(',',line1,1);
-    pos2:=posex(',',line1,pos1+1);
+    List := TStringList.Create;
+    try
+       list.StrictDelimiter:=true;{only accept comma's}
+       {now do line1}
+       List.Clear;
+       ExtractStrings([','], [], PChar(line1),List);
+       if list.count<=3 then {commas between value, DOT as decimal separator}
+       begin
+         ra_radians:=strtofloat(list[0]);
+         dec_radians:=strtofloat(list[1]);
+       end
+       else
+       begin {commas between value, COMMA as decimal separator}
+         ra_radians:=strtofloat(list[0]+'.'+list[1]);
+         dec_radians:=strtofloat(list[2]+'.'+list[3]);
+       end;
+       {now do line2}
+       List.Clear;
+       ExtractStrings([','], [], PChar(line2),List);
+       if list.count<=5 then {commas between value, DOT as decimal separator}
+       begin
+         pixel_size:=strtofloat(list[0]);
+         crota2:=strtofloat(list[1]);
+         flipped:=pos('-',list[2])=0;{from yx ratio. In apm file yx ratio is reported inverse compared with PlateSolve2 window}
+       end
+       else
+       begin {commas between value, COMMA as decimal separator}
+         pixel_size:=strtofloat(list[0]+'.'+list[1]);
+         crota2:=strtofloat(list[2]+'.'+list[3]);
+         flipped:=pos('-',list[4])=0;{from yx ratio. In apm file yx ratio is reported inverse compared with PlateSolve2 window, Reading y/x ratio is difficult with comma separators. It could be written as "1" or "-0,9999" or "1,0011". So line2 could contain 7 or 8 comma's!! Therefore check only for "-"}
+       end;
+    finally
+      List.Free;
+    end;{try}
 
-    ra_radians:=strtofloat(copy(line1,1,pos1-1));
-    dec_radians:=strtofloat(copy(line1,pos1+1,pos2-pos1-1));
-
-    pos1:=posex(',',line2,1);
-    pos2:=posex(',',line2,pos1+1);
-    pos3:=posex(',',line2,pos2+1);
-
-    pixel_size:=strtofloat(copy(line2,1,pos1-1));
-    crota2:=strtofloat(copy(line2,pos1+1,pos2-pos1-1));
-    yx_ratio:=strtofloat(copy(line2,pos2+1,pos3-pos2-1));{if positive then flipped}
-
-    cdelt1:=-pixel_size/3600;
-    {In the apm file the yx ratio is reported inverse compared with Platesolve2 window}
-    if yx_ratio>0 then
+    if flipped then
     begin
-      cdelt1:=-pixel_size/3600;
-      cdelt2:=+pixel_size/3600;
+     cdelt1:=-pixel_size/3600;
+     cdelt2:=+pixel_size/3600;
     end
     else
     begin
       cdelt1:=+pixel_size/3600;
       cdelt2:=+pixel_size/3600;
-      crota2:=180-crota2; {Non-standard angle reporting in Platesolve2}
+      crota2:=180-crota2; {Non-standard angle reporting by Platesolve2.}
     end;
     crota1:=crota2; { coordinate grid is not skewed= > crota1=crota2}
 
