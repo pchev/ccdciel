@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+// {$define camera_debug}
+
 interface
 
 uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom,
@@ -677,6 +679,7 @@ end;
 procedure T_indicamera.NewNumber(nvp: INumberVectorProperty);
 begin
   if (UseMainSensor and (nvp=CCDexpose))or((not UseMainSensor) and (nvp=Guiderexpose)) then begin
+     {$ifdef camera_debug}msg('progress: '+formatfloat(f1,nvp.np[0].value));{$endif}
      if Assigned(FonExposureProgress) then FonExposureProgress(nvp.np[0].value);
   end
   else if nvp=CCDframe then begin
@@ -766,11 +769,14 @@ var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
 begin
+ {$ifdef camera_debug}msg('receive blob');{$endif}
  if bp.bloblen>0 then begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
    bp.blob.Position:=0;
    if pos('.fits',bp.format)>0 then begin // receive a FITS file
+     {$ifdef camera_debug}msg('this is a fits file');{$endif}
      if pos('.z',bp.format)>0 then begin //compressed
+         {$ifdef camera_debug}msg('uncompress file');{$endif}
          FImgStream.Clear;
          FImgStream.Position:=0;
          if zlibok then begin
@@ -787,17 +793,22 @@ begin
          end;
      end
      else begin  //uncompressed
+        {$ifdef camera_debug}msg('copy stream');{$endif}
         FImgStream.Clear;
         FImgStream.Position:=0;
         FImgStream.CopyFrom(bp.blob,bp.size);
      end;
+     {$ifdef camera_debug}msg('NewImage');{$endif}
      NewImage;
    end
    else if pos('.stream',bp.format)>0 then begin // video stream
+     {$ifdef camera_debug}msg('this is a video stream');{$endif}
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
+     {$ifdef camera_debug}msg('process this frame');{$endif}
      try
      if pos('.z',bp.format)>0 then begin //compressed
+         {$ifdef camera_debug}msg('uncompress frame');{$endif}
          if zlibok then begin
            FVideoStream.Clear;
            FVideoStream.Position:=0;
@@ -814,10 +825,12 @@ begin
          end;
      end
      else begin  //uncompressed
+       {$ifdef camera_debug}msg('copy frame');{$endif}
        FVideoStream.Clear;
        FVideoStream.Position:=0;
        FVideoStream.CopyFrom(bp.blob,bp.size);
      end;
+     {$ifdef camera_debug}msg('NewVideoFrame');{$endif}
      NewVideoFrame;
      finally
        lockvideostream:=false;
