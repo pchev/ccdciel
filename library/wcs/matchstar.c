@@ -1,8 +1,8 @@
 /*** File libwcs/matchstar.c
- *** December 13, 2011
+ *** June 9, 2016
  *** By Jessica Mink, jmink@cfa.harvard.edu
  *** Harvard-Smithsonian Center for Astrophysics
- *** Copyright (C) 1996-2011
+ *** Copyright (C) 1996-2016
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
 
     This library is free software; you can redistribute it and/or
@@ -808,7 +808,7 @@ int	debug;		/* Printed debugging information if not zero */
 	    if (getoken(&tokens, itok, token, 256)) {
 
 		/* Read RA, Dec, X, Y if first token has : in it */
-		if (strchr (token, ':') != NULL) {
+		if (isnum (token) == 3) {
 		    ra = str2ra (token);
 		    iytok = 4;
 		    if (getoken(&tokens, 2, token, 256))
@@ -827,7 +827,7 @@ int	debug;		/* Printed debugging information if not zero */
 			    }
 			}
 		    if (getoken(&tokens, iytok, token, 256)) {
-			if (isnum (token))
+			if (isnum (token) == 1 || isnum (token) == 2)
 			    y = atof (token);
 			else
 			    continue;
@@ -850,7 +850,7 @@ int	debug;		/* Printed debugging information if not zero */
 	    /* Image Y coordinate */
 	    itok++;
 	    if (getoken(&tokens, itok, token, 256)) {
-		if (isnum (token))
+		if (isnum (token) == 1 || isnum (token) == 2)
 		    y = atof (token);
 		else
 		    continue;
@@ -873,7 +873,7 @@ int	debug;		/* Printed debugging information if not zero */
 			    ra = ra + (atof (token) / 60.0);
 			    itok++;
 			    if (getoken(&tokens, itok, token, 256)) {
-				if (isnum (token))
+				if (isnum (token) == 1 || isnum (token) == 2)
 				    ra = ra + (atof (token) / 3600.0);
 				}
 			    }
@@ -910,7 +910,7 @@ int	debug;		/* Printed debugging information if not zero */
 				dec = dec + (atof (token) / 60.0);
 			    itok++;
 			    if (getoken(&tokens, itok, token, 256)) {
-				if (isnum (token)) {
+				if (isnum (token) == 1 || isnum (token) == 2) {
 				    if (ndec)
 					dec = dec - (atof (token) / 3600.0);
 				    else
@@ -2045,4 +2045,6 @@ int nitmax;
  * Jul 20 2009	Fixed matched star wrap for bad matches
  *
  * Dec 13 2009	In WCSMatch(), add last x,y,ra,dec so means are means of all
+ *
+ * Jun  9 2016	Fix isnum() tests for added coloned times and dashed dates 
  */ 

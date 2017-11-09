@@ -58,6 +58,7 @@ struct Star {
     int ncat;		/* Number of catalogs for catalog proper motion */
     char *entry;	/* Line copied from input catalog */
     char objname[80];	/* Object name */
+    char datapath[80];	/* File pathname to data */
     int peak;		/* Peak flux per pixel in star image */
 };
 
@@ -133,6 +134,7 @@ struct StarCat {
     int entrv;		/* Entry number for radial velocity */
     int enttype;	/* Entry number for spectral type */
     int entsize;	/* Entry number for size of object */
+    int entpath;	/* Entry number for object data pathname */
     int rpmunit;	/* Units for RA proper motion (PM_x) */
     int dpmunit;	/* Units for DEC proper motion (PM_x) */
     char *caturl;	/* set if web search, else NULL */
@@ -314,6 +316,7 @@ extern "C" {
 	double **tmag,	/* 2-D Array of magnitudes (returned) */
 	int *tpeak,	/* Array of peak counts (returned) */
 	char **tkey,	/* Array of values of additional keyword */
+	char **tpath,	/* Array of values of data pathnames */
 	int nlog);	/* Verbose mode if > 1, number of sources per log line */
     int ctgrdate(	/* Read sources by date from SAO TDC ASCII format catalog */
 	char *catfile,	/* Name of reference star catalog file */

@@ -1,8 +1,8 @@
 /*** File libwcs/imgetwcs.c
- *** September 1, 2011
+ *** June 24, 2016
  *** By Jessica Mink, jmink@cfa.harvard.edu (remotely based on UIowa code)
  *** Harvard-Smithsonian Center for Astrophysics
- *** Copyright (C) 1996-2011
+ *** Copyright (C) 1996-2016
  *** Smithsonian Astrophysical Observatory, Cambridge, MA, USA
 
     This library is free software; you can redistribute it and/or
@@ -685,6 +685,7 @@ char*	ptype;
     strcpy (ctypes[33], "TPV");
 
     ptype0 = -1;
+    ptype[3] = (char) 0;
     for (i = 0; i < nctype; i++) {
 	if (!strcasecmp (ptype, ctypes[i]))
 	    ptype0 = i;
@@ -717,7 +718,7 @@ char *dateobs;
  * Oct 17 1996	Do not print error messages unless verbose is set
  * Oct 30 1996	Keep equinox from image if EQREF is zero
  * Nov  1 1996	Declare undeclared subroutines; remove unused variables
- * Nov  4 1996	Add reference pixel and projection to wcsset111() call
+ * Nov  4 1996	Add reference pixel and projection to wcsset1() call
  * Nov 14 1996	Add GetLimits() to deal with search limits around the poles
  * Nov 15 1996	Drop GetLimits(); code moved to individual catalog routines
  * Dec 10 1996	Fix precession and make equinox double
@@ -809,4 +810,6 @@ char *dateobs;
  * Apr  7 2010	In ChangeFITSWCS() set number of WCS projections from NWCSTYPE
  *
  * Sep  1 2011	Add ZPX and TPV projections to setproj()
+ *
+ * Jun 24 2016	ptype contains only first 3 letters of projection codes
  */
