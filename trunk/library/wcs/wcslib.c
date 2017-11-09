@@ -40,12 +40,12 @@
 *   pixel coordinate a hybrid routine, wcsmix(), iteratively solves for the
 *   unknown elements.
 *
-*   An initialization routine, wcsset111(), computes indices from the ctype
+*   An initialization routine, wcsset1(), computes indices from the ctype
 *   array but need not be called explicitly - see the explanation of
 *   wcs.flag below.
 *
 *
-*   Initialization routine; wcsset111()
+*   Initialization routine; wcsset1()
 *   --------------------------------
 *   Initializes elements of a wcsprm data structure which holds indices into
 *   the coordinate arrays.  Note that this routine need not be called directly;
@@ -55,7 +55,7 @@
 *   Given:
 *      naxis    const int
 *                        Number of image axes.
-*      ctype[][9]
+*      ctype[][16]
 *               const char
 *                        Coordinate axis types corresponding to the FITS
 *                        CTYPEn header cards.
@@ -76,7 +76,7 @@
 *   Compute the pixel coordinate for given world coordinates.
 *
 *   Given:
-*      ctype[][9]
+*      ctype[][16]
 *               const char
 *                        Coordinate axis types corresponding to the FITS
 *                        CTYPEn header cards.
@@ -136,7 +136,7 @@
 *   Compute world coordinates for a given pixel coordinate.
 *
 *   Given:
-*      ctype[][9]
+*      ctype[][16]
 *               const char
 *                        Coordinate axis types corresponding to the FITS
 *                        CTYPEn header cards.
@@ -196,7 +196,7 @@
 *   unknown celestial coordinate element using wcsfwd().
 *
 *   Given:
-*      ctype[][9]
+*      ctype[][16]
 *               const char
 *                        Coordinate axis types corresponding to the FITS
 *                        CTYPEn header cards.
@@ -285,7 +285,7 @@
 *   Notes
 *   -----
 *    1) The CTYPEn must in be upper case and there must be 0 or 1 pair of
-*       matched celestial axis types.  The ctype[][9] should be padded with
+*       matched celestial axis types.  The ctype[][16] should be padded with
 *       blanks on the right and null-terminated.
 *
 *    2) Elements of the crval[] array which correspond to celestial axes are
@@ -317,7 +317,7 @@
 *             three-dimensional structure using a "CUBEFACE" axis indexed from
 *             0 to 5 as above.
 *
-*       These routines support both methods; wcsset111() determines which is
+*       These routines support both methods; wcsset1() determines which is
 *       being used by the presence or absence of a CUBEFACE axis in ctype[].
 *       wcsfwd() and wcsrev1() translate the CUBEFACE axis representation to
 *       the single plane representation understood by the lower-level WCSLIB
@@ -332,7 +332,7 @@
 *         The wcsprm struct contains indexes and other information derived
 *         from the CTYPEn.  Whenever any of the ctype[] are set or changed
 *         this flag must be set to zero to signal the initialization routine,
-*         wcsset111() to redetermine the indices.  The flag is set to 999 if
+*         wcsset1() to redetermine the indices.  The flag is set to 999 if
 *         there is no celestial axis pair in the CTYPEn.
 *
 *      char pcode[4]
@@ -392,7 +392,7 @@
 #include "wcslib.h"
 
 /* Map error number to error message for each function. */
-const char *wcsset111_errmsg[] = {
+const char *wcsset1_errmsg[] = {
    0,
    "Inconsistent or unrecognized coordinate axis types"};
 
@@ -421,10 +421,10 @@ const char *wcsmix_errmsg[] = {
 #define signb(X) ((X) < 0.0 ? 1 : 0)
 
 int
-wcsset111 (naxis, ctype, wcs)
+wcsset1 (naxis, ctype, wcs)
 
 const int naxis;
-const char ctype[][9];
+const char ctype[][16];
 struct wcsprm *wcs;
 
 {
@@ -433,7 +433,7 @@ struct wcsprm *wcs;
 
    int j, k;
    int *ndx = NULL;
-   char requir[9];
+   char requir[16];
 
    strcpy(wcs->pcode, "");
    strcpy(requir, "");
@@ -553,7 +553,7 @@ struct wcsprm *wcs;
 int
 wcsfwd(ctype, wcs, world, crval, cel, phi, theta, prj, imgcrd, lin, pixcrd)
 
-const char ctype[][9];
+const char ctype[][16];
 struct wcsprm* wcs;
 const double world[];
 const double crval[];
@@ -570,7 +570,7 @@ double pixcrd[];
 
    /* Initialize if required. */
    if (wcs->flag != WCSSET) {
-      if (wcsset111(lin->naxis, ctype, wcs)) return 1;
+      if (wcsset1(lin->naxis, ctype, wcs)) return 1;
    }
 
    /* Convert to relative physical coordinates. */
@@ -643,7 +643,7 @@ double pixcrd[];
 int
 wcsrev1(ctype, wcs, pixcrd, lin, imgcrd, prj, phi, theta, crval, cel, world)
 
-const char ctype[][9];
+const char ctype[][16];
 struct wcsprm *wcs;
 const double pixcrd[];
 struct linprm *lin;
@@ -660,7 +660,7 @@ double world[];
 
    /* Initialize if required. */
    if (wcs->flag != WCSSET) {
-      if (wcsset111(lin->naxis, ctype, wcs)) return 1;
+      if (wcsset1(lin->naxis, ctype, wcs)) return 1;
    }
 
    /* Apply reverse linear transformation. */
@@ -743,7 +743,7 @@ int
 wcsmix(ctype, wcs, mixpix, mixcel, vspan, vstep, viter, world, crval, cel,
            phi, theta, prj, imgcrd, lin, pixcrd)
 
-const char ctype[][9];
+const char ctype[][16];
 struct wcsprm *wcs;
 const int mixpix, mixcel;
 const double vspan[2], vstep;
@@ -774,7 +774,7 @@ double pixcrd[];
 
    /* Initialize if required. */
    if (wcs->flag != WCSSET) {
-      if (wcsset111(lin->naxis, ctype, wcs)) return 1;
+      if (wcsset1(lin->naxis, ctype, wcs)) return 1;
    }
 
    /* Check vspan. */
@@ -1331,4 +1331,6 @@ double pixcrd[];
  * Apr  3 2002	Mark Calabretta - Fix bug in code checking section
  *
  * Jun 20 2006	Doug Mink - Initialized uninitialized variables
+ *
+ * Jun 22 2016	Jessica Mink - Increase CTYPE length to 16
  */
