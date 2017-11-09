@@ -211,6 +211,11 @@ if csDestroying in ComponentState then exit;
   indiclient.onDeleteProperty:=@DeleteProperty;
   indiclient.onServerConnected:=@ServerConnected;
   indiclient.onServerDisconnected:=@ServerDisconnected;
+  {$ifdef camera_debug}
+  indiclient.ProtocolTrace:=true;
+  indiclient.ProtocolTraceFile:='/tmp/ccdciel_indicamera.log';
+  indiclient.ProtocolErrorFile:='/tmp/ccdciel_indicamera.err';
+  {$endif}
   ClearStatus;
 end;
 
