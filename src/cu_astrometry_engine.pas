@@ -334,12 +334,12 @@ else if FResolver=ResolverPlateSolve then begin
     Fparam.Add(slash(FPlateSolveFolder)+'PlateSolve2.exe');
   {$endif}
   buf:=FloatToStr(Fra*deg2rad)+','+
-       FloatToStr(Fde*deg2rad)+','+
-       FloatToStr(FXsize*deg2rad)+','+
-       FloatToStr(FYsize*deg2rad)+','+
-       '999,'+
-       FInFile+','+
-       IntToStr(PlateSolveWait);
+        FloatToStr(Fde*deg2rad)+','+
+        FloatToStr(FXsize*deg2rad*0.98)+','+  //PlateSolve2 has problems with solving some images if dimensions are a fraction too large.
+        FloatToStr(FYsize*deg2rad*0.98)+','+
+        '999,'+
+        FInFile+','+
+        IntToStr(PlateSolveWait);
   Fparam.Add(buf);
   Start;
 end
