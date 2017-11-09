@@ -703,7 +703,7 @@ begin
 end;
 
 procedure Tf_starprofile.Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
-var bg,bgdev,star_fwhm: double;
+var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   xg,yg: double;
   xm,ym,ri: integer;
 begin
@@ -772,8 +772,23 @@ begin
   // check focus result
   if terminated then begin
     if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
-    msg('Autofocus finished, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
-    if not FAutofocusResult then begin
+    msg('Autofocus finished, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr)+' TEMP:'+FormatFloat(f1,FocuserTemp));
+    if FAutofocusResult then begin
+      // adjust slippage offset with current result
+      if AutofocusSlippageCorrection then begin
+        if AutofocusVcTemp<>NullCoord then
+           tempcomp:=focuser.TempOffset(AutofocusVcTemp,FocuserTemp)
+        else
+           tempcomp:=0;
+        focuspos:=focuser.FocusPosition;
+        focuspos:=focuspos-(CurrentFilterOffset-AutofocusVcFilterOffset);
+        focuspos:=focuspos-tempcomp;
+        AutofocusSlippageOffset:=round(focuspos-(AutofocusVcpiL+AutofocusVcpiR)/2);
+        config.SetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
+        msg('Focuser slippage offset set to '+inttostr(AutofocusSlippageOffset));
+      end;
+    end
+    else begin
        msg('Autofocus final HFD is higher than '+FormatFloat(f1,AutofocusTolerance));
     end;
     ChkAutofocus.Checked:=false;
@@ -805,6 +820,8 @@ begin
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
               newpos:=newpos+tempcomp;
+              // correct for slippage
+              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               // check in range
               if newpos<FocuserPositionMin then newpos:=FocuserPositionMin;
               focuser.FocusPosition:=round(newpos);
@@ -822,6 +839,8 @@ begin
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
               newpos:=newpos+tempcomp;
+              // correct for slippage
+              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to start position '+focuser.Position.Text);
               FonAbsolutePosition(self);
@@ -840,6 +859,8 @@ begin
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
               newpos:=newpos+tempcomp;
+              // correct for slippage
+              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               // check in range
               if newpos>FocuserPositionMax then newpos:=FocuserPositionMax;
               focuser.FocusPosition:=round(newpos);
@@ -857,6 +878,8 @@ begin
               newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
               // correct for temperature
               newpos:=newpos+tempcomp;
+              // correct for slippage
+              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to start position '+focuser.Position.Text);
               FonAbsolutePosition(self);

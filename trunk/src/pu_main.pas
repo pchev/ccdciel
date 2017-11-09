@@ -1961,6 +1961,11 @@ begin
   AutofocusMeanMovement:=config.GetValue('/StarAnalysis/AutofocusMeanMovement',100);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',0.0);
+  AutofocusSlippageCorrection:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',false);
+  if AutofocusSlippageCorrection then
+     AutofocusSlippageOffset:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',0)
+  else
+    AutofocusSlippageOffset:=0;
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
@@ -3000,6 +3005,8 @@ begin
  // compute and save the curve
  ComputeVcSlope;
  SaveVcurve;
+ AutofocusSlippageOffset:=0;
+ config.SetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
  // position focuser at new center
  if f_vcurve.Quality>0.9 then
     focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2)
@@ -3484,6 +3491,8 @@ begin
    f_option.FocuserTempCoeff.text:=FormatFloat(f2,config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff));
    f_option.AutofocusTolerance.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
    f_option.AutofocusMinSNR.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR));
+   f_option.AutofocusSlippageCorrection.Checked:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',AutofocusSlippageCorrection);
+   f_option.AutofocusSlippageOffset.Text:=IntToStr(config.GetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset));
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
@@ -3599,6 +3608,8 @@ begin
      config.SetValue('/StarAnalysis/FocuserTempCoeff',StrToFloatDef(f_option.FocuserTempCoeff.text,FocuserTempCoeff));
      config.SetValue('/StarAnalysis/AutofocusTolerance',StrToFloatDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
      config.SetValue('/StarAnalysis/AutofocusMinSNR',StrToFloatDef(f_option.AutofocusMinSNR.Text,AutofocusMinSNR));
+     config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
+     config.SetValue('/StarAnalysis/AutofocusSlippageOffset',StrToIntDef(f_option.AutofocusSlippageOffset.Text,AutofocusSlippageOffset));
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
      if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
      config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',StrToFloatDef(f_option.AutofocusPrecisionSlew.Text,2.0));
