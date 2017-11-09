@@ -23,6 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+// {$define camera_debug}
+
+
 interface
 
 uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi,
@@ -314,10 +317,13 @@ end;
 
 procedure T_camera.NewImage;
 begin
+  {$ifdef camera_debug}msg('load stream');{$endif}
   Ffits.Stream:=ImgStream;
   Ffits.LoadStream;
+  {$ifdef camera_debug}msg('write headers');{$endif}
   WriteHeaders;
   FFits.ApplyBPM;
+  {$ifdef camera_debug}msg('display image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 
