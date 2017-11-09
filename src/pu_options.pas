@@ -55,6 +55,8 @@ type
     AutofocusMinSNR: TEdit;
     AutofocusStartHFD: TEdit;
     AutofocusPrecisionSlew: TEdit;
+    AutofocusSlippageCorrection: TCheckBox;
+    AutofocusSlippageOffset: TEdit;
     FocuserTempCoeff: TEdit;
     GroupBox16: TGroupBox;
     GroupBox17: TGroupBox;
@@ -65,6 +67,7 @@ type
     Label85: TLabel;
     Label86: TLabel;
     Label87: TLabel;
+    Label88: TLabel;
     Label89: TLabel;
     Label90: TLabel;
     Notebook3: TNotebook;

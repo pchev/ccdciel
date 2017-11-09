@@ -298,10 +298,10 @@ var
   AutofocusMoveDir: boolean;
   PosStartL,PosStartR,PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;
-  AutofocusVcDir: boolean;
+  AutofocusVcDir, AutofocusSlippageCorrection: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
   AutofocusVcStep:TAutofocusVcurveStep;
-  AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset: integer;
+  AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset,AutofocusSlippageOffset: integer;
   AutofocusMeanStep:TAutofocusMeanStep;
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
