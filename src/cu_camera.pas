@@ -65,6 +65,7 @@ T_camera = class(TComponent)
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
     FVerticalFlip: boolean;
+    FAddFrames: boolean;
     FVideoSizes, FVideoRates:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
@@ -157,6 +158,7 @@ T_camera = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
     property ImgStream: TMemoryStream read FImgStream;
+    property AddFrames: boolean read FAddFrames write FAddFrames;
     property VerticalFlip: boolean read FVerticalFlip;
     property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
@@ -239,6 +241,7 @@ begin
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
+  FAddFrames:=false;
   FhasVideo:=false;
   FVideoStream:=TMemoryStream.Create;;
   lockvideoframe:=false;
@@ -316,7 +319,19 @@ begin
 end;
 
 procedure T_camera.NewImage;
+var f:TFits;
 begin
+if FAddFrames then begin
+  f:=TFits.Create(nil);
+  f.Stream:=ImgStream;
+  f.LoadStream;
+  f.ApplyBPM;
+  FFits.Math(f,moAdd);
+  f.free;
+  WriteHeaders;
+  if Assigned(FonNewImage) then FonNewImage(self);
+end
+else begin
   {$ifdef camera_debug}msg('load stream');{$endif}
   Ffits.Stream:=ImgStream;
   Ffits.LoadStream;
@@ -325,6 +340,7 @@ begin
   FFits.ApplyBPM;
   {$ifdef camera_debug}msg('display image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
+end;
 end;
 
 procedure T_camera.WriteHeaders;
@@ -348,6 +364,8 @@ begin
   if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=-1;
   if not Ffits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
   if not Ffits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
+  if hpix1<0 then if not Ffits.Header.Valueof('XPIXSZ',hpix1) then hpix1:=-1;
+  if hpix2<0 then if not Ffits.Header.Valueof('YPIXSZ',hpix2) then hpix2:=-1;
   if not Ffits.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
   if not Ffits.Header.Valueof('YBINNING',hbin2) then hbin2:=-1;
   if not Ffits.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';

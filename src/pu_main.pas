@@ -481,6 +481,7 @@ type
     procedure CameraVideoRateChange(Sender: TObject);
     procedure CameraVideoExposureChange(Sender: TObject);
     procedure CameraFPSChange(Sender: TObject);
+    procedure ResetPreviewStack(Sender: TObject);
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
@@ -976,6 +977,7 @@ begin
 
   f_preview:=Tf_preview.Create(self);
   f_preview.Camera:=camera;
+  f_preview.onResetStack:=@ResetPreviewStack;
   f_preview.onStartExposure:=@StartPreviewExposure;
   f_preview.onAbortExposure:=@AbortExposure;
   f_preview.onMsg:=@NewMessage;
@@ -3984,6 +3986,11 @@ begin
   StatusBar1.Panels[1].Text:='Stop';
 end;
 
+procedure Tf_main.ResetPreviewStack(Sender: TObject);
+begin
+   fits.ClearImage;
+end;
+
 Procedure Tf_main.StartPreviewExposureAsync(Data: PtrInt);
 begin
   StartPreviewExposure(nil);
@@ -4042,6 +4049,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=f_capture.Fname.Text;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  camera.AddFrames:=f_preview.StackPreview.Checked;
   camera.StartExposure(e);
 end
 else begin
@@ -4198,6 +4206,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   NewMessage('Starting '+f_capture.FrameType.Text+' exposure '+inttostr(f_capture.SeqCount)+' for '+f_capture.ExpTime.Text+' seconds');
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
+  camera.AddFrames:=false;
   // start exposure for time e
   camera.StartExposure(e);
 end

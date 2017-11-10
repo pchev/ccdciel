@@ -2,34 +2,34 @@ object f_preview: Tf_preview
   Left = 0
   Height = 146
   Top = 0
-  Width = 147
+  Width = 160
   AutoSize = True
   ClientHeight = 146
-  ClientWidth = 147
+  ClientWidth = 160
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
     Height = 126
     Top = 20
-    Width = 147
+    Width = 160
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 126
-    ClientWidth = 147
+    ClientWidth = 160
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 24
+      Height = 28
       Top = 0
-      Width = 141
-      ClientHeight = 24
-      ClientWidth = 141
-      TabOrder = 1
+      Width = 157
+      ClientHeight = 28
+      ClientWidth = 157
+      TabOrder = 0
       object ExpTime: TComboBox
-        Left = 50
-        Height = 23
+        Left = 64
+        Height = 27
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
@@ -57,22 +57,22 @@ object f_preview: Tf_preview
         Left = 0
         Height = 11
         Top = 4
-        Width = 18
-        Caption = 'Exp'
+        Width = 45
+        Caption = 'Exposure'
         ParentColor = False
       end
     end
     object Panel3: TPanel
       Left = 0
-      Height = 22
-      Top = 24
-      Width = 141
-      ClientHeight = 22
-      ClientWidth = 141
-      TabOrder = 2
+      Height = 26
+      Top = 28
+      Width = 157
+      ClientHeight = 26
+      ClientWidth = 157
+      TabOrder = 1
       object Binning: TComboBox
-        Left = 50
-        Height = 21
+        Left = 64
+        Height = 25
         Hint = 'Camera binning'
         Top = 0
         Width = 90
@@ -90,47 +90,69 @@ object f_preview: Tf_preview
         Left = 0
         Height = 11
         Top = 4
-        Width = 19
-        Caption = 'Bin.'
+        Width = 37
+        Caption = 'Binning'
         ParentColor = False
       end
     end
-    object BtnPreview: TButton
+    object Panel5: TPanel
       Left = 0
-      Height = 19
-      Hint = 'Start one preview exposure'
-      Top = 46
-      Width = 141
-      Caption = 'Preview'
-      OnClick = BtnPreviewClick
-      ParentFont = False
-      TabOrder = 0
+      Height = 25
+      Top = 54
+      Width = 157
+      ClientHeight = 25
+      ClientWidth = 157
+      TabOrder = 3
+      object BtnPreview: TButton
+        Left = 1
+        Height = 23
+        Hint = 'Start one preview exposure'
+        Top = 1
+        Width = 90
+        Caption = 'Preview'
+        OnClick = BtnPreviewClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object StackPreview: TCheckBox
+        Left = 104
+        Height = 21
+        Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
+        Top = 1
+        Width = 52
+        BidiMode = bdRightToLeft
+        Caption = 'Stack'
+        ParentShowHint = False
+        ParentBidiMode = False
+        ShowHint = True
+        TabOrder = 1
+      end
     end
     object Panel4: TPanel
       Left = 0
-      Height = 20
-      Top = 65
-      Width = 141
-      ClientHeight = 20
-      ClientWidth = 141
-      TabOrder = 3
+      Height = 24
+      Top = 79
+      Width = 157
+      ClientHeight = 24
+      ClientWidth = 157
+      TabOrder = 2
       object BtnLoop: TButton
         Tag = 1
-        Left = 0
-        Height = 19
+        Left = 1
+        Height = 23
         Hint = 'Loop preview exposures'
         Top = 0
-        Width = 112
+        Width = 90
         Caption = 'Loop'
         OnClick = BtnLoopClick
         ParentFont = False
         TabOrder = 0
       end
       object led: TShape
-        Left = 120
+        Left = 104
         Height = 14
         Hint = 'Uncalibrated'
-        Top = 2
+        Top = 4
         Width = 14
         Brush.Color = clGray
         Shape = stCircle
@@ -141,7 +163,7 @@ object f_preview: Tf_preview
     Left = 0
     Height = 20
     Top = 0
-    Width = 147
+    Width = 160
     Align = alTop
     Alignment = taCenter
     BorderStyle = sbsSingle
