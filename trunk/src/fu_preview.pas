@@ -35,6 +35,8 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    Panel5: TPanel;
+    StackPreview: TCheckBox;
     ExpTime: TComboBox;
     Binning: TComboBox;
     Label1: TLabel;
@@ -52,6 +54,7 @@ type
     Fcamera: T_camera;
     Frunning,FLoop: boolean;
     FonMsg: TNotifyMsg;
+    FonResetStack: TNotifyEvent;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     FonEndControlExposure: TNotifyEvent;
@@ -72,6 +75,7 @@ type
     property Loop: boolean read FLoop write FLoop;
     property Exposure: double read GetExposure write SetExposure;
     property Bin: integer read GetBinning;
+    property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -122,6 +126,7 @@ procedure Tf_preview.BtnLoopClick(Sender: TObject);
 begin
   Frunning:=not Frunning;
   if Frunning then begin
+     if StackPreview.Checked and Assigned(FonResetStack) then FonResetStack(self);
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
         led.Brush.Color:=clLime;
@@ -195,6 +200,7 @@ if Camera.Status=devConnected then begin
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
   WaitExposure:=true;
   ControlExposureOK:=false;
+  camera.AddFrames:=false;
   Camera.StartExposure(exp);
   endt:=now+60/secperday;
   while WaitExposure and(now<endt) and (not CancelAutofocus) do begin

@@ -54,6 +54,8 @@ type
 
  THistogram = array[0..high(word)] of integer;
 
+ TMathOperator = (moAdd,moSub,moMean,moMult,moDiv);
+
  TFitsHeader = class(TObject)
     private
       FRows:   TStringList;
@@ -127,7 +129,7 @@ type
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
-    FImgFullRange: Boolean;
+    FImgFullRange,FStreamValid: Boolean;
     Fbpm: TBpm;
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     Fitt : Titt;
@@ -143,6 +145,7 @@ type
     function GetStream: TMemoryStream;
     procedure SetVideoStream(value:TMemoryStream);
     Procedure ReadFitsImage;
+    Procedure WriteFitsImage;
     Procedure GetImage;
     function Citt(value: Word):Word;
     function Citt8(value: Word):byte;
@@ -160,6 +163,8 @@ type
      procedure SaveToFile(fn: string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure ApplyBPM;
+     procedure ClearImage;
+     procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -514,6 +519,7 @@ ImgDmin:=0;
 FBPMcount:=0;
 ImgDmax:=MaxWord;
 FImgFullRange:=false;
+FStreamValid:=false;
 FMarkOverflow:=false;
 FFitsInfo.naxis1:=0;
 FHeader:=TFitsHeader.Create;
@@ -593,6 +599,10 @@ end;
 
 function TFits.GetStream: TMemoryStream;
 begin
+  if not FStreamValid then begin
+    WriteFitsImage;
+    FStreamValid:=true;
+  end;
   result:=FHeader.GetStream;
   FStream.Position:=Fhdr_end;
   result.CopyFrom(FStream,FStream.Size-Fhdr_end);
@@ -907,6 +917,7 @@ case FFitsInfo.bitpix of
          end;
          end;
 end;
+FStreamValid:=true;
 Fmean:=sum/ni;
 Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
 if dmin>=dmax then dmax:=dmin+1;
@@ -920,6 +931,78 @@ if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
   end;
 end;
 GetImage;
+end;
+
+Procedure TFits.WriteFitsImage;
+var hdrmem: TMemoryStream;
+    i,j,k,ii,npix: integer;
+    first:boolean;
+begin
+  hdrmem:=FHeader.GetStream;
+  Fhdr_end:=hdrmem.Size;
+  FStream.Clear;
+  FStream.Position:=0;
+  hdrmem.Position:=0;
+  FStream.CopyFrom(hdrmem,Fhdr_end);
+  hdrmem.Free;
+  npix:=0;
+  first:=true;
+  case FFitsInfo.bitpix of
+     8 : begin
+          for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+          for i:=0 to FFitsInfo.naxis2-1 do begin
+           ii:=FFitsInfo.naxis2-1-i;
+           for j := 0 to FFitsInfo.naxis1-1 do begin
+             if (npix mod 1440 = 0) then begin
+               if not first then FStream.Write(d8,sizeof(d8));
+               FillWord(d8,sizeof(d8),0);
+               npix:=0;
+               first:=false;
+             end;
+             inc(npix);
+             d8[npix]:=imai8[k,ii,j];
+           end;
+           end;
+           end;
+           if npix>0 then  FStream.Write(d8,sizeof(d8));
+           end;
+     16 : begin
+          for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+          for i:=0 to FFitsInfo.naxis2-1 do begin
+           ii:=FFitsInfo.naxis2-1-i;
+           for j := 0 to FFitsInfo.naxis1-1 do begin
+             if (npix mod 1440 = 0) then begin
+               if not first then FStream.Write(d16,sizeof(d16));
+               FillWord(d16,sizeof(d16),0);
+               npix:=0;
+               first:=false;
+             end;
+             inc(npix);
+             d16[npix]:=NtoBE(imai16[k,ii,j]);
+           end;
+           end;
+           end;
+           if npix>0 then  FStream.Write(d16,sizeof(d16));
+           end;
+     32 : begin
+          for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+          for i:=0 to FFitsInfo.naxis2-1 do begin
+           ii:=FFitsInfo.naxis2-1-i;
+           for j := 0 to FFitsInfo.naxis1-1 do begin
+             if (npix mod 1440 = 0) then begin
+               if not first then FStream.Write(d32,sizeof(d32));
+               FillWord(d32,sizeof(d32),0);
+               npix:=0;
+               first:=false;
+             end;
+             inc(npix);
+             d32[npix]:=NtoBE(imai32[k,ii,j]);
+           end;
+           end;
+           end;
+           if npix>0 then  FStream.Write(d32,sizeof(d32));
+           end;
+  end;
 end;
 
 procedure TFits.GetImage;
@@ -1217,5 +1300,97 @@ end;
 bgra.InvalidateBitmap;
 end;
 
+procedure TFits.ClearImage;
+begin
+Fheight:=0;
+Fwidth:=0;
+FFitsInfo.naxis1:=0;
+FFitsInfo.valid:=false;
+FFitsInfo.solved:=false;
+setlength(imar64,0,0,0);
+setlength(imar32,0,0,0);
+setlength(imai8,0,0,0);
+setlength(imai16,0,0,0);
+setlength(imai32,0,0,0);
+setlength(Fimage,0,0,0);
+FStream.Clear;
+end;
+
+procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
+var i,j,k,ii: integer;
+    x,y,dmin,dmax : double;
+    ni,sum,sum2 : extended;
+
+begin
+ if new or (Fheight=0)or(Fwidth=0)then begin  // first frame, just store the operand
+   SetStream(operand.Stream);
+   LoadStream;
+ end
+ else begin  // do operation
+    dmin:=1.0E100;
+    dmax:=-1.0E100;
+    sum:=0; sum2:=0; ni:=0;
+    for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+      for i:=0 to FFitsInfo.naxis2-1 do begin
+       ii:=FFitsInfo.naxis2-1-i;
+       for j := 0 to FFitsInfo.naxis1-1 do begin
+         case FFitsInfo.bitpix of
+          -64 : begin
+                x:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[k,ii,j];
+                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imar64[k,ii,j];
+                end;
+          -32 : begin
+                x:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[k,ii,j];
+                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imar32[k,ii,j];
+                end;
+            8 : begin
+                x:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[k,ii,j];
+                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imai8[k,ii,j];
+                end;
+           16 : begin
+                x:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[k,ii,j];
+                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imai16[k,ii,j];
+                end;
+           32 : begin
+                x:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[k,ii,j];
+                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imai32[k,ii,j];
+                end;
+         end;
+         case MathOperator of
+           moAdd: x:=x+y;
+           moSub: x:=x-y;
+           moMean: x:=x+y/2;
+           moMult: x:=x*y;
+           moDiv : x:=x/y;
+         end;
+         case FFitsInfo.bitpix of
+          -64 : imar64[k,ii,j] := x/FFitsInfo.bscale - FFitsInfo.bzero;
+          -32 : imar32[k,ii,j] := x/FFitsInfo.bscale - FFitsInfo.bzero;
+            8 : imai8[k,ii,j] := max(min(round(x/FFitsInfo.bscale - FFitsInfo.bzero),MAXBYTE),0);
+           16 : imai16[k,ii,j] := max(min(round(x/FFitsInfo.bscale - FFitsInfo.bzero),maxSmallint),-maxSmallint);
+           32 : imai32[k,ii,j] := max(min(round(x/FFitsInfo.bscale - FFitsInfo.bzero),maxLongint),-maxLongint);
+         end;
+         dmin:=min(x,dmin);
+         dmax:=max(x,dmax);
+         sum:=sum+x;
+         sum2:=sum2+x*x;
+         ni:=ni+1;
+       end;
+      end;
+    end;
+    FStreamValid:=false;
+    Fmean:=sum/ni;
+    Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
+    if dmin>=dmax then dmax:=dmin+1;
+      if Fitt=ittramp then begin
+         FFitsInfo.dmin:=max(dmin,Fmean-5*Fsigma);
+         FFitsInfo.dmax:=min(dmax,Fmean+5*Fsigma);
+      end else begin
+         FFitsInfo.dmin:=dmin;
+         FFitsInfo.dmax:=dmax;
+      end;
+    GetImage;
+ end;
+end;
 
 end.
