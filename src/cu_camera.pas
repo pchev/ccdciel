@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
- {$define camera_debug}
+// {$define camera_debug}
 
 
 interface
@@ -344,10 +344,11 @@ if FAddFrames then begin  // stack preview frames
      FFits.Math(f,moAdd,true);  // start a new stack
      FStackCount:=1;
   end;
-  f.free;
   // update image
+  FFits.Header.Assign(f.Header);
   WriteHeaders;
   if Assigned(FonNewImage) then FonNewImage(self);
+  f.free;
 end
 else begin  // normal capture
   FStackCount:=0;
@@ -467,6 +468,7 @@ begin
   Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
+  if FStackCount>1 then Ffits.Header.Add('STACKCNT',FStackCount,'Number of stacked frames');
   if gain>0 then Ffits.Header.Add('GAIN',gain,'Video gain');
   if gamma>0 then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
   if offset>0 then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');

@@ -4357,7 +4357,7 @@ begin
   end
   else if Preview then begin
     buf:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+imgsize;
-    if camera.StackCount>0 then buf:=buf+', stack of '+inttostr(camera.StackCount)+' frames';
+    if camera.StackCount>1 then buf:=buf+', stack of '+inttostr(camera.StackCount)+' frames';
     StatusBar1.Panels[2].Text:=buf;
     if f_preview.Loop and f_preview.Running then Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
        else begin
