@@ -67,6 +67,7 @@ type
       constructor Create;
       destructor  Destroy; override;
       procedure ClearHeader;
+      procedure Assign(value: TFitsHeader);
       function ReadHeader(ff:TMemoryStream): integer;
       function NewWCS(ff:TMemoryStream): boolean;
       function GetStream: TMemoryStream;
@@ -217,6 +218,16 @@ begin
   FValues.Clear;
   FComments.Clear;
 end;
+
+procedure TFitsHeader.Assign(value: TFitsHeader);
+begin
+  ClearHeader;
+  FRows.Assign(value.FRows);
+  FKeys.Assign(value.FKeys);
+  FValues.Assign(value.FValues);
+  FComments.Assign(value.FComments);
+  Fvalid:=value.Fvalid;
+ end;
 
 function TFitsHeader.NewWCS(ff:TMemoryStream): boolean;
 var header : THeaderBlock;
