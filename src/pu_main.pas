@@ -1935,6 +1935,12 @@ begin
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
+  if config.GetValue('/PreviewStack/StackUseDark',false) then begin
+    camera.StackDark.LoadFromFile(config.GetValue('/PreviewStack/StackDarkFile',''));
+  end
+  else begin
+    camera.StackDark.ClearImage;
+  end;
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
   Starwindow:=config.GetValue('/StarAnalysis/Window',20);
@@ -3458,6 +3464,8 @@ begin
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
    f_option.BPMsigma.Text:=inttostr(config.GetValue('/BadPixel/Sigma',5));
+   f_option.StackDarkFile.FileName:=config.GetValue('/PreviewStack/StackDarkFile','');
+   f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
    f_option.VideoPreviewRate.Text:=inttostr(config.GetValue('/Video/PreviewRate',5));
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
@@ -3633,6 +3641,8 @@ begin
      config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
      config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
      config.SetValue('/BadPixel/Sigma',StrToIntDef(f_option.BPMsigma.Text,BPMsigma));
+     config.SetValue('/PreviewStack/StackDarkFile',f_option.StackDarkFile.FileName);
+     config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
      config.SetValue('/Video/PreviewRate',StrToIntDef(f_option.VideoPreviewRate.Text,MaxVideoPreviewRate));
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
@@ -4346,7 +4356,9 @@ begin
      end;
   end
   else if Preview then begin
-    StatusBar1.Panels[2].Text:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+imgsize;
+    buf:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+imgsize;
+    if camera.StackCount>0 then buf:=buf+', stack of '+inttostr(camera.StackCount)+' frames';
+    StatusBar1.Panels[2].Text:=buf;
     if f_preview.Loop and f_preview.Running then Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
        else begin
          f_preview.stop;
@@ -5788,19 +5800,13 @@ begin
 end;
 
 procedure Tf_main.LoadFitsFile(fn:string);
-var mem: TMemoryStream;
-    imgsize: string;
+var imgsize: string;
     n:integer;
     c: TcdcWCScoord;
     x1,y1,x2,y2: double;
 begin
    StatusBar1.Panels[1].Text:='';
-   mem:=TMemoryStream.Create;
-   mem.LoadFromFile(fn);
-   fits.SetBPM(bpm,0,0,0,0);
-   fits.Stream:=mem;
-   fits.LoadStream;
-   mem.free;
+   fits.LoadFromFile(fn);
    if fits.HeaderInfo.valid then begin
      if fits.HeaderInfo.solved then begin
        n:=cdcwcs_initfitsfile(pchar(fn),0);

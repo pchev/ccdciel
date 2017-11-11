@@ -57,6 +57,8 @@ type
     AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
     AutofocusSlippageOffset: TEdit;
+    StackUseDark: TCheckBox;
+    StackDarkFile: TFileNameEdit;
     FocuserTempCoeff: TEdit;
     GroupBox16: TGroupBox;
     GroupBox17: TGroupBox;
@@ -159,6 +161,7 @@ type
     GreenBalance: TTrackBar;
     BlueBalance: TTrackBar;
     TabSheet11: TTabSheet;
+    StackGroup: TGroupBox;
     VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;

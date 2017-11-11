@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-// {$define camera_debug}
+ {$define camera_debug}
 
 
 interface
@@ -58,7 +58,8 @@ T_camera = class(TComponent)
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
     FObjectName: string;
-    FFits: TFits;
+    FFits,FStackDark: TFits;
+    FStackCount: integer;
     FMount: T_mount;
     Fwheel: T_wheel;
     FTimeOut: integer;
@@ -150,6 +151,7 @@ T_camera = class(TComponent)
     procedure StopVideoPreview; virtual; abstract;
     procedure StartVideoRecord(mode:TVideoRecordMode); virtual; abstract;
     procedure StopVideoRecord; virtual; abstract;
+    property StackDark: TFits read FStackDark write FStackDark;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property wheel: T_wheel read Fwheel write Fwheel;
@@ -200,6 +202,7 @@ T_camera = class(TComponent)
     property BitperPixel: double read GetBitperPixel;
     property Color: boolean read GetColor;
     property FPS: double read GetFPS;
+    property StackCount: integer read FStackCount;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
@@ -249,6 +252,8 @@ begin
   FVideoRates:=TStringList.Create;
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
+  FStackDark:=TFits.Create(nil);
+  FStackCount:=0;
 end;
 
 destructor  T_camera.Destroy;
@@ -258,6 +263,7 @@ begin
   FVideoStream.Free;
   FVideoSizes.Free;
   FVideoRates.Free;
+  FStackDark.Free;
   inherited Destroy;
 end;
 
@@ -321,17 +327,30 @@ end;
 procedure T_camera.NewImage;
 var f:TFits;
 begin
-if FAddFrames then begin
+if FAddFrames then begin  // stack preview frames
+  // load temporary image
   f:=TFits.Create(nil);
   f.Stream:=ImgStream;
   f.LoadStream;
-  f.ApplyBPM;
-  FFits.Math(f,moAdd);
+  // substract dark if loaded and compatible
+  if f.SameFormat(FStackDark) then
+     f.Math(FStackDark,moSub);
+  // check frame is compatible
+  if FFits.SameFormat(f) then begin
+     FFits.Math(f,moAdd);       // add frame
+     inc(FStackCount);
+  end
+  else begin
+     FFits.Math(f,moAdd,true);  // start a new stack
+     FStackCount:=1;
+  end;
   f.free;
+  // update image
   WriteHeaders;
   if Assigned(FonNewImage) then FonNewImage(self);
 end
-else begin
+else begin  // normal capture
+  FStackCount:=0;
   {$ifdef camera_debug}msg('load stream');{$endif}
   Ffits.Stream:=ImgStream;
   Ffits.LoadStream;
