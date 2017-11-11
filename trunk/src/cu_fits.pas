@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses SysUtils, Classes, FileUtil, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
-  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms,
+uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
+  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms, Dialogs,
   StdCtrls, ExtCtrls, Buttons, IntfGraphics;
 
 type
@@ -161,10 +161,12 @@ type
      procedure GetFitsInfo;
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToFile(fn: string);
+     procedure LoadFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure ApplyBPM;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
+     function SameFormat(f:TFits): boolean;
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -521,6 +523,7 @@ ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FStreamValid:=false;
 FMarkOverflow:=false;
+FFitsInfo.valid:=false;
 FFitsInfo.naxis1:=0;
 FHeader:=TFitsHeader.Create;
 FStream:=TMemoryStream.Create;
@@ -614,6 +617,26 @@ begin
   mem:=GetStream;
   mem.SaveToFile(fn);
   mem.Free;
+end;
+
+procedure TFits.LoadFromFile(fn:string);
+var mem: TMemoryStream;
+begin
+if FileExistsUTF8(fn) then begin
+ mem:=TMemoryStream.Create;
+ try
+   mem.LoadFromFile(fn);
+   SetBPM(bpm,0,0,0,0);
+   SetStream(mem);
+   LoadStream;
+ finally
+   mem.free;
+ end;
+end
+else begin
+ ClearImage;
+ ShowMessage('File not found '+fn);
+end;
 end;
 
 Procedure TFits.ViewHeaders;
@@ -1314,6 +1337,18 @@ setlength(imai16,0,0,0);
 setlength(imai32,0,0,0);
 setlength(Fimage,0,0,0);
 FStream.Clear;
+end;
+
+function TFits.SameFormat(f:TFits): boolean;
+begin
+ result := f.FFitsInfo.valid and
+           (f.FFitsInfo.bitpix = FFitsInfo.bitpix)  and
+           (f.FFitsInfo.naxis  = FFitsInfo.naxis )  and
+           (f.FFitsInfo.naxis1 = FFitsInfo.naxis1 ) and
+           (f.FFitsInfo.naxis2 = FFitsInfo.naxis2 ) and
+           (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
+           (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
+           (f.FFitsInfo.bscale = FFitsInfo.bscale );
 end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
