@@ -4220,6 +4220,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
   f_preview.StackPreview.Checked:=false;
+  camera.AddFrames:=false;
   // start exposure for time e
   camera.StartExposure(e);
 end
