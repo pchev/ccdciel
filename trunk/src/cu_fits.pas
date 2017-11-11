@@ -599,6 +599,7 @@ try
  FStream.CopyFrom(value,value.Size);
  Fhdr_end:=FHeader.ReadHeader(FStream);
  GetFitsInfo;
+ FStreamValid:=true;
 except
  FFitsInfo.valid:=false;
 end;
