@@ -639,6 +639,7 @@ begin
      StartTimer.Enabled:=true;
      exit;
  end;
+ Preview.StackPreview.Checked:=false;
  led.Brush.Color:=clLime;
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;

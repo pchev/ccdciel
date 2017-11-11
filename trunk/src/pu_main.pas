@@ -2841,6 +2841,7 @@ begin
  PosNearL:=-1;
  PosFocus:=-1;
  PosNearR:=-1;
+ f_preview.StackPreview.Checked:=false;
  NewMessage('From: '+IntToStr(minpos)+' to '+IntToStr(centerp)+' by '+IntToStr(step));
  if focuser.hasTemperature then begin
     NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
@@ -3026,6 +3027,7 @@ begin
  fits.SetBPM(bpm,0,0,0,0);
  learningvcurve:=false;
  camera.ResetFrame;
+ f_preview.StackPreview.Checked:=false;
  f_visu.Zoom:=SaveZoom;
  ImgZoom:=f_visu.Zoom;
  f_starprofile.StarX:=xc1;
@@ -4098,6 +4100,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     StartCaptureTimer.Enabled:=true;
     exit;
   end;
+  f_preview.StackPreview.Checked:=false;
   f_capture.Running:=true;
   MenuCaptureStart.Caption:='Stop';
   Preview:=false;
@@ -4216,7 +4219,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   NewMessage('Starting '+f_capture.FrameType.Text+' exposure '+inttostr(f_capture.SeqCount)+' for '+f_capture.ExpTime.Text+' seconds');
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
-  camera.AddFrames:=false;
+  f_preview.StackPreview.Checked:=false;
   // start exposure for time e
   camera.StartExposure(e);
 end
@@ -4903,6 +4906,7 @@ begin
      SaveFocusZoom:=f_visu.Zoom;
      f_visu.Zoom:=0;
      ImgZoom:=0;
+     f_preview.StackPreview.Checked:=false;
      if not f_preview.Loop then f_preview.Loop:=true;
      if not f_preview.Running then begin
        f_preview.Running:=true;
@@ -5055,6 +5059,7 @@ begin
  end;
  autofocusing:=true;
  savecapture:=Capture;
+ f_preview.StackPreview.Checked:=false;
  try
  Capture:=false;
  NewMessage('Autofocus now');
@@ -5320,6 +5325,7 @@ begin
      SaveFocusZoom:=f_visu.Zoom;
      f_visu.Zoom:=0;
      ImgZoom:=0;
+     f_preview.StackPreview.Checked:=false;
      if not f_preview.Loop then f_preview.Loop:=true;
      if not f_preview.Running then begin
        f_preview.Running:=true;
