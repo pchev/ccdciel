@@ -13,8 +13,8 @@ echo Install ccdciel to $destdir
 install -m 755 -d $destdir
 install -m 755 -d $destdir/bin
 install -m 755 -d $destdir/share
-install -m 755 -d $destdir/share/appdata
 install -m 755 -d $destdir/share/applications
+install -m 755 -d $destdir/share/metainfo
 install -m 755 -d $destdir/share/doc
 install -m 755 -d $destdir/share/doc/ccdciel
 install -m 755 -d $destdir/share/pixmaps
@@ -45,7 +45,7 @@ install -v -m 644 data/stars/focus_star_7  $destdir/share/ccdciel/data/stars/foc
 install -v -m 644 data/stars/focus_star_8  $destdir/share/ccdciel/data/stars/focus_star_8 
 install -v -m 644 doc/doc_ccdciel_en.pdf $destdir/share/ccdciel/doc/doc_ccdciel_en.pdf
 install -v -m 644 system_integration/Linux/share/applications/ccdciel.desktop $destdir/share/applications/ccdciel.desktop
-install -v -m 644 system_integration/Linux/share/appdata/ccdciel.appdata.xml $destdir/share/appdata/ccdciel.appdata.xml
+install -v -m 644 system_integration/Linux/share/metainfo/ccdciel.appdata.xml $destdir/share/metainfo/ccdciel.appdata.xml
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/changelog $destdir/share/doc/ccdciel/changelog
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/copyright $destdir/share/doc/ccdciel/copyright
 install -v -m 644 system_integration/Linux/share/pixmaps/ccdciel.png $destdir/share/pixmaps/ccdciel.png
