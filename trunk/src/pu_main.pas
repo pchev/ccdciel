@@ -1935,7 +1935,8 @@ begin
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
-  if config.GetValue('/PreviewStack/StackUseDark',false) then begin
+  f_preview.StackPreview.Visible:=config.GetValue('/PreviewStack/StackShow',false);
+  if config.GetValue('/PreviewStack/StackUseDark',false) and f_preview.StackPreview.Visible then begin
     camera.StackDark.LoadFromFile(config.GetValue('/PreviewStack/StackDarkFile',''));
   end
   else begin
@@ -3466,6 +3467,7 @@ begin
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
    f_option.BPMsigma.Text:=inttostr(config.GetValue('/BadPixel/Sigma',5));
+   f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.StackDarkFile.FileName:=config.GetValue('/PreviewStack/StackDarkFile','');
    f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
    f_option.VideoPreviewRate.Text:=inttostr(config.GetValue('/Video/PreviewRate',5));
@@ -3643,6 +3645,7 @@ begin
      config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
      config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
      config.SetValue('/BadPixel/Sigma',StrToIntDef(f_option.BPMsigma.Text,BPMsigma));
+     config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/StackDarkFile',f_option.StackDarkFile.FileName);
      config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
      config.SetValue('/Video/PreviewRate',StrToIntDef(f_option.VideoPreviewRate.Text,MaxVideoPreviewRate));
