@@ -332,6 +332,9 @@ if FAddFrames then begin  // stack preview frames
   f:=TFits.Create(nil);
   f.Stream:=ImgStream;
   f.LoadStream;
+  // convert 8bit to 16bit to avoid quick overflow
+  if f.HeaderInfo.bitpix=8 then
+     f.Bitpix8to16;
   // substract dark if loaded and compatible
   if f.SameFormat(FStackDark) then
      f.Math(FStackDark,moSub);

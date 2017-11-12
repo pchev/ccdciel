@@ -167,6 +167,7 @@ type
      procedure ApplyBPM;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
+     procedure Bitpix8to16;
      function SameFormat(f:TFits): boolean;
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
@@ -1361,6 +1362,38 @@ begin
            (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
            (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
            (f.FFitsInfo.bscale = FFitsInfo.bscale );
+end;
+
+procedure TFits.Bitpix8to16;
+var i,j,k,ii: integer;
+    x: smallint;
+begin
+ if FFitsInfo.bitpix = 8 then begin
+   setlength(imai16,n_axis,Fheight,Fwidth);
+   for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+     for i:=0 to FFitsInfo.naxis2-1 do begin
+      ii:=FFitsInfo.naxis2-1-i;
+      for j := 0 to FFitsInfo.naxis1-1 do begin
+        x:=-32767+imai8[k,ii,j];
+        imai16[k,ii,j]:=x;
+      end;
+     end;
+   end;
+ end;
+ FFitsInfo.bitpix:=16;
+ FFitsInfo.bscale:=1;
+ FFitsInfo.bzero:=32768;
+ i:=FHeader.Indexof('BITPIX');
+ if i>=0 then FHeader.Delete(i);
+ FHeader.Insert(i,'BITPIX',16,'');
+ i:=FHeader.Indexof('BSCALE');
+ if i>=0 then FHeader.Delete(i);
+ FHeader.Insert(i,'BSCALE',1,'');
+ i:=FHeader.Indexof('BZERO');
+ if i>=0 then FHeader.Delete(i);
+ FHeader.Insert(i,'BZERO',32768,'');
+ setlength(imai8,0,0,0);
+ WriteFitsImage;
 end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
