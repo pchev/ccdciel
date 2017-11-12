@@ -57,6 +57,7 @@ type
     AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
     AutofocusSlippageOffset: TEdit;
+    StackShow: TCheckBox;
     StackUseDark: TCheckBox;
     StackDarkFile: TFileNameEdit;
     FocuserTempCoeff: TEdit;
