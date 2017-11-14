@@ -372,7 +372,7 @@ begin
      end;
    end;
    FMountSlewing:=true;
-   {$ifdef debug_ascom}msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde)); {$endif}
+   msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
