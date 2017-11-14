@@ -278,7 +278,7 @@ procedure TAstrometry.AstrometrySolveonTimer(Sender: TObject);
 var ra,de,eq,pa: double;
 begin
 TimerAstrometrySolve.Enabled:=false;
-if CurrentCoord(ra,de,eq,pa) then begin
+if fits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
    ra:=ra*15*deg2rad;
    de:=de*deg2rad;
    J2000ToApparent(ra,de);
