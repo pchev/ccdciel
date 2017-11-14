@@ -637,6 +637,7 @@ begin
     if p.Running then exit;
     if t.objectname<>'None' then
        Fcapture.Fname.Text:=trim(t.objectname);
+    p.ObjectName:=t.objectname;
     TargetTimeStart:=now;
     p.Start;
   end;
