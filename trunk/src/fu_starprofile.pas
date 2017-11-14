@@ -890,6 +890,12 @@ begin
               // compute near focus position
               delta:=(AutofocusStartHFD-Fhfd)/AutofocusVcSlopeL;
               newpos:=AutofocusVcpiL+(AutofocusNearHFD/AutofocusVcSlopeL)+delta;
+              // correct for filter offset
+              newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
+              // correct for temperature
+              newpos:=newpos+tempcomp;
+              // correct for slippage
+              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               // move to near focus position
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to near focus '+focuser.Position.Text);
@@ -903,6 +909,12 @@ begin
               // compute near focus position
               delta:=(AutofocusStartHFD-Fhfd)/AutofocusVcSlopeR;
               newpos:=AutofocusVcpiR+(AutofocusNearHFD/AutofocusVcSlopeR)+delta;
+              // correct for filter offset
+              newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
+              // correct for temperature
+              newpos:=newpos+tempcomp;
+              // correct for slippage
+              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               // move to near focus position
               focuser.FocusPosition:=round(newpos);
               msg('Autofocus move to near focus '+focuser.Position.Text);
