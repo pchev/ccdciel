@@ -318,7 +318,7 @@ var txt:string;
     i,n: integer;
     p,pp: TStep;
 begin
-  txt:=FormEntry(self,'Step description','');
+  txt:=FormEntry(self,'Step description','Step'+inttostr(StepList.RowCount));
   p:=TStep.Create;
   n:=StepList.Row;
   if n >= 1 then begin

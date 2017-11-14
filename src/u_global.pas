@@ -421,7 +421,7 @@ begin
   autofocusstart:=false;
   autofocus:=false;
   autofocuscount:=10;
-  description:='Step description';
+  description:='Step1';
 end;
 
 procedure TStep.Assign(Source: Tstep);

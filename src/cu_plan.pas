@@ -62,7 +62,7 @@ T_Plan = class(TComponent)
     StepRunning: boolean;
     StepRepeatCount,StepTotalCount: integer;
     StepTimeStart,StepDelayEnd: TDateTime;
-    FName: string;
+    FName,FObjectName: string;
     FRunning: boolean;
   public
     constructor Create(AOwner: TComponent);override;
@@ -75,6 +75,7 @@ T_Plan = class(TComponent)
     property CurrentStep: integer read FCurrentStep;
     property Running: boolean read FRunning;
     property PlanName: string read FName write SetPlanName;
+    property ObjectName: string read FObjectName write FObjectName;
     property Steps: T_Steps read FSteps;
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
@@ -108,6 +109,7 @@ begin
   StartTimer.Enabled:=false;
   StartTimer.Interval:=5000;
   StartTimer.OnTimer:=@StartTimerTimer;
+  FObjectName:='';
 end;
 
 destructor  T_Plan.Destroy;
@@ -154,7 +156,10 @@ end;
 procedure T_Plan.Start;
 begin
   FRunning:=true;
-  msg('Start plan '+FName);
+  if FObjectName<>'' then
+     msg('Object '+FObjectName+', start plan '+FName)
+  else
+     msg('Start plan '+FName);
   FCurrentStep:=-1;
   NextStep;
 end;
@@ -180,7 +185,10 @@ begin
     FRunning:=false;
     PlanTimer.Enabled:=false;
     FCurrentStep:=-1;
-    msg('Plan '+FName+' finished.');
+    if FObjectName<>'' then
+      msg('Object '+FObjectName+', plan '+FName+' finished.')
+    else
+      msg('Plan '+FName+' finished.');
   end;
 end;
 
