@@ -344,7 +344,7 @@ begin
         PanelFocuserAscom.Visible:=false;
         PanelFocuserInMount.Visible:=false;
      end;
-     Watchdog.Visible:=true;
+     Watchdog.TabVisible:=true;
  end;
 {$ifdef mswindows}
   if InterfaceSelectionBox.ItemIndex=1 then begin
@@ -374,7 +374,7 @@ begin
      PanelFocuserAscom.Visible:=true;
      PanelFocuserInMount.Visible:=false;
      DeviceWatchdog.Checked:=false;
-     Watchdog.Visible:=false;
+     Watchdog.TabVisible:=false;
   end;
 {$else}
  if InterfaceSelectionBox.ItemIndex=1 then begin
