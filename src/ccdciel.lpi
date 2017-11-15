@@ -209,7 +209,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="62">
+    <Units Count="64">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -543,6 +543,14 @@
         <Filename Value="cu_autoguider_linguider.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit61>
+      <Unit62>
+        <Filename Value="cu_indiwatchdog.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit62>
+      <Unit63>
+        <Filename Value="cu_watchdog.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit63>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

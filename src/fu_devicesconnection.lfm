@@ -1,19 +1,20 @@
 object f_devicesconnection: Tf_devicesconnection
   Left = 0
-  Height = 89
+  Height = 112
   Top = 0
   Width = 199
   AutoSize = True
-  ClientHeight = 89
+  ClientHeight = 112
   ClientWidth = 199
+  ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 69
+    Height = 92
     Top = 20
     Width = 199
     Align = alClient
-    ClientHeight = 69
+    ClientHeight = 92
     ClientWidth = 199
     TabOrder = 0
     object BtnConnect: TButton
@@ -45,57 +46,67 @@ object f_devicesconnection: Tf_devicesconnection
       ChildSizing.HorizontalSpacing = 4
       ChildSizing.VerticalSpacing = 4
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ChildSizing.ControlsPerLine = 5
+      ChildSizing.ControlsPerLine = 6
       ClientHeight = 24
       ClientWidth = 196
       TabOrder = 1
       Visible = False
       object LabelCamera: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 2
-        Width = 34
+        Width = 30
         Caption = 'Cam.'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelWheel: TLabel
-        Left = 42
-        Height = 17
+        Left = 38
+        Height = 19
         Top = 2
-        Width = 20
+        Width = 16
         Caption = 'Fil.'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelFocuser: TLabel
-        Left = 66
-        Height = 17
+        Left = 58
+        Height = 19
         Top = 2
-        Width = 28
+        Width = 24
         Caption = 'Foc.'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelRotator: TLabel
-        Left = 98
-        Height = 17
+        Left = 86
+        Height = 19
         Top = 2
-        Width = 28
+        Width = 24
         Caption = 'Rot.'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
       end
       object LabelMount: TLabel
-        Left = 130
-        Height = 17
+        Left = 114
+        Height = 19
         Top = 2
-        Width = 32
+        Width = 28
         Caption = 'Mnt.'
+        Font.Color = clRed
+        ParentColor = False
+        ParentFont = False
+      end
+      object LabelWatchdog: TLabel
+        Left = 146
+        Height = 19
+        Top = 2
+        Width = 29
+        Caption = 'Wch.'
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
@@ -103,9 +114,9 @@ object f_devicesconnection: Tf_devicesconnection
     end
     object ProfileLabel: TLabel
       Left = 8
-      Height = 17
+      Height = 19
       Top = 0
-      Width = 50
+      Width = 42
       Caption = 'Profile:'
       ParentColor = False
     end

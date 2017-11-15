@@ -261,7 +261,7 @@ const
 var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
-  CameraName,WheelName,FocuserName,RotatorName,MountName: string;
+  CameraName,WheelName,FocuserName,RotatorName,MountName,WatchdogName: string;
   ConfirmClose, ScreenScaling: boolean;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;

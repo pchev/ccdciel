@@ -63,9 +63,16 @@ type
     CameraIndiTransfertDir: TEdit;
     DeviceFilterWheel: TCheckBox;
     DeviceFocuser: TCheckBox;
+    DeviceWatchdog: TCheckBox;
     DeviceRotator: TCheckBox;
     DeviceMount: TCheckBox;
+    WatchdogThreshold: TEdit;
+    Label19: TLabel;
+    Label20: TLabel;
     Label8: TLabel;
+    WatchdogAutoLoadConfig: TCheckBox;
+    WatchdogIndiDevice: TComboBox;
+    PanelWatchdogIndi: TPanel;
     PanelRotatorAscom: TPanel;
     RotatorAutoLoadConfig: TCheckBox;
     RotatorIndiDevice: TComboBox;
@@ -81,6 +88,7 @@ type
     FocuserAutoLoadConfig: TCheckBox;
     CameraIndiTransfert: TRadioGroup;
     Rotator: TTabSheet;
+    Watchdog: TTabSheet;
     WheelAutoLoadConfig: TCheckBox;
     IndiTimeout: TEdit;
     IndiSensor: TComboBox;
@@ -150,7 +158,7 @@ type
   private
     { private declarations }
     indiclient: TIndiBaseClient;
-    camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,FCameraSensor: string;
+    camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,watchdogsavedev,FCameraSensor: string;
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FRotatorConnection: TDevInterface;
     IndiTimerCount:integer;
@@ -233,9 +241,10 @@ IndiPort.Text:=conf.GetValue('/INDI/ServerPort','7624');
 IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
 
 DeviceFilterWheel.Checked:=conf.GetValue('/Devices/FilterWheel',false);
-DeviceFocuser.Checked:=conf.GetValue('/Devices/Focuser',false);;
-DeviceRotator.Checked:=conf.GetValue('/Devices/Rotator',false);;
-DeviceMount.Checked:=conf.GetValue('/Devices/Mount',false);;
+DeviceFocuser.Checked:=conf.GetValue('/Devices/Focuser',false);
+DeviceRotator.Checked:=conf.GetValue('/Devices/Rotator',false);
+DeviceMount.Checked:=conf.GetValue('/Devices/Mount',false);
+DeviceWatchdog.Checked:=conf.GetValue('/Devices/Watchdog',false);
 
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
 if CameraIndiDevice.Items.Count=0 then begin
@@ -290,6 +299,15 @@ MountIndiDevice.Text:=conf.GetValue('/INDImount/Device','');
 MountIndiDevPort.Text:=conf.GetValue('/INDImount/DevicePort','');
 MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
 AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
+
+if WatchdogIndiDevice.Items.Count=0 then begin
+  WatchdogIndiDevice.Items.Add(conf.GetValue('/INDIwatchdog/Device',''));
+  WatchdogIndiDevice.ItemIndex:=0;
+end;
+WatchdogIndiDevice.Text:=conf.GetValue('/INDIwatchdog/Device','');
+WatchdogThreshold.Text:=conf.GetValue('/INDIwatchdog/Threshold','10');
+WatchdogAutoLoadConfig.Checked:=conf.GetValue('/INDIwatchdog/AutoLoadConfig',false);
+
 end;
 
 procedure Tf_setup.InterfaceSelectionBoxClick(Sender: TObject);
@@ -326,6 +344,7 @@ begin
         PanelFocuserAscom.Visible:=false;
         PanelFocuserInMount.Visible:=false;
      end;
+     Watchdog.Visible:=true;
  end;
 {$ifdef mswindows}
   if InterfaceSelectionBox.ItemIndex=1 then begin
@@ -354,6 +373,8 @@ begin
      PanelFocuserIndi.Visible:=false;
      PanelFocuserAscom.Visible:=true;
      PanelFocuserInMount.Visible:=false;
+     DeviceWatchdog.Checked:=false;
+     Watchdog.Visible:=false;
   end;
 {$else}
  if InterfaceSelectionBox.ItemIndex=1 then begin
@@ -604,12 +625,14 @@ begin
   focusersavedev:=FocuserIndiDevice.Text;
   rotatorsavedev:=RotatorIndiDevice.Text;
   mountsavedev:=MountIndiDevice.Text;
+  watchdogsavedev:=WatchdogIndiDevice.Text;
   LabelIndiDevCount.Caption:='...';
   CameraIndiDevice.Clear;
   FocuserIndiDevice.Clear;
   RotatorIndiDevice.Clear;
   WheelIndiDevice.Clear;
   MountIndiDevice.Clear;
+  WatchdogIndiDevice.Clear;
   indiclient:=TIndiBaseClient.Create;
   indiclient.onNewDevice:=@IndiNewDevice;
   indiclient.SetServer(IndiServer.Text,IndiPort.Text);
@@ -637,12 +660,15 @@ begin
         RotatorIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and TELESCOPE_INTERFACE)<>0 then
         MountIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and AUX_INTERFACE)<>0 then
+        WatchdogIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
   end;
   if CameraIndiDevice.Items.Count>0 then CameraIndiDevice.ItemIndex:=0;
   if WheelIndiDevice.Items.Count>0 then WheelIndiDevice.ItemIndex:=0;
   if FocuserIndiDevice.Items.Count>0 then FocuserIndiDevice.ItemIndex:=0;
   if RotatorIndiDevice.Items.Count>0 then RotatorIndiDevice.ItemIndex:=0;
   if MountIndiDevice.Items.Count>0 then MountIndiDevice.ItemIndex:=0;
+  if WatchdogIndiDevice.Items.Count>0 then WatchdogIndiDevice.ItemIndex:=0;
   for i:=0 to CameraIndiDevice.Items.Count-1 do
      if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
   for i:=0 to WheelIndiDevice.Items.Count-1 do
@@ -653,6 +679,8 @@ begin
      if RotatorIndiDevice.Items[i]=rotatorsavedev then RotatorIndiDevice.ItemIndex:=i;
   for i:=0 to MountIndiDevice.Items.Count-1 do
      if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
+  for i:=0 to WatchdogIndiDevice.Items.Count-1 do
+     if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
   LabelIndiDevCount.Caption:='Found '+IntToStr(indiclient.devices.Count)+' devices';
   indiclient.DisconnectServer;
   Screen.Cursor:=crDefault;
