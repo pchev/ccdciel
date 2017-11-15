@@ -4279,6 +4279,7 @@ var dt: Tdatetime;
     fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
     fileseqnum: integer;
 begin
+  try
   dt:=NowUTC;
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
@@ -4287,7 +4288,11 @@ begin
   imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
   DrawHistogram(true);
   DrawImage;
+  except
+    on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message);
+  end;
   if Capture then begin
+     try
      subseq:=config.GetValue('/Files/SubfolderSequence',false);
      subobj:=config.GetValue('/Files/SubfolderObjname',false);
      subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
@@ -4349,6 +4354,9 @@ begin
      NewMessage('Saved file '+fn);
      StatusBar1.Panels[2].Text:='Saved '+fn+' '+imgsize;
      StatusBar1.Panels[1].Text := '';
+     except
+       on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message);
+     end;
      f_capture.SeqCount:=f_capture.SeqCount+1;
      f_capture.DitherNum:=f_capture.DitherNum+1;
      f_capture.FocusNum:=f_capture.FocusNum+1;

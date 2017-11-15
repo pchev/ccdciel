@@ -94,6 +94,7 @@ type
     procedure doAutofocusVcurve;
     procedure doAutofocusMean;
     procedure doAutofocusIterative;
+    function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -271,11 +272,12 @@ begin
  inherited Destroy;
 end;
 
-function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean; // double star detection based difference bright_spot and center_of_gravity
+function Tf_starprofile.double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean; // double star detection based difference bright_spot and center_of_gravity
 
-var SumVal,SumValX,SumValY,val,valmax,bg, Xg, Yg: double;
+var SumVal,SumValX,SumValY,val,vmax,bg, Xg, Yg: double;
      i,j : integer;
 begin
+  try
   // New background from corner values
   bg:=0;
   for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
@@ -291,13 +293,13 @@ begin
   SumVal:=0;
   SumValX:=0;
   SumValY:=0;
-  valmax:=0;
+  vmax:=0;
   for i:=-ri to ri do
     for j:=-ri to ri do
     begin
       val:=vmin+Img[0,y+j,x+i]/c-bg;
       if val<0 then val:=0;
-      if val>valmax then valmax:=val;
+      if val>vmax then vmax:=val;
       SumVal:=SumVal+val;
       SumValX:=SumValX+val*(i);
      SumValY:=SumValY+val*(j);
@@ -307,6 +309,12 @@ begin
   if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
     else
     result:=false;
+  except
+    on E: Exception do begin
+        msg('double_star :'+ E.Message);
+        result:=true;
+    end;
+  end;
 end;{double star detection}
 
 procedure Tf_starprofile.FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
@@ -323,6 +331,8 @@ begin
  vmax:=0;
  xm:=0;
  ym:=0;
+
+ try
 
  // try with double star exclusion
  for i:=-rs to rs do
@@ -363,6 +373,13 @@ begin
  xc:=x+xm;
  yc:=y+ym;
 
+ except
+   on E: Exception do begin
+       msg('FindBrightestPixel :'+ E.Message);
+       vmax:=0;
+   end;
+ end;
+
 end;
 
 procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
@@ -385,6 +402,8 @@ begin
   if (x+s)>(xmax-1) then x:=xmax-s-1;
   if (y-s)<1 then y:=s+1;
   if (y+s)>(ymax-1) then y:=ymax-s-1;
+
+  try
 
   // average background
   bg_average:=0;
@@ -464,6 +483,13 @@ begin
 
  if ri=0 then ri:=rs;
  if ri<3 then ri:=3;
+
+ except
+   on E: Exception do begin
+       msg('FindStarPos :'+ E.Message);
+       vmax:=0;
+   end;
+ end;
 end;
 
 procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax: double);
@@ -479,6 +505,7 @@ var i,j: integer;
       x_trunc,y_trunc: integer;
       x_frac,y_frac : double;
     begin
+      try
       x_trunc:=trunc(x1);
       y_trunc:=trunc(y1);
 
@@ -488,6 +515,12 @@ var i,j: integer;
       result:=result + Img[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
       result:=result + Img[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
       result:=result + Img[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
+      except
+        on E: Exception do begin
+            msg('value_subpixel :'+ E.Message);
+            result:=0;
+        end;
+      end;
     end;
 
 begin
@@ -495,6 +528,8 @@ begin
 hfd:=-1;
 star_fwhm:=-1;
 if ri<=0 then exit;
+
+try
 
 // Get center of gravity whithin radius of interest
 SumVal:=0;
@@ -541,6 +576,15 @@ begin
     hfd:=2*SumValR/SumVal;
     hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
     star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }  end;
+
+except
+  on E: Exception do begin
+    msg('GetHFD :'+ E.Message);
+    hfd:=-1;
+    star_fwhm:=-1;
+  end;
+end;
+
 end;
 
 procedure Tf_starprofile.PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
@@ -549,6 +593,7 @@ var i,j,i0,x1,x2,y1,y2:integer;
     txt:string;
 begin
 if (StarX<0)or(StarY<0)or(s<0) then exit;
+try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
 LabelImax.Caption:=FormatFloat(f0,FValMax);
@@ -622,12 +667,18 @@ if FValMax>0 then with graph.Picture.Bitmap do begin
   end;
 end;
 inc(curhist);
+except
+  on E: Exception do begin
+    msg('PlotProfile :'+ E.Message);
+  end;
+end;
 end;
 
 procedure Tf_starprofile.PlotHistory;
 var i:integer;
     xs,ys: double;
 begin
+try
 if curhist>maxhist then
   for i:=0 to maxhist-1 do begin
     histfwhm[i]:=histfwhm[i+1];
@@ -665,6 +716,11 @@ if FValMax>0 then with graph.Picture.Bitmap do begin
   end;
 end;
 inc(curhist);
+except
+  on E: Exception do begin
+    msg('PlotHistory :'+ E.Message);
+  end;
+end;
 end;
 
 procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
@@ -673,6 +729,8 @@ var bg,bgdev: double;
   xm,ym,ri: integer;
 begin
  if (x<0)or(y<0)or(s<0) then exit;
+
+ try
 
  if s>=(xmax div 2) then s:=xmax div 2;
  if s>=(ymax div 2) then s:=ymax div 2;
@@ -699,6 +757,11 @@ begin
    LabelFWHM.Caption:='-';
    LabelImax.Caption:='-';
    ClearGraph;
+ end;
+ except
+   on E: Exception do begin
+     msg('ShowProfile :'+ E.Message);
+   end;
  end;
 end;
 
