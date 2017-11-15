@@ -31,7 +31,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
-  fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator,
+  fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
@@ -321,10 +321,11 @@ type
     focuser: T_focuser;
     rotator: T_rotator;
     mount: T_mount;
+    watchdog: T_watchdog;
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount: boolean;
+    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantWatchdog: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
@@ -417,10 +418,13 @@ type
     Procedure DisconnectRotator(Sender: TObject);
     Procedure ConnectMount(Sender: TObject);
     Procedure DisconnectMount(Sender: TObject);
+    Procedure ConnectWatchdog(Sender: TObject);
+    Procedure DisconnectWatchdog(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     Procedure NewMessage(msg: string);
     Procedure DeviceMessage(msg: string);
+    Procedure WatchdogStatus(Sender: TObject);
     Procedure CameraStatus(Sender: TObject);
     Procedure CameraDisconnected(Sender: TObject);
     Procedure CameraExposureAborted(Sender: TObject);
@@ -929,6 +933,10 @@ begin
   camera.onStatusChange:=@CameraStatus;
   camera.onCameraDisconnected:=@CameraDisconnected;
   camera.onAbortExposure:=@CameraExposureAborted;
+
+  watchdog:=T_indiwatchdog.Create(nil);
+  watchdog.onMsg:=@NewMessage;
+  watchdog.onStatusChange:=@WatchdogStatus;
 
   astrometry:=TAstrometry.Create(nil);
   astrometry.Camera:=camera;
@@ -1495,6 +1503,7 @@ begin
   focuser.Free;
   rotator.Free;
   mount.Free;
+  watchdog.Free;
   ImaBmp.Free;
   refbmp.Free;
   config.Free;
@@ -1909,17 +1918,20 @@ case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
 end;
+WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
 wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
 focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
 rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
 mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
+watchdog.AutoLoadConfig:=config.GetValue('/INDIwatchdog/AutoLoadConfig',false);
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
 rotator.Timeout:=DeviceTimeout;
 wheel.Timeout:=DeviceTimeout;
 mount.Timeout:=DeviceTimeout;
+watchdog.Timeout:=DeviceTimeout;
 end;
 
 procedure Tf_main.SetOptions;
@@ -2021,9 +2033,10 @@ Procedure Tf_main.Connect(Sender: TObject);
 begin
   WantCamera:=true;
   WantWheel:=config.GetValue('/Devices/FilterWheel',false);
-  WantFocuser:=config.GetValue('/Devices/Focuser',false);;
-  WantRotator:=config.GetValue('/Devices/Rotator',false);;
-  WantMount:=config.GetValue('/Devices/Mount',false);;
+  WantFocuser:=config.GetValue('/Devices/Focuser',false);
+  WantRotator:=config.GetValue('/Devices/Rotator',false);
+  WantMount:=config.GetValue('/Devices/Mount',false);
+  WantWatchdog:=config.GetValue('/Devices/Watchdog',false);
 
   if WantCamera and (CameraName='') then begin
     ShowMessage('Please configure your camera!');
@@ -2050,12 +2063,18 @@ begin
     MenuSetup.Click;
     exit;
   end;
+  if WantWatchdog and (WatchdogName='') then begin
+    ShowMessage('Please configure your watchdog!');
+    MenuSetup.Click;
+    exit;
+  end;
 
   f_devicesconnection.LabelCamera.Visible:=WantCamera;
   f_devicesconnection.LabelWheel.Visible:=WantWheel;
   f_devicesconnection.LabelFocuser.Visible:=WantFocuser;
   f_devicesconnection.LabelRotator.Visible:=WantRotator;
   f_devicesconnection.LabelMount.Visible:=WantMount;
+  f_devicesconnection.LabelWatchdog.Visible:=WantWatchdog;
   f_devicesconnection.PanelDev.Visible:=true;
 
   if WantCamera  then ConnectCamera(Sender);
@@ -2063,6 +2082,7 @@ begin
   if WantFocuser then ConnectFocuser(Sender);
   if WantRotator then ConnectRotator(Sender);
   if WantMount   then ConnectMount(Sender);
+  if WantWatchdog then ConnectWatchdog(Sender);
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
@@ -2075,6 +2095,7 @@ if camera.Status<>devDisconnected then begin
      f_capture.stop;
      Capture:=false;
      StatusBar1.Panels[1].Text:='';
+     DisconnectWatchdog(Sender);
      DisconnectCamera(Sender);
      DisconnectWheel(Sender);
      DisconnectFocuser(Sender);
@@ -2425,6 +2446,38 @@ Procedure Tf_main.DisconnectMount(Sender: TObject);
 begin
 mount.Disconnect;
 end;
+
+Procedure Tf_main.ConnectWatchdog(Sender: TObject);
+begin
+   watchdog.Threshold:=strtointdef(config.GetValue('/INDIwatchdog/Threshold','10'),10);
+   watchdog.Connect(config.GetValue('/INDI/Server',''),
+                  config.GetValue('/INDI/ServerPort',''),
+                  config.GetValue('/INDIwatchdog/Device','WatchDog'));
+end;
+
+Procedure Tf_main.DisconnectWatchdog(Sender: TObject);
+begin
+ watchdog.Disconnect;
+end;
+
+Procedure Tf_main.WatchdogStatus(Sender: TObject);
+begin
+ case watchdog.Status of
+   devDisconnected:begin
+                   f_devicesconnection.LabelWatchdog.Font.Color:=clRed;
+                   end;
+   devConnecting:  begin
+                   NewMessage('Connecting watchdog...');
+                   f_devicesconnection.LabelWatchdog.Font.Color:=clOrange;
+                   end;
+   devConnected:   begin
+                   if f_devicesconnection.LabelWatchdog.Font.Color<>clGreen then NewMessage('Watchdog connected');
+                   f_devicesconnection.LabelWatchdog.Font.Color:=clGreen;
+                   end;
+ end;
+ CheckConnectionStatus;
+end;
+
 
 procedure Tf_main.NewMessage(msg: string);
 begin
@@ -3386,6 +3439,7 @@ begin
     config.SetValue('/Devices/Focuser',f_setup.DeviceFocuser.Checked);
     config.SetValue('/Devices/Rotator',f_setup.DeviceRotator.Checked);
     config.SetValue('/Devices/Mount',f_setup.DeviceMount.Checked);
+    config.SetValue('/Devices/Watchdog',f_setup.DeviceWatchdog.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
@@ -3419,6 +3473,10 @@ begin
     config.SetValue('/INDImount/DevicePort',f_setup.MountIndiDevPort.Text);
     config.SetValue('/INDImount/AutoLoadConfig',f_setup.MountAutoLoadConfig.Checked);
     config.SetValue('/ASCOMmount/Device',f_setup.AscomMount.Text);
+
+    if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
+    config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);
+    config.SetValue('/INDIwatchdog/AutoLoadConfig',f_setup.WatchdogAutoLoadConfig.Checked);
 
     SaveConfig;
 
