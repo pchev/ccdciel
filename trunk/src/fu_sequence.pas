@@ -572,9 +572,8 @@ procedure Tf_sequence.TargetGridDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 begin
  if (TargetRow>0)and(aCol=0)and(aRow=TargetRow) then begin
-    TargetGrid.Canvas.Brush.Color := clNavy;
-    TargetGrid.Canvas.Font.Color := clWhite;
     TargetGrid.Canvas.FillRect(aRect);
+    TargetGrid.Canvas.Font.Style:=[fsBold];
     TargetGrid.Canvas.TextOut(aRect.Left,aRect.Top,TargetGrid.Cells[aCol,aRow]);
  end;
 end;
@@ -592,9 +591,8 @@ procedure Tf_sequence.PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 begin
  if (PlanRow>0)and(aCol=0)and(aRow=PlanRow) then begin
-    PlanGrid.Canvas.Brush.Color := clNavy;
-    PlanGrid.Canvas.Font.Color := clWhite;
     PlanGrid.Canvas.FillRect(aRect);
+    PlanGrid.Canvas.Font.Style:=[fsBold];
     PlanGrid.Canvas.TextOut(aRect.Left,aRect.Top,PlanGrid.Cells[aCol,aRow]);
  end;
 end;
