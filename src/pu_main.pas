@@ -5319,6 +5319,7 @@ Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2: integer;
     vmax: double;
 begin
+  CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
