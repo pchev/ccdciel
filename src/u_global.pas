@@ -324,7 +324,8 @@ var
   NutMAT: rotmatrix;
   FlatAutoExposure,FlatWaitDusk,FlatWaitDawn: boolean;
   FlatType: TFlatType;
-  FlatMinExp,FlatMaxExp,FlatLevelMin,FlatLevelMax: integer;
+  FlatMinExp,FlatMaxExp: double;
+  FlatLevelMin,FlatLevelMax: integer;
 
   procedure globalmsg(str:string);
 

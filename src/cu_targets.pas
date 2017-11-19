@@ -731,7 +731,7 @@ begin
     flt.endtime:=-1;
   end;
   if flt.starttime>=0 then begin
-    msg('Wait to start at '+TimeToStr(flt.starttime));
+    msg('Waiting for twilight at '+TimeToStr(flt.starttime));
     wtok:=WaitTill(TimeToStr(flt.starttime),true);
     if not wtok then begin
        msg('Target '+flt.objectname+' canceled before start');
