@@ -57,6 +57,19 @@ type
     AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
     AutofocusSlippageOffset: TEdit;
+    FlatAutoExposure: TCheckBox;
+    FlatLevelMax: TEdit;
+    FlatMinExp: TEdit;
+    FlatMaxExp: TEdit;
+    FlatLevelMin: TEdit;
+    GroupBox18: TGroupBox;
+    Label91: TLabel;
+    Label92: TLabel;
+    Label93: TLabel;
+    Label94: TLabel;
+    Label95: TLabel;
+    Label96: TLabel;
+    FlatType: TRadioGroup;
     StackShow: TCheckBox;
     StackUseDark: TCheckBox;
     StackDarkFile: TFileNameEdit;
@@ -96,6 +109,7 @@ type
     rbLinUnixSocket: TRadioButton;
     rbLinTCP: TRadioButton;
     SlewDelay: TEdit;
+    TabSheet12: TTabSheet;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
     CameraAutoCoolTemp: TEdit;

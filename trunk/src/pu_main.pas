@@ -27,7 +27,7 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
-  fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_scriptengine,
+  fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
@@ -802,6 +802,8 @@ begin
   FocuserLastTemp:=NullCoord;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
+  FlatWaitDusk:=false;
+  FlatWaitDawn:=false;
   onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
   ZoomMin:=1;
@@ -1192,6 +1194,8 @@ begin
   f_filterwheel.Filters.Items.Assign(FilterList);
   f_filterwheel.Filters.ItemIndex:=0;
   f_EditPlan.Filter.Items.Assign(FilterList);
+  f_EditTargets.FlatFilterList.Items.Assign(FilterList);
+  if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
   SetFilterMenu;
 
   n:=config.GetValue('/Binning/Num',0);
@@ -1213,6 +1217,7 @@ begin
   f_preview.Binning.Items.Assign(BinningList);
   f_capture.Binning.Items.Assign(BinningList);
   f_editplan.Binning.Items.Assign(BinningList);
+  f_EditTargets.FlatBinning.Items.Assign(BinningList);
   f_preview.Binning.ItemIndex:=posprev;
   f_capture.Binning.ItemIndex:=poscapt;
 
@@ -2009,6 +2014,12 @@ begin
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
   ElevationMin:=config.GetValue('/Info/ElevationMin',10);
+  FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftSKY)));
+  FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',true);
+  FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1);
+  FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',15);
+  FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
+  FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -2336,6 +2347,7 @@ begin
  f_preview.Binning.Items.Assign(BinningList);
  f_capture.Binning.Items.Assign(BinningList);
  f_editplan.Binning.Items.Assign(BinningList);
+ f_EditTargets.FlatBinning.Items.Assign(BinningList);
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_editplan.Binning.ItemIndex:=0;
@@ -2641,6 +2653,8 @@ case wheel.Status of
                       f_devicesconnection.LabelWheel.Font.Color:=clGreen;
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
                       f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
+                      f_EditTargets.FlatFilterList.Items.Assign(wheel.FilterNames);
+                      if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
                       FilterList.Assign(wheel.FilterNames);
                       SetFilterMenu;
                       if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
@@ -2687,6 +2701,8 @@ procedure Tf_main.FilterNameChange(Sender: TObject);
 begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
 f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
+f_EditTargets.FlatFilterList.Items.Assign(wheel.FilterNames);
+if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
 FilterList.Assign(wheel.FilterNames);
 SetFilterMenu;
 if (wheel.Filter>=0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
@@ -3535,6 +3551,12 @@ begin
    f_option.TemperatureSlope.Text:=FormatFloat(f1,config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope));
    f_option.CameraAutoCool.Checked:=config.GetValue('/Cooler/CameraAutoCool',false);
    f_option.CameraAutoCoolTemp.Text:=FormatFloat(f1,config.GetValue('/Cooler/CameraAutoCoolTemp',0));
+   f_option.FlatType.ItemIndex:=config.GetValue('/Flat/FlatType',ord(FlatType));
+   f_option.FlatAutoExposure.Checked:=config.GetValue('/Flat/FlatAutoExposure',FlatAutoExposure);
+   f_option.FlatMinExp.Text:=IntToStr(config.GetValue('/Flat/FlatMinExp',FlatMinExp));
+   f_option.FlatMaxExp.Text:=IntToStr(config.GetValue('/Flat/FlatMaxExp',FlatMaxExp));
+   f_option.FlatLevelMin.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMin',FlatLevelMin));
+   f_option.FlatLevelMax.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMax',FlatLevelMax));
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
    f_option.FilterList.Cells[0,0]:='Filter name';
@@ -3712,6 +3734,12 @@ begin
      config.SetValue('/Cooler/TemperatureSlope',StrToFloatDef(f_option.TemperatureSlope.Text,0));
      config.SetValue('/Cooler/CameraAutoCool',f_option.CameraAutoCool.Checked);
      config.SetValue('/Cooler/CameraAutoCoolTemp',StrToFloatDef(f_option.CameraAutoCoolTemp.Text,0));
+     config.SetValue('/Flat/FlatType',f_option.FlatType.ItemIndex);
+     config.SetValue('/Flat/FlatAutoExposure',f_option.FlatAutoExposure.Checked);
+     config.SetValue('/Flat/FlatMinExp',StrToIntDef(f_option.FlatMinExp.Text,FlatMinExp));
+     config.SetValue('/Flat/FlatMaxExp',StrToIntDef(f_option.FlatMaxExp.Text,FlatMaxExp));
+     config.SetValue('/Flat/FlatLevelMin',StrToIntDef(f_option.FlatLevelMin.Text,FlatLevelMin));
+     config.SetValue('/Flat/FlatLevelMax',StrToIntDef(f_option.FlatLevelMax.Text,FlatLevelMax));
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
@@ -4336,6 +4364,7 @@ var dt: Tdatetime;
     subseq,subobj,substep,subfrt,subexp,subbin: boolean;
     fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
     fileseqnum: integer;
+    exp,newexp: double;
 begin
   try
   dt:=NowUTC;
@@ -4351,6 +4380,47 @@ begin
   end;
   if Capture then begin
      try
+     if FlatAutoExposure and (camera.FrameType=FLAT) then begin
+       NewMessage('Flat level='+inttostr(round(fits.imageMean)));
+       if (fits.imageMean<FlatLevelMin)or(fits.imageMean>FlatLevelMax) then begin
+         exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
+         newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
+         if newexp<FlatMinExp then begin
+            newexp:=FlatMinExp;
+            if FlatWaitDusk then begin
+               NewMessage('Sky is still too bright, waiting for dusk');
+               wait(30);
+            end
+            else begin
+               Capture:=false;
+               f_capture.Stop;
+               StatusBar1.Panels[1].Text:='Stop';
+               NewMessage('Flat light is too bright, please reduce the light or adjust the flat parameters.');
+               NewMessage('Stop flat capture');
+               exit;
+            end;
+         end;
+         if newexp>FlatMaxExp then begin
+            newexp:=FlatMaxExp;
+            if FlatWaitDawn then begin
+              NewMessage('Sky is still too dark, waiting for dawn');
+              wait(30);
+            end
+            else begin
+              Capture:=false;
+              f_capture.Stop;
+              StatusBar1.Panels[1].Text:='Stop';
+              NewMessage('Flat light is too dark, please increase the light or adjust the flat parameters.');
+              NewMessage('Stop flat capture');
+              exit;
+            end;
+         end;
+         f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
+         if newexp<>exp then NewMessage('Adjust flat exposure time to '+f_capture.ExpTime.Text+' and retry.');
+         if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+         exit;
+       end;
+     end;
      subseq:=config.GetValue('/Files/SubfolderSequence',false);
      subobj:=config.GetValue('/Files/SubfolderObjname',false);
      subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
@@ -4376,7 +4446,12 @@ begin
           fn:=slash(fn+trim(f_sequence.CurrentStep));
         end;
      end;
-     if subexp then fn:=slash(fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
+     if subexp then begin
+       if FlatAutoExposure and (camera.FrameType=FLAT) then
+          fn:=slash(fn+'auto')
+       else
+          fn:=slash(fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
+     end;
      if subbin then fn:=slash(fn+f_capture.Binning.Text);
      ForceDirectoriesUTF8(fn);
      fnobj:=config.GetValue('/Files/FilenameObjname',true);
@@ -4397,7 +4472,12 @@ begin
      end;
      if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
          fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
-     if fnexp then fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
+     if fnexp then begin
+       if FlatAutoExposure and (camera.FrameType=FLAT) then
+          fn:=fn+'auto_'
+       else
+          fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
+     end;
      if fnbin then fn:=fn+f_capture.Binning.Text+'_';
      if fndate then
         fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)

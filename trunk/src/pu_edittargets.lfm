@@ -36,13 +36,13 @@ object f_EditTargets: Tf_EditTargets
       Height = 25
       Hint = 'Add an object to the list'
       Top = 6
-      Width = 95
+      Width = 85
       Caption = 'New object'
       OnClick = BtnNewObjectClick
       TabOrder = 1
     end
     object BtnDeleteObject: TButton
-      Left = 204
+      Left = 288
       Height = 25
       Hint = 'Delete the selected row from the list.'
       Top = 6
@@ -52,11 +52,11 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 2
     end
     object BtnNewScript: TButton
-      Left = 104
+      Left = 96
       Height = 25
       Hint = 'Add a script to the list.'
       Top = 6
-      Width = 95
+      Width = 85
       Caption = 'New script'
       OnClick = BtnNewScriptClick
       TabOrder = 3
@@ -69,6 +69,16 @@ object f_EditTargets: Tf_EditTargets
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 4
+    end
+    object BtnNewFlat: TButton
+      Left = 192
+      Height = 25
+      Hint = 'Add a flat sequence to the list.'
+      Top = 6
+      Width = 85
+      Caption = 'Sky Flat'
+      OnClick = BtnNewFlatClick
+      TabOrder = 5
     end
   end
   object Panel2: TPanel
@@ -126,7 +136,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object RepeatCountList: TEdit
         Left = 208
-        Height = 24
+        Height = 25
         Hint = 'The number of time to repeat.'
         Top = 56
         Width = 56
@@ -179,7 +189,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object SeqStartAt: TMaskEdit
         Left = 98
-        Height = 24
+        Height = 25
         Hint = 'Wait to this time before to start to process the list.'
         Top = 8
         Width = 70
@@ -192,7 +202,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object SeqStopAt: TMaskEdit
         Left = 98
-        Height = 24
+        Height = 25
         Hint = 'Stop at this time even if the processing is not finished.'
         Top = 32
         Width = 70
@@ -210,10 +220,10 @@ object f_EditTargets: Tf_EditTargets
     Height = 595
     Top = 0
     Width = 330
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alRight
     ShowTabs = False
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
@@ -239,7 +249,7 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 0
           object PreviewExposure: TEdit
             Left = 128
-            Height = 24
+            Height = 25
             Hint = 'The exposure time for the preview loop'
             Top = 91
             Width = 44
@@ -249,7 +259,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label9: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 94
             Width = 106
             Caption = 'Preview exposure'
@@ -268,7 +278,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label13: TLabel
             Left = 188
-            Height = 18
+            Height = 19
             Top = 40
             Width = 57
             Caption = '[seconds]'
@@ -276,7 +286,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label11: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 40
             Width = 33
             Caption = 'Delay'
@@ -284,7 +294,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label10: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 11
             Width = 42
             Caption = 'Repeat'
@@ -292,7 +302,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Delay: TEdit
             Left = 92
-            Height = 24
+            Height = 25
             Hint = 'A delay to wait before to repeat.'
             Top = 37
             Width = 80
@@ -302,7 +312,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object RepeatCount: TEdit
             Left = 92
-            Height = 24
+            Height = 25
             Hint = 'The number of time to repeat.'
             Top = 8
             Width = 80
@@ -312,7 +322,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label14: TLabel
             Left = 188
-            Height = 18
+            Height = 19
             Top = 94
             Width = 57
             Caption = '[seconds]'
@@ -340,7 +350,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object ObjEndTime: TMaskEdit
             Left = 92
-            Height = 24
+            Height = 25
             Hint = 'End the capture at this time, even if the plan is not finished.'
             Top = 40
             Width = 70
@@ -354,7 +364,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object ObjStartTime: TMaskEdit
             Left = 92
-            Height = 24
+            Height = 25
             Hint = 'Wait to this time before to start imaging.'
             Top = 8
             Width = 70
@@ -368,7 +378,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label4: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 42
             Width = 53
             Caption = 'End time'
@@ -376,7 +386,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label3: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 10
             Width = 59
             Caption = 'Start time'
@@ -424,7 +434,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointDEC: TEdit
             Left = 98
-            Height = 24
+            Height = 25
             Hint = 'Target declination'
             Top = 42
             Width = 100
@@ -433,7 +443,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointRA: TEdit
             Left = 98
-            Height = 24
+            Height = 25
             Hint = 'Target Right Ascension'
             Top = 6
             Width = 100
@@ -442,7 +452,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label6: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 44
             Width = 67
             Caption = 'Center DEC'
@@ -450,7 +460,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label5: TLabel
             Left = 8
-            Height = 18
+            Height = 19
             Top = 8
             Width = 59
             Caption = 'Center RA'
@@ -528,7 +538,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object RotatorAngle: TEdit
             Left = 144
-            Height = 24
+            Height = 25
             Hint = 'The rotator angle'
             Top = 6
             Width = 48
@@ -558,7 +568,7 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 4
           object Label1: TLabel
             Left = 16
-            Height = 18
+            Height = 19
             Top = 25
             Width = 39
             Caption = 'Object'
@@ -566,7 +576,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label2: TLabel
             Left = 16
-            Height = 18
+            Height = 19
             Top = 54
             Width = 26
             Caption = 'Plan'
@@ -574,7 +584,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PlanList: TComboBox
             Left = 98
-            Height = 34
+            Height = 35
             Hint = 'The plan that define the steps required to take the object pictures.'
             Top = 48
             Width = 126
@@ -603,7 +613,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label7: TLabel
             Left = 16
-            Height = 18
+            Height = 19
             Top = 0
             Width = 58
             Caption = 'Sequence'
@@ -611,7 +621,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object LabelSeq: TLabel
             Left = 98
-            Height = 18
+            Height = 19
             Top = 1
             Width = 58
             Caption = 'LabelSeq'
@@ -621,7 +631,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object ObjectName: TEdit
             Left = 98
-            Height = 24
+            Height = 25
             Hint = 'The name of the object'
             Top = 23
             Width = 126
@@ -675,7 +685,7 @@ object f_EditTargets: Tf_EditTargets
       ClientWidth = 328
       object LabelSeq1: TLabel
         Left = 98
-        Height = 18
+        Height = 19
         Top = 1
         Width = 65
         Caption = 'LabelSeq1'
@@ -685,7 +695,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object Label8: TLabel
         Left = 16
-        Height = 18
+        Height = 19
         Top = 0
         Width = 58
         Caption = 'Sequence'
@@ -693,7 +703,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object Label15: TLabel
         Left = 16
-        Height = 18
+        Height = 19
         Top = 54
         Width = 34
         Caption = 'Script'
@@ -701,7 +711,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object ScriptList: TComboBox
         Left = 98
-        Height = 26
+        Height = 35
         Top = 48
         Width = 126
         ItemHeight = 0
@@ -726,6 +736,105 @@ object f_EditTargets: Tf_EditTargets
         Caption = 'New'
         OnClick = BtnScriptClick
         TabOrder = 2
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'TabSheet3'
+      ClientHeight = 593
+      ClientWidth = 328
+      object LabelSeq2: TLabel
+        Left = 98
+        Height = 19
+        Top = 1
+        Width = 65
+        Caption = 'LabelSeq2'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label12: TLabel
+        Left = 16
+        Height = 19
+        Top = 0
+        Width = 58
+        Caption = 'Sequence'
+        ParentColor = False
+      end
+      object FlatTime: TRadioGroup
+        Left = 16
+        Height = 72
+        Top = 48
+        Width = 280
+        AutoFill = True
+        Caption = 'Flat time'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 2
+        ClientHeight = 52
+        ClientWidth = 278
+        Columns = 2
+        Items.Strings = (
+          'at dusk'
+          'at dawn'
+        )
+        OnClick = FlatTimeClick
+        TabOrder = 0
+      end
+      object Label16: TLabel
+        Left = 16
+        Height = 19
+        Top = 172
+        Width = 46
+        Caption = 'Binning'
+        ParentColor = False
+      end
+      object FlatBinning: TComboBox
+        Left = 104
+        Height = 35
+        Top = 168
+        Width = 100
+        ItemHeight = 0
+        OnChange = TargetChange
+        Style = csDropDownList
+        TabOrder = 1
+      end
+      object FlatFilterList: TCheckListBox
+        Left = 16
+        Height = 207
+        Top = 240
+        Width = 280
+        ItemHeight = 0
+        OnClick = TargetChange
+        TabOrder = 2
+        TopIndex = -1
+      end
+      object Label17: TLabel
+        Left = 16
+        Height = 19
+        Top = 216
+        Width = 36
+        Caption = 'Filters'
+        ParentColor = False
+      end
+      object Label18: TLabel
+        Left = 16
+        Height = 19
+        Top = 131
+        Width = 37
+        Caption = 'Count'
+        ParentColor = False
+      end
+      object FlatCount: TEdit
+        Left = 104
+        Height = 25
+        Top = 128
+        Width = 80
+        OnChange = TargetChange
+        TabOrder = 3
       end
     end
   end

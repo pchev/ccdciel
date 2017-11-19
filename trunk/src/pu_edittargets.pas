@@ -28,13 +28,15 @@ interface
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
   pu_scriptengine, cu_astrometry,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn;
+  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst;
 
 type
 
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
+    FlatCount: TEdit;
+    FlatBinning: TComboBox;
     BtnAnytime: TButton;
     BtnCdCCoord: TButton;
     BtnImgCoord: TButton;
@@ -51,7 +53,16 @@ type
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
     BtnCancel: TButton;
+    BtnNewFlat: TButton;
+    FlatFilterList: TCheckListBox;
     InplaceAutofocus: TCheckBox;
+    Label12: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    LabelSeq2: TLabel;
+    FlatTime: TRadioGroup;
+    TabSheet3: TTabSheet;
     UpdateCoord: TCheckBox;
     Panel8: TPanel;
     Panel9: TPanel;
@@ -116,12 +127,14 @@ type
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
+    procedure BtnNewFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
     procedure BtnPlanClick(Sender: TObject);
     procedure CheckBoxRepeatChange(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
+    procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -161,6 +174,9 @@ implementation
 
 uses LazFileUtils;
 
+const   AutoFlatTxt='AutoFlat';
+        ScriptTxt='Script';
+
 {$R *.lfm}
 
 { Tf_EditTargets }
@@ -191,6 +207,7 @@ begin
     PageControl1.ActivePageIndex:=0;
     LabelSeq.Caption:='0';
     LabelSeq1.Caption:='0';
+    LabelSeq2.Caption:='0';
     ObjStartTime.Text:='';
     ObjEndTime.Text:='';
     ObjStartRise.Checked:=false;
@@ -393,12 +410,12 @@ var txt:string;
 begin
   PageControl1.ActivePageIndex:=0;
   txt:=FormEntry(self,'Object name','None');
-  if txt='Script' then txt:='_Script';
+  if txt=ScriptTxt then txt:='_Script';
   t:=TTarget.Create;
   n:=TargetList.Row;
   if n>=1 then begin
     tt:=TTarget(TargetList.Objects[0,n]);
-    if tt.objectname<>'Script' then t.Assign(tt);
+    if tt.objectname<>ScriptTxt then t.Assign(tt);
   end;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
@@ -412,22 +429,76 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
-var txt:string;
-    i: integer;
+var i: integer;
     t: TTarget;
 begin
   PageControl1.ActivePageIndex:=1;
-  txt:='Script';
   t:=TTarget.Create;
-  t.objectname:=txt;
+  t.objectname:=ScriptTxt;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[0,i]:=IntToStr(i);
-  TargetList.Cells[1,i]:=txt;
+  TargetList.Cells[1,i]:=ScriptTxt;
   TargetList.Cells[2,i]:=t.planname;
   TargetList.Objects[0,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
+end;
+
+procedure Tf_EditTargets.BtnNewFlatClick(Sender: TObject);
+var ft:string;
+    i,n,k: integer;
+    t: TTarget;
+begin
+  n:=0;
+  for i:=1 to TargetList.RowCount-1 do
+    if TargetList.Cells[1,i]=AutoFlatTxt then begin
+      inc(n);
+      k:=i;
+    end;
+  if n=0 then begin // first flat at dusk by default
+    LockTarget:=true;
+    TargetList.InsertColRow(false,1);
+    i:=1;
+    FlatTime.ItemIndex:=0;
+    ft:=FlatTimeName[0];
+    LockTarget:=false;
+  end
+  else if n=1 then begin
+    LockTarget:=true;
+    if k=1 then begin
+      TargetList.RowCount:=TargetList.RowCount+1;
+      i:=TargetList.RowCount-1;
+      FlatTime.ItemIndex:=1;
+      ft:=FlatTimeName[1];
+    end
+    else begin
+      TargetList.InsertColRow(false,1);
+      i:=1;
+      FlatTime.ItemIndex:=0;
+      ft:=FlatTimeName[0];
+    end;
+    LockTarget:=false;
+  end
+  else begin // no more than two flat series
+    ShowMessage('Can only add one flat serie at dusk and one at dawn');
+    exit;
+  end;
+  PageControl1.ActivePageIndex:=2;
+  t:=TTarget.Create;
+  t.objectname:=AutoFlatTxt;
+  t.planname:=ft;
+  t.FlatFilters:='';
+  t.FlatBinX:=1;
+  t.FlatBinY:=1;
+  TargetList.Cells[0,i]:=IntToStr(i);
+  TargetList.Cells[1,i]:=AutoFlatTxt;
+  TargetList.Cells[2,i]:=t.planname;
+  TargetList.Objects[0,i]:=t;
+  TargetList.Row:=i;
+  TargetChange(nil);
+  ResetSequences;
+  TargetListSelection(Sender,0,i);
 end;
 
 procedure Tf_EditTargets.BtnScriptClick(Sender: TObject);
@@ -600,17 +671,42 @@ begin
 end;
 
 procedure Tf_EditTargets.TargetListSelection(Sender: TObject; aCol, aRow: Integer);
-var n:integer;
+var n,i,j:integer;
+    buf: string;
+    filterlst:TStringList;
     t: TTarget;
 begin
   LockTarget:=true;
   n:=aRow;
   LabelSeq.Caption:=IntToStr(n);
   LabelSeq1.Caption:=IntToStr(n);
+  LabelSeq2.Caption:=IntToStr(n);
   t:=TTarget(TargetList.Objects[0,n]);
-  if t.objectname='Script' then begin
+  if t.objectname=ScriptTxt then begin
     PageControl1.ActivePageIndex:=1;
     SetScriptList(t.planname);
+  end
+  else if t.objectname=AutoFlatTxt then begin
+    PageControl1.ActivePageIndex:=2;
+    if t.planname=FlatTimeName[0]
+       then FlatTime.ItemIndex:=0
+       else FlatTime.ItemIndex:=1;
+    FlatCount.Text:=IntToStr(t.FlatCount);
+    buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
+    j:=FlatBinning.Items.IndexOf(buf);
+    if j<0 then
+      j:=FlatBinning.Items.Add(buf);
+    FlatBinning.ItemIndex:=j;
+    filterlst:=TStringList.Create();
+    SplitRec(t.FlatFilters,';',filterlst);
+    for i:=0 to FlatFilterList.Count-1 do begin
+      FlatFilterList.Checked[i]:=false;
+      if trim(FlatFilterList.Items[i])<>'' then
+       for j:=0 to filterlst.Count-1 do begin
+        if FlatFilterList.Items[i]=filterlst[j] then
+          FlatFilterList.Checked[i]:=true;
+      end;
+    end;
   end
   else begin
     PageControl1.ActivePageIndex:=0;
@@ -664,16 +760,16 @@ begin
 end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
-var i,n:integer;
+var i,n,j:integer;
     scdir:TScriptDir;
-    sname: string;
+    sname,str,buf: string;
     t: TTarget;
 begin
   if LockTarget then exit;
   n:=TargetList.Row;
   if n < 1 then exit;
   t:=TTarget(TargetList.Objects[0,n]);
-  if t.objectname='Script' then begin
+  if t.objectname=ScriptTxt then begin
     PageControl1.ActivePageIndex:=1;
     i:=ScriptList.ItemIndex;
     sname:=ScriptList.Items[i];
@@ -681,6 +777,27 @@ begin
     t.planname:=sname;
     if scdir=nil then t.path:=''
                  else t.path:=scdir.path;
+  end
+  else if t.objectname=AutoFlatTxt then begin
+    PageControl1.ActivePageIndex:=2;
+    t.planname:=FlatTimeName[FlatTime.ItemIndex];
+    t.FlatCount:=StrToIntDef(FlatCount.Text,1);
+    str:=FlatBinning.Text;
+    j:=pos('x',str);
+    if j>0 then begin
+       buf:=trim(copy(str,1,j-1));
+       t.FlatBinX:=StrToIntDef(buf,1);
+       buf:=trim(copy(str,j+1,9));
+       t.FlatBinY:=StrToIntDef(buf,1);
+    end else begin
+      t.FlatBinX:=1;
+      t.FlatBinY:=1;
+    end;
+    t.FlatFilters:='';
+    for j:=0 to FlatFilterList.Count-1 do begin
+      if FlatFilterList.Checked[j] then
+         t.FlatFilters:=t.FlatFilters+FlatFilterList.Items[j]+';';
+    end;
   end
   else begin
     PageControl1.ActivePageIndex:=0;
@@ -715,6 +832,44 @@ begin
   end;
   TargetList.Cells[1,n]:=t.objectname;
   TargetList.Cells[2,n]:=t.planname;
+end;
+
+procedure Tf_EditTargets.FlatTimeClick(Sender: TObject);
+var r1,r2,i,n: integer;
+    t:TTarget;
+begin
+if LockTarget then exit;
+  n:=0;
+  for i:=1 to TargetList.RowCount-1 do
+    if TargetList.Cells[1,i]=AutoFlatTxt then inc(n);
+  if n>=2 then begin
+    LockTarget:=true;
+    if FlatTime.ItemIndex=0 then  begin
+       FlatTime.ItemIndex:=1;
+       ShowMessage('There is already a dusk flat plan');
+    end
+    else begin
+       FlatTime.ItemIndex:=0;
+       ShowMessage('There is already a dawn flat plan');
+    end;
+    LockTarget:=false;
+    exit;
+  end;
+  if FlatTime.ItemIndex=0 then begin
+     r1:=TargetList.Row;
+     r2:=1;
+     t:=TTarget(TargetList.Objects[0,r1]);
+     t.planname:=FlatTimeName[0];
+     TargetList.MoveColRow(false,r1,r2);
+  end
+  else begin
+    r1:=TargetList.Row;
+    t:=TTarget(TargetList.Objects[0,r1]);
+    t.planname:=FlatTimeName[1];
+    r2:=TargetList.RowCount-1;
+    TargetList.MoveColRow(false,r1,r2);
+  end;
+  TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;
