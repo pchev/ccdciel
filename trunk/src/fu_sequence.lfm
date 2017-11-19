@@ -5,7 +5,6 @@ object f_sequence: Tf_sequence
   Width = 180
   ClientHeight = 561
   ClientWidth = 180
-  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object StaticText1: TStaticText

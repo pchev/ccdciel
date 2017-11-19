@@ -7,7 +7,6 @@ object f_main: Tf_main
   Caption = 'CCD Ciel'
   ClientHeight = 282
   ClientWidth = 800
-  DesignTimePPI = 95
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -18,7 +17,6 @@ object f_main: Tf_main
   OnResize = FormResize
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '1.8.0.4'
   Visible = False
   object PageControlRight: TPageControl
     Left = 612
