@@ -202,6 +202,8 @@ ConnectTimer.Enabled:=False;
 HeartbeatTimer.Enabled:=False;
 SetHeartbeat(0);
 wait(1);
+indiclient.disconnectDevice(Findidevice);
+wait(1);
 indiclient.Terminate;
 ClearStatus;
 end;
