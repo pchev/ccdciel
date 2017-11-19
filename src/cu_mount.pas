@@ -61,6 +61,7 @@ T_mount = class(TComponent)
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     function Slew(sra,sde: double):boolean; virtual; abstract;
+    function SlewAsync(sra,sde: double):boolean; virtual; abstract;
     function Sync(sra,sde: double):boolean; virtual; abstract;
     function Track:boolean; virtual; abstract;
     procedure AbortMotion; virtual; abstract;

@@ -100,6 +100,7 @@ T_indimount = class(T_mount)
    Procedure Disconnect; override;
    function FlipMeridian:boolean; override;
    function Slew(sra,sde: double):boolean; override;
+   function SlewAsync(sra,sde: double):boolean; override;
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
@@ -493,6 +494,22 @@ if TelescopeInfo<>nil then begin
   result:=TelescopeFocale.value;
 end
 else result:=-1;
+end;
+
+function T_indimount.SlewAsync(sra,sde: double):Boolean;
+var slewtimeout:integer;
+begin
+  result:=false;
+  if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    IUResetSwitch(CoordSet);
+    CoordSetTrack.s:=ISS_ON;
+    indiclient.sendNewSwitch(CoordSet);
+    indiclient.WaitBusy(CoordSet);
+    coord_ra.value:=sra;
+    coord_dec.value:=sde;
+    indiclient.sendNewNumber(coord_prop);
+    result:=true;
+  end;
 end;
 
 function T_indimount.Slew(sra,sde: double):Boolean;
