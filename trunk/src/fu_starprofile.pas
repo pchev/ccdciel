@@ -588,11 +588,11 @@ end;
 end;
 
 procedure Tf_starprofile.PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
-var i,j,i0,x1,x2,y1,y2:integer;
+var i,j,i0,x1,x2,y1,y2,rs:integer;
     xs,ys: double;
     txt:string;
 begin
-if (StarX<0)or(StarY<0)or(s<0) then exit;
+if (FStarX<0)or(FStarY<0)or(s<0) then exit;
 try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
@@ -623,6 +623,13 @@ with profile.Picture.Bitmap do begin
   Canvas.Pen.Mode:=pmCopy;
   Canvas.FillRect(0,0,Width,Height);
   if FValMax>0 then begin
+    rs:=s div 2;
+    if (FStarX-rs)<0 then rs:=round(FStarX);
+    if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-round(FStarX);
+    if (FStarY-rs)<0 then rs:=round(FStarY);
+    if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-round(FStarY);
+    if rs<=0 then exit;
+    s:=2*rs;
     Canvas.Pen.Color:=clRed;
     xs:=Width/s;
     ys:=Height/(1.05*FValMax);
