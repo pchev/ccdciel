@@ -70,6 +70,7 @@ type
       procedure StopSequence(abort: boolean);
       procedure NextTarget;
       function InitTarget:boolean;
+      function InitAutoFlat: boolean;
       procedure StartPlan;
       procedure RunErrorScript;
       procedure RunEndScript;
@@ -458,6 +459,36 @@ begin
      NextTarget;
      exit;
    end
+   else if Targets[FCurrentTarget].objectname='AutoFlat' then begin
+     FInitializing:=true;
+     ShowDelayMsg('');
+     TargetRepeatCount:=1;
+     initok:=InitAutoFlat;
+     if not FRunning then begin
+       exit;
+     end;
+     if initok then begin
+       StartPlan;
+       TargetTimer.Enabled:=true;
+     end
+     else begin
+       msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
+       if FUnattended then begin
+         FInitializing:=false;
+         NextTarget;
+         exit;
+       end else begin
+         FInitializing:=false;
+         f_pause.Caption:='Target failed';
+         f_pause.Text:='Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?';
+         if f_pause.Wait(WaitResponseTime) then begin
+            Dec(FCurrentTarget);
+         end;
+         NextTarget;
+         exit;
+       end;
+     end;
+   end
    else begin
      FInitializing:=true;
      ShowDelayMsg('');
@@ -602,6 +633,122 @@ begin
     end;
     result:=true;
   end;
+  finally
+    FTargetInitializing:=false;
+  end;
+end;
+
+function T_Targets.InitAutoFlat: boolean;
+var i:integer;
+    wtok,nd:boolean;
+    stw: integer;
+    sra,sde,sl,hp1,hp2: double;
+    flt,nextt: TTarget;
+    flp:T_Plan;
+    fls:TStep;
+    flfilter: TStringList;
+begin
+  result:=false;
+  if not FRunning then exit;
+  FTargetInitializing:=true;
+  try
+  // create a dynamic plan with all steps to run the flats, one step per filter
+  flt:=Targets[FCurrentTarget];
+  flp:=T_Plan(flt.plan);
+  flfilter:=TStringList.Create;
+  SplitRec(flt.flatfilters,';',flfilter);
+  // todo: sort by filter exp coeff
+  flp.Clear;
+  for i:=0 to flfilter.count-1 do
+    if trim(flfilter[i])<>'' then begin
+      fls:=TStep.Create;
+      fls.frtype:=FLAT;
+      fls.filter:=FilterList.IndexOf(flfilter[i]);
+      fls.binx:=flt.FlatBinX;
+      fls.biny:=flt.FlatBinY;
+      fls.count:=flt.FlatCount;
+      fls.exposure:=FlatMinExp;
+      fls.delay:=1;
+      fls.repeatcount:=1;
+      fls.dither:=false;
+      fls.dithercount:=1;
+      fls.autofocusstart:=false;
+      fls.autofocus:=false;
+      fls.autofocuscount:=10;
+      fls.description:=flt.planname+' flat '+flfilter[i];
+      flp.Add(fls);
+    end;
+  if flt.planname=FlatTimeName[0] then begin    // Dusk
+    //Start when the Sun is 2 degree below horizon
+    Sun(jdtoday+0.5,sra,sde,sl);
+    Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
+    if abs(hp2)<90 then
+       flt.starttime:=hp2/24
+    else begin
+      msg('No suitable dusk for automatic flat today');
+      exit;
+    end;
+    //Force stop when the Sun is 16 degree below horizon
+    Time_Alt(jdtoday, sra, sde, -16, hp1, hp2);
+    if abs(hp2)<90 then
+       flt.endtime:=hp2/24
+    else begin
+      msg('No suitable dusk for automatic flat today');
+      exit;
+    end;
+    // Update start time of next step to astronomical twilight if not already set
+    if (FCurrentTarget+1)<NumTargets then begin
+      nextt:=Targets[FCurrentTarget+1];
+      if nextt.starttime<0 then begin
+        Time_Alt(jdtoday, sra, sde, -18, hp1, hp2);
+        if abs(hp2)<90 then
+           nextt.starttime:=hp2/24
+      end;
+    end;
+  end
+  else if flt.planname=FlatTimeName[1] then begin  // Dawn
+    //Start when the Sun is 16 degree below horizon
+    Sun(jdtoday+0.5,sra,sde,sl);
+    Time_Alt(jdtoday, sra, sde, -16, hp1, hp2);
+    if abs(hp1)<90 then
+       flt.starttime:=hp1/24
+    else begin
+      msg('No suitable dawn for automatic flat today');
+      exit;
+    end;
+    //Force stop when the Sun is 2 degree below horizon
+    Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
+    if abs(hp1)<90 then
+       flt.endtime:=hp1/24
+    else begin
+      msg('No suitable dawn for automatic flat today');
+      exit;
+    end;
+  end
+  else begin
+    flt.starttime:=-1;
+    flt.endtime:=-1;
+  end;
+  if flt.starttime>=0 then begin
+    msg('Wait to start at '+TimeToStr(flt.starttime));
+    wtok:=WaitTill(TimeToStr(flt.starttime),true);
+    if not wtok then begin
+       msg('Target '+flt.objectname+' canceled before start');
+       exit;
+    end;
+  end;
+  if flt.endtime>=0 then begin
+     SecondsToWait(flt.endtime,true,stw,nd);
+     if stw>0 then begin
+        StopTargetTimer.Interval:=1000*stw;
+        StopTargetTimer.Enabled:=true;
+     end else begin
+       msg('Target '+flt.objectname+' canceled before start');
+       msg('Stop time '+TimeToStr(flt.endtime)+' already passed');
+       exit;
+     end;
+  end;
+  result:=true;
   finally
     FTargetInitializing:=false;
   end;

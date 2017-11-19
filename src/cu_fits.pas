@@ -116,7 +116,7 @@ type
     // 16bit image scaled min/max unsigned
     Fimage : Timaw16;
     // Fimage scaling factor
-    FimageC, FimageMin : double;
+    FimageC, FimageMin,FimageMax : double;
     // Histogram of Fimage
     FHistogram: THistogram;
     // Fits header
@@ -182,6 +182,7 @@ type
      property image : Timaw16 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
+     property imageMax : double read FimageMax;
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
@@ -1189,6 +1190,7 @@ case FFitsInfo.bitpix of
       end;
 FimageC:=c;
 FimageMin:=Fdmin;
+FimageMax:=Fdmax;
 if FimageMin<0 then FimageMin:=0;
 end;
 

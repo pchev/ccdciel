@@ -36,6 +36,7 @@ type
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
+  TFlatType=(ftSKY);
   TAutoguiderType=(PHD,LINGUIDER);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP, HNSKY);
@@ -101,6 +102,8 @@ type
               starttime,endtime,ra,de,pa: double;
               startrise,endset: boolean;
               repeatcount: integer;
+              FlatBinX,FlatBinY,FlatCount: integer;
+              FlatFilters: string;
               preview,astrometrypointing,updatecoord,inplaceautofocus: boolean;
               delay, previewexposure: double;
               plan :TComponent;
@@ -206,6 +209,7 @@ const
   FocusDirIn=true;
   FocusDirOut=false;
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
+  FlatTimeName: array[0..1] of string=('Dusk','Dawn');
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
   ResolverNone=2;
@@ -318,6 +322,9 @@ var
   HorizonMax, HorizonMin, ElevationMin: double;
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
   NutMAT: rotmatrix;
+  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn: boolean;
+  FlatType: TFlatType;
+  FlatMinExp,FlatMaxExp,FlatLevelMin,FlatLevelMax: integer;
 
   procedure globalmsg(str:string);
 
@@ -387,6 +394,10 @@ begin
   preview:=Source.preview;
   delay:=Source.delay;
   previewexposure:=Source.previewexposure;
+  FlatCount:=Source.FlatCount;
+  FlatBinX:=Source.FlatBinX;
+  FlatBinY:=Source.FlatBinY;
+  FlatFilters:=Source.FlatFilters;
 end;
 
 function TTarget.previewexposure_str: string;

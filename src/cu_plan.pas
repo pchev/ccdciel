@@ -175,6 +175,8 @@ end;
 procedure T_Plan.NextStep;
 begin
   PlanTimer.Enabled:=false;
+  FlatWaitDusk:=false;
+  FlatWaitDawn:=false;
   inc(FCurrentStep);
   if FCurrentStep<NumSteps then begin
     StartStep;
@@ -211,6 +213,12 @@ begin
     if p.autofocusstart then Fcapture.FocusNow:=true;
     Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.FiltersChange(self);
+    if p.frtype=FLAT then begin
+      if words(p.description,'',1,1)='Dusk' then
+        FlatWaitDusk:=true;
+      if words(p.description,'',1,1)='Dawn' then
+        FlatWaitDawn:=true;
+    end;
     Wait;
     if not FRunning then exit;
     StepTimeStart:=now;

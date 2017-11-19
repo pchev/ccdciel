@@ -425,6 +425,10 @@ begin
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
        t.delay:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Delay',1.0);
+       t.FlatCount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatCount',1));
+       t.FlatBinX:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
+       t.FlatBinY:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',1));
+       t.FlatFilters:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatFilters','');
        Targets.Add(t);
        LoadPlan(T_Plan(t.plan), t.planname);
      end;
@@ -562,6 +566,10 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Delay',t.delay);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatCount',t.FlatCount);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',t.FlatBinY);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
     end;
     tfile.Flush;
     tfile.Free;
@@ -665,6 +673,9 @@ end;
 
 procedure Tf_sequence.EndSequence(Sender: TObject);
 begin
+ CancelAutofocus:=false;
+ FlatWaitDusk:=false;
+ FlatWaitDawn:=false;
  led.Brush.Color:=clRed;
 end;
 
