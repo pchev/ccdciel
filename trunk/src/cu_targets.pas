@@ -643,6 +643,7 @@ var i:integer;
     wtok,nd:boolean;
     stw: integer;
     sra,sde,sl,hp1,hp2: double;
+    zra,zde : double;
     flt,nextt: TTarget;
     flp:T_Plan;
     fls:TStep;
@@ -683,7 +684,7 @@ begin
     Sun(jdtoday+0.5,sra,sde,sl);
     Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
     if abs(hp2)<90 then
-       flt.starttime:=hp2/24
+       flt.starttime:=rmod(hp2+ObsTimeZone+24,24)/24
     else begin
       msg('No suitable dusk for automatic flat today');
       exit;
@@ -691,7 +692,7 @@ begin
     //Force stop when the Sun is 16 degree below horizon
     Time_Alt(jdtoday, sra, sde, -16, hp1, hp2);
     if abs(hp2)<90 then
-       flt.endtime:=hp2/24
+       flt.endtime:=rmod(hp2+ObsTimeZone+24,24)/24
     else begin
       msg('No suitable dusk for automatic flat today');
       exit;
@@ -702,7 +703,7 @@ begin
       if nextt.starttime<0 then begin
         Time_Alt(jdtoday, sra, sde, -18, hp1, hp2);
         if abs(hp2)<90 then
-           nextt.starttime:=hp2/24
+           nextt.starttime:=rmod(hp2+ObsTimeZone+24,24)/24
       end;
     end;
   end
@@ -711,7 +712,7 @@ begin
     Sun(jdtoday+0.5,sra,sde,sl);
     Time_Alt(jdtoday, sra, sde, -16, hp1, hp2);
     if abs(hp1)<90 then
-       flt.starttime:=hp1/24
+       flt.starttime:=rmod(hp1+ObsTimeZone+24,24)/24
     else begin
       msg('No suitable dawn for automatic flat today');
       exit;
@@ -719,7 +720,7 @@ begin
     //Force stop when the Sun is 2 degree below horizon
     Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
     if abs(hp1)<90 then
-       flt.endtime:=hp1/24
+       flt.endtime:=rmod(hp1+ObsTimeZone+24,24)/24
     else begin
       msg('No suitable dawn for automatic flat today');
       exit;
@@ -748,6 +749,14 @@ begin
        exit;
      end;
   end;
+  // slew near zenith
+  cmdHz2Eq(0,90,zra,zde);
+  if flt.planname=FlatTimeName[0] then
+     zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
+  else
+     zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
+  Mount.Slew(zra,zde);
+  wait(1);
   result:=true;
   finally
     FTargetInitializing:=false;

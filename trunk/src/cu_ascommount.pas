@@ -67,6 +67,7 @@ public
    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
    procedure Disconnect; override;
    function Slew(sra,sde: double):boolean; override;
+   function SlewAsync(sra,sde: double):boolean; override;
    function FlipMeridian: boolean; override;
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
@@ -355,6 +356,34 @@ end;
 procedure T_ascommount.msg(txt: string);
 begin
   if Assigned(FonMsg) then FonMsg(txt);
+end;
+
+function T_ascommount.SlewAsync(sra,sde: double):boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ result:=false;
+ if Connected and CanSlew then begin
+   try
+   if CanSetTracking and (not V.tracking) then begin
+     try
+      V.tracking:=true;
+     except
+       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
+     end;
+   end;
+   msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
+   if CanSlewAsync then begin
+     V.SlewToCoordinatesAsync(sra,sde);
+   end
+   else
+     V.SlewToCoordinates(sra,sde);
+   result:=true;
+   except
+     on E: Exception do msg('Mount '+Fdevice+' Slew error: ' + E.Message);
+   end;
+ end;
+ {$endif}
 end;
 
 function T_ascommount.Slew(sra,sde: double):boolean;

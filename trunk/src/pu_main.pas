@@ -4364,7 +4364,7 @@ var dt: Tdatetime;
     subseq,subobj,substep,subfrt,subexp,subbin: boolean;
     fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
     fileseqnum: integer;
-    exp,newexp: double;
+    exp,newexp,zra,zde: double;
 begin
   try
   dt:=NowUTC;
@@ -4417,9 +4417,24 @@ begin
          end;
          f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
          if newexp<>exp then NewMessage('Adjust flat exposure time to '+f_capture.ExpTime.Text+' and retry.');
+         // while waiting, maintain position near zenith
+         cmdHz2Eq(0,90,zra,zde);
+         if FlatWaitDusk then
+            zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
+         else
+            zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
+         Mount.Slew(zra,zde);
          if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
          exit;
        end;
+       // slew near zenith and add some randomness
+       cmdHz2Eq(0,90,zra,zde);
+       zra:=zra+Random/60;
+       if FlatWaitDusk then
+          zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
+       else
+          zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
+       Mount.SlewAsync(zra,zde);
      end;
      subseq:=config.GetValue('/Files/SubfolderSequence',false);
      subobj:=config.GetValue('/Files/SubfolderObjname',false);
