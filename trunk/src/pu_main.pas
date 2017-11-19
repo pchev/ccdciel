@@ -2016,8 +2016,8 @@ begin
   ElevationMin:=config.GetValue('/Info/ElevationMin',10);
   FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftSKY)));
   FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',true);
-  FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1);
-  FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',15);
+  FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1.0);
+  FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',15.0);
   FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
   FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
 end;
@@ -3553,8 +3553,8 @@ begin
    f_option.CameraAutoCoolTemp.Text:=FormatFloat(f1,config.GetValue('/Cooler/CameraAutoCoolTemp',0));
    f_option.FlatType.ItemIndex:=config.GetValue('/Flat/FlatType',ord(FlatType));
    f_option.FlatAutoExposure.Checked:=config.GetValue('/Flat/FlatAutoExposure',FlatAutoExposure);
-   f_option.FlatMinExp.Text:=IntToStr(config.GetValue('/Flat/FlatMinExp',FlatMinExp));
-   f_option.FlatMaxExp.Text:=IntToStr(config.GetValue('/Flat/FlatMaxExp',FlatMaxExp));
+   f_option.FlatMinExp.Text:=FormatFloat(f3,config.GetValue('/Flat/FlatMinExp',FlatMinExp));
+   f_option.FlatMaxExp.Text:=FormatFloat(f3,config.GetValue('/Flat/FlatMaxExp',FlatMaxExp));
    f_option.FlatLevelMin.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMin',FlatLevelMin));
    f_option.FlatLevelMax.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMax',FlatLevelMax));
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
@@ -3736,8 +3736,8 @@ begin
      config.SetValue('/Cooler/CameraAutoCoolTemp',StrToFloatDef(f_option.CameraAutoCoolTemp.Text,0));
      config.SetValue('/Flat/FlatType',f_option.FlatType.ItemIndex);
      config.SetValue('/Flat/FlatAutoExposure',f_option.FlatAutoExposure.Checked);
-     config.SetValue('/Flat/FlatMinExp',StrToIntDef(f_option.FlatMinExp.Text,FlatMinExp));
-     config.SetValue('/Flat/FlatMaxExp',StrToIntDef(f_option.FlatMaxExp.Text,FlatMaxExp));
+     config.SetValue('/Flat/FlatMinExp',StrToFloatDef(f_option.FlatMinExp.Text,FlatMinExp));
+     config.SetValue('/Flat/FlatMaxExp',StrToFloatDef(f_option.FlatMaxExp.Text,FlatMaxExp));
      config.SetValue('/Flat/FlatLevelMin',StrToIntDef(f_option.FlatLevelMin.Text,FlatLevelMin));
      config.SetValue('/Flat/FlatLevelMax',StrToIntDef(f_option.FlatLevelMax.Text,FlatLevelMax));
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
@@ -4423,18 +4423,21 @@ begin
             zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
          else
             zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
-         Mount.Slew(zra,zde);
+         Mount.SlewAsync(zra,zde);
+         wait(1);
          if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
          exit;
        end;
        // slew near zenith and add some randomness
        cmdHz2Eq(0,90,zra,zde);
-       zra:=zra+Random/60;
+       zra:=zra+(Random-0.5)/15;
+       zde:=zde+(Random-0.5);
        if FlatWaitDusk then
           zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
        else
           zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
        Mount.SlewAsync(zra,zde);
+       wait(1);
      end;
      subseq:=config.GetValue('/Files/SubfolderSequence',false);
      subobj:=config.GetValue('/Files/SubfolderObjname',false);

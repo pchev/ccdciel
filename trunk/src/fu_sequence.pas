@@ -707,7 +707,8 @@ var buf1,buf2:string;
 begin
  try
   TargetRow:=Targets.CurrentTarget+1;
-  if Targets.Running and (TargetRow>0) then begin
+  if Targets.Running then begin
+   if (TargetRow>0) then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
     buf2:=StaticText2.Caption;
     i:=pos(blank,buf2);
@@ -721,6 +722,7 @@ begin
     PlanRow:=p.CurrentStep+1;
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;
+   end;
   end
   else StopSequence;
 except
