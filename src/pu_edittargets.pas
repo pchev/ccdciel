@@ -53,7 +53,7 @@ type
     BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
     BtnCancel: TButton;
-    BtnNewFlat: TButton;
+    BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
     InplaceAutofocus: TCheckBox;
     Label12: TLabel;
@@ -127,7 +127,7 @@ type
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
-    procedure BtnNewFlatClick(Sender: TObject);
+    procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
@@ -442,11 +442,15 @@ begin
   TargetChange(nil);
 end;
 
-procedure Tf_EditTargets.BtnNewFlatClick(Sender: TObject);
+procedure Tf_EditTargets.BtnSkyFlatClick(Sender: TObject);
 var ft:string;
-    i,n,k: integer;
+    i,j,n,k: integer;
     t: TTarget;
 begin
+  if FlatType<>ftSKY then begin
+     ShowMessage('You must configure your flat preference.');
+     exit;
+  end;
   n:=0;
   for i:=1 to TargetList.RowCount-1 do
     if TargetList.Cells[1,i]=SkyFlatTxt then begin
@@ -486,8 +490,13 @@ begin
   t.objectname:=SkyFlatTxt;
   t.planname:=ft;
   t.FlatFilters:='';
+  for j:=0 to FilterList.Count-1 do begin
+    if trim(FilterList[j])<>'' then
+       t.FlatFilters:=t.FlatFilters+FilterList[j]+';';
+  end;
   t.FlatBinX:=1;
   t.FlatBinY:=1;
+  t.FlatCount:=15;
   TargetList.Cells[0,i]:=IntToStr(i);
   TargetList.Cells[1,i]:=SkyFlatTxt;
   TargetList.Cells[2,i]:=t.planname;

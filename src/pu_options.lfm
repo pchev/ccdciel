@@ -832,23 +832,24 @@ object f_option: Tf_option
         Columns = 3
         ItemIndex = 0
         Items.Strings = (
+          'None'
           'Twilight sky flat'
         )
         TabOrder = 0
       end
       object GroupBox18: TGroupBox
         Left = 8
-        Height = 144
+        Height = 200
         Top = 104
         Width = 384
         Caption = 'Flat auto-exposure'
-        ClientHeight = 124
+        ClientHeight = 180
         ClientWidth = 382
         TabOrder = 1
         object FlatAutoExposure: TCheckBox
           Left = 8
           Height = 21
-          Top = 13
+          Top = 40
           Width = 193
           Caption = 'Use flat automatic exposure'
           TabOrder = 0
@@ -856,7 +857,7 @@ object f_option: Tf_option
         object Label91: TLabel
           Left = 8
           Height = 19
-          Top = 48
+          Top = 75
           Width = 86
           Caption = 'Exposure time'
           ParentColor = False
@@ -864,14 +865,14 @@ object f_option: Tf_option
         object FlatMinExp: TEdit
           Left = 200
           Height = 25
-          Top = 45
+          Top = 72
           Width = 56
           TabOrder = 1
         end
         object Label92: TLabel
           Left = 273
           Height = 19
-          Top = 48
+          Top = 75
           Width = 29
           Caption = 'Max:'
           ParentColor = False
@@ -879,14 +880,14 @@ object f_option: Tf_option
         object FlatMaxExp: TEdit
           Left = 312
           Height = 25
-          Top = 45
+          Top = 72
           Width = 56
           TabOrder = 2
         end
         object Label93: TLabel
           Left = 160
           Height = 19
-          Top = 48
+          Top = 75
           Width = 26
           Caption = 'Min:'
           ParentColor = False
@@ -894,7 +895,7 @@ object f_option: Tf_option
         object Label94: TLabel
           Left = 8
           Height = 19
-          Top = 88
+          Top = 115
           Width = 129
           Caption = 'Flat image mean level'
           ParentColor = False
@@ -902,14 +903,14 @@ object f_option: Tf_option
         object FlatLevelMin: TEdit
           Left = 200
           Height = 25
-          Top = 85
+          Top = 112
           Width = 56
           TabOrder = 3
         end
         object Label95: TLabel
           Left = 160
           Height = 19
-          Top = 88
+          Top = 115
           Width = 26
           Caption = 'Min:'
           ParentColor = False
@@ -917,7 +918,7 @@ object f_option: Tf_option
         object Label96: TLabel
           Left = 273
           Height = 19
-          Top = 88
+          Top = 115
           Width = 29
           Caption = 'Max:'
           ParentColor = False
@@ -925,9 +926,17 @@ object f_option: Tf_option
         object FlatLevelMax: TEdit
           Left = 312
           Height = 25
-          Top = 85
+          Top = 112
           Width = 56
           TabOrder = 4
+        end
+        object Label97: TLabel
+          Left = 8
+          Height = 19
+          Top = 8
+          Width = 327
+          Caption = 'Automatic flat exposure is required fot the twilight flat.'
+          ParentColor = False
         end
       end
     end

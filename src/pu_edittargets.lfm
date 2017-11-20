@@ -70,14 +70,14 @@ object f_EditTargets: Tf_EditTargets
       ModalResult = 2
       TabOrder = 4
     end
-    object BtnNewFlat: TButton
+    object BtnSkyFlat: TButton
       Left = 192
       Height = 25
       Hint = 'Add a flat sequence to the list.'
       Top = 6
       Width = 85
       Caption = 'Sky Flat'
-      OnClick = BtnNewFlatClick
+      OnClick = BtnSkyFlatClick
       TabOrder = 5
     end
   end

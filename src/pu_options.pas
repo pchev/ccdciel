@@ -70,6 +70,7 @@ type
     Label95: TLabel;
     Label96: TLabel;
     FlatType: TRadioGroup;
+    Label97: TLabel;
     StackShow: TCheckBox;
     StackUseDark: TCheckBox;
     StackDarkFile: TFileNameEdit;

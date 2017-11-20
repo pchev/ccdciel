@@ -2017,10 +2017,10 @@ begin
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
   ElevationMin:=config.GetValue('/Info/ElevationMin',10);
-  FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftSKY)));
-  FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',true);
+  FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftNone)));
+  FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',false);
   FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1.0);
-  FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',15.0);
+  FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',60.0);
   FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
   FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
 end;
