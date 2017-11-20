@@ -679,6 +679,8 @@ begin
       flp.Add(fls);
     end;
   if flt.planname=FlatTimeName[0] then begin    // Dusk
+    FlatWaitDusk:=true;
+    FlatWaitDawn:=false;
     //Start when the Sun is 2 degree below horizon
     Sun(jdtoday+0.5,sra,sde,sl);
     Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
@@ -707,6 +709,8 @@ begin
     end;
   end
   else if flt.planname=FlatTimeName[1] then begin  // Dawn
+    FlatWaitDawn:=true;
+    FlatWaitDusk:=false;
     //Start when the Sun is 16 degree below horizon
     Sun(jdtoday+0.5,sra,sde,sl);
     Time_Alt(jdtoday, sra, sde, -16, hp1, hp2);
@@ -749,6 +753,7 @@ begin
      end;
   end;
   // slew near zenith
+  FlatSlewTime:=0;
   mount.SlewToSkyFlatPosition;
   result:=true;
   finally

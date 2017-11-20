@@ -122,8 +122,7 @@ begin
         zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
      else
         zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
-     // restart tracking and slew
-     Track;
+     // slew
      Slew(zra,zde);
      // stop tracking to blur the stars
      AbortMotion;
