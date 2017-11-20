@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, indiapi,
+uses u_global, u_utils, indiapi,
   Classes, SysUtils;
 
 type
@@ -58,6 +58,7 @@ T_mount = class(TComponent)
  public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
+    procedure SlewToSkyFlatPosition;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     function Slew(sra,sde: double):boolean; virtual; abstract;
@@ -107,6 +108,28 @@ destructor  T_mount.Destroy;
 begin
   inherited Destroy;
 end;
+
+procedure T_mount.SlewToSkyFlatPosition;
+var zra,zde: double;
+begin
+    // every 5 minutes maintain position near the zenith, add some randomness and stop tracking
+   if now-FlatSlewTime>(5/minperday) then begin
+     FlatSlewTime:=now;
+     cmdHz2Eq(0,90,zra,zde);
+     zra:=zra+(Random-0.5)/15;     // move +/- 0.5 degree
+     zde:=zde+(Random-0.5);
+     if FlatWaitDusk then
+        zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
+     else
+        zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
+     // restart tracking and slew
+     Track;
+     Slew(zra,zde);
+     // stop tracking to blur the stars
+     AbortMotion;
+   end;
+end;
+
 
 end.
 

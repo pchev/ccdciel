@@ -174,9 +174,6 @@ implementation
 
 uses LazFileUtils;
 
-const   AutoFlatTxt='AutoFlat';
-        ScriptTxt='Script';
-
 {$R *.lfm}
 
 { Tf_EditTargets }
@@ -452,7 +449,7 @@ var ft:string;
 begin
   n:=0;
   for i:=1 to TargetList.RowCount-1 do
-    if TargetList.Cells[1,i]=AutoFlatTxt then begin
+    if TargetList.Cells[1,i]=SkyFlatTxt then begin
       inc(n);
       k:=i;
     end;
@@ -486,13 +483,13 @@ begin
   end;
   PageControl1.ActivePageIndex:=2;
   t:=TTarget.Create;
-  t.objectname:=AutoFlatTxt;
+  t.objectname:=SkyFlatTxt;
   t.planname:=ft;
   t.FlatFilters:='';
   t.FlatBinX:=1;
   t.FlatBinY:=1;
   TargetList.Cells[0,i]:=IntToStr(i);
-  TargetList.Cells[1,i]:=AutoFlatTxt;
+  TargetList.Cells[1,i]:=SkyFlatTxt;
   TargetList.Cells[2,i]:=t.planname;
   TargetList.Objects[0,i]:=t;
   TargetList.Row:=i;
@@ -686,7 +683,7 @@ begin
     PageControl1.ActivePageIndex:=1;
     SetScriptList(t.planname);
   end
-  else if t.objectname=AutoFlatTxt then begin
+  else if t.objectname=SkyFlatTxt then begin
     PageControl1.ActivePageIndex:=2;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
@@ -778,7 +775,7 @@ begin
     if scdir=nil then t.path:=''
                  else t.path:=scdir.path;
   end
-  else if t.objectname=AutoFlatTxt then begin
+  else if t.objectname=SkyFlatTxt then begin
     PageControl1.ActivePageIndex:=2;
     t.planname:=FlatTimeName[FlatTime.ItemIndex];
     t.FlatCount:=StrToIntDef(FlatCount.Text,1);
@@ -841,7 +838,7 @@ begin
 if LockTarget then exit;
   n:=0;
   for i:=1 to TargetList.RowCount-1 do
-    if TargetList.Cells[1,i]=AutoFlatTxt then inc(n);
+    if TargetList.Cells[1,i]=SkyFlatTxt then inc(n);
   if n>=2 then begin
     LockTarget:=true;
     if FlatTime.ItemIndex=0 then  begin

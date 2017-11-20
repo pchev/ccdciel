@@ -558,7 +558,7 @@ begin
  {$ifdef mswindows}
  if Connected and CanSlew then begin
    try
-   msg('Mount '+Fdevice+' abort motion');
+   msg('Mount '+Fdevice+' Stop telescope motion.');
    V.AbortSlew;
    if CanSetTracking  then V.tracking:=false;
    except
