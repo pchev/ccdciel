@@ -70,7 +70,7 @@ type
       procedure StopSequence(abort: boolean);
       procedure NextTarget;
       function InitTarget:boolean;
-      function InitAutoFlat: boolean;
+      function InitSkyFlat: boolean;
       procedure StartPlan;
       procedure RunErrorScript;
       procedure RunEndScript;
@@ -459,11 +459,11 @@ begin
      NextTarget;
      exit;
    end
-   else if Targets[FCurrentTarget].objectname='AutoFlat' then begin
+   else if Targets[FCurrentTarget].objectname=SkyFlatTxt then begin
      FInitializing:=true;
      ShowDelayMsg('');
      TargetRepeatCount:=1;
-     initok:=InitAutoFlat;
+     initok:=InitSkyFlat;
      if not FRunning then begin
        exit;
      end;
@@ -638,12 +638,11 @@ begin
   end;
 end;
 
-function T_Targets.InitAutoFlat: boolean;
+function T_Targets.InitSkyFlat: boolean;
 var i:integer;
     wtok,nd:boolean;
     stw: integer;
     sra,sde,sl,hp1,hp2: double;
-    zra,zde : double;
     flt,nextt: TTarget;
     flp:T_Plan;
     fls:TStep;
@@ -750,13 +749,7 @@ begin
      end;
   end;
   // slew near zenith
-  cmdHz2Eq(0,90,zra,zde);
-  if flt.planname=FlatTimeName[0] then
-     zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
-  else
-     zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
-  Mount.Slew(zra,zde);
-  wait(1);
+  mount.SlewToSkyFlatPosition;
   result:=true;
   finally
     FTargetInitializing:=false;

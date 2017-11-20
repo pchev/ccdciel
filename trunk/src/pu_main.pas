@@ -478,6 +478,8 @@ type
     Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
+    procedure CameraSaveNewImage;
+    function  CameraNewFlat: boolean;
     procedure CameraVideoFrame(Sender: TObject);
     procedure CameraVideoPreviewChange(Sender: TObject);
     procedure CameraVideoFrameAsync(Data: PtrInt);
@@ -804,6 +806,7 @@ begin
   cancelWaitTill:=false;
   FlatWaitDusk:=false;
   FlatWaitDawn:=false;
+  FlatSlewTime:=0;
   onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
   ZoomMin:=1;
@@ -4359,166 +4362,36 @@ begin
 end;
 
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
-var dt: Tdatetime;
-    fn,imgsize,buf: string;
-    subseq,subobj,substep,subfrt,subexp,subbin: boolean;
-    fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
-    fileseqnum: integer;
-    exp,newexp,zra,zde: double;
+var buf: string;
 begin
   try
-  dt:=NowUTC;
+  // draw preview
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
   DrawHistogram(true);
   DrawImage;
   except
     on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message);
   end;
+  // process capture
   if Capture then begin
-     try
+     // process automatic flat
      if FlatAutoExposure and (camera.FrameType=FLAT) then begin
-       NewMessage('Flat level='+inttostr(round(fits.imageMean)));
-       if (fits.imageMean<FlatLevelMin)or(fits.imageMean>FlatLevelMax) then begin
-         exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
-         newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
-         if newexp<FlatMinExp then begin
-            newexp:=FlatMinExp;
-            if FlatWaitDusk then begin
-               NewMessage('Sky is still too bright, waiting for dusk');
-               wait(30);
-            end
-            else begin
-               Capture:=false;
-               f_capture.Stop;
-               StatusBar1.Panels[1].Text:='Stop';
-               NewMessage('Flat light is too bright, please reduce the light or adjust the flat parameters.');
-               NewMessage('Stop flat capture');
-               exit;
-            end;
-         end;
-         if newexp>FlatMaxExp then begin
-            newexp:=FlatMaxExp;
-            if FlatWaitDawn then begin
-              NewMessage('Sky is still too dark, waiting for dawn');
-              wait(30);
-            end
-            else begin
-              Capture:=false;
-              f_capture.Stop;
-              StatusBar1.Panels[1].Text:='Stop';
-              NewMessage('Flat light is too dark, please increase the light or adjust the flat parameters.');
-              NewMessage('Stop flat capture');
-              exit;
-            end;
-         end;
-         f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
-         if newexp<>exp then NewMessage('Adjust flat exposure time to '+f_capture.ExpTime.Text+' and retry.');
-         // while waiting, maintain position near zenith
-         cmdHz2Eq(0,90,zra,zde);
-         if FlatWaitDusk then
-            zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
-         else
-            zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
-         Mount.SlewAsync(zra,zde);
-         wait(1);
-         if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
-         exit;
-       end;
-       // slew near zenith and add some randomness
-       cmdHz2Eq(0,90,zra,zde);
-       zra:=zra+(Random-0.5)/15;
-       zde:=zde+(Random-0.5);
-       if FlatWaitDusk then
-          zra:=rmod(zra+1,24)        // dusk, 1 hour east of zenith
-       else
-          zra:=rmod(zra-1+24,24);    // dawn, 1 hour west of zenith
-       Mount.SlewAsync(zra,zde);
-       wait(1);
+       if not CameraNewFlat then exit;
      end;
-     subseq:=config.GetValue('/Files/SubfolderSequence',false);
-     subobj:=config.GetValue('/Files/SubfolderObjname',false);
-     subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
-     substep:=config.GetValue('/Files/SubfolderStep',false);
-     subexp:=config.GetValue('/Files/SubfolderExposure',false);
-     subbin:=config.GetValue('/Files/SubfolderBinning',false);
-     fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-     if subseq and f_sequence.Running then fn:=slash(fn+trim(f_sequence.CurrentName));
-     if subfrt then fn:=slash(fn+trim(f_capture.FrameType.Text));
-     if subobj then begin
-       buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
-       buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
-       buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
-       buf:=StringReplace(buf,':','_',[rfReplaceAll]);
-       fn:=slash(fn+buf);
-     end;
-
-     if substep and f_sequence.Running then begin
-        if f_sequence.StepTotalCount>1 then begin
-          fn:=slash(fn+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
-        end
-        else begin
-          fn:=slash(fn+trim(f_sequence.CurrentStep));
-        end;
-     end;
-     if subexp then begin
-       if FlatAutoExposure and (camera.FrameType=FLAT) then
-          fn:=slash(fn+'auto')
-       else
-          fn:=slash(fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
-     end;
-     if subbin then fn:=slash(fn+f_capture.Binning.Text);
-     ForceDirectoriesUTF8(fn);
-     fnobj:=config.GetValue('/Files/FilenameObjname',true);
-     fnfilter:=config.GetValue('/Files/FilenameFilter',true);
-     fndate:=config.GetValue('/Files/FilenameDate',true);
-     fnexp:=config.GetValue('/Files/FilenameExposure',false);
-     fnbin:=config.GetValue('/Files/FilenameBinning',false);
-     if fnobj then begin
-       if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
-           buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
-           buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
-           buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
-           buf:=StringReplace(buf,':','_',[rfReplaceAll]);
-           fn:=fn+buf+'_';
-       end
-       else
-           fn:=fn+trim(f_capture.FrameType.Text)+'_';
-     end;
-     if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-         fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
-     if fnexp then begin
-       if FlatAutoExposure and (camera.FrameType=FLAT) then
-          fn:=fn+'auto_'
-       else
-          fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
-     end;
-     if fnbin then fn:=fn+f_capture.Binning.Text+'_';
-     if fndate then
-        fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
-     else begin
-        fileseqnum:=1;
-        while FileExistsUTF8(fn+IntToStr(fileseqnum)+'.fits') do
-          inc(fileseqnum);
-        fn:=fn+IntToStr(fileseqnum);
-     end;
-     fn:=fn+'.fits';
-     fits.SaveToFile(fn);
-     NewMessage('Saved file '+fn);
-     StatusBar1.Panels[2].Text:='Saved '+fn+' '+imgsize;
-     StatusBar1.Panels[1].Text := '';
-     except
-       on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message);
-     end;
+     // save file
+     CameraSaveNewImage;
+     // prepare for next exposure
      f_capture.SeqCount:=f_capture.SeqCount+1;
      f_capture.DitherNum:=f_capture.DitherNum+1;
      f_capture.FocusNum:=f_capture.FocusNum+1;
      if f_capture.SeqCount<=StrToInt(f_capture.SeqNum.Text) then begin
+        // next exposure
         if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
      end else begin
+        // end capture
         Capture:=false;
         f_capture.Stop;
         NewMessage('Stop capture');
@@ -4526,18 +4399,172 @@ begin
         MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
      end;
   end
+  // process preview
   else if Preview then begin
-    buf:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+imgsize;
+    buf:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+', stack of '+inttostr(camera.StackCount)+' frames';
     StatusBar1.Panels[2].Text:=buf;
+    // next exposure
     if f_preview.Loop and f_preview.Running then Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
        else begin
+         // end preview
          f_preview.stop;
          Preview:=false;
          NewMessage('End preview');
          StatusBar1.Panels[1].Text:='';
     end;
   end;
+end;
+
+function Tf_main.CameraNewFlat: boolean;
+var exp,newexp: double;
+begin
+ result:=false;
+ NewMessage('Flat level='+inttostr(round(fits.imageMean)));
+ // new exposure time from image level
+ exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
+ newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
+ // check if current image level is in range
+ if (fits.imageMean<FlatLevelMin)or(fits.imageMean>FlatLevelMax) then begin
+   // will need a too short exposure
+   if newexp<FlatMinExp then begin
+      newexp:=FlatMinExp;
+      // wait for dusk
+      if FlatWaitDusk then begin
+         NewMessage('Sky is still too bright, waiting for dusk');
+         StatusBar1.Panels[1].Text:='Waiting for dusk';
+         wait(30);
+      end
+      // or abort
+      else begin
+         Capture:=false;
+         f_capture.Stop;
+         StatusBar1.Panels[1].Text:='Stop';
+         NewMessage('Flat light is too bright, please reduce the light or adjust the flat parameters.');
+         NewMessage('Stop flat capture');
+         exit;
+      end;
+   end;
+   // will need a too long exposure
+   if newexp>FlatMaxExp then begin
+      newexp:=FlatMaxExp;
+      // wait for dawn
+      if FlatWaitDawn then begin
+        NewMessage('Sky is still too dark, waiting for dawn');
+        StatusBar1.Panels[1].Text:='Waiting for dawn';
+        wait(30);
+      end
+      // or abort
+      else begin
+        Capture:=false;
+        f_capture.Stop;
+        StatusBar1.Panels[1].Text:='Stop';
+        NewMessage('Flat light is too faint, please increase the light or adjust the flat parameters.');
+        NewMessage('Stop flat capture');
+        exit;
+      end;
+   end;
+   // while waiting, maintain telescope position for sky flat
+   if FlatWaitDusk or FlatWaitDawn then mount.SlewToSkyFlatPosition;
+   // retry with a new exposure
+   f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
+   if newexp<>exp then NewMessage('Adjust flat exposure time to '+f_capture.ExpTime.Text+' and retry.');
+   if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+   exit;
+ end;
+ // maintain telescope position for sky flat
+ if FlatWaitDusk or FlatWaitDawn then mount.SlewToSkyFlatPosition;
+ // set newexposure time
+ f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
+ // here we have a valid flat to save
+ result:=true;
+end;
+
+procedure Tf_main.CameraSaveNewImage;
+var dt: Tdatetime;
+    fn,buf: string;
+    subseq,subobj,substep,subfrt,subexp,subbin: boolean;
+    fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
+    fileseqnum: integer;
+begin
+try
+ dt:=NowUTC;
+ // construct path
+ subseq:=config.GetValue('/Files/SubfolderSequence',false);
+ subobj:=config.GetValue('/Files/SubfolderObjname',false);
+ subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
+ substep:=config.GetValue('/Files/SubfolderStep',false);
+ subexp:=config.GetValue('/Files/SubfolderExposure',false);
+ subbin:=config.GetValue('/Files/SubfolderBinning',false);
+ fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+ if subseq and f_sequence.Running then fn:=slash(fn+trim(f_sequence.CurrentName));
+ if subfrt then fn:=slash(fn+trim(f_capture.FrameType.Text));
+ if subobj then begin
+   buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
+   buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
+   buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
+   buf:=StringReplace(buf,':','_',[rfReplaceAll]);
+   fn:=slash(fn+buf);
+ end;
+ if substep and f_sequence.Running then begin
+    if f_sequence.StepTotalCount>1 then begin
+      fn:=slash(fn+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
+    end
+    else begin
+      fn:=slash(fn+trim(f_sequence.CurrentStep));
+    end;
+ end;
+ if subexp then begin
+   if FlatAutoExposure and (camera.FrameType=FLAT) then
+      fn:=slash(fn+'auto')
+   else
+      fn:=slash(fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
+ end;
+ if subbin then fn:=slash(fn+f_capture.Binning.Text);
+ ForceDirectoriesUTF8(fn);
+ // construct file name
+ fnobj:=config.GetValue('/Files/FilenameObjname',true);
+ fnfilter:=config.GetValue('/Files/FilenameFilter',true);
+ fndate:=config.GetValue('/Files/FilenameDate',true);
+ fnexp:=config.GetValue('/Files/FilenameExposure',false);
+ fnbin:=config.GetValue('/Files/FilenameBinning',false);
+ if fnobj then begin
+   if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
+       buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
+       buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
+       buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
+       buf:=StringReplace(buf,':','_',[rfReplaceAll]);
+       fn:=fn+buf+'_';
+   end
+   else
+       fn:=fn+trim(f_capture.FrameType.Text)+'_';
+ end;
+ if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
+     fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
+ if fnexp then begin
+   if FlatAutoExposure and (camera.FrameType=FLAT) then
+      fn:=fn+'auto_'
+   else
+      fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
+ end;
+ if fnbin then fn:=fn+f_capture.Binning.Text+'_';
+ if fndate then
+    fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
+ else begin
+    fileseqnum:=1;
+    while FileExistsUTF8(fn+IntToStr(fileseqnum)+'.fits') do
+      inc(fileseqnum);
+    fn:=fn+IntToStr(fileseqnum);
+ end;
+ fn:=fn+'.fits';
+ // save the file
+ fits.SaveToFile(fn);
+ NewMessage('Saved file '+fn);
+ StatusBar1.Panels[2].Text:='Saved '+fn+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+ StatusBar1.Panels[1].Text := '';
+ except
+   on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message);
+ end;
 end;
 
 procedure Tf_main.CameraVideoFrame(Sender: TObject);

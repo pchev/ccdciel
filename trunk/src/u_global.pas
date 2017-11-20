@@ -182,6 +182,7 @@ const
   CRLF = CR + LF;
   tab = #09;
   secperday = 3600*24;
+  minperday = 60*24;
   pi2 = 2 * pi;
   pid2 = pi / 2;
   rad2deg=180/pi;
@@ -234,6 +235,9 @@ const
   URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
+  SkyFlatTxt='SkyFlat';
+  ScriptTxt='Script';
+
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
@@ -326,6 +330,7 @@ var
   FlatType: TFlatType;
   FlatMinExp,FlatMaxExp: double;
   FlatLevelMin,FlatLevelMax: integer;
+  FlatSlewTime: TDateTime;
 
   procedure globalmsg(str:string);
 
