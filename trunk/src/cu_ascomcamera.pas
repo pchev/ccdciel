@@ -47,6 +47,7 @@ T_ascomcamera = class(T_camera)
    {$endif}
    stCCDtemp : double;
    stCooler : boolean;
+   hasGain: boolean;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
@@ -135,6 +136,7 @@ begin
  inherited Create(AOwner);
  stCooler:=false;
  stCCDtemp:=NullCoord;
+ hasGain:=true;
  FCameraInterface:=ASCOM;
  FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);
@@ -427,11 +429,11 @@ begin
      fny:=trunc(fny*scale);
      newx:=V.CameraXSize div sbinX;
      newy:=V.CameraYSize div sbinY;
+     V.BinX:=sbinX;
+     V.BinY:=sbinY;
      if (fsx=0)and(fsy=0)and((abs(newx-fnx)/fnx)<0.1)and((abs(newy-fny)/fny)<0.1)
         then SetFrame(0,0,newx,newy)
         else SetFrame(fsx,fsy,fnx,fny);
-     V.BinX:=sbinX;
-     V.BinY:=sbinY;
      Wait(1);
    end;
    except
@@ -976,10 +978,11 @@ function T_ascomcamera.GetVideoGain:integer;
 begin
 result:=0;
 {$ifdef mswindows}
-if Connected then begin
+if Connected and hasGain then begin
   try
      result:=V.Gain;
   except
+     hasGain:=false;
      result:=0;
   end;
 end
