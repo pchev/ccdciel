@@ -639,7 +639,7 @@ begin
 end;
 
 function T_Targets.InitSkyFlat: boolean;
-var i:integer;
+var i,n:integer;
     wtok,nd:boolean;
     stw: integer;
     sra,sde,sl,hp1,hp2: double;
@@ -647,6 +647,7 @@ var i:integer;
     flp:T_Plan;
     fls:TStep;
     flfilter: TStringList;
+    flexp: TFilterExp;
 begin
   result:=false;
   if not FRunning then exit;
@@ -657,7 +658,24 @@ begin
   flp:=T_Plan(flt.plan);
   flfilter:=TStringList.Create;
   SplitRec(flt.flatfilters,';',flfilter);
-  // todo: sort by filter exp coeff
+  // remove blank filter name
+  for i:=flfilter.count-1 downto 0 do
+   if trim(flfilter[i])='' then flfilter.Delete(i);
+  // add filter exposure factor
+  for i:=0 to flfilter.count-1 do begin
+    flexp:=TFilterExp.Create;
+    n:=FilterList.IndexOf(flfilter[i]);
+    if n>=0 then
+       flexp.ExpFact:=FilterExpFact[n]
+    else
+       flexp.ExpFact:=1.0;
+    flfilter.Objects[i]:=flexp;
+  end;
+  // sort by filter exposure factor
+  if flt.planname=FlatTimeName[0] then // Dusk, take darker filter first
+    SortFilterListDec(flfilter)
+  else                                 // Dawn, take lighter filter first
+    SortFilterListInc(flfilter);
   flp.Clear;
   for i:=0 to flfilter.count-1 do
     if trim(flfilter[i])<>'' then begin
@@ -758,6 +776,8 @@ begin
   result:=true;
   finally
     FTargetInitializing:=false;
+    for i:=0 to flfilter.count-1 do flfilter.Objects[i].Free;
+    flfilter.Free;
   end;
 end;
 

@@ -69,6 +69,11 @@ type
                  path: string;
                end;
 
+  TFilterExp = Class(TObject)
+               public
+                 ExpFact: double;
+               end;
+
   TStep   = Class(TObject)
               public
               exposure, delay : double;

@@ -122,6 +122,9 @@ procedure J2000ToApparent(var ra, de: double);
 procedure ApparentToJ2000(var ra, de: double);
 procedure Sort(var list: array of double);
 function SMedian(list: array of double): double;
+procedure SortFilterListInc(var list: TStringList);
+procedure SortFilterListDec(var list: TStringList);
+
 
 
 implementation
@@ -2220,6 +2223,54 @@ begin
   else
     result:=(list[mid]+list[mid+1])/2;
  end;
+end;
+
+procedure SortFilterListInc(var list: TStringList);
+var sorted: boolean;
+    tmpexp: double;
+    tmpname:string;
+    j,n: integer;
+begin
+repeat
+  sorted := True;
+  n := list.Count;
+  for j := 1 to n-1 do
+  begin
+    if TFilterExp(list.Objects[j - 1]).ExpFact > TFilterExp(list.Objects[j]).ExpFact then
+    begin
+      tmpname := list[j - 1];
+      tmpexp := TFilterExp(list.Objects[j - 1]).ExpFact;
+      list.Move(j,j - 1);
+      list[j] := tmpname;
+      TFilterExp(list.Objects[j]).ExpFact:=tmpexp;
+      sorted := False;
+    end;
+  end;
+until sorted;
+end;
+
+procedure SortFilterListDec(var list: TStringList);
+var sorted: boolean;
+    tmpexp: double;
+    tmpname:string;
+    j,n: integer;
+begin
+repeat
+  sorted := True;
+  n := list.Count;
+  for j := 1 to n-1 do
+  begin
+    if TFilterExp(list.Objects[j - 1]).ExpFact < TFilterExp(list.Objects[j]).ExpFact then
+    begin
+      tmpname := list[j - 1];
+      tmpexp := TFilterExp(list.Objects[j - 1]).ExpFact;
+      list.Move(j,j - 1);
+      list[j] := tmpname;
+      TFilterExp(list.Objects[j]).ExpFact:=tmpexp;
+      sorted := False;
+    end;
+  end;
+until sorted;
 end;
 
 end.
