@@ -412,7 +412,7 @@ begin
   n:=TargetList.Row;
   if n>=1 then begin
     tt:=TTarget(TargetList.Objects[0,n]);
-    if tt.objectname<>ScriptTxt then t.Assign(tt);
+    if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
   end;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
@@ -631,6 +631,7 @@ begin
      PointRA.Text:=f_planetariuminfo.Ra.Text;
      PointDEC.Text:=f_planetariuminfo.De.Text;
      if f_planetariuminfo.Obj.Text<>'' then ObjectName.Text:=trim(f_planetariuminfo.Obj.Text);
+     PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end;
 end;
 
@@ -648,7 +649,7 @@ try
     de:=rad2deg*de;
     PointRA.Text:=RAToStr(ra);
     PointDEC.Text:=DEToStr(de);
-    PointAstrometry.Checked:=true;
+    PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end;
 finally
   screen.Cursor:=crDefault;
