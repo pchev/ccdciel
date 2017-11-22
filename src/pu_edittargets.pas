@@ -464,6 +464,8 @@ begin
     FlatTime.ItemIndex:=0;
     ft:=FlatTimeName[0];
     LockTarget:=false;
+    SeqStartTwilight.Checked:=false;
+    SeqStart.Checked:=false;
   end
   else if n=1 then begin
     LockTarget:=true;
@@ -472,12 +474,16 @@ begin
       i:=TargetList.RowCount-1;
       FlatTime.ItemIndex:=1;
       ft:=FlatTimeName[1];
+      SeqStopTwilight.Checked:=false;
+      SeqStop.Checked:=false;
     end
     else begin
       TargetList.InsertColRow(false,1);
       i:=1;
       FlatTime.ItemIndex:=0;
       ft:=FlatTimeName[0];
+      SeqStartTwilight.Checked:=false;
+      SeqStart.Checked:=false;
     end;
     LockTarget:=false;
   end
@@ -868,6 +874,8 @@ if LockTarget then exit;
      t:=TTarget(TargetList.Objects[0,r1]);
      t.planname:=FlatTimeName[0];
      TargetList.MoveColRow(false,r1,r2);
+     SeqStartTwilight.Checked:=false;
+     SeqStart.Checked:=false;
   end
   else begin
     r1:=TargetList.Row;
@@ -875,6 +883,8 @@ if LockTarget then exit;
     t.planname:=FlatTimeName[1];
     r2:=TargetList.RowCount-1;
     TargetList.MoveColRow(false,r1,r2);
+    SeqStopTwilight.Checked:=false;
+    SeqStop.Checked:=false;
   end;
   TargetChange(Sender);
 end;
