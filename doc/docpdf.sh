@@ -28,8 +28,8 @@ grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/start.h
 sed -i '/http:/ d' fl.txt
 sed -i '/https:/ d' fl.txt
 
-# insert title and doc index
-sed -i '1 i '$lang'\/documentation\/00_title.html\n'$lang'\/documentation\/start.html' fl.txt
+# insert title, first page and doc index
+sed -i '1 i '$lang'\/documentation\/00_title.html\n'$lang'\/start.html\n'$lang'\/documentation\/start.html' fl.txt
 
 # insert pages in File menu
 grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/file.html      | sed 's/<li class="level1"><div class="li"> <a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
@@ -72,8 +72,6 @@ l='Users documentation'
 tocl='Table of Content'
 l='English documentation' 
 
-cp ../ccdtitle.png  $lang/documentation/
-
 cat > $lang/documentation/00_title.html << EOF
 <!DOCTYPE html>
 <html>
@@ -95,7 +93,6 @@ $lastv <br/>
 <br/><br/>
 <br/><br/>
 <br/><br/>
-<img src="ccdtitle.png" width="100%">
 </center>
 </body>
 </html>
@@ -113,7 +110,7 @@ gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.7 -dColorImageResolution=300 -dGrayI
 
 
 # cleanup
-rm tmp.pdf fl.txt toc.xsl $lang/documentation/00_title.html $lang/documentation/ccdtitle.png
+rm tmp.pdf fl.txt toc.xsl $lang/documentation/00_title.html
 
 # end main loop
 done
