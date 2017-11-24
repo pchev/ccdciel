@@ -4,7 +4,7 @@ CC= gcc
 OSTYPE = $(shell uname)
 ifneq ($(findstring Darwin,$(OSTYPE)),)
 SO_Name       = libccdcielwcs.dylib
-LIBFLAGS      = -Wl,-single_module -dynamiclib  -lc -lm -mmacosx-version-min=10.6
+LIBFLAGS      = $(arch_flags) -Wl,-single_module -dynamiclib  -lc -lm -mmacosx-version-min=10.10
 else
 SO_Name       = libccdcielwcs.so.3.8
 LIBFLAGS      = -shared -Wl,-soname,$(SO_Name) -lc -lm
