@@ -837,6 +837,7 @@ begin
     if uncompress<>nil then zlibok:=true;
   end;
   GetAppDir;
+  chdir(Appdir);
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   if Application.HasOption('c', 'config') then begin
@@ -1140,7 +1141,7 @@ var str: string;
     binprev,bincapt:string;
 begin
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
-     NewMessage('Could not load libcdcwcs'+crlf+'Some astrometry function are not available.');
+     NewMessage('Could not load '+libwcs+crlf+'Some astrometry function are not available.');
   end;
 
   SetTheme;
