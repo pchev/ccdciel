@@ -817,6 +817,8 @@ begin
   BinningList:=TStringList.Create;
   CurrentFilterOffset:=0;
   PageControlRight.ActivePageIndex:=0;
+  GetAppDir;
+  chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
   cdcwcs_release:=nil;
   cdcwcs_sky2xy:=nil;
@@ -836,8 +838,6 @@ begin
     uncompress:= Tuncompress(GetProcedureAddress(zlib,'uncompress'));
     if uncompress<>nil then zlibok:=true;
   end;
-  GetAppDir;
-  chdir(Appdir);
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   if Application.HasOption('c', 'config') then begin
