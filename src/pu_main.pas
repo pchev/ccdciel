@@ -787,6 +787,13 @@ begin
   {$else}
   DefaultInterface:=INDI;
   {$endif}
+  {$ifdef lclcarbon}
+  PageConnect.Caption:='Connect';
+  PageFocus.Caption:='Focus';
+  PageCapture.Caption:='Capture';
+  PageSequence.Caption:='Sequence';
+  PageVideo.Caption:='Video';
+  {$endif}
   AppClose:=false;
   ConfirmClose:=true;
   ScaleMainForm;
