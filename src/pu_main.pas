@@ -756,10 +756,22 @@ begin
              buf:=ExpandFileName(slash('/usr/local/bin')+SharedDir);
              if (directoryexists(slash(buf)+slash('scripts'))) then
                 appdir:=buf
+          else begin
+              // try in C:\Program Files
+              buf:='C:\Program Files\CCDciel';
+              if (directoryexists(slash(buf)+slash('scripts'))) then
+                 appdir:=buf
+          else begin
+             // try in C:\Program Files (x86)
+             buf:='C:\Program Files (x86)\CCDciel';
+             if (directoryexists(slash(buf)+slash('scripts'))) then
+                appdir:=buf
 
              else begin
                  Showmessage('Error: Can''t locate the scripts directory !!'+crlf+'Please try to reinstall the software');
              end;
+          end;
+          end;
           end;
           end;
           end;
@@ -812,6 +824,9 @@ begin
   Application.UpdateFormatSettings := False;
   {$else}
   DefaultInterface:=INDI;
+  {$endif}
+  {$ifdef lclgtk2}
+    TBTabs.Color:=clBtnShadow;
   {$endif}
   {$ifdef darwin}
     TBTabs.Color:=clBtnHighlight; // on Mac highlight is darker...
