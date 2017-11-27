@@ -37,7 +37,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, ComCtrls, Types;
+  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types;
 
 type
 
@@ -67,6 +67,7 @@ type
     MenuRotatorRotate: TMenuItem;
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
+    PanelRight: TPanel;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -200,6 +201,12 @@ type
     StartSequenceTimer: TTimer;
     StatusTimer: TTimer;
     PageVideo: TTabSheet;
+    TBTabs: TToolBar;
+    TBConnect: TToolButton;
+    TBFocus: TToolButton;
+    TBCapture: TToolButton;
+    TBSequence: TToolButton;
+    TBVideo: TToolButton;
     procedure AbortTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -308,6 +315,7 @@ type
     procedure MenuVisuZoomAdjustClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;State: TDragState; var Accept: Boolean);
+    procedure SelectTab(Sender: TObject);
     procedure StartCaptureTimerTimer(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
@@ -796,13 +804,6 @@ begin
   {$else}
   DefaultInterface:=INDI;
   {$endif}
-  {$ifdef lclcarbon}
-  PageConnect.Caption:='Connect';
-  PageFocus.Caption:='Focus';
-  PageCapture.Caption:='Capture';
-  PageSequence.Caption:='Sequence';
-  PageVideo.Caption:='Video';
-  {$endif}
   AppClose:=false;
   ConfirmClose:=true;
   ScaleMainForm;
@@ -832,7 +833,6 @@ begin
   FilterList:=TStringList.Create;
   BinningList:=TStringList.Create;
   CurrentFilterOffset:=0;
-  PageControlRight.ActivePageIndex:=0;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -1263,22 +1263,22 @@ begin
   i:=round((c.red+c.green+c.blue)/3);
   // change imagelist
   if i>=128 then begin
-    PageControlRight.Images:=ImageListDay;
+    TBTabs.Images:=ImageListDay;
     MainMenu1.Images:=ImageListDay;
   end
   else begin
-    PageControlRight.Images:=ImageListNight;
+    TBTabs.Images:=ImageListNight;
     MainMenu1.Images:=ImageListNight;
   end;
   // change individual buttons
   btn := TPortableNetworkGraphic.Create;
-  PageControlRight.Images.GetBitmap(5, btn);
+  TBTabs.Images.GetBitmap(5, btn);
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
-  PageControlRight.Images.GetBitmap(6, btn);
+  TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
-  PageControlRight.Images.GetBitmap(7, btn);
+  TBTabs.Images.GetBitmap(7, btn);
   f_visu.histminmax.Glyph.Assign(btn);
-  PageControlRight.Images.GetBitmap(8, btn);
+  TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   btn.Free;
 end;
@@ -1543,15 +1543,13 @@ begin
   CloseLog;
 end;
 
-procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
-  );
+procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   case Key of
-    VK_F1 : PageControlRight.ActivePageIndex:=0;
-    VK_F2 : PageControlRight.ActivePageIndex:=1;
-    VK_F3 : PageControlRight.ActivePageIndex:=2;
-    VK_F4 : PageControlRight.ActivePageIndex:=3;
-
+    VK_F1 : TBConnect.Click;
+    VK_F2 : TBFocus.Click;
+    VK_F3 : TBCapture.Click;
+    VK_F4 : TBSequence.Click;
   end;
 end;
 
@@ -2545,10 +2543,10 @@ begin
                    f_sequence.CameraDisconnected;
                    StatusBar1.Panels[1].Text:='';
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
-                   if PageVideo.TabVisible then begin
-                     PageVideo.TabVisible:=false;
+                   if TBVideo.Visible then begin
+                     TBConnect.Click;
+                     TBVideo.Visible:=false;
                      MenuTabVideo.Visible:=false;
-                     PageControlRight.ActivePageIndex:=0;
                    end;
                    end;
    devConnecting:  begin
@@ -2567,7 +2565,7 @@ begin
                    end;
                    if camera.hasVideo then begin
                       wait(1);
-                      PageVideo.TabVisible:=true;
+                      TBVideo.Visible:=true;
                       MenuTabVideo.Visible:=true;
                       CameraVideoPreviewChange(nil);
                       f_video.FrameRate.Items.Assign(camera.VideoRates);
@@ -5636,9 +5634,21 @@ begin
 end;
 
 procedure Tf_main.MenuTabClick(Sender: TObject);
-var i: integer;
 begin
-  i:=TMenuItem(Sender).Tag;
+  case TMenuItem(Sender).Tag of
+    0 : TBConnect.Click;
+    1 : TBFocus.Click;
+    2 : TBCapture.Click;
+    3 : TBSequence.Click;
+    4 : TBVideo.Click;
+  end;
+end;
+
+procedure Tf_main.SelectTab(Sender: TObject);
+var i:integer;
+begin
+  TToolButton(sender).Down:=true;
+  i:=TToolButton(sender).tag;
   PageControlRight.ActivePageIndex:=i;
 end;
 

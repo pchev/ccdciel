@@ -18,144 +18,19 @@ object f_main: Tf_main
   OnShow = FormShow
   ShowHint = True
   Visible = False
-  object PageControlRight: TPageControl
-    Left = 612
-    Height = 232
-    Top = 0
-    Width = 188
-    ActivePage = PageConnect
-    Align = alRight
-    Images = ImageListDay
-    MultiLine = True
-    TabIndex = 0
-    TabOrder = 0
-    Options = [nboMultiLine]
-    object PageConnect: TTabSheet
-      ClientHeight = 202
-      ClientWidth = 186
-      ImageIndex = 0
-      object PanelRight1: TPanel
-        Left = 0
-        Height = 202
-        Top = 0
-        Width = 186
-        Align = alClient
-        AutoSize = True
-        BevelOuter = bvNone
-        ChildSizing.TopBottomSpacing = 3
-        ChildSizing.VerticalSpacing = 3
-        ChildSizing.Layout = cclTopToBottomThenLeftToRight
-        ChildSizing.ControlsPerLine = 99
-        ParentColor = False
-        ParentFont = False
-        TabOrder = 0
-        OnDragDrop = PanelDragDrop
-        OnDragOver = PanelDragOver
-      end
-    end
-    object PageFocus: TTabSheet
-      ClientHeight = 202
-      ClientWidth = 186
-      ImageIndex = 1
-      object PanelRight2: TPanel
-        Left = 0
-        Height = 236
-        Top = 0
-        Width = 186
-        Align = alClient
-        AutoSize = True
-        BevelOuter = bvNone
-        ChildSizing.TopBottomSpacing = 3
-        ChildSizing.VerticalSpacing = 3
-        ChildSizing.Layout = cclTopToBottomThenLeftToRight
-        ChildSizing.ControlsPerLine = 99
-        ParentColor = False
-        ParentFont = False
-        TabOrder = 0
-        OnDragDrop = PanelDragDrop
-        OnDragOver = PanelDragOver
-      end
-    end
-    object PageCapture: TTabSheet
-      ClientHeight = 202
-      ClientWidth = 186
-      ImageIndex = 2
-      object PanelRight3: TPanel
-        Left = 0
-        Height = 236
-        Top = 0
-        Width = 186
-        Align = alClient
-        AutoSize = True
-        BevelOuter = bvNone
-        ChildSizing.TopBottomSpacing = 3
-        ChildSizing.VerticalSpacing = 3
-        ChildSizing.Layout = cclTopToBottomThenLeftToRight
-        ChildSizing.ControlsPerLine = 99
-        ParentColor = False
-        ParentFont = False
-        TabOrder = 0
-        OnDragDrop = PanelDragDrop
-        OnDragOver = PanelDragOver
-      end
-    end
-    object PageSequence: TTabSheet
-      ClientHeight = 202
-      ClientWidth = 186
-      ImageIndex = 3
-      object PanelRight4: TPanel
-        Left = 0
-        Height = 265
-        Top = 0
-        Width = 184
-        Align = alClient
-        AutoSize = True
-        BevelOuter = bvNone
-        ChildSizing.TopBottomSpacing = 3
-        ChildSizing.VerticalSpacing = 3
-        ChildSizing.Layout = cclTopToBottomThenLeftToRight
-        ChildSizing.ControlsPerLine = 99
-        ParentColor = False
-        ParentFont = False
-        TabOrder = 0
-        OnDragDrop = PanelDragDrop
-        OnDragOver = PanelDragOver
-      end
-    end
-    object PageVideo: TTabSheet
-      ClientHeight = 202
-      ClientWidth = 186
-      ImageIndex = 4
-      TabVisible = False
-      object PanelRight5: TPanel
-        Left = 0
-        Height = 265
-        Top = 0
-        Width = 184
-        Align = alClient
-        AutoSize = True
-        BevelOuter = bvNone
-        ParentColor = False
-        ParentFont = False
-        TabOrder = 0
-        OnDragDrop = PanelDragDrop
-        OnDragOver = PanelDragOver
-      end
-    end
-  end
   object Panel1: TPanel
     Left = 0
-    Height = 232
+    Height = 261
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 232
+    ClientHeight = 261
     ClientWidth = 612
-    TabOrder = 1
+    TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 228
+      Height = 257
       Top = 2
       Width = 2
       Align = alLeft
@@ -191,12 +66,12 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 2
-      Height = 228
+      Height = 257
       Top = 2
       Width = 610
       Align = alClient
       AutoSize = True
-      ClientHeight = 228
+      ClientHeight = 257
       ClientWidth = 610
       Color = 4197901
       ParentColor = False
@@ -204,7 +79,7 @@ object f_main: Tf_main
       object Image1: TImage
         Cursor = crCross
         Left = 1
-        Height = 226
+        Height = 255
         Top = 1
         Width = 608
         AntialiasingMode = amOff
@@ -222,7 +97,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 2
-      Top = 230
+      Top = 259
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -241,7 +116,7 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 232
+    Top = 261
     Width = 800
     Panels = <    
       item
@@ -254,6 +129,204 @@ object f_main: Tf_main
         Width = 600
       end>
     SimplePanel = False
+  end
+  object PanelRight: TPanel
+    Left = 612
+    Height = 261
+    Top = 0
+    Width = 188
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 261
+    ClientWidth = 188
+    TabOrder = 2
+    object PageControlRight: TPageControl
+      Left = 0
+      Height = 229
+      Top = 32
+      Width = 188
+      ActivePage = PageConnect
+      Align = alClient
+      Images = ImageListDay
+      MultiLine = True
+      ShowTabs = False
+      TabIndex = 0
+      TabOrder = 0
+      Options = [nboMultiLine]
+      object PageConnect: TTabSheet
+        ClientHeight = 227
+        ClientWidth = 186
+        ImageIndex = 0
+        object PanelRight1: TPanel
+          Left = 0
+          Height = 227
+          Top = 0
+          Width = 186
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.TopBottomSpacing = 3
+          ChildSizing.VerticalSpacing = 3
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 99
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          OnDragDrop = PanelDragDrop
+          OnDragOver = PanelDragOver
+        end
+      end
+      object PageFocus: TTabSheet
+        ClientHeight = 227
+        ClientWidth = 186
+        ImageIndex = 1
+        object PanelRight2: TPanel
+          Left = 0
+          Height = 229
+          Top = 0
+          Width = 186
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.TopBottomSpacing = 3
+          ChildSizing.VerticalSpacing = 3
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 99
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          OnDragDrop = PanelDragDrop
+          OnDragOver = PanelDragOver
+        end
+      end
+      object PageCapture: TTabSheet
+        ClientHeight = 227
+        ClientWidth = 186
+        ImageIndex = 2
+        object PanelRight3: TPanel
+          Left = 0
+          Height = 229
+          Top = 0
+          Width = 186
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.TopBottomSpacing = 3
+          ChildSizing.VerticalSpacing = 3
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 99
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          OnDragDrop = PanelDragDrop
+          OnDragOver = PanelDragOver
+        end
+      end
+      object PageSequence: TTabSheet
+        ClientHeight = 227
+        ClientWidth = 186
+        ImageIndex = 3
+        object PanelRight4: TPanel
+          Left = 0
+          Height = 229
+          Top = 0
+          Width = 186
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.TopBottomSpacing = 3
+          ChildSizing.VerticalSpacing = 3
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 99
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          OnDragDrop = PanelDragDrop
+          OnDragOver = PanelDragOver
+        end
+      end
+      object PageVideo: TTabSheet
+        ClientHeight = 227
+        ClientWidth = 186
+        ImageIndex = 4
+        TabVisible = False
+        object PanelRight5: TPanel
+          Left = 0
+          Height = 229
+          Top = 0
+          Width = 186
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          OnDragDrop = PanelDragDrop
+          OnDragOver = PanelDragOver
+        end
+      end
+    end
+    object TBTabs: TToolBar
+      Left = 0
+      Top = 0
+      Width = 188
+      ButtonHeight = 30
+      ButtonWidth = 30
+      Images = ImageListDay
+      TabOrder = 1
+      Wrapable = False
+      object TBConnect: TToolButton
+        Left = 1
+        Hint = 'Connect'
+        Top = 2
+        Down = True
+        Grouped = True
+        ImageIndex = 0
+        OnClick = SelectTab
+        Style = tbsCheck
+      end
+      object TBFocus: TToolButton
+        Tag = 1
+        Left = 31
+        Hint = 'Focus'
+        Top = 2
+        Grouped = True
+        ImageIndex = 1
+        OnClick = SelectTab
+        Style = tbsCheck
+      end
+      object TBCapture: TToolButton
+        Tag = 2
+        Left = 61
+        Hint = 'Capture'
+        Top = 2
+        Grouped = True
+        ImageIndex = 2
+        OnClick = SelectTab
+        Style = tbsCheck
+      end
+      object TBSequence: TToolButton
+        Tag = 3
+        Left = 91
+        Hint = 'Sequence'
+        Top = 2
+        Grouped = True
+        ImageIndex = 3
+        OnClick = SelectTab
+        Style = tbsCheck
+      end
+      object TBVideo: TToolButton
+        Tag = 4
+        Left = 121
+        Hint = 'Video'
+        Top = 2
+        Grouped = True
+        ImageIndex = 4
+        OnClick = SelectTab
+        Style = tbsCheck
+        Visible = False
+      end
+    end
   end
   object MainMenu1: TMainMenu
     Images = ImageListDay
