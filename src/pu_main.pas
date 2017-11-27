@@ -376,7 +376,7 @@ type
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     TerminateVcurve: boolean;
-    ScrBmp: TBitmap;
+    ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -842,7 +842,7 @@ begin
   FilterList:=TStringList.Create;
   BinningList:=TStringList.Create;
   CurrentFilterOffset:=0;
-  ScrBmp := TBitmap.Create;
+  ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
   Image1.Align := alClient;
@@ -1606,15 +1606,7 @@ if Shift=[ssLeft] then begin
    end;
  end else if ssShift in Shift then begin
    if EndX>0 then begin
-     with Image1.Canvas do begin
-      Pen.Width := 1;
-      Pen.Color := clWhite;
-      Pen.Mode := pmXor;
-      Brush.Style := bsclear;
-      Rectangle(StartX,StartY,EndX,EndY);
-      Pen.Mode := pmCopy;
-      Brush.Style := bsSolid;
-     end;
+      scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
    end;
    MouseFrame:=true;
    Startx:=X;
@@ -1642,20 +1634,13 @@ if LockMouse then exit;
     LockMouse:=false;
  end
  else if MouseFrame then begin
-   with Image1.Canvas do begin
-    Pen.Width := 1;
-    Pen.Color := clWhite;
-    Pen.Mode := pmXor;
-    Brush.Style := bsclear;
     if EndX>0 then begin
-       Rectangle(StartX,StartY,EndX,EndY);
+       scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
     end;
     EndX:=X;
     EndY:=Y;
-    Rectangle(StartX,StartY,EndX,EndY);
-    Pen.Mode := pmCopy;
-    Brush.Style := bsSolid;
-   end;
+    scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+    image1.Invalidate;
  end
  else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) then begin
     Screen2fits(x,y,xx,yy);
@@ -4840,9 +4825,7 @@ end;
 
 Procedure Tf_main.ClearImage;
 begin
-ScrBmp.Canvas.Brush.Color:=clDarkBlue;
-ScrBmp.Canvas.Pen.Color:=clBlack;
-ScrBmp.Canvas.FillRect(0,0,ScrBmp.Width,ScrBmp.Height);
+ScrBmp.FillRect(0,0,ScrBmp.Width,ScrBmp.Height,clDarkBlue);
 EndX:=-1;
 end;
 
@@ -4872,7 +4855,7 @@ if ImgZoom=0 then begin
     ImgScale0:=w/img_Width;
   end;
   str:=ImaBmp.Resample(w,h) as TBGRABitmap;
-  str.Draw(ScrBmp.Canvas,0,0,True);
+  ScrBmp.PutImage(0,0,str,dmSet);
   str.Free;
 end
 else if ImgZoom=1 then begin
@@ -4881,7 +4864,7 @@ else if ImgZoom=1 then begin
    py:=ImgCy-((img_Height-ScrBmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   ImaBmp.Draw(ScrBmp.Canvas,px,py,True);
+   ScrBmp.PutImage(px,py,imabmp,dmSet);
 end
 else begin
    // other zoom
@@ -4893,7 +4876,7 @@ else begin
    OrigY:=py;
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
    str:=tmpbmp.Resample(ScrBmp.Width,ScrBmp.Height,rmSimpleStretch) as TBGRABitmap;
-   str.Draw(ScrBmp.Canvas,0,0,True);
+   ScrBmp.PutImage(0,0,str,dmSet);
    str.Free;
    tmpbmp.Free;
 end;
@@ -4931,7 +4914,7 @@ end;
 procedure Tf_main.Image1Paint(Sender: TObject);
 var x,y,s,r: integer;
 begin
-  Image1.Canvas.Draw(0, 0, ScrBmp);
+  ScrBmp.Draw(Image1.Canvas,0,0,true);
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
      if ImgZoom=0 then begin
