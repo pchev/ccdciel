@@ -682,14 +682,23 @@ var buf:string;
     {$endif}
 begin
  {$ifdef darwin}
- Appdir:=getcurrentdir;
- if not DirectoryExists(slash(Appdir)+slash('scripts')) then begin
-    Appdir:=ExtractFilePath(ParamStr(0));
-    i:=pos('.app/',Appdir);
-    if i>0 then begin
-      Appdir:=ExtractFilePath(copy(Appdir,1,i));
-    end;
- end;
+   //  try current path
+   Appdir := getcurrentdir;
+   if not DirectoryExists(slash(Appdir)+slash('scripts')) then
+   begin
+     // try under app bundle
+     Appdir := ExtractFilePath(ParamStr(0));
+     i := pos('.app/', Appdir);
+     if i > 0 then
+     begin
+       Appdir := ExtractFilePath(copy(Appdir, 1, i));
+     end;
+     if not DirectoryExists(slash(Appdir)+slash('scripts')) then
+     begin
+        // try default location
+       Appdir := '/Applications/CCDciel';
+     end;
+   end;
  {$else}
  Appdir:=getcurrentdir;
  if not DirectoryExists(slash(Appdir)+slash('scripts')) then begin
