@@ -813,6 +813,9 @@ begin
   {$else}
   DefaultInterface:=INDI;
   {$endif}
+  {$ifdef darwin}
+    TBTabs.Color:=clBtnHighlight; // on Mac highlight is darker...
+  {$endif}
   AppClose:=false;
   ConfirmClose:=true;
   ScaleMainForm;
