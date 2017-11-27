@@ -253,7 +253,9 @@ object f_main: Tf_main
       Width = 188
       ButtonHeight = 30
       ButtonWidth = 30
+      Color = clBtnShadow
       Images = ImageListDay
+      ParentColor = False
       TabOrder = 1
       Wrapable = False
       object TBConnect: TToolButton
