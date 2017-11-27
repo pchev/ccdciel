@@ -311,7 +311,6 @@ begin
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
        ((Findisensor<>'CCD2')and(CCDexpose<>nil)) )
     then begin
-       FStatus := devConnected;
        UseMainSensor:=(Findisensor<>'CCD2');
        if (not Fready) then begin
          Fready:=true;
@@ -414,6 +413,8 @@ begin
    else
        indiclient.setBLOBMode(B_ALSO,Findidevice);
  end;
+ FStatus := devConnected;
+ if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
 procedure T_indicamera.ServerDisconnected(Sender: TObject);
