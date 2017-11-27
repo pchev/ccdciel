@@ -2690,27 +2690,29 @@ begin
 end;
 
 procedure Tf_main.FilterChange(n:double);
-var o: integer;
+var o,f: integer;
 begin
+ f:=round(n);
 // show new filter name
-if (n>=0)and(n<=f_filterwheel.Filters.Items.Count) then
-   f_filterwheel.Filters.ItemIndex:=round(n);
+if (f_filterwheel.Filters.ItemIndex<>f)and(f>=0)and(f<=f_filterwheel.Filters.Items.Count) then  begin
+   f_filterwheel.Filters.ItemIndex:=f;
+end;
 // set exposure factor
-AutofocusExposureFact:=FilterExpFact[round(n)];
+AutofocusExposureFact:=FilterExpFact[f];
 // adjust focus
 if (n>0)and(n<=MaxFilter)and(focuser.Status=devConnected) then begin
- if CurrentFilterOffset<>FilterOffset[round(n)] then begin
+ if CurrentFilterOffset<>FilterOffset[f] then begin
    if filteroffset_initialized then begin
-    o:=FilterOffset[round(n)]-CurrentFilterOffset;
+    o:=FilterOffset[f]-CurrentFilterOffset;
     f_focuser.FocusSpeed:=abs(o);
     if o>0 then
       FocusOUT(nil)
     else
       FocusIN(nil);
-    CurrentFilterOffset:=FilterOffset[round(n)];
+    CurrentFilterOffset:=FilterOffset[f];
    end
    else begin
-    CurrentFilterOffset:=FilterOffset[round(n)];
+    CurrentFilterOffset:=FilterOffset[f];
     filteroffset_initialized:=true;
    end;
  end;

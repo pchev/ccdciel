@@ -334,7 +334,7 @@ end;
 
 procedure T_indiwheel.SetFilter(num:integer);
 begin
-if (WheelSlot<>nil)and(num>0) then begin;
+if (WheelSlot<>nil)and(num>0)and(Slot.value<>num) then begin;
   if num>Slot.max then num:=round(Slot.max);
   if num<Slot.min then num:=round(Slot.min);
   Slot.value:=num;
