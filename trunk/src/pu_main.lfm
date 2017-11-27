@@ -1,11 +1,11 @@
 object f_main: Tf_main
   Left = 228
-  Height = 282
+  Height = 411
   Top = 136
   Width = 800
   ActiveControl = PageControlRight
   Caption = 'CCD Ciel'
-  ClientHeight = 282
+  ClientHeight = 411
   ClientWidth = 800
   KeyPreview = True
   Menu = MainMenu1
@@ -20,17 +20,17 @@ object f_main: Tf_main
   Visible = False
   object Panel1: TPanel
     Left = 0
-    Height = 261
+    Height = 390
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 261
+    ClientHeight = 390
     ClientWidth = 612
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 257
+      Height = 386
       Top = 2
       Width = 2
       Align = alLeft
@@ -66,38 +66,19 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 2
-      Height = 257
+      Height = 386
       Top = 2
       Width = 610
       Align = alClient
       AutoSize = True
-      ClientHeight = 257
-      ClientWidth = 610
       Color = 4197901
       ParentColor = False
       TabOrder = 2
-      object Image1: TImage
-        Cursor = crCross
-        Left = 1
-        Height = 255
-        Top = 1
-        Width = 608
-        AntialiasingMode = amOff
-        Align = alClient
-        OnDblClick = Image1DblClick
-        OnMouseDown = Image1MouseDown
-        OnMouseMove = Image1MouseMove
-        OnMouseUp = Image1MouseUp
-        OnMouseWheel = Image1MouseWheel
-        OnPaint = Image1Paint
-        OnResize = Image1Resize
-        PopupMenu = ImagePopupMenu
-      end
     end
     object PanelBottom: TPanel
       Left = 0
       Height = 2
-      Top = 259
+      Top = 388
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -116,7 +97,7 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 261
+    Top = 390
     Width = 800
     Panels = <    
       item
@@ -132,17 +113,17 @@ object f_main: Tf_main
   end
   object PanelRight: TPanel
     Left = 612
-    Height = 261
+    Height = 390
     Top = 0
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 261
+    ClientHeight = 390
     ClientWidth = 188
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 229
+      Height = 358
       Top = 32
       Width = 188
       ActivePage = PageConnect
@@ -154,12 +135,12 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 227
+        ClientHeight = 356
         ClientWidth = 186
         ImageIndex = 0
         object PanelRight1: TPanel
           Left = 0
-          Height = 227
+          Height = 356
           Top = 0
           Width = 186
           Align = alClient
@@ -177,7 +158,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 227
+        ClientHeight = 356
         ClientWidth = 186
         ImageIndex = 1
         object PanelRight2: TPanel
@@ -200,7 +181,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 227
+        ClientHeight = 356
         ClientWidth = 186
         ImageIndex = 2
         object PanelRight3: TPanel
@@ -223,7 +204,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 227
+        ClientHeight = 356
         ClientWidth = 186
         ImageIndex = 3
         object PanelRight4: TPanel
@@ -246,7 +227,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 227
+        ClientHeight = 356
         ClientWidth = 186
         ImageIndex = 4
         TabVisible = False
@@ -1109,7 +1090,7 @@ object f_main: Tf_main
   object OpenDialog1: TOpenDialog
     Filter = 'Fits file|*.fits;*.fit;*.fts|All|*.*'
     left = 48
-    top = 184
+    top = 176
   end
   object SaveDialog1: TSaveDialog
     DefaultExt = '.fits'

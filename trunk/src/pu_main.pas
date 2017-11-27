@@ -41,10 +41,21 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
 
 type
 
+  TImgDrawingControl = class(TGraphicControl)
+  public
+    property OnPaint;
+    property OnDblClick;
+    property onMouseDown;
+    property onMouseMove;
+    property onMouseUp;
+    property OnMouseWheel;
+    property OnResize;
+    property PopupMenu;
+  end;
+
   { Tf_main }
 
   Tf_main = class(TForm)
-    Image1: TImage;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     MainMenu1: TMainMenu;
@@ -216,17 +227,6 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure Image1DblClick(Sender: TObject);
-    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
-      );
-    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState;
-      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
-    procedure Image1Paint(Sender: TObject);
-    procedure Image1Resize(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
     procedure MenuAutoguiderConnectClick(Sender: TObject);
     procedure MenuAutoguiderDitherClick(Sender: TObject);
@@ -376,6 +376,15 @@ type
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     TerminateVcurve: boolean;
+    ScrBmp: TBitmap;
+    Image1: TImgDrawingControl;
+    procedure Image1DblClick(Sender: TObject);
+    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure Image1Paint(Sender: TObject);
+    procedure Image1Resize(Sender: TObject);
     Procedure GetAppDir;
     procedure ScaleMainForm;
     Procedure InitLog;
@@ -833,6 +842,19 @@ begin
   FilterList:=TStringList.Create;
   BinningList:=TStringList.Create;
   CurrentFilterOffset:=0;
+  ScrBmp := TBitmap.Create;
+  Image1 := TImgDrawingControl.Create(Self);
+  Image1.Parent := PanelCenter;
+  Image1.Align := alClient;
+  image1.OnDblClick := @Image1DblClick;
+  Image1.OnMouseDown := @Image1MouseDown;
+  Image1.OnMouseMove := @Image1MouseMove;
+  Image1.OnMouseUp := @Image1MouseUp;
+  Image1.OnMouseWheel := @Image1MouseWheel;
+  Image1.OnResize := @Image1Resize;
+  Image1.OnPaint := @Image1Paint;
+  Image1.PopupMenu := ImagePopupMenu;
+  Image1.Cursor:=crCross;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -1532,6 +1554,7 @@ begin
   ImaBmp.Free;
   refbmp.Free;
   config.Free;
+  ScrBmp.Free;
   FilterList.Free;
   BinningList.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
@@ -1583,9 +1606,15 @@ if Shift=[ssLeft] then begin
    end;
  end else if ssShift in Shift then begin
    if EndX>0 then begin
-     Image1.Canvas.Pen.Color:=clWhite;
-     Image1.Canvas.Pen.Mode:=pmXor;
-     Image1.Canvas.Frame(StartX,StartY,EndX,EndY);
+     with Image1.Canvas do begin
+      Pen.Width := 1;
+      Pen.Color := clWhite;
+      Pen.Mode := pmXor;
+      Brush.Style := bsclear;
+      Rectangle(StartX,StartY,EndX,EndY);
+      Pen.Mode := pmCopy;
+      Brush.Style := bsSolid;
+     end;
    end;
    MouseFrame:=true;
    Startx:=X;
@@ -1593,7 +1622,6 @@ if Shift=[ssLeft] then begin
    EndX:=-1;
    EndY:=-1
  end;
-
 end;
 
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -1802,7 +1830,7 @@ end;
 
 procedure Tf_main.Image1Resize(Sender: TObject);
 begin
-  image1.Picture.Bitmap.SetSize(image1.Width,image1.Height);
+  ScrBmp.SetSize(Image1.Width,Image1.Height);
   ClearImage;
   DrawImage;
 end;
@@ -4812,9 +4840,9 @@ end;
 
 Procedure Tf_main.ClearImage;
 begin
-image1.Picture.Bitmap.Canvas.Brush.Color:=clDarkBlue;
-image1.Picture.Bitmap.Canvas.Pen.Color:=clBlack;
-image1.Picture.Bitmap.Canvas.FillRect(0,0,image1.Width,image1.Height);
+ScrBmp.Canvas.Brush.Color:=clDarkBlue;
+ScrBmp.Canvas.Pen.Color:=clBlack;
+ScrBmp.Canvas.FillRect(0,0,ScrBmp.Width,ScrBmp.Height);
 EndX:=-1;
 end;
 
@@ -4824,8 +4852,8 @@ var r1,r2: double;
     tmpbmp,str: TBGRABitmap;
 begin
 if (img_Height=0)or(img_Width=0) then exit;
-r1:=image1.Width/imabmp.Width;
-r2:=image1.Height/imabmp.Height;
+r1:=ScrBmp.Width/imabmp.Width;
+r2:=ScrBmp.Height/imabmp.Height;
 ZoomMin:=min(r1,r2);
 if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01) then ImgZoom:=0;
 ClearImage;
@@ -4833,8 +4861,8 @@ imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
-  w:=image1.width;
-  h:=image1.height;
+  w:=ScrBmp.width;
+  h:=ScrBmp.height;
   r2:=w/h;
   if r1>r2 then begin
     h:=trunc(w/r1);
@@ -4844,31 +4872,32 @@ if ImgZoom=0 then begin
     ImgScale0:=w/img_Width;
   end;
   str:=ImaBmp.Resample(w,h) as TBGRABitmap;
-  str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
+  str.Draw(ScrBmp.Canvas,0,0,True);
   str.Free;
 end
 else if ImgZoom=1 then begin
    // zoom 1
-   px:=ImgCx-((img_Width-Image1.Width) div 2);
-   py:=ImgCy-((img_Height-Image1.Height) div 2);
+   px:=ImgCx-((img_Width-ScrBmp.Width) div 2);
+   py:=ImgCy-((img_Height-ScrBmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
-   ImaBmp.Draw(image1.Picture.Bitmap.Canvas,px,py,True);
+   ImaBmp.Draw(ScrBmp.Canvas,px,py,True);
 end
 else begin
    // other zoom
    if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
-   tmpbmp:=TBGRABitmap.Create(round(Image1.Width/ImgZoom),round(Image1.Height/ImgZoom),clDarkBlue);
+   tmpbmp:=TBGRABitmap.Create(round(ScrBmp.Width/ImgZoom),round(ScrBmp.Height/ImgZoom),clDarkBlue);
    px:=ImgCx-((img_Width-tmpbmp.Width) div 2);
    py:=ImgCy-((img_Height-tmpbmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
-   str:=tmpbmp.Resample(image1.Width,image1.Height,rmSimpleStretch) as TBGRABitmap;
-   str.Draw(image1.Picture.Bitmap.Canvas,0,0,True);
+   str:=tmpbmp.Resample(ScrBmp.Width,ScrBmp.Height,rmSimpleStretch) as TBGRABitmap;
+   str.Draw(ScrBmp.Canvas,0,0,True);
    str.Free;
    tmpbmp.Free;
 end;
+Image1.Invalidate;
 Application.ProcessMessages;
 end;
 
@@ -4881,7 +4910,7 @@ if fits.HeaderInfo.solved and
  (cdcWCSinfo.secpix<>0) and
  (abs(cdcWCSinfo.cdec)<89.0)
  then begin
-  scale:=img_Width/image1.Width;
+  scale:=img_Width/ScrBmp.Width;
   xpos:=27*scale;
   ypos:=27*scale;
   Nleng:=24*scale;
@@ -4902,7 +4931,7 @@ end;
 procedure Tf_main.Image1Paint(Sender: TObject);
 var x,y,s,r: integer;
 begin
-  Inherited paint;
+  Image1.Canvas.Draw(0, 0, ScrBmp);
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
      if ImgZoom=0 then begin
