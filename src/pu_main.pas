@@ -1614,14 +1614,20 @@ if LockMouse then exit;
     LockMouse:=false;
  end
  else if MouseFrame then begin
-    Image1.Canvas.Pen.Color:=clWhite;
-    Image1.Canvas.Pen.Mode:=pmXor;
+   with Image1.Canvas do begin
+    Pen.Width := 1;
+    Pen.Color := clWhite;
+    Pen.Mode := pmXor;
+    Brush.Style := bsclear;
     if EndX>0 then begin
-       Image1.Canvas.Frame(StartX,StartY,EndX,EndY);
+       Rectangle(StartX,StartY,EndX,EndY);
     end;
     EndX:=X;
     EndY:=Y;
-    Image1.Canvas.Frame(StartX,StartY,EndX,EndY);
+    Rectangle(StartX,StartY,EndX,EndY);
+    Pen.Mode := pmCopy;
+    Brush.Style := bsSolid;
+   end;
  end
  else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) then begin
     Screen2fits(x,y,xx,yy);
