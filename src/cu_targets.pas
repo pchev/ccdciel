@@ -752,6 +752,7 @@ begin
     flt.endtime:=-1;
   end;
   // slew near zenith and  stop tracking
+  StopGuider;
   FlatSlewTime:=0;
   mount.SlewToSkyFlatPosition;
   // wait twilight
