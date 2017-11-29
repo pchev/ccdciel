@@ -150,6 +150,7 @@ begin
      // send command
      tcpclient.Sock.SendBuffer(@msg,msgl);
      if tcpclient.Sock.LastError<>0 then begin
+        DisplayMessage(tcpclient.GetErrorDesc);
         Terminate;
         exit;
      end;

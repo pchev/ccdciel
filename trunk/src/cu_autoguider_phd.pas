@@ -128,6 +128,7 @@ begin
  if (tcpclient<>nil)and(Value>'') then begin
    tcpclient.Sock.SendString(Value+crlf);
    if tcpclient.Sock.LastError<>0 then begin
+      DisplayMessage(tcpclient.GetErrorDesc);
       Terminate;
    end;
  end;
