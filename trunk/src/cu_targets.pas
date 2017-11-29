@@ -751,6 +751,10 @@ begin
     flt.starttime:=-1;
     flt.endtime:=-1;
   end;
+  // slew near zenith and  stop tracking
+  FlatSlewTime:=0;
+  mount.SlewToSkyFlatPosition;
+  // wait twilight
   if flt.starttime>=0 then begin
     msg('Waiting for twilight at '+TimeToStr(flt.starttime));
     wtok:=WaitTill(TimeToStr(flt.starttime),true);
@@ -771,7 +775,6 @@ begin
      end;
   end;
   // slew near zenith
-  FlatSlewTime:=0;
   mount.SlewToSkyFlatPosition;
   result:=true;
   finally
