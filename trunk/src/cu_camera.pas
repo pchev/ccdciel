@@ -372,7 +372,7 @@ var dy,dm,dd: word;
     focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2: integer;
     hfilter,hframe,hinstr,hdateobs : string;
-    hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2: double;
+    hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass: double;
     gain,gamma,offset: double;
     Frx,Fry,Frwidth,Frheight: integer;
 begin
@@ -397,6 +397,7 @@ begin
   if not Ffits.Header.Valueof('DATAMAX',hdmax)  then hdmax:=Ffits.HeaderInfo.dmax;
   if not Ffits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
+  if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (Fmount.Status=devConnected) then begin
@@ -487,6 +488,7 @@ begin
     Ffits.Header.Add('FRAMEHGT',Frheight,'Frame height');
     Ffits.Header.Add('FRAMEWDH',Frwidth,'Frame width');
   end;
+  if hairmass>0 then Ffits.Header.Add('AIRMASS',hairmass ,'Airmass');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
     Ffits.Header.Add('EQUINOX',2000.0,'');
     Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
