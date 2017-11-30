@@ -831,6 +831,7 @@ begin
   {$ifdef darwin}
     TBTabs.Color:=clBtnHighlight; // on Mac highlight is darker...
   {$endif}
+  PageControlRight.ActivePageIndex:=0;
   AppClose:=false;
   ConfirmClose:=true;
   ScaleMainForm;
