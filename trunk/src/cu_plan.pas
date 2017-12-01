@@ -241,8 +241,8 @@ begin
        inc(StepRepeatCount);
        if (p<>nil)and(StepRepeatCount<=p.repeatcount) then begin
           tt:=p.delay-(Now-StepTimeStart)*secperday;
-          if tt<0.1 then tt:=0.1;
-          msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated sequence '+IntToStr(StepRepeatCount));
+          if tt<1 then tt:=1;
+          if tt>1 then msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated sequence '+IntToStr(StepRepeatCount));
           StepRepeatTimer.Interval:=trunc(1000*tt);
           StepRepeatTimer.Enabled:=true;
           StepDelayEnd:=now+tt/secperday;
