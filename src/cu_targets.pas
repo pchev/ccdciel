@@ -931,8 +931,8 @@ begin
         inc(TargetRepeatCount);
         if (t<>nil)and(TargetRepeatCount<=t.repeatcount) then begin
            tt:=t.delay-(Now-TargetTimeStart)*secperday;
-           if tt<0.1 then tt:=0.1;
-           msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated target '+IntToStr(TargetRepeatCount));
+           if tt<1 then tt:=1;
+           if tt>1 then msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated target '+IntToStr(TargetRepeatCount));
            TargetRepeatTimer.Interval:=trunc(1000*tt);
            TargetRepeatTimer.Enabled:=true;
            TargetDelayEnd:=now+tt/secperday;
