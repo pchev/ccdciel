@@ -57,6 +57,7 @@ type
     AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
     AutofocusSlippageOffset: TEdit;
+    FileCCDtemp: TCheckBox;
     FlatAutoExposure: TCheckBox;
     FlatLevelMax: TEdit;
     FlatMinExp: TEdit;

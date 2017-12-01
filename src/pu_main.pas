@@ -3584,6 +3584,7 @@ begin
    f_option.FileDate.Checked:=config.GetValue('/Files/FilenameDate',true);
    f_option.FileExp.Checked:=config.GetValue('/Files/FilenameExposure',false);
    f_option.FileBin.Checked:=config.GetValue('/Files/FilenameBinning',false);
+   f_option.FileCCDtemp.Checked:=config.GetValue('/Files/FilenameCCDtemp',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -3736,6 +3737,7 @@ begin
      config.SetValue('/Files/FilenameDate',f_option.FileDate.Checked);
      config.SetValue('/Files/FilenameExposure',f_option.FileExp.Checked);
      config.SetValue('/Files/FilenameBinning',f_option.FileBin.Checked);
+     config.SetValue('/Files/FilenameCCDtemp',f_option.FileCCDtemp.Checked);
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      n:=FilterList.Count-1;
@@ -4539,7 +4541,8 @@ procedure Tf_main.CameraSaveNewImage;
 var dt: Tdatetime;
     fn,buf: string;
     subseq,subobj,substep,subfrt,subexp,subbin: boolean;
-    fnobj,fnfilter,fndate,fnexp,fnbin: boolean;
+    fnobj,fnfilter,fndate,fnexp,fnbin,fntemp: boolean;
+    ccdtemp: double;
     fileseqnum: integer;
 begin
 try
@@ -4583,6 +4586,7 @@ try
  fndate:=config.GetValue('/Files/FilenameDate',true);
  fnexp:=config.GetValue('/Files/FilenameExposure',false);
  fnbin:=config.GetValue('/Files/FilenameBinning',false);
+ fntemp:=config.GetValue('/Files/FilenameCCDtemp',false);
  if fnobj then begin
    if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
        buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
@@ -4602,7 +4606,10 @@ try
    else
       fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
  end;
- if fnbin then fn:=fn+f_capture.Binning.Text+'_';
+ if fnbin then
+    fn:=fn+f_capture.Binning.Text+'_';
+ if fntemp and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
+    fn:=fn+formatfloat(f1,ccdtemp)+'C_';
  if fndate then
     fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
  else begin
