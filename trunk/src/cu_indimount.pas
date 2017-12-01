@@ -68,7 +68,7 @@ T_indimount = class(T_mount)
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
-   procedure NewMessage(txt: string);
+   procedure NewMessage(mp:IMessage);
    procedure NewProperty(indiProp: IndiProperty);
    procedure NewNumber(nvp: INumberVectorProperty);
    procedure NewText(tvp: ITextVectorProperty);
@@ -298,7 +298,7 @@ begin
   { TODO :  check if a vital property is removed ? }
 end;
 
-procedure T_indimount.NewMessage(txt: string);
+procedure T_indimount.NewMessage(mp:IMessage);
 const k=2;
   blacklist: array[1..k] of string =('Timed guide','End Timed guide');
 var ok: boolean;
@@ -306,13 +306,14 @@ var ok: boolean;
 begin
   ok:=true;
   for i:=1 to k do begin
-    if pos(blacklist[i],txt)>0 then ok:=false;
+    if pos(blacklist[i],mp.msg)>0 then ok:=false;
   end;
   if ok then begin
-     if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
+     if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
   end else begin
-    if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+txt);
+    if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   end;
+  mp.Free;
 end;
 
 procedure T_indimount.NewProperty(indiProp: IndiProperty);

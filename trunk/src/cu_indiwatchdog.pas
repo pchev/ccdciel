@@ -50,7 +50,7 @@ T_indiwatchdog = class(T_watchdog)
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
-   procedure NewMessage(txt: string);
+   procedure NewMessage(mp: IMessage);
    procedure NewProperty(indiProp: IndiProperty);
    procedure NewNumber(nvp: INumberVectorProperty);
    procedure NewText(tvp: ITextVectorProperty);
@@ -248,9 +248,10 @@ begin
   { TODO :  check if a vital property is removed ? }
 end;
 
-procedure T_indiwatchdog.NewMessage(txt: string);
+procedure T_indiwatchdog.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  mp.Free;
 end;
 
 procedure T_indiwatchdog.NewProperty(indiProp: IndiProperty);

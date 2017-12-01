@@ -51,7 +51,7 @@ T_indirotator = class(T_rotator)
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
-   procedure NewMessage(txt: string);
+   procedure NewMessage(mp: IMessage);
    procedure NewProperty(indiProp: IndiProperty);
    procedure NewNumber(nvp: INumberVectorProperty);
    procedure NewText(tvp: ITextVectorProperty);
@@ -253,9 +253,10 @@ begin
   { TODO :  check if a vital property is removed ? }
 end;
 
-procedure T_indirotator.NewMessage(txt: string);
+procedure T_indirotator.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  mp.free;
 end;
 
 procedure T_indirotator.NewProperty(indiProp: IndiProperty);
