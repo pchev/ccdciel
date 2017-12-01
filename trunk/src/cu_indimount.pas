@@ -299,8 +299,13 @@ begin
 end;
 
 procedure T_indimount.NewMessage(mp:IMessage);
-const k=2;
-  blacklist: array[1..k] of string =('Timed guide','End Timed guide');
+const k=8;
+  blacklist: array[1..k] of string =(
+             'Timed guide','End Timed guide',   // pulse guide message
+             'Starting Goto','Aligned Eqmod',   // extra eqmod goto message, must be [debug]
+             'Setting Eqmod','Slewing mount',   // extra eqmod goto message, must be [debug]
+             'Iterative Goto','Iterative goto'  // extra eqmod goto message, must be [debug]
+             );
 var ok: boolean;
     i: integer;
 begin
