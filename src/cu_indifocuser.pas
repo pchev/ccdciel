@@ -57,7 +57,7 @@ T_indifocuser = class(T_focuser)
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
-   procedure NewMessage(txt: string);
+   procedure NewMessage(mp: IMessage);
    procedure NewProperty(indiProp: IndiProperty);
    procedure NewNumber(nvp: INumberVectorProperty);
    procedure NewText(tvp: ITextVectorProperty);
@@ -287,9 +287,10 @@ begin
   { TODO :  check if a vital property is removed ? }
 end;
 
-procedure T_indifocuser.NewMessage(txt: string);
+procedure T_indifocuser.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
+  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  mp.Free;
 end;
 
 procedure T_indifocuser.NewProperty(indiProp: IndiProperty);
