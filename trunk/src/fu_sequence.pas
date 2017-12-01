@@ -677,6 +677,8 @@ begin
  FlatWaitDusk:=false;
  FlatWaitDawn:=false;
  led.Brush.Color:=clRed;
+ PlanGrid.Invalidate;
+ TargetGrid.Invalidate;
 end;
 
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
