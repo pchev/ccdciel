@@ -175,7 +175,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.17';
+  ccdcielver = '0.9.18';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 2;
   blank=' ';
