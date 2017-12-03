@@ -100,7 +100,7 @@ Fde:=NullCoord;
 Fobjname:='';
 FplanetariumEquinox:=0;  // 0 = equinox of date
 FplanetariumJD:=0;
-InitTimer:=TTimer.Create(nil);
+InitTimer:=TTimer.Create(Application);
 InitTimer.Enabled:=false;
 InitTimer.Interval:=500;
 InitTimer.OnTimer:=@InitTimerTimer;
