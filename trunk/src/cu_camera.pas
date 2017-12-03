@@ -463,6 +463,8 @@ begin
   end;
   Ffits.Header.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   if origin<>'' then Ffits.Header.Add('ORIGIN',origin,'Observatory name');
+  Ffits.Header.Add('SITELAT',ObsLatitude,'Observatory latitude');
+  Ffits.Header.Add('SITELONG',ObsLongitude,'Observatory longitude');
   if observer<>'' then Ffits.Header.Add('OBSERVER',observer,'Observer name');
   if telname<>'' then Ffits.Header.Add('TELESCOP',telname,'Telescope used for acquisition');
   if hinstr<>'' then Ffits.Header.Add('INSTRUME',hinstr,'Instrument used for acquisition');
