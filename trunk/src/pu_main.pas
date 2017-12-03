@@ -1998,8 +1998,8 @@ end;
 procedure Tf_main.SetOptions;
 var i,n: integer;
 begin
-  ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
-  ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
+  ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
+  ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
   BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
@@ -3588,8 +3588,8 @@ begin
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
-   f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',46.0);
-   f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',-6.0);
+   f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
+   f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
