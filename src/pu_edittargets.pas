@@ -158,6 +158,7 @@ type
     FTargetsRepeat: integer;
     procedure LoadPlanList;
     procedure SetPlanList(pl:string);
+    procedure ClearScriptList;
     procedure LoadScriptList;
     procedure SetScriptList(sl:string);
     procedure ResetSequences;
@@ -294,13 +295,22 @@ begin
   if i>=0 then PlanList.ItemIndex:=i;
 end;
 
+procedure Tf_EditTargets.ClearScriptList;
+var i,k: integer;
+begin
+  for i:=0 to ScriptList.Items.Count-1 do begin
+    ScriptList.Items.Objects[i].Free;
+  end;
+  ScriptList.Clear;
+end;
+
 procedure Tf_EditTargets.LoadScriptList;
 var i,k: integer;
     fs : TSearchRec;
     s: TStringlist;
 begin
   s:=TStringlist.Create;
-  ScriptList.Clear;
+  ClearScriptList;
   for k:=1 to MaxScriptDir do begin
     i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
     while i=0 do begin
@@ -312,6 +322,7 @@ begin
   s.CustomSort(@ScriptListCompare);
   ScriptList.Items.Assign(s);
   ScriptList.ItemIndex:=0;
+  s.Free;
 end;
 
 procedure Tf_EditTargets.SetScriptList(sl:string);
@@ -720,6 +731,7 @@ begin
           FlatFilterList.Checked[i]:=true;
       end;
     end;
+    filterlst.Free;
   end
   else begin
     PageControl1.ActivePageIndex:=0;
