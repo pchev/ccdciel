@@ -412,6 +412,7 @@ begin
       msg('No resolver configured!');
       msg('Do simple slew to '+ARToStr3(ra)+'/'+DEToStr(de));
       if not Mount.Slew(ra, de) then exit;
+      Wait(delay);
       dist:=0;
    end else begin
     if filter>0 then begin
