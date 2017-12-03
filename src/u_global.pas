@@ -496,7 +496,7 @@ end;
 
 function TStep.filter_str: string;
 begin
-  if FilterList.Count=0 then
+  if (FilterList.Count=0)or(filter<0)or(filter>(FilterList.Count-1)) then
     Result:=''
   else
     Result:=FilterList[filter];
@@ -508,8 +508,13 @@ begin
 end;
 
 function TStep.frtype_str: string;
+var i:integer;
 begin
-  Result:=FrameName[ord(frtype)];
+  i:=ord(frtype);
+  if (i<0)or(i>ord(High(frtype))) then
+    Result:=''
+  else
+    Result:=FrameName[ord(frtype)];
 end;
 
 function TStep.description_str: string;
