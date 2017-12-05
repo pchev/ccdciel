@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, UScaleDPI,
+uses u_utils, u_global, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, ValEdit, Grids, EditBtn, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, enhedits;
 
 type
 
@@ -38,6 +38,8 @@ type
     AutofocusMeanMovement: TEdit;
     BtnDisableBacklash: TButton;
     BtnDisableFocuserTemp: TButton;
+    BtnFolderDefault: TButton;
+    BtnFileDefault: TButton;
     ButtonDir: TButton;
     BayerMode: TComboBox;
     Autofocusmode: TRadioGroup;
@@ -57,12 +59,12 @@ type
     AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
     AutofocusSlippageOffset: TEdit;
-    FileCCDtemp: TCheckBox;
     FlatAutoExposure: TCheckBox;
     FlatLevelMax: TEdit;
     FlatMinExp: TEdit;
     FlatMaxExp: TEdit;
     FlatLevelMin: TEdit;
+    FileOptions: TStringGrid;
     GroupBox18: TGroupBox;
     Label91: TLabel;
     Label92: TLabel;
@@ -111,6 +113,7 @@ type
     rbLinUnixSocket: TRadioButton;
     rbLinTCP: TRadioButton;
     SlewDelay: TEdit;
+    FolderOptions: TStringGrid;
     TabSheet12: TTabSheet;
     TemperatureSlopeActive: TCheckBox;
     TemperatureSlope: TEdit;
@@ -122,15 +125,11 @@ type
     PanelTemperatureSlope: TPanel;
     StarLostRestart: TEdit;
     StarLostCancel: TEdit;
-    FileBin: TCheckBox;
-    FileExp: TCheckBox;
     GroupBox13: TGroupBox;
     Label70: TLabel;
     Label71: TLabel;
     Label72: TLabel;
     Label73: TLabel;
-    SubfolderBin: TCheckBox;
-    SubfolderExp: TCheckBox;
     Label67: TLabel;
     Label68: TLabel;
     Label69: TLabel;
@@ -254,21 +253,14 @@ type
     SettlePixel: TEdit;
     SettleMinTime: TEdit;
     SettleMaxTime: TEdit;
-    FileFiltername: TCheckBox;
-    FileDate: TCheckBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     Label18: TLabel;
     Label19: TLabel;
-    FileObjname: TCheckBox;
     Label20: TLabel;
     Label21: TLabel;
     Label22: TLabel;
     DitherPixel: TEdit;
-    SubfolderStep: TCheckBox;
-    SubfolderSequence: TCheckBox;
-    SubfolderObjname: TCheckBox;
-    SubfolderFrametype: TCheckBox;
     PHDhostname: TEdit;
     PHDport: TEdit;
     ElbrusFolder: TEdit;
@@ -332,10 +324,15 @@ type
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDisableBacklashClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
+    procedure BtnFileDefaultClick(Sender: TObject);
+    procedure BtnFolderDefaultClick(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
+    procedure FileOrFolderOptionsClick(Sender: TObject);
+    procedure FileOrFolderOptionsColRowMoved(Sender: TObject; IsColumn: Boolean;
+      sIndex, tIndex: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure latChange(Sender: TObject);
@@ -358,6 +355,7 @@ type
     procedure SetLongitude(value:double);
     procedure SetLinGuiderUseUnixSocket(value: boolean);
     function  GetLinGuiderUseUnixSocket: boolean;
+    procedure FileOrFolderOptionsRenumber(G: TStringGrid);
   public
     { public declarations }
     property Resolver: integer read GetResolver write SetResolver;
@@ -394,6 +392,8 @@ procedure Tf_option.FormShow(Sender: TObject);
 begin
   SaveTemperatureSlope:=TemperatureSlope.Text;
   f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Text<>'0.0');
+  FileOrFolderOptionsRenumber(FolderOptions);
+  FileOrFolderOptionsRenumber(FileOptions);
 end;
 
 procedure Tf_option.latChange(Sender: TObject);
@@ -496,6 +496,35 @@ SelectDirectoryDialog1.FileName:=CaptureDir.text;
 if SelectDirectoryDialog1.Execute then CaptureDir.text:=SelectDirectoryDialog1.FileName;
 end;
 
+procedure Tf_option.FileOrFolderOptionsClick(Sender: TObject);
+begin
+  with Sender as TStringGrid do begin
+    if Col=1 then begin
+     if Cells[Col,Row]='1' then
+        Cells[Col,Row]:='0'
+     else
+        Cells[Col,Row]:='1'
+    end;
+  end;
+end;
+
+procedure Tf_option.FileOrFolderOptionsRenumber(G: TStringGrid);
+var i: integer;
+begin
+  with G do begin
+    for i:=0 to RowCount-1 do begin
+      Cells[0,i]:=IntToStr(i+1);
+    end;
+  end;
+end;
+
+procedure Tf_option.FileOrFolderOptionsColRowMoved(Sender: TObject;
+  IsColumn: Boolean; sIndex, tIndex: Integer);
+var i: integer;
+begin
+  FileOrFolderOptionsRenumber(TStringGrid(Sender));
+end;
+
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
@@ -519,6 +548,27 @@ end;
 procedure Tf_option.BtnDisableFocuserTempClick(Sender: TObject);
 begin
   FocuserTempCoeff.Text:='0.0';
+end;
+
+procedure Tf_option.BtnFileDefaultClick(Sender: TObject);
+var i:integer;
+begin
+  for i:=0 to FileNameCount-1 do begin
+    if i in [0,1,5] then
+      FileOptions.Cells[1,i]:='1'
+    else
+      FileOptions.Cells[1,i]:='0';
+    FileOptions.Cells[2,i]:=FilenameName[i];
+  end;
+end;
+
+procedure Tf_option.BtnFolderDefaultClick(Sender: TObject);
+var i:integer;
+begin
+  for i:=0 to SubDirCount-1 do begin
+    FolderOptions.Cells[1,i]:='0';
+    FolderOptions.Cells[2,i]:=SubDirName[i];
+  end;
 end;
 
 procedure Tf_option.CheckStartNearHFD(Sender: TObject);

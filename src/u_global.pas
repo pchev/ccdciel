@@ -46,6 +46,8 @@ type
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
   TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
   TIndiTransfert=(itNetwork,itDisk);
+  TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin);
+  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate);
 
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
@@ -175,7 +177,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.19';
+  ccdcielver = '0.9.20';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 2;
   blank=' ';
@@ -242,7 +244,22 @@ const
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
-
+  SubDirCount=6;
+  FileNameCount=6;
+  SubDirName: array[0..SubDirCount-1] of string =('Subfolder by sequence name',
+                                                'Subfolder by frame type',
+                                                'Subfolder by object name',
+                                                'Subfolder by plan step',
+                                                'Subfolder by exposure time',
+                                                'Subfolder by binning'
+                                                );
+  FilenameName: array[0..FileNameCount-1] of string=('Object name',
+                                                   'Filter',
+                                                   'Exposure time',
+                                                   'Binning',
+                                                   'CCD temperature',
+                                                   'Date / Sequence'
+                                                   );
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
@@ -336,6 +353,10 @@ var
   FlatMinExp,FlatMaxExp: double;
   FlatLevelMin,FlatLevelMax: integer;
   FlatSlewTime: TDateTime;
+  SubDirOpt: array[0..SubDirCount-1] of TSubDirList;
+  SubDirActive: array[0..SubDirCount-1] of Boolean;
+  FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
+  FilenameActive: array[0..FileNameCount-1] of Boolean;
 
   procedure globalmsg(str:string);
 
