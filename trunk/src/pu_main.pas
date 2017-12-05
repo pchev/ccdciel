@@ -1399,10 +1399,57 @@ begin
 end;
 
 procedure Tf_main.UpdConfig(oldver:string);
+var ok:boolean;
+    i: integer;
 begin
   if oldver<'0.0.1a' then begin
      config.DeletePath('/Tools');
      config.Flush;
+  end;
+  if oldver<'0.9.20' then begin
+    for i:=0 to SubDirCount-1 do begin
+      case i of
+        0: ok:=config.GetValue('/Files/SubfolderSequence',false);
+        1: ok:=config.GetValue('/Files/SubfolderFrametype',false);
+        2: ok:=config.GetValue('/Files/SubfolderObjname',false);
+        3: ok:=config.GetValue('/Files/SubfolderStep',false);
+        4: ok:=config.GetValue('/Files/SubfolderExposure',false);
+        5: ok:=config.GetValue('/Files/SubfolderBinning',false);
+        else ok:=false;
+      end;
+      SubDirOpt[i]:=TSubDirList(i);
+      SubDirActive[i]:=ok;
+      config.SetValue('/Files/SubDirOpt'+inttostr(i),ord(SubDirOpt[i]));
+      config.SetValue('/Files/SubDirActive'+inttostr(i),SubDirActive[i]);
+    end;
+    for i:=0 to FileNameCount-1 do begin
+      case i of
+        0: ok:=config.GetValue('/Files/FilenameObjname',true);
+        1: ok:=config.GetValue('/Files/FilenameFilter',true);
+        2: ok:=config.GetValue('/Files/FilenameExposure',false);
+        3: ok:=config.GetValue('/Files/FilenameBinning',false);
+        4: ok:=config.GetValue('/Files/FilenameCCDtemp',false);
+        5: ok:=config.GetValue('/Files/FilenameDate',true);
+        else ok:=false;
+      end;
+      FilenameOpt[i]:=TFilenameList(i);
+      FilenameActive[i]:=ok;
+      config.SetValue('/Files/FileNameOpt'+inttostr(i),ord(FilenameOpt[i]));
+      config.SetValue('/Files/FileNameActive'+inttostr(i),FilenameActive[i]);
+    end;
+    config.DeleteValue('/Files/SubfolderSequence');
+    config.DeleteValue('/Files/SubfolderObjname');
+    config.DeleteValue('/Files/SubfolderStep');
+    config.DeleteValue('/Files/SubfolderFrametype');
+    config.DeleteValue('/Files/SubfolderExposure');
+    config.DeleteValue('/Files/SubfolderBinning');
+    config.DeleteValue('/Files/FilenameObjname');
+    config.DeleteValue('/Files/FilenameFilter');
+    config.DeleteValue('/Files/FilenameExposure');
+    config.DeleteValue('/Files/FilenameBinning');
+    config.DeleteValue('/Files/FilenameCCDtemp');
+    config.DeleteValue('/Files/FilenameDate');
+    SaveConfig;
   end;
 end;
 
@@ -2076,6 +2123,14 @@ begin
   FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',60.0);
   FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
   FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
+  for i:=0 to SubDirCount-1 do begin
+    SubDirOpt[i]:=TSubDirList(round(config.GetValue('/Files/SubDirOpt'+inttostr(i),i)));
+    SubDirActive[i]:=config.GetValue('/Files/SubDirActive'+inttostr(i),false);
+  end;
+  for i:=0 to FileNameCount-1 do begin
+    FileNameOpt[i]:=TFilenameList(round(config.GetValue('/Files/FileNameOpt'+inttostr(i),i)));
+    FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
+  end;
 end;
 
 procedure Tf_main.SaveConfig;
@@ -3481,6 +3536,7 @@ begin
     ShowMessage('Disconnect the camera before to change the configuration.');
     exit;
   end;
+  loadopt:=false;
   f_setup.DefaultCameraInterface:=camera.CameraInterface;
   f_setup.DefaultMountInterface:=mount.MountInterface;
   f_setup.DefaultWheelInterface:=wheel.WheelInterface;
@@ -3573,18 +3629,20 @@ begin
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
-   f_option.SubfolderSequence.Checked:=config.GetValue('/Files/SubfolderSequence',false);
-   f_option.SubfolderObjname.Checked:=config.GetValue('/Files/SubfolderObjname',false);
-   f_option.SubfolderStep.Checked:=config.GetValue('/Files/SubfolderStep',false);
-   f_option.SubfolderFrametype.Checked:=config.GetValue('/Files/SubfolderFrametype',false);
-   f_option.SubfolderExp.Checked:=config.GetValue('/Files/SubfolderExposure',false);
-   f_option.SubfolderBin.Checked:=config.GetValue('/Files/SubfolderBinning',false);
-   f_option.FileObjname.Checked:=config.GetValue('/Files/FilenameObjname',true);
-   f_option.FileFiltername.Checked:=config.GetValue('/Files/FilenameFilter',true);
-   f_option.FileDate.Checked:=config.GetValue('/Files/FilenameDate',true);
-   f_option.FileExp.Checked:=config.GetValue('/Files/FilenameExposure',false);
-   f_option.FileBin.Checked:=config.GetValue('/Files/FilenameBinning',false);
-   f_option.FileCCDtemp.Checked:=config.GetValue('/Files/FilenameCCDtemp',false);
+   for i:=0 to SubDirCount-1 do begin
+     f_option.FolderOptions.Cells[2,i]:=SubDirName[ord(SubDirOpt[i])];
+     if SubDirActive[i] then
+       f_option.FolderOptions.Cells[1,i]:='1'
+     else
+       f_option.FolderOptions.Cells[1,i]:='0'
+   end;
+   for i:=0 to FileNameCount-1 do begin
+    f_option.FileOptions.Cells[2,i]:=FileNameName[ord(FileNameOpt[i])];
+    if FileNameActive[i] then
+      f_option.FileOptions.Cells[1,i]:='1'
+    else
+      f_option.FileOptions.Cells[1,i]:='0'
+   end;
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -3726,18 +3784,18 @@ begin
 
    if f_option.ModalResult=mrOK then begin
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
-     config.SetValue('/Files/SubfolderSequence',f_option.SubfolderSequence.Checked);
-     config.SetValue('/Files/SubfolderObjname',f_option.SubfolderObjname.Checked);
-     config.SetValue('/Files/SubfolderStep',f_option.SubfolderStep.Checked);
-     config.SetValue('/Files/SubfolderFrametype',f_option.SubfolderFrametype.Checked);
-     config.SetValue('/Files/SubfolderExposure',f_option.SubfolderExp.Checked);
-     config.SetValue('/Files/SubfolderBinning',f_option.SubfolderBin.Checked);
-     config.SetValue('/Files/FilenameObjname',f_option.FileObjname.Checked);
-     config.SetValue('/Files/FilenameFilter',f_option.FileFiltername.Checked);
-     config.SetValue('/Files/FilenameDate',f_option.FileDate.Checked);
-     config.SetValue('/Files/FilenameExposure',f_option.FileExp.Checked);
-     config.SetValue('/Files/FilenameBinning',f_option.FileBin.Checked);
-     config.SetValue('/Files/FilenameCCDtemp',f_option.FileCCDtemp.Checked);
+     for i:=0 to SubDirCount-1 do begin
+       for n:=0 to SubDirCount-1 do
+         if SubDirName[n]=f_option.FolderOptions.Cells[2,i] then break;
+       config.SetValue('/Files/SubDirOpt'+inttostr(i),n);
+       config.SetValue('/Files/SubDirActive'+inttostr(i),f_option.FolderOptions.Cells[1,i]='1');
+     end;
+     for i:=0 to FileNameCount-1 do begin
+       for n:=0 to FileNameCount-1 do
+         if FileNameName[n]=f_option.FileOptions.Cells[2,i] then break;
+       config.SetValue('/Files/FileNameOpt'+inttostr(i),n);
+       config.SetValue('/Files/FileNameActive'+inttostr(i),f_option.FileOptions.Cells[1,i]='1');
+     end;
      config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
      config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
      n:=FilterList.Count-1;
@@ -4539,86 +4597,83 @@ end;
 
 procedure Tf_main.CameraSaveNewImage;
 var dt: Tdatetime;
-    fn,buf: string;
-    subseq,subobj,substep,subfrt,subexp,subbin: boolean;
-    fnobj,fnfilter,fndate,fnexp,fnbin,fntemp: boolean;
+    fn,fd,buf: string;
     ccdtemp: double;
-    fileseqnum: integer;
+    fileseqnum,i: integer;
 begin
 try
  dt:=NowUTC;
  // construct path
- subseq:=config.GetValue('/Files/SubfolderSequence',false);
- subobj:=config.GetValue('/Files/SubfolderObjname',false);
- subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
- substep:=config.GetValue('/Files/SubfolderStep',false);
- subexp:=config.GetValue('/Files/SubfolderExposure',false);
- subbin:=config.GetValue('/Files/SubfolderBinning',false);
- fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
- if subseq and f_sequence.Running then fn:=slash(fn+trim(f_sequence.CurrentName));
- if subfrt then fn:=slash(fn+trim(f_capture.FrameType.Text));
- if subobj then begin
-   buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
-   buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
-   buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
-   buf:=StringReplace(buf,':','_',[rfReplaceAll]);
-   fn:=slash(fn+buf);
+ fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+ for i:=0 to SubDirCount-1 do begin
+   case SubDirOpt[i] of
+     sdSeq : if SubDirActive[i] and f_sequence.Running then fd:=slash(fd+trim(f_sequence.CurrentName));
+     sdFrt : if SubDirActive[i] then fd:=slash(fd+trim(f_capture.FrameType.Text));
+     sdObj : if SubDirActive[i] then begin
+               buf:=StringReplace(f_capture.fname.Text,' ','',[rfReplaceAll]);
+               buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
+               buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
+               buf:=StringReplace(buf,':','_',[rfReplaceAll]);
+               fd:=slash(fd+buf);
+             end;
+     sdStep: if SubDirActive[i] and f_sequence.Running then begin
+                if f_sequence.StepTotalCount>1 then begin
+                  fd:=slash(fd+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
+                end
+                else begin
+                  fd:=slash(fd+trim(f_sequence.CurrentStep));
+                end;
+             end;
+     sdExp : if SubDirActive[i] then begin
+               if FlatAutoExposure and (camera.FrameType=FLAT) then
+                  fd:=slash(fd+'auto')
+               else
+                  fd:=slash(fd+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
+             end;
+     sdBin : if SubDirActive[i] then fd:=slash(fd+f_capture.Binning.Text);
+   end;
  end;
- if substep and f_sequence.Running then begin
-    if f_sequence.StepTotalCount>1 then begin
-      fn:=slash(fn+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
-    end
-    else begin
-      fn:=slash(fn+trim(f_sequence.CurrentStep));
-    end;
- end;
- if subexp then begin
-   if FlatAutoExposure and (camera.FrameType=FLAT) then
-      fn:=slash(fn+'auto')
-   else
-      fn:=slash(fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
- end;
- if subbin then fn:=slash(fn+f_capture.Binning.Text);
- ForceDirectoriesUTF8(fn);
+ ForceDirectoriesUTF8(fd);
  // construct file name
- fnobj:=config.GetValue('/Files/FilenameObjname',true);
- fnfilter:=config.GetValue('/Files/FilenameFilter',true);
- fndate:=config.GetValue('/Files/FilenameDate',true);
- fnexp:=config.GetValue('/Files/FilenameExposure',false);
- fnbin:=config.GetValue('/Files/FilenameBinning',false);
- fntemp:=config.GetValue('/Files/FilenameCCDtemp',false);
- if fnobj then begin
-   if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
-       buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
-       buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
-       buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
-       buf:=StringReplace(buf,':','_',[rfReplaceAll]);
-       fn:=fn+buf+'_';
-   end
-   else
-       fn:=fn+trim(f_capture.FrameType.Text)+'_';
+ fn:='';
+ for i:=0 to FileNameCount-1 do begin
+   case FileNameOpt[i] of
+     fnObj : if FileNameActive[i] then begin
+             if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
+                buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
+                buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
+                buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
+                buf:=StringReplace(buf,':','_',[rfReplaceAll]);
+                fn:=fn+buf+'_';
+             end
+             else
+                fn:=fn+trim(f_capture.FrameType.Text)+'_';
+             end;
+     fnFilter: if FileNameActive[i] and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
+                fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
+
+     fnExp : if FileNameActive[i] then begin
+               if FlatAutoExposure and (camera.FrameType=FLAT) then
+                  fn:=fn+'auto_'
+               else
+                  fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
+             end;
+     fnBin : if FileNameActive[i] then fn:=fn+f_capture.Binning.Text+'_';
+     fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
+                fn:=fn+formatfloat(f1,ccdtemp)+'C_';
+     fnDate: if FileNameActive[i] then
+                fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)+'_'
+             else begin
+                fileseqnum:=1;
+                while FileExistsUTF8(slash(fd)+fn+IntToStr(fileseqnum)+'.fits') do
+                  inc(fileseqnum);
+                fn:=fn+IntToStr(fileseqnum)+'_';
+             end;
+   end;
  end;
- if fnfilter and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-     fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
- if fnexp then begin
-   if FlatAutoExposure and (camera.FrameType=FLAT) then
-      fn:=fn+'auto_'
-   else
-      fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
- end;
- if fnbin then
-    fn:=fn+f_capture.Binning.Text+'_';
- if fntemp and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
-    fn:=fn+formatfloat(f1,ccdtemp)+'C_';
- if fndate then
-    fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)
- else begin
-    fileseqnum:=1;
-    while FileExistsUTF8(fn+IntToStr(fileseqnum)+'.fits') do
-      inc(fileseqnum);
-    fn:=fn+IntToStr(fileseqnum);
- end;
- fn:=fn+'.fits';
+ if fn<>'' then
+    delete(fn,length(fn),1); // remove last _
+ fn:=slash(fd)+fn+'.fits';
  // save the file
  fits.SaveToFile(fn);
  NewMessage('Saved file '+fn);
