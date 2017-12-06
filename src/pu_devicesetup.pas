@@ -44,7 +44,9 @@ type
     BtnAboutRotator: TButton;
     BtnChooseRotator: TButton;
     BtnNewProfile: TButton;
+    BtnDeleteProfile: TButton;
     BtnSetupRotator: TButton;
+    BtnCopyProfile: TButton;
     CameraAutoLoadConfig: TCheckBox;
     BtnAboutCamera1: TButton;
     BtnAboutCamera2: TButton;
@@ -143,6 +145,8 @@ type
     Filterwheel: TTabSheet;
     procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
+    procedure BtnCopyProfileClick(Sender: TObject);
+    procedure BtnDeleteProfileClick(Sender: TObject);
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
@@ -217,17 +221,17 @@ ProfileLock:=true;
 try
 ProfileList.Clear;
 ProfileList.Items.Add('default');
-n:=0;
 i:=FindFirstUTF8(slash(ConfigDir)+'ccdciel_*.conf',0,fs);
 while i=0 do begin
   buf:=ExtractFileNameOnly(fs.Name);
   delete(buf,1,8);
   j:=ProfileList.Items.Add(buf);
-  if buf=profile then n:=j;
   i:=FindNextUTF8(fs);
 end;
 FindCloseUTF8(fs);
-ProfileList.ItemIndex:=n;
+n:=ProfileList.Items.IndexOf(profile);
+if n>=0 then ProfileList.ItemIndex:=n
+        else ProfileList.ItemIndex:=0;
 finally
   ProfileLock:=false;
 end;
@@ -712,11 +716,11 @@ begin
   end;
 end;
 
-procedure Tf_setup.BtnNewProfileClick(Sender: TObject);
+procedure Tf_setup.BtnCopyProfileClick(Sender: TObject);
 var newp,curconfig,newconfig:string;
   n:integer;
 begin
-  newp:=FormEntry(self,'New profile','');
+  newp:=FormEntry(self,'Copy current profile to','');
   newp:=trim(newp);
   if (newp<>'')and(newp<>'default') then begin
     if profile='default' then
@@ -734,6 +738,45 @@ begin
     else ShowMessage('Error creating file '+newconfig);
   end;
 end;
+
+procedure Tf_setup.BtnNewProfileClick(Sender: TObject);
+var newp,curconfig,newconfig:string;
+  n:integer;
+  f:textfile;
+begin
+  newp:=FormEntry(self,'Create new empty profile','');
+  newp:=trim(newp);
+  if (newp<>'')and(newp<>'default') then begin
+    newconfig:=slash(ConfigDir)+'ccdciel_'+newp+'.conf';
+    AssignFile(f,newconfig);
+    Rewrite(f);
+    writeln(f,'<?xml version="1.0" encoding="utf-8"?>');
+    writeln(f,'<CONFIG>');
+    writeln(f,'</CONFIG>');
+    CloseFile(f);
+    LoadProfileList;
+    n:=ProfileList.Items.IndexOf(newp);
+    ProfileList.ItemIndex:=n;
+    ProfileListChange(Sender);
+  end;
+end;
+
+procedure Tf_setup.BtnDeleteProfileClick(Sender: TObject);
+var fn: string;
+    n: integer;
+begin
+  if profile='default' then exit;
+  fn:='ccdciel_'+profile+'.conf';
+  fn:=slash(ConfigDir)+fn;
+  if MessageDlgPos('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0,mouse.CursorPos.x,mouse.CursorPos.y)=mrYes then begin
+     DeleteFileUTF8(fn);
+     LoadProfileList;
+     n:=ProfileList.Items.IndexOf('default');
+     ProfileList.ItemIndex:=n;
+     ProfileListChange(Sender);
+  end;
+end;
+
 
 end.
 
