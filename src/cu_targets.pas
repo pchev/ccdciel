@@ -870,7 +870,7 @@ begin
 end;
 
 function T_Targets.Slew(ra,de: double; precision,planprecision: boolean):boolean;
-var err,maxerr: double;
+var err: double;
     prec,exp:double;
     fi,cormethod,bin,maxretry,delay: integer;
 begin
@@ -896,11 +896,10 @@ begin
   end
   else begin
     delay:=config.GetValue('/PrecSlew/Delay',5);
-    maxerr:=max(2*prec,1/60);
     Mount.Slew(ra, de);
     Wait(delay);
-    err:=rad2deg*rmod(AngularDistance(deg2rad*15*ra,deg2rad*de,deg2rad*15*mount.RA,deg2rad*mount.Dec)+pi2,pi2);
-    result:=(err<maxerr);
+    err:=0;
+    result:=true;
     if result and planprecision then begin
       FTargetCoord:=true;
       FTargetRA:=deg2rad*15*ra;
