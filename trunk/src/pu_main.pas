@@ -1329,7 +1329,6 @@ begin
   StartupTimer.Enabled:=false;
   if FOpenSetup then begin
      MenuSetup.Click;
-     MenuOptions.Click;
   end
     else f_script.RunStartupScript;
 end;
@@ -3615,6 +3614,9 @@ begin
     else
        SetConfig;
        if loadopt then SetOptions;
+
+    if config.GetValue('/Filters/Num',-1)<0 then //new empty profile, open options
+       MenuOptions.Click;
   end;
 end;
 
