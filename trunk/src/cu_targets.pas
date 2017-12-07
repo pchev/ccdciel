@@ -563,7 +563,6 @@ var t: TTarget;
 begin
   result:=false;
   if not FRunning then exit;
-  FTargetInitializing:=true;
   try
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
@@ -605,6 +604,8 @@ begin
          exit;
        end;
     end;
+
+    FTargetInitializing:=true;
 
     if ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
       if Autoguider<>nil then begin
@@ -835,7 +836,7 @@ function T_Targets.GetBusy: boolean;
 var t: TTarget;
     p: T_Plan;
 begin
-  result:= FInitializing ;
+  result:= FInitializing and FTargetInitializing;
   if FRunning and(FCurrentTarget>=0) then begin
     t:=Targets[FCurrentTarget];
     if t<>nil then begin
