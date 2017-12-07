@@ -298,8 +298,11 @@ end;
 procedure Tf_EditTargets.ClearScriptList;
 var i,k: integer;
 begin
+  try
   for i:=0 to ScriptList.Items.Count-1 do begin
     ScriptList.Items.Objects[i].Free;
+  end;
+  except
   end;
   ScriptList.Clear;
 end;

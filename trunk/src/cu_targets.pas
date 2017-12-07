@@ -416,16 +416,25 @@ end;
 
 procedure T_Targets.ForceNextTarget;
 var p: T_Plan;
+    t: TTarget;
 begin
  msg('Try next target');
  if FRunning then begin
-   p:=t_plan(Ftargets[FCurrentTarget].plan);
+   t:=Targets[FCurrentTarget];
+   p:=t_plan(t.plan);
+   TargetRepeatCount:=t.repeatcount;
+   if Autofocusing then begin
+     CancelAutofocus:=true;
+     msg('Request to stop autofocus ...');
+     Camera.AbortExposure;
+     if Mount.MountSlewing then Mount.AbortMotion;
+     if Astrometry.Busy then Astrometry.StopAstrometry;
+   end;
    if p.Running then begin
+     msg('Stop plan '+Ftargets[FCurrentTarget].planname);
      p.Stop;
-     msg('Plan '+Ftargets[FCurrentTarget].planname+' stopped.');
      ShowDelayMsg('');
    end;
-   NextTarget;
  end
  else msg('Not running, nothing to do.');
 end;
@@ -436,6 +445,7 @@ begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
   InplaceAutofocus:=false;
+  CancelAutofocus:=false;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
    if Targets[FCurrentTarget].objectname='Script' then begin

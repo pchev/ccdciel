@@ -1610,6 +1610,7 @@ end;
 procedure Tf_main.FormDestroy(Sender: TObject);
 var i: integer;
 begin
+  try
   camera.Free;
   wheel.Free;
   focuser.Free;
@@ -1629,6 +1630,8 @@ begin
   end
   else NewMessage('Program exit');
   CloseLog;
+  except
+  end;
 end;
 
 procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
