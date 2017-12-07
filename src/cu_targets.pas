@@ -96,7 +96,7 @@ type
       FUnattended: boolean;
       FName: string;
     public
-      FTargetInitializing: boolean;
+      FTargetInitializing, FWaitStarting: boolean;
       TargetRepeatCount, TargetTotalCount: integer;
       constructor Create(AOwner: TComponent); override;
       destructor  Destroy; override;
@@ -124,6 +124,7 @@ type
       property TargetRA: double read FTargetRA;
       property TargetDE: double read FTargetDE;
       property TargetInitializing: boolean read FTargetInitializing;
+      property WaitStarting: boolean read FWaitStarting;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
       property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
@@ -147,6 +148,7 @@ constructor T_Targets.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FTargetInitializing:=false;
+  FWaitStarting:=false;
   NumTargets := 0;
   FTargetsRepeat:=1;
   Frunning:=false;
@@ -284,6 +286,8 @@ var hm,he: double;
     twok,wtok,nd: boolean;
     stw:integer;
 begin
+  try
+  FWaitStarting:=true;
   FTargetsRepeatCount:=0;
   FCurrentTarget:=-1;
   FTargetCoord:=false;
@@ -339,6 +343,9 @@ begin
     msg('Starting sequence '+FName)
   else
     msg('Starting sequence '+FName+' repeat '+inttostr(FTargetsRepeatCount+1)+'/'+inttostr(FTargetsRepeat));
+  finally
+    FWaitStarting:=false;
+  end;
   NextTarget;
 end;
 
@@ -564,6 +571,7 @@ begin
   result:=false;
   if not FRunning then exit;
   try
+  FWaitStarting:=true;
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg('Initialize target '+t.objectname);
@@ -606,6 +614,7 @@ begin
     end;
 
     FTargetInitializing:=true;
+    FWaitStarting:=false;
 
     if ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
       if Autoguider<>nil then begin
@@ -646,6 +655,7 @@ begin
   end;
   finally
     FTargetInitializing:=false;
+    FWaitStarting:=false;
   end;
 end;
 
