@@ -367,7 +367,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse, LockMouseWheel: boolean;
-    Capture,Preview,meridianflipping,learningvcurve: boolean;
+    Capture,Preview,learningvcurve: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -6234,6 +6234,7 @@ var ra,de,hh,a,h,tra,tde,err: double;
     mount.AbortMotion;
     if f_capture.Running then CameraExposureAborted(nil);
     if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
+    meridianflipping:=false;
   end;
 begin
   result:=-1;
@@ -6285,6 +6286,7 @@ begin
        (MeridianDelay1=0)
       then begin                    // Do meridian action
       if MeridianOption=1 then begin  // Flip
+        try
         meridianflipping:=true;
         if mount.PierSide=pierUnknown then begin
           NewMessage('Mount is not reporting pier side, meridian flip can be unreliable.');
@@ -6431,9 +6433,11 @@ begin
         end;
         Wait(2);
         f_capture.DitherNum:=0; // no dither after flip
-        meridianflipping:=false;
         NewMessage('Meridian flip finished');
         StatusBar1.Panels[1].Text := '';
+        finally
+          meridianflipping:=false;
+        end;
       end else begin  // Abort
         DoAbort;
       end;

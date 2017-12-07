@@ -344,6 +344,7 @@ var
   FocusStarsBlacklist: string;
   AutofocusTolerance, AutofocusMinSNR: double;
   WaitTillrunning, cancelWaitTill: boolean;
+  MeridianFlipping: boolean;
   horizonlist: Thorizonlist;
   HorizonMax, HorizonMin, ElevationMin: double;
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
