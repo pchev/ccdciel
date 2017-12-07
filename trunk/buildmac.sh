@@ -22,7 +22,7 @@ currentrev=$(LANG=C svn info . | grep Revision: | sed 's/Revision: //')
   rm -rf $basedir
 
 # make i386  Mac version
-  ./configure $configopt prefix=$builddir target=i386-darwin
+  ./configure $configopt prefix=$builddir target=i386-darwin,x86_64-darwin
   if [[ $? -ne 0 ]]; then exit 1;fi
   make CPU_TARGET=i386 clean
   make CPU_TARGET=i386
