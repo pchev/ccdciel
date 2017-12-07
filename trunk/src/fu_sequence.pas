@@ -655,10 +655,10 @@ end;
 procedure Tf_sequence.StopSequence;
 begin
  StatusTimer.Enabled:=false;
+ if targets.TargetInitializing or targets.WaitStarting then led.Brush.Color:=clRed;
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
- if targets.TargetInitializing then led.Brush.Color:=clRed;
 end;
 
 procedure Tf_sequence.AbortSequence;
