@@ -1445,7 +1445,7 @@ begin
          case MathOperator of
            moAdd: x:=x+y;
            moSub: x:=x-y;
-           moMean: x:=x+y/2;
+           moMean: x:=(x+y)/2;
            moMult: x:=x*y;
            moDiv : x:=x/y;
          end;
