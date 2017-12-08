@@ -1742,7 +1742,7 @@ if LockMouse then exit;
          end;
        end
     else sval:='';
-    s:=Starwindow div camera.BinX;
+    s:=Starwindow div fits.HeaderInfo.BinX;
     if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
       f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
       if vmax>0 then begin
@@ -3152,7 +3152,7 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*camera.BinX),xc1,yc1,vmax);
+   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
@@ -4889,7 +4889,7 @@ if fits.HeaderInfo.naxis>0 then begin
   img_Height:=ImaBmp.Height;
   if Preview or Capture then begin // not on control exposure
     if f_starprofile.AutofocusRunning then
-       f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
+       f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
     else if f_starprofile.FindStar or f_starprofile.ChkFocus.Checked then
       f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
   end;
@@ -5004,11 +5004,11 @@ begin
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
      if ImgZoom=0 then begin
-       s:=round((Starwindow/camera.BinX/2)*ImgScale0);
+       s:=round((Starwindow/fits.HeaderInfo.BinX/2)*ImgScale0);
        r:=round(f_starprofile.HFD*ImgScale0/2);
      end
      else  begin
-       s:=round(ImgZoom*Starwindow/camera.BinX/2);
+       s:=round(ImgZoom*Starwindow/fits.HeaderInfo.BinX/2);
        r:=round(ImgZoom*f_starprofile.HFD/2);
      end;
      with Image1.Canvas do begin
@@ -5201,7 +5201,7 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-    f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*camera.BinX),xc,yc,vmax);
+    f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -5619,7 +5619,7 @@ begin
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*camera.BinX),xc,yc,vmax);
+  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
   f_starprofile.FindStar:=(vmax>0);
   f_starprofile.StarX:=xc;
   f_starprofile.StarY:=yc;
