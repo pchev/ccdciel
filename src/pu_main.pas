@@ -1655,7 +1655,7 @@ var x,y: integer;
 begin
  if fits.HeaderInfo.valid and (not f_starprofile.AutofocusRunning) then begin
    Screen2fits(Mx,My,x,y);
-   f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+   f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
    Image1.Invalidate;
  end;
 end;
@@ -3071,7 +3071,7 @@ begin
        f_vcurve.LoadCurve;
        exit;
      end;
-     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
      hfdlist[j-1]:=f_starprofile.HFD;
      NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    end;
@@ -4891,7 +4891,7 @@ if fits.HeaderInfo.naxis>0 then begin
     if f_starprofile.AutofocusRunning then
        f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
     else if f_starprofile.FindStar or f_starprofile.ChkFocus.Checked then
-      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div camera.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,mount.FocaleLength,camera.PixelSize);
+      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
   end;
   if f_visu.BullsEye then begin
     co:=ColorToBGRA(clRed);

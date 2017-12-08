@@ -34,10 +34,10 @@ type
  TFitsInfo = record
             valid, solved: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
-            Frx,Fry,Frwidth,Frheight: integer;
+            Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
             bzero,bscale,dmax,dmin,blank : double;
             equinox,ra,dec,crval1,crval2: double;
-            pixsz1,pixsz2,pixratio: double;
+            pixsz1,pixsz2,pixratio,focallen: double;
             objects,ctype1,ctype2 : string;
             end;
 
@@ -706,6 +706,7 @@ with FFitsInfo do begin
  valid:=false; solved:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
  objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
+ focallen:=0; BinX:=1; BinY:=1;
  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
@@ -724,8 +725,11 @@ with FFitsInfo do begin
     if (keyword='THRESH') then dmax:=strtofloat(buf);
     if (keyword='THRESL') then dmin:=strtofloat(buf);
     if (keyword='BLANK') then blank:=strtofloat(buf);
+    if (keyword='FOCALLEN') then focallen:=strtofloat(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
     if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
+    if (keyword='XBINNING') then BinX:=StrToInt(buf);
+    if (keyword='YBINNING') then BinY:=StrToInt(buf);
     if (keyword='FRAMEX') then Frx:=round(StrToFloat(buf));
     if (keyword='FRAMEY') then Fry:=round(StrToFloat(buf));
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
