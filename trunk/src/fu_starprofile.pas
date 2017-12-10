@@ -186,19 +186,25 @@ begin
  terminated:=false;
  FirstFrame:=true;
  FAutofocusResult:=false;
- FfocuserSpeed:=AutofocusMaxSpeed;
- focuser.FocusSpeed:=FfocuserSpeed;
- focuserdirection:=AutofocusMoveDir;
  FPreFocusPos:=focuser.FocusPosition;
- AutofocusMeanStep:=afmStart;
- if focuserdirection=FocusDirOut then
-    AutofocusVcStep:=vcsStartL
-  else
-    AutofocusVcStep:=vcsStartR;
+ focuserdirection:=AutofocusMoveDir;
  case AutofocusMode of
-   afVcurve   : msg('Autofocus start Vcurve');
-   afMean     : msg('Autofocus start Dynamic curve');
-   afIterative: msg('Autofocus start Iterative focus');
+   afVcurve   : begin
+                msg('Autofocus start Vcurve');
+                if focuserdirection=FocusDirOut then
+                   AutofocusVcStep:=vcsStartL
+                 else
+                   AutofocusVcStep:=vcsStartR;
+                end;
+   afMean     : begin
+                msg('Autofocus start Dynamic curve');
+                AutofocusMeanStep:=afmStart;
+                end;
+   afIterative: begin
+                msg('Autofocus start Iterative focus');
+                FfocuserSpeed:=AutofocusMaxSpeed;
+                focuser.FocusSpeed:=FfocuserSpeed;
+                end;
  end;
 end;
 
