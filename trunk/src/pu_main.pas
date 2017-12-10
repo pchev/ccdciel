@@ -5363,7 +5363,7 @@ begin
    f_starprofile.ChkAutofocus.Checked:=false;
    exit;
  end;
- if (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
+ if(AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
    NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
    f_starprofile.ChkAutofocus.Checked:=false;
    exit;
@@ -5591,7 +5591,7 @@ begin
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
   end;
-  if (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
+  if (AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
     NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
     f_starprofile.ChkAutofocus.Checked:=false;
     exit;
