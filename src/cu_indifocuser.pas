@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_focuser, indibaseclient, indibasedevice, indiapi, indicom,
-     u_global, ExtCtrls, Forms, Classes, SysUtils;
+     u_global, u_utils, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
@@ -385,6 +385,7 @@ if FocusAbsolutePosition<>nil then begin
   indiclient.sendNewNumber(FocusAbsolutePosition);
   FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusAbsolutePosition,60000);
+  if FDelay>0 then wait(FDelay);
 end;
 end;
 
@@ -413,6 +414,7 @@ if FocusRelativePosition<>nil then begin
   indiclient.sendNewNumber(FocusRelativePosition);
   FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusRelativePosition,60000);
+  if FDelay>0 then wait(FDelay);
 end;
 end;
 
@@ -457,6 +459,7 @@ if (FocusTimer<>nil) then begin
   FocusTimer.np[0].value:=p;
   indiclient.sendNewNumber(FocusTimer);
   indiclient.WaitBusy(FocusTimer);
+  if FDelay>0 then wait(FDelay);
 end;
 end;
 

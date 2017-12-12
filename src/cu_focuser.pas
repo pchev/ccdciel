@@ -44,6 +44,7 @@ T_focuser = class(TComponent)
     FAutoLoadConfig: boolean;
     FLastDirection: boolean;
     FhasTemperature: boolean;
+    FDelay: integer;
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -66,6 +67,7 @@ T_focuser = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     procedure FocusIn; virtual; abstract;
     procedure FocusOut; virtual; abstract;
+    property Delay: integer read FDelay write FDelay;
     property LastDirection: boolean read FLastDirection;
     property FocuserInterface: TDevInterface read FFocuserInterface;
     property Status: TDeviceStatus read FStatus;
@@ -98,6 +100,7 @@ begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
   FTimeOut:=100;
+  FDelay:=0;
   FhasTemperature:=false;
 end;
 

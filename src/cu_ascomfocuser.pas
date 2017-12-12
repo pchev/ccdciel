@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_focuser, u_global,
+uses cu_focuser, u_global, u_utils,
     {$ifdef mswindows}
     indiapi, Variants, comobj,
     {$endif}
@@ -265,7 +265,7 @@ begin
    V.Move(p);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
-
+   if FDelay>0 then Wait(FDelay);
    except
     on E: Exception do msg('Focuser '+Fdevice+' Error, can''t move to. ' + E.Message);
    end;
@@ -335,7 +335,7 @@ begin
    V.Move(i);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
-
+   if FDelay>0 then Wait(FDelay);
    except
     on E: Exception do msg('Focuser '+Fdevice+' Set relative position error: ' + E.Message);
    end;

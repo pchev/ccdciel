@@ -322,7 +322,7 @@ var
   FocuserTemp, FocuserLastTemp, FocuserTempCoeff: double;
   FocuserPositionMin, FocuserPositionMax: integer;
   AutofocusMode:TAutofocusMode;
-  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,AutofocusBinning: integer;
+  AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,FocuserDelay,AutofocusBinning: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;
   AutofocusExposure,AutofocusExposureFact:double;
   AutofocusMoveDir: boolean;
