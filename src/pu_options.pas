@@ -534,7 +534,7 @@ procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
-  PanelNearFocus.Visible:=(Autofocusmode.ItemIndex<>1);
+  PanelNearFocus.Visible:=true;
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
