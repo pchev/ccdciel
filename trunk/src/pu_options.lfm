@@ -946,6 +946,7 @@ object f_option: Tf_option
           Hint = 'The size of the frame used to detect a star. '#10'This is in unbinned pixel and must be bigger than the highest HFD you can reach when autofocusing'
           Top = 4
           Width = 54
+          OnEditingDone = CheckFocusWindow
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
@@ -973,6 +974,7 @@ object f_option: Tf_option
           Hint = 'The camera frame used during focus operation to speedup the image download from camera.'#10'This value is in unbinned pixel and must be bigger than the star detection window.'
           Top = 33
           Width = 54
+          OnEditingDone = CheckFocusWindow
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
@@ -1146,23 +1148,23 @@ object f_option: Tf_option
         TabOrder = 1
         object Label49: TLabel
           Left = 8
-          Height = 19
+          Height = 11
           Top = 4
-          Width = 86
+          Width = 71
           Caption = 'Exposure time'
           ParentColor = False
         end
         object Label51: TLabel
           Left = 280
-          Height = 19
+          Height = 11
           Top = 4
-          Width = 49
+          Width = 40
           Caption = 'seconds'
           ParentColor = False
         end
         object AutofocusExposure: TEdit
           Left = 212
-          Height = 25
+          Height = 21
           Hint = 'The exposure time to use for the autofocus operation.'
           Top = 0
           Width = 60
@@ -1172,9 +1174,9 @@ object f_option: Tf_option
         end
         object Label58: TLabel
           Left = 8
-          Height = 19
+          Height = 11
           Top = 60
-          Width = 90
+          Width = 74
           Caption = 'Move direction'
           ParentColor = False
         end
@@ -1183,7 +1185,7 @@ object f_option: Tf_option
           Height = 21
           Hint = 'The prefered focuser direction for autofocus.'
           Top = 58
-          Width = 36
+          Width = 33
           Caption = 'In'
           Checked = True
           ParentShowHint = False
@@ -1196,7 +1198,7 @@ object f_option: Tf_option
           Height = 21
           Hint = 'The prefered focuser direction for autofocus.'
           Top = 58
-          Width = 47
+          Width = 42
           Caption = 'Out'
           ParentShowHint = False
           ShowHint = True
@@ -1213,36 +1215,36 @@ object f_option: Tf_option
           object PageVcurve: TPage
             object Label61: TLabel
               Left = 8
-              Height = 19
+              Height = 11
               Top = 72
-              Width = 313
+              Width = 261
               Caption = 'Run V curve learning again if you change any option.'
               ParentColor = False
               WordWrap = True
             end
             object Label82: TLabel
               Left = 8
-              Height = 19
+              Height = 11
               Top = 4
-              Width = 64
+              Width = 54
               Caption = 'Start focus'
               ParentColor = False
             end
             object Label83: TLabel
               Left = 176
-              Height = 19
+              Height = 11
               Top = 4
-              Width = 26
+              Width = 22
               Caption = 'HFD'
               ParentColor = False
             end
             object AutofocusStartHFD: TEdit
               Left = 213
-              Height = 25
+              Height = 21
               Hint = 'The focus starting point on the V curve used to determine the Near focus position. '#10'Use a high value near the top of the V curve but inside the measurement area. '#10'A typical value is 20.0.'
               Top = 0
               Width = 60
-              OnChange = CheckStartNearHFD
+              OnEditingDone = CheckStartNearHFD
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
@@ -1252,7 +1254,7 @@ object f_option: Tf_option
               Height = 21
               Hint = 'Try to correct for focuser slippage since the last Vcurve learning.'#10'Beware you must set the focuser temperature correction and the filters offset before to use this option.'
               Top = 24
-              Width = 142
+              Width = 123
               Caption = 'Slippage correction '
               ParentShowHint = False
               ShowHint = True
@@ -1260,15 +1262,15 @@ object f_option: Tf_option
             end
             object Label88: TLabel
               Left = 8
-              Height = 19
+              Height = 11
               Top = 48
-              Width = 222
+              Width = 187
               Caption = 'Estimated slippage since last learning'
               ParentColor = False
             end
             object AutofocusSlippageOffset: TEdit
               Left = 280
-              Height = 25
+              Height = 21
               Top = 44
               Width = 50
               ReadOnly = True
@@ -1365,42 +1367,42 @@ object f_option: Tf_option
           TabOrder = 4
           object Label48: TLabel
             Left = 8
-            Height = 19
+            Height = 11
             Top = 4
-            Width = 64
+            Width = 53
             Caption = 'Near focus'
             ParentColor = False
           end
           object Label56: TLabel
             Left = 176
-            Height = 19
+            Height = 11
             Top = 4
-            Width = 26
+            Width = 22
             Caption = 'HFD'
             ParentColor = False
           end
           object AutofocusNearHFD: TEdit
             Left = 212
-            Height = 25
+            Height = 21
             Hint = 'When a star is smaller than this HFD we consider we are approaching focus. '#10'Note this is NOT the focus HFD, the star must show an extended surface.'#10'This is the reference point for V curve method.'#10'A typical value is from 6 to 10.'
             Top = 0
             Width = 60
-            OnChange = CheckStartNearHFD
+            OnEditingDone = CheckStartNearHFD
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
           end
           object Label57: TLabel
             Left = 280
-            Height = 19
+            Height = 11
             Top = 4
-            Width = 33
+            Width = 27
             Caption = 'n.exp'
             ParentColor = False
           end
           object AutofocusNearNum: TEdit
             Left = 344
-            Height = 25
+            Height = 21
             Hint = 'The number of exposure we take to get a mean HFD value '#10'when the HFD is smaller than the value to the left.'
             Top = 0
             Width = 50
@@ -1411,15 +1413,15 @@ object f_option: Tf_option
         end
         object Label50: TLabel
           Left = 8
-          Height = 19
+          Height = 11
           Top = 32
-          Width = 46
+          Width = 37
           Caption = 'Binning'
           ParentColor = False
         end
         object AutofocusBinning: TEdit
           Left = 212
-          Height = 25
+          Height = 21
           Hint = 'The binning to use for autofocus operation.'
           Top = 28
           Width = 60
@@ -1429,23 +1431,23 @@ object f_option: Tf_option
         end
         object Label54: TLabel
           Left = 8
-          Height = 19
+          Height = 11
           Top = 88
-          Width = 123
+          Width = 103
           Caption = 'Autofocus tolerance '
           ParentColor = False
         end
         object Label55: TLabel
           Left = 176
-          Height = 19
+          Height = 11
           Top = 88
-          Width = 26
+          Width = 22
           Caption = 'HFD'
           ParentColor = False
         end
         object AutofocusTolerance: TEdit
           Left = 212
-          Height = 25
+          Height = 21
           Hint = 'The maximal HFD value to consider the autofocus a success. '#10'Beware that a too small value here will return the focuser to it''s initial position.'#10'Set a value high enough to avoid this problem.'
           Top = 84
           Width = 60
@@ -1455,7 +1457,7 @@ object f_option: Tf_option
         end
         object AutofocusMinSNR: TEdit
           Left = 344
-          Height = 25
+          Height = 21
           Hint = 'If a star measurement during autofocus return a SNR ratio value lower than this setting the autofocus is canceled.'#10'Beware that a too big value here will return the focuser to it''s initial position.'#10'Set a value low enough to avoid this problem but enough for a good measurement quality at the Near focus HFP position.'
           Top = 84
           Width = 50
@@ -1465,9 +1467,9 @@ object f_option: Tf_option
         end
         object Label81: TLabel
           Left = 280
-          Height = 19
+          Height = 11
           Top = 88
-          Width = 51
+          Width = 42
           Caption = 'min.SNR'
           ParentColor = False
         end
@@ -1483,15 +1485,15 @@ object f_option: Tf_option
         TabOrder = 2
         object Label53: TLabel
           Left = 7
-          Height = 19
+          Height = 11
           Top = 8
-          Width = 333
+          Width = 280
           Caption = 'Before automatic focus slew to a near star of magnitude'
           ParentColor = False
         end
         object FocusStarMag: TComboBox
           Left = 7
-          Height = 31
+          Height = 25
           Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
           Top = 24
           Width = 80
@@ -1512,24 +1514,24 @@ object f_option: Tf_option
         end
         object AutofocusPrecisionSlew: TEdit
           Left = 278
-          Height = 25
+          Height = 21
           Top = 27
           Width = 51
           TabOrder = 1
         end
         object Label85: TLabel
           Left = 111
-          Height = 19
+          Height = 11
           Top = 30
-          Width = 141
+          Width = 120
           Caption = 'Slew with a precision of '
           ParentColor = False
         end
         object Label86: TLabel
           Left = 335
-          Height = 19
+          Height = 11
           Top = 30
-          Width = 49
+          Width = 43
           Caption = '[arcmin]'
           ParentColor = False
         end
