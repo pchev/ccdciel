@@ -34,8 +34,8 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
-    AutofocusMeanNumPoint: TEdit;
-    AutofocusMeanMovement: TEdit;
+    AutofocusDynamicNumPoint: TEdit;
+    AutofocusDynamicMovement: TEdit;
     BtnDisableBacklash: TButton;
     BtnDisableDelay: TButton;
     BtnDisableFocuserTemp: TButton;
@@ -166,7 +166,7 @@ type
     Label65: TLabel;
     Label66: TLabel;
     MinutesPastMeridianMin: TEdit;
-    PageMean: TPage;
+    PageDynamic: TPage;
     PageNone: TPage;
     PageVcurve: TPage;
     PageIterative: TPage;
