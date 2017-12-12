@@ -806,7 +806,7 @@ begin
   end;
   // sum of multiple exposures
   if (AutofocusNearNum>1)and
-    ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve))and
+    ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve)or(AutofocusMode=afMean))and
     (not((AutofocusVcStep=vcsCheckL)or(AutofocusVcStep=vcsCheckR)))and
     (not FirstFrame)and
     (not terminated)
