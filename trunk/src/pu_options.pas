@@ -37,6 +37,7 @@ type
     AutofocusMeanNumPoint: TEdit;
     AutofocusMeanMovement: TEdit;
     BtnDisableBacklash: TButton;
+    BtnDisableDelay: TButton;
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
@@ -65,6 +66,7 @@ type
     FlatMaxExp: TEdit;
     FlatLevelMin: TEdit;
     FileOptions: TStringGrid;
+    FocuserDelay: TEdit;
     GroupBox18: TGroupBox;
     Label91: TLabel;
     Label92: TLabel;
@@ -74,6 +76,7 @@ type
     Label96: TLabel;
     FlatType: TRadioGroup;
     Label97: TLabel;
+    Label98: TLabel;
     StackShow: TCheckBox;
     StackUseDark: TCheckBox;
     StackDarkFile: TFileNameEdit;
@@ -137,7 +140,7 @@ type
     FocusStarMag: TComboBox;
     FocuserBacklash: TEdit;
     GroupBox10: TGroupBox;
-    GroupBacklash: TGroupBox;
+    GroupCorrection: TGroupBox;
     GroupBox11: TGroupBox;
     GroupBox12: TGroupBox;
     Label46: TLabel;
@@ -323,6 +326,7 @@ type
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDisableBacklashClick(Sender: TObject);
+    procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
@@ -543,6 +547,11 @@ end;
 procedure Tf_option.BtnDisableBacklashClick(Sender: TObject);
 begin
  FocuserBacklash.Text:='0';
+end;
+
+procedure Tf_option.BtnDisableDelayClick(Sender: TObject);
+begin
+  FocuserDelay.Text:='0';
 end;
 
 procedure Tf_option.BtnDisableFocuserTempClick(Sender: TObject);

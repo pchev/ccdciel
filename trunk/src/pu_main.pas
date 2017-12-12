@@ -2085,6 +2085,8 @@ begin
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
   FocuserBacklash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
+  FocuserDelay:=config.GetValue('/StarAnalysis/FocuserDelay',0);
+  if focuser<>nil then focuser.Delay:=FocuserDelay;
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
@@ -3704,6 +3706,7 @@ begin
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
    f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
+   f_option.FocuserDelay.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserDelay',FocuserDelay));
    f_option.FocuserTempCoeff.text:=FormatFloat(f2,config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff));
    f_option.AutofocusTolerance.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
    f_option.AutofocusMinSNR.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR));
@@ -3713,7 +3716,6 @@ begin
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
    f_option.AutofocusPrecisionSlew.Text:=FormatFloat(f2,config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0));
-   f_option.GroupBacklash.Visible:=(focuser.Status=devConnected)and(not focuser.hasAbsolutePosition);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
@@ -3822,6 +3824,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
      config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
+     config.SetValue('/StarAnalysis/FocuserDelay',StrToIntDef(f_option.FocuserDelay.Text,FocuserDelay));
      config.SetValue('/StarAnalysis/FocuserTempCoeff',StrToFloatDef(f_option.FocuserTempCoeff.text,FocuserTempCoeff));
      config.SetValue('/StarAnalysis/AutofocusTolerance',StrToFloatDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
      config.SetValue('/StarAnalysis/AutofocusMinSNR',StrToFloatDef(f_option.AutofocusMinSNR.Text,AutofocusMinSNR));
@@ -4486,6 +4489,7 @@ var buf: string;
 begin
   try
   // draw preview
+  StatusBar1.Panels[1].Text:='';
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
