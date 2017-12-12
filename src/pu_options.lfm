@@ -43,10 +43,10 @@ object f_option: Tf_option
     Height = 465
     Top = 0
     Width = 433
-    ActivePage = TabSheet10
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
-    TabIndex = 5
+    TabIndex = 6
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -1209,7 +1209,7 @@ object f_option: Tf_option
           Height = 98
           Top = 150
           Width = 392
-          PageIndex = 0
+          PageIndex = 1
           TabOrder = 3
           TabStop = True
           object PageVcurve: TPage
@@ -1277,18 +1277,18 @@ object f_option: Tf_option
               TabOrder = 2
             end
           end
-          object PageMean: TPage
+          object PageDynamic: TPage
             object Label64: TLabel
               Left = 8
-              Height = 15
+              Height = 11
               Top = 6
-              Width = 169
+              Width = 131
               Caption = 'Number of dynamic points'
               ParentColor = False
             end
-            object AutofocusMeanNumPoint: TEdit
+            object AutofocusDynamicNumPoint: TEdit
               Left = 212
-              Height = 23
+              Height = 21
               Hint = 'The number of measurement point to take at each focus operation.'#10'A good value is from 5 to 15.'
               Top = 2
               Width = 60
@@ -1296,9 +1296,9 @@ object f_option: Tf_option
               ShowHint = True
               TabOrder = 0
             end
-            object AutofocusMeanMovement: TEdit
+            object AutofocusDynamicMovement: TEdit
               Left = 212
-              Height = 23
+              Height = 21
               Hint = 'The number of step to move the focuser between each measurement point.'#10'This must big enough to get a maximum defocused star size with a HFD at leat 10'
               Top = 34
               Width = 60
@@ -1308,9 +1308,9 @@ object f_option: Tf_option
             end
             object Label65: TLabel
               Left = 8
-              Height = 15
+              Height = 11
               Top = 38
-              Width = 169
+              Width = 131
               Caption = 'Movement between points'
               ParentColor = False
             end

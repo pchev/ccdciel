@@ -92,7 +92,7 @@ type
     procedure PlotHistory;
     procedure ClearGraph;
     procedure doAutofocusVcurve;
-    procedure doAutofocusMean;
+    procedure doAutofocusDynamic;
     procedure doAutofocusIterative;
     function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean;
   public
@@ -196,9 +196,9 @@ begin
                  else
                    AutofocusVcStep:=vcsStartR;
                 end;
-   afMean     : begin
+   afDynamic  : begin
                 msg('Autofocus start Dynamic curve');
-                AutofocusMeanStep:=afmStart;
+                AutofocusDynamicStep:=afdStart;
                 end;
    afIterative: begin
                 msg('Autofocus start Iterative focus');
@@ -806,7 +806,7 @@ begin
   end;
   // sum of multiple exposures
   if (AutofocusNearNum>1)and
-    ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve)or(AutofocusMode=afMean))and
+    ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve)or(AutofocusMode=afDynamic))and
     (not((AutofocusVcStep=vcsCheckL)or(AutofocusVcStep=vcsCheckR)))and
     (not FirstFrame)and
     (not terminated)
@@ -874,7 +874,7 @@ begin
   // do focus and continue
   case AutofocusMode of
     afVcurve   : doAutofocusVcurve;
-    afMean     : doAutofocusMean;
+    afDynamic  : doAutofocusDynamic;
     afIterative: doAutofocusIterative;
   end;
   FirstFrame:=false;
@@ -1047,57 +1047,57 @@ begin
  end;
 end;
 
-procedure Tf_starprofile.doAutofocusMean;
+procedure Tf_starprofile.doAutofocusDynamic;
 var i,k,step: integer;
     VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr: double;
     p:array of TDouble2;
   procedure ResetPos;
   begin
-    k:=AutofocusMeanNumPoint div 2;
-    focuser.FocusSpeed:=AutofocusMeanMovement*(k+1);
+    k:=AutofocusDynamicNumPoint div 2;
+    focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
     if AutofocusMoveDir=FocusDirIn then begin
       onFocusOUT(self);
       Wait(1);
-      focuser.FocusSpeed:=AutofocusMeanMovement;
+      focuser.FocusSpeed:=AutofocusDynamicMovement;
       onFocusIN(self)
     end
     else begin
       onFocusIN(self);
       Wait(1);
-      focuser.FocusSpeed:=AutofocusMeanMovement;
+      focuser.FocusSpeed:=AutofocusDynamicMovement;
       onFocusOUT(self);
     end;
     Wait(1);
   end;
 begin
-  case AutofocusMeanStep of
-    afmStart: begin
-              if not odd(AutofocusMeanNumPoint) then
-                inc(AutofocusMeanNumPoint);
-              if AutofocusMeanNumPoint<5 then AutofocusMeanNumPoint:=5;
-              SetLength(ahfd,AutofocusMeanNumPoint);
+  case AutofocusDynamicStep of
+    afdStart: begin
+              if not odd(AutofocusDynamicNumPoint) then
+                inc(AutofocusDynamicNumPoint);
+              if AutofocusDynamicNumPoint<5 then AutofocusDynamicNumPoint:=5;
+              SetLength(ahfd,AutofocusDynamicNumPoint);
               // set initial position
-              k:=AutofocusMeanNumPoint div 2;
-              focuser.FocusSpeed:=AutofocusMeanMovement*(k+1);
+              k:=AutofocusDynamicNumPoint div 2;
+              focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
               if AutofocusMoveDir=FocusDirIn then begin
                 onFocusOUT(self);
                 Wait(1);
-                focuser.FocusSpeed:=AutofocusMeanMovement;
+                focuser.FocusSpeed:=AutofocusDynamicMovement;
                 onFocusIN(self)
               end
               else begin
                 onFocusIN(self);
                 Wait(1);
-                focuser.FocusSpeed:=AutofocusMeanMovement;
+                focuser.FocusSpeed:=AutofocusDynamicMovement;
                 onFocusOUT(self);
               end;
               Wait(1);
               afmpos:=-1;
               aminhfd:=9999;
               amaxhfd:=-1;
-              AutofocusMeanStep:=afmMeasure;
+              AutofocusDynamicStep:=afdMeasure;
               end;
-    afmMeasure: begin
+    afdMeasure: begin
               // store hfd
               inc(afmpos);
               ahfd[afmpos]:=Fhfd;
@@ -1114,11 +1114,11 @@ begin
               else
                 onFocusOUT(self);
               wait(1);
-              if afmpos=(AutofocusMeanNumPoint-1) then AutofocusMeanStep:=afmEnd;
+              if afmpos=(AutofocusDynamicNumPoint-1) then AutofocusDynamicStep:=afdEnd;
               end;
-    afmEnd: begin
+    afdEnd: begin
               // check measure validity
-              if (aminpos<2)or((AutofocusMeanNumPoint-aminpos-1)<2) then begin
+              if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos-1)<2) then begin
                  msg('Not enough points in or out of focus position,');
                  msg('Try to start with a better position or increase the movement.');
                  ResetPos;
@@ -1143,7 +1143,7 @@ begin
               LeastSquares(p,al,bl,rl);
               VcpiL:=-bl/al;
               // right part
-              k:=AutofocusMeanNumPoint-k-1;
+              k:=AutofocusDynamicNumPoint-k-1;
               SetLength(p,k);
               for i:=0 to k-1 do begin
                 p[i,1]:=aminpos+2+i;
@@ -1154,18 +1154,18 @@ begin
               // focus position
               if AutofocusMoveDir then r2:=rr*rr else r2:=rl*rl;
               msg('Focus quality = '+FormatFloat(f3,r2));
-              step:=round(AutofocusMeanMovement*(VcpiL+VcpiR)/2);
-              focuser.FocusSpeed:=step+AutofocusMeanMovement;
+              step:=round(AutofocusDynamicMovement*(VcpiL+VcpiR)/2);
+              focuser.FocusSpeed:=step+AutofocusDynamicMovement;
               if AutofocusMoveDir=FocusDirIn then begin
                 onFocusOUT(self);
                 wait(1);
-                focuser.FocusSpeed:=AutofocusMeanMovement;
+                focuser.FocusSpeed:=AutofocusDynamicMovement;
                 onFocusIN(self);
               end
               else begin
                 onFocusIN(self);
                 wait(1);
-                focuser.FocusSpeed:=AutofocusMeanMovement;
+                focuser.FocusSpeed:=AutofocusDynamicMovement;
                 onFocusOUT(self)
               end;
               wait(1);

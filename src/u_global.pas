@@ -42,9 +42,9 @@ type
   TPlanetariumType=(CDC, SAMP, HNSKY);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
-  TAutofocusMode=(afVcurve,afMean,afIterative,afNone);
+  TAutofocusMode=(afVcurve,afDynamic,afIterative,afNone);
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
-  TAutofocusMeanStep=(afmStart,afmMeasure,afmEnd);
+  TAutofocusDynamicStep=(afdStart,afdMeasure,afdEnd);
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin);
   TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate);
@@ -331,8 +331,8 @@ var
   AutofocusVcDir, AutofocusSlippageCorrection: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
   AutofocusVcStep:TAutofocusVcurveStep;
-  AutofocusMeanMovement,AutofocusMeanNumPoint,AutofocusVcFilterOffset,AutofocusSlippageOffset: integer;
-  AutofocusMeanStep:TAutofocusMeanStep;
+  AutofocusDynamicMovement,AutofocusDynamicNumPoint,AutofocusVcFilterOffset,AutofocusSlippageOffset: integer;
+  AutofocusDynamicStep:TAutofocusDynamicStep;
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;

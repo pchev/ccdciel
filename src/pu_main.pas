@@ -2090,8 +2090,8 @@ begin
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
-  AutofocusMeanNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
-  AutofocusMeanMovement:=config.GetValue('/StarAnalysis/AutofocusMeanMovement',100);
+  AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',7);
+  AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusMeanMovement',100);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',0.0);
   AutofocusSlippageCorrection:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',false);
@@ -3720,8 +3720,8 @@ begin
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
    f_option.AutofocusNearNum.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum));
-   f_option.AutofocusMeanNumPoint.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',AutofocusMeanNumPoint));
-   f_option.AutofocusMeanMovement.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMeanMovement',AutofocusMeanMovement));
+   f_option.AutofocusDynamicNumPoint.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMeanNumPoint',AutofocusDynamicNumPoint));
+   f_option.AutofocusDynamicMovement.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMeanMovement',AutofocusDynamicMovement));
    f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
    f_option.Focale.Text:=config.GetValue('/Astrometry/FocaleLength','');
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
@@ -3835,8 +3835,8 @@ begin
      config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',StrToFloatDef(f_option.AutofocusPrecisionSlew.Text,2.0));
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',StrToIntDef(f_option.AutofocusNearNum.Text,AutofocusNearNum));
-     config.SetValue('/StarAnalysis/AutofocusMeanNumPoint',StrToIntDef(f_option.AutofocusMeanNumPoint.Text,AutofocusMeanNumPoint));
-     config.SetValue('/StarAnalysis/AutofocusMeanMovement',StrToIntDef(f_option.AutofocusMeanMovement.Text,AutofocusMeanMovement));
+     config.SetValue('/StarAnalysis/AutofocusMeanNumPoint',StrToIntDef(f_option.AutofocusDynamicNumPoint.Text,AutofocusDynamicNumPoint));
+     config.SetValue('/StarAnalysis/AutofocusMeanMovement',StrToIntDef(f_option.AutofocusDynamicMovement.Text,AutofocusDynamicMovement));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
