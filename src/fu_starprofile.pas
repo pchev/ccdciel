@@ -492,7 +492,10 @@ begin
 
  except
    on E: Exception do begin
-       msg('FindStarPos :'+ E.Message);
+       if E is EAccessViolation then
+          msg('FindStarPos : Error, please increase the Focus window size.')
+       else
+          msg('FindStarPos :'+ E.Message);
        vmax:=0;
    end;
  end;
