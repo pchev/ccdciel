@@ -1049,7 +1049,7 @@ end;
 
 procedure Tf_starprofile.doAutofocusMean;
 var i,k,step: integer;
-    VcpiL,VcpiR,al,bl,rl,ar,br,rr: double;
+    VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr: double;
     p:array of TDouble2;
   procedure ResetPos;
   begin
@@ -1125,7 +1125,7 @@ begin
                  terminated:=true;
                  exit;
               end;
-              if (amaxhfd<(3*aminhfd)) then begin
+              if (amaxhfd<(2*aminhfd)) then begin
                  msg('Too small HFD difference,');
                  msg('Try to increase the number of point or the movement.');
                  ResetPos;
@@ -1152,6 +1152,8 @@ begin
               LeastSquares(p,ar,br,rr);
               VcpiR:=-br/ar;
               // focus position
+              if AutofocusMoveDir then r2:=rr*rr else r2:=rl*rl;
+              msg('Focus quality = '+FormatFloat(f3,r2));
               step:=round(AutofocusMeanMovement*(VcpiL+VcpiR)/2);
               focuser.FocusSpeed:=step+AutofocusMeanMovement;
               if AutofocusMoveDir=FocusDirIn then begin
