@@ -330,6 +330,7 @@ type
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
+    procedure CheckFocusWindow(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
@@ -580,12 +581,27 @@ begin
   end;
 end;
 
+procedure Tf_option.CheckFocusWindow(Sender: TObject);
+var a,b: integer;
+begin
+  a:=StrToIntDef(StarWindow.Text,-9999);
+  b:=StrToIntDef(FocusWindow.Text,-9999);
+  if (a<0)or(b<0) then begin
+     ShowMessage('Invalid number!');
+     exit;
+  end;
+  if (4*a)>b then ShowMessage('Focus window must be at least four time greater than Star window!');
+end;
+
 procedure Tf_option.CheckStartNearHFD(Sender: TObject);
 var a,b: double;
 begin
   a:=StrToFloatDef(AutofocusStartHFD.Text,-9999);
   b:=StrToFloatDef(AutofocusNearHFD.Text,-9999);
-  if (a<0)or(b<0) then exit;
+  if (a<0)or(b<0) then begin
+     ShowMessage('Invalid number!');
+     exit;
+  end;
   if a<=b then ShowMessage('Near HFD must be smaller than Start HFD!');
 end;
 
