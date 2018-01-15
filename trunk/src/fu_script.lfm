@@ -16,9 +16,9 @@ object f_script: Tf_script
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Run script'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0

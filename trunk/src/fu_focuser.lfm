@@ -264,9 +264,9 @@ object f_focuser: Tf_focuser
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Focuser'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0

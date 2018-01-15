@@ -17,9 +17,9 @@ object f_ccdtemp: Tf_ccdtemp
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'CCD Temperature'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0

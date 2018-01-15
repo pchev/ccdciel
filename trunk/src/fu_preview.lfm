@@ -168,9 +168,9 @@ object f_preview: Tf_preview
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Preview'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 1
