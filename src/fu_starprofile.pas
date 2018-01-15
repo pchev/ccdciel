@@ -56,6 +56,7 @@ type
     Panel2: TPanel;
     ChkFocus: TSpeedButton;
     ChkAutofocus: TSpeedButton;
+    BtnMeasureImage: TSpeedButton;
     StaticText1: TStaticText;
     VcChart: TChart;
     VcChartL: TFitSeries;
@@ -65,6 +66,7 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure graphDblClick(Sender: TObject);
+    procedure BtnMeasureImageClick(Sender: TObject);
   private
     { private declarations }
     FFindStar: boolean;
@@ -72,6 +74,7 @@ type
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
+    FonMeasureImage: TNotifyEvent;
     FonMsg: TNotifyMsg;
     Fpreview:Tf_preview;
     Ffocuser:Tf_focuser;
@@ -126,6 +129,7 @@ type
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
     property onAbsolutePosition: TNotifyEvent read FonAbsolutePosition write FonAbsolutePosition;
+    property onMeasureImage: TNotifyEvent read FonMeasureImage write FonMeasureImage;
   end;
 
 implementation
@@ -240,6 +244,11 @@ begin
  curhist:=0;
  maxfwhm:=0;
  maximax:=0;
+end;
+
+procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
+begin
+  if assigned(FonMeasureImage) then FonMeasureImage(self);
 end;
 
 procedure Tf_starprofile.msg(txt:string);
