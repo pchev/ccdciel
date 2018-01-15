@@ -480,6 +480,7 @@ type
     procedure StopVcurve(Sender: TObject);
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
+    procedure MeasureImage(Sender: TObject);
     Procedure RotatorStatus(Sender: TObject);
     Procedure RotatorAngleChange(Sender: TObject);
     Procedure RotatorRotate(Sender: TObject);
@@ -1092,6 +1093,7 @@ begin
   f_starprofile.onFocusIN:=@FocusIN;
   f_starprofile.onFocusOUT:=@FocusOUT;
   f_starprofile.onAbsolutePosition:=@FocusSetAbsolutePosition;
+  f_starprofile.onMeasureImage:=@MeasureImage;
 
   f_ccdtemp:=Tf_ccdtemp.Create(self);
   f_ccdtemp.onSetTemperature:=@SetTemperature;
@@ -6480,6 +6482,80 @@ begin
       end;
     end;
   end;
+end;
+
+procedure Tf_main.MeasureImage(Sender: TObject);
+var
+ fitsX,fitsY,size, i, j,imageX,imageY,s,rs,xxc,yyc,rc,fx,fy,nhfd : integer;
+ hfd1,star_fwhm : double;
+ vmax,bg,bgdev,xc,yc: double;
+ hfdlist:array of double;
+ img_temp: array of array of array of byte;
+
+ begin
+  DrawImage;  {clean image}
+
+  imabmp.Canvas.Pen.Mode := pmMerge;
+  imabmp.Canvas.Pen.width := 1; //round(1+height2/image1.height);{thickness lines}
+  imabmp.Canvas.brush.Style:=bsClear;
+  imabmp.Canvas.font.color:=clred;
+  imabmp.Canvas.Pen.Color := $FF;
+
+  setlength(img_temp,1,img_Height,img_Width);{set length of image array}
+  for fitsY:=0 to img_Height-1 do
+    for fitsX:=0 to img_Width-1 do
+      img_temp[0,fitsY,fitsX]:=0;{mark as not surveyed}
+
+  //s:=Starwindow div fits.HeaderInfo.BinX; {do not work well with big window}
+  //if rs<3 then rs:=3;
+  //if rs>15 then rs:=15;
+  s:=14;
+  rs:=s div 2;
+
+  nhfd:=0;
+  SetLength(hfdlist,nhfd);
+
+  for fy:=1 to ((img_Height) div rs)-1 do
+  begin
+    fitsY:=fy*rs;
+    for fx:=1 to ((img_Width) div rs)-1 do
+    begin
+      fitsX:=fx*rs;
+      if (( img_temp[0,fitsY,fitsX]=0){area not surveyed} and
+         (fits.image[0,fitsY,fitsX]>fits.HeaderInfo.dmin+0.04*fits.HeaderInfo.dmax){star}  ) then {new star}
+      begin
+        hfd1:=-1;
+        f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fitsX,fitsY,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
+        if (vmax>0) and (not f_starprofile.double_star(fits.image,fits.imageC,fits.imageMin,rc, xxc,yyc)) then
+          f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);
+        if ((hfd1>0.8) and (hfd1<99)) then
+        begin
+
+          inc(nhfd);
+          SetLength(hfdlist,nhfd);
+          hfdlist[nhfd-1]:=hfd1;    {store hfd list}
+
+          size:=round(2*hfd1);
+          imageY:=round(yc);
+          imageX:=round(xc);
+
+          imabmp.Canvas.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size);{indicate hfd with rectangle}
+          imabmp.Canvas.textout(imageX,imageY,floattostrf(hfd1, ffgeneral, 2,1));{add hfd as text}
+
+          for j:=imageY-rs to imageY+rs do {mark the whole star area as surveyed}
+            for i:=imageX-rs to imageX+rs do
+              if ((j>=0) and (i>=0) and (j<img_Height) and (i<img_Width)) then {mark the area of the star square and prevent double detections}
+                img_temp[0,j,i]:=1;
+
+        end;
+      end;
+    end;
+
+  end;
+  NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList)));
+  setlength(img_temp,0,0,0);{free mem}
+  SetLength(hfdlist,0);
+  PlotImage;
 end;
 
 end.

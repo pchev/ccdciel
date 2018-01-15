@@ -219,10 +219,18 @@ object f_starprofile: Tf_starprofile
         ParentFont = False
       end
     end
-    object ChkFocus: TSpeedButton
+    object BtnMeasureImage: TSpeedButton
       Left = 0
       Height = 23
       Top = 330
+      Width = 172
+      Caption = 'Measure image'
+      OnClick = BtnMeasureImageClick
+    end
+    object ChkFocus: TSpeedButton
+      Left = 0
+      Height = 23
+      Top = 353
       Width = 172
       AllowAllUp = True
       Caption = 'Manual focus aid'
@@ -232,7 +240,7 @@ object f_starprofile: Tf_starprofile
     object ChkAutofocus: TSpeedButton
       Left = 0
       Height = 23
-      Top = 353
+      Top = 376
       Width = 172
       AllowAllUp = True
       Caption = 'Autofocus'
