@@ -6551,7 +6551,7 @@ var
     end;
 
   end;
-  NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList)));
+  if nhfd>0 then NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList)));
   setlength(img_temp,0,0,0);{free mem}
   SetLength(hfdlist,0);
   PlotImage;
