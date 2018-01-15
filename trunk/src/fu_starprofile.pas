@@ -914,6 +914,7 @@ end;
 procedure Tf_starprofile.doAutofocusVcurve;
 var newpos,delta,meanhfd,tempcomp:double;
 begin
+ if not ChkAutofocus.Down then exit;
  case AutofocusVcStep of
    vcsStartL: begin
               // temperature compensation
@@ -935,6 +936,7 @@ begin
               msg('Clear focuser backlash');
               FonAbsolutePosition(self);
               wait(1);
+              if not ChkAutofocus.Down then exit;
               // move back to start focus position
               newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
               if newpos<AutofocusVc[0,1] then begin
@@ -974,6 +976,7 @@ begin
               msg('Clear focuser backlash');
               FonAbsolutePosition(self);
               wait(1);
+              if not ChkAutofocus.Down then exit;
               // move back to start focus position
               newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
               if newpos>AutofocusVc[AutofocusVcNum,1] then begin
