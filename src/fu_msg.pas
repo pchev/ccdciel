@@ -36,6 +36,7 @@ type
     msg: TMemo;
     Panel1: TPanel;
     procedure FrameResize(Sender: TObject);
+    procedure msgMouseLeave(Sender: TObject);
   private
     { private declarations }
   public
@@ -58,6 +59,11 @@ begin
          w:=w-Tframe(TPanel(Parent).Components[i]).Width;
     Width:=w;
   end;
+end;
+
+procedure Tf_msg.msgMouseLeave(Sender: TObject);
+begin
+  msg.SelLength:=0;
 end;
 
 constructor Tf_msg.Create(aOwner: TComponent);

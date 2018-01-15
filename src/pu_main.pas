@@ -60,6 +60,10 @@ type
     ImageListDay: TImageList;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuBrowseLog: TMenuItem;
+    MenuShowLog: TMenuItem;
+    MenuItem12: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
@@ -72,6 +76,7 @@ type
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
     MenuResolveRotate: TMenuItem;
     MenuViewClock: TMenuItem;
     MenuResolveSyncRotator: TMenuItem;
@@ -232,6 +237,7 @@ type
     procedure MenuAutoguiderDitherClick(Sender: TObject);
     procedure MenuAutoguiderGuideClick(Sender: TObject);
     procedure MenuBPMClick(Sender: TObject);
+    procedure MenuBrowseLogClick(Sender: TObject);
     procedure MenuBugReportClick(Sender: TObject);
     procedure MenuCaptureStartClick(Sender: TObject);
     procedure MenuCCDtempSetClick(Sender: TObject);
@@ -280,6 +286,7 @@ type
     procedure MenuSequenceStartClick(Sender: TObject);
     procedure MenuSequenceStopClick(Sender: TObject);
     procedure MenuShowCCDFrameClick(Sender: TObject);
+    procedure MenuShowLogClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuTabClick(Sender: TObject);
     procedure MenuVideoPreviewClick(Sender: TObject);
@@ -2884,6 +2891,25 @@ end;
 procedure Tf_main.MenuOnlineHelpClick(Sender: TObject);
 begin
   ExecuteFile(URL_ONLINEHELP);
+end;
+
+procedure Tf_main.MenuShowLogClick(Sender: TObject);
+var i: integer;
+begin
+  if LogFileOpen then begin
+     i:=ExecuteFile(LogFile);
+     {$ifdef mswindows}
+     if i<=32 then
+        ShowMessage('Error '+inttostr(i)+crlf+'Check if the file exist and set the application to use to open files with .log extension');
+     {$endif}
+  end
+  else
+     ShowMessage('Please activate the log file in the preference.');
+end;
+
+procedure Tf_main.MenuBrowseLogClick(Sender: TObject);
+begin
+  ExecuteFile(LogDir);
 end;
 
 Procedure Tf_main.FocuserStatus(Sender: TObject);

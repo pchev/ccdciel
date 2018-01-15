@@ -25,9 +25,11 @@ object f_msg: Tf_msg
       Width = 606
       Align = alClient
       DragMode = dmAutomatic
+      OnMouseLeave = msgMouseLeave
       ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 0
+      WantReturns = False
     end
   end
 end
