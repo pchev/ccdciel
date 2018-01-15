@@ -25,10 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses BGRABitmap, BGRABitmapTypes,
-  u_global, u_utils, math, UScaleDPI, fu_preview,
-  fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, FileUtil, TAGraph,
-  TAFuncSeries, TASeries, TASources, Forms, Controls, StdCtrls, ExtCtrls;
+uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI,
+  fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits,
+  FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, Forms, Controls,
+  StdCtrls, ExtCtrls, Buttons;
 
 const maxhist=50;
 
@@ -37,8 +37,6 @@ type
   { Tf_starprofile }
 
   Tf_starprofile = class(TFrame)
-    ChkAutofocus: TCheckBox;
-    ChkFocus: TCheckBox;
     FitSourceL: TListChartSource;
     FitSourceR: TListChartSource;
     graph: TImage;
@@ -56,6 +54,8 @@ type
     LabelImax: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
+    ChkFocus: TSpeedButton;
+    ChkAutofocus: TSpeedButton;
     StaticText1: TStaticText;
     VcChart: TChart;
     VcChartL: TFitSeries;
@@ -94,7 +94,6 @@ type
     procedure doAutofocusVcurve;
     procedure doAutofocusDynamic;
     procedure doAutofocusIterative;
-    function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -102,9 +101,12 @@ type
     procedure GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax: double);
     procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
     procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
+    function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean;
     procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
     procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
     procedure InitAutofocus;
+    procedure ChkFocusDown(value:boolean);
+    procedure ChkAutoFocusDown(value:boolean);
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar write FFindStar;
     property HFD:double read Fhfd;
@@ -145,13 +147,25 @@ begin
  end;
 end;
 
+procedure Tf_starprofile.ChkFocusDown(value:boolean);
+begin
+  ChkFocus.Down:=value;
+  ChkFocusChange(ChkFocus);
+end;
+
+procedure Tf_starprofile.ChkAutoFocusDown(value:boolean);
+begin
+ ChkAutofocus.Down:=value;
+ ChkAutofocusChange(ChkAutofocus);
+end;
+
 procedure Tf_starprofile.ChkFocusChange(Sender: TObject);
 begin
- if ChkAutofocus.Checked then begin
-   ChkFocus.Checked:=false;
+ if ChkAutofocus.Down then begin
+   ChkFocus.Down:=false;
    exit;
  end;
- if ChkFocus.Checked then begin
+ if ChkFocus.Down then begin
     if Assigned(FFocusStart) then FFocusStart(self);
  end else begin
    if Assigned(FFocusStop) then FFocusStop(self);
@@ -160,11 +174,11 @@ end;
 
 procedure Tf_starprofile.ChkAutofocusChange(Sender: TObject);
 begin
- if ChkFocus.Checked then begin
-    ChkAutofocus.Checked:=false;
+ if ChkFocus.Down then begin
+    ChkAutofocus.Down:=false;
     exit;
  end;
- if ChkAutofocus.Checked then begin
+ if ChkAutofocus.Down then begin
     if Assigned(FAutoFocusStart) then FAutoFocusStart(self);
  end else begin
    terminated:=true;
@@ -174,7 +188,7 @@ end;
 
 function  Tf_starprofile.getRunning:boolean;
 begin
- result:=ChkAutofocus.Checked;
+ result:=ChkAutofocus.Down;
 end;
 
 procedure Tf_starprofile.InitAutofocus;
@@ -502,7 +516,7 @@ begin
 end;
 
 procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax: double);
-var i,j: integer;
+var i,j,xmax,ymax: integer;
     SumVal,SumValX,SumValY,SumValR: double;
     Xg,Yg: double;
     r:double;
@@ -515,8 +529,10 @@ var i,j: integer;
       x_frac,y_frac : double;
     begin
       try
+      result:=0;
       x_trunc:=trunc(x1);
       y_trunc:=trunc(y1);
+      if (x_trunc<0) or (x_trunc>(xmax-2)) or (y_trunc<0) or (y_trunc>(ymax-2)) then exit;
 
       x_frac :=frac(x1);
       y_frac :=frac(y1);
@@ -539,6 +555,9 @@ star_fwhm:=-1;
 if ri<=0 then exit;
 
 try
+
+ymax:=Length(img[0]);
+xmax:=Length(img[0,0]);
 
 // Get center of gravity whithin radius of interest
 SumVal:=0;
@@ -789,14 +808,14 @@ begin
   if (x<0)or(y<0)or(s<0) then begin
     msg('Autofocus canceled because no star was selected.');
     FAutofocusResult:=false;
-    ChkAutofocus.Checked:=false;
+    ChkAutofocusDown(false);
     exit;
   end;
   FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg,bgdev);
   if FValMax=0 then begin
      msg('Autofocus canceled because no star was found.');
      FAutofocusResult:=false;
-     ChkAutofocus.Checked:=false;
+     ChkAutofocusDown(false);
      exit;
   end;
   GetHFD(img,c,vmin,xm,ym,ri,bg,bgdev,xg,yg,Fhfd,star_fwhm,FValMax);
@@ -804,7 +823,7 @@ begin
   if (Fhfd<=0) then begin
     msg('Autofocus canceled because the HFD cannot be measured');
     FAutofocusResult:=false;
-    ChkAutofocus.Checked:=false;
+    ChkAutofocusDown(false);
     exit;
   end;
   // sum of multiple exposures
@@ -845,7 +864,7 @@ begin
   if fsnr<AutofocusMinSNR then begin
     msg('Autofocus canceled because of low SNR, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
     FAutofocusResult:=false;
-    ChkAutofocus.Checked:=false;
+    ChkAutofocusDown(false);
     exit;
   end;
   // check focus result
@@ -870,7 +889,7 @@ begin
     else begin
        msg('Autofocus final HFD is higher than '+FormatFloat(f1,AutofocusTolerance));
     end;
-    ChkAutofocus.Checked:=false;
+    ChkAutofocusDown(false);
     exit;
   end;
   msg('Autofocus running, hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
@@ -911,7 +930,7 @@ begin
               newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
               if newpos<AutofocusVc[0,1] then begin
                  msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
-                 ChkAutofocus.Checked:=false;
+                 ChkAutofocusDown(false);
                  exit;
               end;
               // correct for filter offset
@@ -950,7 +969,7 @@ begin
               newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
               if newpos>AutofocusVc[AutofocusVcNum,1] then begin
                  msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
-                 ChkAutofocus.Checked:=false;
+                 ChkAutofocusDown(false);
                  exit;
               end;
               // correct for filter offset
