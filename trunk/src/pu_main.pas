@@ -5448,13 +5448,9 @@ begin
      result:=true;
    end
    else begin
-      NewMessage('In place autofocus failed, try with the focus stars list.');
-      if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning) then begin
-        NewMessage('Exposure fail!');
-        f_starprofile.ChkAutofocus.Checked:=false;
-        exit;
-      end;
-      wait(1);
+      NewMessage('In place autofocus failed!');
+      NewMessage('Sequence will continue with the current focuser position.');
+      result:=true;
    end;
  end;
  if (not InplaceAutofocus) or (not result) then begin
