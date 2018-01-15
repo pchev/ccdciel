@@ -6515,18 +6515,17 @@ var
   nhfd:=0;
   SetLength(hfdlist,nhfd);
 
-  for fy:=1 to ((img_Height) div rs)-1 do
+  for fy:=3 to ((img_Height) div rs)-3 do
   begin
     fitsY:=fy*rs;
-    for fx:=1 to ((img_Width) div rs)-1 do
+    for fx:=3 to ((img_Width) div rs)-3 do
     begin
       fitsX:=fx*rs;
-      if (( img_temp[0,fitsY,fitsX]=0){area not surveyed} and
-         (fits.image[0,fitsY,fitsX]>fits.HeaderInfo.dmin+0.04*fits.HeaderInfo.dmax){star}  ) then {new star}
+      if (( img_temp[0,fitsY,fitsX]=0){area not surveyed}  ) then
       begin
         hfd1:=-1;
         f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fitsX,fitsY,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
-        if (vmax>0) and (not f_starprofile.double_star(fits.image,fits.imageC,fits.imageMin,rc, xxc,yyc)) then
+        if (vmax>0) and (not f_starprofile.double_star(fits.image,fits.imageC,fits.imageMin,rc, xxc,yyc)) then  {new star}
           f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);
         if ((hfd1>0.8) and (hfd1<99)) then
         begin
