@@ -16,9 +16,9 @@ object f_sequence: Tf_sequence
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Sequence'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0
@@ -149,8 +149,8 @@ object f_sequence: Tf_sequence
       Align = alTop
       Alignment = taCenter
       Caption = 'Targets'
-      Color = clGray
-      Font.Color = clBlack
+      Color = clBtnShadow
+      Font.Color = clBtnText
       ParentFont = False
       ParentColor = False
       TabOrder = 2
@@ -188,8 +188,8 @@ object f_sequence: Tf_sequence
       Align = alTop
       Alignment = taCenter
       Caption = 'Current plan'
-      Color = clGray
-      Font.Color = clBlack
+      Color = clBtnShadow
+      Font.Color = clBtnText
       ParentFont = False
       ParentColor = False
       TabOrder = 1

@@ -15,9 +15,9 @@ object f_planetarium: Tf_planetarium
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Planetarium'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0

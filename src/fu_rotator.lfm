@@ -17,9 +17,9 @@ object f_rotator: Tf_rotator
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Rotator'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0

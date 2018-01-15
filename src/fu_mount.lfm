@@ -16,9 +16,9 @@ object f_mount: Tf_mount
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Telescope position'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0

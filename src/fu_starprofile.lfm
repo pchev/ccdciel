@@ -18,9 +18,9 @@ object f_starprofile: Tf_starprofile
     Alignment = taCenter
     BorderStyle = sbsSingle
     Caption = 'Star profile'
-    Color = clGray
+    Color = clBtnShadow
     DragMode = dmAutomatic
-    Font.Color = clBlack
+    Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
     TabOrder = 0
