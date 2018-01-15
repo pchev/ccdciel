@@ -4275,7 +4275,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Checked) then begin
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Down) then begin
     // only if temperature change by more than 0.5 C
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
@@ -4931,7 +4931,7 @@ if fits.HeaderInfo.naxis>0 then begin
   if Preview or Capture then begin // not on control exposure
     if f_starprofile.AutofocusRunning then
        f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
-    else if f_starprofile.FindStar or f_starprofile.ChkFocus.Checked then
+    else if f_starprofile.FindStar or f_starprofile.ChkFocus.Down then
       f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
   end;
   if f_visu.BullsEye then begin
@@ -5206,7 +5206,7 @@ end;
 
 procedure Tf_main.MenuFocusaidClick(Sender: TObject);
 begin
-  f_starprofile.ChkFocus.Checked:=not f_starprofile.ChkFocus.Checked;
+  f_starprofile.ChkFocus.Down:=not f_starprofile.ChkFocus.Down;
 end;
 
 procedure Tf_main.MenuFocuserInClick(Sender: TObject);
@@ -5235,7 +5235,7 @@ var x,y,xc,yc,s,s2: integer;
 begin
   if  f_capture.Running  then begin
     NewMessage('Cannot start manual focus now, stop capture and retry');
-    f_starprofile.ChkFocus.Checked:=false;
+    f_starprofile.ChkFocusDown(false);
     exit;
   end;
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
@@ -5272,7 +5272,7 @@ begin
      NewMessage('Focus aid started');
   end
   else begin
-    f_starprofile.ChkFocus.Checked:=false;
+    f_starprofile.ChkFocusDown(false);
     NewMessage('Select a star first!');
   end;
 end;
@@ -5401,17 +5401,17 @@ begin
  end;
  if (AutofocusMode=afNone) then begin
    NewMessage('Please configure the Autofocus options.');
-   f_starprofile.ChkAutofocus.Checked:=false;
+   f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
  if(AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
    NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
-   f_starprofile.ChkAutofocus.Checked:=false;
+   f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
    NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
-   f_starprofile.ChkAutofocus.Checked:=false;
+   f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
  autofocusing:=true;
@@ -5434,12 +5434,12 @@ begin
    if CancelAutofocus then exit;
    // do autofocus
    if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
-   f_starprofile.ChkAutofocus.Checked:=true;
-   while f_starprofile.ChkAutofocus.Checked do begin
+   f_starprofile.ChkAutofocusDown(true);
+   while f_starprofile.ChkAutofocus.Down do begin
     sleep(100);
     Application.ProcessMessages;
     if CancelAutofocus then begin
-      f_starprofile.ChkAutofocus.Checked:=false;
+      f_starprofile.ChkAutofocusDown(false);
       exit;
     end;
    end;
@@ -5519,12 +5519,12 @@ begin
      if CancelAutofocus then exit;
      // do autofocus
      if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
-     f_starprofile.ChkAutofocus.Checked:=true;
-     while f_starprofile.ChkAutofocus.Checked do begin
+     f_starprofile.ChkAutofocusDown(true);
+     while f_starprofile.ChkAutofocus.Down do begin
       sleep(100);
       Application.ProcessMessages;
       if CancelAutofocus then begin
-        f_starprofile.ChkAutofocus.Checked:=false;
+        f_starprofile.ChkAutofocusDown(false);
         exit;
       end;
      end;
@@ -5590,8 +5590,8 @@ end;
 
 procedure Tf_main.cmdAutofocus(var ok: boolean);
 begin
- f_starprofile.ChkAutofocus.Checked:=true;
- while f_starprofile.ChkAutofocus.Checked do begin
+ f_starprofile.ChkAutofocusDown(true);
+ while f_starprofile.ChkAutofocus.Down do begin
   sleep(100);
   Application.ProcessMessages;
  end;
@@ -5610,37 +5610,37 @@ begin
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
    NewMessage('Camera or focuser are not connected');
-   f_starprofile.ChkAutofocus.Checked:=false;
+   f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
   if  f_preview.Running then begin
    NewMessage('Cannot start autofocus now, stop preview and retry');
-   f_starprofile.ChkAutofocus.Checked:=false;
+   f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
   if  astrometry.Busy then begin
    NewMessage('Cannot start autofocus now, astrometry is running');
-   f_starprofile.ChkAutofocus.Checked:=false;
+   f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
   if (AutofocusMode=afNone) then begin
     NewMessage('Please configure the Autofocus options.');
-    f_starprofile.ChkAutofocus.Checked:=false;
+    f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   if (AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
     NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
-    f_starprofile.ChkAutofocus.Checked:=false;
+    f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   if (f_capture.Running and (not autofocusing)) then begin
     NewMessage('Cannot start autofocus now, stop capture and retry');
-    f_starprofile.ChkAutofocus.Checked:=false;
+    f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
     NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
-    f_starprofile.ChkAutofocus.Checked:=false;
+    f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   // start a new exposure as the current frame is probably not a preview
@@ -5650,7 +5650,7 @@ begin
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning) then begin
     NewMessage('Exposure fail!');
-    f_starprofile.ChkAutofocus.Checked:=false;
+    f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   x:=fits.HeaderInfo.naxis1 div 2;
@@ -5692,7 +5692,7 @@ begin
         NewMessage('AutoFocus started');
   end
   else begin                             // no star, manual action is required
-    f_starprofile.ChkAutofocus.Checked:=false;
+    f_starprofile.ChkAutofocusDown(false);
     NewMessage('Autofocus cannot find a star!'+crlf+'Please adjust your parameters');
   end;
 end;
