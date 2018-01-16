@@ -6498,93 +6498,70 @@ begin
   end;
 end;
 
-procedure Tf_main.MeasureImage(Sender: TObject);
+procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
- fitsX,fitsY,size, i, j,imageX,imageY,s,rs,x,y,xxc,yyc,rc,fx,fy,nhfd : integer;
+ fitsX,fitsY,size,imageX,imageY,s,xxc,yyc,rc,fx,fy,nhfd : integer;
  hfd1,star_fwhm : double;
  vmax,bg,bgdev,xc,yc: double;
- hfdlist:array of double;
- img_temp: array of array of array of byte;
+ hfdlist :array of double;
+ Saved_Cursor : TCursor;
+const
+    overlap=2; {box overlap,results in 1 pixel overlap}
+begin
 
- begin
-  DrawImage;  {clean image}
+  if not fits.HeaderInfo.valid then exit;
+
+  Saved_Cursor := Screen.Cursor;
+  Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
+
+  DrawImage; {draw clean image}
 
   imabmp.Canvas.Pen.Mode := pmMerge;
-  imabmp.Canvas.Pen.width := 1; //round(1+height2/image1.height);{thickness lines}
+  imabmp.Canvas.Pen.width := 1;{thickness lines}
   imabmp.Canvas.brush.Style:=bsClear;
   imabmp.Canvas.font.color:=clred;
   imabmp.Canvas.Pen.Color := $FF;
 
-  setlength(img_temp,1,img_Height,img_Width);{set length of image array}
-  for fitsY:=0 to img_Height-1 do
-    for fitsX:=0 to img_Width-1 do
-      img_temp[0,fitsY,fitsX]:=0;{mark as not surveyed}
-
-  // look if the image is focused or not by measuring the brightest star
-  hfd1:=99;
-  s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-  x:=fits.HeaderInfo.naxis1 div 2;
-  y:=fits.HeaderInfo.naxis2 div 2;
-  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),fx,fy,vmax);
-  s:=Starwindow div fits.HeaderInfo.BinX;
-  if vmax>0 then
-    f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fx,fy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
-  if (vmax>0) then
-    f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);
-
-  // select window size depending on result
-  if hfd1<13 then begin  // focused star, use small window
-    s:=14;
-    rs:=s div 2;
-  end
-  else  begin   // non-focused star, use autofocus window size
-    s:=Starwindow div fits.HeaderInfo.BinX;
-    rs:=s div 2;
-  end;
+  s:=14; {test image in boxes of size s*s}
 
   nhfd:=0;
   SetLength(hfdlist,nhfd);
 
-  for fy:=3 to ((img_Height) div s)-3 do
+  for fy:=3 to ((img_Height) div s)-3 do { move test box with stepsize rs around}
   begin
     fitsY:=fy*s;
     for fx:=3 to ((img_Width) div s)-3 do
     begin
       fitsX:=fx*s;
-      if (( img_temp[0,fitsY,fitsX]=0){area not surveyed}  ) then
+      hfd1:=-1;
+      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fitsX,fitsY,s+overlap,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
+      if ((vmax>fits.imagemax*0.1) {new bright star found}
+           and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
+           and (not f_starprofile.double_star(fits.image,fits.imageC,fits.imageMin,rc, xxc,yyc)) ) {ignore double stars} then
+         f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);{calculated HFD}
+
+      if ((hfd1>0.8) and (hfd1<99)) then
       begin
-        hfd1:=-1;
-        f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fitsX,fitsY,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
-        if (vmax>(0.1*fits.HeaderInfo.dmax)) and (not f_starprofile.double_star(fits.image,fits.imageC,fits.imageMin,rc, xxc,yyc)) then  {new star}
-          f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);
-        if ((hfd1>0.8) and (hfd1<99)) then
-        begin
+        inc(nhfd);
+        SetLength(hfdlist,nhfd);
+        hfdlist[nhfd-1]:=hfd1; {store hfd list}
 
-          inc(nhfd);
-          SetLength(hfdlist,nhfd);
-          hfdlist[nhfd-1]:=hfd1;    {store hfd list}
+        size:=round(5*hfd1);{show a square 10 times larger the HFD for quick HFD evaluation in all corners}
+        imageY:=round(yc);
+        imageX:=round(xc);
 
-          size:=round(2*hfd1);
-          imageY:=round(yc);
-          imageX:=round(xc);
-
-          imabmp.Canvas.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size);{indicate hfd with rectangle}
-          imabmp.Canvas.textout(imageX,imageY,floattostrf(hfd1, ffgeneral, 2,1));{add hfd as text}
-
-          for j:=imageY-rs to imageY+rs do {mark the whole star area as surveyed}
-            for i:=imageX-rs to imageX+rs do
-              if ((j>=0) and (i>=0) and (j<img_Height) and (i<img_Width)) then {mark the area of the star square and prevent double detections}
-                img_temp[0,j,i]:=1;
-
-        end;
+        imabmp.Canvas.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size);{indicate hfd with red square}
+        imabmp.Canvas.textout(imageX+size,imageY+size,floattostrf(hfd1, ffgeneral, 2,1));{add hfd as text}
       end;
     end;
-
   end;
-  if nhfd>0 then NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList)));
-  setlength(img_temp,0,0,0);{free mem}
+  if nhfd>0 then
+    NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList)))
+  else
+    NewMessage('No star detected. Is the image focused and sufficiently exposed?');
   SetLength(hfdlist,0);
   PlotImage;
+  Screen.Cursor := saved_cursor;
 end;
 
 end.
