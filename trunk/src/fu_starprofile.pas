@@ -594,7 +594,10 @@ yc:=y+Yg;
 SumVal:=0;
 SumValR:=0;
 pixel_counter:=0;
-Fsnr:=valmax/sqrt(valmax+2*bg);
+if valmax>1 then
+   Fsnr:=valmax/sqrt(valmax+2*bg)
+else
+  Fsnr:=valmax*255/sqrt(valmax*255+2*bg*255);
 if Fsnr>3 then
 begin
   for i:=-ri to ri do
@@ -633,7 +636,10 @@ if (FStarX<0)or(FStarY<0)or(s<0) then exit;
 try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
-LabelImax.Caption:=FormatFloat(f0,FValMax);
+if FValMax>1 then
+   LabelImax.Caption:=FormatFloat(f0,FValMax)
+else
+   LabelImax.Caption:=FormatFloat(f3,FValMax);
 if Ffwhm>0 then begin
   txt:=FormatFloat(f1,Ffwhm);
   if Ffwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,Ffwhmarcsec)+'"';
