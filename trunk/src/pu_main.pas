@@ -62,6 +62,7 @@ type
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
     MenuBrowseLog: TMenuItem;
+    MenuApplyBPM: TMenuItem;
     MenuShowLog: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem2: TMenuItem;
@@ -232,6 +233,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MenuApplyBPMClick(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
     procedure MenuAutoguiderConnectClick(Sender: TObject);
     procedure MenuAutoguiderDitherClick(Sender: TObject);
@@ -2013,6 +2015,18 @@ begin
    bpm[i,1]:=round(config.GetValue('/BadPixelMap/BPMX'+IntToStr(i),0));
    bpm[i,2]:=round(config.GetValue('/BadPixelMap/BPMY'+IntToStr(i),0));
  end;
+end;
+
+procedure Tf_main.MenuApplyBPMClick(Sender: TObject);
+var hasBPM:boolean;
+begin
+ hasBPM:=fits.hasBPM;
+ if not hasBPM then
+    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+ fits.ApplyBPM;
+ DrawImage;
+ if not hasBPM then
+    fits.SetBPM(bpm,0,0,0,0);
 end;
 
 procedure Tf_main.MenuCaptureStartClick(Sender: TObject);

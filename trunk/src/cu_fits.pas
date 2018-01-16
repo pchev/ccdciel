@@ -151,6 +151,7 @@ type
     function Citt(value: Word):Word;
     function Citt8(value: Word):byte;
     procedure SetImgFullRange(value: boolean);
+    function GetHasBPM: boolean;
   protected
     { Protected declarations }
   public
@@ -187,6 +188,7 @@ type
      property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
+     property hasBPM: boolean read GetHasBPM;
   end;
 
 implementation
@@ -1234,6 +1236,11 @@ begin
  FBPMnx:=nx;
  FBPMny:=ny;
  FBPMnax:=nax;
+end;
+
+function TFits.GetHasBPM: boolean;
+begin
+  result:=FBPMcount>0;
 end;
 
 procedure TFits.SetImgFullRange(value: boolean);
