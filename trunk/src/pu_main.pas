@@ -6486,7 +6486,7 @@ end;
 
 procedure Tf_main.MeasureImage(Sender: TObject);
 var
- fitsX,fitsY,size, i, j,imageX,imageY,s,rs,xxc,yyc,rc,fx,fy,nhfd : integer;
+ fitsX,fitsY,size, i, j,imageX,imageY,s,rs,x,y,xxc,yyc,rc,fx,fy,nhfd : integer;
  hfd1,star_fwhm : double;
  vmax,bg,bgdev,xc,yc: double;
  hfdlist:array of double;
@@ -6506,11 +6506,27 @@ var
     for fitsX:=0 to img_Width-1 do
       img_temp[0,fitsY,fitsX]:=0;{mark as not surveyed}
 
-  //s:=Starwindow div fits.HeaderInfo.BinX; {do not work well with big window}
-  //if rs<3 then rs:=3;
-  //if rs>15 then rs:=15;
-  s:=14;
-  rs:=s div 2;
+  // look if the image is focused or not by measuring the brightest star
+  hfd1:=99;
+  s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+  x:=fits.HeaderInfo.naxis1 div 2;
+  y:=fits.HeaderInfo.naxis2 div 2;
+  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),fx,fy,vmax);
+  s:=Starwindow div fits.HeaderInfo.BinX;
+  if vmax>0 then
+    f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fx,fy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
+  if (vmax>0) then
+    f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);
+
+  // select window size depending on result
+  if hfd1<8 then begin  // focused star, use small window
+    s:=14;
+    rs:=s div 2;
+  end
+  else  begin   // non-focused star, use autofocus window size
+    s:=Starwindow div fits.HeaderInfo.BinX;
+    rs:=s div 2;
+  end;
 
   nhfd:=0;
   SetLength(hfdlist,nhfd);
