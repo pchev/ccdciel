@@ -28,7 +28,7 @@ interface
 uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI,
   fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits,
   FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, Forms, Controls,
-  StdCtrls, ExtCtrls, Buttons;
+  StdCtrls, ExtCtrls, Buttons, LCLType;
 
 const maxhist=50;
 
@@ -597,7 +597,7 @@ pixel_counter:=0;
 if valmax>1 then
    Fsnr:=valmax/sqrt(valmax+2*bg)
 else
-  Fsnr:=valmax*255/sqrt(valmax*255+2*bg*255);
+  Fsnr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
 if Fsnr>3 then
 begin
   for i:=-ri to ri do
