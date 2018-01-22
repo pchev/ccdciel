@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi,
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, math,
   lazutf8sysutils, Classes, Forms, SysUtils;
 
 type
@@ -60,6 +60,8 @@ T_camera = class(TComponent)
     FObjectName: string;
     FFits,FStackDark: TFits;
     FStackCount: integer;
+    FStackAlign: boolean;
+    FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
     Fwheel: T_wheel;
     FTimeOut: integer;
@@ -326,6 +328,9 @@ end;
 
 procedure T_camera.NewImage;
 var f:TFits;
+    xi,yi,xc,yc,ri: integer;
+    xs,ys,hfd,fwhm,vmax,snr,bg,bgdev: double;
+    alok: boolean;
 begin
 if FAddFrames then begin  // stack preview frames
   // load temporary image
@@ -340,18 +345,53 @@ if FAddFrames then begin  // stack preview frames
      f.Math(FStackDark,moSub);
   // check frame is compatible
   if FFits.SameFormat(f) then begin
+     if FStackAlign then begin
+        // align frame on ref star
+        alok:=false;
+        xi:=round(FStackStarX);
+        yi:=round(FStackStarY);
+        f.FindStarPos(xi,yi,50,xc,yc,ri,vmax,bg,bgdev);
+        if vmax>0 then begin
+          f.GetHFD(xc,yc,ri,bg,bgdev,xs,ys,hfd,fwhm,vmax,snr);
+          if (hfd>0.8)and(hfd<10) then begin
+             f.Shift(FStackAlignX-xs,FStackAlignY-ys);
+             FStackStarX:=xs;
+             FStackStarY:=ys;
+             alok:=true;
+           end;
+       end;
+       if not alok then msg('Alignment star lost');
+     end;
      FFits.Math(f,moAdd);       // add frame
      inc(FStackCount);
   end
   else begin
      FFits.Math(f,moAdd,true);  // start a new stack
      FStackCount:=1;
+     FStackAlign:=false;
+     // search alignment star
+     FFits.FindBrightestPixel(FFits.HeaderInfo.naxis1 div 2, FFits.HeaderInfo.naxis2 div 2,min(FFits.HeaderInfo.naxis1,FFits.HeaderInfo.naxis2) div 2,20,xi,yi,vmax);
+     if vmax>0 then begin
+       FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
+       if vmax>0 then begin
+         FFits.GetHFD(xc,yc,ri,bg,bgdev,xs,ys,hfd,fwhm,vmax,snr);
+         if (hfd>0.8)and(hfd<10) then begin
+            FStackAlign:=true;
+            FStackAlignX:=xs;
+            FStackAlignY:=ys;
+            FStackStarX:=xs;
+            FStackStarY:=ys;
+            msg('Stacking with alignment star at '+inttostr(round(xs))+'/'+inttostr(round(ys)));
+         end;
+       end;
+     end;
+     if not FStackAlign then msg('No alignment star found for stacking');
   end;
   // update image
   FFits.Header.Assign(f.Header);
   WriteHeaders;
-  if Assigned(FonNewImage) then FonNewImage(self);
   f.free;
+  if Assigned(FonNewImage) then FonNewImage(self);
 end
 else begin  // normal capture
   FStackCount:=0;
