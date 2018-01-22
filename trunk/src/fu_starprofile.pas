@@ -91,7 +91,7 @@ type
     afmpos,aminpos:integer;
     procedure msg(txt:string);
     function  getRunning:boolean;
-    procedure PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
+    procedure PlotProfile(f: TFits; bg: double; s:integer);
     procedure PlotHistory;
     procedure ClearGraph;
     procedure doAutofocusVcurve;
@@ -101,12 +101,8 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax: double);
-    procedure FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-    procedure FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
-    function double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean;
-    procedure ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
-    procedure Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
+    procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
+    procedure Autofocus(f: TFits; x,y,s: integer);
     procedure InitAutofocus;
     procedure ChkFocusDown(value:boolean);
     procedure ChkAutoFocusDown(value:boolean);
@@ -301,333 +297,7 @@ begin
  inherited Destroy;
 end;
 
-function Tf_starprofile.double_star(img:Timaw16; c,vmin : double;ri, x,y : integer):boolean; // double star detection based difference bright_spot and center_of_gravity
-
-var SumVal,SumValX,SumValY,val,vmax,bg, Xg, Yg: double;
-     i,j : integer;
-begin
-  try
-  // New background from corner values
-  bg:=0;
-  for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg:=bg+Img[0,y+ri,x+i];{top line, left to right}
-    bg:=bg+Img[0,y+i,x+ri];{right line, top to bottom}
-    bg:=bg+Img[0,y-ri,x-i];{bottom line, right to left}
-    bg:=bg+Img[0,y-i,x-ri];{right line, bottom to top}
-  end;
-  bg:=bg/(8*ri);
-  bg:=vmin+bg/c;
-
-  SumVal:=0;
-  SumValX:=0;
-  SumValY:=0;
-  vmax:=0;
-  for i:=-ri to ri do
-    for j:=-ri to ri do
-    begin
-      val:=vmin+Img[0,y+j,x+i]/c-bg;
-      if val<0 then val:=0;
-      if val>vmax then vmax:=val;
-      SumVal:=SumVal+val;
-      SumValX:=SumValX+val*(i);
-     SumValY:=SumValY+val*(j);
-    end;
-  Xg:=SumValX/SumVal;
-  Yg:=SumValY/SumVal;
-  if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
-    else
-    result:=false;
-  except
-    on E: Exception do begin
-        msg('double_star :'+ E.Message);
-        result:=true;
-    end;
-  end;
-end;{double star detection}
-
-procedure Tf_starprofile.FindBrightestPixel(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax,starwindow2: integer; out xc,yc:integer; out vmax: double);
-// brightest 3x3 pixels in area s*s centered on x,y of image Img of size xmax,ymax
-var i,j,rs,xm,ym: integer;
-            val :double;
-begin
- rs:= s div 2;
- if (x-rs)<3 then x:=rs+3;
- if (x+rs)>(xmax-3) then x:=xmax-rs-3;
- if (y-rs)<3 then y:=rs+3;
- if (y+rs)>(ymax-3) then y:=ymax-rs-3;
-
- vmax:=0;
- xm:=0;
- ym:=0;
-
- try
-
- // try with double star exclusion
- for i:=-rs to rs do
-   for j:=-rs to rs do begin
-     val:=(Img[0,y+j-1 ,x+i-1]+Img[0,y+j-1 ,x+i]+Img[0,y+j-1 ,x+i+1]+
-           Img[0,y+j ,x+i-1]+Img[0,y+j ,x+i]+Img[0,y+j ,x+i+1]+
-           Img[0,y+j+1 ,x+i-1]+Img[0,y+j+1 ,x+i]+Img[0,y+j+1 ,x+i+1])/9;
-
-     Val:=vmin+Val/c;
-     if Val>vmax then
-     begin
-       if double_star(img,c,vmin,starwindow2, x+i,y+j)=false then
-       begin
-         vmax:=Val;
-         xm:=i;
-         ym:=j;
-       end;
-     end;
- end;
-
- // if we not find anything repeat with only max value
- if vmax=0 then
-   for i:=-rs to rs do
-     for j:=-rs to rs do begin
-       val:=(Img[0,y+j-1 ,x+i-1]+Img[0,y+j-1 ,x+i]+Img[0,y+j-1 ,x+i+1]+
-             Img[0,y+j ,x+i-1]+Img[0,y+j ,x+i]+Img[0,y+j ,x+i+1]+
-             Img[0,y+j+1 ,x+i-1]+Img[0,y+j+1 ,x+i]+Img[0,y+j+1 ,x+i+1])/9;
-
-       Val:=vmin+Val/c;
-       if Val>vmax then
-       begin
-         vmax:=Val;
-         xm:=i;
-         ym:=j;
-       end;
-   end;
-
- xc:=x+xm;
- yc:=y+ym;
-
- except
-   on E: Exception do begin
-       msg('FindBrightestPixel :'+ E.Message);
-       vmax:=0;
-   end;
- end;
-
-end;
-
-procedure Tf_starprofile.FindStarPos(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-// center of gravity in area s*s centered on x,y of image Img of size xmax,ymax
-const
-    max_ri=100;
-var i,j,rs: integer;
-    SumVal,SumValX,SumValY: double;
-    val,xg,yg:double;
-    distance :integer;
-    bg_average : double;
-    distance_histogram : array [0..max_ri] of integer;
-    HistStart: boolean;
-begin
-
-  vmax:=0;
-  bg:=0;
-  rs:=s div 2;
-  if (x-s)<1 then x:=s+1;
-  if (x+s)>(xmax-1) then x:=xmax-s-1;
-  if (y-s)<1 then y:=s+1;
-  if (y+s)>(ymax-1) then y:=ymax-s-1;
-
-  try
-
-  // average background
-  bg_average:=0;
-  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg_average:=bg_average+Img[0,y+rs,x+i];{top line, left to right}
-    bg_average:=bg_average+Img[0,y+i,x+rs];{right line, top to bottom}
-    bg_average:=bg_average+Img[0,y-rs,x-i];{bottom line, right to left}
-    bg_average:=bg_average+Img[0,y-i,x-rs];{right line, bottom to top}
-  end;
-  bg_average:=bg_average/(8*rs);
-
-  bg_standard_deviation:=0;
-  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
-  begin
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+rs,x+i]);{top line, left to right}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y+i,x+rs]);{right line, top to bottom}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y-rs,x-i]);{bottom line, right to left}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Img[0,y-i,x-rs]);{left line, bottom to top}
-  end;
-  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*rs))/c;
-
-  bg:=vmin+bg_average/c;
-
-  // Get center of gravity whithin star detection box
-  SumVal:=0;
-  SumValX:=0;
-  SumValY:=0;
-  vmax:=0;
-  for i:=-rs to rs do
-   for j:=-rs to rs do begin
-     val:=vmin+Img[0,y+j,x+i]/c-bg;
-     if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
-     begin
-       if val>vmax then vmax:=val;
-       SumVal:=SumVal+val;
-       SumValX:=SumValX+val*(i);
-       SumValY:=SumValY+val*(j);
-     end;
-   end;
-
-  if sumval=0 then
-  begin
-    ri:=3;
-    exit;
-  end;
-
-  Xg:=SumValX/SumVal;
-  Yg:=SumValY/SumVal;
-  xc:=round(x+Xg);
-  yc:=round(y+Yg);
-
- // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
-
- for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
-
- for i:=-rs to rs do begin
-   for j:=-rs to rs do begin
-     val:=vmin+Img[0,yc+j,xc+i]/c-bg;
-     if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
-     begin
-       distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
-       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
-     end;
-   end;
-  end;
-
- ri:=0;
- HistStart:=false;
- repeat
-    inc(ri);
-    if distance_histogram[ri]>0 then {continue until we found a value>0, center of reflector ring can be black}
-       HistStart:=true;
- until ((ri>=max_ri) or (HistStart and (distance_histogram[ri]=0)));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
-
- inc(ri,2);
-
- if ri=0 then ri:=rs;
- if ri<3 then ri:=3;
-
- except
-   on E: Exception do begin
-       if E is EAccessViolation then
-          msg('FindStarPos : Error, please increase the Focus window size.')
-       else
-          msg('FindStarPos :'+ E.Message);
-       vmax:=0;
-   end;
- end;
-end;
-
-procedure Tf_starprofile.GetHFD(img:Timaw16; c,vmin: double; x,y,ri: integer; var bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax: double);
-var i,j,xmax,ymax: integer;
-    SumVal,SumValX,SumValY,SumValR: double;
-    Xg,Yg: double;
-    r:double;
-    val, pixel_counter: double;
-
-    function value_subpixel(x1,y1:double):double; {calculate image pixel value on subpixel level}
-    // see: https://www.ap-i.net/mantis/file_download.php?file_id=817&type=bug 
-    var
-      x_trunc,y_trunc: integer;
-      x_frac,y_frac : double;
-    begin
-      try
-      result:=0;
-      x_trunc:=trunc(x1);
-      y_trunc:=trunc(y1);
-      if (x_trunc<0) or (x_trunc>(xmax-2)) or (y_trunc<0) or (y_trunc>(ymax-2)) then exit;
-
-      x_frac :=frac(x1);
-      y_frac :=frac(y1);
-      result:= Img[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
-      result:=result + Img[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
-      result:=result + Img[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
-      result:=result + Img[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
-      except
-        on E: Exception do begin
-            msg('value_subpixel :'+ E.Message);
-            result:=0;
-        end;
-      end;
-    end;
-
-begin
-// x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
-hfd:=-1;
-star_fwhm:=-1;
-if ri<=0 then exit;
-
-try
-
-ymax:=Length(img[0]);
-xmax:=Length(img[0,0]);
-
-// Get center of gravity whithin radius of interest
-SumVal:=0;
-SumValX:=0;
-SumValY:=0;
-valmax:=0;
-for i:=-ri to ri do
- for j:=-ri to ri do begin
-   val:=vmin+Img[0,y+j,x+i]/c-bg;
-   if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
-   begin
-     if val>valmax then valmax:=val;
-     SumVal:=SumVal+val;
-     SumValX:=SumValX+val*(i);
-     SumValY:=SumValY+val*(j);
-   end;
- end;
-if SumVal=0 then begin Fsnr:=0; exit; end;{no values, abort. star_fwhm is already -1}
-Xg:=SumValX/SumVal;
-Yg:=SumValY/SumVal;
-xc:=x+Xg;
-yc:=y+Yg;
-
-// Get HFD
-SumVal:=0;
-SumValR:=0;
-pixel_counter:=0;
-if valmax>1 then
-   Fsnr:=valmax/sqrt(valmax+2*bg)
-else
-  Fsnr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
-if Fsnr>3 then
-begin
-  for i:=-ri to ri do
-    for j:=-ri to ri do
-    begin
-      Val:=vmin+value_subpixel(xc+i,yc+j)/c-bg;
-      if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
-      begin
-        r:=sqrt(i*i+j*j);
-        SumVal:=SumVal+Val;
-        SumValR:=SumValR+Val*r;
-        if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{how many pixels are above half maximum for FWHM}
-      end;
-    end;
-    Sumval:=Sumval+0.00001;{prevent divide by zero}
-    hfd:=2*SumValR/SumVal;
-    hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
-    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }  end;
-
-except
-  on E: Exception do begin
-    msg('GetHFD :'+ E.Message);
-    hfd:=-1;
-    star_fwhm:=-1;
-  end;
-end;
-
-end;
-
-procedure Tf_starprofile.PlotProfile(img:Timaw16; c,vmin,bg: double; s:integer);
+procedure Tf_starprofile.PlotProfile(f: TFits; bg: double; s:integer);
 var i,j,i0,x1,x2,y1,y2,rs:integer;
     xs,ys: double;
     txt:string;
@@ -679,10 +349,10 @@ with profile.Picture.Bitmap do begin
     j:=trunc(FStarY);
     i0:=trunc(FStarX)-(s div 2);
     x1:=0;
-    y1:=Height-trunc((vmin+(img[0,j,i0]/c)-bg)*ys);
+    y1:=Height-trunc((f.imageMin+(f.image[0,j,i0]/f.imageC)-bg)*ys);
     for i:=0 to s-1 do begin
       x2:=trunc(i*xs);
-      y2:=trunc((vmin+(img[0,j,i0+i]/c)-bg)*ys);
+      y2:=trunc((f.imageMin+(f.image[0,j,i0+i]/f.imageC)-bg)*ys);
       y2:=Height-y2;
       Canvas.Line(x1,y1,x2,y2);
       x1:=x2;
@@ -773,7 +443,7 @@ except
 end;
 end;
 
-procedure Tf_starprofile.ShowProfile(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer; focal:double=-1; pxsize:double=-1);
+procedure Tf_starprofile.ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
 var bg,bgdev: double;
   xg,yg: double;
   xm,ym,ri: integer;
@@ -782,13 +452,13 @@ begin
 
  try
 
- if s>=(xmax div 2) then s:=xmax div 2;
- if s>=(ymax div 2) then s:=ymax div 2;
+ if s>=(f.HeaderInfo.naxis1 div 2) then s:=f.HeaderInfo.naxis1 div 2;
+ if s>=(f.HeaderInfo.naxis2 div 2) then s:=f.HeaderInfo.naxis2 div 2;
 
- FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg,bgdev);
+ f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
  if FValMax=0 then exit;
 
- GetHFD(img,c,vmin,xm,ym,ri,bg,bgdev,xg,yg,Fhfd,Ffwhm,FValMax);
+ f.GetHFD(xm,ym,ri,bg,bgdev,xg,yg,Fhfd,Ffwhm,FValMax,Fsnr);
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end
@@ -799,7 +469,7 @@ begin
    FFindStar:=true;
    FStarX:=round(xg);
    FStarY:=round(yg);
-   PlotProfile(img,c,vmin,bg,s);
+   PlotProfile(f,bg,s);
    PlotHistory;
  end else begin
    FFindStar:=false;
@@ -815,7 +485,7 @@ begin
  end;
 end;
 
-procedure Tf_starprofile.Autofocus(img:Timaw16; c,vmin: double; x,y,s,xmax,ymax: integer);
+procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
 var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   xg,yg: double;
   xm,ym,ri: integer;
@@ -826,14 +496,14 @@ begin
     ChkAutofocusDown(false);
     exit;
   end;
-  FindStarPos(img,c,vmin,x,y,s,xmax,ymax,xm,ym,ri,FValMax,bg,bgdev);
+  f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
   if FValMax=0 then begin
      msg('Autofocus canceled because no star was found.');
      FAutofocusResult:=false;
      ChkAutofocusDown(false);
      exit;
   end;
-  GetHFD(img,c,vmin,xm,ym,ri,bg,bgdev,xg,yg,Fhfd,star_fwhm,FValMax);
+  f.GetHFD(xm,ym,ri,bg,bgdev,xg,yg,Fhfd,star_fwhm,FValMax,Fsnr);
   // process this measurement
   if (Fhfd<=0) then begin
     msg('Autofocus canceled because the HFD cannot be measured');
@@ -851,7 +521,7 @@ begin
     FFindStar:=true;
     FStarX:=round(xg);
     FStarY:=round(yg);
-    PlotProfile(img,c,vmin,bg,s);
+    PlotProfile(f,bg,s);
     FhfdList[FnumHfd]:=Fhfd;
     FMinSnr:=min(FMinSnr,Fsnr);
     FminPeak:=min(FminPeak,FValMax);
@@ -874,7 +544,7 @@ begin
   FStarX:=round(xg);
   FStarY:=round(yg);
   Ffwhm:=-1;
-  PlotProfile(img,c,vmin,bg,s);
+  PlotProfile(f,bg,s);
   // check low snr
   if fsnr<AutofocusMinSNR then begin
     msg('Autofocus canceled because of low SNR, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));

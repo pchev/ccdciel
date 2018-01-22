@@ -168,8 +168,15 @@ type
      procedure ApplyBPM;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
+     procedure Shift(dx,dy: double);
+     procedure ShiftInteger(dx,dy: integer);
      procedure Bitpix8to16;
-     function SameFormat(f:TFits): boolean;
+     function  SameFormat(f:TFits): boolean;
+     function  double_star(ri, x,y : integer):boolean;
+     function  value_subpixel(x1,y1:double):double;
+     procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double);
+     procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
+     procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -1365,6 +1372,319 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
+function TFits.double_star(ri, x,y : integer):boolean;
+// double star detection based difference bright_spot and center_of_gravity
+var SumVal,SumValX,SumValY,val,vmax,bg, Xg, Yg: double;
+     i,j : integer;
+begin
+  try
+  // New background from corner values
+  bg:=0;
+  for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
+  begin
+    bg:=bg+Fimage[0,y+ri,x+i];{top line, left to right}
+    bg:=bg+Fimage[0,y+i,x+ri];{right line, top to bottom}
+    bg:=bg+Fimage[0,y-ri,x-i];{bottom line, right to left}
+    bg:=bg+Fimage[0,y-i,x-ri];{right line, bottom to top}
+  end;
+  bg:=bg/(8*ri);
+  bg:=FimageMin+bg/FimageC;
+
+  SumVal:=0;
+  SumValX:=0;
+  SumValY:=0;
+  vmax:=0;
+  for i:=-ri to ri do
+    for j:=-ri to ri do
+    begin
+      val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+      if val<0 then val:=0;
+      if val>vmax then vmax:=val;
+      SumVal:=SumVal+val;
+      SumValX:=SumValX+val*(i);
+     SumValY:=SumValY+val*(j);
+    end;
+  Xg:=SumValX/SumVal;
+  Yg:=SumValY/SumVal;
+  if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
+    else
+    result:=false;
+  except
+    on E: Exception do begin
+        result:=true;
+    end;
+  end;
+end;{double star detection}
+
+function TFits.value_subpixel(x1,y1:double):double;
+{calculate image pixel value on subpixel level}
+// see: https://www.ap-i.net/mantis/file_download.php?file_id=817&type=bug
+var
+  x_trunc,y_trunc: integer;
+  x_frac,y_frac : double;
+begin
+  try
+  result:=0;
+  x_trunc:=trunc(x1);
+  y_trunc:=trunc(y1);
+  if (x_trunc<0) or (x_trunc>(Fwidth-2)) or (y_trunc<0) or (y_trunc>(Fheight-2)) then exit;
+
+  x_frac :=frac(x1);
+  y_frac :=frac(y1);
+  result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
+  result:=result + Fimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
+  result:=result + Fimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
+  result:=result + Fimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
+  except
+    on E: Exception do begin
+        result:=0;
+    end;
+  end;
+end;
+
+procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double);
+// brightest 3x3 pixels in area s*s centered on x,y
+var i,j,rs,xm,ym: integer;
+            val :double;
+begin
+ rs:= s div 2;
+ if (x-rs)<3 then x:=rs+3;
+ if (x+rs)>(Fwidth-3) then x:=Fwidth-rs-3;
+ if (y-rs)<3 then y:=rs+3;
+ if (y+rs)>(Fheight-3) then y:=Fheight-rs-3;
+
+ vmax:=0;
+ xm:=0;
+ ym:=0;
+
+ try
+
+ // try with double star exclusion
+ for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
+           Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
+           Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
+
+     Val:=FimageMin+Val/FimageC;
+     if Val>vmax then
+     begin
+       if double_star(starwindow2, x+i,y+j)=false then
+       begin
+         vmax:=Val;
+         xm:=i;
+         ym:=j;
+       end;
+     end;
+ end;
+
+ // if we not find anything repeat with only max value
+ if vmax=0 then
+   for i:=-rs to rs do
+     for j:=-rs to rs do begin
+       val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
+             Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
+             Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
+
+       Val:=FimageMin+Val/FimageC;
+       if Val>vmax then
+       begin
+         vmax:=Val;
+         xm:=i;
+         ym:=j;
+       end;
+   end;
+
+ xc:=x+xm;
+ yc:=y+ym;
+
+ except
+   on E: Exception do begin
+       vmax:=0;
+   end;
+ end;
+
+end;
+
+procedure TFits.FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
+// center of gravity in area s*s centered on x,y
+const
+    max_ri=100;
+var i,j,rs: integer;
+    SumVal,SumValX,SumValY: double;
+    val,xg,yg:double;
+    distance :integer;
+    bg_average : double;
+    distance_histogram : array [0..max_ri] of integer;
+    HistStart: boolean;
+begin
+
+  vmax:=0;
+  bg:=0;
+  rs:=s div 2;
+  if (x-s)<1 then x:=s+1;
+  if (x+s)>(Fwidth-1) then x:=Fwidth-s-1;
+  if (y-s)<1 then y:=s+1;
+  if (y+s)>(Fheight-1) then y:=Fheight-s-1;
+
+  try
+
+  // average background
+  bg_average:=0;
+  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
+  begin
+    bg_average:=bg_average+Fimage[0,y+rs,x+i];{top line, left to right}
+    bg_average:=bg_average+Fimage[0,y+i,x+rs];{right line, top to bottom}
+    bg_average:=bg_average+Fimage[0,y-rs,x-i];{bottom line, right to left}
+    bg_average:=bg_average+Fimage[0,y-i,x-rs];{right line, bottom to top}
+  end;
+  bg_average:=bg_average/(8*rs);
+
+  bg_standard_deviation:=0;
+  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
+  begin
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+rs,x+i]);{top line, left to right}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+rs]);{right line, top to bottom}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-rs,x-i]);{bottom line, right to left}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-i,x-rs]);{left line, bottom to top}
+  end;
+  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*rs))/FimageC;
+
+  bg:=FimageMin+bg_average/FimageC;
+
+  // Get center of gravity whithin star detection box
+  SumVal:=0;
+  SumValX:=0;
+  SumValY:=0;
+  vmax:=0;
+  for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+     if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
+     begin
+       if val>vmax then vmax:=val;
+       SumVal:=SumVal+val;
+       SumValX:=SumValX+val*(i);
+       SumValY:=SumValY+val*(j);
+     end;
+   end;
+
+  if sumval=0 then
+  begin
+    ri:=3;
+    exit;
+  end;
+
+  Xg:=SumValX/SumVal;
+  Yg:=SumValY/SumVal;
+  xc:=round(x+Xg);
+  yc:=round(y+Yg);
+
+ // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
+
+ for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
+
+ for i:=-rs to rs do begin
+   for j:=-rs to rs do begin
+     val:=FimageMin+Fimage[0,yc+j,xc+i]/FimageC-bg;
+     if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+     begin
+       distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
+       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+     end;
+   end;
+  end;
+
+ ri:=0;
+ HistStart:=false;
+ repeat
+    inc(ri);
+    if distance_histogram[ri]>0 then {continue until we found a value>0, center of reflector ring can be black}
+       HistStart:=true;
+ until ((ri>=max_ri) or (HistStart and (distance_histogram[ri]=0)));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+
+ inc(ri,2);
+
+ if ri=0 then ri:=rs;
+ if ri<3 then ri:=3;
+
+ except
+   on E: Exception do begin
+       vmax:=0;
+   end;
+ end;
+end;
+
+procedure TFits.GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
+var i,j: integer;
+    SumVal,SumValX,SumValY,SumValR: double;
+    Xg,Yg: double;
+    r:double;
+    val, pixel_counter: double;
+begin
+// x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
+hfd:=-1;
+star_fwhm:=-1;
+if ri<=0 then exit;
+
+try
+// Get center of gravity whithin radius of interest
+SumVal:=0;
+SumValX:=0;
+SumValY:=0;
+valmax:=0;
+for i:=-ri to ri do
+ for j:=-ri to ri do begin
+   val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+   if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
+   begin
+     if val>valmax then valmax:=val;
+     SumVal:=SumVal+val;
+     SumValX:=SumValX+val*(i);
+     SumValY:=SumValY+val*(j);
+   end;
+ end;
+if SumVal=0 then begin snr:=0; exit; end;{no values, abort. star_fwhm is already -1}
+Xg:=SumValX/SumVal;
+Yg:=SumValY/SumVal;
+xc:=x+Xg;
+yc:=y+Yg;
+
+// Get HFD
+SumVal:=0;
+SumValR:=0;
+pixel_counter:=0;
+if valmax>1 then
+   snr:=valmax/sqrt(valmax+2*bg)
+else
+  snr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
+if snr>3 then
+begin
+  for i:=-ri to ri do
+    for j:=-ri to ri do
+    begin
+      Val:=FimageMin+value_subpixel(xc+i,yc+j)/FimageC-bg;
+      if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+      begin
+        r:=sqrt(i*i+j*j);
+        SumVal:=SumVal+Val;
+        SumValR:=SumValR+Val*r;
+        if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{how many pixels are above half maximum for FWHM}
+      end;
+    end;
+    Sumval:=Sumval+0.00001;{prevent divide by zero}
+    hfd:=2*SumValR/SumVal;
+    hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
+    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }  end;
+
+except
+  on E: Exception do begin
+    hfd:=-1;
+    star_fwhm:=-1;
+  end;
+end;
+end;
+
 function TFits.SameFormat(f:TFits): boolean;
 begin
  result := f.FFitsInfo.valid and
@@ -1484,6 +1804,73 @@ begin
       end;
     GetImage;
  end;
+end;
+
+procedure TFits.Shift(dx,dy: double);
+begin
+  // for now use integer shift, next is to try with value_subpixel()
+  ShiftInteger(round(dx),round(dy));
+end;
+
+procedure TFits.ShiftInteger(dx,dy: integer);
+var imgshift: TFits;
+    i,ii,j,k,x,y: integer;
+begin
+  imgshift:=TFits.Create(nil);
+  imgshift.SetStream(FStream);
+  imgshift.LoadStream;
+  for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+    for i:=0 to FFitsInfo.naxis2-1 do begin
+     ii:=FFitsInfo.naxis2-1-i;
+     for j := 0 to FFitsInfo.naxis1-1 do begin
+       x:=j-dx;
+       y:=ii-dy;
+       if (x>0)and(x<FFitsInfo.naxis1)and(y>0)and(y<FFitsInfo.naxis2) then begin
+         case FFitsInfo.bitpix of
+          -64 : begin
+                imgshift.imar64[k,ii,j]:=imar64[k,y,x];
+                end;
+          -32 : begin
+                imgshift.imar32[k,ii,j]:=imar32[k,y,x];
+                end;
+            8 : begin
+                imgshift.imai8[k,ii,j]:=imai8[k,y,x];
+                end;
+           16 : begin
+                imgshift.imai16[k,ii,j]:=imai16[k,y,x];
+                end;
+           32 : begin
+                imgshift.imai32[k,ii,j]:=imai32[k,y,x];
+                end;
+         end;
+       end
+       else begin
+        case FFitsInfo.bitpix of
+         -64 : begin
+               imgshift.imar64[k,ii,j]:=-FFitsInfo.bzero;
+               end;
+         -32 : begin
+               imgshift.imar32[k,ii,j]:=-FFitsInfo.bzero;
+               end;
+           8 : begin
+               imgshift.imai8[k,ii,j]:=0;
+               end;
+          16 : begin
+               imgshift.imai16[k,ii,j]:=-maxSmallint;
+               end;
+          32 : begin
+               imgshift.imai32[k,ii,j]:=-maxLongint;
+               end;
+        end;
+       end;
+     end;
+    end;
+  end;
+  imgshift.FStreamValid:=false;
+  SetStream(imgshift.Stream);
+  LoadStream;
+  GetImage;
+  imgshift.Free;
 end;
 
 end.
