@@ -1677,7 +1677,7 @@ var x,y: integer;
 begin
  if fits.HeaderInfo.valid and (not f_starprofile.AutofocusRunning) then begin
    Screen2fits(Mx,My,x,y);
-   f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+   f_starprofile.ShowProfile(fits,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
    Image1.Invalidate;
  end;
 end;
@@ -1713,7 +1713,7 @@ var xx,yy,n: integer;
     sval:string;
     ra,de: double;
     c: TcdcWCScoord;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval: double;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr: double;
 begin
 if LockMouse then exit;
  if MouseMoving and fits.HeaderInfo.valid then begin
@@ -1766,9 +1766,9 @@ if LockMouse then exit;
     else sval:='';
     s:=Starwindow div fits.HeaderInfo.BinX;
     if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
-      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,xx,yy,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
+      fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
       if vmax>0 then begin
-        f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax);
+        fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax,snr);
         if hfd>0.8 then begin
            sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
         end;
@@ -2732,7 +2732,7 @@ begin
   AbortTimer.Enabled:=false;
   StartCaptureTimer.Enabled:=false;
   if Capture and f_capture.Running then NewMessage('Exposure aborted!');
-  if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,0,0,-1,-1,-1,0,0);
+  if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
   f_preview.stop;
   f_capture.stop;
   Capture:=false;
@@ -3126,7 +3126,7 @@ begin
        f_vcurve.LoadCurve;
        exit;
      end;
-     f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
      hfdlist[j-1]:=f_starprofile.HFD;
      NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    end;
@@ -3207,7 +3207,7 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-   f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),xc1,yc1,vmax);
+   fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
@@ -4946,9 +4946,9 @@ if fits.HeaderInfo.naxis>0 then begin
   img_Height:=ImaBmp.Height;
   if Preview or Capture then begin // not on control exposure
     if f_starprofile.AutofocusRunning then
-       f_starprofile.Autofocus(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2)
+       f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
     else if f_starprofile.FindStar or f_starprofile.ChkFocus.Down then
-      f_starprofile.showprofile(fits.image,fits.imageC,fits.imageMin,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
   end;
   if f_visu.BullsEye then begin
     co:=ColorToBGRA(clRed);
@@ -5258,7 +5258,7 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-    f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -5672,7 +5672,7 @@ begin
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
-  f_starprofile.FindBrightestPixel(fits.image,fits.imageC,fits.imageMin,x,y,s,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+  fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
   f_starprofile.FindStar:=(vmax>0);
   f_starprofile.StarX:=xc;
   f_starprofile.StarY:=yc;
@@ -6502,7 +6502,7 @@ procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the 
 var
  fitsX,fitsY,size,imageX,imageY,s,xxc,yyc,rc,fx,fy,nhfd : integer;
  hfd1,star_fwhm : double;
- vmax,bg,bgdev,xc,yc: double;
+ vmax,bg,bgdev,xc,yc,snr: double;
  hfdlist :array of double;
  Saved_Cursor : TCursor;
 const
@@ -6534,11 +6534,11 @@ begin
     begin
       fitsX:=fx*s;
       hfd1:=-1;
-      f_starprofile.FindStarPos(fits.image,fits.imageC,fits.imageMin,fitsX,fitsY,s+overlap,fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2,xxc,yyc,rc,vmax,bg,bgdev);
+      fits.FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
       if ((vmax>fits.imagemax*0.1) {new bright star found}
            and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
-           and (not f_starprofile.double_star(fits.image,fits.imageC,fits.imageMin,rc, xxc,yyc)) ) {ignore double stars} then
-         f_starprofile.GetHFD(fits.image,fits.imageC,fits.imageMin,xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax);{calculated HFD}
+           and (not fits.double_star(rc, xxc,yyc)) ) {ignore double stars} then
+           fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
 
       if ((hfd1>0.8) and (hfd1<99)) then
       begin
