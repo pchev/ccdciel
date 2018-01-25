@@ -42,7 +42,7 @@ TAstrometry_engine = class(TThread)
      Fresult:integer;
      Fcmd: string;
      FOtherOptions: string;
-     FUseScript:Boolean;
+     FUseScript,FUseWSL: Boolean;
      FCustomScript: string;
      Fparam: TStringList;
      process: TProcessUTF8;
@@ -127,7 +127,7 @@ var hnd: Thandle;
     i,childnum:integer;
     resp: Tstringlist;
 {$else}
-var  Kcmd,buf: string;
+var  Kcmd,buf,Kpos: string;
      Kparam: TStringList;
      Kprocess: TProcessUTF8;
 {$endif}
@@ -159,11 +159,18 @@ if FResolver=ResolverAstrometryNet then begin
   Kparam:=TStringList.Create;
   Kprocess:=TProcessUTF8.Create(nil);
   try
-  Kcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
+  if FUseWSL then begin
+     Kcmd:='C:\Windows\System32\bash.exe';
+     Kpos:='\$2';
+  end
+  else begin
+     Kcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
+     Kpos:='$1';
+  end;
   Kparam.Clear;
   Kparam.Add('--login');
   Kparam.Add('-c');
-  Kparam.Add('"ps aux|grep backend| awk ''{print $1}'' | xargs -n1 kill "');
+  Kparam.Add('"ps aux|grep backend| awk ''{print '+Kpos+'}'' | xargs -n1 kill "');
   Kprocess.Executable:=Kcmd;
   Kprocess.Parameters:=Kparam;
   Kprocess.ShowWindow:=swoHIDE;
@@ -171,7 +178,13 @@ if FResolver=ResolverAstrometryNet then begin
   Kparam.Clear;
   Kparam.Add('--login');
   Kparam.Add('-c');
-  Kparam.Add('"ps aux|grep solve-field| awk ''{print $1}'' | xargs -n1 kill "');
+  Kparam.Add('"ps aux|grep solve-field| awk ''{print '+Kpos+'}'' | xargs -n1 kill "');
+  Kprocess.Parameters:=Kparam;
+  Kprocess.Execute;
+  Kparam.Clear;
+  Kparam.Add('--login');
+  Kparam.Add('-c');
+  Kparam.Add('"ps aux|grep astrometry-engine| awk ''{print '+Kpos+'}'' | xargs -n1 kill "');
   Kprocess.Parameters:=Kparam;
   Kprocess.Execute;
   finally
@@ -186,7 +199,7 @@ end;
 procedure TAstrometry_engine.Resolve;
 var str: TStringList;
     i: integer;
-    buf: string;
+    buf,fIn,fDrive: string;
 begin
 if FResolver=ResolverAstrometryNet then begin
  wcsfile:=ChangeFileExt(FInFile,'.wcs');
@@ -232,7 +245,18 @@ if FResolver=ResolverAstrometryNet then begin
    Start;
  end else begin
   {$ifdef mswindows}
+  FUseWSL:=false;
   Fcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
+  {$ifdef cpu64}
+  // Windows Subsystem for Linux cannot be called from a 32bit application
+    if not FileExistsUTF8(fcmd) then begin
+      buf:='C:\Windows\System32\bash.exe';
+      if FileExistsUTF8(buf)then begin
+        Fcmd:=buf;
+        FUseWSL:=true;
+      end;
+    end;
+  {$endif}
   Fparam.Add('--login');
   Fparam.Add('-c');
   buf:='"';
@@ -271,7 +295,13 @@ if FResolver=ResolverAstrometryNet then begin
     for i:=0 to str.Count-1 do buf:=buf+blank+str[i];
     str.Free;
   end;
-  buf:=buf+' ""'+StringReplace(FInFile,'\','/',[rfReplaceAll])+'""'+blank;
+  fIn:=StringReplace(FInFile,'\','/',[rfReplaceAll]);
+  if FUseWSL then begin
+     fDrive:=LowerCase(copy(fIn,1,1));
+     Delete(fIn,1,2);
+     fIn:='/mnt/'+fDrive+fIn;
+  end;
+  buf:=buf+' ""'+fIn+'""'+blank;
   Fparam.Add(buf+'"');
   {$else}
   Fcmd:='solve-field';
@@ -377,7 +407,7 @@ if FResolver=ResolverAstrometryNet then begin
     logok:=false;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
-  process.Options:=[poUsePipes,poStderrToOutPut];
+  if not FUseWSL then process.Options:=[poUsePipes,poStderrToOutPut];
   {$ifdef mswindows}
   process.ShowWindow:=swoHIDE;
   {$endif}
@@ -410,6 +440,11 @@ if FResolver=ResolverAstrometryNet then begin
   until (n<=0)or(process.Output=nil);
   process.Free;
   process:=TProcessUTF8.Create(nil);
+  if logok and (Fresult<>0) then begin
+     buf:='Error result = '+IntToStr(Fresult);
+     cbuf:=buf;
+     BlockWrite(f,cbuf,Length(buf));
+  end;
   except
      Fresult:=1;
      if logok then begin
