@@ -13,7 +13,7 @@
     <i18n>
       <EnableI18N LFM="False"/>
     </i18n>
-    <BuildModes Count="5">
+    <BuildModes Count="6">
       <Item1 Name="Default" Default="True"/>
       <Item2 Name="win32">
         <MacroValues Count="1">
@@ -48,7 +48,40 @@
           </Other>
         </CompilerOptions>
       </Item2>
-      <Item3 Name="Release">
+      <Item3 Name="win64">
+        <MacroValues Count="1">
+          <Macro2 Name="LCLWidgetType" Value="win32"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="ccdciel"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <StackSize Value="1000000"/>
+            <TargetCPU Value="x86_64"/>
+            <TargetOS Value="win64"/>
+          </CodeGeneration>
+          <Linking>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5024="True"/>
+            </CompilerMessages>
+            <CustomOptions Value="-dUseCThreads"/>
+          </Other>
+        </CompilerOptions>
+      </Item3>
+      <Item4 Name="Release">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -82,8 +115,8 @@
             <CustomOptions Value="-dUseCThreads"/>
           </Other>
         </CompilerOptions>
-      </Item3>
-      <Item4 Name="memleak">
+      </Item4>
+      <Item5 Name="memleak">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -125,8 +158,8 @@
             <CustomOptions Value="-dUseCThreads -dUseHeapTrc"/>
           </Other>
         </CompilerOptions>
-      </Item4>
-      <Item5 Name="debug">
+      </Item5>
+      <Item6 Name="debug">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -167,9 +200,10 @@
             <CustomOptions Value="-dUseCThreads"/>
           </Other>
         </CompilerOptions>
-      </Item5>
-      <SharedMatrixOptions Count="1">
+      </Item6>
+      <SharedMatrixOptions Count="2">
         <Item1 ID="755009368669" Modes="win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
+        <Item2 ID="602360172665" Modes="win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
