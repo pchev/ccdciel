@@ -29,6 +29,10 @@ install:
 	./install.sh $(PREFIX) $(CPU_TARGET)
 install_win: 
 	./install_win.sh win32 $(PREFIX)
+install_win_dual32: 
+	./install_win_dual.sh win32 $(PREFIX)
+install_win_dual64: 
+	./install_win_dual.sh win64 $(PREFIX)
 endif
 revision:
 	\$(MAKE) -C src revision
