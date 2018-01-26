@@ -2472,11 +2472,11 @@ begin
  rystep:=round(camera.BinYrange.step);
  if rxmin<1 then rxmin:=1;
  if rxmax<rxmin then rxmax:=rxmin;
- if rxmax>8 then rxmax:=8;
+ if rxmax>10 then rxmax:=10;
  if rxstep<1 then rxstep:=1;
  if rymin<1 then rymin:=1;
  if rymax<rxmin then rymax:=rymin;
- if rymax>8 then rymax:=8;
+ if rymax>10 then rymax:=10;
  if rystep<1 then rystep:=1;
  BinningList.Clear;
  i:=rxmin;
