@@ -20,8 +20,8 @@ for lang in $langs; do
 echo $lang
 
 # main index order
-grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/start.html \
-     | sed 's/<li class="level1"><div class="li"> <a href="//'| cut -d\" -f1 \
+grep '<li class="level."><div class="li"> <a href="' $lang/documentation/start.html \
+     | sed 's/<li class="level."><div class="li"> <a href="//'| cut -d\" -f1 \
      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl.txt
 
 # remove external links
