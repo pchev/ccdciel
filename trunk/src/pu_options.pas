@@ -41,6 +41,7 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    TmpDirDefault: TButton;
     ButtonDir: TButton;
     BayerMode: TComboBox;
     Autofocusmode: TRadioGroup;
@@ -54,12 +55,14 @@ type
     AutofocusTolerance: TEdit;
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
+    ButtonTempDir: TButton;
     CameraAutoCool: TCheckBox;
     AutofocusMinSNR: TEdit;
     AutofocusStartHFD: TEdit;
     AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
     AutofocusSlippageOffset: TEdit;
+    TempDir: TEdit;
     FlatAutoExposure: TCheckBox;
     FlatLevelMax: TEdit;
     FlatMinExp: TEdit;
@@ -77,6 +80,7 @@ type
     FlatType: TRadioGroup;
     Label97: TLabel;
     Label98: TLabel;
+    Label99: TLabel;
     StackShow: TCheckBox;
     StackUseDark: TCheckBox;
     StackDarkFile: TFileNameEdit;
@@ -330,6 +334,7 @@ type
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
+    procedure ButtonTempDirClick(Sender: TObject);
     procedure CheckFocusWindow(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
@@ -348,6 +353,7 @@ type
     procedure rbLinSocketChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
+    procedure TmpDirDefaultClick(Sender: TObject);
   private
     { private declarations }
     FGetPixelSize, FGetFocale: TNotifyEvent;
@@ -499,6 +505,19 @@ begin
 SelectDirectoryDialog1.InitialDir:=CaptureDir.text;
 SelectDirectoryDialog1.FileName:=CaptureDir.text;
 if SelectDirectoryDialog1.Execute then CaptureDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+
+procedure Tf_option.ButtonTempDirClick(Sender: TObject);
+begin
+SelectDirectoryDialog1.InitialDir:=TempDir.text;
+SelectDirectoryDialog1.FileName:=TempDir.text;
+if SelectDirectoryDialog1.Execute then TempDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+procedure Tf_option.TmpDirDefaultClick(Sender: TObject);
+begin
+ TempDir.text:=slash(ConfigDir)+'tmp';
 end;
 
 procedure Tf_option.FileOrFolderOptionsClick(Sender: TObject);

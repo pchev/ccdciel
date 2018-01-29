@@ -2081,6 +2081,8 @@ end;
 procedure Tf_main.SetOptions;
 var i,n: integer;
 begin
+  TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
+  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
@@ -3689,6 +3691,7 @@ begin
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
+   f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
    for i:=0 to SubDirCount-1 do begin
      f_option.FolderOptions.Cells[2,i]:=SubDirName[ord(SubDirOpt[i])];
      if SubDirActive[i] then
@@ -3844,6 +3847,7 @@ begin
 
    if f_option.ModalResult=mrOK then begin
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
+     config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
      for i:=0 to SubDirCount-1 do begin
        for n:=0 to SubDirCount-1 do
          if SubDirName[n]=f_option.FolderOptions.Cells[2,i] then break;
