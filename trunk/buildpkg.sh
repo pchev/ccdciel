@@ -24,8 +24,8 @@ if [[ $arch == i686 ]]; then
 fi
 if [[ $arch == x86_64 ]]; then 
    make_linux64=1
-   make_win_dual=1
-#   make_win32=1
+#   make_win_dual=1
+   make_win32=1
 #   make_win64=1
    extratarget=",x86_64-linux"
 fi
