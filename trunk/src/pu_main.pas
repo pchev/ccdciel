@@ -2090,6 +2090,8 @@ begin
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
   GreenBalance:=config.GetValue('/Color/GreenBalance',1.0);
   BlueBalance:=config.GetValue('/Color/BlueBalance',1.0);
+  ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
+  ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
@@ -3720,6 +3722,8 @@ begin
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
+   f_option.ClippingHigh.Text:=FormatFloat(f0,config.GetValue('/Color/ClippingOverflow',MAXWORD));
+   f_option.ClippingLow.Text:=FormatFloat(f0,config.GetValue('/Color/ClippingUnderflow',0));
    f_option.BPMsigma.Text:=inttostr(config.GetValue('/BadPixel/Sigma',5));
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.StackDarkFile.FileName:=config.GetValue('/PreviewStack/StackDarkFile','');
@@ -3907,6 +3911,8 @@ begin
      config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);
      config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
      config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
+     config.SetValue('/Color/ClippingOverflow',StrToFloatDef(f_option.ClippingHigh.Text,MAXWORD));
+     config.SetValue('/Color/ClippingUnderflow',StrToFloatDef(f_option.ClippingLow.Text,0));
      config.SetValue('/BadPixel/Sigma',StrToIntDef(f_option.BPMsigma.Text,BPMsigma));
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/StackDarkFile',f_option.StackDarkFile.FileName);
@@ -4926,6 +4932,8 @@ if fits.HeaderInfo.naxis>0 then begin
   else if f_visu.BtnSqrt.Checked then fits.itt:=ittsqrt;
   fits.ImgDmax:=round(f_visu.ImgMax);
   fits.ImgDmin:=round(f_visu.ImgMin);
+  fits.Overflow:=ClippingOverflow;
+  fits.Underflow:=ClippingUnderflow;
   fits.MarkOverflow:=f_visu.Clipping;
   fits.GetBGRABitmap(ImaBmp);
   ImgPixRatio:=fits.HeaderInfo.pixratio;
