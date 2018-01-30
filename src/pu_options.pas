@@ -41,6 +41,11 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    ClippingLow: TEdit;
+    ClippingHigh: TEdit;
+    GroupBox19: TGroupBox;
+    Label100: TLabel;
+    Label37: TLabel;
     TmpDirDefault: TButton;
     ButtonDir: TButton;
     BayerMode: TComboBox;
@@ -211,7 +216,6 @@ type
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
-    Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
     Label40: TLabel;

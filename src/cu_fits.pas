@@ -136,6 +136,7 @@ type
     Fitt : Titt;
     emptybmp:Tbitmap;
     FMarkOverflow: boolean;
+    FOverflow, FUnderflow: double;
     f_ViewHeaders: TForm;
     m_ViewHeaders: TMemo;
     p_ViewHeaders: TPanel;
@@ -195,6 +196,8 @@ type
      property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
+     property Overflow: double read FOverflow write FOverflow;
+     property Underflow: double read FUnderflow write FUnderflow;
      property hasBPM: boolean read GetHasBPM;
   end;
 
@@ -545,6 +548,8 @@ ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FStreamValid:=false;
 FMarkOverflow:=false;
+FOverflow:=MAXWORD;
+FUnderflow:=0;
 FFitsInfo.valid:=false;
 FFitsInfo.naxis1:=0;
 FHeader:=TFitsHeader.Create;
@@ -1332,9 +1337,9 @@ for i:=0 to Fheight-1 do begin
          x:=trunc(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
          p^.blue:=Citt8(x);
          if FMarkOverflow then begin
-           if maxvalue([xx,xxg,xxb])>=MAXWORD then
+           if maxvalue([xx,xxg,xxb])>=FOverflow then
              p^:=HighOverflow;
-           if minvalue([xx,xxg,xxb])<=0 then
+           if minvalue([xx,xxg,xxb])<=FUnderflow then
              p^:=LowOverflow;
          end;
        end else begin
@@ -1343,9 +1348,9 @@ for i:=0 to Fheight-1 do begin
          p^.green:=p^.red;
          p^.blue:=p^.red;
          if FMarkOverflow then begin
-           if xx<=0 then
+           if xx<=FUnderflow then
              p^:=LowOverflow
-           else if xx>=MAXWORD then
+           else if xx>=FOverflow then
              p^:=HighOverflow
          end;
        end;
