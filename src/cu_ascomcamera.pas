@@ -345,13 +345,13 @@ begin
    nax2:=ys;
    pix:=0;
    piy:=0;
-   ccdname:='Unknow CCD';
    try
      pix:=V.PixelSizeX;
      piy:=V.PixelSizeY;
    except
      msg('Error: cannot get pixel size from camera');
    end;
+   ccdname:=Fdevice;
    try
      ccdname:=V.Name;
      ccdname:=ccdname+'-'+V.SensorName;
