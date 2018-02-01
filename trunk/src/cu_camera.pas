@@ -538,16 +538,10 @@ begin
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
        if hbin1>0 then hpix1:=hpix1*hbin1;
        if hbin2>0 then hpix2:=hpix2*hbin2;
-       pixscale1:=rad2deg*arctan(hpix1/1000/focal_length);
-       pixscale2:=rad2deg*arctan(hpix2/1000/focal_length);
-       Ffits.Header.Add('CTYPE1','RA---TAN','Pixel coordinate system');
-       Ffits.Header.Add('CTYPE2','DEC--TAN','Pixel coordinate system');
-       Ffits.Header.Add('CRVAL1',hra,'value of ref pixel');
-       Ffits.Header.Add('CRVAL2',hdec,'value of ref pixel');
-       Ffits.Header.Add('CRPIX1',0.5+hnaxis1/2,'ref pixel');
-       Ffits.Header.Add('CRPIX2',0.5+hnaxis2/2,'ref pixel');
-       Ffits.Header.Add('CDELT1',pixscale1,'coordinate scale');
-       Ffits.Header.Add('CDELT2',pixscale2,'coordinate scale');
+       pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
+       pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
+       Ffits.Header.Add('SECPIX1',pixscale1,'image scale arcseconds per pixel');
+       Ffits.Header.Add('SECPIX2',pixscale2,'image scale arcseconds per pixel');
     end;
   end;
   Ffits.Header.Add('END','','');
