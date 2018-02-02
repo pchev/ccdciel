@@ -870,7 +870,7 @@ end;
 function T_ascomcamera.CheckGain:boolean;
 {$ifdef mswindows}
 var i,n: integer;
-    isol: array of WideString;
+    isol: string;
 {$endif}
 begin
   result:=false;
@@ -890,11 +890,11 @@ begin
        end;
        try
        // Check ISO list
-          isol:=V.Gains;
-          n:=Length(isol);
+          n:=V.Gains.Count;
           FISOList.Clear;
           for i:=0 to n-1 do begin
-            FISOList.Add(string(isol[i]));
+            isol:=V.Gains.item[i];
+            FISOList.Add(isol);
           end;
           FhasGainISO:=FISOList.Count>0;
        except
