@@ -28,9 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_camera, u_global, u_utils,
+uses  cu_camera, u_global,
   {$ifdef mswindows}
-    cu_fits, lazutf8sysutils, indiapi,
+    u_utils, cu_fits, lazutf8sysutils, indiapi,
     Variants, comobj,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils;
@@ -47,7 +47,6 @@ T_ascomcamera = class(T_camera)
    {$endif}
    stCCDtemp : double;
    stCooler : boolean;
-   hasGain: boolean;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
@@ -108,6 +107,8 @@ T_ascomcamera = class(T_camera)
    function GetVideoBrightnessRange:TNumRange; override;
    function GetVideoPreviewDivisor:integer; override;
    procedure SetVideoPreviewDivisor(value:integer); override;
+   procedure SetGain(value: integer); override;
+   function GetGain: integer; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -120,6 +121,7 @@ public
    procedure GetFrame(out x,y,width,height: integer); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(focuser,filters,telescope: string); override;
    procedure StartVideoPreview; override;
@@ -136,7 +138,6 @@ begin
  inherited Create(AOwner);
  stCooler:=false;
  stCCDtemp:=NullCoord;
- hasGain:=true;
  FCameraInterface:=ASCOM;
  FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);
@@ -444,7 +445,9 @@ begin
 end;
 
 procedure T_ascomcamera.SetFrame(x,y,width,height: integer);
+{$ifdef mswindows}
 var Xmax,Ymax: integer;
+{$endif}
 begin
  {$ifdef mswindows}
  if Connected then begin
@@ -864,6 +867,78 @@ begin
  FTimeOut:=num;
 end;
 
+function T_ascomcamera.CheckGain:boolean;
+{$ifdef mswindows}
+var i,n: integer;
+    isol: array of WideString;
+{$endif}
+begin
+  result:=false;
+  {$ifdef mswindows}
+  if Connected then begin
+    try
+    // check Gain property
+       i:=V.Gain;
+       try
+       // check Gain range
+          FGainMin:=V.GainMin;
+          FGainMax:=V.GainMax;
+          FhasGain:=true;
+       except
+       // No Gain range
+          FhasGain:=false;
+       end;
+       try
+       // Check ISO list
+          isol:=V.Gains;
+          n:=Length(isol);
+          FISOList.Clear;
+          for i:=0 to n-1 do begin
+            FISOList.Add(string(isol[i]));
+          end;
+          FhasGainISO:=FISOList.Count>0;
+       except
+       // No ISO list
+          FhasGainISO:=false;
+          FISOList.Clear;
+       end;
+    except
+    // No Gain property at all
+       FhasGain:=false;
+       FhasGainISO:=false;
+    end;
+    result:=(FhasGainISO or FhasGain);
+  end;
+  {$endif}
+end;
+
+procedure T_ascomcamera.SetGain(value: integer);
+begin
+ {$ifdef mswindows}
+ if Connected and (FhasGainISO or FhasGain) then begin
+   try
+      V.Gain:=value;
+   except
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascomcamera.GetGain: integer;
+begin
+ result:=0;
+ {$ifdef mswindows}
+ if Connected and (FhasGainISO or FhasGain) then begin
+   try
+      result:=V.Gain;
+   except
+      result:=0;
+   end;
+ end
+ else result:=0;
+ {$endif}
+end;
+
 procedure T_ascomcamera.StartVideoPreview;
 begin
 // todo
@@ -976,18 +1051,8 @@ end;
 
 function T_ascomcamera.GetVideoGain:integer;
 begin
-result:=0;
-{$ifdef mswindows}
-if Connected and hasGain then begin
-  try
-     result:=V.Gain;
-  except
-     hasGain:=false;
-     result:=0;
-  end;
-end
-else result:=0;
-{$endif}
+ result:=0;
+ // todo
 end;
 
 function T_ascomcamera.GetVideoGamma:integer;

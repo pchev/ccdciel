@@ -73,6 +73,9 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
+    FhasGain,FhasGainISO: boolean;
+    FGainMin, FGainMax: integer;
+    FISOList: TStringList;
     procedure msg(txt: string);
     procedure NewImage;
     procedure WriteHeaders;
@@ -133,6 +136,8 @@ T_camera = class(TComponent)
     function GetVideoBrightnessRange:TNumRange; virtual; abstract;
     function GetVideoPreviewDivisor:integer; virtual; abstract;
     procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
+    procedure SetGain(value: integer); virtual; abstract;
+    function GetGain: integer; virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -148,6 +153,7 @@ T_camera = class(TComponent)
     procedure GetFrame(out x,y,width,height: integer); virtual; abstract;
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
+    function  CheckGain: boolean; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
     procedure StartVideoPreview; virtual; abstract;
     procedure StopVideoPreview; virtual; abstract;
@@ -211,6 +217,12 @@ T_camera = class(TComponent)
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property IndiTransfert: TIndiTransfert read FIndiTransfert write FIndiTransfert;
     property IndiTransfertDir: string read FIndiTransfertDir write FIndiTransfertDir;
+    property Gain: integer read GetGain write SetGain;
+    property hasGain: boolean read FhasGain;
+    property GainMin: integer read FGainMin;
+    property GainMax: integer read FGainMax;
+    property hasGainISO: boolean read FhasGainISO;
+    property ISOList: TStringList read FISOList;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -230,6 +242,7 @@ T_camera = class(TComponent)
     property onVideoRateChange: TNotifyEvent read FonVideoRateChange write FonVideoRateChange;
     property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;
     property onVideoExposureChange: TNotifyEvent read FonVideoExposureChange write FonVideoExposureChange;
+
 
 end;
 
@@ -256,6 +269,11 @@ begin
   FCancelTemperatureRamp:=false;
   FStackDark:=TFits.Create(nil);
   FStackCount:=0;
+  FISOList:=TStringList.Create;
+  FGainMin:=0;
+  FGainMax:=0;
+  FhasGain:=false;
+  FhasGainISO:=false;
 end;
 
 destructor  T_camera.Destroy;
@@ -266,6 +284,7 @@ begin
   FVideoSizes.Free;
   FVideoRates.Free;
   FStackDark.Free;
+  FISOList.Free;
   inherited Destroy;
 end;
 
@@ -408,12 +427,12 @@ end;
 
 procedure T_camera.WriteHeaders;
 var dy,dm,dd: word;
-    origin,observer,telname,objname: string;
+    origin,observer,telname,objname,siso: string;
     focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
-    hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2: integer;
+    hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass: double;
-    gain,gamma,offset: double;
+    gamma,offset: double;
     Frx,Fry,Frwidth,Frheight: integer;
 begin
   // get header values from camera (set by INDI driver)
@@ -478,13 +497,23 @@ begin
    Frwidth:=0;
   end;
   try
-   gain:=GetVideoGain;
    gamma:=GetVideoGamma;
    offset:=GetVideoBrightness;
   except
-   gain:=0;
    gamma:=0;
    offset:=0;
+  end;
+  try
+   cgain:=0;
+   if FhasGain then cgain:=GetGain;
+  except
+   cgain:=0;
+  end;
+  try
+   siso:='';
+   if FhasGainISO then siso:=FISOList[GetGain];
+  except
+   siso:='';
   end;
   // write new header
   Ffits.Header.ClearHeader;
@@ -515,7 +544,8 @@ begin
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
   if FStackCount>1 then Ffits.Header.Add('STACKCNT',FStackCount,'Number of stacked frames');
-  if gain>0 then Ffits.Header.Add('GAIN',gain,'Video gain');
+  if cgain>0 then Ffits.Header.Add('GAIN',cgain,'Video gain');
+  if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
   if gamma>0 then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
   if offset>0 then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
   if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X');
