@@ -424,6 +424,7 @@ type
     Procedure DisconnectCamera(Sender: TObject);
     procedure SetCameraActiveDevices;
     procedure ShowBinningRange;
+    procedure ShowGain;
     procedure ShowFrameRange;
     procedure ShowFrame;
     procedure SetFrame(Sender: TObject);
@@ -1876,6 +1877,7 @@ begin
   ShowTemperatureRange;
   ShowExposureRange;
   ShowBinningRange;
+  ShowGain;
   ShowFrameRange;
   SetFocusMode;
 end;
@@ -2504,6 +2506,33 @@ begin
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_editplan.Binning.ItemIndex:=0;
+end;
+
+procedure Tf_main.ShowGain;
+begin
+ camera.CheckGain;
+ f_capture.PanelGain.Visible:=(camera.hasGain or camera.hasGainISO);
+ f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
+ if camera.hasGainISO then begin
+   f_capture.ISObox.Visible:=true;
+   f_capture.GainEdit.Visible:=false;
+   f_capture.ISObox.Items.Assign(camera.ISOList);
+   f_capture.ISObox.ItemIndex:=camera.Gain;
+   f_preview.ISObox.Visible:=true;
+   f_preview.GainEdit.Visible:=false;
+   f_preview.ISObox.Items.Assign(camera.ISOList);
+   f_preview.ISObox.ItemIndex:=camera.Gain;
+ end;
+ if camera.hasGain and (not camera.hasGainISO) then begin
+   f_capture.ISObox.Visible:=false;
+   f_capture.GainEdit.Visible:=true;
+   f_capture.GainEdit.Hint:=IntToStr(camera.GainMin)+'...'+IntToStr(camera.GainMax);
+   f_capture.GainEdit.Text:=IntToStr(camera.Gain);
+   f_preview.ISObox.Visible:=false;
+   f_preview.GainEdit.Visible:=true;
+   f_preview.GainEdit.Hint:=IntToStr(camera.GainMin)+'...'+IntToStr(camera.GainMax);
+   f_preview.GainEdit.Text:=IntToStr(camera.Gain);
+ end;
 end;
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);
@@ -4289,7 +4318,7 @@ end;
 Procedure Tf_main.StartPreviewExposure(Sender: TObject);
 var e: double;
     buf: string;
-    p,binx,biny: integer;
+    p,binx,biny,i: integer;
 begin
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
@@ -4336,6 +4365,13 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
         camera.SetBinning(binx,biny);
      end;
   end;
+  if camera.hasGainISO then begin
+     if camera.Gain<>f_preview.ISObox.ItemIndex then camera.Gain:=f_preview.ISObox.ItemIndex;
+  end;
+  if camera.hasGain and (not camera.hasGainISO) then begin
+     i:=StrToIntDef(f_preview.GainEdit.Text,camera.Gain);
+     if camera.Gain<>i then camera.Gain:=i;
+  end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=f_capture.Fname.Text;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
@@ -4363,7 +4399,7 @@ end;
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 var e: double;
     buf: string;
-    p,binx,biny,waittime: integer;
+    p,binx,biny,waittime,i: integer;
     ftype:TFrameType;
 begin
 if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) then begin
@@ -4411,6 +4447,14 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
         camera.SetBinning(binx,biny);
      end;
   end;
+  // check and set gain
+   if camera.hasGainISO then begin
+     if camera.Gain<>f_capture.ISObox.ItemIndex then camera.Gain:=f_capture.ISObox.ItemIndex;
+   end;
+   if camera.hasGain and (not camera.hasGainISO) then begin
+     i:=StrToIntDef(f_capture.GainEdit.Text,camera.Gain);
+     if camera.Gain<>i then camera.Gain:=i;
+   end;
   // check and set frame
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then begin
     ftype:=TFrameType(f_capture.FrameType.ItemIndex);

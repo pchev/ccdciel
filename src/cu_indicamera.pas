@@ -72,9 +72,10 @@ private
    VideoFPS: INumberVectorProperty;
    FPSest,FPSavg: INumber;
    ImageAdjustments: INumberVectorProperty;
-   Brightness,Gamma,Gain,Exposure:INumber;
+   IBrightness,IGamma,IGain,IExposure:INumber;
    StreamOptions: INumberVectorProperty;
    StreamRate:INumber;
+   CCDIso: ISwitchVectorProperty;
 
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
@@ -172,6 +173,8 @@ private
    function GetVideoBrightnessRange:TNumRange; override;
    function GetVideoPreviewDivisor:integer; override;
    procedure SetVideoPreviewDivisor(value:integer); override;
+   procedure SetGain(value: integer); override;
+   function GetGain: integer; override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -184,6 +187,7 @@ private
    procedure GetFrame(out x,y,width,height: integer); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(focuser,filters,telescope: string); override;
    procedure StartVideoPreview; override;
@@ -273,10 +277,10 @@ begin
     CCDVideoRates:=nil;
     VideoFPS:=nil;
     ImageAdjustments:=nil;
-    Brightness:=nil;
-    Gamma:=nil;
-    Gain:=nil;
-    Exposure:=nil;
+    IBrightness:=nil;
+    IGamma:=nil;
+    IGain:=nil;
+    IExposure:=nil;
     StreamOptions:=nil;
     CCDCooler:=nil;
     CCDTemperature:=nil;
@@ -299,6 +303,10 @@ begin
     Fconnected := false;
     FStatus := devDisconnected;
     FWheelStatus:=devDisconnected;
+    CCDIso:=nil;
+    FhasGainISO:=false;
+    FhasGain:=false;
+    FISOList.Clear;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -671,11 +679,25 @@ begin
   end
   else if (proptype=INDI_NUMBER)and((propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
-     Brightness:=IUFindNumber(ImageAdjustments,'Brightness');
-     Gamma:=IUFindNumber(ImageAdjustments,'Gamma');
-     Gain:=IUFindNumber(ImageAdjustments,'Gain');
-     Exposure:=IUFindNumber(ImageAdjustments,'Exposure');
-     if Exposure=nil then Exposure:=IUFindNumber(ImageAdjustments,'Exposure (Absolute)');
+     IBrightness:=IUFindNumber(ImageAdjustments,'Brightness');
+     IGamma:=IUFindNumber(ImageAdjustments,'Gamma');
+     IGain:=IUFindNumber(ImageAdjustments,'Gain');
+     IExposure:=IUFindNumber(ImageAdjustments,'Exposure');
+     if IExposure=nil then IExposure:=IUFindNumber(ImageAdjustments,'Exposure (Absolute)');
+     FhasGain:=(IGain<>nil);
+     if FhasGain then begin
+        FGainMin:=round(IGain.min);
+        FGainMax:=round(IGain.max);
+     end;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CCD_ISO') then begin
+     CCDIso:=indiProp.getSwitch;
+     FISOList.Clear;
+     for i:=0 to CCDIso.nsp-1 do begin
+        msg(CCDIso.sp[i].lbl);
+        FISOList.Add(CCDIso.sp[i].lbl);
+     end;
+     FhasGainISO:=(FISOList.Count>0);
   end
   else if (proptype=INDI_TEXT)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
@@ -1332,6 +1354,40 @@ begin
  indiclient.Timeout:=FTimeOut;
 end;
 
+function T_indicamera.CheckGain:boolean;
+begin
+  result:=(FhasGainISO or FhasGain);
+end;
+
+procedure T_indicamera.SetGain(value: integer);
+begin
+  if (CCDIso<>nil) and FhasGainISO then begin
+    IUResetSwitch(CCDIso);
+    CCDIso.sp[value].s := ISS_ON;
+    indiclient.sendNewSwitch(CCDIso);
+  end
+  else if (IGain<>nil) and FhasGain then begin
+    IGain.value:=value;
+    indiclient.sendNewNumber(ImageAdjustments);
+  end;
+end;
+
+function T_indicamera.GetGain: integer;
+var i: integer;
+begin
+  result:=0;
+  if (CCDIso<>nil) and FhasGainISO then begin
+    for i := 0 to CCDIso.nsp - 1 do
+      if CCDIso.sp[i].s = ISS_ON then begin
+         result:=i;
+         break;
+      end;
+  end
+  else if (IGain<>nil) and FhasGain then begin
+      result:=round(IGain.value);
+  end;
+end;
+
 procedure T_indicamera.LoadConfig;
 begin
   if configprop<>nil then begin
@@ -1516,63 +1572,63 @@ end;
 function T_indicamera.GetVideoExposure:integer;
 begin
  result:=0;
- if Exposure<>nil then begin
-    result:=round(Exposure.value);
+ if IExposure<>nil then begin
+    result:=round(IExposure.value);
  end;
 end;
 
 function T_indicamera.GetVideoGain:integer;
 begin
  result:=0;
- if Gain<>nil then begin
-    result:=round(Gain.value);
+ if IGain<>nil then begin
+    result:=round(IGain.value);
  end;
 end;
 
 function T_indicamera.GetVideoGamma:integer;
 begin
  result:=0;
- if Gamma<>nil then begin
-    result:=round(Gamma.value);
+ if IGamma<>nil then begin
+    result:=round(IGamma.value);
  end;
 end;
 
 function T_indicamera.GetVideoBrightness:integer;
 begin
  result:=0;
- if Brightness<>nil then begin
-    result:=round(Brightness.value);
+ if IBrightness<>nil then begin
+    result:=round(IBrightness.value);
  end;
 end;
 
 procedure T_indicamera.SetVideoExposure(value:integer);
 begin
- if Exposure<>nil then begin;
-   Exposure.value:=value;
+ if IExposure<>nil then begin;
+   IExposure.value:=value;
    indiclient.sendNewNumber(ImageAdjustments);
  end;
 end;
 
 procedure T_indicamera.SetVideoGain(value:integer);
 begin
- if Gain<>nil then begin;
-   Gain.value:=value;
+ if IGain<>nil then begin;
+   IGain.value:=value;
    indiclient.sendNewNumber(ImageAdjustments);
  end;
 end;
 
 procedure T_indicamera.SetVideoGamma(value:integer);
 begin
- if Gamma<>nil then begin;
-   Gamma.value:=value;
+ if IGamma<>nil then begin;
+   IGamma.value:=value;
    indiclient.sendNewNumber(ImageAdjustments);
  end;
 end;
 
 procedure T_indicamera.SetVideoBrightness(value:integer);
 begin
- if Brightness<>nil then begin;
-   Brightness.value:=value;
+ if IBrightness<>nil then begin;
+   IBrightness.value:=value;
    indiclient.sendNewNumber(ImageAdjustments);
  end;
 end;
@@ -1580,40 +1636,40 @@ end;
 function T_indicamera.GetVideoExposureRange:TNumRange;
 begin
  result:=NullRange;
- if Exposure<>nil then begin
-    result.min:=Exposure.min;
-    result.max:=Exposure.max;
-    result.step:=Exposure.step;
+ if IExposure<>nil then begin
+    result.min:=IExposure.min;
+    result.max:=IExposure.max;
+    result.step:=IExposure.step;
  end
 end;
 
 function T_indicamera.GetVideoGainRange:TNumRange;
 begin
  result:=NullRange;
- if Gain<>nil then begin
-    result.min:=Gain.min;
-    result.max:=Gain.max;
-    result.step:=Gain.step;
+ if (IGain<>nil)and(not FhasGainISO) then begin
+    result.min:=IGain.min;
+    result.max:=IGain.max;
+    result.step:=IGain.step;
  end
 end;
 
 function T_indicamera.GetVideoGammaRange:TNumRange;
 begin
  result:=NullRange;
- if Gamma<>nil then begin
-    result.min:=Gamma.min;
-    result.max:=Gamma.max;
-    result.step:=Gamma.step;
+ if IGamma<>nil then begin
+    result.min:=IGamma.min;
+    result.max:=IGamma.max;
+    result.step:=IGamma.step;
  end
 end;
 
 function T_indicamera.GetVideoBrightnessRange:TNumRange;
 begin
  result:=NullRange;
- if Brightness<>nil then begin
-    result.min:=Brightness.min;
-    result.max:=Brightness.max;
-    result.step:=Brightness.step;
+ if IBrightness<>nil then begin
+    result.min:=IBrightness.min;
+    result.max:=IBrightness.max;
+    result.step:=IBrightness.step;
  end
 end;
 

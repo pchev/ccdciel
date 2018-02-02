@@ -37,6 +37,8 @@ type
     BtnStart: TButton;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
+    GainEdit: TEdit;
+    ISObox: TComboBox;
     FocusCount: TEdit;
     FrameType: TComboBox;
     ExpTime: TComboBox;
@@ -45,8 +47,10 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    LabelGain: TLabel;
     led: TShape;
     Panel1: TPanel;
+    PanelGain: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -155,7 +159,6 @@ begin
      end;
   end;
 end;
-
 
 procedure Tf_capture.Stop;
 begin

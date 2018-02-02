@@ -35,7 +35,11 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    GainEdit: TEdit;
+    ISObox: TComboBox;
+    LabelGain: TLabel;
     Panel5: TPanel;
+    PanelGain: TPanel;
     StackPreview: TCheckBox;
     ExpTime: TComboBox;
     Binning: TComboBox;
