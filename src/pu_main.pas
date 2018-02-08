@@ -888,6 +888,7 @@ begin
   Image1.OnPaint := @Image1Paint;
   Image1.PopupMenu := ImagePopupMenu;
   Image1.Cursor:=crCross;
+  f_msg:=Tf_msg.Create(self);
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -1053,8 +1054,6 @@ begin
   f_visu.onRedraw:=@Redraw;
   f_visu.onZoom:=@ZoomImage;
   f_visu.onRedrawHistogram:=@RedrawHistogram;
-
-  f_msg:=Tf_msg.Create(self);
 
   f_frame:=Tf_frame.Create(self);
   f_frame.onSet:=@SetFrame;
@@ -1482,6 +1481,10 @@ begin
     config.DeleteValue('/StarAnalysis/AutofocusMeanNumPoint');
     config.DeleteValue('/StarAnalysis/AutofocusMeanMovement');
     SaveConfig;
+  end;
+  if oldver<'0.9.24' then begin
+    NewMessage('!!! Please be careful of the value of the new ');
+    NewMessage('!!! Gain option in Preview, Capture and Sequences');
   end;
 end;
 
