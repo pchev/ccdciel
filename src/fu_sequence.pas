@@ -114,6 +114,7 @@ type
     procedure ShowDelayMsg(txt:string);
     procedure StopSequence;
     procedure EndSequence(Sender: TObject);
+    procedure SetEditBtn(onoff:boolean);
   public
     { public declarations }
     CurrentName, CurrentTarget, CurrentFile, CurrentStep: string;
@@ -632,6 +633,15 @@ begin
   result:=Targets.TargetDE;
 end;
 
+procedure Tf_sequence.SetEditBtn(onoff:boolean);
+begin
+  BtnLoadTargets.Enabled:=onoff;
+  BtnNewTargets.Enabled:=onoff;
+  BtnEditTargets.Enabled:=onoff;
+  BtnCopy.Enabled:=onoff;
+  BtnDelete.Enabled:=onoff;
+end;
+
 procedure Tf_sequence.StartTimerTimer(Sender: TObject);
 begin
   StartTimer.Enabled:=false;
@@ -649,6 +659,7 @@ begin
  end;
  Preview.StackPreview.Checked:=false;
  led.Brush.Color:=clLime;
+ SetEditBtn(false);
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
  Targets.Start;
@@ -657,7 +668,10 @@ end;
 procedure Tf_sequence.StopSequence;
 begin
  StatusTimer.Enabled:=false;
- if targets.TargetInitializing or targets.WaitStarting then led.Brush.Color:=clRed;
+ if targets.TargetInitializing or targets.WaitStarting then begin
+   led.Brush.Color:=clRed;
+   SetEditBtn(true);
+ end;
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
@@ -670,6 +684,7 @@ begin
  TargetRow:=-1;
  PlanRow:=-1;
  led.Brush.Color:=clRed;
+ SetEditBtn(true);
  if Unattended.Checked then mount.AbortMotion;
 end;
 
@@ -679,6 +694,7 @@ begin
  FlatWaitDusk:=false;
  FlatWaitDawn:=false;
  led.Brush.Color:=clRed;
+ SetEditBtn(true);
  PlanGrid.Invalidate;
  TargetGrid.Invalidate;
 end;
