@@ -4862,6 +4862,12 @@ try
                   inc(fileseqnum);
                 fn:=fn+IntToStr(fileseqnum)+'_';
              end;
+     fnGain: if FileNameActive[i] and f_capture.PanelGain.Visible then begin
+                if f_capture.ISObox.Visible then
+                  fn:=fn+f_capture.ISObox.Text+'_'
+                else
+                  fn:=fn+f_capture.GainEdit.Text+'_'
+             end;
    end;
  end;
  if fn<>'' then

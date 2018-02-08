@@ -47,7 +47,7 @@ type
   TAutofocusDynamicStep=(afdStart,afdMeasure,afdEnd);
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin);
-  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate);
+  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain);
 
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
@@ -247,7 +247,7 @@ const
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
   SubDirCount=6;
-  FileNameCount=6;
+  FileNameCount=7;
   SubDirName: array[0..SubDirCount-1] of string =('Subfolder by sequence name',
                                                 'Subfolder by frame type',
                                                 'Subfolder by object name',
@@ -260,7 +260,8 @@ const
                                                    'Exposure time',
                                                    'Binning',
                                                    'CCD temperature',
-                                                   'Date / Sequence'
+                                                   'Date / Sequence',
+                                                   'Gain'
                                                    );
 
   {$ifdef linux}
