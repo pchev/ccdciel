@@ -423,7 +423,9 @@ type
     Procedure ConnectCamera(Sender: TObject);
     Procedure DisconnectCamera(Sender: TObject);
     procedure SetCameraActiveDevices;
+    procedure SetBinningList(posprev,poscapt: integer);
     procedure ShowBinningRange;
+    procedure SetGainList;
     procedure ShowGain;
     procedure ShowFrameRange;
     procedure ShowFrame;
@@ -871,6 +873,7 @@ begin
   refbmp:=TBGRABitmap.Create;
   FilterList:=TStringList.Create;
   BinningList:=TStringList.Create;
+  ISOList:=TStringList.Create;
   CurrentFilterOffset:=0;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
@@ -1287,12 +1290,19 @@ begin
   end
   else
     BinningList.Add(Binning0);
-  f_preview.Binning.Items.Assign(BinningList);
-  f_capture.Binning.Items.Assign(BinningList);
-  f_editplan.Binning.Items.Assign(BinningList);
-  f_EditTargets.FlatBinning.Items.Assign(BinningList);
-  f_preview.Binning.ItemIndex:=posprev;
-  f_capture.Binning.ItemIndex:=poscapt;
+  SetBinningList(posprev,poscapt);
+
+  hasGain:=config.GetValue('/Gain/hasGain',false);
+  hasGainISO:=config.GetValue('/Gain/hasGainISO',false);
+  Gain:=config.GetValue('/Gain/Gain',0);
+  GainMin:=config.GetValue('/Gain/GainMin',0);
+  GainMax:=config.GetValue('/Gain/GainMax',0);
+  n:=config.GetValue('/Gain/NumISO',0);
+  for i:=0 to n-1 do begin
+     str:=config.GetValue('/Gain/ISO'+IntToStr(i),'');
+     ISOList.Add(str);
+  end;
+  SetGainList;
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -1569,10 +1579,18 @@ begin
   config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Text);
   config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
   config.SetValue('/Preview/Binning',f_preview.Binning.Text);
+  if hasGainISO then
+    config.SetValue('/Preview/Gain',f_preview.ISObox.Text)
+  else
+    config.SetValue('/Preview/Gain',f_preview.GainEdit.Text);
   config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
   config.SetValue('/Capture/Binning',f_capture.Binning.Text);
   config.SetValue('/Capture/FileName',f_capture.Fname.Text);
   config.SetValue('/Capture/Count',f_capture.SeqNum.Text);
+  if hasGainISO then
+    config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
+  else
+    config.SetValue('/Capture/Gain',f_capture.GainEdit.Text);
 
   config.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
   config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
@@ -1597,6 +1615,17 @@ begin
   config.SetValue('/Binning/Num',n);
   for i:=0 to n-1 do begin
      config.SetValue('/Binning/Binning'+IntToStr(i),BinningList[i]);
+  end;
+
+  config.SetValue('/Gain/hasGain',hasGain);
+  config.SetValue('/Gain/hasGainISO',hasGainISO);
+  config.SetValue('/Gain/Gain',Gain);
+  config.SetValue('/Gain/GainMin',GainMin);
+  config.SetValue('/Gain/GainMax',GainMax);
+  n:=ISOList.Count;
+  config.SetValue('/Gain/NumISO',n);
+  for i:=0 to n-1 do begin
+     config.SetValue('/Gain/ISO'+IntToStr(i),ISOList[i]);
   end;
 
   config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
@@ -1646,6 +1675,7 @@ begin
   ScrBmp.Free;
   FilterList.Free;
   BinningList.Free;
+  ISOList.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
@@ -2499,6 +2529,11 @@ begin
    end;
    inc(i,rxstep);
  end;
+ SetBinningList(posprev,poscapt);
+end;
+
+procedure Tf_main.SetBinningList(posprev,poscapt: integer);
+begin
  f_preview.Binning.Items.Assign(BinningList);
  f_capture.Binning.Items.Assign(BinningList);
  f_editplan.Binning.Items.Assign(BinningList);
@@ -2506,32 +2541,74 @@ begin
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_editplan.Binning.ItemIndex:=0;
+ f_EditTargets.FlatBinning.ItemIndex:=0;
 end;
 
 procedure Tf_main.ShowGain;
 begin
  camera.CheckGain;
- f_capture.PanelGain.Visible:=(camera.hasGain or camera.hasGainISO);
+ hasGain:=camera.hasGain;
+ hasGainISO:=camera.hasGainISO;
+ ISOList.Assign(camera.ISOList);
+ Gain:=camera.Gain;
+ GainMin:=camera.GainMin;
+ GainMax:=camera.GainMax;
+ SetGainList;
+end;
+
+procedure Tf_main.SetGainList;
+var gainprev,gaincapt:string;
+    i,posprev,poscapt:integer;
+begin
+ gainprev:=config.GetValue('/Preview/Gain','');
+ gaincapt:=config.GetValue('/Capture/Gain','');
+ posprev:=Gain;
+ poscapt:=Gain;
+ f_capture.PanelGain.Visible:=(hasGain or hasGainISO);
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
- if camera.hasGainISO then begin
+ f_EditPlan.PanelGain.Visible:=f_capture.PanelGain.Visible;
+ f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
+ if hasGainISO then begin
    f_capture.ISObox.Visible:=true;
    f_capture.GainEdit.Visible:=false;
-   f_capture.ISObox.Items.Assign(camera.ISOList);
-   f_capture.ISObox.ItemIndex:=camera.Gain;
+   f_capture.ISObox.Items.Assign(ISOList);
    f_preview.ISObox.Visible:=true;
    f_preview.GainEdit.Visible:=false;
-   f_preview.ISObox.Items.Assign(camera.ISOList);
-   f_preview.ISObox.ItemIndex:=camera.Gain;
+   f_preview.ISObox.Items.Assign(ISOList);
+   f_EditPlan.ISObox.Visible:=true;
+   f_EditPlan.GainEdit.Visible:=false;
+   f_EditPlan.ISObox.Items.Assign(ISOList);
+   f_EditTargets.ISObox.Visible:=true;
+   f_EditTargets.GainEdit.Visible:=false;
+   f_EditTargets.ISObox.Items.Assign(ISOList);
+   for i:=0 to ISOList.Count-1 do begin;
+      if ISOList[i]=gainprev then posprev:=i;
+      if ISOList[i]=gaincapt then poscapt:=i;
+   end;
+   f_capture.ISObox.ItemIndex:=poscapt;
+   f_preview.ISObox.ItemIndex:=posprev;
+   f_EditPlan.ISObox.ItemIndex:=poscapt;
+   f_EditTargets.ISObox.ItemIndex:=poscapt;
  end;
- if camera.hasGain and (not camera.hasGainISO) then begin
+ if hasGain and (not hasGainISO) then begin
    f_capture.ISObox.Visible:=false;
    f_capture.GainEdit.Visible:=true;
-   f_capture.GainEdit.Hint:=IntToStr(camera.GainMin)+'...'+IntToStr(camera.GainMax);
-   f_capture.GainEdit.Text:=IntToStr(camera.Gain);
+   f_capture.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
    f_preview.ISObox.Visible:=false;
    f_preview.GainEdit.Visible:=true;
-   f_preview.GainEdit.Hint:=IntToStr(camera.GainMin)+'...'+IntToStr(camera.GainMax);
-   f_preview.GainEdit.Text:=IntToStr(camera.Gain);
+   f_preview.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_EditPlan.ISObox.Visible:=false;
+   f_EditPlan.GainEdit.Visible:=true;
+   f_EditPlan.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_EditTargets.ISObox.Visible:=false;
+   f_EditTargets.GainEdit.Visible:=true;
+   f_EditTargets.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   posprev:=StrToIntDef(gainprev,gain);
+   poscapt:=StrToIntDef(gaincapt,gain);
+   f_capture.GainEdit.Text:=IntToStr(poscapt);
+   f_preview.GainEdit.Text:=IntToStr(posprev);
+   f_EditPlan.GainEdit.Text:=IntToStr(poscapt);
+   f_EditTargets.GainEdit.Text:=IntToStr(poscapt);
  end;
 end;
 

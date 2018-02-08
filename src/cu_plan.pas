@@ -204,6 +204,10 @@ begin
     StepTotalCount:=p.repeatcount;
     if p.exposure>0 then Fcapture.ExpTime.Text:=p.exposure_str;
     Fcapture.Binning.Text:=p.binning_str;
+    if hasGainISO then
+      Fcapture.ISObox.ItemIndex:=p.gain
+    else
+      Fcapture.GainEdit.Text:=IntToStr(p.gain);
     Fcapture.SeqNum.Text:=p.count_str;
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Fcapture.CheckBoxDither.Checked:=p.dither;

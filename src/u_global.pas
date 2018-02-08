@@ -87,6 +87,7 @@ type
               autofocuscount: integer;
               filter: integer;
               binx,biny: integer;
+              gain: integer;
               frtype: TFrameType;
               description: string;
               constructor Create;
@@ -110,6 +111,7 @@ type
               startrise,endset: boolean;
               repeatcount: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
+              FlatGain: integer;
               FlatFilters: string;
               preview,astrometrypointing,updatecoord,inplaceautofocus: boolean;
               delay, previewexposure: double;
@@ -286,7 +288,7 @@ const
     OpenFileCMD: string = 'open';
   {$else}
     OpenFileCMD: string = 'xdg-open';   // default FreeDesktop.org
-  {$endif}
+    {$endif}
 
 var
   onMsgGlobal: TNotifyMsg;
@@ -359,6 +361,9 @@ var
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
+  hasGain, hasGainISO : boolean;
+  ISOList: TStringList;
+  Gain,GainMin,GainMax: integer;
 
   procedure globalmsg(str:string);
 
@@ -431,6 +436,7 @@ begin
   FlatCount:=Source.FlatCount;
   FlatBinX:=Source.FlatBinX;
   FlatBinY:=Source.FlatBinY;
+  FlatGain:=Source.FlatGain;
   FlatFilters:=Source.FlatFilters;
 end;
 
@@ -478,6 +484,7 @@ begin
   filter:=Source.filter;
   binx:=Source.binx;
   biny:=Source.biny;
+  gain:=Source.gain;
   frtype:=Source.frtype;
   dither:=Source.dither;
   dithercount:=Source.dithercount;
