@@ -705,6 +705,7 @@ begin
       fls.filter:=FilterList.IndexOf(flfilter[i]);
       fls.binx:=flt.FlatBinX;
       fls.biny:=flt.FlatBinY;
+      fls.gain:=flt.FlatGain;
       fls.count:=flt.FlatCount;
       fls.exposure:=FlatMinExp;
       fls.delay:=1;

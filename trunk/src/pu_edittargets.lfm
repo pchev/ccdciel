@@ -220,10 +220,10 @@ object f_EditTargets: Tf_EditTargets
     Height = 595
     Top = 0
     Width = 330
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alRight
     ShowTabs = False
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
@@ -231,25 +231,25 @@ object f_EditTargets: Tf_EditTargets
       ClientWidth = 328
       object Panel3: TPanel
         Left = 0
-        Height = 593
+        Height = 587
         Top = 0
-        Width = 328
+        Width = 322
         Align = alClient
-        ClientHeight = 593
-        ClientWidth = 328
+        ClientHeight = 587
+        ClientWidth = 322
         TabOrder = 0
         object PanelRepeat: TPanel
           Left = 1
           Height = 125
           Top = 412
-          Width = 326
+          Width = 320
           Align = alTop
           ClientHeight = 125
-          ClientWidth = 326
+          ClientWidth = 320
           TabOrder = 0
           object PreviewExposure: TEdit
             Left = 128
-            Height = 25
+            Height = 23
             Hint = 'The exposure time for the preview loop'
             Top = 91
             Width = 44
@@ -259,18 +259,18 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label9: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 94
-            Width = 106
+            Width = 91
             Caption = 'Preview exposure'
             ParentColor = False
           end
           object Preview: TCheckBox
             Left = 8
-            Height = 21
+            Height = 19
             Hint = 'Start a preview loop when waiting for the delay to expire.'
             Top = 64
-            Width = 212
+            Width = 185
             Caption = 'Preview when waiting to repeat'
             OnChange = TargetChange
             ParentBidiMode = False
@@ -278,31 +278,31 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label13: TLabel
             Left = 188
-            Height = 19
+            Height = 15
             Top = 40
-            Width = 57
+            Width = 51
             Caption = '[seconds]'
             ParentColor = False
           end
           object Label11: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 40
-            Width = 46
+            Width = 39
             Caption = 'Interval'
             ParentColor = False
           end
           object Label10: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 11
-            Width = 42
+            Width = 36
             Caption = 'Repeat'
             ParentColor = False
           end
           object Delay: TEdit
             Left = 92
-            Height = 25
+            Height = 23
             Hint = 'A delay to wait before to repeat.'
             Top = 37
             Width = 80
@@ -312,7 +312,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object RepeatCount: TEdit
             Left = 92
-            Height = 25
+            Height = 23
             Hint = 'The number of time to repeat.'
             Top = 8
             Width = 80
@@ -322,9 +322,9 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label14: TLabel
             Left = 188
-            Height = 19
+            Height = 15
             Top = 94
-            Width = 57
+            Width = 51
             Caption = '[seconds]'
             ParentColor = False
           end
@@ -333,10 +333,10 @@ object f_EditTargets: Tf_EditTargets
           Left = 1
           Height = 70
           Top = 312
-          Width = 326
+          Width = 320
           Align = alTop
           ClientHeight = 70
-          ClientWidth = 326
+          ClientWidth = 320
           TabOrder = 1
           object BtnAnytime: TButton
             Left = 232
@@ -350,7 +350,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object ObjEndTime: TMaskEdit
             Left = 92
-            Height = 25
+            Height = 23
             Hint = 'End the capture at this time, even if the plan is not finished.'
             Top = 40
             Width = 70
@@ -364,7 +364,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object ObjStartTime: TMaskEdit
             Left = 92
-            Height = 25
+            Height = 23
             Hint = 'Wait to this time before to start imaging.'
             Top = 8
             Width = 70
@@ -378,36 +378,36 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label4: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 42
-            Width = 53
+            Width = 47
             Caption = 'End time'
             ParentColor = False
           end
           object Label3: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 10
-            Width = 59
+            Width = 51
             Caption = 'Start time'
             ParentColor = False
           end
           object ObjStartRise: TCheckBox
             Left = 168
-            Height = 21
+            Height = 19
             Hint = 'Set the start time to the object rise (above defined altitude)'
             Top = 10
-            Width = 45
+            Width = 38
             Caption = 'rise'
             OnChange = ObjStartRiseChange
             TabOrder = 3
           end
           object ObjEndSet: TCheckBox
             Left = 168
-            Height = 21
+            Height = 19
             Hint = 'Set the end time to the object set (below defined altitude)'
             Top = 40
-            Width = 45
+            Width = 38
             Caption = ' set'
             OnChange = ObjEndSetChange
             TabOrder = 4
@@ -417,10 +417,10 @@ object f_EditTargets: Tf_EditTargets
           Left = 1
           Height = 165
           Top = 109
-          Width = 326
+          Width = 320
           Align = alTop
           ClientHeight = 165
-          ClientWidth = 326
+          ClientWidth = 320
           TabOrder = 2
           object BtnCurrentCoord: TButton
             Left = 226
@@ -434,7 +434,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointDEC: TEdit
             Left = 98
-            Height = 25
+            Height = 23
             Hint = 'Target declination'
             Top = 42
             Width = 100
@@ -443,7 +443,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointRA: TEdit
             Left = 98
-            Height = 25
+            Height = 23
             Hint = 'Target Right Ascension'
             Top = 6
             Width = 100
@@ -452,17 +452,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label6: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 44
-            Width = 67
+            Width = 60
             Caption = 'Center DEC'
             ParentColor = False
           end
           object Label5: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Top = 8
-            Width = 59
+            Width = 53
             Caption = 'Center RA'
             ParentColor = False
           end
@@ -478,10 +478,10 @@ object f_EditTargets: Tf_EditTargets
           end
           object PointAstrometry: TCheckBox
             Left = 8
-            Height = 21
+            Height = 19
             Hint = 'Use plate solving to increase the accuracy of the telescope position.'
             Top = 112
-            Width = 246
+            Width = 212
             Caption = 'Use astrometry to refine the position'
             OnChange = TargetChange
             TabOrder = 4
@@ -498,20 +498,20 @@ object f_EditTargets: Tf_EditTargets
           end
           object UpdateCoord: TCheckBox
             Left = 8
-            Height = 21
+            Height = 19
             Hint = 'Update the coordinates of moving objects from the planetarium before to slew to the target.'#10'Be sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed above.'
             Top = 88
-            Width = 225
+            Width = 200
             Caption = 'Update RA+Dec from Planetarium'
             OnChange = TargetChange
             TabOrder = 6
           end
           object InplaceAutofocus: TCheckBox
             Left = 8
-            Height = 21
+            Height = 19
             Hint = 'You can avoid to move to a focus star if this target field include a suitable star.'#10'Beware the auto-focus will fail if the star is too faint.'
             Top = 136
-            Width = 181
+            Width = 160
             Caption = 'Stay in place for autofocus'
             OnChange = TargetChange
             TabOrder = 7
@@ -521,24 +521,24 @@ object f_EditTargets: Tf_EditTargets
           Left = 1
           Height = 38
           Top = 274
-          Width = 326
+          Width = 320
           Align = alTop
           ClientHeight = 38
-          ClientWidth = 326
+          ClientWidth = 320
           TabOrder = 3
           object UseRotator: TCheckBox
             Left = 8
-            Height = 21
+            Height = 19
             Hint = 'Move the rotator before to start.'
             Top = 8
-            Width = 128
+            Width = 110
             Caption = 'Set rotator angle '
             OnChange = UseRotatorChange
             TabOrder = 0
           end
           object RotatorAngle: TEdit
             Left = 144
-            Height = 25
+            Height = 23
             Hint = 'The rotator angle'
             Top = 6
             Width = 48
@@ -561,30 +561,30 @@ object f_EditTargets: Tf_EditTargets
           Left = 1
           Height = 108
           Top = 1
-          Width = 326
+          Width = 320
           Align = alTop
           ClientHeight = 108
-          ClientWidth = 326
+          ClientWidth = 320
           TabOrder = 4
           object Label1: TLabel
             Left = 16
-            Height = 19
+            Height = 15
             Top = 25
-            Width = 39
+            Width = 35
             Caption = 'Object'
             ParentColor = False
           end
           object Label2: TLabel
             Left = 16
-            Height = 19
+            Height = 15
             Top = 54
-            Width = 26
+            Width = 23
             Caption = 'Plan'
             ParentColor = False
           end
           object PlanList: TComboBox
             Left = 98
-            Height = 35
+            Height = 23
             Hint = 'The plan that define the steps required to take the object pictures.'
             Top = 48
             Width = 126
@@ -613,17 +613,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object Label7: TLabel
             Left = 16
-            Height = 19
+            Height = 15
             Top = 0
-            Width = 58
+            Width = 51
             Caption = 'Sequence'
             ParentColor = False
           end
           object LabelSeq: TLabel
             Left = 98
-            Height = 19
+            Height = 15
             Top = 1
-            Width = 58
+            Width = 50
             Caption = 'LabelSeq'
             Font.Style = [fsBold]
             ParentColor = False
@@ -631,7 +631,7 @@ object f_EditTargets: Tf_EditTargets
           end
           object ObjectName: TEdit
             Left = 98
-            Height = 25
+            Height = 23
             Hint = 'The name of the object'
             Top = 23
             Width = 126
@@ -661,17 +661,17 @@ object f_EditTargets: Tf_EditTargets
           Left = 1
           Height = 30
           Top = 382
-          Width = 326
+          Width = 320
           Align = alTop
           ClientHeight = 30
-          ClientWidth = 326
+          ClientWidth = 320
           TabOrder = 5
           object CheckBoxRepeat: TCheckBox
             Left = 8
-            Height = 21
+            Height = 19
             Hint = 'Repeat this object a number of time before to go to next target'
             Top = 4
-            Width = 203
+            Width = 178
             Caption = 'Repeat the plan for this object'
             OnChange = CheckBoxRepeatChange
             TabOrder = 0
@@ -711,7 +711,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object ScriptList: TComboBox
         Left = 98
-        Height = 35
+        Height = 23
         Top = 48
         Width = 126
         ItemHeight = 0
@@ -787,7 +787,7 @@ object f_EditTargets: Tf_EditTargets
       object Label16: TLabel
         Left = 16
         Height = 19
-        Top = 172
+        Top = 208
         Width = 46
         Caption = 'Binning'
         ParentColor = False
@@ -795,7 +795,7 @@ object f_EditTargets: Tf_EditTargets
       object FlatBinning: TComboBox
         Left = 104
         Height = 35
-        Top = 168
+        Top = 200
         Width = 100
         ItemHeight = 0
         OnChange = TargetChange
@@ -805,7 +805,7 @@ object f_EditTargets: Tf_EditTargets
       object FlatFilterList: TCheckListBox
         Left = 16
         Height = 207
-        Top = 240
+        Top = 264
         Width = 280
         ItemHeight = 0
         OnClick = TargetChange
@@ -815,7 +815,7 @@ object f_EditTargets: Tf_EditTargets
       object Label17: TLabel
         Left = 16
         Height = 19
-        Top = 216
+        Top = 240
         Width = 36
         Caption = 'Filters'
         ParentColor = False
@@ -835,6 +835,48 @@ object f_EditTargets: Tf_EditTargets
         Width = 80
         OnChange = TargetChange
         TabOrder = 3
+      end
+      object PanelGain: TPanel
+        Left = 0
+        Height = 28
+        Top = 160
+        Width = 240
+        BevelOuter = bvNone
+        Caption = ' '
+        ClientHeight = 28
+        ClientWidth = 240
+        TabOrder = 4
+        Visible = False
+        object ISObox: TComboBox
+          Left = 104
+          Height = 35
+          Hint = 'Exposure time in secondes'
+          Top = 1
+          Width = 100
+          ItemHeight = 0
+          OnChange = TargetChange
+          Style = csDropDownList
+          TabOrder = 0
+          Visible = False
+        end
+        object LabelGain: TLabel
+          Left = 16
+          Height = 19
+          Top = 4
+          Width = 27
+          Caption = 'Gain'
+          ParentColor = False
+        end
+        object GainEdit: TEdit
+          Left = 104
+          Height = 25
+          Top = 0
+          Width = 80
+          OnChange = TargetChange
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
       end
     end
   end

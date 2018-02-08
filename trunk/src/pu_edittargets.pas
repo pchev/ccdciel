@@ -55,13 +55,17 @@ type
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
+    GainEdit: TEdit;
     InplaceAutofocus: TCheckBox;
+    ISObox: TComboBox;
     Label12: TLabel;
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;
+    LabelGain: TLabel;
     LabelSeq2: TLabel;
     FlatTime: TRadioGroup;
+    PanelGain: TPanel;
     TabSheet3: TTabSheet;
     UpdateCoord: TCheckBox;
     Panel8: TPanel;
@@ -503,6 +507,7 @@ begin
   end;
   t.FlatBinX:=1;
   t.FlatBinY:=1;
+  t.FlatGain:=Gain;
   t.FlatCount:=15;
   TargetList.Cells[0,i]:=IntToStr(i);
   TargetList.Cells[1,i]:=SkyFlatTxt;
@@ -711,6 +716,10 @@ begin
     if j<0 then
       j:=FlatBinning.Items.Add(buf);
     FlatBinning.ItemIndex:=j;
+    if hasGainISO then
+      ISObox.ItemIndex:=t.FlatGain
+    else
+      GainEdit.Text:=IntToStr(t.FlatGain);
     filterlst:=TStringList.Create();
     SplitRec(t.FlatFilters,';',filterlst);
     for i:=0 to FlatFilterList.Count-1 do begin
@@ -807,6 +816,12 @@ begin
     end else begin
       t.FlatBinX:=1;
       t.FlatBinY:=1;
+    end;
+    if hasGainISO then begin
+       t.FlatGain:=ISObox.ItemIndex;
+    end
+    else begin
+       t.FlatGain:=StrToIntDef(GainEdit.Text,Gain) ;
     end;
     t.FlatFilters:='';
     for j:=0 to FlatFilterList.Count-1 do begin

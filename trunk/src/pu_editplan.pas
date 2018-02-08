@@ -44,8 +44,12 @@ type
     CheckBoxRepeat: TCheckBox;
     DitherCount: TEdit;
     AutofocusCount: TEdit;
+    GainEdit: TEdit;
+    ISObox: TComboBox;
+    LabelGain: TLabel;
     Panel6: TPanel;
     Panel7: TPanel;
+    PanelGain: TPanel;
     PanelRepeat: TPanel;
     Desc: TEdit;
     Label10: TLabel;
@@ -142,6 +146,8 @@ begin
     p.binx:=1;
     p.biny:=1;
   end;
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
+  p.gain:=StrToIntDef(str,Gain);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
   originalFilter[i]:=str;
   j:=Filter.Items.IndexOf(str);
@@ -243,6 +249,10 @@ begin
   FrameType.ItemIndex:=ord(p.frtype);
   Exposure.Text:=p.exposure_str;
   Binning.Text:=p.binning_str;
+  if hasGainISO then
+    ISObox.ItemIndex:=p.gain
+  else
+    GainEdit.Text:=IntToStr(p.gain);
   Filter.ItemIndex:=p.filter;
   Count.Text:=p.count_str;
   RepeatCount.Text:=p.repeatcount_str;
@@ -279,6 +289,12 @@ begin
   end else begin
     p.binx:=1;
     p.biny:=1;
+  end;
+  if hasGainISO then begin
+     p.gain:=ISObox.ItemIndex;
+  end
+  else begin
+     p.gain:=StrToIntDef(GainEdit.Text,Gain) ;
   end;
   p.filter:=Filter.ItemIndex;
   p.count:=StrToIntDef(Count.Text,1);
@@ -386,6 +402,7 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',FrameType.Items[ord(p.frtype)]);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);
     if Filter.Items.Count>0 then begin // do not erase the filters if the filter wheel is not connected
       k:=p.filter;
       if (k<0)or(k>Filter.Items.Count-1) then str:=''
