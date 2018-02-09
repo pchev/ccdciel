@@ -4836,11 +4836,7 @@ try
    case FileNameOpt[i] of
      fnObj : if FileNameActive[i] then begin
              if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
-                buf:=StringReplace(f_capture.Fname.Text,' ','',[rfReplaceAll]);
-                buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
-                buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
-                buf:=StringReplace(buf,':','_',[rfReplaceAll]);
-                fn:=fn+buf+'_';
+                fn:=fn+trim(f_capture.Fname.Text)+'_';
              end
              else
                 fn:=fn+trim(f_capture.FrameType.Text)+'_';
@@ -4873,6 +4869,10 @@ try
              end;
    end;
  end;
+ fn:=StringReplace(fn,' ','',[rfReplaceAll]);
+ fn:=StringReplace(fn,'/','_',[rfReplaceAll]);
+ fn:=StringReplace(fn,'\','_',[rfReplaceAll]);
+ fn:=StringReplace(fn,':','_',[rfReplaceAll]);
  if fn<>'' then
     delete(fn,length(fn),1); // remove last _
  fn:=slash(fd)+fn+'.fits';
