@@ -41,7 +41,7 @@ uses
   pu_pascaleditor, pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI,
   fu_video, pu_vcurve, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
   cu_ascomrotator, cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog,
-  cu_indiwatchdog;
+  cu_indiwatchdog, pu_focusercalibration;
 
 {$R *.res}
 
@@ -60,6 +60,7 @@ begin
   Application.CreateForm(Tf_EditPlan, f_EditPlan);
   Application.CreateForm(Tf_planetariuminfo, f_planetariuminfo);
   Application.CreateForm(Tf_pause, f_pause);
+  Application.CreateForm(Tf_focusercalibration, f_focusercalibration);
   Application.Run;
 end.
 

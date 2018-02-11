@@ -334,6 +334,10 @@ object f_main: Tf_main
           OnClick = MenuApplyBPMClick
         end
       end
+      object MenuFocuserCalibration: TMenuItem
+        Caption = 'Focuser calibration'
+        OnClick = MenuFocuserCalibrationClick
+      end
       object N1: TMenuItem
         Caption = '-'
       end
