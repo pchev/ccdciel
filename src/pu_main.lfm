@@ -135,14 +135,14 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 336
-        ClientWidth = 186
+        ClientHeight = 334
+        ClientWidth = 178
         ImageIndex = 0
         object PanelRight1: TPanel
           Left = 0
-          Height = 336
+          Height = 334
           Top = 0
-          Width = 186
+          Width = 178
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -158,8 +158,8 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 336
-        ClientWidth = 186
+        ClientHeight = 334
+        ClientWidth = 178
         ImageIndex = 1
         object PanelRight2: TPanel
           Left = 0
@@ -181,8 +181,8 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 336
-        ClientWidth = 186
+        ClientHeight = 334
+        ClientWidth = 178
         ImageIndex = 2
         object PanelRight3: TPanel
           Left = 0
@@ -204,8 +204,8 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 336
-        ClientWidth = 186
+        ClientHeight = 334
+        ClientWidth = 178
         ImageIndex = 3
         object PanelRight4: TPanel
           Left = 0
@@ -227,8 +227,8 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 336
-        ClientWidth = 186
+        ClientHeight = 334
+        ClientWidth = 178
         ImageIndex = 4
         object PanelRight5: TPanel
           Left = 0
@@ -1212,12 +1212,14 @@ object f_main: Tf_main
     top = 32
   end
   object StatusTimer: TTimer
+    Enabled = False
     Interval = 15000
     OnTimer = StatusTimerTimer
     left = 272
     top = 184
   end
   object TimerStampTimer: TTimer
+    Enabled = False
     OnTimer = TimerStampTimerTimer
     left = 384
     top = 112

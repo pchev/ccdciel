@@ -1312,6 +1312,7 @@ begin
 
   LoadFocusStar;
 
+  StatusTimer.Enabled:=true;
   StartupTimer.Enabled:=true;
 end;
 
@@ -1421,6 +1422,7 @@ end;
 procedure Tf_main.UpdConfig(oldver:string);
 var ok:boolean;
     i: integer;
+    msg: string;
 begin
   if trim(oldver)='' then
      exit;
@@ -1483,8 +1485,10 @@ begin
     SaveConfig;
   end;
   if oldver<'0.9.24' then begin
-    NewMessage('!!! Please be careful of the value of the new ');
-    NewMessage('!!! Gain option in Preview, Capture and Sequences');
+    msg:='This version add Gain control for the camera that support this option.'+crlf+
+         'Please be careful of the default value for the Gain in Preview, Capture and Sequences tools';
+    NewMessage(msg);
+    MessageDlg(caption,msg,mtWarning,[mbOK],0);
   end;
 end;
 
