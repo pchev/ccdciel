@@ -246,7 +246,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="64">
+    <Units Count="65">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -588,6 +588,13 @@
         <Filename Value="cu_watchdog.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit63>
+      <Unit64>
+        <Filename Value="pu_focusercalibration.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_focusercalibration"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit64>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -325,6 +325,7 @@ var
   TemperatureSlope: double;
   FocuserTemp, FocuserLastTemp, FocuserTempCoeff: double;
   FocuserPositionMin, FocuserPositionMax: integer;
+  Starwindow,Focuswindow: integer;
   AutofocusMode:TAutofocusMode;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserBacklash,FocuserDelay,AutofocusBinning: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;
@@ -340,7 +341,7 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  CancelAutofocus, InplaceAutofocus, Autofocusing: Boolean;
+  CancelAutofocus, InplaceAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
   NFocusStars: integer;

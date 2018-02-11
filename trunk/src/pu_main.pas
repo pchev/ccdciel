@@ -30,7 +30,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
-  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve,
+  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
@@ -63,6 +63,7 @@ type
     MenuItem10: TMenuItem;
     MenuBrowseLog: TMenuItem;
     MenuApplyBPM: TMenuItem;
+    MenuFocuserCalibration: TMenuItem;
     MenuShowLog: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem2: TMenuItem;
@@ -249,6 +250,7 @@ type
     procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
     procedure MenuFocusaidClick(Sender: TObject);
+    procedure MenuFocuserCalibrationClick(Sender: TObject);
     procedure MenuFocuserInClick(Sender: TObject);
     procedure MenuFocuserOutClick(Sender: TObject);
     procedure MenuFrameResetClick(Sender: TObject);
@@ -371,7 +373,7 @@ type
     cdcWCSinfo: TcdcWCSinfo;
     WCSxyNrot,WCSxyErot: double;
     SaveFocusZoom: double;
-    ImgCx, ImgCy, Mx, My,Starwindow,Focuswindow: integer;
+    ImgCx, ImgCy, Mx, My: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
@@ -463,6 +465,7 @@ type
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
+    Procedure FocuserCalibration(Sender: TObject);
     Procedure FocusStart(Sender: TObject);
     Procedure FocusStop(Sender: TObject);
     Procedure AutoFocusStart(Sender: TObject);
@@ -3173,10 +3176,10 @@ begin
     f_vcurve.onLearnVcurve:=@LearnVcurve;
     f_vcurve.onStopVcurve:=@StopVcurve;
     f_vcurve.onSaveVcurve:=@doSaveVcurve;
-    if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Text:=IntToStr(VcCenterpos) else f_vcurve.FocusPos.Text:='';
-    if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Text:=IntToStr(VcHalfwidth) else f_vcurve.HalfWidth.Text:='';
-    f_vcurve.Nsteps.Text:=IntToStr(VcNsteps);
   end;
+  if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Text:=IntToStr(VcCenterpos) else f_vcurve.FocusPos.Text:='';
+  if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Text:=IntToStr(VcHalfwidth) else f_vcurve.HalfWidth.Text:='';
+  f_vcurve.Nsteps.Text:=IntToStr(VcNsteps);
   formpos(f_vcurve,mouse.CursorPos.x,mouse.CursorPos.y);
   f_vcurve.Show;
   f_vcurve.LoadCurve;
@@ -3307,6 +3310,10 @@ begin
  VcCenterpos:=StrToIntDef(f_vcurve.FocusPos.Text,round(NullCoord));
  VcHalfwidth:=StrToIntDef(f_vcurve.HalfWidth.Text,round(NullCoord));
  VcNsteps:=StrToIntDef(f_vcurve.Nsteps.Text,30);
+ if VcNsteps>99 then begin
+   VcNsteps:=99;
+   f_vcurve.Nsteps.Text:='99';
+ end;
  if (VcCenterpos=NullCoord)or(VcHalfwidth=NullCoord) then exit;
  AutofocusVcFilterOffset:=CurrentFilterOffset;
  try
@@ -5371,6 +5378,16 @@ begin
   f_starprofile.ChkFocus.Down:=not f_starprofile.ChkFocus.Down;
 end;
 
+procedure Tf_main.MenuFocuserCalibrationClick(Sender: TObject);
+begin
+  f_focusercalibration.onCalibration:=@FocuserCalibration;
+  if AutofocusMode=afVcurve then
+     f_focusercalibration.onVcurveLearning:=@FocusVcurveLearning
+  else
+     f_focusercalibration.onVcurveLearning:=nil;
+  f_focusercalibration.Show;
+end;
+
 procedure Tf_main.MenuFocuserInClick(Sender: TObject);
 begin
   FocusIN(Sender);
@@ -5391,8 +5408,252 @@ begin
   SetFrame(Sender);
 end;
 
+Procedure Tf_main.FocuserCalibration(Sender: TObject);
+var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin: integer;
+    savepos,step,hfdmax,newpos,initj,numhfdout,numhfdin: integer;
+    vmax,exp,a,b,r:double;
+    savedir,initstep,OutOfRange: boolean;
+    hfdin,hfdout: array[0..100]of array[1..2] of double;
+    p:array of TDouble2;
+    buf: string;
+begin
+  if  f_capture.Running  then begin
+    buf:='Cannot run calibration now, stop capture and retry';
+    NewMessage(buf);
+    f_focusercalibration.CalibrationCancel(buf);
+    exit;
+  end;
+  if  f_preview.Running  then begin
+    buf:='Cannot run calibration now, stop preview and retry';
+    NewMessage(buf);
+    f_focusercalibration.CalibrationCancel(buf);
+    exit;
+  end;
+  OutOfRange:=false;
+  savepos:=focuser.Position;
+  savedir:=AutofocusMoveDir;
+  step:=f_focusercalibration.MinStep;
+  hfdmax:=f_focusercalibration.MaxHfd;
+  // check window size is enough to reach hfd=20
+  if (Starwindow div camera.BinX)< (4*hfdmax) then
+    Starwindow:=4*hfdmax*camera.BinX;
+  if Focuswindow < (5*Starwindow) then
+    Focuswindow:=5*Starwindow;
+  if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
+    x:=fits.HeaderInfo.naxis1 div 2;
+    y:=fits.HeaderInfo.naxis2 div 2;
+    rs:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+    fits.FindBrightestPixel(x,y,rs,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    f_starprofile.FindStar:=(vmax>0);
+    f_starprofile.StarX:=xc;
+    f_starprofile.StarY:=yc;
+  end;
+  if f_starprofile.FindStar then begin
+    try
+     bin:=camera.BinX;
+     exp:=f_preview.Exposure;
+     s:=Focuswindow div camera.BinX;
+     s2:=s div 2;
+     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
+     Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+     if camera.CameraInterface=INDI then begin
+       // INDI frame in unbinned pixel
+       xc:=xc*camera.BinX;
+       yc:=yc*camera.BinY;
+       s3:=s2*camera.BinX;
+       s4:=s*camera.BinX;
+       camera.SetFrame(xc-s3,yc-s3,s4,s4);
+     end
+     else begin
+       camera.SetFrame(xc-s2,yc-s2,s,s);
+     end;
+     f_starprofile.StarX:=s2;
+     f_starprofile.StarY:=s2;
+     SaveFocusZoom:=f_visu.Zoom;
+     f_visu.Zoom:=0;
+     ImgZoom:=0;
+     f_preview.StackPreview.Checked:=false;
+     NewMessage('Focuser calibration started');
+     j:=0;
+     initstep:=true;
+     initj:=0;
+     numhfdout:=0;
+     TerminateFocuserCalibration:=false;
+     // measure in FocusDirOut direction
+     NewMessage('Set focus direction outward');
+     repeat
+       if not f_preview.ControlExposure(exp,bin,bin) then begin
+          buf:='Exposure fail!';
+          NewMessage(buf);
+          f_focusercalibration.CalibrationCancel(buf);
+          exit;
+       end;
+       if TerminateFocuserCalibration then begin
+         buf:='Request to stop focuser calibration';
+         NewMessage(buf);
+         f_focusercalibration.CalibrationCancel(buf);
+         exit;
+       end;
+       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+       if j=0 then
+         NewMessage('Start position '+' pos:'+IntToStr(focuser.Position)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR))
+       else
+         NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(focuser.Position)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+       hfdout[j,1]:=focuser.Position;
+       hfdout[j,2]:=f_starprofile.hfd;
+       numhfdout:=j;
+       f_focusercalibration.ProgressR(j,hfdout[j,1],hfdout[j,2]);
+       if initstep and (j>0) then begin
+         if (hfdout[j,2]-hfdout[0,2])>hfdout[0,2] then begin
+            initstep:=false;
+            initj:=j;
+         end
+         else begin
+            step:=2*step;
+         end;
+       end;
+       inc(j);
+       if (f_starprofile.hfd<hfdmax) then begin
+         // set new focuser position
+         newpos:=focuser.Position+step;
+         if newpos<focuser.PositionRange.max then
+            focuser.Position:=newpos
+         else
+            OutOfRange:=true;
+         wait(1);
+       end;
+    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>20);
+    if (j>20) then begin
+      buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or increase the minimum movement';
+      NewMessage(buf);
+      f_focusercalibration.CalibrationCancel(buf);
+      exit;
+    end;
+    if OutOfRange then begin
+      buf:='Reach focuser range limit! please better position the focuser half way of it''s mechanical travel or decrease the maximum HFD';
+      NewMessage(buf);
+      f_focusercalibration.CalibrationCancel(buf);
+      exit;
+    end;
+    // measure in FocusDirIn direction
+    NewMessage('Set focus direction inward');
+    newpos:=round(hfdout[0,1]);
+    focuser.Position:=newpos;
+    wait(1);
+    numhfdin:=0;
+    j:=0;
+    repeat
+      if not f_preview.ControlExposure(exp,bin,bin) then begin
+         buf:='Exposure fail!';
+         NewMessage(buf);
+         f_focusercalibration.CalibrationCancel(buf);
+         exit;
+      end;
+      if TerminateFocuserCalibration then begin
+        buf:='Request to stop focuser calibration';
+        NewMessage(buf);
+        f_focusercalibration.CalibrationCancel(buf);
+        exit;
+      end;
+      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+      if j=0 then
+        NewMessage('Start position '+' pos:'+IntToStr(focuser.Position)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR))
+      else
+        NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(focuser.Position)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+      hfdin[j,1]:=focuser.Position;
+      hfdin[j,2]:=f_starprofile.hfd;
+      numhfdin:=j;
+      f_focusercalibration.ProgressL(j,hfdin[j,1],hfdin[j,2]);
+      inc(j);
+      if (f_starprofile.hfd<hfdmax) then begin
+        // set new focuser position
+        newpos:=focuser.Position-step;
+        if newpos>focuser.PositionRange.min then
+           focuser.Position:=newpos
+        else
+           OutOfRange:=true;
+        wait(1);
+      end;
+   until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>20);
+    if (j>20) then begin
+      buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or increase the minimum movement';
+      NewMessage(buf);
+      f_focusercalibration.CalibrationCancel(buf);
+      exit;
+    end;
+    if OutOfRange then begin
+      buf:='Reach focuser range limit! please better position the focuser half way of it''s mechanical travel or decrease the maximum HFD';
+      NewMessage(buf);
+      f_focusercalibration.CalibrationCancel(buf);
+      exit;
+    end;
+
+    // compute values
+    k:=numhfdout-initj+1;
+    SetLength(p,k);
+     for i:=0 to k-1 do begin
+       p[i,1]:=hfdout[initj+i,1];
+       p[i,2]:=hfdout[initj+i,2];
+     end;
+    LeastSquares(p,a,b,r);
+    AutofocusBinning:=bin;
+    AutofocusNearHFD:=hfdout[0,2]+(hfdmax-hfdout[0,2])/2;
+    AutofocusStartHFD:=AutofocusNearHFD+(hfdmax-AutofocusNearHFD)/2;
+    AutofocusNearNum:=3;
+    AutofocusTolerance:=2*hfdout[0,2];
+    AutofocusMinSNR:=3;
+    // vcurve
+    VcCenterpos:=round(hfdout[0,1]);
+    VcHalfwidth:=round(abs((hfdmax-b)/a-hfdout[0,1]));
+    VcNsteps:=15;
+    // dynamic
+    AutofocusDynamicNumPoint:=7;
+    AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b)/a-hfdout[0,1])/3));
+    // iterative
+    AutofocusMaxSpeed:=step;
+    for i:=1 to numhfdout do begin
+      if (hfdout[i,2]-hfdout[0,2])>(0.1*hfdout[0,2]) then begin
+        AutofocusMinSpeed:=round(abs(hfdout[i,1]-hfdout[0,1]));
+        break;
+      end;
+    end;
+    // save config
+    f_focusercalibration.ValueListEditor1.Clear;
+    f_focusercalibration.ValueListEditor1.InsertRow('Binning',inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Start HFD',inttostr(round(AutofocusStartHFD)),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Near HFD',inttostr(round(AutofocusNearHFD)),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Near num',inttostr(AutofocusNearNum),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Tolerance',FormatFloat(f1,AutofocusTolerance),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Min. SNR',FormatFloat(f1,AutofocusMinSNR),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Center position',inttostr(VcCenterpos),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Star detection window',inttostr(Starwindow),true);
+    f_focusercalibration.ValueListEditor1.InsertRow('Focus window',inttostr(Focuswindow),true);
+    f_focusercalibration.ValueListEditor2.Clear;
+    f_focusercalibration.ValueListEditor2.InsertRow('Vcurve half width',inttostr(VcHalfwidth),true);
+    f_focusercalibration.ValueListEditor2.InsertRow('Vcurve N steps',inttostr(VcNsteps),true);
+    f_focusercalibration.ValueListEditor2.InsertRow('Dynamic num',inttostr(AutofocusDynamicNumPoint),true);
+    f_focusercalibration.ValueListEditor2.InsertRow('Dynamic movement',inttostr(AutofocusDynamicMovement),true);
+    f_focusercalibration.ValueListEditor2.InsertRow('Iterative Max. speed',inttostr(AutofocusMaxSpeed),true);
+    f_focusercalibration.ValueListEditor2.InsertRow('Iterative Min. speed',inttostr(AutofocusMinSpeed),true);
+    finally
+      f_starprofile.FindStar:=false;
+      focuser.Position:=savepos;
+      AutofocusMoveDir:=savedir;
+      wait(1);
+      camera.ResetFrame;
+      f_preview.Loop:=false;
+      f_preview.BtnPreviewClick(nil);
+    end;
+  end
+  else begin
+    buf:='Select a star first!';
+    NewMessage(buf);
+    f_focusercalibration.CalibrationCancel(buf);
+  end;
+end;
+
 Procedure Tf_main.FocusStart(Sender: TObject);
-var x,y,xc,yc,s,s2: integer;
+var x,y,xc,yc,s,s2,s3,s4: integer;
     vmax:double;
 begin
   if  f_capture.Running  then begin
@@ -5418,8 +5679,13 @@ begin
        // INDI frame in unbinned pixel
        xc:=xc*camera.BinX;
        yc:=yc*camera.BinY;
+       s3:=s2*camera.BinX;
+       s4:=s*camera.BinX;
+       camera.SetFrame(xc-s3,yc-s3,s4,s4);
+     end
+     else begin
+       camera.SetFrame(xc-s2,yc-s2,s,s);
      end;
-     camera.SetFrame(xc-s2,yc-s2,s,s);
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;
      SaveFocusZoom:=f_visu.Zoom;
@@ -5761,7 +6027,7 @@ begin
 end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
-var x,y,xc,yc,s,s2: integer;
+var x,y,xc,yc,s,s2,s3,s4: integer;
     vmax: double;
 begin
   CancelAutofocus:=false;
@@ -5833,8 +6099,13 @@ begin
        // INDI frame in unbinned pixel
        xc:=xc*camera.BinX;
        yc:=yc*camera.BinY;
+       s3:=s2*camera.BinX;
+       s4:=s*camera.BinX;
+       camera.SetFrame(xc-s3,yc-s3,s4,s4);
+     end
+     else begin
+       camera.SetFrame(xc-s2,yc-s2,s,s);
      end;
-     camera.SetFrame(xc-s2,yc-s2,s,s);
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;
      f_starprofile.InitAutofocus;
