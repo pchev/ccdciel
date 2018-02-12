@@ -54,7 +54,7 @@ type
     procedure FormShow(Sender: TObject);
   private
     FCalibration: TNotifyEvent;
-    FonVcurveLearning: TNotifyEvent;
+    FonCalibrationClose: TNotifyEvent;
     FAbsolute, FRunning, FCalibrationOK: boolean;
     function GetMaxHfd: integer;
     function GetMinStep: integer;
@@ -68,7 +68,7 @@ type
     property MaxHfd: integer read GetMaxHfd;
     property MinStep: integer read GetMinStep;
     property onCalibration: TNotifyEvent read FCalibration write FCalibration;
-    property onVcurveLearning: TNotifyEvent read FonVcurveLearning write FonVcurveLearning;
+    property onCalibrationClose: TNotifyEvent read FonCalibrationClose write FonCalibrationClose;
   end;
 
 var
@@ -160,7 +160,7 @@ end;
 procedure Tf_focusercalibration.BtnCancelClick(Sender: TObject);
 begin
   TerminateFocuserCalibration:=true;
-  if (BtnCancel.Caption='Close') and Assigned(FonVcurveLearning) then FonVcurveLearning(self);
+  if (BtnCancel.Caption='Close') and Assigned(FonCalibrationClose) then FonCalibrationClose(self);
   if not FRunning then close;
 end;
 
@@ -198,6 +198,7 @@ procedure Tf_focusercalibration.Saveconfig;
 begin
   config.SetValue('/StarAnalysis/Window',Starwindow);
   config.SetValue('/StarAnalysis/Focus',Focuswindow);
+  config.SetValue('/StarAnalysis/AutoFocusMode',ord(AutofocusMode));
   config.SetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
   config.SetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
   config.SetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD);

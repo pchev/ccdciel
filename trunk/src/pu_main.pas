@@ -466,6 +466,7 @@ type
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
     Procedure FocuserCalibration(Sender: TObject);
+    Procedure FocuserCalibrationClose(Sender: TObject);
     Procedure FocusStart(Sender: TObject);
     Procedure FocusStop(Sender: TObject);
     Procedure AutoFocusStart(Sender: TObject);
@@ -5393,10 +5394,7 @@ begin
     exit;
   end;
   f_focusercalibration.onCalibration:=@FocuserCalibration;
-  if AutofocusMode=afVcurve then
-     f_focusercalibration.onVcurveLearning:=@FocusVcurveLearning
-  else
-     f_focusercalibration.onVcurveLearning:=nil;
+  f_focusercalibration.onCalibrationClose:=@FocuserCalibrationClose;
   f_focusercalibration.Show;
 end;
 
@@ -5696,7 +5694,10 @@ begin
       VcCenterpos:=round(hfdout[0,1]);
       VcHalfwidth:=round(abs((hfdmax-b)/a-hfdout[0,1]));
       VcNsteps:=15;
-    end;
+      AutoFocusMode:=afVcurve;
+    end
+    else
+      AutoFocusMode:=afDynamic;
     // dynamic
     AutofocusDynamicNumPoint:=7;
     AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b)/a-hfdout[0,1])/3));
@@ -5719,6 +5720,10 @@ begin
     f_focusercalibration.ValueListEditor1.InsertRow('Star detection window',inttostr(Starwindow),true);
     f_focusercalibration.ValueListEditor1.InsertRow('Focus window',inttostr(Focuswindow),true);
     f_focusercalibration.ValueListEditor2.Clear;
+    if AutoFocusMode=afVcurve then
+       f_focusercalibration.ValueListEditor2.InsertRow('Autofocus method','V curve',true)
+    else
+       f_focusercalibration.ValueListEditor2.InsertRow('Autofocus method','Dynamic',true);
     if FocAbsolute then begin
       f_focusercalibration.ValueListEditor2.InsertRow('Vcurve center',inttostr(VcCenterpos),true);
       f_focusercalibration.ValueListEditor2.InsertRow('Vcurve half width',inttostr(VcHalfwidth),true);
@@ -5750,6 +5755,12 @@ begin
     NewMessage(buf);
     f_focusercalibration.CalibrationCancel(buf);
   end;
+end;
+
+Procedure Tf_main.FocuserCalibrationClose(Sender: TObject);
+begin
+ SetOptions;
+ if AutofocusMode=afVcurve then FocusVcurveLearning(Sender);
 end;
 
 Procedure Tf_main.FocusStart(Sender: TObject);
