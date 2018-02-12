@@ -55,7 +55,7 @@ type
   private
     FCalibration: TNotifyEvent;
     FonVcurveLearning: TNotifyEvent;
-    FRunning, FCalibrationOK: boolean;
+    FAbsolute, FRunning, FCalibrationOK: boolean;
     function GetMaxHfd: integer;
     function GetMinStep: integer;
     procedure RunCalibration(Data: PtrInt);
@@ -64,6 +64,7 @@ type
     procedure ProgressL(n:integer; x,y: double);
     procedure ProgressR(n:integer; x,y: double);
     procedure CalibrationCancel(reason:string);
+    property FocAbsolute: boolean read FAbsolute write FAbsolute;
     property MaxHfd: integer read GetMaxHfd;
     property MinStep: integer read GetMinStep;
     property onCalibration: TNotifyEvent read FCalibration write FCalibration;
@@ -203,9 +204,11 @@ begin
   config.SetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
   config.SetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
   config.SetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
-  config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
-  config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
-  config.SetValue('/StarAnalysis/Vcurve/VcNsteps',VcNsteps);
+  if FAbsolute then begin
+    config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
+    config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
+    config.SetValue('/StarAnalysis/Vcurve/VcNsteps',VcNsteps);
+  end;
   config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
   config.SetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
   config.SetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
