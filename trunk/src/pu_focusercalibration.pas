@@ -50,6 +50,7 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnDefaultClick(Sender: TObject);
     procedure BtnNextClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -94,6 +95,25 @@ begin
   BtnCancel.Visible:=true;
   BtnCancel.Caption:='Cancel';
   Notebook1.PageIndex:=0;
+end;
+
+procedure Tf_focusercalibration.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  CanClose := not FRunning;
+  if (BtnCancel.Caption='Close') and Assigned(FonCalibrationClose) then FonCalibrationClose(self);
+end;
+
+procedure Tf_focusercalibration.CalibrationCancel(reason:string);
+begin
+  FCalibrationOK:=false;
+  label4.Caption:=reason;
+end;
+
+procedure Tf_focusercalibration.BtnCancelClick(Sender: TObject);
+begin
+  TerminateFocuserCalibration:=true;
+  if not FRunning then close;
 end;
 
 procedure Tf_focusercalibration.BtnDefaultClick(Sender: TObject);
@@ -155,19 +175,6 @@ procedure Tf_focusercalibration.ProgressR(n:integer; x,y: double);
 begin
   PtSourceR.Add(x,y,'',clGreen);
   FitSourceR.Add(x,y);
-end;
-
-procedure Tf_focusercalibration.BtnCancelClick(Sender: TObject);
-begin
-  TerminateFocuserCalibration:=true;
-  if (BtnCancel.Caption='Close') and Assigned(FonCalibrationClose) then FonCalibrationClose(self);
-  if not FRunning then close;
-end;
-
-procedure Tf_focusercalibration.CalibrationCancel(reason:string);
-begin
-  FCalibrationOK:=false;
-  label4.Caption:=reason;
 end;
 
 procedure Tf_focusercalibration.RunCalibration(Data: PtrInt);

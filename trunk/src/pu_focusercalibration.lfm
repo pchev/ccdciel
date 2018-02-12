@@ -7,6 +7,7 @@ object f_focusercalibration: Tf_focusercalibration
   ClientHeight = 344
   ClientWidth = 517
   FormStyle = fsStayOnTop
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   Visible = False
@@ -25,7 +26,7 @@ object f_focusercalibration: Tf_focusercalibration
         Top = 8
         Width = 488
         AutoSize = False
-        Caption = 'This procedure will help you to find the focuser parameters.'#10#10'Center a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.'#10#10'Your focuser must be positioned about half way of it''s mechanical travel. If this is not the case please adjust it now.'#10#10'The binning you set in the Preview now will be used for the autofocusing operation.'
+        Caption = 'This procedure will help you to  find the focuser parameters for auto-focus.'#10#10'Center a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.'#10#10'After focusing, your focuser must be positioned about half way of it''s mechanical travel. If this is not the case please adjust it now.'#10#10'The binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again.'
         ParentColor = False
         WordWrap = True
       end
@@ -62,15 +63,15 @@ object f_focusercalibration: Tf_focusercalibration
       object Edit2: TEdit
         Left = 264
         Height = 31
-        Top = 160
+        Top = 176
         Width = 79
         TabOrder = 1
       end
       object Label5: TLabel
         Left = 8
-        Height = 40
+        Height = 48
         Top = 120
-        Width = 224
+        Width = 248
         AutoSize = False
         Caption = 'Maximum defocused HFD the focuser can safely reach'
         ParentColor = False
@@ -78,11 +79,13 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object Label6: TLabel
         Left = 8
-        Height = 19
-        Top = 168
-        Width = 174
-        Caption = 'Minimum focuser movement'
+        Height = 48
+        Top = 184
+        Width = 248
+        AutoSize = False
+        Caption = 'Minimum, starting point,  focuser movement'
         ParentColor = False
+        WordWrap = True
       end
       object Label7: TLabel
         Left = 8
@@ -90,14 +93,14 @@ object f_focusercalibration: Tf_focusercalibration
         Top = 8
         Width = 488
         AutoSize = False
-        Caption = 'Try first with the default values and adjust them only if you receive an error message on the next step.'
+        Caption = 'You can set the parameters to define how the focuser will move.'#10#10'Try first with the default values and adjust them only if you receive an error message on the next step.'
         ParentColor = False
         WordWrap = True
       end
       object BtnDefault: TButton
         Left = 368
         Height = 25
-        Top = 162
+        Top = 178
         Width = 74
         Caption = 'Default'
         OnClick = BtnDefaultClick
@@ -236,11 +239,11 @@ object f_focusercalibration: Tf_focusercalibration
     object Page6: TPage
       object Label9: TLabel
         Left = 8
-        Height = 176
+        Height = 240
         Top = 8
         Width = 472
         AutoSize = False
-        Caption = 'The data are now recorded in the profile.'#10#10'You can now review the other autofocus options using the menu Edit / Preferences / Autofocus.'#10#10'If you select to use the Vcurve method you need to learn the curve using the button V-learn in the focuser tool, it will start now if already configured.'
+        Caption = 'The data are now recorded in the profile.'#10#10'You can review the other auto-focus options using the menu '#10'Edit / Preferences / Autofocus.'#10#10'If the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.'#10'You can also do this learning later using the button V-learn in the focuser tool.'
         ParentColor = False
         WordWrap = True
       end

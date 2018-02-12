@@ -5395,6 +5395,7 @@ begin
   end;
   f_focusercalibration.onCalibration:=@FocuserCalibration;
   f_focusercalibration.onCalibrationClose:=@FocuserCalibrationClose;
+  formpos(f_focusercalibration,mouse.CursorPos.x,mouse.CursorPos.y);
   f_focusercalibration.Show;
 end;
 
