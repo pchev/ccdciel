@@ -5380,6 +5380,18 @@ end;
 
 procedure Tf_main.MenuFocuserCalibrationClick(Sender: TObject);
 begin
+  if focuser.Status<>devConnected then begin
+    ShowMessage('Focuser not connected!');
+    exit;
+  end;
+  if camera.Status<>devConnected then begin
+    ShowMessage('Camera not connected!');
+    exit;
+  end;
+  if not(focuser.hasRelativePosition or focuser.hasAbsolutePosition) then begin
+    ShowMessage('The focuser do not support Absolute or Relative movement, autofocus calibration is not possible.');
+    exit;
+  end;
   f_focusercalibration.onCalibration:=@FocuserCalibration;
   if AutofocusMode=afVcurve then
      f_focusercalibration.onVcurveLearning:=@FocusVcurveLearning
@@ -5448,7 +5460,7 @@ begin
       maxstep:=round(focuser.RelPositionRange.max);
     end
     else begin
-      buf:='The focuser do not support Absolute or Relative movement, autofocusing is not possible.';
+      buf:='The focuser do not support Absolute or Relative movement, autofocus calibration is not possible.';
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;

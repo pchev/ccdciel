@@ -45,6 +45,7 @@ type
     ClippingHigh: TEdit;
     GroupBox19: TGroupBox;
     Label100: TLabel;
+    Label101: TLabel;
     Label37: TLabel;
     TmpDirDefault: TButton;
     ButtonDir: TButton;
