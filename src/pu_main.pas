@@ -3331,7 +3331,7 @@ begin
    end;
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
-   s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+   s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
@@ -5494,7 +5494,7 @@ begin
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
-    rs:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+    rs:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
     fits.FindBrightestPixel(x,y,rs,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
@@ -5776,7 +5776,7 @@ begin
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
-    s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+    s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
     fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
@@ -6195,7 +6195,7 @@ begin
   end;
   x:=fits.HeaderInfo.naxis1 div 2;
   y:=fits.HeaderInfo.naxis2 div 2;
-  s:=min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 2;
+  s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
   fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
   f_starprofile.FindStar:=(vmax>0);
   f_starprofile.StarX:=xc;
