@@ -46,9 +46,9 @@ type
     LabelFWHM: TLabel;
     Panel3: TPanel;
     Panel4: TPanel;
-    Panel5: TPanel;
+    PanelGraph: TPanel;
+    PanelFWHM: TPanel;
     Panel6: TPanel;
-    Panel7: TPanel;
     profile: TImage;
     LabelHFD: TLabel;
     LabelImax: TLabel;
@@ -57,16 +57,24 @@ type
     ChkFocus: TSpeedButton;
     ChkAutofocus: TSpeedButton;
     BtnMeasureImage: TSpeedButton;
+    PtSourceL: TListChartSource;
+    PtSourceR: TListChartSource;
     StaticText1: TStaticText;
+    TimerHideGraph: TTimer;
     VcChart: TChart;
     VcChartL: TFitSeries;
+    VcChartPtL: TLineSeries;
+    VcChartPtR: TLineSeries;
     VcChartR: TFitSeries;
+    VcChartRegL: TLineSeries;
+    VcChartRegR: TLineSeries;
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure graphDblClick(Sender: TObject);
     procedure BtnMeasureImageClick(Sender: TObject);
+    procedure TimerHideGraphTimer(Sender: TObject);
   private
     { private declarations }
     FFindStar: boolean;
@@ -83,7 +91,7 @@ type
     maxfwhm,maximax: double;
     Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,Fsnr,FMinSnr,FminPeak:double;
     FhfdList: array of double;
-    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos: integer;
+    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult: boolean;
     ahfd: array of double;
@@ -192,8 +200,10 @@ begin
 end;
 
 procedure Tf_starprofile.InitAutofocus;
+var i: integer;
 begin
  FnumHfd:=0;
+ FnumGraph:=0;
  SetLength(FhfdList,AutofocusNearNum);
  FMinSnr:=99999;
  FminPeak:=9999999;
@@ -202,8 +212,18 @@ begin
  FAutofocusResult:=false;
  FPreFocusPos:=focuser.FocusPosition;
  focuserdirection:=AutofocusMoveDir;
+ PtSourceL.Clear;
+ FitSourceL.Clear;
+ PanelFWHM.Visible:=false;
+ PanelGraph.Visible:=true;
  case AutofocusMode of
    afVcurve   : begin
+                // plot curve in graph
+                if AutofocusMode=afVcurve then begin
+                  for i:=0 to AutofocusVcNum do begin
+                    FitSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
+                  end;
+                end;
                 msg('Autofocus start Vcurve');
                 if focuserdirection=FocusDirOut then
                    AutofocusVcStep:=vcsStartL
@@ -245,6 +265,13 @@ end;
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
 begin
   if assigned(FonMeasureImage) then FonMeasureImage(self);
+end;
+
+procedure Tf_starprofile.TimerHideGraphTimer(Sender: TObject);
+begin
+ TimerHideGraph.Enabled:=false;
+ PanelFWHM.Visible:=true;
+ PanelGraph.Visible:=false;
 end;
 
 procedure Tf_starprofile.msg(txt:string);
@@ -545,6 +572,17 @@ begin
   FStarY:=round(yg);
   Ffwhm:=-1;
   PlotProfile(f,bg,s);
+  if not FirstFrame then begin
+    inc(FnumGraph);
+    if AutofocusMode=afVcurve then begin
+      PtSourceL.Add(focuser.FocusPosition,Fhfd,'',clGreen);
+    end
+    else
+    if (not terminated) then begin
+      PtSourceL.Add(FnumGraph,Fhfd,'',clGreen);
+      FitSourceL.Add(FnumGraph,Fhfd);
+    end;
+  end;
   // check low snr
   if fsnr<AutofocusMinSNR then begin
     msg('Autofocus canceled because of low SNR, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
@@ -712,6 +750,7 @@ begin
              end;
    vcsCheckL:begin
               inc(AutofocusVcCheckNum);
+              dec(FnumGraph);
               SetLength(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
@@ -724,6 +763,7 @@ begin
              end;
    vcsCheckR:begin
               inc(AutofocusVcCheckNum);
+              dec(FnumGraph);
               SetLength(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
@@ -736,6 +776,7 @@ begin
              end;
    vcsFocusL:begin
               // move to focus
+              inc(FnumGraph);
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
@@ -746,6 +787,7 @@ begin
              end;
    vcsFocusR:begin
               // move to focus
+              inc(FnumGraph);
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
@@ -758,7 +800,7 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
-var i,k,step: integer;
+var i,k,step,c: integer;
     VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr: double;
     p:array of TDouble2;
   procedure ResetPos;
@@ -785,17 +827,18 @@ begin
               if not odd(AutofocusDynamicNumPoint) then
                 inc(AutofocusDynamicNumPoint);
               if AutofocusDynamicNumPoint<5 then AutofocusDynamicNumPoint:=5;
-              SetLength(ahfd,AutofocusDynamicNumPoint);
+              SetLength(ahfd,AutofocusDynamicNumPoint+1);
               // set initial position
               k:=AutofocusDynamicNumPoint div 2;
-              focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
               if AutofocusMoveDir=FocusDirIn then begin
+                focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
                 onFocusOUT(self);
                 Wait(1);
                 focuser.FocusSpeed:=AutofocusDynamicMovement;
                 onFocusIN(self)
               end
               else begin
+                focuser.FocusSpeed:=AutofocusDynamicMovement*(k+2);
                 onFocusIN(self);
                 Wait(1);
                 focuser.FocusSpeed:=AutofocusDynamicMovement;
@@ -824,7 +867,10 @@ begin
               else
                 onFocusOUT(self);
               wait(1);
-              if afmpos=(AutofocusDynamicNumPoint-1) then AutofocusDynamicStep:=afdEnd;
+              if afmpos=(AutofocusDynamicNumPoint) then begin
+                AutofocusDynamicStep:=afdEnd;
+                doAutofocusDynamic;
+              end;
               end;
     afdEnd: begin
               // check measure validity
@@ -844,25 +890,32 @@ begin
               end;
               // compute focus
               k:=aminpos;
+              if AutofocusMoveDir=FocusDirIn then
+                c:=1
+              else
+                c:=-1;
               // left part
               SetLength(p,k);
               for i:=0 to k-1 do begin
-                p[i,1]:=i+1;
+                p[i,1]:=i+1+c;
                 p[i,2]:=ahfd[i];
               end;
               LeastSquares(p,al,bl,rl);
               VcpiL:=-bl/al;
               // right part
-              k:=AutofocusDynamicNumPoint-k-1;
+              k:=AutofocusDynamicNumPoint-k;
               SetLength(p,k);
               for i:=0 to k-1 do begin
-                p[i,1]:=aminpos+2+i;
+                p[i,1]:=aminpos+2+i+c;
                 p[i,2]:=ahfd[aminpos+1+i];
               end;
               LeastSquares(p,ar,br,rr);
               VcpiR:=-br/ar;
               // focus position
-              if AutofocusMoveDir then r2:=rr*rr else r2:=rl*rl;
+              if AutofocusMoveDir=FocusDirIn then
+                r2:=rr*rr
+              else
+                r2:=rl*rl;
               msg('Focus quality = '+FormatFloat(f3,r2));
               step:=round(AutofocusDynamicMovement*(VcpiL+VcpiR)/2);
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;

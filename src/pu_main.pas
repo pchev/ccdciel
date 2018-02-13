@@ -6270,7 +6270,8 @@ begin
      end;
    end;
    if not f_capture.Running then StartPreviewExposure(nil);
-end;
+   f_starprofile.TimerHideGraph.Enabled:=true;
+ end;
 
 procedure Tf_main.GUIdestroy(Sender: TObject);
 begin
