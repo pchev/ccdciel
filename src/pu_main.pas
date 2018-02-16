@@ -7115,11 +7115,11 @@ end;
 
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
- fitsX,fitsY,size,imageX,imageY,s,xxc,yyc,rc,fx,fy,nhfd : integer;
- hfd1,star_fwhm : double;
- vmax,bg,bgdev,xc,yc,snr: double;
- hfdlist :array of double;
+ fitsX,fitsY,size,imageX,imageY,s,xxc,yyc,rc,fx,fy,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right,x1,x2,x3,x4,y1,y2,y3,y4 : integer;
+ hfd1,star_fwhm, vmax,bg,bgdev,xc,yc,snr, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor : double;
+ hfdlist, hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
  Saved_Cursor : TCursor;
+ mess2 : string;
 const
     overlap=2; {box overlap,results in 1 pixel overlap}
 begin
@@ -7139,8 +7139,16 @@ begin
 
   s:=14; {test image in boxes of size s*s}
 
-  nhfd:=0;
-  SetLength(hfdlist,nhfd);
+  nhfd:=0;{set counters at zero}
+  nhfd_top_left:=0;
+  nhfd_top_right:=0;
+  nhfd_bottom_left:=0;
+  nhfd_bottom_right:=0;
+  SetLength(hfdlist,0);{set array length to zero}
+  SetLength(hfdlist_top_left,0);
+  SetLength(hfdlist_top_right,0);
+  SetLength(hfdlist_bottom_left,0);
+  SetLength(hfdlist_bottom_right,0);
 
   for fy:=3 to ((img_Height) div s)-3 do { move test box with stepsize rs around}
   begin
@@ -7157,9 +7165,11 @@ begin
 
       if ((hfd1>0.8) and (hfd1<99)) then
       begin
-        inc(nhfd);
-        SetLength(hfdlist,nhfd);
-        hfdlist[nhfd-1]:=hfd1; {store hfd list}
+        inc(nhfd); SetLength(hfdlist,nhfd); hfdlist[nhfd-1]:=hfd1; {set length to new number of elements and store hfd value}
+        if ( (fitsX<(img_width div 2)) and (fitsY<(img_height div 2)) ) then begin inc(nhfd_bottom_left); SetLength(hfdlist_bottom_left,nhfd_bottom_left); hfdlist_bottom_left[nhfd_bottom_left-1]:=hfd1;end;{store corner HFD values}
+        if ( (fitsX>(img_width div 2)) and (fitsY<(img_height div 2)) ) then begin inc(nhfd_bottom_right);SetLength(hfdlist_bottom_right,nhfd_bottom_right);hfdlist_bottom_right[nhfd_bottom_right-1]:=hfd1;end;
+        if ( (fitsX<(img_width div 2)) and (fitsY>(img_height div 2)) ) then begin inc(nhfd_top_left); SetLength(hfdlist_top_left,nhfd_top_left); hfdlist_top_left[nhfd_top_left-1]:=hfd1;end;
+        if ( (fitsX>(img_width div 2)) and (fitsY>(img_height div 2)) ) then begin inc(nhfd_top_right); SetLength(hfdlist_top_right,nhfd_top_right); hfdlist_top_right[nhfd_top_right-1]:=hfd1;end;
 
         size:=round(5*hfd1);{show a square 10 times larger the HFD for quick HFD evaluation in all corners}
         imageY:=round(yc);
@@ -7171,10 +7181,50 @@ begin
     end;
   end;
   if nhfd>0 then
-    NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList)))
+  begin
+    if ((nhfd_top_left>0) and (nhfd_top_right>0) and (nhfd_bottom_left>0) and (nhfd_bottom_right>0)) then {enough information for tilt calculation}
+    begin
+      median_top_left:=SMedian(hfdList_top_left);
+      median_top_right:=SMedian(hfdList_top_right);
+      median_bottom_left:=SMedian(hfdList_bottom_left);
+      median_bottom_right:=SMedian(hfdList_bottom_right);
+
+      median_best:=min(min(median_top_left, median_top_right),min(median_bottom_left,median_bottom_right));{find best corner}
+      median_worst:=max(max(median_top_left, median_top_right),max(median_bottom_left,median_bottom_right));{find worst corner}
+
+      scale_factor:=img_width*0.25/median_worst;
+      x1:=round(-median_bottom_left*scale_factor+img_width/2);y1:=round(-median_bottom_left*scale_factor+img_height/2);{calculate coordinates counter clockwise}
+      x2:=round(+median_bottom_right*scale_factor+img_width/2);y2:=round(-median_bottom_right*scale_factor+img_height/2);
+      x3:=round(+median_top_right*scale_factor+img_width/2);y3:=round(+median_top_right*scale_factor+img_height/2);
+      x4:=round(-median_top_left*scale_factor+img_width/2);y4:=round(+median_top_left*scale_factor+img_height/2);
+
+      imabmp.Canvas.Pen.width := 2;{thickness lines}
+      imabmp.Canvas.moveto(x1,y1);{draw trapezium}
+      imabmp.Canvas.lineto(x2,y2);{draw trapezium}
+      imabmp.Canvas.lineto(x3,y3);{draw trapezium}
+      imabmp.Canvas.lineto(x4,y4);{draw trapezium}
+      imabmp.Canvas.lineto(x1,y1);{draw trapezium}
+
+      imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
+      imabmp.Canvas.lineto(x2,y2);{draw diagonal}
+      imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
+      imabmp.Canvas.lineto(x3,y3);{draw diagonal}
+      imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
+      imabmp.Canvas.lineto(x4,y4);{draw diagonal}
+      mess2:=' Tilt indication:'+inttostr(round(100*((median_worst/median_best)-1)))+'%';{estimate tilt value}
+    end
+    else
+    mess2:='';
+    NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList))+ mess2);{median HFD and tilt indication}
+  end
   else
     NewMessage('No star detected. Is the image focused and sufficiently exposed?');
   SetLength(hfdlist,0);
+  SetLength(hfdlist_top_left,0);
+  SetLength(hfdlist_top_right,0);
+  SetLength(hfdlist_bottom_left,0);
+  SetLength(hfdlist_bottom_right,0);
+
   PlotImage;
   Screen.Cursor := saved_cursor;
 end;
