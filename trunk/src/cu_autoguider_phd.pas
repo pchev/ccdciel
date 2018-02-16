@@ -394,6 +394,7 @@ begin
   while now<endt do begin
     Sleep(100);
     Application.ProcessMessages;
+    if terminated then break;
     if FState<>GUIDER_BUSY then break;
   end;
   result:=(FState<>GUIDER_BUSY);
@@ -408,6 +409,7 @@ begin
   while now<endt do begin
     Sleep(100);
     Application.ProcessMessages;
+    if terminated then break;
     if FState=GUIDER_GUIDING then break;
     inc(n);
     if ((n mod 150)=0) and assigned(FonShowMessage) then

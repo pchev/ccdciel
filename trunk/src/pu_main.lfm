@@ -1,11 +1,11 @@
 object f_main: Tf_main
   Left = 228
-  Height = 391
+  Height = 400
   Top = 136
   Width = 800
   ActiveControl = PageControlRight
   Caption = 'CCD Ciel'
-  ClientHeight = 391
+  ClientHeight = 400
   ClientWidth = 800
   KeyPreview = True
   Menu = MainMenu1
@@ -20,17 +20,17 @@ object f_main: Tf_main
   Visible = False
   object Panel1: TPanel
     Left = 0
-    Height = 341
+    Height = 350
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 341
+    ClientHeight = 350
     ClientWidth = 612
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 337
+      Height = 346
       Top = 2
       Width = 2
       Align = alLeft
@@ -66,7 +66,7 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 2
-      Height = 337
+      Height = 346
       Top = 2
       Width = 610
       Align = alClient
@@ -78,7 +78,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 2
-      Top = 339
+      Top = 348
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -97,8 +97,9 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 341
+    Top = 350
     Width = 800
+    BorderWidth = 1
     Panels = <    
       item
         Width = 300
@@ -107,23 +108,32 @@ object f_main: Tf_main
         Width = 150
       end    
       item
-        Width = 600
+        Width = 250
+      end    
+      item
+        Alignment = taRightJustify
+        Style = psOwnerDraw
+        Width = 100
       end>
+    ParentShowHint = False
     SimplePanel = False
+    ShowHint = True
+    OnDrawPanel = StatusBar1DrawPanel
+    OnResize = StatusBar1Resize
   end
   object PanelRight: TPanel
     Left = 612
-    Height = 341
+    Height = 350
     Top = 0
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 341
+    ClientHeight = 350
     ClientWidth = 188
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 309
+      Height = 318
       Top = 32
       Width = 188
       ActivePage = PageConnect
@@ -135,12 +145,12 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 305
+        ClientHeight = 314
         ClientWidth = 178
         ImageIndex = 0
         object PanelRight1: TPanel
           Left = 0
-          Height = 305
+          Height = 314
           Top = 0
           Width = 178
           Align = alClient
@@ -158,7 +168,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 305
+        ClientHeight = 314
         ClientWidth = 178
         ImageIndex = 1
         object PanelRight2: TPanel
@@ -181,7 +191,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 305
+        ClientHeight = 314
         ClientWidth = 178
         ImageIndex = 2
         object PanelRight3: TPanel
@@ -204,7 +214,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 305
+        ClientHeight = 314
         ClientWidth = 178
         ImageIndex = 3
         object PanelRight4: TPanel
@@ -227,7 +237,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 305
+        ClientHeight = 314
         ClientWidth = 178
         ImageIndex = 4
         object PanelRight5: TPanel

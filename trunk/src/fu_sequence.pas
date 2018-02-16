@@ -28,7 +28,7 @@ interface
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
   fu_capture, fu_preview, fu_filterwheel,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
-  cu_targets, cu_plan, cu_planetarium,
+  cu_targets, cu_plan, cu_planetarium, pu_pause,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -82,6 +82,7 @@ type
     TargetRow, PlanRow: integer;
     Targets: T_Targets;
     FonMsg: TNotifyMsg;
+    FConnectAutoguider: TNotifyEvent;
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
     Ffilter: Tf_filterwheel;
@@ -91,6 +92,8 @@ type
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
+    AutoguiderAlert,AutoguiderStarting: boolean;
+    AutoguiderAlertTime,AutoguiderMsgTime: double;
     procedure SetPreview(val: Tf_preview);
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);
@@ -143,6 +146,7 @@ type
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onConnectAutoguider: TNotifyEvent read FConnectAutoguider write FConnectAutoguider;
   end;
 
 var
@@ -649,14 +653,46 @@ begin
 end;
 
 procedure Tf_sequence.StartSequence;
+var ccdtemp:double;
 begin
  if preview.Running then begin
      msg('Stop preview');
      camera.AbortExposure;
      preview.stop;
+     StartTimer.Interval:=5000;
      StartTimer.Enabled:=true;
      exit;
  end;
+ if (Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
+   if AutoguiderStarting then begin
+     f_pause.Caption:='Autoguider not connected';
+     f_pause.Text:='Cannot connect to autoguider, sequence will run without guiding! '+crlf+'Do you want to continue anyway?';
+     if f_pause.Wait(30) then begin
+       msg('Sequence will run without guiding!');
+     end
+     else begin
+       msg('Sequence aborted.');
+       exit;
+     end;
+   end
+   else begin
+     msg('Try to connect to autoguider');
+     FConnectAutoguider(self);
+     AutoguiderStarting:=true;
+     StartTimer.Interval:=10000;
+     StartTimer.Enabled:=true;
+     exit;
+   end;
+ end;
+ if not camera.Cooler then begin
+    if config.GetValue('/Cooler/CameraAutoCool',false) then begin
+       ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
+       msg('Camera not cooling, set temperature to '+FormatFloat(f1,ccdtemp));
+       camera.Temperature:=ccdtemp;
+    end;
+ end;
+ AutoguiderStarting:=false;
+ AutoguiderAlert:=false;
  Preview.StackPreview.Checked:=false;
  led.Brush.Color:=clLime;
  SetEditBtn(false);
@@ -667,6 +703,7 @@ end;
 
 procedure Tf_sequence.StopSequence;
 begin
+ StartTimer.Enabled:=false;
  StatusTimer.Enabled:=false;
  if targets.TargetInitializing or targets.WaitStarting then begin
    led.Brush.Color:=clRed;
@@ -714,6 +751,7 @@ begin
      msg('Please load or create a target list first.');
    end
    else begin
+     AutoguiderStarting:=false;
      StartSequence;
    end;
  end
@@ -724,10 +762,14 @@ procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
 var buf1,buf2:string;
     i:integer;
     p: T_Plan;
+    alerttime, msgtime: integer;
+const
+    alerttimeout=5;
 begin
  try
   TargetRow:=Targets.CurrentTarget+1;
   if Targets.Running then begin
+   // show plan status
    if (TargetRow>0) then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
     buf2:=StaticText2.Caption;
@@ -743,6 +785,42 @@ begin
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;
    end;
+   // process autoguider problem during sequence
+   if AutoguiderAlert then begin
+    if (Autoguider<>nil)and(Autoguider.State=GUIDER_GUIDING) then begin
+      // autoguiding restarted, clear alert
+      AutoguiderAlert:=false;
+      msg('Autoguiding restarted.');
+    end
+    else begin
+      alerttime:=trunc((now-AutoguiderAlertTime)*minperday);
+      msgtime:=trunc((now-AutoguiderMsgTime)*minperday);
+      if alerttime>=alerttimeout then begin
+        // timeout
+        if (Autoguider=nil)or(Autoguider.State=GUIDER_DISCONNECTED) then begin
+           // no more autoguider, stop sequence
+           msg('Sequence aborted because the autoguider was not reconnected after '+IntToStr(alerttime)+' minutes.');
+           AbortSequence;
+           AutoguiderAlert:=false;
+        end
+        else begin
+           // autoguider connected but not guiding, try next target
+           msg('Autoguider was still not guiding after '+IntToStr(alerttime)+' minutes.');
+           msg('Try next target in sequence.');
+           Targets.ForceNextTarget;
+           AutoguiderAlert:=false;
+        end;
+      end
+      else begin
+       // continue to wait for a restart
+       if msgtime>=1 then begin
+         // display a message every minute
+         AutoguiderMsgTime:=now;
+         msg('Autoguiding stopped for '+IntToStr(alerttime)+' minutes, sequence timeout in '+IntToStr(alerttimeout-alerttime)+' minutes.');
+       end;
+      end;
+    end;
+   end;
   end
   else StopSequence;
 except
@@ -753,14 +831,23 @@ end;
 
 procedure Tf_sequence.AutoguiderDisconnected;
 begin
-  if Targets.Running then  AbortSequence;
+  if not AutoguiderAlert then begin
+   AutoguiderAlert:=true;
+   AutoguiderAlertTime:=now;
+   AutoguiderMsgTime:=0;
+  end;
+  //if Targets.Running then  AbortSequence;     Autoguider.State;
 end;
 
 procedure Tf_sequence.AutoguiderIddle;
 begin
   if Targets.Running and T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and (not Fautoguider.Recovering) then begin
-    msg('Autoguiding stopped unexpectedly!');
-    Targets.ForceNextTarget;
+    if not AutoguiderAlert then begin
+      AutoguiderAlert:=true;
+      AutoguiderAlertTime:=now;
+      AutoguiderMsgTime:=0;
+    end;
+    //Targets.ForceNextTarget;
   end;
 end;
 

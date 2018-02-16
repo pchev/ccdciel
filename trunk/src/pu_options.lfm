@@ -43,10 +43,10 @@ object f_option: Tf_option
     Height = 483
     Top = 0
     Width = 482
-    ActivePage = TabSheet1
+    ActivePage = TabSheet10
     Align = alClient
     MultiLine = True
-    TabIndex = 0
+    TabIndex = 5
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -279,7 +279,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -353,7 +353,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -607,7 +607,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -842,8 +842,8 @@ object f_option: Tf_option
           Height = 40
           Top = 48
           Width = 328
-          ClientHeight = 40
-          ClientWidth = 328
+          ClientHeight = 36
+          ClientWidth = 324
           TabOrder = 1
           object TemperatureSlope: TEdit
             Left = 8
@@ -1049,44 +1049,27 @@ object f_option: Tf_option
       end
       object GroupCorrection: TGroupBox
         Left = 8
-        Height = 80
+        Height = 88
         Top = 96
         Width = 416
         Caption = 'Focuser correction'
-        ClientHeight = 60
+        ClientHeight = 68
         ClientWidth = 414
         TabOrder = 1
         object FocuserBacklash: TEdit
           Left = 266
           Height = 31
-          Hint = 'The amount of backlash to correct when the focus direction change. '#10'Set to zero if you can set the backlash in the focuser driver. '#10'This NOT apply to focuser with absolute position reading.'
-          Top = 2
+          Hint = 'The number of additional steps used for the compensation movement. '#10'This can be greater than the actual backlash.'
+          Top = 0
           Width = 54
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
         end
-        object Label52: TLabel
-          Left = 4
-          Height = 19
-          Top = 5
-          Width = 252
-          Caption = 'Backlash in steps (for relative focuser only)'
-          ParentColor = False
-        end
-        object BtnDisableBacklash: TButton
-          Left = 330
-          Height = 21
-          Top = 4
-          Width = 75
-          Caption = 'Disable'
-          OnClick = BtnDisableBacklashClick
-          TabOrder = 1
-        end
         object Label98: TLabel
           Left = 4
           Height = 19
-          Top = 31
+          Top = 40
           Width = 176
           Caption = 'Stabilization delay after move'
           ParentColor = False
@@ -1094,27 +1077,56 @@ object f_option: Tf_option
         object FocuserDelay: TEdit
           Left = 266
           Height = 31
-          Hint = 'The amount of backlash to correct when the focus direction change. '#10'Set to zero if you can set the backlash in the focuser driver. '#10'This NOT apply to focuser with absolute position reading.'
-          Top = 28
+          Hint = 'The number of additional second we wait after the focuser finish the move.'
+          Top = 34
           Width = 54
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 2
+          TabOrder = 1
         end
         object BtnDisableDelay: TButton
           Left = 330
           Height = 21
-          Top = 30
+          Top = 39
           Width = 75
           Caption = 'Disable'
           OnClick = BtnDisableDelayClick
+          TabOrder = 2
+        end
+        object FocuserBacklashDirection: TComboBox
+          Left = 325
+          Height = 31
+          Hint = 'The direction the focuser will always finish to move.'#10'If using auto-focus set the same move direction.'
+          Top = 1
+          Width = 80
+          ItemHeight = 0
+          ItemIndex = 0
+          Items.Strings = (
+            'IN'
+            'OUT'
+          )
+          ParentShowHint = False
+          ShowHint = True
+          Style = csDropDownList
           TabOrder = 3
+          Text = 'IN'
+        end
+        object FocuserBacklashActive: TCheckBox
+          Left = 5
+          Height = 21
+          Hint = 'Activate backlash compensation.'#10'Let this disabled if your focuser driver include backlash compensation.'
+          Top = 4
+          Width = 165
+          Caption = 'Backlash compensation'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
         end
       end
       object GroupBox12: TGroupBox
         Left = 8
         Height = 176
-        Top = 240
+        Top = 256
         Width = 400
         Caption = 'Filter offset'
         ClientHeight = 156
@@ -1135,11 +1147,11 @@ object f_option: Tf_option
       end
       object GroupBox16: TGroupBox
         Left = 8
-        Height = 49
-        Top = 176
+        Height = 64
+        Top = 184
         Width = 416
         Caption = 'Focuser temperature compensation'
-        ClientHeight = 29
+        ClientHeight = 44
         ClientWidth = 414
         TabOrder = 3
         object Label84: TLabel
@@ -1830,8 +1842,8 @@ object f_option: Tf_option
               Top = 152
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 387
+              ClientHeight = 36
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel

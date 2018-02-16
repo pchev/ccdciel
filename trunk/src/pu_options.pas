@@ -36,13 +36,14 @@ type
   Tf_option = class(TForm)
     AutofocusDynamicNumPoint: TEdit;
     AutofocusDynamicMovement: TEdit;
-    BtnDisableBacklash: TButton;
     BtnDisableDelay: TButton;
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    FocuserBacklashActive: TCheckBox;
     ClippingLow: TEdit;
     ClippingHigh: TEdit;
+    FocuserBacklashDirection: TComboBox;
     GroupBox19: TGroupBox;
     Label100: TLabel;
     Label101: TLabel;
@@ -159,7 +160,6 @@ type
     Label49: TLabel;
     Label50: TLabel;
     Label51: TLabel;
-    Label52: TLabel;
     Label53: TLabel;
     Label54: TLabel;
     Label55: TLabel;
@@ -334,7 +334,6 @@ type
     RefTreshold: TTrackBar;
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
-    procedure BtnDisableBacklashClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
@@ -567,11 +566,6 @@ begin
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
   DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0);
-end;
-
-procedure Tf_option.BtnDisableBacklashClick(Sender: TObject);
-begin
- FocuserBacklash.Text:='0';
 end;
 
 procedure Tf_option.BtnDisableDelayClick(Sender: TObject);

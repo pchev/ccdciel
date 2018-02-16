@@ -330,6 +330,8 @@ type
     procedure StartCaptureTimerTimer(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
+    procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
+    procedure StatusBar1Resize(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
     procedure StatusTimerTimer(Sender: TObject);
     procedure TimerStampTimerTimer(Sender: TObject);
@@ -1135,6 +1137,7 @@ begin
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
   f_sequence.Planetarium:=planetarium;
+  f_sequence.onConnectAutoguider:=@AutoguiderConnectClick;
 
   f_planetarium:=Tf_planetarium.Create(self);
   f_planetarium.onConnect:=@PlanetariumConnectClick;
@@ -1357,6 +1360,72 @@ begin
      MenuSetup.Click;
   end
     else f_script.RunStartupScript;
+end;
+
+procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
+var msg: string;
+    s,x,y: integer;
+begin
+  if StatusBar=StatusBar1 then begin;
+    if panel=StatusBar.Panels[3] then begin
+      msg:='';
+      s:=(StatusBar.Height-6) div 2;
+      y:=StatusBar.Height div 2;
+      // clear
+      statusbar.Canvas.Brush.Color:=clDefault;
+      statusbar.Canvas.FillRect(Rect);
+      // planetarium
+      x:=Rect.Left+s+4;
+      if (f_planetarium<>nil)and(planetarium.Connected) then begin
+        statusbar.Canvas.Brush.Color:=cllime;
+        msg:=msg+'Planetarium connected';
+      end
+      else begin
+        statusbar.Canvas.Brush.Color:=clRed;
+        msg:=msg+'Planetarium disconnected';
+      end;
+      statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
+      // guider
+      x:=x+2*s+4;
+      if (f_autoguider<>nil)and(autoguider.State=GUIDER_DISCONNECTED) then begin
+        statusbar.Canvas.Brush.Color:=clred;
+        msg:=msg+', Autoguider disconnected';
+      end
+      else if (autoguider.State=GUIDER_GUIDING) then begin
+        statusbar.Canvas.Brush.Color:=cllime;
+        msg:=msg+', Autoguider guiding';
+      end
+      else begin
+        statusbar.Canvas.Brush.Color:=clYellow;
+        msg:=msg+', Autoguider connected';
+      end;
+      statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
+      // device
+      x:=x+2*s+4;
+      if (f_devicesconnection<>nil)and(f_devicesconnection.led.Brush.Color=clLime) then begin
+        statusbar.Canvas.Brush.Color:=cllime;
+        msg:=msg+', Devices connected';
+      end
+      else begin
+        statusbar.Canvas.Brush.Color:=clred;
+        msg:=msg+', Devices disconnected';
+      end;
+      statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
+      // set hint
+      statusbar.Hint:=msg;
+    end;
+  end;
+end;
+
+procedure Tf_main.StatusBar1Resize(Sender: TObject);
+var i: integer;
+begin
+  StatusBar1.Panels[3].Width:=3*(StatusBar1.Height);
+  i:=StatusBar1.ClientWidth-StatusBar1.Panels[0].Width-StatusBar1.Panels[1].Width-StatusBar1.Panels[3].Width;
+  if i>0 then
+    StatusBar1.Panels[2].Width:=i
+  else
+    StatusBar1.Panels[2].Width:=0;
 end;
 
 procedure Tf_main.ScriptExecute(Sender: TObject);
@@ -2165,7 +2234,9 @@ begin
   AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
-  FocuserBacklash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
+  focuser.Backlash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
+  focuser.BacklashDirection:=config.GetValue('/StarAnalysis/FocuserBacklashDirection',FocusDirIn);
+  focuser.BacklashActive:=config.GetValue('/StarAnalysis/FocuserBacklashActive',(focuser.Backlash<>0));
   FocuserDelay:=config.GetValue('/StarAnalysis/FocuserDelay',0);
   if focuser<>nil then focuser.Delay:=FocuserDelay;
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
@@ -2382,6 +2453,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  end
  else if (concount>0)or(upcount>0) then SetConnecting
  else SetDisconnected;
+ StatusBar1.Invalidate;
 end;
 
 Procedure Tf_main.ConnectCamera(Sender: TObject);
@@ -3101,7 +3173,6 @@ begin
  else if focuser.hasRelativePosition then begin
     val(f_focuser.RelIncr.Text,p,n);
     if n=0 then begin
-      if focuser.LastDirection<>FocusDirIn then p:=p+FocuserBacklash;
       focuser.FocusIn;
       focuser.RelPosition:=p;
     end;
@@ -3113,7 +3184,6 @@ begin
       focuser.FocusIn;
       val(f_focuser.timer.Text,p,n);
       if n=0 then begin
-        if focuser.LastDirection<>FocusDirIn then p:=p+FocuserBacklash;
         focuser.Timer:=p;
       end;
     end;
@@ -3134,7 +3204,6 @@ begin
  else if focuser.hasRelativePosition then begin
     val(f_focuser.RelIncr.Text,p,n);
     if n=0 then begin
-      if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
       focuser.FocusOut;
       focuser.RelPosition:=p;
     end;
@@ -3146,7 +3215,6 @@ begin
       focuser.FocusOut;
       val(f_focuser.timer.Text,p,n);
       if n=0 then begin
-        if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
         focuser.Timer:=p;
       end;
     end;
@@ -3303,7 +3371,7 @@ end;
 
 procedure Tf_main.LearnVcurve(Sender: TObject);
 var bin: integer;
-    x,y,xc,yc,xc1,yc1,s,s2,s3,s4: integer;
+    x,y,xc,yc,xc1,yc1,s,s2,s3,s4,savepos: integer;
     SaveZoom,vmax: double;
 begin
  if not focuser.hasAbsolutePosition then exit;
@@ -3316,6 +3384,7 @@ begin
    f_vcurve.Nsteps.Text:='99';
  end;
  if (VcCenterpos=NullCoord)or(VcHalfwidth=NullCoord) then exit;
+ savepos:=VcCenterpos;
  AutofocusVcFilterOffset:=CurrentFilterOffset;
  try
  // find a bright star
@@ -3372,7 +3441,7 @@ begin
  NewMessage('Start learning V curve');
  if not doVcurve(VcCenterpos,VcHalfwidth,VcNsteps,AutofocusNearNum,f_preview.Exposure,bin) then begin
    // error return focuser to initial position
-   focuser.Position:=VcCenterpos;
+   focuser.Position:=savepos;
    wait(1);
    exit;
  end;
@@ -3661,6 +3730,7 @@ begin
    f_autoguider.led.Brush.Color:=clGray;
    MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
    MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
+   StatusBar1.Invalidate;
  end;
 end;
 
@@ -3697,7 +3767,7 @@ begin
                        end;
  end;
  if autoguider.LastError<>'' then NewMessage('Autoguider: '+autoguider.LastError);
-
+ StatusBar1.Invalidate;
 end;
 
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
@@ -3886,7 +3956,12 @@ begin
    f_option.AutofocusNearHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD));
    f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
    f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
-   f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',FocuserBacklash));
+   f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',focuser.Backlash));
+   f_option.FocuserBacklashActive.checked:=config.GetValue('/StarAnalysis/FocuserBacklashActive',(focuser.Backlash<>0));
+   if config.GetValue('/StarAnalysis/FocuserBacklashDirection',FocusDirIn) then
+      f_option.FocuserBacklashDirection.ItemIndex:=0
+   else
+      f_option.FocuserBacklashDirection.ItemIndex:=1;
    f_option.FocuserDelay.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserDelay',FocuserDelay));
    f_option.FocuserTempCoeff.text:=FormatFloat(f2,config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff));
    f_option.AutofocusTolerance.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
@@ -4005,7 +4080,9 @@ begin
      config.SetValue('/StarAnalysis/AutofocusNearHFD',StrToFloatDef(f_option.AutofocusNearHFD.Text,AutofocusNearHFD));
      config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
      config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
-     config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,FocuserBacklash));
+     config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,focuser.Backlash));
+     config.SetValue('/StarAnalysis/FocuserBacklashActive',f_option.FocuserBacklashActive.checked);
+     config.SetValue('/StarAnalysis/FocuserBacklashDirection',(f_option.FocuserBacklashDirection.ItemIndex=0));
      config.SetValue('/StarAnalysis/FocuserDelay',StrToIntDef(f_option.FocuserDelay.Text,FocuserDelay));
      config.SetValue('/StarAnalysis/FocuserTempCoeff',StrToFloatDef(f_option.FocuserTempCoeff.text,FocuserTempCoeff));
      config.SetValue('/StarAnalysis/AutofocusTolerance',StrToFloatDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
@@ -4146,6 +4223,7 @@ begin
        f_autoguider.led.Brush.Color:=clGray;
        MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
        MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
+       StatusBar1.Invalidate;
      end;
 
    end;
@@ -5425,12 +5503,12 @@ var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin: integer;
     vmax,exp,a,b,r:double;
     FocAbsolute,savedir,initstep,OutOfRange: boolean;
     hfdin,hfdout: array[0..100]of array[1..2] of double;
+    stepout: array[0..100] of integer;
     p:array of TDouble2;
     buf: string;
 
  procedure relIn(p:integer);
  begin
-   if focuser.LastDirection<>FocusDirIn then p:=p+FocuserBacklash;
    if p>maxstep then p:=maxstep;
    if p<minstep then p:=minstep;
    focuser.FocusIn;
@@ -5439,7 +5517,6 @@ var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin: integer;
  end;
  procedure relOut(p:integer);
  begin
-   if focuser.LastDirection<>FocusDirOut then p:=p+FocuserBacklash;
    if p>maxstep then p:=maxstep;
    if p<minstep then p:=minstep;
    focuser.FocusOut;
@@ -5564,6 +5641,7 @@ begin
        else
           hfdout[j,1]:=savepos;
        hfdout[j,2]:=f_starprofile.hfd;
+       stepout[j]:=step;
        numhfdout:=j;
        f_focusercalibration.ProgressR(j,hfdout[j,1],hfdout[j,2]);
        if initstep and (j>0) then begin
@@ -5572,7 +5650,10 @@ begin
             initj:=j;
          end
          else begin
-            step:=2*step;
+            if step<10 then
+              step:=2*step
+            else
+              step:=round(1.5*step);
          end;
        end;
        inc(j);
@@ -5590,8 +5671,8 @@ begin
          end;
          wait(1);
        end;
-    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>20);
-    if (j>20) then begin
+    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(initstep and(j>20));
+    if (initstep) then begin
       buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or increase the minimum movement';
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
@@ -5664,7 +5745,7 @@ begin
       end;
    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>20);
     if (j>20) then begin
-      buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or increase the minimum movement';
+      buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or decrease the maximum HFD';
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
@@ -5687,9 +5768,10 @@ begin
     AutofocusBinning:=bin;
     AutofocusNearHFD:=hfdout[0,2]+(hfdmax-hfdout[0,2])/2;
     AutofocusStartHFD:=AutofocusNearHFD+(hfdmax-AutofocusNearHFD)/2;
+    // set safe values
     AutofocusNearNum:=3;
     AutofocusTolerance:=2*hfdout[0,2];
-    AutofocusMinSNR:=3;
+    AutofocusMinSNR:=0;
     // vcurve
     if FocAbsolute then begin
       VcCenterpos:=round(hfdout[0,1]);
@@ -5706,7 +5788,7 @@ begin
     AutofocusMaxSpeed:=step;
     for i:=1 to numhfdout do begin
       if (hfdout[i,2]-hfdout[0,2])>(0.1*hfdout[0,2]) then begin
-        AutofocusMinSpeed:=round(abs(hfdout[i,1]-hfdout[0,1]));
+        AutofocusMinSpeed:=stepout[i];
         break;
       end;
     end;
@@ -6646,6 +6728,7 @@ begin
  f_planetarium.Status.Text:='Connected '+PlanetariumName[ord(planetarium.PlanetariumType)];
  NewMessage('Planetarium: '+PlanetariumName[ord(planetarium.PlanetariumType)]+' connected');
  planetarium.InitTimer.Enabled:=true;
+ StatusBar1.Invalidate;
 end;
 
 Procedure Tf_main.PlanetariumDisconnect(Sender: TObject);
@@ -6669,6 +6752,7 @@ begin
    f_planetariuminfo.planetarium:=planetarium;
    f_scriptengine.Planetarium:=planetarium;
    f_sequence.Planetarium:=planetarium;
+   StatusBar1.Invalidate;
  end;
 end;
 
@@ -6798,6 +6882,7 @@ begin
  StatusTimer.Enabled:=false;
  CheckMeridianFlip;
  StatusTimer.Enabled:=true;
+ StatusBar1.Invalidate;
 end;
 
 procedure Tf_main.TimerStampTimerTimer(Sender: TObject);
