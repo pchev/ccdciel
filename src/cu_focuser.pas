@@ -25,12 +25,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, indiapi,
+uses u_global, u_utils, indiapi,
   Classes, SysUtils;
 
 type
 
 T_focuser = class(TComponent)
+  private
+    procedure SetPositionInt(p:integer);
+    procedure SetRelPositionInt(p:integer);
   protected
     FFocuserInterface: TDevInterface;
     FStatus: TDeviceStatus;
@@ -40,11 +43,16 @@ T_focuser = class(TComponent)
     FonSpeedChange: TNotifyNum;
     FonTemperatureChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
+    Fdevice: string;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FLastDirection: boolean;
     FhasTemperature: boolean;
     FDelay: integer;
+    FFocusdirection: integer;
+    FBacklashDirection,FBacklashActive: boolean;
+    FBacklash: integer;
+    procedure msg(txt: string);
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -76,14 +84,17 @@ T_focuser = class(TComponent)
     property hasTimerSpeed: boolean read GethasTimerSpeed;
     property hasTemperature: boolean read FhasTemperature;
     property Temperature: double read GetTemperature;
-    property Position: integer read GetPosition write SetPosition;
-    property RelPosition: integer read GetRelPosition write SetRelPosition;
+    property Position: integer read GetPosition write SetPositionInt;
+    property RelPosition: integer read GetRelPosition write SetRelPositionInt;
     property PositionRange: TNumRange read GetPositionRange;
     property RelPositionRange: TNumRange read GetRelPositionRange;
     property Speed: integer read GetSpeed write SetSpeed;
     property Timer: integer read GetTimer write SetTimer;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    property BacklashDirection: boolean read FBacklashDirection write FBacklashDirection;
+    property BacklashActive: boolean read FBacklashActive write FBacklashActive;
+    property Backlash: integer read FBacklash write FBacklash;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
@@ -101,12 +112,52 @@ begin
   FStatus := devDisconnected;
   FTimeOut:=100;
   FDelay:=0;
+  FFocusdirection:=1;
+  FBacklashActive:=false;
   FhasTemperature:=false;
 end;
 
 destructor  T_focuser.Destroy;
 begin
   inherited Destroy;
+end;
+
+procedure T_focuser.msg(txt: string);
+begin
+  if Assigned(FonMsg) then FonMsg(txt);
+end;
+
+procedure T_focuser.SetPositionInt(p:integer);
+begin
+  msg('Focuser '+Fdevice+' move to '+inttostr(p));
+  if FBacklashActive and ((p<Position)<>FBacklashDirection) then begin   // p<position = focus IN
+    if FBacklashDirection then
+       SetPosition(p+FBacklash)   // backlash IN, go OUT first
+    else
+       SetPosition(p-FBacklash);  // backlash OUT, go IN first
+  end;
+  SetPosition(p);                 // go to final position
+  if FDelay>0 then Wait(FDelay);
+end;
+
+procedure T_focuser.SetRelPositionInt(p:integer);
+begin
+  msg('Focuser '+Fdevice+' move by '+inttostr(FFocusdirection*p));
+  if BacklashActive and (FLastDirection<>FBacklashDirection) then begin   // FLastDirection = focus IN
+    if FBacklashDirection then begin // want to go OUT, backlash IN
+       SetRelPosition(p+FBacklash);  // go more OUT than required
+       FocusIN;                      // go IN by backlash
+       SetRelPosition(FBacklash);
+    end
+    else begin                       // want to go IN, backlash OUT
+       SetRelPosition(p+FBacklash);  // go more IN than required
+       FocusOUT;                     // go OUT by backlash
+       SetRelPosition(FBacklash)
+    end;
+  end
+  else begin
+    SetRelPosition(p);
+  end;
 end;
 
 end.

@@ -27,7 +27,7 @@ interface
 
 uses cu_focuser, u_global, u_utils,
     {$ifdef mswindows}
-    indiapi, Variants, comobj,
+    indiapi, Variants, comobj, math,
     {$endif}
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -36,16 +36,15 @@ T_ascomfocuser = class(T_focuser)
  private
    {$ifdef mswindows}
    V: variant;
-   FFocusdirection: integer;
    stPosition: integer;
    stTemperature: double;
-   Fdevice: string;
    {$endif}
+   FPositionRange: TNumRange;
+   FRelPositionRange: TNumRange;
    FInterfaceVersion: integer;
    FRelIncr: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
-   procedure msg(txt: string);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
  protected
@@ -82,6 +81,8 @@ begin
  inherited Create(AOwner);
  FFocuserInterface:=ASCOM;
  FInterfaceVersion:=1;
+ FPositionRange:=NullRange;
+ FRelPositionRange:=NullRange;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;
@@ -243,7 +244,6 @@ begin
  {$ifdef mswindows}
  FFocusdirection:=-1;
  FLastDirection:=FocusDirIn;
- msg('Focuser '+Fdevice+' set direction in.');
  {$endif}
 end;
 
@@ -252,20 +252,22 @@ begin
  {$ifdef mswindows}
  FFocusdirection:=1;
  FLastDirection:=FocusDirOut;
- msg('Focuser '+Fdevice+' set direction out.');
  {$endif}
 end;
 
 procedure T_ascomfocuser.SetPosition(p:integer);
+var n: integer;
 begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   msg('Focuser '+Fdevice+' move to '+inttostr(p));
-   V.Move(p);
+   if FPositionRange<>NullRange then
+     n:=max(min(p,round(FPositionRange.max)),round(FPositionRange.min))
+   else
+     n:=p;
+   V.Move(n);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
-   if FDelay>0 then Wait(FDelay);
    except
     on E: Exception do msg('Focuser '+Fdevice+' Error, can''t move to. ' + E.Message);
    end;
@@ -292,13 +294,18 @@ begin
  result:=NullRange;
  {$ifdef mswindows}
  if Connected then begin
-   try
-   result.min:=0;
-   result.max:=V.MaxStep;
-   result.step:=1;
-   except
-    result:=NullRange;
-   end;
+   if FPositionRange=NullRange then begin
+     try
+     result.min:=0;
+     result.max:=V.MaxStep;
+     result.step:=1;
+     FPositionRange:=result;
+     except
+      result:=NullRange;
+     end;
+   end
+   else
+     result:=FPositionRange;
  end
  else result:=NullRange;
  {$endif}
@@ -309,13 +316,18 @@ begin
  result:=NullRange;
  {$ifdef mswindows}
  if Connected then begin
-   try
-   result.min:=0;
-   result.max:=V.MaxStep;
-   result.step:=1;
-   except
-    result:=NullRange;
-   end;
+   if FRelPositionRange=NullRange then begin
+     try
+     result.min:=0;
+     result.max:=V.MaxStep;
+     result.step:=1;
+     FRelPositionRange:=result;
+     except
+      result:=NullRange;
+     end;
+   end
+   else
+     result:=FRelPositionRange;
  end
  else result:=NullRange;
  {$endif}
@@ -329,9 +341,11 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   FRelIncr:=p;
+   if FRelPositionRange<>NullRange then
+     FRelIncr:=max(min(p,round(FRelPositionRange.max)),round(FRelPositionRange.min))
+   else
+     FRelIncr:=p;
    i:=FFocusdirection*FRelIncr;
-   msg('Focuser '+Fdevice+' move by '+inttostr(i));
    V.Move(i);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
@@ -401,11 +415,6 @@ end;
 function  T_ascomfocuser.GethasTimerSpeed: boolean;
 begin
  result:=false;
-end;
-
-procedure T_ascomfocuser.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(txt);
 end;
 
 procedure T_ascomfocuser.SetTimeout(num:integer);

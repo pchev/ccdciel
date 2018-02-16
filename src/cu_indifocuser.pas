@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_focuser, indibaseclient, indibasedevice, indiapi, indicom,
-     u_global, u_utils, ExtCtrls, Forms, Classes, SysUtils;
+     u_global, u_utils, math, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
@@ -200,6 +200,7 @@ if not indiclient.Connected then begin
   Findiserverport:=cp2;
   Findidevice:=cp3;
   Findideviceport:=cp4;
+  Fdevice:=Findidevice;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   indiclient.SetServer(Findiserver,Findiserverport);
@@ -379,13 +380,17 @@ begin
 end;
 
 procedure T_indifocuser.SetPosition(p:integer);
+var n: integer;
 begin
 if FocusAbsolutePosition<>nil then begin
-  FocusAbsolutePosition.np[0].value:=p;
+  if PositionRange<>NullRange then
+     n:=max(min(p,round(PositionRange.max)),round(PositionRange.min))
+   else
+     n:=p;
+  FocusAbsolutePosition.np[0].value:=n;
   indiclient.sendNewNumber(FocusAbsolutePosition);
   FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusAbsolutePosition,60000);
-  if FDelay>0 then wait(FDelay);
 end;
 end;
 
@@ -408,9 +413,14 @@ else result:=NullRange;
 end;
 
 procedure T_indifocuser.SetRelPosition(p:integer);
+var n: integer;
 begin
 if FocusRelativePosition<>nil then begin
-  FocusRelativePosition.np[0].value:=p;
+  if RelPositionRange<>NullRange then
+     n:=max(min(p,round(RelPositionRange.max)),round(RelPositionRange.min))
+   else
+     n:=p;
+  FocusRelativePosition.np[0].value:=n;
   indiclient.sendNewNumber(FocusRelativePosition);
   FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusRelativePosition,60000);
@@ -480,6 +490,7 @@ begin
    indiclient.WaitBusy(FocusMotion);
  end;
  FLastDirection:=FocusDirIn;
+ FFocusdirection:=-1;
 end;
 
 procedure T_indifocuser.FocusOut;
@@ -491,6 +502,7 @@ begin
    indiclient.WaitBusy(FocusMotion);
  end;
  FLastDirection:=FocusDirOut;
+ FFocusdirection:=1;
 end;
 
 function  T_indifocuser.GethasAbsolutePosition: boolean;
