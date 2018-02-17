@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 interface
 
 uses
-  u_global, u_utils, blcksock, synsock,
+  u_global, blcksock, synsock,
   Dialogs, LazUTF8, LazFileUtils, LCLIntf, SysUtils, Classes;
 
 type
@@ -67,7 +67,6 @@ type
     FShowSocket: TStringProc;
     FIPaddr, FIPport: string;
     FExecuteCmd: TExCmd;
-//    GetStatus,GetSequenceStatus,GetCaptureStatus,GetLog
     procedure ShowError;
     procedure ThrdTerminate(var i: integer);
   public
@@ -97,8 +96,8 @@ var
 
 constructor TTCPDaemon.Create;
 begin
-  FreeOnTerminate := True;
   inherited Create(True);
+  FreeOnTerminate := True;
 end;
 
 procedure TTCPDaemon.ShowError;
@@ -226,16 +225,15 @@ end;
 
 constructor TTCPThrd.Create(Hsock: TSocket);
 begin
-  FreeOnTerminate := True;
   inherited Create(True);
+  FreeOnTerminate := True;
   Csock := Hsock;
   abort := False;
 end;
 
 procedure TTCPThrd.Execute;
 var
-  s, msg: string;
-  i: integer;
+  s: string;
 begin
   try
     Fsock := TTCPBlockSocket.Create;
@@ -252,7 +250,6 @@ begin
         repeat
           if stoping or terminated then
             break;
-          msg := 'RecvString';
           s := RecvString(500);
           //if s<>'' then writetrace(s);   // for debuging only, not thread safe!
           if lastError = 0 then
