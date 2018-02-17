@@ -182,6 +182,7 @@ const
   ccdcielver = '0.9.25';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 2;
+  Maxclient = 10;
   blank=' ';
   blank80='                                                                                ';
   clOrange=$1080EF;
