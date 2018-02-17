@@ -465,7 +465,7 @@ if FResolver=ResolverAstrometryNet then begin
     mem.LoadFromFile(wcsfile);
     Ftmpfits.Header.NewWCS(mem);
     Ftmpfits.SaveToFile(FOutFile);
-    except
+    finally
       Ftmpfits.Free;
       mem.Free;
     end;
@@ -562,7 +562,7 @@ else if FResolver=ResolverPlateSolve then begin
     mem.LoadFromFile(wcsfile);
     Ftmpfits.Header.NewWCS(mem);
     Ftmpfits.SaveToFile(FOutFile);
-    except
+    finally
       Ftmpfits.Free;
       mem.Free;
     end;
