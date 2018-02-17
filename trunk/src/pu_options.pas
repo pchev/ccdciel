@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, enhedits, Types;
 
 type
 
@@ -40,6 +40,7 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    UseTcpServer: TCheckBox;
     FocuserBacklashActive: TCheckBox;
     ClippingLow: TEdit;
     ClippingHigh: TEdit;
@@ -48,6 +49,9 @@ type
     Label100: TLabel;
     Label101: TLabel;
     Label37: TLabel;
+    FileFolderOpt: TPageControl;
+    FolderOpt: TTabSheet;
+    FileOpt: TTabSheet;
     TmpDirDefault: TButton;
     ButtonDir: TButton;
     BayerMode: TComboBox;
@@ -267,8 +271,6 @@ type
     SettleMaxTime: TEdit;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
-    Label18: TLabel;
-    Label19: TLabel;
     Label20: TLabel;
     Label21: TLabel;
     Label22: TLabel;

@@ -381,7 +381,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse, LockMouseWheel: boolean;
-    Capture,Preview,learningvcurve: boolean;
+    Capture,Preview,learningvcurve,UseTcpServer: boolean;
     LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -1366,7 +1366,6 @@ begin
      MenuSetup.Click;
   end
     else f_script.RunStartupScript;
-  StartServer;
 end;
 
 procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
@@ -1741,6 +1740,7 @@ begin
   if astrometry.Busy then begin
     astrometry.StopAstrometry;
   end;
+  if (TCPDaemon<>nil) then StopServer;
   wait(2); // time for other thread to terminate
   astrometry.Free;
   CloseAction:=caFree;
@@ -2260,6 +2260,7 @@ begin
     AutofocusSlippageOffset:=0;
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
+  UseTcpServer:=config.GetValue('/Log/UseTcpServer',false);
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
   SettlePixel:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
@@ -2294,6 +2295,8 @@ begin
     FileNameOpt[i]:=TFilenameList(round(config.GetValue('/Files/FileNameOpt'+inttostr(i),i)));
     FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
   end;
+  if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
+  if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
 end;
 
 procedure Tf_main.SaveConfig;
@@ -3906,6 +3909,7 @@ begin
     else
       f_option.FileOptions.Cells[1,i]:='0'
    end;
+   f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:='Log files are saved in '+ExtractFilePath(LogFile);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -4104,6 +4108,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',StrToIntDef(f_option.AutofocusDynamicNumPoint.Text,AutofocusDynamicNumPoint));
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',StrToIntDef(f_option.AutofocusDynamicMovement.Text,AutofocusDynamicMovement));
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
+     config.SetValue('/Log/UseTcpServer',f_option.UseTcpServer.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
      config.SetValue('/Info/ObservatoryLongitude',f_option.Longitude);
@@ -7259,12 +7264,13 @@ begin
     exit;
   try
     screen.cursor := crHourglass;
-    TCPDaemon.stoping := True;
+    NewMessage('TCP/IP server stopped');
     for i := 1 to Maxclient do
       if (TCPDaemon.TCPThrd[i] <> nil) then
       begin
         TCPDaemon.TCPThrd[i].stoping := True;
       end;
+    TCPDaemon.stoping := True;
     Wait(1);
     screen.cursor := crDefault;
   except
@@ -7279,7 +7285,7 @@ end;
 
 procedure Tf_main.TCPShowSocket(var msg: string);
 begin
-  NewMessage(Format('Listen on port: %s', [msg]));
+  NewMessage(Format('TCP/IP server listen on port: %s', [msg]));
 end;
 
 function Tf_main.TCPcmd(s: string):string;
