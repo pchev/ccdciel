@@ -313,8 +313,11 @@ begin
     try
       ok:=V.ImageReady;
     except
-      msg('Error reading camera image availability');
-      exit;
+      on E: Exception do begin
+        msg('Error reading camera image availability: ' + E.Message);
+        if assigned(FonAbortExposure) then FonAbortExposure(self);
+        exit;
+      end;
     end;
     {$ifdef debug_ascom}msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok,true));{$endif}
     if (not ok) then begin
@@ -336,8 +339,11 @@ begin
    try
    img:=V.ImageArray;
    except
-     msg('Error: image data not available from camera');
-     exit;
+     on E: Exception do begin
+       msg('Error accessing ImageArray: ' + E.Message);
+       if assigned(FonAbortExposure) then FonAbortExposure(self);
+       exit;
+     end;
    end;
    xs:=length(img);
    ys:=length(img[0]);
@@ -350,7 +356,9 @@ begin
      pix:=V.PixelSizeX;
      piy:=V.PixelSizeY;
    except
-     msg('Error: cannot get pixel size from camera');
+     on E: Exception do begin
+       msg('Error: cannot get pixel size from camera: ' + E.Message);
+     end;
    end;
    ccdname:=Fdevice;
    try
