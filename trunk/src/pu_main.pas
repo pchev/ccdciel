@@ -28,7 +28,7 @@ interface
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_edittargets, pu_scriptengine,
-  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause,
+  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
@@ -368,6 +368,7 @@ type
     f_msg: Tf_msg;
     fits: TFits;
     ImaBmp: TBGRABitmap;
+    TCPDaemon: TTCPDaemon;
     refmask: boolean;
     reftreshold,refcolor: integer;
     reffile: string;
@@ -554,6 +555,11 @@ type
     procedure ScriptExecute(Sender: TObject);
     procedure ScriptAfterExecute(Sender: TObject);
     function CheckMeridianFlip(nextexposure:double=0):integer;
+    procedure StartServer;
+    procedure StopServer;
+    procedure TCPShowError(var msg: string);
+    procedure TCPShowSocket(var msg: string);
+    function TCPcmd(s: string):string;
   public
     { public declarations }
   end;
@@ -1360,6 +1366,7 @@ begin
      MenuSetup.Click;
   end
     else f_script.RunStartupScript;
+  StartServer;
 end;
 
 procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
@@ -7227,6 +7234,79 @@ begin
 
   PlotImage;
   Screen.Cursor := saved_cursor;
+end;
+
+procedure Tf_main.StartServer;
+begin
+  try
+    TCPDaemon := TTCPDaemon.Create;
+    TCPDaemon.onErrorMsg := @TCPShowError;
+    TCPDaemon.onShowSocket := @TCPShowSocket;
+    TCPDaemon.onExecuteCmd:=@TCPcmd;
+    TCPDaemon.IPaddr := '0.0.0.0';
+    TCPDaemon.IPport := '3277';
+    TCPDaemon.Start;
+  except
+
+  end;
+end;
+
+procedure Tf_main.StopServer;
+var
+  i: integer;
+begin
+  if TCPDaemon = nil then
+    exit;
+  try
+    screen.cursor := crHourglass;
+    TCPDaemon.stoping := True;
+    for i := 1 to Maxclient do
+      if (TCPDaemon.TCPThrd[i] <> nil) then
+      begin
+        TCPDaemon.TCPThrd[i].stoping := True;
+      end;
+    Wait(1);
+    screen.cursor := crDefault;
+  except
+    screen.cursor := crDefault;
+  end;
+end;
+
+procedure Tf_main.TCPShowError(var msg: string);
+begin
+  NewMessage(Format('Socket error %s.  %s', [msg, '']));
+end;
+
+procedure Tf_main.TCPShowSocket(var msg: string);
+begin
+  NewMessage(Format('Listen on port: %s', [msg]));
+end;
+
+function Tf_main.TCPcmd(s: string):string;
+var i,j,n: integer;
+begin
+ if (s = 'STATUS') then begin
+   result:=StatusBar1.Hint;
+ end
+ else if (s = 'SEQUENCE') then begin
+   result:=f_sequence.StaticText3.Caption+tab+
+           f_sequence.StaticText2.Caption+tab+
+           f_sequence.StatusMsg.Caption+tab+
+           f_sequence.DelayMsg.Caption;
+ end
+ else if (s = 'CAPTURE') then begin
+   result:=StatusBar1.Panels[1].Text+' '+StatusBar1.Panels[2].Text;
+ end
+ else if (s = 'LOG') then begin
+   result:='';
+   n:=f_msg.msg.Lines.Count-1;
+   if n<10 then
+     j:=0
+   else
+    j:=n-10;
+   for i:=j to n do
+     result:=result+f_msg.msg.Lines[i]+crlf;
+ end;
 end;
 
 end.
