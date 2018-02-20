@@ -184,7 +184,7 @@ object f_starprofile: Tf_starprofile
         Visible = False
         object VcChart: TChart
           Left = 0
-          Height = 140
+          Height = 121
           Top = 0
           Width = 170
           AntialiasingMode = amOn
@@ -210,6 +210,7 @@ object f_starprofile: Tf_starprofile
             'TAChart'
           )
           Align = alClient
+          OnMouseMove = VcChartMouseMove
           object VcChartPtL: TLineSeries
             LinePen.Color = clNone
             LinePen.Style = psClear
@@ -233,6 +234,39 @@ object f_starprofile: Tf_starprofile
           end
           object VcChartRegR: TLineSeries
             Source = FitSourceR
+          end
+        end
+        object Panel5: TPanel
+          Left = 0
+          Height = 19
+          Top = 121
+          Width = 170
+          Align = alBottom
+          BevelOuter = bvNone
+          ClientHeight = 19
+          ClientWidth = 170
+          TabOrder = 1
+          object LabelCoord: TLabel
+            Left = 0
+            Height = 19
+            Top = 0
+            Width = 151
+            Align = alClient
+            AutoSize = False
+            ParentColor = False
+          end
+          object BtnPinGraph: TSpeedButton
+            Left = 151
+            Height = 19
+            Hint = 'Keep graph visible after autofocus is completed'
+            Top = 0
+            Width = 19
+            Align = alRight
+            AllowAllUp = True
+            Flat = True
+            GroupIndex = 1
+            ShowHint = True
+            ParentShowHint = False
           end
         end
       end
@@ -289,7 +323,7 @@ object f_starprofile: Tf_starprofile
     Enabled = False
     Interval = 5000
     OnTimer = TimerHideGraphTimer
-    left = 15
+    left = 16
     top = 459
   end
 end
