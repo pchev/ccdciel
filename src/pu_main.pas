@@ -3270,7 +3270,7 @@ begin
 end;
 
 function Tf_main.doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
-var i,j,k,minpos,maxpos,step:integer;
+var i,j,k,minpos,maxpos,step,sumpos,numpos:integer;
     hfdmin,hfd:double;
     hfdlist: array of double;
 begin
@@ -3341,18 +3341,27 @@ begin
    NewMessage('Vcurve n'+inttostr(i)+' pos:'+FormatFloat(f0,AutofocusVc[k,1])+' hfd:'+FormatFloat(f1,AutofocusVc[k,2])+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
    if f_vcurve<>nil then
       f_vcurve.LearnProgress(i,AutofocusVc[k,1],AutofocusVc[k,2]);
-   // use minimal hfd as a rought focus position used to split right and left curve
+   // find minimal hfd value
    if AutofocusVc[k,2]<hfdmin then begin
      hfdmin:=AutofocusVc[k,2];
-     PosFocus:=k;
    end;
  end;
  AutofocusVcNum:=n;
  AutofocusVcDir:=AutofocusMoveDir;
- if PosFocus<0 then begin
+ if hfdmin=9999 then begin
    NewMessage('Cannot detect star.');
    exit;
  end;
+ // search the central point of the flat central part of the curve to split right and left curve
+ sumpos:=0;
+ numpos:=0;
+ for i:=0 to n do begin
+   if abs(hfdmin-AutofocusVc[i,2])<(0.1*hfdmin) then begin
+    inc(numpos);
+    sumpos:=sumpos+i;
+   end;
+ end;
+ PosFocus:=round(sumpos/numpos);
  //  search near focus pos, cancel if we not reach enough defocalisation
  for i:=0 to PosFocus do begin
    if AutofocusVc[i,2]>=AutofocusNearHFD then PosNearL:=i;

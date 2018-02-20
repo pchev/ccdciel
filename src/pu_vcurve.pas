@@ -182,7 +182,7 @@ end;
 
 Procedure Tf_vcurve.FindLinearPart;
 var i,n,s: integer;
-  a,b,r,r1,r2: double;
+  a,b,rL,rR,r1,r2: double;
   p:array of TDouble2;
 begin
 try
@@ -193,25 +193,24 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
   repeat
     r2:=r1;
     inc(s);
-    if AutofocusVcDir then begin
-      // focus IN, use right part
-      n:=AutofocusVcNum-(PosFocus+s)+1;
-      SetLength(p,n);
-      for i:=0 to n-1 do begin
-        p[i,1]:=AutofocusVc[PosFocus+s+i,1];
-        p[i,2]:=AutofocusVc[PosFocus+s+i,2];
-      end;
-    end else begin
-      // focus OUT, use left part
-      n:=PosFocus-s+1;
-      SetLength(p,n);
-      for i:=0 to n-1 do begin
-        p[i,1]:=AutofocusVc[i,1];
-        p[i,2]:=AutofocusVc[i,2];
-      end;
+    // right part
+    n:=AutofocusVcNum-(PosFocus+s)+1;
+    SetLength(p,n);
+    for i:=0 to n-1 do begin
+      p[i,1]:=AutofocusVc[PosFocus+s+i,1];
+      p[i,2]:=AutofocusVc[PosFocus+s+i,2];
     end;
-    LeastSquares(p,a,b,r);
-    r1:=r*r;
+    LeastSquares(p,a,b,rR);
+    // left part
+    n:=PosFocus-s+1;
+    SetLength(p,n);
+    for i:=0 to n-1 do begin
+      p[i,1]:=AutofocusVc[i,1];
+      p[i,2]:=AutofocusVc[i,2];
+    end;
+    LeastSquares(p,a,b,rL);
+    // worst of the two values
+    r1:=min(rR*rR,rL*rL);
   until (s>=(AutofocusVcNum/4))or((r1>0.97)and(abs(r1-r2)<0.01));
 end;
 AutofocusVcSkipNum:=s;
