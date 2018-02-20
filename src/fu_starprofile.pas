@@ -91,7 +91,7 @@ type
     maxfwhm,maximax: double;
     Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,Fsnr,FMinSnr,FminPeak:double;
     FhfdList: array of double;
-    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph: integer;
+    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph,FAutofocusRestart: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult: boolean;
     ahfd: array of double;
@@ -111,7 +111,7 @@ type
     destructor  Destroy; override;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
     procedure Autofocus(f: TFits; x,y,s: integer);
-    procedure InitAutofocus;
+    procedure InitAutofocus(restart: boolean);
     procedure ChkFocusDown(value:boolean);
     procedure ChkAutoFocusDown(value:boolean);
     property AutofocusRunning: boolean read getRunning;
@@ -199,7 +199,7 @@ begin
  result:=ChkAutofocus.Down;
 end;
 
-procedure Tf_starprofile.InitAutofocus;
+procedure Tf_starprofile.InitAutofocus(restart: boolean);
 var i: integer;
 begin
  FnumHfd:=0;
@@ -216,6 +216,10 @@ begin
  FitSourceL.Clear;
  PanelFWHM.Visible:=false;
  PanelGraph.Visible:=true;
+ if restart then
+    inc(FAutofocusRestart)
+ else
+    FAutofocusRestart:=0;
  case AutofocusMode of
    afVcurve   : begin
                 // plot curve in graph
@@ -615,6 +619,7 @@ begin
     ChkAutofocusDown(false);
     exit;
   end;
+  FirstFrame:=false;
   msg('Autofocus running, hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
   // do focus and continue
   case AutofocusMode of
@@ -622,7 +627,6 @@ begin
     afDynamic  : doAutofocusDynamic;
     afIterative: doAutofocusIterative;
   end;
-  FirstFrame:=false;
 end;
 
 procedure Tf_starprofile.doAutofocusVcurve;
@@ -805,8 +809,8 @@ var i,k,step: integer;
     p:array of TDouble2;
   procedure ResetPos;
   begin
-    k:=AutofocusDynamicNumPoint div 2;
-    focuser.FocusSpeed:=AutofocusDynamicMovement*(k);
+    k:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-aminpos));
+    focuser.FocusSpeed:=k+AutofocusDynamicMovement;
     if AutofocusMoveDir=FocusDirIn then begin
       onFocusOUT(self);
       Wait(1);
@@ -877,15 +881,22 @@ begin
     afdEnd: begin
               // check measure validity
               if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos)<2) then begin
-                 msg('Not enough points in or out of focus position,');
-                 msg('Try to start with a better position or increase the movement.');
                  ResetPos;
-                 terminated:=true;
+                 if FAutofocusRestart>0 then begin
+                   msg('Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool.');
+                   msg('The focuser is now positioned at the best observed HFD position.');
+                   terminated:=true;
+                 end
+                 else begin
+                   msg('Not enough points in or out of focus position, retrying now.');
+                   InitAutofocus(true);
+                   AutofocusDynamicStep:=afdStart;
+                 end;
                  exit;
               end;
               if (amaxhfd<(2*aminhfd)) then begin
-                 msg('Too small HFD difference,');
-                 msg('Try to increase the number of point or the movement.');
+                 msg('Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters.');
+                 msg('The focuser is now positioned at the best observed HFD position.');
                  ResetPos;
                  terminated:=true;
                  exit;

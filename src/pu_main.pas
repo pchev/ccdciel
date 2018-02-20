@@ -6314,7 +6314,7 @@ begin
      end;
      f_starprofile.StarX:=s2;
      f_starprofile.StarY:=s2;
-     f_starprofile.InitAutofocus;
+     f_starprofile.InitAutofocus(false);
      SaveFocusZoom:=f_visu.Zoom;
      f_visu.Zoom:=0;
      ImgZoom:=0;
