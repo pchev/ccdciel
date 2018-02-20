@@ -800,13 +800,13 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
-var i,k,step,c: integer;
+var i,k,step: integer;
     VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr: double;
     p:array of TDouble2;
   procedure ResetPos;
   begin
     k:=AutofocusDynamicNumPoint div 2;
-    focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
+    focuser.FocusSpeed:=AutofocusDynamicMovement*(k);
     if AutofocusMoveDir=FocusDirIn then begin
       onFocusOUT(self);
       Wait(1);
@@ -838,14 +838,14 @@ begin
                 onFocusIN(self)
               end
               else begin
-                focuser.FocusSpeed:=AutofocusDynamicMovement*(k+2);
+                focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
                 onFocusIN(self);
                 Wait(1);
                 focuser.FocusSpeed:=AutofocusDynamicMovement;
                 onFocusOUT(self);
               end;
               Wait(1);
-              afmpos:=-1;
+              afmpos:=0;
               aminhfd:=9999;
               amaxhfd:=-1;
               AutofocusDynamicStep:=afdMeasure;
@@ -861,20 +861,22 @@ begin
               if Fhfd>amaxhfd then begin
                 amaxhfd:=Fhfd;
               end;
+              if afmpos=(AutofocusDynamicNumPoint) then begin
+                // last point, process measurements
+                AutofocusDynamicStep:=afdEnd;
+                doAutofocusDynamic;
+                exit
+              end;
               // increment position
               if AutofocusMoveDir=FocusDirIn then
                 onFocusIN(self)
               else
                 onFocusOUT(self);
               wait(1);
-              if afmpos=(AutofocusDynamicNumPoint) then begin
-                AutofocusDynamicStep:=afdEnd;
-                doAutofocusDynamic;
-              end;
               end;
     afdEnd: begin
               // check measure validity
-              if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos-1)<2) then begin
+              if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos)<2) then begin
                  msg('Not enough points in or out of focus position,');
                  msg('Try to start with a better position or increase the movement.');
                  ResetPos;
@@ -889,35 +891,29 @@ begin
                  exit;
               end;
               // compute focus
-              k:=aminpos;
-              if AutofocusMoveDir=FocusDirIn then
-                c:=1
-              else
-                c:=-1;
+              k:=aminpos-1;
               // left part
               SetLength(p,k);
-              for i:=0 to k-1 do begin
-                p[i,1]:=i+1+c;
-                p[i,2]:=ahfd[i];
+              for i:=1 to k do begin
+                p[i-1,1]:=i;
+                p[i-1,2]:=ahfd[i];
               end;
               LeastSquares(p,al,bl,rl);
               VcpiL:=-bl/al;
               // right part
-              k:=AutofocusDynamicNumPoint-k;
+              k:=AutofocusDynamicNumPoint-aminpos;
               SetLength(p,k);
-              for i:=0 to k-1 do begin
-                p[i,1]:=aminpos+2+i+c;
-                p[i,2]:=ahfd[aminpos+1+i];
+              for i:=1 to k do begin
+                p[i-1,1]:=aminpos+i;
+                p[i-1,2]:=ahfd[aminpos+i];
               end;
               LeastSquares(p,ar,br,rr);
               VcpiR:=-br/ar;
-              // focus position
-              if AutofocusMoveDir=FocusDirIn then
-                r2:=rr*rr
-              else
-                r2:=rl*rl;
+              // focus quality, mean of both side
+              r2:=(rr*rr+rl*rl)/2;
               msg('Focus quality = '+FormatFloat(f3,r2));
-              step:=round(AutofocusDynamicMovement*(VcpiL+VcpiR)/2);
+              // focus position
+              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-(VcpiL+VcpiR)/2));
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;
               if AutofocusMoveDir=FocusDirIn then begin
                 onFocusOUT(self);
