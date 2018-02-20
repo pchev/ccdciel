@@ -27,7 +27,7 @@ interface
 
 uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI,
   fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits,
-  FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, Forms, Controls,
+  FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
   StdCtrls, ExtCtrls, Buttons, LCLType;
 
 const maxhist=50;
@@ -43,9 +43,11 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    LabelCoord: TLabel;
     LabelFWHM: TLabel;
     Panel3: TPanel;
     Panel4: TPanel;
+    Panel5: TPanel;
     PanelGraph: TPanel;
     PanelFWHM: TPanel;
     Panel6: TPanel;
@@ -59,6 +61,7 @@ type
     BtnMeasureImage: TSpeedButton;
     PtSourceL: TListChartSource;
     PtSourceR: TListChartSource;
+    BtnPinGraph: TSpeedButton;
     StaticText1: TStaticText;
     TimerHideGraph: TTimer;
     VcChart: TChart;
@@ -75,6 +78,8 @@ type
     procedure graphDblClick(Sender: TObject);
     procedure BtnMeasureImageClick(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
+    procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     { private declarations }
     FFindStar: boolean;
@@ -273,9 +278,33 @@ end;
 
 procedure Tf_starprofile.TimerHideGraphTimer(Sender: TObject);
 begin
- TimerHideGraph.Enabled:=false;
- PanelFWHM.Visible:=true;
- PanelGraph.Visible:=false;
+ if BtnPinGraph.Down then begin
+   TimerHideGraph.Interval:=1000;
+ end
+ else begin
+   TimerHideGraph.Enabled:=false;
+   PanelFWHM.Visible:=true;
+   PanelGraph.Visible:=false;
+ end;
+end;
+
+
+procedure Tf_starprofile.VcChartMouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+var pointi: TPoint;
+    pointg: TDoublePoint;
+begin
+  if (x>5)and(x<(VcChart.Width-5))and(y>5)and(y<(VcChart.Height-5)) then begin
+  try
+  pointi.x:=X;
+  pointi.y:=Y;
+  pointg:=VcChart.ImageToGraph(pointi);
+  LabelCoord.Caption:='Pos:'+IntToStr(trunc(pointg.x))+' HFD:'+FormatFloat(f1,pointg.y);
+  except
+  end;
+  end else begin
+    LabelCoord.Caption:='';
+  end;
 end;
 
 procedure Tf_starprofile.msg(txt:string);

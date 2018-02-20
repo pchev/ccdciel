@@ -1356,6 +1356,8 @@ begin
   f_visu.histminmax.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(9, btn);
+  f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   btn.Free;
 end;
 
@@ -6364,6 +6366,7 @@ begin
      end;
    end;
    if not f_capture.Running then StartPreviewExposure(nil);
+   f_starprofile.TimerHideGraph.Interval:=5000;
    f_starprofile.TimerHideGraph.Enabled:=true;
  end;
 
