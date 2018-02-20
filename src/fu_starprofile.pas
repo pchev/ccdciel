@@ -836,7 +836,7 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
-var i,k,step: integer;
+var i,k,step,sumpos,numpos: integer;
     VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr: double;
     p:array of TDouble2;
   procedure ResetPos;
@@ -892,7 +892,6 @@ begin
               ahfd[afmpos]:=Fhfd;
               if Fhfd<aminhfd then begin
                 aminhfd:=Fhfd;
-                aminpos:=afmpos;
               end;
               if Fhfd>amaxhfd then begin
                 amaxhfd:=Fhfd;
@@ -911,6 +910,15 @@ begin
               wait(1);
               end;
     afdEnd: begin
+              sumpos:=0;
+              numpos:=0;
+              for i:=1 to AutofocusDynamicNumPoint do begin
+                if abs(aminhfd-ahfd[i])<(0.1*aminhfd) then begin
+                 inc(numpos);
+                 sumpos:=sumpos+i;
+                end;
+              end;
+              aminpos:=round(sumpos/numpos);
               // check measure validity
               if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos)<2) then begin
                  ResetPos;
