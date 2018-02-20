@@ -942,6 +942,12 @@ begin
                 p[i-1,2]:=ahfd[i];
               end;
               LeastSquares(p,al,bl,rl);
+              if al=0 then begin
+                msg('Too small HFD difference.');
+                ResetPos;
+                terminated:=true;
+                exit;
+              end;
               VcpiL:=-bl/al;
               // right part
               k:=AutofocusDynamicNumPoint-aminpos;
@@ -951,6 +957,12 @@ begin
                 p[i-1,2]:=ahfd[aminpos+i];
               end;
               LeastSquares(p,ar,br,rr);
+              if ar=0 then begin
+                msg('Too small HFD difference.');
+                ResetPos;
+                terminated:=true;
+                exit;
+              end;
               VcpiR:=-br/ar;
               // focus quality, mean of both side
               r2:=(rr*rr+rl*rl)/2;
