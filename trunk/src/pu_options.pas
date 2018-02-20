@@ -342,6 +342,7 @@ type
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure ButtonTempDirClick(Sender: TObject);
+    procedure CheckFocuserDirection(Sender: TObject);
     procedure CheckFocusWindow(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
@@ -527,6 +528,16 @@ begin
 SelectDirectoryDialog1.InitialDir:=TempDir.text;
 SelectDirectoryDialog1.FileName:=TempDir.text;
 if SelectDirectoryDialog1.Execute then TempDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+procedure Tf_option.CheckFocuserDirection(Sender: TObject);
+begin
+  msg('');
+  if FocuserBacklashActive.Checked and (
+     ((FocuserBacklashDirection.ItemIndex=0) and AutofocusMoveDirOut.Checked) or
+     ((FocuserBacklashDirection.ItemIndex=1) and AutofocusMoveDirIn.Checked) )
+     then
+         msg('Backlash compensation must be in the same direction as auto-focus');
 end;
 
 procedure Tf_option.TmpDirDefaultClick(Sender: TObject);

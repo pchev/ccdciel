@@ -1125,6 +1125,7 @@ object f_option: Tf_option
             'IN'
             'OUT'
           )
+          OnChange = CheckFocuserDirection
           ParentShowHint = False
           ShowHint = True
           Style = csDropDownList
@@ -1138,6 +1139,7 @@ object f_option: Tf_option
           Top = 4
           Width = 165
           Caption = 'Backlash compensation'
+          OnChange = CheckFocuserDirection
           ParentShowHint = False
           ShowHint = True
           TabOrder = 4
@@ -1287,6 +1289,7 @@ object f_option: Tf_option
           Width = 36
           Caption = 'In'
           Checked = True
+          OnChange = CheckFocuserDirection
           ParentShowHint = False
           ShowHint = True
           TabOrder = 2
@@ -1299,6 +1302,7 @@ object f_option: Tf_option
           Top = 58
           Width = 47
           Caption = 'Out'
+          OnChange = CheckFocuserDirection
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
