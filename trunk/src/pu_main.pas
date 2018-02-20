@@ -494,6 +494,7 @@ type
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
     procedure MeasureImage(Sender: TObject);
+    procedure StarSelection(Sender: TObject);
     Procedure RotatorStatus(Sender: TObject);
     Procedure RotatorAngleChange(Sender: TObject);
     Procedure RotatorRotate(Sender: TObject);
@@ -1112,6 +1113,7 @@ begin
   f_starprofile.onFocusOUT:=@FocusOUT;
   f_starprofile.onAbsolutePosition:=@FocusSetAbsolutePosition;
   f_starprofile.onMeasureImage:=@MeasureImage;
+  f_starprofile.onStarSelection:=@StarSelection;
 
   f_ccdtemp:=Tf_ccdtemp.Create(self);
   f_ccdtemp.onSetTemperature:=@SetTemperature;
@@ -5318,6 +5320,13 @@ begin
         brush.Style:=bsSolid;
      end;
   end;
+end;
+
+procedure  Tf_main.StarSelection(Sender: TObject);
+begin
+  // redraw star box
+  image1.Invalidate;
+  Application.ProcessMessages;
 end;
 
 Procedure Tf_main.DrawHistogram(SetLevel: boolean);

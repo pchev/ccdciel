@@ -87,7 +87,7 @@ type
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
-    FonMeasureImage: TNotifyEvent;
+    FonMeasureImage, FonStarSelection: TNotifyEvent;
     FonMsg: TNotifyMsg;
     Fpreview:Tf_preview;
     Ffocuser:Tf_focuser;
@@ -139,6 +139,7 @@ type
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
     property onAbsolutePosition: TNotifyEvent read FonAbsolutePosition write FonAbsolutePosition;
     property onMeasureImage: TNotifyEvent read FonMeasureImage write FonMeasureImage;
+    property onStarSelection: TNotifyEvent read FonStarSelection write FonStarSelection;
   end;
 
 implementation
@@ -538,6 +539,7 @@ begin
    LabelImax.Caption:='-';
    ClearGraph;
  end;
+ if assigned(FonStarSelection) then FonStarSelection(self);
  except
    on E: Exception do begin
      msg('ShowProfile :'+ E.Message);
@@ -605,6 +607,7 @@ begin
   FStarY:=round(yg);
   Ffwhm:=-1;
   PlotProfile(f,bg,s);
+  if assigned(FonStarSelection) then FonStarSelection(self);
   if not FirstFrame then begin
     inc(FnumGraph);
     if AutofocusMode=afVcurve then begin
