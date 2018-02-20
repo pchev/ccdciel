@@ -40,6 +40,7 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    Labelmsg: TLabel;
     UseTcpServer: TCheckBox;
     FocuserBacklashActive: TCheckBox;
     ClippingLow: TEdit;
@@ -366,6 +367,7 @@ type
     Flatitude, Flongitude: double;
     Lockchange: boolean;
     SaveTemperatureSlope: string;
+    procedure msg(txt:string);
     function GetResolver: integer;
     procedure SetResolver(value:integer);
     procedure SetLatitude(value:double);
@@ -411,6 +413,12 @@ begin
   f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Text<>'0.0');
   FileOrFolderOptionsRenumber(FolderOptions);
   FileOrFolderOptionsRenumber(FileOptions);
+end;
+
+procedure Tf_option.msg(txt:string);
+begin
+ if txt<>'' then Beep;
+ Labelmsg.Caption:=txt;
 end;
 
 procedure Tf_option.latChange(Sender: TObject);
@@ -604,25 +612,27 @@ end;
 procedure Tf_option.CheckFocusWindow(Sender: TObject);
 var a,b: integer;
 begin
+  msg('');
   a:=StrToIntDef(StarWindow.Text,-9999);
   b:=StrToIntDef(FocusWindow.Text,-9999);
   if (a<0)or(b<0) then begin
-     ShowMessage('Invalid number!');
+     msg('Invalid number!');
      exit;
   end;
-  if (4*a)>b then ShowMessage('Focus window must be at least four time greater than Star window!');
+  if (4*a)>b then msg('Focus window must be at least four time greater than Star window!');
 end;
 
 procedure Tf_option.CheckStartNearHFD(Sender: TObject);
 var a,b: double;
 begin
+  msg('');
   a:=StrToFloatDef(AutofocusStartHFD.Text,-9999);
   b:=StrToFloatDef(AutofocusNearHFD.Text,-9999);
   if (a<0)or(b<0) then begin
-     ShowMessage('Invalid number!');
+     msg('Invalid number!');
      exit;
   end;
-  if a<=b then ShowMessage('Near HFD must be smaller than Start HFD!');
+  if a<=b then msg('Near HFD must be smaller than Start HFD!');
 end;
 
 function Tf_option.GetResolver: integer;
