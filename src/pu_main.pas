@@ -474,6 +474,7 @@ type
     Procedure FocusStop(Sender: TObject);
     Procedure AutoFocusStart(Sender: TObject);
     Procedure AutoFocusStop(Sender: TObject);
+    Procedure DoAutoFocus;
     procedure LoadFocusStar;
     function  FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
     function  AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
@@ -4787,6 +4788,7 @@ begin
   ImgFrameH:=FrameH;
   DrawHistogram(true);
   DrawImage;
+  DoAutoFocus;
   except
     on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message);
   end;
@@ -5190,12 +5192,6 @@ if fits.HeaderInfo.naxis>0 then begin
   end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
-  if Preview or Capture then begin // not on control exposure
-    if f_starprofile.AutofocusRunning then
-       f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
-    else if f_starprofile.FindStar or f_starprofile.ChkFocus.Down then
-      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
-  end;
   if f_visu.BullsEye then begin
     co:=ColorToBGRA(clRed);
     cx:=img_Width div 2;
@@ -6369,6 +6365,18 @@ begin
    f_starprofile.TimerHideGraph.Interval:=5000;
    f_starprofile.TimerHideGraph.Enabled:=true;
  end;
+
+Procedure Tf_main.DoAutoFocus;
+begin
+if Preview or Capture then begin // not on control exposure
+  if f_starprofile.AutofocusRunning then
+    // process autofocus
+    f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
+  else if f_starprofile.FindStar or f_starprofile.ChkFocus.Down then
+    // only refresh star profile
+    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+end;
+end;
 
 procedure Tf_main.GUIdestroy(Sender: TObject);
 begin
