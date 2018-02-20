@@ -309,7 +309,7 @@ initialization
  {$ifdef CPU32}
   with NewSigRec do
   begin
-    integer(@Sa_Handler) := SIG_IGN; // ignore signal
+    integer(Sa_Handler) := SIG_IGN; // ignore signal
     Sa_Mask[0] := 0;
     Sa_Flags := 0;
   end;
