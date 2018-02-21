@@ -5489,6 +5489,7 @@ begin
     ShowMessage('The focuser do not support Absolute or Relative movement, autofocus calibration is not possible.');
     exit;
   end;
+  f_focusercalibration.focuser:=focuser;
   f_focusercalibration.onCalibration:=@FocuserCalibration;
   f_focusercalibration.onCalibrationClose:=@FocuserCalibrationClose;
   formpos(f_focusercalibration,mouse.CursorPos.x,mouse.CursorPos.y);
@@ -5517,11 +5518,11 @@ end;
 
 Procedure Tf_main.FocuserCalibration(Sender: TObject);
 var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin: integer;
-    savepos,step,minstep,maxstep,hfdmax,newpos,initj,numhfdout,numhfdin: integer;
+    savepos,step,minstep,maxstep,hfdmax,newpos,initj,numhfd1,numhfd2: integer;
     vmax,exp,a,b,r:double;
-    FocAbsolute,savedir,initstep,OutOfRange: boolean;
-    hfdin,hfdout: array[0..100]of array[1..2] of double;
-    stepout: array[0..100] of integer;
+    FocAbsolute,initstep,OutOfRange: boolean;
+    hfd1,hfd2: array[0..100]of array[1..2] of double;
+    step1: array[0..100] of integer;
     p:array of TDouble2;
     buf: string;
 
@@ -5578,7 +5579,6 @@ begin
     savepos:=focuser.Position
   else
     savepos:=0;
-  savedir:=AutofocusMoveDir;
   step:=f_focusercalibration.MinStep;
   hfdmax:=f_focusercalibration.MaxHfd;
   // check window size is enough to reach hfd=20
@@ -5624,10 +5624,13 @@ begin
      j:=0;
      initstep:=true;
      initj:=0;
-     numhfdout:=0;
+     numhfd1:=0;
      TerminateFocuserCalibration:=false;
-     // measure in FocusDirOut direction
-     NewMessage('Set focus direction outward');
+     // measure in AutofocusMoveDir direction
+     if AutofocusMoveDir then
+       NewMessage('Set focus direction inward')
+     else
+       NewMessage('Set focus direction outward');
      repeat
        if not f_preview.ControlExposure(exp,bin,bin) then begin
           buf:='Exposure fail!';
@@ -5655,15 +5658,15 @@ begin
            NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(savepos)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
        end;
        if FocAbsolute then
-          hfdout[j,1]:=focuser.Position
+          hfd1[j,1]:=focuser.Position
        else
-          hfdout[j,1]:=savepos;
-       hfdout[j,2]:=f_starprofile.hfd;
-       stepout[j]:=step;
-       numhfdout:=j;
-       f_focusercalibration.ProgressR(j,hfdout[j,1],hfdout[j,2]);
+          hfd1[j,1]:=savepos;
+       hfd1[j,2]:=f_starprofile.hfd;
+       step1[j]:=step;
+       numhfd1:=j;
+       f_focusercalibration.ProgressR(j,hfd1[j,1],hfd1[j,2]);
        if initstep and (j>0) then begin
-         if (hfdout[j,2]-hfdout[0,2])>hfdout[0,2] then begin
+         if (hfd1[j,2]-hfd1[0,2])>hfd1[0,2] then begin
             initstep:=false;
             initj:=j;
          end
@@ -5677,41 +5680,66 @@ begin
        inc(j);
        if (f_starprofile.hfd<hfdmax) then begin
          // set new focuser position
-         if FocAbsolute then begin
-           newpos:=focuser.Position+step;
-           if newpos<maxstep then
-              focuser.Position:=newpos
-           else
-              OutOfRange:=true;
+         if AutofocusMoveDir then begin
+           if FocAbsolute then begin
+             newpos:=focuser.Position-step;
+             if newpos>minstep then
+                focuser.Position:=newpos
+             else
+                OutOfRange:=true;
+           end
+           else begin
+             relIn(step);
+           end;
          end
          else begin
-           relOut(step);
+            if FocAbsolute then begin
+              newpos:=focuser.Position+step;
+              if newpos<maxstep then
+                 focuser.Position:=newpos
+              else
+                 OutOfRange:=true;
+            end
+            else begin
+              relOut(step);
+            end;
          end;
          wait(1);
        end;
-    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(initstep and(j>20));
+    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(initstep and(j>30));
     if (initstep) then begin
-      buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or increase the minimum movement';
+      buf:='The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement';
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
     end;
     if OutOfRange then begin
-      buf:='Reach focuser range limit! please better position the focuser half way of it''s mechanical travel or decrease the maximum HFD';
+      buf:='Reach focuser range limit! please better position the focuser half way on it''s mechanical travel or decrease the maximum HFD';
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
     end;
-    // measure in FocusDirIn direction
-    NewMessage('Set focus direction inward');
-    if FocAbsolute then begin
-      focuser.Position:=round(hfdout[0,1]);
+    // measure in reverse direction
+    if AutofocusMoveDir then begin
+      NewMessage('Set focus direction outward');
+      if FocAbsolute then begin
+        focuser.Position:=round(hfd1[0,1]);
+      end
+      else begin
+        relOut(savepos);
+      end;
     end
     else begin
-      relIn(savepos);
+      NewMessage('Set focus direction inward');
+      if FocAbsolute then begin
+        focuser.Position:=round(hfd1[0,1]);
+      end
+      else begin
+        relIn(savepos);
+      end;
     end;
     wait(1);
-    numhfdin:=0;
+    numhfd2:=0;
     j:=0;
     repeat
       if not f_preview.ControlExposure(exp,bin,bin) then begin
@@ -5740,30 +5768,44 @@ begin
           NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(savepos)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
       end;
       if FocAbsolute then
-         hfdin[j,1]:=focuser.Position
+         hfd2[j,1]:=focuser.Position
       else
-         hfdin[j,1]:=savepos;
-      hfdin[j,2]:=f_starprofile.hfd;
-      numhfdin:=j;
-      f_focusercalibration.ProgressL(j,hfdin[j,1],hfdin[j,2]);
+         hfd2[j,1]:=savepos;
+      hfd2[j,2]:=f_starprofile.hfd;
+      numhfd2:=j;
+      f_focusercalibration.ProgressL(j,hfd2[j,1],hfd2[j,2]);
       inc(j);
       if (f_starprofile.hfd<hfdmax) then begin
         // set new focuser position
-        if FocAbsolute then begin
-          newpos:=focuser.Position-step;
-          if newpos>focuser.PositionRange.min then
-             focuser.Position:=newpos
-          else
-             OutOfRange:=true;
+        if AutofocusMoveDir then begin
+          if FocAbsolute then begin
+            newpos:=focuser.Position+step;
+            if newpos<focuser.PositionRange.max then
+               focuser.Position:=newpos
+            else
+               OutOfRange:=true;
+          end
+          else begin
+            relOut(step);
+          end;
         end
         else begin
-          relIn(step);
+          if FocAbsolute then begin
+            newpos:=focuser.Position-step;
+            if newpos>focuser.PositionRange.min then
+               focuser.Position:=newpos
+            else
+               OutOfRange:=true;
+          end
+          else begin
+            relIn(step);
+          end;
         end;
         wait(1);
       end;
-   until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>20);
-    if (j>20) then begin
-      buf:='The focuser do not move enough after 20 steps! please check if the focuser is moving at all or decrease the maximum HFD';
+   until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>30);
+    if (j>30) then begin
+      buf:='The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD';
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
@@ -5776,24 +5818,24 @@ begin
     end;
 
     // compute values
-    k:=numhfdout-initj+1;
+    k:=numhfd1-initj+1;
     SetLength(p,k);
      for i:=0 to k-1 do begin
-       p[i,1]:=hfdout[initj+i,1];
-       p[i,2]:=hfdout[initj+i,2];
+       p[i,1]:=hfd1[initj+i,1];
+       p[i,2]:=hfd1[initj+i,2];
      end;
     LeastSquares(p,a,b,r);
     AutofocusBinning:=bin;
-    AutofocusNearHFD:=hfdout[0,2]+(hfdmax-hfdout[0,2])/2;
+    AutofocusNearHFD:=hfd1[0,2]+(hfdmax-hfd1[0,2])/2;
     AutofocusStartHFD:=AutofocusNearHFD+(hfdmax-AutofocusNearHFD)/2;
     // set safe values
     AutofocusNearNum:=3;
-    AutofocusTolerance:=2*hfdout[0,2];
+    AutofocusTolerance:=2*hfd1[0,2];
     AutofocusMinSNR:=0;
     // vcurve
     if FocAbsolute then begin
-      VcCenterpos:=round(hfdout[0,1]);
-      VcHalfwidth:=round(abs((hfdmax-b)/a-hfdout[0,1]));
+      VcCenterpos:=round(hfd1[0,1]);
+      VcHalfwidth:=round(abs((hfdmax-b)/a-hfd1[0,1]));
       VcNsteps:=15;
       AutoFocusMode:=afVcurve;
     end
@@ -5801,12 +5843,12 @@ begin
       AutoFocusMode:=afDynamic;
     // dynamic
     AutofocusDynamicNumPoint:=7;
-    AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b)/a-hfdout[0,1])/3));
+    AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b)/a-hfd1[0,1])/3));
     // iterative
     AutofocusMaxSpeed:=step;
-    for i:=1 to numhfdout do begin
-      if (hfdout[i,2]-hfdout[0,2])>(0.1*hfdout[0,2]) then begin
-        AutofocusMinSpeed:=stepout[i];
+    for i:=1 to numhfd1 do begin
+      if (hfd1[i,2]-hfd1[0,2])>(0.1*hfd1[0,2]) then begin
+        AutofocusMinSpeed:=step1[i] div 2;
         break;
       end;
     end;
@@ -5820,6 +5862,10 @@ begin
     f_focusercalibration.ValueListEditor1.InsertRow('Min. SNR',FormatFloat(f1,AutofocusMinSNR),true);
     f_focusercalibration.ValueListEditor1.InsertRow('Star detection window',inttostr(Starwindow),true);
     f_focusercalibration.ValueListEditor1.InsertRow('Focus window',inttostr(Focuswindow),true);
+    if AutofocusMoveDir then
+      f_focusercalibration.ValueListEditor1.InsertRow('Autofocus direction','IN',true)
+    else
+      f_focusercalibration.ValueListEditor1.InsertRow('Autofocus direction','OUT',true);
     f_focusercalibration.ValueListEditor2.Clear;
     if AutoFocusMode=afVcurve then
        f_focusercalibration.ValueListEditor2.InsertRow('Autofocus method','V curve',true)
@@ -5844,7 +5890,6 @@ begin
         else
            relin(abs(savepos));
       end;
-      AutofocusMoveDir:=savedir;
       wait(1);
       camera.ResetFrame;
       f_preview.Loop:=false;
