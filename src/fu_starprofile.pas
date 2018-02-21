@@ -672,22 +672,7 @@ begin
                  tempcomp:=focuser.TempOffset(AutofocusVcTemp,FocuserTemp)
               else
                  tempcomp:=0;
-              // move to curve start position to clear backlash
-              newpos:=AutofocusVc[0,1];
-              // correct for filter offset
-              newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
-              // correct for temperature
-              newpos:=newpos+tempcomp;
-              // correct for slippage
-              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
-              // check in range
-              if newpos<FocuserPositionMin then newpos:=FocuserPositionMin;
-              focuser.FocusPosition:=round(newpos);
-              msg('Clear focuser backlash');
-              FonAbsolutePosition(self);
-              wait(1);
-              if not ChkAutofocus.Down then exit;
-              // move back to start focus position
+              // move to start focus position
               newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
               if newpos<AutofocusVc[0,1] then begin
                  msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
@@ -712,22 +697,7 @@ begin
                  tempcomp:=focuser.TempOffset(AutofocusVcTemp,FocuserTemp)
               else
                  tempcomp:=0;
-              // move to curve end position to clear backlash
-              newpos:=AutofocusVc[AutofocusVcNum,1];
-              // correct for filter offset
-              newpos:=newpos+(CurrentFilterOffset-AutofocusVcFilterOffset);
-              // correct for temperature
-              newpos:=newpos+tempcomp;
-              // correct for slippage
-              if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
-              // check in range
-              if newpos>FocuserPositionMax then newpos:=FocuserPositionMax;
-              focuser.FocusPosition:=round(newpos);
-              msg('Clear focuser backlash');
-              FonAbsolutePosition(self);
-              wait(1);
-              if not ChkAutofocus.Down then exit;
-              // move back to start focus position
+              // move to start focus position
               newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
               if newpos>AutofocusVc[AutofocusVcNum,1] then begin
                  msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
@@ -842,18 +812,12 @@ var i,k,step,sumpos,numpos: integer;
   procedure ResetPos;
   begin
     k:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-aminpos));
-    focuser.FocusSpeed:=k+AutofocusDynamicMovement;
+    focuser.FocusSpeed:=k;
     if AutofocusMoveDir=FocusDirIn then begin
       onFocusOUT(self);
-      Wait(1);
-      focuser.FocusSpeed:=AutofocusDynamicMovement;
-      onFocusIN(self)
     end
     else begin
       onFocusIN(self);
-      Wait(1);
-      focuser.FocusSpeed:=AutofocusDynamicMovement;
-      onFocusOUT(self);
     end;
     Wait(1);
   end;
@@ -866,24 +830,18 @@ begin
               SetLength(ahfd,AutofocusDynamicNumPoint+1);
               // set initial position
               k:=AutofocusDynamicNumPoint div 2;
+              focuser.FocusSpeed:=AutofocusDynamicMovement*k;
               if AutofocusMoveDir=FocusDirIn then begin
-                focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
                 onFocusOUT(self);
-                Wait(1);
-                focuser.FocusSpeed:=AutofocusDynamicMovement;
-                onFocusIN(self)
               end
               else begin
-                focuser.FocusSpeed:=AutofocusDynamicMovement*(k+1);
                 onFocusIN(self);
-                Wait(1);
-                focuser.FocusSpeed:=AutofocusDynamicMovement;
-                onFocusOUT(self);
               end;
               Wait(1);
               afmpos:=0;
               aminhfd:=9999;
               amaxhfd:=-1;
+              focuser.FocusSpeed:=AutofocusDynamicMovement;
               AutofocusDynamicStep:=afdMeasure;
               end;
     afdMeasure: begin
@@ -975,7 +933,7 @@ begin
               // focus quality, mean of both side
               r2:=(rr*rr+rl*rl)/2;
               msg('Focus quality = '+FormatFloat(f3,r2));
-              // focus position
+              // focus position with last move in focus direction
               step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-(VcpiL+VcpiR)/2));
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;
               if AutofocusMoveDir=FocusDirIn then begin

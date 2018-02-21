@@ -3293,16 +3293,6 @@ begin
  end;
  if step<1 then exit;
  hfdmin:=9999;
- // initial focuser position in right direction
-  if AutofocusMoveDir=FocusDirOut then begin
-    i:=max(FocuserPositionMin,minpos-step);
-    focuser.Position:=i;
-  end
-  else begin
-    i:=min(FocuserPositionMax,maxpos+step);
-    focuser.Position:=i;
-  end;
-  wait(1);
  // main loop for n measurement
  for i:=0 to n do begin
    // set new focuser position
