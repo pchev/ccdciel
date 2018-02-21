@@ -533,9 +533,12 @@ end;
 procedure Tf_option.CheckFocuserDirection(Sender: TObject);
 begin
   msg('');
-  if FocuserBacklashActive.Checked and (
+  if FocuserBacklashActive.Checked and
+     (Autofocusmode.ItemIndex<3) and
+     (
      ((FocuserBacklashDirection.ItemIndex=0) and AutofocusMoveDirOut.Checked) or
-     ((FocuserBacklashDirection.ItemIndex=1) and AutofocusMoveDirIn.Checked) )
+     ((FocuserBacklashDirection.ItemIndex=1) and AutofocusMoveDirIn.Checked)
+     )
      then
          msg('Backlash compensation must be in the same direction as auto-focus');
 end;
@@ -579,6 +582,7 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
   PanelNearFocus.Visible:=true;
+  CheckFocuserDirection(Sender);
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
@@ -626,8 +630,12 @@ begin
   msg('');
   a:=StrToIntDef(StarWindow.Text,-9999);
   b:=StrToIntDef(FocusWindow.Text,-9999);
-  if (a<0)or(b<0) then begin
-     msg('Invalid number!');
+  if (a<0) then begin
+     msg('Invalid number '+label14.Caption+blank+StarWindow.Text);
+     exit;
+  end;
+  if (b<0) then begin
+     msg('Invalid number '+label2.Caption+blank+FocusWindow.Text);
      exit;
   end;
   if (4*a)>b then msg('Focus window must be at least four time greater than Star window!');
@@ -639,8 +647,12 @@ begin
   msg('');
   a:=StrToFloatDef(AutofocusStartHFD.Text,-9999);
   b:=StrToFloatDef(AutofocusNearHFD.Text,-9999);
-  if (a<0)or(b<0) then begin
-     msg('Invalid number!');
+  if (a<0) then begin
+     msg('Invalid number '+label82.Caption+blank+AutofocusStartHFD.Text);
+     exit;
+  end;
+  if (b<0) then begin
+     msg('Invalid number '+label48.Caption+blank+AutofocusNearHFD.Text);
      exit;
   end;
   if a<=b then msg('Near HFD must be smaller than Start HFD!');
