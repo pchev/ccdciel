@@ -4,7 +4,7 @@ unit pu_focusercalibration;
 
 interface
 
-uses u_global, Classes, SysUtils, FileUtil, TASources, TAGraph, TASeries, Forms,
+uses u_global, cu_focuser, Classes, SysUtils, FileUtil, TASources, TAGraph, TASeries, Forms,
   Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, ValEdit, TADrawUtils, TACustomSeries;
 
 type
@@ -16,11 +16,17 @@ type
     BtnNext: TButton;
     BtnBack: TButton;
     BtnDefault: TButton;
+    BtnNoBacklash: TButton;
+    Focusdir: TComboBox;
     Edit1: TEdit;
     Edit2: TEdit;
+    Backlash: TEdit;
     FitSourceL: TListChartSource;
     FitSourceR: TListChartSource;
     Label1: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -50,10 +56,12 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnDefaultClick(Sender: TObject);
     procedure BtnNextClick(Sender: TObject);
+    procedure BtnNoBacklashClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
+    Ffocuser: T_focuser;
     FCalibration: TNotifyEvent;
     FonCalibrationClose: TNotifyEvent;
     FAbsolute, FRunning, FCalibrationOK: boolean;
@@ -65,6 +73,7 @@ type
     procedure ProgressL(n:integer; x,y: double);
     procedure ProgressR(n:integer; x,y: double);
     procedure CalibrationCancel(reason:string);
+    property focuser: T_focuser read Ffocuser write Ffocuser;
     property FocAbsolute: boolean read FAbsolute write FAbsolute;
     property MaxHfd: integer read GetMaxHfd;
     property MinStep: integer read GetMinStep;
@@ -89,6 +98,14 @@ end;
 
 procedure Tf_focusercalibration.FormShow(Sender: TObject);
 begin
+  if AutofocusMoveDir then
+     Focusdir.ItemIndex:=0
+  else
+     Focusdir.ItemIndex:=1;
+  if Ffocuser.BacklashActive then
+    Backlash.Text:=inttostr(Ffocuser.Backlash)
+  else
+    Backlash.Text:='0';
   FRunning:=false;
   BtnBack.Visible:=false;
   BtnNext.Visible:=true;
@@ -114,6 +131,11 @@ procedure Tf_focusercalibration.BtnCancelClick(Sender: TObject);
 begin
   TerminateFocuserCalibration:=true;
   if not FRunning then close;
+end;
+
+procedure Tf_focusercalibration.BtnNoBacklashClick(Sender: TObject);
+begin
+  Backlash.Text:='0';
 end;
 
 procedure Tf_focusercalibration.BtnDefaultClick(Sender: TObject);
@@ -146,6 +168,10 @@ procedure Tf_focusercalibration.BtnNextClick(Sender: TObject);
 begin
   if Notebook1.PageIndex=2 then begin
     BtnCancel.Caption:='Cancel';
+    Ffocuser.Backlash:=StrToIntDef(Backlash.Text,Ffocuser.Backlash);
+    Ffocuser.BacklashDirection:=(Focusdir.ItemIndex=0);
+    Ffocuser.BacklashActive:=(Ffocuser.Backlash<>0);
+    AutofocusMoveDir:=Ffocuser.BacklashDirection;
     if not FRunning then Application.QueueAsyncCall(@RunCalibration,0);
   end
   else if Notebook1.PageIndex=4 then begin
@@ -212,6 +238,7 @@ begin
   config.SetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
   config.SetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
   config.SetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
+  config.SetValue('/StarAnalysis/AutofocusMoveDir',AutofocusMoveDir);
   if FAbsolute then begin
     config.SetValue('/StarAnalysis/Vcurve/VcCenterpos',VcCenterpos);
     config.SetValue('/StarAnalysis/Vcurve/VcHalfwidth',VcHalfwidth);
@@ -221,6 +248,10 @@ begin
   config.SetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
   config.SetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
   config.SetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
+  config.SetValue('/StarAnalysis/FocuserBacklash',Ffocuser.Backlash);
+  config.SetValue('/StarAnalysis/FocuserBacklashActive',Ffocuser.BacklashActive);
+  config.SetValue('/StarAnalysis/FocuserBacklashDirection',Ffocuser.BacklashDirection);
+
   config.Flush;
 end;
 
