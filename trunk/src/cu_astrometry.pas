@@ -485,10 +485,10 @@ begin
    end;
   end;
   result:=(dist<=prec);
-  err:=dist;
-  FLastSlewErr:=dist;
 
   finally
+    err:=dist;
+    FLastSlewErr:=dist;
     if result then msg('Precision slew finished.')
               else msg('Precision slew failed!');
     fits.SetBPM(bpm,0,0,0,0);

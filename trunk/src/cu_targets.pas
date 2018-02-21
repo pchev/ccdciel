@@ -55,7 +55,7 @@ type
       FTargetCoord: boolean;
       FTargetRA,FTargetDE: double;
       FTargetsRepeatCount: integer;
-      FFileVersion: integer;
+      FFileVersion, FSlewRetry: integer;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -441,7 +441,9 @@ begin
      msg('Stop plan '+Ftargets[FCurrentTarget].planname);
      p.Stop;
      ShowDelayMsg('');
-   end;
+   end
+   else
+     FRunning:=false;
  end
  else msg('Not running, nothing to do.');
 end;
@@ -465,7 +467,7 @@ begin
        end else begin
          f_pause.Caption:='Script failed';
          f_pause.Text:='Script '+Targets[FCurrentTarget].planname+' failed!'+crlf+'Do you want to retry?';
-         if f_pause.Wait(WaitResponseTime) then begin
+         if f_pause.Wait(WaitResponseTime,false) then begin
             Dec(FCurrentTarget);
          end else begin
             StopSequence(false);
@@ -498,7 +500,7 @@ begin
          FInitializing:=false;
          f_pause.Caption:='Target failed';
          f_pause.Text:='Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?';
-         if f_pause.Wait(WaitResponseTime) then begin
+         if f_pause.Wait(WaitResponseTime,false) then begin
             Dec(FCurrentTarget);
          end;
          NextTarget;
@@ -528,7 +530,7 @@ begin
          FInitializing:=false;
          f_pause.Caption:='Target failed';
          f_pause.Text:='Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?';
-         if f_pause.Wait(WaitResponseTime) then begin
+         if f_pause.Wait(WaitResponseTime,false) then begin
             Dec(FCurrentTarget);
          end;
          NextTarget;
@@ -638,6 +640,7 @@ begin
            autofocusstart:=false;
         astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
         // slew to coordinates
+        FSlewRetry:=1;
         ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
         if not ok then exit;
         Wait;
@@ -867,7 +870,7 @@ begin
   if (not result)and(not Unattended) then begin
     f_pause.Caption:='Autoguider Stop';
     f_pause.Text:='Autoguider is still active 60 seconds after a stop request.'+crlf+'Do you want to wait more?';
-    if f_pause.Wait(WaitResponseTime) then begin
+    if f_pause.Wait(WaitResponseTime,false) then begin
        result:=StopGuider();
        exit;
     end;
@@ -884,7 +887,7 @@ begin
   if (not result)and(not Unattended) then begin
     f_pause.Caption:='Autoguider Start';
     f_pause.Text:='Autoguider not guiding '+inttostr(CalibrationDelay+SettleMaxTime)+' seconds after requested to start.'+crlf+'Do you want to retry?';
-    if f_pause.Wait(WaitResponseTime) then begin
+    if f_pause.Wait(WaitResponseTime,false) then begin
        result:=StartGuider();
        exit;
     end;
@@ -898,6 +901,10 @@ var err: double;
 begin
   result:=false;
   FTargetCoord:=false;
+  if FSlewRetry>3 then begin
+     msg('Slew aborted after 3 retries!');
+     exit;
+  end;
   if (Mount=nil)or(Mount.Status<>devConnected) then begin
     msg('Error! Mount not connected');
     exit;
@@ -935,6 +942,7 @@ begin
       f_pause.Caption:='Telescope slew';
       f_pause.Text:='After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?';
       if f_pause.Wait(WaitResponseTime) then begin
+         inc(FSlewRetry);
          result:=Slew(ra,de,precision,planprecision);
          exit;
       end;
