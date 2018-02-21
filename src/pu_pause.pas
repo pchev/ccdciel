@@ -52,7 +52,7 @@ type
     function GetText: string;
   public
     { public declarations }
-    function Wait(timeout:integer=0): boolean;
+    function Wait(timeout:integer=0; defaultresult:boolean=true): boolean;
     property Text: string read GetText write SetText;
   end;
 
@@ -105,14 +105,18 @@ begin
   ScaleDPI(Self);
 end;
 
-function Tf_pause.Wait(timeout:integer=0): boolean;
+function Tf_pause.Wait(timeout:integer=0; defaultresult:boolean=true): boolean;
 var endt: TDateTime;
     n,t:integer;
 begin
+  globalmsg('Pause: ' +PauseLabel.Caption);
   if timeout>0 then begin
     endt:=now+timeout/secperday;
     PauseLabel.Caption:=PauseLabel.Caption;
-    label1.Caption:='Continue automatically in '+inttostr(timeout)+' seconds.';
+    if defaultresult then
+       label1.Caption:='Continue automatically in '+inttostr(timeout)+' seconds.'
+    else
+       label1.Caption:='Cancel automatically in '+inttostr(timeout)+' seconds.';
   end
   else begin
     endt:=MaxInt;
@@ -125,14 +129,17 @@ begin
       inc(n);
       if (n mod 20) = 0 then begin
         t:=round((endt-now)*secperday);
-        label1.Caption:='Continue automatically in '+inttostr(t)+' seconds.';
+        if defaultresult then
+           label1.Caption:='Continue automatically in '+inttostr(t)+' seconds.'
+        else
+           label1.Caption:='Cancel automatically in '+inttostr(t)+' seconds.';
         n:=0;
       end;
     end;
     Application.ProcessMessages;
     Sleep(100);
     if now>endt then begin
-       Fresult:=true;
+       Fresult:=defaultresult;
        FContinue:=true;
     end;
   end;
