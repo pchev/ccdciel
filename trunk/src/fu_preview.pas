@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, indiapi,
+uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, indiapi, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -68,6 +68,7 @@ type
     function GetExposure:double;
     procedure SetExposure(value:double);
     function GetBinning: integer;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -97,11 +98,23 @@ begin
  inherited Create(aOwner);
  ScaleDPI(Self);
  Frunning:=false;
+ SetLang;
 end;
 
 destructor  Tf_preview.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_preview.SetLang;
+begin
+  StaticText1.Caption:=rsPreview;
+  Label1.Caption:=rsExp;
+  LabelGain.Caption:=rsGain;
+  Label2.Caption:=rsBin;
+  BtnPreview.Caption:=rsPreview;
+  StackPreview.Caption:=rsStack;
+  BtnLoop.Caption:=rsLoop;
 end;
 
 procedure Tf_preview.msg(txt:string);
@@ -117,9 +130,9 @@ begin
   if Frunning then begin
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
-        Msg('Start single preview');
+        Msg(rsStartSingleP);
      end else begin
-        Msg('Cannot start preview now');
+        Msg(rsCannotStartP);
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
@@ -134,19 +147,19 @@ begin
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
         led.Brush.Color:=clLime;
-        BtnLoop.Caption:='Stop Loop';
+        BtnLoop.Caption:=rsStopLoop;
         FLoop:=True;
-        Msg('Start preview loop');
+        Msg(rsStartPreview);
      end else begin
         FLoop:=False;
-        Msg('Cannot start preview loop now');
+        Msg(rsCannotStartP2);
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
      led.Brush.Color:=clGray;
-     BtnLoop.Caption:='Loop';
+     BtnLoop.Caption:=rsLoop;
      FLoop:=False;
-     Msg('Stop preview loop');
+     Msg(rsStopPreviewL);
   end;
 end;
 
@@ -156,7 +169,7 @@ begin
   FLoop:=false;
   WaitExposure:=false;
   led.Brush.Color:=clGray;
-  BtnLoop.Caption:='Loop';
+  BtnLoop.Caption:=rsLoop;
 end;
 
 function Tf_preview.GetExposure:double;
@@ -196,7 +209,7 @@ var SaveonNewImage: TNotifyEvent;
 begin
 result:=false;
 if Camera.Status=devConnected then begin
-  msg('Take control exposure for '+FormatFloat(f1,exp)+' seconds');
+  msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]));
   SaveonNewImage:=Camera.onNewImage;
   savebinx:=Camera.BinX;
   savebiny:=Camera.BinY;

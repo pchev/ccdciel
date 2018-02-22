@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
-  fu_capture, fu_preview, fu_filterwheel,
+  fu_capture, fu_preview, fu_filterwheel, u_translation,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan, cu_planetarium, pu_pause,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -118,6 +118,7 @@ type
     procedure StopSequence;
     procedure EndSequence(Sender: TObject);
     procedure SetEditBtn(onoff:boolean);
+    procedure SetLang;
   public
     { public declarations }
     CurrentName, CurrentTarget, CurrentFile, CurrentStep: string;
@@ -162,6 +163,7 @@ constructor Tf_sequence.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ SetLang;
  Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
@@ -176,20 +178,20 @@ begin
  Targets.DelayMsg:=@ShowDelayMsg;
  Targets.onTargetsChange:=@TargetsChange;
  Targets.onPlanChange:=@PlanChange;
- TargetGrid.Cells[0,0]:='Object';
- TargetGrid.Cells[1,0]:='Plan';
- TargetGrid.Cells[2,0]:='Start';
- TargetGrid.Cells[3,0]:='End';
+ TargetGrid.Cells[0, 0]:=rsObject;
+ TargetGrid.Cells[1, 0]:=rsPlan;
+ TargetGrid.Cells[2, 0]:=rsStart;
+ TargetGrid.Cells[3, 0]:=rsEnd;
  TargetGrid.ColWidths[2]:=0;
  TargetGrid.ColWidths[3]:=0;
- TargetGrid.Cells[4,0]:='RA';
- TargetGrid.Cells[5,0]:='DEC';
- PlanGrid.Cells[0,0]:='Desc.';
- PlanGrid.Cells[1,0]:='Exp.';
- PlanGrid.Cells[2,0]:='Count';
- PlanGrid.Cells[3,0]:='Repeat';
- PlanGrid.Cells[4,0]:='Type';
- PlanGrid.Cells[5,0]:='Filter';
+ TargetGrid.Cells[4, 0]:=rsRA;
+ TargetGrid.Cells[5,0]:=rsDec;
+ PlanGrid.Cells[0, 0]:=rsDesc;
+ PlanGrid.Cells[1, 0]:=rsExp2;
+ PlanGrid.Cells[2, 0]:=rsCount;
+ PlanGrid.Cells[3, 0]:=rsRepeat;
+ PlanGrid.Cells[4, 0]:=rsType;
+ PlanGrid.Cells[5, 0]:=rsFilter;
  f_EditTargets:=Tf_EditTargets.Create(nil);
  f_EditTargets.Astrometry:=Fastrometry;
 end;
@@ -201,6 +203,22 @@ begin
  ClearTargetGrid;
  ClearPlanGrid;
  inherited Destroy;
+end;
+
+procedure Tf_sequence.SetLang;
+begin
+  StaticText1.Caption:=rsSequence;
+  StaticText2.Caption:=rsCurrentPlan;
+  StaticText3.Caption:=rsTargets;
+  BtnEditTargets.Caption:=rsEdit;
+  BtnLoadTargets.Caption:=rsLoad;
+  BtnNewTargets.Caption:=rsNew;
+  BtnStart.Caption:=rsStart;
+  BtnStop.Caption:=rsStop;
+  Unattended.Caption:=rsRunUnattende;
+  BtnCopy.Caption:=rsCopy;
+  BtnDelete.Caption:=rsDelete;
+
 end;
 
 procedure Tf_sequence.SetPreview(val: Tf_preview);
@@ -284,11 +302,12 @@ var txt,fn1,fn2: string;
     tfile: TCCDconfig;
 begin
   fn1:=CurrentFile;
-  txt:=FormEntry(self,'Copy to ','');
+  txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
   fn2:=slash(ConfigDir)+txt+'.targets';
   if FileExistsUTF8(fn2) then begin
-     if MessageDlg('Sequence '+fn2+' already exist. Do you want to replace this file?',mtConfirmation,mbYesNo,0)<>mrYes then
+     if MessageDlg(Format(rsSequenceAlre, [fn2]), mtConfirmation, mbYesNo, 0)<>
+       mrYes then
        exit;
   end;
   if CopyFile(fn1,fn2,false) then begin
@@ -305,7 +324,8 @@ procedure Tf_sequence.BtnDeleteClick(Sender: TObject);
 var fn: string;
 begin
    fn:=CurrentFile;
-   if MessageDlg('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+   if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=
+     mrYes then begin
       DeleteFileUTF8(fn);
       ClearTargetGrid;
       ClearPlanGrid;
@@ -467,7 +487,7 @@ var i: integer;
 begin
    ClearTargetGrid;
    TargetGrid.RowCount:=Targets.count+1;
-   StaticText3.Caption:='Targets: '+Targets.TargetName;
+   StaticText3.Caption:=rsTargets+': '+Targets.TargetName;
    if Targets.TargetsRepeat>1 then
      StaticText3.Caption:=StaticText3.Caption+' x'+inttostr(Targets.TargetsRepeat);
    for i:=1 to Targets.count do begin
@@ -487,7 +507,7 @@ begin
   try
    p:=T_Plan(sender);
    ClearPlanGrid;
-   StaticText2.Caption:='Plan: '+p.PlanName;
+   StaticText2.Caption:=rsPlan+': '+p.PlanName;
    PlanGrid.RowCount:=p.count+1;
    for i:=1 to p.count do begin
      PlanGrid.Cells[0,i]:=T_Plan(sender).Steps[i-1].description_str;
@@ -656,7 +676,7 @@ procedure Tf_sequence.StartSequence;
 var ccdtemp:double;
 begin
  if preview.Running then begin
-     msg('Stop preview');
+     msg(rsStopPreview);
      camera.AbortExposure;
      preview.stop;
      StartTimer.Interval:=5000;
@@ -665,18 +685,18 @@ begin
  end;
  if (Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
    if AutoguiderStarting then begin
-     f_pause.Caption:='Autoguider not connected';
-     f_pause.Text:='Cannot connect to autoguider, sequence will run without guiding! '+crlf+'Do you want to continue anyway?';
+     f_pause.Caption:=rsAutoguiderNo;
+     f_pause.Text:=Format(rsCannotConnec, [crlf]);
      if f_pause.Wait(30) then begin
-       msg('Sequence will run without guiding!');
+       msg(rsSequenceWill2);
      end
      else begin
-       msg('Sequence aborted.');
+       msg(rsSequenceAbor);
        exit;
      end;
    end
    else begin
-     msg('Try to connect to autoguider');
+     msg(rsTryToConnect);
      FConnectAutoguider(self);
      AutoguiderStarting:=true;
      StartTimer.Interval:=10000;
@@ -687,7 +707,7 @@ begin
  if not camera.Cooler then begin
     if config.GetValue('/Cooler/CameraAutoCool',false) then begin
        ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
-       msg('Camera not cooling, set temperature to '+FormatFloat(f1,ccdtemp));
+       msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]));
        camera.Temperature:=ccdtemp;
     end;
  end;
@@ -745,17 +765,17 @@ procedure Tf_sequence.BtnStartClick(Sender: TObject);
 begin
  if (Fcamera.Status=devConnected) then begin
    if Targets.Running or Fcapture.Running then begin
-     msg('Capture already running! please stop it first if you want to start a new sequence.');
+     msg(rsCaptureAlrea);
    end
    else if Targets.Count=0 then begin
-     msg('Please load or create a target list first.');
+     msg(rsPleaseLoadOr);
    end
    else begin
      AutoguiderStarting:=false;
      StartSequence;
    end;
  end
- else msg('Camera is not connected');
+ else msg(rsCameraIsNotC);
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
@@ -790,7 +810,7 @@ begin
     if (Autoguider<>nil)and(Autoguider.State=GUIDER_GUIDING) then begin
       // autoguiding restarted, clear alert
       AutoguiderAlert:=false;
-      msg('Autoguiding restarted.');
+      msg(rsAutoguidingR);
     end
     else begin
       alerttime:=trunc((now-AutoguiderAlertTime)*minperday);
@@ -799,14 +819,14 @@ begin
         // timeout
         if (Autoguider=nil)or(Autoguider.State=GUIDER_DISCONNECTED) then begin
            // no more autoguider, stop sequence
-           msg('Sequence aborted because the autoguider was not reconnected after '+IntToStr(alerttime)+' minutes.');
+           msg(Format(rsSequenceAbor2, [IntToStr(alerttime)]));
            AbortSequence;
            AutoguiderAlert:=false;
         end
         else begin
            // autoguider connected but not guiding, try next target
-           msg('Autoguider was still not guiding after '+IntToStr(alerttime)+' minutes.');
-           msg('Try next target in sequence.');
+           msg(Format(rsAutoguiderWa, [IntToStr(alerttime)]));
+           msg(rsTryNextTarge);
            Targets.ForceNextTarget;
            AutoguiderAlert:=false;
         end;
@@ -816,7 +836,7 @@ begin
        if msgtime>=1 then begin
          // display a message every minute
          AutoguiderMsgTime:=now;
-         msg('Autoguiding stopped for '+IntToStr(alerttime)+' minutes, sequence timeout in '+IntToStr(alerttimeout-alerttime)+' minutes.');
+         msg(Format(rsAutoguidingS, [IntToStr(alerttime), IntToStr(alerttimeout-alerttime)]));
        end;
       end;
     end;

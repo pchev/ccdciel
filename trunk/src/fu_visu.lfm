@@ -6,6 +6,7 @@ object f_visu: Tf_visu
   AutoSize = True
   ClientHeight = 112
   ClientWidth = 371
+  DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
@@ -50,7 +51,7 @@ object f_visu: Tf_visu
       end
       object SpinEditMin: TSpinEdit
         Left = 0
-        Height = 25
+        Height = 29
         Top = 0
         Width = 70
         Color = clBlack
@@ -62,7 +63,7 @@ object f_visu: Tf_visu
       end
       object SpinEditMax: TSpinEdit
         Left = 186
-        Height = 25
+        Height = 29
         Top = 0
         Width = 70
         Color = clBlack

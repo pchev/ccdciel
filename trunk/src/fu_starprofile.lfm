@@ -6,6 +6,7 @@ object f_starprofile: Tf_starprofile
   AutoSize = True
   ClientHeight = 499
   ClientWidth = 176
+  DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False

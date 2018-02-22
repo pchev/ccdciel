@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI,
+uses u_global, Graphics, UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -76,6 +76,7 @@ type
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -103,11 +104,26 @@ begin
  ScaleDPI(Self);
  Frunning:=false;
  FFocusNow:=false;
+ SetLang;
 end;
 
 destructor  Tf_capture.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_capture.SetLang;
+begin
+  StaticText1.Caption:=rsCapture;
+  Label1.Caption:=rsExp;
+  LabelGain.Caption:=rsGain;
+  Label2.Caption:=rsBin;
+  Label3.Caption:=rsObject;
+  Label4.Caption:=rsCount;
+  Label5.Caption:=rsType;
+  CheckBoxDither.Caption:=rsDitherEvery;
+  CheckBoxFocus.Caption:=rsFocusEvery;
+  BtnStart.Caption:=rsStart;
 end;
 
 procedure Tf_capture.BtnStartClick(Sender: TObject);
@@ -117,20 +133,20 @@ begin
     FSeqCount:=1;
     FDitherNum:=0;
     FFocusNum:=0;
-    if Assigned(FonMsg) then FonMsg('Start capture');
+    if Assigned(FonMsg) then FonMsg(rsStartCapture);
     if Assigned(FonStartExposure) then FonStartExposure(self);
-    if (not Frunning) and Assigned(FonMsg) then FonMsg('Cannot start capture now');
+    if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC);
   end else begin
     CancelAutofocus:=true;
     if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
   if Frunning then begin
     led.Brush.Color:=clLime;
-    BtnStart.Caption:='Stop';
+    BtnStart.Caption:=rsStop;
   end else begin
     led.Brush.Color:=clGray;
-    BtnStart.Caption:='Start';
-    if Assigned(FonMsg) then FonMsg('Stop capture');
+    BtnStart.Caption:=rsStart;
+    if Assigned(FonMsg) then FonMsg(rsStopCapture);
   end;
 end;
 
@@ -164,7 +180,7 @@ procedure Tf_capture.Stop;
 begin
   Frunning:=false;
   led.Brush.Color:=clGray;
-  BtnStart.Caption:='Start';
+  BtnStart.Caption:=rsStart;
 end;
 
 end.

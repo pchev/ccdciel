@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI,
+uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation,
   fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits,
   FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
   StdCtrls, ExtCtrls, Buttons, LCLType;
@@ -110,6 +110,7 @@ type
     procedure doAutofocusVcurve;
     procedure doAutofocusDynamic;
     procedure doAutofocusIterative;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -147,6 +148,44 @@ implementation
 {$R *.lfm}
 
 { Tf_starprofile }
+
+constructor Tf_starprofile.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ ScaleDPI(Self);
+ SetLang;
+ emptybmp:=Tbitmap.Create;
+ emptybmp.SetSize(1,1);
+ FFindStar:=false;
+ curhist:=0;
+ maxfwhm:=0;
+ maximax:=0;
+ FPreFocusPos:=-1;
+ focuserdirection:=FocusDirIn;
+ FLastHfd:=MaxInt;
+ LabelHFD.Caption:='-';
+ LabelFWHM.Caption:='-';
+ LabelImax.Caption:='-';
+ ClearGraph;
+end;
+
+destructor  Tf_starprofile.Destroy;
+begin
+ emptybmp.Free;
+ inherited Destroy;
+end;
+
+procedure Tf_starprofile.SetLang;
+begin
+  StaticText1.Caption:=rsStarProfile;
+  Label1.Caption:=rsHFD+':';
+  Label2.Caption:=rsIntensity+':';
+  Label3.Caption:=rsFWHM+':';
+  BtnMeasureImage.Caption:=rsImageInspect;
+  ChkFocus.Caption:=rsManualFocusA;
+  ChkAutofocus.Caption:=rsAutofocus;
+end;
+
 
 procedure Tf_starprofile.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
 begin
@@ -234,18 +273,18 @@ begin
                     FitSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
                   end;
                 end;
-                msg('Autofocus start Vcurve');
+                msg(rsAutofocusSta3);
                 if focuserdirection=FocusDirOut then
                    AutofocusVcStep:=vcsStartL
                  else
                    AutofocusVcStep:=vcsStartR;
                 end;
    afDynamic  : begin
-                msg('Autofocus start Dynamic curve');
+                msg(rsAutofocusSta4);
                 AutofocusDynamicStep:=afdStart;
                 end;
    afIterative: begin
-                msg('Autofocus start Iterative focus');
+                msg(rsAutofocusSta5);
                 FfocuserSpeed:=AutofocusMaxSpeed;
                 focuser.FocusSpeed:=FfocuserSpeed;
                 end;
@@ -331,31 +370,6 @@ begin
    Canvas.Pen.Mode:=pmCopy;
    Canvas.FillRect(0,0,Width,Height);
  end;
-end;
-
-constructor Tf_starprofile.Create(aOwner: TComponent);
-begin
- inherited Create(aOwner);
- ScaleDPI(Self);
- emptybmp:=Tbitmap.Create;
- emptybmp.SetSize(1,1);
- FFindStar:=false;
- curhist:=0;
- maxfwhm:=0;
- maximax:=0;
- FPreFocusPos:=-1;
- focuserdirection:=FocusDirIn;
- FLastHfd:=MaxInt;
- LabelHFD.Caption:='-';
- LabelFWHM.Caption:='-';
- LabelImax.Caption:='-';
- ClearGraph;
-end;
-
-destructor  Tf_starprofile.Destroy;
-begin
- emptybmp.Free;
- inherited Destroy;
 end;
 
 procedure Tf_starprofile.PlotProfile(f: TFits; bg: double; s:integer);
@@ -553,14 +567,14 @@ var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   xm,ym,ri: integer;
 begin
   if (x<0)or(y<0)or(s<0) then begin
-    msg('Autofocus canceled because no star was selected.');
+    msg(rsAutofocusCan2);
     FAutofocusResult:=false;
     ChkAutofocusDown(false);
     exit;
   end;
   f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
   if FValMax=0 then begin
-     msg('Autofocus canceled because no star was found.');
+     msg(rsAutofocusCan3);
      FAutofocusResult:=false;
      ChkAutofocusDown(false);
      exit;
@@ -568,7 +582,7 @@ begin
   f.GetHFD(xm,ym,ri,bg,bgdev,xg,yg,Fhfd,star_fwhm,FValMax,Fsnr);
   // process this measurement
   if (Fhfd<=0) then begin
-    msg('Autofocus canceled because the HFD cannot be measured');
+    msg(rsAutofocusCan4);
     FAutofocusResult:=false;
     ChkAutofocusDown(false);
     exit;
@@ -588,7 +602,8 @@ begin
     FMinSnr:=min(FMinSnr,Fsnr);
     FminPeak:=min(FminPeak,FValMax);
     inc(FnumHfd);
-    msg('Autofocus mean frame '+inttostr(FnumHfd)+'/'+inttostr(AutofocusNearNum)+', hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
+    msg(Format(rsAutofocusMea, [inttostr(FnumHfd), inttostr(AutofocusNearNum),
+      FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
     if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
       Fhfd:=SMedian(FhfdList);
       FnumHfd:=0;
@@ -621,7 +636,8 @@ begin
   end;
   // check low snr
   if fsnr<AutofocusMinSNR then begin
-    msg('Autofocus canceled because of low SNR, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr));
+    msg(Format(rsAutofocusCan5, [focuser.Position.Text, FormatFloat(f1, Fhfd),
+      FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
     FAutofocusResult:=false;
     ChkAutofocusDown(false);
     exit;
@@ -629,7 +645,9 @@ begin
   // check focus result
   if terminated then begin
     if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
-    msg('Autofocus finished, POS='+focuser.Position.Text+' HFD='+FormatFloat(f1,Fhfd)+' PEAK:'+FormatFloat(f1,FValMax)+' SNR:'+FormatFloat(f1,Fsnr)+' TEMP:'+FormatFloat(f1,FocuserTemp));
+    msg(Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),
+      FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr), FormatFloat(f1,
+      FocuserTemp)]));
     if FAutofocusResult then begin
       // adjust slippage offset with current result
       if AutofocusSlippageCorrection then begin
@@ -642,17 +660,18 @@ begin
         focuspos:=focuspos-tempcomp;
         AutofocusSlippageOffset:=round(focuspos-(AutofocusVcpiL+AutofocusVcpiR)/2);
         config.SetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
-        msg('Focuser slippage offset set to '+inttostr(AutofocusSlippageOffset));
+        msg(Format(rsFocuserSlipp, [inttostr(AutofocusSlippageOffset)]));
       end;
     end
     else begin
-       msg('Autofocus final HFD is higher than '+FormatFloat(f1,AutofocusTolerance));
+       msg(Format(rsAutofocusFin2, [FormatFloat(f1, AutofocusTolerance)]));
     end;
     ChkAutofocusDown(false);
     exit;
   end;
   FirstFrame:=false;
-  msg('Autofocus running, hfd='+FormatFloat(f1,Fhfd)+' peak:'+FormatFloat(f1,FValMax)+' snr:'+FormatFloat(f1,Fsnr));
+  msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax),
+    FormatFloat(f1, Fsnr)]));
   // do focus and continue
   case AutofocusMode of
     afVcurve   : doAutofocusVcurve;
@@ -675,7 +694,7 @@ begin
               // move to start focus position
               newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
               if newpos<AutofocusVc[0,1] then begin
-                 msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
+                 msg(rsStartFocusHF);
                  ChkAutofocusDown(false);
                  exit;
               end;
@@ -686,7 +705,7 @@ begin
               // correct for slippage
               if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to start position '+focuser.Position.Text);
+              msg(Format(rsAutofocusMov, [focuser.Position.Text]));
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsNearL;
               wait(1);
@@ -700,7 +719,7 @@ begin
               // move to start focus position
               newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
               if newpos>AutofocusVc[AutofocusVcNum,1] then begin
-                 msg('Start focus HFD is outside of current V curve, please decrease the start HFD value');
+                 msg(rsStartFocusHF);
                  ChkAutofocusDown(false);
                  exit;
               end;
@@ -711,7 +730,7 @@ begin
               // correct for slippage
               if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to start position '+focuser.Position.Text);
+              msg(Format(rsAutofocusMov, [focuser.Position.Text]));
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsNearR;
               wait(1);
@@ -728,7 +747,7 @@ begin
               if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               // move to near focus position
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to near focus '+focuser.Position.Text);
+              msg(Format(rsAutofocusMov2, [focuser.Position.Text]));
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsCheckL;
               AutofocusVcCheckNum:=0;
@@ -747,7 +766,7 @@ begin
               if AutofocusSlippageCorrection then newpos:=newpos+AutofocusSlippageOffset;
               // move to near focus position
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to near focus '+focuser.Position.Text);
+              msg(Format(rsAutofocusMov2, [focuser.Position.Text]));
               FonAbsolutePosition(self);
               AutofocusVcStep:=vcsCheckR;
               AutofocusVcCheckNum:=0;
@@ -761,7 +780,8 @@ begin
               AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
-              msg('Autofocus measurement '+IntToStr(AutofocusVcCheckNum)+' : HFD='+FormatFloat(f3,meanhfd)+' position='+IntToStr(round(newpos)));
+              msg(Format(rsAutofocusMea2, [IntToStr(AutofocusVcCheckNum),
+                FormatFloat(f3, meanhfd), IntToStr(round(newpos))]));
               if AutofocusVcCheckNum>=AutofocusNearNum then begin
                 AutofocusVcStep:=vcsFocusL;
                 doAutofocusVcurve;
@@ -774,7 +794,8 @@ begin
               AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
-              msg('Autofocus measurement'+IntToStr(AutofocusVcCheckNum)+' : HFD='+FormatFloat(f3,meanhfd)+' position='+IntToStr(round(newpos)));
+              msg(Format(rsAutofocusMea2, [IntToStr(AutofocusVcCheckNum),
+                FormatFloat(f3, meanhfd), IntToStr(round(newpos))]));
               if AutofocusVcCheckNum>=AutofocusNearNum then begin
                 AutofocusVcStep:=vcsFocusR;
                 doAutofocusVcurve;
@@ -786,7 +807,7 @@ begin
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to focus position '+focuser.Position.Text);
+              msg(Format(rsAutofocusMov3, [focuser.Position.Text]));
               FonAbsolutePosition(self);
               terminated:=true;
               wait(1);
@@ -797,7 +818,7 @@ begin
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
-              msg('Autofocus move to focus position '+focuser.Position.Text);
+              msg(Format(rsAutofocusMov3, [focuser.Position.Text]));
               FonAbsolutePosition(self);
               terminated:=true;
               wait(1);
@@ -881,20 +902,20 @@ begin
               if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos)<2) then begin
                  ResetPos;
                  if FAutofocusRestart>0 then begin
-                   msg('Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool.');
-                   msg('The focuser is now positioned at the best observed HFD position.');
+                   msg(rsNotEnoughPoi);
+                   msg(rsTheFocuserIs);
                    terminated:=true;
                  end
                  else begin
-                   msg('Not enough points in or out of focus position, retrying now.');
+                   msg(rsNotEnoughPoi2);
                    InitAutofocus(true);
                    AutofocusDynamicStep:=afdStart;
                  end;
                  exit;
               end;
               if (amaxhfd<(2*aminhfd)) then begin
-                 msg('Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters.');
-                 msg('The focuser is now positioned at the best observed HFD position.');
+                 msg(rsTooSmallHFDD);
+                 msg(rsTheFocuserIs);
                  ResetPos;
                  terminated:=true;
                  exit;
@@ -909,7 +930,7 @@ begin
               end;
               LeastSquares(p,al,bl,rl);
               if al=0 then begin
-                msg('Too small HFD difference.');
+                msg(rsTooSmallHFDD2);
                 ResetPos;
                 terminated:=true;
                 exit;
@@ -924,7 +945,7 @@ begin
               end;
               LeastSquares(p,ar,br,rr);
               if ar=0 then begin
-                msg('Too small HFD difference.');
+                msg(rsTooSmallHFDD2);
                 ResetPos;
                 terminated:=true;
                 exit;
@@ -932,7 +953,7 @@ begin
               VcpiR:=-br/ar;
               // focus quality, mean of both side
               r2:=(rr*rr+rl*rl)/2;
-              msg('Focus quality = '+FormatFloat(f3,r2));
+              msg(Format(rsFocusQuality, [FormatFloat(f3, r2)]));
               // focus position with last move in focus direction
               step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-(VcpiL+VcpiR)/2));
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;
@@ -971,11 +992,11 @@ begin
   end;
   if focuserdirection=FocusDirIn
      then begin
-        msg('Autofocus focus in by '+inttostr(FfocuserSpeed));
+        msg(Format(rsAutofocusFoc, [inttostr(FfocuserSpeed)]));
         FonFocusIN(self);
       end
      else begin
-       msg('Autofocus focus out by '+inttostr(FfocuserSpeed));
+       msg(Format(rsAutofocusFoc2, [inttostr(FfocuserSpeed)]));
        FonFocusOUT(self);
      end;
   FLastHfd:=Fhfd;

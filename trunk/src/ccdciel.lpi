@@ -167,7 +167,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+            <UnitOutputDirectory Value="units/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
           </SearchPaths>
           <Parsing>
             <SyntaxOptions>
@@ -246,7 +246,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="66">
+    <Units Count="67">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -599,6 +599,10 @@
         <Filename Value="cu_tcpserver.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit65>
+      <Unit66>
+        <Filename Value="u_translation.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit66>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -7,6 +7,7 @@ object f_capture: Tf_capture
   ChildSizing.ControlsPerLine = 1
   ClientHeight = 332
   ClientWidth = 166
+  DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
@@ -103,7 +104,7 @@ object f_capture: Tf_capture
       end
       object GainEdit: TEdit
         Left = 70
-        Height = 25
+        Height = 31
         Top = 4
         Width = 88
         ParentShowHint = False
@@ -146,16 +147,16 @@ object f_capture: Tf_capture
     end
     object Panel4: TPanel
       Left = 0
-      Height = 27
+      Height = 33
       Top = 103
       Width = 161
       Caption = ' '
-      ClientHeight = 27
+      ClientHeight = 33
       ClientWidth = 161
       TabOrder = 2
       object Fname: TEdit
         Left = 70
-        Height = 25
+        Height = 31
         Hint = 'Name of the files saved for this sequence'
         Top = 1
         Width = 90
@@ -172,16 +173,16 @@ object f_capture: Tf_capture
     end
     object Panel5: TPanel
       Left = 0
-      Height = 27
-      Top = 130
+      Height = 33
+      Top = 136
       Width = 161
       Caption = ' '
-      ClientHeight = 27
+      ClientHeight = 33
       ClientWidth = 161
       TabOrder = 3
       object SeqNum: TEdit
         Left = 70
-        Height = 25
+        Height = 31
         Hint = 'Number of exposure in this sequence'
         Top = 1
         Width = 90
@@ -200,7 +201,7 @@ object f_capture: Tf_capture
     object Panel6: TPanel
       Left = 0
       Height = 33
-      Top = 157
+      Top = 169
       Width = 161
       ClientHeight = 33
       ClientWidth = 161
@@ -233,10 +234,10 @@ object f_capture: Tf_capture
     end
     object Panel7: TPanel
       Left = 0
-      Height = 26
-      Top = 190
+      Height = 32
+      Top = 202
       Width = 161
-      ClientHeight = 26
+      ClientHeight = 32
       ClientWidth = 161
       TabOrder = 5
       object CheckBoxDither: TCheckBox
@@ -249,7 +250,7 @@ object f_capture: Tf_capture
       end
       object DitherCount: TEdit
         Left = 120
-        Height = 25
+        Height = 31
         Top = 0
         Width = 40
         TabOrder = 1
@@ -258,10 +259,10 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 26
-      Top = 216
+      Height = 32
+      Top = 234
       Width = 161
-      ClientHeight = 26
+      ClientHeight = 32
       ClientWidth = 161
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
@@ -274,7 +275,7 @@ object f_capture: Tf_capture
       end
       object FocusCount: TEdit
         Left = 120
-        Height = 25
+        Height = 31
         Top = 0
         Width = 40
         TabOrder = 1
@@ -284,7 +285,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 0
       Height = 20
-      Top = 242
+      Top = 266
       Width = 161
       ClientHeight = 20
       ClientWidth = 161

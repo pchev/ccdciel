@@ -37,7 +37,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types;
+  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
 
@@ -562,6 +562,7 @@ type
     procedure TCPShowError(var msg: string);
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
+    procedure SetLang;
   public
     { public declarations }
   end;
@@ -587,7 +588,7 @@ begin
      AssignFile(MsgLog,LogFile);
      Rewrite(MsgLog);
      WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_time);
-     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  Compiled with: '+compile_version);
+     WriteLn(MsgLog, FormatDateTime(dateiso, Now)+blank+rsCompiledWith+': '+compile_version);
      LogFileOpen:=true;
   except
   {$I-}
@@ -606,7 +607,7 @@ begin
      Filemode:=2;
      AssignFile(MsgDeviceLog,DeviceLogFile);
      Rewrite(MsgDeviceLog);
-     WriteLn(MsgDeviceLog,FormatDateTime(dateiso,Now)+'  Start new log');
+     WriteLn(MsgDeviceLog, FormatDateTime(dateiso, Now)+blank+blank+rsStartNewLog);
      DeviceLogFileOpen:=true;
   except
   {$I-}
@@ -946,6 +947,9 @@ begin
   ScriptDir[1].path:=slash(ConfigDir);
   ScriptDir[2].path:=slash(Appdir)+slash('scripts');
 
+  lang := u_translation.translate('');
+  SetLang;
+
   Top:=config.GetValue('/Window/Top',0);
   Left:=config.GetValue('/Window/Left',0);
   Width:=config.GetValue('/Window/Width',1024);
@@ -1062,7 +1066,7 @@ begin
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
   f_devicesconnection.onDisconnect:=@Disconnect;
-  f_devicesconnection.ProfileLabel.Caption:='Profile: '+profile;
+  f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);;
 
   f_visu:=Tf_visu.Create(self);
   f_visu.onRedraw:=@Redraw;
@@ -1218,7 +1222,114 @@ begin
   MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
-  NewMessage('CCDciel '+ccdciel_version+'-'+RevisionStr+' initialized');
+  NewMessage('CCDciel '+ccdciel_version+'-'+RevisionStr+blank+rsInitialized);
+end;
+
+procedure Tf_main.SetLang;
+begin
+   MenuItem1.Caption := rsFile;
+   MenuSetup.Caption:=Format(rsDevicesSetup, [ellipsis]);
+   MenuItemBPM.Caption := rsBadPixelMap;
+   MenuBPM.Caption := rsCreateBadPix;
+   MenuClearBPM.Caption := rsClearBadPixe;
+   MenuApplyBPM.Caption := rsApplyToCurre;
+   MenuFocuserCalibration.Caption := rsFocuserCalib;
+   MenuOpen.Caption := Format(rsOpenFITSFile, [ellipsis]);
+   MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
+   MenuRefimage.Caption := rsOpenReferenc;
+   MenuClearRef.Caption := rsClearReferen;
+   MenuQuit.Caption := rsQuit;
+   MenuItem2.Caption := rsEdit;
+   MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
+   MenuIndiSettings.Caption := rsINDISettings;
+   MenuViewhdr.Caption := rsViewHeader;
+   MenuItem4.Caption := rsTools;
+   MenuViewConnection.Caption := rsConnection;
+   MenuViewPreview.Caption := rsPreview;
+   MenuViewAutoguider.Caption := rsAutoguider;
+   MenuViewPlanetarium.Caption := rsPlanetarium;
+   MenuViewScript.Caption := rsScript;
+   MenuViewFocuser.Caption := rsFocuser;
+   MenuViewStarProfile.Caption := rsStarProfile;
+   MenuViewCapture.Caption := rsCapture;
+   MenuViewFilters.Caption := rsFilters;
+   MenuViewFrame.Caption := rsFrame;
+   MenuViewRotator.Caption := rsRotator;
+   MenuViewCCDtemp.Caption := rsCCDTemperatu;
+   MenuViewMount.Caption := rsTelescopeMou;
+   MenuViewSequence.Caption := rsSequence;
+   MenuViewVideo.Caption := rsVideo;
+   MenuViewHistogram.Caption := rsVisualisatio;
+   MenuViewMessages.Caption := rsMessages;
+   MenuViewClock.Caption := rsClock;
+   MenuResetTools.Caption := rsResetToDefau;
+   MenuTabConnect.Caption := rsConnect;
+   MenuConnection.Caption := rsConnection;
+   MenuConnect.Caption := rsConnect;
+   MenuPreview.Caption := rsPreview;
+   MenuPreviewStart.Caption := rsStart;
+   MenuPreviewLoop.Caption := rsLoop;
+   MenuAutoguider.Caption := rsAutoguider;
+   MenuAutoguiderConnect.Caption := rsConnect;
+   MenuAutoguiderCalibrate.Caption := rsCalibrate;
+   MenuAutoguiderGuide.Caption := rsGuide;
+   MenuAutoguiderDither.Caption := rsDither;
+   MenuPlanetarium.Caption := rsPlanetarium;
+   MenuPlanetariumConnect.Caption := rsConnect;
+   MenuPlanetariumNewtarget.Caption := rsNewTarget;
+   MenuScript.Caption := rsScript;
+   MenuScriptRun.Caption := rsRun;
+   MenuScriptStop.Caption := rsStop;
+   MenuScriptEdit.Caption := rsEdit;
+   MenuScriptNew.Caption := rsNew;
+   MenuHistogram.Caption := rsVisualisatio;
+   MenuVisuLinear.Caption := rsLinear;
+   MenuVisuLog.Caption := rsLog;
+   MenuVisuSqrt.Caption := rsSqrt;
+   MenuVisuZoom2.Caption := rsZoom+' 2:1';
+   MenuVisuZoom1.Caption := rsZoom+' 1:1';
+   MenuVisuZoom12.Caption := rsZoom+' 1:2';
+   MenuVisuZoomAdjust.Caption := rsAdjustToWind;
+   MenuTabFocus.Caption := rsFocus;
+   MenuFocuser.Caption := rsFocuser;
+   MenuFocuserIn.Caption := rsMoveInward;
+   MenuFocuserOut.Caption := rsMoveOutward;
+   MenuStarProfile.Caption := rsStarProfile;
+   MenuFocusaid.Caption := rsFocusAid;
+   MenuTabCapture.Caption := rsCapture;
+   MenuCapture.Caption := rsCapture;
+   MenuCaptureStart.Caption := rsStart;
+   MenuFilters.Caption := rsFilters;
+   MenuFrame.Caption := rsFrame;
+   MenuFrameSet.Caption := rsSet;
+   MenuFrameReset.Caption := rsReset;
+   MenuRotator.Caption := rsRotator;
+   MenuRotatorRotate.Caption := rsRotate;
+   MenuCCDtemp.Caption := rsCCDTemperatu;
+   MenuCCDtempSet.Caption := rsSet;
+   MenuMount.Caption := rsTelescopeMou;
+   MenuMountPark.Caption := rsPark;
+   MenuMountTrack.Caption := rsTrack;
+   MenuTabSequence.Caption := rsSequence;
+   MenuSequence.Caption := rsSequence;
+   MenuSequenceLoad.Caption := rsLoad;
+   MenuSequenceNew.Caption := rsNew;
+   MenuSequenceEdit.Caption := rsEdit;
+   MenuSequenceStart.Caption := rsStart;
+   MenuSequenceStop.Caption := rsStop;
+   MenuTabVideo.Caption := rsVideo;
+   MenuVideo.Caption := rsVideo;
+   MenuVideoPreview.Caption := rsPreview;
+   MenuVideoStart.Caption := rsStartRecord;
+   MenuVideoStop.Caption := rsStopRecord;
+   MenuItem3.Caption := rsHelp;
+   MenuPdfHelp.Caption := rsPDFDocumenta;
+   MenuOnlineHelp.Caption := rsOnlineDocume;
+   MenuShowLog.Caption := rsShowCurrentL;
+   MenuBrowseLog.Caption := rsBrowseLogFil;
+   MenuBugReport.Caption := rsReportAProbl;
+   MenuDownload.Caption := rsDownloadLate;
+   MenuHelpAbout.Caption := rsAbout;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -1389,37 +1500,37 @@ begin
       x:=Rect.Left+s+4;
       if (f_planetarium<>nil)and(planetarium.Connected) then begin
         statusbar.Canvas.Brush.Color:=cllime;
-        msg:=msg+'Planetarium connected';
+        msg:=msg+Format(rsConnected,[rsPlanetarium]);
       end
       else begin
         statusbar.Canvas.Brush.Color:=clRed;
-        msg:=msg+'Planetarium disconnected';
+        msg:=msg+Format(rsDisconnected,[rsPlanetarium]);
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // guider
       x:=x+2*s+4;
       if (f_autoguider<>nil)and(autoguider.State=GUIDER_DISCONNECTED) then begin
         statusbar.Canvas.Brush.Color:=clred;
-        msg:=msg+', Autoguider disconnected';
+        msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
       end
       else if (autoguider.State=GUIDER_GUIDING) then begin
         statusbar.Canvas.Brush.Color:=cllime;
-        msg:=msg+', Autoguider guiding';
+        msg:=msg+', '+Format(rsGuiding,[rsAutoguider]);
       end
       else begin
         statusbar.Canvas.Brush.Color:=clYellow;
-        msg:=msg+', Autoguider connected';
+        msg:=msg+', '+Format(rsConnected,[rsAutoguider]);
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // device
       x:=x+2*s+4;
       if (f_devicesconnection<>nil)and(f_devicesconnection.led.Brush.Color=clLime) then begin
         statusbar.Canvas.Brush.Color:=cllime;
-        msg:=msg+', Devices connected';
+        msg:=msg+', '+Format(rsConnected, [rsDevices]);
       end
       else begin
         statusbar.Canvas.Brush.Color:=clred;
-        msg:=msg+', Devices disconnected';
+        msg:=msg+', '+Format(rsDisconnected, [rsDevices]);
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // set hint
@@ -1724,7 +1835,7 @@ begin
 
 
   SaveConfig;
-  NewMessage('Configuration saved');
+  NewMessage(rsConfiguratio);
 
   TerminateVcurve:=true;
   if autoguider.Running then begin
@@ -2008,7 +2119,7 @@ procedure Tf_main.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
 if AppClose then exit;
 if (camera.Status<>devDisconnected)and(ConfirmClose) then begin
-   CanClose:=(MessageDlg('The camera is connected. Do you want to exit the program now?',mtConfirmation,mbYesNo,0)=mrYes);
+   CanClose:=(MessageDlg(rsTheCameraIsC, mtConfirmation, mbYesNo, 0)=mrYes);
 end else begin
    CanClose:=true;
 end;
@@ -2022,7 +2133,7 @@ if CanClose then begin
  end;
  if f_sequence.Running then f_sequence.AbortSequence;
  f_script.RunShutdownScript;
- NewMessage('Disconnecting devices ...');
+ NewMessage(rsDisconnectin+blank+ellipsis);
  Disconnect(nil);
 end;
 end;
@@ -2058,8 +2169,8 @@ procedure Tf_main.MenuBPMClick(Sender: TObject);
 var bin,x,y,i: integer;
     lb,val,val1,val2: double;
 begin
-f_pause.Caption:='Bad pixel map';
-f_pause.Text:='Cover the camera and set the exposure time and binning in the Preview pane now.'+crlf+'Click Continue when ready.';
+f_pause.Caption:=rsBadPixelMap;
+f_pause.Text:=rsCoverTheCame+crlf+rsClickContinu;
 if f_pause.Wait then begin
   bin:=f_preview.Bin;
   camera.ResetFrame;
@@ -2090,10 +2201,10 @@ if f_pause.Wait then begin
        end;
     end;
     if bpmnum<1000 then
-       NewMessage('Bad pixel detection found '+inttostr(bpmNum)+' hot pixels.')
+       NewMessage(Format(rsBadPixelDete, [inttostr(bpmNum)]))
     else begin
-       NewMessage('Too many hot pixel found!');
-       NewMessage('Please increase the threshold.');
+       NewMessage(rsTooManyHotPi);
+       NewMessage(rsPleaseIncrea);
     end;
     config.DeletePath('/BadPixelMap/');
     config.SetValue('/BadPixelMap/Count',bpmNum);
@@ -2107,7 +2218,7 @@ if f_pause.Wait then begin
     SaveConfig;
   end
   else
-    NewMessage('BPM exposure fail!');
+    NewMessage(rsExposureFail);
 end;
 end;
 
@@ -2117,7 +2228,7 @@ begin
   bpmX:=0;
   bpmY:=0;
   bpmAxis:=0;
-  NewMessage('Bad pixel map cleared.');
+  NewMessage(rsBadPixelMapC);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   config.DeletePath('/BadPixelMap/');
   config.SetValue('/BadPixelMap/Count',bpmNum);
@@ -2332,32 +2443,32 @@ begin
   WantWatchdog:=config.GetValue('/Devices/Watchdog',false);
 
   if WantCamera and (CameraName='') then begin
-    ShowMessage('Please configure your camera!');
+    ShowMessage(rsPleaseConfig+blank+rsCamera);
     MenuSetup.Click;
     exit;
   end;
   if WantWheel and (WheelName='') then begin
-    ShowMessage('Please configure your filter wheel!');
+    ShowMessage(rsPleaseConfig+blank+rsFilterWheel);
     MenuSetup.Click;
     exit;
   end;
   if WantFocuser and (FocuserName='') then begin
-    ShowMessage('Please configure your focuser!');
+    ShowMessage(rsPleaseConfig+blank+rsFocuser2);
     MenuSetup.Click;
     exit;
   end;
   if WantRotator and (RotatorName='') then begin
-    ShowMessage('Please configure your rotator!');
+    ShowMessage(rsPleaseConfig+blank+rsRotator2);
     MenuSetup.Click;
     exit;
   end;
   if WantMount and (MountName='') then begin
-    ShowMessage('Please configure your mount!');
+    ShowMessage(rsPleaseConfig+blank+rsMount);
     MenuSetup.Click;
     exit;
   end;
   if WantWatchdog and (WatchdogName='') then begin
-    ShowMessage('Please configure your watchdog!');
+    ShowMessage(rsPleaseConfig+blank+rsWatchdog);
     MenuSetup.Click;
     exit;
   end;
@@ -2381,7 +2492,7 @@ end;
 Procedure Tf_main.Disconnect(Sender: TObject);
 begin
 if camera.Status<>devDisconnected then begin
-   if (sender=nil) or (MessageDlg('Are you sure you want to disconnect all the devices now?',mtConfirmation,mbYesNo,0)=mrYes) then begin
+   if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
      camera.AbortExposure;
      StartCaptureTimer.Enabled:=false;
      f_preview.stop;
@@ -2403,19 +2514,19 @@ var allcount, upcount, downcount, concount: integer;
 procedure SetDisconnected;
 begin
  f_devicesconnection.led.Brush.Color:=clRed;
- f_devicesconnection.BtnConnect.Caption:='Connect';
+ f_devicesconnection.BtnConnect.Caption:=rsConnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 procedure SetConnected;
 begin
  f_devicesconnection.led.Brush.Color:=clLime;
- f_devicesconnection.BtnConnect.Caption:='Disconnect';
+ f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 procedure SetConnecting;
 begin
  f_devicesconnection.led.Brush.Color:=clYellow;
- f_devicesconnection.BtnConnect.Caption:='Disconnect';
+ f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 
@@ -2506,7 +2617,7 @@ var buf: string;
 begin
   f_ccdtemp.Current.Text:=FormatFloat(f1,camera.Temperature);
   buf:=FormatFloat(f0,camera.TemperatureRange.min)+'...'+FormatFloat(f0,camera.TemperatureRange.max);
-  f_ccdtemp.Setpoint.Hint:='Desired temperature'+crlf+buf;
+  f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;
 end;
 
 procedure Tf_main.SetTemperature(Sender: TObject);
@@ -2533,7 +2644,7 @@ procedure Tf_main.ShowExposureRange;
 var buf: string;
 begin
  buf:=FormatFloat(f0,camera.ExposureRange.min)+'...'+FormatFloat(f0,camera.ExposureRange.max);
- buf:='Exposure time in secondes'+crlf+buf;
+ buf:=rsExposureTime+crlf+buf;
  f_capture.ExpTime.Hint:=buf;
  f_preview.ExpTime.Hint:=buf;
 end;
@@ -2770,7 +2881,7 @@ begin
   if r.step>0 then begin
    FocuserPositionMin:=round(r.min);
    FocuserPositionMax:=round(r.max);
-   f_focuser.Position.Hint:='Current focuser absolute position, '+
+   f_focuser.Position.Hint:=rsCurrentFocus+', '+
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.PosIncr.ItemIndex:=0;
   end;
@@ -2778,7 +2889,7 @@ begin
   f_focuser.timer.Text:=inttostr(focuser.Timer);
   r:=focuser.RelPositionRange;
   if r.step>0 then begin
-    f_focuser.RelIncr.Hint:='Relative increment for the inward or outward movement, '+
+    f_focuser.RelIncr.Hint:=rsRelativeIncr+', '+
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=0;
   end;
@@ -2836,11 +2947,11 @@ begin
                    f_devicesconnection.LabelWatchdog.Font.Color:=clRed;
                    end;
    devConnecting:  begin
-                   NewMessage('Connecting watchdog...');
+                   NewMessage(Format(rsConnecting, [rsWatchdog+ellipsis]));
                    f_devicesconnection.LabelWatchdog.Font.Color:=clOrange;
                    end;
    devConnected:   begin
-                   if f_devicesconnection.LabelWatchdog.Font.Color<>clGreen then NewMessage('Watchdog connected');
+                   if f_devicesconnection.LabelWatchdog.Font.Color<>clGreen then NewMessage(Format(rsConnected, [rsWatchdog]));
                    f_devicesconnection.LabelWatchdog.Font.Color:=clGreen;
                    end;
  end;
@@ -2889,11 +3000,11 @@ begin
                    end;
                    end;
    devConnecting:  begin
-                   NewMessage('Connecting camera...');
+                   NewMessage(Format(rsConnecting, [rsCamera+ellipsis]));
                    f_devicesconnection.LabelCamera.Font.Color:=clOrange;
                    end;
    devConnected:   begin
-                   if f_devicesconnection.LabelCamera.Font.Color<>clGreen then NewMessage('Camera connected');
+                   if f_devicesconnection.LabelCamera.Font.Color<>clGreen then NewMessage(Format(rsConnected, [rsCamera]));
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
                    wait(1);
                    cool:=camera.Cooler;
@@ -2939,27 +3050,27 @@ procedure Tf_main.AbortTimerTimer(Sender: TObject);
 begin
   AbortTimer.Enabled:=false;
   StartCaptureTimer.Enabled:=false;
-  if Capture and f_capture.Running then NewMessage('Exposure aborted!');
+  if Capture and f_capture.Running then NewMessage(rsExposureAbor);
   if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
   f_preview.stop;
   f_capture.stop;
   Capture:=false;
   Preview:=false;
-  StatusBar1.Panels[1].Text:='Stop';
+  StatusBar1.Panels[1].Text:=rsStop;
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
 end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
  f_ccdtemp.Current.Text:=FormatFloat(f1,t);
- if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:='Cancel' else f_ccdtemp.BtnSet.Caption:='Set';
+ if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:=rsCancel else f_ccdtemp.BtnSet.Caption:=rsSet;
 end;
 
 procedure Tf_main.CameraCoolerChange(var v:boolean);
 begin
  if f_ccdtemp.CCDcooler.Checked<>v then begin
     f_ccdtemp.CCDcooler.Checked:=v;
-    NewMessage('Camera cooler '+BoolToStr(v,true));
+    NewMessage(Format(rsCameraCooler, [BoolToStr(v, true)]));
  end;
 end;
 
@@ -3002,11 +3113,11 @@ case wheel.Status of
                       f_devicesconnection.LabelWheel.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage('Connecting filter wheel...');
+                      NewMessage(Format(rsConnecting, [rsFilterWheel+ellipsis]));
                       f_devicesconnection.LabelWheel.Font.Color:=clOrange;
                    end;
   devConnected:   begin
-                      NewMessage('Filter wheel connected');
+                      NewMessage(Format(rsConnected, [rsFilterWheel]));
                       f_devicesconnection.LabelWheel.Font.Color:=clGreen;
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
                       f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
@@ -3088,7 +3199,7 @@ var aboutmsg: string;
 begin
 aboutmsg:='CCDciel '+crlf;
 aboutmsg:=aboutmsg+ccdciel_version+'-'+RevisionStr+blank+compile_time+crlf;
-aboutmsg:=aboutmsg+'Compiled with:'+crlf;
+aboutmsg:=aboutmsg+rsCompiledWith+':'+crlf;
 aboutmsg:=aboutmsg+blank+compile_version+crlf+crlf;
 aboutmsg:=aboutmsg+'Credits:'+crlf;
 aboutmsg:=aboutmsg+tab+'Patrick Chevalley'+crlf;
@@ -3099,7 +3210,7 @@ aboutmsg:=aboutmsg+'This program is free software; you can redistribute it and/o
 aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'+crlf;
 aboutmsg:=aboutmsg+'as published by the Free Software Foundation; either version 3'+crlf;
 aboutmsg:=aboutmsg+'of the License, or (at your option) any later version.'+crlf;
-MessageDlg('About CCDciel',aboutmsg,mtInformation,[mbClose],0);
+MessageDlg(rsAbout+' CCDciel', aboutmsg, mtInformation, [mbClose], 0);
 end;
 
 procedure Tf_main.MenuDownloadClick(Sender: TObject);
@@ -3128,7 +3239,7 @@ begin
      {$endif}
   end
   else
-     ShowMessage('Please activate the log file in the preference.');
+     ShowMessage(rsPleaseActiva);
 end;
 
 procedure Tf_main.MenuBrowseLogClick(Sender: TObject);
@@ -3143,11 +3254,11 @@ case focuser.Status of
                       f_devicesconnection.LabelFocuser.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage('Connecting focuser...');
+                      NewMessage(Format(rsConnecting, [rsFocuser2+ellipsis]));
                       f_devicesconnection.LabelFocuser.Font.Color:=clOrange;
                    end;
   devConnected:   begin
-                      NewMessage('Focuser connected');
+                      NewMessage(Format(rsConnected, [rsFocuser]));
                       f_devicesconnection.LabelFocuser.Font.Color:=clGreen;
                    end;
 end;
@@ -3203,7 +3314,7 @@ begin
       end;
     end;
  end;
- if n<>0 then NewMessage('Invalid numeric value');
+ if n<>0 then NewMessage(rsInvalidNumer);
 end;
 
 procedure Tf_main.FocusOUT(Sender: TObject);
@@ -3234,7 +3345,7 @@ begin
       end;
     end;
  end;
- if n<>0 then NewMessage('Invalid numeric value');
+ if n<>0 then NewMessage(rsInvalidNumer);
 end;
 
 procedure Tf_main.FocusSetAbsolutePosition(Sender: TObject);
@@ -3249,7 +3360,7 @@ end;
 procedure Tf_main.FocusVcurveLearning(Sender: TObject);
 begin
   if not focuser.hasAbsolutePosition then begin
-    NewMessage('Cannot get focuser absolute position');
+    NewMessage(rsCannotGetFoc);
     exit;
   end;
   if f_vcurve=nil then begin
@@ -3286,9 +3397,9 @@ begin
  PosFocus:=-1;
  PosNearR:=-1;
  f_preview.StackPreview.Checked:=false;
- NewMessage('From: '+IntToStr(minpos)+' to '+IntToStr(centerp)+' by '+IntToStr(step));
+ NewMessage(Format(rsFromToBy, [IntToStr(minpos), IntToStr(centerp), IntToStr(step)]));
  if focuser.hasTemperature then begin
-    NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+    NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
     AutofocusVcTemp1:=FocuserTemp;
  end;
  if step<1 then exit;
@@ -3311,11 +3422,11 @@ begin
    // average hfd for nsum exposures
    for j:=1 to nsum do begin
      if not f_preview.ControlExposure(exp,bin,bin) then begin
-       NewMessage('Exposure fail!');
+       NewMessage(rsExposureFail);
        TerminateVcurve:=true;
      end;
      if TerminateVcurve then begin
-       NewMessage('Stop Vcurve learning');
+       NewMessage(rsStopVcurveLe);
        LoadVcurve;
        f_vcurve.LoadCurve;
        exit;
@@ -3339,7 +3450,7 @@ begin
  AutofocusVcNum:=n;
  AutofocusVcDir:=AutofocusMoveDir;
  if hfdmin=9999 then begin
-   NewMessage('Cannot detect star.');
+   NewMessage(rsCannotDetect);
    exit;
  end;
  // search the central point of the flat central part of the curve to split right and left curve
@@ -3362,18 +3473,18 @@ begin
    if AutofocusVc[i,2]>=AutofocusStartHFD then PosStartR:=i;
  end;
  if (PosNearL<0)or(PosNearR<0) then begin
-   NewMessage('Cannot reach near focus HFD, please increase Half Width or better center the curve.');
+   NewMessage(rsCannotReachN);
    exit;
  end;
  if (PosNearL<0)or(PosNearR<0) then begin
-   NewMessage('Cannot reach start focus HFD, please increase Half Width or decrease the start HFD');
+   NewMessage(rsCannotReachS);
    exit;
  end;
  AutofocusVcNum:=n;
  if focuser.hasTemperature then begin
    AutofocusVcTemp2:=FocuserTemp;
    AutofocusVcTemp:=(AutofocusVcTemp1+AutofocusVcTemp2)/2;
-   NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+   NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
  end
  else
    AutofocusVcTemp:=0;
@@ -3409,7 +3520,7 @@ begin
  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
  if (not f_starprofile.FindStar) then begin
    if not f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
-      NewMessage('Exposure fail!');
+      NewMessage(rsExposureFail);
       exit;
    end;
    x:=fits.HeaderInfo.naxis1 div 2;
@@ -3426,7 +3537,7 @@ begin
  end;
 
  if not f_starprofile.FindStar then begin
-   NewMessage('Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning.');
+   NewMessage(rsCannotFindAS);
    exit;
  end;
  learningvcurve:=true;
@@ -3452,7 +3563,7 @@ begin
  f_visu.Zoom:=0;
  ImgZoom:=0;
  // do vcurve exposures
- NewMessage('Start learning V curve');
+ NewMessage(rsStartLearnin);
  if not doVcurve(VcCenterpos,VcHalfwidth,VcNsteps,AutofocusNearNum,f_preview.Exposure,bin) then begin
    // error return focuser to initial position
    focuser.Position:=savepos;
@@ -3565,13 +3676,13 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage('Connecting rotator...');
+                      NewMessage(Format(rsConnecting, [rsRotator2+ellipsis]));
                       f_devicesconnection.LabelRotator.Font.Color:=clOrange;
                    end;
   devConnected:   begin
                       if f_devicesconnection.LabelRotator.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelRotator.Font.Color:=clGreen;
-                      NewMessage('Rotator connected');
+                      NewMessage(Format(rsConnected, [rsRotator]));
                       f_rotator.SetReverse(config.GetValue('/Rotator/Reverse',false));
                       rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
                       f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
@@ -3615,13 +3726,13 @@ case mount.Status of
                       f_devicesconnection.LabelMount.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage('Connecting mount...');
+                      NewMessage(Format(rsConnecting, [rsMount+ellipsis]));
                       f_devicesconnection.LabelMount.Font.Color:=clOrange;
                    end;
   devConnected:   begin
                       if f_devicesconnection.LabelMount.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelMount.Font.Color:=clGreen;
-                      NewMessage('Mount connected');
+                      NewMessage(Format(rsConnected, [rsMount]));
                       wait(1);
                       MountCoordChange(Sender);
                       CheckMeridianFlip;
@@ -3639,20 +3750,20 @@ end;
 Procedure Tf_main.MountPiersideChange(Sender: TObject);
 begin
   case mount.PierSide of
-    pierEast: f_mount.Pierside.Text:='East (Pointing West)';
-    pierWest: f_mount.Pierside.Text:='West (Pointing East)';
-    pierUnknown: f_mount.Pierside.Text:='Unknow pier side';
+    pierEast: f_mount.Pierside.Text:=rsEastPointing;
+    pierWest: f_mount.Pierside.Text:=rsWestPointing;
+    pierUnknown: f_mount.Pierside.Text:=rsUnknowPierSi;
   end;
 end;
 
 Procedure Tf_main.MountParkChange(Sender: TObject);
 begin
  if mount.Park then begin
-    f_mount.BtnPark.Caption:='Parked';
+    f_mount.BtnPark.Caption:=rsParked;
     f_mount.BtnPark.Font.Color:=clRed
  end
  else begin
-    f_mount.BtnPark.Caption:='Unparked';
+    f_mount.BtnPark.Caption:=rsUnparked;
     f_mount.BtnPark.Font.Color:=clGreen;
  end;
  MenuMountPark.Caption:=f_mount.BtnPark.Caption;
@@ -3671,7 +3782,7 @@ end;
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 var i: integer;
 begin
- if f_autoguider.BtnConnect.Caption='Connect' then begin
+ if f_autoguider.BtnConnect.Caption=rsConnect then begin
    i:=config.GetValue('/Autoguider/Software',0);
    case TAutoguiderType(i) of
     PHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
@@ -3688,7 +3799,7 @@ begin
    autoguider.Disconnect;
  end;
  f_autoguider.Status.Text:=autoguider.Status;
- NewMessage('Autoguider: '+autoguider.Status);
+ NewMessage(Format(rsAutoguider2, [autoguider.Status]));
 end;
 
 Procedure Tf_main.AutoguiderCalibrateClick(Sender: TObject);
@@ -3699,7 +3810,7 @@ end;
 Procedure Tf_main.AutoguiderGuideClick(Sender: TObject);
 var onoff:boolean;
 begin
- if f_autoguider.BtnGuide.Caption='Guide' then begin
+ if f_autoguider.BtnGuide.Caption=rsGuide then begin
     onoff:=true;
  end else begin
    onoff:=false;
@@ -3714,7 +3825,7 @@ end;
 
 Procedure Tf_main.AutoguiderConnect(Sender: TObject);
 begin
- f_autoguider.BtnConnect.Caption:='Disconnect';
+ f_autoguider.BtnConnect.Caption:=rsDisconnect;
  MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
  autoguider.ConnectGear;
  autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
@@ -3724,7 +3835,7 @@ Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
 var i: integer;
 begin
  if not AppClose then begin
-   NewMessage('Disconnected from autoguider software!');
+   NewMessage(rsDisconnected2);
    f_sequence.AutoguiderDisconnected;
    // autoguider will be free automatically, create a new one for next connection
    i:=config.GetValue('/Autoguider/Software',0);
@@ -3738,9 +3849,9 @@ begin
    autoguider.onShowMessage:=@NewMessage;
    f_sequence.Autoguider:=autoguider;
    f_autoguider.Status.Text:=autoguider.Status;
-   NewMessage('Autoguider: '+autoguider.Status);
-   f_autoguider.BtnConnect.Caption:='Connect';
-   f_autoguider.BtnGuide.Caption:='Guide';
+   NewMessage(Format(rsAutoguider2, [autoguider.Status]));
+   f_autoguider.BtnConnect.Caption:=rsConnect;
+   f_autoguider.BtnGuide.Caption:=rsGuide;
    f_autoguider.led.Brush.Color:=clGray;
    MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
    MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
@@ -3750,37 +3861,37 @@ end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
 begin
- if f_autoguider.Status.Text<>autoguider.Status then NewMessage('Autoguider: '+autoguider.Status);
+ if f_autoguider.Status.Text<>autoguider.Status then NewMessage(Format(rsAutoguider2, [autoguider.Status]));
  f_autoguider.Status.Text:=autoguider.Status;
  case autoguider.State of
    GUIDER_DISCONNECTED:begin
                        f_autoguider.led.Brush.Color:=clGray;
-                       f_autoguider.BtnGuide.Caption:='Guide';
-                       MenuAutoguiderGuide.Caption:='Guide';
+                       f_autoguider.BtnGuide.Caption:=rsGuide;
+                       MenuAutoguiderGuide.Caption:=rsGuide;
                        end;
    GUIDER_IDLE        :begin
                        f_autoguider.led.Brush.Color:=clYellow;
-                       f_autoguider.BtnGuide.Caption:='Guide';
-                       MenuAutoguiderGuide.Caption:='Guide';
+                       f_autoguider.BtnGuide.Caption:=rsGuide;
+                       MenuAutoguiderGuide.Caption:=rsGuide;
                        if (not meridianflipping)and(not autofocusing) then f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;
-                       f_autoguider.BtnGuide.Caption:='Stop';
-                       MenuAutoguiderGuide.Caption:='Stop guiding';
+                       f_autoguider.BtnGuide.Caption:=rsStop;
+                       MenuAutoguiderGuide.Caption:=rsStopGuiding;
                        end;
    GUIDER_BUSY        :begin
                        f_autoguider.led.Brush.Color:=clOrange;
-                       f_autoguider.BtnGuide.Caption:='Stop';
-                       MenuAutoguiderGuide.Caption:='Stop guiding';
+                       f_autoguider.BtnGuide.Caption:=rsStop;
+                       MenuAutoguiderGuide.Caption:=rsStopGuiding;
                        end;
    GUIDER_ALERT       :begin
                        f_autoguider.led.Brush.Color:=clRed;
-                       f_autoguider.BtnGuide.Caption:='Guide';
-                       MenuAutoguiderGuide.Caption:='Guide';
+                       f_autoguider.BtnGuide.Caption:=rsGuide;
+                       MenuAutoguiderGuide.Caption:=rsGuide;
                        end;
  end;
- if autoguider.LastError<>'' then NewMessage('Autoguider: '+autoguider.LastError);
+ if autoguider.LastError<>'' then NewMessage(Format(rsAutoguider2, [autoguider.LastError]));
  StatusBar1.Invalidate;
 end;
 
@@ -3799,7 +3910,7 @@ var configfile: string;
     loadopt: boolean;
 begin
   if camera.Status<>devDisconnected then begin
-    ShowMessage('Disconnect the camera before to change the configuration.');
+    ShowMessage(rsDisconnectTh);
     exit;
   end;
   loadopt:=false;
@@ -3823,7 +3934,7 @@ begin
          configfile:='ccdciel_'+profile+'.conf';
       loadopt:=FileExistsUTF8(slash(ConfigDir)+configfile);
       OpenConfig(configfile);
-      f_devicesconnection.ProfileLabel.Caption:='Profile: '+profile;
+      f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);
     end;
     config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
@@ -3894,7 +4005,7 @@ var ok,PlanetariumChange,AutoguiderChange: boolean;
 begin
    PlanetariumChange:=false;
    AutoguiderChange:=false;
-   f_option.Caption:='Options :'+profile;
+   f_option.Caption:=Format(rsOptions, [profile]);
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
@@ -3949,9 +4060,9 @@ begin
    f_option.FlatLevelMax.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMax',FlatLevelMax));
    f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
    f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
-   f_option.FilterList.Cells[0,0]:='Filter name';
-   f_option.FilterList.Cells[1,0]:='Focuser offset';
-   f_option.FilterList.Cells[2,0]:='Exposure factor';
+   f_option.FilterList.Cells[0, 0]:=rsFilterName;
+   f_option.FilterList.Cells[1, 0]:=rsFocuserOffse;
+   f_option.FilterList.Cells[2, 0]:=rsExposureFact;
    for i:=1 to f_option.FilterList.RowCount-1 do begin
      f_option.FilterList.Cells[0,i]:='';
      f_option.FilterList.Cells[1,i]:='';
@@ -4233,8 +4344,8 @@ begin
        autoguider.onShowMessage:=@NewMessage;
        f_sequence.Autoguider:=autoguider;
        f_autoguider.Status.Text:=autoguider.Status;
-       NewMessage('Autoguider: '+autoguider.Status);
-       f_autoguider.BtnConnect.Caption:='Connect';
+       NewMessage(Format(rsAutoguider2, [autoguider.Status]));
+       f_autoguider.BtnConnect.Caption:=rsConnect;
        f_autoguider.BtnGuide.Caption:='Guide';
        f_autoguider.led.Brush.Color:=clGray;
        MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
@@ -4487,8 +4598,8 @@ begin
   camera.AbortExposure;
   Preview:=false;
   Capture:=false;
-  NewMessage('Abort exposure');
-  StatusBar1.Panels[1].Text:='Stop';
+  NewMessage(rsAbortExposur);
+  StatusBar1.Panels[1].Text:=rsStop;
 end;
 
 procedure Tf_main.ResetPreviewStack(Sender: TObject);
@@ -4510,7 +4621,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   Preview:=true;
   e:=f_preview.Exposure;
   if e<0 then begin
-    NewMessage('Invalid exposure time '+f_preview.ExpTime.Text);
+    NewMessage(Format(rsInvalidExpos, [f_preview.ExpTime.Text]));
     f_preview.stop;
     Preview:=false;
     exit;
@@ -4521,11 +4632,11 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp),IntToStr(p)]));
         focuser.Position:=focuser.Position+p;
       end
       else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp),IntToStr(p)]));
         if p>0 then focuser.FocusOut else focuser.FocusIn;
         focuser.RelPosition:=abs(p);
       end;
@@ -4541,13 +4652,13 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      if (binx<camera.BinXrange.min)or(biny<camera.BinYrange.min) or
         (binx>camera.BinXrange.max)or(biny>camera.BinYrange.max)
          then begin
-           NewMessage('Invalid binning '+f_preview.Binning.Text);
+           NewMessage(Format(rsInvalidBinni, [f_preview.Binning.Text]));
            f_preview.stop;
            Preview:=false;
            exit;
          end;
      if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
-        NewMessage('Set Binning '+inttostr(binx)+'x'+inttostr(biny));
+        NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny));
         camera.SetBinning(binx,biny);
      end;
   end;
@@ -4591,8 +4702,8 @@ begin
 if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check if we need to cancel running preview
   if f_preview.Running then begin
-    NewMessage('Stop preview');
-    StatusBar1.Panels[1].Text:='Stop preview';
+    NewMessage(rsStopPreview);
+    StatusBar1.Panels[1].Text:=rsStopPreview;
     camera.AbortExposure;
     f_preview.stop;
     // retry after 5 sec.
@@ -4602,13 +4713,13 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   end;
   f_preview.StackPreview.Checked:=false;
   f_capture.Running:=true;
-  MenuCaptureStart.Caption:='Stop';
+  MenuCaptureStart.Caption:=rsStop;
   Preview:=false;
   Capture:=true;
   // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
-    NewMessage('Invalid exposure time '+f_capture.ExpTime.Text);
+    NewMessage(Format(rsInvalidExpos, [f_capture.ExpTime.Text]));
     f_capture.Stop;
     Capture:=false;
     exit;
@@ -4623,13 +4734,13 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
      if (binx<camera.BinXrange.min)or(biny<camera.BinYrange.min) or
         (binx>camera.BinXrange.max)or(biny>camera.BinYrange.max)
         then begin
-          NewMessage('Invalid binning '+f_capture.Binning.Text);
+          NewMessage(Format(rsInvalidBinni, [f_capture.Binning.Text]));
           f_capture.Stop;
           Capture:=false;
           exit;
         end;
      if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
-        NewMessage('Set Binning '+inttostr(binx)+'x'+inttostr(biny));
+        NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny));
         camera.SetBinning(binx,biny);
      end;
   end;
@@ -4654,7 +4765,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   waittime:=CheckMeridianFlip(e);
   if not f_capture.Running then begin
     // stop current capture if meridian flip failed
-    NewMessage('Meridian aborted!');
+    NewMessage(rsMeridianFlip);
     f_capture.Stop;
     Capture:=false;
     exit;
@@ -4673,11 +4784,11 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp), IntToStr(p)]));
         focuser.Position:=focuser.Position+p;
       end
       else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp)+' , adjust position by '+IntToStr(p));
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp), IntToStr(p)]));
         if p>0 then focuser.FocusOut else focuser.FocusIn;
         focuser.RelPosition:=abs(p);
       end;
@@ -4696,14 +4807,14 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
          Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
          exit;
        end else begin
-         NewMessage('Capture stopped during autofocus');
+         NewMessage(rsCaptureStopp);
          f_capture.Stop;
          Capture:=false;
          exit;
        end;
      end else begin
        // failed, cancel current capture
-       NewMessage('Autofocus failed!');
+       NewMessage(rsAutofocusFai);
        f_capture.Stop;
        Capture:=false;
        exit;
@@ -4713,18 +4824,18 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=StrToIntDef(f_capture.DitherCount.Text,1)) then begin
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
-      NewMessage('Dithering...');
-      StatusBar1.Panels[1].Text:='Dithering...';
+      NewMessage(rsDithering+ellipsis);
+      StatusBar1.Panels[1].Text:='rsDithering+ellipsis';
       autoguider.Dither(DitherPixel, DitherRAonly);
       autoguider.WaitBusy(SettleMaxTime);
       Wait(1);
     end else begin
-      NewMessage('Not autoguiding! dithering ignored.');
+      NewMessage(rsNotAutoguidi);
     end;
   end;
   // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
-  NewMessage('Starting '+f_capture.FrameType.Text+' exposure '+inttostr(f_capture.SeqCount)+' for '+f_capture.ExpTime.Text+' seconds');
+  NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount), f_capture.ExpTime.Text]));
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
   f_preview.StackPreview.Checked:=false;
@@ -4746,10 +4857,10 @@ begin
  if (n<=0) then begin
    if meridianflipping or autofocusing then exit;
    if ((f_capture.Running)or(f_preview.Running)) then begin
-     txt := 'Downloading...';
+     txt := rsDownloading+ellipsis;
      if Capture then begin
        if f_capture.Running then
-         StatusBar1.Panels[1].Text := 'Seq: '+inttostr(f_capture.SeqCount)+' '+txt;
+         StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+' '+txt;
      end
      else begin
         StatusBar1.Panels[1].Text := txt;
@@ -4763,11 +4874,10 @@ begin
            else txt:=FormatFloat(f1, n);
   if Capture then begin
     if f_capture.Running then
-      StatusBar1.Panels[1].Text := 'Seq: '+inttostr(f_capture.SeqCount)
-                                   +'  Exp: '+txt+' sec.';
+      StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+blank+rsExp+blank+txt+blank+rsSec;
   end
   else begin
-     StatusBar1.Panels[1].Text := 'Exp: '+txt+' sec.';
+     StatusBar1.Panels[1].Text := rsExp+blank+txt+blank+rsSec;
   end;
  end;
 end;
@@ -4812,15 +4922,15 @@ begin
         // end capture
         Capture:=false;
         f_capture.Stop;
-        NewMessage('Stop capture');
-        StatusBar1.Panels[1].Text := 'Seq: '+inttostr(f_capture.SeqCount-1)+' Finished';
+        NewMessage(rsStopCapture);
+        StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)]);
         MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
      end;
   end
   // process preview
   else if Preview then begin
-    buf:='Preview '+FormatDateTime('hh:nn:ss',now)+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
-    if camera.StackCount>1 then buf:=buf+', stack of '+inttostr(camera.StackCount)+' frames';
+    buf:=rsPreview+blank+FormatDateTime('hh:nn:ss', now)+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+    if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[2].Text:=buf;
     // next exposure
     if f_preview.Loop and f_preview.Running then Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
@@ -4828,7 +4938,7 @@ begin
          // end preview
          f_preview.stop;
          Preview:=false;
-         NewMessage('End preview');
+         NewMessage(rsEndPreview);
          StatusBar1.Panels[1].Text:='';
     end;
   end;
@@ -4857,7 +4967,7 @@ begin
       else begin
          Capture:=false;
          f_capture.Stop;
-         StatusBar1.Panels[1].Text:='Stop';
+         StatusBar1.Panels[1].Text:=rsStop;
          NewMessage('Flat light is too bright, please reduce the light or adjust the flat parameters.');
          NewMessage('Stop flat capture');
          exit;
@@ -4876,7 +4986,7 @@ begin
       else begin
         Capture:=false;
         f_capture.Stop;
-        StatusBar1.Panels[1].Text:='Stop';
+        StatusBar1.Panels[1].Text:=rsStop;
         NewMessage('Flat light is too faint, please increase the light or adjust the flat parameters.');
         NewMessage('Stop flat capture');
         exit;
@@ -4985,8 +5095,8 @@ try
  fn:=slash(fd)+fn+'.fits';
  // save the file
  fits.SaveToFile(fn);
- NewMessage('Saved file '+fn);
- StatusBar1.Panels[2].Text:='Saved '+fn+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+ NewMessage(Format(rsSavedFile, [fn]));
+ StatusBar1.Panels[2].Text:=Format(rsSaved, [fn])+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[1].Text := '';
  except
    on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message);
@@ -5352,14 +5462,14 @@ procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
 begin
   BayerColor:=True;
   DrawImage;
-  NewMessage('Image Debayered');
+  NewMessage(rsImageDebayer);
 end;
 
 procedure Tf_main.MenuItemRawClick(Sender: TObject);
 begin
   BayerColor:=False;
   DrawImage;
-  NewMessage('Image Un-debayered');
+  NewMessage(rsImageUnDebay);
 end;
 
 procedure Tf_main.MenuMountParkClick(Sender: TObject);
@@ -5478,15 +5588,15 @@ end;
 procedure Tf_main.MenuFocuserCalibrationClick(Sender: TObject);
 begin
   if focuser.Status<>devConnected then begin
-    ShowMessage('Focuser not connected!');
+    ShowMessage(Format(rsNotConnected, [rsFocuser]));
     exit;
   end;
   if camera.Status<>devConnected then begin
-    ShowMessage('Camera not connected!');
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
   if not(focuser.hasRelativePosition or focuser.hasAbsolutePosition) then begin
-    ShowMessage('The focuser do not support Absolute or Relative movement, autofocus calibration is not possible.');
+    ShowMessage(rsTheFocuserDo);
     exit;
   end;
   f_focusercalibration.focuser:=focuser;
@@ -5555,7 +5665,7 @@ begin
       maxstep:=round(focuser.RelPositionRange.max);
     end
     else begin
-      buf:='The focuser do not support Absolute or Relative movement, autofocus calibration is not possible.';
+      buf:=rsTheFocuserDo;
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
@@ -5563,13 +5673,13 @@ begin
   end;
   f_focusercalibration.FocAbsolute:=FocAbsolute;
   if  f_capture.Running  then begin
-    buf:='Cannot run calibration now, stop capture and retry';
+    buf:=rsCannotRunCal;
     NewMessage(buf);
     f_focusercalibration.CalibrationCancel(buf);
     exit;
   end;
   if  f_preview.Running  then begin
-    buf:='Cannot run calibration now, stop preview and retry';
+    buf:=rsCannotRunCal2;
     NewMessage(buf);
     f_focusercalibration.CalibrationCancel(buf);
     exit;
@@ -5620,7 +5730,7 @@ begin
      f_visu.Zoom:=0;
      ImgZoom:=0;
      f_preview.StackPreview.Checked:=false;
-     NewMessage('Focuser calibration started');
+     NewMessage(rsFocuserCalib2);
      j:=0;
      initstep:=true;
      initj:=0;
@@ -5628,18 +5738,18 @@ begin
      TerminateFocuserCalibration:=false;
      // measure in AutofocusMoveDir direction
      if AutofocusMoveDir then
-       NewMessage('Set focus direction inward')
+       NewMessage(rsSetFocusDire)
      else
-       NewMessage('Set focus direction outward');
+       NewMessage(rsSetFocusDire2);
      repeat
        if not f_preview.ControlExposure(exp,bin,bin) then begin
-          buf:='Exposure fail!';
+          buf:=rsExposureFail;
           NewMessage(buf);
           f_focusercalibration.CalibrationCancel(buf);
           exit;
        end;
        if TerminateFocuserCalibration then begin
-         buf:='Request to stop focuser calibration';
+         buf:=rsRequestToSto;
          NewMessage(buf);
          f_focusercalibration.CalibrationCancel(buf);
          exit;
@@ -5708,20 +5818,20 @@ begin
        end;
     until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(initstep and(j>30));
     if (initstep) then begin
-      buf:='The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement';
+      buf:=rsTheFocuserDo2;
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
     end;
     if OutOfRange then begin
-      buf:='Reach focuser range limit! please better position the focuser half way on it''s mechanical travel or decrease the maximum HFD';
+      buf:=rsReachFocuser;
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
     end;
     // measure in reverse direction
     if AutofocusMoveDir then begin
-      NewMessage('Set focus direction outward');
+      NewMessage(rsSetFocusDire2);
       if FocAbsolute then begin
         focuser.Position:=round(hfd1[0,1]);
       end
@@ -5730,7 +5840,7 @@ begin
       end;
     end
     else begin
-      NewMessage('Set focus direction inward');
+      NewMessage(rsSetFocusDire);
       if FocAbsolute then begin
         focuser.Position:=round(hfd1[0,1]);
       end
@@ -5743,13 +5853,13 @@ begin
     j:=0;
     repeat
       if not f_preview.ControlExposure(exp,bin,bin) then begin
-         buf:='Exposure fail!';
+         buf:=rsExposureFail;
          NewMessage(buf);
          f_focusercalibration.CalibrationCancel(buf);
          exit;
       end;
       if TerminateFocuserCalibration then begin
-        buf:='Request to stop focuser calibration';
+        buf:=rsRequestToSto;
         NewMessage(buf);
         f_focusercalibration.CalibrationCancel(buf);
         exit;
@@ -5805,13 +5915,13 @@ begin
       end;
    until (f_starprofile.hfd>=hfdmax)or(OutOfRange)or(j>30);
     if (j>30) then begin
-      buf:='The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD';
+      buf:=rsTheFocuserDo3;
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
     end;
     if OutOfRange then begin
-      buf:='Reach focuser range limit! please better position the focuser half way of it''s mechanical travel or decrease the maximum HFD';
+      buf:=rsReachFocuser;
       NewMessage(buf);
       f_focusercalibration.CalibrationCancel(buf);
       exit;
@@ -5897,7 +6007,7 @@ begin
     end;
   end
   else begin
-    buf:='Select a star first!';
+    buf:=rsSelectAStarF;
     NewMessage(buf);
     f_focusercalibration.CalibrationCancel(buf);
   end;
@@ -5914,7 +6024,7 @@ var x,y,xc,yc,s,s2,s3,s4: integer;
     vmax:double;
 begin
   if  f_capture.Running  then begin
-    NewMessage('Cannot start manual focus now, stop capture and retry');
+    NewMessage(rsCannotStartM);
     f_starprofile.ChkFocusDown(false);
     exit;
   end;
@@ -5954,11 +6064,11 @@ begin
        f_preview.Running:=true;
        StartPreviewExposure(nil);
      end;
-     NewMessage('Focus aid started');
+     NewMessage(rsFocusAidStar);
   end
   else begin
     f_starprofile.ChkFocusDown(false);
-    NewMessage('Select a star first!');
+    NewMessage(rsSelectAStarF);
   end;
 end;
 
@@ -5976,8 +6086,8 @@ begin
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
-   NewMessage('Focus aid stopped');
-   if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+   NewMessage(rsFocusAidStop);
+   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
 end;
 
 procedure Tf_main.LoadFocusStar;
@@ -6081,21 +6191,21 @@ begin
  result:=false;
  CancelAutofocus:=false;
  if autofocusing then begin
-   NewMessage('Autofocus already running.');
+   NewMessage(rsAutofocusAlr);
    exit;
  end;
  if (AutofocusMode=afNone) then begin
-   NewMessage('Please configure the Autofocus options.');
+   NewMessage(rsPleaseConfig2);
    f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
  if(AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
-   NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
+   NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]));
    f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
-   NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
+   NewMessage(rsPleaseRunThe);
    f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
@@ -6104,21 +6214,21 @@ begin
  f_preview.StackPreview.Checked:=false;
  try
  Capture:=false;
- NewMessage('Autofocus now');
+ NewMessage(rsAutofocusNow);
  tpos:=false;
  pslew:=false;
  // stop autoguider
  restartguider:=(Autoguider.State<>GUIDER_DISCONNECTED);
  if restartguider and (Autoguider.State=GUIDER_GUIDING) then begin
-   NewMessage('Stop autoguider');
+   NewMessage(rsStopAutoguid);
    autoguider.Guide(false);
    autoguider.WaitBusy(15);
  end;
  if InplaceAutofocus then begin
-   NewMessage('Stay at the current position for autofocus');
+   NewMessage(rsStayAtTheCur);
    if CancelAutofocus then exit;
    // do autofocus
-   if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
    f_starprofile.ChkAutofocusDown(true);
    while f_starprofile.ChkAutofocus.Down do begin
     sleep(100);
@@ -6133,15 +6243,15 @@ begin
      result:=true;
    end
    else begin
-      NewMessage('In place autofocus failed!');
-      NewMessage('Sequence will continue with the current focuser position.');
+      NewMessage(rsInPlaceAutof);
+      NewMessage(rsSequenceWill);
       result:=true;
    end;
  end;
  if (not InplaceAutofocus) or (not result) then begin
    // get current position from target object
    if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
-     NewMessage('Get current position from current target');
+     NewMessage(rsGetCurrentPo);
      if (f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
        tra:=f_sequence.TargetRA;
        tde:=f_sequence.TargetDE;
@@ -6151,7 +6261,7 @@ begin
    end;
    // get current position from last capture image
    if (not tpos)and(f_capture.Running)and(f_capture.SeqCount>1) and fits.HeaderInfo.valid and (astrometryResolver<>ResolverNone) then begin
-     NewMessage('Get current position from last image');
+     NewMessage(rsGetCurrentPo2);
      astrometry.SolveCurrentImage(true);
      if astrometry.LastResult then begin
        astrometry.CurrentCoord(tra,tde,teq,tpa);
@@ -6162,12 +6272,12 @@ begin
        pslew:=true;
      end
      else begin
-      NewMessage('Cannot solve current image.');
+      NewMessage(rsCannotSolveC);
      end;
    end;
    // get current position from telescope
    if (not tpos) then begin
-    NewMessage('Get current position from telescope');
+    NewMessage(rsGetCurrentPo3);
     tra:=deg2rad*15*mount.RA;
     tde:=deg2rad*mount.Dec;
     if mount.Equinox<>0 then begin
@@ -6187,7 +6297,7 @@ begin
      // search focus star
      if FindFocusStar(tra,tde,sra,sde,sid) then begin
        // slew to star
-       NewMessage('Slew to focus star '+sid);
+       NewMessage(Format(rsSlewToFocusS, [sid]));
        if mount.Equinox<>0 then begin
          jd0:=Jd(trunc(mount.Equinox),0,0,0);
          jd1:=DateTimetoJD(now);
@@ -6196,14 +6306,14 @@ begin
        astrometry.AutofocusPrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
      end
      else begin
-      NewMessage('Cannot find a focus star.');
-      if NFocusStars=0 then NewMessage('Star database is empty, check path to star database files!!');
+      NewMessage(rsCannotFindAF);
+      if NFocusStars=0 then NewMessage(rsStarDatabase);
       exit;
      end;
      wait(1);
      if CancelAutofocus then exit;
      // do autofocus
-     if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+     if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
      f_starprofile.ChkAutofocusDown(true);
      while f_starprofile.ChkAutofocus.Down do begin
       sleep(100);
@@ -6216,17 +6326,17 @@ begin
      // if not successful, blacklist the current star and try another
      if not f_starprofile.AutofocusResult then begin
         FocusStarsBlacklist:=FocusStarsBlacklist+' '+sid+' ';
-        NewMessage('Autofocus failed, try with another star...');
+        NewMessage(rsAutofocusFai2);
      end;
      if CancelAutofocus then exit;
    until f_starprofile.AutofocusResult or (focusretry>=maxretry);
    if not f_starprofile.AutofocusResult then begin
-      NewMessage('Autofocus failed after '+inttostr(maxretry)+' retries, continue without focusing.');
+      NewMessage(Format(rsAutofocusFai3, [inttostr(maxretry)]));
    end;
    if CancelAutofocus then exit;
    if ReturnToTarget then begin
      // recenter to previous position
-     NewMessage('Return to target position');
+     NewMessage(rsReturnToTarg);
      if mount.Equinox<>0 then begin
        jd0:=Jd(trunc(mount.Equinox),0,0,0);
        jd1:=DateTimetoJD(now);
@@ -6245,17 +6355,17 @@ begin
  end;
  // start autoguider
  if restartguider then begin
-  NewMessage('Restart autoguider');
+  NewMessage(rsRestartAutog);
   autoguider.Guide(false);
   wait(5);
   autoguider.Guide(true);
   autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
   if autoguider.State<>GUIDER_GUIDING then begin
-    f_pause.Caption:='Pause';
-    f_pause.Text:='Failed to start guiding!';
+    f_pause.Caption:=rsPause;
+    f_pause.Text:=rsFailedToStar;
     NewMessage(f_pause.Text);
     if not f_pause.Wait(120) then begin
-       NewMessage('Failed to start guiding!');
+       NewMessage(rsFailedToStar);
        result:=false;
     end;
   end;
@@ -6294,37 +6404,37 @@ begin
   SaveAutofocusBY:=camera.BinY;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
   if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
-   NewMessage('Camera or focuser are not connected');
+   NewMessage(rsCameraOrFocu);
    f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
   if  f_preview.Running then begin
-   NewMessage('Cannot start autofocus now, stop preview and retry');
+   NewMessage(rsCannotStartA);
    f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
   if  astrometry.Busy then begin
-   NewMessage('Cannot start autofocus now, astrometry is running');
+   NewMessage(rsCannotStartA2);
    f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
   if (AutofocusMode=afNone) then begin
-    NewMessage('Please configure the Autofocus options.');
+    NewMessage(rsPleaseConfig2);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   if (AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
-    NewMessage('Please run Vcurve learning for binning '+inttostr(AutofocusBinning));
+    NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]));
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   if (f_capture.Running and (not autofocusing)) then begin
-    NewMessage('Cannot start autofocus now, stop capture and retry');
+    NewMessage(rsCannotStartA3);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
   if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
-    NewMessage('Please run the V-curve learning for this focuser direction first. Button V-learn.');
+    NewMessage(rsPleaseRunThe);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
@@ -6334,7 +6444,7 @@ begin
   camera.SetBinning(AutofocusBinning,AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning) then begin
-    NewMessage('Exposure fail!');
+    NewMessage(rsExposureFail);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
@@ -6375,15 +6485,16 @@ begin
        f_preview.Running:=true;
        StartPreviewExposure(nil);
      end;
-     if focuser.hasTemperature then NewMessage('Focuser temperature: '+FormatFloat(f1,FocuserTemp));
+     if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
      if f_starprofile.PreFocusPos>0 then
-        NewMessage('AutoFocus started, initial position: '+inttostr(f_starprofile.PreFocusPos))
+        NewMessage(Format(rsAutoFocusSta, [inttostr(f_starprofile.PreFocusPos)])
+          )
      else
-        NewMessage('AutoFocus started');
+        NewMessage(rsAutoFocusSta2);
   end
   else begin                             // no star, manual action is required
     f_starprofile.ChkAutofocusDown(false);
-    NewMessage('Autofocus cannot find a star!'+crlf+'Please adjust your parameters');
+    NewMessage(Format(rsAutofocusCan, [crlf]));
   end;
 end;
 
@@ -6403,12 +6514,12 @@ begin
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
    if f_starprofile.AutofocusResult then begin
-     NewMessage('AutoFocus successful');
+     NewMessage(rsAutoFocusSuc);
    end
    else begin
-     NewMessage('AutoFocus error');
+     NewMessage(rsAutoFocusErr);
      if f_starprofile.PreFocusPos>0 then begin  // only for absolute position focuser
-       NewMessage('Return the focuser to previous position '+inttostr(f_starprofile.PreFocusPos));
+       NewMessage(Format(rsReturnTheFoc, [inttostr(f_starprofile.PreFocusPos)]));
        f_focuser.FocusPosition:=f_starprofile.PreFocusPos;
        FocusSetAbsolutePosition(nil);
        Wait(1);
@@ -6462,9 +6573,9 @@ begin
   MenuViewAstrometryLog.Enabled:=true;
   if astrometry.LastResult then begin
      LoadFitsFile(astrometry.ResultFile);
-     NewMessage(astrometry.Resolver+' resolve successful.');
+     NewMessage(Format(rsResolveSucce, [astrometry.Resolver]));
   end else begin
-    NewMessage(astrometry.Resolver+' resolve error.');
+    NewMessage(Format(rsResolveError, [astrometry.Resolver]));
   end;
 end;
 
@@ -6536,7 +6647,7 @@ var xx,yy,x,y,Timeout: integer;
     endt: TDateTime;
 begin
  if (Mount.Status<>devConnected)or(Camera.Status<>devConnected) then begin
-   NewMessage('Camera and mount must be connected!');
+   NewMessage(rsCameraAndMou);
    exit;
  end;
  wt:=(Sender<>nil);
@@ -6570,7 +6681,7 @@ procedure Tf_main.ResolveRotate(Sender: TObject);
 var ra,de,eq,pa: double;
 begin
  if (rotator.Status<>devConnected)or(Camera.Status<>devConnected) then begin
-   NewMessage('Camera and rotator must be connected!');
+   NewMessage(rsCameraAndRot);
    exit;
  end;
  if fits.HeaderInfo.valid then begin
@@ -6606,7 +6717,7 @@ begin
      end;
   end
   else
-     NewMessage('Rotator is not connected');
+     NewMessage(rsRotatorIsNot);
  end;
 
 end;
@@ -6621,12 +6732,12 @@ begin
   if fits.HeaderInfo.valid then begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
-        NewMessage('Send image to planetarium');
+        NewMessage(rsSendImageToP);
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
         if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
-           NewMessage('Send image to planetarium')
+           NewMessage(rsSendImageToP)
         else
-           NewMessage('Planetarium error.');
+           NewMessage(rsPlanetariumE);
       end else begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -6635,7 +6746,7 @@ begin
       end;
    end
    else
-      NewMessage('Planetarium is not connected');
+      NewMessage(rsPlanetariumI);
   end;
 end;
 
@@ -6654,7 +6765,7 @@ begin
       end;
    end
    else
-      NewMessage('Planetarium is not connected');
+      NewMessage(rsPlanetariumI);
   end;
 end;
 
@@ -6748,7 +6859,7 @@ if (n=0) and planetarium.Connected then begin
 
   if((ra=NullCoord) or (dec=NullCoord) or (sizeV=0) or (sizeH=0) or (rot=NullCoord)) then
   begin
-    NewMessage('Unable to find resolve data!');
+    NewMessage(rsUnableToFind);
   end
   else
   begin
@@ -6759,9 +6870,9 @@ if (n=0) and planetarium.Connected then begin
     ra:=rad2deg*ra;
     dec:=rad2deg*dec;
     if planetarium.DrawFrame(ra,dec,sizeH,sizeV,rot) then
-       NewMessage('CCD frame sent to planetarium.')
+       NewMessage(rsCCDFrameSent)
     else
-       NewMessage('Planetarium error.');
+       NewMessage(rsPlanetariumE);
   end;
 
  end;
@@ -6771,9 +6882,9 @@ procedure Tf_main.AstrometryToPlanetarium(Sender: TObject);
 begin
 if astrometry.LastResult and planetarium.Connected then begin
   if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
-     NewMessage('Send image to planetarium')
+     NewMessage(rsSendImageToP)
   else
-     NewMessage('Planetarium error.');
+     NewMessage(rsPlanetariumE);
 end;
 end;
 
@@ -6781,8 +6892,8 @@ end;
 Procedure Tf_main.PlanetariumConnectClick(Sender: TObject);
 var i: integer;
 begin
- if f_planetarium.BtnConnect.Caption='Connect' then begin
-   f_planetarium.BtnConnect.Caption:='Disconnect';
+ if f_planetarium.BtnConnect.Caption=rsConnect then begin
+   f_planetarium.BtnConnect.Caption:=rsDisconnect;
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    i:=ord(planetarium.PlanetariumType);
    case TPlanetariumType(i) of
@@ -6798,11 +6909,11 @@ end;
 
 Procedure Tf_main.PlanetariumConnect(Sender: TObject);
 begin
- f_planetarium.BtnConnect.Caption:='Disconnect';
+ f_planetarium.BtnConnect.Caption:=rsDisconnect;
  MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
  f_planetarium.led.Brush.Color:=clLime;
- f_planetarium.Status.Text:='Connected '+PlanetariumName[ord(planetarium.PlanetariumType)];
- NewMessage('Planetarium: '+PlanetariumName[ord(planetarium.PlanetariumType)]+' connected');
+ f_planetarium.Status.Text:=Format(rsConnected2, [PlanetariumName[ord(planetarium.PlanetariumType)]]);
+ NewMessage(rsPlanetarium+': '+Format(rsConnected,[PlanetariumName[ord(planetarium.PlanetariumType)]]));
  planetarium.InitTimer.Enabled:=true;
  StatusBar1.Invalidate;
 end;
@@ -6812,10 +6923,10 @@ var i: integer;
 begin
  if not AppClose then begin
    f_planetarium.led.Brush.Color:=clGray;
-   f_planetarium.Status.Text:='Disconnected';
-   f_planetarium.BtnConnect.Caption:='Connect';
+   f_planetarium.Status.Text:=rsDisconnected3;
+   f_planetarium.BtnConnect.Caption:=rsConnect;
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
-   NewMessage('Planetarium: '+PlanetariumName[ord(planetarium.PlanetariumType)]+' disconnected');
+   NewMessage(rsPlanetarium+': '+Format(rsDisconnected,[PlanetariumName[ord(planetarium.PlanetariumType)]]));
    i:=config.GetValue('/Planetarium/Software',0);
    case TPlanetariumType(i) of
      CDC: planetarium:=TPlanetarium_cdc.Create;
@@ -6846,7 +6957,7 @@ begin
       tra:= f_planetariuminfo.Ra.Text;
       tde:=f_planetariuminfo.De.Text;
       objn:=trim(f_planetariuminfo.Obj.Text);
-      NewMessage('Move to new planetarium object '+objn);
+      NewMessage(Format(rsMoveToNewPla, [objn]));
        if tra='-' then
          ra:=NullCoord
        else
@@ -6856,18 +6967,18 @@ begin
        else
          de:=StrToDE(tde);
       if (ra<>NullCoord) and (de<>NullCoord) then begin
-        if MessageDlg('Please confirm you want to slew the telescope to '+objn+' at coordinates '+tra+'/'+tde,mtConfirmation,mbOKCancel,0)=mrOK then begin
+        if MessageDlg(Format(rsPleaseConfir, [objn, tra, tde]), mtConfirmation,mbOKCancel, 0)=mrOK then begin
           if astrometry.PrecisionSlew(ra,de,err) then begin
             f_capture.Fname.Text:=objn;
-            NewMessage('Planetarium target set to '+objn);
+            NewMessage(Format(rsPlanetariumT, [objn]));
           end
-          else NewMessage('Planetarium target slew fail');
+          else NewMessage(rsPlanetariumT2);
         end;
       end
-      else NewMessage('Invalid coordinates');
+      else NewMessage(rsInvalidCoord);
     end;
  end else begin
-   NewMessage('Before to use this tool you must connect the camera, the mount and the planetarium');
+   NewMessage(rsBeforeToUseT);
  end;
 end;
 
@@ -6914,11 +7025,11 @@ begin
      DrawHistogram(true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
-     NewMessage('Open file '+fn);
-     StatusBar1.Panels[2].Text:='Open file '+fn+' '+imgsize;
+     NewMessage(Format(rsOpenFile, [fn]));
+     StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
    end
    else begin
-    NewMessage('Invalid or unsupported FITS file '+fn);
+    NewMessage(Format(rsInvalidOrUns, [fn]));
    end;
 end;
 
@@ -6948,7 +7059,7 @@ begin
                          end;
     M_AstrometryDone: astrometry.AstrometryDone;
     else
-      NewMessage('Receive unknow message: '+inttostr(Message.wParam));
+      NewMessage(Format(rsReceiveUnkno, [inttostr(Message.wParam)]));
   end;
 end;
 
@@ -6974,7 +7085,7 @@ var ra,de,hh,a,h,tra,tde,err: double;
     slewtopos,slewtoimg, restartguider, SaveCapture, ok: boolean;
   procedure DoAbort;
   begin
-    NewMessage('Meridian abort!');
+    NewMessage(rsMeridianFlip);
     mount.AbortMotion;
     if f_capture.Running then CameraExposureAborted(nil);
     if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
@@ -6998,8 +7109,8 @@ begin
     if hh<-pi then hh:=hh+pi2;
     hhmin:=round(rad2deg*60*hh/15);
     f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
-    if hhmin<=0 then f_mount.LabelMeridian.Caption:='Meridian in'
-                else f_mount.LabelMeridian.Caption:='Meridian since';
+    if hhmin<=0 then f_mount.LabelMeridian.Caption:=rsMeridianIn
+                else f_mount.LabelMeridian.Caption:=rsMeridianSinc;
     if (f_capture.Running  or f_sequence.Busy) and (nextexposure=0) then exit;
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
@@ -7016,8 +7127,8 @@ begin
         if (MeridianOption=1) then begin   // if autoflip, wait
            wait(2);
            meridianflipping:=true;
-           NewMessage('Wait meridian flip for '+inttostr(MeridianDelay1)+' minutes');
-           StatusBar1.Panels[1].Text := 'Wait meridian flip';
+           NewMessage(Format(rsWaitMeridian, [inttostr(MeridianDelay1)]));
+           StatusBar1.Panels[1].Text := rsWaitMeridian2;
            result:=15+abs(round(rad2deg*3600*hh/15)); // time to wait for meridian
            exit;
         end else begin
@@ -7033,7 +7144,7 @@ begin
         try
         meridianflipping:=true;
         if mount.PierSide=pierUnknown then begin
-          NewMessage('Mount is not reporting pier side, meridian flip can be unreliable.');
+          NewMessage(rsMountIsNotRe);
         end;
         slewtopos:=false; slewtoimg:=false;
         // get current position from target object
@@ -7063,23 +7174,23 @@ begin
         if MeridianFlipPauseBefore then begin
           waittimeout:=60*MeridianDelay2;
           if waittimeout<=0 then waittimeout:=30;
-          f_pause.Caption:='Pause';
-          f_pause.Text:='Meridian flip will occur now.'+crlf+'Click Continue when ready';
+          f_pause.Caption:=rsPause;
+          f_pause.Text:=rsMeridianFlip2+crlf+rsClickContinu2;
           if not f_pause.Wait(waittimeout) then begin
             meridianflipping:=false;
-            NewMessage('Meridian flip canceled before flip');
+            NewMessage(rsMeridianFlip3);
             DoAbort;
             exit;
           end;
         end;
         // flip
-        NewMessage('Meridian flip now');
-        StatusBar1.Panels[1].Text := 'Meridian flip';
+        NewMessage(rsMeridianFlip4);
+        StatusBar1.Panels[1].Text := rsMeridianFlip5;
         mount.FlipMeridian;
         wait(2);
         if mount.PierSide=pierWest then begin
-          f_pause.Caption:='Pause';
-          f_pause.Text:='Meridian flip error!';
+          f_pause.Caption:=rsPause;
+          f_pause.Text:=rsMeridianFlip6;
           NewMessage(f_pause.Text);
           if not f_pause.Wait(120) then begin
              DoAbort;
@@ -7087,24 +7198,24 @@ begin
           end;
         end;
         if mount.PierSide=pierUnknown then begin
-          NewMessage('Wait 1 minute ...');
+          NewMessage(rsWait1Minute);
           wait(60); // ensure we not do the flip two time
         end;
-        NewMessage('Meridian flip done');
+        NewMessage(rsMeridianFlip7);
         // Pause after
         if MeridianFlipPauseAfter then begin
           SaveCapture:=Capture;
           try
           Capture:=false; // allow preview and refocusing
           waittimeout:=60*MeridianFlipPauseTimeout;
-          f_pause.Caption:='Pause';
-          f_pause.Text:='Meridian flip done.'+crlf+'Click Continue when ready.';
+          f_pause.Caption:=rsPause;
+          f_pause.Text:=rsMeridianFlip7+crlf+rsClickContinu;
           ok:=f_pause.Wait(waittimeout);
           finally
             Capture:=SaveCapture;
           end;
           if not ok then begin
-            NewMessage('Meridian flip canceled after flip');
+            NewMessage(rsMeridianFlip9);
             DoAbort;
             exit;
           end;
@@ -7115,7 +7226,7 @@ begin
         end;
         // precision slew with saved coordinates
         if slewtopos then begin
-          NewMessage('Recenter on last position');
+          NewMessage(rsRecenterOnLa);
           try
           Capture:=false;  // do not save the control images
           astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
@@ -7124,8 +7235,8 @@ begin
             Capture:=true;
           end;
           if (astrometry.LastResult)and(astrometry.LastSlewErr>config.GetValue('/PrecSlew/Precision',5.0)/60) then begin
-            f_pause.Caption:='Pause';
-            f_pause.Text:='Recenter image error!'+crlf+'distance: '+FormatFloat(f1,astrometry.LastSlewErr);
+            f_pause.Caption:=rsPause;
+            f_pause.Text:=Format(rsRecenterImag, [crlf, FormatFloat(f1, astrometry.LastSlewErr)]);
             NewMessage(f_pause.Text);
             if not f_pause.Wait(120) then begin
                DoAbort;
@@ -7135,7 +7246,7 @@ begin
         end;
         // precision slew with saved image
         if slewtoimg  then begin
-          NewMessage('Recenter on last image');
+          NewMessage(rsRecenterOnLa2);
           try
           Capture:=false;  // do not save the control images
           LoadFitsFile(slash(TmpDir)+'meridianflip.fits');
@@ -7146,8 +7257,8 @@ begin
             Capture:=true;
           end;
           if (astrometry.LastResult)and(astrometry.LastSlewErr>config.GetValue('/PrecSlew/Precision',5.0)/60) then begin
-            f_pause.Caption:='Pause';
-            f_pause.Text:='Recenter image error!'+crlf+'distance: '+FormatFloat(f1,astrometry.LastSlewErr);
+            f_pause.Caption:=rsPause;
+            f_pause.Text:=Format(rsRecenterImag, [crlf, FormatFloat(f1,astrometry.LastSlewErr)]);
             NewMessage(f_pause.Text);
             if not f_pause.Wait(120) then begin
                DoAbort;
@@ -7157,7 +7268,7 @@ begin
         end;
         // start autoguider
         if restartguider then begin
-          NewMessage('Restart autoguider');
+          NewMessage(rsRestartAutog);
           autoguider.Guide(false);
           wait(5);
           if MeridianFlipCalibrate then
@@ -7166,8 +7277,8 @@ begin
             autoguider.Guide(true);
           autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
           if autoguider.State<>GUIDER_GUIDING then begin
-            f_pause.Caption:='Pause';
-            f_pause.Text:='Failed to start guiding!';
+            f_pause.Caption:=rsPause;
+            f_pause.Text:=rsFailedToStar;
             NewMessage(f_pause.Text);
             if not f_pause.Wait(120) then begin
                DoAbort;
@@ -7177,7 +7288,7 @@ begin
         end;
         Wait(2);
         f_capture.DitherNum:=0; // no dither after flip
-        NewMessage('Meridian flip finished');
+        NewMessage(rsMeridianFlip10);
         StatusBar1.Panels[1].Text := '';
         finally
           meridianflipping:=false;
@@ -7287,14 +7398,14 @@ begin
       imabmp.Canvas.lineto(x3,y3);{draw diagonal}
       imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
       imabmp.Canvas.lineto(x4,y4);{draw diagonal}
-      mess2:=' Tilt indication:'+inttostr(round(100*((median_worst/median_best)-1)))+'%';{estimate tilt value}
+      mess2:=Format(rsTiltIndicati, [inttostr(round(100*((median_worst/median_best)-1)))]); {estimate tilt value}
     end
     else
     mess2:='';
-    NewMessage('Image median hfd='+formatfloat(f1,SMedian(hfdList))+ mess2);{median HFD and tilt indication}
+    NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2])); {median HFD and tilt indication}
   end
   else
-    NewMessage('No star detected. Is the image focused and sufficiently exposed?');
+    NewMessage(rsNoStarDetect);
   SetLength(hfdlist,0);
   SetLength(hfdlist_top_left,0);
   SetLength(hfdlist_top_right,0);
@@ -7328,7 +7439,7 @@ begin
     exit;
   try
     screen.cursor := crHourglass;
-    NewMessage('TCP/IP server stopped');
+    NewMessage(rsTCPIPServerS);
     for i := 1 to Maxclient do
       if (TCPDaemon.TCPThrd[i] <> nil) then
       begin
@@ -7344,12 +7455,12 @@ end;
 
 procedure Tf_main.TCPShowError(var msg: string);
 begin
-  NewMessage(Format('Socket error %s.  %s', [msg, '']));
+  NewMessage(Format(rsSocketErrorS, [msg, '']));
 end;
 
 procedure Tf_main.TCPShowSocket(var msg: string);
 begin
-  NewMessage(Format('TCP/IP server listen on port: %s', [msg]));
+  NewMessage(Format(rsTCPIPServerL, [msg]));
 end;
 
 function Tf_main.TCPcmd(s: string):string;

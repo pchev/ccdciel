@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global,
+uses  UScaleDPI, u_global, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -72,6 +72,7 @@ type
     function GetSpeed:integer;
     procedure SetPosition(value:integer);
     function GetPosition:integer;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -96,11 +97,25 @@ begin
  inherited Create(aOwner);
  Notebook1.PageIndex:=1;
  ScaleDPI(Self);
+ SetLang;
 end;
 
 destructor  Tf_focuser.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_focuser.SetLang;
+begin
+  StaticText1.Caption:=rsFocuser;
+  label3.Caption:=rsSpeed;
+  label4.Caption:=rsTimer;
+  label6.Caption:=rsIncr;
+  label1.Caption:=rsPos;
+  label2.Caption:=rsStep;
+  BtnSetAbsPos.Caption:=rsMoveTo;
+  BtnVcurve.Caption:=rsVLearn;
+  label5.Caption:=rsTemp;
 end;
 
 procedure Tf_focuser.BtnDownClick(Sender: TObject);

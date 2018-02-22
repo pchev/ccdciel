@@ -8,7 +8,9 @@ object f_vcurve: Tf_vcurve
   Caption = 'V curve'
   ClientHeight = 511
   ClientWidth = 320
+  DesignTimePPI = 95
   FormStyle = fsStayOnTop
+  OnCreate = FormCreate
   OnShow = FormShow
   Visible = False
   object BtnLearnVcurve: TButton
@@ -106,7 +108,7 @@ object f_vcurve: Tf_vcurve
     ParentColor = False
   end
   object Label4: TLabel
-    Left = 42
+    Left = 40
     Height = 19
     Top = 384
     Width = 43
@@ -274,7 +276,7 @@ object f_vcurve: Tf_vcurve
     TabOrder = 7
   end
   object Label9: TLabel
-    Left = 42
+    Left = 40
     Height = 19
     Top = 352
     Width = 15
