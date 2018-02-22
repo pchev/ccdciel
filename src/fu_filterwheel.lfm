@@ -6,6 +6,7 @@ object f_filterwheel: Tf_filterwheel
   AutoSize = True
   ClientHeight = 49
   ClientWidth = 180
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
@@ -33,7 +34,7 @@ object f_filterwheel: Tf_filterwheel
     end
     object Label1: TLabel
       Left = 0
-      Height = 18
+      Height = 19
       Top = 6
       Width = 22
       Caption = 'F:    '

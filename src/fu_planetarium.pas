@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI,
+uses  UScaleDPI,  u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -47,6 +47,7 @@ type
   private
     { private declarations }
     FonConnect,FonNewTarget: TNotifyEvent;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -65,11 +66,19 @@ constructor Tf_planetarium.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ SetLang;
 end;
 
 destructor  Tf_planetarium.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_planetarium.SetLang;
+begin
+  StaticText1.Caption:=rsPlanetarium;
+  BtnConnect.Caption:=rsConnect;
+  BtnNewTarget.Caption:=rsNewTarget;
 end;
 
 procedure Tf_planetarium.BtnConnectClick(Sender: TObject);

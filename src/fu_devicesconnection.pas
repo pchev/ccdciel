@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI,
+uses UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -49,6 +49,7 @@ type
   private
     { private declarations }
     FonConnect,FonDisconnect: TNotifyEvent;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -69,6 +70,7 @@ constructor Tf_devicesconnection.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ SetLang;
 end;
 
 destructor  Tf_devicesconnection.Destroy;
@@ -76,12 +78,24 @@ begin
  inherited Destroy;
 end;
 
+procedure Tf_devicesconnection.SetLang;
+begin
+  StaticText1.Caption:=rsDevicesConne;
+  BtnConnect.Caption:=rsConnect;
+  LabelCamera.Caption:=rsCam;
+  LabelWheel.Caption:=rsFil;
+  LabelFocuser.Caption:=rsFoc;
+  LabelRotator.Caption:=rsRot;
+  LabelMount.Caption:=rsMnt;
+  LabelWatchdog.Caption:=rsWch;
+end;
+
 procedure Tf_devicesconnection.BtnConnectClick(Sender: TObject);
 begin
-  if BtnConnect.Caption='Disconnect' then begin
+  if BtnConnect.Caption=rsDisconnect then begin
     Disconnect(true);
   end else begin
-    BtnConnect.Caption:='Disconnect';
+    BtnConnect.Caption:=rsDisconnect;
     Connect;
   end;
 end;

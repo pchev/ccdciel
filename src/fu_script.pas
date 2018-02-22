@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, UScaleDPI,
+uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, UScaleDPI, u_translation,
   fu_capture, fu_preview, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
   LCLType, Classes, Dialogs, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
@@ -59,6 +59,7 @@ type
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
     procedure msg(txt:string);
+    procedure SetLang;
  public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -87,11 +88,22 @@ constructor Tf_script.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ SetLang;
 end;
 
 destructor  Tf_script.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_script.SetLang;
+begin
+  StaticText1.Caption:=rsRunScript;
+  BtnRun.Caption:=rsRun;
+  BtnEdit.Caption:=rsEdit;
+  BtnNew.Caption:=rsNew;
+  BtnStop.Caption:=rsStop;
+  BtnCopy.Caption:=rsCopy;
 end;
 
 procedure Tf_script.msg(txt:string);
@@ -127,7 +139,7 @@ begin
   i:=ComboBoxScript.ItemIndex;
   if i>=0 then begin
     if f_scriptengine.scr.Running then begin
-      msg('Another script is already running');
+      msg(rsAnotherScrip);
     end else begin
       sname:=ComboBoxScript.Items[i];
       scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
@@ -135,7 +147,7 @@ begin
       f_scriptengine.RunScript(sname,scdir.path);
    end;
   end
-  else msg('Please select a script!');
+  else msg(rsPleaseSelect);
 end;
 
 procedure Tf_script.BtnStopClick(Sender: TObject);
@@ -143,7 +155,7 @@ begin
   if f_scriptengine.scr.Running then begin
     f_scriptengine.StopScript;
   end
-  else msg('No script are running.');
+  else msg(rsNoScriptAreR);
 end;
 
 procedure Tf_script.ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
@@ -160,7 +172,8 @@ begin
    if (txt='')or(scdir=nil) then exit;
    if scdir<>ScriptDir[1] then exit;
    fn:=scdir.path+txt+'.script';
-   if MessageDlg('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+   if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=
+     mrYes then begin
       DeleteFileUTF8(fn);
       LoadScriptList;
    end;
@@ -178,12 +191,13 @@ begin
   scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
   if (txt='')or(scdir=nil) then exit;
   fn1:=scdir.path+txt+'.script';
-  txt:=FormEntry(self,'Copy to ','');
+  txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
   scdir:=ScriptDir[1];
   fn2:=scdir.path+txt+'.script';
   if FileExistsUTF8(fn2) then begin
-     if MessageDlg('Script '+fn2+' already exist. Do you want to replace this file?',mtConfirmation,mbYesNo,0)<>mrYes then
+     if MessageDlg(Format(rsScriptAlread, [fn2]), mtConfirmation, mbYesNo, 0)<>
+       mrYes then
        exit;
   end;
   if CopyFile(fn1,fn2,false) then begin
@@ -211,13 +225,14 @@ begin
   end;
   if newscript then begin
     s.Clear;
-    txt:=FormEntry(self,'New script','');
+    txt:=FormEntry(self, rsNewScript, '');
     if txt='' then exit;
     scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=scdir.path+txt+'.script';
     if FileExistsUTF8(fn) then begin
-       if MessageDlg('Script '+fn+' already exist. Do you want to edit this script?',mtConfirmation,mbYesNo,0)=mrYes then
+       if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=
+         mrYes then
          s.LoadFromFile(fn)
        else
          exit;
@@ -242,7 +257,8 @@ begin
        fn:=scdir.path+txt+'.script';
        newscript:=true;
        if FileExistsUTF8(fn) then begin
-          if MessageDlg('Script '+fn+' already exist. Do you want to replace this custom script by the template?',mtConfirmation,mbYesNo,0)<>mrYes then
+          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation, mbYesNo,
+            0)<>mrYes then
             exit;
        end;
     end;

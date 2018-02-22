@@ -24,6 +24,7 @@ install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
 install -d -m 755 $destdir/scripts
 install -d -m 755 $destdir/data
 install -d -m 755 $destdir/data/stars
+install -d -m 755 $destdir/data/language
 install -d -m 755 $destdir/doc
 
 install -v -m 644 scripts/scope_park.script  $destdir/scripts/scope_park.script
@@ -38,4 +39,6 @@ install -v -m 644 data/stars/focus_star_5   $destdir/data/stars/focus_star_5
 install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6
 install -v -m 644 data/stars/focus_star_7   $destdir/data/stars/focus_star_7
 install -v -m 644 data/stars/focus_star_8   $destdir/data/stars/focus_star_8
+install -v -m 644 data/language/ccdciel.po   $destdir/data/language/ccdciel.po
+install -v -m 644 data/language/ccdciel.fr.po   $destdir/data/language/ccdciel.fr.po
 install -v -m 644 doc/doc_ccdciel_en.pdf    $destdir/doc/doc_ccdciel_en.pdf

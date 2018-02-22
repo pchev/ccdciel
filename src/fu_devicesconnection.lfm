@@ -6,6 +6,7 @@ object f_devicesconnection: Tf_devicesconnection
   AutoSize = True
   ClientHeight = 112
   ClientWidth = 199
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil,
+uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, u_translation,
   Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin;
 
 type
@@ -83,6 +83,7 @@ type
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
     procedure SetZoom(value: double);
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -108,6 +109,7 @@ constructor Tf_visu.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ SetLang;
  ImgMax:=high(word);
  ImgMin:=0;
  FBullsEye:=false;
@@ -124,6 +126,14 @@ end;
 destructor  Tf_visu.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_visu.SetLang;
+begin
+  StaticText1.Caption:=rsVisualisatio;
+  BtnLinear.Caption:=rsLinear;
+  BtnLog.Caption:=rsLog;
+  BtnSqrt.Caption:=rsSqrt;
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);

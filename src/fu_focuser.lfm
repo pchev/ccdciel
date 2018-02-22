@@ -6,6 +6,7 @@ object f_focuser: Tf_focuser
   AutoSize = True
   ClientHeight = 110
   ClientWidth = 180
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
@@ -31,7 +32,7 @@ object f_focuser: Tf_focuser
         Height = 52
         Top = 0
         Width = 178
-        PageIndex = 0
+        PageIndex = 2
         Align = alClient
         TabOrder = 0
         TabStop = True
@@ -93,15 +94,15 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label6: TLabel
               Left = 2
-              Height = 17
+              Height = 19
               Top = 8
-              Width = 29
+              Width = 26
               Caption = 'Incr.'
               ParentColor = False
             end
             object RelIncr: TComboBox
               Left = 54
-              Height = 29
+              Height = 31
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
               Width = 80
@@ -132,7 +133,7 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Position: TEdit
               Left = 40
-              Height = 27
+              Height = 31
               Hint = 'Current focuser absolute position'
               Top = 1
               Width = 72
@@ -140,23 +141,23 @@ object f_focuser: Tf_focuser
             end
             object Label1: TLabel
               Left = 4
-              Height = 17
+              Height = 19
               Top = 4
-              Width = 29
+              Width = 25
               Caption = 'Pos.'
               ParentColor = False
             end
             object Label2: TLabel
               Left = 4
-              Height = 17
+              Height = 19
               Top = 28
-              Width = 31
+              Width = 27
               Caption = 'Step'
               ParentColor = False
             end
             object PosIncr: TComboBox
               Left = 40
-              Height = 29
+              Height = 31
               Hint = 'Increment step for the inward or outward movement'
               Top = 25
               Width = 72
@@ -238,7 +239,7 @@ object f_focuser: Tf_focuser
       Visible = False
       object Temp: TEdit
         Left = 56
-        Height = 23
+        Height = 31
         Top = 1
         Width = 48
         ReadOnly = True
@@ -247,9 +248,9 @@ object f_focuser: Tf_focuser
       end
       object Label5: TLabel
         Left = 4
-        Height = 15
+        Height = 19
         Top = 4
-        Width = 33
+        Width = 37
         Caption = 'Temp.'
         ParentColor = False
       end

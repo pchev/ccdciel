@@ -5,6 +5,8 @@ object f_planetarium: Tf_planetarium
   Width = 162
   ClientHeight = 76
   ClientWidth = 162
+  DesignTimePPI = 95
+  ParentFont = False
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0

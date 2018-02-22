@@ -4,7 +4,7 @@ unit pu_vcurve;
 
 interface
 
-uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils,
+uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils, u_translation,
   FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls,
   Math, Graphics, Dialogs, StdCtrls, ComCtrls, TACustomSeries, TASeries;
 
@@ -56,6 +56,7 @@ type
     procedure BtnLearnVcurveClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure BtnStopVcurveClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GetPosClick(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
@@ -71,6 +72,7 @@ type
     FonStopVcurve: TNotifyEvent;
     FonSaveVcurve: TNotifyEvent;
     procedure LearnVcurveAsync(Data: PtrInt);
+    procedure SetLang;
   public
     { public declarations }
     Procedure FindLinearPart;
@@ -119,6 +121,30 @@ begin
   end;
 end;
 
+procedure Tf_vcurve.FormCreate(Sender: TObject);
+begin
+  SetLang;
+end;
+
+
+procedure Tf_vcurve.SetLang;
+begin
+  label1.Caption:=rsFocusPositio;
+  label2.Caption:=rsMaxOffset;
+  label3.Caption:=rsNumberOfStep;
+  GetPos.Caption:=rsGetCurrent;
+  LabelFocusdir.Caption:=rsFocusDirecti;
+  Label9.Caption:=rsFit;
+  Label12.Caption:=rsQuality;
+  Label4.Caption:=rsSlope+' L';
+  Label6.Caption:=rsSlope+' R';
+  Label11.Caption:=rsCenter;
+  BtnStopVcurve.Caption:=rsStop;
+  BtnLearnVcurve.Caption:=rsLearn;
+  BtnSave.Caption:=rsSave;
+
+end;
+
 procedure Tf_vcurve.BtnLearnVcurveClick(Sender: TObject);
 begin
   if BtnStopVcurve.Visible then exit;
@@ -130,7 +156,7 @@ var r2: double;
 begin
   r2:=StrToFloatDef(LabelQuality.Caption,-1);
   if r2<0.9 then begin
-    if MessageDlg('V curve quality is low. Do you really want to save this curve?',mtConfirmation,mbYesNo,0)<>mrYes
+    if MessageDlg(rsVCurveQualit, mtConfirmation, mbYesNo, 0)<>mrYes
     then
        exit;
   end;
@@ -145,11 +171,11 @@ end;
 
 procedure Tf_vcurve.FormShow(Sender: TObject);
 begin
-  LabelFocusdir.Caption:='Focus direction: ';
+  LabelFocusdir.Caption:=rsFocusDirecti2;
   if AutofocusMoveDir=FocusDirIn then
-     LabelFocusdir.Caption:=LabelFocusdir.Caption+' In <='
+     LabelFocusdir.Caption:=LabelFocusdir.Caption+' '+rsIn+' <='
   else
-     LabelFocusdir.Caption:=LabelFocusdir.Caption+' Out =>';
+     LabelFocusdir.Caption:=LabelFocusdir.Caption+' '+rsOut+' =>';
 end;
 
 procedure Tf_vcurve.GetPosClick(Sender: TObject);

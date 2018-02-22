@@ -6,6 +6,7 @@ object f_preview: Tf_preview
   AutoSize = True
   ClientHeight = 189
   ClientWidth = 166
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
@@ -93,7 +94,7 @@ object f_preview: Tf_preview
       end
       object GainEdit: TEdit
         Left = 64
-        Height = 25
+        Height = 31
         Top = 0
         Width = 88
         ParentShowHint = False

@@ -7,6 +7,7 @@ object f_main: Tf_main
   Caption = 'CCD Ciel'
   ClientHeight = 400
   ClientWidth = 800
+  DesignTimePPI = 95
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -17,6 +18,7 @@ object f_main: Tf_main
   OnResize = FormResize
   OnShow = FormShow
   ShowHint = True
+  LCLVersion = '1.8.0.6'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -136,12 +138,12 @@ object f_main: Tf_main
       Height = 318
       Top = 32
       Width = 188
-      ActivePage = PageConnect
+      ActivePage = PageVideo
       Align = alClient
       Images = ImageListDay
       MultiLine = True
       ShowTabs = False
-      TabIndex = 0
+      TabIndex = 4
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
@@ -173,9 +175,9 @@ object f_main: Tf_main
         ImageIndex = 1
         object PanelRight2: TPanel
           Left = 0
-          Height = 336
+          Height = 314
           Top = 0
-          Width = 186
+          Width = 178
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -196,9 +198,9 @@ object f_main: Tf_main
         ImageIndex = 2
         object PanelRight3: TPanel
           Left = 0
-          Height = 229
+          Height = 314
           Top = 0
-          Width = 186
+          Width = 178
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -219,9 +221,9 @@ object f_main: Tf_main
         ImageIndex = 3
         object PanelRight4: TPanel
           Left = 0
-          Height = 229
+          Height = 314
           Top = 0
-          Width = 186
+          Width = 178
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -242,9 +244,9 @@ object f_main: Tf_main
         ImageIndex = 4
         object PanelRight5: TPanel
           Left = 0
-          Height = 336
+          Height = 314
           Top = 0
-          Width = 186
+          Width = 178
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone

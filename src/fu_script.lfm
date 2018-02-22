@@ -6,6 +6,8 @@ object f_script: Tf_script
   AutoSize = True
   ClientHeight = 105
   ClientWidth = 189
+  DesignTimePPI = 95
+  ParentFont = False
   TabOrder = 0
   object StaticText1: TStaticText
     Left = 0
@@ -32,13 +34,13 @@ object f_script: Tf_script
     ChildSizing.ControlsPerLine = 2
     ClientHeight = 85
     ClientWidth = 189
-     TabOrder = 1
+    TabOrder = 1
     object ComboBoxScript: TComboBox
       Left = 2
-      Height = 24
+      Height = 31
       Top = 2
       Width = 174
-       ItemHeight = 0
+      ItemHeight = 0
       OnKeyDown = ComboBoxScriptKeyDown
       ParentFont = False
       TabOrder = 0

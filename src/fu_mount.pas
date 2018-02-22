@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI,
+uses UScaleDPI,  u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Dialogs, Graphics;
 
 type
@@ -51,6 +51,7 @@ type
     { private declarations }
     FonPark  : TNotifyEvent;
     FonTrack  : TNotifyEvent;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -69,6 +70,7 @@ constructor Tf_mount.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ SetLang;
 end;
 
 destructor  Tf_mount.Destroy;
@@ -76,10 +78,22 @@ begin
  inherited Destroy;
 end;
 
+procedure Tf_mount.SetLang;
+begin
+  StaticText1.Caption:=rsTelescopePos;
+  label1.Caption:=rsRA;
+  label2.Caption:=rsDec;
+  BtnPark.Caption:=rsPark;
+  BtnTrack.Caption:=rsTrack;
+  LabelMeridian.Caption:=rsMeridianIn;
+  label4.Caption:=rsMin;
+  Pierside.Caption:=rsUnknowPierSi;
+end;
+
 procedure Tf_mount.BtnParkClick(Sender: TObject);
 begin
   if BtnPark.Font.Color=clGreen then begin
-     if MessageDlg('Park the telescope now?',mtConfirmation,mbYesNo,0)<>mrYes then exit;
+     if MessageDlg(rsParkTheTeles, mtConfirmation, mbYesNo, 0)<>mrYes then exit;
   end;
   if assigned(FonPark) then FonPark(self);
 end;

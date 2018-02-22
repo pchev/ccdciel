@@ -242,6 +242,7 @@ const
   ldeg = 'd';
   lmin = 'm';
   lsec = 's';
+  ellipsis = '...';
   URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
@@ -300,6 +301,7 @@ var
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   profile: string;
+  lang: string;
   FilterList,BinningList: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;
   FilterExpFact: array [0..MaxFilter] of double;

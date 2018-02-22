@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -50,6 +50,7 @@ type
     FonReverse: TNotifyEvent;
     FonHalt: TNotifyEvent;
     lockreverse, noprompt: boolean;
+    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -73,6 +74,7 @@ begin
  ScaleDPI(Self);
  noprompt:=false;
  lockreverse:=false;
+ SetLang;
 end;
 
 destructor  Tf_rotator.Destroy;
@@ -80,17 +82,26 @@ begin
  inherited Destroy;
 end;
 
+procedure Tf_rotator.SetLang;
+begin
+  StaticText1.Caption:=rsRotator;
+  label6.Caption:=rsPA;
+  BtnRotate.Caption:=rsRotate;
+  Reverse.Caption:=rsReverse;
+  BtnHalt.Caption:=rsHalt;
+end;
+
 procedure Tf_rotator.SetCalibrated(onoff:boolean);
 begin
  if onoff then begin
    led.Brush.Color:=clLime;
-   led.Hint:='Calibrated';
-   Angle.Hint:='Calibrated';
+   led.Hint:=rsCalibrated;
+   Angle.Hint:=rsCalibrated;
  end
  else begin
    led.Brush.Color:=clRed;
-   led.Hint:='Uncalibrated';
-   Angle.Hint:='Uncalibrated';
+   led.Hint:=rsUncalibrated;
+   Angle.Hint:=rsUncalibrated;
  end;
 end;
 
@@ -116,7 +127,7 @@ begin
    if lockreverse then exit;
    if noprompt or
       (led.Brush.Color=clRed) or
-      (MessageDlg('Warning, reversing the rotator will invalidated the calibration. Do you want to continue?',mtConfirmation,mbYesNo,0)=mrYes)
+      (MessageDlg(rsWarningRever, mtConfirmation, mbYesNo, 0)=mrYes)
    then begin
       if Assigned(FonReverse) then FonReverse(self);
    end
