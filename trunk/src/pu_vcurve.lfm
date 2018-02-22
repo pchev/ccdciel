@@ -31,12 +31,15 @@ object f_vcurve: Tf_vcurve
     AntialiasingMode = amOn
     AxisList = <    
       item
+        Intervals.Options = [aipUseCount, aipUseNiceSteps]
+        AtDataOnly = True
         Minors = <>
         Title.LabelFont.Orientation = 900
       end    
       item
-        Intervals.Count = 15
-        Visible = False
+        Intervals.Count = 4
+        Intervals.NiceSteps = '1|10|100|1000'
+        Intervals.Options = [aipUseCount, aipUseNiceSteps]
         Alignment = calBottom
         Minors = <>
       end>
@@ -80,7 +83,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSL: TLabel
     Left = 42
-    Height = 18
+    Height = 19
     Top = 401
     Width = 15
     Caption = '     '
@@ -88,7 +91,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelSR: TLabel
     Left = 239
-    Height = 18
+    Height = 19
     Top = 401
     Width = 15
     Caption = '     '
@@ -96,7 +99,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPID: TLabel
     Left = 135
-    Height = 18
+    Height = 19
     Top = 442
     Width = 15
     Caption = '     '
@@ -104,7 +107,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label4: TLabel
     Left = 42
-    Height = 18
+    Height = 19
     Top = 384
     Width = 43
     Caption = 'Slope L'
@@ -112,7 +115,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label5: TLabel
     Left = 135
-    Height = 18
+    Height = 19
     Top = 425
     Width = 21
     Caption = 'PID'
@@ -120,7 +123,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label6: TLabel
     Left = 239
-    Height = 18
+    Height = 19
     Top = 384
     Width = 44
     Caption = 'Slope R'
@@ -128,7 +131,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label7: TLabel
     Left = 42
-    Height = 18
+    Height = 19
     Top = 425
     Width = 22
     Caption = 'PI L'
@@ -136,7 +139,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPIL: TLabel
     Left = 42
-    Height = 18
+    Height = 19
     Top = 442
     Width = 15
     Caption = '     '
@@ -144,7 +147,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelPIR: TLabel
     Left = 239
-    Height = 18
+    Height = 19
     Top = 441
     Width = 15
     Caption = '     '
@@ -152,7 +155,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label10: TLabel
     Left = 239
-    Height = 18
+    Height = 19
     Top = 425
     Width = 23
     Caption = 'PI R'
@@ -160,7 +163,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label11: TLabel
     Left = 135
-    Height = 18
+    Height = 19
     Top = 384
     Width = 40
     Caption = 'Center'
@@ -168,7 +171,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelCenter: TLabel
     Left = 135
-    Height = 18
+    Height = 19
     Top = 401
     Width = 15
     Caption = '     '
@@ -176,7 +179,7 @@ object f_vcurve: Tf_vcurve
   end
   object FocusPos: TEdit
     Left = 120
-    Height = 24
+    Height = 31
     Hint = 'The approximate focus position, it is important this value is as precise as possible.'
     Top = 8
     Width = 80
@@ -186,7 +189,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label1: TLabel
     Left = 8
-    Height = 18
+    Height = 19
     Top = 12
     Width = 87
     Caption = 'Focus position'
@@ -206,7 +209,7 @@ object f_vcurve: Tf_vcurve
   end
   object HalfWidth: TEdit
     Left = 120
-    Height = 24
+    Height = 31
     Hint = 'The maximum offset we will move the focuser in and out. '#10'The focuser must move enough to get a big defocused star '#10'with a HFD of at least 20, or 2-3x the "Near focus" HFD value.'
     Top = 40
     Width = 80
@@ -216,7 +219,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label2: TLabel
     Left = 8
-    Height = 18
+    Height = 19
     Top = 46
     Width = 63
     Caption = 'Max offset'
@@ -224,7 +227,7 @@ object f_vcurve: Tf_vcurve
   end
   object Nsteps: TEdit
     Left = 144
-    Height = 24
+    Height = 31
     Hint = 'The number of measurement point for this curve'
     Top = 72
     Width = 56
@@ -234,7 +237,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label3: TLabel
     Left = 8
-    Height = 18
+    Height = 19
     Top = 76
     Width = 100
     Caption = 'Number of steps'
@@ -242,7 +245,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelQuality: TLabel
     Left = 239
-    Height = 18
+    Height = 19
     Top = 352
     Width = 12
     Caption = '    '
@@ -272,7 +275,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label9: TLabel
     Left = 42
-    Height = 18
+    Height = 19
     Top = 352
     Width = 15
     Caption = 'Fit'
@@ -280,7 +283,7 @@ object f_vcurve: Tf_vcurve
   end
   object Label12: TLabel
     Left = 176
-    Height = 18
+    Height = 19
     Top = 352
     Width = 46
     Caption = 'Quality:'
@@ -308,7 +311,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelCoord: TLabel
     Left = 179
-    Height = 18
+    Height = 19
     Top = 322
     Width = 120
     Caption = '                                        '
@@ -316,7 +319,7 @@ object f_vcurve: Tf_vcurve
   end
   object LabelStepProgress: TLabel
     Left = 219
-    Height = 18
+    Height = 19
     Top = 76
     Width = 51
     Caption = '                 '

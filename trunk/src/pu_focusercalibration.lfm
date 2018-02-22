@@ -1,10 +1,10 @@
 object f_focusercalibration: Tf_focusercalibration
   Left = 0
-  Height = 344
+  Height = 368
   Top = 0
   Width = 517
   Caption = 'Focuser calibration'
-  ClientHeight = 344
+  ClientHeight = 368
   ClientWidth = 517
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
@@ -13,10 +13,10 @@ object f_focusercalibration: Tf_focusercalibration
   Visible = False
   object Notebook1: TNotebook
     Left = 0
-    Height = 295
+    Height = 319
     Top = 0
     Width = 517
-    PageIndex = 0
+    PageIndex = 3
     Align = alClient
     TabOrder = 0
     object Page1: TPage
@@ -109,7 +109,7 @@ object f_focusercalibration: Tf_focusercalibration
       object Label3: TLabel
         Left = 8
         Height = 19
-        Top = 264
+        Top = 288
         Width = 219
         Caption = 'Click Next to start the measurement.'
         ParentColor = False
@@ -173,7 +173,7 @@ object f_focusercalibration: Tf_focusercalibration
       object Label4: TLabel
         Left = 16
         Height = 38
-        Top = 250
+        Top = 272
         Width = 480
         AutoSize = False
         Caption = 'Label4'
@@ -182,19 +182,24 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object VcChart: TChart
         Left = 4
-        Height = 240
+        Height = 252
         Top = 4
-        Width = 388
+        Width = 428
         AntialiasingMode = amOn
         AxisList = <        
           item
+            Intervals.NiceSteps = '0.1|0.5|1|10'
+            Intervals.Options = [aipUseCount, aipUseNiceSteps]
+            AtDataOnly = True
             Minors = <>
             Title.LabelFont.Orientation = 900
           end        
           item
-            Intervals.Count = 15
-            Visible = False
+            Intervals.Count = 7
+            Intervals.NiceSteps = '1|10|100|1000'
+            Intervals.Options = [aipUseCount, aipUseNiceSteps]
             Alignment = calBottom
+            AtDataOnly = True
             Minors = <>
           end>
         Extent.UseYMin = True
@@ -234,15 +239,16 @@ object f_focusercalibration: Tf_focusercalibration
     object Page5: TPage
       object ValueListEditor1: TValueListEditor
         Left = 8
-        Height = 248
+        Height = 272
         Top = 8
         Width = 248
         DefaultColWidth = 170
         FixedCols = 0
-        RowCount = 9
+        RowCount = 10
         TabOrder = 0
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goThumbTracking]
         Strings.Strings = (
+          ''
           ''
           ''
           ''
@@ -258,20 +264,20 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          78
+          76
         )
       end
       object Label8: TLabel
         Left = 8
         Height = 19
-        Top = 264
+        Top = 288
         Width = 385
         Caption = 'Click Next to save this values to the configuration for this profile.'
         ParentColor = False
       end
       object ValueListEditor2: TValueListEditor
         Left = 264
-        Height = 248
+        Height = 272
         Top = 8
         Width = 248
         DefaultColWidth = 170
@@ -295,7 +301,7 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          78
+          76
         )
       end
     end
@@ -315,7 +321,7 @@ object f_focusercalibration: Tf_focusercalibration
   object Panel1: TPanel
     Left = 0
     Height = 49
-    Top = 295
+    Top = 319
     Width = 517
     Align = alBottom
     ClientHeight = 49
@@ -355,18 +361,18 @@ object f_focusercalibration: Tf_focusercalibration
   end
   object PtSourceL: TListChartSource
     left = 72
-    top = 304
+    top = 336
   end
   object FitSourceL: TListChartSource
-    left = 24
-    top = 304
+    left = 16
+    top = 336
   end
   object FitSourceR: TListChartSource
     left = 120
-    top = 304
+    top = 336
   end
   object PtSourceR: TListChartSource
     left = 168
-    top = 304
+    top = 336
   end
 end
