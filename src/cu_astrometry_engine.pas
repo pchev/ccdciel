@@ -132,6 +132,7 @@ var  Kcmd,buf,Kpos: string;
      Kprocess: TProcessUTF8;
 {$endif}
 begin
+try
 if FResolver=ResolverAstrometryNet then begin
 {$ifdef unix}
   // Kill all child process
@@ -155,6 +156,7 @@ if FResolver=ResolverAstrometryNet then begin
        FpKill(childs[i],SIGKILL);
     resp.Free;
   end;
+  if (process<>nil) then process.Active:=false;
 {$else}
   Kparam:=TStringList.Create;
   Kprocess:=TProcessUTF8.Create(nil);
@@ -193,6 +195,8 @@ if FResolver=ResolverAstrometryNet then begin
   end;
   if (process<>nil) and process.Running then process.Active:=false;
 {$endif}
+end;
+except
 end;
 end;
 

@@ -211,6 +211,7 @@ begin
    if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
+   msg('Resolver already running, cannot start astrometry now!');
    result:=false;
  end;
 end;
@@ -230,6 +231,7 @@ end;
 procedure TAstrometry.StopAstrometry;
 begin
   if FBusy then begin
+    FBusy:=false;
     engine.Stop;
     msg('Stop astrometry resolver.');
   end;
@@ -437,13 +439,14 @@ begin
       if CancelAutofocus then exit;
       msg('Resolve control exposure');
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-      StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil);
-      WaitBusy(AstrometryTimeout+30);
+      if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
+         WaitBusy(AstrometryTimeout+30);
       if not LastResult then begin
          StopAstrometry;
          msg('Fail to resolve control exposure');
          break;
       end;
+      if CancelAutofocus then exit;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
       if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
