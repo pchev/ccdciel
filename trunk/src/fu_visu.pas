@@ -133,9 +133,6 @@ end;
 procedure Tf_visu.SetLang;
 begin
   StaticText1.Caption:=rsVisualisatio;
-{  BtnLinear.Caption:=rsLinear;
-  BtnLog.Caption:=rsLog;
-  BtnSqrt.Caption:=rsSqrt;  }
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);
