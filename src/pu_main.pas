@@ -1205,10 +1205,7 @@ begin
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Text:=config.GetValue('/Capture/Count','1');
 
-  f_visu.BtnLinear.Checked:=config.GetValue('/Visu/Linear',True);
-  f_visu.BtnLog.Checked:=config.GetValue('/Visu/Log',False);
-  f_visu.BtnSqrt.Checked:=config.GetValue('/Visu/Sqrt',False);
-
+  f_visu.Gamma.Value;
 
   ImaBmp:=TBGRABitmap.Create;
   LockMouse:=false;
@@ -1802,9 +1799,9 @@ begin
 
   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
 
-  config.SetValue('/Visu/Linear',f_visu.BtnLinear.Checked);
+{  config.SetValue('/Visu/Linear',f_visu.BtnLinear.Checked);
   config.SetValue('/Visu/Log',f_visu.BtnLog.Checked);
-  config.SetValue('/Visu/Sqrt',f_visu.BtnSqrt.Checked);
+  config.SetValue('/Visu/Sqrt',f_visu.BtnSqrt.Checked);   }
 
   n:=FilterList.Count-1;
   config.SetValue('/Filters/Num',n);
@@ -4494,17 +4491,17 @@ end;
 
 procedure Tf_main.MenuVisuLinearClick(Sender: TObject);
 begin
-  f_visu.BtnLinear.Checked:=True;
+ // f_visu.BtnLinear.Checked:=True;
 end;
 
 procedure Tf_main.MenuVisuLogClick(Sender: TObject);
 begin
-  f_visu.BtnLog.Checked:=True;
+//  f_visu.BtnLog.Checked:=True;
 end;
 
 procedure Tf_main.MenuVisuSqrtClick(Sender: TObject);
 begin
-  f_visu.BtnSqrt.Checked:=True;
+//  f_visu.BtnSqrt.Checked:=True;
 end;
 
 procedure Tf_main.MenuVisuZoom12Click(Sender: TObject);
@@ -5294,9 +5291,7 @@ var tmpbmp:TBGRABitmap;
     s,cx,cy: integer;
 begin
 if fits.HeaderInfo.naxis>0 then begin
-  if f_visu.BtnLinear.Checked then fits.itt:=ittlinear
-  else if f_visu.BtnLog.Checked then fits.itt:=ittlog
-  else if f_visu.BtnSqrt.Checked then fits.itt:=ittsqrt;
+  fits.Gamma:=f_visu.Gamma.Value;
   fits.ImgDmax:=round(f_visu.ImgMax);
   fits.ImgDmin:=round(f_visu.ImgMin);
   fits.Overflow:=ClippingOverflow;
@@ -5537,9 +5532,7 @@ if refmask then begin
   f.Stream:=mem;
   f.LoadStream;
   if f.HeaderInfo.naxis>0 then begin
-    if f_visu.BtnLinear.Checked then f.itt:=ittlinear
-    else if f_visu.BtnLog.Checked then f.itt:=ittlog
-    else if f_visu.BtnSqrt.Checked then f.itt:=ittsqrt;
+    f.Gamma:=f_visu.Gamma.Value;
     f.ImgDmax:=round(f_visu.ImgMax);
     f.ImgDmin:=round(f_visu.ImgMin);
     f.GetBGRABitmap(refbmp);

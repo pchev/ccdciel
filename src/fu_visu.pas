@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, u_translation,
-  Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin;
+  Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
 
 type
 
@@ -36,14 +36,14 @@ type
     BtnClipping: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
+    Gamma: TFloatSpinEdit;
+    hist3: TSpeedButton;
+    hist4: TSpeedButton;
     Histogram: TImage;
     Panel1: TPanel;
     hist1: TSpeedButton;
     hist2: TSpeedButton;
     histminmax: TSpeedButton;
-    BtnLinear: TRadioButton;
-    BtnLog: TRadioButton;
-    BtnSqrt: TRadioButton;
     BtnZoomAdjust: TSpeedButton;
     Panel2: TPanel;
     Panel3: TPanel;
@@ -56,11 +56,13 @@ type
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnClippingClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
-    procedure BtnIttChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
+    procedure GammaChange(Sender: TObject);
     procedure hist1Click(Sender: TObject);
     procedure hist2Click(Sender: TObject);
+    procedure hist3Click(Sender: TObject);
+    procedure hist4Click(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -78,7 +80,7 @@ type
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
-    l1,h1,l2,h2: integer;
+    l1,h1,l2,h2,l3,h3,l4,h4: integer;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
@@ -131,14 +133,14 @@ end;
 procedure Tf_visu.SetLang;
 begin
   StaticText1.Caption:=rsVisualisatio;
-  BtnLinear.Caption:=rsLinear;
+{  BtnLinear.Caption:=rsLinear;
   BtnLog.Caption:=rsLog;
-  BtnSqrt.Caption:=rsSqrt;
+  BtnSqrt.Caption:=rsSqrt;  }
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);
 var i,j,maxh,h,hd2,l: integer;
-    sum,sl1,sh1,sl2,sh2,hc: integer;
+    sum,sl1,sh1,sl2,sh2,sl3,sh3,sl4,sh4,hc: integer;
     sh: double;
 begin
 try
@@ -155,13 +157,21 @@ sl1:=round(0.050*sum); l1:=0;
 sh1:=round(0.950*sum); h1:=0;
 sl2:=round(0.100*sum); l2:=0;
 sh2:=round(0.900*sum); h2:=0;
+sl3:=round(0.040*sum); l3:=0;
+sh3:=round(0.960*sum); h3:=0;
+sl4:=round(0.020*sum); l4:=0;
+sh4:=round(0.980*sum); h4:=0;
 sum:=0;
 for i:=0 to high(word) do begin
   sum:=sum+hist[i];
   if (l1=0) and (sum>=sl1) then l1:=i;
   if (l2=0) and (sum>=sl2) then l2:=i;
+  if (l3=0) and (sum>=sl3) then l3:=i;
+  if (l4=0) and (sum>=sl4) then l4:=i;
   if (h1=0) and (sum>=sh1) then h1:=i;
   if (h2=0) and (sum>=sh2) then h2:=i;
+  if (h3=0) and (sum>=sh3) then h3:=i;
+  if (h4=0) and (sum>=sh4) then h4:=i;
 end;
 if SetLevel then begin
   if hist1.Down then begin
@@ -171,6 +181,14 @@ if SetLevel then begin
   if hist2.Down then begin
     FImgMin:=l2;
     FImgMax:=h2;
+  end;
+  if hist3.Down then begin
+    FImgMin:=l3;
+    FImgMax:=h3;
+  end;
+  if hist4.Down then begin
+    FImgMin:=l4;
+    FImgMax:=h4;
   end;
 end;
 SpinEditMin.Value:=round(FImgMin);
@@ -212,11 +230,6 @@ finally
   Application.ProcessMessages;
   LockSpinEdit:=false;
 end;
-end;
-
-procedure Tf_visu.BtnIttChange(Sender: TObject);
-begin
-  if Assigned(FRedraw) then FRedraw(self);
 end;
 
 procedure Tf_visu.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -269,6 +282,20 @@ FImgMax:=h2;
 if Assigned(FRedraw) then FRedraw(self);
 end;
 
+procedure Tf_visu.hist3Click(Sender: TObject);
+begin
+FImgMin:=l3;
+FImgMax:=h3;
+if Assigned(FRedraw) then FRedraw(self);
+end;
+
+procedure Tf_visu.hist4Click(Sender: TObject);
+begin
+FImgMin:=l4;
+FImgMax:=h4;
+if Assigned(FRedraw) then FRedraw(self);
+end;
+
 procedure Tf_visu.SetZoom(value: double);
 begin
  if FZoom<>value then begin
@@ -289,6 +316,11 @@ begin
     3: FZoom:=2;
   end;
   if Assigned(FonZoom) then FonZoom(self);
+end;
+
+procedure Tf_visu.GammaChange(Sender: TObject);
+begin
+  if Assigned(FRedraw) then FRedraw(self);
 end;
 
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
