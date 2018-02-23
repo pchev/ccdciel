@@ -319,7 +319,7 @@ type
     TabSheet4: TTabSheet;
     Tolerance: TEdit;
     Label7: TLabel;
-    MinRadius: TEdit;
+    MaxRadius: TEdit;
     Label6: TLabel;
     PixelSizeFromCamera: TCheckBox;
     FocaleFromTelescope: TCheckBox;

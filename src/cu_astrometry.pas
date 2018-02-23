@@ -126,7 +126,7 @@ begin
 end;
 
 function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
-var pixsize,pixscale,telescope_focal_length,tolerance,MinRadius,ra,de: double;
+var pixsize,pixscale,telescope_focal_length,tolerance,MaxRadius,ra,de: double;
     n,iwidth,iheight:integer;
     info: TcdcWCSinfo;
 begin
@@ -170,7 +170,7 @@ begin
    engine.InFile:=infile;
    engine.OutFile:=outfile;
    tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
-   MinRadius:=config.GetValue('/Astrometry/MinRadius',15.0);
+   MaxRadius:=config.GetValue('/Astrometry/MaxRadius',15.0);
    AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
    if pixscale=NullCoord then begin
      if config.GetValue('/Astrometry/PixelSizeFromCamera',true)
@@ -199,7 +199,7 @@ begin
    engine.CustomScript:=config.GetValue('/Astrometry/AstCustScript','');
    engine.ra:=ra;
    engine.de:=de;
-   engine.radius:=max(MinRadius,pixscale*iwidth/3600);
+   engine.radius:=max(MaxRadius,pixscale*iwidth/3600);
    engine.Xsize:=pixscale*iwidth/3600;
    engine.Ysize:=pixscale*iheight/3600;
    engine.iwidth:=iwidth;
