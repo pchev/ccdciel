@@ -5028,6 +5028,7 @@ var dt: Tdatetime;
     fn,fd,buf: string;
     ccdtemp: double;
     fileseqnum,i: integer;
+    UseFileSequenceNumber: boolean;
 begin
 try
  dt:=NowUTC;
@@ -5064,6 +5065,7 @@ try
  ForceDirectoriesUTF8(fd);
  // construct file name
  fn:='';
+ UseFileSequenceNumber:=false;
  for i:=0 to FileNameCount-1 do begin
    case FileNameOpt[i] of
      fnObj : if FileNameActive[i] then begin
@@ -5087,12 +5089,8 @@ try
                 fn:=fn+formatfloat(f1,ccdtemp)+'C_';
      fnDate: if FileNameActive[i] then
                 fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)+'_'
-             else begin
-                fileseqnum:=1;
-                while FileExistsUTF8(slash(fd)+fn+IntToStr(fileseqnum)+'.fits') do
-                  inc(fileseqnum);
-                fn:=fn+IntToStr(fileseqnum)+'_';
-             end;
+             else
+                UseFileSequenceNumber:=true;
      fnGain: if FileNameActive[i] and f_capture.PanelGain.Visible then begin
                 if f_capture.ISObox.Visible then
                   fn:=fn+f_capture.ISObox.Text+'_'
@@ -5107,6 +5105,13 @@ try
  fn:=StringReplace(fn,':','_',[rfReplaceAll]);
  if fn<>'' then
     delete(fn,length(fn),1); // remove last _
+ // sequence number must always be at the end
+ if UseFileSequenceNumber then begin
+   fileseqnum:=1;
+   while FileExistsUTF8(slash(fd)+fn+'_'+IntToStr(fileseqnum)+'.fits') do
+     inc(fileseqnum);
+   fn:=fn+'_'+IntToStr(fileseqnum);
+ end;
  fn:=slash(fd)+fn+'.fits';
  // save the file
  fits.SaveToFile(fn);
