@@ -50,8 +50,6 @@ type
  Timar32 = array of array of array of single; TPimar32 = ^Timar32;
  Timar64 = array of array of array of double; TPimar64 = ^Timar64;
 
- Titt = (ittlinear,ittramp,ittlog,ittsqrt);
-
  THistogram = array[0..high(word)] of integer;
 
  TMathOperator = (moAdd,moSub,moMean,moMult,moDiv);
@@ -92,10 +90,6 @@ type
  end;
 
 const    maxl = 20000;
-  Cittsqrt=MaxWord/sqrt(MaxWord);
-  Cittlog=MaxWord/ln(MaxWord);
-  Cittsqrt8=MAXBYTE/sqrt(MaxWord);
-  Cittlog8=MAXBYTE/ln(MaxWord);
 
 type
   TFits = class(TComponent)
@@ -133,7 +127,8 @@ type
     FImgFullRange,FStreamValid: Boolean;
     Fbpm: TBpm;
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
-    Fitt : Titt;
+    gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
+    FGamma: single;
     emptybmp:Tbitmap;
     FMarkOverflow: boolean;
     FOverflow, FUnderflow: double;
@@ -149,10 +144,10 @@ type
     Procedure ReadFitsImage;
     Procedure WriteFitsImage;
     Procedure GetImage;
-    function Citt(value: Word):Word;
-    function Citt8(value: Word):byte;
+    function GammaCorr(value: Word):byte;
     procedure SetImgFullRange(value: boolean);
     function GetHasBPM: boolean;
+    procedure SetGamma(value: single);
   protected
     { Protected declarations }
   public
@@ -187,7 +182,7 @@ type
      property Histogram : THistogram read FHistogram;
      property ImgDmin : Word read FImgDmin write FImgDmin;
      property ImgDmax : Word read FImgDmax write FImgDmax;
-     property itt : Titt read Fitt write Fitt;
+     property Gamma: single read FGamma write SetGamma;
      property image : Timaw16 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
@@ -539,7 +534,6 @@ end;
 constructor TFits.Create(AOwner:TComponent);
 begin
 inherited Create(AOwner);
-Fitt:=ittlinear;
 Fheight:=0;
 Fwidth:=0;
 ImgDmin:=0;
@@ -557,6 +551,7 @@ FStream:=TMemoryStream.Create;
 FIntfImg:=TLazIntfImage.Create(0,0);
 emptybmp:=Tbitmap.Create;
 emptybmp.SetSize(1,1);
+SetGamma(1.0);
 end;
 
 destructor  TFits.Destroy; 
@@ -977,13 +972,8 @@ Fmean:=sum/ni;
 Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
 if dmin>=dmax then dmax:=dmin+1;
 if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
-  if Fitt=ittramp then begin
-     FFitsInfo.dmin:=max(dmin,Fmean-5*Fsigma);
-     FFitsInfo.dmax:=min(dmax,Fmean+5*Fsigma);
-  end else begin
-     FFitsInfo.dmin:=dmin;
-     FFitsInfo.dmax:=dmax;
-  end;
+  FFitsInfo.dmin:=dmin;
+  FFitsInfo.dmax:=dmax;
 end;
 GetImage;
 end;
@@ -1261,52 +1251,23 @@ begin
   if (Fheight>0)and(Fwidth>0) then GetImage;
 end;
 
-function TFits.Citt(value: Word):Word;
+function TFits.GammaCorr(value: Word):byte;
 begin
-case Fitt of
-ittlinear: begin
-          // Linear
-         result:=value;
-         end;
-ittramp: begin
-          // Ramp
-          result:=value;
-         end;
-ittlog:  begin
-          // Log
-          if value=0 then result:=0
-          else result:=round(Cittlog*ln(value));
-          end;
-ittsqrt: begin
-          // sqrt
-          if value=0 then result:=0
-          else result:=round(Cittsqrt*sqrt(value));
-         end;
-end;
+  // gamma_c is 0..1 of length 32768
+  // value is 0..65535
+  // result is 0..255
+  result:=round(255*gamma_c[trunc(value/2)]);
 end;
 
-function TFits.Citt8(value: Word):byte;
+procedure TFits.SetGamma(value: single);
+var
+  i: integer;
 begin
-case Fitt of
-ittlinear: begin
-          // Linear
-         result:=value div 256;
-         end;
-ittramp: begin
-          // Ramp
-          result:=value div 256;
-         end;
-ittsqrt: begin
-          // sqrt
-          if value=0 then result:=0
-          else result:=round(Cittsqrt8*sqrt(value));
-         end;
-ittlog:  begin
-          // Log
-          if value=0 then result:=0
-          else result:=round(Cittlog8*ln(value));
-          end;
-end;
+  if value<>FGamma then begin
+    FGamma:=value;
+    for i:=0 to 32768 do
+      gamma_c[i]:=power(i/32768.0, gamma);
+  end;
 end;
 
 procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
@@ -1329,13 +1290,13 @@ for i:=0 to Fheight-1 do begin
        x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
        if n_axis=3 then begin
          // 3 chanel color image
-         p^.red:=Citt8(x);
+         p^.red:=GammaCorr(x);
          xxg:=Fimage[1,i,j];
          x:=trunc(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
-         p^.green:=Citt8(x);
+         p^.green:=GammaCorr(x);
          xxb:=Fimage[2,i,j];
          x:=trunc(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
-         p^.blue:=Citt8(x);
+         p^.blue:=GammaCorr(x);
          if FMarkOverflow then begin
            if maxvalue([xx,xxg,xxb])>=FOverflow then
              p^:=HighOverflow;
@@ -1344,7 +1305,7 @@ for i:=0 to Fheight-1 do begin
          end;
        end else begin
          // B/W image
-         p^.red:=Citt8(x);
+         p^.red:=GammaCorr(x);
          p^.green:=p^.red;
          p^.blue:=p^.red;
          if FMarkOverflow then begin
@@ -1800,13 +1761,8 @@ begin
     Fmean:=sum/ni;
     Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
     if dmin>=dmax then dmax:=dmin+1;
-      if Fitt=ittramp then begin
-         FFitsInfo.dmin:=max(dmin,Fmean-5*Fsigma);
-         FFitsInfo.dmax:=min(dmax,Fmean+5*Fsigma);
-      end else begin
-         FFitsInfo.dmin:=dmin;
-         FFitsInfo.dmax:=dmax;
-      end;
+    FFitsInfo.dmin:=dmin;
+    FFitsInfo.dmax:=dmax;
     GetImage;
  end;
 end;

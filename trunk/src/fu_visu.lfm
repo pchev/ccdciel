@@ -157,42 +157,10 @@ object f_visu: Tf_visu
         GroupIndex = 102
         OnClick = BtnZoomClick
       end
-      object BtnSqrt: TRadioButton
-        Left = 0
-        Height = 21
-        Hint = 'Use a square root scale to display the image'
-        Top = 60
-        Width = 49
-        Caption = 'Sqrt'
-        OnChange = BtnIttChange
-        TabOrder = 0
-      end
-      object BtnLog: TRadioButton
-        Left = 0
-        Height = 21
-        Hint = 'Use a logarithmic scale to display the image'
-        Top = 40
-        Width = 47
-        Caption = 'Log'
-        OnChange = BtnIttChange
-        TabOrder = 1
-      end
-      object BtnLinear: TRadioButton
-        Left = 0
-        Height = 21
-        Hint = 'Use a linear scale to display the image'
-        Top = 20
-        Width = 61
-        Caption = 'Linear'
-        Checked = True
-        OnChange = BtnIttChange
-        TabOrder = 2
-        TabStop = True
-      end
       object histminmax: TSpeedButton
         Left = 64
         Height = 22
-        Hint = 'Fix the visualisation treshold to the image data range.'
+        Hint = 'Fix the visualisation treshold to the image data range, 100% of the histogram.'
         Top = 0
         Width = 23
         Down = True
@@ -270,7 +238,7 @@ object f_visu: Tf_visu
         Left = 0
         Height = 22
         Hint = 'Show 90% of the histogram'
-        Top = 0
+        Top = 22
         Width = 32
         Caption = '90'
         GroupIndex = 101
@@ -281,7 +249,7 @@ object f_visu: Tf_visu
         Left = 32
         Height = 22
         Hint = 'Show 95% of the histogram'
-        Top = 0
+        Top = 22
         Width = 32
         Caption = '95'
         GroupIndex = 101
@@ -470,6 +438,44 @@ object f_visu: Tf_visu
         }
         GroupIndex = 103
         OnClick = BtnClippingClick
+      end
+      object Gamma: TFloatSpinEdit
+        Left = 2
+        Height = 22
+        Hint = 'Gamma'
+        Top = 44
+        Width = 60
+        AutoSize = False
+        Increment = 0.1
+        MaxValue = 1
+        MinValue = 0.1
+        OnChange = GammaChange
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        Value = 1
+      end
+      object hist3: TSpeedButton
+        Left = 0
+        Height = 22
+        Hint = 'Show 96% of the histogram'
+        Top = 0
+        Width = 32
+        Caption = '96'
+        GroupIndex = 101
+        Transparent = False
+        OnClick = hist3Click
+      end
+      object hist4: TSpeedButton
+        Left = 32
+        Height = 22
+        Hint = 'Show 98% of the histogram'
+        Top = 0
+        Width = 32
+        Caption = '98'
+        GroupIndex = 101
+        Transparent = False
+        OnClick = hist4Click
       end
     end
   end
