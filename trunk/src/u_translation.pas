@@ -436,7 +436,6 @@ begin
  {$ifdef darwin}
   if (trim(buf1) = '') and (trim(buf2) = '') then
   begin
-    writetrace('No language environment, try to read language from user database');
     response := TStringList.Create;
     ExecProcess('defaults read -g AppleLocale', response);
     if response.Count > 0 then
