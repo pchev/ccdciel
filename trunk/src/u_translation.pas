@@ -462,14 +462,12 @@ begin
     Result := lang
   else
   begin
-    pofile := format(slash(appdir) + slash('data') + slash('language') +
-      'ccdciel.%s.po', [lang2]);
+    pofile := format(slash(appdir) + slash('data') + slash('language') +  'ccdciel.%s.po', [lang2]);
     if FileExists(pofile) then
       Result := lang2
     else
     begin
-      pofile := format(slash(appdir) + slash('data') + slash('language') +
-        'ccdciel.%s.po', ['en']);
+      pofile := format(slash(appdir) + slash('data') + slash('language') +  'ccdciel.%s.po', ['en']);
       Result := 'en';
     end;
   end;

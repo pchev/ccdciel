@@ -40,6 +40,9 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    Label19: TLabel;
+    Languages: TComboBox;
+    Label18: TLabel;
     Labelmsg: TLabel;
     UseTcpServer: TCheckBox;
     FocuserBacklashActive: TCheckBox;
@@ -328,7 +331,6 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Logtofile: TCheckBox;
-    GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Label14: TLabel;
@@ -353,6 +355,7 @@ type
       sIndex, tIndex: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure LanguagesChange(Sender: TObject);
     procedure latChange(Sender: TObject);
     procedure longChange(Sender: TObject);
     procedure MeridianOptionClick(Sender: TObject);
@@ -414,6 +417,11 @@ begin
   f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Text<>'0.0');
   FileOrFolderOptionsRenumber(FolderOptions);
   FileOrFolderOptionsRenumber(FileOptions);
+end;
+
+procedure Tf_option.LanguagesChange(Sender: TObject);
+begin
+   label19.Caption:='The program need to be restarted';
 end;
 
 procedure Tf_option.msg(txt:string);
