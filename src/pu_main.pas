@@ -947,7 +947,8 @@ begin
   ScriptDir[1].path:=slash(ConfigDir);
   ScriptDir[2].path:=slash(Appdir)+slash('scripts');
 
-  lang := u_translation.translate('');
+  lang:=config.GetValue('/Language','');;
+  lang:=u_translation.translate(lang);
   SetLang;
 
   Top:=config.GetValue('/Window/Top',0);
@@ -4000,14 +4001,27 @@ end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 var ok,PlanetariumChange,AutoguiderChange: boolean;
-    i,n,FocusStarMagIndex: integer;
+    i,j,n,FocusStarMagIndex: integer;
     buf:string;
+    fs : TSearchRec;
 begin
    PlanetariumChange:=false;
    AutoguiderChange:=false;
    f_option.Caption:=Format(rsOptions, [profile]);
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
+   f_option.Languages.Clear;
+   n:=0;
+   i:=FindFirstUTF8(slash(appdir) + slash('data') + slash('language') + 'ccdciel.*.po',0,fs);
+   while i=0 do begin
+     buf:=ExtractFileNameOnly(fs.Name);
+     delete(buf,1,8);
+     j:=f_option.Languages.Items.Add(buf);
+     if buf=lang then n:=j;
+     i:=FindNextUTF8(fs);
+   end;
+   FindCloseUTF8(fs);
+   f_option.Languages.ItemIndex:=n;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
    for i:=0 to SubDirCount-1 do begin
@@ -4172,6 +4186,7 @@ begin
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin
+     config.SetValue('/Language',f_option.Languages.Text);
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
      for i:=0 to SubDirCount-1 do begin
