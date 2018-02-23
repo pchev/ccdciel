@@ -131,9 +131,6 @@ type
     MenuVisuZoom2: TMenuItem;
     MenuVisuZoom1: TMenuItem;
     MenuVisuZoom12: TMenuItem;
-    MenuVisuLinear: TMenuItem;
-    MenuVisuLog: TMenuItem;
-    MenuVisuSqrt: TMenuItem;
     MenuSequenceNew: TMenuItem;
     MenuSequenceEdit: TMenuItem;
     MenuSequenceStart: TMenuItem;
@@ -317,9 +314,6 @@ type
     procedure MenuViewScriptClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
-    procedure MenuVisuLinearClick(Sender: TObject);
-    procedure MenuVisuLogClick(Sender: TObject);
-    procedure MenuVisuSqrtClick(Sender: TObject);
     procedure MenuVisuZoom12Click(Sender: TObject);
     procedure MenuVisuZoom1Click(Sender: TObject);
     procedure MenuVisuZoom2Click(Sender: TObject);
@@ -1205,7 +1199,7 @@ begin
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Text:=config.GetValue('/Capture/Count','1');
 
-  f_visu.Gamma.Value;
+  f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
 
   ImaBmp:=TBGRABitmap.Create;
   LockMouse:=false;
@@ -1281,9 +1275,6 @@ begin
    MenuScriptEdit.Caption := rsEdit;
    MenuScriptNew.Caption := rsNew;
    MenuHistogram.Caption := rsVisualisatio;
-   MenuVisuLinear.Caption := rsLinear;
-   MenuVisuLog.Caption := rsLog;
-   MenuVisuSqrt.Caption := rsSqrt;
    MenuVisuZoom2.Caption := rsZoom+' 2:1';
    MenuVisuZoom1.Caption := rsZoom+' 1:1';
    MenuVisuZoom12.Caption := rsZoom+' 1:2';
@@ -1799,9 +1790,7 @@ begin
 
   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
 
-{  config.SetValue('/Visu/Linear',f_visu.BtnLinear.Checked);
-  config.SetValue('/Visu/Log',f_visu.BtnLog.Checked);
-  config.SetValue('/Visu/Sqrt',f_visu.BtnSqrt.Checked);   }
+  config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
 
   n:=FilterList.Count-1;
   config.SetValue('/Filters/Num',n);
@@ -4487,21 +4476,6 @@ end;
 procedure Tf_main.MenuViewStarProfileClick(Sender: TObject);
 begin
   f_starprofile.Visible:=MenuViewStarProfile.Checked;
-end;
-
-procedure Tf_main.MenuVisuLinearClick(Sender: TObject);
-begin
- // f_visu.BtnLinear.Checked:=True;
-end;
-
-procedure Tf_main.MenuVisuLogClick(Sender: TObject);
-begin
-//  f_visu.BtnLog.Checked:=True;
-end;
-
-procedure Tf_main.MenuVisuSqrtClick(Sender: TObject);
-begin
-//  f_visu.BtnSqrt.Checked:=True;
 end;
 
 procedure Tf_main.MenuVisuZoom12Click(Sender: TObject);

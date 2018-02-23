@@ -56,9 +56,6 @@ resourcestring
   rsRun = 'Run';
   rsStop = 'Stop';
   rsNew = 'New';
-  rsLinear = 'Linear';
-  rsLog = 'Log';
-  rsSqrt = 'Sqrt';
   rsZoom = 'Zoom';
   rsAdjustToWind = 'Adjust to window';
   rsFocus = 'Focus';
