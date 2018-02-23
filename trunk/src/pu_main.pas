@@ -1606,6 +1606,7 @@ end;
 procedure Tf_main.UpdConfig(oldver:string);
 var ok:boolean;
     i: integer;
+    f: double;
     msg: string;
 begin
   if trim(oldver)='' then
@@ -1673,6 +1674,11 @@ begin
          'Please be careful of the default value for the Gain in Preview, Capture and Sequences tools';
     NewMessage(msg);
     MessageDlg(caption,msg,mtWarning,[mbOK],0);
+  end;
+  if oldver<'0.9.27' then begin
+     f:=config.GetValue('/Astrometry/MinRadius',NullCoord);
+     if f<>NullCoord then
+        config.SetValue('/Astrometry/MaxRadius',f)
   end;
 end;
 
@@ -4114,7 +4120,7 @@ begin
    if f_option.FocaleFromTelescope.Checked then
       f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
    f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
-   f_option.MinRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MinRadius',15.0));
+   f_option.MaxRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MaxRadius',15.0));
    f_option.AstrometryTimeout.Text:=FormatFloat(f0,config.GetValue('/Astrometry/Timeout',60.0));
    f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
    f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
@@ -4261,7 +4267,7 @@ begin
      config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Text);
      config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
      config.SetValue('/Astrometry/ScaleTolerance',StrToFloatDef(f_option.Tolerance.Text,0.1 ));
-     config.SetValue('/Astrometry/MinRadius',StrToFloatDef(f_option.MinRadius.Text,15.0));
+     config.SetValue('/Astrometry/MaxRadius',StrToFloatDef(f_option.MaxRadius.Text,15.0));
      config.SetValue('/Astrometry/Timeout',StrToFloatDef(f_option.AstrometryTimeout.Text,60.0));
      config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
      config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
