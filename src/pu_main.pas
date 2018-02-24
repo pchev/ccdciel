@@ -7384,7 +7384,7 @@ begin
       median_best:=min(min(median_top_left, median_top_right),min(median_bottom_left,median_bottom_right));{find best corner}
       median_worst:=max(max(median_top_left, median_top_right),max(median_bottom_left,median_bottom_right));{find worst corner}
 
-      scale_factor:=img_width*0.25/median_worst;
+      scale_factor:=img_height*0.33/median_worst;
       x1:=round(-median_bottom_left*scale_factor+img_width/2);y1:=round(-median_bottom_left*scale_factor+img_height/2);{calculate coordinates counter clockwise}
       x2:=round(+median_bottom_right*scale_factor+img_width/2);y2:=round(-median_bottom_right*scale_factor+img_height/2);
       x3:=round(+median_top_right*scale_factor+img_width/2);y3:=round(+median_top_right*scale_factor+img_height/2);
