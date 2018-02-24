@@ -1274,12 +1274,14 @@ procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
 var i,j : integer;
     x : word;
     xx,xxg,xxb: extended;
-    c: double;
+    c,overflow,underflow: double;
     p: PBGRAPixel;
     HighOverflow,LowOverflow: TBGRAPixel;
 begin
 HighOverflow:=ColorToBGRA(clFuchsia);
 LowOverflow:=ColorToBGRA(clYellow);
+overflow:=(FOverflow-FimageMin)*FimageC;
+underflow:=(FUnderflow-FimageMin)*FimageC;
 bgra.SetSize(Fwidth,Fheight);
 if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
 c:=MaxWord/(FImgDmax-FImgDmin);
@@ -1298,9 +1300,9 @@ for i:=0 to Fheight-1 do begin
          x:=trunc(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
          p^.blue:=GammaCorr(x);
          if FMarkOverflow then begin
-           if maxvalue([xx,xxg,xxb])>=FOverflow then
-             p^:=HighOverflow;
-           if minvalue([xx,xxg,xxb])<=FUnderflow then
+           if maxvalue([xx,xxg,xxb])>=overflow then
+             p^:=HighOverflow
+           else if minvalue([xx,xxg,xxb])<=underflow then
              p^:=LowOverflow;
          end;
        end else begin
@@ -1309,10 +1311,10 @@ for i:=0 to Fheight-1 do begin
          p^.green:=p^.red;
          p^.blue:=p^.red;
          if FMarkOverflow then begin
-           if xx<=FUnderflow then
-             p^:=LowOverflow
-           else if xx>=FOverflow then
+           if xx>=overflow then
              p^:=HighOverflow
+           else if xx<=underflow then
+             p^:=LowOverflow;
          end;
        end;
        p^.alpha:=255;
