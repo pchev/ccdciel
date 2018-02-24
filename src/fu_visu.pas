@@ -52,7 +52,8 @@ type
     SpinEditMin: TSpinEdit;
     SpinEditMax: TSpinEdit;
     StaticText1: TStaticText;
-    Timer1: TTimer;
+    TimerRedraw: TTimer;
+    TimerMinMax: TTimer;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnClippingClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
@@ -72,7 +73,8 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure SpinEditMaxChange(Sender: TObject);
     procedure SpinEditMinChange(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
+    procedure TimerMinMaxTimer(Sender: TObject);
+    procedure TimerRedrawTimer(Sender: TObject);
   private
     { private declarations }
     FimgMin, FimgMax: double;
@@ -269,28 +271,28 @@ procedure Tf_visu.hist1Click(Sender: TObject);
 begin
 FimgMin:=l1;
 FImgMax:=h1;
-if Assigned(FRedraw) then FRedraw(self);
+TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.hist2Click(Sender: TObject);
 begin
 FImgMin:=l2;
 FImgMax:=h2;
-if Assigned(FRedraw) then FRedraw(self);
+TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.hist3Click(Sender: TObject);
 begin
 FImgMin:=l3;
 FImgMax:=h3;
-if Assigned(FRedraw) then FRedraw(self);
+TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.hist4Click(Sender: TObject);
 begin
 FImgMin:=l4;
 FImgMax:=h4;
-if Assigned(FRedraw) then FRedraw(self);
+TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.SetZoom(value: double);
@@ -317,26 +319,26 @@ end;
 
 procedure Tf_visu.GammaChange(Sender: TObject);
 begin
-  if Assigned(FRedraw) then FRedraw(self);
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
 begin
   FBullsEye:=not FBullsEye;
-  if Assigned(FRedraw) then FRedraw(self);
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.BtnClippingClick(Sender: TObject);
 begin
   FClipping:=BtnClipping.Down;
-  if Assigned(FRedraw) then FRedraw(self);
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.histminmaxClick(Sender: TObject);
 begin
   ImgMin:=0;
   ImgMax:=high(word);
-  if Assigned(FRedraw) then FRedraw(self);
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton;
@@ -374,27 +376,33 @@ begin
             else ImgMin:=max(0,X*255);
   StartUpd:=false;
   histminmax.Down:=true;
-  if Assigned(FRedraw) then FRedraw(self);
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
-  timer1.Enabled:=true;
+  TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.SpinEditMinChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
-  timer1.Enabled:=true;
+  TimerMinMax.Enabled:=true;
 end;
 
-procedure Tf_visu.Timer1Timer(Sender: TObject);
+procedure Tf_visu.TimerMinMaxTimer(Sender: TObject);
 begin
-  timer1.Enabled:=false;
+  TimerMinMax.Enabled:=false;
   histminmax.Down:=true;
   ImgMax:=SpinEditMax.Value;
   ImgMin:=SpinEditMin.Value;
+  if Assigned(FRedraw) then FRedraw(self);
+end;
+
+procedure Tf_visu.TimerRedrawTimer(Sender: TObject);
+begin
+  TimerRedraw.Enabled:=false;
   if Assigned(FRedraw) then FRedraw(self);
 end;
 

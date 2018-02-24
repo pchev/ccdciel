@@ -495,11 +495,18 @@ object f_visu: Tf_visu
     ParentColor = False
     TabOrder = 1
   end
-  object Timer1: TTimer
+  object TimerMinMax: TTimer
     Enabled = False
     Interval = 250
-    OnTimer = Timer1Timer
-    left = 15
+    OnTimer = TimerMinMaxTimer
+    left = 40
+    top = 48
+  end
+  object TimerRedraw: TTimer
+    Enabled = False
+    Interval = 250
+    OnTimer = TimerRedrawTimer
+    left = 149
     top = 48
   end
 end
