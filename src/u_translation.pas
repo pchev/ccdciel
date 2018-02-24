@@ -301,7 +301,6 @@ resourcestring
   rsIncr = 'Incr.';
   rsPos = 'Pos.';
   rsStep = 'Step';
-  rsMoveTo = 'Move to';
   rsVLearn = 'V-learn';
   rsTemp = 'Temp.';
   rsTelescopePos = 'Telescope position';
@@ -441,6 +440,8 @@ resourcestring
   rsFoundDevices = 'Found %s devices';
   rsCopyCurrentP = 'Copy current profile to';
   rsCreateNewEmp = 'Create new empty profile';
+  rsHeight = 'Height';
+  rsWidth = 'Width';
 
 implementation
 

@@ -148,7 +148,7 @@ object f_preview: Tf_preview
         Height = 23
         Hint = 'Start one preview exposure'
         Top = 1
-        Width = 90
+        Width = 95
         Caption = 'Preview'
         OnClick = BtnPreviewClick
         ParentFont = False
@@ -182,7 +182,7 @@ object f_preview: Tf_preview
         Height = 23
         Hint = 'Loop preview exposures'
         Top = 0
-        Width = 90
+        Width = 95
         Caption = 'Loop'
         OnClick = BtnLoopClick
         ParentFont = False
