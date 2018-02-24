@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI,
+uses u_utils, u_global, UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, enhedits, Types;
 
@@ -379,6 +379,7 @@ type
     procedure SetLinGuiderUseUnixSocket(value: boolean);
     function  GetLinGuiderUseUnixSocket: boolean;
     procedure FileOrFolderOptionsRenumber(G: TStringGrid);
+    procedure Setlang;
   public
     { public declarations }
     property Resolver: integer read GetResolver write SetResolver;
@@ -407,6 +408,7 @@ begin
     Label13.Visible:=false;
   {$endif}
   ScaleDPI(Self);
+  Setlang;
   Lockchange:=false;
   PageControl1.ActivePageIndex:=0;
 end;
@@ -419,9 +421,176 @@ begin
   FileOrFolderOptionsRenumber(FileOptions);
 end;
 
+procedure Tf_option.Setlang;
+begin
+  Caption := rsOptions2;
+  Button1.Caption := rsOK;
+  Button2.Caption := rsCancel;
+  TabSheet1.Caption := rsFiles;
+  Label1.Caption := rsCaptureFolde;
+  Logtofile.Caption := rsLogAllMessag;
+  Label99.Caption := rsTemporaryFol;
+  TmpDirDefault.Caption := rsDefault;
+  FileOpt.Caption := rsFileNameOpti;
+  BtnFileDefault.Caption := rsDefault;
+  FolderOpt.Caption := rsFolderNameOp;
+  BtnFolderDefault.Caption := rsDefault;
+  UseTcpServer.Caption := rsAllowToGetPr;
+  Label18.Caption := rsLanguage;
+  TabSheet2.Caption := rsObservatory;
+  Label5.Caption := rsObserverName;
+  Label10.Caption := rsObservatoryN;
+  Label11.Caption := rsTelescopeNam;
+  Label35.Caption := rsLatitude;
+  Label36.Caption := rsLongitude;
+  Label76.Caption := rsHorizonProfi;
+  Label77.Caption := rsMinimumObser;
+  TabSheet8.Caption := rsPreview;
+  GroupBox8.Caption := rsColorPreview;
+  Label38.Caption := rsBayerMatrixP;
+  DebayerPreview.Caption := rsDebayerThePr;
+  GroupBox9.Caption := rsReferenceIma;
+  Label39.Caption := rsTreshold;
+  VideoGroup.Caption := rsVideo;
+  Label45.Caption := rsVideoPreview;
+  GroupBox10.Caption := rsBadPixelsDet;
+  Label62.Caption := rsBadPixelThre;
+  Label63.Caption := rsSigma;
+  StackGroup.Caption := rsPreviewStack;
+  StackUseDark.Caption := rsSubstractADr;
+  StackShow.Caption := rsShowPreviewS;
+  GroupBox19.Caption := rsClippingIndi;
+  Label37.Caption := rsShadowADU;
+  Label100.Caption := rsHighlightADU;
+  TabSheet11.Caption := rsCCDTemperatu2;
+  GroupBox14.Caption := rsAutomaticCoo;
+  CameraAutoCool.Caption := rsCoolDownWhen;
+  Label75.Caption := rsDegree;
+  GroupBox15.Caption := rsMaximumTempe;
+  TemperatureSlopeActive.Caption := rsLimitTempera;
+  Label74.Caption := rsDegreesPerMi;
+  TabSheet12.Caption := rsFlat;
+  FlatType.Caption := rsSequenceAuto;
+  GroupBox18.Caption := rsFlatAutoExpo;
+  FlatAutoExposure.Caption := rsUseFlatAutom;
+  Label91.Caption := rsExposureTime2;
+  Label92.Caption := rsMax;
+  Label93.Caption := rsMin2;
+  Label94.Caption := rsFlatImageMea;
+  Label95.Caption := rsMin2;
+  Label96.Caption := rsMax;
+  Label97.Caption := rsAutomaticFla;
+  TabSheet10.Caption := rsFocus;
+  GroupBox2.Caption := rsStarProfile;
+  Label14.Caption := rsStarDetectio;
+  Label2.Caption := rsFocusWindowS;
+  GroupCorrection.Caption := rsFocuserCorre;
+  Label98.Caption := rsStabilizatio;
+  BtnDisableDelay.Caption := rsDisable;
+  FocuserBacklashActive.Caption := rsBacklashComp;
+  GroupBox12.Caption := rsFilterOffset;
+  GroupBox16.Caption := rsFocuserTempe3;
+  Label84.Caption := rsTemperatureC;
+  BtnDisableFocuserTemp.Caption := rsDisable;
+  TabSheet3.Caption := rsAutofocus;
+  Autofocusmode.Caption := rsAutofocusMet;
+  Label49.Caption := rsExposureTime2;
+  Label51.Caption := rsSeconds;
+  Label58.Caption := rsMoveDirectio;
+  AutofocusMoveDirIn.Caption := rsIn;
+  AutofocusMoveDirOut.Caption := rsOut;
+  Label61.Caption := rsRunVCurveLea;
+  Label82.Caption := rsStartFocus;
+  AutofocusSlippageCorrection.Caption := rsSlippageCorr;
+  Label88.Caption := rsEstimatedSli;
+  Label64.Caption := rsNumberOfDyna;
+  Label65.Caption := rsMovementBetw;
+  Label46.Caption := rsInitialMovem;
+  Label47.Caption := rsFinalMovemen;
+  Label48.Caption := rsNearFocus;
+  Label57.Caption := rsNExp;
+  Label50.Caption := rsBinning;
+  Label54.Caption := rsAutofocusTol;
+  Label81.Caption := rsMinSNR;
+  GroupBox11.Caption := rsAutofocusSta6;
+  Label53.Caption := rsBeforeAutoma;
+  Label85.Caption := rsSlewWithAPre;
+  Label86.Caption := rsArcmin;
+  Label101.Caption := rsYouCanUseThe;
+  TabSheet4.Caption := rsAstrometry;
+  GroupBox4.Caption := rsAstrometryOp;
+  FocaleFromTelescope.Caption := rsFromTelescop;
+  Label4.Caption := rsFocaleLength;
+  Label3.Caption := rsPixelSize;
+  PixelSizeFromCamera.Caption := rsFromCameraDr;
+  ResolverBox.Caption := rsSoftware;
+  Label33.Caption := rsTimeout;
+  Label6.Caption := rsMaximumSearc;
+  Label7.Caption := rsScaleToleran;
+  Label8.Caption := rsDownsample;
+  Label9.Caption := rsMaximumSourc;
+  Plot.Caption := rsCreatePlotOf;
+  Label27.Caption := rsOtherOptions;
+  Label34.Caption := rsCygwinPath;
+  AstUseScript.Caption := rsUseCustomScr;
+  Label12.Caption := rsElbrusImages;
+  Label13.Caption := rsImagesFolder;
+  Label15.Caption := Format(rsBeforeYouCan, [#10]);
+  Label44.Caption := rsManyFunction;
+  Label78.Caption := rsProgramFolde;
+  Label79.Caption := rsWaitAfterSol;
+  Label80.Caption := rsSeconds;
+  TabSheet7.Caption := rsSlewing;
+  GroupBox7.Caption := rsPrecisionSle;
+  Label28.Caption := rsTargetPrecis;
+  Label29.Caption := rsMaximumNumbe;
+  Label30.Caption := rsExposureTime3;
+  Label31.Caption := rsBinning;
+  Label32.Caption := rsControlExpos;
+  PrecSlewBox.Caption := rsCorrectionMe;
+  Label66.Caption := rsFilter;
+  Label87.Caption := rsDelayAfterTe;
+  TabSheet9.Caption := rsMeridian;
+  MeridianOption.Caption := rsOnMeridianCr;
+  Label40.Caption := rsCanTrackPast;
+  Label41.Caption := rsMinutes;
+  MeridianFlipPauseBefore.Caption := rsPauseBeforeM;
+  MeridianFlipPauseAfter.Caption := rsPauseAfterMe;
+  Label42.Caption := rsTimeout;
+  Label43.Caption := rsMinutes;
+  Label59.Caption := rsNoFlipUntilP;
+  Label60.Caption := rsMinutes;
+  MeridianFlipAutofocus.Caption := rsAutofocusAft;
+  MeridianFlipCalibrate.Caption := rsCalibrateAut;
+  TabSheet5.Caption := rsAutoGuiding;
+  AutoguiderBox.Caption := rsSoftware;
+  GroupBox5.Caption := rsDithering;
+  Label23.Caption := rsPixels;
+  DitherRAonly.Caption := rsRAOnly;
+  GroupBox6.Caption := rsSettleTolera;
+  Label20.Caption := rsPixels;
+  Label21.Caption := rsMinTime;
+  Label22.Caption := rsTimeout;
+  Label26.Caption := Format(rsCalibrationD, [#10]);
+  GroupBox13.Caption := rsStarLostReco;
+  Label70.Caption := rsS;
+  Label71.Caption := rsRestartAfter;
+  Label72.Caption := rsS;
+  Label73.Caption := rsAbortAfter;
+  Label16.Caption := rsServer;
+  Label17.Caption := rsPort;
+  Label89.Caption := rsServer;
+  Label90.Caption := rsPort;
+  TabSheet6.Caption := rsPlanetarium;
+  PlanetariumBox.Caption := rsSoftware;
+  CheckBoxLocalCdc.Caption := rsSkychartOnLo;
+  Label25.Caption := rsPort;
+  Label24.Caption := rsServer;
+end;
+
 procedure Tf_option.LanguagesChange(Sender: TObject);
 begin
-   label19.Caption:='The program need to be restarted';
+   label19.Caption:=rsTheProgramNe;
 end;
 
 procedure Tf_option.msg(txt:string);
@@ -548,7 +717,7 @@ begin
      ((FocuserBacklashDirection.ItemIndex=1) and AutofocusMoveDirIn.Checked)
      )
      then
-         msg('Backlash compensation must be in the same direction as auto-focus');
+         msg(rsBacklashComp2);
 end;
 
 procedure Tf_option.TmpDirDefaultClick(Sender: TObject);
@@ -639,14 +808,14 @@ begin
   a:=StrToIntDef(StarWindow.Text,-9999);
   b:=StrToIntDef(FocusWindow.Text,-9999);
   if (a<0) then begin
-     msg('Invalid number '+label14.Caption+blank+StarWindow.Text);
+     msg(Format(rsInvalidNumbe, [label14.Caption+blank+StarWindow.Text]));
      exit;
   end;
   if (b<0) then begin
-     msg('Invalid number '+label2.Caption+blank+FocusWindow.Text);
+     msg(Format(rsInvalidNumbe, [label2.Caption+blank+FocusWindow.Text]));
      exit;
   end;
-  if (4*a)>b then msg('Focus window must be at least four time greater than Star window!');
+  if (4*a)>b then msg(rsFocusWindowM);
 end;
 
 procedure Tf_option.CheckStartNearHFD(Sender: TObject);
@@ -656,14 +825,15 @@ begin
   a:=StrToFloatDef(AutofocusStartHFD.Text,-9999);
   b:=StrToFloatDef(AutofocusNearHFD.Text,-9999);
   if (a<0) then begin
-     msg('Invalid number '+label82.Caption+blank+AutofocusStartHFD.Text);
+     msg(Format(rsInvalidNumbe, [label82.Caption+blank+AutofocusStartHFD.Text])
+       );
      exit;
   end;
   if (b<0) then begin
-     msg('Invalid number '+label48.Caption+blank+AutofocusNearHFD.Text);
+     msg(Format(rsInvalidNumbe, [label48.Caption+blank+AutofocusNearHFD.Text]));
      exit;
   end;
-  if a<=b then msg('Near HFD must be smaller than Start HFD!');
+  if a<=b then msg(rsNearHFDMustB);
 end;
 
 function Tf_option.GetResolver: integer;
