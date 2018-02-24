@@ -86,7 +86,7 @@ resourcestring
   rsConnected = '%s connected';
   rsDisconnected = '%s disconnected';
   rsGuiding = '%s guiding';
-  rsDevices = 'Devices';
+  rsDevices = 'Device';
   rsConfiguratio = 'Configuration saved';
   rsTheCameraIsC = 'The camera is connected. Do you want to exit the program '
     +'now?';
@@ -100,12 +100,10 @@ resourcestring
   rsExposureFail = 'Exposure fail!';
   rsBadPixelMapC = 'Bad pixel map cleared.';
   rsPleaseConfig = 'Please configure your';
-  rsCamera = 'camera';
-  rsFilterWheel = 'filter wheel';
-  rsFocuser2 = 'focuser';
-  rsRotator2 = 'rotator';
-  rsMount = 'mount';
-  rsWatchdog = 'watchdog';
+  rsCamera = 'Camera';
+  rsFilterWheel = 'Filter wheel';
+  rsMount = 'Mount';
+  rsWatchdog = 'Watchdog';
   rsAreYouSureYo = 'Are you sure you want to disconnect all the devices now?';
   rsDisconnect = 'Disconnect';
   rsDesiredTempe = 'Desired temperature';
@@ -136,8 +134,6 @@ resourcestring
   rsUnknowPierSi = 'Unknow pier side';
   rsParked = 'Parked';
   rsUnparked = 'Unparked';
-  rsAutoguider2 = 'Autoguider: %s';
-  rsDisconnected2 = 'Disconnected from autoguider software!';
   rsStopGuiding = 'Stop guiding';
   rsDisconnectTh = 'Disconnect the camera before to change the configuration.';
   rsProfile = 'Profile: %s';
@@ -416,6 +412,35 @@ resourcestring
   rsFocusDirecti2 = 'Focus direction: ';
   rsIn = 'In';
   rsOut = 'Out';
+  rsInterface = 'Interface';
+  rsConnectAndGe = 'Connect and get devices list';
+  rsServer = 'Server';
+  rsPort = 'Port';
+  rsTimeout = 'Timeout';
+  rsChoose = 'Choose';
+  rsSetup = 'Setup';
+  rsSensor = 'Sensor';
+  rsMainSensor = 'Main sensor';
+  rsGuiderSensor = 'Guider sensor;';
+  rsLoadConfigur = 'Load configuration on startup';
+  rsImageTransfe = 'Image transfer';
+  rsNetwork = 'Network';
+  rsRAMDisk = 'RAM Disk';
+  rsDirectory = 'Directory';
+  rsBeSureToConf = 'Be sure to configure the camera connection.';
+  rsFilterWheelI = 'Filter wheel in camera connection. (Restart required!)';
+  rsUseFilterWhe = 'Use filter wheel';
+  rsNotImplement = 'Not implemented!';
+  rsUseFocuser = 'Use focuser';
+  rsFocuserInMou = 'Focuser in mount connection. (Restart required!)';
+  rsUseRotator = 'Use rotator';
+  rsUseMount = 'Use mount';
+  rsHeartBeatThr = 'Heart beat threshold [minutes]';
+  rsUseWatchdog = 'Use watchdog';
+  rsASCOMInterfa = 'ASCOM interface is only available on Windows.';
+  rsFoundDevices = 'Found %s devices';
+  rsCopyCurrentP = 'Copy current profile to';
+  rsCreateNewEmp = 'Create new empty profile';
 
 implementation
 

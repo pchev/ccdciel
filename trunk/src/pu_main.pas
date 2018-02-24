@@ -2458,12 +2458,12 @@ begin
     exit;
   end;
   if WantFocuser and (FocuserName='') then begin
-    ShowMessage(rsPleaseConfig+blank+rsFocuser2);
+    ShowMessage(rsPleaseConfig+blank+rsFocuser);
     MenuSetup.Click;
     exit;
   end;
   if WantRotator and (RotatorName='') then begin
-    ShowMessage(rsPleaseConfig+blank+rsRotator2);
+    ShowMessage(rsPleaseConfig+blank+rsRotator);
     MenuSetup.Click;
     exit;
   end;
@@ -3259,7 +3259,7 @@ case focuser.Status of
                       f_devicesconnection.LabelFocuser.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsFocuser2+ellipsis]));
+                      NewMessage(Format(rsConnecting, [rsFocuser+ellipsis]));
                       f_devicesconnection.LabelFocuser.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3681,7 +3681,7 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsRotator2+ellipsis]));
+                      NewMessage(Format(rsConnecting, [rsRotator+ellipsis]));
                       f_devicesconnection.LabelRotator.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3804,7 +3804,7 @@ begin
    autoguider.Disconnect;
  end;
  f_autoguider.Status.Text:=autoguider.Status;
- NewMessage(Format(rsAutoguider2, [autoguider.Status]));
+ NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]));
 end;
 
 Procedure Tf_main.AutoguiderCalibrateClick(Sender: TObject);
@@ -3840,7 +3840,7 @@ Procedure Tf_main.AutoguiderDisconnect(Sender: TObject);
 var i: integer;
 begin
  if not AppClose then begin
-   NewMessage(rsDisconnected2);
+   NewMessage(format(rsDisconnected,[rsAutoguider]));
    f_sequence.AutoguiderDisconnected;
    // autoguider will be free automatically, create a new one for next connection
    i:=config.GetValue('/Autoguider/Software',0);
@@ -3854,7 +3854,7 @@ begin
    autoguider.onShowMessage:=@NewMessage;
    f_sequence.Autoguider:=autoguider;
    f_autoguider.Status.Text:=autoguider.Status;
-   NewMessage(Format(rsAutoguider2, [autoguider.Status]));
+   NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]));
    f_autoguider.BtnConnect.Caption:=rsConnect;
    f_autoguider.BtnGuide.Caption:=rsGuide;
    f_autoguider.led.Brush.Color:=clGray;
@@ -3866,7 +3866,7 @@ end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
 begin
- if f_autoguider.Status.Text<>autoguider.Status then NewMessage(Format(rsAutoguider2, [autoguider.Status]));
+ if f_autoguider.Status.Text<>autoguider.Status then NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]));
  f_autoguider.Status.Text:=autoguider.Status;
  case autoguider.State of
    GUIDER_DISCONNECTED:begin
@@ -3896,7 +3896,7 @@ begin
                        MenuAutoguiderGuide.Caption:=rsGuide;
                        end;
  end;
- if autoguider.LastError<>'' then NewMessage(Format(rsAutoguider2, [autoguider.LastError]));
+ if autoguider.LastError<>'' then NewMessage(Format(rsAutoguider+': %s', [autoguider.LastError]));
  StatusBar1.Invalidate;
 end;
 
@@ -4365,7 +4365,7 @@ begin
        autoguider.onShowMessage:=@NewMessage;
        f_sequence.Autoguider:=autoguider;
        f_autoguider.Status.Text:=autoguider.Status;
-       NewMessage(Format(rsAutoguider2, [autoguider.Status]));
+       NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]));
        f_autoguider.BtnConnect.Caption:=rsConnect;
        f_autoguider.BtnGuide.Caption:='Guide';
        f_autoguider.led.Brush.Color:=clGray;
