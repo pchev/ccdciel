@@ -1200,6 +1200,13 @@ begin
   f_capture.SeqNum.Text:=config.GetValue('/Capture/Count','1');
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
+  f_visu.histminmax.AllowAllUp:=true;
+  f_visu.histminmax.Down:=config.GetValue('/Visu/HistMinMax',true);
+  f_visu.hist1.Down:=config.GetValue('/Visu/Hist1',false);
+  f_visu.hist2.Down:=config.GetValue('/Visu/Hist2',false);
+  f_visu.hist3.Down:=config.GetValue('/Visu/Hist3',false);
+  f_visu.hist4.Down:=config.GetValue('/Visu/Hist4',false);
+  f_visu.histminmax.AllowAllUp:=false;
 
   ImaBmp:=TBGRABitmap.Create;
   LockMouse:=false;
@@ -1797,6 +1804,11 @@ begin
   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
 
   config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
+  config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);
+  config.SetValue('/Visu/Hist1',f_visu.hist1.Down);
+  config.SetValue('/Visu/Hist2',f_visu.hist2.Down);
+  config.SetValue('/Visu/Hist3',f_visu.hist3.Down);
+  config.SetValue('/Visu/Hist4',f_visu.hist4.Down);
 
   n:=FilterList.Count-1;
   config.SetValue('/Filters/Num',n);
