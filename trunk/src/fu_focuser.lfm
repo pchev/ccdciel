@@ -32,7 +32,7 @@ object f_focuser: Tf_focuser
         Height = 52
         Top = 0
         Width = 178
-        PageIndex = 2
+        PageIndex = 0
         Align = alClient
         TabOrder = 0
         TabStop = True

@@ -1090,10 +1090,6 @@ msgstr ""
 msgid "Step"
 msgstr ""
 
-#: u_translation:rsmoveto
-msgid "Move to"
-msgstr ""
-
 #: u_translation:rsvlearn
 msgid "V-learn"
 msgstr ""

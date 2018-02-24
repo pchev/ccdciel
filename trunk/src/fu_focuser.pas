@@ -113,7 +113,7 @@ begin
   label6.Caption:=rsIncr;
   label1.Caption:=rsPos;
   label2.Caption:=rsStep;
-  BtnSetAbsPos.Caption:=rsMoveTo;
+  BtnSetAbsPos.Caption:=rsSet;
   BtnVcurve.Caption:=rsVLearn;
   label5.Caption:=rsTemp;
 end;

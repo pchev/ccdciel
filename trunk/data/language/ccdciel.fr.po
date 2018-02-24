@@ -6,19 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-24 14:42+0000\n"
-"PO-Revision-Date: 2018-02-24 14:43+0000\n"
+"POT-Creation-Date: 2018-02-24 15:33+0000\n"
+"PO-Revision-Date: 2018-02-24 15:30+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-24 14:44+0000\n"
+"X-Launchpad-Export-Date: 2018-02-24 16:24+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabortexposur
 msgid "Abort exposure"
-msgstr "Interrompre la pose"
+msgstr "Pose interrompue"
 
 #: u_translation.rsabout
 msgid "About"
@@ -398,7 +398,7 @@ msgstr "Connexion"
 
 #: u_translation.rscooler
 msgid "Cooler"
-msgstr "Refroidissement"
+msgstr "Refroidir"
 
 #: u_translation.rscopy
 msgid "Copy"
@@ -819,7 +819,7 @@ msgstr "Capteur principal"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
-msgstr "AIde à la mise au point"
+msgstr "Focus manuel"
 
 #: u_translation.rsmaxoffset
 msgid "Max offset"
@@ -900,10 +900,6 @@ msgstr "Déplacer vers l'intérieur"
 #: u_translation.rsmoveoutward
 msgid "Move outward"
 msgstr "Déplacer vers l'extérieur"
-
-#: u_translation.rsmoveto
-msgid "Move to"
-msgstr "Déplacer vers"
 
 #: u_translation.rsmovetonewpla
 msgid "Move to new planetarium object %s"
@@ -1144,7 +1140,7 @@ msgstr "Demande d'arrêt de la calibration du focuser"
 
 #: u_translation.rsreset
 msgid "Reset"
-msgstr "Réinitialiser"
+msgstr "Rétablir"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -1289,7 +1285,7 @@ msgstr "Serveur"
 
 #: u_translation.rsset
 msgid "Set"
-msgstr "Valider"
+msgstr "Régler"
 
 #: u_translation.rssetbinning
 msgid "Set Binning"
@@ -1414,7 +1410,7 @@ msgstr "Arrêt boucle"
 
 #: u_translation.rsstoppreview
 msgid "Stop preview"
-msgstr "Arrêter l'aperçu"
+msgstr "Arrêt de la prévisualisation"
 
 #: u_translation.rsstoppreviewl
 msgid "Stop preview loop"
