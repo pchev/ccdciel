@@ -6359,13 +6359,8 @@ begin
   autoguider.Guide(true);
   autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
   if autoguider.State<>GUIDER_GUIDING then begin
-    f_pause.Caption:=rsPause;
-    f_pause.Text:=rsFailedToStar;
-    NewMessage(f_pause.Text);
-    if not f_pause.Wait(120) then begin
-       NewMessage(rsFailedToStar);
-       result:=false;
-    end;
+     NewMessage(rsFailedToStar);
+     result:=false;
   end;
  end;
  Wait(2);
