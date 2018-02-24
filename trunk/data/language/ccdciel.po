@@ -1582,3 +1582,547 @@ msgstr ""
 msgid "Create new empty profile"
 msgstr ""
 
+#: u_translation:rsheight
+msgid "Height"
+msgstr ""
+
+#: u_translation:rswidth
+msgid "Width"
+msgstr ""
+
+#: u_translation:rsoptions2
+msgid "Options"
+msgstr ""
+
+#: u_translation:rsok
+msgid "OK"
+msgstr ""
+
+#: u_translation:rsfiles
+msgid "Files"
+msgstr ""
+
+#: u_translation:rscapturefolde
+msgid "Capture folder"
+msgstr ""
+
+#: u_translation:rslogallmessag
+msgid "Log all messages to file "
+msgstr ""
+
+#: u_translation:rstemporaryfol
+msgid "Temporary folder"
+msgstr ""
+
+#: u_translation:rsdefault
+msgid "Default"
+msgstr ""
+
+#: u_translation:rsfilenameopti
+msgid "File name options"
+msgstr ""
+
+#: u_translation:rsfoldernameop
+msgid "Folder name options"
+msgstr ""
+
+#: u_translation:rsallowtogetpr
+msgid "Allow to get program status from TCP/IP internal server"
+msgstr ""
+
+#: u_translation:rslanguage
+msgid "Language"
+msgstr ""
+
+#: u_translation:rsobservatory
+msgid "Observatory"
+msgstr ""
+
+#: u_translation:rsobservername
+msgid "Observer name"
+msgstr ""
+
+#: u_translation:rsobservatoryn
+msgid "Observatory name"
+msgstr ""
+
+#: u_translation:rstelescopenam
+msgid "Telescope name"
+msgstr ""
+
+#: u_translation:rslatitude
+msgid "Latitude"
+msgstr ""
+
+#: u_translation:rslongitude
+msgid "Longitude"
+msgstr ""
+
+#: u_translation:rshorizonprofi
+msgid "Horizon profile"
+msgstr ""
+
+#: u_translation:rsminimumobser
+msgid "Minimum observing elevation "
+msgstr ""
+
+#: u_translation:rscolorpreview
+msgid "Color preview"
+msgstr ""
+
+#: u_translation:rsbayermatrixp
+msgid "Bayer matrix pattern"
+msgstr ""
+
+#: u_translation:rsdebayerthepr
+msgid "Debayer the preview image"
+msgstr ""
+
+#: u_translation:rsreferenceima
+msgid "Reference image"
+msgstr ""
+
+#: u_translation:rstreshold
+msgid "Treshold :"
+msgstr ""
+
+#: u_translation:rsvideopreview
+msgid "Video preview frame rate "
+msgstr ""
+
+#: u_translation:rsbadpixelsdet
+msgid "Bad pixels detection"
+msgstr ""
+
+#: u_translation:rsbadpixelthre
+msgid "Bad pixel threshold"
+msgstr ""
+
+#: u_translation:rssigma
+msgid "sigma"
+msgstr ""
+
+#: u_translation:rspreviewstack
+msgid "Preview stacking"
+msgstr ""
+
+#: u_translation:rssubstractadr
+msgid "Substract a drak frame"
+msgstr ""
+
+#: u_translation:rsshowpreviews
+msgid "Show preview stack option"
+msgstr ""
+
+#: u_translation:rsclippingindi
+msgid "Clipping indicator"
+msgstr ""
+
+#: u_translation:rsshadowadu
+msgid "Shadow ADU"
+msgstr ""
+
+#: u_translation:rshighlightadu
+msgid "Highlight ADU"
+msgstr ""
+
+#: u_translation:rsccdtemperatu2
+msgid "CCD temperature"
+msgstr ""
+
+#: u_translation:rsautomaticcoo
+msgid "Automatic cooling "
+msgstr ""
+
+#: u_translation:rscooldownwhen
+msgid "Cool down when camera is connected"
+msgstr ""
+
+#: u_translation:rsdegree
+msgid "degree"
+msgstr ""
+
+#: u_translation:rsmaximumtempe
+msgid "Maximum temperature change "
+msgstr ""
+
+#: u_translation:rslimittempera
+msgid "Limit temperature change"
+msgstr ""
+
+#: u_translation:rsdegreespermi
+msgid "Degrees per minute"
+msgstr ""
+
+#: u_translation:rsflat
+msgid "Flat"
+msgstr ""
+
+#: u_translation:rssequenceauto
+msgid "Sequence automatic flat"
+msgstr ""
+
+#: u_translation:rsflatautoexpo
+msgid "Flat auto-exposure"
+msgstr ""
+
+#: u_translation:rsuseflatautom
+msgid "Use flat automatic exposure"
+msgstr ""
+
+#: u_translation:rsexposuretime2
+msgid "Exposure time"
+msgstr ""
+
+#: u_translation:rsmax
+msgid "Max:"
+msgstr ""
+
+#: u_translation:rsmin2
+msgid "Min:"
+msgstr ""
+
+#: u_translation:rsflatimagemea
+msgid "Flat image mean level"
+msgstr ""
+
+#: u_translation:rsautomaticfla
+msgid "Automatic flat exposure is required fot the twilight flat."
+msgstr ""
+
+#: u_translation:rsstardetectio
+msgid "Star detection window size "
+msgstr ""
+
+#: u_translation:rsfocuswindows
+msgid "Focus window size"
+msgstr ""
+
+#: u_translation:rsfocusercorre
+msgid "Focuser correction"
+msgstr ""
+
+#: u_translation:rsstabilizatio
+msgid "Stabilization delay after move"
+msgstr ""
+
+#: u_translation:rsdisable
+msgid "Disable"
+msgstr ""
+
+#: u_translation:rsbacklashcomp
+msgid "Backlash compensation"
+msgstr ""
+
+#: u_translation:rsfilteroffset
+msgid "Filter offset"
+msgstr ""
+
+#: u_translation:rsfocusertempe3
+msgid "Focuser temperature compensation"
+msgstr ""
+
+#: u_translation:rstemperaturec
+msgid "Temperature coefficient in steps/C"
+msgstr ""
+
+#: u_translation:rsautofocusmet
+msgid "Autofocus method"
+msgstr ""
+
+#: u_translation:rsseconds
+msgid "seconds"
+msgstr ""
+
+#: u_translation:rsmovedirectio
+msgid "Move direction"
+msgstr ""
+
+#: u_translation:rsrunvcurvelea
+msgid "Run V curve learning again if you change any option."
+msgstr ""
+
+#: u_translation:rsslippagecorr
+msgid "Slippage correction "
+msgstr ""
+
+#: u_translation:rsestimatedsli
+msgid "Estimated slippage since last learning"
+msgstr ""
+
+#: u_translation:rsnumberofdyna
+msgid "Number of dynamic points"
+msgstr ""
+
+#: u_translation:rsmovementbetw
+msgid "Movement between points"
+msgstr ""
+
+#: u_translation:rsinitialmovem
+msgid "Initial movement (steps)"
+msgstr ""
+
+#: u_translation:rsfinalmovemen
+msgid "Final movement (steps)"
+msgstr ""
+
+#: u_translation:rsnearfocus
+msgid "Near focus"
+msgstr ""
+
+#: u_translation:rsnexp
+msgid "n.exp"
+msgstr ""
+
+#: u_translation:rsbinning
+msgid "Binning"
+msgstr ""
+
+#: u_translation:rsautofocustol
+msgid "Autofocus tolerance "
+msgstr ""
+
+#: u_translation:rsminsnr
+msgid "min.SNR"
+msgstr ""
+
+#: u_translation:rsautofocussta6
+msgid "Autofocus star list"
+msgstr ""
+
+#: u_translation:rsbeforeautoma
+msgid "Before automatic focus slew to a near star of magnitude"
+msgstr ""
+
+#: u_translation:rsslewwithapre
+msgid "Slew with a precision of "
+msgstr ""
+
+#: u_translation:rsarcmin
+msgid "[arcmin]"
+msgstr ""
+
+#: u_translation:rsyoucanusethe
+msgid "You can use the menu \"File / Focuser calibration\" to help to fill the values on this page for your specific focuser."
+msgstr ""
+
+#: u_translation:rsastrometry
+msgid "Astrometry"
+msgstr ""
+
+#: u_translation:rsastrometryop
+msgid "Astrometry options"
+msgstr ""
+
+#: u_translation:rsfromtelescop
+msgid "From telescope driver"
+msgstr ""
+
+#: u_translation:rsfocalelength
+msgid "Focale length"
+msgstr ""
+
+#: u_translation:rsstartfocus
+msgid "Start focus"
+msgstr ""
+
+#: u_translation:rspixelsize
+msgid "Pixel size"
+msgstr ""
+
+#: u_translation:rsfromcameradr
+msgid "From camera driver"
+msgstr ""
+
+#: u_translation:rssoftware
+msgid "Software"
+msgstr ""
+
+#: u_translation:rsmaximumsearc
+msgid "Maximum search radius"
+msgstr ""
+
+#: u_translation:rsscaletoleran
+msgid "Scale tolerance"
+msgstr ""
+
+#: u_translation:rsdownsample
+msgid "Downsample"
+msgstr ""
+
+#: u_translation:rsmaximumsourc
+msgid "Maximum sources"
+msgstr ""
+
+#: u_translation:rscreateplotof
+msgid "Create plot of the result"
+msgstr ""
+
+#: u_translation:rsotheroptions
+msgid "Other options "
+msgstr ""
+
+#: u_translation:rscygwinpath
+msgid "Cygwin path"
+msgstr ""
+
+#: u_translation:rsusecustomscr
+msgid "Use custom script"
+msgstr ""
+
+#: u_translation:rselbrusimages
+msgid "Elbrus Images folder "
+msgstr ""
+
+#: u_translation:rsimagesfolder
+msgid "Images folder Unix path"
+msgstr ""
+
+#: u_translation:rsbeforeyoucan
+msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
+msgstr ""
+
+#: u_translation:rsmanyfunction
+msgid "Many functions will not work reliably without an astrometry software."
+msgstr ""
+
+#: u_translation:rsprogramfolde
+msgid "Program folder "
+msgstr ""
+
+#: u_translation:rswaitaftersol
+msgid "Wait after solve"
+msgstr ""
+
+#: u_translation:rsslewing
+msgid "Slewing"
+msgstr ""
+
+#: u_translation:rsprecisionsle
+msgid "Precision slewing options"
+msgstr ""
+
+#: u_translation:rstargetprecis
+msgid "Target precision [arcmin] "
+msgstr ""
+
+#: u_translation:rsmaximumnumbe
+msgid "Maximum number of retry"
+msgstr ""
+
+#: u_translation:rsexposuretime3
+msgid "Exposure time [seconds]"
+msgstr ""
+
+#: u_translation:rscontrolexpos
+msgid "Control exposure"
+msgstr ""
+
+#: u_translation:rscorrectionme
+msgid "Correction method"
+msgstr ""
+
+#: u_translation:rsdelayafterte
+msgid "Delay after telescope slew [seconds] "
+msgstr ""
+
+#: u_translation:rsmeridian
+msgid "Meridian"
+msgstr ""
+
+#: u_translation:rsonmeridiancr
+msgid "On Meridian crossing"
+msgstr ""
+
+#: u_translation:rscantrackpast
+msgid "Can track past meridian for"
+msgstr ""
+
+#: u_translation:rsminutes
+msgid "minutes"
+msgstr ""
+
+#: u_translation:rspausebeforem
+msgid "Pause before meridian flip "
+msgstr ""
+
+#: u_translation:rspauseafterme
+msgid "Pause after meridian flip "
+msgstr ""
+
+#: u_translation:rsnoflipuntilp
+msgid "No flip until past meridian for"
+msgstr ""
+
+#: u_translation:rsautofocusaft
+msgid "Autofocus after meridian flip"
+msgstr ""
+
+#: u_translation:rscalibrateaut
+msgid "Calibrate autoguider after medidian flip"
+msgstr ""
+
+#: u_translation:rsautoguiding
+msgid "Auto-guiding"
+msgstr ""
+
+#: u_translation:rspixels
+msgid "Pixels"
+msgstr ""
+
+#: u_translation:rsraonly
+msgid "RA only"
+msgstr ""
+
+#: u_translation:rssettletolera
+msgid "Settle tolerance"
+msgstr ""
+
+#: u_translation:rsmintime
+msgid "Min. time"
+msgstr ""
+
+#: u_translation:rscalibrationd
+msgid "Calibration %sdelay"
+msgstr ""
+
+#: u_translation:rsstarlostreco
+msgid "Star lost recovery"
+msgstr ""
+
+#: u_translation:rss
+msgid "s"
+msgstr ""
+
+#: u_translation:rsrestartafter
+msgid "Restart after"
+msgstr ""
+
+#: u_translation:rsabortafter
+msgid "Abort after"
+msgstr ""
+
+#: u_translation:rsskychartonlo
+msgid "Skychart on local computer"
+msgstr ""
+
+#: u_translation:rstheprogramne
+msgid "The program need to be restarted"
+msgstr ""
+
+#: u_translation:rsbacklashcomp2
+msgid "Backlash compensation must be in the same direction as auto-focus"
+msgstr ""
+
+#: u_translation:rsinvalidnumbe
+msgid "Invalid number %s"
+msgstr ""
+
+#: u_translation:rsfocuswindowm
+msgid "Focus window must be at least four time greater than Star window!"
+msgstr ""
+
+#: u_translation:rsnearhfdmustb
+msgid "Near HFD must be smaller than Start HFD!"
+msgstr ""
+

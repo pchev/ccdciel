@@ -10,6 +10,7 @@ object f_option: Tf_option
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
+  LCLVersion = '1.8.0.6'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -314,7 +315,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -388,7 +389,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -642,7 +643,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -877,8 +878,8 @@ object f_option: Tf_option
           Height = 40
           Top = 48
           Width = 328
-          ClientHeight = 40
-          ClientWidth = 328
+          ClientHeight = 36
+          ClientWidth = 324
           TabOrder = 1
           object TemperatureSlope: TEdit
             Left = 8
@@ -1881,8 +1882,8 @@ object f_option: Tf_option
               Top = 152
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 387
+              ClientHeight = 36
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
