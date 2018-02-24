@@ -46,7 +46,7 @@ type
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
   TAutofocusDynamicStep=(afdStart,afdMeasure,afdEnd);
   TIndiTransfert=(itNetwork,itDisk);
-  TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin);
+  TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
   TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain);
 
   coordvector = array[1..3] of double;
@@ -248,21 +248,23 @@ const
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
-  SubDirCount=6;
+  SubDirCount=8;
   FileNameCount=7;
   SubDirName: array[0..SubDirCount-1] of string =('Subfolder by sequence name',
                                                 'Subfolder by frame type',
                                                 'Subfolder by object name',
                                                 'Subfolder by plan step',
                                                 'Subfolder by exposure time',
-                                                'Subfolder by binning'
+                                                'Subfolder by binning',
+                                                'Subfolder by date (UT)',
+                                                'Subfolder by date (local time, change at noon)'
                                                 );
   FilenameName: array[0..FileNameCount-1] of string=('Object name',
                                                    'Filter',
                                                    'Exposure time',
                                                    'Binning',
                                                    'CCD temperature',
-                                                   'Date / Sequence',
+                                                   'Date (UT) / Sequence',
                                                    'Gain'
                                                    );
 

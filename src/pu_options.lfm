@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 496
     Top = 0
     Width = 482
-    ActivePage = TabSheet4
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
-    TabIndex = 7
+    TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -155,7 +155,7 @@ object f_option: Tf_option
             Left = 8
             Height = 216
             Top = 8
-            Width = 336
+            Width = 368
             ColCount = 3
             Columns = <            
               item
@@ -165,7 +165,7 @@ object f_option: Tf_option
               end            
               item
                 Title.Caption = 'Title'
-                Width = 200
+                Width = 304
               end>
             FixedRows = 0
             Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
@@ -177,7 +177,7 @@ object f_option: Tf_option
             ColWidths = (
               30
               30
-              200
+              304
             )
           end
         end
@@ -198,7 +198,7 @@ object f_option: Tf_option
             Left = 8
             Height = 216
             Top = 8
-            Width = 336
+            Width = 368
             ColCount = 3
             Columns = <            
               item
@@ -208,11 +208,11 @@ object f_option: Tf_option
               end            
               item
                 Title.Caption = 'Title'
-                Width = 200
+                Width = 304
               end>
             FixedRows = 0
             Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
-            RowCount = 6
+            RowCount = 8
             ScrollBars = ssNone
             TabOrder = 1
             OnClick = FileOrFolderOptionsClick
@@ -220,7 +220,7 @@ object f_option: Tf_option
             ColWidths = (
               30
               30
-              200
+              304
             )
           end
         end
@@ -314,7 +314,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 13
+        ClientHeight = 31
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -388,7 +388,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 13
+        ClientHeight = 31
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -642,7 +642,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 23
+          ClientHeight = 41
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -877,8 +877,8 @@ object f_option: Tf_option
           Height = 40
           Top = 48
           Width = 328
-          ClientHeight = 36
-          ClientWidth = 324
+          ClientHeight = 40
+          ClientWidth = 328
           TabOrder = 1
           object TemperatureSlope: TEdit
             Left = 8

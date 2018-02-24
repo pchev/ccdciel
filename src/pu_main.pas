@@ -4016,6 +4016,7 @@ begin
    f_option.Languages.ItemIndex:=n;
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
+   f_option.FolderOptions.RowCount:=SubDirCount;
    for i:=0 to SubDirCount-1 do begin
      f_option.FolderOptions.Cells[2,i]:=SubDirName[ord(SubDirOpt[i])];
      if SubDirActive[i] then
@@ -4023,6 +4024,7 @@ begin
      else
        f_option.FolderOptions.Cells[1,i]:='0'
    end;
+   f_option.FileOptions.RowCount:=FileNameCount;
    for i:=0 to FileNameCount-1 do begin
     f_option.FileOptions.Cells[2,i]:=FileNameName[ord(FileNameOpt[i])];
     if FileNameActive[i] then
@@ -5001,7 +5003,7 @@ begin
 end;
 
 procedure Tf_main.CameraSaveNewImage;
-var dt: Tdatetime;
+var dt,dn: Tdatetime;
     fn,fd,buf: string;
     ccdtemp: double;
     fileseqnum,i: integer;
@@ -5009,6 +5011,7 @@ var dt: Tdatetime;
 begin
 try
  dt:=NowUTC;
+ dn:=now-0.5;
  // construct path
  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
  for i:=0 to SubDirCount-1 do begin
@@ -5037,6 +5040,8 @@ try
                   fd:=slash(fd+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
              end;
      sdBin : if SubDirActive[i] then fd:=slash(fd+f_capture.Binning.Text);
+     sdDate: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dt));
+     sdNight: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dn));
    end;
  end;
  ForceDirectoriesUTF8(fd);
