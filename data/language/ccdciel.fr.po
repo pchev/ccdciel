@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-22 22:36+0000\n"
-"PO-Revision-Date: 2018-02-22 23:23+0000\n"
+"POT-Creation-Date: 2018-02-24 14:42+0000\n"
+"PO-Revision-Date: 2018-02-24 14:43+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-22 23:24+0000\n"
-"X-Generator: Launchpad (build 18553)\n"
+"X-Launchpad-Export-Date: 2018-02-24 14:44+0000\n"
+"X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabortexposur
 msgid "Abort exposure"
@@ -39,6 +39,10 @@ msgstr "Appliquer à l'image en cours"
 #: u_translation.rsareyousureyo
 msgid "Are you sure you want to disconnect all the devices now?"
 msgstr "Êtes-vous sûr de vouloir déconnecter tous les périphériques maintenant?"
+
+#: u_translation.rsascominterfa
+msgid "ASCOM interface is only available on Windows."
+msgstr "L'interface ASCOM est disponible uniquement sous Windows."
 
 #: u_translation.rsautofocus
 msgid "Autofocus"
@@ -156,10 +160,6 @@ msgstr "Autofocus réussi"
 msgid "Autoguider"
 msgstr "Auto-guideur"
 
-#: u_translation.rsautoguider2
-msgid "Autoguider: %s"
-msgstr "Autoguideur: %s"
-
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
 msgstr "Autoguideur non connecté"
@@ -192,6 +192,10 @@ msgstr "Carte des pixels défecteux effacée."
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
 msgstr "Avant d'utiliser cet outil vous devez connecter la caméra, la monture et le planétarium"
 
+#: u_translation.rsbesuretoconf
+msgid "Be sure to configure the camera connection."
+msgstr "Assurez-vous de configurer la connexion de la caméra."
+
 #: u_translation.rsbin
 msgid "Bin"
 msgstr "Bin"
@@ -213,8 +217,8 @@ msgid "Cam."
 msgstr "Cam."
 
 #: u_translation.rscamera
-msgid "camera"
-msgstr "caméra"
+msgid "Camera"
+msgstr "Caméra"
 
 #: u_translation.rscameraandmou
 msgid "Camera and mount must be connected!"
@@ -336,6 +340,10 @@ msgstr "Température CCD"
 msgid "Center"
 msgstr "Centre"
 
+#: u_translation.rschoose
+msgid "Choose"
+msgstr "Sélection"
+
 #: u_translation.rsclearbadpixe
 msgid "Clear bad pixel map"
 msgstr "Effacer la carte des pixels défecteux"
@@ -368,6 +376,10 @@ msgstr "Configuration enregistrée"
 msgid "Connect"
 msgstr "Connecter"
 
+#: u_translation.rsconnectandge
+msgid "Connect and get devices list"
+msgstr "Connexion et liste des périphériques"
+
 #: u_translation.rsconnected
 msgid "%s connected"
 msgstr "%s connecté"
@@ -392,6 +404,10 @@ msgstr "Refroidissement"
 msgid "Copy"
 msgstr "Copier"
 
+#: u_translation.rscopycurrentp
+msgid "Copy current profile to"
+msgstr "Copier le profile courant vers"
+
 #: u_translation.rscopyto
 msgid "Copy to "
 msgstr "Copier vers "
@@ -407,6 +423,10 @@ msgstr "Couvrez la caméra et régler le temps d'exposition et le binning dans l
 #: u_translation.rscreatebadpix
 msgid "Create bad pixel map"
 msgstr "Créer la carte des pixels défecteux"
+
+#: u_translation.rscreatenewemp
+msgid "Create new empty profile"
+msgstr "Créer un nouveau profile vide"
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -437,8 +457,8 @@ msgid "Desired temperature"
 msgstr "Température désirée"
 
 #: u_translation.rsdevices
-msgid "Devices"
-msgstr "Périphériques"
+msgid "Device"
+msgstr "Périphérique"
 
 #: u_translation.rsdevicesconne
 msgid "Devices connection"
@@ -448,6 +468,10 @@ msgstr "Connexion des périphériques"
 msgid "Devices Setup%s"
 msgstr "Configuration des périphériques%s"
 
+#: u_translation.rsdirectory
+msgid "Directory"
+msgstr "Répertoire"
+
 #: u_translation.rsdisconnect
 msgid "Disconnect"
 msgstr "Déconnecter"
@@ -455,10 +479,6 @@ msgstr "Déconnecter"
 #: u_translation.rsdisconnected
 msgid "%s disconnected"
 msgstr "%s déconnecté"
-
-#: u_translation.rsdisconnected2
-msgid "Disconnected from autoguider software!"
-msgstr "Déconnecté du logiciel d'autoguidage!"
 
 #: u_translation.rsdisconnected3
 msgid "Disconnected"
@@ -561,8 +581,12 @@ msgid "Filters"
 msgstr "Filtres"
 
 #: u_translation.rsfilterwheel
-msgid "filter wheel"
-msgstr "roue à filtres"
+msgid "Filter wheel"
+msgstr "Roue à filtres"
+
+#: u_translation.rsfilterwheeli
+msgid "Filter wheel in camera connection. (Restart required!)"
+msgstr "Roue à filtre avec la caméra. (Redémarrage requis!)"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -600,10 +624,6 @@ msgstr "Direction: "
 msgid "Focuser"
 msgstr "Focuser"
 
-#: u_translation.rsfocuser2
-msgid "focuser"
-msgstr "focuser"
-
 #: u_translation.rsfocusercalib
 msgid "Focuser calibration"
 msgstr "Calibration du focuser"
@@ -611,6 +631,10 @@ msgstr "Calibration du focuser"
 #: u_translation.rsfocusercalib2
 msgid "Focuser calibration started"
 msgstr "Début de la calibration du focuser"
+
+#: u_translation.rsfocuserinmou
+msgid "Focuser in mount connection. (Restart required!)"
+msgstr "Focuseur avec la monture. (Redémarrage requis!)"
 
 #: u_translation.rsfocuseroffse
 msgid "Focuser offset"
@@ -639,6 +663,10 @@ msgstr "Position de mise au point"
 #: u_translation.rsfocusquality
 msgid "Focus quality = %s"
 msgstr "Qualité du focus = %s"
+
+#: u_translation.rsfounddevices
+msgid "Found %s devices"
+msgstr "%s périphériques trouvés"
 
 #: u_translation.rsframe
 msgid "Frame"
@@ -676,6 +704,10 @@ msgstr "Obtenir la position du télescope"
 msgid "Guide"
 msgstr "Guidage"
 
+#: u_translation.rsguidersensor
+msgid "Guider sensor;"
+msgstr "Capteur de guidage"
+
 #: u_translation.rsguiding
 msgid "%s guiding"
 msgstr "%s guide"
@@ -683,6 +715,10 @@ msgstr "%s guide"
 #: u_translation.rshalt
 msgid "Halt"
 msgstr "Arrêter"
+
+#: u_translation.rsheartbeatthr
+msgid "Heart beat threshold [minutes]"
+msgstr "Seuil de Heartbeat [minutes]"
 
 #: u_translation.rshelp
 msgid "Help"
@@ -703,6 +739,10 @@ msgstr "Inspection de l'image"
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
 msgstr "HFD median de l'image = %s"
+
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr "Transfert d'image"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
@@ -732,6 +772,10 @@ msgstr "La mise au point sur place a échoué!"
 msgid "Intensity"
 msgstr "Intensité"
 
+#: u_translation.rsinterface
+msgid "Interface"
+msgstr "Interface"
+
 #: u_translation.rsinvalidbinni
 msgid "Invalid binning %s"
 msgstr "Binning incorrect %s"
@@ -757,21 +801,21 @@ msgstr "Fichier FITS non valide ou non supporté %s"
 msgid "Learn"
 msgstr "Apprendre"
 
-#: u_translation.rslinear
-msgid "Linear"
-msgstr "Linéaire"
-
 #: u_translation.rsload
 msgid "Load"
 msgstr "Charger"
 
-#: u_translation.rslog
-msgid "Log"
-msgstr "Log"
+#: u_translation.rsloadconfigur
+msgid "Load configuration on startup"
+msgstr "Charge la configuration au démarrage"
 
 #: u_translation.rsloop
 msgid "Loop"
 msgstr "Boucle"
+
+#: u_translation.rsmainsensor
+msgid "Main sensor"
+msgstr "Capteur principal"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
@@ -842,8 +886,8 @@ msgid "Mnt."
 msgstr "Mnt."
 
 #: u_translation.rsmount
-msgid "mount"
-msgstr "mounture"
+msgid "Mount"
+msgstr "Monture"
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
@@ -864,6 +908,10 @@ msgstr "Déplacer vers"
 #: u_translation.rsmovetonewpla
 msgid "Move to new planetarium object %s"
 msgstr "Déplacement vers le nouvel objet du planétarium %s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr "Réseau"
 
 #: u_translation.rsnew
 msgid "New"
@@ -900,6 +948,10 @@ msgstr "Pas assez de points avant ou après la position de mise au point après 
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Pas assez de points avant ou après la position de mise au point, fait un nouvel essai."
+
+#: u_translation.rsnotimplement
+msgid "Not implemented!"
+msgstr "Non implémenté!"
 
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
@@ -1018,6 +1070,10 @@ msgstr "Veuillez faire l'apprentissage la Vcurve pour le binning &s"
 msgid "Please select a script!"
 msgstr "Veuillez sélectionner un script!"
 
+#: u_translation.rsport
+msgid "Port"
+msgstr "Port"
+
 #: u_translation.rspos
 msgid "Pos."
 msgstr "Pos."
@@ -1045,6 +1101,10 @@ msgstr "Quitter"
 #: u_translation.rsra
 msgid "RA"
 msgstr "AD"
+
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr "Disque en mémoire"
 
 #: u_translation.rsreachfocuser
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
@@ -1126,10 +1186,6 @@ msgstr "Tourner"
 msgid "Rotator"
 msgstr "Rotateur"
 
-#: u_translation.rsrotator2
-msgid "rotator"
-msgstr "rotateur"
-
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
 msgstr "Le rotateur n'est pas connecté"
@@ -1190,6 +1246,10 @@ msgstr "Choisir d'abord une étoile!"
 msgid "Send image to planetarium"
 msgstr "Afficher l'image dans le planétarium"
 
+#: u_translation.rssensor
+msgid "Sensor"
+msgstr "Capteur"
+
 #: u_translation.rsseq
 msgid "Seq:"
 msgstr "Séq:"
@@ -1223,6 +1283,10 @@ msgstr "La séquence continue avec la posiiton courante du focuser"
 msgid "Sequence will run without guiding!"
 msgstr "La séqunce se fait sans guidage!"
 
+#: u_translation.rsserver
+msgid "Server"
+msgstr "Serveur"
+
 #: u_translation.rsset
 msgid "Set"
 msgstr "Valider"
@@ -1243,6 +1307,10 @@ msgstr "Direction de mise au point vers l'extérieur"
 msgid "Setpoint"
 msgstr "Consigne"
 
+#: u_translation.rssetup
+msgid "Setup"
+msgstr "Configuration"
+
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
 msgstr "Afficher le journal courant"
@@ -1262,10 +1330,6 @@ msgstr "Erreur de socket %s. %s"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Vitesse"
-
-#: u_translation.rssqrt
-msgid "Sqrt"
-msgstr "Sqrt"
 
 #: u_translation.rsstack
 msgid "Stack"
@@ -1416,6 +1480,10 @@ msgstr "Le focuser est maintenant positionné à la position du meilleur HFD."
 msgid " Tilt indication:%s%"
 msgstr " Indication d'inclinaison: %s%"
 
+#: u_translation.rstimeout
+msgid "Timeout"
+msgstr "Délai d'attente"
+
 #: u_translation.rstimer
 msgid "Timer"
 msgstr "Minuteur"
@@ -1468,6 +1536,26 @@ msgstr "Coté du pied inconnu"
 msgid "Unparked"
 msgstr "Non parqué"
 
+#: u_translation.rsusefilterwhe
+msgid "Use filter wheel"
+msgstr "Utilise la roue à filtre"
+
+#: u_translation.rsusefocuser
+msgid "Use focuser"
+msgstr "Utilise le focuseur"
+
+#: u_translation.rsusemount
+msgid "Use mount"
+msgstr "Utilise la monture"
+
+#: u_translation.rsuserotator
+msgid "Use rotator"
+msgstr "Utilise le rotateur"
+
+#: u_translation.rsusewatchdog
+msgid "Use watchdog"
+msgstr "Utilise le Watchdog"
+
 #: u_translation.rsvcurvequalit
 msgid "V curve quality is low. Do you really want to save this curve?"
 msgstr "La qualité de la Vcurve est faible. Voulez-vous vraiment enregistrer cette courbe?"
@@ -1505,8 +1593,8 @@ msgid "Warning, reversing the rotator will invalidated the calibration. Do you w
 msgstr "Attention, l'inversion du rotateur invalidera le calibrage. Voulez-vous continuer?"
 
 #: u_translation.rswatchdog
-msgid "watchdog"
-msgstr "watchdog"
+msgid "Watchdog"
+msgstr "Watchdog"
 
 #: u_translation.rswch
 msgid "Wch."

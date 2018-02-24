@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI,
+uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_translation,
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
@@ -175,6 +175,7 @@ type
     procedure SetRotatorConnection(value: TDevInterface);
     procedure SetMountConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
+    procedure SetLang;
   public
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface: TDevInterface;
@@ -206,10 +207,79 @@ uses LazFileUtils;
 procedure Tf_setup.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  SetLang;
   FRestartRequired:=false;
   LockInterfaceChange:=false;
   InitialLock:=true;
   Pagecontrol1.ActivePage:=DeviceInterface;
+end;
+
+procedure Tf_setup.SetLang;
+begin
+  DeviceInterface.Caption:=rsInterface;
+  GetIndiDevices.Caption:=rsConnectAndGe;
+  Label18.Caption:=rsServer;
+  Label22.Caption:=rsPort;
+  Label1.Caption:=rsTimeout;
+  Label2.Caption:=format(rsProfile,['']);
+  BtnNewProfile.Caption:=rsNew;
+  BtnDeleteProfile.Caption:=rsDelete;
+  BtnCopyProfile.Caption:=rsCopy;
+  Camera.Caption:=rsCamera;
+  BtnChooseCamera.Caption:=rsChoose;
+  BtnSetupCamera.Caption:=rsSetup;
+  BtnAboutCamera.Caption:=rsAbout;
+  Label3.Caption:=rsDevices;
+  Label4.Caption:=rsPort;
+  Label15.Caption:=rsSensor;
+  IndiSensor.Items[0]:=rsMainSensor;
+  IndiSensor.Items[1]:=rsGuiderSensor;
+  CameraAutoLoadConfig.Caption:=rsLoadConfigur;
+  CameraIndiTransfert.Caption:=rsImageTransfe;
+  CameraIndiTransfert.Items[0]:=rsNetwork;
+  CameraIndiTransfert.Items[1]:=rsRAMDisk;
+  Label5.Caption:=rsDirectory;
+  Filterwheel.Caption:=rsFilterWheel;
+  BtnChooseFilter.Caption:=rsChoose;
+  BtnAboutCamera1.Caption:=rsAbout;
+  BtnSetupCamera1.Caption:=rsSetup;
+  FilterWheelInCameraBox.Caption:=rsFilterWheelI;
+  Label17.Caption:=rsBeSureToConf;
+  Label6.Caption:=rsDevices;
+  Label7.Caption:=rsPort;
+  WheelAutoLoadConfig.Caption:=rsLoadConfigur;
+  DeviceFilterWheel.Caption:=rsUseFilterWhe;
+  Focuser.Caption:=rsFocuser;
+  Label16.Caption:=rsNotImplement;
+  BtnChooseFocuser.Caption:=rsChoose;
+  BtnAboutCamera2.Caption:=rsAbout;
+  BtnSetupCamera2.Caption:=rsSetup;
+  FocuserInMountBox.Caption:=rsFocuserInMou;
+  Label9.Caption:=rsDevices;
+  Label10.Caption:=rsPort;
+  FocuserAutoLoadConfig.Caption:=rsLoadConfigur;
+  DeviceFocuser.Caption:=rsUseFocuser;
+  Rotator.Caption:=rsRotator;
+  DeviceRotator.Caption:=rsUseRotator;
+  BtnChooseRotator.Caption:=rsChoose;
+  BtnAboutRotator.Caption:=rsAbout;
+  BtnSetupRotator.Caption:=rsSetup;
+  Label11.Caption:=rsDevices;
+  Label14.Caption:=rsPort;
+  RotatorAutoLoadConfig.Caption:=rsLoadConfigur;
+  Mount.Caption:=rsMount;
+  BtnChooseMount.Caption:=rsChoose;
+  BtnAboutCamera3.Caption:=rsAbout;
+  BtnSetupCamera3.Caption:=rsSetup;
+  Label12.Caption:=rsDevices;
+  Label13.Caption:=rsPort;
+  MountAutoLoadConfig.Caption:=rsLoadConfigur;
+  DeviceMount.Caption:=rsUseMount;
+  Watchdog.Caption:=rsWatchdog;
+  Label19.Caption:=rsDevices;
+  WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
+  Label20.Caption:=rsHeartBeatThr;
+  DeviceWatchdog.Caption:=rsUseWatchdog;
 end;
 
 procedure Tf_setup.LoadProfileList;
@@ -384,7 +454,7 @@ begin
  if InterfaceSelectionBox.ItemIndex=1 then begin
     LockInterfaceChange:=true;
     InterfaceSelectionBox.ItemIndex:=0;
-    ShowMessage('ASCOM interface is only available on Windows.');
+    ShowMessage(rsASCOMInterfa);
  end;
 {$endif}
 end;
@@ -685,7 +755,7 @@ begin
      if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
   for i:=0 to WatchdogIndiDevice.Items.Count-1 do
      if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
-  LabelIndiDevCount.Caption:='Found '+IntToStr(indiclient.devices.Count)+' devices';
+  LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
   indiclient.DisconnectServer;
   Screen.Cursor:=crDefault;
 end;
@@ -720,7 +790,7 @@ procedure Tf_setup.BtnCopyProfileClick(Sender: TObject);
 var newp,curconfig,newconfig:string;
   n:integer;
 begin
-  newp:=FormEntry(self,'Copy current profile to','');
+  newp:=FormEntry(self, rsCopyCurrentP, '');
   newp:=trim(newp);
   if (newp<>'')and(newp<>'default') then begin
     if profile='default' then
@@ -744,7 +814,7 @@ var newp,curconfig,newconfig:string;
   n:integer;
   f:textfile;
 begin
-  newp:=FormEntry(self,'Create new empty profile','');
+  newp:=FormEntry(self, rsCreateNewEmp, '');
   newp:=trim(newp);
   if (newp<>'')and(newp<>'default') then begin
     newconfig:=slash(ConfigDir)+'ccdciel_'+newp+'.conf';
@@ -768,7 +838,8 @@ begin
   if profile='default' then exit;
   fn:='ccdciel_'+profile+'.conf';
   fn:=slash(ConfigDir)+fn;
-  if MessageDlgPos('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0,mouse.CursorPos.x,mouse.CursorPos.y)=mrYes then begin
+  if MessageDlgPos(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0,
+    mouse.CursorPos.x, mouse.CursorPos.y)=mrYes then begin
      DeleteFileUTF8(fn);
      LoadProfileList;
      n:=ProfileList.Items.IndexOf('default');

@@ -174,18 +174,6 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: u_translation:rslinear
-msgid "Linear"
-msgstr ""
-
-#: u_translation:rslog
-msgid "Log"
-msgstr ""
-
-#: u_translation:rssqrt
-msgid "Sqrt"
-msgstr ""
-
 #: u_translation:rszoom
 msgid "Zoom"
 msgstr ""
@@ -307,7 +295,7 @@ msgid "%s guiding"
 msgstr ""
 
 #: u_translation:rsdevices
-msgid "Devices"
+msgid "Device"
 msgstr ""
 
 #: u_translation:rsconfiguratio
@@ -355,27 +343,19 @@ msgid "Please configure your"
 msgstr ""
 
 #: u_translation:rscamera
-msgid "camera"
+msgid "Camera"
 msgstr ""
 
 #: u_translation:rsfilterwheel
-msgid "filter wheel"
-msgstr ""
-
-#: u_translation:rsfocuser2
-msgid "focuser"
-msgstr ""
-
-#: u_translation:rsrotator2
-msgid "rotator"
+msgid "Filter wheel"
 msgstr ""
 
 #: u_translation:rsmount
-msgid "mount"
+msgid "Mount"
 msgstr ""
 
 #: u_translation:rswatchdog
-msgid "watchdog"
+msgid "Watchdog"
 msgstr ""
 
 #: u_translation:rsareyousureyo
@@ -484,14 +464,6 @@ msgstr ""
 
 #: u_translation:rsunparked
 msgid "Unparked"
-msgstr ""
-
-#: u_translation:rsautoguider2
-msgid "Autoguider: %s"
-msgstr ""
-
-#: u_translation:rsdisconnected2
-msgid "Disconnected from autoguider software!"
 msgstr ""
 
 #: u_translation:rsstopguiding
@@ -1496,5 +1468,121 @@ msgstr ""
 
 #: u_translation:rsout
 msgid "Out"
+msgstr ""
+
+#: u_translation:rsinterface
+msgid "Interface"
+msgstr ""
+
+#: u_translation:rsconnectandge
+msgid "Connect and get devices list"
+msgstr ""
+
+#: u_translation:rsserver
+msgid "Server"
+msgstr ""
+
+#: u_translation:rsport
+msgid "Port"
+msgstr ""
+
+#: u_translation:rstimeout
+msgid "Timeout"
+msgstr ""
+
+#: u_translation:rschoose
+msgid "Choose"
+msgstr ""
+
+#: u_translation:rssetup
+msgid "Setup"
+msgstr ""
+
+#: u_translation:rssensor
+msgid "Sensor"
+msgstr ""
+
+#: u_translation:rsmainsensor
+msgid "Main sensor"
+msgstr ""
+
+#: u_translation:rsguidersensor
+msgid "Guider sensor;"
+msgstr ""
+
+#: u_translation:rsloadconfigur
+msgid "Load configuration on startup"
+msgstr ""
+
+#: u_translation:rsimagetransfe
+msgid "Image transfer"
+msgstr ""
+
+#: u_translation:rsnetwork
+msgid "Network"
+msgstr ""
+
+#: u_translation:rsramdisk
+msgid "RAM Disk"
+msgstr ""
+
+#: u_translation:rsdirectory
+msgid "Directory"
+msgstr ""
+
+#: u_translation:rsbesuretoconf
+msgid "Be sure to configure the camera connection."
+msgstr ""
+
+#: u_translation:rsfilterwheeli
+msgid "Filter wheel in camera connection. (Restart required!)"
+msgstr ""
+
+#: u_translation:rsusefilterwhe
+msgid "Use filter wheel"
+msgstr ""
+
+#: u_translation:rsnotimplement
+msgid "Not implemented!"
+msgstr ""
+
+#: u_translation:rsusefocuser
+msgid "Use focuser"
+msgstr ""
+
+#: u_translation:rsfocuserinmou
+msgid "Focuser in mount connection. (Restart required!)"
+msgstr ""
+
+#: u_translation:rsuserotator
+msgid "Use rotator"
+msgstr ""
+
+#: u_translation:rsusemount
+msgid "Use mount"
+msgstr ""
+
+#: u_translation:rsheartbeatthr
+msgid "Heart beat threshold [minutes]"
+msgstr ""
+
+#: u_translation:rsusewatchdog
+msgid "Use watchdog"
+msgstr ""
+
+#: u_translation:rsascominterfa
+msgid "ASCOM interface is only available on Windows."
+msgstr ""
+
+#: u_translation:rsfounddevices
+msgid "Found %s devices"
+msgstr ""
+
+#: u_translation:rscopycurrentp
+msgid "Copy current profile to"
+msgstr ""
+
+#: u_translation:rscreatenewemp
+msgid "Create new empty profile"
 msgstr ""
 
