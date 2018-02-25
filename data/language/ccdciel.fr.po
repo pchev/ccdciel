@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-25 13:27+0000\n"
-"PO-Revision-Date: 2018-02-25 15:03+0000\n"
+"POT-Creation-Date: 2018-02-25 15:33+0000\n"
+"PO-Revision-Date: 2018-02-25 15:42+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-25 15:08+0000\n"
+"X-Launchpad-Export-Date: 2018-02-25 15:44+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabortafter
@@ -279,6 +279,10 @@ msgstr "Bin"
 #: u_translation.rsbinning
 msgid "Binning"
 msgstr "Binning"
+
+#: u_translation.rsblue
+msgid "blue"
+msgstr "bleu"
 
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
@@ -572,6 +576,10 @@ msgstr "Plan courant"
 msgid "Cygwin path"
 msgstr "Dossier de Cygwin"
 
+#: u_translation.rsdateutsequen
+msgid "Date (UT) / Sequence"
+msgstr "Date (TU) / Séquence"
+
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
 msgstr "Débayeriser l'aperçu"
@@ -679,6 +687,10 @@ msgstr "Sous-échantillonner"
 #: u_translation.rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
 msgstr "Voulez-vous supprimer le fichier %s ?"
+
+#: u_translation.rseast
+msgid "East"
+msgstr "Est"
 
 #: u_translation.rseastpointing
 msgid "East (Pointing West)"
@@ -939,6 +951,10 @@ msgstr "Obtenir la position de la dernière image"
 #: u_translation.rsgetcurrentpo3
 msgid "Get current position from telescope"
 msgstr "Obtenir la position du télescope"
+
+#: u_translation.rsgreen
+msgid "green"
+msgstr "vert"
 
 #: u_translation.rsguide
 msgid "Guide"
@@ -1277,6 +1293,10 @@ msgstr "n.exp"
 msgid "No flip until past meridian for"
 msgstr "Pas de retournement pour"
 
+#: u_translation.rsnorth
+msgid "North"
+msgstr "Nord"
+
 #: u_translation.rsnoscriptarer
 msgid "No script are running."
 msgstr "Aucun script n'est en cours d'exécution."
@@ -1317,6 +1337,10 @@ msgstr "Nombre de pas"
 msgid "Object"
 msgstr "Objet"
 
+#: u_translation.rsobjectname
+msgid "Object name"
+msgstr "Nom de l'objet"
+
 #: u_translation.rsobservatory
 msgid "Observatory"
 msgstr "Observatoire"
@@ -1343,7 +1367,7 @@ msgstr "Passage du méridien"
 
 #: u_translation.rsopendarkfile
 msgid "Open Dark file"
-msgstr ""
+msgstr "Ouvrir un fichier Dark"
 
 #: u_translation.rsopenfile
 msgid "Open file %s"
@@ -1545,6 +1569,10 @@ msgstr "Recentrage de la dernière position"
 #: u_translation.rsrecenteronla2
 msgid "Recenter on last image"
 msgstr "Recentrage sur la dernière image"
+
+#: u_translation.rsred
+msgid "red"
+msgstr "rouge"
 
 #: u_translation.rsreferenceima
 msgid "Reference image"
@@ -1811,6 +1839,10 @@ msgstr "Erreur de socket %s. %s"
 msgid "Software"
 msgstr "Logiciel"
 
+#: u_translation.rssouth
+msgid "South"
+msgstr "Sud"
+
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Vitesse"
@@ -1927,6 +1959,38 @@ msgstr "Arrêter l'enregistrement"
 #: u_translation.rsstopvcurvele
 msgid "Stop Vcurve learning"
 msgstr "Arrêter l’apprentissage de la Vcurve"
+
+#: u_translation.rssubfolderbyb
+msgid "Subfolder by binning"
+msgstr "Sous-dossier par binning"
+
+#: u_translation.rssubfolderbyd
+msgid "Subfolder by date (UT)"
+msgstr "Sous-dossier par date (TU)"
+
+#: u_translation.rssubfolderbyd2
+msgid "Subfolder by date (local time, change at noon)"
+msgstr "Sous-dossier par date (temps local, change à midi)"
+
+#: u_translation.rssubfolderbye
+msgid "Subfolder by exposure time"
+msgstr "Sous-dossier par temps d'exposition"
+
+#: u_translation.rssubfolderbyf
+msgid "Subfolder by frame type"
+msgstr "Sous-dossier par type d'image"
+
+#: u_translation.rssubfolderbyo
+msgid "Subfolder by object name"
+msgstr "Sous-dossier par nom d'objet"
+
+#: u_translation.rssubfolderbyp
+msgid "Subfolder by plan step"
+msgstr "Sous-dossier par étape"
+
+#: u_translation.rssubfolderbys
+msgid "Subfolder by sequence name"
+msgstr "Sous-dossier par nom de séquence"
 
 #: u_translation.rssubstractadr
 msgid "Substract a drak frame"
@@ -2143,6 +2207,10 @@ msgstr "Watchdog"
 #: u_translation.rswch
 msgid "Wch."
 msgstr "Wch."
+
+#: u_translation.rswest
+msgid "West"
+msgstr "Ouest"
 
 #: u_translation.rswestpointing
 msgid "West (Pointing East)"

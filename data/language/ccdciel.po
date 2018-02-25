@@ -2138,3 +2138,71 @@ msgstr ""
 msgid "Open Dark file"
 msgstr ""
 
+#: u_translation:rssubfolderbys
+msgid "Subfolder by sequence name"
+msgstr ""
+
+#: u_translation:rssubfolderbyf
+msgid "Subfolder by frame type"
+msgstr ""
+
+#: u_translation:rssubfolderbyo
+msgid "Subfolder by object name"
+msgstr ""
+
+#: u_translation:rssubfolderbyp
+msgid "Subfolder by plan step"
+msgstr ""
+
+#: u_translation:rssubfolderbye
+msgid "Subfolder by exposure time"
+msgstr ""
+
+#: u_translation:rssubfolderbyb
+msgid "Subfolder by binning"
+msgstr ""
+
+#: u_translation:rssubfolderbyd
+msgid "Subfolder by date (UT)"
+msgstr ""
+
+#: u_translation:rssubfolderbyd2
+msgid "Subfolder by date (local time, change at noon)"
+msgstr ""
+
+#: u_translation:rsobjectname
+msgid "Object name"
+msgstr ""
+
+#: u_translation:rsdateutsequen
+msgid "Date (UT) / Sequence"
+msgstr ""
+
+#: u_translation:rsnorth
+msgid "North"
+msgstr ""
+
+#: u_translation:rssouth
+msgid "South"
+msgstr ""
+
+#: u_translation:rswest
+msgid "West"
+msgstr ""
+
+#: u_translation:rseast
+msgid "East"
+msgstr ""
+
+#: u_translation:rsred
+msgid "red"
+msgstr ""
+
+#: u_translation:rsgreen
+msgid "green"
+msgstr ""
+
+#: u_translation:rsblue
+msgid "blue"
+msgstr ""
+

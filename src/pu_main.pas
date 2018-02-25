@@ -1331,6 +1331,21 @@ begin
    MenuBugReport.Caption := rsReportAProbl;
    MenuDownload.Caption := rsDownloadLate;
    MenuHelpAbout.Caption := rsAbout;
+   SubDirName[0]:=rsSubfolderByS;
+   SubDirName[1]:=rsSubfolderByF;
+   SubDirName[2]:=rsSubfolderByO;
+   SubDirName[3]:=rsSubfolderByP;
+   SubDirName[4]:=rsSubfolderByE;
+   SubDirName[5]:=rsSubfolderByB;
+   SubDirName[6]:=rsSubfolderByD;
+   SubDirName[7]:=rsSubfolderByD2;
+   FilenameName[0]:=rsObjectName;
+   FilenameName[1]:=rsFilter;
+   FilenameName[1]:=rsExposureTime2;
+   FilenameName[1]:=rsBinning;
+   FilenameName[1]:=rsCCDTemperatu2;
+   FilenameName[1]:=rsDateUTSequen;
+   FilenameName[1]:=rsGain;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);

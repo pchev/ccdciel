@@ -585,6 +585,23 @@ resourcestring
   rsCreateFromCa = 'Create from camera';
   rsCreateFromDa = 'Create from dark file';
   rsOpenDarkFile = 'Open Dark file';
+  rsSubfolderByS = 'Subfolder by sequence name';
+  rsSubfolderByF = 'Subfolder by frame type';
+  rsSubfolderByO = 'Subfolder by object name';
+  rsSubfolderByP = 'Subfolder by plan step';
+  rsSubfolderByE = 'Subfolder by exposure time';
+  rsSubfolderByB = 'Subfolder by binning';
+  rsSubfolderByD = 'Subfolder by date (UT)';
+  rsSubfolderByD2 = 'Subfolder by date (local time, change at noon)';
+  rsObjectName = 'Object name';
+  rsDateUTSequen = 'Date (UT) / Sequence';
+  rsNorth = 'North';
+  rsSouth = 'South';
+  rsWest = 'West';
+  rsEast = 'East';
+  rsRed = 'red';
+  rsGreen = 'green';
+  rsBlue = 'blue';
 
 implementation
 
