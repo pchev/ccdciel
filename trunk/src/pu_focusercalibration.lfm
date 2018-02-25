@@ -11,14 +11,13 @@ object f_focusercalibration: Tf_focusercalibration
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.8.0.6'
   Visible = False
   object Notebook1: TNotebook
     Left = 0
     Height = 319
     Top = 0
     Width = 517
-    PageIndex = 0
+    PageIndex = 3
     Align = alClient
     TabOrder = 0
     object Page1: TPage
@@ -198,7 +197,7 @@ object f_focusercalibration: Tf_focusercalibration
           end        
           item
             Intervals.Count = 7
-            Intervals.NiceSteps = '1|10|100|1000'
+            Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
             Intervals.Options = [aipUseCount, aipUseNiceSteps]
             Alignment = calBottom
             AtDataOnly = True
