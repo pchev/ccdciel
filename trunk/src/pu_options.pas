@@ -586,6 +586,15 @@ begin
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
   Label25.Caption := rsPort;
   Label24.Caption := rsServer;
+  hemis.Items[0]:=rsNorth;
+  hemis.Items[1]:=rsSouth;
+  long.Items[0]:=rsWest;
+  long.Items[1]:=rsEast;
+  RefColor.Items[0]:=rsRed;
+  RefColor.Items[1]:=rsGreen;
+  RefColor.Items[2]:=rsBlue;
+  FocuserBacklashDirection.Items[0]:=rsIn;
+  FocuserBacklashDirection.Items[1]:=rsOut;
 end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);

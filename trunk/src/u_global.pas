@@ -250,23 +250,6 @@ const
   ScriptTxt='Script';
   SubDirCount=8;
   FileNameCount=7;
-  SubDirName: array[0..SubDirCount-1] of string =('Subfolder by sequence name',
-                                                'Subfolder by frame type',
-                                                'Subfolder by object name',
-                                                'Subfolder by plan step',
-                                                'Subfolder by exposure time',
-                                                'Subfolder by binning',
-                                                'Subfolder by date (UT)',
-                                                'Subfolder by date (local time, change at noon)'
-                                                );
-  FilenameName: array[0..FileNameCount-1] of string=('Object name',
-                                                   'Filter',
-                                                   'Exposure time',
-                                                   'Binning',
-                                                   'CCD temperature',
-                                                   'Date (UT) / Sequence',
-                                                   'Gain'
-                                                   );
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
@@ -371,6 +354,8 @@ var
   hasGain, hasGainISO : boolean;
   ISOList: TStringList;
   Gain,GainMin,GainMax: integer;
+  SubDirName: array[0..SubDirCount-1] of string;
+  FilenameName: array[0..FileNameCount-1] of string;
 
   procedure globalmsg(str:string);
 
