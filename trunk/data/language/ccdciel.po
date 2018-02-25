@@ -2134,3 +2134,7 @@ msgstr ""
 msgid "Create from dark file"
 msgstr ""
 
+#: u_translation:rsopendarkfile
+msgid "Open Dark file"
+msgstr ""
+
