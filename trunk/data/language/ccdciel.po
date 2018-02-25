@@ -2206,3 +2206,43 @@ msgstr ""
 msgid "blue"
 msgstr ""
 
+#: u_translation:rsnone2
+msgid "None"
+msgstr ""
+
+#: u_translation:rstwilightskyf
+msgid "Twilight sky flat"
+msgstr ""
+
+#: u_translation:rsvcurve
+msgid "V curve"
+msgstr ""
+
+#: u_translation:rsdynamic
+msgid "Dynamic"
+msgstr ""
+
+#: u_translation:rsiterative
+msgid "Iterative"
+msgstr ""
+
+#: u_translation:rsmountsync
+msgid "Mount sync"
+msgstr ""
+
+#: u_translation:rspointingoffs
+msgid "Pointing offset"
+msgstr ""
+
+#: u_translation:rsdonothing
+msgid "Do nothing"
+msgstr ""
+
+#: u_translation:rsautomaticfli
+msgid "Automatic flip"
+msgstr ""
+
+#: u_translation:rsabort
+msgid "Abort"
+msgstr ""
+

@@ -6,15 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-25 15:33+0000\n"
-"PO-Revision-Date: 2018-02-25 15:42+0000\n"
+"POT-Creation-Date: 2018-02-25 16:24+0000\n"
+"PO-Revision-Date: 2018-02-25 16:29+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-25 15:44+0000\n"
+"X-Launchpad-Export-Date: 2018-02-25 16:32+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
+
+#: u_translation.rsabort
+msgid "Abort"
+msgstr "Abandon"
 
 #: u_translation.rsabortafter
 msgid "Abort after"
@@ -223,6 +227,10 @@ msgstr "Refroidissement automatique "
 #: u_translation.rsautomaticfla
 msgid "Automatic flat exposure is required fot the twilight flat."
 msgstr "L'exposition automatique du flat est requise pour la séquence crépusculaire."
+
+#: u_translation.rsautomaticfli
+msgid "Automatic flip"
+msgstr "Retournement automatique"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -672,6 +680,10 @@ msgstr "Dither tous les"
 msgid "Dithering"
 msgstr "Dithering"
 
+#: u_translation.rsdonothing
+msgid "Do nothing"
+msgstr "Ne fait rien"
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "Transfert"
@@ -687,6 +699,10 @@ msgstr "Sous-échantillonner"
 #: u_translation.rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
 msgstr "Voulez-vous supprimer le fichier %s ?"
+
+#: u_translation.rsdynamic
+msgid "Dynamic"
+msgstr "Dynamique"
 
 #: u_translation.rseast
 msgid "East"
@@ -1077,6 +1093,10 @@ msgstr "Valeur numérique non valide"
 msgid "Invalid or unsupported FITS file %s"
 msgstr "Fichier FITS non valide ou non supporté %s"
 
+#: u_translation.rsiterative
+msgid "Iterative"
+msgstr "Itératif"
+
 #: u_translation.rslanguage
 msgid "Language"
 msgstr "Langue"
@@ -1241,6 +1261,10 @@ msgstr "Monture"
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
 msgstr "La monture n'indique pas le côté du pied, le retournement méridien peut être douteux."
 
+#: u_translation.rsmountsync
+msgid "Mount sync"
+msgstr "Sync de la monture"
+
 #: u_translation.rsmovedirectio
 msgid "Move direction"
 msgstr "Direction de déplacement vers"
@@ -1292,6 +1316,10 @@ msgstr "n.exp"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "Pas de retournement pour"
+
+#: u_translation.rsnone2
+msgid "None"
+msgstr "Aucun"
 
 #: u_translation.rsnorth
 msgid "North"
@@ -1497,6 +1525,10 @@ msgstr "Veuillez faire l'apprentissage la Vcurve pour le binning &s"
 #: u_translation.rspleaseselect
 msgid "Please select a script!"
 msgstr "Veuillez sélectionner un script!"
+
+#: u_translation.rspointingoffs
+msgid "Pointing offset"
+msgstr "Décalage du pointage"
 
 #: u_translation.rsport
 msgid "Port"
@@ -2108,6 +2140,10 @@ msgstr "Essaie le prochain objet de la séquence."
 msgid "Try to connect to autoguider"
 msgstr "Essaie de connecter l'autoguideur"
 
+#: u_translation.rstwilightskyf
+msgid "Twilight sky flat"
+msgstr "Flat crépusculaire"
+
 #: u_translation.rstype
 msgid "Type"
 msgstr "Type"
@@ -2155,6 +2191,10 @@ msgstr "Utilise le rotateur"
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
 msgstr "Utilise le Watchdog"
+
+#: u_translation.rsvcurve
+msgid "V curve"
+msgstr "Courbe en V"
 
 #: u_translation.rsvcurvequalit
 msgid "V curve quality is low. Do you really want to save this curve?"
