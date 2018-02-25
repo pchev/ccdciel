@@ -5688,9 +5688,9 @@ begin
 end;
 
 Procedure Tf_main.FocuserCalibration(Sender: TObject);
-var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin: integer;
-    savepos,step,minstep,maxstep,hfdmax,newpos,initj,numhfd1,numhfd2: integer;
-    vmax,exp,a,b,r:double;
+var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin,cc: integer;
+    savepos,step,minstep,maxstep,newpos,initj,numhfd1,numhfd2: integer;
+    vmax,exp,a1,a2,b1,b2,r1,r2,pi1,pi2,hfdmax,hfdmin:double;
     FocAbsolute,initstep,OutOfRange: boolean;
     hfd1,hfd2: array[0..100]of array[1..2] of double;
     step1: array[0..100] of integer;
@@ -5754,7 +5754,7 @@ begin
   hfdmax:=f_focusercalibration.MaxHfd;
   // check window size is enough to reach hfd=20
   if (Starwindow div camera.BinX)< (4*hfdmax) then
-    Starwindow:=4*hfdmax*camera.BinX;
+    Starwindow:=max(20,round(4*hfdmax*camera.BinX));
   if Focuswindow < (5*Starwindow) then
     Focuswindow:=5*Starwindow;
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
@@ -5792,6 +5792,7 @@ begin
      ImgZoom:=0;
      f_preview.StackPreview.Checked:=false;
      NewMessage(rsFocuserCalib2);
+     hfdmin:=9999;
      j:=0;
      initstep:=true;
      initj:=0;
@@ -5834,6 +5835,7 @@ begin
           hfd1[j,1]:=savepos;
        hfd1[j,2]:=f_starprofile.hfd;
        step1[j]:=step;
+       if f_starprofile.hfd<hfdmin then hfdmin:=f_starprofile.hfd;
        numhfd1:=j;
        f_focusercalibration.ProgressR(j,hfd1[j,1],hfd1[j,2]);
        if initstep and (j>0) then begin
@@ -5943,6 +5945,7 @@ begin
       else
          hfd2[j,1]:=savepos;
       hfd2[j,2]:=f_starprofile.hfd;
+      if f_starprofile.hfd<hfdmin then hfdmin:=f_starprofile.hfd;
       numhfd2:=j;
       f_focusercalibration.ProgressL(j,hfd2[j,1],hfd2[j,2]);
       inc(j);
@@ -5990,14 +5993,34 @@ begin
 
     // compute values
     k:=numhfd1-initj+1;
+    if k<3 then begin
+      buf:=rsNotEnoughMea;
+      NewMessage(buf);
+      f_focusercalibration.CalibrationCancel(buf);
+      exit;
+    end;
     SetLength(p,k);
-     for i:=0 to k-1 do begin
+    for i:=0 to k-1 do begin
        p[i,1]:=hfd1[initj+i,1];
        p[i,2]:=hfd1[initj+i,2];
-     end;
-    LeastSquares(p,a,b,r);
+    end;
+    LeastSquares(p,a1,b1,r1);
+    pi1:=-b1/a1;
+    k:=min(3,numhfd2+1);
+    if k>2 then begin
+      SetLength(p,k);
+      for i:=0 to k-1 do begin
+         p[i,1]:=hfd2[(numhfd2-k+1)+i,1];
+         p[i,2]:=hfd2[(numhfd2-k+1)+i,2];
+      end;
+      LeastSquares(p,a2,b2,r2);
+      pi2:=-b2/a2;
+      cc:=round((pi1+pi2)/2);
+    end
+    else
+      cc:=round(hfd1[0,1]);
     AutofocusBinning:=bin;
-    AutofocusNearHFD:=hfd1[0,2]+(hfdmax-hfd1[0,2])/2;
+    AutofocusNearHFD:=hfdmin+(hfdmax-hfdmin)/2;
     AutofocusStartHFD:=AutofocusNearHFD+(hfdmax-AutofocusNearHFD)/2;
     // set safe values
     AutofocusNearNum:=3;
@@ -6005,8 +6028,8 @@ begin
     AutofocusMinSNR:=0;
     // vcurve
     if FocAbsolute then begin
-      VcCenterpos:=round(hfd1[0,1]);
-      VcHalfwidth:=round(abs((hfdmax-b)/a-hfd1[0,1]));
+      VcCenterpos:=cc;
+      VcHalfwidth:=round(abs((hfdmax-b1)/a1-cc));
       VcNsteps:=15;
       AutoFocusMode:=afVcurve;
     end
@@ -6014,7 +6037,7 @@ begin
       AutoFocusMode:=afDynamic;
     // dynamic
     AutofocusDynamicNumPoint:=7;
-    AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b)/a-hfd1[0,1])/3));
+    AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b1)/a1-cc)/3));
     // iterative
     AutofocusMaxSpeed:=step;
     for i:=1 to numhfd1 do begin

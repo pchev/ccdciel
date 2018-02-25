@@ -65,7 +65,7 @@ type
     FCalibration: TNotifyEvent;
     FonCalibrationClose: TNotifyEvent;
     FAbsolute, FRunning, FCalibrationOK: boolean;
-    function GetMaxHfd: integer;
+    function GetMaxHfd: double;
     function GetMinStep: integer;
     procedure RunCalibration(Data: PtrInt);
     procedure Saveconfig;
@@ -75,7 +75,7 @@ type
     procedure CalibrationCancel(reason:string);
     property focuser: T_focuser read Ffocuser write Ffocuser;
     property FocAbsolute: boolean read FAbsolute write FAbsolute;
-    property MaxHfd: integer read GetMaxHfd;
+    property MaxHfd: double read GetMaxHfd;
     property MinStep: integer read GetMinStep;
     property onCalibration: TNotifyEvent read FCalibration write FCalibration;
     property onCalibrationClose: TNotifyEvent read FonCalibrationClose write FonCalibrationClose;
@@ -144,9 +144,9 @@ begin
   edit2.Text:='1';
 end;
 
-function Tf_focusercalibration.GetMaxHfd: integer;
+function Tf_focusercalibration.GetMaxHfd: double;
 begin
-  result:=StrToIntDef(Edit1.Text,20);
+  result:=StrToFloatDef(Edit1.Text,20.0);
 end;
 
 function Tf_focusercalibration.GetMinStep: integer;
