@@ -77,10 +77,10 @@ object f_sequence: Tf_sequence
         TabOrder = 1
       end
       object BtnNewTargets: TButton
-        Left = 62
+        Left = 60
         Height = 25
         Top = 4
-        Width = 58
+        Width = 60
         Caption = 'New'
         OnClick = BtnEditTargetsClick
         TabOrder = 2
@@ -95,7 +95,7 @@ object f_sequence: Tf_sequence
         TabOrder = 3
       end
       object BtnStop: TButton
-        Left = 96
+        Left = 99
         Height = 25
         Top = 58
         Width = 80
@@ -125,7 +125,7 @@ object f_sequence: Tf_sequence
         TabOrder = 6
       end
       object BtnDelete: TButton
-        Left = 96
+        Left = 99
         Height = 25
         Top = 32
         Width = 80
@@ -134,7 +134,7 @@ object f_sequence: Tf_sequence
         TabOrder = 7
       end
       object led: TShape
-        Left = 80
+        Left = 83
         Height = 14
         Top = 62
         Width = 14

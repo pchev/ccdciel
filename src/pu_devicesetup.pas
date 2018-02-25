@@ -437,8 +437,8 @@ begin
      FilterWheelInCameraBox.Visible:=true;
      if (not FilterWheelInCameraBox.Checked) then begin
         FWheelConnection:=ASCOM;
-        PanelWheelIndi.Visible:=true;
-        PanelWheelAscom.Visible:=false;
+        PanelWheelIndi.Visible:=false;
+        PanelWheelAscom.Visible:=true;
         PanelWheelIncamera.Visible:=false;
      end;
      FocuserInMountBox.Checked:=false;

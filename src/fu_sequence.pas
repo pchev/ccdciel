@@ -856,7 +856,6 @@ begin
    AutoguiderAlertTime:=now;
    AutoguiderMsgTime:=0;
   end;
-  //if Targets.Running then  AbortSequence;     Autoguider.State;
 end;
 
 procedure Tf_sequence.AutoguiderIddle;
@@ -867,7 +866,6 @@ begin
       AutoguiderAlertTime:=now;
       AutoguiderMsgTime:=0;
     end;
-    //Targets.ForceNextTarget;
   end;
 end;
 
