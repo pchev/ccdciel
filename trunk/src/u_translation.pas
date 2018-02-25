@@ -79,7 +79,6 @@ resourcestring
   rsDownloadLate = 'Download latest version';
   rsAbout = 'About';
   rsDevicesSetup = 'Devices Setup%s';
-  rsCreateBadPix = 'Create bad pixel map';
   rsInitialized = 'initialized';
   rsCompiledWith = 'Compiled with';
   rsStartNewLog = 'Start new log';
@@ -582,6 +581,10 @@ resourcestring
   rsFocusWindowM = 'Focus window must be at least four time greater than Star '
     +'window!';
   rsNearHFDMustB = 'Near HFD must be smaller than Start HFD!';
+  rsDestroyAllBa = 'Destroy all Bad Pixel Map data?';
+  rsCreateFromCa = 'Create from camera';
+  rsCreateFromDa = 'Create from dark file';
+  rsOpenDarkFile = 'Open Dark file';
 
 implementation
 

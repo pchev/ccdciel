@@ -266,10 +266,6 @@ msgstr ""
 msgid "Devices Setup%s"
 msgstr ""
 
-#: u_translation:rscreatebadpix
-msgid "Create bad pixel map"
-msgstr ""
-
 #: u_translation:rsinitialized
 msgid "initialized"
 msgstr ""
@@ -2124,5 +2120,17 @@ msgstr ""
 
 #: u_translation:rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
+msgstr ""
+
+#: u_translation:rsdestroyallba
+msgid "Destroy all Bad Pixel Map data?"
+msgstr ""
+
+#: u_translation:rscreatefromca
+msgid "Create from camera"
+msgstr ""
+
+#: u_translation:rscreatefromda
+msgid "Create from dark file"
 msgstr ""
 

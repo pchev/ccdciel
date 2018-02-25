@@ -333,17 +333,24 @@ object f_main: Tf_main
       end
       object MenuItemBPM: TMenuItem
         Caption = 'Bad pixel map'
+        object MenuApplyBPM: TMenuItem
+          Caption = 'Apply to current image'
+          OnClick = MenuApplyBPMClick
+        end
+        object MenuItem11: TMenuItem
+          Caption = '-'
+        end
         object MenuBPM: TMenuItem
-          Caption = 'Create bad pixel map'
+          Caption = 'Create from camera'
           OnClick = MenuBPMClick
+        end
+        object MenuBPMDark: TMenuItem
+          Caption = 'Create from dark file'
+          OnClick = MenuBPMDarkClick
         end
         object MenuClearBPM: TMenuItem
           Caption = 'Clear bad pixel map'
           OnClick = MenuClearBPMClick
-        end
-        object MenuApplyBPM: TMenuItem
-          Caption = 'Apply to current image'
-          OnClick = MenuApplyBPMClick
         end
       end
       object MenuFocuserCalibration: TMenuItem

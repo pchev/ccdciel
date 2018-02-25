@@ -64,6 +64,8 @@ type
     MenuBrowseLog: TMenuItem;
     MenuApplyBPM: TMenuItem;
     MenuFocuserCalibration: TMenuItem;
+    MenuBPMDark: TMenuItem;
+    MenuItem11: TMenuItem;
     MenuShowLog: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem2: TMenuItem;
@@ -237,6 +239,7 @@ type
     procedure MenuAutoguiderDitherClick(Sender: TObject);
     procedure MenuAutoguiderGuideClick(Sender: TObject);
     procedure MenuBPMClick(Sender: TObject);
+    procedure MenuBPMDarkClick(Sender: TObject);
     procedure MenuBrowseLogClick(Sender: TObject);
     procedure MenuBugReportClick(Sender: TObject);
     procedure MenuCaptureStartClick(Sender: TObject);
@@ -408,6 +411,7 @@ type
     procedure SaveConfig;
     procedure SaveVcurve;
     procedure LoadVcurve;
+    procedure CreateBPM(f: TFits);
     procedure LoadBPM;
     procedure ComputeVcSlope;
     procedure OptionGetPixelSize(Sender: TObject);
@@ -1229,7 +1233,8 @@ begin
    MenuItem1.Caption := rsFile;
    MenuSetup.Caption:=Format(rsDevicesSetup, [ellipsis]);
    MenuItemBPM.Caption := rsBadPixelMap;
-   MenuBPM.Caption := rsCreateBadPix;
+   MenuBPM.Caption := rsCreateFromCa;
+   MenuBPMDark.Caption:=rsCreateFromDa;
    MenuClearBPM.Caption := rsClearBadPixe;
    MenuApplyBPM.Caption := rsApplyToCurre;
    MenuFocuserCalibration.Caption := rsFocuserCalib;
@@ -2170,30 +2175,22 @@ begin
  AutoguiderGuideClick(Sender);
 end;
 
-procedure Tf_main.MenuBPMClick(Sender: TObject);
-var bin,x,y,i: integer;
-    lb,val,val1,val2: double;
+procedure Tf_main.CreateBPM(f: TFits);
+var lb,val,val1,val2: double;
+    x,y,i: integer;
 begin
-f_pause.Caption:=rsBadPixelMap;
-f_pause.Text:=rsCoverTheCame+crlf+rsClickContinu;
-if f_pause.Wait then begin
-  bin:=f_preview.Bin;
-  camera.ResetFrame;
-  Camera.FrameType:=DARK;
-  fits.SetBPM(bpm,0,0,0,0);
-  if f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
-    lb:=fits.imageMean+BPMsigma*fits.imageSigma;
+    lb:=f.imageMean+BPMsigma*f.imageSigma;
     if lb>MAXWORD then lb:=MAXWORD/2;
     bpmNum:=0;
-    bpmX:=fits.HeaderInfo.naxis1;
-    bpmY:=fits.HeaderInfo.naxis2;
-    bpmAxis:=fits.HeaderInfo.naxis;
-    for x:=0 to fits.HeaderInfo.naxis1-1 do begin
-       for y:=0 to fits.HeaderInfo.naxis2-1 do begin
-          val:=trunc(fits.imageMin+fits.image[0,y,x]/fits.imageC);
-          if fits.HeaderInfo.naxis=3 then begin
-            val1:=trunc(fits.imageMin+fits.image[1,y,x]/fits.imageC);
-            val2:=trunc(fits.imageMin+fits.image[2,y,x]/fits.imageC);
+    bpmX:=f.HeaderInfo.naxis1;
+    bpmY:=f.HeaderInfo.naxis2;
+    bpmAxis:=f.HeaderInfo.naxis;
+    for x:=0 to f.HeaderInfo.naxis1-1 do begin
+       for y:=0 to f.HeaderInfo.naxis2-1 do begin
+          val:=f.imageMin+f.image[0,y,x]/f.imageC;
+          if f.HeaderInfo.naxis=3 then begin
+            val1:=f.imageMin+f.image[1,y,x]/f.imageC;
+            val2:=f.imageMin+f.image[2,y,x]/f.imageC;
             val:=maxvalue([val,val1,val2]);
           end;
           if val>lb then begin
@@ -2221,26 +2218,63 @@ if f_pause.Wait then begin
       config.SetValue('/BadPixelMap/BPMY'+IntToStr(i),bpm[i,2]);
     end;
     SaveConfig;
+end;
+
+procedure Tf_main.MenuBPMClick(Sender: TObject);
+var bin: integer;
+begin
+f_pause.Caption:=rsBadPixelMap;
+f_pause.Text:=rsCoverTheCame+crlf+rsClickContinu;
+if f_pause.Wait then begin
+  bin:=f_preview.Bin;
+  camera.ResetFrame;
+  Camera.FrameType:=DARK;
+  fits.SetBPM(bpm,0,0,0,0);
+  if f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
+    CreateBPM(fits);
   end
   else
     NewMessage(rsExposureFail);
 end;
 end;
 
+procedure Tf_main.MenuBPMDarkClick(Sender: TObject);
+var fn : string;
+begin
+  OpenDialog1.Title:=rsOpenDarkFile;
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    fits.SetBPM(bpm,0,0,0,0);
+    fits.LoadFromFile(fn);
+    if fits.HeaderInfo.valid then begin
+      DrawHistogram(true);
+      DrawImage;
+      wait(2);
+      CreateBPM(fits);
+      MenuApplyBPMClick(Sender);
+    end
+    else begin
+      NewMessage(Format(rsInvalidOrUns, [fn]));
+    end;
+  end;
+end;
+
 procedure Tf_main.MenuClearBPMClick(Sender: TObject);
 begin
-  bpmNum:=0;
-  bpmX:=0;
-  bpmY:=0;
-  bpmAxis:=0;
-  NewMessage(rsBadPixelMapC);
-  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-  config.DeletePath('/BadPixelMap/');
-  config.SetValue('/BadPixelMap/Count',bpmNum);
-  config.SetValue('/BadPixelMap/CCDWidth',bpmX);
-  config.SetValue('/BadPixelMap/CCDHeight',bpmY);
-  config.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
-  SaveConfig;
+  if MessageDlg(rsDestroyAllBa, mtConfirmation, mbYesNo, 0)=mrYes then begin
+    bpmNum:=0;
+    bpmX:=0;
+    bpmY:=0;
+    bpmAxis:=0;
+    NewMessage(rsBadPixelMapC);
+    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+    config.DeletePath('/BadPixelMap/');
+    config.SetValue('/BadPixelMap/Count',bpmNum);
+    config.SetValue('/BadPixelMap/CCDWidth',bpmX);
+    config.SetValue('/BadPixelMap/CCDHeight',bpmY);
+    config.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
+    SaveConfig;
+  end;
 end;
 
 
@@ -5497,6 +5531,7 @@ end;
 procedure Tf_main.MenuOpenClick(Sender: TObject);
 var fn: string;
 begin
+  OpenDialog1.Title:=Format(rsOpenFITSFile, ['']);
   if OpenDialog1.Execute then begin
      fn:=OpenDialog1.FileName;
      LoadFitsFile(fn);
@@ -5570,6 +5605,7 @@ end;
 
 procedure Tf_main.MenuRefimageClick(Sender: TObject);
 begin
+  OpenDialog1.Title:=rsOpenReferenc;
   if OpenDialog1.Execute then begin
     OpenRefImage(OpenDialog1.FileName);
   end;
