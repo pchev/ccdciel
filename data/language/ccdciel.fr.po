@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-24 21:00+0000\n"
-"PO-Revision-Date: 2018-02-24 21:39+0000\n"
+"POT-Creation-Date: 2018-02-25 13:27+0000\n"
+"PO-Revision-Date: 2018-02-25 13:31+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-24 21:40+0000\n"
+"X-Launchpad-Export-Date: 2018-02-25 13:32+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabortafter
@@ -234,23 +234,23 @@ msgstr "La compensation du jeu doit être dans le même sens que l'autofocus"
 
 #: u_translation.rsbadpixeldete
 msgid "Bad pixel detection found %s hot pixels."
-msgstr "La détection des pixels défecteux a trouvé %s pixels."
+msgstr "La détection des pixels défectueux a trouvé %s pixels."
 
 #: u_translation.rsbadpixelmap
 msgid "Bad pixel map"
-msgstr "Carte des pixels défecteux"
+msgstr "Carte des pixels défectueux"
 
 #: u_translation.rsbadpixelmapc
 msgid "Bad pixel map cleared."
-msgstr "Carte des pixels défecteux effacée."
+msgstr "Carte des pixels défectueux effacée."
 
 #: u_translation.rsbadpixelsdet
 msgid "Bad pixels detection"
-msgstr "Détection des mauvais pixels"
+msgstr "Détection des pixels défectueux"
 
 #: u_translation.rsbadpixelthre
 msgid "Bad pixel threshold"
-msgstr "Seil de détection"
+msgstr "Seuil de détection"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
@@ -446,7 +446,7 @@ msgstr "Sélection"
 
 #: u_translation.rsclearbadpixe
 msgid "Clear bad pixel map"
-msgstr "Effacer la carte des pixels défecteux"
+msgstr "Effacer la carte des pixels défectueux"
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -540,9 +540,13 @@ msgstr "Nombre"
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
 msgstr "Couvrez la caméra et régler le temps d'exposition et le binning dans l'outil de Prévisualisation."
 
-#: u_translation.rscreatebadpix
-msgid "Create bad pixel map"
-msgstr "Créer la carte des pixels défecteux"
+#: u_translation.rscreatefromca
+msgid "Create from camera"
+msgstr "Créer à partir de la caméra"
+
+#: u_translation.rscreatefromda
+msgid "Create from dark file"
+msgstr "Créer à partir d'un fichier Dark"
 
 #: u_translation.rscreatenewemp
 msgid "Create new empty profile"
@@ -603,6 +607,10 @@ msgstr "Desc."
 #: u_translation.rsdesiredtempe
 msgid "Desired temperature"
 msgstr "Température désirée"
+
+#: u_translation.rsdestroyallba
+msgid "Destroy all Bad Pixel Map data?"
+msgstr "Effacer toutes des données des pixels défectueux?"
 
 #: u_translation.rsdevices
 msgid "Device"
