@@ -602,6 +602,16 @@ resourcestring
   rsRed = 'red';
   rsGreen = 'green';
   rsBlue = 'blue';
+  rsNone2 = 'None';
+  rsTwilightSkyF = 'Twilight sky flat';
+  rsVCurve = 'V curve';
+  rsDynamic = 'Dynamic';
+  rsIterative = 'Iterative';
+  rsMountSync = 'Mount sync';
+  rsPointingOffs = 'Pointing offset';
+  rsDoNothing = 'Do nothing';
+  rsAutomaticFli = 'Automatic flip';
+  rsAbort = 'Abort';
 
 implementation
 

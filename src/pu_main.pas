@@ -1341,11 +1341,11 @@ begin
    SubDirName[7]:=rsSubfolderByD2;
    FilenameName[0]:=rsObjectName;
    FilenameName[1]:=rsFilter;
-   FilenameName[1]:=rsExposureTime2;
-   FilenameName[1]:=rsBinning;
-   FilenameName[1]:=rsCCDTemperatu2;
-   FilenameName[1]:=rsDateUTSequen;
-   FilenameName[1]:=rsGain;
+   FilenameName[2]:=rsExposureTime2;
+   FilenameName[3]:=rsBinning;
+   FilenameName[4]:=rsCCDTemperatu2;
+   FilenameName[5]:=rsDateUTSequen;
+   FilenameName[6]:=rsGain;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);

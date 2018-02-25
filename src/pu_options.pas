@@ -595,6 +595,19 @@ begin
   RefColor.Items[2]:=rsBlue;
   FocuserBacklashDirection.Items[0]:=rsIn;
   FocuserBacklashDirection.Items[1]:=rsOut;
+  FlatType.Items[0]:=rsNone2;
+  FlatType.Items[1]:=rsTwilightSkyF;
+  Autofocusmode.items[0]:=rsVCurve;
+  Autofocusmode.items[1]:=rsDynamic;
+  Autofocusmode.items[2]:=rsIterative;
+  Autofocusmode.items[3]:=rsNone2;
+  ResolverBox.Items[2]:=rsNone2;
+  PrecSlewBox.Items[0]:=rsMountSync;
+  PrecSlewBox.Items[1]:=rsPointingOffs;
+  MeridianOption.Items[0]:=rsDoNothing;
+  MeridianOption.Items[1]:=rsAutomaticFli;
+  MeridianOption.Items[2]:=rsAbort;
+
 end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);
