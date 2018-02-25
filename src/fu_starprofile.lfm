@@ -191,14 +191,15 @@ object f_starprofile: Tf_starprofile
           AntialiasingMode = amOn
           AxisList = <          
             item
-              Visible = False
+              Marks.LabelFont.Height = 8
               Minors = <>
               Title.LabelFont.Orientation = 900
             end          
             item
-              Intervals.Count = 15
-              Visible = False
+              Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
+              Intervals.Options = [aipUseCount, aipUseNiceSteps]
               Alignment = calBottom
+              Marks.LabelFont.Height = 8
               Minors = <>
             end>
           Extent.UseYMin = True
