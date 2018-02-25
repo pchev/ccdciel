@@ -612,6 +612,8 @@ resourcestring
   rsDoNothing = 'Do nothing';
   rsAutomaticFli = 'Automatic flip';
   rsAbort = 'Abort';
+  rsNotEnoughMea = 'Not enough measurement points! Try to increase the '
+    +'maximum HFD or decrease the minimum start movement';
 
 implementation
 

@@ -6,17 +6,19 @@ object f_focusercalibration: Tf_focusercalibration
   Caption = 'Focuser calibration'
   ClientHeight = 368
   ClientWidth = 517
+  DesignTimePPI = 95
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
+  LCLVersion = '1.8.0.6'
   Visible = False
   object Notebook1: TNotebook
     Left = 0
     Height = 319
     Top = 0
     Width = 517
-    PageIndex = 3
+    PageIndex = 0
     Align = alClient
     TabOrder = 0
     object Page1: TPage
@@ -264,7 +266,7 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          76
+          78
         )
       end
       object Label8: TLabel
@@ -301,7 +303,7 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          76
+          78
         )
       end
     end
