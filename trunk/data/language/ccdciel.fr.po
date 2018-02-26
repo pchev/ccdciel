@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-26 17:33+0000\n"
-"PO-Revision-Date: 2018-02-26 19:01+0000\n"
+"POT-Creation-Date: 2018-02-26 19:54+0000\n"
+"PO-Revision-Date: 2018-02-26 20:02+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-26 19:08+0000\n"
+"X-Launchpad-Export-Date: 2018-02-26 20:04+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabort
@@ -75,6 +75,10 @@ msgstr "Astrométrie"
 #: u_translation.rsastrometryop
 msgid "Astrometry options"
 msgstr "Options de l'astrométrie"
+
+#: u_translation.rsastrometryre
+msgid "Astrometry resolver log"
+msgstr "Journal de l'astrométrie"
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -520,6 +524,10 @@ msgstr "Indicateur de troncation"
 msgid "Clock"
 msgstr "Heure"
 
+#: u_translation.rsclose
+msgid "Close"
+msgstr "Fermer"
+
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "Aperçu en couleur"
@@ -856,6 +864,10 @@ msgstr "Fichier"
 msgid "File name options"
 msgstr "Options du nom de fichier"
 
+#: u_translation.rsfilenotfound
+msgid "File not found %s"
+msgstr "Fichier non trouvé %s"
+
 #: u_translation.rsfiles
 msgid "Files"
 msgstr "Fichiers"
@@ -891,6 +903,10 @@ msgstr "Déplacement final (pas)"
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "Ajuster"
+
+#: u_translation.rsfitsheader
+msgid "FITS header"
+msgstr "En-tête FITS"
 
 #: u_translation.rsflat
 msgid "Flat"
@@ -1670,6 +1686,14 @@ msgstr "Préferences%s"
 msgid "Preview"
 msgstr "Prévisualisation"
 
+#: u_translation.rspreviewdebay
+msgid "Preview debayer"
+msgstr "Débayeriser la prévisualisation"
+
+#: u_translation.rspreviewraw
+msgid "Preview raw"
+msgstr "Prévisualistaion RAW"
+
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
 msgstr "Empilement de l'aperçu"
@@ -1769,6 +1793,38 @@ msgstr "Rétablir"
 #: u_translation.rsresettodefau
 msgid "Reset to default"
 msgstr "Rétablir les valeurs par défaut"
+
+#: u_translation.rsresolve
+msgid "Resolve"
+msgstr "Résoudre"
+
+#: u_translation.rsresolveandro
+msgid "Resolve and Rotate"
+msgstr "Résoudre et rotation"
+
+#: u_translation.rsresolveandsh
+msgid "Resolve and show image in planetarium"
+msgstr "Rèsoudre et voir l'image dans le planétarium"
+
+#: u_translation.rsresolveandsh2
+msgid "Resolve and show image frame in planetarium"
+msgstr "Rèsoudre et voir le cadre dans le planétarium"
+
+#: u_translation.rsresolveandsl
+msgid "Resolve and Slew to image center"
+msgstr "Résoudre et Goto au centre de l'image"
+
+#: u_translation.rsresolveandsl2
+msgid "Resolve and Slew to cursor"
+msgstr "Résoudre et Goto à la ppsition du curseur"
+
+#: u_translation.rsresolveandsy
+msgid "Resolve and Sync the mount"
+msgstr "Résoudre et Sync de la monture"
+
+#: u_translation.rsresolveandsy2
+msgid "Resolve and Sync the rotator"
+msgstr "Résoudre et Sync du rotateur"
 
 #: u_translation.rsresolveerror
 msgid "%s resolve error."
@@ -2128,6 +2184,10 @@ msgstr "Pas"
 msgid "Stop"
 msgstr "Arrêt"
 
+#: u_translation.rsstopastromet
+msgid "Stop astrometry resolver"
+msgstr "Arrête l'astrométrie en cours"
+
 #: u_translation.rsstopat
 msgid "Stop at"
 msgstr "Arrêt à"
@@ -2407,6 +2467,10 @@ msgstr "Prévisualisation vidéo "
 #: u_translation.rsviewheader
 msgid "View header"
 msgstr "Voir l'en-tête"
+
+#: u_translation.rsviewlastreso
+msgid "View last resolver log"
+msgstr "Voir le dernier journal de résolution"
 
 #: u_translation.rsvisualisatio
 msgid "Visualisation"

@@ -2446,3 +2446,67 @@ msgstr ""
 msgid "Plan name"
 msgstr ""
 
+#: u_translation:rsresolve
+msgid "Resolve"
+msgstr ""
+
+#: u_translation:rsresolveandsl
+msgid "Resolve and Slew to image center"
+msgstr ""
+
+#: u_translation:rsresolveandsl2
+msgid "Resolve and Slew to cursor"
+msgstr ""
+
+#: u_translation:rsresolveandsy
+msgid "Resolve and Sync the mount"
+msgstr ""
+
+#: u_translation:rsresolveandro
+msgid "Resolve and Rotate"
+msgstr ""
+
+#: u_translation:rsresolveandsy2
+msgid "Resolve and Sync the rotator"
+msgstr ""
+
+#: u_translation:rsresolveandsh
+msgid "Resolve and show image in planetarium"
+msgstr ""
+
+#: u_translation:rsresolveandsh2
+msgid "Resolve and show image frame in planetarium"
+msgstr ""
+
+#: u_translation:rsviewlastreso
+msgid "View last resolver log"
+msgstr ""
+
+#: u_translation:rsstopastromet
+msgid "Stop astrometry resolver"
+msgstr ""
+
+#: u_translation:rspreviewdebay
+msgid "Preview debayer"
+msgstr ""
+
+#: u_translation:rspreviewraw
+msgid "Preview raw"
+msgstr ""
+
+#: u_translation:rsastrometryre
+msgid "Astrometry resolver log"
+msgstr ""
+
+#: u_translation:rsfilenotfound
+msgid "File not found %s"
+msgstr ""
+
+#: u_translation:rsclose
+msgid "Close"
+msgstr ""
+
+#: u_translation:rsfitsheader
+msgid "FITS header"
+msgstr ""
+

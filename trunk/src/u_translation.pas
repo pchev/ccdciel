@@ -663,6 +663,22 @@ resourcestring
   rsAutofocusEve = 'Autofocus every';
   rsAdd = 'Add';
   rsPlanName = 'Plan name';
+  rsResolve = 'Resolve';
+  rsResolveAndSl = 'Resolve and Slew to image center';
+  rsResolveAndSl2 = 'Resolve and Slew to cursor';
+  rsResolveAndSy = 'Resolve and Sync the mount';
+  rsResolveAndRo = 'Resolve and Rotate';
+  rsResolveAndSy2 = 'Resolve and Sync the rotator';
+  rsResolveAndSh = 'Resolve and show image in planetarium';
+  rsResolveAndSh2 = 'Resolve and show image frame in planetarium';
+  rsViewLastReso = 'View last resolver log';
+  rsStopAstromet = 'Stop astrometry resolver';
+  rsPreviewDebay = 'Preview debayer';
+  rsPreviewRaw = 'Preview raw';
+  rsAstrometryRe = 'Astrometry resolver log';
+  rsFileNotFound = 'File not found %s';
+  rsClose = 'Close';
+  rsFITSHeader = 'FITS header';
 
 implementation
 
