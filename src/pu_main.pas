@@ -1331,6 +1331,18 @@ begin
    MenuBugReport.Caption := rsReportAProbl;
    MenuDownload.Caption := rsDownloadLate;
    MenuHelpAbout.Caption := rsAbout;
+   MenuResolve.Caption := rsResolve;
+   MenuResolveSlewCenter.Caption := rsResolveAndSl;
+   MenuResolveSlew.Caption := rsResolveAndSl2;
+   MenuResolveSync.Caption := rsResolveAndSy;
+   MenuResolveRotate.Caption := rsResolveAndRo;
+   MenuResolveSyncRotator.Caption := rsResolveAndSy2;
+   MenuResolvePlanetarium.Caption := rsResolveAndSh;
+   MenuShowCCDFrame.Caption := rsResolveAndSh2;
+   MenuViewAstrometryLog.Caption := rsViewLastReso;
+   MenuStopAstrometry.Caption := rsStopAstromet;
+   MenuItemDebayer.Caption := rsPreviewDebay;
+   MenuItemRaw.Caption := rsPreviewRaw;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -6713,7 +6725,7 @@ var logf: string;
 begin
   logf:=slash(TmpDir)+'ccdcieltmp.log';
   if FileExistsUTF8(logf) then begin
-    f_viewtext.Caption:='Astrometry resolver log';
+    f_viewtext.Caption:=rsAstrometryRe;
     f_viewtext.Memo1.Clear;
     f_viewtext.Memo1.Lines.LoadFromFile(logf);
     FormPos(f_viewtext,mouse.CursorPos.X,mouse.CursorPos.Y);

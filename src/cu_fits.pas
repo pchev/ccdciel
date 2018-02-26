@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
-  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms, Dialogs,
+  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms, Dialogs, u_translation,
   StdCtrls, ExtCtrls, Buttons, IntfGraphics;
 
 type
@@ -658,7 +658,7 @@ if FileExistsUTF8(fn) then begin
 end
 else begin
  ClearImage;
- ShowMessage('File not found '+fn);
+ ShowMessage(Format(rsFileNotFound, [fn]));
 end;
 end;
 
@@ -682,7 +682,7 @@ m_ViewHeaders.ReadOnly:=true;
 m_ViewHeaders.WordWrap:=false;
 m_ViewHeaders.ScrollBars:=ssAutoBoth;
 b_ViewHeaders.Parent:=p_ViewHeaders;
-b_ViewHeaders.Caption:='Close';
+b_ViewHeaders.Caption:=rsClose;
 b_ViewHeaders.Top:=4;
 b_ViewHeaders.Left:=40;
 b_ViewHeaders.Cancel:=true;
@@ -691,7 +691,7 @@ b_ViewHeaders.OnClick:=ViewHeadersBtnClose;
 m_ViewHeaders.Lines:=FHeader.Rows;
 FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
 if trim(FTitle)='' then
-   f_ViewHeaders.Caption:='FITS header'
+   f_ViewHeaders.Caption:=rsFITSHeader
 else
    f_ViewHeaders.Caption:=SysToUTF8(FTitle);
 f_ViewHeaders.Show;
