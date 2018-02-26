@@ -7,6 +7,7 @@ object f_EditPlan: Tf_EditPlan
   Caption = 'Edit plan'
   ClientHeight = 544
   ClientWidth = 467
+  DesignTimePPI = 95
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -51,7 +52,7 @@ object f_EditPlan: Tf_EditPlan
       end
       object Desc: TEdit
         Left = 100
-        Height = 25
+        Height = 31
         Top = 29
         Width = 100
         OnChange = StepChange
@@ -136,7 +137,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Delay: TEdit
           Left = 96
-          Height = 25
+          Height = 31
           Top = 37
           Width = 80
           OnChange = StepChange
@@ -145,7 +146,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object RepeatCount: TEdit
           Left = 96
-          Height = 25
+          Height = 31
           Top = 8
           Width = 80
           OnChange = StepChange
@@ -164,7 +165,7 @@ object f_EditPlan: Tf_EditPlan
         TabOrder = 1
         object Count: TEdit
           Left = 96
-          Height = 25
+          Height = 31
           Top = 120
           Width = 80
           OnChange = StepChange
@@ -207,7 +208,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object Exposure: TEdit
           Left = 96
-          Height = 25
+          Height = 31
           Top = 8
           Width = 80
           OnChange = StepChange
@@ -260,7 +261,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object DitherCount: TEdit
           Left = 168
-          Height = 25
+          Height = 31
           Top = 264
           Width = 40
           OnChange = StepChange
@@ -287,7 +288,7 @@ object f_EditPlan: Tf_EditPlan
         end
         object AutofocusCount: TEdit
           Left = 168
-          Height = 25
+          Height = 31
           Top = 224
           Width = 40
           OnChange = StepChange
@@ -327,7 +328,7 @@ object f_EditPlan: Tf_EditPlan
           end
           object GainEdit: TEdit
             Left = 96
-            Height = 25
+            Height = 31
             Top = 0
             Width = 80
             OnChange = StepChange

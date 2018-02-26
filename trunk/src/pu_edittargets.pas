@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
-  pu_scriptengine, cu_astrometry,
+  pu_scriptengine, cu_astrometry, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst;
 
@@ -165,6 +165,7 @@ type
     procedure LoadScriptList;
     procedure SetScriptList(sl:string);
     procedure ResetSequences;
+    procedure SetLang;
   public
     { public declarations }
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
@@ -186,6 +187,7 @@ procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
   ShowHint:=true;
   ScaleDPI(Self);
+  SetLang;
   LockTarget:=false;
   FTargetsRepeat:=1;
 end;
@@ -219,6 +221,67 @@ begin
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
 end;
 
+procedure Tf_EditTargets.SetLang;
+begin
+  Caption := rsEditTargetLi;
+  BtnClose.Caption := rsSave;
+  BtnNewObject.Caption := rsNewObject;
+  BtnDeleteObject.Caption := rsDelete;
+  BtnNewScript.Caption := rsNewScript;
+  BtnCancel.Caption := rsCancel;
+  BtnSkyFlat.Caption := rsSkyFlat;
+  TargetList.Columns.Items[0].Title.Caption := rsObjectName;
+  TargetList.Columns.Items[1].Title.Caption := rsPlan;
+  CheckBoxRepeatList.Caption := rsRepeatTheWho;
+  SeqStart.Caption := rsStartAt;
+  SeqStop.Caption := rsStopAt;
+  SeqStartTwilight.Caption := rsDusk;
+  SeqStopTwilight.Caption := rsDawn;
+  TabSheet1.Caption := rsObject;
+  Label9.Caption := rsExposureTime2;
+  Preview.Caption := rsPreviewWhenW;
+  Label13.Caption := rsSeconds2;
+  Label11.Caption := rsInterval;
+  Label10.Caption := rsRepeat;
+  Label14.Caption := rsSeconds2;
+  BtnAnytime.Caption := rsAnyTime;
+  Label4.Caption := rsEndTime;
+  Label3.Caption := rsStartTime;
+  ObjStartRise.Caption := rsRise;
+  ObjEndSet.Caption := rsSet2;
+  BtnCurrentCoord.Caption := rsNoMove;
+  Label6.Caption := rsCenterDec;
+  Label5.Caption := rsCenterRA;
+  BtnCdCCoord.Caption := rsPlanetarium;
+  PointAstrometry.Caption := rsUseAstrometr;
+  BtnImgCoord.Caption := rsCurrentImage;
+  UpdateCoord.Caption := rsUpdateRADecF;
+  InplaceAutofocus.Caption := rsStayInPlaceF;
+  UseRotator.Caption := rsSetRotatorAn;
+  BtnImgRot.Caption := rsCurrentImage;
+  Label1.Caption := rsObject;
+  Label2.Caption := rsPlan;
+  BtnNewPlan.Caption := rsNew;
+  BtnEditPlan.Caption := rsEdit;
+  Label7.Caption := rsSequence;
+  BtnCopyPlan.Caption := rsCopy;
+  BtnDeletePlan.Caption := rsDelete;
+  CheckBoxRepeat.Caption := rsRepeatThePla;
+  TabSheet2.Caption := rsScript;
+  Label8.Caption := rsSequence;
+  Label15.Caption := rsScript;
+  BtnEditScript.Caption := rsEdit;
+  BtnEditNewScript.Caption := rsNew;
+  Label12.Caption := rsSequence;
+  FlatTime.Caption := rsFlatTime;
+  Label16.Caption := rsBinning;
+  Label17.Caption := rsFilters;
+  Label18.Caption := rsCount;
+  LabelGain.Caption := rsGain;
+  FlatTime.Items[0]:=rsAtDusk;
+  FlatTime.Items[1]:=rsAtDawn;
+end;
+
 procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
 var ra,de,hs: double;
     i:integer;
@@ -227,7 +290,7 @@ if ObjEndSet.Checked then begin
   ra:=StrToAR(PointRA.Text);
   de:=StrToDE(PointDEC.Text);
   if (ra=NullCoord)or(de=NullCoord) then begin
-     ShowMessage('Invalid object coordinates!');
+     ShowMessage(rsInvalidObjec);
      ObjEndSet.Checked:=false;
      exit;
   end;
@@ -235,9 +298,9 @@ if ObjEndSet.Checked then begin
      ObjEndTime.Text:=TimeToStr(hs/24)
   else begin
      if i=1 then
-       ShowMessage('This object is never below the requested elevation')
+       ShowMessage(rsThisObjectIs)
      else
-       ShowMessage('This object is never above the requested elevation');
+       ShowMessage(rsThisObjectIs2);
      ObjEndTime.Text:='';
      ObjEndSet.Checked:=false;
   end;
@@ -253,7 +316,7 @@ if ObjStartRise.Checked then begin
   ra:=StrToAR(PointRA.Text);
   de:=StrToDE(PointDEC.Text);
   if (ra=NullCoord)or(de=NullCoord) then begin
-     ShowMessage('Invalid object coordinates!');
+     ShowMessage(rsInvalidObjec);
      ObjStartRise.Checked:=false;
      exit;
   end;
@@ -261,9 +324,9 @@ if ObjStartRise.Checked then begin
      ObjStartTime.Text:=TimeToStr(hr/24)
    else begin
       if i=1 then
-        ShowMessage('This object is never below the requested elevation')
+        ShowMessage(rsThisObjectIs)
       else
-        ShowMessage('This object is never above the requested elevation');
+        ShowMessage(rsThisObjectIs2);
       ObjStartTime.Text:='';
       ObjStartRise.Checked:=false;
    end;
@@ -336,7 +399,8 @@ begin
   if txt='' then exit;
   fn2:=slash(ConfigDir)+txt+'.plan';
   if FileExistsUTF8(fn2) then begin
-     if MessageDlg('Plan '+fn2+' already exist. Do you want to replace this file?',mtConfirmation,mbYesNo,0)<>mrYes then
+     if MessageDlg(Format(rsPlanAlreadyE, [fn2]), mtConfirmation, mbYesNo, 0)<>
+       mrYes then
        exit;
   end;
   if CopyFile(fn1,fn2,false) then begin
@@ -357,7 +421,8 @@ var txt,fn: string;
 begin
   txt:=PlanList.Text;
   fn:=slash(ConfigDir)+txt+'.plan';
-  if MessageDlg('Do you want to delete file '+fn+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+  if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes
+    then begin
      DeleteFileUTF8(fn);
      LoadPlanList;
      PlanList.Text:='';
@@ -375,7 +440,8 @@ begin
     if txt='' then exit;
     fn:=slash(ConfigDir)+txt+'.plan';
     if FileExistsUTF8(fn) then begin
-       if MessageDlg('Plan '+txt+' already exist. Do you want to edit this plan?',mtConfirmation,mbYesNo,0)<>mrYes then exit;
+       if MessageDlg(Format(rsPlanAlreadyE2, [txt]), mtConfirmation, mbYesNo, 0)
+         <>mrYes then exit;
     end;
     f_EditPlan.PlanName.Caption:=txt;
   end
@@ -411,7 +477,7 @@ var txt:string;
     t,tt: TTarget;
 begin
   PageControl1.ActivePageIndex:=0;
-  txt:=FormEntry(self,'Object name','None');
+  txt:=FormEntry(self, rsObjectName, 'None');
   if txt=ScriptTxt then txt:='_Script';
   t:=TTarget.Create;
   n:=TargetList.Row;
@@ -453,7 +519,7 @@ var ft:string;
     t: TTarget;
 begin
   if FlatType<>ftSKY then begin
-     ShowMessage('You must configure your flat preference.');
+     ShowMessage(rsYouMustConfi);
      exit;
   end;
   n:=0;
@@ -493,7 +559,7 @@ begin
     LockTarget:=false;
   end
   else begin // no more than two flat series
-    ShowMessage('Can only add one flat serie at dusk and one at dawn');
+    ShowMessage(rsCanOnlyAddOn);
     exit;
   end;
   PageControl1.ActivePageIndex:=2;
@@ -534,13 +600,14 @@ begin
   end;
   if newscript then begin
     s.Clear;
-    txt:=FormEntry(self,'New script','');
+    txt:=FormEntry(self, rsNewScript, '');
     if txt='' then exit;
     scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=scdir.path+txt+'.script';
     if FileExistsUTF8(fn) then begin
-       if MessageDlg('Script '+txt+' already exist. Do you want to edit this script?',mtConfirmation,mbYesNo,0)=mrYes then
+       if MessageDlg(Format(rsScriptAlread2, [txt]), mtConfirmation, mbYesNo, 0)
+         =mrYes then
          s.LoadFromFile(fn)
        else
          exit;
@@ -565,7 +632,8 @@ begin
          fn:=scdir.path+txt+'.script';
          newscript:=true;
          if FileExistsUTF8(fn) then begin
-            if MessageDlg('Script '+fn+' already exist. Do you want to replace this custom script by the template?',mtConfirmation,mbYesNo,0)<>mrYes then
+            if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation,
+              mbYesNo, 0)<>mrYes then
               exit;
          end;
       end;
@@ -594,7 +662,8 @@ begin
   i:=TargetList.Row;
   if i>0 then begin
      str:=TargetList.Cells[0,i]+', '+TargetList.Cells[1,i];
-     if MessageDlg('Delete sequence '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+     if MessageDlg(Format(rsDeleteSequen, [str]), mtConfirmation, mbYesNo, 0)=
+       mrYes then begin
         j:=i-1;
         if j<1 then j:=i+1;
         if j>=TargetList.RowCount then j:=TargetList.RowCount-1;
@@ -876,11 +945,11 @@ if LockTarget then exit;
     LockTarget:=true;
     if FlatTime.ItemIndex=0 then  begin
        FlatTime.ItemIndex:=1;
-       ShowMessage('There is already a dusk flat plan');
+       ShowMessage(rsThereIsAlrea);
     end
     else begin
        FlatTime.ItemIndex:=0;
-       ShowMessage('There is already a dawn flat plan');
+       ShowMessage(rsThereIsAlrea2);
     end;
     LockTarget:=false;
     exit;

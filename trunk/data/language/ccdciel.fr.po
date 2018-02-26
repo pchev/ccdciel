@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-25 16:24+0000\n"
-"PO-Revision-Date: 2018-02-25 16:29+0000\n"
+"POT-Creation-Date: 2018-02-26 17:33+0000\n"
+"PO-Revision-Date: 2018-02-26 19:01+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-25 16:32+0000\n"
+"X-Launchpad-Export-Date: 2018-02-26 19:08+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabort
@@ -32,6 +32,10 @@ msgstr "Pose interrompue"
 msgid "About"
 msgstr "À propos"
 
+#: u_translation.rsadd
+msgid "Add"
+msgstr "Ajouter"
+
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
 msgstr "Ajuster à la fenêtre"
@@ -43,6 +47,10 @@ msgstr "Permet d'obtenir l'état du programme depuis le serveur interne TCP/IP"
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
 msgstr "Un autre script est déjà en cours"
+
+#: u_translation.rsanytime
+msgid "Any time"
+msgstr "N'importe quand"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -68,6 +76,14 @@ msgstr "Astrométrie"
 msgid "Astrometry options"
 msgstr "Options de l'astrométrie"
 
+#: u_translation.rsatdawn
+msgid "at dawn"
+msgstr "à l'aube"
+
+#: u_translation.rsatdusk
+msgid "at dusk"
+msgstr "au crépuscule"
+
 #: u_translation.rsautofocus
 msgid "Autofocus"
 msgstr "Autofocus"
@@ -79,6 +95,10 @@ msgstr "Autofocus après le retournement méridien"
 #: u_translation.rsautofocusalr
 msgid "Autofocus already running."
 msgstr "La mise au point automatique est déjà lancée"
+
+#: u_translation.rsautofocusbef
+msgid "Autofocus before to start"
+msgstr "Autofocus avant le début"
 
 #: u_translation.rsautofocuscan
 msgid "Autofocus cannot find a star!%sPlease adjust your parameters"
@@ -103,6 +123,10 @@ msgstr "L'autofocus est abandonné à cause d'un SNR trop bas, POS=%s HFD=%s PEA
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
 msgstr "Erreur d'autofocus"
+
+#: u_translation.rsautofocuseve
+msgid "Autofocus every"
+msgstr "Autofocus tous les"
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
@@ -416,6 +440,10 @@ msgstr "Impossible de démarrer la prévisualisation maintenant"
 msgid "Cannot start preview loop now"
 msgstr "Ne peut pas démarrer la boucle d'aperçu maintenant"
 
+#: u_translation.rscanonlyaddon
+msgid "Can only add one flat serie at dusk and one at dawn"
+msgstr "Il ne peut y avoir qu'une série de flat au crépuscule et une à l'aube"
+
 #: u_translation.rscantrackpast
 msgid "Can track past meridian for"
 msgstr "Peut suivre après le méridien pour"
@@ -452,6 +480,14 @@ msgstr "Température du CCD"
 msgid "Center"
 msgstr "Centre"
 
+#: u_translation.rscenterdec
+msgid "Center Dec"
+msgstr "Déc centre"
+
+#: u_translation.rscenterra
+msgid "Center RA"
+msgstr "AD centre"
+
 #: u_translation.rschoose
 msgid "Choose"
 msgstr "Sélection"
@@ -471,6 +507,10 @@ msgstr "Cliquez sur Continuer lorsque vous êtes prêt."
 #: u_translation.rsclickcontinu2
 msgid "Click Continue when ready"
 msgstr "Cliquez sur Continuer lorsque vous êtes prêt"
+
+#: u_translation.rsclicktheobje
+msgid "Click the object in planetarium"
+msgstr "Cliquez l'objet dans le planétarium"
 
 #: u_translation.rsclippingindi
 msgid "Clipping indicator"
@@ -576,6 +616,10 @@ msgstr "Actuel"
 msgid "Current focuser absolute position"
 msgstr "Position absolue du focuser"
 
+#: u_translation.rscurrentimage
+msgid "Current image"
+msgstr "Image en cours"
+
 #: u_translation.rscurrentplan
 msgid "Current plan"
 msgstr "Plan courant"
@@ -587,6 +631,10 @@ msgstr "Dossier de Cygwin"
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
 msgstr "Date (TU) / Séquence"
+
+#: u_translation.rsdawn
+msgid "dawn"
+msgstr "aube"
 
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
@@ -616,9 +664,17 @@ msgstr "Délai après le déplacement du télescope [secondes] "
 msgid "Delete"
 msgstr "Supprimer"
 
+#: u_translation.rsdeletesequen
+msgid "Delete sequence %s ?"
+msgstr "Supprimer la séquence %s?"
+
 #: u_translation.rsdesc
 msgid "Desc."
 msgstr "Desc."
+
+#: u_translation.rsdescription
+msgid "Description"
+msgstr "Description"
 
 #: u_translation.rsdesiredtempe
 msgid "Desired temperature"
@@ -700,6 +756,10 @@ msgstr "Sous-échantillonner"
 msgid "Do you want to delete file %s ?"
 msgstr "Voulez-vous supprimer le fichier %s ?"
 
+#: u_translation.rsdusk
+msgid "dusk"
+msgstr "crépuscule"
+
 #: u_translation.rsdynamic
 msgid "Dynamic"
 msgstr "Dynamique"
@@ -714,7 +774,15 @@ msgstr "Est (Pointe à l'ouest)"
 
 #: u_translation.rsedit
 msgid "Edit"
-msgstr "Edition"
+msgstr "Modifier"
+
+#: u_translation.rseditplan
+msgid "Edit plan"
+msgstr "Modifier le plan"
+
+#: u_translation.rsedittargetli
+msgid "Edit target list"
+msgstr "Modifier la liste de cibles"
 
 #: u_translation.rselbrusimages
 msgid "Elbrus Images folder "
@@ -728,6 +796,10 @@ msgstr "Fin"
 msgid "End preview"
 msgstr "Arrêt de la prévisualisation"
 
+#: u_translation.rsendtime
+msgid "End time"
+msgstr "Heure de fin"
+
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
 msgstr "Glissement estimé depuis le dernier apprentissage"
@@ -739,6 +811,10 @@ msgstr "Exp:"
 #: u_translation.rsexp2
 msgid "Exp."
 msgstr "Exp."
+
+#: u_translation.rsexposure
+msgid "Exposure"
+msgstr "Exposiiton"
 
 #: u_translation.rsexposureabor
 msgid "Exposure aborted!"
@@ -827,6 +903,10 @@ msgstr "Auto-exposition du flat"
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
 msgstr "Niveau de l'image de flat"
+
+#: u_translation.rsflattime
+msgid "Flat time"
+msgstr "Moment du flat"
 
 #: u_translation.rsfoc
 msgid "Foc."
@@ -1068,6 +1148,10 @@ msgstr "Intensité"
 msgid "Interface"
 msgstr "Interface"
 
+#: u_translation.rsinterval
+msgid "Interval"
+msgstr "Interval"
+
 #: u_translation.rsinvalidbinni
 msgid "Invalid binning %s"
 msgstr "Binning incorrect %s"
@@ -1088,6 +1172,10 @@ msgstr "Nombre incorrect %s"
 #: u_translation.rsinvalidnumer
 msgid "Invalid numeric value"
 msgstr "Valeur numérique non valide"
+
+#: u_translation.rsinvalidobjec
+msgid "Invalid object coordinates!"
+msgstr "Coordonnées invalide!"
 
 #: u_translation.rsinvalidoruns
 msgid "Invalid or unsupported FITS file %s"
@@ -1301,6 +1389,10 @@ msgstr "Réseau"
 msgid "New"
 msgstr "Nouveau"
 
+#: u_translation.rsnewobject
+msgid "New object"
+msgstr "Nouvel objet"
+
 #: u_translation.rsnewscript
 msgid "New script"
 msgstr "Nouveau script"
@@ -1316,6 +1408,10 @@ msgstr "n.exp"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "Pas de retournement pour"
+
+#: u_translation.rsnomove
+msgid "No move"
+msgstr "Pas de déplacement"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -1340,6 +1436,10 @@ msgstr "Pas d'autoguidage! le dithering est ignoré."
 #: u_translation.rsnotconnected
 msgid "%s not connected!"
 msgstr "%s non connecté!"
+
+#: u_translation.rsnotenoughmea
+msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
+msgstr "Pas assez de points de mesures! Essayez d'augmenter le HFD maximum ou de diminuer le mouvement initial."
 
 #: u_translation.rsnotenoughpoi
 msgid "Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool."
@@ -1469,6 +1569,14 @@ msgstr "Taille des pixels"
 msgid "Plan"
 msgstr "Plan"
 
+#: u_translation.rsplanalreadye
+msgid "Plan %s already exist. Do you want to replace this file?"
+msgstr "Le plan %s existe déjà. Voulez vous remplacer ce fichier?"
+
+#: u_translation.rsplanalreadye2
+msgid "Plan %s already exist. Do you want to edit this plan?"
+msgstr "Le plan %s existe déjà. Voulez vous modifier ce plan?"
+
 #: u_translation.rsplanetarium
 msgid "Planetarium"
 msgstr "Planétarium"
@@ -1481,6 +1589,10 @@ msgstr "Erreur du planétarium."
 msgid "Planetarium is not connected"
 msgstr "La planétarium n'est pas connecté"
 
+#: u_translation.rsplanetariump
+msgid "Planetarium position"
+msgstr "Position du planétarium"
+
 #: u_translation.rsplanetariumt
 msgid "Planetarium target set to %s"
 msgstr "Objet du planétarium défini sur %s"
@@ -1488,6 +1600,10 @@ msgstr "Objet du planétarium défini sur %s"
 #: u_translation.rsplanetariumt2
 msgid "Planetarium target slew fail"
 msgstr "Le centrage de l'objet du planétarium a échoué"
+
+#: u_translation.rsplanname
+msgid "Plan name"
+msgstr "Nom du plan"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -1504,6 +1620,10 @@ msgstr "Veuillez configurer les optins de l'autofocus"
 #: u_translation.rspleaseconfir
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
 msgstr "Veuillez confirmer que vous voulez faire déplacer le télescope vers %s aux coordonnées %s/%s"
+
+#: u_translation.rspleaseconnec
+msgid "Please connect the planetarium first"
+msgstr "Veuillez connecter le planétarium"
 
 #: u_translation.rspleaseincrea
 msgid "Please increase the threshold."
@@ -1553,6 +1673,10 @@ msgstr "Prévisualisation"
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
 msgstr "Empilement de l'aperçu"
+
+#: u_translation.rspreviewwhenw
+msgid "Preview when waiting to repeat"
+msgstr "Prévisualisation pendant l'attente"
 
 #: u_translation.rsprofile
 msgid "Profile: %s"
@@ -1618,6 +1742,18 @@ msgstr "Incrément relatif pour le mouvement vers l'intérieur ou vers l'extéri
 msgid "Repeat"
 msgstr "Répéter"
 
+#: u_translation.rsrepeatthepla
+msgid "Repeat the plan for this object"
+msgstr "Répéter le plan pour cet objet"
+
+#: u_translation.rsrepeatthewho
+msgid "Repeat the whole list"
+msgstr "Répeter la list complète"
+
+#: u_translation.rsrepeatthisst
+msgid "Repeat this step"
+msgstr "Répéter ce plan"
+
 #: u_translation.rsreportaprobl
 msgid "Report a problem"
 msgstr "Signaler un problème"
@@ -1661,6 +1797,10 @@ msgstr "Retourne à la position cible"
 #: u_translation.rsreverse
 msgid "Reverse"
 msgstr "Inverser"
+
+#: u_translation.rsrise
+msgid "rise"
+msgstr "lever"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -1742,6 +1882,10 @@ msgstr "sec."
 msgid "seconds"
 msgstr "secondes"
 
+#: u_translation.rsseconds2
+msgid "[seconds]"
+msgstr "[secondes]"
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Choisir d'abord une étoile!"
@@ -1799,6 +1943,10 @@ msgstr "Serveur"
 msgid "Set"
 msgstr "Régler"
 
+#: u_translation.rsset2
+msgid "set"
+msgstr "coucher"
+
 #: u_translation.rssetbinning
 msgid "Set Binning"
 msgstr "Ajuster le binning"
@@ -1814,6 +1962,10 @@ msgstr "Direction de mise au point vers l'extérieur"
 #: u_translation.rssetpoint
 msgid "Setpoint"
 msgstr "Consigne"
+
+#: u_translation.rssetrotatoran
+msgid "Set rotator angle"
+msgstr "Règle la rotation"
 
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
@@ -1842,6 +1994,10 @@ msgstr "sigma"
 #: u_translation.rsskychartonlo
 msgid "Skychart on local computer"
 msgstr "Cartes du Ciel en local"
+
+#: u_translation.rsskyflat
+msgid "Sky Flat"
+msgstr "Flat crépusculaire"
 
 #: u_translation.rsslewing
 msgid "Slewing"
@@ -1911,6 +2067,10 @@ msgstr "Profile de d'étoile"
 msgid "Start"
 msgstr "Démarrer"
 
+#: u_translation.rsstartat
+msgid "Start at "
+msgstr "Début à "
+
 #: u_translation.rsstartcapture
 msgid "Start capture"
 msgstr "Acquisition"
@@ -1948,9 +2108,17 @@ msgstr "Lancer l'enregistrement"
 msgid "Start single preview"
 msgstr "Prévisualisation"
 
+#: u_translation.rsstarttime
+msgid "Start time"
+msgstr "Heure de début"
+
 #: u_translation.rsstayatthecur
 msgid "Stay at the current position for autofocus"
 msgstr "Reste a la positionpour la mise au point"
+
+#: u_translation.rsstayinplacef
+msgid "Stay in place for autofocus"
+msgstr "Reste sur place pour l'autofocus"
 
 #: u_translation.rsstep
 msgid "Step"
@@ -1959,6 +2127,10 @@ msgstr "Pas"
 #: u_translation.rsstop
 msgid "Stop"
 msgstr "Arrêt"
+
+#: u_translation.rsstopat
+msgid "Stop at"
+msgstr "Arrêt à"
 
 #: u_translation.rsstopautoguid
 msgid "Stop autoguider"
@@ -2096,6 +2268,22 @@ msgstr "Le focuser est maintenant positionné à la position du meilleur HFD."
 msgid "The program need to be restarted"
 msgstr "Le programme doit être redémarrer"
 
+#: u_translation.rsthereisalrea
+msgid "There is already a dusk flat plan"
+msgstr "Il y a déjà un plan de flat pour le crépuscule"
+
+#: u_translation.rsthereisalrea2
+msgid "There is already a dawn flat plan"
+msgstr "Il y a déjà un plan de flat pour l'aube"
+
+#: u_translation.rsthisobjectis
+msgid "This object is never below the requested elevation"
+msgstr "Cet objet n'est jamais en dessous de l'élévation demandée"
+
+#: u_translation.rsthisobjectis2
+msgid "This object is never above the requested elevation"
+msgstr "Cet objet n'est jamais au dessus de l'élévation demandée"
+
 #: u_translation.rstiltindicati
 msgid " Tilt indication:%s%"
 msgstr " Indication d'inclinaison: %s%"
@@ -2158,11 +2346,19 @@ msgstr "Non calibré"
 
 #: u_translation.rsunknowpiersi
 msgid "Unknow pier side"
-msgstr "Coté du pied inconnu"
+msgstr "Côté du pied inconnu"
 
 #: u_translation.rsunparked
 msgid "Unparked"
 msgstr "Non parqué"
+
+#: u_translation.rsupdateradecf
+msgid "Update RA+Dec from Planetarium"
+msgstr "Met à jours AD+Déc depuis le planétarium"
+
+#: u_translation.rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr "Utilise l'astrométrie pour affiner la position"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
@@ -2263,6 +2459,10 @@ msgstr "Largeur"
 #: u_translation.rsyoucanusethe
 msgid "You can use the menu \"File / Focuser calibration\" to help to fill the values on this page for your specific focuser."
 msgstr "Vous pouvez utiliser le menu \"Fichier / Calibration du focuseur\" pour vous aidez à remplir les valeurs pour votre équipement."
+
+#: u_translation.rsyoumustconfi
+msgid "You must configure your flat preference."
+msgstr "Vous devez configurer les préférences pour les flat."
 
 #: u_translation.rszoom
 msgid "Zoom"
