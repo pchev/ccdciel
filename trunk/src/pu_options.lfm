@@ -245,18 +245,11 @@ object f_option: Tf_option
         Left = 144
         Height = 35
         Top = 4
-        Width = 88
+        Width = 128
         ItemHeight = 0
         OnChange = LanguagesChange
         Style = csDropDownList
         TabOrder = 8
-      end
-      object Label19: TLabel
-        Left = 224
-        Height = 1
-        Top = 10
-        Width = 1
-        ParentColor = False
       end
     end
     object TabSheet2: TTabSheet
@@ -314,7 +307,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -388,7 +381,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -642,7 +635,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -877,8 +870,8 @@ object f_option: Tf_option
           Height = 40
           Top = 48
           Width = 328
-          ClientHeight = 40
-          ClientWidth = 328
+          ClientHeight = 36
+          ClientWidth = 324
           TabOrder = 1
           object TemperatureSlope: TEdit
             Left = 8
@@ -1884,8 +1877,8 @@ object f_option: Tf_option
               Top = 176
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 387
+              ClientHeight = 36
+              ClientWidth = 383
               TabOrder = 6
               Visible = False
               object Label34: TLabel
@@ -2705,8 +2698,8 @@ object f_option: Tf_option
               Height = 80
               Top = 48
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

@@ -40,7 +40,6 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
-    Label19: TLabel;
     Languages: TComboBox;
     Label18: TLabel;
     Labelmsg: TLabel;
@@ -612,7 +611,7 @@ end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);
 begin
-   label19.Caption:=rsTheProgramNe;
+   msg(rsTheProgramNe);
 end;
 
 procedure Tf_option.msg(txt:string);

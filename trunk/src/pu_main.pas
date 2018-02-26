@@ -4055,7 +4055,7 @@ end;
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 var ok,PlanetariumChange,AutoguiderChange: boolean;
     i,j,n,FocusStarMagIndex: integer;
-    buf:string;
+    buf,langname:string;
     fs : TSearchRec;
 begin
    PlanetariumChange:=false;
@@ -4069,7 +4069,10 @@ begin
    while i=0 do begin
      buf:=ExtractFileNameOnly(fs.Name);
      delete(buf,1,8);
-     j:=f_option.Languages.Items.Add(buf);
+     if buf='en' then langname:='English'
+     else if buf='fr' then langname:='Français'
+     else langname:='';
+     j:=f_option.Languages.Items.Add(buf+', '+langname);
      if buf=lang then n:=j;
      i:=FindNextUTF8(fs);
    end;
@@ -4241,7 +4244,10 @@ begin
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin
-     config.SetValue('/Language',f_option.Languages.Text);
+     buf:=f_option.Languages.Text;
+     i:=pos(',',buf);
+     if i>0 then buf:=copy(buf,1,i-1);
+     config.SetValue('/Language',buf);
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
      for i:=0 to SubDirCount-1 do begin
