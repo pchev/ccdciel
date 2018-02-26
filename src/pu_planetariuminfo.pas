@@ -4,7 +4,7 @@ unit pu_planetariuminfo;
 
 interface
 
-uses  cu_planetarium, u_utils, u_global, UScaleDPI,
+uses  cu_planetarium, u_utils, u_global, UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -27,6 +27,7 @@ type
     { private declarations }
     FPlanetarium: TPlanetarium;
     procedure recvdata(msg:string);
+    procedure SetLang;
   public
     { public declarations }
     property planetarium: TPlanetarium read FPlanetarium write FPlanetarium;
@@ -44,7 +45,7 @@ implementation
 procedure Tf_planetariuminfo.FormShow(Sender: TObject);
 begin
   if (planetarium=nil) or (not planetarium.Connected) then begin
-    ShowMessage('Please connect the planetarium first');
+    ShowMessage(rsPleaseConnec);
     ModalResult:=mrAbort;
   end
   else begin
@@ -56,6 +57,18 @@ end;
 procedure Tf_planetariuminfo.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  SetLang;
+end;
+
+procedure Tf_planetariuminfo.SetLang;
+begin
+  Caption:=rsPlanetariumP;
+  Button1.Caption:=rsOK;
+  Button2.Caption:=rsCancel;
+  Label1.Caption:=rsCenterRA;
+  Label2.Caption:=rsCenterDec;
+  Label3.Caption:=rsObjectName;
+  Label4.Caption:=rsClickTheObje;
 end;
 
 procedure Tf_planetariuminfo.recvdata(msg:string);

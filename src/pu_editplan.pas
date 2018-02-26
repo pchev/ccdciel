@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, u_ccdconfig, XMLConf, UScaleDPI,
+uses  u_global, u_utils, u_ccdconfig, XMLConf, UScaleDPI, u_translation,
   LazFileUtils, Classes, SysUtils, Forms,
   Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls;
 
@@ -96,6 +96,7 @@ type
     LockStep: boolean;
     originalFilter: array[0..99] of string;
     procedure ResetSteps;
+    procedure SetLang;
   public
     { public declarations }
     procedure ClearStepList;
@@ -114,12 +115,40 @@ implementation
 procedure Tf_EditPlan.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  SetLang;
   LockStep:=false;
 end;
 
 procedure Tf_EditPlan.FormDestroy(Sender: TObject);
 begin
  ClearStepList;
+end;
+
+procedure Tf_EditPlan.SetLang;
+begin
+  Caption := rsEditPlan;
+  Label8.Caption := rsStep;
+  Label7.Caption := rsDescription;
+  Label4.Caption := rsType;
+  Label13.Caption := rsSeconds2;
+  Label11.Caption := rsInterval;
+  Label10.Caption := rsRepeat;
+  Label3.Caption := rsCount;
+  Label6.Caption := rsBinning;
+  Label12.Caption := rsSeconds2;
+  Label2.Caption := rsExposure;
+  Label5.Caption := rsFilter;
+  CheckBoxRepeat.Caption := rsRepeatThisSt;
+  CheckBoxDither.Caption := rsDitherEvery;
+  CheckBoxAutofocusStart.Caption := rsAutofocusBef;
+  CheckBoxAutofocus.Caption := rsAutofocusEve;
+  LabelGain.Caption := rsGain;
+  BtnClose.Caption := rsSave;
+  BtnDeleteStep.Caption := rsDelete;
+  BtnAddStep.Caption := rsAdd;
+  BtnCancel.Caption := rsCancel;
+  StepList.Columns.Items[0].Title.Caption := rsDescription;
+  Label1.Caption := rsPlanName;
 end;
 
 procedure Tf_EditPlan.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);

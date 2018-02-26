@@ -614,6 +614,55 @@ resourcestring
   rsAbort = 'Abort';
   rsNotEnoughMea = 'Not enough measurement points! Try to increase the '
     +'maximum HFD or decrease the minimum start movement';
+  rsPleaseConnec = 'Please connect the planetarium first';
+  rsPlanetariumP = 'Planetarium position';
+  rsCenterRA = 'Center RA';
+  rsCenterDec = 'Center Dec';
+  rsClickTheObje = 'Click the object in planetarium';
+  rsEditTargetLi = 'Edit target list';
+  rsNewObject = 'New object';
+  rsSkyFlat = 'Sky Flat';
+  rsRepeatTheWho = 'Repeat the whole list';
+  rsStartAt = 'Start at ';
+  rsStopAt = 'Stop at';
+  rsDusk = 'dusk';
+  rsDawn = 'dawn';
+  rsPreviewWhenW = 'Preview when waiting to repeat';
+  rsSeconds2 = '[seconds]';
+  rsInterval = 'Interval';
+  rsAnyTime = 'Any time';
+  rsEndTime = 'End time';
+  rsStartTime = 'Start time';
+  rsRise = 'rise';
+  rsSet2 = 'set';
+  rsNoMove = 'No move';
+  rsUseAstrometr = 'Use astrometry to refine the position';
+  rsCurrentImage = 'Current image';
+  rsUpdateRADecF = 'Update RA+Dec from Planetarium';
+  rsStayInPlaceF = 'Stay in place for autofocus';
+  rsSetRotatorAn = 'Set rotator angle';
+  rsRepeatThePla = 'Repeat the plan for this object';
+  rsFlatTime = 'Flat time';
+  rsAtDusk = 'at dusk';
+  rsAtDawn = 'at dawn';
+  rsInvalidObjec = 'Invalid object coordinates!';
+  rsThisObjectIs = 'This object is never below the requested elevation';
+  rsThisObjectIs2 = 'This object is never above the requested elevation';
+  rsPlanAlreadyE = 'Plan %s already exist. Do you want to replace this file?';
+  rsPlanAlreadyE2 = 'Plan %s already exist. Do you want to edit this plan?';
+  rsYouMustConfi = 'You must configure your flat preference.';
+  rsCanOnlyAddOn = 'Can only add one flat serie at dusk and one at dawn';
+  rsDeleteSequen = 'Delete sequence %s ?';
+  rsThereIsAlrea = 'There is already a dusk flat plan';
+  rsThereIsAlrea2 = 'There is already a dawn flat plan';
+  rsEditPlan = 'Edit plan';
+  rsDescription = 'Description';
+  rsExposure = 'Exposure';
+  rsRepeatThisSt = 'Repeat this step';
+  rsAutofocusBef = 'Autofocus before to start';
+  rsAutofocusEve = 'Autofocus every';
+  rsAdd = 'Add';
+  rsPlanName = 'Plan name';
 
 implementation
 

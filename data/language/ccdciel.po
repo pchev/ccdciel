@@ -2246,3 +2246,203 @@ msgstr ""
 msgid "Abort"
 msgstr ""
 
+#: u_translation:rsnotenoughmea
+msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
+msgstr ""
+
+#: u_translation:rspleaseconnec
+msgid "Please connect the planetarium first"
+msgstr ""
+
+#: u_translation:rsplanetariump
+msgid "Planetarium position"
+msgstr ""
+
+#: u_translation:rscenterra
+msgid "Center RA"
+msgstr ""
+
+#: u_translation:rscenterdec
+msgid "Center Dec"
+msgstr ""
+
+#: u_translation:rsclicktheobje
+msgid "Click the object in planetarium"
+msgstr ""
+
+#: u_translation:rsedittargetli
+msgid "Edit target list"
+msgstr ""
+
+#: u_translation:rsnewobject
+msgid "New object"
+msgstr ""
+
+#: u_translation:rsskyflat
+msgid "Sky Flat"
+msgstr ""
+
+#: u_translation:rsrepeatthewho
+msgid "Repeat the whole list"
+msgstr ""
+
+#: u_translation:rsstartat
+msgid "Start at "
+msgstr ""
+
+#: u_translation:rsstopat
+msgid "Stop at"
+msgstr ""
+
+#: u_translation:rsdusk
+msgid "dusk"
+msgstr ""
+
+#: u_translation:rsdawn
+msgid "dawn"
+msgstr ""
+
+#: u_translation:rspreviewwhenw
+msgid "Preview when waiting to repeat"
+msgstr ""
+
+#: u_translation:rsseconds2
+msgid "[seconds]"
+msgstr ""
+
+#: u_translation:rsinterval
+msgid "Interval"
+msgstr ""
+
+#: u_translation:rsanytime
+msgid "Any time"
+msgstr ""
+
+#: u_translation:rsendtime
+msgid "End time"
+msgstr ""
+
+#: u_translation:rsstarttime
+msgid "Start time"
+msgstr ""
+
+#: u_translation:rsrise
+msgid "rise"
+msgstr ""
+
+#: u_translation:rsset2
+msgid "set"
+msgstr ""
+
+#: u_translation:rsnomove
+msgid "No move"
+msgstr ""
+
+#: u_translation:rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr ""
+
+#: u_translation:rscurrentimage
+msgid "Current image"
+msgstr ""
+
+#: u_translation:rsupdateradecf
+msgid "Update RA+Dec from Planetarium"
+msgstr ""
+
+#: u_translation:rsstayinplacef
+msgid "Stay in place for autofocus"
+msgstr ""
+
+#: u_translation:rssetrotatoran
+msgid "Set rotator angle"
+msgstr ""
+
+#: u_translation:rsrepeatthepla
+msgid "Repeat the plan for this object"
+msgstr ""
+
+#: u_translation:rsflattime
+msgid "Flat time"
+msgstr ""
+
+#: u_translation:rsatdusk
+msgid "at dusk"
+msgstr ""
+
+#: u_translation:rsatdawn
+msgid "at dawn"
+msgstr ""
+
+#: u_translation:rsinvalidobjec
+msgid "Invalid object coordinates!"
+msgstr ""
+
+#: u_translation:rsthisobjectis
+msgid "This object is never below the requested elevation"
+msgstr ""
+
+#: u_translation:rsthisobjectis2
+msgid "This object is never above the requested elevation"
+msgstr ""
+
+#: u_translation:rsplanalreadye
+msgid "Plan %s already exist. Do you want to replace this file?"
+msgstr ""
+
+#: u_translation:rsplanalreadye2
+msgid "Plan %s already exist. Do you want to edit this plan?"
+msgstr ""
+
+#: u_translation:rsyoumustconfi
+msgid "You must configure your flat preference."
+msgstr ""
+
+#: u_translation:rscanonlyaddon
+msgid "Can only add one flat serie at dusk and one at dawn"
+msgstr ""
+
+#: u_translation:rsdeletesequen
+msgid "Delete sequence %s ?"
+msgstr ""
+
+#: u_translation:rsthereisalrea
+msgid "There is already a dusk flat plan"
+msgstr ""
+
+#: u_translation:rsthereisalrea2
+msgid "There is already a dawn flat plan"
+msgstr ""
+
+#: u_translation:rseditplan
+msgid "Edit plan"
+msgstr ""
+
+#: u_translation:rsdescription
+msgid "Description"
+msgstr ""
+
+#: u_translation:rsexposure
+msgid "Exposure"
+msgstr ""
+
+#: u_translation:rsrepeatthisst
+msgid "Repeat this step"
+msgstr ""
+
+#: u_translation:rsautofocusbef
+msgid "Autofocus before to start"
+msgstr ""
+
+#: u_translation:rsautofocuseve
+msgid "Autofocus every"
+msgstr ""
+
+#: u_translation:rsadd
+msgid "Add"
+msgstr ""
+
+#: u_translation:rsplanname
+msgid "Plan name"
+msgstr ""
+
