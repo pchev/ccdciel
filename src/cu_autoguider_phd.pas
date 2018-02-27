@@ -192,7 +192,7 @@ p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
    if (eventname='GuideStep') then begin
-     if (FStatus<>'Settling') then FStatus:='Guiding';
+     if (FStatus<>'Settling')and(FStatus<>'Start Dither') then FStatus:='Guiding';
      i:=attrib.IndexOf('ErrorCode');
      if i>=0 then begin
        k:=StrToIntDef(trim(value[i]),-1);
@@ -484,6 +484,7 @@ begin
   buf:=buf+'"id": 2010}';
   Send(buf);
   FState:=GUIDER_BUSY;
+  FStatus:='Start Dither';
 end;
 
 procedure T_autoguider_phd.StarLostTimerTimer(Sender: TObject);
