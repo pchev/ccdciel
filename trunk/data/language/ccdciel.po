@@ -2510,3 +2510,7 @@ msgstr ""
 msgid "FITS header"
 msgstr ""
 
+#: u_translation:rslogfilesares
+msgid "Log files are saved in %s"
+msgstr ""
+

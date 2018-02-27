@@ -87,14 +87,13 @@ object f_option: Tf_option
         Width = 165
         Caption = 'Log all messages to file '
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 1
       end
       object CaptureDir: TEdit
-        Left = 144
+        Left = 160
         Height = 31
         Top = 40
-        Width = 216
+        Width = 200
         TabOrder = 2
       end
       object ButtonTempDir: TButton
@@ -107,10 +106,10 @@ object f_option: Tf_option
         TabOrder = 3
       end
       object TempDir: TEdit
-        Left = 144
+        Left = 160
         Height = 31
         Top = 72
-        Width = 216
+        Width = 200
         TabOrder = 4
       end
       object Label99: TLabel
@@ -242,10 +241,10 @@ object f_option: Tf_option
         ParentColor = False
       end
       object Languages: TComboBox
-        Left = 144
+        Left = 160
         Height = 35
         Top = 4
-        Width = 128
+        Width = 200
         ItemHeight = 0
         OnChange = LanguagesChange
         Style = csDropDownList
@@ -336,7 +335,7 @@ object f_option: Tf_option
           Width = 51
           MaxLength = 12
           ParentShowHint = False
-          ShowHint = False
+          ShowHint = True
           TabOrder = 0
           OnChange = latChange
           Value = 0
@@ -353,7 +352,7 @@ object f_option: Tf_option
           Width = 51
           MaxLength = 2
           ParentShowHint = False
-          ShowHint = False
+          ShowHint = True
           TabOrder = 1
           OnChange = latChange
           Value = 0
@@ -366,7 +365,7 @@ object f_option: Tf_option
           Top = 0
           Width = 51
           ParentShowHint = False
-          ShowHint = False
+          ShowHint = True
           TabOrder = 2
           OnChange = latChange
           Value = 0
@@ -410,7 +409,7 @@ object f_option: Tf_option
           Width = 51
           MaxLength = 12
           ParentShowHint = False
-          ShowHint = False
+          ShowHint = True
           TabOrder = 0
           OnChange = longChange
           Value = 0
@@ -427,7 +426,7 @@ object f_option: Tf_option
           Width = 51
           MaxLength = 2
           ParentShowHint = False
-          ShowHint = False
+          ShowHint = True
           TabOrder = 1
           OnChange = longChange
           Value = 0
@@ -440,7 +439,7 @@ object f_option: Tf_option
           Top = 0
           Width = 51
           ParentShowHint = False
-          ShowHint = False
+          ShowHint = True
           TabOrder = 2
           OnChange = longChange
           Value = 0
@@ -754,7 +753,6 @@ object f_option: Tf_option
           Width = 159
           Caption = 'Substract a drak frame'
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 1
         end
         object StackShow: TCheckBox
@@ -765,7 +763,6 @@ object f_option: Tf_option
           Width = 184
           Caption = 'Show preview stack option'
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 2
         end
       end
@@ -1045,7 +1042,6 @@ object f_option: Tf_option
           Width = 54
           OnEditingDone = CheckFocusWindow
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 0
         end
         object Label14: TLabel
@@ -1073,7 +1069,6 @@ object f_option: Tf_option
           Width = 54
           OnEditingDone = CheckFocusWindow
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 1
         end
       end
@@ -1093,7 +1088,6 @@ object f_option: Tf_option
           Top = 0
           Width = 54
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 0
         end
         object Label98: TLabel
@@ -1111,7 +1105,6 @@ object f_option: Tf_option
           Top = 34
           Width = 54
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 1
         end
         object BtnDisableDelay: TButton
@@ -1137,7 +1130,6 @@ object f_option: Tf_option
           )
           OnChange = CheckFocuserDirection
           ParentShowHint = False
-          ShowHint = False
           Style = csDropDownList
           TabOrder = 3
           Text = 'IN'
@@ -1151,7 +1143,6 @@ object f_option: Tf_option
           Caption = 'Backlash compensation'
           OnChange = CheckFocuserDirection
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 4
         end
       end
@@ -1201,7 +1192,6 @@ object f_option: Tf_option
           Top = 4
           Width = 54
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 0
         end
         object BtnDisableFocuserTemp: TButton
@@ -1245,7 +1235,6 @@ object f_option: Tf_option
         )
         OnClick = AutofocusmodeClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 0
       end
       object PanelAutofocus: TPanel
@@ -1280,7 +1269,6 @@ object f_option: Tf_option
           Top = 0
           Width = 60
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 0
         end
         object Label58: TLabel
@@ -1301,7 +1289,6 @@ object f_option: Tf_option
           Checked = True
           OnChange = CheckFocuserDirection
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 2
           TabStop = True
         end
@@ -1314,7 +1301,6 @@ object f_option: Tf_option
           Caption = 'Out'
           OnChange = CheckFocuserDirection
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 1
         end
         object AutofocusNotebook: TNotebook
@@ -1359,7 +1345,6 @@ object f_option: Tf_option
               Width = 60
               OnEditingDone = CheckStartNearHFD
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 0
             end
             object AutofocusSlippageCorrection: TCheckBox
@@ -1370,7 +1355,6 @@ object f_option: Tf_option
               Width = 142
               Caption = 'Slippage correction '
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 1
             end
             object Label88: TLabel
@@ -1406,7 +1390,6 @@ object f_option: Tf_option
               Top = 2
               Width = 60
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 0
             end
             object AutofocusDynamicMovement: TEdit
@@ -1416,7 +1399,6 @@ object f_option: Tf_option
               Top = 34
               Width = 60
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 1
             end
             object Label65: TLabel
@@ -1444,7 +1426,6 @@ object f_option: Tf_option
               Top = 34
               Width = 60
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 0
             end
             object AutofocusMaxSpeed: TEdit
@@ -1454,7 +1435,6 @@ object f_option: Tf_option
               Top = 4
               Width = 60
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 1
             end
             object Label47: TLabel
@@ -1502,7 +1482,6 @@ object f_option: Tf_option
             Width = 60
             OnEditingDone = CheckStartNearHFD
             ParentShowHint = False
-            ShowHint = False
             TabOrder = 0
           end
           object Label57: TLabel
@@ -1520,7 +1499,6 @@ object f_option: Tf_option
             Top = 0
             Width = 50
             ParentShowHint = False
-            ShowHint = False
             TabOrder = 1
           end
         end
@@ -1539,7 +1517,6 @@ object f_option: Tf_option
           Top = 28
           Width = 60
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 5
         end
         object Label54: TLabel
@@ -1565,7 +1542,6 @@ object f_option: Tf_option
           Top = 84
           Width = 60
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 6
         end
         object AutofocusMinSNR: TEdit
@@ -1575,7 +1551,6 @@ object f_option: Tf_option
           Top = 84
           Width = 50
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 7
         end
         object Label81: TLabel
@@ -1622,7 +1597,6 @@ object f_option: Tf_option
             '8'
           )
           ParentShowHint = False
-          ShowHint = False
           Style = csDropDownList
           TabOrder = 0
           Text = '4'
@@ -1931,7 +1905,6 @@ object f_option: Tf_option
               Top = 10
               Width = 192
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 0
             end
             object Label12: TLabel
@@ -1957,7 +1930,6 @@ object f_option: Tf_option
               Top = 43
               Width = 192
               ParentShowHint = False
-              ShowHint = False
               TabOrder = 1
             end
             object Label15: TLabel
