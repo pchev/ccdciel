@@ -185,7 +185,6 @@ uses LazFileUtils;
 
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
-  ShowHint:=true;
   ScaleDPI(Self);
   SetLang;
   LockTarget:=false;

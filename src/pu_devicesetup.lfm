@@ -78,7 +78,7 @@ object f_setup: Tf_setup
         )
         OnClick = InterfaceSelectionBoxClick
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 0
       end
       object PanelIndiServer: TPanel
@@ -187,7 +187,7 @@ object f_setup: Tf_setup
         Caption = 'New'
         OnClick = BtnNewProfileClick
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 3
       end
       object BtnDeleteProfile: TButton
@@ -199,7 +199,7 @@ object f_setup: Tf_setup
         Caption = 'Delete'
         OnClick = BtnDeleteProfileClick
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 4
       end
       object BtnCopyProfile: TButton
@@ -211,7 +211,7 @@ object f_setup: Tf_setup
         Caption = 'Copy'
         OnClick = BtnCopyProfileClick
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 5
       end
     end
@@ -361,7 +361,7 @@ object f_setup: Tf_setup
           )
           OnClick = CameraIndiTransfertClick
           ParentShowHint = False
-          ShowHint = True
+          ShowHint = False
           TabOrder = 4
         end
         object CameraDiskPanel: TPanel
@@ -388,7 +388,7 @@ object f_setup: Tf_setup
             Top = 8
             Width = 166
             ParentShowHint = False
-            ShowHint = True
+            ShowHint = False
             TabOrder = 0
             Text = '/mnt/ramdisk'
           end
@@ -455,7 +455,7 @@ object f_setup: Tf_setup
         Caption = 'Filter wheel in camera connection. (Restart required!)'
         OnClick = FilterWheelInCameraBoxClick
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 3
       end
       object PanelWheelIncamera: TPanel
@@ -613,7 +613,7 @@ object f_setup: Tf_setup
         Caption = 'Focuser in mount connection. (Restart required!)'
         OnClick = FocuserInMountBoxClick
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 3
       end
       object PanelFocuserIndi: TPanel

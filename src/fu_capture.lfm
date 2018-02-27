@@ -108,7 +108,7 @@ object f_capture: Tf_capture
         Top = 4
         Width = 88
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 1
       end
     end
