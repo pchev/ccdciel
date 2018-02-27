@@ -35,7 +35,7 @@ type
     FTargetHost,FTargetPort,FErrorDesc,FRecvData,FLastError : string;
     FVersion,FMsgVersion,FStatus : String;
     FSettlePix,FSettleTmin,FSettleTmax: string;
-    FRunning, FRecovering: boolean;
+    FRunning, FRecovering,FDithering: boolean;
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
@@ -95,6 +95,7 @@ inherited create(true);
 freeonterminate:=true;
 FRunning:=false;
 FRecovering:=false;
+FDithering:=false;
 FStatus:='Disconnected';
 FState:=GUIDER_DISCONNECTED;
 FTimeout:=500;

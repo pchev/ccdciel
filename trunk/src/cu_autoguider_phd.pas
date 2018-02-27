@@ -192,7 +192,7 @@ p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
    if (eventname='GuideStep') then begin
-     if (FStatus<>'Settling')and(FStatus<>'Start Dither') then FStatus:='Guiding';
+     if (FStatus<>'Settling')and(not FDithering) then FStatus:='Guiding';
      i:=attrib.IndexOf('ErrorCode');
      if i>=0 then begin
        k:=StrToIntDef(trim(value[i]),-1);
@@ -234,7 +234,10 @@ if p>=0 then begin
    else if eventname='CalibrationDataFlipped' then FStatus:='Calibration Data Flipped'
    else if eventname='LoopingExposures' then FStatus:='Looping Exposures'
    else if eventname='LoopingExposuresStopped' then FStatus:='Exposures Stopped'
-   else if eventname='Settling' then FStatus:='Settling'
+   else if eventname='Settling' then begin
+     FStatus:='Settling';
+     FDithering:=false;
+   end
    else if eventname='SettleDone' then begin
      i:=attrib.IndexOf('Status');
      if i>=0 then s:=StrToIntDef(value[i],0) else s:=0;
@@ -245,6 +248,7 @@ if p>=0 then begin
        if i>=0 then err:=value[i] else err:='?';
        FStatus:='Error: '+err;
      end;
+     FDithering:=false;
    end
    else if eventname='GuidingDithered' then FStatus:='Guiding Dithered'
    else if eventname='LockPositionLost' then FStatus:='Lock Position Lost'
@@ -484,7 +488,7 @@ begin
   buf:=buf+'"id": 2010}';
   Send(buf);
   FState:=GUIDER_BUSY;
-  FStatus:='Start Dither';
+  FDithering:=true;
 end;
 
 procedure T_autoguider_phd.StarLostTimerTimer(Sender: TObject);
