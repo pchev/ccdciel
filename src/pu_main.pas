@@ -4918,7 +4918,7 @@ if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) the
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
       NewMessage(rsDithering+ellipsis);
-      StatusBar1.Panels[1].Text:='rsDithering+ellipsis';
+      StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
       autoguider.Dither(DitherPixel, DitherRAonly);
       autoguider.WaitBusy(SettleMaxTime);
       Wait(1);
