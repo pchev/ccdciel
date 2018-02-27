@@ -333,7 +333,7 @@ object f_EditPlan: Tf_EditPlan
             Width = 80
             OnChange = StepChange
             ParentShowHint = False
-            ShowHint = True
+            ShowHint = False
             TabOrder = 1
           end
         end

@@ -17,7 +17,6 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
-  ShowHint = True
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -265,6 +264,8 @@ object f_main: Tf_main
       ButtonWidth = 30
       Images = ImageListDay
       ParentColor = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
       Wrapable = False
       object TBConnect: TToolButton

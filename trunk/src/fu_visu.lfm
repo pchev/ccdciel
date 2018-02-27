@@ -451,7 +451,7 @@ object f_visu: Tf_visu
         MinValue = 0.1
         OnChange = GammaChange
         ParentShowHint = False
-        ShowHint = True
+        ShowHint = False
         TabOrder = 0
         Value = 1
       end

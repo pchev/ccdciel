@@ -93,6 +93,7 @@ end;
 
 procedure Tf_rotator.SetCalibrated(onoff:boolean);
 begin
+ led.ShowHint:=true;
  if onoff then begin
    led.Brush.Color:=clLime;
    led.Hint:=rsCalibrated;

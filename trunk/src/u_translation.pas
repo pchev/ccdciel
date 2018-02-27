@@ -679,6 +679,7 @@ resourcestring
   rsFileNotFound = 'File not found %s';
   rsClose = 'Close';
   rsFITSHeader = 'FITS header';
+  rsLogFilesAreS = 'Log files are saved in %s';
 
 implementation
 

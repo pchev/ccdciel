@@ -12,6 +12,7 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
+  LCLVersion = '1.8.0.6'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -105,7 +106,6 @@ object f_EditTargets: Tf_EditTargets
           Width = 120
         end      
         item
-          MaxSize = 200
           Title.Caption = 'Plan'
           Width = 124
         end>
@@ -876,7 +876,6 @@ object f_EditTargets: Tf_EditTargets
           Width = 80
           OnChange = TargetChange
           ParentShowHint = False
-          ShowHint = True
           TabOrder = 1
         end
       end

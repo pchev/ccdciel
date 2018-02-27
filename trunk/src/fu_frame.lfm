@@ -42,7 +42,7 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 0
       Text = ' '
     end
@@ -54,7 +54,7 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 1
       Text = ' '
     end
@@ -66,7 +66,7 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 2
       Text = ' '
     end
@@ -78,7 +78,7 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = True
+      ShowHint = False
       TabOrder = 3
       Text = ' '
     end

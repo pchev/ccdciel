@@ -267,7 +267,7 @@ object f_starprofile: Tf_starprofile
             AllowAllUp = True
             Flat = True
             GroupIndex = 1
-            ShowHint = True
+            ShowHint = False
             ParentShowHint = False
           end
         end
