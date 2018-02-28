@@ -4,7 +4,8 @@ unit pu_focusercalibration;
 
 interface
 
-uses u_global, cu_focuser, Classes, SysUtils, FileUtil, TASources, TAGraph, TASeries, Forms,
+uses u_global, cu_focuser, u_translation,
+  Classes, SysUtils, FileUtil, TASources, TAGraph, TASeries, Forms,
   Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, ValEdit, TADrawUtils, TACustomSeries;
 
 type
@@ -69,6 +70,7 @@ type
     function GetMinStep: integer;
     procedure RunCalibration(Data: PtrInt);
     procedure Saveconfig;
+    procedure SetLang;
   public
     procedure ProgressL(n:integer; x,y: double);
     procedure ProgressR(n:integer; x,y: double);
@@ -92,8 +94,36 @@ implementation
 
 procedure Tf_focusercalibration.FormCreate(Sender: TObject);
 begin
+  SetLang;
   edit1.Text:='20';
   edit2.Text:='1';
+end;
+
+procedure Tf_focusercalibration.SetLang;
+begin
+  Caption := rsFocuserCalib;
+  Label1.Caption := Format(rsThisProcedur, [#10, #10#10, #10, #10#10, #10#10]);
+  Label2.Caption := Format(rsGlobalFocuse, [#10#10]);
+  Label10.Caption := rsPreferedFocu;
+  Label11.Caption := rsIfYourFocuse;
+  Label12.Caption := rsBacklashComp;
+  BtnNoBacklash.Caption := rsNoBacklash;
+  Label3.Caption := rsClickNextToS;
+  Label5.Caption := rsMaximumDefoc;
+  Label6.Caption := rsMinimumStart;
+  Label7.Caption := Format(rsYouCanSetThe, [#10#10]);
+  BtnDefault.Caption := rsDefault;
+  ValueListEditor1.TitleCaptions[0] := rsParameter;
+  ValueListEditor1.TitleCaptions[1] := rsValue;
+  ValueListEditor2.TitleCaptions[0] := rsParameter;
+  ValueListEditor2.TitleCaptions[1] := rsValue;
+  Label8.Caption := rsClickNextToS2;
+  Label9.Caption := Format(rsTheDataAreNo, [#10#10, #10, #10#10, #10]);
+  BtnCancel.Caption := rsCancel;
+  BtnNext.Caption := rsNext;
+  BtnBack.Caption := rsBack;
+  Focusdir.Items[0]:=rsIn;
+  Focusdir.Items[1]:=rsOut;
 end;
 
 procedure Tf_focusercalibration.FormShow(Sender: TObject);
@@ -110,7 +140,7 @@ begin
   BtnBack.Visible:=false;
   BtnNext.Visible:=true;
   BtnCancel.Visible:=true;
-  BtnCancel.Caption:='Cancel';
+  BtnCancel.Caption:=rsCancel;
   Notebook1.PageIndex:=0;
 end;
 
@@ -118,7 +148,8 @@ procedure Tf_focusercalibration.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 begin
   CanClose := not FRunning;
-  if (BtnCancel.Caption='Close') and Assigned(FonCalibrationClose) then FonCalibrationClose(self);
+  if (BtnCancel.Caption=rsClose) and Assigned(FonCalibrationClose)
+    then FonCalibrationClose(self);
 end;
 
 procedure Tf_focusercalibration.CalibrationCancel(reason:string);
@@ -167,7 +198,7 @@ end;
 procedure Tf_focusercalibration.BtnNextClick(Sender: TObject);
 begin
   if Notebook1.PageIndex=2 then begin
-    BtnCancel.Caption:='Cancel';
+    BtnCancel.Caption:=rsCancel;
     Ffocuser.Backlash:=StrToIntDef(Backlash.Text,Ffocuser.Backlash);
     Ffocuser.BacklashDirection:=(Focusdir.ItemIndex=0);
     Ffocuser.BacklashActive:=(Ffocuser.Backlash<>0);
@@ -180,14 +211,14 @@ begin
     BtnBack.Visible:=true;
     BtnNext.Visible:=false;
     BtnCancel.Visible:=true;
-    BtnCancel.Caption:='Close';
+    BtnCancel.Caption:=rsClose;
   end
   else begin
      Notebook1.PageIndex:=Notebook1.PageIndex+1;
      BtnBack.Visible:=(Notebook1.PageIndex>0)and(Notebook1.PageIndex<4);
      BtnNext.Visible:=Notebook1.PageIndex<Notebook1.PageCount;
      BtnCancel.Visible:=true;
-     BtnCancel.Caption:='Cancel';
+     BtnCancel.Caption:=rsCancel;
   end;
 end;
 
@@ -206,7 +237,7 @@ end;
 procedure Tf_focusercalibration.RunCalibration(Data: PtrInt);
 begin
   FRunning:=true;
-  label4.Caption:='Focuser calibration started, please wait...';
+  label4.Caption:=rsFocuserCalib3;
   Notebook1.PageIndex:=3;
   BtnBack.Visible:=false;
   BtnNext.Visible:=false;
@@ -221,7 +252,7 @@ begin
   BtnNext.Visible:=false;
   BtnCancel.Visible:=true;
   if FCalibrationOK then begin
-    label4.Caption:='Focuser calibration completed, click Next to see the result.';
+    label4.Caption:=rsFocuserCalib4;
     BtnNext.Visible:=true;
   end;
   FRunning:=false;

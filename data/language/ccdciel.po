@@ -2514,3 +2514,79 @@ msgstr ""
 msgid "Log files are saved in %s"
 msgstr ""
 
+#: u_translation:rsfocusercalib3
+msgid "Focuser calibration started, please wait..."
+msgstr ""
+
+#: u_translation:rsfocusercalib4
+msgid "Focuser calibration completed, click Next to see the result."
+msgstr ""
+
+#: u_translation:rsnext
+msgid "Next"
+msgstr ""
+
+#: u_translation:rsback
+msgid "Back"
+msgstr ""
+
+#: u_translation:rsthisprocedur
+msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
+msgstr ""
+
+#: u_translation:rsglobalfocuse
+msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
+msgstr ""
+
+#: u_translation:rspreferedfocu
+msgid "Prefered focuser direction"
+msgstr ""
+
+#: u_translation:rsifyourfocuse
+msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
+msgstr ""
+
+#: u_translation:rsnobacklash
+msgid "No backlash"
+msgstr ""
+
+#: u_translation:rsclicknexttos
+msgid "Click Next to start the measurement."
+msgstr ""
+
+#: u_translation:rsmaximumdefoc
+msgid "Maximum defocused HFD the focuser can safely reach"
+msgstr ""
+
+#: u_translation:rsminimumstart
+msgid "Minimum, starting point,  focuser movement"
+msgstr ""
+
+#: u_translation:rsyoucansetthe
+msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
+msgstr ""
+
+#: u_translation:rsparameter
+msgid "Parameter"
+msgstr ""
+
+#: u_translation:rsvalue
+msgid "Value"
+msgstr ""
+
+#: u_translation:rsclicknexttos2
+msgid "Click Next to save this values to the configuration for this profile."
+msgstr ""
+
+#: u_translation:rsthedataareno
+msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
+msgstr ""
+
+#: u_translation:rsstartpositio
+msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
+msgstr ""
+
+#: u_translation:rsmeasurementp
+msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+msgstr ""
+

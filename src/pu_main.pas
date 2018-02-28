@@ -5857,15 +5857,24 @@ begin
        f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
        if j=0 then begin
          if FocAbsolute then
-           NewMessage('Start position '+' pos:'+IntToStr(focuser.Position)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR))
+           NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
+             FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
+             f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]))
          else
-           NewMessage('Start position '+' pos:'+IntToStr(savepos)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+           NewMessage(Format(rsStartPositio, [IntToStr(savepos), FormatFloat(
+             f1, f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMax),
+             FormatFloat(f1, f_starprofile.SNR)]));
        end
        else begin
          if FocAbsolute then
-           NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(focuser.Position)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR))
+           NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(
+             focuser.Position), IntToStr(step), FormatFloat(f1,
+             f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMax),
+             FormatFloat(f1, f_starprofile.SNR)]))
          else
-           NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(savepos)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+           NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(savepos),
+             IntToStr(step), FormatFloat(f1, f_starprofile.hfd), FormatFloat(
+             f1, f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]));
        end;
        if FocAbsolute then
           hfd1[j,1]:=focuser.Position
@@ -5968,15 +5977,24 @@ begin
       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
       if j=0 then begin
         if FocAbsolute then
-          NewMessage('Start position '+' pos:'+IntToStr(focuser.Position)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR))
+          NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
+            FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
+            f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]))
         else
-          NewMessage('Start position '+' pos:'+IntToStr(savepos)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+          NewMessage(Format(rsStartPositio, [IntToStr(savepos), FormatFloat(f1,
+            f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMax),
+            FormatFloat(f1, f_starprofile.SNR)]));
       end
       else begin
         if FocAbsolute then
-          NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(focuser.Position)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR))
+          NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(
+            focuser.Position), IntToStr(step), FormatFloat(f1, f_starprofile.hfd
+            ), FormatFloat(f1, f_starprofile.ValMax), FormatFloat(f1,
+            f_starprofile.SNR)]))
         else
-          NewMessage('Measurement '+inttostr(j)+' pos:'+IntToStr(savepos)+' step:'+IntToStr(step)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR));
+          NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(savepos),
+            IntToStr(step), FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
+            f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]));
       end;
       if FocAbsolute then
          hfd2[j,1]:=focuser.Position
@@ -6086,32 +6104,32 @@ begin
     end;
     // save config
     f_focusercalibration.ValueListEditor1.Clear;
-    f_focusercalibration.ValueListEditor1.InsertRow('Binning',inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Start HFD',inttostr(round(AutofocusStartHFD)),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Near HFD',inttostr(round(AutofocusNearHFD)),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Near num',inttostr(AutofocusNearNum),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Tolerance',FormatFloat(f1,AutofocusTolerance),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Min. SNR',FormatFloat(f1,AutofocusMinSNR),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Star detection window',inttostr(Starwindow),true);
-    f_focusercalibration.ValueListEditor1.InsertRow('Focus window',inttostr(Focuswindow),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsBinning, inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning), true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsStartFocus,inttostr(round(AutofocusStartHFD)),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsNearFocus,inttostr(round(AutofocusNearHFD)),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsNExp,inttostr(AutofocusNearNum),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsAutofocusTol,FormatFloat(f1,AutofocusTolerance),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsMinSNR,FormatFloat(f1,AutofocusMinSNR),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsStarDetectio,inttostr(Starwindow),true);
+    f_focusercalibration.ValueListEditor1.InsertRow(rsFocusWindowS,inttostr(Focuswindow),true);
     if AutofocusMoveDir then
-      f_focusercalibration.ValueListEditor1.InsertRow('Autofocus direction','IN',true)
+      f_focusercalibration.ValueListEditor1.InsertRow(rsMoveDirectio,rsIn,true)
     else
-      f_focusercalibration.ValueListEditor1.InsertRow('Autofocus direction','OUT',true);
+      f_focusercalibration.ValueListEditor1.InsertRow(rsMoveDirectio,rsOut,true);
     f_focusercalibration.ValueListEditor2.Clear;
     if AutoFocusMode=afVcurve then
-       f_focusercalibration.ValueListEditor2.InsertRow('Autofocus method','V curve',true)
+       f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsVCurve,true)
     else
-       f_focusercalibration.ValueListEditor2.InsertRow('Autofocus method','Dynamic',true);
+       f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsDynamic,true);
     if FocAbsolute then begin
-      f_focusercalibration.ValueListEditor2.InsertRow('Vcurve center',inttostr(VcCenterpos),true);
-      f_focusercalibration.ValueListEditor2.InsertRow('Vcurve half width',inttostr(VcHalfwidth),true);
-      f_focusercalibration.ValueListEditor2.InsertRow('Vcurve N steps',inttostr(VcNsteps),true);
+      f_focusercalibration.ValueListEditor2.InsertRow(rsFocusPositio,inttostr(VcCenterpos),true);
+      f_focusercalibration.ValueListEditor2.InsertRow(rsMaxOffset,inttostr(VcHalfwidth),true);
+      f_focusercalibration.ValueListEditor2.InsertRow(rsNumberOfStep,inttostr(VcNsteps),true);
     end;
-    f_focusercalibration.ValueListEditor2.InsertRow('Dynamic num',inttostr(AutofocusDynamicNumPoint),true);
-    f_focusercalibration.ValueListEditor2.InsertRow('Dynamic movement',inttostr(AutofocusDynamicMovement),true);
-    f_focusercalibration.ValueListEditor2.InsertRow('Iterative Max. speed',inttostr(AutofocusMaxSpeed),true);
-    f_focusercalibration.ValueListEditor2.InsertRow('Iterative Min. speed',inttostr(AutofocusMinSpeed),true);
+    f_focusercalibration.ValueListEditor2.InsertRow(rsNumberOfDyna,inttostr(AutofocusDynamicNumPoint),true);
+    f_focusercalibration.ValueListEditor2.InsertRow(rsMovementBetw,inttostr(AutofocusDynamicMovement),true);
+    f_focusercalibration.ValueListEditor2.InsertRow(rsInitialMovem,inttostr(AutofocusMaxSpeed),true);
+    f_focusercalibration.ValueListEditor2.InsertRow(rsFinalMovemen,inttostr(AutofocusMinSpeed),true);
     finally
       f_starprofile.FindStar:=false;
       if FocAbsolute then
