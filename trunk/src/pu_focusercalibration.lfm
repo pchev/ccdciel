@@ -1,11 +1,11 @@
 object f_focusercalibration: Tf_focusercalibration
   Left = 0
-  Height = 368
+  Height = 424
   Top = 0
-  Width = 517
+  Width = 626
   Caption = 'Focuser calibration'
-  ClientHeight = 368
-  ClientWidth = 517
+  ClientHeight = 424
+  ClientWidth = 626
   DesignTimePPI = 95
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
@@ -14,18 +14,18 @@ object f_focusercalibration: Tf_focusercalibration
   Visible = False
   object Notebook1: TNotebook
     Left = 0
-    Height = 319
+    Height = 375
     Top = 0
-    Width = 517
-    PageIndex = 3
+    Width = 626
+    PageIndex = 1
     Align = alClient
     TabOrder = 0
     object Page1: TPage
       object Label1: TLabel
         Left = 8
-        Height = 280
+        Height = 368
         Top = 8
-        Width = 488
+        Width = 608
         AutoSize = False
         Caption = 'This procedure will help you to  find the focuser parameters for auto-focus.'#10'You only need to run it once to set this parameters.'#10#10'Center a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.'#10'Use the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. '#10#10'After focusing, your focuser must be positioned about half way of it''s mechanical travel. If this is not the case please adjust it now.'#10#10'The binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again.'
         ParentColor = False
@@ -35,9 +35,9 @@ object f_focusercalibration: Tf_focusercalibration
     object Page2: TPage
       object Label2: TLabel
         Left = 8
-        Height = 104
+        Height = 112
         Top = 8
-        Width = 472
+        Width = 608
         AutoSize = False
         Caption = 'Global focuser parameters.'#10#10'Set the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night.'
         ParentColor = False
@@ -46,8 +46,8 @@ object f_focusercalibration: Tf_focusercalibration
       object Focusdir: TComboBox
         Left = 264
         Height = 31
-        Top = 120
-        Width = 88
+        Top = 136
+        Width = 128
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
@@ -61,7 +61,7 @@ object f_focusercalibration: Tf_focusercalibration
       object Label10: TLabel
         Left = 8
         Height = 40
-        Top = 120
+        Top = 136
         Width = 240
         AutoSize = False
         Caption = 'Prefered focuser direction'
@@ -70,9 +70,9 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object Label11: TLabel
         Left = 8
-        Height = 72
-        Top = 168
-        Width = 472
+        Height = 88
+        Top = 200
+        Width = 608
         AutoSize = False
         Caption = 'If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash.'
         ParentColor = False
@@ -81,7 +81,7 @@ object f_focusercalibration: Tf_focusercalibration
       object Label12: TLabel
         Left = 8
         Height = 40
-        Top = 248
+        Top = 296
         Width = 240
         AutoSize = False
         Caption = 'Backlash compensation'
@@ -89,17 +89,17 @@ object f_focusercalibration: Tf_focusercalibration
         WordWrap = True
       end
       object Backlash: TEdit
-        Left = 264
+        Left = 256
         Height = 31
-        Top = 248
+        Top = 296
         Width = 79
         TabOrder = 1
         Text = '0'
       end
       object BtnNoBacklash: TButton
-        Left = 376
+        Left = 368
         Height = 25
-        Top = 250
+        Top = 298
         Width = 104
         Caption = 'No backlash'
         OnClick = BtnNoBacklashClick
@@ -110,7 +110,7 @@ object f_focusercalibration: Tf_focusercalibration
       object Label3: TLabel
         Left = 8
         Height = 19
-        Top = 288
+        Top = 328
         Width = 219
         Caption = 'Click Next to start the measurement.'
         ParentColor = False
@@ -119,21 +119,21 @@ object f_focusercalibration: Tf_focusercalibration
       object Edit1: TEdit
         Left = 264
         Height = 31
-        Top = 120
+        Top = 152
         Width = 79
         TabOrder = 0
       end
       object Edit2: TEdit
         Left = 264
         Height = 31
-        Top = 176
+        Top = 208
         Width = 79
         TabOrder = 1
       end
       object Label5: TLabel
         Left = 8
         Height = 48
-        Top = 120
+        Top = 152
         Width = 248
         AutoSize = False
         Caption = 'Maximum defocused HFD the focuser can safely reach'
@@ -143,7 +143,7 @@ object f_focusercalibration: Tf_focusercalibration
       object Label6: TLabel
         Left = 8
         Height = 48
-        Top = 178
+        Top = 210
         Width = 248
         AutoSize = False
         Caption = 'Minimum, starting point,  focuser movement'
@@ -152,9 +152,9 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object Label7: TLabel
         Left = 8
-        Height = 88
+        Height = 112
         Top = 8
-        Width = 488
+        Width = 552
         AutoSize = False
         Caption = 'You can set the parameters to define how the focuser will move.'#10#10'Try first with the default values and adjust them only if you receive an error message on the next step.'
         ParentColor = False
@@ -163,7 +163,7 @@ object f_focusercalibration: Tf_focusercalibration
       object BtnDefault: TButton
         Left = 368
         Height = 25
-        Top = 178
+        Top = 210
         Width = 74
         Caption = 'Default'
         OnClick = BtnDefaultClick
@@ -174,18 +174,17 @@ object f_focusercalibration: Tf_focusercalibration
       object Label4: TLabel
         Left = 16
         Height = 38
-        Top = 272
+        Top = 328
         Width = 480
         AutoSize = False
-        Caption = 'Label4'
         ParentColor = False
         WordWrap = True
       end
       object VcChart: TChart
         Left = 4
-        Height = 252
+        Height = 308
         Top = 4
-        Width = 428
+        Width = 516
         AntialiasingMode = amOn
         AxisList = <        
           item
@@ -240,9 +239,9 @@ object f_focusercalibration: Tf_focusercalibration
     object Page5: TPage
       object ValueListEditor1: TValueListEditor
         Left = 8
-        Height = 272
+        Height = 312
         Top = 8
-        Width = 248
+        Width = 280
         DefaultColWidth = 170
         FixedCols = 0
         RowCount = 10
@@ -265,22 +264,22 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          78
+          108
         )
       end
       object Label8: TLabel
         Left = 8
         Height = 19
-        Top = 288
+        Top = 344
         Width = 385
         Caption = 'Click Next to save this values to the configuration for this profile.'
         ParentColor = False
       end
       object ValueListEditor2: TValueListEditor
-        Left = 264
-        Height = 272
+        Left = 304
+        Height = 312
         Top = 8
-        Width = 248
+        Width = 280
         DefaultColWidth = 170
         FixedCols = 0
         RowCount = 9
@@ -302,16 +301,16 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          78
+          108
         )
       end
     end
     object Page6: TPage
       object Label9: TLabel
         Left = 8
-        Height = 240
+        Height = 352
         Top = 8
-        Width = 472
+        Width = 608
         AutoSize = False
         Caption = 'The data are now recorded in the profile.'#10#10'You can review the other auto-focus options using the menu '#10'Edit / Preferences / Autofocus.'#10#10'If the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.'#10'You can also do this learning later using the button V-learn in the focuser tool.'
         ParentColor = False
@@ -322,14 +321,14 @@ object f_focusercalibration: Tf_focusercalibration
   object Panel1: TPanel
     Left = 0
     Height = 49
-    Top = 319
-    Width = 517
+    Top = 375
+    Width = 626
     Align = alBottom
     ClientHeight = 49
-    ClientWidth = 517
+    ClientWidth = 626
     TabOrder = 1
     object BtnCancel: TButton
-      Left = 428
+      Left = 537
       Height = 25
       Top = 14
       Width = 74
@@ -340,7 +339,7 @@ object f_focusercalibration: Tf_focusercalibration
       TabOrder = 0
     end
     object BtnNext: TButton
-      Left = 324
+      Left = 433
       Height = 25
       Top = 14
       Width = 74
@@ -350,7 +349,7 @@ object f_focusercalibration: Tf_focusercalibration
       TabOrder = 1
     end
     object BtnBack: TButton
-      Left = 216
+      Left = 325
       Height = 25
       Top = 16
       Width = 74
@@ -362,18 +361,18 @@ object f_focusercalibration: Tf_focusercalibration
   end
   object PtSourceL: TListChartSource
     left = 72
-    top = 336
+    top = 384
   end
   object FitSourceL: TListChartSource
     left = 16
-    top = 336
+    top = 384
   end
   object FitSourceR: TListChartSource
     left = 120
-    top = 336
+    top = 384
   end
   object PtSourceR: TListChartSource
     left = 168
-    top = 336
+    top = 384
   end
 end

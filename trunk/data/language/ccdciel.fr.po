@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-27 13:21+0000\n"
-"PO-Revision-Date: 2018-02-27 13:25+0000\n"
+"POT-Creation-Date: 2018-02-28 11:03+0000\n"
+"PO-Revision-Date: 2018-02-28 11:06+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-27 13:28+0000\n"
+"X-Launchpad-Export-Date: 2018-02-28 11:08+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabort
@@ -259,6 +259,10 @@ msgstr "L'exposition automatique du flat est requise pour la séquence crépuscu
 #: u_translation.rsautomaticfli
 msgid "Automatic flip"
 msgstr "Retournement automatique"
+
+#: u_translation.rsback
+msgid "Back"
+msgstr "Retour"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -511,6 +515,14 @@ msgstr "Cliquez sur Continuer lorsque vous êtes prêt."
 #: u_translation.rsclickcontinu2
 msgid "Click Continue when ready"
 msgstr "Cliquez sur Continuer lorsque vous êtes prêt"
+
+#: u_translation.rsclicknexttos
+msgid "Click Next to start the measurement."
+msgstr "Cliquez sur Suivant pour démarrer la mesure."
+
+#: u_translation.rsclicknexttos2
+msgid "Click Next to save this values to the configuration for this profile."
+msgstr "Cliquez sur Suivant pour enregistrer ces valeurs dans ce profil."
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -968,6 +980,14 @@ msgstr "Calibration du focuser"
 msgid "Focuser calibration started"
 msgstr "Début de la calibration du focuser"
 
+#: u_translation.rsfocusercalib3
+msgid "Focuser calibration started, please wait..."
+msgstr "La calibration du focuser a commencé, veuillez patienter ..."
+
+#: u_translation.rsfocusercalib4
+msgid "Focuser calibration completed, click Next to see the result."
+msgstr "La calibration du focuser est terminée, cliquez sur Suivant pour voir le résultat."
+
 #: u_translation.rsfocusercorre
 msgid "Focuser correction"
 msgstr "Correction du focuseur"
@@ -1064,6 +1084,10 @@ msgstr "Obtenir la position de la dernière image"
 msgid "Get current position from telescope"
 msgstr "Obtenir la position du télescope"
 
+#: u_translation.rsglobalfocuse
+msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
+msgstr "Paramètres globaux du focuser.%sRéglez la direction de mise au point Intérieur ou Extérieur sur celle qui donne le meilleur résultat pour votre configuration. Si vous prévoyez d'utiliser la compensation de température, définissez la direction dans laquelle il doit se déplacer lorsque la température baisse pendant la nuit."
+
 #: u_translation.rsgreen
 msgid "green"
 msgstr "vert"
@@ -1107,6 +1131,10 @@ msgstr "ADU des hautes lumières"
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
 msgstr "Profile de l'horizon"
+
+#: u_translation.rsifyourfocuse
+msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
+msgstr "Si votre pilote de focuser n'offre pas cette option, définissez ici le nombre d'étapes nécessaires pour compenser le jeu lorsque la direction change. Il n'y a pas besoin d'une valeur précise, il vaut mieux la régler plus haute que le jeu réel."
 
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
@@ -1257,6 +1285,10 @@ msgstr "De nombreuses fonctions ne fonctionneront pas  sans un logiciel d'astrom
 msgid "Max:"
 msgstr "Max:"
 
+#: u_translation.rsmaximumdefoc
+msgid "Maximum defocused HFD the focuser can safely reach"
+msgstr "HFD maximum que le focuser peut atteindre"
+
 #: u_translation.rsmaximumnumbe
 msgid "Maximum number of retry"
 msgstr "Nombre maximum d'essais"
@@ -1280,6 +1312,10 @@ msgstr "Décalage max."
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
 msgstr "Mesure %s  hfd:%s pointe:%s snr:%s"
+
+#: u_translation.rsmeasurementp
+msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+msgstr "Mesure %s  pos:%s pas:%s hfd:%s pointe:%s snr:%s"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -1344,6 +1380,10 @@ msgstr "Min:"
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
 msgstr "Hauteur minimum d'observation "
+
+#: u_translation.rsminimumstart
+msgid "Minimum, starting point,  focuser movement"
+msgstr "Mouvement minimum du focuser"
 
 #: u_translation.rsminsnr
 msgid "min.SNR"
@@ -1424,6 +1464,14 @@ msgstr "Nouvelle cible"
 #: u_translation.rsnexp
 msgid "n.exp"
 msgstr "n.exp"
+
+#: u_translation.rsnext
+msgid "Next"
+msgstr "Suivant"
+
+#: u_translation.rsnobacklash
+msgid "No backlash"
+msgstr "Pas de jeu"
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
@@ -1549,6 +1597,10 @@ msgstr "Extérieur"
 msgid "PA"
 msgstr "PA"
 
+#: u_translation.rsparameter
+msgid "Parameter"
+msgstr "Paramètre"
+
 #: u_translation.rspark
 msgid "Park"
 msgstr "Parquer"
@@ -1655,7 +1707,7 @@ msgstr "Veuillez charger ou créer une liste d'objet."
 
 #: u_translation.rspleaserunthe
 msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
-msgstr "Veuillez faire l'apprentissage de la Vcurve pour cette direction du focuser."
+msgstr "Veuillez faire l'apprentissage de la Vcurve pour cette direction du focuser. Bouton Apprendre"
 
 #: u_translation.rspleaserunvcu
 #, fuzzy,badformat
@@ -1681,6 +1733,10 @@ msgstr "Pos."
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
 msgstr "Option du Goto de précision"
+
+#: u_translation.rspreferedfocu
+msgid "Prefered focuser direction"
+msgstr "Direction préférée"
 
 #: u_translation.rspreferences
 msgid "Preferences%s"
@@ -2156,6 +2212,10 @@ msgstr "Début de l'apprentissage de la courbe en V"
 msgid "Start new log"
 msgstr "Commence un nouveau journal"
 
+#: u_translation.rsstartpositio
+msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
+msgstr "Position de départ pos:%s hfd:%s pointe:%s snr:%s"
+
 #: u_translation.rsstartpreview
 msgid "Start preview loop"
 msgstr "Démarrer la boucle d'aperçu"
@@ -2312,6 +2372,10 @@ msgstr "Dossier temporaire"
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
 
+#: u_translation.rsthedataareno
+msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
+msgstr "Les données sont maintenant enregistrées dans le profil. %sVous pouvez revoir les autres options de mise au point automatique à l'aide du menu %sModifier / Préferences / Autofocus. %sSi la méthode Vcurve est active, vous devez faire l'apprentissage de la courbe en utilisant la fenêtre qui s'ouvrira après la fermeture de celle-ci. %sVous pouvez également faire cet apprentissage plus tard en utilisant le bouton Apprendre dans l'outil de mise au point."
+
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
 msgstr "Le focuser ne prend pas en charge le mouvement absolu ou relatif, l'étalonnage de l'autofocus n'est pas possible."
@@ -2347,6 +2411,10 @@ msgstr "Cet objet n'est jamais en dessous de l'élévation demandée"
 #: u_translation.rsthisobjectis2
 msgid "This object is never above the requested elevation"
 msgstr "Cet objet n'est jamais au dessus de l'élévation demandée"
+
+#: u_translation.rsthisprocedur
+msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
+msgstr "Cette procédure vous aidera à trouver les paramètres de mise au point automatique.%sIl suffit de l'exécuter une seule fois pour régler ces paramètres.%sCentrez une étoile assez haute et faites une mise au point manuelle pour être le plus près possible de la mise au point. Utilisez pour cela l'outil de mise au point manuelle.%sUtilisez l'outil Profil étoile pour vérifier que l'intensité de crête de étoile est environ trois quarts de l'ADU maximum de la caméra, mais pas saturée.%sAprès la mise au point, votre focuser doit être positionné à mi-course de sa course mécanique. Si ce n'est pas le cas, veuillez l'ajuster maintenant.%sLe binning que vous avez défini dans l'Aperçu est maintenant utilisé pour la mise au point automatique. Si vous souhaitez modifier ultérieurement le binning de mise au point, vous devez exécuter à nouveau cette procédure."
 
 #: u_translation.rstiltindicati
 msgid " Tilt indication:%s%"
@@ -2452,6 +2520,10 @@ msgstr "Utilise le rotateur"
 msgid "Use watchdog"
 msgstr "Utilise le Watchdog"
 
+#: u_translation.rsvalue
+msgid "Value"
+msgstr "Valeur"
+
 #: u_translation.rsvcurve
 msgid "V curve"
 msgstr "Courbe en V"
@@ -2482,7 +2554,7 @@ msgstr "Visualisation"
 
 #: u_translation.rsvlearn
 msgid "V-learn"
-msgstr "V-learn"
+msgstr "Apprendre"
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."
@@ -2523,6 +2595,10 @@ msgstr "Ouest (pointe à l'est)"
 #: u_translation.rswidth
 msgid "Width"
 msgstr "Largeur"
+
+#: u_translation.rsyoucansetthe
+msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
+msgstr "Vous pouvez ajuster les paramètres pour définir la façon dont le focuser se déplacera.%sEssayez d'abord avec les valeurs par défaut et ajustez-les seulement si vous recevez un message d'erreur à l'étape suivante."
 
 #: u_translation.rsyoucanusethe
 msgid "You can use the menu \"File / Focuser calibration\" to help to fill the values on this page for your specific focuser."
