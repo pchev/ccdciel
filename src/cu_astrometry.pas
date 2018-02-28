@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, fu_preview, cu_astrometry_engine, cu_mount, cu_camera, cu_wheel, cu_fits, indiapi,
-      LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
+      u_translation, LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
 
@@ -150,7 +150,7 @@ begin
      end;
    end;
    if (ra=NullCoord)or(de=NullCoord) then begin
-       msg('Cannot find approximate coordinates for this image.'+crlf+'The astrometry resolution may take a very long time.');
+       msg(Format(rsCannotFindAp, [crlf]));
    end;
    FLastResult:=false;
    logfile:=ChangeFileExt(infile,'.log');
@@ -207,11 +207,11 @@ begin
    engine.timeout:=AstrometryTimeout;
    FBusy:=true;
    engine.Resolve;
-   msg('Resolving using '+ResolverName[engine.Resolver]+' ...');
+   msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]));
    if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
-   msg('Resolver already running, cannot start astrometry now!');
+   msg(rsResolverAlre);
    result:=false;
  end;
 end;
@@ -233,7 +233,7 @@ begin
   if FBusy then begin
     FBusy:=false;
     engine.Stop;
-    msg('Stop astrometry resolver.');
+    msg(rsStopAstromet2);
   end;
 end;
 
@@ -286,7 +286,7 @@ if fits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
    J2000ToApparent(ra,de);
    ra:=rad2deg*ra/15;
    de:=rad2deg*de;
-   msg('Center, apparent coord. RA='+RAToStr(ra)+' DEC='+DEToStr(de)+' PA='+FormatFloat(f1,pa));
+   msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)]));
 end;
 end;
 
@@ -411,8 +411,8 @@ begin
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
    if astrometryResolver=ResolverNone then begin
-      msg('No resolver configured!');
-      msg('Do simple slew to '+ARToStr3(ra)+'/'+DEToStr(de));
+      msg(rsNoResolverCo);
+      msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]));
       if not Mount.Slew(ra, de) then exit;
       Wait(delay);
       dist:=0;
@@ -425,7 +425,7 @@ begin
     deoffset:=0;
     ar1:=deg2rad*15*ra;
     de1:=deg2rad*de;
-    msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
+    msg(Format(rsSlewTo, [ARToStr3(ra), DEToStr(de)]));
     if not Mount.Slew(ra, de) then exit;
     if CancelAutofocus then exit;
     i:=1;
@@ -433,17 +433,17 @@ begin
     repeat
       Wait(delay);
       if not Fpreview.ControlExposure(exp,binx,biny) then begin
-        msg('Exposure fail!');
+        msg(rsExposureFail);
         exit;
       end;
       if CancelAutofocus then exit;
-      msg('Resolve control exposure');
+      msg(rsResolveContr);
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
       if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
          WaitBusy(AstrometryTimeout+30);
       if not LastResult then begin
          StopAstrometry;
-         msg('Fail to resolve control exposure');
+         msg(rsFailToResolv);
          break;
       end;
       if CancelAutofocus then exit;
@@ -460,14 +460,14 @@ begin
       ar2:=deg2rad*15*cra;
       de2:=deg2rad*cde;
       dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
-      msg('Distance to target: '+FormatFloat(f5,60*dist)+' arcmin');
+      msg(Format(rsDistanceToTa, [FormatFloat(f5, 60*dist)]));
       if dist>prec then begin
         case method of
          0: begin
-               msg('Sync to '+ARToStr3(cra)+'/'+DEToStr(cde));
+               msg(Format(rsSyncTo, [ARToStr3(cra), DEToStr(cde)]));
                mount.Sync(cra,cde);
                Wait(2);
-               msg('Slew to '+ARToStr3(ra)+'/'+DEToStr(de));
+               msg(Format(rsSlewTo, [ARToStr3(ra), DEToStr(de)]));
                if not Mount.Slew(ra, de) then exit;
             end;
          else begin
@@ -477,7 +477,8 @@ begin
                newde:=de+deoffset;
                if de>90.0 then de:=90;
                if de<-90.0 then de:=-90;
-               msg('Slew with offset '+FormatFloat(f5,raoffset)+'/'+FormatFloat(f5,deoffset));
+               msg(Format(rsSlewWithOffs, [FormatFloat(f5, raoffset),
+                 FormatFloat(f5, deoffset)]));
                if not Mount.Slew(newra,newde) then exit;
             end;
          end;
@@ -492,8 +493,8 @@ begin
   finally
     err:=dist;
     FLastSlewErr:=dist;
-    if result then msg('Precision slew finished.')
-              else msg('Precision slew failed!');
+    if result then msg(rsPrecisionSle2)
+              else msg(rsPrecisionSle3);
     fits.SetBPM(bpm,0,0,0,0);
     if oldfilter>0 then Fwheel.Filter:=oldfilter;
   end;

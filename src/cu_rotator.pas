@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, indiapi, u_utils,
+uses u_global, indiapi, u_utils, u_translation,
   Classes, SysUtils;
 
 type
@@ -41,6 +41,7 @@ T_rotator = class(TComponent)
     FonAngleChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FTimeOut: integer;
+    Fdevice: string;
     FAutoLoadConfig: boolean;
     FCalibrationAngle: double;
     FReverse: Boolean;
@@ -67,6 +68,7 @@ T_rotator = class(TComponent)
     property CalibrationAngle: double read FCalibrationAngle write FCalibrationAngle;
     property Reverse: Boolean read GetReverse write SetReverse;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onAngleChange: TNotifyEvent read FonAngleChange write FonAngleChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;
@@ -117,7 +119,7 @@ end;
 
 procedure T_rotator.SetCalibratedAngle(p:double);
 begin
-  msg('Rotator move to PA '+FormatFloat(f1,p));
+  msg(Format(rsRotatorMoveT, [FormatFloat(f1, p)]));
   if FReverse then
     p:=360-p-FCalibrationAngle
   else
@@ -135,13 +137,13 @@ begin
     FCalibrationAngle:=angle-GetAngle;
   FCalibrationAngle:=rmod(720+FCalibrationAngle,360);
   if FCalibrationAngle>359 then FCalibrationAngle:=0;
-   msg('Rotator sync calibration = '+FormatFloat(f1,FCalibrationAngle));
+   msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
 procedure T_rotator.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
 end;
 
 end.

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-02-28 11:03+0000\n"
-"PO-Revision-Date: 2018-02-28 11:06+0000\n"
+"POT-Creation-Date: 2018-02-28 17:43+0000\n"
+"PO-Revision-Date: 2018-02-28 17:45+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-02-28 11:08+0000\n"
+"X-Launchpad-Export-Date: 2018-02-28 17:48+0000\n"
 "X-Generator: Launchpad (build 18561)\n"
 
 #: u_translation.rsabort
@@ -28,6 +28,10 @@ msgstr "Abandon après"
 msgid "Abort exposure"
 msgstr "Pose interrompue"
 
+#: u_translation.rsabortthecurr
+msgid "Abort the current sequence"
+msgstr "Abandon de la séquence en cours"
+
 #: u_translation.rsabout
 msgid "About"
 msgstr "À propos"
@@ -39,6 +43,14 @@ msgstr "Ajouter"
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
 msgstr "Ajuster à la fenêtre"
+
+#: u_translation.rsaftertelesco
+msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
+msgstr "Après pointage du télescope vers la cible l'erreur de position est de %s arcmin.%sVoulez-vous réessayer le Goto?"
+
+#: u_translation.rsalignmentsta
+msgid "Alignment star lost"
+msgstr "Étoile d'alignement perdue"
 
 #: u_translation.rsallowtogetpr
 msgid "Allow to get program status from TCP/IP internal server"
@@ -228,9 +240,25 @@ msgstr "Tolérance de mise au point "
 msgid "Autoguider"
 msgstr "Auto-guideur"
 
+#: u_translation.rsautoguideris
+msgid "Autoguider is still active 60 seconds after a stop request.%sDo you want to wait more?"
+msgstr "L'autoguidage est encore actif 60 secondes après la demande d'arrêt.%sVoulez-vous attendre plus longtemps?"
+
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
 msgstr "Autoguideur non connecté"
+
+#: u_translation.rsautoguiderno2
+msgid "Autoguider not guiding %s seconds after requested to start.%sDo you want to retry?"
+msgstr "L'autoguidage n'est pas actif %s secondes après la demande de démarrage.%sVoulez-vous réessayer?"
+
+#: u_translation.rsautoguiderst
+msgid "Autoguider Stop"
+msgstr "Arrête l'autoguidage"
+
+#: u_translation.rsautoguiderst2
+msgid "Autoguider Start"
+msgstr "Démarrage de l'autoguidate"
 
 #: u_translation.rsautoguiderwa
 msgid "Autoguider was still not guiding after %s minutes."
@@ -364,6 +392,10 @@ msgstr "La caméra et le rotateur doivent être connectés!"
 msgid "Camera cooler %s"
 msgstr "Refroidissement de la caméra %s"
 
+#: u_translation.rscameraframex
+msgid "Camera frame x=%s y=%s width=%s height=%s"
+msgstr "Cadre de la caméra x=%s y=%s largeur=%s hauteur=%s"
+
 #: u_translation.rscameraisnotc
 msgid "Camera is not connected"
 msgstr "La caméra n'est pas connectée"
@@ -391,6 +423,10 @@ msgstr "Pas d'étoile détectée."
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
 msgstr "Ne trouve pas une étoile de mise au point"
+
+#: u_translation.rscannotfindap
+msgid "Cannot find approximate coordinates for this image.%sThe astrometry resolution may take a very long time."
+msgstr "Cette image ne contient pas de coordonnées approximative.%sLa résolution astrométrique peut prendre un temps très long."
 
 #: u_translation.rscannotfindas
 msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
@@ -448,6 +484,10 @@ msgstr "Impossible de démarrer la prévisualisation maintenant"
 msgid "Cannot start preview loop now"
 msgstr "Ne peut pas démarrer la boucle d'aperçu maintenant"
 
+#: u_translation.rscannotsyncwh
+msgid "Cannot Sync when the mount is not tracking"
+msgstr "Ne peut pas utiliser Sync quand la monture n'est pas en suivi"
+
 #: u_translation.rscanonlyaddon
 msgid "Can only add one flat serie at dusk and one at dawn"
 msgstr "Il ne peut y avoir qu'une série de flat au crépuscule et une à l'aube"
@@ -487,6 +527,10 @@ msgstr "Température du CCD"
 #: u_translation.rscenter
 msgid "Center"
 msgstr "Centre"
+
+#: u_translation.rscenterappare
+msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
+msgstr "Centre, coordonnées apparentes AD=%s Déc=%s PA=%s"
 
 #: u_translation.rscenterdec
 msgid "Center Dec"
@@ -544,6 +588,10 @@ msgstr "Fermer"
 msgid "Color preview"
 msgstr "Aperçu en couleur"
 
+#: u_translation.rscompilatione
+msgid "Compilation error: %s"
+msgstr "Erreur de compilation: %s"
+
 #: u_translation.rscompiledwith
 msgid "Compiled with"
 msgstr "Compilé avec"
@@ -568,6 +616,10 @@ msgstr "%s connecté"
 msgid "Connected %s"
 msgstr "Connecté %s"
 
+#: u_translation.rsconnected3
+msgid "Connected"
+msgstr "Connecté"
+
 #: u_translation.rsconnecting
 msgid "Connecting %s"
 msgstr "Connection de %s"
@@ -575,6 +627,14 @@ msgstr "Connection de %s"
 #: u_translation.rsconnection
 msgid "Connection"
 msgstr "Connexion"
+
+#: u_translation.rsconnectioner
+msgid "Connection error: %s"
+msgstr "Erreur de connection : %s"
+
+#: u_translation.rscontinueinse
+msgid "Continue in %s seconds"
+msgstr "Continu dans %s secondes"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -740,9 +800,17 @@ msgstr "Déconnecté"
 msgid "Disconnecting devices"
 msgstr "Déconnexion des périphériques"
 
+#: u_translation.rsdisconnectio
+msgid "Disconnection error: %s"
+msgstr "Erreur de déconnection: %s"
+
 #: u_translation.rsdisconnectth
 msgid "Disconnect the camera before to change the configuration."
 msgstr "Déconnectez la caméra avant de modifier la configuration."
+
+#: u_translation.rsdistancetota
+msgid "Distance to target: %s arcmin"
+msgstr "Distance de la cible: %s arcmin"
 
 #: u_translation.rsdither
 msgid "Dither"
@@ -760,6 +828,10 @@ msgstr "Dithering"
 msgid "Do nothing"
 msgstr "Ne fait rien"
 
+#: u_translation.rsdosimpleslew
+msgid "Do simple slew to %s/%s"
+msgstr "Utilise un Goto simple vers %s %s"
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "Transfert"
@@ -775,6 +847,10 @@ msgstr "Sous-échantillonner"
 #: u_translation.rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
 msgstr "Voulez-vous supprimer le fichier %s ?"
+
+#: u_translation.rsdoyouwanttor
+msgid "Do you want to retry?"
+msgstr "Voulez-vous réessayer?"
 
 #: u_translation.rsdusk
 msgid "dusk"
@@ -814,11 +890,35 @@ msgstr "Fin"
 
 #: u_translation.rsendpreview
 msgid "End preview"
-msgstr "Arrêt de la prévisualisation"
+msgstr "Fin de la prévisualisation"
 
 #: u_translation.rsendtime
 msgid "End time"
 msgstr "Heure de fin"
+
+#: u_translation.rserror
+msgid "Error: %s"
+msgstr "Erreur: %s"
+
+#: u_translation.rserror2
+msgid "Error"
+msgstr "Erreur"
+
+#: u_translation.rserrormountno
+msgid "Error! Mount not connected"
+msgstr "Erreur! la monture n'est pas connectée"
+
+#: u_translation.rserrorresult
+msgid "Error result = %s"
+msgstr "Erreur = %s"
+
+#: u_translation.rserrorstartin
+msgid "Error starting command: %s"
+msgstr "Erreur de lancement de la commande: %s"
+
+#: u_translation.rserrorunknowt
+msgid "Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
+msgstr "Erreur: La focale du télescope est inconnue, régler la dans le pilote du télescope ou dans Préférences / Astrométrie"
 
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
@@ -863,6 +963,14 @@ msgstr "Temps de pose [secondes]"
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
 msgstr "Echec du démarage du guidage!"
+
+#: u_translation.rsfailtoresolv
+msgid "Fail to resolve control exposure"
+msgstr "Erreur de résolution de la pose de contrôle"
+
+#: u_translation.rsfalse
+msgid "False"
+msgstr "Non"
 
 #: u_translation.rsfil
 msgid "Fil."
@@ -995,6 +1103,14 @@ msgstr "Correction du focuseur"
 #: u_translation.rsfocuserinmou
 msgid "Focuser in mount connection. (Restart required!)"
 msgstr "Focuseur avec la monture. (Redémarrage requis!)"
+
+#: u_translation.rsfocusermoveb
+msgid "Focuser move by %s"
+msgstr "déplacement du focuser de %s"
+
+#: u_translation.rsfocusermovet
+msgid "Focuser move to %s"
+msgstr "déplacement du focuser vers %s"
 
 #: u_translation.rsfocuseroffse
 msgid "Focuser offset"
@@ -1175,6 +1291,10 @@ msgstr "Paramètres INDI"
 #: u_translation.rsinitialized
 msgid "initialized"
 msgstr "initialisé"
+
+#: u_translation.rsinitializeta
+msgid "Initialize target %s"
+msgstr "Initialise la cible %s"
 
 #: u_translation.rsinitialmovem
 msgid "Initial movement (steps)"
@@ -1405,9 +1525,17 @@ msgstr "Mnt."
 msgid "Mount"
 msgstr "Monture"
 
+#: u_translation.rsmountcapabil
+msgid "Mount capabilities: %s"
+msgstr "Capacités de la monture: %s"
+
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
 msgstr "La monture n'indique pas le côté du pied, le retournement méridien peut être douteux."
+
+#: u_translation.rsmountmoveto
+msgid "move to %s %s"
+msgstr "déplacement vers %s %s"
 
 #: u_translation.rsmountsync
 msgid "Mount sync"
@@ -1449,6 +1577,11 @@ msgstr "Réseau"
 msgid "New"
 msgstr "Nouveau"
 
+#: u_translation.rsnewcoordinat
+#, fuzzy,badformat
+msgid "New coordinates from planetarium: %s %s"
+msgstr "Nouvelles coordonnées du planétarium: %s &s"
+
 #: u_translation.rsnewobject
 msgid "New object"
 msgstr "Nouvel objet"
@@ -1469,9 +1602,21 @@ msgstr "n.exp"
 msgid "Next"
 msgstr "Suivant"
 
+#: u_translation.rsnoalignments
+msgid "No alignment star found for stacking"
+msgstr "Aucune étoile de référence trouvée pour l'empilement"
+
 #: u_translation.rsnobacklash
 msgid "No backlash"
 msgstr "Pas de jeu"
+
+#: u_translation.rsnodawntoday
+msgid "No dawn today"
+msgstr "Pas d'aube aujourd'hui"
+
+#: u_translation.rsnodusktoday
+msgid "No dusk today"
+msgstr "Pas de crépuscule aujourd'hui"
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
@@ -1485,6 +1630,14 @@ msgstr "Pas de déplacement"
 msgid "None"
 msgstr "Aucun"
 
+#: u_translation.rsnoresolverco
+msgid "No resolver configured!"
+msgstr "Aucun résolveur n'est configuré!"
+
+#: u_translation.rsnoresponsefr
+msgid "No response from server"
+msgstr "Pas de réponse du serveur"
+
 #: u_translation.rsnorth
 msgid "North"
 msgstr "Nord"
@@ -1496,6 +1649,19 @@ msgstr "Aucun script n'est en cours d'exécution."
 #: u_translation.rsnostardetect
 msgid "No star detected. Is the image focused and sufficiently exposed?"
 msgstr "Aucune étoile détectée. L'image est-elle focalisée et suffisamment exposée?"
+
+#: u_translation.rsnosuitableda
+msgid "No suitable dawn for automatic flat today"
+msgstr "Pas d'aube convenant au flat automatique aujourd'hui"
+
+#: u_translation.rsnosuitabledu
+msgid "No suitable dusk for automatic flat today"
+msgstr "Pas de crépuscule convenant au flat automatique aujourd'hui"
+
+#: u_translation.rsnotaneqmodmo
+#, fuzzy,badformat
+msgid "%s not an eqmod mount"
+msgstr "% n'est pas une monture Eqmod"
 
 #: u_translation.rsnotautoguidi
 msgid "Not autoguiding! dithering ignored."
@@ -1521,6 +1687,10 @@ msgstr "Pas assez de points avant ou après la position de mise au point, fait u
 msgid "Not implemented!"
 msgstr "Non implémenté!"
 
+#: u_translation.rsnotrunningno
+msgid "Not running, nothing to do."
+msgstr "Pas lancé, rien a faire."
+
 #: u_translation.rsnumberofdyna
 msgid "Number of dynamic points"
 msgstr "Nombre de points dynamiques"
@@ -1536,6 +1706,14 @@ msgstr "Objet"
 #: u_translation.rsobjectname
 msgid "Object name"
 msgstr "Nom de l'objet"
+
+#: u_translation.rsobjectplanfi
+msgid "Object %s, plan %s finished."
+msgstr "Objet %s,  plan %s terminé"
+
+#: u_translation.rsobjectstartp
+msgid "Object %s, start plan %s"
+msgstr "Objet %s, début du plan %s"
 
 #: u_translation.rsobservatory
 msgid "Observatory"
@@ -1592,6 +1770,10 @@ msgstr "Autres options "
 #: u_translation.rsout
 msgid "Out"
 msgstr "Extérieur"
+
+#: u_translation.rsoutofrange
+msgid "%s out of range"
+msgstr "%s hors plage"
 
 #: u_translation.rspa
 msgid "PA"
@@ -1673,9 +1855,17 @@ msgstr "Objet du planétarium défini sur %s"
 msgid "Planetarium target slew fail"
 msgstr "Le centrage de l'objet du planétarium a échoué"
 
+#: u_translation.rsplanfinished
+msgid "Plan %s finished."
+msgstr "Plan %s terminé"
+
 #: u_translation.rsplanname
 msgid "Plan name"
 msgstr "Nom du plan"
+
+#: u_translation.rsplanstopped
+msgid "Plan %s stopped."
+msgstr "Plan %s arrêté."
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -1733,6 +1923,14 @@ msgstr "Pos."
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
 msgstr "Option du Goto de précision"
+
+#: u_translation.rsprecisionsle2
+msgid "Precision slew finished."
+msgstr "Goto de précision terminé"
+
+#: u_translation.rsprecisionsle3
+msgid "Precision slew failed!"
+msgstr "Le Goto de précision a échoué"
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
@@ -1822,9 +2020,21 @@ msgstr "Image de référence"
 msgid "Relative increment for the inward or outward movement"
 msgstr "Incrément relatif pour le mouvement vers l'intérieur ou vers l'extérieur"
 
+#: u_translation.rsremoveallbre
+msgid "Remove all breakpoints"
+msgstr "Supprimer tous les points d'arrêt"
+
 #: u_translation.rsrepeat
 msgid "Repeat"
 msgstr "Répéter"
+
+#: u_translation.rsrepeatstep
+msgid "Repeat step %s/%s %s"
+msgstr "Répète l'étape %s/%s %s"
+
+#: u_translation.rsrepeattarget
+msgid "Repeat target%s/%s %s"
+msgstr "Répète la cible %s/%s %s"
 
 #: u_translation.rsrepeatthepla
 msgid "Repeat the plan for this object"
@@ -1845,6 +2055,14 @@ msgstr "Signaler un problème"
 #: u_translation.rsrequesttosto
 msgid "Request to stop focuser calibration"
 msgstr "Demande d'arrêt de la calibration du focuser"
+
+#: u_translation.rsrequesttosto2
+msgid "Request to stop the current sequence"
+msgstr "Demande d'arrêt de la séquence en cours"
+
+#: u_translation.rsrequesttosto3
+msgid "Request to stop autofocus ..."
+msgstr "Demande d'arrêt de l'autofocus"
 
 #: u_translation.rsreset
 msgid "Reset"
@@ -1886,13 +2104,25 @@ msgstr "Résoudre et Sync de la monture"
 msgid "Resolve and Sync the rotator"
 msgstr "Résoudre et Sync du rotateur"
 
+#: u_translation.rsresolvecontr
+msgid "Resolve control exposure"
+msgstr "Résout la pose de contrôle"
+
 #: u_translation.rsresolveerror
 msgid "%s resolve error."
 msgstr "%s résolution en erreur."
 
+#: u_translation.rsresolveralre
+msgid "Resolver already running, cannot start astrometry now!"
+msgstr "Le résolveur est déjà en cours, on ne peut pas démarrer d'astrométrie maintenant!"
+
 #: u_translation.rsresolvesucce
 msgid "%s resolve successful."
 msgstr "%s résolu avec succès."
+
+#: u_translation.rsresolvingusi
+msgid "Resolving using %s ..."
+msgstr "Résolution par %s"
 
 #: u_translation.rsrestartafter
 msgid "Restart after"
@@ -1934,6 +2164,14 @@ msgstr "Rotateur"
 msgid "Rotator is not connected"
 msgstr "Le rotateur n'est pas connecté"
 
+#: u_translation.rsrotatormovet
+msgid "Rotator move to PA %s"
+msgstr "Le rotateur tourne à %s"
+
+#: u_translation.rsrotatorsyncc
+msgid "Rotator sync calibration = %s"
+msgstr "Rotateur synchronisé à %s"
+
 #: u_translation.rsrun
 msgid "Run"
 msgstr "Exécuter"
@@ -1941,6 +2179,10 @@ msgstr "Exécuter"
 #: u_translation.rsrunscript
 msgid "Run script"
 msgstr "Exécuter le script"
+
+#: u_translation.rsrunscript2
+msgid "Run script %s"
+msgstr "Exécution du script %s"
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
@@ -1989,6 +2231,30 @@ msgstr "Le script %s existe déjà. Voulez-vous modifier ce fichier?"
 #: u_translation.rsscriptalread3
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr "Le script %s existe déjà. Voulez-vous remplacer ce fichier personnalisé par le modèle ?"
+
+#: u_translation.rsscripteditor
+msgid "Script editor"
+msgstr "Éditeur de script"
+
+#: u_translation.rsscripterror
+msgid "Script error: %s"
+msgstr "Erreur du script: %s"
+
+#: u_translation.rsscriptexecut
+msgid "Script execution error, row %s: %s"
+msgstr "Erreur d'execution du script, ligne %s: %s"
+
+#: u_translation.rsscriptfailed
+msgid "Script %s failed!"
+msgstr "Script %s échoué!"
+
+#: u_translation.rsscriptfinish
+msgid "Script %s finished"
+msgstr "Script %s terminé"
+
+#: u_translation.rsscripttermin
+msgid "Script terminating..."
+msgstr "Terminaison du script..."
 
 #: u_translation.rssec
 msgid "sec."
@@ -2043,6 +2309,30 @@ msgstr "La séquence %s existe déjà. Voulez-vous remplacer ce fichier?"
 msgid "Sequence automatic flat"
 msgstr "Séquence de flat automatique"
 
+#: u_translation.rssequencecanc
+msgid "Sequence %s canceled before start"
+msgstr "Séquence %s annulée avant le démarrage"
+
+#: u_translation.rssequencefini
+msgid "Sequence %s finished."
+msgstr "La séquence %s est terminée."
+
+#: u_translation.rssequenceigno
+msgid "Sequence %s ignore stop at dawn"
+msgstr "La séquence %s ignore l'arrêt à l'aube"
+
+#: u_translation.rssequencestar
+msgid "Sequence %s start immediatelly"
+msgstr "La séquence %s démarre immédiatement"
+
+#: u_translation.rssequencestop
+msgid "Sequence stopped by user request, no termination script will be run."
+msgstr "La séquence est arrêtée à la demande de l'utilisateur, aucun script de terminaison n'est exécuté."
+
+#: u_translation.rssequencestop2
+msgid "Sequence %s stopped."
+msgstr "Séquence %s arrêtée."
+
 #: u_translation.rssequencewill
 msgid "Sequence will continue with the current focuser position."
 msgstr "La séquence continue avec la posiiton courante du focuser"
@@ -2067,6 +2357,18 @@ msgstr "coucher"
 msgid "Set Binning"
 msgstr "Ajuster le binning"
 
+#: u_translation.rssetbinningx
+msgid "Set binning %sx%s"
+msgstr "Règle le binning à %sx%s"
+
+#: u_translation.rssetcooler
+msgid "Set cooler %s"
+msgstr "Règle le refroidissement à %s"
+
+#: u_translation.rssetfilterpos
+msgid "Set filter position %s"
+msgstr "Règle la position de filtre à %s"
+
 #: u_translation.rssetfocusdire
 msgid "Set focus direction inward"
 msgstr "Direction de mise au point vers l'intérieur"
@@ -2075,6 +2377,10 @@ msgstr "Direction de mise au point vers l'intérieur"
 msgid "Set focus direction outward"
 msgstr "Direction de mise au point vers l'extérieur"
 
+#: u_translation.rssetframetype
+msgid "Set frame type %s"
+msgstr "Règle le type d'image à %s"
+
 #: u_translation.rssetpoint
 msgid "Setpoint"
 msgstr "Consigne"
@@ -2082,6 +2388,18 @@ msgstr "Consigne"
 #: u_translation.rssetrotatoran
 msgid "Set rotator angle"
 msgstr "Règle la rotation"
+
+#: u_translation.rssettemperatu
+msgid "Set temperature %s"
+msgstr "Règle la température à %s"
+
+#: u_translation.rssettemperatu2
+msgid "Set temperature ramp to %s started"
+msgstr "Début de la rampe de température vers %s"
+
+#: u_translation.rssettemperatu3
+msgid "Set temperature ramp finished"
+msgstr "Rampe de température terminée"
 
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
@@ -2099,6 +2417,10 @@ msgstr "ADU des ombres"
 msgid "Show current log"
 msgstr "Afficher le journal courant"
 
+#: u_translation.rsshowindilog
+msgid "Show INDI log"
+msgstr "Afficher le journal des messages INDI"
+
 #: u_translation.rsshowpreviews
 msgid "Show preview stack option"
 msgstr "Voir l'option d’empilement"
@@ -2115,9 +2437,21 @@ msgstr "Cartes du Ciel en local"
 msgid "Sky Flat"
 msgstr "Flat crépusculaire"
 
+#: u_translation.rsslewaborteda
+msgid "Slew aborted after 3 retries!"
+msgstr "Goto abandonné après 3 tentatives!"
+
 #: u_translation.rsslewing
 msgid "Slewing"
 msgstr "Goto"
+
+#: u_translation.rsslewtelescop
+msgid "Slew telescope to %s %s"
+msgstr "Déplace le télescope vers %s %s"
+
+#: u_translation.rsslewto
+msgid "Slew to %s/%s"
+msgstr "Goto vers %s %s"
 
 #: u_translation.rsslewtofocuss
 msgid "Slew to focus star %s"
@@ -2126,6 +2460,10 @@ msgstr "Centre l'étoile de focalisation %s"
 #: u_translation.rsslewwithapre
 msgid "Slew with a precision of "
 msgstr "Pointage avec une précision de "
+
+#: u_translation.rsslewwithoffs
+msgid "Slew with offset %s/%s"
+msgstr "Goto avec décalage %s/%s"
 
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
@@ -2159,6 +2497,10 @@ msgstr "Délai de stabilisation après un déplacement"
 msgid "Stack"
 msgstr "Empiler"
 
+#: u_translation.rsstackingwith
+msgid "Stacking with alignment star at %s/%s"
+msgstr "Empilement avec l'étoile de référence à %s %s"
+
 #: u_translation.rsstackofframe
 msgid "stack of %s frames"
 msgstr "empilement de %s images"
@@ -2187,9 +2529,17 @@ msgstr "Démarrer"
 msgid "Start at "
 msgstr "Début à "
 
+#: u_translation.rsstartautogui
+msgid "Start autoguider"
+msgstr "Démarre l'autoguidage"
+
 #: u_translation.rsstartcapture
 msgid "Start capture"
 msgstr "Acquisition"
+
+#: u_translation.rsstartexposur
+msgid "Start exposure error: %s"
+msgstr "Erreur au début de la pose: %s"
 
 #: u_translation.rsstartfocus
 msgid "Start focus"
@@ -2200,9 +2550,16 @@ msgid "Start focus HFD is outside of current V curve, please decrease the start 
 msgstr "Le HFD de démarrage est en dehors de la Vcurve actuelle, veuillez diminuer la valeur HFD de démarrage."
 
 #: u_translation.rsstartingexpo
-#, fuzzy,badformat
 msgid "Starting %s exposure %s for %s seconds"
-msgstr "Démarrage de s% poses de %s secondes"
+msgstr "Démarrage de l'exposition %s %s de %s secondes"
+
+#: u_translation.rsstartingsequ
+msgid "Starting sequence %s"
+msgstr "Démarrage de la séquence %s"
+
+#: u_translation.rsstartingsequ2
+msgid "Starting sequence %s repeat %s/%s"
+msgstr "Démarrage de la séquence %s, répétition %s/%s"
 
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
@@ -2211,6 +2568,10 @@ msgstr "Début de l'apprentissage de la courbe en V"
 #: u_translation.rsstartnewlog
 msgid "Start new log"
 msgstr "Commence un nouveau journal"
+
+#: u_translation.rsstartplan
+msgid "Start plan %s"
+msgstr "Début du plan %s"
 
 #: u_translation.rsstartpositio
 msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
@@ -2228,9 +2589,17 @@ msgstr "Lancer l'enregistrement"
 msgid "Start single preview"
 msgstr "Prévisualisation"
 
+#: u_translation.rsstartstep
+msgid "Start step %s"
+msgstr "Début de l'étape %s"
+
 #: u_translation.rsstarttime
 msgid "Start time"
 msgstr "Heure de début"
+
+#: u_translation.rsstarttraking
+msgid "start traking"
+msgstr "début du suivi"
 
 #: u_translation.rsstayatthecur
 msgid "Stay at the current position for autofocus"
@@ -2244,6 +2613,14 @@ msgstr "Reste sur place pour l'autofocus"
 msgid "Step"
 msgstr "Pas"
 
+#: u_translation.rsstepinto
+msgid "Step Into"
+msgstr "Pas à pas approfondi"
+
+#: u_translation.rsstepover
+msgid "Step Over"
+msgstr "Pas à pas"
+
 #: u_translation.rsstop
 msgid "Stop"
 msgstr "Arrêt"
@@ -2251,6 +2628,10 @@ msgstr "Arrêt"
 #: u_translation.rsstopastromet
 msgid "Stop astrometry resolver"
 msgstr "Arrête l'astrométrie en cours"
+
+#: u_translation.rsstopastromet2
+msgid "Stop astrometry resolver."
+msgstr "Arrêt du resolveur astrométrique."
 
 #: u_translation.rsstopat
 msgid "Stop at"
@@ -2272,6 +2653,10 @@ msgstr "Arrêt du guidage"
 msgid "Stop Loop"
 msgstr "Arrêt boucle"
 
+#: u_translation.rsstopplan
+msgid "Stop plan %s"
+msgstr "Arrêt du plan %s"
+
 #: u_translation.rsstoppreview
 msgid "Stop preview"
 msgstr "Arrêt de la prévisualisation"
@@ -2283,6 +2668,22 @@ msgstr "Arrêt de la boucle d'aperçu"
 #: u_translation.rsstoprecord
 msgid "Stop record"
 msgstr "Arrêter l'enregistrement"
+
+#: u_translation.rsstoptelescop
+msgid "Stop telescope motion."
+msgstr "Arrêt du déplacement du télescope"
+
+#: u_translation.rsstopthecurre
+msgid "Stop the current sequence at %s"
+msgstr "Arrête la séquence en cours à %s"
+
+#: u_translation.rsstopthecurre2
+msgid "Stop the current target at %s"
+msgstr "Arrête la cible en cours à %s"
+
+#: u_translation.rsstoptimealre
+msgid "Stop time %s already passed"
+msgstr "Heure d'arrêt %s déjà dépassée"
 
 #: u_translation.rsstopvcurvele
 msgid "Stop Vcurve learning"
@@ -2324,9 +2725,25 @@ msgstr "Sous-dossier par nom de séquence"
 msgid "Substract a drak frame"
 msgstr "Soustrait un dark"
 
+#: u_translation.rssyncto
+msgid "Sync to %s/%s"
+msgstr "Sync à %s %s"
+
+#: u_translation.rssyncto2
+msgid "sync to %s %s"
+msgstr "Sync à %s %s"
+
 #: u_translation.rstakecontrole
 msgid "Take control exposure for %s seconds"
 msgstr "Prend  une pose de contrôle pour %s secondes"
+
+#: u_translation.rstargetcancel
+msgid "Target %s canceled before start"
+msgstr "Cible %s annulée avant le départ"
+
+#: u_translation.rstargetinitia
+msgid "Target initialisation failed!"
+msgstr "L'initialisation de la cible a échoué!"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
@@ -2356,6 +2773,14 @@ msgstr "Nom du telescope"
 msgid "Telescope position"
 msgstr "Position du télescope"
 
+#: u_translation.rstelescopesle
+msgid "Telescope slew error: %s arcminutes."
+msgstr "Erreur de position du télescope: %s arcmin."
+
+#: u_translation.rstelescopesle2
+msgid "Telescope slew"
+msgstr "Goto du télescope"
+
 #: u_translation.rstemp
 msgid "Temp."
 msgstr "Temp."
@@ -2363,6 +2788,14 @@ msgstr "Temp."
 #: u_translation.rstemperaturec
 msgid "Temperature coefficient in steps/C"
 msgstr "Coefficient de température en pas/C"
+
+#: u_translation.rstemperaturer
+msgid "Temperature ramp requested to stop"
+msgstr "Demande d'arrêt de la rampe de température"
+
+#: u_translation.rstemperaturer2
+msgid "Temperature ramp canceled"
+msgstr "Rampe de température abandonnée"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
@@ -2452,9 +2885,17 @@ msgstr "Suivi"
 msgid "Treshold :"
 msgstr "Seuil :"
 
+#: u_translation.rstrue
+msgid "True"
+msgstr "Oui"
+
 #: u_translation.rstrynexttarge
 msgid "Try next target in sequence."
 msgstr "Essaie le prochain objet de la séquence."
+
+#: u_translation.rstrynexttarge2
+msgid "Try next target"
+msgstr "Essaie la cible suivante"
 
 #: u_translation.rstrytoconnect
 msgid "Try to connect to autoguider"
@@ -2479,6 +2920,10 @@ msgstr "Non calibré"
 #: u_translation.rsunknowpiersi
 msgid "Unknow pier side"
 msgstr "Côté du pied inconnu"
+
+#: u_translation.rsunpark
+msgid "Unpark"
+msgstr "Unpark"
 
 #: u_translation.rsunparked
 msgid "Unparked"
@@ -2564,6 +3009,10 @@ msgstr "Attend 1 minute ..."
 msgid "Wait after solve"
 msgstr "Attente après résolution"
 
+#: u_translation.rswaitingfortw
+msgid "Waiting for twilight at %s"
+msgstr "Attend le crépuscule à %s"
+
 #: u_translation.rswaitmeridian
 msgid "Wait meridian flip for %s minutes"
 msgstr "Atttend le retournement méridien depuis %s minutes"
@@ -2571,6 +3020,22 @@ msgstr "Atttend le retournement méridien depuis %s minutes"
 #: u_translation.rswaitmeridian2
 msgid "Wait meridian flip"
 msgstr "Atttend le retournement méridien"
+
+#: u_translation.rswaitsecondsb
+msgid "Wait %s seconds before repeated target %s"
+msgstr "Attend %s scondes avant de répeter la cible %s"
+
+#: u_translation.rswaitsecondsb2
+msgid "Wait %s seconds before repeated sequence %s"
+msgstr "Attend %s secondes avant de répéter la séquence %s"
+
+#: u_translation.rswaittostarta
+msgid "Wait to start at %s"
+msgstr "Attend le démarrage à %s"
+
+#: u_translation.rswaittostarts
+msgid "Wait to start sequence %s at %s"
+msgstr "Attente du début de la séquence %s à %s"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_mount, indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_mount, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
      u_global, u_utils, ExtCtrls, Forms, Classes, SysUtils;
 
 type
@@ -79,7 +79,6 @@ T_indimount = class(T_mount)
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
-   procedure msg(txt: string);
  protected
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
@@ -200,11 +199,6 @@ begin
     FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
  end;
 
-procedure T_indimount.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
-end;
-
 Procedure T_indimount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
@@ -212,6 +206,7 @@ if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
   Findidevice:=cp3;
+  Fdevice:=cp3;
   Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -229,9 +224,9 @@ procedure T_indimount.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (MountDevice=nil)or(not Fready) then begin
-    msg('Error');
+    msg(rsError2);
     if not Fconnected then begin
-      msg('No response from server');
+      msg(rsNoResponseFr);
       msg('Is "'+Findidevice+'" a running telescope mount driver?');
     end
     else if (configprop=nil) then
@@ -273,7 +268,7 @@ procedure T_indimount.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg('Mount server disconnected');
+  msg(rsServer+' '+rsDisconnected3);
   CreateIndiClient;
 end;
 
@@ -299,25 +294,8 @@ begin
 end;
 
 procedure T_indimount.NewMessage(mp:IMessage);
-const k=8;
-  blacklist: array[1..k] of string =(
-             'Timed guide','End Timed guide',   // pulse guide message
-             'Starting Goto','Aligned Eqmod',   // extra eqmod goto message, must be [debug]
-             'Setting Eqmod','Slewing mount',   // extra eqmod goto message, must be [debug]
-             'Iterative Goto','Iterative goto'  // extra eqmod goto message, must be [debug]
-             );
-var ok: boolean;
-    i: integer;
 begin
-  ok:=true;
-  for i:=1 to k do begin
-    if pos(blacklist[i],mp.msg)>0 then ok:=false;
-  end;
-  if ok then begin
-     if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
-  end else begin
-    if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
-  end;
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   mp.Free;
 end;
 
@@ -438,10 +416,14 @@ procedure T_indimount.SetPark(value:Boolean);
 begin
 if parkprop<>nil then begin
  IUResetSwitch(parkprop);
- if value then
+ if value then begin
+    msg(rsPark);
     swpark.s:=ISS_ON
- else
+ end
+ else begin
+    msg(rsUnpark);
     swunpark.s:=ISS_ON;
+ end;
  indiclient.sendNewSwitch(parkprop);
  indiclient.WaitBusy(parkprop,120000);
 end;
@@ -507,6 +489,7 @@ var slewtimeout:integer;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    msg(Format(rsMountMoveTo, [ARToStr3(sra), DEToStr(sde)]));
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
@@ -523,6 +506,7 @@ var slewtimeout:integer;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    msg(Format(rsMountMoveTo, [ARToStr3(sra), DEToStr(sde)]));
     FMountSlewing:=true;
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
@@ -558,6 +542,7 @@ begin
   pierside1:=GetPierSide;
   if pierside1=pierEast then exit; // already right side
   if (sra=NullCoord)or(sde=NullCoord) then exit;
+  msg(rsMeridianFlip5);
   // point one hour to the east
   ra1:=sra+1;
   if ra1>=24 then ra1:=ra1-24;
@@ -580,6 +565,7 @@ function T_indimount.Sync(sra,sde: double):Boolean;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetSync<>nil) and (coord_prop<>nil) then begin
+    msg(Format(rsSyncTo2, [ARToStr3(sra), DEToStr(sde)]));
     IUResetSwitch(CoordSet);
     CoordSetSync.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
@@ -596,6 +582,7 @@ function T_indimount.Track:Boolean;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+    msg(rsStartTraking);
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
@@ -614,7 +601,7 @@ begin
    if ab<>nil then begin
      ab.s:=ISS_ON;
      indiclient.sendNewSwitch(AbortmotionProp);
-     msg('Stop telescope motion.');
+     msg(rsStopTelescop);
    end;
  end;
 end;
@@ -649,8 +636,14 @@ procedure T_indimount.SetSyncMode(value:TEqmodAlign);
 begin
   if (AlignSyncMode<>nil)and(value<>alUNSUPPORTED) then begin
      IUResetSwitch(AlignSyncMode);
-     if value=alSTDSYNC then AlignStdSync.s := ISS_ON
-     else if value=alADDPOINT then AlignAppendSync.s := ISS_ON;
+     if value=alSTDSYNC then begin
+       AlignStdSync.s := ISS_ON;
+       msg('align mode Std Sync');
+     end
+     else if value=alADDPOINT then begin
+       AlignAppendSync.s := ISS_ON;
+       msg('align mode Add Point');
+     end;
      indiclient.sendNewSwitch(AlignSyncMode);
   end;
 end;
@@ -659,6 +652,7 @@ function T_indimount.ClearAlignment:boolean;
 begin
   result:=false;
   if AlignList<>nil then begin
+    msg('clear alignment');
     IUResetSwitch(AlignList);
     AlignListClear.s:=ISS_ON;
     indiclient.sendNewSwitch(AlignList);
@@ -670,6 +664,7 @@ function T_indimount.ClearDelta:boolean;
 begin
   result:=false;
   if SyncManage<>nil then begin
+    msg('clear delta sync');
     IUResetSwitch(SyncManage);
     SyncClearDelta.s:=ISS_ON;
     indiclient.sendNewSwitch(SyncManage);

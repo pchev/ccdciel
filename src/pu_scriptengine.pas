@@ -31,7 +31,7 @@ uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_device
   fu_capture, fu_preview, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
-  Controls, Graphics, Dialogs, ExtCtrls;
+  u_translation, Controls, Graphics, Dialogs, ExtCtrls;
 
 type
 
@@ -660,7 +660,7 @@ var fn: string;
 begin
  try
   result:=false;
-  msg('Run script '+sname);
+  msg(Format(rsRunScript2, [sname]));
   FScriptFilename:=sname;
   fn:=slash(path)+sname+'.script';
   scr.Script.LoadFromFile(fn);
@@ -670,20 +670,21 @@ begin
     result:=scr.Execute;
     wait(2);
     if result then
-       msg('Script '+sname+' finished')
+       msg(Format(rsScriptFinish, [sname]))
     else begin
-       msg('Script execution error, row '+inttostr(scr.ExecErrorRow)+': '+scr.ExecErrorToString);
-       msg('Script '+sname+' finished');
+       msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow),
+         scr.ExecErrorToString]));
+       msg(Format(rsScriptFinish, [sname]));
     end;
   end else begin
     for i:=0 to scr.CompilerMessageCount-1 do begin
-       msg('Compilation error: '+ scr.CompilerErrorToStr(i));
+       msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
     end;
     result:=false;
   end;
  except
    on E: Exception do begin
-    msg('Script error: '+E.Message);
+    msg(Format(rsScriptError, [E.Message]));
    end;
  end;
 end;
@@ -701,11 +702,11 @@ begin
      Preview.Stop;
   end;
   if Autoguider.Running then begin
-    msg('Stop autoguider');
+    msg(rsStopAutoguid);
     Autoguider.Guide(false);
     Autoguider.WaitBusy(15);
   end;
-  msg('Script terminating...');
+  msg(rsScriptTermin);
   scr.Stop;
   if Waitrunning then cancelWait:=true;
   if WaitTillrunning then begin
@@ -894,13 +895,13 @@ result:=msgFailed;
 r:=StrToFloatDef(RA,9999);
 d:=StrToFloatDef(DE,9999);
 if (abs(r)<=24)and(abs(d)<=90) then begin
- msg('Slew telescope to '+ra+' '+de);
+ msg(Format(rsSlewTelescop, [ra, de]));
  if Fmount.Slew(r,d) then begin
    wait(2);
    result:=msgOK;
  end;
 end
-else result:=msgFailed+' out of range';
+else result:=Format(rsOutOfRange, [msgFailed]);
 except
   result:=msgFailed;
 end;
@@ -919,7 +920,7 @@ if (abs(r)<=360)and(abs(d)<=90) then begin
    result:=msgOK;
  end;
 end
-else result:=msgFailed+' out of range';
+else result:=Format(rsOutOfRange, [msgFailed]);
 except
   result:=msgFailed;
 end;
@@ -944,7 +945,7 @@ try
      if mount.ClearAlignment then
        result:=msgOK;
   end
-  else result:=msgFailed+' not an eqmod mount';
+  else result:=Format(rsNotAnEqmodMo, [msgFailed]);
 except
   result:=msgFailed;
 end;
@@ -958,7 +959,7 @@ try
      if mount.ClearDelta then
        result:=msgOK;
   end
-  else result:=msgFailed+' not an eqmod mount';
+  else result:=Format(rsNotAnEqmodMo, [msgFailed]);
 except
   result:=msgFailed;
 end;
@@ -972,7 +973,7 @@ try
      mount.SyncMode:=alSTDSYNC;
      result:=msgOK;
   end
-  else result:=msgFailed+' not an eqmod mount';
+  else result:=Format(rsNotAnEqmodMo, [msgFailed]);
 except
   result:=msgFailed;
 end;
@@ -986,7 +987,7 @@ try
      mount.SyncMode:=alADDPOINT;
      result:=msgOK;
   end
-  else result:=msgFailed+' not an eqmod mount';
+  else result:=Format(rsNotAnEqmodMo, [msgFailed]);
 except
   result:=msgFailed;
 end;
@@ -1189,7 +1190,7 @@ if Assigned(Preview.onStartExposure) then
  else
   exit;
 if Preview.Running then begin
-  if Assigned(FonMsg) then FonMsg('Start single preview');
+  if Assigned(FonMsg) then FonMsg(rsStartSingleP);
   while Preview.Running do begin
     sleep(10);
     Application.ProcessMessages;
@@ -1215,8 +1216,8 @@ if Assigned(Preview.onStartExposure) then
   exit;
 if Preview.Running then begin
  Preview.BtnLoop.Font.Color:=clGreen;
- Preview.BtnLoop.Caption:='Stop Loop';
- if Assigned(FonMsg) then FonMsg('Start preview loop');
+ Preview.BtnLoop.Caption:=rsStopLoop;
+ if Assigned(FonMsg) then FonMsg(rsStartPreview);
 end;
 wait(1);
 result:=msgOK;

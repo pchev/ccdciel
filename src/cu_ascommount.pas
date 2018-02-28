@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_mount, u_global,  indiapi,
+uses  cu_mount, u_global,  indiapi, u_translation,
   {$ifdef mswindows}
     Variants, comobj, u_utils,
   {$endif}
@@ -36,7 +36,6 @@ T_ascommount = class(T_mount)
  private
    {$ifdef mswindows}
    V: variant;
-   Fdevice: string;
    stRA,stDE: double;
    stPark:boolean;
    stPierside: TPierSide;
@@ -45,7 +44,6 @@ T_ascommount = class(T_mount)
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
-   procedure msg(txt: string);
    procedure CheckEqmod;
    function WaitMountSlewing(maxtime:integer):boolean;
  protected
@@ -124,8 +122,8 @@ begin
      if CanSetPierSide then buf:=buf+'CanSetPierSide ';
      if CanSync then buf:=buf+'CanSync ';
      if CanSetTracking then buf:=buf+'CanSetTracking ';
-     msg('Mount '+Fdevice+' connected');
-     msg('Mount capabilities: '+buf);
+     msg(rsConnected3);
+     msg(Format(rsMountCapabil, [buf]));
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
@@ -134,7 +132,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Mount '+Fdevice+' Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -147,12 +145,12 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg('Mount '+Fdevice+' disconnected');
+     msg(rsDisconnected3);
      V.connected:=false;
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -203,7 +201,7 @@ begin
        if Assigned(FonPiersideChange) then FonPiersideChange(self);
     end;
     except
-     on E: Exception do msg('Mount '+Fdevice+' Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -216,15 +214,15 @@ begin
    try
    if CanPark then begin
       if value then begin
-         msg('Mount '+Fdevice+' park');
+         msg(rsPark);
          V.Park;
       end else begin
-         msg('Mount '+Fdevice+' unpark');
+         msg(rsUnpark);
          V.UnPark;
       end;
    end;
    except
-    on E: Exception do msg('Mount '+Fdevice+' Park error: ' + E.Message);
+    on E: Exception do msg('Park error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -353,11 +351,6 @@ begin
  {$endif}
 end;
 
-procedure T_ascommount.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(txt);
-end;
-
 function T_ascommount.SlewAsync(sra,sde: double):boolean;
 begin
  result:=false;
@@ -369,10 +362,10 @@ begin
      try
       V.tracking:=true;
      except
-       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
+       on E: Exception do msg('Set tracking error: ' + E.Message);
      end;
    end;
-   msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
+   msg(Format(rsMountMoveTo, [ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
    end
@@ -380,7 +373,7 @@ begin
      V.SlewToCoordinates(sra,sde);
    result:=true;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Slew error: ' + E.Message);
+     on E: Exception do msg('Slew error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -397,11 +390,11 @@ begin
      try
       V.tracking:=true;
      except
-       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
+       on E: Exception do msg('Set tracking error: ' + E.Message);
      end;
    end;
    FMountSlewing:=true;
-   msg('Mount '+Fdevice+' move to '+ARToStr3(sra)+' '+DEToStr(sde));
+   msg(Format(rsMountMoveTo, [ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
@@ -409,11 +402,11 @@ begin
    else
      V.SlewToCoordinates(sra,sde);
    wait(2);
-   {$ifdef debug_ascom}msg('Mount '+Fdevice+' move finished.'); {$endif}
+   {$ifdef debug_ascom}msg('move finished.'); {$endif}
    FMountSlewing:=false;
    result:=true;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Slew error: ' + E.Message);
+     on E: Exception do msg('Slew error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -434,7 +427,7 @@ begin
     islewing:=false;
   result:=(islewing or FMountSlewing);
   except
-    on E: Exception do msg('Mount '+Fdevice+' Get slewing error: ' + E.Message);
+    on E: Exception do msg('Get slewing error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -477,7 +470,7 @@ begin
     pierside1:=GetPierSide;
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
-    msg('Mount '+Fdevice+' meridian flip');
+    msg(rsMeridianFlip5);
     {TODO: someone with a mount that support this feature can test it}
 {    if CanSetPierSide then begin
        // do the flip
@@ -517,14 +510,14 @@ begin
  if Connected and CanSync then begin
    try
    if CanSetTracking and (not V.tracking) then begin
-     msg('Cannot Sync when the mount is not tracking');
+     msg(rsCannotSyncWh);
      exit;
    end;
-   msg('Mount '+Fdevice+' sync to '+ARToStr3(sra)+' '+DEToStr(sde));
+   msg(Format(rsSyncTo2, [ARToStr3(sra), DEToStr(sde)]));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -539,15 +532,15 @@ begin
    try
    if CanSetTracking and (not V.tracking) then begin
      try
-      msg('Mount '+Fdevice+' start traking');
+      msg(rsStartTraking);
       V.tracking:=true;
      except
-       on E: Exception do msg('Mount '+Fdevice+' Set tracking error: ' + E.Message);
+       on E: Exception do msg('Set tracking error: ' + E.Message);
      end;
    end;
    result:=true;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Track error: ' + E.Message);
+     on E: Exception do msg('Track error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -558,11 +551,11 @@ begin
  {$ifdef mswindows}
  if Connected and CanSlew then begin
    try
-   msg('Mount '+Fdevice+' Stop telescope motion.');
+   msg(rsStopTelescop);
    V.AbortSlew;
    if CanSetTracking  then V.tracking:=false;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Abort motion error: ' + E.Message);
+     on E: Exception do msg('Abort motion error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -619,15 +612,15 @@ begin
  if Connected and IsEqmod and (value<>alUNSUPPORTED) then begin
    try
    if value=alSTDSYNC then begin
-     msg('Mount '+Fdevice+' align mode Std Sync');
+     msg('align mode Std Sync');
      V.CommandString(':ALIGN_MODE,0#');
    end
    else if value=alADDPOINT then begin
-     msg('Mount '+Fdevice+' align mode Add Point');
+     msg('align mode Add Point');
      V.CommandString(':ALIGN_MODE,1#');
    end;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Eqmod set sync mode error: ' + E.Message);
+     on E: Exception do msg('Eqmod set sync mode error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -639,11 +632,11 @@ begin
  {$ifdef mswindows}
  if Connected and IsEqmod then begin
    try
-   msg('Mount '+Fdevice+' clear alignment');
+   msg('clear alignment');
    V.CommandString(':ALIGN_CLEAR_POINTS#');
    result:=true;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Eqmod clear alignment error: ' + E.Message);
+     on E: Exception do msg('Eqmod clear alignment error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -656,11 +649,11 @@ begin
  {$ifdef mswindows}
  if Connected and IsEqmod then begin
    try
-   msg('Mount '+Fdevice+' clear delta sync');
+   msg('clear delta sync');
    V.CommandString(':ALIGN_CLEAR_SYNC#');
    result:=true;
    except
-     on E: Exception do msg('Mount '+Fdevice+' Eqmod clear delta error: ' + E.Message);
+     on E: Exception do msg('Eqmod clear delta error: ' + E.Message);
    end;
  end;
  {$endif}

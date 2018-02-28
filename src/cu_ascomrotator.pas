@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_rotator, u_global,
+uses cu_rotator, u_global,  u_translation,
     {$ifdef mswindows}
     indiapi, Variants, comobj,
     {$endif}
@@ -37,7 +37,6 @@ T_ascomrotator = class(T_rotator)
    {$ifdef mswindows}
    V: variant;
    stAngle: double;
-   Fdevice: string;
    {$endif}
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
@@ -107,7 +106,7 @@ begin
   FInterfaceVersion:=InterfaceVersion;
   V.Connected:=true;
   if Connected then begin
-     msg('Rotator '+Fdevice+' connected.');
+     msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
@@ -115,7 +114,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Rotator '+Fdevice+' Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -128,12 +127,12 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg('Rotator '+Fdevice+' disconnected.');
+     msg(rsDisconnected3);
      V.Connected:=false;
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Rotator '+Fdevice+' Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -170,7 +169,7 @@ begin
         if Assigned(FonAngleChange) then FonAngleChange(self);
       end;
      except
-     on E: Exception do msg('Rotator '+Fdevice+' Status error: ' + E.Message);
+     on E: Exception do msg('Status error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -210,7 +209,7 @@ begin
    WaitRotatorMoving(30000);
 
    except
-    on E: Exception do msg('Rotator '+Fdevice+' Error, can''t move to. ' + E.Message);
+    on E: Exception do msg('Error, can''t move to. ' + E.Message);
    end;
  end;
  {$endif}
@@ -224,7 +223,7 @@ begin
    try
    result:=V.Position;
    except
-    on E: Exception do msg('Rotator '+Fdevice+' Get position error: ' + E.Message);
+    on E: Exception do msg('Get position error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -263,7 +262,7 @@ begin
    try
     V.Halt;
    except
-    on E: Exception do msg('Rotator '+Fdevice+' Halt error: ' + E.Message);
+    on E: Exception do msg('Halt error: ' + E.Message);
    end;
  end;
  {$endif}

@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
+  u_translation, math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
   TTargetList = array of TTarget;
@@ -301,10 +301,10 @@ begin
     if FSeqStopTwilight then
        FSeqStopAt:=hm/24;
     if FSeqStart then begin
-       msg('Wait to start sequence '+FName+' at '+TimeToStr(FSeqStartAt));
+       msg(Format(rsWaitToStartS, [FName, TimeToStr(FSeqStartAt)]));
        wtok:=WaitTill(TimeToStr(FSeqStartAt),true);
        if not wtok then begin
-          msg('Sequence '+FName+' canceled before start');
+          msg(Format(rsSequenceCanc, [FName]));
           FRunning:=false;
           exit;
        end;
@@ -315,8 +315,8 @@ begin
           StopTimer.Interval:=1000*stw;
           StopTimer.Enabled:=true;
        end else begin
-         msg('Sequence '+FName+' canceled before start');
-         msg('Stop time '+TimeToStr(FSeqStopAt)+' already passed');
+         msg(Format(rsSequenceCanc, [FName]));
+         msg(Format(rsStopTimeAlre, [TimeToStr(FSeqStopAt)]));
          FRunning:=false;
          exit;
        end;
@@ -324,25 +324,26 @@ begin
   end else begin
     if FSeqStartTwilight then begin
       if hm<>0 then begin
-        msg('Sequence '+FName+' canceled before start');
-        msg('No dusk today');
+        msg(Format(rsSequenceCanc, [FName]));
+        msg(rsNoDuskToday);
         FRunning:=false;
         exit;
       end else begin
-        msg('Sequence '+FName+' start immediatelly');
-        msg('No dusk today');
+        msg(Format(rsSequenceStar, [FName]));
+        msg(rsNoDuskToday);
       end;
     end;
     if FSeqStopTwilight then begin
-      msg('Sequence '+FName+' ignore stop at dawn');
-      msg('No dawn today');
+      msg(Format(rsSequenceIgno, [FName]));
+      msg(rsNoDawnToday);
       StopTimer.Enabled:=false;
     end;
   end;
   if FTargetsRepeat=1 then
-    msg('Starting sequence '+FName)
+    msg(Format(rsStartingSequ, [FName]))
   else
-    msg('Starting sequence '+FName+' repeat '+inttostr(FTargetsRepeatCount+1)+'/'+inttostr(FTargetsRepeat));
+    msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),
+      inttostr(FTargetsRepeat)]));
   finally
     FWaitStarting:=false;
   end;
@@ -352,19 +353,19 @@ end;
 procedure T_Targets.StopTimerTimer(Sender: TObject);
 begin
   StopTimer.Enabled:=false;
-  msg('Stop the current sequence at '+TimeToStr(FSeqStopAt));
+  msg(Format(rsStopTheCurre, [TimeToStr(FSeqStopAt)]));
   StopSequence(false);
 end;
 
 procedure T_Targets.Stop;
 begin
-  msg('Request to stop the current sequence');
+  msg(rsRequestToSto2);
   StopSequence(false);
 end;
 
 procedure T_Targets.Abort;
 begin
-  msg('Abort the current sequence');
+  msg(rsAbortTheCurr);
   StopSequence(true);
 end;
 
@@ -383,7 +384,7 @@ begin
    end;
    if Autofocusing then begin
      CancelAutofocus:=true;
-     msg('Request to stop autofocus ...');
+     msg(rsRequestToSto3);
      Camera.AbortExposure;
      if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
@@ -395,7 +396,7 @@ begin
    if (not abort) then begin
      if (p<>nil) and p.Running then p.Stop;
      FRunning:=false;
-     msg('Sequence stopped by user request, no termination script will be run.');
+     msg(rsSequenceStop);
      ShowDelayMsg('');
    end
    else begin
@@ -413,39 +414,39 @@ begin
      end;
      StopGuider;
      if f_scriptengine.scr.Running then f_scriptengine.StopScript;
-     msg('Sequence aborted.');
+     msg(rsSequenceAbor);
      RunErrorScript;
      ShowDelayMsg('');
    end;
  end
- else msg('Not running, nothing to do.');
+ else msg(rsNotRunningNo);
 end;
 
 procedure T_Targets.ForceNextTarget;
 var p: T_Plan;
     t: TTarget;
 begin
- msg('Try next target');
+ msg(rsTryNextTarge2);
  if FRunning then begin
    t:=Targets[FCurrentTarget];
    p:=t_plan(t.plan);
    TargetRepeatCount:=t.repeatcount;
    if Autofocusing then begin
      CancelAutofocus:=true;
-     msg('Request to stop autofocus ...');
+     msg(rsRequestToSto3);
      Camera.AbortExposure;
      if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
    end;
    if p.Running then begin
-     msg('Stop plan '+Ftargets[FCurrentTarget].planname);
+     msg(Format(rsStopPlan, [Ftargets[FCurrentTarget].planname]));
      p.Stop;
      ShowDelayMsg('');
    end
    else
      FRunning:=false;
  end
- else msg('Not running, nothing to do.');
+ else msg(rsNotRunningNo);
 end;
 
 procedure T_Targets.NextTarget;
@@ -460,13 +461,14 @@ begin
    if Targets[FCurrentTarget].objectname='Script' then begin
      FInitializing:=false;
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
-       msg('Script '+Targets[FCurrentTarget].planname+' failed!');
+       msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]));
        if FUnattended then begin
          StopSequence(true);
          exit;
        end else begin
-         f_pause.Caption:='Script failed';
-         f_pause.Text:='Script '+Targets[FCurrentTarget].planname+' failed!'+crlf+'Do you want to retry?';
+         f_pause.Caption:=Format(rsScriptFailed, ['']);
+         f_pause.Text:=Format(rsScriptFailed, [Targets[FCurrentTarget].planname]
+           )+crlf+rsDoYouWantToR;
          if f_pause.Wait(WaitResponseTime,false) then begin
             Dec(FCurrentTarget);
          end else begin
@@ -491,15 +493,16 @@ begin
        TargetTimer.Enabled:=true;
      end
      else begin
-       msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
+       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia);
        if FUnattended then begin
          FInitializing:=false;
          NextTarget;
          exit;
        end else begin
          FInitializing:=false;
-         f_pause.Caption:='Target failed';
-         f_pause.Text:='Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?';
+         f_pause.Caption:=rsTargetInitia;
+         f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+
+           crlf+rsDoYouWantToR;
          if f_pause.Wait(WaitResponseTime,false) then begin
             Dec(FCurrentTarget);
          end;
@@ -521,15 +524,16 @@ begin
        TargetTimer.Enabled:=true;
      end
      else begin
-       msg(Targets[FCurrentTarget].objectname+', Target initialisation failed!');
+       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia);
        if FUnattended then begin
          FInitializing:=false;
          NextTarget;
          exit;
        end else begin
          FInitializing:=false;
-         f_pause.Caption:='Target failed';
-         f_pause.Text:='Target initialisation failed for '+Targets[FCurrentTarget].objectname+crlf+'Do you want to retry?';
+         f_pause.Caption:=rsTargetInitia;
+         f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+
+           crlf+rsDoYouWantToR;
          if f_pause.Wait(WaitResponseTime,false) then begin
             Dec(FCurrentTarget);
          end;
@@ -547,14 +551,15 @@ begin
      FTargetRA:=NullCoord;
      FTargetDE:=NullCoord;
      FRunning:=true;
-     msg('Starting sequence '+FName+' repeat '+inttostr(FTargetsRepeatCount+1)+'/'+inttostr(FTargetsRepeat));
+     msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),
+       inttostr(FTargetsRepeat)]));
      NextTarget;
    end
    else begin
      FRunning:=false;
      TargetTimer.Enabled:=false;
      StopGuider;
-     msg('Sequence '+FName+' finished.');
+     msg(Format(rsSequenceFini, [FName]));
      RunEndScript;
      ShowDelayMsg('');
      FCurrentTarget:=-1;
@@ -576,12 +581,12 @@ begin
   FWaitStarting:=true;
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
-    msg('Initialize target '+t.objectname);
+    msg(Format(rsInitializeTa, [t.objectname]));
     InplaceAutofocus:=t.inplaceautofocus;
     // adjust moving object coordinates from planetarium
     if t.updatecoord then begin
        if Fplanetarium.Search(t.objectname,newra,newde) then begin
-          msg('New coordinates from planetarium: '+RAToStr(newra)+' '+DEToStr(newde));
+          msg(Format(rsNewCoordinat, [RAToStr(newra), DEToStr(newde)]));
           t.ra:=newra;
           t.de:=newde;
        end;
@@ -594,10 +599,10 @@ begin
           t.endtime:=hs/24;
     end;
     if t.starttime>=0 then begin
-      msg('Wait to start at '+TimeToStr(t.starttime));
+      msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]));
       wtok:=WaitTill(TimeToStr(t.starttime),true);
       if not wtok then begin
-         msg('Target '+t.objectname+' canceled before start');
+         msg(Format(rsTargetCancel, [t.objectname]));
          result:=false;
          exit;
       end;
@@ -608,8 +613,8 @@ begin
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin
-         msg('Target '+t.objectname+' canceled before start');
-         msg('Stop time '+TimeToStr(t.endtime)+' already passed');
+         msg(Format(rsTargetCancel, [t.objectname]));
+         msg(Format(rsStopTimeAlre, [TimeToStr(t.endtime)]));
          result:=false;
          exit;
        end;
@@ -730,7 +735,7 @@ begin
     if abs(hp2)<90 then
        flt.starttime:=rmod(hp2+ObsTimeZone+24,24)/24
     else begin
-      msg('No suitable dusk for automatic flat today');
+      msg(rsNoSuitableDu);
       exit;
     end;
     //Force stop when the Sun is 16 degree below horizon
@@ -738,7 +743,7 @@ begin
     if abs(hp2)<90 then
        flt.endtime:=rmod(hp2+ObsTimeZone+24,24)/24
     else begin
-      msg('No suitable dusk for automatic flat today');
+      msg(rsNoSuitableDu);
       exit;
     end;
     // Update start time of next step to astronomical twilight if not already set
@@ -760,7 +765,7 @@ begin
     if abs(hp1)<90 then
        flt.starttime:=rmod(hp1+ObsTimeZone+24,24)/24
     else begin
-      msg('No suitable dawn for automatic flat today');
+      msg(rsNoSuitableDa);
       exit;
     end;
     //Force stop when the Sun is 2 degree below horizon
@@ -768,7 +773,7 @@ begin
     if abs(hp1)<90 then
        flt.endtime:=rmod(hp1+ObsTimeZone+24,24)/24
     else begin
-      msg('No suitable dawn for automatic flat today');
+      msg(rsNoSuitableDa);
       exit;
     end;
   end
@@ -782,10 +787,10 @@ begin
   mount.SlewToSkyFlatPosition;
   // wait twilight
   if flt.starttime>=0 then begin
-    msg('Waiting for twilight at '+TimeToStr(flt.starttime));
+    msg(Format(rsWaitingForTw, [TimeToStr(flt.starttime)]));
     wtok:=WaitTill(TimeToStr(flt.starttime),true);
     if not wtok then begin
-       msg('Target '+flt.objectname+' canceled before start');
+       msg(Format(rsTargetCancel, [flt.objectname]));
        exit;
     end;
   end;
@@ -795,8 +800,8 @@ begin
         StopTargetTimer.Interval:=1000*stw;
         StopTargetTimer.Enabled:=true;
      end else begin
-       msg('Target '+flt.objectname+' canceled before start');
-       msg('Stop time '+TimeToStr(flt.endtime)+' already passed');
+       msg(Format(rsTargetCancel, [flt.objectname]));
+       msg(Format(rsStopTimeAlre, [TimeToStr(flt.endtime)]));
        exit;
      end;
   end;
@@ -813,7 +818,7 @@ end;
 procedure T_Targets.StopTargetTimerTimer(Sender: TObject);
 begin
   StopTargetTimer.Enabled:=false;
-  msg('Stop the current target at '+TimeToStr(now));
+  msg(Format(rsStopTheCurre2, [TimeToStr(now)]));
   ForceNextTarget;
 end;
 
@@ -828,7 +833,7 @@ var t: TTarget;
     p: T_Plan;
 begin
   if preview.Running then begin
-      msg('Stop preview');
+      msg(rsStopPreview);
       camera.AbortExposure;
       preview.stop;
       StartPlanTimer.Enabled:=true;
@@ -864,12 +869,12 @@ function T_Targets.StopGuider:boolean;
 begin
   result:=false;
   if (Autoguider=nil)or(not Autoguider.Running) then exit;
-  msg('Stop autoguider');
+  msg(rsStopAutoguid);
   Autoguider.Guide(false);
   result:=Autoguider.WaitBusy(60);
   if (not result)and(not Unattended) then begin
-    f_pause.Caption:='Autoguider Stop';
-    f_pause.Text:='Autoguider is still active 60 seconds after a stop request.'+crlf+'Do you want to wait more?';
+    f_pause.Caption:=rsAutoguiderSt;
+    f_pause.Text:=Format(rsAutoguiderIs, [crlf]);
     if f_pause.Wait(WaitResponseTime,false) then begin
        result:=StopGuider();
        exit;
@@ -881,12 +886,13 @@ function T_Targets.StartGuider:boolean;
 begin
  result:=false;
  if Autoguider=nil then exit;
-  msg('Start autoguider');
+  msg(rsStartAutogui);
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
   if (not result)and(not Unattended) then begin
-    f_pause.Caption:='Autoguider Start';
-    f_pause.Text:='Autoguider not guiding '+inttostr(CalibrationDelay+SettleMaxTime)+' seconds after requested to start.'+crlf+'Do you want to retry?';
+    f_pause.Caption:=rsAutoguiderSt2;
+    f_pause.Text:=Format(rsAutoguiderNo2, [inttostr(CalibrationDelay+
+      SettleMaxTime), crlf]);
     if f_pause.Wait(WaitResponseTime,false) then begin
        result:=StartGuider();
        exit;
@@ -902,11 +908,11 @@ begin
   result:=false;
   FTargetCoord:=false;
   if FSlewRetry>3 then begin
-     msg('Slew aborted after 3 retries!');
+     msg(rsSlewAbortedA);
      exit;
   end;
   if (Mount=nil)or(Mount.Status<>devConnected) then begin
-    msg('Error! Mount not connected');
+    msg(rsErrorMountNo);
     exit;
   end;
   prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
@@ -937,10 +943,10 @@ begin
   end;
   if not FRunning then exit;
   if not result then begin
-    msg('Telescope slew error: '+FormatFloat(f2,err*60)+' arcminutes.');
+    msg(Format(rsTelescopeSle, [FormatFloat(f2, err*60)]));
     if not Unattended then begin
-      f_pause.Caption:='Telescope slew';
-      f_pause.Text:='After telescope pointing to target the offset relative to requested position is '+FormatFloat(f2,err*60)+' arcminutes.'+crlf+'Do you want to retry the slew?';
+      f_pause.Caption:=rsTelescopeSle2;
+      f_pause.Text:=Format(rsAfterTelesco, [FormatFloat(f2, err*60), crlf]);
       if f_pause.Wait(WaitResponseTime) then begin
          inc(FSlewRetry);
          result:=Slew(ra,de,precision,planprecision);
@@ -963,7 +969,8 @@ begin
         if (t<>nil)and(TargetRepeatCount<=t.repeatcount) then begin
            tt:=t.delay-(Now-TargetTimeStart)*secperday;
            if tt<1 then tt:=1;
-           if tt>1 then msg('Wait '+FormatFloat(f1,tt)+' seconds before repeated target '+IntToStr(TargetRepeatCount));
+           if tt>1 then msg(Format(rsWaitSecondsB, [FormatFloat(f1, tt),
+             IntToStr(TargetRepeatCount)]));
            TargetRepeatTimer.Interval:=trunc(1000*tt);
            TargetRepeatTimer.Enabled:=true;
            TargetDelayEnd:=now+tt/secperday;
@@ -980,13 +987,13 @@ begin
    end
    else begin
      tt:=(TargetDelayEnd-Now)*secperday;
-     ShowDelayMsg('Continue in '+FormatFloat(f0,tt)+' seconds');
+     ShowDelayMsg(Format(rsContinueInSe, [FormatFloat(f0, tt)]));
    end;
  end
  else begin
   TargetTimer.Enabled:=false;
   FCurrentTarget:=-1;
-  msg('Sequence '+FName+' stopped.');
+  msg(Format(rsSequenceStop2, [FName]));
   if assigned(FonEndSequence) then FonEndSequence(nil);
   ShowDelayMsg('');
  end;
@@ -1000,8 +1007,10 @@ begin
     ShowDelayMsg('');
     t:=Targets[FCurrentTarget];
     if t<>nil then begin
-      Msg('Repeat target'+inttostr(TargetRepeatCount)+'/'+t.repeatcount_str+' '+t.objectname);
-      ShowDelayMsg('Repeat target'+inttostr(TargetRepeatCount)+'/'+t.repeatcount_str+' '+t.objectname);
+      Msg(Format(rsRepeatTarget, [inttostr(TargetRepeatCount),
+        t.repeatcount_str, t.objectname]));
+      ShowDelayMsg(Format(rsRepeatTarget, [inttostr(TargetRepeatCount),
+        t.repeatcount_str, t.objectname]));
       if t.preview and Preview.Running then Preview.BtnLoop.Click;
       TargetTimeStart:=now;
       StartPlan;

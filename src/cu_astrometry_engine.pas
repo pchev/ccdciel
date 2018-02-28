@@ -29,7 +29,7 @@ uses  u_global, u_utils, cu_fits,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
-  LCLIntf, math, UTF8Process, process, FileUtil, strutils, Classes, SysUtils;
+  LCLIntf, math, UTF8Process, process, FileUtil, strutils, Classes, SysUtils,u_translation;
 
 type
 TAstrometry_engine = class(TThread)
@@ -430,7 +430,7 @@ if FResolver=ResolverAstrometryNet then begin
     if now>endtime then begin
        Stop;
        if logok then begin
-         buf:='Timeout!';
+         buf:=rsTimeout+'!';
          cbuf:=buf;
          BlockWrite(f,cbuf,Length(buf));
        end;
@@ -445,14 +445,14 @@ if FResolver=ResolverAstrometryNet then begin
   process.Free;
   process:=TProcessUTF8.Create(nil);
   if logok and (Fresult<>0) then begin
-     buf:='Error result = '+IntToStr(Fresult);
+     buf:=Format(rsErrorResult, [IntToStr(Fresult)]);
      cbuf:=buf;
      BlockWrite(f,cbuf,Length(buf));
   end;
   except
      Fresult:=1;
      if logok then begin
-       buf:='Error starting command: '+Fcmd;
+       buf:=Format(rsErrorStartin, [Fcmd]);
        cbuf:=buf;
        BlockWrite(f,cbuf,Length(buf));
      end;
@@ -532,7 +532,7 @@ else if FResolver=ResolverElbrus then begin
         Append(ft)
       else
         Rewrite(ft);
-      WriteLn(ft,'Timeout!');
+      WriteLn(ft, rsTimeout+'!');
       WriteLn(ft,'No response from Elbrus after 10 seconds.');
       WriteLn(ft,'Is Elbrus running and waiting for messages?');
       CloseFile(ft);
@@ -577,7 +577,7 @@ else if FResolver=ResolverNone then begin
   if (FLogFile<>'') then begin
     AssignFile(ft,FLogFile);
     rewrite(ft);
-    WriteLn(ft,'No astrometry resolver configured!');
+    WriteLn(ft,rsNoResolverCo);
     CloseFile(ft);
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);

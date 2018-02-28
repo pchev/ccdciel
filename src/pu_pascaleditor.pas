@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 interface
 
-uses  Classes, SysUtils, FileUtil, SynEdit, UScaleDPI,
+uses  Classes, SysUtils, FileUtil, SynEdit, UScaleDPI, u_translation,
   SynHighlighterPas, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   Menus, ActnList, StdActns, Buttons, ComCtrls, uPSComponent, uPSDebugger,
   uPSRuntime, SynEditMarks, SynEditTypes;
@@ -134,7 +134,7 @@ end;
 
 procedure Tf_pascaleditor.SetLang;
 begin
-{  Caption:=rsScriptEditor;
+  Caption:=rsScriptEditor;
   Button1.Caption:=rsSave;
   Button2.Caption:=rsCancel;
   Button3.Caption:=rsHelp;
@@ -144,14 +144,13 @@ begin
   ToolButton4.Hint:=rsStepInto;
   ToolButton5.Hint:=rsStepOver;
   ToolButton6.Hint:=rsRemoveAllBre;
-  SetHelp(self,hlpScriptReference); }
 end;
 
 procedure Tf_pascaleditor.SetScriptName(value:string);
 begin
   if FScriptName<>value then ButtonRemoveBreakpoints(nil);
   FScriptName:=value;
-  Caption:='Script Editor'+': '+FScriptName;
+  Caption:=rsScriptEditor+': '+FScriptName;
 end;
 
 function GetErrorRowCol(const inStr: string): TPoint;

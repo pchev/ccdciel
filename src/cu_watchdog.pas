@@ -33,11 +33,12 @@ type
 T_watchdog = class(TComponent)
  private
  protected
-    FonMsg: TNotifyMsg;
+    FonMsg,FonDeviceMsg: TNotifyMsg;
     FTimeOut,FThreshold: integer;
     FAutoLoadConfig: boolean;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
+    FDevice: string;
     procedure msg(txt: string);
     procedure SetTimeout(num:integer); virtual; abstract;
     procedure SetTThreshold(num:integer); virtual; abstract;
@@ -51,6 +52,7 @@ T_watchdog = class(TComponent)
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property Status: TDeviceStatus read FStatus;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;
 
@@ -71,7 +73,7 @@ end;
 
 procedure T_watchdog.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(fdevice+': '+txt);
 end;
 
 end.

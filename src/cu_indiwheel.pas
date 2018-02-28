@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_wheel, indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_wheel, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
      u_global, ExtCtrls, Forms, Classes, SysUtils;
 
 type
@@ -61,7 +61,6 @@ T_indiwheel = class(T_wheel)
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
-   procedure msg(txt: string);
  protected
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
@@ -160,11 +159,6 @@ begin
     end;
 end;
 
-procedure T_indiwheel.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
-end;
-
 Procedure T_indiwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
@@ -172,6 +166,7 @@ if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
   Findidevice:=cp3;
+  Fdevice:=cp3;
   Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -189,9 +184,9 @@ procedure T_indiwheel.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (WheelDevice=nil)or(not Fready) then begin
-    msg('Error');
+    msg(rsError2);
     if not Fconnected then begin
-      msg('No response from server');
+      msg(rsNoResponseFr);
       msg('Is "'+Findidevice+'" a running wheel driver?');
     end
     else if (configprop=nil) then
@@ -235,7 +230,7 @@ procedure T_indiwheel.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg('Filter wheel server disconnected');
+  msg(rsServer+' '+rsDisconnected3);
   CreateIndiClient;
 end;
 
@@ -262,7 +257,7 @@ end;
 
 procedure T_indiwheel.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   mp.Free;
 end;
 
@@ -338,6 +333,7 @@ begin
 if (WheelSlot<>nil)and(num>0)and(Slot.value<>num) then begin;
   if num>Slot.max then num:=round(Slot.max);
   if num<Slot.min then num:=round(Slot.min);
+  msg(Format(rsSetFilterPos, [inttostr(num)]));
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
   indiclient.WaitBusy(WheelSlot);

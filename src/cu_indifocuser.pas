@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_focuser, indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_focuser, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
      u_global, u_utils, math, ExtCtrls, Forms, Classes, SysUtils;
 
 type
@@ -68,7 +68,6 @@ T_indifocuser = class(T_focuser)
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
-   procedure msg(txt: string);
  protected
    procedure SetPosition(p:integer); override;
    function  GetPosition:integer; override;
@@ -187,11 +186,6 @@ begin
     end;
 end;
 
-procedure T_indifocuser.msg(txt: string);
-begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+txt);
-end;
-
 Procedure T_indifocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
@@ -199,8 +193,8 @@ if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
   Findidevice:=cp3;
+  Fdevice:=cp3;
   Findideviceport:=cp4;
-  Fdevice:=Findidevice;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   indiclient.SetServer(Findiserver,Findiserverport);
@@ -217,9 +211,9 @@ procedure T_indifocuser.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (FocuserDevice=nil)or(not Fready) then begin
-    msg('Error');
+    msg(rsError2);
     if not Fconnected then begin
-      msg('No response from server');
+      msg(rsNoResponseFr);
       msg('Is "'+Findidevice+'" a running focuser driver?');
     end
     else if (configprop=nil) then
@@ -263,7 +257,7 @@ procedure T_indifocuser.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg('Focuser server disconnected');
+  msg(rsServer+' '+rsDisconnected3);
   CreateIndiClient;
 end;
 
@@ -290,7 +284,7 @@ end;
 
 procedure T_indifocuser.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   mp.Free;
 end;
 
