@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_watchdog, indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_watchdog, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
      u_global, u_utils, ExtCtrls, Forms, Classes, SysUtils;
 
 type
@@ -167,6 +167,7 @@ if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
   Findidevice:=cp3;
+  FDevice:=cp3;
   FStatus := devDisconnected;
   indiclient.SetServer(Findiserver,Findiserverport);
   indiclient.watchDevice(Findidevice);
@@ -182,9 +183,9 @@ procedure T_indiwatchdog.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (WatchdogDevice=nil)or(not Fready) then begin
-    msg('Watchdog '+Findidevice+' Error');
+    msg(rsError2);
     if not Fconnected then begin
-      msg('No response from server');
+      msg(rsNoResponseFr);
       msg('Is "'+Findidevice+'" a running Watchdog driver?');
     end
     else if (configprop=nil) then
@@ -223,7 +224,7 @@ procedure T_indiwatchdog.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg('Watchdog '+Findidevice+' server disconnected');
+  msg(rsserver+' '+rsDisconnected3);
   CreateIndiClient;
 end;
 
@@ -250,7 +251,7 @@ end;
 
 procedure T_indiwatchdog.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   mp.Free;
 end;
 

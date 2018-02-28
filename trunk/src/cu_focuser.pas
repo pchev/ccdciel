@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, indiapi,
+uses u_global, u_utils, indiapi, u_translation,
   Classes, SysUtils;
 
 type
@@ -124,12 +124,12 @@ end;
 
 procedure T_focuser.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
 end;
 
 procedure T_focuser.SetPositionInt(p:integer);
 begin
-  msg('Focuser '+Fdevice+' move to '+inttostr(p));
+  msg(Format(rsFocuserMoveT, [inttostr(p)]));
   if FBacklashActive and ((p<Position)<>FBacklashDirection) then begin   // p<position = focus IN
     if FBacklashDirection then
        SetPosition(p+FBacklash)   // backlash IN, go OUT first
@@ -142,7 +142,7 @@ end;
 
 procedure T_focuser.SetRelPositionInt(p:integer);
 begin
-  msg('Focuser '+Fdevice+' move by '+inttostr(FFocusdirection*p));
+  msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)]));
   if BacklashActive and (FLastDirection<>FBacklashDirection) then begin   // FLastDirection = focus IN
     if FBacklashDirection then begin // want to go OUT, backlash IN
        SetRelPosition(p+FBacklash);  // go more OUT than required

@@ -39,10 +39,12 @@ T_mount = class(TComponent)
     FonParkChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
+    Fdevice: string;
     FMountSlewing: boolean;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FIsEqmod: boolean;
+    procedure msg(txt: string);
     function  GetPark:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
     function  GetRA:double; virtual; abstract;
@@ -107,6 +109,11 @@ end;
 destructor  T_mount.Destroy;
 begin
   inherited Destroy;
+end;
+
+procedure T_mount.msg(txt: string);
+begin
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
 end;
 
 procedure T_mount.SlewToSkyFlatPosition;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_focuser, u_global, u_utils,
+uses cu_focuser, u_global, u_utils, u_translation,
     {$ifdef mswindows}
     indiapi, Variants, comobj, math,
     {$endif}
@@ -124,7 +124,7 @@ begin
     V.Connected:=true;
   if Connected then begin
      GetTemperature;
-     msg('Focuser '+Fdevice+' connected.');
+     msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
@@ -132,7 +132,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Focuser '+Fdevice+' Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -145,7 +145,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg('Focuser '+Fdevice+' disconnected.');
+     msg(rsDisconnected3);
      if FInterfaceVersion=1 then
        V.Link:=false
      else
@@ -153,7 +153,7 @@ begin
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Focuser '+Fdevice+' Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -209,7 +209,7 @@ begin
        end;
     end;
     except
-     on E: Exception do msg('Focuser '+Fdevice+' Status error: ' + E.Message);
+     on E: Exception do msg('Status error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -269,7 +269,7 @@ begin
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
    except
-    on E: Exception do msg('Focuser '+Fdevice+' Error, can''t move to. ' + E.Message);
+    on E: Exception do msg('Error, can''t move to. ' + E.Message);
    end;
  end;
  {$endif}
@@ -283,7 +283,7 @@ begin
    try
    result:=V.Position;
    except
-    on E: Exception do msg('Focuser '+Fdevice+' Get position error: ' + E.Message);
+    on E: Exception do msg('Get position error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -351,7 +351,7 @@ begin
    WaitFocuserMoving(60000);
    if FDelay>0 then Wait(FDelay);
    except
-    on E: Exception do msg('Focuser '+Fdevice+' Set relative position error: ' + E.Message);
+    on E: Exception do msg('Set relative position error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -392,7 +392,7 @@ begin
    try
    result:=V.Absolute;
    except
-    on E: Exception do msg('Focuser '+Fdevice+' GethasAbsolutePosition error: ' + E.Message);
+    on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -406,7 +406,7 @@ begin
    try
    result:=not V.Absolute;
    except
-    on E: Exception do msg('Focuser '+Fdevice+' GethasRelativePosition error: ' + E.Message);
+    on E: Exception do msg('GethasRelativePosition error: ' + E.Message);
    end;
  end;
  {$endif}

@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, math,
+uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, math, u_translation,
   lazutf8sysutils, Classes, Forms, SysUtils;
 
 type
@@ -58,6 +58,7 @@ T_camera = class(TComponent)
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
     FObjectName: string;
+    Fdevice: string;
     FFits,FStackDark: TFits;
     FStackCount: integer;
     FStackAlign: boolean;
@@ -81,7 +82,6 @@ T_camera = class(TComponent)
     procedure WriteHeaders;
     procedure NewVideoFrame;
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
-    function GetDevicename: string; virtual; abstract;
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
     procedure SetFrametype(f:TFrameType); virtual; abstract;
@@ -194,7 +194,6 @@ T_camera = class(TComponent)
     property Cooler: boolean read GetCooler write SetCooler;
     property Temperature: double read GetTemperature write SetTemperatureRamp;
     property TemperatureRampActive: Boolean read FTemperatureRampActive;
-    property DeviceName: string read GetDevicename;
     property BinX: Integer read getBinX;
     property BinY: Integer read getBinY;
     property FrameType: TFrameType read GetFrametype write SetFrametype;
@@ -290,7 +289,7 @@ end;
 
 procedure T_camera.msg(txt: string);
 begin
- if Assigned(FonMsg) then FonMsg(DeviceName+': '+txt);
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
 end;
 
 procedure T_camera.SetTemperatureRamp(value:double);
@@ -299,7 +298,7 @@ begin
     TempFinal:=value;
     Application.QueueAsyncCall(@SetTemperatureRampAsync,0);
   end else begin
-    msg('Set temperature '+formatfloat(f1,value));
+    msg(Format(rsSetTemperatu, [formatfloat(f1, value)]));
     SetTemperature(value);
   end;
 end;
@@ -312,10 +311,10 @@ begin
   if TempStep<1 then TempStep:=1;
   if FTemperatureRampActive then begin
      FCancelTemperatureRamp:=true;
-     msg('Temperature ramp requested to stop');
+     msg(rsTemperatureR);
      exit;
   end;
-  msg('Set temperature ramp to '+formatfloat(f1,TempFinal)+' started');
+  msg(Format(rsSetTemperatu2, [formatfloat(f1, TempFinal)]));
   try
   FTemperatureRampActive:=true;
   TempStart:=GetTemperature;
@@ -332,13 +331,13 @@ begin
     if FCancelTemperatureRamp then begin
        FCancelTemperatureRamp:=false;
        FTemperatureRampActive:=false;
-       msg('Temperature ramp canceled');
+       msg(rsTemperatureR2);
        exit;
     end;
     dec(Nstep);
   end;
   SetTemperature(TempFinal);
-  msg('Set temperature ramp finished');
+  msg(rsSetTemperatu3);
   finally
     FTemperatureRampActive:=false;
     if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
@@ -379,7 +378,7 @@ if FAddFrames then begin  // stack preview frames
              alok:=true;
            end;
        end;
-       if not alok then msg('Alignment star lost');
+       if not alok then msg(rsAlignmentSta);
      end;
      FFits.Math(f,moAdd);       // add frame
      inc(FStackCount);
@@ -400,11 +399,12 @@ if FAddFrames then begin  // stack preview frames
             FStackAlignY:=ys;
             FStackStarX:=xs;
             FStackStarY:=ys;
-            msg('Stacking with alignment star at '+inttostr(round(xs))+'/'+inttostr(round(ys)));
+            msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(ys))
+              ]));
          end;
        end;
      end;
-     if not FStackAlign then msg('No alignment star found for stacking');
+     if not FStackAlign then msg(rsNoAlignmentS);
   end;
   // update image
   FFits.Header.Assign(f.Header);
@@ -490,7 +490,7 @@ begin
      focal_length:=Fmount.FocaleLength
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
-  if (focal_length<1) then msg('Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY.');
+  if (focal_length<1) then msg(rsErrorUnknowT);
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
   except

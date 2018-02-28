@@ -2590,3 +2590,467 @@ msgstr ""
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr ""
 
+#: u_translation:rsrunscript2
+msgid "Run script %s"
+msgstr ""
+
+#: u_translation:rsscriptfinish
+msgid "Script %s finished"
+msgstr ""
+
+#: u_translation:rsscriptexecut
+msgid "Script execution error, row %s: %s"
+msgstr ""
+
+#: u_translation:rscompilatione
+msgid "Compilation error: %s"
+msgstr ""
+
+#: u_translation:rsscripterror
+msgid "Script error: %s"
+msgstr ""
+
+#: u_translation:rsscripttermin
+msgid "Script terminating..."
+msgstr ""
+
+#: u_translation:rsslewtelescop
+msgid "Slew telescope to %s %s"
+msgstr ""
+
+#: u_translation:rsoutofrange
+msgid "%s out of range"
+msgstr ""
+
+#: u_translation:rsnotaneqmodmo
+msgid "%s not an eqmod mount"
+msgstr ""
+
+#: u_translation:rsscripteditor
+msgid "Script editor"
+msgstr ""
+
+#: u_translation:rsstepinto
+msgid "Step Into"
+msgstr ""
+
+#: u_translation:rsstepover
+msgid "Step Over"
+msgstr ""
+
+#: u_translation:rsremoveallbre
+msgid "Remove all breakpoints"
+msgstr ""
+
+#: u_translation:rscannotfindap
+msgid "Cannot find approximate coordinates for this image.%sThe astrometry resolution may take a very long time."
+msgstr ""
+
+#: u_translation:rsresolvingusi
+msgid "Resolving using %s ..."
+msgstr ""
+
+#: u_translation:rsresolveralre
+msgid "Resolver already running, cannot start astrometry now!"
+msgstr ""
+
+#: u_translation:rsstopastromet2
+msgid "Stop astrometry resolver."
+msgstr ""
+
+#: u_translation:rscenterappare
+msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
+msgstr ""
+
+#: u_translation:rsnoresolverco
+msgid "No resolver configured!"
+msgstr ""
+
+#: u_translation:rsdosimpleslew
+msgid "Do simple slew to %s/%s"
+msgstr ""
+
+#: u_translation:rsslewto
+msgid "Slew to %s/%s"
+msgstr ""
+
+#: u_translation:rsresolvecontr
+msgid "Resolve control exposure"
+msgstr ""
+
+#: u_translation:rsfailtoresolv
+msgid "Fail to resolve control exposure"
+msgstr ""
+
+#: u_translation:rsdistancetota
+msgid "Distance to target: %s arcmin"
+msgstr ""
+
+#: u_translation:rssyncto
+msgid "Sync to %s/%s"
+msgstr ""
+
+#: u_translation:rsslewwithoffs
+msgid "Slew with offset %s/%s"
+msgstr ""
+
+#: u_translation:rsprecisionsle2
+msgid "Precision slew finished."
+msgstr ""
+
+#: u_translation:rsprecisionsle3
+msgid "Precision slew failed!"
+msgstr ""
+
+#: u_translation:rserrorresult
+msgid "Error result = %s"
+msgstr ""
+
+#: u_translation:rserrorstartin
+msgid "Error starting command: %s"
+msgstr ""
+
+#: u_translation:rssettemperatu
+msgid "Set temperature %s"
+msgstr ""
+
+#: u_translation:rstemperaturer
+msgid "Temperature ramp requested to stop"
+msgstr ""
+
+#: u_translation:rssettemperatu2
+msgid "Set temperature ramp to %s started"
+msgstr ""
+
+#: u_translation:rstemperaturer2
+msgid "Temperature ramp canceled"
+msgstr ""
+
+#: u_translation:rssettemperatu3
+msgid "Set temperature ramp finished"
+msgstr ""
+
+#: u_translation:rsalignmentsta
+msgid "Alignment star lost"
+msgstr ""
+
+#: u_translation:rsstackingwith
+msgid "Stacking with alignment star at %s/%s"
+msgstr ""
+
+#: u_translation:rsnoalignments
+msgid "No alignment star found for stacking"
+msgstr ""
+
+#: u_translation:rserrorunknowt
+msgid "Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
+msgstr ""
+
+#: u_translation:rsfocusermovet
+msgid "Focuser move to %s"
+msgstr ""
+
+#: u_translation:rsfocusermoveb
+msgid "Focuser move by %s"
+msgstr ""
+
+#: u_translation:rsrotatormovet
+msgid "Rotator move to PA %s"
+msgstr ""
+
+#: u_translation:rsrotatorsyncc
+msgid "Rotator sync calibration = %s"
+msgstr ""
+
+#: u_translation:rsconnected3
+msgid "Connected"
+msgstr ""
+
+#: u_translation:rsconnectioner
+msgid "Connection error: %s"
+msgstr ""
+
+#: u_translation:rsdisconnectio
+msgid "Disconnection error: %s"
+msgstr ""
+
+#: u_translation:rserror
+msgid "Error: %s"
+msgstr ""
+
+#: u_translation:rsstartexposur
+msgid "Start exposure error: %s"
+msgstr ""
+
+#: u_translation:rssetbinningx
+msgid "Set binning %sx%s"
+msgstr ""
+
+#: u_translation:rssetframetype
+msgid "Set frame type %s"
+msgstr ""
+
+#: u_translation:rssetfilterpos
+msgid "Set filter position %s"
+msgstr ""
+
+#: u_translation:rssetcooler
+msgid "Set cooler %s"
+msgstr ""
+
+#: u_translation:rsmountmoveto
+msgid "move to %s %s"
+msgstr ""
+
+#: u_translation:rscannotsyncwh
+msgid "Cannot Sync when the mount is not tracking"
+msgstr ""
+
+#: u_translation:rssyncto2
+msgid "sync to %s %s"
+msgstr ""
+
+#: u_translation:rsstarttraking
+msgid "start traking"
+msgstr ""
+
+#: u_translation:rsstoptelescop
+msgid "Stop telescope motion."
+msgstr ""
+
+#: u_translation:rserror2
+msgid "Error"
+msgstr ""
+
+#: u_translation:rsnoresponsefr
+msgid "No response from server"
+msgstr ""
+
+#: u_translation:rstrue
+msgid "True"
+msgstr ""
+
+#: u_translation:rsfalse
+msgid "False"
+msgstr ""
+
+#: u_translation:rsunpark
+msgid "Unpark"
+msgstr ""
+
+#: u_translation:rsmountcapabil
+msgid "Mount capabilities: %s"
+msgstr ""
+
+#: u_translation:rscameraframex
+msgid "Camera frame x=%s y=%s width=%s height=%s"
+msgstr ""
+
+#: u_translation:rswaittostarts
+msgid "Wait to start sequence %s at %s"
+msgstr ""
+
+#: u_translation:rssequencecanc
+msgid "Sequence %s canceled before start"
+msgstr ""
+
+#: u_translation:rsstoptimealre
+msgid "Stop time %s already passed"
+msgstr ""
+
+#: u_translation:rsnodusktoday
+msgid "No dusk today"
+msgstr ""
+
+#: u_translation:rssequencestar
+msgid "Sequence %s start immediatelly"
+msgstr ""
+
+#: u_translation:rssequenceigno
+msgid "Sequence %s ignore stop at dawn"
+msgstr ""
+
+#: u_translation:rsnodawntoday
+msgid "No dawn today"
+msgstr ""
+
+#: u_translation:rsstartingsequ
+msgid "Starting sequence %s"
+msgstr ""
+
+#: u_translation:rsstartingsequ2
+msgid "Starting sequence %s repeat %s/%s"
+msgstr ""
+
+#: u_translation:rsstopthecurre
+msgid "Stop the current sequence at %s"
+msgstr ""
+
+#: u_translation:rsrequesttosto2
+msgid "Request to stop the current sequence"
+msgstr ""
+
+#: u_translation:rsabortthecurr
+msgid "Abort the current sequence"
+msgstr ""
+
+#: u_translation:rsrequesttosto3
+msgid "Request to stop autofocus ..."
+msgstr ""
+
+#: u_translation:rssequencestop
+msgid "Sequence stopped by user request, no termination script will be run."
+msgstr ""
+
+#: u_translation:rsnotrunningno
+msgid "Not running, nothing to do."
+msgstr ""
+
+#: u_translation:rstrynexttarge2
+msgid "Try next target"
+msgstr ""
+
+#: u_translation:rsstopplan
+msgid "Stop plan %s"
+msgstr ""
+
+#: u_translation:rsscriptfailed
+msgid "Script %s failed!"
+msgstr ""
+
+#: u_translation:rsdoyouwanttor
+msgid "Do you want to retry?"
+msgstr ""
+
+#: u_translation:rstargetinitia
+msgid "Target initialisation failed!"
+msgstr ""
+
+#: u_translation:rssequencefini
+msgid "Sequence %s finished."
+msgstr ""
+
+#: u_translation:rsinitializeta
+msgid "Initialize target %s"
+msgstr ""
+
+#: u_translation:rsnewcoordinat
+msgid "New coordinates from planetarium: %s %s"
+msgstr ""
+
+#: u_translation:rswaittostarta
+msgid "Wait to start at %s"
+msgstr ""
+
+#: u_translation:rstargetcancel
+msgid "Target %s canceled before start"
+msgstr ""
+
+#: u_translation:rsnosuitabledu
+msgid "No suitable dusk for automatic flat today"
+msgstr ""
+
+#: u_translation:rsnosuitableda
+msgid "No suitable dawn for automatic flat today"
+msgstr ""
+
+#: u_translation:rswaitingfortw
+msgid "Waiting for twilight at %s"
+msgstr ""
+
+#: u_translation:rsstopthecurre2
+msgid "Stop the current target at %s"
+msgstr ""
+
+#: u_translation:rsautoguiderst
+msgid "Autoguider Stop"
+msgstr ""
+
+#: u_translation:rsautoguideris
+msgid "Autoguider is still active 60 seconds after a stop request.%sDo you want to wait more?"
+msgstr ""
+
+#: u_translation:rsstartautogui
+msgid "Start autoguider"
+msgstr ""
+
+#: u_translation:rsautoguiderst2
+msgid "Autoguider Start"
+msgstr ""
+
+#: u_translation:rsautoguiderno2
+msgid "Autoguider not guiding %s seconds after requested to start.%sDo you want to retry?"
+msgstr ""
+
+#: u_translation:rsslewaborteda
+msgid "Slew aborted after 3 retries!"
+msgstr ""
+
+#: u_translation:rserrormountno
+msgid "Error! Mount not connected"
+msgstr ""
+
+#: u_translation:rstelescopesle
+msgid "Telescope slew error: %s arcminutes."
+msgstr ""
+
+#: u_translation:rstelescopesle2
+msgid "Telescope slew"
+msgstr ""
+
+#: u_translation:rsaftertelesco
+msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
+msgstr ""
+
+#: u_translation:rswaitsecondsb
+msgid "Wait %s seconds before repeated target %s"
+msgstr ""
+
+#: u_translation:rscontinueinse
+msgid "Continue in %s seconds"
+msgstr ""
+
+#: u_translation:rssequencestop2
+msgid "Sequence %s stopped."
+msgstr ""
+
+#: u_translation:rsrepeattarget
+msgid "Repeat target%s/%s %s"
+msgstr ""
+
+#: u_translation:rsobjectstartp
+msgid "Object %s, start plan %s"
+msgstr ""
+
+#: u_translation:rsstartplan
+msgid "Start plan %s"
+msgstr ""
+
+#: u_translation:rsobjectplanfi
+msgid "Object %s, plan %s finished."
+msgstr ""
+
+#: u_translation:rsplanfinished
+msgid "Plan %s finished."
+msgstr ""
+
+#: u_translation:rsstartstep
+msgid "Start step %s"
+msgstr ""
+
+#: u_translation:rswaitsecondsb2
+msgid "Wait %s seconds before repeated sequence %s"
+msgstr ""
+
+#: u_translation:rsplanstopped
+msgid "Plan %s stopped."
+msgstr ""
+
+#: u_translation:rsrepeatstep
+msgid "Repeat step %s/%s %s"
+msgstr ""
+
+#: u_translation:rsshowindilog
+msgid "Show INDI log"
+msgstr ""
+

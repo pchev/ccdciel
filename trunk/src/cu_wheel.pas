@@ -39,9 +39,11 @@ T_wheel = class(TComponent)
     FonFilterChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
+    Fdevice: string;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     Fcameraobj: TObject;
+    procedure msg(txt: string);
     function  GetStatus: TDeviceStatus; virtual; abstract;
     procedure SetFilter(num:integer);  virtual; abstract;
     function  GetFilter:integer; virtual; abstract;
@@ -84,6 +86,12 @@ begin
   FFilterNames.Free;
   inherited Destroy;
 end;
+
+procedure T_wheel.msg(txt: string);
+begin
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
+end;
+
 
 end.
 

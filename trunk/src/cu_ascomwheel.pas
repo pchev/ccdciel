@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_wheel, u_global, indiapi,
+uses  cu_wheel, u_global, indiapi, u_translation,
   {$ifdef mswindows}
      Variants, comobj,
   {$endif}
@@ -36,14 +36,12 @@ T_ascomwheel = class(T_wheel)
  private
    {$ifdef mswindows}
    V: variant;
-   Fdevice: string;
    FFilterNum: integer;
    stFilter: integer;
    {$endif}
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
-   procedure msg(txt: string);
    procedure GetAscomFilterNames(var value:TStringList; var n: integer);
    function WaitFilter(maxtime:integer):boolean;
  protected
@@ -90,7 +88,7 @@ begin
   V:=CreateOleObject(WideString(Fdevice));
   V.connected:=true;
   if V.connected then begin
-     msg('Filter wheel '+Fdevice+' connected.');
+     msg(rsConnected3);
      GetAscomFilterNames(FFilterNames,FFilterNum);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -99,7 +97,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Filter wheel '+Fdevice+' Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message);
   end;
  {$endif}
 end;
@@ -112,12 +110,12 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg('Filter wheel '+Fdevice+' disconnected.');
+     msg(rsDisconnected3);
      V.connected:=false;
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Filter wheel '+Fdevice+' Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message);
    end;
  {$endif}
 end;
@@ -168,7 +166,7 @@ begin
        if Assigned(FonFilterNameChange) then FonFilterNameChange(self);
     end;
     except
-     on E: Exception do msg('Filter wheel '+Fdevice+' Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message);
     end;
   end;
  {$endif}
@@ -204,11 +202,11 @@ begin
  {$ifdef mswindows}
  if Connected and (num>0) then begin
    try
-   msg('Filter wheel '+Fdevice+' set filter position '+inttostr(num));
+   msg(Format(rsSetFilterPos, [inttostr(num)]));
    V.Position:=num-1;
    WaitFilter(60000);
    except
-    on E: Exception do msg('Filter wheel '+Fdevice+' Set filter error: ' + E.Message);
+    on E: Exception do msg('Set filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -222,7 +220,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: Exception do msg('Filter wheel '+Fdevice+' Get filter error: ' + E.Message);
+    on E: Exception do msg('Get filter error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -264,7 +262,7 @@ begin
      value.Add(fnames[i]);
    end;
    except
-    on E: Exception do msg('Filter wheel '+Fdevice+' List filter names error: ' + E.Message);
+    on E: Exception do msg('List filter names error: ' + E.Message);
    end;
  end;
  {$endif}
@@ -273,11 +271,6 @@ end;
 function  T_ascomwheel.GetStatus: TDeviceStatus;
 begin
   result:=FStatus;
-end;
-
-procedure T_ascomwheel.msg(txt: string);
-begin
- if Assigned(FonMsg) then FonMsg(txt);
 end;
 
 procedure T_ascomwheel.SetTimeout(num:integer);

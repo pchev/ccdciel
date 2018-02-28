@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_camera, u_global,
+uses  cu_camera, u_global, u_translation,
   {$ifdef mswindows}
     u_utils, cu_fits, lazutf8sysutils, indiapi,
     Variants, comobj,
@@ -40,7 +40,6 @@ T_ascomcamera = class(T_camera)
  private
    {$ifdef mswindows}
    V: variant;
-   Fdevice: string;
    nf: integer;
    timestart,timeend,timedout,Fexptime:double;
    stX,stY,stWidth,stHeight: integer;
@@ -54,7 +53,6 @@ T_ascomcamera = class(T_camera)
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
   protected
-   function GetDevicename: string; override;
    function GetBinX:integer; override;
    function GetBinY:integer; override;
    procedure SetFrametype(f:TFrameType); override;
@@ -170,12 +168,12 @@ begin
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
-    msg('Connected.');
+    msg(rsConnected3);
  end
  else
     Disconnect;
  except
-   on E: Exception do msg('Connection error: ' + E.Message);
+   on E: Exception do msg(Format(rsConnectionEr, [E.Message]));
  end;
 {$endif}
 end;
@@ -190,10 +188,10 @@ begin
   if not VarIsEmpty(V) then begin
     V.connected:=false;
     V:=Unassigned;
-    msg('Disconnected.');
+    msg(rsDisconnected3);
   end;
   except
-    on E: Exception do msg('Disconnection error: ' + E.Message);
+    on E: Exception do msg(Format(rsDisconnectio, [E.Message]));
   end;
 {$endif}
 end;
@@ -247,7 +245,7 @@ begin
        if Assigned(FonFrameChange) then FonFrameChange(self);
     end;
     except
-     on E: Exception do msg('Error: ' + E.Message);
+     on E: Exception do msg(Format(rsError, [E.Message]));
     end;
   end;
  {$endif}
@@ -279,7 +277,7 @@ if Connected then begin
      else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
-     on E: Exception do msg('Start exposure error: ' + E.Message);
+     on E: Exception do msg(Format(rsStartExposur, [E.Message]));
   end;
 end;
 {$endif}
@@ -319,7 +317,7 @@ begin
         exit;
       end;
     end;
-    {$ifdef debug_ascom}msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok,true));{$endif}
+    {$ifdef debug_ascom}msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok, rsTrue, rsFalse));{$endif}
     if (not ok) then begin
       // in progress
       if assigned(FonExposureProgress) then FonExposureProgress(secperday*(timeend-now));
@@ -329,7 +327,7 @@ begin
  end
  else begin
    ok:=false;
-   msg('Timeout');
+   msg(rsTimeout);
    if assigned(FonAbortExposure) then FonAbortExposure(self);
  end;
 
@@ -428,7 +426,7 @@ begin
    oldx:=V.BinX;
    oldy:=V.BinY;
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
-     msg('Set binning '+inttostr(sbinX)+'x'+inttostr(sbinY));
+     msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
      GetFrame(fsx,fsy,fnx,fny);
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
@@ -548,7 +546,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-    msg('Abort exposure');
+    msg(rsAbortExposur);
     V.AbortExposure;
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message);
@@ -561,16 +559,6 @@ Procedure T_ascomcamera.SetActiveDevices(focuser,filters,telescope: string);
 begin
   // not in ascom
 end;
-
-function T_ascomcamera.GetDevicename: string;
-begin
-{$ifdef mswindows}
-  result:=Fdevice;
-{$else}
-  result:='';
-{$endif}
-end;
-
 
 function T_ascomcamera.GetBinX:integer;
 begin
@@ -603,7 +591,7 @@ end;
 procedure T_ascomcamera.SetFrametype(f:TFrameType);
 begin
  {$ifdef mswindows}
-  msg('Set frame type '+FrameName[ord(f)]);
+  msg(Format(rsSetFrameType, [FrameName[ord(f)]]));
   FFrametype:=f;
  {$endif}
 end;
@@ -670,7 +658,7 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
-   msg('Set filter position '+inttostr(num));
+   msg(Format(rsSetFilterPos, [inttostr(num)]));
    V.Position:=num-1;
    Wait(1);
    except
@@ -763,7 +751,7 @@ begin
 {$ifdef mswindows}
 if Connected and (V.CoolerOn<>value) then begin
   try
-     msg('Set cooler '+BoolToStr(value,True));
+     msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
      V.CoolerOn:=value;
   except
    on E: Exception do msg('Set cooler error: ' + E.Message);

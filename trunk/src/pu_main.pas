@@ -66,6 +66,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuShowINDIlog: TMenuItem;
     MenuShowLog: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem2: TMenuItem;
@@ -290,6 +291,7 @@ type
     procedure MenuSequenceStartClick(Sender: TObject);
     procedure MenuSequenceStopClick(Sender: TObject);
     procedure MenuShowCCDFrameClick(Sender: TObject);
+    procedure MenuShowINDIlogClick(Sender: TObject);
     procedure MenuShowLogClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuTabClick(Sender: TObject);
@@ -586,7 +588,7 @@ begin
      AssignFile(MsgLog,LogFile);
      Rewrite(MsgLog);
      WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_time);
-     WriteLn(MsgLog, FormatDateTime(dateiso, Now)+blank+rsCompiledWith+': '+compile_version);
+     WriteLn(MsgLog, FormatDateTime(dateiso, Now)+blank+blank+rsCompiledWith+': '+compile_version);
      LogFileOpen:=true;
   except
   {$I-}
@@ -985,6 +987,7 @@ begin
     ASCOM: rotator:=T_ascomrotator.Create(nil);
   end;
   rotator.onMsg:=@NewMessage;
+  rotator.onDeviceMsg:=@DeviceMessage;
   rotator.onAngleChange:=@RotatorAngleChange;
   rotator.onStatusChange:=@RotatorStatus;
 
@@ -1031,6 +1034,7 @@ begin
 
   watchdog:=T_indiwatchdog.Create(nil);
   watchdog.onMsg:=@NewMessage;
+  watchdog.onDeviceMsg:=@DeviceMessage;
   watchdog.onStatusChange:=@WatchdogStatus;
 
   astrometry:=TAstrometry.Create(nil);
@@ -1223,6 +1227,7 @@ begin
   Capture:=false;
   Preview:=false;
   MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
+  MenuShowINDIlog.Visible:=(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
   NewMessage('CCDciel '+ccdciel_version+'-'+RevisionStr+blank+rsInitialized);
@@ -1327,6 +1332,7 @@ begin
    MenuPdfHelp.Caption := rsPDFDocumenta;
    MenuOnlineHelp.Caption := rsOnlineDocume;
    MenuShowLog.Caption := rsShowCurrentL;
+   MenuShowINDIlog.Caption:=rsShowINDILog;
    MenuBrowseLog.Caption := rsBrowseLogFil;
    MenuBugReport.Caption := rsReportAProbl;
    MenuDownload.Caption := rsDownloadLate;
@@ -2737,7 +2743,8 @@ begin
    f_frame.FY.Text:=inttostr(FrameY);
    f_frame.FWidth.Text:=inttostr(FrameW);
    f_frame.FHeight.Text:=inttostr(FrameH);
-   NewMessage('Camera frame x='+f_frame.FX.Text+' y='+f_frame.FY.Text+' width='+f_frame.FWidth.Text+' height='+f_frame.FHeight.Text);
+   NewMessage(Format(rsCameraFrameX, [f_frame.FX.Text, f_frame.FY.Text,
+     f_frame.FWidth.Text, f_frame.FHeight.Text]));
  end;
 end;
 
@@ -3155,7 +3162,7 @@ procedure Tf_main.CameraCoolerChange(var v:boolean);
 begin
  if f_ccdtemp.CCDcooler.Checked<>v then begin
     f_ccdtemp.CCDcooler.Checked:=v;
-    NewMessage(Format(rsCameraCooler, [BoolToStr(v, true)]));
+    NewMessage(Format(rsCameraCooler, [': '+BoolToStr(v, rsTrue, rsFalse)]));
  end;
 end;
 
@@ -3318,6 +3325,20 @@ var i: integer;
 begin
   if LogFileOpen then begin
      i:=ExecuteFile(LogFile);
+     {$ifdef mswindows}
+     if i<=32 then
+        ShowMessage('Error '+inttostr(i)+crlf+'Check if the file exist and set the application to use to open files with .log extension');
+     {$endif}
+  end
+  else
+     ShowMessage(rsPleaseActiva);
+end;
+
+procedure Tf_main.MenuShowINDIlogClick(Sender: TObject);
+var i: integer;
+begin
+  if DeviceLogFileOpen then begin
+     i:=ExecuteFile(DeviceLogFile);
      {$ifdef mswindows}
      if i<=32 then
         ShowMessage('Error '+inttostr(i)+crlf+'Check if the file exist and set the application to use to open files with .log extension');

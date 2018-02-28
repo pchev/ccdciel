@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom,
-     u_global, ExtCtrls, Classes, SysUtils;
+     u_global, ExtCtrls, Classes, SysUtils, u_translation;
 
 type
 
@@ -120,7 +120,6 @@ private
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
  protected
-   function GetDevicename: string; override;
    function GetBinX:integer; override;
    function GetBinY:integer; override;
    procedure SetFrametype(f:TFrameType); override;
@@ -350,6 +349,7 @@ if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
   Findidevice:=cp3;
+  Fdevice:=cp3;
   Findisensor:=cp4;
   Findideviceport:=cp5;
   FStatus := devDisconnected;
@@ -372,9 +372,9 @@ procedure T_indicamera.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (not Fready) then begin
-    msg('Error');
+    msg(rsError2);
     if not Fconnected then begin
-       msg('No response from server');
+       msg(rsNoResponseFr);
        msg('Is "'+Findidevice+'" a running camera driver?');
     end
     else if (configprop=nil) then
@@ -415,7 +415,7 @@ begin
  end;
  indiclient.connectDevice(Findidevice);
  if FhasBlob then begin
-   msg('Set BlobMode '+Findisensor);
+   //msg('Set BlobMode '+Findisensor);
    if (Findisensor='CCD1')or(Findisensor='CCD2') then
        indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
    else
@@ -431,7 +431,7 @@ begin
   FWheelStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-  msg('Camera server disconnected');
+  msg(rsServer+' '+rsDisconnected3);
   CreateIndiClient;
 end;
 
@@ -457,20 +457,8 @@ begin
 end;
 
 procedure T_indicamera.NewMessage(mp: IMessage);
-const k=2;
-  blacklist: array[1..k] of string =('TELESCOPE_TIMED_GUIDE','Image saved to ');
-var ok: boolean;
-    i: integer;
 begin
-  ok:=true;
-  for i:=1 to k do begin
-    if pos(blacklist[i],mp.msg)>0 then ok:=false;
-  end;
-  if ok then begin
-     if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
-  end else begin
-    if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
-  end;
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   mp.Free;
 end;
 
@@ -946,6 +934,7 @@ end;
 
 Procedure T_indicamera.AbortExposure;
 begin
+msg(rsAbortExposur);
 if UseMainSensor then begin
   if CCDAbortExposure<>nil then begin
     IUResetSwitch(CCDAbortExposure);
@@ -959,11 +948,6 @@ end else begin
      indiclient.sendNewSwitch(GuiderAbortExposure);
    end;
 end;
-end;
-
-function T_indicamera.GetDevicename: string;
-begin
-  result:=Findidevice;
 end;
 
 function T_indicamera.GetBinX:integer;
@@ -1036,6 +1020,7 @@ end;
 
 Procedure T_indicamera.SetBinning(sbinX,sbinY: integer);
 begin
+msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
 if UseMainSensor then begin
  if CCDbinning<>nil then begin
     CCDbinX.value:=sbinX;
@@ -1056,6 +1041,7 @@ end;
 procedure T_indicamera.SetFrametype(f:TFrameType);
 begin
   if UseMainSensor and (CCDFrameType<>nil) then begin
+     msg(Format(rsSetFrameType, [FrameName[ord(f)]]));
      IUResetSwitch(CCDFrameType);
      case f of
         LIGHT : FrameLight.s:=ISS_ON;
@@ -1185,7 +1171,7 @@ end;
 procedure T_indicamera.SetCooler(value:boolean);
 begin
  if CCDCooler<>nil then begin
-    msg('Set cooler '+BoolToStr(value,True));
+    msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
     IUResetSwitch(CCDCooler);
     if value then CCDCoolerOn.s:=ISS_ON
              else CCDCoolerOff.s:=ISS_ON;
@@ -1222,6 +1208,7 @@ end;
 procedure T_indicamera.SetFilter(num:integer);
 begin
 if WheelSlot<>nil then begin;
+  msg(Format(rsSetFilterPos, [inttostr(num)]));
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
   indiclient.WaitBusy(WheelSlot);

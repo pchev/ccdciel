@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_rotator, indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_rotator, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
      u_global, ExtCtrls, Forms, Classes, SysUtils;
 
 type
@@ -167,6 +167,7 @@ if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
   Findidevice:=cp3;
+  Fdevice:=cp3;
   Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -184,9 +185,9 @@ procedure T_indirotator.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (RotatorDevice=nil)or(not Fready) then begin
-    msg('Rotator '+Findidevice+' Error');
+    msg(rsError2);
     if not Fconnected then begin
-      msg('No response from server');
+      msg(rsNoResponseFr);
       msg('Is "'+Findidevice+'" a running rotator driver?');
     end
     else if (configprop=nil) then
@@ -228,7 +229,7 @@ procedure T_indirotator.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg('Rotator '+Findidevice+' Focuser server disconnected');
+  msg(rsServer+' '+rsDisconnected3);
   CreateIndiClient;
 end;
 
@@ -255,7 +256,7 @@ end;
 
 procedure T_indirotator.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonMsg) then FonMsg(Findidevice+': '+mp.msg);
+  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
   mp.free;
 end;
 
