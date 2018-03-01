@@ -77,6 +77,7 @@ if [[ $make_linux32 ]]; then
   cd $wd
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
+  mkdir debian/ccdciel/usr/
   mv bin debian/ccdciel/usr/
   mv share debian/ccdciel/usr/
   cd debian
@@ -91,6 +92,11 @@ if [[ $make_linux32 ]]; then
   cd $wd
   rsync -a --exclude=.svn system_integration/Linux/rpm $builddir
   cd $builddir
+  mkdir -p rpm/RPMS/x86_64
+  mkdir -p rpm/RPMS/i386
+  mkdir rpm/SRPMS
+  mkdir rpm/tmp
+  mkdir -p rpm/ccdciel/usr/
   mv debian/ccdciel/usr/* rpm/ccdciel/usr/
   cd rpm
   sed -i "/Version:/ s/3/$version/"  SPECS/ccdciel.spec
