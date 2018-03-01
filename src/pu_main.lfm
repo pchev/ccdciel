@@ -30,16 +30,17 @@ object f_main: Tf_main
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 375
-      Top = 2
-      Width = 2
+      Height = 373
+      Top = 3
+      Width = 3
       Align = alLeft
       AutoSize = True
+      BevelOuter = bvNone
       ChildSizing.TopBottomSpacing = 3
       ChildSizing.VerticalSpacing = 3
       ChildSizing.Layout = cclTopToBottomThenLeftToRight
       ChildSizing.ControlsPerLine = 99
-      Constraints.MinWidth = 2
+      Constraints.MinWidth = 3
       ParentColor = False
       ParentFont = False
       TabOrder = 0
@@ -48,16 +49,17 @@ object f_main: Tf_main
     end
     object PanelTop: TPanel
       Left = 0
-      Height = 2
+      Height = 3
       Top = 0
       Width = 612
       Align = alTop
       AutoSize = True
+      BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 3
       ChildSizing.HorizontalSpacing = 3
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 99
-      Constraints.MinHeight = 2
+      Constraints.MinHeight = 3
       ParentColor = False
       ParentFont = False
       TabOrder = 1
@@ -65,28 +67,30 @@ object f_main: Tf_main
       OnDragOver = PanelDragOver
     end
     object PanelCenter: TPanel
-      Left = 2
-      Height = 375
-      Top = 2
-      Width = 610
+      Left = 3
+      Height = 373
+      Top = 3
+      Width = 609
       Align = alClient
       AutoSize = True
+      BevelOuter = bvNone
       Color = 4197901
       ParentColor = False
       TabOrder = 2
     end
     object PanelBottom: TPanel
       Left = 0
-      Height = 2
-      Top = 377
+      Height = 3
+      Top = 376
       Width = 612
       Align = alBottom
       AutoSize = True
+      BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 3
       ChildSizing.HorizontalSpacing = 3
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 99
-      Constraints.MinHeight = 2
+      Constraints.MinHeight = 3
       ParentColor = False
       ParentFont = False
       TabOrder = 3
@@ -136,12 +140,12 @@ object f_main: Tf_main
       Height = 347
       Top = 32
       Width = 188
-      ActivePage = PageVideo
+      ActivePage = PageCapture
       Align = alClient
       Images = ImageListDay
       MultiLine = True
       ShowTabs = False
-      TabIndex = 4
+      TabIndex = 2
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
@@ -196,7 +200,7 @@ object f_main: Tf_main
         ImageIndex = 2
         object PanelRight3: TPanel
           Left = 0
-          Height = 314
+          Height = 343
           Top = 0
           Width = 178
           Align = alClient
@@ -219,7 +223,7 @@ object f_main: Tf_main
         ImageIndex = 3
         object PanelRight4: TPanel
           Left = 0
-          Height = 314
+          Height = 343
           Top = 0
           Width = 178
           Align = alClient
@@ -276,6 +280,8 @@ object f_main: Tf_main
         Grouped = True
         ImageIndex = 0
         OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
         Style = tbsCheck
       end
       object TBFocus: TToolButton
@@ -286,6 +292,8 @@ object f_main: Tf_main
         Grouped = True
         ImageIndex = 1
         OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
         Style = tbsCheck
       end
       object TBCapture: TToolButton
@@ -296,6 +304,8 @@ object f_main: Tf_main
         Grouped = True
         ImageIndex = 2
         OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
         Style = tbsCheck
       end
       object TBSequence: TToolButton
@@ -306,6 +316,8 @@ object f_main: Tf_main
         Grouped = True
         ImageIndex = 3
         OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
         Style = tbsCheck
       end
       object TBVideo: TToolButton

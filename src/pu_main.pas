@@ -333,6 +333,10 @@ type
     procedure StatusBar1Resize(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
     procedure StatusTimerTimer(Sender: TObject);
+    procedure ButtonDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure TBFocusDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -4704,6 +4708,42 @@ begin
  else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
  else if source is TFrame then Accept:=true
  else Accept:=false;
+end;
+
+procedure Tf_main.ButtonDragDrop(Sender, Source: TObject; X, Y: Integer);
+var pnl: TPanel;
+begin
+ pnl:=nil;
+ if sender is TToolButton then begin
+   if TToolButton(Sender)=TBConnect then
+      pnl:=PanelRight1
+   else
+   if TToolButton(Sender)=TBFocus then
+      pnl:=PanelRight2
+   else
+   if TToolButton(Sender)=TBCapture then
+      pnl:=PanelRight3
+   else
+   if TToolButton(Sender)=TBSequence then
+      pnl:=PanelRight4;
+   if pnl<>nil then
+      PanelDragDrop(pnl,Source,X,Y);
+ end;
+end;
+
+procedure Tf_main.ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
+  State: TDragState; var Accept: Boolean);
+begin
+ if Source is TStaticText then Accept:=TStaticText(Source).Parent is TFrame
+ else if Source is TMemo then Accept:=TPanel(TMemo(Source).Parent).Parent is TFrame
+ else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
+ else if source is TFrame then Accept:=true
+ else Accept:=false;
+end;
+
+procedure Tf_main.TBFocusDragDrop(Sender, Source: TObject; X, Y: Integer);
+begin
+
 end;
 
 Procedure Tf_main.AbortExposure(Sender: TObject);
