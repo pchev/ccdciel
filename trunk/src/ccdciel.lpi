@@ -197,7 +197,12 @@
             <CompilerMessages>
               <IgnoredMessages idx5024="True"/>
             </CompilerMessages>
-            <CustomOptions Value="-dUseCThreads"/>
+            <CustomOptions Value="-dUseCThreads
+-dhyperbola_test"/>
+            <OtherDefines Count="2">
+              <Define0 Value="UseCThreads"/>
+              <Define1 Value="hyperbola_test"/>
+            </OtherDefines>
           </Other>
         </CompilerOptions>
       </Item6>
