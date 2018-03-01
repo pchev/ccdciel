@@ -44,7 +44,7 @@ fi
 save_PATH=$PATH
 wd=`pwd`
 
-currentrev=$(LC_ALL=C svn info . | grep Revision: | sed 's/Revision: //')
+currentrev=$(git rev-list --count --first-parent HEAD)
 
 echo $version - $currentrev
 
@@ -124,6 +124,7 @@ if [[ $make_linux64 ]]; then
   cd $wd
   rsync -a --exclude=.svn system_integration/Linux/debian $builddir
   cd $builddir
+  mkdir debian/ccdciel64/usr/
   mv bin debian/ccdciel64/usr/
   mv share debian/ccdciel64/usr/
   cd debian
@@ -138,6 +139,11 @@ if [[ $make_linux64 ]]; then
   cd $wd
   rsync -a --exclude=.svn system_integration/Linux/rpm $builddir
   cd $builddir
+  mkdir -p rpm/RPMS/x86_64
+  mkdir -p rpm/RPMS/i386
+  mkdir rpm/SRPMS
+  mkdir rpm/tmp
+  mkdir -p rpm/ccdciel/usr/
   mv debian/ccdciel64/usr/* rpm/ccdciel/usr/
   cd rpm
   sed -i "/Version:/ s/3/$version/"  SPECS/ccdciel64.spec
@@ -155,6 +161,8 @@ fi
 # make Windows dual x86_64 and i386 version
 if [[ $make_win_dual ]]; then
   rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
+  mkdir $builddir/Data
+  mkdir $builddir/Prog
   # i386
   export PATH=$mingw32:$save_PATH
   ./configure $configopt prefix=$builddir/Data target=i386-win32$extratarget
@@ -188,6 +196,8 @@ fi
 # make Windows i386 version
 if [[ $make_win32 ]]; then
   rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
+  mkdir $builddir/Data
+  mkdir $builddir/Prog
   export PATH=$mingw32:$save_PATH
   ./configure $configopt prefix=$builddir/Data target=i386-win32$extratarget
   if [[ $? -ne 0 ]]; then exit 1;fi
@@ -216,6 +226,8 @@ fi
 # make Windows x86_64 version
 if [[ $make_win64 ]]; then
   rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
+  mkdir $builddir/Data
+  mkdir $builddir/Prog
   export PATH=$mingw64:$save_PATH
   ./configure $configopt prefix=$builddir/Data target=x86_64-win64$extratarget
   if [[ $? -ne 0 ]]; then exit 1;fi
