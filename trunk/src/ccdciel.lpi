@@ -248,7 +248,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="67">
+    <Units Count="68">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -605,6 +605,10 @@
         <Filename Value="u_translation.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit66>
+      <Unit67>
+        <Filename Value="pu_hyperbola.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit67>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
