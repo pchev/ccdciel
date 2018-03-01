@@ -812,7 +812,7 @@ begin
               find_best_hyperbola_fit(AutofocusVc,AutofocusVcNum+1,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
               msg('HYPERBOLA curve fitting focus at: '+
                   inttostr(round(focuser.FocusPosition +
-                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate HFD from position and perfectfocusposition using hyperbola parameters}
+                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate steps to focus using hyperbola parameters}
                   '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
 
               {$endif} {end of hyperbola test}
@@ -833,7 +833,7 @@ begin
               find_best_hyperbola_fit(AutofocusVc,AutofocusVcNum+1,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
               msg('HYPERBOLA curve fitting focus at: '+
                   inttostr(round(focuser.FocusPosition -
-                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate HFD from position and perfectfocusposition using hyperbola parameters}
+                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate steps to focus using hyperbola parameters}
                   '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
 
               {$endif} {end of hyperbola test}
@@ -955,7 +955,7 @@ begin
                 find_best_hyperbola_fit(v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
                 msg('HYPERBOLA curve fitting focus at: '+
                      inttostr(round(p_hyp))+
-                     '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) ); {calculate HFD from position and perfectfocusposition using hyperbola parameters}
+                     '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
               {$endif} {end of hyperbola test}
 
               k:=aminpos-1;
