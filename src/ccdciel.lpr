@@ -41,7 +41,8 @@ uses
   pu_pascaleditor, pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI,
   fu_video, pu_vcurve, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
   cu_ascomrotator, cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog,
-  cu_indiwatchdog, pu_focusercalibration, cu_tcpserver, u_translation;
+  cu_indiwatchdog, pu_focusercalibration, cu_tcpserver, u_translation,
+  pu_hyperbola;
 
 {$R *.res}
 

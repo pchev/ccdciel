@@ -23,10 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+// {$define hyperbola_test}
+
 interface
 
 uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation,
-  fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits,
+  fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, pu_hyperbola,
   FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
   StdCtrls, ExtCtrls, Buttons, LCLType;
 
@@ -805,6 +807,16 @@ begin
               // move to focus
               inc(FnumGraph);
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
+
+              {$ifdef hyperbola_test}
+              find_best_hyperbola_fit(AutofocusVc,AutofocusVcNum+1,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+              msg('HYPERBOLA curve fitting focus at: '+
+                  inttostr(round(focuser.FocusPosition +
+                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate HFD from position and perfectfocusposition using hyperbola parameters}
+                  '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
+
+              {$endif} {end of hyperbola test}
+
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg(Format(rsAutofocusMov3, [focuser.Position.Text]));
@@ -816,6 +828,16 @@ begin
               // move to focus
               inc(FnumGraph);
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
+
+              {$ifdef hyperbola_test}
+              find_best_hyperbola_fit(AutofocusVc,AutofocusVcNum+1,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+              msg('HYPERBOLA curve fitting focus at: '+
+                  inttostr(round(focuser.FocusPosition -
+                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate HFD from position and perfectfocusposition using hyperbola parameters}
+                  '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
+
+              {$endif} {end of hyperbola test}
+
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg(Format(rsAutofocusMov3, [focuser.Position.Text]));
@@ -869,6 +891,13 @@ begin
               // store hfd
               inc(afmpos);
               ahfd[afmpos]:=Fhfd;
+
+              {$ifdef hyperbola_test} {hyperbola store curve}
+              setlength(v_curve,afmpos);
+              v_curve[afmpos-1,1]:=focuser.FocusPosition;
+              v_curve[afmpos-1,2]:=Fhfd;
+              {$endif} {end of store curve}
+
               if Fhfd<aminhfd then begin
                 aminhfd:=Fhfd;
               end;
@@ -921,6 +950,14 @@ begin
                  exit;
               end;
               // compute focus
+
+              {$ifdef hyperbola_test}
+                find_best_hyperbola_fit(v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+                msg('HYPERBOLA curve fitting focus at: '+
+                     inttostr(round(p_hyp))+
+                     '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) ); {calculate HFD from position and perfectfocusposition using hyperbola parameters}
+              {$endif} {end of hyperbola test}
+
               k:=aminpos-1;
               // left part
               SetLength(p,k);
