@@ -13,6 +13,10 @@ component/lib/
 component/synapse/source/lib/lib/
 component/vosamp/lib/
 component/xmlparser/lib/
+doc/doc/
+doc/wiki_doc/
+data/language/launchpad/download/
+data/language/launchpad/translation/
 # ignore binary
 *.o
 library/wcs/libccdcielwcs.*
