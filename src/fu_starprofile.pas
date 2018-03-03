@@ -942,7 +942,7 @@ begin
                  end;
                  exit;
               end;
-              if (amaxhfd<(2*aminhfd)) then begin
+              if (amaxhfd<(1.5*aminhfd)) then begin
                  msg(rsTooSmallHFDD);
                  msg(rsTheFocuserIs);
                  ResetPos;
