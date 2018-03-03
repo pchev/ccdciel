@@ -850,7 +850,7 @@ end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
 var i,k,step,sumpos,numpos: integer;
-    VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr: double;
+    VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr,focpos: double;
     p:array of TDouble2;
   procedure ResetPos;
   begin
@@ -894,7 +894,7 @@ begin
 
               {$ifdef hyperbola_test} {hyperbola store curve}
               setlength(v_curve,afmpos);
-              v_curve[afmpos-1,1]:=focuser.FocusPosition;
+              v_curve[afmpos-1,1]:=afmpos; // measurement number, to work with relative position focuser
               v_curve[afmpos-1,2]:=Fhfd;
               {$endif} {end of store curve}
 
@@ -954,9 +954,12 @@ begin
               {$ifdef hyperbola_test}
                 find_best_hyperbola_fit(v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
                 msg('HYPERBOLA curve fitting focus at: '+
-                     inttostr(round(p_hyp))+
+                     floattostr(p_hyp)+
                      '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
-              {$endif} {end of hyperbola test}
+
+                focpos:=p_hyp;
+
+              {$else} {end of hyperbola test}
 
               k:=aminpos-1;
               // left part
@@ -991,8 +994,13 @@ begin
               // focus quality, mean of both side
               r2:=(rr*rr+rl*rl)/2;
               msg(Format(rsFocusQuality, [FormatFloat(f3, r2)]));
+
+              focpos:=(VcpiL+VcpiR)/2;
+
+              {$endif}
+
               // focus position with last move in focus direction
-              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-(VcpiL+VcpiR)/2));
+              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-focpos));
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;
               if AutofocusMoveDir=FocusDirIn then begin
                 onFocusOUT(self);
