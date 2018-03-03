@@ -6699,7 +6699,7 @@ begin
    if  f_capture.Running and (not autofocusing) then exit;
    f_preview.Running:=false;
    f_preview.Loop:=false;
-   if not f_capture.Running then camera.AbortExposure;
+   if (not f_capture.Running) and (not f_starprofile.AutofocusResult) then camera.AbortExposure;
    fits.SetBPM(bpm,0,0,0,0);
    f_preview.Binning.Text:=SaveAutofocusBinning;
    camera.SetBinning(SaveAutofocusBX,SaveAutofocusBY);
