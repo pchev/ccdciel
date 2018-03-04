@@ -2581,12 +2581,12 @@ if camera.Status<>devDisconnected then begin
      f_capture.stop;
      Capture:=false;
      StatusBar1.Panels[1].Text:='';
-     DisconnectWatchdog(Sender);
-     DisconnectCamera(Sender);
+     DisconnectCamera(Sender); // disconnect camera first
      DisconnectWheel(Sender);
      DisconnectFocuser(Sender);
      DisconnectRotator(Sender);
      DisconnectMount(Sender);
+     DisconnectWatchdog(Sender);
    end;
 end;
 end;
