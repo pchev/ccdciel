@@ -13,3 +13,17 @@ It is build with Freepascal compiler and Lazarus IDE and library.
 
 For more information and precompiled version:
 https://www.ap-i.net/ccdciel
+
+Please report any issue at https://www.ap-i.net/mantis/set_project.php?project_id=3
+
+This software is part of a full suite for astronomical observation:
+- https://github.com/pchev/skychart
+- https://github.com/pchev/indistarter
+- https://github.com/pchev/eqmodgui
+
+Requirement:
+- https://github.com/pchev/libpasastro
+
+See also:
+- http://www.indilib.org/ 
+- http://ascom-standards.org/
