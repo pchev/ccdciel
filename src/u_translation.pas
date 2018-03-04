@@ -511,7 +511,6 @@ resourcestring
   rsInitialMovem = 'Initial movement (steps)';
   rsFinalMovemen = 'Final movement (steps)';
   rsNearFocus = 'Near focus';
-  rsNExp = 'n.exp';
   rsBinning = 'Binning';
   rsAutofocusTol = 'Autofocus tolerance ';
   rsMinSNR = 'min.SNR';
@@ -845,6 +844,7 @@ resourcestring
   rsPlanStopped = 'Plan %s stopped.';
   rsRepeatStep = 'Repeat step %s/%s %s';
   rsShowINDILog = 'Show INDI log';
+  rsNumberOfExpo = 'Number of exposure by point';
 
 
 

@@ -170,7 +170,6 @@ type
     Label53: TLabel;
     Label54: TLabel;
     Label55: TLabel;
-    Label56: TLabel;
     Label57: TLabel;
     Label58: TLabel;
     AutofocusNotebook: TNotebook;
@@ -507,7 +506,7 @@ begin
   Label46.Caption := rsInitialMovem;
   Label47.Caption := rsFinalMovemen;
   Label48.Caption := rsNearFocus;
-  Label57.Caption := rsNExp;
+  Label57.Caption := rsNumberOfExpo;
   Label50.Caption := rsBinning;
   Label54.Caption := rsAutofocusTol;
   Label81.Caption := rsMinSNR;

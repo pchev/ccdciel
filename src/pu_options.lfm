@@ -139,8 +139,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFileDefault: TButton
             Left = 390
             Height = 25
@@ -182,8 +182,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFolderDefault: TButton
             Left = 390
             Height = 25
@@ -1338,7 +1338,7 @@ object f_option: Tf_option
               ParentColor = False
             end
             object AutofocusStartHFD: TEdit
-              Left = 213
+              Left = 212
               Height = 31
               Hint = 'The focus starting point on the V curve used to determine the Near focus position. '#10'Use a high value near the top of the V curve but inside the measurement area. '#10'A typical value is 20.0.'
               Top = 0
@@ -1366,12 +1366,30 @@ object f_option: Tf_option
               ParentColor = False
             end
             object AutofocusSlippageOffset: TEdit
-              Left = 344
+              Left = 352
               Height = 31
               Top = 48
               Width = 50
               ReadOnly = True
               TabOrder = 2
+            end
+            object AutofocusNearHFD: TEdit
+              Left = 352
+              Height = 31
+              Hint = 'When a star is smaller than this HFD we consider we are approaching focus. '#10'Note this is NOT the focus HFD, the star must show an extended surface.'#10'This is the reference point for V curve method.'#10'A typical value is from 6 to 10.'
+              Top = 0
+              Width = 60
+              OnEditingDone = CheckStartNearHFD
+              ParentShowHint = False
+              TabOrder = 3
+            end
+            object Label48: TLabel
+              Left = 280
+              Height = 19
+              Top = 4
+              Width = 64
+              Caption = 'Near focus'
+              ParentColor = False
             end
           end
           object PageDynamic: TPage
@@ -1458,48 +1476,22 @@ object f_option: Tf_option
           ClientHeight = 31
           ClientWidth = 408
           TabOrder = 4
-          object Label48: TLabel
+          object Label57: TLabel
             Left = 8
             Height = 19
             Top = 4
-            Width = 64
-            Caption = 'Near focus'
-            ParentColor = False
-          end
-          object Label56: TLabel
-            Left = 176
-            Height = 19
-            Top = 4
-            Width = 26
-            Caption = 'HFD'
-            ParentColor = False
-          end
-          object AutofocusNearHFD: TEdit
-            Left = 212
-            Height = 31
-            Hint = 'When a star is smaller than this HFD we consider we are approaching focus. '#10'Note this is NOT the focus HFD, the star must show an extended surface.'#10'This is the reference point for V curve method.'#10'A typical value is from 6 to 10.'
-            Top = 0
-            Width = 60
-            OnEditingDone = CheckStartNearHFD
-            ParentShowHint = False
-            TabOrder = 0
-          end
-          object Label57: TLabel
-            Left = 280
-            Height = 19
-            Top = 4
-            Width = 33
-            Caption = 'n.exp'
+            Width = 169
+            Caption = 'Number of exposure by point'
             ParentColor = False
           end
           object AutofocusNearNum: TEdit
-            Left = 344
+            Left = 212
             Height = 31
             Hint = 'The number of exposure we take to get a mean HFD value '#10'when the HFD is smaller than the value to the left.'
             Top = 0
             Width = 50
             ParentShowHint = False
-            TabOrder = 1
+            TabOrder = 0
           end
         end
         object Label50: TLabel
@@ -1545,7 +1537,7 @@ object f_option: Tf_option
           TabOrder = 6
         end
         object AutofocusMinSNR: TEdit
-          Left = 344
+          Left = 352
           Height = 31
           Hint = 'If a star measurement during autofocus return a SNR ratio value lower than this setting the autofocus is canceled.'#10'Beware that a too big value here will return the focuser to it''s initial position.'#10'Set a value low enough to avoid this problem but enough for a good measurement quality at the Near focus HFP position.'
           Top = 84

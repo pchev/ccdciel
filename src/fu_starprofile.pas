@@ -589,7 +589,6 @@ begin
   end;
   // sum of multiple exposures
   if (AutofocusNearNum>1)and
-    ((Fhfd<(AutofocusNearHFD+1))or(AutofocusMode=afVcurve)or(AutofocusMode=afDynamic))and
     (not((AutofocusVcStep=vcsCheckL)or(AutofocusVcStep=vcsCheckR)))and
     (not FirstFrame)and
     (not terminated)
@@ -961,10 +960,8 @@ begin
       focuserdirection:=not focuserdirection;
       terminated:=true;
     end else begin
-      if Fhfd<=AutofocusNearHFD then begin
-         FfocuserSpeed:=max(FfocuserSpeed div 2,AutofocusMinSpeed);   // divide speed by 2
-         focuser.FocusSpeed:=FfocuserSpeed; // set new speed
-      end;
+      FfocuserSpeed:=max(FfocuserSpeed div 2,AutofocusMinSpeed);   // divide speed by 2
+      focuser.FocusSpeed:=FfocuserSpeed; // set new speed
       focuserdirection:=not focuserdirection;
     end;
   end;
