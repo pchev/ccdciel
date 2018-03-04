@@ -844,7 +844,7 @@ resourcestring
   rsPlanStopped = 'Plan %s stopped.';
   rsRepeatStep = 'Repeat step %s/%s %s';
   rsShowINDILog = 'Show INDI log';
-  rsNumberOfExpo = 'Number of exposure by point';
+  rsNumberOfExpo = 'Number of exposure per point';
 
 
 

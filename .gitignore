@@ -17,6 +17,8 @@ doc/doc/
 doc/wiki_doc/
 data/language/launchpad/download/
 data/language/launchpad/translation/
+data/language/launchpad/ccdciel/
+data/language/launchpad/ccdcielpot.tar
 # ignore binary
 *.o
 library/wcs/libccdcielwcs.*

@@ -1866,10 +1866,6 @@ msgstr ""
 msgid "Near focus"
 msgstr ""
 
-#: u_translation:rsnexp
-msgid "n.exp"
-msgstr ""
-
 #: u_translation:rsbinning
 msgid "Binning"
 msgstr ""
@@ -3052,5 +3048,9 @@ msgstr ""
 
 #: u_translation:rsshowindilog
 msgid "Show INDI log"
+msgstr ""
+
+#: u_translation:rsnumberofexpo
+msgid "Number of exposure per point"
 msgstr ""
 
