@@ -23,3 +23,7 @@ This software is part of a full suite for astronomical observation:
 
 Requirement:
 - https://github.com/pchev/libpasastro
+
+See also:
+- http://www.indilib.org/ 
+- http://ascom-standards.org/
