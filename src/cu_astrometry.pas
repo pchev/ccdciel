@@ -333,7 +333,7 @@ end;
 
 procedure TAstrometry.SlewScreenXY(x,y: integer);
 begin
-  if (not FSlewBusy) and (not FBusy) and (FFits.HeaderInfo.naxis>0) and (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+  if (not FSlewBusy) and (not FBusy) and (FFits.HeaderInfo.naxis>0) and AllDevicesConnected and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
    FSlewBusy:=true;
    Xslew:=x;
    Yslew:=y;
@@ -409,7 +409,7 @@ begin
   delay:=config.GetValue('/PrecSlew/Delay',5);
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
-  if (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+  if (Mount.Status=devConnected)and(Camera.Status=devConnected)and AllDevicesConnected then begin
    if astrometryResolver=ResolverNone then begin
       msg(rsNoResolverCo);
       msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]));

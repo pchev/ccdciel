@@ -98,7 +98,6 @@ object f_preview: Tf_preview
         Top = 0
         Width = 88
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 1
       end
     end
@@ -164,7 +163,6 @@ object f_preview: Tf_preview
         Caption = 'Stack'
         ParentShowHint = False
         ParentBidiMode = False
-        ShowHint = False
         TabOrder = 1
       end
     end

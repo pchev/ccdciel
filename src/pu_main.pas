@@ -868,6 +868,7 @@ begin
   ConfirmClose:=true;
   ScaleMainForm;
   NeedRestart:=false;
+  AllDevicesConnected:=false;
   GUIready:=false;
   filteroffset_initialized:=false;
   MsgHandle:=handle;
@@ -1567,7 +1568,7 @@ begin
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // device
       x:=x+2*s+4;
-      if (f_devicesconnection<>nil)and(f_devicesconnection.led.Brush.Color=clLime) then begin
+      if AllDevicesConnected then begin
         statusbar.Canvas.Brush.Color:=cllime;
         msg:=msg+', '+Format(rsConnected, [rsDevices]);
       end
@@ -2595,18 +2596,21 @@ Procedure Tf_main.CheckConnectionStatus;
 var allcount, upcount, downcount, concount: integer;
 procedure SetDisconnected;
 begin
+ AllDevicesConnected:=false;
  f_devicesconnection.led.Brush.Color:=clRed;
  f_devicesconnection.BtnConnect.Caption:=rsConnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 procedure SetConnected;
 begin
+ AllDevicesConnected:=true;
  f_devicesconnection.led.Brush.Color:=clLime;
  f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
 procedure SetConnecting;
 begin
+ AllDevicesConnected:=false;
  f_devicesconnection.led.Brush.Color:=clYellow;
  f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
@@ -4771,7 +4775,7 @@ var e: double;
     buf: string;
     p,binx,biny,i: integer;
 begin
-if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
+if (AllDevicesConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
   e:=f_preview.Exposure;
   if e<0 then begin
@@ -4833,6 +4837,7 @@ else begin
    f_preview.stop;
    Preview:=false;
    StatusBar1.Panels[1].Text:='';
+   if not AllDevicesConnected then NewMessage(rsSomeDefinedD);
 end;
 end;
 
@@ -4853,7 +4858,7 @@ var e: double;
     p,binx,biny,waittime,i: integer;
     ftype:TFrameType;
 begin
-if (camera.Status=devConnected)and(not autofocusing)and (not learningvcurve) then begin
+if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check if we need to cancel running preview
   if f_preview.Running then begin
     NewMessage(rsStopPreview);
@@ -5002,6 +5007,7 @@ else begin
    f_capture.Stop;
    Capture:=false;
    StatusBar1.Panels[1].Text := '';
+   if not AllDevicesConnected then NewMessage(rsSomeDefinedD);
 end;
 end;
 
@@ -5757,6 +5763,10 @@ begin
   end;
   if not(focuser.hasRelativePosition or focuser.hasAbsolutePosition) then begin
     ShowMessage(rsTheFocuserDo);
+    exit;
+  end;
+  if not AllDevicesConnected then begin
+    ShowMessage(rsSomeDefinedD);
     exit;
   end;
   f_focusercalibration.focuser:=focuser;
@@ -6604,6 +6614,11 @@ begin
    f_starprofile.ChkAutofocusDown(false);
    exit;
   end;
+  if not AllDevicesConnected then begin
+    NewMessage(rsSomeDefinedD);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
   if  f_preview.Running then begin
    NewMessage(rsCannotStartA);
    f_starprofile.ChkAutofocusDown(false);
@@ -7143,7 +7158,7 @@ Procedure Tf_main.PlanetariumNewTarget(Sender: TObject);
 var ra,de,err:double;
     tra,tde,objn: string;
 begin
- if planetarium.Connected and (Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+ if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
     f_planetariuminfo.Ra.Text  := '-';
     f_planetariuminfo.De.Text  := '-';
     f_planetariuminfo.Obj.Text := '';
@@ -7175,6 +7190,7 @@ begin
     end;
  end else begin
    NewMessage(rsBeforeToUseT);
+   if not AllDevicesConnected then NewMessage(rsSomeDefinedD);
  end;
 end;
 

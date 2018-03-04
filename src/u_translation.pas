@@ -347,7 +347,6 @@ resourcestring
   rsCaptureAlrea = 'Capture already running! please stop it first if you want '
     +'to start a new sequence.';
   rsPleaseLoadOr = 'Please load or create a target list first.';
-  rsCameraIsNotC = 'Camera is not connected';
   rsAutoguidingR = 'Autoguiding restarted.';
   rsSequenceAbor2 = 'Sequence aborted because the autoguider was not '
     +'reconnected after %s minutes.';
@@ -845,6 +844,7 @@ resourcestring
   rsRepeatStep = 'Repeat step %s/%s %s';
   rsShowINDILog = 'Show INDI log';
   rsNumberOfExpo = 'Number of exposure per point';
+  rsSomeDefinedD = 'Some defined devices are not connected';
 
 
 

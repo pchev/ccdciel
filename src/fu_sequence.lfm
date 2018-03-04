@@ -112,7 +112,6 @@ object f_sequence: Tf_sequence
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 5
       end
       object BtnCopy: TButton

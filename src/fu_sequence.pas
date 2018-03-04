@@ -763,7 +763,7 @@ end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
 begin
- if (Fcamera.Status=devConnected) then begin
+ if (AllDevicesConnected) then begin
    if Targets.Running or Fcapture.Running then begin
      msg(rsCaptureAlrea);
    end
@@ -775,7 +775,7 @@ begin
      StartSequence;
    end;
  end
- else msg(rsCameraIsNotC);
+ else msg(rsSomeDefinedD);
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);

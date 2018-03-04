@@ -208,7 +208,7 @@ var SaveonNewImage: TNotifyEvent;
     endt: TDateTime;
 begin
 result:=false;
-if Camera.Status=devConnected then begin
+if AllDevicesConnected then begin
   msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]));
   SaveonNewImage:=Camera.onNewImage;
   savebinx:=Camera.BinX;
