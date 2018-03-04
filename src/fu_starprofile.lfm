@@ -192,15 +192,19 @@ object f_starprofile: Tf_starprofile
           AxisList = <          
             item
               Marks.LabelFont.Height = 8
+              Marks.LabelBrush.Style = bsClear
               Minors = <>
               Title.LabelFont.Orientation = 900
+              Title.LabelBrush.Style = bsClear
             end          
             item
               Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
               Intervals.Options = [aipUseCount, aipUseNiceSteps]
               Alignment = calBottom
               Marks.LabelFont.Height = 8
+              Marks.LabelBrush.Style = bsClear
               Minors = <>
+              Title.LabelBrush.Style = bsClear
             end>
           Extent.UseYMin = True
           Foot.Brush.Color = clBtnFace
@@ -267,7 +271,6 @@ object f_starprofile: Tf_starprofile
             AllowAllUp = True
             Flat = True
             GroupIndex = 1
-            ShowHint = False
             ParentShowHint = False
           end
         end

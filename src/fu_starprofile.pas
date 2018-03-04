@@ -23,8 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-// {$define hyperbola_test}
-
 interface
 
 uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation,
@@ -101,7 +99,7 @@ type
     curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph,FAutofocusRestart: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult: boolean;
-    ahfd: array of double;
+    dyn_v_curve:array of TDouble2;
     aminhfd,amaxhfd:double;
     afmpos,aminpos:integer;
     procedure msg(txt:string);
@@ -807,16 +805,6 @@ begin
               // move to focus
               inc(FnumGraph);
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
-
-              {$ifdef hyperbola_test}
-              find_best_hyperbola_fit(AutofocusVc,AutofocusVcNum+1,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
-              msg('HYPERBOLA curve fitting focus at: '+
-                  inttostr(round(focuser.FocusPosition +
-                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate steps to focus using hyperbola parameters}
-                  '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
-
-              {$endif} {end of hyperbola test}
-
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg(Format(rsAutofocusMov3, [focuser.Position.Text]));
@@ -828,16 +816,6 @@ begin
               // move to focus
               inc(FnumGraph);
               meanhfd:=SMedian(AutofocusVcCheckHFDlist);
-
-              {$ifdef hyperbola_test}
-              find_best_hyperbola_fit(AutofocusVc,AutofocusVcNum+1,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
-              msg('HYPERBOLA curve fitting focus at: '+
-                  inttostr(round(focuser.FocusPosition -
-                  steps_to_focus(meanhfd,a_hyp,b_hyp)))+ {calculate steps to focus using hyperbola parameters}
-                  '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
-
-              {$endif} {end of hyperbola test}
-
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg(Format(rsAutofocusMov3, [focuser.Position.Text]));
@@ -850,19 +828,20 @@ end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
 var i,k,step,sumpos,numpos: integer;
-    VcpiL,VcpiR,al,bl,rl,r2,ar,br,rr,focpos: double;
-    p:array of TDouble2;
+    p_hyp,a_hyp,b_hyp: double;
   procedure ResetPos;
   begin
     k:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-aminpos));
-    focuser.FocusSpeed:=k;
-    if AutofocusMoveDir=FocusDirIn then begin
-      onFocusOUT(self);
-    end
-    else begin
-      onFocusIN(self);
+    if k>0 then begin
+      focuser.FocusSpeed:=k;
+      if AutofocusMoveDir=FocusDirIn then begin
+        onFocusOUT(self);
+      end
+      else begin
+        onFocusIN(self);
+      end;
+      Wait(1);
     end;
-    Wait(1);
   end;
 begin
   case AutofocusDynamicStep of
@@ -870,7 +849,7 @@ begin
               if not odd(AutofocusDynamicNumPoint) then
                 inc(AutofocusDynamicNumPoint);
               if AutofocusDynamicNumPoint<5 then AutofocusDynamicNumPoint:=5;
-              SetLength(ahfd,AutofocusDynamicNumPoint+1);
+              SetLength(dyn_v_curve,AutofocusDynamicNumPoint+1);
               // set initial position
               k:=AutofocusDynamicNumPoint div 2;
               focuser.FocusSpeed:=AutofocusDynamicMovement*k;
@@ -890,14 +869,8 @@ begin
     afdMeasure: begin
               // store hfd
               inc(afmpos);
-              ahfd[afmpos]:=Fhfd;
-
-              {$ifdef hyperbola_test} {hyperbola store curve}
-              setlength(v_curve,afmpos);
-              v_curve[afmpos-1,1]:=afmpos; // measurement number, to work with relative position focuser
-              v_curve[afmpos-1,2]:=Fhfd;
-              {$endif} {end of store curve}
-
+              dyn_v_curve[afmpos-1,1]:=afmpos; // measurement number, to work with relative position focuser
+              dyn_v_curve[afmpos-1,2]:=Fhfd;
               if Fhfd<aminhfd then begin
                 aminhfd:=Fhfd;
               end;
@@ -920,22 +893,26 @@ begin
     afdEnd: begin
               sumpos:=0;
               numpos:=0;
-              for i:=1 to AutofocusDynamicNumPoint do begin
-                if abs(aminhfd-ahfd[i])<(0.1*aminhfd) then begin
+              // find position with minimum measured HFD
+              for i:=0 to AutofocusDynamicNumPoint-1 do begin
+                if abs(aminhfd-dyn_v_curve[i,2])<(0.1*aminhfd) then begin
                  inc(numpos);
-                 sumpos:=sumpos+i;
+                 sumpos:=sumpos+i+1;
                 end;
               end;
               aminpos:=round(sumpos/numpos);
               // check measure validity
               if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos)<2) then begin
+                 // not enough point on one side
                  ResetPos;
                  if FAutofocusRestart>0 then begin
+                   // we already retry, abort now
                    msg(rsNotEnoughPoi);
                    msg(rsTheFocuserIs);
                    terminated:=true;
                  end
                  else begin
+                   // retry using new position
                    msg(rsNotEnoughPoi2);
                    InitAutofocus(true);
                    AutofocusDynamicStep:=afdStart;
@@ -943,6 +920,7 @@ begin
                  exit;
               end;
               if (amaxhfd<(1.5*aminhfd)) then begin
+                 // not enough difference between min and max HFD, abort
                  msg(rsTooSmallHFDD);
                  msg(rsTheFocuserIs);
                  ResetPos;
@@ -950,57 +928,12 @@ begin
                  exit;
               end;
               // compute focus
-
-              {$ifdef hyperbola_test}
-                find_best_hyperbola_fit(v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
-                msg('HYPERBOLA curve fitting focus at: '+
+              find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+              msg('HYPERBOLA curve fitting focus at: '+
                      floattostr(p_hyp)+
                      '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
-
-                focpos:=p_hyp;
-
-              {$else} {end of hyperbola test}
-
-              k:=aminpos-1;
-              // left part
-              SetLength(p,k);
-              for i:=1 to k do begin
-                p[i-1,1]:=i;
-                p[i-1,2]:=ahfd[i];
-              end;
-              LeastSquares(p,al,bl,rl);
-              if al=0 then begin
-                msg(rsTooSmallHFDD2);
-                ResetPos;
-                terminated:=true;
-                exit;
-              end;
-              VcpiL:=-bl/al;
-              // right part
-              k:=AutofocusDynamicNumPoint-aminpos;
-              SetLength(p,k);
-              for i:=1 to k do begin
-                p[i-1,1]:=aminpos+i;
-                p[i-1,2]:=ahfd[aminpos+i];
-              end;
-              LeastSquares(p,ar,br,rr);
-              if ar=0 then begin
-                msg(rsTooSmallHFDD2);
-                ResetPos;
-                terminated:=true;
-                exit;
-              end;
-              VcpiR:=-br/ar;
-              // focus quality, mean of both side
-              r2:=(rr*rr+rl*rl)/2;
-              msg(Format(rsFocusQuality, [FormatFloat(f3, r2)]));
-
-              focpos:=(VcpiL+VcpiR)/2;
-
-              {$endif}
-
               // focus position with last move in focus direction
-              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-focpos));
+              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp));
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;
               if AutofocusMoveDir=FocusDirIn then begin
                 onFocusOUT(self);

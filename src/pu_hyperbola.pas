@@ -36,9 +36,6 @@ function hfd_calc(position,perfectfocusposition,a,b:double) :double; {calculate 
 function steps_to_focus(hfd,a,b:double) :double; {calculates focuser steps to perfect focus from HFD and hyperbola parameters}
 
 var
- p_hyp,a_hyp,b_hyp: double;
- v_curve:array of TDouble2;
-
  iteration_cycles :integer; {how many cycle where used for curve fitting}
  lowest_error : double; {sum of sqr % HFD error after curve fitting}
 
@@ -83,7 +80,6 @@ var
  n, i: Integer;
  hdf, hfd_simulation, total_error : double;
 begin
- // n:=Length(data);
   n:=data_length;
 
   total_error:=0;
@@ -102,7 +98,6 @@ var
    highest_position, lowest_position,a1,b1,p1,a0,b0,p0  :double;
 begin
  lowest_error:=1E99;
-// n:=Length(data);
  n:=data_length;
 
  highest_hfd:=0;
