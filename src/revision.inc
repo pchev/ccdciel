@@ -1,2 +1,2 @@
-// Created by Svn2RevisionInc
-const RevisionStr = '683';
+// git revision
+const RevisionStr = '873-7fbb56e';
