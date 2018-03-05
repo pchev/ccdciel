@@ -332,7 +332,8 @@ var
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
   CancelAutofocus, InplaceAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   bpm: TBpm;
-  bpmNum,bpmX,bpmY,bpmAxis,BPMsigma: integer;
+  bpmNum,bpmX,bpmY,bpmAxis: integer;
+  BPMsigma: double;
   NFocusStars: integer;
   FocusStars: array of TFocusStar;
   FocusStarsBlacklist: string;

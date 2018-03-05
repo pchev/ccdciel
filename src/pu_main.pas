@@ -1206,11 +1206,11 @@ begin
   LoadVcurve;
   LoadBPM;
 
-  f_ccdtemp.Setpoint.Text:=config.GetValue('/Temperature/Setpoint','0');
+  f_ccdtemp.Setpoint.Value:=config.GetValue('/Temperature/Setpoint',0);
   f_preview.ExpTime.Text:=config.GetValue('/Preview/Exposure','1');
   f_capture.ExpTime.Text:=config.GetValue('/Capture/Exposure','1');
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
-  f_capture.SeqNum.Text:=config.GetValue('/Capture/Count','1');
+  f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
   f_visu.histminmax.AllowAllUp:=true;
@@ -1829,21 +1829,21 @@ begin
   config.SetValue('/Window/Width',Width);
   config.SetValue('/Window/Height',Height);
 
-  config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Text);
+  config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
   config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
   config.SetValue('/Preview/Binning',f_preview.Binning.Text);
   if hasGainISO then
     config.SetValue('/Preview/Gain',f_preview.ISObox.Text)
   else
-    config.SetValue('/Preview/Gain',f_preview.GainEdit.Text);
+    config.SetValue('/Preview/Gain',f_preview.GainEdit.Value);
   config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
   config.SetValue('/Capture/Binning',f_capture.Binning.Text);
   config.SetValue('/Capture/FileName',f_capture.Fname.Text);
-  config.SetValue('/Capture/Count',f_capture.SeqNum.Text);
+  config.SetValue('/Capture/Count',f_capture.SeqNum.Value);
   if hasGainISO then
     config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
   else
-    config.SetValue('/Capture/Gain',f_capture.GainEdit.Text);
+    config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
 
   config.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
   config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
@@ -2479,7 +2479,7 @@ begin
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
-  ElevationMin:=config.GetValue('/Info/ElevationMin',10);
+  ElevationMin:=config.GetValue('/Info/ElevationMin',10.0);
   FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftNone)));
   FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',false);
   FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1.0);
@@ -2708,12 +2708,8 @@ begin
 end;
 
 procedure Tf_main.SetTemperature(Sender: TObject);
-var t: double;
 begin
-  t:=StrToFloatDef(f_ccdtemp.Setpoint.Text,-1000);
-  if t<>-1000 then begin
-     camera.Temperature:=t;
-  end;
+  camera.Temperature:=f_ccdtemp.Setpoint.Value;
 end;
 
 procedure Tf_main.SetCooler(Sender: TObject);
@@ -3110,7 +3106,7 @@ begin
                    cool:=camera.Cooler;
                    CameraCoolerChange(cool);
                    if config.GetValue('/Cooler/CameraAutoCool',false) then begin
-                      f_ccdtemp.Setpoint.Text:=FormatFloat(f1,config.GetValue('/Cooler/CameraAutoCoolTemp',0));
+                      f_ccdtemp.Setpoint.Value:=config.GetValue('/Cooler/CameraAutoCoolTemp',0);
                       f_ccdtemp.BtnSet.Click;
                    end;
                    if camera.hasVideo then begin
@@ -3809,18 +3805,16 @@ end;
 
 Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
- f_rotator.Angle.Text:=FormatFloat(f1,rotator.Angle);
+ f_rotator.Angle.Value:=rotator.Angle;
  f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
 end;
 
 Procedure Tf_main.RotatorRotate(Sender: TObject);
 var a: double;
 begin
- a:=StrToFloatDef(f_rotator.Angle.Text,NullCoord);
- if a<>NullCoord then begin
-  a:=rmod(a+360,360);
-  rotator.Angle:=a;
- end;
+ a:=f_rotator.Angle.Value;
+ a:=rmod(a+360,360);
+ rotator.Angle:=a;
 end;
 
 Procedure Tf_main.RotatorHalt(Sender: TObject);
@@ -4166,33 +4160,33 @@ begin
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
-   f_option.ElevationMin.Text:=FormatFloat(f1,config.GetValue('/Info/ElevationMin',10.0));
+   f_option.ElevationMin.Value:=config.GetValue('/Info/ElevationMin',10.0);
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
-   f_option.ClippingHigh.Text:=FormatFloat(f0,config.GetValue('/Color/ClippingOverflow',MAXWORD));
-   f_option.ClippingLow.Text:=FormatFloat(f0,config.GetValue('/Color/ClippingUnderflow',0));
-   f_option.BPMsigma.Text:=inttostr(config.GetValue('/BadPixel/Sigma',5));
+   f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
+   f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
+   f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.StackDarkFile.FileName:=config.GetValue('/PreviewStack/StackDarkFile','');
    f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
-   f_option.VideoPreviewRate.Text:=inttostr(config.GetValue('/Video/PreviewRate',5));
+   f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
-   f_option.TemperatureSlope.Text:=FormatFloat(f1,config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope));
+   f_option.TemperatureSlope.Value:=config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope);
    f_option.CameraAutoCool.Checked:=config.GetValue('/Cooler/CameraAutoCool',false);
-   f_option.CameraAutoCoolTemp.Text:=FormatFloat(f1,config.GetValue('/Cooler/CameraAutoCoolTemp',0));
+   f_option.CameraAutoCoolTemp.Value:=config.GetValue('/Cooler/CameraAutoCoolTemp',0);
    f_option.FlatType.ItemIndex:=config.GetValue('/Flat/FlatType',ord(FlatType));
    f_option.FlatAutoExposure.Checked:=config.GetValue('/Flat/FlatAutoExposure',FlatAutoExposure);
-   f_option.FlatMinExp.Text:=FormatFloat(f3,config.GetValue('/Flat/FlatMinExp',FlatMinExp));
-   f_option.FlatMaxExp.Text:=FormatFloat(f3,config.GetValue('/Flat/FlatMaxExp',FlatMaxExp));
-   f_option.FlatLevelMin.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMin',FlatLevelMin));
-   f_option.FlatLevelMax.Text:=IntToStr(config.GetValue('/Flat/FlatLevelMax',FlatLevelMax));
-   f_option.StarWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Window',Starwindow));
-   f_option.FocusWindow.Text:=inttostr(config.GetValue('/StarAnalysis/Focus',Focuswindow));
+   f_option.FlatMinExp.Value:=config.GetValue('/Flat/FlatMinExp',FlatMinExp);
+   f_option.FlatMaxExp.Value:=config.GetValue('/Flat/FlatMaxExp',FlatMaxExp);
+   f_option.FlatLevelMin.Value:=config.GetValue('/Flat/FlatLevelMin',FlatLevelMin);
+   f_option.FlatLevelMax.Value:=config.GetValue('/Flat/FlatLevelMax',FlatLevelMax);
+   f_option.StarWindow.Value:=config.GetValue('/StarAnalysis/Window',Starwindow);
+   f_option.FocusWindow.Value:=config.GetValue('/StarAnalysis/Focus',Focuswindow);
    f_option.FilterList.Cells[0, 0]:=rsFilterName;
    f_option.FilterList.Cells[1, 0]:=rsFocuserOffse;
    f_option.FilterList.Cells[2, 0]:=rsExposureFact;
@@ -4209,48 +4203,52 @@ begin
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
    f_option.Autofocusmode.ItemIndex:=config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode));
-   f_option.AutofocusMinSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed));
-   f_option.AutofocusMaxSpeed.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed));
-   f_option.AutofocusStartHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD));
-   f_option.AutofocusNearHFD.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD));
-   f_option.AutofocusExposure.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure));
-   f_option.AutofocusBinning.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning));
-   f_option.FocuserBacklash.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserBacklash',focuser.Backlash));
+   f_option.AutofocusMinSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
+   f_option.AutofocusMaxSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
+   f_option.AutofocusStartHFD.Value:=config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
+   f_option.AutofocusNearHFD.Value:=config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD);
+   f_option.AutofocusExposure.Value:=config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure);
+   f_option.AutofocusBinning.Value:=config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
+   if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
+       f_option.AutofocusBinning.MaxValue:=camera.BinXrange.max
+   else
+       f_option.AutofocusBinning.MaxValue:=max(4,AutofocusBinning);
+   f_option.FocuserBacklash.Value:=config.GetValue('/StarAnalysis/FocuserBacklash',focuser.Backlash);
    f_option.FocuserBacklashActive.checked:=config.GetValue('/StarAnalysis/FocuserBacklashActive',(focuser.Backlash<>0));
    if config.GetValue('/StarAnalysis/FocuserBacklashDirection',FocusDirIn) then
       f_option.FocuserBacklashDirection.ItemIndex:=0
    else
       f_option.FocuserBacklashDirection.ItemIndex:=1;
-   f_option.FocuserDelay.Text:=inttostr(config.GetValue('/StarAnalysis/FocuserDelay',FocuserDelay));
-   f_option.FocuserTempCoeff.text:=FormatFloat(f2,config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff));
-   f_option.AutofocusTolerance.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance));
-   f_option.AutofocusMinSNR.Text:=FormatFloat(f1,config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR));
+   f_option.FocuserDelay.Value:=config.GetValue('/StarAnalysis/FocuserDelay',FocuserDelay);
+   f_option.FocuserTempCoeff.Value:=config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff);
+   f_option.AutofocusTolerance.Value:=config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
+   f_option.AutofocusMinSNR.Value:=config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
    f_option.AutofocusSlippageCorrection.Checked:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',AutofocusSlippageCorrection);
-   f_option.AutofocusSlippageOffset.Text:=IntToStr(config.GetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset));
+   f_option.AutofocusSlippageOffset.Value:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
-   f_option.AutofocusPrecisionSlew.Text:=FormatFloat(f2,config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0));
+   f_option.AutofocusPrecisionSlew.Value:=config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
-   f_option.AutofocusNearNum.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum));
-   f_option.AutofocusDynamicNumPoint.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint));
-   f_option.AutofocusDynamicMovement.Text:=inttostr(config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement));
-   f_option.PixelSize.Text:=config.GetValue('/Astrometry/PixelSize','');
-   f_option.Focale.Text:=config.GetValue('/Astrometry/FocaleLength','');
+   f_option.AutofocusNearNum.Value:=config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
+   f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
+   f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
+   f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0);
+   f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    if f_option.PixelSizeFromCamera.Checked and (camera.PixelSizeX>0) then
-      f_option.PixelSize.Text:=FormatFloat(f2,camera.PixelSizeX);
+      f_option.PixelSize.Value:=camera.PixelSizeX;
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
    if f_option.FocaleFromTelescope.Checked then
-      f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
-   f_option.Tolerance.Text:=FormatFloat(f2,config.GetValue('/Astrometry/ScaleTolerance',0.1));
-   f_option.MaxRadius.Text:=FormatFloat(f1,config.GetValue('/Astrometry/MaxRadius',15.0));
-   f_option.AstrometryTimeout.Text:=FormatFloat(f0,config.GetValue('/Astrometry/Timeout',60.0));
-   f_option.Downsample.Text:=IntToStr(config.GetValue('/Astrometry/DownSample',4));
-   f_option.SourcesLimit.Text:=IntToStr(config.GetValue('/Astrometry/SourcesLimit',150));
+      f_option.Focale.Value:=mount.FocaleLength;
+   f_option.Tolerance.Value:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
+   f_option.MaxRadius.Value:=config.GetValue('/Astrometry/MaxRadius',15.0);
+   f_option.AstrometryTimeout.Value:=config.GetValue('/Astrometry/Timeout',60.0);
+   f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',4);
+   f_option.SourcesLimit.Value:=config.GetValue('/Astrometry/SourcesLimit',150);
    f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
    f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','--no-fits2fits');
    f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);
@@ -4261,22 +4259,26 @@ begin
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
    {$endif}
    f_option.PlatesolveFolder.Text:=config.GetValue('/Astrometry/PlatesolveFolder','C:\PlateSolve2.28');
-   f_option.PlatesolveWait.Text:=IntToStr(config.GetValue('/Astrometry/PlatesolveWait',0));
+   f_option.PlatesolveWait.Value:=config.GetValue('/Astrometry/PlatesolveWait',0);
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
-   f_option.SlewPrec.Text:=FormatFloat(f2,config.GetValue('/PrecSlew/Precision',5.0));
-   f_option.SlewRetry.Text:=IntToStr(config.GetValue('/PrecSlew/Retry',3));
-   f_option.SlewExp.Text:=FormatFloat(f1,config.GetValue('/PrecSlew/Exposure',10));
-   f_option.SlewBin.Text:=IntToStr(config.GetValue('/PrecSlew/Binning',1));
-   f_option.SlewDelay.Text:=IntToStr(config.GetValue('/PrecSlew/Delay',5));
+   f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',5.0);
+   f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
+   f_option.SlewExp.Value:=config.GetValue('/PrecSlew/Exposure',10);
+   f_option.SlewBin.Value:=config.GetValue('/PrecSlew/Binning',1);
+   if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
+       f_option.SlewBin.MaxValue:=camera.BinXrange.max
+   else
+       f_option.SlewBin.MaxValue:=9;
+   f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
    f_option.SlewFilter.Items.Assign(FilterList);
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
-   f_option.MinutesPastMeridian.Text:=IntToStr(config.GetValue('/Meridian/MinutesPast',0));
-   f_option.MinutesPastMeridianMin.Text:=IntToStr(config.GetValue('/Meridian/MinutesPastMin',0));
+   f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',0);
+   f_option.MinutesPastMeridianMin.Value:=config.GetValue('/Meridian/MinutesPastMin',0);
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
-   f_option.MeridianFlipPauseTimeout.Text:=IntToStr(config.GetValue('/Meridian/MeridianFlipPauseTimeout',0));
+   f_option.MeridianFlipPauseTimeout.Value:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
@@ -4287,14 +4289,14 @@ begin
    f_option.LinGuiderSocket.Text:=config.GetValue('/Autoguider/LinGuiderSocket','/tmp/lg_ss');
    f_option.LinGuiderHostname.Text:=config.GetValue('/Autoguider/LinGuiderHostname','localhost');
    f_option.LinGuiderPort.Text:=config.GetValue('/Autoguider/LinGuiderPort','5656');
-   f_option.DitherPixel.Text:=config.GetValue('/Autoguider/Dither/Pixel','1.0');
+   f_option.DitherPixel.Value:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
    f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
-   f_option.SettlePixel.Text:=config.GetValue('/Autoguider/Settle/Pixel','1.0');
-   f_option.SettleMinTime.Text:=config.GetValue('/Autoguider/Settle/MinTime','5');
-   f_option.SettleMaxTime.Text:=config.GetValue('/Autoguider/Settle/MaxTime','30');
-   f_option.CalibrationDelay.Text:=config.GetValue('/Autoguider/Settle/CalibrationDelay','300');
-   f_option.StarLostRestart.Text:=IntToStr(config.GetValue('/Autoguider/Recovery/RestartTimeout',0));
-   f_option.StarLostCancel.Text:=IntToStr(config.GetValue('/Autoguider/Recovery/CancelTimeout',1800));
+   f_option.SettlePixel.Value:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
+   f_option.SettleMinTime.Value:=config.GetValue('/Autoguider/Settle/MinTime',5);
+   f_option.SettleMaxTime.Value:=config.GetValue('/Autoguider/Settle/MaxTime',30);
+   f_option.CalibrationDelay.Value:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
+   f_option.StarLostRestart.Value:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
+   f_option.StarLostCancel.Value:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
@@ -4323,8 +4325,8 @@ begin
        config.SetValue('/Files/FileNameOpt'+inttostr(i),n);
        config.SetValue('/Files/FileNameActive'+inttostr(i),f_option.FileOptions.Cells[1,i]='1');
      end;
-     config.SetValue('/StarAnalysis/Window',StrToIntDef(f_option.StarWindow.Text,Starwindow));
-     config.SetValue('/StarAnalysis/Focus',StrToIntDef(f_option.FocusWindow.Text,Focuswindow));
+     config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
+     config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      n:=FilterList.Count-1;
      config.SetValue('/Filters/Num',n);
      for i:=1 to n do begin
@@ -4337,28 +4339,28 @@ begin
         config.SetValue('/Filters/ExpFact'+IntToStr(i),buf);
      end;
      config.SetValue('/StarAnalysis/AutoFocusMode',f_option.Autofocusmode.ItemIndex);
-     config.SetValue('/StarAnalysis/AutofocusMinSpeed',StrToIntDef(f_option.AutofocusMinSpeed.Text,AutofocusMinSpeed));
-     config.SetValue('/StarAnalysis/AutofocusMaxSpeed',StrToIntDef(f_option.AutofocusMaxSpeed.Text,AutofocusMaxSpeed));
-     config.SetValue('/StarAnalysis/AutofocusStartHFD',StrToFloatDef(f_option.AutofocusStartHFD.Text,AutofocusStartHFD));
-     config.SetValue('/StarAnalysis/AutofocusNearHFD',StrToFloatDef(f_option.AutofocusNearHFD.Text,AutofocusNearHFD));
-     config.SetValue('/StarAnalysis/AutofocusExposure',StrToFloatDef(f_option.AutofocusExposure.Text,AutofocusExposure));
-     config.SetValue('/StarAnalysis/AutofocusBinning',StrToIntDef(f_option.AutofocusBinning.Text,AutofocusBinning));
-     config.SetValue('/StarAnalysis/FocuserBacklash',StrToIntDef(f_option.FocuserBacklash.Text,focuser.Backlash));
+     config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);
+     config.SetValue('/StarAnalysis/AutofocusMaxSpeed',f_option.AutofocusMaxSpeed.Value);
+     config.SetValue('/StarAnalysis/AutofocusStartHFD',f_option.AutofocusStartHFD.Value);
+     config.SetValue('/StarAnalysis/AutofocusNearHFD',f_option.AutofocusNearHFD.Value);
+     config.SetValue('/StarAnalysis/AutofocusExposure',f_option.AutofocusExposure.Value);
+     config.SetValue('/StarAnalysis/AutofocusBinning',f_option.AutofocusBinning.Value);
+     config.SetValue('/StarAnalysis/FocuserBacklash',f_option.FocuserBacklash.Value);
      config.SetValue('/StarAnalysis/FocuserBacklashActive',f_option.FocuserBacklashActive.checked);
      config.SetValue('/StarAnalysis/FocuserBacklashDirection',(f_option.FocuserBacklashDirection.ItemIndex=0));
-     config.SetValue('/StarAnalysis/FocuserDelay',StrToIntDef(f_option.FocuserDelay.Text,FocuserDelay));
-     config.SetValue('/StarAnalysis/FocuserTempCoeff',StrToFloatDef(f_option.FocuserTempCoeff.text,FocuserTempCoeff));
-     config.SetValue('/StarAnalysis/AutofocusTolerance',StrToFloatDef(f_option.AutofocusTolerance.Text,AutofocusTolerance));
-     config.SetValue('/StarAnalysis/AutofocusMinSNR',StrToFloatDef(f_option.AutofocusMinSNR.Text,AutofocusMinSNR));
+     config.SetValue('/StarAnalysis/FocuserDelay',f_option.FocuserDelay.Value);
+     config.SetValue('/StarAnalysis/FocuserTempCoeff',f_option.FocuserTempCoeff.Value);
+     config.SetValue('/StarAnalysis/AutofocusTolerance',f_option.AutofocusTolerance.Value);
+     config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
      config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
-     config.SetValue('/StarAnalysis/AutofocusSlippageOffset',StrToIntDef(f_option.AutofocusSlippageOffset.Text,AutofocusSlippageOffset));
+     config.SetValue('/StarAnalysis/AutofocusSlippageOffset',f_option.AutofocusSlippageOffset.Value);
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
      if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
-     config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',StrToFloatDef(f_option.AutofocusPrecisionSlew.Text,2.0));
+     config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',f_option.AutofocusPrecisionSlew.Value);
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
-     config.SetValue('/StarAnalysis/AutofocusNearNum',StrToIntDef(f_option.AutofocusNearNum.Text,AutofocusNearNum));
-     config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',StrToIntDef(f_option.AutofocusDynamicNumPoint.Text,AutofocusDynamicNumPoint));
-     config.SetValue('/StarAnalysis/AutofocusDynamicMovement',StrToIntDef(f_option.AutofocusDynamicMovement.Text,AutofocusDynamicMovement));
+     config.SetValue('/StarAnalysis/AutofocusNearNum',f_option.AutofocusNearNum.Value);
+     config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
+     config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Log/UseTcpServer',f_option.UseTcpServer.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
@@ -4367,40 +4369,40 @@ begin
      config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Info/HorizonFile',f_option.HorizonFile.FileName);
-     config.SetValue('/Info/ElevationMin',StrToFloatDef(f_option.ElevationMin.Text,10.0));
+     config.SetValue('/Info/ElevationMin',f_option.ElevationMin.Value);
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
      config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);
      config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
      config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
-     config.SetValue('/Color/ClippingOverflow',StrToFloatDef(f_option.ClippingHigh.Text,MAXWORD));
-     config.SetValue('/Color/ClippingUnderflow',StrToFloatDef(f_option.ClippingLow.Text,0));
-     config.SetValue('/BadPixel/Sigma',StrToIntDef(f_option.BPMsigma.Text,BPMsigma));
+     config.SetValue('/Color/ClippingOverflow',f_option.ClippingHigh.Value);
+     config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
+     config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/StackDarkFile',f_option.StackDarkFile.FileName);
      config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
-     config.SetValue('/Video/PreviewRate',StrToIntDef(f_option.VideoPreviewRate.Text,MaxVideoPreviewRate));
+     config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
-     config.SetValue('/Cooler/TemperatureSlope',StrToFloatDef(f_option.TemperatureSlope.Text,0));
+     config.SetValue('/Cooler/TemperatureSlope',f_option.TemperatureSlope.Value);
      config.SetValue('/Cooler/CameraAutoCool',f_option.CameraAutoCool.Checked);
-     config.SetValue('/Cooler/CameraAutoCoolTemp',StrToFloatDef(f_option.CameraAutoCoolTemp.Text,0));
+     config.SetValue('/Cooler/CameraAutoCoolTemp',f_option.CameraAutoCoolTemp.Value);
      config.SetValue('/Flat/FlatType',f_option.FlatType.ItemIndex);
      config.SetValue('/Flat/FlatAutoExposure',f_option.FlatAutoExposure.Checked);
-     config.SetValue('/Flat/FlatMinExp',StrToFloatDef(f_option.FlatMinExp.Text,FlatMinExp));
-     config.SetValue('/Flat/FlatMaxExp',StrToFloatDef(f_option.FlatMaxExp.Text,FlatMaxExp));
-     config.SetValue('/Flat/FlatLevelMin',StrToIntDef(f_option.FlatLevelMin.Text,FlatLevelMin));
-     config.SetValue('/Flat/FlatLevelMax',StrToIntDef(f_option.FlatLevelMax.Text,FlatLevelMax));
+     config.SetValue('/Flat/FlatMinExp',f_option.FlatMinExp.Value);
+     config.SetValue('/Flat/FlatMaxExp',f_option.FlatMaxExp.Value);
+     config.SetValue('/Flat/FlatLevelMin',f_option.FlatLevelMin.Value);
+     config.SetValue('/Flat/FlatLevelMax',f_option.FlatLevelMax.Value);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
-     config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Text);
-     config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Text);
-     config.SetValue('/Astrometry/ScaleTolerance',StrToFloatDef(f_option.Tolerance.Text,0.1 ));
-     config.SetValue('/Astrometry/MaxRadius',StrToFloatDef(f_option.MaxRadius.Text,15.0));
-     config.SetValue('/Astrometry/Timeout',StrToFloatDef(f_option.AstrometryTimeout.Text,60.0));
-     config.SetValue('/Astrometry/DownSample',StrToIntDef(f_option.Downsample.Text,4));
-     config.SetValue('/Astrometry/SourcesLimit',StrToIntDef(f_option.SourcesLimit.Text,0));
+     config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Value);
+     config.SetValue('/Astrometry/FocaleLength',f_option.Focale.Value);
+     config.SetValue('/Astrometry/ScaleTolerance',f_option.Tolerance.Value);
+     config.SetValue('/Astrometry/MaxRadius',f_option.MaxRadius.Value);
+     config.SetValue('/Astrometry/Timeout',f_option.AstrometryTimeout.Value);
+     config.SetValue('/Astrometry/DownSample',f_option.Downsample.Value);
+     config.SetValue('/Astrometry/SourcesLimit',f_option.SourcesLimit.Value);
      config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);
      config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
      config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked);
@@ -4411,20 +4413,20 @@ begin
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
      {$endif}
      config.SetValue('/Astrometry/PlatesolveFolder',f_option.PlatesolveFolder.Text);
-     config.SetValue('/Astrometry/PlatesolveWait',StrToIntDef(f_option.PlatesolveWait.Text,0));
+     config.SetValue('/Astrometry/PlatesolveWait',f_option.PlatesolveWait.Value);
      config.SetValue('/PrecSlew/Method',f_option.PrecSlewBox.ItemIndex);
-     config.SetValue('/PrecSlew/Precision',StrToFloatDef(f_option.SlewPrec.Text,5.0));
-     config.SetValue('/PrecSlew/Retry',StrToIntDef(f_option.SlewRetry.Text,3));
-     config.SetValue('/PrecSlew/Exposure',StrToFloatDef(f_option.SlewExp.Text,10.0));
-     config.SetValue('/PrecSlew/Binning',StrToIntDef(f_option.SlewBin.Text,1));
-     config.SetValue('/PrecSlew/Delay',StrToIntDef(f_option.SlewDelay.Text,5));
+     config.SetValue('/PrecSlew/Precision',f_option.SlewPrec.Value);
+     config.SetValue('/PrecSlew/Retry',f_option.SlewRetry.Value);
+     config.SetValue('/PrecSlew/Exposure',f_option.SlewExp.Value);
+     config.SetValue('/PrecSlew/Binning',f_option.SlewBin.Value);
+     config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
-     config.SetValue('/Meridian/MinutesPast',StrToIntDef(f_option.MinutesPastMeridian.Text,0));
-     config.SetValue('/Meridian/MinutesPastMin',StrToIntDef(f_option.MinutesPastMeridianMin.Text,0));
+     config.SetValue('/Meridian/MinutesPast',f_option.MinutesPastMeridian.Value);
+     config.SetValue('/Meridian/MinutesPastMin',f_option.MinutesPastMeridianMin.Value);
      config.SetValue('/Meridian/MeridianFlipPauseBefore',f_option.MeridianFlipPauseBefore.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseAfter',f_option.MeridianFlipPauseAfter.Checked);
-     config.SetValue('/Meridian/MeridianFlipPauseTimeout',StrToIntDef(f_option.MeridianFlipPauseTimeout.Text,0));
+     config.SetValue('/Meridian/MeridianFlipPauseTimeout',f_option.MeridianFlipPauseTimeout.Value);
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',0));
@@ -4435,14 +4437,14 @@ begin
      config.SetValue('/Autoguider/LinGuiderSocket',f_option.LinGuiderSocket.Text);
      config.SetValue('/Autoguider/LinGuiderHostname',f_option.LinGuiderHostname.Text);
      config.SetValue('/Autoguider/LinGuiderPort',f_option.LinGuiderPort.Text);
-     config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Text);
+     config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Value);
      config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
-     config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Text);
-     config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Text);
-     config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Text);
-     config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Text);
-     config.SetValue('/Autoguider/Recovery/RestartTimeout',StrToIntDef(f_option.StarLostRestart.Text,0));
-     config.SetValue('/Autoguider/Recovery/CancelTimeout',StrToIntDef(f_option.StarLostCancel.Text,1800));
+     config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Value);
+     config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Value);
+     config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Value);
+     config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Value);
+     config.SetValue('/Autoguider/Recovery/RestartTimeout',f_option.StarLostRestart.Value);
+     config.SetValue('/Autoguider/Recovery/CancelTimeout',f_option.StarLostCancel.Value);
      PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',0));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
@@ -4523,13 +4525,13 @@ end;
 procedure Tf_main.OptionGetPixelSize(Sender: TObject);
 begin
    if camera.PixelSizeX>0 then
-      f_option.PixelSize.Text:=FormatFloat(f2,camera.PixelSizeX);
+      f_option.PixelSize.Value:=camera.PixelSizeX;
 end;
 
 procedure Tf_main.OptionGetFocaleLength(Sender: TObject);
 begin
    if mount.FocaleLength>0 then
-      f_option.Focale.Text:=FormatFloat(f0,mount.FocaleLength);
+      f_option.Focale.Value:=mount.FocaleLength;
 end;
 
 procedure Tf_main.MenuViewConnectionClick(Sender: TObject);
@@ -4824,7 +4826,7 @@ if (AllDevicesConnected) and ((not f_capture.Running) or autofocusing) and (not 
      if camera.Gain<>f_preview.ISObox.ItemIndex then camera.Gain:=f_preview.ISObox.ItemIndex;
   end;
   if camera.hasGain and (not camera.hasGainISO) then begin
-     i:=StrToIntDef(f_preview.GainEdit.Text,camera.Gain);
+     i:=f_preview.GainEdit.Value;
      if camera.Gain<>i then camera.Gain:=i;
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
@@ -4908,7 +4910,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      if camera.Gain<>f_capture.ISObox.ItemIndex then camera.Gain:=f_capture.ISObox.ItemIndex;
    end;
    if camera.hasGain and (not camera.hasGainISO) then begin
-     i:=StrToIntDef(f_capture.GainEdit.Text,camera.Gain);
+     i:=f_capture.GainEdit.Value;
      if camera.Gain<>i then camera.Gain:=i;
    end;
   // check and set frame
@@ -4955,7 +4957,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     end;
   end;
   // check if refocusing is required
-  if f_capture.FocusNow or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=StrToIntDef(f_capture.FocusCount.Text,1))) then begin
+  if f_capture.FocusNow or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) then begin
      f_capture.FocusNum:=0;
      f_capture.FocusNow:=false;
      // do autofocus
@@ -4980,7 +4982,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      end;
   end;
   // check if dithering is required
-  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=StrToIntDef(f_capture.DitherCount.Text,1)) then begin
+  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
       NewMessage(rsDithering+ellipsis);
@@ -5075,7 +5077,7 @@ begin
      f_capture.SeqCount:=f_capture.SeqCount+1;
      f_capture.DitherNum:=f_capture.DitherNum+1;
      f_capture.FocusNum:=f_capture.FocusNum+1;
-     if f_capture.SeqCount<=StrToInt(f_capture.SeqNum.Text) then begin
+     if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
         // next exposure
         if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
      end else begin

@@ -28,10 +28,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 33
       Top = 0
-      Width = 161
+      Width = 162
       Caption = ' '
       ClientHeight = 33
-      ClientWidth = 161
+      ClientWidth = 162
       TabOrder = 0
       object ExpTime: TComboBox
         Left = 70
@@ -77,10 +77,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 37
       Top = 33
-      Width = 161
+      Width = 162
       Caption = ' '
       ClientHeight = 37
-      ClientWidth = 161
+      ClientWidth = 162
       TabOrder = 8
       Visible = False
       object ISObox: TComboBox
@@ -102,13 +102,12 @@ object f_capture: Tf_capture
         Caption = 'Gain'
         ParentColor = False
       end
-      object GainEdit: TEdit
-        Left = 70
-        Height = 31
+      object GainEdit: TSpinEdit
+        Left = 72
+        Height = 29
         Top = 4
-        Width = 88
-        ParentShowHint = False
-        ShowHint = False
+        Width = 89
+        MaxValue = 0
         TabOrder = 1
       end
     end
@@ -116,10 +115,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 33
       Top = 70
-      Width = 161
+      Width = 162
       Caption = ' '
       ClientHeight = 33
-      ClientWidth = 161
+      ClientWidth = 162
       TabOrder = 1
       object Binning: TComboBox
         Left = 70
@@ -149,10 +148,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 33
       Top = 103
-      Width = 161
+      Width = 162
       Caption = ' '
       ClientHeight = 33
-      ClientWidth = 161
+      ClientWidth = 162
       TabOrder = 2
       object Fname: TEdit
         Left = 70
@@ -173,22 +172,13 @@ object f_capture: Tf_capture
     end
     object Panel5: TPanel
       Left = 0
-      Height = 33
+      Height = 30
       Top = 136
-      Width = 161
+      Width = 162
       Caption = ' '
-      ClientHeight = 33
-      ClientWidth = 161
+      ClientHeight = 30
+      ClientWidth = 162
       TabOrder = 3
-      object SeqNum: TEdit
-        Left = 70
-        Height = 31
-        Hint = 'Number of exposure in this sequence'
-        Top = 1
-        Width = 90
-        TabOrder = 0
-        Text = '1'
-      end
       object Label4: TLabel
         Left = 2
         Height = 19
@@ -197,14 +187,24 @@ object f_capture: Tf_capture
         Caption = 'Count'
         ParentColor = False
       end
+      object SeqNum: TSpinEdit
+        Left = 72
+        Height = 29
+        Top = 0
+        Width = 88
+        MaxValue = 10000
+        MinValue = 1
+        TabOrder = 0
+        Value = 1
+      end
     end
     object Panel6: TPanel
       Left = 0
       Height = 33
-      Top = 169
-      Width = 161
+      Top = 166
+      Width = 162
       ClientHeight = 33
-      ClientWidth = 161
+      ClientWidth = 162
       TabOrder = 4
       object Label5: TLabel
         Left = 2
@@ -234,11 +234,11 @@ object f_capture: Tf_capture
     end
     object Panel7: TPanel
       Left = 0
-      Height = 32
-      Top = 202
-      Width = 161
-      ClientHeight = 32
-      ClientWidth = 161
+      Height = 30
+      Top = 199
+      Width = 162
+      ClientHeight = 30
+      ClientWidth = 162
       TabOrder = 5
       object CheckBoxDither: TCheckBox
         Left = 2
@@ -248,22 +248,24 @@ object f_capture: Tf_capture
         Caption = 'Dither every'
         TabOrder = 0
       end
-      object DitherCount: TEdit
+      object DitherCount: TSpinEdit
         Left = 120
-        Height = 31
+        Height = 29
         Top = 0
-        Width = 40
+        Width = 41
+        MaxValue = 10000
+        MinValue = 1
         TabOrder = 1
-        Text = '1'
+        Value = 1
       end
     end
     object Panel8: TPanel
       Left = 0
-      Height = 32
-      Top = 234
-      Width = 161
-      ClientHeight = 32
-      ClientWidth = 161
+      Height = 30
+      Top = 229
+      Width = 162
+      ClientHeight = 30
+      ClientWidth = 162
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
         Left = 2
@@ -273,22 +275,24 @@ object f_capture: Tf_capture
         Caption = 'Focus every'
         TabOrder = 0
       end
-      object FocusCount: TEdit
+      object FocusCount: TSpinEdit
         Left = 120
-        Height = 31
+        Height = 29
         Top = 0
-        Width = 40
+        Width = 41
+        MaxValue = 10000
+        MinValue = 1
         TabOrder = 1
-        Text = '1'
+        Value = 1
       end
     end
     object Panel9: TPanel
       Left = 0
       Height = 20
-      Top = 266
-      Width = 161
+      Top = 259
+      Width = 162
       ClientHeight = 20
-      ClientWidth = 161
+      ClientWidth = 162
       TabOrder = 7
       object BtnStart: TButton
         Left = 0

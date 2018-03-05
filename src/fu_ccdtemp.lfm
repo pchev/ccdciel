@@ -43,10 +43,11 @@ object f_ccdtemp: Tf_ccdtemp
       ClientWidth = 178
       TabOrder = 1
       object Current: TEdit
-        Left = 56
-        Height = 31
+        Left = 64
+        Height = 26
         Top = 0
         Width = 40
+        AutoSize = False
         ReadOnly = True
         TabOrder = 0
       end
@@ -59,7 +60,7 @@ object f_ccdtemp: Tf_ccdtemp
         ParentColor = False
       end
       object CCDcooler: TCheckBox
-        Left = 96
+        Left = 104
         Height = 21
         Top = 4
         Width = 63
@@ -72,18 +73,10 @@ object f_ccdtemp: Tf_ccdtemp
       Left = 0
       Height = 33
       Top = 29
-      Width = 122
+      Width = 128
       ClientHeight = 33
-      ClientWidth = 122
+      ClientWidth = 128
       TabOrder = 2
-      object Setpoint: TEdit
-        Left = 56
-        Height = 31
-        Top = 1
-        Width = 65
-        TabOrder = 0
-        Text = '0'
-      end
       object Label2: TLabel
         Left = 1
         Height = 19
@@ -91,6 +84,17 @@ object f_ccdtemp: Tf_ccdtemp
         Width = 51
         Caption = 'Setpoint'
         ParentColor = False
+      end
+      object Setpoint: TFloatSpinEdit
+        Left = 64
+        Height = 29
+        Top = 0
+        Width = 65
+        Increment = 1
+        MaxValue = 100
+        MinValue = -100
+        TabOrder = 0
+        Value = 0
       end
     end
     object BtnSet: TButton

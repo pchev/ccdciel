@@ -12,7 +12,7 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.8.0.6'
+  LCLVersion = '1.8.2.0'
   Visible = False
   object Panel1: TPanel
     Left = 0

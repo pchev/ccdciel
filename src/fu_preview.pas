@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, indiapi, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
 
@@ -35,11 +35,11 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
-    GainEdit: TEdit;
     ISObox: TComboBox;
     LabelGain: TLabel;
     Panel5: TPanel;
     PanelGain: TPanel;
+    GainEdit: TSpinEdit;
     StackPreview: TCheckBox;
     ExpTime: TComboBox;
     Binning: TComboBox;

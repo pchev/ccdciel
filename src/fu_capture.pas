@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, Graphics, UScaleDPI, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
 
@@ -37,9 +37,7 @@ type
     BtnStart: TButton;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
-    GainEdit: TEdit;
     ISObox: TComboBox;
-    FocusCount: TEdit;
     FrameType: TComboBox;
     ExpTime: TComboBox;
     Label1: TLabel;
@@ -59,9 +57,11 @@ type
     Panel7: TPanel;
     Panel8: TPanel;
     Panel9: TPanel;
-    SeqNum: TEdit;
     Fname: TEdit;
-    DitherCount: TEdit;
+    GainEdit: TSpinEdit;
+    SeqNum: TSpinEdit;
+    DitherCount: TSpinEdit;
+    FocusCount: TSpinEdit;
     StaticText1: TStaticText;
     procedure BtnStartClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);

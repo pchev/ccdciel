@@ -1151,7 +1151,7 @@ val(t,tt,n);
 if n<>0 then exit;
 Camera.Temperature:=tt;
 result:=msgOK;
-Ccdtemp.Setpoint.Text:=t;
+Ccdtemp.Setpoint.Value:=tt;
 except
   result:=msgFailed;
 end;
@@ -1292,7 +1292,7 @@ function Tf_scriptengine.cmd_Capture_SetCount(num:string):string;
 begin
 try
 result:=msgFailed;
-Capture.SeqNum.Text:=num;
+Capture.SeqNum.Value:=StrToInt(num);
 result:=msgOK;
 except
   result:=msgFailed;
@@ -1323,7 +1323,7 @@ result:=msgFailed;
 val(num,i,n);
 if n<>0 then exit;
 Capture.CheckBoxDither.Checked:=(i>0);
-if i>0 then Capture.DitherCount.Text:=num else Capture.DitherCount.Text:='1';
+if i>0 then Capture.DitherCount.Value:=i else Capture.DitherCount.value:=1;
 result:=msgOK;
 except
   result:=msgFailed;

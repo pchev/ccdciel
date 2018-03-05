@@ -92,12 +92,12 @@ object f_preview: Tf_preview
         Caption = 'Gain'
         ParentColor = False
       end
-      object GainEdit: TEdit
+      object GainEdit: TSpinEdit
         Left = 64
-        Height = 31
-        Top = 0
-        Width = 88
-        ParentShowHint = False
+        Height = 29
+        Top = 4
+        Width = 90
+        MaxValue = 0
         TabOrder = 1
       end
     end

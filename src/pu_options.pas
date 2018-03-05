@@ -27,26 +27,74 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, enhedits, Types;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, Spin, enhedits, Types;
 
 type
 
   { Tf_option }
 
   Tf_option = class(TForm)
-    AutofocusDynamicNumPoint: TEdit;
-    AutofocusDynamicMovement: TEdit;
     BtnDisableDelay: TButton;
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    ElevationMin: TFloatSpinEdit;
+    ClippingLow: TFloatSpinEdit;
+    ClippingHigh: TFloatSpinEdit;
+    BPMsigma: TFloatSpinEdit;
+    CameraAutoCoolTemp: TFloatSpinEdit;
+    FlatMinExp: TFloatSpinEdit;
+    FlatMaxExp: TFloatSpinEdit;
+    FlatLevelMin: TSpinEdit;
+    FlatLevelMax: TSpinEdit;
+    AutofocusExposure: TFloatSpinEdit;
+    AutofocusTolerance: TFloatSpinEdit;
+    AutofocusMinSNR: TFloatSpinEdit;
+    AutofocusStartHFD: TFloatSpinEdit;
+    AutofocusNearHFD: TFloatSpinEdit;
+    AutofocusPrecisionSlew: TFloatSpinEdit;
+    Downsample: TSpinEdit;
+    DitherPixel: TFloatSpinEdit;
+    SettlePixel: TFloatSpinEdit;
+    SlewExp: TFloatSpinEdit;
+    SlewPrec: TFloatSpinEdit;
+    SourcesLimit: TSpinEdit;
+    PlatesolveWait: TSpinEdit;
+    SlewRetry: TSpinEdit;
+    SlewBin: TSpinEdit;
+    SlewDelay: TSpinEdit;
+    MinutesPastMeridian: TSpinEdit;
+    MinutesPastMeridianMin: TSpinEdit;
+    MeridianFlipPauseTimeout: TSpinEdit;
+    SettleMinTime: TSpinEdit;
+    SettleMaxTime: TSpinEdit;
+    CalibrationDelay: TSpinEdit;
+    StarLostCancel: TSpinEdit;
+    StarLostRestart: TSpinEdit;
+    Tolerance: TFloatSpinEdit;
+    MaxRadius: TFloatSpinEdit;
+    Focale: TFloatSpinEdit;
+    PixelSize: TFloatSpinEdit;
+    FocuserTempCoeff: TFloatSpinEdit;
+    FocusWindow: TSpinEdit;
+    FocuserBacklash: TSpinEdit;
+    FocuserDelay: TSpinEdit;
+    AutofocusBinning: TSpinEdit;
+    AutofocusNearNum: TSpinEdit;
+    AutofocusSlippageOffset: TSpinEdit;
+    AutofocusDynamicNumPoint: TSpinEdit;
+    AutofocusDynamicMovement: TSpinEdit;
+    AutofocusMaxSpeed: TSpinEdit;
+    AutofocusMinSpeed: TSpinEdit;
+    AstrometryTimeout: TSpinEdit;
+    StarWindow: TSpinEdit;
+    TemperatureSlope: TFloatSpinEdit;
     Languages: TComboBox;
     Label18: TLabel;
     Labelmsg: TLabel;
+    VideoPreviewRate: TSpinEdit;
     UseTcpServer: TCheckBox;
     FocuserBacklashActive: TCheckBox;
-    ClippingLow: TEdit;
-    ClippingHigh: TEdit;
     FocuserBacklashDirection: TComboBox;
     GroupBox19: TGroupBox;
     Label100: TLabel;
@@ -59,31 +107,14 @@ type
     ButtonDir: TButton;
     BayerMode: TComboBox;
     Autofocusmode: TRadioGroup;
-    AutofocusMinSpeed: TEdit;
-    AutofocusMaxSpeed: TEdit;
-    AutofocusNearHFD: TEdit;
-    AutofocusExposure: TEdit;
-    AutofocusNearNum: TEdit;
-    BPMsigma: TEdit;
-    AutofocusBinning: TEdit;
-    AutofocusTolerance: TEdit;
     AstUseScript: TCheckBox;
     AstCustScript: TEdit;
     ButtonTempDir: TButton;
     CameraAutoCool: TCheckBox;
-    AutofocusMinSNR: TEdit;
-    AutofocusStartHFD: TEdit;
-    AutofocusPrecisionSlew: TEdit;
     AutofocusSlippageCorrection: TCheckBox;
-    AutofocusSlippageOffset: TEdit;
     TempDir: TEdit;
     FlatAutoExposure: TCheckBox;
-    FlatLevelMax: TEdit;
-    FlatMinExp: TEdit;
-    FlatMaxExp: TEdit;
-    FlatLevelMin: TEdit;
     FileOptions: TStringGrid;
-    FocuserDelay: TEdit;
     GroupBox18: TGroupBox;
     Label91: TLabel;
     Label92: TLabel;
@@ -98,7 +129,6 @@ type
     StackShow: TCheckBox;
     StackUseDark: TCheckBox;
     StackDarkFile: TFileNameEdit;
-    FocuserTempCoeff: TEdit;
     GroupBox16: TGroupBox;
     GroupBox17: TGroupBox;
     Label81: TLabel;
@@ -117,11 +147,9 @@ type
     LinGuiderSocket: TEdit;
     LinGuiderHostname: TEdit;
     LinGuiderPort: TEdit;
-    PlatesolveWait: TEdit;
     Label79: TLabel;
     Label80: TLabel;
     PlatesolveFolder: TEdit;
-    ElevationMin: TEdit;
     Label78: TLabel;
     platesolve: TGroupBox;
     HorizonFile: TFileNameEdit;
@@ -133,19 +161,14 @@ type
     PageHNSKY: TPage;
     rbLinUnixSocket: TRadioButton;
     rbLinTCP: TRadioButton;
-    SlewDelay: TEdit;
     FolderOptions: TStringGrid;
     TabSheet12: TTabSheet;
     TemperatureSlopeActive: TCheckBox;
-    TemperatureSlope: TEdit;
-    CameraAutoCoolTemp: TEdit;
     GroupBox14: TGroupBox;
     GroupBox15: TGroupBox;
     Label74: TLabel;
     Label75: TLabel;
     PanelTemperatureSlope: TPanel;
-    StarLostRestart: TEdit;
-    StarLostCancel: TEdit;
     GroupBox13: TGroupBox;
     Label70: TLabel;
     Label71: TLabel;
@@ -156,7 +179,6 @@ type
     Label69: TLabel;
     SlewFilter: TComboBox;
     FocusStarMag: TComboBox;
-    FocuserBacklash: TEdit;
     GroupBox10: TGroupBox;
     GroupCorrection: TGroupBox;
     GroupBox11: TGroupBox;
@@ -181,7 +203,6 @@ type
     Label64: TLabel;
     Label65: TLabel;
     Label66: TLabel;
-    MinutesPastMeridianMin: TEdit;
     PageDynamic: TPage;
     PageNone: TPage;
     PageVcurve: TPage;
@@ -197,24 +218,19 @@ type
     BlueBalance: TTrackBar;
     TabSheet11: TTabSheet;
     StackGroup: TGroupBox;
-    VideoPreviewRate: TEdit;
     VideoGroup: TGroupBox;
     Label44: TLabel;
     Label45: TLabel;
     MeridianWarning: TLabel;
-    MeridianFlipPauseTimeout: TEdit;
     Label41: TLabel;
     Label42: TLabel;
     Label43: TLabel;
     MeridianFlipPauseBefore: TCheckBox;
     DebayerPreview: TCheckBox;
     CheckBoxLocalCdc: TCheckBox;
-    CalibrationDelay: TEdit;
-    AstrometryTimeout: TEdit;
     CygwinPath: TEdit;
     CaptureDir: TEdit;
     MeridianFlipPauseAfter: TCheckBox;
-    MinutesPastMeridian: TEdit;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
     hemis: TComboBox;
@@ -240,10 +256,6 @@ type
     Page3: TPage;
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
-    SlewPrec: TEdit;
-    SlewRetry: TEdit;
-    SlewExp: TEdit;
-    SlewBin: TEdit;
     GroupBox7: TGroupBox;
     Label28: TLabel;
     Label29: TLabel;
@@ -268,15 +280,11 @@ type
     DitherRAonly: TCheckBox;
     Label23: TLabel;
     PrecSlewBox: TRadioGroup;
-    SettlePixel: TEdit;
-    SettleMinTime: TEdit;
-    SettleMaxTime: TEdit;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     Label20: TLabel;
     Label21: TLabel;
     Label22: TLabel;
-    DitherPixel: TEdit;
     PHDhostname: TEdit;
     PHDport: TEdit;
     ElbrusFolder: TEdit;
@@ -306,24 +314,17 @@ type
     Label5: TLabel;
     PageControl1: TPageControl;
     Plot: TCheckBox;
-    Downsample: TEdit;
     ResolverBox: TRadioGroup;
-    SourcesLimit: TEdit;
     Label8: TLabel;
     Label9: TLabel;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     TabSheet4: TTabSheet;
-    Tolerance: TEdit;
     Label7: TLabel;
-    MaxRadius: TEdit;
     Label6: TLabel;
     PixelSizeFromCamera: TCheckBox;
     FocaleFromTelescope: TCheckBox;
-    PixelSize: TEdit;
-    Focale: TEdit;
-    FocusWindow: TEdit;
     astrometrynet: TGroupBox;
     Label2: TLabel;
     Label3: TLabel;
@@ -333,7 +334,6 @@ type
     Label1: TLabel;
     Label14: TLabel;
     Panel1: TPanel;
-    StarWindow: TEdit;
     RefTreshold: TTrackBar;
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
@@ -368,7 +368,7 @@ type
     FGetPixelSize, FGetFocale: TNotifyEvent;
     Flatitude, Flongitude: double;
     Lockchange: boolean;
-    SaveTemperatureSlope: string;
+    SaveTemperatureSlope: double;
     procedure msg(txt:string);
     function GetResolver: integer;
     procedure SetResolver(value:integer);
@@ -413,8 +413,8 @@ end;
 
 procedure Tf_option.FormShow(Sender: TObject);
 begin
-  SaveTemperatureSlope:=TemperatureSlope.Text;
-  f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Text<>'0.0');
+  SaveTemperatureSlope:=TemperatureSlope.Value;
+  f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Value<>0);
   FileOrFolderOptionsRenumber(FolderOptions);
   FileOrFolderOptionsRenumber(FileOptions);
 end;
@@ -792,12 +792,12 @@ end;
 
 procedure Tf_option.BtnDisableDelayClick(Sender: TObject);
 begin
-  FocuserDelay.Text:='0';
+  FocuserDelay.Value:=0;
 end;
 
 procedure Tf_option.BtnDisableFocuserTempClick(Sender: TObject);
 begin
-  FocuserTempCoeff.Text:='0.0';
+  FocuserTempCoeff.Value:=0.0;
 end;
 
 procedure Tf_option.BtnFileDefaultClick(Sender: TObject);
@@ -825,16 +825,8 @@ procedure Tf_option.CheckFocusWindow(Sender: TObject);
 var a,b: integer;
 begin
   msg('');
-  a:=StrToIntDef(StarWindow.Text,-9999);
-  b:=StrToIntDef(FocusWindow.Text,-9999);
-  if (a<0) then begin
-     msg(Format(rsInvalidNumbe, [label14.Caption+blank+StarWindow.Text]));
-     exit;
-  end;
-  if (b<0) then begin
-     msg(Format(rsInvalidNumbe, [label2.Caption+blank+FocusWindow.Text]));
-     exit;
-  end;
+  a:=StarWindow.Value;
+  b:=FocusWindow.Value;
   if (4*a)>b then msg(rsFocusWindowM);
 end;
 
@@ -842,17 +834,8 @@ procedure Tf_option.CheckStartNearHFD(Sender: TObject);
 var a,b: double;
 begin
   msg('');
-  a:=StrToFloatDef(AutofocusStartHFD.Text,-9999);
-  b:=StrToFloatDef(AutofocusNearHFD.Text,-9999);
-  if (a<0) then begin
-     msg(Format(rsInvalidNumbe, [label82.Caption+blank+AutofocusStartHFD.Text])
-       );
-     exit;
-  end;
-  if (b<0) then begin
-     msg(Format(rsInvalidNumbe, [label48.Caption+blank+AutofocusNearHFD.Text]));
-     exit;
-  end;
+  a:=AutofocusStartHFD.Value;
+  b:=AutofocusNearHFD.Value;
   if a<=b then msg(rsNearHFDMustB);
 end;
 
@@ -876,11 +859,11 @@ end;
 procedure Tf_option.TemperatureSlopeActiveClick(Sender: TObject);
 begin
   if TemperatureSlopeActive.Checked then begin
-     TemperatureSlope.Text:=SaveTemperatureSlope;
+     TemperatureSlope.Value:=SaveTemperatureSlope;
      PanelTemperatureSlope.Visible:=true;
   end
   else begin
-     TemperatureSlope.Text:='0';
+     TemperatureSlope.Value:=0;
      PanelTemperatureSlope.Visible:=false;
   end;
 end;

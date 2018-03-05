@@ -207,13 +207,13 @@ begin
     if hasGainISO then
       Fcapture.ISObox.ItemIndex:=p.gain
     else
-      Fcapture.GainEdit.Text:=IntToStr(p.gain);
-    Fcapture.SeqNum.Text:=p.count_str;
+      Fcapture.GainEdit.Value:=p.gain;
+    Fcapture.SeqNum.Value:=p.count;
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Fcapture.CheckBoxDither.Checked:=p.dither;
-    Fcapture.DitherCount.Text:=p.dithercount_str;
+    Fcapture.DitherCount.Value:=p.dithercount;
     Fcapture.CheckBoxFocus.Checked:=p.autofocus;
-    Fcapture.FocusCount.Text:=p.autofocuscount_str;
+    Fcapture.FocusCount.Value:=p.autofocuscount;
     if p.autofocusstart then Fcapture.FocusNow:=true;
     Ffilter.Filters.ItemIndex:=p.filter;
     Ffilter.FiltersChange(self);

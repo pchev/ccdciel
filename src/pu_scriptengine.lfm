@@ -9,6 +9,7 @@ object f_scriptengine: Tf_scriptengine
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  LCLVersion = '1.8.2.0'
   Visible = False
   object TplPSScript: TPSScript
     CompilerOptions = []

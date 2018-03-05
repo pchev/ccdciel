@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 496
     Top = 0
     Width = 482
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
-    TabIndex = 6
+    TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -139,8 +139,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 260
-          ClientWidth = 458
+          ClientHeight = 233
+          ClientWidth = 452
           object BtnFileDefault: TButton
             Left = 390
             Height = 25
@@ -182,8 +182,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 260
-          ClientWidth = 458
+          ClientHeight = 233
+          ClientWidth = 452
           object BtnFolderDefault: TButton
             Left = 390
             Height = 25
@@ -306,7 +306,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 13
+        ClientHeight = 31
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -380,7 +380,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 13
+        ClientHeight = 31
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -494,12 +494,17 @@ object f_option: Tf_option
         ParentColor = False
         WordWrap = True
       end
-      object ElevationMin: TEdit
+      object ElevationMin: TFloatSpinEdit
         Left = 144
-        Height = 31
-        Top = 325
-        Width = 56
+        Height = 29
+        Top = 328
+        Width = 81
+        DecimalPlaces = 1
+        Increment = 1
+        MaxValue = 89
+        MinValue = 0
         TabOrder = 6
+        Value = 0
       end
     end
     object TabSheet8: TTabSheet
@@ -550,7 +555,7 @@ object f_option: Tf_option
         end
         object RedBalance: TTrackBar
           Left = 272
-          Height = 36
+          Height = 43
           Top = 0
           Width = 100
           Max = 100
@@ -563,7 +568,7 @@ object f_option: Tf_option
         end
         object GreenBalance: TTrackBar
           Left = 272
-          Height = 36
+          Height = 43
           Top = 29
           Width = 100
           Max = 100
@@ -576,7 +581,7 @@ object f_option: Tf_option
         end
         object BlueBalance: TTrackBar
           Left = 272
-          Height = 36
+          Height = 43
           Top = 56
           Width = 100
           Max = 100
@@ -634,7 +639,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 23
+          ClientHeight = 41
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -682,12 +687,15 @@ object f_option: Tf_option
           Caption = 'Video preview frame rate '
           ParentColor = False
         end
-        object VideoPreviewRate: TEdit
-          Left = 200
-          Height = 31
+        object VideoPreviewRate: TSpinEdit
+          Left = 192
+          Height = 29
           Top = 0
-          Width = 48
+          Width = 72
+          MaxValue = 60
+          MinValue = 1
           TabOrder = 0
+          Value = 1
         end
       end
       object GroupBox10: TGroupBox
@@ -699,13 +707,6 @@ object f_option: Tf_option
         ClientHeight = 34
         ClientWidth = 438
         TabOrder = 3
-        object BPMsigma: TEdit
-          Left = 200
-          Height = 31
-          Top = 0
-          Width = 48
-          TabOrder = 0
-        end
         object Label62: TLabel
           Left = 14
           Height = 19
@@ -721,6 +722,18 @@ object f_option: Tf_option
           Width = 36
           Caption = 'sigma'
           ParentColor = False
+        end
+        object BPMsigma: TFloatSpinEdit
+          Left = 191
+          Height = 29
+          Top = 0
+          Width = 57
+          DecimalPlaces = 1
+          Increment = 1
+          MaxValue = 8
+          MinValue = 1
+          TabOrder = 0
+          Value = 1
         end
       end
       object StackGroup: TGroupBox
@@ -783,13 +796,6 @@ object f_option: Tf_option
           Caption = 'Shadow low ADU'
           ParentColor = False
         end
-        object ClippingLow: TEdit
-          Left = 136
-          Height = 31
-          Top = 0
-          Width = 67
-          TabOrder = 0
-        end
         object Label100: TLabel
           Left = 208
           Height = 19
@@ -798,12 +804,27 @@ object f_option: Tf_option
           Caption = 'Highlight high ADU'
           ParentColor = False
         end
-        object ClippingHigh: TEdit
-          Left = 360
-          Height = 31
+        object ClippingLow: TFloatSpinEdit
+          Left = 120
+          Height = 29
           Top = 0
-          Width = 71
+          Width = 84
+          Increment = 1
+          MaxValue = 65535
+          MinValue = 0
+          TabOrder = 0
+          Value = 0
+        end
+        object ClippingHigh: TFloatSpinEdit
+          Left = 352
+          Height = 29
+          Top = 0
+          Width = 81
+          Increment = 1
+          MaxValue = 65535
+          MinValue = 0
           TabOrder = 1
+          Value = 65535
         end
       end
     end
@@ -828,13 +849,6 @@ object f_option: Tf_option
           Caption = 'Cool down when camera is connected'
           TabOrder = 0
         end
-        object CameraAutoCoolTemp: TEdit
-          Left = 40
-          Height = 31
-          Top = 40
-          Width = 56
-          TabOrder = 1
-        end
         object Label75: TLabel
           Left = 120
           Height = 19
@@ -842,6 +856,17 @@ object f_option: Tf_option
           Width = 42
           Caption = 'degree'
           ParentColor = False
+        end
+        object CameraAutoCoolTemp: TFloatSpinEdit
+          Left = 32
+          Height = 29
+          Top = 44
+          Width = 72
+          Increment = 1
+          MaxValue = 100
+          MinValue = -100
+          TabOrder = 1
+          Value = 0
         end
       end
       object GroupBox15: TGroupBox
@@ -867,16 +892,9 @@ object f_option: Tf_option
           Height = 40
           Top = 48
           Width = 328
-          ClientHeight = 36
-          ClientWidth = 324
+          ClientHeight = 40
+          ClientWidth = 328
           TabOrder = 1
-          object TemperatureSlope: TEdit
-            Left = 8
-            Height = 31
-            Top = 8
-            Width = 80
-            TabOrder = 0
-          end
           object Label74: TLabel
             Left = 112
             Height = 19
@@ -884,6 +902,17 @@ object f_option: Tf_option
             Width = 118
             Caption = 'Degrees per minute'
             ParentColor = False
+          end
+          object TemperatureSlope: TFloatSpinEdit
+            Left = 24
+            Height = 29
+            Top = 8
+            Width = 72
+            Increment = 1
+            MaxValue = 100
+            MinValue = 0
+            TabOrder = 0
+            Value = 0
           end
         end
       end
@@ -941,13 +970,6 @@ object f_option: Tf_option
           Caption = 'Exposure time'
           ParentColor = False
         end
-        object FlatMinExp: TEdit
-          Left = 200
-          Height = 31
-          Top = 88
-          Width = 56
-          TabOrder = 1
-        end
         object Label92: TLabel
           Left = 273
           Height = 19
@@ -955,13 +977,6 @@ object f_option: Tf_option
           Width = 29
           Caption = 'Max:'
           ParentColor = False
-        end
-        object FlatMaxExp: TEdit
-          Left = 312
-          Height = 31
-          Top = 88
-          Width = 56
-          TabOrder = 2
         end
         object Label93: TLabel
           Left = 160
@@ -979,13 +994,6 @@ object f_option: Tf_option
           Caption = 'Flat image mean level'
           ParentColor = False
         end
-        object FlatLevelMin: TEdit
-          Left = 200
-          Height = 31
-          Top = 128
-          Width = 56
-          TabOrder = 3
-        end
         object Label95: TLabel
           Left = 160
           Height = 19
@@ -1002,13 +1010,6 @@ object f_option: Tf_option
           Caption = 'Max:'
           ParentColor = False
         end
-        object FlatLevelMax: TEdit
-          Left = 312
-          Height = 31
-          Top = 128
-          Width = 56
-          TabOrder = 4
-        end
         object Label97: TLabel
           Left = 8
           Height = 40
@@ -1018,6 +1019,48 @@ object f_option: Tf_option
           Caption = 'Automatic flat exposure is required fot the twilight flat.'
           ParentColor = False
           WordWrap = True
+        end
+        object FlatMinExp: TFloatSpinEdit
+          Left = 200
+          Height = 29
+          Top = 90
+          Width = 65
+          DecimalPlaces = 3
+          Increment = 1
+          MaxValue = 600
+          MinValue = 0
+          TabOrder = 1
+          Value = 0
+        end
+        object FlatMaxExp: TFloatSpinEdit
+          Left = 312
+          Height = 29
+          Top = 91
+          Width = 65
+          DecimalPlaces = 3
+          Increment = 1
+          MaxValue = 600
+          MinValue = 0
+          TabOrder = 2
+          Value = 0
+        end
+        object FlatLevelMin: TSpinEdit
+          Left = 200
+          Height = 29
+          Top = 128
+          Width = 65
+          Increment = 1000
+          MaxValue = 65535
+          TabOrder = 3
+        end
+        object FlatLevelMax: TSpinEdit
+          Left = 312
+          Height = 29
+          Top = 128
+          Width = 65
+          Increment = 1000
+          MaxValue = 65535
+          TabOrder = 4
         end
       end
     end
@@ -1034,16 +1077,6 @@ object f_option: Tf_option
         ClientHeight = 64
         ClientWidth = 414
         TabOrder = 0
-        object StarWindow: TEdit
-          Left = 270
-          Height = 31
-          Hint = 'The size of the frame used to detect a star. '#10'This is in unbinned pixel and must be bigger than the highest HFD you can reach when autofocusing'
-          Top = 4
-          Width = 54
-          OnEditingDone = CheckFocusWindow
-          ParentShowHint = False
-          TabOrder = 0
-        end
         object Label14: TLabel
           Left = 8
           Height = 19
@@ -1061,15 +1094,27 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object FocusWindow: TEdit
+        object StarWindow: TSpinEdit
           Left = 270
-          Height = 31
-          Hint = 'The camera frame used during focus operation to speedup the image download from camera.'#10'This value is in unbinned pixel and must be bigger than the star detection window.'
-          Top = 33
-          Width = 54
+          Height = 29
+          Top = 4
+          Width = 74
+          MaxValue = 1000
+          MinValue = 10
           OnEditingDone = CheckFocusWindow
-          ParentShowHint = False
+          TabOrder = 0
+          Value = 10
+        end
+        object FocusWindow: TSpinEdit
+          Left = 270
+          Height = 29
+          Top = 32
+          Width = 74
+          MaxValue = 1000
+          MinValue = 100
+          OnEditingDone = CheckFocusWindow
           TabOrder = 1
+          Value = 100
         end
       end
       object GroupCorrection: TGroupBox
@@ -1081,15 +1126,6 @@ object f_option: Tf_option
         ClientHeight = 68
         ClientWidth = 414
         TabOrder = 1
-        object FocuserBacklash: TEdit
-          Left = 270
-          Height = 31
-          Hint = 'The number of additional steps used for the compensation movement. '#10'This can be greater than the actual backlash.'
-          Top = 0
-          Width = 54
-          ParentShowHint = False
-          TabOrder = 0
-        end
         object Label98: TLabel
           Left = 4
           Height = 19
@@ -1098,26 +1134,17 @@ object f_option: Tf_option
           Caption = 'Stabilization delay after move'
           ParentColor = False
         end
-        object FocuserDelay: TEdit
-          Left = 270
-          Height = 31
-          Hint = 'The number of additional second we wait after the focuser finish the move.'
-          Top = 34
-          Width = 54
-          ParentShowHint = False
-          TabOrder = 1
-        end
         object BtnDisableDelay: TButton
           Left = 330
           Height = 21
-          Top = 39
+          Top = 40
           Width = 75
           Caption = 'Disable'
           OnClick = BtnDisableDelayClick
-          TabOrder = 2
+          TabOrder = 0
         end
         object FocuserBacklashDirection: TComboBox
-          Left = 325
+          Left = 330
           Height = 31
           Hint = 'The direction the focuser will always finish to move.'#10'If using auto-focus set the same move direction.'
           Top = 1
@@ -1131,7 +1158,7 @@ object f_option: Tf_option
           OnChange = CheckFocuserDirection
           ParentShowHint = False
           Style = csDropDownList
-          TabOrder = 3
+          TabOrder = 1
           Text = 'IN'
         end
         object FocuserBacklashActive: TCheckBox
@@ -1143,6 +1170,22 @@ object f_option: Tf_option
           Caption = 'Backlash compensation'
           OnChange = CheckFocuserDirection
           ParentShowHint = False
+          TabOrder = 2
+        end
+        object FocuserBacklash: TSpinEdit
+          Left = 270
+          Height = 29
+          Top = 1
+          Width = 54
+          MaxValue = 10000
+          TabOrder = 3
+        end
+        object FocuserDelay: TSpinEdit
+          Left = 270
+          Height = 29
+          Top = 36
+          Width = 54
+          MaxValue = 30
           TabOrder = 4
         end
       end
@@ -1185,15 +1228,6 @@ object f_option: Tf_option
           Caption = 'Temperature coefficient in steps/C'
           ParentColor = False
         end
-        object FocuserTempCoeff: TEdit
-          Left = 270
-          Height = 31
-          Hint = 'The temperature coefficient of the imaging system in focuser steps per degree Celsius.'#13#10'The coefficient is positive if the focuser need to move OUT when the temperature drop.'
-          Top = 4
-          Width = 54
-          ParentShowHint = False
-          TabOrder = 0
-        end
         object BtnDisableFocuserTemp: TButton
           Left = 330
           Height = 23
@@ -1201,7 +1235,18 @@ object f_option: Tf_option
           Width = 75
           Caption = 'Disable'
           OnClick = BtnDisableFocuserTempClick
+          TabOrder = 0
+        end
+        object FocuserTempCoeff: TFloatSpinEdit
+          Left = 270
+          Height = 29
+          Top = 5
+          Width = 54
+          Increment = 1
+          MaxValue = 1000
+          MinValue = 0
           TabOrder = 1
+          Value = 0
         end
       end
     end
@@ -1262,15 +1307,6 @@ object f_option: Tf_option
           Caption = 'seconds'
           ParentColor = False
         end
-        object AutofocusExposure: TEdit
-          Left = 212
-          Height = 31
-          Hint = 'The exposure time to use for the autofocus operation.'
-          Top = 0
-          Width = 60
-          ParentShowHint = False
-          TabOrder = 0
-        end
         object Label58: TLabel
           Left = 8
           Height = 19
@@ -1289,7 +1325,7 @@ object f_option: Tf_option
           Checked = True
           OnChange = CheckFocuserDirection
           ParentShowHint = False
-          TabOrder = 2
+          TabOrder = 1
           TabStop = True
         end
         object AutofocusMoveDirOut: TRadioButton
@@ -1301,7 +1337,7 @@ object f_option: Tf_option
           Caption = 'Out'
           OnChange = CheckFocuserDirection
           ParentShowHint = False
-          TabOrder = 1
+          TabOrder = 0
         end
         object AutofocusNotebook: TNotebook
           Left = 0
@@ -1309,7 +1345,7 @@ object f_option: Tf_option
           Top = 150
           Width = 440
           PageIndex = 0
-          TabOrder = 3
+          TabOrder = 2
           TabStop = True
           object PageVcurve: TPage
             object Label61: TLabel
@@ -1337,16 +1373,6 @@ object f_option: Tf_option
               Caption = 'HFD'
               ParentColor = False
             end
-            object AutofocusStartHFD: TEdit
-              Left = 212
-              Height = 31
-              Hint = 'The focus starting point on the V curve used to determine the Near focus position. '#10'Use a high value near the top of the V curve but inside the measurement area. '#10'A typical value is 20.0.'
-              Top = 0
-              Width = 60
-              OnEditingDone = CheckStartNearHFD
-              ParentShowHint = False
-              TabOrder = 0
-            end
             object AutofocusSlippageCorrection: TCheckBox
               Left = 8
               Height = 21
@@ -1355,7 +1381,7 @@ object f_option: Tf_option
               Width = 142
               Caption = 'Slippage correction '
               ParentShowHint = False
-              TabOrder = 1
+              TabOrder = 0
             end
             object Label88: TLabel
               Left = 8
@@ -1365,24 +1391,6 @@ object f_option: Tf_option
               Caption = 'Estimated slippage since last learning'
               ParentColor = False
             end
-            object AutofocusSlippageOffset: TEdit
-              Left = 352
-              Height = 31
-              Top = 48
-              Width = 50
-              ReadOnly = True
-              TabOrder = 2
-            end
-            object AutofocusNearHFD: TEdit
-              Left = 352
-              Height = 31
-              Hint = 'When a star is smaller than this HFD we consider we are approaching focus. '#10'Note this is NOT the focus HFD, the star must show an extended surface.'#10'This is the reference point for V curve method.'#10'A typical value is from 6 to 10.'
-              Top = 0
-              Width = 60
-              OnEditingDone = CheckStartNearHFD
-              ParentShowHint = False
-              TabOrder = 3
-            end
             object Label48: TLabel
               Left = 280
               Height = 19
@@ -1391,77 +1399,115 @@ object f_option: Tf_option
               Caption = 'Near focus'
               ParentColor = False
             end
+            object AutofocusStartHFD: TFloatSpinEdit
+              Left = 212
+              Height = 29
+              Top = 0
+              Width = 60
+              DecimalPlaces = 1
+              Increment = 1
+              MaxValue = 99
+              MinValue = 1
+              OnEditingDone = CheckStartNearHFD
+              TabOrder = 1
+              Value = 1
+            end
+            object AutofocusNearHFD: TFloatSpinEdit
+              Left = 352
+              Height = 29
+              Top = 0
+              Width = 60
+              DecimalPlaces = 1
+              Increment = 1
+              MaxValue = 99
+              MinValue = 1
+              OnEditingDone = CheckStartNearHFD
+              TabOrder = 2
+              Value = 1
+            end
+            object AutofocusSlippageOffset: TSpinEdit
+              Left = 352
+              Height = 29
+              Top = 48
+              Width = 60
+              MaxValue = 0
+              TabOrder = 3
+            end
           end
           object PageDynamic: TPage
             object Label64: TLabel
               Left = 8
-              Height = 11
+              Height = 19
               Top = 6
-              Width = 131
+              Width = 160
               Caption = 'Number of dynamic points'
               ParentColor = False
             end
-            object AutofocusDynamicNumPoint: TEdit
-              Left = 212
-              Height = 21
-              Hint = 'The number of measurement point to take at each focus operation.'#10'A good value is from 5 to 15.'
-              Top = 2
-              Width = 60
-              ParentShowHint = False
-              TabOrder = 0
-            end
-            object AutofocusDynamicMovement: TEdit
-              Left = 212
-              Height = 21
-              Hint = 'The number of step to move the focuser between each measurement point.'#10'This must big enough to get a maximum defocused star size with a HFD at leat 10'
-              Top = 34
-              Width = 60
-              ParentShowHint = False
-              TabOrder = 1
-            end
             object Label65: TLabel
               Left = 8
-              Height = 11
+              Height = 19
               Top = 38
-              Width = 131
+              Width = 162
               Caption = 'Movement between points'
               ParentColor = False
+            end
+            object AutofocusDynamicNumPoint: TSpinEdit
+              Left = 212
+              Height = 29
+              Top = 0
+              Width = 60
+              MaxValue = 30
+              MinValue = 5
+              TabOrder = 0
+              Value = 5
+            end
+            object AutofocusDynamicMovement: TSpinEdit
+              Left = 212
+              Height = 29
+              Top = 32
+              Width = 60
+              MaxValue = 10000
+              MinValue = 1
+              TabOrder = 1
+              Value = 1
             end
           end
           object PageIterative: TPage
             object Label46: TLabel
               Left = 8
-              Height = 15
+              Height = 19
               Top = 8
-              Width = 156
+              Width = 145
               Caption = 'Initial movement (steps)'
               ParentColor = False
             end
-            object AutofocusMinSpeed: TEdit
-              Left = 212
-              Height = 23
-              Hint = 'The focuser movement in step to use between each measurement for the last iteration. '#10'When we reach a movement smaller than this one we consider we are at focus.'
-              Top = 34
-              Width = 60
-              ParentShowHint = False
-              TabOrder = 0
-            end
-            object AutofocusMaxSpeed: TEdit
-              Left = 212
-              Height = 23
-              Hint = 'The focuser movement in step to use between each measurement in the first iteration. '#10'Must be big enough to quickly reach and pass the focus point.'
-              Top = 4
-              Width = 60
-              ParentShowHint = False
-              TabOrder = 1
-            end
             object Label47: TLabel
               Left = 8
-              Height = 15
-              Top = 38
-              Width = 151
+              Height = 19
+              Top = 42
+              Width = 140
               Caption = 'Final movement (steps)'
               ParentColor = False
+            end
+            object AutofocusMaxSpeed: TSpinEdit
+              Left = 212
+              Height = 29
+              Top = 6
+              Width = 60
+              MaxValue = 10000
+              MinValue = 10
+              TabOrder = 0
+              Value = 10
+            end
+            object AutofocusMinSpeed: TSpinEdit
+              Left = 212
+              Height = 29
+              Top = 38
+              Width = 60
+              MaxValue = 1000
+              MinValue = 2
+              TabOrder = 1
+              Value = 2
             end
           end
           object PageNone: TPage
@@ -1475,23 +1521,24 @@ object f_option: Tf_option
           BevelOuter = bvNone
           ClientHeight = 31
           ClientWidth = 408
-          TabOrder = 4
+          TabOrder = 3
           object Label57: TLabel
             Left = 8
             Height = 19
             Top = 4
-            Width = 169
+            Width = 177
             Caption = 'Number of exposure by point'
             ParentColor = False
           end
-          object AutofocusNearNum: TEdit
+          object AutofocusNearNum: TSpinEdit
             Left = 212
-            Height = 31
-            Hint = 'The number of exposure we take to get a mean HFD value '#10'when the HFD is smaller than the value to the left.'
+            Height = 29
             Top = 0
-            Width = 50
-            ParentShowHint = False
+            Width = 60
+            MaxValue = 10
+            MinValue = 1
             TabOrder = 0
+            Value = 1
           end
         end
         object Label50: TLabel
@@ -1501,15 +1548,6 @@ object f_option: Tf_option
           Width = 46
           Caption = 'Binning'
           ParentColor = False
-        end
-        object AutofocusBinning: TEdit
-          Left = 212
-          Height = 31
-          Hint = 'The binning to use for autofocus operation.'
-          Top = 28
-          Width = 60
-          ParentShowHint = False
-          TabOrder = 5
         end
         object Label54: TLabel
           Left = 8
@@ -1527,24 +1565,6 @@ object f_option: Tf_option
           Caption = 'HFD'
           ParentColor = False
         end
-        object AutofocusTolerance: TEdit
-          Left = 212
-          Height = 31
-          Hint = 'The maximal HFD value to consider the autofocus a success. '#10'Beware that a too small value here will return the focuser to it''s initial position.'#10'Set a value high enough to avoid this problem.'
-          Top = 84
-          Width = 60
-          ParentShowHint = False
-          TabOrder = 6
-        end
-        object AutofocusMinSNR: TEdit
-          Left = 352
-          Height = 31
-          Hint = 'If a star measurement during autofocus return a SNR ratio value lower than this setting the autofocus is canceled.'#10'Beware that a too big value here will return the focuser to it''s initial position.'#10'Set a value low enough to avoid this problem but enough for a good measurement quality at the Near focus HFP position.'
-          Top = 84
-          Width = 50
-          ParentShowHint = False
-          TabOrder = 7
-        end
         object Label81: TLabel
           Left = 280
           Height = 19
@@ -1552,6 +1572,50 @@ object f_option: Tf_option
           Width = 51
           Caption = 'min.SNR'
           ParentColor = False
+        end
+        object AutofocusExposure: TFloatSpinEdit
+          Left = 212
+          Height = 29
+          Top = 0
+          Width = 60
+          DecimalPlaces = 1
+          Increment = 1
+          MaxValue = 15
+          MinValue = 0
+          TabOrder = 4
+          Value = 0
+        end
+        object AutofocusBinning: TSpinEdit
+          Left = 212
+          Height = 29
+          Top = 28
+          Width = 60
+          MaxValue = 4
+          MinValue = 1
+          TabOrder = 5
+          Value = 1
+        end
+        object AutofocusTolerance: TFloatSpinEdit
+          Left = 212
+          Height = 29
+          Top = 84
+          Width = 60
+          Increment = 1
+          MaxValue = 99
+          MinValue = 1
+          TabOrder = 6
+          Value = 1
+        end
+        object AutofocusMinSNR: TFloatSpinEdit
+          Left = 352
+          Height = 29
+          Top = 84
+          Width = 60
+          Increment = 1
+          MaxValue = 99
+          MinValue = 1
+          TabOrder = 7
+          Value = 1
         end
       end
       object GroupBox11: TGroupBox
@@ -1593,13 +1657,6 @@ object f_option: Tf_option
           TabOrder = 0
           Text = '4'
         end
-        object AutofocusPrecisionSlew: TEdit
-          Left = 312
-          Height = 31
-          Top = 40
-          Width = 51
-          TabOrder = 1
-        end
         object Label85: TLabel
           Left = 96
           Height = 19
@@ -1615,6 +1672,18 @@ object f_option: Tf_option
           Width = 49
           Caption = '[arcmin]'
           ParentColor = False
+        end
+        object AutofocusPrecisionSlew: TFloatSpinEdit
+          Left = 296
+          Height = 29
+          Top = 42
+          Width = 60
+          DecimalPlaces = 1
+          Increment = 1
+          MaxValue = 99
+          MinValue = 0
+          TabOrder = 1
+          Value = 0
         end
       end
       object Label101: TLabel
@@ -1641,13 +1710,6 @@ object f_option: Tf_option
         ClientHeight = 160
         ClientWidth = 422
         TabOrder = 0
-        object Focale: TEdit
-          Left = 288
-          Height = 31
-          Top = 27
-          Width = 80
-          TabOrder = 0
-        end
         object FocaleFromTelescope: TCheckBox
           Left = 112
           Height = 21
@@ -1655,7 +1717,7 @@ object f_option: Tf_option
           Width = 154
           Caption = 'From telescope driver'
           OnChange = FocaleFromTelescopeChange
-          TabOrder = 1
+          TabOrder = 0
         end
         object Label4: TLabel
           Left = 7
@@ -1664,13 +1726,6 @@ object f_option: Tf_option
           Width = 80
           Caption = 'Focale length'
           ParentColor = False
-        end
-        object PixelSize: TEdit
-          Left = 288
-          Height = 31
-          Top = 2
-          Width = 80
-          TabOrder = 2
         end
         object Label3: TLabel
           Left = 7
@@ -1687,7 +1742,7 @@ object f_option: Tf_option
           Width = 141
           Caption = 'From camera driver'
           OnChange = PixelSizeFromCameraChange
-          TabOrder = 3
+          TabOrder = 1
         end
         object ResolverBox: TRadioGroup
           Left = 0
@@ -1714,7 +1769,7 @@ object f_option: Tf_option
             'PlateSolve2'
           )
           OnClick = ResolverBoxClick
-          TabOrder = 4
+          TabOrder = 2
         end
         object Label33: TLabel
           Left = 7
@@ -1724,12 +1779,37 @@ object f_option: Tf_option
           Caption = 'Timeout'
           ParentColor = False
         end
-        object AstrometryTimeout: TEdit
+        object PixelSize: TFloatSpinEdit
+          Left = 288
+          Height = 29
+          Top = -4
+          Width = 77
+          Increment = 1
+          MaxValue = 99
+          MinValue = 0
+          TabOrder = 3
+          Value = 0
+        end
+        object Focale: TFloatSpinEdit
+          Left = 288
+          Height = 29
+          Top = 24
+          Width = 77
+          Increment = 1
+          MaxValue = 10000
+          MinValue = 0
+          TabOrder = 4
+          Value = 0
+        end
+        object AstrometryTimeout: TSpinEdit
           Left = 112
-          Height = 31
-          Top = 50
-          Width = 48
+          Height = 29
+          Top = 52
+          Width = 64
+          MaxValue = 300
+          MinValue = 10
           TabOrder = 5
+          Value = 10
         end
       end
       object Notebook1: TNotebook
@@ -1760,13 +1840,6 @@ object f_option: Tf_option
               ParentColor = False
               WordWrap = True
             end
-            object MaxRadius: TEdit
-              Left = 184
-              Height = 31
-              Top = 8
-              Width = 48
-              TabOrder = 0
-            end
             object Label7: TLabel
               Left = 236
               Height = 19
@@ -1775,13 +1848,6 @@ object f_option: Tf_option
               Caption = 'Scale tolerance'
               ParentColor = False
             end
-            object Tolerance: TEdit
-              Left = 368
-              Height = 31
-              Top = 8
-              Width = 48
-              TabOrder = 1
-            end
             object Label8: TLabel
               Left = 12
               Height = 19
@@ -1789,13 +1855,6 @@ object f_option: Tf_option
               Width = 78
               Caption = 'Downsample'
               ParentColor = False
-            end
-            object Downsample: TEdit
-              Left = 184
-              Height = 31
-              Top = 46
-              Width = 48
-              TabOrder = 2
             end
             object Label9: TLabel
               Left = 236
@@ -1807,20 +1866,13 @@ object f_option: Tf_option
               ParentColor = False
               WordWrap = True
             end
-            object SourcesLimit: TEdit
-              Left = 368
-              Height = 31
-              Top = 46
-              Width = 48
-              TabOrder = 3
-            end
             object Plot: TCheckBox
               Left = 12
               Height = 21
               Top = 88
               Width = 165
               Caption = 'Create plot of the result'
-              TabOrder = 4
+              TabOrder = 0
             end
             object Label27: TLabel
               Left = 12
@@ -1835,7 +1887,7 @@ object f_option: Tf_option
               Height = 31
               Top = 112
               Width = 272
-              TabOrder = 5
+              TabOrder = 1
             end
             object CygwinPanel: TPanel
               Left = 0
@@ -1843,9 +1895,9 @@ object f_option: Tf_option
               Top = 176
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 383
-              TabOrder = 6
+              ClientHeight = 40
+              ClientWidth = 387
+              TabOrder = 2
               Visible = False
               object Label34: TLabel
                 Left = 14
@@ -1869,13 +1921,54 @@ object f_option: Tf_option
               Top = 148
               Width = 131
               Caption = 'Use custom script'
-              TabOrder = 7
+              TabOrder = 3
             end
             object AstCustScript: TEdit
               Left = 160
               Height = 31
               Top = 148
               Width = 224
+              TabOrder = 4
+            end
+            object MaxRadius: TFloatSpinEdit
+              Left = 184
+              Height = 29
+              Top = 8
+              Width = 49
+              DecimalPlaces = 1
+              Increment = 1
+              MaxValue = 90
+              MinValue = 0
+              TabOrder = 5
+              Value = 0
+            end
+            object Tolerance: TFloatSpinEdit
+              Left = 368
+              Height = 29
+              Top = 8
+              Width = 49
+              Increment = 1
+              MaxValue = 1
+              MinValue = 0
+              TabOrder = 6
+              Value = 0
+            end
+            object Downsample: TSpinEdit
+              Left = 184
+              Height = 29
+              Top = 46
+              Width = 49
+              MaxValue = 10
+              MinValue = 1
+              TabOrder = 7
+              Value = 1
+            end
+            object SourcesLimit: TSpinEdit
+              Left = 368
+              Height = 29
+              Top = 46
+              Width = 49
+              MaxValue = 1000
               TabOrder = 8
             end
           end
@@ -1981,13 +2074,6 @@ object f_option: Tf_option
               Caption = 'Wait after solve'
               ParentColor = False
             end
-            object PlatesolveWait: TEdit
-              Left = 168
-              Height = 31
-              Top = 78
-              Width = 50
-              TabOrder = 1
-            end
             object Label80: TLabel
               Left = 224
               Height = 19
@@ -1995,6 +2081,14 @@ object f_option: Tf_option
               Width = 49
               Caption = 'seconds'
               ParentColor = False
+            end
+            object PlatesolveWait: TSpinEdit
+              Left = 168
+              Height = 29
+              Top = 76
+              Width = 49
+              MaxValue = 60
+              TabOrder = 1
             end
           end
         end
@@ -2076,34 +2170,6 @@ object f_option: Tf_option
           )
           TabOrder = 0
         end
-        object SlewPrec: TEdit
-          Left = 264
-          Height = 31
-          Top = 78
-          Width = 80
-          TabOrder = 1
-        end
-        object SlewRetry: TEdit
-          Left = 264
-          Height = 31
-          Top = 110
-          Width = 80
-          TabOrder = 2
-        end
-        object SlewExp: TEdit
-          Left = 264
-          Height = 31
-          Top = 176
-          Width = 80
-          TabOrder = 3
-        end
-        object SlewBin: TEdit
-          Left = 264
-          Height = 31
-          Top = 216
-          Width = 80
-          TabOrder = 4
-        end
         object Label66: TLabel
           Left = 16
           Height = 19
@@ -2120,7 +2186,7 @@ object f_option: Tf_option
           AutoSize = False
           ItemHeight = 0
           Style = csDropDownList
-          TabOrder = 5
+          TabOrder = 1
         end
         object Label87: TLabel
           Left = 16
@@ -2130,11 +2196,52 @@ object f_option: Tf_option
           Caption = 'Delay after telescope slew [seconds] '
           ParentColor = False
         end
-        object SlewDelay: TEdit
-          Left = 296
-          Height = 31
+        object SlewPrec: TFloatSpinEdit
+          Left = 264
+          Height = 29
+          Top = 80
+          Width = 80
+          Increment = 1
+          MaxValue = 60
+          MinValue = 0
+          TabOrder = 2
+          Value = 0
+        end
+        object SlewRetry: TSpinEdit
+          Left = 264
+          Height = 29
+          Top = 112
+          Width = 80
+          MaxValue = 10
+          TabOrder = 3
+        end
+        object SlewExp: TFloatSpinEdit
+          Left = 264
+          Height = 29
+          Top = 176
+          Width = 80
+          Increment = 1
+          MaxValue = 60
+          MinValue = 1
+          TabOrder = 4
+          Value = 1
+        end
+        object SlewBin: TSpinEdit
+          Left = 264
+          Height = 29
+          Top = 216
+          Width = 80
+          MaxValue = 9
+          MinValue = 1
+          TabOrder = 5
+          Value = 1
+        end
+        object SlewDelay: TSpinEdit
+          Left = 295
+          Height = 29
           Top = 304
-          Width = 48
+          Width = 49
+          MaxValue = 60
           TabOrder = 6
         end
       end
@@ -2184,15 +2291,8 @@ object f_option: Tf_option
           Caption = 'Can track past meridian for'
           ParentColor = False
         end
-        object MinutesPastMeridian: TEdit
-          Left = 256
-          Height = 31
-          Top = 8
-          Width = 40
-          TabOrder = 0
-        end
         object Label41: TLabel
-          Left = 304
+          Left = 312
           Height = 19
           Top = 12
           Width = 49
@@ -2205,7 +2305,7 @@ object f_option: Tf_option
           Top = 168
           Width = 183
           Caption = 'Pause before meridian flip '
-          TabOrder = 1
+          TabOrder = 0
         end
         object MeridianFlipPauseAfter: TCheckBox
           Left = 8
@@ -2213,7 +2313,7 @@ object f_option: Tf_option
           Top = 200
           Width = 172
           Caption = 'Pause after meridian flip '
-          TabOrder = 2
+          TabOrder = 1
         end
         object Label42: TLabel
           Left = 33
@@ -2223,15 +2323,8 @@ object f_option: Tf_option
           Caption = 'Timeout'
           ParentColor = False
         end
-        object MeridianFlipPauseTimeout: TEdit
-          Left = 128
-          Height = 31
-          Top = 232
-          Width = 40
-          TabOrder = 3
-        end
         object Label43: TLabel
-          Left = 176
+          Left = 184
           Height = 19
           Top = 236
           Width = 49
@@ -2246,15 +2339,8 @@ object f_option: Tf_option
           Caption = 'No flip until past meridian for'
           ParentColor = False
         end
-        object MinutesPastMeridianMin: TEdit
-          Left = 256
-          Height = 31
-          Top = 44
-          Width = 40
-          TabOrder = 4
-        end
         object Label60: TLabel
-          Left = 304
+          Left = 312
           Height = 19
           Top = 48
           Width = 49
@@ -2267,7 +2353,7 @@ object f_option: Tf_option
           Top = 104
           Width = 194
           Caption = 'Autofocus after meridian flip'
-          TabOrder = 5
+          TabOrder = 2
         end
         object MeridianFlipCalibrate: TCheckBox
           Left = 8
@@ -2275,6 +2361,30 @@ object f_option: Tf_option
           Top = 136
           Width = 259
           Caption = 'Calibrate autoguider after medidian flip'
+          TabOrder = 3
+        end
+        object MinutesPastMeridian: TSpinEdit
+          Left = 256
+          Height = 29
+          Top = 10
+          Width = 49
+          MaxValue = 120
+          TabOrder = 4
+        end
+        object MinutesPastMeridianMin: TSpinEdit
+          Left = 256
+          Height = 29
+          Top = 44
+          Width = 49
+          MaxValue = 110
+          TabOrder = 5
+        end
+        object MeridianFlipPauseTimeout: TSpinEdit
+          Left = 123
+          Height = 29
+          Top = 232
+          Width = 49
+          MaxValue = 10
           TabOrder = 6
         end
       end
@@ -2333,21 +2443,24 @@ object f_option: Tf_option
           Caption = 'Pixels'
           ParentColor = False
         end
-        object DitherPixel: TEdit
-          Left = 96
-          Height = 31
-          Top = 8
-          Width = 80
-          TabOrder = 0
-          Text = ' '
-        end
         object DitherRAonly: TCheckBox
           Left = 96
           Height = 21
           Top = 45
           Width = 69
           Caption = 'RA only'
+          TabOrder = 0
+        end
+        object DitherPixel: TFloatSpinEdit
+          Left = 96
+          Height = 29
+          Top = 8
+          Width = 80
+          Increment = 1
+          MaxValue = 99
+          MinValue = 0
           TabOrder = 1
+          Value = 0
         end
       end
       object GroupBox6: TGroupBox
@@ -2359,30 +2472,6 @@ object f_option: Tf_option
         ClientHeight = 178
         ClientWidth = 198
         TabOrder = 2
-        object SettlePixel: TEdit
-          Left = 112
-          Height = 31
-          Top = 8
-          Width = 80
-          TabOrder = 0
-          Text = ' '
-        end
-        object SettleMinTime: TEdit
-          Left = 112
-          Height = 31
-          Top = 45
-          Width = 80
-          TabOrder = 1
-          Text = ' '
-        end
-        object SettleMaxTime: TEdit
-          Left = 112
-          Height = 31
-          Top = 82
-          Width = 80
-          TabOrder = 2
-          Text = ' '
-        end
         object Label20: TLabel
           Left = 17
           Height = 19
@@ -2407,13 +2496,6 @@ object f_option: Tf_option
           Caption = 'Timeout'
           ParentColor = False
         end
-        object CalibrationDelay: TEdit
-          Left = 112
-          Height = 31
-          Top = 119
-          Width = 80
-          TabOrder = 3
-        end
         object Label26: TLabel
           Left = 16
           Height = 38
@@ -2421,6 +2503,41 @@ object f_option: Tf_option
           Width = 68
           Caption = 'Calibration '#10'delay'
           ParentColor = False
+        end
+        object SettlePixel: TFloatSpinEdit
+          Left = 112
+          Height = 29
+          Top = 8
+          Width = 73
+          Increment = 1
+          MaxValue = 99
+          MinValue = 0
+          TabOrder = 0
+          Value = 0
+        end
+        object SettleMinTime: TSpinEdit
+          Left = 112
+          Height = 29
+          Top = 48
+          Width = 73
+          MaxValue = 99
+          TabOrder = 1
+        end
+        object SettleMaxTime: TSpinEdit
+          Left = 112
+          Height = 29
+          Top = 84
+          Width = 73
+          MaxValue = 120
+          TabOrder = 2
+        end
+        object CalibrationDelay: TSpinEdit
+          Left = 112
+          Height = 29
+          Top = 120
+          Width = 73
+          MaxValue = 600
+          TabOrder = 3
         end
       end
       object GroupBox13: TGroupBox
@@ -2432,24 +2549,10 @@ object f_option: Tf_option
         ClientHeight = 80
         ClientWidth = 230
         TabOrder = 3
-        object StarLostRestart: TEdit
-          Left = 120
-          Height = 31
-          Top = 8
-          Width = 64
-          TabOrder = 0
-        end
-        object StarLostCancel: TEdit
-          Left = 120
-          Height = 31
-          Top = 40
-          Width = 64
-          TabOrder = 1
-        end
         object Label70: TLabel
           Left = 192
           Height = 19
-          Top = 14
+          Top = 10
           Width = 6
           Caption = 's'
           ParentColor = False
@@ -2465,7 +2568,7 @@ object f_option: Tf_option
         object Label72: TLabel
           Left = 192
           Height = 19
-          Top = 42
+          Top = 45
           Width = 6
           Caption = 's'
           ParentColor = False
@@ -2477,6 +2580,22 @@ object f_option: Tf_option
           Width = 65
           Caption = 'Abort after'
           ParentColor = False
+        end
+        object StarLostRestart: TSpinEdit
+          Left = 120
+          Height = 29
+          Top = 8
+          Width = 64
+          MaxValue = 3600
+          TabOrder = 0
+        end
+        object StarLostCancel: TSpinEdit
+          Left = 120
+          Height = 29
+          Top = 42
+          Width = 64
+          MaxValue = 3600
+          TabOrder = 1
         end
       end
       object Notebook3: TNotebook
@@ -2662,8 +2781,8 @@ object f_option: Tf_option
               Height = 80
               Top = 48
               Width = 333
-              ClientHeight = 76
-              ClientWidth = 329
+              ClientHeight = 80
+              ClientWidth = 333
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

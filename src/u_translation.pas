@@ -575,7 +575,6 @@ resourcestring
   rsTheProgramNe = 'The program need to be restarted';
   rsBacklashComp2 = 'Backlash compensation must be in the same direction as '
     +'auto-focus';
-  rsInvalidNumbe = 'Invalid number %s';
   rsFocusWindowM = 'Focus window must be at least four time greater than Star '
     +'window!';
   rsNearHFDMustB = 'Near HFD must be smaller than Start HFD!';

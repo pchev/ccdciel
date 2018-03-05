@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
 
@@ -34,8 +34,8 @@ type
 
   Tf_rotator = class(TFrame)
     BtnRotate: TButton;
-    Angle: TEdit;
     BtnHalt: TButton;
+    Angle: TFloatSpinEdit;
     Reverse: TCheckBox;
     Label6: TLabel;
     led: TShape;
