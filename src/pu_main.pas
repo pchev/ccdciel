@@ -56,6 +56,8 @@ type
   { Tf_main }
 
   Tf_main = class(TForm)
+    FocuserConnectTimer: TTimer;
+    CameraConnectTimer: TTimer;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     MainMenu1: TMainMenu;
@@ -226,7 +228,9 @@ type
     TBSequence: TToolButton;
     TBVideo: TToolButton;
     procedure AbortTimerTimer(Sender: TObject);
+    procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
+    procedure FocuserConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -2161,11 +2165,23 @@ begin
   ConnectTimer.Enabled:=false;
   // Thing to do after all devices are connected
   SetCameraActiveDevices;
+end;
+
+procedure Tf_main.CameraConnectTimerTimer(Sender: TObject);
+begin
+  CameraConnectTimer.Enabled:=false;
+  //Thing to do after camera is connected
   ShowTemperatureRange;
   ShowExposureRange;
   ShowBinningRange;
   ShowGain;
   ShowFrameRange;
+end;
+
+procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
+begin
+  FocuserConnectTimer.Enabled:=false;
+  //Thing to do after focuser is connected
   SetFocusMode;
 end;
 
@@ -2621,7 +2637,11 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  if WantCamera then begin
   inc(allcount);
   case camera.Status of
-    devConnected: inc(upcount);
+    devConnected: begin
+                  inc(upcount);
+                  CameraConnectTimer.Enabled:=false;
+                  CameraConnectTimer.Enabled:=true;
+                  end;
     devDisconnected: inc(downcount);
     devConnecting: inc(concount);
   end;
@@ -2637,7 +2657,11 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  if WantFocuser then begin
   inc(allcount);
   case focuser.Status of
-    devConnected: inc(upcount);
+    devConnected: begin
+                  inc(upcount);
+                  FocuserConnectTimer.Enabled:=false;
+                  FocuserConnectTimer.Enabled:=true;
+                  end;
     devDisconnected: inc(downcount);
     devConnecting: inc(concount);
   end;
@@ -2661,6 +2685,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  if allcount=0 then SetDisconnected
  else if (upcount=allcount) then begin
    SetConnected;
+   ConnectTimer.Enabled:=false;
    ConnectTimer.Enabled:=true;
  end
  else if (concount>0)or(upcount>0) then SetConnecting
@@ -4777,7 +4802,7 @@ var e: double;
     buf: string;
     p,binx,biny,i: integer;
 begin
-if (AllDevicesConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
+if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
   e:=f_preview.Exposure;
   if e<0 then begin
