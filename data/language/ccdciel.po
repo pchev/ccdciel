@@ -1254,10 +1254,6 @@ msgstr ""
 msgid "Please load or create a target list first."
 msgstr ""
 
-#: u_translation:rscameraisnotc
-msgid "Camera is not connected"
-msgstr ""
-
 #: u_translation:rsautoguidingr
 msgid "Autoguiding restarted."
 msgstr ""
@@ -2104,10 +2100,6 @@ msgstr ""
 
 #: u_translation:rsbacklashcomp2
 msgid "Backlash compensation must be in the same direction as auto-focus"
-msgstr ""
-
-#: u_translation:rsinvalidnumbe
-msgid "Invalid number %s"
 msgstr ""
 
 #: u_translation:rsfocuswindowm
@@ -3052,5 +3044,9 @@ msgstr ""
 
 #: u_translation:rsnumberofexpo
 msgid "Number of exposure per point"
+msgstr ""
+
+#: u_translation:rssomedefinedd
+msgid "Some defined devices are not connected"
 msgstr ""
 
