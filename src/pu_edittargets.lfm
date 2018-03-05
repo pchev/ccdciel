@@ -12,7 +12,6 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '1.8.2.0'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -136,17 +135,6 @@ object f_EditTargets: Tf_EditTargets
         OnChange = CheckBoxRepeatListChange
         TabOrder = 0
       end
-      object RepeatCountList: TEdit
-        Left = 208
-        Height = 31
-        Hint = 'The number of time to repeat.'
-        Top = 58
-        Width = 56
-        Enabled = False
-        OnChange = RepeatCountListChange
-        TabOrder = 1
-        Text = '1'
-      end
       object SeqStart: TCheckBox
         Left = 8
         Height = 21
@@ -155,7 +143,7 @@ object f_EditTargets: Tf_EditTargets
         Width = 71
         Caption = 'Start at '
         OnChange = SeqStartChange
-        TabOrder = 2
+        TabOrder = 1
       end
       object SeqStop: TCheckBox
         Left = 8
@@ -165,7 +153,7 @@ object f_EditTargets: Tf_EditTargets
         Width = 70
         Caption = 'Stop at '
         OnChange = SeqStopChange
-        TabOrder = 3
+        TabOrder = 2
       end
       object SeqStartTwilight: TCheckBox
         Left = 184
@@ -176,7 +164,7 @@ object f_EditTargets: Tf_EditTargets
         Caption = 'dusk'
         Enabled = False
         OnChange = SeqStartTwilightChange
-        TabOrder = 4
+        TabOrder = 3
       end
       object SeqStopTwilight: TCheckBox
         Left = 184
@@ -187,7 +175,7 @@ object f_EditTargets: Tf_EditTargets
         Caption = 'dawn'
         Enabled = False
         OnChange = SeqStopTwilightChange
-        TabOrder = 5
+        TabOrder = 4
       end
       object SeqStartAt: TMaskEdit
         Left = 98
@@ -197,7 +185,7 @@ object f_EditTargets: Tf_EditTargets
         Width = 70
         CharCase = ecNormal
         MaxLength = 8
-        TabOrder = 6
+        TabOrder = 5
         EditMask = '99:99:99;1;_'
         Text = '  :  :  '
         SpaceChar = '_'
@@ -210,10 +198,21 @@ object f_EditTargets: Tf_EditTargets
         Width = 70
         CharCase = ecNormal
         MaxLength = 8
-        TabOrder = 7
+        TabOrder = 6
         EditMask = '99:99:99;1;_'
         Text = '  :  :  '
         SpaceChar = '_'
+      end
+      object RepeatCountList: TSpinEdit
+        Left = 200
+        Height = 29
+        Top = 56
+        Width = 72
+        MaxValue = 100000
+        MinValue = 1
+        OnChange = RepeatCountListChange
+        TabOrder = 7
+        Value = 1
       end
     end
   end
@@ -222,10 +221,10 @@ object f_EditTargets: Tf_EditTargets
     Height = 595
     Top = 0
     Width = 364
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alRight
     ShowTabs = False
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Object'
@@ -249,16 +248,6 @@ object f_EditTargets: Tf_EditTargets
           ClientHeight = 137
           ClientWidth = 352
           TabOrder = 0
-          object PreviewExposure: TEdit
-            Left = 128
-            Height = 31
-            Hint = 'The exposure time for the preview loop'
-            Top = 96
-            Width = 44
-            OnChange = TargetChange
-            TabOrder = 0
-            Text = '1'
-          end
           object Label9: TLabel
             Left = 8
             Height = 19
@@ -276,7 +265,7 @@ object f_EditTargets: Tf_EditTargets
             Caption = 'Preview when waiting to repeat'
             OnChange = TargetChange
             ParentBidiMode = False
-            TabOrder = 1
+            TabOrder = 0
           end
           object Label13: TLabel
             Left = 188
@@ -302,26 +291,6 @@ object f_EditTargets: Tf_EditTargets
             Caption = 'Repeat'
             ParentColor = False
           end
-          object Delay: TEdit
-            Left = 92
-            Height = 31
-            Hint = 'A delay to wait before to repeat.'
-            Top = 37
-            Width = 80
-            OnChange = TargetChange
-            TabOrder = 2
-            Text = '0'
-          end
-          object RepeatCount: TEdit
-            Left = 92
-            Height = 31
-            Hint = 'The number of time to repeat.'
-            Top = 8
-            Width = 80
-            OnChange = TargetChange
-            TabOrder = 3
-            Text = '1'
-          end
           object Label14: TLabel
             Left = 188
             Height = 19
@@ -329,6 +298,37 @@ object f_EditTargets: Tf_EditTargets
             Width = 57
             Caption = '[seconds]'
             ParentColor = False
+          end
+          object RepeatCount: TSpinEdit
+            Left = 92
+            Height = 29
+            Top = 8
+            Width = 76
+            MaxValue = 100000
+            MinValue = 1
+            OnChange = TargetChange
+            TabOrder = 1
+            Value = 1
+          end
+          object Delay: TSpinEdit
+            Left = 92
+            Height = 29
+            Top = 40
+            Width = 76
+            MaxValue = 100000
+            OnChange = TargetChange
+            TabOrder = 2
+          end
+          object PreviewExposure: TFloatSpinEdit
+            Left = 135
+            Height = 29
+            Top = 101
+            Width = 49
+            Increment = 1
+            MaxValue = 60
+            MinValue = 0
+            TabOrder = 3
+            Value = 0
           end
         end
         object Panel4: TPanel
@@ -538,16 +538,6 @@ object f_EditTargets: Tf_EditTargets
             OnChange = UseRotatorChange
             TabOrder = 0
           end
-          object RotatorAngle: TEdit
-            Left = 144
-            Height = 31
-            Hint = 'The rotator angle'
-            Top = 6
-            Width = 48
-            Enabled = False
-            OnChange = TargetChange
-            TabOrder = 1
-          end
           object BtnImgRot: TButton
             Left = 231
             Height = 25
@@ -556,7 +546,20 @@ object f_EditTargets: Tf_EditTargets
             Width = 115
             Caption = 'Current image'
             OnClick = BtnImgRotClick
+            TabOrder = 1
+          end
+          object RotatorAngle: TFloatSpinEdit
+            Left = 160
+            Height = 29
+            Top = 5
+            Width = 64
+            DecimalPlaces = 1
+            Increment = 1
+            MaxValue = 0
+            MinValue = 0
+            OnChange = TargetChange
             TabOrder = 2
+            Value = 0
           end
         end
         object Panel8: TPanel
@@ -830,14 +833,6 @@ object f_EditTargets: Tf_EditTargets
         Caption = 'Count'
         ParentColor = False
       end
-      object FlatCount: TEdit
-        Left = 104
-        Height = 31
-        Top = 128
-        Width = 80
-        OnChange = TargetChange
-        TabOrder = 3
-      end
       object PanelGain: TPanel
         Left = 0
         Height = 28
@@ -847,7 +842,7 @@ object f_EditTargets: Tf_EditTargets
         Caption = ' '
         ClientHeight = 28
         ClientWidth = 240
-        TabOrder = 4
+        TabOrder = 3
         Visible = False
         object ISObox: TComboBox
           Left = 104
@@ -869,15 +864,26 @@ object f_EditTargets: Tf_EditTargets
           Caption = 'Gain'
           ParentColor = False
         end
-        object GainEdit: TEdit
+        object GainEdit: TSpinEdit
           Left = 104
-          Height = 31
-          Top = 0
-          Width = 80
+          Height = 29
+          Top = 1
+          Width = 100
+          MaxValue = 10000
           OnChange = TargetChange
-          ParentShowHint = False
           TabOrder = 1
         end
+      end
+      object FlatCount: TSpinEdit
+        Left = 104
+        Height = 29
+        Top = 128
+        Width = 100
+        MaxValue = 10000
+        MinValue = 1
+        OnChange = TargetChange
+        TabOrder = 4
+        Value = 1
       end
     end
   end

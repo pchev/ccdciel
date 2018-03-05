@@ -6,7 +6,7 @@ interface
 
 uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils, u_translation,
   FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls,
-  Math, Graphics, Dialogs, StdCtrls, ComCtrls, TACustomSeries, TASeries;
+  Math, Graphics, Dialogs, StdCtrls, ComCtrls, Spin, TACustomSeries, TASeries;
 
 type
 
@@ -23,10 +23,7 @@ type
     LabelQuality: TLabel;
     Label9: TLabel;
     RefSource: TListChartSource;
-    Nsteps: TEdit;
     GetPos: TButton;
-    FocusPos: TEdit;
-    HalfWidth: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -46,6 +43,9 @@ type
     FitSourceR: TListChartSource;
     PtSourceL: TListChartSource;
     PtSourceR: TListChartSource;
+    FocusPos: TSpinEdit;
+    HalfWidth: TSpinEdit;
+    Nsteps: TSpinEdit;
     TrackBar1: TTrackBar;
     VcChart: TChart;
     VcChartRef: TLineSeries;
@@ -180,7 +180,7 @@ end;
 
 procedure Tf_vcurve.GetPosClick(Sender: TObject);
 begin
-  FocusPos.Text:=Ffocuser.Position.Text;
+  FocusPos.Value:=Ffocuser.Position.Value;
 end;
 
 procedure Tf_vcurve.TrackBar1Change(Sender: TObject);

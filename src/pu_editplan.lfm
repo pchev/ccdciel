@@ -135,23 +135,29 @@ object f_EditPlan: Tf_EditPlan
           Caption = 'Repeat'
           ParentColor = False
         end
-        object Delay: TEdit
+        object RepeatCount: TSpinEdit
           Left = 96
-          Height = 31
-          Top = 37
-          Width = 80
+          Height = 29
+          Top = 8
+          Width = 81
+          MaxValue = 100000
+          MinValue = 1
           OnChange = StepChange
           TabOrder = 0
-          Text = '0'
+          Value = 1
         end
-        object RepeatCount: TEdit
+        object Delay: TFloatSpinEdit
           Left = 96
-          Height = 31
-          Top = 8
-          Width = 80
+          Height = 29
+          Top = 38
+          Width = 82
+          DecimalPlaces = 1
+          Increment = 1
+          MaxValue = 100000
+          MinValue = 0
           OnChange = StepChange
           TabOrder = 1
-          Text = '1'
+          Value = 0
         end
       end
       object Panel7: TPanel
@@ -163,15 +169,6 @@ object f_EditPlan: Tf_EditPlan
         ClientHeight = 332
         ClientWidth = 260
         TabOrder = 1
-        object Count: TEdit
-          Left = 96
-          Height = 31
-          Top = 120
-          Width = 80
-          OnChange = StepChange
-          TabOrder = 0
-          Text = '1'
-        end
         object Label3: TLabel
           Left = 8
           Height = 19
@@ -188,7 +185,7 @@ object f_EditPlan: Tf_EditPlan
           ItemHeight = 0
           OnChange = StepChange
           Style = csDropDownList
-          TabOrder = 1
+          TabOrder = 0
         end
         object Label6: TLabel
           Left = 8
@@ -206,15 +203,6 @@ object f_EditPlan: Tf_EditPlan
           Caption = '[seconds]'
           ParentColor = False
         end
-        object Exposure: TEdit
-          Left = 96
-          Height = 31
-          Top = 8
-          Width = 80
-          OnChange = StepChange
-          TabOrder = 2
-          Text = '1'
-        end
         object Label2: TLabel
           Left = 8
           Height = 19
@@ -231,7 +219,7 @@ object f_EditPlan: Tf_EditPlan
           ItemHeight = 0
           OnChange = StepChange
           Style = csDropDownList
-          TabOrder = 3
+          TabOrder = 1
         end
         object Label5: TLabel
           Left = 8
@@ -248,7 +236,7 @@ object f_EditPlan: Tf_EditPlan
           Width = 120
           Caption = 'Repeat this step'
           OnChange = CheckBoxRepeatChange
-          TabOrder = 4
+          TabOrder = 2
         end
         object CheckBoxDither: TCheckBox
           Left = 8
@@ -257,16 +245,7 @@ object f_EditPlan: Tf_EditPlan
           Width = 100
           Caption = 'Dither every '
           OnChange = StepChange
-          TabOrder = 5
-        end
-        object DitherCount: TEdit
-          Left = 168
-          Height = 31
-          Top = 264
-          Width = 40
-          OnChange = StepChange
-          TabOrder = 6
-          Text = '1'
+          TabOrder = 3
         end
         object CheckBoxAutofocusStart: TCheckBox
           Left = 8
@@ -275,7 +254,7 @@ object f_EditPlan: Tf_EditPlan
           Width = 174
           Caption = 'Autofocus before to start'
           OnChange = StepChange
-          TabOrder = 7
+          TabOrder = 4
         end
         object CheckBoxAutofocus: TCheckBox
           Left = 8
@@ -284,16 +263,7 @@ object f_EditPlan: Tf_EditPlan
           Width = 121
           Caption = 'Autofocus every'
           OnChange = StepChange
-          TabOrder = 8
-        end
-        object AutofocusCount: TEdit
-          Left = 168
-          Height = 31
-          Top = 224
-          Width = 40
-          OnChange = StepChange
-          TabOrder = 9
-          Text = '10'
+          TabOrder = 5
         end
         object PanelGain: TPanel
           Left = 0
@@ -304,7 +274,7 @@ object f_EditPlan: Tf_EditPlan
           Caption = ' '
           ClientHeight = 28
           ClientWidth = 240
-          TabOrder = 10
+          TabOrder = 6
           Visible = False
           object ISObox: TComboBox
             Left = 96
@@ -326,16 +296,60 @@ object f_EditPlan: Tf_EditPlan
             Caption = 'Gain'
             ParentColor = False
           end
-          object GainEdit: TEdit
+          object GainEdit: TSpinEdit
             Left = 96
-            Height = 31
-            Top = 0
-            Width = 80
+            Height = 29
+            Top = 4
+            Width = 81
+            MaxValue = 100000
             OnChange = StepChange
-            ParentShowHint = False
-            ShowHint = False
             TabOrder = 1
           end
+        end
+        object Exposure: TFloatSpinEdit
+          Left = 96
+          Height = 29
+          Top = 8
+          Width = 82
+          Increment = 1
+          MaxValue = 10000
+          MinValue = 0
+          OnChange = StepChange
+          TabOrder = 7
+          Value = 0
+        end
+        object Count: TSpinEdit
+          Left = 96
+          Height = 29
+          Top = 120
+          Width = 82
+          MaxValue = 100000
+          MinValue = 1
+          OnChange = StepChange
+          TabOrder = 8
+          Value = 1
+        end
+        object AutofocusCount: TSpinEdit
+          Left = 168
+          Height = 29
+          Top = 224
+          Width = 57
+          MaxValue = 1000
+          MinValue = 1
+          OnChange = StepChange
+          TabOrder = 9
+          Value = 1
+        end
+        object DitherCount: TSpinEdit
+          Left = 168
+          Height = 29
+          Top = 264
+          Width = 57
+          MaxValue = 1000
+          MinValue = 1
+          OnChange = StepChange
+          TabOrder = 10
+          Value = 1
         end
       end
     end

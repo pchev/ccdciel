@@ -28,14 +28,13 @@ interface
 uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
   pu_scriptengine, cu_astrometry, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst;
+  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
 
 type
 
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
-    FlatCount: TEdit;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
     BtnCdCCoord: TButton;
@@ -55,7 +54,8 @@ type
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
-    GainEdit: TEdit;
+    PreviewExposure: TFloatSpinEdit;
+    RotatorAngle: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
     ISObox: TComboBox;
     Label12: TLabel;
@@ -66,12 +66,16 @@ type
     LabelSeq2: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
+    RepeatCount: TSpinEdit;
+    Delay: TSpinEdit;
+    RepeatCountList: TSpinEdit;
+    FlatCount: TSpinEdit;
+    GainEdit: TSpinEdit;
     TabSheet3: TTabSheet;
     UpdateCoord: TCheckBox;
     Panel8: TPanel;
     Panel9: TPanel;
     UseRotator: TCheckBox;
-    RotatorAngle: TEdit;
     ObjStartRise: TCheckBox;
     ObjEndSet: TCheckBox;
     Panel7: TPanel;
@@ -82,8 +86,6 @@ type
     SeqStopTwilight: TCheckBox;
     CheckBoxRepeatList: TCheckBox;
     CheckBoxRepeat: TCheckBox;
-    Delay: TEdit;
-    RepeatCountList: TEdit;
     ObjEndTime: TMaskEdit;
     Label1: TLabel;
     Label10: TLabel;
@@ -116,8 +118,6 @@ type
     PointDEC: TEdit;
     PointRA: TEdit;
     Preview: TCheckBox;
-    PreviewExposure: TEdit;
-    RepeatCount: TEdit;
     ObjStartTime: TMaskEdit;
     SeqStartAt: TMaskEdit;
     TabSheet1: TTabSheet;
@@ -215,7 +215,7 @@ begin
     ObjStartRise.Checked:=false;
     ObjEndSet.Checked:=false;
   end;
-  RepeatCountList.Text:=IntToStr(FTargetsRepeat);
+  RepeatCountList.Value:=FTargetsRepeat;
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
 end;
@@ -462,10 +462,10 @@ procedure Tf_EditTargets.CheckBoxRepeatChange(Sender: TObject);
 begin
   if CheckBoxRepeat.Checked then begin
      PanelRepeat.Visible:=true;
-     RepeatCount.Text:='2';
+     RepeatCount.Value:=2;
   end else begin
      PanelRepeat.Visible:=false;
-     RepeatCount.Text:='1';
+     RepeatCount.Value:=1;
   end;
   TargetChange(nil);
 end;
@@ -744,7 +744,7 @@ try
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
     UseRotator.Checked:=true;
-    RotatorAngle.Text:=FormatFloat(f1,pa);
+    RotatorAngle.Value:=pa;
   end;
 finally
   screen.Cursor:=crDefault;
@@ -778,7 +778,7 @@ begin
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
        else FlatTime.ItemIndex:=1;
-    FlatCount.Text:=IntToStr(t.FlatCount);
+    FlatCount.Value:=t.FlatCount;
     buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
     j:=FlatBinning.Items.IndexOf(buf);
     if j<0 then
@@ -787,7 +787,7 @@ begin
     if hasGainISO then
       ISObox.ItemIndex:=t.FlatGain
     else
-      GainEdit.Text:=IntToStr(t.FlatGain);
+      GainEdit.Value:=t.FlatGain;
     filterlst:=TStringList.Create();
     SplitRec(t.FlatFilters,';',filterlst);
     for i:=0 to FlatFilterList.Count-1 do begin
@@ -827,12 +827,13 @@ begin
     UseRotator.Checked:=(t.pa<>NullCoord);
     InplaceAutofocus.Checked:=t.inplaceautofocus;
     if t.pa=NullCoord then
-      RotatorAngle.Text:='-'
+      RotatorAngle.Value:=0
     else
-      RotatorAngle.Text:=FormatFloat(f1,t.pa);
-    RepeatCount.Text:=t.repeatcount_str;
-    Delay.Text:=t.delay_str;
-    PreviewExposure.Text:=t.previewexposure_str;
+      RotatorAngle.Value:=t.pa;
+    RotatorAngle.Enabled:=UseRotator.Checked;
+    RepeatCount.Value:=t.repeatcount;
+    Delay.Value:=t.delay;
+    PreviewExposure.Value:=t.previewexposure;
     Preview.Checked:=t.preview;
     CheckBoxRepeat.Checked:=(t.repeatcount>1);
     PanelRepeat.Visible:=CheckBoxRepeat.Checked;
@@ -843,12 +844,7 @@ end;
 procedure Tf_EditTargets.UseRotatorChange(Sender: TObject);
 begin
   RotatorAngle.Enabled:=UseRotator.Checked;
-  if RotatorAngle.Enabled then begin
-    RotatorAngle.Text:='0.0';
-  end
-  else begin
-    RotatorAngle.Text:='-'
-  end;
+  RotatorAngle.Value:=0.0;
 end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
@@ -873,7 +869,7 @@ begin
   else if t.objectname=SkyFlatTxt then begin
     PageControl1.ActivePageIndex:=2;
     t.planname:=FlatTimeName[FlatTime.ItemIndex];
-    t.FlatCount:=StrToIntDef(FlatCount.Text,1);
+    t.FlatCount:=FlatCount.Value;
     str:=FlatBinning.Text;
     j:=pos('x',str);
     if j>0 then begin
@@ -889,7 +885,7 @@ begin
        t.FlatGain:=ISObox.ItemIndex;
     end
     else begin
-       t.FlatGain:=StrToIntDef(GainEdit.Text,Gain) ;
+       t.FlatGain:=GainEdit.Value;
     end;
     t.FlatFilters:='';
     for j:=0 to FlatFilterList.Count-1 do begin
@@ -915,17 +911,17 @@ begin
     t.endset:=ObjEndSet.Checked;
     ObjStartTime.Enabled:= not t.startrise;
     ObjEndTime.Enabled:= not t.endset;
-    if RotatorAngle.Text='-' then
-      t.pa:=NullCoord
+    if UseRotator.Checked then
+      t.pa:=RotatorAngle.Value
     else
-      t.pa:=StrToFloatDef(RotatorAngle.Text,NullCoord);
+      t.pa:=NullCoord;
     if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
     t.astrometrypointing:=PointAstrometry.Checked;
     t.updatecoord:=UpdateCoord.Checked;
     t.inplaceautofocus:=InplaceAutofocus.Checked;
-    t.repeatcount:=StrToIntDef(RepeatCount.Text,1);
-    t.delay:=StrToFloatDef(Delay.Text,1);
-    t.previewexposure:=StrToFloatDef(PreviewExposure.Text,1);
+    t.repeatcount:=RepeatCount.Value;
+    t.delay:=Delay.Value;
+    t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
   end;
   TargetList.Cells[1,n]:=t.objectname;
@@ -985,7 +981,7 @@ procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
 begin
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
   if CheckBoxRepeatList.Checked then
-    FTargetsRepeat:=StrToIntDef(RepeatCountList.Text,1)
+    FTargetsRepeat:=RepeatCountList.Value
   else
     FTargetsRepeat:=1;
 end;
@@ -993,7 +989,7 @@ end;
 procedure Tf_EditTargets.RepeatCountListChange(Sender: TObject);
 begin
   if CheckBoxRepeatList.Checked then
-    FTargetsRepeat:=StrToIntDef(RepeatCountList.Text,1);
+    FTargetsRepeat:=RepeatCountList.Value;
 end;
 
 procedure Tf_EditTargets.SeqStartChange(Sender: TObject);

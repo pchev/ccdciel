@@ -4,9 +4,9 @@ unit pu_focusercalibration;
 
 interface
 
-uses u_global, cu_focuser, u_translation,
-  Classes, SysUtils, FileUtil, TASources, TAGraph, TASeries, Forms,
-  Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, ValEdit, TADrawUtils, TACustomSeries;
+uses u_global, cu_focuser, u_translation, Classes, SysUtils, FileUtil,
+  TASources, TAGraph, TASeries, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  StdCtrls, ValEdit, Spin, TADrawUtils, TACustomSeries;
 
 type
 
@@ -19,9 +19,6 @@ type
     BtnDefault: TButton;
     BtnNoBacklash: TButton;
     Focusdir: TComboBox;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Backlash: TEdit;
     FitSourceL: TListChartSource;
     FitSourceR: TListChartSource;
     Label1: TLabel;
@@ -46,6 +43,10 @@ type
     Panel1: TPanel;
     PtSourceL: TListChartSource;
     PtSourceR: TListChartSource;
+    Backlash: TSpinEdit;
+    hfdmax: TSpinEdit;
+    SpinEdit1: TSpinEdit;
+    stepmin: TSpinEdit;
     ValueListEditor1: TValueListEditor;
     ValueListEditor2: TValueListEditor;
     VcChart: TChart;
@@ -95,8 +96,8 @@ implementation
 procedure Tf_focusercalibration.FormCreate(Sender: TObject);
 begin
   SetLang;
-  edit1.Text:='20';
-  edit2.Text:='1';
+  hfdmax.Value:=20;
+  stepmin.Value:=1;
 end;
 
 procedure Tf_focusercalibration.SetLang;
@@ -133,9 +134,9 @@ begin
   else
      Focusdir.ItemIndex:=1;
   if Ffocuser.BacklashActive then
-    Backlash.Text:=inttostr(Ffocuser.Backlash)
+    Backlash.Value:=Ffocuser.Backlash
   else
-    Backlash.Text:='0';
+    Backlash.Value:=0;
   FRunning:=false;
   BtnBack.Visible:=false;
   BtnNext.Visible:=true;
@@ -166,23 +167,23 @@ end;
 
 procedure Tf_focusercalibration.BtnNoBacklashClick(Sender: TObject);
 begin
-  Backlash.Text:='0';
+  Backlash.Value:=0;
 end;
 
 procedure Tf_focusercalibration.BtnDefaultClick(Sender: TObject);
 begin
-  edit1.Text:='20';
-  edit2.Text:='1';
+  hfdmax.Value:=20;
+  stepmin.Value:=1;
 end;
 
 function Tf_focusercalibration.GetMaxHfd: double;
 begin
-  result:=StrToFloatDef(Edit1.Text,20.0);
+  result:=hfdmax.Value;
 end;
 
 function Tf_focusercalibration.GetMinStep: integer;
 begin
-  result:=StrToIntDef(Edit2.Text,1);
+  result:=stepmin.Value;
 end;
 
 procedure Tf_focusercalibration.BtnBackClick(Sender: TObject);
@@ -199,7 +200,7 @@ procedure Tf_focusercalibration.BtnNextClick(Sender: TObject);
 begin
   if Notebook1.PageIndex=2 then begin
     BtnCancel.Caption:=rsCancel;
-    Ffocuser.Backlash:=StrToIntDef(Backlash.Text,Ffocuser.Backlash);
+    Ffocuser.Backlash:=Backlash.Value;
     Ffocuser.BacklashDirection:=(Focusdir.ItemIndex=0);
     Ffocuser.BacklashActive:=(Ffocuser.Backlash<>0);
     AutofocusMoveDir:=Ffocuser.BacklashDirection;

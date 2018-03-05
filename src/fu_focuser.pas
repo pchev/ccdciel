@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
 
@@ -39,6 +39,9 @@ type
     BtnVcurve: TButton;
     Label5: TLabel;
     PanelTemp: TPanel;
+    speed: TSpinEdit;
+    Position: TSpinEdit;
+    timer: TSpinEdit;
     Temp: TEdit;
     Label6: TLabel;
     Notebook1: TNotebook;
@@ -48,8 +51,6 @@ type
     PanelRelPos: TPanel;
     PanelParam: TPanel;
     RelIncr: TComboBox;
-    speed: TEdit;
-    timer: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -58,7 +59,6 @@ type
     PanelTimerMove: TPanel;
     PosIncr: TComboBox;
     PanelBtn: TPanel;
-    Position: TEdit;
     Panel1: TPanel;
     StaticText1: TStaticText;
     procedure BtnDownClick(Sender: TObject);
@@ -141,7 +141,7 @@ end;
 procedure Tf_focuser.SetSpeed(value:integer);
 begin
   case Notebook1.PageIndex of
-    0: timer.Text:=inttostr(value);  // Timer
+    0: timer.Value:=value;  // Timer
     1: RelIncr.Text:=inttostr(value);// Relative
     2: PosIncr.Text:=inttostr(value);// Absolute
   end;
@@ -150,7 +150,7 @@ end;
 function Tf_focuser.GetSpeed:integer;
 begin
  case Notebook1.PageIndex of
-   0: result:=Strtointdef(timer.Text,-1);  // Timer
+   0: result:=timer.Value;  // Timer
    1: result:=Strtointdef(RelIncr.Text,-1);// Relative
    2: result:=Strtointdef(PosIncr.Text,-1);// Absolute
  end;
@@ -160,7 +160,7 @@ procedure Tf_focuser.SetPosition(value:integer);
 begin
  begin
    case Notebook1.PageIndex of
-     2: Position.Text:=inttostr(value);// Absolute
+     2: Position.Value:=value;// Absolute
    end;
  end;
 end;
@@ -168,7 +168,7 @@ end;
 function Tf_focuser.GetPosition:integer;
 begin
  case Notebook1.PageIndex of
-   2: result:=Strtointdef(Position.Text,-1);// Absolute
+   2: result:=Position.Value;// Absolute
    else result:=-1;
  end;
 end;

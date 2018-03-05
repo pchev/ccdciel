@@ -17,7 +17,7 @@ object f_focusercalibration: Tf_focusercalibration
     Height = 375
     Top = 0
     Width = 626
-    PageIndex = 1
+    PageIndex = 2
     Align = alClient
     TabOrder = 0
     object Page1: TPage
@@ -88,14 +88,6 @@ object f_focusercalibration: Tf_focusercalibration
         ParentColor = False
         WordWrap = True
       end
-      object Backlash: TEdit
-        Left = 256
-        Height = 31
-        Top = 296
-        Width = 79
-        TabOrder = 1
-        Text = '0'
-      end
       object BtnNoBacklash: TButton
         Left = 368
         Height = 25
@@ -103,6 +95,14 @@ object f_focusercalibration: Tf_focusercalibration
         Width = 104
         Caption = 'No backlash'
         OnClick = BtnNoBacklashClick
+        TabOrder = 1
+      end
+      object Backlash: TSpinEdit
+        Left = 264
+        Height = 29
+        Top = 296
+        Width = 80
+        MaxValue = 10000
         TabOrder = 2
       end
     end
@@ -115,20 +115,6 @@ object f_focusercalibration: Tf_focusercalibration
         Caption = 'Click Next to start the measurement.'
         ParentColor = False
         WordWrap = True
-      end
-      object Edit1: TEdit
-        Left = 264
-        Height = 31
-        Top = 152
-        Width = 79
-        TabOrder = 0
-      end
-      object Edit2: TEdit
-        Left = 264
-        Height = 31
-        Top = 208
-        Width = 79
-        TabOrder = 1
       end
       object Label5: TLabel
         Left = 8
@@ -167,7 +153,26 @@ object f_focusercalibration: Tf_focusercalibration
         Width = 74
         Caption = 'Default'
         OnClick = BtnDefaultClick
+        TabOrder = 0
+      end
+      object hfdmax: TSpinEdit
+        Left = 264
+        Height = 29
+        Top = 152
+        Width = 80
+        MinValue = 5
+        TabOrder = 1
+        Value = 5
+      end
+      object stepmin: TSpinEdit
+        Left = 264
+        Height = 29
+        Top = 210
+        Width = 80
+        MaxValue = 1000
+        MinValue = 1
         TabOrder = 2
+        Value = 1
       end
     end
     object Page4: TPage
@@ -191,8 +196,10 @@ object f_focusercalibration: Tf_focusercalibration
             Intervals.NiceSteps = '0.1|0.5|1|10'
             Intervals.Options = [aipUseCount, aipUseNiceSteps]
             AtDataOnly = True
+            Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.LabelFont.Orientation = 900
+            Title.LabelBrush.Style = bsClear
           end        
           item
             Intervals.Count = 7
@@ -200,7 +207,9 @@ object f_focusercalibration: Tf_focusercalibration
             Intervals.Options = [aipUseCount, aipUseNiceSteps]
             Alignment = calBottom
             AtDataOnly = True
+            Marks.LabelBrush.Style = bsClear
             Minors = <>
+            Title.LabelBrush.Style = bsClear
           end>
         Extent.UseYMin = True
         Foot.Brush.Color = clBtnFace
@@ -264,7 +273,7 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          108
+          110
         )
       end
       object Label8: TLabel
@@ -301,7 +310,7 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          108
+          110
         )
       end
     end

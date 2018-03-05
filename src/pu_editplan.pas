@@ -27,7 +27,7 @@ interface
 
 uses  u_global, u_utils, u_ccdconfig, XMLConf, UScaleDPI, u_translation,
   LazFileUtils, Classes, SysUtils, Forms,
-  Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls;
+  Controls, Graphics, Dialogs, StdCtrls, Grids, ExtCtrls, Spin;
 
 type
 
@@ -42,9 +42,8 @@ type
     CheckBoxAutofocus: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxRepeat: TCheckBox;
-    DitherCount: TEdit;
-    AutofocusCount: TEdit;
-    GainEdit: TEdit;
+    Exposure: TFloatSpinEdit;
+    Delay: TFloatSpinEdit;
     ISObox: TComboBox;
     LabelGain: TLabel;
     Panel6: TPanel;
@@ -61,13 +60,9 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
-    RepeatCount: TEdit;
-    Delay: TEdit;
     FrameType: TComboBox;
     Filter: TComboBox;
     Binning: TComboBox;
-    Exposure: TEdit;
-    Count: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -78,6 +73,11 @@ type
     Label8: TLabel;
     lblStepNum: TLabel;
     PlanName: TLabel;
+    Count: TSpinEdit;
+    AutofocusCount: TSpinEdit;
+    DitherCount: TSpinEdit;
+    RepeatCount: TSpinEdit;
+    GainEdit: TSpinEdit;
     StepList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnDeleteStepClick(Sender: TObject);
@@ -251,7 +251,7 @@ begin
 
         end;
     1 : begin   // Bias
-           Exposure.Text:='0.01';
+           Exposure.Value:=0.01;
            Filter.ItemIndex:=0;
            CheckBoxRepeat.Checked:=false;
         end;
@@ -276,23 +276,23 @@ begin
   p:=TStep(StepList.Objects[0,n]);
   Desc.Text:=p.description_str;
   FrameType.ItemIndex:=ord(p.frtype);
-  Exposure.Text:=p.exposure_str;
+  Exposure.Value:=p.exposure;
   Binning.Text:=p.binning_str;
   if hasGainISO then
     ISObox.ItemIndex:=p.gain
   else
-    GainEdit.Text:=IntToStr(p.gain);
+    GainEdit.Value:=p.gain;
   Filter.ItemIndex:=p.filter;
-  Count.Text:=p.count_str;
-  RepeatCount.Text:=p.repeatcount_str;
-  Delay.Text:=p.delay_str;
+  Count.Value:=p.count;
+  RepeatCount.Value:=p.repeatcount;
+  Delay.Value:=p.delay;
   CheckBoxRepeat.Checked:=(p.repeatcount>1);
   PanelRepeat.Visible:=CheckBoxRepeat.Checked;
   CheckBoxDither.Checked:=p.dither;
-  DitherCount.Text:=p.dithercount_str;
+  DitherCount.Value:=p.dithercount;
   CheckBoxAutofocusStart.Checked:=p.autofocusstart;
   CheckBoxAutofocus.Checked:=p.autofocus;
-  AutofocusCount.Text:=p.autofocuscount_str;
+  AutofocusCount.Value:=p.autofocuscount;
   LockStep:=false;
 end;
 
@@ -307,7 +307,7 @@ begin
   p:=TStep(StepList.Objects[0,n]);
   p.description:=Desc.Text;
   p.frtype:=TFrameType(FrameType.ItemIndex);
-  p.exposure:=StrToFloatDef(Exposure.Text,1);
+  p.exposure:=Exposure.Value;
   str:=Binning.Text;
   j:=pos('x',str);
   if j>0 then begin
@@ -323,17 +323,17 @@ begin
      p.gain:=ISObox.ItemIndex;
   end
   else begin
-     p.gain:=StrToIntDef(GainEdit.Text,Gain) ;
+     p.gain:=GainEdit.Value;
   end;
   p.filter:=Filter.ItemIndex;
-  p.count:=StrToIntDef(Count.Text,1);
-  p.repeatcount:=StrToIntDef(RepeatCount.Text,1);
-  p.delay:=StrToFloatDef(Delay.Text,1);
+  p.count:=Count.Value;
+  p.repeatcount:=RepeatCount.Value;
+  p.delay:=Delay.Value;
   p.dither:=CheckBoxDither.Checked;
-  p.dithercount:=StrToIntDef(DitherCount.Text,1);
+  p.dithercount:=DitherCount.Value;
   p.autofocusstart:=CheckBoxAutofocusStart.Checked;
   p.autofocus:=CheckBoxAutofocus.Checked;
-  p.autofocuscount:=StrToIntDef(AutofocusCount.Text,10);
+  p.autofocuscount:=AutofocusCount.Value;
   StepList.Cells[1,n]:=p.description;
 end;
 
@@ -350,10 +350,10 @@ procedure Tf_EditPlan.CheckBoxRepeatChange(Sender: TObject);
 begin
   if CheckBoxRepeat.Checked then begin
      PanelRepeat.Visible:=true;
-     RepeatCount.Text:='2';
+     RepeatCount.Value:=2;
   end else begin
      PanelRepeat.Visible:=false;
-     RepeatCount.Text:='1';
+     RepeatCount.Value:=1;
   end;
   StepChange(nil);
 end;

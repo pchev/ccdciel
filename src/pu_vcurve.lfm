@@ -22,7 +22,6 @@ object f_vcurve: Tf_vcurve
     Caption = 'Learn'
     OnClick = BtnLearnVcurveClick
     ParentShowHint = False
-    ShowHint = False
     TabOrder = 0
   end
   object VcChart: TChart
@@ -35,15 +34,19 @@ object f_vcurve: Tf_vcurve
       item
         Intervals.Options = [aipUseCount, aipUseNiceSteps]
         AtDataOnly = True
+        Marks.LabelBrush.Style = bsClear
         Minors = <>
         Title.LabelFont.Orientation = 900
+        Title.LabelBrush.Style = bsClear
       end    
       item
         Intervals.Count = 4
         Intervals.NiceSteps = '1|10|100|1000'
         Intervals.Options = [aipUseCount, aipUseNiceSteps]
         Alignment = calBottom
+        Marks.LabelBrush.Style = bsClear
         Minors = <>
+        Title.LabelBrush.Style = bsClear
       end>
     Extent.UseYMin = True
     Foot.Brush.Color = clBtnFace
@@ -179,16 +182,6 @@ object f_vcurve: Tf_vcurve
     Caption = '     '
     ParentColor = False
   end
-  object FocusPos: TEdit
-    Left = 120
-    Height = 31
-    Hint = 'The approximate focus position, it is important this value is as precise as possible.'
-    Top = 8
-    Width = 80
-    ParentShowHint = False
-    ShowHint = False
-    TabOrder = 2
-  end
   object Label1: TLabel
     Left = 8
     Height = 19
@@ -206,18 +199,7 @@ object f_vcurve: Tf_vcurve
     Caption = 'Get current'
     OnClick = GetPosClick
     ParentShowHint = False
-    ShowHint = False
-    TabOrder = 3
-  end
-  object HalfWidth: TEdit
-    Left = 120
-    Height = 31
-    Hint = 'The maximum offset we will move the focuser in and out. '#10'The focuser must move enough to get a big defocused star '#10'with a HFD of at least 20, or 2-3x the "Near focus" HFD value.'
-    Top = 40
-    Width = 80
-    ParentShowHint = False
-    ShowHint = False
-    TabOrder = 4
+    TabOrder = 2
   end
   object Label2: TLabel
     Left = 8
@@ -226,16 +208,6 @@ object f_vcurve: Tf_vcurve
     Width = 63
     Caption = 'Max offset'
     ParentColor = False
-  end
-  object Nsteps: TEdit
-    Left = 144
-    Height = 31
-    Hint = 'The number of measurement point for this curve'
-    Top = 72
-    Width = 56
-    ParentShowHint = False
-    ShowHint = False
-    TabOrder = 5
   end
   object Label3: TLabel
     Left = 8
@@ -255,7 +227,7 @@ object f_vcurve: Tf_vcurve
   end
   object TrackBar1: TTrackBar
     Left = 68
-    Height = 42
+    Height = 43
     Hint = 'After learning is completed you can use this cursor to better adjust to the linear part of the curve. '#10'The fit must be particulary good near the horizontal blue line position.'
     Top = 332
     Width = 88
@@ -263,8 +235,7 @@ object f_vcurve: Tf_vcurve
     PageSize = 1
     Position = 0
     ParentShowHint = False
-    ShowHint = False
-    TabOrder = 6
+    TabOrder = 3
   end
   object BtnSave: TButton
     Left = 231
@@ -273,7 +244,7 @@ object f_vcurve: Tf_vcurve
     Width = 75
     Caption = 'Save'
     OnClick = BtnSaveClick
-    TabOrder = 7
+    TabOrder = 4
   end
   object Label9: TLabel
     Left = 40
@@ -308,7 +279,7 @@ object f_vcurve: Tf_vcurve
     Width = 75
     Caption = 'Stop'
     OnClick = BtnStopVcurveClick
-    TabOrder = 8
+    TabOrder = 5
     Visible = False
   end
   object LabelCoord: TLabel
@@ -326,6 +297,32 @@ object f_vcurve: Tf_vcurve
     Width = 51
     Caption = '                 '
     ParentColor = False
+  end
+  object FocusPos: TSpinEdit
+    Left = 120
+    Height = 29
+    Top = 8
+    Width = 81
+    MaxValue = 100000
+    TabOrder = 6
+  end
+  object HalfWidth: TSpinEdit
+    Left = 120
+    Height = 29
+    Top = 40
+    Width = 81
+    MaxValue = 100000
+    TabOrder = 7
+  end
+  object Nsteps: TSpinEdit
+    Left = 144
+    Height = 29
+    Top = 72
+    Width = 57
+    MaxValue = 99
+    MinValue = 5
+    TabOrder = 8
+    Value = 5
   end
   object FitSourceL: TListChartSource
     left = 95

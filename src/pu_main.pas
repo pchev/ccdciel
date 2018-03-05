@@ -2933,10 +2933,10 @@ begin
    f_EditTargets.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
    posprev:=StrToIntDef(gainprev,gain);
    poscapt:=StrToIntDef(gaincapt,gain);
-   f_capture.GainEdit.Text:=IntToStr(poscapt);
-   f_preview.GainEdit.Text:=IntToStr(posprev);
-   f_EditPlan.GainEdit.Text:=IntToStr(poscapt);
-   f_EditTargets.GainEdit.Text:=IntToStr(poscapt);
+   f_capture.GainEdit.Value:=poscapt;
+   f_preview.GainEdit.Value:=posprev;
+   f_EditPlan.GainEdit.Value:=poscapt;
+   f_EditTargets.GainEdit.Value:=poscapt;
  end;
 end;
 
@@ -2993,7 +2993,7 @@ begin
   else begin
      f_focuser.Notebook1.PageIndex:=0;
   end;
-  f_focuser.Position.Text:=inttostr(focuser.Position);
+  f_focuser.Position.Value:=focuser.Position;
   FocuserPositionMin:=0;
   FocuserPositionMax:=MAXWORD;
   r:=focuser.PositionRange;
@@ -3005,8 +3005,8 @@ begin
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.PosIncr.ItemIndex:=0;
   end;
-  f_focuser.speed.Text:=inttostr(focuser.Speed);
-  f_focuser.timer.Text:=inttostr(focuser.Timer);
+  f_focuser.speed.Value:=focuser.Speed;
+  f_focuser.timer.Value:=focuser.Timer;
   r:=focuser.RelPositionRange;
   if r.step>0 then begin
     f_focuser.RelIncr.ShowHint:=True;
@@ -3402,17 +3402,17 @@ end;
 
 procedure Tf_main.FocuserPositionChange(n:double);
 begin
-  f_focuser.Position.Text:=inttostr(round(n));
+  f_focuser.Position.Value:=round(n);
 end;
 
 procedure Tf_main.FocuserSpeedChange(n:double);
 begin
-  f_focuser.speed.Text:=inttostr(round(n));
+  f_focuser.speed.Value:=round(n);
 end;
 
 procedure Tf_main.FocuserTimerChange(n:double);
 begin
-  f_focuser.timer.Text:=inttostr(round(n));
+  f_focuser.timer.Value:=round(n);
 end;
 
 procedure Tf_main.FocuserTemperatureChange(n:double);
@@ -3439,15 +3439,11 @@ begin
     end;
  end
  else begin
-    val(f_focuser.speed.Text,p,n);
-    if n=0 then begin
-      focuser.Speed:=p;
-      focuser.FocusIn;
-      val(f_focuser.timer.Text,p,n);
-      if n=0 then begin
-        focuser.Timer:=p;
-      end;
-    end;
+    p:=f_focuser.speed.Value;
+    focuser.Speed:=p;
+    focuser.FocusIn;
+    p:=f_focuser.timer.Value;
+    focuser.Timer:=p;
  end;
  if n<>0 then NewMessage(rsInvalidNumer);
 end;
@@ -3470,25 +3466,21 @@ begin
     end;
  end
  else begin
-    val(f_focuser.speed.Text,p,n);
-    if n=0 then begin
-      focuser.Speed:=p;
-      focuser.FocusOut;
-      val(f_focuser.timer.Text,p,n);
-      if n=0 then begin
-        focuser.Timer:=p;
-      end;
-    end;
+    p:=f_focuser.speed.Value;
+    focuser.Speed:=p;
+    focuser.FocusOut;
+    p:=f_focuser.timer.Value;
+    focuser.Timer:=p;
  end;
  if n<>0 then NewMessage(rsInvalidNumer);
 end;
 
 procedure Tf_main.FocusSetAbsolutePosition(Sender: TObject);
-var p,n: integer;
+var p: integer;
 begin
  if focuser.hasAbsolutePosition then begin
-   Val(f_focuser.Position.Text,p,n);
-   if n=0 then focuser.Position:=p;
+   p:=f_focuser.Position.Value;
+   focuser.Position:=p;
  end
 end;
 
@@ -3507,9 +3499,9 @@ begin
     f_vcurve.onStopVcurve:=@StopVcurve;
     f_vcurve.onSaveVcurve:=@doSaveVcurve;
   end;
-  if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Text:=IntToStr(VcCenterpos) else f_vcurve.FocusPos.Text:='';
-  if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Text:=IntToStr(VcHalfwidth) else f_vcurve.HalfWidth.Text:='';
-  f_vcurve.Nsteps.Text:=IntToStr(VcNsteps);
+  if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Value:=VcCenterpos else f_vcurve.FocusPos.Value:=focuser.Position;
+  if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Value:=VcHalfwidth else f_vcurve.HalfWidth.Value:=500;
+  f_vcurve.Nsteps.Value:=VcNsteps;
   formpos(f_vcurve,mouse.CursorPos.x,mouse.CursorPos.y);
   f_vcurve.Show;
   f_vcurve.LoadCurve;
@@ -3636,9 +3628,9 @@ var bin: integer;
 begin
  if not focuser.hasAbsolutePosition then exit;
  // read parameters
- VcCenterpos:=StrToIntDef(f_vcurve.FocusPos.Text,round(NullCoord));
- VcHalfwidth:=StrToIntDef(f_vcurve.HalfWidth.Text,round(NullCoord));
- VcNsteps:=StrToIntDef(f_vcurve.Nsteps.Text,30);
+ VcCenterpos:=f_vcurve.FocusPos.Value;
+ VcHalfwidth:=f_vcurve.HalfWidth.Value;
+ VcNsteps:=f_vcurve.Nsteps.Value;
  if VcNsteps>99 then begin
    VcNsteps:=99;
    f_vcurve.Nsteps.Text:='99';
