@@ -1547,7 +1547,7 @@ begin
       statusbar.Canvas.FillRect(Rect);
       // planetarium
       x:=Rect.Left+s+4;
-      if (f_planetarium<>nil)and(planetarium.Connected) then begin
+      if (f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected) then begin
         statusbar.Canvas.Brush.Color:=cllime;
         msg:=msg+Format(rsConnected,[rsPlanetarium]);
       end
