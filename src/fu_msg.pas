@@ -35,8 +35,8 @@ type
   Tf_msg = class(TFrame)
     msg: TMemo;
     Panel1: TPanel;
+    StaticText1: TStaticText;
     procedure FrameResize(Sender: TObject);
-    procedure msgMouseLeave(Sender: TObject);
   private
     { private declarations }
   public
@@ -59,11 +59,6 @@ begin
          w:=w-Tframe(TPanel(Parent).Components[i]).Width;
     Width:=w;
   end;
-end;
-
-procedure Tf_msg.msgMouseLeave(Sender: TObject);
-begin
-  msg.SelLength:=0;
 end;
 
 constructor Tf_msg.Create(aOwner: TComponent);
