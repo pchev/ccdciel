@@ -683,7 +683,7 @@ begin
      StartTimer.Enabled:=true;
      exit;
  end;
- if (Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
+ if (Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
    if AutoguiderStarting then begin
      f_pause.Caption:=rsAutoguiderNo;
      f_pause.Text:=Format(rsCannotConnec, [crlf]);
@@ -851,6 +851,7 @@ end;
 
 procedure Tf_sequence.AutoguiderDisconnected;
 begin
+  if Autoguider.AutoguiderType=agNONE then exit;
   if not AutoguiderAlert then begin
    AutoguiderAlert:=true;
    AutoguiderAlertTime:=now;
@@ -860,6 +861,7 @@ end;
 
 procedure Tf_sequence.AutoguiderIddle;
 begin
+  if Autoguider.AutoguiderType=agNONE then exit;
   if Targets.Running and T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and (not Fautoguider.Recovering) then begin
     if not AutoguiderAlert then begin
       AutoguiderAlert:=true;

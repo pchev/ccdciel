@@ -580,7 +580,7 @@
         <ResourceBaseClass Value="Frame"/>
       </Unit60>
       <Unit61>
-        <Filename Value="cu_autoguider_linguider.pas"/>
+        <Filename Value="cu_autoguider_none.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit61>
       <Unit62>

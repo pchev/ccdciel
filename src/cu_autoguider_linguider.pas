@@ -79,7 +79,7 @@ implementation
 Constructor T_autoguider_linguider.Create ;
 begin
   inherited Create;
-  FAutoguiderType:=LINGUIDER;
+  FAutoguiderType:=agLINGUIDER;
   FUSocket:='/tmp/lg_ss';
   UseUnixSocket:=true;
   FTimeout:=500;

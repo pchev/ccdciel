@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
-  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
+  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
   cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
@@ -1055,10 +1055,11 @@ begin
   astrometry.onAstrometryEnd:=@AstrometryEnd;
   astrometry.onShowMessage:=@NewMessage;
 
-  i:=config.GetValue('/Autoguider/Software',0);
+  i:=config.GetValue('/Autoguider/Software',3);
   case TAutoguiderType(i) of
-    PHD: autoguider:=T_autoguider_phd.Create;
-    LINGUIDER: autoguider:=T_autoguider_linguider.Create;
+    agPHD: autoguider:=T_autoguider_phd.Create;
+    agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
+    agNONE: autoguider:=T_autoguider_none.Create;
   end;
   autoguider.onStatusChange:=@AutoguiderStatus;
   autoguider.onConnect:=@AutoguiderConnect;
@@ -1149,7 +1150,7 @@ begin
   f_autoguider.onCalibrate:=@AutoguiderCalibrateClick;
   f_autoguider.onGuide:=@AutoguiderGuideClick;
   f_autoguider.onDither:=@AutoguiderDitherClick;
-  f_autoguider.Status.Text:='Disconnected';
+  f_autoguider.Status.Text:=autoguider.Status;
 
   f_sequence:=Tf_sequence.Create(self);
   f_sequence.onMsg:=@NewMessage;
@@ -1558,7 +1559,11 @@ begin
       // guider
       x:=x+2*s+4;
       if (f_autoguider<>nil)and(autoguider.State=GUIDER_DISCONNECTED) then begin
-        statusbar.Canvas.Brush.Color:=clred;
+        if Autoguider.AutoguiderType=agNONE
+        then
+          statusbar.Canvas.Brush.Color:=clGray
+        else
+          statusbar.Canvas.Brush.Color:=clred;
         msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
       end
       else if (autoguider.State=GUIDER_GUIDING) then begin
@@ -3908,10 +3913,10 @@ Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 var i: integer;
 begin
  if f_autoguider.BtnConnect.Caption=rsConnect then begin
-   i:=config.GetValue('/Autoguider/Software',0);
+   i:=config.GetValue('/Autoguider/Software',3);
    case TAutoguiderType(i) of
-    PHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
-    LINGUIDER: begin
+    agPHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
+    agLINGUIDER: begin
                if config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true) then begin
                  autoguider.Connect(config.GetValue('/Autoguider/Autoguider/LinGuiderSocket','/tmp/lg_ss'));
                end
@@ -3963,10 +3968,11 @@ begin
    NewMessage(format(rsDisconnected,[rsAutoguider]));
    f_sequence.AutoguiderDisconnected;
    // autoguider will be free automatically, create a new one for next connection
-   i:=config.GetValue('/Autoguider/Software',0);
+   i:=config.GetValue('/Autoguider/Software',3);
    case TAutoguiderType(i) of
-     PHD: autoguider:=T_autoguider_phd.Create;
-     LINGUIDER: autoguider:=T_autoguider_linguider.Create;
+     agPHD: autoguider:=T_autoguider_phd.Create;
+     agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
+     agNONE: autoguider:=T_autoguider_none.Create;
    end;
    autoguider.onStatusChange:=@AutoguiderStatus;
    autoguider.onConnect:=@AutoguiderConnect;
@@ -4299,7 +4305,7 @@ begin
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
-   f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',0);
+   f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',3);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
    f_option.LinGuiderUseUnixSocket:=config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true);
@@ -4446,7 +4452,7 @@ begin
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',f_option.MeridianFlipPauseTimeout.Value);
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
-     AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',0));
+     AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',3));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -4489,10 +4495,11 @@ begin
      if AutoguiderChange then begin
        autoguider.Terminate;
        f_sequence.AutoguiderDisconnected;
-       i:=config.GetValue('/Autoguider/Software',0);
+       i:=config.GetValue('/Autoguider/Software',3);
        case TAutoguiderType(i) of
-         PHD: autoguider:=T_autoguider_phd.Create;
-         LINGUIDER: autoguider:=T_autoguider_linguider.Create;
+         agPHD: autoguider:=T_autoguider_phd.Create;
+         agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
+         agNONE: autoguider:=T_autoguider_none.Create;
        end;
        autoguider.onStatusChange:=@AutoguiderStatus;
        autoguider.onConnect:=@AutoguiderConnect;

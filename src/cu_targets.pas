@@ -624,7 +624,7 @@ begin
     FWaitStarting:=false;
 
     if ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
-      if Autoguider<>nil then begin
+      if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) then begin
         // stop guiding
         if Autoguider.State<>GUIDER_DISCONNECTED then begin
           if not StopGuider then exit;
@@ -652,7 +652,7 @@ begin
       end;
       if not FRunning then exit;
       // start guiding
-      autostartguider:=(Autoguider<>nil) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
+      autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
       if autostartguider then begin
         if not StartGuider then exit;
         Wait;

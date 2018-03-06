@@ -55,6 +55,7 @@ type
     AutofocusPrecisionSlew: TFloatSpinEdit;
     Downsample: TSpinEdit;
     DitherPixel: TFloatSpinEdit;
+    PageGuiderNone: TPage;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
     SlewPrec: TFloatSpinEdit;
@@ -605,7 +606,7 @@ begin
   MeridianOption.Items[0]:=rsDoNothing;
   MeridianOption.Items[1]:=rsAutomaticFli;
   MeridianOption.Items[2]:=rsAbort;
-
+  AutoguiderBox.Items[2]:=rsNone2;
 end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);
@@ -785,6 +786,7 @@ end;
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
 begin
   Notebook3.PageIndex:=AutoguiderBox.ItemIndex;
+  groupbox5.Visible:=(AutoguiderBox.ItemIndex<2);
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
   DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0);
