@@ -393,6 +393,7 @@ begin
    {$ifdef debug_ascom}msg('write header');{$endif}
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
+   hdr.Free;
    {$ifdef debug_ascom}msg('write image');{$endif}
    for i:=0 to ys-1 do begin
       for j:=0 to xs-1 do begin
