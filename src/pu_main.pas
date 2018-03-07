@@ -4671,6 +4671,7 @@ var toolmenu,opm,npm: TMenuItem;
 begin
 npm:=nil;
 opm:=nil;
+toolmenu:=nil;
 if sender is TPanel then begin
   if sender is TPanel then begin
     if TPanel(Sender).Tag>0 then npm:=TMenuItem(TPanel(Sender).tag);
