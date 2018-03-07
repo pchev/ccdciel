@@ -1830,10 +1830,6 @@ msgstr ""
 msgid "Move direction"
 msgstr ""
 
-#: u_translation:rsrunvcurvelea
-msgid "Run V curve learning again if you change any option."
-msgstr ""
-
 #: u_translation:rsslippagecorr
 msgid "Slippage correction "
 msgstr ""

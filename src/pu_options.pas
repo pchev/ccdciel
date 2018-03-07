@@ -198,7 +198,6 @@ type
     AutofocusNotebook: TNotebook;
     Label59: TLabel;
     Label60: TLabel;
-    Label61: TLabel;
     Label62: TLabel;
     Label63: TLabel;
     Label64: TLabel;
@@ -498,7 +497,6 @@ begin
   Label58.Caption := rsMoveDirectio;
   AutofocusMoveDirIn.Caption := rsIn;
   AutofocusMoveDirOut.Caption := rsOut;
-  Label61.Caption := rsRunVCurveLea;
   Label82.Caption := rsStartFocus;
   AutofocusSlippageCorrection.Caption := rsSlippageCorr;
   Label88.Caption := rsEstimatedSli;

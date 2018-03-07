@@ -502,7 +502,6 @@ resourcestring
   rsAutofocusMet = 'Autofocus method';
   rsSeconds = 'seconds';
   rsMoveDirectio = 'Move direction';
-  rsRunVCurveLea = 'Run V curve learning again if you change any option.';
   rsSlippageCorr = 'Slippage correction ';
   rsEstimatedSli = 'Estimated slippage since last learning';
   rsNumberOfDyna = 'Number of dynamic points';

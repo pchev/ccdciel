@@ -78,7 +78,6 @@ object f_setup: Tf_setup
         )
         OnClick = InterfaceSelectionBoxClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 0
       end
       object PanelIndiServer: TPanel
@@ -187,7 +186,6 @@ object f_setup: Tf_setup
         Caption = 'New'
         OnClick = BtnNewProfileClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 3
       end
       object BtnDeleteProfile: TButton
@@ -199,7 +197,6 @@ object f_setup: Tf_setup
         Caption = 'Delete'
         OnClick = BtnDeleteProfileClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 4
       end
       object BtnCopyProfile: TButton
@@ -211,7 +208,6 @@ object f_setup: Tf_setup
         Caption = 'Copy'
         OnClick = BtnCopyProfileClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 5
       end
     end
@@ -221,10 +217,10 @@ object f_setup: Tf_setup
       ClientWidth = 361
       object PanelCameraAscom: TPanel
         Left = 16
-        Height = 216
-        Top = 16
+        Height = 112
+        Top = 32
         Width = 287
-        ClientHeight = 216
+        ClientHeight = 112
         ClientWidth = 287
         TabOrder = 0
         Visible = False
@@ -317,7 +313,7 @@ object f_setup: Tf_setup
         end
         object IndiSensor: TComboBox
           Left = 100
-          Height = 31
+          Height = 35
           Top = 50
           Width = 168
           ItemHeight = 0
@@ -361,7 +357,6 @@ object f_setup: Tf_setup
           )
           OnClick = CameraIndiTransfertClick
           ParentShowHint = False
-          ShowHint = False
           TabOrder = 4
         end
         object CameraDiskPanel: TPanel
@@ -388,7 +383,6 @@ object f_setup: Tf_setup
             Top = 8
             Width = 166
             ParentShowHint = False
-            ShowHint = False
             TabOrder = 0
             Text = '/mnt/ramdisk'
           end
@@ -455,7 +449,6 @@ object f_setup: Tf_setup
         Caption = 'Filter wheel in camera connection. (Restart required!)'
         OnClick = FilterWheelInCameraBoxClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 3
       end
       object PanelWheelIncamera: TPanel
@@ -613,7 +606,6 @@ object f_setup: Tf_setup
         Caption = 'Focuser in mount connection. (Restart required!)'
         OnClick = FocuserInMountBoxClick
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 3
       end
       object PanelFocuserIndi: TPanel
