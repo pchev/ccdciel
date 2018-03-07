@@ -1055,7 +1055,7 @@ begin
   astrometry.onAstrometryEnd:=@AstrometryEnd;
   astrometry.onShowMessage:=@NewMessage;
 
-  i:=config.GetValue('/Autoguider/Software',3);
+  i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
     agPHD: autoguider:=T_autoguider_phd.Create;
     agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
@@ -3913,7 +3913,7 @@ Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
 var i: integer;
 begin
  if f_autoguider.BtnConnect.Caption=rsConnect then begin
-   i:=config.GetValue('/Autoguider/Software',3);
+   i:=config.GetValue('/Autoguider/Software',2);
    case TAutoguiderType(i) of
     agPHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
     agLINGUIDER: begin
@@ -3968,7 +3968,7 @@ begin
    NewMessage(format(rsDisconnected,[rsAutoguider]));
    f_sequence.AutoguiderDisconnected;
    // autoguider will be free automatically, create a new one for next connection
-   i:=config.GetValue('/Autoguider/Software',3);
+   i:=config.GetValue('/Autoguider/Software',2);
    case TAutoguiderType(i) of
      agPHD: autoguider:=T_autoguider_phd.Create;
      agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
@@ -4305,7 +4305,7 @@ begin
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
-   f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',3);
+   f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',2);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
    f_option.LinGuiderUseUnixSocket:=config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true);
@@ -4452,7 +4452,7 @@ begin
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',f_option.MeridianFlipPauseTimeout.Value);
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
-     AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',3));
+     AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',2));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -4495,7 +4495,7 @@ begin
      if AutoguiderChange then begin
        autoguider.Terminate;
        f_sequence.AutoguiderDisconnected;
-       i:=config.GetValue('/Autoguider/Software',3);
+       i:=config.GetValue('/Autoguider/Software',2);
        case TAutoguiderType(i) of
          agPHD: autoguider:=T_autoguider_phd.Create;
          agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
