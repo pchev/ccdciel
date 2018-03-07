@@ -376,6 +376,10 @@ object f_main: Tf_main
         Caption = 'Open FITS file...'
         OnClick = MenuOpenClick
       end
+      object MenuOpenPicture: TMenuItem
+        Caption = 'Open picture file...'
+        OnClick = MenuOpenPictureClick
+      end
       object MenuSave: TMenuItem
         Caption = 'Save FITS file...'
         OnClick = MenuSaveClick
@@ -2490,5 +2494,11 @@ object f_main: Tf_main
     OnTimer = CameraConnectTimerTimer
     left = 424
     top = 248
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Title = 'Open picture file'
+    Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
+    left = 48
+    top = 312
   end
 end

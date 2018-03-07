@@ -843,6 +843,7 @@ resourcestring
   rsShowINDILog = 'Show INDI log';
   rsNumberOfExpo = 'Number of exposure per point';
   rsSomeDefinedD = 'Some defined devices are not connected';
+  rsOpenPictureF = 'Open picture file%s';
 
 
 
