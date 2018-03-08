@@ -38,9 +38,9 @@ install -v -m 644 scripts/T_ccd_temp_down.script  $destdir/share/ccdciel/scripts
 install -v -m 644 scripts/T_ccd_temp_up.script  $destdir/share/ccdciel/scripts/T_ccd_temp_up.script
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
 install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scripts/T_eqmod_alignment.script 
-install -v -m 644 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh 
-install -v -m 644 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh 
-install -v -m 644 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh 
+install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
+install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
+install -v -m 755 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh
 install -v -m 644 data/stars/focus_star_4  $destdir/share/ccdciel/data/stars/focus_star_4 
 install -v -m 644 data/stars/focus_star_5  $destdir/share/ccdciel/data/stars/focus_star_5 
 install -v -m 644 data/stars/focus_star_6  $destdir/share/ccdciel/data/stars/focus_star_6 
