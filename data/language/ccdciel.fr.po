@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-05 20:36+0000\n"
-"PO-Revision-Date: 2018-03-05 20:42+0000\n"
+"POT-Creation-Date: 2018-03-08 07:51+0000\n"
+"PO-Revision-Date: 2018-03-08 07:54+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-05 20:44+0000\n"
+"X-Launchpad-Export-Date: 2018-03-08 07:56+0000\n"
 "X-Generator: Launchpad (build 18566)\n"
 
 #: u_translation.rsabort
@@ -1743,6 +1743,10 @@ msgstr "Ouvre le fichier %s"
 msgid "Open FITS file%s"
 msgstr "Ouvrir le fichier FITS %s"
 
+#: u_translation.rsopenpicturef
+msgid "Open picture file%s"
+msgstr "Ouvrir une image%s"
+
 #: u_translation.rsopenreferenc
 msgid "Open reference image"
 msgstr "Ouvrir l'image de référence"
@@ -2631,7 +2635,7 @@ msgstr "Arrêt à"
 
 #: u_translation.rsstopautoguid
 msgid "Stop autoguider"
-msgstr "Arrêter l'autoguidage"
+msgstr "Arrêt de l'autoguidage"
 
 #: u_translation.rsstopcapture
 msgid "Stop capture"

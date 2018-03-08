@@ -2497,6 +2497,7 @@ object f_main: Tf_main
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Title = 'Open picture file'
+    Filter = 'Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All files (*)|*'
     Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
     left = 48
     top = 312

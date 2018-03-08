@@ -3046,3 +3046,7 @@ msgstr ""
 msgid "Some defined devices are not connected"
 msgstr ""
 
+#: u_translation:rsopenpicturef
+msgid "Open picture file%s"
+msgstr ""
+
