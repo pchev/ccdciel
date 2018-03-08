@@ -7718,6 +7718,7 @@ begin
   DrawImage; {draw clean image}
 
   col := ColorToBGRA(clRed);
+  imabmp.FontHeight:=12;
 
   s:=14; {test image in boxes of size s*s}
 
