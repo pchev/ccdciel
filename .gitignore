@@ -6,6 +6,9 @@ Makefile.fpc
 Makefile.fpcxxx
 # ignore build dir
 src/units/
+src/ccdciel.app/
+src/ccdciel.dSYM/
+src/ccdciel.lps
 component/bgrabitmap/lib/
 component/indiclient/lib/
 component/enhedits/lib/

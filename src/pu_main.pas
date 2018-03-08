@@ -7705,6 +7705,7 @@ var
  hfdlist, hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
  Saved_Cursor : TCursor;
  mess2 : string;
+ col: TBGRAPixel;
 const
     overlap=2; {box overlap,results in 1 pixel overlap}
 begin
@@ -7716,11 +7717,7 @@ begin
 
   DrawImage; {draw clean image}
 
-  imabmp.Canvas.Pen.Mode := pmMerge;
-  imabmp.Canvas.Pen.width := 1;{thickness lines}
-  imabmp.Canvas.brush.Style:=bsClear;
-  imabmp.Canvas.font.color:=clred;
-  imabmp.Canvas.Pen.Color := $FF;
+  col := ColorToBGRA(clRed);
 
   s:=14; {test image in boxes of size s*s}
 
@@ -7760,8 +7757,9 @@ begin
         imageY:=round(yc);
         imageX:=round(xc);
 
-        imabmp.Canvas.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size);{indicate hfd with red square}
-        imabmp.Canvas.textout(imageX+size,imageY+size,floattostrf(hfd1, ffgeneral, 2,1));{add hfd as text}
+        imabmp.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size,col ,dmSet);
+        imabmp.TextOut(imageX+size,imageY+size,floattostrf(hfd1, ffgeneral, 2,1),col);
+
       end;
     end;
   end;
@@ -7783,19 +7781,20 @@ begin
       x3:=round(+median_top_right*scale_factor+img_width/2);y3:=round(+median_top_right*scale_factor+img_height/2);
       x4:=round(-median_top_left*scale_factor+img_width/2);y4:=round(+median_top_left*scale_factor+img_height/2);
 
-      imabmp.Canvas.Pen.width := 2;{thickness lines}
-      imabmp.Canvas.moveto(x1,y1);{draw trapezium}
-      imabmp.Canvas.lineto(x2,y2);{draw trapezium}
-      imabmp.Canvas.lineto(x3,y3);{draw trapezium}
-      imabmp.Canvas.lineto(x4,y4);{draw trapezium}
-      imabmp.Canvas.lineto(x1,y1);{draw trapezium}
+      {draw trapezium}
+      imabmp.DrawLineAntialias(x1,y1,x2,y2,col,2);
+      imabmp.DrawLineAntialias(x2,y2,x3,y3,col,2);
+      imabmp.DrawLineAntialias(x3,y3,x4,y4,col,2);
+      imabmp.DrawLineAntialias(x4,y4,x1,y1,col,2);
 
-      imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
-      imabmp.Canvas.lineto(x2,y2);{draw diagonal}
-      imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
-      imabmp.Canvas.lineto(x3,y3);{draw diagonal}
-      imabmp.Canvas.lineto(img_width div 2,img_height div 2);{draw diagonal}
-      imabmp.Canvas.lineto(x4,y4);{draw diagonal}
+      {draw diagonal}
+      xxc:= img_width div 2;
+      yyc:= img_height div 2;
+      imabmp.DrawLineAntialias(xxc,yyc,x1,y1,col,2);
+      imabmp.DrawLineAntialias(xxc,yyc,x2,y2,col,2);
+      imabmp.DrawLineAntialias(xxc,yyc,x3,y3,col,2);
+      imabmp.DrawLineAntialias(xxc,yyc,x4,y4,col,2);
+
       mess2:=Format(rsTiltIndicati, [inttostr(round(100*((median_worst/median_best)-1)))]); {estimate tilt value}
     end
     else
