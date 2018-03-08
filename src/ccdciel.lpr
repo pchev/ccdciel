@@ -48,8 +48,13 @@ uses
 
 begin
   {$ifdef USEHEAPTRC}
-  DeleteFile('/tmp/ccdciel_heap.trc');
-  SetHeapTraceOutput('/tmp/ccdciel_heap.trc');
+    {$ifdef mswindows}
+      DeleteFile('C:\Temp\ccdciel_heap.trc');
+      SetHeapTraceOutput('C:\Temp\ccdciel_heap.trc');
+    {$else}
+      DeleteFile('/tmp/ccdciel_heap.trc');
+      SetHeapTraceOutput('/tmp/ccdciel_heap.trc');
+    {$endif}
   {$endif}
 
   RequireDerivedFormResource := True;

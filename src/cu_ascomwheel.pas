@@ -165,6 +165,7 @@ begin
        FFilterNames.Assign(fnam);
        if Assigned(FonFilterNameChange) then FonFilterNameChange(self);
     end;
+    fnam.Free;
     except
      on E: Exception do msg('Error: ' + E.Message);
     end;

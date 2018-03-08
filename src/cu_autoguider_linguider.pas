@@ -180,6 +180,7 @@ Procedure T_autoguider_linguider.Connect(cp1: string; cp2:string='');
 var buf: string;
 begin
   if FRunning then exit;
+  if not Terminated then begin
   UseUnixSocket:=(cp2='');
   if UseUnixSocket then begin
     FUSocket:=cp1;
@@ -200,6 +201,9 @@ begin
     FStatus:='Connecting';
     Start;
   end;
+  end
+  else
+    Start;
 end;
 
 procedure T_autoguider_linguider.Disconnect;
@@ -210,6 +214,7 @@ end;
 procedure T_autoguider_linguider.Execute;
 var buf:string;
 begin
+ if Terminated then exit;
  if UseUnixSocket then begin
    try
     FRunning:=true;

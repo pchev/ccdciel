@@ -1045,10 +1045,15 @@ begin
   camera.onCameraDisconnected:=@CameraDisconnected;
   camera.onAbortExposure:=@CameraExposureAborted;
 
-  watchdog:=T_indiwatchdog.Create(nil);
-  watchdog.onMsg:=@NewMessage;
-  watchdog.onDeviceMsg:=@DeviceMessage;
-  watchdog.onStatusChange:=@WatchdogStatus;
+  aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
+  if aInt= INDI then begin
+    watchdog:=T_indiwatchdog.Create(nil);
+    watchdog.onMsg:=@NewMessage;
+    watchdog.onDeviceMsg:=@DeviceMessage;
+    watchdog.onStatusChange:=@WatchdogStatus;
+  end
+  else
+    watchdog:=nil;
 
   astrometry:=TAstrometry.Create(nil);
   astrometry.Camera:=camera;
@@ -1909,17 +1914,15 @@ begin
   if autoguider.Running then begin
     autoguider.Disconnect;
     autoguider.Terminate;
- {$ifndef mswindows}
   end else begin
-    autoguider.Free;
- {$endif}
+    autoguider.Terminate;
+    autoguider.Connect('','');
   end;
   if planetarium.Running then begin
     planetarium.Disconnect;
- {$ifndef mswindows}
   end else begin
-    planetarium.Free;
- {$endif}
+    planetarium.Terminate;
+    planetarium.Connect('','');
   end;
   if astrometry.Busy then begin
     astrometry.StopAstrometry;
@@ -2406,20 +2409,22 @@ case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
 end;
-WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
-wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
-focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
-rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
-mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
-camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
-watchdog.AutoLoadConfig:=config.GetValue('/INDIwatchdog/AutoLoadConfig',false);
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
 rotator.Timeout:=DeviceTimeout;
 wheel.Timeout:=DeviceTimeout;
 mount.Timeout:=DeviceTimeout;
-watchdog.Timeout:=DeviceTimeout;
+wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
+focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
+rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
+mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
+camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
+if watchdog<>nil then begin
+  watchdog.Timeout:=DeviceTimeout;
+  WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
+  watchdog.AutoLoadConfig:=config.GetValue('/INDIwatchdog/AutoLoadConfig',false);
+end;
 end;
 
 procedure Tf_main.SetOptions;
@@ -2549,7 +2554,7 @@ begin
   WantFocuser:=config.GetValue('/Devices/Focuser',false);
   WantRotator:=config.GetValue('/Devices/Rotator',false);
   WantMount:=config.GetValue('/Devices/Mount',false);
-  WantWatchdog:=config.GetValue('/Devices/Watchdog',false);
+  WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
 
   if WantCamera and (CameraName='') then begin
     ShowMessage(rsPleaseConfig+blank+rsCamera);
@@ -3060,6 +3065,7 @@ end;
 
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);
 begin
+   if watchdog=nil then exit;
    watchdog.Threshold:=strtointdef(config.GetValue('/INDIwatchdog/Threshold','10'),10);
    watchdog.Connect(config.GetValue('/INDI/Server',''),
                   config.GetValue('/INDI/ServerPort',''),
@@ -3068,11 +3074,13 @@ end;
 
 Procedure Tf_main.DisconnectWatchdog(Sender: TObject);
 begin
+ if watchdog=nil then exit;
  watchdog.Disconnect;
 end;
 
 Procedure Tf_main.WatchdogStatus(Sender: TObject);
 begin
+ if watchdog=nil then exit;
  case watchdog.Status of
    devDisconnected:begin
                    f_devicesconnection.LabelWatchdog.Font.Color:=clRed;
@@ -4484,6 +4492,7 @@ begin
 
      if PlanetariumChange and (not planetarium.Connected) then begin
         planetarium.Terminate;
+        planetarium.Connect('');
         i:=config.GetValue('/Planetarium/Software',0);
         case TPlanetariumType(i) of
           CDC: planetarium:=TPlanetarium_cdc.Create;
@@ -4499,6 +4508,7 @@ begin
      end;
      if AutoguiderChange then begin
        autoguider.Terminate;
+       autoguider.Connect('');
        f_sequence.AutoguiderDisconnected;
        i:=config.GetValue('/Autoguider/Software',2);
        case TAutoguiderType(i) of

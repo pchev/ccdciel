@@ -56,6 +56,7 @@ protected
 public
   InitTimer: TTimer;
   Constructor Create;
+  destructor Destroy; override;
   Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
   procedure Disconnect; virtual; abstract;
   procedure Shutdown; virtual; abstract;
@@ -104,6 +105,12 @@ InitTimer:=TTimer.Create(Application);
 InitTimer.Enabled:=false;
 InitTimer.Interval:=500;
 InitTimer.OnTimer:=@InitTimerTimer;
+end;
+
+destructor  TPlanetarium.Destroy;
+begin
+  if InitTimer<>nil then FreeAndNil(InitTimer);
+  Inherited Destroy;
 end;
 
 procedure TPlanetarium.InitTimerTimer(Sender: TObject);

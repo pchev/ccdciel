@@ -74,7 +74,7 @@ end;
 
 procedure TPlanetarium_cdc.Connect(cp1: string; cp2:string='');
 begin
-  if started or Terminated then exit;
+  if started then exit;
   FTargetHost:=cp1;
   if cp2='' then FTargetPort:=GetCdCPort
             else FTargetPort:=cp2;
@@ -112,6 +112,7 @@ started:=true;
 ending:=false;
 tcpclient:=TTCPClient.Create;
 try
+ if Terminated then exit;
  tcpclient.TargetHost:=FTargetHost;
  tcpclient.TargetPort:=FTargetPort;
  tcpclient.Timeout := FTimeout;

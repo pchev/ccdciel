@@ -91,6 +91,7 @@ var buf:string;
 begin
 tcpclient:=TTCPClient.Create;
 try
+ if Terminated then exit;
  tcpclient.TargetHost:=FTargetHost;
  tcpclient.TargetPort:=FTargetPort;
  tcpclient.Timeout := FTimeout;
@@ -125,7 +126,7 @@ end;
 procedure T_autoguider_phd.Send(const Value: string);
 begin
 //writeln('>>'+Value);
- if (tcpclient<>nil)and(Value>'') then begin
+ if (not terminated)and(tcpclient<>nil)and(Value>'') then begin
    tcpclient.Sock.SendString(Value+crlf);
    if tcpclient.Sock.LastError<>0 then begin
       DisplayMessage(tcpclient.GetErrorDesc);

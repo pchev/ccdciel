@@ -78,7 +78,7 @@ end;
 
 procedure TPlanetarium_hnsky.Connect(cp1: string; cp2:string='');
 begin
-  if started or Terminated then exit;
+  if started then exit;
   Start;
 end;
 
@@ -102,6 +102,7 @@ started:=true;
 ending:=false;
 tcpclient:=TTCPClient.Create;
 try
+ if Terminated then exit;
  tcpclient.TargetHost:=FTargetHost;
  tcpclient.TargetPort:=FTargetPort;
  tcpclient.Timeout := FTimeout;

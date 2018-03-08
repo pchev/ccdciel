@@ -69,6 +69,7 @@ end;
 
 Procedure T_autoguider_none.Connect(cp1: string; cp2:string='');
 begin
+  start;
 end;
 
 procedure T_autoguider_none.Disconnect;

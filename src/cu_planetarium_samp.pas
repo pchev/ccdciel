@@ -100,6 +100,7 @@ procedure TPlanetarium_samp.Execute;
 begin
  try
   SampClient:=TSampClient.Create;
+  if Terminated then exit;
   SampClient.appname:='ccdciel';
   SampClient.appdesc:='CCDciel image capture software';
   SampClient.appicon:='http://a.fsdn.com/allura/p/ccdciel/icon';
