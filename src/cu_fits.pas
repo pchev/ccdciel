@@ -170,7 +170,7 @@ type
      function  SameFormat(f:TFits): boolean;
      function  double_star(ri, x,y : integer):boolean;
      function  value_subpixel(x1,y1:double):double;
-     procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double);
+     procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
      procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
      property IntfImg: TLazIntfImage read FIntfImg;
@@ -1410,10 +1410,11 @@ begin
   end;
 end;
 
-procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double);
+procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
 // brightest 3x3 pixels in area s*s centered on x,y
 var i,j,rs,xm,ym: integer;
-            val :double;
+    bg,bg_average,bg_standard_deviation: double;
+    val :double;
 begin
  rs:= s div 2;
  if (x-rs)<3 then x:=rs+3;
@@ -1427,6 +1428,29 @@ begin
 
  try
 
+   // average background
+  bg_average:=0;
+  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
+  begin
+    bg_average:=bg_average+Fimage[0,y+rs,x+i];{top line, left to right}
+    bg_average:=bg_average+Fimage[0,y+i,x+rs];{right line, top to bottom}
+    bg_average:=bg_average+Fimage[0,y-rs,x-i];{bottom line, right to left}
+    bg_average:=bg_average+Fimage[0,y-i,x-rs];{right line, bottom to top}
+  end;
+  bg_average:=bg_average/(8*rs);
+
+  bg_standard_deviation:=0;
+  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
+  begin
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+rs,x+i]);{top line, left to right}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+rs]);{right line, top to bottom}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-rs,x-i]);{bottom line, right to left}
+    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-i,x-rs]);{left line, bottom to top}
+  end;
+  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*rs))/FimageC;
+
+  bg:=FimageMin+bg_average/FimageC;
+
  // try with double star exclusion
  for i:=-rs to rs do
    for j:=-rs to rs do begin
@@ -1434,8 +1458,9 @@ begin
            Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
            Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
 
-     Val:=FimageMin+Val/FimageC;
-     if Val>vmax then
+     Val:=FimageMin+Val/FimageC-bg;
+     // huge performance improvement by checking only the pixels above the noise
+     if (val>((5*bg_standard_deviation))) and (Val>vmax) then
      begin
        if double_star(starwindow2, x+i,y+j)=false then
        begin
@@ -1446,6 +1471,7 @@ begin
      end;
  end;
 
+ if accept_double then begin
  // if we not find anything repeat with only max value
  if vmax=0 then
    for i:=-rs to rs do
@@ -1462,6 +1488,7 @@ begin
          ym:=j;
        end;
    end;
+ end;
 
  xc:=x+xm;
  yc:=y+ym;

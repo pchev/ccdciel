@@ -7750,10 +7750,13 @@ begin
     begin
       fitsX:=fx*s;
       hfd1:=-1;
+      {ignore double stars, require comparaison with bright pixel position}
+      fits.FindBrightestPixel(fitsX,fitsY,s+overlap,s+overlap,x1,y1,vmax,false);
+      if vmax>0 then begin
       fits.FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
-      if ((vmax>fits.imagemax*0.1) {new bright star found}
+      if ((vmax>fits.imagemax*0.1)and(vmax<(fits.imagemax-2*bg)) {new bright star but not saturated}
            and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
-           and (not fits.double_star(rc, xxc,yyc)) ) {ignore double stars} then
+           ) then
            fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
 
       if ((hfd1>0.8) and (hfd1<99)) then
@@ -7772,6 +7775,7 @@ begin
         imabmp.TextOut(imageX+size,imageY+size,floattostrf(hfd1, ffgeneral, 2,1),col);
 
       end;
+    end;
     end;
   end;
   if nhfd>0 then
