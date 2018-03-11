@@ -7711,7 +7711,7 @@ end;
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
  fitsX,fitsY,size,imageX,imageY,s,xxc,yyc,rc,fx,fy,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right,x1,x2,x3,x4,y1,y2,y3,y4 : integer;
- hfd1,star_fwhm, vmax,bg,bgdev,xc,yc,snr, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor : double;
+ hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor : double;
  hfdlist, hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
  Saved_Cursor : TCursor;
  mess2 : string;
@@ -7754,7 +7754,8 @@ begin
       fits.FindBrightestPixel(fitsX,fitsY,s+overlap,s+overlap,x1,y1,vmax,false);
       if vmax>0 then begin
       fits.FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
-      if ((vmax>fits.imagemax*0.1)and(vmax<(fits.imagemax-2*bg)) {new bright star but not saturated}
+      treshold:=min(fits.imagemax*0.1, 20*bgdev);
+      if ((vmax>treshold)and(vmax<(fits.imagemax-2*bg)) {new bright star but not saturated}
            and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
            ) then
            fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
