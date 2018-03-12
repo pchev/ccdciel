@@ -6445,7 +6445,7 @@ function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
 var tra,tde,teq,tpa,sra,sde,jd0,jd1,err: double;
     sid: string;
     focusretry,maxretry: integer;
-    tpos,pslew,savecapture,restartguider: boolean;
+    tpos,pslew,savecapture,restartguider,pauseguider: boolean;
 begin
  maxretry:=3;
  result:=false;
@@ -6477,15 +6477,18 @@ begin
  NewMessage(rsAutofocusNow);
  tpos:=false;
  pslew:=false;
- // stop autoguider
  restartguider:=(Autoguider.State<>GUIDER_DISCONNECTED);
- if restartguider and (Autoguider.State=GUIDER_GUIDING) then begin
-   NewMessage(rsStopAutoguid);
-   autoguider.Guide(false);
-   autoguider.WaitBusy(15);
- end;
+ pauseguider:=false;
  if InplaceAutofocus then begin
+   try
    NewMessage(rsStayAtTheCur);
+   // pause autoguider
+   pauseguider:=Autoguider.State=GUIDER_GUIDING;
+   if pauseguider then begin
+     NewMessage(rsPauseAutogui);
+     autoguider.Pause(True);
+     Wait(2);
+   end;
    if CancelAutofocus then exit;
    // do autofocus
    if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
@@ -6507,8 +6510,34 @@ begin
       NewMessage(rsSequenceWill);
       result:=true;
    end;
- end;
- if (not InplaceAutofocus) or (not result) then begin
+   finally
+   // restart autoguider, never let in pause in case autofocus is aborted
+   if pauseguider then begin
+     NewMessage(rsResumeAutogu);
+     autoguider.Pause(false);
+     Wait(5);
+   end
+   else if restartguider then begin
+     NewMessage(rsRestartAutog);
+     autoguider.Guide(false);
+     wait(5);
+     autoguider.Guide(true);
+     autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+     if autoguider.State<>GUIDER_GUIDING then begin
+        NewMessage(rsFailedToStar);
+        result:=false;
+     end;
+   end;
+   end;
+ end
+ else   // InplaceAutofocus
+ begin
+   // stop autoguider
+   if restartguider and (Autoguider.State=GUIDER_GUIDING) then begin
+     NewMessage(rsStopAutoguid);
+     autoguider.Guide(false);
+     autoguider.WaitBusy(15);
+   end;
    // get current position from target object
    if (f_sequence.Running) and (f_sequence.TargetCoord) then begin
      NewMessage(rsGetCurrentPo);
@@ -6612,18 +6641,18 @@ begin
    else begin
     result:=true;
    end;
- end;
- // start autoguider
- if restartguider then begin
-  NewMessage(rsRestartAutog);
-  autoguider.Guide(false);
-  wait(5);
-  autoguider.Guide(true);
-  autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
-  if autoguider.State<>GUIDER_GUIDING then begin
-     NewMessage(rsFailedToStar);
-     result:=false;
-  end;
+   // start autoguider
+   if restartguider then begin
+    NewMessage(rsRestartAutog);
+    autoguider.Guide(false);
+    wait(5);
+    autoguider.Guide(true);
+    autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+    if autoguider.State<>GUIDER_GUIDING then begin
+       NewMessage(rsFailedToStar);
+       result:=false;
+    end;
+   end;
  end;
  Wait(2);
  finally

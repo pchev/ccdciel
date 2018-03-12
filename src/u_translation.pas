@@ -844,6 +844,8 @@ resourcestring
   rsNumberOfExpo = 'Number of exposure per point';
   rsSomeDefinedD = 'Some defined devices are not connected';
   rsOpenPictureF = 'Open picture file%s';
+  rsPauseAutogui = 'Pause autoguider';
+  rsResumeAutogu = 'Resume autoguider';
 
 
 

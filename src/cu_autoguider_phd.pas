@@ -434,6 +434,8 @@ var buf:string;
 begin
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
+    Pause(false);
+    wait(1);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
     FStarLostTimeoutCancel:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
     buf:='{"method": "loop","id":2004}';
