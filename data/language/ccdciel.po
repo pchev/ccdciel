@@ -3050,3 +3050,11 @@ msgstr ""
 msgid "Open picture file%s"
 msgstr ""
 
+#: u_translation:rspauseautogui
+msgid "Pause autoguider"
+msgstr ""
+
+#: u_translation:rsresumeautogu
+msgid "Resume autoguider"
+msgstr ""
+

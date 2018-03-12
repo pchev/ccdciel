@@ -46,8 +46,9 @@ install -v -m 644 data/stars/focus_star_5  $destdir/share/ccdciel/data/stars/foc
 install -v -m 644 data/stars/focus_star_6  $destdir/share/ccdciel/data/stars/focus_star_6 
 install -v -m 644 data/stars/focus_star_7  $destdir/share/ccdciel/data/stars/focus_star_7 
 install -v -m 644 data/stars/focus_star_8  $destdir/share/ccdciel/data/stars/focus_star_8 
-install -v -m 644 data/language/ccdciel.po  $destdir/share/ccdciel/data/language/ccdciel.en.po
+install -v -m 644 data/language/ccdciel.po     $destdir/share/ccdciel/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.fr.po  $destdir/share/ccdciel/data/language/ccdciel.fr.po
+install -v -m 644 data/language/ccdciel.it.po  $destdir/share/ccdciel/data/language/ccdciel.it.po
 install -v -m 644 doc/doc_ccdciel_en.pdf $destdir/share/ccdciel/doc/doc_ccdciel_en.pdf
 install -v -m 644 system_integration/Linux/share/applications/ccdciel.desktop $destdir/share/applications/ccdciel.desktop
 install -v -m 644 system_integration/Linux/share/metainfo/ccdciel.appdata.xml $destdir/share/metainfo/ccdciel.appdata.xml

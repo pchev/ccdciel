@@ -4161,6 +4161,7 @@ begin
      delete(buf,1,8);
      if buf='en' then langname:='English'
      else if buf='fr' then langname:='Français'
+     else if buf='it' then langname:='Italiano'
      else langname:='';
      j:=f_option.Languages.Items.Add(buf+', '+langname);
      if buf=lang then n:=j;
