@@ -247,6 +247,7 @@ object f_option: Tf_option
         Width = 200
         ItemHeight = 0
         OnChange = LanguagesChange
+        Sorted = True
         Style = csDropDownList
         TabOrder = 8
       end
@@ -306,7 +307,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -380,7 +381,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -639,7 +640,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -892,8 +893,8 @@ object f_option: Tf_option
           Height = 40
           Top = 48
           Width = 328
-          ClientHeight = 40
-          ClientWidth = 328
+          ClientHeight = 36
+          ClientWidth = 324
           TabOrder = 1
           object Label74: TLabel
             Left = 112
