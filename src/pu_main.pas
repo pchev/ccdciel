@@ -416,6 +416,7 @@ type
     Procedure CloseLog;
     Procedure WriteLog( buf : string);
     Procedure WriteDeviceLog( buf : string);
+    Procedure PurgeOldLog;
     procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem);
     procedure UpdConfig(oldver:string);
     procedure SetConfig;
@@ -602,6 +603,7 @@ begin
      WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_time);
      WriteLn(MsgLog, FormatDateTime(dateiso, Now)+blank+blank+rsCompiledWith+': '+compile_version);
      LogFileOpen:=true;
+     PurgeOldLog;
   except
   {$I-}
      LogFileOpen:=false;
@@ -687,6 +689,33 @@ begin
     CloseFile(MsgDeviceLog);
     {$I+}
   end;
+end;
+
+Procedure Tf_main.PurgeOldLog;
+var fs : TSearchRec;
+    i: integer;
+    tl: Longint;
+    buf: string;
+begin
+ tl:=DateTimeToFileDate(now-30);
+ i:=FindFirstUTF8(slash(LogDir)+'Log_*',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(LogDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
+ i:=FindFirstUTF8(slash(LogDir)+'Devices_Log_*',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(LogDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
 end;
 
 procedure Tf_main.Restart;
