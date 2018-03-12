@@ -347,8 +347,8 @@ end;
 
 procedure T_autoguider_linguider.Pause(onoff:boolean);
 begin
-if not FRunning then exit;
-DisplayMessage('Autoguider: '+'Pause command not supported by Lin_Guider');
+ //Unsupported by Lin_Guider, use Guide instead
+ Guide(not onoff);
 end;
 
 procedure T_autoguider_linguider.Dither(pixel:double; raonly:boolean);
