@@ -582,7 +582,7 @@ begin
          if f.StarList[i].snr>AutofocusMinSNR then begin
             inc(nhfd);
             SetLength(hfdlist,nhfd);
-            hfdlist[i]:=f.StarList[i].hfd;
+            hfdlist[nhfd-1]:=f.StarList[i].hfd;
          end;
        end;
        if nhfd=0 then begin
