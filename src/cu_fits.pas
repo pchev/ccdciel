@@ -182,6 +182,7 @@ type
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
      procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
      procedure GetStarList(rx,ry,s: integer);
+     procedure MeasureStarList(s: integer; list: TArrayDouble2);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -1736,6 +1737,37 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
        end;
      end;
    end;
+ end;
+end;
+
+procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
+var
+ fitsX,fitsY,xxc,yyc,rc,nhfd,i: integer;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
+begin
+
+nhfd:=0;{set counters at zero}
+SetLength(FStarList,0);{set array length to zero}
+
+for i:=0 to Length(list)-1 do
+ begin
+   fitsX:=round(list[i,1]);
+   fitsY:=round(list[i,2]);
+   hfd1:=-1;
+   FindStarPos(fitsX,fitsY,s,xxc,yyc,rc,vmax,bg,bgdev);
+   if (vmax>0) then
+      GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);
+   if ((hfd1>0.8) and (hfd1<99)) then
+    begin
+       inc(nhfd);
+       SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
+       FStarList[nhfd-1].x:=xc;
+       FStarList[nhfd-1].y:=yc;
+       FStarList[nhfd-1].hfd:=hfd1;
+       FStarList[nhfd-1].fwhm:=star_fwhm;
+       FStarList[nhfd-1].snr:=snr;
+       FStarList[nhfd-1].vmax:=vmax;
+    end;
  end;
 end;
 

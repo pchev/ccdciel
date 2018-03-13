@@ -564,8 +564,44 @@ end;
 procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
 var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   xg,yg: double;
-  xm,ym,ri: integer;
+  xm,ym,ri,ns,i,nhfd: integer;
+  hfdlist: array of double;
 begin
+ if AutofocusMultistar then begin    // measure multiple stars
+    f.MeasureStarList(s,AutofocusStarList);
+    ns:=Length(f.StarList);
+    if ns>0 then begin
+       SetLength(hfdlist,0);
+       nhfd:=0;
+       FValMax:=0;
+       Fsnr:=0;
+       for i:=0 to ns-1 do begin
+         Fsnr:=max(Fsnr,f.StarList[i].snr);
+         FValMax:=max(FValMax,f.StarList[i].vmax);
+         if f.StarList[i].snr>AutofocusMinSNR then begin
+            inc(nhfd);
+            SetLength(hfdlist,nhfd);
+            hfdlist[i]:=f.StarList[i].hfd;
+         end;
+       end;
+       if nhfd=0 then begin
+         msg(Format(rsAutofocusCan5, [focuser.Position.Text, FormatFloat(f1, 0),
+           FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
+         FAutofocusResult:=false;
+         ChkAutofocusDown(false);
+         exit;
+       end;
+       Fhfd:=SMedian(hfdlist);
+       msg('Using median of '+inttostr(nhfd)+' stars');
+    end
+    else begin
+       msg(rsAutofocusCan3);
+       FAutofocusResult:=false;
+       ChkAutofocusDown(false);
+       exit;
+    end;
+ end
+ else begin                      // measure one star
   if (x<0)or(y<0)or(s<0) then begin
     msg(rsAutofocusCan2);
     FAutofocusResult:=false;
@@ -615,13 +651,19 @@ begin
       exit;
     end;
   end;
+ end;
   // plot progress
-  FFindStar:=true;
-  FStarX:=round(xg);
-  FStarY:=round(yg);
-  Ffwhm:=-1;
-  PlotProfile(f,bg,s);
-  if assigned(FonStarSelection) then FonStarSelection(self);
+  if AutofocusMultistar then begin
+    if assigned(FonStarSelection) then FonStarSelection(self);
+  end
+  else begin
+    FFindStar:=true;
+    FStarX:=round(xg);
+    FStarY:=round(yg);
+    Ffwhm:=-1;
+    PlotProfile(f,bg,s);
+    if assigned(FonStarSelection) then FonStarSelection(self);
+  end;
   if not FirstFrame then begin
     inc(FnumGraph);
     if AutofocusMode=afVcurve then begin

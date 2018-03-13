@@ -2508,6 +2508,7 @@ begin
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
+  AutofocusMultistar:=config.GetValue('/StarAnalysis/AutofocusMultistar',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
   AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',100);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
@@ -2517,6 +2518,7 @@ begin
      AutofocusSlippageOffset:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',0)
   else
     AutofocusSlippageOffset:=0;
+
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
   UseTcpServer:=config.GetValue('/Log/UseTcpServer',false);
@@ -4305,6 +4307,7 @@ begin
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
    f_option.AutofocusNearNum.Value:=config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
+   f_option.AutofocusMultistar.Checked:=config.GetValue('/StarAnalysis/AutofocusMultistar',false);
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0);
@@ -4431,6 +4434,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',f_option.AutofocusPrecisionSlew.Value);
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',f_option.AutofocusNearNum.Value);
+     config.SetValue('/StarAnalysis/AutofocusMultistar',f_option.AutofocusMultistar.Checked);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
@@ -5676,10 +5680,27 @@ begin
 end;
 
 procedure  Tf_main.StarSelection(Sender: TObject);
+var i,imageX,imageY,size: integer;
+    col: TBGRAPixel;
 begin
-  // redraw star box
-  image1.Invalidate;
-  Application.ProcessMessages;
+  if f_starprofile.AutofocusRunning and AutofocusMultistar and (Length(fits.StarList)>0) then begin
+   // draw all star boxes
+   col := ColorToBGRA(clRed);
+   for i:=0 to Length(fits.StarList)-1 do
+   begin
+      size:=round(5*fits.StarList[i].hfd);
+      imageX:=round(fits.StarList[i].x);
+      imageY:=round(fits.StarList[i].y);
+      imabmp.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size,col ,dmSet);
+      imabmp.TextOut(imageX+size,imageY+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1),col);
+   end;
+   PlotImage;
+  end
+  else begin
+    // redraw star box
+    image1.Invalidate;
+    Application.ProcessMessages;
+  end;
 end;
 
 Procedure Tf_main.DrawHistogram(SetLevel: boolean);
@@ -6714,7 +6735,7 @@ begin
 end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
-var x,y,xc,yc,s,s2,s3,s4: integer;
+var x,y,rx,ry,xc,yc,ns,i,s,s2,s3,s4: integer;
     vmax: double;
 begin
   CancelAutofocus:=false;
@@ -6773,54 +6794,81 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  x:=fits.HeaderInfo.naxis1 div 2;
-  y:=fits.HeaderInfo.naxis2 div 2;
-  s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-  fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
-  f_starprofile.FindStar:=(vmax>0);
-  f_starprofile.StarX:=xc;
-  f_starprofile.StarY:=yc;
-  Image1.Invalidate;
-  wait(1);
-  if f_starprofile.FindStar then begin  // star selected OK
-     s:=Focuswindow div camera.BinX;
-     s2:=s div 2;
-     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
-     if camera.CameraInterface=INDI then begin
-       // INDI frame in unbinned pixel
-       xc:=xc*camera.BinX;
-       yc:=yc*camera.BinY;
-       s3:=s2*camera.BinX;
-       s4:=s*camera.BinX;
-       camera.SetFrame(xc-s3,yc-s3,s4,s4);
+  if AutofocusMultistar then begin  // use multiple stars
+     s:=14; {test image in boxes of size s*s}
+     rx:=round(2*min(img_Height,img_Width)/3); {search area}
+     ry:=rx;
+     fits.GetStarList(rx,ry,s); {search stars in fits image}
+     ns:=Length(fits.StarList);
+     // store star list
+     if ns>0 then begin
+        SetLength(AutofocusStarList,ns);
+        for i:=0 to ns-1 do begin
+          // can eventually filter by snr, vmax,hfd diff from median,...
+          AutofocusStarList[i,1]:=fits.StarList[i].x;
+          AutofocusStarList[i,2]:=fits.StarList[i].y;
+        end;
      end
-     else begin
-       camera.SetFrame(xc-s2,yc-s2,s,s);
+     else begin  // no star, manual action is required
+        SetLength(AutofocusStarList,0);
+        f_starprofile.ChkAutofocusDown(false);
+        NewMessage(Format(rsAutofocusCan, [crlf]));
+        exit;
      end;
-     f_starprofile.StarX:=s2;
-     f_starprofile.StarY:=s2;
-     f_starprofile.InitAutofocus(false);
-     SaveFocusZoom:=f_visu.Zoom;
-     f_visu.Zoom:=0;
-     ImgZoom:=0;
-     f_preview.StackPreview.Checked:=false;
-     if not f_preview.Loop then f_preview.Loop:=true;
-     if not f_preview.Running then begin
-       f_preview.Running:=true;
-       StartPreviewExposure(nil);
-     end;
-     if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
-     if f_starprofile.PreFocusPos>0 then
-        NewMessage(Format(rsAutoFocusSta, [inttostr(f_starprofile.PreFocusPos)])
-          )
-     else
-        NewMessage(rsAutoFocusSta2);
   end
-  else begin                             // no star, manual action is required
-    f_starprofile.ChkAutofocusDown(false);
-    NewMessage(Format(rsAutofocusCan, [crlf]));
+  else begin // single star
+    x:=fits.HeaderInfo.naxis1 div 2;
+    y:=fits.HeaderInfo.naxis2 div 2;
+    s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
+    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    f_starprofile.FindStar:=(vmax>0);
+    f_starprofile.StarX:=xc;
+    f_starprofile.StarY:=yc;
+    Image1.Invalidate;
+    wait(1);
+    if f_starprofile.FindStar then begin  // star selected OK
+       // set focus frame
+       s:=Focuswindow div camera.BinX;
+       s2:=s div 2;
+       Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
+       Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+       if camera.CameraInterface=INDI then begin
+         // INDI frame in unbinned pixel
+         xc:=xc*camera.BinX;
+         yc:=yc*camera.BinY;
+         s3:=s2*camera.BinX;
+         s4:=s*camera.BinX;
+         camera.SetFrame(xc-s3,yc-s3,s4,s4);
+       end
+       else begin
+         camera.SetFrame(xc-s2,yc-s2,s,s);
+       end;
+       // set star position in the frame center
+       f_starprofile.StarX:=s2;
+       f_starprofile.StarY:=s2;
+       // reset zoom
+       SaveFocusZoom:=f_visu.Zoom;
+       f_visu.Zoom:=0;
+       ImgZoom:=0;
+    end
+    else begin   // no star, manual action is required
+      f_starprofile.ChkAutofocusDown(false);
+      NewMessage(Format(rsAutofocusCan, [crlf]));
+      exit;
+    end;
   end;
+  f_starprofile.InitAutofocus(false);
+  f_preview.StackPreview.Checked:=false;
+  if not f_preview.Loop then f_preview.Loop:=true;
+  if not f_preview.Running then begin
+     f_preview.Running:=true;
+     StartPreviewExposure(nil);
+  end;
+  if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]));
+  if f_starprofile.PreFocusPos>0 then
+     NewMessage(Format(rsAutoFocusSta, [inttostr(f_starprofile.PreFocusPos)]))
+  else
+     NewMessage(rsAutoFocusSta2);
 end;
 
 Procedure Tf_main.AutoFocusStop(Sender: TObject);

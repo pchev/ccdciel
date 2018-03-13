@@ -38,6 +38,7 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    AutofocusMultistar: TCheckBox;
     ElevationMin: TFloatSpinEdit;
     ClippingLow: TFloatSpinEdit;
     ClippingHigh: TFloatSpinEdit;

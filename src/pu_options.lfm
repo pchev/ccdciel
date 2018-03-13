@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 497
     Top = 0
     Width = 482
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
-    TabIndex = 0
+    TabIndex = 6
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -1532,6 +1532,14 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 1
           end
+          object AutofocusMultistar: TCheckBox
+            Left = 272
+            Height = 21
+            Top = 4
+            Width = 134
+            Caption = 'Use multiple stars '
+            TabOrder = 1
+          end
         end
         object Label50: TLabel
           Left = 8
@@ -1887,8 +1895,8 @@ object f_option: Tf_option
               Top = 176
               Width = 387
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 383
+              ClientHeight = 40
+              ClientWidth = 387
               TabOrder = 2
               Visible = False
               object Label34: TLabel

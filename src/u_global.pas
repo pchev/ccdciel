@@ -55,6 +55,7 @@ type
   TBpm=array[1..1000]of array[1..2] of integer;
 
   TDouble2 = array[1..2] of double;
+  TArrayDouble2 = array of TDouble2;
 
   TNumRange = record
                min,max,step: double;
@@ -330,7 +331,9 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  CancelAutofocus, InplaceAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
+  InplaceAutofocus, AutofocusMultistar: boolean;
+  AutofocusStarList: TArrayDouble2;
+  CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis: integer;
   BPMsigma: double;
