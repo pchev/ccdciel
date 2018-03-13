@@ -1724,7 +1724,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
             ) then
             GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
 
-       if ((hfd1>0.8) and (hfd1<99)) then
+       if ((hfd1>0.8) and (hfd1<99) and (snr>3)) then
        begin
          inc(nhfd);
          SetLength(FStarList,nhfd);  {set length to new number of elements and store values}

@@ -5687,6 +5687,7 @@ begin
    // draw all star boxes
    col := ColorToBGRA(clRed);
    for i:=0 to Length(fits.StarList)-1 do
+   if fits.StarList[i].snr>AutofocusMinSNR then
    begin
       size:=round(5*fits.StarList[i].hfd);
       imageX:=round(fits.StarList[i].x);
