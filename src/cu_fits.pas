@@ -1719,7 +1719,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      if vmax>0 then begin
        FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
        treshold:=min(FimageMax*0.1, 20*bgdev);
-       if ((vmax>treshold)and(vmax<(FimageMax-2*bg)) {new bright star but not saturated}
+       if ((vmax>treshold)and(vmax<(Overflow-2*bg)) {new bright star but not saturated}
             and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
             ) then
             GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
