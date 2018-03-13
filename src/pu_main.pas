@@ -68,6 +68,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuItemCleanup: TMenuItem;
     MenuOpenPicture: TMenuItem;
     MenuShowINDIlog: TMenuItem;
     MenuShowLog: TMenuItem;
@@ -264,6 +265,7 @@ type
     procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuItemCleanupClick(Sender: TObject);
     procedure MenuOpenPictureClick(Sender: TObject);
     procedure MenuResolveRotateClick(Sender: TObject);
     procedure MenuResolveSyncRotatorClick(Sender: TObject);
@@ -5722,6 +5724,12 @@ begin
   end;
   FormPos(f_indigui,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_indigui.Show;
+end;
+
+procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
+begin
+   f_starprofile.FindStar:=false;
+   DrawImage;
 end;
 
 procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
