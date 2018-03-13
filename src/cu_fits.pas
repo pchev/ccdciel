@@ -43,6 +43,13 @@ type
 
  THeaderBlock = array[1..36,1..80] of char;
 
+ TStar = record
+         x,y: double;
+         hfd, fwhm: double;
+         vmax, snr: double;
+         end;
+ TStarList = array of TStar;
+
  Timai8 = array of array of array of byte; TPimai8 = ^Timai8;
  Timai16 = array of array of array of smallint; TPimai16 = ^Timai16;
  Timaw16 = array of array of array of word; TPimaw16 = ^Timaw16;
@@ -136,6 +143,7 @@ type
     m_ViewHeaders: TMemo;
     p_ViewHeaders: TPanel;
     b_ViewHeaders: TButton;
+    FStarList: TStarList;
     Procedure ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
     Procedure ViewHeadersBtnClose(Sender: TObject);
     procedure SetStream(value:TMemoryStream);
@@ -173,6 +181,7 @@ type
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
      procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
+     procedure GetStarList(rx,ry,s: integer);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -194,6 +203,7 @@ type
      property Overflow: double read FOverflow write FOverflow;
      property Underflow: double read FUnderflow write FUnderflow;
      property hasBPM: boolean read GetHasBPM;
+     property StarList: TStarList read FStarList;
   end;
 
 implementation
@@ -975,6 +985,7 @@ if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
   FFitsInfo.dmin:=dmin;
   FFitsInfo.dmax:=dmax;
 end;
+SetLength(FStarList,0); {reset object list}
 GetImage;
 end;
 
@@ -1678,6 +1689,54 @@ except
     star_fwhm:=-1;
   end;
 end;
+end;
+
+procedure TFits.GetStarList(rx,ry,s: integer);
+var
+ fitsX,fitsY,xxc,yyc,rc,fx,fy,nhfd,x1,y1: integer;
+ hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
+ marginx,marginy: integer;
+const
+    overlap=2; {box overlap,results in 1 pixel overlap}
+begin
+
+nhfd:=0;{set counters at zero}
+SetLength(FStarList,0);{set array length to zero}
+
+marginx:=(FWidth-rx)div 2 div s;
+marginy:=(Fheight-ry)div 2 div s;
+
+for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs around}
+ begin
+   fitsY:=fy*s;
+   for fx:=marginx to ((FWidth) div s)-marginx do
+   begin
+     fitsX:=fx*s;
+     hfd1:=-1;
+     {ignore double stars, require comparaison with bright pixel position}
+     FindBrightestPixel(fitsX,fitsY,s+overlap,s+overlap,x1,y1,vmax,false);
+     if vmax>0 then begin
+       FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
+       treshold:=min(FimageMax*0.1, 20*bgdev);
+       if ((vmax>treshold)and(vmax<(FimageMax-2*bg)) {new bright star but not saturated}
+            and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
+            ) then
+            GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
+
+       if ((hfd1>0.8) and (hfd1<99)) then
+       begin
+         inc(nhfd);
+         SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
+         FStarList[nhfd-1].x:=xc;
+         FStarList[nhfd-1].y:=yc;
+         FStarList[nhfd-1].hfd:=hfd1;
+         FStarList[nhfd-1].fwhm:=star_fwhm;
+         FStarList[nhfd-1].snr:=snr;
+         FStarList[nhfd-1].vmax:=vmax;
+       end;
+     end;
+   end;
+ end;
 end;
 
 function TFits.SameFormat(f:TFits): boolean;
