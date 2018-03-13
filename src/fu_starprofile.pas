@@ -704,7 +704,7 @@ begin
       FocuserTemp)]));
     if FAutofocusResult then begin
       // adjust slippage offset with current result
-      if AutofocusSlippageCorrection then begin
+      if AutofocusSlippageCorrection and (AutofocusMode=afVcurve) then begin
         if AutofocusVcTemp<>NullCoord then
            tempcomp:=focuser.TempOffset(AutofocusVcTemp,FocuserTemp)
         else
