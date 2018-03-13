@@ -566,6 +566,7 @@ var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   xg,yg: double;
   xm,ym,ri,ns,i,nhfd: integer;
   hfdlist: array of double;
+  txt:string;
 begin
  if AutofocusMultistar then begin    // measure multiple stars
     f.MeasureStarList(s,AutofocusStarList);
@@ -654,6 +655,18 @@ begin
  end;
   // plot progress
   if AutofocusMultistar then begin
+    LabelHFD.Caption:=FormatFloat(f1,Fhfd);
+    if FValMax>1 then
+       LabelImax.Caption:=FormatFloat(f0,FValMax)
+    else
+       LabelImax.Caption:=FormatFloat(f3,FValMax);
+    if Ffwhm>0 then begin
+      txt:=FormatFloat(f1,Ffwhm);
+      if Ffwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,Ffwhmarcsec)+'"';
+      LabelFWHM.Caption:=txt;
+    end
+    else
+      LabelFWHM.Caption:='-';
     if assigned(FonStarSelection) then FonStarSelection(self);
   end
   else begin
