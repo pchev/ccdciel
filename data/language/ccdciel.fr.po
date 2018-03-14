@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-14 14:00+0000\n"
-"PO-Revision-Date: 2018-03-14 15:17+0000\n"
+"POT-Creation-Date: 2018-03-14 15:37+0000\n"
+"PO-Revision-Date: 2018-03-14 15:38+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-14 15:20+0000\n"
+"X-Launchpad-Export-Date: 2018-03-14 15:41+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -711,6 +711,10 @@ msgstr "Déc"
 #: u_translation.rsdefault
 msgid "Default"
 msgstr "Défaut"
+
+#: u_translation.rsdefaultbehav
+msgid "Default behavior"
+msgstr "Comportement par défaut"
 
 #: u_translation.rsdegree
 msgid "degree"
@@ -2461,6 +2465,10 @@ msgstr "Goto vers une étoile de magnitude"
 msgid "Slew to focus star %s"
 msgstr "Centre l'étoile de focalisation %s"
 
+#: u_translation.rsslewtofocuss2
+msgid "Slew to focus star"
+msgstr "Goto étoile de focalisation"
+
 #: u_translation.rsslewwithapre
 msgid "Slew with a precision of "
 msgstr "Pointage avec une précision de "
@@ -2612,6 +2620,10 @@ msgstr "début du suivi"
 #: u_translation.rsstayatthecur
 msgid "Stay at the current position for autofocus"
 msgstr "Reste à la position pour la mise au point"
+
+#: u_translation.rsstayinplace
+msgid "Stay in place"
+msgstr "Reste sur place"
 
 #: u_translation.rsstayinplacef
 msgid "Stay in place for autofocus"

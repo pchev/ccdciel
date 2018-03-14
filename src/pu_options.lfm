@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 497
     Top = 0
     Width = 482
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
-    TabIndex = 6
+    TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -139,8 +139,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 260
-          ClientWidth = 458
+          ClientHeight = 233
+          ClientWidth = 452
           object BtnFileDefault: TButton
             Left = 390
             Height = 25
@@ -182,8 +182,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 260
-          ClientWidth = 458
+          ClientHeight = 233
+          ClientWidth = 452
           object BtnFolderDefault: TButton
             Left = 390
             Height = 25
@@ -1333,7 +1333,7 @@ object f_option: Tf_option
         Height = 52
         Hint = 'Use Vcurve with an absolute position focuser, then learn the curve. This is the quickest method.'#10'Use Dynamic with a relative position focuser, this method require you start with a good approximate focus position.'#10'Use Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest method.'
         Top = 4
-        Width = 400
+        Width = 448
         AutoFill = True
         Caption = 'Autofocus method'
         ChildSizing.LeftRightSpacing = 6
@@ -1344,7 +1344,7 @@ object f_option: Tf_option
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
         ClientHeight = 32
-        ClientWidth = 398
+        ClientWidth = 446
         Columns = 4
         Items.Strings = (
           'V curve'
@@ -1701,13 +1701,13 @@ object f_option: Tf_option
         ClientWidth = 464
         TabOrder = 2
         object AutofocusSlewStar: TGroupBox
-          Left = 8
+          Left = 1
           Height = 96
           Top = 40
-          Width = 440
+          Width = 447
           Caption = 'Focus star selection'
           ClientHeight = 76
-          ClientWidth = 438
+          ClientWidth = 445
           TabOrder = 0
           object Label53: TLabel
             Left = 8
@@ -1767,17 +1767,17 @@ object f_option: Tf_option
           end
         end
         object Label52: TLabel
-          Left = 8
+          Left = 1
           Height = 19
-          Top = 8
+          Top = 7
           Width = 99
           Caption = 'Default behavior'
           ParentColor = False
         end
         object AutofocusSlew: TRadioButton
-          Left = 121
+          Left = 160
           Height = 21
-          Top = 8
+          Top = 6
           Width = 128
           Caption = 'Slew to focus star'
           Checked = True
@@ -1786,19 +1786,19 @@ object f_option: Tf_option
           TabStop = True
         end
         object AutofocusInPlace: TRadioButton
-          Left = 280
+          Left = 342
           Height = 21
-          Top = 8
+          Top = 6
           Width = 98
           Caption = 'Stay in place'
           OnChange = ChangeAutofocusInPlace
           TabOrder = 2
         end
         object AutofocusMultistar: TRadioGroup
-          Left = 8
+          Left = 1
           Height = 96
           Top = 40
-          Width = 440
+          Width = 447
           AutoFill = True
           Caption = 'Focus star selection'
           ChildSizing.LeftRightSpacing = 6
@@ -1809,7 +1809,7 @@ object f_option: Tf_option
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
           ClientHeight = 76
-          ClientWidth = 438
+          ClientWidth = 445
           Columns = 2
           Items.Strings = (
             'Use the brighter star'

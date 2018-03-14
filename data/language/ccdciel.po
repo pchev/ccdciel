@@ -3070,3 +3070,15 @@ msgstr ""
 msgid "Use multiple stars"
 msgstr ""
 
+#: u_translation:rsdefaultbehav
+msgid "Default behavior"
+msgstr ""
+
+#: u_translation:rsslewtofocuss2
+msgid "Slew to focus star"
+msgstr ""
+
+#: u_translation:rsstayinplace
+msgid "Stay in place"
+msgstr ""
+

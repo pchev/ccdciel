@@ -430,6 +430,7 @@ begin
   f_option.TemperatureSlopeActive.Checked:=(f_option.TemperatureSlope.Value<>0);
   FileOrFolderOptionsRenumber(FolderOptions);
   FileOrFolderOptionsRenumber(FileOptions);
+  ChangeAutofocusInPlace(nil);
 end;
 
 procedure Tf_option.Setlang;
@@ -526,6 +527,9 @@ begin
   Label50.Caption := rsBinning;
   Label54.Caption := rsAutofocusTol;
   Label81.Caption := rsMinSNR;
+  Label52.Caption:=rsDefaultBehav;
+  AutofocusSlew.Caption:=rsSlewToFocusS2;
+  AutofocusInPlace.Caption:=rsStayInPlace;
   AutofocusSlewStar.Caption := rsFocusStarSel;
   Label53.Caption := rsSlewToANearS;
   Label85.Caption := rsSlewWithAPre;
