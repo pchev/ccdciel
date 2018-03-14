@@ -445,7 +445,7 @@ begin
          t.pa:=StrToFloatDef(x,NullCoord);
        t.astrometrypointing:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
        t.updatecoord:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
-       t.inplaceautofocus:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',false);
+       t.inplaceautofocus:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',AutofocusInPlace);
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));

@@ -1866,24 +1866,12 @@ msgstr ""
 msgid "min.SNR"
 msgstr ""
 
-#: u_translation:rsautofocussta6
-msgid "Autofocus star list"
-msgstr ""
-
-#: u_translation:rsbeforeautoma
-msgid "Before automatic focus slew to a near star of magnitude"
-msgstr ""
-
 #: u_translation:rsslewwithapre
 msgid "Slew with a precision of "
 msgstr ""
 
 #: u_translation:rsarcmin
 msgid "[arcmin]"
-msgstr ""
-
-#: u_translation:rsyoucanusethe
-msgid "You can use the menu \"File / Focuser calibration\" to help to fill the values on this page for your specific focuser."
 msgstr ""
 
 #: u_translation:rsastrometry
@@ -3060,5 +3048,25 @@ msgstr ""
 
 #: u_translation:rssensorsprope
 msgid "Sensors properties"
+msgstr ""
+
+#: u_translation:rsthemenufilef
+msgid "The menu \"File/Focuser calibration\" help to fill this values."
+msgstr ""
+
+#: u_translation:rsslewtoanears
+msgid "Slew to a near star of magnitude"
+msgstr ""
+
+#: u_translation:rsfocusstarsel
+msgid "Focus star selection"
+msgstr ""
+
+#: u_translation:rsusethebright
+msgid "Use the brighter star"
+msgstr ""
+
+#: u_translation:rsusemultiples
+msgid "Use multiple stars"
 msgstr ""
 

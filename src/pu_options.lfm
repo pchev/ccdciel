@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 497
     Top = 0
     Width = 482
-    ActivePage = TabSheet11
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
-    TabIndex = 3
+    TabIndex = 6
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -307,7 +307,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -381,7 +381,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -640,7 +640,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -902,8 +902,8 @@ object f_option: Tf_option
             Height = 40
             Top = 48
             Width = 328
-            ClientHeight = 40
-            ClientWidth = 328
+            ClientHeight = 36
+            ClientWidth = 324
             TabOrder = 1
             object Label74: TLabel
               Left = 112
@@ -1358,11 +1358,11 @@ object f_option: Tf_option
       end
       object PanelAutofocus: TPanel
         Left = 8
-        Height = 256
-        Top = 104
+        Height = 240
+        Top = 86
         Width = 432
         BevelOuter = bvNone
-        ClientHeight = 256
+        ClientHeight = 240
         ClientWidth = 432
         TabOrder = 1
         object Label49: TLabel
@@ -1415,7 +1415,7 @@ object f_option: Tf_option
         end
         object AutofocusNotebook: TNotebook
           Left = 0
-          Height = 106
+          Height = 90
           Top = 150
           Width = 440
           PageIndex = 0
@@ -1605,14 +1605,6 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 1
           end
-          object AutofocusMultistar: TCheckBox
-            Left = 272
-            Height = 21
-            Top = 4
-            Width = 134
-            Caption = 'Use multiple stars '
-            TabOrder = 1
-          end
         end
         object Label50: TLabel
           Left = 8
@@ -1691,83 +1683,140 @@ object f_option: Tf_option
           Value = 1
         end
       end
-      object GroupBox11: TGroupBox
-        Left = 8
-        Height = 96
-        Top = 368
-        Width = 440
-        Caption = 'Autofocus star list'
-        ClientHeight = 76
-        ClientWidth = 438
-        TabOrder = 2
-        object Label53: TLabel
-          Left = 8
-          Height = 40
-          Top = 0
-          Width = 425
-          AutoSize = False
-          Caption = 'Before automatic focus slew to a near star of magnitude'
-          ParentColor = False
-          WordWrap = True
-        end
-        object FocusStarMag: TComboBox
-          Left = 7
-          Height = 31
-          Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
-          Top = 40
-          Width = 80
-          ItemHeight = 0
-          ItemIndex = 0
-          Items.Strings = (
-            '4'
-            '5'
-            '6'
-            '7'
-            '8'
-          )
-          ParentShowHint = False
-          Style = csDropDownList
-          TabOrder = 0
-          Text = '4'
-        end
-        object Label85: TLabel
-          Left = 96
-          Height = 19
-          Top = 46
-          Width = 141
-          Caption = 'Slew with a precision of '
-          ParentColor = False
-        end
-        object Label86: TLabel
-          Left = 369
-          Height = 19
-          Top = 45
-          Width = 49
-          Caption = '[arcmin]'
-          ParentColor = False
-        end
-        object AutofocusPrecisionSlew: TFloatSpinEdit
-          Left = 296
-          Height = 29
-          Top = 42
-          Width = 60
-          DecimalPlaces = 1
-          Increment = 1
-          MaxValue = 99
-          MinValue = 0
-          TabOrder = 1
-          Value = 0
-        end
-      end
       object Label101: TLabel
         Left = 16
-        Height = 40
+        Height = 19
         Top = 56
-        Width = 392
-        AutoSize = False
-        Caption = 'You can use the menu "File / Focuser calibration" to help to fill the values on this page for your specific focuser.'
+        Width = 348
+        Caption = 'The menu "File / Focuser calibration" help to fill this values.'
         ParentColor = False
-        WordWrap = True
+      end
+      object PanelFocusStar: TPanel
+        Left = 8
+        Height = 144
+        Top = 328
+        Width = 464
+        BevelOuter = bvNone
+        ClientHeight = 144
+        ClientWidth = 464
+        TabOrder = 2
+        object AutofocusSlewStar: TGroupBox
+          Left = 8
+          Height = 96
+          Top = 40
+          Width = 440
+          Caption = 'Focus star selection'
+          ClientHeight = 76
+          ClientWidth = 438
+          TabOrder = 0
+          object Label53: TLabel
+            Left = 8
+            Height = 19
+            Top = 8
+            Width = 193
+            Caption = 'Slew to a near star of magnitude'
+            ParentColor = False
+          end
+          object FocusStarMag: TComboBox
+            Left = 7
+            Height = 31
+            Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
+            Top = 36
+            Width = 80
+            ItemHeight = 0
+            ItemIndex = 0
+            Items.Strings = (
+              '4'
+              '5'
+              '6'
+              '7'
+              '8'
+            )
+            ParentShowHint = False
+            Style = csDropDownList
+            TabOrder = 0
+            Text = '4'
+          end
+          object Label85: TLabel
+            Left = 96
+            Height = 19
+            Top = 42
+            Width = 141
+            Caption = 'Slew with a precision of '
+            ParentColor = False
+          end
+          object Label86: TLabel
+            Left = 369
+            Height = 19
+            Top = 42
+            Width = 49
+            Caption = '[arcmin]'
+            ParentColor = False
+          end
+          object AutofocusPrecisionSlew: TFloatSpinEdit
+            Left = 296
+            Height = 29
+            Top = 38
+            Width = 60
+            DecimalPlaces = 1
+            Increment = 1
+            MaxValue = 99
+            MinValue = 0
+            TabOrder = 1
+            Value = 0
+          end
+        end
+        object Label52: TLabel
+          Left = 8
+          Height = 19
+          Top = 8
+          Width = 99
+          Caption = 'Default behavior'
+          ParentColor = False
+        end
+        object AutofocusSlew: TRadioButton
+          Left = 121
+          Height = 21
+          Top = 8
+          Width = 128
+          Caption = 'Slew to focus star'
+          Checked = True
+          OnChange = ChangeAutofocusInPlace
+          TabOrder = 1
+          TabStop = True
+        end
+        object AutofocusInPlace: TRadioButton
+          Left = 280
+          Height = 21
+          Top = 8
+          Width = 98
+          Caption = 'Stay in place'
+          OnChange = ChangeAutofocusInPlace
+          TabOrder = 2
+        end
+        object AutofocusMultistar: TRadioGroup
+          Left = 8
+          Height = 96
+          Top = 40
+          Width = 440
+          AutoFill = True
+          Caption = 'Focus star selection'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 2
+          ClientHeight = 76
+          ClientWidth = 438
+          Columns = 2
+          Items.Strings = (
+            'Use the brighter star'
+            'Use multiple stars '
+          )
+          TabOrder = 3
+        end
       end
     end
     object TabSheet4: TTabSheet
@@ -1940,8 +1989,8 @@ object f_option: Tf_option
               Top = 176
               Width = 424
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 424
+              ClientHeight = 36
+              ClientWidth = 420
               TabOrder = 2
               Visible = False
               object Label34: TLabel

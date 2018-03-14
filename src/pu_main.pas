@@ -2514,6 +2514,8 @@ begin
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusMultistar:=config.GetValue('/StarAnalysis/AutofocusMultistar',false);
+  AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
+  if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
   AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',100);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
@@ -4312,7 +4314,13 @@ begin
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
    f_option.AutofocusNearNum.Value:=config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
-   f_option.AutofocusMultistar.Checked:=config.GetValue('/StarAnalysis/AutofocusMultistar',false);
+   if config.GetValue('/StarAnalysis/AutofocusMultistar',false) then
+      f_option.AutofocusMultistar.ItemIndex:=1
+   else
+      f_option.AutofocusMultistar.ItemIndex:=0;
+   ok:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
+   f_option.AutofocusInPlace.Checked:=ok;
+   f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
@@ -4443,7 +4451,8 @@ begin
      config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',f_option.AutofocusPrecisionSlew.Value);
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',f_option.AutofocusNearNum.Value);
-     config.SetValue('/StarAnalysis/AutofocusMultistar',f_option.AutofocusMultistar.Checked);
+     config.SetValue('/StarAnalysis/AutofocusInPlace',f_option.AutofocusInPlace.Checked);
+     config.SetValue('/StarAnalysis/AutofocusMultistar',f_option.AutofocusMultistar.ItemIndex=1);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
@@ -5700,7 +5709,7 @@ procedure  Tf_main.StarSelection(Sender: TObject);
 var i,imageX,imageY,size: integer;
     col: TBGRAPixel;
 begin
-  if f_starprofile.AutofocusRunning and AutofocusMultistar and (Length(fits.StarList)>0) then begin
+  if f_starprofile.AutofocusRunning and AutofocusMultistar  and InplaceAutofocus and (Length(fits.StarList)>0) then begin
    // draw all star boxes
    col := ColorToBGRA(clRed);
    for i:=0 to Length(fits.StarList)-1 do
@@ -6598,7 +6607,7 @@ begin
      autoguider.Pause(false);
      Wait(5);
    end
-   else if restartguider then begin
+   else if restartguider and (not CancelAutofocus)then begin
      NewMessage(rsRestartAutog);
      autoguider.Guide(false);
      wait(5);
@@ -6818,7 +6827,7 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  if AutofocusMultistar then begin  // use multiple stars
+  if AutofocusMultistar and InplaceAutofocus then begin  // use multiple stars
      s:=14; {test image in boxes of size s*s}
      rx:=round(2*min(img_Height,img_Width)/3); {search area}
      ry:=rx;

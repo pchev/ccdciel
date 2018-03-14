@@ -374,7 +374,7 @@ var p: T_Plan;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
- InplaceAutofocus:=false;
+ InplaceAutofocus:=AutofocusInPlace;
  if FRunning then begin
    FRunning:=false;
    if WaitTillrunning then begin
@@ -454,7 +454,7 @@ var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
-  InplaceAutofocus:=false;
+  InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin

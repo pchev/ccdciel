@@ -38,7 +38,7 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
-    AutofocusMultistar: TCheckBox;
+    Label52: TLabel;
     MaxAduFromCamera: TCheckBox;
     ElevationMin: TFloatSpinEdit;
     ClippingLow: TFloatSpinEdit;
@@ -62,8 +62,12 @@ type
     Label19: TLabel;
     Label3: TLabel;
     PageGuiderNone: TPage;
+    PanelFocusStar: TPanel;
     PixelSize: TFloatSpinEdit;
     PixelSizeFromCamera: TCheckBox;
+    AutofocusSlew: TRadioButton;
+    AutofocusInPlace: TRadioButton;
+    AutofocusMultistar: TRadioGroup;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
     SlewPrec: TFloatSpinEdit;
@@ -190,7 +194,7 @@ type
     FocusStarMag: TComboBox;
     GroupBox10: TGroupBox;
     GroupCorrection: TGroupBox;
-    GroupBox11: TGroupBox;
+    AutofocusSlewStar: TGroupBox;
     GroupBox12: TGroupBox;
     Label46: TLabel;
     Label47: TLabel;
@@ -348,6 +352,7 @@ type
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure ButtonTempDirClick(Sender: TObject);
+    procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
     procedure CheckFocusWindow(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
@@ -521,11 +526,14 @@ begin
   Label50.Caption := rsBinning;
   Label54.Caption := rsAutofocusTol;
   Label81.Caption := rsMinSNR;
-  GroupBox11.Caption := rsAutofocusSta6;
-  Label53.Caption := rsBeforeAutoma;
+  AutofocusSlewStar.Caption := rsFocusStarSel;
+  Label53.Caption := rsSlewToANearS;
   Label85.Caption := rsSlewWithAPre;
   Label86.Caption := rsArcmin;
-  Label101.Caption := rsYouCanUseThe;
+  AutofocusMultistar.Caption := rsFocusStarSel;
+  AutofocusMultistar.Items[0]:=rsUseTheBright;
+  AutofocusMultistar.Items[1]:=rsUseMultipleS;
+  Label101.Caption := rsTheMenuFileF;
   TabSheet4.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
   FocaleFromTelescope.Caption := rsFromTelescop;
@@ -746,6 +754,12 @@ SelectDirectoryDialog1.FileName:=TempDir.text;
 if SelectDirectoryDialog1.Execute then TempDir.text:=SelectDirectoryDialog1.FileName;
 end;
 
+procedure Tf_option.ChangeAutofocusInPlace(Sender: TObject);
+begin
+  AutofocusMultistar.Visible:=AutofocusInPlace.Checked;
+  AutofocusSlewStar.Visible:=not AutofocusMultistar.Visible;
+end;
+
 procedure Tf_option.CheckFocuserDirection(Sender: TObject);
 begin
   msg('');
@@ -797,6 +811,7 @@ procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
+  PanelFocusStar.Visible:=PanelAutofocus.Visible;
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
 end;

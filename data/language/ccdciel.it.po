@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-14 09:12+0000\n"
+"POT-Creation-Date: 2018-03-14 14:00+0000\n"
 "PO-Revision-Date: 2018-03-11 10:05+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-14 09:48+0000\n"
+"X-Launchpad-Export-Date: 2018-03-14 15:20+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -224,10 +224,6 @@ msgstr ""
 msgid "Autofocus start Iterative focus"
 msgstr ""
 
-#: u_translation.rsautofocussta6
-msgid "Autofocus star list"
-msgstr ""
-
 #: u_translation.rsautofocussuc
 msgid "AutoFocus successful"
 msgstr ""
@@ -322,10 +318,6 @@ msgstr ""
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
-msgstr ""
-
-#: u_translation.rsbeforeautoma
-msgid "Before automatic focus slew to a near star of magnitude"
 msgstr ""
 
 #: u_translation.rsbeforetouset
@@ -1134,6 +1126,10 @@ msgstr ""
 
 #: u_translation.rsfocusquality
 msgid "Focus quality = %s"
+msgstr ""
+
+#: u_translation.rsfocusstarsel
+msgid "Focus star selection"
 msgstr ""
 
 #: u_translation.rsfocuswindowm
@@ -2452,6 +2448,10 @@ msgstr ""
 msgid "Slew to %s/%s"
 msgstr ""
 
+#: u_translation.rsslewtoanears
+msgid "Slew to a near star of magnitude"
+msgstr ""
+
 #: u_translation.rsslewtofocuss
 msgid "Slew to focus star %s"
 msgstr ""
@@ -2828,6 +2828,10 @@ msgstr ""
 msgid "The focuser is now positioned at the best observed HFD position."
 msgstr ""
 
+#: u_translation.rsthemenufilef
+msgid "The menu \"File/Focuser calibration\" help to fill this values."
+msgstr ""
+
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
 msgstr ""
@@ -2960,8 +2964,16 @@ msgstr ""
 msgid "Use mount"
 msgstr ""
 
+#: u_translation.rsusemultiples
+msgid "Use multiple stars"
+msgstr ""
+
 #: u_translation.rsuserotator
 msgid "Use rotator"
+msgstr ""
+
+#: u_translation.rsusethebright
+msgid "Use the brighter star"
 msgstr ""
 
 #: u_translation.rsusewatchdog
@@ -3066,10 +3078,6 @@ msgstr ""
 
 #: u_translation.rsyoucansetthe
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
-msgstr ""
-
-#: u_translation.rsyoucanusethe
-msgid "You can use the menu \"File / Focuser calibration\" to help to fill the values on this page for your specific focuser."
 msgstr ""
 
 #: u_translation.rsyoumustconfi

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-14 09:12+0000\n"
-"PO-Revision-Date: 2018-03-14 09:45+0000\n"
+"POT-Creation-Date: 2018-03-14 14:00+0000\n"
+"PO-Revision-Date: 2018-03-14 15:17+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-14 09:48+0000\n"
+"X-Launchpad-Export-Date: 2018-03-14 15:20+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -224,10 +224,6 @@ msgstr "Début de l'autofocus avec courbe dynamique"
 msgid "Autofocus start Iterative focus"
 msgstr "Début de l'autofocus itératif"
 
-#: u_translation.rsautofocussta6
-msgid "Autofocus star list"
-msgstr "Liste d'étoile pour l'autofocus"
-
 #: u_translation.rsautofocussuc
 msgid "AutoFocus successful"
 msgstr "Autofocus réussi"
@@ -323,10 +319,6 @@ msgstr "Seuil de détection"
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
 msgstr "Motif de la matrice Bayer"
-
-#: u_translation.rsbeforeautoma
-msgid "Before automatic focus slew to a near star of magnitude"
-msgstr "Avant une focalistaion automatique, se déplacer sur une étoiles de magnitude"
 
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
@@ -1135,6 +1127,10 @@ msgstr "Position du focus"
 #: u_translation.rsfocusquality
 msgid "Focus quality = %s"
 msgstr "Qualité du focus = %s"
+
+#: u_translation.rsfocusstarsel
+msgid "Focus star selection"
+msgstr "Choix des étoiles de focalisation"
 
 #: u_translation.rsfocuswindowm
 msgid "Focus window must be at least four time greater than Star window!"
@@ -2457,6 +2453,10 @@ msgstr "Déplace le télescope vers %s %s"
 msgid "Slew to %s/%s"
 msgstr "Goto vers %s %s"
 
+#: u_translation.rsslewtoanears
+msgid "Slew to a near star of magnitude"
+msgstr "Goto vers une étoile de magnitude"
+
 #: u_translation.rsslewtofocuss
 msgid "Slew to focus star %s"
 msgstr "Centre l'étoile de focalisation %s"
@@ -2833,6 +2833,10 @@ msgstr "Le focuser ne bouge pas assez après 30 pas! veuillez vérifier si le fo
 msgid "The focuser is now positioned at the best observed HFD position."
 msgstr "Le focuser est maintenant positionné à la position du meilleur HFD."
 
+#: u_translation.rsthemenufilef
+msgid "The menu \"File/Focuser calibration\" help to fill this values."
+msgstr "Le menu \"Fichier/Calibration du focuser\" aide à remplir ces valeurs."
+
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
 msgstr "Le programme doit être redémarrer"
@@ -2965,9 +2969,17 @@ msgstr "Utilise le focuseur"
 msgid "Use mount"
 msgstr "Utilise la monture"
 
+#: u_translation.rsusemultiples
+msgid "Use multiple stars"
+msgstr "Utilise plusieurs étoiles"
+
 #: u_translation.rsuserotator
 msgid "Use rotator"
 msgstr "Utilise le rotateur"
+
+#: u_translation.rsusethebright
+msgid "Use the brighter star"
+msgstr "Utilise l'étoile la plus brillante"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -3072,10 +3084,6 @@ msgstr "Largeur"
 #: u_translation.rsyoucansetthe
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
 msgstr "Vous pouvez ajuster les paramètres pour définir la façon dont le focuser se déplacera.%sEssayez d'abord avec les valeurs par défaut et ajustez-les seulement si vous recevez un message d'erreur à l'étape suivante."
-
-#: u_translation.rsyoucanusethe
-msgid "You can use the menu \"File / Focuser calibration\" to help to fill the values on this page for your specific focuser."
-msgstr "Vous pouvez utiliser le menu \"Fichier / Calibration du focuseur\" pour vous aidez à remplir les valeurs pour votre équipement."
 
 #: u_translation.rsyoumustconfi
 msgid "You must configure your flat preference."

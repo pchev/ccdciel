@@ -331,7 +331,8 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  InplaceAutofocus, AutofocusMultistar: boolean;
+  AutofocusInPlace, AutofocusMultistar: boolean;
+  InplaceAutofocus: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   bpm: TBpm;
@@ -393,7 +394,7 @@ begin
   pa:=NullCoord;
   astrometrypointing:=false;
   updatecoord:=false;
-  inplaceautofocus:=false;
+  inplaceautofocus:=AutofocusInPlace;
   repeatcount:=1;
   preview:=False;
   delay:=1;

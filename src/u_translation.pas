@@ -511,12 +511,8 @@ resourcestring
   rsBinning = 'Binning';
   rsAutofocusTol = 'Autofocus tolerance ';
   rsMinSNR = 'min.SNR';
-  rsAutofocusSta6 = 'Autofocus star list';
-  rsBeforeAutoma = 'Before automatic focus slew to a near star of magnitude';
   rsSlewWithAPre = 'Slew with a precision of ';
   rsArcmin = '[arcmin]';
-  rsYouCanUseThe = 'You can use the menu "File / Focuser calibration" to help '
-    +'to fill the values on this page for your specific focuser.';
   rsAstrometry = 'Astrometry';
   rsAstrometryOp = 'Astrometry options';
   rsFromTelescop = 'From telescope driver';
@@ -847,6 +843,12 @@ resourcestring
   rsResumeAutogu = 'Resume autoguider';
   rsMaximumADU = 'Maximum ADU';
   rsSensorsPrope = 'Sensors properties';
+  rsTheMenuFileF = 'The menu "File/Focuser calibration" help to fill this '
+    +'values.';
+  rsSlewToANearS = 'Slew to a near star of magnitude';
+  rsFocusStarSel = 'Focus star selection';
+  rsUseTheBright = 'Use the brighter star';
+  rsUseMultipleS = 'Use multiple stars';
 
 
 
