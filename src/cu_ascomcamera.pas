@@ -33,7 +33,7 @@ uses  cu_camera, u_global, u_translation,
     u_utils, cu_fits, lazutf8sysutils, indiapi,
     Variants, comobj,
   {$endif}
-  Forms, ExtCtrls, Classes, SysUtils;
+  Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
 type
 T_ascomcamera = class(T_camera)
@@ -70,6 +70,7 @@ T_ascomcamera = class(T_camera)
    procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
    function GetMaxY: double; override;
+   function GetMaxADU: double; override;
    function GetPixelSize: double; override;
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
@@ -788,6 +789,21 @@ if Connected then begin
   end;
 end
 else result:=-1;
+{$endif}
+end;
+
+function T_ascomcamera.GetMaxADU: double;
+begin
+ result:=MAXWORD;
+{$ifdef mswindows}
+if Connected then begin
+  try
+     result:=V.MaxADU;
+  except
+     result:=MAXWORD;
+  end;
+end
+else result:=MAXWORD;
 {$endif}
 end;
 

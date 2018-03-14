@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom,
-     u_global, ExtCtrls, Classes, SysUtils, u_translation;
+     u_global, math, ExtCtrls, Classes, SysUtils, LCLType, u_translation;
 
 type
 
@@ -137,6 +137,7 @@ private
    procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
    function GetMaxY: double; override;
+   function GetMaxADU: double; override;
    function GetPixelSize: double; override;
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
@@ -1262,6 +1263,21 @@ begin
         result:=Guidermaxy.value;
      end
      else result:=-1;
+  end;
+end;
+
+function T_indicamera.GetMaxADU: double;
+begin
+  if UseMainSensor then begin
+   if CCDinfo<>nil then begin
+      result:=2**CCDbitperpixel.value-1;
+   end
+   else result:=MAXWORD;
+  end else begin
+     if Guiderinfo<>nil then begin
+        result:=2**Guiderbitperpixel.value-1;
+     end
+     else result:=MAXWORD;
   end;
 end;
 

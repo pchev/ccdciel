@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-12 14:15+0000\n"
-"PO-Revision-Date: 2018-03-12 14:17+0000\n"
+"POT-Creation-Date: 2018-03-14 09:12+0000\n"
+"PO-Revision-Date: 2018-03-14 09:45+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-12 14:20+0000\n"
+"X-Launchpad-Export-Date: 2018-03-14 09:48+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -513,10 +513,6 @@ msgid "CCD frame sent to planetarium."
 msgstr "Image CCD envoyée au planétarium."
 
 #: u_translation.rsccdtemperatu
-msgid "CCD Temperature"
-msgstr "Température CCD"
-
-#: u_translation.rsccdtemperatu2
 msgid "CCD temperature"
 msgstr "Température du CCD"
 
@@ -1396,6 +1392,10 @@ msgstr "De nombreuses fonctions ne fonctionneront pas  sans un logiciel d'astrom
 #: u_translation.rsmax
 msgid "Max:"
 msgstr "Max:"
+
+#: u_translation.rsmaximumadu
+msgid "Maximum ADU"
+msgstr "ADU maximum"
 
 #: u_translation.rsmaximumdefoc
 msgid "Maximum defocused HFD the focuser can safely reach"
@@ -2279,6 +2279,10 @@ msgstr "Afficher l'image dans le planétarium"
 #: u_translation.rssensor
 msgid "Sensor"
 msgstr "Capteur"
+
+#: u_translation.rssensorsprope
+msgid "Sensors properties"
+msgstr "Propriétés du capteur"
 
 #: u_translation.rsseq
 msgid "Seq:"

@@ -103,7 +103,7 @@ msgid "Rotator"
 msgstr ""
 
 #: u_translation:rsccdtemperatu
-msgid "CCD Temperature"
+msgid "CCD temperature"
 msgstr ""
 
 #: u_translation:rstelescopemou
@@ -1718,10 +1718,6 @@ msgstr ""
 msgid "Highlight ADU"
 msgstr ""
 
-#: u_translation:rsccdtemperatu2
-msgid "CCD temperature"
-msgstr ""
-
 #: u_translation:rsautomaticcoo
 msgid "Automatic cooling "
 msgstr ""
@@ -3056,5 +3052,13 @@ msgstr ""
 
 #: u_translation:rsresumeautogu
 msgid "Resume autoguider"
+msgstr ""
+
+#: u_translation:rsmaximumadu
+msgid "Maximum ADU"
+msgstr ""
+
+#: u_translation:rssensorsprope
+msgid "Sensors properties"
 msgstr ""
 

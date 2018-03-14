@@ -38,7 +38,7 @@ resourcestring
   rsFilters = 'Filters';
   rsFrame = 'Frame';
   rsRotator = 'Rotator';
-  rsCCDTemperatu = 'CCD Temperature';
+  rsCCDTemperatu = 'CCD temperature';
   rsTelescopeMou = 'Telescope mount';
   rsSequence = 'Sequence';
   rsVideo = 'Video';
@@ -474,7 +474,6 @@ resourcestring
   rsClippingIndi = 'Clipping indicator';
   rsShadowADU = 'Shadow ADU';
   rsHighlightADU = 'Highlight ADU';
-  rsCCDTemperatu2 = 'CCD temperature';
   rsAutomaticCoo = 'Automatic cooling ';
   rsCoolDownWhen = 'Cool down when camera is connected';
   rsDegree = 'degree';
@@ -846,6 +845,8 @@ resourcestring
   rsOpenPictureF = 'Open picture file%s';
   rsPauseAutogui = 'Pause autoguider';
   rsResumeAutogu = 'Resume autoguider';
+  rsMaximumADU = 'Maximum ADU';
+  rsSensorsPrope = 'Sensors properties';
 
 
 

@@ -305,7 +305,7 @@ var
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
   ImgZoom,ZoomMin: double;
-  ClippingOverflow, ClippingUnderflow: double;
+  MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsTimeZone: double;
   BayerColor: boolean;

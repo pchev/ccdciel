@@ -39,6 +39,7 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TCheckBox;
+    MaxAduFromCamera: TCheckBox;
     ElevationMin: TFloatSpinEdit;
     ClippingLow: TFloatSpinEdit;
     ClippingHigh: TFloatSpinEdit;
@@ -56,7 +57,13 @@ type
     AutofocusPrecisionSlew: TFloatSpinEdit;
     Downsample: TSpinEdit;
     DitherPixel: TFloatSpinEdit;
+    GroupBox1: TGroupBox;
+    GroupBox20: TGroupBox;
+    Label19: TLabel;
+    Label3: TLabel;
     PageGuiderNone: TPage;
+    PixelSize: TFloatSpinEdit;
+    PixelSizeFromCamera: TCheckBox;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
     SlewPrec: TFloatSpinEdit;
@@ -71,12 +78,12 @@ type
     SettleMinTime: TSpinEdit;
     SettleMaxTime: TSpinEdit;
     CalibrationDelay: TSpinEdit;
+    MaxAdu: TSpinEdit;
     StarLostCancel: TSpinEdit;
     StarLostRestart: TSpinEdit;
     Tolerance: TFloatSpinEdit;
     MaxRadius: TFloatSpinEdit;
     Focale: TFloatSpinEdit;
-    PixelSize: TFloatSpinEdit;
     FocuserTempCoeff: TFloatSpinEdit;
     FocusWindow: TSpinEdit;
     FocuserBacklash: TSpinEdit;
@@ -324,11 +331,9 @@ type
     TabSheet4: TTabSheet;
     Label7: TLabel;
     Label6: TLabel;
-    PixelSizeFromCamera: TCheckBox;
     FocaleFromTelescope: TCheckBox;
     astrometrynet: TGroupBox;
     Label2: TLabel;
-    Label3: TLabel;
     Label4: TLabel;
     Logtofile: TCheckBox;
     GroupBox2: TGroupBox;
@@ -357,6 +362,7 @@ type
     procedure LanguagesChange(Sender: TObject);
     procedure latChange(Sender: TObject);
     procedure longChange(Sender: TObject);
+    procedure MaxAduFromCameraChange(Sender: TObject);
     procedure MeridianOptionClick(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
@@ -366,7 +372,7 @@ type
     procedure TmpDirDefaultClick(Sender: TObject);
   private
     { private declarations }
-    FGetPixelSize, FGetFocale: TNotifyEvent;
+    FGetMaxADU, FGetPixelSize, FGetFocale: TNotifyEvent;
     Flatitude, Flongitude: double;
     Lockchange: boolean;
     SaveTemperatureSlope: double;
@@ -385,6 +391,7 @@ type
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
     property LinGuiderUseUnixSocket: boolean read GetLinGuiderUseUnixSocket write SetLinGuiderUseUnixSocket;
+    property onGetMaxADU : TNotifyEvent read FGetMaxADU write FGetMaxADU;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
   end;
@@ -461,13 +468,17 @@ begin
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
-  TabSheet11.Caption := rsCCDTemperatu2;
+  TabSheet11.Caption := rsCamera;
+  GroupBox1.Caption := rsCCDTemperatu;
   GroupBox14.Caption := rsAutomaticCoo;
   CameraAutoCool.Caption := rsCoolDownWhen;
   Label75.Caption := rsDegree;
   GroupBox15.Caption := rsMaximumTempe;
   TemperatureSlopeActive.Caption := rsLimitTempera;
   Label74.Caption := rsDegreesPerMi;
+  GroupBox20.Caption:=rsSensorsPrope;
+  label19.Caption:=rsMaximumADU;
+  MaxAduFromCamera.Caption:=rsFromCameraDr;
   TabSheet12.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
   GroupBox18.Caption := rsFlatAutoExpo;
@@ -680,6 +691,14 @@ try
 finally
   LockChange:=false;
 end;
+end;
+
+
+procedure Tf_option.MaxAduFromCameraChange(Sender: TObject);
+begin
+  MaxADU.Enabled:=not MaxADUFromCamera.Checked;
+  if (not MaxADU.Enabled) and (assigned(FGetMaxADU)) then
+      FGetMaxADU(self);
 end;
 
 procedure Tf_option.PixelSizeFromCameraChange(Sender: TObject);

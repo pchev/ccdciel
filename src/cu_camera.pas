@@ -101,6 +101,7 @@ T_camera = class(TComponent)
     procedure SetFilterNames(value:TStringList); virtual; abstract;
     function GetMaxX: double; virtual; abstract;
     function GetMaxY: double; virtual; abstract;
+    function GetMaxADU: double; virtual; abstract;
     function GetPixelSize: double; virtual; abstract;
     function GetPixelSizeX: double; virtual; abstract;
     function GetPixelSizeY: double; virtual; abstract;
@@ -203,6 +204,7 @@ T_camera = class(TComponent)
     property TemperatureRange: TNumRange read GetTemperatureRange;
     property MaxX: double read GetMaxX;
     property MaxY: double read GetMaxY;
+    property MaxADU: double read GetMaxADU;
     property PixelSize: double read GetPixelSize;
     property PixelSizeX: double read GetPixelSizeX;
     property PixelSizeY: double read GetPixelSizeY;

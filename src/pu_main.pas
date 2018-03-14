@@ -430,6 +430,7 @@ type
     procedure CreateBPM(f: TFits);
     procedure LoadBPM;
     procedure ComputeVcSlope;
+    procedure OptionGetMaxADU(Sender: TObject);
     procedure OptionGetPixelSize(Sender: TObject);
     procedure OptionGetFocaleLength(Sender: TObject);
     procedure Restart;
@@ -1412,7 +1413,7 @@ begin
    FilenameName[1]:=rsFilter;
    FilenameName[2]:=rsExposureTime2;
    FilenameName[3]:=rsBinning;
-   FilenameName[4]:=rsCCDTemperatu2;
+   FilenameName[4]:=rsCCDTemperatu;
    FilenameName[5]:=rsDateUTSequen;
    FilenameName[6]:=rsGain;
    TBConnect.Hint := rsConnect;
@@ -2472,6 +2473,8 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',1.0);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
+  MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
+  ClippingOverflow:=min(ClippingOverflow,MaxADU);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
@@ -4312,10 +4315,14 @@ begin
    f_option.AutofocusMultistar.Checked:=config.GetValue('/StarAnalysis/AutofocusMultistar',false);
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
+   f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
+   f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0);
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+   if f_option.MaxAduFromCamera.Checked then
+      f_option.MaxAdu.Value:=camera.MaxAdu;
    if f_option.PixelSizeFromCamera.Checked and (camera.PixelSizeX>0) then
       f_option.PixelSize.Value:=camera.PixelSizeX;
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
@@ -4471,6 +4478,8 @@ begin
      config.SetValue('/Flat/FlatMaxExp',f_option.FlatMaxExp.Value);
      config.SetValue('/Flat/FlatLevelMin',f_option.FlatLevelMin.Value);
      config.SetValue('/Flat/FlatLevelMax',f_option.FlatLevelMax.Value);
+     config.GetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
+     config.GetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
@@ -4601,6 +4610,11 @@ end;
 procedure Tf_main.MenuPreviewStartClick(Sender: TObject);
 begin
   f_preview.BtnPreview.Click;
+end;
+
+procedure Tf_main.OptionGetMaxADU(Sender: TObject);
+begin
+  f_option.MaxAdu.Value:=round(camera.MaxADU);
 end;
 
 procedure Tf_main.OptionGetPixelSize(Sender: TObject);
@@ -5529,6 +5543,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.Gamma:=f_visu.Gamma.Value;
   fits.ImgDmax:=round(f_visu.ImgMax);
   fits.ImgDmin:=round(f_visu.ImgMin);
+  fits.MaxADU:=MaxADU;
   fits.Overflow:=ClippingOverflow;
   fits.Underflow:=ClippingUnderflow;
   fits.MarkOverflow:=f_visu.Clipping;

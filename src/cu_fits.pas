@@ -138,7 +138,7 @@ type
     FGamma: single;
     emptybmp:Tbitmap;
     FMarkOverflow: boolean;
-    FOverflow, FUnderflow: double;
+    FMaxADU, FOverflow, FUnderflow: double;
     f_ViewHeaders: TForm;
     m_ViewHeaders: TMemo;
     p_ViewHeaders: TPanel;
@@ -200,6 +200,7 @@ type
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
+     property MaxADU: double read FMaxADU write FMaxADU;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
      property Overflow: double read FOverflow write FOverflow;
      property Underflow: double read FUnderflow write FUnderflow;
@@ -553,6 +554,7 @@ ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FStreamValid:=false;
 FMarkOverflow:=false;
+FMaxADU:=MAXWORD;
 FOverflow:=MAXWORD;
 FUnderflow:=0;
 FFitsInfo.valid:=false;
@@ -1719,7 +1721,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      if vmax>0 then begin
        FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
        treshold:=min(FimageMax*0.1, 20*bgdev);
-       if ((vmax>treshold)and(vmax<(Overflow-2*bg)) {new bright star but not saturated}
+       if ((vmax>treshold)and(vmax<(MaxADU-2*bg)) {new bright star but not saturated}
             and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
             ) then
             GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
