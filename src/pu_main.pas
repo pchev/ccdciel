@@ -6837,7 +6837,16 @@ begin
      NewMessage('Total stars found: '+inttostr(ns)); // TODO: debug message to remove
      // store star list
      if ns>0 then begin
-         // get median HFD
+        // make temporary list with all the stars
+        SetLength(AutofocusStarList,ns);
+        for i:=0 to ns-1 do begin
+           AutofocusStarList[i,1]:=fits.StarList[i].x;
+           AutofocusStarList[i,2]:=fits.StarList[i].y;
+         end;
+        // Measure again using the full star window to detect outliers
+        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList);
+        ns:=Length(fits.StarList);
+         // compute median HFD
         SetLength(hfdlist,ns);
         for i:=0 to ns-1 do
             hfdlist[i]:=fits.StarList[i].hfd;
@@ -6845,7 +6854,7 @@ begin
         NewMessage('Median HFD: '+FloatToStr(meanhfd)); // TODO: debug message to remove
         n:=0;
         for i:=0 to ns-1 do begin
-          // filter by hfd to remove galaxies
+          // filter by hfd to remove galaxies and others outliers
           if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
             inc(n);
             SetLength(AutofocusStarList,n);
