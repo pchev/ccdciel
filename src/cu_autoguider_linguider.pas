@@ -314,6 +314,8 @@ begin
   while now<endt do begin
     Sleep(1000);
     Application.ProcessMessages;
+    if CancelAutofocus then break;
+    if FStopGuiding then break;
     if FState=GUIDER_GUIDING then break;
     inc(n);
     if ((n mod 150)=0) and assigned(FonShowMessage) then
@@ -333,6 +335,7 @@ var xy,buf:string;
 begin
 if not FRunning then exit;
   if onoff then begin
+     FStopGuiding:=false;
      xy:=LinGuiderCmd(LIN_FIND_STAR);
      buf:=LinGuiderCmd(LIN_SET_GUIDER_SQUARE_POS,xy);
      buf:=LinGuiderCmd(LIN_SET_GUIDER_OVL_POS,xy);
@@ -340,6 +343,7 @@ if not FRunning then exit;
      buf:=LinGuiderCmd(LIN_GUIDER,'start');
      DisplayMessage('Autoguider: '+'Guide start: '+buf);
   end else begin
+     FStopGuiding:=true;
      buf:=LinGuiderCmd(LIN_GUIDER,'stop');
      DisplayMessage('Autoguider: '+'Guide stop: '+buf);
   end;

@@ -810,9 +810,6 @@ resourcestring
   rsNoSuitableDa = 'No suitable dawn for automatic flat today';
   rsWaitingForTw = 'Waiting for twilight at %s';
   rsStopTheCurre2 = 'Stop the current target at %s';
-  rsAutoguiderSt = 'Autoguider Stop';
-  rsAutoguiderIs = 'Autoguider is still active 60 seconds after a stop request'
-    +'.%sDo you want to wait more?';
   rsStartAutogui = 'Start autoguider';
   rsAutoguiderSt2 = 'Autoguider Start';
   rsAutoguiderNo2 = 'Autoguider not guiding %s seconds after requested to '

@@ -400,6 +400,8 @@ begin
     Sleep(100);
     Application.ProcessMessages;
     if terminated then break;
+    if CancelAutofocus then break;
+    if FStopGuiding then break;
     if FState<>GUIDER_BUSY then break;
   end;
   result:=(FState<>GUIDER_BUSY);
@@ -415,6 +417,8 @@ begin
     Sleep(100);
     Application.ProcessMessages;
     if terminated then break;
+    if CancelAutofocus then break;
+    if FStopGuiding then break;
     if FState=GUIDER_GUIDING then break;
     inc(n);
     if ((n mod 150)=0) and assigned(FonShowMessage) then
@@ -434,6 +438,7 @@ var buf:string;
 begin
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
+    FStopGuiding:=false;
     Pause(false);
     wait(1);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
@@ -443,11 +448,13 @@ begin
     Send(buf);
     WaitBusy(60);
     Wait(10); //enough time for a new guide exposure
+    if FStopGuiding then exit;
     buf:='{"method": "find_star","id":2005}';
     FState:=GUIDER_BUSY;
     Send(buf);
     WaitBusy(60);
     Wait(2);
+    if FStopGuiding then exit;
     buf:='{"method": "guide", "params": [';
     buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
     buf:=buf+'"time": '+FSettleTmin+',';       // min time
@@ -457,6 +464,7 @@ begin
     buf:=buf+'"id": 2003}';
     Send(buf);
   end else begin
+    FStopGuiding:=true;
     buf:='{"method": "stop_capture","id":2001}';
     Send(buf);
     StarLostTimer.Enabled:=false;

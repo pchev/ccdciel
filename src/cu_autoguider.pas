@@ -35,7 +35,7 @@ type
     FTargetHost,FTargetPort,FErrorDesc,FRecvData,FLastError : string;
     FVersion,FMsgVersion,FStatus : String;
     FSettlePix,FSettleTmin,FSettleTmax: string;
-    FRunning, FRecovering,FDithering: boolean;
+    FRunning, FRecovering,FDithering,FStopGuiding: boolean;
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;

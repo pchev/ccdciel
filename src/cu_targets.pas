@@ -396,6 +396,7 @@ begin
    if (not abort) then begin
      if (p<>nil) and p.Running then p.Stop;
      FRunning:=false;
+     StopGuider;
      msg(rsSequenceStop);
      ShowDelayMsg('');
    end
@@ -872,14 +873,6 @@ begin
   msg(rsStopAutoguid);
   Autoguider.Guide(false);
   result:=Autoguider.WaitBusy(60);
-  if (not result)and(not Unattended) then begin
-    f_pause.Caption:=rsAutoguiderSt;
-    f_pause.Text:=Format(rsAutoguiderIs, [crlf]);
-    if f_pause.Wait(WaitResponseTime,false) then begin
-       result:=StopGuider();
-       exit;
-    end;
-  end;
 end;
 
 function T_Targets.StartGuider:boolean;
