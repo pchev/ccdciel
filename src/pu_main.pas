@@ -6768,8 +6768,9 @@ begin
 end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
-var x,y,rx,ry,xc,yc,ns,i,s,s2,s3,s4: integer;
-    vmax: double;
+var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4: integer;
+    hfdlist: array of double;
+    vmax,meanhfd: double;
 begin
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
@@ -6833,14 +6834,26 @@ begin
      ry:=rx;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
      ns:=Length(fits.StarList);
+     NewMessage('Total stars found: '+inttostr(ns)); // TODO: debug message to remove
      // store star list
      if ns>0 then begin
-        SetLength(AutofocusStarList,ns);
+         // get median HFD
+        SetLength(hfdlist,ns);
+        for i:=0 to ns-1 do
+            hfdlist[i]:=fits.StarList[i].hfd;
+        meanhfd:=SMedian(hfdlist);
+        NewMessage('Median HFD: '+FloatToStr(meanhfd)); // TODO: debug message to remove
+        n:=0;
         for i:=0 to ns-1 do begin
-          // can eventually filter by snr, vmax,hfd diff from median,...
-          AutofocusStarList[i,1]:=fits.StarList[i].x;
-          AutofocusStarList[i,2]:=fits.StarList[i].y;
+          // filter by hfd to remove galaxies
+          if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+            inc(n);
+            SetLength(AutofocusStarList,n);
+            AutofocusStarList[n-1,1]:=fits.StarList[i].x;
+            AutofocusStarList[n-1,2]:=fits.StarList[i].y;
+          end;
         end;
+        NewMessage('Stars selected for autofocus: '+inttostr(n)); // TODO: debug message to remove
      end
      else begin  // no star, manual action is required
         SetLength(AutofocusStarList,0);
