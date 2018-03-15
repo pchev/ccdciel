@@ -1684,7 +1684,8 @@ begin
     Sumval:=Sumval+0.00001;{prevent divide by zero}
     hfd:=2*SumValR/SumVal;
     hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
-    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }  end;
+    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+end;
 
 except
   on E: Exception do begin
@@ -1726,7 +1727,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
             ) then
             GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
        {check valid hfd, snr and star shape using hfd/fwhm ratio, ratio must be high enough to accept defocused stars}
-       if ((hfd1>0.8) and (hfd1<99) and (snr>3) and ((hfd1/star_fwhm)<4) ) then
+       if ((hfd1>0.8) and (hfd1<99) and (snr>3) and (star_fwhm>0) and ((hfd1/star_fwhm)<4) ) then
        begin
          inc(nhfd);
          SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
@@ -1761,7 +1762,7 @@ for i:=0 to Length(list)-1 do
       GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);
 
    {check valid hfd, snr and star shape using hfd/fwhm ratio, ratio must be high enough to accept defocused stars}
-   if ((hfd1>0.8) and (hfd1<99) and (snr>3)  and ((hfd1/star_fwhm)<4) ) then
+   if ((hfd1>0.8) and (hfd1<99) and (snr>3)  and (star_fwhm>0) and ((hfd1/star_fwhm)<4) ) then
     begin
        inc(nhfd);
        SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
