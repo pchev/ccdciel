@@ -2930,14 +2930,6 @@ msgstr ""
 msgid "Stop the current target at %s"
 msgstr ""
 
-#: u_translation:rsautoguiderst
-msgid "Autoguider Stop"
-msgstr ""
-
-#: u_translation:rsautoguideris
-msgid "Autoguider is still active 60 seconds after a stop request.%sDo you want to wait more?"
-msgstr ""
-
 #: u_translation:rsstartautogui
 msgid "Start autoguider"
 msgstr ""
@@ -3062,14 +3054,6 @@ msgstr ""
 msgid "Focus star selection"
 msgstr ""
 
-#: u_translation:rsusethebright
-msgid "Use the brighter star"
-msgstr ""
-
-#: u_translation:rsusemultiples
-msgid "Use multiple stars"
-msgstr ""
-
 #: u_translation:rsdefaultbehav
 msgid "Default behavior"
 msgstr ""
@@ -3080,5 +3064,9 @@ msgstr ""
 
 #: u_translation:rsstayinplace
 msgid "Stay in place"
+msgstr ""
+
+#: u_translation:rsdetectmultip
+msgid "Detect multiple stars in the image"
 msgstr ""
 

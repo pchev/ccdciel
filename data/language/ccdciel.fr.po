@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-14 15:37+0000\n"
-"PO-Revision-Date: 2018-03-14 15:38+0000\n"
+"POT-Creation-Date: 2018-03-16 10:09+0000\n"
+"PO-Revision-Date: 2018-03-16 11:51+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-14 15:41+0000\n"
+"X-Launchpad-Export-Date: 2018-03-16 11:52+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -236,10 +236,6 @@ msgstr "Tolérance de mise au point "
 msgid "Autoguider"
 msgstr "Auto-guideur"
 
-#: u_translation.rsautoguideris
-msgid "Autoguider is still active 60 seconds after a stop request.%sDo you want to wait more?"
-msgstr "L'autoguidage est encore actif 60 secondes après la demande d'arrêt.%sVoulez-vous attendre plus longtemps?"
-
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
 msgstr "Autoguideur non connecté"
@@ -247,10 +243,6 @@ msgstr "Autoguideur non connecté"
 #: u_translation.rsautoguiderno2
 msgid "Autoguider not guiding %s seconds after requested to start.%sDo you want to retry?"
 msgstr "L'autoguidage n'est pas actif %s secondes après la demande de démarrage.%sVoulez-vous réessayer?"
-
-#: u_translation.rsautoguiderst
-msgid "Autoguider Stop"
-msgstr "Arrête l'autoguidage"
 
 #: u_translation.rsautoguiderst2
 msgid "Autoguider Start"
@@ -751,6 +743,10 @@ msgstr "Température désirée"
 #: u_translation.rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
 msgstr "Effacer toutes des données des pixels défectueux?"
+
+#: u_translation.rsdetectmultip
+msgid "Detect multiple stars in the image"
+msgstr "Détection de plusieurs étoiles dans l'image"
 
 #: u_translation.rsdevices
 msgid "Device"
@@ -2981,17 +2977,9 @@ msgstr "Utilise le focuseur"
 msgid "Use mount"
 msgstr "Utilise la monture"
 
-#: u_translation.rsusemultiples
-msgid "Use multiple stars"
-msgstr "Utilise plusieurs étoiles"
-
 #: u_translation.rsuserotator
 msgid "Use rotator"
 msgstr "Utilise le rotateur"
-
-#: u_translation.rsusethebright
-msgid "Use the brighter star"
-msgstr "Utilise l'étoile la plus brillante"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
