@@ -260,7 +260,7 @@ resourcestring
   rsRecenterImag = 'Recenter image error!%sdistance: %s';
   rsRecenterOnLa2 = 'Recenter on last image';
   rsMeridianFlip10 = 'Meridian flip completed';
-  rsTiltIndicati = ' Tilt indication:%s%';
+  rsTiltIndicati = ' Tilt indication:%s';
   rsImageMedianH = 'Image median hfd=%s';
   rsNoStarDetect = 'No star detected. Is the image focused and sufficiently '
     +'exposed?';
@@ -848,6 +848,9 @@ resourcestring
   rsSlewToFocusS2 = 'Slew to focus star';
   rsStayInPlace = 'Stay in place';
   rsDetectMultip = 'Detect multiple stars in the image';
+  rsUsingMedianO = 'Using median of %s stars';
+  rsHYPERBOLACur = 'HYPERBOLA curve fitting focus at %s,  remaining curve fits'
+    +' error %s,  iteration cycles %s';
 
 
 

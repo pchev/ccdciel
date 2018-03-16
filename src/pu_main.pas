@@ -6828,7 +6828,6 @@ begin
      ry:=rx;
      fits.GetStarList(rx,ry,s,true); {search stars in fits image}
      ns:=Length(fits.StarList);
-     NewMessage('Total stars found: '+inttostr(ns)); // TODO: debug message to remove
      // store star list
      if ns>0 then begin
         // make temporary list with all the stars
@@ -6845,7 +6844,6 @@ begin
         for i:=0 to ns-1 do
             hfdlist[i]:=fits.StarList[i].hfd;
         meanhfd:=SMedian(hfdlist);
-        NewMessage('Median HFD: '+FloatToStr(meanhfd)); // TODO: debug message to remove
         n:=0;
         for i:=0 to ns-1 do begin
           // filter by hfd to remove galaxies and others outliers
@@ -6856,7 +6854,6 @@ begin
             AutofocusStarList[n-1,2]:=fits.StarList[i].y;
           end;
         end;
-        NewMessage('Stars selected for autofocus: '+inttostr(n)); // TODO: debug message to remove
      end
      else begin  // no star, manual action is required
         SetLength(AutofocusStarList,0);
@@ -7959,7 +7956,7 @@ begin
       imabmp.DrawLineAntialias(xxc,yyc,x3,y3,col,2);
       imabmp.DrawLineAntialias(xxc,yyc,x4,y4,col,2);
 
-      mess2:=Format(rsTiltIndicati, [inttostr(round(100*((median_worst/median_best)-1)))]); {estimate tilt value}
+      mess2:=Format(rsTiltIndicati, [inttostr(round(100*((median_worst/median_best)-1)))])+'%'; {estimate tilt value}
     end
     else
     mess2:='';

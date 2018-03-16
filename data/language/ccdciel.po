@@ -931,7 +931,7 @@ msgid "Meridian flip completed"
 msgstr ""
 
 #: u_translation:rstiltindicati
-msgid " Tilt indication:%s%"
+msgid " Tilt indication:%s"
 msgstr ""
 
 #: u_translation:rsimagemedianh
@@ -3068,5 +3068,13 @@ msgstr ""
 
 #: u_translation:rsdetectmultip
 msgid "Detect multiple stars in the image"
+msgstr ""
+
+#: u_translation:rsusingmediano
+msgid "Using median of %s stars"
+msgstr ""
+
+#: u_translation:rshyperbolacur
+msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fits error %s,  iteration cycles %s"
 msgstr ""
 

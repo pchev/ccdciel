@@ -593,7 +593,7 @@ begin
          exit;
        end;
        Fhfd:=SMedian(hfdlist);
-       msg('Using median of '+inttostr(nhfd)+' stars');
+       msg(Format(rsUsingMedianO, [inttostr(nhfd)]));
     end
     else begin
        msg(rsAutofocusCan3);
@@ -724,8 +724,7 @@ begin
     exit;
   end;
   FirstFrame:=false;
-  msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax),
-    FormatFloat(f1, Fsnr)]));
+  msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
   // do focus and continue
   case AutofocusMode of
     afVcurve   : doAutofocusVcurve;
@@ -983,9 +982,8 @@ begin
               end;
               // compute focus
               find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
-              msg('HYPERBOLA curve fitting focus at: '+
-                     floattostr(p_hyp)+
-                     '  remaining curve fit error '+floattostr(lowest_error)+'  iteration cycles '+inttostr(iteration_cycles) );
+              msg(Format(rsHYPERBOLACur, [FormatFloat(f3, p_hyp), FormatFloat(
+                f4, lowest_error), inttostr(iteration_cycles)]) );
               // focus position with last move in focus direction
               step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp));
               focuser.FocusSpeed:=step+AutofocusDynamicMovement;

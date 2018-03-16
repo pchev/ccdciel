@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-16 10:09+0000\n"
-"PO-Revision-Date: 2018-03-16 11:51+0000\n"
+"POT-Creation-Date: 2018-03-16 13:45+0000\n"
+"PO-Revision-Date: 2018-03-16 13:55+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-16 11:52+0000\n"
+"X-Launchpad-Export-Date: 2018-03-16 13:56+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -134,7 +134,7 @@ msgstr "L'autofocus est abandonné car le HFD ne peut être mesuré."
 
 #: u_translation.rsautofocuscan5
 msgid "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
-msgstr "L'autofocus est abandonné à cause d'un SNR trop bas, POS=%s HFD=%s PEAK:%s SNR:%s"
+msgstr "L'autofocus est abandonné à cause d'un SNR trop bas, POS=%s HFD=%s POINTE:%s SNR:%s"
 
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
@@ -158,7 +158,7 @@ msgstr "La mise au point a échoué après %s tentatives, on continu sans mise a
 
 #: u_translation.rsautofocusfin
 msgid "Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
-msgstr "Autofocus terminé, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
+msgstr "Autofocus terminé, POS=%s HFD=%s POINTE:%s SNR:%s TEMP:%s"
 
 #: u_translation.rsautofocusfin2
 msgid "Autofocus final HFD is higher than %s"
@@ -202,7 +202,7 @@ msgstr "Mise au point maintenant"
 
 #: u_translation.rsautofocusrun
 msgid "Autofocus running, hfd=%s peak:%s snr:%s"
-msgstr "Autofocus en cours, hfd=%s peak:%s snr:%s"
+msgstr "Autofocus en cours, hfd=%s pointe:%s snr:%s"
 
 #: u_translation.rsautofocussta
 msgid "AutoFocus started, initial position: %s"
@@ -1235,6 +1235,10 @@ msgstr "ADU des hautes lumières"
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
 msgstr "Profile de l'horizon"
+
+#: u_translation.rshyperbolacur
+msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fits error %s,  iteration cycles %s"
+msgstr "Ajustement de la courbe hyperbolique, focus  à %s, erreur restante %s, cycles d'itération %s"
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
@@ -2870,8 +2874,8 @@ msgid "This procedure will help you to  find the focuser parameters for auto-foc
 msgstr "Cette procédure vous aidera à trouver les paramètres de mise au point automatique.%sIl suffit de l'exécuter une seule fois pour régler ces paramètres.%sCentrez une étoile assez haute et faites une mise au point manuelle pour être le plus près possible de la mise au point. Utilisez pour cela l'outil de mise au point manuelle.%sUtilisez l'outil Profil étoile pour vérifier que l'intensité de crête de étoile est environ trois quarts de l'ADU maximum de la caméra, mais pas saturée.%sAprès la mise au point, votre focuser doit être positionné à mi-course de sa course mécanique. Si ce n'est pas le cas, veuillez l'ajuster maintenant.%sLe binning que vous avez défini dans l'Aperçu est maintenant utilisé pour la mise au point automatique. Si vous souhaitez modifier ultérieurement le binning de mise au point, vous devez exécuter à nouveau cette procédure."
 
 #: u_translation.rstiltindicati
-msgid " Tilt indication:%s%"
-msgstr " Indication d'inclinaison: %s%"
+msgid " Tilt indication:%s"
+msgstr " Indication d'inclinaison:%s"
 
 #: u_translation.rstimeout
 msgid "Timeout"
@@ -2984,6 +2988,10 @@ msgstr "Utilise le rotateur"
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
 msgstr "Utilise le Watchdog"
+
+#: u_translation.rsusingmediano
+msgid "Using median of %s stars"
+msgstr "Utilise la médiane de %s étoiles"
 
 #: u_translation.rsvalue
 msgid "Value"
