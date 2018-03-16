@@ -844,11 +844,10 @@ resourcestring
     +'values.';
   rsSlewToANearS = 'Slew to a near star of magnitude';
   rsFocusStarSel = 'Focus star selection';
-  rsUseTheBright = 'Use the brighter star';
-  rsUseMultipleS = 'Use multiple stars';
   rsDefaultBehav = 'Default behavior';
   rsSlewToFocusS2 = 'Slew to focus star';
   rsStayInPlace = 'Stay in place';
+  rsDetectMultip = 'Detect multiple stars in the image';
 
 
 

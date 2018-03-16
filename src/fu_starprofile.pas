@@ -568,7 +568,7 @@ var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   hfdlist: array of double;
   txt:string;
 begin
- if AutofocusMultistar  and InplaceAutofocus then begin    // measure multiple stars
+ if InplaceAutofocus then begin    // measure multiple stars
     f.MeasureStarList(s,AutofocusStarList,false);
     ns:=Length(f.StarList);
     if ns>0 then begin
@@ -654,7 +654,7 @@ begin
   end;
  end;
   // plot progress
-  if AutofocusMultistar  and InplaceAutofocus then begin
+  if InplaceAutofocus then begin
     LabelHFD.Caption:=FormatFloat(f1,Fhfd);
     if FValMax>1 then
        LabelImax.Caption:=FormatFloat(f0,FValMax)

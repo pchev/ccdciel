@@ -38,7 +38,9 @@ type
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
+    AutofocusMultistar: TGroupBox;
     Label52: TLabel;
+    Label56: TLabel;
     MaxAduFromCamera: TCheckBox;
     ElevationMin: TFloatSpinEdit;
     ClippingLow: TFloatSpinEdit;
@@ -67,7 +69,6 @@ type
     PixelSizeFromCamera: TCheckBox;
     AutofocusSlew: TRadioButton;
     AutofocusInPlace: TRadioButton;
-    AutofocusMultistar: TRadioGroup;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
     SlewPrec: TFloatSpinEdit;
@@ -535,8 +536,7 @@ begin
   Label85.Caption := rsSlewWithAPre;
   Label86.Caption := rsArcmin;
   AutofocusMultistar.Caption := rsFocusStarSel;
-  AutofocusMultistar.Items[0]:=rsUseTheBright;
-  AutofocusMultistar.Items[1]:=rsUseMultipleS;
+  label56.Caption := rsDetectMultip;
   Label101.Caption := rsTheMenuFileF;
   TabSheet4.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
