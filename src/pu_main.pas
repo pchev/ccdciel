@@ -6832,7 +6832,7 @@ begin
      s:=14; {test image in boxes of size s*s}
      rx:=round(2*min(img_Height,img_Width)/3); {search area}
      ry:=rx;
-     fits.GetStarList(rx,ry,s); {search stars in fits image}
+     fits.GetStarList(rx,ry,s,true); {search stars in fits image}
      ns:=Length(fits.StarList);
      NewMessage('Total stars found: '+inttostr(ns)); // TODO: debug message to remove
      // store star list
@@ -6844,7 +6844,7 @@ begin
            AutofocusStarList[i,2]:=fits.StarList[i].y;
          end;
         // Measure again using the full star window to detect outliers
-        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList);
+        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList,true);
         ns:=Length(fits.StarList);
          // compute median HFD
         SetLength(hfdlist,ns);
@@ -7900,7 +7900,7 @@ begin
   rx:=img_Width-6*s; {search area}
   ry:=img_Height-6*s;
 
-  fits.GetStarList(rx,ry,s); {search stars in fits image}
+  fits.GetStarList(rx,ry,s,true); {search stars in fits image}
 
   nhfd:=Length(fits.StarList);
   SetLength(hfdlist,nhfd);

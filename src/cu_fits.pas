@@ -181,8 +181,8 @@ type
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
      procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
-     procedure GetStarList(rx,ry,s: integer);
-     procedure MeasureStarList(s: integer; list: TArrayDouble2);
+     procedure GetStarList(rx,ry,s: integer; checkfwhm: boolean);
+     procedure MeasureStarList(s: integer; list: TArrayDouble2; checkfwhm: boolean);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -1695,10 +1695,10 @@ except
 end;
 end;
 
-procedure TFits.GetStarList(rx,ry,s: integer);
+procedure TFits.GetStarList(rx,ry,s: integer; checkfwhm: boolean);
 var
  fitsX,fitsY,xxc,yyc,rc,fx,fy,nhfd,x1,y1: integer;
- hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
+ hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr,fwhmratio: double;
  marginx,marginy: integer;
 const
     overlap=2; {box overlap,results in 1 pixel overlap}
@@ -1717,6 +1717,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
    begin
      fitsX:=fx*s;
      hfd1:=-1;
+     star_fwhm:=-1;
      {ignore double stars, require comparaison with bright pixel position}
      FindBrightestPixel(fitsX,fitsY,s+overlap,s+overlap,x1,y1,vmax,false);
      if vmax>0 then begin
@@ -1726,8 +1727,16 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
             and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
             ) then
             GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
-       {check valid hfd, snr and star shape using hfd/fwhm ratio, ratio must be high enough to accept defocused stars}
-       if ((hfd1>0.8) and (hfd1<99) and (snr>3) and (star_fwhm>0) and ((hfd1/star_fwhm)<4) ) then
+
+       if checkfwhm then {use this parameter only with focused stars}
+          if star_fwhm>0 then
+            fwhmratio:=hfd1/star_fwhm
+          else
+            fwhmratio:=999
+       else
+          fwhmratio:=1;
+       {check valid hfd, snr and star shape using hfd/fwhm ratio}
+       if ((hfd1>0.8) and (hfd1<99) and (snr>3) and (star_fwhm>0) and (fwhmratio<2) ) then
        begin
          inc(nhfd);
          SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
@@ -1743,10 +1752,10 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
  end;
 end;
 
-procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
+procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2; checkfwhm: boolean);
 var
  fitsX,fitsY,xxc,yyc,rc,nhfd,i: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,fwhmratio: double;
 begin
 
 nhfd:=0;{set counters at zero}
@@ -1757,12 +1766,20 @@ for i:=0 to Length(list)-1 do
    fitsX:=round(list[i,1]);
    fitsY:=round(list[i,2]);
    hfd1:=-1;
+   star_fwhm:=-1;
    FindStarPos(fitsX,fitsY,s,xxc,yyc,rc,vmax,bg,bgdev);
    if (vmax>0) then
       GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);
 
-   {check valid hfd, snr and star shape using hfd/fwhm ratio, ratio must be high enough to accept defocused stars}
-   if ((hfd1>0.8) and (hfd1<99) and (snr>3)  and (star_fwhm>0) and ((hfd1/star_fwhm)<4) ) then
+   if checkfwhm then {use this parameter only with focused stars}
+      if star_fwhm>0 then
+        fwhmratio:=hfd1/star_fwhm
+      else
+        fwhmratio:=999
+   else
+      fwhmratio:=1;
+   {check valid hfd, snr and star shape using hfd/fwhm ratio}
+   if ((hfd1>0.8) and (hfd1<99) and (snr>3)  and (star_fwhm>0) and (fwhmratio<2) ) then
     begin
        inc(nhfd);
        SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
