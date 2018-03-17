@@ -10,9 +10,9 @@ rm doc/robots.txt
 
 mkdir wiki_doc
 cp -R -p doc/* wiki_doc/
-cp print.css wiki_doc/lib/exe/
+cp wiki.css wiki_doc/lib/exe/
 cd wiki_doc/lib/exe
 css=$(ls -1 css.php*|head -1)
 rm $css
-mv print.css $css
+mv wiki.css $css
 cd -
