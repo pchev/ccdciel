@@ -132,17 +132,16 @@ begin
   if FBacklashActive and ((p<Position)<>FBacklashDirection) then begin   // p<position = focus IN
     if FBacklashDirection then
     begin
-       msg(Format(rsFocuserMoveT, [inttostr(p)])+', '+rsBacklashComp+' + '+inttostr(FBacklash));
+       msg(Format(rsFocuserMoveT, [inttostr(p)])+' + '+inttostr(FBacklash)+' '+rsBacklashComp);
        SetPosition(p+FBacklash)   // backlash IN, go OUT first
     end
     else
     begin
-       msg(Format(rsFocuserMoveT, [inttostr(p)])+', '+rsBacklashComp+' - '+inttostr(FBacklash));
+       msg(Format(rsFocuserMoveT, [inttostr(p)])+' - '+inttostr(FBacklash)+' '+rsBacklashComp);
        SetPosition(p-FBacklash);  // backlash OUT, go IN first
     end;
-  end
-  else
-    msg(Format(rsFocuserMoveT, [inttostr(p)]));
+  end;
+  msg(Format(rsFocuserMoveT, [inttostr(p)]));
   SetPosition(p);                 // go to final position
   if FDelay>0 then Wait(FDelay);
 end;
