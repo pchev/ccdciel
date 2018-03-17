@@ -2078,10 +2078,6 @@ msgstr ""
 msgid "The program need to be restarted"
 msgstr ""
 
-#: u_translation:rsbacklashcomp2
-msgid "Backlash compensation must be in the same direction as auto-focus"
-msgstr ""
-
 #: u_translation:rsfocuswindowm
 msgid "Focus window must be at least four time greater than Star window!"
 msgstr ""
@@ -3076,5 +3072,13 @@ msgstr ""
 
 #: u_translation:rshyperbolacur
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fits error %s,  iteration cycles %s"
+msgstr ""
+
+#: u_translation:rsmovecomplete
+msgid "move completed"
+msgstr ""
+
+#: u_translation:rsimagecleanup
+msgid "Image cleanup"
 msgstr ""
 

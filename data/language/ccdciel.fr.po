@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-16 13:45+0000\n"
-"PO-Revision-Date: 2018-03-16 13:55+0000\n"
+"POT-Creation-Date: 2018-03-17 15:36+0000\n"
+"PO-Revision-Date: 2018-03-17 15:40+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-16 13:56+0000\n"
+"X-Launchpad-Export-Date: 2018-03-17 15:44+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -283,10 +283,6 @@ msgstr "Retour"
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
 msgstr "Compensation du jeu"
-
-#: u_translation.rsbacklashcomp2
-msgid "Backlash compensation must be in the same direction as auto-focus"
-msgstr "La compensation du jeu doit être dans le même sens que l'autofocus"
 
 #: u_translation.rsbadpixeldete
 msgid "Bad pixel detection found %s hot pixels."
@@ -1244,6 +1240,10 @@ msgstr "Ajustement de la courbe hyperbolique, focus  à %s, erreur restante %s, 
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
 msgstr "Si votre pilote de focuser n'offre pas cette option, définissez ici le nombre d'étapes nécessaires pour compenser le jeu lorsque la direction change. Il n'y a pas besoin d'une valeur précise, il vaut mieux la régler plus haute que le jeu réel."
 
+#: u_translation.rsimagecleanup
+msgid "Image cleanup"
+msgstr "Nettoyage de l'image"
+
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
 msgstr "Image Debayerisée"
@@ -1532,6 +1532,10 @@ msgstr "déplacement vers %s %s"
 #: u_translation.rsmountsync
 msgid "Mount sync"
 msgstr "Sync de la monture"
+
+#: u_translation.rsmovecomplete
+msgid "move completed"
+msgstr "déplacement terminé"
 
 #: u_translation.rsmovedirectio
 msgid "Move direction"

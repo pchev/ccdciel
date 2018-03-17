@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-16 13:45+0000\n"
-"PO-Revision-Date: 2018-03-11 10:05+0000\n"
+"POT-Creation-Date: 2018-03-17 15:36+0000\n"
+"PO-Revision-Date: 2018-03-17 09:17+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-16 13:56+0000\n"
+"X-Launchpad-Export-Date: 2018-03-17 15:44+0000\n"
 "X-Generator: Launchpad (build 18571)\n"
 
 #: u_translation.rsabort
@@ -74,7 +74,7 @@ msgstr ""
 
 #: u_translation.rsareyousureyo
 msgid "Are you sure you want to disconnect all the devices now?"
-msgstr ""
+msgstr "Sei sicuro di voler scollegare tutti i dispositivi ora?"
 
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
@@ -284,13 +284,9 @@ msgstr ""
 msgid "Backlash compensation"
 msgstr ""
 
-#: u_translation.rsbacklashcomp2
-msgid "Backlash compensation must be in the same direction as auto-focus"
-msgstr ""
-
 #: u_translation.rsbadpixeldete
 msgid "Bad pixel detection found %s hot pixels."
-msgstr ""
+msgstr "Il rilevamento dei pixel difettosi ha trovato %s pixel caldi."
 
 #: u_translation.rsbadpixelmap
 msgid "Bad pixel map"
@@ -298,7 +294,7 @@ msgstr "Mappa pixel difettosi"
 
 #: u_translation.rsbadpixelmapc
 msgid "Bad pixel map cleared."
-msgstr ""
+msgstr "Mappa dei pixel difettosi cancellata."
 
 #: u_translation.rsbadpixelsdet
 msgid "Bad pixels detection"
@@ -362,7 +358,7 @@ msgstr ""
 
 #: u_translation.rscamera
 msgid "Camera"
-msgstr ""
+msgstr "Fotocamera"
 
 #: u_translation.rscameraandmou
 msgid "Camera and mount must be connected!"
@@ -374,7 +370,7 @@ msgstr ""
 
 #: u_translation.rscameracooler
 msgid "Camera cooler %s"
-msgstr ""
+msgstr "Raffreddamento fotocamera %s"
 
 #: u_translation.rscameraframex
 msgid "Camera frame x=%s y=%s width=%s height=%s"
@@ -390,7 +386,7 @@ msgstr ""
 
 #: u_translation.rscancel
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
@@ -398,7 +394,7 @@ msgstr ""
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
-msgstr ""
+msgstr "Impossibile rilevare la stella."
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
@@ -414,11 +410,11 @@ msgstr ""
 
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
-msgstr ""
+msgstr "Impossibile rilevare la posizione assoluta del focheggiatore"
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
-msgstr ""
+msgstr "Impossibile raggiungere messa a fuoco HFD, incrementa valore Half Width o centra meglio la curva."
 
 #: u_translation.rscannotreachs
 msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
@@ -498,7 +494,7 @@ msgstr ""
 
 #: u_translation.rsccdtemperatu
 msgid "CCD temperature"
-msgstr ""
+msgstr "Temperatura CCD"
 
 #: u_translation.rscenter
 msgid "Center"
@@ -530,7 +526,7 @@ msgstr "Pulisci immagine di riferimento"
 
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
-msgstr ""
+msgstr "Clicca su Continua quando sei pronto."
 
 #: u_translation.rsclickcontinu2
 msgid "Click Continue when ready"
@@ -574,7 +570,7 @@ msgstr "Compilato con"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
-msgstr ""
+msgstr "Configurazione salvata"
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -586,7 +582,7 @@ msgstr ""
 
 #: u_translation.rsconnected
 msgid "%s connected"
-msgstr ""
+msgstr "%s connesso"
 
 #: u_translation.rsconnected2
 msgid "Connected %s"
@@ -598,7 +594,7 @@ msgstr ""
 
 #: u_translation.rsconnecting
 msgid "Connecting %s"
-msgstr ""
+msgstr "Sto collegando %s"
 
 #: u_translation.rsconnection
 msgid "Connection"
@@ -646,7 +642,7 @@ msgstr ""
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
-msgstr ""
+msgstr "Copri la fotocamera e imposta il tempo di esposizione e il binning nel pannello di Anteprima."
 
 #: u_translation.rscreatefromca
 msgid "Create from camera"
@@ -670,7 +666,7 @@ msgstr ""
 
 #: u_translation.rscurrentfocus
 msgid "Current focuser absolute position"
-msgstr ""
+msgstr "Posizione assoluta attuale del focheggiatore"
 
 #: u_translation.rscurrentimage
 msgid "Current image"
@@ -738,7 +734,7 @@ msgstr ""
 
 #: u_translation.rsdesiredtempe
 msgid "Desired temperature"
-msgstr ""
+msgstr "Temperatura desiderata"
 
 #: u_translation.rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
@@ -750,7 +746,7 @@ msgstr ""
 
 #: u_translation.rsdevices
 msgid "Device"
-msgstr ""
+msgstr "Dispositivo"
 
 #: u_translation.rsdevicesconne
 msgid "Devices connection"
@@ -770,11 +766,11 @@ msgstr ""
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
-msgstr ""
+msgstr "Disconnetti"
 
 #: u_translation.rsdisconnected
 msgid "%s disconnected"
-msgstr ""
+msgstr "%s disconnesso"
 
 #: u_translation.rsdisconnected3
 msgid "Disconnected"
@@ -782,7 +778,7 @@ msgstr ""
 
 #: u_translation.rsdisconnectin
 msgid "Disconnecting devices"
-msgstr ""
+msgstr "Sto scollegando i dispositivi"
 
 #: u_translation.rsdisconnectio
 msgid "Disconnection error: %s"
@@ -922,7 +918,7 @@ msgstr ""
 
 #: u_translation.rsexposureabor
 msgid "Exposure aborted!"
-msgstr ""
+msgstr "Esposizione annullata!"
 
 #: u_translation.rsexposurefact
 msgid "Exposure factor"
@@ -930,11 +926,11 @@ msgstr ""
 
 #: u_translation.rsexposurefail
 msgid "Exposure fail!"
-msgstr ""
+msgstr "Esposizione fallita!"
 
 #: u_translation.rsexposuretime
 msgid "Exposure time in secondes"
-msgstr ""
+msgstr "Tempo di esposizione in secondi"
 
 #: u_translation.rsexposuretime2
 msgid "Exposure time"
@@ -994,7 +990,7 @@ msgstr "Filtri"
 
 #: u_translation.rsfilterwheel
 msgid "Filter wheel"
-msgstr ""
+msgstr "Ruota dei filtri"
 
 #: u_translation.rsfilterwheeli
 msgid "Filter wheel in camera connection. (Restart required!)"
@@ -1106,7 +1102,7 @@ msgstr ""
 
 #: u_translation.rsfocusertempe
 msgid "Focuser temperature: %s"
-msgstr ""
+msgstr "Temperatura focheggiatore: %s"
 
 #: u_translation.rsfocusertempe2
 msgid "Focuser temperature: %s , adjust position by %s"
@@ -1162,7 +1158,7 @@ msgstr ""
 
 #: u_translation.rsfromtoby
 msgid "From: %s to %s by %s"
-msgstr ""
+msgstr "Da: %s a %s tramite %s"
 
 #: u_translation.rsfwhm
 msgid "FWHM"
@@ -1206,7 +1202,7 @@ msgstr ""
 
 #: u_translation.rsguiding
 msgid "%s guiding"
-msgstr ""
+msgstr "%s sta guidando"
 
 #: u_translation.rshalt
 msgid "Halt"
@@ -1242,6 +1238,10 @@ msgstr ""
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
+msgstr ""
+
+#: u_translation.rsimagecleanup
+msgid "Image cleanup"
 msgstr ""
 
 #: u_translation.rsimagedebayer
@@ -1322,7 +1322,7 @@ msgstr ""
 
 #: u_translation.rsinvalidnumer
 msgid "Invalid numeric value"
-msgstr ""
+msgstr "Valore numerico non valido"
 
 #: u_translation.rsinvalidobjec
 msgid "Invalid object coordinates!"
@@ -1422,7 +1422,7 @@ msgstr ""
 
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
-msgstr ""
+msgstr "Misura hfd di %s:%s picco:%s snr:%s"
 
 #: u_translation.rsmeasurementp
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
@@ -1514,7 +1514,7 @@ msgstr ""
 
 #: u_translation.rsmount
 msgid "Mount"
-msgstr ""
+msgstr "Montatura"
 
 #: u_translation.rsmountcapabil
 msgid "Mount capabilities: %s"
@@ -1530,6 +1530,10 @@ msgstr ""
 
 #: u_translation.rsmountsync
 msgid "Mount sync"
+msgstr ""
+
+#: u_translation.rsmovecomplete
+msgid "move completed"
 msgstr ""
 
 #: u_translation.rsmovedirectio
@@ -1866,11 +1870,11 @@ msgstr ""
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
-msgstr ""
+msgstr "Per favore attiva il file di log nelle preferenze."
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
-msgstr ""
+msgstr "Per favore imposta il tuo"
 
 #: u_translation.rspleaseconfig2
 msgid "Please configure the Autofocus options."
@@ -1886,7 +1890,7 @@ msgstr ""
 
 #: u_translation.rspleaseincrea
 msgid "Please increase the threshold."
-msgstr ""
+msgstr "Per favore aumenta la soglia."
 
 #: u_translation.rspleaseloador
 msgid "Please load or create a target list first."
@@ -2014,7 +2018,7 @@ msgstr ""
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
-msgstr ""
+msgstr "Incremento relativo del movimento in dentro o all'infuori"
 
 #: u_translation.rsremoveallbre
 msgid "Remove all breakpoints"
@@ -2702,7 +2706,7 @@ msgstr ""
 
 #: u_translation.rsstopvcurvele
 msgid "Stop Vcurve learning"
-msgstr ""
+msgstr "Ferma apprendimento Vcurve"
 
 #: u_translation.rssubfolderbyb
 msgid "Subfolder by binning"
@@ -2818,7 +2822,7 @@ msgstr ""
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
-msgstr ""
+msgstr "La fotocamera è disconnessa. Vuoi uscire dal programma adesso?"
 
 #: u_translation.rsthedataareno
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
@@ -2886,7 +2890,7 @@ msgstr "Strumenti"
 
 #: u_translation.rstoomanyhotpi
 msgid "Too many hot pixel found!"
-msgstr ""
+msgstr "Troppi pixel caldi rilevati!"
 
 #: u_translation.rstoosmallhfdd
 msgid "Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters."
@@ -2898,7 +2902,7 @@ msgstr ""
 
 #: u_translation.rstrack
 msgid "Track"
-msgstr ""
+msgstr "Segui"
 
 #: u_translation.rstreshold
 msgid "Treshold :"

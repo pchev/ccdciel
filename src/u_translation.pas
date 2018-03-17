@@ -850,6 +850,7 @@ resourcestring
   rsHYPERBOLACur = 'HYPERBOLA curve fitting focus at %s,  remaining curve fits'
     +' error %s,  iteration cycles %s';
   rsMoveComplete = 'move completed';
+  rsImageCleanup = 'Image cleanup';
 
 
 

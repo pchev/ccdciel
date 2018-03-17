@@ -1401,6 +1401,7 @@ begin
    MenuStopAstrometry.Caption := rsStopAstromet;
    MenuItemDebayer.Caption := rsPreviewDebay;
    MenuItemRaw.Caption := rsPreviewRaw;
+   MenuItemCleanup.Caption:=rsImageCleanup;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
