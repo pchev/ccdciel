@@ -517,6 +517,7 @@ begin
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop,slewtimeout,10000);
+    msg(rsMoveComplete);
     FMountSlewing:=false;
     result:=true;
   end;

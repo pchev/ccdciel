@@ -402,7 +402,7 @@ begin
    else
      V.SlewToCoordinates(sra,sde);
    wait(2);
-   {$ifdef debug_ascom}msg('move finished.'); {$endif}
+   msg(rsMoveComplete);
    FMountSlewing:=false;
    result:=true;
    except

@@ -129,33 +129,42 @@ end;
 
 procedure T_focuser.SetPositionInt(p:integer);
 begin
-  msg(Format(rsFocuserMoveT, [inttostr(p)]));
   if FBacklashActive and ((p<Position)<>FBacklashDirection) then begin   // p<position = focus IN
     if FBacklashDirection then
+    begin
+       msg(Format(rsFocuserMoveT, [inttostr(p)])+', '+rsBacklashComp+' + '+inttostr(FBacklash));
        SetPosition(p+FBacklash)   // backlash IN, go OUT first
+    end
     else
+    begin
+       msg(Format(rsFocuserMoveT, [inttostr(p)])+', '+rsBacklashComp+' - '+inttostr(FBacklash));
        SetPosition(p-FBacklash);  // backlash OUT, go IN first
-  end;
+    end;
+  end
+  else
+    msg(Format(rsFocuserMoveT, [inttostr(p)]));
   SetPosition(p);                 // go to final position
   if FDelay>0 then Wait(FDelay);
 end;
 
 procedure T_focuser.SetRelPositionInt(p:integer);
 begin
-  msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)]));
   if BacklashActive and (FLastDirection<>FBacklashDirection) then begin   // FLastDirection = focus IN
     if FBacklashDirection then begin // want to go OUT, backlash IN
+       msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)])+', '+rsBacklashComp+' + '+inttostr(FBacklash));
        SetRelPosition(p+FBacklash);  // go more OUT than required
        FocusIN;                      // go IN by backlash
        SetRelPosition(FBacklash);
     end
     else begin                       // want to go IN, backlash OUT
+       msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)])+', '+rsBacklashComp+' - '+inttostr(FBacklash));
        SetRelPosition(p+FBacklash);  // go more IN than required
        FocusOUT;                     // go OUT by backlash
        SetRelPosition(FBacklash)
     end;
   end
   else begin
+    msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)]));
     SetRelPosition(p);
   end;
 end;
