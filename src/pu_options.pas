@@ -766,15 +766,20 @@ end;
 
 procedure Tf_option.CheckFocuserDirection(Sender: TObject);
 begin
-  msg('');
-  if FocuserBacklashActive.Checked and
-     (Autofocusmode.ItemIndex<3) and
-     (
-     ((FocuserBacklashDirection.ItemIndex=0) and AutofocusMoveDirOut.Checked) or
-     ((FocuserBacklashDirection.ItemIndex=1) and AutofocusMoveDirIn.Checked)
-     )
-     then
-         msg(rsBacklashComp2);
+  if PanelAutofocus.Visible then
+  begin
+     { force the backlash in the same direction as the autofocus}
+     if AutofocusMoveDirIn.Checked then
+       FocuserBacklashDirection.ItemIndex:=0
+     else
+       FocuserBacklashDirection.ItemIndex:=1;
+     FocuserBacklashDirection.Enabled:=false;
+  end
+  else
+  begin
+     {autofocus is disabled, let select the direction}
+     FocuserBacklashDirection.Enabled:=true;
+  end;
 end;
 
 procedure Tf_option.TmpDirDefaultClick(Sender: TObject);
