@@ -7943,7 +7943,7 @@ begin
 
   if nhfd>0 then
   begin
-    if ((nhfd_top_left>0) and (nhfd_top_right>0) and (nhfd_bottom_left>0) and (nhfd_bottom_right>0)) then {enough information for tilt calculation}
+    if ((nhfd_top_left>2) and (nhfd_top_right>2) and (nhfd_bottom_left>2) and (nhfd_bottom_right>2)) then {enough information for tilt calculation}
     begin
       median_top_left:=SMedian(hfdList_top_left);
       median_top_right:=SMedian(hfdList_top_right);
