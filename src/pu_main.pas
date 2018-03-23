@@ -6765,7 +6765,7 @@ end;
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4: integer;
     hfdlist: array of double;
-    vmax,meanhfd: double;
+    vmax,meanhfd, med: double;
 begin
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
@@ -6824,7 +6824,25 @@ begin
     exit;
   end;
   if InplaceAutofocus then begin  // use multiple stars
-     s:=20; {test image in boxes of size s*s}
+
+     // first measurement with a big window to find median star diameter
+     s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
+     rx:=img_Width-6*s; {search area}
+     ry:=img_Height-6*s;
+     fits.GetStarList(rx,ry,s); {search stars in fits image}
+     ns:=Length(fits.StarList);
+     if ns>0 then begin
+       SetLength(hfdlist,ns);
+       for i:=0 to ns-1 do
+         hfdlist[i]:=fits.StarList[i].hfd;
+       med:=SMedian(hfdlist);            {median of starshfd}
+       s:=min(max(16,round(5*med)),60);  {reasonable window to measure this stars}
+     end
+     else
+       s:=20; {no star found, try with small default window}
+
+
+//     s:=20; {test image in boxes of size s*s}
      rx:=round(2*min(img_Height,img_Width)/3); {search area}
      ry:=rx;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
