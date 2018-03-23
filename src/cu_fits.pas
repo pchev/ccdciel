@@ -751,8 +751,8 @@ with FFitsInfo do begin
     if (keyword='FOCALLEN') then focallen:=strtofloat(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
     if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
-    if (keyword='XBINNING') then BinX:=StrToInt(buf);
-    if (keyword='YBINNING') then BinY:=StrToInt(buf);
+    if (keyword='XBINNING') then BinX:=round(StrToFloat(buf));
+    if (keyword='YBINNING') then BinY:=round(StrToFloat(buf));
     if (keyword='FRAMEX') then Frx:=round(StrToFloat(buf));
     if (keyword='FRAMEY') then Fry:=round(StrToFloat(buf));
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
