@@ -1870,7 +1870,7 @@ end;{gethfd2}
 
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
- fitsX,fitsY,fx,fy,nhfd,x1,y1: integer;
+ fitsX,fitsY,fx,fy,nhfd: integer;
  hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
  marginx,marginy: integer;
 const

@@ -7871,12 +7871,11 @@ end;
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
  i,size,imageX,imageY,rx,ry,s,xxc,yyc,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right,x1,x2,x3,x4,y1,y2,y3,y4 : integer;
- hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,pxscale : double;
+ hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,med : double;
  hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
  Saved_Cursor : TCursor;
  mess2 : string;
  col: TBGRAPixel;
- tmplist: TArrayDouble2;
 begin
 
   if not fits.HeaderInfo.valid then exit;
@@ -7889,7 +7888,23 @@ begin
   col := ColorToBGRA(clRed);
   imabmp.FontHeight:=12;
 
-  s:=20; {test image in boxes of size s*s}
+  // first measurement with a big window to find median star diameter
+  s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
+  rx:=img_Width-6*s; {search area}
+  ry:=img_Height-6*s;
+  fits.GetStarList(rx,ry,s); {search stars in fits image}
+  nhfd:=Length(fits.StarList);
+  if nhfd>0 then begin
+    SetLength(hfdlist,nhfd);
+    for i:=0 to nhfd-1 do
+      hfdlist[i]:=fits.StarList[i].hfd;
+    med:=SMedian(hfdlist);            {median of starshfd}
+    s:=min(max(16,round(5*med)),60);  {reasonable window to measure this stars}
+  end
+  else
+    s:=20; {no star found, try with small default window}
+
+  // new measurement with adjusted window
   rx:=img_Width-6*s; {search area}
   ry:=img_Height-6*s;
 
