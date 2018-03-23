@@ -2169,10 +2169,10 @@ if MouseFrame and fits.HeaderInfo.valid then begin
   end;
   w:=x2-x1;
   h:=y2-y1;
-  f_frame.FX.Text:='X,'+inttostr(x1);
-  f_frame.FY.Text:='Y,'+inttostr(y1);
-  f_frame.FWidth.Text:=rsWidth+','+inttostr(w);
-  f_frame.FHeight.Text:=rsHeight+','+inttostr(h);
+  f_frame.FX.Text:=inttostr(x1);
+  f_frame.FY.Text:=inttostr(y1);
+  f_frame.FWidth.Text:=inttostr(w);
+  f_frame.FHeight.Text:=inttostr(h);
 end;
 MouseMoving:=false;
 MouseFrame:=false;
