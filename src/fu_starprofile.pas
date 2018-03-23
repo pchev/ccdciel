@@ -569,7 +569,7 @@ var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   txt:string;
 begin
  if InplaceAutofocus then begin    // measure multiple stars
-    f.MeasureStarList(s,AutofocusStarList,false);
+    f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
     if ns>0 then begin
        SetLength(hfdlist,0);

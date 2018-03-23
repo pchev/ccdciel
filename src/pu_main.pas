@@ -6824,10 +6824,10 @@ begin
     exit;
   end;
   if InplaceAutofocus then begin  // use multiple stars
-     s:=14; {test image in boxes of size s*s}
+     s:=20; {test image in boxes of size s*s}
      rx:=round(2*min(img_Height,img_Width)/3); {search area}
      ry:=rx;
-     fits.GetStarList(rx,ry,s,true); {search stars in fits image}
+     fits.GetStarList(rx,ry,s); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list
      if ns>0 then begin
@@ -6837,8 +6837,8 @@ begin
            AutofocusStarList[i,1]:=fits.StarList[i].x;
            AutofocusStarList[i,2]:=fits.StarList[i].y;
          end;
-        // Measure again using the full star window to detect outliers
-        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList,true);
+        // Measure again to remove stars that are problematic with the full star window
+        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList);
         ns:=Length(fits.StarList);
          // compute median HFD
         SetLength(hfdlist,ns);
@@ -7871,11 +7871,12 @@ end;
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
  i,size,imageX,imageY,rx,ry,s,xxc,yyc,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right,x1,x2,x3,x4,y1,y2,y3,y4 : integer;
- hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor : double;
+ hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,pxscale : double;
  hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
  Saved_Cursor : TCursor;
  mess2 : string;
  col: TBGRAPixel;
+ tmplist: TArrayDouble2;
 begin
 
   if not fits.HeaderInfo.valid then exit;
@@ -7888,11 +7889,11 @@ begin
   col := ColorToBGRA(clRed);
   imabmp.FontHeight:=12;
 
-  s:=14; {test image in boxes of size s*s}
+  s:=20; {test image in boxes of size s*s}
   rx:=img_Width-6*s; {search area}
   ry:=img_Height-6*s;
 
-  fits.GetStarList(rx,ry,s,true); {search stars in fits image}
+  fits.GetStarList(rx,ry,s); {search stars in fits image}
 
   nhfd:=Length(fits.StarList);
   SetLength(hfdlist,nhfd);

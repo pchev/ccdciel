@@ -181,8 +181,9 @@ type
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
      procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
-     procedure GetStarList(rx,ry,s: integer; checkfwhm: boolean);
-     procedure MeasureStarList(s: integer; list: TArrayDouble2; checkfwhm: boolean);
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);{han.k 2018-3-21}
+     procedure GetStarList(rx,ry,s: integer);
+     procedure MeasureStarList(s: integer; list: TArrayDouble2);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -1409,8 +1410,7 @@ begin
   result:=0;
   x_trunc:=trunc(x1);
   y_trunc:=trunc(y1);
-  if (x_trunc<0) or (x_trunc>(Fwidth-2)) or (y_trunc<0) or (y_trunc>(Fheight-2)) then exit;
-
+  if (x_trunc<=0) or (x_trunc>=(Fwidth-2)) or (y_trunc<=0) or (y_trunc>=(Fheight-2)) then exit;
   x_frac :=frac(x1);
   y_frac :=frac(y1);
   result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
@@ -1514,6 +1514,7 @@ begin
  end;
 
 end;
+
 
 procedure TFits.FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
 // center of gravity in area s*s centered on x,y
@@ -1624,6 +1625,8 @@ begin
  end;
 end;
 
+
+
 procedure TFits.GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
 var i,j: integer;
     SumVal,SumValX,SumValY,SumValR: double;
@@ -1695,10 +1698,180 @@ except
 end;
 end;
 
-procedure TFits.GetStarList(rx,ry,s: integer; checkfwhm: boolean);
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);{han.k 2018-3-21}
+// center of gravity in area s*s centered on x,y
+const
+    max_ri=100;
+var i,j,rs,distance,counter,ri, distance_top_value: integer;
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
+    pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
+    distance_histogram : array [0..max_ri] of integer;
+    HistStart,asymmetry : boolean;
+begin
+
+  valmax:=0;
+  bg:=0;
+  snr:=0;
+  valmax:=0;
+  hfd:=-1;
+  star_fwhm:=-1;
+
+  rs:=s div 2;
+  if (x-s)<1+3 then x:=s+1+3;
+  if (x+s)>(Fwidth-1-3) then x:=Fwidth-s-1-3;
+  if (y-s)<1+3 then y:=s+1+3;
+  if (y+s)>(Fheight-1-3) then y:=Fheight-s-1-3;
+
+  try
+
+  // average background
+  counter:=0;
+  bg_average:=0;
+  for i:=-rs-3 to rs+3 do {calculate mean at square boundaries of detection box}
+  for j:=-rs-3 to rs+3 do
+  begin
+    if ( (abs(i)>=rs) and (abs(j)>=rs) ) then
+    begin
+      bg_average:=bg_average+Fimage[0,y+i,x+j];
+      inc(counter)
+    end;
+  end;
+  bg_average:=bg_average/counter; {mean value background}
+  bg:=bg_average;
+
+  counter:=0;
+  bg_standard_deviation:=0;
+  for i:=-rs-3 to rs+3 do {calculate standard deviation background at the square boundaries of detection box}
+    for j:=-rs-3 to rs+3 do
+    begin
+      if ( (abs(i)>=rs) and (abs(j)>=rs) ) then
+      begin
+          bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+j]);
+          inc(counter)
+      end;
+  end;
+  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(counter)); {standard deviation in background}
+
+
+  bg:=bg_average;
+
+
+  repeat {## reduce box size till symmetry to remove stars}
+    // Get center of gravity whithin star detection box and count signal pixels
+    SumVal:=0;
+    SumValX:=0;
+    SumValY:=0;
+    valmax:=0;
+    for i:=-rs to rs do
+    for j:=-rs to rs do
+    begin
+      val:=Fimage[0,y+j,x+i]-bg;
+      if val>5*bg_standard_deviation then
+      begin
+        if val>valmax then valmax:=val;
+        SumVal:=SumVal+val;
+        SumValX:=SumValX+val*(i);
+        SumValY:=SumValY+val*(j);
+      end;
+    end;
+    if sumval<=10*bg_standard_deviation then exit; {no star found, too noisy}
+    Xg:=SumValX/SumVal;
+    Yg:=SumValY/SumVal;
+    xc:=(x+Xg);
+    yc:=(y+Yg);
+   {center of gravity found}
+
+    if ((xc-rs<=1) or (xc+rs>=Fwidth-2) or (yc-rs<=1) or (yc+rs>=Fheight-2) ) then begin exit;end;{prevent runtime errors near sides of images}
+
+   // Check for asymmetry. Are we testing a group of stars or a defocused star?
+    val_00:=0;val_01:=0;val_10:=0;val_11:=0;
+    for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram}
+
+    for i:=-rs to 0 do begin
+      for j:=-rs to 0 do begin
+        val_00:=val_00+ value_subpixel(xc+i,yc+j)-bg; {value top left}
+        val_01:=val_01+ value_subpixel(xc+i,yc-j)-bg; {value bottom left}
+        val_10:=val_10+ value_subpixel(xc-i,yc+j)-bg; {value top right}
+        val_11:=val_11+ value_subpixel(xc-i,yc-j)-bg; {value bottom right}
+      end;
+    end;
+    af:=min(0.95,rs/10); {## variable asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
+                        {more critital detection if rs is large}
+    asymmetry:=( (val_00<af*val_11) or  (val_00>(1/af)*val_11) or  {diagonal asymmetry} {has shape large asymmetry?}
+                 (val_01<af*val_10) or  (val_01>(1/af)*val_10) or  {diagonal asymmetry}
+                ((val_00+val_01)<af*(val_10+val_11)) or    ((val_00+val_01)>(1/af)*(val_10+val_11)) or  {east west asymmetry}
+                ((val_00+val_10)<af*(val_01+val_11)) or    ((val_00+val_10)>(1/af)*(val_01+val_11)) );  {north south asymmetry}
+
+
+    if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
+    if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
+  until asymmetry=false;{loop and reduce box size until asymmetry is gone or exit if box is too small}
+
+ // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
+ for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
+ for i:=-rs to rs do begin
+   for j:=-rs to rs do begin
+     Val:=value_subpixel(xc+i,yc+j)-bg;{##}
+     if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+     begin
+       distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
+       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+     end;
+   end;
+  end;
+
+ ri:=0;
+ distance_top_value:=0;
+ HistStart:=false;
+ repeat
+    inc(ri);
+    if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
+    if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
+  until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+ if ri>=rs then {## star is larger then box, abort} exit; {hfd:=-1}
+
+ if ri<3 then ri:=3;
+
+  // Get HFD
+  SumVal:=0;
+  SumValR:=0;
+  pixel_counter:=0;
+  if valmax>1 then
+    snr:=valmax/sqrt(valmax+2*bg)
+  else
+    snr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
+  if snr>3 then
+  begin
+    for i:=-ri to ri do
+      for j:=-ri to ri do
+      begin
+        Val:=value_subpixel(xc+i,yc+j)-bg;
+        if val>5*bg_standard_deviation then {5 * sd should be signal }
+        begin
+          r:=sqrt(i*i+j*j);
+          SumVal:=SumVal+Val;
+          SumValR:=SumValR+Val*r;
+          if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{how many pixels are above half maximum for FWHM}
+        end;
+      end;
+      Sumval:=Sumval+0.00001;{prevent divide by zero}
+      hfd:=2*SumValR/SumVal;
+      hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
+      star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+ end;
+
+ except
+   on E: Exception do begin
+     hfd:=-1;
+     star_fwhm:=-1;
+   end;
+ end;
+end;{gethfd2}
+
+procedure TFits.GetStarList(rx,ry,s: integer);
 var
- fitsX,fitsY,xxc,yyc,rc,fx,fy,nhfd,x1,y1: integer;
- hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr,fwhmratio: double;
+ fitsX,fitsY,fx,fy,nhfd,x1,y1: integer;
+ hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
  marginx,marginy: integer;
 const
     overlap=2; {box overlap,results in 1 pixel overlap}
@@ -1716,46 +1889,38 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
    for fx:=marginx to ((FWidth) div s)-marginx do
    begin
      fitsX:=fx*s;
-     hfd1:=-1;
-     star_fwhm:=-1;
-     {ignore double stars, require comparaison with bright pixel position}
-     FindBrightestPixel(fitsX,fitsY,s+overlap,s+overlap,x1,y1,vmax,false);
-     if vmax>0 then begin
-       FindStarPos(fitsX,fitsY,s+overlap,xxc,yyc,rc,vmax,bg,bgdev);
-       treshold:=min(FimageMax*0.1, 20*bgdev);
-       if ((vmax>treshold)and(vmax<(MaxADU-2*bg)) {new bright star but not saturated}
-            and (xxc>fitsX- round(s/2)) and (yyc>fitsY-round(s/2)) {prevent double detections in overlap area}
-            ) then
-            GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);{calculated HFD}
 
-       if checkfwhm then {use this parameter only with focused stars}
-          if star_fwhm>0 then
-            fwhmratio:=hfd1/star_fwhm
-          else
-            fwhmratio:=999
-       else
-          fwhmratio:=1;
-       {check valid hfd, snr and star shape using hfd/fwhm ratio}
-       if ((hfd1>0.8) and (hfd1<99) and (snr>3) and (star_fwhm>0) and (fwhmratio<2) ) then
-       begin
-         inc(nhfd);
-         SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
-         FStarList[nhfd-1].x:=xc;
-         FStarList[nhfd-1].y:=yc;
-         FStarList[nhfd-1].hfd:=hfd1;
-         FStarList[nhfd-1].fwhm:=star_fwhm;
-         FStarList[nhfd-1].snr:=snr;
-         FStarList[nhfd-1].vmax:=vmax;
-       end;
+     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);{2018-3-21, calculate HFD}
+
+     {scale the result as GetHFD2 work with internal 16 bit values}
+     vmax:=vmax/FimageC+FimageMin;
+     bg:=bg/FimageC+FimageMin;
+     bgdev:=bgdev/FimageC;
+     {minimal star detection level}
+     treshold:=min(FimageMax*0.1, 20*bgdev);
+
+     {check valid hfd }
+     if (hfd1>0.8) and (hfd1<99)
+        and (vmax>treshold) and (vmax<(MaxADU-2*bg)) {new bright star but not saturated}
+     then
+     begin
+       inc(nhfd);
+       SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
+       FStarList[nhfd-1].x:=xc;
+       FStarList[nhfd-1].y:=yc;
+       FStarList[nhfd-1].hfd:=hfd1;
+       FStarList[nhfd-1].fwhm:=star_fwhm;
+       FStarList[nhfd-1].snr:=snr;
+       FStarList[nhfd-1].vmax:=vmax;
      end;
    end;
  end;
 end;
 
-procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2; checkfwhm: boolean);
+procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
 var
  fitsX,fitsY,xxc,yyc,rc,nhfd,i: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,fwhmratio: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
 begin
 
 nhfd:=0;{set counters at zero}
@@ -1771,15 +1936,8 @@ for i:=0 to Length(list)-1 do
    if (vmax>0) then
       GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);
 
-   if checkfwhm then {use this parameter only with focused stars}
-      if star_fwhm>0 then
-        fwhmratio:=hfd1/star_fwhm
-      else
-        fwhmratio:=999
-   else
-      fwhmratio:=1;
-   {check valid hfd, snr and star shape using hfd/fwhm ratio}
-   if ((hfd1>0.8) and (hfd1<99) and (snr>3)  and (star_fwhm>0) and (fwhmratio<2) ) then
+   {check valid hfd, snr}
+   if ((hfd1>0.8) and (hfd1<99) and (snr>3)) then
     begin
        inc(nhfd);
        SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
