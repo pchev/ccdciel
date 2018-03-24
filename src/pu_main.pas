@@ -68,6 +68,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuSaveConfig: TMenuItem;
     MenuItemCleanup: TMenuItem;
     MenuOpenPicture: TMenuItem;
     MenuShowINDIlog: TMenuItem;
@@ -266,6 +267,7 @@ type
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
+    procedure MenuSaveConfigClick(Sender: TObject);
     procedure MenuOpenPictureClick(Sender: TObject);
     procedure MenuResolveRotateClick(Sender: TObject);
     procedure MenuResolveSyncRotatorClick(Sender: TObject);
@@ -424,6 +426,7 @@ type
     procedure SetConfig;
     procedure SetOptions;
     procedure OpenConfig(n: string);
+    procedure SaveSettings;
     procedure SaveConfig;
     procedure SaveVcurve;
     procedure LoadVcurve;
@@ -1299,6 +1302,7 @@ begin
    MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
    MenuRefimage.Caption := rsOpenReferenc;
    MenuClearRef.Caption := rsClearReferen;
+   MenuSaveConfig.Caption := rsSaveConfigur;
    MenuQuit.Caption := rsQuit;
    MenuItem2.Caption := rsEdit;
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
@@ -1791,155 +1795,11 @@ begin
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-var i,n: integer;
 begin
   if AppClose then exit;
   AppClose:=true;
 
-  config.SetValue('/Configuration/Version',ccdcielver);
-
-  config.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
-  config.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
-  config.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
-  config.SetValue('/Tools/Connection/Left',f_devicesconnection.Left);
-
-  config.SetValue('/Tools/Histogram/Parent',f_visu.Parent.Name);
-  config.SetValue('/Tools/Histogram/Visible',f_visu.Visible);
-  config.SetValue('/Tools/Histogram/Top',f_visu.Top);
-  config.SetValue('/Tools/Histogram/Left',f_visu.Left);
-
-  config.SetValue('/Tools/Messages/Parent',f_msg.Parent.Name);
-  config.SetValue('/Tools/Messages/Visible',f_msg.Visible);
-  config.SetValue('/Tools/Messages/Top',f_msg.Top);
-  config.SetValue('/Tools/Messages/Left',f_msg.Left);
-
-  config.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
-  config.SetValue('/Tools/Focuser/Visible',f_focuser.Visible);
-  config.SetValue('/Tools/Focuser/Top',f_focuser.Top);
-  config.SetValue('/Tools/Focuser/Left',f_focuser.Left);
-
-  config.SetValue('/Tools/Starprofile/Parent',f_starprofile.Parent.Name);
-  config.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
-  config.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
-  config.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
-
-  config.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
-  config.SetValue('/Tools/Frame/Visible',f_frame.Visible);
-  config.SetValue('/Tools/Frame/Top',f_frame.Top);
-  config.SetValue('/Tools/Frame/Left',f_frame.Left);
-
-  config.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
-  config.SetValue('/Tools/Rotator/Visible',f_rotator.Visible);
-  config.SetValue('/Tools/Rotator/Top',f_rotator.Top);
-  config.SetValue('/Tools/Rotator/Left',f_rotator.Left);
-
-  config.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
-  config.SetValue('/Tools/Preview/Visible',f_preview.Visible);
-  config.SetValue('/Tools/Preview/Top',f_preview.Top);
-  config.SetValue('/Tools/Preview/Left',f_preview.Left);
-
-  config.SetValue('/Tools/Capture/Parent',f_capture.Parent.Name);
-  config.SetValue('/Tools/Capture/Visible',f_capture.Visible);
-  config.SetValue('/Tools/Capture/Top',f_capture.Top);
-  config.SetValue('/Tools/Capture/Left',f_capture.Left);
-
-  config.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
-  config.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible);
-  config.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
-  config.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
-
-  config.SetValue('/Tools/CCDTemp/Parent',f_ccdtemp.Parent.Name);
-  config.SetValue('/Tools/CCDTemp/Visible',f_ccdtemp.Visible);
-  config.SetValue('/Tools/CCDTemp/Top',f_ccdtemp.Top);
-  config.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
-
-  config.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
-  config.SetValue('/Tools/Mount/Visible',f_mount.Visible);
-  config.SetValue('/Tools/Mount/Top',f_mount.Top);
-  config.SetValue('/Tools/Mount/Left',f_mount.Left);
-
-  config.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
-  config.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
-  config.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
-  config.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
-
-  config.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
-  config.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
-  config.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
-  config.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
-
-  config.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
-  config.SetValue('/Tools/Script/Visible',f_script.Visible);
-  config.SetValue('/Tools/Script/Top',f_script.Top);
-  config.SetValue('/Tools/Script/Left',f_script.Left);
-  config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
-
-  config.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
-
-  config.SetValue('/Window/Top',Top);
-  config.SetValue('/Window/Left',Left);
-  config.SetValue('/Window/Width',Width);
-  config.SetValue('/Window/Height',Height);
-
-  config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
-  config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
-  config.SetValue('/Preview/Binning',f_preview.Binning.Text);
-  if hasGainISO then
-    config.SetValue('/Preview/Gain',f_preview.ISObox.Text)
-  else
-    config.SetValue('/Preview/Gain',f_preview.GainEdit.Value);
-  config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
-  config.SetValue('/Capture/Binning',f_capture.Binning.Text);
-  config.SetValue('/Capture/FileName',f_capture.Fname.Text);
-  config.SetValue('/Capture/Count',f_capture.SeqNum.Value);
-  if hasGainISO then
-    config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
-  else
-    config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
-
-  config.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
-  config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
-  config.SetValue('/Tools/Sequence/Top',f_sequence.Top);
-  config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
-
-  config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
-
-  config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
-  config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);
-  config.SetValue('/Visu/Hist1',f_visu.hist1.Down);
-  config.SetValue('/Visu/Hist2',f_visu.hist2.Down);
-  config.SetValue('/Visu/Hist3',f_visu.hist3.Down);
-  config.SetValue('/Visu/Hist4',f_visu.hist4.Down);
-
-  n:=FilterList.Count-1;
-  config.SetValue('/Filters/Num',n);
-  for i:=1 to n do begin
-     config.SetValue('/Filters/Filter'+IntToStr(i),FilterList[i]);
-     config.SetValue('/Filters/Offset'+IntToStr(i),FilterOffset[i]);
-     config.SetValue('/Filters/ExpFact'+IntToStr(i),FilterExpFact[i]);
-  end;
-
-  n:=BinningList.Count;
-  config.SetValue('/Binning/Num',n);
-  for i:=0 to n-1 do begin
-     config.SetValue('/Binning/Binning'+IntToStr(i),BinningList[i]);
-  end;
-
-  config.SetValue('/Gain/hasGain',hasGain);
-  config.SetValue('/Gain/hasGainISO',hasGainISO);
-  config.SetValue('/Gain/Gain',Gain);
-  config.SetValue('/Gain/GainMin',GainMin);
-  config.SetValue('/Gain/GainMax',GainMax);
-  n:=ISOList.Count;
-  config.SetValue('/Gain/NumISO',n);
-  for i:=0 to n-1 do begin
-     config.SetValue('/Gain/ISO'+IntToStr(i),ISOList[i]);
-  end;
-
-  config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
-  config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
-
-
+  SaveSettings;
   SaveConfig;
   NewMessage(rsConfiguratio);
 
@@ -2565,6 +2425,155 @@ begin
   end;
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
+end;
+
+procedure Tf_main.SaveSettings;
+var i,n: integer;
+begin
+   // Set current tools value to the config
+
+   config.SetValue('/Configuration/Version',ccdcielver);
+
+   config.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
+   config.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
+   config.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
+   config.SetValue('/Tools/Connection/Left',f_devicesconnection.Left);
+
+   config.SetValue('/Tools/Histogram/Parent',f_visu.Parent.Name);
+   config.SetValue('/Tools/Histogram/Visible',f_visu.Visible);
+   config.SetValue('/Tools/Histogram/Top',f_visu.Top);
+   config.SetValue('/Tools/Histogram/Left',f_visu.Left);
+
+   config.SetValue('/Tools/Messages/Parent',f_msg.Parent.Name);
+   config.SetValue('/Tools/Messages/Visible',f_msg.Visible);
+   config.SetValue('/Tools/Messages/Top',f_msg.Top);
+   config.SetValue('/Tools/Messages/Left',f_msg.Left);
+
+   config.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
+   config.SetValue('/Tools/Focuser/Visible',f_focuser.Visible);
+   config.SetValue('/Tools/Focuser/Top',f_focuser.Top);
+   config.SetValue('/Tools/Focuser/Left',f_focuser.Left);
+
+   config.SetValue('/Tools/Starprofile/Parent',f_starprofile.Parent.Name);
+   config.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
+   config.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
+   config.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
+
+   config.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
+   config.SetValue('/Tools/Frame/Visible',f_frame.Visible);
+   config.SetValue('/Tools/Frame/Top',f_frame.Top);
+   config.SetValue('/Tools/Frame/Left',f_frame.Left);
+
+   config.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
+   config.SetValue('/Tools/Rotator/Visible',f_rotator.Visible);
+   config.SetValue('/Tools/Rotator/Top',f_rotator.Top);
+   config.SetValue('/Tools/Rotator/Left',f_rotator.Left);
+
+   config.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
+   config.SetValue('/Tools/Preview/Visible',f_preview.Visible);
+   config.SetValue('/Tools/Preview/Top',f_preview.Top);
+   config.SetValue('/Tools/Preview/Left',f_preview.Left);
+
+   config.SetValue('/Tools/Capture/Parent',f_capture.Parent.Name);
+   config.SetValue('/Tools/Capture/Visible',f_capture.Visible);
+   config.SetValue('/Tools/Capture/Top',f_capture.Top);
+   config.SetValue('/Tools/Capture/Left',f_capture.Left);
+
+   config.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
+   config.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible);
+   config.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
+   config.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
+
+   config.SetValue('/Tools/CCDTemp/Parent',f_ccdtemp.Parent.Name);
+   config.SetValue('/Tools/CCDTemp/Visible',f_ccdtemp.Visible);
+   config.SetValue('/Tools/CCDTemp/Top',f_ccdtemp.Top);
+   config.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
+
+   config.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
+   config.SetValue('/Tools/Mount/Visible',f_mount.Visible);
+   config.SetValue('/Tools/Mount/Top',f_mount.Top);
+   config.SetValue('/Tools/Mount/Left',f_mount.Left);
+
+   config.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
+   config.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
+   config.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
+   config.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
+
+   config.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
+   config.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
+   config.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
+   config.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
+
+   config.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
+   config.SetValue('/Tools/Script/Visible',f_script.Visible);
+   config.SetValue('/Tools/Script/Top',f_script.Top);
+   config.SetValue('/Tools/Script/Left',f_script.Left);
+   config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
+
+   config.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
+
+   config.SetValue('/Window/Top',Top);
+   config.SetValue('/Window/Left',Left);
+   config.SetValue('/Window/Width',Width);
+   config.SetValue('/Window/Height',Height);
+
+   config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
+   config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
+   config.SetValue('/Preview/Binning',f_preview.Binning.Text);
+   if hasGainISO then
+     config.SetValue('/Preview/Gain',f_preview.ISObox.Text)
+   else
+     config.SetValue('/Preview/Gain',f_preview.GainEdit.Value);
+   config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
+   config.SetValue('/Capture/Binning',f_capture.Binning.Text);
+   config.SetValue('/Capture/FileName',f_capture.Fname.Text);
+   config.SetValue('/Capture/Count',f_capture.SeqNum.Value);
+   if hasGainISO then
+     config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
+   else
+     config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
+
+   config.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
+   config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
+   config.SetValue('/Tools/Sequence/Top',f_sequence.Top);
+   config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
+
+   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
+
+   config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
+   config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);
+   config.SetValue('/Visu/Hist1',f_visu.hist1.Down);
+   config.SetValue('/Visu/Hist2',f_visu.hist2.Down);
+   config.SetValue('/Visu/Hist3',f_visu.hist3.Down);
+   config.SetValue('/Visu/Hist4',f_visu.hist4.Down);
+
+   n:=FilterList.Count-1;
+   config.SetValue('/Filters/Num',n);
+   for i:=1 to n do begin
+      config.SetValue('/Filters/Filter'+IntToStr(i),FilterList[i]);
+      config.SetValue('/Filters/Offset'+IntToStr(i),FilterOffset[i]);
+      config.SetValue('/Filters/ExpFact'+IntToStr(i),FilterExpFact[i]);
+   end;
+
+   n:=BinningList.Count;
+   config.SetValue('/Binning/Num',n);
+   for i:=0 to n-1 do begin
+      config.SetValue('/Binning/Binning'+IntToStr(i),BinningList[i]);
+   end;
+
+   config.SetValue('/Gain/hasGain',hasGain);
+   config.SetValue('/Gain/hasGainISO',hasGainISO);
+   config.SetValue('/Gain/Gain',Gain);
+   config.SetValue('/Gain/GainMin',GainMin);
+   config.SetValue('/Gain/GainMax',GainMax);
+   n:=ISOList.Count;
+   config.SetValue('/Gain/NumISO',n);
+   for i:=0 to n-1 do begin
+      config.SetValue('/Gain/ISO'+IntToStr(i),ISOList[i]);
+   end;
+
+   config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
+   config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -4080,6 +4089,13 @@ end;
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
 begin
   fits.ViewHeaders;
+end;
+
+procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
+begin
+ SaveSettings;
+ SaveConfig;
+ NewMessage(rsConfiguratio);
 end;
 
 procedure Tf_main.MenuQuitClick(Sender: TObject);

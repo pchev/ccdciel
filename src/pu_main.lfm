@@ -398,6 +398,10 @@ object f_main: Tf_main
       object N7: TMenuItem
         Caption = '-'
       end
+      object MenuSaveConfig: TMenuItem
+        Caption = 'Save configuration now'
+        OnClick = MenuSaveConfigClick
+      end
       object MenuQuit: TMenuItem
         Caption = 'Quit'
         OnClick = MenuQuitClick

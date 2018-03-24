@@ -851,6 +851,7 @@ resourcestring
     +' error %s,  iteration cycles %s';
   rsMoveComplete = 'move completed';
   rsImageCleanup = 'Image cleanup';
+  rsSaveConfigur = 'Save configuration now';
 
 
 
