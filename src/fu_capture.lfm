@@ -2,11 +2,11 @@ object f_capture: Tf_capture
   Left = 0
   Height = 332
   Top = 0
-  Width = 166
+  Width = 180
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
   ClientHeight = 332
-  ClientWidth = 166
+  ClientWidth = 180
   DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
@@ -16,27 +16,26 @@ object f_capture: Tf_capture
     Left = 0
     Height = 312
     Top = 20
-    Width = 166
+    Width = 180
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 312
-    ClientWidth = 166
+    ClientWidth = 180
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 33
       Top = 0
-      Width = 162
+      Width = 179
       Caption = ' '
       ClientHeight = 33
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 0
       object ExpTime: TComboBox
-        Left = 70
+        Left = 88
         Height = 31
-        Hint = 'Exposure time in secondes'
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -77,14 +76,14 @@ object f_capture: Tf_capture
       Left = 0
       Height = 37
       Top = 33
-      Width = 162
+      Width = 179
       Caption = ' '
       ClientHeight = 37
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 8
       Visible = False
       object ISObox: TComboBox
-        Left = 70
+        Left = 87
         Height = 35
         Hint = 'Exposure time in secondes'
         Top = 1
@@ -103,7 +102,7 @@ object f_capture: Tf_capture
         ParentColor = False
       end
       object GainEdit: TSpinEdit
-        Left = 72
+        Left = 88
         Height = 29
         Top = 4
         Width = 89
@@ -115,15 +114,14 @@ object f_capture: Tf_capture
       Left = 0
       Height = 33
       Top = 70
-      Width = 162
+      Width = 179
       Caption = ' '
       ClientHeight = 33
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 1
       object Binning: TComboBox
-        Left = 70
+        Left = 88
         Height = 31
-        Hint = 'Camera binning'
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -146,18 +144,17 @@ object f_capture: Tf_capture
     end
     object Panel4: TPanel
       Left = 0
-      Height = 33
+      Height = 32
       Top = 103
-      Width = 162
+      Width = 179
       Caption = ' '
-      ClientHeight = 33
-      ClientWidth = 162
+      ClientHeight = 32
+      ClientWidth = 179
       TabOrder = 2
       object Fname: TEdit
-        Left = 70
+        Left = 87
         Height = 31
-        Hint = 'Name of the files saved for this sequence'
-        Top = 1
+        Top = 0
         Width = 90
         TabOrder = 0
       end
@@ -173,11 +170,11 @@ object f_capture: Tf_capture
     object Panel5: TPanel
       Left = 0
       Height = 30
-      Top = 136
-      Width = 162
+      Top = 135
+      Width = 179
       Caption = ' '
       ClientHeight = 30
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 3
       object Label4: TLabel
         Left = 2
@@ -188,7 +185,7 @@ object f_capture: Tf_capture
         ParentColor = False
       end
       object SeqNum: TSpinEdit
-        Left = 72
+        Left = 87
         Height = 29
         Top = 0
         Width = 88
@@ -201,10 +198,10 @@ object f_capture: Tf_capture
     object Panel6: TPanel
       Left = 0
       Height = 33
-      Top = 166
-      Width = 162
+      Top = 165
+      Width = 179
       ClientHeight = 33
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 4
       object Label5: TLabel
         Left = 2
@@ -215,7 +212,7 @@ object f_capture: Tf_capture
         ParentColor = False
       end
       object FrameType: TComboBox
-        Left = 70
+        Left = 87
         Height = 31
         Top = 1
         Width = 90
@@ -235,10 +232,10 @@ object f_capture: Tf_capture
     object Panel7: TPanel
       Left = 0
       Height = 30
-      Top = 199
-      Width = 162
+      Top = 198
+      Width = 179
       ClientHeight = 30
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 5
       object CheckBoxDither: TCheckBox
         Left = 2
@@ -249,7 +246,7 @@ object f_capture: Tf_capture
         TabOrder = 0
       end
       object DitherCount: TSpinEdit
-        Left = 120
+        Left = 134
         Height = 29
         Top = 0
         Width = 41
@@ -262,10 +259,10 @@ object f_capture: Tf_capture
     object Panel8: TPanel
       Left = 0
       Height = 30
-      Top = 229
-      Width = 162
+      Top = 228
+      Width = 179
       ClientHeight = 30
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
         Left = 2
@@ -276,7 +273,7 @@ object f_capture: Tf_capture
         TabOrder = 0
       end
       object FocusCount: TSpinEdit
-        Left = 120
+        Left = 134
         Height = 29
         Top = 0
         Width = 41
@@ -289,10 +286,10 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 0
       Height = 20
-      Top = 259
-      Width = 162
+      Top = 258
+      Width = 179
       ClientHeight = 20
-      ClientWidth = 162
+      ClientWidth = 179
       TabOrder = 7
       object BtnStart: TButton
         Left = 0
@@ -306,9 +303,8 @@ object f_capture: Tf_capture
         TabOrder = 0
       end
       object led: TShape
-        Left = 128
+        Left = 148
         Height = 14
-        Hint = 'Uncalibrated'
         Top = 2
         Width = 14
         Brush.Color = clGray
@@ -320,7 +316,7 @@ object f_capture: Tf_capture
     Left = 0
     Height = 20
     Top = 0
-    Width = 166
+    Width = 180
     Align = alTop
     Alignment = taCenter
     BorderStyle = sbsSingle

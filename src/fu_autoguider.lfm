@@ -2,9 +2,9 @@ object f_autoguider: Tf_autoguider
   Left = 0
   Height = 100
   Top = 0
-  Width = 166
+  Width = 180
   ClientHeight = 100
-  ClientWidth = 166
+  ClientWidth = 180
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
@@ -12,7 +12,7 @@ object f_autoguider: Tf_autoguider
     Left = 0
     Height = 20
     Top = 0
-    Width = 166
+    Width = 180
     Align = alTop
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -28,23 +28,23 @@ object f_autoguider: Tf_autoguider
     Left = 0
     Height = 80
     Top = 20
-    Width = 166
+    Width = 180
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
     ClientHeight = 80
-    ClientWidth = 166
+    ClientWidth = 180
     TabOrder = 1
     object Panel2: TPanel
       Left = 0
       Height = 26
       Top = 0
-      Width = 166
+      Width = 177
       ClientHeight = 26
-      ClientWidth = 166
+      ClientWidth = 177
       TabOrder = 0
       object led: TShape
-        Left = 128
+        Left = 148
         Height = 14
         Top = 4
         Width = 14
@@ -56,7 +56,7 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Hint = 'Autoguider status'
         Top = 0
-        Width = 120
+        Width = 136
         AutoSize = False
         ReadOnly = True
         TabOrder = 0
@@ -66,9 +66,9 @@ object f_autoguider: Tf_autoguider
       Left = 0
       Height = 26
       Top = 26
-      Width = 166
+      Width = 177
       ClientHeight = 26
-      ClientWidth = 166
+      ClientWidth = 177
       TabOrder = 1
       object BtnConnect: TButton
         Left = 0
@@ -80,7 +80,7 @@ object f_autoguider: Tf_autoguider
         TabOrder = 0
       end
       object BtnCal: TButton
-        Left = 85
+        Left = 96
         Height = 25
         Top = 0
         Width = 80
@@ -93,9 +93,9 @@ object f_autoguider: Tf_autoguider
       Left = 0
       Height = 26
       Top = 52
-      Width = 166
+      Width = 177
       ClientHeight = 26
-      ClientWidth = 166
+      ClientWidth = 177
       TabOrder = 2
       object BtnGuide: TButton
         Left = 0
@@ -107,7 +107,7 @@ object f_autoguider: Tf_autoguider
         TabOrder = 0
       end
       object BtnDither: TButton
-        Left = 85
+        Left = 96
         Height = 25
         Top = 0
         Width = 80

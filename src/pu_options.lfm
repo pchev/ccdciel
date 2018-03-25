@@ -66,7 +66,7 @@ object f_option: Tf_option
       object ButtonDir: TButton
         Left = 365
         Height = 25
-        Top = 47
+        Top = 44
         Width = 27
         Caption = '...'
         OnClick = ButtonDirClick
@@ -92,14 +92,14 @@ object f_option: Tf_option
       object CaptureDir: TEdit
         Left = 160
         Height = 31
-        Top = 40
+        Top = 41
         Width = 200
         TabOrder = 2
       end
       object ButtonTempDir: TButton
         Left = 365
         Height = 25
-        Top = 80
+        Top = 76
         Width = 27
         Caption = '...'
         OnClick = ButtonTempDirClick
@@ -108,7 +108,7 @@ object f_option: Tf_option
       object TempDir: TEdit
         Left = 160
         Height = 31
-        Top = 72
+        Top = 73
         Width = 200
         TabOrder = 4
       end
@@ -123,7 +123,7 @@ object f_option: Tf_option
       object TmpDirDefault: TButton
         Left = 400
         Height = 25
-        Top = 80
+        Top = 76
         Width = 60
         Caption = 'Default'
         OnClick = TmpDirDefaultClick
@@ -307,7 +307,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 13
+        ClientHeight = 31
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -381,7 +381,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 13
+        ClientHeight = 31
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -640,7 +640,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 23
+          ClientHeight = 41
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -902,8 +902,8 @@ object f_option: Tf_option
             Height = 40
             Top = 48
             Width = 328
-            ClientHeight = 36
-            ClientWidth = 324
+            ClientHeight = 40
+            ClientWidth = 328
             TabOrder = 1
             object Label74: TLabel
               Left = 112
@@ -1039,7 +1039,7 @@ object f_option: Tf_option
         object Label91: TLabel
           Left = 8
           Height = 19
-          Top = 91
+          Top = 96
           Width = 86
           Caption = 'Exposure time'
           ParentColor = False
@@ -1047,7 +1047,7 @@ object f_option: Tf_option
         object Label92: TLabel
           Left = 273
           Height = 19
-          Top = 91
+          Top = 96
           Width = 29
           Caption = 'Max:'
           ParentColor = False
@@ -1055,7 +1055,7 @@ object f_option: Tf_option
         object Label93: TLabel
           Left = 160
           Height = 19
-          Top = 91
+          Top = 96
           Width = 26
           Caption = 'Min:'
           ParentColor = False
@@ -1063,7 +1063,7 @@ object f_option: Tf_option
         object Label94: TLabel
           Left = 8
           Height = 19
-          Top = 131
+          Top = 133
           Width = 129
           Caption = 'Flat image mean level'
           ParentColor = False
@@ -1071,7 +1071,7 @@ object f_option: Tf_option
         object Label95: TLabel
           Left = 160
           Height = 19
-          Top = 131
+          Top = 133
           Width = 26
           Caption = 'Min:'
           ParentColor = False
@@ -1079,7 +1079,7 @@ object f_option: Tf_option
         object Label96: TLabel
           Left = 273
           Height = 19
-          Top = 131
+          Top = 133
           Width = 29
           Caption = 'Max:'
           ParentColor = False
@@ -1097,7 +1097,7 @@ object f_option: Tf_option
         object FlatMinExp: TFloatSpinEdit
           Left = 200
           Height = 29
-          Top = 90
+          Top = 91
           Width = 65
           DecimalPlaces = 3
           Increment = 1
@@ -1984,8 +1984,8 @@ object f_option: Tf_option
               Top = 176
               Width = 424
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 420
+              ClientHeight = 40
+              ClientWidth = 424
               TabOrder = 2
               Visible = False
               object Label34: TLabel
@@ -2873,8 +2873,8 @@ object f_option: Tf_option
               Height = 80
               Top = 48
               Width = 333
-              ClientHeight = 76
-              ClientWidth = 329
+              ClientHeight = 80
+              ClientWidth = 333
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

@@ -2,10 +2,10 @@ object f_preview: Tf_preview
   Left = 0
   Height = 189
   Top = 0
-  Width = 166
+  Width = 180
   AutoSize = True
   ClientHeight = 189
-  ClientWidth = 166
+  ClientWidth = 180
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
@@ -13,23 +13,23 @@ object f_preview: Tf_preview
     Left = 0
     Height = 169
     Top = 20
-    Width = 166
+    Width = 180
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 169
-    ClientWidth = 166
+    ClientWidth = 180
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 32
       Top = 0
-      Width = 161
+      Width = 179
       ClientHeight = 32
-      ClientWidth = 161
+      ClientWidth = 179
       TabOrder = 0
       object ExpTime: TComboBox
-        Left = 64
+        Left = 88
         Height = 31
         Hint = 'Exposure time in seconds'
         Top = 0
@@ -65,19 +65,19 @@ object f_preview: Tf_preview
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 37
+      Height = 36
       Top = 32
-      Width = 161
+      Width = 179
       Caption = ' '
-      ClientHeight = 37
-      ClientWidth = 161
+      ClientHeight = 36
+      ClientWidth = 179
       TabOrder = 4
       Visible = False
       object ISObox: TComboBox
-        Left = 64
+        Left = 88
         Height = 35
         Hint = 'Exposure time in secondes'
-        Top = 1
+        Top = 0
         Width = 90
         ItemHeight = 0
         Style = csDropDownList
@@ -93,7 +93,7 @@ object f_preview: Tf_preview
         ParentColor = False
       end
       object GainEdit: TSpinEdit
-        Left = 64
+        Left = 88
         Height = 29
         Top = 4
         Width = 90
@@ -104,13 +104,13 @@ object f_preview: Tf_preview
     object Panel3: TPanel
       Left = 0
       Height = 32
-      Top = 69
-      Width = 161
+      Top = 68
+      Width = 179
       ClientHeight = 32
-      ClientWidth = 161
+      ClientWidth = 179
       TabOrder = 1
       object Binning: TComboBox
-        Left = 64
+        Left = 88
         Height = 31
         Hint = 'Camera binning'
         Top = 0
@@ -137,10 +137,10 @@ object f_preview: Tf_preview
     object Panel5: TPanel
       Left = 0
       Height = 25
-      Top = 101
-      Width = 161
+      Top = 100
+      Width = 179
       ClientHeight = 25
-      ClientWidth = 161
+      ClientWidth = 179
       TabOrder = 3
       object BtnPreview: TButton
         Left = 1
@@ -154,7 +154,7 @@ object f_preview: Tf_preview
         TabOrder = 0
       end
       object StackPreview: TCheckBox
-        Left = 104
+        Left = 112
         Height = 21
         Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
         Top = 1
@@ -169,10 +169,10 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 24
-      Top = 126
-      Width = 161
+      Top = 125
+      Width = 179
       ClientHeight = 24
-      ClientWidth = 161
+      ClientWidth = 179
       TabOrder = 2
       object BtnLoop: TButton
         Tag = 1
@@ -187,7 +187,7 @@ object f_preview: Tf_preview
         TabOrder = 0
       end
       object led: TShape
-        Left = 104
+        Left = 148
         Height = 14
         Hint = 'Uncalibrated'
         Top = 4
@@ -201,7 +201,7 @@ object f_preview: Tf_preview
     Left = 0
     Height = 20
     Top = 0
-    Width = 166
+    Width = 180
     Align = alTop
     Alignment = taCenter
     BorderStyle = sbsSingle

@@ -2,10 +2,10 @@ object f_devicesconnection: Tf_devicesconnection
   Left = 0
   Height = 112
   Top = 0
-  Width = 199
+  Width = 180
   AutoSize = True
   ClientHeight = 112
-  ClientWidth = 199
+  ClientWidth = 180
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
@@ -13,10 +13,10 @@ object f_devicesconnection: Tf_devicesconnection
     Left = 0
     Height = 92
     Top = 20
-    Width = 199
+    Width = 180
     Align = alClient
     ClientHeight = 92
-    ClientWidth = 199
+    ClientWidth = 180
     TabOrder = 0
     object BtnConnect: TButton
       Left = 8
@@ -29,7 +29,7 @@ object f_devicesconnection: Tf_devicesconnection
       TabOrder = 0
     end
     object led: TShape
-      Left = 110
+      Left = 148
       Height = 14
       Top = 20
       Width = 14
@@ -40,7 +40,7 @@ object f_devicesconnection: Tf_devicesconnection
       Left = 0
       Height = 24
       Top = 40
-      Width = 196
+      Width = 180
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 4
       ChildSizing.TopBottomSpacing = 2
@@ -49,7 +49,7 @@ object f_devicesconnection: Tf_devicesconnection
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 6
       ClientHeight = 24
-      ClientWidth = 196
+      ClientWidth = 180
       TabOrder = 1
       Visible = False
       object LabelCamera: TLabel
@@ -126,7 +126,7 @@ object f_devicesconnection: Tf_devicesconnection
     Left = 0
     Height = 20
     Top = 0
-    Width = 199
+    Width = 180
     Align = alTop
     Alignment = taCenter
     BorderStyle = sbsSingle
