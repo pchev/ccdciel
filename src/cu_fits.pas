@@ -1795,7 +1795,7 @@ begin
         val_11:=val_11+ value_subpixel(xc-i,yc-j)-bg; {value bottom right}
       end;
     end;
-    af:=min(0.95,rs/10); {## variable asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
+    af:=min(0.90,rs/10); {## variable asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
                         {more critital detection if rs is large}
 
     asymmetry:=( (val_00<af*val_11) or (val_00>val_11/af) or {diagonal asymmetry} {has shape large asymmetry?}
