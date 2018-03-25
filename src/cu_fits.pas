@@ -1797,11 +1797,11 @@ begin
     end;
     af:=min(0.95,rs/10); {## variable asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
                         {more critital detection if rs is large}
-    asymmetry:=( (val_00<af*val_11) or  (val_00>(1/af)*val_11) or  {diagonal asymmetry} {has shape large asymmetry?}
-                 (val_01<af*val_10) or  (val_01>(1/af)*val_10) or  {diagonal asymmetry}
-                ((val_00+val_01)<af*(val_10+val_11)) or    ((val_00+val_01)>(1/af)*(val_10+val_11)) or  {east west asymmetry}
-                ((val_00+val_10)<af*(val_01+val_11)) or    ((val_00+val_10)>(1/af)*(val_01+val_11)) );  {north south asymmetry}
 
+    asymmetry:=( (val_00<af*val_11) or (val_00>val_11/af) or {diagonal asymmetry} {has shape large asymmetry?}
+                 (val_01<af*val_10) or (val_01>val_10/af) or {diagonal asymmetry}
+                ((val_00+val_01)<af*(val_10+val_11)) or ((val_00+val_01)>(val_10+val_11)/af) or {east west asymmetry}
+                ((val_00+val_10)<af*(val_01+val_11)) or ((val_00+val_10)>(val_01+val_11)/af) ); {north south asymmetry}
 
     if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
