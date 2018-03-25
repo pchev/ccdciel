@@ -852,6 +852,9 @@ resourcestring
   rsMoveComplete = 'move completed';
   rsImageCleanup = 'Image cleanup';
   rsSaveConfigur = 'Save configuration now';
+  rsWeAreProbabl = 'We are probably trying to focus on a hot pixel!';
+  rsPleaseCreate =
+    'Please create a new bad pixel map or select a brighter star';
 
 
 

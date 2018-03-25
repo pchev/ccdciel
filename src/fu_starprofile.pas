@@ -624,6 +624,14 @@ begin
     ChkAutofocusDown(false);
     exit;
   end;
+  if (Fhfd<0.8) then begin
+    msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
+    msg(rsWeAreProbabl);
+    msg(rsPleaseCreate);
+    FAutofocusResult:=false;
+    ChkAutofocusDown(false);
+    exit;
+  end;
   // sum of multiple exposures
   if (AutofocusNearNum>1)and
     (not((AutofocusVcStep=vcsCheckL)or(AutofocusVcStep=vcsCheckR)))and
