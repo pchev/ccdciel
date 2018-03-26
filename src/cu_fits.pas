@@ -1858,6 +1858,8 @@ begin
       hfd:=2*SumValR/SumVal;
       hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
       star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+      if hfd/(star_fwhm+0.00001)>3 then {Compare the hfd with the fwhm to reject group of stars wrongly identified as a big hfd}
+        hfd:=-1;                        {in this case the pixel_counter remain small, this give a small fwhm and this test reject the group}
  end;
 
  except
