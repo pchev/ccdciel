@@ -1934,9 +1934,8 @@ for i:=0 to Length(list)-1 do
    fitsY:=round(list[i,2]);
    hfd1:=-1;
    star_fwhm:=-1;
-   FindStarPos(fitsX,fitsY,s,xxc,yyc,rc,vmax,bg,bgdev);
-   if (vmax>0) then
-      GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd1,star_fwhm,vmax,snr);
+
+   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);
 
    {check valid hfd, snr}
    if ((hfd1>0.8) and (hfd1<99) and (snr>3)) then
