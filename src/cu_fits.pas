@@ -1698,11 +1698,18 @@ except
 end;
 end;
 
-procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);{han.k 2018-3-21}
-// center of gravity in area s*s centered on x,y
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);
+// x,y, s, test location x,y and box size s x s
+// xc,yc, center of gravity
+// bg, background value
+// bf_standard_deviation, standard deviation of background
+// hfd, Half Flux Diameter of star disk
+// star_fwhm, Full Width Half Maximum of star disk
+// valmax, maximum value of brightest pixel in final test box.
+// SNR, signal noise ratio
 const
     max_ri=100;
-var i,j,rs,distance,counter,ri, distance_top_value: integer;
+var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
     pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
     distance_histogram : array [0..max_ri] of integer;
@@ -1752,9 +1759,7 @@ begin
   end;
   bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(counter)); {standard deviation in background}
 
-
   bg:=bg_average;
-
 
   repeat {## reduce box size till symmetry to remove stars}
     // Get center of gravity whithin star detection box and count signal pixels
@@ -1823,14 +1828,17 @@ begin
  ri:=0;
  distance_top_value:=0;
  HistStart:=false;
+ illuminated_pixels:=0;
  repeat
     inc(ri);
+     illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
     if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
     if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
   until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
- if ri>=rs then {## star is larger then box, abort} exit; {hfd:=-1}
 
- if ri<3 then ri:=3;
+  if ri>=rs then {star is larger then box, abort} exit; {hfd:=-1}
+  if illuminated_pixels<0.35*sqr(ri+ri){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
+  if ri<3 then ri:=3; {Minimum 3x3 box}
 
   // Get HFD
   SumVal:=0;
@@ -1858,8 +1866,6 @@ begin
       hfd:=2*SumValR/SumVal;
       hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
       star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
-      if hfd/(star_fwhm+0.00001)>3 then {Compare the hfd with the fwhm to reject group of stars wrongly identified as a big hfd}
-        hfd:=-1;                        {in this case the pixel_counter remain small, this give a small fwhm and this test reject the group}
  end;
 
  except
