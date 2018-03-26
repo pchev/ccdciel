@@ -3768,10 +3768,8 @@ begin
  AutofocusSlippageOffset:=0;
  config.SetValue('/StarAnalysis/AutofocusSlippageOffset',AutofocusSlippageOffset);
  // position focuser at new center
- if f_vcurve.Quality>0.9 then begin
-    focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2);
-    f_vcurve.FocusPos.Value:=round((AutofocusVcpiL+AutofocusVcpiR)/2);
- end
+ if f_vcurve.Quality>0.9 then
+    focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2)
  else
     focuser.Position:=round(AutofocusVc[PosFocus,1]);
  wait(1);
@@ -3832,6 +3830,8 @@ begin
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiL',AutofocusVcpiL);
   config.Flush;
  end;
+ // move the focuser at the center point as we like this curve
+ focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2);
 end;
 
 Procedure Tf_main.LoadVcurve;
