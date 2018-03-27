@@ -1837,7 +1837,7 @@ begin
   until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
   if ri>=rs then {star is larger then box, abort} exit; {hfd:=-1}
-  if illuminated_pixels<0.35*sqr(ri+ri){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
+  if illuminated_pixels<0.35*sqr(ri+ri-2){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
   if ri<3 then ri:=3; {Minimum 3x3 box}
 
   // Get HFD
