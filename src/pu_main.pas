@@ -4340,8 +4340,8 @@ begin
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
-   f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0);
-   f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0);
+   f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
+   f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    if f_option.MaxAduFromCamera.Checked then
@@ -4502,8 +4502,8 @@ begin
      config.SetValue('/Flat/FlatMaxExp',f_option.FlatMaxExp.Value);
      config.SetValue('/Flat/FlatLevelMin',f_option.FlatLevelMin.Value);
      config.SetValue('/Flat/FlatLevelMax',f_option.FlatLevelMax.Value);
-     config.GetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
-     config.GetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
+     config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
+     config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
