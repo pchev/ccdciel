@@ -373,7 +373,7 @@ if FAddFrames then begin  // stack preview frames
         f.FindStarPos(xi,yi,50,xc,yc,ri,vmax,bg,bgdev);
         if vmax>0 then begin
           f.GetHFD(xc,yc,ri,bg,bgdev,xs,ys,hfd,fwhm,vmax,snr);
-          if (hfd>0.8)and(hfd<10) then begin
+          if ((hfd>0)and(Undersampled or (hfd>0.8))) and (hfd<10) then begin
              f.Shift(FStackAlignX-xs,FStackAlignY-ys);
              FStackStarX:=xs;
              FStackStarY:=ys;
@@ -395,7 +395,7 @@ if FAddFrames then begin  // stack preview frames
        FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
        if vmax>0 then begin
          FFits.GetHFD(xc,yc,ri,bg,bgdev,xs,ys,hfd,fwhm,vmax,snr);
-         if (hfd>0.8)and(hfd<10) then begin
+         if ((hfd>0)and(Undersampled or (hfd>0.8))) and (hfd<10) then begin
             FStackAlign:=true;
             FStackAlignX:=xs;
             FStackAlignY:=ys;

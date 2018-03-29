@@ -930,6 +930,7 @@ begin
   FlatSlewTime:=0;
   onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
+  Undersampled:=false;
   ZoomMin:=1;
   refmask:=false;
   reftreshold:=128;
@@ -1967,7 +1968,7 @@ if LockMouse then exit;
       fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
       if vmax>0 then begin
         fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax,snr);
-        if hfd>0.8 then begin
+        if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
            sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
         end;
       end;
@@ -2348,8 +2349,9 @@ begin
   end;
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
-  Starwindow:=config.GetValue('/StarAnalysis/Window',20);
-  Focuswindow:=config.GetValue('/StarAnalysis/Focus',200);
+  Starwindow:=config.GetValue('/StarAnalysis/Window',80);
+  Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
+  Undersampled:=config.GetValue('/StarAnalysis/Undersampled',false);
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
   for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
@@ -4284,6 +4286,7 @@ begin
    f_option.FlatLevelMax.Value:=config.GetValue('/Flat/FlatLevelMax',FlatLevelMax);
    f_option.StarWindow.Value:=config.GetValue('/StarAnalysis/Window',Starwindow);
    f_option.FocusWindow.Value:=config.GetValue('/StarAnalysis/Focus',Focuswindow);
+   f_option.Undersampled.Checked:=config.GetValue('/StarAnalysis/Undersampled',Undersampled);
    f_option.FilterList.Cells[0, 0]:=rsFilterName;
    f_option.FilterList.Cells[1, 0]:=rsFocuserOffse;
    f_option.FilterList.Cells[2, 0]:=rsExposureFact;
@@ -4431,6 +4434,7 @@ begin
      end;
      config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
+     config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
      n:=FilterList.Count-1;
      config.SetValue('/Filters/Num',n);
      for i:=1 to n do begin

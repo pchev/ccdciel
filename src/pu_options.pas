@@ -106,6 +106,7 @@ type
     Languages: TComboBox;
     Label18: TLabel;
     Labelmsg: TLabel;
+    Undersampled: TCheckBox;
     VideoPreviewRate: TSpinEdit;
     UseTcpServer: TCheckBox;
     FocuserBacklashActive: TCheckBox;

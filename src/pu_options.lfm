@@ -307,7 +307,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -381,7 +381,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -640,7 +640,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -902,8 +902,8 @@ object f_option: Tf_option
             Height = 40
             Top = 48
             Width = 328
-            ClientHeight = 40
-            ClientWidth = 328
+            ClientHeight = 36
+            ClientWidth = 324
             TabOrder = 1
             object Label74: TLabel
               Left = 112
@@ -929,11 +929,11 @@ object f_option: Tf_option
       end
       object GroupBox20: TGroupBox
         Left = 8
-        Height = 104
+        Height = 112
         Top = 288
         Width = 416
         Caption = 'Sensors properties'
-        ClientHeight = 84
+        ClientHeight = 92
         ClientWidth = 414
         TabOrder = 1
         object Label19: TLabel
@@ -1144,11 +1144,11 @@ object f_option: Tf_option
       ClientWidth = 472
       object GroupBox2: TGroupBox
         Left = 8
-        Height = 84
+        Height = 112
         Top = 4
         Width = 416
         Caption = 'Star profile'
-        ClientHeight = 64
+        ClientHeight = 92
         ClientWidth = 414
         TabOrder = 0
         object Label14: TLabel
@@ -1190,11 +1190,19 @@ object f_option: Tf_option
           TabOrder = 1
           Value = 100
         end
+        object Undersampled: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 64
+          Width = 285
+          Caption = 'System is undersampled, accept 1 pixel star.'
+          TabOrder = 2
+        end
       end
       object GroupCorrection: TGroupBox
         Left = 8
         Height = 88
-        Top = 96
+        Top = 120
         Width = 416
         Caption = 'Focuser correction'
         ClientHeight = 68
@@ -1266,17 +1274,17 @@ object f_option: Tf_option
       object GroupBox12: TGroupBox
         Left = 8
         Height = 176
-        Top = 256
-        Width = 400
+        Top = 282
+        Width = 416
         Caption = 'Filter offset'
         ClientHeight = 156
-        ClientWidth = 398
+        ClientWidth = 414
         TabOrder = 2
         object FilterList: TStringGrid
           Left = 0
           Height = 156
           Top = 0
-          Width = 398
+          Width = 414
           Align = alClient
           ColCount = 3
           DefaultColWidth = 122
@@ -1288,7 +1296,7 @@ object f_option: Tf_option
       object GroupBox16: TGroupBox
         Left = 8
         Height = 64
-        Top = 184
+        Top = 212
         Width = 416
         Caption = 'Focuser temperature compensation'
         ClientHeight = 44
@@ -1984,8 +1992,8 @@ object f_option: Tf_option
               Top = 176
               Width = 424
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 424
+              ClientHeight = 36
+              ClientWidth = 420
               TabOrder = 2
               Visible = False
               object Label34: TLabel
@@ -2873,8 +2881,8 @@ object f_option: Tf_option
               Height = 80
               Top = 48
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

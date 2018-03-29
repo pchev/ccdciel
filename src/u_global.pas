@@ -335,6 +335,7 @@ var
   InplaceAutofocus: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
+  Undersampled: boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis: integer;
   BPMsigma: double;

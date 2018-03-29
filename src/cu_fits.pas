@@ -1837,7 +1837,7 @@ begin
   until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
   if ri>=rs then {star is larger then box, abort} exit; {hfd:=-1}
-  if illuminated_pixels<0.35*sqr(ri+ri-2){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
+  if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
   if ri<3 then ri:=3; {Minimum 3x3 box}
 
   // Get HFD
@@ -1908,7 +1908,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      treshold:=min(FimageMax*0.1, 20*bgdev);
 
      {check valid hfd }
-     if (hfd1>0.8) and (hfd1<99)
+     if ((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99)
         and (vmax>treshold) and (vmax<(MaxADU-2*bg)) {new bright star but not saturated}
      then
      begin
@@ -1944,7 +1944,7 @@ for i:=0 to Length(list)-1 do
    GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);
 
    {check valid hfd, snr}
-   if ((hfd1>0.8) and (hfd1<99) and (snr>3)) then
+   if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
     begin
        inc(nhfd);
        SetLength(FStarList,nhfd);  {set length to new number of elements and store values}

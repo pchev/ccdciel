@@ -624,7 +624,7 @@ begin
     ChkAutofocusDown(false);
     exit;
   end;
-  if (Fhfd<0.8) then begin
+  if (Fhfd<=0)or((not Undersampled)and(Fhfd<0.8)) then begin
     msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
     msg(rsWeAreProbabl);
     msg(rsPleaseCreate);
