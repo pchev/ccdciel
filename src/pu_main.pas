@@ -5953,7 +5953,7 @@ end;
 Procedure Tf_main.FocuserCalibration(Sender: TObject);
 var i,j,k,x,y,xc,yc,rs,s,s2,s3,s4,bin,cc: integer;
     savepos,step,minstep,maxstep,newpos,initj,numhfd1,numhfd2: integer;
-    vmax,exp,a1,a2,b1,b2,r1,r2,pi1,pi2,hfdmax,hfdmin:double;
+    vmax,exp,a1,a2,b1,b2,r1,r2,pi1,pi2,hfdmax,hfdmin,hfddyn:double;
     FocAbsolute,initstep,OutOfRange: boolean;
     hfd1,hfd2: array[0..100]of array[1..2] of double;
     step1: array[0..100] of integer;
@@ -6317,8 +6317,9 @@ begin
     else
       AutoFocusMode:=afDynamic;
     // dynamic
+    hfddyn:=min(AutofocusNearHFD,2.5*hfdmin);
     AutofocusDynamicNumPoint:=7;
-    AutofocusDynamicMovement:=round(abs(((AutofocusNearHFD-b1)/a1-cc)/3));
+    AutofocusDynamicMovement:=round(abs(((hfddyn-b1)/a1-cc)/3));
     // iterative
     AutofocusMaxSpeed:=step;
     for i:=1 to numhfd1 do begin
