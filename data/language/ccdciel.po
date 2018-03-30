@@ -3071,7 +3071,7 @@ msgid "Using median of %s stars"
 msgstr ""
 
 #: u_translation:rshyperbolacur
-msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fits error %s,  iteration cycles %s"
+msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr ""
 
 #: u_translation:rsmovecomplete
@@ -3080,5 +3080,21 @@ msgstr ""
 
 #: u_translation:rsimagecleanup
 msgid "Image cleanup"
+msgstr ""
+
+#: u_translation:rssaveconfigur
+msgid "Save configuration now"
+msgstr ""
+
+#: u_translation:rsweareprobabl
+msgid "We are probably trying to focus on a hot pixel!"
+msgstr ""
+
+#: u_translation:rspleasecreate
+msgid "Please create a new bad pixel map or select a brighter star"
+msgstr ""
+
+#: u_translation:rsitissuggestt
+msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr ""
 

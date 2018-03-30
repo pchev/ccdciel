@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-17 15:36+0000\n"
-"PO-Revision-Date: 2018-03-17 09:17+0000\n"
+"POT-Creation-Date: 2018-03-30 11:04+0000\n"
+"PO-Revision-Date: 2018-03-23 17:39+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-17 15:44+0000\n"
-"X-Generator: Launchpad (build 18571)\n"
+"X-Launchpad-Export-Date: 2018-03-30 11:44+0000\n"
+"X-Generator: Launchpad (build 18599)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -26,7 +26,7 @@ msgstr ""
 
 #: u_translation.rsabortexposur
 msgid "Abort exposure"
-msgstr ""
+msgstr "Annulla esposizione"
 
 #: u_translation.rsabortthecurr
 msgid "Abort the current sequence"
@@ -146,7 +146,7 @@ msgstr ""
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
-msgstr ""
+msgstr "Autofocus fallito!"
 
 #: u_translation.rsautofocusfai2
 msgid "Autofocus failed, try with another star..."
@@ -406,7 +406,7 @@ msgstr ""
 
 #: u_translation.rscannotfindas
 msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
-msgstr ""
+msgstr "Impossibile trovare una stella a questa posizione. Spostati su una stella luminosa o aumenta il tempo di esposizione dell'anteprima o il binning autofocus."
 
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
@@ -486,7 +486,7 @@ msgstr ""
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
-msgstr ""
+msgstr "Acquisizione fermata durante l'autofocus"
 
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
@@ -786,7 +786,7 @@ msgstr ""
 
 #: u_translation.rsdisconnectth
 msgid "Disconnect the camera before to change the configuration."
-msgstr ""
+msgstr "Disconnetti la fotocamera prima di cambiare la configurazione."
 
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
@@ -802,7 +802,7 @@ msgstr ""
 
 #: u_translation.rsdithering
 msgid "Dithering"
-msgstr ""
+msgstr "Retinatura"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -814,7 +814,7 @@ msgstr ""
 
 #: u_translation.rsdownloading
 msgid "Downloading"
-msgstr ""
+msgstr "Scaricamento in corso"
 
 #: u_translation.rsdownloadlate
 msgid "Download latest version"
@@ -846,7 +846,7 @@ msgstr ""
 
 #: u_translation.rseastpointing
 msgid "East (Pointing West)"
-msgstr ""
+msgstr "Est (verso Ovest)"
 
 #: u_translation.rsedit
 msgid "Edit"
@@ -870,7 +870,7 @@ msgstr ""
 
 #: u_translation.rsendpreview
 msgid "End preview"
-msgstr ""
+msgstr "Fine anteprima"
 
 #: u_translation.rsendtime
 msgid "End time"
@@ -906,7 +906,7 @@ msgstr ""
 
 #: u_translation.rsexp
 msgid "Exp:"
-msgstr ""
+msgstr "Esp:"
 
 #: u_translation.rsexp2
 msgid "Exp."
@@ -922,7 +922,7 @@ msgstr "Esposizione annullata!"
 
 #: u_translation.rsexposurefact
 msgid "Exposure factor"
-msgstr ""
+msgstr "Fattore di esposizione"
 
 #: u_translation.rsexposurefail
 msgid "Exposure fail!"
@@ -978,7 +978,7 @@ msgstr ""
 
 #: u_translation.rsfiltername
 msgid "Filter name"
-msgstr ""
+msgstr "Nome del filtro"
 
 #: u_translation.rsfilteroffset
 msgid "Filter offset"
@@ -1106,7 +1106,7 @@ msgstr "Temperatura focheggiatore: %s"
 
 #: u_translation.rsfocusertempe2
 msgid "Focuser temperature: %s , adjust position by %s"
-msgstr ""
+msgstr "Temperatura focheggiatore: %s, aggiusta posizione di %s"
 
 #: u_translation.rsfocusertempe3
 msgid "Focuser temperature compensation"
@@ -1233,7 +1233,7 @@ msgid "Horizon profile"
 msgstr ""
 
 #: u_translation.rshyperbolacur
-msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fits error %s,  iteration cycles %s"
+msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr ""
 
 #: u_translation.rsifyourfocuse
@@ -1310,7 +1310,7 @@ msgstr ""
 
 #: u_translation.rsinvalidbinni
 msgid "Invalid binning %s"
-msgstr ""
+msgstr "Binning %s non valido"
 
 #: u_translation.rsinvalidcoord
 msgid "Invalid coordinates"
@@ -1318,7 +1318,7 @@ msgstr ""
 
 #: u_translation.rsinvalidexpos
 msgid "Invalid exposure time %s"
-msgstr ""
+msgstr "Tempo di esposizione %s non valido"
 
 #: u_translation.rsinvalidnumer
 msgid "Invalid numeric value"
@@ -1334,6 +1334,10 @@ msgstr ""
 
 #: u_translation.rsiterative
 msgid "Iterative"
+msgstr ""
+
+#: u_translation.rsitissuggestt
+msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr ""
 
 #: u_translation.rslanguage
@@ -1434,7 +1438,7 @@ msgstr ""
 
 #: u_translation.rsmeridianflip
 msgid "Meridian flip aborted!"
-msgstr ""
+msgstr "Inversione per passaggio al meridiano annullata!"
 
 #: u_translation.rsmeridianflip10
 msgid "Meridian flip completed"
@@ -1754,7 +1758,7 @@ msgstr "Apri immagine di riferimento"
 
 #: u_translation.rsoptions
 msgid "Options :%s"
-msgstr ""
+msgstr "Opzioni: %s"
 
 #: u_translation.rsoptions2
 msgid "Options"
@@ -1786,7 +1790,7 @@ msgstr "Parcheggia"
 
 #: u_translation.rsparked
 msgid "Parked"
-msgstr ""
+msgstr "Parcheggiato"
 
 #: u_translation.rsparktheteles
 msgid "Park the telescope now?"
@@ -1888,6 +1892,10 @@ msgstr ""
 msgid "Please connect the planetarium first"
 msgstr ""
 
+#: u_translation.rspleasecreate
+msgid "Please create a new bad pixel map or select a brighter star"
+msgstr ""
+
 #: u_translation.rspleaseincrea
 msgid "Please increase the threshold."
 msgstr "Per favore aumenta la soglia."
@@ -1962,7 +1970,7 @@ msgstr ""
 
 #: u_translation.rsprofile
 msgid "Profile: %s"
-msgstr ""
+msgstr "Profilo: %s"
 
 #: u_translation.rsprogramfolde
 msgid "Program folder "
@@ -2200,13 +2208,17 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: u_translation.rssaveconfigur
+msgid "Save configuration now"
+msgstr ""
+
 #: u_translation.rssaved
 msgid "Saved %s"
-msgstr ""
+msgstr "%s salvato"
 
 #: u_translation.rssavedfile
 msgid "Saved file %s"
-msgstr ""
+msgstr "File %s salvato"
 
 #: u_translation.rssavefitsfile
 msgid "Save FITS file%s"
@@ -2258,7 +2270,7 @@ msgstr ""
 
 #: u_translation.rssec
 msgid "sec."
-msgstr ""
+msgstr "sec."
 
 #: u_translation.rsseconds
 msgid "seconds"
@@ -2286,11 +2298,11 @@ msgstr ""
 
 #: u_translation.rsseq
 msgid "Seq:"
-msgstr ""
+msgstr "Seq:"
 
 #: u_translation.rsseqfinished
 msgid "Seq: %s Finished"
-msgstr ""
+msgstr "Seq: %s terminata"
 
 #: u_translation.rssequence
 msgid "Sequence"
@@ -2358,7 +2370,7 @@ msgstr ""
 
 #: u_translation.rssetbinning
 msgid "Set Binning"
-msgstr ""
+msgstr "Imposta binning"
 
 #: u_translation.rssetbinningx
 msgid "Set binning %sx%s"
@@ -2566,7 +2578,7 @@ msgstr ""
 
 #: u_translation.rsstartingexpo
 msgid "Starting %s exposure %s for %s seconds"
-msgstr ""
+msgstr "Inizio %s esposizione %s per %s secondi"
 
 #: u_translation.rsstartingsequ
 msgid "Starting sequence %s"
@@ -2578,7 +2590,7 @@ msgstr ""
 
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
-msgstr ""
+msgstr "Inizia apprendimento curva V"
 
 #: u_translation.rsstartnewlog
 msgid "Start new log"
@@ -2662,11 +2674,11 @@ msgstr ""
 
 #: u_translation.rsstopcapture
 msgid "Stop capture"
-msgstr ""
+msgstr "Ferma acquisizione"
 
 #: u_translation.rsstopguiding
 msgid "Stop guiding"
-msgstr ""
+msgstr "Smetti di guidare"
 
 #: u_translation.rsstoploop
 msgid "Stop Loop"
@@ -2678,7 +2690,7 @@ msgstr ""
 
 #: u_translation.rsstoppreview
 msgid "Stop preview"
-msgstr ""
+msgstr "Ferma anteprima"
 
 #: u_translation.rsstoppreviewl
 msgid "Stop preview loop"
@@ -2950,7 +2962,7 @@ msgstr ""
 
 #: u_translation.rsunparked
 msgid "Unparked"
-msgstr ""
+msgstr "Non parcheggiato"
 
 #: u_translation.rsupdateradecf
 msgid "Update RA+Dec from Planetarium"
@@ -3076,13 +3088,17 @@ msgstr ""
 msgid "Wch."
 msgstr ""
 
+#: u_translation.rsweareprobabl
+msgid "We are probably trying to focus on a hot pixel!"
+msgstr ""
+
 #: u_translation.rswest
 msgid "West"
 msgstr ""
 
 #: u_translation.rswestpointing
 msgid "West (Pointing East)"
-msgstr ""
+msgstr "Ovest (verso Est)"
 
 #: u_translation.rswidth
 msgid "Width"

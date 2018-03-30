@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-03-17 15:36+0000\n"
-"PO-Revision-Date: 2018-03-17 15:40+0000\n"
+"POT-Creation-Date: 2018-03-30 11:04+0000\n"
+"PO-Revision-Date: 2018-03-30 11:42+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-03-17 15:44+0000\n"
-"X-Generator: Launchpad (build 18571)\n"
+"X-Launchpad-Export-Date: 2018-03-30 11:44+0000\n"
+"X-Generator: Launchpad (build 18599)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -1233,7 +1233,7 @@ msgid "Horizon profile"
 msgstr "Profile de l'horizon"
 
 #: u_translation.rshyperbolacur
-msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fits error %s,  iteration cycles %s"
+msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr "Ajustement de la courbe hyperbolique, focus  à %s, erreur restante %s, cycles d'itération %s"
 
 #: u_translation.rsifyourfocuse
@@ -1336,6 +1336,10 @@ msgstr "Fichier FITS non valide ou non supporté %s"
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Itératif"
+
+#: u_translation.rsitissuggestt
+msgid "It is suggest to slew to focus star when using Vcurve"
+msgstr "Avec Vcurve il est conseillé d'utiliser une étoiles de focalisation"
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -1891,6 +1895,10 @@ msgstr "Veuillez confirmer que vous voulez faire déplacer le télescope vers %s
 msgid "Please connect the planetarium first"
 msgstr "Veuillez connecter le planétarium"
 
+#: u_translation.rspleasecreate
+msgid "Please create a new bad pixel map or select a brighter star"
+msgstr "Veuillez créer une nouvelle carte des pixels défectueux"
+
 #: u_translation.rspleaseincrea
 msgid "Please increase the threshold."
 msgstr "Veuillez augmenter la limite."
@@ -2203,6 +2211,10 @@ msgstr "s"
 #: u_translation.rssave
 msgid "Save"
 msgstr "Enregistrer"
+
+#: u_translation.rssaveconfigur
+msgid "Save configuration now"
+msgstr "Enregistrer la configuration"
 
 #: u_translation.rssaved
 msgid "Saved %s"
@@ -3080,6 +3092,10 @@ msgstr "Watchdog"
 #: u_translation.rswch
 msgid "Wch."
 msgstr "Wch."
+
+#: u_translation.rsweareprobabl
+msgid "We are probably trying to focus on a hot pixel!"
+msgstr "Nous essayons probablement de focaliser sur un pixel chaud !"
 
 #: u_translation.rswest
 msgid "West"
