@@ -847,7 +847,7 @@ resourcestring
   rsStayInPlace = 'Stay in place';
   rsDetectMultip = 'Detect multiple stars in the image';
   rsUsingMedianO = 'Using median of %s stars';
-  rsHYPERBOLACur = 'HYPERBOLA curve fitting focus at %s,  remaining curve fits'
+  rsHYPERBOLACur = 'HYPERBOLA curve fitting focus at %s,  remaining curve fit'
     +' error %s,  iteration cycles %s';
   rsMoveComplete = 'move completed';
   rsImageCleanup = 'Image cleanup';
@@ -855,6 +855,7 @@ resourcestring
   rsWeAreProbabl = 'We are probably trying to focus on a hot pixel!';
   rsPleaseCreate =
     'Please create a new bad pixel map or select a brighter star';
+  rsItIsSuggestT = 'It is suggest to slew to focus star when using Vcurve';
 
 
 

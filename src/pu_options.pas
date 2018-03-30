@@ -41,6 +41,7 @@ type
     AutofocusMultistar: TGroupBox;
     Label52: TLabel;
     Label56: TLabel;
+    LabelMultistarWarning: TLabel;
     MaxAduFromCamera: TCheckBox;
     ElevationMin: TFloatSpinEdit;
     ClippingLow: TFloatSpinEdit;
@@ -763,6 +764,10 @@ procedure Tf_option.ChangeAutofocusInPlace(Sender: TObject);
 begin
   AutofocusMultistar.Visible:=AutofocusInPlace.Checked;
   AutofocusSlewStar.Visible:=not AutofocusMultistar.Visible;
+  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=0) then
+     LabelMultistarWarning.Caption:=rsItIsSuggestT
+  else
+    LabelMultistarWarning.Caption:='';
 end;
 
 procedure Tf_option.CheckFocuserDirection(Sender: TObject);
@@ -824,6 +829,10 @@ begin
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
+  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=0) then
+     LabelMultistarWarning.Caption:=rsItIsSuggestT
+  else
+    LabelMultistarWarning.Caption:='';
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);

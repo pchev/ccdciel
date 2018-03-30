@@ -1814,9 +1814,17 @@ object f_option: Tf_option
           object Label56: TLabel
             Left = 8
             Height = 19
-            Top = 23
+            Top = 8
             Width = 200
             Caption = 'Detect multiple stars in the image'
+            ParentColor = False
+          end
+          object LabelMultistarWarning: TLabel
+            Left = 8
+            Height = 19
+            Top = 38
+            Width = 6
+            Caption = '  '
             ParentColor = False
           end
         end
