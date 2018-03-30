@@ -481,7 +481,7 @@
 						<key>IFPkgDescriptionTitle</key>
 						<string>CCDciel</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>0.9.30</string>
+						<string>0.9.31</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
@@ -497,7 +497,7 @@
 					<key>CFBundleName</key>
 					<string>CCDciel</string>
 					<key>CFBundleShortVersionString</key>
-					<string>0.9.30</string>
+					<string>0.9.31</string>
 				</dict>
 				<key>Options</key>
 				<dict>
