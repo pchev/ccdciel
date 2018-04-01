@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 497
     Top = 0
     Width = 482
-    ActivePage = TabSheet1
+    ActivePage = TabSheet10
     Align = alClient
     MultiLine = True
-    TabIndex = 0
+    TabIndex = 5
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet

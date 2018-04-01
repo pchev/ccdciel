@@ -21,11 +21,11 @@ object f_filterwheel: Tf_filterwheel
     ClientWidth = 180
     TabOrder = 0
     object Filters: TComboBox
-      Left = 21
+      Left = 29
       Height = 28
       Hint = 'Filter name'
       Top = 0
-      Width = 138
+      Width = 147
       AutoSize = False
       ItemHeight = 0
       OnChange = FiltersChange
@@ -33,10 +33,11 @@ object f_filterwheel: Tf_filterwheel
       TabOrder = 0
     end
     object Label1: TLabel
-      Left = 0
+      Left = 8
       Height = 19
       Top = 6
       Width = 22
+      BorderSpacing.Left = 8
       Caption = 'F:    '
       ParentColor = False
     end

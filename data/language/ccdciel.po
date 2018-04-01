@@ -3098,3 +3098,7 @@ msgstr ""
 msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr ""
 
+#: u_translation:rssystemisunde
+msgid "System is undersampled, accept 1 pixel star"
+msgstr ""
+

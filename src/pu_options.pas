@@ -503,6 +503,7 @@ begin
   GroupBox2.Caption := rsStarProfile;
   Label14.Caption := rsStarDetectio;
   Label2.Caption := rsFocusWindowS;
+  Undersampled.Caption:=rsSystemIsUnde;
   GroupCorrection.Caption := rsFocuserCorre;
   Label98.Caption := rsStabilizatio;
   BtnDisableDelay.Caption := rsDisable;
