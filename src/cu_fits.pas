@@ -1803,10 +1803,12 @@ begin
     af:=0.30; {## asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
               {0.30 make focusing to work with bad seeing}
 
-    asymmetry:=( (val_00<af*val_11) or (val_00>val_11/af) or {diagonal asymmetry} {has shape large asymmetry?}
+    asymmetry:=( (val_00<af*val_11) or (val_00>val_11/af) or {diagonal asymmetry} {has asymmetry, ovals are NO LONGER accepted}
                  (val_01<af*val_10) or (val_01>val_10/af) or {diagonal asymmetry}
-                ((val_00+val_01)<af*(val_10+val_11)) or ((val_00+val_01)>(val_10+val_11)/af) or {east west asymmetry}
-                ((val_00+val_10)<af*(val_01+val_11)) or ((val_00+val_10)>(val_01+val_11)/af) ); {north south asymmetry}
+                 (val_00<af*val_10) or (val_00>val_10/af) or {east west asymmetry1}
+                 (val_01<af*val_11) or (val_01>val_11/af) or {east west asymmetry2}
+                 (val_00<af*val_01) or (val_00>val_01/af) or {north south asymmetry1}
+                 (val_10<af*val_11) or (val_10>val_11/af));  {north south asymmetry2}
 
     if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
@@ -1819,26 +1821,26 @@ begin
      Val:=value_subpixel(xc+i,yc+j)-bg;{##}
      if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
      begin
-       distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
+       distance:=round((sqrt(i*i + j*j )));{distance from gravity center }
        if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
      end;
    end;
   end;
 
- ri:=0;
+ ri:=-1; {will start from distance 0}
  distance_top_value:=0;
  HistStart:=false;
  illuminated_pixels:=0;
  repeat
     inc(ri);
-     illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
+    illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
     if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
     if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
   until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
   if ri>=rs then {star is larger then box, abort} exit; {hfd:=-1}
   if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
-  if ri<3 then ri:=3; {Minimum 3x3 box}
+  if ri<3 then ri:=3; {Minimum 6+1 x 6+1 pixel box}
 
   // Get HFD
   SumVal:=0;
