@@ -3103,6 +3103,6 @@ msgid "System is undersampled, accept 1 pixel star"
 msgstr ""
 
 #: u_translation:rsmagnifyer
-msgid "Magnifyer"
+msgid "Magnifier"
 msgstr ""
 
