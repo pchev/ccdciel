@@ -857,6 +857,7 @@ resourcestring
     'Please create a new bad pixel map or select a brighter star';
   rsItIsSuggestT = 'It is suggest to slew to focus star when using Vcurve';
   rsSystemIsUnde = 'System is undersampled, accept 1 pixel star';
+  rsMagnifyer = 'Magnifyer';
 
 
 

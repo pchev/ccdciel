@@ -42,7 +42,7 @@ uses
   fu_video, pu_vcurve, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
   cu_ascomrotator, cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog,
   cu_indiwatchdog, pu_focusercalibration, cu_tcpserver, u_translation,
-  pu_hyperbola;
+  pu_hyperbola, fu_magnifyer;
 
 {$R *.res}
 

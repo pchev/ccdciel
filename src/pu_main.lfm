@@ -482,6 +482,13 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewStarProfileClick
       end
+      object MenuViewMagnifyer: TMenuItem
+        AutoCheck = True
+        Caption = 'Magnifyer'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewMagnifyerClick
+      end
       object MenuViewCapture: TMenuItem
         AutoCheck = True
         Caption = 'Capture'

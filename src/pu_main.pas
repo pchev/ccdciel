@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame,
+uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
@@ -68,6 +68,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuViewMagnifyer: TMenuItem;
     MenuSaveConfig: TMenuItem;
     MenuItemCleanup: TMenuItem;
     MenuOpenPicture: TMenuItem;
@@ -321,6 +322,7 @@ type
     procedure MenuQuitClick(Sender: TObject);
     procedure MenuSetupClick(Sender: TObject);
     procedure MenuViewHistogramClick(Sender: TObject);
+    procedure MenuViewMagnifyerClick(Sender: TObject);
     procedure MenuViewMessagesClick(Sender: TObject);
     procedure MenuViewMountClick(Sender: TObject);
     procedure MenuViewPlanetariumClick(Sender: TObject);
@@ -372,6 +374,7 @@ type
     f_sequence: Tf_sequence;
     f_starprofile: Tf_starprofile;
     f_focuser: Tf_focuser;
+    f_magnifyer: Tf_magnifyer;
     f_rotator: Tf_rotator;
     f_vcurve:Tf_vcurve;
     f_mount: Tf_mount;
@@ -582,6 +585,7 @@ type
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
     procedure SetLang;
+    procedure UpdateMagnifyer(x,y:integer);
   public
     { public declarations }
   end;
@@ -1177,6 +1181,8 @@ begin
   f_starprofile.onMeasureImage:=@MeasureImage;
   f_starprofile.onStarSelection:=@StarSelection;
 
+  f_magnifyer:=Tf_magnifyer.Create(self);
+
   f_ccdtemp:=Tf_ccdtemp.Create(self);
   f_ccdtemp.onSetTemperature:=@SetTemperature;
   f_ccdtemp.onSetCooler:=@SetCooler;
@@ -1317,6 +1323,7 @@ begin
    MenuViewScript.Caption := rsScript;
    MenuViewFocuser.Caption := rsFocuser;
    MenuViewStarProfile.Caption := rsStarProfile;
+   MenuViewMagnifyer.Caption := rsMagnifyer;
    MenuViewCapture.Caption := rsCapture;
    MenuViewFilters.Caption := rsFilters;
    MenuViewFrame.Caption := rsFrame;
@@ -1458,6 +1465,7 @@ begin
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser);
   SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
+  SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil);
 
   SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture);
   SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
@@ -1700,6 +1708,7 @@ begin
 
   SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser);
   SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
+  SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil);
 
   SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture);
   SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
@@ -1915,6 +1924,8 @@ var xx,yy,n: integer;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr: double;
 begin
 if LockMouse then exit;
+ if not MouseMoving then
+    UpdateMagnifyer(x,y);
  if MouseMoving and fits.HeaderInfo.valid then begin
     LockMouse:=true;
     ImgCx:=ImgCx+round((X-Mx) / ImgZoom);
@@ -2460,6 +2471,11 @@ begin
    config.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
    config.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
    config.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
+
+   config.SetValue('/Tools/Magnifyer/Parent',f_magnifyer.Parent.Name);
+   config.SetValue('/Tools/Magnifyer/Visible',f_magnifyer.Visible);
+   config.SetValue('/Tools/Magnifyer/Top',f_magnifyer.Top);
+   config.SetValue('/Tools/Magnifyer/Left',f_magnifyer.Left);
 
    config.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
    config.SetValue('/Tools/Frame/Visible',f_frame.Visible);
@@ -4680,6 +4696,11 @@ begin
   f_focuser.Visible:=MenuViewFocuser.Checked;
 end;
 
+procedure Tf_main.MenuViewMagnifyerClick(Sender: TObject);
+begin
+  f_magnifyer.Visible:=MenuViewMagnifyer.Checked;
+end;
+
 procedure Tf_main.MenuViewFrameClick(Sender: TObject);
 begin
   f_frame.Visible:=MenuViewFrame.Checked;
@@ -5666,6 +5687,7 @@ else begin
    tmpbmp.Free;
 end;
 Image1.Invalidate;
+UpdateMagnifyer(Mx,My);
 Application.ProcessMessages;
 end;
 
@@ -8028,6 +8050,32 @@ begin
 
   PlotImage;
   Screen.Cursor := saved_cursor;
+end;
+
+Procedure Tf_main.UpdateMagnifyer(x,y:integer);
+var xx,yy,n,px,py: integer;
+    z: double;
+    tmpbmp,str: TBGRABitmap;
+begin
+if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(x>0)and(y>0) then begin
+ Screen2fits(x,y,xx,yy);
+ z:=max(2,3*ImgZoom);
+ tmpbmp:=TBGRABitmap.Create(round(f_magnifyer.Image1.Width/z),round(f_magnifyer.Image1.Height/z),clDarkBlue);
+ try
+   px:=tmpbmp.Width div 2 - xx;
+   py:=tmpbmp.Height div 2 - yy;
+   tmpbmp.PutImage(px,py,ImaBmp,dmSet);
+   str:=tmpbmp.Resample(f_magnifyer.Image1.Width,f_magnifyer.Image1.Height,rmSimpleStretch) as TBGRABitmap;
+   try
+     f_magnifyer.Image1.Picture.Assign(str);
+   finally
+     str.Free;
+   end;
+ finally
+   tmpbmp.Free;
+ end;
+ f_magnifyer.Image1.Invalidate;
+end;
 end;
 
 procedure Tf_main.StartServer;
