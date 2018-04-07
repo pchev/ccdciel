@@ -707,7 +707,9 @@ var fs : TSearchRec;
     tl: Longint;
     buf: string;
 begin
+ // purge file older than 30 days
  tl:=DateTimeToFileDate(now-30);
+ // purge standard log
  i:=FindFirstUTF8(slash(LogDir)+'Log_*',0,fs);
  while i=0 do begin
    if (fs.Time>0)and(fs.Time<tl) then begin
@@ -717,7 +719,18 @@ begin
    i:=FindNextUTF8(fs);
  end;
  FindCloseUTF8(fs);
+ // purge indi log
  i:=FindFirstUTF8(slash(LogDir)+'Devices_Log_*',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(LogDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
+ // purge focus error pictures
+ i:=FindFirstUTF8(slash(LogDir)+'focus_fail_*',0,fs);
  while i=0 do begin
    if (fs.Time>0)and(fs.Time<tl) then begin
      buf:=slash(LogDir)+fs.Name;
@@ -6805,6 +6818,7 @@ Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4: integer;
     hfdlist: array of double;
     vmax,meanhfd, med: double;
+    buf: string;
 begin
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
@@ -6900,26 +6914,40 @@ begin
         // Measure again to remove stars that are problematic with the full star window
         fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList);
         ns:=Length(fits.StarList);
-         // compute median HFD
-        SetLength(hfdlist,ns);
-        for i:=0 to ns-1 do
-            hfdlist[i]:=fits.StarList[i].hfd;
-        meanhfd:=SMedian(hfdlist);
-        n:=0;
-        for i:=0 to ns-1 do begin
-          // filter by hfd to remove galaxies and others outliers
-          if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
-            inc(n);
-            SetLength(AutofocusStarList,n);
-            AutofocusStarList[n-1,1]:=fits.StarList[i].x;
-            AutofocusStarList[n-1,2]:=fits.StarList[i].y;
+        if ns>0 then begin
+           // compute median HFD
+          SetLength(hfdlist,ns);
+          for i:=0 to ns-1 do
+              hfdlist[i]:=fits.StarList[i].hfd;
+          meanhfd:=SMedian(hfdlist);
+          n:=0;
+          for i:=0 to ns-1 do begin
+            // filter by hfd to remove galaxies and others outliers
+            if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+              inc(n);
+              SetLength(AutofocusStarList,n);
+              AutofocusStarList[n-1,1]:=fits.StarList[i].x;
+              AutofocusStarList[n-1,2]:=fits.StarList[i].y;
+            end;
           end;
+        end
+        else begin
+         SetLength(AutofocusStarList,0);
+         f_starprofile.ChkAutofocusDown(false);
+         NewMessage(Format(rsAutofocusCan, [crlf]));
+         buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+         fits.SaveToFile(buf);
+         NewMessage(Format(rsSavedFile, [buf]));
+         exit;
         end;
      end
      else begin  // no star, manual action is required
         SetLength(AutofocusStarList,0);
         f_starprofile.ChkAutofocusDown(false);
         NewMessage(Format(rsAutofocusCan, [crlf]));
+        buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+        fits.SaveToFile(buf);
+        NewMessage(Format(rsSavedFile, [buf]));
         exit;
      end;
   end
