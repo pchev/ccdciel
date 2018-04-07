@@ -620,6 +620,10 @@ begin
          exit;
        end;
     end;
+    if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
+       autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
+    else
+       autofocusstart:=false;
 
     FTargetInitializing:=true;
     FWaitStarting:=false;
@@ -640,10 +644,6 @@ begin
       // set coordinates
       if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
         // disable astrometrypointing and autoguiding if first step is to move to focus star
-        if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
-           autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
-        else
-           autofocusstart:=false;
         astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
         // slew to coordinates
         FSlewRetry:=1;
@@ -652,13 +652,13 @@ begin
         Wait;
       end;
       if not FRunning then exit;
-      // start guiding
-      autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
-      if autostartguider then begin
-        if not StartGuider then exit;
-        Wait;
-        if not FRunning then exit;
-      end;
+    end;
+    // start guiding
+    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
+    if autostartguider then begin
+      if not StartGuider then exit;
+      Wait;
+      if not FRunning then exit;
     end;
     result:=true;
   end;
