@@ -1078,7 +1078,7 @@ begin
  result:=msgFailed;
  if Autoguider=nil then exit;
  Autoguider.Dither(DitherPixel, DitherRAonly);
- if Autoguider.WaitBusy(SettleMaxTime) then result:=msgOK;
+ if Autoguider.WaitDithering(SettleMaxTime) then result:=msgOK;
  wait(2);
  except
    result:=msgFailed;

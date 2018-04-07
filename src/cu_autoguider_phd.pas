@@ -54,6 +54,7 @@ type
     procedure Dither(pixel:double; raonly:boolean); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
+    function WaitDithering(maxwait:integer=5):boolean; override;
   end;
 
 implementation
@@ -237,7 +238,6 @@ if p>=0 then begin
    else if eventname='LoopingExposuresStopped' then FStatus:='Exposures Stopped'
    else if eventname='Settling' then begin
      FStatus:='Settling';
-     FDithering:=false;
    end
    else if eventname='SettleDone' then begin
      i:=attrib.IndexOf('Status');
@@ -427,6 +427,21 @@ begin
   result:=(FState=GUIDER_GUIDING);
 end;
 
+function T_autoguider_phd.WaitDithering(maxwait:integer=5):boolean;
+var endt: TDateTime;
+begin
+  endt:=now+maxwait/secperday;
+  while now<endt do begin
+    Sleep(100);
+    Application.ProcessMessages;
+    if terminated then break;
+    if CancelAutofocus then break;
+    if FStopGuiding then break;
+    if not FDithering then break;
+  end;
+  result:=(not FDithering);
+end;
+
 procedure T_autoguider_phd.Calibrate;
 begin
   Guide(true,true);
@@ -497,9 +512,9 @@ begin
   buf:=buf+'"time": '+FSettleTmin+',';        // min time
   buf:=buf+'"timeout": '+FSettleTmax+'}],';   // max time
   buf:=buf+'"id": 2010}';
-  Send(buf);
   FState:=GUIDER_BUSY;
   FDithering:=true;
+  Send(buf);
 end;
 
 procedure T_autoguider_phd.StarLostTimerTimer(Sender: TObject);

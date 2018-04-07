@@ -5125,7 +5125,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       NewMessage(rsDithering+ellipsis);
       StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
       autoguider.Dither(DitherPixel, DitherRAonly);
-      autoguider.WaitBusy(SettleMaxTime);
+      autoguider.WaitDithering(SettleMaxTime);
       Wait(1);
     end else begin
       NewMessage(rsNotAutoguidi);

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, u_global, u_utils, cu_tcpclient, Sockets, blcksock, synsock,
+uses cu_autoguider, u_global,
   u_translation, Forms, Classes, SysUtils;
 
 type
@@ -50,6 +50,7 @@ type
     procedure Dither(pixel:double; raonly:boolean); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
+    function WaitDithering(maxwait:integer=5):boolean; override;
   end;
 
 implementation
@@ -107,6 +108,11 @@ begin
 end;
 
 function T_autoguider_none.WaitGuiding(maxwait:integer=5):boolean;
+begin
+  result:=true;
+end;
+
+function T_autoguider_none.WaitDithering(maxwait:integer=5):boolean;
 begin
   result:=true;
 end;
