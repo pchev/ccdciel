@@ -599,9 +599,11 @@ begin
        msg(rsAutofocusCan3);
        FAutofocusResult:=false;
        ChkAutofocusDown(false);
-       txt:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
-       f.SaveToFile(txt);
-       msg(Format(rsSavedFile, [txt]));
+       if LogToFile then begin
+         txt:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+         f.SaveToFile(txt);
+         msg(Format(rsSavedFile, [txt]));
+       end;
        exit;
     end;
  end

@@ -284,7 +284,7 @@ var
   Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
   CameraName,WheelName,FocuserName,RotatorName,MountName,WatchdogName: string;
   AllDevicesConnected: boolean;
-  ConfirmClose, ScreenScaling: boolean;
+  ConfirmClose, ScreenScaling, LogToFile: boolean;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   profile: string;

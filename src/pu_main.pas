@@ -399,7 +399,7 @@ type
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockMouse, LockMouseWheel: boolean;
     Capture,Preview,learningvcurve,UseTcpServer: boolean;
-    LogToFile,LogFileOpen,DeviceLogFileOpen: Boolean;
+    LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
     MsgLog,MsgDeviceLog: Textfile;
@@ -6935,9 +6935,11 @@ begin
          SetLength(AutofocusStarList,0);
          f_starprofile.ChkAutofocusDown(false);
          NewMessage(Format(rsAutofocusCan, [crlf]));
-         buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
-         fits.SaveToFile(buf);
-         NewMessage(Format(rsSavedFile, [buf]));
+         if LogToFile then begin
+           buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+           fits.SaveToFile(buf);
+           NewMessage(Format(rsSavedFile, [buf]));
+         end;
          exit;
         end;
      end
@@ -6945,9 +6947,11 @@ begin
         SetLength(AutofocusStarList,0);
         f_starprofile.ChkAutofocusDown(false);
         NewMessage(Format(rsAutofocusCan, [crlf]));
-        buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
-        fits.SaveToFile(buf);
-        NewMessage(Format(rsSavedFile, [buf]));
+        if LogToFile then begin
+          buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+          fits.SaveToFile(buf);
+          NewMessage(Format(rsSavedFile, [buf]));
+        end;
         exit;
      end;
   end
