@@ -4313,8 +4313,8 @@ begin
    end;
    for i:=1 to FilterList.Count-1 do begin
      f_option.FilterList.Cells[0,i]:=FilterList[i];
-     f_option.FilterList.Cells[1,i]:=config.GetValue('/Filters/Offset'+IntToStr(i),'0');
-     f_option.FilterList.Cells[2,i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),'1.0');
+     f_option.FilterList.Cells[1,i]:=FormatFloat(f0,config.GetValue('/Filters/Offset'+IntToStr(i),0));
+     f_option.FilterList.Cells[2,i]:=FormatFloat(f1,config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0));
    end;
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
@@ -4455,12 +4455,8 @@ begin
      config.SetValue('/Filters/Num',n);
      for i:=1 to n do begin
         config.SetValue('/Filters/Filter'+IntToStr(i),FilterList[i]);
-        buf:=trim(f_option.FilterList.Cells[1,i]);
-        if not IsNumber(buf) then buf:='0';
-        config.SetValue('/Filters/Offset'+IntToStr(i),buf);
-        buf:=trim(f_option.FilterList.Cells[2,i]);
-        if not IsNumber(buf) then buf:='1.0';
-        config.SetValue('/Filters/ExpFact'+IntToStr(i),buf);
+        config.SetValue('/Filters/Offset'+IntToStr(i),StrToIntDef(trim(f_option.FilterList.Cells[1,i]),0));
+        config.SetValue('/Filters/ExpFact'+IntToStr(i),StrToFloatDef(trim(f_option.FilterList.Cells[2,i]),1.0));
      end;
      config.SetValue('/StarAnalysis/AutoFocusMode',f_option.Autofocusmode.ItemIndex);
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);
@@ -6856,6 +6852,9 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
+  // protect again wrong settting
+  if AutofocusExposureFact<=0 then AutofocusExposureFact:=1;
+  if AutofocusExposure<=0 then AutofocusExposure:=1;
   // start a new exposure as the current frame is probably not a preview
   f_preview.Exposure:=AutofocusExposure*AutofocusExposureFact;
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);

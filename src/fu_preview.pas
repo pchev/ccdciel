@@ -219,7 +219,7 @@ if AllDevicesConnected then begin
   ControlExposureOK:=false;
   camera.AddFrames:=false;
   Camera.StartExposure(exp);
-  endt:=now+60/secperday;
+  endt:=now+(exp+30)/secperday;
   while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
     Sleep(100);
     Application.ProcessMessages;
