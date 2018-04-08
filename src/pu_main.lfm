@@ -2517,4 +2517,11 @@ object f_main: Tf_main
     left = 48
     top = 312
   end
+  object MagnifyerTimer: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = MagnifyerTimerTimer
+    left = 170
+    top = 121
+  end
 end

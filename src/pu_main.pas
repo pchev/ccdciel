@@ -96,6 +96,7 @@ type
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
     PanelRight: TPanel;
+    MagnifyerTimer: TTimer;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -243,6 +244,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MenuApplyBPMClick(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
     procedure MenuAutoguiderConnectClick(Sender: TObject);
@@ -1938,7 +1940,7 @@ var xx,yy,n: integer;
 begin
 if LockMouse then exit;
  if not MouseMoving then
-    UpdateMagnifyer(x,y);
+    MagnifyerTimer.Enabled:=true;
  if MouseMoving and fits.HeaderInfo.valid then begin
     LockMouse:=true;
     ImgCx:=ImgCx+round((X-Mx) / ImgZoom);
@@ -8083,8 +8085,14 @@ begin
   Screen.Cursor := saved_cursor;
 end;
 
+procedure Tf_main.MagnifyerTimerTimer(Sender: TObject);
+begin
+  MagnifyerTimer.Enabled:=false;
+  UpdateMagnifyer(Mx,My);
+end;
+
 Procedure Tf_main.UpdateMagnifyer(x,y:integer);
-var xx,yy,n,px,py: integer;
+var xx,yy,px,py: integer;
     z: double;
     tmpbmp,str: TBGRABitmap;
 begin
