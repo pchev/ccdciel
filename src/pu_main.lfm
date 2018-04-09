@@ -2531,4 +2531,11 @@ object f_main: Tf_main
     left = 272
     top = 184
   end
+  object PlotTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = PlotTimerTimer
+    left = 160
+    top = 312
+  end
 end

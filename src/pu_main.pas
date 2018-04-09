@@ -98,6 +98,7 @@ type
     PanelRight: TPanel;
     MagnifyerTimer: TTimer;
     MeasureTimer: TTimer;
+    PlotTimer: TTimer;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -342,6 +343,7 @@ type
     procedure MenuVisuZoomAdjustClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;State: TDragState; var Accept: Boolean);
+    procedure PlotTimerTimer(Sender: TObject);
     procedure SelectTab(Sender: TObject);
     procedure StartCaptureTimerTimer(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
@@ -396,12 +398,12 @@ type
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
     WCSxyNrot,WCSxyErot: double;
-    SaveFocusZoom: double;
-    ImgCx, ImgCy, Mx, My: integer;
+    SaveFocusZoom,ImgCx, ImgCy: double;
+    Mx, My: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, LockMouse, LockMouseWheel: boolean;
+    MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel: boolean;
     Capture,Preview,learningvcurve,UseTcpServer: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -1296,7 +1298,8 @@ begin
   f_visu.histminmax.AllowAllUp:=false;
 
   ImaBmp:=TBGRABitmap.Create;
-  LockMouse:=false;
+  LockTimerPlot:=false;
+  LockMouseWheel:=false;
   ImgCx:=0;
   ImgCy:=0;
   StartX:=0;
@@ -1935,14 +1938,11 @@ end;
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-if LockMouse then exit;
  MagnifyerTimer.Enabled:=true;
  if MouseMoving and fits.HeaderInfo.valid then begin
-    LockMouse:=true;
-    ImgCx:=ImgCx+round((X-Mx) / ImgZoom);
-    ImgCy:=ImgCy+round((Y-My) / ImgZoom);
-    PlotImage;
-    LockMouse:=false;
+    ImgCx:=ImgCx + (X-Mx) / ImgZoom;
+    ImgCy:=ImgCy + (Y-My) / ImgZoom;
+    PlotTimer.Enabled:=true;
  end
  else if MouseFrame then begin
     if EndX>0 then begin
@@ -1960,13 +1960,22 @@ Mx:=X;
 My:=Y;
 end;
 
+procedure Tf_main.PlotTimerTimer(Sender: TObject);
+begin
+  if LockTimerPlot then exit;
+  PlotTimer.Enabled:=false;
+  LockTimerPlot:=true;
+  PlotImage;
+  LockTimerPlot:=false;
+end;
+
 procedure Tf_main.Image1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var xx,x1,y1,x2,y2,w,h: integer;
 begin
 if MouseMoving and fits.HeaderInfo.valid then begin
-  ImgCx:=ImgCx+X-Mx;
-  ImgCy:=ImgCy+Y-My;
+  ImgCx:=ImgCx + (X-Mx) / ImgZoom;
+  ImgCy:=ImgCy + (Y-My) / ImgZoom;
   PlotImage;
   Mx:=X;
   My:=Y;
@@ -5614,8 +5623,8 @@ if ImgZoom=0 then begin
 end
 else if ImgZoom=1 then begin
    // zoom 1
-   px:=ImgCx-((img_Width-ScrBmp.Width) div 2);
-   py:=ImgCy-((img_Height-ScrBmp.Height) div 2);
+   px:=round(ImgCx)-((img_Width-ScrBmp.Width) div 2);
+   py:=round(ImgCy)-((img_Height-ScrBmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
    ScrBmp.PutImage(px,py,imabmp,dmSet);
@@ -5624,8 +5633,8 @@ else begin
    // other zoom
    if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
    tmpbmp:=TBGRABitmap.Create(round(ScrBmp.Width/ImgZoom),round(ScrBmp.Height/ImgZoom),clDarkBlue);
-   px:=ImgCx-((img_Width-tmpbmp.Width) div 2);
-   py:=ImgCy-((img_Height-tmpbmp.Height) div 2);
+   px:=round(ImgCx)-((img_Width-tmpbmp.Width) div 2);
+   py:=round(ImgCy)-((img_Height-tmpbmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
@@ -7442,10 +7451,12 @@ end;
 
 procedure Tf_main.LoadFitsFile(fn:string);
 var imgsize: string;
-    n:integer;
+    n,oldw,oldh:integer;
     c: TcdcWCScoord;
     x1,y1,x2,y2: double;
 begin
+   oldw:=fits.HeaderInfo.naxis1;
+   oldh:=fits.HeaderInfo.naxis2;
    StatusBar1.Panels[1].Text:='';
    fits.LoadFromFile(fn);
    if fits.HeaderInfo.valid then begin
@@ -7474,6 +7485,10 @@ begin
        else cdcWCSinfo.secpix:=0;
      end
        else cdcWCSinfo.secpix:=0;
+     if (oldw<>fits.HeaderInfo.naxis1)or(oldh<>fits.HeaderInfo.naxis2) then begin
+       ImgCx:=0;
+       ImgCy:=0;
+     end;
      DrawHistogram(true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
