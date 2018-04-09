@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_ccdconfig, dynlibs, LMessages,
-  Classes, SysUtils;
+  Classes, SysUtils,LCLType;
 
 type
   TNotifyMsg = procedure(msg:string) of object;
