@@ -853,6 +853,7 @@ procedure Tf_sequence.AutoguiderDisconnected;
 begin
   if Autoguider.AutoguiderType=agNONE then exit;
   if Targets.Running and
+    (Targets.CurrentTarget>=0) and
     T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and
     (Targets.Targets[Targets.CurrentTarget].autoguiding)
     then begin
@@ -868,6 +869,7 @@ procedure Tf_sequence.AutoguiderIddle;
 begin
   if Autoguider.AutoguiderType=agNONE then exit;
   if Targets.Running and
+    (Targets.CurrentTarget>=0) and
     T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and
     (Targets.Targets[Targets.CurrentTarget].autoguiding) and
     (not Fautoguider.Recovering)
