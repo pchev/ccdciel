@@ -114,7 +114,7 @@ type
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain: integer;
               FlatFilters: string;
-              preview,astrometrypointing,updatecoord,inplaceautofocus: boolean;
+              preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -396,6 +396,7 @@ begin
   astrometrypointing:=false;
   updatecoord:=false;
   inplaceautofocus:=AutofocusInPlace;
+  autoguiding:=false;
   repeatcount:=1;
   preview:=False;
   delay:=1;
@@ -429,6 +430,7 @@ begin
   updatecoord:=Source.updatecoord;
   repeatcount:=Source.repeatcount;
   inplaceautofocus:=Source.inplaceautofocus;
+  autoguiding:=Source.autoguiding;
   preview:=Source.preview;
   delay:=Source.delay;
   previewexposure:=Source.previewexposure;

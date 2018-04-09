@@ -852,17 +852,26 @@ end;
 procedure Tf_sequence.AutoguiderDisconnected;
 begin
   if Autoguider.AutoguiderType=agNONE then exit;
-  if not AutoguiderAlert then begin
-   AutoguiderAlert:=true;
-   AutoguiderAlertTime:=now;
-   AutoguiderMsgTime:=0;
+  if Targets.Running and
+    T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and
+    (Targets.Targets[Targets.CurrentTarget].autoguiding)
+    then begin
+    if not AutoguiderAlert then begin
+     AutoguiderAlert:=true;
+     AutoguiderAlertTime:=now;
+     AutoguiderMsgTime:=0;
+    end;
   end;
 end;
 
 procedure Tf_sequence.AutoguiderIddle;
 begin
   if Autoguider.AutoguiderType=agNONE then exit;
-  if Targets.Running and T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and (not Fautoguider.Recovering) then begin
+  if Targets.Running and
+    T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and
+    (Targets.Targets[Targets.CurrentTarget].autoguiding) and
+    (not Fautoguider.Recovering)
+    then begin
     if not AutoguiderAlert then begin
       AutoguiderAlert:=true;
       AutoguiderAlertTime:=now;

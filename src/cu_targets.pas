@@ -459,8 +459,9 @@ begin
   CancelAutofocus:=false;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
-   if Targets[FCurrentTarget].objectname='Script' then begin
+   if Targets[FCurrentTarget].objectname=ScriptTxt then begin
      FInitializing:=false;
+     Targets[FCurrentTarget].autoguiding:=false;
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
        msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]));
        if FUnattended then begin
@@ -583,6 +584,7 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg(Format(rsInitializeTa, [t.objectname]));
+    t.autoguiding:=false;
     InplaceAutofocus:=t.inplaceautofocus;
     // adjust moving object coordinates from planetarium
     if t.updatecoord then begin
@@ -659,6 +661,7 @@ begin
       if not StartGuider then exit;
       Wait;
       if not FRunning then exit;
+      t.autoguiding:=true;
     end;
     result:=true;
   end;
@@ -685,6 +688,7 @@ begin
   try
   // create a dynamic plan with all steps to run the flats, one step per filter
   flt:=Targets[FCurrentTarget];
+  flt.autoguiding:=false;
   flp:=T_Plan(flt.plan);
   flfilter:=TStringList.Create;
   SplitRec(flt.flatfilters,';',flfilter);
