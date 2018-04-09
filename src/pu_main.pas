@@ -8103,6 +8103,8 @@ if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(x>0)and(y>0) then begin
  try
    px:=tmpbmp.Width div 2 - xx;
    py:=tmpbmp.Height div 2 - yy;
+   px:=min(0,max(px,tmpbmp.Width-fits.HeaderInfo.naxis1));
+   py:=min(0,max(py,tmpbmp.Height-fits.HeaderInfo.naxis2));
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
    str:=tmpbmp.Resample(f_magnifyer.Image1.Width,f_magnifyer.Image1.Height,rmSimpleStretch) as TBGRABitmap;
    try
