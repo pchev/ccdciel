@@ -97,6 +97,7 @@ type
     OpenPictureDialog1: TOpenPictureDialog;
     PanelRight: TPanel;
     MagnifyerTimer: TTimer;
+    MeasureTimer: TTimer;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -245,6 +246,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
+    procedure MeasureTimerTimer(Sender: TObject);
     procedure MenuApplyBPMClick(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
     procedure MenuAutoguiderConnectClick(Sender: TObject);
@@ -588,6 +590,7 @@ type
     function TCPcmd(s: string):string;
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
+    procedure MeasureAtPos(x,y:integer);
   public
     { public declarations }
   end;
@@ -1931,16 +1934,9 @@ end;
 
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
-var xx,yy,n: integer;
-    val,xxc,yyc,rc,s:integer;
-    sval:string;
-    ra,de: double;
-    c: TcdcWCScoord;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr: double;
 begin
 if LockMouse then exit;
- if not MouseMoving then
-    MagnifyerTimer.Enabled:=true;
+ MagnifyerTimer.Enabled:=true;
  if MouseMoving and fits.HeaderInfo.valid then begin
     LockMouse:=true;
     ImgCx:=ImgCx+round((X-Mx) / ImgZoom);
@@ -1958,66 +1954,7 @@ if LockMouse then exit;
     image1.Invalidate;
  end
  else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) then begin
-    Screen2fits(x,y,xx,yy);
-    if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
-       if fits.HeaderInfo.naxis=2 then begin
-         if fits.HeaderInfo.bitpix>0 then begin
-           val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
-           sval:=inttostr(val);
-         end
-         else begin
-          dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
-          sval:=FormatFloat(f3,dval);
-         end;
-       end
-       else if (fits.HeaderInfo.naxis=3)and(fits.HeaderInfo.naxis3=3) then begin
-         if fits.HeaderInfo.bitpix>0 then begin
-           val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
-           sval:=inttostr(val);
-           val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
-           sval:=sval+'/'+inttostr(val);
-           val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
-           sval:=sval+'/'+inttostr(val);
-         end
-         else begin
-          dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
-          sval:=FormatFloat(f3,dval);
-          dval:=fits.imageMin+fits.image[1,yy,xx]/fits.imageC;
-          sval:=sval+'/'+FormatFloat(f3,dval);
-          dval:=fits.imageMin+fits.image[2,yy,xx]/fits.imageC;
-          sval:=sval+'/'+FormatFloat(f3,dval);
-         end;
-       end
-    else sval:='';
-    s:=Starwindow div fits.HeaderInfo.BinX;
-    if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
-      fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
-      if vmax>0 then begin
-        fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax,snr);
-        if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
-           sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
-        end;
-      end;
-    end;
-    if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin
-      c.x:=xx;
-      c.y:=cdcWCSinfo.hp-yy;
-      n:=cdcwcs_xy2sky(@c,0);
-      if n=0 then begin
-        ra:=c.ra;
-        de:=c.dec;
-        if mount.Equinox=0 then begin
-          ra:=deg2rad*ra;
-          de:=deg2rad*de;
-          J2000ToApparent(ra,de);
-          ra:=rad2deg*ra;
-          de:=rad2deg*de;
-        end;
-        StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
-      end;
-    end;
-    yy:=img_Height-yy;
-    StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
+   MeasureTimer.Enabled:=true;
  end;
 Mx:=X;
 My:=Y;
@@ -5698,8 +5635,8 @@ else begin
    tmpbmp.Free;
 end;
 Image1.Invalidate;
-UpdateMagnifyer(Mx,My);
 Application.ProcessMessages;
+MagnifyerTimer.Enabled:=true;
 end;
 
 procedure Tf_main.plot_north(bmp:TBGRABitmap);
@@ -8091,6 +8028,12 @@ begin
   UpdateMagnifyer(Mx,My);
 end;
 
+procedure Tf_main.MeasureTimerTimer(Sender: TObject);
+begin
+  MeasureTimer.Enabled:=false;
+  MeasureAtPos(Mx,My);
+end;
+
 Procedure Tf_main.UpdateMagnifyer(x,y:integer);
 var xx,yy,px,py: integer;
     z: double;
@@ -8117,6 +8060,76 @@ if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(x>0)and(y>0) then begin
  end;
  f_magnifyer.Image1.Invalidate;
 end;
+end;
+
+procedure Tf_main.MeasureAtPos(x,y:integer);
+var xx,yy,n: integer;
+    val,xxc,yyc,rc,s:integer;
+    sval:string;
+    ra,de: double;
+    c: TcdcWCScoord;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr: double;
+begin
+ Screen2fits(x,y,xx,yy);
+ if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
+    if fits.HeaderInfo.naxis=2 then begin
+      if fits.HeaderInfo.bitpix>0 then begin
+        val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+        sval:=inttostr(val);
+      end
+      else begin
+       dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
+       sval:=FormatFloat(f3,dval);
+      end;
+    end
+    else if (fits.HeaderInfo.naxis=3)and(fits.HeaderInfo.naxis3=3) then begin
+      if fits.HeaderInfo.bitpix>0 then begin
+        val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+        sval:=inttostr(val);
+        val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
+        sval:=sval+'/'+inttostr(val);
+        val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
+        sval:=sval+'/'+inttostr(val);
+      end
+      else begin
+       dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
+       sval:=FormatFloat(f3,dval);
+       dval:=fits.imageMin+fits.image[1,yy,xx]/fits.imageC;
+       sval:=sval+'/'+FormatFloat(f3,dval);
+       dval:=fits.imageMin+fits.image[2,yy,xx]/fits.imageC;
+       sval:=sval+'/'+FormatFloat(f3,dval);
+      end;
+    end
+ else sval:='';
+ s:=Starwindow div fits.HeaderInfo.BinX;
+ if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
+   fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
+   if vmax>0 then begin
+     fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax,snr);
+     if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
+        sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
+     end;
+   end;
+ end;
+ if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin
+   c.x:=xx;
+   c.y:=cdcWCSinfo.hp-yy;
+   n:=cdcwcs_xy2sky(@c,0);
+   if n=0 then begin
+     ra:=c.ra;
+     de:=c.dec;
+     if mount.Equinox=0 then begin
+       ra:=deg2rad*ra;
+       de:=deg2rad*de;
+       J2000ToApparent(ra,de);
+       ra:=rad2deg*ra;
+       de:=rad2deg*de;
+     end;
+     StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
+   end;
+ end;
+ yy:=img_Height-yy;
+ StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
 
 procedure Tf_main.StartServer;

@@ -1261,7 +1261,7 @@ object f_main: Tf_main
     Enabled = False
     Interval = 15000
     OnTimer = StatusTimerTimer
-    left = 272
+    left = 416
     top = 184
   end
   object TimerStampTimer: TTimer
@@ -2521,7 +2521,14 @@ object f_main: Tf_main
     Enabled = False
     Interval = 200
     OnTimer = MagnifyerTimerTimer
-    left = 170
-    top = 121
+    left = 160
+    top = 112
+  end
+  object MeasureTimer: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = MeasureTimerTimer
+    left = 272
+    top = 184
   end
 end
