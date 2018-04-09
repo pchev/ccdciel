@@ -246,11 +246,19 @@ begin
 end;
 
 function TPlanetarium_cdc.ShowImage(fn: string):boolean;
+var buf:string;
 begin
   result:=false;
-  if Cmd('SHOWBGIMAGE OFF')<>msgOK then exit;
-  if Cmd('LOADBGIMAGE '+fn)<>msgOK then exit;
-  if Cmd('SHOWBGIMAGE ON')<>msgOK then exit;
+  buf:='SHOWBGIMAGE OFF';
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  buf:='LOADBGIMAGE '+fn;
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  buf:='SHOWBGIMAGE ON';
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  FLastErrorTxt:='';
   result:=true;
 end;
 
@@ -266,19 +274,29 @@ begin
     frde:=rad2deg*frde;
   end;
   buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
-  if Cmd(buf)<>msgOK then exit;
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SETDEC ' + FormatFloat('0.00000', frde);
-  if Cmd(buf)<>msgOK then exit;
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SHOWRECTANGLE 10';
-  if Cmd(buf)<>msgOK then exit;
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SETRECTANGLE 10 ' + FormatFloat('0.000', frsizeH*60) + ' ' +
     FormatFloat('0.00', frsizeV*60) + ' ' +
     FormatFloat('0.00', frrot) + ' 0';
-  if Cmd(buf)<>msgOK then exit;
-  if Cmd('MARKCENTER ON')<>msgOK then exit;
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  buf:='MARKCENTER ON';
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SETFOV ' + FormatFloat('0.000', frsizeH*2.2);
-  if Cmd(buf)<>msgOK then exit;
-  if Cmd('REDRAW')<>msgOK then exit;
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  buf:='REDRAW';
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  FLastErrorTxt:='';
   result:=true;
 end;
 
@@ -308,7 +326,9 @@ begin
          end;
        end;
      end;
-  end;
+  end
+  else
+    FLastErrorTxt:=buf;
   finally
     p.Free;
   end;

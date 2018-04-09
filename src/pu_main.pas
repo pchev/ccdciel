@@ -7192,12 +7192,11 @@ begin
   if fits.HeaderInfo.valid then begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
-        NewMessage(rsSendImageToP);
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
         if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
            NewMessage(rsSendImageToP)
         else
-           NewMessage(rsPlanetariumE);
+           NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt);
       end else begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
@@ -7332,7 +7331,7 @@ if (n=0) and planetarium.Connected then begin
     if planetarium.DrawFrame(ra,dec,sizeH,sizeV,rot) then
        NewMessage(rsCCDFrameSent)
     else
-       NewMessage(rsPlanetariumE);
+       NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt);
   end;
 
  end;
@@ -7344,7 +7343,7 @@ if astrometry.LastResult and planetarium.Connected then begin
   if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
      NewMessage(rsSendImageToP)
   else
-     NewMessage(rsPlanetariumE);
+     NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt);
 end;
 end;
 

@@ -200,14 +200,21 @@ begin
 end;
 
 function TPlanetarium_hnsky.ShowImage(fn: string):boolean;
+var buf: string;
 begin
-result:=(Cmd('LOAD_FITS '+fn)=msgOK);
+result:=false;
+buf:='LOAD_FITS '+fn;
+FLastErrorTxt:=Cmd(buf);
+if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+FLastErrorTxt:='';
+result:=true;
 end;
 
 function TPlanetarium_hnsky.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
-var buf,r: string;
+var buf: string;
     fra_2000, fdec_2000: double;
 begin
+  result:=false;
   fra_2000:=frra*deg2rad;
   fdec_2000:=frde*deg2rad;
   ApparentToJ2000(fra_2000,fdec_2000);
@@ -217,8 +224,10 @@ begin
        formatfloat(f5,frrot*deg2rad) + blank +
        formatfloat(f5,fra_2000) + blank +
        formatfloat(f5,fdec_2000);
-  r:=Cmd(buf);
-  result:=(r=msgOK);
+  FLastErrorTxt:=Cmd(buf);
+  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  FLastErrorTxt:='';
+  result:=true;
 end;
 
 

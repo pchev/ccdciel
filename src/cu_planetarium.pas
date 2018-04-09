@@ -39,7 +39,7 @@ protected
   FRunning: boolean;
   Fra, Fde: double;
   FplanetariumEquinox, FplanetariumJD: double;
-  Fobjname: string;
+  Fobjname, FLastErrorTxt: string;
   FPlanetariumType: TPlanetariumType;
   FonShowMessage: TNotifyMsg;
   FonReceiveData: TNotifyMsg;
@@ -78,6 +78,7 @@ public
   property EqSys: double read FplanetariumEquinox;
   property Objname: string read Fobjname;
   property PlanetariumType: TPlanetariumType read FPlanetariumType;
+  property LastErrorTxt: string read FLastErrorTxt;
   property onConnect: TNotifyEvent read FonConnect  write FonConnect;
   property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
   property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -99,6 +100,7 @@ FRecvData:='';
 Fra:=NullCoord;
 Fde:=NullCoord;
 Fobjname:='';
+FLastErrorTxt:='';
 FplanetariumEquinox:=0;  // 0 = equinox of date
 FplanetariumJD:=0;
 InitTimer:=TTimer.Create(Application);
