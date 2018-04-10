@@ -1,6 +1,8 @@
 #!/bin/bash 
 
-version=0.9.32
+version=0.9.33
+version_major=0
+version_minor=9
 
 basedir=/tmp/ccdciel   # Be sure this is set to a non existent directory, it is removed after the run!
 
@@ -36,6 +38,15 @@ currentrev=$(git rev-list --count --first-parent HEAD)
   cp system_integration/MacOSX/ccdciel.packproj $basedir
   cp system_integration/MacOSX/readme.txt $basedir
   cd $basedir
+  sed -i.bak "s/ccdciel_version/$version/g" ccdciel.packproj 
+  rm ccdciel.packproj.bak
+  sed -i.bak "s/ccdciel_major/$version_major/" ccdciel.packproj 
+  rm ccdciel.packproj.bak
+  sed -i.bak "s/ccdciel_minor/$version_minor/" ccdciel.packproj 
+  rm ccdciel.packproj.bak
+  sed -i.bak "s/ccdciel_version/$version/" readme.txt
+  rm readme.txt.bak
+  
   mv ccdciel "CCDciel"
   freeze -v ccdciel.packproj
   if [[ $? -ne 0 ]]; then exit 1;fi

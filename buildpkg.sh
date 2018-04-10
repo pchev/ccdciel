@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=0.9.32
+version=0.9.33
 
 builddir=/tmp/ccdciel  # Be sure this is set to a non existent directory, it is removed after the run!
 innosetup="C:\Program Files (x86)\Inno Setup 5\ISCC.exe"  # Install under Wine from http://www.jrsoftware.org/isinfo.php
@@ -191,6 +191,7 @@ if [[ $make_win_dual ]]; then
   cd $builddir
   sed -i "/AppVerName/ s/V3/V$version/" ccdciel_dual.iss
   sed -i "/OutputBaseFilename/ s/windows/$version-$currentrev-windows/" ccdciel_dual.iss
+  sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
   wine "$innosetup" "$wine_build\ccdciel_dual.iss"
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv $builddir/ccdciel*.exe $wd
@@ -221,6 +222,7 @@ if [[ $make_win32 ]]; then
   cd $builddir
   sed -i "/AppVerName/ s/V3/V$version/" ccdciel.iss
   sed -i "/OutputBaseFilename/ s/windows/$version-$currentrev-windows/" ccdciel.iss
+  sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
   wine "$innosetup" "$wine_build\ccdciel.iss"
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv $builddir/ccdciel*.exe $wd
@@ -252,6 +254,7 @@ if [[ $make_win64 ]]; then
   cd $builddir
   sed -i "/AppVerName/ s/V3/V$version/" ccdciel_64.iss
   sed -i "/OutputBaseFilename/ s/windows-x64/$version-$currentrev-windows-x64/" ccdciel_64.iss
+  sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
   wine "$innosetup" "$wine_build\ccdciel_64.iss"
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv $builddir/ccdciel*.exe $wd
