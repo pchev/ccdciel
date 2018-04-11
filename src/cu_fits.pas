@@ -1888,10 +1888,10 @@ procedure TFits.GetStarList(rx,ry,s: integer);
 var
  fitsX,fitsY,fx,fy,nhfd: integer;
  hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
- marginx,marginy: integer;
-const
-    overlap=2; {box overlap,results in 1 pixel overlap}
+ marginx,marginy,overlap: integer;
 begin
+
+overlap:=s div 2; // large overlap to have more chance to measure a big dot as a single piece
 
 nhfd:=0;{set counters at zero}
 SetLength(FStarList,0);{set array length to zero}
@@ -1917,6 +1917,8 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
 
      {check valid hfd }
      if ((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99)
+        and (xc>(fitsX-(s div 2))) and (yc>(fitsY-(s div 2))) {prevent double detections in overlap area}
+        and (xc<(fitsX+(s div 2))) and (yc<(fitsY+(s div 2)))
         and (vmax>treshold) and (vmax<(MaxADU-2*bg)) {new bright star but not saturated}
      then
      begin
@@ -1935,7 +1937,7 @@ end;
 
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
 var
- fitsX,fitsY,xxc,yyc,rc,nhfd,i: integer;
+ fitsX,fitsY,nhfd,i: integer;
  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
 begin
 
