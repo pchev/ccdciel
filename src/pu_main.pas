@@ -415,6 +415,8 @@ type
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
+    trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;
+    trpOK: boolean;
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -5542,6 +5544,7 @@ var tmpbmp:TBGRABitmap;
     s,cx,cy: integer;
 begin
 if fits.HeaderInfo.naxis>0 then begin
+  trpOK:=false;
   fits.Gamma:=f_visu.Gamma.Value;
   fits.ImgDmax:=round(f_visu.ImgMax);
   fits.ImgDmin:=round(f_visu.ImgMin);
@@ -5676,7 +5679,8 @@ if fits.HeaderInfo.solved and
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,s,r: integer;
+var x,y,xxc,yyc,s,r: integer;
+    i,size: integer;
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
@@ -5697,31 +5701,72 @@ begin
         brush.Style:=bsSolid;
      end;
   end;
+  if Length(fits.StarList)>0 then begin
+     // draw all star boxes
+     Image1.Canvas.pen.Color:=clYellow;
+     Image1.Canvas.pen.Mode:=pmMerge;
+     Image1.Canvas.pen.Width:=DoScaleX(1);
+     Image1.Canvas.Brush.Style:=bsClear;
+     Image1.Canvas.Font.Color:=clYellow;
+     Image1.Canvas.Font.Size:=DoScaleX(10);
+     for i:=0 to Length(fits.StarList)-1 do
+     begin
+        if f_starprofile.AutofocusRunning and
+           InplaceAutofocus and
+           (fits.StarList[i].snr<AutofocusMinSNR)  // do not plot stars not used by autofocus
+           then continue;
+        Fits2Screen(round(fits.StarList[i].x),round(fits.StarList[i].y),x,y);
+        size:=round(max(ImgZoom,ImgScale0)*5*fits.StarList[i].hfd);
+        Image1.Canvas.Rectangle(x-size,y-size, x+size, y+size);
+        Image1.Canvas.TextOut(x+size,y+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1));
+     end;
+     if trpOK then begin
+        {draw trapezium}
+        Image1.Canvas.pen.Width:=DoScaleX(2);
+        // x1,y1,x2,y2
+        Fits2Screen(trpx1,trpy1,x,y);
+        Image1.Canvas.MoveTo(x,y);
+        Fits2Screen(trpx2,trpy2,x,y);
+        Image1.Canvas.LineTo(x,y);
+        // x2,y2,x3,y3
+        Fits2Screen(trpx3,trpy3,x,y);
+        Image1.Canvas.LineTo(x,y);
+        // x3,y3,x4,y4
+        Fits2Screen(trpx4,trpy4,x,y);
+        Image1.Canvas.LineTo(x,y);
+        // x4,y4,x1,y1
+        Fits2Screen(trpx1,trpy1,x,y);
+        Image1.Canvas.LineTo(x,y);
+        {draw diagonal}
+        Fits2Screen(img_width div 2,img_height div 2,xxc,yyc);
+        // xxc,yyc,x1,y1
+        Image1.Canvas.MoveTo(xxc,yyc);
+        Fits2Screen(trpx1,trpy1,x,y);
+        Image1.Canvas.LineTo(x,y);
+        // xxc,yyc,x2,y2
+        Image1.Canvas.MoveTo(xxc,yyc);
+        Fits2Screen(trpx2,trpy2,x,y);
+        Image1.Canvas.LineTo(x,y);
+        // xxc,yyc,x3,y3
+        Image1.Canvas.MoveTo(xxc,yyc);
+        Fits2Screen(trpx3,trpy3,x,y);
+        Image1.Canvas.LineTo(x,y);
+        // xxc,yyc,x4,y4
+        Image1.Canvas.MoveTo(xxc,yyc);
+        Fits2Screen(trpx4,trpy4,x,y);
+        Image1.Canvas.LineTo(x,y);
+     end;
+     Image1.Canvas.brush.Style:=bsSolid;
+     Image1.Canvas.pen.Width:=1;
+     Image1.Canvas.pen.Mode:=pmCopy;
+  end;
 end;
 
 procedure  Tf_main.StarSelection(Sender: TObject);
-var i,imageX,imageY,size: integer;
-    col: TBGRAPixel;
 begin
-  if f_starprofile.AutofocusRunning and InplaceAutofocus and (Length(fits.StarList)>0) then begin
-   // draw all star boxes
-   col := ColorToBGRA(clRed);
-   for i:=0 to Length(fits.StarList)-1 do
-   if fits.StarList[i].snr>AutofocusMinSNR then
-   begin
-      size:=round(5*fits.StarList[i].hfd);
-      imageX:=round(fits.StarList[i].x);
-      imageY:=round(fits.StarList[i].y);
-      imabmp.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size,col ,dmSet);
-      imabmp.TextOut(imageX+size,imageY+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1),col);
-   end;
-   PlotImage;
-  end
-  else begin
-    // redraw star box
-    image1.Invalidate;
-    Application.ProcessMessages;
-  end;
+  // redraw star box
+  image1.Invalidate;
+  Application.ProcessMessages;
 end;
 
 Procedure Tf_main.DrawHistogram(SetLevel: boolean);
@@ -5747,6 +5792,7 @@ end;
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
 begin
    f_starprofile.FindStar:=false;
+   fits.ClearStarList;
    DrawImage;
 end;
 
@@ -7915,12 +7961,11 @@ end;
 
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
- i,size,imageX,imageY,rx,ry,s,xxc,yyc,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right,x1,x2,x3,x4,y1,y2,y3,y4 : integer;
+ i,rx,ry,s,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right : integer;
  hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,med : double;
  hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
  Saved_Cursor : TCursor;
  mess2 : string;
- col: TBGRAPixel;
 begin
 
   if not fits.HeaderInfo.valid then exit;
@@ -7929,9 +7974,6 @@ begin
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
 
   DrawImage; {draw clean image}
-
-  col := ColorToBGRA(clRed);
-  imabmp.FontHeight:=12;
 
   // first measurement with a big window to find median star diameter
   s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
@@ -7977,13 +8019,6 @@ begin
      if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_right);SetLength(hfdlist_bottom_right,nhfd_bottom_right);hfdlist_bottom_right[nhfd_bottom_right-1]:=hfd1;end;
      if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_left); SetLength(hfdlist_top_left,nhfd_top_left); hfdlist_top_left[nhfd_top_left-1]:=hfd1;end;
      if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_right); SetLength(hfdlist_top_right,nhfd_top_right); hfdlist_top_right[nhfd_top_right-1]:=hfd1;end;
-
-     size:=round(5*hfd1);{show a square 10 times larger the HFD for quick HFD evaluation in all corners}
-     imageX:=round(xc);
-     imageY:=round(yc);
-
-     imabmp.Rectangle(imageX-size,imageY-size, imageX+size, imageY+size,col ,dmSet);
-     imabmp.TextOut(imageX+size,imageY+size,floattostrf(hfd1, ffgeneral, 2,1),col);
   end;
 
   if nhfd>0 then
@@ -7999,29 +8034,18 @@ begin
       median_worst:=max(max(median_top_left, median_top_right),max(median_bottom_left,median_bottom_right));{find worst corner}
 
       scale_factor:=img_height*0.33/median_worst;
-      x1:=round(-median_bottom_left*scale_factor+img_width/2);y1:=round(-median_bottom_left*scale_factor+img_height/2);{calculate coordinates counter clockwise}
-      x2:=round(+median_bottom_right*scale_factor+img_width/2);y2:=round(-median_bottom_right*scale_factor+img_height/2);
-      x3:=round(+median_top_right*scale_factor+img_width/2);y3:=round(+median_top_right*scale_factor+img_height/2);
-      x4:=round(-median_top_left*scale_factor+img_width/2);y4:=round(+median_top_left*scale_factor+img_height/2);
-
-      {draw trapezium}
-      imabmp.DrawLineAntialias(x1,y1,x2,y2,col,2);
-      imabmp.DrawLineAntialias(x2,y2,x3,y3,col,2);
-      imabmp.DrawLineAntialias(x3,y3,x4,y4,col,2);
-      imabmp.DrawLineAntialias(x4,y4,x1,y1,col,2);
-
-      {draw diagonal}
-      xxc:= img_width div 2;
-      yyc:= img_height div 2;
-      imabmp.DrawLineAntialias(xxc,yyc,x1,y1,col,2);
-      imabmp.DrawLineAntialias(xxc,yyc,x2,y2,col,2);
-      imabmp.DrawLineAntialias(xxc,yyc,x3,y3,col,2);
-      imabmp.DrawLineAntialias(xxc,yyc,x4,y4,col,2);
+      trpx1:=round(-median_bottom_left*scale_factor+img_width/2);trpy1:=round(-median_bottom_left*scale_factor+img_height/2);{calculate coordinates counter clockwise}
+      trpx2:=round(+median_bottom_right*scale_factor+img_width/2);trpy2:=round(-median_bottom_right*scale_factor+img_height/2);
+      trpx3:=round(+median_top_right*scale_factor+img_width/2);trpy3:=round(+median_top_right*scale_factor+img_height/2);
+      trpx4:=round(-median_top_left*scale_factor+img_width/2);trpy4:=round(+median_top_left*scale_factor+img_height/2);
+      trpOK:=true;
 
       mess2:=Format(rsTiltIndicati, [inttostr(round(100*((median_worst/median_best)-1)))])+'%'; {estimate tilt value}
     end
-    else
-    mess2:='';
+    else begin
+      trpOK:=false;
+      mess2:='';
+    end;
     NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2])); {median HFD and tilt indication}
   end
   else

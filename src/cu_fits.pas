@@ -184,6 +184,7 @@ type
      procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
+     procedure ClearStarList;
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -1877,6 +1878,11 @@ begin
    end;
  end;
 end;{gethfd2}
+
+procedure TFits.ClearStarList;
+begin
+  SetLength(FStarList,0);
+end;
 
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
