@@ -906,6 +906,14 @@ begin
   ScaleDPI(Self);
   ScaleImageList(ImageListDay);
   ScaleImageList(ImageListNight);
+  // resize empty drop area
+  if Screen.Height<1024 then
+    rl:=DoScaleX(3)
+  else
+    rl:=DoScaleX(5);
+  PanelTop.Constraints.MinHeight:=rl;
+  PanelBottom.Constraints.MinHeight:=rl;
+  PanelLeft.Constraints.MinWidth:=rl;
 end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
@@ -4814,6 +4822,12 @@ begin
  else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
  else if source is TFrame then Accept:=true
  else Accept:=false;
+ if (Sender is TPanel)and(TPanel(Sender).ControlCount=0) then begin
+   if State=dsDragEnter then
+      TPanel(Sender).Color:=clBtnHighlight;
+   if State=dsDragLeave then
+      TPanel(Sender).Color:=clDefault;
+ end;
 end;
 
 procedure Tf_main.ButtonDragDrop(Sender, Source: TObject; X, Y: Integer);
