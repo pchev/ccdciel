@@ -1914,7 +1914,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      bg:=bg/FimageC+FimageMin;
      bgdev:=bgdev/FimageC;
      {minimal star detection level}
-     treshold:=min(FimageMax*0.1, 20*bgdev);
+     treshold:=min(FimageMax*0.1, 10*bgdev);
 
      {check valid hfd }
      if ((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99)

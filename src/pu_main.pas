@@ -6900,13 +6900,12 @@ begin
        for i:=0 to ns-1 do
          hfdlist[i]:=fits.StarList[i].hfd;
        med:=SMedian(hfdlist);            {median of starshfd}
-       s:=min(max(16,round(5*med)),60);  {reasonable window to measure this stars}
+       s:=min(max(16,round(3*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
      end
      else
        s:=20; {no star found, try with small default window}
 
 
-//     s:=20; {test image in boxes of size s*s}
      rx:=round(2*min(img_Height,img_Width)/3); {search area}
      ry:=rx;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
@@ -8000,7 +7999,7 @@ begin
     for i:=0 to nhfd-1 do
       hfdlist[i]:=fits.StarList[i].hfd;
     med:=SMedian(hfdlist);            {median of starshfd}
-    s:=min(max(16,round(5*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+    s:=min(max(16,round(3*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
   end
   else
     s:=20; {no star found, try with small default window}
