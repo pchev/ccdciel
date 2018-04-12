@@ -1891,7 +1891,8 @@ var
  marginx,marginy,overlap: integer;
 begin
 
-overlap:=s div 2; // large overlap to have more chance to measure a big dot as a single piece
+overlap:=round(s/3); // large overlap to have more chance to measure a big dot as a single piece
+s:=round(2*s/3);     // keep original window size after adding overlap
 
 nhfd:=0;{set counters at zero}
 SetLength(FStarList,0);{set array length to zero}
