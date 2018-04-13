@@ -1886,9 +1886,10 @@ end;
 
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
- fitsX,fitsY,fx,fy,nhfd: integer;
+ fitsX,fitsY,fx,fy,nhfd,i,j,size: integer;
  hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
  marginx,marginy,overlap: integer;
+ img_temp: Timai8;
 begin
 
 overlap:=round(s/3); // large overlap to have more chance to measure a big dot as a single piece
@@ -1899,6 +1900,11 @@ SetLength(FStarList,0);{set array length to zero}
 
 marginx:=(FWidth-rx)div 2 div s;
 marginy:=(Fheight-ry)div 2 div s;
+
+SetLength(img_temp,1,FWidth,FHeight); {array to check for duplicate}
+for j:=0 to Fheight-1 do
+   for i:=0 to FWidth-1 do
+      img_temp[0,i,j]:=0;  {mark as not surveyed}
 
 for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs around}
  begin
@@ -1918,8 +1924,9 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
 
      {check valid hfd }
      if ((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99)
-        and (xc>(fitsX-(s div 2))) and (yc>(fitsY-(s div 2))) {prevent double detections in overlap area}
-        and (xc<(fitsX+(s div 2))) and (yc<(fitsY+(s div 2)))
+        and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
+        and (xc>=(-0.5+fitsX-(s div 2))) and (yc>=(-0.5+fitsY-(s div 2))) {exclude overlap area}
+        and (xc<(0.5+fitsX+(s div 2))) and (yc<(0.5+fitsY+(s div 2)))
         and (vmax>treshold) and (vmax<(MaxADU-2*bg)) {new bright star but not saturated}
      then
      begin
@@ -1931,9 +1938,16 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
        FStarList[nhfd-1].fwhm:=star_fwhm;
        FStarList[nhfd-1].snr:=snr;
        FStarList[nhfd-1].vmax:=vmax;
+
+       size:=round(2*hfd1);
+       for j:=round(yc)-size to round(yc)+size do {mark the whole star area as surveyed}
+          for i:=round(xc)-size to round(xc)+size do
+             img_temp[0,i,j]:=1;
+
      end;
    end;
  end;
+ SetLength(img_temp,0,0,0);
 end;
 
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
