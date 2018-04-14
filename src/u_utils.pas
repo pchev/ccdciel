@@ -77,6 +77,7 @@ function jddate(jd: double) : string;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
+Function CurrentSidTim: double;
 Procedure Refraction(var h : double; flag:boolean);
 PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 Procedure Hz2Eq(A,h : double; out hh,de : double);
@@ -1052,27 +1053,29 @@ hh:= arctan2(sin(a1),cos(a1)*sin(l1)+tan(h1)*cos(l1));
 hh:=Rmod(hh+pi2,pi2);
 END ;
 
-Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
-var jd0,CurSt,CurTime: double;
+Function CurrentSidTim: double;
+var jd0,CurTime: double;
     Year, Month, Day: Word;
 begin
 DecodeDate(now, Year, Month, Day);
 CurTime:=frac(now)*24;
 jd0:=jd(Year,Month,Day,0);
-CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+result:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+end;
+
+Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
+var CurSt: double;
+begin
+CurST:=CurrentSidTim;
 Eq2Hz(CurSt-deg2rad*15*ra,deg2rad*de,a,h) ;
 a:=rad2deg*rmod(a+pi,pi2);
 h:=rad2deg*h;
 end;
 
 Procedure cmdHz2Eq(a,h : double; var ra,de : double);
-var jd0,CurSt,CurTime: double;
-    Year, Month, Day: Word;
+var CurSt: double;
 begin
-DecodeDate(now, Year, Month, Day);
-CurTime:=frac(now)*24;
-jd0:=jd(Year,Month,Day,0);
-CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+CurST:=CurrentSidTim;
 a:=rmod(deg2rad*a-pi,pi2);
 Hz2Eq(a,deg2rad*h,ra,de);
 ra:=rad2deg*Rmod(CurST-ra+pi2,pi2)/15;

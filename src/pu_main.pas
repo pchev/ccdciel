@@ -6542,18 +6542,13 @@ end;
 
 function Tf_main.FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
 var i: integer;
-    jd0,CurSt,CurTime: double;
-    Year, Month, Day: Word;
-    d,dmin,hh,hl,ta,th,a,h: double;
+    CurST,d,dmin,hh,hl,ta,th,a,h: double;
     tm,sm: TPierSide;
 begin
   // all parameters coordinates of the date
   result:=false;
   dmin:=pi2;
-  DecodeDate(now, Year, Month, Day);
-  CurTime:=frac(now)*24;
-  jd0:=jd(Year,Month,Day,0);
-  CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+  CurST:=CurrentSidTim;
   hh:=CurSt-tra;
   Eq2Hz(hh,tde,ta,th);
   tm:=mount.PierSide;
@@ -7751,8 +7746,7 @@ end;
 
 function Tf_main.CheckMeridianFlip(nextexposure:double=0):integer;
 var ra,de,hh,a,h,tra,tde,err: double;
-    jd0,CurSt,CurTime: double;
-    Year, Month, Day: Word;
+    CurSt: double;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
     slewtopos,slewtoimg, restartguider, SaveCapture, ok: boolean;
   procedure DoAbort;
@@ -7766,10 +7760,7 @@ var ra,de,hh,a,h,tra,tde,err: double;
 begin
   result:=-1;
   if (mount.Status=devConnected) and (not mount.MountSlewing) and (not autofocusing) and ((not meridianflipping)or(nextexposure<>0)) then begin
-    DecodeDate(now, Year, Month, Day);
-    CurTime:=frac(now)*24;
-    jd0:=jd(Year,Month,Day,0);
-    CurST:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+    CurST:=CurrentSidTim;
     ra:=mount.RA;
     de:=mount.Dec;
     ra:=deg2rad*15*ra;
