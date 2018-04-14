@@ -398,9 +398,10 @@ end;
 end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double): boolean;
-var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa: double;
+var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade,a,h: double;
     fn:string;
-    n,i,oldfilter,delay:integer;
+    n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
+    SyncOK,NearMeridian,RetryMeridianSync: boolean;
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
   result:=false;
@@ -430,7 +431,9 @@ begin
     if CancelAutofocus then exit;
     i:=1;
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+    RetryMeridianSyncCount:=0;
     repeat
+      RetryMeridianSync:=false;
       Wait(delay);
       if not Fpreview.ControlExposure(exp,binx,biny) then begin
         msg(rsExposureFail);
@@ -450,12 +453,13 @@ begin
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
       if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
+      ara:=deg2rad*15*cra;
+      ade:=deg2rad*cde;
+      J2000ToApparent(ara,ade);
+      NearMeridian:=(abs(CurrentSidTim-ara)<=(2*deg2rad));    // we are pointing within 2 degree of the meridian
       if mount.Equinox=0 then begin
-        cra:=deg2rad*15*cra;
-        cde:=deg2rad*cde;
-        J2000ToApparent(cra,cde);
-        cra:=rad2deg*cra/15;
-        cde:=rad2deg*cde;
+        cra:=rad2deg*ara/15;
+        cde:=rad2deg*ade;
       end;
       ar2:=deg2rad*15*cra;
       de2:=deg2rad*cde;
@@ -465,10 +469,34 @@ begin
         case method of
          0: begin
                msg(Format(rsSyncTo, [ARToStr3(cra), DEToStr(cde)]));
-               mount.Sync(cra,cde);
-               Wait(2);
-               msg(Format(rsSlewTo, [ARToStr3(ra), DEToStr(de)]));
-               if not Mount.Slew(ra, de) then exit;
+               SyncOK:=mount.Sync(cra,cde);
+               if SyncOK then begin
+                  Wait(2);
+                  msg(Format(rsSlewTo, [ARToStr3(ra), DEToStr(de)]));
+                  if not Mount.Slew(ra, de) then exit;
+               end
+               else begin
+                 if NearMeridian then begin        // some mount cannot sync across the meridian
+                   inc(RetryMeridianSyncCount);
+                   if RetryMeridianSyncCount<=10 then begin        // retry for 10 minutes so the mount move a bit further
+                     msg('Mount Sync failed near the meridian.');
+                     msg('Waiting 1 minute before to retry');
+                     Wait(60);
+                     if CancelAutofocus then exit;
+                     RetryMeridianSync:=true;
+                     dec(i);
+                   end
+                   else begin
+                     msg('Mount Sync failed near the meridian.');
+                     msg('Abandon after 10 retries.');
+                     break;
+                   end;
+                 end
+                 else begin
+                   msg('Mount Sync failed!');
+                   break;
+                 end;
+               end;
             end;
          else begin
                raoffset:=ra+raoffset-cra;
@@ -484,7 +512,7 @@ begin
          end;
       end;
       inc(i);
-    until (dist<=prec)or(i>maxslew);
+    until (not RetryMeridianSync)and((dist<=prec)or(i>maxslew));
 
    end;
   end;
