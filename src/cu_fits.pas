@@ -1925,8 +1925,6 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      {check valid hfd }
      if ((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99)
         and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
-        and (xc>=(-0.5+fitsX-(s div 2))) and (yc>=(-0.5+fitsY-(s div 2))) {exclude overlap area}
-        and (xc<(0.5+fitsX+(s div 2))) and (yc<(0.5+fitsY+(s div 2)))
         and (vmax>treshold) and (vmax<(MaxADU-2*bg)) {new bright star but not saturated}
      then
      begin
