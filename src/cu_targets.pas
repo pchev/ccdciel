@@ -575,7 +575,7 @@ var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i: integer;
     hr,hs,newra,newde: double;
-    autofocusstart, astrometrypointing, autostartguider: boolean;
+    autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
 begin
   result:=false;
   if not FRunning then exit;
@@ -655,8 +655,14 @@ begin
       end;
       if not FRunning then exit;
     end;
+    // check if the plans contain only calibration
+    isCalibrationTarget:=true;
+    for i:=0 to T_Plan(t.plan).Count-1 do begin
+       if T_Plan(t.plan).Steps[i].frtype=LIGHT then
+          isCalibrationTarget:=false;
+    end;
     // start guiding
-    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart);
+    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
     if autostartguider then begin
       if not StartGuider then exit;
       Wait;
