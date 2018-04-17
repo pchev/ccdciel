@@ -595,6 +595,7 @@ object f_EditTargets: Tf_EditTargets
             Width = 126
             ItemHeight = 0
             OnChange = TargetChange
+            Sorted = True
             Style = csDropDownList
             TabOrder = 0
           end
