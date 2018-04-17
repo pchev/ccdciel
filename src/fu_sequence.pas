@@ -674,6 +674,8 @@ end;
 
 procedure Tf_sequence.StartSequence;
 var ccdtemp:double;
+    i,j: integer;
+    isCalibrationSequence: boolean;
 begin
  if preview.Running then begin
      msg(rsStopPreview);
@@ -683,7 +685,18 @@ begin
      StartTimer.Enabled:=true;
      exit;
  end;
- if (Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
+ // check if the sequence contain only calibration
+ isCalibrationSequence:=true;
+ for j:=0 to Targets.Count-1 do begin
+   if Targets.Targets[j].objectname=ScriptTxt then continue;
+   if Targets.Targets[j].objectname=SkyFlatTxt then continue;
+   for i:=0 to T_Plan(Targets.Targets[j].plan).Count-1 do begin
+      if T_Plan(Targets.Targets[j].plan).Steps[i].frtype=LIGHT then
+         isCalibrationSequence:=false;
+   end;
+ end;
+ // check if autoguider is required and connected
+ if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
    if AutoguiderStarting then begin
      f_pause.Caption:=rsAutoguiderNo;
      f_pause.Text:=Format(rsCannotConnec, [crlf]);
@@ -704,6 +717,7 @@ begin
      exit;
    end;
  end;
+ // check camera cooler
  if not camera.Cooler then begin
     if config.GetValue('/Cooler/CameraAutoCool',false) then begin
        ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
@@ -711,6 +725,7 @@ begin
        camera.Temperature:=ccdtemp;
     end;
  end;
+ // initialize sequence
  AutoguiderStarting:=false;
  AutoguiderAlert:=false;
  Preview.StackPreview.Checked:=false;
