@@ -133,6 +133,8 @@ begin
     FSeqCount:=1;
     FDitherNum:=0;
     FFocusNum:=0;
+    if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome)and FlatAutoExposure then
+       AdjustDomeFlat:=true;
     if Assigned(FonMsg) then FonMsg(rsStartCapture);
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC);

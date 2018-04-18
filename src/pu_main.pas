@@ -547,7 +547,8 @@ type
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
     procedure CameraSaveNewImage;
-    function  CameraNewFlat: boolean;
+    function  CameraNewSkyFlat: boolean;
+    function  CameraNewDomeFlat: boolean;
     procedure CameraVideoFrame(Sender: TObject);
     procedure CameraVideoPreviewChange(Sender: TObject);
     procedure CameraVideoFrameAsync(Data: PtrInt);
@@ -962,6 +963,7 @@ begin
   FlatWaitDusk:=false;
   FlatWaitDawn:=false;
   FlatSlewTime:=0;
+  AdjustDomeFlat:=false;
   onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
   Undersampled:=false;
@@ -5183,7 +5185,14 @@ begin
   if Capture then begin
      // process automatic flat
      if FlatAutoExposure and (camera.FrameType=FLAT) then begin
-       if not CameraNewFlat then exit;
+       case FlatType of
+         ftSKY : begin
+                 if not CameraNewSkyFlat then exit;
+                 end;
+         ftDome :begin
+                 if not CameraNewDomeFlat then exit;
+                 end;
+       end;
      end;
      // save file
      CameraSaveNewImage;
@@ -5220,11 +5229,49 @@ begin
   end;
 end;
 
-function Tf_main.CameraNewFlat: boolean;
+function Tf_main.CameraNewDomeFlat: boolean;
+var exp,newexp: double;
+begin
+  result:=false;
+  NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageMean))]));
+  if AdjustDomeFlat then begin
+    // adjust exposure time only once per series
+    exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
+    if ((fits.imageMean<FlatLevelMin)or(fits.imageMean>FlatLevelMax))
+       and ((exp>FlatMinExp)or(exp<FlatMaxExp))
+    then begin
+      newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
+      if newexp<FlatMinExp then begin
+         // min configured value
+         newexp:=FlatMinExp;
+         AdjustDomeFlat:=false;
+         NewMessage(rsReachConfigu);
+      end;
+      if newexp>FlatMaxExp then begin
+        // max configured value
+         newexp:=FlatMaxExp;
+         AdjustDomeFlat:=false;
+         NewMessage(rsReachConfigu2);
+      end;
+      f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
+      if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [
+        f_capture.ExpTime.Text]));
+      if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+      // retry with new exposure
+      exit;
+    end
+    else
+      AdjustDomeFlat:=false;
+  end;
+  // save this flat
+  result:=true;
+end;
+
+function Tf_main.CameraNewSkyFlat: boolean;
 var exp,newexp: double;
 begin
  result:=false;
- NewMessage('Flat level='+inttostr(round(fits.imageMean)));
+ NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageMean))]));
  // new exposure time from image level
  exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
  newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
@@ -5235,8 +5282,8 @@ begin
       newexp:=FlatMinExp;
       // wait for dusk
       if FlatWaitDusk then begin
-         NewMessage('Sky is still too bright, waiting for dusk');
-         StatusBar1.Panels[1].Text:='Waiting for dusk';
+         NewMessage(rsSkyIsStillTo);
+         StatusBar1.Panels[1].Text:=rsWaitingForDu;
          wait(30);
       end
       // or abort
@@ -5244,8 +5291,8 @@ begin
          Capture:=false;
          f_capture.Stop;
          StatusBar1.Panels[1].Text:=rsStop;
-         NewMessage('Flat light is too bright, please reduce the light or adjust the flat parameters.');
-         NewMessage('Stop flat capture');
+         NewMessage(rsReachConfigu);
+         NewMessage(rsStopFlatCapt);
          exit;
       end;
    end;
@@ -5254,8 +5301,8 @@ begin
       newexp:=FlatMaxExp;
       // wait for dawn
       if FlatWaitDawn then begin
-        NewMessage('Sky is still too dark, waiting for dawn');
-        StatusBar1.Panels[1].Text:='Waiting for dawn';
+        NewMessage(rsSkyIsStillTo2);
+        StatusBar1.Panels[1].Text:=rsWaitingForDa;
         wait(30);
       end
       // or abort
@@ -5263,8 +5310,8 @@ begin
         Capture:=false;
         f_capture.Stop;
         StatusBar1.Panels[1].Text:=rsStop;
-        NewMessage('Flat light is too faint, please increase the light or adjust the flat parameters.');
-        NewMessage('Stop flat capture');
+        NewMessage(rsReachConfigu2);
+        NewMessage(rsStopFlatCapt);
         exit;
       end;
    end;
@@ -5272,7 +5319,7 @@ begin
    if FlatWaitDusk or FlatWaitDawn then mount.SlewToSkyFlatPosition;
    // retry with a new exposure
    f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
-   if newexp<>exp then NewMessage('Adjust flat exposure time to '+f_capture.ExpTime.Text+' and retry.');
+   if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [f_capture.ExpTime.Text]));
    if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
    exit;
  end;

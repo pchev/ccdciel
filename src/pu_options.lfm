@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 497
     Top = 0
     Width = 482
-    ActivePage = TabSheet10
+    ActivePage = TabSheet12
     Align = alClient
     MultiLine = True
-    TabIndex = 5
+    TabIndex = 4
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -139,8 +139,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFileDefault: TButton
             Left = 390
             Height = 25
@@ -182,8 +182,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFolderDefault: TButton
             Left = 390
             Height = 25
@@ -1016,6 +1016,7 @@ object f_option: Tf_option
         Items.Strings = (
           'None'
           'Twilight sky flat'
+          'Dome/Panel'
         )
         TabOrder = 0
       end

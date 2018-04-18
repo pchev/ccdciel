@@ -349,7 +349,7 @@ var
   HorizonMax, HorizonMin, ElevationMin: double;
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
   NutMAT: rotmatrix;
-  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn: boolean;
+  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat: boolean;
   FlatType: TFlatType;
   FlatMinExp,FlatMaxExp: double;
   FlatLevelMin,FlatLevelMax: integer;

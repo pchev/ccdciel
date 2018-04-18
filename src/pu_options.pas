@@ -621,6 +621,7 @@ begin
   FocuserBacklashDirection.Items[1]:=rsOut;
   FlatType.Items[0]:=rsNone2;
   FlatType.Items[1]:=rsTwilightSkyF;
+  FlatType.Items[2]:=rsDomePanel;
   Autofocusmode.items[0]:=rsVCurve;
   Autofocusmode.items[1]:=rsDynamic;
   Autofocusmode.items[2]:=rsIterative;

@@ -858,6 +858,16 @@ resourcestring
   rsItIsSuggestT = 'It is suggest to slew to focus star when using Vcurve';
   rsSystemIsUnde = 'System is undersampled, accept 1 pixel star';
   rsMagnifyer = 'Magnifier';
+  rsDomePanel = 'Dome/Panel';
+  rsFlatLevel = 'Flat level=%s';
+  rsReachConfigu = 'Reach configured minimum flat exposure time!';
+  rsReachConfigu2 = 'Reach configured maximum flat exposure time!';
+  rsAdjustFlatEx = 'Adjust flat exposure time to %s and retry.';
+  rsStopFlatCapt = 'Stop flat capture';
+  rsSkyIsStillTo = 'Sky is still too bright, waiting for dusk';
+  rsWaitingForDu = 'Waiting for dusk';
+  rsSkyIsStillTo2 = 'Sky is still too dark, waiting for dawn';
+  rsWaitingForDa = 'Waiting for dawn';
 
 
 
