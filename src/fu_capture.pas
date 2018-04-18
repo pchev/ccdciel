@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_translation,
+uses u_global, Graphics, UScaleDPI, u_translation, cu_mount,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -68,6 +68,7 @@ type
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }
+    FMount: T_mount;
     FSeqCount: integer;
     FDitherNum: integer;
     FFocusNum: integer;
@@ -82,6 +83,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure Stop;
+    property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property DitherNum: Integer read FDitherNum write FDitherNum;
@@ -133,8 +135,10 @@ begin
     FSeqCount:=1;
     FDitherNum:=0;
     FFocusNum:=0;
-    if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome)and FlatAutoExposure then
+    if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome)and FlatAutoExposure then begin
        AdjustDomeFlat:=true;
+       if DomeFlatTelescopeSlew and (FMount<>nil) then FMount.SlewToDomeFlatPosition;
+    end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture);
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC);

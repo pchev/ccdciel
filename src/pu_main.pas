@@ -1181,6 +1181,7 @@ begin
   astrometry.preview:=f_preview;
 
   f_capture:=Tf_capture.Create(self);
+  f_capture.Mount:=mount;
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@AbortExposure;
   f_capture.onMsg:=@NewMessage;
@@ -2401,6 +2402,9 @@ begin
   FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',60.0);
   FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
   FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
+  DomeFlatTelescopeSlew:=config.GetValue('/Flat/DomeFlatTelescopeSlew',false);
+  DomeFlatTelescopeAz:=config.GetValue('/Flat/DomeFlatTelescopeAz',90.0);
+  DomeFlatTelescopeAlt:=config.GetValue('/Flat/DomeFlatTelescopeAlt',5.0);
   for i:=0 to SubDirCount-1 do begin
     SubDirOpt[i]:=TSubDirList(round(config.GetValue('/Files/SubDirOpt'+inttostr(i),i)));
     SubDirActive[i]:=config.GetValue('/Files/SubDirActive'+inttostr(i),false);
@@ -4273,6 +4277,9 @@ begin
    f_option.FlatMaxExp.Value:=config.GetValue('/Flat/FlatMaxExp',FlatMaxExp);
    f_option.FlatLevelMin.Value:=config.GetValue('/Flat/FlatLevelMin',FlatLevelMin);
    f_option.FlatLevelMax.Value:=config.GetValue('/Flat/FlatLevelMax',FlatLevelMax);
+   f_option.DomeFlatTelescopeSlew.Checked:=config.GetValue('/Flat/DomeFlatTelescopeSlew',DomeFlatTelescopeSlew);
+   f_option.DomeFlatTelescopeAz.Value:=config.GetValue('/Flat/DomeFlatTelescopeAz',DomeFlatTelescopeAz);
+   f_option.DomeFlatTelescopeAlt.Value:=config.GetValue('/Flat/DomeFlatTelescopeAlt',DomeFlatTelescopeAlt);
    f_option.StarWindow.Value:=config.GetValue('/StarAnalysis/Window',Starwindow);
    f_option.FocusWindow.Value:=config.GetValue('/StarAnalysis/Focus',Focuswindow);
    f_option.Undersampled.Checked:=config.GetValue('/StarAnalysis/Undersampled',Undersampled);
@@ -4487,6 +4494,9 @@ begin
      config.SetValue('/Flat/FlatMaxExp',f_option.FlatMaxExp.Value);
      config.SetValue('/Flat/FlatLevelMin',f_option.FlatLevelMin.Value);
      config.SetValue('/Flat/FlatLevelMax',f_option.FlatLevelMax.Value);
+     config.SetValue('/Flat/DomeFlatTelescopeSlew',f_option.DomeFlatTelescopeSlew.Checked);
+     config.SetValue('/Flat/DomeFlatTelescopeAz',f_option.DomeFlatTelescopeAz.Value);
+     config.SetValue('/Flat/DomeFlatTelescopeAlt',f_option.DomeFlatTelescopeAlt.Value);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);

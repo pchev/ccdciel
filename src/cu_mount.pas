@@ -61,6 +61,7 @@ T_mount = class(TComponent)
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure SlewToSkyFlatPosition;
+    procedure SlewToDomeFlatPosition;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     function Slew(sra,sde: double):boolean; virtual; abstract;
@@ -136,6 +137,16 @@ begin
    end;
 end;
 
+procedure T_mount.SlewToDomeFlatPosition;
+var zra,zde: double;
+begin
+   // actual equatorial position of flat panel
+   cmdHz2Eq(DomeFlatTelescopeAz,DomeFlatTelescopeAlt,zra,zde);
+   // slew
+   Slew(zra,zde);
+   // stop tracking
+   AbortMotion;
+end;
 
 end.
 

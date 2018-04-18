@@ -39,8 +39,16 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    DomeFlatTelescopeSlew: TCheckBox;
+    DomeFlatTelescopeAz: TFloatSpinEdit;
+    DomeFlatTelescopeAlt: TFloatSpinEdit;
+    DomeBox: TGroupBox;
+    Label102: TLabel;
+    Label103: TLabel;
+    Label104: TLabel;
     Label52: TLabel;
     Label56: TLabel;
+    Label61: TLabel;
     LabelMultistarWarning: TLabel;
     MaxAduFromCamera: TCheckBox;
     ElevationMin: TFloatSpinEdit;
@@ -131,7 +139,7 @@ type
     TempDir: TEdit;
     FlatAutoExposure: TCheckBox;
     FileOptions: TStringGrid;
-    GroupBox18: TGroupBox;
+    FlatExposureBox: TGroupBox;
     Label91: TLabel;
     Label92: TLabel;
     Label93: TLabel;
@@ -361,6 +369,7 @@ type
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
+    procedure FlatTypeClick(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FileOrFolderOptionsClick(Sender: TObject);
     procedure FileOrFolderOptionsColRowMoved(Sender: TObject; IsColumn: Boolean;
@@ -490,7 +499,7 @@ begin
   MaxAduFromCamera.Caption:=rsFromCameraDr;
   TabSheet12.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
-  GroupBox18.Caption := rsFlatAutoExpo;
+  FlatExposureBox.Caption := rsFlatAutoExpo;
   FlatAutoExposure.Caption := rsUseFlatAutom;
   Label91.Caption := rsExposureTime2;
   Label92.Caption := rsMax;
@@ -499,6 +508,12 @@ begin
   Label95.Caption := rsMin2;
   Label96.Caption := rsMax;
   Label97.Caption := rsAutomaticFla;
+  DomeBox.Caption:=rsDomePanel;
+  DomeFlatTelescopeSlew.Caption:=rsSlewTelescop2;
+  Label61.Caption:=rsTelescopeAzi;
+  Label102.Caption:=rsTelescopeEle;
+  Label103.Caption:=rsDegree;
+  Label104.Caption:=rsDegree;
   TabSheet10.Caption := rsFocus;
   GroupBox2.Caption := rsStarProfile;
   Label14.Caption := rsStarDetectio;
@@ -745,6 +760,12 @@ begin
   end else begin
     PanelRemoteCdc.Visible:=true;
   end;
+end;
+
+procedure Tf_option.FlatTypeClick(Sender: TObject);
+begin
+  FlatExposureBox.Visible:=FlatType.ItemIndex>0;
+  DomeBox.Visible:=FlatType.ItemIndex=2;
 end;
 
 procedure Tf_option.ButtonDirClick(Sender: TObject);

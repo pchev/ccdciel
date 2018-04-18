@@ -349,9 +349,9 @@ var
   HorizonMax, HorizonMin, ElevationMin: double;
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
   NutMAT: rotmatrix;
-  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat: boolean;
+  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew: boolean;
   FlatType: TFlatType;
-  FlatMinExp,FlatMaxExp: double;
+  FlatMinExp,FlatMaxExp,DomeFlatTelescopeAz,DomeFlatTelescopeAlt: double;
   FlatLevelMin,FlatLevelMax: integer;
   FlatSlewTime: TDateTime;
   SubDirOpt: array[0..SubDirCount-1] of TSubDirList;

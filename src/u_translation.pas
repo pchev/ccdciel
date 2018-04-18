@@ -868,6 +868,9 @@ resourcestring
   rsWaitingForDu = 'Waiting for dusk';
   rsSkyIsStillTo2 = 'Sky is still too dark, waiting for dawn';
   rsWaitingForDa = 'Waiting for dawn';
+  rsTelescopeAzi = 'Telescope azimuth';
+  rsTelescopeEle = 'Telescope elevation';
+  rsSlewTelescop2 = 'Slew telescope to flat panel position';
 
 
 
