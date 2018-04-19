@@ -245,19 +245,24 @@ begin
   end;
 end;
 
+function CompareResult(resp,comp: string): boolean;
+begin
+  result:=(copy(resp,1,Length(comp))=comp);
+end;
+
 function TPlanetarium_cdc.ShowImage(fn: string):boolean;
 var buf:string;
 begin
   result:=false;
   buf:='SHOWBGIMAGE OFF';
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf:='LOADBGIMAGE '+fn;
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf:='SHOWBGIMAGE ON';
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   FLastErrorTxt:='';
   result:=true;
 end;
@@ -275,27 +280,27 @@ begin
   end;
   buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SETDEC ' + FormatFloat('0.00000', frde);
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SHOWRECTANGLE 10';
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SETRECTANGLE 10 ' + FormatFloat('0.000', frsizeH*60) + ' ' +
     FormatFloat('0.00', frsizeV*60) + ' ' +
     FormatFloat('0.00', frrot) + ' 0';
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf:='MARKCENTER ON';
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SETFOV ' + FormatFloat('0.000', frsizeH*2.2);
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf:='REDRAW';
   FLastErrorTxt:=Cmd(buf);
-  if FLastErrorTxt<>msgOK then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   FLastErrorTxt:='';
   result:=true;
 end;
