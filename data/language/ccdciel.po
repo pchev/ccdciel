@@ -3162,3 +3162,7 @@ msgstr ""
 msgid "Error processing temporary file in %s"
 msgstr ""
 
+#: u_translation:rstelescopesle3
+msgid "Telescope slew failed"
+msgstr ""
+

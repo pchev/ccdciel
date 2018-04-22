@@ -905,6 +905,7 @@ end;
 
 function T_Targets.Slew(ra,de: double; precision,planprecision: boolean):boolean;
 var err: double;
+    errtxt: string;
     prec,exp:double;
     fi,cormethod,bin,maxretry,delay: integer;
 begin
@@ -946,10 +947,18 @@ begin
   end;
   if not FRunning then exit;
   if not result then begin
-    msg(Format(rsTelescopeSle, [FormatFloat(f2, err*60)]));
+    if (err*60)<9000 then
+       errtxt:=Format(rsTelescopeSle, [FormatFloat(f2, err*60)])
+    else
+       errtxt:=rsTelescopeSle3;
+    msg(errtxt);
     if not Unattended then begin
       f_pause.Caption:=rsTelescopeSle2;
-      f_pause.Text:=Format(rsAfterTelesco, [FormatFloat(f2, err*60), crlf]);
+      if (err*60)<9000 then
+         errtxt:=Format(rsAfterTelesco, [FormatFloat(f2, err*60), crlf])
+      else
+         errtxt:=rsTelescopeSle3+crlf+rsDoYouWantToR;
+      f_pause.Text:=errtxt;
       if f_pause.Wait(WaitResponseTime) then begin
          inc(FSlewRetry);
          result:=Slew(ra,de,precision,planprecision);

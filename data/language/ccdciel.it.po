@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-04-22 14:51+0000\n"
+"POT-Creation-Date: 2018-04-22 16:21+0000\n"
 "PO-Revision-Date: 2018-04-22 07:20+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-04-22 15:16+0000\n"
+"X-Launchpad-Export-Date: 2018-04-22 16:28+0000\n"
 "X-Generator: Launchpad (build 18617)\n"
 
 #: u_translation.rsabort
@@ -2866,6 +2866,10 @@ msgstr ""
 
 #: u_translation.rstelescopesle2
 msgid "Telescope slew"
+msgstr ""
+
+#: u_translation.rstelescopesle3
+msgid "Telescope slew failed"
 msgstr ""
 
 #: u_translation.rstemp
