@@ -7394,7 +7394,12 @@ rot:=NullCoord;
 
 fn:=slash(TmpDir)+'ccdcielsolved.fits';
 n:=cdcwcs_initfitsfile(pchar(fn),0);
-if n=0 then n:=cdcwcs_getinfo(addr(wcsinfo),0);
+if n=0 then
+  n:=cdcwcs_getinfo(addr(wcsinfo),0)
+else begin
+  NewMessage(Format(rsErrorProcess, [TmpDir]));
+  exit;
+end;
 
 if (n=0) and (rotator.Status=devConnected) then begin
 
@@ -7416,7 +7421,12 @@ ra:=NullCoord; dec:=NullCoord; rot:=NullCoord; sizeH:=0; sizeV:=0;
 
 fn:=slash(TmpDir)+'ccdcielsolved.fits';
 n:=cdcwcs_initfitsfile(pchar(fn),0);
-if n=0 then n:=cdcwcs_getinfo(addr(wcsinfo),0);
+if n=0 then
+   n:=cdcwcs_getinfo(addr(wcsinfo),0)
+else begin
+  NewMessage(Format(rsErrorProcess, [TmpDir]));
+  exit;
+end;
 
 if (n=0) and planetarium.Connected then begin
 
@@ -7572,7 +7582,11 @@ begin
    if fits.HeaderInfo.valid then begin
      if fits.HeaderInfo.solved then begin
        n:=cdcwcs_initfitsfile(pchar(fn),0);
-       if n=0 then n:=cdcwcs_getinfo(addr(cdcWCSinfo),0);
+       if n=0 then
+          n:=cdcwcs_getinfo(addr(cdcWCSinfo),0)
+       else begin
+         NewMessage(Format(rsErrorProcess, [TmpDir]));
+       end;
        if (n=0) and (abs(cdcWCSinfo.cdec)<89.0) then begin
          c.ra:=cdcWCSinfo.cra;
          c.dec:=cdcWCSinfo.cdec;

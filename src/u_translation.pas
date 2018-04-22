@@ -871,6 +871,7 @@ resourcestring
   rsTelescopeAzi = 'Telescope azimuth';
   rsTelescopeEle = 'Telescope elevation';
   rsSlewTelescop2 = 'Slew telescope to flat panel position';
+  rsErrorProcess = 'Error processing temporary file in %s';
 
 
 

@@ -133,6 +133,11 @@ begin
  if (not FBusy) then begin
    Fterminatecmd:=terminatecmd;
    n:=cdcwcs_initfitsfile(PChar(infile),0);
+   if n<>0 then begin
+     msg(Format(rsErrorProcess, [TmpDir]));
+     result:=false;
+     exit;
+   end;
    ra:=NullCoord;
    de:=NullCoord;
    pixscale:=NullCoord;
@@ -318,6 +323,10 @@ TimerAstrometrySync.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
+   if n<>0 then begin
+     msg(Format(rsErrorProcess, [TmpDir]));
+     exit;
+   end;
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
        if mount.Equinox=0 then begin
          ra:=deg2rad*15*ra;
@@ -366,6 +375,10 @@ try
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
+   if n<>0 then begin
+     msg(Format(rsErrorProcess, [TmpDir]));
+     exit;
+   end;
    n:=cdcwcs_getinfo(addr(i),0);
    if (n=0)and(i.secpix<>0) then begin
      Screen2fits(Xslew,Yslew,xx,yy);
@@ -452,6 +465,10 @@ begin
       if CancelAutofocus then exit;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
+      if n<>0 then begin
+        msg(Format(rsErrorProcess, [TmpDir]));
+        exit;
+      end;
       if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
       ara:=deg2rad*15*cra;
       ade:=deg2rad*cde;
