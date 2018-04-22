@@ -3106,3 +3106,59 @@ msgstr ""
 msgid "Magnifier"
 msgstr ""
 
+#: u_translation:rsdomepanel
+msgid "Dome/Panel"
+msgstr ""
+
+#: u_translation:rsflatlevel
+msgid "Flat level=%s"
+msgstr ""
+
+#: u_translation:rsreachconfigu
+msgid "Reach configured minimum flat exposure time!"
+msgstr ""
+
+#: u_translation:rsreachconfigu2
+msgid "Reach configured maximum flat exposure time!"
+msgstr ""
+
+#: u_translation:rsadjustflatex
+msgid "Adjust flat exposure time to %s and retry."
+msgstr ""
+
+#: u_translation:rsstopflatcapt
+msgid "Stop flat capture"
+msgstr ""
+
+#: u_translation:rsskyisstillto
+msgid "Sky is still too bright, waiting for dusk"
+msgstr ""
+
+#: u_translation:rswaitingfordu
+msgid "Waiting for dusk"
+msgstr ""
+
+#: u_translation:rsskyisstillto2
+msgid "Sky is still too dark, waiting for dawn"
+msgstr ""
+
+#: u_translation:rswaitingforda
+msgid "Waiting for dawn"
+msgstr ""
+
+#: u_translation:rstelescopeazi
+msgid "Telescope azimuth"
+msgstr ""
+
+#: u_translation:rstelescopeele
+msgid "Telescope elevation"
+msgstr ""
+
+#: u_translation:rsslewtelescop2
+msgid "Slew telescope to flat panel position"
+msgstr ""
+
+#: u_translation:rserrorprocess
+msgid "Error processing temporary file in %s"
+msgstr ""
+

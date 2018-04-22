@@ -4207,7 +4207,8 @@ begin
    while i=0 do begin
      buf:=ExtractFileNameOnly(fs.Name);
      delete(buf,1,8);
-     if buf='en' then langname:='English'
+     if buf='en' then langname:='English (US)'
+     else if buf='en_GB' then langname:='English (GB)'
      else if buf='fr' then langname:='Français'
      else if buf='it' then langname:='Italiano'
      else langname:='';

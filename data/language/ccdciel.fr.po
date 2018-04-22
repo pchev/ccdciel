@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-04-06 15:46+0000\n"
-"PO-Revision-Date: 2018-04-06 15:50+0000\n"
+"POT-Creation-Date: 2018-04-22 14:51+0000\n"
+"PO-Revision-Date: 2018-04-22 15:15+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-04-06 15:52+0000\n"
-"X-Generator: Launchpad (build 18599)\n"
+"X-Launchpad-Export-Date: 2018-04-22 15:16+0000\n"
+"X-Generator: Launchpad (build 18617)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -39,6 +39,10 @@ msgstr "À propos"
 #: u_translation.rsadd
 msgid "Add"
 msgstr "Ajouter"
+
+#: u_translation.rsadjustflatex
+msgid "Adjust flat exposure time to %s and retry."
+msgstr "Ajuste le temps d'exposition à %s et réessaie."
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -804,6 +808,10 @@ msgstr "Dither tous les"
 msgid "Dithering"
 msgstr "Dithering"
 
+#: u_translation.rsdomepanel
+msgid "Dome/Panel"
+msgstr "Coupole/Panneau"
+
 #: u_translation.rsdonothing
 msgid "Do nothing"
 msgstr "Ne fait rien"
@@ -887,6 +895,10 @@ msgstr "Erreur"
 #: u_translation.rserrormountno
 msgid "Error! Mount not connected"
 msgstr "Erreur! la monture n'est pas connectée"
+
+#: u_translation.rserrorprocess
+msgid "Error processing temporary file in %s"
+msgstr "Erreur de traitement du fichier temporaire dans %s"
 
 #: u_translation.rserrorresult
 msgid "Error result = %s"
@@ -1019,6 +1031,10 @@ msgstr "Auto-exposition du flat"
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
 msgstr "Niveau de l'image de flat"
+
+#: u_translation.rsflatlevel
+msgid "Flat level=%s"
+msgstr "Niveau du flat=%s"
 
 #: u_translation.rsflattime
 msgid "Flat time"
@@ -2004,6 +2020,14 @@ msgstr "Disque en mémoire"
 msgid "RA only"
 msgstr "Seulement AD"
 
+#: u_translation.rsreachconfigu
+msgid "Reach configured minimum flat exposure time!"
+msgstr "Le temps d'exposition minimum du flat est atteint!"
+
+#: u_translation.rsreachconfigu2
+msgid "Reach configured maximum flat exposure time!"
+msgstr "Le temps d'exposition maximum du flat est atteint!"
+
 #: u_translation.rsreachfocuser
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
 msgstr "La limite de plage de mise au point est atteinte! veuillez mieux positionner le focuser au milieu de sa course mécanique ou diminuer le HFD maximum"
@@ -2461,6 +2485,14 @@ msgstr "Cartes du Ciel en local"
 msgid "Sky Flat"
 msgstr "Flat crépusculaire"
 
+#: u_translation.rsskyisstillto
+msgid "Sky is still too bright, waiting for dusk"
+msgstr "Le ciel est toujours trop brillant, attend le crépuscule"
+
+#: u_translation.rsskyisstillto2
+msgid "Sky is still too dark, waiting for dawn"
+msgstr "Le ciel est toujours trop sombre, attend l'aube"
+
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
 msgstr "Goto abandonné après 3 tentatives!"
@@ -2472,6 +2504,10 @@ msgstr "Goto"
 #: u_translation.rsslewtelescop
 msgid "Slew telescope to %s %s"
 msgstr "Déplace le télescope vers %s %s"
+
+#: u_translation.rsslewtelescop2
+msgid "Slew telescope to flat panel position"
+msgstr "Déplace le télescope à la position du panneau"
 
 #: u_translation.rsslewto
 msgid "Slew to %s/%s"
@@ -2685,6 +2721,10 @@ msgstr "Arrêt de l'autoguidage"
 msgid "Stop capture"
 msgstr "Arrêt de l'acquisition"
 
+#: u_translation.rsstopflatcapt
+msgid "Stop flat capture"
+msgstr "Arrêt de la capture du flat"
+
 #: u_translation.rsstopguiding
 msgid "Stop guiding"
 msgstr "Arrêt du guidage"
@@ -2804,6 +2844,14 @@ msgstr "Le serveur TCP/IP écoute sur le port: %s"
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
 msgstr "Serveur TCP/IP arrêté"
+
+#: u_translation.rstelescopeazi
+msgid "Telescope azimuth"
+msgstr "Azimut du télescope"
+
+#: u_translation.rstelescopeele
+msgid "Telescope elevation"
+msgstr "Élévation du télescope"
 
 #: u_translation.rstelescopemou
 msgid "Telescope mount"
@@ -3060,6 +3108,14 @@ msgstr "Attend 1 minute ..."
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
 msgstr "Attente après résolution"
+
+#: u_translation.rswaitingforda
+msgid "Waiting for dawn"
+msgstr "Attente de l'aube"
+
+#: u_translation.rswaitingfordu
+msgid "Waiting for dusk"
+msgstr "Attente du crépuscule"
 
 #: u_translation.rswaitingfortw
 msgid "Waiting for twilight at %s"
