@@ -385,6 +385,7 @@ type
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
+    procedure TempDirChange(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
     procedure TmpDirDefaultClick(Sender: TObject);
   private
@@ -931,6 +932,20 @@ end;
 procedure Tf_option.ResolverBoxClick(Sender: TObject);
 begin
   Notebook1.PageIndex:=ResolverBox.ItemIndex;
+end;
+
+procedure Tf_option.TempDirChange(Sender: TObject);
+{$ifdef mswindows}var c: char;{$endif}
+begin
+{$ifdef mswindows}
+  Labelmsg.Caption:='';
+  for c in TempDir.Text do begin
+    if (c<#32)or(c>#127) then begin
+      Labelmsg.Caption:=rsTemporaryFol2;
+      break;
+    end;
+  end;
+{$endif}
 end;
 
 procedure Tf_option.TemperatureSlopeActiveClick(Sender: TObject);

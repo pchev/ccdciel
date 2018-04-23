@@ -53,10 +53,10 @@ object f_option: Tf_option
     Height = 497
     Top = 0
     Width = 482
-    ActivePage = TabSheet12
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
-    TabIndex = 4
+    TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -110,6 +110,7 @@ object f_option: Tf_option
         Height = 31
         Top = 73
         Width = 200
+        OnChange = TempDirChange
         TabOrder = 4
       end
       object Label99: TLabel
@@ -640,7 +641,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -902,8 +903,8 @@ object f_option: Tf_option
             Height = 40
             Top = 48
             Width = 328
-            ClientHeight = 40
-            ClientWidth = 328
+            ClientHeight = 36
+            ClientWidth = 324
             TabOrder = 1
             object Label74: TLabel
               Left = 112
@@ -2076,8 +2077,8 @@ object f_option: Tf_option
               Top = 176
               Width = 424
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 424
+              ClientHeight = 36
+              ClientWidth = 420
               TabOrder = 2
               Visible = False
               object Label34: TLabel
@@ -2965,8 +2966,8 @@ object f_option: Tf_option
               Height = 80
               Top = 48
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124

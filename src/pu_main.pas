@@ -4411,6 +4411,7 @@ begin
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin
+     if f_option.Labelmsg.Caption<>'' then NewMessage(f_option.Labelmsg.Caption);
      buf:=f_option.Languages.Text;
      i:=pos(',',buf);
      if i>0 then buf:=copy(buf,1,i-1);

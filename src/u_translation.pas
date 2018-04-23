@@ -873,6 +873,7 @@ resourcestring
   rsSlewTelescop2 = 'Slew telescope to flat panel position';
   rsErrorProcess = 'Error processing temporary file in %s';
   rsTelescopeSle3 = 'Telescope slew failed';
+  rsTemporaryFol2 = 'Temporary folder must contain only ASCII characters';
 
 
 
