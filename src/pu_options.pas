@@ -46,6 +46,7 @@ type
     Label102: TLabel;
     Label103: TLabel;
     Label104: TLabel;
+    Label105: TLabel;
     Label52: TLabel;
     Label56: TLabel;
     Label61: TLabel;
@@ -72,12 +73,15 @@ type
     GroupBox20: TGroupBox;
     Label19: TLabel;
     Label3: TLabel;
+    Page5: TPage;
     PageGuiderNone: TPage;
     PanelFocusStar: TPanel;
     PixelSize: TFloatSpinEdit;
     PixelSizeFromCamera: TCheckBox;
     AutofocusSlew: TRadioButton;
     AutofocusInPlace: TRadioButton;
+    astap: TGroupBox;
+    ASTAPFolder: TEdit;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
     SlewPrec: TFloatSpinEdit;
@@ -924,7 +928,7 @@ end;
 
 procedure Tf_option.SetResolver(value:integer);
 begin
-  if (value<0)or(value>3) then exit;
+  if (value<0)or(value>(ResolverBox.Items.Count-1)) then exit;
   ResolverBox.ItemIndex:=value;
   ResolverBoxClick(nil);
 end;

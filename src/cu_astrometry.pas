@@ -171,6 +171,7 @@ begin
    engine.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
    engine.PlateSolveFolder:=config.GetValue('/Astrometry/PlatesolveFolder','');
    engine.PlateSolveWait:=config.GetValue('/Astrometry/PlatesolveWait',0);
+   engine.ASTAPFolder:=config.GetValue('/Astrometry/ASTAPFolder','');
    engine.LogFile:=logfile;
    engine.InFile:=infile;
    engine.OutFile:=outfile;

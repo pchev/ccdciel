@@ -35,7 +35,7 @@ type
 TAstrometry_engine = class(TThread)
    private
      FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile : string;
-     FPlateSolveFolder: string;
+     FPlateSolveFolder,FASTAPFolder: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fplot: boolean;
@@ -83,6 +83,7 @@ TAstrometry_engine = class(TThread)
      property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
      property PlateSolveFolder: string read FPlateSolveFolder write FPlateSolveFolder;
      property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
+     property ASTAPFolder: string read FASTAPFolder write FASTAPFolder;
 end;
 
 implementation
@@ -377,6 +378,22 @@ else if FResolver=ResolverPlateSolve then begin
   Fparam.Add(buf);
   Start;
 end
+else if FResolver=ResolverAstap then begin
+  {$ifdef mswindows}
+    Fcmd:=slash(FASTAPFolder)+'astap.exe';
+  {$else}
+    Fcmd:=slash(FASTAPFolder)+'astap';
+  {$endif}
+  buf:=FloatToStr(Fra*deg2rad)+','+
+        FloatToStr(Fde*deg2rad)+','+
+        FloatToStr(FXsize*deg2rad*0.98)+','+
+        FloatToStr(FYsize*deg2rad*0.98)+','+
+        '999,'+
+        FInFile+','+
+        IntToStr(0);
+  Fparam.Add(buf);
+  Start;
+end
 else if FResolver=ResolverNone then begin
   Start;
 end;
@@ -541,6 +558,39 @@ else if FResolver=ResolverElbrus then begin
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
 end
 else if FResolver=ResolverPlateSolve then begin
+  process.Executable:=Fcmd;
+  process.Parameters:=Fparam;
+  try
+  process.Execute;
+  process.WaitOnExit;
+  Fresult:=process.ExitStatus;
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
+  except
+     Fresult:=1;
+  end;
+  // merge apm result
+  apmfile:=ChangeFileExt(FInFile,'.apm');
+  wcsfile:=ChangeFileExt(FInFile,'.wcs');
+  if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
+    Apm2Wcs;
+    Ftmpfits:=TFits.Create(nil);
+    mem:=TMemoryStream.Create;
+    try
+    mem.LoadFromFile(FInFile);
+    Ftmpfits.Stream:=mem;
+    mem.clear;
+    mem.LoadFromFile(wcsfile);
+    Ftmpfits.Header.NewWCS(mem);
+    Ftmpfits.SaveToFile(FOutFile);
+    finally
+      Ftmpfits.Free;
+      mem.Free;
+    end;
+  end;
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+end
+else if FResolver=ResolverAstap then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   try
