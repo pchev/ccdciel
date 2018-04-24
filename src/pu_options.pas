@@ -43,10 +43,15 @@ type
     DomeFlatTelescopeAz: TFloatSpinEdit;
     DomeFlatTelescopeAlt: TFloatSpinEdit;
     DomeBox: TGroupBox;
+    ASTAPStartMag: TFloatSpinEdit;
+    ASTAPLimitMag: TFloatSpinEdit;
     Label102: TLabel;
     Label103: TLabel;
     Label104: TLabel;
     Label105: TLabel;
+    Label106: TLabel;
+    Label107: TLabel;
+    Label108: TLabel;
     Label52: TLabel;
     Label56: TLabel;
     Label61: TLabel;
@@ -97,6 +102,7 @@ type
     SettleMaxTime: TSpinEdit;
     CalibrationDelay: TSpinEdit;
     MaxAdu: TSpinEdit;
+    ASTAPSearchRegion: TSpinEdit;
     StarLostCancel: TSpinEdit;
     StarLostRestart: TSpinEdit;
     Tolerance: TFloatSpinEdit;

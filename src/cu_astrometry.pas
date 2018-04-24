@@ -172,6 +172,9 @@ begin
    engine.PlateSolveFolder:=config.GetValue('/Astrometry/PlatesolveFolder','');
    engine.PlateSolveWait:=config.GetValue('/Astrometry/PlatesolveWait',0);
    engine.ASTAPFolder:=config.GetValue('/Astrometry/ASTAPFolder','');
+   engine.ASTAPSearchRegion:=config.GetValue('/Astrometry/ASTAPSearchRegion',99);
+   engine.ASTAPStartMag:=config.GetValue('/Astrometry/ASTAPStartMag',10.0);
+   engine.ASTAPLimitMag:=config.GetValue('/Astrometry/ASTAPLimitMag',16.5);
    engine.LogFile:=logfile;
    engine.InFile:=infile;
    engine.OutFile:=outfile;

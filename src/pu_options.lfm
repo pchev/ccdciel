@@ -140,8 +140,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFileDefault: TButton
             Left = 390
             Height = 25
@@ -183,8 +183,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFolderDefault: TButton
             Left = 390
             Height = 25
@@ -2000,7 +2000,7 @@ object f_option: Tf_option
         Height = 260
         Top = 188
         Width = 432
-        PageIndex = 3
+        PageIndex = 4
         TabOrder = 1
         TabStop = True
         object Page1: TPage
@@ -2299,6 +2299,64 @@ object f_option: Tf_option
               Top = 24
               Width = 240
               TabOrder = 0
+            end
+            object Label106: TLabel
+              Left = 14
+              Height = 19
+              Top = 77
+              Width = 88
+              Caption = 'Search regions'
+              ParentColor = False
+            end
+            object ASTAPSearchRegion: TSpinEdit
+              Left = 168
+              Height = 29
+              Top = 72
+              Width = 104
+              MaxValue = 999
+              MinValue = 1
+              TabOrder = 1
+              Value = 1
+            end
+            object Label107: TLabel
+              Left = 14
+              Height = 19
+              Top = 117
+              Width = 98
+              Caption = 'Start magnitude'
+              ParentColor = False
+            end
+            object Label108: TLabel
+              Left = 14
+              Height = 19
+              Top = 157
+              Width = 118
+              Caption = 'Limiting magnitude'
+              ParentColor = False
+            end
+            object ASTAPStartMag: TFloatSpinEdit
+              Left = 168
+              Height = 29
+              Top = 112
+              Width = 104
+              DecimalPlaces = 1
+              Increment = 1
+              MaxValue = 16
+              MinValue = 10
+              TabOrder = 2
+              Value = 10
+            end
+            object ASTAPLimitMag: TFloatSpinEdit
+              Left = 168
+              Height = 29
+              Top = 152
+              Width = 104
+              DecimalPlaces = 1
+              Increment = 1
+              MaxValue = 16.5
+              MinValue = 12
+              TabOrder = 3
+              Value = 12
             end
           end
         end

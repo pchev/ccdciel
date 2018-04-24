@@ -34,12 +34,14 @@ uses  u_global, u_utils, cu_fits,
 type
 TAstrometry_engine = class(TThread)
    private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile : string;
+     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile: string;
      FPlateSolveFolder,FASTAPFolder: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fplot: boolean;
      Fresult:integer;
+     FASTAPStartMag,FASTAPLimitMag: double;
+     FASTAPSearchRegion: integer;
      Fcmd: string;
      FOtherOptions: string;
      FUseScript,FUseWSL: Boolean;
@@ -50,6 +52,7 @@ TAstrometry_engine = class(TThread)
    protected
      procedure Execute; override;
      procedure Apm2Wcs;
+     procedure AstapWcs;
    public
      constructor Create;
      destructor Destroy; override;
@@ -84,6 +87,9 @@ TAstrometry_engine = class(TThread)
      property PlateSolveFolder: string read FPlateSolveFolder write FPlateSolveFolder;
      property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
      property ASTAPFolder: string read FASTAPFolder write FASTAPFolder;
+     property ASTAPSearchRegion: integer read FASTAPSearchRegion write FASTAPSearchRegion;
+     property ASTAPStartMag: double read FASTAPStartMag write FASTAPStartMag;
+     property ASTAPLimitMag: double read FASTAPLimitMag write FASTAPLimitMag;
 end;
 
 implementation
@@ -196,6 +202,10 @@ if FResolver=ResolverAstrometryNet then begin
   end;
   if (process<>nil) and process.Running then process.Active:=false;
 {$endif}
+end
+else if FResolver=ResolverAstap then begin
+  if (process<>nil) and process.Running then
+    process.Terminate(1);
 end;
 except
 end;
@@ -384,14 +394,18 @@ else if FResolver=ResolverAstap then begin
   {$else}
     Fcmd:=slash(FASTAPFolder)+'astap';
   {$endif}
-  buf:=FloatToStr(Fra*deg2rad)+','+
-        FloatToStr(Fde*deg2rad)+','+
-        FloatToStr(FXsize*deg2rad*0.98)+','+
-        FloatToStr(FYsize*deg2rad*0.98)+','+
-        '999,'+
-        FInFile+','+
-        IntToStr(0);
-  Fparam.Add(buf);
+  Fparam.Add('-d');
+  Fparam.Add(FormatFloat(f2,max(FXsize,FYsize)));
+  Fparam.Add('-M');
+  Fparam.Add(FormatFloat(f2,FASTAPStartMag));
+  Fparam.Add('-m');
+  Fparam.Add(FormatFloat(f2,FASTAPLimitMag));
+  Fparam.Add('-r');
+  Fparam.Add(inttostr(FASTAPSearchRegion));
+  Fparam.Add('-f');
+  Fparam.Add(FInFile);
+  wcsfile:=ChangeFileExt(FInFile,'.wcs');
+  DeleteFileUTF8(wcsfile);
   Start;
 end
 else if FResolver=ResolverNone then begin
@@ -411,6 +425,7 @@ var n: LongInt;
     i,nside,available: integer;
     endtime: double;
     mem: TMemoryStream;
+    hl:array[1..80] of char;
 begin
 if FResolver=ResolverAstrometryNet then begin
   cbuf:='';
@@ -591,6 +606,16 @@ else if FResolver=ResolverPlateSolve then begin
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
 end
 else if FResolver=ResolverAstap then begin
+  cbuf:='';
+  if (FLogFile<>'') then begin
+    AssignFile(f,FLogFile);
+    rewrite(f,1);
+    buf:=Fcmd;
+    for i:=0 to Fparam.Count-1 do buf:=buf+' '+Fparam[i];
+    buf:=buf+CRLF;
+    cbuf:=buf;
+    BlockWrite(f,cbuf,Length(buf));
+  end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   try
@@ -602,17 +627,15 @@ else if FResolver=ResolverAstap then begin
   except
      Fresult:=1;
   end;
-  // merge apm result
-  apmfile:=ChangeFileExt(FInFile,'.apm');
-  wcsfile:=ChangeFileExt(FInFile,'.wcs');
-  if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
-    Apm2Wcs;
+  // merge wcs result
+  if (Fresult=0)and(FileExistsUTF8(wcsfile)) then begin
     Ftmpfits:=TFits.Create(nil);
     mem:=TMemoryStream.Create;
     try
     mem.LoadFromFile(FInFile);
     Ftmpfits.Stream:=mem;
     mem.clear;
+    AstapWcs;
     mem.LoadFromFile(wcsfile);
     Ftmpfits.Header.NewWCS(mem);
     Ftmpfits.SaveToFile(FOutFile);
@@ -637,7 +660,7 @@ end;
 procedure TAstrometry_engine.Apm2Wcs;
 // communicated by Han Kleijn
 var
-  i,pos1,pos2,pos3,sign : integer;
+  i,sign : integer;
   f : textfile;
   line1, line2,line3 :string;
   hdr: THeaderBlock;
@@ -718,7 +741,7 @@ begin
 
     // write header
     for i:=1 to 36 do
-    hdr[i]:=blank80;
+      hdr[i]:=blank80;
     hdr[1] := 'COMMENT Solved by Platesolve 2'+blank80;
     hdr[2] := 'CTYPE1 = '+#39+'RA---TAN'+#39+' / first parameter RA , projection TANgential'+blank80;
     hdr[3] := 'CTYPE2 = '+#39+'DEC--TAN'+#39+' / second parameter DEC, projection TANgential'+blank80;
@@ -749,6 +772,39 @@ begin
     write(f,' ');
     CloseFile(f);
   end;
+end;
+
+procedure TAstrometry_engine.AstapWcs;
+// Process ASTAP .wcs result
+var
+  i,n : integer;
+  ft : textfile;
+  mem: TMemoryStream;
+  hl:array[1..80] of char;
+  buf:string;
+begin
+    mem:=TMemoryStream.Create;
+    AssignFile(ft,wcsfile);
+    reset(ft);
+    n:=0;
+    repeat
+      ReadLn(ft,buf);
+      hl:=copy(buf+blank80,1,80);
+      mem.Write(hl,80);
+      inc(n);
+    until eof(ft);
+    CloseFile(ft);
+    hl:=blank80;
+    for i:=0 to (36-(n div 36)) do mem.Write(hl,80);
+    mem.Position:=0;
+    mem.SaveToFile(wcsfile);
+    mem.free;
+
+    // mark as solved
+    AssignFile(ft,ChangeFileExt(FInFile,'.solved'));
+    rewrite(ft);
+    write(ft,' ');
+    CloseFile(ft);
 end;
 
 end.
