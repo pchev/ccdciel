@@ -62,7 +62,7 @@ type
     PtSourceL: TListChartSource;
     PtSourceR: TListChartSource;
     BtnPinGraph: TSpeedButton;
-    StaticText1: TStaticText;
+    Title: TLabel;
     TimerHideGraph: TTimer;
     VcChart: TChart;
     VcChartL: TFitSeries;
@@ -177,7 +177,7 @@ end;
 
 procedure Tf_starprofile.SetLang;
 begin
-  StaticText1.Caption:=rsStarProfile;
+  Title.Caption:=rsStarProfile;
   Label1.Caption:=rsHFD+':';
   Label2.Caption:=rsIntensity+':';
   Label3.Caption:=rsFWHM+':';

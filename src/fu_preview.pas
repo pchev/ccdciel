@@ -50,7 +50,7 @@ type
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
   private
@@ -108,7 +108,7 @@ end;
 
 procedure Tf_preview.SetLang;
 begin
-  StaticText1.Caption:=rsPreview;
+  Title.Caption:=rsPreview;
   Label1.Caption:=rsExp;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBin;

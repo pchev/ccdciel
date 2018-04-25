@@ -36,7 +36,7 @@ type
     Filters: TComboBox;
     Label1: TLabel;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure FiltersChange(Sender: TObject);
   private
     { private declarations }
@@ -69,7 +69,7 @@ end;
 
 procedure Tf_filterwheel.SetLang;
 begin
-  StaticText1.Caption:=rsFilter;
+  Title.Caption:=rsFilter;
 end;
 
 procedure Tf_filterwheel.FiltersChange(Sender: TObject);

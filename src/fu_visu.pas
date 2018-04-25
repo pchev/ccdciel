@@ -51,7 +51,7 @@ type
     BtnZoom1: TSpeedButton;
     SpinEditMin: TSpinEdit;
     SpinEditMax: TSpinEdit;
-    StaticText1: TStaticText;
+    Title: TLabel;
     TimerRedraw: TTimer;
     TimerMinMax: TTimer;
     procedure BtnBullsEyeClick(Sender: TObject);
@@ -134,7 +134,7 @@ end;
 
 procedure Tf_visu.SetLang;
 begin
-  StaticText1.Caption:=rsVisualisatio;
+  Title.Caption:=rsVisualisatio;
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);

@@ -479,21 +479,20 @@ object f_visu: Tf_visu
       end
     end
   end
-  object StaticText1: TStaticText
+  object Title: TLabel
+    AutoSize = False  
     Left = 0
     Height = 20
     Top = 0
     Width = 371
     Align = alTop
     Alignment = taCenter
-    BorderStyle = sbsSingle
     Caption = 'Visualisation'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
-    TabOrder = 1
   end
   object TimerMinMax: TTimer
     Enabled = False

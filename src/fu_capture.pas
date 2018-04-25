@@ -62,7 +62,7 @@ type
     SeqNum: TSpinEdit;
     DitherCount: TSpinEdit;
     FocusCount: TSpinEdit;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnStartClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
@@ -116,7 +116,7 @@ end;
 
 procedure Tf_capture.SetLang;
 begin
-  StaticText1.Caption:=rsCapture;
+  Title.Caption:=rsCapture;
   Label1.Caption:=rsExp;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBin;

@@ -312,20 +312,19 @@ object f_capture: Tf_capture
       end
     end
   end
-  object StaticText1: TStaticText
+  object Title: TLabel
+    AutoSize = False
     Left = 0
     Height = 20
     Top = 0
     Width = 180
     Align = alTop
     Alignment = taCenter
-    BorderStyle = sbsSingle
     Caption = 'Capture'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
-    TabOrder = 1
   end
 end

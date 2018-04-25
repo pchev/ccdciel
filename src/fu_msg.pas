@@ -35,7 +35,7 @@ type
   Tf_msg = class(TFrame)
     msg: TMemo;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }

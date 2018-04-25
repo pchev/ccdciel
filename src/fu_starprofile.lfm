@@ -11,21 +11,20 @@ object f_starprofile: Tf_starprofile
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  object StaticText1: TStaticText
+  object Title: TLabel
+    AutoSize = False
     Left = 0
     Height = 20
     Top = 0
     Width = 176
     Align = alTop
     Alignment = taCenter
-    BorderStyle = sbsSingle
     Caption = 'Star profile'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
     ParentFont = False
     ParentColor = False
-    TabOrder = 0
   end
   object Panel1: TPanel
     Left = 0

@@ -56,9 +56,9 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     SaveDialog1: TSaveDialog;
-    StaticText1: TStaticText;
-    StaticText2: TStaticText;
-    StaticText3: TStaticText;
+    Title1: TPanel;
+    Title2: TPanel;
+    Title3: TPanel;
     TargetGrid: TStringGrid;
     PlanGrid: TStringGrid;
     procedure BtnCopyClick(Sender: TObject);
@@ -207,9 +207,9 @@ end;
 
 procedure Tf_sequence.SetLang;
 begin
-  StaticText1.Caption:=rsSequence;
-  StaticText2.Caption:=rsCurrentPlan;
-  StaticText3.Caption:=rsTargets;
+  Title1.Caption:=rsSequence;
+  Title2.Caption:=rsCurrentPlan;
+  Title3.Caption:=rsTargets;
   BtnEditTargets.Caption:=rsEdit;
   BtnLoadTargets.Caption:=rsLoad;
   BtnNewTargets.Caption:=rsNew;
@@ -487,9 +487,9 @@ var i: integer;
 begin
    ClearTargetGrid;
    TargetGrid.RowCount:=Targets.count+1;
-   StaticText3.Caption:=rsTargets+': '+Targets.TargetName;
+   Title3.Caption:=rsTargets+': '+Targets.TargetName;
    if Targets.TargetsRepeat>1 then
-     StaticText3.Caption:=StaticText3.Caption+' x'+inttostr(Targets.TargetsRepeat);
+     Title3.Caption:=Title3.Caption+' x'+inttostr(Targets.TargetsRepeat);
    for i:=1 to Targets.count do begin
      TargetGrid.Cells[0,i]:=Targets.Targets[i-1].objectname;
      TargetGrid.Cells[1,i]:=Targets.Targets[i-1].planname;
@@ -507,7 +507,7 @@ begin
   try
    p:=T_Plan(sender);
    ClearPlanGrid;
-   StaticText2.Caption:=rsPlan+': '+p.PlanName;
+   Title2.Caption:=rsPlan+': '+p.PlanName;
    PlanGrid.RowCount:=p.count+1;
    for i:=1 to p.count do begin
      PlanGrid.Cells[0,i]:=T_Plan(sender).Steps[i-1].description_str;
@@ -807,7 +807,7 @@ begin
    // show plan status
    if (TargetRow>0) then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
-    buf2:=StaticText2.Caption;
+    buf2:=Title2.Caption;
     i:=pos(blank,buf2);
     delete(buf2,1,i);
     buf2:=trim(buf2);

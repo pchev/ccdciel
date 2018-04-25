@@ -44,7 +44,7 @@ type
     Panel1: TPanel;
     led: TShape;
     PanelDev: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnConnectClick(Sender: TObject);
   private
     { private declarations }
@@ -80,7 +80,7 @@ end;
 
 procedure Tf_devicesconnection.SetLang;
 begin
-  StaticText1.Caption:=rsDevicesConne;
+  Title.Caption:=rsDevicesConne;
   BtnConnect.Caption:=rsConnect;
   LabelCamera.Caption:=rsCam;
   LabelWheel.Caption:=rsFil;

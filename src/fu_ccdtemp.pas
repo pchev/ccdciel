@@ -42,7 +42,7 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnSetClick(Sender: TObject);
     procedure CCDcoolerChange(Sender: TObject);
   private
@@ -78,7 +78,7 @@ end;
 
 procedure Tf_ccdtemp.SetLang;
 begin
-  StaticText1.Caption:=rsCCDTemperatu;
+  Title.Caption:=rsCCDTemperatu;
   Label1.Caption:=rsCurrent;
   CCDcooler.Caption:=rsCooler;
   Label2.Caption:=rsSetpoint;

@@ -3,26 +3,27 @@ object f_planetarium: Tf_planetarium
   Height = 76
   Top = 0
   Width = 180
+  AutoSize = True
   ClientHeight = 76
   ClientWidth = 180
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  object StaticText1: TStaticText
+  object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
     Width = 180
     Align = alTop
     Alignment = taCenter
-    BorderStyle = sbsSingle
+    AutoSize = False
     Caption = 'Planetarium'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentFont = False
     ParentColor = False
-    TabOrder = 0
+    ParentFont = False
+    Transparent = False
   end
   object Panel1: TPanel
     Left = 0
@@ -34,7 +35,7 @@ object f_planetarium: Tf_planetarium
     ChildSizing.ControlsPerLine = 1
     ClientHeight = 56
     ClientWidth = 180
-    TabOrder = 1
+    TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 26

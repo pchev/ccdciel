@@ -40,7 +40,7 @@ type
     Label6: TLabel;
     led: TShape;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnHaltClick(Sender: TObject);
     procedure BtnRotateClick(Sender: TObject);
     procedure ReverseChange(Sender: TObject);
@@ -84,7 +84,7 @@ end;
 
 procedure Tf_rotator.SetLang;
 begin
-  StaticText1.Caption:=rsRotator;
+  Title.Caption:=rsRotator;
   label6.Caption:=rsPA;
   BtnRotate.Caption:=rsRotate;
   Reverse.Caption:=rsReverse;

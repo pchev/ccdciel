@@ -44,7 +44,7 @@ type
     RA: TEdit;
     DE: TEdit;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnParkClick(Sender: TObject);
     procedure BtnTrackClick(Sender: TObject);
   private
@@ -80,7 +80,7 @@ end;
 
 procedure Tf_mount.SetLang;
 begin
-  StaticText1.Caption:=rsTelescopePos;
+  Title.Caption:=rsTelescopePos;
   label1.Caption:=rsRA;
   label2.Caption:=rsDec;
   BtnPark.Caption:=rsPark;

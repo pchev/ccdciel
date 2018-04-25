@@ -43,7 +43,7 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Status: TEdit;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnCalClick(Sender: TObject);
     procedure BtnConnectClick(Sender: TObject);
     procedure BtnDitherClick(Sender: TObject);
@@ -82,7 +82,7 @@ end;
 
 procedure Tf_autoguider.SetLang;
 begin
-  StaticText1.Caption:=rsAutoguider;
+  Title.Caption:=rsAutoguider;
   BtnConnect.Caption:=rsConnect;
   BtnCal.Caption:=rsCalibrate;
   BtnGuide.Caption:=rsGuide;

@@ -35,7 +35,7 @@ type
   Tf_magnifyer = class(TFrame)
     Image1: TImage;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
   private
     { private declarations }
     procedure SetLang;
@@ -67,7 +67,7 @@ end;
 
 procedure Tf_magnifyer.SetLang;
 begin
-  StaticText1.Caption:=rsMagnifyer;
+  Title.Caption:=rsMagnifyer;
 end;
 
 end.

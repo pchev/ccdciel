@@ -1,21 +1,37 @@
 object f_devicesconnection: Tf_devicesconnection
   Left = 0
-  Height = 112
+  Height = 86
   Top = 0
   Width = 180
   AutoSize = True
-  ClientHeight = 112
+  ClientHeight = 86
   ClientWidth = 180
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
+  object Title: TLabel
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 180
+    Align = alTop
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Devices connection'
+    Color = clBtnShadow
+    DragMode = dmAutomatic
+    Font.Color = clBtnText
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
   object Panel1: TPanel
     Left = 0
-    Height = 92
+    Height = 66
     Top = 20
     Width = 180
     Align = alClient
-    ClientHeight = 92
+    ClientHeight = 66
     ClientWidth = 180
     TabOrder = 0
     object BtnConnect: TButton
@@ -121,21 +137,5 @@ object f_devicesconnection: Tf_devicesconnection
       Caption = 'Profile:'
       ParentColor = False
     end
-  end
-  object StaticText1: TStaticText
-    Left = 0
-    Height = 20
-    Top = 0
-    Width = 180
-    Align = alTop
-    Alignment = taCenter
-    BorderStyle = sbsSingle
-    Caption = 'Devices connection'
-    Color = clBtnShadow
-    DragMode = dmAutomatic
-    Font.Color = clBtnText
-    ParentFont = False
-    ParentColor = False
-    TabOrder = 1
   end
 end

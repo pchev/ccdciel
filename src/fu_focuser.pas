@@ -60,7 +60,7 @@ type
     PosIncr: TComboBox;
     PanelBtn: TPanel;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnDownClick(Sender: TObject);
     procedure BtnSetAbsPosClick(Sender: TObject);
     procedure BtnUpClick(Sender: TObject);
@@ -107,7 +107,7 @@ end;
 
 procedure Tf_focuser.SetLang;
 begin
-  StaticText1.Caption:=rsFocuser;
+  Title.Caption:=rsFocuser;
   label3.Caption:=rsSpeed;
   label4.Caption:=rsTimer;
   label6.Caption:=rsIncr;

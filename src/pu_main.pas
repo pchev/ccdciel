@@ -4778,17 +4778,16 @@ npm:=nil;
 opm:=nil;
 toolmenu:=nil;
 if sender is TPanel then begin
-  if sender is TPanel then begin
     if TPanel(Sender).Tag>0 then npm:=TMenuItem(TPanel(Sender).tag);
-    if source is TStaticText then begin
-     if TFrame(TStaticText(Source).Parent).tag>0 then toolmenu:=TMenuItem(TFrame(TStaticText(Source).Parent).tag);
-     TFrame(TStaticText(Source).Parent).Parent:=TPanel(Sender);
-     TFrame(TStaticText(Source).Parent).Top:=Y;
-     TFrame(TStaticText(Source).Parent).Left:=X;
+    if source is TLabel then begin
+     if TFrame(TLabel(Source).Parent).tag>0 then toolmenu:=TMenuItem(TFrame(TLabel(Source).Parent).tag);
+     TFrame(TLabel(Source).Parent).Parent:=TPanel(Sender);
+     TFrame(TLabel(Source).Parent).Top:=Y;
+     TFrame(TLabel(Source).Parent).Left:=X;
      if TPanel(Sender).Width>TPanel(Sender).Height then begin
-        TFrame(TStaticText(Source).Parent).Align:=alLeft;
+        TFrame(TLabel(Source).Parent).Align:=alLeft;
      end else begin
-        TFrame(TStaticText(Source).Parent).Align:=alTop;
+        TFrame(TLabel(Source).Parent).Align:=alTop;
      end;
     end
     else if source is TMemo then begin
@@ -4832,14 +4831,13 @@ if sender is TPanel then begin
         npm.Add(toolmenu);
       end;
     end;
-   end;
 end;
 end;
 
 procedure Tf_main.PanelDragOver(Sender, Source: TObject; X, Y: Integer;
   State: TDragState; var Accept: Boolean);
 begin
- if Source is TStaticText then Accept:=TStaticText(Source).Parent is TFrame
+ if Source is TLabel then Accept:=TLabel(Source).Parent is TFrame
  else if Source is TMemo then Accept:=TPanel(TMemo(Source).Parent).Parent is TFrame
  else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
  else if source is TFrame then Accept:=true
@@ -4876,7 +4874,7 @@ end;
 procedure Tf_main.ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
   State: TDragState; var Accept: Boolean);
 begin
- if Source is TStaticText then Accept:=TStaticText(Source).Parent is TFrame
+ if Source is TLabel then Accept:=TLabel(Source).Parent is TFrame
  else if Source is TMemo then Accept:=TPanel(TMemo(Source).Parent).Parent is TFrame
  else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
  else if source is TFrame then Accept:=true
@@ -8309,8 +8307,8 @@ begin
    result:=StatusBar1.Hint;
  end
  else if (s = 'SEQUENCE') then begin
-   result:=f_sequence.StaticText3.Caption+tab+
-           f_sequence.StaticText2.Caption+tab+
+   result:=f_sequence.Title3.Caption+tab+
+           f_sequence.Title2.Caption+tab+
            f_sequence.StatusMsg.Caption+tab+
            f_sequence.DelayMsg.Caption;
  end

@@ -42,7 +42,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnResetClick(Sender: TObject);
     procedure BtnSetClick(Sender: TObject);
   private
@@ -77,7 +77,7 @@ end;
 
 procedure Tf_frame.SetLang;
 begin
-  StaticText1.Caption:=rsFrame;
+  Title.Caption:=rsFrame;
   BtnSet.Caption:=rsSet;
   BtnReset.Caption:=rsReset;
 end;

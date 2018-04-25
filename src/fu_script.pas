@@ -42,7 +42,7 @@ type
     ComboBoxScript: TComboBox;
     led: TShape;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnRunClick(Sender: TObject);
@@ -98,7 +98,7 @@ end;
 
 procedure Tf_script.SetLang;
 begin
-  StaticText1.Caption:=rsRunScript;
+  Title.Caption:=rsRunScript;
   BtnRun.Caption:=rsRun;
   BtnEdit.Caption:=rsEdit;
   BtnNew.Caption:=rsNew;

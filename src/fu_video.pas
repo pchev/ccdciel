@@ -66,7 +66,7 @@ type
     RecFrames: TComboBox;
     Preview: TCheckBox;
     Panel1: TPanel;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BrightnessKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState
       );
     procedure BrightnessMouseUp(Sender: TObject; Button: TMouseButton;

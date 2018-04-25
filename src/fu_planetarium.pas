@@ -41,7 +41,7 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Status: TEdit;
-    StaticText1: TStaticText;
+    Title: TLabel;
     procedure BtnConnectClick(Sender: TObject);
     procedure BtnNewTargetClick(Sender: TObject);
   private
@@ -76,7 +76,7 @@ end;
 
 procedure Tf_planetarium.SetLang;
 begin
-  StaticText1.Caption:=rsPlanetarium;
+  Title.Caption:=rsPlanetarium;
   BtnConnect.Caption:=rsConnect;
   BtnNewTarget.Caption:=rsNewTarget;
 end;
