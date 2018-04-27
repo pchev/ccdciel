@@ -615,6 +615,7 @@ else if FResolver=ResolverAstap then begin
     buf:=buf+CRLF;
     cbuf:=buf;
     BlockWrite(f,cbuf,Length(buf));
+    CloseFile(f);
   end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
