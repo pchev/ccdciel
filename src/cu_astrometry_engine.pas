@@ -41,7 +41,7 @@ TAstrometry_engine = class(TThread)
      Fplot: boolean;
      Fresult:integer;
      FASTAPStartMag,FASTAPLimitMag: double;
-     FASTAPSearchRegion: integer;
+     FASTAPSearchRadius: integer;
      Fcmd: string;
      FOtherOptions: string;
      FUseScript,FUseWSL: Boolean;
@@ -87,7 +87,7 @@ TAstrometry_engine = class(TThread)
      property PlateSolveFolder: string read FPlateSolveFolder write FPlateSolveFolder;
      property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
      property ASTAPFolder: string read FASTAPFolder write FASTAPFolder;
-     property ASTAPSearchRegion: integer read FASTAPSearchRegion write FASTAPSearchRegion;
+     property ASTAPSearchRadius: integer read FASTAPSearchRadius write FASTAPSearchRadius;
      property ASTAPStartMag: double read FASTAPStartMag write FASTAPStartMag;
      property ASTAPLimitMag: double read FASTAPLimitMag write FASTAPLimitMag;
 end;
@@ -394,14 +394,14 @@ else if FResolver=ResolverAstap then begin
   {$else}
     Fcmd:=slash(FASTAPFolder)+'astap';
   {$endif}
-  Fparam.Add('-d');
+  Fparam.Add('-fov');
   Fparam.Add(FormatFloat(f2,max(FXsize,FYsize)));
   Fparam.Add('-M');
   Fparam.Add(FormatFloat(f2,FASTAPStartMag));
   Fparam.Add('-m');
   Fparam.Add(FormatFloat(f2,FASTAPLimitMag));
   Fparam.Add('-r');
-  Fparam.Add(inttostr(FASTAPSearchRegion));
+  Fparam.Add(inttostr(FASTAPSearchRadius));
   Fparam.Add('-f');
   Fparam.Add(FInFile);
   wcsfile:=ChangeFileExt(FInFile,'.wcs');

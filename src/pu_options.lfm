@@ -2286,7 +2286,7 @@ object f_option: Tf_option
             ClientWidth = 422
             TabOrder = 0
             object Label105: TLabel
-              Left = 14
+              Left = 8
               Height = 19
               Top = 28
               Width = 94
@@ -2294,32 +2294,24 @@ object f_option: Tf_option
               ParentColor = False
             end
             object ASTAPFolder: TEdit
-              Left = 168
+              Left = 176
               Height = 31
               Top = 24
               Width = 240
               TabOrder = 0
             end
-            object Label106: TLabel
-              Left = 14
-              Height = 19
-              Top = 77
-              Width = 88
-              Caption = 'Search regions'
-              ParentColor = False
-            end
-            object ASTAPSearchRegion: TSpinEdit
-              Left = 168
+            object ASTAPSearchRadius: TSpinEdit
+              Left = 176
               Height = 29
               Top = 72
               Width = 104
-              MaxValue = 999
+              MaxValue = 90
               MinValue = 1
               TabOrder = 1
               Value = 1
             end
             object Label107: TLabel
-              Left = 14
+              Left = 8
               Height = 19
               Top = 117
               Width = 98
@@ -2327,7 +2319,7 @@ object f_option: Tf_option
               ParentColor = False
             end
             object Label108: TLabel
-              Left = 14
+              Left = 8
               Height = 19
               Top = 157
               Width = 118
@@ -2335,7 +2327,7 @@ object f_option: Tf_option
               ParentColor = False
             end
             object ASTAPStartMag: TFloatSpinEdit
-              Left = 168
+              Left = 176
               Height = 29
               Top = 112
               Width = 104
@@ -2347,7 +2339,7 @@ object f_option: Tf_option
               Value = 10
             end
             object ASTAPLimitMag: TFloatSpinEdit
-              Left = 168
+              Left = 176
               Height = 29
               Top = 152
               Width = 104
@@ -2357,6 +2349,16 @@ object f_option: Tf_option
               MinValue = 12
               TabOrder = 3
               Value = 12
+            end
+            object Label109: TLabel
+              Left = 8
+              Height = 38
+              Top = 77
+              Width = 165
+              AutoSize = False
+              Caption = 'Maximum search radius'
+              ParentColor = False
+              WordWrap = True
             end
           end
         end

@@ -49,9 +49,9 @@ type
     Label103: TLabel;
     Label104: TLabel;
     Label105: TLabel;
-    Label106: TLabel;
     Label107: TLabel;
     Label108: TLabel;
+    Label109: TLabel;
     Label52: TLabel;
     Label56: TLabel;
     Label61: TLabel;
@@ -102,7 +102,7 @@ type
     SettleMaxTime: TSpinEdit;
     CalibrationDelay: TSpinEdit;
     MaxAdu: TSpinEdit;
-    ASTAPSearchRegion: TSpinEdit;
+    ASTAPSearchRadius: TSpinEdit;
     StarLostCancel: TSpinEdit;
     StarLostRestart: TSpinEdit;
     Tolerance: TFloatSpinEdit;
@@ -590,6 +590,10 @@ begin
   Label78.Caption := rsProgramFolde;
   Label79.Caption := rsWaitAfterSol;
   Label80.Caption := rsSeconds;
+  Label105.Caption := rsProgramFolde;
+  Label109.Caption := rsMaximumSearc;
+  Label107.Caption := rsStartMagnitu;
+  Label108.Caption := rsLimitingMagn;
   TabSheet7.Caption := rsSlewing;
   GroupBox7.Caption := rsPrecisionSle;
   Label28.Caption := rsTargetPrecis;
