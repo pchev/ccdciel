@@ -2334,7 +2334,7 @@ object f_option: Tf_option
               DecimalPlaces = 1
               Increment = 1
               MaxValue = 16
-              MinValue = 10
+              MinValue = 8
               TabOrder = 2
               Value = 10
             end
