@@ -876,6 +876,8 @@ resourcestring
   rsTemporaryFol2 = 'Temporary folder must contain only ASCII characters';
   rsStartMagnitu = 'Start magnitude';
   rsLimitingMagn = 'Limiting magnitude';
+  rsSolvedInSeco = 'Solved in %s seconds';
+  rsOffset = 'offset';
 
 
 

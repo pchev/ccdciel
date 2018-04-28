@@ -39,7 +39,7 @@ TAstrometry = class(TComponent)
     FonEndAstrometry: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
-    FLastSlewErr: double;
+    FLastSlewErr,FInitra,FInitdec,FStartTime: double;
     Fmount: T_mount;
     Fcamera: T_camera;
     Fwheel: T_wheel;
@@ -73,6 +73,9 @@ TAstrometry = class(TComponent)
     property SlewBusy: Boolean read FSlewBusy;
     property LastSlewErr: double read FLastSlewErr;
     property LastResult: Boolean read FLastResult;
+    property InitRA: double read Finitra;
+    property InitDEC: double read Finitdec;
+    property StartTime: double read FStartTime;
     property ResultFile: string read savefile;
     property Resolver: string read FResolverName;
     property Mount: T_mount read Fmount write Fmount;
@@ -158,6 +161,9 @@ begin
        msg(Format(rsCannotFindAp, [crlf]));
    end;
    FLastResult:=false;
+   FInitra:=ra;
+   FInitdec:=de;
+   FStartTime:=now;
    logfile:=ChangeFileExt(infile,'.log');
    solvefile:=ChangeFileExt(infile,'.solved');
    savefile:=outfile;

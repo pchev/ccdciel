@@ -397,7 +397,7 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
-    WCSxyNrot,WCSxyErot: double;
+    WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC: double;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -7142,6 +7142,7 @@ begin
 end;
 
 procedure Tf_main.AstrometryEnd(Sender: TObject);
+var resulttxt:string;
 begin
   // update Menu
   MenuStopAstrometry.Visible:=false;
@@ -7153,7 +7154,16 @@ begin
   MenuViewAstrometryLog.Enabled:=true;
   if astrometry.LastResult then begin
      LoadFitsFile(astrometry.ResultFile);
-     NewMessage(Format(rsResolveSucce, [astrometry.Resolver]));
+     resulttxt:=blank;
+     resulttxt:=resulttxt+Format(rsSolvedInSeco, [inttostr(round((now-astrometry.StartTime)*secperday))]);
+     if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord) and
+        (astrometry.InitRA<>NullCoord) and (astrometry.InitDEC<>NullCoord)
+     then begin
+        resulttxt:=resulttxt+' , '+rsOffset+blank+
+          FormatFloat(f4,rad2deg*AngularDistance(deg2rad*astrometry.InitRA,deg2rad*astrometry.InitDEC,deg2rad*WCScenterRA,deg2rad*WCScenterDEC))+
+          blank+rsdegree;
+     end;
+     NewMessage(Format(rsResolveSucce, [astrometry.Resolver])+resulttxt);
   end else begin
     NewMessage(Format(rsResolveError, [astrometry.Resolver]));
   end;
@@ -7614,10 +7624,23 @@ begin
          x2:=c.x;
          y2:=c.y;
          WCSxyErot := arctan2((x2 - x1), (y1 - y2));
+         c.x:=0.5+cdcWCSinfo.wp/2;
+         c.y:=0.5+cdcWCSinfo.hp/2;
+         n:=cdcwcs_xy2sky(@c,0);
+         WCScenterRA:=c.ra;
+         WCScenterDEC:=c.dec;
        end
-       else cdcWCSinfo.secpix:=0;
+       else begin
+         cdcWCSinfo.secpix:=0;
+         WCScenterRA:=NullCoord;
+         WCScenterDEC:=NullCoord;
+       end;
      end
-       else cdcWCSinfo.secpix:=0;
+       else begin
+        cdcWCSinfo.secpix:=0;
+        WCScenterRA:=NullCoord;
+        WCScenterDEC:=NullCoord;
+       end;
      if (oldw<>fits.HeaderInfo.naxis1)or(oldh<>fits.HeaderInfo.naxis2) then begin
        ImgCx:=0;
        ImgCy:=0;
