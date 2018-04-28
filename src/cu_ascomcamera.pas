@@ -122,7 +122,7 @@ public
    procedure ResetFrame; override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
-   Procedure SetActiveDevices(focuser,filters,telescope: string); override;
+   Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
    procedure StartVideoRecord(mode:TVideoRecordMode); override;
@@ -557,7 +557,7 @@ begin
  {$endif}
 end;
 
-Procedure T_ascomcamera.SetActiveDevices(focuser,filters,telescope: string);
+Procedure T_ascomcamera.SetActiveDevices(afocuser,afilters,atelescope: string);
 begin
   // not in ascom
 end;

@@ -189,7 +189,7 @@ private
    procedure ResetFrame; override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
-   Procedure SetActiveDevices(focuser,filters,telescope: string); override;
+   Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
    procedure StartVideoRecord(mode:TVideoRecordMode); override;
@@ -1180,26 +1180,26 @@ begin
  end;
 end;
 
-Procedure T_indicamera.SetActiveDevices(focuser,filters,telescope: string);
+Procedure T_indicamera.SetActiveDevices(afocuser,afilters,atelescope: string);
 var tp:IText;
 begin
   if ActiveDevices<>nil then begin
-     if focuser<>'' then begin
+     if afocuser<>'' then begin
         tp:=IUFindText(ActiveDevices,'ACTIVE_FOCUSER');
         if tp<>nil then begin
-           tp.text:=focuser;
+           tp.text:=afocuser;
         end;
      end;
-     if filters<>'' then begin
+     if afilters<>'' then begin
         tp:=IUFindText(ActiveDevices,'ACTIVE_FILTER');
         if tp<>nil then begin
-           tp.text:=filters;
+           tp.text:=afilters;
         end;
      end;
-     if telescope<>'' then begin
+     if atelescope<>'' then begin
         tp:=IUFindText(ActiveDevices,'ACTIVE_TELESCOPE');
         if tp<>nil then begin
-           tp.text:=telescope;
+           tp.text:=atelescope;
         end;
      end;
      indiclient.sendNewText(ActiveDevices);

@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, u_global, u_utils,  indiapi, math, u_translation,
+uses  cu_fits, cu_mount, cu_wheel, cu_focuser, u_global, u_utils,  indiapi, math, u_translation,
   lazutf8sysutils, Classes, Forms, SysUtils;
 
 type
@@ -65,6 +65,7 @@ T_camera = class(TComponent)
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
     Fwheel: T_wheel;
+    FFocuser: T_focuser;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
@@ -163,7 +164,8 @@ T_camera = class(TComponent)
     property StackDark: TFits read FStackDark write FStackDark;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
-    property wheel: T_wheel read Fwheel write Fwheel;
+    property Wheel: T_wheel read Fwheel write Fwheel;
+    property Focuser: T_focuser read FFocuser write FFocuser;
     property ObjectName: string read FObjectName write FObjectName;
     property CameraInterface: TDevInterface read FCameraInterface;
     property Status: TDeviceStatus read FStatus;
@@ -431,11 +433,12 @@ procedure T_camera.WriteHeaders;
 var dy,dm,dd: word;
     origin,observer,telname,objname,siso: string;
     focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
-    hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain: integer;
+    hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs : string;
-    hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass: double;
+    hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     gamma,offset: double;
     Frx,Fry,Frwidth,Frheight: integer;
+    hasfocusertemp,hasfocuserpos: boolean;
 begin
   // get header values from camera (set by INDI driver)
   if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
@@ -517,6 +520,24 @@ begin
   except
    siso:='';
   end;
+  hasfocuserpos:=false;
+  try
+  if (FFocuser<>nil)and(FFocuser.hasAbsolutePosition) then begin
+     focuserpos:=FFocuser.Position;
+     hasfocuserpos:=true;
+  end;
+  except
+   hasfocuserpos:=false;
+  end;
+  hasfocusertemp:=false;
+  try
+  if (FFocuser<>nil)and(FFocuser.hasTemperature) then begin
+     focusertemp:=FFocuser.Temperature;
+     hasfocusertemp:=true;
+  end;
+  except
+   hasfocuserpos:=false;
+  end;
   // write new header
   Ffits.Header.ClearHeader;
   Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -563,6 +584,8 @@ begin
     Ffits.Header.Add('FRAMEWDH',Frwidth,'Frame width');
   end;
   if hairmass>0 then Ffits.Header.Add('AIRMASS',hairmass ,'Airmass');
+  if hasfocuserpos then Ffits.Header.Add('FOCUSPOS',focuserpos ,'Focuser position in steps');
+  if hasfocusertemp then Ffits.Header.Add('FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
     Ffits.Header.Add('EQUINOX',2000.0,'');
     Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
