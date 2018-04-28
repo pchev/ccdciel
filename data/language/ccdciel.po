@@ -3166,3 +3166,23 @@ msgstr ""
 msgid "Telescope slew failed"
 msgstr ""
 
+#: u_translation:rstemporaryfol2
+msgid "Temporary folder must contain only ASCII characters"
+msgstr ""
+
+#: u_translation:rsstartmagnitu
+msgid "Start magnitude"
+msgstr ""
+
+#: u_translation:rslimitingmagn
+msgid "Limiting magnitude"
+msgstr ""
+
+#: u_translation:rssolvedinseco
+msgid "Solved in %s seconds"
+msgstr ""
+
+#: u_translation:rsoffset
+msgid "offset"
+msgstr ""
+
