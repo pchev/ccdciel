@@ -6568,7 +6568,7 @@ var f: textfile;
     focusmag: integer;
 begin
  fn:='focus_star_4';
- SetLength(FocusStars,1000);
+ SetLength(FocusStars,10000);
  NFocusStars:=0;
  focusmag:=config.GetValue('/StarAnalysis/AutofocusStarMag',4);
  if (focusmag<4)or(focusmag>8) then focusmag:=4;
@@ -6590,7 +6590,7 @@ begin
    if (ra<>NullCoord)and(de<>NullCoord) then begin
      inc(NFocusStars);
      if NFocusStars>=Length(FocusStars) then
-        SetLength(FocusStars,NFocusStars+1000);
+        SetLength(FocusStars,NFocusStars+10000);
      ra:=deg2rad*ra;
      de:=deg2rad*de;
      // store coordinates of the date

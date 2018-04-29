@@ -1896,7 +1896,7 @@ overlap:=round(s/3); // large overlap to have more chance to measure a big dot a
 s:=round(2*s/3);     // keep original window size after adding overlap
 
 nhfd:=0;{set counters at zero}
-SetLength(FStarList,100);{allocate initial size}
+SetLength(FStarList,1000);{allocate initial size}
 
 marginx:=(FWidth-rx)div 2 div s;
 marginy:=(Fheight-ry)div 2 div s;
@@ -1930,7 +1930,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      begin
        inc(nhfd);
        if nhfd>=Length(FStarList) then
-          SetLength(FStarList,nhfd+100);  {get more space to store values}
+          SetLength(FStarList,nhfd+1000);  {get more space to store values}
        FStarList[nhfd-1].x:=xc;
        FStarList[nhfd-1].y:=yc;
        FStarList[nhfd-1].hfd:=hfd1;
@@ -1957,7 +1957,7 @@ var
 begin
 
 nhfd:=0;{set counters at zero}
-SetLength(FStarList,100);{allocate initial size}
+SetLength(FStarList,1000);{allocate initial size}
 
 for i:=0 to Length(list)-1 do
  begin
@@ -1973,7 +1973,7 @@ for i:=0 to Length(list)-1 do
     begin
        inc(nhfd);
        if nhfd>=Length(FStarList) then
-          SetLength(FStarList,nhfd+100);  {get more space to store values}
+          SetLength(FStarList,nhfd+1000);  {get more space to store values}
        FStarList[nhfd-1].x:=xc;
        FStarList[nhfd-1].y:=yc;
        FStarList[nhfd-1].hfd:=hfd1;
