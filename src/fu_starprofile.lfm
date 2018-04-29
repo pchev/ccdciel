@@ -12,19 +12,20 @@ object f_starprofile: Tf_starprofile
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
-    AutoSize = False
     Left = 0
     Height = 20
     Top = 0
     Width = 176
     Align = alTop
     Alignment = taCenter
+    AutoSize = False
     Caption = 'Star profile'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentFont = False
     ParentColor = False
+    ParentFont = False
+    Transparent = False
   end
   object Panel1: TPanel
     Left = 0
@@ -36,7 +37,7 @@ object f_starprofile: Tf_starprofile
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 479
     ClientWidth = 176
-    TabOrder = 1
+    TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 80

@@ -10,19 +10,20 @@ object f_frame: Tf_frame
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
-    AutoSize = False
     Left = 0
     Height = 20
     Top = 0
     Width = 192
     Align = alTop
     Alignment = taCenter
+    AutoSize = False
     Caption = 'Frame'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentFont = False
     ParentColor = False
+    ParentFont = False
+    Transparent = False
   end
   object Panel1: TPanel
     Left = 0
@@ -32,7 +33,7 @@ object f_frame: Tf_frame
     Align = alClient
     ClientHeight = 51
     ClientWidth = 192
-    TabOrder = 1
+    TabOrder = 0
     object FX: TEdit
       Left = 16
       Height = 22
@@ -41,7 +42,6 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = False
       TabOrder = 0
       Text = ' '
     end
@@ -53,7 +53,6 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = False
       TabOrder = 1
       Text = ' '
     end
@@ -65,7 +64,6 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = False
       TabOrder = 2
       Text = ' '
     end
@@ -77,7 +75,6 @@ object f_frame: Tf_frame
       Width = 55
       AutoSize = False
       ParentShowHint = False
-      ShowHint = False
       TabOrder = 3
       Text = ' '
     end

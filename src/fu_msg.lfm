@@ -32,13 +32,14 @@ object f_msg: Tf_msg
     end
   end
   object Title: TLabel
-    AutoSize = False
     Left = 0
     Height = 117
     Top = 0
     Width = 8
     Align = alLeft
     Alignment = taCenter
+    AutoSize = False
     DragMode = dmAutomatic
+    ParentColor = False
   end
 end

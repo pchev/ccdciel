@@ -10,19 +10,20 @@ object f_rotator: Tf_rotator
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
-    AutoSize = False
     Left = 0
     Height = 20
     Top = 0
     Width = 180
     Align = alTop
     Alignment = taCenter
+    AutoSize = False
     Caption = 'Rotator'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentFont = False
     ParentColor = False
+    ParentFont = False
+    Transparent = False
   end
   object Panel1: TPanel
     Left = 0
@@ -32,7 +33,7 @@ object f_rotator: Tf_rotator
     Align = alTop
     ClientHeight = 58
     ClientWidth = 180
-    TabOrder = 1
+    TabOrder = 0
     object Label6: TLabel
       Left = 28
       Height = 18

@@ -17,7 +17,7 @@ object f_focuser: Tf_focuser
     Align = alClient
     ClientHeight = 94
     ClientWidth = 180
-    TabOrder = 1
+    TabOrder = 0
     object PanelParam: TPanel
       Left = 0
       Height = 56
@@ -32,7 +32,7 @@ object f_focuser: Tf_focuser
         Height = 56
         Top = 0
         Width = 178
-        PageIndex = 2
+        PageIndex = 0
         Align = alClient
         TabOrder = 0
         TabStop = True
@@ -257,18 +257,19 @@ object f_focuser: Tf_focuser
     end
   end
   object Title: TLabel
-    AutoSize = False
     Left = 0
     Height = 20
     Top = 0
     Width = 180
     Align = alTop
     Alignment = taCenter
+    AutoSize = False
     Caption = 'Focuser'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentFont = False
     ParentColor = False
+    ParentFont = False
+    Transparent = False
   end
 end

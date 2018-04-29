@@ -451,7 +451,6 @@ object f_visu: Tf_visu
         MinValue = 0.1
         OnChange = GammaChange
         ParentShowHint = False
-        ShowHint = False
         TabOrder = 0
         Value = 1
       end
@@ -480,19 +479,20 @@ object f_visu: Tf_visu
     end
   end
   object Title: TLabel
-    AutoSize = False  
     Left = 0
     Height = 20
     Top = 0
     Width = 371
     Align = alTop
     Alignment = taCenter
+    AutoSize = False
     Caption = 'Visualisation'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentFont = False
     ParentColor = False
+    ParentFont = False
+    Transparent = False
   end
   object TimerMinMax: TTimer
     Enabled = False
