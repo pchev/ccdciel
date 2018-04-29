@@ -39,6 +39,9 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    CygwinPath: TDirectoryEdit;
+    ASTAPFolder: TDirectoryEdit;
+    PlatesolveFolder: TDirectoryEdit;
     DomeFlatTelescopeSlew: TCheckBox;
     DomeFlatTelescopeAz: TFloatSpinEdit;
     DomeFlatTelescopeAlt: TFloatSpinEdit;
@@ -86,7 +89,6 @@ type
     AutofocusSlew: TRadioButton;
     AutofocusInPlace: TRadioButton;
     astap: TGroupBox;
-    ASTAPFolder: TEdit;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
     SlewPrec: TFloatSpinEdit;
@@ -183,7 +185,6 @@ type
     LinGuiderPort: TEdit;
     Label79: TLabel;
     Label80: TLabel;
-    PlatesolveFolder: TEdit;
     Label78: TLabel;
     platesolve: TGroupBox;
     HorizonFile: TFileNameEdit;
@@ -261,7 +262,6 @@ type
     MeridianFlipPauseBefore: TCheckBox;
     DebayerPreview: TCheckBox;
     CheckBoxLocalCdc: TCheckBox;
-    CygwinPath: TEdit;
     CaptureDir: TEdit;
     MeridianFlipPauseAfter: TCheckBox;
     GroupBox8: TGroupBox;
