@@ -3592,6 +3592,7 @@ begin
  end;
  if step<1 then exit;
  hfdmin:=9999;
+ SetLength(hfdlist,nsum);
  // main loop for n measurement
  for i:=0 to n do begin
    // set new focuser position
@@ -3604,7 +3605,6 @@ begin
      k:=n-i;
    end;
    wait(1);
-   SetLength(hfdlist,nsum);
    // use bad pixel map
    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
    // average hfd for nsum exposures
@@ -6601,6 +6601,7 @@ begin
    end;
  until eof(f);
  CloseFile(f);
+ SetLength(FocusStars,NFocusStars+1);
  except
    NewMessage('Error loading focus star list '+slash(DataDir)+slash('stars')+fn);
  end;
@@ -6989,15 +6990,16 @@ begin
               hfdlist[i]:=fits.StarList[i].hfd;
           meanhfd:=SMedian(hfdlist);
           n:=0;
+          SetLength(AutofocusStarList,ns);
           for i:=0 to ns-1 do begin
             // filter by hfd to remove galaxies and others outliers
             if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
               inc(n);
-              SetLength(AutofocusStarList,n);
               AutofocusStarList[n-1,1]:=fits.StarList[i].x;
               AutofocusStarList[n-1,2]:=fits.StarList[i].y;
             end;
           end;
+          SetLength(AutofocusStarList,n);
         end
         else begin
          SetLength(AutofocusStarList,0);
@@ -8111,10 +8113,10 @@ begin
   nhfd_top_right:=0;
   nhfd_bottom_left:=0;
   nhfd_bottom_right:=0;
-  SetLength(hfdlist_top_left,0);{set array length to zero}
-  SetLength(hfdlist_top_right,0);
-  SetLength(hfdlist_bottom_left,0);
-  SetLength(hfdlist_bottom_right,0);
+  SetLength(hfdlist_top_left,nhfd);{set array length to max size}
+  SetLength(hfdlist_top_right,nhfd);
+  SetLength(hfdlist_bottom_left,nhfd);
+  SetLength(hfdlist_bottom_right,nhfd);
 
   for i:=0 to nhfd-1 do
   begin
@@ -8122,11 +8124,15 @@ begin
      hfdlist[i]:=hfd1;
      xc:=fits.StarList[i].x;
      yc:=fits.StarList[i].y;
-     if ( (xc<(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_left); SetLength(hfdlist_bottom_left,nhfd_bottom_left); hfdlist_bottom_left[nhfd_bottom_left-1]:=hfd1;end;{store corner HFD values}
-     if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_right);SetLength(hfdlist_bottom_right,nhfd_bottom_right);hfdlist_bottom_right[nhfd_bottom_right-1]:=hfd1;end;
-     if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_left); SetLength(hfdlist_top_left,nhfd_top_left); hfdlist_top_left[nhfd_top_left-1]:=hfd1;end;
-     if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_right); SetLength(hfdlist_top_right,nhfd_top_right); hfdlist_top_right[nhfd_top_right-1]:=hfd1;end;
+     if ( (xc<(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_left);  hfdlist_bottom_left[nhfd_bottom_left-1]:=hfd1;end;{store corner HFD values}
+     if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_right); hfdlist_bottom_right[nhfd_bottom_right-1]:=hfd1;end;
+     if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_left); hfdlist_top_left[nhfd_top_left-1]:=hfd1;end;
+     if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_right); hfdlist_top_right[nhfd_top_right-1]:=hfd1;end;
   end;
+  SetLength(hfdlist_bottom_left,nhfd_bottom_left);
+  SetLength(hfdlist_bottom_right,nhfd_bottom_right);
+  SetLength(hfdlist_top_left,nhfd_top_left);
+  SetLength(hfdlist_top_right,nhfd_top_right);
 
   if nhfd>0 then
   begin

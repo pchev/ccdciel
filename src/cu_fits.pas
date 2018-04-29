@@ -1896,7 +1896,7 @@ overlap:=round(s/3); // large overlap to have more chance to measure a big dot a
 s:=round(2*s/3);     // keep original window size after adding overlap
 
 nhfd:=0;{set counters at zero}
-SetLength(FStarList,0);{set array length to zero}
+SetLength(FStarList,100);{allocate initial size}
 
 marginx:=(FWidth-rx)div 2 div s;
 marginy:=(Fheight-ry)div 2 div s;
@@ -1929,7 +1929,8 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      then
      begin
        inc(nhfd);
-       SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
+       if nhfd>=Length(FStarList) then
+          SetLength(FStarList,nhfd+100);  {get more space to store values}
        FStarList[nhfd-1].x:=xc;
        FStarList[nhfd-1].y:=yc;
        FStarList[nhfd-1].hfd:=hfd1;
@@ -1945,6 +1946,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      end;
    end;
  end;
+ SetLength(FStarList,nhfd);  {set length to new number of elements}
  SetLength(img_temp,0,0,0);
 end;
 
@@ -1955,7 +1957,7 @@ var
 begin
 
 nhfd:=0;{set counters at zero}
-SetLength(FStarList,0);{set array length to zero}
+SetLength(FStarList,100);{allocate initial size}
 
 for i:=0 to Length(list)-1 do
  begin
@@ -1970,7 +1972,8 @@ for i:=0 to Length(list)-1 do
    if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
     begin
        inc(nhfd);
-       SetLength(FStarList,nhfd);  {set length to new number of elements and store values}
+       if nhfd>=Length(FStarList) then
+          SetLength(FStarList,nhfd+100);  {get more space to store values}
        FStarList[nhfd-1].x:=xc;
        FStarList[nhfd-1].y:=yc;
        FStarList[nhfd-1].hfd:=hfd1;
@@ -1979,6 +1982,7 @@ for i:=0 to Length(list)-1 do
        FStarList[nhfd-1].vmax:=vmax;
     end;
  end;
+ SetLength(FStarList,nhfd);  {set length to new number of elements}
 end;
 
 function TFits.SameFormat(f:TFits): boolean;

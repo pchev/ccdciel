@@ -572,7 +572,7 @@ begin
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
     if ns>0 then begin
-       SetLength(hfdlist,0);
+       SetLength(hfdlist,ns);
        nhfd:=0;
        FValMax:=0;
        Fsnr:=0;
@@ -581,10 +581,10 @@ begin
          FValMax:=max(FValMax,f.StarList[i].vmax);
          if f.StarList[i].snr>AutofocusMinSNR then begin
             inc(nhfd);
-            SetLength(hfdlist,nhfd);
             hfdlist[nhfd-1]:=f.StarList[i].hfd;
          end;
        end;
+       SetLength(hfdlist,nhfd);
        if nhfd=0 then begin
          msg(Format(rsAutofocusCan5, [focuser.Position.Text, FormatFloat(f1, 0),
            FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]));
