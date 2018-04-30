@@ -378,14 +378,23 @@ else if FResolver=ResolverPlateSolve then begin
     Fcmd:='wine';
     Fparam.Add(slash(FPlateSolveFolder)+'PlateSolve2.exe');
   {$endif}
-  buf:=FloatToStr(Fra*deg2rad)+','+
-        FloatToStr(Fde*deg2rad)+','+
-        FloatToStr(FXsize*deg2rad*0.98)+','+  //PlateSolve2 has problems with solving some images if dimensions are a fraction too large.
-        FloatToStr(FYsize*deg2rad*0.98)+','+
-        '999,'+
-        FInFile+','+
-        IntToStr(PlateSolveWait);
+  if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
+    buf:=FloatToStr(Fra*deg2rad)+','+
+          FloatToStr(Fde*deg2rad)+','+
+          FloatToStr(FXsize*deg2rad*0.98)+','+  //PlateSolve2 has problems with solving some images if dimensions are a fraction too large.
+          FloatToStr(FYsize*deg2rad*0.98)+','+
+          '999,'+
+          FInFile+','+
+          IntToStr(PlateSolveWait);
+  end
+  else begin
+    buf:=FInFile;
+  end;
   Fparam.Add(buf);
+  apmfile:=ChangeFileExt(FInFile,'.apm');
+  wcsfile:=ChangeFileExt(FInFile,'.wcs');
+  DeleteFileUTF8(apmfile);
+  DeleteFileUTF8(wcsfile);
   Start;
 end
 else if FResolver=ResolverAstap then begin
@@ -585,8 +594,6 @@ else if FResolver=ResolverPlateSolve then begin
      Fresult:=1;
   end;
   // merge apm result
-  apmfile:=ChangeFileExt(FInFile,'.apm');
-  wcsfile:=ChangeFileExt(FInFile,'.wcs');
   if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
     Apm2Wcs;
     Ftmpfits:=TFits.Create(nil);

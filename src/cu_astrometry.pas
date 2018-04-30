@@ -136,11 +136,6 @@ begin
  if (not FBusy) then begin
    Fterminatecmd:=terminatecmd;
    n:=cdcwcs_initfitsfile(PChar(infile),0);
-   if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]));
-     result:=false;
-     exit;
-   end;
    ra:=NullCoord;
    de:=NullCoord;
    pixscale:=NullCoord;
