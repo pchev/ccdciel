@@ -203,7 +203,7 @@ if FResolver=ResolverAstrometryNet then begin
   if (process<>nil) and process.Running then process.Active:=false;
 {$endif}
 end
-else if FResolver=ResolverAstap then begin
+else begin
   if (process<>nil) and process.Running then
     process.Terminate(1);
 end;
@@ -475,6 +475,7 @@ if FResolver=ResolverAstrometryNet then begin
          cbuf:=buf;
          BlockWrite(f,cbuf,Length(buf));
        end;
+       break;
     end;
     sleep(100);
   end;
@@ -584,9 +585,16 @@ end
 else if FResolver=ResolverPlateSolve then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
+  endtime:=now+FTimeout/secperday;
   try
   process.Execute;
-  process.WaitOnExit;
+  while process.Running do begin
+    if now>endtime then begin
+       Stop;
+       break;
+    end;
+    sleep(100);
+  end;
   Fresult:=process.ExitStatus;
   process.Free;
   process:=TProcessUTF8.Create(nil);
@@ -626,9 +634,16 @@ else if FResolver=ResolverAstap then begin
   end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
+  endtime:=now+FTimeout/secperday;
   try
   process.Execute;
-  process.WaitOnExit;
+  while process.Running do begin
+    if now>endtime then begin
+       Stop;
+       break;
+    end;
+    sleep(100);
+  end;
   Fresult:=process.ExitStatus;
   process.Free;
   process:=TProcessUTF8.Create(nil);
