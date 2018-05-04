@@ -350,11 +350,12 @@ var
   HorizonMax, HorizonMin, ElevationMin: double;
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
   NutMAT: rotmatrix;
-  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew: boolean;
+  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew,DomeFlatSetLight,AdjustFlatLight: boolean;
   FlatType: TFlatType;
   FlatMinExp,FlatMaxExp,DomeFlatTelescopeAz,DomeFlatTelescopeAlt: double;
   FlatLevelMin,FlatLevelMax: integer;
   FlatSlewTime: TDateTime;
+  DomeFlatSetLightON,DomeFlatSetLightOFF: string;
   SubDirOpt: array[0..SubDirCount-1] of TSubDirList;
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;

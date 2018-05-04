@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_translation, cu_mount,
+uses u_global, Graphics, UScaleDPI, u_translation, cu_mount, u_utils,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -135,9 +135,15 @@ begin
     FSeqCount:=1;
     FDitherNum:=0;
     FFocusNum:=0;
-    if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome)and FlatAutoExposure then begin
-       AdjustDomeFlat:=true;
-       if DomeFlatTelescopeSlew and (FMount<>nil) then FMount.SlewToDomeFlatPosition;
+    if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
+       if DomeFlatSetLight and (DomeFlatSetLightON<>'') then begin
+          AdjustFlatLight:=true;
+          ExecProcess(DomeFlatSetLightON,nil,false);
+       end;
+       if FlatAutoExposure then
+          AdjustDomeFlat:=true;
+       if DomeFlatTelescopeSlew and (FMount<>nil) then
+          Mount.SlewToDomeFlatPosition;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture);
     if Assigned(FonStartExposure) then FonStartExposure(self);
@@ -187,6 +193,12 @@ begin
   Frunning:=false;
   led.Brush.Color:=clGray;
   BtnStart.Caption:=rsStart;
+  if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
+     if DomeFlatSetLight and AdjustFlatLight and (DomeFlatSetLightOFF<>'') then begin
+        AdjustFlatLight:=false;
+        ExecProcess(DomeFlatSetLightOFF,nil,false);
+     end;
+  end;
 end;
 
 end.

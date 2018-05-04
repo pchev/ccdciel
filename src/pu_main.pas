@@ -964,6 +964,7 @@ begin
   FlatWaitDawn:=false;
   FlatSlewTime:=0;
   AdjustDomeFlat:=false;
+  AdjustFlatLight:=false;
   onMsgGlobal:=@NewMessage;
   ImgPixRatio:=1;
   Undersampled:=false;
@@ -2406,6 +2407,9 @@ begin
   DomeFlatTelescopeSlew:=config.GetValue('/Flat/DomeFlatTelescopeSlew',false);
   DomeFlatTelescopeAz:=config.GetValue('/Flat/DomeFlatTelescopeAz',90.0);
   DomeFlatTelescopeAlt:=config.GetValue('/Flat/DomeFlatTelescopeAlt',5.0);
+  DomeFlatSetLight:=config.GetValue('/Flat/DomeFlatSetLight',false);
+  DomeFlatSetLightON:=config.GetValue('/Flat/DomeFlatSetLightON','');
+  DomeFlatSetLightOFF:=config.GetValue('/Flat/DomeFlatSetLightOFF','');
   for i:=0 to SubDirCount-1 do begin
     SubDirOpt[i]:=TSubDirList(round(config.GetValue('/Files/SubDirOpt'+inttostr(i),i)));
     SubDirActive[i]:=config.GetValue('/Files/SubDirActive'+inttostr(i),false);
@@ -4282,6 +4286,9 @@ begin
    f_option.DomeFlatTelescopeSlew.Checked:=config.GetValue('/Flat/DomeFlatTelescopeSlew',DomeFlatTelescopeSlew);
    f_option.DomeFlatTelescopeAz.Value:=config.GetValue('/Flat/DomeFlatTelescopeAz',DomeFlatTelescopeAz);
    f_option.DomeFlatTelescopeAlt.Value:=config.GetValue('/Flat/DomeFlatTelescopeAlt',DomeFlatTelescopeAlt);
+   f_option.DomeFlatSetLight.Checked:=config.GetValue('/Flat/DomeFlatSetLight',DomeFlatSetLight);
+   f_option.DomeFlatSetLightON.Text:=config.GetValue('/Flat/DomeFlatSetLightON',DomeFlatSetLightON);
+   f_option.DomeFlatSetLightOFF.Text:=config.GetValue('/Flat/DomeFlatSetLightOFF',DomeFlatSetLightOFF);
    f_option.StarWindow.Value:=config.GetValue('/StarAnalysis/Window',Starwindow);
    f_option.FocusWindow.Value:=config.GetValue('/StarAnalysis/Focus',Focuswindow);
    f_option.Undersampled.Checked:=config.GetValue('/StarAnalysis/Undersampled',Undersampled);
@@ -4504,6 +4511,9 @@ begin
      config.SetValue('/Flat/DomeFlatTelescopeSlew',f_option.DomeFlatTelescopeSlew.Checked);
      config.SetValue('/Flat/DomeFlatTelescopeAz',f_option.DomeFlatTelescopeAz.Value);
      config.SetValue('/Flat/DomeFlatTelescopeAlt',f_option.DomeFlatTelescopeAlt.Value);
+     config.SetValue('/Flat/DomeFlatSetLight',f_option.DomeFlatSetLight.Checked);
+     config.SetValue('/Flat/DomeFlatSetLightON',f_option.DomeFlatSetLightON.Text);
+     config.SetValue('/Flat/DomeFlatSetLightOFF',f_option.DomeFlatSetLightOFF.Text);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);

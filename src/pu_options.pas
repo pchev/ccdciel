@@ -39,8 +39,13 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    DomeFlatSetLight: TCheckBox;
     CygwinPath: TDirectoryEdit;
     ASTAPFolder: TDirectoryEdit;
+    DomeFlatSetLightON: TEdit;
+    DomeFlatSetLightOFF: TEdit;
+    Label106: TLabel;
+    Label110: TLabel;
     PlatesolveFolder: TDirectoryEdit;
     DomeFlatTelescopeSlew: TCheckBox;
     DomeFlatTelescopeAz: TFloatSpinEdit;
