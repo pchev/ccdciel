@@ -217,7 +217,7 @@
       <local>
         <FormatVersion Value="1"/>
         <LaunchingApplication PathPlusParams="/usr/bin/wine $(TargetCmdLine)"/>
-        <WorkingDirectory Value="/usr/local/share/ccdciel/"/>
+        <WorkingDirectory Value="/usr/bin"/>
       </local>
     </RunParams>
     <RequiredPackages Count="10">

@@ -12,9 +12,9 @@ exit
 indi_setprop "Arduino Switcher.SOCKET 1.SOCKET01"=Off
 
 # With a flip-flat we also need to reopen the cover
-indi_setprop "Flip Flat.FLAT_LIGHT_CONTROL.FLAT_LIGHT_ON"=Off
+indi_setprop "Flip Flat.FLAT_LIGHT_CONTROL.FLAT_LIGHT_OFF"=On
 sleep 1
-indi_setprop "Flip Flat.CAP_PARK.PARK"=Off                                
+indi_setprop "Flip Flat.CAP_PARK.UNPARK"=On
 
 echo light OFF
 
