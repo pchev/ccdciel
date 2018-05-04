@@ -2,6 +2,8 @@
 
 # Example script to switch on the light panel light when starting a Flat series
 # Change the device properties accordingly to the device you use
+# In Preference/Flat Light ON script set:
+# bash -c /path-to-script/lightpanelon.sh
 
 # do nothing by default
 exit
@@ -16,6 +18,6 @@ indi_setprop "Flip Flat.FLAT_LIGHT_CONTROL.FLAT_LIGHT_ON"=On
 
 echo light ON
 
-# wait for light intensity to stabilize
+# wait enough for light intensity to stabilize
 sleep 5
 
