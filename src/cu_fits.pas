@@ -422,7 +422,7 @@ begin
   val:=0;
   k:=FKeys.IndexOf(key);
   result:=(k>=0);
-  if result then val:=StrToIntDef(FValues[k],0);
+  if result then val:=StrToIntDef(trim(FValues[k]),0);
 end;
 
 function TFitsHeader.Valueof(key: string; out val: double): boolean; overload;
@@ -431,7 +431,7 @@ begin
   val:=0;
   k:=FKeys.IndexOf(key);
   result:=(k>=0);
-  if result then val:=StrToFloatDef(FValues[k],0);
+  if result then val:=StrToFloatDef(trim(FValues[k]),0);
 end;
 
 function TFitsHeader.Valueof(key: string; out val: boolean): boolean; overload;
@@ -440,7 +440,7 @@ begin
   val:=false;
   k:=FKeys.IndexOf(key);
   result:=(k>=0);
-  if result then val:=(FValues[k]='T');
+  if result then val:=(trim(FValues[k])='T');
 end;
 
 function TFitsHeader.Add(key,val,comment: string; quotedval:boolean=true): integer;
