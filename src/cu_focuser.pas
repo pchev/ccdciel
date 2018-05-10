@@ -124,7 +124,7 @@ end;
 
 procedure T_focuser.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
+  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
 end;
 
 procedure T_focuser.SetPositionInt(p:integer);

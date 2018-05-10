@@ -42,7 +42,7 @@ protected
   Fobjname, FLastErrorTxt: string;
   FPlanetariumType: TPlanetariumType;
   FonShowMessage: TNotifyMsg;
-  FonReceiveData: TNotifyMsg;
+  FonReceiveData: TNotifyStr;
   FonConnect: TNotifyEvent;
   FonDisconnect: TNotifyEvent;
   procedure InitTimerTimer(Sender: TObject);
@@ -82,7 +82,7 @@ public
   property onConnect: TNotifyEvent read FonConnect  write FonConnect;
   property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
   property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
-  property onReceiveData: TNotifyMsg read FonReceiveData write FonReceiveData;
+  property onReceiveData: TNotifyStr read FonReceiveData write FonReceiveData;
 end;
 
 implementation

@@ -293,7 +293,7 @@ end;
 
 procedure T_camera.msg(txt: string);
 begin
- if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
 end;
 
 procedure T_camera.SetTemperatureRamp(value:double);

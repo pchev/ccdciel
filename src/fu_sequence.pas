@@ -113,8 +113,8 @@ type
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
     procedure LoadPlan(p: T_Plan; plan:string);
-    procedure msg(txt:string);
-    procedure ShowDelayMsg(txt:string);
+    procedure msg(txt:string; level: integer=1);
+    procedure ShowDelayMsg(txt:string; level: integer=1);
     procedure StopSequence;
     procedure EndSequence(Sender: TObject);
     procedure SetEditBtn(onoff:boolean);
@@ -286,13 +286,13 @@ begin
   PlanGrid.RowCount:=1;
 end;
 
-procedure Tf_sequence.msg(txt:string);
+procedure Tf_sequence.msg(txt:string; level: integer=1);
 begin
   StatusMsg.Caption:=txt;
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(txt, level);
 end;
 
-procedure Tf_sequence.ShowDelayMsg(txt:string);
+procedure Tf_sequence.ShowDelayMsg(txt:string; level: integer=1);
 begin
   DelayMsg.Caption:=txt;
 end;

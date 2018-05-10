@@ -30,7 +30,8 @@ uses u_ccdconfig, dynlibs, LMessages,
   Classes, SysUtils,LCLType;
 
 type
-  TNotifyMsg = procedure(msg:string) of object;
+  TNotifyMsg = procedure(msg:string; level: integer=1) of object;
+  TNotifyStr = procedure(msg:string) of object;
   TNotifyNum = procedure(d: double) of object;
   TNotifyBool= procedure(var v: boolean) of object;
 
@@ -286,6 +287,7 @@ var
   CameraName,WheelName,FocuserName,RotatorName,MountName,WatchdogName: string;
   AllDevicesConnected: boolean;
   ConfirmClose, ScreenScaling, LogToFile: boolean;
+  LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   profile: string;

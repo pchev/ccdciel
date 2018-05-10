@@ -73,7 +73,7 @@ end;
 
 procedure T_watchdog.msg(txt: string);
 begin
-  if Assigned(FonMsg) then FonMsg(fdevice+': '+txt);
+  if Assigned(FonMsg) then FonMsg(fdevice+': '+txt,3);
 end;
 
 end.

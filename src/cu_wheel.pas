@@ -89,7 +89,7 @@ end;
 
 procedure T_wheel.msg(txt: string);
 begin
- if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt);
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
 end;
 
 

@@ -417,6 +417,7 @@ type
     Image1: TImgDrawingControl;
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;
     trpOK: boolean;
+    AllMsg: TStringList;
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -485,8 +486,9 @@ type
     Procedure DisconnectWatchdog(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
-    Procedure NewMessage(msg: string);
-    Procedure DeviceMessage(msg: string);
+    procedure LogLevelChange(Sender: TObject);
+    Procedure NewMessage(msg: string; level: integer=1);
+    Procedure DeviceMessage(msg: string; level: integer=1);
     Procedure WatchdogStatus(Sender: TObject);
     Procedure CameraStatus(Sender: TObject);
     Procedure CameraDisconnected(Sender: TObject);
@@ -679,7 +681,7 @@ begin
         InitLog;
         if not LogFileOpen then exit;
      end;
-     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+'  '+UTF8ToSys(buf));
+     WriteLn(MsgLog,UTF8ToSys(buf));
      Flush(MsgLog);
     end;
   except
@@ -969,6 +971,8 @@ begin
   ImgPixRatio:=1;
   Undersampled:=false;
   ZoomMin:=1;
+  LogLevel:=3;
+  AllMsg:=TStringList.Create;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -990,6 +994,7 @@ begin
   Image1.PopupMenu := ImagePopupMenu;
   Image1.Cursor:=crCross;
   f_msg:=Tf_msg.Create(self);
+  f_msg.onLogLevelChange:=@LogLevelChange;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -1896,6 +1901,7 @@ begin
   end
   else NewMessage('Program exit');
   CloseLog;
+  AllMsg.Free;
   except
   end;
 end;
@@ -3133,7 +3139,7 @@ begin
                    f_devicesconnection.LabelWatchdog.Font.Color:=clRed;
                    end;
    devConnecting:  begin
-                   NewMessage(Format(rsConnecting, [rsWatchdog+ellipsis]));
+                   NewMessage(Format(rsConnecting, [rsWatchdog+ellipsis]),2);
                    f_devicesconnection.LabelWatchdog.Font.Color:=clOrange;
                    end;
    devConnected:   begin
@@ -3144,21 +3150,45 @@ begin
  CheckConnectionStatus;
 end;
 
+procedure Tf_main.LogLevelChange(Sender: TObject);
+var i: integer;
+    l:string;
+begin
+  if f_msg.LogLevel1.Down then
+    i:=1
+  else if f_msg.LogLevel2.Down then
+    i:=2
+  else
+    i:=3;
+  if i<>LogLevel then begin
+    LogLevel:=i;
+    l:=IntToStr(LogLevel);
+    f_msg.msg.Clear;
+    for i:=0 to AllMsg.Count-1 do begin
+       if copy(AllMsg[i],10,1)<=l then f_msg.msg.Lines.Add(AllMsg[i]);
+    end;
+  end;
+end;
 
-procedure Tf_main.NewMessage(msg: string);
+procedure Tf_main.NewMessage(msg: string; level: integer=1);
 begin
  if msg<>'' then begin
-  if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
-  f_msg.msg.Lines.Add(FormatDateTime('hh:nn:ss',now)+':'+msg);
-  f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
-  f_msg.msg.SelLength:=0;
+  msg:=FormatDateTime('hh:nn:ss',now)+blank+IntToStr(level)+':'+msg;
+  if AllMsg.Count>100 then AllMsg.Delete(0);
+  AllMsg.Add(msg);
+  if level<=LogLevel then begin
+    if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
+    f_msg.msg.Lines.Add(msg);
+    f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
+    f_msg.msg.SelLength:=0;
+  end;
   if LogToFile then begin
     WriteLog(msg);
   end;
  end;
 end;
 
-procedure Tf_main.DeviceMessage(msg: string);
+procedure Tf_main.DeviceMessage(msg: string; level: integer=1);
 begin
  if msg<>'' then begin
   if LogToFile then begin
@@ -3186,7 +3216,7 @@ begin
                    end;
                    end;
    devConnecting:  begin
-                   NewMessage(Format(rsConnecting, [rsCamera+ellipsis]));
+                   NewMessage(Format(rsConnecting, [rsCamera+ellipsis]),2);
                    f_devicesconnection.LabelCamera.Font.Color:=clOrange;
                    end;
    devConnected:   begin
@@ -3299,7 +3329,7 @@ case wheel.Status of
                       f_devicesconnection.LabelWheel.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsFilterWheel+ellipsis]));
+                      NewMessage(Format(rsConnecting, [rsFilterWheel+ellipsis]),2);
                       f_devicesconnection.LabelWheel.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3454,7 +3484,7 @@ case focuser.Status of
                       f_devicesconnection.LabelFocuser.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsFocuser+ellipsis]));
+                      NewMessage(Format(rsConnecting, [rsFocuser+ellipsis]),2);
                       f_devicesconnection.LabelFocuser.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3868,7 +3898,7 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsRotator+ellipsis]));
+                      NewMessage(Format(rsConnecting, [rsRotator+ellipsis]),2);
                       f_devicesconnection.LabelRotator.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3916,7 +3946,7 @@ case mount.Status of
                       f_devicesconnection.LabelMount.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsMount+ellipsis]));
+                      NewMessage(Format(rsConnecting, [rsMount+ellipsis]),2);
                       f_devicesconnection.LabelMount.Font.Color:=clOrange;
                    end;
   devConnected:   begin

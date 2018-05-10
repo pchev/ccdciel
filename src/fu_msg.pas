@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses UScaleDPI,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons;
 
 type
 
@@ -35,14 +35,21 @@ type
   Tf_msg = class(TFrame)
     msg: TMemo;
     Panel1: TPanel;
+    Panel2: TPanel;
+    LogLevel1: TSpeedButton;
+    LogLevel3: TSpeedButton;
+    LogLevel2: TSpeedButton;
     Title: TLabel;
     procedure FrameResize(Sender: TObject);
+    procedure LogLevelClick(Sender: TObject);
   private
     { private declarations }
+    FLogLevelChange: TNotifyEvent;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property onLogLevelChange: TNotifyEvent read FLogLevelChange write FLogLevelChange;
   end;
 
 implementation
@@ -59,6 +66,11 @@ begin
          w:=w-Tframe(TPanel(Parent).Components[i]).Width;
     Width:=w;
   end;
+end;
+
+procedure Tf_msg.LogLevelClick(Sender: TObject);
+begin
+  if Assigned(FLogLevelChange) then FLogLevelChange(Self);
 end;
 
 constructor Tf_msg.Create(aOwner: TComponent);
