@@ -1,0 +1,29 @@
+object f_msgtabs: Tf_msgtabs
+  Left = 0
+  Height = 26
+  Top = 0
+  Width = 320
+  AlphaBlend = True
+  AlphaBlendValue = 80
+  BorderIcons = []
+  BorderStyle = bsNone
+  ClientHeight = 26
+  ClientWidth = 320
+  FormStyle = fsStayOnTop
+  ShowInTaskBar = stNever
+  Visible = True
+  object TabControl1: TTabControl
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 320
+    TabIndex = 0
+    Tabs.Strings = (
+      'Summary'
+      'Commands'
+      'Details'
+    )
+    Align = alTop
+    TabOrder = 0
+  end
+end

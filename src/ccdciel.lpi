@@ -252,7 +252,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="70">
+    <Units Count="71">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -624,6 +624,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit69>
+      <Unit70>
+        <Filename Value="pu_msgtabs.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_msgtabs"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit70>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

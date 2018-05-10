@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI,
+uses UScaleDPI, pu_msgtabs,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons;
 
 type
@@ -35,20 +35,22 @@ type
   Tf_msg = class(TFrame)
     msg: TMemo;
     Panel1: TPanel;
-    Panel2: TPanel;
-    LogLevel1: TSpeedButton;
-    LogLevel3: TSpeedButton;
-    LogLevel2: TSpeedButton;
+    Timer1: TTimer;
     Title: TLabel;
     procedure FrameResize(Sender: TObject);
-    procedure LogLevelClick(Sender: TObject);
+    procedure msgMouseEnter(Sender: TObject);
+    procedure msgMouseLeave(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     { private declarations }
+    FLogLevel: integer;
     FLogLevelChange: TNotifyEvent;
+    procedure TabControlChange(Sender: TObject);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property LogLevel: integer read FLogLevel;
     property onLogLevelChange: TNotifyEvent read FLogLevelChange write FLogLevelChange;
   end;
 
@@ -68,15 +70,47 @@ begin
   end;
 end;
 
-procedure Tf_msg.LogLevelClick(Sender: TObject);
+procedure Tf_msg.TabControlChange(Sender: TObject);
 begin
-  if Assigned(FLogLevelChange) then FLogLevelChange(Self);
+ FLogLevel:=f_msgtabs.TabControl1.TabIndex+1;
+ if Assigned(FLogLevelChange) then FLogLevelChange(Self);
+end;
+
+procedure Tf_msg.msgMouseEnter(Sender: TObject);
+var p:TPoint;
+begin
+ timer1.Enabled:=false;
+ p.x:=msg.left;
+ p.y:=msg.top-f_msgtabs.Height;
+ p:=ClientToScreen(p);
+ f_msgtabs.Left:=p.x;
+ f_msgtabs.Top:=p.y;
+ f_msgtabs.Width:=msg.Width;
+ f_msgtabs.Visible:=true;
+end;
+
+procedure Tf_msg.msgMouseLeave(Sender: TObject);
+begin
+  timer1.Enabled:=true;
+end;
+
+procedure Tf_msg.Timer1Timer(Sender: TObject);
+begin
+  timer1.Enabled:=false;
+  f_msgtabs.Visible:=false;
 end;
 
 constructor Tf_msg.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  ScaleDPI(Self);
+ FLogLevel:=3;
+ f_msgtabs:=Tf_msgtabs.Create(self);
+ f_msgtabs.Visible:=false;
+ f_msgtabs.TabControl1.TabIndex:=FLogLevel-1;
+ f_msgtabs.TabControl1.OnMouseEnter:=@msgMouseEnter;
+ f_msgtabs.TabControl1.OnMouseLeave:=@msgMouseLeave;
+ f_msgtabs.TabControl1.OnChange:=@TabControlChange;
 end;
 
 destructor  Tf_msg.Destroy;

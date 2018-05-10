@@ -3154,12 +3154,7 @@ procedure Tf_main.LogLevelChange(Sender: TObject);
 var i: integer;
     l:string;
 begin
-  if f_msg.LogLevel1.Down then
-    i:=1
-  else if f_msg.LogLevel2.Down then
-    i:=2
-  else
-    i:=3;
+  i:=f_msg.LogLevel;
   if i<>LogLevel then begin
     LogLevel:=i;
     l:=IntToStr(LogLevel);
