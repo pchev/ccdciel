@@ -218,7 +218,7 @@ if AllDevicesConnected then begin
   WaitExposure:=true;
   ControlExposureOK:=false;
   camera.AddFrames:=false;
-  camera.FrameType:=LIGHT;
+  if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   Camera.StartExposure(exp);
   endt:=now+(exp+30)/secperday;
   while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
