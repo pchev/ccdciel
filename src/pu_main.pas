@@ -681,7 +681,7 @@ begin
         InitLog;
         if not LogFileOpen then exit;
      end;
-     WriteLn(MsgLog,UTF8ToSys(buf));
+     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+blank+UTF8ToSys(buf));
      Flush(MsgLog);
     end;
   except
@@ -3171,19 +3171,20 @@ begin
 end;
 
 procedure Tf_main.NewMessage(msg: string; level: integer=1);
+var buf: string;
 begin
  if msg<>'' then begin
-  msg:=FormatDateTime('hh:nn:ss',now)+blank+IntToStr(level)+':'+msg;
+  buf:=FormatDateTime('hh:nn:ss',now)+blank+IntToStr(level)+':'+msg;
   if AllMsg.Count>100 then AllMsg.Delete(0);
-  AllMsg.Add(msg);
+  AllMsg.Add(buf);
   if level<=LogLevel then begin
     if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
-    f_msg.msg.Lines.Add(msg);
+    f_msg.msg.Lines.Add(buf);
     f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
     f_msg.msg.SelLength:=0;
   end;
   if LogToFile then begin
-    WriteLog(msg);
+    WriteLog(IntToStr(level)+':'+msg);
   end;
  end;
 end;
