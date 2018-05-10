@@ -145,9 +145,9 @@ begin
        if DomeFlatTelescopeSlew and (FMount<>nil) then
           Mount.SlewToDomeFlatPosition;
     end;
-    if Assigned(FonMsg) then FonMsg(rsStartCapture);
+    if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
     if Assigned(FonStartExposure) then FonStartExposure(self);
-    if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC);
+    if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,1);
   end else begin
     CancelAutofocus:=true;
     if Assigned(FonAbortExposure) then FonAbortExposure(self);
@@ -158,7 +158,7 @@ begin
   end else begin
     led.Brush.Color:=clGray;
     BtnStart.Caption:=rsStart;
-    if Assigned(FonMsg) then FonMsg(rsStopCapture);
+    if Assigned(FonMsg) then FonMsg(rsStopCapture,2);
   end;
 end;
 

@@ -113,8 +113,8 @@ type
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
     procedure LoadPlan(p: T_Plan; plan:string);
-    procedure msg(txt:string; level: integer=1);
-    procedure ShowDelayMsg(txt:string; level: integer=1);
+    procedure msg(txt:string; level: integer);
+    procedure ShowDelayMsg(txt:string);
     procedure StopSequence;
     procedure EndSequence(Sender: TObject);
     procedure SetEditBtn(onoff:boolean);
@@ -286,13 +286,13 @@ begin
   PlanGrid.RowCount:=1;
 end;
 
-procedure Tf_sequence.msg(txt:string; level: integer=1);
+procedure Tf_sequence.msg(txt:string; level: integer);
 begin
   StatusMsg.Caption:=txt;
   if Assigned(FonMsg) then FonMsg(txt, level);
 end;
 
-procedure Tf_sequence.ShowDelayMsg(txt:string; level: integer=1);
+procedure Tf_sequence.ShowDelayMsg(txt:string);
 begin
   DelayMsg.Caption:=txt;
 end;
@@ -678,7 +678,7 @@ var ccdtemp:double;
     isCalibrationSequence: boolean;
 begin
  if preview.Running then begin
-     msg(rsStopPreview);
+     msg(rsStopPreview,2);
      camera.AbortExposure;
      preview.stop;
      StartTimer.Interval:=5000;
@@ -701,15 +701,15 @@ begin
      f_pause.Caption:=rsAutoguiderNo;
      f_pause.Text:=Format(rsCannotConnec, [crlf]);
      if f_pause.Wait(30) then begin
-       msg(rsSequenceWill2);
+       msg(rsSequenceWill2,1);
      end
      else begin
-       msg(rsSequenceAbor);
+       msg(rsSequenceAbor,1);
        exit;
      end;
    end
    else begin
-     msg(rsTryToConnect);
+     msg(rsTryToConnect,1);
      FConnectAutoguider(self);
      AutoguiderStarting:=true;
      StartTimer.Interval:=10000;
@@ -721,7 +721,7 @@ begin
  if not camera.Cooler then begin
     if config.GetValue('/Cooler/CameraAutoCool',false) then begin
        ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
-       msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]));
+       msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
        camera.Temperature:=ccdtemp;
     end;
  end;
@@ -780,17 +780,17 @@ procedure Tf_sequence.BtnStartClick(Sender: TObject);
 begin
  if (AllDevicesConnected) then begin
    if Targets.Running or Fcapture.Running then begin
-     msg(rsCaptureAlrea);
+     msg(rsCaptureAlrea,1);
    end
    else if Targets.Count=0 then begin
-     msg(rsPleaseLoadOr);
+     msg(rsPleaseLoadOr,1);
    end
    else begin
      AutoguiderStarting:=false;
      StartSequence;
    end;
  end
- else msg(rsSomeDefinedD);
+ else msg(rsSomeDefinedD,1);
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
@@ -825,7 +825,7 @@ begin
     if (Autoguider<>nil)and(Autoguider.State=GUIDER_GUIDING) then begin
       // autoguiding restarted, clear alert
       AutoguiderAlert:=false;
-      msg(rsAutoguidingR);
+      msg(rsAutoguidingR,1);
     end
     else begin
       alerttime:=trunc((now-AutoguiderAlertTime)*minperday);
@@ -834,14 +834,14 @@ begin
         // timeout
         if (Autoguider=nil)or(Autoguider.State=GUIDER_DISCONNECTED) then begin
            // no more autoguider, stop sequence
-           msg(Format(rsSequenceAbor2, [IntToStr(alerttime)]));
+           msg(Format(rsSequenceAbor2, [IntToStr(alerttime)]),1);
            AbortSequence;
            AutoguiderAlert:=false;
         end
         else begin
            // autoguider connected but not guiding, try next target
-           msg(Format(rsAutoguiderWa, [IntToStr(alerttime)]));
-           msg(rsTryNextTarge);
+           msg(Format(rsAutoguiderWa, [IntToStr(alerttime)]),1);
+           msg(rsTryNextTarge,1);
            Targets.ForceNextTarget;
            AutoguiderAlert:=false;
         end;
@@ -851,7 +851,7 @@ begin
        if msgtime>=1 then begin
          // display a message every minute
          AutoguiderMsgTime:=now;
-         msg(Format(rsAutoguidingS, [IntToStr(alerttime), IntToStr(alerttimeout-alerttime)]));
+         msg(Format(rsAutoguidingS, [IntToStr(alerttime), IntToStr(alerttimeout-alerttime)]),1);
        end;
       end;
     end;

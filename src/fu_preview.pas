@@ -64,7 +64,7 @@ type
     FonEndControlExposure: TNotifyEvent;
     WaitExposure, ControlExposureOK: boolean;
     procedure EndExposure(Sender: TObject);
-    procedure msg(txt:string);
+    procedure msg(txt:string; level:integer);
     function GetExposure:double;
     procedure SetExposure(value:double);
     function GetBinning: integer;
@@ -117,9 +117,9 @@ begin
   BtnLoop.Caption:=rsLoop;
 end;
 
-procedure Tf_preview.msg(txt:string);
+procedure Tf_preview.msg(txt:string; level:integer);
 begin
- if assigned(FonMsg) then FonMsg(txt);
+ if assigned(FonMsg) then FonMsg(txt,level);
 end;
 
 procedure Tf_preview.BtnPreviewClick(Sender: TObject);
@@ -130,9 +130,9 @@ begin
   if Frunning then begin
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
-        Msg(rsStartSingleP);
+        Msg(rsStartSingleP,2);
      end else begin
-        Msg(rsCannotStartP);
+        Msg(rsCannotStartP,1);
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
@@ -149,17 +149,17 @@ begin
         led.Brush.Color:=clLime;
         BtnLoop.Caption:=rsStopLoop;
         FLoop:=True;
-        Msg(rsStartPreview);
+        Msg(rsStartPreview,2);
      end else begin
         FLoop:=False;
-        Msg(rsCannotStartP2);
+        Msg(rsCannotStartP2,1);
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
      led.Brush.Color:=clGray;
      BtnLoop.Caption:=rsLoop;
      FLoop:=False;
-     Msg(rsStopPreviewL);
+     Msg(rsStopPreviewL,2);
   end;
 end;
 
@@ -209,7 +209,7 @@ var SaveonNewImage: TNotifyEvent;
 begin
 result:=false;
 if AllDevicesConnected then begin
-  msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]));
+  msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3);
   SaveonNewImage:=Camera.onNewImage;
   savebinx:=Camera.BinX;
   savebiny:=Camera.BinY;

@@ -49,7 +49,7 @@ T_Plan = class(TComponent)
     procedure SetPlanName(val: string);
     procedure NextStep;
     procedure StartStep;
-    procedure msg(txt:string);
+    procedure msg(txt:string; level: integer);
     procedure ShowDelayMsg(txt:string);
     procedure PlanTimerTimer(Sender: TObject);
     procedure StepRepeatTimerTimer(Sender: TObject);
@@ -124,9 +124,9 @@ begin
   if Assigned(FPlanChange) then FPlanChange(self);
 end;
 
-procedure T_Plan.msg(txt:string);
+procedure T_Plan.msg(txt:string; level: integer);
 begin
-  if Assigned(FonMsg) then FonMsg(txt);
+  if Assigned(FonMsg) then FonMsg(txt,level);
 end;
 
 procedure T_Plan.ShowDelayMsg(txt:string);
@@ -157,9 +157,9 @@ procedure T_Plan.Start;
 begin
   FRunning:=true;
   if FObjectName<>'' then
-     msg(Format(rsObjectStartP, [FObjectName, FName]))
+     msg(Format(rsObjectStartP, [FObjectName, FName]),1)
   else
-     msg(Format(rsStartPlan, [FName]));
+     msg(Format(rsStartPlan, [FName]),1);
   FCurrentStep:=-1;
   NextStep;
 end;
@@ -188,9 +188,9 @@ begin
     PlanTimer.Enabled:=false;
     FCurrentStep:=-1;
     if FObjectName<>'' then
-      msg(Format(rsObjectPlanFi, [FObjectName, FName]))
+      msg(Format(rsObjectPlanFi, [FObjectName, FName]),1)
     else
-      msg(Format(rsPlanFinished, [FName]));
+      msg(Format(rsPlanFinished, [FName]),1);
   end;
 end;
 
@@ -226,7 +226,7 @@ begin
     Wait;
     if not FRunning then exit;
     StepTimeStart:=now;
-    msg(Format(rsStartStep, [p.description_str]));
+    msg(Format(rsStartStep, [p.description_str]),1);
     ShowDelayMsg('');
     StartCapture;
   end;
@@ -247,7 +247,7 @@ begin
           tt:=p.delay-(Now-StepTimeStart)*secperday;
           if tt<1 then tt:=1;
           if tt>1 then msg(Format(rsWaitSecondsB2, [FormatFloat(f1, tt),
-            IntToStr(StepRepeatCount)]));
+            IntToStr(StepRepeatCount)]),2);
           StepRepeatTimer.Interval:=trunc(1000*tt);
           StepRepeatTimer.Enabled:=true;
           StepDelayEnd:=now+tt/secperday;
@@ -266,7 +266,7 @@ begin
     PlanTimer.Enabled:=false;
     StepRepeatTimer.Enabled:=false;
     FCurrentStep:=-1;
-    msg(Format(rsPlanStopped, [FName]));
+    msg(Format(rsPlanStopped, [FName]),1);
     ShowDelayMsg('');
  end;
 end;
@@ -281,7 +281,7 @@ begin
     p:=Steps[CurrentStep];
     if p<>nil then begin
       msg(Format(rsRepeatStep, [inttostr(StepRepeatCount), p.repeatcount_str,
-        p.description_str]));
+        p.description_str]),1);
       StepTimeStart:=now;
       StartCapture;
     end
@@ -298,7 +298,7 @@ end;
 procedure T_Plan.StartCapture;
 begin
  if preview.Running then begin
-     msg(rsStopPreview);
+     msg(rsStopPreview,2);
      camera.AbortExposure;
      preview.stop;
      StartTimer.Enabled:=true;

@@ -52,7 +52,7 @@ TAstrometry = class(TComponent)
     procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
-    procedure msg(txt:string);
+    procedure msg(txt:string; level: integer);
     function WaitBusy(Timeout:double=60): boolean;
     procedure AstrometrySolve(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
@@ -112,9 +112,9 @@ begin
   TimerAstrometrySlewScreenXY.OnTimer:=@AstrometrySlewScreenXYonTimer;
 end;
 
-procedure TAstrometry.msg(txt:string);
+procedure TAstrometry.msg(txt:string; level: integer);
 begin
- if assigned(FonShowMessage) then FonShowMessage(txt);
+ if assigned(FonShowMessage) then FonShowMessage(txt,level);
 end;
 
 function TAstrometry.WaitBusy(Timeout:double=60): boolean;
@@ -153,7 +153,7 @@ begin
      end;
    end;
    if (ra=NullCoord)or(de=NullCoord) then begin
-       msg(Format(rsCannotFindAp, [crlf]));
+       msg(Format(rsCannotFindAp, [crlf]),2);
    end;
    FLastResult:=false;
    FInitra:=ra;
@@ -217,11 +217,11 @@ begin
    engine.timeout:=AstrometryTimeout;
    FBusy:=true;
    engine.Resolve;
-   msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]));
+   msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]),3);
    if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
-   msg(rsResolverAlre);
+   msg(rsResolverAlre,1);
    result:=false;
  end;
 end;
@@ -243,7 +243,7 @@ begin
   if FBusy then begin
     FBusy:=false;
     engine.Stop;
-    msg(rsStopAstromet2);
+    msg(rsStopAstromet2,1);
   end;
 end;
 
@@ -296,7 +296,7 @@ if fits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
    J2000ToApparent(ra,de);
    ra:=rad2deg*ra/15;
    de:=rad2deg*de;
-   msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)]));
+   msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)]),3);
 end;
 end;
 
@@ -329,7 +329,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]));
+     msg(Format(rsErrorProcess, [TmpDir]),1);
      exit;
    end;
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
@@ -381,7 +381,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]));
+     msg(Format(rsErrorProcess, [TmpDir]),1);
      exit;
    end;
    n:=cdcwcs_getinfo(addr(i),0);
@@ -430,8 +430,8 @@ begin
   FLastSlewErr:=dist;
   if (Mount.Status=devConnected)and(Camera.Status=devConnected)and AllDevicesConnected then begin
    if astrometryResolver=ResolverNone then begin
-      msg(rsNoResolverCo);
-      msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]));
+      msg(rsNoResolverCo,2);
+      msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]),2);
       if not Mount.Slew(ra, de) then exit;
       Wait(delay);
       dist:=0;
@@ -453,24 +453,24 @@ begin
       RetryMeridianSync:=false;
       Wait(delay);
       if not Fpreview.ControlExposure(exp,binx,biny) then begin
-        msg(rsExposureFail);
+        msg(rsExposureFail,1);
         exit;
       end;
       if CancelAutofocus then exit;
-      msg(rsResolveContr);
+      msg(rsResolveContr,3);
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
       if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
          WaitBusy(AstrometryTimeout+30);
       if not LastResult then begin
          StopAstrometry;
-         msg(rsFailToResolv);
+         msg(rsFailToResolv,1);
          break;
       end;
       if CancelAutofocus then exit;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
       if n<>0 then begin
-        msg(Format(rsErrorProcess, [TmpDir]));
+        msg(Format(rsErrorProcess, [TmpDir]),1);
         exit;
       end;
       if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
@@ -485,7 +485,7 @@ begin
       ar2:=deg2rad*15*cra;
       de2:=deg2rad*cde;
       dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
-      msg(Format(rsDistanceToTa, [FormatFloat(f5, 60*dist)]));
+      msg(Format(rsDistanceToTa, [FormatFloat(f5, 60*dist)]),3);
       if dist>prec then begin
         case method of
          0: begin
@@ -498,21 +498,21 @@ begin
                  if NearMeridian then begin        // some mount cannot sync across the meridian
                    inc(RetryMeridianSyncCount);
                    if RetryMeridianSyncCount<=10 then begin        // retry for 10 minutes so the mount move a bit further
-                     msg('Mount Sync failed near the meridian.');
-                     msg('Waiting 1 minute before to retry');
+                     msg('Mount Sync failed near the meridian.',2);
+                     msg('Waiting 1 minute before to retry',2);
                      Wait(60);
                      if CancelAutofocus then exit;
                      RetryMeridianSync:=true;
                      dec(i);
                    end
                    else begin
-                     msg('Mount Sync failed near the meridian.');
-                     msg('Abandon after 10 retries.');
+                     msg('Mount Sync failed near the meridian.',1);
+                     msg('Abandon after 10 retries.',1);
                      break;
                    end;
                  end
                  else begin
-                   msg('Mount Sync failed!');
+                   msg('Mount Sync failed!',1);
                    break;
                  end;
                end;
@@ -525,7 +525,7 @@ begin
                if de>90.0 then de:=90;
                if de<-90.0 then de:=-90;
                msg(Format(rsSlewWithOffs, [FormatFloat(f5, raoffset),
-                 FormatFloat(f5, deoffset)]));
+                 FormatFloat(f5, deoffset)]),3);
                if not Mount.Slew(newra,newde) then exit;
             end;
          end;
@@ -540,8 +540,8 @@ begin
   finally
     err:=dist;
     FLastSlewErr:=dist;
-    if result then msg(rsPrecisionSle2)
-              else msg(rsPrecisionSle3);
+    if result then msg(rsPrecisionSle2,2)
+              else msg(rsPrecisionSle3,1);
     fits.SetBPM(bpm,0,0,0,0);
     if oldfilter>0 then Fwheel.Filter:=oldfilter;
   end;
