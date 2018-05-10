@@ -4,7 +4,7 @@ object f_msgtabs: Tf_msgtabs
   Top = 0
   Width = 320
   AlphaBlend = True
-  AlphaBlendValue = 80
+  AlphaBlendValue = 192
   BorderIcons = []
   BorderStyle = bsNone
   ClientHeight = 26

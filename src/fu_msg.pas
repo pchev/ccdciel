@@ -80,12 +80,12 @@ procedure Tf_msg.msgMouseEnter(Sender: TObject);
 var p:TPoint;
 begin
  timer1.Enabled:=false;
- p.x:=msg.left;
- p.y:=msg.top-f_msgtabs.Height;
+ p.x:=title.Width;
+ p.y:=-f_msgtabs.Height;
  p:=ClientToScreen(p);
  f_msgtabs.Left:=p.x;
  f_msgtabs.Top:=p.y;
- f_msgtabs.Width:=msg.Width;
+ f_msgtabs.Width:=msg.Width+2;
  f_msgtabs.Visible:=true;
 end;
 

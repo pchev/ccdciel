@@ -628,6 +628,7 @@
         <Filename Value="pu_msgtabs.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_msgtabs"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit70>
     </Units>
