@@ -718,7 +718,6 @@ resourcestring
   rsCompilationE = 'Compilation error: %s';
   rsScriptError = 'Script error: %s';
   rsScriptTermin = 'Script terminating...';
-  rsSlewTelescop = 'Slew telescope to %s %s';
   rsOutOfRange = '%s out of range';
   rsNotAnEqmodMo = '%s not an eqmod mount';
   rsScriptEditor = 'Script editor';
@@ -733,7 +732,8 @@ resourcestring
   rsCenterAppare = 'Center, apparent coord. RA=%s DEC=%s PA=%s';
   rsNoResolverCo = 'No resolver configured!';
   rsDoSimpleSlew = 'Do simple slew to %s/%s';
-  rsSlewTo = 'Slew to %s/%s';
+  rsSlewTo = 'Slewing to %s/%s';
+  rsSlewComplete = 'Slew is complete';
   rsResolveContr = 'Resolve control exposure';
   rsFailToResolv = 'Fail to resolve control exposure';
   rsDistanceToTa = 'Distance to target: %s arcmin';
@@ -766,9 +766,7 @@ resourcestring
   rsSetFrameType = 'Set frame type %s';
   rsSetFilterPos = 'Set filter position %s';
   rsSetCooler = 'Set cooler %s';
-  rsMountMoveTo = 'move to %s %s';
   rsCannotSyncWh = 'Cannot Sync when the mount is not tracking';
-  rsSyncTo2 = 'sync to %s %s';
   rsStartTraking = 'start traking';
   rsStopTelescop = 'Stop telescope motion.';
   rsError2 = 'Error';
@@ -849,7 +847,6 @@ resourcestring
   rsUsingMedianO = 'Using median of %s stars';
   rsHYPERBOLACur = 'HYPERBOLA curve fitting focus at %s,  remaining curve fit'
     +' error %s,  iteration cycles %s';
-  rsMoveComplete = 'move completed';
   rsImageCleanup = 'Image cleanup';
   rsSaveConfigur = 'Save configuration now';
   rsWeAreProbabl = 'We are probably trying to focus on a hot pixel!';

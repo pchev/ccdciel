@@ -444,7 +444,6 @@ begin
     deoffset:=0;
     ar1:=deg2rad*15*ra;
     de1:=deg2rad*de;
-    msg(Format(rsSlewTo, [ARToStr3(ra), DEToStr(de)]));
     if not Mount.Slew(ra, de) then exit;
     if CancelAutofocus then exit;
     i:=1;
@@ -490,11 +489,9 @@ begin
       if dist>prec then begin
         case method of
          0: begin
-               msg(Format(rsSyncTo, [ARToStr3(cra), DEToStr(cde)]));
                SyncOK:=mount.Sync(cra,cde);
                if SyncOK then begin
                   Wait(2);
-                  msg(Format(rsSlewTo, [ARToStr3(ra), DEToStr(de)]));
                   if not Mount.Slew(ra, de) then exit;
                end
                else begin

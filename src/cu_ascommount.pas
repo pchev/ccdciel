@@ -365,7 +365,7 @@ begin
        on E: Exception do msg('Set tracking error: ' + E.Message);
      end;
    end;
-   msg(Format(rsMountMoveTo, [ARToStr3(sra), DEToStr(sde)]));
+   msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
    end
@@ -394,7 +394,7 @@ begin
      end;
    end;
    FMountSlewing:=true;
-   msg(Format(rsMountMoveTo, [ARToStr3(sra), DEToStr(sde)]));
+   msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
@@ -402,7 +402,7 @@ begin
    else
      V.SlewToCoordinates(sra,sde);
    wait(2);
-   msg(rsMoveComplete);
+   msg(rsSlewComplete);
    FMountSlewing:=false;
    result:=true;
    except
@@ -513,7 +513,7 @@ begin
      msg(rsCannotSyncWh);
      exit;
    end;
-   msg(Format(rsSyncTo2, [ARToStr3(sra), DEToStr(sde)]));
+   msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except
