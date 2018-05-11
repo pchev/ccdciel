@@ -10,7 +10,9 @@ object f_msgtabs: Tf_msgtabs
   ClientHeight = 26
   ClientWidth = 320
   FormStyle = fsStayOnTop
+  OnCreate = FormCreate
   ShowInTaskBar = stNever
+  LCLVersion = '1.8.2.0'
   Visible = True
   object TabControl1: TTabControl
     Left = 0

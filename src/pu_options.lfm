@@ -52,10 +52,10 @@ object f_option: Tf_option
     Height = 522
     Top = 0
     Width = 482
-    ActivePage = TabSheet1
+    ActivePage = TabSheet12
     Align = alClient
     MultiLine = True
-    TabIndex = 0
+    TabIndex = 4
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -139,8 +139,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 235
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFileDefault: TButton
             Left = 390
             Height = 25
@@ -182,8 +182,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 235
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           object BtnFolderDefault: TButton
             Left = 390
             Height = 25
@@ -999,7 +999,7 @@ object f_option: Tf_option
         Left = 8
         Height = 65
         Top = 16
-        Width = 384
+        Width = 432
         AutoFill = True
         Caption = 'Sequence automatic flat'
         ChildSizing.LeftRightSpacing = 6
@@ -1010,7 +1010,7 @@ object f_option: Tf_option
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
         ClientHeight = 47
-        ClientWidth = 382
+        ClientWidth = 430
         Columns = 3
         ItemIndex = 0
         Items.Strings = (
@@ -1025,10 +1025,10 @@ object f_option: Tf_option
         Left = 8
         Height = 200
         Top = 88
-        Width = 384
+        Width = 432
         Caption = 'Flat auto-exposure'
         ClientHeight = 182
-        ClientWidth = 382
+        ClientWidth = 430
         TabOrder = 1
         Visible = False
         object FlatAutoExposure: TCheckBox
@@ -1048,7 +1048,7 @@ object f_option: Tf_option
           ParentColor = False
         end
         object Label92: TLabel
-          Left = 273
+          Left = 297
           Height = 17
           Top = 96
           Width = 33
@@ -1056,7 +1056,7 @@ object f_option: Tf_option
           ParentColor = False
         end
         object Label93: TLabel
-          Left = 160
+          Left = 184
           Height = 17
           Top = 96
           Width = 30
@@ -1072,7 +1072,7 @@ object f_option: Tf_option
           ParentColor = False
         end
         object Label95: TLabel
-          Left = 160
+          Left = 184
           Height = 17
           Top = 133
           Width = 30
@@ -1080,7 +1080,7 @@ object f_option: Tf_option
           ParentColor = False
         end
         object Label96: TLabel
-          Left = 273
+          Left = 297
           Height = 17
           Top = 133
           Width = 33
@@ -1098,7 +1098,7 @@ object f_option: Tf_option
           WordWrap = True
         end
         object FlatMinExp: TFloatSpinEdit
-          Left = 200
+          Left = 224
           Height = 27
           Top = 91
           Width = 65
@@ -1110,7 +1110,7 @@ object f_option: Tf_option
           Value = 0
         end
         object FlatMaxExp: TFloatSpinEdit
-          Left = 312
+          Left = 336
           Height = 27
           Top = 91
           Width = 65
@@ -1122,7 +1122,7 @@ object f_option: Tf_option
           Value = 0
         end
         object FlatLevelMin: TSpinEdit
-          Left = 200
+          Left = 224
           Height = 27
           Top = 128
           Width = 65
@@ -1131,7 +1131,7 @@ object f_option: Tf_option
           TabOrder = 3
         end
         object FlatLevelMax: TSpinEdit
-          Left = 312
+          Left = 336
           Height = 27
           Top = 128
           Width = 65
@@ -1144,10 +1144,10 @@ object f_option: Tf_option
         Left = 8
         Height = 192
         Top = 296
-        Width = 384
+        Width = 432
         Caption = 'Dome/Panel'
         ClientHeight = 174
-        ClientWidth = 382
+        ClientWidth = 430
         TabOrder = 2
         Visible = False
         object Label61: TLabel
@@ -1167,7 +1167,7 @@ object f_option: Tf_option
           ParentColor = False
         end
         object DomeFlatTelescopeAz: TFloatSpinEdit
-          Left = 176
+          Left = 224
           Height = 27
           Top = 32
           Width = 81
@@ -1178,7 +1178,7 @@ object f_option: Tf_option
           Value = 0
         end
         object DomeFlatTelescopeAlt: TFloatSpinEdit
-          Left = 176
+          Left = 224
           Height = 27
           Top = 56
           Width = 81
@@ -1189,7 +1189,7 @@ object f_option: Tf_option
           Value = 0
         end
         object Label103: TLabel
-          Left = 271
+          Left = 319
           Height = 17
           Top = 36
           Width = 55
@@ -1197,7 +1197,7 @@ object f_option: Tf_option
           ParentColor = False
         end
         object Label104: TLabel
-          Left = 271
+          Left = 319
           Height = 17
           Top = 60
           Width = 55
@@ -1216,8 +1216,8 @@ object f_option: Tf_option
           Left = 18
           Height = 21
           Top = 88
-          Width = 259
-          Caption = 'Use script to light the panel on/off'
+          Width = 348
+          Caption = 'Use external command to light the panel on/off'
           TabOrder = 3
         end
         object Label106: TLabel
@@ -1237,14 +1237,14 @@ object f_option: Tf_option
           ParentColor = False
         end
         object DomeFlatSetLightON: TEdit
-          Left = 113
+          Left = 184
           Height = 27
           Top = 112
           Width = 199
           TabOrder = 4
         end
         object DomeFlatSetLightOFF: TEdit
-          Left = 113
+          Left = 184
           Height = 27
           Top = 136
           Width = 199

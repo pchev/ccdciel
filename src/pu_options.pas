@@ -530,6 +530,9 @@ begin
   Label102.Caption:=rsTelescopeEle;
   Label103.Caption:=rsDegree;
   Label104.Caption:=rsDegree;
+  DomeFlatSetLight.Caption:=rsUseExternalC;
+  Label106.Caption:=rsLightON;
+  Label110.Caption:=rsLightOFF;
   TabSheet10.Caption := rsFocus;
   GroupBox2.Caption := rsStarProfile;
   Label14.Caption := rsStarDetectio;

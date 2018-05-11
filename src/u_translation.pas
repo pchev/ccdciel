@@ -875,6 +875,12 @@ resourcestring
   rsLimitingMagn = 'Limiting magnitude';
   rsSolvedInSeco = 'Solved in %s seconds';
   rsOffset = 'offset';
+  rsSummary = 'Summary';
+  rsCommands = 'Commands';
+  rsDetails = 'Details';
+  rsUseExternalC = 'Use external command to light the panel on/off';
+  rsLightON = 'Light ON';
+  rsLightOFF = 'Light OFF';
 
 
 

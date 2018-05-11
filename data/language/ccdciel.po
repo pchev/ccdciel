@@ -2578,10 +2578,6 @@ msgstr ""
 msgid "Script terminating..."
 msgstr ""
 
-#: u_translation:rsslewtelescop
-msgid "Slew telescope to %s %s"
-msgstr ""
-
 #: u_translation:rsoutofrange
 msgid "%s out of range"
 msgstr ""
@@ -2635,7 +2631,11 @@ msgid "Do simple slew to %s/%s"
 msgstr ""
 
 #: u_translation:rsslewto
-msgid "Slew to %s/%s"
+msgid "Slewing to %s/%s"
+msgstr ""
+
+#: u_translation:rsslewcomplete
+msgid "Slew is complete"
 msgstr ""
 
 #: u_translation:rsresolvecontr
@@ -2762,16 +2762,8 @@ msgstr ""
 msgid "Set cooler %s"
 msgstr ""
 
-#: u_translation:rsmountmoveto
-msgid "move to %s %s"
-msgstr ""
-
 #: u_translation:rscannotsyncwh
 msgid "Cannot Sync when the mount is not tracking"
-msgstr ""
-
-#: u_translation:rssyncto2
-msgid "sync to %s %s"
 msgstr ""
 
 #: u_translation:rsstarttraking
@@ -3074,10 +3066,6 @@ msgstr ""
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr ""
 
-#: u_translation:rsmovecomplete
-msgid "move completed"
-msgstr ""
-
 #: u_translation:rsimagecleanup
 msgid "Image cleanup"
 msgstr ""
@@ -3184,5 +3172,29 @@ msgstr ""
 
 #: u_translation:rsoffset
 msgid "offset"
+msgstr ""
+
+#: u_translation:rssummary
+msgid "Summary"
+msgstr ""
+
+#: u_translation:rscommands
+msgid "Commands"
+msgstr ""
+
+#: u_translation:rsdetails
+msgid "Details"
+msgstr ""
+
+#: u_translation:rsuseexternalc
+msgid "Use external command to light the panel on/off"
+msgstr ""
+
+#: u_translation:rslighton
+msgid "Light ON"
+msgstr ""
+
+#: u_translation:rslightoff
+msgid "Light OFF"
 msgstr ""
 

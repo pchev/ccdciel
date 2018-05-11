@@ -994,8 +994,6 @@ begin
   Image1.OnPaint := @Image1Paint;
   Image1.PopupMenu := ImagePopupMenu;
   Image1.Cursor:=crCross;
-  f_msg:=Tf_msg.Create(self);
-  f_msg.onLogLevelChange:=@LogLevelChange;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -1047,6 +1045,9 @@ begin
   Left:=config.GetValue('/Window/Left',0);
   Width:=config.GetValue('/Window/Width',1024);
   Height:=config.GetValue('/Window/Height',768);
+
+  f_msg:=Tf_msg.Create(self);
+  f_msg.onLogLevelChange:=@LogLevelChange;
 
   aInt:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(DefaultInterface)));
   case aInt of

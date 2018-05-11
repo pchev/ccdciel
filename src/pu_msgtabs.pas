@@ -4,7 +4,7 @@ unit pu_msgtabs;
 
 interface
 
-uses
+uses  UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls;
 
 type
@@ -13,8 +13,10 @@ type
 
   Tf_msgtabs = class(TForm)
     TabControl1: TTabControl;
+    procedure FormCreate(Sender: TObject);
 
   private
+    procedure SetLang;
   public
   end;
 
@@ -28,6 +30,19 @@ implementation
 { Tf_msgtabs }
 
 
+
+procedure Tf_msgtabs.FormCreate(Sender: TObject);
+begin
+  ScaleDPI(Self);
+  Setlang;
+end;
+
+procedure Tf_msgtabs.SetLang;
+begin
+  TabControl1.Tabs[0]:=rsSummary;
+  TabControl1.Tabs[1]:=rsCommands;
+  TabControl1.Tabs[2]:=rsDetails;
+end;
 
 end.
 
