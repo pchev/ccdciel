@@ -132,7 +132,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message,1);
   end;
  {$endif}
 end;
@@ -145,12 +145,12 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3);
+     msg(rsDisconnected3,1);
      V.connected:=false;
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message,1);
    end;
  {$endif}
 end;
@@ -201,7 +201,7 @@ begin
        if Assigned(FonPiersideChange) then FonPiersideChange(self);
     end;
     except
-     on E: Exception do msg('Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message,1);
     end;
   end;
  {$endif}
@@ -222,7 +222,7 @@ begin
       end;
    end;
    except
-    on E: Exception do msg('Park error: ' + E.Message);
+    on E: Exception do msg('Park error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -362,7 +362,7 @@ begin
      try
       V.tracking:=true;
      except
-       on E: Exception do msg('Set tracking error: ' + E.Message);
+       on E: Exception do msg('Set tracking error: ' + E.Message,1);
      end;
    end;
    msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
@@ -373,7 +373,7 @@ begin
      V.SlewToCoordinates(sra,sde);
    result:=true;
    except
-     on E: Exception do msg('Slew error: ' + E.Message);
+     on E: Exception do msg('Slew error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -390,7 +390,7 @@ begin
      try
       V.tracking:=true;
      except
-       on E: Exception do msg('Set tracking error: ' + E.Message);
+       on E: Exception do msg('Set tracking error: ' + E.Message,1);
      end;
    end;
    FMountSlewing:=true;
@@ -406,7 +406,7 @@ begin
    FMountSlewing:=false;
    result:=true;
    except
-     on E: Exception do msg('Slew error: ' + E.Message);
+     on E: Exception do msg('Slew error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -427,7 +427,7 @@ begin
     islewing:=false;
   result:=(islewing or FMountSlewing);
   except
-    on E: Exception do msg('Get slewing error: ' + E.Message);
+    on E: Exception do msg('Get slewing error: ' + E.Message,1);
   end;
  {$endif}
 end;
@@ -510,14 +510,14 @@ begin
  if Connected and CanSync then begin
    try
    if CanSetTracking and (not V.tracking) then begin
-     msg(rsCannotSyncWh);
+     msg(rsCannotSyncWh,1);
      exit;
    end;
    msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except
-     on E: Exception do msg('Error: ' + E.Message);
+     on E: Exception do msg('Error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -535,12 +535,12 @@ begin
       msg(rsStartTraking);
       V.tracking:=true;
      except
-       on E: Exception do msg('Set tracking error: ' + E.Message);
+       on E: Exception do msg('Set tracking error: ' + E.Message,1);
      end;
    end;
    result:=true;
    except
-     on E: Exception do msg('Track error: ' + E.Message);
+     on E: Exception do msg('Track error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -555,7 +555,7 @@ begin
    V.AbortSlew;
    if CanSetTracking  then V.tracking:=false;
    except
-     on E: Exception do msg('Abort motion error: ' + E.Message);
+     on E: Exception do msg('Abort motion error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -620,7 +620,7 @@ begin
      V.CommandString(':ALIGN_MODE,1#');
    end;
    except
-     on E: Exception do msg('Eqmod set sync mode error: ' + E.Message);
+     on E: Exception do msg('Eqmod set sync mode error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -636,7 +636,7 @@ begin
    V.CommandString(':ALIGN_CLEAR_POINTS#');
    result:=true;
    except
-     on E: Exception do msg('Eqmod clear alignment error: ' + E.Message);
+     on E: Exception do msg('Eqmod clear alignment error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -653,7 +653,7 @@ begin
    V.CommandString(':ALIGN_CLEAR_SYNC#');
    result:=true;
    except
-     on E: Exception do msg('Eqmod clear delta error: ' + E.Message);
+     on E: Exception do msg('Eqmod clear delta error: ' + E.Message,1);
    end;
  end;
  {$endif}

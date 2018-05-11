@@ -217,22 +217,22 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Mount already connected');
+else msg('Mount already connected',1);
 end;
 
 procedure T_indimount.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (MountDevice=nil)or(not Fready) then begin
-    msg(rsError2);
+    msg(rsError2,1);
     if not Fconnected then begin
-      msg(rsNoResponseFr);
-      msg('Is "'+Findidevice+'" a running telescope mount driver?');
+      msg(rsNoResponseFr,1);
+      msg('Is "'+Findidevice+'" a running telescope mount driver?',1);
     end
     else if (configprop=nil) then
-       msg('Missing property CONFIG_PROCESS')
+       msg('Missing property CONFIG_PROCESS',1)
     else if (coord_prop=nil) then
-       msg('Missing property EQUATORIAL_EOD_COORD or EQUATORIAL_COORD');
+       msg('Missing property EQUATORIAL_EOD_COORD or EQUATORIAL_COORD',1);
     Disconnect;
   end;
 end;
@@ -268,7 +268,7 @@ procedure T_indimount.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3);
+  msg(rsServer+' '+rsDisconnected3,1);
   CreateIndiClient;
 end;
 

@@ -43,7 +43,7 @@ T_wheel = class(TComponent)
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     Fcameraobj: TObject;
-    procedure msg(txt: string);
+    procedure msg(txt: string; level:integer=3);
     function  GetStatus: TDeviceStatus; virtual; abstract;
     procedure SetFilter(num:integer);  virtual; abstract;
     function  GetFilter:integer; virtual; abstract;
@@ -87,9 +87,9 @@ begin
   inherited Destroy;
 end;
 
-procedure T_wheel.msg(txt: string);
+procedure T_wheel.msg(txt: string; level:integer=3);
 begin
- if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
 end;
 
 

@@ -52,7 +52,7 @@ T_focuser = class(TComponent)
     FFocusdirection: integer;
     FBacklashDirection,FBacklashActive: boolean;
     FBacklash: integer;
-    procedure msg(txt: string);
+    procedure msg(txt: string; level:integer=3);
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
     function  GetRelPosition:integer; virtual; abstract;
@@ -122,9 +122,9 @@ begin
   inherited Destroy;
 end;
 
-procedure T_focuser.msg(txt: string);
+procedure T_focuser.msg(txt: string; level:integer=3);
 begin
-  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
+  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
 end;
 
 procedure T_focuser.SetPositionInt(p:integer);

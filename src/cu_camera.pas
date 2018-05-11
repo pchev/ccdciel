@@ -78,7 +78,7 @@ T_camera = class(TComponent)
     FhasGain,FhasGainISO: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
-    procedure msg(txt: string);
+    procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure WriteHeaders;
     procedure NewVideoFrame;
@@ -291,9 +291,9 @@ begin
   inherited Destroy;
 end;
 
-procedure T_camera.msg(txt: string);
+procedure T_camera.msg(txt: string; level:integer=3);
 begin
- if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
 end;
 
 procedure T_camera.SetTemperatureRamp(value:double);
@@ -315,7 +315,7 @@ begin
   if TempStep<1 then TempStep:=1;
   if FTemperatureRampActive then begin
      FCancelTemperatureRamp:=true;
-     msg(rsTemperatureR);
+     msg(rsTemperatureR,1);
      exit;
   end;
   msg(Format(rsSetTemperatu2, [formatfloat(f1, TempFinal)]));
@@ -335,7 +335,7 @@ begin
     if FCancelTemperatureRamp then begin
        FCancelTemperatureRamp:=false;
        FTemperatureRampActive:=false;
-       msg(rsTemperatureR2);
+       msg(rsTemperatureR2,1);
        exit;
     end;
     dec(Nstep);
@@ -382,7 +382,7 @@ if FAddFrames then begin  // stack preview frames
              alok:=true;
            end;
        end;
-       if not alok then msg(rsAlignmentSta);
+       if not alok then msg(rsAlignmentSta,1);
      end;
      FFits.Math(f,moAdd);       // add frame
      inc(FStackCount);
@@ -408,7 +408,7 @@ if FAddFrames then begin  // stack preview frames
          end;
        end;
      end;
-     if not FStackAlign then msg(rsNoAlignmentS);
+     if not FStackAlign then msg(rsNoAlignmentS,1);
   end;
   // update image
   FFits.Header.Assign(f.Header);
@@ -495,7 +495,7 @@ begin
      focal_length:=Fmount.FocaleLength
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
-  if (focal_length<1) then msg(rsErrorUnknowT);
+  if (focal_length<1) then msg(rsErrorUnknowT,1);
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
   except

@@ -177,24 +177,24 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Filters already connected');
+else msg('Filters already connected',1);
 end;
 
 procedure T_indiwheel.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (WheelDevice=nil)or(not Fready) then begin
-    msg(rsError2);
+    msg(rsError2,1);
     if not Fconnected then begin
-      msg(rsNoResponseFr);
-      msg('Is "'+Findidevice+'" a running wheel driver?');
+      msg(rsNoResponseFr,1);
+      msg('Is "'+Findidevice+'" a running wheel driver?',1);
     end
     else if (configprop=nil) then
-       msg('Missing property CONFIG_PROCESS')
+       msg('Missing property CONFIG_PROCESS',1)
     else if (WheelSlot=nil) then
-       msg('Missing property FILTER_SLOT')
+       msg('Missing property FILTER_SLOT',1)
     else if (FilterName=nil) then
-       msg('Missing property FILTER_NAME');
+       msg('Missing property FILTER_NAME',1);
     Disconnect;
   end;
 end;
@@ -230,7 +230,7 @@ procedure T_indiwheel.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3);
+  msg(rsServer+' '+rsDisconnected3,1);
   CreateIndiClient;
 end;
 

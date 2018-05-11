@@ -114,7 +114,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message,1);
   end;
  {$endif}
 end;
@@ -127,12 +127,12 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3);
+     msg(rsDisconnected3,1);
      V.Connected:=false;
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message,1);
    end;
  {$endif}
 end;
@@ -169,7 +169,7 @@ begin
         if Assigned(FonAngleChange) then FonAngleChange(self);
       end;
      except
-     on E: Exception do msg('Status error: ' + E.Message);
+     on E: Exception do msg('Status error: ' + E.Message,1);
     end;
   end;
  {$endif}
@@ -209,7 +209,7 @@ begin
    WaitRotatorMoving(30000);
 
    except
-    on E: Exception do msg('Error, can''t move to. ' + E.Message);
+    on E: Exception do msg('Error, can''t move to. ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -223,7 +223,7 @@ begin
    try
    result:=V.Position;
    except
-    on E: Exception do msg('Get position error: ' + E.Message);
+    on E: Exception do msg('Get position error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -262,7 +262,7 @@ begin
    try
     V.Halt;
    except
-    on E: Exception do msg('Halt error: ' + E.Message);
+    on E: Exception do msg('Halt error: ' + E.Message,1);
    end;
  end;
  {$endif}

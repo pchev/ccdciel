@@ -366,26 +366,26 @@ if not indiclient.Connected then begin
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Camera already connected');
+else msg('Camera already connected',1);
 end;
 
 procedure T_indicamera.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (not Fready) then begin
-    msg(rsError2);
+    msg(rsError2,1);
     if not Fconnected then begin
-       msg(rsNoResponseFr);
-       msg('Is "'+Findidevice+'" a running camera driver?');
+       msg(rsNoResponseFr,1);
+       msg('Is "'+Findidevice+'" a running camera driver?',1);
     end
     else if (configprop=nil) then
-       msg('Missing property CONFIG_PROCESS')
+       msg('Missing property CONFIG_PROCESS',1)
     else if not FhasBlob then
-       msg('Missing property INDI_BLOB')
+       msg('Missing property INDI_BLOB',1)
     else if ((Findisensor='CCD2')and(Guiderexpose=nil)) then
-       msg(Findisensor+' missing property GUIDER_EXPOSURE')
+       msg(Findisensor+' missing property GUIDER_EXPOSURE',1)
     else if ((Findisensor<>'CCD2')and(CCDexpose=nil)) then
-       msg(Findisensor+' missing property CCD_EXPOSURE');
+       msg(Findisensor+' missing property CCD_EXPOSURE',1);
     Disconnect;
   end;
 end;
@@ -416,7 +416,6 @@ begin
  end;
  indiclient.connectDevice(Findidevice);
  if FhasBlob then begin
-   //msg('Set BlobMode '+Findisensor);
    if (Findisensor='CCD1')or(Findisensor='CCD2') then
        indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
    else
@@ -432,7 +431,7 @@ begin
   FWheelStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3);
+  msg(rsServer+' '+rsDisconnected3,1);
   CreateIndiClient;
 end;
 
@@ -683,7 +682,7 @@ begin
      CCDIso:=indiProp.getSwitch;
      FISOList.Clear;
      for i:=0 to CCDIso.nsp-1 do begin
-        msg(CCDIso.sp[i].lbl);
+        {$ifdef camera_debug}msg(CCDIso.sp[i].lbl);{$endif}
         FISOList.Add(CCDIso.sp[i].lbl);
      end;
      FhasGainISO:=(FISOList.Count>0);
@@ -855,7 +854,7 @@ begin
      end;
    end
    else begin
-        msg('Invalid file format '+bp.format+', a FITS file is required');
+        msg('Invalid file format '+bp.format+', a FITS file is required',1);
         AbortExposure;
         NewImage;
    end;

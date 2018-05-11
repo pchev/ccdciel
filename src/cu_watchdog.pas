@@ -39,7 +39,7 @@ T_watchdog = class(TComponent)
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
     FDevice: string;
-    procedure msg(txt: string);
+    procedure msg(txt: string; level:integer=3);
     procedure SetTimeout(num:integer); virtual; abstract;
     procedure SetTThreshold(num:integer); virtual; abstract;
   public
@@ -71,9 +71,9 @@ begin
   inherited Destroy;
 end;
 
-procedure T_watchdog.msg(txt: string);
+procedure T_watchdog.msg(txt: string; level:integer=3);
 begin
-  if Assigned(FonMsg) then FonMsg(fdevice+': '+txt,3);
+  if Assigned(FonMsg) then FonMsg(fdevice+': '+txt,level);
 end;
 
 end.

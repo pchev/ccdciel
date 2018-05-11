@@ -132,7 +132,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Connection error: ' + E.Message);
+    on E: Exception do msg('Connection error: ' + E.Message,1);
   end;
  {$endif}
 end;
@@ -145,7 +145,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3);
+     msg(rsDisconnected3,1);
      if FInterfaceVersion=1 then
        V.Link:=false
      else
@@ -153,7 +153,7 @@ begin
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Disconnection error: ' + E.Message);
+     on E: Exception do msg('Disconnection error: ' + E.Message,1);
    end;
  {$endif}
 end;
@@ -209,7 +209,7 @@ begin
        end;
     end;
     except
-     on E: Exception do msg('Status error: ' + E.Message);
+     on E: Exception do msg('Status error: ' + E.Message,1);
     end;
   end;
  {$endif}
@@ -269,7 +269,7 @@ begin
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
    except
-    on E: Exception do msg('Error, can''t move to. ' + E.Message);
+    on E: Exception do msg('Error, can''t move to. ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -283,7 +283,7 @@ begin
    try
    result:=V.Position;
    except
-    on E: Exception do msg('Get position error: ' + E.Message);
+    on E: Exception do msg('Get position error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -351,7 +351,7 @@ begin
    WaitFocuserMoving(60000);
    if FDelay>0 then Wait(FDelay);
    except
-    on E: Exception do msg('Set relative position error: ' + E.Message);
+    on E: Exception do msg('Set relative position error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -392,7 +392,7 @@ begin
    try
    result:=V.Absolute;
    except
-    on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message);
+    on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message,1);
    end;
  end;
  {$endif}
@@ -406,7 +406,7 @@ begin
    try
    result:=not V.Absolute;
    except
-    on E: Exception do msg('GethasRelativePosition error: ' + E.Message);
+    on E: Exception do msg('GethasRelativePosition error: ' + E.Message,1);
    end;
  end;
  {$endif}

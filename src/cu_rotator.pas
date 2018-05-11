@@ -45,7 +45,7 @@ T_rotator = class(TComponent)
     FAutoLoadConfig: boolean;
     FCalibrationAngle: double;
     FReverse: Boolean;
-    procedure msg(txt: string);
+    procedure msg(txt: string; level:integer=3);
     procedure SetReverse(value:boolean);
     function GetReverse:boolean;
     procedure SetDriverReverse(value:boolean); virtual; abstract;
@@ -141,9 +141,9 @@ begin
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
-procedure T_rotator.msg(txt: string);
+procedure T_rotator.msg(txt: string; level:integer=3);
 begin
-  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
+  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
 end;
 
 end.

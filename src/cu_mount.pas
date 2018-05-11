@@ -44,7 +44,7 @@ T_mount = class(TComponent)
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FIsEqmod: boolean;
-    procedure msg(txt: string);
+    procedure msg(txt: string; level:integer=3);
     function  GetPark:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
     function  GetRA:double; virtual; abstract;
@@ -112,9 +112,9 @@ begin
   inherited Destroy;
 end;
 
-procedure T_mount.msg(txt: string);
+procedure T_mount.msg(txt: string; level:integer=3);
 begin
- if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,3);
+ if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
 end;
 
 procedure T_mount.SlewToSkyFlatPosition;

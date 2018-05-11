@@ -176,22 +176,22 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg(' Watchdog already connected');
+else msg(' Watchdog already connected',1);
 end;
 
 procedure T_indiwatchdog.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (WatchdogDevice=nil)or(not Fready) then begin
-    msg(rsError2);
+    msg(rsError2,1);
     if not Fconnected then begin
-      msg(rsNoResponseFr);
-      msg('Is "'+Findidevice+'" a running Watchdog driver?');
+      msg(rsNoResponseFr,1);
+      msg('Is "'+Findidevice+'" a running Watchdog driver?',1);
     end
     else if (configprop=nil) then
-       msg('Watchdog '+Findidevice+' Missing property CONFIG_PROCESS')
+       msg('Watchdog '+Findidevice+' Missing property CONFIG_PROCESS',1)
     else if (heartbeatvalue=nil) then
-       msg('Watchdog '+Findidevice+' Missing property WATCHDOG_HEARTBEAT');
+       msg('Watchdog '+Findidevice+' Missing property WATCHDOG_HEARTBEAT',1);
     Disconnect;
   end;
 end;
@@ -224,7 +224,7 @@ procedure T_indiwatchdog.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsserver+' '+rsDisconnected3);
+  msg(rsserver+' '+rsDisconnected3,1);
   CreateIndiClient;
 end;
 
