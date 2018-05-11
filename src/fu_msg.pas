@@ -46,11 +46,12 @@ type
     FLogLevel: integer;
     FLogLevelChange: TNotifyEvent;
     procedure TabControlChange(Sender: TObject);
+    procedure SetLoglevel(value: integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    property LogLevel: integer read FLogLevel;
+    property LogLevel: integer read FLogLevel write SetLoglevel;
     property onLogLevelChange: TNotifyEvent read FLogLevelChange write FLogLevelChange;
   end;
 
@@ -68,6 +69,12 @@ begin
          w:=w-Tframe(TPanel(Parent).Components[i]).Width;
     Width:=w;
   end;
+end;
+
+procedure Tf_msg.SetLoglevel(value: integer);
+begin
+  FLogLevel:=value;
+  f_msgtabs.TabControl1.TabIndex:=FLogLevel-1;
 end;
 
 procedure Tf_msg.TabControlChange(Sender: TObject);

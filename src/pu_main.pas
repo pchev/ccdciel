@@ -971,7 +971,7 @@ begin
   ImgPixRatio:=1;
   Undersampled:=false;
   ZoomMin:=1;
-  LogLevel:=3;
+  LogLevel:=2;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -1317,6 +1317,9 @@ begin
   f_visu.hist3.Down:=config.GetValue('/Visu/Hist3',false);
   f_visu.hist4.Down:=config.GetValue('/Visu/Hist4',false);
   f_visu.histminmax.AllowAllUp:=false;
+
+  LogLevel:=config.GetValue('/Tools/Messages/LogLevel',LogLevel);
+  f_msg.LogLevel:=LogLevel;
 
   ImaBmp:=TBGRABitmap.Create;
   LockTimerPlot:=false;
@@ -2450,6 +2453,7 @@ begin
    config.SetValue('/Tools/Messages/Visible',f_msg.Visible);
    config.SetValue('/Tools/Messages/Top',f_msg.Top);
    config.SetValue('/Tools/Messages/Left',f_msg.Left);
+   config.SetValue('/Tools/Messages/LogLevel',LogLevel);
 
    config.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
    config.SetValue('/Tools/Focuser/Visible',f_focuser.Visible);
