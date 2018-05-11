@@ -973,6 +973,7 @@ begin
   ZoomMin:=1;
   LogLevel:=3;
   AllMsg:=TStringList.Create;
+  AllMsg.OwnsObjects:=true;
   refmask:=false;
   reftreshold:=128;
   refbmp:=TBGRABitmap.Create;
@@ -3152,26 +3153,29 @@ end;
 
 procedure Tf_main.LogLevelChange(Sender: TObject);
 var i: integer;
-    l:string;
 begin
   i:=f_msg.LogLevel;
   if i<>LogLevel then begin
     LogLevel:=i;
-    l:=IntToStr(LogLevel);
     f_msg.msg.Clear;
     for i:=0 to AllMsg.Count-1 do begin
-       if copy(AllMsg[i],10,1)<=l then f_msg.msg.Lines.Add(AllMsg[i]);
+       if TIntList(AllMsg.Objects[i]).value<=LogLevel then
+          f_msg.msg.Lines.Add(AllMsg[i]);
     end;
   end;
 end;
 
 procedure Tf_main.NewMessage(msg: string; level: integer=1);
 var buf: string;
+    ilevel:TIntList;
 begin
  if msg<>'' then begin
-  buf:=FormatDateTime('hh:nn:ss',now)+blank+IntToStr(level)+':'+msg;
-  if AllMsg.Count>100 then AllMsg.Delete(0);
-  AllMsg.Add(buf);
+  buf:=FormatDateTime('hh:nn:ss',now)+blank+msg;
+  if AllMsg.Count>100 then
+     AllMsg.Delete(0);
+  ilevel:=TIntList.Create;
+  ilevel.value:=level;
+  AllMsg.AddObject(buf,ilevel);
   if level<=LogLevel then begin
     if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
     f_msg.msg.Lines.Add(buf);
@@ -3179,7 +3183,7 @@ begin
     f_msg.msg.SelLength:=0;
   end;
   if LogToFile then begin
-    WriteLog(IntToStr(level)+':'+msg);
+    WriteLog(IntToStr(level)+': '+msg);
   end;
  end;
 end;

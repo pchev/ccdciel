@@ -78,6 +78,11 @@ type
                  ExpFact: double;
                end;
 
+  TIntList = Class(TObject)
+               public
+                 value: integer;
+               end;
+
   TStep   = Class(TObject)
               public
               exposure, delay : double;
