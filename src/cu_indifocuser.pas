@@ -204,24 +204,24 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Focuser already connected',1);
+else msg('Focuser already connected',0);
 end;
 
 procedure T_indifocuser.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (FocuserDevice=nil)or(not Fready) then begin
-    msg(rsError2,1);
+    msg(rsError2,0);
     if not Fconnected then begin
-      msg(rsNoResponseFr,1);
-      msg('Is "'+Findidevice+'" a running focuser driver?',1);
+      msg(rsNoResponseFr,0);
+      msg('Is "'+Findidevice+'" a running focuser driver?',0);
     end
     else if (configprop=nil) then
-       msg('Missing property CONFIG_PROCESS',1)
+       msg('Missing property CONFIG_PROCESS',0)
     else if (FocusMotion=nil) then
-       msg('Missing property FOCUS_MOTION',1)
+       msg('Missing property FOCUS_MOTION',0)
     else if ((FocusAbsolutePosition=nil)and(FocusRelativePosition=nil)and(FocusTimer=nil)) then
-       msg('One of the properties ABS_FOCUS_POSITION, REL_FOCUS_POSITION, FOCUS_TIMER is required',1);
+       msg('One of the properties ABS_FOCUS_POSITION, REL_FOCUS_POSITION, FOCUS_TIMER is required',0);
     Disconnect;
   end;
 end;
@@ -257,7 +257,7 @@ procedure T_indifocuser.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3,1);
+  msg(rsServer+' '+rsDisconnected3,0);
   CreateIndiClient;
 end;
 

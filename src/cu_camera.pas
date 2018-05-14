@@ -335,7 +335,7 @@ begin
     if FCancelTemperatureRamp then begin
        FCancelTemperatureRamp:=false;
        FTemperatureRampActive:=false;
-       msg(rsTemperatureR2,1);
+       msg(rsTemperatureR2,0);
        exit;
     end;
     dec(Nstep);
@@ -382,7 +382,7 @@ if FAddFrames then begin  // stack preview frames
              alok:=true;
            end;
        end;
-       if not alok then msg(rsAlignmentSta,1);
+       if not alok then msg(rsAlignmentSta,0);
      end;
      FFits.Math(f,moAdd);       // add frame
      inc(FStackCount);
@@ -408,7 +408,7 @@ if FAddFrames then begin  // stack preview frames
          end;
        end;
      end;
-     if not FStackAlign then msg(rsNoAlignmentS,1);
+     if not FStackAlign then msg(rsNoAlignmentS,0);
   end;
   // update image
   FFits.Header.Assign(f.Header);
@@ -495,7 +495,7 @@ begin
      focal_length:=Fmount.FocaleLength
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
-  if (focal_length<1) then msg(rsErrorUnknowT,1);
+  if (focal_length<1) then msg(rsErrorUnknowT,0);
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
   except

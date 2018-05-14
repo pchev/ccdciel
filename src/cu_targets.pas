@@ -416,7 +416,7 @@ begin
      end;
      StopGuider;
      if f_scriptengine.scr.Running then f_scriptengine.StopScript;
-     msg(rsSequenceAbor,1);
+     msg(rsSequenceAbor,0);
      RunErrorScript;
      ShowDelayMsg('');
    end;
@@ -464,7 +464,7 @@ begin
      FInitializing:=false;
      Targets[FCurrentTarget].autoguiding:=false;
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
-       msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]),1);
+       msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]),0);
        if FUnattended then begin
          StopSequence(true);
          exit;
@@ -496,7 +496,7 @@ begin
        TargetTimer.Enabled:=true;
      end
      else begin
-       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,1);
+       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
        if FUnattended then begin
          FInitializing:=false;
          NextTarget;
@@ -527,7 +527,7 @@ begin
        TargetTimer.Enabled:=true;
      end
      else begin
-       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,1);
+       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
        if FUnattended then begin
          FInitializing:=false;
          NextTarget;
@@ -913,11 +913,11 @@ begin
   result:=false;
   FTargetCoord:=false;
   if FSlewRetry>3 then begin
-     msg(rsSlewAbortedA,1);
+     msg(rsSlewAbortedA,0);
      exit;
   end;
   if (Mount=nil)or(Mount.Status<>devConnected) then begin
-    msg(rsErrorMountNo,1);
+    msg(rsErrorMountNo,0);
     exit;
   end;
   prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
@@ -952,7 +952,7 @@ begin
        errtxt:=Format(rsTelescopeSle, [FormatFloat(f2, err*60)])
     else
        errtxt:=rsTelescopeSle3;
-    msg(errtxt,1);
+    msg(errtxt,0);
     if not Unattended then begin
       f_pause.Caption:=rsTelescopeSle2;
       if (err*60)<9000 then

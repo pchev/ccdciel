@@ -221,7 +221,7 @@ begin
    if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
-   msg(rsResolverAlre,1);
+   msg(rsResolverAlre,0);
    result:=false;
  end;
 end;
@@ -329,7 +329,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]),1);
+     msg(Format(rsErrorProcess, [TmpDir]),0);
      exit;
    end;
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
@@ -381,7 +381,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),0);
    if n<>0 then begin
-     msg(Format(rsErrorProcess, [TmpDir]),1);
+     msg(Format(rsErrorProcess, [TmpDir]),0);
      exit;
    end;
    n:=cdcwcs_getinfo(addr(i),0);
@@ -453,7 +453,7 @@ begin
       RetryMeridianSync:=false;
       Wait(delay);
       if not Fpreview.ControlExposure(exp,binx,biny) then begin
-        msg(rsExposureFail,1);
+        msg(rsExposureFail,0);
         exit;
       end;
       if CancelAutofocus then exit;
@@ -463,14 +463,14 @@ begin
          WaitBusy(AstrometryTimeout+30);
       if not LastResult then begin
          StopAstrometry;
-         msg(rsFailToResolv,1);
+         msg(rsFailToResolv,0);
          break;
       end;
       if CancelAutofocus then exit;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
       if n<>0 then begin
-        msg(Format(rsErrorProcess, [TmpDir]),1);
+        msg(Format(rsErrorProcess, [TmpDir]),0);
         exit;
       end;
       if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
@@ -506,13 +506,13 @@ begin
                      dec(i);
                    end
                    else begin
-                     msg('Mount Sync failed near the meridian.',1);
-                     msg('Abandon after 10 retries.',1);
+                     msg('Mount Sync failed near the meridian.',0);
+                     msg('Abandon after 10 retries.',0);
                      break;
                    end;
                  end
                  else begin
-                   msg('Mount Sync failed!',1);
+                   msg('Mount Sync failed!',0);
                    break;
                  end;
                end;
@@ -541,7 +541,7 @@ begin
     err:=dist;
     FLastSlewErr:=dist;
     if result then msg(rsPrecisionSle2,2)
-              else msg(rsPrecisionSle3,1);
+              else msg(rsPrecisionSle3,0);
     fits.SetBPM(bpm,0,0,0,0);
     if oldfilter>0 then Fwheel.Filter:=oldfilter;
   end;

@@ -147,7 +147,7 @@ begin
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
     if Assigned(FonStartExposure) then FonStartExposure(self);
-    if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,1);
+    if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
   end else begin
     CancelAutofocus:=true;
     if Assigned(FonAbortExposure) then FonAbortExposure(self);

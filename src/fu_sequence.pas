@@ -701,10 +701,10 @@ begin
      f_pause.Caption:=rsAutoguiderNo;
      f_pause.Text:=Format(rsCannotConnec, [crlf]);
      if f_pause.Wait(30) then begin
-       msg(rsSequenceWill2,1);
+       msg(rsSequenceWill2,0);
      end
      else begin
-       msg(rsSequenceAbor,1);
+       msg(rsSequenceAbor,0);
        exit;
      end;
    end
@@ -780,17 +780,17 @@ procedure Tf_sequence.BtnStartClick(Sender: TObject);
 begin
  if (AllDevicesConnected) then begin
    if Targets.Running or Fcapture.Running then begin
-     msg(rsCaptureAlrea,1);
+     msg(rsCaptureAlrea,0);
    end
    else if Targets.Count=0 then begin
-     msg(rsPleaseLoadOr,1);
+     msg(rsPleaseLoadOr,0);
    end
    else begin
      AutoguiderStarting:=false;
      StartSequence;
    end;
  end
- else msg(rsSomeDefinedD,1);
+ else msg(rsSomeDefinedD,0);
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
@@ -834,7 +834,7 @@ begin
         // timeout
         if (Autoguider=nil)or(Autoguider.State=GUIDER_DISCONNECTED) then begin
            // no more autoguider, stop sequence
-           msg(Format(rsSequenceAbor2, [IntToStr(alerttime)]),1);
+           msg(Format(rsSequenceAbor2, [IntToStr(alerttime)]),0);
            AbortSequence;
            AutoguiderAlert:=false;
         end

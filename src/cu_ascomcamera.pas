@@ -174,7 +174,7 @@ begin
  else
     Disconnect;
  except
-   on E: Exception do msg(Format(rsConnectionEr, [E.Message]),1);
+   on E: Exception do msg(Format(rsConnectionEr, [E.Message]),0);
  end;
 {$endif}
 end;
@@ -189,10 +189,10 @@ begin
   if not VarIsEmpty(V) then begin
     V.connected:=false;
     V:=Unassigned;
-    msg(rsDisconnected3,1);
+    msg(rsDisconnected3,0);
   end;
   except
-    on E: Exception do msg(Format(rsDisconnectio, [E.Message]),1);
+    on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
   end;
 {$endif}
 end;
@@ -246,7 +246,7 @@ begin
        if Assigned(FonFrameChange) then FonFrameChange(self);
     end;
     except
-     on E: Exception do msg(Format(rsError, [E.Message]),1);
+     on E: Exception do msg(Format(rsError, [E.Message]),0);
     end;
   end;
  {$endif}
@@ -278,7 +278,7 @@ if Connected then begin
      else ExposureTimer.Interval:=50;
      ExposureTimer.Enabled:=true;
   except
-     on E: Exception do msg(Format(rsStartExposur, [E.Message]),1);
+     on E: Exception do msg(Format(rsStartExposur, [E.Message]),0);
   end;
 end;
 {$endif}
@@ -306,14 +306,14 @@ begin
     try
       state:=V.CameraState;
     except
-      msg('Error reading camera state',1);
+      msg('Error reading camera state',0);
     end;
     ok:=false;
     try
       ok:=V.ImageReady;
     except
       on E: Exception do begin
-        msg('Error reading camera image availability: ' + E.Message,1);
+        msg('Error reading camera image availability: ' + E.Message,0);
         if assigned(FonAbortExposure) then FonAbortExposure(self);
         exit;
       end;
@@ -328,7 +328,7 @@ begin
  end
  else begin
    ok:=false;
-   msg(rsTimeout,1);
+   msg(rsTimeout,0);
    if assigned(FonAbortExposure) then FonAbortExposure(self);
  end;
 
@@ -339,7 +339,7 @@ begin
    img:=V.ImageArray;
    except
      on E: Exception do begin
-       msg('Error accessing ImageArray: ' + E.Message,1);
+       msg('Error accessing ImageArray: ' + E.Message,0);
        if assigned(FonAbortExposure) then FonAbortExposure(self);
        exit;
      end;
@@ -356,7 +356,7 @@ begin
      piy:=V.PixelSizeY;
    except
      on E: Exception do begin
-       msg('Error: cannot get pixel size from camera: ' + E.Message,1);
+       msg('Error: cannot get pixel size from camera: ' + E.Message,0);
      end;
    end;
    ccdname:=Fdevice;
@@ -411,7 +411,7 @@ begin
    NewImage;
  end;
  except
-    on E: Exception do msg('Error reading image: ' + E.Message,1);
+    on E: Exception do msg('Error reading image: ' + E.Message,0);
  end;
  {$endif}
 end;
@@ -446,7 +446,7 @@ begin
      Wait(1);
    end;
    except
-    on E: Exception do msg('Camera '+Fdevice+' Set binning error: ' + E.Message,1);
+    on E: Exception do msg('Camera '+Fdevice+' Set binning error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -477,7 +477,7 @@ begin
    V.NumY:=height;
    Wait(1);
    except
-    on E: Exception do msg('Set frame error: ' + E.Message,1);
+    on E: Exception do msg('Set frame error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -493,7 +493,7 @@ begin
    width  := V.NumX;
    height := V.NumY;
    except
-    on E: Exception do msg('Get frame error: ' + E.Message,1);
+    on E: Exception do msg('Get frame error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -518,7 +518,7 @@ begin
    heightr.max:=V.CameraYSize;
    heightr.step:=1;
    except
-    on E: Exception do msg('Get frame range error: ' + E.Message,1);
+    on E: Exception do msg('Get frame range error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -537,7 +537,7 @@ if Connected then begin
   SetFrame(0,0,w,h);
   Wait(1);
   except
-   on E: Exception do msg('Reset frame error: ' + E.Message,1);
+   on E: Exception do msg('Reset frame error: ' + E.Message,0);
   end;
 end;
 {$endif}
@@ -551,7 +551,7 @@ begin
     msg(rsAbortExposur);
     V.AbortExposure;
    except
-    on E: Exception do msg('Abort exposure error: ' + E.Message,1);
+    on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -664,7 +664,7 @@ begin
    V.Position:=num-1;
    Wait(1);
    except
-    on E: Exception do msg('Set filter error: ' + E.Message,1);
+    on E: Exception do msg('Set filter error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -678,7 +678,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: Exception do msg('Get filter error: ' + E.Message,1);
+    on E: Exception do msg('Get filter error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -728,7 +728,7 @@ begin
       V.SetCCDTemperature:=value;
    end;
    except
-    on E: Exception do msg('Set temperature error: ' + E.Message,1);
+    on E: Exception do msg('Set temperature error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -756,7 +756,7 @@ if Connected and (V.CoolerOn<>value) then begin
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
      V.CoolerOn:=value;
   except
-   on E: Exception do msg('Set cooler error: ' + E.Message,1);
+   on E: Exception do msg('Set cooler error: ' + E.Message,0);
   end;
 end;
 {$endif}

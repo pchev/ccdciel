@@ -132,7 +132,7 @@ begin
      if Frunning then begin
         Msg(rsStartSingleP,2);
      end else begin
-        Msg(rsCannotStartP,1);
+        Msg(rsCannotStartP,0);
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
@@ -152,7 +152,7 @@ begin
         Msg(rsStartPreview,2);
      end else begin
         FLoop:=False;
-        Msg(rsCannotStartP2,1);
+        Msg(rsCannotStartP2,0);
      end;
   end else begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);

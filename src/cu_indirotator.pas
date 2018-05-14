@@ -178,22 +178,22 @@ if not indiclient.Connected then begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg(' Rotator already connected',1);
+else msg(' Rotator already connected',0);
 end;
 
 procedure T_indirotator.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (RotatorDevice=nil)or(not Fready) then begin
-    msg(rsError2,1);
+    msg(rsError2,0);
     if not Fconnected then begin
-      msg(rsNoResponseFr,1);
-      msg('Is "'+Findidevice+'" a running rotator driver?',1);
+      msg(rsNoResponseFr,0);
+      msg('Is "'+Findidevice+'" a running rotator driver?',0);
     end
     else if (configprop=nil) then
-       msg('Rotator '+Findidevice+' Missing property CONFIG_PROCESS',1)
+       msg('Rotator '+Findidevice+' Missing property CONFIG_PROCESS',0)
     else if (RotatorAngle=nil) then
-       msg('Rotator '+Findidevice+' Missing property ABS_ROTATOR_ANGLE',1);
+       msg('Rotator '+Findidevice+' Missing property ABS_ROTATOR_ANGLE',0);
     Disconnect;
   end;
 end;
@@ -229,7 +229,7 @@ procedure T_indirotator.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3,1);
+  msg(rsServer+' '+rsDisconnected3,0);
   CreateIndiClient;
 end;
 

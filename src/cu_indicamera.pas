@@ -366,26 +366,26 @@ if not indiclient.Connected then begin
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   InitTimer.Enabled:=true;
 end
-else msg('Camera already connected',1);
+else msg('Camera already connected',0);
 end;
 
 procedure T_indicamera.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
   if (not Fready) then begin
-    msg(rsError2,1);
+    msg(rsError2,0);
     if not Fconnected then begin
-       msg(rsNoResponseFr,1);
-       msg('Is "'+Findidevice+'" a running camera driver?',1);
+       msg(rsNoResponseFr,0);
+       msg('Is "'+Findidevice+'" a running camera driver?',0);
     end
     else if (configprop=nil) then
-       msg('Missing property CONFIG_PROCESS',1)
+       msg('Missing property CONFIG_PROCESS',0)
     else if not FhasBlob then
-       msg('Missing property INDI_BLOB',1)
+       msg('Missing property INDI_BLOB',0)
     else if ((Findisensor='CCD2')and(Guiderexpose=nil)) then
-       msg(Findisensor+' missing property GUIDER_EXPOSURE',1)
+       msg(Findisensor+' missing property GUIDER_EXPOSURE',0)
     else if ((Findisensor<>'CCD2')and(CCDexpose=nil)) then
-       msg(Findisensor+' missing property CCD_EXPOSURE',1);
+       msg(Findisensor+' missing property CCD_EXPOSURE',0);
     Disconnect;
   end;
 end;
@@ -431,7 +431,7 @@ begin
   FWheelStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3,1);
+  msg(rsServer+' '+rsDisconnected3,0);
   CreateIndiClient;
 end;
 
@@ -854,7 +854,7 @@ begin
      end;
    end
    else begin
-        msg('Invalid file format '+bp.format+', a FITS file is required',1);
+        msg('Invalid file format '+bp.format+', a FITS file is required',0);
         AbortExposure;
         NewImage;
    end;

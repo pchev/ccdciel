@@ -97,7 +97,7 @@ begin
   else
      Disconnect;
   except
-    on E: Exception do msg('Connection error: ' + E.Message,1);
+    on E: Exception do msg('Connection error: ' + E.Message,0);
   end;
  {$endif}
 end;
@@ -110,12 +110,12 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3,1);
+     msg(rsDisconnected3,0);
      V.connected:=false;
      V:=Unassigned;
    end;
    except
-     on E: Exception do msg('Disconnection error: ' + E.Message,1);
+     on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
  {$endif}
 end;
@@ -167,7 +167,7 @@ begin
     end;
     fnam.Free;
     except
-     on E: Exception do msg('Error: ' + E.Message,1);
+     on E: Exception do msg('Error: ' + E.Message,0);
     end;
   end;
  {$endif}
@@ -207,7 +207,7 @@ begin
    V.Position:=num-1;
    WaitFilter(60000);
    except
-    on E: Exception do msg('Set filter error: ' + E.Message,1);
+    on E: Exception do msg('Set filter error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -221,7 +221,7 @@ begin
    try
    result:=V.Position+1;
    except
-    on E: Exception do msg('Get filter error: ' + E.Message,1);
+    on E: Exception do msg('Get filter error: ' + E.Message,0);
    end;
  end;
  {$endif}
@@ -263,7 +263,7 @@ begin
      value.Add(fnames[i]);
    end;
    except
-    on E: Exception do msg('List filter names error: ' + E.Message,1);
+    on E: Exception do msg('List filter names error: ' + E.Message,0);
    end;
  end;
  {$endif}

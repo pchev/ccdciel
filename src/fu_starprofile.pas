@@ -464,7 +464,7 @@ end;
 inc(curhist);
 except
   on E: Exception do begin
-    msg('PlotProfile :'+ E.Message,1);
+    msg('PlotProfile :'+ E.Message,0);
   end;
 end;
 end;
@@ -513,7 +513,7 @@ end;
 inc(curhist);
 except
   on E: Exception do begin
-    msg('PlotHistory :'+ E.Message,1);
+    msg('PlotHistory :'+ E.Message,0);
   end;
 end;
 end;
@@ -556,7 +556,7 @@ begin
  if assigned(FonStarSelection) then FonStarSelection(self);
  except
    on E: Exception do begin
-     msg('ShowProfile :'+ E.Message,1);
+     msg('ShowProfile :'+ E.Message,0);
    end;
  end;
 end;
@@ -596,7 +596,7 @@ begin
        msg(Format(rsUsingMedianO, [inttostr(nhfd)]),3);
     end
     else begin
-       msg(rsAutofocusCan3,1);
+       msg(rsAutofocusCan3,0);
        FAutofocusResult:=false;
        ChkAutofocusDown(false);
        if LogToFile then begin
@@ -609,14 +609,14 @@ begin
  end
  else begin                      // measure one star
   if (x<0)or(y<0)or(s<0) then begin
-    msg(rsAutofocusCan2,1);
+    msg(rsAutofocusCan2,0);
     FAutofocusResult:=false;
     ChkAutofocusDown(false);
     exit;
   end;
   f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
   if FValMax=0 then begin
-     msg(rsAutofocusCan3,1);
+     msg(rsAutofocusCan3,0);
      FAutofocusResult:=false;
      ChkAutofocusDown(false);
      exit;
@@ -624,15 +624,15 @@ begin
   f.GetHFD(xm,ym,ri,bg,bgdev,xg,yg,Fhfd,star_fwhm,FValMax,Fsnr);
   // process this measurement
   if (Fhfd<=0) then begin
-    msg(rsAutofocusCan4,1);
+    msg(rsAutofocusCan4,0);
     FAutofocusResult:=false;
     ChkAutofocusDown(false);
     exit;
   end;
   if (Fhfd<=0)or((not Undersampled)and(Fhfd<0.8)) then begin
     msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]),3);
-    msg(rsWeAreProbabl,1);
-    msg(rsPleaseCreate,1);
+    msg(rsWeAreProbabl,0);
+    msg(rsPleaseCreate,0);
     FAutofocusResult:=false;
     ChkAutofocusDown(false);
     exit;
@@ -731,7 +731,7 @@ begin
       end;
     end
     else begin
-       msg(Format(rsAutofocusFin2, [FormatFloat(f1, AutofocusTolerance)]),1);
+       msg(Format(rsAutofocusFin2, [FormatFloat(f1, AutofocusTolerance)]),0);
     end;
     ChkAutofocusDown(false);
     exit;
@@ -760,7 +760,7 @@ begin
               // move to start focus position
               newpos:=AutofocusVcpiL+(AutofocusStartHFD/AutofocusVcSlopeL);
               if newpos<AutofocusVc[0,1] then begin
-                 msg(rsStartFocusHF,1);
+                 msg(rsStartFocusHF,0);
                  ChkAutofocusDown(false);
                  exit;
               end;
@@ -785,7 +785,7 @@ begin
               // move to start focus position
               newpos:=AutofocusVcpiR+(AutofocusStartHFD/AutofocusVcSlopeR);
               if newpos>AutofocusVc[AutofocusVcNum,1] then begin
-                 msg(rsStartFocusHF,1);
+                 msg(rsStartFocusHF,0);
                  ChkAutofocusDown(false);
                  exit;
               end;
@@ -973,7 +973,7 @@ begin
                  ResetPos;
                  if FAutofocusRestart>0 then begin
                    // we already retry, abort now
-                   msg(rsNotEnoughPoi,1);
+                   msg(rsNotEnoughPoi,0);
                    msg(rsTheFocuserIs,1);
                    terminated:=true;
                  end
@@ -987,7 +987,7 @@ begin
               end;
               if (amaxhfd<(1.5*aminhfd)) then begin
                  // not enough difference between min and max HFD, abort
-                 msg(rsTooSmallHFDD,1);
+                 msg(rsTooSmallHFDD,0);
                  msg(rsTheFocuserIs,1);
                  ResetPos;
                  terminated:=true;
