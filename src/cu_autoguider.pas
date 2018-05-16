@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, LCLIntf,
+uses u_global, LCLIntf, u_translation,
   Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -124,9 +124,9 @@ end;
 procedure T_autoguider.DisplayMessage(msg:string);
 begin
 if FErrorDesc='' then
-  FErrorDesc:=msg
+  FErrorDesc:=rsAutoguider+': '+msg
 else
-  FErrorDesc:=FErrorDesc+crlf+msg;
+  FErrorDesc:=FErrorDesc+crlf+rsAutoguider+': '+msg;
 PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderMessage, 0);
 end;
 

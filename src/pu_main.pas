@@ -7866,13 +7866,15 @@ begin
 end;
 
 procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
+var buf:string;
 begin
   if AppClose then exit;
   case Message.wParam of
     M_AutoguiderStatusChange: AutoguiderStatus(nil);
     M_AutoguiderMessage: if autoguider.ErrorDesc<>'' then begin
-                          NewMessage(autoguider.ErrorDesc,1);
+                          buf:=autoguider.ErrorDesc;
                           autoguider.ErrorDesc:='';
+                          NewMessage(buf,1);
                          end;
     M_AstrometryDone: astrometry.AstrometryDone;
     else

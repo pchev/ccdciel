@@ -172,7 +172,7 @@ begin
  except
    on e:Exception do begin
      result:=msgFailed;
-     DisplayMessage('Autoguider: '+e.Message);
+     DisplayMessage(e.Message);
    end;
  end;
 end;
@@ -292,7 +292,7 @@ end;
 procedure T_autoguider_linguider.Shutdown;
 begin
 if not FRunning then exit;
-DisplayMessage('Autoguider: '+'Shutdown command not supported by Lin_Guider');
+DisplayMessage('Shutdown command not supported by Lin_Guider');
 end;
 
 procedure T_autoguider_linguider.SettleTolerance(pixel:double; mintime,maxtime: integer);
@@ -334,7 +334,7 @@ end;
 procedure T_autoguider_linguider.Calibrate;
 begin
 if not FRunning then exit;
-DisplayMessage('Autoguider: '+'Calibrate command not supported by Lin_Guider');
+DisplayMessage('Calibrate command not supported by Lin_Guider');
 end;
 
 procedure T_autoguider_linguider.Guide(onoff:boolean; recalibrate:boolean=false);
@@ -348,11 +348,11 @@ if not FRunning then exit;
      buf:=LinGuiderCmd(LIN_SET_GUIDER_OVL_POS,xy);
      buf:=LinGuiderCmd(LIN_SET_GUIDER_RETICLE_POS,xy);
      buf:=LinGuiderCmd(LIN_GUIDER,'start');
-     DisplayMessage('Autoguider: '+'Guide start: '+buf);
+     DisplayMessage('Guide start: '+buf);
   end else begin
      FStopGuiding:=true;
      buf:=LinGuiderCmd(LIN_GUIDER,'stop');
-     DisplayMessage('Autoguider: '+'Guide stop: '+buf);
+     DisplayMessage('Guide stop: '+buf);
   end;
 end;
 
@@ -369,7 +369,7 @@ if not FRunning then exit;
   pix:=FormatFloat(f1,pixel);
   buf:=LinGuiderCmd(LIN_SET_DITHERING_RANGE,pix);
   buf:=LinGuiderCmd(LIN_DITHER);
-  DisplayMessage('Autoguider: '+'Dither: '+buf);
+  DisplayMessage('Dither: '+buf);
 end;
 
 procedure T_autoguider_linguider.StarLostTimerTimer(Sender: TObject);
