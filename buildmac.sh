@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=0.9.36
+version=0.9.37
 version_major=0
 version_minor=9
 
