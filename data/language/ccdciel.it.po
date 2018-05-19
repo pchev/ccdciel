@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2018-05-11 16:06+0000\n"
-"PO-Revision-Date: 2018-04-28 09:44+0000\n"
+"PO-Revision-Date: 2018-05-12 08:30+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-05-11 16:13+0000\n"
-"X-Generator: Launchpad (build 18640)\n"
+"X-Launchpad-Export-Date: 2018-05-19 14:44+0000\n"
+"X-Generator: Launchpad (build 18658)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -258,7 +258,7 @@ msgstr ""
 
 #: u_translation.rsautoguiding
 msgid "Auto-guiding"
-msgstr ""
+msgstr "Autoguida"
 
 #: u_translation.rsautoguidingr
 msgid "Autoguiding restarted."
@@ -318,7 +318,7 @@ msgstr ""
 
 #: u_translation.rsbeforeyoucan
 msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
-msgstr ""
+msgstr "Prima di poter usare questa opzione, il programma Elbrus deve essere calibrato per le tue immagini. Poi seleziona File / E-Attendi messaggio.%sAssicurati anche di selezionare l'opzione: \"Aggiungi WCS nell'header FITS\"."
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -478,7 +478,7 @@ msgstr ""
 
 #: u_translation.rscapture
 msgid "Capture"
-msgstr "Acquisisci"
+msgstr "Cattura"
 
 #: u_translation.rscapturealrea
 msgid "Capture already running! please stop it first if you want to start a new sequence."
@@ -614,11 +614,11 @@ msgstr ""
 
 #: u_translation.rscontinueinse
 msgid "Continue in %s seconds"
-msgstr ""
+msgstr "Continua in %s secondi"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
-msgstr ""
+msgstr "Controllo esposizione"
 
 #: u_translation.rscooldownwhen
 msgid "Cool down when camera is connected"
@@ -642,7 +642,7 @@ msgstr ""
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
-msgstr ""
+msgstr "Metodo di correzione"
 
 #: u_translation.rscount
 msgid "Count"
@@ -666,11 +666,11 @@ msgstr ""
 
 #: u_translation.rscreateplotof
 msgid "Create plot of the result"
-msgstr ""
+msgstr "Crea disegno del risultato"
 
 #: u_translation.rscurrent
 msgid "Current"
-msgstr ""
+msgstr "Attuale"
 
 #: u_translation.rscurrentfocus
 msgid "Current focuser absolute position"
@@ -722,7 +722,7 @@ msgstr "Gradi al minuto"
 
 #: u_translation.rsdelayafterte
 msgid "Delay after telescope slew [seconds] "
-msgstr ""
+msgstr "Intervallo dopo movimento telescopio [sec] "
 
 #: u_translation.rsdelete
 msgid "Delete"
@@ -838,7 +838,7 @@ msgstr "Scarica l'ultima versione"
 
 #: u_translation.rsdownsample
 msgid "Downsample"
-msgstr ""
+msgstr "Sottocampiona"
 
 #: u_translation.rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
@@ -1178,7 +1178,7 @@ msgstr "Da driver fotocamera"
 
 #: u_translation.rsfromtelescop
 msgid "From telescope driver"
-msgstr ""
+msgstr "Da driver telescopio"
 
 #: u_translation.rsfromtoby
 msgid "From: %s to %s by %s"
@@ -1230,7 +1230,7 @@ msgstr "%s sta guidando"
 
 #: u_translation.rshalt
 msgid "Halt"
-msgstr ""
+msgstr "Ferma"
 
 #: u_translation.rsheartbeatthr
 msgid "Heart beat threshold [minutes]"
@@ -1358,7 +1358,7 @@ msgstr ""
 
 #: u_translation.rsiterative
 msgid "Iterative"
-msgstr ""
+msgstr "Iterativo"
 
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
@@ -1386,7 +1386,7 @@ msgstr ""
 
 #: u_translation.rslimitingmagn
 msgid "Limiting magnitude"
-msgstr ""
+msgstr "Magnitudine limite"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -1430,7 +1430,7 @@ msgstr ""
 
 #: u_translation.rsmanyfunction
 msgid "Many functions will not work reliably without an astrometry software."
-msgstr ""
+msgstr "Molte funzioni non funzioneranno correttamente senza un programma astrometrico."
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -1446,15 +1446,15 @@ msgstr ""
 
 #: u_translation.rsmaximumnumbe
 msgid "Maximum number of retry"
-msgstr ""
+msgstr "Massimo numero di tentativi"
 
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
-msgstr ""
+msgstr "Massimo raggio di ricerca"
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
-msgstr ""
+msgstr "Sorgenti massime"
 
 #: u_translation.rsmaximumtempe
 msgid "Maximum temperature change "
@@ -1730,7 +1730,7 @@ msgstr ""
 
 #: u_translation.rsobject
 msgid "Object"
-msgstr ""
+msgstr "Oggetto"
 
 #: u_translation.rsobjectname
 msgid "Object name"
@@ -1802,7 +1802,7 @@ msgstr ""
 
 #: u_translation.rsotheroptions
 msgid "Other options "
-msgstr ""
+msgstr "Altre opzioni "
 
 #: u_translation.rsout
 msgid "Out"
@@ -1966,7 +1966,7 @@ msgstr ""
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
-msgstr ""
+msgstr "Opzioni di precisione movimento"
 
 #: u_translation.rsprecisionsle2
 msgid "Precision slew finished."
@@ -2198,7 +2198,7 @@ msgstr ""
 
 #: u_translation.rsreverse
 msgid "Reverse"
-msgstr ""
+msgstr "Inverti"
 
 #: u_translation.rsrise
 msgid "rise"
@@ -2242,7 +2242,7 @@ msgstr ""
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
-msgstr ""
+msgstr "Esegui automaticamente"
 
 #: u_translation.rss
 msgid "s"
@@ -2270,7 +2270,7 @@ msgstr "Salva file FITS %s"
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
-msgstr ""
+msgstr "Tolleranza scala"
 
 #: u_translation.rsscript
 msgid "Script"
@@ -2318,11 +2318,11 @@ msgstr "sec."
 
 #: u_translation.rsseconds
 msgid "seconds"
-msgstr ""
+msgstr "secondi"
 
 #: u_translation.rsseconds2
 msgid "[seconds]"
-msgstr ""
+msgstr "[secondi]"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -2442,7 +2442,7 @@ msgstr ""
 
 #: u_translation.rssetpoint
 msgid "Setpoint"
-msgstr ""
+msgstr "Setpoint"
 
 #: u_translation.rssetrotatoran
 msgid "Set rotator angle"
@@ -2514,7 +2514,7 @@ msgstr ""
 
 #: u_translation.rsslewing
 msgid "Slewing"
-msgstr ""
+msgstr "Movimento"
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"
@@ -2522,7 +2522,7 @@ msgstr "Muovi telescopio alla posizione del pannello Flat"
 
 #: u_translation.rsslewto
 msgid "Slewing to %s/%s"
-msgstr ""
+msgstr "In movimento a %s/%s"
 
 #: u_translation.rsslewtoanears
 msgid "Slew to a near star of magnitude"
@@ -2558,11 +2558,11 @@ msgstr ""
 
 #: u_translation.rssoftware
 msgid "Software"
-msgstr ""
+msgstr "Programma"
 
 #: u_translation.rssolvedinseco
 msgid "Solved in %s seconds"
-msgstr ""
+msgstr "Risolto in %s secondi"
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
@@ -2654,7 +2654,7 @@ msgstr "Inizia apprendimento curva V"
 
 #: u_translation.rsstartmagnitu
 msgid "Start magnitude"
-msgstr ""
+msgstr "Magnitudine di partenza"
 
 #: u_translation.rsstartnewlog
 msgid "Start new log"
@@ -2822,7 +2822,7 @@ msgstr "Sottocartella da nome sequenza"
 
 #: u_translation.rssubstractadr
 msgid "Substract a drak frame"
-msgstr ""
+msgstr "Sottrai un dark frame"
 
 #: u_translation.rssummary
 msgid "Summary"
@@ -2850,11 +2850,11 @@ msgstr ""
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
-msgstr ""
+msgstr "Precisione di puntamento [arcmin] "
 
 #: u_translation.rstargets
 msgid "Targets"
-msgstr ""
+msgstr "Obiettivi"
 
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
@@ -3006,7 +3006,7 @@ msgstr "Segui"
 
 #: u_translation.rstreshold
 msgid "Treshold :"
-msgstr ""
+msgstr "Soglia :"
 
 #: u_translation.rstrue
 msgid "True"
@@ -3030,7 +3030,7 @@ msgstr "Flat crepuscolare"
 
 #: u_translation.rstype
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: u_translation.rsunabletofind
 msgid "Unable to find resolve data!"
@@ -3062,7 +3062,7 @@ msgstr ""
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
-msgstr ""
+msgstr "Usa script personalizzato"
 
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"
@@ -3114,7 +3114,7 @@ msgstr "Video"
 
 #: u_translation.rsvideopreview
 msgid "Video preview frame rate "
-msgstr "Cadenza fotogrammi per anteprima video "
+msgstr "fps per anteprima video "
 
 #: u_translation.rsviewheader
 msgid "View header"
@@ -3138,7 +3138,7 @@ msgstr ""
 
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
-msgstr ""
+msgstr "Attendi dopo risoluzione"
 
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
