@@ -881,6 +881,7 @@ resourcestring
   rsUseExternalC = 'Use external command to light the panel on/off';
   rsLightON = 'Light ON';
   rsLightOFF = 'Light OFF';
+  rsResolveAndPl = 'Resolve and plot DSO';
 
 
 

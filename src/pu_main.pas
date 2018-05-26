@@ -1457,6 +1457,7 @@ begin
    MenuResolveSync.Caption := rsResolveAndSy;
    MenuResolveRotate.Caption := rsResolveAndRo;
    MenuResolveSyncRotator.Caption := rsResolveAndSy2;
+   MenuResolveDSO.Caption:=rsResolveAndPl;
    MenuResolvePlanetarium.Caption := rsResolveAndSh;
    MenuShowCCDFrame.Caption := rsResolveAndSh2;
    MenuViewAstrometryLog.Caption := rsViewLastReso;

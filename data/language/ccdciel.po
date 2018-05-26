@@ -3198,3 +3198,7 @@ msgstr ""
 msgid "Light OFF"
 msgstr ""
 
+#: u_translation:rsresolveandpl
+msgid "Resolve and plot DSO"
+msgstr ""
+
