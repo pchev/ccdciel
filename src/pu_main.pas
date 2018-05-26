@@ -33,8 +33,9 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
-  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp,
-  cu_planetarium_hnsky, pu_planetariuminfo, indiapi, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
+  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
+  cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
+  u_deepsky, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, ExtDlgs, Types, u_translation;
@@ -68,6 +69,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuResolveDSO: TMenuItem;
     MenuViewMagnifyer: TMenuItem;
     MenuSaveConfig: TMenuItem;
     MenuItemCleanup: TMenuItem;
@@ -273,6 +275,7 @@ type
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
+    procedure MenuResolveDSOClick(Sender: TObject);
     procedure MenuSaveConfigClick(Sender: TObject);
     procedure MenuOpenPictureClick(Sender: TObject);
     procedure MenuResolveRotateClick(Sender: TObject);
@@ -575,6 +578,7 @@ type
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
+    procedure AstrometryPlotDSO(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
@@ -1589,6 +1593,8 @@ begin
   f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
 
   LoadFocusStar;
+  deepstring:=TStringList.Create;
+  load_deep;
 
   StatusTimer.Enabled:=true;
   StartupTimer.Enabled:=true;
@@ -1899,6 +1905,7 @@ begin
   FilterList.Free;
   BinningList.Free;
   ISOList.Free;
+  deepstring.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
@@ -7364,6 +7371,29 @@ begin
   astrometry.SlewScreenXY(MouseDownX,MouseDownY);
 end;
 
+procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
+begin
+ if fits.HeaderInfo.valid then begin
+     if fits.HeaderInfo.solved then begin
+        plot_deepsky(fits,imabmp.Canvas,imabmp.Height);
+        PlotImage;
+     end else begin
+       if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
+         fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+         astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
+       end;
+     end;
+ end;
+end;
+
+procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
+begin
+if astrometry.LastResult then begin
+  plot_deepsky(fits,imabmp.Canvas,imabmp.Height);
+  PlotImage;
+end;
+end;
+
 procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);
 begin
   if fits.HeaderInfo.valid then begin
@@ -7533,7 +7563,6 @@ if astrometry.LastResult and planetarium.Connected then begin
      NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt,1);
 end;
 end;
-
 
 Procedure Tf_main.PlanetariumConnectClick(Sender: TObject);
 var i: integer;

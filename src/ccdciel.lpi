@@ -217,7 +217,7 @@
       <local>
         <FormatVersion Value="1"/>
         <LaunchingApplication PathPlusParams="/usr/bin/wine $(TargetCmdLine)"/>
-        <WorkingDirectory Value="/usr/bin"/>
+        <WorkingDirectory Value="/usr/local/bin"/>
       </local>
     </RunParams>
     <RequiredPackages Count="10">
@@ -252,7 +252,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="71">
+    <Units Count="72">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -631,6 +631,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit70>
+      <Unit71>
+        <Filename Value="u_deepsky.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit71>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
