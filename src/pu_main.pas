@@ -7184,11 +7184,15 @@ end;
 procedure Tf_main.AstrometryStart(Sender: TObject);
 begin
   // update Menu
-  MenuResolvePlanetarium.Enabled:=false;
-  MenuResolveSync.Enabled:=false;
-  MenuResolveSlew.Enabled:=false;
   MenuResolve.Enabled:=false;
   MenuResolveSlewCenter.Enabled:=false;
+  MenuResolveSlew.Enabled:=false;
+  MenuResolveSync.Enabled:=false;
+  MenuResolveRotate.Enabled:=false;
+  MenuResolveSyncRotator.Enabled:=false;
+  MenuResolveDSO.Enabled:=false;
+  MenuResolvePlanetarium.Enabled:=false;
+  MenuShowCCDFrame.Enabled:=false;
   {$ifdef mswindows}
   MenuViewAstrometryLog.Enabled:=false;
   {$endif}
@@ -7200,11 +7204,15 @@ var resulttxt:string;
 begin
   // update Menu
   MenuStopAstrometry.Visible:=false;
-  MenuResolvePlanetarium.Enabled:=true;
-  MenuResolveSync.Enabled:=true;
-  MenuResolveSlew.Enabled:=true;
   MenuResolve.Enabled:=true;
   MenuResolveSlewCenter.Enabled:=true;
+  MenuResolveSlew.Enabled:=true;
+  MenuResolveSync.Enabled:=true;
+  MenuResolveRotate.Enabled:=true;
+  MenuResolveSyncRotator.Enabled:=true;
+  MenuResolveDSO.Enabled:=true;
+  MenuResolvePlanetarium.Enabled:=true;
+  MenuShowCCDFrame.Enabled:=true;
   MenuViewAstrometryLog.Enabled:=true;
   if astrometry.LastResult then begin
      LoadFitsFile(astrometry.ResultFile);
