@@ -286,9 +286,10 @@ var
   dra,ddec,delta,gamma,
   telescope_ra,telescope_dec,cos_telescope_dec,fov,ra2,dec2,
   length1,width1,pa,xx,yy,x,y,len,flipped,
-  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2,crota2,ra0,dec0 :double;
-  width2, height2,h: integer;
+  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2,crota1,crota2,ra0,dec0 :double;
+  width2, height2,h,sign: integer;
   name: string;
+  new_to_old_WCS: boolean;
 begin
   if ((f<>nil) and (f.HeaderInfo.solved)) then
   begin
@@ -298,17 +299,29 @@ begin
     fitsy:=height2/2;
     if not f.Header.Valueof('CRPIX1',crpix1) then exit;
     if not f.Header.Valueof('CRPIX2',crpix2) then exit;
-    if not f.Header.Valueof('CDELT1',cdelt1) then exit;
-    if not f.Header.Valueof('CDELT2',cdelt2) then exit;
-    if not f.Header.Valueof('CROTA2',crota2) then exit;
+    if not f.Header.Valueof('CRVAL1',ra0) then exit;
+    if not f.Header.Valueof('CRVAL2',dec0) then exit;
     if not f.Header.Valueof('CD1_1',cd1_1) then exit;
     if not f.Header.Valueof('CD1_2',cd1_2) then exit;
     if not f.Header.Valueof('CD2_1',cd2_1) then exit;
     if not f.Header.Valueof('CD2_2',cd2_2) then exit;
-    if not f.Header.Valueof('CRVAL1',ra0) then exit;
-    if not f.Header.Valueof('CRVAL2',dec0) then exit;
+    new_to_old_WCS:=false;
+    if not f.Header.Valueof('CDELT1',cdelt1) then new_to_old_WCS:=true;
+    if not f.Header.Valueof('CDELT2',cdelt2) then new_to_old_WCS:=true;
+    if not f.Header.Valueof('CROTA2',crota2) then new_to_old_WCS:=true;
+
     ra0:=deg2rad*ra0;
     dec0:=deg2rad*dec0;
+
+    if new_to_old_WCS then begin
+      if (cd1_1*cd2_2-cd1_2*cd2_1)>=0 then sign:=+1 else sign:=-1;
+      cdelt1:=sqrt(sqr(cd1_1)+sqr(cd2_1))*sign;
+      cdelt2:=sqrt(sqr(cd1_2)+sqr(cd2_2));
+      crota1:= arctan2(sign*cd1_2,cd2_2);
+      crota2:= arctan2(sign*cd1_1,cd2_1)-pi/2;
+      crota1:= crota1*180/pi;
+      crota2:= crota2*180/pi;
+    end;
 
     dRa :=(cd1_1*(fitsx-crpix1)+cd1_2*(fitsy-crpix2))*pi/180;
     dDec:=(cd2_1*(fitsx-crpix1)+cd2_2*(fitsy-crpix2))*pi/180;
