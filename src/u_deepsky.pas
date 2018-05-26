@@ -357,7 +357,7 @@ begin
        if width1=0 then begin width1:=length1;pa:=999;end;
        len:=length1/(cdelt2*60*10*2); {Length in pixels}
        if PA<>999 then
-         plot_glx(cnv,x,y,len,width1/length1,-(pa*flipped-90)*pi/180) {draw oval or galaxy}
+         plot_glx(cnv,x,y,len,width1/length1,-(pa*flipped-90+crota2)*pi/180) {draw oval or galaxy}
        else
          cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
      end;
