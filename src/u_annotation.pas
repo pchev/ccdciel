@@ -1,4 +1,4 @@
-unit u_deepsky; {deep sky annotation of the image}
+unit u_annotation; {deep sky annotation of the image}
 { From ASTAP unit_deepsky with modification for CCDciel environment}
 {$mode delphi}
 {Copyright (C) 2018 by Han Kleijn, www.hnsky.org
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 interface
-uses  u_global, u_utils, cu_fits,
+uses  u_global, u_utils, cu_fits, UScaleDPI,
   Classes, SysUtils,strutils, math,graphics;
 
 procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
@@ -39,7 +39,7 @@ begin
     with deepstring do
     begin
        try
-       LoadFromFile(slash(DataDir)+slash('dso')+'astap_deep_sky.ads');{load deep sky data from file }
+       LoadFromFile(slash(DataDir)+slash('dso')+'deep_sky.csv');{load deep sky data from file }
        except;
          clear;
          globalmsg('Deep sky data base not found. Please try to reinstall the program.');
@@ -233,7 +233,7 @@ begin
 end;
 
 
-procedure plot_glx(dc:tcanvas;x9,y9,diameter,neigung {ratio width/length},orientation:double); {draw oval or galaxy}
+procedure plot_glx(dc:tcanvas;x9,y9,diameter,ratio {ratio width/length},orientation:double); {draw oval or galaxy}
 var   glx :array[0..127 {nr}+1] of tpoint;
       i,nr           : integer;
       r, xx,yy,sin_ori,cos_ori              : double;
@@ -242,16 +242,15 @@ begin
    else if diameter<20 then nr:=44
    else nr:=127;
 
-  if abs(neigung)<0.00001 then neigung:=0.00001;{show ring always also when it is flat}
+  if abs(ratio)<0.00001 then ratio:=0.00001;{show ring always also when it is flat}
    for i:=0 to nr+1 do
    begin
-     r:=sqrt(sqr(diameter*neigung)/(1.00000000000001-(1-sqr(neigung))*sqr(cos(-pi*i*2/(nr))))); {radius ellips}
+     r:=sqrt(sqr(diameter*ratio)/(1.00000000000001-(1-sqr(ratio))*sqr(cos(-pi*i*2/(nr))))); {radius ellips}
       sincos(orientation+pi*i*2/nr, sin_ori, cos_ori);
      glx[i].x:=round(x9    +r * cos_ori );
      glx[i].y:=round(y9    +r * sin_ori );
    end;
-   dc.polygon(glx,nr+1)
-    //else dc.polyline(glx,nr+1);
+   dc.polygon(glx,nr+1);
 end;
 
 procedure rotate(rot,x,y :double;var  x2,y2:double);{rotate a vector point, angle seen from y-axis, counter clockwise}
@@ -259,8 +258,8 @@ var
   sin_rot, cos_rot :double;
 begin
   sincos(rot, sin_rot, cos_rot);
-  x2:=x * + sin_rot + y*cos_rot;{ROTATION MOON AROUND CENTER OF PLANET}
-  y2:=x * - cos_rot + y*sin_rot;{SEE PRISMA WIS VADEMECUM BLZ 68}
+  x2:=x * + sin_rot + y*cos_rot;
+  y2:=x * - cos_rot + y*sin_rot;{SEE PRISMA WIS VADEMECUM page 68}
 end;
 
 
@@ -275,7 +274,7 @@ begin
   sincos(dec0  ,sin_dec0 ,cos_dec0);
   sincos(dec   ,sin_dec  ,cos_dec );
   sincos(ra-ra0, sin_deltaRA,cos_deltaRA);
-  dv  := (cos_dec0 * cos_dec * cos_deltaRA + sin_dec0 * sin_dec) / (3600*180/pi)*cdelt; {/ (3600*180/pi)*cdelt, factor for onversion standard coordinates to CCD pixels}
+  dv  := (cos_dec0 * cos_dec * cos_deltaRA + sin_dec0 * sin_dec) / (3600*180/pi)*cdelt; {/ (3600*180/pi)*cdelt, factor for conversion standard coordinates to CCD pixels}
   xx := - cos_dec *sin_deltaRA / dv;{tangent of the angle in RA}
   yy := -(sin_dec0 * cos_dec * cos_deltaRA - cos_dec0 * sin_dec) / dv;  {tangent of the angle in DEC}
 end;
@@ -340,7 +339,7 @@ begin
     if h=0 then h:=height2;
     cnv.Pen.width := round(1+height2/h);{thickness lines}
     cnv.pen.color:=clyellow;
-    cnv.font.size:=round(14*height2/h);{adapt font to image dimensions}
+    cnv.font.size:=round(DoScaleX(10)*height2/h);{adapt font to image dimensions}
     cnv.brush.Style:=bsClear;
     cnv.font.color:=clyellow;
 

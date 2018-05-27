@@ -632,7 +632,7 @@
         <ResourceBaseClass Value="Form"/>
       </Unit70>
       <Unit71>
-        <Filename Value="u_deepsky.pas"/>
+        <Filename Value="u_annotation.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit71>
     </Units>

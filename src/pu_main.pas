@@ -35,7 +35,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
-  u_deepsky, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
+  u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
   LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, ExtDlgs, Types, u_translation;
@@ -1595,7 +1595,6 @@ begin
 
   LoadFocusStar;
   deepstring:=TStringList.Create;
-  load_deep;
 
   StatusTimer.Enabled:=true;
   StartupTimer.Enabled:=true;
@@ -7384,7 +7383,8 @@ procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
 begin
  if fits.HeaderInfo.valid then begin
      if fits.HeaderInfo.solved then begin
-        plot_deepsky(fits,imabmp.Canvas,imabmp.Height);
+        load_deep;
+        plot_deepsky(fits,imabmp.Canvas,Image1.Height);
         PlotImage;
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
@@ -7398,7 +7398,8 @@ end;
 procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
 begin
 if astrometry.LastResult then begin
-  plot_deepsky(fits,imabmp.Canvas,imabmp.Height);
+  load_deep;
+  plot_deepsky(fits,imabmp.Canvas,Image1.Height);
   PlotImage;
 end;
 end;
