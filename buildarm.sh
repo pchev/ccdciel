@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=0.9.37
+version=$(grep 'ccdcielver' src/u_global.pas |head -1| cut -d\' -f2)
 
 builddir=/tmp/ccdciel  # Be sure this is set to a non existent directory, it is removed after the run!
 

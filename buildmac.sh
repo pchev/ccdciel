@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=0.9.37
+version=$(grep 'ccdcielver' src/u_global.pas |head -1| cut -d\' -f2)
 version_major=0
 version_minor=9
 
