@@ -336,6 +336,16 @@ begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
    {$ifdef debug_ascom}msg('read image.');{$endif}
    try
+   GetFrame(i,j,xs,ys);
+   SetLength(img,xs,ys);
+   except
+     on E: Exception do begin
+       msg('Error, cannot pre-allocate image of size '+inttostr(xs)+'/'+inttostr(ys)+' : '+ E.Message,0);
+       if assigned(FonAbortExposure) then FonAbortExposure(self);
+       exit;
+     end;
+   end;
+   try
    img:=V.ImageArray;
    except
      on E: Exception do begin
