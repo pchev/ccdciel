@@ -31,7 +31,7 @@ interface
 uses  cu_camera, u_global, u_translation,
   {$ifdef mswindows}
     u_utils, cu_fits, lazutf8sysutils, indiapi,
-    Variants, comobj,
+    Variants, comobj, ActiveX,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
@@ -291,7 +291,10 @@ var ok: boolean;
     nax1,nax2,state: integer;
     pix,piy: double;
     dateobs,ccdname,frname:string;
-    img: array of array of LongInt;
+    img: PSafeArray;
+    Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
+    p2:array[0..1] of integer;
+    p3:array[0..2] of integer;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
@@ -336,17 +339,7 @@ begin
    if assigned(FonExposureProgress) then FonExposureProgress(0);
    {$ifdef debug_ascom}msg('read image.');{$endif}
    try
-   GetFrame(i,j,xs,ys);
-   SetLength(img,xs,ys);
-   except
-     on E: Exception do begin
-       msg('Error, cannot pre-allocate image of size '+inttostr(xs)+'/'+inttostr(ys)+' : '+ E.Message,0);
-       if assigned(FonAbortExposure) then FonAbortExposure(self);
-       exit;
-     end;
-   end;
-   try
-   img:=V.ImageArray;
+   img:=PSafeArray(TVarData(V.ImageArray).Varray);  // magic casting
    except
      on E: Exception do begin
        msg('Error accessing ImageArray: ' + E.Message,0);
@@ -354,8 +347,24 @@ begin
        exit;
      end;
    end;
-   xs:=length(img);
-   ys:=length(img[0]);
+   Dims:=SafeArrayGetDim(img);
+   if (Dims<2)or(Dims>3) then begin
+     msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   es:=SafeArrayGetElemsize(img);
+   if es<>4 then begin
+     msg('Error ImageArray unsupported element size=' + inttostr(es));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   SafeArrayGetLBound(img, 1, LBoundX);
+   SafeArrayGetUBound(img, 1, HBoundX);
+   xs:=HBoundX-LBoundX+1;
+   SafeArrayGetLBound(img, 2, LBoundY);
+   SafeArrayGetUBound(img, 2, HBoundY);
+   ys:=HBoundY-LBoundY+1;
    {$ifdef debug_ascom}msg('width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
    nax1:=xs;
    nax2:=ys;
@@ -406,12 +415,36 @@ begin
    hdrmem.Free;
    hdr.Free;
    {$ifdef debug_ascom}msg('write image');{$endif}
-   for i:=0 to ys-1 do begin
-      for j:=0 to xs-1 do begin
-        ii:=img[j,ys-1-i]-32768;
-        ii:=NtoBE(ii);
-        FImgStream.Write(ii,sizeof(smallint));
-      end;
+   if Dims=2 then begin
+     for i:=LBoundY to ys-1 do begin
+        p2[1]:=ys-1-i;
+        for j:=LBoundX to xs-1 do begin
+          p2[0]:=j;
+          SafeArrayGetElement(img,p2,ii);
+          if ii>0 then
+             ii:=ii-32768
+          else
+             ii:=-32768;
+          ii:=NtoBE(ii);
+          FImgStream.Write(ii,sizeof(smallint));
+        end;
+     end;
+   end
+   else if Dims=3 then begin
+     p3[2]:=0; // only the first plane
+     for i:=LBoundY to ys-1 do begin
+        p3[1]:=ys-1-i;
+        for j:=LBoundX to xs-1 do begin
+          p3[0]:=j;
+          SafeArrayGetElement(img,p3,ii);
+          if ii>0 then
+             ii:=ii-32768
+          else
+             ii:=-32768;
+          ii:=NtoBE(ii);
+          FImgStream.Write(ii,sizeof(smallint));
+        end;
+     end;
    end;
    {$ifdef debug_ascom}msg('pad fits');{$endif}
    c:=2880-(FImgStream.Size mod 2880);
