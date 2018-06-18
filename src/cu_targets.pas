@@ -680,7 +680,7 @@ end;
 
 function T_Targets.InitSkyFlat: boolean;
 var i,n:integer;
-    wtok,nd:boolean;
+    wtok,nd,ForceNextStartTime:boolean;
     stw: integer;
     sra,sde,sl,hp1,hp2: double;
     flt,nextt: TTarget;
@@ -690,6 +690,7 @@ var i,n:integer;
     flexp: TFilterExp;
 begin
   result:=false;
+  ForceNextStartTime:=false;
   if not FRunning then exit;
   FTargetInitializing:=true;
   try
@@ -763,8 +764,10 @@ begin
       nextt:=Targets[FCurrentTarget+1];
       if nextt.starttime<0 then begin
         Time_Alt(jdtoday, sra, sde, -18, hp1, hp2);
-        if abs(hp2)<90 then
+        if abs(hp2)<90 then begin
+           ForceNextStartTime:=true;
            nextt.starttime:=rmod(hp2+ObsTimeZone+24,24)/24
+        end;
       end;
     end;
   end
@@ -803,6 +806,7 @@ begin
     wtok:=WaitTill(TimeToStr(flt.starttime),true);
     if not wtok then begin
        msg(Format(rsTargetCancel, [flt.objectname]),1);
+       if ForceNextStartTime then nextt.starttime:=-1;
        exit;
     end;
   end;
