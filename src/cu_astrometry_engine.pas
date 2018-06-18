@@ -51,7 +51,7 @@ TAstrometry_engine = class(TThread)
      Ftmpfits: TFits;
    protected
      procedure Execute; override;
-     procedure Apm2Wcs;
+     function Apm2Wcs: boolean;
      procedure AstapWcs;
    public
      constructor Create;
@@ -603,19 +603,23 @@ else if FResolver=ResolverPlateSolve then begin
   end;
   // merge apm result
   if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
-    Apm2Wcs;
-    Ftmpfits:=TFits.Create(nil);
-    mem:=TMemoryStream.Create;
-    try
-    mem.LoadFromFile(FInFile);
-    Ftmpfits.Stream:=mem;
-    mem.clear;
-    mem.LoadFromFile(wcsfile);
-    Ftmpfits.Header.NewWCS(mem);
-    Ftmpfits.SaveToFile(FOutFile);
-    finally
-      Ftmpfits.Free;
-      mem.Free;
+    if (FLogFile<>'') then begin
+      CopyFile(apmfile,LogFile,false,false);
+    end;
+    if Apm2Wcs then begin
+      Ftmpfits:=TFits.Create(nil);
+      mem:=TMemoryStream.Create;
+      try
+      mem.LoadFromFile(FInFile);
+      Ftmpfits.Stream:=mem;
+      mem.clear;
+      mem.LoadFromFile(wcsfile);
+      Ftmpfits.Header.NewWCS(mem);
+      Ftmpfits.SaveToFile(FOutFile);
+      finally
+        Ftmpfits.Free;
+        mem.Free;
+      end;
     end;
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
@@ -680,7 +684,7 @@ else if FResolver=ResolverNone then begin
 end;
 end;
 
-procedure TAstrometry_engine.Apm2Wcs;
+function TAstrometry_engine.Apm2Wcs:boolean;
 // communicated by Han Kleijn
 var
   i,sign : integer;
@@ -694,6 +698,7 @@ var
   List: TStrings;
 
 begin
+  result:=false;
   assign(f,apmfile);
   // Reopen the file for reading
   Reset(f);
@@ -794,6 +799,10 @@ begin
     rewrite(f);
     write(f,' ');
     CloseFile(f);
+    result:=true;
+  end
+  else begin
+    result:=false;
   end;
 end;
 
