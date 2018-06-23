@@ -113,13 +113,13 @@ type
 
   TTarget = Class(TObject)
               public
-              objectname, planname, path: string;
+              objectname, planname, path: shortstring;
               starttime,endtime,ra,de,pa: double;
               startrise,endset: boolean;
               repeatcount: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain: integer;
-              FlatFilters: string;
+              FlatFilters: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
               delay, previewexposure: double;
               plan :TComponent;

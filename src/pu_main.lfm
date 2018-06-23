@@ -17,20 +17,21 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
+  LCLVersion = '1.8.4.0'
   Visible = False
   object Panel1: TPanel
     Left = 0
-    Height = 381
+    Height = 353
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 381
+    ClientHeight = 353
     ClientWidth = 612
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 375
+      Height = 347
       Top = 3
       Width = 3
       Align = alLeft
@@ -68,7 +69,7 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 3
-      Height = 375
+      Height = 347
       Top = 3
       Width = 609
       Align = alClient
@@ -81,7 +82,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 3
-      Top = 378
+      Top = 350
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -101,7 +102,7 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 19
-    Top = 381
+    Top = 353
     Width = 800
     BorderWidth = 1
     Panels = <    
@@ -127,17 +128,17 @@ object f_main: Tf_main
   end
   object PanelRight: TPanel
     Left = 612
-    Height = 381
+    Height = 353
     Top = 0
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 381
+    ClientHeight = 353
     ClientWidth = 188
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 349
+      Height = 321
       Top = 32
       Width = 188
       ActivePage = PageCapture
@@ -149,7 +150,7 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 0
         object PanelRight1: TPanel
@@ -172,7 +173,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 1
         object PanelRight2: TPanel
@@ -195,12 +196,12 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 2
         object PanelRight3: TPanel
           Left = 0
-          Height = 345
+          Height = 317
           Top = 0
           Width = 178
           Align = alClient
@@ -218,7 +219,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 3
         object PanelRight4: TPanel
@@ -241,7 +242,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 4
         object PanelRight5: TPanel

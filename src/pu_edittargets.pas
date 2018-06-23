@@ -25,16 +25,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
+uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
   pu_scriptengine, cu_astrometry, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
+
+const
+  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; colrepeat=8;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolrepeat=7;
 
 type
 
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
+    AutofocusCount: TSpinEdit;
+    BtnAddStep: TButton;
+    BtnCancel1: TButton;
+    BtnClose1: TButton;
+    BtnDeleteStep: TButton;
+    CheckBoxAutofocus: TCheckBox;
+    CheckBoxAutofocusStart: TCheckBox;
+    CheckBoxDither: TCheckBox;
+    Delay1: TFloatSpinEdit;
+    DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
     BtnCdCCoord: TButton;
@@ -54,81 +68,76 @@ type
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
+    GainEdit1: TSpinEdit;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
+    GroupBox7: TGroupBox;
+    ISObox1: TComboBox;
+    Label1: TLabel;
+    Label12: TLabel;
+    Label17: TLabel;
+    LabelGain1: TLabel;
+    Panel1: TPanel;
+    Panel10: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
+    PanelGain1: TPanel;
+    PanelRepeat: TPanel;
+    PlanName: TLabel;
     PreviewExposure: TFloatSpinEdit;
-    RotatorAngle: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
     ISObox: TComboBox;
-    Label12: TLabel;
     Label16: TLabel;
-    Label17: TLabel;
     Label18: TLabel;
     LabelGain: TLabel;
-    LabelSeq2: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
-    RepeatCount: TSpinEdit;
     Delay: TSpinEdit;
     RepeatCountList: TSpinEdit;
     FlatCount: TSpinEdit;
     GainEdit: TSpinEdit;
+    StepList: TStringGrid;
     TabSheet3: TTabSheet;
     UpdateCoord: TCheckBox;
-    Panel8: TPanel;
-    Panel9: TPanel;
-    UseRotator: TCheckBox;
-    ObjStartRise: TCheckBox;
-    ObjEndSet: TCheckBox;
-    Panel7: TPanel;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
     SeqStartTwilight: TCheckBox;
     SeqStopTwilight: TCheckBox;
     CheckBoxRepeatList: TCheckBox;
-    CheckBoxRepeat: TCheckBox;
-    ObjEndTime: TMaskEdit;
-    Label1: TLabel;
-    Label10: TLabel;
     Label11: TLabel;
     Label13: TLabel;
     Label14: TLabel;
     Label15: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
     Label9: TLabel;
-    LabelSeq: TLabel;
-    LabelSeq1: TLabel;
-    ObjectName: TEdit;
     PageControl1: TPageControl;
-    Panel3: TPanel;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    Panel4: TPanel;
-    Panel5: TPanel;
+    PanelBottom: TPanel;
+    PanelTarget: TPanel;
     Panel6: TPanel;
-    PanelRepeat: TPanel;
-    PlanList: TComboBox;
     ScriptList: TComboBox;
     PointAstrometry: TCheckBox;
-    PointDEC: TEdit;
-    PointRA: TEdit;
     Preview: TCheckBox;
-    ObjStartTime: TMaskEdit;
     SeqStartAt: TMaskEdit;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TargetList: TStringGrid;
+    procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCopyPlanClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
+    procedure BtnDeleteStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
@@ -136,38 +145,54 @@ type
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
     procedure BtnPlanClick(Sender: TObject);
-    procedure CheckBoxRepeatChange(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ObjEndSetChange(Sender: TObject);
-    procedure ObjStartRiseChange(Sender: TObject);
+    procedure FrameTypeChange(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
     procedure SeqStartTwilightChange(Sender: TObject);
     procedure SeqStopChange(Sender: TObject);
     procedure SeqStopTwilightChange(Sender: TObject);
+    procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
+      tIndex: Integer);
+    procedure StepListEditingDone(Sender: TObject);
+    procedure StepListSelectEditor(Sender: TObject; aCol, aRow: Integer;
+      var Editor: TWinControl);
+    procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure StepChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
+    procedure TargetListEditingDone(Sender: TObject);
+    procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
+      var Editor: TWinControl);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
-    procedure UseRotatorChange(Sender: TObject);
   private
     { private declarations }
     FAstrometry: TAstrometry;
     LockTarget: boolean;
     FTargetsRepeat: integer;
-    procedure LoadPlanList;
-    procedure SetPlanList(pl:string);
-    procedure LoadScriptList;
-    procedure SetScriptList(sl:string);
+    LockStep: boolean;
+    originalFilter: array[0..99] of string;
+    procedure SetPlanList(n: integer; pl:string);
+    procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
     procedure SetLang;
+    procedure ResetSteps;
+    procedure SetStep(n: integer; p: TStep);
   public
     { public declarations }
+    procedure LoadPlanList;
+    procedure LoadScriptList;
+    procedure SetTarget(n: integer; t: TTarget);
+    procedure ClearStepList;
+    procedure ShowPlan;
+    procedure SavePlan;
+    procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
   end;
@@ -189,31 +214,27 @@ begin
   SetLang;
   LockTarget:=false;
   FTargetsRepeat:=1;
+  LockStep:=false;
+  LoadPlanList;
+  LoadScriptList;
 end;
 
 procedure Tf_EditTargets.FormDestroy(Sender: TObject);
 begin
   // objects are destroyed in fu_sequence
+  ClearStepList;
 end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
-  TargetList.Cells[0,0]:='Seq';
-  LoadPlanList;
-  LoadScriptList;
+  TargetList.Cells[colseq,0]:='Seq';
+  StepList.Cells[0,0]:='Seq';
   if TargetList.RowCount>1 then begin
      TargetList.Row:=1;
      TargetListSelection(nil,0,1);
   end
   else begin
     PageControl1.ActivePageIndex:=0;
-    LabelSeq.Caption:='0';
-    LabelSeq1.Caption:='0';
-    LabelSeq2.Caption:='0';
-    ObjStartTime.Text:='';
-    ObjEndTime.Text:='';
-    ObjStartRise.Checked:=false;
-    ObjEndSet.Checked:=false;
   end;
   RepeatCountList.Value:=FTargetsRepeat;
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
@@ -229,8 +250,20 @@ begin
   BtnNewScript.Caption := rsNewScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
-  TargetList.Columns.Items[0].Title.Caption := rsObjectName;
-  TargetList.Columns.Items[1].Title.Caption := rsPlan;
+  TargetList.Columns.Items[colname-1].Title.Caption := rsObjectName;
+  TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
+  TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
+  TargetList.Columns.Items[coldec-1].Title.Caption := rsDec;
+  TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
+  TargetList.Columns.Items[colstart-1].Title.Caption := rsStart;
+  TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
+  TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
+  TargetList.Columns.Items[colstart-1].PickList.Clear;
+  TargetList.Columns.Items[colstart-1].PickList.Add('');
+  TargetList.Columns.Items[colstart-1].PickList.Add(rsRise);
+  TargetList.Columns.Items[colend-1].PickList.Clear;
+  TargetList.Columns.Items[colend-1].PickList.Add('');
+  TargetList.Columns.Items[colend-1].PickList.Add(rsSet2);
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   SeqStart.Caption := rsStartAt;
   SeqStop.Caption := rsStopAt;
@@ -241,53 +274,53 @@ begin
   Preview.Caption := rsPreviewWhenW;
   Label13.Caption := rsSeconds2;
   Label11.Caption := rsInterval;
-  Label10.Caption := rsRepeat;
   Label14.Caption := rsSeconds2;
   BtnAnytime.Caption := rsAnyTime;
-  Label4.Caption := rsEndTime;
-  Label3.Caption := rsStartTime;
-  ObjStartRise.Caption := rsRise;
-  ObjEndSet.Caption := rsSet2;
   BtnCurrentCoord.Caption := rsNoMove;
-  Label6.Caption := rsCenterDec;
-  Label5.Caption := rsCenterRA;
   BtnCdCCoord.Caption := rsPlanetarium;
   PointAstrometry.Caption := rsUseAstrometr;
   BtnImgCoord.Caption := rsCurrentImage;
   UpdateCoord.Caption := rsUpdateRADecF;
   InplaceAutofocus.Caption := rsStayInPlaceF;
-  UseRotator.Caption := rsSetRotatorAn;
   BtnImgRot.Caption := rsCurrentImage;
-  Label1.Caption := rsObject;
-  Label2.Caption := rsPlan;
   BtnNewPlan.Caption := rsNew;
   BtnEditPlan.Caption := rsEdit;
-  Label7.Caption := rsSequence;
   BtnCopyPlan.Caption := rsCopy;
   BtnDeletePlan.Caption := rsDelete;
-  CheckBoxRepeat.Caption := rsRepeatThePla;
   TabSheet2.Caption := rsScript;
-  Label8.Caption := rsSequence;
   Label15.Caption := rsScript;
   BtnEditScript.Caption := rsEdit;
   BtnEditNewScript.Caption := rsNew;
-  Label12.Caption := rsSequence;
   FlatTime.Caption := rsFlatTime;
   Label16.Caption := rsBinning;
-  Label17.Caption := rsFilters;
+  GroupBox6.Caption := rsFilters;
+  GroupBox7.Caption := rsExposure;
   Label18.Caption := rsCount;
   LabelGain.Caption := rsGain;
   FlatTime.Items[0]:=rsAtDusk;
   FlatTime.Items[1]:=rsAtDawn;
+  // plan
+  Label17.Caption := rsSeconds2;
+  Label12.Caption := rsInterval;
+  CheckBoxDither.Caption := rsDitherEvery;
+  CheckBoxAutofocusStart.Caption := rsAutofocusBef;
+  CheckBoxAutofocus.Caption := rsAutofocusEve;
+  LabelGain1.Caption := rsGain;
+  BtnClose1.Caption := rsSave;
+  BtnDeleteStep.Caption := rsDelete;
+  BtnAddStep.Caption := rsAdd;
+  BtnCancel1.Caption := rsCancel;
+  StepList.Columns.Items[0].Title.Caption := rsDescription;
+  Label1.Caption := rsPlanName;
 end;
 
-procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
+{procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
 var ra,de,hs: double;
     i:integer;
 begin
 if ObjEndSet.Checked then begin
-  ra:=StrToAR(PointRA.Text);
-  de:=StrToDE(PointDEC.Text);
+  ra:=StrToAR(TargetList.Cells[colra,TargetList.Row]);
+  de:=StrToDE(TargetList.Cells[coldec,TargetList.Row]);
   if (ra=NullCoord)or(de=NullCoord) then begin
      ShowMessage(rsInvalidObjec);
      ObjEndSet.Checked:=false;
@@ -312,8 +345,8 @@ var ra,de,hr: double;
     i:integer;
 begin
 if ObjStartRise.Checked then begin
-  ra:=StrToAR(PointRA.Text);
-  de:=StrToDE(PointDEC.Text);
+  ra:=StrToAR(TargetList.Cells[colra,TargetList.Row]);
+  de:=StrToDE(TargetList.Cells[coldec,TargetList.Row]);
   if (ra=NullCoord)or(de=NullCoord) then begin
      ShowMessage(rsInvalidObjec);
      ObjStartRise.Checked:=false;
@@ -331,33 +364,38 @@ if ObjStartRise.Checked then begin
    end;
 end;
 TargetChange(Sender);
-end;
+end;   }
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
 begin
-  if ObjStartRise.Checked then ObjStartRiseChange(Sender);
-  if ObjEndSet.Checked then ObjEndSetChange(Sender);
+//  if ObjStartRise.Checked then ObjStartRiseChange(Sender);
+//  if ObjEndSet.Checked then ObjEndSetChange(Sender);
   TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.LoadPlanList;
 var i: integer;
     fs : TSearchRec;
+    s: TStringlist;
 begin
-  PlanList.Clear;
+  s:=TStringlist.Create;
+  TargetList.Columns[colplan-1].PickList.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.plan',0,fs);
   while i=0 do begin
-    PlanList.Items.Add(ExtractFileNameOnly(fs.Name));
+    s.Add(ExtractFileNameOnly(fs.Name));
     i:=FindNextUTF8(fs);
   end;
   FindCloseUTF8(fs);
+  s.Sorted:=true;
+  TargetList.Columns[colplan-1].PickList.Assign(s);
+  s.Free;
 end;
 
-procedure Tf_EditTargets.SetPlanList(pl:string);
+procedure Tf_EditTargets.SetPlanList(n: integer; pl:string);
 var i:integer;
 begin
-  i:=PlanList.Items.IndexOf(pl);
-  if i>=0 then PlanList.ItemIndex:=i;
+  i:=TargetList.Columns[colplan-1].PickList.IndexOf(pl);
+  if i>=0 then TargetList.Cells[colplan,n]:=pl;
 end;
 
 procedure Tf_EditTargets.LoadScriptList;
@@ -381,18 +419,21 @@ begin
   s.Free;
 end;
 
-procedure Tf_EditTargets.SetScriptList(sl:string);
+procedure Tf_EditTargets.SetScriptList(n: integer; sl:string);
 var i:integer;
 begin
   i:=ScriptList.Items.IndexOf(sl);
   if i>=0 then ScriptList.ItemIndex:=i;
+  TargetList.Cells[colplan,n]:=sl;
 end;
 
 procedure Tf_EditTargets.BtnCopyPlanClick(Sender: TObject);
 var txt,fn1,fn2: string;
     pfile: TCCDconfig;
+    n: integer;
 begin
-  txt:=PlanList.Text;
+  n:=TargetList.Row;
+  txt:=TargetList.Cells[colplan,n];
   fn1:=slash(ConfigDir)+txt+'.plan';
   txt:=FormEntry(self,'Copy to ','');
   if txt='' then exit;
@@ -409,7 +450,7 @@ begin
      pfile.Flush;
      pfile.Free;
      LoadPlanList;
-     SetPlanList(txt);
+     SetPlanList(n,txt);
      BtnPlanClick(Sender);
      TargetChange(nil);
   end;
@@ -417,23 +458,28 @@ end;
 
 procedure Tf_EditTargets.BtnDeletePlanClick(Sender: TObject);
 var txt,fn: string;
+    n: integer;
 begin
-  txt:=PlanList.Text;
+  n:=TargetList.Row;
+  txt:=TargetList.Cells[colplan,n];
   fn:=slash(ConfigDir)+txt+'.plan';
   if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes
     then begin
      DeleteFileUTF8(fn);
      LoadPlanList;
-     PlanList.Text:='';
+     TargetList.Cells[colplan,n]:='';
      TargetChange(nil);
   end;
 end;
 
+
 procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
 var txt,fn: string;
     newplan: boolean;
+    n: integer;
 begin
-  newplan:=(Sender=BtnNewPlan)or(PlanList.Text='');
+  n:=TargetList.Row;
+  newplan:=(Sender=BtnNewPlan)or(TargetList.Cells[colplan,n]='');
   if newplan then begin
     txt:=FormEntry(self,'New plan ','');
     if txt='' then exit;
@@ -442,33 +488,20 @@ begin
        if MessageDlg(Format(rsPlanAlreadyE2, [txt]), mtConfirmation, mbYesNo, 0)
          <>mrYes then exit;
     end;
-    f_EditPlan.PlanName.Caption:=txt;
+    PlanName.Caption:=txt;
   end
   else begin
-    if PlanList.Text='' then exit;
-    f_EditPlan.PlanName.Caption:=PlanList.Text;
+    if TargetList.Cells[colplan,n]='' then exit;
+    PlanName.Caption:=TargetList.Cells[colplan,n];
   end;
-  FormPos(f_EditPlan,mouse.CursorPos.X,mouse.CursorPos.Y);
-  if f_EditPlan.ShowModal=mrOK then begin
-    if newplan then begin
+  ShowPlan;
+{    if newplan then begin
        LoadPlanList;
-       SetPlanList(f_EditPlan.PlanName.Caption);
+       SetPlanList(n,f_EditPlan.PlanName.Caption);
        TargetChange(nil);
-    end;
-  end;
+    end;}
 end;
 
-procedure Tf_EditTargets.CheckBoxRepeatChange(Sender: TObject);
-begin
-  if CheckBoxRepeat.Checked then begin
-     PanelRepeat.Visible:=true;
-     RepeatCount.Value:=2;
-  end else begin
-     PanelRepeat.Visible:=false;
-     RepeatCount.Value:=1;
-  end;
-  TargetChange(nil);
-end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var txt:string;
@@ -481,17 +514,16 @@ begin
   t:=TTarget.Create;
   n:=TargetList.Row;
   if n>=1 then begin
-    tt:=TTarget(TargetList.Objects[0,n]);
+    tt:=TTarget(TargetList.Objects[colseq,n]);
     if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
   end;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
-  TargetList.Cells[0,i]:=IntToStr(i);
-  TargetList.Cells[1,i]:=txt;
-  TargetList.Cells[2,i]:=t.planname;
-  TargetList.Objects[0,i]:=t;
+  TargetList.Cells[colseq,i]:=IntToStr(i);
+  TargetList.Cells[colname,i]:=txt;
+  TargetList.Cells[colplan,i]:=t.planname;
+  TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
-  ObjectName.Text:=trim(txt);
   TargetChange(nil);
 end;
 
@@ -504,10 +536,10 @@ begin
   t.objectname:=ScriptTxt;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
-  TargetList.Cells[0,i]:=IntToStr(i);
-  TargetList.Cells[1,i]:=ScriptTxt;
-  TargetList.Cells[2,i]:=t.planname;
-  TargetList.Objects[0,i]:=t;
+  TargetList.Cells[colseq,i]:=IntToStr(i);
+  TargetList.Cells[colname,i]:=ScriptTxt;
+  TargetList.Cells[colplan,i]:=t.planname;
+  TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
 end;
@@ -523,7 +555,7 @@ begin
   end;
   n:=0;
   for i:=1 to TargetList.RowCount-1 do
-    if TargetList.Cells[1,i]=SkyFlatTxt then begin
+    if TargetList.Cells[colname,i]=SkyFlatTxt then begin
       inc(n);
       k:=i;
     end;
@@ -574,10 +606,10 @@ begin
   t.FlatBinY:=1;
   t.FlatGain:=Gain;
   t.FlatCount:=15;
-  TargetList.Cells[0,i]:=IntToStr(i);
-  TargetList.Cells[1,i]:=SkyFlatTxt;
-  TargetList.Cells[2,i]:=t.planname;
-  TargetList.Objects[0,i]:=t;
+  TargetList.Cells[colseq,i]:=IntToStr(i);
+  TargetList.Cells[colname,i]:=SkyFlatTxt;
+  TargetList.Cells[colplan,i]:=t.planname;
+  TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
   ResetSequences;
@@ -587,10 +619,11 @@ end;
 procedure Tf_EditTargets.BtnScriptClick(Sender: TObject);
 var txt,fn: string;
     scdir:TScriptDir;
-    i:integer;
+    i,n:integer;
     newscript: boolean;
     s: TStringList;
 begin
+  n:=TargetList.Row;
   newscript:=(Sender=BtnEditNewScript)or(ScriptList.Text='');
   s:=TStringList.Create;
   if f_pascaleditor=nil then begin
@@ -646,7 +679,7 @@ begin
     s.SaveToFile(fn);
     if newscript then begin
      LoadScriptList;
-     SetScriptList(f_pascaleditor.ScriptName);
+     SetScriptList(n,f_pascaleditor.ScriptName);
      TargetChange(nil);
     end;
   end;
@@ -660,7 +693,7 @@ var i,j: integer;
 begin
   i:=TargetList.Row;
   if i>0 then begin
-     str:=TargetList.Cells[0,i]+', '+TargetList.Cells[1,i];
+     str:=TargetList.Cells[colseq,i]+', '+TargetList.Cells[colname,i];
      if MessageDlg(Format(rsDeleteSequen, [str]), mtConfirmation, mbYesNo, 0)=
        mrYes then begin
         j:=i-1;
@@ -670,7 +703,7 @@ begin
         Application.ProcessMessages;
         LockTarget:=true;
         //if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free; Cause crash because plan is shared
-        TargetList.Objects[0,i]:=nil;
+        TargetList.Objects[colseq,i]:=nil;
         TargetList.DeleteRow(i);
         Application.ProcessMessages;
         ResetSequences;
@@ -681,44 +714,45 @@ begin
         TargetChange(nil);
      end;
   end;
-
 end;
 
 procedure Tf_EditTargets.ResetSequences;
 var i: integer;
 begin
   for i:=1 to TargetList.RowCount-1 do begin
-    TargetList.Cells[0,i]:=IntToStr(i);
+    TargetList.Cells[colseq,i]:=IntToStr(i);
   end;
 end;
 
 procedure Tf_EditTargets.BtnAnytimeClick(Sender: TObject);
 begin
-  ObjStartRise.Checked:=false;
-  ObjEndSet.Checked:=false;
-  ObjStartTime.Text:='';
-  ObjEndTime.Text:='';
+  TargetList.Cells[colstart,TargetList.Row]:='';
+  TargetList.Cells[colend,TargetList.Row]:='';
 end;
 
 procedure Tf_EditTargets.BtnCdCCoordClick(Sender: TObject);
+var n: integer;
 begin
-  f_planetariuminfo.Ra.Text  := PointRA.Text;
-  f_planetariuminfo.De.Text  := PointDEC.Text;
-  f_planetariuminfo.Obj.Text := ObjectName.Text;
+  n:=TargetList.Row;
+  f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
+  f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
+  f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_planetariuminfo.ShowModal;
   if f_planetariuminfo.ModalResult=mrOK then begin
-     PointRA.Text:=f_planetariuminfo.Ra.Text;
-     PointDEC.Text:=f_planetariuminfo.De.Text;
-     if f_planetariuminfo.Obj.Text<>'' then ObjectName.Text:=trim(f_planetariuminfo.Obj.Text);
+     TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
+     TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
+     if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
      PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end;
 end;
 
 procedure Tf_EditTargets.BtnImgCoordClick(Sender: TObject);
 var ra,de,eq,pa: double;
+    n: integer;
 begin
 try
+  n:=TargetList.Row;
   screen.Cursor:=crHourGlass;
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
@@ -727,8 +761,8 @@ try
     J2000ToApparent(ra,de);
     ra:=rad2deg*ra/15;
     de:=rad2deg*de;
-    PointRA.Text:=RAToStr(ra);
-    PointDEC.Text:=DEToStr(de);
+    TargetList.Cells[colra,n]:=RAToStr(ra);
+    TargetList.Cells[coldec,n]:=DEToStr(de);
     PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end;
 finally
@@ -738,13 +772,14 @@ end;
 
 procedure Tf_EditTargets.BtnImgRotClick(Sender: TObject);
 var ra,de,eq,pa: double;
+    n: integer;
 begin
 try
+  n:=TargetList.Row;
   screen.Cursor:=crHourGlass;
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
-    UseRotator.Checked:=true;
-    RotatorAngle.Value:=pa;
+    TargetList.Cells[colpa,n]:=FormatFloat(f2,pa);
   end;
 finally
   screen.Cursor:=crDefault;
@@ -753,31 +788,29 @@ end;
 
 procedure Tf_EditTargets.BtnCurrentCoordClick(Sender: TObject);
 begin
-  PointRA.Text:='-';
-  PointDEC.Text:='-';
+  TargetList.Cells[colra,TargetList.Row]:='-';
+  TargetList.Cells[coldec,TargetList.Row]:='-';
 end;
 
-procedure Tf_EditTargets.TargetListSelection(Sender: TObject; aCol, aRow: Integer);
-var n,i,j:integer;
+procedure Tf_EditTargets.SetTarget(n: integer; t: TTarget);
+var i,j:integer;
     buf: string;
     filterlst:TStringList;
-    t: TTarget;
 begin
+  if (t=nil)or(n=0)or(n>=TargetList.RowCount) then exit;
   LockTarget:=true;
-  n:=aRow;
-  LabelSeq.Caption:=IntToStr(n);
-  LabelSeq1.Caption:=IntToStr(n);
-  LabelSeq2.Caption:=IntToStr(n);
-  t:=TTarget(TargetList.Objects[0,n]);
+  TargetList.Cells[colseq,n]:=IntToStr(n);
+  TargetList.Cells[colname,n]:=t.objectname;
   if t.objectname=ScriptTxt then begin
     PageControl1.ActivePageIndex:=1;
-    SetScriptList(t.planname);
+    SetScriptList(n,t.planname);
   end
   else if t.objectname=SkyFlatTxt then begin
     PageControl1.ActivePageIndex:=2;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
        else FlatTime.ItemIndex:=1;
+    TargetList.Cells[colplan,n]:=t.planname;
     FlatCount.Value:=t.FlatCount;
     buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
     j:=FlatBinning.Items.IndexOf(buf);
@@ -802,49 +835,48 @@ begin
   end
   else begin
     PageControl1.ActivePageIndex:=0;
-    ObjectName.Text:=t.objectname;
-    SetPlanList(t.planname);
+    SetPlanList(n,t.planname);
     if t.starttime>=0 then
-       ObjStartTime.Text:=TimeToStr(t.starttime)
+       TargetList.Cells[colstart,n]:=TimeToStr(t.starttime)
     else
-       ObjStartTime.Text:='';
+       TargetList.Cells[colstart,n]:='';
     if t.endtime>=0 then
-       ObjEndTime.Text:=TimeToStr(t.endtime)
+       TargetList.Cells[colend,n]:=TimeToStr(t.endtime)
     else
-       ObjEndTime.Text:='';
+       TargetList.Cells[colend,n]:='';
     if t.ra=NullCoord then
-      PointRA.Text:='-'
+      TargetList.Cells[colra,n]:='-'
     else
-      PointRA.Text:=RAToStr(t.ra);
+      TargetList.Cells[colra,n]:=RAToStr(t.ra);
     if t.de=NullCoord then
-      PointDEC.Text:='-'
+      TargetList.Cells[coldec,n]:='-'
     else
-      PointDEC.Text:=DEToStr(t.de);
-    ObjStartRise.Checked:=t.startrise;
-    ObjEndSet.Checked:=t.endset;
+      TargetList.Cells[coldec,n]:=DEToStr(t.de);
+    if t.startrise then TargetList.Cells[colstart,n]:=rsRise;
+    if t.endset then TargetList.Cells[colend,n]:=rsSet2;
     PointAstrometry.Checked:=t.astrometrypointing;
     UpdateCoord.Checked:=t.updatecoord;
-    UseRotator.Checked:=(t.pa<>NullCoord);
     InplaceAutofocus.Checked:=t.inplaceautofocus;
     if t.pa=NullCoord then
-      RotatorAngle.Value:=0
+      TargetList.Cells[colpa,n]:='-'
     else
-      RotatorAngle.Value:=t.pa;
-    RotatorAngle.Enabled:=UseRotator.Checked;
-    RepeatCount.Value:=t.repeatcount;
+      TargetList.Cells[colpa,n]:=FormatFloat(f2,t.pa);
+    TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
+    GroupBox5.Visible:=t.repeatcount>1;
     Delay.Value:=t.delay;
     PreviewExposure.Value:=t.previewexposure;
     Preview.Checked:=t.preview;
-    CheckBoxRepeat.Checked:=(t.repeatcount>1);
-    PanelRepeat.Visible:=CheckBoxRepeat.Checked;
+    PlanName.Caption:=TargetList.Cells[colplan,n];
+    ShowPlan;
   end;
   LockTarget:=false;
 end;
 
-procedure Tf_EditTargets.UseRotatorChange(Sender: TObject);
+procedure Tf_EditTargets.TargetListSelection(Sender: TObject; aCol, aRow: Integer);
+var t: TTarget;
 begin
-  RotatorAngle.Enabled:=UseRotator.Checked;
-  RotatorAngle.Value:=0.0;
+  t:=TTarget(TargetList.Objects[colseq,aRow]);
+  SetTarget(aRow,t);
 end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
@@ -856,11 +888,12 @@ begin
   if LockTarget then exit;
   n:=TargetList.Row;
   if n < 1 then exit;
-  t:=TTarget(TargetList.Objects[0,n]);
+  t:=TTarget(TargetList.Objects[colseq,n]);
   if t.objectname=ScriptTxt then begin
     PageControl1.ActivePageIndex:=1;
     i:=ScriptList.ItemIndex;
     sname:=ScriptList.Items[i];
+    TargetList.Cells[colplan,n]:=sname;
     scdir:=TScriptDir(ScriptList.Items.Objects[i]);
     t.planname:=sname;
     if scdir=nil then t.path:=''
@@ -895,37 +928,61 @@ begin
   end
   else begin
     PageControl1.ActivePageIndex:=0;
-    t.objectname:=trim(ObjectName.Text);
-    t.planname:=PlanList.Text;
-    t.starttime:=StrToTimeDef(ObjStartTime.Text,-1);
-    t.endtime:=StrToTimeDef(ObjEndTime.Text,-1);
-    if PointRA.Text='-' then
+    t.objectname:=trim(TargetList.Cells[colname,n]);
+    t.planname:=TargetList.Cells[colplan,n];
+    t.starttime:=StrToTimeDef(TargetList.Cells[colstart,n],-1);
+    t.endtime:=StrToTimeDef(TargetList.Cells[colend,n],-1);
+    if TargetList.Cells[colra,n]='-' then
       t.ra:=NullCoord
     else
-      t.ra:=StrToAR(PointRA.Text);
-    if PointDEC.Text='-' then
+      t.ra:=StrToAR(TargetList.Cells[colra,n]);
+    if TargetList.Cells[coldec,n]='-' then
       t.de:=NullCoord
     else
-      t.de:=StrToDE(PointDEC.Text);
-    t.startrise:=ObjStartRise.Checked;
-    t.endset:=ObjEndSet.Checked;
-    ObjStartTime.Enabled:= not t.startrise;
-    ObjEndTime.Enabled:= not t.endset;
-    if UseRotator.Checked then
-      t.pa:=RotatorAngle.Value
+      t.de:=StrToDE(TargetList.Cells[coldec,n]);
+    t.startrise:=TargetList.Cells[colstart,n]=rsRise;
+    t.endset:=TargetList.Cells[colend,n]=rsSet2;
+    if TargetList.Cells[colpa,n]='-' then
+      t.pa:=NullCoord
     else
-      t.pa:=NullCoord;
+      t.pa:=StrToFloatDef(TargetList.Cells[colpa,n],t.pa);
     if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
     t.astrometrypointing:=PointAstrometry.Checked;
     t.updatecoord:=UpdateCoord.Checked;
     t.inplaceautofocus:=InplaceAutofocus.Checked;
-    t.repeatcount:=RepeatCount.Value;
+    t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);
+    GroupBox5.Visible:=t.repeatcount>1;
     t.delay:=Delay.Value;
     t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
   end;
-  TargetList.Cells[1,n]:=t.objectname;
-  TargetList.Cells[2,n]:=t.planname;
+end;
+
+procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;
+  IsColumn: Boolean; sIndex, tIndex: Integer);
+begin
+  ResetSequences;
+  TargetListSelection(Sender,0,tIndex);
+end;
+
+procedure Tf_EditTargets.TargetListEditingDone(Sender: TObject);
+begin
+  TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.TargetListSelectEditor(Sender: TObject; aCol,
+  aRow: Integer; var Editor: TWinControl);
+begin
+ if (TargetList.Cells[colname,aRow]=SkyFlatTxt) or (TargetList.Cells[colname,aRow]=ScriptTxt) then
+    Editor:=TargetList.EditorByStyle(cbsNone)     // no edition for flat and script
+ else if (aCol=colplan) then
+    Editor:=TargetList.EditorByStyle(cbsPickList) // plan selection
+ else if (aCol=colpa) then
+    Editor:=TargetList.EditorByStyle(cbsPickList) // selection for null pa
+ else if (aCol=colstart)or(aCol=colend) then
+    Editor:=TargetList.EditorByStyle(cbsPickList) // selection for rise, set
+ else
+    Editor:=TargetList.EditorByStyle(cbsAuto);
 end;
 
 procedure Tf_EditTargets.FlatTimeClick(Sender: TObject);
@@ -935,7 +992,7 @@ begin
 if LockTarget then exit;
   n:=0;
   for i:=1 to TargetList.RowCount-1 do
-    if TargetList.Cells[1,i]=SkyFlatTxt then inc(n);
+    if TargetList.Cells[colname,i]=SkyFlatTxt then inc(n);
   if n>=2 then begin
     LockTarget:=true;
     if FlatTime.ItemIndex=0 then  begin
@@ -952,7 +1009,7 @@ if LockTarget then exit;
   if FlatTime.ItemIndex=0 then begin
      r1:=TargetList.Row;
      r2:=1;
-     t:=TTarget(TargetList.Objects[0,r1]);
+     t:=TTarget(TargetList.Objects[colseq,r1]);
      t.planname:=FlatTimeName[0];
      TargetList.MoveColRow(false,r1,r2);
      SeqStartTwilight.Checked:=false;
@@ -960,7 +1017,7 @@ if LockTarget then exit;
   end
   else begin
     r1:=TargetList.Row;
-    t:=TTarget(TargetList.Objects[0,r1]);
+    t:=TTarget(TargetList.Objects[colseq,r1]);
     t.planname:=FlatTimeName[1];
     r2:=TargetList.RowCount-1;
     TargetList.MoveColRow(false,r1,r2);
@@ -968,13 +1025,6 @@ if LockTarget then exit;
     SeqStop.Checked:=false;
   end;
   TargetChange(Sender);
-end;
-
-procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;
-  IsColumn: Boolean; sIndex, tIndex: Integer);
-begin
-  ResetSequences;
-  TargetListSelection(Sender,0,tIndex);
 end;
 
 procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
@@ -1019,6 +1069,331 @@ begin
   if SeqStopTwilight.Checked and TwilightAstro(now,hm,he) then
      SeqStopAt.Text:=TimeToStr(hm/24);
 end;
+
+
+///////////// Plan /////////////////
+
+procedure Tf_EditTargets.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
+var str,buf: string;
+    j:integer;
+begin
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
+  p.description:=str;
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light');
+  j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
+  if j<0 then j:=0;
+  p.frtype:=TFrameType(j);
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1');
+  j:=StepList.Columns[pcolbin-1].PickList.IndexOf(str);
+  if j<0 then
+    StepList.Columns[pcolbin-1].PickList.Add(str);
+  j:=pos('x',str);
+  if j>0 then begin
+     buf:=trim(copy(str,1,j-1));
+     p.binx:=StrToIntDef(buf,1);
+     buf:=trim(copy(str,j+1,9));
+     p.biny:=StrToIntDef(buf,1);
+  end else begin
+    p.binx:=1;
+    p.biny:=1;
+  end;
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
+  p.gain:=StrToIntDef(str,Gain);
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
+  originalFilter[i]:=str;
+  j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
+  if j<0 then j:=0;
+  p.filter:=j;
+  p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
+  p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
+  p.repeatcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1));
+  PanelRepeat.Visible:=(p.repeatcount>1);
+  p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
+  p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
+  p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
+  p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
+  p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
+  p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
+end;
+
+procedure Tf_EditTargets.ShowPlan;
+//old formshow
+var pfile: TCCDconfig;
+    fn: string;
+    i,n:integer;
+    p: TStep;
+  procedure NewPlan;
+  begin
+    StepList.RowCount:=2;
+    p:=TStep.Create;
+    StepList.Cells[0,1]:='1';
+    StepList.Cells[1,1]:=p.description_str;
+    StepList.Objects[0,1]:=p;
+    StepListSelection(nil,0,1);
+  end;
+begin
+  ClearStepList;
+  fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
+  if FileExistsUTF8(fn) then begin
+    pfile:=TCCDconfig.Create(self);
+    pfile.Filename:=fn;
+    n:=pfile.GetValue('/StepNum',0);
+    if n=0 then begin
+      NewPlan;
+    end else begin
+      StepList.RowCount:=n+1;
+      for i:=1 to n do begin
+        p:=TStep.Create;
+        ReadStep(pfile,i,p);
+        StepList.Cells[0,i]:=IntToStr(i);
+        StepList.Cells[1,i]:=p.description_str;
+        StepList.Objects[0,i]:=p;
+      end;
+      pfile.Free;
+      StepListSelection(nil,0,1);
+    end;
+  end else begin
+    NewPlan;
+  end;
+end;
+
+procedure Tf_EditTargets.ClearStepList;
+var i: integer;
+begin
+  for i:=1 to StepList.RowCount-1 do begin
+    if StepList.Objects[0,i]<>nil then StepList.Objects[0,i].Free;
+    StepList.Objects[0,i]:=nil;
+  end;
+  StepList.RowCount:=1;
+end;
+
+procedure Tf_EditTargets.FrameTypeChange(Sender: TObject);
+begin
+{  case FrameType.ItemIndex of
+    0 : begin   // Light
+
+        end;
+    1 : begin   // Bias
+           Exposure.Value:=0.01;
+           Filter.ItemIndex:=0;
+           CheckBoxRepeat.Checked:=false;
+        end;
+    2 : begin   // Dark
+           Filter.ItemIndex:=0;
+           CheckBoxRepeat.Checked:=false;
+        end;
+    3 : begin   // Flat
+           CheckBoxRepeat.Checked:=false;
+        end;
+  end;
+  StepChange(Sender);   }
+end;
+
+
+procedure Tf_EditTargets.StepListSelection(Sender: TObject; aCol, aRow: Integer);
+var p: Tstep;
+begin
+  p:=TStep(StepList.Objects[pcolseq,aRow]);
+  SetStep(aRow,p);
+end;
+
+procedure Tf_EditTargets.SetStep(n: integer; p: TStep);
+begin
+  LockStep:=true;
+  StepList.Cells[pcoldesc,n]:=p.description_str;
+  StepList.Cells[pcoltype,n]:=FrameName[ord(p.frtype)];
+  StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
+  StepList.Cells[pcolbin,n]:=p.binning_str;
+  if hasGainISO then
+    ISObox.ItemIndex:=p.gain
+  else
+    GainEdit.Value:=p.gain;
+  StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter];
+  StepList.Cells[pcolcount,n]:=IntToStr(p.count);
+  StepList.Cells[pcolrepeat,n]:=IntToStr(p.repeatcount);
+  Delay.Value:=p.delay;
+  PanelRepeat.Visible:=(p.repeatcount>1);
+  CheckBoxDither.Checked:=p.dither;
+  DitherCount.Value:=p.dithercount;
+  CheckBoxAutofocusStart.Checked:=p.autofocusstart;
+  CheckBoxAutofocus.Checked:=p.autofocus;
+  AutofocusCount.Value:=p.autofocuscount;
+  LockStep:=false;
+end;
+
+procedure Tf_EditTargets.StepChange(Sender: TObject);
+var n,j:integer;
+    p: TStep;
+    str,buf: string;
+begin
+  if LockStep then exit;
+  n:=StepList.Row;
+  if n < 1 then exit;
+  p:=TStep(StepList.Objects[0,n]);
+  p.description:=StepList.Cells[pcoldesc,n];
+  str:=StepList.Cells[pcoltype,n];
+  j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
+  if j<0 then j:=0;
+  p.frtype:=TFrameType(j);
+  p.exposure:=StrToFloatDef(StepList.Cells[pcolexp,n],p.exposure);
+  str:=StepList.Cells[pcolbin,n];
+  j:=pos('x',str);
+  if j>0 then begin
+     buf:=trim(copy(str,1,j-1));
+     p.binx:=StrToIntDef(buf,1);
+     buf:=trim(copy(str,j+1,9));
+     p.biny:=StrToIntDef(buf,1);
+  end else begin
+    p.binx:=1;
+    p.biny:=1;
+  end;
+  if hasGainISO then begin
+     p.gain:=ISObox.ItemIndex;
+  end
+  else begin
+     p.gain:=GainEdit.Value;
+  end;
+  str:=StepList.Cells[pcolfilter,n];
+  j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
+  if j<0 then j:=0;
+  p.filter:=j;
+  p.count:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
+  p.repeatcount:=StrToIntDef(StepList.Cells[pcolrepeat,n],p.repeatcount);
+  PanelRepeat.Visible:=(p.repeatcount>1);
+  p.delay:=Delay.Value;
+  p.dither:=CheckBoxDither.Checked;
+  p.dithercount:=DitherCount.Value;
+  p.autofocusstart:=CheckBoxAutofocusStart.Checked;
+  p.autofocus:=CheckBoxAutofocus.Checked;
+  p.autofocuscount:=AutofocusCount.Value;
+  StepList.Cells[1,n]:=p.description;
+end;
+
+procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
+  sIndex, tIndex: Integer);
+var i,n: integer;
+begin
+  i:=StepList.Row;
+  ResetSteps;
+  StepListSelection(Sender,0,i);
+end;
+
+procedure Tf_EditTargets.StepListEditingDone(Sender: TObject);
+begin
+  StepChange(Sender);
+end;
+
+procedure Tf_EditTargets.StepListSelectEditor(Sender: TObject; aCol,
+  aRow: Integer; var Editor: TWinControl);
+begin
+  if (aCol=pcoltype) then
+     Editor:=StepList.EditorByStyle(cbsPickList)   // type selection
+  else if (aCol=pcolbin) then
+     Editor:=TargetList.EditorByStyle(cbsPickList) // binning selection
+  else if (aCol=pcolfilter) then
+     Editor:=TargetList.EditorByStyle(cbsPickList) // filter selection
+  else
+     Editor:=TargetList.EditorByStyle(cbsAuto);
+end;
+
+procedure Tf_EditTargets.BtnAddStepClick(Sender: TObject);
+var txt:string;
+    i,n: integer;
+    p,pp: TStep;
+begin
+  txt:=FormEntry(self,'Step description','Step'+inttostr(StepList.RowCount));
+  p:=TStep.Create;
+  n:=StepList.Row;
+  if n >= 1 then begin
+    pp:=TStep(StepList.Objects[0,n]);
+    p.Assign(pp);
+  end;
+  StepList.RowCount:=StepList.RowCount+1;
+  i:=StepList.RowCount-1;
+  StepList.Cells[0,i]:=IntToStr(i);
+  StepList.Cells[1,i]:=txt;
+  StepList.Objects[0,i]:=p;
+  StepList.Row:=i;
+  StepList.Cells[pcoldesc,n]:=txt;
+  StepChange(nil);
+end;
+
+procedure Tf_EditTargets.BtnDeleteStepClick(Sender: TObject);
+var i,j: integer;
+    str: string;
+begin
+  i:=StepList.Row;
+  if i>0 then begin
+     str:=StepList.Cells[0,i]+', '+StepList.Cells[1,i];
+     if MessageDlg('Delete step '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+        j:=i-1;
+        if j<1 then j:=i+1;
+        if j>=StepList.RowCount then j:=StepList.RowCount-1;
+        StepList.Row:=j;
+        StepListSelection(StepList,0,j);
+        Application.ProcessMessages;
+        if StepList.Objects[0,i]<>nil then StepList.Objects[0,i].Free;
+        StepList.Objects[0,i]:=nil;
+        StepList.DeleteRow(i);
+     end;
+     ResetSteps;
+  end;
+end;
+
+procedure Tf_EditTargets.ResetSteps;
+var i: integer;
+begin
+  for i:=1 to StepList.RowCount-1 do begin
+    StepList.Cells[0,i]:=IntToStr(i);
+  end;
+end;
+
+procedure Tf_EditTargets.SavePlan;
+var pfile: TCCDconfig;
+    fn,str: string;
+    i,n,k: integer;
+    p: TStep;
+begin
+try
+  fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
+  pfile:=TCCDconfig.Create(self);
+  pfile.Filename:=fn;
+  pfile.Clear;
+  n:=StepList.RowCount-1;
+  pfile.SetValue('/PlanName',PlanName.Caption);
+  pfile.SetValue('/StepNum',n);
+  for i:=1 to n do begin
+    p:=TStep(StepList.Objects[0,i]);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',FrameName[ord(p.frtype)]);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);
+    if StepList.Columns[pcolfilter-1].PickList.Count>0 then begin // do not erase the filters if the filter wheel is not connected
+      k:=p.filter;
+      if (k<0)or(k>StepList.Columns[pcolfilter-1].PickList.Count-1) then str:=''
+         else str:=StepList.Columns[pcolfilter-1].PickList[k];
+    end else begin
+      str:=originalFilter[i];
+    end;
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Filter',str);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',p.count);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Dither',p.dither);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/DitherCount',p.dithercount);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',p.autofocusstart);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Autofocus',p.autofocus);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',p.autofocuscount);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',p.repeatcount);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
+  end;
+  pfile.Flush;
+  pfile.Free;
+  ModalResult:=mrOK;
+except
+  on E: Exception do ShowMessage('Error saving plan: '+ E.Message);
+end;
+end;
+
 
 end.
 

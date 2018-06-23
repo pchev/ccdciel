@@ -27,7 +27,7 @@ interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
-  fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_editplan, pu_edittargets, pu_scriptengine,
+  fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
@@ -1551,7 +1551,7 @@ begin
   end;
   f_filterwheel.Filters.Items.Assign(FilterList);
   f_filterwheel.Filters.ItemIndex:=0;
-  f_EditPlan.Filter.Items.Assign(FilterList);
+  f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(FilterList);
   f_EditTargets.FlatFilterList.Items.Assign(FilterList);
   if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
   SetFilterMenu;
@@ -2941,11 +2941,10 @@ procedure Tf_main.SetBinningList(posprev,poscapt: integer);
 begin
  f_preview.Binning.Items.Assign(BinningList);
  f_capture.Binning.Items.Assign(BinningList);
- f_editplan.Binning.Items.Assign(BinningList);
+ f_EditTargets.StepList.Columns[pcolbin-1].PickList.Assign(BinningList);
  f_EditTargets.FlatBinning.Items.Assign(BinningList);
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
- f_editplan.Binning.ItemIndex:=0;
  f_EditTargets.FlatBinning.ItemIndex:=0;
 end;
 
@@ -2971,7 +2970,7 @@ begin
  poscapt:=Gain;
  f_capture.PanelGain.Visible:=(hasGain or hasGainISO);
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
- f_EditPlan.PanelGain.Visible:=f_capture.PanelGain.Visible;
+ f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
  if hasGainISO then begin
    f_capture.ISObox.Visible:=true;
@@ -2980,9 +2979,9 @@ begin
    f_preview.ISObox.Visible:=true;
    f_preview.GainEdit.Visible:=false;
    f_preview.ISObox.Items.Assign(ISOList);
-   f_EditPlan.ISObox.Visible:=true;
-   f_EditPlan.GainEdit.Visible:=false;
-   f_EditPlan.ISObox.Items.Assign(ISOList);
+   f_EditTargets.ISObox.Visible:=true;
+   f_EditTargets.GainEdit.Visible:=false;
+   f_EditTargets.ISObox.Items.Assign(ISOList);
    f_EditTargets.ISObox.Visible:=true;
    f_EditTargets.GainEdit.Visible:=false;
    f_EditTargets.ISObox.Items.Assign(ISOList);
@@ -2992,7 +2991,7 @@ begin
    end;
    f_capture.ISObox.ItemIndex:=poscapt;
    f_preview.ISObox.ItemIndex:=posprev;
-   f_EditPlan.ISObox.ItemIndex:=poscapt;
+   f_EditTargets.ISObox.ItemIndex:=poscapt;
    f_EditTargets.ISObox.ItemIndex:=poscapt;
  end;
  if hasGain and (not hasGainISO) then begin
@@ -3000,15 +2999,15 @@ begin
    f_capture.GainEdit.Visible:=true;
    f_capture.GainEdit.ShowHint:=True;
    f_preview.GainEdit.ShowHint:=True;
-   f_EditPlan.GainEdit.ShowHint:=True;
+   f_EditTargets.GainEdit.ShowHint:=True;
    f_EditTargets.GainEdit.ShowHint:=True;
    f_capture.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
    f_preview.ISObox.Visible:=false;
    f_preview.GainEdit.Visible:=true;
    f_preview.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
-   f_EditPlan.ISObox.Visible:=false;
-   f_EditPlan.GainEdit.Visible:=true;
-   f_EditPlan.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_EditTargets.ISObox.Visible:=false;
+   f_EditTargets.GainEdit.Visible:=true;
+   f_EditTargets.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
    f_EditTargets.ISObox.Visible:=false;
    f_EditTargets.GainEdit.Visible:=true;
    f_EditTargets.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
@@ -3016,7 +3015,7 @@ begin
    poscapt:=StrToIntDef(gaincapt,gain);
    f_capture.GainEdit.Value:=poscapt;
    f_preview.GainEdit.Value:=posprev;
-   f_EditPlan.GainEdit.Value:=poscapt;
+   f_EditTargets.GainEdit.Value:=poscapt;
    f_EditTargets.GainEdit.Value:=poscapt;
  end;
 end;
@@ -3348,7 +3347,7 @@ case wheel.Status of
                       NewMessage(Format(rsConnected, [rsFilterWheel]),1);
                       f_devicesconnection.LabelWheel.Font.Color:=clGreen;
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
-                      f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
+                      f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(wheel.FilterNames);
                       f_EditTargets.FlatFilterList.Items.Assign(wheel.FilterNames);
                       if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
                       FilterList.Assign(wheel.FilterNames);
@@ -3398,7 +3397,7 @@ end;
 procedure Tf_main.FilterNameChange(Sender: TObject);
 begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
-f_EditPlan.Filter.Items.Assign(wheel.FilterNames);
+f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(wheel.FilterNames);
 f_EditTargets.FlatFilterList.Items.Assign(wheel.FilterNames);
 if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
 FilterList.Assign(wheel.FilterNames);

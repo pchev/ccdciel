@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_editplan, pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
+uses
+  pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
   fu_capture, fu_preview, fu_filterwheel, u_translation,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan, cu_planetarium, pu_pause,
@@ -338,58 +339,58 @@ procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i,n:integer;
     t:TTarget;
 begin
+   f_EditTargets.LoadPlanList;
+   f_EditTargets.LoadScriptList;
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
-     f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
-     f_EditTargets.TargetList.RowCount:=Targets.Count+1;
-     f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
-     f_EditTargets.SeqStop.Checked:=Targets.SeqStop;
-     f_EditTargets.SeqStartTwilight.Checked:=Targets.SeqStartTwilight;
-     f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
-     f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
-     f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
-     for i:=1 to Targets.Count do begin
-       t:=TTarget.Create;
-       t.Assign(Targets.Targets[i-1]);
-       f_EditTargets.TargetList.Cells[0,i]:=IntToStr(i);
-       f_EditTargets.TargetList.Cells[1,i]:=t.objectname;
-       f_EditTargets.TargetList.Cells[2,i]:=t.planname;
-       f_EditTargets.TargetList.Objects[0,i]:=t;
-     end;
-   end else begin
-     CurrentFile:='';
-     CurrentName:='';
-     f_EditTargets.TargetsRepeat:=1;
-     f_EditTargets.SeqStart.Checked:=false;
-     f_EditTargets.SeqStop.Checked:=false;
-     f_EditTargets.SeqStartTwilight.Checked:=false;
-     f_EditTargets.SeqStopTwilight.Checked:=false;
-     f_EditTargets.SeqStartAt.Text:='00:00:00';
-     f_EditTargets.SeqStopAt.Text:='00:00:00';
-     t:=TTarget.Create;
-     f_EditTargets.TargetList.RowCount:=2;
-     f_EditTargets.TargetList.Cells[0,1]:='1';
-     f_EditTargets.TargetList.Cells[1,1]:=t.objectname;
-     f_EditTargets.TargetList.Cells[2,1]:=t.planname;
-     f_EditTargets.TargetList.Objects[0,1]:=t;
-   end;
-   FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
-   if f_EditTargets.ShowModal=mrOK then begin
-     n:=f_EditTargets.TargetList.RowCount;
-     Targets.Clear;
-     for i:=1 to n-1 do begin
-       t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
-       Targets.Add(t);
-       LoadPlan(T_Plan(t.plan), t.planname);
-     end;
-     Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
-     Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
-     Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
-     Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
-     Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
-     Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
-     Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
-     SaveTargets(CurrentFile);
-   end;
+      f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
+      f_EditTargets.TargetList.RowCount:=Targets.Count+1;
+      f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
+      f_EditTargets.SeqStop.Checked:=Targets.SeqStop;
+      f_EditTargets.SeqStartTwilight.Checked:=Targets.SeqStartTwilight;
+      f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
+      f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
+      f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
+      for i:=1 to Targets.Count do begin
+        t:=TTarget.Create;
+        t.Assign(Targets.Targets[i-1]);
+        f_EditTargets.SetTarget(i,t);
+        f_EditTargets.TargetList.Objects[colseq,i]:=t;
+      end;
+    end else begin
+      CurrentFile:='';
+      CurrentName:='';
+      f_EditTargets.TargetsRepeat:=1;
+      f_EditTargets.SeqStart.Checked:=false;
+      f_EditTargets.SeqStop.Checked:=false;
+      f_EditTargets.SeqStartTwilight.Checked:=false;
+      f_EditTargets.SeqStopTwilight.Checked:=false;
+      f_EditTargets.SeqStartAt.Text:='00:00:00';
+      f_EditTargets.SeqStopAt.Text:='00:00:00';
+      t:=TTarget.Create;
+      f_EditTargets.TargetList.RowCount:=2;
+      f_EditTargets.TargetList.Cells[0,1]:='1';
+      f_EditTargets.TargetList.Cells[1,1]:=t.objectname;
+      f_EditTargets.TargetList.Cells[2,1]:=t.planname;
+      f_EditTargets.TargetList.Objects[0,1]:=t;
+    end;
+    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
+    if f_EditTargets.ShowModal=mrOK then begin
+      n:=f_EditTargets.TargetList.RowCount;
+      Targets.Clear;
+      for i:=1 to n-1 do begin
+        t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
+        Targets.Add(t);
+        LoadPlan(T_Plan(t.plan), t.planname);
+      end;
+      Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
+      Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
+      Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
+      Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
+      Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
+      Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
+      Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
+      SaveTargets(CurrentFile);
+    end;
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);
@@ -476,7 +477,7 @@ begin
      n:=pfile.GetValue('/StepNum',0);
      for i:=1 to n do begin
        s:=TStep.Create;
-       f_EditPlan.ReadStep(pfile,i,s);
+       f_EditTargets.ReadStep(pfile,i,s);
        p.Add(s);
      end;
   end;
