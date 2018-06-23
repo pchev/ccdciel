@@ -1148,9 +1148,9 @@ begin
         StepList.Cells[0,i]:=IntToStr(i);
         StepList.Cells[1,i]:=p.description_str;
         StepList.Objects[0,i]:=p;
+        StepListSelection(nil,0,i);
       end;
       pfile.Free;
-      StepListSelection(nil,0,1);
     end;
   end else begin
     NewPlan;
@@ -1289,11 +1289,11 @@ begin
   if (aCol=pcoltype) then
      Editor:=StepList.EditorByStyle(cbsPickList)   // type selection
   else if (aCol=pcolbin) then
-     Editor:=TargetList.EditorByStyle(cbsPickList) // binning selection
+     Editor:=StepList.EditorByStyle(cbsPickList) // binning selection
   else if (aCol=pcolfilter) then
-     Editor:=TargetList.EditorByStyle(cbsPickList) // filter selection
+     Editor:=StepList.EditorByStyle(cbsPickList) // filter selection
   else
-     Editor:=TargetList.EditorByStyle(cbsAuto);
+     Editor:=StepList.EditorByStyle(cbsAuto);
 end;
 
 procedure Tf_EditTargets.BtnAddStepClick(Sender: TObject);

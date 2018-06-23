@@ -202,14 +202,12 @@ object f_EditTargets: Tf_EditTargets
       Columns = <      
         item
           MinSize = 100
-          SizePriority = 1
           Title.Caption = 'Object name'
           Width = 95
         end      
         item
           ButtonStyle = cbsPickList
           MinSize = 30
-          SizePriority = 1
           Title.Caption = 'Plan'
           Width = 95
         end      
