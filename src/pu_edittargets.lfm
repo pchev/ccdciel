@@ -8,7 +8,7 @@ object f_EditTargets: Tf_EditTargets
   ClientHeight = 650
   ClientWidth = 1000
   Constraints.MinHeight = 650
-  Constraints.MinWidth = 1000
+  Constraints.MinWidth = 970
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -27,20 +27,20 @@ object f_EditTargets: Tf_EditTargets
     Constraints.MinHeight = 440
     TabOrder = 0
     object Panel11: TPanel
-      Left = 664
+      Left = 699
       Height = 391
       Top = 48
-      Width = 335
+      Width = 300
       Align = alRight
       BevelOuter = bvNone
       ClientHeight = 391
-      ClientWidth = 335
+      ClientWidth = 300
       TabOrder = 1
       object PageControl1: TPageControl
         Left = 0
         Height = 391
         Top = 0
-        Width = 335
+        Width = 300
         ActivePage = TabSheet1
         Align = alClient
         ShowTabs = False
@@ -49,16 +49,16 @@ object f_EditTargets: Tf_EditTargets
         object TabSheet1: TTabSheet
           Caption = 'Object'
           ClientHeight = 387
-          ClientWidth = 325
+          ClientWidth = 290
           object GroupBox2: TGroupBox
             Left = 0
             Height = 152
             Top = 0
-            Width = 325
+            Width = 290
             Align = alTop
             Caption = 'Target'
             ClientHeight = 134
-            ClientWidth = 323
+            ClientWidth = 288
             TabOrder = 0
             object BtnCurrentCoord: TButton
               Left = 136
@@ -125,11 +125,11 @@ object f_EditTargets: Tf_EditTargets
             Left = 0
             Height = 51
             Top = 152
-            Width = 325
+            Width = 290
             Align = alTop
             Caption = 'Plan'
             ClientHeight = 33
-            ClientWidth = 323
+            ClientWidth = 288
             TabOrder = 1
             object BtnNewPlan: TButton
               Left = 8
@@ -163,11 +163,11 @@ object f_EditTargets: Tf_EditTargets
             Left = 0
             Height = 127
             Top = 260
-            Width = 325
+            Width = 290
             Align = alClient
             Caption = 'Repeat'
             ClientHeight = 109
-            ClientWidth = 323
+            ClientWidth = 288
             TabOrder = 2
             object Label9: TLabel
               Left = 3
@@ -237,12 +237,11 @@ object f_EditTargets: Tf_EditTargets
             Left = 0
             Height = 57
             Top = 203
-            Width = 325
+            Width = 290
             Align = alTop
             BevelOuter = bvNone
-            Caption = 'Panel6'
             ClientHeight = 57
-            ClientWidth = 325
+            ClientWidth = 290
             TabOrder = 3
             object GroupBox3: TGroupBox
               Left = 0
@@ -269,11 +268,11 @@ object f_EditTargets: Tf_EditTargets
               Left = 151
               Height = 57
               Top = 0
-              Width = 174
+              Width = 139
               Align = alClient
               Caption = 'Start/Stop'
               ClientHeight = 39
-              ClientWidth = 172
+              ClientWidth = 137
               TabOrder = 1
               object BtnAnytime: TButton
                 Left = 4
@@ -291,7 +290,7 @@ object f_EditTargets: Tf_EditTargets
         object TabSheet2: TTabSheet
           Caption = 'Script'
           ClientHeight = 387
-          ClientWidth = 325
+          ClientWidth = 290
           object Label15: TLabel
             Left = 16
             Height = 17
@@ -332,7 +331,7 @@ object f_EditTargets: Tf_EditTargets
         object TabSheet3: TTabSheet
           Caption = 'TabSheet3'
           ClientHeight = 387
-          ClientWidth = 325
+          ClientWidth = 290
           object FlatTime: TRadioGroup
             Left = 0
             Height = 51
@@ -607,21 +606,21 @@ object f_EditTargets: Tf_EditTargets
       Left = 1
       Height = 391
       Top = 48
-      Width = 663
+      Width = 698
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 391
-      ClientWidth = 663
+      ClientWidth = 698
       TabOrder = 2
       object PanelBottom: TPanel
         Left = 0
         Height = 39
         Top = 352
-        Width = 663
+        Width = 698
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 39
-        ClientWidth = 663
+        ClientWidth = 698
         TabOrder = 0
         object BtnNewObject: TButton
           Left = 232
@@ -687,7 +686,7 @@ object f_EditTargets: Tf_EditTargets
         Height = 352
         Hint = 'The list of target to process in sequence.'
         Top = 0
-        Width = 663
+        Width = 698
         Align = alClient
         AutoFillColumns = True
         ColCount = 9
@@ -695,13 +694,13 @@ object f_EditTargets: Tf_EditTargets
           item
             MinSize = 100
             Title.Caption = 'Object name'
-            Width = 93
+            Width = 110
           end        
           item
             ButtonStyle = cbsPickList
             MinSize = 30
             Title.Caption = 'Plan'
-            Width = 93
+            Width = 110
           end        
           item
             MinSize = 85
@@ -770,8 +769,8 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = TargetListSelection
         ColWidths = (
           30
-          93
-          93
+          110
+          110
           85
           95
           50
@@ -788,7 +787,6 @@ object f_EditTargets: Tf_EditTargets
     Top = 440
     Width = 1000
     Align = alClient
-    Caption = 'PanelPlan'
     ClientHeight = 171
     ClientWidth = 1000
     Constraints.MinHeight = 170
@@ -797,24 +795,24 @@ object f_EditTargets: Tf_EditTargets
       Left = 1
       Height = 169
       Top = 1
-      Width = 663
+      Width = 698
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 169
-      ClientWidth = 663
+      ClientWidth = 698
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
         Height = 139
         Top = 0
-        Width = 663
+        Width = 698
         Align = alClient
         AutoFillColumns = True
         ColCount = 8
         Columns = <        
           item
             Title.Caption = 'Description'
-            Width = 130
+            Width = 148
           end        
           item
             ButtonStyle = cbsPickList
@@ -850,7 +848,7 @@ object f_EditTargets: Tf_EditTargets
               'No change'
             )
             Title.Caption = 'Filter'
-            Width = 130
+            Width = 148
           end        
           item
             MinSize = 70
@@ -877,11 +875,11 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = StepListSelection
         ColWidths = (
           30
-          130
+          148
           70
           80
           80
-          130
+          148
           70
           70
         )
@@ -890,11 +888,11 @@ object f_EditTargets: Tf_EditTargets
         Left = 0
         Height = 30
         Top = 139
-        Width = 663
+        Width = 698
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 663
+        ClientWidth = 698
         TabOrder = 1
         object PlanName: TLabel
           Left = 100
@@ -944,24 +942,23 @@ object f_EditTargets: Tf_EditTargets
       end
     end
     object Panel12: TPanel
-      Left = 664
+      Left = 699
       Height = 169
       Top = 1
-      Width = 335
+      Width = 300
       Align = alRight
       BevelOuter = bvNone
-      Caption = 'Panel12'
       ClientHeight = 169
-      ClientWidth = 335
+      ClientWidth = 300
       TabOrder = 1
       object Panel8: TPanel
         Left = 0
         Height = 128
         Top = 0
-        Width = 335
+        Width = 300
         Align = alTop
         ClientHeight = 128
-        ClientWidth = 335
+        ClientWidth = 300
         TabOrder = 0
         object CheckBoxDither: TCheckBox
           Left = 8
@@ -1058,10 +1055,10 @@ object f_EditTargets: Tf_EditTargets
         Left = 0
         Height = 46
         Top = 128
-        Width = 335
+        Width = 300
         Align = alTop
         ClientHeight = 46
-        ClientWidth = 335
+        ClientWidth = 300
         TabOrder = 1
         object Label17: TLabel
           Left = 184
