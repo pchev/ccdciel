@@ -342,6 +342,7 @@ begin
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
+      f_EditTargets.TargetName.Caption:=Targets.TargetName;
       f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
       f_EditTargets.TargetList.RowCount:=Targets.Count+1;
       f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
@@ -359,6 +360,7 @@ begin
     end else begin
       CurrentFile:='';
       CurrentName:='';
+      f_EditTargets.TargetName.Caption:='New targets';
       f_EditTargets.TargetsRepeat:=1;
       f_EditTargets.SeqStart.Checked:=false;
       f_EditTargets.SeqStop.Checked:=false;

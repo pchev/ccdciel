@@ -41,8 +41,7 @@ type
   Tf_EditTargets = class(TForm)
     AutofocusCount: TSpinEdit;
     BtnAddStep: TButton;
-    BtnCancel1: TButton;
-    BtnClose1: TButton;
+    BtnSavePlan: TButton;
     BtnDeleteStep: TButton;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
@@ -54,7 +53,6 @@ type
     BtnCdCCoord: TButton;
     BtnImgCoord: TButton;
     BtnCurrentCoord: TButton;
-    BtnEditPlan: TButton;
     BtnEditScript: TButton;
     BtnImgRot: TButton;
     BtnNewObject: TButton;
@@ -80,19 +78,25 @@ type
     Label1: TLabel;
     Label12: TLabel;
     Label17: TLabel;
+    Label2: TLabel;
     LabelGain1: TLabel;
     Panel1: TPanel;
     Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    Panel13: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
     Panel7: TPanel;
     Panel8: TPanel;
     Panel9: TPanel;
     PanelGain1: TPanel;
     PanelRepeat: TPanel;
     PlanName: TLabel;
+    TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
     ISObox: TComboBox;
@@ -122,7 +126,6 @@ type
     PageControl1: TPageControl;
     PanelBottom: TPanel;
     PanelTarget: TPanel;
-    Panel6: TPanel;
     ScriptList: TComboBox;
     PointAstrometry: TCheckBox;
     Preview: TCheckBox;
@@ -140,15 +143,17 @@ type
     procedure BtnDeleteStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
+    procedure BtnSavePlanClick(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
-    procedure BtnPlanClick(Sender: TObject);
+    procedure BtnNewPlanClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FrameTypeChange(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
@@ -225,6 +230,11 @@ begin
   ClearStepList;
 end;
 
+procedure Tf_EditTargets.FormResize(Sender: TObject);
+begin
+  PanelTarget.Height:=(ClientHeight-Panel1.Height) div 2;
+end;
+
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
   TargetList.Cells[colseq,0]:='Seq';
@@ -284,7 +294,6 @@ begin
   InplaceAutofocus.Caption := rsStayInPlaceF;
   BtnImgRot.Caption := rsCurrentImage;
   BtnNewPlan.Caption := rsNew;
-  BtnEditPlan.Caption := rsEdit;
   BtnCopyPlan.Caption := rsCopy;
   BtnDeletePlan.Caption := rsDelete;
   TabSheet2.Caption := rsScript;
@@ -299,6 +308,12 @@ begin
   LabelGain.Caption := rsGain;
   FlatTime.Items[0]:=rsAtDusk;
   FlatTime.Items[1]:=rsAtDawn;
+  label2.Caption:=rsSequence;
+  GroupBox2.Caption:=rsObject;
+  GroupBox1.Caption:=rsPlan;
+  GroupBox3.Caption:=rsPA;
+  GroupBox4.Caption:=rsStart+'/'+rsStop;
+  GroupBox5.Caption:=rsRepeat;
   // plan
   Label17.Caption := rsSeconds2;
   Label12.Caption := rsInterval;
@@ -306,12 +321,17 @@ begin
   CheckBoxAutofocusStart.Caption := rsAutofocusBef;
   CheckBoxAutofocus.Caption := rsAutofocusEve;
   LabelGain1.Caption := rsGain;
-  BtnClose1.Caption := rsSave;
+  BtnSavePlan.Caption := rsSave;
   BtnDeleteStep.Caption := rsDelete;
   BtnAddStep.Caption := rsAdd;
-  BtnCancel1.Caption := rsCancel;
-  StepList.Columns.Items[0].Title.Caption := rsDescription;
-  Label1.Caption := rsPlanName;
+  StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
+  StepList.Columns.Items[pcoltype-1].Title.Caption := rsType;
+  StepList.Columns.Items[pcolexp-1].Title.Caption := rsExposure;
+  StepList.Columns.Items[pcolbin-1].Title.Caption := rsBinning;
+  StepList.Columns.Items[pcolfilter-1].Title.Caption := rsFilter;
+  StepList.Columns.Items[pcolcount-1].Title.Caption := rsCount;
+  StepList.Columns.Items[pcolrepeat-1].Title.Caption := rsRepeat;
+  Label1.Caption := rsPlan;
 end;
 
 {procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
@@ -451,7 +471,8 @@ begin
      pfile.Free;
      LoadPlanList;
      SetPlanList(n,txt);
-     BtnPlanClick(Sender);
+     PlanName.Caption:=TargetList.Cells[colplan,n];
+     ShowPlan;
      TargetChange(nil);
   end;
 end;
@@ -468,38 +489,31 @@ begin
      DeleteFileUTF8(fn);
      LoadPlanList;
      TargetList.Cells[colplan,n]:='';
+     PlanName.Caption:='';
+     ShowPlan;
      TargetChange(nil);
   end;
 end;
 
 
-procedure Tf_EditTargets.BtnPlanClick(Sender: TObject);
+procedure Tf_EditTargets.BtnNewPlanClick(Sender: TObject);
 var txt,fn: string;
-    newplan: boolean;
     n: integer;
 begin
   n:=TargetList.Row;
-  newplan:=(Sender=BtnNewPlan)or(TargetList.Cells[colplan,n]='');
-  if newplan then begin
-    txt:=FormEntry(self,'New plan ','');
-    if txt='' then exit;
-    fn:=slash(ConfigDir)+txt+'.plan';
-    if FileExistsUTF8(fn) then begin
-       if MessageDlg(Format(rsPlanAlreadyE2, [txt]), mtConfirmation, mbYesNo, 0)
-         <>mrYes then exit;
-    end;
-    PlanName.Caption:=txt;
-  end
-  else begin
-    if TargetList.Cells[colplan,n]='' then exit;
-    PlanName.Caption:=TargetList.Cells[colplan,n];
+  txt:=FormEntry(self,'New plan ','');
+  if txt='' then exit;
+  fn:=slash(ConfigDir)+txt+'.plan';
+  if FileExistsUTF8(fn) then begin
+     if MessageDlg(Format(rsPlanAlreadyE2, [txt]), mtConfirmation, mbYesNo, 0)
+       <>mrYes then exit;
   end;
+  PlanName.Caption:=txt;
+  SavePlan;
+  LoadPlanList;
+  SetPlanList(n,txt);
   ShowPlan;
-{    if newplan then begin
-       LoadPlanList;
-       SetPlanList(n,f_EditPlan.PlanName.Caption);
-       TargetChange(nil);
-    end;}
+  TargetChange(nil);
 end;
 
 
@@ -802,10 +816,12 @@ begin
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
   if t.objectname=ScriptTxt then begin
+    Panel3.Visible:=false;
     PageControl1.ActivePageIndex:=1;
     SetScriptList(n,t.planname);
   end
   else if t.objectname=SkyFlatTxt then begin
+    Panel3.Visible:=false;
     PageControl1.ActivePageIndex:=2;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
@@ -834,6 +850,7 @@ begin
     filterlst.Free;
   end
   else begin
+    Panel3.Visible:=true;
     PageControl1.ActivePageIndex:=0;
     SetPlanList(n,t.planname);
     if t.starttime>=0 then
@@ -884,6 +901,7 @@ var i,n,j:integer;
     scdir:TScriptDir;
     sname,str,buf: string;
     t: TTarget;
+    planchange: boolean;
 begin
   if LockTarget then exit;
   n:=TargetList.Row;
@@ -929,6 +947,7 @@ begin
   else begin
     PageControl1.ActivePageIndex:=0;
     t.objectname:=trim(TargetList.Cells[colname,n]);
+    planchange:=(t.planname<>TargetList.Cells[colplan,n]);
     t.planname:=TargetList.Cells[colplan,n];
     t.starttime:=StrToTimeDef(TargetList.Cells[colstart,n],-1);
     t.endtime:=StrToTimeDef(TargetList.Cells[colend,n],-1);
@@ -955,6 +974,10 @@ begin
     t.delay:=Delay.Value;
     t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
+    if planchange then begin
+      PlanName.Caption:=t.planname;
+      ShowPlan;
+    end;
   end;
 end;
 
@@ -1348,6 +1371,11 @@ begin
   end;
 end;
 
+procedure Tf_EditTargets.BtnSavePlanClick(Sender: TObject);
+begin
+  SavePlan;
+end;
+
 procedure Tf_EditTargets.SavePlan;
 var pfile: TCCDconfig;
     fn,str: string;
@@ -1388,7 +1416,8 @@ try
   end;
   pfile.Flush;
   pfile.Free;
-  ModalResult:=mrOK;
+  LoadPlanList;
+  TargetChange(nil);
 except
   on E: Exception do ShowMessage('Error saving plan: '+ E.Message);
 end;

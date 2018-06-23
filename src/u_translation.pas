@@ -651,7 +651,6 @@ resourcestring
   rsAutofocusBef = 'Autofocus before to start';
   rsAutofocusEve = 'Autofocus every';
   rsAdd = 'Add';
-  rsPlanName = 'Plan name';
   rsResolve = 'Resolve';
   rsResolveAndSl = 'Resolve and Slew to image center';
   rsResolveAndSl2 = 'Resolve and Slew to cursor';
