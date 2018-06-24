@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
-  pu_scriptengine, cu_astrometry, u_translation,
+  pu_scriptengine, cu_astrometry, u_translation, pu_sequenceoptions,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
 
@@ -45,6 +45,7 @@ type
     BtnSavePlan: TButton;
     BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
+    ButtonEndOptions: TButton;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -152,6 +153,7 @@ type
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
+    procedure ButtonEndOptionsClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -375,14 +377,16 @@ end;
 procedure Tf_EditTargets.LoadScriptList;
 var i,k: integer;
     fs : TSearchRec;
-    s: TStringlist;
+    s,s1: TStringlist;
 begin
+  s1:=TStringlist.Create;
   s:=TStringlist.Create;
   ScriptList.Clear;
   for k:=1 to MaxScriptDir do begin
     i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
     while i=0 do begin
       s.AddObject(ExtractFileNameOnly(fs.Name),ScriptDir[k]);
+      if k=1 then s1.AddObject(ExtractFileNameOnly(fs.Name),ScriptDir[k]);
       i:=FindNextUTF8(fs);
     end;
     FindCloseUTF8(fs);
@@ -390,6 +394,9 @@ begin
   s.CustomSort(@ScriptListCompare);
   ScriptList.Items.Assign(s);
   ScriptList.ItemIndex:=0;
+  s1.CustomSort(@ScriptListCompare);
+  f_sequenceoptions.ScriptList.Items.Assign(s1);
+  f_sequenceoptions.ScriptListError.Items.Assign(s1);
   s.Free;
 end;
 
@@ -462,6 +469,13 @@ begin
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
+end;
+
+procedure Tf_EditTargets.ButtonEndOptionsClick(Sender: TObject);
+begin
+  FormPos(f_sequenceoptions,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_sequenceoptions.ShowModal;
+
 end;
 
 procedure Tf_EditTargets.BtnSkyFlatClick(Sender: TObject);

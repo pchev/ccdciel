@@ -1,0 +1,116 @@
+object f_sequenceoptions: Tf_sequenceoptions
+  Left = 0
+  Height = 374
+  Top = 0
+  Width = 382
+  Caption = 'f_sequenceoptions'
+  ClientHeight = 374
+  ClientWidth = 382
+  DesignTimePPI = 95
+  OnCreate = FormCreate
+  Visible = False
+  object MainOptions: TCheckGroup
+    Left = 0
+    Height = 190
+    Top = 0
+    Width = 382
+    Align = alTop
+    AutoFill = True
+    Caption = 'Actions to take when the sequence is finished'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 172
+    ClientWidth = 380
+    Items.Strings = (
+      'Do nothing'
+      'Stop telescope tracking'
+      'Park the telescope'
+      'Warm the camera'
+      'Run a script'
+    )
+    OnItemClick = MainOptionsItemClick
+    TabOrder = 0
+    Data = {
+      050000000202020202
+    }
+  end
+  object PanelScript: TPanel
+    Left = 0
+    Height = 49
+    Top = 190
+    Width = 382
+    Align = alTop
+    ClientHeight = 49
+    ClientWidth = 382
+    TabOrder = 1
+    object ScriptList: TComboBox
+      Left = 112
+      Height = 33
+      Top = 8
+      Width = 214
+      ItemHeight = 0
+      Style = csDropDownList
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 32
+      Height = 17
+      Top = 14
+      Width = 37
+      Caption = 'Script'
+      ParentColor = False
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 86
+    Top = 239
+    Width = 382
+    Align = alClient
+    ClientHeight = 86
+    ClientWidth = 382
+    TabOrder = 2
+    object UnattendedErrorScript: TCheckBox
+      Left = 8
+      Height = 21
+      Top = 8
+      Width = 337
+      Caption = 'Run additional script in case of unattended error'
+      TabOrder = 0
+    end
+    object ScriptListError: TComboBox
+      Left = 112
+      Height = 33
+      Top = 40
+      Width = 214
+      ItemHeight = 0
+      Style = csDropDownList
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 49
+    Top = 325
+    Width = 382
+    Align = alBottom
+    ClientHeight = 49
+    ClientWidth = 382
+    TabOrder = 3
+    object BtnClose: TButton
+      Left = 252
+      Height = 25
+      Top = 8
+      Width = 74
+      Caption = 'Close'
+      ModalResult = 1
+      TabOrder = 0
+    end
+  end
+end

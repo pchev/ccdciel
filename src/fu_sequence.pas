@@ -27,7 +27,7 @@ interface
 
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
-  fu_capture, fu_preview, fu_filterwheel, u_translation,
+  fu_capture, fu_preview, fu_filterwheel, u_translation, pu_sequenceoptions,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan, cu_planetarium, pu_pause,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -351,6 +351,14 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
       f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
       f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
+      f_sequenceoptions.MainOptions.Checked[optnone]:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
+      f_sequenceoptions.MainOptions.Checked[optstoptracking]:=Targets.AtEndStopTracking;
+      f_sequenceoptions.MainOptions.Checked[optpark]:=Targets.AtEndPark;
+      f_sequenceoptions.MainOptions.Checked[optwarm]:=Targets.AtEndWarmCamera;
+      f_sequenceoptions.MainOptions.Checked[optscript]:=Targets.AtEndRunScript;
+      f_sequenceoptions.UnattendedErrorScript.Checked:=Targets.OnErrorRunScript;
+      f_sequenceoptions.SetScript(Targets.AtEndScript);
+      f_sequenceoptions.SetErrorScript(Targets.OnErrorScript);
       for i:=1 to Targets.Count do begin
         t:=TTarget.Create;
         t.Assign(Targets.Targets[i-1]);
@@ -391,6 +399,13 @@ begin
       Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
       Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
       Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
+      Targets.AtEndStopTracking := f_sequenceoptions.MainOptions.Checked[optstoptracking];
+      Targets.AtEndPark         := f_sequenceoptions.MainOptions.Checked[optpark];
+      Targets.AtEndWarmCamera   := f_sequenceoptions.MainOptions.Checked[optwarm];
+      Targets.AtEndRunScript    := f_sequenceoptions.MainOptions.Checked[optscript];
+      Targets.OnErrorRunScript  := f_sequenceoptions.UnattendedErrorScript.Checked;
+      Targets.AtEndScript       := f_sequenceoptions.ScriptList.Text;
+      Targets.OnErrorScript     := f_sequenceoptions.ScriptListError.Text;
       SaveTargets(CurrentSequenceFile);
     end else begin
       // look for modified plan
@@ -419,6 +434,21 @@ begin
    Targets.SeqStopTwilight  := tfile.GetValue('/Startup/SeqStopTwilight',false);
    Targets.SeqStartAt       := StrToTimeDef(tfile.GetValue('/Startup/SeqStartAt','00:00:00'),0);
    Targets.SeqStopAt        := StrToTimeDef(tfile.GetValue('/Startup/SeqStopAt','00:00:00'),0);
+   Targets.AtEndStopTracking:= tfile.GetValue('/Termination/StopTracking',true);
+   Targets.AtEndPark        := tfile.GetValue('/Termination/Park',false);
+   Targets.AtEndWarmCamera  := tfile.GetValue('/Termination/WarmCamera',false);
+   Targets.AtEndRunScript   := tfile.GetValue('/Termination/RunScript',false);
+   Targets.OnErrorRunScript := tfile.GetValue('/Termination/ErrorRunScript',false);
+   Targets.AtEndScript      := tfile.GetValue('/Termination/EndScript','');
+   Targets.OnErrorScript    := tfile.GetValue('/Termination/ErrorScript','');
+   if Targets.FileVersion<3 then begin
+     // compatibility with previous version
+     if FileExistsUTF8(slash(ScriptDir[1].path)+'end_sequence.script') then begin
+        Targets.AtEndStopTracking:=false;
+        Targets.AtEndRunScript:=true;
+        Targets.AtEndScript:='end_sequence';
+     end;
+   end;
    if n>0 then begin
      for i:=1 to n do begin
        t:=TTarget.Create;
@@ -570,6 +600,13 @@ begin
     tfile.SetValue('/Startup/SeqStopTwilight',Targets.SeqStopTwilight);
     tfile.SetValue('/Startup/SeqStartAt',TimeToStr(Targets.SeqStartAt));
     tfile.SetValue('/Startup/SeqStopAt',TimeToStr(Targets.SeqStopAt));
+    tfile.SetValue('/Termination/StopTracking',Targets.AtEndStopTracking);
+    tfile.SetValue('/Termination/Park',Targets.AtEndPark);
+    tfile.SetValue('/Termination/WarmCamera',Targets.AtEndWarmCamera);
+    tfile.SetValue('/Termination/RunScript',Targets.AtEndRunScript);
+    tfile.SetValue('/Termination/ErrorRunScript',Targets.OnErrorRunScript);
+    tfile.SetValue('/Termination/EndScript',Targets.AtEndScript);
+    tfile.SetValue('/Termination/ErrorScript',Targets.OnErrorScript);
     for i:=1 to Targets.Count do begin
       t:=Targets.Targets[i-1];
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);

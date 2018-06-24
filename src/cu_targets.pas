@@ -57,6 +57,8 @@ type
       FTargetRA,FTargetDE: double;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
+      FAtEndPark, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript: boolean;
+      FAtEndScript, FOnErrorScript: string;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -73,8 +75,8 @@ type
       function InitTarget:boolean;
       function InitSkyFlat: boolean;
       procedure StartPlan;
-      procedure RunErrorScript;
-      procedure RunEndScript;
+      procedure RunErrorAction;
+      procedure RunEndAction;
       function StopGuider:boolean;
       function StartGuider:boolean;
       function Slew(ra,de: double; precision,planprecision: boolean):boolean;
@@ -141,6 +143,13 @@ type
       property DelayMsg: TNotifyStr read FDelayMsg write FDelayMsg;
       property onMsg: TNotifyMsg read FonMsg write FonMsg;
       property onEndSequence: TNotifyEvent read FonEndSequence write FonEndSequence;
+      property AtEndPark: boolean read FAtEndPark write FAtEndPark;
+      property AtEndStopTracking: boolean read FAtEndStopTracking write FAtEndStopTracking;
+      property AtEndWarmCamera: boolean read FAtEndWarmCamera write FAtEndWarmCamera;
+      property AtEndRunScript: boolean read FAtEndRunScript write FAtEndRunScript;
+      property OnErrorRunScript: boolean read FOnErrorRunScript write FOnErrorRunScript;
+      property AtEndScript: string read FAtEndScript write FAtEndScript;
+      property OnErrorScript: string read FOnErrorScript write FOnErrorScript;
   end;
 
 implementation
@@ -159,6 +168,13 @@ begin
   FSeqStop:=false;
   FSeqStartTwilight:=false;
   FSeqStopTwilight:=false;
+  FAtEndPark:=false;
+  FAtEndStopTracking:=true;
+  FAtEndWarmCamera:=false;
+  FAtEndRunScript:=false;
+  FOnErrorRunScript:=false;
+  FAtEndScript:='';
+  FOnErrorScript:='';
   FInitializing:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
@@ -417,7 +433,7 @@ begin
      StopGuider;
      if f_scriptengine.scr.Running then f_scriptengine.StopScript;
      msg(rsSequenceAbor,0);
-     RunErrorScript;
+     RunErrorAction;
      ShowDelayMsg('');
    end;
  end
@@ -563,7 +579,7 @@ begin
      TargetTimer.Enabled:=false;
      StopGuider;
      msg(Format(rsSequenceFini, [FName]),1);
-     RunEndScript;
+     RunEndAction;
      ShowDelayMsg('');
      FCurrentTarget:=-1;
      if assigned(FonEndSequence) then FonEndSequence(nil);
@@ -1036,23 +1052,37 @@ begin
  end;
 end;
 
-procedure T_Targets.RunErrorScript;
+procedure T_Targets.RunErrorAction;
 var path,sname: string;
 begin
-  path:=ScriptDir[1].path;
-  sname:='unattended_error';
-  if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path);
+  RunEndAction;
+  if OnErrorRunScript then begin
+    path:=ScriptDir[1].path;
+    sname:=OnErrorScript;
+    if FileExistsUTF8(slash(path)+sname+'.script') then begin
+       f_scriptengine.RunScript(sname,path);
+    end;
   end;
 end;
 
-procedure T_Targets.RunEndScript;
+procedure T_Targets.RunEndAction;
 var path,sname: string;
 begin
-  path:=ScriptDir[1].path;
-  sname:='end_sequence';
-  if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path);
+  if AtEndStopTracking then begin
+    Mount.AbortMotion;
+  end;
+  if AtEndPark then begin
+    Mount.Park:=true;
+  end;
+  if AtEndWarmCamera then begin
+    Camera.Temperature:=20.0;
+  end;
+  if AtEndRunScript then begin
+    path:=ScriptDir[1].path;
+    sname:=AtEndScript;
+    if FileExistsUTF8(slash(path)+sname+'.script') then begin
+       f_scriptengine.RunScript(sname,path);
+    end;
   end;
 end;
 

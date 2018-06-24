@@ -252,7 +252,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="71">
+    <Units Count="72">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -628,6 +628,12 @@
         <Filename Value="u_annotation.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit70>
+      <Unit71>
+        <Filename Value="pu_sequenceoptions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_sequenceoptions"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit71>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -41,10 +41,10 @@ object f_EditTargets: Tf_EditTargets
         Height = 331
         Top = 0
         Width = 300
-        ActivePage = TabSheet1
+        ActivePage = TabSheet2
         Align = alClient
         ShowTabs = False
-        TabIndex = 0
+        TabIndex = 1
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
@@ -573,6 +573,15 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 1
           Value = 1
         end
+      end
+      object ButtonEndOptions: TButton
+        Left = 776
+        Height = 25
+        Top = 8
+        Width = 152
+        Caption = 'Termination options'
+        OnClick = ButtonEndOptionsClick
+        TabOrder = 3
       end
     end
     object Panel4: TPanel

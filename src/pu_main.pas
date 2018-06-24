@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer,
-  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
+  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, pu_sequenceoptions,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
@@ -1249,6 +1249,7 @@ begin
   f_autoguider.onDither:=@AutoguiderDitherClick;
   f_autoguider.Status.Text:=autoguider.Status;
 
+  f_sequenceoptions:=Tf_sequenceoptions.Create(self);
   f_sequence:=Tf_sequence.Create(self);
   f_sequence.onMsg:=@NewMessage;
   f_sequence.Preview:=f_preview;
