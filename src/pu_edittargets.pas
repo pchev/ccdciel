@@ -260,7 +260,7 @@ begin
   Caption := rsEditTargetLi;
   BtnSave.Caption := rsSave;
   BtnNewObject.Caption := rsNewObject;
-  BtnDeleteObject.Caption := rsDelete;
+  BtnDeleteObject.Caption := rsRemoveObject;
   BtnNewScript.Caption := rsNewScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
@@ -696,6 +696,7 @@ procedure Tf_EditTargets.BtnAnytimeClick(Sender: TObject);
 begin
   TargetList.Cells[colstart,TargetList.Row]:='';
   TargetList.Cells[colend,TargetList.Row]:='';
+  TargetChange(nil);
 end;
 
 procedure Tf_EditTargets.BtnCancelClick(Sender: TObject);
@@ -718,6 +719,7 @@ begin
      TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
      if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
      PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
+     TargetChange(nil);
   end;
 end;
 
@@ -738,6 +740,7 @@ try
     TargetList.Cells[colra,n]:=RAToStr(ra);
     TargetList.Cells[coldec,n]:=DEToStr(de);
     PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
+    TargetChange(nil);
   end;
 finally
   screen.Cursor:=crDefault;
@@ -754,6 +757,7 @@ try
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
     TargetList.Cells[colpa,n]:=FormatFloat(f2,pa);
+    TargetChange(nil);
   end;
 finally
   screen.Cursor:=crDefault;
@@ -783,6 +787,7 @@ procedure Tf_EditTargets.BtnCurrentCoordClick(Sender: TObject);
 begin
   TargetList.Cells[colra,TargetList.Row]:='-';
   TargetList.Cells[coldec,TargetList.Row]:='-';
+  TargetChange(nil);
 end;
 
 procedure Tf_EditTargets.CheckPlanModified;

@@ -191,6 +191,7 @@ object f_EditTargets: Tf_EditTargets
               Increment = 1
               MaxValue = 60
               MinValue = 0
+              OnChange = TargetChange
               TabOrder = 2
               Value = 0
             end
@@ -599,7 +600,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 25
           Hint = 'Delete the selected row from the list.'
           Top = 6
-          Width = 83
+          Width = 112
           Caption = 'Delete'
           OnClick = BtnDeleteObjectClick
           TabOrder = 1

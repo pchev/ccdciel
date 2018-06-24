@@ -882,6 +882,7 @@ resourcestring
   rsLightOFF = 'Light OFF';
   rsResolveAndPl = 'Resolve and plot DSO';
   rsSaveAs = 'Save as...';
+  rsRemoveObject = 'Remove object';
 
 
 
