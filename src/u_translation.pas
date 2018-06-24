@@ -883,6 +883,7 @@ resourcestring
   rsResolveAndPl = 'Resolve and plot DSO';
   rsSaveAs = 'Save as...';
   rsRemoveObject = 'Remove object';
+  rsCannotComput = 'Cannot compute rise or set time.';
 
 
 

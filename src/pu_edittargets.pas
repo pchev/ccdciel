@@ -192,6 +192,7 @@ type
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
     procedure CheckPlanModified;
+    function   CheckRiseSet(n: integer): boolean;
   public
     { public declarations }
     procedure LoadPlanList;
@@ -335,58 +336,6 @@ begin
   StepList.Columns.Items[pcolrepeat-1].Title.Caption := rsRepeat;
   Label1.Caption := rsPlan;
 end;
-
-{procedure Tf_EditTargets.ObjEndSetChange(Sender: TObject);
-var ra,de,hs: double;
-    i:integer;
-begin
-if ObjEndSet.Checked then begin
-  ra:=StrToAR(TargetList.Cells[colra,TargetList.Row]);
-  de:=StrToDE(TargetList.Cells[coldec,TargetList.Row]);
-  if (ra=NullCoord)or(de=NullCoord) then begin
-     ShowMessage(rsInvalidObjec);
-     ObjEndSet.Checked:=false;
-     exit;
-  end;
-  if ObjSet(ra,de,hs,i) then
-     ObjEndTime.Text:=TimeToStr(hs/24)
-  else begin
-     if i=1 then
-       ShowMessage(rsThisObjectIs)
-     else
-       ShowMessage(rsThisObjectIs2);
-     ObjEndTime.Text:='';
-     ObjEndSet.Checked:=false;
-  end;
-end;
-TargetChange(Sender);
-end;
-
-procedure Tf_EditTargets.ObjStartRiseChange(Sender: TObject);
-var ra,de,hr: double;
-    i:integer;
-begin
-if ObjStartRise.Checked then begin
-  ra:=StrToAR(TargetList.Cells[colra,TargetList.Row]);
-  de:=StrToDE(TargetList.Cells[coldec,TargetList.Row]);
-  if (ra=NullCoord)or(de=NullCoord) then begin
-     ShowMessage(rsInvalidObjec);
-     ObjStartRise.Checked:=false;
-     exit;
-  end;
-  if ObjRise(ra,de,hr,i) then
-     ObjStartTime.Text:=TimeToStr(hr/24)
-   else begin
-      if i=1 then
-        ShowMessage(rsThisObjectIs)
-      else
-        ShowMessage(rsThisObjectIs2);
-      ObjStartTime.Text:='';
-      ObjStartRise.Checked:=false;
-   end;
-end;
-TargetChange(Sender);
-end;   }
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
 begin
@@ -940,6 +889,7 @@ begin
   end
   else begin
     PageControl1.ActivePageIndex:=0;
+    CheckRiseSet(n);
     t.objectname:=trim(TargetList.Cells[colname,n]);
     planchange:=(t.planname<>TargetList.Cells[colplan,n]);
     t.planname:=TargetList.Cells[colplan,n];
@@ -973,6 +923,49 @@ begin
       ShowPlan;
     end;
   end;
+end;
+
+function Tf_EditTargets.CheckRiseSet(n: integer): boolean;
+var ra,de,h: double;
+    i:integer;
+begin
+result:=true;
+ra:=StrToAR(TargetList.Cells[colra,n]);
+de:=StrToDE(TargetList.Cells[coldec,n]);
+if TargetList.Cells[colstart,n]=rsRise then begin
+  if (ra=NullCoord)or(de=NullCoord) then begin
+     ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
+     TargetList.Cells[colstart,n]:='';
+     result:=false;
+  end
+  else begin
+    if not ObjRise(ra,de,h,i) then begin
+      if i=1 then
+        ShowMessage(rsThisObjectIs)
+      else
+        ShowMessage(rsThisObjectIs2);
+      TargetList.Cells[colstart,n]:='';
+      result:=false;
+    end;
+  end;
+end;
+if TargetList.Cells[colend,n]=rsSet2 then begin
+  if (ra=NullCoord)or(de=NullCoord) then begin
+     ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
+     TargetList.Cells[colend,n]:='';
+     result:=false;
+  end
+  else begin
+    if not ObjSet(ra,de,h,i) then begin
+      if i=1 then
+        ShowMessage(rsThisObjectIs)
+      else
+        ShowMessage(rsThisObjectIs2);
+      TargetList.Cells[colend,n]:='';
+      result:=false;
+    end;
+  end;
+end;
 end;
 
 procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;
