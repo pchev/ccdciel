@@ -251,6 +251,8 @@ begin
   else begin
     PageControl1.ActivePageIndex:=0;
   end;
+  SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
+  SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
   RepeatCountList.Value:=FTargetsRepeat;
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
@@ -1066,18 +1068,35 @@ end;
 
 procedure Tf_EditTargets.SeqStartTwilightChange(Sender: TObject);
 var he,hm: double;
+    ok: boolean;
 begin
+  ok:=TwilightAstro(now,hm,he);
   SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
-  if SeqStartTwilight.Checked and TwilightAstro(now,hm,he) then
-     SeqStartAt.Text:=TimeToStr(he/24);
+  if SeqStartTwilight.Checked then begin
+    if ok then
+     SeqStartAt.Text:=TimeToStr(he/24)
+    else begin
+     ShowMessage('No astronomical twilight at this location today');
+     SeqStartTwilight.Checked:=false;
+    end;
+  end;
+  SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
 end;
 
 procedure Tf_EditTargets.SeqStopTwilightChange(Sender: TObject);
 var he,hm: double;
+    ok: boolean;
 begin
+  ok:=TwilightAstro(now,hm,he);
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
-  if SeqStopTwilight.Checked and TwilightAstro(now,hm,he) then
-     SeqStopAt.Text:=TimeToStr(hm/24);
+  if SeqStopTwilight.Checked then begin
+    if ok then
+      SeqStopAt.Text:=TimeToStr(hm/24)
+    else begin
+      ShowMessage('No astronomical twilight at this location today');
+      SeqStopTwilight.Checked:=false;
+    end;
+  end;
 end;
 
 
