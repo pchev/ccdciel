@@ -371,7 +371,7 @@ procedure T_Targets.StopTimerTimer(Sender: TObject);
 begin
   StopTimer.Enabled:=false;
   msg(Format(rsStopTheCurre, [TimeToStr(FSeqStopAt)]),1);
-  StopSequence(false);
+  StopSequence(true);
 end;
 
 procedure T_Targets.Stop;
@@ -414,7 +414,12 @@ begin
      if (p<>nil) and p.Running then p.Stop;
      FRunning:=false;
      StopGuider;
-     msg(rsSequenceStop,1);
+     if Unattended then begin
+       RunEndAction;
+     end
+     else begin
+       msg(rsSequenceStop,1);
+     end;
      ShowDelayMsg('');
    end
    else begin
@@ -436,6 +441,7 @@ begin
      RunErrorAction;
      ShowDelayMsg('');
    end;
+
  end
  else msg(rsNotRunningNo,1);
 end;
