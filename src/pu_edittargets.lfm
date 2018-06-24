@@ -254,41 +254,51 @@ object f_EditTargets: Tf_EditTargets
           Caption = 'Script'
           ClientHeight = 327
           ClientWidth = 290
-          object Label15: TLabel
-            Left = 16
-            Height = 17
-            Top = 54
-            Width = 37
-            Caption = 'Script'
-            ParentColor = False
-          end
-          object ScriptList: TComboBox
-            Left = 98
-            Height = 33
-            Top = 48
-            Width = 166
-            ItemHeight = 0
-            OnChange = TargetChange
-            Style = csDropDownList
+          object Panel14: TPanel
+            Left = 0
+            Height = 108
+            Top = 0
+            Width = 290
+            Align = alTop
+            ClientHeight = 108
+            ClientWidth = 290
             TabOrder = 0
-          end
-          object BtnEditScript: TButton
-            Left = 98
-            Height = 25
-            Top = 96
-            Width = 70
-            Caption = 'Edit'
-            OnClick = BtnScriptClick
-            TabOrder = 1
-          end
-          object BtnEditNewScript: TButton
-            Left = 184
-            Height = 25
-            Top = 96
-            Width = 80
-            Caption = 'New'
-            OnClick = BtnScriptClick
-            TabOrder = 2
+            object Label15: TLabel
+              Left = 16
+              Height = 17
+              Top = 22
+              Width = 37
+              Caption = 'Script'
+              ParentColor = False
+            end
+            object ScriptList: TComboBox
+              Left = 98
+              Height = 33
+              Top = 16
+              Width = 166
+              ItemHeight = 0
+              OnChange = TargetChange
+              Style = csDropDownList
+              TabOrder = 0
+            end
+            object BtnEditScript: TButton
+              Left = 98
+              Height = 25
+              Top = 64
+              Width = 70
+              Caption = 'Edit'
+              OnClick = BtnScriptClick
+              TabOrder = 1
+            end
+            object BtnEditNewScript: TButton
+              Left = 184
+              Height = 25
+              Top = 64
+              Width = 80
+              Caption = 'New'
+              OnClick = BtnScriptClick
+              TabOrder = 2
+            end
           end
         end
         object TabSheet3: TTabSheet
@@ -299,7 +309,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 0
             Height = 51
             Top = 0
-            Width = 310
+            Width = 290
             Align = alTop
             AutoFill = True
             Caption = 'Flat time'
@@ -311,7 +321,7 @@ object f_EditTargets: Tf_EditTargets
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
             ClientHeight = 33
-            ClientWidth = 308
+            ClientWidth = 288
             Columns = 2
             Items.Strings = (
               'at dusk'
@@ -322,19 +332,19 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox6: TGroupBox
             Left = 0
-            Height = 169
-            Top = 160
-            Width = 310
+            Height = 175
+            Top = 152
+            Width = 290
             Align = alClient
             Caption = 'Filters'
-            ClientHeight = 151
-            ClientWidth = 308
+            ClientHeight = 157
+            ClientWidth = 288
             TabOrder = 1
             object FlatFilterList: TCheckListBox
               Left = 0
-              Height = 151
+              Height = 157
               Top = 0
-              Width = 308
+              Width = 288
               Align = alClient
               IntegralHeight = True
               ItemHeight = 0
@@ -345,26 +355,26 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox7: TGroupBox
             Left = 0
-            Height = 109
+            Height = 101
             Top = 51
-            Width = 310
+            Width = 290
             Align = alTop
             Caption = 'Exposure'
-            ClientHeight = 91
-            ClientWidth = 308
+            ClientHeight = 83
+            ClientWidth = 288
             TabOrder = 2
             object Label16: TLabel
-              Left = 136
+              Left = 8
               Height = 17
-              Top = 56
+              Top = 48
               Width = 49
               Caption = 'Binning'
               ParentColor = False
             end
             object FlatBinning: TComboBox
-              Left = 208
+              Left = 72
               Height = 33
-              Top = 48
+              Top = 40
               Width = 84
               ItemHeight = 0
               OnChange = TargetChange
@@ -380,21 +390,21 @@ object f_EditTargets: Tf_EditTargets
               ParentColor = False
             end
             object PanelGain: TPanel
-              Left = 0
+              Left = 160
               Height = 40
-              Top = 48
+              Top = 39
               Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 36
-              ClientWidth = 124
+              ClientHeight = 40
+              ClientWidth = 128
               TabOrder = 1
               Visible = False
               object ISObox: TComboBox
                 Left = 56
                 Height = 33
                 Hint = 'Exposure time in secondes'
-                Top = 2
+                Top = 0
                 Width = 64
                 ItemHeight = 0
                 OnChange = TargetChange
@@ -413,7 +423,7 @@ object f_EditTargets: Tf_EditTargets
               object GainEdit: TSpinEdit
                 Left = 64
                 Height = 27
-                Top = 2
+                Top = 4
                 Width = 56
                 MaxValue = 10000
                 OnChange = TargetChange
@@ -421,7 +431,7 @@ object f_EditTargets: Tf_EditTargets
               end
             end
             object FlatCount: TSpinEdit
-              Left = 64
+              Left = 72
               Height = 27
               Top = 8
               Width = 56
@@ -898,11 +908,11 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 34
           Top = 0
-          Width = 240
+          Width = 288
           BevelOuter = bvNone
           Caption = ' '
           ClientHeight = 34
-          ClientWidth = 240
+          ClientWidth = 288
           TabOrder = 3
           Visible = False
           object ISObox1: TComboBox

@@ -84,6 +84,7 @@ type
     Panel11: TPanel;
     Panel12: TPanel;
     Panel13: TPanel;
+    Panel14: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
