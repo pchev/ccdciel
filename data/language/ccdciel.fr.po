@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2018-06-24 18:30+0000\n"
-"PO-Revision-Date: 2018-06-24 18:44+0000\n"
+"PO-Revision-Date: 2018-06-24 19:41+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-06-24 18:48+0000\n"
+"X-Launchpad-Export-Date: 2018-06-24 19:48+0000\n"
 "X-Generator: Launchpad (build 18688)\n"
 
 #: u_translation.rsabort
@@ -38,7 +38,7 @@ msgstr "À propos"
 
 #: u_translation.rsactionstotak
 msgid "Actions to take when the sequence is finished"
-msgstr "Actions a effectuer quand la séquence esr terminée"
+msgstr "Actions a effectuer quand la séquence est terminée"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -46,7 +46,7 @@ msgstr "Ajouter"
 
 #: u_translation.rsaddstep
 msgid "Add step"
-msgstr "Ajout d'une étape"
+msgstr "Ajout  étape"
 
 #: u_translation.rsadjustflatex
 msgid "Adjust flat exposure time to %s and retry."
@@ -843,7 +843,7 @@ msgstr "Coupole/Panneau"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
-msgstr "Ne fait rien"
+msgstr "Ne rien faire"
 
 #: u_translation.rsdosimpleslew
 msgid "Do simple slew to %s/%s"
@@ -2107,11 +2107,11 @@ msgstr "Supprimer tous les points d'arrêt"
 
 #: u_translation.rsremoveobject
 msgid "Remove object"
-msgstr "Supprimer l'objet"
+msgstr "Supprime objet"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
-msgstr "supprimer l'étape"
+msgstr "Supprime étape"
 
 #: u_translation.rsrepeat
 msgid "Repeat"
@@ -2275,7 +2275,7 @@ msgstr "Exécuter"
 
 #: u_translation.rsrunadditiona
 msgid "Run additional script in case of unattended error"
-msgstr "Exécute un script additionel en cas d'erreur sans surveillance"
+msgstr "Exécute un script additionnel en cas d'erreur"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
@@ -2327,7 +2327,7 @@ msgstr "Enregister le plan"
 
 #: u_translation.rssaveplanas
 msgid "Save plan as..."
-msgstr "Enregister le plan sous..."
+msgstr "Enregister sous..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -2672,7 +2672,7 @@ msgstr "Profile de d'étoile"
 
 #: u_translation.rsstart
 msgid "Start"
-msgstr "Démarrer"
+msgstr "Début"
 
 #: u_translation.rsstartat
 msgid "Start at "
@@ -3136,7 +3136,7 @@ msgstr "Non parqué"
 
 #: u_translation.rsupdateradecf
 msgid "Update RA+Dec from Planetarium"
-msgstr "Met à jours AD+Déc depuis le planétarium"
+msgstr "Mise à jours AD+Déc du planétarium"
 
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"

@@ -2,10 +2,10 @@ object f_sequenceoptions: Tf_sequenceoptions
   Left = 0
   Height = 374
   Top = 0
-  Width = 382
+  Width = 397
   Caption = 'f_sequenceoptions'
   ClientHeight = 374
-  ClientWidth = 382
+  ClientWidth = 397
   DesignTimePPI = 95
   OnCreate = FormCreate
   Visible = False
@@ -13,7 +13,7 @@ object f_sequenceoptions: Tf_sequenceoptions
     Left = 0
     Height = 190
     Top = 0
-    Width = 382
+    Width = 397
     Align = alTop
     AutoFill = True
     Caption = 'Actions to take when the sequence is finished'
@@ -26,7 +26,7 @@ object f_sequenceoptions: Tf_sequenceoptions
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
     ClientHeight = 172
-    ClientWidth = 380
+    ClientWidth = 395
     Items.Strings = (
       'Do nothing'
       'Stop telescope tracking'
@@ -44,10 +44,10 @@ object f_sequenceoptions: Tf_sequenceoptions
     Left = 0
     Height = 49
     Top = 190
-    Width = 382
+    Width = 397
     Align = alTop
     ClientHeight = 49
-    ClientWidth = 382
+    ClientWidth = 397
     TabOrder = 1
     object ScriptList: TComboBox
       Left = 112
@@ -71,10 +71,10 @@ object f_sequenceoptions: Tf_sequenceoptions
     Left = 0
     Height = 86
     Top = 239
-    Width = 382
+    Width = 397
     Align = alClient
     ClientHeight = 86
-    ClientWidth = 382
+    ClientWidth = 397
     TabOrder = 2
     object UnattendedErrorScript: TCheckBox
       Left = 8
@@ -98,10 +98,10 @@ object f_sequenceoptions: Tf_sequenceoptions
     Left = 0
     Height = 49
     Top = 325
-    Width = 382
+    Width = 397
     Align = alBottom
     ClientHeight = 49
-    ClientWidth = 382
+    ClientWidth = 397
     TabOrder = 3
     object BtnClose: TButton
       Left = 252

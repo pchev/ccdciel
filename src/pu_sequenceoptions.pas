@@ -55,10 +55,10 @@ begin
   Caption:=rsTerminationO;
   MainOptions.Caption:=rsActionsToTak;
   MainOptions.Items[0]:=rsDoNothing;
-  MainOptions.Items[0]:=rsStopTelescop2;
-  MainOptions.Items[0]:=rsParkTheTeles2;
-  MainOptions.Items[0]:=rsWarmTheCamer;
-  MainOptions.Items[0]:=rsRunAScript;
+  MainOptions.Items[1]:=rsStopTelescop2;
+  MainOptions.Items[2]:=rsParkTheTeles2;
+  MainOptions.Items[3]:=rsWarmTheCamer;
+  MainOptions.Items[4]:=rsRunAScript;
   label1.Caption:=rsScript;
   UnattendedErrorScript.Caption:=rsRunAdditiona;
   BtnClose.Caption:=rsClose;

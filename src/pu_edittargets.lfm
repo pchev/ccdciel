@@ -41,10 +41,10 @@ object f_EditTargets: Tf_EditTargets
         Height = 331
         Top = 0
         Width = 300
-        ActivePage = TabSheet2
+        ActivePage = TabSheet1
         Align = alClient
         ShowTabs = False
-        TabIndex = 1
+        TabIndex = 0
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
@@ -221,7 +221,7 @@ object f_EditTargets: Tf_EditTargets
                 Height = 25
                 Hint = 'Solve the current image and get the rotation of the image'
                 Top = 6
-                Width = 112
+                Width = 132
                 Caption = 'Current image'
                 OnClick = BtnImgRotClick
                 TabOrder = 0
@@ -242,7 +242,7 @@ object f_EditTargets: Tf_EditTargets
                 Height = 25
                 Hint = 'Clear time constraint'
                 Top = 6
-                Width = 114
+                Width = 122
                 Caption = 'Any time'
                 OnClick = BtnAnytimeClick
                 TabOrder = 0
@@ -459,10 +459,10 @@ object f_EditTargets: Tf_EditTargets
         Left = 0
         Height = 47
         Top = 0
-        Width = 250
+        Width = 266
         Align = alLeft
         ClientHeight = 47
-        ClientWidth = 250
+        ClientWidth = 266
         TabOrder = 0
         object SeqStart: TCheckBox
           Left = 8
@@ -500,7 +500,7 @@ object f_EditTargets: Tf_EditTargets
         end
       end
       object Panel7: TPanel
-        Left = 250
+        Left = 266
         Height = 47
         Top = 0
         Width = 250
@@ -544,7 +544,7 @@ object f_EditTargets: Tf_EditTargets
         end
       end
       object Panel13: TPanel
-        Left = 500
+        Left = 516
         Height = 47
         Top = 0
         Width = 263
@@ -575,10 +575,10 @@ object f_EditTargets: Tf_EditTargets
         end
       end
       object ButtonEndOptions: TButton
-        Left = 776
+        Left = 800
         Height = 25
         Top = 8
-        Width = 152
+        Width = 176
         Caption = 'Termination options'
         OnClick = ButtonEndOptionsClick
         TabOrder = 3
@@ -619,7 +619,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 25
           Hint = 'Delete the selected row from the list.'
           Top = 6
-          Width = 112
+          Width = 120
           Caption = 'Remove object'
           OnClick = BtnDeleteObjectClick
           TabOrder = 1
@@ -1112,7 +1112,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 792
+      Left = 776
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
@@ -1123,11 +1123,11 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 904
+      Left = 864
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
-      Width = 75
+      Width = 128
       Anchors = [akTop, akRight]
       Caption = 'Save as...'
       OnClick = BtnSaveAsClick

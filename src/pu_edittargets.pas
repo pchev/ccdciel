@@ -265,6 +265,7 @@ procedure Tf_EditTargets.SetLang;
 begin
   Caption := rsEditTargetLi;
   BtnSave.Caption := rsSave;
+  BtnSaveAs.Caption := rsSaveAs;
   BtnNewObject.Caption := rsNewObject;
   BtnDeleteObject.Caption := rsRemoveObject;
   BtnNewScript.Caption := rsNewScript;
