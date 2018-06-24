@@ -181,7 +181,7 @@ type
     FAstrometry: TAstrometry;
     LockTarget: boolean;
     FTargetsRepeat: integer;
-    LockStep: boolean;
+    LockStep, StepsModified: boolean;
     originalFilter: array[0..99] of string;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
@@ -220,6 +220,7 @@ begin
   LockTarget:=false;
   FTargetsRepeat:=1;
   LockStep:=false;
+  StepsModified:=false;
   LoadPlanList;
   LoadScriptList;
 end;
@@ -812,6 +813,11 @@ var i,j:integer;
     filterlst:TStringList;
 begin
   if (t=nil)or(n=0)or(n>=TargetList.RowCount) then exit;
+  if StepsModified then begin
+    if MessageDlg('The plan '+PlanName.Caption+' is modified. Do you want to save the change ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+       SavePlan;
+    end;
+  end;
   LockTarget:=true;
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
@@ -1100,6 +1106,7 @@ procedure Tf_EditTargets.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
 var str,buf: string;
     j:integer;
 begin
+  StepsModified:=false;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
   p.description:=str;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light');
@@ -1245,56 +1252,80 @@ begin
 end;
 
 procedure Tf_EditTargets.StepChange(Sender: TObject);
-var n,j:integer;
+var n,j,i:integer;
     p: TStep;
+    x: double;
     str,buf: string;
 begin
   if LockStep then exit;
   n:=StepList.Row;
   if n < 1 then exit;
   p:=TStep(StepList.Objects[0,n]);
+  StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
   p.description:=StepList.Cells[pcoldesc,n];
   str:=StepList.Cells[pcoltype,n];
   j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
   if j<0 then j:=0;
+  StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
   p.frtype:=TFrameType(j);
-  p.exposure:=StrToFloatDef(StepList.Cells[pcolexp,n],p.exposure);
+  x:=StrToFloatDef(StepList.Cells[pcolexp,n],p.exposure);
+  StepsModified:=StepsModified or (p.exposure<>x);
+  p.exposure:=x;
   str:=StepList.Cells[pcolbin,n];
   j:=pos('x',str);
   if j>0 then begin
      buf:=trim(copy(str,1,j-1));
-     p.binx:=StrToIntDef(buf,1);
+     i:=StrToIntDef(buf,1);
+     StepsModified:=StepsModified or (p.binx<>i);
+     p.binx:=i;
      buf:=trim(copy(str,j+1,9));
-     p.biny:=StrToIntDef(buf,1);
+     i:=StrToIntDef(buf,1);
+     StepsModified:=StepsModified or (p.biny<>i);
+     p.biny:=i;
   end else begin
+    StepsModified:=StepsModified or (p.binx<>1);
     p.binx:=1;
+    StepsModified:=StepsModified or (p.biny<>1);
     p.biny:=1;
   end;
   if hasGainISO then begin
+     StepsModified:=StepsModified or (p.gain<>ISObox.ItemIndex);
      p.gain:=ISObox.ItemIndex;
   end
   else begin
+     StepsModified:=StepsModified or (p.gain<>GainEdit.Value);
      p.gain:=GainEdit.Value;
   end;
   str:=StepList.Cells[pcolfilter,n];
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
   if j<0 then j:=0;
+  StepsModified:=StepsModified or (p.filter<>j);
   p.filter:=j;
-  p.count:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
-  p.repeatcount:=StrToIntDef(StepList.Cells[pcolrepeat,n],p.repeatcount);
+  j:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
+  StepsModified:=StepsModified or (p.count<>j);
+  p.count:=j;
+  j:=StrToIntDef(StepList.Cells[pcolrepeat,n],p.repeatcount);
+  StepsModified:=StepsModified or (p.repeatcount<>j);
+  p.repeatcount:=j;
   PanelRepeat.Visible:=(p.repeatcount>1);
+  StepsModified:=StepsModified or (p.delay<>Delay.Value);
   p.delay:=Delay.Value;
+  StepsModified:=StepsModified or (p.dither<>CheckBoxDither.Checked);
   p.dither:=CheckBoxDither.Checked;
+  StepsModified:=StepsModified or (p.dithercount<>DitherCount.Value);
   p.dithercount:=DitherCount.Value;
+  StepsModified:=StepsModified or (p.autofocusstart<>CheckBoxAutofocusStart.Checked);
   p.autofocusstart:=CheckBoxAutofocusStart.Checked;
+  StepsModified:=StepsModified or (p.autofocus<>CheckBoxAutofocus.Checked);
   p.autofocus:=CheckBoxAutofocus.Checked;
+  StepsModified:=StepsModified or (p.autofocuscount<>AutofocusCount.Value);
   p.autofocuscount:=AutofocusCount.Value;
   StepList.Cells[1,n]:=p.description;
 end;
 
 procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
   sIndex, tIndex: Integer);
-var i,n: integer;
+var i: integer;
 begin
   i:=StepList.Row;
   ResetSteps;
@@ -1418,6 +1449,7 @@ try
   pfile.Free;
   LoadPlanList;
   TargetChange(nil);
+  StepsModified:=false;
 except
   on E: Exception do ShowMessage('Error saving plan: '+ E.Message);
 end;
