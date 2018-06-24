@@ -226,7 +226,7 @@ const
   b80 ='                                                                                ';
   FocusDirIn=true;
   FocusDirOut=false;
-  FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    ');
+  FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    '); // add space to header as INDI do
   FlatTimeName: array[0..1] of string=('Dusk','Dawn');
   ResolverAstrometryNet=0;
   ResolverElbrus=1;

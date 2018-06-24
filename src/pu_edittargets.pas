@@ -1148,7 +1148,7 @@ begin
   StepsModified:=false;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
   p.description:=str;
-  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light');
+  str:=trim(pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light'));
   j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
   if j<0 then j:=0;
   p.frtype:=TFrameType(j);
@@ -1220,6 +1220,8 @@ begin
         StepListSelection(nil,0,i);
       end;
       pfile.Free;
+      StepList.Row:=1;
+      StepListSelection(StepList,0,1);
     end;
   end else begin
     NewPlan;
@@ -1270,7 +1272,7 @@ procedure Tf_EditTargets.SetStep(n: integer; p: TStep);
 begin
   LockStep:=true;
   StepList.Cells[pcoldesc,n]:=p.description_str;
-  StepList.Cells[pcoltype,n]:=FrameName[ord(p.frtype)];
+  StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
   StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
   StepList.Cells[pcolbin,n]:=p.binning_str;
   if hasGainISO then
@@ -1303,6 +1305,8 @@ begin
   StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
   p.description:=StepList.Cells[pcoldesc,n];
   str:=StepList.Cells[pcoltype,n];
+  if str='Dark' then
+    j:=0;
   j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
   if j<0 then j:=0;
   StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
@@ -1482,7 +1486,7 @@ try
   for i:=1 to n do begin
     p:=TStep(StepList.Objects[0,i]);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',FrameName[ord(p.frtype)]);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',trim(FrameName[ord(p.frtype)]));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);
