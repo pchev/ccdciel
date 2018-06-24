@@ -392,6 +392,9 @@ begin
       Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
       Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
       SaveTargets(CurrentSequenceFile);
+    end else begin
+      // look for modified plan
+      LoadTargets(CurrentSequenceFile);
     end;
 end;
 

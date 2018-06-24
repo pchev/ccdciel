@@ -1,11 +1,11 @@
 object f_EditTargets: Tf_EditTargets
   Left = 0
-  Height = 650
+  Height = 681
   Top = 87
   Width = 1000
   ActiveControl = BtnSave
   Caption = 'Edit target list'
-  ClientHeight = 650
+  ClientHeight = 681
   ClientWidth = 1000
   Constraints.MinHeight = 650
   Constraints.MinWidth = 970
@@ -18,27 +18,27 @@ object f_EditTargets: Tf_EditTargets
   Visible = False
   object PanelTarget: TPanel
     Left = 0
-    Height = 440
+    Height = 380
     Top = 0
     Width = 1000
     Align = alTop
-    ClientHeight = 440
+    ClientHeight = 380
     ClientWidth = 1000
-    Constraints.MinHeight = 440
+    Constraints.MinHeight = 380
     TabOrder = 0
     object Panel11: TPanel
       Left = 699
-      Height = 391
+      Height = 331
       Top = 48
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 391
+      ClientHeight = 331
       ClientWidth = 300
       TabOrder = 1
       object PageControl1: TPageControl
         Left = 0
-        Height = 391
+        Height = 331
         Top = 0
         Width = 300
         ActivePage = TabSheet1
@@ -48,7 +48,7 @@ object f_EditTargets: Tf_EditTargets
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
-          ClientHeight = 387
+          ClientHeight = 327
           ClientWidth = 290
           object GroupBox2: TGroupBox
             Left = 0
@@ -103,7 +103,7 @@ object f_EditTargets: Tf_EditTargets
             object UpdateCoord: TCheckBox
               Left = 8
               Height = 21
-              Hint = 'Update the coordinates of moving objects from the planetarium before to slew to the target.'#10'Be sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed above.'
+              Hint = 'For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.'#10'Be sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here.'
               Top = 108
               Width = 246
               Caption = 'Update RA+Dec from Planetarium'
@@ -121,54 +121,16 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 5
             end
           end
-          object GroupBox1: TGroupBox
-            Left = 0
-            Height = 51
-            Top = 152
-            Width = 290
-            Align = alTop
-            Caption = 'Plan'
-            ClientHeight = 33
-            ClientWidth = 288
-            TabOrder = 1
-            object BtnNewPlan: TButton
-              Left = 8
-              Height = 25
-              Top = 0
-              Width = 72
-              Caption = 'New'
-              OnClick = BtnNewPlanClick
-              TabOrder = 0
-            end
-            object BtnCopyPlan: TButton
-              Left = 96
-              Height = 25
-              Top = 0
-              Width = 72
-              Caption = 'Copy'
-              OnClick = BtnCopyPlanClick
-              TabOrder = 1
-            end
-            object BtnDeletePlan: TButton
-              Left = 192
-              Height = 25
-              Top = 0
-              Width = 72
-              Caption = 'Delete'
-              OnClick = BtnDeletePlanClick
-              TabOrder = 2
-            end
-          end
           object GroupBox5: TGroupBox
             Left = 0
-            Height = 127
-            Top = 260
+            Height = 118
+            Top = 209
             Width = 290
             Align = alClient
             Caption = 'Repeat'
-            ClientHeight = 109
+            ClientHeight = 100
             ClientWidth = 288
-            TabOrder = 2
+            TabOrder = 1
             object Label9: TLabel
               Left = 3
               Height = 17
@@ -236,13 +198,13 @@ object f_EditTargets: Tf_EditTargets
           object Panel6: TPanel
             Left = 0
             Height = 57
-            Top = 203
+            Top = 152
             Width = 290
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 57
             ClientWidth = 290
-            TabOrder = 3
+            TabOrder = 2
             object GroupBox3: TGroupBox
               Left = 0
               Height = 57
@@ -289,7 +251,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet2: TTabSheet
           Caption = 'Script'
-          ClientHeight = 387
+          ClientHeight = 327
           ClientWidth = 290
           object Label15: TLabel
             Left = 16
@@ -330,7 +292,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet3: TTabSheet
           Caption = 'TabSheet3'
-          ClientHeight = 387
+          ClientHeight = 327
           ClientWidth = 290
           object FlatTime: TRadioGroup
             Left = 0
@@ -604,18 +566,18 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel4: TPanel
       Left = 1
-      Height = 391
+      Height = 331
       Top = 48
       Width = 698
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 391
+      ClientHeight = 331
       ClientWidth = 698
       TabOrder = 2
       object PanelBottom: TPanel
         Left = 0
         Height = 39
-        Top = 352
+        Top = 292
         Width = 698
         Align = alBottom
         BevelOuter = bvNone
@@ -683,7 +645,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 352
+        Height = 292
         Hint = 'The list of target to process in sequence.'
         Top = 0
         Width = 698
@@ -783,27 +745,27 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel3: TPanel
     Left = 0
-    Height = 171
-    Top = 440
+    Height = 262
+    Top = 380
     Width = 1000
     Align = alClient
-    ClientHeight = 171
+    ClientHeight = 262
     ClientWidth = 1000
     Constraints.MinHeight = 170
     TabOrder = 1
     object Panel9: TPanel
       Left = 1
-      Height = 169
+      Height = 230
       Top = 1
       Width = 698
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 169
+      ClientHeight = 230
       ClientWidth = 698
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
-        Height = 139
+        Height = 230
         Top = 0
         Width = 698
         Align = alClient
@@ -884,80 +846,15 @@ object f_EditTargets: Tf_EditTargets
           70
         )
       end
-      object Panel10: TPanel
-        Left = 0
-        Height = 30
-        Top = 139
-        Width = 698
-        Align = alBottom
-        BevelOuter = bvNone
-        ClientHeight = 30
-        ClientWidth = 698
-        TabOrder = 1
-        object PlanName: TLabel
-          Left = 100
-          Height = 17
-          Top = 5
-          Width = 75
-          Caption = 'PlanName'
-          Font.Style = [fsBold]
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label1: TLabel
-          Left = 8
-          Height = 17
-          Top = 5
-          Width = 73
-          Caption = 'Plan name '
-          ParentColor = False
-        end
-        object BtnAddStep: TButton
-          Left = 232
-          Height = 25
-          Top = 2
-          Width = 88
-          Caption = 'Add step'
-          OnClick = BtnAddStepClick
-          TabOrder = 0
-        end
-        object BtnDeleteStep: TButton
-          Left = 330
-          Height = 25
-          Top = 2
-          Width = 104
-          Caption = 'Delete step'
-          OnClick = BtnDeleteStepClick
-          TabOrder = 1
-        end
-        object BtnSavePlan: TButton
-          Left = 444
-          Height = 25
-          Top = 2
-          Width = 96
-          Caption = 'Save plan'
-          OnClick = BtnSavePlanClick
-          TabOrder = 2
-        end
-        object BtnSavePlanAs: TButton
-          Left = 550
-          Height = 25
-          Top = 2
-          Width = 107
-          Caption = 'Save plan as...'
-          OnClick = BtnSavePlanAsClick
-          TabOrder = 3
-        end
-      end
     end
     object Panel12: TPanel
       Left = 699
-      Height = 169
+      Height = 230
       Top = 1
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 169
+      ClientHeight = 230
       ClientWidth = 300
       TabOrder = 1
       object Panel8: TPanel
@@ -1100,11 +997,85 @@ object f_EditTargets: Tf_EditTargets
         end
       end
     end
+    object Panel10: TPanel
+      Left = 1
+      Height = 30
+      Top = 231
+      Width = 998
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 30
+      ClientWidth = 998
+      TabOrder = 2
+      object PlanName: TLabel
+        Left = 100
+        Height = 17
+        Top = 5
+        Width = 75
+        Caption = 'PlanName'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label1: TLabel
+        Left = 8
+        Height = 17
+        Top = 5
+        Width = 73
+        Caption = 'Plan name '
+        ParentColor = False
+      end
+      object BtnAddStep: TButton
+        Left = 232
+        Height = 25
+        Top = 2
+        Width = 120
+        Caption = 'Add step'
+        OnClick = BtnAddStepClick
+        TabOrder = 0
+      end
+      object BtnRemoveStep: TButton
+        Left = 360
+        Height = 25
+        Top = 2
+        Width = 104
+        Caption = 'Remove step'
+        OnClick = BtnRemoveStepClick
+        TabOrder = 1
+      end
+      object BtnSavePlan: TButton
+        Left = 472
+        Height = 25
+        Top = 2
+        Width = 136
+        Caption = 'Save plan'
+        OnClick = BtnSavePlanClick
+        TabOrder = 2
+      end
+      object BtnSavePlanAs: TButton
+        Left = 616
+        Height = 25
+        Top = 2
+        Width = 144
+        Caption = 'Save plan as...'
+        OnClick = BtnSavePlanAsClick
+        TabOrder = 3
+      end
+      object BtnDeletePlan: TButton
+        Left = 768
+        Height = 25
+        Top = 2
+        Width = 152
+        Caption = 'Delete plan'
+        OnClick = BtnDeletePlanClick
+        TabOrder = 4
+      end
+    end
   end
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 611
+    Top = 642
     Width = 1000
     Align = alBottom
     ClientHeight = 39
@@ -1117,7 +1088,7 @@ object f_EditTargets: Tf_EditTargets
       Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Cancel'
-      ModalResult = 2
+      OnClick = BtnCancelClick
       TabOrder = 0
     end
     object BtnSave: TButton
@@ -1128,7 +1099,7 @@ object f_EditTargets: Tf_EditTargets
       Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Save'
-      ModalResult = 1
+      OnClick = BtnSaveClick
       TabOrder = 1
     end
     object BtnSaveAs: TButton

@@ -43,7 +43,7 @@ type
     BtnAddStep: TButton;
     BtnSaveAs: TButton;
     BtnSavePlan: TButton;
-    BtnDeleteStep: TButton;
+    BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
@@ -62,14 +62,11 @@ type
     BtnSave: TButton;
     BtnEditNewScript: TButton;
     BtnNewScript: TButton;
-    BtnNewPlan: TButton;
-    BtnCopyPlan: TButton;
     BtnDeletePlan: TButton;
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
     GainEdit1: TSpinEdit;
-    GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
@@ -138,22 +135,22 @@ type
     TargetList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
+    procedure BtnCancelClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
-    procedure BtnCopyPlanClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
-    procedure BtnDeleteStepClick(Sender: TObject);
+    procedure BtnRemoveStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
     procedure BtnSaveAsClick(Sender: TObject);
+    procedure BtnSaveClick(Sender: TObject);
     procedure BtnSavePlanAsClick(Sender: TObject);
     procedure BtnSavePlanClick(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
-    procedure BtnNewPlanClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -194,6 +191,7 @@ type
     procedure SetLang;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
+    procedure CheckPlanModified;
   public
     { public declarations }
     procedure LoadPlanList;
@@ -299,9 +297,6 @@ begin
   UpdateCoord.Caption := rsUpdateRADecF;
   InplaceAutofocus.Caption := rsStayInPlaceF;
   BtnImgRot.Caption := rsCurrentImage;
-  BtnNewPlan.Caption := rsNew;
-  BtnCopyPlan.Caption := rsCopy;
-  BtnDeletePlan.Caption := rsDelete;
   TabSheet2.Caption := rsScript;
   Label15.Caption := rsScript;
   BtnEditScript.Caption := rsEdit;
@@ -316,7 +311,6 @@ begin
   FlatTime.Items[1]:=rsAtDawn;
   label2.Caption:=rsSequence;
   GroupBox2.Caption:=rsObject;
-  GroupBox1.Caption:=rsPlan;
   GroupBox3.Caption:=rsPA;
   GroupBox4.Caption:=rsStart+'/'+rsStop;
   GroupBox5.Caption:=rsRepeat;
@@ -327,10 +321,11 @@ begin
   CheckBoxAutofocusStart.Caption := rsAutofocusBef;
   CheckBoxAutofocus.Caption := rsAutofocusEve;
   LabelGain1.Caption := rsGain;
-  BtnSavePlan.Caption := rsSave;
-  BtnSavePlanAs.Caption:=rsSaveAs;
-  BtnDeleteStep.Caption := rsDelete;
-  BtnAddStep.Caption := rsAdd;
+  BtnDeletePlan.Caption := 'Delete plan';
+  BtnSavePlan.Caption := 'Save plan';
+  BtnSavePlanAs.Caption:='Save plan as...';
+  BtnRemoveStep.Caption := 'Remove step';
+  BtnAddStep.Caption := 'Add step';
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
   StepList.Columns.Items[pcoltype-1].Title.Caption := rsType;
   StepList.Columns.Items[pcolexp-1].Title.Caption := rsExposure;
@@ -454,36 +449,6 @@ begin
   TargetList.Cells[colplan,n]:=sl;
 end;
 
-procedure Tf_EditTargets.BtnCopyPlanClick(Sender: TObject);
-var txt,fn1,fn2: string;
-    pfile: TCCDconfig;
-    n: integer;
-begin
-  n:=TargetList.Row;
-  txt:=TargetList.Cells[colplan,n];
-  fn1:=slash(ConfigDir)+txt+'.plan';
-  txt:=FormEntry(self,'Copy to ','');
-  if txt='' then exit;
-  fn2:=slash(ConfigDir)+txt+'.plan';
-  if FileExistsUTF8(fn2) then begin
-     if MessageDlg(Format(rsPlanAlreadyE, [fn2]), mtConfirmation, mbYesNo, 0)<>
-       mrYes then
-       exit;
-  end;
-  if CopyFile(fn1,fn2,false) then begin
-     pfile:=TCCDconfig.Create(self);
-     pfile.Filename:=fn2;
-     pfile.SetValue('/PlanName',txt);
-     pfile.Flush;
-     pfile.Free;
-     LoadPlanList;
-     SetPlanList(n,txt);
-     PlanName.Caption:=TargetList.Cells[colplan,n];
-     ShowPlan;
-     TargetChange(nil);
-  end;
-end;
-
 procedure Tf_EditTargets.BtnDeletePlanClick(Sender: TObject);
 var txt,fn: string;
     n: integer;
@@ -495,34 +460,16 @@ begin
     then begin
      DeleteFileUTF8(fn);
      LoadPlanList;
-     TargetList.Cells[colplan,n]:='';
-     PlanName.Caption:='';
+     if TargetList.Columns[colplan-1].PickList.Count>0 then
+       TargetList.Cells[colplan,n]:=TargetList.Columns[colplan-1].PickList[0]
+     else
+       TargetList.Cells[colplan,n]:='';
+     PlanName.Caption:=TargetList.Cells[colplan,n];
      ShowPlan;
      TargetChange(nil);
+     StepsModified:=false;
   end;
 end;
-
-
-procedure Tf_EditTargets.BtnNewPlanClick(Sender: TObject);
-var txt,fn: string;
-    n: integer;
-begin
-  n:=TargetList.Row;
-  txt:=FormEntry(self,'New plan ','');
-  if txt='' then exit;
-  fn:=slash(ConfigDir)+txt+'.plan';
-  if FileExistsUTF8(fn) then begin
-     if MessageDlg(Format(rsPlanAlreadyE2, [txt]), mtConfirmation, mbYesNo, 0)
-       <>mrYes then exit;
-  end;
-  PlanName.Caption:=txt;
-  SavePlan;
-  LoadPlanList;
-  SetPlanList(n,txt);
-  ShowPlan;
-  TargetChange(nil);
-end;
-
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var txt:string;
@@ -751,6 +698,12 @@ begin
   TargetList.Cells[colend,TargetList.Row]:='';
 end;
 
+procedure Tf_EditTargets.BtnCancelClick(Sender: TObject);
+begin
+  CheckPlanModified;
+  ModalResult:=mrCancel;
+end;
+
 procedure Tf_EditTargets.BtnCdCCoordClick(Sender: TObject);
 var n: integer;
 begin
@@ -809,6 +762,7 @@ end;
 
 procedure Tf_EditTargets.BtnSaveAsClick(Sender: TObject);
 begin
+CheckPlanModified;
 SaveDialog1.InitialDir:=ConfigDir;
 SaveDialog1.DefaultExt:='.targets';
 SaveDialog1.filter:='CCDciel Sequence|*.targets';
@@ -819,10 +773,25 @@ if SaveDialog1.Execute then begin
 end;
 end;
 
+procedure Tf_EditTargets.BtnSaveClick(Sender: TObject);
+begin
+  CheckPlanModified;
+  ModalResult:=mrOK;
+end;
+
 procedure Tf_EditTargets.BtnCurrentCoordClick(Sender: TObject);
 begin
   TargetList.Cells[colra,TargetList.Row]:='-';
   TargetList.Cells[coldec,TargetList.Row]:='-';
+end;
+
+procedure Tf_EditTargets.CheckPlanModified;
+begin
+if StepsModified then begin
+  if MessageDlg('The plan '+PlanName.Caption+' is modified. Do you want to save the change ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+     SavePlan;
+  end;
+end;
 end;
 
 procedure Tf_EditTargets.SetTarget(n: integer; t: TTarget);
@@ -831,11 +800,7 @@ var i,j:integer;
     filterlst:TStringList;
 begin
   if (t=nil)or(n=0)or(n>=TargetList.RowCount) then exit;
-  if StepsModified then begin
-    if MessageDlg('The plan '+PlanName.Caption+' is modified. Do you want to save the change ?',mtConfirmation,mbYesNo,0)=mrYes then begin
-       SavePlan;
-    end;
-  end;
+  CheckPlanModified;
   LockTarget:=true;
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
@@ -1202,6 +1167,7 @@ begin
     end;
   end else begin
     NewPlan;
+    BtnSavePlanAs.Click;
   end;
 end;
 
@@ -1348,6 +1314,7 @@ begin
   i:=StepList.Row;
   ResetSteps;
   StepListSelection(Sender,0,i);
+  StepsModified:=true;
 end;
 
 procedure Tf_EditTargets.StepListEditingDone(Sender: TObject);
@@ -1380,17 +1347,18 @@ begin
     pp:=TStep(StepList.Objects[0,n]);
     p.Assign(pp);
   end;
+  p.description:=txt;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
-  StepList.Cells[0,i]:=IntToStr(i);
-  StepList.Cells[1,i]:=txt;
-  StepList.Objects[0,i]:=p;
+  StepList.Cells[pcolseq,i]:=IntToStr(i);
+  StepList.Cells[pcoldesc,i]:=txt;
+  StepList.Objects[pcolseq,i]:=p;
   StepList.Row:=i;
-  StepList.Cells[pcoldesc,n]:=txt;
-  StepChange(nil);
+  StepsModified:=true;
+  SetStep(i,p);
 end;
 
-procedure Tf_EditTargets.BtnDeleteStepClick(Sender: TObject);
+procedure Tf_EditTargets.BtnRemoveStepClick(Sender: TObject);
 var i,j: integer;
     str: string;
 begin
@@ -1407,6 +1375,7 @@ begin
         if StepList.Objects[0,i]<>nil then StepList.Objects[0,i].Free;
         StepList.Objects[0,i]:=nil;
         StepList.DeleteRow(i);
+        StepsModified:=true;
      end;
      ResetSteps;
   end;
