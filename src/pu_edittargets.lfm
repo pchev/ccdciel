@@ -577,11 +577,56 @@ object f_EditTargets: Tf_EditTargets
       object ButtonEndOptions: TButton
         Left = 800
         Height = 25
-        Top = 8
+        Top = 5
         Width = 176
         Caption = 'Termination options'
         OnClick = ButtonEndOptionsClick
         TabOrder = 3
+      end
+      object Shape1: TShape
+        Left = 832
+        Height = 10
+        Top = 34
+        Width = 10
+        ParentShowHint = False
+        Pen.Style = psClear
+        ShowHint = True
+      end
+      object Shape2: TShape
+        Left = 848
+        Height = 10
+        Top = 34
+        Width = 10
+        ParentShowHint = False
+        Pen.Style = psClear
+        ShowHint = True
+      end
+      object Shape3: TShape
+        Left = 864
+        Height = 10
+        Top = 34
+        Width = 10
+        ParentShowHint = False
+        Pen.Style = psClear
+        ShowHint = True
+      end
+      object Shape4: TShape
+        Left = 880
+        Height = 10
+        Top = 34
+        Width = 10
+        ParentShowHint = False
+        Pen.Style = psClear
+        ShowHint = True
+      end
+      object Shape5: TShape
+        Left = 896
+        Height = 10
+        Top = 34
+        Width = 10
+        ParentShowHint = False
+        Pen.Style = psClear
+        ShowHint = True
       end
     end
     object Panel4: TPanel

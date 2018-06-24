@@ -98,6 +98,11 @@ type
     PanelRepeat: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
+    Shape1: TShape;
+    Shape2: TShape;
+    Shape3: TShape;
+    Shape4: TShape;
+    Shape5: TShape;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
@@ -196,6 +201,7 @@ type
     procedure CheckPlanModified;
     function  CheckRiseSet(n: integer): boolean;
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
+    procedure ShowEndOptions;
   public
     { public declarations }
     procedure LoadPlanList;
@@ -259,6 +265,7 @@ begin
   RepeatCountList.Value:=FTargetsRepeat;
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
+  ShowEndOptions;
 end;
 
 procedure Tf_EditTargets.SetLang;
@@ -272,6 +279,11 @@ begin
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
   ButtonEndOptions.Caption:=rsTerminationO;
+  Shape1.Hint:=rsStopTelescop2;
+  Shape2.Hint:=rsParkTheTeles2;
+  Shape3.Hint:=rsWarmTheCamer;
+  Shape4.Hint:=rsRunAScript;
+  Shape5.Hint:=rsRunAdditiona;
   TargetList.Columns.Items[colname-1].Title.Caption := rsObjectName;
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
@@ -473,11 +485,20 @@ begin
   TargetChange(nil);
 end;
 
+procedure Tf_EditTargets.ShowEndOptions;
+begin
+  if f_sequenceoptions.MainOptions.Checked[1] then Shape1.Brush.Color:=clLime else Shape1.Brush.Color:=clRed;
+  if f_sequenceoptions.MainOptions.Checked[2] then Shape2.Brush.Color:=clLime else Shape2.Brush.Color:=clRed;
+  if f_sequenceoptions.MainOptions.Checked[3] then Shape3.Brush.Color:=clLime else Shape3.Brush.Color:=clRed;
+  if f_sequenceoptions.MainOptions.Checked[4] then Shape4.Brush.Color:=clLime else Shape4.Brush.Color:=clRed;
+  if f_sequenceoptions.UnattendedErrorScript.Checked then Shape5.Brush.Color:=clLime else Shape5.Brush.Color:=clRed;
+end;
+
 procedure Tf_EditTargets.ButtonEndOptionsClick(Sender: TObject);
 begin
   FormPos(f_sequenceoptions,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_sequenceoptions.ShowModal;
-
+  ShowEndOptions;
 end;
 
 procedure Tf_EditTargets.BtnSkyFlatClick(Sender: TObject);
