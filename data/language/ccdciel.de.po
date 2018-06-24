@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-05-26 17:06+0000\n"
+"POT-Creation-Date: 2018-06-24 18:30+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-05-26 17:12+0000\n"
-"X-Generator: Launchpad (build 18667)\n"
+"X-Launchpad-Export-Date: 2018-06-24 18:48+0000\n"
+"X-Generator: Launchpad (build 18688)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -36,8 +36,16 @@ msgstr ""
 msgid "About"
 msgstr ""
 
+#: u_translation.rsactionstotak
+msgid "Actions to take when the sequence is finished"
+msgstr ""
+
 #: u_translation.rsadd
 msgid "Add"
+msgstr ""
+
+#: u_translation.rsaddstep
+msgid "Add step"
 msgstr ""
 
 #: u_translation.rsadjustflatex
@@ -392,6 +400,10 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#: u_translation.rscannotcomput
+msgid "Cannot compute rise or set time."
+msgstr ""
+
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
 msgstr ""
@@ -728,8 +740,16 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+#: u_translation.rsdeleteplan
+msgid "Delete plan"
+msgstr ""
+
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
+msgstr ""
+
+#: u_translation.rsdeletestep
+msgid "Delete step %s ?"
 msgstr ""
 
 #: u_translation.rsdesc
@@ -1632,6 +1652,10 @@ msgstr ""
 msgid "No alignment star found for stacking"
 msgstr ""
 
+#: u_translation.rsnoastronomic
+msgid "No astronomical twilight at this location today"
+msgstr ""
+
 #: u_translation.rsnobacklash
 msgid "No backlash"
 msgstr ""
@@ -1832,6 +1856,10 @@ msgstr ""
 msgid "Park the telescope now?"
 msgstr ""
 
+#: u_translation.rsparktheteles2
+msgid "Park the telescope"
+msgstr ""
+
 #: u_translation.rspause
 msgid "Pause"
 msgstr ""
@@ -1898,10 +1926,6 @@ msgstr ""
 
 #: u_translation.rsplanfinished
 msgid "Plan %s finished."
-msgstr ""
-
-#: u_translation.rsplanname
-msgid "Plan name"
 msgstr ""
 
 #: u_translation.rsplanstopped
@@ -2076,6 +2100,14 @@ msgstr ""
 msgid "Remove all breakpoints"
 msgstr ""
 
+#: u_translation.rsremoveobject
+msgid "Remove object"
+msgstr ""
+
+#: u_translation.rsremovestep
+msgid "Remove step"
+msgstr ""
+
 #: u_translation.rsrepeat
 msgid "Repeat"
 msgstr ""
@@ -2236,6 +2268,14 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
+#: u_translation.rsrunadditiona
+msgid "Run additional script in case of unattended error"
+msgstr ""
+
+#: u_translation.rsrunascript
+msgid "Run a script"
+msgstr ""
+
 #: u_translation.rsrunscript
 msgid "Run script"
 msgstr ""
@@ -2256,6 +2296,10 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: u_translation.rssaveas
+msgid "Save as..."
+msgstr ""
+
 #: u_translation.rssaveconfigur
 msgid "Save configuration now"
 msgstr ""
@@ -2271,6 +2315,14 @@ msgstr ""
 #: u_translation.rssavefitsfile
 msgid "Save FITS file%s"
 msgstr "FITS Datei Speichern%s"
+
+#: u_translation.rssaveplan
+msgid "Save plan"
+msgstr ""
+
+#: u_translation.rssaveplanas
+msgid "Save plan as..."
+msgstr ""
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -2712,6 +2764,10 @@ msgstr ""
 msgid "Step"
 msgstr ""
 
+#: u_translation.rsstepdescript
+msgid "Step description"
+msgstr ""
+
 #: u_translation.rsstepinto
 msgid "Step Into"
 msgstr ""
@@ -2774,6 +2830,10 @@ msgstr ""
 
 #: u_translation.rsstoptelescop
 msgid "Stop telescope motion."
+msgstr ""
+
+#: u_translation.rsstoptelescop2
+msgid "Stop telescope tracking"
 msgstr ""
 
 #: u_translation.rsstopthecurre
@@ -2924,6 +2984,10 @@ msgstr ""
 msgid "Temporary folder must contain only ASCII characters"
 msgstr ""
 
+#: u_translation.rsterminationo
+msgid "Termination options"
+msgstr ""
+
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr ""
@@ -2952,6 +3016,10 @@ msgstr ""
 msgid "The menu \"File/Focuser calibration\" help to fill this values."
 msgstr ""
 
+#: u_translation.rstheplanismod
+msgid "The plan %s is modified. Do you want to save the change ?"
+msgstr ""
+
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
 msgstr ""
@@ -2962,6 +3030,10 @@ msgstr ""
 
 #: u_translation.rsthereisalrea2
 msgid "There is already a dawn flat plan"
+msgstr ""
+
+#: u_translation.rsthetelescope
+msgid "The telescope is parked, unpark now"
 msgstr ""
 
 #: u_translation.rsthisobjectis
@@ -3178,6 +3250,10 @@ msgstr ""
 
 #: u_translation.rswaittostarts
 msgid "Wait to start sequence %s at %s"
+msgstr ""
+
+#: u_translation.rswarmthecamer
+msgid "Warm the camera"
 msgstr ""
 
 #: u_translation.rswarningrever

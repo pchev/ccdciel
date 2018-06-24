@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-05-26 17:06+0000\n"
-"PO-Revision-Date: 2018-05-26 17:08+0000\n"
+"POT-Creation-Date: 2018-06-24 18:30+0000\n"
+"PO-Revision-Date: 2018-06-24 18:44+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-05-26 17:12+0000\n"
-"X-Generator: Launchpad (build 18667)\n"
+"X-Launchpad-Export-Date: 2018-06-24 18:48+0000\n"
+"X-Generator: Launchpad (build 18688)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -36,9 +36,17 @@ msgstr "Abandon de la séquence en cours"
 msgid "About"
 msgstr "À propos"
 
+#: u_translation.rsactionstotak
+msgid "Actions to take when the sequence is finished"
+msgstr "Actions a effectuer quand la séquence esr terminée"
+
 #: u_translation.rsadd
 msgid "Add"
 msgstr "Ajouter"
+
+#: u_translation.rsaddstep
+msgid "Add step"
+msgstr "Ajout d'une étape"
 
 #: u_translation.rsadjustflatex
 msgid "Adjust flat exposure time to %s and retry."
@@ -392,6 +400,10 @@ msgstr "La caméra ou le focuser ne sont pas connecté"
 msgid "Cancel"
 msgstr "Annuler"
 
+#: u_translation.rscannotcomput
+msgid "Cannot compute rise or set time."
+msgstr "Ne peut pas calculer le lever ou le coucher."
+
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
 msgstr "Impossible de se connecter à l'autoguideur, la séquence se fera sans guidage! %s Voulez-vous continuer quand même?"
@@ -728,9 +740,18 @@ msgstr "Délai après le déplacement du télescope [secondes] "
 msgid "Delete"
 msgstr "Supprimer"
 
+#: u_translation.rsdeleteplan
+msgid "Delete plan"
+msgstr "Supprimer le plan"
+
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
 msgstr "Supprimer la séquence %s?"
+
+#: u_translation.rsdeletestep
+#, fuzzy,badformat
+msgid "Delete step %s ?"
+msgstr "Supprimer l'étape &s?"
 
 #: u_translation.rsdesc
 msgid "Desc."
@@ -934,7 +955,7 @@ msgstr "Exp."
 
 #: u_translation.rsexposure
 msgid "Exposure"
-msgstr "Exposiiton"
+msgstr "Exposition"
 
 #: u_translation.rsexposureabor
 msgid "Exposure aborted!"
@@ -1634,6 +1655,10 @@ msgstr "Suivant"
 msgid "No alignment star found for stacking"
 msgstr "Aucune étoile de référence trouvée pour l'empilement"
 
+#: u_translation.rsnoastronomic
+msgid "No astronomical twilight at this location today"
+msgstr "Pas de crépuscule astronomique aujourd'hui pour ce lieu."
+
 #: u_translation.rsnobacklash
 msgid "No backlash"
 msgstr "Pas de jeu"
@@ -1835,6 +1860,10 @@ msgstr "Parqué"
 msgid "Park the telescope now?"
 msgstr "Parquer le télescope maintenant?"
 
+#: u_translation.rsparktheteles2
+msgid "Park the telescope"
+msgstr "Parque le télescope"
+
 #: u_translation.rspause
 msgid "Pause"
 msgstr "Pause"
@@ -1902,10 +1931,6 @@ msgstr "Le centrage de l'objet du planétarium a échoué"
 #: u_translation.rsplanfinished
 msgid "Plan %s finished."
 msgstr "Plan %s terminé"
-
-#: u_translation.rsplanname
-msgid "Plan name"
-msgstr "Nom du plan"
 
 #: u_translation.rsplanstopped
 msgid "Plan %s stopped."
@@ -2080,6 +2105,14 @@ msgstr "Incrément relatif pour le mouvement vers l'intérieur ou vers l'extéri
 msgid "Remove all breakpoints"
 msgstr "Supprimer tous les points d'arrêt"
 
+#: u_translation.rsremoveobject
+msgid "Remove object"
+msgstr "Supprimer l'objet"
+
+#: u_translation.rsremovestep
+msgid "Remove step"
+msgstr "supprimer l'étape"
+
 #: u_translation.rsrepeat
 msgid "Repeat"
 msgstr "Répéter"
@@ -2240,6 +2273,14 @@ msgstr "Rotateur synchronisé à %s"
 msgid "Run"
 msgstr "Exécuter"
 
+#: u_translation.rsrunadditiona
+msgid "Run additional script in case of unattended error"
+msgstr "Exécute un script additionel en cas d'erreur sans surveillance"
+
+#: u_translation.rsrunascript
+msgid "Run a script"
+msgstr "Exécute un script"
+
 #: u_translation.rsrunscript
 msgid "Run script"
 msgstr "Exécuter le script"
@@ -2260,6 +2301,10 @@ msgstr "s"
 msgid "Save"
 msgstr "Enregistrer"
 
+#: u_translation.rssaveas
+msgid "Save as..."
+msgstr "Enregistrer sous..."
+
 #: u_translation.rssaveconfigur
 msgid "Save configuration now"
 msgstr "Enregistrer la configuration"
@@ -2275,6 +2320,14 @@ msgstr "Fichier sauvegardé %s"
 #: u_translation.rssavefitsfile
 msgid "Save FITS file%s"
 msgstr "Enregistrer  le fichier FITS %s"
+
+#: u_translation.rssaveplan
+msgid "Save plan"
+msgstr "Enregister le plan"
+
+#: u_translation.rssaveplanas
+msgid "Save plan as..."
+msgstr "Enregister le plan sous..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -2717,6 +2770,10 @@ msgstr "Reste sur place pour l'autofocus"
 msgid "Step"
 msgstr "Pas"
 
+#: u_translation.rsstepdescript
+msgid "Step description"
+msgstr "Description de l'étape"
+
 #: u_translation.rsstepinto
 msgid "Step Into"
 msgstr "Pas à pas approfondi"
@@ -2780,6 +2837,10 @@ msgstr "Arrêter l'enregistrement"
 #: u_translation.rsstoptelescop
 msgid "Stop telescope motion."
 msgstr "Arrêt du déplacement du télescope"
+
+#: u_translation.rsstoptelescop2
+msgid "Stop telescope tracking"
+msgstr "Arrêt du suivit du télescope"
 
 #: u_translation.rsstopthecurre
 msgid "Stop the current sequence at %s"
@@ -2929,6 +2990,10 @@ msgstr "Dossier temporaire"
 msgid "Temporary folder must contain only ASCII characters"
 msgstr "Le nom du dossier temporaire ne doit pas contenir de caractère accentué"
 
+#: u_translation.rsterminationo
+msgid "Termination options"
+msgstr "Options de terminaison"
+
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
@@ -2957,6 +3022,10 @@ msgstr "Le focuser est maintenant positionné à la position du meilleur HFD."
 msgid "The menu \"File/Focuser calibration\" help to fill this values."
 msgstr "Le menu \"Fichier/Calibration du focuser\" aide à remplir ces valeurs."
 
+#: u_translation.rstheplanismod
+msgid "The plan %s is modified. Do you want to save the change ?"
+msgstr "Le plan %s est modifié. Voulez-vous enregistrer les changements?"
+
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
 msgstr "Le programme doit être redémarrer"
@@ -2968,6 +3037,10 @@ msgstr "Il y a déjà un plan de flat pour le crépuscule"
 #: u_translation.rsthereisalrea2
 msgid "There is already a dawn flat plan"
 msgstr "Il y a déjà un plan de flat pour l'aube"
+
+#: u_translation.rsthetelescope
+msgid "The telescope is parked, unpark now"
+msgstr "Le télescope est parqué, déparque maintenant"
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
@@ -3184,6 +3257,10 @@ msgstr "Attend le démarrage à %s"
 #: u_translation.rswaittostarts
 msgid "Wait to start sequence %s at %s"
 msgstr "Attente du début de la séquence %s à %s"
+
+#: u_translation.rswarmthecamer
+msgid "Warm the camera"
+msgstr "Réchaufe la caméra"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"

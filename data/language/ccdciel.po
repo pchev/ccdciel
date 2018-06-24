@@ -2406,10 +2406,6 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: u_translation:rsplanname
-msgid "Plan name"
-msgstr ""
-
 #: u_translation:rsresolve
 msgid "Resolve"
 msgstr ""
@@ -3200,5 +3196,85 @@ msgstr ""
 
 #: u_translation:rsresolveandpl
 msgid "Resolve and plot DSO"
+msgstr ""
+
+#: u_translation:rssaveas
+msgid "Save as..."
+msgstr ""
+
+#: u_translation:rsremoveobject
+msgid "Remove object"
+msgstr ""
+
+#: u_translation:rscannotcomput
+msgid "Cannot compute rise or set time."
+msgstr ""
+
+#: u_translation:rsdeleteplan
+msgid "Delete plan"
+msgstr ""
+
+#: u_translation:rssaveplan
+msgid "Save plan"
+msgstr ""
+
+#: u_translation:rssaveplanas
+msgid "Save plan as..."
+msgstr ""
+
+#: u_translation:rsremovestep
+msgid "Remove step"
+msgstr ""
+
+#: u_translation:rsaddstep
+msgid "Add step"
+msgstr ""
+
+#: u_translation:rstheplanismod
+msgid "The plan %s is modified. Do you want to save the change ?"
+msgstr ""
+
+#: u_translation:rsnoastronomic
+msgid "No astronomical twilight at this location today"
+msgstr ""
+
+#: u_translation:rsdeletestep
+msgid "Delete step %s ?"
+msgstr ""
+
+#: u_translation:rsstepdescript
+msgid "Step description"
+msgstr ""
+
+#: u_translation:rsterminationo
+msgid "Termination options"
+msgstr ""
+
+#: u_translation:rsactionstotak
+msgid "Actions to take when the sequence is finished"
+msgstr ""
+
+#: u_translation:rsstoptelescop2
+msgid "Stop telescope tracking"
+msgstr ""
+
+#: u_translation:rsparktheteles2
+msgid "Park the telescope"
+msgstr ""
+
+#: u_translation:rswarmthecamer
+msgid "Warm the camera"
+msgstr ""
+
+#: u_translation:rsrunascript
+msgid "Run a script"
+msgstr ""
+
+#: u_translation:rsrunadditiona
+msgid "Run additional script in case of unattended error"
+msgstr ""
+
+#: u_translation:rsthetelescope
+msgid "The telescope is parked, unpark now"
 msgstr ""
 
