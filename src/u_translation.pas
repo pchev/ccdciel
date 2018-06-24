@@ -893,6 +893,13 @@ resourcestring
   rsNoAstronomic = 'No astronomical twilight at this location today';
   rsDeleteStep = 'Delete step %s ?';
   rsStepDescript = 'Step description';
+  rsTerminationO = 'Termination options';
+  rsActionsToTak = 'Actions to take when the sequence is finished';
+  rsStopTelescop2 = 'Stop telescope tracking';
+  rsParkTheTeles2 = 'Park the telescope';
+  rsWarmTheCamer = 'Warm the camera';
+  rsRunAScript = 'Run a script';
+  rsRunAdditiona = 'Run additional script in case of unattended error';
 
 
 

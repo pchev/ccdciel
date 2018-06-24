@@ -270,6 +270,7 @@ begin
   BtnNewScript.Caption := rsNewScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
+  ButtonEndOptions.Caption:=rsTerminationO;
   TargetList.Columns.Items[colname-1].Title.Caption := rsObjectName;
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;

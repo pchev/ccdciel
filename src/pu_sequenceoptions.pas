@@ -4,7 +4,7 @@ unit pu_sequenceoptions;
 
 interface
 
-uses
+uses  u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, EditBtn;
 
@@ -29,6 +29,7 @@ type
   private
 
   public
+    procedure SetLang;
     procedure SetScript(sl:string);
     procedure SetErrorScript(sl:string);
 
@@ -42,6 +43,26 @@ implementation
 {$R *.lfm}
 
 { Tf_sequenceoptions }
+
+procedure Tf_sequenceoptions.FormCreate(Sender: TObject);
+begin
+  SetLang;
+  MainOptions.Checked[optpark]:=true;
+end;
+
+procedure Tf_sequenceoptions.SetLang;
+begin
+  Caption:=rsTerminationO;
+  MainOptions.Caption:=rsActionsToTak;
+  MainOptions.Items[0]:=rsDoNothing;
+  MainOptions.Items[0]:=rsStopTelescop2;
+  MainOptions.Items[0]:=rsParkTheTeles2;
+  MainOptions.Items[0]:=rsWarmTheCamer;
+  MainOptions.Items[0]:=rsRunAScript;
+  label1.Caption:=rsScript;
+  UnattendedErrorScript.Caption:=rsRunAdditiona;
+  BtnClose.Caption:=rsClose;
+end;
 
 procedure Tf_sequenceoptions.MainOptionsItemClick(Sender: TObject; Index: integer);
 begin
@@ -62,11 +83,6 @@ begin
      MainOptions.Checked[optstoptracking]:=false;
   end;
   PanelScript.Visible:=MainOptions.Checked[optscript];
-end;
-
-procedure Tf_sequenceoptions.FormCreate(Sender: TObject);
-begin
-  MainOptions.Checked[optpark]:=true;
 end;
 
 procedure Tf_sequenceoptions.SetScript(sl:string);

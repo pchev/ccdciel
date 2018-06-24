@@ -396,8 +396,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 40
-              ClientWidth = 128
+              ClientHeight = 36
+              ClientWidth = 124
               TabOrder = 1
               Visible = False
               object ISObox: TComboBox
