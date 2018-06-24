@@ -738,6 +738,19 @@ begin
          isCalibrationSequence:=false;
    end;
  end;
+ // check camera cooler
+ if not camera.Cooler then begin
+    if config.GetValue('/Cooler/CameraAutoCool',false) then begin
+       ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
+       msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
+       camera.Temperature:=ccdtemp;
+    end;
+ end;
+ // check mount park
+ if mount.Park then begin
+    msg(rsTheTelescope, 1);
+    mount.Park:=false;
+ end;
  // check if autoguider is required and connected
  if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
    if AutoguiderStarting then begin
@@ -759,14 +772,6 @@ begin
      StartTimer.Enabled:=true;
      exit;
    end;
- end;
- // check camera cooler
- if not camera.Cooler then begin
-    if config.GetValue('/Cooler/CameraAutoCool',false) then begin
-       ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
-       msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
-       camera.Temperature:=ccdtemp;
-    end;
  end;
  // initialize sequence
  AutoguiderStarting:=false;

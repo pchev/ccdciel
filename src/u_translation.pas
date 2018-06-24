@@ -900,6 +900,7 @@ resourcestring
   rsWarmTheCamer = 'Warm the camera';
   rsRunAScript = 'Run a script';
   rsRunAdditiona = 'Run additional script in case of unattended error';
+  rsTheTelescope = 'The telescope is parked, unpark now';
 
 
 
