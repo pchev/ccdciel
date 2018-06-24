@@ -317,27 +317,6 @@ begin
        FSeqStartAt:=he/24;
     if FSeqStopTwilight then
        FSeqStopAt:=hm/24;
-    if FSeqStart then begin
-       msg(Format(rsWaitToStartS, [FName, TimeToStr(FSeqStartAt)]),1);
-       wtok:=WaitTill(TimeToStr(FSeqStartAt),true);
-       if not wtok then begin
-          msg(Format(rsSequenceCanc, [FName]),1);
-          FRunning:=false;
-          exit;
-       end;
-    end;
-    if FSeqStop then begin
-       SecondsToWait(FSeqStopAt,true,stw,nd);
-       if stw>0 then begin
-          StopTimer.Interval:=1000*stw;
-          StopTimer.Enabled:=true;
-       end else begin
-         msg(Format(rsSequenceCanc, [FName]),1);
-         msg(Format(rsStopTimeAlre, [TimeToStr(FSeqStopAt)]),1);
-         FRunning:=false;
-         exit;
-       end;
-    end;
   end else begin
     if FSeqStartTwilight then begin
       if hm<>0 then begin
@@ -348,13 +327,35 @@ begin
       end else begin
         msg(Format(rsSequenceStar, [FName]),1);
         msg(rsNoDuskToday,1);
+        FSeqStart:=false;
       end;
     end;
     if FSeqStopTwilight then begin
       msg(Format(rsSequenceIgno, [FName]),1);
       msg(rsNoDawnToday,1);
-      StopTimer.Enabled:=false;
+      FSeqStop:=false;
     end;
+  end;
+  if FSeqStart then begin
+     msg(Format(rsWaitToStartS, [FName, TimeToStr(FSeqStartAt)]),1);
+     wtok:=WaitTill(TimeToStr(FSeqStartAt),true);
+     if not wtok then begin
+        msg(Format(rsSequenceCanc, [FName]),1);
+        FRunning:=false;
+        exit;
+     end;
+  end;
+  if FSeqStop then begin
+     SecondsToWait(FSeqStopAt,true,stw,nd);
+     if stw>0 then begin
+        StopTimer.Interval:=1000*stw;
+        StopTimer.Enabled:=true;
+     end else begin
+       msg(Format(rsSequenceCanc, [FName]),1);
+       msg(Format(rsStopTimeAlre, [TimeToStr(FSeqStopAt)]),1);
+       FRunning:=false;
+       exit;
+     end;
   end;
   if FTargetsRepeat=1 then
     msg(Format(rsStartingSequ, [FName]),1)

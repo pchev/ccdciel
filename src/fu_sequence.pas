@@ -777,6 +777,7 @@ begin
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
  Targets.Start;
+ if not Targets.Running then AbortSequence;
 end;
 
 procedure Tf_sequence.StopSequence;
