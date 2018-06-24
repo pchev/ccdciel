@@ -3,7 +3,7 @@ object f_EditTargets: Tf_EditTargets
   Height = 650
   Top = 87
   Width = 1000
-  ActiveControl = BtnClose
+  ActiveControl = BtnSave
   Caption = 'Edit target list'
   ClientHeight = 650
   ClientWidth = 1000
@@ -913,7 +913,7 @@ object f_EditTargets: Tf_EditTargets
           ParentColor = False
         end
         object BtnAddStep: TButton
-          Left = 256
+          Left = 232
           Height = 25
           Top = 2
           Width = 88
@@ -922,7 +922,7 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 0
         end
         object BtnDeleteStep: TButton
-          Left = 368
+          Left = 330
           Height = 25
           Top = 2
           Width = 104
@@ -931,13 +931,22 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 1
         end
         object BtnSavePlan: TButton
-          Left = 496
+          Left = 444
           Height = 25
           Top = 2
           Width = 96
           Caption = 'Save plan'
           OnClick = BtnSavePlanClick
           TabOrder = 2
+        end
+        object BtnSavePlanAs: TButton
+          Left = 550
+          Height = 25
+          Top = 2
+          Width = 107
+          Caption = 'Save plan as...'
+          OnClick = BtnSavePlanAsClick
+          TabOrder = 3
         end
       end
     end
@@ -1102,7 +1111,7 @@ object f_EditTargets: Tf_EditTargets
     ClientWidth = 1000
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 768
+      Left = 680
       Height = 25
       Top = 4
       Width = 75
@@ -1111,8 +1120,8 @@ object f_EditTargets: Tf_EditTargets
       ModalResult = 2
       TabOrder = 0
     end
-    object BtnClose: TButton
-      Left = 888
+    object BtnSave: TButton
+      Left = 792
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
@@ -1122,5 +1131,20 @@ object f_EditTargets: Tf_EditTargets
       ModalResult = 1
       TabOrder = 1
     end
+    object BtnSaveAs: TButton
+      Left = 904
+      Height = 25
+      Hint = 'Save the list and close this window.'
+      Top = 4
+      Width = 75
+      Anchors = [akTop, akRight]
+      Caption = 'Save as...'
+      OnClick = BtnSaveAsClick
+      TabOrder = 2
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    left = 32
+    top = 616
   end
 end

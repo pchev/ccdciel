@@ -303,6 +303,7 @@ var
   CurrentFilterOffset: integer;
   filteroffset_initialized: boolean;
   compile_time, compile_version, compile_system, lclver: string;
+  CurrentSequenceFile: string;
   DitherPixel, SettlePixel: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;

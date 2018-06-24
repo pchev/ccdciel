@@ -122,7 +122,7 @@ type
     procedure SetLang;
   public
     { public declarations }
-    CurrentName, CurrentTarget, CurrentFile, CurrentStep: string;
+    CurrentName, CurrentTarget, CurrentStep: string;
     StepRepeatCount, StepTotalCount: integer;
 
     constructor Create(aOwner: TComponent); override;
@@ -302,7 +302,7 @@ procedure Tf_sequence.BtnCopyClick(Sender: TObject);
 var txt,fn1,fn2: string;
     tfile: TCCDconfig;
 begin
-  fn1:=CurrentFile;
+  fn1:=CurrentSequenceFile;
   txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
   fn2:=slash(ConfigDir)+txt+'.targets';
@@ -324,7 +324,7 @@ end;
 procedure Tf_sequence.BtnDeleteClick(Sender: TObject);
 var fn: string;
 begin
-   fn:=CurrentFile;
+   fn:=CurrentSequenceFile;
    if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=
      mrYes then begin
       DeleteFileUTF8(fn);
@@ -358,7 +358,7 @@ begin
         f_EditTargets.TargetList.Objects[colseq,i]:=t;
       end;
     end else begin
-      CurrentFile:='';
+      CurrentSequenceFile:='';
       CurrentName:='';
       f_EditTargets.TargetName.Caption:='New targets';
       f_EditTargets.TargetsRepeat:=1;
@@ -391,7 +391,7 @@ begin
       Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
       Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
       Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
-      SaveTargets(CurrentFile);
+      SaveTargets(CurrentSequenceFile);
     end;
 end;
 
@@ -406,7 +406,7 @@ begin
    CurrentName:=ExtractFileNameOnly(fn);
    Targets.Clear;
    Targets.TargetName:=CurrentName;
-   CurrentFile:=fn;
+   CurrentSequenceFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
    Targets.FileVersion      :=tfile.GetValue('/Version',1);
    Targets.TargetsRepeat    :=tfile.GetValue('/RepeatCount',1);
@@ -554,7 +554,7 @@ begin
     tfile:=TCCDconfig.Create(self);
     tfile.Filename:=fn;
     tfile.Clear;
-    CurrentFile:=fn;
+    CurrentSequenceFile:=fn;
     CurrentName:=ExtractFileNameOnly(fn);
     Targets.TargetName:=CurrentName;
     tfile.SetValue('/Version',TargetFileVersion);

@@ -2557,7 +2557,7 @@ begin
    config.SetValue('/Tools/Sequence/Top',f_sequence.Top);
    config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
 
-   config.SetValue('/Sequence/Targets',f_sequence.CurrentFile);
+   config.SetValue('/Sequence/Targets',CurrentSequenceFile);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
    config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);

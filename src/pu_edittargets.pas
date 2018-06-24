@@ -41,8 +41,10 @@ type
   Tf_EditTargets = class(TForm)
     AutofocusCount: TSpinEdit;
     BtnAddStep: TButton;
+    BtnSaveAs: TButton;
     BtnSavePlan: TButton;
     BtnDeleteStep: TButton;
+    BtnSavePlanAs: TButton;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -57,7 +59,7 @@ type
     BtnImgRot: TButton;
     BtnNewObject: TButton;
     BtnDeleteObject: TButton;
-    BtnClose: TButton;
+    BtnSave: TButton;
     BtnEditNewScript: TButton;
     BtnNewScript: TButton;
     BtnNewPlan: TButton;
@@ -96,6 +98,7 @@ type
     PanelGain1: TPanel;
     PanelRepeat: TPanel;
     PlanName: TLabel;
+    SaveDialog1: TSaveDialog;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
@@ -143,6 +146,8 @@ type
     procedure BtnDeleteStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
+    procedure BtnSaveAsClick(Sender: TObject);
+    procedure BtnSavePlanAsClick(Sender: TObject);
     procedure BtnSavePlanClick(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
@@ -255,7 +260,7 @@ end;
 procedure Tf_EditTargets.SetLang;
 begin
   Caption := rsEditTargetLi;
-  BtnClose.Caption := rsSave;
+  BtnSave.Caption := rsSave;
   BtnNewObject.Caption := rsNewObject;
   BtnDeleteObject.Caption := rsDelete;
   BtnNewScript.Caption := rsNewScript;
@@ -323,6 +328,7 @@ begin
   CheckBoxAutofocus.Caption := rsAutofocusEve;
   LabelGain1.Caption := rsGain;
   BtnSavePlan.Caption := rsSave;
+  BtnSavePlanAs.Caption:=rsSaveAs;
   BtnDeleteStep.Caption := rsDelete;
   BtnAddStep.Caption := rsAdd;
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
@@ -798,6 +804,18 @@ try
   end;
 finally
   screen.Cursor:=crDefault;
+end;
+end;
+
+procedure Tf_EditTargets.BtnSaveAsClick(Sender: TObject);
+begin
+SaveDialog1.InitialDir:=ConfigDir;
+SaveDialog1.DefaultExt:='.targets';
+SaveDialog1.filter:='CCDciel Sequence|*.targets';
+SaveDialog1.FileName:=CurrentSequenceFile;
+if SaveDialog1.Execute then begin
+  CurrentSequenceFile:=SaveDialog1.FileName;
+  ModalResult:=mrOK;
 end;
 end;
 
@@ -1399,6 +1417,20 @@ var i: integer;
 begin
   for i:=1 to StepList.RowCount-1 do begin
     StepList.Cells[0,i]:=IntToStr(i);
+  end;
+end;
+
+procedure Tf_EditTargets.BtnSavePlanAsClick(Sender: TObject);
+begin
+  SaveDialog1.InitialDir:=ConfigDir;
+  SaveDialog1.DefaultExt:='.plan';
+  SaveDialog1.filter:='Plan|*.plan';
+  SaveDialog1.FileName:=PlanName.Caption+'.plan';
+  if SaveDialog1.Execute then begin
+     PlanName.Caption:=ExtractFileNameOnly(SaveDialog1.FileName);
+     SavePlan;
+     SetPlanList(TargetList.Row,PlanName.Caption);
+     TargetChange(nil);
   end;
 end;
 
