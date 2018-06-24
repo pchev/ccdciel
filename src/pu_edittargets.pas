@@ -157,7 +157,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FrameTypeChange(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
@@ -192,7 +191,8 @@ type
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
     procedure CheckPlanModified;
-    function   CheckRiseSet(n: integer): boolean;
+    function  CheckRiseSet(n: integer): boolean;
+    procedure FrameTypeChange(n: integer; newtype: TFrameType);
   public
     { public declarations }
     procedure LoadPlanList;
@@ -324,11 +324,11 @@ begin
   CheckBoxAutofocusStart.Caption := rsAutofocusBef;
   CheckBoxAutofocus.Caption := rsAutofocusEve;
   LabelGain1.Caption := rsGain;
-  BtnDeletePlan.Caption := 'Delete plan';
-  BtnSavePlan.Caption := 'Save plan';
-  BtnSavePlanAs.Caption:='Save plan as...';
-  BtnRemoveStep.Caption := 'Remove step';
-  BtnAddStep.Caption := 'Add step';
+  BtnDeletePlan.Caption := rsDeletePlan;
+  BtnSavePlan.Caption := rsSavePlan;
+  BtnSavePlanAs.Caption:=rsSavePlanAs;
+  BtnRemoveStep.Caption := rsRemoveStep;
+  BtnAddStep.Caption := rsAddStep;
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
   StepList.Columns.Items[pcoltype-1].Title.Caption := rsType;
   StepList.Columns.Items[pcolexp-1].Title.Caption := rsExposure;
@@ -744,9 +744,10 @@ end;
 procedure Tf_EditTargets.CheckPlanModified;
 begin
 if StepsModified then begin
-  if MessageDlg('The plan '+PlanName.Caption+' is modified. Do you want to save the change ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+  if MessageDlg(Format(rsThePlanIsMod, [PlanName.Caption]), mtConfirmation, mbYesNo, 0)=mrYes then begin
      SavePlan;
   end;
+  StepsModified:=false;
 end;
 end;
 
@@ -1076,7 +1077,7 @@ begin
     if ok then
      SeqStartAt.Text:=TimeToStr(he/24)
     else begin
-     ShowMessage('No astronomical twilight at this location today');
+     ShowMessage(rsNoAstronomic);
      SeqStartTwilight.Checked:=false;
     end;
   end;
@@ -1093,7 +1094,7 @@ begin
     if ok then
       SeqStopAt.Text:=TimeToStr(hm/24)
     else begin
-      ShowMessage('No astronomical twilight at this location today');
+      ShowMessage(rsNoAstronomic);
       SeqStopTwilight.Checked:=false;
     end;
   end;
@@ -1198,26 +1199,25 @@ begin
   StepList.RowCount:=1;
 end;
 
-procedure Tf_EditTargets.FrameTypeChange(Sender: TObject);
+procedure Tf_EditTargets.FrameTypeChange(n: integer; newtype: TFrameType);
 begin
-{  case FrameType.ItemIndex of
-    0 : begin   // Light
+  case newtype of
+    Light : begin
 
         end;
-    1 : begin   // Bias
-           Exposure.Value:=0.01;
-           Filter.ItemIndex:=0;
-           CheckBoxRepeat.Checked:=false;
+    Bias : begin
+           StepList.Cells[pcolexp,n]:='0.01';
+           StepList.Cells[pcolfilter,n]:=Filter0;
+           StepList.Cells[pcolrepeat,n]:='1';
         end;
-    2 : begin   // Dark
-           Filter.ItemIndex:=0;
-           CheckBoxRepeat.Checked:=false;
+    Dark : begin
+           StepList.Cells[pcolfilter,n]:=Filter0;
+           StepList.Cells[pcolrepeat,n]:='1';
         end;
-    3 : begin   // Flat
-           CheckBoxRepeat.Checked:=false;
+    Flat : begin
+           StepList.Cells[pcolrepeat,n]:='1';
         end;
   end;
-  StepChange(Sender);   }
 end;
 
 
@@ -1268,6 +1268,7 @@ begin
   j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
   if j<0 then j:=0;
   StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
+  if p.frtype<>TFrameType(j) then FrameTypeChange(n,TFrameType(j));
   p.frtype:=TFrameType(j);
   x:=StrToFloatDef(StepList.Cells[pcolexp,n],p.exposure);
   StepsModified:=StepsModified or (p.exposure<>x);
@@ -1357,7 +1358,7 @@ var txt:string;
     i,n: integer;
     p,pp: TStep;
 begin
-  txt:=FormEntry(self,'Step description','Step'+inttostr(StepList.RowCount));
+  txt:=FormEntry(self, rsStepDescript, 'Step'+inttostr(StepList.RowCount));
   p:=TStep.Create;
   n:=StepList.Row;
   if n >= 1 then begin
@@ -1382,7 +1383,8 @@ begin
   i:=StepList.Row;
   if i>0 then begin
      str:=StepList.Cells[0,i]+', '+StepList.Cells[1,i];
-     if MessageDlg('Delete step '+str+' ?',mtConfirmation,mbYesNo,0)=mrYes then begin
+     if MessageDlg(Format(rsDeleteStep, [str]), mtConfirmation, mbYesNo, 0)=
+       mrYes then begin
         j:=i-1;
         if j<1 then j:=i+1;
         if j>=StepList.RowCount then j:=StepList.RowCount-1;

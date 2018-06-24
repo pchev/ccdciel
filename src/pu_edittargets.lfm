@@ -1116,7 +1116,7 @@ object f_EditTargets: Tf_EditTargets
     end
   end
   object SaveDialog1: TSaveDialog
-    left = 32
-    top = 616
+    left = 48
+    top = 424
   end
 end

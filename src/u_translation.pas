@@ -884,6 +884,15 @@ resourcestring
   rsSaveAs = 'Save as...';
   rsRemoveObject = 'Remove object';
   rsCannotComput = 'Cannot compute rise or set time.';
+  rsDeletePlan = 'Delete plan';
+  rsSavePlan = 'Save plan';
+  rsSavePlanAs = 'Save plan as...';
+  rsRemoveStep = 'Remove step';
+  rsAddStep = 'Add step';
+  rsThePlanIsMod = 'The plan %s is modified. Do you want to save the change ?';
+  rsNoAstronomic = 'No astronomical twilight at this location today';
+  rsDeleteStep = 'Delete step %s ?';
+  rsStepDescript = 'Step description';
 
 
 
