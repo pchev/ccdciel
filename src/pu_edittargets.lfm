@@ -151,11 +151,11 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
             object Label13: TLabel
-              Left = 208
+              Left = 176
               Height = 17
               Top = 8
-              Width = 17
-              Caption = '[s]'
+              Width = 63
+              Caption = '[seconds]'
               ParentColor = False
             end
             object Label11: TLabel
@@ -170,8 +170,8 @@ object f_EditTargets: Tf_EditTargets
               Left = 208
               Height = 17
               Top = 74
-              Width = 17
-              Caption = '[s]'
+              Width = 63
+              Caption = '[seconds]'
               ParentColor = False
             end
             object Delay: TSpinEdit
@@ -601,7 +601,7 @@ object f_EditTargets: Tf_EditTargets
           Hint = 'Delete the selected row from the list.'
           Top = 6
           Width = 112
-          Caption = 'Delete'
+          Caption = 'Remove object'
           OnClick = BtnDeleteObjectClick
           TabOrder = 1
         end
