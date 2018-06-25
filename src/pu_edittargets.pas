@@ -1013,7 +1013,6 @@ procedure Tf_EditTargets.TargetListColRowMoved(Sender: TObject;
   IsColumn: Boolean; sIndex, tIndex: Integer);
 begin
   ResetSequences;
-  TargetListSelection(Sender,0,tIndex);
 end;
 
 procedure Tf_EditTargets.TargetListEditingDone(Sender: TObject);
@@ -1369,11 +1368,8 @@ end;
 
 procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
   sIndex, tIndex: Integer);
-var i: integer;
 begin
-  i:=StepList.Row;
   ResetSteps;
-  StepListSelection(Sender,0,i);
   StepsModified:=true;
 end;
 
