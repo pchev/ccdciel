@@ -49,7 +49,7 @@ type
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
-    Delay1: TFloatSpinEdit;
+    PDelay: TFloatSpinEdit;
     DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
@@ -67,14 +67,14 @@ type
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
-    GainEdit1: TSpinEdit;
+    PGainEdit: TSpinEdit;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
-    ISObox1: TComboBox;
+    PISObox: TComboBox;
     Label1: TLabel;
     Label12: TLabel;
     Label17: TLabel;
@@ -106,16 +106,16 @@ type
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
-    ISObox: TComboBox;
+    FISObox: TComboBox;
     Label16: TLabel;
     Label18: TLabel;
     LabelGain: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
-    Delay: TSpinEdit;
+    TDelay: TSpinEdit;
     RepeatCountList: TSpinEdit;
     FlatCount: TSpinEdit;
-    GainEdit: TSpinEdit;
+    FGainEdit: TSpinEdit;
     StepList: TStringGrid;
     TabSheet3: TTabSheet;
     UpdateCoord: TCheckBox;
@@ -818,9 +818,9 @@ begin
       j:=FlatBinning.Items.Add(buf);
     FlatBinning.ItemIndex:=j;
     if hasGainISO then
-      ISObox.ItemIndex:=t.FlatGain
+      FISObox.ItemIndex:=t.FlatGain
     else
-      GainEdit.Value:=t.FlatGain;
+      FGainEdit.Value:=t.FlatGain;
     filterlst:=TStringList.Create();
     SplitRec(t.FlatFilters,';',filterlst);
     for i:=0 to FlatFilterList.Count-1 do begin
@@ -864,7 +864,7 @@ begin
       TargetList.Cells[colpa,n]:=FormatFloat(f2,t.pa);
     TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
     GroupBox5.Visible:=t.repeatcount>1;
-    Delay.Value:=t.delay;
+    TDelay.Value:=t.delay;
     PreviewExposure.Value:=t.previewexposure;
     Preview.Checked:=t.preview;
     PlanName.Caption:=TargetList.Cells[colplan,n];
@@ -917,10 +917,10 @@ begin
       t.FlatBinY:=1;
     end;
     if hasGainISO then begin
-       t.FlatGain:=ISObox.ItemIndex;
+       t.FlatGain:=FISObox.ItemIndex;
     end
     else begin
-       t.FlatGain:=GainEdit.Value;
+       t.FlatGain:=FGainEdit.Value;
     end;
     t.FlatFilters:='';
     for j:=0 to FlatFilterList.Count-1 do begin
@@ -956,7 +956,7 @@ begin
     t.inplaceautofocus:=InplaceAutofocus.Checked;
     t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);
     GroupBox5.Visible:=t.repeatcount>1;
-    t.delay:=Delay.Value;
+    t.delay:=TDelay.Value;
     t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
     if planchange then begin
@@ -1275,13 +1275,13 @@ begin
   StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
   StepList.Cells[pcolbin,n]:=p.binning_str;
   if hasGainISO then
-    ISObox.ItemIndex:=p.gain
+    PISObox.ItemIndex:=p.gain
   else
-    GainEdit.Value:=p.gain;
+    PGainEdit.Value:=p.gain;
   StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter];
   StepList.Cells[pcolcount,n]:=IntToStr(p.count);
   StepList.Cells[pcolrepeat,n]:=IntToStr(p.repeatcount);
-  Delay.Value:=p.delay;
+  PDelay.Value:=p.delay;
   PanelRepeat.Visible:=(p.repeatcount>1);
   CheckBoxDither.Checked:=p.dither;
   DitherCount.Value:=p.dithercount;
@@ -1332,12 +1332,12 @@ begin
     p.biny:=1;
   end;
   if hasGainISO then begin
-     StepsModified:=StepsModified or (p.gain<>ISObox.ItemIndex);
-     p.gain:=ISObox.ItemIndex;
+     StepsModified:=StepsModified or (p.gain<>PISObox.ItemIndex);
+     p.gain:=PISObox.ItemIndex;
   end
   else begin
-     StepsModified:=StepsModified or (p.gain<>GainEdit.Value);
-     p.gain:=GainEdit.Value;
+     StepsModified:=StepsModified or (p.gain<>PGainEdit.Value);
+     p.gain:=PGainEdit.Value;
   end;
   str:=StepList.Cells[pcolfilter,n];
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
@@ -1351,8 +1351,8 @@ begin
   StepsModified:=StepsModified or (p.repeatcount<>j);
   p.repeatcount:=j;
   PanelRepeat.Visible:=(p.repeatcount>1);
-  StepsModified:=StepsModified or (p.delay<>Delay.Value);
-  p.delay:=Delay.Value;
+  StepsModified:=StepsModified or (p.delay<>PDelay.Value);
+  p.delay:=PDelay.Value;
   StepsModified:=StepsModified or (p.dither<>CheckBoxDither.Checked);
   p.dither:=CheckBoxDither.Checked;
   StepsModified:=StepsModified or (p.dithercount<>DitherCount.Value);

@@ -174,7 +174,7 @@ object f_EditTargets: Tf_EditTargets
               Caption = '[seconds]'
               ParentColor = False
             end
-            object Delay: TSpinEdit
+            object TDelay: TSpinEdit
               Left = 87
               Height = 27
               Top = 4
@@ -396,11 +396,11 @@ object f_EditTargets: Tf_EditTargets
               Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 36
-              ClientWidth = 124
+              ClientHeight = 40
+              ClientWidth = 128
               TabOrder = 1
               Visible = False
-              object ISObox: TComboBox
+              object FISObox: TComboBox
                 Left = 56
                 Height = 33
                 Hint = 'Exposure time in secondes'
@@ -420,7 +420,7 @@ object f_EditTargets: Tf_EditTargets
                 Caption = 'Gain'
                 ParentColor = False
               end
-              object GainEdit: TSpinEdit
+              object FGainEdit: TSpinEdit
                 Left = 64
                 Height = 27
                 Top = 4
@@ -969,7 +969,7 @@ object f_EditTargets: Tf_EditTargets
           ClientWidth = 288
           TabOrder = 3
           Visible = False
-          object ISObox1: TComboBox
+          object PISObox: TComboBox
             Left = 96
             Height = 33
             Hint = 'Exposure time in secondes'
@@ -989,7 +989,7 @@ object f_EditTargets: Tf_EditTargets
             Caption = 'Gain'
             ParentColor = False
           end
-          object GainEdit1: TSpinEdit
+          object PGainEdit: TSpinEdit
             Left = 96
             Height = 27
             Top = 4
@@ -1047,7 +1047,7 @@ object f_EditTargets: Tf_EditTargets
           Caption = 'Interval'
           ParentColor = False
         end
-        object Delay1: TFloatSpinEdit
+        object PDelay: TFloatSpinEdit
           Left = 96
           Height = 27
           Top = 8
