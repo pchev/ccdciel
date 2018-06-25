@@ -1,13 +1,13 @@
 object f_EditTargets: Tf_EditTargets
   Left = 0
-  Height = 681
+  Height = 592
   Top = 87
   Width = 1000
   ActiveControl = BtnSave
   Caption = 'Edit target list'
-  ClientHeight = 681
+  ClientHeight = 592
   ClientWidth = 1000
-  Constraints.MinHeight = 650
+  Constraints.MinHeight = 580
   Constraints.MinWidth = 970
   DesignTimePPI = 95
   OnCreate = FormCreate
@@ -18,27 +18,27 @@ object f_EditTargets: Tf_EditTargets
   Visible = False
   object PanelTarget: TPanel
     Left = 0
-    Height = 380
+    Height = 368
     Top = 0
     Width = 1000
     Align = alTop
-    ClientHeight = 380
+    ClientHeight = 368
     ClientWidth = 1000
-    Constraints.MinHeight = 380
+    Constraints.MinHeight = 360
     TabOrder = 0
     object Panel11: TPanel
       Left = 699
-      Height = 331
+      Height = 319
       Top = 48
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 331
+      ClientHeight = 319
       ClientWidth = 300
       TabOrder = 1
       object PageControl1: TPageControl
         Left = 0
-        Height = 331
+        Height = 319
         Top = 0
         Width = 300
         ActivePage = TabSheet1
@@ -48,7 +48,7 @@ object f_EditTargets: Tf_EditTargets
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
-          ClientHeight = 327
+          ClientHeight = 315
           ClientWidth = 290
           object GroupBox2: TGroupBox
             Left = 0
@@ -123,18 +123,18 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox5: TGroupBox
             Left = 0
-            Height = 118
+            Height = 106
             Top = 209
             Width = 290
             Align = alClient
             Caption = 'Repeat'
-            ClientHeight = 100
+            ClientHeight = 88
             ClientWidth = 288
             TabOrder = 1
             object Label9: TLabel
               Left = 3
               Height = 17
-              Top = 74
+              Top = 59
               Width = 116
               Caption = 'Preview exposure'
               ParentColor = False
@@ -143,7 +143,7 @@ object f_EditTargets: Tf_EditTargets
               Left = 3
               Height = 21
               Hint = 'Start a preview loop when waiting for the delay to expire.'
-              Top = 36
+              Top = 32
               Width = 230
               Caption = 'Preview when waiting to repeat'
               OnChange = TargetChange
@@ -153,7 +153,7 @@ object f_EditTargets: Tf_EditTargets
             object Label13: TLabel
               Left = 176
               Height = 17
-              Top = 8
+              Top = 4
               Width = 63
               Caption = '[seconds]'
               ParentColor = False
@@ -161,7 +161,7 @@ object f_EditTargets: Tf_EditTargets
             object Label11: TLabel
               Left = 3
               Height = 17
-              Top = 8
+              Top = 4
               Width = 50
               Caption = 'Interval'
               ParentColor = False
@@ -169,7 +169,7 @@ object f_EditTargets: Tf_EditTargets
             object Label14: TLabel
               Left = 208
               Height = 17
-              Top = 74
+              Top = 59
               Width = 63
               Caption = '[seconds]'
               ParentColor = False
@@ -177,7 +177,7 @@ object f_EditTargets: Tf_EditTargets
             object TDelay: TSpinEdit
               Left = 87
               Height = 27
-              Top = 4
+              Top = 0
               Width = 76
               MaxValue = 100000
               OnChange = TargetChange
@@ -186,7 +186,7 @@ object f_EditTargets: Tf_EditTargets
             object PreviewExposure: TFloatSpinEdit
               Left = 130
               Height = 27
-              Top = 72
+              Top = 55
               Width = 62
               Increment = 1
               MaxValue = 60
@@ -252,7 +252,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet2: TTabSheet
           Caption = 'Script'
-          ClientHeight = 327
+          ClientHeight = 315
           ClientWidth = 290
           object Panel14: TPanel
             Left = 0
@@ -303,7 +303,7 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet3: TTabSheet
           Caption = 'TabSheet3'
-          ClientHeight = 327
+          ClientHeight = 315
           ClientWidth = 290
           object FlatTime: TRadioGroup
             Left = 0
@@ -396,8 +396,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 40
-              ClientWidth = 128
+              ClientHeight = 36
+              ClientWidth = 124
               TabOrder = 1
               Visible = False
               object FISObox: TComboBox
@@ -631,18 +631,18 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel4: TPanel
       Left = 1
-      Height = 331
+      Height = 319
       Top = 48
       Width = 698
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 331
+      ClientHeight = 319
       ClientWidth = 698
       TabOrder = 2
       object PanelBottom: TPanel
         Left = 0
         Height = 39
-        Top = 292
+        Top = 280
         Width = 698
         Align = alBottom
         BevelOuter = bvNone
@@ -710,7 +710,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 292
+        Height = 280
         Hint = 'The list of target to process in sequence.'
         Top = 0
         Width = 698
@@ -810,27 +810,27 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel3: TPanel
     Left = 0
-    Height = 262
-    Top = 380
+    Height = 185
+    Top = 368
     Width = 1000
     Align = alClient
-    ClientHeight = 262
+    ClientHeight = 185
     ClientWidth = 1000
     Constraints.MinHeight = 170
     TabOrder = 1
     object Panel9: TPanel
       Left = 1
-      Height = 230
+      Height = 153
       Top = 1
       Width = 698
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 230
+      ClientHeight = 153
       ClientWidth = 698
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
-        Height = 230
+        Height = 153
         Top = 0
         Width = 698
         Align = alClient
@@ -914,27 +914,27 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel12: TPanel
       Left = 699
-      Height = 230
+      Height = 153
       Top = 1
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 230
+      ClientHeight = 153
       ClientWidth = 300
       TabOrder = 1
       object Panel8: TPanel
         Left = 0
-        Height = 128
+        Height = 114
         Top = 0
         Width = 300
         Align = alTop
-        ClientHeight = 128
+        ClientHeight = 114
         ClientWidth = 300
         TabOrder = 0
         object CheckBoxDither: TCheckBox
           Left = 8
           Height = 21
-          Top = 96
+          Top = 84
           Width = 109
           Caption = 'Dither every '
           OnChange = StepChange
@@ -952,7 +952,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxAutofocus: TCheckBox
           Left = 8
           Height = 21
-          Top = 64
+          Top = 60
           Width = 130
           Caption = 'Autofocus every'
           OnChange = StepChange
@@ -1002,7 +1002,7 @@ object f_EditTargets: Tf_EditTargets
         object AutofocusCount: TSpinEdit
           Left = 165
           Height = 27
-          Top = 64
+          Top = 56
           Width = 57
           MaxValue = 1000
           MinValue = 1
@@ -1013,7 +1013,7 @@ object f_EditTargets: Tf_EditTargets
         object DitherCount: TSpinEdit
           Left = 165
           Height = 27
-          Top = 96
+          Top = 84
           Width = 57
           MaxValue = 1000
           MinValue = 1
@@ -1024,17 +1024,17 @@ object f_EditTargets: Tf_EditTargets
       end
       object PanelRepeat: TPanel
         Left = 0
-        Height = 46
-        Top = 128
+        Height = 34
+        Top = 114
         Width = 300
         Align = alTop
-        ClientHeight = 46
+        ClientHeight = 34
         ClientWidth = 300
         TabOrder = 1
         object Label17: TLabel
           Left = 184
           Height = 17
-          Top = 13
+          Top = 7
           Width = 63
           Caption = '[seconds]'
           ParentColor = False
@@ -1042,7 +1042,7 @@ object f_EditTargets: Tf_EditTargets
         object Label12: TLabel
           Left = 8
           Height = 17
-          Top = 13
+          Top = 7
           Width = 50
           Caption = 'Interval'
           ParentColor = False
@@ -1050,7 +1050,7 @@ object f_EditTargets: Tf_EditTargets
         object PDelay: TFloatSpinEdit
           Left = 96
           Height = 27
-          Top = 8
+          Top = 2
           Width = 82
           DecimalPlaces = 1
           Increment = 1
@@ -1065,7 +1065,7 @@ object f_EditTargets: Tf_EditTargets
     object Panel10: TPanel
       Left = 1
       Height = 30
-      Top = 231
+      Top = 154
       Width = 998
       Align = alBottom
       BevelOuter = bvNone
@@ -1140,7 +1140,7 @@ object f_EditTargets: Tf_EditTargets
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 642
+    Top = 553
     Width = 1000
     Align = alBottom
     ClientHeight = 39
