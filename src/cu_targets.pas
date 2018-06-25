@@ -94,7 +94,7 @@ type
       FSeqStart,FSeqStop: boolean;
       FSeqStartTwilight,FSeqStopTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
-      FRunning: boolean;
+      FRunning,FScriptRunning: boolean;
       FInitializing: boolean;
       FUnattended: boolean;
       FName: string;
@@ -123,6 +123,7 @@ type
       property TargetName: string read FName write SetTargetName;
       property Busy: boolean read GetBusy;
       property Running: boolean read FRunning;
+      property ScriptRunning: boolean read FScriptRunning;
       property TargetCoord: boolean read FTargetCoord;
       property TargetRA: double read FTargetRA;
       property TargetDE: double read FTargetDE;
@@ -408,6 +409,9 @@ begin
      if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
    end;
+   if f_scriptengine.scr.Running then begin
+      f_scriptengine.StopScript;
+   end;
    if FCurrentTarget>=0 then
       p:=t_plan(Ftargets[FCurrentTarget].plan)
    else
@@ -443,7 +447,7 @@ begin
      RunErrorAction;
      ShowDelayMsg('');
    end;
-
+   if assigned(FonEndSequence) then FonEndSequence(nil);
  end
  else msg(rsNotRunningNo,1);
 end;
@@ -487,8 +491,11 @@ begin
    if Targets[FCurrentTarget].objectname=ScriptTxt then begin
      FInitializing:=false;
      Targets[FCurrentTarget].autoguiding:=false;
+     FScriptRunning:=true;
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
+       FScriptRunning:=false;
        msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]),0);
+       if FRunning then begin
        if FUnattended then begin
          StopSequence(true);
          exit;
@@ -503,8 +510,10 @@ begin
             exit;
          end;
        end;
+       end;
      end;
-     NextTarget;
+     FScriptRunning:=false;
+     if FRunning then NextTarget;
      exit;
    end
    else if Targets[FCurrentTarget].objectname=SkyFlatTxt then begin
@@ -921,7 +930,7 @@ begin
   msg(rsStartAutogui,2);
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
-  if (not result)and(not Unattended) then begin
+  if FRunning and (not result)and(not Unattended) then begin
     f_pause.Caption:=rsAutoguiderSt2;
     f_pause.Text:=Format(rsAutoguiderNo2, [inttostr(CalibrationDelay+
       SettleMaxTime), crlf]);

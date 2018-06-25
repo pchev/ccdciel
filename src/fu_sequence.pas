@@ -789,7 +789,7 @@ procedure Tf_sequence.StopSequence;
 begin
  StartTimer.Enabled:=false;
  StatusTimer.Enabled:=false;
- if targets.TargetInitializing or targets.WaitStarting then begin
+ if targets.TargetInitializing or targets.WaitStarting or targets.ScriptRunning then begin
    led.Brush.Color:=clRed;
    SetEditBtn(true);
  end;

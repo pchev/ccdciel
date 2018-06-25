@@ -83,7 +83,7 @@ type
     slist: array of String;
     LastErr:string;
     strllist: array of TStringList;
-    Waitrunning, cancelWait: boolean;
+    Waitrunning, cancelWait, ScriptCancel: boolean;
 
     RunProcess: TProcess;
     procedure msg(str:string);
@@ -665,10 +665,12 @@ begin
   fn:=slash(path)+sname+'.script';
   scr.Script.LoadFromFile(fn);
   ok:=scr.Compile;
+  ScriptCancel:=false;
   if ok then begin
     Application.ProcessMessages;
     result:=scr.Execute;
     wait(2);
+    result:=result and (not ScriptCancel);
     if result then
        msg(Format(rsScriptFinish, [sname]))
     else begin
@@ -707,6 +709,7 @@ begin
     Autoguider.WaitBusy(15);
   end;
   msg(rsScriptTermin);
+  ScriptCancel:=true;
   scr.Stop;
   if Waitrunning then cancelWait:=true;
   if WaitTillrunning then begin
