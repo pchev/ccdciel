@@ -1589,6 +1589,7 @@ begin
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
+  f_sequence.Unattended.Checked:=config.GetValue('/Sequence/Unattended',false);
 
   f_planetariuminfo.planetarium:=planetarium;
 
@@ -2559,6 +2560,7 @@ begin
    config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
 
    config.SetValue('/Sequence/Targets',CurrentSequenceFile);
+   config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
    config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);
