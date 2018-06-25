@@ -405,9 +405,9 @@ begin
    if Autofocusing then begin
      CancelAutofocus:=true;
      msg(rsRequestToSto3,1);
-     Camera.AbortExposure;
      if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
+     wait(30);
    end;
    if f_scriptengine.scr.Running then begin
       f_scriptengine.StopScript;
@@ -464,9 +464,9 @@ begin
    if Autofocusing then begin
      CancelAutofocus:=true;
      msg(rsRequestToSto3,1);
-     Camera.AbortExposure;
      if Mount.MountSlewing then Mount.AbortMotion;
      if Astrometry.Busy then Astrometry.StopAstrometry;
+     wait(30);
    end;
    if p.Running then begin
      msg(Format(rsStopPlan, [Ftargets[FCurrentTarget].planname]),1);
