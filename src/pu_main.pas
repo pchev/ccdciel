@@ -2974,7 +2974,7 @@ begin
  f_capture.PanelGain.Visible:=(hasGain or hasGainISO);
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
- f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
+ f_EditTargets.PanelGain1.Visible:=f_capture.PanelGain.Visible;
  if hasGainISO then begin
    f_capture.ISObox.Visible:=true;
    f_capture.GainEdit.Visible:=false;
