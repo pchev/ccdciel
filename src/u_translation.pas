@@ -48,6 +48,7 @@ resourcestring
   rsResetToDefau = 'Reset to default';
   rsConnect = 'Connect';
   rsStart = 'Start';
+  rsBegin = 'Begin';
   rsLoop = 'Loop';
   rsCalibrate = 'Calibrate';
   rsGuide = 'Guide';
@@ -901,6 +902,9 @@ resourcestring
   rsRunAScript = 'Run a script';
   rsRunAdditiona = 'Run additional script in case of unattended error';
   rsTheTelescope = 'The telescope is parked, unpark now';
+  rsExecutingThe = 'Executing the termination error actions.';
+  rsExecutingThe2 = 'Executing the termination actions.';
+  rsTheSequenceW = 'The sequence %s will be stopped at %s, in %s seconds.';
 
 
 

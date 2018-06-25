@@ -142,6 +142,10 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
+#: u_translation:rsbegin
+msgid "Begin"
+msgstr ""
+
 #: u_translation:rsloop
 msgid "Loop"
 msgstr ""
@@ -3276,5 +3280,17 @@ msgstr ""
 
 #: u_translation:rsthetelescope
 msgid "The telescope is parked, unpark now"
+msgstr ""
+
+#: u_translation:rsexecutingthe
+msgid "Executing the termination error actions."
+msgstr ""
+
+#: u_translation:rsexecutingthe2
+msgid "Executing the termination actions."
+msgstr ""
+
+#: u_translation:rsthesequencew
+msgid "The sequence %s will be stopped at %s, in %s seconds."
 msgstr ""
 

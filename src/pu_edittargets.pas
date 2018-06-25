@@ -289,7 +289,7 @@ begin
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
   TargetList.Columns.Items[coldec-1].Title.Caption := rsDec;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
-  TargetList.Columns.Items[colstart-1].Title.Caption := rsStart;
+  TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
   TargetList.Columns.Items[colstart-1].PickList.Clear;
@@ -332,7 +332,7 @@ begin
   label2.Caption:=rsSequence;
   GroupBox2.Caption:=rsObject;
   GroupBox3.Caption:=rsPA;
-  GroupBox4.Caption:=rsStart+'/'+rsStop;
+  GroupBox4.Caption:=rsBegin+'/'+rsEnd;
   GroupBox5.Caption:=rsRepeat;
   // plan
   Label17.Caption := rsSeconds2;

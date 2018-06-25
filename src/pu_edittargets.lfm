@@ -233,7 +233,7 @@ object f_EditTargets: Tf_EditTargets
               Top = 0
               Width = 139
               Align = alClient
-              Caption = 'Start/Stop'
+              Caption = 'Begin/End'
               ClientHeight = 39
               ClientWidth = 137
               TabOrder = 1
@@ -763,7 +763,7 @@ object f_EditTargets: Tf_EditTargets
               'Rise'
             )
             SizePriority = 0
-            Title.Caption = 'Start'
+            Title.Caption = 'Begin'
             Width = 80
           end        
           item
@@ -775,7 +775,7 @@ object f_EditTargets: Tf_EditTargets
               'Set'
             )
             SizePriority = 0
-            Title.Caption = 'Stop'
+            Title.Caption = 'End'
             Width = 80
           end        
           item

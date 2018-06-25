@@ -181,7 +181,7 @@ begin
  Targets.onPlanChange:=@PlanChange;
  TargetGrid.Cells[0, 0]:=rsObject;
  TargetGrid.Cells[1, 0]:=rsPlan;
- TargetGrid.Cells[2, 0]:=rsStart;
+ TargetGrid.Cells[2, 0]:=rsBegin;
  TargetGrid.Cells[3, 0]:=rsEnd;
  TargetGrid.ColWidths[2]:=0;
  TargetGrid.ColWidths[3]:=0;

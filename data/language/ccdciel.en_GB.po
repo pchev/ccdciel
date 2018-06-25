@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-06-24 18:30+0000\n"
+"POT-Creation-Date: 2018-06-25 13:30+0000\n"
 "PO-Revision-Date: 2018-05-01 15:32+0000\n"
 "Last-Translator: Stephan Woidowski <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-06-24 19:48+0000\n"
+"X-Launchpad-Export-Date: 2018-06-25 13:40+0000\n"
 "X-Generator: Launchpad (build 18688)\n"
 "Language: en_GB\n"
 
@@ -328,6 +328,10 @@ msgstr "Before to use this tool you must connect the camera, the mount and the p
 #: u_translation.rsbeforeyoucan
 msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
 msgstr "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
+
+#: u_translation.rsbegin
+msgid "Begin"
+msgstr ""
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -944,6 +948,14 @@ msgstr "Error: Unknow telescope focal length, set in telescope driver or in PREF
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
 msgstr "Estimated slippage since last learning"
+
+#: u_translation.rsexecutingthe
+msgid "Executing the termination error actions."
+msgstr ""
+
+#: u_translation.rsexecutingthe2
+msgid "Executing the termination actions."
+msgstr ""
 
 #: u_translation.rsexp
 msgid "Exp:"
@@ -3032,6 +3044,10 @@ msgstr "There is already a dusk flat plan"
 #: u_translation.rsthereisalrea2
 msgid "There is already a dawn flat plan"
 msgstr "There is already a dawn flat plan"
+
+#: u_translation.rsthesequencew
+msgid "The sequence %s will be stopped at %s, in %s seconds."
+msgstr ""
 
 #: u_translation.rsthetelescope
 msgid "The telescope is parked, unpark now"

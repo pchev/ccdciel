@@ -348,6 +348,7 @@ begin
   if FSeqStop then begin
      SecondsToWait(FSeqStopAt,true,stw,nd);
      if stw>0 then begin
+        msg(Format(rsTheSequenceW, [FName, TimeToStr(FSeqStopAt), IntToStr(stw)]), 1);
         StopTimer.Interval:=1000*stw;
         StopTimer.Enabled:=true;
      end else begin
@@ -1062,6 +1063,7 @@ end;
 procedure T_Targets.RunErrorAction;
 var path,sname: string;
 begin
+  msg(rsExecutingThe,1);
   RunEndAction;
   if OnErrorRunScript then begin
     path:=ScriptDir[1].path;
@@ -1075,6 +1077,7 @@ end;
 procedure T_Targets.RunEndAction;
 var path,sname: string;
 begin
+  msg(rsExecutingThe2,1);
   if AtEndStopTracking then begin
     Mount.AbortMotion;
   end;
