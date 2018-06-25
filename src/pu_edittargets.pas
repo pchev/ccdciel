@@ -1224,7 +1224,7 @@ begin
     end;
   end else begin
     NewPlan;
-    BtnSavePlanAs.Click;
+    if PlanName.Caption<>'' then StepsModified:=true;
   end;
 end;
 
