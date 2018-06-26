@@ -48,10 +48,8 @@ rm fl1.txt
 
 # insert pages not in index 
 if [ -f "$lang/documentation/ccdscript.html" ]; then
-  sed -i '/\/status_bar.html/ a '$lang'\/documentation\/server.html \n'$lang'\/documentation\/ccdscript.html \n'$lang'\/documentation\/script_example.html \n'$lang'\/documentation\/script_reference.html' fl.txt
+  sed -i '/\/ccdscript.html/ a '$lang'\/documentation\/script_example.html \n'$lang'\/documentation\/script_reference.html \n'$lang'\/documentation\/server.html' fl.txt
 fi
-
-
 
 # remove duplicates
 cp fl.txt fl1.txt
