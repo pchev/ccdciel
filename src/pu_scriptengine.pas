@@ -29,7 +29,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default,
+  Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
 
@@ -173,6 +173,7 @@ type
     function cmd_ClearReferenceImage:string;
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
+    function cmd_ListFiles(var lf:TStringList):string;
   public
     { public declarations }
     dbgscr: TPSScriptDebugger;
@@ -258,6 +259,14 @@ begin
   result:=true;
   varname:=uppercase(varname);
   if varname='LASTERROR' then str:=LastErr
+  else if varname='DIRECTORYSEPARATOR' then str:=DirectorySeparator
+  else if varname='APPDIR' then str:=Appdir
+  else if varname='TMPDIR' then str:=TmpDir
+  else if varname='CAPTUREDIR' then str:=slash(config.GetValue('/Files/CapturePath',defCapturePath))
+  else if varname='LIGHTDIR' then str:=Fcapture.FrameType.Items[ord(LIGHT)]
+  else if varname='BIASDIR' then str:=Fcapture.FrameType.Items[ord(BIAS)]
+  else if varname='DARKDIR' then str:=Fcapture.FrameType.Items[ord(DARK)]
+  else if varname='FLATDIR' then str:=Fcapture.FrameType.Items[ord(FLAT)]
   else if varname='STR1' then str:=slist[0]
   else if varname='STR2' then str:=slist[1]
   else if varname='STR3' then str:=slist[2]
@@ -843,6 +852,7 @@ else if cname='SEQUENCE_START' then result:=cmd_SequenceStart(arg[0])
 else if cname='SAVE_FITS_FILE' then result:=cmd_SaveFitsFile(arg[0])
 else if cname='OPEN_FITS_FILE' then result:=cmd_OpenFitsFile(arg[0])
 else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
+else if cname='LIST_FILES' then result:=cmd_ListFiles(arg)
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1125,7 +1135,12 @@ begin
 try
 result:=msgFailed;
 fl.Clear;
-fl.Assign(Ffilter.FilterNames);
+if Ffilter.Status=devConnected then
+  fl.Assign(Ffilter.FilterNames)
+else begin
+ fl.Assign(FilterList);
+ fl.Delete(0); // remove no_change
+end;
 result:=msgOK;
 except
   result:=msgFailed;
@@ -1507,6 +1522,26 @@ begin
  ShutdownTimer.Enabled:=false;
  Application.MainForm.Close;
 end;
+
+function Tf_scriptengine.cmd_ListFiles(var lf:TStringList):string;
+var fs : TSearchRec;
+    i: integer;
+    dir,buf: string;
+begin
+ dir:=lf[0];
+ lf.Clear;
+ i:=FindFirstUTF8(dir,0,fs);
+ while i=0 do begin
+   lf.Add(fs.Name);
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
+ if lf.Count>0 then
+   result:=msgOK
+ else
+  result:=msgFailed;
+end;
+
 
 end.
 

@@ -1,0 +1,20 @@
+############################################
+# Script for Siril
+# Template for CCDciel preprocessing 
+# Create master flat without filter
+############################################
+
+setext fits
+
+cd $BASEDIR
+
+#preprocess flats
+cd $FLATDIR
+preprocess $FLATPREFIX_ -bias=$MASTERBIAS
+#build master-flat
+stack pp_$FLATPREFIX_ rej 3 3 -norm=mul
+
+load pp_$FLATPREFIX_stacked.fits
+save Master_Flat.fits
+
+close

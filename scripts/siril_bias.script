@@ -1,0 +1,47 @@
+// CCDciel script to process files with Siril
+//
+// Create Master Bias
+//
+var
+  buf: string;
+  script,log: Tstringlist;
+  i: Integer;
+  homedir,basedir,biasdir: string;
+  biasprefix: string;
+
+begin
+
+  // Get capture directories.
+  // CCDciel must be configured to use only subfolder by frame type
+  //
+  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
+  GetS('CAPTUREDIR', basedir);
+  GetS('BIASDIR', biasdir);
+  biasprefix := biasdir;
+  
+  // Get scripts directory
+  GetS('APPDIR', appdir);
+  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
+  GetS('TMPDIR', tmpdir);
+
+
+  // Replace variable in template
+  script:= Tstringlist.create;
+  script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_bias.ssf');
+  for i:=0 to script.count-1 do begin
+    buf:=script[i];
+    buf:=StringReplace(buf, '$BASEDIR', basedir);
+    buf:=StringReplace(buf, '$BIASDIR', biasdir);
+    buf:=StringReplace(buf, '$BIASPREFIX', biasprefix);
+    script[i]:=buf;
+  end;
+  script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+  script.free;
+
+  // Run Siril
+  log:=Tstringlist.Create;
+  RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+  log.savetofile(basedir+'/siril_bias.log');
+  log.free;
+
+end.

@@ -1,0 +1,65 @@
+// CCDciel script to process files with Siril
+//
+// Create Master Flat with filter
+//
+
+var
+  buf: string;
+  script,log, filterlist: Tstringlist;
+  i,f: Integer;
+  homedir,basedir,flatdir: string;
+  masterbias,flatprefix,filter: string;
+
+begin
+
+  // Get capture directories.
+  // CCDciel must be configured to use only subfolder by frame type
+  //
+  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
+  GetS('CAPTUREDIR', basedir);
+  GetS('BIASDIR', biasdir);
+  GetS('FLATDIR', flatdir);
+  masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
+  flatprefix:=flatdir;
+  
+  // Get scripts directory
+  GetS('APPDIR', appdir);
+  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
+  GetS('TMPDIR', tmpdir);
+
+  // Get the list of filter name
+  //
+  filterlist:= Tstringlist.create;
+  r:=cmdArg('WHEEL_GETFILTERSNAME',filterlist);
+  if r<>msgOK then exit;
+
+
+  // Loop for Light prefix
+  //
+  for f:=0 to filterlist.count-1 do begin
+
+    filter :=filterlist[f];
+    // Replace variable in template
+    script:= Tstringlist.create;
+    script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat.ssf');
+    for i:=0 to script.count-1 do begin
+      buf:=script[i];
+      buf:=StringReplace(buf, '$BASEDIR', basedir);
+      buf:=StringReplace(buf, '$FLATDIR', flatdir);
+      buf:=StringReplace(buf, '$MASTERBIAS', masterbias);
+      buf:=StringReplace(buf, '$FLATPREFIX', flatprefix);
+      buf:=StringReplace(buf, '$FILTER', filter);
+      script[i]:=buf;
+    end;
+    script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+    script.free;
+
+    // Run Siril
+    log:=Tstringlist.Create;
+    RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+    log.savetofile(basedir+'/siril_flat_'+filter+'.log');
+    log.free;
+
+  end;
+
+end.

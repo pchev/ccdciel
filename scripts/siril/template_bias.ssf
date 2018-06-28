@@ -1,0 +1,18 @@
+############################################
+# Script for Siril
+# Template for CCDciel preprocessing 
+# Create master bias
+############################################
+
+setext fits
+
+cd $BASEDIR
+
+#build master-bias
+cd $BIASDIR
+stack $BIASPREFIX_  rej 3 3 -nonorm
+
+load $BIASPREFIX_stacked.fits
+save Master_Bias.fits
+
+close

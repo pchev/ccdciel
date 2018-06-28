@@ -22,6 +22,7 @@ install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Resources/c
 install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
 
 install -d -m 755 $destdir/scripts
+install -m 755 -d $destdir/scripts/siril
 install -d -m 755 $destdir/data
 install -d -m 755 $destdir/data/stars
 install -d -m 755 $destdir/data/dso
@@ -37,6 +38,12 @@ install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/scripts/T_eqmod_ali
 install -v -m 755 scripts/astrometry.sh  $destdir/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/scripts/astrometry-online.sh
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/scripts/astrometry-macos.sh
+install -v -m 755 scripts/siril/template_bias.ssf  $destdir/scripts/siril/template_bias.ssf
+install -v -m 755 scripts/siril/template_dark.ssf  $destdir/scripts/siril/template_dark.ssf
+install -v -m 755 scripts/siril/template_flat.ssf  $destdir/scripts/siril/template_flat.ssf
+install -v -m 755 scripts/siril/template_light.ssf  $destdir/scripts/siril/template_light.ssf
+install -v -m 755 scripts/siril/template_flat_filter.ssf  $destdir/scripts/siril/template_flat_filter.ssf
+install -v -m 755 scripts/siril/template_light_filter.ssf  $destdir/scripts/siril/template_light_filter.ssf
 install -v -m 644 data/stars/focus_star_4   $destdir/data/stars/focus_star_4
 install -v -m 644 data/stars/focus_star_5   $destdir/data/stars/focus_star_5
 install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6

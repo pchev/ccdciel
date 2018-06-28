@@ -1,0 +1,51 @@
+// CCDciel script to process files with Siril
+//
+// Create Master Flat without filter
+//
+
+var
+  buf: string;
+  script,log: Tstringlist;
+  i: Integer;
+  appdir,tmpdir,basedir,flatdir: string;
+  masterbias,flatprefix: string;
+
+begin
+
+  // Get capture directories.
+  // CCDciel must be configured to use only subfolder by frame type
+  //
+  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
+  GetS('CAPTUREDIR', basedir);
+  GetS('BIASDIR', biasdir);
+  GetS('FLATDIR', flatdir);
+  masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
+  flatprefix:=flatdir;
+  
+  // Get scripts directory
+  GetS('APPDIR', appdir);
+  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
+  GetS('TMPDIR', tmpdir);
+  
+    // Replace variable in template
+    script:= Tstringlist.create;
+    script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat.ssf');
+    for i:=0 to script.count-1 do begin
+      buf:=script[i];
+      buf:=StringReplace(buf, '$BASEDIR', basedir);
+      buf:=StringReplace(buf, '$FLATDIR', flatdir);
+      buf:=StringReplace(buf, '$MASTERBIAS', masterbias);
+      buf:=StringReplace(buf, '$FLATPREFIX', flatprefix);
+      script[i]:=buf;
+    end;
+    script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+    script.free;
+
+    // Run Siril
+    log:=Tstringlist.Create;
+    RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+    log.savetofile(basedir+'/siril_flat.log');
+    log.free;
+
+
+end.

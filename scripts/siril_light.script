@@ -1,0 +1,87 @@
+// CCDciel script to process files with Siril
+//
+// Process light frames without filter
+//
+
+var
+  buf,r,DirectorySeparator: string;
+  script,log, lf, lightlist: Tstringlist;
+  i,p: Integer;
+  homedir,basedir,lightdir,biasdir,darkdir,flatdir: string;
+  masterbias,masterdark,masterflat,lightprefix: string;
+  appdir, tmpdir, siriltemplatedir: string;
+
+begin
+
+  // Get capture directories.
+  // CCDciel must be configured to use only subfolder by frame type
+  //
+  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
+  GetS('CAPTUREDIR', basedir);
+  GetS('LIGHTDIR', lightdir);
+  GetS('BIASDIR', biasdir);
+  GetS('DARKDIR', darkdir);
+  GetS('FLATDIR', flatdir);
+  masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
+  masterdark := '..'+DirectorySeparator+darkdir+DirectorySeparator+'Master_Dark';
+  masterflat := '..'+DirectorySeparator+flatdir+DirectorySeparator+'Master_Flat';
+
+  // List unique prefix in the Light directory
+  // CCDciel must be configured to make file name with Object and Filter only
+  //
+  lightlist:=Tstringlist.create;
+  lf:=Tstringlist.create;
+  lightlist.clear;
+  lf.clear;
+  lf.add(basedir+DirectorySeparator+lightdir+DirectorySeparator+'*.fits');
+  r:=cmdArg('LIST_FILES',lf);
+  if r<>msgOK then exit;
+  for i:=0 to lf.count-1 do begin
+    buf:=lf[i];
+    if copy(buf,1,3)='pp_' then continue;  // skip preprocessed
+    if copy(buf,1,2)='r_' then continue;   // skip registred
+    p:=pos('_',buf);
+    if p<0 then continue;
+    buf:=copy(buf,1,p-1);
+    if lightlist.IndexOf(buf)<0 then
+      lightlist.add(buf);
+  end;
+
+  // Get scripts directory
+  GetS('APPDIR', appdir);
+  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
+  GetS('TMPDIR', tmpdir);
+
+
+  // Loop for Light prefix
+  //
+  for i:=0 to lightlist.count-1 do begin
+    lightprefix:= lightlist[i];
+
+      logmsg('Process '+lightprefix );
+
+      // Replace variable in template
+      script:= Tstringlist.create;
+      script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_light.ssf');
+      for i:=0 to script.count-1 do begin
+        buf:=script[i];
+        buf:=StringReplace(buf, '$BASEDIR', basedir);
+        buf:=StringReplace(buf, '$LIGHTDIR', lightdir);
+        buf:=StringReplace(buf, '$MASTERDARK', masterdark);
+        buf:=StringReplace(buf, '$MASTERFLAT', masterflat);
+        buf:=StringReplace(buf, '$LIGHTPREFIX', lightprefix);
+        script[i]:=buf;
+      end;
+      script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+      script.free;
+
+      // Run Siril
+      log:=Tstringlist.Create;
+      RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+      log.savetofile(basedir+DirectorySeparator+'siril_'+lightprefix+'.log');
+      log.free;
+
+
+  end; // lightlist
+
+end.

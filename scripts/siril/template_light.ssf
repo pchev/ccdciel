@@ -1,0 +1,24 @@
+############################################
+# Script for Siril
+# Template for CCDciel preprocessing 
+# Preprocess a series without filter
+############################################
+
+setext fits
+
+cd $BASEDIR
+
+#preprocess lights
+cd $LIGHTDIR
+preprocess $LIGHTPREFIX_ -dark=$MASTERDARK -flat=$MASTERFLAT
+
+## stop here because stacking probably need some manual selection
+## but you can uncomment the register and stack command if you want
+
+##align lights
+#register pp_$LIGHTPREFIX_
+
+##stack calibrated lights
+#stack r_pp_$LIGHTPREFIX_ rej 3 3 -norm=addscale
+
+close

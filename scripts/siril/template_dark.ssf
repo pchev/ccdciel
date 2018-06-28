@@ -1,0 +1,18 @@
+############################################
+# Script for Siril
+# Template for CCDciel preprocessing 
+# Create master dark
+############################################
+
+setext fits
+
+cd $BASEDIR
+
+#build master-dark
+cd $DARKDIR
+stack $DARKPREFIX_ rej 3 3 -nonorm
+
+load $DARKPREFIX_stacked.fits
+save Master_Dark.fits
+
+close
