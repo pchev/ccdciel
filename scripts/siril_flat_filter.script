@@ -39,6 +39,9 @@ begin
   for f:=0 to filterlist.count-1 do begin
 
     filter :=filterlist[f];
+    if trim(filter)='' then continue;
+    logmsg('Process Flat '+filter);
+
     // Replace variable in template
     script:= Tstringlist.create;
     script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat_filter.ssf');
