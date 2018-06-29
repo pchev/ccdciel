@@ -59,6 +59,7 @@ type
       FFileVersion, FSlewRetry: integer;
       FAtEndPark, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript: boolean;
       FAtEndScript, FOnErrorScript: string;
+      SkipTarget: boolean;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -71,6 +72,7 @@ type
       procedure msg(txt:string; level:integer);
       procedure ShowDelayMsg(txt:string);
       procedure StopSequence(abort: boolean);
+      procedure NextTargetAsync(Data: PtrInt);
       procedure NextTarget;
       function InitTarget:boolean;
       function InitSkyFlat: boolean;
@@ -180,6 +182,7 @@ begin
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
+  SkipTarget:=false;
   TargetTimer:=TTimer.Create(self);
   TargetTimer.Enabled:=false;
   TargetTimer.Interval:=1000;
@@ -480,6 +483,11 @@ begin
 end;
 
 procedure T_Targets.NextTarget;
+begin
+  Application.QueueAsyncCall(@NextTargetAsync,0);
+end;
+
+procedure T_Targets.NextTargetAsync(Data: PtrInt);
 var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
@@ -560,21 +568,29 @@ begin
        TargetTimer.Enabled:=true;
      end
      else begin
-       msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
-       if FUnattended then begin
+       if SkipTarget then begin
+         wait(1);
          FInitializing:=false;
-         NextTarget;
+         if FRunning then NextTarget;
          exit;
-       end else begin
-         FInitializing:=false;
-         f_pause.Caption:=rsTargetInitia;
-         f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+
-           crlf+rsDoYouWantToR;
-         if f_pause.Wait(WaitResponseTime,false) then begin
-            Dec(FCurrentTarget);
+       end
+       else begin
+         msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
+         if FUnattended then begin
+           FInitializing:=false;
+           NextTarget;
+           exit;
+         end else begin
+           FInitializing:=false;
+           f_pause.Caption:=rsTargetInitia;
+           f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+
+             crlf+rsDoYouWantToR;
+           if f_pause.Wait(WaitResponseTime,false) then begin
+              Dec(FCurrentTarget);
+           end;
+           NextTarget;
+           exit;
          end;
-         NextTarget;
-         exit;
        end;
      end;
    end;
@@ -611,6 +627,7 @@ var t: TTarget;
     hr,hs,newra,newde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
 begin
+  SkipTarget:=false;
   result:=false;
   if not FRunning then exit;
   try
@@ -634,6 +651,24 @@ begin
           t.starttime:=hr/24;
        if t.endset and ObjSet(t.ra,t.de,hs,i) then
           t.endtime:=hs/24;
+    end;
+    if t.skip then begin
+      if t.starttime>=0 then begin
+        SecondsToWait(t.starttime,false,stw,nd);
+        SkipTarget:=SkipTarget or (stw>60);
+      end;
+      if t.endtime>=0 then begin
+        SecondsToWait(t.endtime,true,stw,nd);
+        SkipTarget:=SkipTarget or (stw<0);
+      end;
+      if t.darknight then begin
+        // SkipTarget:=SkipTarget or (not DarkNightNow);
+      end;
+      if SkipTarget then begin
+        msg('Skip target '+t.objectname+' because observing condition are not meet.',1);
+        result:=false;
+        exit;
+      end;
     end;
     if t.starttime>=0 then begin
       msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);

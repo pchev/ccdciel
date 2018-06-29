@@ -115,7 +115,7 @@ type
               public
               objectname, planname, path: shortstring;
               starttime,endtime,ra,de,pa: double;
-              startrise,endset: boolean;
+              startrise,endset,darknight,skip: boolean;
               repeatcount: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain: integer;
@@ -411,6 +411,8 @@ begin
   preview:=False;
   delay:=1;
   previewexposure:=1;
+  darknight:=false;
+  skip:=false;
 end;
 
 destructor TTarget.Destroy;
@@ -449,6 +451,8 @@ begin
   FlatBinY:=Source.FlatBinY;
   FlatGain:=Source.FlatGain;
   FlatFilters:=Source.FlatFilters;
+  darknight:=Source.darknight;
+  skip:=Source.skip;
 end;
 
 function TTarget.previewexposure_str: string;

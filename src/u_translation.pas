@@ -905,6 +905,9 @@ resourcestring
   rsExecutingThe = 'Executing the termination error actions.';
   rsExecutingThe2 = 'Executing the termination actions.';
   rsTheSequenceW = 'The sequence %s will be stopped at %s, in %s seconds.';
+  rsSkip = 'Skip';
+  rsDarkNight = 'Dark%snight';
+  rsTargetName = 'Target%sname';
 
 
 

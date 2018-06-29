@@ -464,6 +464,8 @@ begin
        end;
        t.startrise:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
        t.endset:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
+       t.darknight:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/DarkNight',false);
+       t.skip:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Skip',false);
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
        if x='-' then
          t.ra:=NullCoord
@@ -622,6 +624,8 @@ begin
         tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime','');
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartRise',t.startrise);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/DarkNight',t.darknight);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/Skip',t.skip);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
       if t.pa=NullCoord then

@@ -31,7 +31,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
   maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
 
 const
-  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; colrepeat=8;
+  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolrepeat=7;
 
 type
@@ -179,12 +179,16 @@ type
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
     procedure StepChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
+    procedure TargetListCheckboxToggled(sender: TObject; aCol, aRow: Integer;
+      aState: TCheckboxState);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure TargetListEditingDone(Sender: TObject);
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure TargetListValidateEntry(sender: TObject; aCol, aRow: Integer;
+      const OldValue: string; var NewValue: String);
   private
     { private declarations }
     FAstrometry: TAstrometry;
@@ -229,6 +233,7 @@ uses LazFileUtils;
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  TargetList.RowHeights[0]:=40;
   SetLang;
   LockTarget:=false;
   FTargetsRepeat:=1;
@@ -284,13 +289,15 @@ begin
   Shape3.Hint:=rsWarmTheCamer;
   Shape4.Hint:=rsRunAScript;
   Shape5.Hint:=rsRunAdditiona;
-  TargetList.Columns.Items[colname-1].Title.Caption := rsObjectName;
+  TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
   TargetList.Columns.Items[coldec-1].Title.Caption := rsDec;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
+  TargetList.Columns.Items[coldark-1].Title.Caption := Format(rsDarkNight, [crlf]);
+  TargetList.Columns.Items[colskip-1].Title.Caption := rsSkip;
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
   TargetList.Columns.Items[colstart-1].PickList.Clear;
   TargetList.Columns.Items[colstart-1].PickList.Add('');
@@ -805,6 +812,8 @@ begin
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
   if t.objectname=ScriptTxt then begin
+    TargetList.Cells[coldark,n]:='';
+    TargetList.Cells[colskip,n]:='';
     Panel3.Visible:=false;
     PageControl1.ActivePageIndex:=1;
     SetScriptList(n,t.planname);
@@ -816,6 +825,8 @@ begin
        then FlatTime.ItemIndex:=0
        else FlatTime.ItemIndex:=1;
     TargetList.Cells[colplan,n]:=t.planname;
+    TargetList.Cells[coldark,n]:='';
+    TargetList.Cells[colskip,n]:='';
     FlatCount.Value:=t.FlatCount;
     buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
     j:=FlatBinning.Items.IndexOf(buf);
@@ -860,6 +871,14 @@ begin
       TargetList.Cells[coldec,n]:=DEToStr(t.de);
     if t.startrise then TargetList.Cells[colstart,n]:=rsRise;
     if t.endset then TargetList.Cells[colend,n]:=rsSet2;
+    if t.darknight then
+      TargetList.Cells[coldark,n]:='1'
+    else
+      TargetList.Cells[coldark,n]:='0';
+    if t.skip then
+      TargetList.Cells[colskip,n]:='1'
+    else
+      TargetList.Cells[colskip,n]:='0';
     PointAstrometry.Checked:=t.astrometrypointing;
     UpdateCoord.Checked:=t.updatecoord;
     InplaceAutofocus.Checked:=t.inplaceautofocus;
@@ -883,6 +902,15 @@ var t: TTarget;
 begin
   t:=TTarget(TargetList.Objects[colseq,aRow]);
   SetTarget(aRow,t);
+end;
+
+procedure Tf_EditTargets.TargetListValidateEntry(sender: TObject; aCol,
+  aRow: Integer; const OldValue: string; var NewValue: String);
+begin
+  if (TargetList.Cells[0,aRow]=SkyFlatTxt)or(TargetList.Cells[0,aRow]=ScriptTxt) then begin
+     if aCol=coldark then NewValue:='';
+     if aCol=colskip then NewValue:='';
+  end;
 end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
@@ -951,6 +979,8 @@ begin
       t.de:=StrToDE(TargetList.Cells[coldec,n]);
     t.startrise:=TargetList.Cells[colstart,n]=rsRise;
     t.endset:=TargetList.Cells[colend,n]=rsSet2;
+    t.darknight:=(TargetList.Cells[coldark,n]='1');
+    t.skip:=(TargetList.Cells[colskip,n]='1');
     if TargetList.Cells[colpa,n]='-' then
       t.pa:=NullCoord
     else
@@ -969,6 +999,12 @@ begin
       ShowPlan;
     end;
   end;
+end;
+
+procedure Tf_EditTargets.TargetListCheckboxToggled(sender: TObject; aCol,
+  aRow: Integer; aState: TCheckboxState);
+begin
+  TargetChange(Sender);
 end;
 
 function Tf_EditTargets.CheckRiseSet(n: integer): boolean;
@@ -1036,6 +1072,8 @@ begin
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for null pa
  else if (aCol=colstart)or(aCol=colend) then
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for rise, set
+ else if (aCol=coldark)or(aCol=colskip) then
+    Editor:=TargetList.EditorByStyle(cbsCheckboxColumn) // dark night and skip
  else
     Editor:=TargetList.EditorByStyle(cbsAuto);
 end;
