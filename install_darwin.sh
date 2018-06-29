@@ -38,8 +38,8 @@ install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/scripts/T_eqmod_ali
 install -v -m 755 scripts/astrometry.sh  $destdir/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/scripts/astrometry-online.sh
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/scripts/astrometry-macos.sh
-install -v -m 755 scripts/siril_bias.script  $destdir/scripts/scripts/siril_bias.script
-install -v -m 755 scripts/siril_dark.script $destdir/scripts/scripts/siril_dark.script
+install -v -m 755 scripts/siril_bias.script  $destdir/scripts/siril_bias.script
+install -v -m 755 scripts/siril_dark.script $destdir/scripts/siril_dark.script
 install -v -m 755 scripts/siril_flat_filter.script $destdir/scripts/siril_flat_filter.script
 install -v -m 755 scripts/siril_flat.script $destdir/scripts/siril_flat.script
 install -v -m 755 scripts/siril_light_filter.script $destdir/scripts/siril_light_filter.script
