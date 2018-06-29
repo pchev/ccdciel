@@ -392,6 +392,7 @@ procedure Tf_EditTargets.LoadScriptList;
 var i,k: integer;
     fs : TSearchRec;
     s,s1: TStringlist;
+    scr: string;
 begin
   s1:=TStringlist.Create;
   s:=TStringlist.Create;
@@ -399,8 +400,11 @@ begin
   for k:=1 to MaxScriptDir do begin
     i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
     while i=0 do begin
-      s.AddObject(ExtractFileNameOnly(fs.Name),ScriptDir[k]);
-      if k=1 then s1.AddObject(ExtractFileNameOnly(fs.Name),ScriptDir[k]);
+      scr:=ExtractFileNameOnly(fs.Name);
+      if s.IndexOf(scr)<0 then begin
+        s.AddObject(scr,ScriptDir[k]);
+        if k=1 then s1.AddObject(scr,ScriptDir[k]);
+      end;
       i:=FindNextUTF8(fs);
     end;
     FindCloseUTF8(fs);
