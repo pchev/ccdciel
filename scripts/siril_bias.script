@@ -44,4 +44,8 @@ begin
   log.savetofile(basedir+'/siril_bias.log');
   log.free;
 
+  // Cleanup
+  Deletefile(basedir+DirectorySeparator+biasdir+DirectorySeparator+biasprefix+'_.seq');
+  Deletefile(basedir+DirectorySeparator+biasdir+DirectorySeparator+biasprefix+'_stacked.fits');
+
 end.

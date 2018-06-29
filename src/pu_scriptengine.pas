@@ -119,6 +119,9 @@ type
     procedure doLogmsg(str:string);
     procedure doWait(wt:integer);
     function doWaitTill(hour:string; showdialog: boolean):boolean;
+    function doDeleteFile(FileName: String): Boolean;
+    function doRenameFile(OldName, NewName: String): Boolean;
+    function doCreateDir(NewDir: String): Boolean;
     function Cmd(cname:string):string;
     function CmdArg(cname:string; var arg:Tstringlist):string;
     function CompileScripts: boolean;
@@ -262,7 +265,7 @@ begin
   else if varname='DIRECTORYSEPARATOR' then str:=DirectorySeparator
   else if varname='APPDIR' then str:=Appdir
   else if varname='TMPDIR' then str:=TmpDir
-  else if varname='CAPTUREDIR' then str:=slash(config.GetValue('/Files/CapturePath',defCapturePath))
+  else if varname='CAPTUREDIR' then str:=config.GetValue('/Files/CapturePath',defCapturePath)
   else if varname='LIGHTDIR' then str:=Fcapture.FrameType.Items[ord(LIGHT)]
   else if varname='BIASDIR' then str:=Fcapture.FrameType.Items[ord(BIAS)]
   else if varname='DARKDIR' then str:=Fcapture.FrameType.Items[ord(DARK)]
@@ -662,6 +665,40 @@ begin
  result:=WaitTill(hour,showdialog);
 end;
 
+function Tf_scriptengine.doDeleteFile(FileName: String): Boolean;
+var lf:TStringList;
+    i: integer;
+    dir:string;
+begin
+  result:=false;
+  if pos('*',FileName)>1 then begin
+    dir:=slash(ExtractFilePath(FileName));
+    lf:=TStringList.Create;
+    lf.Add(FileName);
+    cmd_ListFiles(lf);
+    if lf.Count>0 then begin
+      result:=true;
+      for i:=0 to lf.Count-1 do begin
+        result:=result and DeleteFileUTF8(dir+lf[i]);
+      end;
+    end;
+    lf.Free;
+  end
+  else begin
+    result:=DeleteFileUTF8(FileName);
+  end;
+end;
+
+function Tf_scriptengine.doRenameFile(OldName, NewName: String): Boolean;
+begin
+  result:=RenameFileUTF8(OldName, NewName);
+end;
+
+function Tf_scriptengine.doCreateDir(NewDir: String): Boolean;
+begin
+  result:=CreateDirUTF8(NewDir);
+end;
+
 function Tf_scriptengine.RunScript(sname,path: string):boolean;
 var fn: string;
     i: integer;
@@ -784,6 +821,10 @@ with Sender as TPSScript do begin
   AddMethod(self, @Tf_scriptengine.doRunOutput,'function RunOutput(cmdline:string; var output:TStringlist):boolean;');
   AddMethod(self, @Tf_scriptengine.doWait,'procedure Wait(wt:integer);');
   AddMethod(self, @Tf_scriptengine.doWaitTill,'function WaitTill(hour:string; showdialog: boolean):boolean;');
+  AddMethod(self, @Tf_scriptengine.doDeleteFile,'function DeleteFile(FileName: String): Boolean;');
+  AddMethod(self, @Tf_scriptengine.doRenameFile,'function RenameFile(OldName, NewName: String): Boolean;');
+  AddMethod(self, @Tf_scriptengine.doCreateDir,'function CreateDir(NewDir: String): Boolean;');
+
 end;
 end;
 

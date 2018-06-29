@@ -44,4 +44,8 @@ begin
   log.savetofile(basedir+'/siril_dark.log');
   log.free;
 
+  // Cleanup
+  Deletefile(basedir+DirectorySeparator+darkdir+DirectorySeparator+darkprefix+'_.seq');
+  Deletefile(basedir+DirectorySeparator+darkdir+DirectorySeparator+darkprefix+'_stacked.fits');
+
 end.

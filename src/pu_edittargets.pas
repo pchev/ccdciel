@@ -412,6 +412,7 @@ begin
   f_sequenceoptions.ScriptList.Items.Assign(s1);
   f_sequenceoptions.ScriptListError.Items.Assign(s1);
   s.Free;
+  s1.Free;
 end;
 
 procedure Tf_EditTargets.SetScriptList(n: integer; sl:string);

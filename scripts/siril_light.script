@@ -7,7 +7,7 @@ var
   buf,r,DirectorySeparator: string;
   script,log, lf, lightlist: Tstringlist;
   i,p: Integer;
-  homedir,basedir,lightdir,biasdir,darkdir,flatdir: string;
+  homedir,basedir,processdir,lightdir,biasdir,darkdir,flatdir: string;
   masterbias,masterdark,masterflat,lightprefix: string;
   appdir, tmpdir, siriltemplatedir: string;
 
@@ -25,6 +25,9 @@ begin
   masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
   masterdark := '..'+DirectorySeparator+darkdir+DirectorySeparator+'Master_Dark';
   masterflat := '..'+DirectorySeparator+flatdir+DirectorySeparator+'Master_Flat';
+
+  processdir:=basedir+DirectorySeparator+'processed';
+  CreateDir(processdir);
 
   // List unique prefix in the Light directory
   // CCDciel must be configured to make file name with Object and Filter only
@@ -81,7 +84,22 @@ begin
       log.savetofile(basedir+DirectorySeparator+'siril_'+lightprefix+'.log');
       log.free;
 
+      // Cleanup
+      Deletefile(basedir+DirectorySeparator+lightdir+DirectorySeparator+lightprefix+'_.seq');
+      Deletefile(basedir+DirectorySeparator+lightdir+DirectorySeparator+'pp_'+lightprefix+'_.seq');
+
+      // Move processed files
+      lf.clear;
+      lf.add(basedir+DirectorySeparator+lightdir+DirectorySeparator+'pp_'+lightprefix+'_*.fits');
+      r:=cmdArg('LIST_FILES',lf);
+      for i:=0 to lf.count-1 do begin
+        buf:=lf[i];
+        RenameFile(basedir+DirectorySeparator+lightdir+DirectorySeparator+buf,processdir+DirectorySeparator+buf);
+      end;
 
   end; // lightlist
+
+  lightlist.free;
+  lf.free;
 
 end.

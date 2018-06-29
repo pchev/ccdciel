@@ -47,5 +47,11 @@ begin
     log.savetofile(basedir+'/siril_flat.log');
     log.free;
 
+    // Cleanup
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+flatprefix+'_.seq');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+'_stacked.fits');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+'_*.fits');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+'_.seq');
+
 
 end.
