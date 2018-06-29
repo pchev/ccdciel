@@ -6,8 +6,8 @@ var
   buf: string;
   script,log: Tstringlist;
   i: Integer;
-  homedir,basedir,biasdir: string;
-  biasprefix: string;
+  appdir,tmpdir,siriltemplatedir,DirectorySeparator: string;
+  basedir,biasdir,biasprefix: string;
 
 begin
 
@@ -18,7 +18,7 @@ begin
   GetS('CAPTUREDIR', basedir);
   GetS('BIASDIR', biasdir);
   biasprefix := biasdir;
-  
+
   // Get scripts directory
   GetS('APPDIR', appdir);
   siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';

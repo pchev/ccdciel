@@ -7,8 +7,8 @@ var
   buf: string;
   script,log: Tstringlist;
   i: Integer;
-  appdir,tmpdir,basedir,flatdir: string;
-  masterbias,flatprefix: string;
+  DirectorySeparator,appdir,tmpdir,siriltemplatedir: string;
+  basedir,biasdir,flatdir,masterbias,flatprefix: string;
 
 begin
 

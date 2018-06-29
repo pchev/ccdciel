@@ -6,8 +6,8 @@ var
   buf: string;
   script,log: Tstringlist;
   i: Integer;
-  basedir,darkdir: string;
-  darkprefix: string;
+  DirectorySeparator,appdir,tmpdir,siriltemplatedir: string;
+  basedir,darkdir,darkprefix: string;
 
 begin
 

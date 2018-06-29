@@ -7,8 +7,8 @@ var
   buf: string;
   script,log, filterlist: Tstringlist;
   i,f: Integer;
-  homedir,basedir,flatdir: string;
-  masterbias,flatprefix,filter: string;
+  DirectorySeparator,appdir,tmpdir,siriltemplatedir,r: string;
+  basedir,biasdir,flatdir,masterbias,flatprefix,filter: string;
 
 begin
 
@@ -41,7 +41,7 @@ begin
     filter :=filterlist[f];
     // Replace variable in template
     script:= Tstringlist.create;
-    script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat.ssf');
+    script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat_filter.ssf');
     for i:=0 to script.count-1 do begin
       buf:=script[i];
       buf:=StringReplace(buf, '$BASEDIR', basedir);
