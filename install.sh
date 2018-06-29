@@ -43,6 +43,12 @@ install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scrip
 install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh
+install -v -m 755 scripts/siril_bias.script  $destdir/share/ccdciel/scripts/scripts/siril_bias.script
+install -v -m 755 scripts/siril_dark.script $destdir/share/ccdciel/scripts/scripts/siril_dark.script
+install -v -m 755 scripts/siril_flat_filter.script $destdir/share/ccdciel/scripts/siril_flat_filter.script
+install -v -m 755 scripts/siril_flat.script $destdir/share/ccdciel/scripts/siril_flat.script
+install -v -m 755 scripts/siril_light_filter.script $destdir/share/ccdciel/scripts/siril_light_filter.script
+install -v -m 755 scripts/siril_light.script $destdir/share/ccdciel/scripts/siril_light.script
 install -v -m 755 scripts/siril/template_bias.ssf  $destdir/share/ccdciel/scripts/siril/template_bias.ssf
 install -v -m 755 scripts/siril/template_dark.ssf  $destdir/share/ccdciel/scripts/siril/template_dark.ssf
 install -v -m 755 scripts/siril/template_flat.ssf  $destdir/share/ccdciel/scripts/siril/template_flat.ssf
