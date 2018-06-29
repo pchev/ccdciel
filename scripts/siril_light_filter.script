@@ -6,7 +6,7 @@
 var
   buf,r,DirectorySeparator: string;
   script,log, filterlist, lf, lightlist: Tstringlist;
-  i,f,p: Integer;
+  i,f,o,p: Integer;
   homedir,basedir,processdir,lightdir,biasdir,darkdir,flatdir: string;
   masterbias,masterdark,masterflat,lightprefix,filter: string;
   appdir, tmpdir, siriltemplatedir: string;
@@ -64,8 +64,8 @@ begin
 
   // Loop for Light prefix
   //
-  for i:=0 to lightlist.count-1 do begin
-    lightprefix:= lightlist[i];
+  for o:=0 to lightlist.count-1 do begin
+    lightprefix:= lightlist[o];
 
     // Loop for filter name
     //
