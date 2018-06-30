@@ -490,7 +490,12 @@ begin
        buf1 := trim(copy(buf, 1, radecl));
        de := strtofloatdef(buf1, -999);
        if de < -900 then continue;
-       ra:=ra/15;
+       // convert to apparent coord.
+       ra:=deg2rad*ra;
+       de:=deg2rad*de;
+       J2000ToApparent(ra,de);
+       ra:=rad2deg*ra/15;
+       de:=rad2deg*de;
        // create new target
        t:=TTarget.Create;
        n:=TargetList.Row;
