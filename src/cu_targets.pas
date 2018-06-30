@@ -305,7 +305,7 @@ end;
 procedure T_Targets.Start;
 var hm,he: double;
     twok,wtok,nd: boolean;
-    stw:integer;
+    j,stw:integer;
 begin
   try
   FWaitStarting:=true;
@@ -315,6 +315,16 @@ begin
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
   FRunning:=true;
+  if not FSeqStop then begin
+    // look for a dawn sky flat
+    for j:=0 to NumTargets-1 do begin
+      if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
+        // Add stop at dawn
+        FSeqStop:=true;
+        FSeqStopTwilight:=true;
+      end;
+    end;
+  end;
   twok:=TwilightAstro(now,hm,he);
   if twok then begin
     if FSeqStartTwilight then
@@ -374,9 +384,30 @@ begin
 end;
 
 procedure T_Targets.StopTimerTimer(Sender: TObject);
+var j: integer;
+    p:t_plan;
 begin
   StopTimer.Enabled:=false;
   msg(Format(rsStopTheCurre, [TimeToStr(FSeqStopAt)]),1);
+  if FSeqStopTwilight then begin
+    // look for a dawn sky flat
+    for j:=0 to NumTargets-1 do begin
+     if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
+        // stop current step
+        if FCurrentTarget>=0 then
+           p:=t_plan(Ftargets[FCurrentTarget].plan)
+        else
+           p:=nil;
+        if (p<>nil) and p.Running then p.Stop;
+        wait(5);
+        // run sky flat
+        FCurrentTarget:=j-1;
+        FTargetsRepeatCount:=FTargetsRepeat-1;
+        NextTarget;
+        exit;
+     end;
+    end;
+  end;
   StopSequence(true);
 end;
 

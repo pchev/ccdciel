@@ -754,6 +754,7 @@ begin
  if mount.Park then begin
     msg(rsTheTelescope, 1);
     mount.Park:=false;
+    wait(5);
  end;
  // check if autoguider is required and connected
  if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
