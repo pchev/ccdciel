@@ -524,7 +524,10 @@ begin
      if FRunning then NextTarget;
      exit;
    end
-   else if Targets[FCurrentTarget].objectname=SkyFlatTxt then begin
+   else if (Targets[FCurrentTarget].objectname=SkyFlatTxt) then begin
+    if ((Targets[FCurrentTarget].planname=FlatTimeName[0])and(FTargetsRepeatCount=0)  // Dusk, run only on first repeat
+        or((Targets[FCurrentTarget].planname=FlatTimeName[1])and(FTargetsRepeatCount=FTargetsRepeat-1)))  // Dawn, run only on last repeat
+    then begin
      FInitializing:=true;
      ShowDelayMsg('');
      TargetRepeatCount:=1;
@@ -554,6 +557,11 @@ begin
          exit;
        end;
      end;
+    end
+    else begin
+     NextTarget;
+     exit;
+    end;
    end
    else begin
      FInitializing:=true;
