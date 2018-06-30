@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
   pu_scriptengine, cu_astrometry, u_translation, pu_sequenceoptions,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10;
@@ -45,10 +45,12 @@ type
     BtnSavePlan: TButton;
     BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
+    BtnImport: TButton;
     ButtonEndOptions: TButton;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
+    OpenDialog1: TOpenDialog;
     PDelay: TFloatSpinEdit;
     DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
@@ -147,6 +149,7 @@ type
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
+    procedure BtnImportClick(Sender: TObject);
     procedure BtnRemoveStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
@@ -453,6 +456,64 @@ begin
      ShowPlan;
      TargetChange(nil);
      StepsModified:=false;
+  end;
+end;
+
+procedure Tf_EditTargets.BtnImportClick(Sender: TObject);
+var obj:string;
+    i,n: integer;
+    t,tt: TTarget;
+    f: textfile;
+    title, buf, buf1: string;
+    ra, de: double;
+const
+  objl = 32;
+  radecl = 10;
+begin
+  // Import Cartes du Ciel observation list
+  if OpenDialog1.Execute then begin
+     AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
+     reset(f);
+     readln(f, title);
+     while not EOF(f) do
+     begin
+       // read object
+       readln(f, buf);
+       buf1 := copy(buf, 1, objl);
+       obj := trim(buf1);
+       if (obj=ScriptTxt)or(obj=SkyFlatTxt) then continue;
+       Delete(buf, 1, objl);
+       buf1 := trim(copy(buf, 1, radecl));
+       ra := strtofloatdef(buf1, -999);
+       if ra < -900 then continue;
+       Delete(buf, 1, radecl);
+       buf1 := trim(copy(buf, 1, radecl));
+       de := strtofloatdef(buf1, -999);
+       if de < -900 then continue;
+       ra:=ra/15;
+       // create new target
+       t:=TTarget.Create;
+       n:=TargetList.Row;
+       if n>=1 then begin
+         // copy current target
+         tt:=TTarget(TargetList.Objects[colseq,n]);
+         if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+       end;
+       // assign name and coordinates
+       t.objectname:=obj;
+       t.ra:=ra;
+       t.de:=de;
+       // add target
+       TargetList.RowCount:=TargetList.RowCount+1;
+       i:=TargetList.RowCount-1;
+       TargetList.Cells[colseq,i]:=IntToStr(i);
+       TargetList.Cells[colname,i]:=obj;
+       TargetList.Cells[colplan,i]:=t.planname;
+       TargetList.Objects[colseq,i]:=t;
+       TargetList.Row:=i;
+       SetTarget(i,t);
+     end;
+     CloseFile(f);
   end;
 end;
 

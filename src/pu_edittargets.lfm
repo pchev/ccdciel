@@ -1200,9 +1200,23 @@ object f_EditTargets: Tf_EditTargets
       OnClick = BtnSaveAsClick
       TabOrder = 2
     end
+    object BtnImport: TButton
+      Left = 8
+      Height = 25
+      Top = 4
+      Width = 216
+      Caption = 'Import CdC observing list'
+      OnClick = BtnImportClick
+      TabOrder = 3
+    end
   end
   object SaveDialog1: TSaveDialog
     left = 48
+    top = 424
+  end
+  object OpenDialog1: TOpenDialog
+    Title = 'Open CDC observing list'
+    left = 152
     top = 424
   end
 end
