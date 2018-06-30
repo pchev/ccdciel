@@ -96,6 +96,9 @@ procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; o
 procedure LoadHorizon(fname: string);
 function ObjRise(ra,de: double; out hr:double; out i:integer):boolean;
 function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
+procedure Moon(jdn:double; out ra,de,phase,illum:double);
+function  MoonRiseSet(dt:TDateTime; out moonrise,moonset:double):boolean;
+function  DarkNight(t:Tdatetime): boolean;
 procedure sofa_PM(p: coordvector; var r: double);
 procedure sofa_S2C(theta, phi: double; var c: coordvector);
 procedure sofa_C2S(p: coordvector; var theta, phi: double);
@@ -1063,6 +1066,16 @@ jd0:=jd(Year,Month,Day,0);
 result:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
 end;
 
+Function SidTimT(t:TDateTime): double;
+var jd0,CurTime: double;
+    Year, Month, Day: Word;
+begin
+DecodeDate(t, Year, Month, Day);
+CurTime:=frac(t)*24;
+jd0:=jd(Year,Month,Day,0);
+result:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
+end;
+
 Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
 var CurSt: double;
 begin
@@ -1220,6 +1233,40 @@ ze := ys * sin(ecl);
 ra := arctan2( ye, xe );
 de := arctan2( ze, sqrt(xe*xe+ye*ye) );
 end;
+
+procedure Moon(jdn:double; out ra,de,phase,illum:double);
+var d,LE,M,F,l,b,e : double;
+    t,sm,mm,md: double;
+begin
+//Very approximate Moon position
+d :=jdn-jd2000;
+// ecliptic longitude
+LE := deg2rad * (218.316 + 13.176396 * d - 3.63258E-8 * d*d);
+// mean anomaly
+M := deg2rad * (134.963 + 13.064993 * d + 2.46324E-7 * d*d);
+// mean distance
+F := deg2rad * (93.272 + 13.229350 * d - 9.31666E-8 * d*d);
+// longitude
+l := LE + deg2rad * 6.289 * sin(M);
+// latitude
+b := deg2rad * 5.128 * sin(F);
+// obliquity of the Earth
+e := deg2rad * (23.4397 - 0.00000036 * d);
+// Moon Right Ascension and Declination
+ra:=arctan2(sin(l) * cos(e) - tan(b) * sin(e), cos(l));
+de:=sin(sin(b) * cos(e) + cos(b) * sin(e) * sin(l));
+ra:=rmod(ra+pi2,pi2);
+// phase
+t:=(jdn-2415020)/36525;  { meeus 15.1 }
+sm:=degtorad(358.475833+35999.0498*t-0.000150*t*t-0.0000033*t*t*t);  {meeus 30. }
+mm:=degtorad(296.104608+477198.8491*t+0.009192*t*t+0.0000144*t*t*t);
+md:=rmod(350.737486+445267.1142*t-0.001436*t*t+0.0000019*t*t*t,360);
+phase:=180-md ;     { meeus 31.4 }
+md:=degtorad(md);
+phase:=rmod(phase-6.289*sin(mm)+2.100*sin(sm)-1.274*sin(2*md-mm)-0.658*sin(2*md)-0.214*sin(2*mm)-0.112*sin(md)+360,360);
+illum:=(1+cos(degtorad(phase)))/2;
+end;
+
 
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 (*
@@ -2274,6 +2321,62 @@ repeat
     end;
   end;
 until sorted;
+end;
+
+function MoonRiseSet(dt:TDateTime; out moonrise,moonset:double):boolean;
+var jd0,jd1,jd2,ra,de,phase,illum,hp1,hp2: double;
+    Year, Month, Day: Word;
+begin
+ // Approximate time the moon do light the sky
+ DecodeDate(dt, Year, Month, Day);
+ jd0:=jd(Year,Month,Day,0);
+ Moon(jd0,ra,de,phase,illum);
+ if illum<0.15 then begin  // small moon to ignore
+  moonrise:=0;
+  moonset:=24;
+  result:=false;
+  exit;
+ end;
+ Time_Alt(jd0, ra, de, 0, hp1, hp2);
+ if hp1<-90 then      // No moon rise
+ begin
+   moonrise:=0;
+   moonset:=24;
+   result:=false;
+ end
+ else if hp1>90 then // No moon set
+ begin
+    moonrise:=0;
+    moonset:=24;
+    result:=true;
+ end
+ else begin          // rise and set
+   jd1:=jd0+hp1/24;
+   jd2:=jd0+hp2/24;
+   Moon(jd1,ra,de,phase,illum);
+   Time_Alt(jd0, ra, de, 0, hp1, hp2);
+   moonrise:=rmod(hp1+ObsTimeZone+24,24);
+   Moon(jd2,ra,de,phase,illum);
+   Time_Alt(jd0, ra, de, 0, hp1, hp2);
+   moonset:=rmod(hp2+ObsTimeZone+24,24);
+   result:=true;
+ end;
+end;
+
+function DarkNight(t:Tdatetime): boolean;
+var st,jdn,ra,de,l,phase,illum,a,h: double;
+begin
+  st:=SidTimT(t);
+  jdn:=DateTimetoJD(t);
+  Sun(jdn,ra,de,l);
+  Eq2Hz(st-ra,de,a,h) ;
+  h:=rad2deg*h;
+  result:=(h<=-18);
+  if not result then exit;
+  Moon(jdn,ra,de,phase,illum);
+  Eq2Hz(st-ra,de,a,h) ;
+  h:=rad2deg*h;
+  result:=result and ((h<0) or (illum<0.15));
 end;
 
 end.

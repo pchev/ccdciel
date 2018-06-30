@@ -908,6 +908,7 @@ resourcestring
   rsSkip = 'Skip';
   rsDarkNight = 'Dark%snight';
   rsTargetName = 'Target%sname';
+  rsSkipTargetBe = 'Skip target %s because observing condition are not meet.';
 
 
 

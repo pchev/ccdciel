@@ -691,6 +691,7 @@ begin
        if t.endset and ObjSet(t.ra,t.de,hs,i) then
           t.endtime:=hs/24;
     end;
+
     if t.skip then begin
       if t.starttime>=0 then begin
         SecondsToWait(t.starttime,false,stw,nd);
@@ -701,10 +702,10 @@ begin
         SkipTarget:=SkipTarget or (stw<0);
       end;
       if t.darknight then begin
-        // SkipTarget:=SkipTarget or (not DarkNightNow);
+        SkipTarget:=SkipTarget or (not DarkNight(now));
       end;
       if SkipTarget then begin
-        msg('Skip target '+t.objectname+' because observing condition are not meet.',1);
+        msg(Format(rsSkipTargetBe, [t.objectname]), 1);
         result:=false;
         exit;
       end;

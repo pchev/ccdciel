@@ -1004,6 +1004,14 @@ end;
 procedure Tf_EditTargets.TargetListCheckboxToggled(sender: TObject; aCol,
   aRow: Integer; aState: TCheckboxState);
 begin
+  if aCol=coldark then begin
+    if TargetList.Cells[coldark,aRow]='1' then
+      TargetList.Cells[colskip,aRow]:='1';
+  end;
+  if aCol=colskip then begin
+    if TargetList.Cells[colskip,aRow]='0' then
+      TargetList.Cells[coldark,aRow]:='0';
+  end;
   TargetChange(Sender);
 end;
 
