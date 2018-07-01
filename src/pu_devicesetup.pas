@@ -722,6 +722,12 @@ begin
   inc(IndiTimerCount);
   if (not receiveindidevice)and(IndiTimerCount<=5) then exit;
   IndiTimer.Enabled:=false;
+  try
+  if indiclient.Terminated then begin
+    Screen.Cursor:=crDefault;
+    ShowMessage('No response from INDI server. Is the Indi server running?');
+    exit;
+  end;
   for i:=0 to indiclient.devices.Count-1 do begin
      drint:=BaseDevice(indiclient.devices[i]).getDriverInterface();
      if (drint and CCD_INTERFACE)<>0 then
@@ -758,6 +764,8 @@ begin
   LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
   indiclient.DisconnectServer;
   Screen.Cursor:=crDefault;
+  except
+  end;
 end;
 
 procedure Tf_setup.IndiNewDevice(dp: Basedevice);
