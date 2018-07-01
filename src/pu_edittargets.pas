@@ -880,8 +880,14 @@ begin
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
   if t.objectname=ScriptTxt then begin
+    TargetList.Cells[colra,n]:='';
+    TargetList.Cells[coldec,n]:='';
+    TargetList.Cells[colpa,n]:='';
+    TargetList.Cells[colstart,n]:='';
+    TargetList.Cells[colend,n]:='';
     TargetList.Cells[coldark,n]:='';
     TargetList.Cells[colskip,n]:='';
+    TargetList.Cells[colrepeat,n]:='';
     Panel3.Visible:=false;
     PageControl1.ActivePageIndex:=1;
     SetScriptList(n,t.planname);
@@ -893,8 +899,14 @@ begin
        then FlatTime.ItemIndex:=0
        else FlatTime.ItemIndex:=1;
     TargetList.Cells[colplan,n]:=t.planname;
+    TargetList.Cells[colra,n]:='';
+    TargetList.Cells[coldec,n]:='';
+    TargetList.Cells[colpa,n]:='';
+    TargetList.Cells[colstart,n]:='';
+    TargetList.Cells[colend,n]:='';
     TargetList.Cells[coldark,n]:='';
     TargetList.Cells[colskip,n]:='';
+    TargetList.Cells[colrepeat,n]:='';
     FlatCount.Value:=t.FlatCount;
     buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
     j:=FlatBinning.Items.IndexOf(buf);
