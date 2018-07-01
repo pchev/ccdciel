@@ -590,6 +590,10 @@ begin
      end;
     end
     else begin
+     if Targets[FCurrentTarget].planname=FlatTimeName[1] then begin
+        // dawn flat, do not run final scripts now, only on last repeat
+        FCurrentTarget:=NumTargets-1;
+     end;
      NextTarget;
      exit;
     end;
