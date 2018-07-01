@@ -3315,7 +3315,7 @@ msgid "Waiting for dark night"
 msgstr ""
 
 #: u_translation:rstargetwillbe
-msgid "Target will be stopped at %s, in %s seconds"
+msgid "Target can run until %s, in %s seconds"
 msgstr ""
 
 #: u_translation:rscontinue

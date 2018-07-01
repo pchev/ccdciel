@@ -910,7 +910,7 @@ resourcestring
   rsTargetName = 'Target%sname';
   rsSkipTarget = 'Skip target %s';
   rsWaitingForDa2 = 'Waiting for dark night';
-  rsTargetWillBe = 'Target will be stopped at %s, in %s seconds';
+  rsTargetWillBe = 'Target can run until %s, in %s seconds';
   rsContinue = 'Continue';
   rsCancelInSeco = 'Cancel in %s seconds.';
   rsTomorrow = 'tomorrow';

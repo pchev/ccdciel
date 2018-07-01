@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-07-01 10:18+0000\n"
+"POT-Creation-Date: 2018-07-01 21:27+0000\n"
 "PO-Revision-Date: 2018-06-17 08:25+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-07-01 10:28+0000\n"
+"X-Launchpad-Export-Date: 2018-07-01 21:36+0000\n"
 "X-Generator: Launchpad (build 18704)\n"
 
 #: u_translation.rsabort
@@ -2965,7 +2965,7 @@ msgid "Targets"
 msgstr "Obiettivi"
 
 #: u_translation.rstargetwillbe
-msgid "Target will be stopped at %s, in %s seconds"
+msgid "Target can run until %s, in %s seconds"
 msgstr ""
 
 #: u_translation.rstcpipserverl
