@@ -536,6 +536,8 @@ begin
     tt:=TTarget(TargetList.Objects[colseq,n]);
     if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
   end;
+  if (t.planname='')and(TargetList.Columns[colplan-1].PickList.Count>0) then
+     t.planname:=TargetList.Columns[colplan-1].PickList[0];
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[colseq,i]:=IntToStr(i);

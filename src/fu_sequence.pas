@@ -377,6 +377,8 @@ begin
       f_EditTargets.SeqStartAt.Text:='00:00:00';
       f_EditTargets.SeqStopAt.Text:='00:00:00';
       t:=TTarget.Create;
+      if (t.planname='')and(f_EditTargets.TargetList.Columns[colplan-1].PickList.Count>0) then
+         t.planname:=f_EditTargets.TargetList.Columns[colplan-1].PickList[0];
       f_EditTargets.TargetList.RowCount:=2;
       f_EditTargets.TargetList.Cells[0,1]:='1';
       f_EditTargets.TargetList.Cells[1,1]:=t.objectname;
