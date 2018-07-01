@@ -1188,6 +1188,7 @@ end;
 procedure T_Targets.RunEndAction;
 var path,sname: string;
 begin
+if AtEndStopTracking or AtEndPark or AtEndWarmCamera or AtEndRunScript then begin
   msg(rsExecutingThe2,1);
   if AtEndStopTracking then begin
     Mount.AbortMotion;
@@ -1205,6 +1206,9 @@ begin
        f_scriptengine.RunScript(sname,path);
     end;
   end;
+end
+else
+  msg(rsNoTerminatio, 1);
 end;
 
 end.

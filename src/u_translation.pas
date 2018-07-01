@@ -916,6 +916,7 @@ resourcestring
   rsTomorrow = 'tomorrow';
   rsNeedToWaitUn = 'Need to wait until %s';
   rsTimeAlreadyP = 'Time already passed %s';
+  rsNoTerminatio = 'No termination actions configured.';
 
 
 
