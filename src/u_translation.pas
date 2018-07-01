@@ -908,7 +908,14 @@ resourcestring
   rsSkip = 'Skip';
   rsDarkNight = 'Dark%snight';
   rsTargetName = 'Target%sname';
-  rsSkipTargetBe = 'Skip target %s because observing condition are not meet.';
+  rsSkipTarget = 'Skip target %s';
+  rsWaitingForDa2 = 'Waiting for dark night';
+  rsTargetWillBe = 'Target will be stopped at %s, in %s seconds';
+  rsContinue = 'Continue';
+  rsCancelInSeco = 'Cancel in %s seconds.';
+  rsTomorrow = 'tomorrow';
+  rsNeedToWaitUn = 'Need to wait until %s';
+  rsTimeAlreadyP = 'Time already passed %s';
 
 
 

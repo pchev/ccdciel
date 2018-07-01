@@ -665,6 +665,7 @@ var t: TTarget;
     stw,i,intime: integer;
     hr,hs,newra,newde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
+    skipmsg: string;
 begin
   SkipTarget:=false;
   result:=false;
@@ -694,30 +695,40 @@ begin
     intime:=InTimeInterval(frac(now),t.starttime,t.endtime);
     // test if skiped
     if t.skip then begin
+      skipmsg:='';
       if (intime<0) and (t.starttime>=0) then begin
         SecondsToWait(t.starttime,false,stw,nd);
-        SkipTarget:=SkipTarget or (stw>60);
+        if (stw>60) then begin
+          SkipTarget:=true;
+          skipmsg:=skipmsg+', '+Format(rsWaitToStartA, [TimeToStr(t.starttime)]);
+        end;
       end;
       if (intime<=0) and (t.endtime>=0) then begin
         SecondsToWait(t.endtime,true,stw,nd);
-        SkipTarget:=SkipTarget or (stw<60);
+        if stw<60 then begin
+          SkipTarget:=true;
+          skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+        end;
       end;
       if (intime>0) then begin
         SkipTarget:=true;
+        skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
       end;
       if t.darknight then begin
-        SkipTarget:=SkipTarget or (not DarkNight(now));
+        if (not DarkNight(now)) then begin
+          SkipTarget:=true;
+          skipmsg:=skipmsg+', '+rsWaitingForDa2;
+        end;
       end;
       if SkipTarget then begin
-        msg(Format(rsSkipTargetBe, [t.objectname]), 1);
+        msg(Format(rsSkipTarget, [t.objectname])+skipmsg, 2);
         result:=false;
         exit;
       end;
     end;
     // start / stop timer
     if (intime>0) then begin
-      msg(Format(rsTargetCancel, [t.objectname]),1);
-      msg(Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),1);
+      msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),2);
       result:=false;
       exit;
     end;
@@ -733,11 +744,11 @@ begin
     if (intime<=0) and (t.endtime>=0) then begin
        SecondsToWait(t.endtime,true,stw,nd);
        if stw>60 then begin
+          msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 3);
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin
-         msg(Format(rsTargetCancel, [t.objectname]),1);
-         msg(Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),1);
+         msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),2);
          result:=false;
          exit;
        end;

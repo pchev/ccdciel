@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, UScaleDPI, u_utils,
+uses  u_global, UScaleDPI, u_utils, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -50,6 +50,7 @@ type
     FContinue, Fresult : boolean;
     procedure SetText(value:string);
     function GetText: string;
+    procedure setlang;
   public
     { public declarations }
     function Wait(timeout:integer=0; defaultresult:boolean=true): boolean;
@@ -67,6 +68,12 @@ implementation
 
 { Tf_pause }
 
+procedure Tf_pause.setlang;
+begin
+ BtnContinue.Caption:=rsContinue;
+ BtnCancel.Caption:=rsCancel;
+end;
+
 procedure Tf_pause.SetText(value:string);
 begin
   PauseLabel.Caption:=value;
@@ -81,6 +88,7 @@ procedure Tf_pause.FormShow(Sender: TObject);
 begin
   FContinue:=false;
   Fresult:=false;
+  setlang;
 end;
 
 procedure Tf_pause.BtnContinueClick(Sender: TObject);
@@ -109,14 +117,14 @@ function Tf_pause.Wait(timeout:integer=0; defaultresult:boolean=true): boolean;
 var endt: TDateTime;
     n,t:integer;
 begin
-  globalmsg('Pause: ' +PauseLabel.Caption);
+  globalmsg(rsPause+': ' +PauseLabel.Caption);
   if timeout>0 then begin
     endt:=now+timeout/secperday;
     PauseLabel.Caption:=PauseLabel.Caption;
     if defaultresult then
-       label1.Caption:='Continue automatically in '+inttostr(timeout)+' seconds.'
+       label1.Caption:=Format(rsContinueInSe,[inttostr(timeout)])
     else
-       label1.Caption:='Cancel automatically in '+inttostr(timeout)+' seconds.';
+       label1.Caption:=Format(rsCancelInSeco, [inttostr(timeout)]);
   end
   else begin
     endt:=MaxInt;
@@ -130,9 +138,9 @@ begin
       if (n mod 20) = 0 then begin
         t:=round((endt-now)*secperday);
         if defaultresult then
-           label1.Caption:='Continue automatically in '+inttostr(t)+' seconds.'
+           label1.Caption:=Format(rsContinueInSe,[inttostr(t)])
         else
-           label1.Caption:='Cancel automatically in '+inttostr(t)+' seconds.';
+           label1.Caption:=Format(rsCancelInSeco, [inttostr(t)]);
         n:=0;
       end;
     end;
@@ -162,7 +170,7 @@ begin
   endt:=StrToTime(hour,':');
   SecondsToWait(endt,forcenextday,wt,nextday);
   if nextday then
-     daystr:='tomorrow '
+     daystr:=rsTomorrow+' '
   else
      daystr:='';
   if wt>0 then begin
@@ -170,8 +178,8 @@ begin
     if showdialog then begin
       wt_pause:=Tf_pause.Create(nil);
       try
-      globalmsg('Need to wait until '+daystr+hour);
-      wt_pause.Text:='Need to wait until '+daystr+hour;
+      globalmsg(Format(rsNeedToWaitUn, [daystr+hour]));
+      wt_pause.Text:=Format(rsNeedToWaitUn, [daystr+hour]);
       result:=wt_pause.Wait(wt)
       finally
       WaitTillrunning:=false;
@@ -179,7 +187,7 @@ begin
       end;
     end
     else begin
-      globalmsg('Need to wait until '+daystr+hour);
+      globalmsg(Format(rsNeedToWaitUn, [daystr+hour]));
       while now<endt do begin
         Sleep(100);
         Application.ProcessMessages;
@@ -194,7 +202,7 @@ begin
      result:=true;
     end;
   end else begin
-    globalmsg('Time already passed '+daystr+hour);
+    globalmsg(Format(rsTimeAlreadyP, [daystr+hour]));
     result:=true;
   end;
  except
