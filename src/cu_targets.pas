@@ -662,7 +662,7 @@ end;
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
-    stw,i: integer;
+    stw,i,intime: integer;
     hr,hs,newra,newde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
 begin
@@ -691,15 +691,19 @@ begin
        if t.endset and ObjSet(t.ra,t.de,hs,i) then
           t.endtime:=hs/24;
     end;
-
+    intime:=InTimeInterval(frac(now),t.starttime,t.endtime);
+    // test if skiped
     if t.skip then begin
-      if t.starttime>=0 then begin
+      if (intime<0) and (t.starttime>=0) then begin
         SecondsToWait(t.starttime,false,stw,nd);
         SkipTarget:=SkipTarget or (stw>60);
       end;
-      if t.endtime>=0 then begin
+      if (intime<=0) and (t.endtime>=0) then begin
         SecondsToWait(t.endtime,true,stw,nd);
-        SkipTarget:=SkipTarget or (stw<0);
+        SkipTarget:=SkipTarget or (stw<60);
+      end;
+      if (intime>0) then begin
+        SkipTarget:=true;
       end;
       if t.darknight then begin
         SkipTarget:=SkipTarget or (not DarkNight(now));
@@ -710,7 +714,14 @@ begin
         exit;
       end;
     end;
-    if t.starttime>=0 then begin
+    // start / stop timer
+    if (intime>0) then begin
+      msg(Format(rsTargetCancel, [t.objectname]),1);
+      msg(Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),1);
+      result:=false;
+      exit;
+    end;
+    if (intime<0) and (t.starttime>=0) then begin
       msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);
       wtok:=WaitTill(TimeToStr(t.starttime),true);
       if not wtok then begin
@@ -719,9 +730,9 @@ begin
          exit;
       end;
     end;
-    if t.endtime>=0 then begin
+    if (intime<=0) and (t.endtime>=0) then begin
        SecondsToWait(t.endtime,true,stw,nd);
-       if stw>0 then begin
+       if stw>60 then begin
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin
@@ -731,6 +742,7 @@ begin
          exit;
        end;
     end;
+    // detect autofocus
     if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
        autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
     else

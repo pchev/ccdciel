@@ -99,6 +99,7 @@ function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
 procedure Moon(jdn:double; out ra,de,phase,illum:double);
 function  MoonRiseSet(dt:TDateTime; out moonrise,moonset:double):boolean;
 function  DarkNight(t:Tdatetime): boolean;
+function InTimeInterval(t,begint, endt: double): integer;
 procedure sofa_PM(p: coordvector; var r: double);
 procedure sofa_S2C(theta, phi: double; var c: coordvector);
 procedure sofa_C2S(p: coordvector; var theta, phi: double);
@@ -2371,12 +2372,37 @@ begin
   Sun(jdn,ra,de,l);
   Eq2Hz(st-ra,de,a,h) ;
   h:=rad2deg*h;
+  // sun below astro-twilight
   result:=(h<=-18);
   if not result then exit;
   Moon(jdn,ra,de,phase,illum);
   Eq2Hz(st-ra,de,a,h) ;
   h:=rad2deg*h;
+  // moon small or set
   result:=result and ((h<0) or (illum<0.15));
+end;
+
+function InTimeInterval(t,begint, endt: double): integer;
+// interval from noon to noon
+// between begin and end : result = 0
+// before begin : result = -1
+// after end    : result = 1
+begin
+  result:=0;
+  if (begint<0)and(endt<0) then exit;  // interval not set
+  if begint<0 then begint:=0.5;        // default to noon
+  if endt<0 then endt:=0.5;            // default to noon
+  if (begint<=0.5)and(endt>=0.5) then begin
+    // day interval, no shift
+  end else begin
+    // night interval, shift by 12h
+    t:=rmod(t-0.5+1,1);
+    begint:=rmod(begint-0.5+1,1);
+    endt:=rmod(endt-0.5+1,1);
+  end;
+  // test interval
+  if t<begint then result:=-1;
+  if t>endt   then result:=1;
 end;
 
 end.
