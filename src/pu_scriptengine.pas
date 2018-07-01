@@ -1179,9 +1179,9 @@ fl.Clear;
 if Ffilter.Status=devConnected then
   fl.Assign(Ffilter.FilterNames)
 else begin
- fl.Assign(FilterList);
- fl.Delete(0); // remove no_change
+  fl.Assign(FilterList);
 end;
+fl.Delete(0); // remove no_change
 result:=msgOK;
 except
   result:=msgFailed;
