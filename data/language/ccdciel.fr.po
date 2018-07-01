@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-06-25 13:30+0000\n"
-"PO-Revision-Date: 2018-06-25 13:39+0000\n"
+"POT-Creation-Date: 2018-07-01 10:18+0000\n"
+"PO-Revision-Date: 2018-07-01 10:26+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-06-25 13:40+0000\n"
-"X-Generator: Launchpad (build 18688)\n"
+"X-Launchpad-Export-Date: 2018-07-01 10:28+0000\n"
+"X-Generator: Launchpad (build 18704)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -404,6 +404,10 @@ msgstr "La caméra ou le focuser ne sont pas connecté"
 msgid "Cancel"
 msgstr "Annuler"
 
+#: u_translation.rscancelinseco
+msgid "Cancel in %s seconds."
+msgstr "Abandon dans %s secondes"
+
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
 msgstr "Ne peut pas calculer le lever ou le coucher."
@@ -628,6 +632,10 @@ msgstr "Connexion"
 msgid "Connection error: %s"
 msgstr "Erreur de connection : %s"
 
+#: u_translation.rscontinue
+msgid "Continue"
+msgstr "Continuer"
+
 #: u_translation.rscontinueinse
 msgid "Continue in %s seconds"
 msgstr "Continu dans %s secondes"
@@ -703,6 +711,10 @@ msgstr "Plan courant"
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Dossier de Cygwin"
+
+#: u_translation.rsdarknight
+msgid "Dark%snight"
+msgstr "Nuit%snoire"
 
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
@@ -1634,6 +1646,10 @@ msgstr "Prêt du focus"
 msgid "Near HFD must be smaller than Start HFD!"
 msgstr "Le HFD proche doit être plus petit que le HFD de départ!"
 
+#: u_translation.rsneedtowaitun
+msgid "Need to wait until %s"
+msgstr "Doit attendre jusqu'à %s"
+
 #: u_translation.rsnetwork
 msgid "Network"
 msgstr "Réseau"
@@ -1747,6 +1763,10 @@ msgstr "Pas assez de points avant ou après la position de mise au point après 
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Pas assez de points avant ou après la position de mise au point, fait un nouvel essai."
+
+#: u_translation.rsnoterminatio
+msgid "No termination actions configured."
+msgstr "Aucune action de fin n'est configurée."
 
 #: u_translation.rsnotimplement
 msgid "Not implemented!"
@@ -2562,6 +2582,14 @@ msgstr "Voir l'option d’empilement"
 msgid "sigma"
 msgstr "sigma"
 
+#: u_translation.rsskip
+msgid "Skip"
+msgstr "Passer"
+
+#: u_translation.rsskiptarget
+msgid "Skip target %s"
+msgstr "Saute l'objet  %s"
+
 #: u_translation.rsskychartonlo
 msgid "Skychart on local computer"
 msgstr "Cartes du Ciel en local"
@@ -2930,6 +2958,10 @@ msgstr "Cible %s annulée avant le départ"
 msgid "Target initialisation failed!"
 msgstr "L'initialisation de la cible a échoué!"
 
+#: u_translation.rstargetname
+msgid "Target%sname"
+msgstr "Nom%sobjet"
+
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
 msgstr "Précision souhaitée [arcmin] "
@@ -2937,6 +2969,10 @@ msgstr "Précision souhaitée [arcmin] "
 #: u_translation.rstargets
 msgid "Targets"
 msgstr "Cibles"
+
+#: u_translation.rstargetwillbe
+msgid "Target will be stopped at %s, in %s seconds"
+msgstr "L'objet sera arrêté à %s, dans %s secondes"
 
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
@@ -3074,6 +3110,10 @@ msgstr "Cette procédure vous aidera à trouver les paramètres de mise au point
 msgid " Tilt indication:%s"
 msgstr " Indication d'inclinaison:%s"
 
+#: u_translation.rstimealreadyp
+msgid "Time already passed %s"
+msgstr "Heure déjà passée %s"
+
 #: u_translation.rstimeout
 msgid "Timeout"
 msgstr "Délai d'attente"
@@ -3081,6 +3121,10 @@ msgstr "Délai d'attente"
 #: u_translation.rstimer
 msgid "Timer"
 msgstr "Minuteur"
+
+#: u_translation.rstomorrow
+msgid "tomorrow"
+msgstr "demain"
 
 #: u_translation.rstools
 msgid "Tools"
@@ -3241,6 +3285,10 @@ msgstr "Attente après résolution"
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
 msgstr "Attente de l'aube"
+
+#: u_translation.rswaitingforda2
+msgid "Waiting for dark night"
+msgstr "Attente de la nuit noire"
 
 #: u_translation.rswaitingfordu
 msgid "Waiting for dusk"

@@ -3294,3 +3294,51 @@ msgstr ""
 msgid "The sequence %s will be stopped at %s, in %s seconds."
 msgstr ""
 
+#: u_translation:rsskip
+msgid "Skip"
+msgstr ""
+
+#: u_translation:rsdarknight
+msgid "Dark%snight"
+msgstr ""
+
+#: u_translation:rstargetname
+msgid "Target%sname"
+msgstr ""
+
+#: u_translation:rsskiptarget
+msgid "Skip target %s"
+msgstr ""
+
+#: u_translation:rswaitingforda2
+msgid "Waiting for dark night"
+msgstr ""
+
+#: u_translation:rstargetwillbe
+msgid "Target will be stopped at %s, in %s seconds"
+msgstr ""
+
+#: u_translation:rscontinue
+msgid "Continue"
+msgstr ""
+
+#: u_translation:rscancelinseco
+msgid "Cancel in %s seconds."
+msgstr ""
+
+#: u_translation:rstomorrow
+msgid "tomorrow"
+msgstr ""
+
+#: u_translation:rsneedtowaitun
+msgid "Need to wait until %s"
+msgstr ""
+
+#: u_translation:rstimealreadyp
+msgid "Time already passed %s"
+msgstr ""
+
+#: u_translation:rsnoterminatio
+msgid "No termination actions configured."
+msgstr ""
+

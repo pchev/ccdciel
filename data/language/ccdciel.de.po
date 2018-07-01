@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-06-25 13:30+0000\n"
+"POT-Creation-Date: 2018-07-01 10:18+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-06-25 13:40+0000\n"
-"X-Generator: Launchpad (build 18688)\n"
+"X-Launchpad-Export-Date: 2018-07-01 10:28+0000\n"
+"X-Generator: Launchpad (build 18704)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -404,6 +404,10 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#: u_translation.rscancelinseco
+msgid "Cancel in %s seconds."
+msgstr ""
+
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
 msgstr ""
@@ -628,6 +632,10 @@ msgstr "Verbindung"
 msgid "Connection error: %s"
 msgstr ""
 
+#: u_translation.rscontinue
+msgid "Continue"
+msgstr ""
+
 #: u_translation.rscontinueinse
 msgid "Continue in %s seconds"
 msgstr ""
@@ -702,6 +710,10 @@ msgstr ""
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
+msgstr ""
+
+#: u_translation.rsdarknight
+msgid "Dark%snight"
 msgstr ""
 
 #: u_translation.rsdateutsequen
@@ -1632,6 +1644,10 @@ msgstr ""
 msgid "Near HFD must be smaller than Start HFD!"
 msgstr ""
 
+#: u_translation.rsneedtowaitun
+msgid "Need to wait until %s"
+msgstr ""
+
 #: u_translation.rsnetwork
 msgid "Network"
 msgstr ""
@@ -1742,6 +1758,10 @@ msgstr ""
 
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
+msgstr ""
+
+#: u_translation.rsnoterminatio
+msgid "No termination actions configured."
 msgstr ""
 
 #: u_translation.rsnotimplement
@@ -2556,6 +2576,14 @@ msgstr ""
 msgid "sigma"
 msgstr ""
 
+#: u_translation.rsskip
+msgid "Skip"
+msgstr ""
+
+#: u_translation.rsskiptarget
+msgid "Skip target %s"
+msgstr ""
+
 #: u_translation.rsskychartonlo
 msgid "Skychart on local computer"
 msgstr ""
@@ -2924,12 +2952,20 @@ msgstr ""
 msgid "Target initialisation failed!"
 msgstr ""
 
+#: u_translation.rstargetname
+msgid "Target%sname"
+msgstr ""
+
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
 msgstr ""
 
 #: u_translation.rstargets
 msgid "Targets"
+msgstr ""
+
+#: u_translation.rstargetwillbe
+msgid "Target will be stopped at %s, in %s seconds"
 msgstr ""
 
 #: u_translation.rstcpipserverl
@@ -3068,12 +3104,20 @@ msgstr ""
 msgid " Tilt indication:%s"
 msgstr ""
 
+#: u_translation.rstimealreadyp
+msgid "Time already passed %s"
+msgstr ""
+
 #: u_translation.rstimeout
 msgid "Timeout"
 msgstr ""
 
 #: u_translation.rstimer
 msgid "Timer"
+msgstr ""
+
+#: u_translation.rstomorrow
+msgid "tomorrow"
 msgstr ""
 
 #: u_translation.rstools
@@ -3234,6 +3278,10 @@ msgstr ""
 
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
+msgstr ""
+
+#: u_translation.rswaitingforda2
+msgid "Waiting for dark night"
 msgstr ""
 
 #: u_translation.rswaitingfordu
