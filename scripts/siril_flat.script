@@ -4,7 +4,7 @@
 //
 
 var
-  buf: string;
+  buf,sirilcmd: string;
   script,log: Tstringlist;
   i: Integer;
   DirectorySeparator,appdir,tmpdir,siriltemplatedir: string;
@@ -21,6 +21,10 @@ begin
   GetS('FLATDIR', flatdir);
   masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
   flatprefix:=flatdir;
+  if DirectorySeparator='\' then
+      sirilcmd:='C:\Program Files\SiriL\bin\siril.exe'
+  else
+      sirilcmd:='siril';
   
   // Get scripts directory
   GetS('APPDIR', appdir);
@@ -38,13 +42,13 @@ begin
       buf:=StringReplace(buf, '$FLATPREFIX', flatprefix);
       script[i]:=buf;
     end;
-    script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+    SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
     script.free;
 
     // Run Siril
     log:=Tstringlist.Create;
-    RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
-    log.savetofile(basedir+'/siril_flat.log');
+    RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+    log.savetofile(basedir+DirectorySeparator+'siril_flat.log');
     log.free;
 
     // Cleanup

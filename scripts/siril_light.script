@@ -4,7 +4,7 @@
 //
 
 var
-  buf,r,DirectorySeparator: string;
+  buf,r,DirectorySeparator,sirilcmd: string;
   script,log, lf, lightlist: Tstringlist;
   i,o,p: Integer;
   homedir,basedir,processdir,lightdir,biasdir,darkdir,flatdir: string;
@@ -25,6 +25,10 @@ begin
   masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
   masterdark := '..'+DirectorySeparator+darkdir+DirectorySeparator+'Master_Dark';
   masterflat := '..'+DirectorySeparator+flatdir+DirectorySeparator+'Master_Flat';
+  if DirectorySeparator='\' then
+      sirilcmd:='C:\Program Files\SiriL\bin\siril.exe'
+  else
+      sirilcmd:='siril';
 
   processdir:=basedir+DirectorySeparator+'processed';
   CreateDir(processdir);
@@ -75,12 +79,12 @@ begin
         buf:=StringReplace(buf, '$LIGHTPREFIX', lightprefix);
         script[i]:=buf;
       end;
-      script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+      SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
       script.free;
 
       // Run Siril
       log:=Tstringlist.Create;
-      RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+      RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
       log.savetofile(basedir+DirectorySeparator+'siril_'+lightprefix+'.log');
       log.free;
 

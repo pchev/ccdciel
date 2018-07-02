@@ -3,7 +3,7 @@
 // Create Master Dark
 //
 var
-  buf: string;
+  buf,sirilcmd: string;
   script,log: Tstringlist;
   i: Integer;
   DirectorySeparator,appdir,tmpdir,siriltemplatedir: string;
@@ -18,6 +18,10 @@ begin
   GetS('CAPTUREDIR', basedir);
   GetS('DARKDIR', darkdir);
   darkprefix := darkdir;
+  if DirectorySeparator='\' then
+      sirilcmd:='C:\Program Files\SiriL\bin\siril.exe'
+  else
+      sirilcmd:='siril';
 
   // Get scripts directory
   GetS('APPDIR', appdir);
@@ -35,13 +39,13 @@ begin
     buf:=StringReplace(buf, '$DARKPREFIX', darkprefix);
     script[i]:=buf;
   end;
-  script.savetofile(tmpdir+DirectorySeparator+'tmp.ssf');
+  SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
   script.free;
 
   // Run Siril
   log:=Tstringlist.Create;
-  RunOutput('siril -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
-  log.savetofile(basedir+'/siril_dark.log');
+  RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
+  log.savetofile(basedir+DirectorySeparator+'siril_dark.log');
   log.free;
 
   // Cleanup

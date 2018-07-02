@@ -91,6 +91,7 @@ type
     function doSetS(varname:string; str: string):Boolean;
     function doGetSL(varname:string; var strl: TStringList):Boolean;
     function doSetSL(varname:string; strl: TStringList):Boolean;
+    function doSaveSL(fn:string; strl: TStringList):Boolean;
     function doGetI(varname:string; var i: Integer):Boolean;
     function doSetI(varname:string; i: Integer):Boolean;
     function doGetD(varname:string; var x: Double):Boolean;
@@ -332,6 +333,25 @@ else if varname='STRL8' then strllist[7]:=strl
 else if varname='STRL9' then strllist[8]:=strl
 else if varname='STRL10' then strllist[9]:=strl
 else result:=false;
+end;
+
+function Tf_scriptengine.doSaveSL(fn:string; strl: TStringList):Boolean;
+var f: textfile;
+    i: integer;
+begin
+// save a stringlist with Unix line ending
+ try
+ AssignFile(f,fn);
+ SetTextLineEnding(f,lf);
+ Rewrite(f);
+ for i:=0 to strl.Count-1 do begin
+   WriteLn(f,strl[i]);
+ end;
+ CloseFile(f);
+ result:=true;
+ except
+   result:=false;
+ end;
 end;
 
 function  Tf_scriptengine.doGetD(varname:string; var x: double):boolean;
@@ -824,6 +844,7 @@ with Sender as TPSScript do begin
   AddMethod(self, @Tf_scriptengine.doDeleteFile,'function DeleteFile(FileName: String): Boolean;');
   AddMethod(self, @Tf_scriptengine.doRenameFile,'function RenameFile(OldName, NewName: String): Boolean;');
   AddMethod(self, @Tf_scriptengine.doCreateDir,'function CreateDir(NewDir: String): Boolean;');
+  AddMethod(self, @Tf_scriptengine.doSaveSL,'function SaveSL(fn:string; strl: TStringList):Boolean;');
 
 end;
 end;
