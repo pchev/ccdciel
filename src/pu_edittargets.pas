@@ -401,10 +401,9 @@ end;
 procedure Tf_EditTargets.LoadScriptList;
 var i,k: integer;
     fs : TSearchRec;
-    s,s1: TStringlist;
+    s: TStringlist;
     scr: string;
 begin
-  s1:=TStringlist.Create;
   s:=TStringlist.Create;
   ScriptList.Clear;
   for k:=1 to MaxScriptDir do begin
@@ -413,7 +412,6 @@ begin
       scr:=ExtractFileNameOnly(fs.Name);
       if s.IndexOf(scr)<0 then begin
         s.AddObject(scr,ScriptDir[k]);
-        if k=1 then s1.AddObject(scr,ScriptDir[k]);
       end;
       i:=FindNextUTF8(fs);
     end;
@@ -422,11 +420,9 @@ begin
   s.CustomSort(@ScriptListCompare);
   ScriptList.Items.Assign(s);
   ScriptList.ItemIndex:=0;
-  s1.CustomSort(@ScriptListCompare);
-  f_sequenceoptions.ScriptList.Items.Assign(s1);
-  f_sequenceoptions.ScriptListError.Items.Assign(s1);
+  f_sequenceoptions.ScriptList.Items.Assign(s);
+  f_sequenceoptions.ScriptListError.Items.Assign(s);
   s.Free;
-  s1.Free;
 end;
 
 procedure Tf_EditTargets.SetScriptList(n: integer; sl:string);
