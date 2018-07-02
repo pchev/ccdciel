@@ -45,16 +45,12 @@ install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/a
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh
 install -v -m 755 scripts/siril_bias.script  $destdir/share/ccdciel/scripts/siril_bias.script
 install -v -m 755 scripts/siril_dark.script $destdir/share/ccdciel/scripts/siril_dark.script
-install -v -m 755 scripts/siril_flat_filter.script $destdir/share/ccdciel/scripts/siril_flat_filter.script
 install -v -m 755 scripts/siril_flat.script $destdir/share/ccdciel/scripts/siril_flat.script
-install -v -m 755 scripts/siril_light_filter.script $destdir/share/ccdciel/scripts/siril_light_filter.script
 install -v -m 755 scripts/siril_light.script $destdir/share/ccdciel/scripts/siril_light.script
 install -v -m 755 scripts/siril/template_bias.ssf  $destdir/share/ccdciel/scripts/siril/template_bias.ssf
 install -v -m 755 scripts/siril/template_dark.ssf  $destdir/share/ccdciel/scripts/siril/template_dark.ssf
 install -v -m 755 scripts/siril/template_flat.ssf  $destdir/share/ccdciel/scripts/siril/template_flat.ssf
 install -v -m 755 scripts/siril/template_light.ssf  $destdir/share/ccdciel/scripts/siril/template_light.ssf
-install -v -m 755 scripts/siril/template_flat_filter.ssf  $destdir/share/ccdciel/scripts/siril/template_flat_filter.ssf
-install -v -m 755 scripts/siril/template_light_filter.ssf  $destdir/share/ccdciel/scripts/siril/template_light_filter.ssf
 install -v -m 644 data/stars/focus_star_4  $destdir/share/ccdciel/data/stars/focus_star_4 
 install -v -m 644 data/stars/focus_star_5  $destdir/share/ccdciel/data/stars/focus_star_5 
 install -v -m 644 data/stars/focus_star_6  $destdir/share/ccdciel/data/stars/focus_star_6 

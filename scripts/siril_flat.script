@@ -1,14 +1,14 @@
 // CCDciel script to process files with Siril
 //
-// Create Master Flat without filter
+// Create Master Flat with filter
 //
 
 var
   buf,sirilcmd: string;
-  script,log: Tstringlist;
-  i: Integer;
-  DirectorySeparator,appdir,tmpdir,siriltemplatedir: string;
-  basedir,biasdir,flatdir,masterbias,flatprefix: string;
+  script,log, filterlist: Tstringlist;
+  i,f: Integer;
+  DirectorySeparator,appdir,tmpdir,siriltemplatedir,r: string;
+  basedir,biasdir,flatdir,masterbias,flatprefix,filter: string;
 
 begin
 
@@ -30,7 +30,27 @@ begin
   GetS('APPDIR', appdir);
   siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
   GetS('TMPDIR', tmpdir);
-  
+
+  // Get the list of filter name
+  //
+  filterlist:= Tstringlist.create;
+  r:=cmdArg('WHEEL_GETFILTERSNAME',filterlist);
+  if r<>msgOK then exit;
+
+
+  // Loop for filter name
+  //
+  for f:=-1 to filterlist.count-1 do begin
+
+    if f<0 then 
+       filter:=''
+    else begin   
+      filter :=filterlist[f];
+      if trim(filter)='' then continue;
+      filter:='_'+filter;
+    end;  
+    logmsg('Process Flat'+filter);
+
     // Replace variable in template
     script:= Tstringlist.create;
     script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat.ssf');
@@ -40,6 +60,7 @@ begin
       buf:=StringReplace(buf, '$FLATDIR', flatdir);
       buf:=StringReplace(buf, '$MASTERBIAS', masterbias);
       buf:=StringReplace(buf, '$FLATPREFIX', flatprefix);
+      buf:=StringReplace(buf, '$FILTER', filter);
       script[i]:=buf;
     end;
     SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
@@ -48,14 +69,17 @@ begin
     // Run Siril
     log:=Tstringlist.Create;
     RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
-    log.savetofile(basedir+DirectorySeparator+'siril_flat.log');
+    log.savetofile(basedir+DirectorySeparator+'siril_flat'+filter+'.log');
     log.free;
 
     // Cleanup
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+flatprefix+'_.seq');
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+'_stacked.fits');
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+'_*.fits');
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+'_.seq');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+flatprefix+'*_.seq');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+filter+'_stacked.fits');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+filter+'_*.fits');
+    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+filter+'_.seq');
 
+  end;
+
+  filterlist.free;
 
 end.

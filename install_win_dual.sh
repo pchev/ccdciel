@@ -43,16 +43,12 @@ install -v -m 755 scripts/astrometry-online.sh  $destdir/scripts/astrometry-onli
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/scripts/astrometry-macos.sh
 install -v -m 755 scripts/siril_bias.script  $destdir/scripts/siril_bias.script
 install -v -m 755 scripts/siril_dark.script $destdir/scripts/siril_dark.script
-install -v -m 755 scripts/siril_flat_filter.script $destdir/scripts/siril_flat_filter.script
 install -v -m 755 scripts/siril_flat.script $destdir/scripts/siril_flat.script
-install -v -m 755 scripts/siril_light_filter.script $destdir/scripts/siril_light_filter.script
 install -v -m 755 scripts/siril_light.script $destdir/scripts/siril_light.script
 install -v -m 755 scripts/siril/template_bias.ssf  $destdir/scripts/siril/template_bias.ssf
 install -v -m 755 scripts/siril/template_dark.ssf  $destdir/scripts/siril/template_dark.ssf
 install -v -m 755 scripts/siril/template_flat.ssf  $destdir/scripts/siril/template_flat.ssf
 install -v -m 755 scripts/siril/template_light.ssf  $destdir/scripts/siril/template_light.ssf
-install -v -m 755 scripts/siril/template_flat_filter.ssf  $destdir/scripts/siril/template_flat_filter.ssf
-install -v -m 755 scripts/siril/template_light_filter.ssf  $destdir/scripts/siril/template_light_filter.ssf
 install -v -m 644 data/stars/focus_star_4   $destdir/data/stars/focus_star_4
 install -v -m 644 data/stars/focus_star_5   $destdir/data/stars/focus_star_5
 install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6
