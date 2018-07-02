@@ -3190,7 +3190,7 @@ begin
   ilevel:=TIntList.Create;
   ilevel.value:=level;
   AllMsg.AddObject(buf,ilevel);
-  if level<=LogLevel then begin
+  if (f_msg<>nil)and(level<=LogLevel) then begin
     if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
     f_msg.msg.Lines.Add(buf);
     f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
