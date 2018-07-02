@@ -123,7 +123,7 @@ begin
   endt:=now+Timeout/secperday;
   while (FBusy)and(now<endt)and (not CancelAutofocus) do begin
      sleep(100);
-     Application.ProcessMessages;
+     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   end;
   result:=not FBusy;
 end;

@@ -314,7 +314,7 @@ begin
   n:=0;
   while now<endt do begin
     Sleep(1000);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if CancelAutofocus then break;
     if FStopGuiding then break;
     if FState=GUIDER_GUIDING then break;

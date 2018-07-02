@@ -398,7 +398,7 @@ begin
   endt:=now+maxwait/secperday;
   while now<endt do begin
     Sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if terminated then break;
     if CancelAutofocus then break;
     if FStopGuiding then break;
@@ -415,7 +415,7 @@ begin
   n:=0;
   while now<endt do begin
     Sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if terminated then break;
     if CancelAutofocus then break;
     if FStopGuiding then break;
@@ -433,7 +433,7 @@ begin
   endt:=now+maxwait/secperday;
   while now<endt do begin
     Sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if terminated then break;
     if CancelAutofocus then break;
     if FStopGuiding then break;

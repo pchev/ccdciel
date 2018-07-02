@@ -144,7 +144,7 @@ begin
         n:=0;
       end;
     end;
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     Sleep(100);
     if now>endt then begin
        Fresult:=defaultresult;
@@ -190,7 +190,7 @@ begin
       globalmsg(Format(rsNeedToWaitUn, [daystr+hour]));
       while now<endt do begin
         Sleep(100);
-        Application.ProcessMessages;
+        if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
         if cancelWaitTill then begin
           WaitTillrunning:=false;
           cancelWaitTill:=false;

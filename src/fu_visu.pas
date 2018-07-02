@@ -226,7 +226,7 @@ with Histogram.Picture.Bitmap do begin
   Canvas.Line(i,0,i,Height);
 end;
 finally
-  Application.ProcessMessages;
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   LockSpinEdit:=false;
 end;
 end;

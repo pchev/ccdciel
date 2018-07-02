@@ -2067,7 +2067,7 @@ if fits.HeaderInfo.naxis>0 then begin
     if ImgZoom>ZoomMax then ImgZoom:=ZoomMax;
     if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
     PlotImage;
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   finally
     LockMouseWheel := False;
   end;
@@ -5781,7 +5781,7 @@ else begin
    tmpbmp.Free;
 end;
 Image1.Invalidate;
-Application.ProcessMessages;
+if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 MagnifyerTimer.Enabled:=true;
 end;
 
@@ -5900,7 +5900,7 @@ procedure  Tf_main.StarSelection(Sender: TObject);
 begin
   // redraw star box
   image1.Invalidate;
-  Application.ProcessMessages;
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 end;
 
 Procedure Tf_main.DrawHistogram(SetLevel: boolean);
@@ -6756,7 +6756,7 @@ begin
    f_starprofile.ChkAutofocusDown(true);
    while f_starprofile.ChkAutofocus.Down do begin
     sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if CancelAutofocus then begin
       f_starprofile.ChkAutofocusDown(false);
       exit;
@@ -6867,7 +6867,7 @@ begin
      f_starprofile.ChkAutofocusDown(true);
      while f_starprofile.ChkAutofocus.Down do begin
       sleep(100);
-      Application.ProcessMessages;
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       if CancelAutofocus then begin
         f_starprofile.ChkAutofocusDown(false);
         exit;
@@ -6933,7 +6933,7 @@ begin
  f_starprofile.ChkAutofocusDown(true);
  while f_starprofile.ChkAutofocus.Down do begin
   sleep(100);
-  Application.ProcessMessages;
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
  end;
  ok:=f_starprofile.AutofocusResult;
 end;
@@ -7315,7 +7315,7 @@ begin
      endt:=now+Timeout/secperday;
      while (astrometry.SlewBusy)and(now<endt) do begin
         sleep(100);
-        Application.ProcessMessages;
+        if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      end;
    end;
  end;

@@ -223,7 +223,7 @@ if AllDevicesConnected then begin
   endt:=now+(exp+30)/secperday;
   while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
     Sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   end;
   result:=ControlExposureOK;
   Camera.onNewImage:=SaveonNewImage;

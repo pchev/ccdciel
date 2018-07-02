@@ -738,7 +738,7 @@ try
   if output<>nil then P.Options := [poUsePipes, poStdErrToOutPut];
   P.Execute;
   while P.Running do begin
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if (output<>nil) and (P.Output<>nil) then begin
       M.SetSize(BytesRead + READ_BYTES);
       n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
@@ -827,7 +827,7 @@ begin
   endt:=now+wt/secperday;
   while now<endt do begin
     Sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   end;
 end;
 

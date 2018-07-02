@@ -235,7 +235,7 @@ begin
        dateto:=now+Fcmdtimeout;
        while (not Terminated)and(tcpclient.resultbuffer='')and(now<dateto) do begin
           sleep(100);
-          application.ProcessMessages;
+          if GetCurrentThreadId=MainThreadID then application.ProcessMessages;
        end;
        if (not Terminated) then begin
          if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;

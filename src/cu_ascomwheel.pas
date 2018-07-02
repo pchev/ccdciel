@@ -186,7 +186,7 @@ begin
    count:=0;
    while (V.Position<0)and(count<maxcount) do begin
       sleep(100);
-      Application.ProcessMessages;
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
    result:=(count<maxcount);

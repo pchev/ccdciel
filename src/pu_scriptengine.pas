@@ -254,7 +254,7 @@ end;
 
 procedure Tf_scriptengine.TplPSScriptLine(Sender: TObject);
 begin
-  Application.ProcessMessages;
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 end;
 
    function Tf_scriptengine.doGetS(varname:string; var str: string):Boolean;
@@ -523,7 +523,7 @@ try
   if output<>nil then RunProcess.Options := [poUsePipes, poStdErrToOutPut];
   RunProcess.Execute;
   while RunProcess.Running do begin
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if (output<>nil) and (RunProcess.Output<>nil) then begin
       M.SetSize(BytesRead + READ_BYTES);
       n := RunProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
@@ -648,7 +648,7 @@ begin
   Waitrunning:=true;
   while now<endt do begin
     Sleep(100);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if cancelWait then begin
       Waitrunning:=false;
       cancelWait:=false;
@@ -713,7 +713,7 @@ begin
   ok:=scr.Compile;
   ScriptCancel:=false;
   if ok then begin
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     result:=scr.Execute;
     wait(2);
     result:=result and (not ScriptCancel);
@@ -1251,7 +1251,7 @@ if Preview.Running then begin
   if Assigned(FonMsg) then FonMsg(rsStartSingleP);
   while Preview.Running do begin
     sleep(10);
-    Application.ProcessMessages;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   end;
   wait(1);
   result:=msgOK;
@@ -1290,7 +1290,7 @@ try
 result:=msgFailed;
 while Preview.Running and Preview.Loop do begin
   Sleep(100);
-  Application.ProcessMessages;
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 end;
 result:=msgOK;
 except
