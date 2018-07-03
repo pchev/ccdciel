@@ -7952,7 +7952,7 @@ var ra,de,hh,a,h,tra,tde,err: double;
   end;
 begin
   result:=-1;
-  if (mount.Status=devConnected) and (not mount.MountSlewing) and (not autofocusing) and ((not meridianflipping)or(nextexposure<>0)) then begin
+  if (mount.Status=devConnected) and (not mount.MountSlewing) and (mount.Park=false) and (not autofocusing) and ((not meridianflipping)or(nextexposure<>0)) then begin
     CurST:=CurrentSidTim;
     ra:=mount.RA;
     de:=mount.Dec;
