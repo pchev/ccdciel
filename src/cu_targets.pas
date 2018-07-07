@@ -907,6 +907,8 @@ begin
     end;
   end
   else if flt.planname=FlatTimeName[1] then begin  // Dawn
+    // stop main twilight timer
+    if FSeqStopTwilight then StopTimer.Enabled:=false;
     FlatWaitDawn:=true;
     FlatWaitDusk:=false;
     //Start when the Sun is 16 degree below horizon
