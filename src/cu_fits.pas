@@ -985,7 +985,10 @@ end;
 FStreamValid:=true;
 Fmean:=sum/ni;
 Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
-if dmin>=dmax then dmax:=dmin+1;
+if dmin>=dmax then begin
+   dmax:=dmin+1;
+   dmin:=dmin-1;
+end;
 if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
   FFitsInfo.dmin:=dmin;
   FFitsInfo.dmax:=dmax;
