@@ -295,6 +295,7 @@ var ok: boolean;
     Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
     p2:array[0..1] of integer;
     p3:array[0..2] of integer;
+    lii: integer;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
@@ -420,9 +421,9 @@ begin
         p2[1]:=ys-1-i;
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
-          SafeArrayGetElement(img,p2,ii);
-          if ii>0 then
-             ii:=ii-32768
+          SafeArrayGetElement(img,p2,lii);
+          if lii>0 then
+             ii:=lii-32768
           else
              ii:=-32768;
           ii:=NtoBE(ii);
@@ -436,9 +437,9 @@ begin
         p3[1]:=ys-1-i;
         for j:=LBoundX to xs-1 do begin
           p3[0]:=j;
-          SafeArrayGetElement(img,p3,ii);
-          if ii>0 then
-             ii:=ii-32768
+          SafeArrayGetElement(img,p3,lii);
+          if lii>0 then
+             ii:=lii-32768
           else
              ii:=-32768;
           ii:=NtoBE(ii);
