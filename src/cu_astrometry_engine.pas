@@ -40,8 +40,7 @@ TAstrometry_engine = class(TThread)
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fplot: boolean;
      Fresult:integer;
-     FASTAPStartMag,FASTAPLimitMag: double;
-     FASTAPSearchRadius: integer;
+     FASTAPSearchRadius,FASTAPdownsample: integer;
      Fcmd: string;
      FOtherOptions: string;
      FUseScript,FUseWSL: Boolean;
@@ -88,8 +87,7 @@ TAstrometry_engine = class(TThread)
      property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
      property ASTAPFolder: string read FASTAPFolder write FASTAPFolder;
      property ASTAPSearchRadius: integer read FASTAPSearchRadius write FASTAPSearchRadius;
-     property ASTAPStartMag: double read FASTAPStartMag write FASTAPStartMag;
-     property ASTAPLimitMag: double read FASTAPLimitMag write FASTAPLimitMag;
+     property ASTAPdownsample: Integer read FASTAPdownsample write FASTAPdownsample;
 end;
 
 implementation
@@ -405,10 +403,8 @@ else if FResolver=ResolverAstap then begin
   {$endif}
   Fparam.Add('-fov');
   Fparam.Add(FormatFloat(f2,max(FXsize,FYsize)));
-  Fparam.Add('-M');
-  Fparam.Add(FormatFloat(f2,FASTAPStartMag));
-  Fparam.Add('-m');
-  Fparam.Add(FormatFloat(f2,FASTAPLimitMag));
+  Fparam.Add('-z');
+  Fparam.Add(inttostr(FASTAPdownsample));
   Fparam.Add('-r');
   Fparam.Add(inttostr(FASTAPSearchRadius));
   Fparam.Add('-f');

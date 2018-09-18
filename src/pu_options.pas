@@ -51,14 +51,11 @@ type
     DomeFlatTelescopeAz: TFloatSpinEdit;
     DomeFlatTelescopeAlt: TFloatSpinEdit;
     DomeBox: TGroupBox;
-    ASTAPStartMag: TFloatSpinEdit;
-    ASTAPLimitMag: TFloatSpinEdit;
     Label102: TLabel;
     Label103: TLabel;
     Label104: TLabel;
     Label105: TLabel;
     Label107: TLabel;
-    Label108: TLabel;
     Label109: TLabel;
     Label52: TLabel;
     Label56: TLabel;
@@ -110,6 +107,7 @@ type
     CalibrationDelay: TSpinEdit;
     MaxAdu: TSpinEdit;
     ASTAPSearchRadius: TSpinEdit;
+    ASTAPdownsample: TSpinEdit;
     StarLostCancel: TSpinEdit;
     StarLostRestart: TSpinEdit;
     Tolerance: TFloatSpinEdit;
@@ -600,8 +598,7 @@ begin
   Label80.Caption := rsSeconds;
   Label105.Caption := rsProgramFolde;
   Label109.Caption := rsMaximumSearc;
-  Label107.Caption := rsStartMagnitu;
-  Label108.Caption := rsLimitingMagn;
+  Label107.Caption := rsDownsample;
   TabSheet7.Caption := rsSlewing;
   GroupBox7.Caption := rsPrecisionSle;
   Label28.Caption := rsTargetPrecis;

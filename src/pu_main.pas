@@ -4418,8 +4418,7 @@ begin
    f_option.PlatesolveWait.Value:=config.GetValue('/Astrometry/PlatesolveWait',0);
    f_option.ASTAPFolder.Text:=config.GetValue('/Astrometry/ASTAPFolder',{$ifdef mswindows}'C:\Program Files\astap'{$else}'/opt/astap'{$endif});
    f_option.ASTAPSearchRadius.Value:=config.GetValue('/Astrometry/ASTAPSearchRadius',5);
-   f_option.ASTAPStartMag.Value:=config.GetValue('/Astrometry/ASTAPStartMag',10.0);
-   f_option.ASTAPLimitMag.Value:=config.GetValue('/Astrometry/ASTAPLimitMag',16.5);
+   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',1);
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
    f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',5.0);
    f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
@@ -4583,8 +4582,7 @@ begin
      config.SetValue('/Astrometry/PlatesolveWait',f_option.PlatesolveWait.Value);
      config.SetValue('/Astrometry/ASTAPFolder',f_option.ASTAPFolder.Text);
      config.SetValue('/Astrometry/ASTAPSearchRadius',f_option.ASTAPSearchRadius.Value);
-     config.SetValue('/Astrometry/ASTAPStartMag',f_option.ASTAPStartMag.Value);
-     config.SetValue('/Astrometry/ASTAPLimitMag',f_option.ASTAPLimitMag.Value);
+     config.SetValue('/Astrometry/ASTAPdownsample',f_option.ASTAPdownsample.Value);
      config.SetValue('/PrecSlew/Method',f_option.PrecSlewBox.ItemIndex);
      config.SetValue('/PrecSlew/Precision',f_option.SlewPrec.Value);
      config.SetValue('/PrecSlew/Retry',f_option.SlewRetry.Value);
