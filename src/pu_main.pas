@@ -5837,7 +5837,7 @@ begin
   end;
   if Length(fits.StarList)>0 then begin
      // draw all star boxes
-     Image1.Canvas.pen.Color:=clYellow;
+     Image1.Canvas.pen.Color:=clRed;
      Image1.Canvas.pen.Mode:=pmMerge;
      Image1.Canvas.pen.Width:=DoScaleX(1);
      Image1.Canvas.Brush.Style:=bsClear;
@@ -5856,6 +5856,7 @@ begin
      end;
      if trpOK then begin
         {draw trapezium}
+        Image1.Canvas.pen.Color:=clYellow;
         Image1.Canvas.pen.Width:=DoScaleX(2);
         // x1,y1,x2,y2
         Fits2Screen(trpx1,trpy1,x,y);
