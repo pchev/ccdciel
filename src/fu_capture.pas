@@ -132,6 +132,7 @@ procedure Tf_capture.BtnStartClick(Sender: TObject);
 begin
   Frunning:=not Frunning;
   if Frunning then begin
+    CancelAutofocus:=false;
     FSeqCount:=1;
     FDitherNum:=0;
     FFocusNum:=0;
