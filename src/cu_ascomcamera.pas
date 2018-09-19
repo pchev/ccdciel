@@ -988,16 +988,16 @@ end;
 
 function T_ascomcamera.GetGain: integer;
 begin
- result:=0;
+ result:=NullInt;
  {$ifdef mswindows}
  if Connected and (FhasGainISO or FhasGain) then begin
    try
       result:=V.Gain;
    except
-      result:=0;
+      result:=NullInt;
    end;
  end
- else result:=0;
+ else result:=NullInt;
  {$endif}
 end;
 
@@ -1113,19 +1113,19 @@ end;
 
 function T_ascomcamera.GetVideoGain:integer;
 begin
- result:=0;
+ result:=NullInt;
  // todo
 end;
 
 function T_ascomcamera.GetVideoGamma:integer;
 begin
- result:=0;
+ result:=NullInt;
  // todo
 end;
 
 function T_ascomcamera.GetVideoBrightness:integer;
 begin
- result:=0;
+ result:=NullInt;
  // todo
 end;
 

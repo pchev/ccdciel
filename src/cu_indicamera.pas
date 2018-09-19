@@ -1377,7 +1377,7 @@ end;
 function T_indicamera.GetGain: integer;
 var i: integer;
 begin
-  result:=0;
+  result:=NullInt;
   if (CCDIso<>nil) and FhasGainISO then begin
     for i := 0 to CCDIso.nsp - 1 do
       if CCDIso.sp[i].s = ISS_ON then begin
@@ -1581,7 +1581,7 @@ end;
 
 function T_indicamera.GetVideoGain:integer;
 begin
- result:=0;
+ result:=NullInt;
  if IGain<>nil then begin
     result:=round(IGain.value);
  end;
@@ -1589,7 +1589,7 @@ end;
 
 function T_indicamera.GetVideoGamma:integer;
 begin
- result:=0;
+ result:=NullInt;
  if IGamma<>nil then begin
     result:=round(IGamma.value);
  end;
@@ -1597,7 +1597,7 @@ end;
 
 function T_indicamera.GetVideoBrightness:integer;
 begin
- result:=0;
+ result:=NullInt;
  if IBrightness<>nil then begin
     result:=round(IBrightness.value);
  end;

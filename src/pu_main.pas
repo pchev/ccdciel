@@ -3331,9 +3331,9 @@ end;
 procedure Tf_main.CameraVideoExposureChange(Sender: TObject);
 begin
   f_video.ShowExposure(round(camera.VideoExposure));
-  f_video.Gain.Position:=round(camera.VideoGain);
-  f_video.Gamma.Position:=round(camera.VideoGamma);
-  f_video.Brightness.Position:=round(camera.VideoBrightness);
+  f_video.Gain.Position:=max(min(round(camera.VideoGain),f_video.Gain.Max),f_video.Gain.Min);
+  f_video.Gamma.Position:=max(min(round(camera.VideoGamma),f_video.Gamma.Max),f_video.Gamma.Min);
+  f_video.Brightness.Position:=max(min(round(camera.VideoBrightness),f_video.Brightness.Max),f_video.Brightness.Min);
 end;
 
 Procedure Tf_main.WheelStatus(Sender: TObject);

@@ -211,6 +211,7 @@ const
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord:double=-9999;
+  NullInt: integer=-9999;
   Filter0 = 'No change';
   Binning0 = '1x1';
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';

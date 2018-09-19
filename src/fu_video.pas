@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui,
+uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui, math,
   Classes, SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
@@ -187,7 +187,7 @@ begin
    Gain.Max:=round(r.max);
    Gain.LineSize:=round(r.step);
    Gain.PageSize:=round(5*r.step);
-   Gain.Position:=camera.VideoGain;
+   Gain.Position:=max(min(round(camera.VideoGain),Gain.Max),Gain.Min);
  end;
  r:=camera.VideoGammaRange;
  PanelGamma.Visible:=(r.max>0);
@@ -197,7 +197,7 @@ begin
    Gamma.Max:=round(r.max);
    Gamma.LineSize:=round(r.step);
    Gamma.PageSize:=round(5*r.step);
-   Gamma.Position:=camera.VideoGamma;
+   Gamma.Position:=max(min(round(camera.VideoGamma),Gamma.Max),Gamma.Min);
  end;
  r:=camera.VideoBrightnessRange;
  PanelBrightness.Visible:=(r.max>0);
@@ -207,7 +207,7 @@ begin
    Brightness.Max:=round(r.max);
    Brightness.LineSize:=round(r.step);
    Brightness.PageSize:=round(5*r.step);
-   Brightness.Position:=camera.VideoBrightness;
+   Brightness.Position:=max(min(round(camera.VideoBrightness),Brightness.Max),Brightness.Min);
  end;
 
 end;

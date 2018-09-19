@@ -436,7 +436,7 @@ var dy,dm,dd: word;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
-    gamma,offset: double;
+    gamma,offset: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
 begin
@@ -505,14 +505,14 @@ begin
    gamma:=GetVideoGamma;
    offset:=GetVideoBrightness;
   except
-   gamma:=0;
-   offset:=0;
+   gamma:=NullInt;
+   offset:=NullInt;
   end;
   try
-   cgain:=0;
+   cgain:=NullInt;
    if FhasGain then cgain:=GetGain;
   except
-   cgain:=0;
+   cgain:=NullInt;
   end;
   try
    siso:='';
@@ -567,10 +567,10 @@ begin
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
   if FStackCount>1 then Ffits.Header.Add('STACKCNT',FStackCount,'Number of stacked frames');
-  if cgain>0 then Ffits.Header.Add('GAIN',cgain,'Video gain');
+  if cgain<>NullInt then Ffits.Header.Add('GAIN',cgain,'Video gain');
   if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
-  if gamma>0 then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
-  if offset>0 then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
+  if gamma<>NullInt then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
+  if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
   if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X');
   if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y');
   if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
