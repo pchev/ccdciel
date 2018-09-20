@@ -5317,12 +5317,16 @@ begin
          newexp:=FlatMinExp;
          AdjustDomeFlat:=false;
          NewMessage(rsReachConfigu,1);
+         NewMessage(rsStopFlatCapt,1);
+         exit;
       end;
       if newexp>FlatMaxExp then begin
         // max configured value
          newexp:=FlatMaxExp;
          AdjustDomeFlat:=false;
          NewMessage(rsReachConfigu2,1);
+         NewMessage(rsStopFlatCapt,1);
+         exit;
       end;
       f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
       if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [
