@@ -314,6 +314,7 @@ begin
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
+  CancelAutofocus:=false;
   FRunning:=true;
   if not FSeqStop then begin
     // look for a dawn sky flat
@@ -436,13 +437,11 @@ begin
       then wt_pause.BtnCancel.Click
       else cancelWaitTill:=true;
    end;
-   if Autofocusing then begin
-     CancelAutofocus:=true;
-     msg(rsRequestToSto3,1);
-     if Mount.MountSlewing then Mount.AbortMotion;
-     if Astrometry.Busy then Astrometry.StopAstrometry;
-     wait(30);
-   end;
+   if Autofocusing then msg(rsRequestToSto3,1);
+   CancelAutofocus:=true;
+   Camera.AbortExposure;
+   if Mount.MountSlewing then Mount.AbortMotion;
+   if Astrometry.Busy then Astrometry.StopAstrometry;
    if f_scriptengine.scr.Running then begin
       f_scriptengine.StopScript;
    end;

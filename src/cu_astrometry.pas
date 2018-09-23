@@ -432,6 +432,7 @@ begin
       msg(rsNoResolverCo,2);
       msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]),2);
       if not Mount.Slew(ra, de) then exit;
+      if CancelAutofocus then exit;
       Wait(delay);
       dist:=0;
    end else begin
@@ -451,6 +452,7 @@ begin
     repeat
       RetryMeridianSync:=false;
       Wait(delay);
+      if CancelAutofocus then exit;
       if not Fpreview.ControlExposure(exp,binx,biny) then begin
         msg(rsExposureFail,0);
         exit;
@@ -485,13 +487,16 @@ begin
       de2:=deg2rad*cde;
       dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
       msg(Format(rsDistanceToTa, [FormatFloat(f5, 60*dist)]),3);
+      if CancelAutofocus then exit;
       if dist>prec then begin
         case method of
          0: begin
                SyncOK:=mount.Sync(cra,cde);
                if SyncOK then begin
                   Wait(2);
+                  if CancelAutofocus then exit;
                   if not Mount.Slew(ra, de) then exit;
+                  if CancelAutofocus then exit;
                end
                else begin
                  if NearMeridian then begin        // some mount cannot sync across the meridian
@@ -517,6 +522,7 @@ begin
                end;
             end;
          else begin
+               if CancelAutofocus then exit;
                raoffset:=ra+raoffset-cra;
                deoffset:=de+deoffset-cde;
                newra:=rmod(ra+raoffset+24,24.0);
@@ -526,9 +532,11 @@ begin
                msg(Format(rsSlewWithOffs, [FormatFloat(f5, raoffset),
                  FormatFloat(f5, deoffset)]),3);
                if not Mount.Slew(newra,newde) then exit;
+               if CancelAutofocus then exit;
             end;
          end;
       end;
+      if CancelAutofocus then exit;
       inc(i);
     until (not RetryMeridianSync)and((dist<=prec)or(i>maxslew));
 

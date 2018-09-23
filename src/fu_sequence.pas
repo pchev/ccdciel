@@ -818,7 +818,6 @@ end;
 
 procedure Tf_sequence.EndSequence(Sender: TObject);
 begin
- CancelAutofocus:=false;
  FlatWaitDusk:=false;
  FlatWaitDawn:=false;
  led.Brush.Color:=clRed;

@@ -6857,6 +6857,7 @@ begin
          PrecessionFK5(jd1,jd0,sra,sde);
        end;
        astrometry.AutofocusPrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
+       if CancelAutofocus then exit;
      end
      else begin
       NewMessage(rsCannotFindAF,1);
