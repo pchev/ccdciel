@@ -915,6 +915,9 @@ resourcestring
   rsNeedToWaitUn = 'Need to wait until %s';
   rsTimeAlreadyP = 'Time already passed %s';
   rsNoTerminatio = 'No termination actions configured.';
+  rsElevation = 'Elevation';
+  rsSetMountTime = 'Set mount time from computer';
+  rsSetMountSite = 'Set mount site long/lat from configuration';
 
 
 

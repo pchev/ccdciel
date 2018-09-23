@@ -70,6 +70,10 @@ T_mount = class(TComponent)
     function Track:boolean; virtual; abstract;
     procedure AbortMotion; virtual; abstract;
     function FlipMeridian:boolean; virtual; abstract;
+    function GetSite(var long,lat,elev: double): boolean; virtual; abstract;
+    function SetSite(long,lat,elev: double): boolean; virtual; abstract;
+    function GetDate(var utc,offset: string): boolean; virtual; abstract;
+    function SetDate(utc,offset: string): boolean; virtual; abstract;
     // Eqmod specific
     function ClearAlignment:boolean; virtual; abstract;
     function ClearDelta:boolean; virtual; abstract;

@@ -63,6 +63,8 @@ type
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
     CameraIndiTransfertDir: TEdit;
+    MountSetDateTime: TCheckBox;
+    MountSetObservatory: TCheckBox;
     DeviceFilterWheel: TCheckBox;
     DeviceFocuser: TCheckBox;
     DeviceWatchdog: TCheckBox;
@@ -275,6 +277,8 @@ begin
   Label13.Caption:=rsPort;
   MountAutoLoadConfig.Caption:=rsLoadConfigur;
   DeviceMount.Caption:=rsUseMount;
+  MountSetDateTime.Caption:=rsSetMountTime;
+  MountSetObservatory.Caption:=rsSetMountSite;
   Watchdog.Caption:=rsWatchdog;
   Label19.Caption:=rsDevices;
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
@@ -373,6 +377,8 @@ MountIndiDevice.Text:=conf.GetValue('/INDImount/Device','');
 MountIndiDevPort.Text:=conf.GetValue('/INDImount/DevicePort','');
 MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
 AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
+MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
+MountSetObservatory.Checked:=conf.GetValue('/Mount/SetObservatory',false);
 
 if WatchdogIndiDevice.Items.Count=0 then begin
   WatchdogIndiDevice.Items.Add(conf.GetValue('/INDIwatchdog/Device',''));

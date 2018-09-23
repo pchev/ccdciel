@@ -2335,6 +2335,7 @@ begin
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
+  ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
   BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
@@ -3954,6 +3955,7 @@ begin
 end;
 
 Procedure Tf_main.MountStatus(Sender: TObject);
+var bufutc,bufoffset: string;
 begin
 case mount.Status of
   devDisconnected:begin
@@ -3968,6 +3970,14 @@ case mount.Status of
                       f_devicesconnection.LabelMount.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsMount]),1);
                       wait(1);
+                      if config.GetValue('/Mount/SetDateTime',false) then begin
+                         bufutc:=FormatDateTime(dateisoshort,NowUTC);
+                         bufoffset:=FormatFloat(f2,ObsTimeZone);
+                         mount.SetDate(bufutc,bufoffset);
+                      end;
+                      if config.GetValue('/Mount/SetObservatory',false) then begin
+                         mount.SetSite(-ObsLongitude, ObsLatitude, ObsElevation);
+                      end;
                       MountCoordChange(Sender);
                       CheckMeridianFlip;
                    end;
@@ -4222,6 +4232,8 @@ begin
     config.SetValue('/INDImount/DevicePort',f_setup.MountIndiDevPort.Text);
     config.SetValue('/INDImount/AutoLoadConfig',f_setup.MountAutoLoadConfig.Checked);
     config.SetValue('/ASCOMmount/Device',f_setup.AscomMount.Text);
+    config.SetValue('/Mount/SetDateTime',f_setup.MountSetDateTime.Checked);
+    config.SetValue('/Mount/SetObservatory',f_setup.MountSetObservatory.Checked);
 
     if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
     config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);
@@ -4299,6 +4311,7 @@ begin
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
    f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
    f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
+   f_option.ObsElev.Value:=config.GetValue('/Info/ObservatoryElevation',0.0);
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
@@ -4524,6 +4537,7 @@ begin
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
      config.SetValue('/Info/ObservatoryLongitude',f_option.Longitude);
+     config.SetValue('/Info/ObservatoryElevation',f_option.ObsElev.Value);
      config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Info/HorizonFile',f_option.HorizonFile.FileName);

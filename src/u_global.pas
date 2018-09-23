@@ -317,7 +317,7 @@ var
   ImgZoom,ZoomMin: double;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
-  ObsLongitude, ObsLatitude, ObsTimeZone: double;
+  ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
   BayerColor: boolean;
   BayerMode:TBayerMode;
   RedBalance,GreenBalance,BlueBalance: double;

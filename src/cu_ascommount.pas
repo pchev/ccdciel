@@ -72,6 +72,10 @@ public
    procedure AbortMotion; override;
    function ClearAlignment:boolean; override;
    function ClearDelta:boolean; override;
+   function GetSite(var long,lat,elev: double): boolean; override;
+   function SetSite(long,lat,elev: double): boolean; override;
+   function GetDate(var utc,offset: string): boolean; override;
+   function SetDate(utc,offset: string): boolean; override;
 end;
 
 
@@ -659,5 +663,71 @@ begin
  {$endif}
 end;
 
+function T_ascommount.GetSite(var long,lat,elev: double): boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   long:=V.SiteLongitude;
+   lat:=V.SiteLatitude;
+   elev:=V.SiteElevation;
+   result:=true;
+   except
+     on E: Exception do msg('Cannot get site information: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.SetSite(long,lat,elev: double): boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   V.SiteLongitude := long;
+   V.SiteLatitude  := lat;
+   V.SiteElevation := elev;
+   result:=true;
+   except
+     on E: Exception do msg('Cannot set site information: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.GetDate(var utc,offset: string): boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   // todo: check date format
+   utc:=V.UTCDate;
+   offset:='';
+   result:=true;
+   except
+     on E: Exception do msg('Cannot get date: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.SetDate(utc,offset: string): boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   // todo: check date format
+   V.UTCDate:=utc;
+   result:=true;
+   except
+     on E: Exception do msg('Cannot set date: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
 end.
 

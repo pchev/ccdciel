@@ -60,6 +60,13 @@ T_indimount = class(T_mount)
    AlignNo,AlignNearest,AlignNstar: ISwitch;
    Pier_Side: ISwitchVectorProperty;
    Pier_East,Pier_West: ISwitch;
+   GeographicCoord_prop: INumberVectorProperty;
+   geo_lat: INumber;
+   geo_lon: INumber;
+   geo_elev: INumber;
+   DateTime_Prop: ITextVectorProperty;
+   dateutc : IText;
+   utcoffset : IText;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -105,6 +112,10 @@ T_indimount = class(T_mount)
    procedure AbortMotion; override;
    function ClearAlignment:boolean; override;
    function ClearDelta:boolean; override;
+   function GetSite(var long,lat,elev: double): boolean; override;
+   function SetSite(long,lat,elev: double): boolean; override;
+   function GetDate(var utc,offset: string): boolean; override;
+   function SetDate(utc,offset: string): boolean; override;
 end;
 
 implementation
@@ -175,6 +186,8 @@ begin
     AlignSyncMode:=nil;
     AlignMode:=nil;
     Pier_Side:=nil;
+    GeographicCoord_prop:=nil;
+    DateTime_Prop:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -358,6 +371,21 @@ begin
       Pier_West:=IUFindSwitch(Pier_Side,'PIER_WEST');
       if (Pier_East=nil)or(Pier_West=nil) then Pier_Side:=nil;
       if Assigned(FonPiersideChange) then FonPiersideChange(self);
+   end
+   else if (proptype = INDI_NUMBER) and (propname = 'GEOGRAPHIC_COORD') then
+   begin
+     GeographicCoord_prop := indiProp.getNumber();
+     geo_lat := IUFindNumber(GeographicCoord_prop, 'LAT');
+     geo_lon := IUFindNumber(GeographicCoord_prop, 'LONG');
+     geo_elev := IUFindNumber(GeographicCoord_prop, 'ELEV');
+      if (geo_lat=nil)or(geo_lon=nil)or(geo_elev=nil) then GeographicCoord_prop:=nil;
+   end
+   else if (proptype = INDI_TEXT) and (propname = 'TIME_UTC') then
+   begin
+     DateTime_Prop := indiProp.getText();
+     dateutc := IUFindText(DateTime_Prop, 'UTC');
+     utcoffset := IUFindText(DateTime_Prop, 'OFFSET');
+     if (dateutc=nil)or(utcoffset=nil) then DateTime_Prop:=nil;
    end
    else if (proptype=INDI_SWITCH)and(propname='ALIGNMODE') then begin
       AlignMode:=indiProp.getSwitch;
@@ -673,6 +701,49 @@ begin
   end;
 end;
 
+function T_indimount.GetSite(var long,lat,elev: double): boolean;
+begin
+  result:=false;
+  if GeographicCoord_prop<>nil then begin
+    long:=geo_lon.Value;
+    lat:=geo_lat.Value;
+    elev:=geo_elev.Value;
+    result:=true;
+  end;
+end;
+
+function T_indimount.SetSite(long,lat,elev: double): boolean;
+begin
+  result:=false;
+  if GeographicCoord_prop<>nil then begin
+    geo_lon.Value  := long;
+    geo_lat.Value  := lat;
+    geo_elev.Value := elev;
+    indiclient.sendNewNumber(GeographicCoord_prop);
+    result:=true;
+  end;
+end;
+
+function T_indimount.GetDate(var utc,offset: string): boolean;
+begin
+  result:=false;
+  if DateTime_Prop<>nil then begin
+    utc:=dateutc.Text;
+    offset:=utcoffset.Text;
+    result:=true;
+  end;
+end;
+
+function T_indimount.SetDate(utc,offset: string): boolean;
+begin
+  result:=false;
+  if DateTime_Prop<>nil then begin
+    dateutc.Text   := utc;
+    utcoffset.Text := offset;
+    indiclient.sendNewText(DateTime_Prop);
+    result:=true;
+  end;
+end;
 
 end.
 

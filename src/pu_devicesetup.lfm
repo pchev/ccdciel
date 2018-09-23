@@ -10,7 +10,6 @@ object f_setup: Tf_setup
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.8.4.0'
   Visible = False
   object Panel1: TPanel
     Left = 0
@@ -46,9 +45,9 @@ object f_setup: Tf_setup
     Height = 267
     Top = 0
     Width = 371
-    ActivePage = DeviceInterface
+    ActivePage = Mount
     Align = alClient
-    TabIndex = 0
+    TabIndex = 5
     TabOrder = 1
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
@@ -792,10 +791,10 @@ object f_setup: Tf_setup
       ClientWidth = 361
       object PanelMountAscom: TPanel
         Left = 16
-        Height = 112
+        Height = 136
         Top = 32
         Width = 287
-        ClientHeight = 112
+        ClientHeight = 136
         ClientWidth = 287
         TabOrder = 1
         Visible = False
@@ -839,10 +838,10 @@ object f_setup: Tf_setup
       end
       object PanelMountIndi: TPanel
         Left = 16
-        Height = 160
+        Height = 136
         Top = 32
         Width = 345
-        ClientHeight = 160
+        ClientHeight = 136
         ClientWidth = 345
         TabOrder = 0
         object MountIndiDevice: TComboBox
@@ -878,9 +877,9 @@ object f_setup: Tf_setup
           ParentColor = False
         end
         object MountAutoLoadConfig: TCheckBox
-          Left = 13
+          Left = 16
           Height = 21
-          Top = 120
+          Top = 96
           Width = 214
           Caption = 'Load configuration on startup'
           TabOrder = 2
@@ -893,6 +892,22 @@ object f_setup: Tf_setup
         Width = 99
         Caption = 'Use mount '
         TabOrder = 2
+      end
+      object MountSetDateTime: TCheckBox
+        Left = 32
+        Height = 21
+        Top = 176
+        Width = 225
+        Caption = 'Set mount date from computer'
+        TabOrder = 3
+      end
+      object MountSetObservatory: TCheckBox
+        Left = 32
+        Height = 21
+        Top = 205
+        Width = 296
+        Caption = 'Set mount site long/lat from configuration'
+        TabOrder = 4
       end
     end
     object Watchdog: TTabSheet

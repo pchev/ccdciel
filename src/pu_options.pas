@@ -44,6 +44,8 @@ type
     ASTAPFolder: TDirectoryEdit;
     DomeFlatSetLightON: TEdit;
     DomeFlatSetLightOFF: TEdit;
+    Label108: TLabel;
+    ObsElev: TFloatSpinEdit;
     Label106: TLabel;
     Label110: TLabel;
     PlatesolveFolder: TDirectoryEdit;
@@ -481,6 +483,7 @@ begin
   Label11.Caption := rsTelescopeNam;
   Label35.Caption := rsLatitude;
   Label36.Caption := rsLongitude;
+  Label108.Caption := rsElevation;
   Label76.Caption := rsHorizonProfi;
   Label77.Caption := rsMinimumObser;
   TabSheet8.Caption := rsPreview;
