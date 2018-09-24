@@ -74,8 +74,8 @@ public
    function ClearDelta:boolean; override;
    function GetSite(var long,lat,elev: double): boolean; override;
    function SetSite(long,lat,elev: double): boolean; override;
-   function GetDate(var utc,offset: string): boolean; override;
-   function SetDate(utc,offset: string): boolean; override;
+   function GetDate(var utc,offset: double): boolean; override;
+   function SetDate(utc,offset: double): boolean; override;
 end;
 
 
@@ -697,15 +697,14 @@ begin
  {$endif}
 end;
 
-function T_ascommount.GetDate(var utc,offset: string): boolean;
+function T_ascommount.GetDate(var utc,offset: double): boolean;
 begin
  result:=false;
  {$ifdef mswindows}
  if Connected then begin
    try
-   // todo: check date format
-   utc:=V.UTCDate;
-   offset:='';
+   utc:=VarToDateTime(V.UTCDate);
+   offset:=ObsTimeZone; // No offset in ASCOM telescope interface
    result:=true;
    except
      on E: Exception do msg('Cannot get date: ' + E.Message,0);
@@ -714,14 +713,13 @@ begin
  {$endif}
 end;
 
-function T_ascommount.SetDate(utc,offset: string): boolean;
+function T_ascommount.SetDate(utc,offset: double): boolean;
 begin
  result:=false;
  {$ifdef mswindows}
  if Connected then begin
    try
-   // todo: check date format
-   V.UTCDate:=utc;
+   V.UTCDate:=VarFromDateTime(utc);
    result:=true;
    except
      on E: Exception do msg('Cannot set date: ' + E.Message,0);

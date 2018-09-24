@@ -3955,7 +3955,6 @@ begin
 end;
 
 Procedure Tf_main.MountStatus(Sender: TObject);
-var bufutc,bufoffset: string;
 begin
 case mount.Status of
   devDisconnected:begin
@@ -3971,9 +3970,7 @@ case mount.Status of
                       NewMessage(Format(rsConnected, [rsMount]),1);
                       wait(1);
                       if config.GetValue('/Mount/SetDateTime',false) then begin
-                         bufutc:=FormatDateTime(dateisoshort,NowUTC);
-                         bufoffset:=FormatFloat(f2,ObsTimeZone);
-                         mount.SetDate(bufutc,bufoffset);
+                         mount.SetDate(NowUTC,ObsTimeZone);
                       end;
                       if config.GetValue('/Mount/SetObservatory',false) then begin
                          mount.SetSite(-ObsLongitude, ObsLatitude, ObsElevation);

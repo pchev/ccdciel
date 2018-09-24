@@ -114,8 +114,8 @@ T_indimount = class(T_mount)
    function ClearDelta:boolean; override;
    function GetSite(var long,lat,elev: double): boolean; override;
    function SetSite(long,lat,elev: double): boolean; override;
-   function GetDate(var utc,offset: string): boolean; override;
-   function SetDate(utc,offset: string): boolean; override;
+   function GetDate(var utc,offset: double): boolean; override;
+   function SetDate(utc,offset: double): boolean; override;
 end;
 
 implementation
@@ -724,22 +724,22 @@ begin
   end;
 end;
 
-function T_indimount.GetDate(var utc,offset: string): boolean;
+function T_indimount.GetDate(var utc,offset: double): boolean;
 begin
   result:=false;
   if DateTime_Prop<>nil then begin
-    utc:=dateutc.Text;
-    offset:=utcoffset.Text;
+    utc:=DateIso2DateTime(dateutc.Text);
+    offset:=StrToFloatDef(trim(utcoffset.Text),0);
     result:=true;
   end;
 end;
 
-function T_indimount.SetDate(utc,offset: string): boolean;
+function T_indimount.SetDate(utc,offset: double): boolean;
 begin
   result:=false;
   if DateTime_Prop<>nil then begin
-    dateutc.Text   := utc;
-    utcoffset.Text := offset;
+    dateutc.Text   := FormatDateTime(dateisoshort,utc);
+    utcoffset.Text := FormatFloat(f2,offset);
     indiclient.sendNewText(DateTime_Prop);
     result:=true;
   end;

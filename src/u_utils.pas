@@ -73,6 +73,7 @@ function DateTimetoJD0(date: Tdatetime): double;
 function Jd(annee,mois,jour :INTEGER; Heure:double):double;
 PROCEDURE Djd(jd:Double;OUT annee,mois,jour:INTEGER; OUT Heure:double);
 function isodate(a,m,d : integer) : string;
+function DateIso2DateTime(dt: string): double;
 function jddate(jd: double) : string;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
@@ -942,6 +943,51 @@ end;
 function isodate(a,m,d : integer) : string;
 begin
 result:=padzeros(inttostr(a),4)+'-'+padzeros(inttostr(m),2)+'-'+padzeros(inttostr(d),2);
+end;
+
+function DateIso2DateTime(dt: string): double;
+var
+  sy, y, m, d, p: integer;
+  h: double;
+begin
+  Result := 0;
+  sy := 1;
+  h := 0;
+  dt := trim(dt);
+  if length(dt) > 2 then
+  begin
+    if dt[1] = '-' then
+    begin
+      sy := -1;
+      Delete(dt, 1, 1);
+    end;
+    if dt[1] = '+' then
+    begin
+      sy := 1;
+      Delete(dt, 1, 1);
+    end;
+  end;
+  p := pos('-', dt);
+  if p = 0 then
+    exit;
+  y := sy * StrToInt(trim(copy(dt, 1, p - 1)));
+  dt := copy(dt, p + 1, 999);
+  p := pos('-', dt);
+  if p = 0 then
+    exit;
+  m := StrToInt(trim(copy(dt, 1, p - 1)));
+  dt := copy(dt, p + 1, 999);
+  p := pos('T', dt);
+  if p = 0 then
+    p := pos(' ', dt);
+  if p = 0 then
+    d := StrToInt(trim(dt))     // no time part
+  else
+  begin
+    d := StrToInt(trim(copy(dt, 1, p - 1)));
+    h := StrToTime(trim(copy(dt,p+1,99)),':');
+  end;
+  result := EncodeDate(y, m, d) + h;
 end;
 
 function jddate(jd: double) : string;
