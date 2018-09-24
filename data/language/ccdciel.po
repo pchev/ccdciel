@@ -3346,3 +3346,7 @@ msgstr ""
 msgid "Set mount site long/lat from configuration"
 msgstr ""
 
+#: u_translation:rsusergroup
+msgid "User group"
+msgstr ""
+
