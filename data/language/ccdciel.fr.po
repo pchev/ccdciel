@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-07-01 21:27+0000\n"
-"PO-Revision-Date: 2018-07-01 21:33+0000\n"
+"POT-Creation-Date: 2018-09-24 15:18+0000\n"
+"PO-Revision-Date: 2018-09-24 15:41+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-07-01 21:36+0000\n"
-"X-Generator: Launchpad (build 18704)\n"
+"X-Launchpad-Export-Date: 2018-09-24 15:44+0000\n"
+"X-Generator: Launchpad (build 18783)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -917,6 +917,10 @@ msgstr "Modifier la liste de cibles"
 msgid "Elbrus Images folder "
 msgstr "Dossier d'image d'Elbrus "
 
+#: u_translation.rselevation
+msgid "Elevation"
+msgstr "Altitude"
+
 #: u_translation.rsend
 msgid "End"
 msgstr "Fin"
@@ -1429,10 +1433,6 @@ msgstr "Éteindre la lumière"
 #: u_translation.rslighton
 msgid "Light ON"
 msgstr "Allumer la lumière"
-
-#: u_translation.rslimitingmagn
-msgid "Limiting magnitude"
-msgstr "Magnitude limite"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -2534,6 +2534,14 @@ msgstr "Direction de mise au point vers l'extérieur"
 msgid "Set frame type %s"
 msgstr "Règle le type d'image à %s"
 
+#: u_translation.rssetmountsite
+msgid "Set mount site long/lat from configuration"
+msgstr "Envoie les coordonnées de l'observatoire"
+
+#: u_translation.rssetmounttime
+msgid "Set mount time from computer"
+msgstr "Envoie l'heure de l'ordinateur"
+
 #: u_translation.rssetpoint
 msgid "Setpoint"
 msgstr "Consigne"
@@ -2753,10 +2761,6 @@ msgstr "Démarrage de la séquence %s, répétition %s/%s"
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
 msgstr "Début de l'apprentissage de la courbe en V"
-
-#: u_translation.rsstartmagnitu
-msgid "Start magnitude"
-msgstr "Magnitude de départ"
 
 #: u_translation.rsstartnewlog
 msgid "Start new log"

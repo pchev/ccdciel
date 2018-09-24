@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-07-01 21:27+0000\n"
-"PO-Revision-Date: 2018-05-01 15:32+0000\n"
-"Last-Translator: Stephan Woidowski <Unknown>\n"
+"POT-Creation-Date: 2018-09-24 15:18+0000\n"
+"PO-Revision-Date: 2018-09-24 15:35+0000\n"
+"Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-07-01 21:36+0000\n"
-"X-Generator: Launchpad (build 18704)\n"
+"X-Launchpad-Export-Date: 2018-09-24 15:44+0000\n"
+"X-Generator: Launchpad (build 18783)\n"
 "Language: en_GB\n"
 
 #: u_translation.rsabort
@@ -39,7 +39,7 @@ msgstr "About"
 
 #: u_translation.rsactionstotak
 msgid "Actions to take when the sequence is finished"
-msgstr ""
+msgstr "Actions to take when the sequence is finished"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -47,7 +47,7 @@ msgstr "Add"
 
 #: u_translation.rsaddstep
 msgid "Add step"
-msgstr ""
+msgstr "Add step"
 
 #: u_translation.rsadjustflatex
 msgid "Adjust flat exposure time to %s and retry."
@@ -331,7 +331,7 @@ msgstr "Before you can use this option the Elbrus program must be calibrated for
 
 #: u_translation.rsbegin
 msgid "Begin"
-msgstr ""
+msgstr "Begin"
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -407,11 +407,11 @@ msgstr "Cancel"
 
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
-msgstr ""
+msgstr "Cancel in %s seconds."
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
-msgstr ""
+msgstr "Cannot compute rise or set time."
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
@@ -587,7 +587,7 @@ msgstr "Colour preview"
 
 #: u_translation.rscommands
 msgid "Commands"
-msgstr ""
+msgstr "Commands"
 
 #: u_translation.rscompilatione
 msgid "Compilation error: %s"
@@ -635,7 +635,7 @@ msgstr "Connection error: %s"
 
 #: u_translation.rscontinue
 msgid "Continue"
-msgstr ""
+msgstr "Continue"
 
 #: u_translation.rscontinueinse
 msgid "Continue in %s seconds"
@@ -715,7 +715,7 @@ msgstr "Cygwin path"
 
 #: u_translation.rsdarknight
 msgid "Dark%snight"
-msgstr ""
+msgstr "Dark%snight"
 
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
@@ -759,7 +759,7 @@ msgstr "Delete"
 
 #: u_translation.rsdeleteplan
 msgid "Delete plan"
-msgstr ""
+msgstr "Delete plan"
 
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
@@ -767,7 +767,7 @@ msgstr "Delete sequence %s ?"
 
 #: u_translation.rsdeletestep
 msgid "Delete step %s ?"
-msgstr ""
+msgstr "Delete step %s ?"
 
 #: u_translation.rsdesc
 msgid "Desc."
@@ -787,7 +787,7 @@ msgstr "Destroy all Bad Pixel Map data?"
 
 #: u_translation.rsdetails
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: u_translation.rsdetectmultip
 msgid "Detect multiple stars in the image"
@@ -917,6 +917,10 @@ msgstr "Edit target list"
 msgid "Elbrus Images folder "
 msgstr "Elbrus Images folder "
 
+#: u_translation.rselevation
+msgid "Elevation"
+msgstr "Elevation"
+
 #: u_translation.rsend
 msgid "End"
 msgstr "End"
@@ -963,11 +967,11 @@ msgstr "Estimated slippage since last learning"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
-msgstr ""
+msgstr "Executing the termination error actions."
 
 #: u_translation.rsexecutingthe2
 msgid "Executing the termination actions."
-msgstr ""
+msgstr "Executing the termination actions."
 
 #: u_translation.rsexp
 msgid "Exp:"
@@ -1423,15 +1427,11 @@ msgstr "Learn"
 
 #: u_translation.rslightoff
 msgid "Light OFF"
-msgstr ""
+msgstr "Light OFF"
 
 #: u_translation.rslighton
 msgid "Light ON"
-msgstr ""
-
-#: u_translation.rslimitingmagn
-msgid "Limiting magnitude"
-msgstr "Limiting magnitude"
+msgstr "Light ON"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -1647,7 +1647,7 @@ msgstr "Near HFD must be smaller than Start HFD!"
 
 #: u_translation.rsneedtowaitun
 msgid "Need to wait until %s"
-msgstr ""
+msgstr "Need to wait until %s"
 
 #: u_translation.rsnetwork
 msgid "Network"
@@ -1683,7 +1683,7 @@ msgstr "No alignment star found for stacking"
 
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
-msgstr ""
+msgstr "No astronomical twilight at this location today"
 
 #: u_translation.rsnobacklash
 msgid "No backlash"
@@ -1763,7 +1763,7 @@ msgstr "Not enough points in or out of focus position, retrying now."
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
-msgstr ""
+msgstr "No termination actions configured."
 
 #: u_translation.rsnotimplement
 msgid "Not implemented!"
@@ -1891,7 +1891,7 @@ msgstr "Park the telescope now?"
 
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
-msgstr ""
+msgstr "Park the telescope"
 
 #: u_translation.rspause
 msgid "Pause"
@@ -2135,11 +2135,11 @@ msgstr "Remove all breakpoints"
 
 #: u_translation.rsremoveobject
 msgid "Remove object"
-msgstr ""
+msgstr "Remove object"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
-msgstr ""
+msgstr "Remove step"
 
 #: u_translation.rsrepeat
 msgid "Repeat"
@@ -2195,7 +2195,7 @@ msgstr "Resolve"
 
 #: u_translation.rsresolveandpl
 msgid "Resolve and plot DSO"
-msgstr ""
+msgstr "Resolve and plot DSO"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
@@ -2303,11 +2303,11 @@ msgstr "Run"
 
 #: u_translation.rsrunadditiona
 msgid "Run additional script in case of unattended error"
-msgstr ""
+msgstr "Run additional script in case of unattended error"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
-msgstr ""
+msgstr "Run a script"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -2331,7 +2331,7 @@ msgstr "Save"
 
 #: u_translation.rssaveas
 msgid "Save as..."
-msgstr ""
+msgstr "Save as..."
 
 #: u_translation.rssaveconfigur
 msgid "Save configuration now"
@@ -2351,11 +2351,11 @@ msgstr "Save FITS file%s"
 
 #: u_translation.rssaveplan
 msgid "Save plan"
-msgstr ""
+msgstr "Save plan"
 
 #: u_translation.rssaveplanas
 msgid "Save plan as..."
-msgstr ""
+msgstr "Save plan as..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -2529,6 +2529,14 @@ msgstr "Set focus direction outward"
 msgid "Set frame type %s"
 msgstr "Set frame type %s"
 
+#: u_translation.rssetmountsite
+msgid "Set mount site long/lat from configuration"
+msgstr "Set mount site long/lat from configuration"
+
+#: u_translation.rssetmounttime
+msgid "Set mount time from computer"
+msgstr "Set mount time from computer"
+
 #: u_translation.rssetpoint
 msgid "Setpoint"
 msgstr "Setpoint"
@@ -2579,11 +2587,11 @@ msgstr "sigma"
 
 #: u_translation.rsskip
 msgid "Skip"
-msgstr ""
+msgstr "Skip"
 
 #: u_translation.rsskiptarget
 msgid "Skip target %s"
-msgstr ""
+msgstr "Skip target %s"
 
 #: u_translation.rsskychartonlo
 msgid "Skychart on local computer"
@@ -2607,7 +2615,7 @@ msgstr "Slew aborted after 3 retries!"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
-msgstr ""
+msgstr "Slew is complete"
 
 #: u_translation.rsslewing
 msgid "Slewing"
@@ -2619,7 +2627,7 @@ msgstr "Slew telescope to flat panel position"
 
 #: u_translation.rsslewto
 msgid "Slewing to %s/%s"
-msgstr ""
+msgstr "Slewing to %s/%s"
 
 #: u_translation.rsslewtoanears
 msgid "Slew to a near star of magnitude"
@@ -2749,10 +2757,6 @@ msgstr "Starting sequence %s repeat %s/%s"
 msgid "Start learning V curve"
 msgstr "Start learning V curve"
 
-#: u_translation.rsstartmagnitu
-msgid "Start magnitude"
-msgstr "Start magnitude"
-
 #: u_translation.rsstartnewlog
 msgid "Start new log"
 msgstr "Start new log"
@@ -2807,7 +2811,7 @@ msgstr "Step"
 
 #: u_translation.rsstepdescript
 msgid "Step description"
-msgstr ""
+msgstr "Step description"
 
 #: u_translation.rsstepinto
 msgid "Step Into"
@@ -2875,7 +2879,7 @@ msgstr "Stop telescope motion."
 
 #: u_translation.rsstoptelescop2
 msgid "Stop telescope tracking"
-msgstr ""
+msgstr "Stop telescope tracking"
 
 #: u_translation.rsstopthecurre
 msgid "Stop the current sequence at %s"
@@ -2931,7 +2935,7 @@ msgstr "Substract a drak frame"
 
 #: u_translation.rssummary
 msgid "Summary"
-msgstr ""
+msgstr "Summary"
 
 #: u_translation.rssyncto
 msgid "Sync to %s/%s"
@@ -2955,7 +2959,7 @@ msgstr "Target initialisation failed!"
 
 #: u_translation.rstargetname
 msgid "Target%sname"
-msgstr ""
+msgstr "Target%sname"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
@@ -2967,7 +2971,7 @@ msgstr "Targets"
 
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
-msgstr ""
+msgstr "Target can run until %s, in %s seconds"
 
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
@@ -3035,7 +3039,7 @@ msgstr "Temporary folder must contain only ASCII characters"
 
 #: u_translation.rsterminationo
 msgid "Termination options"
-msgstr ""
+msgstr "Termination options"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -3067,7 +3071,7 @@ msgstr "The menu \"File/Focuser calibration\" help to fill this values."
 
 #: u_translation.rstheplanismod
 msgid "The plan %s is modified. Do you want to save the change ?"
-msgstr ""
+msgstr "The plan %s is modified. Do you want to save the change?"
 
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
@@ -3083,11 +3087,11 @@ msgstr "There is already a dawn flat plan"
 
 #: u_translation.rsthesequencew
 msgid "The sequence %s will be stopped at %s, in %s seconds."
-msgstr ""
+msgstr "The sequence %s will be stopped at %s, in %s seconds."
 
 #: u_translation.rsthetelescope
 msgid "The telescope is parked, unpark now"
-msgstr ""
+msgstr "The telescope is parked, unpark now"
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
@@ -3107,7 +3111,7 @@ msgstr " Tilt indication:%s"
 
 #: u_translation.rstimealreadyp
 msgid "Time already passed %s"
-msgstr ""
+msgstr "Time already passed %s"
 
 #: u_translation.rstimeout
 msgid "Timeout"
@@ -3119,7 +3123,7 @@ msgstr "Timer"
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
-msgstr ""
+msgstr "tomorrow"
 
 #: u_translation.rstools
 msgid "Tools"
@@ -3203,7 +3207,7 @@ msgstr "Use custom script"
 
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"
-msgstr ""
+msgstr "Use external command to light the panel on/off"
 
 #: u_translation.rsusefilterwhe
 msgid "Use filter wheel"
@@ -3283,7 +3287,7 @@ msgstr "Waiting for dawn"
 
 #: u_translation.rswaitingforda2
 msgid "Waiting for dark night"
-msgstr ""
+msgstr "Waiting for dark night"
 
 #: u_translation.rswaitingfordu
 msgid "Waiting for dusk"
@@ -3319,7 +3323,7 @@ msgstr "Wait to start sequence %s at %s"
 
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
-msgstr ""
+msgstr "Warm the camera"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"

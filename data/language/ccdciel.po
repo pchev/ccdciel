@@ -3158,14 +3158,6 @@ msgstr ""
 msgid "Temporary folder must contain only ASCII characters"
 msgstr ""
 
-#: u_translation:rsstartmagnitu
-msgid "Start magnitude"
-msgstr ""
-
-#: u_translation:rslimitingmagn
-msgid "Limiting magnitude"
-msgstr ""
-
 #: u_translation:rssolvedinseco
 msgid "Solved in %s seconds"
 msgstr ""
@@ -3340,5 +3332,17 @@ msgstr ""
 
 #: u_translation:rsnoterminatio
 msgid "No termination actions configured."
+msgstr ""
+
+#: u_translation:rselevation
+msgid "Elevation"
+msgstr ""
+
+#: u_translation:rssetmounttime
+msgid "Set mount time from computer"
+msgstr ""
+
+#: u_translation:rssetmountsite
+msgid "Set mount site long/lat from configuration"
 msgstr ""
 

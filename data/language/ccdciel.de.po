@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-07-01 21:27+0000\n"
+"POT-Creation-Date: 2018-09-24 15:18+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-07-01 21:36+0000\n"
-"X-Generator: Launchpad (build 18704)\n"
+"X-Launchpad-Export-Date: 2018-09-24 15:44+0000\n"
+"X-Generator: Launchpad (build 18783)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -916,6 +916,10 @@ msgstr ""
 msgid "Elbrus Images folder "
 msgstr ""
 
+#: u_translation.rselevation
+msgid "Elevation"
+msgstr ""
+
 #: u_translation.rsend
 msgid "End"
 msgstr ""
@@ -1426,10 +1430,6 @@ msgstr ""
 
 #: u_translation.rslighton
 msgid "Light ON"
-msgstr ""
-
-#: u_translation.rslimitingmagn
-msgid "Limiting magnitude"
 msgstr ""
 
 #: u_translation.rslimittempera
@@ -2528,6 +2528,14 @@ msgstr ""
 msgid "Set frame type %s"
 msgstr ""
 
+#: u_translation.rssetmountsite
+msgid "Set mount site long/lat from configuration"
+msgstr ""
+
+#: u_translation.rssetmounttime
+msgid "Set mount time from computer"
+msgstr ""
+
 #: u_translation.rssetpoint
 msgid "Setpoint"
 msgstr ""
@@ -2746,10 +2754,6 @@ msgstr ""
 
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
-msgstr ""
-
-#: u_translation.rsstartmagnitu
-msgid "Start magnitude"
 msgstr ""
 
 #: u_translation.rsstartnewlog
