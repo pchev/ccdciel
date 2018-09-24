@@ -69,6 +69,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuUsergroup: TMenuItem;
     MenuResolveDSO: TMenuItem;
     MenuViewMagnifyer: TMenuItem;
     MenuSaveConfig: TMenuItem;
@@ -315,6 +316,7 @@ type
     procedure MenuShowLogClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuTabClick(Sender: TObject);
+    procedure MenuUsergroupClick(Sender: TObject);
     procedure MenuVideoPreviewClick(Sender: TObject);
     procedure MenuVideoStartClick(Sender: TObject);
     procedure MenuVideoStopClick(Sender: TObject);
@@ -1446,6 +1448,7 @@ begin
    MenuItem3.Caption := rsHelp;
    MenuPdfHelp.Caption := rsPDFDocumenta;
    MenuOnlineHelp.Caption := rsOnlineDocume;
+   MenuUsergroup.Caption := rsUserGroup;
    MenuShowLog.Caption := rsShowCurrentL;
    MenuShowINDIlog.Caption:=rsShowINDILog;
    MenuBrowseLog.Caption := rsBrowseLogFil;
@@ -3442,6 +3445,11 @@ aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'
 aboutmsg:=aboutmsg+'as published by the Free Software Foundation; either version 3'+crlf;
 aboutmsg:=aboutmsg+'of the License, or (at your option) any later version.'+crlf;
 MessageDlg(rsAbout+' CCDciel', aboutmsg, mtInformation, [mbClose], 0);
+end;
+
+procedure Tf_main.MenuUsergroupClick(Sender: TObject);
+begin
+  ExecuteFile(URL_USERGROUP);
 end;
 
 procedure Tf_main.MenuDownloadClick(Sender: TObject);

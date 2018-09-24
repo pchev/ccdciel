@@ -1098,6 +1098,10 @@ object f_main: Tf_main
         Caption = 'Online documentation'
         OnClick = MenuOnlineHelpClick
       end
+      object MenuUsergroup: TMenuItem
+        Caption = 'User group'
+        OnClick = MenuUsergroupClick
+      end
       object MenuItem12: TMenuItem
         Caption = '-'
       end
