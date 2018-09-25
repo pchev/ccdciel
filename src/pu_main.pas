@@ -2392,7 +2392,7 @@ begin
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
   AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',100);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
-  AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',0.0);
+  AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',3.0);
   AutofocusSlippageCorrection:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',false);
   if AutofocusSlippageCorrection then
      AutofocusSlippageOffset:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',0)
@@ -6487,7 +6487,7 @@ begin
     // set safe values
     AutofocusNearNum:=3;
     AutofocusTolerance:=2*hfd1[0,2];
-    AutofocusMinSNR:=0;
+    AutofocusMinSNR:=3;
     // vcurve
     if FocAbsolute then begin
       VcCenterpos:=cc;
@@ -7039,7 +7039,7 @@ begin
        for i:=0 to ns-1 do
          hfdlist[i]:=fits.StarList[i].hfd;
        med:=SMedian(hfdlist);            {median of starshfd}
-       s:=min(max(16,round(3*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+       s:=min(max(12,round(6*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
      end
      else
        s:=20; {no star found, try with small default window}
@@ -8206,7 +8206,7 @@ begin
     for i:=0 to nhfd-1 do
       hfdlist[i]:=fits.StarList[i].hfd;
     med:=SMedian(hfdlist);            {median of starshfd}
-    s:=min(max(16,round(3*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+    s:=min(max(12,round(6*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
   end
   else
     s:=20; {no star found, try with small default window}

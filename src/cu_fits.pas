@@ -1216,6 +1216,7 @@ case FFitsInfo.bitpix of
            end;
       end;
 FimageC:=c;
+
 FimageMin:=Fdmin;
 FimageMax:=Fdmax;
 if FimageMin<0 then FimageMin:=0;
@@ -1574,7 +1575,7 @@ begin
   for i:=-rs to rs do
    for j:=-rs to rs do begin
      val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
-     if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
+     if val>((3*bg_standard_deviation)) then  {>3 * sd should be signal }
      begin
        if val>vmax then vmax:=val;
        SumVal:=SumVal+val;
@@ -1601,7 +1602,7 @@ begin
  for i:=-rs to rs do begin
    for j:=-rs to rs do begin
      val:=FimageMin+Fimage[0,yc+j,xc+i]/FimageC-bg;
-     if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+     if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
      begin
        distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
        if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
@@ -1644,7 +1645,7 @@ star_fwhm:=-1;
 if ri<=0 then exit;
 
 try
-// Get center of gravity whithin radius of interest
+// Get center of star gravity whithin radius of interest
 SumVal:=0;
 SumValX:=0;
 SumValY:=0;
@@ -1652,7 +1653,7 @@ valmax:=0;
 for i:=-ri to ri do
  for j:=-ri to ri do begin
    val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
-   if val>((5*bg_standard_deviation)) then  {5 * sd should be signal }
+   if val>((3*bg_standard_deviation)) then  {3 * sd should be signal }
    begin
      if val>valmax then valmax:=val;
      SumVal:=SumVal+val;
@@ -1675,12 +1676,12 @@ if valmax>1 then
 else
   snr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
 if snr>3 then
-begin
-  for i:=-ri to ri do
+begin  // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
+  for i:=-ri to ri do  {Make steps of one pixel in the region of interest}
     for j:=-ri to ri do
     begin
-      Val:=FimageMin+value_subpixel(xc+i,yc+j)/FimageC-bg;
-      if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+      Val:=FimageMin+value_subpixel(xc+i,yc+j)/FimageC-bg; {The calculated center of gravity is a floating point position and can be anyware, so calculate pixel values on sub-pixel level}
+      if val>((3*bg_standard_deviation)) then {3 * sd should be signal}
       begin
         r:=sqrt(i*i+j*j);
         SumVal:=SumVal+Val;
@@ -1728,20 +1729,19 @@ begin
   star_fwhm:=-1;
 
   rs:=s div 2;
-  if (x-s)<1+3 then x:=s+1+3;
-  if (x+s)>(Fwidth-1-3) then x:=Fwidth-s-1-3;
-  if (y-s)<1+3 then y:=s+1+3;
-  if (y+s)>(Fheight-1-3) then y:=Fheight-s-1-3;
+  if (x-s)<1+4 then x:=s+1+4;
+  if (x+s)>(Fwidth-1-4) then x:=Fwidth-s-1-4;
+  if (y-s)<1+4 then y:=s+1+4;
+  if (y+s)>(Fheight-1-4) then y:=Fheight-s-1-4;
 
   try
-
   // average background
   counter:=0;
   bg_average:=0;
-  for i:=-rs-3 to rs+3 do {calculate mean at square boundaries of detection box}
-  for j:=-rs-3 to rs+3 do
+  for i:=-rs-4 to rs+4 do {calculate mean at square boundaries of detection box}
+  for j:=-rs-4 to rs+4 do
   begin
-    if ( (abs(i)>=rs) and (abs(j)>=rs) ) then
+    if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
     begin
       bg_average:=bg_average+Fimage[0,y+i,x+j];
       inc(counter)
@@ -1752,10 +1752,10 @@ begin
 
   counter:=0;
   bg_standard_deviation:=0;
-  for i:=-rs-3 to rs+3 do {calculate standard deviation background at the square boundaries of detection box}
-    for j:=-rs-3 to rs+3 do
+  for i:=-rs-4 to rs+4 do {calculate standard deviation background at the square boundaries of detection box}
+    for j:=-rs-4 to rs+4 do
     begin
-      if ( (abs(i)>=rs) and (abs(j)>=rs) ) then
+      if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
       begin
           bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+j]);
           inc(counter)
@@ -1775,7 +1775,7 @@ begin
     for j:=-rs to rs do
     begin
       val:=Fimage[0,y+j,x+i]-bg;
-      if val>5*bg_standard_deviation then
+      if val>(3.5)*bg_standard_deviation then {just above noise level. }
       begin
         if val>valmax then valmax:=val;
         SumVal:=SumVal+val;
@@ -1783,12 +1783,12 @@ begin
         SumValY:=SumValY+val*(j);
       end;
     end;
-    if sumval<=10*bg_standard_deviation then exit; {no star found, too noisy}
+    if sumval<=15*bg_standard_deviation then exit; {no star found, too noisy}
     Xg:=SumValX/SumVal;
     Yg:=SumValY/SumVal;
     xc:=(x+Xg);
     yc:=(y+Yg);
-   {center of gravity found}
+   {center of star gravity found}
 
     if ((xc-rs<=1) or (xc+rs>=Fwidth-2) or (yc-rs<=1) or (yc+rs>=Fheight-2) ) then begin exit;end;{prevent runtime errors near sides of images}
 
@@ -1816,16 +1816,16 @@ begin
 
     if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
-  until asymmetry=false;{loop and reduce box size until asymmetry is gone or exit if box is too small}
+  until asymmetry=false; {loop and reduce box size until asymmetry is gone or exit if box is too small}
 
  // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
  for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
  for i:=-rs to rs do begin
    for j:=-rs to rs do begin
      Val:=value_subpixel(xc+i,yc+j)-bg;{##}
-     if val>((5*bg_standard_deviation)) then {5 * sd should be signal }
+     if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
      begin
-       distance:=round((sqrt(i*i + j*j )));{distance from gravity center }
+       distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
        if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
      end;
    end;
@@ -1846,33 +1846,71 @@ begin
   if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
   if ri<3 then ri:=3; {Minimum 6+1 x 6+1 pixel box}
 
-  // Get HFD
+  // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
   SumVal:=0;
   SumValR:=0;
   pixel_counter:=0;
-  if valmax>1 then
-    snr:=valmax/sqrt(valmax+2*bg)
-  else
-    snr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
-  if snr>3 then
-  begin
-    for i:=-ri to ri do
-      for j:=-ri to ri do
-      begin
-        Val:=value_subpixel(xc+i,yc+j)-bg;
-        if val>5*bg_standard_deviation then {5 * sd should be signal }
-        begin
-          r:=sqrt(i*i+j*j);
-          SumVal:=SumVal+Val;
-          SumValR:=SumValR+Val*r;
-          if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{how many pixels are above half maximum for FWHM}
-        end;
-      end;
-      Sumval:=Sumval+0.00001;{prevent divide by zero}
-      hfd:=2*SumValR/SumVal;
-      hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
-      star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
- end;
+
+  snr:=valmax/bg_standard_deviation;{how much times above background noise}
+
+  for i:=-ri to ri do {Make steps of one pixel}
+    for j:=-ri to ri do
+    begin
+      Val:=value_subpixel(xc+i,yc+j)-bg;{The calculated center of gravity is a floating point position and can be anyware, so calculate pixel values on sub-pixel level}
+      r:=sqrt(i*i+j*j);{Distance from star gravity center}
+      SumVal:=SumVal+Val;{Sumval will be star total flux value}
+      SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
+      if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
+    end;
+  Sumval:=Sumval+0.00001;{prevent divide by zero}
+  hfd:=2*SumValR/SumVal;
+  hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
+  star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+
+{==========Notes on HFD calculation method=================
+  https://en.wikipedia.org/wiki/Half_flux_diameter
+  http://www005.upp.so-net.ne.jp/k_miyash/occ02/halffluxdiameter/halffluxdiameter_en.html       by Kazuhisa Miyashita. No sub-pixel calculation
+  https://www.lost-infinity.com/night-sky-image-processing-part-6-measuring-the-half-flux-diameter-hfd-of-a-star-a-simple-c-implementation/
+  http://www.ccdware.com/Files/ITS%20Paper.pdf     See page 10, HFD Measurement Algorithm
+
+  HFD, Half Flux Diameter is defined as: The diameter of circle where total flux value of pixels inside is equal to the outside pixel's.
+  HFR, half flux radius:=0.5*HFD
+  The pixel_flux:=pixel_value - background.
+
+  The approximation routine assumes that the HFD line divides the star in equal portions of gravity:
+      sum(pixel_flux * (distance_from_the_centroid - HFR))=0
+  This can be rewritten as
+     sum(pixel_flux * distance_from_the_centroid) - sum(pixel_values * (HFR))=0
+     or
+     HFR:=sum(pixel_flux * distance_from_the_centroid))/sum(pixel_flux)
+     HFD:=2*HFR
+
+  This is not an exact method but a very efficient routine. Numerical checking with an a highly oversampled artificial Gaussian shaped star indicates the following:
+
+  Perfect two dimensional Gaussian shape with σ=1:   Numerical HFD=2.3548*σ                     Approximation 2.5066, an offset of +6.4%
+  Homogeneous disk of a single value  :              Numerical HFD:=disk_diameter/sqrt(2)       Approximation disk_diameter/1.5, an offset of -6.1%
+
+  The approximation routine is robust and efficient.
+
+  Since the number of pixels illuminated is small and the calculated center of star gravity is not at the center of an pixel, above summation should be calculated on sub-pixel level (as used here)
+  or the image should be re-sampled to a higher resolution.
+
+  A sufficient signal to noise is required to have valid HFD value due to background noise.
+
+  Note that for perfect Gaussian shape both the HFD and FWHM are at the same 2.3548 σ.
+  }
+
+
+   {=============Notes on FWHM:=====================
+      1)	Determine the background level by the averaging the boarder pixels.
+      2)	Calculate the standard deviation of the background.
+
+          Signal is anything 3 * standard deviation above background
+
+      3)	Determine the maximum signal level of region of interest.
+      4)	Count pixels which are equal or above half maximum level.
+      5)	Use the pixel count as area and calculate the diameter of that area  as diameter:=2 *sqrt(count/pi).}
+
 
  except
    on E: Exception do begin
@@ -1880,6 +1918,8 @@ begin
      star_fwhm:=-1;
    end;
  end;
+
+
 end;{gethfd2}
 
 procedure TFits.ClearStarList;
@@ -1890,7 +1930,7 @@ end;
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
  fitsX,fitsY,fx,fy,nhfd,i,j,size: integer;
- hfd1,star_fwhm,treshold,vmax,bg,bgdev,xc,yc,snr: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
  marginx,marginy,overlap: integer;
  img_temp: Timai8;
 begin
@@ -1922,13 +1962,13 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      vmax:=vmax/FimageC+FimageMin;
      bg:=bg/FimageC+FimageMin;
      bgdev:=bgdev/FimageC;
-     {minimal star detection level}
-     treshold:=min(FimageMax*0.1, 10*bgdev);
 
      {check valid hfd }
-     if ((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99)
+     if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
+        and (hfd1<99)
         and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
-        and (vmax>treshold) and (vmax<(MaxADU-2*bg)) {new bright star but not saturated}
+        and (snr>AutofocusMinSNR)  {minimal star detection level}
+        and (vmax<(MaxADU-2*bg))   {new bright star but not saturated}
      then
      begin
        inc(nhfd);
