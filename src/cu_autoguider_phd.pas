@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, cu_tcpclient, u_global, u_utils, blcksock, synsock, fpjson, jsonparser,
+uses cu_autoguider, cu_tcpclient, u_global, u_utils, blcksock, synsock, fpjson, jsonparser, u_translation,
   Forms, Classes, SysUtils;
 
 type
@@ -431,6 +431,7 @@ function T_autoguider_phd.WaitDithering(maxwait:integer=5):boolean;
 var endt: TDateTime;
 begin
   endt:=now+maxwait/secperday;
+  FonShowMessage('Enter dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse));
   while now<endt do begin
     Sleep(100);
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
@@ -439,6 +440,7 @@ begin
     if FStopGuiding then break;
     if not FDithering then break;
   end;
+  FonShowMessage('Exit dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse));
   result:=(not FDithering);
 end;
 
