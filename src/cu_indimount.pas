@@ -319,17 +319,17 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
+  if (proptype=INDI_TEXT)and(Mountport=nil)and(propname='DEVICE_PORT') then begin
      Mountport:=indiProp.getText;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+  else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
      if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='EQUATORIAL_EOD_COORD') then begin
+  else if (proptype=INDI_NUMBER)and(coord_prop=nil)and(propname='EQUATORIAL_EOD_COORD') then begin
       coord_prop:=indiProp.getNumber;
       coord_ra:=IUFindNumber(coord_prop,'RA');
       coord_dec:=IUFindNumber(coord_prop,'DEC');
@@ -343,36 +343,36 @@ begin
       eod_coord:=false;
       if (coord_ra=nil)or(coord_dec=nil) then coord_prop:=nil;
    end
-   else if (proptype=INDI_SWITCH)and(propname='ON_COORD_SET') then begin
+   else if (proptype=INDI_SWITCH)and(CoordSet=nil)and(propname='ON_COORD_SET') then begin
       CoordSet:=indiProp.getSwitch;
       CoordSetTrack:=IUFindSwitch(CoordSet,'TRACK');
       CoordSetSlew:=IUFindSwitch(CoordSet,'SLEW');
       CoordSetSync:=IUFindSwitch(CoordSet,'SYNC');
    end
-   else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_PARK') then begin
+   else if (proptype=INDI_SWITCH)and(parkprop=nil)and(propname='TELESCOPE_PARK') then begin
       parkprop:=indiProp.getSwitch;
       swpark:=IUFindSwitch(parkprop,'PARK');
       swunpark:=IUFindSwitch(parkprop,'UNPARK');
       if (swpark=nil)or(swunpark=nil) then parkprop:=nil;
       if Assigned(FonParkChange) then FonParkChange(self);
    end
-   else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_ABORT_MOTION') then begin
+   else if (proptype=INDI_SWITCH)and(AbortmotionProp=nil)and(propname='TELESCOPE_ABORT_MOTION') then begin
       AbortmotionProp:=indiProp.getSwitch;
    end
-   else if (proptype=INDI_NUMBER)and(propname='TELESCOPE_INFO') then begin
+   else if (proptype=INDI_NUMBER)and(TelescopeInfo=nil)and(propname='TELESCOPE_INFO') then begin
       TelescopeInfo:=indiProp.getNumber;
       TelescopeAperture:=IUFindNumber(TelescopeInfo,'TELESCOPE_APERTURE');
       TelescopeFocale:=IUFindNumber(TelescopeInfo,'TELESCOPE_FOCAL_LENGTH');
       if (TelescopeAperture=nil)or(TelescopeFocale=nil) then TelescopeInfo:=nil;
    end
-   else if (proptype=INDI_SWITCH)and(propname='TELESCOPE_PIER_SIDE') then begin
+   else if (proptype=INDI_SWITCH)and(Pier_Side=nil)and(propname='TELESCOPE_PIER_SIDE') then begin
       Pier_Side:=indiProp.getSwitch;
       Pier_East:=IUFindSwitch(Pier_Side,'PIER_EAST');
       Pier_West:=IUFindSwitch(Pier_Side,'PIER_WEST');
       if (Pier_East=nil)or(Pier_West=nil) then Pier_Side:=nil;
       if Assigned(FonPiersideChange) then FonPiersideChange(self);
    end
-   else if (proptype = INDI_NUMBER) and (propname = 'GEOGRAPHIC_COORD') then
+   else if (proptype = INDI_NUMBER) and(GeographicCoord_prop=nil)and (propname = 'GEOGRAPHIC_COORD') then
    begin
      GeographicCoord_prop := indiProp.getNumber();
      geo_lat := IUFindNumber(GeographicCoord_prop, 'LAT');
@@ -380,32 +380,32 @@ begin
      geo_elev := IUFindNumber(GeographicCoord_prop, 'ELEV');
       if (geo_lat=nil)or(geo_lon=nil)or(geo_elev=nil) then GeographicCoord_prop:=nil;
    end
-   else if (proptype = INDI_TEXT) and (propname = 'TIME_UTC') then
+   else if (proptype = INDI_TEXT) and(DateTime_Prop=nil)and (propname = 'TIME_UTC') then
    begin
      DateTime_Prop := indiProp.getText();
      dateutc := IUFindText(DateTime_Prop, 'UTC');
      utcoffset := IUFindText(DateTime_Prop, 'OFFSET');
      if (dateutc=nil)or(utcoffset=nil) then DateTime_Prop:=nil;
    end
-   else if (proptype=INDI_SWITCH)and(propname='ALIGNMODE') then begin
+   else if (proptype=INDI_SWITCH)and(AlignMode=nil)and(propname='ALIGNMODE') then begin
       AlignMode:=indiProp.getSwitch;
       AlignNo:=IUFindSwitch(AlignMode,'NOALIGN');
       AlignNearest:=IUFindSwitch(AlignMode,'ALIGNNEAREST');
       AlignNstar:=IUFindSwitch(AlignMode,'ALIGNNSTAR');
       if (AlignNo=nil)or(AlignNearest=nil)or(AlignNstar=nil) then AlignMode:=nil;
    end
-   else if (proptype=INDI_SWITCH)and(propname='ALIGNLIST') then begin
+   else if (proptype=INDI_SWITCH)and(AlignList=nil)and(propname='ALIGNLIST') then begin
       AlignList:=indiProp.getSwitch;
       AlignListClear:=IUFindSwitch(AlignList,'ALIGNLISTCLEAR');
       if AlignListClear=nil then AlignList:=nil;
    end
-   else if (proptype=INDI_SWITCH)and(propname='ALIGNSYNCMODE') then begin
+   else if (proptype=INDI_SWITCH)and(AlignSyncMode=nil)and(propname='ALIGNSYNCMODE') then begin
       AlignSyncMode:=indiProp.getSwitch;
       AlignStdSync:=IUFindSwitch(AlignSyncMode,'ALIGNSTANDARDSYNC');
       AlignAppendSync:=IUFindSwitch(AlignSyncMode,'ALIGNAPPENDSYNC');
       if (AlignStdSync=nil)or(AlignAppendSync=nil) then AlignSyncMode:=nil;
    end
-   else if (proptype=INDI_SWITCH)and(propname='SYNCMANAGE') then begin
+   else if (proptype=INDI_SWITCH)and(SyncManage=nil)and(propname='SYNCMANAGE') then begin
       SyncManage:=indiProp.getSwitch;
       SyncClearDelta:=IUFindSwitch(SyncManage,'SYNCCLEARDELTA');
       if (SyncClearDelta=nil) then SyncManage:=nil;

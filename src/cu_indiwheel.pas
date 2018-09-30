@@ -269,22 +269,22 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
+  if (proptype=INDI_TEXT)and(Wheelport=nil)and(propname='DEVICE_PORT') then begin
      Wheelport:=indiProp.getText;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+  else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
       configprop:=indiProp.getSwitch;
       configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
       configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
       configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
       if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='FILTER_SLOT') then begin
+  else if (proptype=INDI_NUMBER)and(WheelSlot=nil)and(propname='FILTER_SLOT') then begin
      WheelSlot:=indiProp.getNumber;
      Slot:=IUFindNumber(WheelSlot,'FILTER_SLOT_VALUE');
      if Slot=nil then WheelSlot:=nil;
   end
-  else if (proptype=INDI_TEXT)and(propname='FILTER_NAME') then begin
+  else if (proptype=INDI_TEXT)and(FilterName=nil)and(propname='FILTER_NAME') then begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);

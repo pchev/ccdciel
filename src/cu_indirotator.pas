@@ -134,6 +134,7 @@ begin
     Rotatorport:=nil;
     RotatorAngle:=nil;
     RotatorAbort:=nil;
+    RotatorReverse:=nil;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -267,26 +268,26 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
+  if (proptype=INDI_TEXT)and(Rotatorport=nil)and(propname='DEVICE_PORT') then begin
      Rotatorport:=indiProp.getText;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+  else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
      if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='ABS_ROTATOR_ANGLE') then begin
+  else if (proptype=INDI_NUMBER)and(RotatorAngle=nil)and(propname='ABS_ROTATOR_ANGLE') then begin
      RotatorAngle:=indiProp.getNumber;
   end
-  else if (proptype=INDI_SWITCH)and(propname='ROTATOR_REVERSE') then begin
+  else if (proptype=INDI_SWITCH)and(RotatorReverse=nil)and(propname='ROTATOR_REVERSE') then begin
      RotatorReverse:=indiProp.getSwitch;
      RotatorReverseEnable:=IUFindSwitch(RotatorReverse,'REVERSE_ENABLED');
      RotatorReverseDisable:=IUFindSwitch(RotatorReverse,'REVERSE_DISABLED');
      if (RotatorReverseEnable=nil)or(RotatorReverseDisable=nil) then RotatorReverse:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='ROTATOR_ABORT_MOTION') then begin
+  else if (proptype=INDI_SWITCH)and(RotatorAbort=nil)and(propname='ROTATOR_ABORT_MOTION') then begin
      RotatorAbort:=indiProp.getSwitch;
   end;
   CheckStatus;

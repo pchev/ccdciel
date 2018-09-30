@@ -474,28 +474,28 @@ begin
   if (proptype = INDI_BLOB) then begin
      FhasBlob:=true;
   end
-  else if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
+  else if (proptype=INDI_TEXT)and(CCDport=nil)and(propname='DEVICE_PORT') then begin
      CCDport:=indiProp.getText;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+  else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
      if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='CCD_EXPOSURE') then begin
+  else if (proptype=INDI_NUMBER)and(CCDexpose=nil)and(propname='CCD_EXPOSURE') then begin
      CCDexpose:=indiProp.getNumber;
      CCDexposeValue:=IUFindNumber(CCDexpose,'CCD_EXPOSURE_VALUE');
      if CCDexposeValue=nil then CCDexpose:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='CCD_BINNING') then begin
+  else if (proptype=INDI_NUMBER)and(CCDbinning=nil)and(propname='CCD_BINNING') then begin
      CCDbinning:=indiProp.getNumber;
      CCDbinX:=IUFindNumber(CCDbinning,'HOR_BIN');
      CCDbinY:=IUFindNumber(CCDbinning,'VER_BIN');
      if (CCDbinX=nil)or(CCDbinY=nil) then CCDbinning:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='CCD_FRAME') then begin
+  else if (proptype=INDI_NUMBER)and(CCDframe=nil)and(propname='CCD_FRAME') then begin
      CCDframe:=indiProp.getNumber;
      CCDframeX:=IUFindNumber(CCDframe,'X');
      CCDframeY:=IUFindNumber(CCDframe,'Y');
@@ -503,10 +503,10 @@ begin
      CCDframeHeight:=IUFindNumber(CCDframe,'HEIGHT');
      if (CCDframeX=nil)or(CCDframeY=nil)or(CCDframeWidth=nil)or(CCDframeHeight=nil) then CCDframe:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_FRAME_RESET') then begin
+  else if (proptype=INDI_SWITCH)and(CCDframeReset=nil)and(propname='CCD_FRAME_RESET') then begin
      CCDframeReset:=indiProp.getSwitch;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_FRAME_TYPE') then begin
+  else if (proptype=INDI_SWITCH)and(CCDFrameType=nil)and(propname='CCD_FRAME_TYPE') then begin
      CCDFrameType:=indiProp.getSwitch;
      FrameLight:=IUFindSwitch(CCDFrameType,'FRAME_LIGHT');
      FrameBias:=IUFindSwitch(CCDFrameType,'FRAME_BIAS');
@@ -514,7 +514,7 @@ begin
      FrameFlat:=IUFindSwitch(CCDFrameType,'FRAME_FLAT');
      if (FrameLight=nil)or(FrameBias=nil)or(FrameDark=nil)or(FrameFlat=nil) then CCDFrameType:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_COMPRESSION') then begin
+  else if (proptype=INDI_SWITCH)and(CCDCompression=nil)and(propname='CCD_COMPRESSION') then begin
      CCDCompression:=indiProp.getSwitch;
      CCDcompress:=IUFindSwitch(CCDCompression,'CCD_COMPRESS');
      if CCDcompress=nil then CCDcompress:=IUFindSwitch(CCDCompression,'COMPRESS');;
@@ -522,21 +522,21 @@ begin
      if CCDraw=nil then CCDraw:=IUFindSwitch(CCDCompression,'RAW');
      if (CCDcompress=nil)or(CCDraw=nil) then CCDCompression:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_ABORT_EXPOSURE') then begin
+  else if (proptype=INDI_SWITCH)and(CCDAbortExposure=nil)and(propname='CCD_ABORT_EXPOSURE') then begin
      CCDAbortExposure:=indiProp.getSwitch;
      CCDAbort:=IUFindSwitch(CCDAbortExposure,'ABORT');
      if (CCDAbort=nil) then CCDAbortExposure:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_COOLER') then begin
+  else if (proptype=INDI_SWITCH)and(CCDCooler=nil)and(propname='CCD_COOLER') then begin
      CCDCooler:=indiProp.getSwitch;
      CCDCoolerOn:=IUFindSwitch(CCDCooler,'COOLER_ON');
      CCDCoolerOff:=IUFindSwitch(CCDCooler,'COOLER_OFF');
      if (CCDCoolerOn=nil)or(CCDCoolerOff=nil) then CCDCooler:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='CCD_TEMPERATURE') then begin
+  else if (proptype=INDI_NUMBER)and(CCDTemperature=nil)and(propname='CCD_TEMPERATURE') then begin
      CCDTemperature:=indiProp.getNumber;
   end
-  else if (proptype=INDI_NUMBER)and(propname='CCD_INFO') then begin
+  else if (proptype=INDI_NUMBER)and(CCDinfo=nil)and(propname='CCD_INFO') then begin
      CCDinfo:=indiProp.getNumber;
      CCDmaxx:=IUFindNumber(CCDinfo,'CCD_MAX_X');
      CCDmaxy:=IUFindNumber(CCDinfo,'CCD_MAX_Y');
@@ -546,24 +546,24 @@ begin
      CCDbitperpixel:=IUFindNumber(CCDinfo,'CCD_BITSPERPIXEL');
      if (CCDmaxx=nil)or(CCDmaxy=nil)or(CCDpixelsize=nil)or(CCDpixelsizex=nil)or(CCDpixelsizey=nil)or(CCDbitperpixel=nil) then CCDinfo:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_COLOR_SPACE') then begin
+  else if (proptype=INDI_SWITCH)and(CCDColorSpace=nil)and(propname='CCD_COLOR_SPACE') then begin
      CCDColorSpace:=indiProp.getSwitch;
      CCDColorGray:=IUFindSwitch(CCDColorSpace,'CCD_COLOR_GRAY');
      CCDColorRGB:=IUFindSwitch(CCDColorSpace,'CCD_COLOR_RGB');
      if (CCDColorGray=nil)or(CCDColorRGB=nil) then CCDColorSpace:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='GUIDER_EXPOSURE') then begin
+  else if (proptype=INDI_NUMBER)and(Guiderexpose=nil)and(propname='GUIDER_EXPOSURE') then begin
      Guiderexpose:=indiProp.getNumber;
      GuiderexposeValue:=IUFindNumber(Guiderexpose,'GUIDER_EXPOSURE_VALUE');
      if GuiderexposeValue=nil then Guiderexpose:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='GUIDER_BINNING') then begin
+  else if (proptype=INDI_NUMBER)and(Guiderbinning=nil)and(propname='GUIDER_BINNING') then begin
      Guiderbinning:=indiProp.getNumber;
      GuiderbinX:=IUFindNumber(Guiderbinning,'HOR_BIN');
      GuiderbinY:=IUFindNumber(Guiderbinning,'VER_BIN');
      if (GuiderbinX=nil)or(GuiderbinY=nil) then Guiderbinning:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='GUIDER_COMPRESSION') then begin
+  else if (proptype=INDI_SWITCH)and(GuiderCompression=nil)and(propname='GUIDER_COMPRESSION') then begin
      GuiderCompression:=indiProp.getSwitch;
      Guidercompress:=IUFindSwitch(GuiderCompression,'GUIDER_COMPRESS');
      if Guidercompress=nil then Guidercompress:=IUFindSwitch(GuiderCompression,'COMPRESS');;
@@ -571,12 +571,12 @@ begin
      if Guiderraw=nil then Guiderraw:=IUFindSwitch(GuiderCompression,'RAW');
      if (Guidercompress=nil)or(Guiderraw=nil) then GuiderCompression:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='GUIDER_ABORT_EXPOSURE') then begin
+  else if (proptype=INDI_SWITCH)and(GuiderAbortExposure=nil)and(propname='GUIDER_ABORT_EXPOSURE') then begin
      GuiderAbortExposure:=indiProp.getSwitch;
      GuiderAbort:=IUFindSwitch(GuiderAbortExposure,'ABORT');
      if (GuiderAbort=nil) then GuiderAbortExposure:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='GUIDER_INFO') then begin
+  else if (proptype=INDI_NUMBER)and(Guiderinfo=nil)and(propname='GUIDER_INFO') then begin
      Guiderinfo:=indiProp.getNumber;
      Guidermaxx:=IUFindNumber(CCDinfo,'GUIDER_MAX_X');
      Guidermaxy:=IUFindNumber(CCDinfo,'GUIDER_MAX_Y');
@@ -586,12 +586,12 @@ begin
      Guiderbitperpixel:=IUFindNumber(CCDinfo,'GUIDER_BITSPERPIXEL');
      if (Guidermaxx=nil)or(Guidermaxy=nil)or(Guiderpixelsize=nil)or(Guiderpixelsizex=nil)or(Guiderpixelsizey=nil)or(Guiderbitperpixel=nil) then Guiderinfo:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='FILTER_SLOT') then begin
+  else if (proptype=INDI_NUMBER)and(WheelSlot=nil)and(propname='FILTER_SLOT') then begin
      WheelSlot:=indiProp.getNumber;
      Slot:=IUFindNumber(WheelSlot,'FILTER_SLOT_VALUE');
      if Slot=nil then WheelSlot:=nil;
   end
-  else if (proptype=INDI_TEXT)and(propname='FILTER_NAME') then begin
+  else if (proptype=INDI_TEXT)and(FilterName=nil)and(propname='FILTER_NAME') then begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
@@ -599,41 +599,41 @@ begin
         FFilterNames.Add(FilterName.tp[i].text);
      end;
   end
-  else if (proptype=INDI_SWITCH)and(propname='UPLOAD_MODE') then begin
+  else if (proptype=INDI_SWITCH)and(UploadMode=nil)and(propname='UPLOAD_MODE') then begin
      UploadMode:=indiProp.getSwitch;
      UploadClient:=IUFindSwitch(UploadMode,'UPLOAD_CLIENT');
      UploadLocal:=IUFindSwitch(UploadMode,'UPLOAD_LOCAL');
      UploadBoth:=IUFindSwitch(UploadMode,'UPLOAD_BOTH');
      if (UploadClient=nil)or(UploadLocal=nil)or(UploadBoth=nil) then UploadMode:=nil;
   end
-  else if (proptype=INDI_TEXT)and(propname='UPLOAD_SETTINGS') then begin
+  else if (proptype=INDI_TEXT)and(UploadSettings=nil)and(propname='UPLOAD_SETTINGS') then begin
      UploadSettings:=indiProp.getText;
      UploadDir:=IUFindText(UploadSettings,'UPLOAD_DIR');
      UploadPrefix:=IUFindText(UploadSettings,'UPLOAD_PREFIX');
      if (UploadDir=nil)or(UploadPrefix=nil) then UploadSettings:=nil;
   end
-  else if (proptype=INDI_TEXT)and(propname='CCD_FILE_PATH') then begin
+  else if (proptype=INDI_TEXT)and(CCDfilepath=nil)and(propname='CCD_FILE_PATH') then begin
      CCDfilepath:=indiProp.getText;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_VIDEO_STREAM') then begin
+  else if (proptype=INDI_SWITCH)and(CCDVideoStream=nil)and(propname='CCD_VIDEO_STREAM') then begin
      CCDVideoStream:=indiProp.getSwitch;
      VideoStreamOn:=IUFindSwitch(CCDVideoStream,'STREAM_ON');
      VideoStreamOff:=IUFindSwitch(CCDVideoStream,'STREAM_OFF');
      if (VideoStreamOn=nil)or(VideoStreamOff=nil) then CCDVideoStream:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='RECORD_OPTIONS') then begin
+  else if (proptype=INDI_NUMBER)and(RecordOptions=nil)and(propname='RECORD_OPTIONS') then begin
      RecordOptions:=indiProp.getNumber;
      RecordOptionDuration:=IUFindNumber(RecordOptions,'RECORD_DURATION');
      RecordOptionFrames:=IUFindNumber(RecordOptions,'RECORD_FRAME_TOTAL');
      if (RecordOptionDuration=nil)or(RecordOptionFrames=nil) then RecordOptions:=nil;
   end
-  else if (proptype=INDI_TEXT)and(propname='RECORD_FILE') then begin
+  else if (proptype=INDI_TEXT)and(RecordFile=nil)and(propname='RECORD_FILE') then begin
      RecordFile:=indiProp.getText();
      RecordFileDir:=IUFindText(RecordFile,'RECORD_FILE_DIR');
      RecordFilename:=IUFindText(RecordFile,'RECORD_FILE_NAME');
      if (RecordFileDir=nil)or(RecordFilename=nil) then RecordFile:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='RECORD_STREAM') then begin
+  else if (proptype=INDI_SWITCH)and(RecordStream=nil)and(propname='RECORD_STREAM') then begin
      RecordStream:=indiProp.getSwitch;
      RecordStreamOn:=IUFindSwitch(RecordStream,'RECORD_ON');
      RecordStreamOff:=IUFindSwitch(RecordStream,'RECORD_OFF');
@@ -641,32 +641,32 @@ begin
      RecordFrames:=IUFindSwitch(RecordStream,'RECORD_FRAME_ON');
      if (RecordStreamOn=nil)or(RecordStreamOff=nil)or(RecordDuration=nil)or(RecordFrames=nil) then RecordStream:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='V4L2_SIZE_DISCRETE') then begin
+  else if (proptype=INDI_SWITCH)and(CCDVideoSize=nil)and(propname='V4L2_SIZE_DISCRETE') then begin
      CCDVideoSize:=indiProp.getSwitch;
      FVideoSizes.Clear;
      if CCDVideoSize<>nil then for i:=0 to CCDVideoSize.nsp-1 do begin
         FVideoSizes.Add(CCDVideoSize.sp[i].name);
      end;
   end
-  else if (proptype=INDI_SWITCH)and(propname='V4L2_FRAMEINT_DISCRETE') then begin
+  else if (proptype=INDI_SWITCH)and(CCDVideoRates=nil)and(propname='V4L2_FRAMEINT_DISCRETE') then begin
      CCDVideoRates:=indiProp.getSwitch;
      FVideoRates.Clear;
      if CCDVideoRates<>nil then for i:=0 to CCDVideoRates.nsp-1 do begin
         FVideoRates.Add(CCDVideoRates.sp[i].name);
      end;
   end
-  else if (proptype=INDI_NUMBER)and(propname='FPS') then begin
+  else if (proptype=INDI_NUMBER)and(VideoFPS=nil)and(propname='FPS') then begin
      VideoFPS:=indiProp.getNumber;
      FPSest:=IUFindNumber(VideoFPS,'EST_FPS');
      FPSavg:=IUFindNumber(VideoFPS,'AVG_FPS');
      if (FPSest=nil)or(FPSavg=nil) then VideoFPS:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='STREAM_OPTIONS') then begin
+  else if (proptype=INDI_NUMBER)and(StreamOptions=nil)and(propname='STREAM_OPTIONS') then begin
      StreamOptions:=indiProp.getNumber;
      StreamRate:=IUFindNumber(StreamOptions,'STREAM_RATE');
      if (StreamRate=nil) then StreamOptions:=nil;
   end
-  else if (proptype=INDI_NUMBER)and((propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
+  else if (proptype=INDI_NUMBER)and(ImageAdjustments=nil)and((propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
      IBrightness:=IUFindNumber(ImageAdjustments,'Brightness');
      IGamma:=IUFindNumber(ImageAdjustments,'Gamma');
@@ -679,7 +679,7 @@ begin
         FGainMax:=round(IGain.max);
      end;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CCD_ISO') then begin
+  else if (proptype=INDI_SWITCH)and(CCDIso=nil)and(propname='CCD_ISO') then begin
      CCDIso:=indiProp.getSwitch;
      FISOList.Clear;
      for i:=0 to CCDIso.nsp-1 do begin
@@ -688,7 +688,7 @@ begin
      end;
      FhasGainISO:=(FISOList.Count>0);
   end
-  else if (proptype=INDI_TEXT)and(propname='ACTIVE_DEVICES') then begin
+  else if (proptype=INDI_TEXT)and(ActiveDevices=nil)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
   end;
   CheckStatus;

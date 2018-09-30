@@ -262,14 +262,14 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+  if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
      if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='WATCHDOG_HEARTBEAT') then begin
+  else if (proptype=INDI_NUMBER)and(heartbeat=nil)and(propname='WATCHDOG_HEARTBEAT') then begin
      heartbeat:=indiProp.getNumber;
      heartbeatvalue:=IUFindNumber(heartbeat,'WATCHDOG_HEARTBEAT_VALUE');
   end;

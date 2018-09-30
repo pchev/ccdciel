@@ -295,44 +295,44 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(propname='DEVICE_PORT') then begin
+  if (proptype=INDI_TEXT)and(Focuserport=nil)and(propname='DEVICE_PORT') then begin
      Focuserport:=indiProp.getText;
   end
-  else if (proptype=INDI_SWITCH)and(propname='CONFIG_PROCESS') then begin
+  else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
      if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(propname='FOCUS_MOTION') then begin
+  else if (proptype=INDI_SWITCH)and(FocusMotion=nil)and(propname='FOCUS_MOTION') then begin
      FocusMotion:=indiProp.getSwitch;
      FocusInward:=IUFindSwitch(FocusMotion,'FOCUS_INWARD');
      FocusOutward:=IUFindSwitch(FocusMotion,'FOCUS_OUTWARD');
      if (FocusInward=nil)or(FocusOutward=nil) then FocusMotion:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(propname='FOCUS_SPEED') then begin
+  else if (proptype=INDI_NUMBER)and(FocusSpeed=nil)and(propname='FOCUS_SPEED') then begin
      FocusSpeed:=indiProp.getNumber;
   end
-  else if (proptype=INDI_NUMBER)and(propname='FOCUS_TIMER') then begin
+  else if (proptype=INDI_NUMBER)and(FocusTimer=nil)and(propname='FOCUS_TIMER') then begin
      FocusTimer:=indiProp.getNumber;
   end
-  else if (proptype=INDI_NUMBER)and(propname='REL_FOCUS_POSITION') then begin
+  else if (proptype=INDI_NUMBER)and(FocusRelativePosition=nil)and(propname='REL_FOCUS_POSITION') then begin
      FocusRelativePosition:=indiProp.getNumber;
   end
-  else if (proptype=INDI_NUMBER)and(propname='ABS_FOCUS_POSITION') then begin
+  else if (proptype=INDI_NUMBER)and(FocusAbsolutePosition=nil)and(propname='ABS_FOCUS_POSITION') then begin
      FocusAbsolutePosition:=indiProp.getNumber;
   end
-  else if (proptype=INDI_SWITCH)and(propname='FOCUS_ABORT_MOTION') then begin
+  else if (proptype=INDI_SWITCH)and(FocusAbort=nil)and(propname='FOCUS_ABORT_MOTION') then begin
      FocusAbort:=indiProp.getSwitch;
   end
-  else if (proptype=INDI_NUMBER)and(propname='Presets') then begin
+  else if (proptype=INDI_NUMBER)and(FocusPreset=nil)and(propname='Presets') then begin
      FocusPreset:=indiProp.getNumber;
   end
-  else if (proptype=INDI_SWITCH)and(propname='Goto') then begin
+  else if (proptype=INDI_SWITCH)and(FocusGotoPreset=nil)and(propname='Goto') then begin
      FocusGotoPreset:=indiProp.getSwitch;
   end
-  else if (proptype=INDI_NUMBER)and(propname='FOCUS_TEMPERATURE') then begin
+  else if (proptype=INDI_NUMBER)and(FocusTemperature=nil)and(propname='FOCUS_TEMPERATURE') then begin
      FocusTemperature:=indiProp.getNumber();
      FhasTemperature:=true;
   end;
