@@ -919,6 +919,7 @@ resourcestring
   rsSetMountTime = 'Set mount time from computer';
   rsSetMountSite = 'Set mount site long/lat from configuration';
   rsUserGroup = 'User group';
+  rsUsingConfigu = 'Using configuration file %s';
 
 
 

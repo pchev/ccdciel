@@ -978,6 +978,7 @@ begin
   Undersampled:=false;
   ZoomMin:=1;
   LogLevel:=2;
+  LogToFile:=false;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -1345,6 +1346,7 @@ begin
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
   NewMessage('CCDciel '+ccdciel_version+'-'+RevisionStr+blank+rsInitialized,1);
+  NewMessage(Format(rsUsingConfigu, [configfile]), 3);
 end;
 
 procedure Tf_main.SetLang;
@@ -2615,6 +2617,7 @@ end;
 procedure Tf_main.OpenConfig(n: string);
 var configver: string;
 begin
+ NewMessage(Format(rsUsingConfigu, [n]), 3);
  config.Filename:=slash(ConfigDir)+n;
  configver:=config.GetValue('/Configuration/Version','');
  UpdConfig(configver);
@@ -3187,14 +3190,14 @@ procedure Tf_main.NewMessage(msg: string; level: integer=1);
 var buf: string;
     ilevel:TIntList;
 begin
- if msg<>'' then begin
+ if (msg<>'')and(f_msg<>nil) then begin
   buf:=FormatDateTime('hh:nn:ss',now)+blank+msg;
   if AllMsg.Count>100 then
      AllMsg.Delete(0);
   ilevel:=TIntList.Create;
   ilevel.value:=level;
   AllMsg.AddObject(buf,ilevel);
-  if (f_msg<>nil)and(level<=LogLevel) then begin
+  if level<=LogLevel then begin
     if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
     f_msg.msg.Lines.Add(buf);
     f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
