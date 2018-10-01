@@ -569,9 +569,8 @@ var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   txt:string;
 begin
 
- // Canceling autofocus
- if (x<0)or(y<0)or(s<0) then begin
-   msg(rsAutofocusCan2,0);
+ // Canceling autofocus if no fits file
+ if f=nil then begin
    FAutofocusResult:=false;
    ChkAutofocusDown(false);
    exit;
@@ -617,6 +616,13 @@ begin
     end;
  end
  else begin                      // measure one star
+   // Canceling autofocus if no star position given
+   if (x<0)or(y<0)or(s<0) then begin
+     msg(rsAutofocusCan2,0);
+     FAutofocusResult:=false;
+     ChkAutofocusDown(false);
+     exit;
+   end;
   f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
   if FValMax=0 then begin
      msg(rsAutofocusCan3,0);
