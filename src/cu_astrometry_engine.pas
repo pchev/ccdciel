@@ -595,7 +595,16 @@ else if FResolver=ResolverPlateSolve then begin
   process.Free;
   process:=TProcessUTF8.Create(nil);
   except
-     Fresult:=1;
+     on E: Exception do begin
+       Fresult:=1;
+       AssignFile(ft,FLogFile);
+       Rewrite(ft);
+       WriteLn(ft,'Fail to start Platesolve2:');
+       WriteLn(ft,Fcmd);
+       WriteLn(ft,Fparam[0]);
+       WriteLn(ft,E.Message);
+       CloseFile(ft);
+     end;
   end;
   // merge apm result
   if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
@@ -648,7 +657,14 @@ else if FResolver=ResolverAstap then begin
   process.Free;
   process:=TProcessUTF8.Create(nil);
   except
-     Fresult:=1;
+     on E: Exception do begin
+       Fresult:=1;
+       AssignFile(ft,FLogFile);
+       Append(ft);
+       WriteLn(ft,'Fail to start Astap:');
+       WriteLn(ft,E.Message);
+       CloseFile(ft);
+     end;
   end;
   // merge wcs result
   if (Fresult=0)and(FileExistsUTF8(wcsfile)) then begin
