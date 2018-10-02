@@ -582,6 +582,12 @@ else if FResolver=ResolverPlateSolve then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   endtime:=now+FTimeout/secperday;
+  AssignFile(ft,FLogFile);
+  Rewrite(ft);
+  WriteLn(ft,Fcmd);
+  for i:=0 to Fparam.Count-1 do
+     WriteLn(ft,Fparam[i]);
+  CloseFile(ft);
   try
   process.Execute;
   while process.Running do begin
@@ -598,10 +604,8 @@ else if FResolver=ResolverPlateSolve then begin
      on E: Exception do begin
        Fresult:=1;
        AssignFile(ft,FLogFile);
-       Rewrite(ft);
+       Append(ft);
        WriteLn(ft,'Fail to start Platesolve2:');
-       WriteLn(ft,Fcmd);
-       WriteLn(ft,Fparam[0]);
        WriteLn(ft,E.Message);
        CloseFile(ft);
      end;
@@ -609,7 +613,17 @@ else if FResolver=ResolverPlateSolve then begin
   // merge apm result
   if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
     if (FLogFile<>'') then begin
-      CopyFile(apmfile,LogFile,false,false);
+      AssignFile(ft,FLogFile);
+      Append(ft);
+      AssignFile(fl,apmfile);
+      Reset(fl);
+      WriteLn(ft,'Platesolve2 result:');
+      while not eof(fl) do begin
+        ReadLn(fl,buf);
+        writeln(ft,buf);
+      end;
+      CloseFile(ft);
+      CloseFile(fl);
     end;
     if Apm2Wcs then begin
       Ftmpfits:=TFits.Create(nil);
