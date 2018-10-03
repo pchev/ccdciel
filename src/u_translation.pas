@@ -920,6 +920,8 @@ resourcestring
   rsSetMountSite = 'Set mount site long/lat from configuration';
   rsUserGroup = 'User group';
   rsUsingConfigu = 'Using configuration file %s';
+  rsPleaseSelect2 = 'Please select a temporary folder without space in the '
+    +'path name.';
 
 
 
