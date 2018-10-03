@@ -3350,3 +3350,11 @@ msgstr ""
 msgid "User group"
 msgstr ""
 
+#: u_translation:rsusingconfigu
+msgid "Using configuration file %s"
+msgstr ""
+
+#: u_translation:rspleaseselect2
+msgid "Please select a temporary folder without space in the path name."
+msgstr ""
+

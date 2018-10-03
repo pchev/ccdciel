@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-09-24 16:45+0000\n"
+"POT-Creation-Date: 2018-10-03 17:12+0000\n"
 "PO-Revision-Date: 2018-06-17 08:25+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-09-24 16:48+0000\n"
-"X-Generator: Launchpad (build 18783)\n"
+"X-Launchpad-Export-Date: 2018-10-03 17:24+0000\n"
+"X-Generator: Launchpad (build 18785)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -2008,6 +2008,10 @@ msgstr "Esegui l'apprendimento della curva V per il binning %s"
 msgid "Please select a script!"
 msgstr ""
 
+#: u_translation.rspleaseselect2
+msgid "Please select a temporary folder without space in the path name."
+msgstr ""
+
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
 msgstr "Offset di puntamento"
@@ -3235,6 +3239,10 @@ msgstr "Usa rotatore"
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
 msgstr "Usa dispositivo di controllo"
+
+#: u_translation.rsusingconfigu
+msgid "Using configuration file %s"
+msgstr ""
 
 #: u_translation.rsusingmediano
 msgid "Using median of %s stars"
