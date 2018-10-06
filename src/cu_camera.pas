@@ -496,6 +496,7 @@ begin
   else
      focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
   if (focal_length<1) then msg(rsErrorUnknowT,0);
+  if (focal_length>50000) then msg('Error: Is the telescope focal length really '+FormatFloat(f0,focal_length)+'mm ?',0);
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
   except
