@@ -431,7 +431,7 @@ function T_autoguider_phd.WaitDithering(maxwait:integer=5):boolean;
 var endt: TDateTime;
 begin
   endt:=now+maxwait/secperday;
-  FonShowMessage('Enter dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse));
+  FonShowMessage('Enter dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
   while now<endt do begin
     Sleep(100);
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
@@ -440,7 +440,7 @@ begin
     if FStopGuiding then break;
     if not FDithering then break;
   end;
-  FonShowMessage('Exit dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse));
+  FonShowMessage('Exit dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
   result:=(not FDithering);
 end;
 

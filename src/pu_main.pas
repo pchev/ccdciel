@@ -3197,6 +3197,7 @@ var buf: string;
     ilevel:TIntList;
 begin
  if (msg<>'')and(f_msg<>nil) then begin
+  if level<9 then begin
   buf:=FormatDateTime('hh:nn:ss',now)+blank+msg;
   if AllMsg.Count>100 then
      AllMsg.Delete(0);
@@ -3208,6 +3209,7 @@ begin
     f_msg.msg.Lines.Add(buf);
     f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
     f_msg.msg.SelLength:=0;
+  end;
   end;
   if LogToFile then begin
     WriteLog(IntToStr(level)+': '+msg);
