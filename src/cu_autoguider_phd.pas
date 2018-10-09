@@ -493,6 +493,7 @@ end;
 procedure T_autoguider_phd.Pause(onoff:boolean);
 var buf:string;
 begin
+  FStopGuiding:=false;
   if onoff then begin
     buf:='{"method": "set_paused","params":[true,"full"],"id":2002}';
     Send(buf);
@@ -505,6 +506,7 @@ end;
 procedure T_autoguider_phd.Dither(pixel:double; raonly:boolean);
 var pix,rao,buf:string;
 begin
+  FStopGuiding:=false;
   pix:=FormatFloat(f1,pixel);
   if raonly then rao:='true' else rao:='false';
   buf:='{"method": "dither", "params": [';
