@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-10-03 17:12+0000\n"
+"POT-Creation-Date: 2018-10-10 13:51+0000\n"
 "PO-Revision-Date: 2018-06-17 08:25+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-10-03 17:24+0000\n"
-"X-Generator: Launchpad (build 18785)\n"
+"X-Launchpad-Export-Date: 2018-10-10 13:56+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -706,6 +706,10 @@ msgstr ""
 
 #: u_translation.rscurrentplan
 msgid "Current plan"
+msgstr ""
+
+#: u_translation.rscurvatureind
+msgid "  Curvature=%s"
 msgstr ""
 
 #: u_translation.rscygwinpath
@@ -3109,7 +3113,7 @@ msgid "This procedure will help you to  find the focuser parameters for auto-foc
 msgstr ""
 
 #: u_translation.rstiltindicati
-msgid " Tilt indication:%s"
+msgid "  Tilt indication=%s"
 msgstr ""
 
 #: u_translation.rstimealreadyp

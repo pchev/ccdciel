@@ -934,8 +934,12 @@ msgstr ""
 msgid "Meridian flip completed"
 msgstr ""
 
+#: u_translation:rscurvatureind
+msgid "  Curvature=%s"
+msgstr ""
+
 #: u_translation:rstiltindicati
-msgid " Tilt indication:%s"
+msgid "  Tilt indication=%s"
 msgstr ""
 
 #: u_translation:rsimagemedianh
