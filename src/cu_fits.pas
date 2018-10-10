@@ -1982,8 +1982,8 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
        FStarList[nhfd-1].vmax:=vmax;
 
        size:=round(2*hfd1);
-       for j:=round(yc)-size to round(yc)+size do {mark the whole star area as surveyed}
-          for i:=round(xc)-size to round(xc)+size do
+       for j:=max(0,round(yc)-size) to min(FHeight-1,round(yc)+size) do {mark the whole star area as surveyed}
+          for i:=max(0,round(xc)-size) to min(Fwidth-1,round(xc)+size) do
              img_temp[0,i,j]:=1;
 
      end;
