@@ -410,7 +410,6 @@ type
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel: boolean;
     Capture,Preview,learningvcurve,UseTcpServer: boolean;
-    LockDrawHistogram,LockDrawImage: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -552,8 +551,6 @@ type
     Procedure PlanetariumConnect(Sender: TObject);
     Procedure PlanetariumDisconnect(Sender: TObject);
     Procedure PlanetariumNewTarget(Sender: TObject);
-    procedure DrawHistogramAsync(Data: PtrInt);
-    procedure DrawImageAsync(Data: PtrInt);
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
     procedure CameraSaveNewImage;
@@ -1336,8 +1333,6 @@ begin
   ImaBmp:=TBGRABitmap.Create;
   LockTimerPlot:=false;
   LockMouseWheel:=false;
-  LockDrawHistogram:=false;
-  LockDrawImage:=false;
   ImgCx:=0;
   ImgCy:=0;
   StartX:=0;
@@ -5266,32 +5261,6 @@ begin
  Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
 
-procedure Tf_main.DrawHistogramAsync(Data: PtrInt);
-begin
- try
-  try
-    DrawHistogram(true);
-  except
-    on E: Exception do NewMessage('DrawHistogramAsync :'+ E.Message,1);
-  end;
- finally
-  LockDrawHistogram:=false;
- end;
-end;
-
-procedure Tf_main.DrawImageAsync(Data: PtrInt);
-begin
- try
-  try
-    DrawImage;
-  except
-    on E: Exception do NewMessage('DrawImageAsync :'+ E.Message,1);
-  end;
- finally
-  LockDrawImage:=false;
- end;
-end;
-
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
 begin
@@ -5302,16 +5271,9 @@ begin
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  // wait previous frame is draw
-  while LockDrawHistogram or LockDrawImage do begin
-    sleep(100);
-    Application.ProcessMessages;
-  end;
-  // draw image asynchronously
-  LockDrawHistogram:=true;
-  Application.QueueAsyncCall(@DrawHistogramAsync,0);
-  LockDrawImage:=true;
-  Application.QueueAsyncCall(@DrawImageAsync,0);
+  // draw image
+  DrawHistogram(true);
+  DrawImage;
   // process autofocus frame
   DoAutoFocus;
   except
