@@ -8187,13 +8187,14 @@ begin
   end;
 end;
 
+
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
- i,rx,ry,s,nhfd,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right : integer;
- hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,med : double;
- hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right :array of double;
+ i,rx,ry,s,nhfd,nhfd_center,nhfd_outer_ring,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right : integer;
+ hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,med,median_center, median_outer_ring : double;
+ hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right, hfdlist_center,hfdlist_outer_ring :array of double;
  Saved_Cursor : TCursor;
- mess2 : string;
+ mess1,mess2 : string;
 begin
 
   if not fits.HeaderInfo.valid then exit;
@@ -8225,14 +8226,21 @@ begin
 
   fits.GetStarList(rx,ry,s); {search stars in fits image}
 
-  nhfd:=Length(fits.StarList);
+  nhfd:=Length(fits.StarList);{number of stars detected for HFD statistics}
   SetLength(hfdlist,nhfd);
+
+  nhfd_center:=0;
+  nhfd_outer_ring:=0;
 
   nhfd_top_left:=0;{set counters at zero}
   nhfd_top_right:=0;
   nhfd_bottom_left:=0;
   nhfd_bottom_right:=0;
-  SetLength(hfdlist_top_left,nhfd);{set array length to max size}
+
+  SetLength(hfdlist_center,nhfd);{set array length to maximum number of stars available}
+  SetLength(hfdlist_outer_ring,nhfd);
+
+  SetLength(hfdlist_top_left,nhfd);
   SetLength(hfdlist_top_right,nhfd);
   SetLength(hfdlist_bottom_left,nhfd);
   SetLength(hfdlist_bottom_right,nhfd);
@@ -8243,11 +8251,17 @@ begin
      hfdlist[i]:=hfd1;
      xc:=fits.StarList[i].x;
      yc:=fits.StarList[i].y;
+
+     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))<sqr(0.25)*(sqr(img_width div 2)+sqr(img_height div 2))  then begin inc(nhfd_center); if nhfd_center>=length( hfdlist_center) then  SetLength( hfdlist_center,nhfd_center+100);  hfdlist_center[nhfd_center-1]:=hfd1;end;{store center(<25% diameter) HFD values}
+     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))>sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2))  then begin inc(nhfd_outer_ring); if nhfd_outer_ring>=length(hfdlist_outer_ring) then  SetLength(hfdlist_outer_ring,nhfd_outer_ring+100);  hfdlist_outer_ring[nhfd_outer_ring-1]:=hfd1;end;{store out ring (>75% diameter) HFD values}
+
      if ( (xc<(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_left);  hfdlist_bottom_left[nhfd_bottom_left-1]:=hfd1;end;{store corner HFD values}
      if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_right); hfdlist_bottom_right[nhfd_bottom_right-1]:=hfd1;end;
      if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_left); hfdlist_top_left[nhfd_top_left-1]:=hfd1;end;
      if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_right); hfdlist_top_right[nhfd_top_right-1]:=hfd1;end;
   end;
+  SetLength(hfdlist_center,nhfd_center);
+  SetLength(hfdlist_outer_ring,nhfd_outer_ring);
   SetLength(hfdlist_bottom_left,nhfd_bottom_left);
   SetLength(hfdlist_bottom_right,nhfd_bottom_right);
   SetLength(hfdlist_top_left,nhfd_top_left);
@@ -8255,6 +8269,16 @@ begin
 
   if nhfd>0 then
   begin
+    if ((nhfd_center>2) and (nhfd_outer_ring>2)) then  {enough information for curvature calculation}
+    begin
+      median_center:=SMedian(hfdlist_center);
+      median_outer_ring:=SMedian(hfdlist_outer_ring);
+      mess1:=Format(rsCurvatureInd, [inttostr(round(100*(median_outer_ring/(median_center)-1)))])+'%';
+    end
+    else
+    mess1:='';
+
+
     if ((nhfd_top_left>2) and (nhfd_top_right>2) and (nhfd_bottom_left>2) and (nhfd_bottom_right>2)) then {enough information for tilt calculation}
     begin
       median_top_left:=SMedian(hfdList_top_left);
@@ -8278,11 +8302,16 @@ begin
       trpOK:=false;
       mess2:='';
     end;
-    NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2]),1); {median HFD and tilt indication}
+    NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2+mess1]),1); {median HFD and tilt indication}
   end
   else
     NewMessage(rsNoStarDetect,1);
-  SetLength(hfdlist,0);
+
+  SetLength(hfdlist,0);{release memory. Could also be done with hfdlist:=nil}
+
+  SetLength(hfdlist_center,0);
+  SetLength(hfdlist_outer_ring,0);
+
   SetLength(hfdlist_top_left,0);
   SetLength(hfdlist_top_right,0);
   SetLength(hfdlist_bottom_left,0);
