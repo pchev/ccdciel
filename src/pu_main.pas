@@ -35,8 +35,8 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
-  u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase,
-  LazUTF8, LazUTF8SysUtils, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
+  u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
+  LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, ExtDlgs, Types, u_translation;
 
@@ -613,8 +613,11 @@ var
 
 implementation
 
-{$if (lcl_fullversion >= 1070000)}
-  uses lclplatformdef;
+uses
+{$if lcl_major > 1}
+LazSysUtils;
+{$else}
+LazUTF8SysUtils;
 {$endif}
 
 {$R *.lfm}

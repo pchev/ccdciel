@@ -30,10 +30,10 @@ interface
 
 uses  cu_camera, u_global, u_translation,
   {$ifdef mswindows}
-    u_utils, cu_fits, lazutf8sysutils, indiapi,
+    u_utils, cu_fits, indiapi,
     Variants, comobj, ActiveX,
   {$endif}
-  Forms, ExtCtrls, Classes, SysUtils, LCLType;
+  LCLVersion, Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
 type
 T_ascomcamera = class(T_camera)
@@ -131,6 +131,15 @@ end;
 
 
 implementation
+
+{$ifdef mswindows}
+uses
+{$if lcl_major > 1}
+LazSysUtils;
+{$else}
+LazUTF8SysUtils;
+{$endif}
+{$endif}
 
 constructor T_ascomcamera.Create(AOwner: TComponent);
 begin
