@@ -57,7 +57,7 @@ if [[ $make_linuxarm ]]; then
   mv bin debian/ccdcielarm64/usr/
   mv share debian/ccdcielarm64/usr/
   cd debian
-  sz=$(du -s ccdciel/usr | cut -f1)
+  sz=$(du -s ccdcielarm64/usr | cut -f1)
   sed -i "s/%size%/$sz/" ccdcielarm64/DEBIAN/control
   sed -i "/Version:/ s/3/$version-$currentrev/" ccdcielarm64/DEBIAN/control
   fakeroot dpkg-deb -Zxz --build ccdcielarm64 .
