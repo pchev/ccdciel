@@ -4443,7 +4443,17 @@ begin
    {$endif}
    f_option.PlatesolveFolder.Text:=config.GetValue('/Astrometry/PlatesolveFolder','C:\PlateSolve2.28');
    f_option.PlatesolveWait.Value:=config.GetValue('/Astrometry/PlatesolveWait',0);
-   f_option.ASTAPFolder.Text:=config.GetValue('/Astrometry/ASTAPFolder',{$ifdef mswindows}'C:\Program Files\astap'{$else}'/opt/astap'{$endif});
+   f_option.ASTAPFolder.Text:=config.GetValue('/Astrometry/ASTAPFolder',
+      {$ifdef mswindows}
+      'C:\Program Files\astap'
+      {$else}
+        {$ifdef darwin}
+        '/Applications/astap.app/Contents/MacOS'
+        {$else}
+        '/opt/astap'
+        {$endif}
+      {$endif}
+      );
    f_option.ASTAPSearchRadius.Value:=config.GetValue('/Astrometry/ASTAPSearchRadius',5);
    f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',1);
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
