@@ -2,7 +2,7 @@ unit cu_ascomfocuser;
 
 {$mode objfpc}{$H+}
 
-//{$define debug_ascom}
+// {$define debug_ascom}
 
 {
 Copyright (C) 2015 Patrick Chevalley
@@ -44,7 +44,9 @@ T_ascomfocuser = class(T_focuser)
    FPositionRange: TNumRange;
    FRelPositionRange: TNumRange;
    FInterfaceVersion: integer;
+   FhasAbsolutePosition,FhasRelativePosition: boolean;
    FRelIncr: integer;
+   FmsgTemp,FmsgAPos,FmsgRPos: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
@@ -58,7 +60,9 @@ T_ascomfocuser = class(T_focuser)
    function  GetSpeed:integer; override;
    procedure SetTimer(p:integer); override;
    function  GetTimer:integer; override;
+   function  GethasAbsolutePositionReal: boolean;
    function  GethasAbsolutePosition: boolean; override;
+   function  GethasRelativePositionReal: boolean;
    function  GethasRelativePosition: boolean; override;
    function  GethasTimerSpeed: boolean; override;
    function  GetPositionRange: TNumRange; override;
@@ -85,6 +89,11 @@ begin
  FInterfaceVersion:=1;
  FPositionRange:=NullRange;
  FRelPositionRange:=NullRange;
+ FhasAbsolutePosition:=false;
+ FhasRelativePosition:=false;
+ FmsgTemp:=9999;
+ FmsgAPos:=-1;
+ FmsgRPos:=-1;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=1000;
@@ -128,6 +137,8 @@ begin
     V.Connected:=true;
   if Connected then begin
      GetTemperature;
+     FhasAbsolutePosition:=GethasAbsolutePositionReal;
+     FhasRelativePosition:=GethasRelativePositionReal;
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -293,7 +304,12 @@ begin
  if Connected then begin
    try
    result:=V.Position;
-   {$ifdef debug_ascom}msg('Position = '+inttostr(Result));{$endif}
+   {$ifdef debug_ascom}
+   if FmsgAPos<>Result then begin
+     msg('Position = '+inttostr(Result));
+     FmsgAPos:=Result;
+   end;
+   {$endif}
    except
     on E: Exception do msg('Get position error: ' + E.Message,0);
    end;
@@ -375,7 +391,12 @@ end;
 function  T_ascomfocuser.GetRelPosition:integer;
 begin
  result:=FRelIncr;
- {$ifdef debug_ascom}msg('Relative position = '+inttostr(Result));{$endif}
+ {$ifdef debug_ascom}
+ if FmsgRPos<>Result then begin
+    msg('Relative position = '+inttostr(Result));
+    FmsgRPos:=Result;
+ end;
+ {$endif}
 end;
 
 procedure T_ascomfocuser.SetSpeed(p:integer);
@@ -400,7 +421,7 @@ begin
  result:=0;
 end;
 
-function  T_ascomfocuser.GethasAbsolutePosition: boolean;
+function  T_ascomfocuser.GethasAbsolutePositionReal: boolean;
 begin
  result:=False;
  {$ifdef mswindows}
@@ -415,7 +436,17 @@ begin
  {$endif}
 end;
 
-function  T_ascomfocuser.GethasRelativePosition: boolean;
+function  T_ascomfocuser.GethasAbsolutePosition: boolean;
+begin
+ result:=False;
+ {$ifdef mswindows}
+ if Connected then begin
+   result:=FhasAbsolutePosition;
+ end;
+ {$endif}
+end;
+
+function  T_ascomfocuser.GethasRelativePositionReal: boolean;
 begin
  result:=False;
  {$ifdef mswindows}
@@ -426,6 +457,16 @@ begin
    except
     on E: Exception do msg('GethasRelativePosition error: ' + E.Message,0);
    end;
+ end;
+ {$endif}
+end;
+
+function  T_ascomfocuser.GethasRelativePosition: boolean;
+begin
+ result:=False;
+ {$ifdef mswindows}
+ if Connected then begin
+   result:=FhasRelativePosition;
  end;
  {$endif}
 end;
@@ -442,6 +483,9 @@ begin
 end;
 
 function  T_ascomfocuser.GetTemperature:double;
+{$ifdef debug_ascom}
+var i: integer;
+{$endif}
 begin
  result:=0;
  {$ifdef mswindows}
@@ -449,7 +493,13 @@ begin
    try
    result:= V.Temperature;
    FhasTemperature:=true;
-   {$ifdef debug_ascom}msg('Temperature: '+FormatFloat(f1,result));{$endif}
+   {$ifdef debug_ascom}
+   i:=round(10*Result);
+   if FmsgTemp<>i then begin
+      msg('Temperature: '+FormatFloat(f1,result));
+      FmsgTemp:=i;
+   end;
+   {$endif}
    except
     result:=0;
     FhasTemperature:=false;
