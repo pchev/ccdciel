@@ -2,6 +2,8 @@ unit cu_ascomfocuser;
 
 {$mode objfpc}{$H+}
 
+//{$define debug_ascom}
+
 {
 Copyright (C) 2015 Patrick Chevalley
 
@@ -103,6 +105,7 @@ begin
   if not VarIsEmpty(V) then begin
    result:=V.InterfaceVersion;
   end;
+  {$ifdef debug_ascom}msg('Interface version = '+inttostr(Result));{$endif}
   except
     result:=1;
   end;
@@ -114,6 +117,7 @@ begin
  {$ifdef mswindows}
   try
   FStatus := devConnecting;
+  {$ifdef debug_ascom}msg('Connecting... ');{$endif}
   Fdevice:=cp1;
   V:=Unassigned;
   V:=CreateOleObject(WideString(Fdevice));
@@ -129,8 +133,10 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
   end
-  else
+  else begin
+     {$ifdef debug_ascom}msg('Not connected');{$endif}
      Disconnect;
+  end;
   except
     on E: Exception do msg('Connection error: ' + E.Message,0);
   end;
@@ -224,6 +230,7 @@ begin
  {$ifdef mswindows}
  try
  if Connected then begin
+   {$ifdef debug_ascom}msg('Wait moving ... ');{$endif}
    maxcount:=maxtime div 100;
    count:=0;
    while (V.IsMoving)and(count<maxcount) do begin
@@ -232,6 +239,7 @@ begin
       inc(count);
    end;
    result:=(count<maxcount);
+   {$ifdef debug_ascom}msg('Move completed '+BoolToStr(result, rsTrue, rsFalse));{$endif}
  end;
  except
    result:=false;
@@ -244,6 +252,7 @@ begin
  {$ifdef mswindows}
  FFocusdirection:=-1;
  FLastDirection:=FocusDirIn;
+ {$ifdef debug_ascom}msg('Set direction IN');{$endif}
  {$endif}
 end;
 
@@ -252,6 +261,7 @@ begin
  {$ifdef mswindows}
  FFocusdirection:=1;
  FLastDirection:=FocusDirOut;
+ {$ifdef debug_ascom}msg('Set direction OUT');{$endif}
  {$endif}
 end;
 
@@ -265,6 +275,7 @@ begin
      n:=max(min(p,round(FPositionRange.max)),round(FPositionRange.min))
    else
      n:=p;
+   {$ifdef debug_ascom}msg('Move '+inttostr(p)+' '+inttostr(n));{$endif}
    V.Move(n);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
@@ -282,6 +293,7 @@ begin
  if Connected then begin
    try
    result:=V.Position;
+   {$ifdef debug_ascom}msg('Position = '+inttostr(Result));{$endif}
    except
     on E: Exception do msg('Get position error: ' + E.Message,0);
    end;
@@ -300,6 +312,7 @@ begin
      result.max:=V.MaxStep;
      result.step:=1;
      FPositionRange:=result;
+     {$ifdef debug_ascom}msg('Position range = '+FormatFloat(f0,FPositionRange.min)+' '+FormatFloat(f0,FPositionRange.max)+' '+FormatFloat(f0,FPositionRange.step) );{$endif}
      except
       result:=NullRange;
      end;
@@ -322,6 +335,7 @@ begin
      result.max:=V.MaxStep;
      result.step:=1;
      FRelPositionRange:=result;
+     {$ifdef debug_ascom}msg('Relative position range = '+FormatFloat(f0,FRelPositionRange.min)+' '+FormatFloat(f0,FRelPositionRange.max)+' '+FormatFloat(f0,FRelPositionRange.step) );{$endif}
      except
       result:=NullRange;
      end;
@@ -346,6 +360,7 @@ begin
    else
      FRelIncr:=p;
    i:=FFocusdirection*FRelIncr;
+   {$ifdef debug_ascom}msg('Relative move '+inttostr(p)+' '+inttostr(i));{$endif}
    V.Move(i);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
@@ -360,6 +375,7 @@ end;
 function  T_ascomfocuser.GetRelPosition:integer;
 begin
  result:=FRelIncr;
+ {$ifdef debug_ascom}msg('Relative position = '+inttostr(Result));{$endif}
 end;
 
 procedure T_ascomfocuser.SetSpeed(p:integer);
@@ -391,6 +407,7 @@ begin
  if Connected then begin
    try
    result:=V.Absolute;
+   {$ifdef debug_ascom}msg('Use AbsolutePosition: '+BoolToStr(result, rsTrue, rsFalse));{$endif}
    except
     on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message,0);
    end;
@@ -405,6 +422,7 @@ begin
  if Connected then begin
    try
    result:=not V.Absolute;
+   {$ifdef debug_ascom}msg('Use RelativePosition: '+BoolToStr(result, rsTrue, rsFalse));{$endif}
    except
     on E: Exception do msg('GethasRelativePosition error: ' + E.Message,0);
    end;
@@ -420,6 +438,7 @@ end;
 procedure T_ascomfocuser.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
+ {$ifdef debug_ascom}msg('Set timeout: '+inttostr(num));{$endif}
 end;
 
 function  T_ascomfocuser.GetTemperature:double;
@@ -430,9 +449,11 @@ begin
    try
    result:= V.Temperature;
    FhasTemperature:=true;
+   {$ifdef debug_ascom}msg('Temperature: '+FormatFloat(f1,result));{$endif}
    except
     result:=0;
     FhasTemperature:=false;
+    {$ifdef debug_ascom}msg('No temperature');{$endif}
    end;
  end;
  {$endif}
