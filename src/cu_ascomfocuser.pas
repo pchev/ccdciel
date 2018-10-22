@@ -2,7 +2,7 @@ unit cu_ascomfocuser;
 
 {$mode objfpc}{$H+}
 
-// {$define debug_ascom}
+//{$define debug_ascom}
 
 {
 Copyright (C) 2015 Patrick Chevalley
@@ -186,7 +186,10 @@ if not VarIsEmpty(V) then begin
   else
      result:=V.connected;
   except
-   result:=false;
+   on E: Exception do begin
+      {$ifdef debug_ascom}msg('Error Connected : '+ E.Message);{$endif}
+      result:=false;
+   end;
   end;
 end;
 {$endif}
@@ -245,15 +248,23 @@ begin
    maxcount:=maxtime div 100;
    count:=0;
    while (V.IsMoving)and(count<maxcount) do begin
+      {$ifdef debug_ascom}
+      if (count mod 20) = 0 then begin
+         msg('Wait moving, IsMoving = '+BoolToStr(V.IsMoving, True));
+      end;
+      {$endif}
       sleep(100);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
    result:=(count<maxcount);
-   {$ifdef debug_ascom}msg('Move completed '+BoolToStr(result, rsTrue, rsFalse));{$endif}
+   {$ifdef debug_ascom}msg('Move completed '+BoolToStr(result, True));{$endif}
  end;
  except
-   result:=false;
+  on E: Exception do begin
+       {$ifdef debug_ascom}msg('Error IsMoving : '+ E.Message);{$endif}
+       result:=false;
+    end;
  end;
  {$endif}
 end;
@@ -330,7 +341,10 @@ begin
      FPositionRange:=result;
      {$ifdef debug_ascom}msg('Position range = '+FormatFloat(f0,FPositionRange.min)+' '+FormatFloat(f0,FPositionRange.max)+' '+FormatFloat(f0,FPositionRange.step) );{$endif}
      except
-      result:=NullRange;
+       on E: Exception do begin
+          {$ifdef debug_ascom}msg('Error MaxStep : '+ E.Message);{$endif}
+          result:=NullRange;
+       end;
      end;
    end
    else
@@ -353,7 +367,10 @@ begin
      FRelPositionRange:=result;
      {$ifdef debug_ascom}msg('Relative position range = '+FormatFloat(f0,FRelPositionRange.min)+' '+FormatFloat(f0,FRelPositionRange.max)+' '+FormatFloat(f0,FRelPositionRange.step) );{$endif}
      except
-      result:=NullRange;
+       on E: Exception do begin
+          {$ifdef debug_ascom}msg('Error MaxStep : '+ E.Message);{$endif}
+          result:=NullRange;
+       end;
      end;
    end
    else
@@ -428,7 +445,7 @@ begin
  if Connected then begin
    try
    result:=V.Absolute;
-   {$ifdef debug_ascom}msg('Use AbsolutePosition: '+BoolToStr(result, rsTrue, rsFalse));{$endif}
+   {$ifdef debug_ascom}msg('Use AbsolutePosition: '+BoolToStr(result, True));{$endif}
    except
     on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message,0);
    end;
@@ -453,7 +470,7 @@ begin
  if Connected then begin
    try
    result:=not V.Absolute;
-   {$ifdef debug_ascom}msg('Use RelativePosition: '+BoolToStr(result, rsTrue, rsFalse));{$endif}
+   {$ifdef debug_ascom}msg('Use RelativePosition: '+BoolToStr(result, True));{$endif}
    except
     on E: Exception do msg('GethasRelativePosition error: ' + E.Message,0);
    end;
