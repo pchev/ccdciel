@@ -100,6 +100,7 @@ private
    configload,configsave,configdefault: ISwitch;
    FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
+   FVideoMsg: boolean;
    lockvideostream:boolean;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -245,6 +246,7 @@ begin
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
  CreateIndiClient;
  lockvideostream:=false;
+ FVideoMsg:=false;
 end;
 
 destructor  T_indicamera.Destroy;
@@ -459,7 +461,12 @@ end;
 
 procedure T_indicamera.NewMessage(mp: IMessage);
 begin
-  if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
+  if FVideoMsg then begin
+    msg(mp.msg,3);
+  end
+  else begin
+    if Assigned(FonDeviceMsg) then FonDeviceMsg(Findidevice+': '+mp.msg);
+  end;
   mp.Free;
 end;
 
@@ -1403,6 +1410,7 @@ end;
 procedure T_indicamera.StartVideoPreview;
 begin
  if CCDVideoStream<>nil then begin
+  FVideoMsg:=true;
   IUResetSwitch(CCDVideoStream);
   VideoStreamOn.s:=ISS_ON;
   indiclient.sendNewSwitch(CCDVideoStream);
@@ -1466,6 +1474,7 @@ end;
 procedure T_indicamera.StartVideoRecord(mode:TVideoRecordMode);
 begin
   if RecordStream<>nil then begin
+    FVideoMsg:=true;
     IUResetSwitch(RecordStream);
     case mode of
        rmDuration : RecordDuration.s:=ISS_ON;
