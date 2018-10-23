@@ -1082,8 +1082,12 @@ begin
   if aCol=coldark then begin
     if TargetList.Cells[coldark,aRow]='1' then
       TargetList.Cells[colskip,aRow]:='1';
+    if (TargetList.Cells[colstart,aRow]='')and(TargetList.Cells[colend,aRow]='')and(TargetList.Cells[coldark,aRow]='0') then
+       TargetList.Cells[colskip,aRow]:='0';
   end;
   if aCol=colskip then begin
+    if (TargetList.Cells[colstart,aRow]='')and(TargetList.Cells[colend,aRow]='')and(TargetList.Cells[coldark,aRow]='0') then
+       TargetList.Cells[colskip,aRow]:='0';
     if TargetList.Cells[colskip,aRow]='0' then
       TargetList.Cells[coldark,aRow]:='0';
   end;
@@ -1095,6 +1099,8 @@ var ra,de,h: double;
     i:integer;
 begin
 result:=true;
+if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(TargetList.Cells[coldark,n]='0') then
+   TargetList.Cells[colskip,n]:='0';
 ra:=StrToAR(TargetList.Cells[colra,n]);
 de:=StrToDE(TargetList.Cells[coldec,n]);
 if TargetList.Cells[colstart,n]=rsRise then begin
