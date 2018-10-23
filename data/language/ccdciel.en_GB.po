@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-10-10 13:51+0000\n"
-"PO-Revision-Date: 2018-10-04 18:11+0000\n"
+"POT-Creation-Date: 2018-10-23 08:18+0000\n"
+"PO-Revision-Date: 2018-10-13 14:09+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-10-10 13:56+0000\n"
-"X-Generator: Launchpad (build 18790)\n"
+"X-Launchpad-Export-Date: 2018-10-23 08:28+0000\n"
+"X-Generator: Launchpad (build 18801)\n"
 "Language: en_GB\n"
 
 #: u_translation.rsabort
@@ -711,7 +711,7 @@ msgstr "Current plan"
 
 #: u_translation.rscurvatureind
 msgid "  Curvature=%s"
-msgstr ""
+msgstr "  Curvature=%s"
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
@@ -1260,6 +1260,10 @@ msgstr "Get current position from last image"
 #: u_translation.rsgetcurrentpo3
 msgid "Get current position from telescope"
 msgstr "Get current position from telescope"
+
+#: u_translation.rsgetsitelongl
+msgid "Get site long/lat from the mount"
+msgstr ""
 
 #: u_translation.rsglobalfocuse
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
@@ -2593,6 +2597,14 @@ msgstr "Show preview stack option"
 msgid "sigma"
 msgstr "sigma"
 
+#: u_translation.rssitesendtote
+msgid "Site send to telescope."
+msgstr ""
+
+#: u_translation.rssitesetfromt
+msgid "Site set from the telescope."
+msgstr ""
+
 #: u_translation.rsskip
 msgid "Skip"
 msgstr "Skip"
@@ -3115,7 +3127,7 @@ msgstr "This procedure will help you to  find the focuser parameters for auto-fo
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"
-msgstr ""
+msgstr "  Tilt indication=%s"
 
 #: u_translation.rstimealreadyp
 msgid "Time already passed %s"
@@ -3128,6 +3140,10 @@ msgstr "Timeout"
 #: u_translation.rstimer
 msgid "Timer"
 msgstr "Timer"
+
+#: u_translation.rstimesendtote
+msgid "Time send to telescope."
+msgstr ""
 
 #: u_translation.rstomorrow
 msgid "tomorrow"

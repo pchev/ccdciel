@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-10-10 13:51+0000\n"
-"PO-Revision-Date: 2018-10-10 13:53+0000\n"
+"POT-Creation-Date: 2018-10-23 08:18+0000\n"
+"PO-Revision-Date: 2018-10-23 08:26+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-10-10 13:56+0000\n"
-"X-Generator: Launchpad (build 18790)\n"
+"X-Launchpad-Export-Date: 2018-10-23 08:28+0000\n"
+"X-Generator: Launchpad (build 18801)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -1260,6 +1260,10 @@ msgstr "Obtenir la position de la dernière image"
 #: u_translation.rsgetcurrentpo3
 msgid "Get current position from telescope"
 msgstr "Obtenir la position du télescope"
+
+#: u_translation.rsgetsitelongl
+msgid "Get site long/lat from the mount"
+msgstr "Reçoit les coord. du lieu de la monture"
 
 #: u_translation.rsglobalfocuse
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
@@ -2598,6 +2602,14 @@ msgstr "Voir l'option d’empilement"
 msgid "sigma"
 msgstr "sigma"
 
+#: u_translation.rssitesendtote
+msgid "Site send to telescope."
+msgstr "Lieu envoyé au télescope"
+
+#: u_translation.rssitesetfromt
+msgid "Site set from the telescope."
+msgstr "Lieu reçu du télescope"
+
 #: u_translation.rsskip
 msgid "Skip"
 msgstr "Passer"
@@ -3133,6 +3145,10 @@ msgstr "Délai d'attente"
 #: u_translation.rstimer
 msgid "Timer"
 msgstr "Minuteur"
+
+#: u_translation.rstimesendtote
+msgid "Time send to telescope."
+msgstr "Date envoyée au télescope"
 
 #: u_translation.rstomorrow
 msgid "tomorrow"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-10-10 13:51+0000\n"
+"POT-Creation-Date: 2018-10-23 08:18+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-10-10 13:56+0000\n"
-"X-Generator: Launchpad (build 18790)\n"
+"X-Launchpad-Export-Date: 2018-10-23 08:28+0000\n"
+"X-Generator: Launchpad (build 18801)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -1258,6 +1258,10 @@ msgstr ""
 
 #: u_translation.rsgetcurrentpo3
 msgid "Get current position from telescope"
+msgstr ""
+
+#: u_translation.rsgetsitelongl
+msgid "Get site long/lat from the mount"
 msgstr ""
 
 #: u_translation.rsglobalfocuse
@@ -2592,6 +2596,14 @@ msgstr ""
 msgid "sigma"
 msgstr ""
 
+#: u_translation.rssitesendtote
+msgid "Site send to telescope."
+msgstr ""
+
+#: u_translation.rssitesetfromt
+msgid "Site set from the telescope."
+msgstr ""
+
 #: u_translation.rsskip
 msgid "Skip"
 msgstr ""
@@ -3126,6 +3138,10 @@ msgstr ""
 
 #: u_translation.rstimer
 msgid "Timer"
+msgstr ""
+
+#: u_translation.rstimesendtote
+msgid "Time send to telescope."
 msgstr ""
 
 #: u_translation.rstomorrow

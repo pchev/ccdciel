@@ -3362,3 +3362,19 @@ msgstr ""
 msgid "Please select a temporary folder without space in the path name."
 msgstr ""
 
+#: u_translation:rsgetsitelongl
+msgid "Get site long/lat from the mount"
+msgstr ""
+
+#: u_translation:rstimesendtote
+msgid "Time send to telescope."
+msgstr ""
+
+#: u_translation:rssitesendtote
+msgid "Site send to telescope."
+msgstr ""
+
+#: u_translation:rssitesetfromt
+msgid "Site set from the telescope."
+msgstr ""
+
