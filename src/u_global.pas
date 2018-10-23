@@ -85,8 +85,8 @@ type
 
   TStep   = Class(TObject)
               public
-              exposure, delay : double;
-              count, repeatcount: integer;
+              exposure : double;
+              count: integer;
               dither: boolean;
               dithercount: integer;
               autofocusstart: boolean;
@@ -100,9 +100,7 @@ type
               constructor Create;
               procedure Assign(Source: Tstep);
               function exposure_str: string;
-              function delay_str: string;
               function count_str: string;
-              function repeatcount_str: string;
               function filter_str: string;
               function binning_str: string;
               function frtype_str: string;
@@ -477,9 +475,7 @@ end;
 constructor TStep.Create;
 begin
   exposure:=1;
-  delay:=1;
   count:=1;
-  repeatcount:=1;
   filter:=0;
   binx:=1;
   biny:=1;
@@ -495,9 +491,7 @@ end;
 procedure TStep.Assign(Source: Tstep);
 begin
   exposure:=Source.exposure;
-  delay:=Source.delay;
   count:=Source.count;
-  repeatcount:=Source.repeatcount;
   filter:=Source.filter;
   binx:=Source.binx;
   biny:=Source.biny;
@@ -516,19 +510,9 @@ begin
  Result:=FloatToStr(exposure);
 end;
 
-function TStep.delay_str: string;
-begin
-  Result:=FloatToStr(delay);
-end;
-
 function TStep.count_str: string;
 begin
   Result:=IntToStr(count);
-end;
-
-function TStep.repeatcount_str: string;
-begin
-  Result:=IntToStr(repeatcount);
 end;
 
 function TStep.dithercount_str: string;

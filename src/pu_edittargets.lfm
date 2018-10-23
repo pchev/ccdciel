@@ -41,10 +41,10 @@ object f_EditTargets: Tf_EditTargets
         Height = 311
         Top = 0
         Width = 300
-        ActivePage = TabSheet1
+        ActivePage = TabSheet3
         Align = alClient
         ShowTabs = False
-        TabIndex = 0
+        TabIndex = 2
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
@@ -882,11 +882,11 @@ object f_EditTargets: Tf_EditTargets
         Width = 698
         Align = alClient
         AutoFillColumns = True
-        ColCount = 8
+        ColCount = 7
         Columns = <        
           item
             Title.Caption = 'Description'
-            Width = 148
+            Width = 183
           end        
           item
             ButtonStyle = cbsPickList
@@ -922,20 +922,13 @@ object f_EditTargets: Tf_EditTargets
               'No change'
             )
             Title.Caption = 'Filter'
-            Width = 148
+            Width = 183
           end        
           item
             MinSize = 70
             MaxSize = 70
             SizePriority = 0
             Title.Caption = 'Count'
-            Width = 70
-          end        
-          item
-            MinSize = 70
-            MaxSize = 70
-            SizePriority = 0
-            Title.Caption = 'Repeat'
             Width = 70
           end>
         DefaultColWidth = 30
@@ -949,12 +942,11 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = StepListSelection
         ColWidths = (
           30
-          148
+          183
           70
           80
           80
-          148
-          70
+          183
           70
         )
       end
@@ -1054,60 +1046,20 @@ object f_EditTargets: Tf_EditTargets
       ClientHeight = 187
       ClientWidth = 300
       TabOrder = 1
-      object GroupBoxRepeat: TGroupBox
-        Left = 0
-        Height = 48
-        Top = 140
-        Width = 300
-        Align = alTop
-        Caption = 'Repeat'
-        ClientHeight = 30
-        ClientWidth = 298
-        TabOrder = 0
-        object Label17: TLabel
-          Left = 184
-          Height = 17
-          Top = 5
-          Width = 63
-          Caption = '[seconds]'
-          ParentColor = False
-        end
-        object Label12: TLabel
-          Left = 8
-          Height = 17
-          Top = 5
-          Width = 50
-          Caption = 'Interval'
-          ParentColor = False
-        end
-        object PDelay: TFloatSpinEdit
-          Left = 96
-          Height = 27
-          Top = 0
-          Width = 82
-          DecimalPlaces = 1
-          Increment = 1
-          MaxValue = 100000
-          MinValue = 0
-          OnChange = StepChange
-          TabOrder = 0
-          Value = 0
-        end
-      end
       object GroupBoxStep: TGroupBox
         Left = 0
-        Height = 140
+        Height = 157
         Top = 0
         Width = 300
         Align = alTop
         Caption = 'Step'
-        ClientHeight = 122
+        ClientHeight = 139
         ClientWidth = 298
-        TabOrder = 1
+        TabOrder = 0
         object DitherCount: TSpinEdit
           Left = 165
           Height = 27
-          Top = 84
+          Top = 72
           Width = 57
           MaxValue = 1000
           MinValue = 1
@@ -1118,7 +1070,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxDither: TCheckBox
           Left = 8
           Height = 21
-          Top = 84
+          Top = 72
           Width = 109
           Caption = 'Dither every '
           OnChange = StepChange
@@ -1127,7 +1079,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxAutofocusStart: TCheckBox
           Left = 8
           Height = 21
-          Top = 36
+          Top = 8
           Width = 186
           Caption = 'Autofocus before to start'
           OnChange = StepChange
@@ -1136,60 +1088,61 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxAutofocus: TCheckBox
           Left = 8
           Height = 21
-          Top = 60
+          Top = 40
           Width = 130
           Caption = 'Autofocus every'
           OnChange = StepChange
           TabOrder = 3
         end
         object PanelGain1: TPanel
-          Left = 0
+          Left = 24
           Height = 34
-          Top = 0
-          Width = 288
+          Top = 104
+          Width = 204
           BevelOuter = bvNone
-          Caption = ' '
+          ClientHeight = 34
+          ClientWidth = 204
           TabOrder = 4
           Visible = False
-        end
-        object PISObox: TComboBox
-          Left = 96
-          Height = 33
-          Hint = 'Exposure time in secondes'
-          Top = 1
-          Width = 100
-          ItemHeight = 0
-          OnChange = StepChange
-          Style = csDropDownList
-          TabOrder = 5
-          Visible = False
-        end
-        object LabelGain1: TLabel
-          Left = 8
-          Height = 17
-          Top = 4
-          Width = 30
-          Caption = 'Gain'
-          ParentColor = False
-        end
-        object PGainEdit: TSpinEdit
-          Left = 96
-          Height = 27
-          Top = 1
-          Width = 81
-          MaxValue = 100000
-          OnChange = StepChange
-          TabOrder = 6
+          object LabelGain1: TLabel
+            Left = 8
+            Height = 17
+            Top = 4
+            Width = 30
+            Caption = 'Gain'
+            ParentColor = False
+          end
+          object PGainEdit: TSpinEdit
+            Left = 96
+            Height = 27
+            Top = 1
+            Width = 81
+            MaxValue = 100000
+            OnChange = StepChange
+            TabOrder = 0
+          end
+          object PISObox: TComboBox
+            Left = 96
+            Height = 33
+            Hint = 'Exposure time in secondes'
+            Top = 1
+            Width = 100
+            ItemHeight = 0
+            OnChange = StepChange
+            Style = csDropDownList
+            TabOrder = 1
+            Visible = False
+          end
         end
         object AutofocusCount: TSpinEdit
           Left = 165
           Height = 27
-          Top = 56
+          Top = 40
           Width = 57
           MaxValue = 1000
           MinValue = 1
           OnChange = StepChange
-          TabOrder = 7
+          TabOrder = 5
           Value = 1
         end
       end

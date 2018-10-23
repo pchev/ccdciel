@@ -35,7 +35,6 @@ T_Steps = array of TStep;
 
 T_Plan = class(TComponent)
   private
-    StepRepeatTimer: TTimer;
     PlanTimer: TTimer;
     StartTimer: TTimer;
     FPlanChange: TNotifyEvent;
@@ -52,7 +51,6 @@ T_Plan = class(TComponent)
     procedure msg(txt:string; level: integer);
     procedure ShowDelayMsg(txt:string);
     procedure PlanTimerTimer(Sender: TObject);
-    procedure StepRepeatTimerTimer(Sender: TObject);
     procedure StartTimerTimer(Sender: TObject);
     procedure StartCapture;
   protected
@@ -60,7 +58,6 @@ T_Plan = class(TComponent)
     NumSteps: integer;
     FCurrentStep: integer;
     StepRunning: boolean;
-    StepRepeatCount,StepTotalCount: integer;
     StepTimeStart,StepDelayEnd: TDateTime;
     FName,FObjectName: string;
     FRunning: boolean;
@@ -101,10 +98,6 @@ begin
   PlanTimer.Enabled:=false;
   PlanTimer.Interval:=1000;
   PlanTimer.OnTimer:=@PlanTimerTimer;
-  StepRepeatTimer:=TTimer.Create(Self);
-  StepRepeatTimer.Enabled:=false;
-  StepRepeatTimer.Interval:=1000;
-  StepRepeatTimer.OnTimer:=@StepRepeatTimerTimer;
   StartTimer:=TTimer.Create(self);
   StartTimer.Enabled:=false;
   StartTimer.Interval:=5000;
@@ -167,8 +160,6 @@ end;
 procedure T_Plan.Stop;
 begin
   FRunning:=false;
-  if StepRepeatTimer.Enabled and Preview.Running then Preview.BtnLoop.Click;
-  StepRepeatTimer.Enabled:=false;
   if Capture.Running then Capture.BtnStart.Click;
 end;
 
@@ -198,10 +189,8 @@ procedure T_Plan.StartStep;
 var p: TStep;
 begin
   StepRunning:=true;
-  StepRepeatCount:=1;
   p:=FSteps[CurrentStep];
   if p<>nil then begin
-    StepTotalCount:=p.repeatcount;
     if p.exposure>0 then Fcapture.ExpTime.Text:=p.exposure_str;
     Fcapture.Binning.Text:=p.binning_str;
     if hasGainISO then
@@ -239,55 +228,19 @@ var tt: double;
 begin
  if FRunning then begin
    p:=FSteps[CurrentStep];
-   if not StepRepeatTimer.Enabled then begin
-     StepRunning:=Capture.Running;
-     if not StepRunning then begin
-       inc(StepRepeatCount);
-       if (p<>nil)and(StepRepeatCount<=p.repeatcount) then begin
-          tt:=p.delay-(Now-StepTimeStart)*secperday;
-          if tt<1 then tt:=1;
-          if tt>1 then msg(Format(rsWaitSecondsB2, [FormatFloat(f1, tt),
-            IntToStr(StepRepeatCount)]),2);
-          StepRepeatTimer.Interval:=trunc(1000*tt);
-          StepRepeatTimer.Enabled:=true;
-          StepDelayEnd:=now+tt/secperday;
-       end
-       else begin
-         NextStep;
-       end;
-     end;
-   end
-   else begin
-     tt:=(StepDelayEnd-Now)*secperday;
-     ShowDelayMsg(Format(rsContinueInSe, [FormatFloat(f0, tt)]));
+   StepRunning:=Capture.Running;
+   if not StepRunning then begin
+       NextStep;
    end;
  end
  else begin
     PlanTimer.Enabled:=false;
-    StepRepeatTimer.Enabled:=false;
     FCurrentStep:=-1;
     msg(Format(rsPlanStopped, [FName]),1);
     ShowDelayMsg('');
  end;
 end;
 
-procedure T_Plan.StepRepeatTimerTimer(Sender: TObject);
-var p: TStep;
-begin
- if FRunning then begin
-    StepRunning:=true;
-    StepRepeatTimer.Enabled:=false;
-    ShowDelayMsg('');
-    p:=Steps[CurrentStep];
-    if p<>nil then begin
-      msg(Format(rsRepeatStep, [inttostr(StepRepeatCount), p.repeatcount_str,
-        p.description_str]),1);
-      StepTimeStart:=now;
-      StartCapture;
-    end
-    else FRunning:=false;
- end;
-end;
 
 procedure T_Plan.StartTimerTimer(Sender: TObject);
 begin

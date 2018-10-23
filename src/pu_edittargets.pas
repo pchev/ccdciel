@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolrepeat=7;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6;
 
 type
 
@@ -51,13 +51,11 @@ type
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
     GroupBoxStep: TGroupBox;
-    GroupBoxRepeat: TGroupBox;
     OpenDialog1: TOpenDialog;
     Panel15: TPanel;
     Panel16: TPanel;
     Panel17: TPanel;
     PanelSep: TPanel;
-    PDelay: TFloatSpinEdit;
     DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
@@ -84,8 +82,6 @@ type
     GroupBox7: TGroupBox;
     PISObox: TComboBox;
     Label1: TLabel;
-    Label12: TLabel;
-    Label17: TLabel;
     Label2: TLabel;
     LabelGain1: TLabel;
     Panel1: TPanel;
@@ -221,7 +217,7 @@ type
     procedure ClearStepList;
     procedure ShowPlan;
     procedure SavePlan;
-    procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
+    procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
   end;
@@ -350,9 +346,6 @@ begin
   GroupBox5.Caption:=rsRepeat;
   // plan
   GroupBoxStep.Caption:=rsStep;
-  GroupBoxRepeat.Caption:=rsRepeat;
-  Label17.Caption := rsSeconds2;
-  Label12.Caption := rsInterval;
   CheckBoxDither.Caption := rsDitherEvery;
   CheckBoxAutofocusStart.Caption := rsAutofocusBef;
   CheckBoxAutofocus.Caption := rsAutofocusEve;
@@ -368,7 +361,6 @@ begin
   StepList.Columns.Items[pcolbin-1].Title.Caption := rsBinning;
   StepList.Columns.Items[pcolfilter-1].Title.Caption := rsFilter;
   StepList.Columns.Items[pcolcount-1].Title.Caption := rsCount;
-  StepList.Columns.Items[pcolrepeat-1].Title.Caption := rsRepeat;
   Label1.Caption := rsPlan;
 end;
 
@@ -1274,7 +1266,7 @@ end;
 
 ///////////// Plan /////////////////
 
-procedure Tf_EditTargets.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep);
+procedure Tf_EditTargets.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
 var str,buf: string;
     j:integer;
 begin
@@ -1308,20 +1300,19 @@ begin
   p.filter:=j;
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
   p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
-  p.repeatcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1));
-  GroupBoxRepeat.Visible:=(p.repeatcount>1);
-  p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
   p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
   p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
   p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
   p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
+  // obsolete option
+  if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
+     msg:='Warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
 end;
 
 procedure Tf_EditTargets.ShowPlan;
-//old formshow
 var pfile: TCCDconfig;
-    fn: string;
+    fn,buf: string;
     i,n:integer;
     p: TStep;
   procedure NewPlan;
@@ -1344,9 +1335,10 @@ begin
       NewPlan;
     end else begin
       StepList.RowCount:=n+1;
+      buf:='';
       for i:=1 to n do begin
         p:=TStep.Create;
-        ReadStep(pfile,i,p);
+        ReadStep(pfile,i,p,buf);
         StepList.Cells[0,i]:=IntToStr(i);
         StepList.Cells[1,i]:=p.description_str;
         StepList.Objects[0,i]:=p;
@@ -1355,6 +1347,7 @@ begin
       pfile.Free;
       StepList.Row:=1;
       StepListSelection(StepList,0,1);
+      if buf>'' then ShowMessage(buf);
     end;
   end else begin
     NewPlan;
@@ -1381,14 +1374,12 @@ begin
     Bias : begin
            StepList.Cells[pcolexp,n]:='0.01';
            StepList.Cells[pcolfilter,n]:=Filter0;
-           StepList.Cells[pcolrepeat,n]:='1';
         end;
     Dark : begin
            StepList.Cells[pcolfilter,n]:=Filter0;
-           StepList.Cells[pcolrepeat,n]:='1';
         end;
     Flat : begin
-           StepList.Cells[pcolrepeat,n]:='1';
+
         end;
   end;
 end;
@@ -1414,10 +1405,7 @@ begin
     PGainEdit.Value:=p.gain;
   StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter];
   StepList.Cells[pcolcount,n]:=IntToStr(p.count);
-  StepList.Cells[pcolrepeat,n]:=IntToStr(p.repeatcount);
-  PDelay.Value:=p.delay;
   GroupBoxStep.Caption:=rsStep+blank+p.description_str;
-  GroupBoxRepeat.Visible:=(p.repeatcount>1);
   CheckBoxDither.Checked:=p.dither;
   DitherCount.Value:=p.dithercount;
   CheckBoxAutofocusStart.Checked:=p.autofocusstart;
@@ -1482,12 +1470,6 @@ begin
   j:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
   StepsModified:=StepsModified or (p.count<>j);
   p.count:=j;
-  j:=StrToIntDef(StepList.Cells[pcolrepeat,n],p.repeatcount);
-  StepsModified:=StepsModified or (p.repeatcount<>j);
-  p.repeatcount:=j;
-  GroupBoxRepeat.Visible:=(p.repeatcount>1);
-  StepsModified:=StepsModified or (p.delay<>PDelay.Value);
-  p.delay:=PDelay.Value;
   StepsModified:=StepsModified or (p.dither<>CheckBoxDither.Checked);
   p.dither:=CheckBoxDither.Checked;
   StepsModified:=StepsModified or (p.dithercount<>DitherCount.Value);
@@ -1635,8 +1617,6 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',p.autofocusstart);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Autofocus',p.autofocus);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',p.autofocuscount);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',p.repeatcount);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Delay',p.delay);
   end;
   pfile.Flush;
   pfile.Free;

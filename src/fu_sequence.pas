@@ -190,9 +190,8 @@ begin
  PlanGrid.Cells[0, 0]:=rsDesc;
  PlanGrid.Cells[1, 0]:=rsExp2;
  PlanGrid.Cells[2, 0]:=rsCount;
- PlanGrid.Cells[3, 0]:=rsRepeat;
- PlanGrid.Cells[4, 0]:=rsType;
- PlanGrid.Cells[5, 0]:=rsFilter;
+ PlanGrid.Cells[3, 0]:=rsType;
+ PlanGrid.Cells[4, 0]:=rsFilter;
  f_EditTargets:=Tf_EditTargets.Create(nil);
  f_EditTargets.Astrometry:=Fastrometry;
 end;
@@ -502,7 +501,7 @@ begin
 end;
 
 procedure Tf_sequence.LoadPlan(p: T_plan; plan:string);
-var fn: string;
+var fn,buf: string;
     i,n:integer;
     pfile: TCCDconfig;
     s: TStep;
@@ -514,11 +513,13 @@ begin
      pfile:=TCCDconfig.Create(self);
      pfile.Filename:=fn;
      n:=pfile.GetValue('/StepNum',0);
+     buf:='';
      for i:=1 to n do begin
        s:=TStep.Create;
-       f_EditTargets.ReadStep(pfile,i,s);
+       f_EditTargets.ReadStep(pfile,i,s,buf);
        p.Add(s);
      end;
+     if buf>'' then ShowMessage(buf);
   end;
 end;
 
@@ -553,9 +554,8 @@ begin
      PlanGrid.Cells[0,i]:=T_Plan(sender).Steps[i-1].description_str;
      PlanGrid.Cells[1,i]:=T_Plan(sender).Steps[i-1].exposure_str;
      PlanGrid.Cells[2,i]:=T_Plan(sender).Steps[i-1].count_str;
-     PlanGrid.Cells[3,i]:=T_Plan(sender).Steps[i-1].repeatcount_str;
-     PlanGrid.Cells[4,i]:=T_Plan(sender).Steps[i-1].frtype_str;
-     PlanGrid.Cells[5,i]:=T_Plan(sender).Steps[i-1].filter_str;
+     PlanGrid.Cells[3,i]:=T_Plan(sender).Steps[i-1].frtype_str;
+     PlanGrid.Cells[4,i]:=T_Plan(sender).Steps[i-1].filter_str;
    end;
   except
   end;

@@ -863,8 +863,6 @@ begin
       fls.gain:=flt.FlatGain;
       fls.count:=flt.FlatCount;
       fls.exposure:=FlatMinExp;
-      fls.delay:=1;
-      fls.repeatcount:=1;
       fls.dither:=false;
       fls.dithercount:=1;
       fls.autofocusstart:=false;
