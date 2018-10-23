@@ -28,12 +28,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_camera, u_global, u_translation,
+uses  cu_camera, u_global,
   {$ifdef mswindows}
-    u_utils, cu_fits, indiapi,
-    Variants, comobj, ActiveX,
+    u_translation, u_utils, cu_fits, indiapi,
+    Variants, comobj, ActiveX, LCLVersion,
   {$endif}
-  LCLVersion, Forms, ExtCtrls, Classes, SysUtils, LCLType;
+   Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
 type
 T_ascomcamera = class(T_camera)
@@ -319,7 +319,7 @@ begin
     try
       state:=V.CameraState;
     except
-      msg('Error reading camera state',0);
+      msg('Error reading camera state '+inttostr(state),0);
     end;
     ok:=false;
     try
@@ -457,6 +457,7 @@ begin
      end;
    end;
    {$ifdef debug_ascom}msg('pad fits');{$endif}
+   b:='';
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);

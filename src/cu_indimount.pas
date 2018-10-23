@@ -513,7 +513,6 @@ else result:=-1;
 end;
 
 function T_indimount.SlewAsync(sra,sde: double):Boolean;
-var slewtimeout:integer;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin

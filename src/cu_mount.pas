@@ -127,6 +127,7 @@ begin
     // every 5 minutes maintain position near the zenith, add some randomness and stop tracking
    if now-FlatSlewTime>(5/minperday) then begin
      FlatSlewTime:=now;
+     zra:=0; zde:=0;
      cmdHz2Eq(0,90,zra,zde);
      zra:=zra+(Random-0.5)/15;     // move +/- 0.5 degree
      zde:=zde+(Random-0.5);
@@ -144,6 +145,7 @@ end;
 procedure T_mount.SlewToDomeFlatPosition;
 var zra,zde: double;
 begin
+   zra:=0; zde:=0;
    // actual equatorial position of flat panel
    cmdHz2Eq(DomeFlatTelescopeAz,DomeFlatTelescopeAlt,zra,zde);
    // slew

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, indiapi, UScaleDPI,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI,
   fu_capture, fu_preview, fu_filterwheel, u_translation, pu_sequenceoptions,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan, cu_planetarium, pu_pause,

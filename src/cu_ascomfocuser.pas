@@ -27,9 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_focuser, u_global, u_utils, u_translation,
+uses cu_focuser, u_global,
     {$ifdef mswindows}
-    indiapi, Variants, comobj, math,
+    u_translation, u_utils, indiapi, Variants, comobj, math,
     {$endif}
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -288,7 +288,9 @@ begin
 end;
 
 procedure T_ascomfocuser.SetPosition(p:integer);
+{$ifdef mswindows}
 var n: integer;
+{$endif}
 begin
  {$ifdef mswindows}
  if Connected then begin

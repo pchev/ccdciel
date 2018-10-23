@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 {$mode delphi}{$H+}
-
 interface
 
 uses u_global,
@@ -696,8 +695,8 @@ var
 begin
    pchExec := @bchExec;
    StrPCopy(pchExec,cmd);
-   FillChar(si,sizeof(si),0);
-   FillChar(pi,sizeof(pi),0);
+   FillChar(si{%H-},sizeof(si),0);
+   FillChar(pi{%H-},sizeof(pi),0);
    si.dwFlags:=STARTF_USESHOWWINDOW;
    if title<>'' then si.lpTitle:=Pchar(title);
    if hide then si.wShowWindow:=SW_SHOWMINIMIZED
@@ -1901,6 +1900,7 @@ begin
   end;
 end;
 
+{$WARN 5057 off : Local variable "$1" does not seem to be initialized}
 procedure apparent_equatorialV(var p1: coordvector);
 var
   ra, de, da, dd: double;
@@ -2276,6 +2276,7 @@ begin
   // Return result.
   sofa_Cr(w, r);
 end;
+{$WARN 5057 on : Local variable "$1" does not seem to be initialized}
 
 procedure Sort(var list: array of double);
 var sorted: boolean;

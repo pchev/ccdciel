@@ -1003,6 +1003,7 @@ begin
                  exit;
               end;
               // compute focus
+              p_hyp:=0;a_hyp:=0;b_hyp:=0;
               find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
               msg(Format(rsHYPERBOLACur, [FormatFloat(f3, p_hyp), FormatFloat(
                 f4, lowest_error), inttostr(iteration_cycles)]),3 );

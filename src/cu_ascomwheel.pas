@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_wheel, u_global, indiapi, u_translation,
+uses  cu_wheel, u_global, indiapi,
   {$ifdef mswindows}
-     Variants, comobj,
+     u_translation, Variants, comobj,
   {$endif}
    ExtCtrls, Forms, Classes, SysUtils;
 
@@ -155,6 +155,7 @@ begin
        if Assigned(FonFilterChange) then FonFilterChange(stFilter);
     end;
     fnam:=Tstringlist.Create;
+    n:=0;
     GetAscomFilterNames(fnam,n);
     fnchanged:=n<>FFilterNum;
     if not fnchanged then

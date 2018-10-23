@@ -52,7 +52,7 @@ end;
 
 //http://fastcode.sourceforge.net/
 //function ValLong_JOH_PAS_4_c(Value: Integer): string;
-function Valint32(const s; var code: Integer): Longint;{fast val function, about 4 x faster}
+function Valint32(const s; out code: Integer): Longint;{fast val function, about 4 x faster}
 var
   Digit: Integer;
   Neg, Hex, Valid: Boolean;
@@ -139,12 +139,12 @@ begin
 end;
 
 
-procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; var ra2,dec2,length2,width2,pa : double);{deepsky database search}
+procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; out ra2,dec2,length2,width2,pa : double);{deepsky database search}
 var
   x,z,y      : integer;
   fout,fout2, backsl1, backsl2,length_regel : integer;
-  regel, data1, type1      :  string;
-  delta_ra,width2dummy : double;
+  regel, data1      :  string;
+  delta_ra : double;
   p2,p1: pchar;
 begin
   repeat {until fout is 0}
@@ -236,7 +236,7 @@ end;
 procedure plot_glx(dc:tcanvas;x9,y9,diameter,ratio {ratio width/length},orientation:double); {draw oval or galaxy}
 var   glx :array[0..127 {nr}+1] of tpoint;
       i,nr           : integer;
-      r, xx,yy,sin_ori,cos_ori              : double;
+      r, sin_ori,cos_ori              : double;
 begin
    if diameter<10 then nr:=22
    else if diameter<20 then nr:=44
@@ -253,7 +253,7 @@ begin
    dc.polygon(glx,nr+1);
 end;
 
-procedure rotate(rot,x,y :double;var  x2,y2:double);{rotate a vector point, angle seen from y-axis, counter clockwise}
+procedure rotate(rot,x,y :double;out  x2,y2:double);{rotate a vector point, angle seen from y-axis, counter clockwise}
 var
   sin_rot, cos_rot :double;
 begin
@@ -268,7 +268,7 @@ end;
 { ra,dec:   right ascension and declination}
 { xx,yy :   CCD coordinates}
 { cdelt:    CCD scale in arcsec per pixel}
-procedure equatorial_standard(ra0,dec0,ra,dec, cdelt : double; var xx,yy: double);
+procedure equatorial_standard(ra0,dec0,ra,dec, cdelt : double; out xx,yy: double);
 var dv,sin_dec0,cos_dec0,sin_dec ,cos_dec,sin_deltaRA,cos_deltaRA: double;
 begin
   sincos(dec0  ,sin_dec0 ,cos_dec0);

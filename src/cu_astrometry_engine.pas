@@ -29,7 +29,7 @@ uses  u_global, u_utils, cu_fits,
   {$ifdef unix}
   Unix, BaseUnix,
   {$endif}
-  LCLIntf, math, UTF8Process, process, FileUtil, strutils, Classes, SysUtils,u_translation;
+  LCLIntf, math, UTF8Process, process, FileUtil, Classes, SysUtils,u_translation;
 
 type
 TAstrometry_engine = class(TThread)
@@ -132,7 +132,7 @@ var hnd: Thandle;
     i,childnum:integer;
     resp: Tstringlist;
 {$else}
-var  Kcmd,buf,Kpos: string;
+var  Kcmd,Kpos: string;
      Kparam: TStringList;
      Kprocess: TProcessUTF8;
 {$endif}
@@ -212,7 +212,10 @@ end;
 procedure TAstrometry_engine.Resolve;
 var str: TStringList;
     i: integer;
-    buf,fIn,fDrive: string;
+    buf: String;
+    {$ifdef mswindows}
+    fIn,fDrive: string;
+    {$endif}
 begin
 if FResolver=ResolverAstrometryNet then begin
  wcsfile:=ChangeFileExt(FInFile,'.wcs');
@@ -430,7 +433,6 @@ var n: LongInt;
     i,nside,available: integer;
     endtime: double;
     mem: TMemoryStream;
-    hl:array[1..80] of char;
 begin
 if FResolver=ResolverAstrometryNet then begin
   cbuf:='';

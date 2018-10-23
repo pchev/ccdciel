@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  u_translation, math, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
+  u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
   TTargetList = array of TTarget;

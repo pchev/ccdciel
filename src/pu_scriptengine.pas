@@ -1554,6 +1554,7 @@ function Tf_scriptengine.cmd_AutoFocus: string;
 var ok:boolean;
 begin
   result:=msgFailed;
+  ok:=false;
   try
   if Assigned(FonAutofocus) then FonAutofocus(ok);
   if ok then result:=msgOK;
@@ -1565,6 +1566,7 @@ function Tf_scriptengine.cmd_AutomaticAutoFocus: string;
 var ok:boolean;
 begin
   result:=msgFailed;
+  ok:=false;
   try
   if Assigned(FonAutomaticAutofocus) then FonAutomaticAutofocus(ok);
   if ok then result:=msgOK;
@@ -1588,7 +1590,7 @@ end;
 function Tf_scriptengine.cmd_ListFiles(var lf:TStringList):string;
 var fs : TSearchRec;
     i: integer;
-    dir,buf: string;
+    dir: string;
 begin
  dir:=lf[0];
  lf.Clear;

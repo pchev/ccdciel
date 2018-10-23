@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_rotator, u_global,  u_translation,
+uses cu_rotator, u_global,
     {$ifdef mswindows}
-    indiapi, Variants, comobj,
+    u_translation, indiapi, Variants, comobj,
     {$endif}
     Forms, ExtCtrls,Classes, SysUtils;
 

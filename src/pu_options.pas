@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, Spin, enhedits, Types;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, Spin, enhedits;
 
 type
 
@@ -863,7 +863,6 @@ end;
 
 procedure Tf_option.FileOrFolderOptionsColRowMoved(Sender: TObject;
   IsColumn: Boolean; sIndex, tIndex: Integer);
-var i: integer;
 begin
   FileOrFolderOptionsRenumber(TStringGrid(Sender));
 end;

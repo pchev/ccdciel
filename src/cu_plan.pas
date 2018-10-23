@@ -223,11 +223,8 @@ end;
 
 
 procedure T_Plan.PlanTimerTimer(Sender: TObject);
-var tt: double;
-    p: TStep;
 begin
  if FRunning then begin
-   p:=FSteps[CurrentStep];
    StepRunning:=Capture.Running;
    if not StepRunning then begin
        NextStep;

@@ -95,7 +95,6 @@ end;
 procedure TPlanetarium_hnsky.Execute;
 var buf:string;
     dateto : double;
-    i : integer;
     ending : boolean;
 begin
 started:=true;

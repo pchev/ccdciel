@@ -415,7 +415,7 @@ end;
 end;
 
 function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew: integer; out err: double): boolean;
-var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade,a,h: double;
+var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: double;
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
     SyncOK,NearMeridian,RetryMeridianSync: boolean;

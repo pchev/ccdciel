@@ -942,7 +942,7 @@ begin
   compile_system:={$I %FPCTARGETOS%};
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
-  Application.UpdateFormatSettings := False;
+  Application.{%H-}qUpdateFormatSettings := False;
   {$else}
   DefaultInterface:=INDI;
   {$endif}
@@ -3482,13 +3482,17 @@ begin
 end;
 
 procedure Tf_main.MenuShowLogClick(Sender: TObject);
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
   if LogFileOpen then begin
-     i:=ExecuteFile(LogFile);
      {$ifdef mswindows}
+     i:=ExecuteFile(LogFile);
      if i<=32 then
         ShowMessage('Error '+inttostr(i)+crlf+'Check if the file exist and set the application to use to open files with .log extension');
+     {$else}
+     ExecuteFile(LogFile);
      {$endif}
   end
   else
@@ -3496,13 +3500,17 @@ begin
 end;
 
 procedure Tf_main.MenuShowINDIlogClick(Sender: TObject);
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
   if DeviceLogFileOpen then begin
-     i:=ExecuteFile(DeviceLogFile);
      {$ifdef mswindows}
+     i:=ExecuteFile(DeviceLogFile);
      if i<=32 then
         ShowMessage('Error '+inttostr(i)+crlf+'Check if the file exist and set the application to use to open files with .log extension');
+     {$else}
+     ExecuteFile(LogFile);
      {$endif}
   end
   else
@@ -7932,6 +7940,7 @@ begin
      end;
    end;
    // fill to fits buffer size
+   b:='';
    c:=2880-(ImgStream.Size mod 2880);
    FillChar(b,c,0);
    ImgStream.Write(b,c);

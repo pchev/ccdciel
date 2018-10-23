@@ -292,7 +292,7 @@ end;
 
 procedure Tf_setup.LoadProfileList;
 var fs : TSearchRec;
-    i,j,n: integer;
+    i,n: integer;
     buf:string;
 begin
 ProfileLock:=true;
@@ -303,7 +303,7 @@ i:=FindFirstUTF8(slash(ConfigDir)+'ccdciel_*.conf',0,fs);
 while i=0 do begin
   buf:=ExtractFileNameOnly(fs.Name);
   delete(buf,1,8);
-  j:=ProfileList.Items.Add(buf);
+  ProfileList.Items.Add(buf);
   i:=FindNextUTF8(fs);
 end;
 FindCloseUTF8(fs);
@@ -620,17 +620,16 @@ procedure Tf_setup.BtnAboutAscomClick(Sender: TObject);
 {$ifdef mswindows}
 var buf : string;
   V: variant;
-  t,dev: WideString;
-  err: string;
+  dev: WideString;
 {$endif}
 begin
 {$ifdef mswindows}
   case TButton(Sender).Tag of
-    1 : begin t:='Camera'; dev:=AscomCamera.Text; end;
-    2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
-    3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
-    4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
-    5 : begin t:='Rotator'; dev:=AscomRotator.Text; end;
+    1 : begin dev:=AscomCamera.Text; end;
+    2 : begin dev:=AscomWheel.Text; end;
+    3 : begin dev:=AscomFocuser.Text; end;
+    4 : begin dev:=AscomMount.Text; end;
+    5 : begin dev:=AscomRotator.Text; end;
   end;
 
   try
@@ -649,17 +648,16 @@ procedure Tf_setup.BtnSetupAscomClick(Sender: TObject);
 {$ifdef mswindows}
 var
   V: variant;
-  t,dev: WideString;
-  err: string;
+  dev: WideString;
 {$endif}
 begin
 {$ifdef mswindows}
   case TButton(Sender).Tag of
-    1 : begin t:='Camera'; dev:=AscomCamera.Text; end;
-    2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
-    3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
-    4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
-    5 : begin t:='Rotator'; dev:=AscomRotator.Text; end;
+    1 : begin dev:=AscomCamera.Text; end;
+    2 : begin dev:=AscomWheel.Text; end;
+    3 : begin dev:=AscomFocuser.Text; end;
+    4 : begin dev:=AscomMount.Text; end;
+    5 : begin dev:=AscomRotator.Text; end;
   end;
 
   try
@@ -839,7 +837,7 @@ begin
 end;
 
 procedure Tf_setup.BtnNewProfileClick(Sender: TObject);
-var newp,curconfig,newconfig:string;
+var newp,newconfig:string;
   n:integer;
   f:textfile;
 begin
