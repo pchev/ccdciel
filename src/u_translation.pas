@@ -923,6 +923,10 @@ resourcestring
   rsUsingConfigu = 'Using configuration file %s';
   rsPleaseSelect2 = 'Please select a temporary folder without space in the '
     +'path name.';
+  rsGetSiteLongL = 'Get site long/lat from the mount';
+  rsTimeSendToTe = 'Time send to telescope.';
+  rsSiteSendToTe = 'Site send to telescope.';
+  rsSiteSetFromT = 'Site set from the telescope.';
 
 
 

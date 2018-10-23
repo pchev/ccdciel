@@ -910,6 +910,14 @@ object f_setup: Tf_setup
         Caption = 'Set mount site long/lat from configuration'
         TabOrder = 4
       end
+      object MountGetObservatory: TCheckBox
+        Left = 32
+        Height = 21
+        Top = 233
+        Width = 234
+        Caption = 'Get site long/lat from the mount'
+        TabOrder = 5
+      end
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'

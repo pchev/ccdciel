@@ -70,6 +70,7 @@ type
     DeviceWatchdog: TCheckBox;
     DeviceRotator: TCheckBox;
     DeviceMount: TCheckBox;
+    MountGetObservatory: TCheckBox;
     WatchdogThreshold: TEdit;
     Label19: TLabel;
     Label20: TLabel;
@@ -279,6 +280,7 @@ begin
   DeviceMount.Caption:=rsUseMount;
   MountSetDateTime.Caption:=rsSetMountTime;
   MountSetObservatory.Caption:=rsSetMountSite;
+  MountGetObservatory.Caption:=rsGetSiteLongL;
   Watchdog.Caption:=rsWatchdog;
   Label19.Caption:=rsDevices;
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
@@ -379,6 +381,7 @@ MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
 AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
 MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
 MountSetObservatory.Checked:=conf.GetValue('/Mount/SetObservatory',false);
+MountGetObservatory.Checked:=conf.GetValue('/Mount/GetObservatory',false);
 
 if WatchdogIndiDevice.Items.Count=0 then begin
   WatchdogIndiDevice.Items.Add(conf.GetValue('/INDIwatchdog/Device',''));

@@ -3992,10 +3992,21 @@ case mount.Status of
                       NewMessage(Format(rsConnected, [rsMount]),1);
                       wait(1);
                       if config.GetValue('/Mount/SetDateTime',false) then begin
-                         mount.SetDate(NowUTC,ObsTimeZone);
+                         if mount.SetDate(NowUTC,ObsTimeZone) then
+                            NewMessage(rsTimeSendToTe, 3);
                       end;
                       if config.GetValue('/Mount/SetObservatory',false) then begin
-                         mount.SetSite(-ObsLongitude, ObsLatitude, ObsElevation);
+                         if mount.SetSite(-ObsLongitude, ObsLatitude, ObsElevation) then
+                            NewMessage(rsSiteSendToTe, 3);
+                      end
+                      else if config.GetValue('/Mount/GetObservatory',false) then begin
+                         if mount.GetSite(ObsLongitude, ObsLatitude, ObsElevation) then begin
+                           ObsLongitude:=-ObsLongitude;
+                           config.SetValue('/Info/ObservatoryLatitude',ObsLatitude);
+                           config.SetValue('/Info/ObservatoryLongitude',ObsLongitude);
+                           config.SetValue('/Info/ObservatoryElevation',ObsElevation);
+                           NewMessage(rsSiteSetFromT, 3);
+                         end;
                       end;
                       MountCoordChange(Sender);
                       CheckMeridianFlip;
@@ -4253,6 +4264,7 @@ begin
     config.SetValue('/ASCOMmount/Device',f_setup.AscomMount.Text);
     config.SetValue('/Mount/SetDateTime',f_setup.MountSetDateTime.Checked);
     config.SetValue('/Mount/SetObservatory',f_setup.MountSetObservatory.Checked);
+    config.SetValue('/Mount/GetObservatory',f_setup.MountGetObservatory.Checked);
 
     if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
     config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);

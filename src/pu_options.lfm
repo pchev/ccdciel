@@ -2,11 +2,11 @@ object f_option: Tf_option
   Left = 574
   Height = 558
   Top = 118
-  Width = 601
+  Width = 635
   ActiveControl = PageControl1
   Caption = 'Options'
   ClientHeight = 558
-  ClientWidth = 601
+  ClientWidth = 635
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
@@ -15,10 +15,10 @@ object f_option: Tf_option
     Left = 0
     Height = 58
     Top = 500
-    Width = 601
+    Width = 635
     Align = alBottom
     ClientHeight = 58
-    ClientWidth = 601
+    ClientWidth = 635
     TabOrder = 0
     object Button1: TButton
       Left = 256
@@ -52,7 +52,7 @@ object f_option: Tf_option
     Left = 0
     Height = 500
     Top = 0
-    Width = 601
+    Width = 635
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
@@ -63,7 +63,7 @@ object f_option: Tf_option
     object TabSheet1: TTabSheet
       Caption = 'Files'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object ButtonDir: TButton
         Left = 365
         Height = 25
@@ -257,7 +257,7 @@ object f_option: Tf_option
     object TabSheet2: TTabSheet
       Caption = 'Observatory'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object Label5: TLabel
         Left = 8
         Height = 17
@@ -533,7 +533,7 @@ object f_option: Tf_option
     object TabSheet8: TTabSheet
       Caption = 'Preview'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object GroupBox8: TGroupBox
         Left = 8
         Height = 104
@@ -662,7 +662,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 25
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -854,7 +854,7 @@ object f_option: Tf_option
     object TabSheet11: TTabSheet
       Caption = 'Camera'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object GroupBox1: TGroupBox
         Left = 8
         Height = 272
@@ -924,8 +924,8 @@ object f_option: Tf_option
             Height = 40
             Top = 48
             Width = 328
-            ClientHeight = 40
-            ClientWidth = 328
+            ClientHeight = 36
+            ClientWidth = 324
             TabOrder = 1
             object Label74: TLabel
               Left = 112
@@ -1016,7 +1016,7 @@ object f_option: Tf_option
     object TabSheet12: TTabSheet
       Caption = 'Flat'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object FlatType: TRadioGroup
         Left = 8
         Height = 65
@@ -1277,7 +1277,7 @@ object f_option: Tf_option
     object TabSheet10: TTabSheet
       Caption = 'Focus'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object GroupBox2: TGroupBox
         Left = 8
         Height = 112
@@ -1471,7 +1471,7 @@ object f_option: Tf_option
     object TabSheet3: TTabSheet
       Caption = 'Autofocus'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object Autofocusmode: TRadioGroup
         Left = 8
         Height = 52
@@ -1969,7 +1969,7 @@ object f_option: Tf_option
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object GroupBox4: TGroupBox
         Left = 8
         Height = 180
@@ -2137,8 +2137,8 @@ object f_option: Tf_option
               Top = 176
               Width = 418
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 418
+              ClientHeight = 36
+              ClientWidth = 414
               TabOrder = 2
               Visible = False
               object Label34: TLabel
@@ -2416,7 +2416,7 @@ object f_option: Tf_option
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object GroupBox7: TGroupBox
         Left = 8
         Height = 412
@@ -2568,7 +2568,7 @@ object f_option: Tf_option
     object TabSheet9: TTabSheet
       Caption = 'Meridian'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object MeridianOption: TRadioGroup
         Left = 8
         Height = 57
@@ -2719,7 +2719,7 @@ object f_option: Tf_option
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object AutoguiderBox: TRadioGroup
         Left = 8
         Height = 64
@@ -3043,7 +3043,7 @@ object f_option: Tf_option
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
       ClientHeight = 496
-      ClientWidth = 494
+      ClientWidth = 528
       object PlanetariumBox: TRadioGroup
         Left = 4
         Height = 80
@@ -3103,8 +3103,8 @@ object f_option: Tf_option
               Height = 80
               Top = 48
               Width = 333
-              ClientHeight = 80
-              ClientWidth = 333
+              ClientHeight = 76
+              ClientWidth = 329
               TabOrder = 1
               object CdCport: TEdit
                 Left = 124
