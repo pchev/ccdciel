@@ -50,7 +50,13 @@ type
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
+    GroupBoxStep: TGroupBox;
+    GroupBoxRepeat: TGroupBox;
     OpenDialog1: TOpenDialog;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    PanelSep: TPanel;
     PDelay: TFloatSpinEdit;
     DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
@@ -70,7 +76,7 @@ type
     BtnSkyFlat: TButton;
     FlatFilterList: TCheckListBox;
     PGainEdit: TSpinEdit;
-    GroupBox2: TGroupBox;
+    GroupBoxTarget: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
@@ -89,15 +95,13 @@ type
     Panel13: TPanel;
     Panel14: TPanel;
     Panel2: TPanel;
-    Panel3: TPanel;
+    PanelPlan: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
-    Panel8: TPanel;
     Panel9: TPanel;
     PanelGain1: TPanel;
-    PanelRepeat: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
     Shape1: TShape;
@@ -340,11 +344,13 @@ begin
   FlatTime.Items[0]:=rsAtDusk;
   FlatTime.Items[1]:=rsAtDawn;
   label2.Caption:=rsSequence;
-  GroupBox2.Caption:=rsObject;
+  GroupBoxTarget.Caption:=rsObject;
   GroupBox3.Caption:=rsPA;
   GroupBox4.Caption:=rsBegin+'/'+rsEnd;
   GroupBox5.Caption:=rsRepeat;
   // plan
+  GroupBoxStep.Caption:=rsStep;
+  GroupBoxRepeat.Caption:=rsRepeat;
   Label17.Caption := rsSeconds2;
   Label12.Caption := rsInterval;
   CheckBoxDither.Caption := rsDitherEvery;
@@ -884,12 +890,12 @@ begin
     TargetList.Cells[coldark,n]:='';
     TargetList.Cells[colskip,n]:='';
     TargetList.Cells[colrepeat,n]:='';
-    Panel3.Visible:=false;
+    PanelPlan.Visible:=false;
     PageControl1.ActivePageIndex:=1;
     SetScriptList(n,t.planname);
   end
   else if t.objectname=SkyFlatTxt then begin
-    Panel3.Visible:=false;
+    PanelPlan.Visible:=false;
     PageControl1.ActivePageIndex:=2;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
@@ -926,7 +932,7 @@ begin
     filterlst.Free;
   end
   else begin
-    Panel3.Visible:=true;
+    PanelPlan.Visible:=true;
     PageControl1.ActivePageIndex:=0;
     SetPlanList(n,t.planname);
     if t.starttime>=0 then
@@ -978,6 +984,7 @@ var t: TTarget;
 begin
   t:=TTarget(TargetList.Objects[colseq,aRow]);
   SetTarget(aRow,t);
+  GroupBoxTarget.Caption:=rsObject+blank+TargetList.Cells[1,aRow];
 end;
 
 procedure Tf_EditTargets.TargetListValidateEntry(sender: TObject; aCol,
@@ -1302,7 +1309,7 @@ begin
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
   p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
   p.repeatcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1));
-  PanelRepeat.Visible:=(p.repeatcount>1);
+  GroupBoxRepeat.Visible:=(p.repeatcount>1);
   p.delay:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Delay',1.0);
   p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
   p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
@@ -1409,7 +1416,8 @@ begin
   StepList.Cells[pcolcount,n]:=IntToStr(p.count);
   StepList.Cells[pcolrepeat,n]:=IntToStr(p.repeatcount);
   PDelay.Value:=p.delay;
-  PanelRepeat.Visible:=(p.repeatcount>1);
+  GroupBoxStep.Caption:=rsStep+blank+p.description_str;
+  GroupBoxRepeat.Visible:=(p.repeatcount>1);
   CheckBoxDither.Checked:=p.dither;
   DitherCount.Value:=p.dithercount;
   CheckBoxAutofocusStart.Checked:=p.autofocusstart;
@@ -1477,7 +1485,7 @@ begin
   j:=StrToIntDef(StepList.Cells[pcolrepeat,n],p.repeatcount);
   StepsModified:=StepsModified or (p.repeatcount<>j);
   p.repeatcount:=j;
-  PanelRepeat.Visible:=(p.repeatcount>1);
+  GroupBoxRepeat.Visible:=(p.repeatcount>1);
   StepsModified:=StepsModified or (p.delay<>PDelay.Value);
   p.delay:=PDelay.Value;
   StepsModified:=StepsModified or (p.dither<>CheckBoxDither.Checked);

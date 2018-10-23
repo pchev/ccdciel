@@ -18,27 +18,27 @@ object f_EditTargets: Tf_EditTargets
   Visible = False
   object PanelTarget: TPanel
     Left = 0
-    Height = 368
+    Height = 360
     Top = 0
     Width = 1000
     Align = alTop
-    ClientHeight = 368
+    ClientHeight = 360
     ClientWidth = 1000
     Constraints.MinHeight = 360
     TabOrder = 0
     object Panel11: TPanel
       Left = 699
-      Height = 319
+      Height = 311
       Top = 48
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 319
+      ClientHeight = 311
       ClientWidth = 300
       TabOrder = 1
       object PageControl1: TPageControl
         Left = 0
-        Height = 319
+        Height = 311
         Top = 0
         Width = 300
         ActivePage = TabSheet1
@@ -48,9 +48,9 @@ object f_EditTargets: Tf_EditTargets
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
-          ClientHeight = 315
+          ClientHeight = 307
           ClientWidth = 290
-          object GroupBox2: TGroupBox
+          object GroupBoxTarget: TGroupBox
             Left = 0
             Height = 152
             Top = 0
@@ -123,12 +123,12 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox5: TGroupBox
             Left = 0
-            Height = 106
+            Height = 98
             Top = 209
             Width = 290
             Align = alClient
             Caption = 'Repeat'
-            ClientHeight = 88
+            ClientHeight = 80
             ClientWidth = 288
             TabOrder = 1
             object Label9: TLabel
@@ -252,28 +252,28 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet2: TTabSheet
           Caption = 'Script'
-          ClientHeight = 315
+          ClientHeight = 307
           ClientWidth = 290
           object Panel14: TPanel
             Left = 0
             Height = 108
             Top = 0
-            Width = 292
+            Width = 290
             Align = alTop
             ClientHeight = 108
-            ClientWidth = 292
+            ClientWidth = 290
             TabOrder = 0
             object Label15: TLabel
               Left = 16
-              Height = 15
+              Height = 17
               Top = 22
-              Width = 30
+              Width = 37
               Caption = 'Script'
               ParentColor = False
             end
             object ScriptList: TComboBox
               Left = 98
-              Height = 23
+              Height = 33
               Top = 16
               Width = 166
               ItemHeight = 0
@@ -303,13 +303,13 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet3: TTabSheet
           Caption = 'TabSheet3'
-          ClientHeight = 315
+          ClientHeight = 307
           ClientWidth = 290
           object FlatTime: TRadioGroup
             Left = 0
             Height = 51
             Top = 0
-            Width = 292
+            Width = 290
             Align = alTop
             AutoFill = True
             Caption = 'Flat time'
@@ -321,7 +321,7 @@ object f_EditTargets: Tf_EditTargets
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
             ClientHeight = 33
-            ClientWidth = 290
+            ClientWidth = 288
             Columns = 2
             Items.Strings = (
               'at dusk'
@@ -332,17 +332,17 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox6: TGroupBox
             Left = 0
-            Height = 159
+            Height = 155
             Top = 152
-            Width = 292
+            Width = 290
             Align = alClient
             Caption = 'Filters'
-            ClientHeight = 141
-            ClientWidth = 290
+            ClientHeight = 137
+            ClientWidth = 288
             TabOrder = 1
             object FlatFilterList: TCheckListBox
               Left = 0
-              Height = 139
+              Height = 137
               Top = 0
               Width = 288
               Align = alClient
@@ -357,23 +357,23 @@ object f_EditTargets: Tf_EditTargets
             Left = 0
             Height = 101
             Top = 51
-            Width = 292
+            Width = 290
             Align = alTop
             Caption = 'Exposure'
             ClientHeight = 83
-            ClientWidth = 290
+            ClientWidth = 288
             TabOrder = 2
             object Label16: TLabel
               Left = 8
-              Height = 15
+              Height = 17
               Top = 44
-              Width = 41
+              Width = 49
               Caption = 'Binning'
               ParentColor = False
             end
             object FlatBinning: TComboBox
               Left = 72
-              Height = 23
+              Height = 33
               Top = 40
               Width = 84
               ItemHeight = 0
@@ -383,9 +383,9 @@ object f_EditTargets: Tf_EditTargets
             end
             object Label18: TLabel
               Left = 8
-              Height = 15
+              Height = 17
               Top = 11
-              Width = 33
+              Width = 38
               Caption = 'Count'
               ParentColor = False
             end
@@ -396,13 +396,13 @@ object f_EditTargets: Tf_EditTargets
               Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 36
-              ClientWidth = 124
+              ClientHeight = 40
+              ClientWidth = 128
               TabOrder = 1
               Visible = False
               object FISObox: TComboBox
                 Left = 56
-                Height = 23
+                Height = 33
                 Hint = 'Exposure time in secondes'
                 Top = 0
                 Width = 64
@@ -414,15 +414,15 @@ object f_EditTargets: Tf_EditTargets
               end
               object LabelGain: TLabel
                 Left = 8
-                Height = 15
+                Height = 17
                 Top = 4
-                Width = 24
+                Width = 30
                 Caption = 'Gain'
                 ParentColor = False
               end
               object FGainEdit: TSpinEdit
                 Left = 56
-                Height = 23
+                Height = 27
                 Top = 0
                 Width = 56
                 MaxValue = 10000
@@ -432,7 +432,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object FlatCount: TSpinEdit
               Left = 72
-              Height = 23
+              Height = 27
               Top = 8
               Width = 56
               MaxValue = 10000
@@ -455,133 +455,14 @@ object f_EditTargets: Tf_EditTargets
       ClientHeight = 47
       ClientWidth = 998
       TabOrder = 0
-      object Panel5: TPanel
-        Left = 0
-        Height = 47
-        Top = 0
-        Width = 266
-        Align = alLeft
-        ClientHeight = 47
-        ClientWidth = 266
-        TabOrder = 0
-        object SeqStart: TCheckBox
-          Left = 8
-          Height = 21
-          Hint = 'Activate the start time'
-          Top = 8
-          Width = 76
-          Caption = 'Start at '
-          OnChange = SeqStartChange
-          TabOrder = 0
-        end
-        object SeqStartAt: TMaskEdit
-          Left = 88
-          Height = 29
-          Hint = 'Wait to this time before to start to process the list.'
-          Top = 4
-          Width = 70
-          CharCase = ecNormal
-          MaxLength = 8
-          TabOrder = 1
-          EditMask = '99:99:99;1;_'
-          Text = '  :  :  '
-          SpaceChar = '_'
-        end
-        object SeqStartTwilight: TCheckBox
-          Left = 164
-          Height = 21
-          Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
-          Top = 8
-          Width = 55
-          Caption = 'dusk'
-          Enabled = False
-          OnChange = SeqStartTwilightChange
-          TabOrder = 2
-        end
-      end
-      object Panel7: TPanel
-        Left = 266
-        Height = 47
-        Top = 0
-        Width = 250
-        Align = alLeft
-        ClientHeight = 47
-        ClientWidth = 250
-        TabOrder = 1
-        object SeqStop: TCheckBox
-          Left = 8
-          Height = 21
-          Hint = 'Activate the stop time'
-          Top = 8
-          Width = 74
-          Caption = 'Stop at '
-          OnChange = SeqStopChange
-          TabOrder = 0
-        end
-        object SeqStopAt: TMaskEdit
-          Left = 88
-          Height = 29
-          Hint = 'Stop at this time even if the processing is not finished.'
-          Top = 4
-          Width = 70
-          CharCase = ecNormal
-          MaxLength = 8
-          TabOrder = 1
-          EditMask = '99:99:99;1;_'
-          Text = '  :  :  '
-          SpaceChar = '_'
-        end
-        object SeqStopTwilight: TCheckBox
-          Left = 164
-          Height = 21
-          Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
-          Top = 8
-          Width = 59
-          Caption = 'dawn'
-          Enabled = False
-          OnChange = SeqStopTwilightChange
-          TabOrder = 2
-        end
-      end
-      object Panel13: TPanel
-        Left = 516
-        Height = 47
-        Top = 0
-        Width = 263
-        Align = alLeft
-        ClientHeight = 47
-        ClientWidth = 263
-        TabOrder = 2
-        object CheckBoxRepeatList: TCheckBox
-          Left = 8
-          Height = 21
-          Hint = 'Repeat the whole list a number of time.'
-          Top = 8
-          Width = 165
-          Caption = 'Repeat the whole list '
-          OnChange = CheckBoxRepeatListChange
-          TabOrder = 0
-        end
-        object RepeatCountList: TSpinEdit
-          Left = 200
-          Height = 27
-          Top = 4
-          Width = 56
-          MaxValue = 100000
-          MinValue = 1
-          OnChange = RepeatCountListChange
-          TabOrder = 1
-          Value = 1
-        end
-      end
       object ButtonEndOptions: TButton
-        Left = 800
+        Left = 784
         Height = 25
         Top = 5
         Width = 176
         Caption = 'Termination options'
         OnClick = ButtonEndOptionsClick
-        TabOrder = 3
+        TabOrder = 0
       end
       object Shape1: TShape
         Left = 832
@@ -628,89 +509,233 @@ object f_EditTargets: Tf_EditTargets
         Pen.Style = psClear
         ShowHint = True
       end
+      object Panel16: TPanel
+        Left = 0
+        Height = 47
+        Top = 0
+        Width = 792
+        Align = alLeft
+        BevelOuter = bvNone
+        ClientHeight = 47
+        ClientWidth = 792
+        TabOrder = 1
+        object Panel15: TPanel
+          Left = 0
+          Height = 18
+          Top = 0
+          Width = 792
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 18
+          ClientWidth = 792
+          TabOrder = 0
+          object Label2: TLabel
+            Left = 8
+            Height = 17
+            Top = 0
+            Width = 63
+            Caption = 'Sequence'
+            ParentColor = False
+          end
+          object TargetName: TLabel
+            Left = 100
+            Height = 17
+            Top = 0
+            Width = 89
+            Caption = 'TargetName'
+            Font.Style = [fsBold]
+            ParentColor = False
+            ParentFont = False
+          end
+        end
+        object Panel5: TPanel
+          Left = 513
+          Height = 29
+          Top = 18
+          Width = 266
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 29
+          ClientWidth = 266
+          TabOrder = 1
+          object SeqStart: TCheckBox
+            Left = 8
+            Height = 21
+            Hint = 'Activate the start time'
+            Top = 5
+            Width = 76
+            Caption = 'Start at '
+            OnChange = SeqStartChange
+            TabOrder = 0
+          end
+          object SeqStartAt: TMaskEdit
+            Left = 88
+            Height = 29
+            Hint = 'Wait to this time before to start to process the list.'
+            Top = 0
+            Width = 70
+            CharCase = ecNormal
+            MaxLength = 8
+            TabOrder = 1
+            EditMask = '99:99:99;1;_'
+            Text = '  :  :  '
+            SpaceChar = '_'
+          end
+          object SeqStartTwilight: TCheckBox
+            Left = 164
+            Height = 21
+            Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
+            Top = 5
+            Width = 55
+            Caption = 'dusk'
+            Enabled = False
+            OnChange = SeqStartTwilightChange
+            TabOrder = 2
+          end
+        end
+        object Panel7: TPanel
+          Left = 263
+          Height = 29
+          Top = 18
+          Width = 250
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 29
+          ClientWidth = 250
+          TabOrder = 2
+          object SeqStop: TCheckBox
+            Left = 8
+            Height = 21
+            Hint = 'Activate the stop time'
+            Top = 5
+            Width = 74
+            Caption = 'Stop at '
+            OnChange = SeqStopChange
+            TabOrder = 0
+          end
+          object SeqStopAt: TMaskEdit
+            Left = 88
+            Height = 29
+            Hint = 'Stop at this time even if the processing is not finished.'
+            Top = 0
+            Width = 70
+            CharCase = ecNormal
+            MaxLength = 8
+            TabOrder = 1
+            EditMask = '99:99:99;1;_'
+            Text = '  :  :  '
+            SpaceChar = '_'
+          end
+          object SeqStopTwilight: TCheckBox
+            Left = 164
+            Height = 21
+            Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
+            Top = 5
+            Width = 59
+            Caption = 'dawn'
+            Enabled = False
+            OnChange = SeqStopTwilightChange
+            TabOrder = 2
+          end
+        end
+        object Panel13: TPanel
+          Left = 0
+          Height = 29
+          Top = 18
+          Width = 263
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 29
+          ClientWidth = 263
+          TabOrder = 3
+          object CheckBoxRepeatList: TCheckBox
+            Left = 8
+            Height = 21
+            Hint = 'Repeat the whole list a number of time.'
+            Top = 5
+            Width = 165
+            Caption = 'Repeat the whole list '
+            OnChange = CheckBoxRepeatListChange
+            TabOrder = 0
+          end
+          object RepeatCountList: TSpinEdit
+            Left = 200
+            Height = 27
+            Top = 1
+            Width = 56
+            MaxValue = 100000
+            MinValue = 1
+            OnChange = RepeatCountListChange
+            TabOrder = 1
+            Value = 1
+          end
+        end
+      end
     end
     object Panel4: TPanel
       Left = 1
-      Height = 319
+      Height = 311
       Top = 48
       Width = 698
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 319
+      ClientHeight = 311
       ClientWidth = 698
       TabOrder = 2
       object PanelBottom: TPanel
         Left = 0
-        Height = 39
-        Top = 280
+        Height = 30
+        Top = 281
         Width = 698
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 39
+        ClientHeight = 30
         ClientWidth = 698
         TabOrder = 0
         object BtnNewObject: TButton
-          Left = 232
+          Left = 8
           Height = 25
           Hint = 'Add an object to the list'
-          Top = 6
+          Top = 2
           Width = 93
           Caption = 'New object'
           OnClick = BtnNewObjectClick
           TabOrder = 0
         end
         object BtnDeleteObject: TButton
-          Left = 576
+          Left = 352
           Height = 25
           Hint = 'Delete the selected row from the list.'
-          Top = 6
+          Top = 2
           Width = 120
           Caption = 'Remove object'
           OnClick = BtnDeleteObjectClick
           TabOrder = 1
         end
         object BtnNewScript: TButton
-          Left = 336
+          Left = 112
           Height = 25
           Hint = 'Add a script to the list.'
-          Top = 6
+          Top = 2
           Width = 104
           Caption = 'New script'
           OnClick = BtnNewScriptClick
           TabOrder = 2
         end
         object BtnSkyFlat: TButton
-          Left = 448
+          Left = 224
           Height = 25
           Hint = 'Add a flat sequence to the list.'
-          Top = 6
+          Top = 2
           Width = 120
           Caption = 'Sky Flat'
           OnClick = BtnSkyFlatClick
           TabOrder = 3
         end
-        object TargetName: TLabel
-          Left = 100
-          Height = 17
-          Top = 8
-          Width = 89
-          Caption = 'TargetName'
-          Font.Style = [fsBold]
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label2: TLabel
-          Left = 8
-          Height = 17
-          Top = 8
-          Width = 43
-          Caption = 'Label2'
-          ParentColor = False
-        end
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 280
+        Height = 281
         Hint = 'The list of target to process in sequence.'
         Top = 0
         Width = 698
@@ -830,30 +855,30 @@ object f_EditTargets: Tf_EditTargets
       end
     end
   end
-  object Panel3: TPanel
+  object PanelPlan: TPanel
     Left = 0
-    Height = 185
-    Top = 368
+    Height = 189
+    Top = 364
     Width = 1000
     Align = alClient
-    ClientHeight = 185
+    ClientHeight = 189
     ClientWidth = 1000
     Constraints.MinHeight = 170
     TabOrder = 1
     object Panel9: TPanel
       Left = 1
-      Height = 153
+      Height = 187
       Top = 1
       Width = 698
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 153
+      ClientHeight = 187
       ClientWidth = 698
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
-        Height = 153
-        Top = 0
+        Height = 139
+        Top = 18
         Width = 698
         Align = alClient
         AutoFillColumns = True
@@ -933,130 +958,116 @@ object f_EditTargets: Tf_EditTargets
           70
         )
       end
+      object Panel17: TPanel
+        Left = 0
+        Height = 18
+        Top = 0
+        Width = 698
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 18
+        ClientWidth = 698
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 8
+          Height = 17
+          Top = 0
+          Width = 73
+          Caption = 'Plan name '
+          ParentColor = False
+        end
+        object PlanName: TLabel
+          Left = 100
+          Height = 17
+          Top = 0
+          Width = 75
+          Caption = 'PlanName'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+      end
+      object Panel10: TPanel
+        Left = 0
+        Height = 30
+        Top = 157
+        Width = 698
+        Align = alBottom
+        BevelOuter = bvNone
+        ClientHeight = 30
+        ClientWidth = 698
+        TabOrder = 2
+        object BtnAddStep: TButton
+          Left = 8
+          Height = 25
+          Top = 2
+          Width = 120
+          Caption = 'Add step'
+          OnClick = BtnAddStepClick
+          TabOrder = 0
+        end
+        object BtnRemoveStep: TButton
+          Left = 136
+          Height = 25
+          Top = 2
+          Width = 104
+          Caption = 'Remove step'
+          OnClick = BtnRemoveStepClick
+          TabOrder = 1
+        end
+        object BtnSavePlan: TButton
+          Left = 248
+          Height = 25
+          Top = 2
+          Width = 136
+          Caption = 'Save plan'
+          OnClick = BtnSavePlanClick
+          TabOrder = 2
+        end
+        object BtnSavePlanAs: TButton
+          Left = 392
+          Height = 25
+          Top = 2
+          Width = 144
+          Caption = 'Save plan as...'
+          OnClick = BtnSavePlanAsClick
+          TabOrder = 3
+        end
+        object BtnDeletePlan: TButton
+          Left = 544
+          Height = 25
+          Top = 2
+          Width = 152
+          Caption = 'Delete plan'
+          OnClick = BtnDeletePlanClick
+          TabOrder = 4
+        end
+      end
     end
     object Panel12: TPanel
       Left = 699
-      Height = 153
+      Height = 187
       Top = 1
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 153
+      ClientHeight = 187
       ClientWidth = 300
       TabOrder = 1
-      object Panel8: TPanel
+      object GroupBoxRepeat: TGroupBox
         Left = 0
-        Height = 114
-        Top = 0
+        Height = 48
+        Top = 140
         Width = 300
         Align = alTop
-        ClientHeight = 114
-        ClientWidth = 300
+        Caption = 'Repeat'
+        ClientHeight = 30
+        ClientWidth = 298
         TabOrder = 0
-        object CheckBoxDither: TCheckBox
-          Left = 8
-          Height = 21
-          Top = 84
-          Width = 109
-          Caption = 'Dither every '
-          OnChange = StepChange
-          TabOrder = 0
-        end
-        object CheckBoxAutofocusStart: TCheckBox
-          Left = 8
-          Height = 21
-          Top = 36
-          Width = 186
-          Caption = 'Autofocus before to start'
-          OnChange = StepChange
-          TabOrder = 1
-        end
-        object CheckBoxAutofocus: TCheckBox
-          Left = 8
-          Height = 21
-          Top = 60
-          Width = 130
-          Caption = 'Autofocus every'
-          OnChange = StepChange
-          TabOrder = 2
-        end
-        object PanelGain1: TPanel
-          Left = 0
-          Height = 34
-          Top = 0
-          Width = 288
-          BevelOuter = bvNone
-          Caption = ' '
-          ClientHeight = 34
-          ClientWidth = 288
-          TabOrder = 3
-          Visible = False
-          object PISObox: TComboBox
-            Left = 96
-            Height = 33
-            Hint = 'Exposure time in secondes'
-            Top = 1
-            Width = 100
-            ItemHeight = 0
-            OnChange = StepChange
-            Style = csDropDownList
-            TabOrder = 0
-            Visible = False
-          end
-          object LabelGain1: TLabel
-            Left = 8
-            Height = 17
-            Top = 4
-            Width = 30
-            Caption = 'Gain'
-            ParentColor = False
-          end
-          object PGainEdit: TSpinEdit
-            Left = 96
-            Height = 27
-            Top = 1
-            Width = 81
-            MaxValue = 100000
-            OnChange = StepChange
-            TabOrder = 1
-          end
-        end
-        object AutofocusCount: TSpinEdit
-          Left = 165
-          Height = 27
-          Top = 56
-          Width = 57
-          MaxValue = 1000
-          MinValue = 1
-          OnChange = StepChange
-          TabOrder = 4
-          Value = 1
-        end
-        object DitherCount: TSpinEdit
-          Left = 165
-          Height = 27
-          Top = 84
-          Width = 57
-          MaxValue = 1000
-          MinValue = 1
-          OnChange = StepChange
-          TabOrder = 5
-          Value = 1
-        end
-      end
-      object PanelRepeat: TPanel
-        Left = 0
-        Height = 34
-        Top = 114
-        Width = 300
-        Align = alTop
-        ClientHeight = 34
-        ClientWidth = 300
-        TabOrder = 1
         object Label17: TLabel
           Left = 184
           Height = 17
-          Top = 7
+          Top = 5
           Width = 63
           Caption = '[seconds]'
           ParentColor = False
@@ -1064,7 +1075,7 @@ object f_EditTargets: Tf_EditTargets
         object Label12: TLabel
           Left = 8
           Height = 17
-          Top = 7
+          Top = 5
           Width = 50
           Caption = 'Interval'
           ParentColor = False
@@ -1072,7 +1083,7 @@ object f_EditTargets: Tf_EditTargets
         object PDelay: TFloatSpinEdit
           Left = 96
           Height = 27
-          Top = 2
+          Top = 0
           Width = 82
           DecimalPlaces = 1
           Increment = 1
@@ -1083,79 +1094,104 @@ object f_EditTargets: Tf_EditTargets
           Value = 0
         end
       end
-    end
-    object Panel10: TPanel
-      Left = 1
-      Height = 30
-      Top = 154
-      Width = 998
-      Align = alBottom
-      BevelOuter = bvNone
-      ClientHeight = 30
-      ClientWidth = 998
-      TabOrder = 2
-      object PlanName: TLabel
-        Left = 100
-        Height = 17
-        Top = 5
-        Width = 75
-        Caption = 'PlanName'
-        Font.Style = [fsBold]
-        ParentColor = False
-        ParentFont = False
-      end
-      object Label1: TLabel
-        Left = 8
-        Height = 17
-        Top = 5
-        Width = 73
-        Caption = 'Plan name '
-        ParentColor = False
-      end
-      object BtnAddStep: TButton
-        Left = 232
-        Height = 25
-        Top = 2
-        Width = 120
-        Caption = 'Add step'
-        OnClick = BtnAddStepClick
-        TabOrder = 0
-      end
-      object BtnRemoveStep: TButton
-        Left = 360
-        Height = 25
-        Top = 2
-        Width = 104
-        Caption = 'Remove step'
-        OnClick = BtnRemoveStepClick
+      object GroupBoxStep: TGroupBox
+        Left = 0
+        Height = 140
+        Top = 0
+        Width = 300
+        Align = alTop
+        Caption = 'Step'
+        ClientHeight = 122
+        ClientWidth = 298
         TabOrder = 1
-      end
-      object BtnSavePlan: TButton
-        Left = 472
-        Height = 25
-        Top = 2
-        Width = 136
-        Caption = 'Save plan'
-        OnClick = BtnSavePlanClick
-        TabOrder = 2
-      end
-      object BtnSavePlanAs: TButton
-        Left = 616
-        Height = 25
-        Top = 2
-        Width = 144
-        Caption = 'Save plan as...'
-        OnClick = BtnSavePlanAsClick
-        TabOrder = 3
-      end
-      object BtnDeletePlan: TButton
-        Left = 768
-        Height = 25
-        Top = 2
-        Width = 152
-        Caption = 'Delete plan'
-        OnClick = BtnDeletePlanClick
-        TabOrder = 4
+        object DitherCount: TSpinEdit
+          Left = 165
+          Height = 27
+          Top = 84
+          Width = 57
+          MaxValue = 1000
+          MinValue = 1
+          OnChange = StepChange
+          TabOrder = 0
+          Value = 1
+        end
+        object CheckBoxDither: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 84
+          Width = 109
+          Caption = 'Dither every '
+          OnChange = StepChange
+          TabOrder = 1
+        end
+        object CheckBoxAutofocusStart: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 36
+          Width = 186
+          Caption = 'Autofocus before to start'
+          OnChange = StepChange
+          TabOrder = 2
+        end
+        object CheckBoxAutofocus: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 60
+          Width = 130
+          Caption = 'Autofocus every'
+          OnChange = StepChange
+          TabOrder = 3
+        end
+        object PanelGain1: TPanel
+          Left = 0
+          Height = 34
+          Top = 0
+          Width = 288
+          BevelOuter = bvNone
+          Caption = ' '
+          TabOrder = 4
+          Visible = False
+        end
+        object PISObox: TComboBox
+          Left = 96
+          Height = 33
+          Hint = 'Exposure time in secondes'
+          Top = 1
+          Width = 100
+          ItemHeight = 0
+          OnChange = StepChange
+          Style = csDropDownList
+          TabOrder = 5
+          Visible = False
+        end
+        object LabelGain1: TLabel
+          Left = 8
+          Height = 17
+          Top = 4
+          Width = 30
+          Caption = 'Gain'
+          ParentColor = False
+        end
+        object PGainEdit: TSpinEdit
+          Left = 96
+          Height = 27
+          Top = 1
+          Width = 81
+          MaxValue = 100000
+          OnChange = StepChange
+          TabOrder = 6
+        end
+        object AutofocusCount: TSpinEdit
+          Left = 165
+          Height = 27
+          Top = 56
+          Width = 57
+          MaxValue = 1000
+          MinValue = 1
+          OnChange = StepChange
+          TabOrder = 7
+          Value = 1
+        end
       end
     end
   end
@@ -1201,7 +1237,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 2
     end
     object BtnImport: TButton
-      Left = 8
+      Left = 9
       Height = 25
       Top = 4
       Width = 216
@@ -1209,6 +1245,16 @@ object f_EditTargets: Tf_EditTargets
       OnClick = BtnImportClick
       TabOrder = 3
     end
+  end
+  object PanelSep: TPanel
+    Left = 0
+    Height = 4
+    Top = 360
+    Width = 1000
+    Align = alTop
+    Color = clBtnShadow
+    ParentColor = False
+    TabOrder = 3
   end
   object SaveDialog1: TSaveDialog
     left = 48
