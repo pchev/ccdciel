@@ -2,11 +2,11 @@ object f_setup: Tf_setup
   Left = 132
   Height = 307
   Top = 125
-  Width = 371
+  Width = 497
   ActiveControl = Button1
   Caption = 'Devices setup'
   ClientHeight = 307
-  ClientWidth = 371
+  ClientWidth = 497
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
@@ -15,10 +15,10 @@ object f_setup: Tf_setup
     Left = 0
     Height = 40
     Top = 267
-    Width = 371
+    Width = 497
     Align = alBottom
     ClientHeight = 40
-    ClientWidth = 371
+    ClientWidth = 497
     TabOrder = 0
     object Button1: TButton
       Left = 232
@@ -44,15 +44,16 @@ object f_setup: Tf_setup
     Left = 0
     Height = 267
     Top = 0
-    Width = 371
-    ActivePage = Mount
+    Width = 497
+    ActivePage = DeviceInterface
     Align = alClient
-    TabIndex = 5
+    TabIndex = 0
     TabOrder = 1
+    TabPosition = tpLeft
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object InterfaceSelectionBox: TRadioGroup
         Left = 16
         Height = 54
@@ -213,8 +214,8 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object PanelCameraAscom: TPanel
         Left = 16
         Height = 112
@@ -391,8 +392,8 @@ object f_setup: Tf_setup
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object PanelWheelAscom: TPanel
         Left = 16
         Height = 112
@@ -528,8 +529,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object PanelFocuserInMount: TPanel
         Left = 18
         Height = 112
@@ -668,8 +669,8 @@ object f_setup: Tf_setup
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object DeviceRotator: TCheckBox
         Left = 16
         Height = 21
@@ -787,8 +788,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object PanelMountAscom: TPanel
         Left = 16
         Height = 136
@@ -912,8 +913,8 @@ object f_setup: Tf_setup
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 238
-      ClientWidth = 361
+      ClientHeight = 263
+      ClientWidth = 398
       object PanelWatchdogIndi: TPanel
         Left = 16
         Height = 160
