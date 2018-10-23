@@ -592,7 +592,7 @@ begin
 if Connected then begin
   try
   w:=V.CameraXSize div V.BinX;
-  h:=V.CameraYSize div V.BinX;
+  h:=V.CameraYSize div V.BinY;
   SetFrame(0,0,w,h);
   Wait(1);
   except
