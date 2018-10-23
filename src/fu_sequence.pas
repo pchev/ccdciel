@@ -109,7 +109,7 @@ type
     function GetTargetCoord: boolean;
     function GetTargetRA: double;
     function GetTargetDE: double;
-    procedure SaveTargets(fn:string);
+    procedure SaveTargets(fn,defaultname:string);
     procedure StartSequence;
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
@@ -337,6 +337,7 @@ end;
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i,n:integer;
     t:TTarget;
+    defaultname: string;
 begin
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
@@ -388,7 +389,10 @@ begin
     if f_EditTargets.ShowModal=mrOK then begin
       n:=f_EditTargets.TargetList.RowCount;
       Targets.Clear;
+      defaultname:=FormatDateTime('mmdd',now);
       for i:=1 to n-1 do begin
+        if (f_EditTargets.TargetList.Cells[1,i]<>ScriptTxt) and (f_EditTargets.TargetList.Cells[1,i]<>SkyFlatTxt) then
+           defaultname:=f_EditTargets.TargetList.Cells[1,i];
         t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
         Targets.Add(t);
         LoadPlan(T_Plan(t.plan), t.planname);
@@ -407,7 +411,7 @@ begin
       Targets.OnErrorRunScript  := f_sequenceoptions.UnattendedErrorScript.Checked;
       Targets.AtEndScript       := f_sequenceoptions.ScriptList.Text;
       Targets.OnErrorScript     := f_sequenceoptions.ScriptListError.Text;
-      SaveTargets(CurrentSequenceFile);
+      SaveTargets(CurrentSequenceFile,defaultname);
     end else begin
       // look for modified plan
       LoadTargets(CurrentSequenceFile);
@@ -575,7 +579,7 @@ begin
  end;
 end;
 
-procedure Tf_sequence.SaveTargets(fn:string);
+procedure Tf_sequence.SaveTargets(fn,defaultname:string);
 var tfile: TCCDconfig;
     t:TTarget;
     i: integer;
@@ -583,6 +587,7 @@ begin
  if TargetGrid.RowCount>1 then begin
     if fn='' then begin
       SaveDialog1.InitialDir:=ConfigDir;
+      SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
       if SaveDialog1.Execute then begin
         fn:=SaveDialog1.FileName;
       end
