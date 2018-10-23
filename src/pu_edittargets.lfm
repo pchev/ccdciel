@@ -456,7 +456,7 @@ object f_EditTargets: Tf_EditTargets
       ClientWidth = 998
       TabOrder = 0
       object ButtonEndOptions: TButton
-        Left = 784
+        Left = 792
         Height = 25
         Top = 5
         Width = 176
@@ -465,7 +465,7 @@ object f_EditTargets: Tf_EditTargets
         TabOrder = 0
       end
       object Shape1: TShape
-        Left = 832
+        Left = 840
         Height = 10
         Top = 34
         Width = 10
@@ -474,7 +474,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape2: TShape
-        Left = 848
+        Left = 856
         Height = 10
         Top = 34
         Width = 10
@@ -483,7 +483,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape3: TShape
-        Left = 864
+        Left = 872
         Height = 10
         Top = 34
         Width = 10
@@ -492,7 +492,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape4: TShape
-        Left = 880
+        Left = 888
         Height = 10
         Top = 34
         Width = 10
@@ -501,7 +501,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape5: TShape
-        Left = 896
+        Left = 904
         Height = 10
         Top = 34
         Width = 10
@@ -549,7 +549,7 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object Panel5: TPanel
-          Left = 513
+          Left = 0
           Height = 29
           Top = 18
           Width = 266
@@ -594,7 +594,7 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object Panel7: TPanel
-          Left = 263
+          Left = 266
           Height = 29
           Top = 18
           Width = 250
@@ -639,7 +639,7 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object Panel13: TPanel
-          Left = 0
+          Left = 516
           Height = 29
           Top = 18
           Width = 263
