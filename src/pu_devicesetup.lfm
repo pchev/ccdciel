@@ -908,6 +908,7 @@ object f_setup: Tf_setup
         Top = 205
         Width = 296
         Caption = 'Set mount site long/lat from configuration'
+        OnClick = MountSetObservatoryClick
         TabOrder = 4
       end
       object MountGetObservatory: TCheckBox
@@ -916,6 +917,7 @@ object f_setup: Tf_setup
         Top = 233
         Width = 234
         Caption = 'Get site long/lat from the mount'
+        OnClick = MountGetObservatoryClick
         TabOrder = 5
       end
     end

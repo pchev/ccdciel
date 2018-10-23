@@ -161,6 +161,8 @@ type
     procedure InterfaceSelectionBoxClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
+    procedure MountGetObservatoryClick(Sender: TObject);
+    procedure MountSetObservatoryClick(Sender: TObject);
     procedure ProfileListChange(Sender: TObject);
   private
     { private declarations }
@@ -775,6 +777,16 @@ begin
   Screen.Cursor:=crDefault;
   except
   end;
+end;
+
+procedure Tf_setup.MountGetObservatoryClick(Sender: TObject);
+begin
+  if MountGetObservatory.Checked then MountSetObservatory.Checked:=false;
+end;
+
+procedure Tf_setup.MountSetObservatoryClick(Sender: TObject);
+begin
+  if MountSetObservatory.Checked then MountGetObservatory.Checked:=false;
 end;
 
 procedure Tf_setup.IndiNewDevice(dp: Basedevice);
