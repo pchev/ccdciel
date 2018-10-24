@@ -442,7 +442,6 @@ implementation
 procedure Tf_option.FormCreate(Sender: TObject);
 begin
   {$ifdef mswindows}
-    PageControl1.TabPosition:=tpTop;
     CygwinPanel.Visible:=true;
     ElbrusUnixpath.Visible:=false;
     Label13.Visible:=false;

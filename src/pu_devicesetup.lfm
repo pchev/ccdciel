@@ -47,13 +47,14 @@ object f_setup: Tf_setup
     Width = 497
     ActivePage = DeviceInterface
     Align = alClient
+    MultiLine = True
     TabIndex = 0
     TabOrder = 1
-    TabPosition = tpLeft
+    Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object InterfaceSelectionBox: TRadioGroup
         Left = 16
         Height = 54
@@ -214,8 +215,8 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object PanelCameraAscom: TPanel
         Left = 16
         Height = 112
@@ -392,8 +393,8 @@ object f_setup: Tf_setup
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object PanelWheelAscom: TPanel
         Left = 16
         Height = 112
@@ -529,8 +530,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object PanelFocuserInMount: TPanel
         Left = 18
         Height = 112
@@ -669,8 +670,8 @@ object f_setup: Tf_setup
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object DeviceRotator: TCheckBox
         Left = 16
         Height = 21
@@ -788,8 +789,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object PanelMountAscom: TPanel
         Left = 16
         Height = 136
@@ -923,8 +924,8 @@ object f_setup: Tf_setup
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 263
-      ClientWidth = 398
+      ClientHeight = 238
+      ClientWidth = 487
       object PanelWatchdogIndi: TPanel
         Left = 16
         Height = 160

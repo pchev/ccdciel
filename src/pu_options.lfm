@@ -58,12 +58,11 @@ object f_option: Tf_option
     MultiLine = True
     TabIndex = 0
     TabOrder = 1
-    TabPosition = tpLeft
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object ButtonDir: TButton
         Left = 365
         Height = 25
@@ -256,8 +255,8 @@ object f_option: Tf_option
     end
     object TabSheet2: TTabSheet
       Caption = 'Observatory'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object Label5: TLabel
         Left = 8
         Height = 17
@@ -309,7 +308,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 29
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 3
         object hemis: TComboBox
@@ -383,7 +382,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 29
+        ClientHeight = 13
         ClientWidth = 250
         TabOrder = 4
         object long: TComboBox
@@ -532,8 +531,8 @@ object f_option: Tf_option
     end
     object TabSheet8: TTabSheet
       Caption = 'Preview'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object GroupBox8: TGroupBox
         Left = 8
         Height = 104
@@ -853,8 +852,8 @@ object f_option: Tf_option
     end
     object TabSheet11: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object GroupBox1: TGroupBox
         Left = 8
         Height = 272
@@ -1015,8 +1014,8 @@ object f_option: Tf_option
     end
     object TabSheet12: TTabSheet
       Caption = 'Flat'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object FlatType: TRadioGroup
         Left = 8
         Height = 65
@@ -1276,8 +1275,8 @@ object f_option: Tf_option
     end
     object TabSheet10: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object GroupBox2: TGroupBox
         Left = 8
         Height = 112
@@ -1470,8 +1469,8 @@ object f_option: Tf_option
     end
     object TabSheet3: TTabSheet
       Caption = 'Autofocus'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object Autofocusmode: TRadioGroup
         Left = 8
         Height = 52
@@ -1968,8 +1967,8 @@ object f_option: Tf_option
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object GroupBox4: TGroupBox
         Left = 8
         Height = 180
@@ -2415,8 +2414,8 @@ object f_option: Tf_option
     end
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object GroupBox7: TGroupBox
         Left = 8
         Height = 412
@@ -2567,8 +2566,8 @@ object f_option: Tf_option
     end
     object TabSheet9: TTabSheet
       Caption = 'Meridian'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object MeridianOption: TRadioGroup
         Left = 8
         Height = 57
@@ -2718,8 +2717,8 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object AutoguiderBox: TRadioGroup
         Left = 8
         Height = 64
@@ -3042,8 +3041,8 @@ object f_option: Tf_option
     end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 496
-      ClientWidth = 528
+      ClientHeight = 471
+      ClientWidth = 625
       object PlanetariumBox: TRadioGroup
         Left = 4
         Height = 80
