@@ -211,6 +211,9 @@ uses LazFileUtils;
 
 procedure Tf_setup.FormCreate(Sender: TObject);
 begin
+  {$ifdef mswindows}
+    PageControl1.TabPosition:=tpTop;
+  {$endif}
   ScaleDPI(Self);
   SetLang;
   FRestartRequired:=false;
