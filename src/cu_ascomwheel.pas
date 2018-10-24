@@ -85,7 +85,7 @@ begin
   FStatus := devConnecting;
   Fdevice:=cp1;
   V:=Unassigned;
-  V:=CreateOleObject(WideString(Fdevice));
+  V:=CreateOleObject(Fdevice);
   V.connected:=true;
   if V.connected then begin
      msg(rsConnected3);
@@ -261,7 +261,7 @@ begin
    value.Clear;
    value.Add(Filter0);
    for i:=0 to n-1 do begin
-     value.Add(fnames[i]);
+     value.Add(string(fnames[i]));
    end;
    except
     on E: Exception do msg('List filter names error: ' + E.Message,0);

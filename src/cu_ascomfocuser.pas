@@ -129,7 +129,7 @@ begin
   {$ifdef debug_ascom}msg('Connecting... ');{$endif}
   Fdevice:=cp1;
   V:=Unassigned;
-  V:=CreateOleObject(WideString(Fdevice));
+  V:=CreateOleObject(Fdevice);
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
     V.Link:=true

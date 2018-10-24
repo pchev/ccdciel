@@ -102,7 +102,7 @@ begin
   FReverse:=False;
   Fdevice:=cp1;
   V:=Unassigned;
-  V:=CreateOleObject(WideString(Fdevice));
+  V:=CreateOleObject(Fdevice);
   FInterfaceVersion:=InterfaceVersion;
   V.Connected:=true;
   if Connected then begin

@@ -585,11 +585,11 @@ var
 begin
 {$ifdef mswindows}
   case TButton(Sender).Tag of
-    1 : begin t:='Camera'; dev:=AscomCamera.Text; end;
-    2 : begin t:='FilterWheel'; dev:=AscomWheel.Text; end;
-    3 : begin t:='Focuser'; dev:=AscomFocuser.Text; end;
-    4 : begin t:='Telescope'; dev:=AscomMount.Text; end;
-    5 : begin t:='Rotator'; dev:=AscomRotator.Text; end;
+    1 : begin t:='Camera'; dev:=widestring(AscomCamera.Text); end;
+    2 : begin t:='FilterWheel'; dev:=widestring(AscomWheel.Text); end;
+    3 : begin t:='Focuser'; dev:=widestring(AscomFocuser.Text); end;
+    4 : begin t:='Telescope'; dev:=widestring(AscomMount.Text); end;
+    5 : begin t:='Rotator'; dev:=widestring(AscomRotator.Text); end;
   end;
   try
     try
@@ -601,11 +601,11 @@ begin
     dev:=widestring(V.Choose(dev));
     V:=Unassigned;
     case TButton(Sender).Tag of
-      1 : AscomCamera.Text:=dev;
-      2 : AscomWheel.Text:=dev;
-      3 : AscomFocuser.Text:=dev;
-      4 : AscomMount.Text:=dev;
-      5 : AscomRotator.Text:=dev;
+      1 : AscomCamera.Text:=string(dev);
+      2 : AscomWheel.Text:=string(dev);
+      3 : AscomFocuser.Text:=string(dev);
+      4 : AscomMount.Text:=string(dev);
+      5 : AscomRotator.Text:=string(dev);
     end;
   except
     on E: Exception do begin
@@ -625,15 +625,15 @@ var buf : string;
 begin
 {$ifdef mswindows}
   case TButton(Sender).Tag of
-    1 : begin dev:=AscomCamera.Text; end;
-    2 : begin dev:=AscomWheel.Text; end;
-    3 : begin dev:=AscomFocuser.Text; end;
-    4 : begin dev:=AscomMount.Text; end;
-    5 : begin dev:=AscomRotator.Text; end;
+    1 : begin dev:=widestring(AscomCamera.Text); end;
+    2 : begin dev:=widestring(AscomWheel.Text); end;
+    3 : begin dev:=widestring(AscomFocuser.Text); end;
+    4 : begin dev:=widestring(AscomMount.Text); end;
+    5 : begin dev:=widestring(AscomRotator.Text); end;
   end;
 
   try
-    V := CreateOleObject(widestring(dev));
+    V := CreateOleObject(string(dev));
     buf:=V.Description;
     buf:=buf+crlf+V.DriverInfo;
     V:=Unassigned;
@@ -653,15 +653,15 @@ var
 begin
 {$ifdef mswindows}
   case TButton(Sender).Tag of
-    1 : begin dev:=AscomCamera.Text; end;
-    2 : begin dev:=AscomWheel.Text; end;
-    3 : begin dev:=AscomFocuser.Text; end;
-    4 : begin dev:=AscomMount.Text; end;
-    5 : begin dev:=AscomRotator.Text; end;
+    1 : begin dev:=widestring(AscomCamera.Text); end;
+    2 : begin dev:=widestring(AscomWheel.Text); end;
+    3 : begin dev:=widestring(AscomFocuser.Text); end;
+    4 : begin dev:=widestring(AscomMount.Text); end;
+    5 : begin dev:=widestring(AscomRotator.Text); end;
   end;
 
   try
-    V := CreateOleObject(widestring(dev));
+    V := CreateOleObject(string(dev));
     V.SetupDialog;
     V:=Unassigned;
   except

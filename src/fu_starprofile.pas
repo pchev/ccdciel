@@ -413,9 +413,9 @@ with profile.Picture.Bitmap do begin
   if FValMax>0 then begin
     rs:=s div 2;
     if (FStarX-rs)<0 then rs:=round(FStarX);
-    if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-round(FStarX);
+    if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-integer(round(FStarX));
     if (FStarY-rs)<0 then rs:=round(FStarY);
-    if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-round(FStarY);
+    if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-integer(round(FStarY));
     if rs<=0 then exit;
     s:=2*rs;
     Canvas.Pen.Color:=clRed;

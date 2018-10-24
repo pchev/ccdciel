@@ -92,7 +92,7 @@ type
     { private declarations }
     Fdbgscr: TPSScriptDebugger;
     FDebugResume: Boolean;
-    FActiveLine: Cardinal;
+    FActiveLine: integer;
     FScriptName: string;
     procedure SetScriptName(value:string);
     procedure DebugLineInfo(Sender: TObject; const fn: String; Pos, Row, Col: Cardinal);
