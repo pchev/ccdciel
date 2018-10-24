@@ -942,7 +942,7 @@ begin
   compile_system:={$I %FPCTARGETOS%};
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
-  Application.{%H-}qUpdateFormatSettings := False;
+  Application.{%H-}UpdateFormatSettings := False;
   {$else}
   DefaultInterface:=INDI;
   {$endif}
