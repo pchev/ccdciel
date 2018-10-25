@@ -2,12 +2,13 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
  
 [Setup]
+ArchitecturesInstallIn64BitMode=x64
 AppName=CCDciel
 AppVerName=CCDciel V3
 AppPublisherURL=http://sourceforge.net/projects/ccdciel
 AppSupportURL=http://sourceforge.net/projects/ccdciel
 AppUpdatesURL=http://sourceforge.net/projects/ccdciel
-DefaultDirName={pf}\CCDciel
+DefaultDirName={pf32}\CCDciel
 UsePreviousAppDir=false
 DefaultGroupName=CCDciel
 AllowNoIcons=true
@@ -33,3 +34,40 @@ Source: Data\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsub
 Name: {group}\CCDciel; Filename: {app}\ccdciel.exe; WorkingDir: {app}
 Name: {userdesktop}\CCDciel; Filename: {app}\ccdciel.exe; WorkingDir: {app}; Tasks: desktopicon
  
+[Code]
+{Uninstall previous version to avoid 32bit/64bit mismatch}
+function GetUninstallString: string;
+var
+  sUnInstPathWOW64,sUnInstPath: string;
+  sUnInstallString: String;
+begin
+  Result := '';
+  sUnInstallString := '';
+  sUnInstPath := ExpandConstant('Software\Microsoft\Windows\CurrentVersion\Uninstall\{{6570df38-f18f-11e4-9532-fb2d36b55e00}_is1'); 
+  sUnInstPathWOW64 := ExpandConstant('Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{{6570df38-f18f-11e4-9532-fb2d36b55e00}_is1'); 
+  if not RegQueryStringValue(HKLM, sUnInstPath, 'UninstallString', sUnInstallString) then
+    if not RegQueryStringValue(HKCU, sUnInstPath, 'UninstallString', sUnInstallString) then 
+    if not RegQueryStringValue(HKLM, sUnInstPathWOW64, 'UninstallString', sUnInstallString) then
+    RegQueryStringValue(HKCU, sUnInstPathWOW64, 'UninstallString', sUnInstallString);
+  Result := sUnInstallString;
+end;
+
+function IsUpgrade: Boolean;
+begin
+  Result := (GetUninstallString() <> '');
+end;
+
+function InitializeSetup: Boolean;
+var
+  iResultCode: Integer;
+  sUnInstallString: string;
+begin
+  Result := True; { in case when no previous version is found }
+  if IsUpgrade then  
+  begin
+      sUnInstallString := GetUninstallString();
+      sUnInstallString :=  RemoveQuotes(sUnInstallString);
+      Exec(ExpandConstant(sUnInstallString), '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, iResultCode);
+      Result := True; 
+  end;
+end;
