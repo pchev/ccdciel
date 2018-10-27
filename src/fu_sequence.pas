@@ -164,7 +164,9 @@ constructor Tf_sequence.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
+ Title1.Color:=clWindowFrame;
+ Title2.Color:=clWindowFrame;
+ Title3.Color:=clWindowFrame;
  {$endif}
  ScaleDPI(Self);
  SetLang;
