@@ -214,19 +214,8 @@
       <Version Value="2"/>
     </PublishOptions>
     <RunParams>
-      <local>
-        <LaunchingApplication PathPlusParams="/usr/bin/wine $(TargetCmdLine)"/>
-        <WorkingDirectory Value="/usr/local/bin"/>
-      </local>
       <FormatVersion Value="2"/>
-      <Modes Count="1">
-        <Mode0 Name="default">
-          <local>
-            <LaunchingApplication PathPlusParams="/usr/bin/wine $(TargetCmdLine)"/>
-            <WorkingDirectory Value="/usr/local/bin"/>
-          </local>
-        </Mode0>
-      </Modes>
+      <Modes Count="0"/>
     </RunParams>
     <RequiredPackages Count="10">
       <Item1>
