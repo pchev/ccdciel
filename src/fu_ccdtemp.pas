@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses   UScaleDPI, Dialogs, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
 
@@ -66,6 +66,9 @@ implementation
 constructor Tf_ccdtemp.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  SetLang;
 end;

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
 
@@ -95,6 +95,9 @@ implementation
 constructor Tf_focuser.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  Notebook1.PageIndex:=1;
  ScaleDPI(Self);
  SetLang;

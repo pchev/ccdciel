@@ -86,7 +86,6 @@ object f_rotator: Tf_rotator
       Top = 1
       Width = 64
       DecimalPlaces = 1
-      Increment = 1
       MaxValue = 0
       MinValue = 0
       TabOrder = 3

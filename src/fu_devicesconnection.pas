@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses UScaleDPI, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
 
@@ -69,6 +69,9 @@ implementation
 constructor Tf_devicesconnection.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  SetLang;
 end;

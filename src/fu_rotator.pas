@@ -71,6 +71,9 @@ implementation
 constructor Tf_rotator.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  noprompt:=false;
  lockreverse:=false;

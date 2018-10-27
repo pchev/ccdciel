@@ -1,10 +1,11 @@
 object f_msg: Tf_msg
   Left = 0
-  Height = 117
+  Height = 116
   Top = 0
-  Width = 608
-  ClientHeight = 117
-  ClientWidth = 608
+  Width = 602
+  ClientHeight = 116
+  ClientWidth = 602
+  DesignTimePPI = 95
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
@@ -17,6 +18,7 @@ object f_msg: Tf_msg
     AutoSize = True
     ClientHeight = 117
     ClientWidth = 600
+    ParentFont = False
     TabOrder = 0
     object msg: TMemo
       Left = 1
@@ -26,6 +28,7 @@ object f_msg: Tf_msg
       Align = alClient
       OnMouseEnter = msgMouseEnter
       OnMouseLeave = msgMouseLeave
+      ParentFont = False
       ReadOnly = True
       ScrollBars = ssAutoVertical
       TabOrder = 0
@@ -43,6 +46,7 @@ object f_msg: Tf_msg
     Caption = ' '
     DragMode = dmAutomatic
     ParentColor = False
+    ParentFont = False
   end
   object Timer1: TTimer
     Enabled = False

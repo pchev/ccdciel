@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, ExtCtrls, StdCtrls;
 
 type
 
@@ -58,6 +58,9 @@ implementation
 constructor Tf_filterwheel.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  SetLang;
 end;

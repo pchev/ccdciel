@@ -152,6 +152,9 @@ implementation
 constructor Tf_starprofile.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  SetLang;
  emptybmp:=Tbitmap.Create;

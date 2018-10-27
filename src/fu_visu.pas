@@ -112,6 +112,9 @@ implementation
 constructor Tf_visu.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  SetLang;
  ImgMax:=high(word);

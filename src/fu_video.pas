@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui, math,
-  Classes, SysUtils, LazFileUtils, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
+  Classes, SysUtils, LazFileUtils, Forms, Graphics, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
 
@@ -125,6 +125,9 @@ implementation
 constructor Tf_video.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  Frunning:=false;
  FVideoGUIready:=false;

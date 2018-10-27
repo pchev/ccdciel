@@ -96,6 +96,9 @@ implementation
 constructor Tf_preview.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  Frunning:=false;
  SetLang;

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, ExtCtrls, StdCtrls;
 
 type
 
@@ -54,6 +54,9 @@ implementation
 constructor Tf_magnifyer.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  Image1.Picture.Bitmap.Height:=Image1.Height;
  Image1.Picture.Bitmap.Width:=Image1.Width;
  ScaleDPI(Self);

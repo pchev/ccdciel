@@ -163,6 +163,9 @@ uses LazFileUtils;
 constructor Tf_sequence.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  SetLang;
  Targets:=T_Targets.Create(nil);

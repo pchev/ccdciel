@@ -223,6 +223,7 @@ object f_starprofile: Tf_starprofile
             Pointer.Brush.Style = bsClear
             Pointer.OverrideColor = [ocPen]
             Pointer.Style = psCircle
+            Pointer.Visible = True
             ShowPoints = True
             Source = PtSourceL
           end
@@ -232,6 +233,7 @@ object f_starprofile: Tf_starprofile
             Pointer.Brush.Style = bsClear
             Pointer.OverrideColor = [ocPen]
             Pointer.Style = psCircle
+            Pointer.Visible = True
             ShowPoints = True
             Source = PtSourceR
           end

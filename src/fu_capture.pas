@@ -103,6 +103,9 @@ implementation
 constructor Tf_capture.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
  ScaleDPI(Self);
  Frunning:=false;
  FFocusNow:=false;
