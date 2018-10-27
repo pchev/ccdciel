@@ -17,11 +17,11 @@ ifeq ($(OS_TARGET),win32)
         $(MAKE) -C wcs -f Makefile.win64 all
  else
  ifeq ($(OS_TARGET),darwin)
-  ifeq ($(CPU_TARGET),i386)
-     $(MAKE) -C wcs all arch_flags=-m32
-  else
-     $(MAKE) -C wcs all arch_flags=-m64
-  endif
+   ifeq ($(CPU_TARGET),i386)
+        $(MAKE) -C wcs all arch_flags=-m32
+   else
+        $(MAKE) -C wcs all arch_flags=-m64
+   endif
  endif
  endif
 endif
