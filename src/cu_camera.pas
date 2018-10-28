@@ -458,10 +458,12 @@ begin
   if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=-1;
   if not Ffits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
   if not Ffits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
-  if hpix1<0 then if not Ffits.Header.Valueof('XPIXSZ',hpix1) then hpix1:=-1;
-  if hpix2<0 then if not Ffits.Header.Valueof('YPIXSZ',hpix2) then hpix2:=-1;
   if not Ffits.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
   if not Ffits.Header.Valueof('YBINNING',hbin2) then hbin2:=-1;
+  if (hpix1>0) and (hbin1>0) then hpix1:=hpix1*hbin1;
+  if (hpix2>0) and (hbin2>0) then hpix2:=hpix2*hbin2;
+  if hpix1<0 then if not Ffits.Header.Valueof('XPIXSZ',hpix1) then hpix1:=-1;
+  if hpix2<0 then if not Ffits.Header.Valueof('YPIXSZ',hpix2) then hpix2:=-1;
   if not Ffits.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';
   if not Ffits.Header.Valueof('FILTER',hfilter) then hfilter:='';
   if not Ffits.Header.Valueof('DATAMIN',hdmin)  then hdmin:=Ffits.HeaderInfo.dmin;
@@ -579,8 +581,8 @@ begin
   if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
   if gamma<>NullInt then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
   if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
-  if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X');
-  if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y');
+  if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
+  if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
   if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
   if hbin2>0 then Ffits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
   Ffits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
@@ -599,8 +601,6 @@ begin
     Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
     Ffits.Header.Add('DEC',hdec,'[deg] Telescope pointing DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
-       if hbin1>0 then hpix1:=hpix1*hbin1;
-       if hbin2>0 then hpix2:=hpix2*hbin2;
        pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
        Ffits.Header.Add('SECPIX1',pixscale1,'image scale arcseconds per pixel');
