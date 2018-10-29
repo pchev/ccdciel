@@ -997,8 +997,9 @@ var i,n,j:integer;
 begin
   if LockTarget then exit;
   n:=TargetList.Row;
-  if n < 1 then exit;
+  if n <= 1 then exit;
   t:=TTarget(TargetList.Objects[colseq,n]);
+  if t=nil then exit;
   if t.objectname=ScriptTxt then begin
     PageControl1.ActivePageIndex:=1;
     i:=ScriptList.ItemIndex;
@@ -1428,8 +1429,9 @@ var n,j,i:integer;
 begin
   if LockStep then exit;
   n:=StepList.Row;
-  if n < 1 then exit;
+  if n <= 1 then exit;
   p:=TStep(StepList.Objects[0,n]);
+  if p=nil then exit;
   StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
   p.description:=StepList.Cells[pcoldesc,n];
   str:=StepList.Cells[pcoltype,n];
