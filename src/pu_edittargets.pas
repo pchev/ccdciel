@@ -528,7 +528,10 @@ begin
   n:=TargetList.Row;
   if n>=1 then begin
     tt:=TTarget(TargetList.Objects[colseq,n]);
-    if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+    if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then begin
+      t.Assign(tt);
+      t.objectname:=txt;
+    end;
   end;
   if (t.planname='')and(TargetList.Columns[colplan-1].PickList.Count>0) then
      t.planname:=TargetList.Columns[colplan-1].PickList[0];
