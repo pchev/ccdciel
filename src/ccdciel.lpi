@@ -219,10 +219,10 @@
     </RunParams>
     <RequiredPackages Count="10">
       <Item1>
-        <PackageName Value="TAChartLazarusPkg"/>
+        <PackageName Value="BGRABitmapPack_nogl"/>
       </Item1>
       <Item2>
-        <PackageName Value="BGRABitmapPack"/>
+        <PackageName Value="TAChartLazarusPkg"/>
       </Item2>
       <Item3>
         <PackageName Value="enhedit"/>
