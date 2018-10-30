@@ -996,8 +996,11 @@ var i,n,j:integer;
     planchange: boolean;
 begin
   if LockTarget then exit;
+  // is table empty?
+  if TargetList.RowCount<=1 then exit;
   n:=TargetList.Row;
-  if n <= 1 then exit;
+  // is title row?
+  if n < 1 then exit;
   t:=TTarget(TargetList.Objects[colseq,n]);
   if t=nil then exit;
   if t.objectname=ScriptTxt then begin
@@ -1428,8 +1431,11 @@ var n,j,i:integer;
     str,buf: string;
 begin
   if LockStep then exit;
+  // is table empty?
+  if StepList.RowCount<=1 then exit;
   n:=StepList.Row;
-  if n <= 1 then exit;
+  // is title row?
+  if n < 1 then exit;
   p:=TStep(StepList.Objects[0,n]);
   if p=nil then exit;
   StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
