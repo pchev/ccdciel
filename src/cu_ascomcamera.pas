@@ -484,11 +484,14 @@ begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   {$ifdef debug_ascom}msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));{$endif}
    oldx:=V.BinX;
    oldy:=V.BinY;
+   {$ifdef debug_ascom}msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));{$endif}
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
      GetFrame(fsx,fsy,fnx,fny);
+     {$ifdef debug_ascom}msg('Current frame '+inttostr(fsx)+','+inttostr(fsy)+'/'+inttostr(fnx)+'x'+inttostr(fny));{$endif}
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
      fnx:=trunc(fnx*scale);
@@ -513,14 +516,25 @@ end;
 
 procedure T_ascomcamera.SetFrame(x,y,width,height: integer);
 {$ifdef mswindows}
-var Xmax,Ymax: integer;
+var Xmax,Ymax,w,h,bx,by: integer;
 {$endif}
 begin
  {$ifdef mswindows}
  if Connected then begin
    try
+   {$ifdef debug_ascom}msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
+   w:=V.CameraXSize;
+   h:=V.CameraYSize;
+   bx:=V.BinX;
+   by:=V.BinY;
+   {$ifdef debug_ascom}
+     msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
+   {$endif}
    Xmax:= V.CameraXSize div V.BinX;
    Ymax:= V.CameraYSize div V.BinY;
+   {$ifdef debug_ascom}
+     msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
+   {$endif}
    // force even values
    x:=round(x+0.5);
    y:=round(y+0.5);
@@ -529,7 +543,7 @@ begin
    if y>Ymax then y:=Ymax-1;
    if (x+width)>Xmax then width:=Xmax-x;
    if (y+height)>Ymax then height:=Ymax-y;
-   {$ifdef debug_ascom}msg('set frame '+inttostr(width)+'x'+inttostr(height));{$endif}
+   {$ifdef debug_ascom}msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
    V.StartX:=x;
    V.StartY:=y;
    V.NumX:=width;
@@ -576,6 +590,7 @@ begin
    heightr.min:=1;
    heightr.max:=V.CameraYSize;
    heightr.step:=1;
+   {$ifdef debug_ascom}msg('Get frame range :'+inttostr(round(widthr.max))+'x'+inttostr(round(heightr.max)));{$endif}
    except
     on E: Exception do msg('Get frame range error: ' + E.Message,0);
    end;
@@ -585,14 +600,21 @@ end;
 
 procedure T_ascomcamera.ResetFrame;
 {$ifdef mswindows}
-var w,h: integer;
+var w,h,bx,by: integer;
 {$endif}
 begin
 {$ifdef mswindows}
 if Connected then begin
   try
-  w:=V.CameraXSize div V.BinX;
-  h:=V.CameraYSize div V.BinY;
+  w:=V.CameraXSize;
+  h:=V.CameraYSize;
+  bx:=V.BinX;
+  by:=V.BinY;
+  {$ifdef debug_ascom}
+    msg('ResetFrame: XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
+  {$endif}
+  w:=w div bx;
+  h:=h div by;
   SetFrame(0,0,w,h);
   Wait(1);
   except
