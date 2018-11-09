@@ -97,7 +97,7 @@ private
    UploadDir, UploadPrefix: IText;
    CCDfilepath: ITextVectorProperty;
    configprop: ISwitchVectorProperty;
-   configload,configsave,configdefault: ISwitch;
+   configload,configsave: ISwitch;
    FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
@@ -488,8 +488,7 @@ begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
-     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
-     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
+     if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
   else if (proptype=INDI_NUMBER)and(CCDexpose=nil)and(propname='CCD_EXPOSURE') then begin
      CCDexpose:=indiProp.getNumber;

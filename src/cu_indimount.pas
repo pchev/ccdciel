@@ -49,7 +49,7 @@ T_indimount = class(T_mount)
    TelescopeAperture, TelescopeFocale: INumber;
    eod_coord:  boolean;
    configprop: ISwitchVectorProperty;
-   configload,configsave,configdefault: ISwitch;
+   configload,configsave: ISwitch;
    SyncManage: ISwitchVectorProperty;
    SyncClearDelta: ISwitch;
    AlignList: ISwitchVectorProperty;
@@ -326,8 +326,7 @@ begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
-     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
-     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
+     if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
   else if (proptype=INDI_NUMBER)and(coord_prop=nil)and(propname='EQUATORIAL_EOD_COORD') then begin
       coord_prop:=indiProp.getNumber;

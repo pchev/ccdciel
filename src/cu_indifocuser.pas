@@ -48,7 +48,7 @@ T_indifocuser = class(T_focuser)
    FocusGotoPreset: ISwitchVectorProperty;
    FocusTemperature: INumberVectorProperty;
    configprop: ISwitchVectorProperty;
-   configload,configsave,configdefault: ISwitch;
+   configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -302,8 +302,7 @@ begin
      configprop:=indiProp.getSwitch;
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
-     configdefault:=IUFindSwitch(configprop,'CONFIG_DEFAULT');
-     if (configload=nil)or(configsave=nil)or(configdefault=nil) then configprop:=nil;
+     if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
   else if (proptype=INDI_SWITCH)and(FocusMotion=nil)and(propname='FOCUS_MOTION') then begin
      FocusMotion:=indiProp.getSwitch;
