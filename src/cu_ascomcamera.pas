@@ -30,7 +30,7 @@ interface
 
 uses  cu_camera, u_global,
   {$ifdef mswindows}
-    u_translation, u_utils, cu_fits, indiapi,
+    u_translation, u_utils, cu_fits, indiapi, math,
     Variants, comobj, ActiveX, LCLVersion,
   {$endif}
    Forms, ExtCtrls, Classes, SysUtils, LCLType;
@@ -565,6 +565,11 @@ begin
    y      := V.StartY;
    width  := V.NumX;
    height := V.NumY;
+   // Consistency check for buggy qhy drivers
+   x:=max(x,0);
+   y:=max(y,0);
+   width:=min(width,V.CameraXSize div V.BinX);
+   height:=min(height,V.CameraYSize div V.BinY);
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
    end;
