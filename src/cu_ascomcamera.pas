@@ -557,6 +557,7 @@ begin
 end;
 
 procedure T_ascomcamera.GetFrame(out x,y,width,height: integer);
+var Cx,Cy,Cwidth,Cheight: integer;
 begin
  {$ifdef mswindows}
  if Connected then begin
@@ -566,10 +567,13 @@ begin
    width  := V.NumX;
    height := V.NumY;
    // Consistency check for buggy qhy drivers
-   x:=max(x,0);
-   y:=max(y,0);
-   width:=min(width,V.CameraXSize div V.BinX);
-   height:=min(height,V.CameraYSize div V.BinY);
+   Cx:=max(x,0);
+   Cy:=max(y,0);
+   Cwidth:=min(width,V.CameraXSize div V.BinX);
+   Cheight:=min(height,V.CameraYSize div V.BinY);
+   if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then
+      setframe(Cx,Cy,Cwidth,Cheight);
+   //
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
    end;
