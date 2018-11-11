@@ -571,8 +571,11 @@ begin
    Cy:=max(y,0);
    Cwidth:=min(width,V.CameraXSize div V.BinX);
    Cheight:=min(height,V.CameraYSize div V.BinY);
-   if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then
-      setframe(Cx,Cy,Cwidth,Cheight);
+   if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then  begin
+     msg('Correct driver wrong frame size: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),1);
+     msg('Set new value : '+inttostr(Cx)+','+inttostr(Cy)+'/'+inttostr(Cwidth)+'x'+inttostr(Cheight),1);
+     setframe(Cx,Cy,Cwidth,Cheight);
+   end;
    //
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
