@@ -604,6 +604,7 @@ type
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
     procedure MeasureAtPos(x,y:integer);
+    procedure ShutdownProgram(Sender: TObject);
   public
     { public declarations }
   end;
@@ -1643,12 +1644,42 @@ begin
 end;
 
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
+var buf: string;
+    timeout,endt: double;
+    shutdown: boolean;
 begin
   StartupTimer.Enabled:=false;
   if FOpenSetup then begin
+     // first setup screen
      MenuSetup.Click;
   end
-    else f_script.RunStartupScript;
+    else begin
+     // process automated startup options
+     f_script.RunStartupScript;
+     if Application.HasOption('r', 'run_sequence') then begin
+        buf:=Application.GetOptionValue('r', 'run_sequence');
+        if fileexists(buf) then begin
+          f_sequence.LoadTargets(buf);
+          if not AllDevicesConnected then begin
+            Connect(nil);
+            timeout:=60;
+            endt:=now+timeout/secperday;
+            while (not AllDevicesConnected )and(now<endt) do begin
+               sleep(100);
+               if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+            end;
+          end;
+          if AllDevicesConnected then begin
+             shutdown:=Application.HasOption('s', 'shutdown');
+             f_sequence.AtEndShutdown:=shutdown;
+             f_sequence.OnShutdown:=@ShutdownProgram;
+             f_sequence.BtnStart.Click;
+          end
+          else NewMessage('Devices not connected!'+buf);
+        end
+        else NewMessage('File not found: '+buf);
+     end;
+    end;
 end;
 
 procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
@@ -8542,6 +8573,19 @@ begin
    for i:=j to n do
      result:=result+f_msg.msg.Lines[i]+crlf;
  end;
+end;
+
+procedure Tf_main.ShutdownProgram(Sender: TObject);
+begin
+ f_pause.Caption:='Program shutdown';
+ f_pause.Text:='The program will be closed in 5 minutes';
+ NewMessage(f_pause.Text,1);
+ if f_pause.Wait(300) then begin
+   ConfirmClose:=false;
+   Close;
+ end
+ else
+   NewMessage('Program shutdown canceled.',1);
 end;
 
 end.

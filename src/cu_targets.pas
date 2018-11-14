@@ -43,6 +43,7 @@ type
       FonMsg: TNotifyMsg;
       FDelayMsg: TNotifyStr;
       FonEndSequence: TNotifyEvent;
+      FonShutdown: TNotifyEvent;
       Fcapture: Tf_capture;
       Fpreview: Tf_preview;
       Ffilter: Tf_filterwheel;
@@ -57,7 +58,7 @@ type
       FTargetRA,FTargetDE: double;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
-      FAtEndPark, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript: boolean;
+      FAtEndPark, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
       SkipTarget: boolean;
       function GetBusy: boolean;
@@ -153,6 +154,8 @@ type
       property OnErrorRunScript: boolean read FOnErrorRunScript write FOnErrorRunScript;
       property AtEndScript: string read FAtEndScript write FAtEndScript;
       property OnErrorScript: string read FOnErrorScript write FOnErrorScript;
+      property AtEndShutdown: boolean read FAtEndShutdown write FAtEndShutdown;
+      property OnShutdown: TNotifyEvent read FonShutdown write FonShutdown;
   end;
 
 implementation
@@ -176,6 +179,7 @@ begin
   FAtEndWarmCamera:=false;
   FAtEndRunScript:=false;
   FOnErrorRunScript:=false;
+  FAtEndShutdown:=false;
   FAtEndScript:='';
   FOnErrorScript:='';
   FInitializing:=false;
@@ -1187,7 +1191,7 @@ end;
 procedure T_Targets.RunEndAction;
 var path,sname: string;
 begin
-if AtEndStopTracking or AtEndPark or AtEndWarmCamera or AtEndRunScript then begin
+if AtEndStopTracking or AtEndPark or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
   msg(rsExecutingThe2,1);
   if AtEndStopTracking then begin
     Mount.AbortMotion;
@@ -1204,6 +1208,9 @@ if AtEndStopTracking or AtEndPark or AtEndWarmCamera or AtEndRunScript then begi
     if FileExistsUTF8(slash(path)+sname+'.script') then begin
        f_scriptengine.RunScript(sname,path);
     end;
+  end;
+  if AtEndShutdown then begin
+     if Assigned(FonShutdown) then FonShutdown(self);
   end;
 end
 else

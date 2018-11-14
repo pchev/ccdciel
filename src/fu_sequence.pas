@@ -120,6 +120,10 @@ type
     procedure EndSequence(Sender: TObject);
     procedure SetEditBtn(onoff:boolean);
     procedure SetLang;
+    function GetEndShutdown: boolean;
+    procedure SetEndShutdown(value:boolean);
+    function GetOnShutdown: TNotifyEvent;
+    procedure SetOnShutdown(value:TNotifyEvent);
   public
     { public declarations }
     CurrentName, CurrentTarget, CurrentStep: string;
@@ -147,6 +151,8 @@ type
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
+    property AtEndShutdown: boolean read GetEndShutdown write SetEndShutdown;
+    property OnShutdown: TNotifyEvent read GetOnShutdown write SetOnShutdown;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onConnectAutoguider: TNotifyEvent read FConnectAutoguider write FConnectAutoguider;
   end;
@@ -732,9 +738,9 @@ begin
 end;
 
 procedure Tf_sequence.StartSequence;
-var ccdtemp:double;
+var ccdtemp,tempdiff,temp,endt:double;
     i,j: integer;
-    isCalibrationSequence: boolean;
+    isCalibrationSequence, waitcooling: boolean;
 begin
  if preview.Running then begin
      msg(rsStopPreview,2);
@@ -755,9 +761,10 @@ begin
    end;
  end;
  // check camera cooler
+ waitcooling:=config.GetValue('/Cooler/CameraAutoCool',false);
+ ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
  if not camera.Cooler then begin
-    if config.GetValue('/Cooler/CameraAutoCool',false) then begin
-       ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
+    if waitcooling then begin
        msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
        camera.Temperature:=ccdtemp;
     end;
@@ -788,6 +795,21 @@ begin
      StartTimer.Interval:=10000;
      StartTimer.Enabled:=true;
      exit;
+   end;
+ end;
+ // wait for camera cooling
+ if waitcooling then begin
+   endt:=now+300/secperday; // wait 5 minutes max.
+   tempdiff:=100;  i:=0;
+   while (tempdiff>1)and(now<endt) do begin
+      sleep(100);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(i);
+      if (i mod 100) = 0 then begin // every 10 sec.
+         temp:=camera.Temperature;
+         tempdiff:=abs(ccdtemp-temp);
+         msg(rsCCDTemperatu+': '+FormatFloat(f1,temp),3);
+      end;
    end;
  end;
  // initialize sequence
@@ -974,6 +996,25 @@ begin
  if Targets.Running then AbortSequence;
 end;
 
+function Tf_sequence.GetEndShutdown: boolean;
+begin
+   result:=Targets.AtEndShutdown;
+end;
+
+procedure Tf_sequence.SetEndShutdown(value:boolean);
+begin
+  Targets.AtEndShutdown:=value;
+end;
+
+function Tf_sequence.GetOnShutdown: TNotifyEvent;
+begin
+   result:=Targets.OnShutdown;
+end;
+
+procedure Tf_sequence.SetOnShutdown(value:TNotifyEvent);
+begin
+  Targets.OnShutdown:=value;
+end;
 
 end.
 
