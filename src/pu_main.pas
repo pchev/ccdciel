@@ -1658,6 +1658,7 @@ begin
      f_script.RunStartupScript;
      if Application.HasOption('r', 'run_sequence') then begin
         buf:=Application.GetOptionValue('r', 'run_sequence');
+        NewMessage('Run sequence '+buf);
         if fileexists(buf) then begin
           f_sequence.LoadTargets(buf);
           if not AllDevicesConnected then begin
@@ -1675,7 +1676,7 @@ begin
              f_sequence.OnShutdown:=@ShutdownProgram;
              f_sequence.BtnStart.Click;
           end
-          else NewMessage('Devices not connected!'+buf);
+          else NewMessage('Devices not connected!');
         end
         else NewMessage('File not found: '+buf);
      end;
