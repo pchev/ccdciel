@@ -70,6 +70,7 @@ T_camera = class(TComponent)
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
     FVerticalFlip: boolean;
+    FASCOMFlipImage: boolean;
     FAddFrames: boolean;
     FVideoSizes, FVideoRates:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
@@ -173,6 +174,7 @@ T_camera = class(TComponent)
     property ImgStream: TMemoryStream read FImgStream;
     property AddFrames: boolean read FAddFrames write FAddFrames;
     property VerticalFlip: boolean read FVerticalFlip;
+    property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
     property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
@@ -266,6 +268,7 @@ begin
   FIndiTransfertDir:=defTransfertPath;
   FIndiTransfertPrefix:='ccdciel_tmp';
   FVerticalFlip:=false;
+  FASCOMFlipImage:=true;
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;

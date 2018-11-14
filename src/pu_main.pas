@@ -2361,6 +2361,7 @@ focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
 rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
 mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
+camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
 if watchdog<>nil then begin
   watchdog.Timeout:=DeviceTimeout;
   WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
@@ -4278,6 +4279,7 @@ begin
     config.SetValue('/INDIcamera/IndiTransfert',f_setup.CameraIndiTransfert.ItemIndex);
     config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
+    config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     if f_setup.WheelIndiDevice.Text<>'' then config.SetValue('/INDIwheel/Device',f_setup.WheelIndiDevice.Text);

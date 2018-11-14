@@ -63,6 +63,7 @@ type
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
     CameraIndiTransfertDir: TEdit;
+    FlipImage: TCheckBox;
     MountSetDateTime: TCheckBox;
     MountSetObservatory: TCheckBox;
     DeviceFilterWheel: TCheckBox;
@@ -248,6 +249,7 @@ begin
   BtnChooseFilter.Caption:=rsChoose;
   BtnAboutCamera1.Caption:=rsAbout;
   BtnSetupCamera1.Caption:=rsSetup;
+  FlipImage.Caption:=rsFlipTheImage;
   FilterWheelInCameraBox.Caption:=rsFilterWheelI;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
@@ -340,6 +342,7 @@ CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',false);
 CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork));
 CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir','/tmp');
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
+FlipImage.Checked:=conf.GetValue('/ASCOMcamera/FlipImage',true);
 CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));

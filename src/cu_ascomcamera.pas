@@ -427,7 +427,10 @@ begin
    {$ifdef debug_ascom}msg('write image');{$endif}
    if Dims=2 then begin
      for i:=LBoundY to ys-1 do begin
-        p2[1]:=ys-1-i;
+        if FASCOMFlipImage then
+           p2[1]:=ys-1-i
+        else
+           p2[1]:=i;
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
           SafeArrayGetElement(img,p2,lii);
@@ -443,7 +446,10 @@ begin
    else if Dims=3 then begin
      p3[2]:=0; // only the first plane
      for i:=LBoundY to ys-1 do begin
-        p3[1]:=ys-1-i;
+        if FASCOMFlipImage then
+           p3[1]:=ys-1-i
+        else
+           p3[1]:=i;
         for j:=LBoundX to xs-1 do begin
           p3[0]:=j;
           SafeArrayGetElement(img,p3,lii);
