@@ -75,6 +75,7 @@ type
     FGetImage: TGetImage;
     procedure ShowError;
     procedure ThrdTerminate(var i: integer);
+    function GetIPport: string;
   public
     stoping: boolean;
     TCPThrd: array [1..Maxclient] of TTCPThrd;
@@ -83,7 +84,7 @@ type
     procedure Execute; override;
     procedure ShowSocket;
     property IPaddr: string read FIPaddr write FIPaddr;
-    property IPport: string read FIPport write FIPport;
+    property IPport: string read GetIPport write FIPport;
     property onErrorMsg: TStringProc read FErrorMsg write FErrorMsg;
     property onShowSocket: TStringProc read FShowSocket write FShowSocket;
     property onExecuteCmd: TExCmd read FExecuteCmd write FExecuteCmd;
@@ -114,6 +115,16 @@ begin
   msg := IntToStr(sock.lasterror) + ' ' + sock.GetErrorDesc(sock.lasterror);
   if assigned(FErrorMsg) then
     FErrorMsg(msg);
+end;
+
+function TTCPDaemon.GetIPport: string;
+begin
+  if sock=nil then
+    result:=FIPport
+  else begin
+    sock.GetSins;
+    result := IntToStr(sock.GetLocalSinPort);
+  end;
 end;
 
 procedure TTCPDaemon.ShowSocket;

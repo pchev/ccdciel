@@ -254,6 +254,7 @@ const
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
   URL_USERGROUP='https://groups.io/g/ccdciel';
+  URL_PROGRAMSTATUS='http://localhost:3277';
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
   SubDirCount=8;

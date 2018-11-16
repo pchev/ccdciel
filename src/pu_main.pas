@@ -69,6 +69,7 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuStatus: TMenuItem;
     MenuUsergroup: TMenuItem;
     MenuResolveDSO: TMenuItem;
     MenuViewMagnifyer: TMenuItem;
@@ -314,6 +315,7 @@ type
     procedure MenuShowCCDFrameClick(Sender: TObject);
     procedure MenuShowINDIlogClick(Sender: TObject);
     procedure MenuShowLogClick(Sender: TObject);
+    procedure MenuStatusClick(Sender: TObject);
     procedure MenuStopAstrometryClick(Sender: TObject);
     procedure MenuTabClick(Sender: TObject);
     procedure MenuUsergroupClick(Sender: TObject);
@@ -3515,6 +3517,20 @@ procedure Tf_main.MenuOnlineHelpClick(Sender: TObject);
 begin
   ExecuteFile(URL_ONLINEHELP);
 end;
+
+procedure Tf_main.MenuStatusClick(Sender: TObject);
+var port,url: string;
+begin
+  if (TCPDaemon<>nil)and(not TCPDaemon.Finished) then begin
+    port:=TCPDaemon.IPport;
+    url:=StringReplace(URL_PROGRAMSTATUS,'3277',port,[]);
+    ExecuteFile(url);
+  end
+  else begin
+    ShowMessage('Server not running! Please check the option for TCP/IP server in the program preferences');
+  end;
+end;
+
 
 procedure Tf_main.MenuShowLogClick(Sender: TObject);
 {$ifdef mswindows}
