@@ -1338,7 +1338,7 @@ function Tf_scriptengine.cmd_Capture_SetExposure(exp:string):string;
 begin
 try
 result:=msgFailed;
-Capture.ExpTime.Text:=exp;
+Capture.ExposureTime:=StrToFloatDef(exp,Capture.ExposureTime);
 result:=msgOK;
 except
   result:=msgFailed;

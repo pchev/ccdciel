@@ -178,6 +178,7 @@ begin
     FRunning:=false;
     PlanTimer.Enabled:=false;
     FCurrentStep:=-1;
+    CurrentStepName:='';
     if FObjectName<>'' then
       msg(Format(rsObjectPlanFi, [FObjectName, FName]),1)
     else
@@ -191,7 +192,7 @@ begin
   StepRunning:=true;
   p:=FSteps[CurrentStep];
   if p<>nil then begin
-    if p.exposure>0 then Fcapture.ExpTime.Text:=p.exposure_str;
+    if p.exposure>0 then Fcapture.ExposureTime:=p.exposure;
     Fcapture.Binning.Text:=p.binning_str;
     if hasGainISO then
       Fcapture.ISObox.ItemIndex:=p.gain
@@ -216,6 +217,7 @@ begin
     if not FRunning then exit;
     StepTimeStart:=now;
     msg(Format(rsStartStep, [p.description_str]),1);
+    CurrentStepName:=p.description;
     ShowDelayMsg('');
     StartCapture;
   end;

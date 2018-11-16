@@ -187,7 +187,7 @@ const
   ccdcielver = '0.9.47';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 3;
-  Maxclient = 10;
+  Maxclient = 100;
   blank=' ';
   blank80='                                                                                ';
   clOrange=$1080EF;
@@ -373,6 +373,7 @@ var
   Gain,GainMin,GainMax: integer;
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
+  CurrentSeqName, CurrentTargetName, CurrentStepName: string;
 
   procedure globalmsg(str:string);
 

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 interface
 
 uses
-  u_global, blcksock, synsock,
+  u_global, blcksock, synsock, synautil,
   Dialogs, LazUTF8, LazFileUtils, LCLIntf, SysUtils, Classes;
 
 type
@@ -35,6 +35,7 @@ type
   TStringProc = procedure(var S: string) of object;
   TIntProc = procedure(var i: integer) of object;
   TExCmd = function(cmd: string): string of object;
+  TGetImage = procedure(n: string; var i: Tmemorystream) of object;
 
   TTCPThrd = class(TThread)
   private
@@ -42,6 +43,8 @@ type
     CSock: TSocket;
     cmd: string;
     cmdresult: string;
+    FHttpRequest: string;
+    FGetImage: TGetImage;
     FConnectTime: double;
     FTerminate: TIntProc;
     FExecuteCmd: TExCmd;
@@ -53,11 +56,13 @@ type
     procedure Execute; override;
     procedure SendData(str: string);
     procedure ExecuteCmd;
+    procedure ProcessHttp;
     property sock: TTCPBlockSocket read FSock;
     property ConnectTime: double read FConnectTime;
     property Terminated;
     property onTerminate: TIntProc read FTerminate write FTerminate;
     property onExecuteCmd: TExCmd read FExecuteCmd write FExecuteCmd;
+    property onGetImage: TGetImage read  FGetImage write FGetImage;
   end;
 
   TTCPDaemon = class(TThread)
@@ -67,6 +72,7 @@ type
     FShowSocket: TStringProc;
     FIPaddr, FIPport: string;
     FExecuteCmd: TExCmd;
+    FGetImage: TGetImage;
     procedure ShowError;
     procedure ThrdTerminate(var i: integer);
   public
@@ -81,6 +87,7 @@ type
     property onErrorMsg: TStringProc read FErrorMsg write FErrorMsg;
     property onShowSocket: TStringProc read FShowSocket write FShowSocket;
     property onExecuteCmd: TExCmd read FExecuteCmd write FExecuteCmd;
+    property onGetImage: TGetImage read  FGetImage write FGetImage;
   end;
 
 implementation
@@ -121,7 +128,8 @@ end;
 
 procedure TTCPDaemon.ThrdTerminate(var i: integer);
 begin
-  ThrdActive[i] := False;
+  if (i>0) and (i<=Maxclient) then
+     ThrdActive[i] := False;
 end;
 
 procedure TTCPDaemon.Execute;
@@ -179,40 +187,34 @@ begin
               TCPThrd[n] := TTCPThrd.Create(ClientSock);
               TCPThrd[n].onTerminate := @ThrdTerminate;
               TCPThrd[n].onExecuteCmd := FExecuteCmd;
+              TCPThrd[n].onGetImage := FGetImage;
+              TCPThrd[n].id := n;
+              ThrdActive[n] := True;
               TCPThrd[n].Start;
-              i := 0;
-              while (TCPThrd[n].Fsock = nil) and (i < 100) do
-              begin
-                sleep(100);
-                Inc(i);
-              end;
-              if not TCPThrd[n].terminated then
-              begin
-                TCPThrd[n].id := n;
-                ThrdActive[n] := True;
-                TCPThrd[n].senddata(msgOK + ' id=' + IntToStr(n));
-                end;
-              end;
             end
             else
               with TTCPThrd.Create(ClientSock) do
               begin
-                i := 0;
-                while (sock = nil) and (i < 100) do
-                begin
-                  sleep(100);
-                  Inc(i);
-                end;
+                Fsock := TTCPBlockSocket.Create;
+                Fsock.socket := CSock;
+                Fsock.GetSins;
+                Fsock.MaxLineLength := 1024;
                 if not terminated then
                 begin
-                  if Sock <> nil then
-                    Sock.SendString(msgFailed + ' Maximum connection reach!' + CRLF);
-                  terminate;
+                  if Fsock <> nil then begin
+                   Fsock.SendString('HTTP/1.0 503' + CRLF);
+                   Fsock.SendString('' + CRLF);
+                   Fsock.SendString(msgFailed + ' Maximum connection reach!' + CRLF);
+                  end;
+                  Fsock.CloseSocket;
+                  Fsock.Free;
                 end;
+                Free;
               end;
           end
           else if lasterror <> 0 then
             Synchronize(@ShowError);
+        end;
       until False;
     end;
   finally
@@ -229,11 +231,12 @@ begin
   FreeOnTerminate := True;
   Csock := Hsock;
   abort := False;
+  id:=-1;
 end;
 
 procedure TTCPThrd.Execute;
 var
-  s: string;
+  s,su: string;
 begin
   try
     Fsock := TTCPBlockSocket.Create;
@@ -251,14 +254,20 @@ begin
           if stoping or terminated then
             break;
           s := RecvString(500);
-          //if s<>'' then writetrace(s);   // for debuging only, not thread safe!
+          //if s<>'' then writeln(s);   // for debuging only, not thread safe!
           if lastError = 0 then
           begin
-            s:=uppercase(s);
-            if (s = 'QUIT') or (s = 'EXIT') then
-              break
+            su:=uppercase(s);
+            if (su = 'QUIT') or (su = 'EXIT') then begin
+              break;
+            end
+            else if copy(su,1,3)='GET' then begin
+               FHttpRequest:=s;
+               Synchronize(@ProcessHttp);
+               break;
+            end
             else begin
-              cmd:=s;
+              cmd:=su;
               Synchronize(@ExecuteCmd);
               SendString(cmdresult + crlf);
               if lastError <> 0 then break;
@@ -300,6 +309,59 @@ begin
       cmdresult := FExecuteCmd(cmd);
   except
     cmdresult := msgFailed;
+  end;
+end;
+
+procedure TTCPThrd.ProcessHttp;
+var method, uri, protocol, Doc: string;
+   i: integer;
+   img: TMemoryStream;
+begin
+  method := fetch(FHttpRequest, ' ');
+  uri := fetch(FHttpRequest, ' ');
+  protocol := fetch(FHttpRequest, ' ');
+  if method<>'GET' then begin
+     Fsock.SendString('HTTP/1.0 405' + CRLF);
+     Fsock.SendString('' + CRLF);
+     Fsock.SendString('Invalid method '+method + CRLF);
+  end
+  else if pos('HTTP/',protocol)<0 then begin
+     Fsock.SendString('HTTP/1.0 406' + CRLF);
+     Fsock.SendString('' + CRLF);
+     Fsock.SendString('Invalid protocol '+protocol + CRLF);
+  end
+  else if uri='/' then begin
+    Doc := FExecuteCmd('HTML_STATUS');
+    Fsock.SendString('HTTP/1.0 200' + CRLF);
+    Fsock.SendString('Content-type: Text/Html' + CRLF);
+    Fsock.SendString('Content-length: ' + IntTostr(Length(Doc)) + CRLF);
+    Fsock.SendString('Connection: close' + CRLF);
+    Fsock.SendString('Date: ' + Rfc822DateTime(now) + CRLF);
+    Fsock.SendString('Server: CCDciel' + CRLF);
+    Fsock.SendString('' + CRLF);
+    Fsock.SendString(Doc);
+  end
+  else if (pos('.jpg',uri)>0)and(assigned(FGetImage)) then begin
+    Doc:=StringReplace(uri,'/','',[]);
+    i:=pos('.jpg',Doc);
+    Doc:=copy(Doc,1,i-1);
+    img:=TMemoryStream.Create;
+    FGetImage(Doc,img);
+    Fsock.SendString('HTTP/1.0 200' + CRLF);
+    Fsock.SendString('Content-type: image/jpeg' + CRLF);
+    Fsock.SendString('Content-length: ' + IntTostr(img.Size) + CRLF);
+    Fsock.SendString('Connection: close' + CRLF);
+    Fsock.SendString('Date: ' + Rfc822DateTime(now) + CRLF);
+    Fsock.SendString('Server: CCDciel' + CRLF);
+    Fsock.SendString('' + CRLF);
+    img.Position:=0;
+    Fsock.SendStreamRaw(img);
+    img.free;
+  end
+  else begin
+    Fsock.SendString('HTTP/1.0 404' + CRLF);
+    Fsock.SendString('' + CRLF);
+    Fsock.SendString('Not Found' + CRLF);
   end;
 end;
 

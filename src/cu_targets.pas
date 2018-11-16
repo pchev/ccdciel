@@ -485,6 +485,8 @@ begin
      ShowDelayMsg('');
    end;
    if assigned(FonEndSequence) then FonEndSequence(nil);
+   CurrentTargetName:='';
+   CurrentStepName:='';
  end
  else msg(rsNotRunningNo,1);
 end;
@@ -530,6 +532,7 @@ begin
   CancelAutofocus:=false;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
+   CurrentTargetName:=Targets[FCurrentTarget].objectname;
    if Targets[FCurrentTarget].objectname=ScriptTxt then begin
      FInitializing:=false;
      Targets[FCurrentTarget].autoguiding:=false;

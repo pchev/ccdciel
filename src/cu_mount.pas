@@ -45,6 +45,7 @@ T_mount = class(TComponent)
     FAutoLoadConfig: boolean;
     FIsEqmod: boolean;
     procedure msg(txt: string; level:integer=3);
+    function  GetTracking:Boolean; virtual; abstract;
     function  GetPark:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
     function  GetRA:double; virtual; abstract;
@@ -82,6 +83,7 @@ T_mount = class(TComponent)
     // Eqmod specific
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
+    property Tracking: Boolean read GetTracking;
     property Park: Boolean read GetPark write SetPark;
     property MountSlewing: boolean read GetMountSlewing;
     property RA: double read GetRA;

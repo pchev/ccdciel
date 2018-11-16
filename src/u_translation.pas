@@ -928,6 +928,11 @@ resourcestring
   rsSiteSendToTe = 'Site send to telescope.';
   rsSiteSetFromT = 'Site set from the telescope.';
   rsFlipTheImage = 'Flip the image vertically';
+  rsTracking = 'tracking';
+  rsNotTracking = 'not tracking';
+  rsOn = 'On';
+  rsOff = 'Off';
+  rsStatus = '%s status';
 
 
 

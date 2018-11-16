@@ -42,6 +42,8 @@ T_indimount = class(T_mount)
    coord_dec:  INumber;
    CoordSet: ISwitchVectorProperty;
    CoordSetTrack,CoordSetSlew,CoordSetSync: ISwitch;
+   TrackState: ISwitchVectorProperty;
+   TrackOn,TrackOff: ISwitch;
    parkprop: ISwitchVectorProperty;
    swpark,swunpark: ISwitch;
    AbortmotionProp: ISwitchVectorProperty;
@@ -87,6 +89,7 @@ T_indimount = class(T_mount)
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
  protected
+   function  GetTracking:Boolean; override;
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
@@ -177,6 +180,7 @@ begin
     Mountport:=nil;
     TelescopeInfo:=nil;
     parkprop:=nil;
+    TrackState:=nil;
     coord_prop:=nil;
     CoordSet:=nil;
     AbortmotionProp:=nil;
@@ -354,6 +358,12 @@ begin
       swunpark:=IUFindSwitch(parkprop,'UNPARK');
       if (swpark=nil)or(swunpark=nil) then parkprop:=nil;
       if Assigned(FonParkChange) then FonParkChange(self);
+   end
+   else if (proptype=INDI_SWITCH)and(TrackState=nil)and(propname='TELESCOPE_TRACK_STATE') then begin
+      TrackState:=indiProp.getSwitch;
+      TrackOn:=IUFindSwitch(TrackState,'TRACK_ON');
+      TrackOff:=IUFindSwitch(TrackState,'TRACK_OFF');
+      if (TrackOn=nil)or(TrackOff=nil) then TrackState:=nil;
    end
    else if (proptype=INDI_SWITCH)and(AbortmotionProp=nil)and(propname='TELESCOPE_ABORT_MOTION') then begin
       AbortmotionProp:=indiProp.getSwitch;
@@ -602,6 +612,14 @@ begin
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop);
     result:=true;
+  end;
+end;
+
+function  T_indimount.GetTracking:Boolean;
+begin
+  result:=true;
+  if (TrackState<>nil) and (TrackOn<>nil) then begin
+     result:=(TrackOn.s=ISS_ON);
   end;
 end;
 

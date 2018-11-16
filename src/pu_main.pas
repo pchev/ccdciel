@@ -423,6 +423,7 @@ type
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;
     trpOK: boolean;
     AllMsg: TStringList;
+    CameraExposureRemain:double;
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -601,6 +602,7 @@ type
     procedure TCPShowError(var msg: string);
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
+    procedure TCPgetimage(n: string;  var img: Tmemorystream);
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
     procedure MeasureAtPos(x,y:integer);
@@ -618,7 +620,7 @@ uses
 {$if lcl_major > 1}
 LazSysUtils;
 {$else}
-LazUTF8SysUtils;
+{LazUTF8}SysUtils;
 {$endif}
 
 {$R *.lfm}
@@ -1318,7 +1320,7 @@ begin
 
   f_ccdtemp.Setpoint.Value:=config.GetValue('/Temperature/Setpoint',0);
   f_preview.ExpTime.Text:=config.GetValue('/Preview/Exposure','1');
-  f_capture.ExpTime.Text:=config.GetValue('/Capture/Exposure','1');
+  f_capture.ExposureTime:=config.GetValue('/Capture/Exposure',1.0);
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
 
@@ -1334,7 +1336,7 @@ begin
   LogLevel:=config.GetValue('/Tools/Messages/LogLevel',LogLevel);
   f_msg.LogLevel:=LogLevel;
 
-  ImaBmp:=TBGRABitmap.Create;
+  ImaBmp:=TBGRABitmap.Create(1,1);
   LockTimerPlot:=false;
   LockMouseWheel:=false;
   ImgCx:=0;
@@ -5169,6 +5171,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     Capture:=false;
     exit;
   end;
+  CameraExposureRemain:=e;
   // check and set binning
   p:=pos('x',f_capture.Binning.Text);
   if p>0 then begin
@@ -5280,7 +5283,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   end;
   // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
-  NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount), f_capture.ExpTime.Text]),1);
+  NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
   f_preview.StackPreview.Checked:=false;
@@ -5300,13 +5303,14 @@ end;
 procedure Tf_main.CameraProgress(n:double);
 var txt: string;
 begin
+ CameraExposureRemain:=n;
  if (n<=0) then begin
    if meridianflipping or autofocusing then exit;
    if ((f_capture.Running)or(f_preview.Running)) then begin
      txt := rsDownloading+ellipsis;
      if Capture then begin
        if f_capture.Running then
-         StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+' '+txt;
+         StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
      end
      else begin
         StatusBar1.Panels[1].Text := txt;
@@ -5318,9 +5322,10 @@ begin
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
+  txt:=txt+'/'+f_capture.ExpTime.Text;
   if Capture then begin
     if f_capture.Running then
-      StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+blank+rsExp+blank+txt+blank+rsSec;
+      StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
   end
   else begin
      StatusBar1.Panels[1].Text := rsExp+blank+txt+blank+rsSec;
@@ -5378,7 +5383,7 @@ begin
         Capture:=false;
         f_capture.Stop;
         NewMessage(rsStopCapture,2);
-        StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)]);
+        StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
         MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
      end;
   end
@@ -5427,9 +5432,8 @@ begin
          NewMessage(rsStopFlatCapt,1);
          exit;
       end;
-      f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
-      if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [
-        f_capture.ExpTime.Text]),2);
+      f_capture.ExposureTime:=newexp;
+      if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [f_capture.ExpTime.Text]),2);
       if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
       // retry with new exposure
       exit;
@@ -5492,7 +5496,7 @@ begin
    // while waiting, maintain telescope position for sky flat
    if FlatWaitDusk or FlatWaitDawn then mount.SlewToSkyFlatPosition;
    // retry with a new exposure
-   f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
+   f_capture.ExposureTime:=newexp;
    if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [f_capture.ExpTime.Text]),2);
    if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
    exit;
@@ -5500,7 +5504,7 @@ begin
  // maintain telescope position for sky flat
  if FlatWaitDusk or FlatWaitDawn then mount.SlewToSkyFlatPosition;
  // set newexposure time
- f_capture.ExpTime.Text:=FormatFloat(f3,newexp);
+ f_capture.ExposureTime:=newexp;
  // here we have a valid flat to save
  result:=true;
 end;
@@ -5519,7 +5523,7 @@ try
  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
  for i:=0 to SubDirCount-1 do begin
    case SubDirOpt[i] of
-     sdSeq : if SubDirActive[i] and f_sequence.Running then fd:=slash(fd+trim(f_sequence.CurrentName));
+     sdSeq : if SubDirActive[i] and f_sequence.Running then fd:=slash(fd+trim(CurrentSeqName));
      sdFrt : if SubDirActive[i] then fd:=slash(fd+trim(f_capture.FrameType.Text));
      sdObj : if SubDirActive[i] then begin
                buf:=StringReplace(f_capture.fname.Text,' ','',[rfReplaceAll]);
@@ -5530,10 +5534,10 @@ try
              end;
      sdStep: if SubDirActive[i] and f_sequence.Running then begin
                 if f_sequence.StepTotalCount>1 then begin
-                  fd:=slash(fd+trim(f_sequence.CurrentStep)+'_'+IntToStr(f_sequence.StepRepeatCount))
+                  fd:=slash(fd+trim(CurrentStepName)+'_'+IntToStr(f_sequence.StepRepeatCount))
                 end
                 else begin
-                  fd:=slash(fd+trim(f_sequence.CurrentStep));
+                  fd:=slash(fd+trim(CurrentStepName));
                 end;
              end;
      sdExp : if SubDirActive[i] then begin
@@ -8511,6 +8515,7 @@ begin
     TCPDaemon.onErrorMsg := @TCPShowError;
     TCPDaemon.onShowSocket := @TCPShowSocket;
     TCPDaemon.onExecuteCmd:=@TCPcmd;
+    TCPDaemon.onGetImage:=@TCPgetimage;
     TCPDaemon.IPaddr := '0.0.0.0';
     TCPDaemon.IPport := '3277';
     TCPDaemon.Start;
@@ -8551,8 +8556,33 @@ begin
   NewMessage(Format(rsTCPIPServerL, [msg]),1);
 end;
 
+procedure Tf_main.TCPgetimage(n: string;  var img: Tmemorystream);
+var jpg: TJPEGImage;
+begin
+  img.clear;
+  try
+  jpg:= TJPEGImage.Create;
+  if n='scrimage' then
+    jpg.Assign(ScrBmp)
+  else if n='fullimage' then
+      jpg.Assign(ImaBmp)
+  else if n='lastfocus' then
+      jpg.Assign(f_starprofile.LastFocusimage)
+  else begin
+      jpg.SetSize(Image1.Width,Image1.Height);
+      PanelCenter.PaintTo(jpg.Canvas,0,0);
+  end;
+  jpg.SaveToStream(img);
+  jpg.free;
+  except
+    img.clear;
+  end;
+end;
+
 function Tf_main.TCPcmd(s: string):string;
-var i,j,n: integer;
+var i,j,n,frx,fry,frw,frh: integer;
+    pctseq,pcttarget,pctstep,pctexp: double;
+    lblseq,lbltarget,lblstep,lblexp: string;
 begin
  if (s = 'STATUS') then begin
    result:=StatusBar1.Hint;
@@ -8575,6 +8605,142 @@ begin
     j:=n-10;
    for i:=j to n do
      result:=result+f_msg.msg.Lines[i]+crlf;
+ end
+ else if (s = 'HTML_STATUS') then begin
+   result:='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"'
+           + ' "http://www.w3.org/TR/html4/loose.dtd">'+crlf
+           + '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>'+Format(rsStatus, ['CCDciel'])+'</title>'+crlf
+           + '<style type="text/css">.gauge {  width: 125px;  height: 62px;  position: relative;  overflow: hidden;  text-align:center;  margin: auto; }'+crlf
+           + '.gauge-1 { z-index: 1;  background-color: rgba(80,80,255,.2);  width: 100%;  height: 100%; border-radius: 125px 125px 0px 0px;}'+crlf
+           + '.gauge-2 {  z-index: 3;  position: absolute;  background-color: rgba(255,255,255,1);  width: 75%;  height: 75%;  bottom:0;  margin-left: 50%;  margin-right: auto; transform: translateX(-50%); border-radius: 125px 125px 0px 0px;}'+crlf
+           + '.gauge-3 {  z-index: 2;  position: absolute;  background-color: rgba(80,80,255,1);  width: 100%;  height: 100%; margin-left: auto;  margin-right: auto;  border-radius: 0px 0px 100px 100px;  transform-origin: center top;  transform:rotate(0.0turn);}'+crlf
+           + '.gauge-pct {  z-index: 4;  color: rgba(0,0,0,.2);  font-size: 1.2em;  line-height: 25px;  position: absolute;  width: 100%;  height: 100%;  top: 27%;  margin-left: auto;  margin-right: auto;}'+crlf
+           + '</style></head> <body onload="ScrollLog();">'+crlf;
+
+   result:=result + '<h1>'+Format(rsStatus, ['CCDciel'])+'<br></h1>'+crlf;
+
+   if AllDevicesConnected then
+     result:=result+Format(rsConnected+'</font></b>', [rsDevices+'<b><font color="green">'])
+   else
+     result:=result+Format(rsDisconnected+'</font></b>', [rsDevices+'<b><font color="red">']);
+   if (f_autoguider<>nil)and(autoguider.State=GUIDER_DISCONNECTED) then
+     result:=result+', '+Format(rsDisconnected+'</font></b>',[rsAutoguider+'<b><font color="red">'])
+   else if (autoguider.State=GUIDER_GUIDING) then
+     result:=result+', '+Format(rsGuiding+'</font></b>',[rsAutoguider+'<b><font color="green">'])
+   else
+     result:=result+', '+Format(rsConnected+'</font></b>',[rsAutoguider+'<b><font color="orange">']);
+   if (f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected) then
+     result:=result+', '+Format(rsConnected+'</font></b>',[rsPlanetarium+'<b><font color="green">'])
+   else
+     result:=result+', '+Format(rsDisconnected+'</font></b>',[rsPlanetarium+'<b><font color="red">']);
+   result:=result+'<br>'+crlf;
+
+   result:=result+'<table style="width: 520px; text-align:left;">'+crlf;
+   if mount.Status=devConnected then begin
+     result:=result+'<tr><td style="vertical-align:top;"><b>'+rsMount+': </b></td><td colspan="2" style="vertical-align:top;">';
+     if mount.Park then
+       result:=result+'<font color="red">'+rsParked+'</font>'
+     else begin
+       result:=result+rsUnparked;
+       if mount.Tracking then result:=result+', '+rsTracking
+          else result:=result+', <font color="red">'+rsNotTracking+'</font>';
+       result:=result+', ';
+       result:=result+rsRA+': '+f_mount.RA.Text+' ';
+       result:=result+rsDec+': '+f_mount.DE.Text+'<br>';
+       result:=result+f_mount.Pierside.Text+', '+rsMeridianIn+' '+f_mount.TimeToMeridian.Text+' '+rsMinutes;
+       result:=result+'<br>';
+     end;
+     result:=result+'</td></tr>';
+   end;
+   if camera.Status=devConnected then begin
+     result:=result+'<tr><td style="vertical-align:top;"><b>'+rsCamera+': </b></td><td colspan="2" style="vertical-align:top;">';
+     result:=result+rsBinning+': '+inttostr(camera.BinX)+'x'+inttostr(camera.BinY)+', ';
+     camera.GetFrame(frx,fry,frw,frh);
+     result:=result+rsFrame+': X='+inttostr(frx)+' Y='+inttostr(fry)+' '+rsWidth+'='+inttostr(frw)+' '+rsHeight+'='+inttostr(frh)+'<br>';
+     result:=result+rsCCDTemperatu+': '+f_ccdtemp.Current.Text+', '+rsCooler+'='+BoolToStr(f_ccdtemp.CCDcooler.Checked, rsOn, '<font color="red">'+rsOff+'</font>')+'<br>';
+     result:=result+'</td></tr>';
+   end;
+   if wheel.Status=devConnected then begin
+     result:=result+'<tr><td style="vertical-align:top;"><b>'+rsFilters+': </b></td><td colspan="2" style="vertical-align:top;">';
+     result:=result+rsFilter+': '+f_filterwheel.Filters.Text;
+     result:=result+'</td></tr>';
+   end;
+   if rotator.Status=devConnected then begin
+     result:=result+'<tr><td style="vertical-align:top;"><b>'+rsRotator+': </b></td><td colspan="2" style="vertical-align:top;">';
+     result:=result+rsPA+': '+f_rotator.Angle.Text;
+     result:=result+'</td></tr>';
+   end;
+   if focuser.Status=devConnected then begin
+     result:=result+'<tr><td style="vertical-align:top;"><b>'+rsFocuser+': </b></td><td style="vertical-align:top;">';
+     if focuser.hasAbsolutePosition then result:=result+rsPos+': '+f_focuser.Position.Text+'<br>';
+     if focuser.hasTemperature then result:=result+rsTemp+': '+f_focuser.Temp.Text+'<br>';
+     result:=result+StringReplace(f_starprofile.LastFocusMsg,crlf,'<br>',[]);
+     if true or (f_starprofile.PtSourceL.Count>0) then begin
+        result:=result+'</td><td style="vertical-align:top;">';
+        result:=result+'<img src="lastfocus.jpg" alt="Last focus graph">';
+     end;
+     result:=result+'</td></tr>';
+   end;
+   result:=result+'</table>';
+
+   pctseq:=0;pcttarget:=0;pctstep:=0;pctexp:=0;
+   lblseq:='&nbsp;';lbltarget:='&nbsp;';lblstep:='&nbsp;';lblexp:='&nbsp;';
+   if f_sequence.Running then begin
+      pctseq := f_sequence.PercentComplete;
+      pcttarget:= f_sequence.TargetPercentComplete;
+   end;
+   if f_capture.Running then begin
+      pctstep:=(f_capture.SeqCount-1)/f_capture.SeqNum.Value;
+      if f_capture.ExposureTime>0 then pctexp := (f_capture.ExposureTime-CameraExposureRemain)/f_capture.ExposureTime;
+   end;
+   if CurrentSeqName<>'' then lblseq:=copy(CurrentSeqName,1,14);
+   if CurrentTargetName<>'' then lbltarget:=copy(CurrentTargetName,1,14);
+   if CurrentStepName<>'' then lblstep:=copy(CurrentStepName,1,14);
+   if f_sequence.Running then
+     result:=result+'<b>'+rsSequence+': '+'</b>'+f_sequence.StatusMsg.Caption+'<br>'
+   else
+     result:=result+'<b>'+rsSequence+': '+'</b>'+rsStop+'<br>';
+   result:=result+'<table style="width: 520px; text-align:center; overflow: hidden;"><tr><td>'+crlf
+           +'<div class="gauge"><div class="gauge-1"></div><div class="gauge-2"></div>'
+           +'<div class="gauge-3" style="transform:rotate('+formatfloat(f2,pctseq/2)+'turn);"></div>'
+           +'<div class="gauge-pct"> <h2>'+formatfloat(f0,pctseq*100)+'%</h2> </div>'
+           +'</div>'+rsSequence+'<br>'+lblseq+'</td><td>'+crlf
+           +'<div class="gauge"><div class="gauge-1"></div><div class="gauge-2"></div>'
+           +'<div class="gauge-3" style="transform:rotate('+formatfloat(f2,pcttarget/2)+'turn);"></div>'
+           +'<div class="gauge-pct"> <h2>'+formatfloat(f0,pcttarget*100)+'%</h2> </div>'
+           +'</div>'+rsTargets+'<br>'+lbltarget+'</td><td>'+crlf
+           +'<div class="gauge"><div class="gauge-1"></div><div class="gauge-2"></div>'
+           +'<div class="gauge-3" style="transform:rotate('+formatfloat(f2,pctstep/2)+'turn);"></div>'
+           +'<div class="gauge-pct"> <h2>'+formatfloat(f0,pctstep*100)+'%</h2> </div>'
+           +'</div>'+rsStep+'<br>'+lblstep+'</td><td>'+crlf
+           +'<div class="gauge"><div class="gauge-1"></div><div class="gauge-2"></div>'
+           +'<div class="gauge-3" style="transform:rotate('+formatfloat(f2,pctexp/2)+'turn);"></div>'
+           +'<div class="gauge-pct"> <h2>'+formatfloat(f0,pctexp*100)+'%</h2> </div>'
+           +'</div>'+rsExposure+'<br>'+lblexp+'</td></tr></table>'+crlf;
+
+   if f_sequence.DelayMsg.Caption<>'' then
+     result:=result+'<b>'+'Operation'+': '+'</b>'+f_sequence.DelayMsg.Caption+'<br>'+crlf;
+   if capture then
+      result:=result+'<b>'+rsCapture+': '+'</b>'
+   else if preview then
+      result:=result+'<b>'+rsPreview+': '+'</b>';
+   result:=result+StatusBar1.Panels[1].Text+'<br>'+crlf;
+
+   result:=result+'<a href="fullimage.jpg" target="_blank"><img src="scrimage.jpg" width="520" alt="Last image on screen"></a>' +'<br>'+crlf;
+   result:=result+StatusBar1.Panels[2].Text+'<br>'+crlf;
+
+   n:=f_msg.msg.Lines.Count-1;
+   if n<30 then j:=0
+           else j:=n-30;
+   result:=result+'<div id="log" style="height:150px;width:520px;border:1px solid #ccc;overflow:auto;">';
+   for i:=j to n do
+     result:=result+f_msg.msg.Lines[i]+'<br>'+crlf;
+   result:=result+'</div>'+'<br>'+crlf;
+   result:=result+'<script> function ScrollLog() {' +
+           'var elmnt = document.getElementById("log");' +
+           'elmnt.scrollTop += 99999; } </script>';
+
+   result:=result+'</body></html>'+crlf;
  end;
 end;
 

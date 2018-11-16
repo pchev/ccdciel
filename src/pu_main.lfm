@@ -17,6 +17,7 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
+  LCLVersion = '2.0.0.2'
   object Panel1: TPanel
     Left = 0
     Height = 381
@@ -108,7 +109,7 @@ object f_main: Tf_main
         Width = 300
       end    
       item
-        Width = 150
+        Width = 200
       end    
       item
         Width = 250
@@ -148,7 +149,7 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 0
         object PanelRight1: TPanel
@@ -171,7 +172,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 1
         object PanelRight2: TPanel
@@ -194,7 +195,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 2
         object PanelRight3: TPanel
@@ -217,7 +218,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 3
         object PanelRight4: TPanel
@@ -240,7 +241,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 345
+        ClientHeight = 317
         ClientWidth = 178
         ImageIndex = 4
         object PanelRight5: TPanel

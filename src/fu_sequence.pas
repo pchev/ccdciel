@@ -124,11 +124,11 @@ type
     procedure SetEndShutdown(value:boolean);
     function GetOnShutdown: TNotifyEvent;
     procedure SetOnShutdown(value:TNotifyEvent);
+    function GetPercentComplete: double;
+    function GetTargetPercentComplete: double;
   public
     { public declarations }
-    CurrentName, CurrentTarget, CurrentStep: string;
     StepRepeatCount, StepTotalCount: integer;
-
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure AutoguiderDisconnected;
@@ -139,6 +139,8 @@ type
     procedure AbortSequence;
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
+    property PercentComplete: double read GetPercentComplete;
+    property TargetPercentComplete: double read GetTargetPercentComplete;
     property TargetCoord: boolean read GetTargetCoord;
     property TargetRA: double read GetTargetRA;
     property TargetDE: double read GetTargetDE;
@@ -176,6 +178,9 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ CurrentSeqName:='';
+ CurrentTargetName:='';
+ CurrentStepName:='';
  Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
@@ -378,7 +383,7 @@ begin
       end;
     end else begin
       CurrentSequenceFile:='';
-      CurrentName:='';
+      CurrentSeqName:='';
       f_EditTargets.TargetName.Caption:='New targets';
       f_EditTargets.TargetsRepeat:=1;
       f_EditTargets.SeqStart.Checked:=false;
@@ -437,9 +442,9 @@ var tfile: TCCDconfig;
 begin
    tfile:=TCCDconfig.Create(self);
    tfile.Filename:=fn;
-   CurrentName:=ExtractFileNameOnly(fn);
+   CurrentSeqName:=ExtractFileNameOnly(fn);
    Targets.Clear;
-   Targets.TargetName:=CurrentName;
+   Targets.TargetName:=CurrentSeqName;
    CurrentSequenceFile:=fn;
    n:=tfile.GetValue('/TargetNum',0);
    Targets.FileVersion      :=tfile.GetValue('/Version',1);
@@ -608,10 +613,10 @@ begin
     tfile.Filename:=fn;
     tfile.Clear;
     CurrentSequenceFile:=fn;
-    CurrentName:=ExtractFileNameOnly(fn);
-    Targets.TargetName:=CurrentName;
+    CurrentSeqName:=ExtractFileNameOnly(fn);
+    Targets.TargetName:=CurrentSeqName;
     tfile.SetValue('/Version',TargetFileVersion);
-    tfile.SetValue('/ListName',CurrentName);
+    tfile.SetValue('/ListName',CurrentSeqName);
     tfile.SetValue('/TargetNum',Targets.Count);
     tfile.SetValue('/RepeatCount',Targets.TargetsRepeat);
     tfile.SetValue('/Startup/SeqStart',Targets.SeqStart);
@@ -1014,6 +1019,32 @@ end;
 procedure Tf_sequence.SetOnShutdown(value:TNotifyEvent);
 begin
   Targets.OnShutdown:=value;
+end;
+
+function Tf_sequence.GetPercentComplete: double;
+begin
+{ TODO : Improve to take account for execution time }
+try
+  if Targets.Running and (Targets.CurrentTarget>=0) then
+     result := (Targets.CurrentTarget)/Targets.Count
+  else
+     result:=0;
+  except
+    result:=0;
+  end;
+end;
+
+function Tf_sequence.GetTargetPercentComplete: double;
+begin
+{ TODO : Improve to take account for execution time }
+try
+  if Targets.Running and (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep>=0) then
+     result := (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep)/ T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Count
+  else
+     result:=0;
+except
+  result:=0;
+end;
 end;
 
 end.

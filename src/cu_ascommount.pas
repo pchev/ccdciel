@@ -47,6 +47,7 @@ T_ascommount = class(T_mount)
    procedure CheckEqmod;
    function WaitMountSlewing(maxtime:integer):boolean;
  protected
+   function  GetTracking:Boolean; override;
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
@@ -522,6 +523,19 @@ begin
    result:=true;
    except
      on E: Exception do msg('Sync error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.GetTracking:Boolean;
+begin
+ result:=true;
+ {$ifdef mswindows}
+ if Connected then begin
+   try
+   result:=V.tracking;
+   except
    end;
  end;
  {$endif}

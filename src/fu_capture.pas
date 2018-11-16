@@ -64,11 +64,13 @@ type
     FocusCount: TSpinEdit;
     Title: TLabel;
     procedure BtnStartClick(Sender: TObject);
+    procedure ExpTimeChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }
     FMount: T_mount;
+    FExposureTime: double;
     FSeqCount: integer;
     FDitherNum: integer;
     FFocusNum: integer;
@@ -78,6 +80,7 @@ type
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     procedure SetLang;
+    procedure SetExposureTime(val: double);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -86,6 +89,7 @@ type
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
+    property ExposureTime: double read FExposureTime write SetExposureTime;
     property DitherNum: Integer read FDitherNum write FDitherNum;
     property FocusNum: Integer read FFocusNum write FFocusNum;
     property FocusNow: boolean read FFocusNow write FFocusNow;
@@ -109,6 +113,7 @@ begin
  ScaleDPI(Self);
  Frunning:=false;
  FFocusNow:=false;
+ FExposureTime:=-1;
  SetLang;
 end;
 
@@ -164,6 +169,17 @@ begin
     BtnStart.Caption:=rsStart;
     if Assigned(FonMsg) then FonMsg(rsStopCapture,2);
   end;
+end;
+
+procedure Tf_capture.ExpTimeChange(Sender: TObject);
+begin
+  FExposureTime:=StrToFloatDef(ExpTime.Text,-1);
+end;
+
+procedure Tf_capture.SetExposureTime(val: double);
+begin
+  FExposureTime:=val;
+  ExpTime.Text:=FormatFloat('0.###',val);
 end;
 
 procedure Tf_capture.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);

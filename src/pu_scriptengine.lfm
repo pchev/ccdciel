@@ -4,13 +4,10 @@ object f_scriptengine: Tf_scriptengine
   Top = 0
   Width = 409
   Caption = 'f_scriptengine'
-  ClientHeight = 317
-  ClientWidth = 409
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '1.8.4.0'
-  Visible = False
+  LCLVersion = '2.0.0.2'
   object TplPSScript: TPSScript
     CompilerOptions = []
     OnLine = TplPSScriptLine

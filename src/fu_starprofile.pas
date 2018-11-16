@@ -113,6 +113,8 @@ type
     procedure SetLang;
   public
     { public declarations }
+    LastFocusimage: TBGRABitmap;
+    LastFocusMsg: string;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
@@ -159,6 +161,8 @@ begin
  SetLang;
  emptybmp:=Tbitmap.Create;
  emptybmp.SetSize(1,1);
+ LastFocusimage:=TBGRABitmap.Create(1,1);
+ LastFocusMsg:='Autofocus not run';
  FFindStar:=false;
  curhist:=0;
  maxfwhm:=0;
@@ -175,6 +179,7 @@ end;
 destructor  Tf_starprofile.Destroy;
 begin
  emptybmp.Free;
+ LastFocusimage.Free;
  inherited Destroy;
 end;
 
@@ -728,6 +733,7 @@ begin
       FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr), FormatFloat(f1,
       FocuserTemp)]),2);
     if FAutofocusResult then begin
+      LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
       // adjust slippage offset with current result
       if AutofocusSlippageCorrection and (AutofocusMode=afVcurve) then begin
         if AutofocusVcTemp<>NullCoord then
@@ -743,8 +749,11 @@ begin
       end;
     end
     else begin
+       LastFocusMsg:=rsAutofocusFai+crlf+FormatDateTime('hh:nn:ss', now);
        msg(Format(rsAutofocusFin2, [FormatFloat(f1, AutofocusTolerance)]),0);
     end;
+    LastFocusimage.SetSize(VcChart.Width,VcChart.Height);
+    VcChart.PaintTo(LastFocusimage.Canvas,0,0);
     ChkAutofocusDown(false);
     exit;
   end;

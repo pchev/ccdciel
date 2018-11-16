@@ -26,16 +26,16 @@ object f_capture: Tf_capture
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 33
+      Height = 31
       Top = 0
       Width = 179
       Caption = ' '
-      ClientHeight = 33
+      ClientHeight = 31
       ClientWidth = 179
       TabOrder = 0
       object ExpTime: TComboBox
         Left = 88
-        Height = 31
+        Height = 29
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -60,31 +60,32 @@ object f_capture: Tf_capture
           '600'
           '1200'
         )
+        OnChange = ExpTimeChange
         TabOrder = 0
         Text = '1'
       end
       object Label1: TLabel
         Left = 2
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 22
+        Width = 24
         Caption = 'Exp'
         ParentColor = False
       end
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 37
-      Top = 33
+      Height = 35
+      Top = 31
       Width = 179
       Caption = ' '
-      ClientHeight = 37
+      ClientHeight = 35
       ClientWidth = 179
       TabOrder = 8
       Visible = False
       object ISObox: TComboBox
         Left = 87
-        Height = 35
+        Height = 33
         Hint = 'Exposure time in secondes'
         Top = 1
         Width = 90
@@ -95,15 +96,15 @@ object f_capture: Tf_capture
       end
       object LabelGain: TLabel
         Left = 2
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 27
+        Width = 30
         Caption = 'Gain'
         ParentColor = False
       end
       object GainEdit: TSpinEdit
         Left = 88
-        Height = 29
+        Height = 27
         Top = 4
         Width = 89
         MaxValue = 0
@@ -112,16 +113,16 @@ object f_capture: Tf_capture
     end
     object Panel3: TPanel
       Left = 0
-      Height = 33
-      Top = 70
+      Height = 31
+      Top = 66
       Width = 179
       Caption = ' '
-      ClientHeight = 33
+      ClientHeight = 31
       ClientWidth = 179
       TabOrder = 1
       object Binning: TComboBox
         Left = 88
-        Height = 31
+        Height = 29
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -135,58 +136,58 @@ object f_capture: Tf_capture
       end
       object Label2: TLabel
         Left = 2
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 22
+        Width = 25
         Caption = 'Bin.'
         ParentColor = False
       end
     end
     object Panel4: TPanel
       Left = 0
-      Height = 32
-      Top = 103
+      Height = 30
+      Top = 97
       Width = 179
       Caption = ' '
-      ClientHeight = 32
+      ClientHeight = 30
       ClientWidth = 179
       TabOrder = 2
       object Fname: TEdit
         Left = 87
-        Height = 31
+        Height = 29
         Top = 0
         Width = 90
         TabOrder = 0
       end
       object Label3: TLabel
         Left = 2
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 39
+        Width = 42
         Caption = 'Object'
         ParentColor = False
       end
     end
     object Panel5: TPanel
       Left = 0
-      Height = 30
-      Top = 135
+      Height = 28
+      Top = 127
       Width = 179
       Caption = ' '
-      ClientHeight = 30
+      ClientHeight = 28
       ClientWidth = 179
       TabOrder = 3
       object Label4: TLabel
         Left = 2
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 37
+        Width = 38
         Caption = 'Count'
         ParentColor = False
       end
       object SeqNum: TSpinEdit
         Left = 87
-        Height = 29
+        Height = 27
         Top = 0
         Width = 88
         MaxValue = 10000
@@ -197,23 +198,23 @@ object f_capture: Tf_capture
     end
     object Panel6: TPanel
       Left = 0
-      Height = 33
-      Top = 165
+      Height = 31
+      Top = 155
       Width = 179
-      ClientHeight = 33
+      ClientHeight = 31
       ClientWidth = 179
       TabOrder = 4
       object Label5: TLabel
         Left = 2
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 29
+        Width = 30
         Caption = 'Type'
         ParentColor = False
       end
       object FrameType: TComboBox
         Left = 87
-        Height = 31
+        Height = 29
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -231,23 +232,23 @@ object f_capture: Tf_capture
     end
     object Panel7: TPanel
       Left = 0
-      Height = 30
-      Top = 198
+      Height = 28
+      Top = 186
       Width = 179
-      ClientHeight = 30
+      ClientHeight = 28
       ClientWidth = 179
       TabOrder = 5
       object CheckBoxDither: TCheckBox
         Left = 2
         Height = 21
         Top = 0
-        Width = 97
+        Width = 105
         Caption = 'Dither every'
         TabOrder = 0
       end
       object DitherCount: TSpinEdit
         Left = 134
-        Height = 29
+        Height = 27
         Top = 0
         Width = 41
         MaxValue = 10000
@@ -258,23 +259,23 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 30
-      Top = 228
+      Height = 28
+      Top = 214
       Width = 179
-      ClientHeight = 30
+      ClientHeight = 28
       ClientWidth = 179
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
         Left = 2
         Height = 21
         Top = 0
-        Width = 95
+        Width = 102
         Caption = 'Focus every'
         TabOrder = 0
       end
       object FocusCount: TSpinEdit
         Left = 134
-        Height = 29
+        Height = 27
         Top = 0
         Width = 41
         MaxValue = 10000
@@ -286,7 +287,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 0
       Height = 20
-      Top = 258
+      Top = 242
       Width = 179
       ClientHeight = 20
       ClientWidth = 179
