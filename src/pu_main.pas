@@ -8752,7 +8752,7 @@ begin
    for i:=j to n do
      result:=result+f_msg.msg.Lines[i]+'<br>'+crlf;
    result:=result+'</div>'+'<br>'+crlf;
-   result:=result+'<script> function ScrollLog() {' +
+   result:=result+'<script type="application/javascript"> function ScrollLog() {' +
            'var elmnt = document.getElementById("log");' +
            'elmnt.scrollTop += 99999; } </script>';
 
