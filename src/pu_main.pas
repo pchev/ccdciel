@@ -620,7 +620,7 @@ uses
 {$if lcl_major > 1}
 LazSysUtils;
 {$else}
-{LazUTF8}SysUtils;
+LazUTF8SysUtils;
 {$endif}
 
 {$R *.lfm}
