@@ -29,6 +29,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
   {$ifdef mswindows}
     Variants, comobj,
   {$endif}
+  dnssend,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, ComCtrls;
 
@@ -732,15 +733,12 @@ var i: integer;
     drint:word;
 begin
   inc(IndiTimerCount);
-  if (not receiveindidevice)and(IndiTimerCount<=5) then exit;
+  if (not receiveindidevice)and(IndiTimerCount<=5)and(indiclient<>nil)and(indiclient.Connected) then exit;
   IndiTimer.Enabled:=false;
+  Screen.Cursor:=crDefault;
   try
-  if indiclient.Terminated then begin
-    Screen.Cursor:=crDefault;
-    if pos('.local',IndiServer.Text)>0 then
-      ShowMessage('No response from INDI server. Beware that mDNS .local server name is not supported.')
-    else
-      ShowMessage('No response from INDI server. Is the Indi server running?');
+  if (indiclient=nil)or indiclient.Finished or indiclient.Terminated or (not indiclient.Connected)  then begin
+    ShowMessage('No response from INDI server. Is the Indi server running?');
     exit;
   end;
   for i:=0 to indiclient.devices.Count-1 do begin
@@ -780,6 +778,7 @@ begin
   indiclient.DisconnectServer;
   Screen.Cursor:=crDefault;
   except
+    Screen.Cursor:=crDefault;
   end;
 end;
 
