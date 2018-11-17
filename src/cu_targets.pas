@@ -844,21 +844,28 @@ begin
   // remove blank filter name
   for i:=flfilter.count-1 downto 0 do
    if trim(flfilter[i])='' then flfilter.Delete(i);
-  // add filter exposure factor
-  for i:=0 to flfilter.count-1 do begin
-    flexp:=TFilterExp.Create;
-    n:=FilterList.IndexOf(flfilter[i]);
-    if n>=0 then
-       flexp.ExpFact:=FilterExpFact[n]
-    else
-       flexp.ExpFact:=1.0;
-    flfilter.Objects[i]:=flexp;
+  if flfilter.count>0 then begin
+    // add filter exposure factor
+    for i:=0 to flfilter.count-1 do begin
+      flexp:=TFilterExp.Create;
+      n:=FilterList.IndexOf(flfilter[i]);
+      if n>=0 then
+         flexp.ExpFact:=FilterExpFact[n]
+      else
+         flexp.ExpFact:=1.0;
+      flfilter.Objects[i]:=flexp;
+    end;
+    // sort by filter exposure factor
+    if flt.planname=FlatTimeName[0] then // Dusk, take darker filter first
+      SortFilterListDec(flfilter)
+    else                                 // Dawn, take lighter filter first
+      SortFilterListInc(flfilter);
+  end
+  else begin
+    flexp:=TFilterExp.Create;           // No filter
+    flexp.ExpFact:=1.0;
+    flfilter.AddObject(Filter0,flexp);
   end;
-  // sort by filter exposure factor
-  if flt.planname=FlatTimeName[0] then // Dusk, take darker filter first
-    SortFilterListDec(flfilter)
-  else                                 // Dawn, take lighter filter first
-    SortFilterListInc(flfilter);
   flp.Clear;
   for i:=0 to flfilter.count-1 do
     if trim(flfilter[i])<>'' then begin
@@ -875,7 +882,10 @@ begin
       fls.autofocusstart:=false;
       fls.autofocus:=false;
       fls.autofocuscount:=10;
-      fls.description:=flt.planname+' flat '+flfilter[i];
+      if flfilter[i]=Filter0 then
+         fls.description:=flt.planname+' flat '
+      else
+         fls.description:=flt.planname+' flat '+flfilter[i];
       flp.Add(fls);
     end;
   if flt.planname=FlatTimeName[0] then begin    // Dusk

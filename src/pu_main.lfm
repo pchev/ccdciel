@@ -24,8 +24,8 @@ object f_main: Tf_main
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 377
-    ClientWidth = 608
+    ClientHeight = 381
+    ClientWidth = 612
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
@@ -131,8 +131,8 @@ object f_main: Tf_main
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 377
-    ClientWidth = 184
+    ClientHeight = 381
+    ClientWidth = 188
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
@@ -149,7 +149,7 @@ object f_main: Tf_main
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
         ClientHeight = 345
-        ClientWidth = 184
+        ClientWidth = 178
         ImageIndex = 0
         object PanelRight1: TPanel
           Left = 0
@@ -172,7 +172,7 @@ object f_main: Tf_main
       end
       object PageFocus: TTabSheet
         ClientHeight = 345
-        ClientWidth = 184
+        ClientWidth = 178
         ImageIndex = 1
         object PanelRight2: TPanel
           Left = 0
@@ -195,7 +195,7 @@ object f_main: Tf_main
       end
       object PageCapture: TTabSheet
         ClientHeight = 345
-        ClientWidth = 184
+        ClientWidth = 178
         ImageIndex = 2
         object PanelRight3: TPanel
           Left = 0
@@ -218,7 +218,7 @@ object f_main: Tf_main
       end
       object PageSequence: TTabSheet
         ClientHeight = 345
-        ClientWidth = 184
+        ClientWidth = 178
         ImageIndex = 3
         object PanelRight4: TPanel
           Left = 0
@@ -241,7 +241,7 @@ object f_main: Tf_main
       end
       object PageVideo: TTabSheet
         ClientHeight = 345
-        ClientWidth = 184
+        ClientWidth = 178
         ImageIndex = 4
         object PanelRight5: TPanel
           Left = 0
