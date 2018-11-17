@@ -737,7 +737,10 @@ begin
   try
   if indiclient.Terminated then begin
     Screen.Cursor:=crDefault;
-    ShowMessage('No response from INDI server. Is the Indi server running?');
+    if pos('.local',IndiServer.Text)>0 then
+      ShowMessage('No response from INDI server. Beware that mDNS .local server name is not supported.')
+    else
+      ShowMessage('No response from INDI server. Is the Indi server running?');
     exit;
   end;
   for i:=0 to indiclient.devices.Count-1 do begin
