@@ -8628,7 +8628,7 @@ begin
  else if (s = 'HTML_STATUS') then begin
    result:='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"'
            + ' "http://www.w3.org/TR/html4/loose.dtd">'+crlf
-           + '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>'+Format(rsStatus, ['CCDciel'])+'</title>'+crlf
+           + '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="refresh" content="60"><title>'+Format(rsStatus, ['CCDciel'])+'</title>'+crlf
            + '<style type="text/css">.gauge {  width: 125px;  height: 62px;  position: relative;  overflow: hidden;  text-align:center;  margin: auto; }'+crlf
            + '.gauge-1 { z-index: 1;  background-color: rgba(80,80,255,.2);  width: 100%;  height: 100%; border-radius: 125px 125px 0px 0px;}'+crlf
            + '.gauge-2 {  z-index: 3;  position: absolute;  background-color: rgba(255,255,255,1);  width: 75%;  height: 75%;  bottom:0;  margin-left: 50%;  margin-right: auto; transform: translateX(-50%); border-radius: 125px 125px 0px 0px;}'+crlf
@@ -8752,7 +8752,7 @@ begin
    n:=f_msg.msg.Lines.Count-1;
    if n<30 then j:=0
            else j:=n-30;
-   result:=result+'<div id="log" style="height:150px;width:520px;border:1px solid #ccc;overflow:auto;">';
+   result:=result+'<div id="log" style="height:120px;width:520px;border:1px solid #ccc;overflow:auto;">';
    for i:=j to n do
      result:=result+f_msg.msg.Lines[i]+'<br>'+crlf;
    result:=result+'</div>'+'<br>'+crlf;
