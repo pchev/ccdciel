@@ -8707,18 +8707,19 @@ begin
    if f_sequence.Running then begin
       pctseq := f_sequence.PercentComplete;
       pcttarget:= f_sequence.TargetPercentComplete;
+      result:=result+'<b>'+rsSequence+': '+'</b>'+f_sequence.StatusMsg.Caption+'<br>'
+   end
+   else begin
+     result:=result+'<b>'+rsSequence+': '+'</b>'+rsStop+'<br>';
    end;
    if f_capture.Running then begin
       pctstep:=(f_capture.SeqCount-1)/f_capture.SeqNum.Value;
       if f_capture.ExposureTime>0 then pctexp := (f_capture.ExposureTime-CameraExposureRemain)/f_capture.ExposureTime;
+      lblexp:=f_capture.ExpTime.Text;
    end;
    if CurrentSeqName<>'' then lblseq:=copy(CurrentSeqName,1,14);
    if CurrentTargetName<>'' then lbltarget:=copy(CurrentTargetName,1,14);
    if CurrentStepName<>'' then lblstep:=copy(CurrentStepName,1,14);
-   if f_sequence.Running then
-     result:=result+'<b>'+rsSequence+': '+'</b>'+f_sequence.StatusMsg.Caption+'<br>'
-   else
-     result:=result+'<b>'+rsSequence+': '+'</b>'+rsStop+'<br>';
    result:=result+'<table style="width: 520px; text-align:center; overflow: hidden;"><tr><td>'+crlf
            +'<div class="gauge"><div class="gauge-1"></div><div class="gauge-2"></div>'
            +'<div class="gauge-3" style="transform:rotate('+formatfloat(f2,pctseq/2)+'turn);"></div>'
