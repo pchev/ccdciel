@@ -81,6 +81,7 @@ type
   private
     { private declarations }
     TargetRow, PlanRow: integer;
+    StartingSequence: Boolean;
     Targets: T_Targets;
     FonMsg: TNotifyMsg;
     FConnectAutoguider: TNotifyEvent;
@@ -181,6 +182,7 @@ begin
  CurrentSeqName:='';
  CurrentTargetName:='';
  CurrentStepName:='';
+ StartingSequence:=false;
  Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
@@ -739,6 +741,7 @@ end;
 procedure Tf_sequence.StartTimerTimer(Sender: TObject);
 begin
   StartTimer.Enabled:=false;
+  if not StartingSequence then exit;
   StartSequence;
 end;
 
@@ -747,6 +750,9 @@ var ccdtemp,tempdiff,temp,endt:double;
     i,j: integer;
     isCalibrationSequence, waitcooling: boolean;
 begin
+ StartingSequence:=true;
+ msg(Format(rsStartingSequ,['']),1);
+ led.Brush.Color:=clYellow;
  if preview.Running then begin
      msg(rsStopPreview,2);
      camera.AbortExposure;
@@ -765,6 +771,7 @@ begin
          isCalibrationSequence:=false;
    end;
  end;
+ if not StartingSequence then exit;
  // check camera cooler
  waitcooling:=config.GetValue('/Cooler/CameraAutoCool',false);
  ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
@@ -774,12 +781,14 @@ begin
        camera.Temperature:=ccdtemp;
     end;
  end;
+ if not StartingSequence then exit;
  // check mount park
  if mount.Park then begin
     msg(rsTheTelescope, 1);
     mount.Park:=false;
     wait(5);
  end;
+ if not StartingSequence then exit;
  // check if autoguider is required and connected
  if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
    if AutoguiderStarting then begin
@@ -802,12 +811,14 @@ begin
      exit;
    end;
  end;
+ if not StartingSequence then exit;
  // wait for camera cooling
  if waitcooling then begin
    endt:=now+300/secperday; // wait 5 minutes max.
    tempdiff:=100;  i:=0;
    while (tempdiff>1)and(now<endt) do begin
       sleep(100);
+      if not StartingSequence then exit;
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(i);
       if (i mod 100) = 0 then begin // every 10 sec.
@@ -818,6 +829,8 @@ begin
    end;
  end;
  // initialize sequence
+ if not StartingSequence then exit;
+ StartingSequence:=false;
  AutoguiderStarting:=false;
  AutoguiderAlert:=false;
  Preview.StackPreview.Checked:=false;
@@ -833,6 +846,11 @@ procedure Tf_sequence.StopSequence;
 begin
  StartTimer.Enabled:=false;
  StatusTimer.Enabled:=false;
+ if StartingSequence then begin
+    led.Brush.Color:=clRed;
+    msg(Format(rsSequenceStop2,['']),1);
+ end;
+ StartingSequence:=false;
  if targets.TargetInitializing or targets.WaitStarting or targets.ScriptRunning then begin
    led.Brush.Color:=clRed;
    SetEditBtn(true);
