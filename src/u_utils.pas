@@ -40,6 +40,7 @@ function InvertF32(X : LongWord) : Single;
 function InvertF64(X : Int64) : Double;
 Procedure FormPos(form : Tform; x,y : integer);
 Function FormEntry(aOwner:TComponent; lbl,defaultstr:string):string;
+Function FormEntryCB(aOwner:TComponent; val:Tstrings; lbl,defaultstr:string):string;
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
 procedure SplitRec(buf,sep:string; var arg: TStringList);
 Procedure SplitCmd(S : String; List : TStringList);
@@ -134,6 +135,8 @@ procedure SortFilterListDec(var list: TStringList);
 
 implementation
 
+uses u_translation;
+
 const
   GregorianStart=15821015;
   GregorianStartJD=2299161;
@@ -184,17 +187,60 @@ Function FormEntry(aOwner:TComponent; lbl,defaultstr:string):string;
 var f: TForm;
     l: Tlabel;
     e: Tedit;
-    b: TButton;
+    b,c: TButton;
 begin
   f:=TForm.Create(aOwner);
   l:=TLabel.Create(f);
   e:=TEdit.Create(f);
+  c:=TButton.Create(f);
   b:=TButton.Create(f);
   l.Caption:=lbl;
   l.Parent:=f;
+  e.Constraints.MinWidth:=200;
   e.Text:=defaultstr;
   e.Parent:=f;
-  b.Caption:='OK';
+  c.Caption:=rsCancel;
+  c.ModalResult:=mrCancel;
+  c.Parent:=f;
+  c.Cancel:=true;
+  b.Caption:=rsOK;
+  b.ModalResult:=mrOK;
+  b.Parent:=f;
+  b.Default:=true;
+  f.ChildSizing.ControlsPerLine:=2;
+  f.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
+  f.AutoSize:=true;
+  FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f.ShowModal;
+  if f.ModalResult=mrOK then
+    result:=e.Text
+  else
+    result:=defaultstr;
+  f.free;
+end;
+
+Function FormEntryCB(aOwner:TComponent; val:Tstrings; lbl,defaultstr:string):string;
+var f: TForm;
+    l: Tlabel;
+    e: TComboBox;
+    b,c: TButton;
+begin
+  f:=TForm.Create(aOwner);
+  l:=TLabel.Create(f);
+  e:=TComboBox.Create(f);
+  c:=TButton.Create(f);
+  b:=TButton.Create(f);
+  l.Caption:=lbl;
+  l.Parent:=f;
+  e.Constraints.MinWidth:=200;
+  e.Items.Assign(val);
+  e.Text:=defaultstr;
+  e.Parent:=f;
+  c.Caption:=rsCancel;
+  c.ModalResult:=mrCancel;
+  c.Parent:=f;
+  c.Cancel:=true;
+  b.Caption:=rsOK;
   b.ModalResult:=mrOK;
   b.Parent:=f;
   b.Default:=true;

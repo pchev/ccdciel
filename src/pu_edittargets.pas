@@ -28,11 +28,12 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
   pu_scriptengine, cu_astrometry, u_translation, pu_sequenceoptions,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6;
+  titleadd=0; titledel=1;
 
 type
 
@@ -46,11 +47,14 @@ type
     BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
     BtnImport: TButton;
+    BtnApplyToAll: TButton;
     ButtonEndOptions: TButton;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
     GroupBoxStep: TGroupBox;
+    ImageListNight: TImageList;
+    ImageListDay: TImageList;
     OpenDialog1: TOpenDialog;
     Panel15: TPanel;
     Panel16: TPanel;
@@ -144,6 +148,7 @@ type
     TargetList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
+    procedure BtnApplyToAllClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
@@ -187,6 +192,7 @@ type
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure TargetListEditingDone(Sender: TObject);
+    procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
@@ -206,7 +212,7 @@ type
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
     procedure CheckPlanModified;
-    function  CheckRiseSet(n: integer): boolean;
+    function  CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
     procedure ShowEndOptions;
   public
@@ -765,6 +771,21 @@ begin
   TargetChange(nil);
 end;
 
+procedure Tf_EditTargets.BtnApplyToAllClick(Sender: TObject);
+var i: integer;
+    t: TTarget;
+begin
+  with TargetList do begin
+   for i:=1 to RowCount-1 do
+      if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+        t:=TTarget(Objects[colseq,i]);
+        t.astrometrypointing := (PointAstrometry.Checked and (t.ra<>NullCoord) and (t.de<>NullCoord));
+        t.updatecoord := UpdateCoord.Checked;
+        t.inplaceautofocus := InplaceAutofocus.Checked;
+      end;
+  end;
+end;
+
 procedure Tf_EditTargets.BtnCancelClick(Sender: TObject);
 begin
   CheckPlanModified;
@@ -1098,10 +1119,10 @@ begin
     if TargetList.Cells[colskip,aRow]='0' then
       TargetList.Cells[coldark,aRow]:='0';
   end;
-  TargetChange(Sender);
+  if sender<>nil then TargetChange(Sender);
 end;
 
-function Tf_EditTargets.CheckRiseSet(n: integer): boolean;
+function Tf_EditTargets.CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
 var ra,de,h: double;
     i:integer;
 begin
@@ -1112,16 +1133,16 @@ ra:=StrToAR(TargetList.Cells[colra,n]);
 de:=StrToDE(TargetList.Cells[coldec,n]);
 if TargetList.Cells[colstart,n]=rsRise then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
-     ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
+     if showmsg then ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
      TargetList.Cells[colstart,n]:='';
      result:=false;
   end
   else begin
     if not ObjRise(ra,de,h,i) then begin
       if i=1 then
-        ShowMessage(rsThisObjectIs)
+        if showmsg then ShowMessage(rsThisObjectIs)
       else
-        ShowMessage(rsThisObjectIs2);
+        if showmsg then ShowMessage(rsThisObjectIs2);
       TargetList.Cells[colstart,n]:='';
       result:=false;
     end;
@@ -1129,16 +1150,16 @@ if TargetList.Cells[colstart,n]=rsRise then begin
 end;
 if TargetList.Cells[colend,n]=rsSet2 then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
-     ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
+     if showmsg then ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
      TargetList.Cells[colend,n]:='';
      result:=false;
   end
   else begin
     if not ObjSet(ra,de,h,i) then begin
       if i=1 then
-        ShowMessage(rsThisObjectIs)
+        if showmsg then ShowMessage(rsThisObjectIs)
       else
-        ShowMessage(rsThisObjectIs2);
+        if showmsg then ShowMessage(rsThisObjectIs2);
       TargetList.Cells[colend,n]:='';
       result:=false;
     end;
@@ -1155,6 +1176,142 @@ end;
 procedure Tf_EditTargets.TargetListEditingDone(Sender: TObject);
 begin
   TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
+var i: integer;
+    onoff: boolean;
+    buf: string;
+    t: TTarget;
+begin
+ if IsColumn then with TargetList do begin
+  case index of
+    colplan : begin
+                buf:=FormEntryCB(self, Columns[Index-1].PickList, Columns[Index-1].Title.Caption, '');
+                if buf<>'' then begin
+                  for i:=1 to RowCount-1 do
+                     if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+                       Cells[Index,i]:=buf;
+                       t:=TTarget(Objects[colseq,i]);
+                       t.planname:=buf;
+                     end;
+                end;
+              end;
+    colpa  : begin
+                buf:=FormEntry(self, Columns[Index-1].Title.Caption, '');
+                if buf<>'' then begin
+                  for i:=1 to RowCount-1 do
+                     if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+                       Cells[Index,i]:=buf;
+                       t:=TTarget(Objects[colseq,i]);
+                       if buf='-' then
+                         t.pa:=NullCoord
+                       else
+                         t.pa:=StrToFloatDef(buf,t.pa);
+                     end;
+                end;
+              end;
+    colstart: begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+                     if onoff then
+                        Cells[Index,i]:='rise'
+                     else
+                        Cells[Index,i]:='';
+                     CheckRiseSet(i,false);
+                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
+                     t:=TTarget(Objects[colseq,i]);
+                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
+                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
+                     t.startrise:=Cells[colstart,i]=rsRise;
+                     t.endset:=Cells[colend,i]=rsSet2;
+                     t.darknight:=(Cells[coldark,i]='1');
+                     t.skip:=(Cells[colskip,i]='1');
+                   end;
+              end;
+    colend:   begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+                     if onoff then
+                        Cells[Index,i]:='set'
+                     else
+                        Cells[Index,i]:='';
+                     CheckRiseSet(i,false);
+                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
+                     t:=TTarget(Objects[colseq,i]);
+                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
+                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
+                     t.startrise:=Cells[colstart,i]=rsRise;
+                     t.endset:=Cells[colend,i]=rsSet2;
+                     t.darknight:=(Cells[coldark,i]='1');
+                     t.skip:=(Cells[colskip,i]='1');
+                   end;
+              end;
+    coldark:   begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+                     if onoff then
+                        Cells[Index,i]:='1'
+                     else
+                        Cells[Index,i]:='0';
+                     CheckRiseSet(i,false);
+                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
+                     t:=TTarget(Objects[colseq,i]);
+                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
+                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
+                     t.startrise:=Cells[colstart,i]=rsRise;
+                     t.endset:=Cells[colend,i]=rsSet2;
+                     t.darknight:=(Cells[coldark,i]='1');
+                     t.skip:=(Cells[colskip,i]='1');
+                   end;
+              end;
+    colskip:   begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
+                     if onoff then
+                        Cells[Index,i]:='1'
+                     else
+                        Cells[Index,i]:='0';
+                     CheckRiseSet(i,false);
+                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
+                     t:=TTarget(Objects[colseq,i]);
+                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
+                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
+                     t.startrise:=Cells[colstart,i]=rsRise;
+                     t.endset:=Cells[colend,i]=rsSet2;
+                     t.darknight:=(Cells[coldark,i]='1');
+                     t.skip:=(Cells[colskip,i]='1');
+                   end;
+              end;
+    colrepeat:begin
+                buf:=FormEntry(self, Columns[Index-1].Title.Caption, '');
+                if buf<>'' then begin
+                  for i:=1 to RowCount-1 do
+                     if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
+                       Cells[Index,i]:=buf;
+                       t:=TTarget(Objects[colseq,i]);
+                       t.repeatcount:=StrToIntDef(buf,1);
+                       t.delay:=TDelay.Value;
+                       t.previewexposure:=PreviewExposure.Value;
+                       t.preview:=Preview.Checked;
+                     end;
+                end;
+              end;
+
+  end;
+ end;
 end;
 
 procedure Tf_EditTargets.TargetListSelectEditor(Sender: TObject; aCol,

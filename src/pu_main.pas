@@ -1603,6 +1603,8 @@ begin
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
   f_sequence.Unattended.Checked:=config.GetValue('/Sequence/Unattended',false);
+  f_EditTargets.Width:=config.GetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
+  f_EditTargets.Height:=config.GetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
 
   f_planetariuminfo.planetarium:=planetarium;
 
@@ -2608,6 +2610,8 @@ begin
 
    config.SetValue('/Sequence/Targets',CurrentSequenceFile);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
+   config.SetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
+   config.SetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
    config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);

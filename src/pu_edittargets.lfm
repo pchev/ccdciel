@@ -1,12 +1,12 @@
 object f_EditTargets: Tf_EditTargets
   Left = 0
-  Height = 592
+  Height = 600
   Top = 87
-  Width = 1000
+  Width = 1024
   ActiveControl = BtnSave
   Caption = 'Edit target list'
-  ClientHeight = 592
-  ClientWidth = 1000
+  ClientHeight = 600
+  ClientWidth = 1024
   Constraints.MinHeight = 580
   Constraints.MinWidth = 970
   DesignTimePPI = 95
@@ -15,30 +15,29 @@ object f_EditTargets: Tf_EditTargets
   OnResize = FormResize
   OnShow = FormShow
   Position = poDefaultPosOnly
-  Visible = False
   object PanelTarget: TPanel
     Left = 0
-    Height = 360
+    Height = 390
     Top = 0
-    Width = 1000
+    Width = 1024
     Align = alTop
-    ClientHeight = 360
-    ClientWidth = 1000
+    ClientHeight = 386
+    ClientWidth = 1020
     Constraints.MinHeight = 360
     TabOrder = 0
     object Panel11: TPanel
-      Left = 699
-      Height = 311
+      Left = 723
+      Height = 341
       Top = 48
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 311
-      ClientWidth = 300
+      ClientHeight = 337
+      ClientWidth = 296
       TabOrder = 1
       object PageControl1: TPageControl
         Left = 0
-        Height = 311
+        Height = 341
         Top = 0
         Width = 300
         ActivePage = TabSheet3
@@ -48,16 +47,16 @@ object f_EditTargets: Tf_EditTargets
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
-          ClientHeight = 307
-          ClientWidth = 290
+          ClientHeight = 337
+          ClientWidth = 296
           object GroupBoxTarget: TGroupBox
             Left = 0
-            Height = 152
+            Height = 175
             Top = 0
             Width = 290
             Align = alTop
             Caption = 'Target'
-            ClientHeight = 134
+            ClientHeight = 157
             ClientWidth = 288
             TabOrder = 0
             object BtnCurrentCoord: TButton
@@ -120,15 +119,24 @@ object f_EditTargets: Tf_EditTargets
               OnChange = TargetChange
               TabOrder = 5
             end
+            object BtnApplyToAll: TButton
+              Left = 32
+              Height = 25
+              Top = 130
+              Width = 224
+              Caption = 'Apply to all'
+              OnClick = BtnApplyToAllClick
+              TabOrder = 6
+            end
           end
           object GroupBox5: TGroupBox
             Left = 0
-            Height = 98
-            Top = 209
+            Height = 105
+            Top = 232
             Width = 290
             Align = alClient
             Caption = 'Repeat'
-            ClientHeight = 80
+            ClientHeight = 87
             ClientWidth = 288
             TabOrder = 1
             object Label9: TLabel
@@ -188,7 +196,6 @@ object f_EditTargets: Tf_EditTargets
               Height = 27
               Top = 55
               Width = 62
-              Increment = 1
               MaxValue = 60
               MinValue = 0
               OnChange = TargetChange
@@ -199,12 +206,12 @@ object f_EditTargets: Tf_EditTargets
           object Panel6: TPanel
             Left = 0
             Height = 57
-            Top = 152
+            Top = 175
             Width = 290
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 57
-            ClientWidth = 290
+            ClientHeight = 53
+            ClientWidth = 286
             TabOrder = 2
             object GroupBox3: TGroupBox
               Left = 0
@@ -252,16 +259,16 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet2: TTabSheet
           Caption = 'Script'
-          ClientHeight = 307
-          ClientWidth = 290
+          ClientHeight = 337
+          ClientWidth = 296
           object Panel14: TPanel
             Left = 0
             Height = 108
             Top = 0
             Width = 290
             Align = alTop
-            ClientHeight = 108
-            ClientWidth = 290
+            ClientHeight = 104
+            ClientWidth = 286
             TabOrder = 0
             object Label15: TLabel
               Left = 16
@@ -303,8 +310,8 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet3: TTabSheet
           Caption = 'TabSheet3'
-          ClientHeight = 307
-          ClientWidth = 290
+          ClientHeight = 337
+          ClientWidth = 296
           object FlatTime: TRadioGroup
             Left = 0
             Height = 51
@@ -332,25 +339,33 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox6: TGroupBox
             Left = 0
-            Height = 155
+            Height = 185
             Top = 152
             Width = 290
             Align = alClient
             Caption = 'Filters'
-            ClientHeight = 137
+            ClientHeight = 167
             ClientWidth = 288
             TabOrder = 1
             object FlatFilterList: TCheckListBox
               Left = 0
-              Height = 137
+              Height = 167
               Top = 0
               Width = 288
               Align = alClient
               IntegralHeight = True
+              Items.Strings = (
+                'a'
+                'b'
+                'c'
+              )
               ItemHeight = 0
               OnClick = TargetChange
               TabOrder = 0
               TopIndex = -1
+              Data = {
+                03000000000000
+              }
             end
           end
           object GroupBox7: TGroupBox
@@ -396,8 +411,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 40
-              ClientWidth = 128
+              ClientHeight = 36
+              ClientWidth = 124
               TabOrder = 1
               Visible = False
               object FISObox: TComboBox
@@ -449,11 +464,11 @@ object f_EditTargets: Tf_EditTargets
       Left = 1
       Height = 47
       Top = 1
-      Width = 998
+      Width = 1022
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 47
-      ClientWidth = 998
+      ClientHeight = 43
+      ClientWidth = 1018
       TabOrder = 0
       object ButtonEndOptions: TButton
         Left = 792
@@ -516,8 +531,8 @@ object f_EditTargets: Tf_EditTargets
         Width = 792
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 47
-        ClientWidth = 792
+        ClientHeight = 43
+        ClientWidth = 788
         TabOrder = 1
         object Panel15: TPanel
           Left = 0
@@ -526,8 +541,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 792
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 18
-          ClientWidth = 792
+          ClientHeight = 14
+          ClientWidth = 788
           TabOrder = 0
           object Label2: TLabel
             Left = 8
@@ -555,8 +570,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 266
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 29
-          ClientWidth = 266
+          ClientHeight = 25
+          ClientWidth = 262
           TabOrder = 1
           object SeqStart: TCheckBox
             Left = 8
@@ -600,8 +615,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 250
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 29
-          ClientWidth = 250
+          ClientHeight = 25
+          ClientWidth = 246
           TabOrder = 2
           object SeqStop: TCheckBox
             Left = 8
@@ -645,8 +660,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 263
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 29
-          ClientWidth = 263
+          ClientHeight = 25
+          ClientWidth = 259
           TabOrder = 3
           object CheckBoxRepeatList: TCheckBox
             Left = 8
@@ -674,23 +689,23 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel4: TPanel
       Left = 1
-      Height = 311
+      Height = 341
       Top = 48
-      Width = 698
+      Width = 722
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 311
-      ClientWidth = 698
+      ClientHeight = 337
+      ClientWidth = 718
       TabOrder = 2
       object PanelBottom: TPanel
         Left = 0
         Height = 30
-        Top = 281
-        Width = 698
+        Top = 311
+        Width = 722
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 30
-        ClientWidth = 698
+        ClientHeight = 26
+        ClientWidth = 718
         TabOrder = 0
         object BtnNewObject: TButton
           Left = 8
@@ -735,10 +750,10 @@ object f_EditTargets: Tf_EditTargets
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 281
+        Height = 311
         Hint = 'The list of target to process in sequence.'
         Top = 0
-        Width = 698
+        Width = 722
         Align = alClient
         AutoFillColumns = True
         ColCount = 11
@@ -747,13 +762,14 @@ object f_EditTargets: Tf_EditTargets
             MinSize = 100
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 70
+            Width = 61
           end        
           item
             MinSize = 30
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Plan'
-            Width = 70
+            Width = 61
           end        
           item
             MinSize = 85
@@ -778,6 +794,7 @@ object f_EditTargets: Tf_EditTargets
               '-'
             )
             SizePriority = 0
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'PA'
             Width = 50
@@ -790,6 +807,7 @@ object f_EditTargets: Tf_EditTargets
               'Rise'
             )
             SizePriority = 0
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Begin'
             Width = 80
@@ -802,6 +820,7 @@ object f_EditTargets: Tf_EditTargets
               'Set'
             )
             SizePriority = 0
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'End'
             Width = 80
@@ -809,84 +828,90 @@ object f_EditTargets: Tf_EditTargets
           item
             ButtonStyle = cbsCheckboxColumn
             SizePriority = 0
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Dark night'
-            Width = 40
+            Width = 55
           end        
           item
             ButtonStyle = cbsCheckboxColumn
             SizePriority = 0
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Skip'
-            Width = 40
+            Width = 55
           end        
           item
             MinSize = 55
             MaxSize = 55
             SizePriority = 0
+            Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 55
+            Width = 66
           end>
         DefaultColWidth = 30
+        HeaderHotZones = [gzFixedCols, gzFixedCells]
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellEllipsis]
         RowCount = 2
         ScrollBars = ssAutoVertical
         TabOrder = 1
+        TitleImageList = ImageListDay
         OnCheckboxToggled = TargetListCheckboxToggled
         OnColRowMoved = TargetListColRowMoved
         OnEditingDone = TargetListEditingDone
+        OnHeaderClick = TargetListHeaderClick
         OnSelectEditor = TargetListSelectEditor
         OnSelection = TargetListSelection
         OnValidateEntry = TargetListValidateEntry
         ColWidths = (
           30
-          70
-          70
+          61
+          61
           85
           95
           50
           80
           80
-          40
-          40
           55
+          55
+          66
         )
       end
     end
   end
   object PanelPlan: TPanel
     Left = 0
-    Height = 189
-    Top = 364
-    Width = 1000
+    Height = 170
+    Top = 394
+    Width = 1024
     Align = alClient
-    ClientHeight = 189
-    ClientWidth = 1000
+    ClientHeight = 166
+    ClientWidth = 1020
     Constraints.MinHeight = 170
     TabOrder = 1
     object Panel9: TPanel
       Left = 1
-      Height = 187
+      Height = 168
       Top = 1
-      Width = 698
+      Width = 722
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 187
-      ClientWidth = 698
+      ClientHeight = 164
+      ClientWidth = 718
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
-        Height = 139
+        Height = 120
         Top = 18
-        Width = 698
+        Width = 722
         Align = alClient
         AutoFillColumns = True
         ColCount = 7
         Columns = <        
           item
             Title.Caption = 'Description'
-            Width = 183
+            Width = 194
           end        
           item
             ButtonStyle = cbsPickList
@@ -922,7 +947,7 @@ object f_EditTargets: Tf_EditTargets
               'No change'
             )
             Title.Caption = 'Filter'
-            Width = 183
+            Width = 194
           end        
           item
             MinSize = 70
@@ -942,11 +967,11 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = StepListSelection
         ColWidths = (
           30
-          183
+          194
           70
           80
           80
-          183
+          194
           70
         )
       end
@@ -954,11 +979,11 @@ object f_EditTargets: Tf_EditTargets
         Left = 0
         Height = 18
         Top = 0
-        Width = 698
+        Width = 722
         Align = alTop
         BevelOuter = bvNone
-        ClientHeight = 18
-        ClientWidth = 698
+        ClientHeight = 14
+        ClientWidth = 718
         TabOrder = 1
         object Label1: TLabel
           Left = 8
@@ -982,12 +1007,12 @@ object f_EditTargets: Tf_EditTargets
       object Panel10: TPanel
         Left = 0
         Height = 30
-        Top = 157
-        Width = 698
+        Top = 138
+        Width = 722
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 30
-        ClientWidth = 698
+        ClientHeight = 26
+        ClientWidth = 718
         TabOrder = 2
         object BtnAddStep: TButton
           Left = 8
@@ -1037,14 +1062,14 @@ object f_EditTargets: Tf_EditTargets
       end
     end
     object Panel12: TPanel
-      Left = 699
-      Height = 187
+      Left = 723
+      Height = 168
       Top = 1
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 187
-      ClientWidth = 300
+      ClientHeight = 164
+      ClientWidth = 296
       TabOrder = 1
       object GroupBoxStep: TGroupBox
         Left = 0
@@ -1100,8 +1125,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 104
           Width = 204
           BevelOuter = bvNone
-          ClientHeight = 34
-          ClientWidth = 204
+          ClientHeight = 30
+          ClientWidth = 200
           TabOrder = 4
           Visible = False
           object LabelGain1: TLabel
@@ -1151,14 +1176,14 @@ object f_EditTargets: Tf_EditTargets
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 553
-    Width = 1000
+    Top = 561
+    Width = 1024
     Align = alBottom
-    ClientHeight = 39
-    ClientWidth = 1000
+    ClientHeight = 35
+    ClientWidth = 1020
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 680
+      Left = 708
       Height = 25
       Top = 4
       Width = 75
@@ -1168,7 +1193,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 776
+      Left = 804
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
@@ -1179,7 +1204,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 864
+      Left = 892
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
@@ -1202,8 +1227,8 @@ object f_EditTargets: Tf_EditTargets
   object PanelSep: TPanel
     Left = 0
     Height = 4
-    Top = 360
-    Width = 1000
+    Top = 390
+    Width = 1024
     Align = alTop
     Color = clBtnShadow
     ParentColor = False
@@ -1217,5 +1242,95 @@ object f_EditTargets: Tf_EditTargets
     Title = 'Open CDC observing list'
     left = 152
     top = 424
+  end
+  object ImageListDay: TImageList
+    Height = 12
+    Width = 12
+    left = 263
+    top = 429
+    Bitmap = {
+      4C69020000000C0000000C000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00004D4D4D8F0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000004D4D4DC000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00004D4D4DC00000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000004D4D4DC000000000000000000000
+      0000000000000000000000000000000000004D4D4D604D4D4DC04D4D4DC04D4D
+      4DC04D4D4DF04D4D4DC04D4D4DC04D4D4DC04C4C4C9000000000000000000000
+      0000000000000000000000000000000000004D4D4DC000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00004D4D4DC00000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000004D4D4DC000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00004D4D4D600000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000004C4C4C904D4D4DC04D4D4DC04D4D4DC04D4D4DC04D4D4DC04D4D
+      4DC04C4C4C90000000000000000000000000000000004C4C4C904D4D4DC04D4D
+      4DC04D4D4DC04D4D4DC04D4D4DC04D4D4DC04C4C4C9000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000
+    }
+  end
+  object ImageListNight: TImageList
+    Height = 12
+    Width = 12
+    left = 364
+    top = 429
+    Bitmap = {
+      4C69020000000C0000000C000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000F3F3F38F0000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F2F2F2C000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000F2F2F2C00000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F2F2F2C000000000000000000000
+      000000000000000000000000000000000000F2F2F260F2F2F2C0F2F2F2C0F2F2
+      F2C0F2F2F2F0F2F2F2C0F2F2F2C0F2F2F2C0F3F3F39000000000000000000000
+      000000000000000000000000000000000000F2F2F2C000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000F2F2F2C00000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000F2F2F2C000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000F2F2F2600000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000F3F3F390F2F2F2C0F2F2F2C0F2F2F2C0F2F2F2C0F2F2F2C0F2F2
+      F2C0F3F3F39000000000000000000000000000000000F3F3F390F2F2F2C0F2F2
+      F2C0F2F2F2C0F2F2F2C0F2F2F2C0F2F2F2C0F3F3F39000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000
+    }
   end
 end
