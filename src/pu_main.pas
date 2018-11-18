@@ -5342,7 +5342,6 @@ begin
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
-  txt:=txt+'/'+f_capture.ExpTime.Text;
   if Capture then begin
     if f_capture.Running then
       StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
