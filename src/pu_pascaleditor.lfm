@@ -1,88 +1,92 @@
 object f_pascaleditor: Tf_pascaleditor
   Left = 407
-  Height = 500
+  Height = 505
   Top = 175
-  Width = 700
+  Width = 707
   ActiveControl = Button1
   Caption = 'Editor'
-  ClientHeight = 500
-  ClientWidth = 700
-  DesignTimePPI = 95
+  ClientHeight = 505
+  ClientWidth = 707
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '1.8.0.6'
-  Visible = False
   object Panel1: TPanel
     Left = 0
-    Height = 80
-    Top = 420
-    Width = 700
+    Height = 81
+    Top = 424
+    Width = 707
     Align = alBottom
-    ClientHeight = 80
-    ClientWidth = 700
+    ClientHeight = 81
+    ClientWidth = 707
+    ParentFont = False
     TabOrder = 0
     object PanelDebug: TPanel
       Left = 1
-      Height = 78
+      Height = 79
       Top = 1
-      Width = 698
+      Width = 705
       Align = alClient
-      ClientHeight = 78
-      ClientWidth = 698
+      ClientHeight = 79
+      ClientWidth = 705
+      ParentFont = False
       TabOrder = 3
       Visible = False
       object DebugMemo: TMemo
         Left = 1
-        Height = 76
+        Height = 77
         Top = 1
-        Width = 696
+        Width = 703
         Align = alClient
+        ParentFont = False
         ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
     object Button1: TButton
-      Left = 608
+      Left = 614
       Height = 25
       Top = 9
-      Width = 75
+      Width = 76
       Caption = 'Save'
       ModalResult = 1
+      ParentFont = False
       TabOrder = 0
     end
     object Button2: TButton
-      Left = 504
+      Left = 509
       Height = 25
       Top = 9
-      Width = 75
+      Width = 76
       Caption = 'Cancel'
       ModalResult = 2
+      ParentFont = False
       TabOrder = 1
     end
     object Button3: TButton
-      Left = 400
+      Left = 404
       Height = 25
       Top = 9
-      Width = 75
+      Width = 76
       Caption = 'Help'
       OnClick = Button3Click
+      ParentFont = False
       TabOrder = 2
     end
     object Label1: TLabel
       Left = 8
-      Height = 19
+      Height = 17
       Top = 9
-      Width = 39
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
+      ParentFont = False
     end
   end
   inline SynEdit1: TSynEdit
     Left = 0
-    Height = 392
+    Height = 396
     Top = 28
-    Width = 700
+    Width = 707
     Align = alClient
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -578,18 +582,20 @@ object f_pascaleditor: Tf_pascaleditor
     Left = 0
     Height = 28
     Top = 0
-    Width = 700
+    Width = 707
     Align = alTop
     ClientHeight = 28
-    ClientWidth = 700
+    ClientWidth = 707
+    ParentFont = False
     TabOrder = 2
     object ToolBar1: TToolBar
       Left = 1
       Height = 26
       Top = 1
-      Width = 698
+      Width = 705
       Caption = 'ToolBar1'
       Images = ImageList1
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
@@ -679,12 +685,12 @@ object f_pascaleditor: Tf_pascaleditor
     SymbolAttri.Foreground = clRed
     CompilerMode = pcmDelphi
     NestedComments = False
-    left = 56
-    top = 48
+    left = 57
+    top = 49
   end
   object PopupMenu1: TPopupMenu
-    left = 144
-    top = 48
+    left = 146
+    top = 49
     object MenuItem3: TMenuItem
       Action = EditSelectAll1
     end
@@ -700,7 +706,7 @@ object f_pascaleditor: Tf_pascaleditor
   end
   object ActionList1: TActionList
     left = 240
-    top = 48
+    top = 49
     object EditSelectAll1: TEditSelectAll
       Category = 'Edit'
       Caption = 'Select &All'
@@ -727,8 +733,8 @@ object f_pascaleditor: Tf_pascaleditor
     end
   end
   object ImageList1: TImageList
-    left = 56
-    top = 112
+    left = 57
+    top = 113
     Bitmap = {
       4C690700000010000000100000000000000000000000D7D6F0FFA2B1F6FF7C8E
       EEFF697EECFF8193EFFFABB7F7FFE4DDEBFF0000000000000000000000000000

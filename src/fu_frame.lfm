@@ -1,19 +1,18 @@
 object f_frame: Tf_frame
   Left = 0
-  Height = 71
+  Height = 72
   Top = 0
-  Width = 192
+  Width = 194
   AutoSize = True
-  ClientHeight = 71
-  ClientWidth = 192
-  DesignTimePPI = 95
+  ClientHeight = 72
+  ClientWidth = 194
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 192
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -27,20 +26,22 @@ object f_frame: Tf_frame
   end
   object Panel1: TPanel
     Left = 0
-    Height = 51
+    Height = 52
     Top = 20
-    Width = 192
+    Width = 194
     Align = alClient
-    ClientHeight = 51
-    ClientWidth = 192
+    ClientHeight = 52
+    ClientWidth = 194
+    ParentFont = False
     TabOrder = 0
     object FX: TEdit
       Left = 16
       Height = 22
       Hint = 'X'
       Top = 0
-      Width = 55
+      Width = 56
       AutoSize = False
+      ParentFont = False
       ParentShowHint = False
       TabOrder = 0
       Text = ' '
@@ -50,67 +51,74 @@ object f_frame: Tf_frame
       Height = 22
       Hint = 'Y'
       Top = 22
-      Width = 55
+      Width = 56
       AutoSize = False
+      ParentFont = False
       ParentShowHint = False
       TabOrder = 1
       Text = ' '
     end
     object FWidth: TEdit
-      Left = 70
+      Left = 71
       Height = 22
       Hint = 'Width'
       Top = 0
-      Width = 55
+      Width = 56
       AutoSize = False
+      ParentFont = False
       ParentShowHint = False
       TabOrder = 2
       Text = ' '
     end
     object FHeight: TEdit
-      Left = 70
+      Left = 71
       Height = 22
       Hint = 'Height'
       Top = 22
-      Width = 55
+      Width = 56
       AutoSize = False
+      ParentFont = False
       ParentShowHint = False
       TabOrder = 3
       Text = ' '
     end
     object BtnSet: TButton
-      Left = 125
+      Left = 126
       Height = 22
       Top = 0
-      Width = 65
+      Width = 66
       Caption = 'Set'
       OnClick = BtnSetClick
+      ParentFont = False
       TabOrder = 4
     end
     object BtnReset: TButton
-      Left = 125
+      Left = 126
       Height = 22
       Top = 24
-      Width = 65
+      Width = 66
       Caption = 'Reset'
       OnClick = BtnResetClick
+      ParentFont = False
       TabOrder = 5
     end
     object Label1: TLabel
-      Left = 2
-      Height = 19
+      Left = 4
+      Height = 17
       Top = 2
-      Width = 11
+      Width = 13
       Caption = 'X:'
       ParentColor = False
+      ParentFont = False
     end
     object Label2: TLabel
-      Left = 2
-      Height = 19
+      Left = 4
+      Height = 17
       Top = 24
       Width = 10
       Caption = 'Y:'
       ParentColor = False
+      ParentFont = False
     end
   end
 end

@@ -1,43 +1,44 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 332
+  Height = 335
   Top = 0
-  Width = 180
+  Width = 182
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 332
-  ClientWidth = 180
-  DesignTimePPI = 95
+  ClientHeight = 335
+  ClientWidth = 182
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 312
+    Height = 315
     Top = 20
-    Width = 180
+    Width = 182
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 312
-    ClientWidth = 180
+    ClientHeight = 315
+    ClientWidth = 182
+    ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 31
       Top = 0
-      Width = 179
+      Width = 181
       Caption = ' '
       ClientHeight = 31
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
-        Left = 88
+        Left = 89
         Height = 29
         Top = 1
-        Width = 90
+        Width = 91
         ItemHeight = 0
         ItemIndex = 7
         Items.Strings = (
@@ -61,53 +62,59 @@ object f_capture: Tf_capture
           '1200'
         )
         OnChange = ExpTimeChange
+        ParentFont = False
         TabOrder = 0
         Text = '1'
       end
       object Label1: TLabel
-        Left = 2
+        Left = 4
         Height = 17
         Top = 4
         Width = 24
         Caption = 'Exp'
         ParentColor = False
+        ParentFont = False
       end
     end
     object PanelGain: TPanel
       Left = 0
       Height = 35
       Top = 31
-      Width = 179
+      Width = 181
       Caption = ' '
       ClientHeight = 35
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 8
       Visible = False
       object ISObox: TComboBox
-        Left = 87
+        Left = 88
         Height = 33
         Hint = 'Exposure time in secondes'
         Top = 1
-        Width = 90
+        Width = 91
         ItemHeight = 0
+        ParentFont = False
         Style = csDropDownList
         TabOrder = 0
         Visible = False
       end
       object LabelGain: TLabel
-        Left = 2
+        Left = 4
         Height = 17
         Top = 4
         Width = 30
         Caption = 'Gain'
         ParentColor = False
+        ParentFont = False
       end
       object GainEdit: TSpinEdit
-        Left = 88
+        Left = 89
         Height = 27
         Top = 4
-        Width = 89
+        Width = 90
         MaxValue = 0
+        ParentFont = False
         TabOrder = 1
       end
     end
@@ -115,83 +122,92 @@ object f_capture: Tf_capture
       Left = 0
       Height = 31
       Top = 66
-      Width = 179
+      Width = 181
       Caption = ' '
       ClientHeight = 31
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
-        Left = 88
+        Left = 89
         Height = 29
         Top = 1
-        Width = 90
+        Width = 91
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
           '1x1'
         )
+        ParentFont = False
         Style = csDropDownList
         TabOrder = 0
         Text = '1x1'
       end
       object Label2: TLabel
-        Left = 2
+        Left = 4
         Height = 17
         Top = 4
         Width = 25
         Caption = 'Bin.'
         ParentColor = False
+        ParentFont = False
       end
     end
     object Panel4: TPanel
       Left = 0
       Height = 30
       Top = 97
-      Width = 179
+      Width = 181
       Caption = ' '
       ClientHeight = 30
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 2
       object Fname: TEdit
-        Left = 87
+        Left = 88
         Height = 29
         Top = 0
-        Width = 90
+        Width = 91
+        ParentFont = False
         TabOrder = 0
       end
       object Label3: TLabel
-        Left = 2
+        Left = 4
         Height = 17
         Top = 4
         Width = 42
         Caption = 'Object'
         ParentColor = False
+        ParentFont = False
       end
     end
     object Panel5: TPanel
       Left = 0
       Height = 28
       Top = 127
-      Width = 179
+      Width = 181
       Caption = ' '
       ClientHeight = 28
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 3
       object Label4: TLabel
-        Left = 2
+        Left = 4
         Height = 17
         Top = 4
         Width = 38
         Caption = 'Count'
         ParentColor = False
+        ParentFont = False
       end
       object SeqNum: TSpinEdit
-        Left = 87
+        Left = 88
         Height = 27
         Top = 0
-        Width = 88
+        Width = 89
         MaxValue = 10000
         MinValue = 1
+        ParentFont = False
         TabOrder = 0
         Value = 1
       end
@@ -200,23 +216,25 @@ object f_capture: Tf_capture
       Left = 0
       Height = 31
       Top = 155
-      Width = 179
+      Width = 181
       ClientHeight = 31
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 4
       object Label5: TLabel
-        Left = 2
+        Left = 4
         Height = 17
         Top = 4
         Width = 30
         Caption = 'Type'
         ParentColor = False
+        ParentFont = False
       end
       object FrameType: TComboBox
-        Left = 87
+        Left = 88
         Height = 29
         Top = 1
-        Width = 90
+        Width = 91
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
@@ -225,6 +243,7 @@ object f_capture: Tf_capture
           'Dark'
           'Flat'
         )
+        ParentFont = False
         Style = csDropDownList
         TabOrder = 0
         Text = 'Light'
@@ -234,25 +253,28 @@ object f_capture: Tf_capture
       Left = 0
       Height = 28
       Top = 186
-      Width = 179
+      Width = 181
       ClientHeight = 28
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
-        Left = 2
+        Left = 4
         Height = 21
         Top = 0
         Width = 105
         Caption = 'Dither every'
+        ParentFont = False
         TabOrder = 0
       end
       object DitherCount: TSpinEdit
-        Left = 134
+        Left = 135
         Height = 27
         Top = 0
         Width = 41
         MaxValue = 10000
         MinValue = 1
+        ParentFont = False
         TabOrder = 1
         Value = 1
       end
@@ -261,25 +283,28 @@ object f_capture: Tf_capture
       Left = 0
       Height = 28
       Top = 214
-      Width = 179
+      Width = 181
       ClientHeight = 28
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
-        Left = 2
+        Left = 4
         Height = 21
         Top = 0
         Width = 102
         Caption = 'Focus every'
+        ParentFont = False
         TabOrder = 0
       end
       object FocusCount: TSpinEdit
-        Left = 134
+        Left = 135
         Height = 27
         Top = 0
         Width = 41
         MaxValue = 10000
         MinValue = 1
+        ParentFont = False
         TabOrder = 1
         Value = 1
       end
@@ -288,23 +313,24 @@ object f_capture: Tf_capture
       Left = 0
       Height = 20
       Top = 242
-      Width = 179
+      Width = 181
       ClientHeight = 20
-      ClientWidth = 179
+      ClientWidth = 181
+      ParentFont = False
       TabOrder = 7
       object BtnStart: TButton
         Left = 0
         Height = 19
         Hint = 'Start the capture sequence'
         Top = 0
-        Width = 120
+        Width = 121
         Caption = 'Start'
         OnClick = BtnStartClick
         ParentFont = False
         TabOrder = 0
       end
       object led: TShape
-        Left = 148
+        Left = 150
         Height = 14
         Top = 2
         Width = 14
@@ -317,7 +343,7 @@ object f_capture: Tf_capture
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 182
     Align = alTop
     Alignment = taCenter
     AutoSize = False

@@ -1,52 +1,54 @@
 object f_filterwheel: Tf_filterwheel
   Left = 0
-  Height = 49
+  Height = 50
   Top = 0
-  Width = 180
+  Width = 182
   AutoSize = True
-  ClientHeight = 49
-  ClientWidth = 180
-  DesignTimePPI = 95
+  ClientHeight = 50
+  ClientWidth = 182
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 29
+    Height = 30
     Top = 20
-    Width = 180
+    Width = 182
     Align = alClient
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 29
-    ClientWidth = 180
+    ClientHeight = 30
+    ClientWidth = 182
+    ParentFont = False
     TabOrder = 0
     object Filters: TComboBox
-      Left = 29
+      Left = 33
       Height = 28
       Hint = 'Filter name'
       Top = 0
-      Width = 147
+      Width = 149
       AutoSize = False
       ItemHeight = 0
       OnChange = FiltersChange
+      ParentFont = False
       Style = csDropDownList
       TabOrder = 0
     end
     object Label1: TLabel
       Left = 8
-      Height = 19
+      Height = 17
       Top = 6
-      Width = 22
+      Width = 26
       BorderSpacing.Left = 8
       Caption = 'F:    '
       ParentColor = False
+      ParentFont = False
     end
   end
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 182
     Align = alTop
     Alignment = taCenter
     AutoSize = False

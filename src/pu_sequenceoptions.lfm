@@ -8,7 +8,6 @@ object f_sequenceoptions: Tf_sequenceoptions
   ClientHeight = 374
   ClientWidth = 397
   OnCreate = FormCreate
-  Visible = False
   object MainOptions: TCheckGroup
     Left = 0
     Height = 190
@@ -25,8 +24,8 @@ object f_sequenceoptions: Tf_sequenceoptions
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 170
-    ClientWidth = 393
+    ClientHeight = 172
+    ClientWidth = 395
     Items.Strings = (
       'Do nothing'
       'Stop telescope tracking'
@@ -51,18 +50,18 @@ object f_sequenceoptions: Tf_sequenceoptions
     TabOrder = 1
     object ScriptList: TComboBox
       Left = 112
-      Height = 23
+      Height = 33
       Top = 8
       Width = 214
-      ItemHeight = 15
+      ItemHeight = 0
       Style = csDropDownList
       TabOrder = 0
     end
     object Label1: TLabel
       Left = 32
-      Height = 15
+      Height = 17
       Top = 14
-      Width = 30
+      Width = 37
       Caption = 'Script'
       ParentColor = False
     end
@@ -78,18 +77,18 @@ object f_sequenceoptions: Tf_sequenceoptions
     TabOrder = 2
     object UnattendedErrorScript: TCheckBox
       Left = 8
-      Height = 19
+      Height = 21
       Top = 8
-      Width = 274
+      Width = 337
       Caption = 'Run additional script in case of unattended error'
       TabOrder = 0
     end
     object ScriptListError: TComboBox
       Left = 112
-      Height = 23
+      Height = 33
       Top = 40
       Width = 214
-      ItemHeight = 15
+      ItemHeight = 0
       Style = csDropDownList
       TabOrder = 1
     end

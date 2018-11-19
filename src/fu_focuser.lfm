@@ -1,82 +1,88 @@
 object f_focuser: Tf_focuser
   Left = 0
-  Height = 114
+  Height = 115
   Top = 0
-  Width = 180
+  Width = 182
   AutoSize = True
-  ClientHeight = 114
-  ClientWidth = 180
-  DesignTimePPI = 95
+  ClientHeight = 115
+  ClientWidth = 182
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 94
+    Height = 95
     Top = 20
-    Width = 180
+    Width = 182
     Align = alClient
-    ClientHeight = 94
-    ClientWidth = 180
+    ClientHeight = 95
+    ClientWidth = 182
+    ParentFont = False
     TabOrder = 0
     object PanelParam: TPanel
       Left = 0
-      Height = 56
+      Height = 57
       Top = 0
-      Width = 178
+      Width = 180
       BevelOuter = bvNone
-      ClientHeight = 56
-      ClientWidth = 178
+      ClientHeight = 57
+      ClientWidth = 180
+      ParentFont = False
       TabOrder = 1
       object Notebook1: TNotebook
         Left = 0
-        Height = 56
+        Height = 57
         Top = 0
-        Width = 178
-        PageIndex = 0
+        Width = 180
+        PageIndex = 1
         Align = alClient
         TabOrder = 0
         TabStop = True
         object PageTimerMove: TPage
           object PanelTimerMove: TPanel
             Left = 0
-            Height = 56
+            Height = 57
             Top = 0
-            Width = 178
+            Width = 180
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 56
-            ClientWidth = 178
+            ClientHeight = 57
+            ClientWidth = 180
+            ParentFont = False
             TabOrder = 0
             object Label3: TLabel
-              Left = 0
-              Height = 19
+              Left = 6
+              Height = 17
               Top = 4
-              Width = 37
+              Width = 40
               Caption = 'Speed'
               ParentColor = False
+              ParentFont = False
             end
             object Label4: TLabel
-              Left = 0
-              Height = 19
+              Left = 6
+              Height = 17
               Top = 27
-              Width = 34
+              Width = 38
               Caption = 'Timer'
               ParentColor = False
+              ParentFont = False
             end
             object speed: TSpinEdit
-              Left = 56
-              Height = 29
+              Left = 57
+              Height = 27
               Top = 0
-              Width = 80
+              Width = 81
               MaxValue = 0
+              ParentFont = False
               TabOrder = 0
             end
             object timer: TSpinEdit
-              Left = 56
-              Height = 29
+              Left = 57
+              Height = 27
               Top = 27
-              Width = 80
+              Width = 81
               MaxValue = 0
+              ParentFont = False
               TabOrder = 1
             end
           end
@@ -84,28 +90,30 @@ object f_focuser: Tf_focuser
         object PageRelPos: TPage
           object PanelRelPos: TPanel
             Left = 0
-            Height = 56
+            Height = 57
             Top = 0
-            Width = 178
+            Width = 180
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 56
-            ClientWidth = 178
+            ClientHeight = 57
+            ClientWidth = 180
+            ParentFont = False
             TabOrder = 0
             object Label6: TLabel
-              Left = 2
-              Height = 19
+              Left = 6
+              Height = 17
               Top = 8
-              Width = 26
+              Width = 27
               Caption = 'Incr.'
               ParentColor = False
+              ParentFont = False
             end
             object RelIncr: TComboBox
-              Left = 56
-              Height = 31
+              Left = 57
+              Height = 29
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
-              Width = 90
+              Width = 91
               ItemHeight = 0
               Items.Strings = (
                 '10'
@@ -115,6 +123,7 @@ object f_focuser: Tf_focuser
                 '500'
                 '1000'
               )
+              ParentFont = False
               TabOrder = 0
               Text = '5000'
             end
@@ -123,36 +132,39 @@ object f_focuser: Tf_focuser
         object PageAbsPos: TPage
           object PanelAbsPos: TPanel
             Left = 0
-            Height = 56
+            Height = 57
             Top = 0
-            Width = 178
+            Width = 180
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 56
-            ClientWidth = 178
+            ClientHeight = 57
+            ClientWidth = 180
+            ParentFont = False
             TabOrder = 0
             object Label1: TLabel
-              Left = 4
-              Height = 19
+              Left = 6
+              Height = 17
               Top = 4
-              Width = 25
+              Width = 27
               Caption = 'Pos.'
               ParentColor = False
+              ParentFont = False
             end
             object Label2: TLabel
-              Left = 4
-              Height = 19
+              Left = 6
+              Height = 17
               Top = 28
-              Width = 27
+              Width = 29
               Caption = 'Step'
               ParentColor = False
+              ParentFont = False
             end
             object PosIncr: TComboBox
               Left = 40
-              Height = 31
+              Height = 29
               Hint = 'Increment step for the inward or outward movement'
               Top = 25
-              Width = 72
+              Width = 73
               ItemHeight = 0
               Items.Strings = (
                 '10'
@@ -162,35 +174,39 @@ object f_focuser: Tf_focuser
                 '500'
                 '1000'
               )
+              ParentFont = False
               TabOrder = 0
               Text = '5000'
             end
             object BtnSetAbsPos: TButton
-              Left = 114
+              Left = 115
               Height = 24
               Hint = 'Set absolute focuser position'
               Top = 1
-              Width = 64
+              Width = 65
               Caption = 'Move to'
               OnClick = BtnSetAbsPosClick
+              ParentFont = False
               TabOrder = 1
             end
             object BtnVcurve: TButton
-              Left = 114
+              Left = 115
               Height = 24
               Hint = 'V curve learning'
               Top = 27
-              Width = 64
+              Width = 65
               Caption = 'V-learn'
               OnClick = BtnVcurveClick
+              ParentFont = False
               TabOrder = 2
             end
             object Position: TSpinEdit
               Left = 40
-              Height = 29
+              Height = 27
               Top = 0
-              Width = 72
+              Width = 73
               MaxValue = 0
+              ParentFont = False
               TabOrder = 3
             end
           end
@@ -198,13 +214,14 @@ object f_focuser: Tf_focuser
       end
     end
     object PanelBtn: TPanel
-      Left = 112
+      Left = 113
       Height = 28
-      Top = 56
-      Width = 72
+      Top = 57
+      Width = 73
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 72
+      ClientWidth = 73
+      ParentFont = False
       TabOrder = 0
       object BtnDown: TButton
         Left = 2
@@ -214,6 +231,7 @@ object f_focuser: Tf_focuser
         Width = 30
         Caption = '<'
         OnClick = BtnDownClick
+        ParentFont = False
         TabOrder = 0
       end
       object BtnUp: TButton
@@ -224,35 +242,39 @@ object f_focuser: Tf_focuser
         Width = 30
         Caption = '>'
         OnClick = BtnUpClick
+        ParentFont = False
         TabOrder = 1
       end
     end
     object PanelTemp: TPanel
       Left = 0
       Height = 28
-      Top = 56
-      Width = 112
+      Top = 57
+      Width = 113
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 112
+      ClientWidth = 113
+      ParentFont = False
       TabOrder = 2
       Visible = False
       object Temp: TEdit
-        Left = 56
-        Height = 31
+        Left = 57
+        Height = 29
         Top = 1
-        Width = 48
+        Width = 49
+        ParentFont = False
         ReadOnly = True
         TabStop = False
         TabOrder = 0
       end
       object Label5: TLabel
-        Left = 4
-        Height = 19
+        Left = 6
+        Height = 17
         Top = 4
-        Width = 37
+        Width = 39
         Caption = 'Temp.'
         ParentColor = False
+        ParentFont = False
       end
     end
   end
@@ -260,7 +282,7 @@ object f_focuser: Tf_focuser
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 182
     Align = alTop
     Alignment = taCenter
     AutoSize = False

@@ -1,19 +1,18 @@
 object f_script: Tf_script
   Left = 0
-  Height = 105
+  Height = 113
   Top = 0
-  Width = 189
+  Width = 191
   AutoSize = True
-  ClientHeight = 105
-  ClientWidth = 189
-  DesignTimePPI = 95
+  ClientHeight = 113
+  ClientWidth = 191
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 189
+    Width = 191
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -27,19 +26,20 @@ object f_script: Tf_script
   end
   object Panel1: TPanel
     Left = 0
-    Height = 85
+    Height = 93
     Top = 20
-    Width = 189
+    Width = 191
     Align = alClient
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 85
-    ClientWidth = 189
+    ClientHeight = 93
+    ClientWidth = 191
+    ParentFont = False
     TabOrder = 0
     object ComboBoxScript: TComboBox
       Left = 2
       Height = 29
-      Top = 2
-      Width = 174
+      Top = 0
+      Width = 176
       ItemHeight = 0
       OnKeyDown = ComboBoxScriptKeyDown
       ParentFont = False
@@ -49,40 +49,44 @@ object f_script: Tf_script
       Left = 2
       Height = 25
       Top = 30
-      Width = 66
+      Width = 67
       Caption = 'Run'
       OnClick = BtnRunClick
+      ParentFont = False
       TabOrder = 1
     end
     object BtnEdit: TButton
       Left = 2
       Height = 25
-      Top = 58
-      Width = 60
+      Top = 60
+      Width = 61
       Caption = 'Edit'
       OnClick = BtnScriptClick
+      ParentFont = False
       TabOrder = 2
     end
     object BtnNew: TButton
-      Left = 65
+      Left = 66
       Height = 25
-      Top = 58
-      Width = 60
+      Top = 60
+      Width = 61
       Caption = 'New'
       OnClick = BtnScriptClick
+      ParentFont = False
       TabOrder = 3
     end
     object BtnStop: TButton
-      Left = 78
+      Left = 79
       Height = 25
       Top = 30
-      Width = 66
+      Width = 67
       Caption = 'Stop'
       OnClick = BtnStopClick
+      ParentFont = False
       TabOrder = 4
     end
     object led: TShape
-      Left = 148
+      Left = 156
       Height = 14
       Top = 36
       Width = 14
@@ -90,12 +94,13 @@ object f_script: Tf_script
       Shape = stCircle
     end
     object BtnCopy: TButton
-      Left = 128
+      Left = 129
       Height = 25
-      Top = 58
-      Width = 60
+      Top = 60
+      Width = 61
       Caption = 'Copy'
       OnClick = BtnCopyClick
+      ParentFont = False
       TabOrder = 5
     end
   end

@@ -1,65 +1,69 @@
 object f_setup: Tf_setup
   Left = 132
-  Height = 307
+  Height = 340
   Top = 125
-  Width = 497
+  Width = 502
   ActiveControl = Button1
   Caption = 'Devices setup'
-  ClientHeight = 307
-  ClientWidth = 497
-  DesignTimePPI = 95
+  ClientHeight = 340
+  ClientWidth = 502
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
     Height = 40
-    Top = 267
-    Width = 497
+    Top = 300
+    Width = 502
     Align = alBottom
     ClientHeight = 40
-    ClientWidth = 497
+    ClientWidth = 502
+    ParentFont = False
     TabOrder = 0
     object Button1: TButton
-      Left = 232
+      Left = 234
       Height = 25
       Top = 8
-      Width = 75
+      Width = 76
       Caption = 'OK'
       ModalResult = 1
+      ParentFont = False
       TabOrder = 0
     end
     object Button3: TButton
-      Left = 120
+      Left = 121
       Height = 25
       Top = 8
-      Width = 75
+      Width = 76
       Cancel = True
       Caption = 'Cancel'
       ModalResult = 2
+      ParentFont = False
       TabOrder = 1
     end
   end
   object Pagecontrol1: TPageControl
     Left = 0
-    Height = 267
+    Height = 300
     Top = 0
-    Width = 497
+    Width = 502
     ActivePage = DeviceInterface
     Align = alClient
     MultiLine = True
+    ParentFont = False
     TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
       object InterfaceSelectionBox: TRadioGroup
         Left = 16
-        Height = 54
+        Height = 55
         Hint = 'You need to restart the program after changing this option'
-        Top = 64
-        Width = 346
+        Top = 65
+        Width = 350
         AutoFill = True
         Caption = 'Select interface'
         ChildSizing.LeftRightSpacing = 6
@@ -69,8 +73,8 @@ object f_setup: Tf_setup
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 36
-        ClientWidth = 344
+        ClientHeight = 37
+        ClientWidth = 348
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -78,40 +82,45 @@ object f_setup: Tf_setup
           'ASCOM'
         )
         OnClick = InterfaceSelectionBoxClick
+        ParentFont = False
         ParentShowHint = False
         TabOrder = 0
       end
       object PanelIndiServer: TPanel
         Left = 17
-        Height = 114
-        Top = 124
-        Width = 345
-        ClientHeight = 114
-        ClientWidth = 345
+        Height = 115
+        Top = 125
+        Width = 349
+        ClientHeight = 115
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 1
         object IndiServer: TEdit
           Left = 8
           Height = 29
           Top = 24
-          Width = 120
+          Width = 121
+          ParentFont = False
           TabOrder = 0
           Text = 'localhost'
         end
         object IndiPort: TEdit
-          Left = 136
+          Left = 137
           Height = 29
           Top = 24
-          Width = 80
+          Width = 81
+          ParentFont = False
           TabOrder = 1
           Text = '7624'
         end
         object GetIndiDevices: TButton
           Left = 8
           Height = 25
-          Top = 64
-          Width = 264
+          Top = 65
+          Width = 267
           Caption = 'Connect and get devices list'
           OnClick = GetIndiDevicesClick
+          ParentFont = False
           TabOrder = 2
         end
         object Label18: TLabel
@@ -121,50 +130,56 @@ object f_setup: Tf_setup
           Width = 42
           Caption = 'Server'
           ParentColor = False
+          ParentFont = False
         end
         object Label22: TLabel
-          Left = 143
+          Left = 145
           Height = 17
           Top = 5
           Width = 26
           Caption = 'Port'
           ParentColor = False
+          ParentFont = False
         end
         object LabelIndiDevCount: TLabel
           Left = 13
           Height = 17
-          Top = 88
+          Top = 89
           Width = 12
           Caption = '   '
           ParentColor = False
+          ParentFont = False
         end
         object Label1: TLabel
-          Left = 224
+          Left = 226
           Height = 17
           Top = 5
           Width = 54
           Caption = 'Timeout'
           ParentColor = False
+          ParentFont = False
         end
         object IndiTimeout: TEdit
-          Left = 224
+          Left = 226
           Height = 29
           Top = 24
-          Width = 48
+          Width = 49
+          ParentFont = False
           TabOrder = 3
         end
       end
       object ProfileList: TComboBox
-        Left = 104
+        Left = 105
         Height = 29
         Top = 8
-        Width = 120
+        Width = 121
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
           'Default'
         )
         OnChange = ProfileListChange
+        ParentFont = False
         Sorted = True
         Style = csDropDownList
         TabOrder = 2
@@ -177,68 +192,137 @@ object f_setup: Tf_setup
         Width = 49
         Caption = 'Profile :'
         ParentColor = False
+        ParentFont = False
       end
       object BtnNewProfile: TButton
-        Left = 292
+        Left = 295
         Height = 25
         Hint = 'Create a new empty profile.'#10'Warning this also clear every program preference for this new profile. '#10'Use the Copy button if you want to configure a different equipement but keep the program options.'
         Top = 8
-        Width = 70
+        Width = 71
         Caption = 'New'
         OnClick = BtnNewProfileClick
+        ParentFont = False
         ParentShowHint = False
         TabOrder = 3
       end
       object BtnDeleteProfile: TButton
-        Left = 292
+        Left = 295
         Height = 25
         Hint = 'Delete this profile and associated program preference.'
         Top = 40
-        Width = 70
+        Width = 71
         Caption = 'Delete'
         OnClick = BtnDeleteProfileClick
+        ParentFont = False
         ParentShowHint = False
         TabOrder = 4
       end
       object BtnCopyProfile: TButton
-        Left = 228
+        Left = 230
         Height = 25
         Hint = 'Copy the current profile to a new one.'#10'This also copy every program preference to the new profile.'
         Top = 8
-        Width = 59
+        Width = 60
         Caption = 'Copy'
         OnClick = BtnCopyProfileClick
+        ParentFont = False
         ParentShowHint = False
         TabOrder = 5
       end
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
+      object PanelCameraAscom: TPanel
+        Left = 16
+        Height = 178
+        Top = 32
+        Width = 348
+        ClientHeight = 178
+        ClientWidth = 348
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+        object BtnChooseCamera: TButton
+          Tag = 1
+          Left = 168
+          Height = 25
+          Top = 16
+          Width = 108
+          Caption = 'Choose'
+          OnClick = BtnChooseClick
+          ParentFont = False
+          TabOrder = 0
+        end
+        object AscomCamera: TEdit
+          Left = 14
+          Height = 29
+          Top = 17
+          Width = 139
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BtnSetupCamera: TButton
+          Tag = 1
+          Left = 168
+          Height = 25
+          Top = 49
+          Width = 108
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BtnAboutCamera: TButton
+          Tag = 1
+          Left = 170
+          Height = 25
+          Top = 81
+          Width = 108
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          ParentFont = False
+          TabOrder = 3
+        end
+        object FlipImage: TCheckBox
+          Left = 13
+          Height = 21
+          Top = 125
+          Width = 186
+          Caption = 'Flip the image vertically '
+          ParentFont = False
+          TabOrder = 4
+        end
+      end
       object PanelCameraIndi: TPanel
         Left = 16
-        Height = 224
+        Height = 242
         Top = 16
-        Width = 345
-        ClientHeight = 224
-        ClientWidth = 345
+        Width = 349
+        ClientHeight = 242
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 1
         object CameraIndiDevice: TComboBox
-          Left = 100
+          Left = 101
           Height = 33
           Top = 16
-          Width = 168
+          Width = 170
           ItemHeight = 0
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object CameraIndiDevPort: TEdit
-          Left = 100
+          Left = 101
           Height = 21
-          Top = 84
-          Width = 168
+          Top = 85
+          Width = 170
           BorderStyle = bsNone
+          ParentFont = False
           TabOrder = 1
         end
         object Label3: TLabel
@@ -248,51 +332,56 @@ object f_setup: Tf_setup
           Width = 45
           Caption = 'Device'
           ParentColor = False
+          ParentFont = False
         end
         object Label4: TLabel
           Left = 14
           Height = 17
-          Top = 86
+          Top = 87
           Width = 26
           Caption = 'Port'
           ParentColor = False
+          ParentFont = False
         end
         object Label15: TLabel
           Left = 13
           Height = 17
-          Top = 54
+          Top = 55
           Width = 44
           Caption = 'Sensor'
           ParentColor = False
+          ParentFont = False
         end
         object IndiSensor: TComboBox
-          Left = 100
+          Left = 101
           Height = 29
-          Top = 50
-          Width = 168
+          Top = 51
+          Width = 170
           ItemHeight = 0
           Items.Strings = (
             'Main sensor'
             'Guider sensor'
           )
           OnChange = IndiSensorChange
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 2
         end
         object CameraAutoLoadConfig: TCheckBox
           Left = 13
           Height = 21
-          Top = 120
+          Top = 121
           Width = 214
           Caption = 'Load configuration on startup'
+          ParentFont = False
           TabOrder = 3
         end
         object CameraIndiTransfert: TRadioGroup
           Left = 13
           Height = 45
           Hint = 'Make test to determine the most performant '#10'option depending on your computer '#10'(Network is mandatory if the camera is '#10'connected to a remote Indi server)'
-          Top = 140
-          Width = 244
+          Top = 152
+          Width = 247
           AutoFill = True
           Caption = 'Image transfert'
           ChildSizing.LeftRightSpacing = 6
@@ -303,149 +392,104 @@ object f_setup: Tf_setup
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
           ClientHeight = 27
-          ClientWidth = 242
+          ClientWidth = 245
           Columns = 2
           Items.Strings = (
             'Network'
             'RAM Disk'
           )
           OnClick = CameraIndiTransfertClick
+          ParentFont = False
           ParentShowHint = False
           TabOrder = 4
         end
         object CameraDiskPanel: TPanel
           Left = 8
           Height = 36
-          Top = 180
-          Width = 267
+          Top = 200
+          Width = 270
           BevelOuter = bvNone
           ClientHeight = 36
-          ClientWidth = 267
+          ClientWidth = 270
+          ParentFont = False
           TabOrder = 5
           object Label5: TLabel
             Left = 8
             Height = 17
-            Top = 12
+            Top = 4
             Width = 60
             Caption = 'Directory'
             ParentColor = False
+            ParentFont = False
           end
           object CameraIndiTransfertDir: TEdit
-            Left = 85
+            Left = 86
             Height = 29
             Hint = 'The temporary RAM disk used to transfert the images '#10'from the Indi server'
-            Top = 8
-            Width = 166
+            Top = 0
+            Width = 168
+            ParentFont = False
             ParentShowHint = False
             TabOrder = 0
             Text = '/mnt/ramdisk'
           end
         end
       end
-      object PanelCameraAscom: TPanel
-        Left = 16
-        Height = 176
-        Top = 32
-        Width = 344
-        ClientHeight = 176
-        ClientWidth = 344
-        TabOrder = 0
-        Visible = False
-        object BtnChooseCamera: TButton
-          Tag = 1
-          Left = 166
-          Height = 25
-          Top = 16
-          Width = 107
-          Caption = 'Choose'
-          OnClick = BtnChooseClick
-          TabOrder = 0
-        end
-        object AscomCamera: TEdit
-          Left = 14
-          Height = 29
-          Top = 17
-          Width = 138
-          TabOrder = 1
-        end
-        object BtnSetupCamera: TButton
-          Tag = 1
-          Left = 166
-          Height = 25
-          Top = 48
-          Width = 107
-          Caption = 'Setup'
-          OnClick = BtnSetupAscomClick
-          TabOrder = 2
-        end
-        object BtnAboutCamera: TButton
-          Tag = 1
-          Left = 168
-          Height = 25
-          Top = 80
-          Width = 107
-          Caption = 'About'
-          OnClick = BtnAboutAscomClick
-          TabOrder = 3
-        end
-        object FlipImage: TCheckBox
-          Left = 13
-          Height = 21
-          Top = 124
-          Width = 186
-          Caption = 'Flip the image vertically '
-          TabOrder = 4
-        end
-      end
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
       object PanelWheelAscom: TPanel
         Left = 16
-        Height = 112
+        Height = 113
         Top = 32
-        Width = 287
-        ClientHeight = 112
-        ClientWidth = 287
+        Width = 290
+        ClientHeight = 113
+        ClientWidth = 290
+        ParentFont = False
         TabOrder = 1
         Visible = False
         object BtnChooseFilter: TButton
           Tag = 2
-          Left = 166
+          Left = 168
           Height = 25
           Top = 16
-          Width = 107
+          Width = 108
           Caption = 'Choose'
           OnClick = BtnChooseClick
+          ParentFont = False
           TabOrder = 0
         end
         object AscomWheel: TEdit
           Left = 14
           Height = 29
           Top = 17
-          Width = 138
+          Width = 139
+          ParentFont = False
           TabOrder = 1
         end
         object BtnAboutCamera1: TButton
           Tag = 2
-          Left = 168
+          Left = 170
           Height = 25
-          Top = 80
-          Width = 107
+          Top = 81
+          Width = 108
           Caption = 'About'
           OnClick = BtnAboutAscomClick
+          ParentFont = False
           TabOrder = 2
         end
         object BtnSetupCamera1: TButton
           Tag = 2
-          Left = 166
+          Left = 168
           Height = 25
-          Top = 48
-          Width = 107
+          Top = 49
+          Width = 108
           Caption = 'Setup'
           OnClick = BtnSetupAscomClick
+          ParentFont = False
           TabOrder = 3
         end
       end
@@ -453,20 +497,22 @@ object f_setup: Tf_setup
         Left = 16
         Height = 21
         Hint = 'You need to restart the program after changing this option'
-        Top = 192
+        Top = 194
         Width = 370
         Caption = 'Filter wheel in camera connection. (Restart required!)'
         OnClick = FilterWheelInCameraBoxClick
+        ParentFont = False
         ParentShowHint = False
         TabOrder = 3
       end
       object PanelWheelIncamera: TPanel
         Left = 16
-        Height = 112
+        Height = 113
         Top = 32
-        Width = 287
-        ClientHeight = 112
-        ClientWidth = 287
+        Width = 290
+        ClientHeight = 113
+        ClientWidth = 290
+        ParentFont = False
         TabOrder = 2
         object Label17: TLabel
           Left = 14
@@ -475,30 +521,34 @@ object f_setup: Tf_setup
           Width = 287
           Caption = 'Be sure to configure the camera connection.'
           ParentColor = False
+          ParentFont = False
         end
       end
       object PanelWheelIndi: TPanel
         Left = 16
-        Height = 152
+        Height = 154
         Top = 32
-        Width = 345
-        ClientHeight = 152
-        ClientWidth = 345
+        Width = 349
+        ClientHeight = 154
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 0
         object WheelIndiDevice: TComboBox
-          Left = 100
+          Left = 101
           Height = 33
           Top = 16
-          Width = 168
+          Width = 170
           ItemHeight = 0
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object WheelIndiDevPort: TEdit
-          Left = 100
+          Left = 101
           Height = 29
-          Top = 56
-          Width = 168
+          Top = 57
+          Width = 170
+          ParentFont = False
           TabOrder = 1
         end
         object Label6: TLabel
@@ -508,21 +558,24 @@ object f_setup: Tf_setup
           Width = 45
           Caption = 'Device'
           ParentColor = False
+          ParentFont = False
         end
         object Label7: TLabel
           Left = 13
           Height = 17
-          Top = 62
+          Top = 63
           Width = 26
           Caption = 'Port'
           ParentColor = False
+          ParentFont = False
         end
         object WheelAutoLoadConfig: TCheckBox
           Left = 13
           Height = 21
-          Top = 120
+          Top = 121
           Width = 214
           Caption = 'Load configuration on startup'
+          ParentFont = False
           TabOrder = 2
         end
       end
@@ -532,20 +585,23 @@ object f_setup: Tf_setup
         Top = 8
         Width = 126
         Caption = 'Use filter wheel'
+        ParentFont = False
         TabOrder = 4
       end
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
       object PanelFocuserInMount: TPanel
         Left = 18
-        Height = 112
+        Height = 113
         Top = 32
-        Width = 286
-        ClientHeight = 112
-        ClientWidth = 286
+        Width = 289
+        ClientHeight = 113
+        ClientWidth = 289
+        ParentFont = False
         TabOrder = 2
         object Label16: TLabel
           Left = 13
@@ -561,48 +617,53 @@ object f_setup: Tf_setup
       end
       object PanelFocuserAscom: TPanel
         Left = 16
-        Height = 112
+        Height = 113
         Top = 32
-        Width = 287
-        ClientHeight = 112
-        ClientWidth = 287
+        Width = 290
+        ClientHeight = 113
+        ClientWidth = 290
+        ParentFont = False
         TabOrder = 1
         Visible = False
         object BtnChooseFocuser: TButton
           Tag = 3
-          Left = 166
+          Left = 168
           Height = 25
           Top = 16
-          Width = 107
+          Width = 108
           Caption = 'Choose'
           OnClick = BtnChooseClick
+          ParentFont = False
           TabOrder = 0
         end
         object AscomFocuser: TEdit
           Left = 14
           Height = 29
           Top = 17
-          Width = 138
+          Width = 139
+          ParentFont = False
           TabOrder = 1
         end
         object BtnAboutCamera2: TButton
           Tag = 3
-          Left = 168
+          Left = 170
           Height = 25
-          Top = 80
-          Width = 107
+          Top = 81
+          Width = 108
           Caption = 'About'
           OnClick = BtnAboutAscomClick
+          ParentFont = False
           TabOrder = 2
         end
         object BtnSetupCamera2: TButton
           Tag = 3
-          Left = 166
+          Left = 168
           Height = 25
-          Top = 48
-          Width = 107
+          Top = 49
+          Width = 108
           Caption = 'Setup'
           OnClick = BtnSetupAscomClick
+          ParentFont = False
           TabOrder = 3
         end
       end
@@ -610,35 +671,39 @@ object f_setup: Tf_setup
         Left = 16
         Height = 21
         Hint = 'You need to restart the program after changing this option'
-        Top = 192
+        Top = 194
         Width = 338
         Caption = 'Focuser in mount connection. (Restart required!)'
         OnClick = FocuserInMountBoxClick
+        ParentFont = False
         ParentShowHint = False
         TabOrder = 3
       end
       object PanelFocuserIndi: TPanel
         Left = 16
-        Height = 152
+        Height = 154
         Top = 32
-        Width = 345
-        ClientHeight = 152
-        ClientWidth = 345
+        Width = 349
+        ClientHeight = 154
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 0
         object FocuserIndiDevice: TComboBox
-          Left = 100
+          Left = 101
           Height = 33
           Top = 17
-          Width = 168
+          Width = 170
           ItemHeight = 0
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object FocuserIndiDevPort: TEdit
-          Left = 100
+          Left = 101
           Height = 29
-          Top = 57
-          Width = 168
+          Top = 58
+          Width = 170
+          ParentFont = False
           TabOrder = 1
         end
         object Label9: TLabel
@@ -648,21 +713,24 @@ object f_setup: Tf_setup
           Width = 45
           Caption = 'Device'
           ParentColor = False
+          ParentFont = False
         end
         object Label10: TLabel
           Left = 13
           Height = 17
-          Top = 63
+          Top = 64
           Width = 26
           Caption = 'Port'
           ParentColor = False
+          ParentFont = False
         end
         object FocuserAutoLoadConfig: TCheckBox
           Left = 13
           Height = 21
-          Top = 120
+          Top = 121
           Width = 214
           Caption = 'Load configuration on startup'
+          ParentFont = False
           TabOrder = 2
         end
       end
@@ -672,90 +740,101 @@ object f_setup: Tf_setup
         Top = 8
         Width = 105
         Caption = 'Use focuser '
+        ParentFont = False
         TabOrder = 4
       end
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
       object DeviceRotator: TCheckBox
         Left = 16
         Height = 21
         Top = 8
         Width = 101
         Caption = 'Use rotator '
+        ParentFont = False
         TabOrder = 0
       end
       object PanelRotatorAscom: TPanel
         Left = 16
-        Height = 112
+        Height = 113
         Top = 32
-        Width = 287
-        ClientHeight = 112
-        ClientWidth = 287
+        Width = 290
+        ClientHeight = 113
+        ClientWidth = 290
+        ParentFont = False
         TabOrder = 2
         Visible = False
         object BtnChooseRotator: TButton
           Tag = 5
-          Left = 166
+          Left = 168
           Height = 25
           Top = 16
-          Width = 107
+          Width = 108
           Caption = 'Choose'
           OnClick = BtnChooseClick
+          ParentFont = False
           TabOrder = 0
         end
         object AscomRotator: TEdit
           Left = 14
           Height = 29
           Top = 17
-          Width = 138
+          Width = 139
+          ParentFont = False
           TabOrder = 1
         end
         object BtnAboutRotator: TButton
           Tag = 5
-          Left = 168
+          Left = 170
           Height = 25
-          Top = 80
-          Width = 107
+          Top = 81
+          Width = 108
           Caption = 'About'
           OnClick = BtnAboutAscomClick
+          ParentFont = False
           TabOrder = 2
         end
         object BtnSetupRotator: TButton
           Tag = 5
-          Left = 166
+          Left = 168
           Height = 25
-          Top = 48
-          Width = 107
+          Top = 49
+          Width = 108
           Caption = 'Setup'
           OnClick = BtnSetupAscomClick
+          ParentFont = False
           TabOrder = 3
         end
       end
       object PanelRotatorIndi: TPanel
         Left = 16
-        Height = 160
+        Height = 162
         Top = 32
-        Width = 345
-        ClientHeight = 160
-        ClientWidth = 345
+        Width = 349
+        ClientHeight = 162
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 1
         object RotatorIndiDevice: TComboBox
-          Left = 100
+          Left = 101
           Height = 33
           Top = 17
-          Width = 168
+          Width = 170
           ItemHeight = 0
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object RotatorIndiDevPort: TEdit
-          Left = 100
+          Left = 101
           Height = 29
-          Top = 57
-          Width = 168
+          Top = 58
+          Width = 170
+          ParentFont = False
           TabOrder = 1
         end
         object Label11: TLabel
@@ -765,108 +844,121 @@ object f_setup: Tf_setup
           Width = 45
           Caption = 'Device'
           ParentColor = False
+          ParentFont = False
         end
         object Label14: TLabel
           Left = 13
           Height = 17
-          Top = 63
+          Top = 64
           Width = 26
           Caption = 'Port'
           ParentColor = False
+          ParentFont = False
         end
         object RotatorAutoLoadConfig: TCheckBox
           Left = 13
           Height = 21
-          Top = 134
+          Top = 135
           Width = 214
           Caption = 'Load configuration on startup'
+          ParentFont = False
           TabOrder = 2
         end
         object Label8: TLabel
           Left = 13
           Height = 44
-          Top = 88
-          Width = 323
+          Top = 89
+          Width = 326
           AutoSize = False
           Caption = 'Warning! INDI rotator is totally untested, please send me your result via the bug tracker.'
           ParentColor = False
+          ParentFont = False
           WordWrap = True
         end
       end
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
       object PanelMountAscom: TPanel
         Left = 16
-        Height = 136
+        Height = 137
         Top = 32
-        Width = 287
-        ClientHeight = 136
-        ClientWidth = 287
+        Width = 290
+        ClientHeight = 137
+        ClientWidth = 290
+        ParentFont = False
         TabOrder = 1
         Visible = False
         object BtnChooseMount: TButton
           Tag = 4
-          Left = 166
+          Left = 168
           Height = 25
           Top = 16
-          Width = 107
+          Width = 108
           Caption = 'Choose'
           OnClick = BtnChooseClick
+          ParentFont = False
           TabOrder = 0
         end
         object AscomMount: TEdit
           Left = 14
           Height = 29
           Top = 17
-          Width = 138
+          Width = 139
+          ParentFont = False
           TabOrder = 1
         end
         object BtnAboutCamera3: TButton
           Tag = 4
-          Left = 168
+          Left = 170
           Height = 25
-          Top = 80
-          Width = 107
+          Top = 81
+          Width = 108
           Caption = 'About'
           OnClick = BtnAboutAscomClick
+          ParentFont = False
           TabOrder = 2
         end
         object BtnSetupCamera3: TButton
           Tag = 4
-          Left = 166
+          Left = 168
           Height = 25
-          Top = 48
-          Width = 107
+          Top = 49
+          Width = 108
           Caption = 'Setup'
           OnClick = BtnSetupAscomClick
+          ParentFont = False
           TabOrder = 3
         end
       end
       object PanelMountIndi: TPanel
         Left = 16
-        Height = 136
+        Height = 137
         Top = 32
-        Width = 345
-        ClientHeight = 136
-        ClientWidth = 345
+        Width = 349
+        ClientHeight = 137
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 0
         object MountIndiDevice: TComboBox
-          Left = 100
+          Left = 101
           Height = 33
           Top = 16
-          Width = 168
+          Width = 170
           ItemHeight = 0
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object MountIndiDevPort: TEdit
-          Left = 100
+          Left = 101
           Height = 29
-          Top = 56
-          Width = 168
+          Top = 57
+          Width = 170
+          ParentFont = False
           TabOrder = 1
         end
         object Label12: TLabel
@@ -876,21 +968,24 @@ object f_setup: Tf_setup
           Width = 45
           Caption = 'Device'
           ParentColor = False
+          ParentFont = False
         end
         object Label13: TLabel
           Left = 13
           Height = 17
-          Top = 62
+          Top = 63
           Width = 26
           Caption = 'Port'
           ParentColor = False
+          ParentFont = False
         end
         object MountAutoLoadConfig: TCheckBox
           Left = 16
           Height = 21
-          Top = 96
+          Top = 97
           Width = 214
           Caption = 'Load configuration on startup'
+          ParentFont = False
           TabOrder = 2
         end
       end
@@ -900,53 +995,60 @@ object f_setup: Tf_setup
         Top = 8
         Width = 99
         Caption = 'Use mount '
+        ParentFont = False
         TabOrder = 2
       end
       object MountSetDateTime: TCheckBox
         Left = 32
         Height = 21
-        Top = 176
+        Top = 178
         Width = 225
         Caption = 'Set mount date from computer'
+        ParentFont = False
         TabOrder = 3
       end
       object MountSetObservatory: TCheckBox
         Left = 32
         Height = 21
-        Top = 205
+        Top = 207
         Width = 296
         Caption = 'Set mount site long/lat from configuration'
         OnClick = MountSetObservatoryClick
+        ParentFont = False
         TabOrder = 4
       end
       object MountGetObservatory: TCheckBox
         Left = 32
         Height = 21
-        Top = 233
+        Top = 235
         Width = 234
         Caption = 'Get site long/lat from the mount'
         OnClick = MountGetObservatoryClick
+        ParentFont = False
         TabOrder = 5
       end
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 238
-      ClientWidth = 487
+      ClientHeight = 271
+      ClientWidth = 492
+      ParentFont = False
       object PanelWatchdogIndi: TPanel
         Left = 16
-        Height = 160
+        Height = 162
         Top = 32
-        Width = 345
-        ClientHeight = 160
-        ClientWidth = 345
+        Width = 349
+        ClientHeight = 162
+        ClientWidth = 349
+        ParentFont = False
         TabOrder = 0
         object WatchdogIndiDevice: TComboBox
-          Left = 100
+          Left = 101
           Height = 33
           Top = 16
-          Width = 168
+          Width = 170
           ItemHeight = 0
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
@@ -957,28 +1059,32 @@ object f_setup: Tf_setup
           Width = 45
           Caption = 'Device'
           ParentColor = False
+          ParentFont = False
         end
         object WatchdogAutoLoadConfig: TCheckBox
           Left = 13
           Height = 21
-          Top = 120
+          Top = 121
           Width = 214
           Caption = 'Load configuration on startup'
+          ParentFont = False
           TabOrder = 1
         end
         object Label20: TLabel
           Left = 13
           Height = 17
-          Top = 75
+          Top = 76
           Width = 201
           Caption = 'Heart beat threshold [minutes]'
           ParentColor = False
+          ParentFont = False
         end
         object WatchdogThreshold: TEdit
-          Left = 218
+          Left = 220
           Height = 29
-          Top = 73
+          Top = 74
           Width = 32
+          ParentFont = False
           TabOrder = 2
         end
       end
@@ -988,6 +1094,7 @@ object f_setup: Tf_setup
         Top = 8
         Width = 116
         Caption = 'Use watchdog'
+        ParentFont = False
         TabOrder = 1
       end
     end
@@ -997,6 +1104,6 @@ object f_setup: Tf_setup
     Interval = 5000
     OnTimer = IndiTimerTimer
     left = 40
-    top = 272
+    top = 304
   end
 end
