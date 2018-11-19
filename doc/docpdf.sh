@@ -104,8 +104,8 @@ sed -i "s/Table of Content/$tocl/g" toc.xsl
 wkhtmltopdf --quiet --dpi 96 --enable-toc-back-links  --enable-external-links --enable-internal-links --footer-right '[page]' $fl toc --xsl-style-sheet toc.xsl  tmp.pdf
 
 # fix for anchor bug : http://code.google.com/p/wkhtmltopdf/issues/detail?id=463
-gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.7 -dColorImageResolution=300 -dGrayImageResolution=300 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=../doc_${suffix}_${lang}.pdf tmp.pdf
-
+#gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.7 -dColorImageResolution=300 -dGrayImageResolution=300 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=../doc_${suffix}_${lang}.pdf tmp.pdf
+cp tmp.pdf ../doc_${suffix}_${lang}.pdf
 
 # cleanup
 rm tmp.pdf fl.txt toc.xsl $lang/documentation/00_title.html
