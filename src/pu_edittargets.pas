@@ -508,6 +508,9 @@ begin
        t.objectname:=obj;
        t.ra:=ra;
        t.de:=de;
+       // default autofocus and plate solving
+       t.astrometrypointing:=(astrometryResolver<>ResolverNone);
+       t.inplaceautofocus:=AutofocusInPlace;
        // add target
        TargetList.RowCount:=TargetList.RowCount+1;
        i:=TargetList.RowCount-1;
