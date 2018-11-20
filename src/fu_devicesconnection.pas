@@ -36,6 +36,8 @@ type
     BtnConnect: TButton;
     LabelWatchdog: TLabel;
     LabelRotator: TLabel;
+    Panel2: TPanel;
+    Panel3: TPanel;
     ProfileLabel: TLabel;
     LabelCamera: TLabel;
     LabelWheel: TLabel;

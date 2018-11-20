@@ -1,19 +1,21 @@
 object f_mount: Tf_mount
   Left = 0
-  Height = 133
+  Height = 140
   Top = 0
-  Width = 180
+  Width = 179
   AutoSize = True
-  ClientHeight = 133
-  ClientWidth = 180
+  ClientHeight = 140
+  ClientWidth = 179
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 179
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -27,102 +29,144 @@ object f_mount: Tf_mount
   end
   object Panel1: TPanel
     Left = 0
-    Height = 113
+    Height = 120
     Top = 20
-    Width = 180
+    Width = 179
     Align = alClient
-    ChildSizing.ControlsPerLine = 2
-    ClientHeight = 113
-    ClientWidth = 180
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 120
+    ClientWidth = 179
     TabOrder = 0
-    object Label1: TLabel
+    object Panel2: TPanel
       Left = 0
-      Height = 19
+      Height = 29
       Top = 0
-      Width = 31
-      Caption = 'RA     '
-      ParentColor = False
-    end
-    object RA: TEdit
-      Left = 35
-      Height = 31
-      Hint = 'Current telescope Right Ascension'
-      Top = 0
-      Width = 80
-      Alignment = taRightJustify
-      ReadOnly = True
+      Width = 178
+      BevelOuter = bvNone
+      ClientHeight = 29
+      ClientWidth = 178
       TabOrder = 0
+      object Label1: TLabel
+        Left = 0
+        Height = 17
+        Top = 4
+        Width = 37
+        Caption = 'RA     '
+        ParentColor = False
+      end
+      object RA: TEdit
+        Left = 35
+        Height = 29
+        Hint = 'Current telescope Right Ascension'
+        Top = 0
+        Width = 80
+        Alignment = taRightJustify
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object BtnTrack: TButton
+        Left = 120
+        Height = 22
+        Top = 2
+        Width = 58
+        Caption = 'Track'
+        OnClick = BtnTrackClick
+        TabOrder = 1
+      end
     end
-    object Label2: TLabel
+    object Panel3: TPanel
       Left = 0
-      Height = 19
-      Top = 27
-      Width = 31
-      Caption = 'Dec   '
-      ParentColor = False
-    end
-    object DE: TEdit
-      Left = 35
-      Height = 31
-      Hint = 'Current telescope declination'
-      Top = 25
-      Width = 80
-      Alignment = taRightJustify
-      ReadOnly = True
-      TabOrder = 1
-    end
-    object BtnPark: TButton
-      Left = 120
-      Height = 22
+      Height = 29
       Top = 29
-      Width = 58
-      Caption = 'Park'
-      OnClick = BtnParkClick
-      TabOrder = 2
+      Width = 178
+      BevelOuter = bvNone
+      ClientHeight = 29
+      ClientWidth = 178
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 0
+        Height = 17
+        Top = 4
+        Width = 37
+        Caption = 'Dec   '
+        ParentColor = False
+      end
+      object DE: TEdit
+        Left = 35
+        Height = 29
+        Hint = 'Current telescope declination'
+        Top = 0
+        Width = 80
+        Alignment = taRightJustify
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object BtnPark: TButton
+        Left = 120
+        Height = 22
+        Top = 2
+        Width = 58
+        Caption = 'Park'
+        OnClick = BtnParkClick
+        TabOrder = 1
+      end
     end
-    object BtnTrack: TButton
-      Left = 120
-      Height = 22
-      Top = 2
-      Width = 58
-      Caption = 'Track'
-      OnClick = BtnTrackClick
-      TabOrder = 3
-    end
-    object LabelMeridian: TLabel
+    object Panel4: TPanel
       Left = 0
-      Height = 19
-      Top = 85
-      Width = 67
-      Caption = 'Meridian in'
-      ParentColor = False
+      Height = 29
+      Top = 58
+      Width = 178
+      BevelOuter = bvNone
+      ClientHeight = 29
+      ClientWidth = 178
+      TabOrder = 2
+      object Pierside: TEdit
+        Left = 0
+        Height = 29
+        Hint = 'Current telescope pier side'
+        Top = 0
+        Width = 178
+        Align = alClient
+        ReadOnly = True
+        TabOrder = 0
+        Text = 'Unknow pier side'
+      end
     end
-    object TimeToMeridian: TEdit
-      Left = 96
-      Height = 31
-      Hint = 'Time from meridian transit (hour angle)'
-      Top = 79
-      Width = 40
-      ReadOnly = True
-      TabOrder = 4
-    end
-    object Label4: TLabel
-      Left = 144
-      Height = 19
-      Top = 85
-      Width = 26
-      Caption = 'min.'
-      ParentColor = False
-    end
-    object Pierside: TEdit
-      Left = 3
-      Height = 31
-      Hint = 'Current telescope pier side'
-      Top = 50
-      Width = 173
-      ReadOnly = True
-      TabOrder = 5
-      Text = 'Unknow pier side'
+    object Panel5: TPanel
+      Left = 0
+      Height = 29
+      Top = 87
+      Width = 178
+      BevelOuter = bvNone
+      ClientHeight = 29
+      ClientWidth = 178
+      TabOrder = 3
+      object LabelMeridian: TLabel
+        Left = 0
+        Height = 17
+        Top = 4
+        Width = 72
+        Caption = 'Meridian in'
+        ParentColor = False
+      end
+      object TimeToMeridian: TEdit
+        Left = 96
+        Height = 29
+        Hint = 'Time from meridian transit (hour angle)'
+        Top = 0
+        Width = 40
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object Label4: TLabel
+        Left = 144
+        Height = 17
+        Top = 4
+        Width = 29
+        Caption = 'min.'
+        ParentColor = False
+      end
     end
   end
 end

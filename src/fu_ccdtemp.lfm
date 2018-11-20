@@ -1,18 +1,19 @@
 object f_ccdtemp: Tf_ccdtemp
   Left = 0
-  Height = 82
+  Height = 81
   Top = 0
-  Width = 182
+  Width = 180
   AutoSize = True
-  ClientHeight = 82
-  ClientWidth = 182
+  ClientHeight = 81
+  ClientWidth = 180
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 182
+    Width = 180
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -26,25 +27,26 @@ object f_ccdtemp: Tf_ccdtemp
   end
   object Panel1: TPanel
     Left = 0
-    Height = 62
+    Height = 61
     Top = 20
-    Width = 182
+    Width = 180
     Align = alClient
-    ClientHeight = 62
-    ClientWidth = 182
+    ClientHeight = 61
+    ClientWidth = 180
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 27
       Top = 0
-      Width = 184
+      Width = 182
+      BevelOuter = bvNone
       ClientHeight = 27
-      ClientWidth = 184
+      ClientWidth = 182
       ParentFont = False
       TabOrder = 0
       object Current: TEdit
-        Left = 65
+        Left = 64
         Height = 26
         Top = 0
         Width = 40
@@ -63,7 +65,7 @@ object f_ccdtemp: Tf_ccdtemp
         ParentFont = False
       end
       object CCDcooler: TCheckBox
-        Left = 108
+        Left = 107
         Height = 21
         Top = 2
         Width = 66
@@ -77,9 +79,10 @@ object f_ccdtemp: Tf_ccdtemp
       Left = 0
       Height = 33
       Top = 29
-      Width = 184
+      Width = 182
+      BevelOuter = bvNone
       ClientHeight = 33
-      ClientWidth = 184
+      ClientWidth = 182
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
@@ -92,20 +95,20 @@ object f_ccdtemp: Tf_ccdtemp
         ParentFont = False
       end
       object Setpoint: TFloatSpinEdit
-        Left = 65
+        Left = 64
         Height = 27
         Top = 0
-        Width = 66
+        Width = 65
         MinValue = -100
         ParentFont = False
         TabOrder = 0
         Value = 0
       end
       object BtnSet: TButton
-        Left = 132
+        Left = 131
         Height = 24
         Top = 2
-        Width = 51
+        Width = 50
         Caption = 'Set'
         OnClick = BtnSetClick
         ParentFont = False

@@ -42,6 +42,8 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
     Title: TLabel;
     procedure BtnResetClick(Sender: TObject);
     procedure BtnSetClick(Sender: TObject);

@@ -36,6 +36,8 @@ type
     BtnRotate: TButton;
     BtnHalt: TButton;
     Angle: TFloatSpinEdit;
+    Panel2: TPanel;
+    Panel3: TPanel;
     Reverse: TCheckBox;
     Label6: TLabel;
     led: TShape;

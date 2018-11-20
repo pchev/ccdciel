@@ -125,9 +125,9 @@ end;
 procedure Tf_capture.SetLang;
 begin
   Title.Caption:=rsCapture;
-  Label1.Caption:=rsExp;
+  Label1.Caption:=rsExposure;
   LabelGain.Caption:=rsGain;
-  Label2.Caption:=rsBin;
+  Label2.Caption:=rsBinning;
   Label3.Caption:=rsObject;
   Label4.Caption:=rsCount;
   Label5.Caption:=rsType;

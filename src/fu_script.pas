@@ -42,6 +42,9 @@ type
     ComboBoxScript: TComboBox;
     led: TShape;
     Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
     Title: TLabel;
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);

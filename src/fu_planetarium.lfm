@@ -1,18 +1,19 @@
 object f_planetarium: Tf_planetarium
   Left = 0
-  Height = 77
+  Height = 76
   Top = 0
-  Width = 182
+  Width = 180
   AutoSize = True
-  ClientHeight = 77
-  ClientWidth = 182
+  ClientHeight = 76
+  ClientWidth = 180
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 182
+    Width = 180
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -26,27 +27,28 @@ object f_planetarium: Tf_planetarium
   end
   object Panel1: TPanel
     Left = 0
-    Height = 57
+    Height = 56
     Top = 20
-    Width = 182
+    Width = 180
     Align = alClient
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 57
-    ClientWidth = 182
+    ClientHeight = 56
+    ClientWidth = 180
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 26
+      Height = 25
       Top = 0
-      Width = 183
-      ClientHeight = 26
-      ClientWidth = 183
+      Width = 180
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 180
       ParentFont = False
       TabOrder = 0
       object led: TShape
-        Left = 150
+        Left = 148
         Height = 14
         Top = 4
         Width = 14
@@ -58,7 +60,7 @@ object f_planetarium: Tf_planetarium
         Height = 25
         Hint = 'Planetarium status'
         Top = 0
-        Width = 137
+        Width = 136
         AutoSize = False
         ParentFont = False
         ReadOnly = True
@@ -67,28 +69,29 @@ object f_planetarium: Tf_planetarium
     end
     object Panel3: TPanel
       Left = 0
-      Height = 26
-      Top = 26
-      Width = 183
-      ClientHeight = 26
-      ClientWidth = 183
+      Height = 25
+      Top = 25
+      Width = 180
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 180
       ParentFont = False
       TabOrder = 1
       object BtnConnect: TButton
         Left = 0
         Height = 25
         Top = 0
-        Width = 76
+        Width = 75
         Caption = 'Connect'
         OnClick = BtnConnectClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnNewTarget: TButton
-        Left = 96
+        Left = 95
         Height = 25
         Top = 0
-        Width = 86
+        Width = 85
         Caption = 'New target'
         OnClick = BtnNewTargetClick
         ParentFont = False
@@ -98,8 +101,8 @@ object f_planetarium: Tf_planetarium
     object Panel4: TPanel
       Left = 0
       Height = 1
-      Top = 52
-      Width = 183
+      Top = 50
+      Width = 180
       ParentFont = False
       TabOrder = 2
     end

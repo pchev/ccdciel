@@ -1,19 +1,21 @@
 object f_rotator: Tf_rotator
   Left = 0
-  Height = 83
+  Height = 80
   Top = 0
-  Width = 180
+  Width = 177
   AutoSize = True
-  ClientHeight = 83
-  ClientWidth = 180
+  ClientHeight = 80
+  ClientWidth = 177
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 177
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,67 +31,89 @@ object f_rotator: Tf_rotator
     Left = 0
     Height = 58
     Top = 20
-    Width = 180
+    Width = 177
     Align = alTop
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
     ClientHeight = 58
-    ClientWidth = 180
+    ClientWidth = 177
     TabOrder = 0
-    object Label6: TLabel
-      Left = 28
-      Height = 18
-      Top = 4
-      Width = 16
-      AutoSize = False
-      Caption = 'PA'
-      ParentColor = False
-    end
-    object BtnRotate: TButton
-      Left = 115
-      Height = 25
-      Top = 1
-      Width = 60
-      Caption = 'Rotate'
-      OnClick = BtnRotateClick
+    object Panel2: TPanel
+      Left = 0
+      Height = 28
+      Top = 0
+      Width = 175
+      BevelOuter = bvNone
+      ClientHeight = 28
+      ClientWidth = 175
       TabOrder = 0
+      object led: TShape
+        Left = 4
+        Height = 14
+        Hint = 'Uncalibrated'
+        Top = 6
+        Width = 14
+        Brush.Color = clRed
+        Shape = stCircle
+      end
+      object Label6: TLabel
+        Left = 28
+        Height = 18
+        Top = 6
+        Width = 16
+        AutoSize = False
+        Caption = 'PA'
+        ParentColor = False
+      end
+      object Angle: TFloatSpinEdit
+        Left = 48
+        Height = 27
+        Top = 1
+        Width = 64
+        DecimalPlaces = 1
+        MaxValue = 0
+        MinValue = 0
+        TabOrder = 0
+        Value = 0
+      end
+      object BtnRotate: TButton
+        Left = 115
+        Height = 25
+        Top = 1
+        Width = 60
+        Caption = 'Rotate'
+        OnClick = BtnRotateClick
+        TabOrder = 1
+      end
     end
-    object Reverse: TCheckBox
-      Left = 4
-      Height = 21
-      Top = 34
-      Width = 71
-      AutoSize = False
-      Caption = 'Reverse'
-      OnChange = ReverseChange
-      TabOrder = 1
-    end
-    object BtnHalt: TButton
-      Left = 115
+    object Panel3: TPanel
+      Left = 0
       Height = 25
-      Top = 32
-      Width = 60
-      Caption = 'Halt'
-      OnClick = BtnHaltClick
-      TabOrder = 2
-    end
-    object led: TShape
-      Left = 4
-      Height = 14
-      Hint = 'Uncalibrated'
-      Top = 6
-      Width = 14
-      Brush.Color = clRed
-      Shape = stCircle
-    end
-    object Angle: TFloatSpinEdit
-      Left = 48
-      Height = 29
-      Top = 1
-      Width = 64
-      DecimalPlaces = 1
-      MaxValue = 0
-      MinValue = 0
-      TabOrder = 3
-      Value = 0
+      Top = 28
+      Width = 175
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 175
+      TabOrder = 1
+      object Reverse: TCheckBox
+        Left = 4
+        Height = 21
+        Top = 0
+        Width = 108
+        AutoSize = False
+        Caption = 'Reverse'
+        OnChange = ReverseChange
+        TabOrder = 0
+      end
+      object BtnHalt: TButton
+        Left = 115
+        Height = 25
+        Top = 0
+        Width = 60
+        Caption = 'Halt'
+        OnClick = BtnHaltClick
+        TabOrder = 1
+      end
     end
   end
 end

@@ -112,9 +112,9 @@ end;
 procedure Tf_preview.SetLang;
 begin
   Title.Caption:=rsPreview;
-  Label1.Caption:=rsExp;
+  Label1.Caption:=rsExposure;
   LabelGain.Caption:=rsGain;
-  Label2.Caption:=rsBin;
+  Label2.Caption:=rsBinning;
   BtnPreview.Caption:=rsPreview;
   StackPreview.Caption:=rsStack;
   BtnLoop.Caption:=rsLoop;

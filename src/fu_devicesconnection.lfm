@@ -1,18 +1,21 @@
 object f_devicesconnection: Tf_devicesconnection
   Left = 0
-  Height = 87
+  Height = 86
   Top = 0
-  Width = 182
+  Width = 191
   AutoSize = True
-  ClientHeight = 87
-  ClientWidth = 182
+  ClientHeight = 86
+  ClientWidth = 191
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 182
+    Width = 191
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -26,38 +29,69 @@ object f_devicesconnection: Tf_devicesconnection
   end
   object Panel1: TPanel
     Left = 0
-    Height = 67
+    Height = 66
     Top = 20
-    Width = 182
+    Width = 191
     Align = alClient
-    ClientHeight = 67
-    ClientWidth = 182
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 66
+    ClientWidth = 191
     ParentFont = False
     TabOrder = 0
-    object BtnConnect: TButton
-      Left = 8
-      Height = 25
-      Hint = 'Connect all devices'
-      Top = 16
-      Width = 86
-      Caption = 'Connect'
-      OnClick = BtnConnectClick
-      ParentFont = False
+    object Panel2: TPanel
+      Left = 0
+      Height = 17
+      Top = 0
+      Width = 191
+      BevelOuter = bvNone
+      ClientHeight = 17
+      ClientWidth = 191
       TabOrder = 0
+      object ProfileLabel: TLabel
+        Left = 8
+        Height = 17
+        Top = 0
+        Width = 45
+        Caption = 'Profile:'
+        ParentColor = False
+        ParentFont = False
+      end
     end
-    object led: TShape
-      Left = 150
-      Height = 14
-      Top = 22
-      Width = 14
-      Brush.Color = clRed
-      Shape = stCircle
+    object Panel3: TPanel
+      Left = 0
+      Height = 25
+      Top = 17
+      Width = 191
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 191
+      TabOrder = 1
+      object BtnConnect: TButton
+        Left = 8
+        Height = 25
+        Hint = 'Connect all devices'
+        Top = 0
+        Width = 85
+        Caption = 'Connect'
+        OnClick = BtnConnectClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object led: TShape
+        Left = 148
+        Height = 14
+        Top = 5
+        Width = 14
+        Brush.Color = clRed
+        Shape = stCircle
+      end
     end
     object PanelDev: TPanel
       Left = 0
-      Height = 24
-      Top = 40
-      Width = 182
+      Height = 21
+      Top = 42
+      Width = 191
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 4
       ChildSizing.TopBottomSpacing = 2
@@ -65,10 +99,10 @@ object f_devicesconnection: Tf_devicesconnection
       ChildSizing.VerticalSpacing = 4
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 6
-      ClientHeight = 24
-      ClientWidth = 182
+      ClientHeight = 21
+      ClientWidth = 191
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 2
       Visible = False
       object LabelCamera: TLabel
         Left = 4
@@ -130,15 +164,6 @@ object f_devicesconnection: Tf_devicesconnection
         ParentColor = False
         ParentFont = False
       end
-    end
-    object ProfileLabel: TLabel
-      Left = 8
-      Height = 17
-      Top = 0
-      Width = 45
-      Caption = 'Profile:'
-      ParentColor = False
-      ParentFont = False
     end
   end
 end

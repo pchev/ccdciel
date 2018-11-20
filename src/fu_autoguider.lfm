@@ -1,18 +1,19 @@
 object f_autoguider: Tf_autoguider
   Left = 0
-  Height = 101
+  Height = 100
   Top = 0
-  Width = 182
+  Width = 180
   AutoSize = True
-  ClientHeight = 101
-  ClientWidth = 182
+  ClientHeight = 100
+  ClientWidth = 180
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 182
+    Width = 180
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -26,27 +27,28 @@ object f_autoguider: Tf_autoguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 81
+    Height = 80
     Top = 20
-    Width = 182
+    Width = 180
     Align = alClient
-    ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
-    ClientHeight = 81
-    ClientWidth = 182
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 80
+    ClientWidth = 180
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 26
+      Height = 25
       Top = 0
-      Width = 179
-      ClientHeight = 26
-      ClientWidth = 179
+      Width = 176
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 176
       ParentFont = False
       TabOrder = 0
       object led: TShape
-        Left = 150
+        Left = 148
         Height = 14
         Top = 4
         Width = 14
@@ -58,7 +60,7 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Hint = 'Autoguider status'
         Top = 0
-        Width = 137
+        Width = 136
         AutoSize = False
         ParentFont = False
         ReadOnly = True
@@ -67,28 +69,29 @@ object f_autoguider: Tf_autoguider
     end
     object Panel3: TPanel
       Left = 0
-      Height = 26
-      Top = 26
-      Width = 179
-      ClientHeight = 26
-      ClientWidth = 179
+      Height = 25
+      Top = 25
+      Width = 176
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 176
       ParentFont = False
       TabOrder = 1
       object BtnConnect: TButton
         Left = 0
         Height = 25
         Top = 0
-        Width = 81
+        Width = 80
         Caption = 'Connect'
         OnClick = BtnConnectClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnCal: TButton
-        Left = 97
+        Left = 96
         Height = 25
         Top = 0
-        Width = 81
+        Width = 80
         Caption = 'Calibrate'
         OnClick = BtnCalClick
         ParentFont = False
@@ -97,28 +100,29 @@ object f_autoguider: Tf_autoguider
     end
     object Panel4: TPanel
       Left = 0
-      Height = 26
-      Top = 52
-      Width = 179
-      ClientHeight = 26
-      ClientWidth = 179
+      Height = 25
+      Top = 50
+      Width = 176
+      BevelOuter = bvNone
+      ClientHeight = 25
+      ClientWidth = 176
       ParentFont = False
       TabOrder = 2
       object BtnGuide: TButton
         Left = 0
         Height = 25
         Top = 0
-        Width = 81
+        Width = 80
         Caption = 'Guide'
         OnClick = BtnGuideClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnDither: TButton
-        Left = 97
+        Left = 96
         Height = 25
         Top = 0
-        Width = 81
+        Width = 80
         Caption = 'Dither'
         OnClick = BtnDitherClick
         ParentFont = False
