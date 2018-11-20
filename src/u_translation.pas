@@ -933,6 +933,9 @@ resourcestring
   rsOn = 'On';
   rsOff = 'Off';
   rsStatus = '%s status';
+  rsMountTrackin = 'Mount tracking restarted';
+  rsMountTrackin2 = 'Mount tracking stopped! sequence timeout in %s minutes.';
+  rsMountWasStil = 'Mount was still not tracking after %s minutes.';
 
 
 

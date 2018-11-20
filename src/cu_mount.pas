@@ -37,6 +37,7 @@ T_mount = class(TComponent)
     FonCoordChange: TNotifyEvent;
     FonPiersideChange: TNotifyEvent;
     FonParkChange: TNotifyEvent;
+    FonTrackingChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
     Fdevice: string;
@@ -99,6 +100,7 @@ T_mount = class(TComponent)
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
     property onPiersideChange: TNotifyEvent read FonPiersideChange write FonPiersideChange;
     property onParkChange: TNotifyEvent read FonParkChange write FonParkChange;
+    property onTrackingChange: TNotifyEvent read FonTrackingChange write FonTrackingChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;
 

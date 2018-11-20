@@ -543,6 +543,7 @@ type
     Procedure MountCoordChange(Sender: TObject);
     Procedure MountPiersideChange(Sender: TObject);
     Procedure MountParkChange(Sender: TObject);
+    Procedure MountTrackingChange(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
     Procedure AutoguiderCalibrateClick(Sender: TObject);
     Procedure AutoguiderGuideClick(Sender: TObject);
@@ -1109,6 +1110,7 @@ begin
   mount.onCoordChange:=@MountCoordChange;
   mount.onPiersideChange:=@MountPiersideChange;
   mount.onParkChange:=@MountParkChange;
+  mount.onTrackingChange:=@MountTrackingChange;
   mount.onStatusChange:=@MountStatus;
 
 
@@ -4091,6 +4093,18 @@ begin
     pierWest: f_mount.Pierside.Text:=rsWestPointing;
     pierUnknown: f_mount.Pierside.Text:=rsUnknowPierSi;
   end;
+end;
+
+Procedure Tf_main.MountTrackingChange(Sender: TObject);
+begin
+   if mount.Tracking then begin
+      f_mount.BtnTrack.Font.Color:=clGreen;
+      f_sequence.MountTrackingStarted;
+   end
+   else begin
+      f_mount.BtnTrack.Font.Color:=clRed;
+      if (not meridianflipping)and(not mount.MountSlewing) then f_sequence.MountTrackingStopped;
+   end;
 end;
 
 Procedure Tf_main.MountParkChange(Sender: TObject);

@@ -803,6 +803,8 @@ begin
        if T_Plan(t.plan).Steps[i].frtype=LIGHT then
           isCalibrationTarget:=false;
     end;
+    // start mount tracking
+    if (not isCalibrationTarget) then mount.Track;
     // start guiding
     autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
     if autostartguider then begin

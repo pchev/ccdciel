@@ -96,6 +96,8 @@ type
     Fplanetarium: TPlanetarium;
     AutoguiderAlert,AutoguiderStarting: boolean;
     AutoguiderAlertTime,AutoguiderMsgTime: double;
+    MountTrackingAlert: boolean;
+    MountTrackingAlertTime: double;
     procedure SetPreview(val: Tf_preview);
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);
@@ -134,6 +136,8 @@ type
     destructor  Destroy; override;
     procedure AutoguiderDisconnected;
     procedure AutoguiderIddle;
+    procedure MountTrackingStarted;
+    procedure MountTrackingStopped;
     procedure ExposureAborted;
     procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
@@ -833,6 +837,7 @@ begin
  StartingSequence:=false;
  AutoguiderStarting:=false;
  AutoguiderAlert:=false;
+ MountTrackingAlert:=false;
  Preview.StackPreview.Checked:=false;
  led.Brush.Color:=clLime;
  SetEditBtn(false);
@@ -907,9 +912,10 @@ procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
 var buf1,buf2:string;
     i:integer;
     p: T_Plan;
-    alerttime, msgtime: integer;
+    agAlerttime, trAlerttime, msgtime: integer;
 const
-    alerttimeout=5;
+    agAlerttimeout=5;
+    trAlerttimeout=1;
 begin
  try
   TargetRow:=Targets.CurrentTarget+1;
@@ -938,19 +944,19 @@ begin
       msg(rsAutoguidingR,1);
     end
     else begin
-      alerttime:=trunc((now-AutoguiderAlertTime)*minperday);
+      agAlerttime:=trunc((now-AutoguiderAlertTime)*minperday);
       msgtime:=trunc((now-AutoguiderMsgTime)*minperday);
-      if alerttime>=alerttimeout then begin
+      if agAlerttime>=agAlerttimeout then begin
         // timeout
         if (Autoguider=nil)or(Autoguider.State=GUIDER_DISCONNECTED) then begin
            // no more autoguider, stop sequence
-           msg(Format(rsSequenceAbor2, [IntToStr(alerttime)]),0);
+           msg(Format(rsSequenceAbor2, [IntToStr(agAlerttime)]),0);
            AbortSequence;
            AutoguiderAlert:=false;
         end
         else begin
            // autoguider connected but not guiding, try next target
-           msg(Format(rsAutoguiderWa, [IntToStr(alerttime)]),1);
+           msg(Format(rsAutoguiderWa, [IntToStr(agAlerttime)]),1);
            msg(rsTryNextTarge,1);
            Targets.ForceNextTarget;
            AutoguiderAlert:=false;
@@ -961,9 +967,24 @@ begin
        if msgtime>=1 then begin
          // display a message every minute
          AutoguiderMsgTime:=now;
-         msg(Format(rsAutoguidingS, [IntToStr(alerttime), IntToStr(alerttimeout-alerttime)]),1);
+         msg(Format(rsAutoguidingS, [IntToStr(agAlerttime), IntToStr(agAlerttimeout-agAlerttime)]),1);
        end;
       end;
+    end;
+   end;
+   // process mount tracking problem during sequence
+   if MountTrackingAlert then begin
+    trAlerttime:=trunc((now-MountTrackingAlertTime)*minperday);
+    if trAlerttime>=trAlerttimeout then begin
+       // timeout, mount still not tracking, try next target
+       msg(Format(rsMountWasStil, [IntToStr(trAlerttime)]), 1);
+       msg(rsTryNextTarge,1);
+       Targets.ForceNextTarget;
+       MountTrackingAlert:=false;
+    end
+    else begin
+      // try to restart tracking
+      mount.Track;
     end;
    end;
   end
@@ -1005,6 +1026,33 @@ begin
       AutoguiderMsgTime:=0;
     end;
   end;
+end;
+
+procedure Tf_sequence.MountTrackingStarted;
+var t: TTarget;
+begin
+  if MountTrackingAlert then begin
+    MountTrackingAlert:=false;
+    msg(rsMountTrackin, 1);
+    // maybe we can recenter the target here
+    // but as this function is mainly to handle mount limits we not do it for now
+    // for very short interruption the autoguider may handle the recenter better
+  end;
+end;
+
+procedure Tf_sequence.MountTrackingStopped;
+begin
+  if Targets.Running and
+    (Targets.CurrentTarget>=0) and
+    (Targets.Targets[Targets.CurrentTarget].objectname<>SkyFlatTxt) and
+    (Targets.Targets[Targets.CurrentTarget].objectname<>ScriptTxt) and
+    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running) and
+    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].frtype=LIGHT)
+    then begin
+       MountTrackingAlert:=true;
+       MountTrackingAlertTime:=now;
+       msg(Format(rsMountTrackin2, ['1']), 1);
+    end;
 end;
 
 procedure Tf_sequence.ExposureAborted;

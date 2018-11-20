@@ -36,11 +36,12 @@ T_ascommount = class(T_mount)
  private
    {$ifdef mswindows}
    V: variant;
+   {$endif}
+   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
    stRA,stDE: double;
    stPark:boolean;
    stPierside: TPierSide;
-   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
-   {$endif}
+   stTracking: boolean;
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
@@ -86,9 +87,20 @@ constructor T_ascommount.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
  FMountInterface:=ASCOM;
+ stRA:=0;
+ stDE:=0;;
+ stPark:=false;
+ stPierside:=pierUnknown;
+ stTracking:=false;
+ CanPark:=false;
+ CanSlew:=false;
+ CanSlewAsync:=false;
+ CanSetPierSide:=false;
+ CanSync:=false;
+ CanSetTracking:=false;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=1000;
+ StatusTimer.Interval:=2000;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -179,6 +191,7 @@ procedure T_ascommount.StatusTimerTimer(sender: TObject);
 var x,y: double;
     pk: boolean;
     ps: TPierSide;
+    tr: Boolean;
   {$endif}
 begin
  {$ifdef mswindows}
@@ -192,6 +205,7 @@ begin
     y:=GetDec;
     pk:=GetPark;
     ps:=GetPierSide;
+    tr:=GetTracking;
     if (x<>stRA)or(y<>stDE) then begin
        stRA:=x;
        stDE:=y;
@@ -204,6 +218,10 @@ begin
     if ps<>stPierside then begin
        stPierside:=ps;
        if Assigned(FonPiersideChange) then FonPiersideChange(self);
+    end;
+    if tr<>stTracking then begin
+       stTracking:=tr;
+       if Assigned(FonTrackingChange) then FonTrackingChange(self);
     end;
     except
      on E: Exception do msg('Status error: ' + E.Message,0);

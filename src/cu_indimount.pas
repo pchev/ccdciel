@@ -364,6 +364,7 @@ begin
       TrackOn:=IUFindSwitch(TrackState,'TRACK_ON');
       TrackOff:=IUFindSwitch(TrackState,'TRACK_OFF');
       if (TrackOn=nil)or(TrackOff=nil) then TrackState:=nil;
+      if Assigned(FonTrackingChange) then FonTrackingChange(self);
    end
    else if (proptype=INDI_SWITCH)and(AbortmotionProp=nil)and(propname='TELESCOPE_ABORT_MOTION') then begin
       AbortmotionProp:=indiProp.getSwitch;
@@ -438,6 +439,9 @@ procedure T_indimount.NewSwitch(svp: ISwitchVectorProperty);
 begin
   if svp=parkprop then begin
      if Assigned(FonParkChange) then FonParkChange(self);
+  end
+  else if svp=TrackState then begin
+     if Assigned(FonTrackingChange) then FonTrackingChange(self);
   end
   else if svp=Pier_Side then begin
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
@@ -626,7 +630,13 @@ end;
 function T_indimount.Track:Boolean;
 begin
   result:=false;
-  if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
+  if (TrackState<>nil)then begin
+    IUResetSwitch(TrackState);
+    TrackOn.s:=ISS_ON;
+    indiclient.sendNewSwitch(TrackState);
+    result:=true;
+  end
+  else if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
     msg(rsStartTraking);
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
