@@ -28,6 +28,7 @@ library/wcs/libccdcielwcs.*
 src/ccdciel
 src/ccdciel.exe
 src/ccdciel.dbg
+src/test_ascom_camera.exe
 ccdciel*.rpm
 ccdciel*.deb
 ccdciel*.exe
