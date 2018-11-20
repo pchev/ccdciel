@@ -476,7 +476,7 @@ begin
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
-  if (Fmount.Status=devConnected) then begin
+  if (FMount<>nil)and(Fmount.Status=devConnected) then begin
      hra:=15*Fmount.RA;
      hdec:=Fmount.Dec;
      equinox:=Fmount.Equinox;
@@ -494,19 +494,21 @@ begin
        hdec:=rad2deg*hdec;
      end;
   end;
-  if (hfilter='')and(Fwheel.Status=devConnected) then begin
+  if (hfilter='')and(Fwheel<>nil)and(Fwheel.Status=devConnected) then begin
      hfilter:=Fwheel.FilterNames[Fwheel.Filter];
   end;
   ccdtemp:=Temperature;
   objname:=FObjectName;
-  origin:=config.GetValue('/Info/ObservatoryName','');
-  observer:=config.GetValue('/Info/ObserverName','');
-  telname:=config.GetValue('/Info/TelescopeName','');
-  if config.GetValue('/Astrometry/FocaleFromTelescope',true)
-  then
-     focal_length:=Fmount.FocaleLength
-  else
-     focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+  if config<>nil then begin
+    origin:=config.GetValue('/Info/ObservatoryName','');
+    observer:=config.GetValue('/Info/ObserverName','');
+    telname:=config.GetValue('/Info/TelescopeName','');
+    if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+    then
+       focal_length:=Fmount.FocaleLength
+    else
+       focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+  end;
   if (focal_length<1) then msg(rsErrorUnknowT,0);
   if (focal_length>50000) then msg('Error: Is the telescope focal length really '+FormatFloat(f0,focal_length)+'mm ?',0);
   try
