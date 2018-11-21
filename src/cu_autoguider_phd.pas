@@ -33,6 +33,7 @@ type
   T_autoguider_phd = class(T_autoguider)
   protected
     TcpClient : TTcpclient;
+    JsonRecurseLevel: integer;
     procedure JsonDataToStringlist(var SK,SV: TStringList; prefix:string; D : TJSONData);
     procedure JsonToStringlist(jsontxt:string; var SK,SV: TStringList);
     procedure Send(const Value: string);
@@ -140,16 +141,19 @@ procedure T_autoguider_phd.JsonDataToStringlist(var SK,SV: TStringList; prefix:s
 var i:integer;
     pr,buf:string;
 begin
+inc(JsonRecurseLevel);
 if Assigned(D) then begin
   case D.JSONType of
     jtArray,jtObject: begin
         for i:=0 to D.Count-1 do begin
            if D.JSONType=jtArray then begin
               if prefix='' then pr:=IntToStr(I) else pr:=prefix+'.'+IntToStr(I);
-              JsonDataToStringlist(SK,SV,pr,D.items[i]);
+              if JsonRecurseLevel<100 then JsonDataToStringlist(SK,SV,pr,D.items[i])
+                 else raise Exception.Create('JSON data recursion > 100');
            end else begin
               if prefix='' then pr:=TJSONObject(D).Names[i] else pr:=prefix+'.'+TJSONObject(D).Names[i];
-              JsonDataToStringlist(SK,SV,pr,D.items[i]);
+              if JsonRecurseLevel<100 then JsonDataToStringlist(SK,SV,pr,D.items[i])
+                 else raise Exception.Create('JSON data recursion > 100');
            end;
         end;
        end;
@@ -175,9 +179,14 @@ var  J: TJSONData;
 begin
 jsontxt:=StringReplace(jsontxt,chr(10),' ',[rfReplaceAll]);
 jsontxt:=StringReplace(jsontxt,chr(13),' ',[rfReplaceAll]);
+try
 J:=GetJSON(jsontxt);
+JsonRecurseLevel:=0;
 JsonDataToStringlist(SK,SV,'',J);
 J.Free;
+except
+  on E: Exception do DisplayMessage('Error: '+ E.Message);
+end;
 end;
 
 Procedure T_autoguider_phd.ProcessEvent(txt:string);
