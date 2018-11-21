@@ -279,6 +279,11 @@ if p>=0 then begin
      if i>=0 then begin
         FVersion:=value[i];
      end;
+     i:=attrib.IndexOf('PHDSubver');
+     if i>=0 then begin
+        FVersion:=FVersion+value[i];
+     end;
+     DisplayMessage('PHD version: '+FVersion);
      i:=attrib.IndexOf('MsgVersion');
      if i>=0 then begin
         FMsgVersion:=value[i];
