@@ -102,12 +102,15 @@ try
    FRunning:=true;
    if assigned(FonConnect) then FonConnect(self);
    // main loop
+   try
    repeat
      if terminated then break;
      buf:=tcpclient.recvstring;
      if (tcpclient.Sock.lastError<>0)and(tcpclient.Sock.lastError<>WSAETIMEDOUT) then break;
      if (buf<>'') then ProcessEvent(buf);
    until false;
+   except
+   end;
  end
  else begin
    DisplayMessage('Cannot connect to PHD2, Is PHD2 running and the server active?');
@@ -128,6 +131,7 @@ end;
 procedure T_autoguider_phd.Send(const Value: string);
 begin
 //writeln('>>'+Value);
+try
  if (not terminated)and(tcpclient<>nil)and(Value>'') then begin
    tcpclient.Sock.SendString(Value+crlf);
    if tcpclient.Sock.LastError<>0 then begin
@@ -135,6 +139,8 @@ begin
       Terminate;
    end;
  end;
+except
+end;
 end;
 
 procedure T_autoguider_phd.JsonDataToStringlist(var SK,SV: TStringList; prefix:string; D : TJSONData);
@@ -409,6 +415,8 @@ end;
 function T_autoguider_phd.WaitBusy(maxwait:integer=5):boolean;
 var endt: TDateTime;
 begin
+result:=false;
+try
   endt:=now+maxwait/secperday;
   while now<endt do begin
     Sleep(100);
@@ -419,12 +427,16 @@ begin
     if FState<>GUIDER_BUSY then break;
   end;
   result:=(FState<>GUIDER_BUSY);
+except
+end;
 end;
 
 function T_autoguider_phd.WaitGuiding(maxwait:integer=5):boolean;
 var endt: TDateTime;
     n: integer;
 begin
+result:=false;
+try
   endt:=now+maxwait/secperday;
   n:=0;
   while now<endt do begin
@@ -439,11 +451,15 @@ begin
         FonShowMessage('Waiting for autoguider to start...');
   end;
   result:=(FState=GUIDER_GUIDING);
+except
+end;
 end;
 
 function T_autoguider_phd.WaitDithering(maxwait:integer=5):boolean;
 var endt: TDateTime;
 begin
+result:=false;
+try
   endt:=now+maxwait/secperday;
   FonShowMessage('Enter dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
   while now<endt do begin
@@ -456,6 +472,8 @@ begin
   end;
   FonShowMessage('Exit dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
   result:=(not FDithering);
+except
+end;
 end;
 
 procedure T_autoguider_phd.Calibrate;
@@ -467,6 +485,7 @@ procedure T_autoguider_phd.Guide(onoff:boolean; recalibrate:boolean=false);
 var buf:string;
     cguide: boolean;
 begin
+try
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
     FStopGuiding:=false;
@@ -478,14 +497,16 @@ begin
     FState:=GUIDER_BUSY;
     Send(buf);
     WaitBusy(60);
+    if terminated or FStopGuiding then exit;
     Wait(10); //enough time for a new guide exposure
-    if FStopGuiding then exit;
+    if terminated or FStopGuiding then exit;
     buf:='{"method": "find_star","id":2005}';
     FState:=GUIDER_BUSY;
     Send(buf);
     WaitBusy(60);
+    if terminated or FStopGuiding then exit;
     Wait(2);
-    if FStopGuiding then exit;
+    if terminated or FStopGuiding then exit;
     buf:='{"method": "guide", "params": [';
     buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
     buf:=buf+'"time": '+FSettleTmin+',';       // min time
@@ -502,6 +523,8 @@ begin
     FRecovering:=false;
   end;
   if cguide<>onoff then FState:=GUIDER_BUSY;
+except
+end;
 end;
 
 procedure T_autoguider_phd.Pause(onoff:boolean);
@@ -520,6 +543,7 @@ end;
 procedure T_autoguider_phd.Dither(pixel:double; raonly:boolean);
 var pix,rao,buf:string;
 begin
+try
   FStopGuiding:=false;
   pix:=FormatFloat(f1,pixel);
   if raonly then rao:='true' else rao:='false';
@@ -533,6 +557,8 @@ begin
   FState:=GUIDER_BUSY;
   FDithering:=true;
   Send(buf);
+except
+end;
 end;
 
 procedure T_autoguider_phd.StarLostTimerTimer(Sender: TObject);
