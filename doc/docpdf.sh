@@ -47,8 +47,11 @@ sed -i '/\/tools\.html/r./fl1.txt' fl.txt
 rm fl1.txt
 
 # insert pages not in index 
+if [ -f "$lang/documentation/ccdciel_status.html" ]; then
+  sed -i '/\/ccdciel_status.html/ a '$lang'\/documentation\/server.html' fl.txt
+fi
 if [ -f "$lang/documentation/ccdscript.html" ]; then
-  sed -i '/\/ccdscript.html/ a '$lang'\/documentation\/script_example.html \n'$lang'\/documentation\/script_reference.html \n'$lang'\/documentation\/server.html' fl.txt
+  sed -i '/\/ccdscript.html/ a '$lang'\/documentation\/script_example.html \n'$lang'\/documentation\/script_reference.html' fl.txt
 fi
 
 # remove duplicates
