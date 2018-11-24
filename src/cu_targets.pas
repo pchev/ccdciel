@@ -528,6 +528,10 @@ var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
+  // stop autoguider
+  StopGuider;
+  // stop mount tracking
+  Mount.AbortMotion;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
   inc(FCurrentTarget);
@@ -789,6 +793,8 @@ begin
       if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
         // disable astrometrypointing and autoguiding if first step is to move to focus star
         astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
+        // must track before to slew
+        mount.Track;
         // slew to coordinates
         FSlewRetry:=1;
         ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
@@ -804,7 +810,8 @@ begin
           isCalibrationTarget:=false;
     end;
     // start mount tracking
-    if (not isCalibrationTarget) then mount.Track;
+    if isCalibrationTarget then mount.AbortMotion
+                           else mount.Track;
     // start guiding
     autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
     if autostartguider then begin
