@@ -424,8 +424,10 @@ begin
    else
        indiclient.setBLOBMode(B_ALSO,Findidevice);
  end;
- FStatus := devConnected;
- if Assigned(FonStatusChange) then FonStatusChange(self);
+ if Fready and (FStatus<>devConnected) then begin
+   FStatus := devConnected;
+   if Assigned(FonStatusChange) then FonStatusChange(self);
+ end;
 end;
 
 procedure T_indicamera.ServerDisconnected(Sender: TObject);
