@@ -297,6 +297,7 @@ var
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   config: TCCDConfig;
   profile: string;
+  ProfileFromCommandLine: boolean;
   lang: string;
   FilterList,BinningList: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;

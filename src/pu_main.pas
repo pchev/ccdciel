@@ -1033,8 +1033,10 @@ begin
   end;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
+  ProfileFromCommandLine:=false;
   if Application.HasOption('c', 'config') then begin
     profile:=Application.GetOptionValue('c', 'config');
+    ProfileFromCommandLine:=true;
   end
   else begin
     inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
@@ -2655,10 +2657,12 @@ procedure Tf_main.SaveConfig;
 var inif:TIniFile;
 begin
   config.Flush;
-  inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
-  inif.WriteString('main','profile',profile);
-  inif.UpdateFile;
-  inif.Free;
+  if not ProfileFromCommandLine then begin
+    inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
+    inif.WriteString('main','profile',profile);
+    inif.UpdateFile;
+    inif.Free;
+  end;
 end;
 
 procedure Tf_main.OpenConfig(n: string);
@@ -4286,6 +4290,7 @@ begin
 
   if f_setup.ModalResult=mrOK then begin
     if profile<>f_setup.profile then begin
+      ProfileFromCommandLine:=false;
       profile:=f_setup.profile;
       if profile='default' then
          configfile:='ccdciel.conf'
