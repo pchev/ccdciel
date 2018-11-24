@@ -656,9 +656,14 @@ begin
    if ab<>nil then begin
      ab.s:=ISS_ON;
      indiclient.sendNewSwitch(AbortmotionProp);
-     msg(rsStopTelescop);
    end;
  end;
+ if TrackState<>nil then begin
+    IUResetSwitch(TrackState);
+    TrackOff.s:=ISS_ON;
+    indiclient.sendNewSwitch(TrackState);
+ end;
+ msg(rsStopTelescop);
 end;
 
 procedure T_indimount.SetTimeout(num:integer);
