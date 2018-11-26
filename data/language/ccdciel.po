@@ -3382,3 +3382,35 @@ msgstr ""
 msgid "Flip the image vertically"
 msgstr ""
 
+#: u_translation:rstracking
+msgid "tracking"
+msgstr ""
+
+#: u_translation:rsnottracking
+msgid "not tracking"
+msgstr ""
+
+#: u_translation:rson
+msgid "On"
+msgstr ""
+
+#: u_translation:rsoff
+msgid "Off"
+msgstr ""
+
+#: u_translation:rsstatus
+msgid "%s status"
+msgstr ""
+
+#: u_translation:rsmounttrackin
+msgid "Mount tracking restarted"
+msgstr ""
+
+#: u_translation:rsmounttrackin2
+msgid "Mount tracking stopped! sequence timeout in %s minutes."
+msgstr ""
+
+#: u_translation:rsmountwasstil
+msgid "Mount was still not tracking after %s minutes."
+msgstr ""
+
