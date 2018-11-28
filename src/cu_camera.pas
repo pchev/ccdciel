@@ -247,9 +247,9 @@ T_camera = class(TComponent)
     property onVideoRateChange: TNotifyEvent read FonVideoRateChange write FonVideoRateChange;
     property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;
     property onVideoExposureChange: TNotifyEvent read FonVideoExposureChange write FonVideoExposureChange;
-
-
 end;
+
+const CameraTimeout=60; // in seconds, must be enough to download image from any camers
 
 implementation
 

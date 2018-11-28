@@ -936,6 +936,7 @@ resourcestring
   rsMountTrackin = 'Mount tracking restarted';
   rsMountTrackin2 = 'Mount tracking stopped! sequence timeout in %s minutes.';
   rsMountWasStil = 'Mount was still not tracking after %s minutes.';
+  rsNoResponseFr2 = 'No response from camera!';
 
 
 

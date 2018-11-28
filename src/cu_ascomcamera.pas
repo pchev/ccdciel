@@ -279,7 +279,7 @@ if Connected then begin
      V.StartExposure(exptime,li);
      timestart:=NowUTC;
      timeend:=now+(exptime)/secperday;
-     timedout:=now+(exptime+60)/secperday;
+     timedout:=now+(exptime+CameraTimeout)/secperday;
      Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
      else if exptime>=1 then ExposureTimer.Interval:=500
@@ -341,7 +341,7 @@ begin
  end
  else begin
    ok:=false;
-   msg(rsTimeout,0);
+   msg(rsNoResponseFr2,0);
    if assigned(FonAbortExposure) then FonAbortExposure(self);
  end;
 

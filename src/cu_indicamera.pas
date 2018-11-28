@@ -102,6 +102,9 @@ private
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
+   timedout: double;
+   ExposureTimer: TTimer;
+   procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -244,6 +247,10 @@ begin
  ConnectTimer.Enabled:=false;
  ConnectTimer.Interval:=3000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
+ ExposureTimer:=TTimer.Create(nil);
+ ExposureTimer.Enabled:=false;
+ ExposureTimer.Interval:=1000;
+ ExposureTimer.OnTimer:=@ExposureTimerTimer;
  CreateIndiClient;
  lockvideostream:=false;
  FVideoMsg:=false;
@@ -253,8 +260,10 @@ destructor  T_indicamera.Destroy;
 begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
+ ExposureTimer.Enabled:=false;
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
+ FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
  inherited Destroy;
@@ -920,6 +929,26 @@ end else begin
     indiclient.sendNewNumber(Guiderexpose);
   end;
 end;
+timedout:=now+(exptime+CameraTimeout)/secperday;
+ExposureTimer.Enabled:=true;
+end;
+
+procedure T_indicamera.ExposureTimerTimer(sender: TObject);
+begin
+ ExposureTimer.Enabled:=false;
+ if UseMainSensor then begin
+   if (CCDexpose<>nil)and (CCDexpose.s<>IPS_BUSY) then
+      exit;
+ end else begin
+   if (Guiderexpose<>nil)and (Guiderexpose.s<>IPS_BUSY) then
+      exit;
+ end;
+ if now>timedout then begin
+    msg(rsNoResponseFr2, 0);
+    if assigned(FonAbortExposure) then FonAbortExposure(self);
+ end
+ else
+   ExposureTimer.Enabled:=true;
 end;
 
 function T_indicamera.GetExposureRange:TNumRange;
