@@ -44,6 +44,7 @@ T_ascomcamera = class(T_camera)
    timestart,timeend,timedout,Fexptime:double;
    FCameraXSize,FCameraYSize,FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FPixelSizeX,FPixelSizeY: double;
+   FHasTemperature, FCanSetTemperature: boolean;
    Fccdname: string;
    {$endif}
    stCCDtemp : double;
@@ -148,6 +149,14 @@ begin
  inherited Create(AOwner);
  stCooler:=false;
  stCCDtemp:=NullCoord;
+ FCameraXSize:=-1;
+ FCameraYSize:=-1;
+ FMaxBinX:=1;
+ FMaxBinY:=1;
+ FBinX:=1;
+ FBinY:=1;
+ FHasTemperature:=false;
+ FCanSetTemperature:=false;
  FCameraInterface:=ASCOM;
  FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);
@@ -156,7 +165,7 @@ begin
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=1000;
+ StatusTimer.Interval:=5000;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -168,6 +177,9 @@ begin
 end;
 
 procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
+{$ifdef mswindows}
+var x: double;
+{$endif}
 begin
 {$ifdef mswindows}
  try
@@ -230,7 +242,17 @@ begin
       Fccdname:=Fccdname+'-'+V.SensorName;
     except
     end;
-
+    try
+      FCanSetTemperature:=V.CanSetCCDTemperature;
+    except
+      FCanSetTemperature:=false;
+    end;
+    try
+      x:=V.CCDTemperature;
+      FHasTemperature:=true;
+    except
+      FHasTemperature:=false;
+    end;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
     msg(rsConnected3);
@@ -293,7 +315,7 @@ begin
        stCooler:=c;
        if Assigned(FonCoolerChange) then FonCoolerChange(stCooler);
     end;
-    if V.CanSetCCDTemperature then begin
+    if FHasTemperature then begin
        t:=GetTemperature;
        if (t<>stCCDtemp) then begin
          stCCDtemp:=t;
@@ -313,7 +335,6 @@ var li: boolean;
 {$endif}
 begin
 {$ifdef mswindows}
-if Connected then begin
   case FFrametype of
     LIGHT: li:=true;
     BIAS : li:=false;
@@ -335,7 +356,6 @@ if Connected then begin
   except
      on E: Exception do msg(Format(rsStartExposur, [E.Message]),0);
   end;
-end;
 {$endif}
 end;
 
@@ -521,7 +541,6 @@ var oldx,oldy,newx,newy,fsx,fsy,fnx,fny: integer;
 {$endif}
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
    {$ifdef debug_ascom}msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));{$endif}
    oldx:=FBinX;
@@ -551,7 +570,6 @@ begin
    except
     on E: Exception do msg('Camera '+Fdevice+' Set binning error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -561,7 +579,6 @@ var Xmax,Ymax,w,h,bx,by: integer;
 {$endif}
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
    {$ifdef debug_ascom}msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
    w:=FCameraXSize;
@@ -594,7 +611,6 @@ begin
    except
     on E: Exception do msg('Set frame error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -602,7 +618,6 @@ procedure T_ascomcamera.GetFrame(out x,y,width,height: integer);
 var Cx,Cy,Cwidth,Cheight: integer;
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
    x      := V.StartX;
    y      := V.StartY;
@@ -629,7 +644,6 @@ begin
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -637,7 +651,6 @@ procedure T_ascomcamera.GetFrameRange(out xr,yr,widthr,heightr: TNumRange);
 begin
  xr:=NullRange;yr:=NullRange;widthr:=NullRange;heightr:=NullRange;
  {$ifdef mswindows}
- if Connected then begin
    try
    xr.min:=0;
    xr.max:=FCameraXSize-1;
@@ -655,7 +668,6 @@ begin
    except
     on E: Exception do msg('Get frame range error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -665,7 +677,6 @@ var w,h,bx,by: integer;
 {$endif}
 begin
 {$ifdef mswindows}
-if Connected then begin
   try
   w:=FCameraXSize;
   h:=FCameraYSize;
@@ -681,21 +692,18 @@ if Connected then begin
   except
    on E: Exception do msg('Reset frame error: ' + E.Message,0);
   end;
-end;
 {$endif}
 end;
 
 Procedure T_ascomcamera.AbortExposure;
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
     msg(rsAbortExposur);
     V.AbortExposure;
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -708,9 +716,7 @@ function T_ascomcamera.GetBinX:integer;
 begin
  result:=1;
  {$ifdef mswindows}
- if Connected then begin
    result:=FBinX;
- end;
  {$endif}
 end;
 
@@ -718,9 +724,7 @@ function T_ascomcamera.GetBinY:integer;
 begin
  result:=1;
  {$ifdef mswindows}
- if Connected then begin
    result:=FBinY;
- end;
  {$endif}
 end;
 
@@ -741,9 +745,7 @@ function T_ascomcamera.GetBinXrange:TNumRange;
 begin
  result:=UnitRange;
  {$ifdef mswindows}
- if Connected then begin
    result.max:=FMaxBinX;
- end;
  {$endif}
 end;
 
@@ -751,9 +753,7 @@ function T_ascomcamera.GetBinYrange:TNumRange;
 begin
  result:=UnitRange;
  {$ifdef mswindows}
- if Connected then begin
    result.max:=FMaxBinY;
- end;
  {$endif}
 end;
 
@@ -761,7 +761,6 @@ function T_ascomcamera.GetExposureRange:TNumRange;
 begin
   result:=NullRange;
   {$ifdef mswindows}
-  if Connected then begin
     try
     result.max:=V.ExposureMax;
     result.min:=V.ExposureMin;
@@ -769,7 +768,6 @@ begin
     except
      result:=NullRange;
     end;
-  end;
   {$endif}
 end;
 
@@ -784,7 +782,6 @@ end;
 procedure T_ascomcamera.SetFilter(num:integer);
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
    V.Position:=num-1;
@@ -792,7 +789,6 @@ begin
    except
     on E: Exception do msg('Set filter error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -800,13 +796,11 @@ function  T_ascomcamera.GetFilter:integer;
 begin
  result:=0;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.Position+1;
    except
     on E: Exception do msg('Get filter error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -831,32 +825,28 @@ function  T_ascomcamera.GetTemperature: double;
 begin
  result:=NullCoord;
  {$ifdef mswindows}
- if Connected then begin
    try
-   if V.CanSetCCDTemperature then
+   if FHasTemperature then
       result:=V.CCDTemperature
    else
       result:=NullCoord;
    except
      result:=NullCoord;
    end;
- end;
  {$endif}
 end;
 
 procedure T_ascomcamera.SetTemperature(value:double);
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
-   if V.CanSetCCDTemperature then begin
+   if FCanSetTemperature then begin
       SetCooler(true);
       V.SetCCDTemperature:=value;
    end;
    except
     on E: Exception do msg('Set temperature error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -864,20 +854,18 @@ function  T_ascomcamera.GetCooler: boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
      result:=V.CoolerOn;
    except
      result:=false;
    end;
- end;
  {$endif}
 end;
 
 procedure T_ascomcamera.SetCooler(value:boolean);
 begin
 {$ifdef mswindows}
-if Connected and (V.CoolerOn<>value) then begin
+if (V.CoolerOn<>value) then begin
   try
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
      V.CoolerOn:=value;
@@ -892,10 +880,7 @@ function T_ascomcamera.GetMaxX: double;
 begin
  result:=-1;
 {$ifdef mswindows}
-if Connected then begin
-   result:=FCameraXSize;
-end
-else result:=-1;
+ result:=FCameraXSize;
 {$endif}
 end;
 
@@ -903,10 +888,7 @@ function T_ascomcamera.GetMaxY: double;
 begin
  result:=-1;
 {$ifdef mswindows}
-if Connected then begin
-   result:=FCameraYSize;
-end
-else result:=-1;
+ result:=FCameraYSize;
 {$endif}
 end;
 
@@ -914,14 +896,11 @@ function T_ascomcamera.GetMaxADU: double;
 begin
  result:=MAXWORD;
 {$ifdef mswindows}
-if Connected then begin
   try
      result:=V.MaxADU;
   except
      result:=MAXWORD;
   end;
-end
-else result:=MAXWORD;
 {$endif}
 end;
 
@@ -929,14 +908,11 @@ function T_ascomcamera.GetPixelSize: double;
 begin
  result:=-1;
 {$ifdef mswindows}
-if Connected then begin
   try
      result:=FPixelSizeX;
   except
      result:=-1;
   end;
-end
-else result:=-1;
 {$endif}
 end;
 
@@ -944,14 +920,11 @@ function T_ascomcamera.GetPixelSizeX: double;
 begin
  result:=-1;
 {$ifdef mswindows}
-if Connected then begin
   try
      result:=FPixelSizeX;
   except
      result:=-1;
   end;
-end
-else result:=-1;
 {$endif}
 end;
 
@@ -959,14 +932,11 @@ function T_ascomcamera.GetPixelSizeY: double;
 begin
  result:=-1;
 {$ifdef mswindows}
-if Connected then begin
   try
      result:=FPixelSizeY;
   except
      result:=-1;
   end;
-end
-else result:=-1;
 {$endif}
 end;
 
@@ -982,14 +952,11 @@ function T_ascomcamera.GetColor: boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
       result:=(V.SensorType=1);  // Camera produces color image directly, requiring not Bayer decoding
    except
       result:=false;
    end;
- end
- else result:=false;
  {$endif}
 end;
 
@@ -1006,7 +973,6 @@ var i,n: integer;
 begin
   result:=false;
   {$ifdef mswindows}
-  if Connected then begin
     try
     // check Gain property
        i:=V.Gain;
@@ -1039,14 +1005,13 @@ begin
        FhasGainISO:=false;
     end;
     result:=(FhasGainISO or FhasGain);
-  end;
   {$endif}
 end;
 
 procedure T_ascomcamera.SetGain(value: integer);
 begin
  {$ifdef mswindows}
- if Connected and (FhasGainISO or FhasGain) then begin
+ if (FhasGainISO or FhasGain) then begin
    try
       V.Gain:=value;
    except
@@ -1059,14 +1024,13 @@ function T_ascomcamera.GetGain: integer;
 begin
  result:=NullInt;
  {$ifdef mswindows}
- if Connected and (FhasGainISO or FhasGain) then begin
+ if (FhasGainISO or FhasGain) then begin
    try
       result:=V.Gain;
    except
       result:=NullInt;
    end;
- end
- else result:=NullInt;
+ end;
  {$endif}
 end;
 
