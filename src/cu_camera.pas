@@ -605,6 +605,8 @@ begin
     Ffits.Header.Add('EQUINOX',2000.0,'');
     Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
     Ffits.Header.Add('DEC',hdec,'[deg] Telescope pointing DEC');
+    Ffits.Header.Add('OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
+    Ffits.Header.Add('OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
        pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
