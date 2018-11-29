@@ -42,7 +42,9 @@ T_ascomcamera = class(T_camera)
    V: variant;
    nf: integer;
    timestart,timeend,timedout,Fexptime:double;
-   stX,stY,stWidth,stHeight: integer;
+   FCameraXSize,FCameraYSize,FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
+   FPixelSizeX,FPixelSizeY: double;
+   Fccdname: string;
    {$endif}
    stCCDtemp : double;
    stCooler : boolean;
@@ -176,6 +178,59 @@ begin
  V.connected:=true;
  if V.connected then begin
     FStatus := devConnected;
+    try
+    FCameraXSize:=V.CameraXSize;
+    except
+     on E: Exception do begin
+       FCameraXSize:=-1;
+       msg('Error: cannot get frame size X from camera: ' + E.Message,0);
+     end;
+    end;
+    try
+    FCameraYSize:=V.CameraYSize;
+    except
+     on E: Exception do begin
+       FCameraYSize:=-1;
+       msg('Error: cannot get frame size Y from camera: ' + E.Message,0);
+     end;
+    end;
+    try
+     FMaxBinX:=V.MaxBinX;
+    except
+     FMaxBinX:=1;
+    end;
+    try
+    FMaxBinY:=V.MaxBinY;
+    except
+     FMaxBinY:=1;
+    end;
+    try
+     FBinX:=V.BinX;
+    except
+     FBinX:=1;
+    end;
+    try
+     FBinY:=V.BinY;
+    except
+     FBinY:=1;
+    end;
+    FPixelSizeX:=0;
+    FPixelSizeY:=0;
+    try
+      FPixelSizeX:=round(V.PixelSizeX*100)/100;
+      FPixelSizeY:=round(V.PixelSizeY*100)/100;
+    except
+      on E: Exception do begin
+        msg('Error: cannot get pixel size from camera: ' + E.Message,0);
+      end;
+    end;
+    Fccdname:=Fdevice;
+    try
+      Fccdname:=V.Name;
+      Fccdname:=Fccdname+'-'+V.SensorName;
+    except
+    end;
+
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
     msg(rsConnected3);
@@ -222,8 +277,7 @@ end;
 
 procedure T_ascomcamera.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
-var x,y,width,height: integer;
-    t: double;
+var t: double;
     c: boolean;
 {$endif}
 begin
@@ -245,14 +299,6 @@ begin
          stCCDtemp:=t;
          if Assigned(FonTemperatureChange) then FonTemperatureChange(stCCDtemp);
     end;
-    end;
-    GetFrame(x,y,width,height);
-    if (x<>stX)or(y<>stY)or(width<>stWidth)or(height<>stHeight) then begin
-       stX:=x;
-       stY:=y;
-       stWidth:=width;
-       stHeight:=height;
-       if Assigned(FonFrameChange) then FonFrameChange(self);
     end;
     except
      on E: Exception do msg(Format(rsError, [E.Message]),0);
@@ -378,22 +424,9 @@ begin
    {$ifdef debug_ascom}msg('width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
    nax1:=xs;
    nax2:=ys;
-   pix:=0;
-   piy:=0;
-   try
-     pix:=V.PixelSizeX;
-     piy:=V.PixelSizeY;
-   except
-     on E: Exception do begin
-       msg('Error: cannot get pixel size from camera: ' + E.Message,0);
-     end;
-   end;
-   ccdname:=Fdevice;
-   try
-     ccdname:=V.Name;
-     ccdname:=ccdname+'-'+V.SensorName;
-   except
-   end;
+   pix:=FPixelSizeX;
+   piy:=FPixelSizeY;
+   ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,timestart);
    {$ifdef debug_ascom}msg('set fits header');{$endif}
@@ -491,8 +524,8 @@ begin
  if Connected then begin
    try
    {$ifdef debug_ascom}msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));{$endif}
-   oldx:=V.BinX;
-   oldy:=V.BinY;
+   oldx:=FBinX;
+   oldy:=FBinY;
    {$ifdef debug_ascom}msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));{$endif}
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
@@ -504,10 +537,12 @@ begin
      scale:=oldy/sbinY;
      fsy:=trunc(fsy*scale);
      fny:=trunc(fny*scale);
-     newx:=V.CameraXSize div sbinX;
-     newy:=V.CameraYSize div sbinY;
+     newx:=FCameraXSize div sbinX;
+     newy:=FCameraYSize div sbinY;
      V.BinX:=sbinX;
      V.BinY:=sbinY;
+     FBinX:=sbinX;
+     FBinY:=sbinY;
      if (fsx=0)and(fsy=0)and((abs(newx-fnx)/fnx)<0.1)and((abs(newy-fny)/fny)<0.1)
         then SetFrame(0,0,newx,newy)
         else SetFrame(fsx,fsy,fnx,fny);
@@ -529,15 +564,15 @@ begin
  if Connected then begin
    try
    {$ifdef debug_ascom}msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
-   w:=V.CameraXSize;
-   h:=V.CameraYSize;
-   bx:=V.BinX;
-   by:=V.BinY;
+   w:=FCameraXSize;
+   h:=FCameraYSize;
+   bx:=FBinX;
+   by:=FBinY;
    {$ifdef debug_ascom}
      msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
    {$endif}
-   Xmax:= V.CameraXSize div V.BinX;
-   Ymax:= V.CameraYSize div V.BinY;
+   Xmax:= w div bx;
+   Ymax:= h div by;
    {$ifdef debug_ascom}
      msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
    {$endif}
@@ -555,6 +590,7 @@ begin
    V.NumX:=width;
    V.NumY:=height;
    Wait(1);
+   if Assigned(FonFrameChange) then FonFrameChange(self);
    except
     on E: Exception do msg('Set frame error: ' + E.Message,0);
    end;
@@ -575,12 +611,19 @@ begin
    // Consistency check for buggy qhy drivers
    Cx:=max(x,0);
    Cy:=max(y,0);
-   Cwidth:=min(width,V.CameraXSize div V.BinX);
-   Cheight:=min(height,V.CameraYSize div V.BinY);
+   Cwidth:=min(width,FCameraXSize div FBinX);
+   Cheight:=min(height,FCameraYSize div FBinY);
    if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then  begin
      msg('Correct driver wrong frame size: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),1);
      msg('Set new value : '+inttostr(Cx)+','+inttostr(Cy)+'/'+inttostr(Cwidth)+'x'+inttostr(Cheight),1);
-     setframe(Cx,Cy,Cwidth,Cheight);
+     V.StartX:=Cx;
+     V.StartY:=Cy;
+     V.NumX:=Cwidth;
+     V.NumY:=Cheight;
+     x:=Cx;
+     y:=Cy;
+     width:=Cwidth;
+     height:=Cheight;
    end;
    //
    except
@@ -597,16 +640,16 @@ begin
  if Connected then begin
    try
    xr.min:=0;
-   xr.max:=V.CameraXSize-1;
+   xr.max:=FCameraXSize-1;
    xr.step:=1;
    yr.min:=0;
-   yr.max:=V.CameraYSize-1;
+   yr.max:=FCameraYSize-1;
    yr.step:=1;
    widthr.min:=1;
-   widthr.max:=V.CameraXSize;
+   widthr.max:=FCameraXSize;
    widthr.step:=1;
    heightr.min:=1;
-   heightr.max:=V.CameraYSize;
+   heightr.max:=FCameraYSize;
    heightr.step:=1;
    {$ifdef debug_ascom}msg('Get frame range :'+inttostr(round(widthr.max))+'x'+inttostr(round(heightr.max)));{$endif}
    except
@@ -624,10 +667,10 @@ begin
 {$ifdef mswindows}
 if Connected then begin
   try
-  w:=V.CameraXSize;
-  h:=V.CameraYSize;
-  bx:=V.BinX;
-  by:=V.BinY;
+  w:=FCameraXSize;
+  h:=FCameraYSize;
+  bx:=FBinX;
+  by:=FBinY;
   {$ifdef debug_ascom}
     msg('ResetFrame: XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
   {$endif}
@@ -666,11 +709,7 @@ begin
  result:=1;
  {$ifdef mswindows}
  if Connected then begin
-   try
-   result:=V.BinX;
-   except
-    result:=1;
-   end;
+   result:=FBinX;
  end;
  {$endif}
 end;
@@ -680,11 +719,7 @@ begin
  result:=1;
  {$ifdef mswindows}
  if Connected then begin
-   try
-   result:=V.BinY;
-   except
-    result:=1;
-   end;
+   result:=FBinY;
  end;
  {$endif}
 end;
@@ -707,11 +742,7 @@ begin
  result:=UnitRange;
  {$ifdef mswindows}
  if Connected then begin
-   try
-   result.max:=V.MaxBinX;
-   except
-    result.max:=1;
-   end;
+   result.max:=FMaxBinX;
  end;
  {$endif}
 end;
@@ -721,11 +752,7 @@ begin
  result:=UnitRange;
  {$ifdef mswindows}
  if Connected then begin
-   try
-   result.max:=V.MaxBinY;
-   except
-    result:=UnitRange;
-   end;
+   result.max:=FMaxBinY;
  end;
  {$endif}
 end;
@@ -866,11 +893,7 @@ begin
  result:=-1;
 {$ifdef mswindows}
 if Connected then begin
-  try
-     result:=V.CameraXSize;
-  except
-     result:=-1;
-  end;
+   result:=FCameraXSize;
 end
 else result:=-1;
 {$endif}
@@ -881,11 +904,7 @@ begin
  result:=-1;
 {$ifdef mswindows}
 if Connected then begin
-  try
-     result:=V.CameraYSize;
-  except
-     result:=-1;
-  end;
+   result:=FCameraYSize;
 end
 else result:=-1;
 {$endif}
@@ -912,7 +931,7 @@ begin
 {$ifdef mswindows}
 if Connected then begin
   try
-     result:=V.PixelSizeX;
+     result:=FPixelSizeX;
   except
      result:=-1;
   end;
@@ -927,7 +946,7 @@ begin
 {$ifdef mswindows}
 if Connected then begin
   try
-     result:=V.PixelSizeX;
+     result:=FPixelSizeX;
   except
      result:=-1;
   end;
@@ -942,7 +961,7 @@ begin
 {$ifdef mswindows}
 if Connected then begin
   try
-     result:=V.PixelSizeY;
+     result:=FPixelSizeY;
   except
      result:=-1;
   end;
