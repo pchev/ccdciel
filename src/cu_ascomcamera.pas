@@ -42,11 +42,11 @@ T_ascomcamera = class(T_camera)
    V: variant;
    nf: integer;
    timestart,timeend,timedout,Fexptime:double;
-   FCameraXSize,FCameraYSize,FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FPixelSizeX,FPixelSizeY: double;
-   FHasTemperature, FCanSetTemperature: boolean;
    Fccdname: string;
    {$endif}
+   FCameraXSize,FCameraYSize,FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
+   FHasTemperature, FCanSetTemperature: boolean;
    stCCDtemp : double;
    stCooler : boolean;
    FFrametype:TFrameType;
@@ -615,7 +615,9 @@ begin
 end;
 
 procedure T_ascomcamera.GetFrame(out x,y,width,height: integer);
+{$ifdef mswindows}
 var Cx,Cy,Cwidth,Cheight: integer;
+{$endif}
 begin
  {$ifdef mswindows}
    try
