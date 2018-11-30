@@ -8780,7 +8780,8 @@ begin
            'elmnt.scrollTop += 99999; } </script>';
 
    result:=result+'</body></html>'+crlf;
- end;
+ end
+ else result:='Unknow command: '+s;
 end;
 
 procedure Tf_main.ShutdownProgram(Sender: TObject);
