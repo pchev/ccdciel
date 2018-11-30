@@ -8781,7 +8781,7 @@ begin
 
    result:=result+'</body></html>'+crlf;
  end
- else result:='Unknow command: '+s;
+ else result:='Unknown command: '+s;
 end;
 
 procedure Tf_main.ShutdownProgram(Sender: TObject);
