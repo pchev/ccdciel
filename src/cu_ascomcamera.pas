@@ -388,7 +388,7 @@ begin
     end;
     ok:=false;
     try
-      ok:=V.ImageReady;
+      if state=0 then ok:=V.ImageReady;
     except
       on E: Exception do begin
         msg('Error reading camera image availability: ' + E.Message,0);
@@ -405,7 +405,7 @@ begin
         1 : FonExposureProgress(-1); // wait start
         2 : FonExposureProgress(secperday*(timeend-now)); // exposure in progress
         3 : begin StatusTimer.Enabled:=false; FonExposureProgress(-3);  end; // read ccd
-        4 : begin StatusTimer.Enabled:=false; FonExposureProgress(-4);  end; // downloading
+        4 : begin StatusTimer.Enabled:=false; FonExposureProgress(-4); exposuretimer.Interval:=250;  end; // downloading
         5 : FonExposureProgress(-5); // error
         else FonExposureProgress(-9);
       end;
@@ -423,6 +423,7 @@ begin
  if ok then begin
    try
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
+   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    {$ifdef debug_ascom}msg('read image.');{$endif}
    try
    img:=PSafeArray(TVarData(V.ImageArray).Varray);  // magic casting
@@ -537,6 +538,7 @@ begin
    end;
    {$ifdef debug_ascom}msg('display image');{$endif}
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
+   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;
    finally
    StatusTimer.Enabled:=true;
