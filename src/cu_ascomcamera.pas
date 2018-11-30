@@ -229,8 +229,8 @@ begin
     FPixelSizeX:=0;
     FPixelSizeY:=0;
     try
-      FPixelSizeX:=round(V.PixelSizeX*100)/100;
-      FPixelSizeY:=round(V.PixelSizeY*100)/100;
+      FPixelSizeX:=round(int(V.PixelSizeX)*100)/100;
+      FPixelSizeY:=round(int(V.PixelSizeY)*100)/100;
     except
       on E: Exception do begin
         msg('Error: cannot get pixel size from camera: ' + E.Message,0);
