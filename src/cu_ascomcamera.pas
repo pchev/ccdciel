@@ -702,7 +702,9 @@ begin
  {$ifdef mswindows}
    try
     msg(rsAbortExposur);
+    ExposureTimer.Enabled:=false;
     V.AbortExposure;
+    if assigned(FonAbortExposure) then FonAbortExposure(self);
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;
