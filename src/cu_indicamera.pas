@@ -806,7 +806,7 @@ var source,dest: array of char;
 begin
  {$ifdef camera_debug}msg('receive blob');{$endif}
  if bp.bloblen>0 then begin
-   if assigned(FonExposureProgress) then FonExposureProgress(0);
+   if assigned(FonExposureProgress) then FonExposureProgress(-10);
    bp.blob.Position:=0;
    if pos('.fits',bp.format)>0 then begin // receive a FITS file
      {$ifdef camera_debug}msg('this is a fits file');{$endif}
@@ -834,6 +834,7 @@ begin
         FImgStream.CopyFrom(bp.blob,bp.size);
      end;
      {$ifdef camera_debug}msg('NewImage');{$endif}
+     if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
    else if pos('.stream',bp.format)>0 then begin // video stream

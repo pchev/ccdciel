@@ -5341,12 +5341,24 @@ end;
 
 procedure Tf_main.CameraProgress(n:double);
 var txt: string;
+    i: integer;
 begin
  CameraExposureRemain:=n;
  if (n<=0) then begin
    if meridianflipping or autofocusing then exit;
    if ((f_capture.Running)or(f_preview.Running)) then begin
-     txt := rsDownloading+ellipsis;
+     i:=round(n);
+     case i of
+       -11 : txt:=rsDisplay+ellipsis;
+       -10 : txt:=rsReadImage+ellipsis;
+       -9 : txt:=rsUnknownStatu+ellipsis;
+       -5 : txt:=rsError2+ellipsis;
+       -4 : txt:=rsDownloading+ellipsis;
+       -3 : txt:=rsReadCCD+ellipsis;
+       -1 : txt:=rsWaitStart+ellipsis;
+        0 : txt:=rsIddle+ellipsis;
+       else txt:=rsUnknownStatu+ellipsis;
+     end;
      if Capture then begin
        if f_capture.Running then
          StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;

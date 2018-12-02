@@ -131,7 +131,7 @@ resourcestring
   rsStartLearnin = 'Start learning V curve';
   rsEastPointing = 'East (Pointing West)';
   rsWestPointing = 'West (Pointing East)';
-  rsUnknowPierSi = 'Unknow pier side';
+  rsUnknowPierSi = 'Unknown pier side';
   rsParked = 'Parked';
   rsUnparked = 'Unparked';
   rsStopGuiding = 'Stop guiding';
@@ -241,7 +241,7 @@ resourcestring
     +'mount and the planetarium';
   rsOpenFile = 'Open file %s';
   rsInvalidOrUns = 'Invalid or unsupported FITS file %s';
-  rsReceiveUnkno = 'Receive unknow message: %s';
+  rsReceiveUnkno = 'Receive unknown message: %s';
   rsMeridianIn = 'Meridian in';
   rsMeridianSinc = 'Meridian since';
   rsWaitMeridian = 'Wait meridian flip for %s minutes';
@@ -752,7 +752,7 @@ resourcestring
   rsAlignmentSta = 'Alignment star lost';
   rsStackingWith = 'Stacking with alignment star at %s/%s';
   rsNoAlignmentS = 'No alignment star found for stacking';
-  rsErrorUnknowT = 'Error: Unknow telescope focal length, set in telescope '
+  rsErrorUnknowT = 'Error: Unknown telescope focal length, set in telescope '
     +'driver or in PREFERENCE, ASTROMETRY.';
   rsFocuserMoveT = 'Focuser move to %s';
   rsFocuserMoveB = 'Focuser move by %s';
@@ -937,6 +937,12 @@ resourcestring
   rsMountTrackin2 = 'Mount tracking stopped! sequence timeout in %s minutes.';
   rsMountWasStil = 'Mount was still not tracking after %s minutes.';
   rsNoResponseFr2 = 'No response from camera!';
+  rsDisplay = 'Display';
+  rsReadImage = 'Read image';
+  rsUnknownStatu = 'Unknown status';
+  rsReadCCD = 'Read CCD';
+  rsWaitStart = 'Wait start';
+  rsIddle = 'Iddle';
 
 
 

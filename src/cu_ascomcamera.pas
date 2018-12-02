@@ -349,9 +349,7 @@ begin
      timedout:=now+(exptime+CameraTimeout)/secperday;
      Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
-     else if exptime>=1 then ExposureTimer.Interval:=500
-     else if exptime>=0.5 then ExposureTimer.Interval:=100
-     else ExposureTimer.Interval:=50;
+     else ExposureTimer.Interval:=500;
      ExposureTimer.Enabled:=true;
   except
      on E: Exception do msg(Format(rsStartExposur, [E.Message]),0);
@@ -400,7 +398,16 @@ begin
     {$ifdef debug_ascom}msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok, rsTrue, rsFalse));{$endif}
     if (not ok) then begin
       // in progress
-      if assigned(FonExposureProgress) then FonExposureProgress(secperday*(timeend-now));
+      if assigned(FonExposureProgress) then
+      case state of
+        0 : FonExposureProgress(0);  // iddle
+        1 : FonExposureProgress(-1); // wait start
+        2 : FonExposureProgress(secperday*(timeend-now)); // exposure in progress
+        3 : FonExposureProgress(-3); // read ccd
+        4 : FonExposureProgress(-4); // downloading
+        5 : FonExposureProgress(-5); // error
+        else FonExposureProgress(-9);
+      end;
       ExposureTimer.Enabled:=true;
       exit;
     end;
@@ -412,7 +419,7 @@ begin
  end;
 
  if ok then begin
-   if assigned(FonExposureProgress) then FonExposureProgress(0);
+   if assigned(FonExposureProgress) then FonExposureProgress(-10);
    {$ifdef debug_ascom}msg('read image.');{$endif}
    try
    img:=PSafeArray(TVarData(V.ImageArray).Varray);  // magic casting
@@ -526,6 +533,7 @@ begin
      on E: Exception do msg('Error releasing ImageArray memory: ' + E.Message,0);
    end;
    {$ifdef debug_ascom}msg('display image');{$endif}
+   if assigned(FonExposureProgress) then FonExposureProgress(-11);
    NewImage;
  end;
  except
