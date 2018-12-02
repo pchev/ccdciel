@@ -715,7 +715,11 @@ procedure T_indicamera.NewNumber(nvp: INumberVectorProperty);
 begin
   if (UseMainSensor and (nvp=CCDexpose))or((not UseMainSensor) and (nvp=Guiderexpose)) then begin
      {$ifdef camera_debug}msg('progress: '+formatfloat(f1,nvp.np[0].value));{$endif}
-     if Assigned(FonExposureProgress) then FonExposureProgress(nvp.np[0].value);
+     if Assigned(FonExposureProgress) then
+        if nvp.np[0].value >0 then
+           FonExposureProgress(nvp.np[0].value)
+        else
+           FonExposureProgress(-4);
   end
   else if nvp=CCDframe then begin
      if Assigned(FonFrameChange) then FonFrameChange(self);
@@ -834,7 +838,6 @@ begin
         FImgStream.CopyFrom(bp.blob,bp.size);
      end;
      {$ifdef camera_debug}msg('NewImage');{$endif}
-     if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
    else if pos('.stream',bp.format)>0 then begin // video stream
