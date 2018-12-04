@@ -942,7 +942,7 @@ resourcestring
   rsUnknownStatu = 'Unknown status';
   rsReadCCD = 'Read CCD';
   rsWaitStart = 'Wait start';
-  rsIddle = 'Iddle';
+  rsIdle = 'Idle';
 
 
 

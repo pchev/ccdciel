@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-11-26 10:57+0000\n"
+"POT-Creation-Date: 2018-12-04 13:42+0000\n"
 "PO-Revision-Date: 2018-05-14 09:37+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-11-26 11:20+0000\n"
-"X-Generator: Launchpad (build 18826)\n"
+"X-Launchpad-Export-Date: 2018-12-04 14:08+0000\n"
+"X-Generator: Launchpad (build 18830)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -840,6 +840,10 @@ msgstr ""
 msgid "Disconnect the camera before to change the configuration."
 msgstr ""
 
+#: u_translation.rsdisplay
+msgid "Display"
+msgstr ""
+
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
 msgstr ""
@@ -961,7 +965,7 @@ msgid "Error starting command: %s"
 msgstr ""
 
 #: u_translation.rserrorunknowt
-msgid "Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
+msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
 msgstr ""
 
 #: u_translation.rsestimatedsli
@@ -1318,6 +1322,10 @@ msgstr ""
 
 #: u_translation.rshyperbolacur
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
+msgstr ""
+
+#: u_translation.rsidle
+msgid "Idle"
 msgstr ""
 
 #: u_translation.rsifyourfocuse
@@ -1740,6 +1748,10 @@ msgstr ""
 msgid "No response from server"
 msgstr ""
 
+#: u_translation.rsnoresponsefr2
+msgid "No response from camera!"
+msgstr ""
+
 #: u_translation.rsnorth
 msgid "North"
 msgstr ""
@@ -2140,8 +2152,16 @@ msgstr ""
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
 msgstr ""
 
+#: u_translation.rsreadccd
+msgid "Read CCD"
+msgstr ""
+
+#: u_translation.rsreadimage
+msgid "Read image"
+msgstr ""
+
 #: u_translation.rsreceiveunkno
-msgid "Receive unknow message: %s"
+msgid "Receive unknown message: %s"
 msgstr ""
 
 #: u_translation.rsrecenterimag
@@ -3240,8 +3260,12 @@ msgstr ""
 msgid "Uncalibrated"
 msgstr ""
 
+#: u_translation.rsunknownstatu
+msgid "Unknown status"
+msgstr ""
+
 #: u_translation.rsunknowpiersi
-msgid "Unknow pier side"
+msgid "Unknown pier side"
 msgstr ""
 
 #: u_translation.rsunpark
@@ -3378,6 +3402,10 @@ msgstr ""
 
 #: u_translation.rswaitsecondsb2
 msgid "Wait %s seconds before repeated sequence %s"
+msgstr ""
+
+#: u_translation.rswaitstart
+msgid "Wait start"
 msgstr ""
 
 #: u_translation.rswaittostarta

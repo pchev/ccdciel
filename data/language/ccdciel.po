@@ -455,7 +455,7 @@ msgid "West (Pointing East)"
 msgstr ""
 
 #: u_translation:rsunknowpiersi
-msgid "Unknow pier side"
+msgid "Unknown pier side"
 msgstr ""
 
 #: u_translation:rsparked
@@ -859,7 +859,7 @@ msgid "Invalid or unsupported FITS file %s"
 msgstr ""
 
 #: u_translation:rsreceiveunkno
-msgid "Receive unknow message: %s"
+msgid "Receive unknown message: %s"
 msgstr ""
 
 #: u_translation:rsmeridianin
@@ -2711,7 +2711,7 @@ msgid "No alignment star found for stacking"
 msgstr ""
 
 #: u_translation:rserrorunknowt
-msgid "Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
+msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
 msgstr ""
 
 #: u_translation:rsfocusermovet
@@ -3412,5 +3412,33 @@ msgstr ""
 
 #: u_translation:rsmountwasstil
 msgid "Mount was still not tracking after %s minutes."
+msgstr ""
+
+#: u_translation:rsnoresponsefr2
+msgid "No response from camera!"
+msgstr ""
+
+#: u_translation:rsdisplay
+msgid "Display"
+msgstr ""
+
+#: u_translation:rsreadimage
+msgid "Read image"
+msgstr ""
+
+#: u_translation:rsunknownstatu
+msgid "Unknown status"
+msgstr ""
+
+#: u_translation:rsreadccd
+msgid "Read CCD"
+msgstr ""
+
+#: u_translation:rswaitstart
+msgid "Wait start"
+msgstr ""
+
+#: u_translation:rsidle
+msgid "Idle"
 msgstr ""
 

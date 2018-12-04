@@ -5356,7 +5356,7 @@ begin
        -4 : txt:=rsDownloading+ellipsis;
        -3 : txt:=rsReadCCD+ellipsis;
        -1 : txt:=rsWaitStart+ellipsis;
-        0 : txt:=rsIddle+ellipsis;
+        0 : txt:=rsIdle+ellipsis;
        else txt:=rsUnknownStatu+ellipsis;
      end;
      if Capture then begin

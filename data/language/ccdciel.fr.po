@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-11-26 10:57+0000\n"
-"PO-Revision-Date: 2018-11-26 11:16+0000\n"
+"POT-Creation-Date: 2018-12-04 13:42+0000\n"
+"PO-Revision-Date: 2018-12-04 13:43+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-11-26 11:20+0000\n"
-"X-Generator: Launchpad (build 18826)\n"
+"X-Launchpad-Export-Date: 2018-12-04 14:08+0000\n"
+"X-Generator: Launchpad (build 18830)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -840,6 +840,10 @@ msgstr "Erreur de déconnection: %s"
 msgid "Disconnect the camera before to change the configuration."
 msgstr "Déconnectez la caméra avant de modifier la configuration."
 
+#: u_translation.rsdisplay
+msgid "Display"
+msgstr "Affichage"
+
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
 msgstr "Distance de la cible: %s arcmin"
@@ -961,7 +965,7 @@ msgid "Error starting command: %s"
 msgstr "Erreur de lancement de la commande: %s"
 
 #: u_translation.rserrorunknowt
-msgid "Error: Unknow telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
+msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
 msgstr "Erreur: La focale du télescope est inconnue, régler la dans le pilote du télescope ou dans Préférences / Astrométrie"
 
 #: u_translation.rsestimatedsli
@@ -1319,6 +1323,10 @@ msgstr "Profile de l'horizon"
 #: u_translation.rshyperbolacur
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr "Ajustement de la courbe hyperbolique, focus  à %s, erreur restante %s, cycles d'itération %s"
+
+#: u_translation.rsidle
+msgid "Idle"
+msgstr "Attente"
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
@@ -1740,6 +1748,10 @@ msgstr "Aucun résolveur n'est configuré!"
 msgid "No response from server"
 msgstr "Pas de réponse du serveur"
 
+#: u_translation.rsnoresponsefr2
+msgid "No response from camera!"
+msgstr "Pas de réponse de la caméra!"
+
 #: u_translation.rsnorth
 msgid "North"
 msgstr "Nord"
@@ -2140,8 +2152,16 @@ msgstr "Le temps d'exposition maximum du flat est atteint!"
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
 msgstr "La limite de plage de mise au point est atteinte! veuillez mieux positionner le focuser au milieu de sa course mécanique ou diminuer le HFD maximum"
 
+#: u_translation.rsreadccd
+msgid "Read CCD"
+msgstr "Lecture CCD"
+
+#: u_translation.rsreadimage
+msgid "Read image"
+msgstr "Lecture image"
+
 #: u_translation.rsreceiveunkno
-msgid "Receive unknow message: %s"
+msgid "Receive unknown message: %s"
 msgstr "Message inconnu reçu: %s"
 
 #: u_translation.rsrecenterimag
@@ -2254,7 +2274,7 @@ msgstr "Résoudre et Goto au centre de l'image"
 
 #: u_translation.rsresolveandsl2
 msgid "Resolve and Slew to cursor"
-msgstr "Résoudre et Goto à la ppsition du curseur"
+msgstr "Résoudre et Goto à la position du curseur"
 
 #: u_translation.rsresolveandsy
 msgid "Resolve and Sync the mount"
@@ -3240,8 +3260,12 @@ msgstr "Ne trouve pas les données de la solution!"
 msgid "Uncalibrated"
 msgstr "Non calibré"
 
+#: u_translation.rsunknownstatu
+msgid "Unknown status"
+msgstr "État inconnu"
+
 #: u_translation.rsunknowpiersi
-msgid "Unknow pier side"
+msgid "Unknown pier side"
 msgstr "Côté du pied inconnu"
 
 #: u_translation.rsunpark
@@ -3379,6 +3403,10 @@ msgstr "Attend %s scondes avant de répeter la cible %s"
 #: u_translation.rswaitsecondsb2
 msgid "Wait %s seconds before repeated sequence %s"
 msgstr "Attend %s secondes avant de répéter la séquence %s"
+
+#: u_translation.rswaitstart
+msgid "Wait start"
+msgstr "Attente du début"
 
 #: u_translation.rswaittostarta
 msgid "Wait to start at %s"
