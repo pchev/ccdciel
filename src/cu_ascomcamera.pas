@@ -320,7 +320,7 @@ begin
        if (t<>stCCDtemp) then begin
          stCCDtemp:=t;
          if Assigned(FonTemperatureChange) then FonTemperatureChange(stCCDtemp);
-    end;
+       end;
     end;
     except
      on E: Exception do msg(Format(rsError, [E.Message]),0);
@@ -351,6 +351,7 @@ begin
      if exptime>=10 then ExposureTimer.Interval:=1000
      else ExposureTimer.Interval:=500;
      ExposureTimer.Enabled:=true;
+     StatusTimer.Enabled:=true;
   except
      on E: Exception do msg(Format(rsStartExposur, [E.Message]),0);
   end;
@@ -403,8 +404,8 @@ begin
         0 : FonExposureProgress(0);  // iddle
         1 : FonExposureProgress(-1); // wait start
         2 : FonExposureProgress(secperday*(timeend-now)); // exposure in progress
-        3 : FonExposureProgress(-3); // read ccd
-        4 : FonExposureProgress(-4); // downloading
+        3 : begin StatusTimer.Enabled:=false; FonExposureProgress(-3);  end; // read ccd
+        4 : begin StatusTimer.Enabled:=false; FonExposureProgress(-4);  end; // downloading
         5 : FonExposureProgress(-5); // error
         else FonExposureProgress(-9);
       end;
@@ -416,9 +417,11 @@ begin
    ok:=false;
    msg(rsNoResponseFr2,0);
    if assigned(FonAbortExposure) then FonAbortExposure(self);
+   StatusTimer.Enabled:=true;
  end;
 
  if ok then begin
+   try
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    {$ifdef debug_ascom}msg('read image.');{$endif}
    try
@@ -535,6 +538,9 @@ begin
    {$ifdef debug_ascom}msg('display image');{$endif}
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    NewImage;
+   finally
+   StatusTimer.Enabled:=true;
+   end;
  end;
  except
     on E: Exception do msg('Error reading image: ' + E.Message,0);
@@ -711,6 +717,7 @@ begin
    try
     msg(rsAbortExposur);
     ExposureTimer.Enabled:=false;
+    StatusTimer.Enabled:=true;
     V.AbortExposure;
     if assigned(FonAbortExposure) then FonAbortExposure(self);
    except
