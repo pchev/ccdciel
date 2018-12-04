@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom,
-     u_global, math, ExtCtrls, Classes, SysUtils, LCLType, u_translation;
+     u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, u_translation;
 
 type
 
@@ -810,9 +810,10 @@ var source,dest: array of char;
 begin
  {$ifdef camera_debug}msg('receive blob');{$endif}
  if bp.bloblen>0 then begin
-   if assigned(FonExposureProgress) then FonExposureProgress(-10);
    bp.blob.Position:=0;
    if pos('.fits',bp.format)>0 then begin // receive a FITS file
+     if assigned(FonExposureProgress) then FonExposureProgress(-10);
+     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      {$ifdef camera_debug}msg('this is a fits file');{$endif}
      if pos('.z',bp.format)>0 then begin //compressed
          {$ifdef camera_debug}msg('uncompress file');{$endif}
@@ -838,6 +839,8 @@ begin
         FImgStream.CopyFrom(bp.blob,bp.size);
      end;
      {$ifdef camera_debug}msg('NewImage');{$endif}
+     if assigned(FonExposureProgress) then FonExposureProgress(-11);
+     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      NewImage;
    end
    else if pos('.stream',bp.format)>0 then begin // video stream
