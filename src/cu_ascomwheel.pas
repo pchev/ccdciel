@@ -59,6 +59,8 @@ T_ascomwheel = class(T_wheel)
    procedure Disconnect; override;
 end;
 
+const waitpoll=500;
+      statusinterval=2000;
 
 implementation
 
@@ -68,7 +70,7 @@ begin
  FWheelInterface:=ASCOM;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=1000;
+ StatusTimer.Interval:=statusinterval;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -182,16 +184,14 @@ begin
  result:=true;
  {$ifdef mswindows}
  try
- if Connected  then begin
-   maxcount:=maxtime div 100;
+   maxcount:=maxtime div waitpoll;
    count:=0;
    while (V.Position<0)and(count<maxcount) do begin
-      sleep(100);
+      sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
    result:=(count<maxcount);
- end;
  except
    result:=false;
  end;
@@ -202,7 +202,7 @@ end;
 procedure T_ascomwheel.SetFilter(num:integer);
 begin
  {$ifdef mswindows}
- if Connected and (num>0) then begin
+ if (not VarIsEmpty(V)) and (num>0) then begin
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
    V.Position:=num-1;
@@ -218,13 +218,13 @@ function  T_ascomwheel.GetFilter:integer;
 begin
  result:=0;
  {$ifdef mswindows}
- if Connected then begin
+  if (not VarIsEmpty(V)) then begin
    try
    result:=V.Position+1;
    except
     on E: Exception do msg('Get filter error: ' + E.Message,0);
    end;
- end;
+  end;
  {$endif}
 end;
 
@@ -253,12 +253,12 @@ var fnames: array of WideString;
     i: integer;
 {$endif}
 begin
+ value.Clear;
+ n:=0;
  {$ifdef mswindows}
- if Connected then begin
    try
    fnames:=V.Names;
    n:=Length(fnames);
-   value.Clear;
    value.Add(Filter0);
    for i:=0 to n-1 do begin
      value.Add(string(fnames[i]));
@@ -266,7 +266,6 @@ begin
    except
     on E: Exception do msg('List filter names error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 

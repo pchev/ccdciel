@@ -79,6 +79,8 @@ public
    procedure FocusOut; override;
 end;
 
+const waitpoll=500;
+      statusinterval=2000;
 
 implementation
 
@@ -96,7 +98,7 @@ begin
  FmsgRPos:=-1;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=1000;
+ StatusTimer.Interval:=statusinterval;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -243,9 +245,8 @@ begin
  result:=true;
  {$ifdef mswindows}
  try
- if Connected then begin
    {$ifdef debug_ascom}msg('Wait moving ... ');{$endif}
-   maxcount:=maxtime div 100;
+   maxcount:=maxtime div waitpoll;
    count:=0;
    while (V.IsMoving)and(count<maxcount) do begin
       {$ifdef debug_ascom}
@@ -253,13 +254,12 @@ begin
          msg('Wait moving, IsMoving = '+BoolToStr(V.IsMoving, True));
       end;
       {$endif}
-      sleep(100);
+      sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
    result:=(count<maxcount);
    {$ifdef debug_ascom}msg('Move completed '+BoolToStr(result, True));{$endif}
- end;
  except
   on E: Exception do begin
        {$ifdef debug_ascom}msg('Error IsMoving : '+ E.Message);{$endif}
@@ -293,7 +293,7 @@ var n: integer;
 {$endif}
 begin
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
    if FPositionRange<>NullRange then
      n:=max(min(p,round(FPositionRange.max)),round(FPositionRange.min))
@@ -314,7 +314,7 @@ function  T_ascomfocuser.GetPosition:integer;
 begin
  result:=0;
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
    result:=V.Position;
    {$ifdef debug_ascom}
@@ -334,7 +334,7 @@ function  T_ascomfocuser.GetPositionRange: TNumRange;
 begin
  result:=NullRange;
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    if FPositionRange=NullRange then begin
      try
      result.min:=0;
@@ -351,8 +351,7 @@ begin
    end
    else
      result:=FPositionRange;
- end
- else result:=NullRange;
+ end;
  {$endif}
 end;
 
@@ -360,7 +359,7 @@ function  T_ascomfocuser.GetRelPositionRange: TNumRange;
 begin
  result:=NullRange;
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    if FRelPositionRange=NullRange then begin
      try
      result.min:=0;
@@ -377,8 +376,7 @@ begin
    end
    else
      result:=FRelPositionRange;
- end
- else result:=NullRange;
+ end;
  {$endif}
 end;
 
@@ -388,7 +386,7 @@ var i: integer;
 {$endif}
 begin
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
    if FRelPositionRange<>NullRange then
      FRelIncr:=max(min(p,round(FRelPositionRange.max)),round(FRelPositionRange.min))
@@ -444,7 +442,7 @@ function  T_ascomfocuser.GethasAbsolutePositionReal: boolean;
 begin
  result:=False;
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
    result:=V.Absolute;
    {$ifdef debug_ascom}msg('Use AbsolutePosition: '+BoolToStr(result, True));{$endif}
@@ -459,9 +457,7 @@ function  T_ascomfocuser.GethasAbsolutePosition: boolean;
 begin
  result:=False;
  {$ifdef mswindows}
- if Connected then begin
-   result:=FhasAbsolutePosition;
- end;
+ result:=FhasAbsolutePosition;
  {$endif}
 end;
 
@@ -469,7 +465,7 @@ function  T_ascomfocuser.GethasRelativePositionReal: boolean;
 begin
  result:=False;
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
    result:=not V.Absolute;
    {$ifdef debug_ascom}msg('Use RelativePosition: '+BoolToStr(result, True));{$endif}
@@ -484,9 +480,7 @@ function  T_ascomfocuser.GethasRelativePosition: boolean;
 begin
  result:=False;
  {$ifdef mswindows}
- if Connected then begin
-   result:=FhasRelativePosition;
- end;
+ result:=FhasRelativePosition;
  {$endif}
 end;
 
@@ -508,7 +502,7 @@ var i: integer;
 begin
  result:=0;
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
    result:= V.Temperature;
    FhasTemperature:=true;

@@ -80,6 +80,8 @@ public
    function SetDate(utc,offset: double): boolean; override;
 end;
 
+const waitpoll=500;
+      statusinterval=2000;
 
 implementation
 
@@ -100,7 +102,7 @@ begin
  CanSetTracking:=false;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=2000;
+ StatusTimer.Interval:=statusinterval;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -233,7 +235,6 @@ end;
 procedure T_ascommount.SetPark(value:Boolean);
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
    if CanPark then begin
       if value then begin
@@ -247,7 +248,6 @@ begin
    except
     on E: Exception do msg('Park error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -255,14 +255,11 @@ function  T_ascommount.GetPark:Boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.AtPark;
    except
     result:=false;
    end;
- end
- else result:=false;
  {$endif}
 end;
 
@@ -270,14 +267,11 @@ function  T_ascommount.GetRA:double;
 begin
  result:=NullCoord;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.RightAscension;
    except
     result:=NullCoord;
    end;
- end
- else result:=NullCoord;
  {$endif}
 end;
 
@@ -285,14 +279,11 @@ function  T_ascommount.GetDec:double;
 begin
  result:=NullCoord;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.Declination;
    except
     result:=NullCoord;
    end;
- end
- else result:=NullCoord;
  {$endif}
 end;
 
@@ -303,7 +294,6 @@ var i: integer;
 begin
  result:=pierUnknown;
  {$ifdef mswindows}
- if Connected then begin
    try
    i:=V.SideOfPier;  // pascal enum may have different size
    case i of
@@ -314,8 +304,6 @@ begin
    except
     result:=pierUnknown;
    end;
- end
- else result:=pierUnknown;
  {$endif}
 end;
 
@@ -326,7 +314,6 @@ var i: Integer;
 begin
  result:=0;
 {$ifdef mswindows}
-if Connected then begin
   try
   i:=V.EquatorialSystem;
   case i of
@@ -339,8 +326,6 @@ if Connected then begin
   except
    result:=0;
   end;
-end
-else result:=0;
 {$endif}
 end;
 
@@ -348,14 +333,11 @@ function  T_ascommount.GetAperture:double;
 begin
  result:=-1;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.ApertureDiameter*1000;
    except
     result:=-1;
    end;
- end
- else result:=-1;
  {$endif}
 end;
 
@@ -363,14 +345,11 @@ function  T_ascommount.GetFocaleLength:double;
 begin
  result:=-1;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.FocalLength*1000;
    except
     result:=-1;
    end;
- end
- else result:=-1;
  {$endif}
 end;
 
@@ -378,8 +357,7 @@ function T_ascommount.SlewAsync(sra,sde: double):boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- result:=false;
- if Connected and CanSlew then begin
+ if CanSlew then begin
    try
    if CanSetTracking and (not V.tracking) then begin
      try
@@ -406,8 +384,7 @@ function T_ascommount.Slew(sra,sde: double):boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- result:=false;
- if Connected and CanSlew then begin
+ if CanSlew then begin
    try
    if CanSetTracking and (not V.tracking) then begin
      try
@@ -463,11 +440,11 @@ begin
  result:=true;
  {$ifdef mswindows}
  try
- if Connected and CanSlewAsync then begin
-   maxcount:=maxtime div 100;
+ if CanSlewAsync then begin
+   maxcount:=maxtime div waitpoll;
    count:=0;
    while (V.Slewing)and(count<maxcount) do begin
-      sleep(100);
+      sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
@@ -530,7 +507,7 @@ begin
  result:=false;
  {$ifdef mswindows}
  result:=false;
- if Connected and CanSync then begin
+ if CanSync then begin
    try
    if CanSetTracking and (not V.tracking) then begin
      msg(rsCannotSyncWh,0);
@@ -550,12 +527,10 @@ function T_ascommount.GetTracking:Boolean;
 begin
  result:=true;
  {$ifdef mswindows}
- if Connected then begin
    try
    result:=V.tracking;
    except
    end;
- end;
  {$endif}
 end;
 
@@ -563,8 +538,6 @@ function T_ascommount.Track:boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- result:=false;
- if Connected then begin
    try
    if CanSetTracking and (not V.tracking) then begin
      try
@@ -578,14 +551,13 @@ begin
    except
      on E: Exception do msg('Track error: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
 procedure T_ascommount.AbortMotion;
 begin
  {$ifdef mswindows}
- if Connected and CanSlew then begin
+ if CanSlew then begin
    try
    msg(rsStopTelescop);
    V.AbortSlew;
@@ -611,14 +583,12 @@ var buf:string;
 begin
   FIsEqmod:=false;
   {$ifdef mswindows}
-  if Connected then begin
     try
     buf:=V.CommandString(':MOUNTVER#');
     if length(buf)=8 then FIsEqmod:=true;
     except
      FIsEqmod:=false;
     end;
-  end
   {$endif}
 end;
 
@@ -629,7 +599,7 @@ var buf:string;
 begin
  result:=alUNSUPPORTED;
  {$ifdef mswindows}
- if Connected and IsEqmod then begin
+ if IsEqmod then begin
    try
    buf:=V.CommandString(':ALIGN_MODE#');
    if buf='1#' then result:=alADDPOINT
@@ -645,7 +615,7 @@ end;
 procedure T_ascommount.SetSyncMode(value:TEqmodAlign);
 begin
  {$ifdef mswindows}
- if Connected and IsEqmod and (value<>alUNSUPPORTED) then begin
+ if IsEqmod and (value<>alUNSUPPORTED) then begin
    try
    if value=alSTDSYNC then begin
      msg('align mode Std Sync');
@@ -666,7 +636,7 @@ function T_ascommount.ClearAlignment:boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected and IsEqmod then begin
+ if IsEqmod then begin
    try
    msg('clear alignment');
    V.CommandString(':ALIGN_CLEAR_POINTS#');
@@ -683,7 +653,7 @@ function T_ascommount.ClearDelta:boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected and IsEqmod then begin
+ if IsEqmod then begin
    try
    msg('clear delta sync');
    V.CommandString(':ALIGN_CLEAR_SYNC#');
@@ -699,7 +669,6 @@ function T_ascommount.GetSite(var long,lat,elev: double): boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
    long:=V.SiteLongitude;
    lat:=V.SiteLatitude;
@@ -708,7 +677,6 @@ begin
    except
      on E: Exception do msg('Cannot get site information: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -716,7 +684,6 @@ function T_ascommount.SetSite(long,lat,elev: double): boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
    V.SiteLongitude := long;
    V.SiteLatitude  := lat;
@@ -725,7 +692,6 @@ begin
    except
      on E: Exception do msg('Cannot set site information: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -733,7 +699,6 @@ function T_ascommount.GetDate(var utc,offset: double): boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
    utc:=VarToDateTime(V.UTCDate);
    offset:=ObsTimeZone; // No offset in ASCOM telescope interface
@@ -741,7 +706,6 @@ begin
    except
      on E: Exception do msg('Cannot get date: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 
@@ -749,14 +713,12 @@ function T_ascommount.SetDate(utc,offset: double): boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
    V.UTCDate:=VarFromDateTime(utc);
    result:=true;
    except
      on E: Exception do msg('Cannot set date: ' + E.Message,0);
    end;
- end;
  {$endif}
 end;
 end.

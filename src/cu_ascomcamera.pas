@@ -132,6 +132,7 @@ public
    procedure StopVideoRecord; override;
 end;
 
+const statusinterval=5000;
 
 implementation
 
@@ -161,11 +162,11 @@ begin
  FVerticalFlip:=false;
  ExposureTimer:=TTimer.Create(nil);
  ExposureTimer.Enabled:=false;
- ExposureTimer.Interval:=100;
+ ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=5000;
+ StatusTimer.Interval:=statusinterval;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -886,14 +887,14 @@ end;
 procedure T_ascomcamera.SetCooler(value:boolean);
 begin
 {$ifdef mswindows}
-if (V.CoolerOn<>value) then begin
   try
+  if (V.CoolerOn<>value) then begin
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
      V.CoolerOn:=value;
+  end;
   except
    on E: Exception do msg('Set cooler error: ' + E.Message,0);
   end;
-end;
 {$endif}
 end;
 

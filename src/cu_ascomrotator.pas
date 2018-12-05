@@ -59,6 +59,8 @@ public
    Procedure Halt; override;
 end;
 
+const waitpoll=500;
+      statusinterval=2000;
 
 implementation
 
@@ -69,7 +71,7 @@ begin
  FInterfaceVersion:=1;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
- StatusTimer.Interval:=1000;
+ StatusTimer.Interval:=statusinterval;
  StatusTimer.OnTimer:=@StatusTimerTimer;
 end;
 
@@ -183,16 +185,14 @@ begin
  result:=true;
  {$ifdef mswindows}
  try
- if Connected then begin
-   maxcount:=maxtime div 100;
+   maxcount:=maxtime div waitpoll;
    count:=0;
    while (V.IsMoving)and(count<maxcount) do begin
-      sleep(100);
+      sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
    result:=(count<maxcount);
- end;
  except
    result:=false;
  end;
@@ -202,8 +202,8 @@ end;
 procedure T_ascomrotator.SetAngle(p:double);
 begin
  {$ifdef mswindows}
- if Connected then begin
-   try
+ if not VarIsEmpty(V) then begin
+ try
    //msg('Rotator '+Fdevice+' move to internal '+FormatFloat(f1,p));
    V.MoveAbsolute(p);
    WaitRotatorMoving(30000);
@@ -219,8 +219,8 @@ function  T_ascomrotator.GetAngle:double;
 begin
  result:=0;
  {$ifdef mswindows}
- if Connected then begin
-   try
+ if not VarIsEmpty(V) then begin
+ try
    result:=V.Position;
    except
     on E: Exception do msg('Get position error: ' + E.Message,0);
@@ -233,32 +233,28 @@ function T_ascomrotator.GetDriverReverse:boolean;
 begin
  result:=false;
  {$ifdef mswindows}
- if Connected then begin
    try
    if V.CanReverse then result:=V.Reverse;
    except
     result:=false;
    end;
- end;
  {$endif}
 end;
 
 procedure T_ascomrotator.SetDriverReverse(value:boolean);
 begin
  {$ifdef mswindows}
- if Connected then begin
    try
    if V.CanReverse then V.Reverse:=value;
    except
    end;
- end;
  {$endif}
 end;
 
 Procedure T_ascomrotator.Halt;
 begin
  {$ifdef mswindows}
- if Connected then begin
+ if not VarIsEmpty(V) then begin
    try
     V.Halt;
    except
