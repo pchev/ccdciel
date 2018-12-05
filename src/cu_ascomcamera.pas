@@ -532,11 +532,6 @@ begin
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
-   try
-   SafeArrayDestroy(img);
-   except
-     on E: Exception do msg('Error releasing ImageArray memory: ' + E.Message,0);
-   end;
    {$ifdef debug_ascom}msg('display image');{$endif}
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
