@@ -27,7 +27,7 @@ interface
 
 uses cu_rotator, u_global,
     {$ifdef mswindows}
-    u_translation, indiapi, Variants, comobj,
+    u_translation, indiapi, Variants, comobj, math,
     {$endif}
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -268,6 +268,14 @@ procedure T_ascomrotator.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
 end;
+
+initialization
+{$ifdef mswindows}
+{$if defined(cpui386) or defined(cpux86_64)}
+// some Ascom driver raise this exceptions
+SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide,exOverflow, exUnderflow, exPrecision]);
+{$endif}
+{$endif}
 
 end.
 

@@ -27,9 +27,8 @@ interface
 
 uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_translation,
   {$ifdef mswindows}
-    Variants, comobj,
+    Variants, comobj, math,
   {$endif}
-  dnssend,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, ComCtrls;
 
@@ -880,6 +879,13 @@ begin
   end;
 end;
 
+initialization
+{$ifdef mswindows}
+{$if defined(cpui386) or defined(cpux86_64)}
+// some Ascom driver raise this exceptions
+SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide,exOverflow, exUnderflow, exPrecision]);
+{$endif}
+{$endif}
 
 end.
 

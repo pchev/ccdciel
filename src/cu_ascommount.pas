@@ -27,7 +27,7 @@ interface
 
 uses  cu_mount, u_global,  indiapi,
   {$ifdef mswindows}
-    u_translation, Variants, comobj, u_utils,
+    u_translation, Variants, comobj, u_utils, math,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils;
 
@@ -721,5 +721,14 @@ begin
    end;
  {$endif}
 end;
+
+initialization
+{$ifdef mswindows}
+{$if defined(cpui386) or defined(cpux86_64)}
+// some Ascom driver raise this exceptions
+SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide,exOverflow, exUnderflow, exPrecision]);
+{$endif}
+{$endif}
+
 end.
 

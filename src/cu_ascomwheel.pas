@@ -27,7 +27,7 @@ interface
 
 uses  cu_wheel, u_global, indiapi,
   {$ifdef mswindows}
-     u_translation, Variants, comobj,
+     u_translation, Variants, comobj, math,
   {$endif}
    ExtCtrls, Forms, Classes, SysUtils;
 
@@ -283,6 +283,14 @@ procedure T_ascomwheel.SetCamera(value: TObject);
 begin
  Fcameraobj:=value;
 end;
+
+initialization
+{$ifdef mswindows}
+{$if defined(cpui386) or defined(cpux86_64)}
+// some Ascom driver raise this exceptions
+SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide,exOverflow, exUnderflow, exPrecision]);
+{$endif}
+{$endif}
 
 end.
 
