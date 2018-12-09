@@ -433,6 +433,8 @@ else begin  // normal capture
   Ffits.LoadStream;
   {$ifdef camera_debug}msg('write headers');{$endif}
   WriteHeaders;
+  {$ifdef camera_debug}msg('apply correction');{$endif}
+  FFits.ApplyDark;
   FFits.ApplyBPM;
   {$ifdef camera_debug}msg('display image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);

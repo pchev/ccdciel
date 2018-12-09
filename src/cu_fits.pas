@@ -144,6 +144,9 @@ type
     p_ViewHeaders: TPanel;
     b_ViewHeaders: TButton;
     FStarList: TStarList;
+    FDark: TFits;
+    FDarkOn: boolean;
+    FDarkProcess, FBPMProcess: boolean;
     Procedure ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
     Procedure ViewHeadersBtnClose(Sender: TObject);
     procedure SetStream(value:TMemoryStream);
@@ -170,6 +173,8 @@ type
      procedure LoadFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure ApplyBPM;
+     procedure ApplyDark;
+     procedure FreeDark;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
      procedure Shift(dx,dy: double);
@@ -207,7 +212,11 @@ type
      property Overflow: double read FOverflow write FOverflow;
      property Underflow: double read FUnderflow write FUnderflow;
      property hasBPM: boolean read GetHasBPM;
+     property BPMProcess: boolean read FBPMProcess;
      property StarList: TStarList read FStarList;
+     property DarkProcess: boolean read FDarkProcess;
+     property DarkOn: boolean read FDarkOn write FDarkOn;
+     property DarkFrame: TFits read FDark write FDark;
   end;
 
 implementation
@@ -552,6 +561,9 @@ Fheight:=0;
 Fwidth:=0;
 ImgDmin:=0;
 FBPMcount:=0;
+FBPMProcess:=false;
+FDarkProcess:=false;
+FDarkOn:=false;
 ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FStreamValid:=false;
@@ -582,6 +594,7 @@ FHeader.Free;
 FStream.Free;
 FIntfImg.Free;
 emptybmp.Free;
+FreeDark;
 inherited destroy;
 except
 //writeln('error destroy '+name);
@@ -665,6 +678,7 @@ if FileExistsUTF8(fn) then begin
  try
    mem.LoadFromFile(fn);
    SetBPM(bpm,0,0,0,0);
+   FDarkOn:=false;
    SetStream(mem);
    LoadStream;
  finally
@@ -807,6 +821,8 @@ var i,ii,j,npix,k,km,kk : integer;
     x8,b8:byte;
 begin
 if FFitsInfo.naxis1=0 then exit;
+FDarkProcess:=false;
+FBPMProcess:=false;
 dmin:=1.0E100;
 dmax:=-1.0E100;
 sum:=0; sum2:=0; ni:=0;
@@ -1222,6 +1238,21 @@ FimageMax:=Fdmax;
 if FimageMin<0 then FimageMin:=0;
 end;
 
+procedure TFits.FreeDark;
+begin
+  if FDark<>nil then FreeAndNil(FDark);
+end;
+
+procedure TFits.ApplyDark;
+begin
+if (FDarkOn)and(FDark<>nil)and(SameFormat(FDark))
+   then begin
+     Math(FDark,moSub);
+     FDarkProcess:=true;
+     FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark substracted','');
+   end;
+end;
+
 procedure TFits.ApplyBPM;
 var i,x,y,x0,y0: integer;
 begin
@@ -1244,6 +1275,8 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
       end;
     end;
   end;
+  FBPMProcess:=true;
+  FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Corrected with Bap Pixel Map','');
 end;
 end;
 
@@ -2074,7 +2107,7 @@ end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
 var i,j,k,ii: integer;
-    x,y,dmin,dmax : double;
+    x,y,dmin,dmax,minoffset,maxoffset : double;
     ni,sum,sum2 : extended;
 
 begin
@@ -2083,9 +2116,12 @@ begin
    LoadStream;
  end
  else begin  // do operation
+
     dmin:=1.0E100;
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
+    minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
+    maxoffset:=operand.FFitsInfo.dmax-FFitsInfo.dmax;
     for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
       for i:=0 to FFitsInfo.naxis2-1 do begin
        ii:=FFitsInfo.naxis2-1-i;
@@ -2093,38 +2129,39 @@ begin
          case FFitsInfo.bitpix of
           -64 : begin
                 x:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[k,ii,j];
-                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imar64[k,ii,j];
+                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imar64[k,ii,j];
                 end;
           -32 : begin
                 x:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[k,ii,j];
-                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imar32[k,ii,j];
+                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imar32[k,ii,j];
                 end;
             8 : begin
                 x:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[k,ii,j];
-                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imai8[k,ii,j];
+                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai8[k,ii,j];
                 end;
            16 : begin
                 x:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[k,ii,j];
-                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imai16[k,ii,j];
+                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai16[k,ii,j];
                 end;
            32 : begin
                 x:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[k,ii,j];
-                y:=FFitsInfo.bzero+FFitsInfo.bscale*operand.imai32[k,ii,j];
+                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai32[k,ii,j];
                 end;
          end;
          case MathOperator of
            moAdd: x:=x+y;
-           moSub: x:=x-y;
+           moSub: x:=x-y+minoffset;
            moMean: x:=(x+y)/2;
            moMult: x:=x*y;
            moDiv : x:=x/y;
          end;
+         x:=(x-FFitsInfo.bzero)/FFitsInfo.bscale;
          case FFitsInfo.bitpix of
-          -64 : imar64[k,ii,j] := x/FFitsInfo.bscale - FFitsInfo.bzero;
-          -32 : imar32[k,ii,j] := x/FFitsInfo.bscale - FFitsInfo.bzero;
-            8 : imai8[k,ii,j] := max(min(round(x/FFitsInfo.bscale - FFitsInfo.bzero),MAXBYTE),0);
-           16 : imai16[k,ii,j] := max(min(round(x/FFitsInfo.bscale - FFitsInfo.bzero),maxSmallint),-maxSmallint);
-           32 : imai32[k,ii,j] := max(min(round(x/FFitsInfo.bscale - FFitsInfo.bzero),maxLongint),-maxLongint);
+          -64 : imar64[k,ii,j] := x;
+          -32 : imar32[k,ii,j] := x;
+            8 : begin x:=max(min(round(x),MAXBYTE),0); imai8[k,ii,j] := round(x); end;
+           16 : begin x:=max(min(round(x),maxSmallint),-maxSmallint-1);  imai16[k,ii,j] :=round(x); end;
+           32 : begin x:= max(min(round(x),maxLongint),-maxLongint-1); imai32[k,ii,j] := round(x); end;
          end;
          dmin:=min(x,dmin);
          dmax:=max(x,dmax);
@@ -2135,8 +2172,10 @@ begin
       end;
     end;
     FStreamValid:=false;
-    Fmean:=sum/ni;
-    Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
+    dmin:=FFitsInfo.bzero+FFitsInfo.bscale*dmin;
+    dmax:=FFitsInfo.bzero+FFitsInfo.bscale*dmax;
+    Fmean:=FFitsInfo.bzero+FFitsInfo.bscale*(sum/ni);
+    Fsigma:=FFitsInfo.bscale*(sqrt((sum2/ni)-((sum/ni)*(sum/ni))));
     if dmin>=dmax then dmax:=dmin+1;
     FFitsInfo.dmin:=dmin;
     FFitsInfo.dmax:=dmax;

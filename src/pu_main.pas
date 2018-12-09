@@ -69,6 +69,12 @@ type
     MenuFocuserCalibration: TMenuItem;
     MenuBPMDark: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuDarkApply: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuDarkCamera: TMenuItem;
+    MenuDarkFile: TMenuItem;
+    MenuDarkClear: TMenuItem;
+    MenuItemDark: TMenuItem;
     MenuStatus: TMenuItem;
     MenuUsergroup: TMenuItem;
     MenuResolveDSO: TMenuItem;
@@ -266,6 +272,10 @@ type
     procedure MenuClearBPMClick(Sender: TObject);
     procedure MenuClearRefClick(Sender: TObject);
     procedure MenuConnectClick(Sender: TObject);
+    procedure MenuDarkApplyClick(Sender: TObject);
+    procedure MenuDarkCameraClick(Sender: TObject);
+    procedure MenuDarkClearClick(Sender: TObject);
+    procedure MenuDarkFileClick(Sender: TObject);
     procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
     procedure MenuFocusaidClick(Sender: TObject);
@@ -1049,6 +1059,7 @@ begin
      configfile:='ccdciel_'+profile+'.conf';
   FOpenSetup:=not FileExistsUTF8(slash(ConfigDir)+configfile);
   OpenConfig(configfile);
+  ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
 
   LogFileOpen:=false;
   for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
@@ -1117,6 +1128,10 @@ begin
 
 
   fits:=TFits.Create(self);
+  if FileExistsUTF8(ConfigDarkFile) then begin
+     fits.DarkFrame:=TFits.Create(nil);
+     fits.DarkFrame.LoadFromFile(ConfigDarkFile);
+  end;
 
   aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
   case aInt of
@@ -2252,9 +2267,9 @@ f_pause.Text:=rsCoverTheCame+crlf+rsClickContinu;
 if f_pause.Wait then begin
   bin:=f_preview.Bin;
   camera.ResetFrame;
-  Camera.FrameType:=DARK;
   fits.SetBPM(bpm,0,0,0,0);
-  if f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
+  fits.DarkOn:=false;
+  if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK) then begin
     CreateBPM(fits);
   end
   else
@@ -2269,6 +2284,7 @@ begin
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
     fits.SetBPM(bpm,0,0,0,0);
+    fits.DarkOn:=false;
     fits.LoadFromFile(fn);
     if fits.HeaderInfo.valid then begin
       DrawHistogram(true);
@@ -2318,6 +2334,7 @@ end;
 procedure Tf_main.MenuApplyBPMClick(Sender: TObject);
 var hasBPM:boolean;
 begin
+ if fits.BPMProcess then exit; // already applied
  hasBPM:=fits.hasBPM;
  if not hasBPM then
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
@@ -2325,6 +2342,70 @@ begin
  DrawImage;
  if not hasBPM then
     fits.SetBPM(bpm,0,0,0,0);
+end;
+
+procedure Tf_main.MenuDarkApplyClick(Sender: TObject);
+begin
+ if fits.DarkProcess then exit; // already applied
+ try
+ fits.DarkOn:=true;
+ fits.ApplyDark;
+ DrawHistogram(true);
+ DrawImage;
+ finally
+ fits.DarkOn:=false;
+ end;
+end;
+
+procedure Tf_main.MenuDarkCameraClick(Sender: TObject);
+var bin: integer;
+begin
+ f_pause.Caption:='Dark frame';
+ f_pause.Text:=rsCoverTheCame+crlf+rsClickContinu;
+ if f_pause.Wait then begin
+   bin:=f_preview.Bin;
+   camera.ResetFrame;
+   fits.SetBPM(bpm,0,0,0,0);
+   fits.DarkOn:=false;
+   if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK) then begin
+     fits.SaveToFile(ConfigDarkFile);
+     if fits.DarkFrame=nil then fits.DarkFrame:=TFits.Create(nil);
+     fits.DarkFrame.LoadFromFile(ConfigDarkFile);
+   end
+   else
+     NewMessage(rsExposureFail,1);
+ end;
+end;
+
+procedure Tf_main.MenuDarkClearClick(Sender: TObject);
+begin
+  fits.FreeDark;
+  DeleteFile(ConfigDarkFile);
+end;
+
+procedure Tf_main.MenuDarkFileClick(Sender: TObject);
+var fn : string;
+begin
+  OpenDialog1.Title:=rsOpenDarkFile;
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    fits.SetBPM(bpm,0,0,0,0);
+    fits.DarkOn:=false;
+    if fits.DarkFrame=nil then fits.DarkFrame:=TFits.Create(nil);
+    fits.DarkFrame.LoadFromFile(fn);
+    if fits.DarkFrame.HeaderInfo.valid then begin
+      fits.DarkFrame.SaveToFile(ConfigDarkFile);
+    end
+    else begin
+      fits.FreeDark;
+      NewMessage(Format(rsInvalidOrUns, [fn]),1);
+    end;
+  end;
+end;
+
+procedure Tf_main.MenuConnectClick(Sender: TObject);
+begin
+  f_devicesconnection.BtnConnect.Click;
 end;
 
 procedure Tf_main.MenuCaptureStartClick(Sender: TObject);
@@ -3747,6 +3828,8 @@ begin
    wait(1);
    // use bad pixel map
    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+   // use dark
+   fits.DarkOn:=true;
    // average hfd for nsum exposures
    for j:=1 to nsum do begin
      if not f_preview.ControlExposure(exp,bin,bin) then begin
@@ -3846,6 +3929,8 @@ begin
  bin:=AutofocusBinning;
  // use bad pixel map
  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+ // use dark
+ fits.DarkOn:=true;
  if (not f_starprofile.FindStar) then begin
    if not f_preview.ControlExposure(f_preview.Exposure,bin,bin) then begin
       NewMessage(rsExposureFail,1);
@@ -3912,6 +3997,7 @@ begin
  finally
  // reset camera
  fits.SetBPM(bpm,0,0,0,0);
+ fits.DarkOn:=false;
  learningvcurve:=false;
  camera.ResetFrame;
  f_preview.StackPreview.Checked:=false;
@@ -4299,6 +4385,14 @@ begin
       loadopt:=FileExistsUTF8(slash(ConfigDir)+configfile);
       OpenConfig(configfile);
       f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);
+      ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
+      if FileExistsUTF8(ConfigDarkFile) then begin
+        if fits.DarkFrame=nil then fits.DarkFrame:=TFits.Create(nil);
+        fits.DarkFrame.LoadFromFile(ConfigDarkFile);
+      end
+      else begin
+        fits.FreeDark;
+      end;
     end;
     config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
@@ -5325,6 +5419,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
+  // disable dark
+  fits.DarkOn:=false;
   f_preview.StackPreview.Checked:=false;
   camera.AddFrames:=false;
   // start exposure for time e
@@ -6205,11 +6301,6 @@ begin
   ClearRefImage(Sender);
 end;
 
-procedure Tf_main.MenuConnectClick(Sender: TObject);
-begin
-  f_devicesconnection.BtnConnect.Click;
-end;
-
 procedure Tf_main.MenuFilterClick(Sender: TObject);
 begin
   wheel.Filter:=TMenuItem(Sender).Tag;
@@ -6760,6 +6851,7 @@ begin
    f_preview.Loop:=false;
    camera.AbortExposure;
    fits.SetBPM(bpm,0,0,0,0);
+   fits.DarkOn:=false;
    camera.ResetFrame;
    f_visu.Zoom:=SaveFocusZoom;
    ImgZoom:=f_visu.Zoom;
@@ -7155,6 +7247,7 @@ begin
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   camera.SetBinning(AutofocusBinning,AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  fits.DarkOn:=true;
   if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning) then begin
     NewMessage(rsExposureFail,1);
     f_starprofile.ChkAutofocusDown(false);
@@ -7298,6 +7391,7 @@ begin
    f_preview.Loop:=false;
    if (not f_capture.Running) and (not f_starprofile.AutofocusResult) then camera.AbortExposure;
    fits.SetBPM(bpm,0,0,0,0);
+   fits.DarkOn:=false;
    f_preview.Binning.Text:=SaveAutofocusBinning;
    camera.SetBinning(SaveAutofocusBX,SaveAutofocusBY);
    camera.SetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);

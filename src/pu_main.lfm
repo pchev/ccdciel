@@ -146,13 +146,13 @@ object f_main: Tf_main
       Height = 347
       Top = 32
       Width = 188
-      ActivePage = PageCapture
+      ActivePage = PageConnect
       Align = alClient
       Images = ImageListDay
       MultiLine = True
       ParentFont = False
       ShowTabs = False
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
@@ -162,7 +162,7 @@ object f_main: Tf_main
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 314
+          Height = 343
           Top = 0
           Width = 178
           Align = alClient
@@ -376,6 +376,28 @@ object f_main: Tf_main
         object MenuClearBPM: TMenuItem
           Caption = 'Clear bad pixel map'
           OnClick = MenuClearBPMClick
+        end
+      end
+      object MenuItemDark: TMenuItem
+        Caption = 'Dark frame'
+        object MenuDarkApply: TMenuItem
+          Caption = 'Apply to current image'
+          OnClick = MenuDarkApplyClick
+        end
+        object MenuItem13: TMenuItem
+          Caption = '-'
+        end
+        object MenuDarkCamera: TMenuItem
+          Caption = 'Create from camera'
+          OnClick = MenuDarkCameraClick
+        end
+        object MenuDarkFile: TMenuItem
+          Caption = 'Load dark file'
+          OnClick = MenuDarkFileClick
+        end
+        object MenuDarkClear: TMenuItem
+          Caption = 'Clear Dark frame'
+          OnClick = MenuDarkClearClick
         end
       end
       object MenuFocuserCalibration: TMenuItem
