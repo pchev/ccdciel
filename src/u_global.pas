@@ -259,6 +259,7 @@ const
   ScriptTxt='Script';
   SubDirCount=8;
   FileNameCount=7;
+  MinFrameSize=5;
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';

@@ -1111,14 +1111,21 @@ begin
 end;
 
 procedure T_indicamera.SetFrame(x,y,width,height: integer);
+var Xmax,Ymax,w,h,bx,by: integer;
 begin
   if UseMainSensor and (CCDframe<>nil) then begin
+     Xmax:=round(CCDframeWidth.max);
+     Ymax:=round(CCDframeHeight.max);
+     // check range
+     if width<MinFrameSize then width:=MinFrameSize;
+     if height<MinFrameSize then height:=MinFrameSize;
+     if x>(Xmax-MinFrameSize) then x:=Xmax-MinFrameSize;
+     if y>(Ymax-MinFrameSize) then y:=Ymax-MinFrameSize;
+     if (x+width)>Xmax then width:=Xmax-x;
+     if (y+height)>Ymax then height:=Ymax-y;
      // force even values
      x:=round(x+0.5);
      y:=round(y+0.5);
-     // check range
-     if (x+width)>CCDframeWidth.max then width:=round(CCDframeWidth.max-x);
-     if (y+height)>CCDframeHeight.max then height:=round(CCDframeHeight.max-y);
      CCDframeX.value:=x;
      CCDframeY.value:=y;
      CCDframeWidth.value:=width;
