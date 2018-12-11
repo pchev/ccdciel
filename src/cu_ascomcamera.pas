@@ -361,12 +361,14 @@ end;
 
 procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
+type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy: double;
     dateobs,ccdname,frname:string;
     img: PSafeArray;
+    pimgdata: pointer;
     Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
     p2:array[0..1] of integer;
     p3:array[0..2] of integer;
@@ -490,6 +492,12 @@ begin
    hdrmem.Free;
    hdr.Free;
    {$ifdef debug_ascom}msg('write image');{$endif}
+   i:=SafeArrayAccessData(img,pimgdata);
+   if i<>S_OK then begin
+     msg('Error accessing ImageArray data: ' + hexStr(i,10));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
    if Dims=2 then begin
      for i:=LBoundY to ys-1 do begin
         if FASCOMFlipImage then
@@ -498,7 +506,7 @@ begin
            p2[1]:=i;
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
-          SafeArrayGetElement(img,p2,lii);
+          lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
           if lii>0 then
              ii:=lii-32768
           else
@@ -517,7 +525,7 @@ begin
            p3[1]:=i;
         for j:=LBoundX to xs-1 do begin
           p3[0]:=j;
-          SafeArrayGetElement(img,p3,lii);
+          lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
           if lii>0 then
              ii:=lii-32768
           else
@@ -532,15 +540,12 @@ begin
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
-   try
-   SafeArrayDestroy(img);
-   except
-     on E: Exception do msg('Error releasing ImageArray memory: ' + E.Message,0);
-   end;
    {$ifdef debug_ascom}msg('display image');{$endif}
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;
+   SafeArrayUnaccessData(img);
+   SafeArrayDestroyData(img);
    finally
    StatusTimer.Enabled:=true;
    end;
@@ -549,7 +554,6 @@ begin
     on E: Exception do msg('Error reading image: ' + E.Message,0);
  end;
  {$endif}
- // An exception in fpc_variant_clear can occur here when debugging the program, this not affect normal operation.
 end;
 
 Procedure T_ascomcamera.SetBinning(sbinX,sbinY: integer);
