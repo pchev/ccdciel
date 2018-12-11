@@ -1372,7 +1372,8 @@ begin
   MenuShowINDIlog.Visible:=(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
-  NewMessage('CCDciel '+ccdciel_version+'-'+RevisionStr+blank+rsInitialized,1);
+  NewMessage(SystemInformation,9);
+  NewMessage('CCDciel '+ccdciel_version+blank+rsInitialized,1);
   NewMessage(Format(rsUsingConfigu, [configfile]), 3);
 end;
 

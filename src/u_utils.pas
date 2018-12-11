@@ -26,7 +26,7 @@ interface
 
 uses u_global,
      {$ifdef mswindows}
-       Windows, registry,
+       Windows, registry, ActiveX, comobj, variants,
      {$endif}
      {$ifdef unix}
        unix,baseunix,
@@ -130,8 +130,7 @@ procedure Sort(var list: array of double);
 function SMedian(list: array of double): double;
 procedure SortFilterListInc(var list: TStringList);
 procedure SortFilterListDec(var list: TStringList);
-
-
+function SystemInformation: string;
 
 implementation
 
@@ -2496,6 +2495,48 @@ begin
   // test interval
   if t<begint then result:=-1;
   if t>endt   then result:=1;
+end;
+
+{$ifdef mswindows}
+function  GetWin32_Info:string;
+var
+  objWMIService : OLEVariant;
+  colItems      : OLEVariant;
+  colItem       : OLEVariant;
+  oEnum         : IEnumvariant;
+  iValue        : LongWord;
+
+  function GetWMIObject(const objectName: String): IDispatch;
+  var
+    chEaten: PULONG;
+    BindCtx: IBindCtx;
+    Moniker: IMoniker;
+  begin
+    OleCheck(CreateBindCtx(0, bindCtx));
+    OleCheck(MkParseDisplayName(BindCtx, StringToOleStr(objectName), chEaten, Moniker));
+    OleCheck(Moniker.BindToObject(BindCtx, nil, IDispatch, Result));
+  end;
+
+begin
+  objWMIService := GetWMIObject('winmgmts:\\localhost\root\cimv2');
+  colItems      := objWMIService.ExecQuery('SELECT * FROM Win32_OperatingSystem','WQL',0);
+  oEnum         := IUnknown(colItems._NewEnum) as IEnumVariant;
+  if oEnum.Next(1, colItem, iValue) = 0 then begin
+  Result:=colItem.Caption+' '+colItem.Version+' '+colItem.OSArchitecture;
+  end;
+end;
+{$endif}
+
+function SystemInformation: string;
+begin
+result:='';
+{$ifdef mswindows}
+try
+result:=GetWin32_Info;
+except
+result:='Windows '+inttostr(Win32Platform)+' '+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+'.'+inttostr(Win32BuildNumber);
+end;
+{$endif}
 end;
 
 end.
