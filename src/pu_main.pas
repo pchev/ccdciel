@@ -5497,10 +5497,14 @@ begin
   // draw image
   DrawHistogram(true);
   DrawImage;
+  except
+    on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+  end;
+  try
   // process autofocus frame
   DoAutoFocus;
   except
-    on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+    on E: Exception do NewMessage('CameraNewImage, Autofocus :'+ E.Message,1);
   end;
   // process capture
   if Capture then begin
