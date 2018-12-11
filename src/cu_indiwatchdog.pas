@@ -258,6 +258,9 @@ end;
 procedure T_indiwatchdog.NewProperty(indiProp: IndiProperty);
 var propname: string;
     proptype: INDI_TYPE;
+    TxtProp: ITextVectorProperty;
+    Txt: IText;
+    buf: string;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
@@ -267,6 +270,19 @@ begin
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      if (configload=nil)or(configsave=nil) then configprop:=nil;
+  end
+  else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
+     buf:='';
+     TxtProp:=indiProp.getText;
+     if TxtProp<>nil then begin
+       Txt:=IUFindText(TxtProp,'DRIVER_EXEC');
+       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+       Txt:=IUFindText(TxtProp,'DRIVER_VERSION');
+       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+       Txt:=IUFindText(TxtProp,'DRIVER_INTERFACE');
+       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text;
+       msg(buf,9);
+     end;
   end
   else if (proptype=INDI_NUMBER)and(heartbeat=nil)and(propname='WATCHDOG_HEARTBEAT') then begin
      heartbeat:=indiProp.getNumber;

@@ -192,6 +192,11 @@ begin
  if V.connected then begin
     FStatus := devConnected;
     try
+    msg('Driver version: '+V.DriverVersion,9);
+    except
+      msg('Error: unknown driver version',9);
+    end;
+    try
     FCameraXSize:=V.CameraXSize;
     except
      on E: Exception do begin

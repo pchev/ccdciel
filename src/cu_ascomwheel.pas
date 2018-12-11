@@ -90,6 +90,11 @@ begin
   V:=CreateOleObject(Fdevice);
   V.connected:=true;
   if V.connected then begin
+     try
+     msg('Driver version: '+V.DriverVersion,9);
+     except
+       msg('Error: unknown driver version',9);
+     end;
      msg(rsConnected3);
      GetAscomFilterNames(FFilterNames,FFilterNum);
      FStatus := devConnected;

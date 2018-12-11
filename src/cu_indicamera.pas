@@ -484,6 +484,9 @@ end;
 procedure T_indicamera.NewProperty(indiProp: IndiProperty);
 var propname: string;
     proptype: INDI_TYPE;
+    TxtProp: ITextVectorProperty;
+    Txt: IText;
+    buf: string;
     i: integer;
 begin
   propname:=indiProp.getName;
@@ -494,6 +497,19 @@ begin
   end
   else if (proptype=INDI_TEXT)and(CCDport=nil)and(propname='DEVICE_PORT') then begin
      CCDport:=indiProp.getText;
+  end
+  else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
+     buf:='';
+     TxtProp:=indiProp.getText;
+     if TxtProp<>nil then begin
+       Txt:=IUFindText(TxtProp,'DRIVER_EXEC');
+       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+       Txt:=IUFindText(TxtProp,'DRIVER_VERSION');
+       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+       Txt:=IUFindText(TxtProp,'DRIVER_INTERFACE');
+       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text;
+       msg(buf,9);
+     end;
   end
   else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;

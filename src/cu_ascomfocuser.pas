@@ -138,6 +138,11 @@ begin
   else
     V.Connected:=true;
   if Connected then begin
+     try
+     msg('Driver version: '+V.DriverVersion,9);
+     except
+       msg('Error: unknown driver version',9);
+     end;
      GetTemperature;
      FhasAbsolutePosition:=GethasAbsolutePositionReal;
      FhasRelativePosition:=GethasRelativePositionReal;
