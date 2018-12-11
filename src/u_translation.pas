@@ -943,6 +943,7 @@ resourcestring
   rsReadCCD = 'Read CCD';
   rsWaitStart = 'Wait start';
   rsIdle = 'Idle';
+  rsPleaseRunThe2 = 'Please run the Focuser Calibration procedure first';
 
 
 

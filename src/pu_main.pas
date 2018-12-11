@@ -6977,7 +6977,12 @@ begin
    f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
- if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)) then begin
+ if (AutofocusMode=afVcurve) and(AutofocusVcNum<=0) then begin
+   NewMessage(rsPleaseRunThe2, 1);
+   f_starprofile.ChkAutofocusDown(false);
+   exit;
+ end;
+ if (AutofocusMode=afVcurve) and(AutofocusVcDir<>AutofocusMoveDir) then begin
    NewMessage(rsPleaseRunThe,1);
    f_starprofile.ChkAutofocusDown(false);
    exit;
@@ -7228,18 +7233,23 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  if (AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
-    NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);
-    f_starprofile.ChkAutofocusDown(false);
-    exit;
-  end;
   if (f_capture.Running and (not autofocusing)) then begin
     NewMessage(rsCannotStartA3,1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  if (AutofocusMode=afVcurve) and((AutofocusVcDir<>AutofocusMoveDir)or(AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
+  if (AutofocusMode=afVcurve) and((AutofocusVcNum<=0)or(AutofocusVcpiL<0)or(AutofocusVcpiR<0)) then begin
+    NewMessage(rsPleaseRunThe2, 1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if (AutofocusMode=afVcurve) and(AutofocusVcDir<>AutofocusMoveDir) then begin
     NewMessage(rsPleaseRunThe,1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if (AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
+    NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
