@@ -1376,6 +1376,9 @@ begin
   {$ifdef mswindows}
   NewMessage(AscomVersion,9);
   {$endif}
+  {$ifdef unix}
+  NewMessage(IndiVersion,9);
+  {$endif}
   NewMessage('CCDciel '+ccdciel_version+blank+rsInitialized,1);
   NewMessage(Format(rsUsingConfigu, [configfile]), 3);
 end;

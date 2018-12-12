@@ -132,6 +132,8 @@ procedure SortFilterListInc(var list: TStringList);
 procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
 function AscomVersion: string;
+function IndiVersion: string;
+
 
 implementation
 
@@ -2648,6 +2650,25 @@ v:=Unassigned;
 except
 end;
 {$endif}
+end;
+
+function IndiVersion: string;
+var r: Tstringlist;
+    i: integer;
+begin
+result:='';
+try
+r:=Tstringlist.Create;
+ExecProcess('indiserver -version',r);  // add invalid option to be sure in the future the server will not start even without parameters
+for i:=0 to r.count-1 do begin
+  if copy(r[i],1,13)='INDI Library:' then
+    result:=result+'Local '+r[i];
+  if copy(r[i],1,5)='Code ' then
+    result:=result+', '+r[i];
+end;
+r.free;
+except
+end;
 end;
 
 end.
