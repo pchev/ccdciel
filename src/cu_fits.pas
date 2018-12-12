@@ -2063,7 +2063,7 @@ end;
 
 function TFits.SameFormat(f:TFits): boolean;
 begin
- result := f.FFitsInfo.valid and
+ result := (f<>nil) and f.FFitsInfo.valid and
            (f.FFitsInfo.bitpix = FFitsInfo.bitpix)  and
            (f.FFitsInfo.naxis  = FFitsInfo.naxis )  and
            (f.FFitsInfo.naxis1 = FFitsInfo.naxis1 ) and

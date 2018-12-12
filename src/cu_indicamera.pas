@@ -1127,7 +1127,7 @@ begin
 end;
 
 procedure T_indicamera.SetFrame(x,y,width,height: integer);
-var Xmax,Ymax,w,h,bx,by: integer;
+var Xmax,Ymax: integer;
 begin
   if UseMainSensor and (CCDframe<>nil) then begin
      Xmax:=round(CCDframeWidth.max);

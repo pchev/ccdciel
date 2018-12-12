@@ -59,7 +59,7 @@ T_camera = class(TComponent)
     FFilterNames: TStringList;
     FObjectName: string;
     Fdevice: string;
-    FFits,FStackDark: TFits;
+    FFits: TFits;
     FStackCount: integer;
     FStackAlign: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
@@ -162,7 +162,6 @@ T_camera = class(TComponent)
     procedure StopVideoPreview; virtual; abstract;
     procedure StartVideoRecord(mode:TVideoRecordMode); virtual; abstract;
     procedure StopVideoRecord; virtual; abstract;
-    property StackDark: TFits read FStackDark write FStackDark;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property Wheel: T_wheel read Fwheel write Fwheel;
@@ -280,7 +279,6 @@ begin
   FVideoRates:=TStringList.Create;
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
-  FStackDark:=TFits.Create(nil);
   FStackCount:=0;
   FISOList:=TStringList.Create;
   FGainMin:=0;
@@ -296,7 +294,6 @@ begin
   FVideoStream.Free;
   FVideoSizes.Free;
   FVideoRates.Free;
-  FStackDark.Free;
   FISOList.Free;
   inherited Destroy;
 end;
@@ -373,8 +370,8 @@ if FAddFrames then begin  // stack preview frames
   if f.HeaderInfo.bitpix=8 then
      f.Bitpix8to16;
   // substract dark if loaded and compatible
-  if f.SameFormat(FStackDark) then
-     f.Math(FStackDark,moSub);
+  if f.SameFormat(FFits.DarkFrame) then
+     f.Math(FFits.DarkFrame,moSub);
   // check frame is compatible
   if FFits.SameFormat(f) then begin
      if FStackAlign then begin

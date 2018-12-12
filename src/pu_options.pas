@@ -168,8 +168,6 @@ type
     Label98: TLabel;
     Label99: TLabel;
     StackShow: TCheckBox;
-    StackUseDark: TCheckBox;
-    StackDarkFile: TFileNameEdit;
     GroupBox16: TGroupBox;
     GroupBox17: TGroupBox;
     Label81: TLabel;
@@ -498,7 +496,6 @@ begin
   Label62.Caption := rsBadPixelThre;
   Label63.Caption := rsSigma;
   StackGroup.Caption := rsPreviewStack;
-  StackUseDark.Caption := rsSubstractADr;
   StackShow.Caption := rsShowPreviewS;
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;

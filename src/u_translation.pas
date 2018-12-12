@@ -471,7 +471,6 @@ resourcestring
   rsBadPixelThre = 'Bad pixel threshold';
   rsSigma = 'sigma';
   rsPreviewStack = 'Preview stacking';
-  rsSubstractADr = 'Substract a drak frame';
   rsShowPreviewS = 'Show preview stack option';
   rsClippingIndi = 'Clipping indicator';
   rsShadowADU = 'Shadow ADU';

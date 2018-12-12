@@ -2483,12 +2483,6 @@ begin
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
   f_preview.StackPreview.Visible:=config.GetValue('/PreviewStack/StackShow',false);
-  if config.GetValue('/PreviewStack/StackUseDark',false) and f_preview.StackPreview.Visible then begin
-    camera.StackDark.LoadFromFile(config.GetValue('/PreviewStack/StackDarkFile',''));
-  end
-  else begin
-    camera.StackDark.ClearImage;
-  end;
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
   Starwindow:=config.GetValue('/StarAnalysis/Window',80);
@@ -4534,8 +4528,6 @@ begin
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
-   f_option.StackDarkFile.FileName:=config.GetValue('/PreviewStack/StackDarkFile','');
-   f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
@@ -4770,8 +4762,6 @@ begin
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
-     config.SetValue('/PreviewStack/StackDarkFile',f_option.StackDarkFile.FileName);
-     config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
