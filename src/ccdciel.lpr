@@ -28,6 +28,9 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
+  {$ifdef mswindows}
+  windows,
+  {$endif}
   Forms, pascalscript, tachartlazaruspkg, sysutils, pu_main,
   fu_devicesconnection, fu_preview, fu_msg, u_utils, fu_visu, cu_indimount,
   fu_capture, pu_devicesetup, cu_ascomfocuser, cu_focuser, u_global,
@@ -45,6 +48,13 @@ uses
   pu_hyperbola, fu_magnifyer, pu_msgtabs, u_annotation, pu_sequenceoptions;
 
 {$R *.res}
+
+{$ifdef mswindows}
+{$ifdef cpui386}
+// allow to use more than 2GB of memory
+{$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
+{$endif}
+{$endif}
 
 begin
   {$ifdef USEHEAPTRC}
