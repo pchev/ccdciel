@@ -131,6 +131,7 @@ function SMedian(list: array of double): double;
 procedure SortFilterListInc(var list: TStringList);
 procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
+function AscomVersion: string;
 
 implementation
 
@@ -2606,7 +2607,7 @@ end;
 
 function SystemInformation: string;
 begin
-result:='Unknown system';
+result:='Unknown system version';
 {$ifdef mswindows}
 try
 result:=GetWin32_Info;
@@ -2626,6 +2627,25 @@ try
 result:=GetMac_Info+', '+GetKernel_Info;
 except
 result:='MacOS';
+end;
+{$endif}
+end;
+
+function AscomVersion: string;
+{$ifdef mswindows}
+var v: Variant;
+{$endif}
+begin
+result:='Unknown ASCOM version';
+{$ifdef mswindows}
+try
+v:=CreateOleObject('ASCOM.Utilities.Util');
+result:='ASCOM Platform '+v.PlatformVersion;
+result:=result+', '+inttostr(v.MajorVersion)+'.'+inttostr(v.MinorVersion);
+result:=result+'.'+inttostr(v.ServicePack);
+result:=result+'.'+inttostr(v.BuildNumber);
+v:=Unassigned;
+except
 end;
 {$endif}
 end;
