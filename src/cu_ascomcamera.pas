@@ -430,6 +430,8 @@ begin
 
  if ok then begin
    try
+   {$ifdef debug_ascom}msg('clear old image.');{$endif}
+   FFits.ClearImage;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    {$ifdef debug_ascom}msg('read image.');{$endif}
@@ -545,12 +547,13 @@ begin
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
+   {$ifdef debug_ascom}msg('release imagearray');{$endif}
+   SafeArrayUnaccessData(img);
+   SafeArrayDestroyData(img);
    {$ifdef debug_ascom}msg('display image');{$endif}
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;
-   SafeArrayUnaccessData(img);
-   SafeArrayDestroyData(img);
    finally
    StatusTimer.Enabled:=true;
    end;
