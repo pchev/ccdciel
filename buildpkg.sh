@@ -215,15 +215,15 @@ if [[ $make_win32 ]]; then
   if [[ $? -ne 0 ]]; then exit 1;fi
   # zip
   cd $builddir/Data
-  zip -r  ccdciel-$version-$currentrev-windows.zip *
+  zip -r  ccdciel-$version-$currentrev-windows-x32.zip *
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.zip $wd
   # exe
   cd $builddir
-  sed -i "/AppVerName/ s/V3/V$version/" ccdciel.iss
-  sed -i "/OutputBaseFilename/ s/windows/$version-$currentrev-windows/" ccdciel.iss
+  sed -i "/AppVerName/ s/V3/V$version/" ccdciel_32.iss
+  sed -i "/OutputBaseFilename/ s/windows/$version-$currentrev-windows/" ccdciel_32.iss
   sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
-  wine "$innosetup" "$wine_build\ccdciel.iss"
+  wine "$innosetup" "$wine_build\ccdciel_32.iss"
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv $builddir/ccdciel*.exe $wd
 
