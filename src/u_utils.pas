@@ -2527,14 +2527,105 @@ begin
 end;
 {$endif}
 
+{$ifdef unix}
+function GetKernel_Info: string;
+var P: TProcess;
+
+  function ExecParam(Param: String): String;
+  begin
+    P.Parameters[0]:= '-' + Param;
+    P.Execute;
+    SetLength(Result, 1000);
+    SetLength(Result, P.Output.Read(Result[1], Length(Result)));
+    While (Length(Result) > 0) And (Result[Length(Result)] In [#8..#13,#32]) Do
+      SetLength(Result, Length(Result) - 1);
+  end;
+
+begin
+  P:= TProcess.Create(Nil);
+  P.Options:= [poWaitOnExit, poUsePipes];
+  P.Executable:= 'uname';
+  P.Parameters.Add('');
+  result:='Kernel: '+ ExecParam('s')+' ';
+  result:=result+ ExecParam('r')+' ';
+  result:=result+ ExecParam('m');
+  P.Free;
+end;
+{$endif}
+
+{$ifdef linux}
+function GetLinux_Info: string;
+var P: TProcess;
+
+  function ExecParam(Param: String): String;
+  begin
+    P.Parameters[0]:= '-' + Param;
+    P.Execute;
+    SetLength(Result, 1000);
+    SetLength(Result, P.Output.Read(Result[1], Length(Result)));
+    While (Length(Result) > 0) And (Result[Length(Result)] In [#8..#13,#32]) Do
+      SetLength(Result, Length(Result) - 1);
+  end;
+
+begin
+  P:= TProcess.Create(Nil);
+  P.Options:= [poWaitOnExit, poUsePipes];
+  P.Executable:= 'lsb_release';
+  P.Parameters.Add('');
+  result:='System: '+ ExecParam('is')+' ';
+  result:=result+ ExecParam('rs');
+  P.Free;
+end;
+{$endif}
+
+{$ifdef darwin}
+function GetMac_Info: string;
+var P: TProcess;
+
+  function ExecParam(Param: String): String;
+  begin
+    P.Parameters[0]:= '-' + Param;
+    P.Execute;
+    SetLength(Result, 1000);
+    SetLength(Result, P.Output.Read(Result[1], Length(Result)));
+    While (Length(Result) > 0) And (Result[Length(Result)] In [#8..#13,#32]) Do
+      SetLength(Result, Length(Result) - 1);
+  end;
+
+begin
+  P:= TProcess.Create(Nil);
+  P.Options:= [poWaitOnExit, poUsePipes];
+  P.Executable:= 'sw_vers';
+  P.Parameters.Add('');
+  result:='System: '+ ExecParam('productName')+' ';
+  result:=result+ ExecParam('productVersion')+' ';
+  result:=result+ ExecParam('buildVersion');
+  P.Free;
+end;
+{$endif}
+
 function SystemInformation: string;
 begin
-result:='';
+result:='Unknown system';
 {$ifdef mswindows}
 try
 result:=GetWin32_Info;
 except
 result:='Windows '+inttostr(Win32Platform)+' '+inttostr(Win32MajorVersion)+'.'+inttostr(Win32MinorVersion)+'.'+inttostr(Win32BuildNumber);
+end;
+{$endif}
+{$ifdef linux}
+try
+result:=GetLinux_Info+', '+GetKernel_Info;
+except
+result:='Linux';
+end;
+{$endif}
+{$ifdef darwin}
+try
+result:=GetMac_Info+', '+GetKernel_Info;
+except
+result:='MacOS';
 end;
 {$endif}
 end;
