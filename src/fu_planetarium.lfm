@@ -88,10 +88,10 @@ object f_planetarium: Tf_planetarium
         TabOrder = 0
       end
       object BtnNewTarget: TButton
-        Left = 95
+        Left = 87
         Height = 25
         Top = 0
-        Width = 85
+        Width = 93
         Caption = 'New target'
         OnClick = BtnNewTargetClick
         ParentFont = False

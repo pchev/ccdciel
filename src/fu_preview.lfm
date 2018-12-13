@@ -19,23 +19,23 @@ object f_preview: Tf_preview
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 140
-    ClientWidth = 176
+    ClientHeight = 144
+    ClientWidth = 180
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 29
+      Height = 31
       Top = 0
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 25
-      ClientWidth = 174
+      ClientHeight = 31
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
         Left = 88
-        Height = 29
+        Height = 31
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
@@ -62,9 +62,9 @@ object f_preview: Tf_preview
       end
       object Label1: TLabel
         Left = 0
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 60
+        Width = 56
         Caption = 'Exposure'
         ParentColor = False
         ParentFont = False
@@ -72,19 +72,19 @@ object f_preview: Tf_preview
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 33
-      Top = 29
+      Height = 35
+      Top = 31
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 29
-      ClientWidth = 174
+      ClientHeight = 35
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 4
       Visible = False
       object ISObox: TComboBox
         Left = 88
-        Height = 33
+        Height = 35
         Hint = 'Exposure time in secondes'
         Top = 0
         Width = 90
@@ -96,16 +96,16 @@ object f_preview: Tf_preview
       end
       object LabelGain: TLabel
         Left = 2
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 30
+        Width = 28
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
       end
       object GainEdit: TSpinEdit
         Left = 88
-        Height = 27
+        Height = 29
         Top = 4
         Width = 90
         MaxValue = 0
@@ -115,17 +115,17 @@ object f_preview: Tf_preview
     end
     object Panel3: TPanel
       Left = 0
-      Height = 29
-      Top = 62
+      Height = 31
+      Top = 66
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 25
-      ClientWidth = 174
+      ClientHeight = 31
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
         Left = 88
-        Height = 29
+        Height = 31
         Hint = 'Camera binning'
         Top = 0
         Width = 90
@@ -141,9 +141,9 @@ object f_preview: Tf_preview
       end
       object Label2: TLabel
         Left = 0
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 49
+        Width = 47
         Caption = 'Binning'
         ParentColor = False
         ParentFont = False
@@ -152,11 +152,11 @@ object f_preview: Tf_preview
     object Panel5: TPanel
       Left = 0
       Height = 24
-      Top = 91
+      Top = 97
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 20
-      ClientWidth = 174
+      ClientHeight = 24
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 3
       object BtnPreview: TButton
@@ -164,7 +164,7 @@ object f_preview: Tf_preview
         Height = 23
         Hint = 'Start one preview exposure'
         Top = 1
-        Width = 95
+        Width = 105
         Caption = 'Preview'
         OnClick = BtnPreviewClick
         ParentFont = False
@@ -175,7 +175,7 @@ object f_preview: Tf_preview
         Height = 21
         Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
         Top = 1
-        Width = 60
+        Width = 56
         BidiMode = bdRightToLeft
         Caption = 'Stack'
         ParentFont = False
@@ -187,11 +187,11 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 23
-      Top = 115
+      Top = 121
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 19
-      ClientWidth = 174
+      ClientHeight = 23
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 2
       object BtnLoop: TButton
@@ -200,7 +200,7 @@ object f_preview: Tf_preview
         Height = 23
         Hint = 'Loop preview exposures'
         Top = 0
-        Width = 95
+        Width = 105
         Caption = 'Loop'
         OnClick = BtnLoopClick
         ParentFont = False
