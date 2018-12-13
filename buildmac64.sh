@@ -2,7 +2,7 @@
 
 version=$(grep 'ccdcielver' src/u_global.pas |head -1| cut -d\' -f2)
 
-basedir=/tmp/ccdciel   # Be sure this is set to a non existent directory, it is removed after the run!
+basedir=/Volumes/TmpInst/ccdciel   # Be sure this is set to a non existent directory, it is removed after the run!
 
 builddir=$basedir/ccdciel
 
