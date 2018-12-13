@@ -734,8 +734,12 @@ begin
      if Assigned(FonExposureProgress) then
         if nvp.np[0].value >0 then
            FonExposureProgress(nvp.np[0].value)
-        else
-           FonExposureProgress(-4);
+        else  begin
+           if nvp.s=IPS_ALERT then
+              AbortExposure
+           else
+              FonExposureProgress(-4);
+        end;
   end
   else if nvp=CCDframe then begin
      if Assigned(FonFrameChange) then FonFrameChange(self);
