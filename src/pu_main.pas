@@ -3350,6 +3350,7 @@ begin
   if LogToFile then begin
     WriteDeviceLog(msg);
   end;
+  if pos('[ERROR]',msg)>0 then NewMessage(msg,1);
  end;
 end;
 
@@ -3653,7 +3654,7 @@ begin
      if i<=32 then
         ShowMessage('Error '+inttostr(i)+crlf+'Check if the file exist and set the application to use to open files with .log extension');
      {$else}
-     ExecuteFile(LogFile);
+     ExecuteFile(DeviceLogFile);
      {$endif}
   end
   else
