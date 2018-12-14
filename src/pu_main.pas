@@ -109,6 +109,7 @@ type
     MagnifyerTimer: TTimer;
     MeasureTimer: TTimer;
     PlotTimer: TTimer;
+    ImageResizeTimer: TTimer;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -256,6 +257,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MeasureTimerTimer(Sender: TObject);
     procedure MenuApplyBPMClick(Sender: TObject);
@@ -2196,6 +2198,12 @@ end;
 
 procedure Tf_main.Image1Resize(Sender: TObject);
 begin
+ ImageResizeTimer.Enabled:=true;
+end;
+
+procedure Tf_main.ImageResizeTimerTimer(Sender: TObject);
+begin
+  ImageResizeTimer.Enabled:=false;
   ScrBmp.SetSize(Image1.Width,Image1.Height);
   ClearImage;
   DrawImage;
