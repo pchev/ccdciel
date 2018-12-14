@@ -1,14 +1,15 @@
 object f_EditTargets: Tf_EditTargets
   Left = 0
-  Height = 606
+  Height = 600
   Top = 87
-  Width = 1035
+  Width = 1024
   ActiveControl = BtnSave
   Caption = 'Edit target list'
-  ClientHeight = 606
-  ClientWidth = 1035
-  Constraints.MinHeight = 586
-  Constraints.MinWidth = 980
+  ClientHeight = 600
+  ClientWidth = 1024
+  Constraints.MinHeight = 580
+  Constraints.MinWidth = 970
+  DesignTimePPI = 95
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnResize = FormResize
@@ -16,59 +17,60 @@ object f_EditTargets: Tf_EditTargets
   Position = poDefaultPosOnly
   object PanelTarget: TPanel
     Left = 0
-    Height = 394
+    Height = 390
     Top = 0
-    Width = 1035
+    Width = 1024
     Align = alTop
-    ClientHeight = 394
-    ClientWidth = 1035
-    Constraints.MinHeight = 364
+    ClientHeight = 390
+    ClientWidth = 1024
+    Constraints.MinHeight = 390
     ParentFont = False
     TabOrder = 0
     object Panel11: TPanel
-      Left = 731
-      Height = 345
+      Left = 723
+      Height = 341
       Top = 48
-      Width = 303
+      Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 345
-      ClientWidth = 303
+      ClientHeight = 341
+      ClientWidth = 300
+      Constraints.MinHeight = 341
       ParentFont = False
       TabOrder = 1
       object PageControl1: TPageControl
         Left = 0
-        Height = 345
+        Height = 341
         Top = 0
-        Width = 303
-        ActivePage = TabSheet3
+        Width = 300
+        ActivePage = TabSheet1
         Align = alClient
         ParentFont = False
         ShowTabs = False
-        TabIndex = 2
+        TabIndex = 0
         TabOrder = 0
         object TabSheet1: TTabSheet
           Caption = 'Object'
-          ClientHeight = 341
-          ClientWidth = 293
+          ClientHeight = 337
+          ClientWidth = 290
           ParentFont = False
           object GroupBoxTarget: TGroupBox
             Left = 0
-            Height = 177
+            Height = 175
             Top = 0
             Width = 290
             Align = alTop
             Caption = 'Target'
-            ClientHeight = 159
+            ClientHeight = 155
             ClientWidth = 288
             ParentFont = False
             TabOrder = 0
             object BtnCurrentCoord: TButton
-              Left = 137
+              Left = 136
               Height = 25
               Hint = 'Do not move the telescope before to start imaging.'
               Top = 6
-              Width = 147
+              Width = 145
               Caption = 'No move'
               OnClick = BtnCurrentCoordClick
               ParentFont = False
@@ -79,7 +81,7 @@ object f_EditTargets: Tf_EditTargets
               Height = 25
               Hint = 'Get the coordinates and object name from the planetarium'
               Top = 6
-              Width = 121
+              Width = 120
               Caption = 'Planetarium'
               OnClick = BtnCdCCoordClick
               ParentFont = False
@@ -89,8 +91,8 @@ object f_EditTargets: Tf_EditTargets
               Left = 8
               Height = 21
               Hint = 'Use plate solving to increase the accuracy of the telescope position.'
-              Top = 61
-              Width = 264
+              Top = 60
+              Width = 246
               Caption = 'Use astrometry to refine the position'
               OnChange = TargetChange
               ParentFont = False
@@ -101,7 +103,7 @@ object f_EditTargets: Tf_EditTargets
               Height = 25
               Hint = 'Solve the current image and get the center coordinates'
               Top = 32
-              Width = 276
+              Width = 273
               Caption = 'Position from current image'
               OnClick = BtnImgCoordClick
               ParentFont = False
@@ -111,8 +113,8 @@ object f_EditTargets: Tf_EditTargets
               Left = 8
               Height = 21
               Hint = 'For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.'#10'Be sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here.'
-              Top = 109
-              Width = 246
+              Top = 108
+              Width = 228
               Caption = 'Update RA+Dec from Planetarium'
               OnChange = TargetChange
               ParentFont = False
@@ -122,8 +124,8 @@ object f_EditTargets: Tf_EditTargets
               Left = 8
               Height = 21
               Hint = 'You can avoid to move to a focus star if this target field include a suitable star.'#10'Beware the auto-focus will fail if the star is too faint.'
-              Top = 85
-              Width = 198
+              Top = 84
+              Width = 183
               Caption = 'Stay in place for autofocus'
               OnChange = TargetChange
               ParentFont = False
@@ -132,8 +134,8 @@ object f_EditTargets: Tf_EditTargets
             object BtnApplyToAll: TButton
               Left = 32
               Height = 25
-              Top = 131
-              Width = 226
+              Top = 130
+              Width = 224
               Caption = 'Apply to all'
               OnClick = BtnApplyToAllClick
               ParentFont = False
@@ -147,15 +149,15 @@ object f_EditTargets: Tf_EditTargets
             Width = 290
             Align = alClient
             Caption = 'Repeat'
-            ClientHeight = 87
+            ClientHeight = 85
             ClientWidth = 288
             ParentFont = False
             TabOrder = 1
             object Label9: TLabel
               Left = 3
-              Height = 17
-              Top = 60
-              Width = 116
+              Height = 19
+              Top = 59
+              Width = 106
               Caption = 'Preview exposure'
               ParentColor = False
               ParentFont = False
@@ -165,7 +167,7 @@ object f_EditTargets: Tf_EditTargets
               Height = 21
               Hint = 'Start a preview loop when waiting for the delay to expire.'
               Top = 32
-              Width = 230
+              Width = 212
               Caption = 'Preview when waiting to repeat'
               OnChange = TargetChange
               ParentFont = False
@@ -173,47 +175,47 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
             object Label13: TLabel
-              Left = 178
-              Height = 17
+              Left = 176
+              Height = 19
               Top = 4
-              Width = 63
+              Width = 57
               Caption = '[seconds]'
               ParentColor = False
               ParentFont = False
             end
             object Label11: TLabel
               Left = 3
-              Height = 17
+              Height = 19
               Top = 4
-              Width = 50
+              Width = 46
               Caption = 'Interval'
               ParentColor = False
               ParentFont = False
             end
             object Label14: TLabel
-              Left = 210
-              Height = 17
-              Top = 60
-              Width = 63
+              Left = 208
+              Height = 19
+              Top = 59
+              Width = 57
               Caption = '[seconds]'
               ParentColor = False
               ParentFont = False
             end
             object TDelay: TSpinEdit
-              Left = 88
-              Height = 27
+              Left = 87
+              Height = 29
               Top = 0
-              Width = 77
+              Width = 76
               MaxValue = 100000
               OnChange = TargetChange
               ParentFont = False
               TabOrder = 1
             end
             object PreviewExposure: TFloatSpinEdit
-              Left = 131
-              Height = 27
-              Top = 56
-              Width = 63
+              Left = 130
+              Height = 29
+              Top = 55
+              Width = 62
               MaxValue = 60
               MinValue = 0
               OnChange = TargetChange
@@ -224,12 +226,12 @@ object f_EditTargets: Tf_EditTargets
           end
           object Panel6: TPanel
             Left = 0
-            Height = 58
+            Height = 57
             Top = 175
             Width = 290
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 58
+            ClientHeight = 57
             ClientWidth = 290
             ParentFont = False
             TabOrder = 2
@@ -237,11 +239,11 @@ object f_EditTargets: Tf_EditTargets
               Left = 0
               Height = 57
               Top = 0
-              Width = 153
+              Width = 151
               Align = alLeft
               Caption = 'PA'
-              ClientHeight = 39
-              ClientWidth = 151
+              ClientHeight = 37
+              ClientWidth = 149
               ParentFont = False
               TabOrder = 0
               object BtnImgRot: TButton
@@ -249,7 +251,7 @@ object f_EditTargets: Tf_EditTargets
                 Height = 25
                 Hint = 'Solve the current image and get the rotation of the image'
                 Top = 6
-                Width = 133
+                Width = 132
                 Caption = 'Current image'
                 OnClick = BtnImgRotClick
                 ParentFont = False
@@ -263,7 +265,7 @@ object f_EditTargets: Tf_EditTargets
               Width = 139
               Align = alClient
               Caption = 'Begin/End'
-              ClientHeight = 39
+              ClientHeight = 37
               ClientWidth = 137
               ParentFont = False
               TabOrder = 1
@@ -272,7 +274,7 @@ object f_EditTargets: Tf_EditTargets
                 Height = 25
                 Hint = 'Clear time constraint'
                 Top = 6
-                Width = 123
+                Width = 122
                 Caption = 'Any time'
                 OnClick = BtnAnytimeClick
                 ParentFont = False
@@ -283,33 +285,33 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet2: TTabSheet
           Caption = 'Script'
-          ClientHeight = 341
-          ClientWidth = 293
+          ClientHeight = 337
+          ClientWidth = 290
           ParentFont = False
           object Panel14: TPanel
             Left = 0
-            Height = 109
+            Height = 108
             Top = 0
             Width = 290
             Align = alTop
-            ClientHeight = 109
+            ClientHeight = 108
             ClientWidth = 290
             ParentFont = False
             TabOrder = 0
             object Label15: TLabel
               Left = 16
-              Height = 17
+              Height = 19
               Top = 22
-              Width = 37
+              Width = 34
               Caption = 'Script'
               ParentColor = False
               ParentFont = False
             end
             object ScriptList: TComboBox
-              Left = 99
-              Height = 33
+              Left = 98
+              Height = 35
               Top = 16
-              Width = 168
+              Width = 166
               ItemHeight = 0
               OnChange = TargetChange
               ParentFont = False
@@ -317,20 +319,20 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
             object BtnEditScript: TButton
-              Left = 99
+              Left = 98
               Height = 25
-              Top = 65
-              Width = 71
+              Top = 64
+              Width = 70
               Caption = 'Edit'
               OnClick = BtnScriptClick
               ParentFont = False
               TabOrder = 1
             end
             object BtnEditNewScript: TButton
-              Left = 186
+              Left = 184
               Height = 25
-              Top = 65
-              Width = 81
+              Top = 64
+              Width = 80
               Caption = 'New'
               OnClick = BtnScriptClick
               ParentFont = False
@@ -340,14 +342,14 @@ object f_EditTargets: Tf_EditTargets
         end
         object TabSheet3: TTabSheet
           Caption = 'TabSheet3'
-          ClientHeight = 341
-          ClientWidth = 293
+          ClientHeight = 337
+          ClientWidth = 290
           ParentFont = False
           object FlatTime: TRadioGroup
             Left = 0
-            Height = 52
+            Height = 51
             Top = 0
-            Width = 293
+            Width = 290
             Align = alTop
             AutoFill = True
             Caption = 'Flat time'
@@ -358,8 +360,8 @@ object f_EditTargets: Tf_EditTargets
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 34
-            ClientWidth = 291
+            ClientHeight = 31
+            ClientWidth = 288
             Columns = 2
             Items.Strings = (
               'at dusk'
@@ -371,20 +373,20 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox6: TGroupBox
             Left = 0
-            Height = 187
-            Top = 154
-            Width = 293
+            Height = 185
+            Top = 152
+            Width = 290
             Align = alClient
             Caption = 'Filters'
-            ClientHeight = 169
-            ClientWidth = 291
+            ClientHeight = 165
+            ClientWidth = 288
             ParentFont = False
             TabOrder = 1
             object FlatFilterList: TCheckListBox
               Left = 0
-              Height = 169
+              Height = 165
               Top = 0
-              Width = 291
+              Width = 288
               Align = alClient
               IntegralHeight = True
               ItemHeight = 0
@@ -396,29 +398,29 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox7: TGroupBox
             Left = 0
-            Height = 102
-            Top = 52
-            Width = 293
+            Height = 101
+            Top = 51
+            Width = 290
             Align = alTop
             Caption = 'Exposure'
-            ClientHeight = 84
-            ClientWidth = 291
+            ClientHeight = 81
+            ClientWidth = 288
             ParentFont = False
             TabOrder = 2
             object Label16: TLabel
               Left = 8
-              Height = 17
+              Height = 19
               Top = 44
-              Width = 49
+              Width = 47
               Caption = 'Binning'
               ParentColor = False
               ParentFont = False
             end
             object FlatBinning: TComboBox
-              Left = 73
-              Height = 33
+              Left = 72
+              Height = 35
               Top = 40
-              Width = 85
+              Width = 84
               ItemHeight = 0
               OnChange = TargetChange
               ParentFont = False
@@ -427,31 +429,31 @@ object f_EditTargets: Tf_EditTargets
             end
             object Label18: TLabel
               Left = 8
-              Height = 17
+              Height = 19
               Top = 11
-              Width = 38
+              Width = 37
               Caption = 'Count'
               ParentColor = False
               ParentFont = False
             end
             object PanelGain: TPanel
-              Left = 162
+              Left = 160
               Height = 40
               Top = 39
-              Width = 129
+              Width = 128
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 40
-              ClientWidth = 129
+              ClientHeight = 36
+              ClientWidth = 124
               ParentFont = False
               TabOrder = 1
               Visible = False
               object FISObox: TComboBox
-                Left = 57
-                Height = 33
+                Left = 56
+                Height = 35
                 Hint = 'Exposure time in secondes'
                 Top = 0
-                Width = 65
+                Width = 64
                 ItemHeight = 0
                 OnChange = TargetChange
                 ParentFont = False
@@ -461,18 +463,18 @@ object f_EditTargets: Tf_EditTargets
               end
               object LabelGain: TLabel
                 Left = 8
-                Height = 17
+                Height = 19
                 Top = 4
-                Width = 30
+                Width = 28
                 Caption = 'Gain'
                 ParentColor = False
                 ParentFont = False
               end
               object FGainEdit: TSpinEdit
-                Left = 57
-                Height = 27
+                Left = 56
+                Height = 29
                 Top = 0
-                Width = 57
+                Width = 56
                 MaxValue = 10000
                 OnChange = TargetChange
                 ParentFont = False
@@ -480,10 +482,10 @@ object f_EditTargets: Tf_EditTargets
               end
             end
             object FlatCount: TSpinEdit
-              Left = 73
-              Height = 27
+              Left = 72
+              Height = 29
               Top = 8
-              Width = 57
+              Width = 56
               MaxValue = 10000
               MinValue = 1
               OnChange = TargetChange
@@ -499,25 +501,25 @@ object f_EditTargets: Tf_EditTargets
       Left = 1
       Height = 47
       Top = 1
-      Width = 1033
+      Width = 1022
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 47
-      ClientWidth = 1033
+      ClientWidth = 1022
       ParentFont = False
       TabOrder = 0
       object ButtonEndOptions: TButton
-        Left = 800
+        Left = 792
         Height = 25
         Top = 5
-        Width = 178
+        Width = 176
         Caption = 'Termination options'
         OnClick = ButtonEndOptionsClick
         ParentFont = False
         TabOrder = 0
       end
       object Shape1: TShape
-        Left = 849
+        Left = 840
         Height = 10
         Top = 34
         Width = 10
@@ -526,7 +528,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape2: TShape
-        Left = 865
+        Left = 856
         Height = 10
         Top = 34
         Width = 10
@@ -535,7 +537,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape3: TShape
-        Left = 881
+        Left = 872
         Height = 10
         Top = 34
         Width = 10
@@ -544,7 +546,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape4: TShape
-        Left = 897
+        Left = 888
         Height = 10
         Top = 34
         Width = 10
@@ -553,7 +555,7 @@ object f_EditTargets: Tf_EditTargets
         ShowHint = True
       end
       object Shape5: TShape
-        Left = 914
+        Left = 904
         Height = 10
         Top = 34
         Width = 10
@@ -565,38 +567,38 @@ object f_EditTargets: Tf_EditTargets
         Left = 0
         Height = 47
         Top = 0
-        Width = 800
+        Width = 792
         Align = alLeft
         BevelOuter = bvNone
         ClientHeight = 47
-        ClientWidth = 800
+        ClientWidth = 792
         ParentFont = False
         TabOrder = 1
         object Panel15: TPanel
           Left = 0
           Height = 18
           Top = 0
-          Width = 800
+          Width = 792
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 18
-          ClientWidth = 800
+          ClientWidth = 792
           ParentFont = False
           TabOrder = 0
           object Label2: TLabel
             Left = 8
-            Height = 17
+            Height = 19
             Top = 0
-            Width = 63
+            Width = 58
             Caption = 'Sequence'
             ParentColor = False
             ParentFont = False
           end
           object TargetName: TLabel
-            Left = 101
-            Height = 17
+            Left = 100
+            Height = 19
             Top = 0
-            Width = 89
+            Width = 83
             Caption = 'TargetName'
             Font.Style = [fsBold]
             ParentColor = False
@@ -607,11 +609,11 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 29
           Top = 18
-          Width = 269
+          Width = 266
           Align = alLeft
           BevelOuter = bvNone
           ClientHeight = 29
-          ClientWidth = 269
+          ClientWidth = 266
           ParentFont = False
           TabOrder = 1
           object SeqStart: TCheckBox
@@ -619,18 +621,18 @@ object f_EditTargets: Tf_EditTargets
             Height = 21
             Hint = 'Activate the start time'
             Top = 5
-            Width = 76
+            Width = 71
             Caption = 'Start at '
             OnChange = SeqStartChange
             ParentFont = False
             TabOrder = 0
           end
           object SeqStartAt: TMaskEdit
-            Left = 89
-            Height = 29
+            Left = 88
+            Height = 31
             Hint = 'Wait to this time before to start to process the list.'
             Top = 0
-            Width = 71
+            Width = 70
             CharCase = ecNormal
             MaxLength = 8
             ParentFont = False
@@ -640,11 +642,11 @@ object f_EditTargets: Tf_EditTargets
             SpaceChar = '_'
           end
           object SeqStartTwilight: TCheckBox
-            Left = 166
+            Left = 164
             Height = 21
             Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
             Top = 5
-            Width = 55
+            Width = 53
             Caption = 'dusk'
             Enabled = False
             OnChange = SeqStartTwilightChange
@@ -653,14 +655,14 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object Panel7: TPanel
-          Left = 269
+          Left = 266
           Height = 29
           Top = 18
-          Width = 253
+          Width = 250
           Align = alLeft
           BevelOuter = bvNone
           ClientHeight = 29
-          ClientWidth = 253
+          ClientWidth = 250
           ParentFont = False
           TabOrder = 2
           object SeqStop: TCheckBox
@@ -668,18 +670,18 @@ object f_EditTargets: Tf_EditTargets
             Height = 21
             Hint = 'Activate the stop time'
             Top = 5
-            Width = 74
+            Width = 70
             Caption = 'Stop at '
             OnChange = SeqStopChange
             ParentFont = False
             TabOrder = 0
           end
           object SeqStopAt: TMaskEdit
-            Left = 89
-            Height = 29
+            Left = 88
+            Height = 31
             Hint = 'Stop at this time even if the processing is not finished.'
             Top = 0
-            Width = 71
+            Width = 70
             CharCase = ecNormal
             MaxLength = 8
             ParentFont = False
@@ -689,11 +691,11 @@ object f_EditTargets: Tf_EditTargets
             SpaceChar = '_'
           end
           object SeqStopTwilight: TCheckBox
-            Left = 166
+            Left = 164
             Height = 21
             Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
             Top = 5
-            Width = 59
+            Width = 57
             Caption = 'dawn'
             Enabled = False
             OnChange = SeqStopTwilightChange
@@ -702,14 +704,14 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object Panel13: TPanel
-          Left = 522
+          Left = 516
           Height = 29
           Top = 18
-          Width = 266
+          Width = 263
           Align = alLeft
           BevelOuter = bvNone
           ClientHeight = 29
-          ClientWidth = 266
+          ClientWidth = 263
           ParentFont = False
           TabOrder = 3
           object CheckBoxRepeatList: TCheckBox
@@ -717,17 +719,17 @@ object f_EditTargets: Tf_EditTargets
             Height = 21
             Hint = 'Repeat the whole list a number of time.'
             Top = 5
-            Width = 165
+            Width = 151
             Caption = 'Repeat the whole list '
             OnChange = CheckBoxRepeatListChange
             ParentFont = False
             TabOrder = 0
           end
           object RepeatCountList: TSpinEdit
-            Left = 202
-            Height = 27
+            Left = 200
+            Height = 29
             Top = 1
-            Width = 57
+            Width = 56
             MaxValue = 100000
             MinValue = 1
             OnChange = RepeatCountListChange
@@ -740,24 +742,24 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel4: TPanel
       Left = 1
-      Height = 345
+      Height = 341
       Top = 48
-      Width = 730
+      Width = 722
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 345
-      ClientWidth = 730
+      ClientHeight = 341
+      ClientWidth = 722
       ParentFont = False
       TabOrder = 2
       object PanelBottom: TPanel
         Left = 0
         Height = 30
-        Top = 315
-        Width = 730
+        Top = 311
+        Width = 722
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 730
+        ClientWidth = 722
         ParentFont = False
         TabOrder = 0
         object BtnNewObject: TButton
@@ -765,40 +767,40 @@ object f_EditTargets: Tf_EditTargets
           Height = 25
           Hint = 'Add an object to the list'
           Top = 2
-          Width = 94
+          Width = 93
           Caption = 'New object'
           OnClick = BtnNewObjectClick
           ParentFont = False
           TabOrder = 0
         end
         object BtnDeleteObject: TButton
-          Left = 356
+          Left = 352
           Height = 25
           Hint = 'Delete the selected row from the list.'
           Top = 2
-          Width = 121
+          Width = 120
           Caption = 'Remove object'
           OnClick = BtnDeleteObjectClick
           ParentFont = False
           TabOrder = 1
         end
         object BtnNewScript: TButton
-          Left = 113
+          Left = 112
           Height = 25
           Hint = 'Add a script to the list.'
           Top = 2
-          Width = 105
+          Width = 104
           Caption = 'New script'
           OnClick = BtnNewScriptClick
           ParentFont = False
           TabOrder = 2
         end
         object BtnSkyFlat: TButton
-          Left = 226
+          Left = 224
           Height = 25
           Hint = 'Add a flat sequence to the list.'
           Top = 2
-          Width = 121
+          Width = 120
           Caption = 'Sky Flat'
           OnClick = BtnSkyFlatClick
           ParentFont = False
@@ -807,48 +809,48 @@ object f_EditTargets: Tf_EditTargets
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 315
+        Height = 311
         Hint = 'The list of target to process in sequence.'
         Top = 0
-        Width = 730
+        Width = 722
         Align = alClient
         AutoFillColumns = True
         ColCount = 11
         Columns = <        
           item
-            MinSize = 101
-            MaxSize = 202
+            MinSize = 100
+            MaxSize = 200
             Title.MultiLine = True
             Title.Caption = 'Object name'
             Width = 91
           end        
           item
             MinSize = 30
-            MaxSize = 202
+            MaxSize = 200
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Plan'
             Width = 91
           end        
           item
-            MinSize = 86
-            MaxSize = 86
+            MinSize = 85
+            MaxSize = 85
             SizePriority = 0
             Title.MultiLine = True
             Title.Caption = 'RA'
-            Width = 86
+            Width = 85
           end        
           item
-            MinSize = 96
-            MaxSize = 96
+            MinSize = 95
+            MaxSize = 95
             SizePriority = 0
             Title.MultiLine = True
             Title.Caption = 'Dec'
-            Width = 88
+            Width = 87
           end        
           item
             MinSize = 4
-            MaxSize = 51
+            MaxSize = 50
             PickList.Strings = (
               '-'
             )
@@ -859,8 +861,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 40
           end        
           item
-            MinSize = 81
-            MaxSize = 81
+            MinSize = 80
+            MaxSize = 80
             PickList.Strings = (
               ''
               'Rise'
@@ -869,11 +871,11 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Begin'
-            Width = 71
+            Width = 70
           end        
           item
-            MinSize = 81
-            MaxSize = 81
+            MinSize = 80
+            MaxSize = 80
             PickList.Strings = (
               ''
               'Set'
@@ -882,34 +884,34 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'End'
-            Width = 61
+            Width = 60
           end        
           item
             ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
+            MaxSize = 200
             SizePriority = 0
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Dark night'
-            Width = 51
+            Width = 50
           end        
           item
             ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
+            MaxSize = 200
             SizePriority = 0
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Skip'
-            Width = 51
+            Width = 50
           end        
           item
-            MinSize = 56
-            MaxSize = 56
+            MinSize = 55
+            MaxSize = 55
             SizePriority = 0
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 67
+            Width = 66
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -930,57 +932,57 @@ object f_EditTargets: Tf_EditTargets
           30
           91
           91
-          86
-          88
+          85
+          87
           40
-          71
-          61
-          51
-          51
-          67
+          70
+          60
+          50
+          50
+          66
         )
       end
     end
   end
   object PanelPlan: TPanel
     Left = 0
-    Height = 172
-    Top = 398
-    Width = 1035
+    Height = 170
+    Top = 394
+    Width = 1024
     Align = alClient
-    ClientHeight = 172
-    ClientWidth = 1035
-    Constraints.MinHeight = 172
+    ClientHeight = 170
+    ClientWidth = 1024
+    Constraints.MinHeight = 170
     ParentFont = False
     TabOrder = 1
     object Panel9: TPanel
       Left = 1
-      Height = 170
+      Height = 168
       Top = 1
-      Width = 730
+      Width = 722
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 170
-      ClientWidth = 730
+      ClientHeight = 168
+      ClientWidth = 722
       ParentFont = False
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
-        Height = 122
+        Height = 120
         Top = 18
-        Width = 730
+        Width = 722
         Align = alClient
         AutoFillColumns = True
         ColCount = 7
         Columns = <        
           item
-            MaxSize = 202
+            MaxSize = 200
             Title.Caption = 'Description'
-            Width = 197
+            Width = 195
           end        
           item
             ButtonStyle = cbsPickList
-            MaxSize = 202
+            MaxSize = 200
             PickList.Strings = (
               'Light'
               'Bias'
@@ -989,40 +991,40 @@ object f_EditTargets: Tf_EditTargets
             )
             SizePriority = 0
             Title.Caption = 'Type'
-            Width = 71
+            Width = 70
           end        
           item
-            MaxSize = 202
+            MaxSize = 200
             SizePriority = 0
             Title.Caption = 'Exposure'
-            Width = 81
+            Width = 80
           end        
           item
             ButtonStyle = cbsPickList
-            MinSize = 81
-            MaxSize = 81
+            MinSize = 80
+            MaxSize = 80
             PickList.Strings = (
               '1x1'
             )
             SizePriority = 0
             Title.Caption = 'Binning'
-            Width = 81
+            Width = 80
           end        
           item
             ButtonStyle = cbsPickList
-            MaxSize = 202
+            MaxSize = 200
             PickList.Strings = (
               'No change'
             )
             Title.Caption = 'Filter'
-            Width = 197
+            Width = 195
           end        
           item
-            MinSize = 71
-            MaxSize = 71
+            MinSize = 70
+            MaxSize = 70
             SizePriority = 0
             Title.Caption = 'Count'
-            Width = 71
+            Width = 70
           end>
         DefaultColWidth = 30
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellEllipsis]
@@ -1036,39 +1038,39 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = StepListSelection
         ColWidths = (
           30
-          197
-          71
-          81
-          81
-          197
-          71
+          195
+          70
+          80
+          80
+          195
+          70
         )
       end
       object Panel17: TPanel
         Left = 0
         Height = 18
         Top = 0
-        Width = 730
+        Width = 722
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 18
-        ClientWidth = 730
+        ClientWidth = 722
         ParentFont = False
         TabOrder = 1
         object Label1: TLabel
           Left = 8
-          Height = 17
+          Height = 19
           Top = 0
-          Width = 73
+          Width = 66
           Caption = 'Plan name '
           ParentColor = False
           ParentFont = False
         end
         object PlanName: TLabel
-          Left = 101
-          Height = 17
+          Left = 100
+          Height = 19
           Top = 0
-          Width = 75
+          Width = 69
           Caption = 'PlanName'
           Font.Style = [fsBold]
           ParentColor = False
@@ -1078,59 +1080,59 @@ object f_EditTargets: Tf_EditTargets
       object Panel10: TPanel
         Left = 0
         Height = 30
-        Top = 140
-        Width = 730
+        Top = 138
+        Width = 722
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 30
-        ClientWidth = 730
+        ClientWidth = 722
         ParentFont = False
         TabOrder = 2
         object BtnAddStep: TButton
           Left = 8
           Height = 25
           Top = 2
-          Width = 121
+          Width = 120
           Caption = 'Add step'
           OnClick = BtnAddStepClick
           ParentFont = False
           TabOrder = 0
         end
         object BtnRemoveStep: TButton
-          Left = 137
+          Left = 136
           Height = 25
           Top = 2
-          Width = 105
+          Width = 104
           Caption = 'Remove step'
           OnClick = BtnRemoveStepClick
           ParentFont = False
           TabOrder = 1
         end
         object BtnSavePlan: TButton
-          Left = 251
+          Left = 248
           Height = 25
           Top = 2
-          Width = 137
+          Width = 136
           Caption = 'Save plan'
           OnClick = BtnSavePlanClick
           ParentFont = False
           TabOrder = 2
         end
         object BtnSavePlanAs: TButton
-          Left = 396
+          Left = 392
           Height = 25
           Top = 2
-          Width = 146
+          Width = 144
           Caption = 'Save plan as...'
           OnClick = BtnSavePlanAsClick
           ParentFont = False
           TabOrder = 3
         end
         object BtnDeletePlan: TButton
-          Left = 550
+          Left = 544
           Height = 25
           Top = 2
-          Width = 154
+          Width = 152
           Caption = 'Delete plan'
           OnClick = BtnDeletePlanClick
           ParentFont = False
@@ -1139,32 +1141,32 @@ object f_EditTargets: Tf_EditTargets
       end
     end
     object Panel12: TPanel
-      Left = 731
-      Height = 170
+      Left = 723
+      Height = 168
       Top = 1
-      Width = 303
+      Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 170
-      ClientWidth = 303
+      ClientHeight = 168
+      ClientWidth = 300
       ParentFont = False
       TabOrder = 1
       object GroupBoxStep: TGroupBox
         Left = 0
-        Height = 159
+        Height = 157
         Top = 0
-        Width = 303
+        Width = 300
         Align = alTop
         Caption = 'Step'
-        ClientHeight = 141
-        ClientWidth = 301
+        ClientHeight = 137
+        ClientWidth = 298
         ParentFont = False
         TabOrder = 0
         object DitherCount: TSpinEdit
-          Left = 167
-          Height = 27
-          Top = 73
-          Width = 58
+          Left = 165
+          Height = 29
+          Top = 72
+          Width = 57
           MaxValue = 1000
           MinValue = 1
           OnChange = StepChange
@@ -1175,8 +1177,8 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxDither: TCheckBox
           Left = 8
           Height = 21
-          Top = 73
-          Width = 109
+          Top = 72
+          Width = 101
           Caption = 'Dither every '
           OnChange = StepChange
           ParentFont = False
@@ -1186,7 +1188,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 8
           Height = 21
           Top = 8
-          Width = 186
+          Width = 176
           Caption = 'Autofocus before to start'
           OnChange = StepChange
           ParentFont = False
@@ -1196,7 +1198,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 8
           Height = 21
           Top = 40
-          Width = 130
+          Width = 122
           Caption = 'Autofocus every'
           OnChange = StepChange
           ParentFont = False
@@ -1205,39 +1207,39 @@ object f_EditTargets: Tf_EditTargets
         object PanelGain1: TPanel
           Left = 24
           Height = 34
-          Top = 105
-          Width = 206
+          Top = 104
+          Width = 204
           BevelOuter = bvNone
           ClientHeight = 34
-          ClientWidth = 206
+          ClientWidth = 204
           ParentFont = False
           TabOrder = 4
           Visible = False
           object LabelGain1: TLabel
             Left = 8
-            Height = 17
+            Height = 19
             Top = 4
-            Width = 30
+            Width = 28
             Caption = 'Gain'
             ParentColor = False
             ParentFont = False
           end
           object PGainEdit: TSpinEdit
-            Left = 97
-            Height = 27
+            Left = 96
+            Height = 29
             Top = 1
-            Width = 82
+            Width = 81
             MaxValue = 100000
             OnChange = StepChange
             ParentFont = False
             TabOrder = 0
           end
           object PISObox: TComboBox
-            Left = 97
-            Height = 33
+            Left = 96
+            Height = 35
             Hint = 'Exposure time in secondes'
             Top = 1
-            Width = 101
+            Width = 100
             ItemHeight = 0
             OnChange = StepChange
             ParentFont = False
@@ -1247,10 +1249,10 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object AutofocusCount: TSpinEdit
-          Left = 167
-          Height = 27
+          Left = 165
+          Height = 29
           Top = 40
-          Width = 58
+          Width = 57
           MaxValue = 1000
           MinValue = 1
           OnChange = StepChange
@@ -1264,18 +1266,18 @@ object f_EditTargets: Tf_EditTargets
   object Panel1: TPanel
     Left = 0
     Height = 39
-    Top = 567
-    Width = 1035
+    Top = 561
+    Width = 1024
     Align = alBottom
     ClientHeight = 39
-    ClientWidth = 1035
+    ClientWidth = 1024
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 720
+      Left = 712
       Height = 25
       Top = 4
-      Width = 76
+      Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Cancel'
       OnClick = BtnCancelClick
@@ -1283,11 +1285,11 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 817
+      Left = 808
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
-      Width = 76
+      Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Save'
       OnClick = BtnSaveClick
@@ -1295,11 +1297,11 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 906
+      Left = 896
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 4
-      Width = 129
+      Width = 128
       Anchors = [akTop, akRight]
       Caption = 'Save as...'
       OnClick = BtnSaveAsClick
@@ -1310,7 +1312,7 @@ object f_EditTargets: Tf_EditTargets
       Left = 9
       Height = 25
       Top = 4
-      Width = 218
+      Width = 216
       Caption = 'Import CdC observing list'
       OnClick = BtnImportClick
       ParentFont = False
@@ -1320,8 +1322,8 @@ object f_EditTargets: Tf_EditTargets
   object PanelSep: TPanel
     Left = 0
     Height = 4
-    Top = 394
-    Width = 1035
+    Top = 390
+    Width = 1024
     Align = alTop
     Color = clBtnShadow
     ParentColor = False
@@ -1330,18 +1332,18 @@ object f_EditTargets: Tf_EditTargets
   end
   object SaveDialog1: TSaveDialog
     left = 48
-    top = 464
+    top = 459
   end
   object OpenDialog1: TOpenDialog
     Title = 'Open CDC observing list'
-    left = 152
-    top = 464
+    left = 150
+    top = 459
   end
   object ImageListDay: TImageList
     Height = 12
     Width = 12
-    left = 264
-    top = 464
+    left = 261
+    top = 459
     Bitmap = {
       4C69020000000C0000000C000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1385,8 +1387,8 @@ object f_EditTargets: Tf_EditTargets
   object ImageListNight: TImageList
     Height = 12
     Width = 12
-    left = 368
-    top = 464
+    left = 364
+    top = 459
     Bitmap = {
       4C69020000000C0000000C000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
