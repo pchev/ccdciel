@@ -943,6 +943,9 @@ resourcestring
   rsWaitStart = 'Wait start';
   rsIdle = 'Idle';
   rsPleaseRunThe2 = 'Please run the Focuser Calibration procedure first';
+  rsDarkFrame = 'Dark frame';
+  rsLoadDarkFile = 'Load dark file';
+  rsClearDarkFra = 'Clear Dark frame';
 
 
 

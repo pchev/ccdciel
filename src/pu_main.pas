@@ -1394,6 +1394,11 @@ begin
    MenuBPMDark.Caption:=rsCreateFromDa;
    MenuClearBPM.Caption := rsClearBadPixe;
    MenuApplyBPM.Caption := rsApplyToCurre;
+   MenuItemDark.Caption:=rsDarkFrame;
+   MenuDarkApply.Caption:=rsApplyToCurre;
+   MenuDarkCamera.Caption:=rsCreateFromCa;
+   MenuDarkFile.Caption:=rsLoadDarkFile;
+   MenuDarkClear.Caption:=rsClearDarkFra;
    MenuFocuserCalibration.Caption := rsFocuserCalib;
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
    MenuOpen.Caption := Format(rsOpenFITSFile, [ellipsis]);
