@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-12-04 13:42+0000\n"
-"PO-Revision-Date: 2018-12-04 13:43+0000\n"
+"POT-Creation-Date: 2018-12-15 10:06+0000\n"
+"PO-Revision-Date: 2018-12-15 10:33+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-12-04 14:08+0000\n"
-"X-Generator: Launchpad (build 18830)\n"
+"X-Launchpad-Export-Date: 2018-12-15 10:36+0000\n"
+"X-Generator: Launchpad (build 18837)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -544,6 +544,10 @@ msgstr "Sélection"
 msgid "Clear bad pixel map"
 msgstr "Effacer la carte des pixels défectueux"
 
+#: u_translation.rscleardarkfra
+msgid "Clear Dark frame"
+msgstr "Effacer l'image noire"
+
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
 msgstr "Effacer l'image de référence"
@@ -622,7 +626,7 @@ msgstr "Connecté"
 
 #: u_translation.rsconnecting
 msgid "Connecting %s"
-msgstr "Connection de %s"
+msgstr "Connexion de %s"
 
 #: u_translation.rsconnection
 msgid "Connection"
@@ -630,7 +634,7 @@ msgstr "Connexion"
 
 #: u_translation.rsconnectioner
 msgid "Connection error: %s"
-msgstr "Erreur de connection : %s"
+msgstr "Erreur de connexion : %s"
 
 #: u_translation.rscontinue
 msgid "Continue"
@@ -715,6 +719,10 @@ msgstr "  Courbure=%s"
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Dossier de Cygwin"
+
+#: u_translation.rsdarkframe
+msgid "Dark frame"
+msgstr "Image noire"
 
 #: u_translation.rsdarknight
 msgid "Dark%snight"
@@ -834,7 +842,7 @@ msgstr "Déconnexion des périphériques"
 
 #: u_translation.rsdisconnectio
 msgid "Disconnection error: %s"
-msgstr "Erreur de déconnection: %s"
+msgstr "Erreur de déconnexion: %s"
 
 #: u_translation.rsdisconnectth
 msgid "Disconnect the camera before to change the configuration."
@@ -974,11 +982,11 @@ msgstr "Glissement estimé depuis le dernier apprentissage"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
-msgstr "Execution des actions après un fin en erreur."
+msgstr "Exécution des actions après une fin en erreur."
 
 #: u_translation.rsexecutingthe2
 msgid "Executing the termination actions."
-msgstr "Execution des actions de fin."
+msgstr "Exécution des actions de fin."
 
 #: u_translation.rsexp
 msgid "Exp:"
@@ -1018,7 +1026,7 @@ msgstr "Temps de pose [secondes]"
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
-msgstr "Echec du démarage du guidage!"
+msgstr "Échec du démarrage du guidage!"
 
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
@@ -1186,11 +1194,11 @@ msgstr "Correction de glissement du focuser réglée sur %s"
 
 #: u_translation.rsfocusertempe
 msgid "Focuser temperature: %s"
-msgstr "Temperature du focuser: %s"
+msgstr "Température du focuser: %s"
 
 #: u_translation.rsfocusertempe2
 msgid "Focuser temperature: %s , adjust position by %s"
-msgstr "Temperature du focuser: %s , ajuste la position de %s"
+msgstr "Température du focuser: %s , ajuste la position de %s"
 
 #: u_translation.rsfocusertempe3
 msgid "Focuser temperature compensation"
@@ -1218,7 +1226,7 @@ msgstr "La fenêtre de focus doit être au moins 4 fois plus grande que la fenê
 
 #: u_translation.rsfocuswindows
 msgid "Focus window size"
-msgstr "Tailel de la fenêtre de focus"
+msgstr "Taille de la fenêtre de focus"
 
 #: u_translation.rsfoldernameop
 msgid "Folder name options"
@@ -1346,7 +1354,7 @@ msgstr "Inspection de l'image"
 
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
-msgstr "HFD median de l'image = %s"
+msgstr "HFD médian de l'image = %s"
 
 #: u_translation.rsimagesfolder
 msgid "Images folder Unix path"
@@ -1398,7 +1406,7 @@ msgstr "Interface"
 
 #: u_translation.rsinterval
 msgid "Interval"
-msgstr "Interval"
+msgstr "Intervalle"
 
 #: u_translation.rsinvalidbinni
 msgid "Invalid binning %s"
@@ -1464,13 +1472,17 @@ msgstr "Charger"
 msgid "Load configuration on startup"
 msgstr "Charge la configuration au démarrage"
 
+#: u_translation.rsloaddarkfile
+msgid "Load dark file"
+msgstr "Charger un fichier d'image noire"
+
 #: u_translation.rslogallmessag
 msgid "Log all messages to file "
 msgstr "Enregistrer tous les messages dans un fichier "
 
 #: u_translation.rslogfilesares
 msgid "Log files are saved in %s"
-msgstr "Les messages sont enregisté dans %s"
+msgstr "Les messages sont enregistré dans %s"
 
 #: u_translation.rslongitude
 msgid "Longitude"
@@ -2014,7 +2026,7 @@ msgstr "Plan %s arrêté."
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
-msgstr "Veuillet activer le journal dans les options."
+msgstr "Veuillez activer le journal dans les options."
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -2022,7 +2034,7 @@ msgstr "Veuillez configurer votre"
 
 #: u_translation.rspleaseconfig2
 msgid "Please configure the Autofocus options."
-msgstr "Veuillez configurer les optins de l'autofocus"
+msgstr "Veuillez configurer les options de l'autofocus"
 
 #: u_translation.rspleaseconfir
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
@@ -2047,6 +2059,10 @@ msgstr "Veuillez charger ou créer une liste d'objet."
 #: u_translation.rspleaserunthe
 msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
 msgstr "Veuillez faire l'apprentissage de la Vcurve pour cette direction du focuser. Bouton Apprendre"
+
+#: u_translation.rspleaserunthe2
+msgid "Please run the Focuser Calibration procedure first"
+msgstr "Veuillez d'abord exécuter la procédure de calibration du focuser"
 
 #: u_translation.rspleaserunvcu
 msgid "Please run Vcurve learning for binning %s"
@@ -2090,7 +2106,7 @@ msgstr "Direction préférée"
 
 #: u_translation.rspreferences
 msgid "Preferences%s"
-msgstr "Préferences%s"
+msgstr "Préférences%s"
 
 #: u_translation.rspreview
 msgid "Preview"
@@ -2102,7 +2118,7 @@ msgstr "Débayeriser la prévisualisation"
 
 #: u_translation.rspreviewraw
 msgid "Preview raw"
-msgstr "Prévisualistaion RAW"
+msgstr "Prévisualisation RAW"
 
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
@@ -2218,7 +2234,7 @@ msgstr "Répéter le plan pour cet objet"
 
 #: u_translation.rsrepeatthewho
 msgid "Repeat the whole list"
-msgstr "Répeter la list complète"
+msgstr "Répéter la liste complète"
 
 #: u_translation.rsrepeatthisst
 msgid "Repeat this step"
@@ -2262,11 +2278,11 @@ msgstr "Résoudre et rotation"
 
 #: u_translation.rsresolveandsh
 msgid "Resolve and show image in planetarium"
-msgstr "Rèsoudre et voir l'image dans le planétarium"
+msgstr "Résoudre et voir l'image dans le planétarium"
 
 #: u_translation.rsresolveandsh2
 msgid "Resolve and show image frame in planetarium"
-msgstr "Rèsoudre et voir le cadre dans le planétarium"
+msgstr "Résoudre et voir le cadre dans le planétarium"
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
@@ -2410,11 +2426,11 @@ msgstr "Enregistrer  le fichier FITS %s"
 
 #: u_translation.rssaveplan
 msgid "Save plan"
-msgstr "Enregister le plan"
+msgstr "Enregistrer le plan"
 
 #: u_translation.rssaveplanas
 msgid "Save plan as..."
-msgstr "Enregister sous..."
+msgstr "Enregistrer sous..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -2446,7 +2462,7 @@ msgstr "Erreur du script: %s"
 
 #: u_translation.rsscriptexecut
 msgid "Script execution error, row %s: %s"
-msgstr "Erreur d'execution du script, ligne %s: %s"
+msgstr "Erreur d’exécution du script, ligne %s: %s"
 
 #: u_translation.rsscriptfailed
 msgid "Script %s failed!"
@@ -2542,11 +2558,11 @@ msgstr "Séquence %s arrêtée."
 
 #: u_translation.rssequencewill
 msgid "Sequence will continue with the current focuser position."
-msgstr "La séquence continue avec la posiiton courante du focuser"
+msgstr "La séquence continue avec la position courante du focuser"
 
 #: u_translation.rssequencewill2
 msgid "Sequence will run without guiding!"
-msgstr "La séqunce se fait sans guidage!"
+msgstr "La séquence se fait sans guidage!"
 
 #: u_translation.rsserver
 msgid "Server"
@@ -2902,7 +2918,7 @@ msgstr "Arrête l'astrométrie en cours"
 
 #: u_translation.rsstopastromet2
 msgid "Stop astrometry resolver."
-msgstr "Arrêt du resolveur astrométrique."
+msgstr "Arrêt du résolveur astrométrique."
 
 #: u_translation.rsstopat
 msgid "Stop at"
@@ -3000,10 +3016,6 @@ msgstr "Sous-dossier par étape"
 msgid "Subfolder by sequence name"
 msgstr "Sous-dossier par nom de séquence"
 
-#: u_translation.rssubstractadr
-msgid "Substract a drak frame"
-msgstr "Soustrait un dark"
-
 #: u_translation.rssummary
 msgid "Summary"
 msgstr "Résumé"
@@ -3066,7 +3078,7 @@ msgstr "Monture du télescope"
 
 #: u_translation.rstelescopenam
 msgid "Telescope name"
-msgstr "Nom du telescope"
+msgstr "Nom du télescope"
 
 #: u_translation.rstelescopepos
 msgid "Telescope position"
@@ -3118,7 +3130,7 @@ msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
 
 #: u_translation.rsthedataareno
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
-msgstr "Les données sont maintenant enregistrées dans le profil. %sVous pouvez revoir les autres options de mise au point automatique à l'aide du menu %sModifier / Préferences / Autofocus. %sSi la méthode Vcurve est active, vous devez faire l'apprentissage de la courbe en utilisant la fenêtre qui s'ouvrira après la fermeture de celle-ci. %sVous pouvez également faire cet apprentissage plus tard en utilisant le bouton Apprendre dans l'outil de mise au point."
+msgstr "Les données sont maintenant enregistrées dans le profil. %sVous pouvez revoir les autres options de mise au point automatique à l'aide du menu %sModifier / Préférences / Autofocus. %sSi la méthode Vcurve est active, vous devez faire l'apprentissage de la courbe en utilisant la fenêtre qui s'ouvrira après la fermeture de celle-ci. %sVous pouvez également faire cet apprentissage plus tard en utilisant le bouton Apprendre dans l'outil de mise au point."
 
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
@@ -3390,15 +3402,15 @@ msgstr "Attend le crépuscule à %s"
 
 #: u_translation.rswaitmeridian
 msgid "Wait meridian flip for %s minutes"
-msgstr "Atttend le retournement méridien depuis %s minutes"
+msgstr "Attend le retournement méridien depuis %s minutes"
 
 #: u_translation.rswaitmeridian2
 msgid "Wait meridian flip"
-msgstr "Atttend le retournement méridien"
+msgstr "Attend le retournement méridien"
 
 #: u_translation.rswaitsecondsb
 msgid "Wait %s seconds before repeated target %s"
-msgstr "Attend %s scondes avant de répeter la cible %s"
+msgstr "Attend %s secondes avant de répéter la cible %s"
 
 #: u_translation.rswaitsecondsb2
 msgid "Wait %s seconds before repeated sequence %s"
@@ -3418,7 +3430,7 @@ msgstr "Attente du début de la séquence %s à %s"
 
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
-msgstr "Réchaufe la caméra"
+msgstr "Réchauffe la caméra"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"

@@ -1706,10 +1706,6 @@ msgstr ""
 msgid "Preview stacking"
 msgstr ""
 
-#: u_translation:rssubstractadr
-msgid "Substract a drak frame"
-msgstr ""
-
 #: u_translation:rsshowpreviews
 msgid "Show preview stack option"
 msgstr ""
@@ -3440,5 +3436,21 @@ msgstr ""
 
 #: u_translation:rsidle
 msgid "Idle"
+msgstr ""
+
+#: u_translation:rspleaserunthe2
+msgid "Please run the Focuser Calibration procedure first"
+msgstr ""
+
+#: u_translation:rsdarkframe
+msgid "Dark frame"
+msgstr ""
+
+#: u_translation:rsloaddarkfile
+msgid "Load dark file"
+msgstr ""
+
+#: u_translation:rscleardarkfra
+msgid "Clear Dark frame"
 msgstr ""
 

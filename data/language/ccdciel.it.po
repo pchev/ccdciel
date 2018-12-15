@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-12-04 13:42+0000\n"
+"POT-Creation-Date: 2018-12-15 10:06+0000\n"
 "PO-Revision-Date: 2018-12-04 14:05+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-12-04 14:08+0000\n"
-"X-Generator: Launchpad (build 18830)\n"
+"X-Launchpad-Export-Date: 2018-12-15 10:36+0000\n"
+"X-Generator: Launchpad (build 18837)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -544,6 +544,10 @@ msgstr ""
 msgid "Clear bad pixel map"
 msgstr "Pulisci mappa pixel difettosi"
 
+#: u_translation.rscleardarkfra
+msgid "Clear Dark frame"
+msgstr ""
+
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
 msgstr "Pulisci immagine di riferimento"
@@ -714,6 +718,10 @@ msgstr ""
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
+msgstr ""
+
+#: u_translation.rsdarkframe
+msgid "Dark frame"
 msgstr ""
 
 #: u_translation.rsdarknight
@@ -1464,6 +1472,10 @@ msgstr "Carica"
 msgid "Load configuration on startup"
 msgstr "Carica configurazione all'avvio"
 
+#: u_translation.rsloaddarkfile
+msgid "Load dark file"
+msgstr ""
+
 #: u_translation.rslogallmessag
 msgid "Log all messages to file "
 msgstr "Annota tutti i messaggi su file "
@@ -2047,6 +2059,10 @@ msgstr ""
 #: u_translation.rspleaserunthe
 msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
 msgstr "Esegui prima l'apprendimento della curva V per questa direzione del focheggiatore. Pulsante V-learn."
+
+#: u_translation.rspleaserunthe2
+msgid "Please run the Focuser Calibration procedure first"
+msgstr ""
 
 #: u_translation.rspleaserunvcu
 msgid "Please run Vcurve learning for binning %s"
@@ -2999,10 +3015,6 @@ msgstr "Sottocartella da passo programma"
 #: u_translation.rssubfolderbys
 msgid "Subfolder by sequence name"
 msgstr "Sottocartella da nome sequenza"
-
-#: u_translation.rssubstractadr
-msgid "Substract a drak frame"
-msgstr "Sottrai un dark frame"
 
 #: u_translation.rssummary
 msgid "Summary"
