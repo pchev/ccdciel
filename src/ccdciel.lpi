@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="72">
+    <Units Count="77">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -680,6 +680,29 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit71>
+      <Unit72>
+        <Filename Value="cu_weather.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit72>
+      <Unit73>
+        <Filename Value="cu_safety.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit73>
+      <Unit74>
+        <Filename Value="cu_ascomsafety.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="cu_ascomweather.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit75>
+      <Unit76>
+        <Filename Value="fu_weather.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_weather"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit76>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

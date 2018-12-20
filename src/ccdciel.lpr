@@ -39,13 +39,14 @@ uses
   cu_ascomwheel, cu_ascommount, cu_ascomcamera, fu_ccdtemp, pu_options,
   fu_frame, cu_astrometry_engine, cu_planetarium_samp, pu_viewtext,
   cu_autoguider_phd, cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig,
-  pu_edittargets, cu_autoguider, cu_planetarium, fu_planetarium,
-  cu_astrometry, pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan,
-  pu_pascaleditor, pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI,
-  fu_video, pu_vcurve, cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator,
-  cu_ascomrotator, cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog,
-  cu_indiwatchdog, pu_focusercalibration, cu_tcpserver, u_translation,
-  pu_hyperbola, fu_magnifyer, pu_msgtabs, u_annotation, pu_sequenceoptions;
+  pu_edittargets, cu_autoguider, cu_planetarium, fu_planetarium, cu_astrometry,
+  pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan, pu_pascaleditor,
+  pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI, fu_video, pu_vcurve,
+  cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator, cu_ascomrotator,
+  cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog, cu_indiwatchdog,
+  pu_focusercalibration, cu_tcpserver, u_translation, pu_hyperbola,
+  fu_magnifyer, pu_msgtabs, u_annotation, pu_sequenceoptions, cu_safety,
+  cu_weather, cu_ascomsafety, cu_ascomweather, fu_weather;
 
 {$R *.res}
 

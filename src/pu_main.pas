@@ -32,6 +32,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
+  cu_weather, cu_ascomweather, cu_safety, cu_ascomsafety, fu_weather, fu_safety,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -74,6 +75,8 @@ type
     MenuDarkCamera: TMenuItem;
     MenuDarkFile: TMenuItem;
     MenuDarkClear: TMenuItem;
+    MenuViewWeather: TMenuItem;
+    MenuViewSafety: TMenuItem;
     MenuItemDark: TMenuItem;
     MenuStatus: TMenuItem;
     MenuUsergroup: TMenuItem;
@@ -353,9 +356,11 @@ type
     procedure MenuViewPreviewClick(Sender: TObject);
     procedure MenuViewCaptureClick(Sender: TObject);
     procedure MenuViewRotatorClick(Sender: TObject);
+    procedure MenuViewSafetyClick(Sender: TObject);
     procedure MenuViewScriptClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
+    procedure MenuViewWeatherClick(Sender: TObject);
     procedure MenuVisuZoom12Click(Sender: TObject);
     procedure MenuVisuZoom1Click(Sender: TObject);
     procedure MenuVisuZoom2Click(Sender: TObject);
@@ -384,10 +389,12 @@ type
     rotator: T_rotator;
     mount: T_mount;
     watchdog: T_watchdog;
+    weather: T_weather;
+    safety: T_safety;
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantWatchdog: boolean;
+    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantWeather, WantSafety, WantWatchdog: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
@@ -403,6 +410,8 @@ type
     f_rotator: Tf_rotator;
     f_vcurve:Tf_vcurve;
     f_mount: Tf_mount;
+    f_weather: Tf_weather;
+    f_safety: Tf_safety;
     f_autoguider: Tf_autoguider;
     f_planetarium: Tf_planetarium;
     f_script: Tf_script;
@@ -504,6 +513,10 @@ type
     Procedure DisconnectMount(Sender: TObject);
     Procedure ConnectWatchdog(Sender: TObject);
     Procedure DisconnectWatchdog(Sender: TObject);
+    Procedure ConnectWeather(Sender: TObject);
+    Procedure DisconnectWeather(Sender: TObject);
+    Procedure ConnectSafety(Sender: TObject);
+    Procedure DisconnectSafety(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     procedure LogLevelChange(Sender: TObject);
@@ -556,6 +569,10 @@ type
     Procedure MountPiersideChange(Sender: TObject);
     Procedure MountParkChange(Sender: TObject);
     Procedure MountTrackingChange(Sender: TObject);
+    Procedure WeatherStatus(Sender: TObject);
+    Procedure WeatherClearChange(Sender: TObject);
+    Procedure SafetyStatus(Sender: TObject);
+    Procedure SafetySafeChange(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
     Procedure AutoguiderCalibrateClick(Sender: TObject);
     Procedure AutoguiderGuideClick(Sender: TObject);
@@ -635,7 +652,7 @@ uses
 {$if lcl_major > 1}
 LazSysUtils;
 {$else}
-LazUTF8SysUtils;
+{LazUTF8}SysUtils;
 {$endif}
 
 {$R *.lfm}
@@ -1115,6 +1132,26 @@ begin
   rotator.onAngleChange:=@RotatorAngleChange;
   rotator.onStatusChange:=@RotatorStatus;
 
+  aInt:=TDevInterface(config.GetValue('/WeatherInterface',ord(DefaultInterface)));
+  case aInt of
+   // INDI:  weather:=T_indiweather.Create(nil);
+    ASCOM: weather:=T_ascomweather.Create(nil);
+  end;
+  weather.onMsg:=@NewMessage;
+  weather.onDeviceMsg:=@DeviceMessage;
+  weather.onStatusChange:=@WeatherStatus;
+  weather.onClearChange:=@WeatherClearChange;
+
+  aInt:=TDevInterface(config.GetValue('/SafetyInterface',ord(DefaultInterface)));
+  case aInt of
+   // INDI:  safety:=T_indisafety.Create(nil);
+    ASCOM: safety:=T_ascomsafety.Create(nil);
+  end;
+  safety.onMsg:=@NewMessage;
+  safety.onDeviceMsg:=@DeviceMessage;
+  safety.onStatusChange:=@SafetyStatus;
+  safety.onSafeChange:=@SafetySafeChange;
+
   aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
   case aInt of
     INDI:  mount:=T_indimount.Create(nil);
@@ -1273,6 +1310,10 @@ begin
   f_rotator.onRotate:=@RotatorRotate;
   f_rotator.onHalt:=@RotatorHalt;
   f_rotator.onReverse:=@RotatorReverse;
+
+  f_weather:=Tf_weather.Create(self);
+
+  f_safety:=Tf_safety.Create(self);
 
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
@@ -1560,6 +1601,8 @@ begin
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
   SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
+  SetTool(f_weather,'Weather',PanelRight1,f_script.top+1,MenuViewWeather,nil);
+  SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil);
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser);
   SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
@@ -1838,6 +1881,8 @@ begin
   SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
   SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
   SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
+  SetTool(f_weather,'',PanelRight1,f_script.top+1,MenuViewWeather,nil);
+  SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil);
 
   SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser);
   SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
@@ -1979,6 +2024,8 @@ begin
   rotator.Free;
   mount.Free;
   watchdog.Free;
+  weather.Free;
+  safety.Free;
   ImaBmp.Free;
   refbmp.Free;
   config.Free;
@@ -2461,18 +2508,30 @@ case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
 end;
+case weather.WeatherInterface of
+   INDI : WeatherName:=config.GetValue('/INDIweather/Device','');
+   ASCOM: WeatherName:=config.GetValue('/ASCOMweather/Device','');
+end;
+case safety.SafetyInterface of
+   INDI : SafetyName:=config.GetValue('/INDIsafety/Device','');
+   ASCOM: SafetyName:=config.GetValue('/ASCOMsafety/Device','');
+end;
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
 rotator.Timeout:=DeviceTimeout;
 wheel.Timeout:=DeviceTimeout;
 mount.Timeout:=DeviceTimeout;
+weather.Timeout:=DeviceTimeout;
+safety.Timeout:=DeviceTimeout;
 wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
 focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
 rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
 mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
 camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
+weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
+safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
 if watchdog<>nil then begin
   watchdog.Timeout:=DeviceTimeout;
   WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
@@ -2776,6 +2835,8 @@ begin
   WantFocuser:=config.GetValue('/Devices/Focuser',false);
   WantRotator:=config.GetValue('/Devices/Rotator',false);
   WantMount:=config.GetValue('/Devices/Mount',false);
+  WantWeather:=config.GetValue('/Devices/Weather',false);
+  WantSafety:=config.GetValue('/Devices/Safety',false);
   WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
 
   if WantCamera and (CameraName='') then begin
@@ -2808,12 +2869,24 @@ begin
     MenuSetup.Click;
     exit;
   end;
+  if WantWeather and (WeatherName='') then begin
+    ShowMessage(rsPleaseConfig+blank+rsWeatherStati);
+    MenuSetup.Click;
+    exit;
+  end;
+  if WantSafety and (SafetyName='') then begin
+    ShowMessage(rsPleaseConfig+blank+rsSafetyMonito);
+    MenuSetup.Click;
+    exit;
+  end;
 
   f_devicesconnection.LabelCamera.Visible:=WantCamera;
   f_devicesconnection.LabelWheel.Visible:=WantWheel;
   f_devicesconnection.LabelFocuser.Visible:=WantFocuser;
   f_devicesconnection.LabelRotator.Visible:=WantRotator;
   f_devicesconnection.LabelMount.Visible:=WantMount;
+  f_devicesconnection.LabelWeather.Visible:=WantWeather;
+  f_devicesconnection.LabelSafety.Visible:=WantSafety;
   f_devicesconnection.LabelWatchdog.Visible:=WantWatchdog;
   f_devicesconnection.PanelDev.Visible:=true;
 
@@ -2822,6 +2895,8 @@ begin
   if WantFocuser then ConnectFocuser(Sender);
   if WantRotator then ConnectRotator(Sender);
   if WantMount   then ConnectMount(Sender);
+  if WantWeather then ConnectWeather(Sender);
+  if WantSafety  then ConnectSafety(Sender);
   if WantWatchdog then ConnectWatchdog(Sender);
 end;
 
@@ -2840,6 +2915,8 @@ if camera.Status<>devDisconnected then begin
      DisconnectFocuser(Sender);
      DisconnectRotator(Sender);
      DisconnectMount(Sender);
+     DisconnectWeather(Sender);
+     DisconnectSafety(Sender);
      DisconnectWatchdog(Sender);
    end;
 end;
@@ -2919,6 +2996,22 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
     devConnecting: inc(concount);
   end;
  end;
+  if WantWeather then begin
+  inc(allcount);
+  case weather.Status of
+    devConnected: inc(upcount);
+    devDisconnected: inc(downcount);
+    devConnecting: inc(concount);
+  end;
+ end;
+  if WantSafety then begin
+   inc(allcount);
+   case safety.Status of
+     devConnected: inc(upcount);
+     devDisconnected: inc(downcount);
+     devConnecting: inc(concount);
+   end;
+  end;
  if allcount=0 then SetDisconnected
  else if (upcount=allcount) then begin
    SetConnected;
@@ -3316,6 +3409,90 @@ begin
                    end;
  end;
  CheckConnectionStatus;
+end;
+
+Procedure Tf_main.ConnectWeather(Sender: TObject);
+begin
+  case weather.WeatherInterface of
+    INDI : weather.Connect(config.GetValue('/INDI/Server',''),
+                          config.GetValue('/INDI/ServerPort',''),
+                          config.GetValue('/INDIweather/Device',''),
+                          '');
+    ASCOM: weather.Connect(config.GetValue('/ASCOMweather/Device',''));
+  end;
+end;
+
+Procedure Tf_main.DisconnectWeather(Sender: TObject);
+begin
+ weather.Disconnect;
+end;
+
+Procedure Tf_main.WeatherStatus(Sender: TObject);
+begin
+case weather.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelWeather.Font.Color:=clRed;
+                  end;
+  devConnecting:  begin
+                      NewMessage(Format(rsConnecting, [rsWeatherStati+ellipsis]),2);
+                      f_devicesconnection.LabelWeather.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelWeather.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelWeather.Font.Color:=clGreen;
+                      NewMessage(Format(rsConnected, [rsWeatherStati]),1);
+                      WeatherClearChange(Sender);
+                   end;
+end;
+CheckConnectionStatus;
+end;
+
+Procedure Tf_main.WeatherClearChange(Sender: TObject);
+begin
+if weather.Clear then f_weather.led.Brush.Color:=clLime
+                 else f_weather.led.Brush.Color:=clRed;
+end;
+
+Procedure Tf_main.ConnectSafety(Sender: TObject);
+begin
+  case safety.SafetyInterface of
+    INDI : safety.Connect(config.GetValue('/INDI/Server',''),
+                          config.GetValue('/INDI/ServerPort',''),
+                          config.GetValue('/INDIsafety/Device',''),
+                          '');
+    ASCOM: safety.Connect(config.GetValue('/ASCOMsafety/Device',''));
+  end;
+end;
+
+Procedure Tf_main.DisconnectSafety(Sender: TObject);
+begin
+ safety.Disconnect;
+end;
+
+Procedure Tf_main.SafetyStatus(Sender: TObject);
+begin
+case safety.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelSafety.Font.Color:=clRed;
+                  end;
+  devConnecting:  begin
+                      NewMessage(Format(rsConnecting, [rsSafetyMonito+ellipsis]),2);
+                      f_devicesconnection.LabelSafety.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelSafety.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelSafety.Font.Color:=clGreen;
+                      NewMessage(Format(rsConnected, [rsSafetyMonito]),1);
+                      SafetySafeChange(Sender);
+                   end;
+end;
+CheckConnectionStatus;
+end;
+
+Procedure Tf_main.SafetySafeChange(Sender: TObject);
+begin
+if safety.Safe then f_safety.led.Brush.Color:=clLime
+               else f_safety.led.Brush.Color:=clRed;
 end;
 
 procedure Tf_main.LogLevelChange(Sender: TObject);
@@ -4383,6 +4560,8 @@ begin
   f_setup.DefaultWheelInterface:=wheel.WheelInterface;
   f_setup.DefaultFocuserInterface:=focuser.FocuserInterface;
   f_setup.DefaultRotatorInterface:=rotator.RotatorInterface;
+  f_setup.DefaultWeatherInterface:=weather.WeatherInterface;
+  f_setup.DefaultSafetyInterface:=safety.SafetyInterface;
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config);
@@ -4420,6 +4599,8 @@ begin
     config.SetValue('/Devices/Rotator',f_setup.DeviceRotator.Checked);
     config.SetValue('/Devices/Mount',f_setup.DeviceMount.Checked);
     config.SetValue('/Devices/Watchdog',f_setup.DeviceWatchdog.Checked);
+    config.SetValue('/Devices/Weather',f_setup.DeviceWeather.Checked);
+    config.SetValue('/Devices/Safety',f_setup.DeviceSafety.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
@@ -4461,6 +4642,16 @@ begin
     if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
     config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);
     config.SetValue('/INDIwatchdog/AutoLoadConfig',f_setup.WatchdogAutoLoadConfig.Checked);
+
+    config.SetValue('/WeatherInterface',ord(f_setup.WeatherConnection));
+    if f_setup.WeatherIndiDevice.Text<>'' then config.SetValue('/INDIweather/Device',f_setup.WeatherIndiDevice.Text);
+    config.SetValue('/INDIweather/AutoLoadConfig',f_setup.WeatherAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMweather/Device',f_setup.AscomWeather.Text);
+
+    config.SetValue('/SafetyInterface',ord(f_setup.SafetyConnection));
+    if f_setup.SafetyIndiDevice.Text<>'' then config.SetValue('/INDIsafety/Device',f_setup.SafetyIndiDevice.Text);
+    config.SetValue('/INDIsafety/AutoLoadConfig',f_setup.SafetyAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMsafety/Device',f_setup.AscomSafety.Text);
 
     SaveConfig;
 
@@ -5011,6 +5202,11 @@ begin
   f_rotator.Visible:=MenuViewRotator.Checked;
 end;
 
+procedure Tf_main.MenuViewSafetyClick(Sender: TObject);
+begin
+  f_safety.Visible:=MenuViewSafety.Checked;
+end;
+
 procedure Tf_main.MenuViewPlanetariumClick(Sender: TObject);
 begin
   f_planetarium.Visible:=MenuViewPlanetarium.Checked;
@@ -5039,6 +5235,11 @@ end;
 procedure Tf_main.MenuViewStarProfileClick(Sender: TObject);
 begin
   f_starprofile.Visible:=MenuViewStarProfile.Checked;
+end;
+
+procedure Tf_main.MenuViewWeatherClick(Sender: TObject);
+begin
+  f_safety.Visible:=MenuViewSafety.Checked;
 end;
 
 procedure Tf_main.MenuVisuZoom12Click(Sender: TObject);

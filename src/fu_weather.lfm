@@ -1,0 +1,72 @@
+object f_weather: Tf_weather
+  Left = 0
+  Height = 45
+  Top = 0
+  Width = 179
+  AutoSize = True
+  ClientHeight = 45
+  ClientWidth = 179
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
+  object Title: TLabel
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 179
+    Align = alTop
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Weather'
+    Color = clBtnShadow
+    DragMode = dmAutomatic
+    Font.Color = clBtnText
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 21
+    Top = 20
+    Width = 179
+    Align = alTop
+    AutoSize = True
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 21
+    ClientWidth = 179
+    ParentFont = False
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 0
+      Height = 20
+      Top = 0
+      Width = 166
+      BevelOuter = bvNone
+      ClientHeight = 20
+      ClientWidth = 166
+      ParentFont = False
+      TabOrder = 0
+      object led: TShape
+        Left = 152
+        Height = 14
+        Hint = 'Uncalibrated'
+        Top = 4
+        Width = 14
+        Brush.Color = clRed
+        Shape = stCircle
+      end
+      object Label1: TLabel
+        Left = 8
+        Height = 15
+        Top = 5
+        Width = 27
+        Caption = 'Clear'
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+  end
+end

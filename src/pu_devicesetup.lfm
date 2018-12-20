@@ -46,17 +46,17 @@ object f_setup: Tf_setup
     Height = 300
     Top = 0
     Width = 502
-    ActivePage = DeviceInterface
+    ActivePage = Filterwheel
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 1
     Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object InterfaceSelectionBox: TRadioGroup
         Left = 16
@@ -73,8 +73,8 @@ object f_setup: Tf_setup
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 37
-        ClientWidth = 348
+        ClientHeight = 35
+        ClientWidth = 346
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -97,7 +97,7 @@ object f_setup: Tf_setup
         TabOrder = 1
         object IndiServer: TEdit
           Left = 8
-          Height = 29
+          Height = 23
           Top = 24
           Width = 121
           ParentFont = False
@@ -106,7 +106,7 @@ object f_setup: Tf_setup
         end
         object IndiPort: TEdit
           Left = 137
-          Height = 29
+          Height = 23
           Top = 24
           Width = 81
           ParentFont = False
@@ -125,43 +125,43 @@ object f_setup: Tf_setup
         end
         object Label18: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 5
-          Width = 42
+          Width = 32
           Caption = 'Server'
           ParentColor = False
           ParentFont = False
         end
         object Label22: TLabel
           Left = 145
-          Height = 17
+          Height = 15
           Top = 5
-          Width = 26
+          Width = 22
           Caption = 'Port'
           ParentColor = False
           ParentFont = False
         end
         object LabelIndiDevCount: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 89
-          Width = 12
+          Width = 9
           Caption = '   '
           ParentColor = False
           ParentFont = False
         end
         object Label1: TLabel
           Left = 226
-          Height = 17
+          Height = 15
           Top = 5
-          Width = 54
+          Width = 45
           Caption = 'Timeout'
           ParentColor = False
           ParentFont = False
         end
         object IndiTimeout: TEdit
           Left = 226
-          Height = 29
+          Height = 23
           Top = 24
           Width = 49
           ParentFont = False
@@ -170,10 +170,10 @@ object f_setup: Tf_setup
       end
       object ProfileList: TComboBox
         Left = 105
-        Height = 29
+        Height = 23
         Top = 8
         Width = 121
-        ItemHeight = 0
+        ItemHeight = 15
         ItemIndex = 0
         Items.Strings = (
           'Default'
@@ -187,9 +187,9 @@ object f_setup: Tf_setup
       end
       object Label2: TLabel
         Left = 21
-        Height = 17
+        Height = 15
         Top = 14
-        Width = 49
+        Width = 40
         Caption = 'Profile :'
         ParentColor = False
         ParentFont = False
@@ -233,8 +233,8 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object PanelCameraAscom: TPanel
         Left = 16
@@ -308,10 +308,10 @@ object f_setup: Tf_setup
         TabOrder = 1
         object CameraIndiDevice: TComboBox
           Left = 101
-          Height = 33
+          Height = 23
           Top = 16
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           ParentFont = False
           Style = csDropDownList
           TabOrder = 0
@@ -354,10 +354,10 @@ object f_setup: Tf_setup
         end
         object IndiSensor: TComboBox
           Left = 101
-          Height = 29
+          Height = 23
           Top = 51
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           Items.Strings = (
             'Main sensor'
             'Guider sensor'
@@ -391,8 +391,8 @@ object f_setup: Tf_setup
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 27
-          ClientWidth = 245
+          ClientHeight = 25
+          ClientWidth = 243
           Columns = 2
           Items.Strings = (
             'Network'
@@ -438,8 +438,8 @@ object f_setup: Tf_setup
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object PanelWheelAscom: TPanel
         Left = 16
@@ -464,7 +464,7 @@ object f_setup: Tf_setup
         end
         object AscomWheel: TEdit
           Left = 14
-          Height = 29
+          Height = 23
           Top = 17
           Width = 139
           ParentFont = False
@@ -495,10 +495,10 @@ object f_setup: Tf_setup
       end
       object FilterWheelInCameraBox: TCheckBox
         Left = 16
-        Height = 21
+        Height = 19
         Hint = 'You need to restart the program after changing this option'
         Top = 194
-        Width = 370
+        Width = 298
         Caption = 'Filter wheel in camera connection. (Restart required!)'
         OnClick = FilterWheelInCameraBoxClick
         ParentFont = False
@@ -516,9 +516,9 @@ object f_setup: Tf_setup
         TabOrder = 2
         object Label17: TLabel
           Left = 14
-          Height = 17
+          Height = 15
           Top = 32
-          Width = 287
+          Width = 234
           Caption = 'Be sure to configure the camera connection.'
           ParentColor = False
           ParentFont = False
@@ -535,17 +535,17 @@ object f_setup: Tf_setup
         TabOrder = 0
         object WheelIndiDevice: TComboBox
           Left = 101
-          Height = 33
+          Height = 23
           Top = 16
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object WheelIndiDevPort: TEdit
           Left = 101
-          Height = 29
+          Height = 23
           Top = 57
           Width = 170
           ParentFont = False
@@ -553,27 +553,27 @@ object f_setup: Tf_setup
         end
         object Label6: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 24
-          Width = 45
+          Width = 35
           Caption = 'Device'
           ParentColor = False
           ParentFont = False
         end
         object Label7: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 63
-          Width = 26
+          Width = 22
           Caption = 'Port'
           ParentColor = False
           ParentFont = False
         end
         object WheelAutoLoadConfig: TCheckBox
           Left = 13
-          Height = 21
+          Height = 19
           Top = 121
-          Width = 214
+          Width = 178
           Caption = 'Load configuration on startup'
           ParentFont = False
           TabOrder = 2
@@ -581,9 +581,9 @@ object f_setup: Tf_setup
       end
       object DeviceFilterWheel: TCheckBox
         Left = 16
-        Height = 21
+        Height = 19
         Top = 8
-        Width = 126
+        Width = 100
         Caption = 'Use filter wheel'
         ParentFont = False
         TabOrder = 4
@@ -591,8 +591,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object PanelFocuserInMount: TPanel
         Left = 18
@@ -605,9 +605,9 @@ object f_setup: Tf_setup
         TabOrder = 2
         object Label16: TLabel
           Left = 13
-          Height = 29
+          Height = 32
           Top = 32
-          Width = 242
+          Width = 209
           Caption = 'Not implemented!'
           Font.Height = -24
           Font.Style = [fsBold]
@@ -638,7 +638,7 @@ object f_setup: Tf_setup
         end
         object AscomFocuser: TEdit
           Left = 14
-          Height = 29
+          Height = 23
           Top = 17
           Width = 139
           ParentFont = False
@@ -669,10 +669,10 @@ object f_setup: Tf_setup
       end
       object FocuserInMountBox: TCheckBox
         Left = 16
-        Height = 21
+        Height = 19
         Hint = 'You need to restart the program after changing this option'
         Top = 194
-        Width = 338
+        Width = 276
         Caption = 'Focuser in mount connection. (Restart required!)'
         OnClick = FocuserInMountBoxClick
         ParentFont = False
@@ -690,17 +690,17 @@ object f_setup: Tf_setup
         TabOrder = 0
         object FocuserIndiDevice: TComboBox
           Left = 101
-          Height = 33
+          Height = 23
           Top = 17
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object FocuserIndiDevPort: TEdit
           Left = 101
-          Height = 29
+          Height = 23
           Top = 58
           Width = 170
           ParentFont = False
@@ -708,27 +708,27 @@ object f_setup: Tf_setup
         end
         object Label9: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 25
-          Width = 45
+          Width = 35
           Caption = 'Device'
           ParentColor = False
           ParentFont = False
         end
         object Label10: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 64
-          Width = 26
+          Width = 22
           Caption = 'Port'
           ParentColor = False
           ParentFont = False
         end
         object FocuserAutoLoadConfig: TCheckBox
           Left = 13
-          Height = 21
+          Height = 19
           Top = 121
-          Width = 214
+          Width = 178
           Caption = 'Load configuration on startup'
           ParentFont = False
           TabOrder = 2
@@ -736,9 +736,9 @@ object f_setup: Tf_setup
       end
       object DeviceFocuser: TCheckBox
         Left = 16
-        Height = 21
+        Height = 19
         Top = 8
-        Width = 105
+        Width = 84
         Caption = 'Use focuser '
         ParentFont = False
         TabOrder = 4
@@ -746,8 +746,8 @@ object f_setup: Tf_setup
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object DeviceRotator: TCheckBox
         Left = 16
@@ -821,10 +821,10 @@ object f_setup: Tf_setup
         TabOrder = 1
         object RotatorIndiDevice: TComboBox
           Left = 101
-          Height = 33
+          Height = 23
           Top = 17
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           ParentFont = False
           Style = csDropDownList
           TabOrder = 0
@@ -879,8 +879,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object PanelMountAscom: TPanel
         Left = 16
@@ -905,7 +905,7 @@ object f_setup: Tf_setup
         end
         object AscomMount: TEdit
           Left = 14
-          Height = 29
+          Height = 23
           Top = 17
           Width = 139
           ParentFont = False
@@ -945,17 +945,17 @@ object f_setup: Tf_setup
         TabOrder = 0
         object MountIndiDevice: TComboBox
           Left = 101
-          Height = 33
+          Height = 23
           Top = 16
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object MountIndiDevPort: TEdit
           Left = 101
-          Height = 29
+          Height = 23
           Top = 57
           Width = 170
           ParentFont = False
@@ -963,27 +963,27 @@ object f_setup: Tf_setup
         end
         object Label12: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 24
-          Width = 45
+          Width = 35
           Caption = 'Device'
           ParentColor = False
           ParentFont = False
         end
         object Label13: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 63
-          Width = 26
+          Width = 22
           Caption = 'Port'
           ParentColor = False
           ParentFont = False
         end
         object MountAutoLoadConfig: TCheckBox
           Left = 16
-          Height = 21
+          Height = 19
           Top = 97
-          Width = 214
+          Width = 178
           Caption = 'Load configuration on startup'
           ParentFont = False
           TabOrder = 2
@@ -991,27 +991,27 @@ object f_setup: Tf_setup
       end
       object DeviceMount: TCheckBox
         Left = 16
-        Height = 21
+        Height = 19
         Top = 8
-        Width = 99
+        Width = 81
         Caption = 'Use mount '
         ParentFont = False
         TabOrder = 2
       end
       object MountSetDateTime: TCheckBox
         Left = 32
-        Height = 21
+        Height = 19
         Top = 178
-        Width = 225
+        Width = 185
         Caption = 'Set mount date from computer'
         ParentFont = False
         TabOrder = 3
       end
       object MountSetObservatory: TCheckBox
         Left = 32
-        Height = 21
+        Height = 19
         Top = 207
-        Width = 296
+        Width = 245
         Caption = 'Set mount site long/lat from configuration'
         OnClick = MountSetObservatoryClick
         ParentFont = False
@@ -1019,19 +1019,227 @@ object f_setup: Tf_setup
       end
       object MountGetObservatory: TCheckBox
         Left = 32
-        Height = 21
+        Height = 19
         Top = 235
-        Width = 234
+        Width = 192
         Caption = 'Get site long/lat from the mount'
         OnClick = MountGetObservatoryClick
         ParentFont = False
         TabOrder = 5
       end
     end
+    object Weather: TTabSheet
+      Caption = 'Weather'
+      ClientHeight = 252
+      ClientWidth = 494
+      object PanelWeatherIndi: TPanel
+        Left = 16
+        Height = 154
+        Top = 32
+        Width = 349
+        ClientHeight = 154
+        ClientWidth = 349
+        ParentFont = False
+        TabOrder = 1
+        object WeatherIndiDevice: TComboBox
+          Left = 101
+          Height = 23
+          Top = 17
+          Width = 170
+          ItemHeight = 15
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object Label21: TLabel
+          Left = 13
+          Height = 15
+          Top = 25
+          Width = 35
+          Caption = 'Device'
+          ParentColor = False
+          ParentFont = False
+        end
+        object WeatherAutoLoadConfig: TCheckBox
+          Left = 13
+          Height = 19
+          Top = 121
+          Width = 178
+          Caption = 'Load configuration on startup'
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object DeviceWeather: TCheckBox
+        Left = 16
+        Height = 19
+        Top = 8
+        Width = 130
+        Caption = 'Use weather monitor'
+        ParentFont = False
+        TabOrder = 0
+      end
+      object PanelWeatherAscom: TPanel
+        Left = 16
+        Height = 113
+        Top = 32
+        Width = 290
+        ClientHeight = 113
+        ClientWidth = 290
+        ParentFont = False
+        TabOrder = 2
+        Visible = False
+        object BtnChooseWeather: TButton
+          Tag = 6
+          Left = 168
+          Height = 25
+          Top = 16
+          Width = 108
+          Caption = 'Choose'
+          OnClick = BtnChooseClick
+          ParentFont = False
+          TabOrder = 0
+        end
+        object AscomWeather: TEdit
+          Left = 14
+          Height = 23
+          Top = 17
+          Width = 139
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BtnAboutWeather: TButton
+          Tag = 6
+          Left = 170
+          Height = 25
+          Top = 81
+          Width = 108
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BtnSetupWeather: TButton
+          Tag = 6
+          Left = 168
+          Height = 25
+          Top = 49
+          Width = 108
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          ParentFont = False
+          TabOrder = 3
+        end
+      end
+    end
+    object Safety: TTabSheet
+      Caption = 'Safety'
+      ClientHeight = 252
+      ClientWidth = 494
+      object DeviceSafety: TCheckBox
+        Left = 16
+        Height = 19
+        Top = 8
+        Width = 119
+        Caption = 'Use safety monitor'
+        ParentFont = False
+        TabOrder = 0
+      end
+      object PanelSafetyIndi: TPanel
+        Left = 16
+        Height = 154
+        Top = 32
+        Width = 349
+        ClientHeight = 154
+        ClientWidth = 349
+        ParentFont = False
+        TabOrder = 1
+        object SafetyIndiDevice: TComboBox
+          Left = 101
+          Height = 23
+          Top = 17
+          Width = 170
+          ItemHeight = 15
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object Label24: TLabel
+          Left = 13
+          Height = 15
+          Top = 25
+          Width = 35
+          Caption = 'Device'
+          ParentColor = False
+          ParentFont = False
+        end
+        object SafetyAutoLoadConfig: TCheckBox
+          Left = 13
+          Height = 19
+          Top = 121
+          Width = 178
+          Caption = 'Load configuration on startup'
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object PanelSafetyAscom: TPanel
+        Left = 16
+        Height = 113
+        Top = 32
+        Width = 290
+        ClientHeight = 113
+        ClientWidth = 290
+        ParentFont = False
+        TabOrder = 2
+        Visible = False
+        object BtnChooseSafety: TButton
+          Tag = 7
+          Left = 168
+          Height = 25
+          Top = 16
+          Width = 108
+          Caption = 'Choose'
+          OnClick = BtnChooseClick
+          ParentFont = False
+          TabOrder = 0
+        end
+        object AscomSafety: TEdit
+          Left = 14
+          Height = 23
+          Top = 17
+          Width = 139
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BtnAboutSafety: TButton
+          Tag = 7
+          Left = 170
+          Height = 25
+          Top = 81
+          Width = 108
+          Caption = 'About'
+          OnClick = BtnAboutAscomClick
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BtnSetupSafety: TButton
+          Tag = 7
+          Left = 168
+          Height = 25
+          Top = 49
+          Width = 108
+          Caption = 'Setup'
+          OnClick = BtnSetupAscomClick
+          ParentFont = False
+          TabOrder = 3
+        end
+      end
+    end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 271
-      ClientWidth = 492
+      ClientHeight = 252
+      ClientWidth = 494
       ParentFont = False
       object PanelWatchdogIndi: TPanel
         Left = 16
@@ -1044,44 +1252,44 @@ object f_setup: Tf_setup
         TabOrder = 0
         object WatchdogIndiDevice: TComboBox
           Left = 101
-          Height = 33
+          Height = 23
           Top = 16
           Width = 170
-          ItemHeight = 0
+          ItemHeight = 15
           ParentFont = False
           Style = csDropDownList
           TabOrder = 0
         end
         object Label19: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 24
-          Width = 45
+          Width = 35
           Caption = 'Device'
           ParentColor = False
           ParentFont = False
         end
         object WatchdogAutoLoadConfig: TCheckBox
           Left = 13
-          Height = 21
+          Height = 19
           Top = 121
-          Width = 214
+          Width = 178
           Caption = 'Load configuration on startup'
           ParentFont = False
           TabOrder = 1
         end
         object Label20: TLabel
           Left = 13
-          Height = 17
+          Height = 15
           Top = 76
-          Width = 201
+          Width = 162
           Caption = 'Heart beat threshold [minutes]'
           ParentColor = False
           ParentFont = False
         end
         object WatchdogThreshold: TEdit
           Left = 220
-          Height = 29
+          Height = 23
           Top = 74
           Width = 32
           ParentFont = False
@@ -1090,9 +1298,9 @@ object f_setup: Tf_setup
       end
       object DeviceWatchdog: TCheckBox
         Left = 16
-        Height = 21
+        Height = 19
         Top = 8
-        Width = 116
+        Width = 95
         Caption = 'Use watchdog'
         ParentFont = False
         TabOrder = 1

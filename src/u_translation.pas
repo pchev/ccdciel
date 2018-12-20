@@ -946,6 +946,10 @@ resourcestring
   rsDarkFrame = 'Dark frame';
   rsLoadDarkFile = 'Load dark file';
   rsClearDarkFra = 'Clear Dark frame';
+  rsWeatherStati = 'Weather station';
+  rsSafetyMonito = 'Safety monitor';
+  rsClearConditi = 'Clear condition';
+  rsSafeForOpera = 'Safe for operation';
 
 
 

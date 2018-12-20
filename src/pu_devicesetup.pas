@@ -37,14 +37,22 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    AscomWeather: TEdit;
+    AscomSafety: TEdit;
     AscomRotator: TEdit;
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
+    BtnAboutWeather: TButton;
+    BtnAboutSafety: TButton;
     BtnAboutRotator: TButton;
+    BtnChooseWeather: TButton;
+    BtnChooseSafety: TButton;
     BtnChooseRotator: TButton;
     BtnNewProfile: TButton;
     BtnDeleteProfile: TButton;
+    BtnSetupWeather: TButton;
+    BtnSetupSafety: TButton;
     BtnSetupRotator: TButton;
     BtnCopyProfile: TButton;
     CameraAutoLoadConfig: TCheckBox;
@@ -63,7 +71,15 @@ type
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
     CameraIndiTransfertDir: TEdit;
+    DeviceWeather: TCheckBox;
+    DeviceSafety: TCheckBox;
     FlipImage: TCheckBox;
+    WeatherAutoLoadConfig: TCheckBox;
+    SafetyAutoLoadConfig: TCheckBox;
+    WeatherIndiDevice: TComboBox;
+    SafetyIndiDevice: TComboBox;
+    Label21: TLabel;
+    Label24: TLabel;
     MountSetDateTime: TCheckBox;
     MountSetObservatory: TCheckBox;
     DeviceFilterWheel: TCheckBox;
@@ -72,6 +88,12 @@ type
     DeviceRotator: TCheckBox;
     DeviceMount: TCheckBox;
     MountGetObservatory: TCheckBox;
+    PanelWeatherAscom: TPanel;
+    PanelSafetyAscom: TPanel;
+    PanelWeatherIndi: TPanel;
+    PanelSafetyIndi: TPanel;
+    Weather: TTabSheet;
+    Safety: TTabSheet;
     WatchdogThreshold: TEdit;
     Label19: TLabel;
     Label20: TLabel;
@@ -168,9 +190,9 @@ type
   private
     { private declarations }
     indiclient: TIndiBaseClient;
-    camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,watchdogsavedev,FCameraSensor: string;
+    camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
-    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FRotatorConnection: TDevInterface;
+    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount:integer;
     receiveindidevice:boolean;
     procedure IndiNewDevice(dp: Basedevice);
@@ -180,11 +202,13 @@ type
     procedure SetFocuserConnection(value: TDevInterface);
     procedure SetRotatorConnection(value: TDevInterface);
     procedure SetMountConnection(value: TDevInterface);
+    procedure SetWeatherConnection(value: TDevInterface);
+    procedure SetSafetyConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
     procedure SetLang;
   public
     { public declarations }
-    DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface: TDevInterface;
+    DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
     profile: string;
     procedure LoadProfileList;
     procedure Loadconfig(conf: TCCDConfig);
@@ -196,6 +220,8 @@ type
     property FocuserConnection: TDevInterface read FFocuserConnection write SetFocuserConnection;
     property RotatorConnection: TDevInterface read FRotatorConnection write SetRotatorConnection;
     property MountConnection: TDevInterface read FMountConnection write SetMountConnection;
+    property WeatherConnection: TDevInterface read FWeatherConnection write SetWeatherConnection;
+    property SafetyConnection: TDevInterface read FSafetyConnection write SetSafetyConnection;
   end;
 
 var
@@ -328,6 +354,8 @@ DeviceFilterWheel.Checked:=conf.GetValue('/Devices/FilterWheel',false);
 DeviceFocuser.Checked:=conf.GetValue('/Devices/Focuser',false);
 DeviceRotator.Checked:=conf.GetValue('/Devices/Rotator',false);
 DeviceMount.Checked:=conf.GetValue('/Devices/Mount',false);
+DeviceWeather.Checked:=conf.GetValue('/Devices/Weather',false);
+DeviceSafety.Checked:=conf.GetValue('/Devices/Safety',false);
 DeviceWatchdog.Checked:=conf.GetValue('/Devices/Watchdog',false);
 
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
@@ -388,6 +416,24 @@ MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
 MountSetObservatory.Checked:=conf.GetValue('/Mount/SetObservatory',false);
 MountGetObservatory.Checked:=conf.GetValue('/Mount/GetObservatory',false);
 
+WeatherConnection:=TDevInterface(conf.GetValue('/WeatherInterface',ord(DefaultWeatherInterface)));
+if WeatherIndiDevice.Items.Count=0 then begin
+  WeatherIndiDevice.Items.Add(conf.GetValue('/INDIweather/Device',''));
+  WeatherIndiDevice.ItemIndex:=0;
+end;
+WeatherIndiDevice.Text:=conf.GetValue('/INDIweather/Device','');
+WeatherAutoLoadConfig.Checked:=conf.GetValue('/INDIweather/AutoLoadConfig',false);
+AscomWeather.Text:=conf.GetValue('/ASCOMweather/Device','');
+
+SafetyConnection:=TDevInterface(conf.GetValue('/SafetyInterface',ord(DefaultSafetyInterface)));
+if SafetyIndiDevice.Items.Count=0 then begin
+  SafetyIndiDevice.Items.Add(conf.GetValue('/INDIsafety/Device',''));
+  SafetyIndiDevice.ItemIndex:=0;
+end;
+SafetyIndiDevice.Text:=conf.GetValue('/INDIsafety/Device','');
+SafetyAutoLoadConfig.Checked:=conf.GetValue('/INDIsafety/AutoLoadConfig',false);
+AscomSafety.Text:=conf.GetValue('/ASCOMsafety/Device','');
+
 if WatchdogIndiDevice.Items.Count=0 then begin
   WatchdogIndiDevice.Items.Add(conf.GetValue('/INDIwatchdog/Device',''));
   WatchdogIndiDevice.ItemIndex:=0;
@@ -417,6 +463,12 @@ begin
      FRotatorConnection:=INDI;
      PanelRotatorIndi.Visible:=true;
      PanelRotatorAscom.Visible:=false;
+     FWeatherConnection:=INDI;
+     PanelWeatherIndi.Visible:=true;
+     PanelWeatherAscom.Visible:=false;
+     FSafetyConnection:=INDI;
+     PanelSafetyIndi.Visible:=true;
+     PanelSafetyAscom.Visible:=false;
      // INDI internal filter use same driver as camera
      FilterWheelInCameraBox.Visible:=true;
      if (not FilterWheelInCameraBox.Checked) then begin
@@ -448,6 +500,12 @@ begin
      FRotatorConnection:=ASCOM;
      PanelRotatorIndi.Visible:=false;
      PanelRotatorAscom.Visible:=true;
+     FWeatherConnection:=ASCOM;
+     PanelWeatherIndi.Visible:=false;
+     PanelWeatherAscom.Visible:=true;
+     FSafetyConnection:=ASCOM;
+     PanelSafetyIndi.Visible:=false;
+     PanelSafetyAscom.Visible:=true;
      FilterWheelInCameraBox.Visible:=true;
      if (not FilterWheelInCameraBox.Checked) then begin
         FWheelConnection:=ASCOM;
@@ -500,6 +558,22 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FRotatorConnection:=value;
+end;
+
+procedure Tf_setup.SetWeatherConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FWeatherConnection:=value;
+end;
+
+procedure Tf_setup.SetSafetyConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FSafetyConnection:=value;
 end;
 
 procedure Tf_setup.SetWheelConnection(value: TDevInterface);
@@ -593,6 +667,8 @@ begin
     3 : begin t:='Focuser'; dev:=widestring(AscomFocuser.Text); end;
     4 : begin t:='Telescope'; dev:=widestring(AscomMount.Text); end;
     5 : begin t:='Rotator'; dev:=widestring(AscomRotator.Text); end;
+    6 : begin t:='ObservingConditions'; dev:=widestring(AscomWeather.Text); end;
+    7 : begin t:='SafetyMonitor'; dev:=widestring(AscomSafety.Text); end;
   end;
   try
     try
@@ -609,6 +685,8 @@ begin
       3 : AscomFocuser.Text:=string(dev);
       4 : AscomMount.Text:=string(dev);
       5 : AscomRotator.Text:=string(dev);
+      6 : AscomWeather.Text:=string(dev);
+      7 : AscomSafety.Text:=string(dev);
     end;
   except
     on E: Exception do begin
@@ -633,12 +711,18 @@ begin
     3 : begin dev:=widestring(AscomFocuser.Text); end;
     4 : begin dev:=widestring(AscomMount.Text); end;
     5 : begin dev:=widestring(AscomRotator.Text); end;
+    6 : begin dev:=widestring(AscomWeather.Text); end;
+    7 : begin dev:=widestring(AscomSafety.Text); end;
   end;
 
   try
     V := CreateOleObject(string(dev));
-    buf:=V.Description;
-    buf:=buf+crlf+V.DriverInfo;
+    buf:=V.DriverInfo;
+    try
+    buf:=buf+crlf+V.Description;
+    except
+      // Description is sometime not available when not connected
+    end;
     V:=Unassigned;
     ShowMessage(buf);
   except
@@ -661,6 +745,8 @@ begin
     3 : begin dev:=widestring(AscomFocuser.Text); end;
     4 : begin dev:=widestring(AscomMount.Text); end;
     5 : begin dev:=widestring(AscomRotator.Text); end;
+    6 : begin dev:=widestring(AscomWeather.Text); end;
+    7 : begin dev:=widestring(AscomSafety.Text); end;
   end;
 
   try
@@ -712,6 +798,8 @@ begin
   rotatorsavedev:=RotatorIndiDevice.Text;
   mountsavedev:=MountIndiDevice.Text;
   watchdogsavedev:=WatchdogIndiDevice.Text;
+  weathersavedev:=WeatherIndiDevice.Text;
+  safetysavedev:=SafetyIndiDevice.Text;
   LabelIndiDevCount.Caption:='...';
   CameraIndiDevice.Clear;
   FocuserIndiDevice.Clear;
@@ -719,6 +807,8 @@ begin
   WheelIndiDevice.Clear;
   MountIndiDevice.Clear;
   WatchdogIndiDevice.Clear;
+  WeatherIndiDevice.Clear;
+  SafetyIndiDevice.Clear;
   indiclient:=TIndiBaseClient.Create;
   indiclient.onNewDevice:=@IndiNewDevice;
   indiclient.SetServer(IndiServer.Text,IndiPort.Text);
@@ -754,6 +844,10 @@ begin
         MountIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and AUX_INTERFACE)<>0 then
         WatchdogIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and WEATHER_INTERFACE)<>0 then
+        WeatherIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and WEATHER_INTERFACE)<>0 then
+        SafetyIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
   end;
   if CameraIndiDevice.Items.Count>0 then CameraIndiDevice.ItemIndex:=0;
   if WheelIndiDevice.Items.Count>0 then WheelIndiDevice.ItemIndex:=0;
@@ -761,6 +855,8 @@ begin
   if RotatorIndiDevice.Items.Count>0 then RotatorIndiDevice.ItemIndex:=0;
   if MountIndiDevice.Items.Count>0 then MountIndiDevice.ItemIndex:=0;
   if WatchdogIndiDevice.Items.Count>0 then WatchdogIndiDevice.ItemIndex:=0;
+  if WeatherIndiDevice.Items.Count>0 then WeatherIndiDevice.ItemIndex:=0;
+  if SafetyIndiDevice.Items.Count>0 then SafetyIndiDevice.ItemIndex:=0;
   for i:=0 to CameraIndiDevice.Items.Count-1 do
      if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
   for i:=0 to WheelIndiDevice.Items.Count-1 do
@@ -773,6 +869,10 @@ begin
      if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
   for i:=0 to WatchdogIndiDevice.Items.Count-1 do
      if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
+  for i:=0 to WeatherIndiDevice.Items.Count-1 do
+     if WeatherIndiDevice.Items[i]=weathersavedev then WeatherIndiDevice.ItemIndex:=i;
+  for i:=0 to SafetyIndiDevice.Items.Count-1 do
+     if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
   LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
   indiclient.DisconnectServer;
   Screen.Cursor:=crDefault;
