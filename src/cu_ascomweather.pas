@@ -179,6 +179,7 @@ begin
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
  try
+   { TODO : process other properties }
    result:=V.CloudCover<50;
    except
     on E: Exception do msg('Get Clear error: ' + E.Message,0);

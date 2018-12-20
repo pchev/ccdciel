@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="77">
+    <Units Count="79">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -703,6 +703,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit76>
+      <Unit77>
+        <Filename Value="cu_indiweather.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit77>
+      <Unit78>
+        <Filename Value="cu_indisafety.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit78>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

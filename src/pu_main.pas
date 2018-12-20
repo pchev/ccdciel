@@ -32,7 +32,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
-  cu_weather, cu_ascomweather, cu_safety, cu_ascomsafety, fu_weather, fu_safety,
+  cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -652,7 +652,7 @@ uses
 {$if lcl_major > 1}
 LazSysUtils;
 {$else}
-{LazUTF8}SysUtils;
+LazUTF8SysUtils;
 {$endif}
 
 {$R *.lfm}
@@ -1134,7 +1134,7 @@ begin
 
   aInt:=TDevInterface(config.GetValue('/WeatherInterface',ord(DefaultInterface)));
   case aInt of
-   // INDI:  weather:=T_indiweather.Create(nil);
+    INDI:  weather:=T_indiweather.Create(nil);
     ASCOM: weather:=T_ascomweather.Create(nil);
   end;
   weather.onMsg:=@NewMessage;
@@ -1144,7 +1144,7 @@ begin
 
   aInt:=TDevInterface(config.GetValue('/SafetyInterface',ord(DefaultInterface)));
   case aInt of
-   // INDI:  safety:=T_indisafety.Create(nil);
+    INDI:  safety:=T_indisafety.Create(nil);
     ASCOM: safety:=T_ascomsafety.Create(nil);
   end;
   safety.onMsg:=@NewMessage;
