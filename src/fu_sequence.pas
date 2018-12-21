@@ -142,6 +142,7 @@ type
     procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
     procedure AbortSequence;
+    procedure BadWeather;
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
     property PercentComplete: double read GetPercentComplete;
@@ -863,6 +864,11 @@ begin
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
+end;
+
+procedure Tf_sequence.BadWeather;
+begin
+
 end;
 
 procedure Tf_sequence.AbortSequence;

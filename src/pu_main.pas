@@ -3489,6 +3489,10 @@ end;
 Procedure Tf_main.WeatherClearChange(Sender: TObject);
 begin
  f_weather.Clear := weather.Clear;
+ NewMessage('Weather monitor report: '+BoolToStr(f_safety.Safe,'Good','Bad'),3);
+ if f_sequence.Running then begin
+    f_sequence.BadWeather;
+ end;
 end;
 
 Procedure Tf_main.ConnectSafety(Sender: TObject);
@@ -3530,6 +3534,36 @@ end;
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
 begin
  f_safety.Safe := safety.Safe;
+ NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
+ if not f_safety.Safe then begin
+   // unsafe condition, abort and close.
+   if f_sequence.Running then begin
+      if not f_sequence.Unattended.Checked then begin
+         f_pause.Caption:='Unsafe condition detected!';
+         f_pause.Text:='The safety monitor report unsafe condition.';
+         if f_pause.Wait(60,false) then begin
+            exit;
+         end;
+      end;
+      f_sequence.AbortSequence;
+      wait(5);
+      mount.Park:=true;
+      ConfirmClose:=false;
+      Close;
+   end
+   else if f_capture.Running then begin
+      f_pause.Caption:='Unsafe condition detected!';
+      f_pause.Text:='The safety monitor report unsafe condition.';
+      if f_pause.Wait(60,false) then begin
+         exit;
+      end;
+      f_capture.BtnStartClick(nil);
+      wait(5);
+      mount.Park:=true;
+      ConfirmClose:=false;
+      Close;
+   end;
+ end;
 end;
 
 procedure Tf_main.LogLevelChange(Sender: TObject);
