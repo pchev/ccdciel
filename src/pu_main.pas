@@ -3480,9 +3480,9 @@ case weather.Status of
                       if f_devicesconnection.LabelWeather.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelWeather.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsWeatherStati]),1);
-                      WeatherClearChange(Sender);
                    end;
 end;
+WeatherClearChange(Sender);
 CheckConnectionStatus;
 end;
 
@@ -3522,9 +3522,9 @@ case safety.Status of
                       if f_devicesconnection.LabelSafety.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelSafety.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsSafetyMonito]),1);
-                      SafetySafeChange(Sender);
                    end;
 end;
+SafetySafeChange(Sender);
 CheckConnectionStatus;
 end;
 
