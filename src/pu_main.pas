@@ -4647,6 +4647,7 @@ begin
     if f_setup.WeatherIndiDevice.Text<>'' then config.SetValue('/INDIweather/Device',f_setup.WeatherIndiDevice.Text);
     config.SetValue('/INDIweather/AutoLoadConfig',f_setup.WeatherAutoLoadConfig.Checked);
     config.SetValue('/ASCOMweather/Device',f_setup.AscomWeather.Text);
+    config.SetValue('/ASCOMweather/DeviceType',f_setup.AscomWeatherType.ItemIndex);
 
     config.SetValue('/SafetyInterface',ord(f_setup.SafetyConnection));
     if f_setup.SafetyIndiDevice.Text<>'' then config.SetValue('/INDIsafety/Device',f_setup.SafetyIndiDevice.Text);

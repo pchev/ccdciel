@@ -46,11 +46,11 @@ object f_setup: Tf_setup
     Height = 300
     Top = 0
     Width = 502
-    ActivePage = Filterwheel
+    ActivePage = Weather
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 2
+    TabIndex = 6
     TabOrder = 1
     Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
@@ -1101,10 +1101,10 @@ object f_setup: Tf_setup
           TabOrder = 0
         end
         object AscomWeather: TEdit
-          Left = 14
+          Left = 11
           Height = 23
           Top = 17
-          Width = 139
+          Width = 142
           ParentFont = False
           TabOrder = 1
         end
@@ -1129,6 +1129,30 @@ object f_setup: Tf_setup
           OnClick = BtnSetupAscomClick
           ParentFont = False
           TabOrder = 3
+        end
+        object AscomWeatherType: TRadioGroup
+          Left = 8
+          Height = 65
+          Top = 41
+          Width = 145
+          AutoFill = True
+          Caption = 'Interface type'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 1
+          ClientHeight = 45
+          ClientWidth = 141
+          ItemIndex = 0
+          Items.Strings = (
+            'Observing condition'
+            'Safety monitor'
+          )
+          OnClick = AscomWeatherTypeClick
+          TabOrder = 4
         end
       end
     end

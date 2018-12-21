@@ -64,7 +64,7 @@ T_weather = class(TComponent)
   public
     UseCloudCover,UseDewPoint,UseHumidity,UsePressure,UseRainRate,UseSkyBrightness,
     UseSkyQuality,UseSkyTemperature,UseStarFWHM,UseTemperature,UseWindDirection,
-    UseWindGust,UseWindSpeed,UseStatus: boolean;
+    UseWindGust,UseWindSpeed: boolean;
     MinCloudCover,MinDewPoint,MinHumidity,MinPressure,MinRainRate,MinSkyBrightness,
     MinSkyQuality,MinSkyTemperature,MinStarFWHM,MinTemperature,MinWindDirection,
     MinWindGust,MinWindSpeed: double;
@@ -147,7 +147,6 @@ begin
   UseWindDirection:=false;
   UseWindGust:=false;
   UseWindSpeed:=false;
-  UseStatus:=false;
 end;
 
 destructor  T_weather.Destroy;

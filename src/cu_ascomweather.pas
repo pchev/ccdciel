@@ -201,70 +201,78 @@ begin
  try
    nullcheck:=false;
    result:=true;
-   if FhasCloudCover and UseCloudCover then begin
-      x:=CloudCover;
-      result:=result and (x>=MinCloudCover)and(x<=MaxCloudCover);
-      nullcheck:=true;
-   end;
-   if FhasDewPoint and UseDewPoint then begin
-      x:=DewPoint;
-      result:=result and (x>=MinDewPoint)and(x<=MaxDewPoint);
-      nullcheck:=true;
-   end;
-   if FhasHumidity and UseHumidity then begin
-      x:=Humidity;
-      result:=result and (x>=MinHumidity)and(x<=MaxHumidity);
-      nullcheck:=true;
-   end;
-   if FhasPressure and UsePressure then begin
-      x:=Pressure;
-      result:=result and (x>=MinPressure)and(x<=MaxPressure);
-      nullcheck:=true;
-   end;
-   if FhasRainRate and UseRainRate then begin
-      x:=RainRate;
-      result:=result and (x>=MinRainRate)and(x<=MaxRainRate);
-      nullcheck:=true;
-   end;
-   if FhasSkyBrightness and UseSkyBrightness then begin
-      x:=SkyBrightness;
-      result:=result and (x>=MinSkyBrightness)and(x<=MaxSkyBrightness);
-      nullcheck:=true;
-   end;
-   if FhasSkyQuality and UseSkyQuality then begin
-      x:=SkyQuality;
-      result:=result and (x>=MinSkyQuality)and(x<=MaxSkyQuality);
-      nullcheck:=true;
-   end;
-   if FhasSkyTemperature and UseSkyTemperature then begin
-      x:=SkyTemperature;
-      result:=result and (x>=MinSkyTemperature)and(x<=MaxSkyTemperature);
-      nullcheck:=true;
-   end;
-   if FhasStarFWHM and UseStarFWHM then begin
-      x:=StarFWHM;
-      result:=result and (x>=MinStarFWHM)and(x<=MaxStarFWHM);
-      nullcheck:=true;
-   end;
-   if FhasTemperature and UseTemperature then begin
-      x:=Temperature;
-      result:=result and (x>=MinTemperature)and(x<=MaxTemperature);
-      nullcheck:=true;
-   end;
-   if FhasWindDirection and UseWindDirection then begin
-      x:=WindDirection;
-      result:=result and (x>=MinWindDirection)and(x<=MaxWindDirection);
-      nullcheck:=true;
-   end;
-   if FhasWindGust and UseWindGust then begin
-      x:=WindGust;
-      result:=result and (x>=MinWindGust)and(x<=MaxWindGust);
-      nullcheck:=true;
-   end;
-   if FhasWindSpeed and UseWindSpeed then begin
-      x:=WindSpeed;
-      result:=result and (x>=MinWindSpeed)and(x<=MaxWindSpeed);
-      nullcheck:=true;
+   if FhasStatus then begin
+     // SafetyMonitor interface
+     result:=result and WeatherStatus;
+     nullcheck:=true;
+   end
+   else begin
+     // ObservingConditions interface
+     if FhasCloudCover and UseCloudCover then begin
+        x:=CloudCover;
+        result:=result and (x>=MinCloudCover)and(x<=MaxCloudCover);
+        nullcheck:=true;
+     end;
+     if FhasDewPoint and UseDewPoint then begin
+        x:=DewPoint;
+        result:=result and (x>=MinDewPoint)and(x<=MaxDewPoint);
+        nullcheck:=true;
+     end;
+     if FhasHumidity and UseHumidity then begin
+        x:=Humidity;
+        result:=result and (x>=MinHumidity)and(x<=MaxHumidity);
+        nullcheck:=true;
+     end;
+     if FhasPressure and UsePressure then begin
+        x:=Pressure;
+        result:=result and (x>=MinPressure)and(x<=MaxPressure);
+        nullcheck:=true;
+     end;
+     if FhasRainRate and UseRainRate then begin
+        x:=RainRate;
+        result:=result and (x>=MinRainRate)and(x<=MaxRainRate);
+        nullcheck:=true;
+     end;
+     if FhasSkyBrightness and UseSkyBrightness then begin
+        x:=SkyBrightness;
+        result:=result and (x>=MinSkyBrightness)and(x<=MaxSkyBrightness);
+        nullcheck:=true;
+     end;
+     if FhasSkyQuality and UseSkyQuality then begin
+        x:=SkyQuality;
+        result:=result and (x>=MinSkyQuality)and(x<=MaxSkyQuality);
+        nullcheck:=true;
+     end;
+     if FhasSkyTemperature and UseSkyTemperature then begin
+        x:=SkyTemperature;
+        result:=result and (x>=MinSkyTemperature)and(x<=MaxSkyTemperature);
+        nullcheck:=true;
+     end;
+     if FhasStarFWHM and UseStarFWHM then begin
+        x:=StarFWHM;
+        result:=result and (x>=MinStarFWHM)and(x<=MaxStarFWHM);
+        nullcheck:=true;
+     end;
+     if FhasTemperature and UseTemperature then begin
+        x:=Temperature;
+        result:=result and (x>=MinTemperature)and(x<=MaxTemperature);
+        nullcheck:=true;
+     end;
+     if FhasWindDirection and UseWindDirection then begin
+        x:=WindDirection;
+        result:=result and (x>=MinWindDirection)and(x<=MaxWindDirection);
+        nullcheck:=true;
+     end;
+     if FhasWindGust and UseWindGust then begin
+        x:=WindGust;
+        result:=result and (x>=MinWindGust)and(x<=MaxWindGust);
+        nullcheck:=true;
+     end;
+     if FhasWindSpeed and UseWindSpeed then begin
+        x:=WindSpeed;
+        result:=result and (x>=MinWindSpeed)and(x<=MaxWindSpeed);
+        nullcheck:=true;
+     end;
    end;
    result:=result and nullcheck;
    except
@@ -279,6 +287,7 @@ end;
 
 procedure T_ascomweather.GetCapabilities;
 var x: double;
+    ok: boolean;
 begin
  {$ifdef mswindows}
  try
@@ -357,6 +366,12 @@ begin
    FhasWindSpeed:=false;
    x:=V.WindSpeed;
    FhasWindSpeed:=true;
+ except
+ end;
+ try
+   FhasStatus:=false;
+   ok:=V.IsSafe;
+   FhasStatus:=true;
  except
  end;
  {$endif}
@@ -534,6 +549,14 @@ end;
 function T_ascomweather.GetWeatherStatus: boolean;
 begin
  result:=false;
+ {$ifdef mswindows}
+ try
+ if FhasStatus then begin
+   result:=V.IsSafe;
+ end;
+ except
+ end;
+ {$endif}
 end;
 
 procedure T_ascomweather.SetTimeout(num:integer);

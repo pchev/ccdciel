@@ -74,6 +74,7 @@ type
     DeviceWeather: TCheckBox;
     DeviceSafety: TCheckBox;
     FlipImage: TCheckBox;
+    AscomWeatherType: TRadioGroup;
     WeatherAutoLoadConfig: TCheckBox;
     SafetyAutoLoadConfig: TCheckBox;
     WeatherIndiDevice: TComboBox;
@@ -187,6 +188,7 @@ type
     procedure MountGetObservatoryClick(Sender: TObject);
     procedure MountSetObservatoryClick(Sender: TObject);
     procedure ProfileListChange(Sender: TObject);
+    procedure AscomWeatherTypeClick(Sender: TObject);
   private
     { private declarations }
     indiclient: TIndiBaseClient;
@@ -423,6 +425,7 @@ if WeatherIndiDevice.Items.Count=0 then begin
 end;
 WeatherIndiDevice.Text:=conf.GetValue('/INDIweather/Device','');
 WeatherAutoLoadConfig.Checked:=conf.GetValue('/INDIweather/AutoLoadConfig',false);
+f_setup.AscomWeatherType.ItemIndex:=config.GetValue('/ASCOMweather/DeviceType',0);
 AscomWeather.Text:=conf.GetValue('/ASCOMweather/Device','');
 
 SafetyConnection:=TDevInterface(conf.GetValue('/SafetyInterface',ord(DefaultSafetyInterface)));
@@ -667,7 +670,13 @@ begin
     3 : begin t:='Focuser'; dev:=widestring(AscomFocuser.Text); end;
     4 : begin t:='Telescope'; dev:=widestring(AscomMount.Text); end;
     5 : begin t:='Rotator'; dev:=widestring(AscomRotator.Text); end;
-    6 : begin t:='ObservingConditions'; dev:=widestring(AscomWeather.Text); end;
+    6 : begin
+          if AscomWeatherType.ItemIndex=0 then
+            t:='ObservingConditions'
+          else
+            t:='SafetyMonitor';
+          dev:=widestring(AscomWeather.Text);
+        end;
     7 : begin t:='SafetyMonitor'; dev:=widestring(AscomSafety.Text); end;
   end;
   try
@@ -915,6 +924,11 @@ begin
       chkconf.Free;
     end;
   end;
+end;
+
+procedure Tf_setup.AscomWeatherTypeClick(Sender: TObject);
+begin
+  AscomWeather.Text:='';
 end;
 
 procedure Tf_setup.BtnCopyProfileClick(Sender: TObject);
