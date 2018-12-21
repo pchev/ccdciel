@@ -950,6 +950,21 @@ resourcestring
   rsSafetyMonito = 'Safety monitor';
   rsClearConditi = 'Clear condition';
   rsSafeForOpera = 'Safe for operation';
+  rsCloudCover = 'Cloud cover';
+  rsDewPoint = 'Dew point';
+  rsHumidity = 'Humidity';
+  rsPressure = 'Pressure';
+  rsRainRate = 'Rain rate';
+  rsSkyBrightnes = 'Sky brightness';
+  rsSkyQuality = 'Sky quality';
+  rsSkyTemperatu = 'Sky temperature';
+  rsStarFWHM = 'Star FWHM';
+  rsTemperature = 'Temperature';
+  rsWindDirectio = 'Wind direction';
+  rsWindGust = 'Wind gust';
+  rsWindSpeed = 'Wind speed';
+  rsMinimum = 'minimum';
+  rsMaximum = 'maximum';
 
 
 
