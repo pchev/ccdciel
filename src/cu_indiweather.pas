@@ -36,8 +36,7 @@ T_indiweather = class(T_weather)
    InitTimer: TTimer;
    ConnectTimer: TTimer;
    WeatherDevice: Basedevice;
-   WeatherStatus: ILightVectorProperty;
-   WeatherForecast: INumberVectorProperty;
+   WeatherStatusProp: ILightVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
@@ -75,6 +74,7 @@ T_indiweather = class(T_weather)
    function GetWindDirection: double; override;
    function GetWindGust: double; override;
    function GetWindSpeed: double; override;
+   function GetWeatherStatus: boolean; override;
    procedure SetTimeout(num:integer); override;
  public
    constructor Create(AOwner: TComponent);override;
@@ -137,8 +137,7 @@ end;
 procedure T_indiweather.ClearStatus;
 begin
     WeatherDevice:=nil;
-    WeatherStatus:=nil;
-    WeatherForecast:=nil;
+    WeatherStatusProp:=nil;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -150,7 +149,7 @@ procedure T_indiweather.CheckStatus;
 begin
     if Fconnected and
        (configprop<>nil) and
-       (WeatherStatus<>nil)
+       (WeatherStatusProp<>nil)
     then begin
        FStatus := devConnected;
        if (not Fready) then begin
@@ -158,6 +157,7 @@ begin
          if FAutoloadConfig then begin
            LoadConfig;
          end;
+         GetCapabilities;
          if Assigned(FonStatusChange) then FonStatusChange(self);
        end;
     end;
@@ -194,7 +194,7 @@ begin
     end
     else if (configprop=nil) then
        msg('Weather '+Findidevice+' Missing property CONFIG_PROCESS',0)
-    else if (WeatherStatus=nil) then
+    else if (WeatherStatusProp=nil) then
        msg('Weather '+Findidevice+' Missing property WEATHER_STATUS',0);
     Disconnect;
   end;
@@ -286,20 +286,14 @@ begin
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_LIGHT)and(WeatherStatus=nil)and(propname='WEATHER_STATUS') then begin
-     WeatherStatus:=indiProp.getLight;
-  end
-  else if (proptype=INDI_NUMBER)and(WeatherForecast=nil)and(propname='WEATHER_FORECAST') then begin
-     WeatherForecast:=indiProp.getNumber;
+  else if (proptype=INDI_LIGHT)and(WeatherStatusProp=nil)and(propname='WEATHER_STATUS') then begin
+     WeatherStatusProp:=indiProp.getLight;
   end;
   CheckStatus;
 end;
 
 procedure T_indiweather.NewNumber(nvp: INumberVectorProperty);
 begin
-  if nvp=WeatherForecast then begin
-     if Assigned(FonClearChange) then FonClearChange(self);
-  end;
 end;
 
 procedure T_indiweather.NewText(tvp: ITextVectorProperty);
@@ -314,88 +308,106 @@ end;
 
 procedure T_indiweather.NewLight(lvp: ILightVectorProperty);
 begin
-  if lvp=WeatherStatus then begin
+  if lvp=WeatherStatusProp then begin
      if Assigned(FonClearChange) then FonClearChange(self);
   end;
 end;
 
 function  T_indiweather.GetClear:Boolean;
 begin
-  result:=false;
-  { TODO : process other properties }
-  if WeatherStatus<>nil then begin
-     result:=WeatherStatus.s=IPS_OK;
-  end;
+  // Use only WEATHER_STATUS for now because other properties are not standardized
+  result:=WeatherStatus;
 end;
 
 procedure T_indiweather.GetCapabilities;
 begin
+ FhasCloudCover:=false;
+ FhasDewPoint:=false;
+ FhasHumidity:=false;
+ FhasPressure:=false;
+ FhasRainRate:=false;
+ FhasSkyBrightness:=false;
+ FhasSkyQuality:=false;
+ FhasSkyTemperature:=false;
+ FhasStarFWHM:=false;
+ FhasTemperature:=false;
+ FhasWindDirection:=false;
+ FhasWindGust:=false;
+ FhasWindSpeed:=false;
+ FhasStatus:=(WeatherStatusProp<>nil);
+end;
 
+function T_indiweather.GetWeatherStatus: boolean;
+begin
+ result:=false;
+ if WeatherStatusProp<>nil then begin
+    result:=WeatherStatusProp.s=IPS_OK;
+ end;
 end;
 
 function T_indiweather.GetCloudCover: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetDewPoint: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetHumidity: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetPressure: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetRainRate: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetSkyBrightness: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetSkyQuality: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetSkyTemperature: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetStarFWHM: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetTemperature: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetWindDirection: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetWindGust: double;
 begin
-
+ result:=NullCoord;
 end;
 
 function T_indiweather.GetWindSpeed: double;
 begin
-
+ result:=NullCoord;
 end;
 
 procedure T_indiweather.SetTimeout(num:integer);

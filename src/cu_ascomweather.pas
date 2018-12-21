@@ -36,8 +36,8 @@ T_ascomweather = class(T_weather)
  private
    {$ifdef mswindows}
    V: variant;
-   {$endif}
    stClear: boolean;
+   {$endif}
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
@@ -59,6 +59,7 @@ T_ascomweather = class(T_weather)
    function GetWindDirection: double; override;
    function GetWindGust: double; override;
    function GetWindSpeed: double; override;
+   function GetWeatherStatus: boolean; override;
    procedure SetTimeout(num:integer); override;
 public
    constructor Create(AOwner: TComponent);override;
@@ -189,8 +190,10 @@ begin
 end;
 
 function  T_ascomweather.GetClear:boolean;
+{$ifdef mswindows}
 var x: double;
     nullcheck: boolean;
+{$endif}
 begin
  result:=false;
  {$ifdef mswindows}
@@ -277,6 +280,7 @@ end;
 procedure T_ascomweather.GetCapabilities;
 var x: double;
 begin
+ {$ifdef mswindows}
  try
    FhasCloudCover:=false;
    x:=V.CloudCover;
@@ -355,6 +359,7 @@ begin
    FhasWindSpeed:=true;
  except
  end;
+ {$endif}
 end;
 
 function T_ascomweather.GetCloudCover: double;
@@ -524,6 +529,11 @@ begin
  except
  end;
  {$endif}
+end;
+
+function T_ascomweather.GetWeatherStatus: boolean;
+begin
+ result:=false;
 end;
 
 procedure T_ascomweather.SetTimeout(num:integer);

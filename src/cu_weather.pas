@@ -42,7 +42,7 @@ T_weather = class(TComponent)
     FAutoLoadConfig: boolean;
     FhasCloudCover,FhasDewPoint,FhasHumidity,FhasPressure,FhasRainRate,FhasSkyBrightness,
     FhasSkyQuality,FhasSkyTemperature,FhasStarFWHM,FhasTemperature,FhasWindDirection,
-    FhasWindGust,FhasWindSpeed: boolean;
+    FhasWindGust,FhasWindSpeed,FhasStatus: boolean;
     procedure msg(txt: string; level:integer=3);
     function GetClear: boolean; virtual; abstract;
     procedure GetCapabilities; virtual; abstract;
@@ -59,11 +59,12 @@ T_weather = class(TComponent)
     function GetWindDirection: double; virtual; abstract;
     function GetWindGust: double; virtual; abstract;
     function GetWindSpeed: double; virtual; abstract;
+    function GetWeatherStatus: boolean; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
     UseCloudCover,UseDewPoint,UseHumidity,UsePressure,UseRainRate,UseSkyBrightness,
     UseSkyQuality,UseSkyTemperature,UseStarFWHM,UseTemperature,UseWindDirection,
-    UseWindGust,UseWindSpeed: boolean;
+    UseWindGust,UseWindSpeed,UseStatus: boolean;
     MinCloudCover,MinDewPoint,MinHumidity,MinPressure,MinRainRate,MinSkyBrightness,
     MinSkyQuality,MinSkyTemperature,MinStarFWHM,MinTemperature,MinWindDirection,
     MinWindGust,MinWindSpeed: double;
@@ -92,6 +93,7 @@ T_weather = class(TComponent)
     property hasWindDirection: boolean read FhasWindDirection ;
     property hasWindGust: boolean read FhasWindGust ;
     property hasWindSpeed: boolean read FhasWindSpeed ;
+    property hasStatus: boolean read FhasStatus;
     property CloudCover: double read GetCloudCover ;
     property DewPoint: double read GetDewPoint ;
     property Humidity: double read GetHumidity ;
@@ -105,6 +107,7 @@ T_weather = class(TComponent)
     property WindDirection: double read GetWindDirection ;
     property WindGust: double read GetWindGust ;
     property WindSpeed: double read GetWindSpeed ;
+    property WeatherStatus: boolean read GetWeatherStatus;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -130,6 +133,7 @@ begin
   FhasWindDirection:=false;
   FhasWindGust:=false;
   FhasWindSpeed:=false;
+  FhasStatus:=false;
   UseCloudCover:=false;
   UseDewPoint:=false;
   UseHumidity:=false;
@@ -143,6 +147,7 @@ begin
   UseWindDirection:=false;
   UseWindGust:=false;
   UseWindSpeed:=false;
+  UseStatus:=false;
 end;
 
 destructor  T_weather.Destroy;
