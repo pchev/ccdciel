@@ -44,7 +44,21 @@ T_ascomweather = class(T_weather)
    function  Connected: boolean;
    function  InterfaceVersion: integer;
  protected
-   function  GetClear:boolean; override;
+   function GetClear:boolean; override;
+   procedure GetCapabilities; override;
+   function GetCloudCover: double; override;
+   function GetDewPoint: double; override;
+   function GetHumidity: double; override;
+   function GetPressure: double; override;
+   function GetRainRate: double; override;
+   function GetSkyBrightness: double; override;
+   function GetSkyQuality: double; override;
+   function GetSkyTemperature: double; override;
+   function GetStarFWHM: double; override;
+   function GetTemperature: double; override;
+   function GetWindDirection: double; override;
+   function GetWindGust: double; override;
+   function GetWindSpeed: double; override;
    procedure SetTimeout(num:integer); override;
 public
    constructor Create(AOwner: TComponent);override;
@@ -106,6 +120,7 @@ begin
      end;
      msg(rsConnected3);
      FStatus := devConnected;
+     GetCapabilities;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      StatusTimer.Enabled:=true;
   end
@@ -174,16 +189,339 @@ begin
 end;
 
 function  T_ascomweather.GetClear:boolean;
+var x: double;
+    nullcheck: boolean;
 begin
  result:=false;
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
  try
-   { TODO : process other properties }
-   result:=V.CloudCover<50;
-   except
-    on E: Exception do msg('Get Clear error: ' + E.Message,0);
+   nullcheck:=false;
+   result:=true;
+   if FhasCloudCover and UseCloudCover then begin
+      x:=CloudCover;
+      result:=result and (x>=MinCloudCover)and(x<=MaxCloudCover);
+      nullcheck:=true;
    end;
+   if FhasDewPoint and UseDewPoint then begin
+      x:=DewPoint;
+      result:=result and (x>=MinDewPoint)and(x<=MaxDewPoint);
+      nullcheck:=true;
+   end;
+   if FhasHumidity and UseHumidity then begin
+      x:=Humidity;
+      result:=result and (x>=MinHumidity)and(x<=MaxHumidity);
+      nullcheck:=true;
+   end;
+   if FhasPressure and UsePressure then begin
+      x:=Pressure;
+      result:=result and (x>=MinPressure)and(x<=MaxPressure);
+      nullcheck:=true;
+   end;
+   if FhasRainRate and UseRainRate then begin
+      x:=RainRate;
+      result:=result and (x>=MinRainRate)and(x<=MaxRainRate);
+      nullcheck:=true;
+   end;
+   if FhasSkyBrightness and UseSkyBrightness then begin
+      x:=SkyBrightness;
+      result:=result and (x>=MinSkyBrightness)and(x<=MaxSkyBrightness);
+      nullcheck:=true;
+   end;
+   if FhasSkyQuality and UseSkyQuality then begin
+      x:=SkyQuality;
+      result:=result and (x>=MinSkyQuality)and(x<=MaxSkyQuality);
+      nullcheck:=true;
+   end;
+   if FhasSkyTemperature and UseSkyTemperature then begin
+      x:=SkyTemperature;
+      result:=result and (x>=MinSkyTemperature)and(x<=MaxSkyTemperature);
+      nullcheck:=true;
+   end;
+   if FhasStarFWHM and UseStarFWHM then begin
+      x:=StarFWHM;
+      result:=result and (x>=MinStarFWHM)and(x<=MaxStarFWHM);
+      nullcheck:=true;
+   end;
+   if FhasTemperature and UseTemperature then begin
+      x:=Temperature;
+      result:=result and (x>=MinTemperature)and(x<=MaxTemperature);
+      nullcheck:=true;
+   end;
+   if FhasWindDirection and UseWindDirection then begin
+      x:=WindDirection;
+      result:=result and (x>=MinWindDirection)and(x<=MaxWindDirection);
+      nullcheck:=true;
+   end;
+   if FhasWindGust and UseWindGust then begin
+      x:=WindGust;
+      result:=result and (x>=MinWindGust)and(x<=MaxWindGust);
+      nullcheck:=true;
+   end;
+   if FhasWindSpeed and UseWindSpeed then begin
+      x:=WindSpeed;
+      result:=result and (x>=MinWindSpeed)and(x<=MaxWindSpeed);
+      nullcheck:=true;
+   end;
+   result:=result and nullcheck;
+   except
+    on E: Exception do begin
+     msg('Get Clear error: ' + E.Message,0);
+     result:=false;
+    end;
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascomweather.GetCapabilities;
+var x: double;
+begin
+ try
+   FhasCloudCover:=false;
+   x:=V.CloudCover;
+   FhasCloudCover:=true;
+ except
+ end;
+ try
+   FhasDewPoint:=false;
+   x:=V.DewPoint;
+   FhasDewPoint:=true;
+ except
+ end;
+ try
+   FhasHumidity:=false;
+   x:=V.Humidity;
+   FhasHumidity:=true;
+ except
+ end;
+ try
+   FhasPressure:=false;
+   x:=V.Pressure;
+   FhasPressure:=true;
+ except
+ end;
+ try
+   FhasRainRate:=false;
+   x:=V.RainRate;
+   FhasRainRate:=true;
+ except
+ end;
+ try
+   FhasSkyBrightness:=false;
+   x:=V.SkyBrightness;
+   FhasSkyBrightness:=true;
+ except
+ end;
+ try
+   FhasSkyQuality:=false;
+   x:=V.SkyQuality;
+   FhasSkyQuality:=true;
+ except
+ end;
+ try
+   FhasSkyTemperature:=false;
+   x:=V.SkyTemperature;
+   FhasSkyTemperature:=true;
+ except
+ end;
+ try
+   FhasStarFWHM:=false;
+   x:=V.StarFWHM;
+   FhasStarFWHM:=true;
+ except
+ end;
+ try
+   FhasTemperature:=false;
+   x:=V.Temperature;
+   FhasTemperature:=true;
+ except
+ end;
+ try
+   FhasWindDirection:=false;
+   x:=V.WindDirection;
+   FhasWindDirection:=true;
+ except
+ end;
+ try
+   FhasWindGust:=false;
+   x:=V.WindGust;
+   FhasWindGust:=true;
+ except
+ end;
+ try
+   FhasWindSpeed:=false;
+   x:=V.WindSpeed;
+   FhasWindSpeed:=true;
+ except
+ end;
+end;
+
+function T_ascomweather.GetCloudCover: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasCloudCover then begin
+   result:=V.CloudCover;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetDewPoint: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasDewPoint then begin
+   result:=V.DewPoint;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetHumidity: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasHumidity then begin
+   result:=V.Humidity;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetPressure: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasPressure then begin
+   result:=V.Pressure;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetRainRate: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasRainRate then begin
+   result:=V.RainRate;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetSkyBrightness: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasSkyBrightness then begin
+   result:=V.SkyBrightness;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetSkyQuality: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasSkyQuality then begin
+   result:=V.SkyQuality;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetSkyTemperature: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasSkyTemperature then begin
+   result:=V.SkyTemperature;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetStarFWHM: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasStarFWHM then begin
+   result:=V.StarFWHM;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetTemperature: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasTemperature then begin
+   result:=V.Temperature;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetWindDirection: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasWindDirection then begin
+   result:=V.WindDirection;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetWindGust: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasWindGust then begin
+   result:=V.WindGust;
+ end;
+ except
+ end;
+ {$endif}
+end;
+
+function T_ascomweather.GetWindSpeed: double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+ try
+ if FhasWindSpeed then begin
+   result:=V.WindSpeed;
+ end;
+ except
  end;
  {$endif}
 end;

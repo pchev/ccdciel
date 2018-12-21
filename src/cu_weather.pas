@@ -40,10 +40,36 @@ T_weather = class(TComponent)
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
+    FhasCloudCover,FhasDewPoint,FhasHumidity,FhasPressure,FhasRainRate,FhasSkyBrightness,
+    FhasSkyQuality,FhasSkyTemperature,FhasStarFWHM,FhasTemperature,FhasWindDirection,
+    FhasWindGust,FhasWindSpeed: boolean;
     procedure msg(txt: string; level:integer=3);
-    procedure SetTimeout(num:integer); virtual; abstract;
     function GetClear: boolean; virtual; abstract;
+    procedure GetCapabilities; virtual; abstract;
+    function GetCloudCover: double; virtual; abstract;
+    function GetDewPoint: double; virtual; abstract;
+    function GetHumidity: double; virtual; abstract;
+    function GetPressure: double; virtual; abstract;
+    function GetRainRate: double; virtual; abstract;
+    function GetSkyBrightness: double; virtual; abstract;
+    function GetSkyQuality: double; virtual; abstract;
+    function GetSkyTemperature: double; virtual; abstract;
+    function GetStarFWHM: double; virtual; abstract;
+    function GetTemperature: double; virtual; abstract;
+    function GetWindDirection: double; virtual; abstract;
+    function GetWindGust: double; virtual; abstract;
+    function GetWindSpeed: double; virtual; abstract;
+    procedure SetTimeout(num:integer); virtual; abstract;
   public
+    UseCloudCover,UseDewPoint,UseHumidity,UsePressure,UseRainRate,UseSkyBrightness,
+    UseSkyQuality,UseSkyTemperature,UseStarFWHM,UseTemperature,UseWindDirection,
+    UseWindGust,UseWindSpeed: boolean;
+    MinCloudCover,MinDewPoint,MinHumidity,MinPressure,MinRainRate,MinSkyBrightness,
+    MinSkyQuality,MinSkyTemperature,MinStarFWHM,MinTemperature,MinWindDirection,
+    MinWindGust,MinWindSpeed: double;
+    MaxCloudCover,MaxDewPoint,MaxHumidity,MaxPressure,MaxRainRate,MaxSkyBrightness,
+    MaxSkyQuality,MaxSkyTemperature,MaxStarFWHM,MaxTemperature,MaxWindDirection,
+    MaxWindGust,MaxWindSpeed: double;
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
@@ -53,6 +79,32 @@ T_weather = class(TComponent)
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property Clear: boolean read GetClear;
+    property hasCloudCover: boolean read FhasCloudCover ;
+    property hasDewPoint: boolean read FhasDewPoint ;
+    property hasHumidity: boolean read FhasHumidity ;
+    property hasPressure: boolean read FhasPressure ;
+    property hasRainRate: boolean read FhasRainRate ;
+    property hasSkyBrightness: boolean read FhasSkyBrightness ;
+    property hasSkyQuality: boolean read FhasSkyQuality ;
+    property hasSkyTemperature: boolean read FhasSkyTemperature ;
+    property hasStarFWHM: boolean read FhasStarFWHM ;
+    property hasTemperature: boolean read FhasTemperature ;
+    property hasWindDirection: boolean read FhasWindDirection ;
+    property hasWindGust: boolean read FhasWindGust ;
+    property hasWindSpeed: boolean read FhasWindSpeed ;
+    property CloudCover: double read GetCloudCover ;
+    property DewPoint: double read GetDewPoint ;
+    property Humidity: double read GetHumidity ;
+    property Pressure: double read GetPressure ;
+    property RainRate: double read GetRainRate ;
+    property SkyBrightness: double read GetSkyBrightness ;
+    property SkyQuality: double read GetSkyQuality ;
+    property SkyTemperature: double read GetSkyTemperature ;
+    property StarFWHM: double read GetStarFWHM ;
+    property Temperature: double read GetTemperature ;
+    property WindDirection: double read GetWindDirection ;
+    property WindGust: double read GetWindGust ;
+    property WindSpeed: double read GetWindSpeed ;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -65,6 +117,32 @@ constructor T_weather.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
+  FhasCloudCover:=false;
+  FhasDewPoint:=false;
+  FhasHumidity:=false;
+  FhasPressure:=false;
+  FhasRainRate:=false;
+  FhasSkyBrightness:=false;
+  FhasSkyQuality:=false;
+  FhasSkyTemperature:=false;
+  FhasStarFWHM:=false;
+  FhasTemperature:=false;
+  FhasWindDirection:=false;
+  FhasWindGust:=false;
+  FhasWindSpeed:=false;
+  UseCloudCover:=false;
+  UseDewPoint:=false;
+  UseHumidity:=false;
+  UsePressure:=false;
+  UseRainRate:=false;
+  UseSkyBrightness:=false;
+  UseSkyQuality:=false;
+  UseSkyTemperature:=false;
+  UseStarFWHM:=false;
+  UseTemperature:=false;
+  UseWindDirection:=false;
+  UseWindGust:=false;
+  UseWindSpeed:=false;
 end;
 
 destructor  T_weather.Destroy;

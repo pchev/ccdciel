@@ -61,6 +61,20 @@ T_indiweather = class(T_weather)
    procedure LoadConfig;
  protected
    function  GetClear:boolean; override;
+   procedure GetCapabilities; override;
+   function GetCloudCover: double; override;
+   function GetDewPoint: double; override;
+   function GetHumidity: double; override;
+   function GetPressure: double; override;
+   function GetRainRate: double; override;
+   function GetSkyBrightness: double; override;
+   function GetSkyQuality: double; override;
+   function GetSkyTemperature: double; override;
+   function GetStarFWHM: double; override;
+   function GetTemperature: double; override;
+   function GetWindDirection: double; override;
+   function GetWindGust: double; override;
+   function GetWindSpeed: double; override;
    procedure SetTimeout(num:integer); override;
  public
    constructor Create(AOwner: TComponent);override;
@@ -312,6 +326,76 @@ begin
   if WeatherStatus<>nil then begin
      result:=WeatherStatus.s=IPS_OK;
   end;
+end;
+
+procedure T_indiweather.GetCapabilities;
+begin
+
+end;
+
+function T_indiweather.GetCloudCover: double;
+begin
+
+end;
+
+function T_indiweather.GetDewPoint: double;
+begin
+
+end;
+
+function T_indiweather.GetHumidity: double;
+begin
+
+end;
+
+function T_indiweather.GetPressure: double;
+begin
+
+end;
+
+function T_indiweather.GetRainRate: double;
+begin
+
+end;
+
+function T_indiweather.GetSkyBrightness: double;
+begin
+
+end;
+
+function T_indiweather.GetSkyQuality: double;
+begin
+
+end;
+
+function T_indiweather.GetSkyTemperature: double;
+begin
+
+end;
+
+function T_indiweather.GetStarFWHM: double;
+begin
+
+end;
+
+function T_indiweather.GetTemperature: double;
+begin
+
+end;
+
+function T_indiweather.GetWindDirection: double;
+begin
+
+end;
+
+function T_indiweather.GetWindGust: double;
+begin
+
+end;
+
+function T_indiweather.GetWindSpeed: double;
+begin
+
 end;
 
 procedure T_indiweather.SetTimeout(num:integer);
