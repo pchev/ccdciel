@@ -3488,8 +3488,7 @@ end;
 
 Procedure Tf_main.WeatherClearChange(Sender: TObject);
 begin
-if weather.Clear then f_weather.led.Brush.Color:=clLime
-                 else f_weather.led.Brush.Color:=clRed;
+ f_weather.Clear := weather.Clear;
 end;
 
 Procedure Tf_main.ConnectSafety(Sender: TObject);
@@ -3530,8 +3529,7 @@ end;
 
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
 begin
-if safety.Safe then f_safety.led.Brush.Color:=clLime
-               else f_safety.led.Brush.Color:=clRed;
+ f_safety.Safe := safety.Safe;
 end;
 
 procedure Tf_main.LogLevelChange(Sender: TObject);
@@ -5374,7 +5372,7 @@ end;
 
 procedure Tf_main.MenuViewWeatherClick(Sender: TObject);
 begin
-  f_safety.Visible:=MenuViewSafety.Checked;
+  f_weather.Visible:=MenuViewWeather.Checked;
 end;
 
 procedure Tf_main.MenuVisuZoom12Click(Sender: TObject);

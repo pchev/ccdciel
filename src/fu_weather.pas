@@ -40,11 +40,14 @@ type
     Title: TLabel;
   private
     { private declarations }
+    FClear: boolean;
     procedure SetLang;
+    procedure SetClear(value:boolean);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property Clear: boolean read FClear write SetClear;
   end;
 
 implementation
@@ -72,6 +75,15 @@ procedure Tf_weather.SetLang;
 begin
   Title.Caption:=rsWeatherStati;
   label1.Caption:=rsClearConditi;
+end;
+
+procedure Tf_weather.SetClear(value:boolean);
+begin
+  FClear:=value;
+  if FClear then
+     led.Brush.Color:=clLime
+  else
+     led.Brush.Color:=clRed;
 end;
 
 end.

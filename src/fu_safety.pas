@@ -40,11 +40,14 @@ type
     Title: TLabel;
   private
     { private declarations }
+    FSafe: boolean;
     procedure SetLang;
+    procedure SetSafe(value:boolean);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property Safe: boolean read FSafe write SetSafe;
   end;
 
 implementation
@@ -72,6 +75,15 @@ procedure Tf_safety.SetLang;
 begin
   Title.Caption:=rsSafetyMonito;
   label1.Caption:=rsSafeForOpera;
+end;
+
+procedure Tf_safety.SetSafe(value:boolean);
+begin
+  FSafe:=value;
+  if FSafe then
+     led.Brush.Color:=clLime
+  else
+     led.Brush.Color:=clRed;
 end;
 
 end.
