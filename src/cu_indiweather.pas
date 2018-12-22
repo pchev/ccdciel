@@ -41,6 +41,7 @@ T_indiweather = class(T_weather)
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice: string;
+   stClear: boolean;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -142,6 +143,7 @@ begin
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
+    stClear:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
@@ -307,9 +309,14 @@ begin
 end;
 
 procedure T_indiweather.NewLight(lvp: ILightVectorProperty);
+var ok: boolean;
 begin
   if lvp=WeatherStatusProp then begin
-     if Assigned(FonClearChange) then FonClearChange(self);
+     ok:=WeatherStatusProp.s=IPS_OK;
+     if ok<>stClear then begin
+       stClear:=ok;
+       if Assigned(FonClearChange) then FonClearChange(self);
+     end;
   end;
 end;
 

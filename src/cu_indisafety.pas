@@ -41,6 +41,7 @@ T_indisafety = class(T_safety)
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice: string;
+   stSafe: boolean;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -126,6 +127,7 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
+    stSafe:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -291,9 +293,14 @@ begin
 end;
 
 procedure T_indisafety.NewLight(lvp: ILightVectorProperty);
+var ok: boolean;
 begin
   if lvp=SafetyStatus then begin
-     if Assigned(FonSafeChange) then FonSafeChange(self);
+    ok:=SafetyStatus.s=IPS_OK;
+    if ok<>stSafe then begin
+      stSafe:=ok;
+      if Assigned(FonSafeChange) then FonSafeChange(self);
+    end;
   end;
 end;
 

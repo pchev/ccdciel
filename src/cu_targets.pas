@@ -462,6 +462,8 @@ begin
  InplaceAutofocus:=AutofocusInPlace;
  if FRunning then begin
    FRunning:=false;
+   WeatherPauseCanceled:=true;
+   WeatherPauseCapture:=false;
    if WaitTillrunning then begin
      if wt_pause<>nil
       then wt_pause.BtnCancel.Click

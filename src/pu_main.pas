@@ -4456,7 +4456,7 @@ begin
    end
    else begin
       f_mount.BtnTrack.Font.Color:=clRed;
-      if (not meridianflipping)and(not mount.MountSlewing) then f_sequence.MountTrackingStopped;
+      if (not meridianflipping)and(not mount.MountSlewing)and(not WeatherPauseCapture) then f_sequence.MountTrackingStopped;
    end;
 end;
 
@@ -4578,7 +4578,7 @@ begin
                        f_autoguider.led.Brush.Color:=clYellow;
                        f_autoguider.BtnGuide.Caption:=rsGuide;
                        MenuAutoguiderGuide.Caption:=rsGuide;
-                       if (not meridianflipping)and(not autofocusing) then f_sequence.AutoguiderIddle;
+                       if (not meridianflipping)and(not autofocusing)and(not WeatherPauseCapture) then f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;
@@ -5666,7 +5666,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // wait if paused
   if WeatherPauseCapture then begin
      if (ftype=LIGHT) then begin
-       NewMessage('Sequence paused for bad weather ...');
+       f_sequence.StatusMsg.Caption:='Sequence paused for bad weather ...';
+       NewMessage(f_sequence.StatusMsg.Caption);
        WeatherCapturePaused:=true;
        // stop guiding and mount tracking now
        if (autoguider<>nil)and(autoguider.Running) then autoguider.Guide(false);
