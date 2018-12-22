@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="79">
+    <Units Count="82">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -711,6 +711,18 @@
         <Filename Value="cu_indisafety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit78>
+      <Unit79>
+        <Filename Value="cu_ascomdome.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit79>
+      <Unit80>
+        <Filename Value="cu_dome.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit80>
+      <Unit81>
+        <Filename Value="cu_indidome.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit81>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
