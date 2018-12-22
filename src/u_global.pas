@@ -378,6 +378,7 @@ var
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
   CurrentSeqName, CurrentTargetName, CurrentStepName: string;
+  WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled: boolean;
 
   procedure globalmsg(str:string);
 

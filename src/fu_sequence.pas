@@ -142,7 +142,7 @@ type
     procedure CameraDisconnected;
     procedure LoadTargets(fn: string);
     procedure AbortSequence;
-    procedure BadWeather;
+    procedure WeatherChange(value:boolean);
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
     property PercentComplete: double read GetPercentComplete;
@@ -866,9 +866,16 @@ begin
  PlanRow:=-1;
 end;
 
-procedure Tf_sequence.BadWeather;
+procedure Tf_sequence.WeatherChange(value: boolean);
 begin
-
+  if value then begin
+    // good weather, restart the sequence
+    Targets.WeatherRestart;
+  end
+  else begin
+    // bad weather, pause the sequence
+    Targets.WeatherPause;
+  end;
 end;
 
 procedure Tf_sequence.AbortSequence;

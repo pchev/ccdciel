@@ -111,6 +111,8 @@ type
       procedure Start;
       procedure Stop;
       procedure Abort;
+      procedure WeatherPause;
+      procedure WeatherRestart;
       procedure ForceNextTarget;
       property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
@@ -166,6 +168,9 @@ begin
   FTargetInitializing:=false;
   FWaitStarting:=false;
   NumTargets := 0;
+  WeatherPauseCapture:=false;
+  WeatherCapturePaused:=false;
+  WeatherPauseCanceled:=false;
   FTargetsRepeat:=1;
   Frunning:=false;
   FSeqStartAt:=0;
@@ -426,6 +431,27 @@ procedure T_Targets.Abort;
 begin
   msg(rsAbortTheCurr,1);
   StopSequence(true);
+end;
+
+procedure T_Targets.WeatherPause;
+begin
+  // set to pause after the current exposure is complete
+  WeatherPauseCapture:=true;
+end;
+
+procedure T_Targets.WeatherRestart;
+var initok: boolean;
+begin
+  if WeatherCapturePaused then begin
+    // we really pause, try to recenter, restart mount and guiding.
+    WeatherPauseCanceled:=false;
+    initok:=InitTarget;
+    if not initok then begin
+       WeatherPauseCanceled:=true;
+       if FRunning then NextTarget;
+    end;
+  end;
+  WeatherPauseCapture:=false;
 end;
 
 procedure T_Targets.StopSequence(abort: boolean);

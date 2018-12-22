@@ -3489,9 +3489,9 @@ end;
 Procedure Tf_main.WeatherClearChange(Sender: TObject);
 begin
  f_weather.Clear := weather.Clear;
- NewMessage('Weather monitor report: '+BoolToStr(f_safety.Safe,'Good','Bad'),3);
+ NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
  if f_sequence.Running then begin
-    f_sequence.BadWeather;
+    f_sequence.WeatherChange(f_weather.Clear);
  end;
 end;
 
@@ -5659,6 +5659,29 @@ var e: double;
     ftype:TFrameType;
 begin
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
+  if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
+    ftype:=TFrameType(f_capture.FrameType.ItemIndex)
+  else
+    ftype:=LIGHT;
+  // wait if paused
+  if WeatherPauseCapture then begin
+     if (ftype=LIGHT) then begin
+       NewMessage('Sequence paused for bad weather ...');
+       WeatherCapturePaused:=true;
+       // stop guiding and mount tracking now
+       if (autoguider<>nil)and(autoguider.Running) then autoguider.Guide(false);
+       mount.AbortMotion;
+       while WeatherPauseCapture and f_capture.Running do begin
+          Wait(5);
+       end;
+       // tracking and guiding is restarted by the sequence before we go here
+       WeatherCapturePaused:=false;
+       // continue if not aborted
+       if WeatherPauseCanceled then exit;
+     end
+     else
+       NewMessage('Ignore weather condition for image type='+FrameName[ord(ftype)]);
+  end;
   // check if we need to cancel running preview
   if f_preview.Running then begin
     NewMessage(rsStopPreview,1);
@@ -5713,13 +5736,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      if camera.Gain<>i then camera.Gain:=i;
    end;
   // check and set frame
-  if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then begin
-    ftype:=TFrameType(f_capture.FrameType.ItemIndex);
-    if camera.FrameType<>ftype then camera.FrameType:=ftype;
-    if ftype<>LIGHT then begin
-       f_capture.CheckBoxDither.Checked:=false;
-       f_capture.CheckBoxFocus.Checked:=false;
-    end;
+  if camera.FrameType<>ftype then camera.FrameType:=ftype;
+  if ftype<>LIGHT then begin
+     f_capture.CheckBoxDither.Checked:=false;
+     f_capture.CheckBoxFocus.Checked:=false;
   end;
   // check for meridian and do flip now if required
   waittime:=CheckMeridianFlip(e);
