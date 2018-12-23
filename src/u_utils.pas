@@ -501,6 +501,7 @@ begin
        sec:=0.0;
     end;
     str(dd:3:0,d);
+    if abs(dd)<10 then d:='0'+trim(d);
     str(min:2:0,m);
     if abs(min)<10 then m:='0'+trim(m);
     str(sec:2:0,s);
