@@ -291,7 +291,7 @@ const
 var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
-  CameraName,WheelName,FocuserName,RotatorName,MountName,WatchdogName,WeatherName,SafetyName: string;
+  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName: string;
   ConfigDarkFile: string;
   AllDevicesConnected: boolean;
   ConfirmClose, ScreenScaling, LogToFile: boolean;

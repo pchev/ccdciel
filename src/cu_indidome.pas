@@ -38,6 +38,12 @@ T_indidome = class(T_dome)
    DomeDevice: Basedevice;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
+   DomeShutterProp: ISwitchVectorProperty;
+   DomeShutterOpen,DomeShutterClose: ISwitch;
+   DomeGotoProp: ISwitchVectorProperty;
+   DomeGotoHome,DomeGotoPark: ISwitch;
+   DomeAutosyncProp: ISwitchVectorProperty;
+   DomeAutosyncEnable,DomeAutosyncDisable: ISwitch;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
@@ -59,6 +65,12 @@ T_indidome = class(T_dome)
    procedure LoadConfig;
  protected
    procedure SetTimeout(num:integer); override;
+   function GetPark: boolean; override;
+   procedure SetPark(value:boolean); override;
+   function GetShutter: boolean; override;
+   procedure SetShutter(value:boolean); override;
+   function GetSlave: boolean; override;
+   procedure SetSlave(value:boolean); override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -121,6 +133,9 @@ procedure T_indidome.ClearStatus;
 begin
     DomeDevice:=nil;
     configprop:=nil;
+    DomeShutterProp:=nil;
+    DomeGotoProp:=nil;
+    DomeAutosyncProp:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -263,6 +278,24 @@ begin
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      if (configload=nil)or(configsave=nil) then configprop:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(DomeShutterProp=nil)and(propname='DOME_SHUTTER') then begin
+     DomeShutterProp:=indiProp.getSwitch;
+     DomeShutterOpen:=IUFindSwitch(DomeShutterProp,'SHUTTER_OPEN');
+     DomeShutterClose:=IUFindSwitch(DomeShutterProp,'SHUTTER_CLOSE');
+     if (DomeShutterOpen=nil)or(DomeShutterClose=nil) then DomeShutterProp:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(DomeGotoProp=nil)and(propname='DOME_GOTO') then begin
+     DomeGotoProp:=indiProp.getSwitch;
+     DomeGotoHome:=IUFindSwitch(DomeGotoProp,'DOME_HOME');
+     DomeGotoPark:=IUFindSwitch(DomeGotoProp,'DOME_PARK');
+     if (DomeGotoHome=nil)or(DomeGotoPark=nil) then DomeGotoProp:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(DomeAutosyncProp=nil)and(propname='DOME_AUTOSYNC') then begin
+     DomeAutosyncProp:=indiProp.getSwitch;
+     DomeAutosyncEnable:=IUFindSwitch(DomeAutosyncProp,'DOME_AUTOSYNC_ENABLE');
+     DomeAutosyncDisable:=IUFindSwitch(DomeAutosyncProp,'DOME_AUTOSYNC_DISABLE');
+     if (DomeAutosyncEnable=nil)or(DomeAutosyncDisable=nil) then DomeAutosyncProp:=nil;
   end;
   CheckStatus;
 end;
@@ -282,7 +315,6 @@ begin
 end;
 
 procedure T_indidome.NewLight(lvp: ILightVectorProperty);
-var ok: boolean;
 begin
 end;
 
@@ -300,6 +332,66 @@ begin
     indiclient.sendNewSwitch(configprop);
   end;
 end;
+
+function T_indidome.GetPark: boolean;
+begin
+ result:=false;
+ if DomeGotoProp<>nil then begin
+   result := (DomeGotoPark.s=ISS_ON);
+ end;
+end;
+
+procedure T_indidome.SetPark(value:boolean);
+begin
+ if DomeGotoProp<>nil then begin
+    IUResetSwitch(DomeGotoProp);
+    if value then begin
+       DomeGotoPark.s:=ISS_ON;
+       indiclient.sendNewSwitch(DomeGotoProp);
+    end;
+ end;
+end;
+
+function T_indidome.GetShutter: boolean;
+begin
+ result:=false;
+ if DomeShutterProp<>nil then begin
+   result := (DomeShutterOpen.s=ISS_ON);
+ end;
+end;
+
+procedure T_indidome.SetShutter(value:boolean);
+begin
+ if DomeShutterProp<>nil then begin
+    IUResetSwitch(DomeShutterProp);
+    if value then
+      DomeShutterOpen.s:=ISS_ON
+    else
+      DomeShutterClose.s:=ISS_ON;
+    indiclient.sendNewSwitch(DomeShutterProp);
+ end;
+end;
+
+function T_indidome.GetSlave: boolean;
+begin
+ result:=false;
+ if DomeAutosyncProp<>nil then begin
+   result := (DomeAutosyncEnable.s=ISS_ON);
+ end;
+end;
+
+procedure T_indidome.SetSlave(value:boolean);
+begin
+ if DomeAutosyncProp<>nil then begin
+    IUResetSwitch(DomeAutosyncProp);
+    if value then
+      DomeAutosyncEnable.s:=ISS_ON
+    else
+      DomeAutosyncDisable.s:=ISS_ON;
+    indiclient.sendNewSwitch(DomeAutosyncProp);
+ end;
+end;
+
 
 end.
 

@@ -47,7 +47,7 @@ uses
   pu_focusercalibration, cu_tcpserver, u_translation, pu_hyperbola,
   fu_magnifyer, pu_msgtabs, u_annotation, pu_sequenceoptions, cu_safety,
   cu_weather, cu_ascomsafety, cu_ascomweather, fu_weather, cu_indiweather,
-  cu_indisafety, cu_dome, cu_ascomdome, cu_indidome;
+  cu_indisafety, cu_dome, cu_ascomdome, cu_indidome, fu_dome;
 
 {$R *.res}
 

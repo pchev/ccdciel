@@ -40,8 +40,15 @@ T_dome = class(TComponent)
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
+    FhasPark,FhasShutter,FhasSlaving: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure SetTimeout(num:integer); virtual; abstract;
+    function GetPark: boolean; virtual; abstract;
+    procedure SetPark(value:boolean); virtual; abstract;
+    function GetShutter: boolean; virtual; abstract;
+    procedure SetShutter(value:boolean); virtual; abstract;
+    function GetSlave: boolean; virtual; abstract;
+    procedure SetSlave(value:boolean); virtual; abstract;
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -49,6 +56,12 @@ T_dome = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     property DomeInterface: TDevInterface read FDomeInterface;
     property Status: TDeviceStatus read FStatus;
+    property hasPark: boolean read FhasPark;
+    property hasShutter: boolean read FhasShutter;
+    property hasSlaving: boolean read FhasSlaving;
+    property Park: boolean read GetPark write SetPark;
+    property Shutter: boolean read GetShutter write SetShutter;
+    property Slave: boolean read GetSlave write SetSlave;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -63,6 +76,9 @@ constructor T_dome.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
+  FhasPark:=false;
+  FhasSlaving:=false;
+  FhasShutter:=false;
 end;
 
 destructor  T_dome.Destroy;

@@ -34,6 +34,7 @@ type
 
   Tf_devicesconnection = class(TFrame)
     BtnConnect: TButton;
+    LabelDome: TLabel;
     LabelSafety: TLabel;
     LabelWeather: TLabel;
     LabelWatchdog: TLabel;

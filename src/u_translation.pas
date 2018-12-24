@@ -965,6 +965,9 @@ resourcestring
   rsWindSpeed = 'Wind speed';
   rsMinimum = 'minimum';
   rsMaximum = 'maximum';
+  rsDome = 'Dome';
+  rsOpen = 'Open';
+  rsSlaved = 'Slaved';
 
 
 

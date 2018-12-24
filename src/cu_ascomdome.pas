@@ -30,7 +30,6 @@ uses cu_dome, u_global,
     u_translation, indiapi, Variants, comobj, math,
     {$endif}
     Forms, ExtCtrls,Classes, SysUtils;
-
 type
 T_ascomdome = class(T_dome)
  private
@@ -39,11 +38,18 @@ T_ascomdome = class(T_dome)
    {$endif}
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
+
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
  protected
    procedure SetTimeout(num:integer); override;
+   function GetPark: boolean; override;
+   procedure SetPark(value:boolean); override;
+   function GetShutter: boolean; override;
+   procedure SetShutter(value:boolean); override;
+   function GetSlave: boolean; override;
+   procedure SetSlave(value:boolean); override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -101,6 +107,21 @@ begin
      msg('Driver version: '+V.DriverVersion,9);
      except
        msg('Error: unknown driver version',9);
+     end;
+     try
+     FhasPark:=V.CanPark;
+     except
+       FhasPark:=false;
+     end;
+     try
+     FhasSlaving:=V.CanSlave;
+     except
+       FhasSlaving:=false;
+     end;
+     try
+     FhasShutter:=V.CanSetShutter;
+     except
+       FhasShutter:=false;
      end;
      msg(rsConnected3);
      FStatus := devConnected;
@@ -170,6 +191,83 @@ procedure T_ascomdome.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
 end;
+
+function T_ascomdome.GetPark: boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+   try
+   if FhasPark then result:=V.AtPark;
+   except
+    result:=false;
+   end;
+ {$endif}
+end;
+
+procedure T_ascomdome.SetPark(value:boolean);
+begin
+ {$ifdef mswindows}
+   try
+   if FhasPark and value then V.Park;
+   except
+    on E: Exception do msg('Park error: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascomdome.GetShutter: boolean;
+var i: integer;
+begin
+ result:=false;
+ {$ifdef mswindows}
+   try
+   if FhasShutter then begin
+     i:=V.ShutterStatus;
+     result:=(i=0);  // open
+   end;
+   except
+    result:=false;
+   end;
+ {$endif}
+end;
+
+procedure T_ascomdome.SetShutter(value:boolean);
+begin
+ {$ifdef mswindows}
+   try
+   if FhasShutter then begin
+     if value then V.OpenShutter
+              else V.CloseShutter;
+   end;
+   except
+    on E: Exception do msg('Set shutter error: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascomdome.GetSlave: boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+   try
+   if FhasSlaving then result:=V.Slaved;
+   except
+    result:=false;
+   end;
+ {$endif}
+end;
+
+procedure T_ascomdome.SetSlave(value:boolean);
+begin
+ {$ifdef mswindows}
+   try
+   if FhasSlaving then V.Slaved:=value;
+   except
+    on E: Exception do msg('Slave error: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
 
 initialization
 {$ifdef mswindows}

@@ -155,6 +155,16 @@ object f_devicesconnection: Tf_devicesconnection
         ParentColor = False
         ParentFont = False
       end
+      object LabelDome: TLabel
+        Left = 125
+        Height = 15
+        Top = 2
+        Width = 27
+        Caption = 'Dome'
+        Font.Color = clRed
+        ParentColor = False
+        ParentFont = False
+      end
       object LabelWatchdog: TLabel
         Left = 139
         Height = 15
