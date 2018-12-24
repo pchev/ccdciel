@@ -42,12 +42,16 @@ type
     Title: TLabel;
   private
     { private declarations }
-    FClear: boolean;
+    FShutter,FSlave: boolean;
+    procedure SetShutter(value:boolean);
+    procedure SetSlave(value:boolean);
     procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property Shutter: boolean read FShutter write SetShutter;
+    property Slave: boolean read FSlave write SetSlave;
   end;
 
 implementation
@@ -76,6 +80,24 @@ begin
   Title.Caption:=rsDome;
   Label1.Caption:=rsOpen;
   Label2.Caption:=rsSlaved;
+end;
+
+procedure Tf_dome.SetShutter(value:boolean);
+begin
+  FShutter:=value;
+  if FShutter then
+     ledOpen.Brush.Color:=clLime
+  else
+     ledOpen.Brush.Color:=clRed;
+end;
+
+procedure Tf_dome.SetSlave(value:boolean);
+begin
+  FSlave:=value;
+  if FSlave then
+     ledSlaved.Brush.Color:=clLime
+  else
+     ledSlaved.Brush.Color:=clRed;
 end;
 
 end.

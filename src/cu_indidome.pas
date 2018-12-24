@@ -40,8 +40,8 @@ T_indidome = class(T_dome)
    configload,configsave: ISwitch;
    DomeShutterProp: ISwitchVectorProperty;
    DomeShutterOpen,DomeShutterClose: ISwitch;
-   DomeGotoProp: ISwitchVectorProperty;
-   DomeGotoHome,DomeGotoPark: ISwitch;
+   DomeParkProp: ISwitchVectorProperty;
+   DomePark,DomeUnpark: ISwitch;
    DomeAutosyncProp: ISwitchVectorProperty;
    DomeAutosyncEnable,DomeAutosyncDisable: ISwitch;
    Fready,Fconnected: boolean;
@@ -134,7 +134,7 @@ begin
     DomeDevice:=nil;
     configprop:=nil;
     DomeShutterProp:=nil;
-    DomeGotoProp:=nil;
+    DomeParkProp:=nil;
     DomeAutosyncProp:=nil;
     Fready:=false;
     Fconnected := false;
@@ -145,7 +145,10 @@ end;
 procedure T_indidome.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil)
+       (configprop<>nil) and
+       (DomeShutterProp<>nil) and
+       (DomeParkProp<>nil) and
+       (DomeAutosyncProp<>nil)
     then begin
        FStatus := devConnected;
        if (not Fready) then begin
@@ -187,8 +190,12 @@ begin
       msg(rsNoResponseFr,0);
       msg('Is "'+Findidevice+'" a running dome driver?',0);
     end
-    else if (configprop=nil) then
-       msg('Dome '+Findidevice+' Missing property CONFIG_PROCESS',0);
+    else begin
+      if (configprop=nil) then msg('Dome '+Findidevice+' Missing property CONFIG_PROCESS',0);
+      if (DomeShutterProp=nil) then msg('Dome '+Findidevice+' Missing property DOME_SHUTTER',0);
+      if (DomeParkProp=nil) then msg('Dome '+Findidevice+' Missing property DOME_PARK',0);
+      if (DomeAutosyncProp=nil) then msg('Dome '+Findidevice+' Missing property DOME_AUTOSYNC',0);
+    end;
     Disconnect;
   end;
 end;
@@ -285,11 +292,11 @@ begin
      DomeShutterClose:=IUFindSwitch(DomeShutterProp,'SHUTTER_CLOSE');
      if (DomeShutterOpen=nil)or(DomeShutterClose=nil) then DomeShutterProp:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(DomeGotoProp=nil)and(propname='DOME_GOTO') then begin
-     DomeGotoProp:=indiProp.getSwitch;
-     DomeGotoHome:=IUFindSwitch(DomeGotoProp,'DOME_HOME');
-     DomeGotoPark:=IUFindSwitch(DomeGotoProp,'DOME_PARK');
-     if (DomeGotoHome=nil)or(DomeGotoPark=nil) then DomeGotoProp:=nil;
+  else if (proptype=INDI_SWITCH)and(DomeParkProp=nil)and(propname='DOME_PARK') then begin
+     DomeParkProp:=indiProp.getSwitch;
+     DomePark:=IUFindSwitch(DomeParkProp,'PARK');
+     DomeUnpark:=IUFindSwitch(DomeParkProp,'UNPARK');
+     if (DomePark=nil)or(DomeUnpark=nil) then DomeParkProp:=nil;
   end
   else if (proptype=INDI_SWITCH)and(DomeAutosyncProp=nil)and(propname='DOME_AUTOSYNC') then begin
      DomeAutosyncProp:=indiProp.getSwitch;
@@ -311,7 +318,12 @@ end;
 
 procedure T_indidome.NewSwitch(svp: ISwitchVectorProperty);
 begin
-//  writeln('NewSwitch: '+svp.name);
+  if svp=DomeShutterProp then begin
+     if Assigned(FonShutterChange) then FonShutterChange(self);
+  end;
+  if svp=DomeAutosyncProp then begin
+     if Assigned(FonSlaveChange) then FonSlaveChange(self);
+  end;
 end;
 
 procedure T_indidome.NewLight(lvp: ILightVectorProperty);
@@ -336,19 +348,20 @@ end;
 function T_indidome.GetPark: boolean;
 begin
  result:=false;
- if DomeGotoProp<>nil then begin
-   result := (DomeGotoPark.s=ISS_ON);
+ if DomeParkProp<>nil then begin
+   result := (DomePark.s=ISS_ON);
  end;
 end;
 
 procedure T_indidome.SetPark(value:boolean);
 begin
- if DomeGotoProp<>nil then begin
-    IUResetSwitch(DomeGotoProp);
-    if value then begin
-       DomeGotoPark.s:=ISS_ON;
-       indiclient.sendNewSwitch(DomeGotoProp);
-    end;
+ if DomeParkProp<>nil then begin
+    IUResetSwitch(DomeParkProp);
+    if value then
+       DomePark.s:=ISS_ON
+    else
+       DomeUnpark.s:=ISS_ON;
+    indiclient.sendNewSwitch(DomeParkProp);
  end;
 end;
 
@@ -394,4 +407,3 @@ end;
 
 
 end.
-

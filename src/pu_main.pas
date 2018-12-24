@@ -577,6 +577,8 @@ type
     Procedure MountParkChange(Sender: TObject);
     Procedure MountTrackingChange(Sender: TObject);
     Procedure DomeStatus(Sender: TObject);
+    Procedure DomeShutterChange(Sender: TObject);
+    Procedure DomeSlaveChange(Sender: TObject);
     Procedure WeatherStatus(Sender: TObject);
     Procedure WeatherClearChange(Sender: TObject);
     Procedure SafetyStatus(Sender: TObject);
@@ -1181,6 +1183,8 @@ begin
   dome.onMsg:=@NewMessage;
   dome.onDeviceMsg:=@DeviceMessage;
   dome.onStatusChange:=@DomeStatus;
+  dome.onShutterChange:=@DomeShutterChange;
+  dome.onSlaveChange:=@DomeSlaveChange;
 
   fits:=TFits.Create(self);
   if FileExistsUTF8(ConfigDarkFile) then begin
@@ -3502,9 +3506,23 @@ case dome.Status of
                       if f_devicesconnection.LabelDome.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelDome.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsDome]),1);
+                      DomeShutterChange(Sender);
+                      DomeSlaveChange(Sender);
                    end;
 end;
 CheckConnectionStatus;
+end;
+
+Procedure Tf_main.DomeShutterChange(Sender: TObject);
+begin
+  f_dome.Shutter:=dome.Shutter;
+  NewMessage('Dome shutter: '+BoolToStr(f_dome.Shutter,rsOpen,rsClose));
+end;
+
+Procedure Tf_main.DomeSlaveChange(Sender: TObject);
+begin
+ f_dome.Slave:=dome.Slave;
+ NewMessage('Dome slaving: '+BoolToStr(f_dome.Slave,rsOn,rsOff));
 end;
 
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);

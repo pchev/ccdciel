@@ -36,7 +36,7 @@ T_dome = class(TComponent)
     FDomeInterface: TDevInterface;
     FStatus: TDeviceStatus;
     FonMsg,FonDeviceMsg: TNotifyMsg;
-    FonStatusChange, FonSafeChange: TNotifyEvent;
+    FonStatusChange, FonShutterChange,FonSlaveChange: TNotifyEvent;
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
@@ -67,7 +67,8 @@ T_dome = class(TComponent)
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
-    property onSafeChange: TNotifyEvent read FonSafeChange write FonSafeChange;
+    property onShutterChange: TNotifyEvent read FonShutterChange write FonShutterChange;
+    property onSlaveChange: TNotifyEvent read FonSlaveChange write FonSlaveChange;
 end;
 
 implementation

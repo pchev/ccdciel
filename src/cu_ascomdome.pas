@@ -208,7 +208,7 @@ procedure T_ascomdome.SetPark(value:boolean);
 begin
  {$ifdef mswindows}
    try
-   if FhasPark and value then V.Park;
+   if FhasPark and value then V.Park; // no ASCOM unpark
    except
     on E: Exception do msg('Park error: ' + E.Message,0);
    end;
