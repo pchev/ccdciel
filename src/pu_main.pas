@@ -76,6 +76,7 @@ type
     MenuDarkCamera: TMenuItem;
     MenuDarkFile: TMenuItem;
     MenuDarkClear: TMenuItem;
+    MenuViewDome: TMenuItem;
     MenuViewWeather: TMenuItem;
     MenuViewSafety: TMenuItem;
     MenuItemDark: TMenuItem;
@@ -343,6 +344,7 @@ type
     procedure MenuViewCCDtempClick(Sender: TObject);
     procedure MenuViewClockClick(Sender: TObject);
     procedure MenuViewConnectionClick(Sender: TObject);
+    procedure MenuViewDomeClick(Sender: TObject);
     procedure MenuViewFiltersClick(Sender: TObject);
     procedure MenuViewFocuserClick(Sender: TObject);
     procedure MenuViewFrameClick(Sender: TObject);
@@ -1483,6 +1485,7 @@ begin
    MenuViewRotator.Caption := rsRotator;
    MenuViewCCDtemp.Caption := rsCCDTemperatu;
    MenuViewMount.Caption := rsTelescopeMou;
+   MenuViewDome.Caption := rsDome;
    MenuViewSequence.Caption := rsSequence;
    MenuViewVideo.Caption := rsVideo;
    MenuViewHistogram.Caption := rsVisualisatio;
@@ -1617,7 +1620,7 @@ begin
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
   SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
-  SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,(*MenuViewDome*)nil,nil);
+  SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil);
   SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil);
   SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil);
 
@@ -1898,7 +1901,7 @@ begin
   SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
   SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
   SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
-  SetTool(f_dome,'',PanelRight1,f_script.top+1,(*MenuViewDome*)nil,nil);
+  SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil);
   SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil);
   SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil);
 
@@ -4716,6 +4719,7 @@ begin
   loadopt:=false;
   f_setup.DefaultCameraInterface:=camera.CameraInterface;
   f_setup.DefaultMountInterface:=mount.MountInterface;
+  f_setup.DefaultDomeInterface:=dome.DomeInterface;
   f_setup.DefaultWheelInterface:=wheel.WheelInterface;
   f_setup.DefaultFocuserInterface:=focuser.FocuserInterface;
   f_setup.DefaultRotatorInterface:=rotator.RotatorInterface;
@@ -4757,6 +4761,7 @@ begin
     config.SetValue('/Devices/Focuser',f_setup.DeviceFocuser.Checked);
     config.SetValue('/Devices/Rotator',f_setup.DeviceRotator.Checked);
     config.SetValue('/Devices/Mount',f_setup.DeviceMount.Checked);
+    config.SetValue('/Devices/Dome',f_setup.DeviceDome.Checked);
     config.SetValue('/Devices/Watchdog',f_setup.DeviceWatchdog.Checked);
     config.SetValue('/Devices/Weather',f_setup.DeviceWeather.Checked);
     config.SetValue('/Devices/Safety',f_setup.DeviceSafety.Checked);
@@ -4797,6 +4802,12 @@ begin
     config.SetValue('/Mount/SetDateTime',f_setup.MountSetDateTime.Checked);
     config.SetValue('/Mount/SetObservatory',f_setup.MountSetObservatory.Checked);
     config.SetValue('/Mount/GetObservatory',f_setup.MountGetObservatory.Checked);
+
+    config.SetValue('/DomeInterface',ord(f_setup.DomeConnection));
+    if f_setup.DomeIndiDevice.Text<>'' then config.SetValue('/INDIdome/Device',f_setup.DomeIndiDevice.Text);
+    config.SetValue('/INDIdome/DevicePort',f_setup.DomeIndiDevPort.Text);
+    config.SetValue('/INDIdome/AutoLoadConfig',f_setup.DomeAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMdome/Device',f_setup.AscomDome.Text);
 
     if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
     config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);
@@ -5403,6 +5414,11 @@ end;
 procedure Tf_main.MenuViewConnectionClick(Sender: TObject);
 begin
   f_devicesconnection.Visible:=MenuViewConnection.Checked;
+end;
+
+procedure Tf_main.MenuViewDomeClick(Sender: TObject);
+begin
+  f_dome.Visible:=MenuViewDome.Checked;
 end;
 
 procedure Tf_main.MenuViewFiltersClick(Sender: TObject);

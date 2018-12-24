@@ -576,6 +576,13 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewMountClick
       end
+      object MenuViewDome: TMenuItem
+        AutoCheck = True
+        Caption = 'Dome'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewDomeClick
+      end
       object MenuViewSequence: TMenuItem
         AutoCheck = True
         Caption = 'Sequence'

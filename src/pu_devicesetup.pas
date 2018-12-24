@@ -37,20 +37,24 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    AscomDome: TEdit;
     AscomWeather: TEdit;
     AscomSafety: TEdit;
     AscomRotator: TEdit;
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
+    BtnAboutDome: TButton;
     BtnAboutWeather: TButton;
     BtnAboutSafety: TButton;
     BtnAboutRotator: TButton;
+    BtnChooseDome: TButton;
     BtnChooseWeather: TButton;
     BtnChooseSafety: TButton;
     BtnChooseRotator: TButton;
     BtnNewProfile: TButton;
     BtnDeleteProfile: TButton;
+    BtnSetupDome: TButton;
     BtnSetupWeather: TButton;
     BtnSetupSafety: TButton;
     BtnSetupRotator: TButton;
@@ -71,10 +75,19 @@ type
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
     CameraIndiTransfertDir: TEdit;
+    DeviceDome: TCheckBox;
     DeviceWeather: TCheckBox;
     DeviceSafety: TCheckBox;
     FlipImage: TCheckBox;
     AscomWeatherType: TRadioGroup;
+    Dome: TTabSheet;
+    Label23: TLabel;
+    Label25: TLabel;
+    DomeIndiDevPort: TEdit;
+    PanelDomeAscom: TPanel;
+    PanelDomeIndi: TPanel;
+    DomeAutoLoadConfig: TCheckBox;
+    DomeIndiDevice: TComboBox;
     WeatherAutoLoadConfig: TCheckBox;
     SafetyAutoLoadConfig: TCheckBox;
     WeatherIndiDevice: TComboBox;
@@ -194,7 +207,7 @@ type
     indiclient: TIndiBaseClient;
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
-    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
+    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount:integer;
     receiveindidevice:boolean;
     procedure IndiNewDevice(dp: Basedevice);
@@ -204,13 +217,14 @@ type
     procedure SetFocuserConnection(value: TDevInterface);
     procedure SetRotatorConnection(value: TDevInterface);
     procedure SetMountConnection(value: TDevInterface);
+    procedure SetDomeConnection(value: TDevInterface);
     procedure SetWeatherConnection(value: TDevInterface);
     procedure SetSafetyConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
     procedure SetLang;
   public
     { public declarations }
-    DefaultCameraInterface, DefaultMountInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
+    DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
     profile: string;
     procedure LoadProfileList;
     procedure Loadconfig(conf: TCCDConfig);
@@ -222,6 +236,7 @@ type
     property FocuserConnection: TDevInterface read FFocuserConnection write SetFocuserConnection;
     property RotatorConnection: TDevInterface read FRotatorConnection write SetRotatorConnection;
     property MountConnection: TDevInterface read FMountConnection write SetMountConnection;
+    property DomeConnection: TDevInterface read FDomeConnection write SetDomeConnection;
     property WeatherConnection: TDevInterface read FWeatherConnection write SetWeatherConnection;
     property SafetyConnection: TDevInterface read FSafetyConnection write SetSafetyConnection;
   end;
@@ -313,6 +328,13 @@ begin
   MountSetDateTime.Caption:=rsSetMountTime;
   MountSetObservatory.Caption:=rsSetMountSite;
   MountGetObservatory.Caption:=rsGetSiteLongL;
+  DeviceDome.Caption:='Use dome';
+  Label25.Caption:=rsDevices;
+  Label23.Caption:=rsPort;
+  DomeAutoLoadConfig.Caption:=rsLoadConfigur;
+  BtnChooseDome.Caption:=rsChoose;
+  BtnAboutDome.Caption:=rsAbout;
+  BtnSetupDome.Caption:=rsSetup;
   Watchdog.Caption:=rsWatchdog;
   Label19.Caption:=rsDevices;
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
@@ -356,6 +378,7 @@ DeviceFilterWheel.Checked:=conf.GetValue('/Devices/FilterWheel',false);
 DeviceFocuser.Checked:=conf.GetValue('/Devices/Focuser',false);
 DeviceRotator.Checked:=conf.GetValue('/Devices/Rotator',false);
 DeviceMount.Checked:=conf.GetValue('/Devices/Mount',false);
+DeviceDome.Checked:=conf.GetValue('/Devices/Dome',false);
 DeviceWeather.Checked:=conf.GetValue('/Devices/Weather',false);
 DeviceSafety.Checked:=conf.GetValue('/Devices/Safety',false);
 DeviceWatchdog.Checked:=conf.GetValue('/Devices/Watchdog',false);
@@ -418,6 +441,16 @@ MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
 MountSetObservatory.Checked:=conf.GetValue('/Mount/SetObservatory',false);
 MountGetObservatory.Checked:=conf.GetValue('/Mount/GetObservatory',false);
 
+DomeConnection:=TDevInterface(conf.GetValue('/DomeInterface',ord(DefaultDomeInterface)));
+if DomeIndiDevice.Items.Count=0 then begin
+  DomeIndiDevice.Items.Add(conf.GetValue('/INDIdome/Device',''));
+  DomeIndiDevice.ItemIndex:=0;
+end;
+DomeIndiDevice.Text:=conf.GetValue('/INDIdome/Device','');
+DomeIndiDevPort.Text:=conf.GetValue('/INDIdome/DevicePort','');
+DomeAutoLoadConfig.Checked:=conf.GetValue('/INDIdome/AutoLoadConfig',false);
+AscomDome.Text:=conf.GetValue('/ASCOMdome/Device','');
+
 WeatherConnection:=TDevInterface(conf.GetValue('/WeatherInterface',ord(DefaultWeatherInterface)));
 if WeatherIndiDevice.Items.Count=0 then begin
   WeatherIndiDevice.Items.Add(conf.GetValue('/INDIweather/Device',''));
@@ -463,6 +496,9 @@ begin
      FMountConnection:=INDI;
      PanelMountIndi.Visible:=true;
      PanelMountAscom.Visible:=false;
+     FDomeConnection:=INDI;
+     PanelDomeIndi.Visible:=true;
+     PanelDomeAscom.Visible:=false;
      FRotatorConnection:=INDI;
      PanelRotatorIndi.Visible:=true;
      PanelRotatorAscom.Visible:=false;
@@ -500,6 +536,9 @@ begin
      FMountConnection:=ASCOM;
      PanelMountIndi.Visible:=false;
      PanelMountAscom.Visible:=true;
+     FDomeConnection:=ASCOM;
+     PanelDomeIndi.Visible:=false;
+     PanelDomeAscom.Visible:=true;
      FRotatorConnection:=ASCOM;
      PanelRotatorIndi.Visible:=false;
      PanelRotatorAscom.Visible:=true;
@@ -635,6 +674,14 @@ begin
   FMountConnection:=value;
 end;
 
+procedure Tf_setup.SetDomeConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FDomeConnection:=value;
+end;
+
 procedure Tf_setup.FilterWheelInCameraBoxClick(Sender: TObject);
 begin
   if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
@@ -678,6 +725,7 @@ begin
           dev:=widestring(AscomWeather.Text);
         end;
     7 : begin t:='SafetyMonitor'; dev:=widestring(AscomSafety.Text); end;
+    8 : begin t:='Dome'; dev:=widestring(AscomDome.Text); end;
   end;
   try
     try
@@ -696,6 +744,7 @@ begin
       5 : AscomRotator.Text:=string(dev);
       6 : AscomWeather.Text:=string(dev);
       7 : AscomSafety.Text:=string(dev);
+      8 : AscomDome.Text:=string(dev);
     end;
   except
     on E: Exception do begin
@@ -722,6 +771,7 @@ begin
     5 : begin dev:=widestring(AscomRotator.Text); end;
     6 : begin dev:=widestring(AscomWeather.Text); end;
     7 : begin dev:=widestring(AscomSafety.Text); end;
+    8 : begin dev:=widestring(AscomDome.Text); end;
   end;
 
   try
@@ -756,6 +806,7 @@ begin
     5 : begin dev:=widestring(AscomRotator.Text); end;
     6 : begin dev:=widestring(AscomWeather.Text); end;
     7 : begin dev:=widestring(AscomSafety.Text); end;
+    8 : begin dev:=widestring(AscomDome.Text); end;
   end;
 
   try
