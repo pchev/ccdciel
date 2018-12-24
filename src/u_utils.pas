@@ -133,6 +133,7 @@ procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
 function AscomVersion: string;
 function IndiVersion: string;
+function AstrometryVersion(resolver:integer; cygwinpath:string; usescript:boolean):string;
 
 
 implementation
@@ -2669,6 +2670,39 @@ for i:=0 to r.count-1 do begin
 end;
 r.free;
 except
+end;
+end;
+
+function AstrometryVersion(resolver:integer; cygwinpath:string; usescript:boolean):string;
+var P: TProcess;
+    i: integer;
+    buf: String;
+begin
+result:='unknown';
+if (resolver=ResolverAstrometryNet) and (not usescript) then begin
+  P:= TProcess.Create(Nil);
+  P.Options:= [poWaitOnExit, poUsePipes];
+  {$ifdef mswindows}
+  P.Executable:=slash(cygwinpath)+slash('bin')+'bash.exe';
+  P.Parameters.Add('--login');
+  P.Parameters.Add('-c');
+  buf:='"';
+  buf:=buf+' solve-field ';
+  buf:=buf+' --help "';
+  P.Parameters.Add(buf);
+  {$else}
+  P.Executable:='solve-field';
+  P.Parameters.Add('--help');
+  {$endif}
+  P.Execute;
+  SetLength(buf, 1000);
+  SetLength(buf, P.Output.Read(buf[1], Length(buf)));
+  i:=pos('Revision',buf);
+  if i<=0 then exit;
+  delete(buf,1,i+8);
+  i:=pos(',',buf);
+  if i<=0 then exit;
+  result:=copy(buf,1,i-1);
 end;
 end;
 

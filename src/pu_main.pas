@@ -2541,6 +2541,7 @@ end;
 
 procedure Tf_main.SetOptions;
 var i,n: integer;
+    buf,v: string;
 begin
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
@@ -2620,6 +2621,16 @@ begin
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+  buf:=config.GetValue('/Astrometry/OtherOptions','');
+  if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
+    v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstUseScript',false));
+    if v<>'unknown' then begin
+      if v>='0.68' then begin // option --no-fits2fits was removed in version 0.68
+         buf:=StringReplace(buf,'--no-fits2fits','',[rfReplaceAll]);
+         config.SetValue('/Astrometry/OtherOptions',buf);
+      end;
+    end;
+  end;
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
