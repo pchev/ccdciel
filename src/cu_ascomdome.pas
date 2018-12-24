@@ -36,6 +36,7 @@ T_ascomdome = class(T_dome)
    {$ifdef mswindows}
    V: variant;
    {$endif}
+   stShutter,stSlave,stPark: boolean;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
 
@@ -66,6 +67,9 @@ begin
  inherited Create(AOwner);
  FDomeInterface:=ASCOM;
  FInterfaceVersion:=1;
+ stShutter:=false;
+ stSlave:=false;
+ stPark:=false;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -180,6 +184,16 @@ begin
   end
   else begin
      try
+       s:=GetShutter;
+       if s<>stShutter then begin
+         stShutter:=s;
+         if Assigned(FonShutterChange) then FonShutterChange(self);
+       end;
+       s:=GetSlave;
+       if s<>stSlave then begin
+         stSlave:=s;
+         if Assigned(FonSlaveChange) then FonSlaveChange(self);
+       end;
      except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
