@@ -205,7 +205,7 @@ type
   private
     { private declarations }
     indiclient: TIndiBaseClient;
-    camsavedev,wheelsavedev,focusersavedev,mountsavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
+    camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
     FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount:integer;
@@ -857,6 +857,7 @@ begin
   focusersavedev:=FocuserIndiDevice.Text;
   rotatorsavedev:=RotatorIndiDevice.Text;
   mountsavedev:=MountIndiDevice.Text;
+  domesavedev:=MountIndiDevice.Text;
   watchdogsavedev:=WatchdogIndiDevice.Text;
   weathersavedev:=WeatherIndiDevice.Text;
   safetysavedev:=SafetyIndiDevice.Text;
@@ -866,6 +867,7 @@ begin
   RotatorIndiDevice.Clear;
   WheelIndiDevice.Clear;
   MountIndiDevice.Clear;
+  DomeIndiDevice.Clear;
   WatchdogIndiDevice.Clear;
   WeatherIndiDevice.Clear;
   SafetyIndiDevice.Clear;
@@ -902,6 +904,8 @@ begin
         RotatorIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and TELESCOPE_INTERFACE)<>0 then
         MountIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (drint and DOME_INTERFACE)<>0 then
+        DomeIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and AUX_INTERFACE)<>0 then
         WatchdogIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (drint and WEATHER_INTERFACE)<>0 then
@@ -914,6 +918,7 @@ begin
   if FocuserIndiDevice.Items.Count>0 then FocuserIndiDevice.ItemIndex:=0;
   if RotatorIndiDevice.Items.Count>0 then RotatorIndiDevice.ItemIndex:=0;
   if MountIndiDevice.Items.Count>0 then MountIndiDevice.ItemIndex:=0;
+  if DomeIndiDevice.Items.Count>0 then DomeIndiDevice.ItemIndex:=0;
   if WatchdogIndiDevice.Items.Count>0 then WatchdogIndiDevice.ItemIndex:=0;
   if WeatherIndiDevice.Items.Count>0 then WeatherIndiDevice.ItemIndex:=0;
   if SafetyIndiDevice.Items.Count>0 then SafetyIndiDevice.ItemIndex:=0;
@@ -927,6 +932,8 @@ begin
      if RotatorIndiDevice.Items[i]=rotatorsavedev then RotatorIndiDevice.ItemIndex:=i;
   for i:=0 to MountIndiDevice.Items.Count-1 do
      if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
+  for i:=0 to DomeIndiDevice.Items.Count-1 do
+     if DomeIndiDevice.Items[i]=domesavedev then DomeIndiDevice.ItemIndex:=i;
   for i:=0 to WatchdogIndiDevice.Items.Count-1 do
      if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
   for i:=0 to WeatherIndiDevice.Items.Count-1 do
