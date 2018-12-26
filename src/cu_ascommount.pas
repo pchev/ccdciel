@@ -47,6 +47,7 @@ T_ascommount = class(T_mount)
    procedure StatusTimerTimer(sender: TObject);
    procedure CheckEqmod;
    function WaitMountSlewing(maxtime:integer):boolean;
+   function WaitMountPark(maxtime:integer):boolean;
  protected
    function  GetTracking:Boolean; override;
    procedure SetPark(value:Boolean); override;
@@ -245,6 +246,7 @@ begin
       if value then begin
          msg(rsPark);
          V.Park;
+         WaitMountPark(120000);
       end else begin
          msg(rsUnpark);
          V.UnPark;
@@ -449,6 +451,30 @@ begin
    maxcount:=maxtime div waitpoll;
    count:=0;
    while (V.Slewing)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+ {$endif}
+end;
+
+function T_ascommount.WaitMountPark(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ try
+ if CanPark then begin
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (not V.atPark)and(count<maxcount) do begin
       sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
