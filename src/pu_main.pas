@@ -3606,10 +3606,9 @@ ok:=weather.Clear;
 if f_weather.Clear<>ok then begin
  f_weather.Clear:=ok;
  NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
- if f_sequence.Running then begin
-    f_sequence.WeatherChange(f_weather.Clear);
- end;
+ f_sequence.WeatherChange(f_weather.Clear);
 end;
+if not f_sequence.Running then f_sequence.WeatherChange(f_weather.Clear);;
 end;
 
 Procedure Tf_main.ConnectSafety(Sender: TObject);

@@ -717,6 +717,19 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     msg(Format(rsInitializeTa, [t.objectname]),1);
+    // check weather
+    if WeatherPauseCapture then begin
+       msg('Sequence paused for bad weather ...',1);
+       // stop guiding and mount tracking now
+       StopGuider;
+       mount.AbortMotion;
+       WeatherCapturePaused:=false;
+       while WeatherPauseCapture and Frunning do begin
+          Wait(5);
+       end;
+       // continue if not aborted
+       if not FRunning then exit;
+    end;
     t.autoguiding:=false;
     InplaceAutofocus:=t.inplaceautofocus;
     // adjust moving object coordinates from planetarium
