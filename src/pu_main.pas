@@ -3649,9 +3649,10 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
-var ok: boolean;
+var ok,closenow : boolean;
 begin
 ok:=safety.Safe;
+closenow:=false;
 if f_safety.Safe<>ok then begin
  f_safety.Safe:=ok;
  NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
@@ -3666,10 +3667,8 @@ if f_safety.Safe<>ok then begin
          end;
       end;
       f_sequence.AbortSequence;
+      closenow:=true;
       wait(5);
-      mount.Park:=true;
-      ConfirmClose:=false;
-      Close;
    end
    else if f_capture.Running then begin
       f_pause.Caption:='Unsafe condition detected!';
@@ -3678,10 +3677,20 @@ if f_safety.Safe<>ok then begin
          exit;
       end;
       f_capture.BtnStartClick(nil);
+      closenow:=true;
       wait(5);
-      mount.Park:=true;
-      ConfirmClose:=false;
-      Close;
+   end;
+   if closenow then begin
+     mount.Park:=true;
+     wait(1);
+     dome.Slave:=false;
+     wait(1);
+     dome.Park:=true;
+     wait(1);
+     dome.Shutter:=false;
+     wait(5);
+     ConfirmClose:=false;
+     Close;
    end;
  end;
 end;
