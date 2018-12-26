@@ -58,7 +58,7 @@ object f_dome: Tf_dome
         Shape = stCircle
       end
       object Label2: TLabel
-        Left = 92
+        Left = 98
         Height = 15
         Top = 4
         Width = 34
@@ -67,7 +67,7 @@ object f_dome: Tf_dome
         ParentFont = False
       end
       object Label1: TLabel
-        Left = 5
+        Left = 8
         Height = 15
         Top = 4
         Width = 29
@@ -76,7 +76,7 @@ object f_dome: Tf_dome
         ParentFont = False
       end
       object ledOpen: TShape
-        Left = 62
+        Left = 65
         Height = 14
         Top = 4
         Width = 14

@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="83">
+    <Units Count="84">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -730,6 +730,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit82>
+      <Unit83>
+        <Filename Value="fu_safety.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_safety"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit83>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
