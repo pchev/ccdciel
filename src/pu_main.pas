@@ -3514,15 +3514,19 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.DomeShutterChange(Sender: TObject);
+var ok: boolean;
 begin
-  f_dome.Shutter:=dome.Shutter;
-  NewMessage('Dome shutter: '+BoolToStr(f_dome.Shutter,rsOpen,rsClose));
+  ok:=dome.Shutter;
+  if f_dome.Shutter<>ok then NewMessage('Dome shutter: '+BoolToStr(ok,rsOpen,rsClose));
+  f_dome.Shutter:=ok;
 end;
 
 Procedure Tf_main.DomeSlaveChange(Sender: TObject);
+var ok: boolean;
 begin
- f_dome.Slave:=dome.Slave;
- NewMessage('Dome slaving: '+BoolToStr(f_dome.Slave,rsOn,rsOff));
+ ok:=dome.Slave;
+ if f_dome.Slave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,rsOn,rsOff));
+ f_dome.Slave:=ok;
 end;
 
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);
@@ -3596,12 +3600,16 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.WeatherClearChange(Sender: TObject);
+var ok: boolean;
 begin
- f_weather.Clear := weather.Clear;
+ok:=weather.Clear;
+if f_weather.Clear<>ok then begin
+ f_weather.Clear:=ok;
  NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
  if f_sequence.Running then begin
     f_sequence.WeatherChange(f_weather.Clear);
  end;
+end;
 end;
 
 Procedure Tf_main.ConnectSafety(Sender: TObject);
@@ -3641,8 +3649,11 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
+var ok: boolean;
 begin
- f_safety.Safe := safety.Safe;
+ok:=safety.Safe;
+if f_safety.Safe<>ok then begin
+ f_safety.Safe:=ok;
  NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
  if not f_safety.Safe then begin
    // unsafe condition, abort and close.
@@ -3673,6 +3684,7 @@ begin
       Close;
    end;
  end;
+end;
 end;
 
 procedure Tf_main.LogLevelChange(Sender: TObject);
