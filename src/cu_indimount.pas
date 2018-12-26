@@ -483,6 +483,7 @@ if parkprop<>nil then begin
  end;
  indiclient.sendNewSwitch(parkprop);
  indiclient.WaitBusy(parkprop,120000);
+ indiclient.WaitBusy(coord_prop,120000);
 end;
 end;
 
