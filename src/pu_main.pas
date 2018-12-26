@@ -3659,13 +3659,12 @@ if f_safety.Safe<>ok then begin
  if not f_safety.Safe then begin
    // unsafe condition, abort and close.
    if f_sequence.Running then begin
-      if not f_sequence.Unattended.Checked then begin
-         f_pause.Caption:='Unsafe condition detected!';
-         f_pause.Text:='The safety monitor report unsafe condition.';
-         if f_pause.Wait(60,false) then begin
-            exit;
-         end;
+      f_pause.Caption:='Unsafe condition detected!';
+      f_pause.Text:='The safety monitor report unsafe condition.';
+      if f_pause.Wait(60,false) then begin
+        exit;
       end;
+      if f_safety.Safe then exit;  // safe again, ignore
       f_sequence.AbortSequence;
       closenow:=true;
       wait(5);
@@ -3676,6 +3675,7 @@ if f_safety.Safe<>ok then begin
       if f_pause.Wait(60,false) then begin
          exit;
       end;
+      if f_safety.Safe then exit;  // safe again, ignore
       f_capture.BtnStartClick(nil);
       closenow:=true;
       wait(5);
