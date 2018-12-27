@@ -296,7 +296,7 @@ procedure T_indisafety.NewLight(lvp: ILightVectorProperty);
 var ok: boolean;
 begin
   if lvp=SafetyStatus then begin
-    ok:=SafetyStatus.s=IPS_OK;
+    ok:=GetSafe;
     if ok<>stSafe then begin
       stSafe:=ok;
       if Assigned(FonSafeChange) then FonSafeChange(self);
@@ -307,9 +307,8 @@ end;
 function  T_indisafety.GetSafe:Boolean;
 begin
   result:=false;
-  { TODO : process other properties }
   if SafetyStatus<>nil then begin
-     result:=SafetyStatus.s=IPS_OK;
+     result:=SafetyStatus.s<>IPS_ALERT;
   end;
 end;
 

@@ -312,7 +312,7 @@ procedure T_indiweather.NewLight(lvp: ILightVectorProperty);
 var ok: boolean;
 begin
   if lvp=WeatherStatusProp then begin
-     ok:=WeatherStatusProp.s=IPS_OK;
+     ok:=GetWeatherStatus;
      if ok<>stClear then begin
        stClear:=ok;
        if Assigned(FonClearChange) then FonClearChange(self);
