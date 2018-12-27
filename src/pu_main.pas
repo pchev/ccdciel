@@ -3651,49 +3651,42 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
-var ok,closenow : boolean;
+var ok : boolean;
 begin
 ok:=safety.Safe;
-closenow:=false;
 if f_safety.Safe<>ok then begin
  f_safety.Safe:=ok;
  NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
  if not f_safety.Safe then begin
    // unsafe condition, abort and close.
+   f_pause.Caption:='Unsafe condition detected!';
+   f_pause.Text:='The safety monitor report unsafe condition.';
+   if f_pause.Wait(30,false) then begin
+     NewMessage('Unsafe condition ignored by user');
+     exit;
+   end;
+   if f_safety.Safe then exit;  // safe again, ignore
+   // stop sequence
    if f_sequence.Running then begin
-      f_pause.Caption:='Unsafe condition detected!';
-      f_pause.Text:='The safety monitor report unsafe condition.';
-      if f_pause.Wait(60,false) then begin
-        exit;
-      end;
-      if f_safety.Safe then exit;  // safe again, ignore
       f_sequence.AbortSequence;
-      closenow:=true;
       wait(5);
    end
+   // stop other capture
    else if f_capture.Running then begin
-      f_pause.Caption:='Unsafe condition detected!';
-      f_pause.Text:='The safety monitor report unsafe condition.';
-      if f_pause.Wait(60,false) then begin
-         exit;
-      end;
-      if f_safety.Safe then exit;  // safe again, ignore
       f_capture.BtnStartClick(nil);
-      closenow:=true;
       wait(5);
    end;
-   if closenow then begin
-     mount.Park:=true;
-     wait(1);
-     dome.Slave:=false;
-     wait(1);
-     dome.Park:=true;
-     wait(1);
-     dome.Shutter:=false;
-     wait(5);
-     ConfirmClose:=false;
-     Close;
-   end;
+   // park and close
+   mount.Park:=true;
+   wait(1);
+   dome.Slave:=false;
+   wait(1);
+   dome.Park:=true;
+   wait(1);
+   dome.Shutter:=false;
+   wait(5);
+   ConfirmClose:=false;
+   Close;
  end;
 end;
 end;
