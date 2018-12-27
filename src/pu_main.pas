@@ -3500,6 +3500,7 @@ begin
 case dome.Status of
   devDisconnected:begin
                       f_devicesconnection.LabelDome.Font.Color:=clRed;
+                      f_dome.Connected:=false;
                   end;
   devConnecting:  begin
                       NewMessage(Format(rsConnecting, [rsDome+ellipsis]),2);
@@ -3509,6 +3510,7 @@ case dome.Status of
                       if f_devicesconnection.LabelDome.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelDome.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsDome]),1);
+                      f_dome.Connected:=true;
                       DomeShutterChange(Sender);
                       DomeSlaveChange(Sender);
                    end;
@@ -3519,17 +3521,21 @@ end;
 Procedure Tf_main.DomeShutterChange(Sender: TObject);
 var ok: boolean;
 begin
-  ok:=dome.Shutter;
-  if f_dome.Shutter<>ok then NewMessage('Dome shutter: '+BoolToStr(ok,rsOpen,rsClose));
-  f_dome.Shutter:=ok;
+  if f_dome.Connected then begin
+    ok:=dome.Shutter;
+    if f_dome.Shutter<>ok then NewMessage('Dome shutter: '+BoolToStr(ok,rsOpen,rsClose));
+    f_dome.Shutter:=ok;
+  end;
 end;
 
 Procedure Tf_main.DomeSlaveChange(Sender: TObject);
 var ok: boolean;
 begin
- ok:=dome.Slave;
- if f_dome.Slave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,rsOn,rsOff));
- f_dome.Slave:=ok;
+  if f_dome.Connected then begin
+    ok:=dome.Slave;
+    if f_dome.Slave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,rsOn,rsOff));
+    f_dome.Slave:=ok;
+  end;
 end;
 
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);
@@ -3587,6 +3593,7 @@ begin
 case weather.Status of
   devDisconnected:begin
                       f_devicesconnection.LabelWeather.Font.Color:=clRed;
+                      f_weather.Connected:=false;
                   end;
   devConnecting:  begin
                       NewMessage(Format(rsConnecting, [rsWeatherStati+ellipsis]),2);
@@ -3596,6 +3603,7 @@ case weather.Status of
                       if f_devicesconnection.LabelWeather.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelWeather.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsWeatherStati]),1);
+                      f_weather.Connected:=true;
                    end;
 end;
 WeatherClearChange(Sender);
@@ -3605,13 +3613,14 @@ end;
 Procedure Tf_main.WeatherClearChange(Sender: TObject);
 var ok: boolean;
 begin
-ok:=weather.Clear;
-if f_weather.Clear<>ok then begin
- f_weather.Clear:=ok;
- NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
- f_sequence.WeatherChange(f_weather.Clear);
-end;
-if not f_sequence.Running then f_sequence.WeatherChange(f_weather.Clear);;
+  if f_weather.Connected then begin
+    ok:=weather.Clear;
+    if f_weather.Clear<>ok then begin
+      f_weather.Clear:=ok;
+      NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
+      f_sequence.WeatherChange(f_weather.Clear);
+    end;
+  end;
 end;
 
 Procedure Tf_main.ConnectSafety(Sender: TObject);
@@ -3635,6 +3644,7 @@ begin
 case safety.Status of
   devDisconnected:begin
                       f_devicesconnection.LabelSafety.Font.Color:=clRed;
+                      f_safety.Connected:=false;
                   end;
   devConnecting:  begin
                       NewMessage(Format(rsConnecting, [rsSafetyMonito+ellipsis]),2);
@@ -3643,6 +3653,7 @@ case safety.Status of
   devConnected:   begin
                       if f_devicesconnection.LabelSafety.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelSafety.Font.Color:=clGreen;
+                      f_safety.Connected:=true;
                       NewMessage(Format(rsConnected, [rsSafetyMonito]),1);
                    end;
 end;
@@ -3653,42 +3664,44 @@ end;
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
 var ok : boolean;
 begin
-ok:=safety.Safe;
-if f_safety.Safe<>ok then begin
- f_safety.Safe:=ok;
- NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
- if not f_safety.Safe then begin
-   // unsafe condition, abort and close.
-   f_pause.Caption:='Unsafe condition detected!';
-   f_pause.Text:='The safety monitor report unsafe condition.';
-   if f_pause.Wait(30,false) then begin
-     NewMessage('Unsafe condition ignored by user');
-     exit;
-   end;
-   if f_safety.Safe then exit;  // safe again, ignore
-   // stop sequence
-   if f_sequence.Running then begin
-      f_sequence.AbortSequence;
-      wait(5);
-   end
-   // stop other capture
-   else if f_capture.Running then begin
-      f_capture.BtnStartClick(nil);
-      wait(5);
-   end;
-   // park and close
-   mount.Park:=true;
-   wait(1);
-   dome.Slave:=false;
-   wait(1);
-   dome.Park:=true;
-   wait(1);
-   dome.Shutter:=false;
-   wait(5);
-   ConfirmClose:=false;
-   Close;
- end;
-end;
+  if f_safety.Connected then begin
+    ok:=safety.Safe;
+    if f_safety.Safe<>ok then begin
+     f_safety.Safe:=ok;
+     NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
+     if not f_safety.Safe then begin
+       // unsafe condition, abort and close.
+       f_pause.Caption:='Unsafe condition detected!';
+       f_pause.Text:='The safety monitor report unsafe condition.';
+       if f_pause.Wait(30,false) then begin
+         NewMessage('Unsafe condition ignored by user');
+         exit;
+       end;
+       if f_safety.Safe then exit;  // safe again, ignore
+       // stop sequence
+       if f_sequence.Running then begin
+          f_sequence.AbortSequence;
+          wait(5);
+       end
+       // stop other capture
+       else if f_capture.Running then begin
+          f_capture.BtnStartClick(nil);
+          wait(5);
+       end;
+       // park and close
+       mount.Park:=true;
+       wait(1);
+       dome.Slave:=false;
+       wait(1);
+       dome.Park:=true;
+       wait(1);
+       dome.Shutter:=false;
+       wait(5);
+       ConfirmClose:=false;
+       Close;
+     end;
+    end;
+  end;
 end;
 
 procedure Tf_main.LogLevelChange(Sender: TObject);

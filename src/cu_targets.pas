@@ -725,17 +725,18 @@ begin
   if t<>nil then begin
     msg(Format(rsInitializeTa, [t.objectname]),1);
     // check weather
-    if not FWeather.Clear then begin
+    if (FWeather.Connected)and(not FWeather.Clear) then begin
        msg('Sequence paused for bad weather ...',1);
        // stop guiding and mount tracking now
        StopGuider;
        mount.AbortMotion;
        WeatherCapturePaused:=false;
-       while (not FWeather.Clear) and Frunning do begin
+       while (FWeather.Connected)and(not FWeather.Clear) and Frunning do begin
           Wait(5);
        end;
        // continue if not aborted
        if not FRunning then exit;
+       msg('Restart sequence',1);
     end;
     t.autoguiding:=false;
     InplaceAutofocus:=t.inplaceautofocus;

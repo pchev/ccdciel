@@ -42,14 +42,17 @@ type
     Title: TLabel;
   private
     { private declarations }
-    FShutter,FSlave: boolean;
+    FConnected,FShutter,FSlave: boolean;
+    procedure SetConnected(value:boolean);
     procedure SetShutter(value:boolean);
     procedure SetSlave(value:boolean);
+    procedure SetLed;
     procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property Connected: boolean read FConnected write SetConnected;
     property Shutter: boolean read FShutter write SetShutter;
     property Slave: boolean read FSlave write SetSlave;
   end;
@@ -66,6 +69,11 @@ begin
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  {$endif}
+ FConnected:=false;
+ FShutter:=false;
+ FSlave:=false;
+ ledOpen.Brush.Color:=clGray;
+ ledSlaved.Brush.Color:=clGray;
  ScaleDPI(Self);
  SetLang;
 end;
@@ -82,22 +90,40 @@ begin
   Label2.Caption:=rsSlaved;
 end;
 
+procedure Tf_dome.SetLed;
+begin
+  if FConnected then begin
+    if FShutter then
+       ledOpen.Brush.Color:=clLime
+    else
+       ledOpen.Brush.Color:=clRed;
+    if FSlave then
+       ledSlaved.Brush.Color:=clLime
+    else
+       ledSlaved.Brush.Color:=clRed;
+  end
+  else begin
+     ledOpen.Brush.Color:=clGray;
+     ledSlaved.Brush.Color:=clGray;
+  end;
+end;
+
+procedure Tf_dome.SetConnected(value:boolean);
+begin
+  FConnected:=value;
+  SetLed;
+end;
+
 procedure Tf_dome.SetShutter(value:boolean);
 begin
   FShutter:=value;
-  if FShutter then
-     ledOpen.Brush.Color:=clLime
-  else
-     ledOpen.Brush.Color:=clRed;
+  SetLed;
 end;
 
 procedure Tf_dome.SetSlave(value:boolean);
 begin
   FSlave:=value;
-  if FSlave then
-     ledSlaved.Brush.Color:=clLime
-  else
-     ledSlaved.Brush.Color:=clRed;
+  SetLed;
 end;
 
 end.

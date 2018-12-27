@@ -40,13 +40,16 @@ type
     Title: TLabel;
   private
     { private declarations }
-    FClear: boolean;
+    FConnected,FClear: boolean;
     procedure SetLang;
+    procedure SetConnected(value:boolean);
     procedure SetClear(value:boolean);
+    procedure SetLed;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property Connected: boolean read FConnected write SetConnected;
     property Clear: boolean read FClear write SetClear;
   end;
 
@@ -62,6 +65,9 @@ begin
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  {$endif}
+ FConnected:=false;
+ FClear:=false;
+ led.Brush.Color:=clGray;
  ScaleDPI(Self);
  SetLang;
 end;
@@ -77,13 +83,28 @@ begin
   label1.Caption:=rsClearConditi;
 end;
 
+procedure Tf_weather.SetLed;
+begin
+  if FConnected then begin
+     if FClear then
+        led.Brush.Color:=clLime
+     else
+        led.Brush.Color:=clRed;
+  end
+  else
+     led.Brush.Color:=clGray;
+end;
+
+procedure Tf_weather.SetConnected(value:boolean);
+begin
+  FConnected:=value;
+  SetLed;
+end;
+
 procedure Tf_weather.SetClear(value:boolean);
 begin
   FClear:=value;
-  if FClear then
-     led.Brush.Color:=clLime
-  else
-     led.Brush.Color:=clRed;
+  SetLed;
 end;
 
 end.

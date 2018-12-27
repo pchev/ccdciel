@@ -40,13 +40,16 @@ type
     Title: TLabel;
   private
     { private declarations }
-    FSafe: boolean;
+    FConnected,FSafe: boolean;
     procedure SetLang;
+    procedure SetConnected(value:boolean);
     procedure SetSafe(value:boolean);
+    procedure SetLed;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property Connected: boolean read FConnected write SetConnected;
     property Safe: boolean read FSafe write SetSafe;
   end;
 
@@ -62,6 +65,9 @@ begin
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  {$endif}
+ FConnected:=false;
+ FSafe:=false;;
+ led.Brush.Color:=clGray;
  ScaleDPI(Self);
  SetLang;
 end;
@@ -77,13 +83,28 @@ begin
   label1.Caption:=rsSafeForOpera;
 end;
 
+procedure Tf_safety.SetLed;
+begin
+  if FConnected then begin
+     if FSafe then
+        led.Brush.Color:=clLime
+     else
+        led.Brush.Color:=clRed;
+  end
+  else
+     led.Brush.Color:=clGray;
+end;
+
+procedure Tf_safety.SetConnected(value:boolean);
+begin
+  FConnected:=value;
+  SetLed;
+end;
+
 procedure Tf_safety.SetSafe(value:boolean);
 begin
   FSafe:=value;
-  if FSafe then
-     led.Brush.Color:=clLime
-  else
-     led.Brush.Color:=clRed;
+  SetLed;
 end;
 
 end.
