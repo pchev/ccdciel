@@ -1350,6 +1350,9 @@ begin
   f_sequence.Preview:=f_preview;
   f_sequence.Capture:=f_capture;
   f_sequence.Filter:=f_filterwheel;
+  f_sequence.Weather:=f_weather;
+  f_sequence.Safety:=f_safety;
+  f_sequence.Dome:=f_dome;
   f_sequence.Mount:=mount;
   f_sequence.Camera:=camera;
   f_sequence.Rotator:=rotator;

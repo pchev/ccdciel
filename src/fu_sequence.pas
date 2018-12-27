@@ -29,7 +29,7 @@ uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI,
   fu_capture, fu_preview, fu_filterwheel, u_translation, pu_sequenceoptions,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
-  cu_targets, cu_plan, cu_planetarium, pu_pause,
+  cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, fu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -88,6 +88,9 @@ type
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
     Ffilter: Tf_filterwheel;
+    Fweather: Tf_weather;
+    Fsafety: Tf_safety;
+    Fdome: Tf_dome;
     Fmount: T_mount;
     Fcamera: T_camera;
     Frotator: T_rotator;
@@ -104,6 +107,9 @@ type
     procedure SetCamera(val: T_camera);
     procedure SetRotator(val: T_rotator);
     procedure SetFilter(val: Tf_filterwheel);
+    procedure SetWeather(val: Tf_weather);
+    procedure SetSafety(val: Tf_safety);
+    procedure SetDome(val: Tf_dome);
     procedure SetAutoguider(val: T_autoguider);
     procedure SetAstrometry(val: TAstrometry);
     procedure SetPlanetarium(val: TPlanetarium);
@@ -156,6 +162,9 @@ type
     property Camera: T_camera read Fcamera write SetCamera;
     property Rotator: T_rotator read Frotator write SetRotator;
     property Filter: Tf_filterwheel read Ffilter write SetFilter;
+    property Weather: Tf_weather read Fweather write SetWeather;
+    property Safety: Tf_safety read Fsafety write SetSafety;
+    property Dome: Tf_dome read Fdome write SetDome;
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
@@ -278,6 +287,24 @@ procedure Tf_sequence.SetFilter(val: Tf_filterwheel);
 begin
   Ffilter:=val;
   Targets.Filter:=Ffilter;
+end;
+
+procedure Tf_sequence.SetWeather(val: Tf_weather);
+begin
+  Fweather:=val;
+  Targets.Weather:=Fweather;
+end;
+
+procedure Tf_sequence.SetSafety(val: Tf_safety);
+begin
+  Fsafety:=val;
+  Targets.Safety:=Fsafety;
+end;
+
+procedure Tf_sequence.SetDome(val: Tf_dome);
+begin
+  Fdome:=val;
+  Targets.Dome:=Fdome;
 end;
 
 procedure Tf_sequence.SetAutoguider(val: T_autoguider);

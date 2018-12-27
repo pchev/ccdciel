@@ -27,6 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
+  fu_safety, fu_weather, fu_dome,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -47,6 +48,9 @@ type
       Fcapture: Tf_capture;
       Fpreview: Tf_preview;
       Ffilter: Tf_filterwheel;
+      Fweather: Tf_weather;
+      Fsafety: Tf_safety;
+      Fdome: Tf_dome;
       Fmount: T_mount;
       Fcamera: T_camera;
       Frotaror: T_rotator;
@@ -143,6 +147,9 @@ type
       property Camera: T_camera read Fcamera write SetCamera;
       property Rotaror: T_rotator read Frotaror write Frotaror;
       property Filter: Tf_filterwheel read Ffilter write SetFilter;
+      property Weather: Tf_weather read Fweather write Fweather;
+      property Safety: Tf_safety read Fsafety write Fsafety;
+      property Dome: Tf_dome read Fdome write Fdome;
       property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
       property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
       property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
@@ -443,7 +450,7 @@ procedure T_Targets.WeatherRestart;
 var initok: boolean;
 begin
   if WeatherCapturePaused then begin
-    // we really pause, try to recenter, restart mount and guiding.
+    // we really pause during capture, try to recenter, restart mount and guiding.
     WeatherPauseCanceled:=false;
     initok:=InitTarget;
     if not initok then begin
@@ -718,13 +725,13 @@ begin
   if t<>nil then begin
     msg(Format(rsInitializeTa, [t.objectname]),1);
     // check weather
-    if WeatherPauseCapture then begin
+    if not FWeather.Clear then begin
        msg('Sequence paused for bad weather ...',1);
        // stop guiding and mount tracking now
        StopGuider;
        mount.AbortMotion;
        WeatherCapturePaused:=false;
-       while WeatherPauseCapture and Frunning do begin
+       while (not FWeather.Clear) and Frunning do begin
           Wait(5);
        end;
        // continue if not aborted
