@@ -2530,6 +2530,7 @@ begin
   oEnum         := IUnknown(colItems._NewEnum) as IEnumVariant;
   if oEnum.Next(1, colItem, iValue) = 0 then begin
   Result:=colItem.Caption+' '+colItem.Version+' '+colItem.OSArchitecture;
+  end;
   except
   end;
 end;
