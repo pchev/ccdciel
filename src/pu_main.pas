@@ -1817,21 +1817,27 @@ begin
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // guider
       x:=x+2*s+4;
-      if (f_autoguider<>nil)and(autoguider.State=GUIDER_DISCONNECTED) then begin
-        if Autoguider.AutoguiderType=agNONE
-        then
-          statusbar.Canvas.Brush.Color:=clGray
-        else
-          statusbar.Canvas.Brush.Color:=clred;
-        msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
-      end
-      else if (autoguider.State=GUIDER_GUIDING) then begin
-        statusbar.Canvas.Brush.Color:=cllime;
-        msg:=msg+', '+Format(rsGuiding,[rsAutoguider]);
+      if f_autoguider=nil then begin
+         statusbar.Canvas.Brush.Color:=clGray;
+         msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
       end
       else begin
-        statusbar.Canvas.Brush.Color:=clYellow;
-        msg:=msg+', '+Format(rsConnected,[rsAutoguider]);
+        if autoguider.State=GUIDER_DISCONNECTED then begin
+          if Autoguider.AutoguiderType=agNONE
+          then
+            statusbar.Canvas.Brush.Color:=clGray
+          else
+            statusbar.Canvas.Brush.Color:=clred;
+          msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
+        end
+        else if (autoguider.State=GUIDER_GUIDING) then begin
+          statusbar.Canvas.Brush.Color:=cllime;
+          msg:=msg+', '+Format(rsGuiding,[rsAutoguider]);
+        end
+        else begin
+          statusbar.Canvas.Brush.Color:=clYellow;
+          msg:=msg+', '+Format(rsConnected,[rsAutoguider]);
+        end;
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // device
