@@ -2523,11 +2523,14 @@ var
   end;
 
 begin
+  result:='unknown';
+  try
   objWMIService := GetWMIObject('winmgmts:\\localhost\root\cimv2');
   colItems      := objWMIService.ExecQuery('SELECT * FROM Win32_OperatingSystem','WQL',0);
   oEnum         := IUnknown(colItems._NewEnum) as IEnumVariant;
   if oEnum.Next(1, colItem, iValue) = 0 then begin
   Result:=colItem.Caption+' '+colItem.Version+' '+colItem.OSArchitecture;
+  except
   end;
 end;
 {$endif}
@@ -2547,6 +2550,8 @@ var P: TProcess;
   end;
 
 begin
+  result:='unknown';
+  try
   P:= TProcess.Create(Nil);
   P.Options:= [poWaitOnExit, poUsePipes];
   P.Executable:= 'uname';
@@ -2555,6 +2560,8 @@ begin
   result:=result+ ExecParam('r')+' ';
   result:=result+ ExecParam('m');
   P.Free;
+  except
+  end;
 end;
 {$endif}
 
@@ -2573,6 +2580,8 @@ var P: TProcess;
   end;
 
 begin
+  result:='unknown';
+  try
   P:= TProcess.Create(Nil);
   P.Options:= [poWaitOnExit, poUsePipes];
   P.Executable:= 'lsb_release';
@@ -2580,6 +2589,8 @@ begin
   result:='System: '+ ExecParam('is')+' ';
   result:=result+ ExecParam('rs');
   P.Free;
+  except
+  end;
 end;
 {$endif}
 
@@ -2598,6 +2609,7 @@ var P: TProcess;
   end;
 
 begin
+  try
   P:= TProcess.Create(Nil);
   P.Options:= [poWaitOnExit, poUsePipes];
   P.Executable:= 'sw_vers';
@@ -2606,6 +2618,8 @@ begin
   result:=result+ ExecParam('productVersion')+' ';
   result:=result+ ExecParam('buildVersion');
   P.Free;
+  except
+  end;
 end;
 {$endif}
 
@@ -2679,6 +2693,7 @@ var P: TProcess;
     buf: String;
 begin
 result:='unknown';
+try
 if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   P:= TProcess.Create(Nil);
   P.Options:= [poWaitOnExit, poUsePipes];
@@ -2703,6 +2718,8 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   i:=pos(',',buf);
   if i<=0 then exit;
   result:=copy(buf,1,i-1);
+end;
+except
 end;
 end;
 
