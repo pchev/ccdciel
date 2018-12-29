@@ -49,6 +49,7 @@ type
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
   TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain);
+  TSafetyAction=(safNothing,safShowPrompt,safAbortSequence,safStopTelescope,safParkTelescope,safStopDomeSlaving,safParkDome,safCloseDome,safWarmCamera,safAutoguiderShutdown,safPlanetariumShutdown,safExternalCommand,safExitProgram);
 
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
@@ -234,6 +235,7 @@ const
   ResolverAstap=4;
   ResolverName: array[0..4] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve','ASTAP');
   PlanetariumName: array[0..2] of string =('Cartes du Ciel', 'SAMP', 'HNSKY');
+  SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','');
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;
@@ -260,6 +262,7 @@ const
   SubDirCount=8;
   FileNameCount=7;
   MinFrameSize=5;
+  SafetyActionNum=15;
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';

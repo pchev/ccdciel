@@ -51,6 +51,7 @@ type
     FloatSpinEditMi13: TFloatSpinEdit;
     FloatSpinEditMi8: TFloatSpinEdit;
     FloatSpinEditMi9: TFloatSpinEdit;
+    Label111: TLabel;
     LabelMa10: TLabel;
     LabelMa11: TLabel;
     LabelMa12: TLabel;
@@ -69,6 +70,8 @@ type
     PanelW13: TPanel;
     PanelW8: TPanel;
     PanelW9: TPanel;
+    SafetyActions: TStringGrid;
+    TabSheet14: TTabSheet;
     UseW1: TCheckBox;
     DomeFlatSetLight: TCheckBox;
     CygwinPath: TDirectoryEdit;
@@ -477,6 +480,8 @@ type
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
+    procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
+    procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure TempDirChange(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
     procedure TmpDirDefaultClick(Sender: TObject);
@@ -526,6 +531,7 @@ begin
   ScaleDPI(Self);
   Setlang;
   Lockchange:=false;
+  SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
 end;
 
@@ -747,6 +753,7 @@ begin
   MeridianOption.Items[1]:=rsAutomaticFli;
   MeridianOption.Items[2]:=rsAbort;
   AutoguiderBox.Items[2]:=rsNone2;
+  TabSheet13.Caption := rsWeatherStati;
   UseW1.Caption:=rsCloudCover;
   UseW2.Caption:=rsDewPoint;
   UseW3.Caption:=rsHumidity;
@@ -786,6 +793,10 @@ begin
   LabelMa11.Caption:=rsMaximum;
   LabelMa12.Caption:=rsMaximum;
   LabelMa13.Caption:=rsMaximum;
+  TabSheet14.Caption := rsSafetyMonito;
+  label111.Caption:=rsTheFollowing;
+  SafetyActions.Columns[0].Title.Caption:=rsAction;
+  SafetyActions.Columns[1].Title.Caption:=rsParameter;
 end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);
@@ -1068,6 +1079,45 @@ end;
 procedure Tf_option.ResolverBoxClick(Sender: TObject);
 begin
   Notebook1.PageIndex:=ResolverBox.ItemIndex;
+end;
+
+procedure Tf_option.SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
+const delim='"'; comma=',';
+begin
+  if aCol=1 then begin
+    if (Editor is TCustomComboBox) then
+      with Editor as TCustomComboBox do begin
+        Items.CommaText:= delim + SafetyActionName[0] + delim + comma +
+                          delim + SafetyActionName[1] + delim + comma +
+                          delim + SafetyActionName[2] + delim + comma +
+                          delim + SafetyActionName[3] + delim + comma +
+                          delim + SafetyActionName[4] + delim + comma +
+                          delim + SafetyActionName[5] + delim + comma +
+                          delim + SafetyActionName[6] + delim + comma +
+                          delim + SafetyActionName[7] + delim + comma +
+                          delim + SafetyActionName[8] + delim + comma +
+                          delim + SafetyActionName[9] + delim + comma +
+                          delim + SafetyActionName[10] + delim + comma +
+                          delim + SafetyActionName[11] + delim + comma +
+                          delim + SafetyActionName[12] + delim;
+      end;
+  end;
+end;
+
+procedure Tf_option.SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
+var i: integer;
+    ok: boolean;
+begin
+ if aCol=1 then begin
+   ok:=false;
+   for i:=0 to ord(high(TSafetyAction)) do begin
+     if SafetyActionName[i]=NewValue then begin
+        ok:=true;
+        break;
+     end;
+   end;
+   if not ok then NewValue:=OldValue;
+ end;
 end;
 
 procedure Tf_option.TempDirChange(Sender: TObject);

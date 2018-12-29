@@ -1599,6 +1599,19 @@ begin
    TBCapture.Hint := rsCapture;
    TBSequence.Hint := rsSequence;
    TBVideo.Hint := rsVideo;
+   SafetyActionName[0]:='';
+   SafetyActionName[1]:=trim(rsShowPrompt);
+   SafetyActionName[2]:=trim(rsAbortTheCurr);
+   SafetyActionName[3]:=trim(rsStopTelescop2);
+   SafetyActionName[4]:=trim(rsParkTheTeles2);
+   SafetyActionName[5]:=trim(rsStopDomeSlav);
+   SafetyActionName[6]:=trim(rsParkDome);
+   SafetyActionName[7]:=trim(rsCloseDome);
+   SafetyActionName[8]:=trim(rsWarmTheCamer);
+   SafetyActionName[9]:=trim(rsAutoguiderSh);
+   SafetyActionName[10]:=trim(rsPlanetariumS);
+   SafetyActionName[11]:=trim(rsCallExternal);
+   SafetyActionName[12]:=trim(rsExitProgram);
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -3669,42 +3682,107 @@ end;
 
 Procedure Tf_main.SafetySafeChange(Sender: TObject);
 var ok : boolean;
+    i,n,k: integer;
+    param: string;
+    output: TStringList;
 begin
   if f_safety.Connected then begin
     ok:=safety.Safe;
     if f_safety.Safe<>ok then begin
      f_safety.Safe:=ok;
-     NewMessage('Safety monitor report: '+BoolToStr(f_safety.Safe,'Safe','Unsafe'),3);
+     NewMessage(rsSafetyMonito+': '+BoolToStr(f_safety.Safe, rsSafe, rsUnsafe), 3);
      if not f_safety.Safe then begin
-       // unsafe condition, abort and close.
-       f_pause.Caption:='Unsafe condition detected!';
-       f_pause.Text:='The safety monitor report unsafe condition.';
-       if f_pause.Wait(30,false) then begin
-         NewMessage('Unsafe condition ignored by user');
-         exit;
+       NewMessage(rsUnsafeCondit);
+       // Run actions
+       for i:=0 to SafetyActionNum-1 do begin
+          n:=round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0));
+          if n<0 then n:=0;
+          if n>ord(high(TSafetyAction)) then n:=ord(high(TSafetyAction));
+          param:=trim(config.GetValue('/Safety/Actions/Parameter'+inttostr(i),''));
+          try
+          case TSafetyAction(n) of
+            safNothing: continue;
+            safShowPrompt: begin
+               k:=StrToIntDef(param,30);
+               f_pause.Caption:=rsUnsafeCondit;
+               f_pause.Text:=Format(rsTheSafetyMon, [crlf, rsCancel, rsContinue]);
+               if f_pause.Wait(k,false) then begin
+                 NewMessage(rsUnsafeCondit2);
+                 exit;
+               end;
+               if f_safety.Safe then exit;  // safe again, ignore
+            end;
+            safAbortSequence: begin
+               NewMessage(rsAbortTheCurr);
+               // stop sequence
+               if f_sequence.Running then begin
+                  f_sequence.AbortSequence;
+                  wait(5);
+               end
+               // stop other capture
+               else if f_capture.Running then begin
+                  f_capture.BtnStartClick(nil);
+                  wait(5);
+               end;
+            end;
+            safStopTelescope: begin
+               NewMessage(rsStopTelescop2);
+               if mount<>nil then mount.AbortMotion;
+               wait(1);
+            end;
+            safParkTelescope: begin
+               NewMessage(rsParkTheTeles2);
+               if mount<>nil then mount.Park:=true;
+               wait(1);
+            end;
+            safStopDomeSlaving: begin
+               NewMessage(rsStopDomeSlav);
+               if dome<>nil then dome.Slave:=false;
+               wait(1);
+            end;
+            safParkDome: begin
+               NewMessage(rsParkDome);
+               if dome<>nil then dome.Park:=true;
+               wait(1);
+            end;
+            safCloseDome: begin
+               NewMessage(rsCloseDome);
+               if dome<>nil then dome.Shutter:=false;
+               wait(1);
+            end;
+            safWarmCamera: begin
+               NewMessage(rsWarmTheCamer);
+               if camera<>nil then camera.Temperature:=20;
+               wait(1);
+            end;
+            safAutoguiderShutdown: begin
+               NewMessage(rsAutoguiderSh);
+               if autoguider<>nil then autoguider.Shutdown;
+               wait(1);
+            end;
+            safPlanetariumShutdown: begin
+               NewMessage(rsPlanetariumS);
+               if planetarium<>nil then planetarium.Shutdown;
+               wait(1);
+            end;
+            safExternalCommand: begin
+               NewMessage(rsCallExternal+': '+param);
+               output:=TStringList.Create;
+               k:=ExecProcess(param,output);
+               NewMessage('exit code = '+inttostr(k),3);
+               for k:=0 to output.Count-1 do
+                  NewMessage(output[k],3);
+               output.Free;
+            end;
+            safExitProgram: begin
+               NewMessage(rsExitProgram);
+               ShutdownProgram(self);
+            end;
+          end;
+          except
+            on E: Exception do NewMessage('Safety action '+inttostr(i)+': '+inttostr(n)+': '+ E.Message,1);
+          end;
        end;
-       if f_safety.Safe then exit;  // safe again, ignore
-       // stop sequence
-       if f_sequence.Running then begin
-          f_sequence.AbortSequence;
-          wait(5);
-       end
-       // stop other capture
-       else if f_capture.Running then begin
-          f_capture.BtnStartClick(nil);
-          wait(5);
-       end;
-       // park and close
-       mount.Park:=true;
-       wait(1);
-       dome.Slave:=false;
-       wait(1);
-       dome.Park:=true;
-       wait(1);
-       dome.Shutter:=false;
-       wait(5);
-       ConfirmClose:=false;
-       Close;
      end;
     end;
   end;
@@ -4892,7 +4970,7 @@ end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 var ok,PlanetariumChange,AutoguiderChange: boolean;
-    i,n,FocusStarMagIndex: integer;
+    i,n,k,FocusStarMagIndex: integer;
     buf,langname:string;
     fs : TSearchRec;
 begin
@@ -5175,6 +5253,11 @@ begin
       f_option.FloatSpinEditMa12.value:=config.GetValue('/Weather/Max/WindGust',0);
       f_option.FloatSpinEditMa13.value:=config.GetValue('/Weather/Max/WindSpeed',0);
    end;
+   for i:=0 to SafetyActionNum-1 do begin
+      f_option.SafetyActions.Cells[1,i+1]:=SafetyActionName[round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0))];
+      f_option.SafetyActions.Cells[2,i+1]:=config.GetValue('/Safety/Actions/Parameter'+inttostr(i),'');
+   end;
+
    FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_option.ShowModal;
 
@@ -5370,6 +5453,18 @@ begin
         config.SetValue('/Weather/Max/WindDirection',f_option.FloatSpinEditMa11.value);
         config.SetValue('/Weather/Max/WindGust',f_option.FloatSpinEditMa12.value);
         config.SetValue('/Weather/Max/WindSpeed',f_option.FloatSpinEditMa13.value);
+     end;
+     for i:=0 to SafetyActionNum-1 do begin
+        k:=-1;
+        for n:=0 to ord(high(TSafetyAction)) do begin
+           if SafetyActionName[n]=trim(f_option.SafetyActions.Cells[1,i+1]) then begin
+             k:=n;
+             break;
+           end;
+        end;
+        if k<0 then k:=0;
+        config.SetValue('/Safety/Actions/Action'+inttostr(i),k);
+        config.SetValue('/Safety/Actions/Parameter'+inttostr(i),trim(f_option.SafetyActions.Cells[2,i+1]));
      end;
 
      SaveConfig;

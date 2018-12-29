@@ -968,6 +968,26 @@ resourcestring
   rsDome = 'Dome';
   rsOpen = 'Open';
   rsSlaved = 'Slaved';
+  rsShowPrompt = 'Show prompt';
+  rsStopDomeSlav = 'Stop Dome slaving';
+  rsParkDome = 'Park the Dome';
+  rsCloseDome = 'Close the Dome shutter';
+  rsAutoguiderSh = 'Autoguider shutdown';
+  rsPlanetariumS = 'Planetarium shutdown';
+  rsCallExternal = 'Call external command';
+  rsExitProgram = 'Exit program';
+  rsSafe = 'Safe';
+  rsUnsafe = 'Unsafe';
+  rsUnsafeCondit = 'Unsafe condition detected!';
+  rsTheSafetyMon = 'The safety monitor report unsafe condition.%sSelect %s to run the safety actions now, or %s to ignore them.';
+  rsUnsafeCondit2 = 'Unsafe condition ignored by user';
+  rsTheFollowing = 'The following actions are run if the safety monitor report dangerous condition';
+  rsAction = 'Action';
+  rsUseDome = 'Use dome';
+  rsUseWeatherSt = 'Use weather station';
+  rsInterfaceTyp = 'Interface type';
+  rsObservingCon = 'Observing condition';
+  rsUseSafetyMon = 'Use safety monitor';
 
 
 
