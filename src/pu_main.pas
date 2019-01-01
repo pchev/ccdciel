@@ -2842,6 +2842,21 @@ begin
    config.SetValue('/Tools/Script/Left',f_script.Left);
    config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
 
+   config.SetValue('/Tools/Weather/Parent',f_weather.Parent.Name);
+   config.SetValue('/Tools/Weather/Visible',f_weather.Visible);
+   config.SetValue('/Tools/Weather/Top',f_weather.Top);
+   config.SetValue('/Tools/Weather/Left',f_weather.Left);
+
+   config.SetValue('/Tools/Safety/Parent',f_safety.Parent.Name);
+   config.SetValue('/Tools/Safety/Visible',f_safety.Visible);
+   config.SetValue('/Tools/Safety/Top',f_safety.Top);
+   config.SetValue('/Tools/Safety/Left',f_safety.Left);
+
+   config.SetValue('/Tools/Dome/Parent',f_dome.Parent.Name);
+   config.SetValue('/Tools/Dome/Visible',f_dome.Visible);
+   config.SetValue('/Tools/Dome/Top',f_dome.Top);
+   config.SetValue('/Tools/Dome/Left',f_dome.Left);
+
    config.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
    config.SetValue('/Window/Top',Top);
