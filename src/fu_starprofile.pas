@@ -419,6 +419,7 @@ with profile.Picture.Bitmap do begin
   Canvas.Pen.Mode:=pmCopy;
   Canvas.FillRect(0,0,Width,Height);
   if FValMax>0 then begin
+    bg:=max(bg,0);
     rs:=s div 2;
     if (FStarX-rs)<0 then rs:=round(FStarX);
     if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-integer(round(FStarX));
@@ -428,14 +429,14 @@ with profile.Picture.Bitmap do begin
     s:=2*rs;
     Canvas.Pen.Color:=clRed;
     xs:=Width/s;
-    ys:=Height/(1.05*FValMax);
+    ys:=Height/(1.1*(FValMax));
     j:=trunc(FStarY);
     i0:=trunc(FStarX)-(s div 2);
     x1:=0;
-    y1:=Height-trunc((f.imageMin+(f.image[0,j,i0]/f.imageC)-bg)*ys);
+    y1:=Height-trunc((f.imageMin+(f.image[0,j,i0]/f.imageC)-bg)*ys)+3;
     for i:=0 to s-1 do begin
       x2:=trunc(i*xs);
-      y2:=trunc((f.imageMin+(f.image[0,j,i0+i]/f.imageC)-bg)*ys);
+      y2:=trunc((f.imageMin+(f.image[0,j,i0+i]/f.imageC)-bg)*ys)+3;
       y2:=Height-y2;
       Canvas.Line(x1,y1,x2,y2);
       x1:=x2;
