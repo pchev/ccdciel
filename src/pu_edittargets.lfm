@@ -1,11 +1,11 @@
 object f_EditTargets: Tf_EditTargets
   Left = 0
-  Height = 600
+  Height = 580
   Top = 87
   Width = 1024
   ActiveControl = BtnSave
   Caption = 'Edit target list'
-  ClientHeight = 600
+  ClientHeight = 580
   ClientWidth = 1024
   Constraints.MinHeight = 580
   Constraints.MinWidth = 970
@@ -819,14 +819,12 @@ object f_EditTargets: Tf_EditTargets
         Columns = <        
           item
             MinSize = 100
-            MaxSize = 200
             Title.MultiLine = True
             Title.Caption = 'Object name'
             Width = 91
           end        
           item
             MinSize = 30
-            MaxSize = 200
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Plan'
@@ -888,7 +886,6 @@ object f_EditTargets: Tf_EditTargets
           end        
           item
             ButtonStyle = cbsCheckboxColumn
-            MaxSize = 200
             SizePriority = 0
             Title.ImageIndex = 0
             Title.MultiLine = True
@@ -897,7 +894,6 @@ object f_EditTargets: Tf_EditTargets
           end        
           item
             ButtonStyle = cbsCheckboxColumn
-            MaxSize = 200
             SizePriority = 0
             Title.ImageIndex = 0
             Title.MultiLine = True
@@ -946,29 +942,29 @@ object f_EditTargets: Tf_EditTargets
   end
   object PanelPlan: TPanel
     Left = 0
-    Height = 170
+    Height = 156
     Top = 394
     Width = 1024
     Align = alClient
-    ClientHeight = 170
+    ClientHeight = 156
     ClientWidth = 1024
-    Constraints.MinHeight = 170
+    Constraints.MinHeight = 156
     ParentFont = False
     TabOrder = 1
     object Panel9: TPanel
       Left = 1
-      Height = 168
+      Height = 154
       Top = 1
       Width = 722
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 168
+      ClientHeight = 154
       ClientWidth = 722
       ParentFont = False
       TabOrder = 0
       object StepList: TStringGrid
         Left = 0
-        Height = 120
+        Height = 106
         Top = 18
         Width = 722
         Align = alClient
@@ -976,13 +972,11 @@ object f_EditTargets: Tf_EditTargets
         ColCount = 7
         Columns = <        
           item
-            MaxSize = 200
             Title.Caption = 'Description'
             Width = 195
           end        
           item
             ButtonStyle = cbsPickList
-            MaxSize = 200
             PickList.Strings = (
               'Light'
               'Bias'
@@ -994,7 +988,6 @@ object f_EditTargets: Tf_EditTargets
             Width = 70
           end        
           item
-            MaxSize = 200
             SizePriority = 0
             Title.Caption = 'Exposure'
             Width = 80
@@ -1012,7 +1005,6 @@ object f_EditTargets: Tf_EditTargets
           end        
           item
             ButtonStyle = cbsPickList
-            MaxSize = 200
             PickList.Strings = (
               'No change'
             )
@@ -1080,7 +1072,7 @@ object f_EditTargets: Tf_EditTargets
       object Panel10: TPanel
         Left = 0
         Height = 30
-        Top = 138
+        Top = 124
         Width = 722
         Align = alBottom
         BevelOuter = bvNone
@@ -1142,12 +1134,12 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel12: TPanel
       Left = 723
-      Height = 168
+      Height = 154
       Top = 1
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 168
+      ClientHeight = 154
       ClientWidth = 300
       ParentFont = False
       TabOrder = 1
@@ -1165,7 +1157,7 @@ object f_EditTargets: Tf_EditTargets
         object DitherCount: TSpinEdit
           Left = 165
           Height = 29
-          Top = 72
+          Top = 57
           Width = 57
           MaxValue = 1000
           MinValue = 1
@@ -1177,7 +1169,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxDither: TCheckBox
           Left = 8
           Height = 21
-          Top = 72
+          Top = 58
           Width = 101
           Caption = 'Dither every '
           OnChange = StepChange
@@ -1187,7 +1179,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxAutofocusStart: TCheckBox
           Left = 8
           Height = 21
-          Top = 8
+          Top = 2
           Width = 176
           Caption = 'Autofocus before to start'
           OnChange = StepChange
@@ -1197,7 +1189,7 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxAutofocus: TCheckBox
           Left = 8
           Height = 21
-          Top = 40
+          Top = 30
           Width = 122
           Caption = 'Autofocus every'
           OnChange = StepChange
@@ -1205,12 +1197,12 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 3
         end
         object PanelGain1: TPanel
-          Left = 24
-          Height = 34
-          Top = 104
+          Left = 26
+          Height = 30
+          Top = 90
           Width = 204
           BevelOuter = bvNone
-          ClientHeight = 34
+          ClientHeight = 30
           ClientWidth = 204
           ParentFont = False
           TabOrder = 4
@@ -1218,7 +1210,7 @@ object f_EditTargets: Tf_EditTargets
           object LabelGain1: TLabel
             Left = 8
             Height = 19
-            Top = 4
+            Top = 0
             Width = 28
             Caption = 'Gain'
             ParentColor = False
@@ -1227,7 +1219,7 @@ object f_EditTargets: Tf_EditTargets
           object PGainEdit: TSpinEdit
             Left = 96
             Height = 29
-            Top = 1
+            Top = 0
             Width = 81
             MaxValue = 100000
             OnChange = StepChange
@@ -1238,7 +1230,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 96
             Height = 35
             Hint = 'Exposure time in secondes'
-            Top = 1
+            Top = 0
             Width = 100
             ItemHeight = 0
             OnChange = StepChange
@@ -1251,7 +1243,7 @@ object f_EditTargets: Tf_EditTargets
         object AutofocusCount: TSpinEdit
           Left = 165
           Height = 29
-          Top = 40
+          Top = 26
           Width = 57
           MaxValue = 1000
           MinValue = 1
@@ -1265,18 +1257,18 @@ object f_EditTargets: Tf_EditTargets
   end
   object Panel1: TPanel
     Left = 0
-    Height = 39
-    Top = 561
+    Height = 30
+    Top = 550
     Width = 1024
     Align = alBottom
-    ClientHeight = 39
+    ClientHeight = 30
     ClientWidth = 1024
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
       Left = 712
       Height = 25
-      Top = 4
+      Top = 2
       Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Cancel'
@@ -1288,7 +1280,7 @@ object f_EditTargets: Tf_EditTargets
       Left = 808
       Height = 25
       Hint = 'Save the list and close this window.'
-      Top = 4
+      Top = 2
       Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Save'
@@ -1300,7 +1292,7 @@ object f_EditTargets: Tf_EditTargets
       Left = 896
       Height = 25
       Hint = 'Save the list and close this window.'
-      Top = 4
+      Top = 2
       Width = 128
       Anchors = [akTop, akRight]
       Caption = 'Save as...'
@@ -1311,7 +1303,7 @@ object f_EditTargets: Tf_EditTargets
     object BtnImport: TButton
       Left = 9
       Height = 25
-      Top = 4
+      Top = 2
       Width = 216
       Caption = 'Import CdC observing list'
       OnClick = BtnImportClick
