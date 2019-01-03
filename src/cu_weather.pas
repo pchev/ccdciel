@@ -43,6 +43,7 @@ T_weather = class(TComponent)
     FhasCloudCover,FhasDewPoint,FhasHumidity,FhasPressure,FhasRainRate,FhasSkyBrightness,
     FhasSkyQuality,FhasSkyTemperature,FhasStarFWHM,FhasTemperature,FhasWindDirection,
     FhasWindGust,FhasWindSpeed,FhasStatus: boolean;
+    FWeatherMessage: string;
     procedure msg(txt: string; level:integer=3);
     function GetClear: boolean; virtual; abstract;
     procedure GetCapabilities; virtual; abstract;
@@ -108,6 +109,7 @@ T_weather = class(TComponent)
     property WindGust: double read GetWindGust ;
     property WindSpeed: double read GetWindSpeed ;
     property WeatherStatus: boolean read GetWeatherStatus;
+    property WeatherMessage: string read FWeatherMessage;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -147,6 +149,7 @@ begin
   UseWindDirection:=false;
   UseWindGust:=false;
   UseWindSpeed:=false;
+  FWeatherMessage:='';
 end;
 
 destructor  T_weather.Destroy;

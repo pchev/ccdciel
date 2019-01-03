@@ -345,10 +345,17 @@ begin
 end;
 
 function T_indiweather.GetWeatherStatus: boolean;
+var i: integer;
 begin
  result:=false;
  if WeatherStatusProp<>nil then begin
     result:=WeatherStatusProp.s=IPS_OK;
+    FWeatherMessage:='';
+    if not result then
+       for i:=0 to WeatherStatusProp.nlp-1 do begin
+         if WeatherStatusProp.lp[i].s<>IPS_OK then
+            FWeatherMessage:=FWeatherMessage+' '+WeatherStatusProp.lp[i].lbl;
+       end;
  end;
 end;
 

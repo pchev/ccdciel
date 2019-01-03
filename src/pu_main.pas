@@ -3652,6 +3652,7 @@ begin
     if f_weather.Clear<>ok then begin
       f_weather.Clear:=ok;
       NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
+      if not f_weather.Clear then NewMessage('Problem with:'+weather.WeatherMessage);
       f_sequence.WeatherChange(f_weather.Clear);
     end;
   end;
