@@ -5937,7 +5937,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        NewMessage(f_sequence.StatusMsg.Caption);
        WeatherCapturePaused:=true;
        // stop guiding and mount tracking now
-       if (autoguider<>nil)and(autoguider.Running) then autoguider.Guide(false);
+       if (autoguider<>nil)and(autoguider.Running) then begin
+          NewMessage(rsStopAutoguid,2);
+          autoguider.Guide(false);
+       end;
        mount.AbortMotion;
        while WeatherPauseCapture and f_capture.Running do begin
           Wait(5);
@@ -5946,6 +5949,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        WeatherCapturePaused:=false;
        // continue if not aborted
        if WeatherPauseCanceled then exit;
+       // check if autofocus before start, we must redo it now to also recenter the target
+       try
+       if f_sequence.Running and (f_sequence.CurrentPlan<>nil) then begin
+          f_capture.FocusNow:=f_sequence.CurrentPlan.Steps[f_sequence.CurrentPlan.CurrentStep].autofocusstart;
+       end;
+       except
+       end;
+       NewMessage('Continue sequence execution');
      end
      else
        NewMessage('Ignore weather condition for image type='+FrameName[ord(ftype)]);

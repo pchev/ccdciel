@@ -118,6 +118,7 @@ type
     function GetTargetCoord: boolean;
     function GetTargetRA: double;
     function GetTargetDE: double;
+    function GetCurrentPlan: T_Plan;
     procedure SaveTargets(fn,defaultname:string);
     procedure StartSequence;
     procedure ClearTargetGrid;
@@ -156,6 +157,7 @@ type
     property TargetCoord: boolean read GetTargetCoord;
     property TargetRA: double read GetTargetRA;
     property TargetDE: double read GetTargetDE;
+    property CurrentPlan: T_Plan read GetCurrentPlan;
     property Preview: Tf_preview read Fpreview write SetPreview;
     property Capture: Tf_capture read Fcapture write SetCapture;
     property Mount: T_mount read Fmount write SetMount;
@@ -759,6 +761,14 @@ end;
 function Tf_sequence.GetTargetDE: double;
 begin
   result:=Targets.TargetDE;
+end;
+
+function Tf_sequence.GetCurrentPlan: T_Plan;
+begin
+  if (Targets<>nil)and(Targets.CurrentTarget>=0) then
+    result:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan)
+  else
+    result:=nil;
 end;
 
 procedure Tf_sequence.SetEditBtn(onoff:boolean);
