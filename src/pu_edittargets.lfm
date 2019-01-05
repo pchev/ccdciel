@@ -563,6 +563,15 @@ object f_EditTargets: Tf_EditTargets
         Pen.Style = psClear
         ShowHint = True
       end
+      object Shape6: TShape
+        Left = 904
+        Height = 10
+        Top = 34
+        Width = 10
+        ParentShowHint = False
+        Pen.Style = psClear
+        ShowHint = True
+      end
       object Panel16: TPanel
         Left = 0
         Height = 47

@@ -56,11 +56,11 @@ object f_option: Tf_option
     Height = 500
     Top = 0
     Width = 530
-    ActivePage = TabSheet1
+    ActivePage = TabSheet14
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 13
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -154,8 +154,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 390
@@ -200,8 +200,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 390
@@ -338,7 +338,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         ParentFont = False
         TabOrder = 3
@@ -417,7 +417,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 31
+        ClientHeight = 13
         ClientWidth = 250
         ParentFont = False
         TabOrder = 4
@@ -718,7 +718,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 179
           Columns = 3
           Items.Strings = (
@@ -977,8 +977,8 @@ object f_option: Tf_option
             Height = 40
             Top = 48
             Width = 328
-            ClientHeight = 40
-            ClientWidth = 328
+            ClientHeight = 36
+            ClientWidth = 324
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -2297,8 +2297,8 @@ object f_option: Tf_option
               Top = 176
               Width = 418
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 418
+              ClientHeight = 36
+              ClientWidth = 414
               ParentFont = False
               TabOrder = 2
               Visible = False

@@ -988,6 +988,7 @@ resourcestring
   rsInterfaceTyp = 'Interface type';
   rsObservingCon = 'Observing condition';
   rsUseSafetyMon = 'Use safety monitor';
+  rsParkAndClose = 'Park and close the dome';
 
 
 

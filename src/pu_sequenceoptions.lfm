@@ -1,18 +1,18 @@
 object f_sequenceoptions: Tf_sequenceoptions
   Left = 0
-  Height = 374
+  Height = 370
   Top = 0
-  Width = 397
-  ActiveControl = MainOptions.CheckBox0
+  Width = 393
   Caption = 'f_sequenceoptions'
-  ClientHeight = 374
-  ClientWidth = 397
+  ClientHeight = 370
+  ClientWidth = 393
+  DesignTimePPI = 95
   OnCreate = FormCreate
   object MainOptions: TCheckGroup
     Left = 0
-    Height = 190
+    Height = 188
     Top = 0
-    Width = 397
+    Width = 393
     Align = alTop
     AutoFill = True
     Caption = 'Actions to take when the sequence is finished'
@@ -24,91 +24,101 @@ object f_sequenceoptions: Tf_sequenceoptions
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 172
-    ClientWidth = 395
+    ClientHeight = 168
+    ClientWidth = 391
     Items.Strings = (
       'Do nothing'
       'Stop telescope tracking'
       'Park the telescope'
+      'Close and park the dome'
       'Warm the camera'
       'Run a script'
     )
     OnItemClick = MainOptionsItemClick
+    ParentFont = False
     TabOrder = 0
     Data = {
-      050000000202020202
+      06000000020202020202
     }
   end
   object PanelScript: TPanel
     Left = 0
-    Height = 49
-    Top = 190
-    Width = 397
+    Height = 48
+    Top = 188
+    Width = 393
     Align = alTop
-    ClientHeight = 49
-    ClientWidth = 397
+    ClientHeight = 48
+    ClientWidth = 393
+    ParentFont = False
     TabOrder = 1
     object ScriptList: TComboBox
-      Left = 112
-      Height = 33
+      Left = 111
+      Height = 35
       Top = 8
-      Width = 214
+      Width = 212
       ItemHeight = 0
+      ParentFont = False
       Style = csDropDownList
       TabOrder = 0
     end
     object Label1: TLabel
       Left = 32
-      Height = 17
+      Height = 19
       Top = 14
-      Width = 37
+      Width = 34
       Caption = 'Script'
       ParentColor = False
+      ParentFont = False
     end
   end
   object Panel1: TPanel
     Left = 0
     Height = 86
-    Top = 239
-    Width = 397
+    Top = 236
+    Width = 393
     Align = alClient
     ClientHeight = 86
-    ClientWidth = 397
+    ClientWidth = 393
+    ParentFont = False
     TabOrder = 2
     object UnattendedErrorScript: TCheckBox
       Left = 8
       Height = 21
       Top = 8
-      Width = 337
+      Width = 313
       Caption = 'Run additional script in case of unattended error'
+      ParentFont = False
       TabOrder = 0
     end
     object ScriptListError: TComboBox
-      Left = 112
-      Height = 33
+      Left = 111
+      Height = 35
       Top = 40
-      Width = 214
+      Width = 212
       ItemHeight = 0
+      ParentFont = False
       Style = csDropDownList
       TabOrder = 1
     end
   end
   object Panel2: TPanel
     Left = 0
-    Height = 49
-    Top = 325
-    Width = 397
+    Height = 48
+    Top = 322
+    Width = 393
     Align = alBottom
-    ClientHeight = 49
-    ClientWidth = 397
+    ClientHeight = 48
+    ClientWidth = 393
+    ParentFont = False
     TabOrder = 3
     object BtnClose: TButton
-      Left = 252
+      Left = 249
       Height = 25
       Top = 8
-      Width = 74
+      Width = 73
       Caption = 'Close'
       ModalResult = 1
+      ParentFont = False
       TabOrder = 0
     end
   end

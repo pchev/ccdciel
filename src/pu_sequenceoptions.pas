@@ -8,7 +8,7 @@ uses  u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, EditBtn;
 
-const optnone=0; optstoptracking=1; optpark=2; optwarm=3; optscript=4;
+const optnone=0; optstoptracking=1; optpark=2; optclosedome=3; optwarm=4; optscript=5;
 
 type
 
@@ -57,8 +57,9 @@ begin
   MainOptions.Items[0]:=rsDoNothing;
   MainOptions.Items[1]:=rsStopTelescop2;
   MainOptions.Items[2]:=rsParkTheTeles2;
-  MainOptions.Items[3]:=rsWarmTheCamer;
-  MainOptions.Items[4]:=rsRunAScript;
+  MainOptions.Items[3]:=rsParkAndClose;
+  MainOptions.Items[4]:=rsWarmTheCamer;
+  MainOptions.Items[5]:=rsRunAScript;
   label1.Caption:=rsScript;
   UnattendedErrorScript.Caption:=rsRunAdditiona;
   BtnClose.Caption:=rsClose;
@@ -70,6 +71,7 @@ begin
      MainOptions.Checked[optnone]:=true;
      MainOptions.Checked[optstoptracking]:=false;
      MainOptions.Checked[optpark]:=false;
+     MainOptions.Checked[optclosedome]:=false;
      MainOptions.Checked[optwarm]:=false;
      MainOptions.Checked[optscript]:=false;
   end;

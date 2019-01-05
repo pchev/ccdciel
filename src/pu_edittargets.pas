@@ -109,6 +109,7 @@ type
     Shape3: TShape;
     Shape4: TShape;
     Shape5: TShape;
+    Shape6: TShape;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
@@ -295,9 +296,10 @@ begin
   ButtonEndOptions.Caption:=rsTerminationO;
   Shape1.Hint:=rsStopTelescop2;
   Shape2.Hint:=rsParkTheTeles2;
-  Shape3.Hint:=rsWarmTheCamer;
-  Shape4.Hint:=rsRunAScript;
-  Shape5.Hint:=rsRunAdditiona;
+  Shape3.Hint:=rsParkAndClose;
+  Shape4.Hint:=rsWarmTheCamer;
+  Shape5.Hint:=rsRunAScript;
+  Shape6.Hint:=rsRunAdditiona;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
@@ -577,7 +579,8 @@ begin
   if f_sequenceoptions.MainOptions.Checked[2] then Shape2.Brush.Color:=clLime else Shape2.Brush.Color:=clRed;
   if f_sequenceoptions.MainOptions.Checked[3] then Shape3.Brush.Color:=clLime else Shape3.Brush.Color:=clRed;
   if f_sequenceoptions.MainOptions.Checked[4] then Shape4.Brush.Color:=clLime else Shape4.Brush.Color:=clRed;
-  if f_sequenceoptions.UnattendedErrorScript.Checked then Shape5.Brush.Color:=clLime else Shape5.Brush.Color:=clRed;
+  if f_sequenceoptions.MainOptions.Checked[5] then Shape5.Brush.Color:=clLime else Shape5.Brush.Color:=clRed;
+  if f_sequenceoptions.UnattendedErrorScript.Checked then Shape6.Brush.Color:=clLime else Shape6.Brush.Color:=clRed;
 end;
 
 procedure Tf_EditTargets.ButtonEndOptionsClick(Sender: TObject);

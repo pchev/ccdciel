@@ -26,10 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
   fu_capture, fu_preview, fu_filterwheel, u_translation, pu_sequenceoptions,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
-  cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, fu_dome,
+  cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
 
@@ -90,7 +90,7 @@ type
     Ffilter: Tf_filterwheel;
     Fweather: Tf_weather;
     Fsafety: Tf_safety;
-    Fdome: Tf_dome;
+    Fdome: T_dome;
     Fmount: T_mount;
     Fcamera: T_camera;
     Frotator: T_rotator;
@@ -109,7 +109,7 @@ type
     procedure SetFilter(val: Tf_filterwheel);
     procedure SetWeather(val: Tf_weather);
     procedure SetSafety(val: Tf_safety);
-    procedure SetDome(val: Tf_dome);
+    procedure SetDome(val: T_dome);
     procedure SetAutoguider(val: T_autoguider);
     procedure SetAstrometry(val: TAstrometry);
     procedure SetPlanetarium(val: TPlanetarium);
@@ -166,7 +166,7 @@ type
     property Filter: Tf_filterwheel read Ffilter write SetFilter;
     property Weather: Tf_weather read Fweather write SetWeather;
     property Safety: Tf_safety read Fsafety write SetSafety;
-    property Dome: Tf_dome read Fdome write SetDome;
+    property Dome: T_dome read Fdome write SetDome;
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
@@ -303,7 +303,7 @@ begin
   Targets.Safety:=Fsafety;
 end;
 
-procedure Tf_sequence.SetDome(val: Tf_dome);
+procedure Tf_sequence.SetDome(val: T_dome);
 begin
   Fdome:=val;
   Targets.Dome:=Fdome;
@@ -403,9 +403,10 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
       f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
       f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
-      f_sequenceoptions.MainOptions.Checked[optnone]:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
+      f_sequenceoptions.MainOptions.Checked[optnone]:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndCloseDome or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
       f_sequenceoptions.MainOptions.Checked[optstoptracking]:=Targets.AtEndStopTracking;
       f_sequenceoptions.MainOptions.Checked[optpark]:=Targets.AtEndPark;
+      f_sequenceoptions.MainOptions.Checked[optclosedome]:=Targets.AtEndCloseDome;
       f_sequenceoptions.MainOptions.Checked[optwarm]:=Targets.AtEndWarmCamera;
       f_sequenceoptions.MainOptions.Checked[optscript]:=Targets.AtEndRunScript;
       f_sequenceoptions.UnattendedErrorScript.Checked:=Targets.OnErrorRunScript;
@@ -458,6 +459,7 @@ begin
       Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
       Targets.AtEndStopTracking := f_sequenceoptions.MainOptions.Checked[optstoptracking];
       Targets.AtEndPark         := f_sequenceoptions.MainOptions.Checked[optpark];
+      Targets.AtEndCloseDome    := f_sequenceoptions.MainOptions.Checked[optclosedome];
       Targets.AtEndWarmCamera   := f_sequenceoptions.MainOptions.Checked[optwarm];
       Targets.AtEndRunScript    := f_sequenceoptions.MainOptions.Checked[optscript];
       Targets.OnErrorRunScript  := f_sequenceoptions.UnattendedErrorScript.Checked;
@@ -493,6 +495,7 @@ begin
    Targets.SeqStopAt        := StrToTimeDef(tfile.GetValue('/Startup/SeqStopAt','00:00:00'),0);
    Targets.AtEndStopTracking:= tfile.GetValue('/Termination/StopTracking',true);
    Targets.AtEndPark        := tfile.GetValue('/Termination/Park',false);
+   Targets.AtEndCloseDome   := tfile.GetValue('/Termination/CloseDome',false);
    Targets.AtEndWarmCamera  := tfile.GetValue('/Termination/WarmCamera',false);
    Targets.AtEndRunScript   := tfile.GetValue('/Termination/RunScript',false);
    Targets.OnErrorRunScript := tfile.GetValue('/Termination/ErrorRunScript',false);
@@ -663,6 +666,7 @@ begin
     tfile.SetValue('/Startup/SeqStopAt',TimeToStr(Targets.SeqStopAt));
     tfile.SetValue('/Termination/StopTracking',Targets.AtEndStopTracking);
     tfile.SetValue('/Termination/Park',Targets.AtEndPark);
+    tfile.SetValue('/Termination/CloseDome',Targets.AtEndCloseDome);
     tfile.SetValue('/Termination/WarmCamera',Targets.AtEndWarmCamera);
     tfile.SetValue('/Termination/RunScript',Targets.AtEndRunScript);
     tfile.SetValue('/Termination/ErrorRunScript',Targets.OnErrorRunScript);
@@ -826,12 +830,12 @@ begin
  end;
  if not StartingSequence then exit;
  // Check dome open and slaving
- if (not isCalibrationSequence)and dome.Connected and
-   ((not dome.Shutter)or(dome.CanSlave and(not dome.Slave)))
+ if (not isCalibrationSequence)and(dome.Status=devConnected) and
+   ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
    then begin
     buf:='Dome is: ';
     if not dome.Shutter then buf:=buf+'closed, ';
-    if dome.CanSlave and(not dome.Slave) then buf:=buf+'not slaved ';
+    if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
     f_pause.Caption:='Dome is not ready';
     f_pause.Text:=buf;
     if not f_pause.Wait then begin

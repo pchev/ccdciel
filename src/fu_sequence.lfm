@@ -1,11 +1,12 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 570
+  Height = 564
   Top = 0
-  Width = 182
+  Width = 180
   AutoSize = True
-  ClientHeight = 570
-  ClientWidth = 182
+  ClientHeight = 564
+  ClientWidth = 180
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +15,7 @@ object f_sequence: Tf_sequence
     Left = 0
     Height = 20
     Top = 0
-    Width = 182
+    Width = 180
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,20 +29,20 @@ object f_sequence: Tf_sequence
   end
   object Panel1: TPanel
     Left = 0
-    Height = 279
+    Height = 276
     Top = 20
-    Width = 182
+    Width = 180
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 279
-    ClientWidth = 182
+    ClientHeight = 276
+    ClientWidth = 180
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 140
+      Height = 138
       Top = 20
-      Width = 182
+      Width = 180
       Align = alClient
       ColCount = 6
       DefaultRowHeight = 18
@@ -55,19 +56,19 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 119
-      Top = 160
-      Width = 182
+      Height = 118
+      Top = 158
+      Width = 180
       Align = alBottom
-      ClientHeight = 119
-      ClientWidth = 182
+      ClientHeight = 118
+      ClientWidth = 180
       ParentFont = False
       TabOrder = 1
       object BtnEditTargets: TButton
-        Left = 123
+        Left = 122
         Height = 25
         Top = 4
-        Width = 59
+        Width = 58
         Caption = 'Edit'
         OnClick = BtnEditTargetsClick
         ParentFont = False
@@ -77,17 +78,17 @@ object f_sequence: Tf_sequence
         Left = 0
         Height = 25
         Top = 4
-        Width = 59
+        Width = 58
         Caption = 'Load'
         OnClick = BtnLoadTargetsClick
         ParentFont = False
         TabOrder = 1
       end
       object BtnNewTargets: TButton
-        Left = 61
+        Left = 60
         Height = 25
         Top = 4
-        Width = 61
+        Width = 60
         Caption = 'New'
         OnClick = BtnEditTargetsClick
         ParentFont = False
@@ -96,18 +97,18 @@ object f_sequence: Tf_sequence
       object BtnStart: TButton
         Left = 0
         Height = 25
-        Top = 59
-        Width = 81
+        Top = 58
+        Width = 80
         Caption = 'Start'
         OnClick = BtnStartClick
         ParentFont = False
         TabOrder = 3
       end
       object BtnStop: TButton
-        Left = 100
+        Left = 99
         Height = 25
-        Top = 59
-        Width = 81
+        Top = 58
+        Width = 80
         Caption = 'Stop'
         OnClick = BtnStopClick
         ParentFont = False
@@ -117,8 +118,8 @@ object f_sequence: Tf_sequence
         Left = 1
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 93
-        Width = 126
+        Top = 92
+        Width = 122
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentFont = False
@@ -129,26 +130,26 @@ object f_sequence: Tf_sequence
         Left = 0
         Height = 25
         Top = 32
-        Width = 81
+        Width = 80
         Caption = 'Copy'
         OnClick = BtnCopyClick
         ParentFont = False
         TabOrder = 6
       end
       object BtnDelete: TButton
-        Left = 100
+        Left = 99
         Height = 25
         Top = 32
-        Width = 81
+        Width = 80
         Caption = 'Delete'
         OnClick = BtnDeleteClick
         ParentFont = False
         TabOrder = 7
       end
       object led: TShape
-        Left = 84
+        Left = 83
         Height = 14
-        Top = 63
+        Top = 62
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
@@ -158,7 +159,7 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 20
       Top = 0
-      Width = 182
+      Width = 180
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -172,20 +173,20 @@ object f_sequence: Tf_sequence
   end
   object Panel2: TPanel
     Left = 0
-    Height = 241
-    Top = 299
-    Width = 182
+    Height = 238
+    Top = 296
+    Width = 180
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 241
-    ClientWidth = 182
+    ClientHeight = 238
+    ClientWidth = 180
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 140
+      Height = 138
       Top = 20
-      Width = 182
+      Width = 180
       Align = alClient
       DefaultRowHeight = 18
       FixedCols = 0
@@ -199,7 +200,7 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 20
       Top = 0
-      Width = 182
+      Width = 180
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -212,19 +213,19 @@ object f_sequence: Tf_sequence
     end
     object Panel4: TPanel
       Left = 0
-      Height = 81
-      Top = 160
-      Width = 182
+      Height = 80
+      Top = 158
+      Width = 180
       Align = alBottom
-      ClientHeight = 81
-      ClientWidth = 182
+      ClientHeight = 80
+      ClientWidth = 180
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel
         Left = 1
-        Height = 78
+        Height = 77
         Top = 1
-        Width = 180
+        Width = 178
         Align = alClient
         AutoSize = False
         ParentColor = False
@@ -234,8 +235,8 @@ object f_sequence: Tf_sequence
       object DelayMsg: TLabel
         Left = 1
         Height = 1
-        Top = 79
-        Width = 180
+        Top = 78
+        Width = 178
         Align = alBottom
         ParentColor = False
         ParentFont = False
@@ -247,27 +248,27 @@ object f_sequence: Tf_sequence
     DefaultExt = '.targets'
     Filter = 'targets|*.targets'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    left = 65
-    top = 65
+    left = 64
+    top = 64
   end
   object SaveDialog1: TSaveDialog
     Title = 'Save target list as'
     DefaultExt = '.targets'
     Filter = 'targets|*.targets'
-    left = 146
-    top = 65
+    left = 144
+    top = 64
   end
   object StatusTimer: TTimer
     Enabled = False
     OnTimer = StatusTimerTimer
     left = 8
-    top = 65
+    top = 64
   end
   object StartTimer: TTimer
     Enabled = False
     Interval = 5000
     OnTimer = StartTimerTimer
-    left = 113
-    top = 65
+    left = 112
+    top = 64
   end
 end

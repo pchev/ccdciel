@@ -17,21 +17,20 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
-  LCLVersion = '2.0.0.2'
   object Panel1: TPanel
     Left = 0
-    Height = 381
+    Height = 379
     Top = 0
-    Width = 618
+    Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 381
-    ClientWidth = 618
+    ClientHeight = 379
+    ClientWidth = 612
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 375
+      Height = 373
       Top = 3
       Width = 3
       Align = alLeft
@@ -52,7 +51,7 @@ object f_main: Tf_main
       Left = 0
       Height = 3
       Top = 0
-      Width = 618
+      Width = 612
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
@@ -70,9 +69,9 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 3
-      Height = 375
+      Height = 373
       Top = 3
-      Width = 615
+      Width = 609
       Align = alClient
       AutoSize = True
       BevelOuter = bvNone
@@ -84,8 +83,8 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 3
-      Top = 378
-      Width = 618
+      Top = 376
+      Width = 612
       Align = alBottom
       AutoSize = True
       BevelOuter = bvNone
@@ -104,9 +103,9 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 381
-    Width = 808
+    Height = 21
+    Top = 379
+    Width = 800
     BorderWidth = 1
     Panels = <    
       item
@@ -131,21 +130,21 @@ object f_main: Tf_main
     OnResize = StatusBar1Resize
   end
   object PanelRight: TPanel
-    Left = 620
-    Height = 381
+    Left = 612
+    Height = 379
     Top = 0
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 381
+    ClientHeight = 379
     ClientWidth = 188
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 349
+      Height = 347
       Top = 32
-      Width = 190
+      Width = 188
       ActivePage = PageConnect
       Align = alClient
       Images = ImageListDay
@@ -156,15 +155,15 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 315
-        ClientWidth = 180
+        ClientHeight = 343
+        ClientWidth = 178
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 341
+          Height = 343
           Top = 0
-          Width = 182
+          Width = 178
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -180,8 +179,8 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 315
-        ClientWidth = 180
+        ClientHeight = 343
+        ClientWidth = 178
         ImageIndex = 1
         ParentFont = False
         object PanelRight2: TPanel
@@ -204,8 +203,8 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 315
-        ClientWidth = 180
+        ClientHeight = 343
+        ClientWidth = 178
         ImageIndex = 2
         ParentFont = False
         object PanelRight3: TPanel
@@ -228,8 +227,8 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 315
-        ClientWidth = 180
+        ClientHeight = 343
+        ClientWidth = 178
         ImageIndex = 3
         ParentFont = False
         object PanelRight4: TPanel
@@ -252,8 +251,8 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 315
-        ClientWidth = 180
+        ClientHeight = 343
+        ClientWidth = 178
         ImageIndex = 4
         ParentFont = False
         object PanelRight5: TPanel
@@ -275,7 +274,7 @@ object f_main: Tf_main
     object TBTabs: TToolBar
       Left = 0
       Top = 0
-      Width = 190
+      Width = 188
       ButtonHeight = 30
       ButtonWidth = 30
       Images = ImageListDay
@@ -311,7 +310,7 @@ object f_main: Tf_main
       end
       object TBCapture: TToolButton
         Tag = 2
-        Left = 60
+        Left = 61
         Hint = 'Capture'
         Top = 2
         Grouped = True
@@ -323,7 +322,7 @@ object f_main: Tf_main
       end
       object TBSequence: TToolButton
         Tag = 3
-        Left = 90
+        Left = 91
         Hint = 'Sequence'
         Top = 2
         Grouped = True
@@ -335,7 +334,7 @@ object f_main: Tf_main
       end
       object TBVideo: TToolButton
         Tag = 4
-        Left = 120
+        Left = 121
         Hint = 'Video'
         Top = 2
         Grouped = True
@@ -2314,7 +2313,7 @@ object f_main: Tf_main
     Enabled = False
     Interval = 500
     OnTimer = ImageResizeTimerTimer
-    left = 289
+    left = 280
     top = 306
   end
 end

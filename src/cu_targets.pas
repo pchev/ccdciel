@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  fu_safety, fu_weather, fu_dome,
+  fu_safety, fu_weather, cu_dome,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -50,7 +50,7 @@ type
       Ffilter: Tf_filterwheel;
       Fweather: Tf_weather;
       Fsafety: Tf_safety;
-      Fdome: Tf_dome;
+      Fdome: T_dome;
       Fmount: T_mount;
       Fcamera: T_camera;
       Frotaror: T_rotator;
@@ -62,7 +62,7 @@ type
       FTargetRA,FTargetDE: double;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
-      FAtEndPark, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
+      FAtEndPark, FAtEndCloseDome, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
       SkipTarget: boolean;
       function GetBusy: boolean;
@@ -149,7 +149,7 @@ type
       property Filter: Tf_filterwheel read Ffilter write SetFilter;
       property Weather: Tf_weather read Fweather write Fweather;
       property Safety: Tf_safety read Fsafety write Fsafety;
-      property Dome: Tf_dome read Fdome write Fdome;
+      property Dome: T_dome read Fdome write Fdome;
       property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
       property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
       property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
@@ -157,6 +157,7 @@ type
       property onMsg: TNotifyMsg read FonMsg write FonMsg;
       property onEndSequence: TNotifyEvent read FonEndSequence write FonEndSequence;
       property AtEndPark: boolean read FAtEndPark write FAtEndPark;
+      property AtEndCloseDome: boolean read FAtEndCloseDome write FAtEndCloseDome;
       property AtEndStopTracking: boolean read FAtEndStopTracking write FAtEndStopTracking;
       property AtEndWarmCamera: boolean read FAtEndWarmCamera write FAtEndWarmCamera;
       property AtEndRunScript: boolean read FAtEndRunScript write FAtEndRunScript;
@@ -187,6 +188,7 @@ begin
   FSeqStartTwilight:=false;
   FSeqStopTwilight:=false;
   FAtEndPark:=false;
+  FAtEndCloseDome:=false;
   FAtEndStopTracking:=true;
   FAtEndWarmCamera:=false;
   FAtEndRunScript:=false;
@@ -1262,15 +1264,26 @@ end;
 procedure T_Targets.RunEndAction;
 var path,sname: string;
 begin
-if AtEndStopTracking or AtEndPark or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
+if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
   msg(rsExecutingThe2,1);
   if AtEndStopTracking then begin
+    msg(rsStopTelescop2,1);
     Mount.AbortMotion;
   end;
   if AtEndPark then begin
+    msg(rsParkTheTeles2,1);
     Mount.Park:=true;
   end;
+  if AtEndCloseDome then begin
+    msg(rsStopDomeSlav,1);
+    Dome.Slave:=false;
+    msg(rsParkDome,1);
+    Dome.Park:=true;
+    msg(rsCloseDome,1);
+    Dome.Shutter:=false;
+  end;
   if AtEndWarmCamera then begin
+    msg(rsWarmTheCamer,1);
     Camera.Temperature:=20.0;
   end;
   if AtEndRunScript then begin
@@ -1281,6 +1294,7 @@ if AtEndStopTracking or AtEndPark or AtEndWarmCamera or AtEndRunScript or AtEndS
     end;
   end;
   if AtEndShutdown then begin
+     msg(rsExitProgram,1);
      if Assigned(FonShutdown) then FonShutdown(self);
   end;
 end
