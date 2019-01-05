@@ -39,6 +39,10 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    Label113: TLabel;
+    Label114: TLabel;
+    Label115: TLabel;
+    ReadOutCapture: TComboBox;
     FloatSpinEditMa10: TFloatSpinEdit;
     FloatSpinEditMa11: TFloatSpinEdit;
     FloatSpinEditMa12: TFloatSpinEdit;
@@ -51,7 +55,9 @@ type
     FloatSpinEditMi13: TFloatSpinEdit;
     FloatSpinEditMi8: TFloatSpinEdit;
     FloatSpinEditMi9: TFloatSpinEdit;
+    GroupBoxReadOut: TGroupBox;
     Label111: TLabel;
+    Label112: TLabel;
     LabelMa10: TLabel;
     LabelMa11: TLabel;
     LabelMa12: TLabel;
@@ -70,6 +76,9 @@ type
     PanelW13: TPanel;
     PanelW8: TPanel;
     PanelW9: TPanel;
+    ReadOutPreview: TComboBox;
+    ReadOutFocus: TComboBox;
+    ReadOutAstrometry: TComboBox;
     SafetyActions: TStringGrid;
     TabSheet14: TTabSheet;
     UseW1: TCheckBox;

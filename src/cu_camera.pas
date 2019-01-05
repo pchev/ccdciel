@@ -79,6 +79,8 @@ T_camera = class(TComponent)
     FhasGain,FhasGainISO: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
+    FhasFastReadout, FhasReadOut: boolean;
+    FReadOutList: TStringList;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure WriteHeaders;
@@ -141,6 +143,8 @@ T_camera = class(TComponent)
     procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
     procedure SetGain(value: integer); virtual; abstract;
     function GetGain: integer; virtual; abstract;
+    procedure SetReadOutMode(value: integer); virtual; abstract;
+    function GetReadOutMode: integer; virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -227,6 +231,9 @@ T_camera = class(TComponent)
     property GainMax: integer read FGainMax;
     property hasGainISO: boolean read FhasGainISO;
     property ISOList: TStringList read FISOList;
+    property hasReadOut: boolean read FhasReadOut;
+    property ReadOutList: TStringList read FReadOutList;
+    property ReadOutMode: integer read GetReadOutMode write SetReadOutMode;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -285,6 +292,9 @@ begin
   FGainMax:=0;
   FhasGain:=false;
   FhasGainISO:=false;
+  FReadOutList:=TStringList.Create;
+  FhasFastReadout:=false;
+  FhasReadOut:=false;
 end;
 
 destructor  T_camera.Destroy;

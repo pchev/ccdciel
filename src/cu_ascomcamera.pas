@@ -111,6 +111,8 @@ T_ascomcamera = class(T_camera)
    procedure SetVideoPreviewDivisor(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   procedure SetReadOutMode(value: integer); override;
+   function GetReadOutMode: integer; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -180,6 +182,8 @@ end;
 procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
 {$ifdef mswindows}
 var x: double;
+    readmodes: array of WideString;
+    i,n: integer;
 {$endif}
 begin
 {$ifdef mswindows}
@@ -258,6 +262,29 @@ begin
       FHasTemperature:=true;
     except
       FHasTemperature:=false;
+    end;
+    FReadOutList.Clear;
+    try
+      FhasFastReadout:=V.CanFastReadout;
+    except
+      FhasFastReadout:=false;
+    end;
+    if FhasFastReadout then begin
+      FhasReadOut:=true;
+      FReadOutList.Add('Standard');
+      FReadOutList.Add('Fast');
+    end
+    else begin
+      try
+        readmodes:=V.ReadoutModes;
+        n:=Length(readmodes);
+        for i:=0 to n-1 do begin
+          FReadOutList.Add(string(readmodes[i]));
+        end;
+        FhasReadOut:=true;
+      except
+        FhasReadOut:=false;
+      end;
     end;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
@@ -1069,6 +1096,45 @@ begin
    end;
  end;
  {$endif}
+end;
+
+procedure T_ascomcamera.SetReadOutMode(value: integer);
+begin
+ {$ifdef mswindows}
+ try
+ if FhasReadOut then begin
+   if FhasFastReadout then begin
+     if value=0 then V.FastReadout:=false
+                else V.FastReadout:=true
+   end
+   else begin
+     V.ReadoutMode:=value;
+   end;
+ end;
+ except
+    on E: Exception do msg('Set ReadOut='+inttostr(value)+': '+E.Message,0);
+ end;
+ {$endif}
+end;
+
+function T_ascomcamera.GetReadOutMode: integer;
+begin
+  result:=0;
+  {$ifdef mswindows}
+  try
+  if (FhasReadOut) then begin
+     if FhasFastReadout then begin
+       if V.FastReadout then result:=1
+                        else result:=0;
+     end
+     else begin
+       result:=V.ReadoutMode;
+     end;
+  end;
+  except
+     on E: Exception do msg('Get ReadOut: '+E.Message,0);
+  end;
+  {$endif}
 end;
 
 procedure T_ascomcamera.StartVideoPreview;

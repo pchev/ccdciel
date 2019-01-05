@@ -74,7 +74,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure Stop;
-    function ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType=LIGHT):boolean;
+    function ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode:integer):boolean;
     property Running: boolean read Frunning write Frunning;
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
@@ -205,7 +205,7 @@ begin
   else result:=1;
 end;
 
-function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType=LIGHT):boolean;
+function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode:integer):boolean;
 var SaveonNewImage: TNotifyEvent;
     savebinx,savebiny: integer;
     endt: TDateTime;
@@ -221,6 +221,9 @@ if AllDevicesConnected then begin
   WaitExposure:=true;
   ControlExposureOK:=false;
   camera.AddFrames:=false;
+  if camera.hasReadOut then begin
+     camera.readoutmode:=readoutmode;
+  end;
   if camera.FrameType<>frmt then camera.FrameType:=frmt;
   Camera.StartExposure(exp);
   endt:=now+(exp+30)/secperday;

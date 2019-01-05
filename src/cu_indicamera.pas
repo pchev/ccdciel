@@ -179,6 +179,8 @@ private
    procedure SetVideoPreviewDivisor(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   procedure SetReadOutMode(value: integer); override;
+   function GetReadOutMode: integer; override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -1461,6 +1463,17 @@ begin
       result:=round(IGain.value);
   end;
 end;
+
+procedure T_indicamera.SetReadOutMode(value: integer);
+begin
+// no INDI property ?
+end;
+
+function T_indicamera.GetReadOutMode: integer;
+begin
+result:=0;
+end;
+
 
 procedure T_indicamera.LoadConfig;
 begin

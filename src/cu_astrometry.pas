@@ -453,7 +453,7 @@ begin
       RetryMeridianSync:=false;
       Wait(delay);
       if CancelAutofocus then exit;
-      if not Fpreview.ControlExposure(exp,binx,biny) then begin
+      if not Fpreview.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry) then begin
         msg(rsExposureFail,0);
         exit;
       end;

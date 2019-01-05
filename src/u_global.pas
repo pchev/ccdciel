@@ -304,11 +304,12 @@ var
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;
-  FilterList,BinningList: TStringList;
+  FilterList,BinningList,ReadoutList: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;
   FilterExpFact: array [0..MaxFilter] of double;
   CurrentFilterOffset: integer;
   filteroffset_initialized: boolean;
+  ReadoutModeCapture,ReadoutModePreview,ReadoutModeFocus,ReadoutModeAstrometry: integer;
   compile_time, compile_version, compile_system, lclver: string;
   CurrentSequenceFile: string;
   DitherPixel, SettlePixel: double;
