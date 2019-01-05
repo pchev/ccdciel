@@ -138,6 +138,9 @@ begin
     DomeAutosyncProp:=nil;
     Fready:=false;
     Fconnected := false;
+    FhasPark:=false;
+    FhasSlaving:=false;
+    FhasShutter:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -146,9 +149,7 @@ procedure T_indidome.CheckStatus;
 begin
     if Fconnected and
        (configprop<>nil) and
-       (DomeShutterProp<>nil) and
-       (DomeParkProp<>nil) and
-       (DomeAutosyncProp<>nil)
+       ((DomeShutterProp<>nil)or(DomeParkProp<>nil))  // rolloff define only Park
     then begin
        FStatus := devConnected;
        if (not Fready) then begin
@@ -291,18 +292,21 @@ begin
      DomeShutterOpen:=IUFindSwitch(DomeShutterProp,'SHUTTER_OPEN');
      DomeShutterClose:=IUFindSwitch(DomeShutterProp,'SHUTTER_CLOSE');
      if (DomeShutterOpen=nil)or(DomeShutterClose=nil) then DomeShutterProp:=nil;
+     FhasShutter:=DomeShutterProp<>nil
   end
   else if (proptype=INDI_SWITCH)and(DomeParkProp=nil)and(propname='DOME_PARK') then begin
      DomeParkProp:=indiProp.getSwitch;
      DomePark:=IUFindSwitch(DomeParkProp,'PARK');
      DomeUnpark:=IUFindSwitch(DomeParkProp,'UNPARK');
      if (DomePark=nil)or(DomeUnpark=nil) then DomeParkProp:=nil;
+     FhasPark:=DomeParkProp<>nil;
   end
   else if (proptype=INDI_SWITCH)and(DomeAutosyncProp=nil)and(propname='DOME_AUTOSYNC') then begin
      DomeAutosyncProp:=indiProp.getSwitch;
      DomeAutosyncEnable:=IUFindSwitch(DomeAutosyncProp,'DOME_AUTOSYNC_ENABLE');
      DomeAutosyncDisable:=IUFindSwitch(DomeAutosyncProp,'DOME_AUTOSYNC_DISABLE');
      if (DomeAutosyncEnable=nil)or(DomeAutosyncDisable=nil) then DomeAutosyncProp:=nil;
+     FhasSlaving:=DomeAutosyncProp<>nil;
   end;
   CheckStatus;
 end;
@@ -319,6 +323,9 @@ end;
 procedure T_indidome.NewSwitch(svp: ISwitchVectorProperty);
 begin
   if svp=DomeShutterProp then begin
+     if Assigned(FonShutterChange) then FonShutterChange(self);
+  end;
+  if (svp=DomeParkProp)and(DomeShutterProp=nil) then begin
      if Assigned(FonShutterChange) then FonShutterChange(self);
   end;
   if svp=DomeAutosyncProp then begin
@@ -370,7 +377,9 @@ begin
  result:=false;
  if DomeShutterProp<>nil then begin
    result := (DomeShutterOpen.s=ISS_ON);
- end;
+ end
+ else
+   result := not GetPark;
 end;
 
 procedure T_indidome.SetShutter(value:boolean);
@@ -382,7 +391,9 @@ begin
     else
       DomeShutterClose.s:=ISS_ON;
     indiclient.sendNewSwitch(DomeShutterProp);
- end;
+ end
+ else
+    SetPark(not value);
 end;
 
 function T_indidome.GetSlave: boolean;
