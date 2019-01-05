@@ -42,9 +42,10 @@ type
     Title: TLabel;
   private
     { private declarations }
-    FConnected,FShutter,FSlave: boolean;
+    FConnected,FShutter,FSlave,FCanSlave: boolean;
     procedure SetConnected(value:boolean);
     procedure SetShutter(value:boolean);
+    procedure SetCanSlave(value:boolean);
     procedure SetSlave(value:boolean);
     procedure SetLed;
     procedure SetLang;
@@ -54,6 +55,7 @@ type
     destructor  Destroy; override;
     property Connected: boolean read FConnected write SetConnected;
     property Shutter: boolean read FShutter write SetShutter;
+    property CanSlave: boolean read FCanSlave write SetCanSlave;
     property Slave: boolean read FSlave write SetSlave;
   end;
 
@@ -71,6 +73,7 @@ begin
  {$endif}
  FConnected:=false;
  FShutter:=false;
+ FCanSlave:=true;
  FSlave:=false;
  ledOpen.Brush.Color:=clGray;
  ledSlaved.Brush.Color:=clGray;
@@ -118,6 +121,13 @@ procedure Tf_dome.SetShutter(value:boolean);
 begin
   FShutter:=value;
   SetLed;
+end;
+
+procedure Tf_dome.SetCanSlave(value:boolean);
+begin
+  FCanSlave:=value;
+  Label2.Visible:=FCanSlave;
+  ledSlaved.Visible:=FCanSlave;
 end;
 
 procedure Tf_dome.SetSlave(value:boolean);

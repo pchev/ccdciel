@@ -3544,6 +3544,7 @@ case dome.Status of
                       if f_devicesconnection.LabelDome.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelDome.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsDome]),1);
+                      wait(1);
                       f_dome.Connected:=true;
                       DomeShutterChange(Sender);
                       DomeSlaveChange(Sender);
@@ -3566,9 +3567,14 @@ Procedure Tf_main.DomeSlaveChange(Sender: TObject);
 var ok: boolean;
 begin
   if f_dome.Connected then begin
-    ok:=dome.Slave;
-    if f_dome.Slave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,rsOn,rsOff));
-    f_dome.Slave:=ok;
+    ok:=dome.hasSlaving;
+    if f_dome.CanSlave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,'available','unavailable'));
+    f_dome.CanSlave:=dome.hasSlaving;
+    if f_dome.CanSlave then begin
+      ok:=dome.Slave;
+      if f_dome.Slave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,rsOn,rsOff));
+      f_dome.Slave:=ok;
+    end;
   end;
 end;
 
