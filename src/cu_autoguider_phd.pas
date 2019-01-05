@@ -489,6 +489,11 @@ try
   cguide:=(FState=GUIDER_GUIDING);
   if onoff then begin
     FStopGuiding:=false;
+    if (FState=GUIDER_ALERT)or(FState=GUIDER_BUSY) then begin
+       // try to reconnect the camera and mount
+       ConnectGear;
+       Wait(10);
+    end;
     Pause(false);
     wait(1);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
