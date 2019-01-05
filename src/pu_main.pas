@@ -467,13 +467,14 @@ type
     Procedure WriteLog( buf : string);
     Procedure WriteDeviceLog( buf : string);
     Procedure PurgeOldLog;
-    procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem);
+    procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean);
     procedure UpdConfig(oldver:string);
     procedure SetConfig;
     procedure SetOptions;
     procedure OpenConfig(n: string);
     procedure SaveSettings;
     procedure SaveConfig;
+    procedure ShowActiveTools;
     procedure SaveVcurve;
     procedure LoadVcurve;
     procedure CreateBPM(f: TFits);
@@ -814,7 +815,7 @@ begin
   Close;
 end;
 
-procedure Tf_main.SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem);
+procedure Tf_main.SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean);
 var pn: string;
     i: integer;
     par: Tpanel;
@@ -836,7 +837,7 @@ end;
 tool.Top:=config.GetValue('/Tools/'+widestring(configname)+'/Top',defaultpos);
 tool.Left:=config.GetValue('/Tools/'+widestring(configname)+'/Left',defaultpos);
 tool.Parent:=par;
-tool.Visible:=config.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
+tool.Visible:=DeviceSelected and config.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
 chkmenu.Checked:=tool.Visible;
 tool.Tag:=PtrInt(toolmenu);
 if (toolmenu<>nil)and(par.tag>0) then begin
@@ -1632,35 +1633,7 @@ begin
   PanelRight3.Tag:=PtrInt(MenuTabCapture);
   PanelRight4.Tag:=PtrInt(MenuTabSequence);
 
-  SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram);
-  SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil);
-
-  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection,MenuConnection);
-  SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview);
-  SetTool(f_autoguider,'Autoguider',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
-  SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
-  SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
-  SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil);
-  SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil);
-  SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil);
-
-  SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser);
-  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
-  SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil);
-
-  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture);
-  SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
-  SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame);
-  SetTool(f_rotator,'Rotator',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator);
-  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp);
-  SetTool(f_mount,'Mount',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
-
-  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence);
-
-  SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo);
-
-  MenuViewClock.Checked:=config.GetValue('/Tools/Clock/Visible',true);
-  MenuViewClockClick(nil);
+  ShowActiveTools;
 
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -1731,6 +1704,49 @@ begin
 
   StatusTimer.Enabled:=true;
   StartupTimer.Enabled:=true;
+end;
+
+procedure Tf_main.ShowActiveTools;
+begin
+  WantCamera:=true;
+  WantWheel:=config.GetValue('/Devices/FilterWheel',false);
+  WantFocuser:=config.GetValue('/Devices/Focuser',false);
+  WantRotator:=config.GetValue('/Devices/Rotator',false);
+  WantMount:=config.GetValue('/Devices/Mount',false);
+  WantDome:=config.GetValue('/Devices/Dome',false);
+  WantWeather:=config.GetValue('/Devices/Weather',false);
+  WantSafety:=config.GetValue('/Devices/Safety',false);
+  WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
+
+  SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
+  SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
+
+  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection,MenuConnection,true);
+  SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview,true);
+  SetTool(f_autoguider,'Autoguider',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+  SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
+  SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript,true);
+  SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
+  SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
+  SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
+
+  SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
+  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
+  SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
+
+  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture,true);
+  SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters,WantWheel);
+  SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
+  SetTool(f_rotator,'Rotator',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
+  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
+  SetTool(f_mount,'Mount',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
+
+  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence,true);
+
+  SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+
+  MenuViewClock.Checked:=config.GetValue('/Tools/Clock/Visible',true);
+  MenuViewClockClick(nil);
 end;
 
 procedure Tf_main.SetTheme;
@@ -1919,32 +1935,32 @@ end;
 procedure Tf_main.MenuResetToolsClick(Sender: TObject);
 var i: integer;
 begin
-  SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram);
-  SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil);
+  SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
+  SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
-  SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection);
-  SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview);
-  SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider);
-  SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium);
-  SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript);
-  SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil);
-  SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil);
-  SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil);
+  SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
+  SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview,true);
+  SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+  SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
+  SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript,true);
+  SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
+  SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
+  SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
 
-  SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser);
-  SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile);
-  SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil);
+  SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
+  SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
+  SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
 
-  SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture);
-  SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters);
-  SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame);
-  SetTool(f_rotator,'',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator);
-  SetTool(f_ccdtemp,'',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp);
-  SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount);
+  SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
+  SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters,WantWheel);
+  SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
+  SetTool(f_rotator,'',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
+  SetTool(f_ccdtemp,'',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
+  SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
 
-  SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence);
+  SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
-  SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo);
+  SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -2777,7 +2793,7 @@ begin
    config.SetValue('/Tools/Messages/LogLevel',LogLevel);
 
    config.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
-   config.SetValue('/Tools/Focuser/Visible',f_focuser.Visible);
+   config.SetValue('/Tools/Focuser/Visible',f_focuser.Visible or (not WantFocuser));
    config.SetValue('/Tools/Focuser/Top',f_focuser.Top);
    config.SetValue('/Tools/Focuser/Left',f_focuser.Left);
 
@@ -2797,7 +2813,7 @@ begin
    config.SetValue('/Tools/Frame/Left',f_frame.Left);
 
    config.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
-   config.SetValue('/Tools/Rotator/Visible',f_rotator.Visible);
+   config.SetValue('/Tools/Rotator/Visible',f_rotator.Visible or (not WantRotator));
    config.SetValue('/Tools/Rotator/Top',f_rotator.Top);
    config.SetValue('/Tools/Rotator/Left',f_rotator.Left);
 
@@ -2812,7 +2828,7 @@ begin
    config.SetValue('/Tools/Capture/Left',f_capture.Left);
 
    config.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
-   config.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible);
+   config.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible or (not WantWheel));
    config.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
    config.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
 
@@ -2822,7 +2838,7 @@ begin
    config.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
 
    config.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
-   config.SetValue('/Tools/Mount/Visible',f_mount.Visible);
+   config.SetValue('/Tools/Mount/Visible',f_mount.Visible or (not WantMount));
    config.SetValue('/Tools/Mount/Top',f_mount.Top);
    config.SetValue('/Tools/Mount/Left',f_mount.Left);
 
@@ -2843,17 +2859,17 @@ begin
    config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
 
    config.SetValue('/Tools/Weather/Parent',f_weather.Parent.Name);
-   config.SetValue('/Tools/Weather/Visible',f_weather.Visible);
+   config.SetValue('/Tools/Weather/Visible',f_weather.Visible or (not WantWeather));
    config.SetValue('/Tools/Weather/Top',f_weather.Top);
    config.SetValue('/Tools/Weather/Left',f_weather.Left);
 
    config.SetValue('/Tools/Safety/Parent',f_safety.Parent.Name);
-   config.SetValue('/Tools/Safety/Visible',f_safety.Visible);
+   config.SetValue('/Tools/Safety/Visible',f_safety.Visible or (not WantSafety));
    config.SetValue('/Tools/Safety/Top',f_safety.Top);
    config.SetValue('/Tools/Safety/Left',f_safety.Left);
 
    config.SetValue('/Tools/Dome/Parent',f_dome.Parent.Name);
-   config.SetValue('/Tools/Dome/Visible',f_dome.Visible);
+   config.SetValue('/Tools/Dome/Visible',f_dome.Visible or (not WantDome));
    config.SetValue('/Tools/Dome/Top',f_dome.Top);
    config.SetValue('/Tools/Dome/Left',f_dome.Left);
 
@@ -2949,16 +2965,6 @@ end;
 
 Procedure Tf_main.Connect(Sender: TObject);
 begin
-  WantCamera:=true;
-  WantWheel:=config.GetValue('/Devices/FilterWheel',false);
-  WantFocuser:=config.GetValue('/Devices/Focuser',false);
-  WantRotator:=config.GetValue('/Devices/Rotator',false);
-  WantMount:=config.GetValue('/Devices/Mount',false);
-  WantDome:=config.GetValue('/Devices/Dome',false);
-  WantWeather:=config.GetValue('/Devices/Weather',false);
-  WantSafety:=config.GetValue('/Devices/Safety',false);
-  WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
-
   if WantCamera and (CameraName='') then begin
     ShowMessage(rsPleaseConfig+blank+rsCamera);
     MenuSetup.Click;
@@ -4978,6 +4984,7 @@ begin
     config.SetValue('/ASCOMsafety/Device',f_setup.AscomSafety.Text);
 
     SaveConfig;
+    ShowActiveTools;
 
     if f_setup.RestartRequired then
        Restart
