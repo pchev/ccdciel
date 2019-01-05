@@ -305,6 +305,7 @@ begin
   FVideoSizes.Free;
   FVideoRates.Free;
   FISOList.Free;
+  FReadOutList.Free;
   inherited Destroy;
 end;
 

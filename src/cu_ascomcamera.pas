@@ -182,7 +182,7 @@ end;
 procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
 {$ifdef mswindows}
 var x: double;
-    readmodes: array of WideString;
+    readmodes,roitem: Variant;
     i,n: integer;
 {$endif}
 begin
@@ -271,15 +271,16 @@ begin
     end;
     if FhasFastReadout then begin
       FhasReadOut:=true;
-      FReadOutList.Add('Standard');
+      FReadOutList.Add('High quality');
       FReadOutList.Add('Fast');
     end
     else begin
       try
         readmodes:=V.ReadoutModes;
-        n:=Length(readmodes);
+        n:=readmodes.Count;
         for i:=0 to n-1 do begin
-          FReadOutList.Add(string(readmodes[i]));
+          roitem:=readmodes.Item(i);
+          FReadOutList.Add(string(roitem));
         end;
         FhasReadOut:=true;
       except

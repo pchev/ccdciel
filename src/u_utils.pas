@@ -2710,9 +2710,11 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   P.Executable:='solve-field';
   P.Parameters.Add('--help');
   {$endif}
+  P.ShowWindow:=swoHIDE;
   P.Execute;
   SetLength(buf, 1000);
   SetLength(buf, P.Output.Read(buf[1], Length(buf)));
+  P.Free;
   i:=pos('Revision',buf);
   if i<=0 then exit;
   delete(buf,1,i+8);
