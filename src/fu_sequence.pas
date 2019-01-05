@@ -791,6 +791,7 @@ procedure Tf_sequence.StartSequence;
 var ccdtemp,tempdiff,temp,endt:double;
     i,j: integer;
     isCalibrationSequence, waitcooling: boolean;
+    buf: string;
 begin
  StartingSequence:=true;
  msg(Format(rsStartingSequ,['']),1);
@@ -824,12 +825,27 @@ begin
     end;
  end;
  if not StartingSequence then exit;
+ // Check dome open and slaving
+ if (not isCalibrationSequence)and dome.Connected and
+   ((not dome.Shutter)or(dome.CanSlave and(not dome.Slave)))
+   then begin
+    buf:='Dome is: ';
+    if not dome.Shutter then buf:=buf+'closed, ';
+    if dome.CanSlave and(not dome.Slave) then buf:=buf+'not slaved ';
+    f_pause.Caption:='Dome is not ready';
+    f_pause.Text:=buf;
+    if not f_pause.Wait then begin
+      StopSequence;
+    end;
+ end;
+ if not StartingSequence then exit;
  // check mount park
  if mount.Park then begin
     msg(rsTheTelescope, 1);
     mount.Park:=false;
     wait(5);
  end;
+
  if not StartingSequence then exit;
  // check if autoguider is required and connected
  if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
@@ -840,8 +856,7 @@ begin
        msg(rsSequenceWill2,0);
      end
      else begin
-       msg(rsSequenceAbor,0);
-       exit;
+       StopSequence;
      end;
    end
    else begin
