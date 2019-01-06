@@ -242,6 +242,9 @@ uses LazFileUtils;
 
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
+  {$ifdef lclcocoa}
+  PageControl1.BorderSpacing.Around:=8;
+  {$endif}
   ScaleDPI(Self);
   TargetList.RowHeights[0]:=40;
   SetLang;
