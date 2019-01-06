@@ -194,6 +194,8 @@ begin
  Title3.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel2.ChildSizing.LeftRightSpacing:=8;
+ Panel1.ChildSizing.VerticalSpacing:=4;
+ Panel2.ChildSizing.VerticalSpacing:=4;
  {$endif}
  ScaleDPI(Self);
  SetLang;

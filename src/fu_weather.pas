@@ -65,6 +65,7 @@ begin
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
+ Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
  FConnected:=false;
  FClear:=false;
