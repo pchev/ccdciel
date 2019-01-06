@@ -192,7 +192,7 @@ begin
  Title1.Color:=clWindowFrame;
  Title2.Color:=clWindowFrame;
  Title3.Color:=clWindowFrame;
- Panel1.ChildSizing.LeftRightSpacing:=8
+ Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel2.ChildSizing.LeftRightSpacing:=8
  {$endif}
  ScaleDPI(Self);

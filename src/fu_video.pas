@@ -127,7 +127,7 @@ begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
- Panel1.ChildSizing.LeftRightSpacing:=8
+ Panel1.ChildSizing.LeftRightSpacing:=8;
  {$endif}
  ScaleDPI(Self);
  Frunning:=false;
