@@ -42,6 +42,11 @@ type
     Label113: TLabel;
     Label114: TLabel;
     Label115: TLabel;
+    Label116: TLabel;
+    Label117: TLabel;
+    Label118: TLabel;
+    Panel2: TPanel;
+    Panel3: TPanel;
     ReadOutCapture: TComboBox;
     FloatSpinEditMa10: TFloatSpinEdit;
     FloatSpinEditMa11: TFloatSpinEdit;
@@ -80,6 +85,8 @@ type
     ReadOutFocus: TComboBox;
     ReadOutAstrometry: TComboBox;
     SafetyActions: TStringGrid;
+    ScrollBoxWeather: TScrollBox;
+    WeatherRestartDelay: TSpinEdit;
     TabSheet14: TTabSheet;
     UseW1: TCheckBox;
     DomeFlatSetLight: TCheckBox;

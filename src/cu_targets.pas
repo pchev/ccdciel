@@ -39,6 +39,7 @@ type
       TargetRepeatTimer: TTimer;
       StopTimer: TTimer;
       StopTargetTimer: TTimer;
+      WeatherRestartTimer: TTimer;
       FTargetsChange: TNotifyEvent;
       FPlanChange: TNotifyEvent;
       FonMsg: TNotifyMsg;
@@ -92,6 +93,7 @@ type
       procedure StartPlanTimerTimer(Sender: TObject);
       procedure StopTimerTimer(Sender: TObject);
       procedure StopTargetTimerTimer(Sender: TObject);
+      procedure WeatherRestartTimerTimer(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -179,6 +181,7 @@ begin
   WeatherPauseCapture:=false;
   WeatherCapturePaused:=false;
   WeatherPauseCanceled:=false;
+  WeatherCancelRestart:=false;
   FTargetsRepeat:=1;
   Frunning:=false;
   FSeqStartAt:=0;
@@ -219,6 +222,9 @@ begin
   StopTargetTimer:=TTimer.Create(self);
   StopTargetTimer.Enabled:=false;
   StopTargetTimer.OnTimer:=@StopTargetTimerTimer;
+  WeatherRestartTimer:=TTimer.Create(self);
+  WeatherRestartTimer.Enabled:=false;
+  WeatherRestartTimer.OnTimer:=@WeatherRestartTimerTimer;
 end;
 
 destructor  T_Targets.Destroy;
@@ -333,6 +339,7 @@ begin
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
   CancelAutofocus:=false;
+  WeatherCancelRestart:=false;
   FRunning:=true;
   if not FSeqStop then begin
     // look for a dawn sky flat
@@ -446,21 +453,52 @@ procedure T_Targets.WeatherPause;
 begin
   // set to pause after the current exposure is complete
   WeatherPauseCapture:=true;
+  // cancel any restart in progress
+  WeatherRestartTimer.Enabled:=false;
+  WeatherCancelRestart:=true;
 end;
 
 procedure T_Targets.WeatherRestart;
-var initok: boolean;
 begin
   if WeatherCapturePaused then begin
-    // we really pause during capture, try to recenter, restart mount and guiding.
+    // we really pause during capture, wait restart delay
+    WeatherRestartTimer.Enabled:=false;
+    WeatherRestartTimer.Interval:=1000*60*WeatherRestartDelay;
+    WeatherRestartTimer.Enabled:=true;
+    WeatherCancelRestart:=false;
+    msg('Waiting for '+IntToStr(WeatherRestartDelay)+' minutes of good weather before to restart the sequence',1);
+  end
+  else begin
+    // we not pause, just remove the condition
+    WeatherPauseCapture:=false;
+  end;
+end;
+
+procedure T_Targets.WeatherRestartTimerTimer(Sender: TObject);
+var initok: boolean;
+begin
+  WeatherRestartTimer.Enabled:=false;
+  if FRunning then begin
+    // try to recenter, restart mount and guiding.
     WeatherPauseCanceled:=false;
     initok:=InitTarget;
-    if not initok then begin
+    if (not initok)and(not WeatherCancelRestart) then begin
        WeatherPauseCanceled:=true;
        if FRunning then NextTarget;
     end;
+  end
+  else begin
+    WeatherPauseCanceled:=true;
   end;
-  WeatherPauseCapture:=false;
+  // continue the capture
+  if not WeatherCancelRestart then
+     WeatherPauseCapture:=false
+  else begin
+    // stop and continue to wait
+     StopGuider;
+     mount.AbortMotion;
+     msg('Sequence paused for bad weather ...',1);
+  end;
 end;
 
 procedure T_Targets.StopSequence(abort: boolean);
@@ -468,11 +506,13 @@ var p: T_Plan;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
+ WeatherRestartTimer.Enabled:=false;
  InplaceAutofocus:=AutofocusInPlace;
  if FRunning then begin
    FRunning:=false;
    WeatherPauseCanceled:=true;
    WeatherPauseCapture:=false;
+   WeatherCancelRestart:=false;
    if WaitTillrunning then begin
      if wt_pause<>nil
       then wt_pause.BtnCancel.Click
@@ -727,7 +767,7 @@ begin
   if t<>nil then begin
     msg(Format(rsInitializeTa, [t.objectname]),1);
     // check weather
-    if (FWeather.Connected)and(not FWeather.Clear) then begin
+    if (not WeatherPauseCapture)and(FWeather.Connected)and(not FWeather.Clear) then begin
        msg('Sequence paused for bad weather ...',1);
        // stop guiding and mount tracking now
        StopGuider;
@@ -824,6 +864,8 @@ begin
     else
        autofocusstart:=false;
 
+    if WeatherCancelRestart then exit;
+
     FTargetInitializing:=true;
     FWaitStarting:=false;
 
@@ -834,6 +876,7 @@ begin
           if not StopGuider then exit;
           Wait(2);
           if not FRunning then exit;
+          if WeatherCancelRestart then exit;
         end;
       end;
       // set rotator position
@@ -853,6 +896,7 @@ begin
         Wait;
       end;
       if not FRunning then exit;
+      if WeatherCancelRestart then exit;
     end;
     // check if the plans contain only calibration
     isCalibrationTarget:=true;
@@ -869,6 +913,7 @@ begin
       if not StartGuider then exit;
       Wait;
       if not FRunning then exit;
+      if WeatherCancelRestart then exit;
       t.autoguiding:=true;
     end;
     result:=true;

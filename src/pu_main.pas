@@ -2750,6 +2750,7 @@ begin
   end;
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
+  WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
   weather.UseCloudCover:=config.GetValue('/Weather/Use/CloudCover',false);
   weather.UseDewPoint:=config.GetValue('/Weather/Use/DewPoint',false);
   weather.UseHumidity:=config.GetValue('/Weather/Use/Humidity',false);
@@ -5272,8 +5273,9 @@ begin
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
    f_option.CheckBoxLocalCdc.Checked:=f_option.CdCport.Text='';
    f_option.PanelRemoteCdc.Visible:=not f_option.CheckBoxLocalCdc.Checked;
-   f_option.TabSheet13.TabVisible:=(weather.Status=devConnected)and(not weather.hasStatus);
-   if f_option.TabSheet13.TabVisible then begin
+   f_option.WeatherRestartDelay.Value:=config.GetValue('/Weather/RestartDelay',5);
+   f_option.ScrollBoxWeather.Visible:=(weather.Status=devConnected)and(not weather.hasStatus);
+   if f_option.ScrollBoxWeather.Visible then begin
       f_option.PanelW1.Visible:=weather.hasCloudCover;
       f_option.PanelW2.Visible:=weather.hasDewPoint;
       f_option.PanelW3.Visible:=weather.hasHumidity;
@@ -5493,7 +5495,8 @@ begin
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
-     if f_option.TabSheet13.Visible then begin
+     config.SetValue('/Weather/RestartDelay',f_option.WeatherRestartDelay.Value);
+     if f_option.ScrollBoxWeather.Visible then begin
         config.SetValue('/Weather/Use/CloudCover',f_option.UseW1.Checked);
         config.SetValue('/Weather/Use/DewPoint',f_option.UseW2.Checked);
         config.SetValue('/Weather/Use/Humidity',f_option.UseW3.Checked);
@@ -6000,10 +6003,11 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     ftype:=LIGHT;
   // wait if paused
   if WeatherPauseCapture then begin
+    if f_sequence.Running then begin
      if (ftype=LIGHT) then begin
+       WeatherCapturePaused:=true;
        f_sequence.StatusMsg.Caption:='Sequence paused for bad weather ...';
        NewMessage(f_sequence.StatusMsg.Caption);
-       WeatherCapturePaused:=true;
        // stop guiding and mount tracking now
        if (autoguider<>nil)and(autoguider.Running) then begin
           NewMessage(rsStopAutoguid,2);
@@ -6028,6 +6032,11 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      end
      else
        NewMessage('Ignore weather condition for image type='+FrameName[ord(ftype)]);
+    end
+    else begin
+      // capture running without a sequence, just show a message
+      NewMessage('Weather condition are bad, it is best if you stop the running capture now.',1);
+    end;
   end;
   // check if we need to cancel running preview
   if f_preview.Running then begin
