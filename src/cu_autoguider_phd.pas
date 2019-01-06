@@ -31,11 +31,13 @@ uses cu_autoguider, cu_tcpclient, u_global, u_utils, blcksock, synsock, fpjson, 
 type
 
   T_autoguider_phd = class(T_autoguider)
+  private
+    procedure ProcessEventAsync(Data: PtrInt);
   protected
     TcpClient : TTcpclient;
     JsonRecurseLevel: integer;
     procedure JsonDataToStringlist(var SK,SV: TStringList; prefix:string; D : TJSONData);
-    procedure JsonToStringlist(jsontxt:string; var SK,SV: TStringList);
+    procedure JsonToStringlist(jsontxt:TStringStream; var SK,SV: TStringList);
     procedure Send(const Value: string);
     procedure SetState;
     Procedure ProcessEvent(txt:string); override;
@@ -91,6 +93,7 @@ end;
 procedure T_autoguider_phd.Execute;
 var buf:string;
 begin
+try
 tcpclient:=TTCPClient.Create;
 try
  if Terminated then exit;
@@ -125,6 +128,9 @@ tcpclient.Disconnect;
 FStatus:='Disconnected';
 ProcessDisconnect;
 tcpclient.Free;
+end;
+except
+  on E: Exception do DisplayMessage('Main loop error: '+ E.Message);
 end;
 end;
 
@@ -180,31 +186,44 @@ if Assigned(D) then begin
 end;
 end;
 
-procedure T_autoguider_phd.JsonToStringlist(jsontxt:string; var SK,SV: TStringList);
+procedure T_autoguider_phd.JsonToStringlist(jsontxt:TStringStream; var SK,SV: TStringList);
 var  J: TJSONData;
 begin
-jsontxt:=StringReplace(jsontxt,chr(10),' ',[rfReplaceAll]);
-jsontxt:=StringReplace(jsontxt,chr(13),' ',[rfReplaceAll]);
 try
 J:=GetJSON(jsontxt);
 JsonRecurseLevel:=0;
 JsonDataToStringlist(SK,SV,'',J);
 J.Free;
 except
-  on E: Exception do DisplayMessage('Error: '+ E.Message);
+  on E: Exception do DisplayMessage('JsonToStringlist Error: '+ E.Message);
 end;
 end;
 
-Procedure T_autoguider_phd.ProcessEvent(txt:string);
+procedure T_autoguider_phd.ProcessEvent(txt:string);
+var s:TStringStream;
+begin
+try
+ txt:=StringReplace(txt,chr(10),' ',[rfReplaceAll]);
+ txt:=StringReplace(txt,chr(13),' ',[rfReplaceAll]);
+ s:=TStringStream.Create(txt);
+ Application.QueueAsyncCall(@ProcessEventAsync, PtrInt(s))
+ except
+   on E: Exception do DisplayMessage('ProcessEvent Error: '+ E.Message);
+ end;
+end;
+
+procedure T_autoguider_phd.ProcessEventAsync(Data: PtrInt);
 var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
     p,i,s,k:integer;
 begin
+try
 attrib:=Tstringlist.Create;
 value:=Tstringlist.Create;
 FLastError:='';
 try
-JsontoStringlist(txt,attrib,value);
+JsontoStringlist(TStringStream(Data),attrib,value);
+TStringStream(Data).Free;
 p:=attrib.IndexOf('Event');    // PHD events
 if p>=0 then begin
    eventname:=value[p];
@@ -361,6 +380,9 @@ StatusChange;
 finally
  attrib.Free;
  value.Free;
+end;
+except
+  on E: Exception do DisplayMessage('ProcessEventAsync Error: '+ E.Message);
 end;
 end;
 
