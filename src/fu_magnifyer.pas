@@ -56,6 +56,7 @@ begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
+ Panel1.ChildSizing.LeftRightSpacing:=8
  {$endif}
  Image1.Picture.Bitmap.Height:=Image1.Height;
  Image1.Picture.Bitmap.Width:=Image1.Width;

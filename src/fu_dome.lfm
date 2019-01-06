@@ -1,11 +1,12 @@
 object f_dome: Tf_dome
   Left = 0
-  Height = 58
+  Height = 57
   Top = 0
-  Width = 177
+  Width = 175
   AutoSize = True
-  ClientHeight = 58
-  ClientWidth = 177
+  ClientHeight = 57
+  ClientWidth = 175
+  DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +15,7 @@ object f_dome: Tf_dome
     Left = 0
     Height = 20
     Top = 0
-    Width = 177
+    Width = 175
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,29 +29,29 @@ object f_dome: Tf_dome
   end
   object Panel1: TPanel
     Left = 0
-    Height = 20
+    Height = 24
     Top = 20
-    Width = 177
+    Width = 175
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 20
-    ClientWidth = 177
+    ClientHeight = 24
+    ClientWidth = 175
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 19
+      Height = 23
       Top = 0
-      Width = 166
+      Width = 164
       BevelOuter = bvNone
-      ClientHeight = 19
-      ClientWidth = 166
+      ClientHeight = 23
+      ClientWidth = 164
       ParentFont = False
       TabOrder = 0
       object ledSlaved: TShape
-        Left = 152
+        Left = 150
         Height = 14
         Top = 4
         Width = 14
@@ -58,25 +59,25 @@ object f_dome: Tf_dome
         Shape = stCircle
       end
       object Label2: TLabel
-        Left = 98
-        Height = 15
+        Left = 97
+        Height = 19
         Top = 4
-        Width = 34
+        Width = 39
         Caption = 'Slaved'
         ParentColor = False
         ParentFont = False
       end
       object Label1: TLabel
         Left = 8
-        Height = 15
+        Height = 19
         Top = 4
-        Width = 29
+        Width = 33
         Caption = 'Open'
         ParentColor = False
         ParentFont = False
       end
       object ledOpen: TShape
-        Left = 65
+        Left = 64
         Height = 14
         Top = 4
         Width = 14

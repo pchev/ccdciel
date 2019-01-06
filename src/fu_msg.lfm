@@ -11,20 +11,20 @@ object f_msg: Tf_msg
   TabOrder = 0
   object Panel1: TPanel
     Left = 8
-    Height = 117
+    Height = 116
     Top = 0
-    Width = 600
+    Width = 594
     Align = alClient
     AutoSize = True
-    ClientHeight = 117
-    ClientWidth = 600
+    ClientHeight = 116
+    ClientWidth = 594
     ParentFont = False
     TabOrder = 0
     object msg: TMemo
       Left = 1
-      Height = 115
+      Height = 114
       Top = 1
-      Width = 598
+      Width = 592
       Align = alClient
       OnMouseEnter = msgMouseEnter
       OnMouseLeave = msgMouseLeave
@@ -37,7 +37,7 @@ object f_msg: Tf_msg
   end
   object Title: TLabel
     Left = 0
-    Height = 117
+    Height = 116
     Top = 0
     Width = 8
     Align = alLeft

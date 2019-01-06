@@ -27,18 +27,18 @@ object f_capture: Tf_capture
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 30
+      Height = 32
       Top = 0
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 30
+      ClientHeight = 32
       ClientWidth = 178
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
         Left = 88
-        Height = 29
+        Height = 31
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -70,9 +70,9 @@ object f_capture: Tf_capture
       end
       object Label1: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 24
+        Width = 22
         Caption = 'Exp'
         ParentColor = False
         ParentFont = False
@@ -80,19 +80,19 @@ object f_capture: Tf_capture
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 34
-      Top = 30
+      Height = 36
+      Top = 32
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 34
+      ClientHeight = 36
       ClientWidth = 178
       ParentFont = False
       TabOrder = 8
       Visible = False
       object ISObox: TComboBox
         Left = 87
-        Height = 33
+        Height = 35
         Hint = 'Exposure time in secondes'
         Top = 1
         Width = 90
@@ -104,16 +104,16 @@ object f_capture: Tf_capture
       end
       object LabelGain: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 8
-        Width = 30
+        Width = 28
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
       end
       object GainEdit: TSpinEdit
         Left = 88
-        Height = 27
+        Height = 29
         Top = 4
         Width = 89
         MaxValue = 0
@@ -123,18 +123,18 @@ object f_capture: Tf_capture
     end
     object Panel3: TPanel
       Left = 0
-      Height = 30
-      Top = 64
+      Height = 32
+      Top = 68
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 30
+      ClientHeight = 32
       ClientWidth = 178
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
         Left = 88
-        Height = 29
+        Height = 31
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -149,9 +149,9 @@ object f_capture: Tf_capture
       end
       object Label2: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 25
+        Width = 24
         Caption = 'Bin.'
         ParentColor = False
         ParentFont = False
@@ -159,18 +159,18 @@ object f_capture: Tf_capture
     end
     object Panel4: TPanel
       Left = 0
-      Height = 29
-      Top = 94
+      Height = 31
+      Top = 100
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 29
+      ClientHeight = 31
       ClientWidth = 178
       ParentFont = False
       TabOrder = 2
       object Fname: TEdit
         Left = 87
-        Height = 29
+        Height = 31
         Top = 0
         Width = 90
         ParentFont = False
@@ -178,9 +178,9 @@ object f_capture: Tf_capture
       end
       object Label3: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 42
+        Width = 39
         Caption = 'Object'
         ParentColor = False
         ParentFont = False
@@ -188,27 +188,27 @@ object f_capture: Tf_capture
     end
     object Panel5: TPanel
       Left = 0
-      Height = 27
-      Top = 123
+      Height = 29
+      Top = 131
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 27
+      ClientHeight = 29
       ClientWidth = 178
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 38
+        Width = 37
         Caption = 'Count'
         ParentColor = False
         ParentFont = False
       end
       object SeqNum: TSpinEdit
         Left = 87
-        Height = 27
+        Height = 29
         Top = 0
         Width = 88
         MaxValue = 10000
@@ -220,26 +220,26 @@ object f_capture: Tf_capture
     end
     object Panel6: TPanel
       Left = 0
-      Height = 30
-      Top = 150
+      Height = 32
+      Top = 160
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 30
+      ClientHeight = 32
       ClientWidth = 178
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
         Left = 4
-        Height = 17
+        Height = 19
         Top = 4
-        Width = 30
+        Width = 29
         Caption = 'Type'
         ParentColor = False
         ParentFont = False
       end
       object FrameType: TComboBox
         Left = 87
-        Height = 29
+        Height = 31
         Top = 1
         Width = 90
         ItemHeight = 0
@@ -258,11 +258,11 @@ object f_capture: Tf_capture
     end
     object Panel7: TPanel
       Left = 0
-      Height = 27
-      Top = 180
+      Height = 29
+      Top = 192
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 27
+      ClientHeight = 29
       ClientWidth = 178
       ParentFont = False
       TabOrder = 5
@@ -270,14 +270,14 @@ object f_capture: Tf_capture
         Left = 4
         Height = 21
         Top = 0
-        Width = 105
+        Width = 98
         Caption = 'Dither every'
         ParentFont = False
         TabOrder = 0
       end
       object DitherCount: TSpinEdit
         Left = 134
-        Height = 27
+        Height = 29
         Top = 0
         Width = 41
         MaxValue = 10000
@@ -289,11 +289,11 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 27
-      Top = 207
+      Height = 29
+      Top = 221
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 27
+      ClientHeight = 29
       ClientWidth = 178
       ParentFont = False
       TabOrder = 6
@@ -301,14 +301,14 @@ object f_capture: Tf_capture
         Left = 4
         Height = 21
         Top = 0
-        Width = 102
+        Width = 95
         Caption = 'Focus every'
         ParentFont = False
         TabOrder = 0
       end
       object FocusCount: TSpinEdit
         Left = 134
-        Height = 27
+        Height = 29
         Top = 0
         Width = 41
         MaxValue = 10000
@@ -321,7 +321,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 0
       Height = 22
-      Top = 234
+      Top = 250
       Width = 178
       BevelOuter = bvNone
       ClientHeight = 22

@@ -42,16 +42,16 @@ object f_script: Tf_script
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 29
+      Height = 31
       Top = 0
       Width = 188
       BevelOuter = bvNone
-      ClientHeight = 29
+      ClientHeight = 31
       ClientWidth = 188
       TabOrder = 0
       object ComboBoxScript: TComboBox
         Left = 0
-        Height = 29
+        Height = 31
         Top = 0
         Width = 188
         Align = alClient
@@ -64,7 +64,7 @@ object f_script: Tf_script
     object Panel3: TPanel
       Left = 0
       Height = 25
-      Top = 29
+      Top = 31
       Width = 188
       BevelOuter = bvNone
       ClientHeight = 25
@@ -102,7 +102,7 @@ object f_script: Tf_script
     object Panel4: TPanel
       Left = 0
       Height = 25
-      Top = 54
+      Top = 56
       Width = 188
       BevelOuter = bvNone
       ClientHeight = 25
