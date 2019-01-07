@@ -3622,3 +3622,71 @@ msgstr ""
 msgid "Use safety monitor"
 msgstr ""
 
+#: u_translation:rsparkandclose
+msgid "Park and close the dome"
+msgstr ""
+
+#: u_translation:rsgood
+msgid "Good"
+msgstr ""
+
+#: u_translation:rsbad
+msgid "Bad"
+msgstr ""
+
+#: u_translation:rsweathermonit
+msgid "Weather monitor report: %s"
+msgstr ""
+
+#: u_translation:rsweatherissue
+msgid "Weather issue: %s"
+msgstr ""
+
+#: u_translation:rssequencepaus
+msgid "Sequence paused for bad weather ..."
+msgstr ""
+
+#: u_translation:rscontinuesequ
+msgid "Continue sequence execution"
+msgstr ""
+
+#: u_translation:rsignoreweathe
+msgid "Ignore weather condition for image type=%s"
+msgstr ""
+
+#: u_translation:rsweathercondi
+msgid "Weather condition are bad, it is best if you stop the running capture now."
+msgstr ""
+
+#: u_translation:rsdomeshutter
+msgid "Dome shutter: %s"
+msgstr ""
+
+#: u_translation:rsavailable
+msgid "available"
+msgstr ""
+
+#: u_translation:rsunavailable
+msgid "unavailable"
+msgstr ""
+
+#: u_translation:rsdomeslaving
+msgid "Dome slaving: %s"
+msgstr ""
+
+#: u_translation:rswaitingformi
+msgid "Waiting for %s minutes of good weather before to restart the sequence"
+msgstr ""
+
+#: u_translation:rsreadoutmodes
+msgid "Readout modes"
+msgstr ""
+
+#: u_translation:rsrestartafter2
+msgid "Restart after weather is good for"
+msgstr ""
+
+#: u_translation:rspausesequenc
+msgid "Pause sequence when the observing condition are out of the limits"
+msgstr ""
+

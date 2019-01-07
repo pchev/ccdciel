@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2018-12-29 15:48+0000\n"
-"PO-Revision-Date: 2018-12-04 14:05+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
+"POT-Creation-Date: 2019-01-07 17:00+0000\n"
+"PO-Revision-Date: 2018-12-30 16:51+0000\n"
+"Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2018-12-29 16:32+0000\n"
+"X-Launchpad-Export-Date: 2019-01-07 17:20+0000\n"
 "X-Generator: Launchpad (build 18847)\n"
 
 #: u_translation.rsabort
@@ -296,6 +296,10 @@ msgstr "L'autoesposizione Flat è necessaria per il Flat crepuscolare."
 msgid "Automatic flip"
 msgstr "Inversione automatica"
 
+#: u_translation.rsavailable
+msgid "available"
+msgstr ""
+
 #: u_translation.rsback
 msgid "Back"
 msgstr ""
@@ -303,6 +307,10 @@ msgstr ""
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
 msgstr "Compensazione gioco"
+
+#: u_translation.rsbad
+msgid "Bad"
+msgstr ""
 
 #: u_translation.rsbadpixeldete
 msgid "Bad pixel detection found %s hot pixels."
@@ -402,7 +410,7 @@ msgstr "Raffrescatore fotocamera %s"
 
 #: u_translation.rscameraframex
 msgid "Camera frame x=%s y=%s width=%s height=%s"
-msgstr ""
+msgstr "Frame fotocamera x=%s y=%s larghezza=%s altezza=%s"
 
 #: u_translation.rscameranotcoo
 msgid "Camera not cooling, set temperature to %s"
@@ -490,11 +498,11 @@ msgstr "Impossibile iniziare messa a fuoco manuale, ferma la cattura e riprova"
 
 #: u_translation.rscannotstartp
 msgid "Cannot start preview now"
-msgstr ""
+msgstr "Impossibile iniziare anteprima ora"
 
 #: u_translation.rscannotstartp2
 msgid "Cannot start preview loop now"
-msgstr ""
+msgstr "Impossibile iniziare loop anteprima ora"
 
 #: u_translation.rscannotsyncwh
 msgid "Cannot Sync when the mount is not tracking"
@@ -614,7 +622,7 @@ msgstr "Anteprima colore"
 
 #: u_translation.rscommands
 msgid "Commands"
-msgstr ""
+msgstr "Comandi"
 
 #: u_translation.rscompilatione
 msgid "Compilation error: %s"
@@ -667,6 +675,10 @@ msgstr ""
 #: u_translation.rscontinueinse
 msgid "Continue in %s seconds"
 msgstr "Continua in %s secondi"
+
+#: u_translation.rscontinuesequ
+msgid "Continue sequence execution"
+msgstr ""
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -822,7 +834,7 @@ msgstr "Cancello tutti i dati della mappa dei pixel difettosi?"
 
 #: u_translation.rsdetails
 msgid "Details"
-msgstr ""
+msgstr "Dettagli"
 
 #: u_translation.rsdetectmultip
 msgid "Detect multiple stars in the image"
@@ -903,6 +915,14 @@ msgstr ""
 #: u_translation.rsdomepanel
 msgid "Dome/Panel"
 msgstr "Cupola/Pannello"
+
+#: u_translation.rsdomeshutter
+msgid "Dome shutter: %s"
+msgstr ""
+
+#: u_translation.rsdomeslaving
+msgid "Dome slaving: %s"
+msgstr ""
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1320,6 +1340,10 @@ msgstr ""
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 msgstr ""
 
+#: u_translation.rsgood
+msgid "Good"
+msgstr ""
+
 #: u_translation.rsgreen
 msgid "green"
 msgstr "verde"
@@ -1380,6 +1404,10 @@ msgstr ""
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
 msgstr ""
 
+#: u_translation.rsignoreweathe
+msgid "Ignore weather condition for image type=%s"
+msgstr ""
+
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
 msgstr ""
@@ -1390,7 +1418,7 @@ msgstr "Immagine Debayered"
 
 #: u_translation.rsimageinspect
 msgid "Image inspection"
-msgstr ""
+msgstr "Analizza immagine"
 
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
@@ -1546,7 +1574,7 @@ msgstr "Sensore principale"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
-msgstr ""
+msgstr "Aiuto fuoco manuale"
 
 #: u_translation.rsmanyfunction
 msgid "Many functions will not work reliably without an astrometry software."
@@ -2000,6 +2028,10 @@ msgstr ""
 msgid "Park"
 msgstr "Parcheggia"
 
+#: u_translation.rsparkandclose
+msgid "Park and close the dome"
+msgstr ""
+
 #: u_translation.rsparkdome
 msgid "Park the Dome"
 msgstr ""
@@ -2031,6 +2063,10 @@ msgstr ""
 #: u_translation.rspausebeforem
 msgid "Pause before meridian flip "
 msgstr "Pausa prima del passaggio al meridiano "
+
+#: u_translation.rspausesequenc
+msgid "Pause sequence when the observing condition are out of the limits"
+msgstr ""
 
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
@@ -2186,11 +2222,11 @@ msgstr "Anteprima"
 
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
-msgstr ""
+msgstr "Anteprima debayer"
 
 #: u_translation.rspreviewraw
 msgid "Preview raw"
-msgstr ""
+msgstr "Anteprima raw"
 
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
@@ -2250,6 +2286,10 @@ msgstr ""
 
 #: u_translation.rsreadimage
 msgid "Read image"
+msgstr ""
+
+#: u_translation.rsreadoutmodes
+msgid "Readout modes"
 msgstr ""
 
 #: u_translation.rsreceiveunkno
@@ -2399,6 +2439,10 @@ msgstr ""
 #: u_translation.rsrestartafter
 msgid "Restart after"
 msgstr "Ricomincia dopo"
+
+#: u_translation.rsrestartafter2
+msgid "Restart after weather is good for"
+msgstr ""
 
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
@@ -2632,6 +2676,10 @@ msgstr ""
 msgid "Sequence %s ignore stop at dawn"
 msgstr ""
 
+#: u_translation.rssequencepaus
+msgid "Sequence paused for bad weather ..."
+msgstr ""
+
 #: u_translation.rssequencestar
 msgid "Sequence %s start immediatelly"
 msgstr ""
@@ -2694,11 +2742,11 @@ msgstr ""
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
-msgstr ""
+msgstr "Imposta coordinate della montatura da configurazione"
 
 #: u_translation.rssetmounttime
 msgid "Set mount time from computer"
-msgstr ""
+msgstr "Imposta data della montatura dal PC"
 
 #: u_translation.rssetpoint
 msgid "Setpoint"
@@ -2754,7 +2802,7 @@ msgstr ""
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
-msgstr ""
+msgstr "Coordinate inviate al telescopio"
 
 #: u_translation.rssitesetfromt
 msgid "Site set from the telescope."
@@ -2966,7 +3014,7 @@ msgstr ""
 
 #: u_translation.rsstartpreview
 msgid "Start preview loop"
-msgstr ""
+msgstr "Inizia loop anteprima"
 
 #: u_translation.rsstartrecord
 msgid "Start record"
@@ -2974,7 +3022,7 @@ msgstr "Inizia registrazione"
 
 #: u_translation.rsstartsinglep
 msgid "Start single preview"
-msgstr ""
+msgstr "Inizia anteprima singola"
 
 #: u_translation.rsstartstep
 msgid "Start step %s"
@@ -3070,7 +3118,7 @@ msgstr "Ferma anteprima"
 
 #: u_translation.rsstoppreviewl
 msgid "Stop preview loop"
-msgstr ""
+msgstr "Ferma loop anteprima"
 
 #: u_translation.rsstoprecord
 msgid "Stop record"
@@ -3134,7 +3182,7 @@ msgstr "Sottocartella da nome sequenza"
 
 #: u_translation.rssummary
 msgid "Summary"
-msgstr ""
+msgstr "Sommario"
 
 #: u_translation.rssyncto
 msgid "Sync to %s/%s"
@@ -3198,7 +3246,7 @@ msgstr "Nome telescopio"
 
 #: u_translation.rstelescopepos
 msgid "Telescope position"
-msgstr ""
+msgstr "Posizione telescopio"
 
 #: u_translation.rstelescopesle
 msgid "Telescope slew error: %s arcminutes."
@@ -3314,7 +3362,7 @@ msgstr ""
 
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
-msgstr ""
+msgstr "Questa procedura ti aiuterà a inserire i parametri del focheggiatore per l'autofocus.%sBasta compierla solo una volta per impostare i parametri.%sCentra il campo inquadrato su una stella alta sull'orizzonte e metti a fuoco manualmente il più possibile. Puoi usare lo strumento di aiuto alla messa a fuoco manuale per aiutarti.%sUsa lo strumento di analisi del profilo stellare per controllare che il picco di intensità sia circa tre quarti del massimo ADU della fotocamera, ma non saturata.%sDopo di ciò il focheggiatore deve essere posizionato a circa metà della sua capacità di escursione. Se non è così sistemalo.%sIl binning che hai impostato nell'anteprima verrà utilizzato per le operazioni di autofocus. Se in seguito vuoi cambiare il binning dell'autofocus dovrai ricordarti di ripetere questa procedura."
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"
@@ -3334,7 +3382,7 @@ msgstr ""
 
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
-msgstr ""
+msgstr "Data inviata al telescopio"
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
@@ -3396,6 +3444,10 @@ msgstr "Tipo"
 msgid "Unable to find resolve data!"
 msgstr ""
 
+#: u_translation.rsunavailable
+msgid "unavailable"
+msgstr ""
+
 #: u_translation.rsuncalibrated
 msgid "Uncalibrated"
 msgstr ""
@@ -3406,7 +3458,7 @@ msgstr ""
 
 #: u_translation.rsunknowpiersi
 msgid "Unknown pier side"
-msgstr ""
+msgstr "Posizione rispetto al meridiano sconosciuta"
 
 #: u_translation.rsunpark
 msgid "Unpark"
@@ -3486,7 +3538,7 @@ msgstr ""
 
 #: u_translation.rsusingconfigu
 msgid "Using configuration file %s"
-msgstr ""
+msgstr "Utilizzando il file di configurazione %s"
 
 #: u_translation.rsusingmediano
 msgid "Using median of %s stars"
@@ -3548,6 +3600,10 @@ msgstr ""
 msgid "Waiting for dusk"
 msgstr ""
 
+#: u_translation.rswaitingformi
+msgid "Waiting for %s minutes of good weather before to restart the sequence"
+msgstr ""
+
 #: u_translation.rswaitingfortw
 msgid "Waiting for twilight at %s"
 msgstr ""
@@ -3598,6 +3654,18 @@ msgstr ""
 
 #: u_translation.rsweareprobabl
 msgid "We are probably trying to focus on a hot pixel!"
+msgstr ""
+
+#: u_translation.rsweathercondi
+msgid "Weather condition are bad, it is best if you stop the running capture now."
+msgstr ""
+
+#: u_translation.rsweatherissue
+msgid "Weather issue: %s"
+msgstr ""
+
+#: u_translation.rsweathermonit
+msgid "Weather monitor report: %s"
 msgstr ""
 
 #: u_translation.rsweatherstati
