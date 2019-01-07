@@ -989,6 +989,22 @@ resourcestring
   rsObservingCon = 'Observing condition';
   rsUseSafetyMon = 'Use safety monitor';
   rsParkAndClose = 'Park and close the dome';
+  rsGood = 'Good';
+  rsBad = 'Bad';
+  rsWeatherMonit = 'Weather monitor report: %s';
+  rsWeatherIssue = 'Weather issue: %s';
+  rsSequencePaus = 'Sequence paused for bad weather ...';
+  rsContinueSequ = 'Continue sequence execution';
+  rsIgnoreWeathe = 'Ignore weather condition for image type=%s';
+  rsWeatherCondi = 'Weather condition are bad, it is best if you stop the running capture now.';
+  rsDomeShutter = 'Dome shutter: %s';
+  rsAvailable = 'available';
+  rsUnavailable = 'unavailable';
+  rsDomeSlaving = 'Dome slaving: %s';
+  rsWaitingForMi = 'Waiting for %s minutes of good weather before to restart the sequence';
+  rsReadoutModes = 'Readout modes';
+  rsRestartAfter2 = 'Restart after weather is good for';
+  rsPauseSequenc = 'Pause sequence when the observing condition are out of the limits';
 
 
 

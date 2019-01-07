@@ -466,7 +466,7 @@ begin
     WeatherRestartTimer.Interval:=1000*60*WeatherRestartDelay;
     WeatherRestartTimer.Enabled:=true;
     WeatherCancelRestart:=false;
-    msg('Waiting for '+IntToStr(WeatherRestartDelay)+' minutes of good weather before to restart the sequence',1);
+    msg(Format(rsWaitingForMi, [IntToStr(WeatherRestartDelay)]), 1);
   end
   else begin
     // we not pause, just remove the condition
@@ -497,7 +497,7 @@ begin
     // stop and continue to wait
      StopGuider;
      mount.AbortMotion;
-     msg('Sequence paused for bad weather ...',1);
+     msg(rsSequencePaus, 1);
   end;
 end;
 
@@ -768,7 +768,7 @@ begin
     msg(Format(rsInitializeTa, [t.objectname]),1);
     // check weather
     if (not WeatherPauseCapture)and(FWeather.Connected)and(not FWeather.Clear) then begin
-       msg('Sequence paused for bad weather ...',1);
+       msg(rsSequencePaus, 1);
        // stop guiding and mount tracking now
        StopGuider;
        mount.AbortMotion;
@@ -778,7 +778,7 @@ begin
        end;
        // continue if not aborted
        if not FRunning then exit;
-       msg('Restart sequence',1);
+       msg(rsContinueSequ, 1);
     end;
     t.autoguiding:=false;
     InplaceAutofocus:=t.inplaceautofocus;

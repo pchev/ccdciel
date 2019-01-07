@@ -3593,7 +3593,7 @@ var ok: boolean;
 begin
   if f_dome.Connected then begin
     ok:=dome.Shutter;
-    if f_dome.Shutter<>ok then NewMessage('Dome shutter: '+BoolToStr(ok,rsOpen,rsClose));
+    if f_dome.Shutter<>ok then NewMessage(Format(rsDomeShutter, [BoolToStr(ok, rsOpen, rsClose)]));
     f_dome.Shutter:=ok;
   end;
 end;
@@ -3603,11 +3603,11 @@ var ok: boolean;
 begin
   if f_dome.Connected then begin
     ok:=dome.hasSlaving;
-    if f_dome.CanSlave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,'available','unavailable'));
+    if f_dome.CanSlave<>ok then NewMessage(Format(rsDomeSlaving, [BoolToStr(ok, rsAvailable, rsUnavailable)]));
     f_dome.CanSlave:=dome.hasSlaving;
     if f_dome.CanSlave then begin
       ok:=dome.Slave;
-      if f_dome.Slave<>ok then NewMessage('Dome slaving: '+BoolToStr(ok,rsOn,rsOff));
+      if f_dome.Slave<>ok then NewMessage(Format(rsDomeSlaving, [BoolToStr(ok, rsOn, rsOff)]));
       f_dome.Slave:=ok;
     end;
   end;
@@ -3692,8 +3692,8 @@ begin
     ok:=weather.Clear;
     if f_weather.Clear<>ok then begin
       f_weather.Clear:=ok;
-      NewMessage('Weather monitor report: '+BoolToStr(f_weather.Clear,'Good','Bad'),1);
-      if not f_weather.Clear then NewMessage('Problem with:'+weather.WeatherMessage);
+      NewMessage(Format(rsWeatherMonit, [BoolToStr(f_weather.Clear, rsGood, rsBad)]), 1);
+      if not f_weather.Clear then NewMessage(Format(rsWeatherIssue, [weather.WeatherMessage]));
       f_sequence.WeatherChange(f_weather.Clear);
     end;
   end;
@@ -6006,7 +6006,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     if f_sequence.Running then begin
      if (ftype=LIGHT) then begin
        WeatherCapturePaused:=true;
-       f_sequence.StatusMsg.Caption:='Sequence paused for bad weather ...';
+       f_sequence.StatusMsg.Caption:=rsSequencePaus;
        NewMessage(f_sequence.StatusMsg.Caption);
        // stop guiding and mount tracking now
        if (autoguider<>nil)and(autoguider.Running) then begin
@@ -6028,14 +6028,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        end;
        except
        end;
-       NewMessage('Continue sequence execution');
+       NewMessage(rsContinueSequ);
      end
      else
-       NewMessage('Ignore weather condition for image type='+FrameName[ord(ftype)]);
+       NewMessage(Format(rsIgnoreWeathe, [FrameName[ord(ftype)]]));
     end
     else begin
       // capture running without a sequence, just show a message
-      NewMessage('Weather condition are bad, it is best if you stop the running capture now.',1);
+      NewMessage(rsWeatherCondi, 1);
     end;
   end;
   // check if we need to cancel running preview

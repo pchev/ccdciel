@@ -612,6 +612,11 @@ begin
   GroupBox20.Caption:=rsSensorsPrope;
   label19.Caption:=rsMaximumADU;
   MaxAduFromCamera.Caption:=rsFromCameraDr;
+  GroupBoxReadOut.Caption:=rsReadoutModes;
+  Label112.Caption:=rsCapture;
+  Label113.Caption:=rsPreview;
+  Label114.Caption:=rsFocus;
+  Label115.Caption:=rsAstrometry;
   TabSheet12.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
   FlatExposureBox.Caption := rsFlatAutoExpo;
@@ -770,6 +775,9 @@ begin
   MeridianOption.Items[2]:=rsAbort;
   AutoguiderBox.Items[2]:=rsNone2;
   TabSheet13.Caption := rsWeatherStati;
+  Label118.Caption:=rsPauseSequenc;
+  Label116.Caption:=rsRestartAfter2;
+  Label117.Caption:=rsMinutes;
   UseW1.Caption:=rsCloudCover;
   UseW2.Caption:=rsDewPoint;
   UseW3.Caption:=rsHumidity;
