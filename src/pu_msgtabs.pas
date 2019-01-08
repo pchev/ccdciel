@@ -34,6 +34,7 @@ implementation
 procedure Tf_msgtabs.FormCreate(Sender: TObject);
 begin
   {$ifdef lclcocoa}
+  ClientHeight:=48;
   TabControl1.Height:=44;
   {$endif}
   ScaleDPI(Self);
