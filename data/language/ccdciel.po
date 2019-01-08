@@ -3690,3 +3690,11 @@ msgstr ""
 msgid "Pause sequence when the observing condition are out of the limits"
 msgstr ""
 
+#: u_translation:rsapplytoall
+msgid "Apply to all"
+msgstr ""
+
+#: u_translation:rsfilter0
+msgid "No change"
+msgstr ""
+

@@ -1593,6 +1593,7 @@ begin
    SubDirName[5]:=rsSubfolderByB;
    SubDirName[6]:=rsSubfolderByD;
    SubDirName[7]:=rsSubfolderByD2;
+   Filter0:=rsFilter0;
    FilenameName[0]:=rsObjectName;
    FilenameName[1]:=rsFilter;
    FilenameName[2]:=rsExposureTime2;

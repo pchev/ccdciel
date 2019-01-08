@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-01-07 17:00+0000\n"
-"PO-Revision-Date: 2019-01-07 17:17+0000\n"
+"POT-Creation-Date: 2019-01-08 10:21+0000\n"
+"PO-Revision-Date: 2019-01-08 10:23+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-01-07 17:20+0000\n"
+"X-Launchpad-Export-Date: 2019-01-08 10:24+0000\n"
 "X-Generator: Launchpad (build 18847)\n"
 
 #: u_translation.rsabort
@@ -79,6 +79,10 @@ msgstr "Un autre script est déjà en cours"
 #: u_translation.rsanytime
 msgid "Any time"
 msgstr "N'importe quand"
+
+#: u_translation.rsapplytoall
+msgid "Apply to all"
+msgstr "Appliquer à tous"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -1116,6 +1120,10 @@ msgstr "Fichiers"
 msgid "Filter"
 msgstr "Filtre"
 
+#: u_translation.rsfilter0
+msgid "No change"
+msgstr "Pas de changement"
+
 #: u_translation.rsfiltername
 msgid "Filter name"
 msgstr "Nom du filtre"
@@ -1154,7 +1162,7 @@ msgstr "Flat"
 
 #: u_translation.rsflatautoexpo
 msgid "Flat auto-exposure"
-msgstr "Auto-exposition du flat"
+msgstr "Exposition automatique du flat"
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
@@ -1822,7 +1830,7 @@ msgstr "Pas de crépuscule aujourd'hui"
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
-msgstr "Pas de retournement pour"
+msgstr "Pas de retournement avant"
 
 #: u_translation.rsnomove
 msgid "No move"
@@ -2442,7 +2450,7 @@ msgstr "Redémarre après"
 
 #: u_translation.rsrestartafter2
 msgid "Restart after weather is good for"
-msgstr "Reprend quand le temps est beau pendant"
+msgstr "Reprend quand le temps est beau depuis"
 
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
@@ -3506,7 +3514,7 @@ msgstr "Utilise la roue à filtre"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
-msgstr "Utilise l'auto-exposition du flat"
+msgstr "Utilise l'exposition automatique du flat"
 
 #: u_translation.rsusefocuser
 msgid "Use focuser"

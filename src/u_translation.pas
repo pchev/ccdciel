@@ -1005,6 +1005,9 @@ resourcestring
   rsReadoutModes = 'Readout modes';
   rsRestartAfter2 = 'Restart after weather is good for';
   rsPauseSequenc = 'Pause sequence when the observing condition are out of the limits';
+  rsApplyToAll = 'Apply to all';
+  rsFilter0 = 'No change';
+
 
 
 

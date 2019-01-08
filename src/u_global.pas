@@ -211,7 +211,6 @@ const
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord:double=-9999;
   NullInt: integer=-9999;
-  Filter0 = 'No change';
   Binning0 = '1x1';
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
   dateisoshort = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss';
@@ -307,6 +306,7 @@ var
   FilterList,BinningList,ReadoutList: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;
   FilterExpFact: array [0..MaxFilter] of double;
+  Filter0: string;
   CurrentFilterOffset: integer;
   filteroffset_initialized: boolean;
   ReadoutModeCapture,ReadoutModePreview,ReadoutModeFocus,ReadoutModeAstrometry: integer;

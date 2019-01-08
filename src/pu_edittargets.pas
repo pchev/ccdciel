@@ -337,6 +337,7 @@ begin
   BtnImgCoord.Caption := rsCurrentImage;
   UpdateCoord.Caption := rsUpdateRADecF;
   InplaceAutofocus.Caption := rsStayInPlaceF;
+  BtnApplyToAll.Caption:=rsApplyToAll;
   BtnImgRot.Caption := rsCurrentImage;
   TabSheet2.Caption := rsScript;
   Label15.Caption := rsScript;
