@@ -84,6 +84,9 @@ type
     Label23: TLabel;
     Label25: TLabel;
     DomeIndiDevPort: TEdit;
+    Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
     PanelDomeAscom: TPanel;
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;

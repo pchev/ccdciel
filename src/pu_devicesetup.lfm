@@ -1150,6 +1150,14 @@ object f_setup: Tf_setup
           TabOrder = 2
         end
       end
+      object Label26: TLabel
+        Left = 21
+        Height = 19
+        Top = 205
+        Width = 344
+        Caption = 'Experimental! Please read the documentation before use.'
+        ParentColor = False
+      end
     end
     object Weather: TTabSheet
       Caption = 'Weather'
@@ -1280,6 +1288,14 @@ object f_setup: Tf_setup
         ParentFont = False
         TabOrder = 0
       end
+      object Label27: TLabel
+        Left = 21
+        Height = 19
+        Top = 205
+        Width = 344
+        Caption = 'Experimental! Please read the documentation before use.'
+        ParentColor = False
+      end
     end
     object Safety: TTabSheet
       Caption = 'Safety'
@@ -1384,6 +1400,14 @@ object f_setup: Tf_setup
           ParentFont = False
           TabOrder = 1
         end
+      end
+      object Label28: TLabel
+        Left = 21
+        Height = 19
+        Top = 205
+        Width = 344
+        Caption = 'Experimental! Please read the documentation before use.'
+        ParentColor = False
       end
     end
     object Watchdog: TTabSheet
