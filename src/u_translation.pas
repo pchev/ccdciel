@@ -663,7 +663,6 @@ resourcestring
   rsViewLastReso = 'View last resolver log';
   rsStopAstromet = 'Stop astrometry resolver';
   rsPreviewDebay = 'Preview debayer';
-  rsPreviewRaw = 'Preview raw';
   rsAstrometryRe = 'Astrometry resolver log';
   rsFileNotFound = 'File not found %s';
   rsClose = 'Close';

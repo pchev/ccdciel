@@ -990,12 +990,13 @@ object f_main: Tf_main
       Caption = '-'
     end
     object MenuItemDebayer: TMenuItem
+      AutoCheck = True
       Caption = 'Preview debayer'
+      ShowAlwaysCheckable = True
       OnClick = MenuItemDebayerClick
     end
-    object MenuItemRaw: TMenuItem
-      Caption = 'Preview raw'
-      OnClick = MenuItemRawClick
+    object MenuItem14: TMenuItem
+      Caption = '-'
     end
     object MenuItemCleanup: TMenuItem
       Caption = 'Image cleanup'

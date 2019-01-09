@@ -76,6 +76,7 @@ type
     MenuDarkCamera: TMenuItem;
     MenuDarkFile: TMenuItem;
     MenuDarkClear: TMenuItem;
+    MenuItem14: TMenuItem;
     MenuViewDome: TMenuItem;
     MenuViewWeather: TMenuItem;
     MenuViewSafety: TMenuItem;
@@ -121,7 +122,6 @@ type
     MenuOnlineHelp: TMenuItem;
     MenuBugReport: TMenuItem;
     MenuShowCCDFrame: TMenuItem;
-    MenuItemRaw: TMenuItem;
     MenuItemDebayer: TMenuItem;
     MenuItemBPM: TMenuItem;
     MenuClearBPM: TMenuItem;
@@ -300,7 +300,6 @@ type
     procedure MenuResolveRotateClick(Sender: TObject);
     procedure MenuResolveSyncRotatorClick(Sender: TObject);
     procedure MenuItemDebayerClick(Sender: TObject);
-    procedure MenuItemRawClick(Sender: TObject);
     procedure MenuMountParkClick(Sender: TObject);
     procedure MenuMountTrackClick(Sender: TObject);
     procedure MenuOnlineHelpClick(Sender: TObject);
@@ -1583,7 +1582,6 @@ begin
    MenuViewAstrometryLog.Caption := rsViewLastReso;
    MenuStopAstrometry.Caption := rsStopAstromet;
    MenuItemDebayer.Caption := rsPreviewDebay;
-   MenuItemRaw.Caption := rsPreviewRaw;
    MenuItemCleanup.Caption:=rsImageCleanup;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
@@ -2791,6 +2789,10 @@ begin
   weather.MaxWindDirection:=config.GetValue('/Weather/Max/WindDirection',0);
   weather.MaxWindGust:=config.GetValue('/Weather/Max/WindGust',0);
   weather.MaxWindSpeed:=config.GetValue('/Weather/Max/WindSpeed',0);
+  if BayerColor<>MenuItemDebayer.Checked then begin
+    MenuItemDebayer.Checked:=BayerColor;
+    MenuItemDebayerClick(self);
+  end;
 end;
 
 procedure Tf_main.SaveSettings;
@@ -6961,16 +6963,20 @@ end;
 
 procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
 begin
+ if MenuItemDebayer.Checked then begin
   BayerColor:=True;
-  DrawImage;
-  NewMessage(rsImageDebayer,1);
-end;
-
-procedure Tf_main.MenuItemRawClick(Sender: TObject);
-begin
+  if fits.HeaderInfo.naxis>0 then begin
+    DrawImage;
+    NewMessage(rsImageDebayer,1);
+  end;
+ end
+ else begin
   BayerColor:=False;
-  DrawImage;
-  NewMessage(rsImageUnDebay,1);
+  if fits.HeaderInfo.naxis>0 then begin
+    DrawImage;
+    NewMessage(rsImageUnDebay,1);
+  end;
+ end;
 end;
 
 procedure Tf_main.MenuMountParkClick(Sender: TObject);
