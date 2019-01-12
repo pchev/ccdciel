@@ -2691,13 +2691,14 @@ end;
 function AstrometryVersion(resolver:integer; cygwinpath:string; usescript:boolean):string;
 var P: TProcess;
     i: integer;
+    endtime: double;
     buf: String;
 begin
 result:='unknown';
 try
 if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   P:= TProcess.Create(Nil);
-  P.Options:= [poWaitOnExit, poUsePipes];
+  P.Options:=[poUsePipes,poStderrToOutPut];
   {$ifdef mswindows}
   P.Executable:=slash(cygwinpath)+slash('bin')+'bash.exe';
   P.Parameters.Add('--login');
@@ -2711,7 +2712,14 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   P.Parameters.Add('--help');
   {$endif}
   P.ShowWindow:=swoHIDE;
+  endtime:=now+2/secperday;
   P.Execute;
+  while P.Running do begin
+    if now>endtime then begin
+       P.Terminate(1);
+    end;
+    sleep(100);
+  end;
   SetLength(buf, 1000);
   SetLength(buf, P.Output.Read(buf[1], Length(buf)));
   P.Free;
@@ -2720,7 +2728,9 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   delete(buf,1,i+8);
   i:=pos(',',buf);
   if i<=0 then exit;
-  result:=copy(buf,1,i-1);
+  result:=trim(copy(buf,1,i-1));
+  i:=StrToIntDef(result,0);
+  if i>1000 then result:='0.38'; // some old windows version use the revision number instead of the version
 end;
 except
 end;
