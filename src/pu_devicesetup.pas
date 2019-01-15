@@ -91,6 +91,7 @@ type
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;
     DomeIndiDevice: TComboBox;
+    InitTimer: TTimer;
     WeatherAutoLoadConfig: TCheckBox;
     SafetyAutoLoadConfig: TCheckBox;
     WeatherIndiDevice: TComboBox;
@@ -198,6 +199,7 @@ type
     procedure FilterWheelInCameraBoxClick(Sender: TObject);
     procedure FocuserInMountBoxClick(Sender: TObject);
     procedure GetIndiDevicesClick(Sender: TObject);
+    procedure InitTimerTimer(Sender: TObject);
     procedure InterfaceSelectionBoxClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
@@ -214,6 +216,7 @@ type
     IndiTimerCount:integer;
     receiveindidevice:boolean;
     procedure IndiNewDevice(dp: Basedevice);
+    procedure IndiDisconnected(Sender: TObject);
     procedure SetConnectionInterface(value: TDevInterface);
     procedure SetCameraConnection(value: TDevInterface);
     procedure SetWheelConnection(value: TDevInterface);
@@ -848,6 +851,7 @@ end;
 procedure Tf_setup.FormShow(Sender: TObject);
 begin
   InitialLock:=false;
+  InitTimer.Enabled:=true;
 end;
 
 procedure Tf_setup.IndiSensorChange(Sender: TObject);
@@ -866,6 +870,12 @@ begin
  end else begin
    IndiSensor.ItemIndex:=0;
  end;
+end;
+
+procedure Tf_setup.InitTimerTimer(Sender: TObject);
+begin
+  InitTimer.Enabled:=false;
+  if FConnectionInterface=INDI then GetIndiDevicesClick(Self);
 end;
 
 procedure Tf_setup.GetIndiDevicesClick(Sender: TObject);
@@ -894,10 +904,27 @@ begin
   SafetyIndiDevice.Clear;
   indiclient:=TIndiBaseClient.Create;
   indiclient.onNewDevice:=@IndiNewDevice;
+  indiclient.onServerDisconnected:=@IndiDisconnected;
   indiclient.SetServer(IndiServer.Text,IndiPort.Text);
   indiclient.ConnectServer;
+  IndiTimer.Interval:=5000;  // wait 5 sec for initial connection
   IndiTimer.Enabled:=true;
   Screen.Cursor:=crHourGlass;
+end;
+
+procedure Tf_setup.IndiNewDevice(dp: Basedevice);
+begin
+   IndiTimer.Interval:=1000; // wait up to 5 x 1 sec for next device
+   IndiTimer.Enabled:=false;
+   IndiTimer.Enabled:=true;
+   receiveindidevice:=true
+end;
+
+procedure Tf_setup.IndiDisconnected(Sender: TObject);
+begin
+   IndiTimer.Interval:=100; // not connect, stop immediatelly
+   IndiTimer.Enabled:=false;
+   IndiTimer.Enabled:=true;
 end;
 
 procedure Tf_setup.IndiTimerTimer(Sender: TObject);
@@ -910,9 +937,28 @@ begin
   Screen.Cursor:=crDefault;
   try
   if (indiclient=nil)or indiclient.Finished or indiclient.Terminated or (not indiclient.Connected)  then begin
-    ShowMessage('No response from INDI server. Is the Indi server running?');
+    LabelIndiDevCount.Caption:='No response from INDI server. Is the Indi server running?';
+    CameraIndiDevice.Items.Add(camsavedev);
+    WheelIndiDevice.Items.Add(wheelsavedev);
+    FocuserIndiDevice.Items.Add(focusersavedev);
+    RotatorIndiDevice.Items.Add(rotatorsavedev);
+    MountIndiDevice.Items.Add(mountsavedev);
+    MountIndiDevice.Items.Add(domesavedev);
+    WatchdogIndiDevice.Items.Add(watchdogsavedev);
+    WeatherIndiDevice.Items.Add(weathersavedev);
+    SafetyIndiDevice.Items.Add(safetysavedev);
+    CameraIndiDevice.ItemIndex:=0;
+    WheelIndiDevice.ItemIndex:=0;
+    FocuserIndiDevice.ItemIndex:=0;
+    RotatorIndiDevice.ItemIndex:=0;
+    MountIndiDevice.ItemIndex:=0;
+    MountIndiDevice.ItemIndex:=0;
+    WatchdogIndiDevice.ItemIndex:=0;
+    WeatherIndiDevice.ItemIndex:=0;
+    SafetyIndiDevice.ItemIndex:=0;
     exit;
   end;
+  try
   for i:=0 to indiclient.devices.Count-1 do begin
      drint:=BaseDevice(indiclient.devices[i]).getDriverInterface();
      if (drint and CCD_INTERFACE)<>0 then
@@ -962,9 +1008,11 @@ begin
   for i:=0 to SafetyIndiDevice.Items.Count-1 do
      if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
   LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
+  indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
-  Screen.Cursor:=crDefault;
   except
+  end;
+  finally
     Screen.Cursor:=crDefault;
   end;
 end;
@@ -977,11 +1025,6 @@ end;
 procedure Tf_setup.MountSetObservatoryClick(Sender: TObject);
 begin
   if MountSetObservatory.Checked then MountGetObservatory.Checked:=false;
-end;
-
-procedure Tf_setup.IndiNewDevice(dp: Basedevice);
-begin
-   receiveindidevice:=true
 end;
 
 procedure Tf_setup.ProfileListChange(Sender: TObject);

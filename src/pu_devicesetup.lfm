@@ -64,7 +64,7 @@ object f_setup: Tf_setup
         Height = 54
         Hint = 'You need to restart the program after changing this option'
         Top = 64
-        Width = 346
+        Width = 386
         AutoFill = True
         Caption = 'Select interface'
         ChildSizing.LeftRightSpacing = 6
@@ -75,7 +75,7 @@ object f_setup: Tf_setup
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
         ClientHeight = 34
-        ClientWidth = 344
+        ClientWidth = 384
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -89,11 +89,11 @@ object f_setup: Tf_setup
       end
       object PanelIndiServer: TPanel
         Left = 17
-        Height = 114
+        Height = 122
         Top = 124
-        Width = 345
-        ClientHeight = 114
-        ClientWidth = 345
+        Width = 385
+        ClientHeight = 122
+        ClientWidth = 385
         ParentFont = False
         TabOrder = 1
         object IndiServer: TEdit
@@ -1485,7 +1485,14 @@ object f_setup: Tf_setup
     Enabled = False
     Interval = 5000
     OnTimer = IndiTimerTimer
-    left = 40
-    top = 301
+    left = 16
+    top = 312
+  end
+  object InitTimer: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = InitTimerTimer
+    left = 65
+    top = 312
   end
 end
