@@ -244,6 +244,8 @@ procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
   {$ifdef lclcocoa}
   PageControl1.BorderSpacing.Around:=8;
+  TargetList.FixedColor:=clBackground;
+  StepList.FixedColor:=clBackground;
   {$endif}
   ScaleDPI(Self);
   TargetList.RowHeights[0]:=40;

@@ -1770,7 +1770,11 @@ var c:TBGRAPixel;
     i:integer;
 begin
   // detect if theme color is dark
+  {$ifdef lclcocoa}
+  c:=ColorToBGRA(ColorToRGB(clBackground));
+  {$else}
   c:=ColorToBGRA(ColorToRGB(clBtnFace));
+  {$endif}
   i:=round((c.red+c.green+c.blue)/3);
   // change imagelist
   if i>=128 then begin
@@ -1780,6 +1784,9 @@ begin
   else begin
     TBTabs.Images:=ImageListNight;
     MainMenu1.Images:=ImageListNight;
+    {$ifdef lclcocoa}
+    TBTabs.Color:=clBackground;
+    {$endif}
   end;
   // change individual buttons
   btn := TPortableNetworkGraphic.Create;

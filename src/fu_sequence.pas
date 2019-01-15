@@ -196,6 +196,8 @@ begin
  Panel2.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  Panel2.ChildSizing.VerticalSpacing:=4;
+ TargetGrid.FixedColor := clBackground;
+ PlanGrid.FixedColor := clBackground;
  {$endif}
  ScaleDPI(Self);
  SetLang;
