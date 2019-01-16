@@ -39,6 +39,7 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
     Label115: TLabel;
@@ -727,6 +728,7 @@ begin
   Label60.Caption := rsMinutes;
   MeridianFlipAutofocus.Caption := rsAutofocusAft;
   MeridianFlipCalibrate.Caption := rsCalibrateAut;
+  MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;
   TabSheet5.Caption := rsAutoGuiding;
   AutoguiderBox.Caption := rsSoftware;
   GroupBox5.Caption := rsDithering;

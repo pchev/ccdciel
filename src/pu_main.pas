@@ -2718,6 +2718,7 @@ begin
   MeridianFlipPauseTimeout:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
+  MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
@@ -5262,6 +5263,7 @@ begin
    f_option.MeridianFlipPauseTimeout.Value:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
+   f_option.MeridianFlipStopSlaving.Checked:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',2);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
@@ -5485,6 +5487,7 @@ begin
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',f_option.MeridianFlipPauseTimeout.Value);
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
+     config.SetValue('/Meridian/MeridianFlipStopSlaving',f_option.MeridianFlipStopSlaving.Checked);
      AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',2));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
@@ -9109,6 +9112,11 @@ begin
           autoguider.Guide(false);
           autoguider.WaitBusy(15);
         end;
+        // suspend dome slaving
+        if MeridianFlipStopSlaving and (dome.Status=devConnected) then begin
+           NewMessage(Format(rsDomeSlaving,[rsOff]),2);
+           dome.Slave:=false;
+        end;
         wait(2);
         // Pause before
         if MeridianFlipPauseBefore then begin
@@ -9142,6 +9150,12 @@ begin
           wait(60); // ensure we not do the flip two time
         end;
         NewMessage(rsMeridianFlip7,2);
+        // resume dome slaving
+        if MeridianFlipStopSlaving and (dome.Status=devConnected) then begin
+           NewMessage(Format(rsDomeSlaving,[rsOn]),2);
+           dome.Slave:=true;
+           wait(30);
+        end;
         // Pause after
         if MeridianFlipPauseAfter then begin
           SaveCapture:=Capture;
