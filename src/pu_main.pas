@@ -8228,7 +8228,7 @@ begin
        Wait(1);
      end;
    end;
-   if not f_capture.Running then StartPreviewExposure(nil);
+   if (not f_capture.Running)and(not CancelAutofocus) then StartPreviewExposure(nil);
    f_starprofile.TimerHideGraph.Interval:=5000;
    f_starprofile.TimerHideGraph.Enabled:=true;
  end;
