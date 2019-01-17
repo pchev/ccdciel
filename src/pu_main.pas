@@ -6315,13 +6315,14 @@ begin
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[2].Text:=buf;
     // next exposure
-    if f_preview.Loop and f_preview.Running then Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
-       else begin
-         // end preview
-         f_preview.stop;
-         Preview:=false;
-         NewMessage(rsEndPreview,2);
-         StatusBar1.Panels[1].Text:='';
+    if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then
+       Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
+    else begin
+       // end preview
+       f_preview.stop;
+       Preview:=false;
+       NewMessage(rsEndPreview,2);
+       StatusBar1.Panels[1].Text:='';
     end;
   end;
 end;
@@ -8056,6 +8057,10 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
   if InplaceAutofocus then begin  // use multiple stars
 
      // first measurement with a big window to find median star diameter
@@ -8173,8 +8178,16 @@ begin
       exit;
     end;
   end;
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
   f_starprofile.InitAutofocus(false);
   f_preview.StackPreview.Checked:=false;
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
   if not f_preview.Loop then f_preview.Loop:=true;
   if not f_preview.Running then begin
      f_preview.Running:=true;
