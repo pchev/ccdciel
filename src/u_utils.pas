@@ -126,6 +126,8 @@ procedure apparent_equatorialV(var p1: coordvector);
 procedure mean_equatorial(var ra, de: double);
 procedure J2000ToApparent(var ra, de: double);
 procedure ApparentToJ2000(var ra, de: double);
+procedure MountToLocal(mountjd:double; var ra, de: double);
+procedure LocalToMount(mountjd:double; var ra, de: double);
 procedure Sort(var list: array of double);
 function SMedian(list: array of double): double;
 procedure SortFilterListInc(var list: TStringList);
@@ -2044,6 +2046,24 @@ procedure ApparentToJ2000(var ra, de: double);
 begin
 mean_equatorial(ra,de);
 PrecessionFK5(jdtoday,jd2000,ra,de);
+end;
+
+procedure MountToLocal(mountjd:double; var ra, de: double);
+begin
+ra:=deg2rad*ra*15;
+de:=deg2rad*de;
+PrecessionFK5(mountjd,jdtoday,ra,de);
+ra:=rad2deg*ra/15;
+de:=rad2deg*de;
+end;
+
+procedure LocalToMount(mountjd:double; var ra, de: double);
+begin
+ra:=deg2rad*ra*15;
+de:=deg2rad*de;
+PrecessionFK5(jdtoday,mountjd,ra,de);
+ra:=rad2deg*ra/15;
+de:=rad2deg*de;
 end;
 
 ////// Required functions adapted from the SOFA library

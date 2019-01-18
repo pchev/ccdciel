@@ -732,11 +732,13 @@ resourcestring
   rsNoResolverCo = 'No resolver configured!';
   rsDoSimpleSlew = 'Do simple slew to %s/%s';
   rsSlewTo = 'Slewing to %s/%s';
+  rsSlewToEQ = 'Slewing to %s %s/%s';
   rsSlewComplete = 'Slew is complete';
   rsResolveContr = 'Resolve control exposure';
   rsFailToResolv = 'Fail to resolve control exposure';
   rsDistanceToTa = 'Distance to target: %s arcmin';
   rsSyncTo = 'Sync to %s/%s';
+  rsSyncToEQ = 'Sync to %s %s/%s';
   rsSlewWithOffs = 'Slew with offset %s/%s';
   rsPrecisionSle2 = 'Precision slew finished.';
   rsPrecisionSle3 = 'Precision slew failed!';

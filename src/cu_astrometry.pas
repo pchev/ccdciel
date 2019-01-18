@@ -422,6 +422,10 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: do
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
   result:=false;
+  if Mount.Park then begin
+    msg('Mount is parked!',1);
+    exit;
+  end;
   oldfilter:=0;
   try
   delay:=config.GetValue('/PrecSlew/Delay',5);

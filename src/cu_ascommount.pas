@@ -373,7 +373,10 @@ begin
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
    end;
-   msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
+   if Equinox=0 then
+      msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+   else
+      msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
    end
@@ -401,7 +404,10 @@ begin
      end;
    end;
    FMountSlewing:=true;
-   msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
+   if Equinox=0 then
+      msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+   else
+      msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
@@ -544,7 +550,10 @@ begin
      msg(rsCannotSyncWh,0);
      exit;
    end;
-   msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]));
+   if Equinox=0 then
+      msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]))
+   else
+      msg(Format(rsSyncToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    V.SyncToCoordinates(sra,sde);
    result:=true;
    except

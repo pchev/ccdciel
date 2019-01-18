@@ -546,7 +546,10 @@ function T_indimount.SlewAsync(sra,sde: double):Boolean;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
-    msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
+    if Equinox=0 then
+       msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+    else
+       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
@@ -563,7 +566,10 @@ var slewtimeout:integer;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
-    msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]));
+    if Equinox=0 then
+       msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+    else
+       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
     FMountSlewing:=true;
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
@@ -623,7 +629,10 @@ function T_indimount.Sync(sra,sde: double):Boolean;
 begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetSync<>nil) and (coord_prop<>nil) then begin
-    msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]));
+    if Equinox=0 then
+       msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]))
+    else
+       msg(Format(rsSyncToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
     IUResetSwitch(CoordSet);
     CoordSetSync.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);

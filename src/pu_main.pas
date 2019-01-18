@@ -7875,13 +7875,11 @@ begin
    // get current position from telescope
    if (not tpos) then begin
     NewMessage(rsGetCurrentPo3,2);
-    tra:=deg2rad*15*mount.RA;
-    tde:=deg2rad*mount.Dec;
-    if mount.Equinox<>0 then begin
-      jd0:=Jd(trunc(mount.Equinox),0,0,0);
-      jd1:=DateTimetoJD(now);
-      PrecessionFK5(jd0,jd1,tra,tde);
-    end;
+    tra:=mount.RA;
+    tde:=mount.Dec;
+    MountToLocal(mount.EquinoxJD,tra,tde);
+    tra:=deg2rad*15*tra;
+    tde:=deg2rad*tde;
     pslew:=false;
     tpos:=true;
    end;
@@ -7895,12 +7893,10 @@ begin
      if FindFocusStar(tra,tde,sra,sde,sid) then begin
        // slew to star
        NewMessage(Format(rsSlewToFocusS, [sid]),2);
-       if mount.Equinox<>0 then begin
-         jd0:=Jd(trunc(mount.Equinox),0,0,0);
-         jd1:=DateTimetoJD(now);
-         PrecessionFK5(jd1,jd0,sra,sde);
-       end;
-       astrometry.AutofocusPrecisionSlew(rad2deg*sra/15,rad2deg*sde,err);
+       sra:=rad2deg*sra/15;
+       sde:=rad2deg*sde;
+       LocalToMount(mount.EquinoxJD,sra,sde);
+       astrometry.AutofocusPrecisionSlew(sra,sde,err);
        if CancelAutofocus then exit;
      end
      else begin
@@ -7935,15 +7931,13 @@ begin
    if ReturnToTarget then begin
      // recenter to previous position
      NewMessage(rsReturnToTarg,2);
-     if mount.Equinox<>0 then begin
-       jd0:=Jd(trunc(mount.Equinox),0,0,0);
-       jd1:=DateTimetoJD(now);
-       PrecessionFK5(jd1,jd0,tra,tde);
-     end;
+     tra:=rad2deg*tra/15;
+     tde:=rad2deg*tde;
+     LocalToMount(mount.EquinoxJD,tra,tde);
      if pslew then begin
-        result:=astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
+        result:=astrometry.PrecisionSlew(tra,tde,err);
      end else begin
-        result:=mount.Slew(rad2deg*tra/15,rad2deg*tde);
+        result:=mount.Slew(tra,tde);
      end;
      if CancelAutofocus then exit;
     end
@@ -8708,6 +8702,10 @@ begin
     FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
     f_planetariuminfo.ShowModal;
     if f_planetariuminfo.ModalResult=mrOK then begin
+      if Mount.Park then begin
+         NewMessage(rsTheTelescope);
+         mount.Park:=false;
+      end;
       tra:= f_planetariuminfo.Ra.Text;
       tde:=f_planetariuminfo.De.Text;
       objn:=trim(f_planetariuminfo.Obj.Text);
@@ -8722,6 +8720,7 @@ begin
          de:=StrToDE(tde);
       if (ra<>NullCoord) and (de<>NullCoord) then begin
         if MessageDlg(Format(rsPleaseConfir, [objn, tra, tde]), mtConfirmation,mbOKCancel, 0)=mrOK then begin
+          LocalToMount(mount.EquinoxJD,ra,de);
           if astrometry.PrecisionSlew(ra,de,err) then begin
             f_capture.Fname.Text:=objn;
             NewMessage(Format(rsPlanetariumT, [objn]),1);

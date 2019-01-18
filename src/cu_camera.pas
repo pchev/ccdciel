@@ -492,10 +492,9 @@ begin
      equinox:=Fmount.Equinox;
      if equinox<>2000 then begin
        if equinox=0 then begin
-         DecodeDate(now,dy,dm,dd);
-         jd1:=jd(dy,dm,dd,0);
+         jd1:=jdtoday;
        end else begin
-         jd1:=jd(trunc(equinox),1,1,0);
+         jd1:=mount.EquinoxJD;
        end;
        hra:=deg2rad*hra;
        hdec:=deg2rad*hdec;

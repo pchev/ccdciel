@@ -1180,6 +1180,7 @@ begin
     msg(rsErrorMountNo,0);
     exit;
   end;
+  LocalToMount(mount.EquinoxJD,ra,de);
   prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
   if precision then begin
     cormethod:=config.GetValue('/PrecSlew/Method',1);
@@ -1222,6 +1223,7 @@ begin
       f_pause.Text:=errtxt;
       if f_pause.Wait(WaitResponseTime) then begin
          inc(FSlewRetry);
+         MountToLocal(mount.EquinoxJD,ra,de);
          result:=Slew(ra,de,precision,planprecision);
          exit;
       end;

@@ -45,7 +45,10 @@ T_mount = class(TComponent)
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FIsEqmod: boolean;
+    FEquinox,FEquinoxJD: double;
     procedure msg(txt: string; level:integer=3);
+    function  GetEquinoxCache: double;
+    function  GetEquinoxJD: double;
     function  GetTracking:Boolean; virtual; abstract;
     function  GetPark:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
@@ -90,7 +93,8 @@ T_mount = class(TComponent)
     property RA: double read GetRA;
     property Dec: double read GetDec;
     property PierSide: TPierSide read GetPierSide;
-    property Equinox: double read GetEquinox;
+    property Equinox: double read GetEquinoxCache;
+    property EquinoxJD: double read GetEquinoxJD;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
     property Timeout: integer read FTimeout write SetTimeout;
@@ -113,6 +117,8 @@ begin
   FMountSlewing:=false;
   FStatus := devDisconnected;
   FTimeOut:=100;
+  FEquinox:=NullCoord;
+  FEquinoxJD:=NullCoord;
 end;
 
 destructor  T_mount.Destroy;
@@ -123,6 +129,25 @@ end;
 procedure T_mount.msg(txt: string; level:integer=3);
 begin
  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
+end;
+
+function T_mount.GetEquinoxCache: double;
+begin
+ if FEquinox=NullCoord then begin
+    FEquinox:=GetEquinox;
+ end;
+ result:=FEquinox;
+end;
+
+function T_mount.GetEquinoxJD: double;
+begin
+ if FEquinoxJD=NullCoord then begin
+   if Equinox=0 then
+    FEquinoxJD:=jdtoday
+   else
+    FEquinoxJD:=Jd(trunc(Equinox),0,0,0);
+ end;
+ result:=FEquinoxJD;
 end;
 
 procedure T_mount.SlewToSkyFlatPosition;
