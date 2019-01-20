@@ -859,12 +859,25 @@ end;
 end;
 
 procedure Tf_EditTargets.BtnSaveAsClick(Sender: TObject);
+var defaultname: string;
+    i,n: integer;
 begin
 CheckPlanModified;
 SaveDialog1.InitialDir:=ConfigDir;
 SaveDialog1.DefaultExt:='.targets';
 SaveDialog1.filter:='CCDciel Sequence|*.targets';
-SaveDialog1.FileName:=CurrentSequenceFile;
+if CurrentSequenceFile='' then begin
+  n:=TargetList.RowCount;
+  defaultname:=FormatDateTime('mmdd',now);
+  for i:=1 to n-1 do begin
+    if (TargetList.Cells[1,i]<>ScriptTxt) and (TargetList.Cells[1,i]<>SkyFlatTxt) then
+       defaultname:=TargetList.Cells[1,i];
+  end;
+  SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
+end
+else
+  SaveDialog1.FileName:=CurrentSequenceFile;
+
 if SaveDialog1.Execute then begin
   CurrentSequenceFile:=SaveDialog1.FileName;
   ModalResult:=mrOK;
