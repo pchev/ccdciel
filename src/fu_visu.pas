@@ -143,7 +143,7 @@ begin
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);
-var i,j,maxh,h,hd2,l: integer;
+var i,j,maxp,maxh,h,hd2,l: integer;
     sum,sl1,sh1,sl2,sh2,sl3,sh3,sl4,sh4,hc: integer;
     sh: double;
 begin
@@ -153,8 +153,10 @@ maxh:=0;
 sum:=0;
 for i:=0 to high(word) do begin
   sum:=sum+hist[i];
-  if hist[i]>maxh then
+  if hist[i]>maxh then begin
       maxh:=hist[i];
+      maxp:=i;
+  end;
 end;
 if maxh=0 then exit;
 sl1:=round(0.050*sum); l1:=0;
@@ -168,14 +170,16 @@ sh4:=round(0.980*sum); h4:=0;
 sum:=0;
 for i:=0 to high(word) do begin
   sum:=sum+hist[i];
-  if (l1=0) and (sum>=sl1) then l1:=i;
-  if (l2=0) and (sum>=sl2) then l2:=i;
-  if (l3=0) and (sum>=sl3) then l3:=i;
-  if (l4=0) and (sum>=sl4) then l4:=i;
-  if (h1=0) and (sum>=sh1) then h1:=i;
-  if (h2=0) and (sum>=sh2) then h2:=i;
-  if (h3=0) and (sum>=sh3) then h3:=i;
-  if (h4=0) and (sum>=sh4) then h4:=i;
+  if i>maxp then begin
+    if (l1=0) and (sum>=sl1) then l1:=i;
+    if (l2=0) and (sum>=sl2) then l2:=i;
+    if (l3=0) and (sum>=sl3) then l3:=i;
+    if (l4=0) and (sum>=sl4) then l4:=i;
+    if (h1=0) and (sum>=sh1) then h1:=i;
+    if (h2=0) and (sum>=sh2) then h2:=i;
+    if (h3=0) and (sum>=sh3) then h3:=i;
+    if (h4=0) and (sum>=sh4) then h4:=i;
+  end;
 end;
 if SetLevel then begin
   if hist1.Down then begin
