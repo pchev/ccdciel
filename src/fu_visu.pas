@@ -116,6 +116,17 @@ begin
  Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
+ BtnClipping.Flat:=true;
+ BtnZoom05.Flat:=true;
+ BtnBullsEye.Flat:=true;
+ hist3.Flat:=true;
+ hist4.Flat:=true;
+ hist1.Flat:=true;
+ hist2.Flat:=true;
+ histminmax.Flat:=true;
+ BtnZoomAdjust.Flat:=true;
+ BtnZoom2.Flat:=true;
+ BtnZoom1.Flat:=true;
  {$endif}
  ScaleDPI(Self);
  SetLang;

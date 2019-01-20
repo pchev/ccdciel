@@ -1,11 +1,12 @@
 object f_visu: Tf_visu
   Left = 0
-  Height = 113
+  Height = 112
   Top = 0
-  Width = 375
+  Width = 371
   AutoSize = True
-  ClientHeight = 113
-  ClientWidth = 375
+  ClientHeight = 112
+  ClientWidth = 371
+  DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
@@ -13,38 +14,38 @@ object f_visu: Tf_visu
   DesignTop = 23
   object Panel1: TPanel
     Left = 0
-    Height = 93
+    Height = 92
     Top = 20
-    Width = 375
+    Width = 371
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 93
-    ClientWidth = 375
+    ClientHeight = 92
+    ClientWidth = 371
     ParentFont = False
     TabOrder = 0
     object Panel3: TPanel
       Left = 0
-      Height = 90
+      Height = 89
       Top = 0
-      Width = 259
+      Width = 256
       BevelOuter = bvNone
-      ClientHeight = 90
-      ClientWidth = 259
+      ClientHeight = 89
+      ClientWidth = 256
       Color = clBlack
-      Constraints.MaxWidth = 259
-      Constraints.MinWidth = 259
+      Constraints.MaxWidth = 256
+      Constraints.MinWidth = 256
       Font.Color = clSilver
       ParentColor = False
       ParentFont = False
       TabOrder = 1
       object Histogram: TImage
         Left = 0
-        Height = 90
+        Height = 89
         Hint = 'Histogram of the current image.'#10'Click and move to adjust the visualisation thresold.'
         Top = 0
-        Width = 259
+        Width = 256
         Align = alClient
         OnMouseDown = HistogramMouseDown
         OnMouseMove = HistogramMouseMove
@@ -52,9 +53,9 @@ object f_visu: Tf_visu
       end
       object SpinEditMin: TSpinEdit
         Left = 0
-        Height = 22
+        Height = 29
         Top = 0
-        Width = 71
+        Width = 70
         Color = clBlack
         Font.Color = clSilver
         Increment = 10
@@ -65,10 +66,10 @@ object f_visu: Tf_visu
         Visible = False
       end
       object SpinEditMax: TSpinEdit
-        Left = 188
-        Height = 22
+        Left = 186
+        Height = 29
         Top = 0
-        Width = 71
+        Width = 70
         Color = clBlack
         Font.Color = clSilver
         Increment = 10
@@ -80,23 +81,22 @@ object f_visu: Tf_visu
       end
     end
     object Panel2: TPanel
-      Left = 259
-      Height = 90
+      Left = 256
+      Height = 89
       Top = 0
-      Width = 112
+      Width = 111
       BevelOuter = bvNone
-      ClientHeight = 90
-      ClientWidth = 112
+      ClientHeight = 89
+      ClientWidth = 111
       ParentFont = False
       TabOrder = 0
       object BtnZoomAdjust: TSpeedButton
-        Left = 89
+        Left = 88
         Height = 22
         Hint = 'Zoom to adjust in window'
-        Top = 67
+        Top = 66
         Width = 23
         Color = clDefault
-        Flat = True
         Glyph.Data = {
           C6070000424DC607000000000000360000002800000016000000160000000100
           2000000000009007000064000000640000000000000000000000000000000000
@@ -167,14 +167,13 @@ object f_visu: Tf_visu
         ParentFont = False
       end
       object histminmax: TSpeedButton
-        Left = 65
+        Left = 64
         Height = 22
         Hint = 'Fix the visualisation treshold to the image data range, 100% of the histogram.'
         Top = 0
         Width = 23
         Color = clDefault
         Down = True
-        Flat = True
         Glyph.Data = {
           C6070000424DC607000000000000360000002800000016000000160000000100
           2000000000009007000064000000640000000000000000000000000000000000
@@ -254,7 +253,6 @@ object f_visu: Tf_visu
         Width = 32
         Caption = '90'
         Color = clDefault
-        Flat = True
         GroupIndex = 101
         Transparent = False
         OnClick = hist2Click
@@ -268,7 +266,6 @@ object f_visu: Tf_visu
         Width = 32
         Caption = '95'
         Color = clDefault
-        Flat = True
         GroupIndex = 101
         Transparent = False
         OnClick = hist1Click
@@ -276,55 +273,51 @@ object f_visu: Tf_visu
       end
       object BtnZoom2: TSpeedButton
         Tag = 3
-        Left = 89
+        Left = 88
         Height = 22
         Hint = 'Zoom two time'
         Top = 0
         Width = 23
         Caption = '2:1'
         Color = clDefault
-        Flat = True
         GroupIndex = 102
         OnClick = BtnZoomClick
         ParentFont = False
       end
       object BtnZoom1: TSpeedButton
         Tag = 2
-        Left = 89
+        Left = 88
         Height = 22
         Hint = 'Zoom to original scale'
         Top = 22
         Width = 23
         Caption = '1:1'
         Color = clDefault
-        Flat = True
         GroupIndex = 102
         OnClick = BtnZoomClick
         ParentFont = False
       end
       object BtnZoom05: TSpeedButton
         Tag = 1
-        Left = 89
+        Left = 88
         Height = 22
         Hint = 'Zoom to original scale'
         Top = 44
         Width = 23
         Caption = '1:2'
         Color = clDefault
-        Flat = True
         GroupIndex = 102
         OnClick = BtnZoomClick
         ParentFont = False
       end
       object BtnBullsEye: TSpeedButton
-        Left = 65
+        Left = 64
         Height = 22
         Hint = 'Show bulls eye'
         Top = 22
         Width = 23
         AllowAllUp = True
         Color = clDefault
-        Flat = True
         Glyph.Data = {
           C6070000424DC607000000000000360000002800000016000000160000000100
           2000000000009007000064000000640000000000000000000000000000000000
@@ -395,14 +388,13 @@ object f_visu: Tf_visu
         ParentFont = False
       end
       object BtnClipping: TSpeedButton
-        Left = 65
+        Left = 64
         Height = 22
         Hint = 'Show highlight and shadow clipping'
         Top = 44
         Width = 23
         AllowAllUp = True
         Color = clDefault
-        Flat = True
         Glyph.Data = {
           C6070000424DC607000000000000360000002800000016000000160000000100
           2000000000009007000064000000640000000000000000000000000000000000
@@ -477,7 +469,7 @@ object f_visu: Tf_visu
         Height = 22
         Hint = 'Gamma'
         Top = 44
-        Width = 61
+        Width = 60
         AutoSize = False
         Increment = 0.1
         MaxValue = 1
@@ -496,7 +488,6 @@ object f_visu: Tf_visu
         Width = 32
         Caption = '96'
         Color = clDefault
-        Flat = True
         GroupIndex = 101
         Transparent = False
         OnClick = hist3Click
@@ -510,7 +501,6 @@ object f_visu: Tf_visu
         Width = 32
         Caption = '98'
         Color = clDefault
-        Flat = True
         GroupIndex = 101
         Transparent = False
         OnClick = hist4Click
@@ -522,7 +512,7 @@ object f_visu: Tf_visu
     Left = 0
     Height = 20
     Top = 0
-    Width = 375
+    Width = 371
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -538,14 +528,14 @@ object f_visu: Tf_visu
     Enabled = False
     Interval = 250
     OnTimer = TimerMinMaxTimer
-    Left = 40
-    Top = 49
+    left = 40
+    top = 48
   end
   object TimerRedraw: TTimer
     Enabled = False
     Interval = 250
     OnTimer = TimerRedrawTimer
-    Left = 151
-    Top = 49
+    left = 149
+    top = 48
   end
 end
