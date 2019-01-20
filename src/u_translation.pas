@@ -498,7 +498,7 @@ resourcestring
   rsBacklashComp = 'Backlash compensation';
   rsFilterOffset = 'Filter offset';
   rsFocuserTempe3 = 'Focuser temperature compensation';
-  rsTemperatureC = 'Temperature coefficient in steps/C';
+  rsTemperatureC = 'Temperature coefficient in steps/%s';
   rsAutofocusMet = 'Autofocus method';
   rsSeconds = 'seconds';
   rsMoveDirectio = 'Move direction';

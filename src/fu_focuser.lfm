@@ -225,7 +225,7 @@ object f_focuser: Tf_focuser
       ParentFont = False
       TabOrder = 0
       object BtnDown: TButton
-        Left = 2
+        Left = 4
         Height = 25
         Hint = 'Move focuser inward'
         Top = 4
@@ -262,7 +262,7 @@ object f_focuser: Tf_focuser
         Left = 56
         Height = 31
         Top = 1
-        Width = 48
+        Width = 44
         ParentFont = False
         ReadOnly = True
         TabStop = False
@@ -271,11 +271,19 @@ object f_focuser: Tf_focuser
       object Label5: TLabel
         Left = 6
         Height = 19
-        Top = 4
+        Top = 6
         Width = 37
         Caption = 'Temp.'
         ParentColor = False
         ParentFont = False
+      end
+      object lblTemp: TLabel
+        Left = 102
+        Height = 19
+        Top = 6
+        Width = 8
+        Caption = 'C'
+        ParentColor = False
       end
     end
   end

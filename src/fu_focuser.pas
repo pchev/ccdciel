@@ -38,6 +38,7 @@ type
     BtnSetAbsPos: TButton;
     BtnVcurve: TButton;
     Label5: TLabel;
+    lblTemp: TLabel;
     PanelTemp: TPanel;
     speed: TSpinEdit;
     Position: TSpinEdit;

@@ -330,6 +330,7 @@ var
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
   TemperatureScale: integer;
+  TempLabel: string;
   TemperatureSlope: double;
   FocuserTemp, FocuserLastTemp, FocuserTempCoeff: double;
   FocuserPositionMin, FocuserPositionMax: integer;

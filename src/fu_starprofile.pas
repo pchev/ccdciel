@@ -733,8 +733,7 @@ begin
   if terminated then begin
     if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
     msg(Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),
-      FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr), FormatFloat(f1,
-      FocuserTemp)]),2);
+      FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
     if FAutofocusResult then begin
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
       // adjust slippage offset with current result

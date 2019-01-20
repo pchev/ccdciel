@@ -892,7 +892,7 @@ begin
       if (i mod 100) = 0 then begin // every 10 sec.
          temp:=camera.Temperature;
          tempdiff:=abs(ccdtemp-temp);
-         msg(rsCCDTemperatu+': '+FormatFloat(f1,TempDisplay(TemperatureScale,temp)),3);
+         msg(rsCCDTemperatu+': '+FormatFloat(f1,TempDisplay(TemperatureScale,temp))+TempLabel,3);
       end;
    end;
  end;

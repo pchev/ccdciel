@@ -521,6 +521,7 @@ type
     procedure Setlang;
   public
     { public declarations }
+    LockTemp: Boolean;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
@@ -550,6 +551,7 @@ begin
   ScaleDPI(Self);
   Setlang;
   Lockchange:=false;
+  LockTemp:=false;
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
 end;
@@ -1166,13 +1168,26 @@ end;
 
 procedure Tf_option.TemperatureScaleClick(Sender: TObject);
 begin
+  if LockTemp then exit;
   if  TemperatureScale.ItemIndex=0 then begin
     Label74.Caption:=format(rsDegreesPerMi,['C']);
     Label75.Caption:=rsDegree+blank+'C';
+    Label84.Caption:=format(rsTemperatureC,['C']);
+    if sender<>nil then begin
+       FocuserTempCoeff.Value:=FocuserTempCoeff.Value*5/9;
+       if TemperatureSlopeActive.Checked then TemperatureSlope.Value:=TemperatureSlope.Value*5/9;
+       if CameraAutoCool.Checked then CameraAutoCoolTemp.Value:=TempCelsius(1,CameraAutoCoolTemp.Value);
+    end;
   end
   else begin
     Label74.Caption:=format(rsDegreesPerMi,['F']);
     Label75.Caption:=rsDegree+blank+'F';
+    Label84.Caption:=format(rsTemperatureC,['F']);
+    if sender<>nil then begin
+      FocuserTempCoeff.Value:=FocuserTempCoeff.Value*9/5;
+      if TemperatureSlopeActive.Checked then TemperatureSlope.Value:=TemperatureSlope.Value*9/5;
+      if CameraAutoCool.Checked then CameraAutoCoolTemp.Value:=TempDisplay(1,CameraAutoCoolTemp.Value);
+    end;
   end;
 end;
 

@@ -1008,6 +1008,7 @@ begin
   MsgHandle:=handle;
   meridianflipping:=false;
   TemperatureScale:=0;
+  TempLabel:='C';
   TemperatureSlope:=0;
   learningvcurve:=false;
   autofocusing:=false;
@@ -2661,16 +2662,23 @@ begin
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
   if TemperatureScale<>i then begin
     if TemperatureScale=0 then begin
-       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+'C';
+       TempLabel:='C';
+       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+TempLabel;
        f_ccdtemp.Setpoint.Value:=TempCelsius(1,f_ccdtemp.Setpoint.Value);
+       f_focuser.lblTemp.Caption:=TempLabel;
     end
     else begin
-       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+'F';
+       TempLabel:='F';
+       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+TempLabel;
        f_ccdtemp.Setpoint.Value:=TempDisplay(1,f_ccdtemp.Setpoint.Value);
+       f_focuser.lblTemp.Caption:=TempLabel;
     end;
     if camera.Status=devConnected then begin
        ShowTemperatureRange;
        CameraTemperatureChange(camera.Temperature);
+    end;
+    if (focuser.Status=devConnected) and focuser.hasTemperature then begin
+       FocuserTemperatureChange(focuser.Temperature);
     end;
   end;
   TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
@@ -2704,6 +2712,7 @@ begin
   FocuserDelay:=config.GetValue('/StarAnalysis/FocuserDelay',0);
   if focuser<>nil then focuser.Delay:=FocuserDelay;
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
+  if abs(FocuserTempCoeff)<0.001 then FocuserTempCoeff:=0;
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
@@ -3255,6 +3264,7 @@ end;
 procedure Tf_main.ShowTemperatureRange;
 var buf: string;
 begin
+  if camera.Temperature=NullCoord then f_ccdtemp.Visible:=False;
   f_ccdtemp.Current.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,camera.Temperature));
   buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+'...'+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
   f_ccdtemp.Setpoint.ShowHint:=True;
@@ -3508,7 +3518,7 @@ begin
    FocuserLastTemp:=FocuserTemp;
    if focuser.hasTemperature then begin
       f_focuser.PanelTemp.Visible:=true;
-      f_focuser.Temp.Text:=FormatFloat(f1,focuser.Temperature);
+      f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp));
    end
    else
       f_focuser.PanelTemp.Visible:=false;
@@ -4274,7 +4284,7 @@ end;
 
 procedure Tf_main.FocuserTemperatureChange(n:double);
 begin
-  f_focuser.Temp.Text:=FormatFloat(f1,n);
+  f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,n));
   FocuserTemp:=n;
 end;
 
@@ -4383,7 +4393,7 @@ begin
  f_preview.StackPreview.Checked:=false;
  NewMessage(Format(rsFromToBy, [IntToStr(minpos), IntToStr(centerp), IntToStr(step)]),2);
  if focuser.hasTemperature then begin
-    NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]),2);
+    NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
     AutofocusVcTemp1:=FocuserTemp;
  end;
  if step<1 then exit;
@@ -4470,7 +4480,7 @@ begin
  if focuser.hasTemperature then begin
    AutofocusVcTemp2:=FocuserTemp;
    AutofocusVcTemp:=(AutofocusVcTemp1+AutofocusVcTemp2)/2;
-   NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]),2);
+   NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
  end
  else
    AutofocusVcTemp:=0;
@@ -5068,6 +5078,7 @@ var ok,PlanetariumChange,AutoguiderChange: boolean;
 begin
    PlanetariumChange:=false;
    AutoguiderChange:=false;
+   f_option.LockTemp:=true;
    f_option.Caption:=Format(rsOptions, [profile]);
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetFocale:=@OptionGetFocaleLength;
@@ -5205,6 +5216,8 @@ begin
       f_option.FocuserBacklashDirection.ItemIndex:=1;
    f_option.FocuserDelay.Value:=config.GetValue('/StarAnalysis/FocuserDelay',FocuserDelay);
    f_option.FocuserTempCoeff.Value:=config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff);
+   if TemperatureScale=1 then
+      f_option.FocuserTempCoeff.Value:=f_option.FocuserTempCoeff.Value*5/9;
    f_option.AutofocusTolerance.Value:=config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
    f_option.AutofocusMinSNR.Value:=config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
    f_option.AutofocusSlippageCorrection.Checked:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',AutofocusSlippageCorrection);
@@ -5368,6 +5381,7 @@ begin
       f_option.SafetyActions.Cells[2,i+1]:=config.GetValue('/Safety/Actions/Parameter'+inttostr(i),'');
    end;
 
+   f_option.LockTemp:=false;
    FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_option.ShowModal;
 
@@ -5412,7 +5426,9 @@ begin
      config.SetValue('/StarAnalysis/FocuserBacklashActive',f_option.FocuserBacklashActive.checked);
      config.SetValue('/StarAnalysis/FocuserBacklashDirection',(f_option.FocuserBacklashDirection.ItemIndex=0));
      config.SetValue('/StarAnalysis/FocuserDelay',f_option.FocuserDelay.Value);
-     config.SetValue('/StarAnalysis/FocuserTempCoeff',f_option.FocuserTempCoeff.Value);
+     x:=f_option.FocuserTempCoeff.Value;
+     if TemperatureScale=1 then x:=x*9/5;
+     config.SetValue('/StarAnalysis/FocuserTempCoeff',x);
      config.SetValue('/StarAnalysis/AutofocusTolerance',f_option.AutofocusTolerance.Value);
      config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
      config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
@@ -5961,11 +5977,11 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp),IntToStr(p)]),2);
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
         focuser.Position:=focuser.Position+p;
       end
       else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp),IntToStr(p)]),2);
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
         if p>0 then focuser.FocusOut else focuser.FocusIn;
         focuser.RelPosition:=abs(p);
       end;
@@ -6156,11 +6172,11 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp), IntToStr(p)]),2);
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel, IntToStr(p)]),2);
         focuser.Position:=focuser.Position+p;
       end
       else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, FocuserTemp), IntToStr(p)]),2);
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel, IntToStr(p)]),2);
         if p>0 then focuser.FocusOut else focuser.FocusIn;
         focuser.RelPosition:=abs(p);
       end;
@@ -7677,7 +7693,7 @@ begin
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
    NewMessage(rsFocusAidStop,1);
-   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]),2);
+   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
 end;
 
 procedure Tf_main.LoadFocusStar;
@@ -7822,7 +7838,7 @@ begin
    end;
    if CancelAutofocus then exit;
    // do autofocus
-   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]),2);
+   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
    f_starprofile.ChkAutofocusDown(true);
    while f_starprofile.ChkAutofocus.Down do begin
     sleep(100);
@@ -7930,7 +7946,7 @@ begin
      wait(1);
      if CancelAutofocus then exit;
      // do autofocus
-     if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]),2);
+     if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
      f_starprofile.ChkAutofocusDown(true);
      while f_starprofile.ChkAutofocus.Down do begin
       sleep(100);
@@ -8210,7 +8226,7 @@ begin
      f_preview.Running:=true;
      StartPreviewExposure(nil);
   end;
-  if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, FocuserTemp)]),2);
+  if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
   if f_starprofile.PreFocusPos>0 then
      NewMessage(Format(rsAutoFocusSta, [inttostr(f_starprofile.PreFocusPos)]),2)
   else

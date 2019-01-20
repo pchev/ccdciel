@@ -320,7 +320,7 @@ begin
     TempFinal:=value;
     Application.QueueAsyncCall(@SetTemperatureRampAsync,0);
   end else begin
-    msg(Format(rsSetTemperatu, [formatfloat(f1, TempDisplay(TemperatureScale,value))]));
+    msg(Format(rsSetTemperatu, [formatfloat(f1, TempDisplay(TemperatureScale,value))+TempLabel]));
     SetTemperature(value);
   end;
 end;
@@ -340,7 +340,7 @@ begin
      msg(rsTemperatureR,1);
      exit;
   end;
-  msg(Format(rsSetTemperatu2, [formatfloat(f1, TempDisplay(TemperatureScale,TempFinal))]));
+  msg(Format(rsSetTemperatu2, [formatfloat(f1, TempDisplay(TemperatureScale,TempFinal))+TempLabel]));
   try
   FTemperatureRampActive:=true;
   TempStart:=GetTemperature;
