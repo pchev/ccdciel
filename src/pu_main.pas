@@ -9094,6 +9094,7 @@ begin
     CurST:=CurrentSidTim;
     ra:=mount.RA;
     de:=mount.Dec;
+    MountToLocal(mount.EquinoxJD,ra,de);
     ra:=deg2rad*15*ra;
     hh:=CurSt-ra;
     Eq2Hz(hh,deg2rad*de,a,h) ;
