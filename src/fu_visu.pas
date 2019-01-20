@@ -170,6 +170,7 @@ for i:=0 to high(word) do begin
   end;
 end;
 if maxh=0 then exit;
+if maxp>(high(word) div 10) then maxp:=0; // peak is probably not sky background
 sl1:=round(0.050*sum); l1:=0;
 sh1:=round(0.950*sum); h1:=0;
 sl2:=round(0.100*sum); l2:=0;
