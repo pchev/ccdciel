@@ -128,6 +128,8 @@ procedure J2000ToApparent(var ra, de: double);
 procedure ApparentToJ2000(var ra, de: double);
 procedure MountToLocal(mountjd:double; var ra, de: double);
 procedure LocalToMount(mountjd:double; var ra, de: double);
+procedure MountToJ2000(mountjd:double; var ra, de: double);
+procedure J2000ToMount(mountjd:double; var ra, de: double);
 procedure Sort(var list: array of double);
 function SMedian(list: array of double): double;
 procedure SortFilterListInc(var list: TStringList);
@@ -2064,6 +2066,24 @@ begin
 ra:=deg2rad*ra*15;
 de:=deg2rad*de;
 PrecessionFK5(jdtoday,mountjd,ra,de);
+ra:=rad2deg*ra/15;
+de:=rad2deg*de;
+end;
+
+procedure MountToJ2000(mountjd:double; var ra, de: double);
+begin
+ra:=deg2rad*ra*15;
+de:=deg2rad*de;
+PrecessionFK5(mountjd,jd2000,ra,de);
+ra:=rad2deg*ra/15;
+de:=rad2deg*de;
+end;
+
+procedure J2000ToMount(mountjd:double; var ra, de: double);
+begin
+ra:=deg2rad*ra*15;
+de:=deg2rad*de;
+PrecessionFK5(jd2000,mountjd,ra,de);
 ra:=rad2deg*ra/15;
 de:=rad2deg*de;
 end;

@@ -542,6 +542,14 @@ begin
          t.de:=NullCoord
        else
          t.de:=StrToDE(x);
+       if (Targets.FileVersion<4)and(t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+         // previous version, up to 3, store apparent coordinates
+         t.ra:=t.ra*15*deg2rad;
+         t.de:=t.de*deg2rad;
+         ApparentToJ2000(t.ra,t.de);
+         t.ra:=rad2deg*t.ra/15;
+         t.de:=rad2deg*t.de;
+       end;
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PA','-');
        if x='-' then
          t.pa:=NullCoord

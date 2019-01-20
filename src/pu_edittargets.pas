@@ -498,12 +498,7 @@ begin
        buf1 := trim(copy(buf, 1, radecl));
        de := strtofloatdef(buf1, -999);
        if de < -900 then continue;
-       // convert to apparent coord.
-       ra:=deg2rad*ra;
-       de:=deg2rad*de;
-       J2000ToApparent(ra,de);
-       ra:=rad2deg*ra/15;
-       de:=rad2deg*de;
+       ra:=ra/15;
        // create new target
        t:=TTarget.Create;
        n:=TargetList.Row;
@@ -512,7 +507,7 @@ begin
          tt:=TTarget(TargetList.Objects[colseq,n]);
          if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
        end;
-       // assign name and coordinates
+       // assign name and coordinates J2000
        t.objectname:=obj;
        t.ra:=ra;
        t.de:=de;

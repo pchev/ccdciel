@@ -9234,7 +9234,10 @@ begin
           NewMessage(rsRecenterOnLa,2);
           try
           Capture:=false;  // do not save the control images
-          astrometry.PrecisionSlew(rad2deg*tra/15,rad2deg*tde,err);
+          tra:=rad2deg*tra/15;
+          tde:=rad2deg*tde;
+          LocalToMount(mount.EquinoxJD,tra,tde);
+          astrometry.PrecisionSlew(tra,tde,err);
           wait(2);
           finally
             Capture:=true;
@@ -9535,13 +9538,7 @@ begin
    if n=0 then begin
      ra:=c.ra;
      de:=c.dec;
-     if mount.Equinox=0 then begin
-       ra:=deg2rad*ra;
-       de:=deg2rad*de;
-       J2000ToApparent(ra,de);
-       ra:=rad2deg*ra;
-       de:=rad2deg*de;
-     end;
+     J2000ToMount(mount.EquinoxJD,ra,de);
      StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
    end;
  end;

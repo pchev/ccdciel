@@ -187,7 +187,7 @@ type
 const
   ccdcielver = '0.9.52';
   ccdciel_version='Version beta '+ccdcielver;
-  TargetFileVersion = 3;
+  TargetFileVersion = 4;
   Maxclient = 100;
   blank=' ';
   blank80='                                                                                ';

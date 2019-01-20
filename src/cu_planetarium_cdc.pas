@@ -203,11 +203,11 @@ if FRecvData<>'' then begin
   if (p.Count>=4)and(p[0]='>') then begin
     Fra:=StrToAR(p[2]);
     Fde:=StrToDE(p[3]);
-    if FplanetariumEquinox=2000 then begin
+    if (FplanetariumEquinox<>2000)and(FplanetariumJD>0) then begin
       if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
         Fra:=Fra*15*deg2rad;
         Fde:=Fde*deg2rad;
-        J2000ToApparent(Fra,Fde);
+        PrecessionFK5(FplanetariumJD,jd2000,Fra,Fde);
         Fra:=rad2deg*Fra/15;
         Fde:=rad2deg*Fde;
       end;
@@ -271,10 +271,10 @@ function TPlanetarium_cdc.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boo
 var buf:string;
 begin
   result:=false;
-  if FplanetariumEquinox=2000 then begin
+  if (FplanetariumEquinox<>0)and(FplanetariumJD>0) then begin
     frra:=frra*deg2rad;
     frde:=frde*deg2rad;
-    ApparentToJ2000(frra,frde);
+    PrecessionFK5(jdtoday,FplanetariumJD,frra,frde);
     frra:=rad2deg*frra;
     frde:=rad2deg*frde;
   end;
@@ -309,6 +309,7 @@ function TPlanetarium_cdc.Search(sname: string; out sra,sde: double): boolean;
 var buf: string;
     p: TStringList;
 begin
+  // return J2000 coord.
   result:=false;
   p:=TStringList.Create;
   try
@@ -320,11 +321,11 @@ begin
        sde:=StrToDE(p[3]);
        if (sra<>NullCoord)and(sde<>NullCoord) then begin
          result:=true;
-         if FplanetariumEquinox=2000 then begin
+         if (FplanetariumEquinox<>2000)and(FplanetariumJD>0)then begin
            if (sra<>NullCoord)and(sde<>NullCoord) then begin
              sra:=sra*15*deg2rad;
              sde:=sde*deg2rad;
-             J2000ToApparent(sra,sde);
+             PrecessionFK5(FplanetariumJD,jd2000,sra,sde);
              sra:=rad2deg*sra/15;
              sde:=rad2deg*sde;
            end;

@@ -164,7 +164,6 @@ if FRecvData<>'' then begin
     Fra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
     Fde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
     if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
-      J2000ToApparent(Fra,Fde);
       Fra:=rad2deg*Fra/15;
       Fde:=rad2deg*Fde;
       Fobjname:=p[2];
@@ -234,6 +233,7 @@ function TPlanetarium_hnsky.Search(sname: string; out sra,sde: double): boolean;
 var buf: string;
     p:Tstringlist;
 begin
+  // return J2000 coord.
   result:=false;
   p:=Tstringlist.Create;
   try
@@ -243,7 +243,6 @@ begin
     sra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
     sde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
     if (sra<>NullCoord)and(sde<>NullCoord) then begin
-      J2000ToApparent(sra,sde);
       sra:=rad2deg*sra/15;
       sde:=rad2deg*sde;
       result:=true;

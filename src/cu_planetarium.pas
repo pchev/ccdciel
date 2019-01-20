@@ -119,7 +119,10 @@ procedure TPlanetarium.InitTimerTimer(Sender: TObject);
 begin
  InitTimer.Enabled:=false;
  FplanetariumEquinox:=GetEqSys;
- if FplanetariumEquinox>0 then FplanetariumJD:=jd(trunc(FplanetariumEquinox),1,1,0);
+ if FplanetariumEquinox>0 then
+    FplanetariumJD:=jd(trunc(FplanetariumEquinox),1,1,0)
+ else if FplanetariumEquinox=0 then
+    FplanetariumJD:=jdtoday;
 end;
 
 procedure TPlanetarium.SetCmdTimeout(value:double);

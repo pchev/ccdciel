@@ -332,13 +332,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
      exit;
    end;
    if (n=0) and CurrentCoord(ra,de,eq,pa) then begin
-       if mount.Equinox=0 then begin
-         ra:=deg2rad*15*ra;
-         de:=deg2rad*de;
-         J2000ToApparent(ra,de);
-         ra:=rad2deg*ra/15;
-         de:=rad2deg*de;
-       end;
+       J2000ToMount(mount.EquinoxJD,ra,de);
        mount.Sync(ra,de);
    end;
 end;
@@ -390,22 +384,16 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
      c.y:=i.hp-yy;
      m:=cdcwcs_xy2sky(@c,0);
      if m=0 then begin
-       ra:=c.ra;
+       ra:=c.ra/15;
        de:=c.dec;
-       if mount.Equinox=0 then begin
-         ra:=deg2rad*ra;
-         de:=deg2rad*de;
-         J2000ToApparent(ra,de);
-         ra:=rad2deg*ra;
-         de:=rad2deg*de;
-       end;
+       J2000ToMount(mount.EquinoxJD,ra,de);
        prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
        cormethod:=config.GetValue('/PrecSlew/Method',1);
        maxretry:=config.GetValue('/PrecSlew/Retry',3);
        exp:=config.GetValue('/PrecSlew/Exposure',10.0);
        bin:=config.GetValue('/PrecSlew/Binning',1);
        fi:=config.GetValue('/PrecSlew/Filter',0);
-       PrecisionSlew(ra/15,de,prec,exp,fi,bin,bin,cormethod,maxretry,err);
+       PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,err);
      end;
    end;
 end;
@@ -483,10 +471,7 @@ begin
       ade:=deg2rad*cde;
       J2000ToApparent(ara,ade);
       NearMeridian:=(abs(CurrentSidTim-ara)<=(2*deg2rad));    // we are pointing within 2 degree of the meridian
-      if mount.Equinox=0 then begin
-        cra:=rad2deg*ara/15;
-        cde:=rad2deg*ade;
-      end;
+      J2000ToMount(mount.EquinoxJD,cra,cde);
       ar2:=deg2rad*15*cra;
       de2:=deg2rad*cde;
       dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);

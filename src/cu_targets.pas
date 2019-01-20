@@ -754,7 +754,7 @@ function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
-    hr,hs,newra,newde: double;
+    hr,hs,newra,newde,appra,appde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg: string;
 begin
@@ -790,11 +790,19 @@ begin
           t.de:=newde;
        end;
     end;
+    // compute apparent coord.
+    if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+       appra:=t.ra*15*deg2rad;
+       appde:=t.de*deg2rad;
+       J2000ToApparent(appra,appde);
+       appra:=appra*rad2deg/15;
+       appde:=appde*rad2deg;
+    end;
     // adjust rise/set time
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-       if t.startrise and ObjRise(t.ra,t.de,hr,i) then
+       if t.startrise and ObjRise(appra,appde,hr,i) then
           t.starttime:=hr/24;
-       if t.endset and ObjSet(t.ra,t.de,hs,i) then
+       if t.endset and ObjSet(appra,appde,hs,i) then
           t.endtime:=hs/24;
     end;
     intime:=InTimeInterval(frac(now),t.starttime,t.endtime);
@@ -1170,6 +1178,7 @@ var err: double;
     prec,exp:double;
     fi,cormethod,bin,maxretry,delay: integer;
 begin
+  // Slew to J2000 ra,de
   result:=false;
   FTargetCoord:=false;
   if FSlewRetry>3 then begin
@@ -1180,7 +1189,7 @@ begin
     msg(rsErrorMountNo,0);
     exit;
   end;
-  LocalToMount(mount.EquinoxJD,ra,de);
+  J2000ToMount(mount.EquinoxJD,ra,de);
   prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
   if precision then begin
     cormethod:=config.GetValue('/PrecSlew/Method',1);
@@ -1193,6 +1202,7 @@ begin
       FTargetCoord:=true;
       FTargetRA:=deg2rad*15*ra;
       FTargetDE:=deg2rad*de;
+      PrecessionFK5(mount.EquinoxJD,jdtoday,FTargetRA,FTargetDE);
     end;
   end
   else begin
@@ -1205,6 +1215,7 @@ begin
       FTargetCoord:=true;
       FTargetRA:=deg2rad*15*ra;
       FTargetDE:=deg2rad*de;
+      PrecessionFK5(mount.EquinoxJD,jdtoday,FTargetRA,FTargetDE);
     end;
   end;
   if not FRunning then exit;
@@ -1223,7 +1234,7 @@ begin
       f_pause.Text:=errtxt;
       if f_pause.Wait(WaitResponseTime) then begin
          inc(FSlewRetry);
-         MountToLocal(mount.EquinoxJD,ra,de);
+         MountToJ2000(mount.EquinoxJD,ra,de);
          result:=Slew(ra,de,precision,planprecision);
          exit;
       end;
