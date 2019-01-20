@@ -136,6 +136,8 @@ function SystemInformation: string;
 function AscomVersion: string;
 function IndiVersion: string;
 function AstrometryVersion(resolver:integer; cygwinpath:string; usescript:boolean):string;
+function TempDisplay(cf:integer; t:double):double;
+function TempCelsius(cf:integer; t:double):double;
 
 
 implementation
@@ -2064,6 +2066,22 @@ de:=deg2rad*de;
 PrecessionFK5(jdtoday,mountjd,ra,de);
 ra:=rad2deg*ra/15;
 de:=rad2deg*de;
+end;
+
+function TempDisplay(cf:integer; t:double):double;
+begin
+if cf=0 then
+   result:=t
+else
+   result:= t*9/5+32; // C to F
+end;
+
+function TempCelsius(cf:integer; t:double):double;
+begin
+if cf=0 then
+   result:=t
+else
+   result:= (t-32)*5/9; // F to C
 end;
 
 ////// Required functions adapted from the SOFA library

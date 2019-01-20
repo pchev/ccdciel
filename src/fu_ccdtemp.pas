@@ -83,7 +83,7 @@ end;
 
 procedure Tf_ccdtemp.SetLang;
 begin
-  Title.Caption:=rsCCDTemperatu;
+  Title.Caption:=rsCCDTemperatu+' C';
   Label1.Caption:=rsCurrent;
   CCDcooler.Caption:=rsCooler;
   Label2.Caption:=rsSetpoint;

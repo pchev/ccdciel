@@ -831,6 +831,7 @@ begin
  if not camera.Cooler then begin
     if waitcooling then begin
        msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
+       ccdtemp:=TempCelsius(TemperatureScale,ccdtemp);
        camera.Temperature:=ccdtemp;
     end;
  end;
@@ -891,7 +892,7 @@ begin
       if (i mod 100) = 0 then begin // every 10 sec.
          temp:=camera.Temperature;
          tempdiff:=abs(ccdtemp-temp);
-         msg(rsCCDTemperatu+': '+FormatFloat(f1,temp),3);
+         msg(rsCCDTemperatu+': '+FormatFloat(f1,TempDisplay(TemperatureScale,temp)),3);
       end;
    end;
  end;

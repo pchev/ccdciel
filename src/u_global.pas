@@ -329,6 +329,7 @@ var
   BayerMode:TBayerMode;
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
+  TemperatureScale: integer;
   TemperatureSlope: double;
   FocuserTemp, FocuserLastTemp, FocuserTempCoeff: double;
   FocuserPositionMin, FocuserPositionMax: integer;

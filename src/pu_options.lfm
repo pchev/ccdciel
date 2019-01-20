@@ -56,11 +56,11 @@ object f_option: Tf_option
     Height = 500
     Top = 0
     Width = 530
-    ActivePage = TabSheet1
+    ActivePage = TabSheet11
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 3
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -154,8 +154,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 390
@@ -200,8 +200,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 233
-          ClientWidth = 452
+          ClientHeight = 260
+          ClientWidth = 458
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 390
@@ -905,28 +905,29 @@ object f_option: Tf_option
       ParentFont = False
       object GroupBox1: TGroupBox
         Left = 8
-        Height = 232
+        Height = 236
         Top = 8
         Width = 464
         Caption = 'CCD temperature'
-        ClientHeight = 212
+        ClientHeight = 216
         ClientWidth = 462
         ParentFont = False
         TabOrder = 0
         object GroupBox14: TGroupBox
-          Left = 16
-          Height = 97
-          Top = 112
-          Width = 433
+          Left = 0
+          Height = 82
+          Top = 130
+          Width = 462
+          Align = alTop
           Caption = 'Automatic cooling '
-          ClientHeight = 77
-          ClientWidth = 431
+          ClientHeight = 62
+          ClientWidth = 460
           ParentFont = False
           TabOrder = 0
           object CameraAutoCool: TCheckBox
             Left = 16
             Height = 21
-            Top = 8
+            Top = 2
             Width = 249
             Caption = 'Cool down when camera is connected'
             ParentFont = False
@@ -935,7 +936,7 @@ object f_option: Tf_option
           object Label75: TLabel
             Left = 128
             Height = 19
-            Top = 44
+            Top = 34
             Width = 42
             Caption = 'degree'
             ParentColor = False
@@ -944,7 +945,7 @@ object f_option: Tf_option
           object CameraAutoCoolTemp: TFloatSpinEdit
             Left = 40
             Height = 29
-            Top = 40
+            Top = 30
             Width = 72
             MinValue = -100
             ParentFont = False
@@ -953,19 +954,20 @@ object f_option: Tf_option
           end
         end
         object GroupBox15: TGroupBox
-          Left = 16
-          Height = 100
-          Top = 4
-          Width = 433
+          Left = 0
+          Height = 82
+          Top = 48
+          Width = 462
+          Align = alTop
           Caption = 'Maximum temperature change '
-          ClientHeight = 80
-          ClientWidth = 431
+          ClientHeight = 62
+          ClientWidth = 460
           ParentFont = False
           TabOrder = 1
           object TemperatureSlopeActive: TCheckBox
             Left = 16
             Height = 21
-            Top = 8
+            Top = 2
             Width = 180
             Caption = 'Limit temperature change'
             OnClick = TemperatureSlopeActiveClick
@@ -974,18 +976,18 @@ object f_option: Tf_option
           end
           object PanelTemperatureSlope: TPanel
             Left = 16
-            Height = 34
-            Top = 40
+            Height = 30
+            Top = 30
             Width = 328
             BevelOuter = bvNone
             ClientHeight = 30
-            ClientWidth = 324
+            ClientWidth = 328
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
               Left = 112
               Height = 19
-              Top = 6
+              Top = 4
               Width = 119
               Caption = 'Degrees per minute'
               ParentColor = False
@@ -994,7 +996,7 @@ object f_option: Tf_option
             object TemperatureSlope: TFloatSpinEdit
               Left = 24
               Height = 29
-              Top = 2
+              Top = 0
               Width = 72
               MinValue = 0
               ParentFont = False
@@ -1003,11 +1005,36 @@ object f_option: Tf_option
             end
           end
         end
+        object TemperatureScale: TRadioGroup
+          Left = 0
+          Height = 48
+          Top = 0
+          Width = 462
+          Align = alTop
+          AutoFill = True
+          Caption = 'Temperature scale'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 2
+          ClientHeight = 28
+          ClientWidth = 460
+          Columns = 2
+          Items.Strings = (
+            'Celsius'
+            'Fahrenheit'
+          )
+          OnClick = TemperatureScaleClick
+          TabOrder = 2
+        end
       end
       object GroupBox20: TGroupBox
         Left = 8
         Height = 96
-        Top = 242
+        Top = 248
         Width = 464
         Caption = 'Sensors properties'
         ClientHeight = 76

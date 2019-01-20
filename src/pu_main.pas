@@ -1007,6 +1007,7 @@ begin
   filteroffset_initialized:=false;
   MsgHandle:=handle;
   meridianflipping:=false;
+  TemperatureScale:=0;
   TemperatureSlope:=0;
   learningvcurve:=false;
   autofocusing:=false;
@@ -2656,6 +2657,22 @@ begin
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
   f_preview.StackPreview.Visible:=config.GetValue('/PreviewStack/StackShow',false);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
+  i:=TemperatureScale;
+  TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
+  if TemperatureScale<>i then begin
+    if TemperatureScale=0 then begin
+       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+'C';
+       f_ccdtemp.Setpoint.Value:=TempCelsius(1,f_ccdtemp.Setpoint.Value);
+    end
+    else begin
+       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+'F';
+       f_ccdtemp.Setpoint.Value:=TempDisplay(1,f_ccdtemp.Setpoint.Value);
+    end;
+    if camera.Status=devConnected then begin
+       ShowTemperatureRange;
+       CameraTemperatureChange(camera.Temperature);
+    end;
+  end;
   TemperatureSlope:=config.GetValue('/Cooler/TemperatureSlope',0);
   ReadoutModeCapture:=config.GetValue('/Readout/Capture',0);
   ReadoutModePreview:=config.GetValue('/Readout/Preview',0);
@@ -3238,15 +3255,15 @@ end;
 procedure Tf_main.ShowTemperatureRange;
 var buf: string;
 begin
-  f_ccdtemp.Current.Text:=FormatFloat(f1,camera.Temperature);
-  buf:=FormatFloat(f0,camera.TemperatureRange.min)+'...'+FormatFloat(f0,camera.TemperatureRange.max);
+  f_ccdtemp.Current.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,camera.Temperature));
+  buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+'...'+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
   f_ccdtemp.Setpoint.ShowHint:=True;
   f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;
 end;
 
 procedure Tf_main.SetTemperature(Sender: TObject);
 begin
-  camera.Temperature:=f_ccdtemp.Setpoint.Value;
+  camera.Temperature:=TempCelsius(TemperatureScale,f_ccdtemp.Setpoint.Value);
 end;
 
 procedure Tf_main.SetCooler(Sender: TObject);
@@ -3991,7 +4008,7 @@ end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
- f_ccdtemp.Current.Text:=FormatFloat(f1,t);
+ f_ccdtemp.Current.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,t));
  if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:=rsCancel else f_ccdtemp.BtnSet.Caption:=rsSet;
 end;
 
@@ -5045,6 +5062,7 @@ end;
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
 var ok,PlanetariumChange,AutoguiderChange: boolean;
     i,n,k,FocusStarMagIndex: integer;
+    x:double;
     buf,langname:string;
     fs : TSearchRec;
 begin
@@ -5119,9 +5137,13 @@ begin
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
-   f_option.TemperatureSlope.Value:=config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope);
+   x:=config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope);
+   if abs(x)<0.001 then x:=0;
+   f_option.TemperatureSlope.Value:=x;
+   f_option.PanelTemperatureSlope.Visible:=(x<>0);
    f_option.CameraAutoCool.Checked:=config.GetValue('/Cooler/CameraAutoCool',false);
    f_option.CameraAutoCoolTemp.Value:=config.GetValue('/Cooler/CameraAutoCoolTemp',0);
+   f_option.TemperatureScale.ItemIndex:=config.GetValue('/Cooler/TemperatureScale',TemperatureScale);
    if ReadoutList.Count>0 then begin
      f_option.ReadOutCapture.ItemIndex:=config.GetValue('/Readout/Capture',0);
      f_option.ReadOutPreview.ItemIndex:=config.GetValue('/Readout/Preview',0);
@@ -5428,6 +5450,7 @@ begin
      config.SetValue('/Cooler/TemperatureSlope',f_option.TemperatureSlope.Value);
      config.SetValue('/Cooler/CameraAutoCool',f_option.CameraAutoCool.Checked);
      config.SetValue('/Cooler/CameraAutoCoolTemp',f_option.CameraAutoCoolTemp.Value);
+     config.SetValue('/Cooler/TemperatureScale',f_option.TemperatureScale.ItemIndex);
      if ReadoutList.Count>0 then begin
        config.SetValue('/Readout/Capture',f_option.ReadOutCapture.ItemIndex);
        config.SetValue('/Readout/Preview',f_option.ReadOutPreview.ItemIndex);

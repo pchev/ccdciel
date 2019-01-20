@@ -480,7 +480,7 @@ resourcestring
   rsDegree = 'degree';
   rsMaximumTempe = 'Maximum temperature change ';
   rsLimitTempera = 'Limit temperature change';
-  rsDegreesPerMi = 'Degrees per minute';
+  rsDegreesPerMi = 'Degrees %s per minute';
   rsFlat = 'Flat';
   rsSequenceAuto = 'Sequence automatic flat';
   rsFlatAutoExpo = 'Flat auto-exposure';
@@ -1009,6 +1009,7 @@ resourcestring
   rsApplyToAll = 'Apply to all';
   rsFilter0 = 'No change';
   rsSuspendDomeS = 'Suspend dome slaving';
+  rsTemperatureS = 'Temperature scale';
 
 
 

@@ -48,6 +48,7 @@ type
     Label118: TLabel;
     Panel2: TPanel;
     Panel3: TPanel;
+    TemperatureScale: TRadioGroup;
     ReadOutCapture: TComboBox;
     FloatSpinEditMa10: TFloatSpinEdit;
     FloatSpinEditMa11: TFloatSpinEdit;
@@ -500,6 +501,7 @@ type
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
     procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure TempDirChange(Sender: TObject);
+    procedure TemperatureScaleClick(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
     procedure TmpDirDefaultClick(Sender: TObject);
   private
@@ -559,6 +561,7 @@ begin
   FileOrFolderOptionsRenumber(FolderOptions);
   FileOrFolderOptionsRenumber(FileOptions);
   ChangeAutofocusInPlace(nil);
+  TemperatureScaleClick(nil);
 end;
 
 procedure Tf_option.Setlang;
@@ -606,6 +609,7 @@ begin
   GroupBox1.Caption := rsCCDTemperatu;
   GroupBox14.Caption := rsAutomaticCoo;
   CameraAutoCool.Caption := rsCoolDownWhen;
+  TemperatureScale.Caption:=rsTemperatureS;
   Label75.Caption := rsDegree;
   GroupBox15.Caption := rsMaximumTempe;
   TemperatureSlopeActive.Caption := rsLimitTempera;
@@ -1158,6 +1162,18 @@ begin
     end;
   end;
 {$endif}
+end;
+
+procedure Tf_option.TemperatureScaleClick(Sender: TObject);
+begin
+  if  TemperatureScale.ItemIndex=0 then begin
+    Label74.Caption:=format(rsDegreesPerMi,['C']);
+    Label75.Caption:=rsDegree+blank+'C';
+  end
+  else begin
+    Label74.Caption:=format(rsDegreesPerMi,['F']);
+    Label75.Caption:=rsDegree+blank+'F';
+  end;
 end;
 
 procedure Tf_option.TemperatureSlopeActiveClick(Sender: TObject);

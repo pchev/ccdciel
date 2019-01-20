@@ -360,7 +360,7 @@ begin
   varname:=uppercase(varname);
   if varname='TELESCOPERA' then x:=Fmount.RA
   else if varname='TELESCOPEDE' then x:=Fmount.Dec
-  else if varname='CCDTEMP' then x:=Fcamera.Temperature
+  else if varname='CCDTEMP' then x:=TempDisplay(TemperatureScale,Fcamera.Temperature)
   else if varname='TIMENOW' then x:=now
   else if varname='DOUBLE1' then x:=dlist[0]
   else if varname='DOUBLE2' then x:=dlist[1]
@@ -1228,7 +1228,7 @@ try
 result:=msgFailed;
 val(t,tt,n);
 if n<>0 then exit;
-Camera.Temperature:=tt;
+Camera.Temperature:=TempCelsius(TemperatureScale,tt);
 result:=msgOK;
 Ccdtemp.Setpoint.Value:=tt;
 except

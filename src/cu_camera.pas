@@ -320,23 +320,27 @@ begin
     TempFinal:=value;
     Application.QueueAsyncCall(@SetTemperatureRampAsync,0);
   end else begin
-    msg(Format(rsSetTemperatu, [formatfloat(f1, value)]));
+    msg(Format(rsSetTemperatu, [formatfloat(f1, TempDisplay(TemperatureScale,value))]));
     SetTemperature(value);
   end;
 end;
 
 procedure T_camera.SetTemperatureRampAsync(Data: PtrInt);
-var TempStart,TempNow,TempRamp: double;
+var TempStart,TempNow,TempRamp,tsl: double;
     Nstep,TempStep: integer;
 begin
-  TempStep:=round(60.0/TemperatureSlope);
+  if TemperatureScale=0 then
+     tsl:=TemperatureSlope
+  else
+     tsl:=TemperatureSlope*5/9; // F -> C
+  TempStep:=round(60.0/tsl);
   if TempStep<1 then TempStep:=1;
   if FTemperatureRampActive then begin
      FCancelTemperatureRamp:=true;
      msg(rsTemperatureR,1);
      exit;
   end;
-  msg(Format(rsSetTemperatu2, [formatfloat(f1, TempFinal)]));
+  msg(Format(rsSetTemperatu2, [formatfloat(f1, TempDisplay(TemperatureScale,TempFinal))]));
   try
   FTemperatureRampActive:=true;
   TempStart:=GetTemperature;
