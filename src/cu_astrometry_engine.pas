@@ -404,8 +404,6 @@ else if FResolver=ResolverAstap then begin
   {$else}
     Fcmd:=slash(FASTAPFolder)+'astap';
   {$endif}
-  Fparam.Add('-fov');
-  Fparam.Add(FormatFloat(f2,max(FXsize,FYsize)));
   Fparam.Add('-z');
   Fparam.Add(inttostr(FASTAPdownsample));
   Fparam.Add('-r');
