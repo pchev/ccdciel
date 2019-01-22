@@ -1010,6 +1010,7 @@ resourcestring
   rsFilter0 = 'No change';
   rsSuspendDomeS = 'Suspend dome slaving';
   rsTemperatureS = 'Temperature scale';
+  rsRunAutoFocus = 'Auto-focus if temp. change by more than %s';
 
 
 

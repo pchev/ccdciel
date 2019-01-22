@@ -2713,6 +2713,8 @@ begin
   if focuser<>nil then focuser.Delay:=FocuserDelay;
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
   if abs(FocuserTempCoeff)<0.001 then FocuserTempCoeff:=0;
+  AutofocusTemp:=config.GetValue('/StarAnalysis/AutofocusTemp',0.0);
+  if abs(AutofocusTemp)<0.001 then AutofocusTemp:=0;
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
@@ -5216,8 +5218,11 @@ begin
       f_option.FocuserBacklashDirection.ItemIndex:=1;
    f_option.FocuserDelay.Value:=config.GetValue('/StarAnalysis/FocuserDelay',FocuserDelay);
    f_option.FocuserTempCoeff.Value:=config.GetValue('/StarAnalysis/FocuserTempCoeff',FocuserTempCoeff);
-   if TemperatureScale=1 then
+   f_option.AutofocusTemp.Value:=config.GetValue('/StarAnalysis/AutofocusTemp',AutofocusTemp);
+   if TemperatureScale=1 then begin
       f_option.FocuserTempCoeff.Value:=f_option.FocuserTempCoeff.Value*5/9;
+      f_option.AutofocusTemp.Value:=f_option.AutofocusTemp.Value*5/9;
+   end;
    f_option.AutofocusTolerance.Value:=config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
    f_option.AutofocusMinSNR.Value:=config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
    f_option.AutofocusSlippageCorrection.Checked:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',AutofocusSlippageCorrection);
@@ -5429,6 +5434,9 @@ begin
      x:=f_option.FocuserTempCoeff.Value;
      if TemperatureScale=1 then x:=x*9/5;
      config.SetValue('/StarAnalysis/FocuserTempCoeff',x);
+     x:=f_option.AutofocusTemp.Value;
+     if TemperatureScale=1 then x:=x*9/5;
+     config.SetValue('/StarAnalysis/AutofocusTemp',x);
      config.SetValue('/StarAnalysis/AutofocusTolerance',f_option.AutofocusTolerance.Value);
      config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
      config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
@@ -6184,7 +6192,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     end;
   end;
   // check if refocusing is required
-  if f_capture.FocusNow or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) then begin
+  if f_capture.FocusNow
+     or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value))
+     or (focuser.hasTemperature and (AutofocusTemp<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) and (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTemp))
+     then begin
      f_capture.FocusNum:=0;
      f_capture.FocusNow:=false;
      // do autofocus

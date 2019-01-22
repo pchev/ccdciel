@@ -39,6 +39,9 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    BtnDisableAutofocusTemp: TButton;
+    AutofocusTemp: TFloatSpinEdit;
+    Label119: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -471,6 +474,7 @@ type
     RefTreshold: TTrackBar;
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
+    procedure BtnDisableAutofocusTempClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
@@ -656,6 +660,7 @@ begin
   GroupBox12.Caption := rsFilterOffset;
   GroupBox16.Caption := rsFocuserTempe3;
   Label84.Caption := rsTemperatureC;
+  Label119.Caption := rsRunAutoFocus;
   BtnDisableFocuserTemp.Caption := rsDisable;
   TabSheet3.Caption := rsAutofocus;
   Autofocusmode.Caption := rsAutofocusMet;
@@ -1057,6 +1062,11 @@ begin
   FocuserTempCoeff.Value:=0.0;
 end;
 
+procedure Tf_option.BtnDisableAutofocusTempClick(Sender: TObject);
+begin
+  AutofocusTemp.Value:=0.0;
+end;
+
 procedure Tf_option.BtnFileDefaultClick(Sender: TObject);
 var i:integer;
 begin
@@ -1173,8 +1183,10 @@ begin
     Label74.Caption:=format(rsDegreesPerMi,['C']);
     Label75.Caption:=rsDegree+blank+'C';
     Label84.Caption:=format(rsTemperatureC,['C']);
+    Label119.Caption := format(rsRunAutoFocus,['C']);
     if sender<>nil then begin
        FocuserTempCoeff.Value:=FocuserTempCoeff.Value*5/9;
+       AutofocusTemp.Value:=AutofocusTemp.Value*5/9;
        if TemperatureSlopeActive.Checked then TemperatureSlope.Value:=TemperatureSlope.Value*5/9;
        if CameraAutoCool.Checked then CameraAutoCoolTemp.Value:=TempCelsius(1,CameraAutoCoolTemp.Value);
     end;
@@ -1183,8 +1195,10 @@ begin
     Label74.Caption:=format(rsDegreesPerMi,['F']);
     Label75.Caption:=rsDegree+blank+'F';
     Label84.Caption:=format(rsTemperatureC,['F']);
+    Label119.Caption := format(rsRunAutoFocus,['F']);
     if sender<>nil then begin
       FocuserTempCoeff.Value:=FocuserTempCoeff.Value*9/5;
+      AutofocusTemp.Value:=AutofocusTemp.Value*9/5;
       if TemperatureSlopeActive.Checked then TemperatureSlope.Value:=TemperatureSlope.Value*9/5;
       if CameraAutoCool.Checked then CameraAutoCoolTemp.Value:=TempDisplay(1,CameraAutoCoolTemp.Value);
     end;
