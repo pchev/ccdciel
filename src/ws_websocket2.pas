@@ -1040,7 +1040,7 @@ begin
   fFullDataProcess := false;
   fFullDataStream := TMemoryStream.Create;
 
-  fSendCriticalSection := TCriticalSection.Create;
+  fSendCriticalSection := syncobjs.TCriticalSection.Create;
   fHandshake := false;
 
   inherited;

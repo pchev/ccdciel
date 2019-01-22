@@ -477,7 +477,7 @@ begin
 
   FreeOnTerminate := true;
   fConnections := TList.Create;
-  fConnectionTermLock := TCriticalSection.Create;
+  fConnectionTermLock := syncobjs.TCriticalSection.Create;
   fMaxConnectionsCount := -1;
   fCanAddConnection := true;
   fCurrentAddConnection := nil;
