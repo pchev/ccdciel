@@ -1743,7 +1743,7 @@ msgid "Limit temperature change"
 msgstr ""
 
 #: u_translation:rsdegreespermi
-msgid "Degrees per minute"
+msgid "Degrees %s per minute"
 msgstr ""
 
 #: u_translation:rsflat
@@ -1815,7 +1815,7 @@ msgid "Focuser temperature compensation"
 msgstr ""
 
 #: u_translation:rstemperaturec
-msgid "Temperature coefficient in steps/C"
+msgid "Temperature coefficient in steps/%s"
 msgstr ""
 
 #: u_translation:rsautofocusmet
@@ -2031,7 +2031,7 @@ msgid "Autofocus after meridian flip"
 msgstr ""
 
 #: u_translation:rscalibrateaut
-msgid "Calibrate autoguider after medidian flip"
+msgid "Calibrate autoguider after meridian flip"
 msgstr ""
 
 #: u_translation:rsautoguiding
@@ -2454,10 +2454,6 @@ msgstr ""
 msgid "Preview debayer"
 msgstr ""
 
-#: u_translation:rspreviewraw
-msgid "Preview raw"
-msgstr ""
-
 #: u_translation:rsastrometryre
 msgid "Astrometry resolver log"
 msgstr ""
@@ -2634,6 +2630,10 @@ msgstr ""
 msgid "Slewing to %s/%s"
 msgstr ""
 
+#: u_translation:rsslewtoeq
+msgid "Slewing to %s %s/%s"
+msgstr ""
+
 #: u_translation:rsslewcomplete
 msgid "Slew is complete"
 msgstr ""
@@ -2652,6 +2652,10 @@ msgstr ""
 
 #: u_translation:rssyncto
 msgid "Sync to %s/%s"
+msgstr ""
+
+#: u_translation:rssynctoeq
+msgid "Sync to %s %s/%s"
 msgstr ""
 
 #: u_translation:rsslewwithoffs
@@ -3696,5 +3700,17 @@ msgstr ""
 
 #: u_translation:rsfilter0
 msgid "No change"
+msgstr ""
+
+#: u_translation:rssuspenddomes
+msgid "Suspend dome slaving"
+msgstr ""
+
+#: u_translation:rstemperatures
+msgid "Temperature scale"
+msgstr ""
+
+#: u_translation:rsrunautofocus
+msgid "Auto-focus if temp. change by more than %s"
 msgstr ""
 

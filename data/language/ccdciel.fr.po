@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-01-08 10:21+0000\n"
-"PO-Revision-Date: 2019-01-08 10:23+0000\n"
+"POT-Creation-Date: 2019-01-22 10:15+0000\n"
+"PO-Revision-Date: 2019-01-22 10:19+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-01-08 10:24+0000\n"
-"X-Generator: Launchpad (build 18847)\n"
+"X-Launchpad-Export-Date: 2019-01-22 10:20+0000\n"
+"X-Generator: Launchpad (build 18856)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -377,7 +377,7 @@ msgid "Calibrate"
 msgstr "Calibrer"
 
 #: u_translation.rscalibrateaut
-msgid "Calibrate autoguider after medidian flip"
+msgid "Calibrate autoguider after meridian flip"
 msgstr "Calibration d'autoguidage après le retournement méridien"
 
 #: u_translation.rscalibrated
@@ -797,8 +797,8 @@ msgid "degree"
 msgstr "degré"
 
 #: u_translation.rsdegreespermi
-msgid "Degrees per minute"
-msgstr "Degrés par minutes"
+msgid "Degrees %s per minute"
+msgstr "Degrés %s par minutes"
 
 #: u_translation.rsdelayafterte
 msgid "Delay after telescope slew [seconds] "
@@ -2232,10 +2232,6 @@ msgstr "Prévisualisation"
 msgid "Preview debayer"
 msgstr "Débayeriser la prévisualisation"
 
-#: u_translation.rspreviewraw
-msgid "Preview raw"
-msgstr "Prévisualisation RAW"
-
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
 msgstr "Empilement de l'aperçu"
@@ -2511,6 +2507,10 @@ msgstr "Exécute un script additionnel en cas d'erreur"
 #: u_translation.rsrunascript
 msgid "Run a script"
 msgstr "Exécute un script"
+
+#: u_translation.rsrunautofocus
+msgid "Auto-focus if temp. change by more than %s"
+msgstr "Auto-focus si changement de plus de %s"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -2880,6 +2880,10 @@ msgstr "Déplacement vers %s/%s"
 msgid "Slew to a near star of magnitude"
 msgstr "Goto vers une étoile de magnitude"
 
+#: u_translation.rsslewtoeq
+msgid "Slewing to %s %s/%s"
+msgstr "Déplacement vers %s %s/%s"
+
 #: u_translation.rsslewtofocuss
 msgid "Slew to focus star %s"
 msgstr "Centre l'étoile de focalisation %s"
@@ -3192,9 +3196,17 @@ msgstr "Sous-dossier par nom de séquence"
 msgid "Summary"
 msgstr "Résumé"
 
+#: u_translation.rssuspenddomes
+msgid "Suspend dome slaving"
+msgstr "Suspendre l'asservissement du dôme"
+
 #: u_translation.rssyncto
 msgid "Sync to %s/%s"
 msgstr "Sync à %s %s"
+
+#: u_translation.rssynctoeq
+msgid "Sync to %s %s/%s"
+msgstr "Sync à %s %s %s"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
@@ -3277,8 +3289,8 @@ msgid "Temperature"
 msgstr "Température"
 
 #: u_translation.rstemperaturec
-msgid "Temperature coefficient in steps/C"
-msgstr "Coefficient de température en pas/C"
+msgid "Temperature coefficient in steps/%s"
+msgstr "Coefficient de température en pas/%s"
 
 #: u_translation.rstemperaturer
 msgid "Temperature ramp requested to stop"
@@ -3287,6 +3299,10 @@ msgstr "Demande d'arrêt de la rampe de température"
 #: u_translation.rstemperaturer2
 msgid "Temperature ramp canceled"
 msgstr "Rampe de température abandonnée"
+
+#: u_translation.rstemperatures
+msgid "Temperature scale"
+msgstr "Échelle de température"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
