@@ -555,7 +555,7 @@ resourcestring
   rsPauseAfterMe = 'Pause after meridian flip ';
   rsNoFlipUntilP = 'No flip until past meridian for';
   rsAutofocusAft = 'Autofocus after meridian flip';
-  rsCalibrateAut = 'Calibrate autoguider after medidian flip';
+  rsCalibrateAut = 'Calibrate autoguider after meridian flip';
   rsAutoGuiding = 'Auto-guiding';
   rsPixels = 'Pixels';
   rsRAOnly = 'RA only';
