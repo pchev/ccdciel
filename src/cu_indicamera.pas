@@ -27,14 +27,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom,
+uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom, ws_websocket2,
      u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, u_translation;
 
 type
 
+T_indicamera = class;
+TIndiWebSocketClientConnection = class(TWebSocketClientConnection)
+  fFramedText: string;
+  fFramedStream: TMemoryStream;
+  FonNewFile: TNotifyEvent;
+  procedure ProcessText(aFinal, aRes1, aRes2, aRes3: boolean; aData: string); override;
+  procedure ProcessTextContinuation(aFinal, aRes1, aRes2, aRes3: boolean; aData: string); override;
+  procedure ProcessStream(aFinal, aRes1, aRes2, aRes3: boolean; aData: TMemoryStream); override;
+  procedure ProcessStreamContinuation(aFinal, aRes1, aRes2, aRes3: boolean; aData: TMemoryStream); override;
+  procedure SyncBinFrame;
+public
+  constructor Create(aHost, aPort, aResourceName: string;
+       aOrigin: string = '-'; aProtocol: string = '-'; aExtension: string = '-';
+       aCookie: string = '-'; aVersion: integer = 8); override;
+  destructor Destroy; override;
+  property onNewFile: TNotifyEvent read FonNewFile write FonNewFile;
+end;
+
 T_indicamera = class(T_camera)
 private
    indiclient: TIndiBaseClient;
+   indiws: TIndiWebSocketClientConnection;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
    CCDDevice: Basedevice;
@@ -50,6 +69,9 @@ private
    FrameLight, FrameBias, FrameDark,FrameFlat: ISwitch;
    CCDCompression: ISwitchVectorProperty;
    CCDcompress, CCDraw: ISwitch;
+   CCDWebsocket: ISwitchVectorProperty;
+   CCDWebsocketON, CCDWebsocketOFF: ISwitch;
+   CCDWebsocketSetting: INumberVectorProperty;
    CCDAbortExposure: ISwitchVectorProperty;
    CCDAbort: ISwitch;
    CCDCooler: ISwitchVectorProperty;
@@ -76,7 +98,6 @@ private
    StreamOptions: INumberVectorProperty;
    StreamRate:INumber;
    CCDIso: ISwitchVectorProperty;
-
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
    Guiderbinning: INumberVectorProperty;
@@ -118,11 +139,15 @@ private
    procedure NewSwitch(svp: ISwitchVectorProperty);
    procedure NewLight(lvp: ILightVectorProperty);
    procedure NewBlob(bp: IBLOB);
+   procedure NewImageFile(ft: string; sz,blen:integer; data: TMemoryStream);
    procedure DeleteDevice(dp: Basedevice);
    procedure DeleteProperty(indiProp: IndiProperty);
    procedure ServerConnected(Sender: TObject);
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
+   procedure ConnectWs;
+   procedure DisconnectWs;
+   procedure WsNewFile(Sender: TObject);
  protected
    function GetBinX:integer; override;
    function GetBinY:integer; override;
@@ -281,6 +306,8 @@ begin
     CCDframeReset:=nil;
     CCDFrameType:=nil;
     CCDCompression:=nil;
+    CCDWebsocket:=nil;
+    CCDWebsocketSetting:=nil;
     CCDAbortExposure:=nil;
     CCDColorSpace:=nil;
     CCDVideoStream:=nil;
@@ -436,6 +463,8 @@ begin
        indiclient.setBLOBMode(B_ALSO,Findidevice);
  end;
  if Fready and (FStatus<>devConnected) then begin
+   if (CCDWebsocket<>nil)and(CCDWebsocketON.s=ISS_ON) then
+      ConnectWs;
    FStatus := devConnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
  end;
@@ -445,6 +474,7 @@ procedure T_indicamera.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   FWheelStatus := devDisconnected;
+  if (indiws<>nil)and(not indiws.IsTerminated) then DisconnectWs;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   msg(rsServer+' '+rsDisconnected3,0);
@@ -469,7 +499,8 @@ end;
 
 procedure T_indicamera.DeleteProperty(indiProp: IndiProperty);
 begin
-  { TODO :  check if a vital property is removed ? }
+  if indiProp.getName='CCD_WEBSOCKET_SETTINGS' then
+     CCDWebsocketSetting:=nil;
 end;
 
 procedure T_indicamera.NewMessage(mp: IMessage);
@@ -561,6 +592,15 @@ begin
      CCDAbortExposure:=indiProp.getSwitch;
      CCDAbort:=IUFindSwitch(CCDAbortExposure,'ABORT');
      if (CCDAbort=nil) then CCDAbortExposure:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(CCDWebsocket=nil)and(propname='CCD_WEBSOCKET') then begin
+     CCDWebsocket:=indiProp.getSwitch;
+     CCDWebsocketON:=IUFindSwitch(CCDWebsocket,'WEBSOCKET_ENABLED');
+     CCDWebsocketOFF:=IUFindSwitch(CCDWebsocket,'WEBSOCKET_DISABLED');
+     if (CCDWebsocketON=nil)or(CCDWebsocketOFF=nil) then CCDWebsocket:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(propname='CCD_WEBSOCKET_SETTINGS') then begin
+     CCDWebsocketSetting:=indiProp.getNumber;
   end
   else if (proptype=INDI_SWITCH)and(CCDCooler=nil)and(propname='CCD_COOLER') then begin
      CCDCooler:=indiProp.getSwitch;
@@ -817,6 +857,12 @@ begin
   else if svp=CCDVideoRates then begin
       if Assigned(FonVideoRateChange) then FonVideoRateChange(self);
   end
+  else if svp=CCDWebsocket then begin
+      if (CCDWebsocketON.s=ISS_ON) then
+         ConnectWs
+      else if (CCDWebsocketOFF.s=ISS_ON) then
+         DisconnectWs;
+  end
   ;
 end;
 
@@ -825,28 +871,33 @@ begin
 //  writeln('NewLight: '+lvp.name);
 end;
 
-procedure T_indicamera.NewBlob(bp: IBLOB);
+procedure T_indicamera.NewImageFile(ft: string; sz,blen:integer; data: TMemoryStream);
 var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
 begin
  {$ifdef camera_debug}msg('receive blob');{$endif}
- if bp.bloblen>0 then begin
-   bp.blob.Position:=0;
-   if pos('.fits',bp.format)>0 then begin // receive a FITS file
+ if blen>0 then begin
+   data.Position:=0;
+   if pos('.fits',ft)>0 then begin // receive a FITS file
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      {$ifdef camera_debug}msg('this is a fits file');{$endif}
-     if pos('.z',bp.format)>0 then begin //compressed
+     if pos('.z',ft)>0 then begin //compressed
          {$ifdef camera_debug}msg('uncompress file');{$endif}
          FImgStream.Clear;
          FImgStream.Position:=0;
          if zlibok then begin
-           sourceLen:=bp.bloblen;
-           destLen:=bp.size;
+           sourceLen:=blen;
+           if sz>0 then
+              destLen:=sz
+           else if CCDframe<>nil then
+              destLen:=round(CCDframeWidth.value*CCDframeHeight.value*2)+(10*2880)
+           else
+              destLen:=10000*10000*2;
            SetLength(source,sourceLen);
            SetLength(dest,destLen);
-           bp.blob.Read(source[0],sourceLen);
+           data.Read(source[0],sourceLen);
            i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
            if i=0 then
               FImgStream.Write(dest[0],destLen);
@@ -858,29 +909,34 @@ begin
         {$ifdef camera_debug}msg('copy stream');{$endif}
         FImgStream.Clear;
         FImgStream.Position:=0;
-        FImgStream.CopyFrom(bp.blob,bp.size);
+        FImgStream.CopyFrom(data,sz);
      end;
      {$ifdef camera_debug}msg('NewImage');{$endif}
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      NewImage;
    end
-   else if pos('.stream',bp.format)>0 then begin // video stream
+   else if pos('.stream',ft)>0 then begin // video stream
      {$ifdef camera_debug}msg('this is a video stream');{$endif}
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
      {$ifdef camera_debug}msg('process this frame');{$endif}
      try
-     if pos('.z',bp.format)>0 then begin //compressed
+     if pos('.z',ft)>0 then begin //compressed
          {$ifdef camera_debug}msg('uncompress frame');{$endif}
          if zlibok then begin
            FVideoStream.Clear;
            FVideoStream.Position:=0;
-           sourceLen:=bp.bloblen;
-           destLen:=bp.size;
+           sourceLen:=blen;
+           if sz>0 then
+              destLen:=sz
+           else if CCDframe<>nil then
+              destLen:=round(CCDframeWidth.value*CCDframeHeight.value*2)+(1000)
+           else
+              destLen:=10000*10000*2;
            SetLength(source,sourceLen);
            SetLength(dest,destLen);
-           bp.blob.Read(source[0],sourceLen);
+           data.Read(source[0],sourceLen);
            i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
            if i=0 then
               FVideoStream.Write(dest[0],destLen);
@@ -892,7 +948,7 @@ begin
        {$ifdef camera_debug}msg('copy frame');{$endif}
        FVideoStream.Clear;
        FVideoStream.Position:=0;
-       FVideoStream.CopyFrom(bp.blob,bp.size);
+       FVideoStream.CopyFrom(data,sz);
      end;
      {$ifdef camera_debug}msg('NewVideoFrame');{$endif}
      NewVideoFrame;
@@ -901,10 +957,19 @@ begin
      end;
    end
    else begin
-        msg('Invalid file format '+bp.format+', a FITS file is required',0);
+        msg('Invalid file format '+ft+', a FITS file is required',0);
         AbortExposure;
         NewImage;
    end;
+ end;
+end;
+
+procedure T_indicamera.NewBlob(bp: IBLOB);
+begin
+ {$ifdef camera_debug}msg('receive blob');{$endif}
+ if bp.bloblen>0 then begin
+   bp.blob.Position:=0;
+   NewImageFile(bp.format,bp.size,bp.bloblen,bp.blob);
  end;
 end;
 
@@ -1776,6 +1841,98 @@ begin
    StreamRate.value:=value;
    indiclient.sendNewNumber(StreamOptions);
  end;
+end;
+
+procedure T_indicamera.ConnectWs;
+var h,p: string;
+    wsport:INumber;
+begin
+try
+  if CCDWebsocketSetting=nil then exit;
+  if (indiws<>nil)and(not indiws.IsTerminated) then exit;
+  h:=Findiserver;
+  wsport:=IUFindNumber(CCDWebsocketSetting,'WS_SETTINGS_PORT');
+  if wsport=nil then exit;
+  p:=IntToStr(round(wsport.Value));
+  indiws:=TIndiWebSocketClientConnection.Create(h,p,'/');
+  indiws.FreeOnTerminate:=true;
+  indiws.OnNewfile:=@WsNewFile;
+  indiws.Start;
+except
+end;
+end;
+
+procedure T_indicamera.DisconnectWs;
+begin
+try
+  indiws.Close(wsCloseNormal,'');
+except
+end;
+end;
+
+procedure T_indicamera.WsNewFile(Sender: TObject);
+begin
+if indiws<>nil then
+  NewImageFile(indiws.fFramedText,0,indiws.fFramedStream.Size,indiws.fFramedStream);
+end;
+
+{ TIndiWebSocketClientConnection }
+
+procedure TIndiWebSocketClientConnection.ProcessText(aFinal, aRes1, aRes2,
+  aRes3: boolean; aData: string);
+begin
+  fFramedText := aData;
+end;
+
+procedure TIndiWebSocketClientConnection.ProcessTextContinuation(aFinal, aRes1,
+  aRes2, aRes3: boolean; aData: string);
+begin
+  fFramedText := fFramedText + aData;
+end;
+
+procedure TIndiWebSocketClientConnection.ProcessStream(aFinal, aRes1, aRes2,
+  aRes3: boolean; aData: TMemoryStream);
+begin
+  fFramedStream.Size := 0;
+  fFramedStream.CopyFrom(aData, aData.Size);
+  if (aFinal) then
+  begin
+    Synchronize(@SyncBinFrame);
+  end;
+end;
+
+procedure TIndiWebSocketClientConnection.ProcessStreamContinuation(aFinal,
+  aRes1, aRes2, aRes3: boolean; aData: TMemoryStream);
+begin
+  fFramedStream.CopyFrom(aData, aData.Size);
+  if (aFinal) then
+  begin
+    Synchronize(@SyncBinFrame);
+  end;
+end;
+
+procedure TIndiWebSocketClientConnection.SyncBinFrame;
+begin
+  {$ifdef camera_debug}msg('receive ws_blob');{$endif}
+  if fFramedStream.Size>0 then begin
+    fFramedStream.Position:=0;
+    if Assigned(FOnNewfile) then FOnNewfile(self);
+  end;
+end;
+
+constructor TIndiWebSocketClientConnection.Create(aHost, aPort, aResourceName: string;
+    aOrigin: string = '-'; aProtocol: string = '-'; aExtension: string = '-';
+    aCookie: string = '-'; aVersion: integer = 8);
+begin
+  inherited;
+  fFramedText := '';
+  fFramedStream := TMemoryStream.Create;
+end;
+
+destructor TIndiWebSocketClientConnection.Destroy;
+begin
+  fFramedStream.free;
+  inherited;
 end;
 
 end.
