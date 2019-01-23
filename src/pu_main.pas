@@ -601,7 +601,6 @@ type
     function  CameraNewDomeFlat: boolean;
     procedure CameraVideoFrame(Sender: TObject);
     procedure CameraVideoPreviewChange(Sender: TObject);
-    procedure CameraVideoFrameAsync(Data: PtrInt);
     procedure CameraVideoSizeChange(Sender: TObject);
     procedure CameraVideoRateChange(Sender: TObject);
     procedure CameraVideoExposureChange(Sender: TObject);
@@ -6586,11 +6585,6 @@ try
 end;
 
 procedure Tf_main.CameraVideoFrame(Sender: TObject);
-begin
-  Application.QueueAsyncCall(@CameraVideoFrameAsync,0);
-end;
-
-procedure Tf_main.CameraVideoFrameAsync(Data: PtrInt);
 begin
 ImgFrameX:=FrameX;
 ImgFrameY:=FrameY;
