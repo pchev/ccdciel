@@ -275,6 +275,7 @@ begin
   if (FplanetariumEquinox<>0)and(FplanetariumJD>0) then begin
     frra:=frra*deg2rad;
     frde:=frde*deg2rad;
+    mean_equatorial(frra,frde);
     PrecessionFK5(jdtoday,FplanetariumJD,frra,frde);
     frra:=rad2deg*frra;
     frde:=rad2deg*frde;
@@ -326,6 +327,7 @@ begin
            if (sra<>NullCoord)and(sde<>NullCoord) then begin
              sra:=sra*15*deg2rad;
              sde:=sde*deg2rad;
+             mean_equatorial(sra,sde);
              PrecessionFK5(FplanetariumJD,jd2000,sra,sde);
              sra:=rad2deg*sra/15;
              sde:=rad2deg*sde;

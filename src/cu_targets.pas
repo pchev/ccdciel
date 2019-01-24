@@ -1200,9 +1200,11 @@ begin
     result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,err);
     if result then begin
       FTargetCoord:=true;
-      FTargetRA:=deg2rad*15*ra;
-      FTargetDE:=deg2rad*de;
-      PrecessionFK5(mount.EquinoxJD,jdtoday,FTargetRA,FTargetDE);
+      FTargetRA:=ra;
+      FTargetDE:=de;
+      MountToLocal(mount.EquinoxJD,FTargetRA,FTargetDE);
+      FTargetRA:=deg2rad*15*FTargetRA;
+      FTargetDE:=deg2rad*FTargetDE;
     end;
   end
   else begin
@@ -1213,9 +1215,11 @@ begin
     result:=true;
     if result and planprecision then begin
       FTargetCoord:=true;
-      FTargetRA:=deg2rad*15*ra;
-      FTargetDE:=deg2rad*de;
-      PrecessionFK5(mount.EquinoxJD,jdtoday,FTargetRA,FTargetDE);
+      FTargetRA:=ra;
+      FTargetDE:=de;
+      MountToLocal(mount.EquinoxJD,FTargetRA,FTargetDE);
+      FTargetRA:=deg2rad*15*FTargetRA;
+      FTargetDE:=deg2rad*FTargetDE;
     end;
   end;
   if not FRunning then exit;
