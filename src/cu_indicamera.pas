@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom, ws_websocket2,
-     u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, u_translation;
+     u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
 
 type
 
@@ -228,6 +228,12 @@ private
 end;
 
 implementation
+uses
+{$if lcl_major > 1}
+LazSysUtils;
+{$else}
+LazUTF8SysUtils;
+{$endif}
 
 procedure T_indicamera.CreateIndiClient;
 begin
@@ -876,6 +882,7 @@ var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
 begin
+ FMidExposureTime:=(Ftimestart+NowUTC)/2;
  {$ifdef camera_debug}msg('receive blob');{$endif}
  if blen>0 then begin
    data.Position:=0;
@@ -1023,6 +1030,7 @@ end else begin
     indiclient.sendNewNumber(Guiderexpose);
   end;
 end;
+Ftimestart:=NowUTC;
 timedout:=now+(exptime+CameraTimeout)/secperday;
 ExposureTimer.Enabled:=true;
 end;

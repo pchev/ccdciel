@@ -207,6 +207,7 @@ if FRecvData<>'' then begin
       if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
         Fra:=Fra*15*deg2rad;
         Fde:=Fde*deg2rad;
+        mean_equatorial(Fra,Fde);
         PrecessionFK5(FplanetariumJD,jd2000,Fra,Fde);
         Fra:=rad2deg*Fra/15;
         Fde:=rad2deg*Fde;

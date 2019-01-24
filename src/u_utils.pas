@@ -79,9 +79,11 @@ PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
 Function CurrentSidTim: double;
+Function SidTimT(t:TDateTime): double;
 Procedure Refraction(var h : double; flag:boolean);
 PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 Procedure Hz2Eq(A,h : double; out hh,de : double);
+function AirMass(h: double): double;
 Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
 Procedure cmdHz2Eq(a,h : double; var ra,de : double);
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
@@ -1197,6 +1199,10 @@ ra:=rad2deg*Rmod(CurST-ra+pi2,pi2)/15;
 de:=rad2deg*de;
 end;
 
+function AirMass(h: double): double;
+begin
+  result := 1 / sin(deg2rad * (h + (244 / (165 + 47 * h ** 1.1))));
+end;
 
 procedure Screen2Fits(x,y: integer; out xx,yy:integer);
 begin
@@ -2054,17 +2060,21 @@ end;
 
 procedure MountToLocal(mountjd:double; var ra, de: double);
 begin
+if abs(mountjd-jdtoday)<0.1 then exit;
 ra:=deg2rad*ra*15;
 de:=deg2rad*de;
 PrecessionFK5(mountjd,jdtoday,ra,de);
+apparent_equatorial(ra,de);
 ra:=rad2deg*ra/15;
 de:=rad2deg*de;
 end;
 
 procedure LocalToMount(mountjd:double; var ra, de: double);
 begin
+if abs(mountjd-jdtoday)<0.1 then exit;
 ra:=deg2rad*ra*15;
 de:=deg2rad*de;
+mean_equatorial(ra,de);
 PrecessionFK5(jdtoday,mountjd,ra,de);
 ra:=rad2deg*ra/15;
 de:=rad2deg*de;
@@ -2072,8 +2082,10 @@ end;
 
 procedure MountToJ2000(mountjd:double; var ra, de: double);
 begin
+if abs(mountjd-jd2000)<0.1 then exit;
 ra:=deg2rad*ra*15;
 de:=deg2rad*de;
+mean_equatorial(ra,de);
 PrecessionFK5(mountjd,jd2000,ra,de);
 ra:=rad2deg*ra/15;
 de:=rad2deg*de;
@@ -2081,9 +2093,11 @@ end;
 
 procedure J2000ToMount(mountjd:double; var ra, de: double);
 begin
+if abs(mountjd-jd2000)<0.1 then exit;
 ra:=deg2rad*ra*15;
 de:=deg2rad*de;
 PrecessionFK5(jd2000,mountjd,ra,de);
+apparent_equatorial(ra,de);
 ra:=rad2deg*ra/15;
 de:=rad2deg*de;
 end;

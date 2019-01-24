@@ -41,7 +41,7 @@ T_ascomcamera = class(T_camera)
    {$ifdef mswindows}
    V: variant;
    nf: integer;
-   timestart,timeend,timedout,Fexptime:double;
+   timedout,Fexptime:double;
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    {$endif}
@@ -378,8 +378,8 @@ begin
   try
      {$ifdef debug_ascom}msg('start exposure.');{$endif}
      V.StartExposure(exptime,li);
-     timestart:=NowUTC;
-     timeend:=now+(exptime)/secperday;
+     Ftimestart:=NowUTC;
+     Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
      Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
@@ -439,7 +439,7 @@ begin
       case state of
         0 : FonExposureProgress(0);  // iddle
         1 : FonExposureProgress(-1); // wait start
-        2 : FonExposureProgress(secperday*(timeend-now)); // exposure in progress
+        2 : FonExposureProgress(secperday*(Ftimeend-now)); // exposure in progress
         3 : begin StatusTimer.Enabled:=false; FonExposureProgress(-3);  end; // read ccd
         4 : begin StatusTimer.Enabled:=false; FonExposureProgress(-4); exposuretimer.Interval:=250;  end; // downloading
         5 : FonExposureProgress(-5); // error
@@ -458,6 +458,7 @@ begin
 
  if ok then begin
    try
+   FMidExposureTime:=(Ftimestart+NowUTC)/2;
    {$ifdef debug_ascom}msg('clear old image.');{$endif}
    FFits.ClearImage;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
@@ -497,7 +498,7 @@ begin
    piy:=FPixelSizeY;
    ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
-   dateobs:=FormatDateTime(dateisoshort,timestart);
+   dateobs:=FormatDateTime(dateisoshort,Ftimestart);
    {$ifdef debug_ascom}msg('set fits header');{$endif}
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;

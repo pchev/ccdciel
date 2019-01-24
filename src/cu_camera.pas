@@ -81,6 +81,7 @@ T_camera = class(TComponent)
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
     FReadOutList: TStringList;
+    Ftimestart,Ftimeend,FMidExposureTime: double;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure WriteHeaders;
@@ -454,12 +455,12 @@ end;
 end;
 
 procedure T_camera.WriteHeaders;
-var dy,dm,dd: word;
-    origin,observer,telname,objname,siso: string;
-    focal_length,pixscale1,pixscale2,ccdtemp,equinox,jd1: double;
+var origin,observer,telname,objname,siso: string;
+    focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
+    haz,hal: double;
     gamma,offset: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
@@ -491,21 +492,22 @@ begin
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
-     hra:=15*Fmount.RA;
+     hra:=Fmount.RA;
      hdec:=Fmount.Dec;
-     equinox:=Fmount.Equinox;
-     if equinox<>2000 then begin
-       if equinox=0 then begin
-         jd1:=jdtoday;
-       end else begin
-         jd1:=mount.EquinoxJD;
-       end;
-       hra:=deg2rad*hra;
-       hdec:=deg2rad*hdec;
-       PrecessionFK5(jd1,jd2000,hra,hdec);
-       hra:=rad2deg*hra;
-       hdec:=rad2deg*hdec;
-     end;
+     MountToJ2000(Fmount.EquinoxJD,hra,hdec);
+     hra:=15*hra;
+  end;
+  haz:=NullCoord; hal:=NullCoord;
+  if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+     ra:=deg2rad*hra;
+     de:=deg2rad*hdec;
+     J2000ToApparent(ra,de);
+     st:=SidTimT(FMidExposureTime+ObsTimeZone/24);
+     Eq2Hz(st-ra,de,haz,hal) ;
+     Refraction(hal,true);
+     haz:=round(100*rad2deg*rmod(haz+pi,pi2))/100;
+     hal:=round(100*rad2deg*hal)/100;
+     hairmass:=round(100*AirMass(hal))/100;
   end;
   if (hfilter='')and(Fwheel<>nil)and(Fwheel.Status=devConnected) then begin
      hfilter:=Fwheel.FilterNames[Fwheel.Filter];
@@ -610,6 +612,12 @@ begin
     Ffits.Header.Add('FRAMEY',Fry,'Frame start y');
     Ffits.Header.Add('FRAMEHGT',Frheight,'Frame height');
     Ffits.Header.Add('FRAMEWDH',Frwidth,'Frame width');
+  end;
+  if (haz<>NullCoord)and(hal<>NullCoord) then begin
+    Ffits.Header.Add('CENTAZ',haz,'[deg] Azimuth of center of image');
+    Ffits.Header.Add('CENTALT',hal,'[deg] Altitude of center of image');
+    Ffits.Header.Add('OBJCTAZ',haz,'[deg] Azimuth of center of image');
+    Ffits.Header.Add('OBJCTALT',hal,'[deg] Altitude of center of image');
   end;
   if hairmass>0 then Ffits.Header.Add('AIRMASS',hairmass ,'Airmass');
   if hasfocuserpos then Ffits.Header.Add('FOCUSPOS',focuserpos ,'Focuser position in steps');
