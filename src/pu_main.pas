@@ -8764,7 +8764,7 @@ begin
          de:=StrToDE(tde);
       if (ra<>NullCoord) and (de<>NullCoord) then begin
         if MessageDlg(Format(rsPleaseConfir, [objn, tra, tde]), mtConfirmation,mbOKCancel, 0)=mrOK then begin
-          LocalToMount(mount.EquinoxJD,ra,de);
+          J2000ToMount(mount.EquinoxJD,ra,de);
           if astrometry.PrecisionSlew(ra,de,err) then begin
             f_capture.Fname.Text:=objn;
             NewMessage(Format(rsPlanetariumT, [objn]),1);
