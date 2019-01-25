@@ -4157,8 +4157,10 @@ begin
 end;
 
 procedure Tf_main.MenuHelpAboutClick(Sender: TObject);
-var aboutmsg: string;
+var aboutmsg,cdate: string;
 begin
+cdate:={$I %DATE%};
+cdate:=copy(cdate,1,4);
 aboutmsg:='CCDciel '+crlf;
 aboutmsg:=aboutmsg+ccdciel_version+'-'+RevisionStr+blank+compile_time+crlf;
 aboutmsg:=aboutmsg+rsCompiledWith+':'+crlf;
@@ -4166,7 +4168,7 @@ aboutmsg:=aboutmsg+blank+compile_version+crlf+crlf;
 aboutmsg:=aboutmsg+'Credits:'+crlf;
 aboutmsg:=aboutmsg+tab+'Patrick Chevalley'+crlf;
 aboutmsg:=aboutmsg+tab+'Han Kleijn'+crlf+crlf;
-aboutmsg:=aboutmsg+'Copyright (C) 2017 Patrick Chevalley pch@ap-i.net'+crlf;
+aboutmsg:=aboutmsg+'Copyright (C) '+cdate+' Patrick Chevalley pch@ap-i.net'+crlf;
 aboutmsg:=aboutmsg+'http://www.ap-i.net'+crlf;
 aboutmsg:=aboutmsg+'This program is free software; you can redistribute it and/or'+crlf;
 aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'+crlf;
