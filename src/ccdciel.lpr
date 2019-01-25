@@ -47,7 +47,7 @@ uses
   pu_focusercalibration, cu_tcpserver, u_translation, pu_hyperbola,
   fu_magnifyer, pu_msgtabs, u_annotation, pu_sequenceoptions, cu_safety,
   cu_weather, cu_ascomsafety, cu_ascomweather, fu_weather, cu_indiweather,
-  cu_indisafety, cu_dome, cu_ascomdome, cu_indidome, fu_dome, fu_safety;
+  cu_indisafety, cu_dome, cu_ascomdome, cu_indidome, fu_dome, fu_safety, pu_about;
 
 {$R *.res}
 
@@ -78,6 +78,7 @@ begin
   Application.CreateForm(Tf_planetariuminfo, f_planetariuminfo);
   Application.CreateForm(Tf_pause, f_pause);
   Application.CreateForm(Tf_focusercalibration, f_focusercalibration);
+  Application.CreateForm(Tf_about, f_about);
   Application.Run;
 end.
 

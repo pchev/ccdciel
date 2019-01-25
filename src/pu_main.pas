@@ -33,7 +33,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -984,6 +984,8 @@ begin
   compile_time:={$I %DATE%}+' '+{$I %TIME%};
   compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
   compile_system:={$I %FPCTARGETOS%};
+  cdate:={$I %DATE%};
+  cdate:=copy(cdate,1,4);
   {$ifdef mswindows}
   DefaultInterface:=ASCOM;
   Application.{%H-}UpdateFormatSettings := False;
@@ -1453,6 +1455,9 @@ begin
   {$ifdef unix}
   NewMessage(IndiVersion,9);
   {$endif}
+  NewMessage('CCDciel Copyright (C) '+cdate+' Patrick Chevalley');
+  NewMessage('This is free software, you can redistribute it under certain conditions.');
+  NewMessage('This program comes with ABSOLUTELY NO WARRANTY; for details see '+rsHelp+'/'+rsAbout);
   NewMessage('CCDciel '+ccdciel_version+blank+rsInitialized,1);
   NewMessage(Format(rsUsingConfigu, [configfile]), 3);
 end;
@@ -4157,24 +4162,8 @@ begin
 end;
 
 procedure Tf_main.MenuHelpAboutClick(Sender: TObject);
-var aboutmsg,cdate: string;
 begin
-cdate:={$I %DATE%};
-cdate:=copy(cdate,1,4);
-aboutmsg:='CCDciel '+crlf;
-aboutmsg:=aboutmsg+ccdciel_version+'-'+RevisionStr+blank+compile_time+crlf;
-aboutmsg:=aboutmsg+rsCompiledWith+':'+crlf;
-aboutmsg:=aboutmsg+blank+compile_version+crlf+crlf;
-aboutmsg:=aboutmsg+'Credits:'+crlf;
-aboutmsg:=aboutmsg+tab+'Patrick Chevalley'+crlf;
-aboutmsg:=aboutmsg+tab+'Han Kleijn'+crlf+crlf;
-aboutmsg:=aboutmsg+'Copyright (C) '+cdate+' Patrick Chevalley pch@ap-i.net'+crlf;
-aboutmsg:=aboutmsg+'http://www.ap-i.net'+crlf;
-aboutmsg:=aboutmsg+'This program is free software; you can redistribute it and/or'+crlf;
-aboutmsg:=aboutmsg+'modify it under the terms of the GNU General Public License'+crlf;
-aboutmsg:=aboutmsg+'as published by the Free Software Foundation; either version 3'+crlf;
-aboutmsg:=aboutmsg+'of the License, or (at your option) any later version.'+crlf;
-MessageDlg(rsAbout+' CCDciel', aboutmsg, mtInformation, [mbClose], 0);
+f_about.ShowModal;
 end;
 
 procedure Tf_main.MenuUsergroupClick(Sender: TObject);
