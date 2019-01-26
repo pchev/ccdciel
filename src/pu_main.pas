@@ -1455,10 +1455,8 @@ begin
   {$ifdef unix}
   NewMessage(IndiVersion,9);
   {$endif}
-  NewMessage('CCDciel Copyright (C) '+cdate+' Patrick Chevalley');
-  NewMessage('This is free software, you can redistribute it under certain conditions.');
+  NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
   NewMessage('This program comes with ABSOLUTELY NO WARRANTY; for details see '+rsHelp+'/'+rsAbout);
-  NewMessage('CCDciel '+ccdciel_version+blank+rsInitialized,1);
   NewMessage(Format(rsUsingConfigu, [configfile]), 3);
 end;
 
