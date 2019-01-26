@@ -7778,7 +7778,7 @@ begin
 end;
 
 function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
-var tra,tde,teq,tpa,sra,sde,jd0,jd1,err: double;
+var tra,tde,teq,tpa,sra,sde,err: double;
     sid: string;
     focusretry,maxretry: integer;
     tpos,pslew,savecapture,restartguider,pauseguider: boolean;

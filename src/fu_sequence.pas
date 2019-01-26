@@ -1113,7 +1113,6 @@ begin
 end;
 
 procedure Tf_sequence.MountTrackingStarted;
-var t: TTarget;
 begin
   if MountTrackingAlert then begin
     MountTrackingAlert:=false;

@@ -36,8 +36,8 @@ T_ascomsafety = class(T_safety)
  private
    {$ifdef mswindows}
    V: variant;
-   {$endif}
    stSafe: boolean;
+   {$endif}
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);

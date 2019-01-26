@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, indiapi, u_utils, u_translation,
+uses u_global, indiapi,
   Classes, SysUtils;
 
 type

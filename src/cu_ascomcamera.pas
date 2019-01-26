@@ -181,8 +181,7 @@ end;
 
 procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
 {$ifdef mswindows}
-var x: double;
-    readmodes,roitem: Variant;
+var readmodes,roitem: Variant;
     i,n: integer;
 {$endif}
 begin
@@ -258,7 +257,7 @@ begin
       FCanSetTemperature:=false;
     end;
     try
-      x:=V.CCDTemperature;
+      DummyDouble:=V.CCDTemperature;
       FHasTemperature:=true;
     except
       FHasTemperature:=false;

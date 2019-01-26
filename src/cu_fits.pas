@@ -2107,7 +2107,7 @@ end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
 var i,j,k,ii: integer;
-    x,y,dmin,dmax,minoffset,maxoffset : double;
+    x,y,dmin,dmax,minoffset : double;
     ni,sum,sum2 : extended;
 
 begin
@@ -2121,7 +2121,6 @@ begin
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
     minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
-    maxoffset:=operand.FFitsInfo.dmax-FFitsInfo.dmax;
     for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
       for i:=0 to FFitsInfo.naxis2-1 do begin
        ii:=FFitsInfo.naxis2-1-i;

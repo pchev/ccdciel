@@ -386,6 +386,8 @@ var
   CurrentSeqName, CurrentTargetName, CurrentStepName: string;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
+  DummyDouble: double;
+  DummyBool: boolean;
 
   procedure globalmsg(str:string);
 

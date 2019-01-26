@@ -18,6 +18,7 @@ unit ws_customserver2;
   {$MODE DELPHI}
 {$ENDIF}
 {$H+}
+{$WARN 5043 off : Symbol "$1" is deprecated}
 
 interface
 
@@ -25,7 +26,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, blcksock, syncobjs, Sockets, ssl_openssl, ws_bclasses;
+  Classes, SysUtils, blcksock, syncobjs, ssl_openssl, ws_bclasses;
 
 type
   TCustomServer = class;

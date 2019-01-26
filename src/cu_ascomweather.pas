@@ -315,91 +315,89 @@ begin
 end;
 
 procedure T_ascomweather.GetCapabilities;
-var x: double;
-    ok: boolean;
 begin
  {$ifdef mswindows}
  try
    FhasCloudCover:=false;
-   x:=V.CloudCover;
+   DummyDouble:=V.CloudCover;
    FhasCloudCover:=true;
  except
  end;
  try
    FhasDewPoint:=false;
-   x:=V.DewPoint;
+   DummyDouble:=V.DewPoint;
    FhasDewPoint:=true;
  except
  end;
  try
    FhasHumidity:=false;
-   x:=V.Humidity;
+   DummyDouble:=V.Humidity;
    FhasHumidity:=true;
  except
  end;
  try
    FhasPressure:=false;
-   x:=V.Pressure;
+   DummyDouble:=V.Pressure;
    FhasPressure:=true;
  except
  end;
  try
    FhasRainRate:=false;
-   x:=V.RainRate;
+   DummyDouble:=V.RainRate;
    FhasRainRate:=true;
  except
  end;
  try
    FhasSkyBrightness:=false;
-   x:=V.SkyBrightness;
+   DummyDouble:=V.SkyBrightness;
    FhasSkyBrightness:=true;
  except
  end;
  try
    FhasSkyQuality:=false;
-   x:=V.SkyQuality;
+   DummyDouble:=V.SkyQuality;
    FhasSkyQuality:=true;
  except
  end;
  try
    FhasSkyTemperature:=false;
-   x:=V.SkyTemperature;
+   DummyDouble:=V.SkyTemperature;
    FhasSkyTemperature:=true;
  except
  end;
  try
    FhasStarFWHM:=false;
-   x:=V.StarFWHM;
+   DummyDouble:=V.StarFWHM;
    FhasStarFWHM:=true;
  except
  end;
  try
    FhasTemperature:=false;
-   x:=V.Temperature;
+   DummyDouble:=V.Temperature;
    FhasTemperature:=true;
  except
  end;
  try
    FhasWindDirection:=false;
-   x:=V.WindDirection;
+   DummyDouble:=V.WindDirection;
    FhasWindDirection:=true;
  except
  end;
  try
    FhasWindGust:=false;
-   x:=V.WindGust;
+   DummyDouble:=V.WindGust;
    FhasWindGust:=true;
  except
  end;
  try
    FhasWindSpeed:=false;
-   x:=V.WindSpeed;
+   DummyDouble:=V.WindSpeed;
    FhasWindSpeed:=true;
  except
  end;
  try
    FhasStatus:=false;
-   ok:=V.IsSafe;
+   DummyBool:=V.IsSafe;
    FhasStatus:=true;
  except
  end;

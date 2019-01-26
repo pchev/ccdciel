@@ -55,6 +55,10 @@ unit ws_websocket2;
   {$MODE DELPHI}
 {$ENDIF}
 {$H+}
+{$WARN 5091 off : Local variable "$1" of a managed type does not seem to be initialized}
+{$WARN 5057 off : Local variable "$1" does not seem to be initialized}
+{$WARN 4081 off : Converting the operands to "$1" before doing the multiply could prevent overflow errors.}
+{$WARN 5089 off : Local variable "$1" of a managed type does not seem to be initialized}
 
 interface
 

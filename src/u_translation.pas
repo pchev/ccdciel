@@ -101,7 +101,6 @@ resourcestring
   rsDownloadLate = 'Download latest version';
   rsAbout = 'About';
   rsDevicesSetup = 'Devices Setup%s';
-  rsInitialized = 'initialized';
   rsCompiledWith = 'Compiled with';
   rsStartNewLog = 'Start new log';
   rsConnected = '%s connected';

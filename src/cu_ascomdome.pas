@@ -230,7 +230,9 @@ begin
 end;
 
 function T_ascomdome.GetShutter: boolean;
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
  result:=false;
  {$ifdef mswindows}
