@@ -158,6 +158,13 @@ begin
  Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
+ BtnPinGraph.Flat:=true;
+ BtnMeasureImage.Flat:=true;
+ ChkFocus.Flat:=true;
+ ChkAutofocus.Flat:=true;
+ BtnMeasureImage.Transparent:=false;
+ ChkFocus.Transparent:=false;
+ ChkAutofocus.Transparent:=false;
  {$endif}
  ScaleDPI(Self);
  SetLang;
