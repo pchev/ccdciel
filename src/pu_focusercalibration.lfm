@@ -11,7 +11,6 @@ object f_focusercalibration: Tf_focusercalibration
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
-  Visible = False
   object Notebook1: TNotebook
     Left = 0
     Height = 375
@@ -111,7 +110,7 @@ object f_focusercalibration: Tf_focusercalibration
         Left = 8
         Height = 19
         Top = 328
-        Width = 219
+        Width = 220
         Caption = 'Click Next to start the measurement.'
         ParentColor = False
         WordWrap = True
@@ -225,6 +224,7 @@ object f_focusercalibration: Tf_focusercalibration
           Pointer.Brush.Style = bsClear
           Pointer.OverrideColor = [ocPen]
           Pointer.Style = psCircle
+          Pointer.Visible = True
           ShowPoints = True
           Source = PtSourceL
         end
@@ -234,6 +234,7 @@ object f_focusercalibration: Tf_focusercalibration
           Pointer.Brush.Style = bsClear
           Pointer.OverrideColor = [ocPen]
           Pointer.Style = psCircle
+          Pointer.Visible = True
           ShowPoints = True
           Source = PtSourceR
         end

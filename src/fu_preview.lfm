@@ -108,7 +108,7 @@ object f_preview: Tf_preview
         Height = 29
         Top = 4
         Width = 90
-        MaxValue = 0
+        MaxValue = 999999999
         ParentFont = False
         TabOrder = 1
       end

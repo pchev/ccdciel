@@ -66,7 +66,6 @@ type
     PtSourceR: TListChartSource;
     Backlash: TSpinEdit;
     hfdmax: TSpinEdit;
-    SpinEdit1: TSpinEdit;
     stepmin: TSpinEdit;
     ValueListEditor1: TValueListEditor;
     ValueListEditor2: TValueListEditor;

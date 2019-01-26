@@ -116,7 +116,7 @@ object f_capture: Tf_capture
         Height = 29
         Top = 4
         Width = 89
-        MaxValue = 0
+        MaxValue = 999999999
         ParentFont = False
         TabOrder = 1
       end
