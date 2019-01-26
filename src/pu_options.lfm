@@ -56,11 +56,11 @@ object f_option: Tf_option
     Height = 500
     Top = 0
     Width = 530
-    ActivePage = TabSheet10
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 5
+    TabIndex = 6
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -1782,7 +1782,7 @@ object f_option: Tf_option
           Width = 36
           Caption = 'In'
           Checked = True
-          OnChange = CheckFocuserDirection
+          OnClick = CheckFocuserDirection
           ParentFont = False
           ParentShowHint = False
           TabOrder = 1
@@ -1795,7 +1795,7 @@ object f_option: Tf_option
           Top = 56
           Width = 47
           Caption = 'Out'
-          OnChange = CheckFocuserDirection
+          OnClick = CheckFocuserDirection
           ParentFont = False
           ParentShowHint = False
           TabOrder = 0
@@ -2198,7 +2198,7 @@ object f_option: Tf_option
           Width = 129
           Caption = 'Slew to focus star'
           Checked = True
-          OnChange = ChangeAutofocusInPlace
+          OnClick = ChangeAutofocusInPlace
           ParentFont = False
           TabOrder = 1
           TabStop = True
@@ -2209,7 +2209,7 @@ object f_option: Tf_option
           Top = 6
           Width = 98
           Caption = 'Stay in place'
-          OnChange = ChangeAutofocusInPlace
+          OnClick = ChangeAutofocusInPlace
           ParentFont = False
           TabOrder = 2
         end
@@ -2430,8 +2430,8 @@ object f_option: Tf_option
               Top = 176
               Width = 418
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 414
+              ClientHeight = 40
+              ClientWidth = 418
               ParentFont = False
               TabOrder = 2
               Visible = False
@@ -3302,7 +3302,7 @@ object f_option: Tf_option
         Height = 107
         Top = 77
         Width = 452
-        PageIndex = 0
+        PageIndex = 1
         TabOrder = 4
         object PagePHD: TPage
           object GroupBox3: TGroupBox
@@ -3411,7 +3411,7 @@ object f_option: Tf_option
               Width = 95
               Caption = 'Unix Socket'
               Checked = True
-              OnChange = rbLinSocketChange
+              OnClick = rbLinSocketChange
               ParentFont = False
               TabOrder = 4
               TabStop = True
@@ -3422,7 +3422,7 @@ object f_option: Tf_option
               Top = 50
               Width = 47
               Caption = 'TCP'
-              OnChange = rbLinSocketChange
+              OnClick = rbLinSocketChange
               ParentFont = False
               TabOrder = 3
             end
