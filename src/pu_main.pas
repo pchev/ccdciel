@@ -3988,6 +3988,10 @@ begin
                    f_option.ReadOutPreview.Items.Assign(ReadoutList);
                    f_option.ReadOutFocus.Items.Assign(ReadoutList);
                    f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
+                   if config.GetValue('/Sensor/MaxADUFromCamera',true) then begin
+                      MaxADU:=camera.MaxADU;
+                      config.SetValue('/Sensor/MaxADU',MaxADU);
+                   end;
                    end;
  end;
  CheckConnectionStatus;
@@ -5071,6 +5075,7 @@ begin
    f_option.LockTemp:=true;
    f_option.Caption:=Format(rsOptions, [profile]);
    f_option.onGetPixelSize:=@OptionGetPixelSize;
+   f_option.onGetMaxADU:=@OptionGetMaxADU;
    f_option.onGetFocale:=@OptionGetFocaleLength;
    f_option.Languages.Clear;
    i:=FindFirstUTF8(slash(appdir) + slash('data') + slash('language') + 'ccdciel.*.po',0,fs);
