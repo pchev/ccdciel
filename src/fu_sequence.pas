@@ -27,7 +27,7 @@ interface
 
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
-  fu_capture, fu_preview, fu_filterwheel, u_translation, pu_sequenceoptions,
+  fu_capture, fu_preview, fu_filterwheel, u_translation,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -400,6 +400,7 @@ begin
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
+      // Edit
       f_EditTargets.TargetName.Caption:=Targets.TargetName;
       f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
       f_EditTargets.TargetList.RowCount:=Targets.Count+1;
@@ -409,15 +410,15 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
       f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
       f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
-      f_sequenceoptions.MainOptions.Checked[optnone]:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndCloseDome or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
-      f_sequenceoptions.MainOptions.Checked[optstoptracking]:=Targets.AtEndStopTracking;
-      f_sequenceoptions.MainOptions.Checked[optpark]:=Targets.AtEndPark;
-      f_sequenceoptions.MainOptions.Checked[optclosedome]:=Targets.AtEndCloseDome;
-      f_sequenceoptions.MainOptions.Checked[optwarm]:=Targets.AtEndWarmCamera;
-      f_sequenceoptions.MainOptions.Checked[optscript]:=Targets.AtEndRunScript;
-      f_sequenceoptions.UnattendedErrorScript.Checked:=Targets.OnErrorRunScript;
-      f_sequenceoptions.SetScript(Targets.AtEndScript);
-      f_sequenceoptions.SetErrorScript(Targets.OnErrorScript);
+      f_EditTargets.cbNone.Checked:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndCloseDome or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
+      f_EditTargets.cbStopTracking.Checked:=Targets.AtEndStopTracking;
+      f_EditTargets.cbParkScope.Checked:=Targets.AtEndPark;
+      f_EditTargets.cbParkDome.Checked:=Targets.AtEndCloseDome;
+      f_EditTargets.cbWarm.Checked:=Targets.AtEndWarmCamera;
+      f_EditTargets.cbScript.Checked:=Targets.AtEndRunScript;
+      f_EditTargets.cbUnattended.Checked:=Targets.OnErrorRunScript;
+      f_EditTargets.BtnEndScript.Hint:=Targets.AtEndScript;
+      f_EditTargets.BtnUnattendedScript.Hint:=Targets.OnErrorScript;
       for i:=1 to Targets.Count do begin
         t:=TTarget.Create;
         t.Assign(Targets.Targets[i-1]);
@@ -425,6 +426,7 @@ begin
         f_EditTargets.TargetList.Objects[colseq,i]:=t;
       end;
     end else begin
+      // New
       CurrentSequenceFile:='';
       CurrentSeqName:='';
       f_EditTargets.TargetName.Caption:='New targets';
@@ -435,6 +437,13 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=false;
       f_EditTargets.SeqStartAt.Text:='00:00:00';
       f_EditTargets.SeqStopAt.Text:='00:00:00';
+      f_EditTargets.cbNone.Checked:=false;
+      f_EditTargets.cbStopTracking.Checked:=true;
+      f_EditTargets.cbParkScope.Checked:=false;
+      f_EditTargets.cbParkDome.Checked:=false;
+      f_EditTargets.cbWarm.Checked:=false;
+      f_EditTargets.cbScript.Checked:=false;
+      f_EditTargets.cbUnattended.Checked:=false;
       t:=TTarget.Create;
       if (t.planname='')and(f_EditTargets.TargetList.Columns[colplan-1].PickList.Count>0) then
          t.planname:=f_EditTargets.TargetList.Columns[colplan-1].PickList[0];
@@ -463,14 +472,14 @@ begin
       Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
       Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
       Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
-      Targets.AtEndStopTracking := f_sequenceoptions.MainOptions.Checked[optstoptracking];
-      Targets.AtEndPark         := f_sequenceoptions.MainOptions.Checked[optpark];
-      Targets.AtEndCloseDome    := f_sequenceoptions.MainOptions.Checked[optclosedome];
-      Targets.AtEndWarmCamera   := f_sequenceoptions.MainOptions.Checked[optwarm];
-      Targets.AtEndRunScript    := f_sequenceoptions.MainOptions.Checked[optscript];
-      Targets.OnErrorRunScript  := f_sequenceoptions.UnattendedErrorScript.Checked;
-      Targets.AtEndScript       := f_sequenceoptions.ScriptList.Text;
-      Targets.OnErrorScript     := f_sequenceoptions.ScriptListError.Text;
+      Targets.AtEndStopTracking := f_EditTargets.cbStopTracking.Checked;
+      Targets.AtEndPark         := f_EditTargets.cbParkScope.Checked;
+      Targets.AtEndCloseDome    := f_EditTargets.cbParkDome.Checked;
+      Targets.AtEndWarmCamera   := f_EditTargets.cbWarm.Checked;
+      Targets.AtEndRunScript    := f_EditTargets.cbScript.Checked;
+      Targets.OnErrorRunScript  := f_EditTargets.cbUnattended.Checked;
+      Targets.AtEndScript       := f_EditTargets.BtnEndScript.Hint;
+      Targets.OnErrorScript     := f_EditTargets.BtnUnattendedScript.Hint;
       SaveTargets(CurrentSequenceFile,defaultname);
     end else begin
       // look for modified plan

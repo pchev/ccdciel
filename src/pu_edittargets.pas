@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
-  pu_scriptengine, cu_astrometry, u_translation, pu_sequenceoptions,
+  pu_scriptengine, cu_astrometry, u_translation, pu_selectscript,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
 
@@ -41,24 +41,42 @@ type
 
   Tf_EditTargets = class(TForm)
     AutofocusCount: TSpinEdit;
+    Bevel1: TBevel;
+    Bevel2: TBevel;
     BtnAddStep: TButton;
+    BtnUnattendedScript: TButton;
     BtnSaveAs: TButton;
     BtnSavePlan: TButton;
     BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
     BtnImport: TButton;
     BtnApplyToAll: TButton;
-    ButtonEndOptions: TButton;
+    BtnEndScript: TButton;
+    cbNone: TCheckBox;
+    cbStopTracking: TCheckBox;
+    cbParkScope: TCheckBox;
+    cbParkDome: TCheckBox;
+    cbWarm: TCheckBox;
+    cbScript: TCheckBox;
+    cbUnattended: TCheckBox;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
     GroupBoxStep: TGroupBox;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
+    Label3: TLabel;
+    Label4: TLabel;
     OpenDialog1: TOpenDialog;
     Panel15: TPanel;
     Panel16: TPanel;
     Panel17: TPanel;
+    Panel18: TPanel;
+    Panel19: TPanel;
+    Panel20: TPanel;
+    Panel21: TPanel;
+    Panel3: TPanel;
+    Panel8: TPanel;
     PanelSep: TPanel;
     DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
@@ -104,12 +122,6 @@ type
     PanelGain1: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
-    Shape1: TShape;
-    Shape2: TShape;
-    Shape3: TShape;
-    Shape4: TShape;
-    Shape5: TShape;
-    Shape6: TShape;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
@@ -155,6 +167,7 @@ type
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
+    procedure BtnEndScriptClick(Sender: TObject);
     procedure BtnImportClick(Sender: TObject);
     procedure BtnRemoveStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
@@ -167,7 +180,8 @@ type
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
-    procedure ButtonEndOptionsClick(Sender: TObject);
+    procedure BtnUnattendedScriptClick(Sender: TObject);
+    procedure cbTermOptionClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -205,6 +219,7 @@ type
     LockTarget: boolean;
     FTargetsRepeat: integer;
     LockStep, StepsModified: boolean;
+    Lockcb: boolean;
     originalFilter: array[0..99] of string;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
@@ -215,7 +230,6 @@ type
     procedure CheckPlanModified;
     function  CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
-    procedure ShowEndOptions;
   public
     { public declarations }
     procedure LoadPlanList;
@@ -254,6 +268,9 @@ begin
   FTargetsRepeat:=1;
   LockStep:=false;
   StepsModified:=false;
+  Lockcb:=false;
+  f_selectscript:=Tf_selectscript.Create(self);
+  cbStopTracking.Checked:=true;
   LoadPlanList;
   LoadScriptList;
 end;
@@ -285,7 +302,14 @@ begin
   RepeatCountList.Value:=FTargetsRepeat;
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
-  ShowEndOptions;
+  if BtnEndScript.Hint='' then
+     BtnEndScript.Caption:='.?.'
+  else
+     BtnEndScript.Caption:='...';
+  if BtnUnattendedScript.Hint='' then
+     BtnUnattendedScript.Caption:='.?.'
+  else
+     BtnUnattendedScript.Caption:='...';
 end;
 
 procedure Tf_EditTargets.SetLang;
@@ -298,13 +322,6 @@ begin
   BtnNewScript.Caption := rsNewScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
-  ButtonEndOptions.Caption:=rsTerminationO;
-  Shape1.Hint:=rsStopTelescop2;
-  Shape2.Hint:=rsParkTheTeles2;
-  Shape3.Hint:=rsParkAndClose;
-  Shape4.Hint:=rsWarmTheCamer;
-  Shape5.Hint:=rsRunAScript;
-  Shape6.Hint:=rsRunAdditiona;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
@@ -376,6 +393,16 @@ begin
   StepList.Columns.Items[pcolfilter-1].Title.Caption := rsFilter;
   StepList.Columns.Items[pcolcount-1].Title.Caption := rsCount;
   Label1.Caption := rsPlan;
+  // termination options
+  Label3.Caption:=rsTerminationO;
+  cbNone.Caption:=rsDoNothing;
+  cbStopTracking.Caption:=rsStopTelescop2;
+  cbParkScope.Caption:=rsParkTheTeles2;
+  cbParkDome.Caption:=rsParkAndClose;
+  cbWarm.Caption:=rsWarmTheCamer;
+  cbScript.Caption:=rsRunAScript;
+  Label4.Caption:=rsUnattendedEr;
+
 end;
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
@@ -432,8 +459,7 @@ begin
   s.CustomSort(@ScriptListCompare);
   ScriptList.Items.Assign(s);
   ScriptList.ItemIndex:=0;
-  f_sequenceoptions.ScriptList.Items.Assign(s);
-  f_sequenceoptions.ScriptListError.Items.Assign(s);
+  f_selectscript.ComboBoxScript.Items.Assign(s);
   s.Free;
 end;
 
@@ -574,21 +600,55 @@ begin
   TargetChange(nil);
 end;
 
-procedure Tf_EditTargets.ShowEndOptions;
+procedure Tf_EditTargets.BtnEndScriptClick(Sender: TObject);
 begin
-  if f_sequenceoptions.MainOptions.Checked[1] then Shape1.Brush.Color:=clLime else Shape1.Brush.Color:=clRed;
-  if f_sequenceoptions.MainOptions.Checked[2] then Shape2.Brush.Color:=clLime else Shape2.Brush.Color:=clRed;
-  if f_sequenceoptions.MainOptions.Checked[3] then Shape3.Brush.Color:=clLime else Shape3.Brush.Color:=clRed;
-  if f_sequenceoptions.MainOptions.Checked[4] then Shape4.Brush.Color:=clLime else Shape4.Brush.Color:=clRed;
-  if f_sequenceoptions.MainOptions.Checked[5] then Shape5.Brush.Color:=clLime else Shape5.Brush.Color:=clRed;
-  if f_sequenceoptions.UnattendedErrorScript.Checked then Shape6.Brush.Color:=clLime else Shape6.Brush.Color:=clRed;
+  f_selectscript.SetScript(BtnEndScript.Hint);
+  FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
+  if f_selectscript.ShowModal=mrOK then begin
+     BtnEndScript.Hint:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+  end;
+  if BtnEndScript.Hint='' then
+     BtnEndScript.Caption:='.?.'
+  else
+     BtnEndScript.Caption:='...';
 end;
 
-procedure Tf_EditTargets.ButtonEndOptionsClick(Sender: TObject);
+procedure Tf_EditTargets.BtnUnattendedScriptClick(Sender: TObject);
 begin
-  FormPos(f_sequenceoptions,mouse.CursorPos.X,mouse.CursorPos.Y);
-  f_sequenceoptions.ShowModal;
-  ShowEndOptions;
+  f_selectscript.SetScript(BtnUnattendedScript.Hint);
+  FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
+  if f_selectscript.ShowModal=mrOK then begin
+     BtnUnattendedScript.Hint:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+  end;
+  if BtnUnattendedScript.Hint='' then
+     BtnUnattendedScript.Caption:='.?.'
+  else
+     BtnUnattendedScript.Caption:='...';
+end;
+
+procedure Tf_EditTargets.cbTermOptionClick(Sender: TObject);
+begin
+  if not(Sender is TCheckBox) then exit;
+  if Lockcb then exit;
+  Lockcb:=true;
+  if (Sender=cbNone) then begin
+     cbNone.Checked:=true;
+     cbStopTracking.Checked:=false;
+     cbParkScope.Checked:=false;
+     cbParkDome.Checked:=false;
+     cbWarm.Checked:=false;
+     cbScript.Checked:=false;
+  end;
+  if (Sender<>cbNone) and TCheckBox(Sender).Checked then begin
+     cbNone.Checked:=false;
+  end;
+  if (Sender=cbStopTracking) and cbStopTracking.Checked then begin
+     cbParkScope.Checked:=false;
+  end;
+  if (Sender=cbParkScope) and cbParkScope.Checked then begin
+     cbStopTracking.Checked:=false;
+  end;
+  Lockcb:=false;
 end;
 
 procedure Tf_EditTargets.BtnSkyFlatClick(Sender: TObject);

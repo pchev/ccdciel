@@ -34,8 +34,8 @@ object f_sequence: Tf_sequence
     Width = 180
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 276
-    ClientWidth = 180
+    ClientHeight = 272
+    ClientWidth = 176
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
@@ -60,8 +60,8 @@ object f_sequence: Tf_sequence
       Top = 158
       Width = 180
       Align = alBottom
-      ClientHeight = 118
-      ClientWidth = 180
+      ClientHeight = 114
+      ClientWidth = 176
       ParentFont = False
       TabOrder = 1
       object BtnEditTargets: TButton
@@ -178,8 +178,8 @@ object f_sequence: Tf_sequence
     Width = 180
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 238
-    ClientWidth = 180
+    ClientHeight = 234
+    ClientWidth = 176
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
@@ -217,8 +217,8 @@ object f_sequence: Tf_sequence
       Top = 158
       Width = 180
       Align = alBottom
-      ClientHeight = 80
-      ClientWidth = 180
+      ClientHeight = 76
+      ClientWidth = 176
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel

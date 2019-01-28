@@ -914,12 +914,10 @@ resourcestring
   rsDeleteStep = 'Delete step %s ?';
   rsStepDescript = 'Step description';
   rsTerminationO = 'Termination options';
-  rsActionsToTak = 'Actions to take when the sequence is finished';
   rsStopTelescop2 = 'Stop telescope tracking';
   rsParkTheTeles2 = 'Park the telescope';
   rsWarmTheCamer = 'Warm the camera';
   rsRunAScript = 'Run a script';
-  rsRunAdditiona = 'Run additional script in case of unattended error';
   rsTheTelescope = 'The telescope is parked, unpark now';
   rsExecutingThe = 'Executing the termination error actions.';
   rsExecutingThe2 = 'Executing the termination actions.';
@@ -1032,6 +1030,7 @@ resourcestring
   rsTemperatureS = 'Temperature scale';
   rsRunAutoFocus = 'Auto-focus if temp. change by more than %s';
   rsLicenseAgree = 'License agreement';
+  rsUnattendedEr = 'Unattended error script';
 
 
 

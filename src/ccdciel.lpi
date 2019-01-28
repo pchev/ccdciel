@@ -674,73 +674,73 @@
         <IsPartOfProject Value="True"/>
       </Unit70>
       <Unit71>
-        <Filename Value="pu_sequenceoptions.pas"/>
+        <Filename Value="cu_weather.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="f_sequenceoptions"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
       </Unit71>
       <Unit72>
-        <Filename Value="cu_weather.pas"/>
+        <Filename Value="cu_safety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit72>
       <Unit73>
-        <Filename Value="cu_safety.pas"/>
+        <Filename Value="cu_ascomsafety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit73>
       <Unit74>
-        <Filename Value="cu_ascomsafety.pas"/>
+        <Filename Value="cu_ascomweather.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit74>
       <Unit75>
-        <Filename Value="cu_ascomweather.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit75>
-      <Unit76>
         <Filename Value="fu_weather.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_weather"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit75>
+      <Unit76>
+        <Filename Value="cu_indiweather.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit76>
       <Unit77>
-        <Filename Value="cu_indiweather.pas"/>
+        <Filename Value="cu_indisafety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit77>
       <Unit78>
-        <Filename Value="cu_indisafety.pas"/>
+        <Filename Value="cu_ascomdome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit78>
       <Unit79>
-        <Filename Value="cu_ascomdome.pas"/>
+        <Filename Value="cu_dome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit79>
       <Unit80>
-        <Filename Value="cu_dome.pas"/>
+        <Filename Value="cu_indidome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit80>
       <Unit81>
-        <Filename Value="cu_indidome.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit81>
-      <Unit82>
         <Filename Value="fu_dome.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_dome"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit82>
-      <Unit83>
+      </Unit81>
+      <Unit82>
         <Filename Value="fu_safety.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_safety"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit83>
-      <Unit84>
+      </Unit82>
+      <Unit83>
         <Filename Value="pu_about.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_about"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit83>
+      <Unit84>
+        <Filename Value="pu_selectscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_selectscript"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit84>
