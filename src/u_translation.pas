@@ -447,11 +447,9 @@ resourcestring
   rsRAMDisk = 'RAM Disk';
   rsDirectory = 'Directory';
   rsBeSureToConf = 'Be sure to configure the camera connection.';
-  rsFilterWheelI = 'Filter wheel in camera connection. (Restart required!)';
   rsUseFilterWhe = 'Use filter wheel';
   rsNotImplement = 'Not implemented!';
   rsUseFocuser = 'Use focuser';
-  rsFocuserInMou = 'Focuser in mount connection. (Restart required!)';
   rsUseRotator = 'Use rotator';
   rsUseMount = 'Use mount';
   rsHeartBeatThr = 'Heart beat threshold [minutes]';

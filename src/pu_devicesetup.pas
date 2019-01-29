@@ -87,11 +87,41 @@ type
     Label26: TLabel;
     Label27: TLabel;
     Label28: TLabel;
+    Label29: TLabel;
+    DeviceCamera: TLabel;
+    PageControlWatchdog: TPageControl;
+    PageControlSafety: TPageControl;
+    PageControlWeather: TPageControl;
+    PageControlDome: TPageControl;
+    PageControlMount: TPageControl;
+    PageControlRotator: TPageControl;
+    PageControlFocuser: TPageControl;
+    PageControlWheel: TPageControl;
+    PageControlCamera: TPageControl;
     PanelDomeAscom: TPanel;
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;
     DomeIndiDevice: TComboBox;
     InitTimer: TTimer;
+    CameraIndi: TTabSheet;
+    CameraAscom: TTabSheet;
+    FocuserIndi: TTabSheet;
+    FocuserAscom: TTabSheet;
+    FocuserInMount: TTabSheet;
+    RotatorIndi: TTabSheet;
+    RotatorAscom: TTabSheet;
+    MountIndi: TTabSheet;
+    MountAscom: TTabSheet;
+    DomeIndi: TTabSheet;
+    DomeAscom: TTabSheet;
+    SafetyIndi: TTabSheet;
+    SafetyAscom: TTabSheet;
+    WatchdogIndi: TTabSheet;
+    WeatherIndi: TTabSheet;
+    WeatherAscom: TTabSheet;
+    WheelInCamera: TTabSheet;
+    WheelIndi: TTabSheet;
+    WheelAscom: TTabSheet;
     WeatherAutoLoadConfig: TCheckBox;
     SafetyAutoLoadConfig: TCheckBox;
     WeatherIndiDevice: TComboBox;
@@ -138,9 +168,6 @@ type
     WheelAutoLoadConfig: TCheckBox;
     IndiTimeout: TEdit;
     IndiSensor: TComboBox;
-    FilterWheelInCameraBox: TCheckBox;
-    FocuserInMountBox: TCheckBox;
-    InterfaceSelectionBox: TRadioGroup;
     IndiPort: TEdit;
     IndiServer: TEdit;
     GetIndiDevices: TButton;
@@ -196,15 +223,21 @@ type
     procedure CameraIndiTransfertClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
-    procedure FilterWheelInCameraBoxClick(Sender: TObject);
-    procedure FocuserInMountBoxClick(Sender: TObject);
     procedure GetIndiDevicesClick(Sender: TObject);
     procedure InitTimerTimer(Sender: TObject);
-    procedure InterfaceSelectionBoxClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
     procedure MountSetObservatoryClick(Sender: TObject);
+    procedure PageControlCameraChange(Sender: TObject);
+    procedure PageControlDomeChange(Sender: TObject);
+    procedure PageControlFocuserChange(Sender: TObject);
+    procedure PageControlMountChange(Sender: TObject);
+    procedure PageControlRotatorChange(Sender: TObject);
+    procedure PageControlSafetyChange(Sender: TObject);
+    procedure PageControlWatchdogChange(Sender: TObject);
+    procedure PageControlWeatherChange(Sender: TObject);
+    procedure PageControlWheelChange(Sender: TObject);
     procedure ProfileListChange(Sender: TObject);
     procedure AscomWeatherTypeClick(Sender: TObject);
   private
@@ -212,12 +245,11 @@ type
     indiclient: TIndiBaseClient;
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
     LockInterfaceChange,InitialLock,ProfileLock: boolean;
-    FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
+    FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount:integer;
     receiveindidevice:boolean;
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
-    procedure SetConnectionInterface(value: TDevInterface);
     procedure SetCameraConnection(value: TDevInterface);
     procedure SetWheelConnection(value: TDevInterface);
     procedure SetFocuserConnection(value: TDevInterface);
@@ -235,7 +267,6 @@ type
     procedure LoadProfileList;
     procedure Loadconfig(conf: TCCDConfig);
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
-    property ConnectionInterface: TDevInterface read FConnectionInterface write SetConnectionInterface;
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
     property FocuserConnection: TDevInterface read FFocuserConnection write SetFocuserConnection;
@@ -265,6 +296,16 @@ begin
   LockInterfaceChange:=false;
   InitialLock:=true;
   Pagecontrol1.ActivePage:=DeviceInterface;
+  {$ifndef mswindows}
+  CameraAscom.TabVisible:=false;
+  WheelAscom.TabVisible:=false;
+  FocuserAscom.TabVisible:=false;
+  RotatorAscom.TabVisible:=false;
+  MountAscom.TabVisible:=false;
+  DomeAscom.TabVisible:=false;
+  WeatherAscom.TabVisible:=false;
+  SafetyAscom.TabVisible:=false;
+  {$endif}
 end;
 
 procedure Tf_setup.SetLang;
@@ -297,7 +338,6 @@ begin
   BtnAboutCamera1.Caption:=rsAbout;
   BtnSetupCamera1.Caption:=rsSetup;
   FlipImage.Caption:=rsFlipTheImage;
-  FilterWheelInCameraBox.Caption:=rsFilterWheelI;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
   Label7.Caption:=rsPort;
@@ -308,7 +348,6 @@ begin
   BtnChooseFocuser.Caption:=rsChoose;
   BtnAboutCamera2.Caption:=rsAbout;
   BtnSetupCamera2.Caption:=rsSetup;
-  FocuserInMountBox.Caption:=rsFocuserInMou;
   Label9.Caption:=rsDevices;
   Label10.Caption:=rsPort;
   FocuserAutoLoadConfig.Caption:=rsLoadConfigur;
@@ -361,7 +400,26 @@ begin
   Label19.Caption:=rsDevices;
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
   Label20.Caption:=rsHeartBeatThr;
-  DeviceWatchdog.Caption:=rsUseWatchdog;
+  DeviceWatchdog.Caption:=rsUseWatchdog+': '+DevInterfaceName[0];
+  CameraIndi.Caption:=DevInterfaceName[0];
+  CameraAscom.Caption:=DevInterfaceName[1];
+  WheelIndi.Caption:=DevInterfaceName[0];
+  WheelAscom.Caption:=DevInterfaceName[1];
+  WheelInCamera.Caption:=DevInterfaceName[2];
+  FocuserIndi.Caption:=DevInterfaceName[0];
+  FocuserAscom.Caption:=DevInterfaceName[1];
+  FocuserInMount.Caption:=DevInterfaceName[3];
+  RotatorIndi.Caption:=DevInterfaceName[0];
+  RotatorAscom.Caption:=DevInterfaceName[1];
+  MountIndi.Caption:=DevInterfaceName[0];
+  MountAscom.Caption:=DevInterfaceName[1];
+  DomeIndi.Caption:=DevInterfaceName[0];
+  DomeAscom.Caption:=DevInterfaceName[1];
+  WeatherIndi.Caption:=DevInterfaceName[0];
+  WeatherAscom.Caption:=DevInterfaceName[1];
+  SafetyIndi.Caption:=DevInterfaceName[0];
+  SafetyAscom.Caption:=DevInterfaceName[1];
+  WatchdogIndi.Caption:=DevInterfaceName[0];
 end;
 
 procedure Tf_setup.LoadProfileList;
@@ -391,7 +449,6 @@ end;
 
 procedure Tf_setup.Loadconfig(conf: TCCDConfig);
 begin
-ConnectionInterface:=TDevInterface(conf.GetValue('/Interface',ord(DefaultCameraInterface)));
 IndiServer.Text:=conf.GetValue('/INDI/Server','localhost');
 IndiPort.Text:=conf.GetValue('/INDI/ServerPort','7624');
 IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
@@ -500,111 +557,17 @@ WatchdogIndiDevice.Text:=conf.GetValue('/INDIwatchdog/Device','');
 WatchdogThreshold.Text:=conf.GetValue('/INDIwatchdog/Threshold','10');
 WatchdogAutoLoadConfig.Checked:=conf.GetValue('/INDIwatchdog/AutoLoadConfig',true);
 
+DeviceFilterWheel.Caption:=rsUseFilterWhe+': '+DevInterfaceName[ord(FWheelConnection)];
+DeviceWeather.Caption:=rsUseWeatherSt+': '+DevInterfaceName[ord(FWeatherConnection)];
+DeviceSafety.Caption:=rsUseSafetyMon+': '+DevInterfaceName[ord(FSafetyConnection)];
+DeviceRotator.Caption:=rsUseRotator+': '+DevInterfaceName[ord(FRotatorConnection)];
+DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
+DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
+DeviceDome.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
+DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
+
 end;
 
-procedure Tf_setup.InterfaceSelectionBoxClick(Sender: TObject);
-begin
-  if LockInterfaceChange then begin
-    LockInterfaceChange:=false;
-    exit;
-  end;
-  if InterfaceSelectionBox.ItemIndex=0 then begin
-     FConnectionInterface:=INDI;
-     PanelIndiServer.Visible:=true;
-     FCameraConnection:=INDI;
-     PanelCameraIndi.Visible:=true;
-     PanelCameraAscom.Visible:=false;
-     FMountConnection:=INDI;
-     PanelMountIndi.Visible:=true;
-     PanelMountAscom.Visible:=false;
-     FDomeConnection:=INDI;
-     PanelDomeIndi.Visible:=true;
-     PanelDomeAscom.Visible:=false;
-     FRotatorConnection:=INDI;
-     PanelRotatorIndi.Visible:=true;
-     PanelRotatorAscom.Visible:=false;
-     FWeatherConnection:=INDI;
-     PanelWeatherIndi.Visible:=true;
-     PanelWeatherAscom.Visible:=false;
-     FSafetyConnection:=INDI;
-     PanelSafetyIndi.Visible:=true;
-     PanelSafetyAscom.Visible:=false;
-     // INDI internal filter use same driver as camera
-     FilterWheelInCameraBox.Visible:=true;
-     if (not FilterWheelInCameraBox.Checked) then begin
-        FWheelConnection:=INDI;
-        PanelWheelIndi.Visible:=true;
-        PanelWheelAscom.Visible:=false;
-        PanelWheelIncamera.Visible:=false;
-     end;
-     FocuserInMountBox.Visible:=true;
-     if (not FocuserInMountBox.Checked) then begin
-        FFocuserConnection:=INDI;
-        PanelFocuserIndi.Visible:=true;
-        PanelFocuserAscom.Visible:=false;
-        PanelFocuserInMount.Visible:=false;
-     end;
-     Watchdog.TabVisible:=true;
- end;
-{$ifdef mswindows}
-  if InterfaceSelectionBox.ItemIndex=1 then begin
-     FConnectionInterface:=ASCOM;
-     PanelIndiServer.Visible:=false;
-     FCameraConnection:=ASCOM;
-     PanelCameraIndi.Visible:=false;
-     PanelCameraAscom.Visible:=true;
-     FMountConnection:=ASCOM;
-     PanelMountIndi.Visible:=false;
-     PanelMountAscom.Visible:=true;
-     FDomeConnection:=ASCOM;
-     PanelDomeIndi.Visible:=false;
-     PanelDomeAscom.Visible:=true;
-     FRotatorConnection:=ASCOM;
-     PanelRotatorIndi.Visible:=false;
-     PanelRotatorAscom.Visible:=true;
-     FWeatherConnection:=ASCOM;
-     PanelWeatherIndi.Visible:=false;
-     PanelWeatherAscom.Visible:=true;
-     FSafetyConnection:=ASCOM;
-     PanelSafetyIndi.Visible:=false;
-     PanelSafetyAscom.Visible:=true;
-     FilterWheelInCameraBox.Visible:=true;
-     if (not FilterWheelInCameraBox.Checked) then begin
-        FWheelConnection:=ASCOM;
-        PanelWheelIndi.Visible:=false;
-        PanelWheelAscom.Visible:=true;
-        PanelWheelIncamera.Visible:=false;
-     end;
-     FocuserInMountBox.Checked:=false;
-     FocuserInMountBox.Visible:=false;
-     FFocuserConnection:=ASCOM;
-     PanelFocuserIndi.Visible:=false;
-     PanelFocuserAscom.Visible:=true;
-     PanelFocuserInMount.Visible:=false;
-     DeviceWatchdog.Checked:=false;
-     Watchdog.TabVisible:=false;
-  end;
-{$else}
- if InterfaceSelectionBox.ItemIndex=1 then begin
-    LockInterfaceChange:=true;
-    InterfaceSelectionBox.ItemIndex:=0;
-    ShowMessage(rsASCOMInterfa);
- end;
-{$endif}
-end;
-
-procedure Tf_setup.SetConnectionInterface(value: TDevInterface);
-begin
-{$ifndef mswindows}
-  if value=ASCOM then value:=INDI;
-{$endif}
-  FConnectionInterface:=value;
-  case FConnectionInterface of
-    INDI: InterfaceSelectionBox.ItemIndex:=0;
-    ASCOM: InterfaceSelectionBox.ItemIndex:=1;
-  end;
-  InterfaceSelectionBoxClick(nil);
- end;
 
 procedure Tf_setup.SetCameraConnection(value: TDevInterface);
 begin
@@ -612,6 +575,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FCameraConnection:=value;
+  case FCameraConnection of
+   INDI: PageControlCamera.ActivePageIndex:=0;
+   ASCOM: PageControlCamera.ActivePageIndex:=1;
+  end;
 end;
 
 procedure Tf_setup.SetRotatorConnection(value: TDevInterface);
@@ -620,6 +587,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FRotatorConnection:=value;
+  case FRotatorConnection of
+   INDI: PageControlRotator.ActivePageIndex:=0;
+   ASCOM: PageControlRotator.ActivePageIndex:=1;
+  end;
 end;
 
 procedure Tf_setup.SetWeatherConnection(value: TDevInterface);
@@ -628,6 +599,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FWeatherConnection:=value;
+  case FWeatherConnection of
+   INDI: PageControlWeather.ActivePageIndex:=0;
+   ASCOM: PageControlWeather.ActivePageIndex:=1;
+  end;
 end;
 
 procedure Tf_setup.SetSafetyConnection(value: TDevInterface);
@@ -636,6 +611,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FSafetyConnection:=value;
+  case FSafetyConnection of
+   INDI: PageControlSafety.ActivePageIndex:=0;
+   ASCOM: PageControlSafety.ActivePageIndex:=1;
+  end;
 end;
 
 procedure Tf_setup.SetWheelConnection(value: TDevInterface);
@@ -644,21 +623,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FWheelConnection:=value;
-  FilterWheelInCameraBox.Checked:=(FWheelConnection = INCAMERA);
-  if FWheelConnection=INDI then begin
-    PanelWheelIndi.Visible:=true;
-    PanelWheelAscom.Visible:=false;
-    PanelWheelIncamera.Visible:=false;
-  end
-  else if FWheelConnection=ASCOM then begin
-    PanelWheelIndi.Visible:=false;
-    PanelWheelAscom.Visible:=true;
-    PanelWheelIncamera.Visible:=false;
-  end
-  else if FWheelConnection=INCAMERA then begin
-    PanelWheelIndi.Visible:=false;
-    PanelWheelAscom.Visible:=false;
-    PanelWheelIncamera.Visible:=true;
+  case FWheelConnection of
+   INDI: PageControlWheel.ActivePageIndex:=0;
+   ASCOM: PageControlWheel.ActivePageIndex:=1;
+   INCAMERA: PageControlWheel.ActivePageIndex:=2;
   end;
 end;
 
@@ -668,21 +636,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FFocuserConnection:=value;
-  FocuserInMountBox.Checked:=(FFocuserConnection = INTELESCOPE);
-  if FFocuserConnection=INDI then begin
-    PanelFocuserIndi.Visible:=true;
-    PanelFocuserAscom.Visible:=false;
-    PanelFocuserInMount.Visible:=false;
-  end
-  else if FFocuserConnection=ASCOM then begin
-    PanelFocuserIndi.Visible:=false;
-    PanelFocuserAscom.Visible:=true;
-    PanelFocuserInMount.Visible:=false;
-  end
-  else if FFocuserConnection=INTELESCOPE then begin
-    PanelFocuserIndi.Visible:=false;
-    PanelFocuserAscom.Visible:=false;
-    PanelFocuserInMount.Visible:=true;
+  case FFocuserConnection of
+   INDI: PageControlFocuser.ActivePageIndex:=0;
+   ASCOM: PageControlFocuser.ActivePageIndex:=1;
+   INTELESCOPE: PageControlFocuser.ActivePageIndex:=2;
   end;
 end;
 
@@ -692,6 +649,10 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FMountConnection:=value;
+  case FMountConnection of
+   INDI: PageControlMount.ActivePageIndex:=0;
+   ASCOM: PageControlMount.ActivePageIndex:=1;
+  end;
 end;
 
 procedure Tf_setup.SetDomeConnection(value: TDevInterface);
@@ -700,23 +661,9 @@ begin
   if value=ASCOM then value:=INDI;
 {$endif}
   FDomeConnection:=value;
-end;
-
-procedure Tf_setup.FilterWheelInCameraBoxClick(Sender: TObject);
-begin
-  if FilterWheelInCameraBox.Checked then begin
-    SetWheelConnection(INCAMERA);
-  end else begin
-    SetWheelConnection(FConnectionInterface);
-  end;
-end;
-
-procedure Tf_setup.FocuserInMountBoxClick(Sender: TObject);
-begin
-  if FocuserInMountBox.Checked then begin
-    SetFocuserConnection(INTELESCOPE);
-  end else begin
-    SetFocuserConnection(FConnectionInterface);
+  case FDomeConnection of
+   INDI: PageControlDome.ActivePageIndex:=0;
+   ASCOM: PageControlDome.ActivePageIndex:=1;
   end;
 end;
 
@@ -869,7 +816,7 @@ end;
 procedure Tf_setup.InitTimerTimer(Sender: TObject);
 begin
   InitTimer.Enabled:=false;
-  if FConnectionInterface=INDI then GetIndiDevicesClick(Self);
+  GetIndiDevicesClick(Self);
 end;
 
 procedure Tf_setup.GetIndiDevicesClick(Sender: TObject);
@@ -1019,6 +966,85 @@ end;
 procedure Tf_setup.MountSetObservatoryClick(Sender: TObject);
 begin
   if MountSetObservatory.Checked then MountGetObservatory.Checked:=false;
+end;
+
+procedure Tf_setup.PageControlCameraChange(Sender: TObject);
+begin
+  case PageControlCamera.ActivePageIndex of
+    0: FCameraConnection:=INDI;
+    1: FCameraConnection:=ASCOM;
+  end;
+  DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
+end;
+
+procedure Tf_setup.PageControlDomeChange(Sender: TObject);
+begin
+  case PageControlDome.ActivePageIndex of
+    0: FDomeConnection:=INDI;
+    1: FDomeConnection:=ASCOM;
+  end;
+  DeviceDome.Caption:=rsUseDome+': '+DevInterfaceName[ord(FDomeConnection)];
+end;
+
+procedure Tf_setup.PageControlFocuserChange(Sender: TObject);
+begin
+  case PageControlFocuser.ActivePageIndex of
+    0: FocuserConnection:=INDI;
+    1: FocuserConnection:=ASCOM;
+    2: FocuserConnection:=INTELESCOPE;
+  end;
+  DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
+end;
+
+procedure Tf_setup.PageControlMountChange(Sender: TObject);
+begin
+  case PageControlMount.ActivePageIndex of
+    0: FMountConnection:=INDI;
+    1: FMountConnection:=ASCOM;
+  end;
+  DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
+end;
+
+procedure Tf_setup.PageControlRotatorChange(Sender: TObject);
+begin
+  case PageControlRotator.ActivePageIndex of
+    0: FRotatorConnection:=INDI;
+    1: FRotatorConnection:=ASCOM;
+  end;
+  DeviceRotator.Caption:=rsUseRotator+': '+DevInterfaceName[ord(FRotatorConnection)];
+end;
+
+procedure Tf_setup.PageControlSafetyChange(Sender: TObject);
+begin
+  case PageControlSafety.ActivePageIndex of
+    0: FSafetyConnection:=INDI;
+    1: FSafetyConnection:=ASCOM;
+  end;
+  DeviceSafety.Caption:=rsUseSafetyMon+': '+DevInterfaceName[ord(FSafetyConnection)];
+end;
+
+procedure Tf_setup.PageControlWatchdogChange(Sender: TObject);
+begin
+// no alternative
+end;
+
+procedure Tf_setup.PageControlWeatherChange(Sender: TObject);
+begin
+  case PageControlWeather.ActivePageIndex of
+    0: FWeatherConnection:=INDI;
+    1: FWeatherConnection:=ASCOM;
+  end;
+  DeviceWeather.Caption:=rsUseWeatherSt+': '+DevInterfaceName[ord(FWeatherConnection)];
+end;
+
+procedure Tf_setup.PageControlWheelChange(Sender: TObject);
+begin
+  case PageControlWheel.ActivePageIndex of
+    0: FWheelConnection:=INDI;
+    1: FWheelConnection:=ASCOM;
+    2: FWheelConnection:=INCAMERA;
+  end;
+  DeviceFilterWheel.Caption:=rsUseFilterWhe+': '+DevInterfaceName[ord(FWheelConnection)];
 end;
 
 procedure Tf_setup.ProfileListChange(Sender: TObject);

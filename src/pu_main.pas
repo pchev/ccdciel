@@ -1665,6 +1665,8 @@ begin
    SafetyActionName[10]:=trim(rsPlanetariumS);
    SafetyActionName[11]:=trim(rsCallExternal);
    SafetyActionName[12]:=trim(rsExitProgram);
+   DevInterfaceName[2]:='In camera';
+   DevInterfaceName[3]:='In mount';
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -3072,46 +3074,55 @@ end;
 Procedure Tf_main.Connect(Sender: TObject);
 begin
   if WantCamera and (CameraName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsCamera);
     MenuSetup.Click;
     exit;
   end;
   if WantWheel and (WheelName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsFilterWheel);
     MenuSetup.Click;
     exit;
   end;
   if WantFocuser and (FocuserName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsFocuser);
     MenuSetup.Click;
     exit;
   end;
   if WantRotator and (RotatorName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsRotator);
     MenuSetup.Click;
     exit;
   end;
   if WantMount and (MountName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsMount);
     MenuSetup.Click;
     exit;
   end;
   if WantDome and (DomeName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsDome);
     MenuSetup.Click;
     exit;
   end;
   if WantWatchdog and (WatchdogName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsWatchdog);
     MenuSetup.Click;
     exit;
   end;
   if WantWeather and (WeatherName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsWeatherStati);
     MenuSetup.Click;
     exit;
   end;
   if WantSafety and (SafetyName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsSafetyMonito);
     MenuSetup.Click;
     exit;
@@ -5012,7 +5023,6 @@ begin
         fits.FreeDark;
       end;
     end;
-    config.SetValue('/Interface',ord(f_setup.ConnectionInterface));
     config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
     config.SetValue('/INDI/ServerPort',f_setup.IndiPort.Text);
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);

@@ -388,6 +388,7 @@ var
   WeatherRestartDelay: integer;
   DummyDouble: double;
   DummyBool: boolean;
+  DevInterfaceName: array[0..3] of string=('INDI','ASCOM','In camera','In mount');
 
   procedure globalmsg(str:string);
 
