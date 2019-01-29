@@ -211,7 +211,7 @@ type
     { private declarations }
     indiclient: TIndiBaseClient;
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
-    FRestartRequired, LockInterfaceChange,InitialLock,ProfileLock: boolean;
+    LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FConnectionInterface,FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount:integer;
     receiveindidevice:boolean;
@@ -235,7 +235,6 @@ type
     procedure LoadProfileList;
     procedure Loadconfig(conf: TCCDConfig);
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
-    property RestartRequired: boolean read FRestartRequired;
     property ConnectionInterface: TDevInterface read FConnectionInterface write SetConnectionInterface;
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
@@ -263,7 +262,6 @@ procedure Tf_setup.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
   SetLang;
-  FRestartRequired:=false;
   LockInterfaceChange:=false;
   InitialLock:=true;
   Pagecontrol1.ActivePage:=DeviceInterface;
@@ -511,7 +509,6 @@ begin
     exit;
   end;
   if InterfaceSelectionBox.ItemIndex=0 then begin
-     if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
      FConnectionInterface:=INDI;
      PanelIndiServer.Visible:=true;
      FCameraConnection:=INDI;
@@ -551,7 +548,6 @@ begin
  end;
 {$ifdef mswindows}
   if InterfaceSelectionBox.ItemIndex=1 then begin
-     if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
      FConnectionInterface:=ASCOM;
      PanelIndiServer.Visible:=false;
      FCameraConnection:=ASCOM;
@@ -708,7 +704,6 @@ end;
 
 procedure Tf_setup.FilterWheelInCameraBoxClick(Sender: TObject);
 begin
-  if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
   if FilterWheelInCameraBox.Checked then begin
     SetWheelConnection(INCAMERA);
   end else begin
@@ -718,7 +713,6 @@ end;
 
 procedure Tf_setup.FocuserInMountBoxClick(Sender: TObject);
 begin
-  if (sender<>nil)and(not InitialLock) then FRestartRequired:=true;
   if FocuserInMountBox.Checked then begin
     SetFocuserConnection(INTELESCOPE);
   end else begin

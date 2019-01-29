@@ -451,6 +451,9 @@ type
     trpOK: boolean;
     AllMsg: TStringList;
     CameraExposureRemain:double;
+    procedure CreateDevices;
+    procedure SetDevices;
+    procedure DestroyDevices;
     procedure Image1DblClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -973,8 +976,7 @@ begin
 end;
 
 procedure Tf_main.FormCreate(Sender: TObject);
-var DefaultInterface,aInt: TDevInterface;
-    inif: TIniFile;
+var inif: TIniFile;
     configfile: string;
     i:integer;
 begin
@@ -987,10 +989,7 @@ begin
   cdate:={$I %DATE%};
   cdate:=copy(cdate,1,4);
   {$ifdef mswindows}
-  DefaultInterface:=ASCOM;
   Application.{%H-}UpdateFormatSettings := False;
-  {$else}
-  DefaultInterface:=INDI;
   {$endif}
   {$ifdef lclgtk2}
     TBTabs.Color:=clBtnShadow;
@@ -1115,132 +1114,15 @@ begin
   f_msg:=Tf_msg.Create(self);
   f_msg.onLogLevelChange:=@LogLevelChange;
 
-  aInt:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  wheel:=T_indiwheel.Create(nil);
-    ASCOM: wheel:=T_ascomwheel.Create(nil);
-    INCAMERA: wheel:=T_incamerawheel.Create(nil);
-  end;
-  wheel.onMsg:=@NewMessage;
-  wheel.onDeviceMsg:=@DeviceMessage;
-  wheel.onFilterChange:=@FilterChange;
-  wheel.onFilterNameChange:=@FilterNameChange;
-  wheel.onStatusChange:=@WheelStatus;
-
-  aInt:=TDevInterface(config.GetValue('/FocuserInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  focuser:=T_indifocuser.Create(nil);
-    ASCOM: focuser:=T_ascomfocuser.Create(nil);
-  end;
-  focuser.onMsg:=@NewMessage;
-  focuser.onDeviceMsg:=@DeviceMessage;
-  focuser.onPositionChange:=@FocuserPositionChange;
-  focuser.onSpeedChange:=@FocuserSpeedChange;
-  focuser.onTimerChange:=@FocuserTimerChange;
-  focuser.onStatusChange:=@FocuserStatus;
-  focuser.onTemperatureChange:=@FocuserTemperatureChange;
-
-  aInt:=TDevInterface(config.GetValue('/RotatorInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  rotator:=T_indirotator.Create(nil);
-    ASCOM: rotator:=T_ascomrotator.Create(nil);
-  end;
-  rotator.onMsg:=@NewMessage;
-  rotator.onDeviceMsg:=@DeviceMessage;
-  rotator.onAngleChange:=@RotatorAngleChange;
-  rotator.onStatusChange:=@RotatorStatus;
-
-  aInt:=TDevInterface(config.GetValue('/WeatherInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  weather:=T_indiweather.Create(nil);
-    ASCOM: weather:=T_ascomweather.Create(nil);
-  end;
-  weather.onMsg:=@NewMessage;
-  weather.onDeviceMsg:=@DeviceMessage;
-  weather.onStatusChange:=@WeatherStatus;
-  weather.onClearChange:=@WeatherClearChange;
-
-  aInt:=TDevInterface(config.GetValue('/SafetyInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  safety:=T_indisafety.Create(nil);
-    ASCOM: safety:=T_ascomsafety.Create(nil);
-  end;
-  safety.onMsg:=@NewMessage;
-  safety.onDeviceMsg:=@DeviceMessage;
-  safety.onStatusChange:=@SafetyStatus;
-  safety.onSafeChange:=@SafetySafeChange;
-
-  aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  mount:=T_indimount.Create(nil);
-    ASCOM: mount:=T_ascommount.Create(nil);
-  end;
-  mount.onMsg:=@NewMessage;
-  mount.onDeviceMsg:=@DeviceMessage;
-  mount.onCoordChange:=@MountCoordChange;
-  mount.onPiersideChange:=@MountPiersideChange;
-  mount.onParkChange:=@MountParkChange;
-  mount.onTrackingChange:=@MountTrackingChange;
-  mount.onStatusChange:=@MountStatus;
-
-  aInt:=TDevInterface(config.GetValue('/DomeInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  dome:=T_indidome.Create(nil);
-    ASCOM: dome:=T_ascomdome.Create(nil);
-  end;
-  dome.onMsg:=@NewMessage;
-  dome.onDeviceMsg:=@DeviceMessage;
-  dome.onStatusChange:=@DomeStatus;
-  dome.onShutterChange:=@DomeShutterChange;
-  dome.onSlaveChange:=@DomeSlaveChange;
-
   fits:=TFits.Create(self);
   if FileExistsUTF8(ConfigDarkFile) then begin
      fits.DarkFrame:=TFits.Create(nil);
      fits.DarkFrame.LoadFromFile(ConfigDarkFile);
   end;
 
-  aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
-  case aInt of
-    INDI:  camera:=T_indicamera.Create(nil);
-    ASCOM: camera:=T_ascomcamera.Create(nil);
-  end;
-  if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
-  camera.Mount:=mount;
-  camera.Wheel:=wheel;
-  camera.Focuser:=focuser;
-  camera.Fits:=fits;
-  camera.onMsg:=@NewMessage;
-  camera.onDeviceMsg:=@DeviceMessage;
-  camera.onExposureProgress:=@CameraProgress;
-  camera.onFrameChange:=@FrameChange;
-  camera.onTemperatureChange:=@CameraTemperatureChange;
-  camera.onCoolerChange:=@CameraCoolerChange;
-  camera.onNewImage:=@CameraNewImage;
-  camera.onVideoFrame:=@CameraVideoFrame;
-  camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
-  camera.onVideoSizeChange:=@CameraVideoSizeChange;
-  camera.onVideoRateChange:=@CameraVideoRateChange;
-  camera.onFPSChange:=@CameraFPSChange;
-  camera.onVideoExposureChange:=@CameraVideoExposureChange;
-  camera.onStatusChange:=@CameraStatus;
-  camera.onCameraDisconnected:=@CameraDisconnected;
-  camera.onAbortExposure:=@CameraExposureAborted;
-
-  aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
-  if aInt= INDI then begin
-    watchdog:=T_indiwatchdog.Create(nil);
-    watchdog.onMsg:=@NewMessage;
-    watchdog.onDeviceMsg:=@DeviceMessage;
-    watchdog.onStatusChange:=@WatchdogStatus;
-  end
-  else
-    watchdog:=nil;
+  CreateDevices;
 
   astrometry:=TAstrometry.Create(nil);
-  astrometry.Camera:=camera;
-  astrometry.Mount:=mount;
-  astrometry.Wheel:=wheel;
   astrometry.Fits:=fits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
@@ -1282,7 +1164,6 @@ begin
   f_frame.onReset:=@ResetFrame;
 
   f_preview:=Tf_preview.Create(self);
-  f_preview.Camera:=camera;
   f_preview.onResetStack:=@ResetPreviewStack;
   f_preview.onStartExposure:=@StartPreviewExposure;
   f_preview.onAbortExposure:=@AbortExposure;
@@ -1291,14 +1172,11 @@ begin
   astrometry.preview:=f_preview;
 
   f_capture:=Tf_capture.Create(self);
-  f_capture.Mount:=mount;
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@AbortExposure;
   f_capture.onMsg:=@NewMessage;
 
   f_video:=Tf_video.Create(self);
-  f_video.camera:=camera;
-  f_video.wheel:=wheel;
   f_video.onMsg:=@NewMessage;
 
   f_filterwheel:=Tf_filterwheel.Create(self);
@@ -1359,10 +1237,6 @@ begin
   f_sequence.Filter:=f_filterwheel;
   f_sequence.Weather:=f_weather;
   f_sequence.Safety:=f_safety;
-  f_sequence.Dome:=dome;
-  f_sequence.Mount:=mount;
-  f_sequence.Camera:=camera;
-  f_sequence.Rotator:=rotator;
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
   f_sequence.Planetarium:=planetarium;
@@ -1390,23 +1264,19 @@ begin
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
   f_scriptengine.Ccdtemp:=f_ccdtemp;
-  f_scriptengine.Filter:=wheel;
-  f_scriptengine.Mount:=mount;
-  f_scriptengine.Camera:=camera;
-  f_scriptengine.Focuser:=focuser;
   f_scriptengine.Autoguider:=autoguider;
   f_scriptengine.Astrometry:=astrometry;
   f_scriptengine.Planetarium:=planetarium;
 
   f_script:=Tf_script.Create(self);
   f_script.onMsg:=@NewMessage;
-  f_script.Camera:=camera;
   f_script.Preview:=f_preview;
   f_script.Capture:=f_capture;
-  f_script.Mount:=mount;
   f_script.Autoguider:=autoguider;
   f_script.Astrometry:=astrometry;
   f_script.LoadScriptList;
+
+  SetDevices;
 
   InitCoord;
   SetConfig;
@@ -1457,6 +1327,181 @@ begin
   NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
   NewMessage('This program comes with ABSOLUTELY NO WARRANTY; for details see '+rsHelp+'/'+rsAbout);
   NewMessage(Format(rsUsingConfigu, [configfile]), 3);
+end;
+
+procedure Tf_main.CreateDevices;
+var DefaultInterface,aInt: TDevInterface;
+begin
+   {$ifdef mswindows}
+   DefaultInterface:=ASCOM;
+   {$else}
+   DefaultInterface:=INDI;
+   {$endif}
+   aInt:=TDevInterface(config.GetValue('/FilterWheelInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  wheel:=T_indiwheel.Create(nil);
+     ASCOM: wheel:=T_ascomwheel.Create(nil);
+     INCAMERA: wheel:=T_incamerawheel.Create(nil);
+   end;
+   wheel.onMsg:=@NewMessage;
+   wheel.onDeviceMsg:=@DeviceMessage;
+   wheel.onFilterChange:=@FilterChange;
+   wheel.onFilterNameChange:=@FilterNameChange;
+   wheel.onStatusChange:=@WheelStatus;
+
+   aInt:=TDevInterface(config.GetValue('/FocuserInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  focuser:=T_indifocuser.Create(nil);
+     ASCOM: focuser:=T_ascomfocuser.Create(nil);
+   end;
+   focuser.onMsg:=@NewMessage;
+   focuser.onDeviceMsg:=@DeviceMessage;
+   focuser.onPositionChange:=@FocuserPositionChange;
+   focuser.onSpeedChange:=@FocuserSpeedChange;
+   focuser.onTimerChange:=@FocuserTimerChange;
+   focuser.onStatusChange:=@FocuserStatus;
+   focuser.onTemperatureChange:=@FocuserTemperatureChange;
+
+   aInt:=TDevInterface(config.GetValue('/RotatorInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  rotator:=T_indirotator.Create(nil);
+     ASCOM: rotator:=T_ascomrotator.Create(nil);
+   end;
+   rotator.onMsg:=@NewMessage;
+   rotator.onDeviceMsg:=@DeviceMessage;
+   rotator.onAngleChange:=@RotatorAngleChange;
+   rotator.onStatusChange:=@RotatorStatus;
+
+   aInt:=TDevInterface(config.GetValue('/WeatherInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  weather:=T_indiweather.Create(nil);
+     ASCOM: weather:=T_ascomweather.Create(nil);
+   end;
+   weather.onMsg:=@NewMessage;
+   weather.onDeviceMsg:=@DeviceMessage;
+   weather.onStatusChange:=@WeatherStatus;
+   weather.onClearChange:=@WeatherClearChange;
+
+   aInt:=TDevInterface(config.GetValue('/SafetyInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  safety:=T_indisafety.Create(nil);
+     ASCOM: safety:=T_ascomsafety.Create(nil);
+   end;
+   safety.onMsg:=@NewMessage;
+   safety.onDeviceMsg:=@DeviceMessage;
+   safety.onStatusChange:=@SafetyStatus;
+   safety.onSafeChange:=@SafetySafeChange;
+
+   aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  mount:=T_indimount.Create(nil);
+     ASCOM: mount:=T_ascommount.Create(nil);
+   end;
+   mount.onMsg:=@NewMessage;
+   mount.onDeviceMsg:=@DeviceMessage;
+   mount.onCoordChange:=@MountCoordChange;
+   mount.onPiersideChange:=@MountPiersideChange;
+   mount.onParkChange:=@MountParkChange;
+   mount.onTrackingChange:=@MountTrackingChange;
+   mount.onStatusChange:=@MountStatus;
+
+   aInt:=TDevInterface(config.GetValue('/DomeInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  dome:=T_indidome.Create(nil);
+     ASCOM: dome:=T_ascomdome.Create(nil);
+   end;
+   dome.onMsg:=@NewMessage;
+   dome.onDeviceMsg:=@DeviceMessage;
+   dome.onStatusChange:=@DomeStatus;
+   dome.onShutterChange:=@DomeShutterChange;
+   dome.onSlaveChange:=@DomeSlaveChange;
+
+   aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  camera:=T_indicamera.Create(nil);
+     ASCOM: camera:=T_ascomcamera.Create(nil);
+   end;
+   if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
+   camera.Mount:=mount;
+   camera.Wheel:=wheel;
+   camera.Focuser:=focuser;
+   camera.Fits:=fits;
+   camera.onMsg:=@NewMessage;
+   camera.onDeviceMsg:=@DeviceMessage;
+   camera.onExposureProgress:=@CameraProgress;
+   camera.onFrameChange:=@FrameChange;
+   camera.onTemperatureChange:=@CameraTemperatureChange;
+   camera.onCoolerChange:=@CameraCoolerChange;
+   camera.onNewImage:=@CameraNewImage;
+   camera.onVideoFrame:=@CameraVideoFrame;
+   camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
+   camera.onVideoSizeChange:=@CameraVideoSizeChange;
+   camera.onVideoRateChange:=@CameraVideoRateChange;
+   camera.onFPSChange:=@CameraFPSChange;
+   camera.onVideoExposureChange:=@CameraVideoExposureChange;
+   camera.onStatusChange:=@CameraStatus;
+   camera.onCameraDisconnected:=@CameraDisconnected;
+   camera.onAbortExposure:=@CameraExposureAborted;
+
+   aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
+   if aInt= INDI then begin
+     watchdog:=T_indiwatchdog.Create(nil);
+     watchdog.onMsg:=@NewMessage;
+     watchdog.onDeviceMsg:=@DeviceMessage;
+     watchdog.onStatusChange:=@WatchdogStatus;
+   end
+   else
+     watchdog:=nil;
+
+   SetDevices;
+end;
+
+procedure Tf_main.SetDevices;
+begin
+ if astrometry<>nil then begin
+   astrometry.Camera:=camera;
+   astrometry.Mount:=mount;
+   astrometry.Wheel:=wheel;
+ end;
+ if f_preview<>nil then begin
+   f_preview.Camera:=camera;
+ end;
+ if f_capture<>nil then begin
+   f_capture.Mount:=mount;
+ end;
+ if f_video<>nil then begin
+   f_video.camera:=camera;
+   f_video.wheel:=wheel;
+ end;
+ if f_sequence<>nil then begin
+   f_sequence.Dome:=dome;
+   f_sequence.Mount:=mount;
+   f_sequence.Camera:=camera;
+   f_sequence.Rotator:=rotator;
+ end;
+ if f_scriptengine<>nil then begin
+   f_scriptengine.Filter:=wheel;
+   f_scriptengine.Mount:=mount;
+   f_scriptengine.Camera:=camera;
+   f_scriptengine.Focuser:=focuser;
+ end;
+ if f_script<>nil then begin
+   f_script.Camera:=camera;
+   f_script.Mount:=mount;
+ end;
+end;
+
+procedure Tf_main.DestroyDevices;
+begin
+ camera.Free;
+ wheel.Free;
+ focuser.Free;
+ rotator.Free;
+ mount.Free;
+ dome.Free;
+ watchdog.Free;
+ weather.Free;
+ safety.Free;
 end;
 
 procedure Tf_main.SetLang;
@@ -2106,15 +2151,7 @@ procedure Tf_main.FormDestroy(Sender: TObject);
 var i: integer;
 begin
   try
-  camera.Free;
-  wheel.Free;
-  focuser.Free;
-  rotator.Free;
-  mount.Free;
-  dome.Free;
-  watchdog.Free;
-  weather.Free;
-  safety.Free;
+  DestroyDevices;
   ImaBmp.Free;
   refbmp.Free;
   config.Free;
@@ -5049,13 +5086,15 @@ begin
     config.SetValue('/ASCOMsafety/Device',f_setup.AscomSafety.Text);
 
     SaveConfig;
+
+    DestroyDevices;
+    CreateDevices;
+
     ShowActiveTools;
 
-    if f_setup.RestartRequired then
-       Restart
-    else
-       SetConfig;
-       if loadopt then SetOptions;
+    SetConfig;
+    if loadopt then SetOptions;
+
 
     if config.GetValue('/Filters/Num',-1)<0 then //new empty profile, open options
        MenuOptions.Click;
