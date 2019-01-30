@@ -399,6 +399,7 @@ type
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
     WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantWatchdog: boolean;
+    CameraInitialized: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
     f_filterwheel: Tf_filterwheel;
@@ -2341,12 +2342,15 @@ end;
 procedure Tf_main.CameraConnectTimerTimer(Sender: TObject);
 begin
   CameraConnectTimer.Enabled:=false;
-  //Thing to do after camera is connected
-  ShowTemperatureRange;
-  ShowExposureRange;
-  ShowBinningRange;
-  ShowGain;
-  ShowFrameRange;
+  if not CameraInitialized then begin
+    //Thing to do after camera is connected
+    CameraInitialized:=true;
+    ShowTemperatureRange;
+    ShowExposureRange;
+    ShowBinningRange;
+    ShowGain;
+    ShowFrameRange;
+  end;
 end;
 
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
@@ -3158,9 +3162,8 @@ end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
 begin
-if camera.Status<>devDisconnected then begin
    if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
-     camera.AbortExposure;
+     if camera.Status=devConnected then camera.AbortExposure;
      StartCaptureTimer.Enabled:=false;
      f_preview.stop;
      f_capture.stop;
@@ -3176,7 +3179,6 @@ if camera.Status<>devDisconnected then begin
      DisconnectSafety(Sender);
      DisconnectWatchdog(Sender);
    end;
-end;
 end;
 
 Procedure Tf_main.CheckConnectionStatus;
@@ -3290,6 +3292,7 @@ end;
 
 Procedure Tf_main.ConnectCamera(Sender: TObject);
 begin
+   CameraInitialized:=false;
    case camera.CameraInterface of
     INDI : begin
            camera.IndiTransfert:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
@@ -3310,7 +3313,7 @@ end;
 
 Procedure Tf_main.DisconnectCamera(Sender: TObject);
 begin
- camera.Disconnect;
+if camera.Status<>devDisconnected then camera.Disconnect;
 end;
 
 procedure Tf_main.SetCameraActiveDevices;
@@ -3350,8 +3353,10 @@ end;
 
 procedure Tf_main.ShowExposureRange;
 var buf: string;
+    r: TNumRange;
 begin
- buf:=FormatFloat(f0,camera.ExposureRange.min)+'...'+FormatFloat(f0,camera.ExposureRange.max);
+ r:=camera.ExposureRange;
+ buf:=FormatFloat(f0,r.min)+'...'+FormatFloat(f0,r.max);
  buf:=rsExposureTime+crlf+buf;
  f_capture.ExpTime.ShowHint:=True;
  f_preview.ExpTime.ShowHint:=True;
@@ -5302,9 +5307,9 @@ begin
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
-   if f_option.MaxAduFromCamera.Checked then
+   if f_option.MaxAduFromCamera.Checked and (camera.Status=devConnected) then
       f_option.MaxAdu.Value:=camera.MaxAdu;
-   if f_option.PixelSizeFromCamera.Checked and (camera.PixelSizeX>0) then
+   if f_option.PixelSizeFromCamera.Checked and (camera.Status=devConnected) and (camera.PixelSizeX>0) then
       f_option.PixelSize.Value:=camera.PixelSizeX;
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
    if f_option.FocaleFromTelescope.Checked then
@@ -5743,18 +5748,19 @@ end;
 
 procedure Tf_main.OptionGetMaxADU(Sender: TObject);
 begin
-  f_option.MaxAdu.Value:=round(camera.MaxADU);
+  if camera.Status=devConnected then
+     f_option.MaxAdu.Value:=round(camera.MaxADU);
 end;
 
 procedure Tf_main.OptionGetPixelSize(Sender: TObject);
 begin
-   if camera.PixelSizeX>0 then
+   if (camera.Status=devConnected) and (camera.PixelSizeX>0) then
       f_option.PixelSize.Value:=camera.PixelSizeX;
 end;
 
 procedure Tf_main.OptionGetFocaleLength(Sender: TObject);
 begin
-   if mount.FocaleLength>0 then
+   if (mount.Status=devConnected) and (mount.FocaleLength>0) then
       f_option.Focale.Value:=mount.FocaleLength;
 end;
 

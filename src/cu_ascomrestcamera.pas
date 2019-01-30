@@ -186,109 +186,112 @@ begin
   V.Protocol:=cp3;
   Fdevice:=cp4;
   V.Device:=Fdevice;
-  FStatus := devConnected;
-  try
-    V.Put('Connected',true); // try to connect if authorized by server
-  except
-  end;
-  try
-  msg('Driver version: '+V.Get('DriverVersion').AsString,9);
-  except
-    msg('Error: unknown driver version',9);
-  end;
-  try
-  FCameraXSize:=V.Get('CameraXSize').AsInt;
-  except
-   on E: Exception do begin
-     FCameraXSize:=-1;
-     msg('Error: cannot get frame size X from camera: ' + E.Message,0);
-   end;
-  end;
-  try
-  FCameraYSize:=V.Get('CameraYSize').AsInt;
-  except
-   on E: Exception do begin
-     FCameraYSize:=-1;
-     msg('Error: cannot get frame size Y from camera: ' + E.Message,0);
-   end;
-  end;
-  try
-   FMaxBinX:=V.Get('MaxBinX').AsInt;
-  except
-   FMaxBinX:=1;
-  end;
-  try
-  FMaxBinY:=V.Get('MaxBinY').AsInt;
-  except
-   FMaxBinY:=1;
-  end;
-  try
-   FBinX:=V.Get('BinX').AsInt;
-  except
-   FBinX:=1;
-  end;
-  try
-   FBinY:=V.Get('BinY').AsInt;
-  except
-   FBinY:=1;
-  end;
-  FPixelSizeX:=0;
-  FPixelSizeY:=0;
-  try
-    FPixelSizeX:=round(int(V.Get('PixelSizeX').AsFloat)*100)/100;
-    FPixelSizeY:=round(int(V.Get('PixelSizeY').AsFloat)*100)/100;
-  except
-    on E: Exception do begin
-      msg('Error: cannot get pixel size from camera: ' + E.Message,0);
-    end;
-  end;
-  Fccdname:=Fdevice;
-  try
-    Fccdname:=V.Name;
-    Fccdname:=Fccdname+'-'+V.Get('SensorName').AsString;
-  except
-  end;
-  try
-    FCanSetTemperature:=V.Get('CanSetCCDTemperature').AsBool;
-  except
-    FCanSetTemperature:=false;
-  end;
-  try
-    DummyDouble:=V.Get('CCDTemperature').AsFloat;
-    FHasTemperature:=true;
-  except
-    FHasTemperature:=false;
-  end;
-  FReadOutList.Clear;
-  try
-    FhasFastReadout:=V.Get('CanFastReadout').AsBool;
-  except
-    FhasFastReadout:=false;
-  end;
-  if FhasFastReadout then begin
-    FhasReadOut:=true;
-    FReadOutList.Add('High quality');
-    FReadOutList.Add('Fast');
-  end
-  else begin
+  V.Put('Connected',true); // try to connect if authorized by server
+  if V.Get('Connected').AsBool then begin
     try
-      rlist:=V.Get('ReadoutModes').AsStringArray;
-      n:=Length(rlist);
-      for i:=0 to n-1 do begin
-        FReadOutList.Add(rlist[i]);
-      end;
-      SetLength(rlist,0);
-      FhasReadOut:=true;
+    msg('Driver version: '+V.Get('DriverVersion').AsString,9);
     except
-      FhasReadOut:=false;
+      msg('Error: unknown driver version',9);
     end;
-  end;
-  if Assigned(FonStatusChange) then FonStatusChange(self);
-  StatusTimer.Enabled:=true;
-  msg(rsConnected3);
-//    Disconnect;
+    try
+    FCameraXSize:=V.Get('CameraXSize').AsInt;
+    except
+     on E: Exception do begin
+       FCameraXSize:=-1;
+       msg('Error: cannot get frame size X from camera: ' + E.Message,0);
+     end;
+    end;
+    try
+    FCameraYSize:=V.Get('CameraYSize').AsInt;
+    except
+     on E: Exception do begin
+       FCameraYSize:=-1;
+       msg('Error: cannot get frame size Y from camera: ' + E.Message,0);
+     end;
+    end;
+    try
+     FMaxBinX:=V.Get('MaxBinX').AsInt;
+    except
+     FMaxBinX:=1;
+    end;
+    try
+    FMaxBinY:=V.Get('MaxBinY').AsInt;
+    except
+     FMaxBinY:=1;
+    end;
+    try
+     FBinX:=V.Get('BinX').AsInt;
+    except
+     FBinX:=1;
+    end;
+    try
+     FBinY:=V.Get('BinY').AsInt;
+    except
+     FBinY:=1;
+    end;
+    FPixelSizeX:=0;
+    FPixelSizeY:=0;
+    try
+      FPixelSizeX:=round(V.Get('PixelSizeX').AsFloat*100)/100;
+      FPixelSizeY:=round(V.Get('PixelSizeY').AsFloat*100)/100;
+    except
+      on E: Exception do begin
+        msg('Error: cannot get pixel size from camera: ' + E.Message,0);
+      end;
+    end;
+    Fccdname:=Fdevice;
+    try
+      Fccdname:=V.Name;
+      Fccdname:=Fccdname+'-'+V.Get('SensorName').AsString;
+    except
+    end;
+    try
+      FCanSetTemperature:=V.Get('CanSetCCDTemperature').AsBool;
+    except
+      FCanSetTemperature:=false;
+    end;
+    try
+      DummyDouble:=V.Get('CCDTemperature').AsFloat;
+      FHasTemperature:=true;
+    except
+      FHasTemperature:=false;
+    end;
+    FReadOutList.Clear;
+    try
+      FhasFastReadout:=V.Get('CanFastReadout').AsBool;
+    except
+      FhasFastReadout:=false;
+    end;
+    if FhasFastReadout then begin
+      FhasReadOut:=true;
+      FReadOutList.Add('High quality');
+      FReadOutList.Add('Fast');
+    end
+    else begin
+      try
+        rlist:=V.Get('ReadoutModes').AsStringArray;
+        n:=Length(rlist);
+        for i:=0 to n-1 do begin
+          FReadOutList.Add(rlist[i]);
+        end;
+        SetLength(rlist,0);
+        FhasReadOut:=true;
+      except
+        FhasReadOut:=false;
+      end;
+    end;
+    FStatus := devConnected;
+    if Assigned(FonStatusChange) then FonStatusChange(self);
+    StatusTimer.Enabled:=true;
+    msg(rsConnected3);
+  end
+  else
+     Disconnect;
  except
-   on E: Exception do msg(Format(rsConnectionEr, [E.Message]),0);
+   on E: Exception do begin
+      msg(Format(rsConnectionEr, [E.Message]),0);
+      Disconnect;
+   end;
  end;
 end;
 
@@ -748,10 +751,15 @@ begin
   result:=NullRange;
     try
     result.max:=V.Get('ExposureMax').AsFloat;
+    except
+    end;
+    try
     result.min:=V.Get('V.ExposureMin').AsFloat;
+    except
+    end;
+    try
     result.step:=V.Get('V.ExposureResolution').AsFloat;
     except
-     result:=NullRange;
     end;
 end;
 

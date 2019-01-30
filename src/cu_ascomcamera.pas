@@ -828,7 +828,15 @@ begin
   {$ifdef mswindows}
     try
     result.max:=V.ExposureMax;
+    except
+     result:=NullRange;
+    end;
+    try
     result.min:=V.ExposureMin;
+    except
+     result:=NullRange;
+    end;
+    try
     result.step:=V.ExposureResolution;
     except
      result:=NullRange;
