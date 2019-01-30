@@ -41,6 +41,7 @@ type
     AscomWeather: TEdit;
     AscomSafety: TEdit;
     AscomRotator: TEdit;
+    AscomRestWeatherType: TRadioGroup;
     AscomWheel: TEdit;
     AscomFocuser: TEdit;
     AscomMount: TEdit;
@@ -59,6 +60,34 @@ type
     BtnSetupSafety: TButton;
     BtnSetupRotator: TButton;
     BtnCopyProfile: TButton;
+    WheelARestDevice: TSpinEdit;
+    FocuserARestDevice: TSpinEdit;
+    RotatorARestDevice: TSpinEdit;
+    MountARestDevice: TSpinEdit;
+    DomeARestDevice: TSpinEdit;
+    WeatherARestDevice: TSpinEdit;
+    SafetyARestDevice: TSpinEdit;
+    WheelARestHost: TEdit;
+    FocuserARestHost: TEdit;
+    RotatorARestHost: TEdit;
+    MountARestHost: TEdit;
+    DomeARestHost: TEdit;
+    WeatherARestHost: TEdit;
+    SafetyARestHost: TEdit;
+    WheelARestPort: TSpinEdit;
+    FocuserARestPort: TSpinEdit;
+    RotatorARestPort: TSpinEdit;
+    MountARestPort: TSpinEdit;
+    DomeARestPort: TSpinEdit;
+    WeatherARestPort: TSpinEdit;
+    SafetyARestPort: TSpinEdit;
+    WheelARestProtocol: TComboBox;
+    FocuserARestProtocol: TComboBox;
+    RotatorARestProtocol: TComboBox;
+    MountARestProtocol: TComboBox;
+    DomeARestProtocol: TComboBox;
+    WeatherARestProtocol: TComboBox;
+    SafetyARestProtocol: TComboBox;
     CameraAutoLoadConfig: TCheckBox;
     BtnAboutCamera1: TButton;
     BtnAboutCamera2: TButton;
@@ -96,6 +125,34 @@ type
     Label31: TLabel;
     Label32: TLabel;
     Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label39: TLabel;
+    Label40: TLabel;
+    Label41: TLabel;
+    Label42: TLabel;
+    Label43: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
+    Label58: TLabel;
+    Label59: TLabel;
+    Label60: TLabel;
+    Label61: TLabel;
     PageControlWatchdog: TPageControl;
     PageControlSafety: TPageControl;
     PageControlWeather: TPageControl;
@@ -106,6 +163,13 @@ type
     PageControlWheel: TPageControl;
     PageControlCamera: TPageControl;
     Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
     PanelDomeAscom: TPanel;
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;
@@ -127,6 +191,13 @@ type
     CameraAscomRest: TTabSheet;
     CameraARestPort: TSpinEdit;
     CameraARestDevice: TSpinEdit;
+    WheelAscomRest: TTabSheet;
+    FocuserAscomRest: TTabSheet;
+    RotatorAscomRest: TTabSheet;
+    MountAscomRest: TTabSheet;
+    DomeAscomRest: TTabSheet;
+    WeatherAscomRest: TTabSheet;
+    SafetyAscomRest: TTabSheet;
     WatchdogIndi: TTabSheet;
     WeatherIndi: TTabSheet;
     WeatherAscom: TTabSheet;
@@ -502,6 +573,10 @@ WheelIndiDevice.Text:=conf.GetValue('/INDIwheel/Device','');
 WheelIndiDevPort.Text:=conf.GetValue('/INDIwheel/DevicePort','');
 WheelAutoLoadConfig.Checked:=conf.GetValue('/INDIwheel/AutoLoadConfig',true);
 AscomWheel.Text:=conf.GetValue('/ASCOMwheel/Device','');
+WheelARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestwheel/Protocol',0);
+WheelARestHost.Text:=conf.GetValue('/ASCOMRestwheel/Host','127.0.0.1');
+WheelARestPort.Value:=conf.GetValue('/ASCOMRestwheel/Port',11111);
+WheelARestDevice.Value:=conf.GetValue('/ASCOMRestwheel/Device',0);
 
 FocuserConnection:=TDevInterface(conf.GetValue('/FocuserInterface',ord(DefaultFocuserInterface)));
 if FocuserIndiDevice.Items.Count=0 then begin
@@ -512,6 +587,10 @@ FocuserIndiDevice.Text:=conf.GetValue('/INDIfocuser/Device','');
 FocuserIndiDevPort.Text:=conf.GetValue('/INDIfocuser/DevicePort','');
 FocuserAutoLoadConfig.Checked:=conf.GetValue('/INDIfocuser/AutoLoadConfig',true);
 AscomFocuser.Text:=conf.GetValue('/ASCOMfocuser/Device','');
+FocuserARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestfocuser/Protocol',0);
+FocuserARestHost.Text:=conf.GetValue('/ASCOMRestfocuser/Host','127.0.0.1');
+FocuserARestPort.Value:=conf.GetValue('/ASCOMRestfocuser/Port',11111);
+FocuserARestDevice.Value:=conf.GetValue('/ASCOMRestfocuser/Device',0);
 
 RotatorConnection:=TDevInterface(conf.GetValue('/RotatorInterface',ord(DefaultRotatorInterface)));
 if RotatorIndiDevice.Items.Count=0 then begin
@@ -522,6 +601,10 @@ RotatorIndiDevice.Text:=conf.GetValue('/INDIrotator/Device','');
 RotatorIndiDevPort.Text:=conf.GetValue('/INDIrotator/DevicePort','');
 RotatorAutoLoadConfig.Checked:=conf.GetValue('/INDIrotator/AutoLoadConfig',true);
 AscomRotator.Text:=conf.GetValue('/ASCOMrotator/Device','');
+RotatorARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestrotator/Protocol',0);
+RotatorARestHost.Text:=conf.GetValue('/ASCOMRestrotator/Host','127.0.0.1');
+RotatorARestPort.Value:=conf.GetValue('/ASCOMRestrotator/Port',11111);
+RotatorARestDevice.Value:=conf.GetValue('/ASCOMRestrotator/Device',0);
 
 MountConnection:=TDevInterface(conf.GetValue('/MountInterface',ord(DefaultMountInterface)));
 if MountIndiDevice.Items.Count=0 then begin
@@ -535,6 +618,10 @@ AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
 MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
 MountSetObservatory.Checked:=conf.GetValue('/Mount/SetObservatory',false);
 MountGetObservatory.Checked:=conf.GetValue('/Mount/GetObservatory',false);
+MountARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestmount/Protocol',0);
+MountARestHost.Text:=conf.GetValue('/ASCOMRestmount/Host','127.0.0.1');
+MountARestPort.Value:=conf.GetValue('/ASCOMRestmount/Port',11111);
+MountARestDevice.Value:=conf.GetValue('/ASCOMRestmount/Device',0);
 
 DomeConnection:=TDevInterface(conf.GetValue('/DomeInterface',ord(DefaultDomeInterface)));
 if DomeIndiDevice.Items.Count=0 then begin
@@ -545,6 +632,10 @@ DomeIndiDevice.Text:=conf.GetValue('/INDIdome/Device','');
 DomeIndiDevPort.Text:=conf.GetValue('/INDIdome/DevicePort','');
 DomeAutoLoadConfig.Checked:=conf.GetValue('/INDIdome/AutoLoadConfig',true);
 AscomDome.Text:=conf.GetValue('/ASCOMdome/Device','');
+DomeARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestdome/Protocol',0);
+DomeARestHost.Text:=conf.GetValue('/ASCOMRestdome/Host','127.0.0.1');
+DomeARestPort.Value:=conf.GetValue('/ASCOMRestdome/Port',11111);
+DomeARestDevice.Value:=conf.GetValue('/ASCOMRestdome/Device',0);
 
 WeatherConnection:=TDevInterface(conf.GetValue('/WeatherInterface',ord(DefaultWeatherInterface)));
 if WeatherIndiDevice.Items.Count=0 then begin
@@ -555,6 +646,11 @@ WeatherIndiDevice.Text:=conf.GetValue('/INDIweather/Device','');
 WeatherAutoLoadConfig.Checked:=conf.GetValue('/INDIweather/AutoLoadConfig',true);
 f_setup.AscomWeatherType.ItemIndex:=config.GetValue('/ASCOMweather/DeviceType',0);
 AscomWeather.Text:=conf.GetValue('/ASCOMweather/Device','');
+WeatherARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestweather/Protocol',0);
+WeatherARestHost.Text:=conf.GetValue('/ASCOMRestweather/Host','127.0.0.1');
+WeatherARestPort.Value:=conf.GetValue('/ASCOMRestweather/Port',11111);
+WeatherARestDevice.Value:=conf.GetValue('/ASCOMRestweather/Device',0);
+f_setup.AscomRestWeatherType.ItemIndex:=config.GetValue('/ASCOMRestweather/DeviceType',0);
 
 SafetyConnection:=TDevInterface(conf.GetValue('/SafetyInterface',ord(DefaultSafetyInterface)));
 if SafetyIndiDevice.Items.Count=0 then begin
@@ -564,6 +660,10 @@ end;
 SafetyIndiDevice.Text:=conf.GetValue('/INDIsafety/Device','');
 SafetyAutoLoadConfig.Checked:=conf.GetValue('/INDIsafety/AutoLoadConfig',true);
 AscomSafety.Text:=conf.GetValue('/ASCOMsafety/Device','');
+SafetyARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestsafety/Protocol',0);
+SafetyARestHost.Text:=conf.GetValue('/ASCOMRestsafety/Host','127.0.0.1');
+SafetyARestPort.Value:=conf.GetValue('/ASCOMRestsafety/Port',11111);
+SafetyARestDevice.Value:=conf.GetValue('/ASCOMRestsafety/Device',0);
 
 if WatchdogIndiDevice.Items.Count=0 then begin
   WatchdogIndiDevice.Items.Add(conf.GetValue('/INDIwatchdog/Device',''));
@@ -1000,6 +1100,7 @@ begin
   case PageControlDome.ActivePageIndex of
     0: FDomeConnection:=INDI;
     1: FDomeConnection:=ASCOM;
+    2: FDomeConnection:=ASCOMREST;
   end;
   DeviceDome.Caption:=rsUseDome+': '+DevInterfaceName[ord(FDomeConnection)];
 end;
@@ -1010,6 +1111,7 @@ begin
     0: FocuserConnection:=INDI;
     1: FocuserConnection:=ASCOM;
     2: FocuserConnection:=INTELESCOPE;
+    3: FocuserConnection:=ASCOMREST;
   end;
   DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 end;
@@ -1019,6 +1121,7 @@ begin
   case PageControlMount.ActivePageIndex of
     0: FMountConnection:=INDI;
     1: FMountConnection:=ASCOM;
+    2: FMountConnection:=ASCOMREST;
   end;
   DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
 end;
@@ -1028,6 +1131,7 @@ begin
   case PageControlRotator.ActivePageIndex of
     0: FRotatorConnection:=INDI;
     1: FRotatorConnection:=ASCOM;
+    2: FRotatorConnection:=ASCOMREST;
   end;
   DeviceRotator.Caption:=rsUseRotator+': '+DevInterfaceName[ord(FRotatorConnection)];
 end;
@@ -1037,13 +1141,9 @@ begin
   case PageControlSafety.ActivePageIndex of
     0: FSafetyConnection:=INDI;
     1: FSafetyConnection:=ASCOM;
+    2: FSafetyConnection:=ASCOMREST;
   end;
   DeviceSafety.Caption:=rsUseSafetyMon+': '+DevInterfaceName[ord(FSafetyConnection)];
-end;
-
-procedure Tf_setup.PageControlWatchdogChange(Sender: TObject);
-begin
-// no alternative
 end;
 
 procedure Tf_setup.PageControlWeatherChange(Sender: TObject);
@@ -1051,6 +1151,7 @@ begin
   case PageControlWeather.ActivePageIndex of
     0: FWeatherConnection:=INDI;
     1: FWeatherConnection:=ASCOM;
+    2: FWeatherConnection:=ASCOMREST;
   end;
   DeviceWeather.Caption:=rsUseWeatherSt+': '+DevInterfaceName[ord(FWeatherConnection)];
 end;
@@ -1061,8 +1162,14 @@ begin
     0: FWheelConnection:=INDI;
     1: FWheelConnection:=ASCOM;
     2: FWheelConnection:=INCAMERA;
+    3: FWheelConnection:=ASCOMREST;
   end;
   DeviceFilterWheel.Caption:=rsUseFilterWhe+': '+DevInterfaceName[ord(FWheelConnection)];
+end;
+
+procedure Tf_setup.PageControlWatchdogChange(Sender: TObject);
+begin
+// no alternative
 end;
 
 procedure Tf_setup.ProfileListChange(Sender: TObject);

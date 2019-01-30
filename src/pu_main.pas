@@ -37,7 +37,8 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
-  cu_ascomrestcamera,
+  cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount,
+  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
@@ -1344,6 +1345,7 @@ begin
      INDI:  wheel:=T_indiwheel.Create(nil);
      ASCOM: wheel:=T_ascomwheel.Create(nil);
      INCAMERA: wheel:=T_incamerawheel.Create(nil);
+     ASCOMREST: wheel:=T_ascomrestwheel.Create(nil);
    end;
    wheel.onMsg:=@NewMessage;
    wheel.onDeviceMsg:=@DeviceMessage;
@@ -1355,6 +1357,7 @@ begin
    case aInt of
      INDI:  focuser:=T_indifocuser.Create(nil);
      ASCOM: focuser:=T_ascomfocuser.Create(nil);
+     ASCOMREST: focuser:=T_ascomrestfocuser.Create(nil);
    end;
    focuser.onMsg:=@NewMessage;
    focuser.onDeviceMsg:=@DeviceMessage;
@@ -1368,6 +1371,7 @@ begin
    case aInt of
      INDI:  rotator:=T_indirotator.Create(nil);
      ASCOM: rotator:=T_ascomrotator.Create(nil);
+     ASCOMREST: rotator:=T_ascomrestrotator.Create(nil);
    end;
    rotator.onMsg:=@NewMessage;
    rotator.onDeviceMsg:=@DeviceMessage;
@@ -1378,6 +1382,7 @@ begin
    case aInt of
      INDI:  weather:=T_indiweather.Create(nil);
      ASCOM: weather:=T_ascomweather.Create(nil);
+     ASCOMREST: weather:=T_ascomrestweather.Create(nil);
    end;
    weather.onMsg:=@NewMessage;
    weather.onDeviceMsg:=@DeviceMessage;
@@ -1388,6 +1393,7 @@ begin
    case aInt of
      INDI:  safety:=T_indisafety.Create(nil);
      ASCOM: safety:=T_ascomsafety.Create(nil);
+     ASCOMREST: safety:=T_ascomrestsafety.Create(nil);
    end;
    safety.onMsg:=@NewMessage;
    safety.onDeviceMsg:=@DeviceMessage;
@@ -1398,6 +1404,7 @@ begin
    case aInt of
      INDI:  mount:=T_indimount.Create(nil);
      ASCOM: mount:=T_ascommount.Create(nil);
+     ASCOMREST: mount:=T_ascomrestmount.Create(nil);
    end;
    mount.onMsg:=@NewMessage;
    mount.onDeviceMsg:=@DeviceMessage;
@@ -1411,6 +1418,7 @@ begin
    case aInt of
      INDI:  dome:=T_indidome.Create(nil);
      ASCOM: dome:=T_ascomdome.Create(nil);
+     ASCOMREST: dome:=T_ascomrestdome.Create(nil);
    end;
    dome.onMsg:=@NewMessage;
    dome.onDeviceMsg:=@DeviceMessage;
@@ -2631,30 +2639,42 @@ case wheel.WheelInterface of
    INCAMERA: WheelName:=CameraName;
    INDI : WheelName:=config.GetValue('/INDIwheel/Device','');
    ASCOM: WheelName:=config.GetValue('/ASCOMwheel/Device','');
+   ASCOMREST: WheelName:='FilterWheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0));
 end;
 case focuser.FocuserInterface of
    INDI : FocuserName:=config.GetValue('/INDIfocuser/Device','');
    ASCOM: FocuserName:=config.GetValue('/ASCOMfocuser/Device','');
+   ASCOMREST: FocuserName:='Focuser/'+IntToStr(config.GetValue('/ASCOMRestfocuser/Device',0));
 end;
 case rotator.RotatorInterface of
    INDI : RotatorName:=config.GetValue('/INDIrotator/Device','');
    ASCOM: RotatorName:=config.GetValue('/ASCOMrotator/Device','');
+   ASCOMREST: RotatorName:='Rotator/'+IntToStr(config.GetValue('/ASCOMRestrotator/Device',0));
 end;
 case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
+   ASCOMREST: MountName:='Telescope/'+IntToStr(config.GetValue('/ASCOMRestmount/Device',0));
 end;
 case dome.DomeInterface of
    INDI : DomeName:=config.GetValue('/INDIdome/Device','');
    ASCOM: DomeName:=config.GetValue('/ASCOMdome/Device','');
+   ASCOMREST: DomeName:='Dome/'+IntToStr(config.GetValue('/ASCOMRestdome/Device',0));
 end;
 case weather.WeatherInterface of
    INDI : WeatherName:=config.GetValue('/INDIweather/Device','');
    ASCOM: WeatherName:=config.GetValue('/ASCOMweather/Device','');
+   ASCOMREST: begin
+              if config.GetValue('/ASCOMRestweather/DeviceType',0)=0 then
+               WeatherName:='ObservingConditions/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0))
+              else
+               WeatherName:='SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0));
+              end;
 end;
 case safety.SafetyInterface of
    INDI : SafetyName:=config.GetValue('/INDIsafety/Device','');
    ASCOM: SafetyName:=config.GetValue('/ASCOMsafety/Device','');
+   ASCOMREST: SafetyName:='SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0));
 end;
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
@@ -2745,10 +2765,10 @@ begin
   for i:=1 to n do begin
      FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
      FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
-     if wheel.Filter=i then CurrentFilterOffset:=FilterOffset[i];
+     if (wheel.Status=devConnected)and(wheel.Filter=i) then CurrentFilterOffset:=FilterOffset[i];
   end;
   CurrentFilterOffset:=0;
-  AutofocusExposureFact:=FilterExpFact[wheel.Filter];
+  if (wheel.Status=devConnected) then AutofocusExposureFact:=FilterExpFact[wheel.Filter];
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
@@ -3553,12 +3573,16 @@ begin
                           config.GetValue('/INDIwheel/Device',''),
                           config.GetValue('/INDIwheel/DevicePort',''));
     ASCOM: wheel.Connect(config.GetValue('/ASCOMwheel/Device',''));
+    ASCOMREST: wheel.Connect(config.GetValue('/ASCOMRestwheel/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestwheel/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestwheel/Protocol',0)],
+                          'FilterWheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0)));
   end;
 end;
 
 Procedure Tf_main.DisconnectWheel(Sender: TObject);
 begin
-wheel.Disconnect;
+ if wheel.Status<>devDisconnected then wheel.Disconnect;
 end;
 
 Procedure Tf_main.ConnectFocuser(Sender: TObject);
@@ -3569,12 +3593,16 @@ begin
                           config.GetValue('/INDIfocuser/Device',''),
                           config.GetValue('/INDIfocuser/DevicePort',''));
     ASCOM: focuser.Connect(config.GetValue('/ASCOMfocuser/Device',''));
+    ASCOMREST: focuser.Connect(config.GetValue('/ASCOMRestfocuser/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestfocuser/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestfocuser/Protocol',0)],
+                          'Focuser/'+IntToStr(config.GetValue('/ASCOMRestfocuser/Device',0)));
   end;
 end;
 
 Procedure Tf_main.DisconnectFocuser(Sender: TObject);
 begin
-focuser.Disconnect;
+ if focuser.Status<>devDisconnected then focuser.Disconnect;
 end;
 
 procedure Tf_main.SetFocusMode;
@@ -3628,12 +3656,16 @@ begin
                           config.GetValue('/INDIrotator/Device',''),
                           config.GetValue('/INDIrotator/DevicePort',''));
     ASCOM: rotator.Connect(config.GetValue('/ASCOMrotator/Device',''));
+    ASCOMREST: rotator.Connect(config.GetValue('/ASCOMRestrotator/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestrotator/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestrotator/Protocol',0)],
+                          'Rotator/'+IntToStr(config.GetValue('/ASCOMRestrotator/Device',0)));
   end;
 end;
 
 Procedure Tf_main.DisconnectRotator(Sender: TObject);
 begin
- rotator.Disconnect;
+ if rotator.Status<>devDisconnected then rotator.Disconnect;
 end;
 
 Procedure Tf_main.ConnectMount(Sender: TObject);
@@ -3644,12 +3676,16 @@ begin
                           config.GetValue('/INDImount/Device',''),
                           config.GetValue('/INDImount/DevicePort',''));
     ASCOM: mount.Connect(config.GetValue('/ASCOMmount/Device',''));
+    ASCOMREST: mount.Connect(config.GetValue('/ASCOMRestmount/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestmount/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestmount/Protocol',0)],
+                          'Telescope/'+IntToStr(config.GetValue('/ASCOMRestmount/Device',0)));
   end;
 end;
 
 Procedure Tf_main.DisconnectMount(Sender: TObject);
 begin
-mount.Disconnect;
+ if mount.Status<>devDisconnected then mount.Disconnect;
 end;
 
 Procedure Tf_main.ConnectDome(Sender: TObject);
@@ -3660,12 +3696,16 @@ begin
                           config.GetValue('/INDIdome/Device',''),
                           config.GetValue('/INDIdome/DevicePort',''));
     ASCOM: dome.Connect(config.GetValue('/ASCOMdome/Device',''));
+    ASCOMREST: dome.Connect(config.GetValue('/ASCOMRestdome/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestdome/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestdome/Protocol',0)],
+                          'Dome/'+IntToStr(config.GetValue('/ASCOMRestdome/Device',0)));
   end;
 end;
 
 Procedure Tf_main.DisconnectDome(Sender: TObject);
 begin
- dome.Disconnect;
+ if dome.Status<>devDisconnected then dome.Disconnect;
 end;
 
 Procedure Tf_main.DomeStatus(Sender: TObject);
@@ -3759,12 +3799,22 @@ begin
                           config.GetValue('/INDIweather/Device',''),
                           '');
     ASCOM: weather.Connect(config.GetValue('/ASCOMweather/Device',''));
+    ASCOMREST: begin
+               if config.GetValue('/ASCOMRestweather/DeviceType',0)=0 then
+                  WeatherName:='ObservingConditions/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0))
+                else
+                  WeatherName:='SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0));
+           weather.Connect(config.GetValue('/ASCOMRestweather/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestweather/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestweather/Protocol',0)],
+                          WeatherName);
+               end;
   end;
 end;
 
 Procedure Tf_main.DisconnectWeather(Sender: TObject);
 begin
- weather.Disconnect;
+ if weather.Status<>devDisconnected then weather.Disconnect;
 end;
 
 Procedure Tf_main.WeatherStatus(Sender: TObject);
@@ -3811,12 +3861,16 @@ begin
                           config.GetValue('/INDIsafety/Device',''),
                           '');
     ASCOM: safety.Connect(config.GetValue('/ASCOMsafety/Device',''));
+    ASCOMREST: safety.Connect(config.GetValue('/ASCOMRestsafety/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestsafety/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestsafety/Protocol',0)],
+                          'SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0)));
   end;
 end;
 
 Procedure Tf_main.DisconnectSafety(Sender: TObject);
 begin
- safety.Disconnect;
+ if safety.Status<>devDisconnected then safety.Disconnect;
 end;
 
 Procedure Tf_main.SafetyStatus(Sender: TObject);
@@ -5072,18 +5126,30 @@ begin
     config.SetValue('/INDIwheel/DevicePort',f_setup.WheelIndiDevPort.Text);
     config.SetValue('/INDIwheel/AutoLoadConfig',f_setup.WheelAutoLoadConfig.Checked);
     config.SetValue('/ASCOMwheel/Device',f_setup.AscomWheel.Text);
+    config.SetValue('/ASCOMRestwheel/Protocol',f_setup.WheelARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestwheel/Host',f_setup.WheelARestHost.Text);
+    config.SetValue('/ASCOMRestwheel/Port',f_setup.WheelARestPort.Value);
+    config.SetValue('/ASCOMRestwheel/Device',f_setup.WheelARestDevice.Value);
 
     config.SetValue('/FocuserInterface',ord(f_setup.FocuserConnection));
     if f_setup.FocuserIndiDevice.Text<>'' then config.SetValue('/INDIfocuser/Device',f_setup.FocuserIndiDevice.Text);
     config.SetValue('/INDIfocuser/DevicePort',f_setup.FocuserIndiDevPort.Text);
     config.SetValue('/INDIfocuser/AutoLoadConfig',f_setup.FocuserAutoLoadConfig.Checked);
     config.SetValue('/ASCOMfocuser/Device',f_setup.AscomFocuser.Text);
+    config.SetValue('/ASCOMRestfocuser/Protocol',f_setup.FocuserARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestfocuser/Host',f_setup.FocuserARestHost.Text);
+    config.SetValue('/ASCOMRestfocuser/Port',f_setup.FocuserARestPort.Value);
+    config.SetValue('/ASCOMRestfocuser/Device',f_setup.FocuserARestDevice.Value);
 
     config.SetValue('/RotatorInterface',ord(f_setup.RotatorConnection));
     if f_setup.RotatorIndiDevice.Text<>'' then config.SetValue('/INDIrotator/Device',f_setup.RotatorIndiDevice.Text);
     config.SetValue('/INDIrotator/DevicePort',f_setup.RotatorIndiDevPort.Text);
     config.SetValue('/INDIrotator/AutoLoadConfig',f_setup.RotatorAutoLoadConfig.Checked);
     config.SetValue('/ASCOMrotator/Device',f_setup.AscomRotator.Text);
+    config.SetValue('/ASCOMRestrotator/Protocol',f_setup.RotatorARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestrotator/Host',f_setup.RotatorARestHost.Text);
+    config.SetValue('/ASCOMRestrotator/Port',f_setup.RotatorARestPort.Value);
+    config.SetValue('/ASCOMRestrotator/Device',f_setup.RotatorARestDevice.Value);
 
     config.SetValue('/MountInterface',ord(f_setup.MountConnection));
     if f_setup.MountIndiDevice.Text<>'' then config.SetValue('/INDImount/Device',f_setup.MountIndiDevice.Text);
@@ -5093,12 +5159,20 @@ begin
     config.SetValue('/Mount/SetDateTime',f_setup.MountSetDateTime.Checked);
     config.SetValue('/Mount/SetObservatory',f_setup.MountSetObservatory.Checked);
     config.SetValue('/Mount/GetObservatory',f_setup.MountGetObservatory.Checked);
+    config.SetValue('/ASCOMRestmount/Protocol',f_setup.MountARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestmount/Host',f_setup.MountARestHost.Text);
+    config.SetValue('/ASCOMRestmount/Port',f_setup.MountARestPort.Value);
+    config.SetValue('/ASCOMRestmount/Device',f_setup.MountARestDevice.Value);
 
     config.SetValue('/DomeInterface',ord(f_setup.DomeConnection));
     if f_setup.DomeIndiDevice.Text<>'' then config.SetValue('/INDIdome/Device',f_setup.DomeIndiDevice.Text);
     config.SetValue('/INDIdome/DevicePort',f_setup.DomeIndiDevPort.Text);
     config.SetValue('/INDIdome/AutoLoadConfig',f_setup.DomeAutoLoadConfig.Checked);
     config.SetValue('/ASCOMdome/Device',f_setup.AscomDome.Text);
+    config.SetValue('/ASCOMRestdome/Protocol',f_setup.DomeARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestdome/Host',f_setup.DomeARestHost.Text);
+    config.SetValue('/ASCOMRestdome/Port',f_setup.DomeARestPort.Value);
+    config.SetValue('/ASCOMRestdome/Device',f_setup.DomeARestDevice.Value);
 
     if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
     config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);
@@ -5109,11 +5183,20 @@ begin
     config.SetValue('/INDIweather/AutoLoadConfig',f_setup.WeatherAutoLoadConfig.Checked);
     config.SetValue('/ASCOMweather/Device',f_setup.AscomWeather.Text);
     config.SetValue('/ASCOMweather/DeviceType',f_setup.AscomWeatherType.ItemIndex);
+    config.SetValue('/ASCOMRestweather/Protocol',f_setup.WeatherARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestweather/Host',f_setup.WeatherARestHost.Text);
+    config.SetValue('/ASCOMRestweather/Port',f_setup.WeatherARestPort.Value);
+    config.SetValue('/ASCOMRestweather/Device',f_setup.WeatherARestDevice.Value);
+    config.SetValue('/ASCOMRestweather/DeviceType',f_setup.AscomRestWeatherType.ItemIndex);
 
     config.SetValue('/SafetyInterface',ord(f_setup.SafetyConnection));
     if f_setup.SafetyIndiDevice.Text<>'' then config.SetValue('/INDIsafety/Device',f_setup.SafetyIndiDevice.Text);
     config.SetValue('/INDIsafety/AutoLoadConfig',f_setup.SafetyAutoLoadConfig.Checked);
     config.SetValue('/ASCOMsafety/Device',f_setup.AscomSafety.Text);
+    config.SetValue('/ASCOMRestsafety/Protocol',f_setup.SafetyARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestsafety/Host',f_setup.SafetyARestHost.Text);
+    config.SetValue('/ASCOMRestsafety/Port',f_setup.SafetyARestPort.Value);
+    config.SetValue('/ASCOMRestsafety/Device',f_setup.SafetyARestDevice.Value);
 
     SaveConfig;
 

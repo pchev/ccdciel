@@ -105,6 +105,7 @@ type
     procedure Put(method,value:string); overload;
     procedure Put(method:string;value:double); overload;
     procedure Put(method:string;value:Boolean); overload;
+    function PutR(method: string; params:array of string):TAscomResult;
     property Host: string read Fhost write SetHost;
     property Port: string read Fport write SetPort;
     property Protocol: string read Fprotocol write SetProtocol;
@@ -391,6 +392,71 @@ begin
      J.Free;
    end;
 end;
+
+function TAscomRest.PutR(method: string; params:array of string):TAscomResult;
+var J: TJSONData;
+    url,data: string;
+    ok: boolean;
+    i,n: integer;
+begin
+  Fhttp.Document.Clear;
+  Fhttp.Headers.Clear;
+  n:=Length(params);
+  if n=0 then begin
+    if ClientId>0 then
+       data:='ClientID='+IntToStr(FClientId)
+    else
+       data:=' ';
+  end
+  else if n=1 then begin
+    data:=params[0];
+    if ClientId>0 then
+       data:=data+'&ClientID='+IntToStr(FClientId);
+  end
+  else begin
+     i:=0;
+     data:='';
+     repeat
+       data:=data+params[i]+'='+params[i+1]+'&';
+       inc(i,2);
+     until (i+1)>(n-1);
+     if odd(n) then data:=data+params[n-1];
+     if copy(data,length(data),1)='&' then data:=copy(data,1,length(data)-1);
+     if ClientId>0 then
+        data:=data+'&ClientID='+IntToStr(FClientId);
+  end;
+  WriteStrToStream(Fhttp.Document, data);
+  Fhttp.MimeType := 'application/x-www-form-urlencoded';
+  url := FbaseUrl+Fdevice+'/'+method;
+  ok := Fhttp.HTTPMethod('PUT', url);
+   if ok then begin
+    if (Fhttp.ResultCode=200) then begin
+      Fhttp.Document.Position:=0;
+      Result:=TAscomResult.Create;
+      Result.data:=GetJSON(Fhttp.Document);
+      FLastErrorCode:=Result.data.GetPath('ErrorNumber').AsInteger;
+      FLastError:=Result.data.GetPath('ErrorMessage').AsString;
+      FDriverException:=Result.data.GetPath('DriverException');
+      if FLastErrorCode<>0 then begin
+         Result.Free;
+         raise EAscomException.Create(FLastError);
+      end;
+    end
+    else begin
+      FLastErrorCode:=Fhttp.ResultCode;
+      FLastError:=Fhttp.ResultString;
+      i:=pos('<br>',FLastError);
+      if i>0 then FLastError:=copy(FLastError,1,i-1);
+      raise EApiException.Create(FLastError);
+    end;
+  end
+  else begin
+    FLastErrorCode:=Fhttp.Sock.LastError;
+    FLastError:=Fhttp.Sock.LastErrorDesc;
+    raise ESocketException.Create(Fhost+':'+Fport+' '+FLastError);
+  end;
+end;
+
 
 procedure TAscomRest.Put(method: string; params:array of string); overload;
 var J: TJSONData;
