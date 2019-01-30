@@ -170,6 +170,7 @@ begin
     for i:=0 to Count-1 do
       Result[i]:=Strings[i];
   end;
+  Free;
 end;
 
 function TAscomResult.GetIntArray: IIntArray;
@@ -180,6 +181,7 @@ begin
     for i:=0 to Count-1 do
       Result[i]:=Integers[i];
   end;
+  Free;
 end;
 
 { TAscomRest }

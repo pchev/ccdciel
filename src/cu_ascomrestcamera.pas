@@ -188,6 +188,10 @@ begin
   V.Device:=Fdevice;
   FStatus := devConnected;
   try
+    V.Put('Connected',true); // try to connect if authorized by server
+  except
+  end;
+  try
   msg('Driver version: '+V.Get('DriverVersion').AsString,9);
   except
     msg('Error: unknown driver version',9);
@@ -273,6 +277,7 @@ begin
       for i:=0 to n-1 do begin
         FReadOutList.Add(rlist[i]);
       end;
+      SetLength(rlist,0);
       FhasReadOut:=true;
     except
       FhasReadOut:=false;
@@ -936,6 +941,7 @@ begin
             isol:=gainlist[i];
             FISOList.Add(isol);
           end;
+          SetLength(gainlist,0);
           FhasGainISO:=FISOList.Count>0;
        except
        // No ISO list
