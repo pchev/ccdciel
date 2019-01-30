@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="85">
+    <Units Count="86">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -744,6 +744,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit84>
+      <Unit85>
+        <Filename Value="cu_ascomrestcamera.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit85>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

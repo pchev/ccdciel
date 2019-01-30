@@ -37,6 +37,7 @@ uses fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
+  cu_ascomrestcamera,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
@@ -1313,8 +1314,8 @@ begin
   EndY:=0;
   Capture:=false;
   Preview:=false;
-  MenuIndiSettings.Enabled:=(camera.CameraInterface=INDI);
-  MenuShowINDIlog.Visible:=(camera.CameraInterface=INDI);
+  MenuIndiSettings.Enabled:=true;//(camera.CameraInterface=INDI);
+  MenuShowINDIlog.Visible:=true;//(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
 
   NewMessage(SystemInformation,9);
@@ -1420,6 +1421,7 @@ begin
    case aInt of
      INDI:  camera:=T_indicamera.Create(nil);
      ASCOM: camera:=T_ascomcamera.Create(nil);
+     ASCOMREST: camera:=T_ascomrestcamera.Create(nil);
    end;
    if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
    camera.Mount:=mount;
@@ -1443,7 +1445,7 @@ begin
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
 
-   aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
+   aInt:=INDI;
    if aInt= INDI then begin
      watchdog:=T_indiwatchdog.Create(nil);
      watchdog.onMsg:=@NewMessage;
@@ -1665,8 +1667,8 @@ begin
    SafetyActionName[10]:=trim(rsPlanetariumS);
    SafetyActionName[11]:=trim(rsCallExternal);
    SafetyActionName[12]:=trim(rsExitProgram);
-   DevInterfaceName[2]:='In camera';
-   DevInterfaceName[3]:='In mount';
+   DevInterfaceName[2]:=rsInCamera;
+   DevInterfaceName[3]:=rsInMount;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -2619,6 +2621,7 @@ begin
 case camera.CameraInterface of
    INDI : CameraName:=config.GetValue('/INDIcamera/Device','');
    ASCOM: CameraName:=config.GetValue('/ASCOMcamera/Device','');
+   ASCOMREST: CameraName:='Camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0));
 end;
 case wheel.WheelInterface of
    INCAMERA: WheelName:=CameraName;
@@ -2664,7 +2667,10 @@ rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
 mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 dome.AutoLoadConfig:=config.GetValue('/INDIdome/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
-camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
+if camera.CameraInterface=ASCOM then
+   camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
+if camera.CameraInterface=ASCOMREST then
+   camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
 weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
 safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
 if watchdog<>nil then begin
@@ -3295,6 +3301,10 @@ begin
                           config.GetValue('/INDIcamera/DevicePort',''));
            end;
     ASCOM: camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
+    ASCOMREST: camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestcamera/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestcamera/Protocol',0)],
+                          'Camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0)));
   end;
 end;
 
@@ -5046,6 +5056,11 @@ begin
     config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
     config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
+    config.SetValue('/ASCOMRestcamera/Protocol',f_setup.CameraARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestcamera/Host',f_setup.CameraARestHost.Text);
+    config.SetValue('/ASCOMRestcamera/Port',f_setup.CameraARestPort.Value);
+    config.SetValue('/ASCOMRestcamera/Device',f_setup.CameraARestDevice.Value);
+    config.SetValue('/ASCOMRestcamera/FlipImage',f_setup.FlipImage1.Checked);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     if f_setup.WheelIndiDevice.Text<>'' then config.SetValue('/INDIwheel/Device',f_setup.WheelIndiDevice.Text);

@@ -30,7 +30,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
     Variants, comobj, math,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls;
+  ExtCtrls, ComCtrls, Spin;
 
 type
 
@@ -75,12 +75,15 @@ type
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
     CameraIndiTransfertDir: TEdit;
+    CameraARestProtocol: TComboBox;
     DeviceDome: TCheckBox;
     DeviceWeather: TCheckBox;
     DeviceSafety: TCheckBox;
+    CameraARestHost: TEdit;
     FlipImage: TCheckBox;
     AscomWeatherType: TRadioGroup;
     Dome: TTabSheet;
+    FlipImage1: TCheckBox;
     Label23: TLabel;
     Label25: TLabel;
     DomeIndiDevPort: TEdit;
@@ -89,6 +92,10 @@ type
     Label28: TLabel;
     Label29: TLabel;
     DeviceCamera: TLabel;
+    Label30: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
     PageControlWatchdog: TPageControl;
     PageControlSafety: TPageControl;
     PageControlWeather: TPageControl;
@@ -98,6 +105,7 @@ type
     PageControlFocuser: TPageControl;
     PageControlWheel: TPageControl;
     PageControlCamera: TPageControl;
+    Panel2: TPanel;
     PanelDomeAscom: TPanel;
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;
@@ -116,6 +124,9 @@ type
     DomeAscom: TTabSheet;
     SafetyIndi: TTabSheet;
     SafetyAscom: TTabSheet;
+    CameraAscomRest: TTabSheet;
+    CameraARestPort: TSpinEdit;
+    CameraARestDevice: TSpinEdit;
     WatchdogIndi: TTabSheet;
     WeatherIndi: TTabSheet;
     WeatherAscom: TTabSheet;
@@ -476,6 +487,11 @@ CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir','/tmp'
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
 FlipImage.Checked:=conf.GetValue('/ASCOMcamera/FlipImage',true);
 CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
+CameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestcamera/Protocol',0);
+CameraARestHost.Text:=conf.GetValue('/ASCOMRestcamera/Host','127.0.0.1');
+CameraARestPort.Value:=conf.GetValue('/ASCOMRestcamera/Port',11111);
+CameraARestDevice.Value:=conf.GetValue('/ASCOMRestcamera/Device',0);
+FlipImage1.Checked:=conf.GetValue('/ASCOMRestcamera/FlipImage',true);
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
 if WheelIndiDevice.Items.Count=0 then begin
@@ -578,6 +594,7 @@ begin
   case FCameraConnection of
    INDI: PageControlCamera.ActivePageIndex:=0;
    ASCOM: PageControlCamera.ActivePageIndex:=1;
+   ASCOMREST: PageControlCamera.ActivePageIndex:=2;
   end;
 end;
 
@@ -973,6 +990,7 @@ begin
   case PageControlCamera.ActivePageIndex of
     0: FCameraConnection:=INDI;
     1: FCameraConnection:=ASCOM;
+    2: FCameraConnection:=ASCOMREST;
   end;
   DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
 end;

@@ -1029,6 +1029,8 @@ resourcestring
   rsRunAutoFocus = 'Auto-focus if temp. change by more than %s';
   rsLicenseAgree = 'License agreement';
   rsUnattendedEr = 'Unattended error script';
+  rsInCamera = 'In camera';
+  rsInMount = 'In mount';
 
 
 

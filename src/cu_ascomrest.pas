@@ -50,25 +50,33 @@ type
     height,width: integer;
     img: array of array of array of integer;  // nplane, height, width
   end;
+  IStringArray = array of string;
+  IIntArray = array of integer;
 
   TAscomResult= class(TObject)
      protected
        Fdata: TJSONData;
        function GetAsFloat: double;
+       function GetAsInt: integer;
        function GetAsBool: boolean;
        function GetAsString: string;
+       function GetAsStringArray: IStringArray;
+       function GetIntArray: IIntArray;
      public
        constructor Create;
        destructor Destroy; override;
        property data: TJSONData read Fdata write Fdata;
        property AsFloat: double read GetAsFloat;
+       property AsInt: Integer read GetAsInt;
        property AsBool: boolean read GetAsBool;
        property AsString: string read GetAsString;
+       property AsStringArray: IStringArray read GetAsStringArray;
+       property AsIntArray: IIntArray read GetIntArray;
   end;
 
   TAscomRest = class(TComponent)
   protected
-    Fhost, Fport, Fprotocol, FbaseUrl, FApiVersion: string;
+    Fhost, Fport, Fprotocol, FDevice, FbaseUrl, FApiVersion: string;
     Fuser, Fpassword: string;
     FClientId: integer;
     FLastError: string;
@@ -88,17 +96,19 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Get(device,method:string):TAscomResult;
-    function GetTrackingRates(device:string): ITrackingRates;
-    function GetAxisRates(device,axis:string): IAxisRates;
-    function GetImageArray(device:string): TImageArray;
-    procedure Put(device,method: string; params:array of string); overload;
-    procedure Put(device,method,value:string); overload;
-    procedure Put(device,method:string;value:double); overload;
-    procedure Put(device,method:string;value:Boolean); overload;
+    function Get(method:string):TAscomResult;
+    function GetTrackingRates: ITrackingRates;
+    function GetAxisRates(axis:string): IAxisRates;
+    function GetImageArray: TImageArray;
+    procedure Put(method: string; params:array of string); overload;
+    procedure Put(method:string); overload;
+    procedure Put(method,value:string); overload;
+    procedure Put(method:string;value:double); overload;
+    procedure Put(method:string;value:Boolean); overload;
     property Host: string read Fhost write SetHost;
     property Port: string read Fport write SetPort;
     property Protocol: string read Fprotocol write SetProtocol;
+    property Device: string read FDevice write FDevice;
     property ApiVersion: string read FApiVersion write SetApiVersion;
     property User: string read Fuser write SetUser;
     property Password: string read Fpassword write SetPassword;
@@ -134,6 +144,12 @@ begin
  Free;
 end;
 
+function TAscomResult.GetAsInt: Integer;
+begin
+ Result:=data.GetPath('Value').AsInteger;
+ Free;
+end;
+
 function TAscomResult.GetAsBool: Boolean;
 begin
   Result:=data.GetPath('Value').AsBoolean;
@@ -144,6 +160,26 @@ function TAscomResult.GetAsString: string;
 begin
    Result:=data.GetPath('Value').AsString;
    Free;
+end;
+
+function TAscomResult.GetAsStringArray: IStringArray;
+var i: integer;
+begin
+  with TJSONArray(data.GetPath('Value')) do begin
+    SetLength(Result,Count);
+    for i:=0 to Count-1 do
+      Result[i]:=Strings[i];
+  end;
+end;
+
+function TAscomResult.GetIntArray: IIntArray;
+var i: integer;
+begin
+  with TJSONArray(data.GetPath('Value')) do begin
+    SetLength(Result,Count);
+    for i:=0 to Count-1 do
+      Result[i]:=Integers[i];
+  end;
 end;
 
 { TAscomRest }
@@ -158,6 +194,7 @@ begin
   Fprotocol:='http:';
   Fhost:='localhost';
   Fport:='11111';
+  FDevice:='';
   Fuser:='';
   Fpassword:='';
   FClientId:=0;
@@ -231,14 +268,14 @@ begin
   FClientId:=i;
 end;
 
-function TAscomRest.Get(device,method:string):TAscomResult;
+function TAscomRest.Get(method:string):TAscomResult;
  var ok: boolean;
      url: string;
      i: integer;
  begin
    Fhttp.Document.Clear;
    Fhttp.Headers.Clear;
-   url:=FbaseUrl+device+'/'+method;
+   url:=FbaseUrl+Fdevice+'/'+method;
    if ClientId>0 then url:=url+'?ClientID='+IntToStr(FClientId);
    ok := Fhttp.HTTPMethod('GET', url);
    if ok then begin
@@ -269,11 +306,11 @@ function TAscomRest.Get(device,method:string):TAscomResult;
    end;
  end;
 
-function TAscomRest.GetTrackingRates(device:string): ITrackingRates;
+function TAscomRest.GetTrackingRates: ITrackingRates;
 var J: TAscomResult;
     i: integer;
 begin
-  J:=Get(device,'TrackingRates');
+  J:=Get('TrackingRates');
   try
   with TJSONArray(J.data.GetPath('Rates')) do begin
     SetLength(Result,Count);
@@ -285,12 +322,12 @@ begin
   end;
 end;
 
-function TAscomRest.GetAxisRates(device,axis:string): IAxisRates;
+function TAscomRest.GetAxisRates(axis:string): IAxisRates;
 var J: TAscomResult;
     i,n: integer;
     r: IRate;
 begin
-  J:=Get(device,'AxisRates?Axis='+axis);
+  J:=Get('AxisRates?Axis='+axis);
   try
   with TJSONArray(J.data.GetPath('Value')) do begin
     n:=count;
@@ -307,11 +344,11 @@ begin
   end;
 end;
 
-function TAscomRest.GetImageArray(device:string): TImageArray;
+function TAscomRest.GetImageArray: TImageArray;
 var J: TAscomResult;
     i,k,n: integer;
 begin
-   J:=Get(device,'ImageArray');
+   J:=Get('ImageArray');
    try
    Result:=TImageArray.Create;
    Result.nplane:=J.data.GetPath('Rank').AsInteger;
@@ -353,7 +390,7 @@ begin
    end;
 end;
 
-procedure TAscomRest.Put(device,method: string; params:array of string); overload;
+procedure TAscomRest.Put(method: string; params:array of string); overload;
 var J: TJSONData;
     url,data: string;
     ok: boolean;
@@ -366,7 +403,7 @@ begin
     if ClientId>0 then
        data:='ClientID='+IntToStr(FClientId)
     else
-       data:='';
+       data:=' ';
   end
   else if n=1 then begin
     data:=params[0];
@@ -387,7 +424,7 @@ begin
   end;
   WriteStrToStream(Fhttp.Document, data);
   Fhttp.MimeType := 'application/x-www-form-urlencoded';
-  url := FbaseUrl+device+'/'+method;
+  url := FbaseUrl+Fdevice+'/'+method;
   ok := Fhttp.HTTPMethod('PUT', url);
    if ok then begin
     if (Fhttp.ResultCode=200) then begin
@@ -416,19 +453,24 @@ begin
   end;
 end;
 
-procedure TAscomRest.Put(device,method,value:string); overload;
+procedure TAscomRest.Put(method:string); overload;
 begin
-  Put(device,method,[method,value]);
+  Put(method,[]);
 end;
 
-procedure TAscomRest.Put(device,method:string;value:double);  overload;
+procedure TAscomRest.Put(method,value:string); overload;
 begin
-  Put(device,method,[method,FloatToStr(value)]);
+  Put(method,[method,value]);
 end;
 
-procedure TAscomRest.Put(device,method:string;value:Boolean); overload;
+procedure TAscomRest.Put(method:string;value:double);  overload;
 begin
-  Put(device,method,[method,BoolToStr(value,true)]);
+  Put(method,[method,FloatToStr(value)]);
+end;
+
+procedure TAscomRest.Put(method:string;value:Boolean); overload;
+begin
+  Put(method,[method,BoolToStr(value,true)]);
 end;
 
 

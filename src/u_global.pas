@@ -35,7 +35,7 @@ type
   TNotifyNum = procedure(d: double) of object;
   TNotifyBool= procedure(var v: boolean) of object;
 
-  TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE);
+  TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
   TFlatType=(ftNone,ftSKY,ftDome);
   TAutoguiderType=(agPHD,agLINGUIDER,agNONE);
@@ -388,7 +388,8 @@ var
   WeatherRestartDelay: integer;
   DummyDouble: double;
   DummyBool: boolean;
-  DevInterfaceName: array[0..3] of string=('INDI','ASCOM','In camera','In mount');
+  DevInterfaceName: array[0..4] of string=('INDI','ASCOM','In camera','In mount','ASCOM REST');
+  ProtocolName: array[0..1] of string=('http:','https:');
 
   procedure globalmsg(str:string);
 
