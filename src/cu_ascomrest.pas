@@ -377,11 +377,11 @@ begin
        for i:=0 to Count-1 do begin
          with Arrays[i] do begin
            for k:=0 to Count-1 do begin
-             for n:=0 to 2 do begin
-               with Arrays[n] do begin
+             with Arrays[k] do begin
+               for n:=0 to 2 do begin
                  Result.img[n,k,i]:=Integers[n];
-               end;
-             end; //n
+               end; //n
+             end;
            end; // k
          end;
        end; //i

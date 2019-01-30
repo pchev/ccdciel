@@ -375,11 +375,11 @@ procedure T_ascomrestcamera.ExposureTimerTimer(sender: TObject);
 type Timgdata = array of longint;
 var ok: boolean;
     imgarray:TImageArray;
-    i,j,c,xs,ys: integer;
+    i,j,k,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy: double;
     dateobs,ccdname,frname:string;
-    Dims, es : Integer;
+    Dims: Integer;
     p2:array[0..1] of integer;
     p3:array[0..2] of integer;
     lii: integer;
@@ -469,9 +469,17 @@ begin
    hdr.ClearHeader;
    hdr.Add('SIMPLE',true,'file does conform to FITS standard');
    hdr.Add('BITPIX',16,'number of bits per data pixel');
+   if dims=2 then begin
    hdr.Add('NAXIS',2,'number of data axes');
    hdr.Add('NAXIS1',nax1 ,'length of data axis 1');
    hdr.Add('NAXIS2',nax2 ,'length of data axis 2');
+   end
+   else begin
+     hdr.Add('NAXIS',3,'number of data axes');
+     hdr.Add('NAXIS1',3 ,'length of data axis 1');
+     hdr.Add('NAXIS2',nax1 ,'length of data axis 1');
+     hdr.Add('NAXIS3',nax2 ,'length of data axis 2');
+   end;
    hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
@@ -501,7 +509,7 @@ begin
            p2[1]:=i;
         for j:=0 to xs-1 do begin
           p2[0]:=j;
-          lii:=imgarray.img[0,p2[1],p2[0]];  // p2[0]+p2[1]*xs];
+          lii:=imgarray.img[0,p2[1],p2[0]];
           if lii>0 then
              ii:=lii-32768
           else
@@ -512,7 +520,8 @@ begin
      end;
    end
    else if Dims=3 then begin
-     p3[2]:=0; // only the first plane
+     for k:=0 to 2 do begin
+     p3[2]:=k;
      for i:=0 to ys-1 do begin
         if FASCOMFlipImage then
            p3[1]:=ys-1-i
@@ -520,7 +529,7 @@ begin
            p3[1]:=i;
         for j:=0 to xs-1 do begin
           p3[0]:=j;
-          lii:=imgarray.img[0,p3[1],p3[0]]; // [p3[0]+p3[1]*xs];
+          lii:=imgarray.img[p3[2],p3[1],p3[0]];
           if lii>0 then
              ii:=lii-32768
           else
@@ -528,6 +537,7 @@ begin
           ii:=NtoBE(ii);
           FImgStream.Write(ii,sizeof(smallint));
         end;
+     end;
      end;
    end;
    {$ifdef debug_ascom}msg('pad fits');{$endif}
