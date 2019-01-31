@@ -96,7 +96,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Get(method:string):TAscomResult;
+    function Get(method:string; param: string=''):TAscomResult;
     function GetTrackingRates: ITrackingRates;
     function GetAxisRates(axis:string): IAxisRates;
     function GetImageArray: TImageArray;
@@ -271,7 +271,7 @@ begin
   FClientId:=i;
 end;
 
-function TAscomRest.Get(method:string):TAscomResult;
+function TAscomRest.Get(method:string; param: string=''):TAscomResult;
  var ok: boolean;
      url: string;
      i: integer;
@@ -279,7 +279,13 @@ function TAscomRest.Get(method:string):TAscomResult;
    Fhttp.Document.Clear;
    Fhttp.Headers.Clear;
    url:=FbaseUrl+Fdevice+'/'+method;
-   if ClientId>0 then url:=url+'?ClientID='+IntToStr(FClientId);
+   if param>'' then begin
+      url:=url+'?'+param;
+      if ClientId>0 then url:=url+'&ClientID='+IntToStr(FClientId);
+   end
+   else begin
+      if ClientId>0 then url:=url+'?ClientID='+IntToStr(FClientId);
+   end;
    ok := Fhttp.HTTPMethod('GET', url);
    if ok then begin
      if (Fhttp.ResultCode=200) then begin
@@ -330,7 +336,7 @@ var J: TAscomResult;
     i,n: integer;
     r: IRate;
 begin
-  J:=Get('AxisRates?Axis='+axis);
+  J:=Get('AxisRates','Axis='+axis);
   try
   with TJSONArray(J.data.GetPath('Value')) do begin
     n:=count;
@@ -406,7 +412,7 @@ begin
     if ClientId>0 then
        data:='ClientID='+IntToStr(FClientId)
     else
-       data:=' ';
+       data:='ClientID=0';
   end
   else if n=1 then begin
     data:=params[0];
@@ -471,7 +477,7 @@ begin
     if ClientId>0 then
        data:='ClientID='+IntToStr(FClientId)
     else
-       data:=' ';
+       data:='ClientID=0';
   end
   else if n=1 then begin
     data:=params[0];
