@@ -3170,13 +3170,21 @@ begin
   f_devicesconnection.PanelDev.Visible:=true;
 
   if WantCamera  then ConnectCamera(Sender);
+  Application.ProcessMessages;
   if WantWheel   then ConnectWheel(Sender);
+  Application.ProcessMessages;
   if WantFocuser then ConnectFocuser(Sender);
+  Application.ProcessMessages;
   if WantRotator then ConnectRotator(Sender);
+  Application.ProcessMessages;
   if WantMount   then ConnectMount(Sender);
+  Application.ProcessMessages;
   if WantDome    then ConnectDome(Sender);
+  Application.ProcessMessages;
   if WantWeather then ConnectWeather(Sender);
+  Application.ProcessMessages;
   if WantSafety  then ConnectSafety(Sender);
+  Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
 end;
 

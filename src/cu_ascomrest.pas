@@ -191,7 +191,7 @@ constructor TAscomRest.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   Fhttp:=THTTPSend.Create;
-  Fhttp.Sock.ConnectionTimeout:=2000;  // not too long if service is not available
+  Fhttp.Sock.ConnectionTimeout:=1000;  // not too long if service is not available
   Fhttp.Timeout:=120000;               // 2 minutes for long sync request
   Fhttp.UserAgent:='';
   Fprotocol:='http:';
