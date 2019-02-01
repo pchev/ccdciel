@@ -400,8 +400,7 @@ begin
 end;
 
 function TAscomRest.PutR(method: string; params:array of string):TAscomResult;
-var J: TJSONData;
-    url,data: string;
+var url,data: string;
     ok: boolean;
     i,n: integer;
 begin

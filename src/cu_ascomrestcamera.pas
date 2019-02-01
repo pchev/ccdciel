@@ -372,7 +372,6 @@ begin
 end;
 
 procedure T_ascomrestcamera.ExposureTimerTimer(sender: TObject);
-type Timgdata = array of longint;
 var ok: boolean;
     imgarray:TImageArray;
     i,j,k,c,xs,ys: integer;
@@ -748,11 +747,13 @@ end;
 
 function T_ascomrestcamera.GetBinXrange:TNumRange;
 begin
+   result:=UnitRange;
    result.max:=FMaxBinX;
 end;
 
 function T_ascomrestcamera.GetBinYrange:TNumRange;
 begin
+   result:=UnitRange;
    result.max:=FMaxBinY;
 end;
 
@@ -762,10 +763,12 @@ begin
     try
     result.max:=V.Get('ExposureMax').AsFloat;
     except
+     result.max:=3600;
     end;
     try
     result.min:=V.Get('V.ExposureMin').AsFloat;
     except
+    result.min:=0.001;
     end;
     try
     result.step:=V.Get('V.ExposureResolution').AsFloat;

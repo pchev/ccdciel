@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_weather, cu_ascomrest, u_global,
-    u_translation, indiapi, math,
+    u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 
 type

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  cu_mount, cu_ascomrest, u_global,  indiapi,
-    u_translation, u_utils, math,
+    u_translation, u_utils,
   Forms, ExtCtrls, Classes, SysUtils;
 
 type
