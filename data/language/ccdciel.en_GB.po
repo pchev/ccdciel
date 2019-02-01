@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-01-22 10:15+0000\n"
+"POT-Creation-Date: 2019-02-01 21:33+0000\n"
 "PO-Revision-Date: 2018-12-15 15:06+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-01-22 10:20+0000\n"
-"X-Generator: Launchpad (build 18856)\n"
+"X-Launchpad-Export-Date: 2019-02-01 21:44+0000\n"
+"X-Generator: Launchpad (build 18862)\n"
 "Language: en_GB\n"
 
 #: u_translation.rsabort
@@ -40,10 +40,6 @@ msgstr "About"
 #: u_translation.rsaction
 msgid "Action"
 msgstr ""
-
-#: u_translation.rsactionstotak
-msgid "Actions to take when the sequence is finished"
-msgstr "Actions to take when the sequence is finished"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -85,6 +81,10 @@ msgstr "Any time"
 msgid "Apply to all"
 msgstr ""
 
+#: u_translation.rsapplytoallde
+msgid "Apply to all devices"
+msgstr ""
+
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
 msgstr "Apply to current image"
@@ -100,6 +100,10 @@ msgstr "Are you sure you want to disconnect all the devices now?"
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
 msgstr "ASCOM interface is only available on Windows."
+
+#: u_translation.rsascomremote
+msgid "ASCOM Remote"
+msgstr ""
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
@@ -645,10 +649,6 @@ msgstr "Configuration saved"
 msgid "Connect"
 msgstr "Connect"
 
-#: u_translation.rsconnectandge
-msgid "Connect and get devices list"
-msgstr "Connect and get devices list"
-
 #: u_translation.rsconnected
 msgid "%s connected"
 msgstr "%s connected"
@@ -1141,10 +1141,6 @@ msgstr "Filters"
 msgid "Filter wheel"
 msgstr "Filter wheel"
 
-#: u_translation.rsfilterwheeli
-msgid "Filter wheel in camera connection. (Restart required!)"
-msgstr "Filter wheel in camera connection. (Restart required!)"
-
 #: u_translation.rsfinalmovemen
 msgid "Final movement (steps)"
 msgstr "Final movement (steps)"
@@ -1237,10 +1233,6 @@ msgstr "Focuser calibration completed, click Next to see the result."
 msgid "Focuser correction"
 msgstr "Focuser correction"
 
-#: u_translation.rsfocuserinmou
-msgid "Focuser in mount connection. (Restart required!)"
-msgstr "Focuser in mount connection. (Restart required!)"
-
 #: u_translation.rsfocusermoveb
 msgid "Focuser move by %s"
 msgstr "Focuser move by %s"
@@ -1324,6 +1316,10 @@ msgstr "FWHM"
 #: u_translation.rsgain
 msgid "Gain"
 msgstr "Gain"
+
+#: u_translation.rsget
+msgid "Get"
+msgstr ""
 
 #: u_translation.rsgetcurrent
 msgid "Get current"
@@ -1449,6 +1445,10 @@ msgstr "Image Un-debayered"
 msgid "In"
 msgstr "In"
 
+#: u_translation.rsincamera
+msgid "In camera"
+msgstr ""
+
 #: u_translation.rsincr
 msgid "Incr."
 msgstr "Incr."
@@ -1457,10 +1457,6 @@ msgstr "Incr."
 msgid "INDI settings"
 msgstr "INDI settings"
 
-#: u_translation.rsinitialized
-msgid "initialized"
-msgstr "initialized"
-
 #: u_translation.rsinitializeta
 msgid "Initialize target %s"
 msgstr "Initialise target %s"
@@ -1468,6 +1464,10 @@ msgstr "Initialise target %s"
 #: u_translation.rsinitialmovem
 msgid "Initial movement (steps)"
 msgstr "Initial movement (steps)"
+
+#: u_translation.rsinmount
+msgid "In mount"
+msgstr ""
 
 #: u_translation.rsinplaceautof
 msgid "In place autofocus failed!"
@@ -1532,6 +1532,10 @@ msgstr "Latitude"
 #: u_translation.rslearn
 msgid "Learn"
 msgstr "Learn"
+
+#: u_translation.rslicenseagree
+msgid "License agreement"
+msgstr ""
 
 #: u_translation.rslightoff
 msgid "Light OFF"
@@ -1824,6 +1828,10 @@ msgstr "No backlash"
 #: u_translation.rsnodawntoday
 msgid "No dawn today"
 msgstr "No dawn today"
+
+#: u_translation.rsnodevice
+msgid "No device"
+msgstr ""
 
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
@@ -2249,6 +2257,10 @@ msgstr "Profile: %s"
 msgid "Program folder "
 msgstr "Program folder "
 
+#: u_translation.rsprotocol
+msgid "Protocol"
+msgstr ""
+
 #: u_translation.rsquality
 msgid "Quality:"
 msgstr "Quality:"
@@ -2324,6 +2336,10 @@ msgstr "Reference image"
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
 msgstr "Relative increment for the inward or outward movement"
+
+#: u_translation.rsremotedevice
+msgid "Remote device number"
+msgstr ""
 
 #: u_translation.rsremoveallbre
 msgid "Remove all breakpoints"
@@ -2500,10 +2516,6 @@ msgstr "Rotator sync calibration = %s"
 #: u_translation.rsrun
 msgid "Run"
 msgstr "Run"
-
-#: u_translation.rsrunadditiona
-msgid "Run additional script in case of unattended error"
-msgstr "Run additional script in case of unattended error"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
@@ -3468,6 +3480,10 @@ msgstr "Type"
 #: u_translation.rsunabletofind
 msgid "Unable to find resolve data!"
 msgstr "Unable to find resolve data!"
+
+#: u_translation.rsunattendeder
+msgid "Unattended error script"
+msgstr ""
 
 #: u_translation.rsunavailable
 msgid "unavailable"

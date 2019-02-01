@@ -270,10 +270,6 @@ msgstr ""
 msgid "Devices Setup%s"
 msgstr ""
 
-#: u_translation:rsinitialized
-msgid "initialized"
-msgstr ""
-
 #: u_translation:rscompiledwith
 msgid "Compiled with"
 msgstr ""
@@ -1470,10 +1466,6 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-#: u_translation:rsconnectandge
-msgid "Connect and get devices list"
-msgstr ""
-
 #: u_translation:rsserver
 msgid "Server"
 msgstr ""
@@ -1530,10 +1522,6 @@ msgstr ""
 msgid "Be sure to configure the camera connection."
 msgstr ""
 
-#: u_translation:rsfilterwheeli
-msgid "Filter wheel in camera connection. (Restart required!)"
-msgstr ""
-
 #: u_translation:rsusefilterwhe
 msgid "Use filter wheel"
 msgstr ""
@@ -1544,10 +1532,6 @@ msgstr ""
 
 #: u_translation:rsusefocuser
 msgid "Use focuser"
-msgstr ""
-
-#: u_translation:rsfocuserinmou
-msgid "Focuser in mount connection. (Restart required!)"
 msgstr ""
 
 #: u_translation:rsuserotator
@@ -3250,10 +3234,6 @@ msgstr ""
 msgid "Termination options"
 msgstr ""
 
-#: u_translation:rsactionstotak
-msgid "Actions to take when the sequence is finished"
-msgstr ""
-
 #: u_translation:rsstoptelescop2
 msgid "Stop telescope tracking"
 msgstr ""
@@ -3268,10 +3248,6 @@ msgstr ""
 
 #: u_translation:rsrunascript
 msgid "Run a script"
-msgstr ""
-
-#: u_translation:rsrunadditiona
-msgid "Run additional script in case of unattended error"
 msgstr ""
 
 #: u_translation:rsthetelescope
@@ -3712,5 +3688,45 @@ msgstr ""
 
 #: u_translation:rsrunautofocus
 msgid "Auto-focus if temp. change by more than %s"
+msgstr ""
+
+#: u_translation:rslicenseagree
+msgid "License agreement"
+msgstr ""
+
+#: u_translation:rsunattendeder
+msgid "Unattended error script"
+msgstr ""
+
+#: u_translation:rsincamera
+msgid "In camera"
+msgstr ""
+
+#: u_translation:rsinmount
+msgid "In mount"
+msgstr ""
+
+#: u_translation:rsascomremote
+msgid "ASCOM Remote"
+msgstr ""
+
+#: u_translation:rsnodevice
+msgid "No device"
+msgstr ""
+
+#: u_translation:rsprotocol
+msgid "Protocol"
+msgstr ""
+
+#: u_translation:rsapplytoallde
+msgid "Apply to all devices"
+msgstr ""
+
+#: u_translation:rsremotedevice
+msgid "Remote device number"
+msgstr ""
+
+#: u_translation:rsget
+msgid "Get"
 msgstr ""
 

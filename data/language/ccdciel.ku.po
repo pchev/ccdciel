@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-01-22 10:15+0000\n"
+"POT-Creation-Date: 2019-02-01 21:33+0000\n"
 "PO-Revision-Date: 2018-05-14 09:37+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-01-22 10:20+0000\n"
-"X-Generator: Launchpad (build 18856)\n"
+"X-Launchpad-Export-Date: 2019-02-01 21:44+0000\n"
+"X-Generator: Launchpad (build 18862)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -38,10 +38,6 @@ msgstr "Der barê"
 
 #: u_translation.rsaction
 msgid "Action"
-msgstr ""
-
-#: u_translation.rsactionstotak
-msgid "Actions to take when the sequence is finished"
 msgstr ""
 
 #: u_translation.rsadd
@@ -84,6 +80,10 @@ msgstr ""
 msgid "Apply to all"
 msgstr ""
 
+#: u_translation.rsapplytoallde
+msgid "Apply to all devices"
+msgstr ""
+
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
 msgstr ""
@@ -98,6 +98,10 @@ msgstr ""
 
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
+msgstr ""
+
+#: u_translation.rsascomremote
+msgid "ASCOM Remote"
 msgstr ""
 
 #: u_translation.rsastrometry
@@ -644,10 +648,6 @@ msgstr ""
 msgid "Connect"
 msgstr "Bê girêdan"
 
-#: u_translation.rsconnectandge
-msgid "Connect and get devices list"
-msgstr ""
-
 #: u_translation.rsconnected
 msgid "%s connected"
 msgstr ""
@@ -1140,10 +1140,6 @@ msgstr "Parzûn"
 msgid "Filter wheel"
 msgstr ""
 
-#: u_translation.rsfilterwheeli
-msgid "Filter wheel in camera connection. (Restart required!)"
-msgstr ""
-
 #: u_translation.rsfinalmovemen
 msgid "Final movement (steps)"
 msgstr ""
@@ -1236,10 +1232,6 @@ msgstr ""
 msgid "Focuser correction"
 msgstr ""
 
-#: u_translation.rsfocuserinmou
-msgid "Focuser in mount connection. (Restart required!)"
-msgstr ""
-
 #: u_translation.rsfocusermoveb
 msgid "Focuser move by %s"
 msgstr ""
@@ -1322,6 +1314,10 @@ msgstr ""
 
 #: u_translation.rsgain
 msgid "Gain"
+msgstr ""
+
+#: u_translation.rsget
+msgid "Get"
 msgstr ""
 
 #: u_translation.rsgetcurrent
@@ -1448,6 +1444,10 @@ msgstr ""
 msgid "In"
 msgstr ""
 
+#: u_translation.rsincamera
+msgid "In camera"
+msgstr ""
+
 #: u_translation.rsincr
 msgid "Incr."
 msgstr ""
@@ -1456,16 +1456,16 @@ msgstr ""
 msgid "INDI settings"
 msgstr ""
 
-#: u_translation.rsinitialized
-msgid "initialized"
-msgstr ""
-
 #: u_translation.rsinitializeta
 msgid "Initialize target %s"
 msgstr ""
 
 #: u_translation.rsinitialmovem
 msgid "Initial movement (steps)"
+msgstr ""
+
+#: u_translation.rsinmount
+msgid "In mount"
 msgstr ""
 
 #: u_translation.rsinplaceautof
@@ -1530,6 +1530,10 @@ msgstr ""
 
 #: u_translation.rslearn
 msgid "Learn"
+msgstr ""
+
+#: u_translation.rslicenseagree
+msgid "License agreement"
 msgstr ""
 
 #: u_translation.rslightoff
@@ -1822,6 +1826,10 @@ msgstr ""
 
 #: u_translation.rsnodawntoday
 msgid "No dawn today"
+msgstr ""
+
+#: u_translation.rsnodevice
+msgid "No device"
 msgstr ""
 
 #: u_translation.rsnodusktoday
@@ -2248,6 +2256,10 @@ msgstr ""
 msgid "Program folder "
 msgstr ""
 
+#: u_translation.rsprotocol
+msgid "Protocol"
+msgstr ""
+
 #: u_translation.rsquality
 msgid "Quality:"
 msgstr ""
@@ -2322,6 +2334,10 @@ msgstr ""
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
+msgstr ""
+
+#: u_translation.rsremotedevice
+msgid "Remote device number"
 msgstr ""
 
 #: u_translation.rsremoveallbre
@@ -2499,10 +2515,6 @@ msgstr ""
 #: u_translation.rsrun
 msgid "Run"
 msgstr "Bixebitîne"
-
-#: u_translation.rsrunadditiona
-msgid "Run additional script in case of unattended error"
-msgstr ""
 
 #: u_translation.rsrunascript
 msgid "Run a script"
@@ -3466,6 +3478,10 @@ msgstr ""
 
 #: u_translation.rsunabletofind
 msgid "Unable to find resolve data!"
+msgstr ""
+
+#: u_translation.rsunattendeder
+msgid "Unattended error script"
 msgstr ""
 
 #: u_translation.rsunavailable
