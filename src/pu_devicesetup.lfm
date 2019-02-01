@@ -305,22 +305,22 @@ object f_setup: Tf_setup
         Height = 288
         Top = 36
         Width = 420
-        ActivePage = CameraIndi
-        TabIndex = 0
+        ActivePage = CameraAscomRest
+        TabIndex = 2
         TabOrder = 0
         OnChange = PageControlCameraChange
         object CameraIndi: TTabSheet
           Caption = 'CameraIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelCameraIndi: TPanel
             Left = 16
             Height = 239
             Top = 0
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 235
-            ClientWidth = 341
+            ClientHeight = 239
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object CameraIndiDevice: TComboBox
@@ -428,8 +428,8 @@ object f_setup: Tf_setup
               Top = 198
               Width = 267
               BevelOuter = bvNone
-              ClientHeight = 32
-              ClientWidth = 263
+              ClientHeight = 36
+              ClientWidth = 267
               ParentFont = False
               TabOrder = 5
               object Label5: TLabel
@@ -457,16 +457,16 @@ object f_setup: Tf_setup
         end
         object CameraAscom: TTabSheet
           Caption = 'CameraAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelCameraAscom: TPanel
             Left = 16
             Height = 176
             Top = 16
             Width = 344
             BevelOuter = bvNone
-            ClientHeight = 172
-            ClientWidth = 340
+            ClientHeight = 176
+            ClientWidth = 344
             ParentFont = False
             TabOrder = 0
             object BtnChooseCamera: TButton
@@ -523,15 +523,16 @@ object f_setup: Tf_setup
         end
         object CameraAscomRest: TTabSheet
           Caption = 'CameraAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel2: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object FlipImage1: TCheckBox
               Left = 13
@@ -661,16 +662,16 @@ object f_setup: Tf_setup
         OnChange = PageControlWheelChange
         object WheelIndi: TTabSheet
           Caption = 'WheelIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWheelIndi: TPanel
             Left = 16
             Height = 152
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 152
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object WheelIndiDevice: TComboBox
@@ -722,16 +723,16 @@ object f_setup: Tf_setup
         end
         object WheelAscom: TTabSheet
           Caption = 'WheelAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWheelAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseFilter: TButton
@@ -779,16 +780,16 @@ object f_setup: Tf_setup
         end
         object WheelInCamera: TTabSheet
           Caption = 'WheelInCamera'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWheelIncamera: TPanel
             Left = 16
             Height = 112
             Top = 32
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object Label17: TLabel
@@ -804,15 +805,16 @@ object f_setup: Tf_setup
         end
         object WheelAscomRest: TTabSheet
           Caption = 'WheelAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel3: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object WheelARestProtocol: TComboBox
               Left = 13
@@ -888,7 +890,7 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label63: TLabel
-              Left = 16
+              Left = 15
               Height = 19
               Top = 108
               Width = 72
@@ -925,16 +927,16 @@ object f_setup: Tf_setup
         OnChange = PageControlFocuserChange
         object FocuserIndi: TTabSheet
           Caption = 'FocuserIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelFocuserIndi: TPanel
             Left = 16
             Height = 152
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 152
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object FocuserIndiDevice: TComboBox
@@ -986,16 +988,16 @@ object f_setup: Tf_setup
         end
         object FocuserAscom: TTabSheet
           Caption = 'FocuserAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelFocuserAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseFocuser: TButton
@@ -1043,16 +1045,16 @@ object f_setup: Tf_setup
         end
         object FocuserInMount: TTabSheet
           Caption = 'FocuserInMount'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelFocuserInMount: TPanel
             Left = 18
             Height = 112
             Top = 32
             Width = 286
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 282
+            ClientHeight = 112
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -1070,15 +1072,16 @@ object f_setup: Tf_setup
         end
         object FocuserAscomRest: TTabSheet
           Caption = 'FocuserAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel4: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object FocuserARestProtocol: TComboBox
               Left = 13
@@ -1154,7 +1157,7 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label65: TLabel
-              Left = 38
+              Left = 35
               Height = 19
               Top = 108
               Width = 52
@@ -1191,16 +1194,16 @@ object f_setup: Tf_setup
         OnChange = PageControlRotatorChange
         object RotatorIndi: TTabSheet
           Caption = 'RotatorIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelRotatorIndi: TPanel
             Left = 16
             Height = 160
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 341
+            ClientHeight = 160
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object RotatorIndiDevice: TComboBox
@@ -1263,16 +1266,16 @@ object f_setup: Tf_setup
         end
         object RotatorAscom: TTabSheet
           Caption = 'RotatorAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelRotatorAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseRotator: TButton
@@ -1320,15 +1323,16 @@ object f_setup: Tf_setup
         end
         object RotatorAscomRest: TTabSheet
           Caption = 'RotatorAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel5: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object RotatorARestProtocol: TComboBox
               Left = 13
@@ -1404,7 +1408,7 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label66: TLabel
-              Left = 40
+              Left = 36
               Height = 19
               Top = 108
               Width = 51
@@ -1470,16 +1474,16 @@ object f_setup: Tf_setup
         OnChange = PageControlMountChange
         object MountIndi: TTabSheet
           Caption = 'MountIndi'
-          ClientHeight = 192
-          ClientWidth = 416
+          ClientHeight = 165
+          ClientWidth = 410
           object PanelMountIndi: TPanel
             Left = 16
             Height = 136
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 132
-            ClientWidth = 341
+            ClientHeight = 136
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object MountIndiDevice: TComboBox
@@ -1531,16 +1535,16 @@ object f_setup: Tf_setup
         end
         object MountAscom: TTabSheet
           Caption = 'MountAscom'
-          ClientHeight = 192
-          ClientWidth = 416
+          ClientHeight = 165
+          ClientWidth = 410
           object PanelMountAscom: TPanel
             Left = 16
             Height = 136
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 132
-            ClientWidth = 283
+            ClientHeight = 136
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseMount: TButton
@@ -1588,15 +1592,16 @@ object f_setup: Tf_setup
         end
         object MountAscomRest: TTabSheet
           Caption = 'MountAscomRest'
-          ClientHeight = 192
-          ClientWidth = 416
+          ClientHeight = 165
+          ClientWidth = 410
           object Panel6: TPanel
             Left = 16
-            Height = 193
+            Height = 153
             Top = 0
-            Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            Width = 384
+            BevelOuter = bvNone
+            ClientHeight = 153
+            ClientWidth = 384
             TabOrder = 0
             object MountARestProtocol: TComboBox
               Left = 13
@@ -1672,7 +1677,7 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label67: TLabel
-              Left = 27
+              Left = 16
               Height = 19
               Top = 108
               Width = 63
@@ -1717,16 +1722,16 @@ object f_setup: Tf_setup
         OnChange = PageControlDomeChange
         object DomeIndi: TTabSheet
           Caption = 'DomeIndi'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelDomeIndi: TPanel
             Left = 16
             Height = 152
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 152
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object DomeIndiDevice: TComboBox
@@ -1778,16 +1783,16 @@ object f_setup: Tf_setup
         end
         object DomeAscom: TTabSheet
           Caption = 'DomeAscom'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelDomeAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseDome: TButton
@@ -1835,15 +1840,16 @@ object f_setup: Tf_setup
         end
         object DomeAscomRest: TTabSheet
           Caption = 'DomeAscomRest'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object Panel7: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object DomeARestProtocol: TComboBox
               Left = 13
@@ -1919,7 +1925,7 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label68: TLabel
-              Left = 48
+              Left = 45
               Height = 19
               Top = 108
               Width = 42
@@ -1964,16 +1970,16 @@ object f_setup: Tf_setup
         OnChange = PageControlWeatherChange
         object WeatherIndi: TTabSheet
           Caption = 'WeatherIndi'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelWeatherIndi: TPanel
             Left = 16
             Height = 152
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 152
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object WeatherIndiDevice: TComboBox
@@ -2008,16 +2014,16 @@ object f_setup: Tf_setup
         end
         object WeatherAscom: TTabSheet
           Caption = 'WeatherAscom'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelWeatherAscom: TPanel
             Left = 16
             Height = 160
             Top = 16
             Width = 344
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 340
+            ClientHeight = 160
+            ClientWidth = 344
             ParentFont = False
             TabOrder = 0
             object BtnChooseWeather: TButton
@@ -2090,15 +2096,16 @@ object f_setup: Tf_setup
         end
         object WeatherAscomRest: TTabSheet
           Caption = 'WeatherAscomRest'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object Panel8: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object WeatherARestProtocol: TComboBox
               Left = 13
@@ -2234,16 +2241,16 @@ object f_setup: Tf_setup
         OnChange = PageControlSafetyChange
         object SafetyIndi: TTabSheet
           Caption = 'SafetyIndi'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelSafetyIndi: TPanel
             Left = 16
             Height = 152
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 152
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object SafetyIndiDevice: TComboBox
@@ -2278,16 +2285,16 @@ object f_setup: Tf_setup
         end
         object SafetyAscom: TTabSheet
           Caption = 'SafetyAscom'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelSafetyAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseSafety: TButton
@@ -2335,15 +2342,16 @@ object f_setup: Tf_setup
         end
         object SafetyAscomRest: TTabSheet
           Caption = 'SafetyAscomRest'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object Panel9: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
-            ClientHeight = 189
-            ClientWidth = 388
+            BevelOuter = bvNone
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object SafetyARestProtocol: TComboBox
               Left = 13
@@ -2419,7 +2427,7 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label69: TLabel
-              Left = 48
+              Left = 44
               Height = 19
               Top = 108
               Width = 43
@@ -2456,16 +2464,16 @@ object f_setup: Tf_setup
         OnChange = PageControlWatchdogChange
         object WatchdogIndi: TTabSheet
           Caption = 'WatchdogIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWatchdogIndi: TPanel
             Left = 16
             Height = 160
             Top = 16
             Width = 345
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 341
+            ClientHeight = 160
+            ClientWidth = 345
             ParentFont = False
             TabOrder = 0
             object WatchdogIndiDevice: TComboBox
