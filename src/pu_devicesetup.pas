@@ -64,7 +64,6 @@ type
     DefaultARestHost: TEdit;
     DefaultARestPort: TSpinEdit;
     DefaultARestProtocol: TComboBox;
-    UseINDI: TCheckBox;
     Label62: TLabel;
     Label63: TLabel;
     Label64: TLabel;
@@ -347,7 +346,7 @@ type
     LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount:integer;
-    receiveindidevice:boolean;
+    receiveindidevice, UseINDI: boolean;
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
     procedure SetCameraConnection(value: TDevInterface);
@@ -711,7 +710,7 @@ DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)
 DeviceDome.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
 
-UseINDI.Checked:=(CameraConnection=INDI)or(WheelConnection=INDI)or(FocuserConnection=INDI)or(RotatorConnection=INDI)or(MountConnection=INDI)or(DomeConnection=INDI)or(WeatherConnection=INDI)or(SafetyConnection=INDI);
+UseINDI:=(CameraConnection=INDI)or(WheelConnection=INDI)or(FocuserConnection=INDI)or(RotatorConnection=INDI)or(MountConnection=INDI)or(DomeConnection=INDI)or(WeatherConnection=INDI)or(SafetyConnection=INDI);
 end;
 
 
@@ -967,7 +966,7 @@ end;
 procedure Tf_setup.FormShow(Sender: TObject);
 begin
   InitialLock:=false;
-  if UseINDI.Checked then CheckIndiTimer.Enabled:=true;
+  if UseINDI then CheckIndiTimer.Enabled:=true;
 end;
 
 procedure Tf_setup.IndiSensorChange(Sender: TObject);
@@ -1124,7 +1123,7 @@ begin
   for i:=0 to SafetyIndiDevice.Items.Count-1 do
      if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
   LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
-  if indiclient.devices.Count>0 then UseINDI.Checked:=true;
+  if indiclient.devices.Count>0 then UseINDI:=true;
   indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
   except
@@ -1246,7 +1245,7 @@ begin
     try
     chkconf.Filename:=slash(ConfigDir)+configfile;
     Loadconfig(chkconf);
-    if UseINDI.Checked then CheckIndiTimer.Enabled:=true;
+    if UseINDI then CheckIndiTimer.Enabled:=true;
     finally
       chkconf.Free;
     end;
