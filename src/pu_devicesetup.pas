@@ -511,7 +511,7 @@ begin
   Label76.Caption:=rsPort;
   GetIndi1.Caption:=rsGet;
   Label34.Caption:=rsProtocol;
-  Label34.Caption:=rsServer;
+  Label35.Caption:=rsServer;
   Label36.Caption:=rsPort;
   Label37.Caption:=rsRemoteDevice;
   BtnChooseFilter.Caption:=rsChoose;
@@ -884,6 +884,7 @@ begin
   case FRotatorConnection of
    INDI: PageControlRotator.ActivePageIndex:=0;
    ASCOM: PageControlRotator.ActivePageIndex:=1;
+   ASCOMREST: PageControlRotator.ActivePageIndex:=2;
   end;
 end;
 
@@ -896,6 +897,7 @@ begin
   case FWeatherConnection of
    INDI: PageControlWeather.ActivePageIndex:=0;
    ASCOM: PageControlWeather.ActivePageIndex:=1;
+   ASCOMREST: PageControlWeather.ActivePageIndex:=2;
   end;
 end;
 
@@ -908,6 +910,7 @@ begin
   case FSafetyConnection of
    INDI: PageControlSafety.ActivePageIndex:=0;
    ASCOM: PageControlSafety.ActivePageIndex:=1;
+   ASCOMREST: PageControlSafety.ActivePageIndex:=2;
   end;
 end;
 
@@ -921,6 +924,7 @@ begin
    INDI: PageControlWheel.ActivePageIndex:=0;
    ASCOM: PageControlWheel.ActivePageIndex:=1;
    INCAMERA: PageControlWheel.ActivePageIndex:=2;
+   ASCOMREST: PageControlWheel.ActivePageIndex:=3;
   end;
 end;
 
@@ -934,6 +938,7 @@ begin
    INDI: PageControlFocuser.ActivePageIndex:=0;
    ASCOM: PageControlFocuser.ActivePageIndex:=1;
    INTELESCOPE: PageControlFocuser.ActivePageIndex:=2;
+   ASCOMREST: PageControlFocuser.ActivePageIndex:=3;
   end;
 end;
 
@@ -946,6 +951,7 @@ begin
   case FMountConnection of
    INDI: PageControlMount.ActivePageIndex:=0;
    ASCOM: PageControlMount.ActivePageIndex:=1;
+   ASCOMREST: PageControlMount.ActivePageIndex:=2;
   end;
 end;
 
@@ -958,6 +964,7 @@ begin
   case FDomeConnection of
    INDI: PageControlDome.ActivePageIndex:=0;
    ASCOM: PageControlDome.ActivePageIndex:=1;
+   ASCOMREST: PageControlDome.ActivePageIndex:=2;
   end;
 end;
 
