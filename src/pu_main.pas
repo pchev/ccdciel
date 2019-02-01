@@ -2630,7 +2630,31 @@ begin
 end;
 
 procedure Tf_main.SetConfig;
+var defautindiserver, defaultindiport: string;
 begin
+ // Upgrade old config with single server
+defautindiserver:=config.GetValue('/INDI/Server','localhost');
+defaultindiport:=config.GetValue('/INDI/ServerPort','7624');
+if config.GetValue('/INDIcamera/Server','')='' then begin
+   config.SetValue('/INDIcamera/Server',defautindiserver);
+   config.SetValue('/INDIcamera/ServerPort',defaultindiport);
+   config.SetValue('/INDIwheel/Server',defautindiserver);
+   config.SetValue('/INDIwheel/ServerPort',defaultindiport);
+   config.SetValue('/INDIfocuser/Server',defautindiserver);
+   config.SetValue('/INDIfocuser/ServerPort',defaultindiport);
+   config.SetValue('/INDIrotator/Server',defautindiserver);
+   config.SetValue('/INDIrotator/ServerPort',defaultindiport);
+   config.SetValue('/INDImount/Server',defautindiserver);
+   config.SetValue('/INDImount/ServerPort',defaultindiport);
+   config.SetValue('/INDIdome/Server',defautindiserver);
+   config.SetValue('/INDIdome/ServerPort',defaultindiport);
+   config.SetValue('/INDIwatchdog/Server',defautindiserver);
+   config.SetValue('/INDIwatchdog/ServerPort',defaultindiport);
+   config.SetValue('/INDIweather/Server',defautindiserver);
+   config.SetValue('/INDIweather/ServerPort',defaultindiport);
+   config.SetValue('/INDIsafety/Server',defautindiserver);
+   config.SetValue('/INDIsafety/ServerPort',defaultindiport);
+end;
 case camera.CameraInterface of
    INDI : CameraName:=config.GetValue('/INDIcamera/Device','');
    ASCOM: CameraName:=config.GetValue('/ASCOMcamera/Device','');
@@ -3326,8 +3350,8 @@ begin
     INDI : begin
            camera.IndiTransfert:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
            camera.IndiTransfertDir:=config.GetValue('/INDIcamera/IndiTransfertDir','/tmp');
-           camera.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+           camera.Connect(config.GetValue('/INDIcamera/Server',''),
+                          config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
                           config.GetValue('/INDIcamera/Sensor','CCD1'),
                           config.GetValue('/INDIcamera/DevicePort',''));
@@ -3577,8 +3601,8 @@ Procedure Tf_main.ConnectWheel(Sender: TObject);
 begin
   case wheel.WheelInterface of
     INCAMERA : wheel.Connect('');
-    INDI : wheel.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : wheel.Connect(config.GetValue('/INDIwheel/Server',''),
+                          config.GetValue('/INDIwheel/ServerPort',''),
                           config.GetValue('/INDIwheel/Device',''),
                           config.GetValue('/INDIwheel/DevicePort',''));
     ASCOM: wheel.Connect(config.GetValue('/ASCOMwheel/Device',''));
@@ -3597,8 +3621,8 @@ end;
 Procedure Tf_main.ConnectFocuser(Sender: TObject);
 begin
   case focuser.FocuserInterface of
-    INDI : focuser.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : focuser.Connect(config.GetValue('/INDIfocuser/Server',''),
+                          config.GetValue('/INDIfocuser/ServerPort',''),
                           config.GetValue('/INDIfocuser/Device',''),
                           config.GetValue('/INDIfocuser/DevicePort',''));
     ASCOM: focuser.Connect(config.GetValue('/ASCOMfocuser/Device',''));
@@ -3660,8 +3684,8 @@ end;
 Procedure Tf_main.ConnectRotator(Sender: TObject);
 begin
   case rotator.RotatorInterface of
-    INDI : rotator.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : rotator.Connect(config.GetValue('/INDIrotator/Server',''),
+                          config.GetValue('/INDIrotator/ServerPort',''),
                           config.GetValue('/INDIrotator/Device',''),
                           config.GetValue('/INDIrotator/DevicePort',''));
     ASCOM: rotator.Connect(config.GetValue('/ASCOMrotator/Device',''));
@@ -3680,8 +3704,8 @@ end;
 Procedure Tf_main.ConnectMount(Sender: TObject);
 begin
   case mount.MountInterface of
-    INDI : mount.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : mount.Connect(config.GetValue('/INDImount/Server',''),
+                          config.GetValue('/INDImount/ServerPort',''),
                           config.GetValue('/INDImount/Device',''),
                           config.GetValue('/INDImount/DevicePort',''));
     ASCOM: mount.Connect(config.GetValue('/ASCOMmount/Device',''));
@@ -3700,8 +3724,8 @@ end;
 Procedure Tf_main.ConnectDome(Sender: TObject);
 begin
   case dome.DomeInterface of
-    INDI : dome.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : dome.Connect(config.GetValue('/INDIdome/Server',''),
+                          config.GetValue('/INDIdome/ServerPort',''),
                           config.GetValue('/INDIdome/Device',''),
                           config.GetValue('/INDIdome/DevicePort',''));
     ASCOM: dome.Connect(config.GetValue('/ASCOMdome/Device',''));
@@ -3725,7 +3749,7 @@ case dome.Status of
                       f_dome.Connected:=false;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsDome+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsDome+' '+DevInterfaceName[ord(dome.DomeInterface)]+' "'+dome.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelDome.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3770,8 +3794,8 @@ Procedure Tf_main.ConnectWatchdog(Sender: TObject);
 begin
    if watchdog=nil then exit;
    watchdog.Threshold:=strtointdef(config.GetValue('/INDIwatchdog/Threshold','10'),10);
-   watchdog.Connect(config.GetValue('/INDI/Server',''),
-                  config.GetValue('/INDI/ServerPort',''),
+   watchdog.Connect(config.GetValue('/INDIwatchdog/Server',''),
+                  config.GetValue('/INDIwatchdog/ServerPort',''),
                   config.GetValue('/INDIwatchdog/Device','WatchDog'));
 end;
 
@@ -3803,8 +3827,8 @@ end;
 Procedure Tf_main.ConnectWeather(Sender: TObject);
 begin
   case weather.WeatherInterface of
-    INDI : weather.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : weather.Connect(config.GetValue('/INDIweather/Server',''),
+                          config.GetValue('/INDIweather/ServerPort',''),
                           config.GetValue('/INDIweather/Device',''),
                           '');
     ASCOM: weather.Connect(config.GetValue('/ASCOMweather/Device',''));
@@ -3834,7 +3858,7 @@ case weather.Status of
                       f_weather.Connected:=false;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsWeatherStati+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsWeatherStati+' '+DevInterfaceName[ord(weather.WeatherInterface)]+' "'+weather.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelWeather.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -3865,8 +3889,8 @@ end;
 Procedure Tf_main.ConnectSafety(Sender: TObject);
 begin
   case safety.SafetyInterface of
-    INDI : safety.Connect(config.GetValue('/INDI/Server',''),
-                          config.GetValue('/INDI/ServerPort',''),
+    INDI : safety.Connect(config.GetValue('/INDIsafety/Server',''),
+                          config.GetValue('/INDIsafety/ServerPort',''),
                           config.GetValue('/INDIsafety/Device',''),
                           '');
     ASCOM: safety.Connect(config.GetValue('/ASCOMsafety/Device',''));
@@ -3890,7 +3914,7 @@ case safety.Status of
                       f_safety.Connected:=false;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsSafetyMonito+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsSafetyMonito+' '+DevInterfaceName[ord(safety.SafetyInterface)]+' "'+safety.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelSafety.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -4080,7 +4104,7 @@ begin
                    end;
                    end;
    devConnecting:  begin
-                   NewMessage(Format(rsConnecting, [rsCamera+ellipsis]),2);
+                   NewMessage(Format(rsConnecting, [rsCamera+' '+DevInterfaceName[ord(camera.CameraInterface)]+' "'+camera.DeviceName+'" '+ellipsis]),2);
                    f_devicesconnection.LabelCamera.Font.Color:=clOrange;
                    end;
    devConnected:   begin
@@ -4202,7 +4226,7 @@ case wheel.Status of
                       f_devicesconnection.LabelWheel.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsFilterWheel+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsFilterWheel+' '+DevInterfaceName[ord(wheel.WheelInterface)]+' "'+wheel.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelWheel.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -4375,7 +4399,7 @@ case focuser.Status of
                       f_devicesconnection.LabelFocuser.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsFocuser+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsFocuser+' '+DevInterfaceName[ord(focuser.FocuserInterface)]+' "'+focuser.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelFocuser.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -4794,7 +4818,7 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsRotator+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsRotator+' '+DevInterfaceName[ord(rotator.RotatorInterface)]+' "'+rotator.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelRotator.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -4842,7 +4866,7 @@ case mount.Status of
                       f_devicesconnection.LabelMount.Font.Color:=clRed;
                   end;
   devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsMount+ellipsis]),2);
+                      NewMessage(Format(rsConnecting, [rsMount+' '+DevInterfaceName[ord(mount.MountInterface)]+' "'+mount.DeviceName+'" '+ellipsis]),2);
                       f_devicesconnection.LabelMount.Font.Color:=clOrange;
                    end;
   devConnected:   begin
@@ -5101,8 +5125,6 @@ begin
         fits.FreeDark;
       end;
     end;
-    config.SetValue('/INDI/Server',f_setup.IndiServer.Text);
-    config.SetValue('/INDI/ServerPort',f_setup.IndiPort.Text);
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
 
     config.SetValue('/Devices/Camera',true);
@@ -5116,6 +5138,8 @@ begin
     config.SetValue('/Devices/Safety',f_setup.DeviceSafety.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
+    config.SetValue('/INDIcamera/Server',f_setup.CameraIndiServer.Text);
+    config.SetValue('/INDIcamera/ServerPort',f_setup.CameraIndiPort.Text);
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
     config.SetValue('/INDIcamera/Sensor',f_setup.CameraSensor);
     config.SetValue('/INDIcamera/DevicePort',f_setup.CameraIndiDevPort.Text);
@@ -5131,6 +5155,8 @@ begin
     config.SetValue('/ASCOMRestcamera/FlipImage',f_setup.FlipImage1.Checked);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
+    config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
+    config.SetValue('/INDIwheel/ServerPort',f_setup.WheelIndiPort.Text);
     if f_setup.WheelIndiDevice.Text<>'' then config.SetValue('/INDIwheel/Device',f_setup.WheelIndiDevice.Text);
     config.SetValue('/INDIwheel/DevicePort',f_setup.WheelIndiDevPort.Text);
     config.SetValue('/INDIwheel/AutoLoadConfig',f_setup.WheelAutoLoadConfig.Checked);
@@ -5141,6 +5167,8 @@ begin
     config.SetValue('/ASCOMRestwheel/Device',f_setup.WheelARestDevice.Value);
 
     config.SetValue('/FocuserInterface',ord(f_setup.FocuserConnection));
+    config.SetValue('/INDIfocuser/Server',f_setup.FocuserIndiServer.Text);
+    config.SetValue('/INDIfocuser/ServerPort',f_setup.FocuserIndiPort.Text);
     if f_setup.FocuserIndiDevice.Text<>'' then config.SetValue('/INDIfocuser/Device',f_setup.FocuserIndiDevice.Text);
     config.SetValue('/INDIfocuser/DevicePort',f_setup.FocuserIndiDevPort.Text);
     config.SetValue('/INDIfocuser/AutoLoadConfig',f_setup.FocuserAutoLoadConfig.Checked);
@@ -5151,6 +5179,8 @@ begin
     config.SetValue('/ASCOMRestfocuser/Device',f_setup.FocuserARestDevice.Value);
 
     config.SetValue('/RotatorInterface',ord(f_setup.RotatorConnection));
+    config.SetValue('/INDIrotator/Server',f_setup.RotatorIndiServer.Text);
+    config.SetValue('/INDIrotator/ServerPort',f_setup.RotatorIndiPort.Text);
     if f_setup.RotatorIndiDevice.Text<>'' then config.SetValue('/INDIrotator/Device',f_setup.RotatorIndiDevice.Text);
     config.SetValue('/INDIrotator/DevicePort',f_setup.RotatorIndiDevPort.Text);
     config.SetValue('/INDIrotator/AutoLoadConfig',f_setup.RotatorAutoLoadConfig.Checked);
@@ -5161,6 +5191,8 @@ begin
     config.SetValue('/ASCOMRestrotator/Device',f_setup.RotatorARestDevice.Value);
 
     config.SetValue('/MountInterface',ord(f_setup.MountConnection));
+    config.SetValue('/INDImount/Server',f_setup.MountIndiServer.Text);
+    config.SetValue('/INDImount/ServerPort',f_setup.MountIndiPort.Text);
     if f_setup.MountIndiDevice.Text<>'' then config.SetValue('/INDImount/Device',f_setup.MountIndiDevice.Text);
     config.SetValue('/INDImount/DevicePort',f_setup.MountIndiDevPort.Text);
     config.SetValue('/INDImount/AutoLoadConfig',f_setup.MountAutoLoadConfig.Checked);
@@ -5174,6 +5206,8 @@ begin
     config.SetValue('/ASCOMRestmount/Device',f_setup.MountARestDevice.Value);
 
     config.SetValue('/DomeInterface',ord(f_setup.DomeConnection));
+    config.SetValue('/INDIdome/Server',f_setup.DomeIndiServer.Text);
+    config.SetValue('/INDIdome/ServerPort',f_setup.DomeIndiPort.Text);
     if f_setup.DomeIndiDevice.Text<>'' then config.SetValue('/INDIdome/Device',f_setup.DomeIndiDevice.Text);
     config.SetValue('/INDIdome/DevicePort',f_setup.DomeIndiDevPort.Text);
     config.SetValue('/INDIdome/AutoLoadConfig',f_setup.DomeAutoLoadConfig.Checked);
@@ -5183,11 +5217,15 @@ begin
     config.SetValue('/ASCOMRestdome/Port',f_setup.DomeARestPort.Value);
     config.SetValue('/ASCOMRestdome/Device',f_setup.DomeARestDevice.Value);
 
+    config.SetValue('/INDIwatchdog/Server',f_setup.WatchdogIndiServer.Text);
+    config.SetValue('/INDIwatchdog/ServerPort',f_setup.WatchdogIndiPort.Text);
     if f_setup.WatchdogIndiDevice.Text<>'' then config.SetValue('/INDIwatchdog/Device',f_setup.WatchdogIndiDevice.Text);
     config.SetValue('/INDIwatchdog/Threshold',f_setup.WatchdogThreshold.Text);
     config.SetValue('/INDIwatchdog/AutoLoadConfig',f_setup.WatchdogAutoLoadConfig.Checked);
 
     config.SetValue('/WeatherInterface',ord(f_setup.WeatherConnection));
+    config.SetValue('/INDIweather/Server',f_setup.WeatherIndiServer.Text);
+    config.SetValue('/INDIweather/ServerPort',f_setup.WeatherIndiPort.Text);
     if f_setup.WeatherIndiDevice.Text<>'' then config.SetValue('/INDIweather/Device',f_setup.WeatherIndiDevice.Text);
     config.SetValue('/INDIweather/AutoLoadConfig',f_setup.WeatherAutoLoadConfig.Checked);
     config.SetValue('/ASCOMweather/Device',f_setup.AscomWeather.Text);
@@ -5199,6 +5237,8 @@ begin
     config.SetValue('/ASCOMRestweather/DeviceType',f_setup.AscomRestWeatherType.ItemIndex);
 
     config.SetValue('/SafetyInterface',ord(f_setup.SafetyConnection));
+    config.SetValue('/INDIsafety/Server',f_setup.SafetyIndiServer.Text);
+    config.SetValue('/INDIsafety/ServerPort',f_setup.SafetyIndiPort.Text);
     if f_setup.SafetyIndiDevice.Text<>'' then config.SetValue('/INDIsafety/Device',f_setup.SafetyIndiDevice.Text);
     config.SetValue('/INDIsafety/AutoLoadConfig',f_setup.SafetyAutoLoadConfig.Checked);
     config.SetValue('/ASCOMsafety/Device',f_setup.AscomSafety.Text);
@@ -7156,8 +7196,8 @@ begin
   if not GUIready then begin
      f_indigui:=Tf_indigui.Create(self);
      f_indigui.onDestroy:=@GUIdestroy;
-     f_indigui.IndiServer:=config.GetValue('/INDI/Server','');
-     f_indigui.IndiPort:=config.GetValue('/INDI/ServerPort','');
+     f_indigui.IndiServer:=config.GetValue('/INDIcamera/Server','');
+     f_indigui.IndiPort:=config.GetValue('/INDIcamera/ServerPort','');
      GUIready:=true;
   end;
   FormPos(f_indigui,mouse.CursorPos.X,mouse.CursorPos.Y);

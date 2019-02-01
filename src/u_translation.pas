@@ -432,7 +432,6 @@ resourcestring
   rsIn = 'In';
   rsOut = 'Out';
   rsInterface = 'Interface';
-  rsConnectAndGe = 'Connect and get devices list';
   rsServer = 'Server';
   rsPort = 'Port';
   rsTimeout = 'Timeout';
@@ -1032,6 +1031,11 @@ resourcestring
   rsInCamera = 'In camera';
   rsInMount = 'In mount';
   rsASCOMRemote = 'ASCOM Remote';
+  rsNoDevice = 'No device';
+  rsProtocol = 'Protocol';
+  rsApplyToAllDe = 'Apply to all devices';
+  rsRemoteDevice = 'Remote device number';
+  rsGet = 'Get';
 
 
 

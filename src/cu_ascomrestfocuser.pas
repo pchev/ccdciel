@@ -127,6 +127,7 @@ begin
   V.Protocol:=cp3;
   Fdevice:=cp4;
   V.Device:=Fdevice;
+  if Assigned(FonStatusChange) then FonStatusChange(self);
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
     V.Put('Link',true)

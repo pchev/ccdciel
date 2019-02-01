@@ -60,6 +60,7 @@ T_rotator = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     Procedure Halt; virtual; abstract;
     Procedure Sync(angle:double);
+    property DeviceName: string read FDevice;
     property RotatorInterface: TDevInterface read FRotatorInterface;
     property Status: TDeviceStatus read FStatus;
     property Timeout: integer read FTimeout write SetTimeout;

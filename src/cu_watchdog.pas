@@ -47,6 +47,7 @@ T_watchdog = class(TComponent)
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    property DeviceName: string read FDevice;
     property Timeout: integer read FTimeout write SetTimeout;
     property Threshold: integer read FThreshold write SetTThreshold;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;

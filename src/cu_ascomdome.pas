@@ -102,6 +102,7 @@ begin
   try
   FStatus := devConnecting;
   Fdevice:=cp1;
+  if Assigned(FonStatusChange) then FonStatusChange(self);
   V:=Unassigned;
   V:=CreateOleObject(Fdevice);
   FInterfaceVersion:=InterfaceVersion;

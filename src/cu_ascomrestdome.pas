@@ -98,6 +98,7 @@ begin
   V.Port:=cp2;
   V.Protocol:=cp3;
   Fdevice:=cp4;
+  if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Put('Connected',true);
   if V.Get('Connected').AsBool then begin

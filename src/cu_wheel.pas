@@ -56,6 +56,7 @@ T_wheel = class(TComponent)
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    property DeviceName: string read FDevice;
     property WheelInterface: TDevInterface read FWheelInterface;
     property Camera: TObject read Fcameraobj write SetCamera;
     property Status: TDeviceStatus read GetStatus;

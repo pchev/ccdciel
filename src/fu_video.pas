@@ -405,8 +405,8 @@ begin
   if not FVideoGUIready then begin
     FVideoindigui:=Tf_indigui.Create(Application.MainForm);
     FVideoindigui.onDestroy:=@GUIdestroy;
-    FVideoindigui.IndiServer:=config.GetValue('/INDI/Server','');
-    FVideoindigui.IndiPort:=config.GetValue('/INDI/ServerPort','');
+    FVideoindigui.IndiServer:=config.GetValue('/INDIcamera/Server','');
+    FVideoindigui.IndiPort:=config.GetValue('/INDIcamera/ServerPort','');
     FVideoindigui.IndiDevice:=CameraName;
     FVideoGUIready:=true;
   end;

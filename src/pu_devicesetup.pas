@@ -30,7 +30,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
     Variants, comobj, math,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, Spin;
+  ExtCtrls, ComCtrls, Spin, Types;
 
 type
 
@@ -61,9 +61,67 @@ type
     BtnSetupRotator: TButton;
     BtnCopyProfile: TButton;
     ApplyAscomRemote: TButton;
+    ApplyIndi: TButton;
+    WatchdogMsg: TLabel;
+    WeatherMsg: TLabel;
+    SafetyMsg: TLabel;
+    DomeMsg: TLabel;
+    MountMsg: TLabel;
+    RotatorMsg: TLabel;
+    FocuserMsg: TLabel;
+    WheelMsg: TLabel;
+    GetIndi: TButton;
+    GetIndi1: TButton;
+    GetIndi2: TButton;
+    GetIndi3: TButton;
+    GetIndi4: TButton;
+    GetIndi5: TButton;
+    GetIndi6: TButton;
+    GetIndi7: TButton;
+    GetIndi8: TButton;
+    CameraMsg: TLabel;
+    WatchdogIndiPort: TEdit;
+    WatchdogIndiServer: TEdit;
+    Label89: TLabel;
+    Label90: TLabel;
+    Panel19: TPanel;
+    SafetyIndiPort: TEdit;
+    SafetyIndiServer: TEdit;
+    Label87: TLabel;
+    Label88: TLabel;
+    Panel18: TPanel;
+    WeatherIndiPort: TEdit;
+    WeatherIndiServer: TEdit;
+    DomeIndiPort: TEdit;
+    DomeIndiServer: TEdit;
+    Label83: TLabel;
+    Label84: TLabel;
+    Label85: TLabel;
+    Label86: TLabel;
+    MountIndiPort: TEdit;
+    MountIndiServer: TEdit;
+    Label81: TLabel;
+    Label82: TLabel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    RotatorIndiPort: TEdit;
+    RotatorIndiServer: TEdit;
+    FocuserIndiPort: TEdit;
+    FocuserIndiServer: TEdit;
+    Label77: TLabel;
+    Label78: TLabel;
+    Label79: TLabel;
+    Label80: TLabel;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    WheelIndiPort: TEdit;
+    WheelIndiServer: TEdit;
     DefaultARestHost: TEdit;
     DefaultARestPort: TSpinEdit;
     DefaultARestProtocol: TComboBox;
+    CameraIndiPort: TEdit;
+    CameraIndiServer: TEdit;
     Label62: TLabel;
     Label63: TLabel;
     Label64: TLabel;
@@ -75,7 +133,13 @@ type
     Label70: TLabel;
     Label71: TLabel;
     Label72: TLabel;
+    Label73: TLabel;
+    Label74: TLabel;
+    Label75: TLabel;
+    Label76: TLabel;
     Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
     WheelARestDevice: TSpinEdit;
     FocuserARestDevice: TSpinEdit;
     RotatorARestDevice: TSpinEdit;
@@ -190,7 +254,6 @@ type
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;
     DomeIndiDevice: TComboBox;
-    CheckIndiTimer: TTimer;
     CameraIndi: TTabSheet;
     CameraAscom: TTabSheet;
     FocuserIndi: TTabSheet;
@@ -268,13 +331,11 @@ type
     IndiSensor: TComboBox;
     IndiPort: TEdit;
     IndiServer: TEdit;
-    GetIndiDevices: TButton;
     Label1: TLabel;
     Label15: TLabel;
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;
-    LabelIndiDevCount: TLabel;
     Label22: TLabel;
     PanelIndiServer: TPanel;
     PanelFocuserInMount: TPanel;
@@ -312,6 +373,7 @@ type
     IndiTimer: TTimer;
     Camera: TTabSheet;
     Filterwheel: TTabSheet;
+    procedure ApplyIndiClick(Sender: TObject);
     procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
     procedure BtnCopyProfileClick(Sender: TObject);
@@ -321,9 +383,8 @@ type
     procedure ApplyAscomRemoteClick(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure GetIndiClick(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
-    procedure GetIndiDevicesClick(Sender: TObject);
-    procedure CheckIndiTimerTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
@@ -345,8 +406,9 @@ type
     camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
     LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
-    IndiTimerCount:integer;
-    receiveindidevice, UseINDI: boolean;
+    IndiTimerCount,GetDeviceType:integer;
+    receiveindidevice: boolean;
+    procedure GetIndiDevicesStart;
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
     procedure SetCameraConnection(value: TDevInterface);
@@ -410,15 +472,27 @@ end;
 procedure Tf_setup.SetLang;
 begin
   DeviceInterface.Caption:=rsInterface;
-  GetIndiDevices.Caption:=rsConnectAndGe;
   Label18.Caption:=rsServer;
   Label22.Caption:=rsPort;
   Label1.Caption:=rsTimeout;
+  ApplyIndi.Caption:=rsApplyToAllDe;
+  label62.Caption:=rsASCOMRemote;
+  Label70.Caption:=rsProtocol;
+  Label71.Caption:=rsServer;
+  Label72.Caption:=rsPort;
+  ApplyAscomRemote.Caption:=rsApplyToAllDe;
   Label2.Caption:=format(rsProfile,['']);
   BtnNewProfile.Caption:=rsNew;
   BtnDeleteProfile.Caption:=rsDelete;
   BtnCopyProfile.Caption:=rsCopy;
   Camera.Caption:=rsCamera;
+  Label73.Caption:=rsServer;
+  Label74.Caption:=rsPort;
+  Label30.Caption:=rsProtocol;
+  Label31.Caption:=rsServer;
+  Label32.Caption:=rsPort;
+  Label33.Caption:=rsRemoteDevice;
+  GetIndi.Caption:=rsGet;
   BtnChooseCamera.Caption:=rsChoose;
   BtnSetupCamera.Caption:=rsSetup;
   BtnAboutCamera.Caption:=rsAbout;
@@ -433,6 +507,13 @@ begin
   CameraIndiTransfert.Items[1]:=rsRAMDisk;
   Label5.Caption:=rsDirectory;
   Filterwheel.Caption:=rsFilterWheel;
+  Label75.Caption:=rsServer;
+  Label76.Caption:=rsPort;
+  GetIndi1.Caption:=rsGet;
+  Label34.Caption:=rsProtocol;
+  Label34.Caption:=rsServer;
+  Label36.Caption:=rsPort;
+  Label37.Caption:=rsRemoteDevice;
   BtnChooseFilter.Caption:=rsChoose;
   BtnAboutCamera1.Caption:=rsAbout;
   BtnSetupCamera1.Caption:=rsSetup;
@@ -451,7 +532,21 @@ begin
   Label10.Caption:=rsPort;
   FocuserAutoLoadConfig.Caption:=rsLoadConfigur;
   DeviceFocuser.Caption:=rsUseFocuser;
+  Label77.Caption:=rsServer;
+  Label78.Caption:=rsPort;
+  GetIndi2.Caption:=rsGet;
+  Label38.Caption:=rsProtocol;
+  Label39.Caption:=rsServer;
+  Label40.Caption:=rsPort;
+  Label41.Caption:=rsRemoteDevice;
   Rotator.Caption:=rsRotator;
+  Label79.Caption:=rsServer;
+  Label80.Caption:=rsPort;
+  GetIndi3.Caption:=rsGet;
+  Label42.Caption:=rsProtocol;
+  Label43.Caption:=rsServer;
+  Label44.Caption:=rsPort;
+  Label45.Caption:=rsRemoteDevice;
   DeviceRotator.Caption:=rsUseRotator;
   BtnChooseRotator.Caption:=rsChoose;
   BtnAboutRotator.Caption:=rsAbout;
@@ -460,6 +555,13 @@ begin
   Label14.Caption:=rsPort;
   RotatorAutoLoadConfig.Caption:=rsLoadConfigur;
   Mount.Caption:=rsMount;
+  Label81.Caption:=rsServer;
+  Label82.Caption:=rsPort;
+  GetIndi4.Caption:=rsGet;
+  Label46.Caption:=rsProtocol;
+  Label47.Caption:=rsServer;
+  Label48.Caption:=rsPort;
+  Label49.Caption:=rsRemoteDevice;
   BtnChooseMount.Caption:=rsChoose;
   BtnAboutCamera3.Caption:=rsAbout;
   BtnSetupCamera3.Caption:=rsSetup;
@@ -471,6 +573,13 @@ begin
   MountSetObservatory.Caption:=rsSetMountSite;
   MountGetObservatory.Caption:=rsGetSiteLongL;
   Dome.Caption:=rsDome;
+  Label83.Caption:=rsServer;
+  Label84.Caption:=rsPort;
+  GetIndi5.Caption:=rsGet;
+  Label50.Caption:=rsProtocol;
+  Label51.Caption:=rsServer;
+  Label52.Caption:=rsPort;
+  Label53.Caption:=rsRemoteDevice;
   DeviceDome.Caption:=rsUseDome;
   Label25.Caption:=rsDevices;
   Label23.Caption:=rsPort;
@@ -479,6 +588,13 @@ begin
   BtnAboutDome.Caption:=rsAbout;
   BtnSetupDome.Caption:=rsSetup;
   Weather.Caption:=rsWeatherStati;
+  Label85.Caption:=rsServer;
+  Label86.Caption:=rsPort;
+  GetIndi6.Caption:=rsGet;
+  Label54.Caption:=rsProtocol;
+  Label55.Caption:=rsServer;
+  Label56.Caption:=rsPort;
+  Label57.Caption:=rsRemoteDevice;
   DeviceWeather.Caption:=rsUseWeatherSt;
   Label21.Caption:=rsDevices;
   WeatherAutoLoadConfig.Caption:=rsLoadConfigur;
@@ -490,12 +606,22 @@ begin
   AscomWeatherType.Items[1]:=rsSafetyMonito;
   Safety.Caption:=rsSafetyMonito;
   DeviceSafety.Caption:=rsUseSafetyMon;
+  Label87.Caption:=rsServer;
+  Label88.Caption:=rsPort;
+  GetIndi7.Caption:=rsGet;
+  Label58.Caption:=rsProtocol;
+  Label59.Caption:=rsServer;
+  Label60.Caption:=rsPort;
+  Label61.Caption:=rsRemoteDevice;
   Label24.Caption:=rsDevices;
   SafetyAutoLoadConfig.Caption:=rsLoadConfigur;
   BtnChooseSafety.Caption:=rsChoose;
   BtnAboutSafety.Caption:=rsAbout;
   BtnSetupSafety.Caption:=rsSetup;
   Watchdog.Caption:=rsWatchdog;
+  Label89.Caption:=rsServer;
+  Label90.Caption:=rsPort;
+  GetIndi8.Caption:=rsGet;
   Label19.Caption:=rsDevices;
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
   Label20.Caption:=rsHeartBeatThr;
@@ -555,9 +681,12 @@ end;
 end;
 
 procedure Tf_setup.Loadconfig(conf: TCCDConfig);
+var defautindiserver, defaultindiport: string;
 begin
-IndiServer.Text:=conf.GetValue('/INDI/Server','localhost');
-IndiPort.Text:=conf.GetValue('/INDI/ServerPort','7624');
+// default value from old config
+defautindiserver:=conf.GetValue('/INDI/Server','localhost');
+defaultindiport:=conf.GetValue('/INDI/ServerPort','7624');
+
 IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
 
 DeviceFilterWheel.Checked:=conf.GetValue('/Devices/FilterWheel',false);
@@ -570,6 +699,10 @@ DeviceSafety.Checked:=conf.GetValue('/Devices/Safety',false);
 DeviceWatchdog.Checked:=conf.GetValue('/Devices/Watchdog',false);
 
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
+CameraIndiServer.Text:=conf.GetValue('/INDIcamera/Server',defautindiserver);
+CameraIndiPort.Text:=conf.GetValue('/INDIcamera/ServerPort',defaultindiport);
+IndiServer.Text:=CameraIndiServer.Text;
+IndiPort.Text:=CameraIndiPort.Text;
 if CameraIndiDevice.Items.Count=0 then begin
   CameraIndiDevice.Items.Add(conf.GetValue('/INDIcamera/Device',''));
   CameraIndiDevice.ItemIndex:=0;
@@ -593,6 +726,8 @@ DefaultARestHost.Text:=CameraARestHost.Text;
 DefaultARestPort.Value:=CameraARestPort.Value;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
+WheelIndiServer.Text:=conf.GetValue('/INDIwheel/Server',defautindiserver);
+WheelIndiPort.Text:=conf.GetValue('/INDIwheel/ServerPort',defaultindiport);
 if WheelIndiDevice.Items.Count=0 then begin
   WheelIndiDevice.Items.Add(conf.GetValue('/INDIwheel/Device',''));
   WheelIndiDevice.ItemIndex:=0;
@@ -607,6 +742,8 @@ WheelARestPort.Value:=conf.GetValue('/ASCOMRestwheel/Port',11111);
 WheelARestDevice.Value:=conf.GetValue('/ASCOMRestwheel/Device',0);
 
 FocuserConnection:=TDevInterface(conf.GetValue('/FocuserInterface',ord(DefaultFocuserInterface)));
+FocuserIndiServer.Text:=conf.GetValue('/INDIfocuser/Server',defautindiserver);
+FocuserIndiPort.Text:=conf.GetValue('/INDIfocuser/ServerPort',defaultindiport);
 if FocuserIndiDevice.Items.Count=0 then begin
   FocuserIndiDevice.Items.Add(conf.GetValue('/INDIfocuser/Device',''));
   FocuserIndiDevice.ItemIndex:=0;
@@ -621,6 +758,8 @@ FocuserARestPort.Value:=conf.GetValue('/ASCOMRestfocuser/Port',11111);
 FocuserARestDevice.Value:=conf.GetValue('/ASCOMRestfocuser/Device',0);
 
 RotatorConnection:=TDevInterface(conf.GetValue('/RotatorInterface',ord(DefaultRotatorInterface)));
+RotatorIndiServer.Text:=conf.GetValue('/INDIrotator/Server',defautindiserver);
+RotatorIndiPort.Text:=conf.GetValue('/INDIrotator/ServerPort',defaultindiport);
 if RotatorIndiDevice.Items.Count=0 then begin
   RotatorIndiDevice.Items.Add(conf.GetValue('/INDIrotator/Device',''));
   RotatorIndiDevice.ItemIndex:=0;
@@ -635,6 +774,8 @@ RotatorARestPort.Value:=conf.GetValue('/ASCOMRestrotator/Port',11111);
 RotatorARestDevice.Value:=conf.GetValue('/ASCOMRestrotator/Device',0);
 
 MountConnection:=TDevInterface(conf.GetValue('/MountInterface',ord(DefaultMountInterface)));
+MountIndiServer.Text:=conf.GetValue('/INDImount/Server',defautindiserver);
+MountIndiPort.Text:=conf.GetValue('/INDImount/ServerPort',defaultindiport);
 if MountIndiDevice.Items.Count=0 then begin
   MountIndiDevice.Items.Add(conf.GetValue('/INDImount/Device',''));
   MountIndiDevice.ItemIndex:=0;
@@ -652,6 +793,8 @@ MountARestPort.Value:=conf.GetValue('/ASCOMRestmount/Port',11111);
 MountARestDevice.Value:=conf.GetValue('/ASCOMRestmount/Device',0);
 
 DomeConnection:=TDevInterface(conf.GetValue('/DomeInterface',ord(DefaultDomeInterface)));
+DomeIndiServer.Text:=conf.GetValue('/INDIdome/Server',defautindiserver);
+DomeIndiPort.Text:=conf.GetValue('/INDIdome/ServerPort',defaultindiport);
 if DomeIndiDevice.Items.Count=0 then begin
   DomeIndiDevice.Items.Add(conf.GetValue('/INDIdome/Device',''));
   DomeIndiDevice.ItemIndex:=0;
@@ -666,6 +809,8 @@ DomeARestPort.Value:=conf.GetValue('/ASCOMRestdome/Port',11111);
 DomeARestDevice.Value:=conf.GetValue('/ASCOMRestdome/Device',0);
 
 WeatherConnection:=TDevInterface(conf.GetValue('/WeatherInterface',ord(DefaultWeatherInterface)));
+WeatherIndiServer.Text:=conf.GetValue('/INDIweather/Server',defautindiserver);
+WeatherIndiPort.Text:=conf.GetValue('/INDIweather/ServerPort',defaultindiport);
 if WeatherIndiDevice.Items.Count=0 then begin
   WeatherIndiDevice.Items.Add(conf.GetValue('/INDIweather/Device',''));
   WeatherIndiDevice.ItemIndex:=0;
@@ -681,6 +826,8 @@ WeatherARestDevice.Value:=conf.GetValue('/ASCOMRestweather/Device',0);
 f_setup.AscomRestWeatherType.ItemIndex:=config.GetValue('/ASCOMRestweather/DeviceType',0);
 
 SafetyConnection:=TDevInterface(conf.GetValue('/SafetyInterface',ord(DefaultSafetyInterface)));
+SafetyIndiServer.Text:=conf.GetValue('/INDIsafety/Server',defautindiserver);
+SafetyIndiPort.Text:=conf.GetValue('/INDIsafety/ServerPort',defaultindiport);
 if SafetyIndiDevice.Items.Count=0 then begin
   SafetyIndiDevice.Items.Add(conf.GetValue('/INDIsafety/Device',''));
   SafetyIndiDevice.ItemIndex:=0;
@@ -693,6 +840,8 @@ SafetyARestHost.Text:=conf.GetValue('/ASCOMRestsafety/Host','127.0.0.1');
 SafetyARestPort.Value:=conf.GetValue('/ASCOMRestsafety/Port',11111);
 SafetyARestDevice.Value:=conf.GetValue('/ASCOMRestsafety/Device',0);
 
+WatchdogIndiServer.Text:=conf.GetValue('/INDIwatchdog/Server',defautindiserver);
+WatchdogIndiPort.Text:=conf.GetValue('/INDIwatchdog/ServerPort',defaultindiport);
 if WatchdogIndiDevice.Items.Count=0 then begin
   WatchdogIndiDevice.Items.Add(conf.GetValue('/INDIwatchdog/Device',''));
   WatchdogIndiDevice.ItemIndex:=0;
@@ -710,7 +859,6 @@ DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)
 DeviceDome.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
 
-UseINDI:=(CameraConnection=INDI)or(WheelConnection=INDI)or(FocuserConnection=INDI)or(RotatorConnection=INDI)or(MountConnection=INDI)or(DomeConnection=INDI)or(WeatherConnection=INDI)or(SafetyConnection=INDI);
 end;
 
 
@@ -958,6 +1106,28 @@ begin
    SafetyARestPort.Value:=DefaultARestPort.Value;
 end;
 
+procedure Tf_setup.ApplyIndiClick(Sender: TObject);
+begin
+  CameraIndiServer.text:=IndiServer.text;
+  WheelIndiServer.text:=IndiServer.text;
+  FocuserIndiServer.text:=IndiServer.text;
+  RotatorIndiServer.text:=IndiServer.text;
+  MountIndiServer.text:=IndiServer.text;
+  DomeIndiServer.text:=IndiServer.text;
+  WeatherIndiServer.text:=IndiServer.text;
+  SafetyIndiServer.text:=IndiServer.text;
+  WatchdogIndiServer.text:=IndiServer.text;
+  CameraIndiPort.text:=IndiPort.text;
+  WheelIndiPort.text:=IndiPort.text;
+  FocuserIndiPort.text:=IndiPort.text;
+  RotatorIndiPort.text:=IndiPort.text;
+  MountIndiPort.text:=IndiPort.text;
+  DomeIndiPort.text:=IndiPort.text;
+  WeatherIndiPort.text:=IndiPort.text;
+  SafetyIndiPort.text:=IndiPort.text;
+  WatchdogIndiPort.text:=IndiPort.text;
+end;
+
 procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
 begin
   CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
@@ -966,7 +1136,6 @@ end;
 procedure Tf_setup.FormShow(Sender: TObject);
 begin
   InitialLock:=false;
-  if UseINDI then CheckIndiTimer.Enabled:=true;
 end;
 
 procedure Tf_setup.IndiSensorChange(Sender: TObject);
@@ -987,15 +1156,15 @@ begin
  end;
 end;
 
-procedure Tf_setup.CheckIndiTimerTimer(Sender: TObject);
-begin
-  CheckIndiTimer.Enabled:=false;
-  GetIndiDevicesClick(Self);
-end;
-
-procedure Tf_setup.GetIndiDevicesClick(Sender: TObject);
+procedure Tf_setup.GetIndiClick(Sender: TObject);
 begin
   if IndiTimer.Enabled then exit;
+  GetDeviceType:=TButton(Sender).tag;
+  GetIndiDevicesStart;
+end;
+
+procedure Tf_setup.GetIndiDevicesStart;
+begin
   IndiTimerCount:=0;
   receiveindidevice:=false;
   camsavedev:=CameraIndiDevice.Text;
@@ -1003,24 +1172,52 @@ begin
   focusersavedev:=FocuserIndiDevice.Text;
   rotatorsavedev:=RotatorIndiDevice.Text;
   mountsavedev:=MountIndiDevice.Text;
-  domesavedev:=MountIndiDevice.Text;
-  watchdogsavedev:=WatchdogIndiDevice.Text;
+  domesavedev:=DomeIndiDevice.Text;
   weathersavedev:=WeatherIndiDevice.Text;
   safetysavedev:=SafetyIndiDevice.Text;
-  LabelIndiDevCount.Caption:='...';
-  CameraIndiDevice.Clear;
-  FocuserIndiDevice.Clear;
-  RotatorIndiDevice.Clear;
-  WheelIndiDevice.Clear;
-  MountIndiDevice.Clear;
-  DomeIndiDevice.Clear;
-  WatchdogIndiDevice.Clear;
-  WeatherIndiDevice.Clear;
-  SafetyIndiDevice.Clear;
+  watchdogsavedev:=WatchdogIndiDevice.Text;
   indiclient:=TIndiBaseClient.Create;
   indiclient.onNewDevice:=@IndiNewDevice;
   indiclient.onServerDisconnected:=@IndiDisconnected;
-  indiclient.SetServer(IndiServer.Text,IndiPort.Text);
+  case GetDeviceType of
+    1: begin
+        CameraMsg.Caption:='';
+        CameraIndiDevice.Clear;
+        indiclient.SetServer(CameraIndiServer.Text,CameraIndiPort.Text);
+       end;
+    2: begin
+        WheelIndiDevice.Clear;
+        indiclient.SetServer(WheelIndiServer.Text,WheelIndiPort.Text);
+       end;
+    3: begin
+        FocuserIndiDevice.Clear;
+        indiclient.SetServer(FocuserIndiServer.Text,FocuserIndiPort.Text);
+       end;
+    4: begin
+        RotatorIndiDevice.Clear;
+        indiclient.SetServer(RotatorIndiServer.Text,RotatorIndiPort.Text);
+       end;
+    5: begin
+        MountIndiDevice.Clear;
+        indiclient.SetServer(MountIndiServer.Text,MountIndiPort.Text);
+       end;
+    6: begin
+        DomeIndiDevice.Clear;
+        indiclient.SetServer(DomeIndiServer.Text,DomeIndiPort.Text);
+       end;
+    7: begin
+        WeatherIndiDevice.Clear;
+        indiclient.SetServer(WeatherIndiServer.Text,WeatherIndiPort.Text);
+       end;
+    8: begin
+        SafetyIndiDevice.Clear;
+        indiclient.SetServer(SafetyIndiServer.Text,SafetyIndiPort.Text);
+       end;
+    9: begin
+        WatchdogIndiDevice.Clear;
+        indiclient.SetServer(WatchdogIndiServer.Text,WatchdogIndiPort.Text);
+       end;
+  end;
   indiclient.ConnectServer;
   IndiTimer.Interval:=5000;  // wait 5 sec for initial connection
   IndiTimer.Enabled:=true;
@@ -1052,78 +1249,165 @@ begin
   Screen.Cursor:=crDefault;
   try
   if (indiclient=nil)or indiclient.Finished or indiclient.Terminated or (not indiclient.Connected)  then begin
-    LabelIndiDevCount.Caption:='No response from INDI server. Is the Indi server running?';
-    CameraIndiDevice.Items.Add(camsavedev);
-    WheelIndiDevice.Items.Add(wheelsavedev);
-    FocuserIndiDevice.Items.Add(focusersavedev);
-    RotatorIndiDevice.Items.Add(rotatorsavedev);
-    MountIndiDevice.Items.Add(mountsavedev);
-    MountIndiDevice.Items.Add(domesavedev);
-    WatchdogIndiDevice.Items.Add(watchdogsavedev);
-    WeatherIndiDevice.Items.Add(weathersavedev);
-    SafetyIndiDevice.Items.Add(safetysavedev);
-    CameraIndiDevice.ItemIndex:=0;
-    WheelIndiDevice.ItemIndex:=0;
-    FocuserIndiDevice.ItemIndex:=0;
-    RotatorIndiDevice.ItemIndex:=0;
-    MountIndiDevice.ItemIndex:=0;
-    MountIndiDevice.ItemIndex:=0;
-    WatchdogIndiDevice.ItemIndex:=0;
-    WeatherIndiDevice.ItemIndex:=0;
-    SafetyIndiDevice.ItemIndex:=0;
+    if (GetDeviceType=1) then begin
+       CameraMsg.Caption:=rsNoResponseFr;
+       CameraIndiDevice.Items.Add(camsavedev);
+       CameraIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=2) then begin
+       WheelMsg.Caption:=rsNoResponseFr;
+       WheelIndiDevice.Items.Add(wheelsavedev);
+       WheelIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=3) then begin
+       FocuserMsg.Caption:=rsNoResponseFr;
+       FocuserIndiDevice.Items.Add(focusersavedev);
+       FocuserIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=4) then begin
+       RotatorMsg.Caption:=rsNoResponseFr;
+       RotatorIndiDevice.Items.Add(rotatorsavedev);
+       RotatorIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=5) then begin
+       MountMsg.Caption:=rsNoResponseFr;
+       MountIndiDevice.Items.Add(mountsavedev);
+       MountIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=6) then begin
+       DomeMsg.Caption:=rsNoResponseFr;
+       DomeIndiDevice.Items.Add(domesavedev);
+       DomeIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=7) then begin
+       WeatherMsg.Caption:=rsNoResponseFr;
+       WeatherIndiDevice.Items.Add(weathersavedev);
+       WeatherIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=8) then begin
+       SafetyMsg.Caption:=rsNoResponseFr;
+       SafetyIndiDevice.Items.Add(safetysavedev);
+       SafetyIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=9) then begin
+       WatchdogMsg.Caption:=rsNoResponseFr;
+       WatchdogIndiDevice.Items.Add(watchdogsavedev);
+       WatchdogIndiDevice.ItemIndex:=0;
+    end;
     exit;
   end;
   try
   for i:=0 to indiclient.devices.Count-1 do begin
      drint:=BaseDevice(indiclient.devices[i]).getDriverInterface();
-     if (drint and CCD_INTERFACE)<>0 then
+     if (GetDeviceType=1)and((drint and CCD_INTERFACE)<>0) then
         CameraIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and FILTER_INTERFACE)<>0 then
+     if (GetDeviceType=2)and((drint and FILTER_INTERFACE)<>0) then
         WheelIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and FOCUSER_INTERFACE)<>0 then
+     if (GetDeviceType=3)and((drint and FOCUSER_INTERFACE)<>0) then
         FocuserIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and ROTATOR_INTERFACE)<>0 then
+     if (GetDeviceType=4)and((drint and ROTATOR_INTERFACE)<>0) then
         RotatorIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and TELESCOPE_INTERFACE)<>0 then
+     if (GetDeviceType=5)and((drint and TELESCOPE_INTERFACE)<>0) then
         MountIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and DOME_INTERFACE)<>0 then
+     if (GetDeviceType=6)and((drint and DOME_INTERFACE)<>0) then
         DomeIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and AUX_INTERFACE)<>0 then
-        WatchdogIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and WEATHER_INTERFACE)<>0 then
+     if (GetDeviceType=7)and((drint and WEATHER_INTERFACE)<>0) then
         WeatherIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
-     if (drint and WEATHER_INTERFACE)<>0 then
+     if (GetDeviceType=8)and((drint and WEATHER_INTERFACE)<>0) then
         SafetyIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (GetDeviceType=9)and((drint and AUX_INTERFACE)<>0) then
+        WatchdogIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
   end;
-  if CameraIndiDevice.Items.Count>0 then CameraIndiDevice.ItemIndex:=0;
-  if WheelIndiDevice.Items.Count>0 then WheelIndiDevice.ItemIndex:=0;
-  if FocuserIndiDevice.Items.Count>0 then FocuserIndiDevice.ItemIndex:=0;
-  if RotatorIndiDevice.Items.Count>0 then RotatorIndiDevice.ItemIndex:=0;
-  if MountIndiDevice.Items.Count>0 then MountIndiDevice.ItemIndex:=0;
-  if DomeIndiDevice.Items.Count>0 then DomeIndiDevice.ItemIndex:=0;
-  if WatchdogIndiDevice.Items.Count>0 then WatchdogIndiDevice.ItemIndex:=0;
-  if WeatherIndiDevice.Items.Count>0 then WeatherIndiDevice.ItemIndex:=0;
-  if SafetyIndiDevice.Items.Count>0 then SafetyIndiDevice.ItemIndex:=0;
-  for i:=0 to CameraIndiDevice.Items.Count-1 do
-     if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
-  for i:=0 to WheelIndiDevice.Items.Count-1 do
-     if WheelIndiDevice.Items[i]=wheelsavedev then WheelIndiDevice.ItemIndex:=i;
-  for i:=0 to FocuserIndiDevice.Items.Count-1 do
-     if FocuserIndiDevice.Items[i]=focusersavedev then FocuserIndiDevice.ItemIndex:=i;
-  for i:=0 to RotatorIndiDevice.Items.Count-1 do
-     if RotatorIndiDevice.Items[i]=rotatorsavedev then RotatorIndiDevice.ItemIndex:=i;
-  for i:=0 to MountIndiDevice.Items.Count-1 do
-     if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
-  for i:=0 to DomeIndiDevice.Items.Count-1 do
-     if DomeIndiDevice.Items[i]=domesavedev then DomeIndiDevice.ItemIndex:=i;
-  for i:=0 to WatchdogIndiDevice.Items.Count-1 do
-     if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
-  for i:=0 to WeatherIndiDevice.Items.Count-1 do
-     if WeatherIndiDevice.Items[i]=weathersavedev then WeatherIndiDevice.ItemIndex:=i;
-  for i:=0 to SafetyIndiDevice.Items.Count-1 do
-     if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
-  LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
-  if indiclient.devices.Count>0 then UseINDI:=true;
+  if (GetDeviceType=1) then begin
+    if CameraIndiDevice.Items.Count>0 then
+       CameraIndiDevice.ItemIndex:=0
+    else begin
+       CameraIndiDevice.Items.Add(camsavedev); ;
+       CameraMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to CameraIndiDevice.Items.Count-1 do
+       if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=2) then begin
+    if WheelIndiDevice.Items.Count>0 then
+       WheelIndiDevice.ItemIndex:=0
+    else begin
+       WheelIndiDevice.Items.Add(wheelsavedev);
+       WheelMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to WheelIndiDevice.Items.Count-1 do
+       if WheelIndiDevice.Items[i]=wheelsavedev then WheelIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=3) then begin
+    if FocuserIndiDevice.Items.Count>0 then
+       FocuserIndiDevice.ItemIndex:=0
+    else begin
+       FocuserIndiDevice.Items.Add(focusersavedev);
+       FocuserMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to FocuserIndiDevice.Items.Count-1 do
+       if FocuserIndiDevice.Items[i]=focusersavedev then FocuserIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=4) then begin
+    if RotatorIndiDevice.Items.Count>0 then
+       RotatorIndiDevice.ItemIndex:=0
+    else begin
+       RotatorIndiDevice.Items.Add(rotatorsavedev);
+       RotatorMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to RotatorIndiDevice.Items.Count-1 do
+       if RotatorIndiDevice.Items[i]=rotatorsavedev then RotatorIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=5) then begin
+    if MountIndiDevice.Items.Count>0 then
+       MountIndiDevice.ItemIndex:=0
+    else begin
+       MountIndiDevice.Items.Add(mountsavedev);
+       MountMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to MountIndiDevice.Items.Count-1 do
+       if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=6) then begin
+    if DomeIndiDevice.Items.Count>0 then
+       DomeIndiDevice.ItemIndex:=0
+    else begin
+       DomeIndiDevice.Items.Add(domesavedev);
+       DomeMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to DomeIndiDevice.Items.Count-1 do
+       if DomeIndiDevice.Items[i]=domesavedev then DomeIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=7) then begin
+    if WeatherIndiDevice.Items.Count>0 then
+       WeatherIndiDevice.ItemIndex:=0
+    else begin
+       WeatherIndiDevice.Items.Add(weathersavedev);
+       WeatherMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to WeatherIndiDevice.Items.Count-1 do
+       if WeatherIndiDevice.Items[i]=weathersavedev then WeatherIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=8) then begin
+    if SafetyIndiDevice.Items.Count>0 then
+       SafetyIndiDevice.ItemIndex:=0
+    else begin
+       SafetyIndiDevice.Items.Add(safetysavedev);
+       SafetyMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to SafetyIndiDevice.Items.Count-1 do
+       if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=9) then begin
+    if WatchdogIndiDevice.Items.Count>0 then
+       WatchdogIndiDevice.ItemIndex:=0
+    else begin
+       WatchdogIndiDevice.Items.Add(watchdogsavedev);
+       WatchdogMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to WatchdogIndiDevice.Items.Count-1 do
+       if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
+  end;
   indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
   except
@@ -1245,7 +1529,6 @@ begin
     try
     chkconf.Filename:=slash(ConfigDir)+configfile;
     Loadconfig(chkconf);
-    if UseINDI then CheckIndiTimer.Enabled:=true;
     finally
       chkconf.Free;
     end;

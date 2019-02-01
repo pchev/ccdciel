@@ -73,6 +73,7 @@ T_focuser = class(TComponent)
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    property DeviceName: string read FDevice;
     procedure FocusIn; virtual; abstract;
     procedure FocusOut; virtual; abstract;
     property Delay: integer read FDelay write FDelay;

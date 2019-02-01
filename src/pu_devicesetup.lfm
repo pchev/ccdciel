@@ -61,10 +61,10 @@ object f_setup: Tf_setup
       ParentFont = False
       object PanelIndiServer: TPanel
         Left = 24
-        Height = 134
+        Height = 126
         Top = 50
         Width = 423
-        ClientHeight = 134
+        ClientHeight = 126
         ClientWidth = 423
         ParentFont = False
         TabOrder = 0
@@ -86,16 +86,6 @@ object f_setup: Tf_setup
           TabOrder = 1
           Text = '7624'
         end
-        object GetIndiDevices: TButton
-          Left = 8
-          Height = 25
-          Top = 83
-          Width = 264
-          Caption = 'Connect and get devices list'
-          OnClick = GetIndiDevicesClick
-          ParentFont = False
-          TabOrder = 2
-        end
         object Label18: TLabel
           Left = 13
           Height = 19
@@ -114,15 +104,6 @@ object f_setup: Tf_setup
           ParentColor = False
           ParentFont = False
         end
-        object LabelIndiDevCount: TLabel
-          Left = 13
-          Height = 19
-          Top = 107
-          Width = 9
-          Caption = '   '
-          ParentColor = False
-          ParentFont = False
-        end
         object Label1: TLabel
           Left = 224
           Height = 19
@@ -138,7 +119,7 @@ object f_setup: Tf_setup
           Top = 43
           Width = 48
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 2
         end
         object Label29: TLabel
           Left = 13
@@ -147,6 +128,15 @@ object f_setup: Tf_setup
           Width = 69
           Caption = 'INDI Server'
           ParentColor = False
+        end
+        object ApplyIndi: TButton
+          Left = 8
+          Height = 25
+          Top = 83
+          Width = 258
+          Caption = 'Apply to all devices'
+          OnClick = ApplyIndiClick
+          TabOrder = 3
         end
       end
       object ProfileList: TComboBox
@@ -264,7 +254,7 @@ object f_setup: Tf_setup
           Top = 44
           Width = 192
           TabOrder = 1
-          Text = '127.0.0.1'
+          Text = 'localhost'
         end
         object Label72: TLabel
           Left = 288
@@ -311,22 +301,23 @@ object f_setup: Tf_setup
         OnChange = PageControlCameraChange
         object CameraIndi: TTabSheet
           Caption = 'CameraIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelCameraIndi: TPanel
-            Left = 16
-            Height = 239
+            Left = 0
+            Height = 257
             Top = 0
-            Width = 345
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 235
-            ClientWidth = 341
+            ClientHeight = 257
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object CameraIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 30
-              Top = 16
+              Top = 48
               Width = 168
               Constraints.MaxHeight = 30
               ItemHeight = 0
@@ -335,45 +326,45 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object CameraIndiDevPort: TEdit
-              Left = 100
+              Left = 95
               Height = 23
-              Top = 84
+              Top = 116
               Width = 168
               BorderStyle = bsNone
               ParentFont = False
               TabOrder = 1
             end
             object Label3: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 24
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object Label4: TLabel
-              Left = 14
+              Left = 9
               Height = 19
-              Top = 86
+              Top = 118
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object Label15: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 54
+              Top = 86
               Width = 41
               Caption = 'Sensor'
               ParentColor = False
               ParentFont = False
             end
             object IndiSensor: TComboBox
-              Left = 100
+              Left = 95
               Height = 30
-              Top = 50
+              Top = 82
               Width = 168
               Constraints.MaxHeight = 30
               ItemHeight = 0
@@ -387,20 +378,20 @@ object f_setup: Tf_setup
               TabOrder = 2
             end
             object CameraAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 9
               Height = 21
-              Top = 120
+              Top = 152
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 3
             end
             object CameraIndiTransfert: TRadioGroup
-              Left = 13
+              Left = 8
               Height = 45
               Hint = 'Make test to determine the most performant '#10'option depending on your computer '#10'(Network is mandatory if the camera is '#10'connected to a remote Indi server)'
-              Top = 150
-              Width = 244
+              Top = 182
+              Width = 204
               AutoFill = True
               Caption = 'Image transfert'
               ChildSizing.LeftRightSpacing = 6
@@ -411,7 +402,7 @@ object f_setup: Tf_setup
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 2
               ClientHeight = 25
-              ClientWidth = 242
+              ClientWidth = 202
               Columns = 2
               Items.Strings = (
                 'Network'
@@ -423,19 +414,19 @@ object f_setup: Tf_setup
               TabOrder = 4
             end
             object CameraDiskPanel: TPanel
-              Left = 8
-              Height = 36
-              Top = 198
-              Width = 267
+              Left = 211
+              Height = 45
+              Top = 182
+              Width = 192
               BevelOuter = bvNone
-              ClientHeight = 32
-              ClientWidth = 263
+              ClientHeight = 45
+              ClientWidth = 192
               ParentFont = False
               TabOrder = 5
               object Label5: TLabel
                 Left = 8
                 Height = 19
-                Top = 4
+                Top = 22
                 Width = 56
                 Caption = 'Directory'
                 ParentColor = False
@@ -445,28 +436,95 @@ object f_setup: Tf_setup
                 Left = 85
                 Height = 31
                 Hint = 'The temporary RAM disk used to transfert the images '#10'from the Indi server'
-                Top = 0
-                Width = 166
+                Top = 14
+                Width = 99
                 ParentFont = False
                 ParentShowHint = False
                 TabOrder = 0
                 Text = '/mnt/ramdisk'
               end
             end
+            object Panel11: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 6
+              object Label73: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object CameraIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label74: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object CameraIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi: TButton
+              Tag = 1
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 7
+            end
+            object CameraMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
           end
         end
         object CameraAscom: TTabSheet
           Caption = 'CameraAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelCameraAscom: TPanel
             Left = 16
             Height = 176
             Top = 16
             Width = 344
             BevelOuter = bvNone
-            ClientHeight = 172
-            ClientWidth = 340
+            ClientHeight = 176
+            ClientWidth = 344
             ParentFont = False
             TabOrder = 0
             object BtnChooseCamera: TButton
@@ -523,19 +581,19 @@ object f_setup: Tf_setup
         end
         object CameraAscomRest: TTabSheet
           Caption = 'CameraAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel2: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object FlipImage1: TCheckBox
-              Left = 13
+              Left = 92
               Height = 21
               Top = 160
               Width = 167
@@ -617,11 +675,10 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label64: TLabel
-              Left = 36
+              Left = 16
               Height = 19
               Top = 108
               Width = 51
-              Anchors = [akTop, akRight]
               Caption = 'Camera/'
               ParentColor = False
             end
@@ -662,22 +719,23 @@ object f_setup: Tf_setup
         OnChange = PageControlWheelChange
         object WheelIndi: TTabSheet
           Caption = 'WheelIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWheelIndi: TPanel
-            Left = 16
-            Height = 152
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 257
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 257
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object WheelIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 16
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -685,54 +743,121 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object WheelIndiDevPort: TEdit
-              Left = 100
+              Left = 95
               Height = 31
-              Top = 56
+              Top = 88
               Width = 168
               ParentFont = False
               TabOrder = 1
             end
             object Label6: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 24
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object Label7: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 62
+              Top = 94
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object WheelAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 120
+              Top = 152
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 2
             end
+            object Panel12: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 3
+              object Label75: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object WheelIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label76: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object WheelIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi1: TButton
+              Tag = 2
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 4
+            end
+            object WheelMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
           end
         end
         object WheelAscom: TTabSheet
           Caption = 'WheelAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWheelAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseFilter: TButton
@@ -780,16 +905,16 @@ object f_setup: Tf_setup
         end
         object WheelInCamera: TTabSheet
           Caption = 'WheelInCamera'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWheelIncamera: TPanel
             Left = 16
             Height = 112
             Top = 32
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object Label17: TLabel
@@ -805,16 +930,16 @@ object f_setup: Tf_setup
         end
         object WheelAscomRest: TTabSheet
           Caption = 'WheelAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel3: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object WheelARestProtocol: TComboBox
               Left = 13
@@ -890,11 +1015,10 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label63: TLabel
-              Left = 15
+              Left = 16
               Height = 19
               Top = 108
               Width = 72
-              Anchors = [akTop, akRight]
               Caption = 'FilterWheel/'
               ParentColor = False
             end
@@ -927,22 +1051,23 @@ object f_setup: Tf_setup
         OnChange = PageControlFocuserChange
         object FocuserIndi: TTabSheet
           Caption = 'FocuserIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelFocuserIndi: TPanel
-            Left = 16
-            Height = 152
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 257
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 257
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object FocuserIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 17
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -950,54 +1075,121 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object FocuserIndiDevPort: TEdit
-              Left = 100
+              Left = 95
               Height = 31
-              Top = 57
+              Top = 88
               Width = 168
               ParentFont = False
               TabOrder = 1
             end
             object Label9: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 25
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object Label10: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 63
+              Top = 94
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object FocuserAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 120
+              Top = 151
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 2
             end
+            object Panel13: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 3
+              object Label77: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object FocuserIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label78: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object FocuserIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi2: TButton
+              Tag = 3
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 4
+            end
+            object FocuserMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
           end
         end
         object FocuserAscom: TTabSheet
           Caption = 'FocuserAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelFocuserAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseFocuser: TButton
@@ -1045,16 +1237,16 @@ object f_setup: Tf_setup
         end
         object FocuserInMount: TTabSheet
           Caption = 'FocuserInMount'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelFocuserInMount: TPanel
             Left = 18
             Height = 112
             Top = 32
             Width = 286
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 282
+            ClientHeight = 112
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -1072,16 +1264,16 @@ object f_setup: Tf_setup
         end
         object FocuserAscomRest: TTabSheet
           Caption = 'FocuserAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel4: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object FocuserARestProtocol: TComboBox
               Left = 13
@@ -1157,11 +1349,10 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label65: TLabel
-              Left = 35
+              Left = 16
               Height = 19
               Top = 108
               Width = 52
-              Anchors = [akTop, akRight]
               Caption = 'Focuser/'
               ParentColor = False
             end
@@ -1194,22 +1385,23 @@ object f_setup: Tf_setup
         OnChange = PageControlRotatorChange
         object RotatorIndi: TTabSheet
           Caption = 'RotatorIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelRotatorIndi: TPanel
-            Left = 16
-            Height = 160
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 257
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 341
+            ClientHeight = 257
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object RotatorIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 17
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -1217,47 +1409,114 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object RotatorIndiDevPort: TEdit
-              Left = 100
+              Left = 95
               Height = 31
-              Top = 57
+              Top = 88
               Width = 168
               ParentFont = False
               TabOrder = 1
             end
             object Label11: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 25
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object Label14: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 63
+              Top = 94
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object RotatorAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 134
+              Top = 165
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 2
             end
             object Label8: TLabel
-              Left = 13
+              Left = 8
               Height = 44
-              Top = 88
+              Top = 192
               Width = 323
               AutoSize = False
               Caption = 'Warning! INDI rotator is totally untested, please send me your result via the bug tracker.'
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
+            object Panel14: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 3
+              object Label79: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object RotatorIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label80: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object RotatorIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi3: TButton
+              Tag = 4
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 4
+            end
+            object RotatorMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
               ParentColor = False
               ParentFont = False
               WordWrap = True
@@ -1266,16 +1525,16 @@ object f_setup: Tf_setup
         end
         object RotatorAscom: TTabSheet
           Caption = 'RotatorAscom'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelRotatorAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseRotator: TButton
@@ -1323,16 +1582,16 @@ object f_setup: Tf_setup
         end
         object RotatorAscomRest: TTabSheet
           Caption = 'RotatorAscomRest'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object Panel5: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object RotatorARestProtocol: TComboBox
               Left = 13
@@ -1408,11 +1667,10 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label66: TLabel
-              Left = 36
+              Left = 16
               Height = 19
               Top = 108
               Width = 51
-              Anchors = [akTop, akRight]
               Caption = 'Rotator/'
               ParentColor = False
             end
@@ -1474,22 +1732,23 @@ object f_setup: Tf_setup
         OnChange = PageControlMountChange
         object MountIndi: TTabSheet
           Caption = 'MountIndi'
-          ClientHeight = 192
-          ClientWidth = 416
+          ClientHeight = 165
+          ClientWidth = 410
           object PanelMountIndi: TPanel
-            Left = 16
-            Height = 136
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 165
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 132
-            ClientWidth = 341
+            ClientHeight = 165
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object MountIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 16
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -1497,54 +1756,121 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object MountIndiDevPort: TEdit
-              Left = 100
+              Left = 95
               Height = 31
-              Top = 56
+              Top = 88
               Width = 168
               ParentFont = False
               TabOrder = 1
             end
             object Label12: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 24
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object Label13: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 62
+              Top = 94
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object MountAutoLoadConfig: TCheckBox
-              Left = 16
+              Left = 11
               Height = 21
-              Top = 96
+              Top = 128
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 2
             end
+            object Panel15: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 3
+              object Label81: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object MountIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label82: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object MountIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi4: TButton
+              Tag = 5
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 4
+            end
+            object MountMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
           end
         end
         object MountAscom: TTabSheet
           Caption = 'MountAscom'
-          ClientHeight = 192
-          ClientWidth = 416
+          ClientHeight = 165
+          ClientWidth = 410
           object PanelMountAscom: TPanel
             Left = 16
             Height = 136
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 132
-            ClientWidth = 283
+            ClientHeight = 136
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseMount: TButton
@@ -1592,16 +1918,16 @@ object f_setup: Tf_setup
         end
         object MountAscomRest: TTabSheet
           Caption = 'MountAscomRest'
-          ClientHeight = 192
-          ClientWidth = 416
+          ClientHeight = 165
+          ClientWidth = 410
           object Panel6: TPanel
             Left = 16
             Height = 144
             Top = 16
             Width = 384
             BevelOuter = bvNone
-            ClientHeight = 140
-            ClientWidth = 380
+            ClientHeight = 144
+            ClientWidth = 384
             TabOrder = 0
             object MountARestProtocol: TComboBox
               Left = 13
@@ -1681,7 +2007,6 @@ object f_setup: Tf_setup
               Height = 19
               Top = 108
               Width = 63
-              Anchors = [akTop, akRight]
               Caption = 'Telescope/'
               ParentColor = False
             end
@@ -1722,22 +2047,23 @@ object f_setup: Tf_setup
         OnChange = PageControlDomeChange
         object DomeIndi: TTabSheet
           Caption = 'DomeIndi'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelDomeIndi: TPanel
-            Left = 16
-            Height = 152
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 217
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 217
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object DomeIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 17
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -1745,54 +2071,121 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object Label25: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 25
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object DomeAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 120
+              Top = 151
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
             end
             object Label23: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 62
+              Top = 93
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object DomeIndiDevPort: TEdit
-              Left = 100
+              Left = 95
               Height = 31
-              Top = 56
+              Top = 87
               Width = 168
               ParentFont = False
               TabOrder = 2
+            end
+            object Panel16: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 3
+              object Label83: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object DomeIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label84: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object DomeIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi5: TButton
+              Tag = 6
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 4
+            end
+            object DomeMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
             end
           end
         end
         object DomeAscom: TTabSheet
           Caption = 'DomeAscom'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelDomeAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseDome: TButton
@@ -1840,16 +2233,16 @@ object f_setup: Tf_setup
         end
         object DomeAscomRest: TTabSheet
           Caption = 'DomeAscomRest'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object Panel7: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object DomeARestProtocol: TComboBox
               Left = 13
@@ -1925,11 +2318,10 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label68: TLabel
-              Left = 45
+              Left = 16
               Height = 19
               Top = 108
               Width = 42
-              Anchors = [akTop, akRight]
               Caption = 'Dome/'
               ParentColor = False
             end
@@ -1970,22 +2362,23 @@ object f_setup: Tf_setup
         OnChange = PageControlWeatherChange
         object WeatherIndi: TTabSheet
           Caption = 'WeatherIndi'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelWeatherIndi: TPanel
-            Left = 16
-            Height = 152
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 217
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 217
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object WeatherIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 17
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -1993,37 +2386,104 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object Label21: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 25
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object WeatherAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 120
+              Top = 151
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
             end
+            object Panel17: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 2
+              object Label85: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object WeatherIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label86: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object WeatherIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi6: TButton
+              Tag = 7
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 3
+            end
+            object WeatherMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
           end
         end
         object WeatherAscom: TTabSheet
           Caption = 'WeatherAscom'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelWeatherAscom: TPanel
             Left = 16
             Height = 160
             Top = 16
             Width = 344
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 340
+            ClientHeight = 160
+            ClientWidth = 344
             ParentFont = False
             TabOrder = 0
             object BtnChooseWeather: TButton
@@ -2096,16 +2556,16 @@ object f_setup: Tf_setup
         end
         object WeatherAscomRest: TTabSheet
           Caption = 'WeatherAscomRest'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object Panel8: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object WeatherARestProtocol: TComboBox
               Left = 13
@@ -2241,22 +2701,23 @@ object f_setup: Tf_setup
         OnChange = PageControlSafetyChange
         object SafetyIndi: TTabSheet
           Caption = 'SafetyIndi'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelSafetyIndi: TPanel
-            Left = 16
-            Height = 152
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 217
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 148
-            ClientWidth = 341
+            ClientHeight = 217
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object SafetyIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 17
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -2264,37 +2725,104 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object Label24: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 25
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object SafetyAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 120
+              Top = 151
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
             end
+            object Panel18: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 2
+              object Label87: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object SafetyIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label88: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object SafetyIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi7: TButton
+              Tag = 8
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 3
+            end
+            object SafetyMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
+            end
           end
         end
         object SafetyAscom: TTabSheet
           Caption = 'SafetyAscom'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object PanelSafetyAscom: TPanel
             Left = 16
             Height = 112
             Top = 16
             Width = 287
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 112
+            ClientWidth = 287
             ParentFont = False
             TabOrder = 0
             object BtnChooseSafety: TButton
@@ -2342,16 +2870,16 @@ object f_setup: Tf_setup
         end
         object SafetyAscomRest: TTabSheet
           Caption = 'SafetyAscomRest'
-          ClientHeight = 244
-          ClientWidth = 416
+          ClientHeight = 217
+          ClientWidth = 410
           object Panel9: TPanel
             Left = 16
             Height = 193
             Top = 16
             Width = 392
             BevelOuter = bvNone
-            ClientHeight = 189
-            ClientWidth = 388
+            ClientHeight = 193
+            ClientWidth = 392
             TabOrder = 0
             object SafetyARestProtocol: TComboBox
               Left = 13
@@ -2427,11 +2955,10 @@ object f_setup: Tf_setup
               ParentColor = False
             end
             object Label69: TLabel
-              Left = 44
+              Left = 16
               Height = 19
               Top = 108
               Width = 43
-              Anchors = [akTop, akRight]
               Caption = 'Safety/'
               ParentColor = False
             end
@@ -2464,22 +2991,23 @@ object f_setup: Tf_setup
         OnChange = PageControlWatchdogChange
         object WatchdogIndi: TTabSheet
           Caption = 'WatchdogIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 257
+          ClientWidth = 410
           object PanelWatchdogIndi: TPanel
-            Left = 16
-            Height = 160
-            Top = 16
-            Width = 345
+            Left = 0
+            Height = 257
+            Top = 0
+            Width = 410
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 341
+            ClientHeight = 257
+            ClientWidth = 410
             ParentFont = False
             TabOrder = 0
             object WatchdogIndiDevice: TComboBox
-              Left = 100
+              Left = 95
               Height = 35
-              Top = 16
+              Top = 48
               Width = 168
               ItemHeight = 0
               ParentFont = False
@@ -2487,39 +3015,106 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object Label19: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 24
+              Top = 56
               Width = 40
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
             end
             object WatchdogAutoLoadConfig: TCheckBox
-              Left = 13
+              Left = 8
               Height = 21
-              Top = 120
+              Top = 152
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
             end
             object Label20: TLabel
-              Left = 13
+              Left = 8
               Height = 19
-              Top = 75
+              Top = 107
               Width = 185
               Caption = 'Heart beat threshold [minutes]'
               ParentColor = False
               ParentFont = False
             end
             object WatchdogThreshold: TEdit
-              Left = 218
+              Left = 213
               Height = 31
-              Top = 73
-              Width = 32
+              Top = 102
+              Width = 50
               ParentFont = False
               TabOrder = 2
+            end
+            object Panel19: TPanel
+              Left = 0
+              Height = 38
+              Top = 8
+              Width = 408
+              BevelOuter = bvNone
+              ClientHeight = 38
+              ClientWidth = 408
+              TabOrder = 3
+              object Label89: TLabel
+                Left = 8
+                Height = 19
+                Top = 6
+                Width = 38
+                Caption = 'Server'
+                ParentColor = False
+                ParentFont = False
+              end
+              object WatchdogIndiServer: TEdit
+                Left = 95
+                Height = 31
+                Top = 0
+                Width = 120
+                ParentFont = False
+                TabOrder = 0
+                Text = 'localhost'
+              end
+              object Label90: TLabel
+                Left = 232
+                Height = 19
+                Top = 6
+                Width = 26
+                Caption = 'Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object WatchdogIndiPort: TEdit
+                Left = 272
+                Height = 31
+                Top = 0
+                Width = 80
+                ParentFont = False
+                TabOrder = 1
+                Text = '7624'
+              end
+            end
+            object GetIndi8: TButton
+              Tag = 9
+              Left = 272
+              Height = 25
+              Top = 50
+              Width = 74
+              Caption = 'Get'
+              OnClick = GetIndiClick
+              TabOrder = 4
+            end
+            object WatchdogMsg: TLabel
+              Left = 272
+              Height = 53
+              Top = 86
+              Width = 131
+              AutoSize = False
+              Caption = '   '
+              ParentColor = False
+              ParentFont = False
+              WordWrap = True
             end
           end
         end
@@ -2531,13 +3126,6 @@ object f_setup: Tf_setup
     Interval = 5000
     OnTimer = IndiTimerTimer
     left = 16
-    top = 360
-  end
-  object CheckIndiTimer: TTimer
-    Enabled = False
-    Interval = 50
-    OnTimer = CheckIndiTimerTimer
-    left = 80
     top = 360
   end
 end

@@ -75,6 +75,7 @@ T_weather = class(TComponent)
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    property DeviceName: string read FDevice;
     property WeatherInterface: TDevInterface read FWeatherInterface;
     property Status: TDeviceStatus read FStatus;
     property Timeout: integer read FTimeout write SetTimeout;

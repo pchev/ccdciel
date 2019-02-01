@@ -85,6 +85,7 @@ T_mount = class(TComponent)
     property IsEqmod: boolean read FIsEqmod;
     property SyncMode:TEqmodAlign read GetSyncMode write SetSyncMode;
     // Eqmod specific
+    property DeviceName: string read FDevice;
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
     property Tracking: Boolean read GetTracking;

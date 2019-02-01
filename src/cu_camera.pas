@@ -167,6 +167,7 @@ T_camera = class(TComponent)
     procedure StopVideoPreview; virtual; abstract;
     procedure StartVideoRecord(mode:TVideoRecordMode); virtual; abstract;
     procedure StopVideoRecord; virtual; abstract;
+    property DeviceName: string read FDevice;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property Wheel: T_wheel read Fwheel write Fwheel;
