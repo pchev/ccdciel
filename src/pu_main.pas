@@ -1678,6 +1678,7 @@ begin
    SafetyActionName[12]:=trim(rsExitProgram);
    DevInterfaceName[2]:=rsInCamera;
    DevInterfaceName[3]:=rsInMount;
+   DevInterfaceName[4]:=rsASCOMRemote;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);

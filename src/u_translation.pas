@@ -1031,6 +1031,7 @@ resourcestring
   rsUnattendedEr = 'Unattended error script';
   rsInCamera = 'In camera';
   rsInMount = 'In mount';
+  rsASCOMRemote = 'ASCOM Remote';
 
 
 

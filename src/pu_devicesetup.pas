@@ -60,6 +60,23 @@ type
     BtnSetupSafety: TButton;
     BtnSetupRotator: TButton;
     BtnCopyProfile: TButton;
+    ApplyAscomRemote: TButton;
+    DefaultARestHost: TEdit;
+    DefaultARestPort: TSpinEdit;
+    DefaultARestProtocol: TComboBox;
+    UseINDI: TCheckBox;
+    Label62: TLabel;
+    Label63: TLabel;
+    Label64: TLabel;
+    Label65: TLabel;
+    Label66: TLabel;
+    Label67: TLabel;
+    Label68: TLabel;
+    Label69: TLabel;
+    Label70: TLabel;
+    Label71: TLabel;
+    Label72: TLabel;
+    Panel10: TPanel;
     WheelARestDevice: TSpinEdit;
     FocuserARestDevice: TSpinEdit;
     RotatorARestDevice: TSpinEdit;
@@ -174,7 +191,7 @@ type
     PanelDomeIndi: TPanel;
     DomeAutoLoadConfig: TCheckBox;
     DomeIndiDevice: TComboBox;
-    InitTimer: TTimer;
+    CheckIndiTimer: TTimer;
     CameraIndi: TTabSheet;
     CameraAscom: TTabSheet;
     FocuserIndi: TTabSheet;
@@ -302,11 +319,12 @@ type
     procedure BtnDeleteProfileClick(Sender: TObject);
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
+    procedure ApplyAscomRemoteClick(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
     procedure GetIndiDevicesClick(Sender: TObject);
-    procedure InitTimerTimer(Sender: TObject);
+    procedure CheckIndiTimerTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
@@ -485,22 +503,30 @@ begin
   DeviceWatchdog.Caption:=rsUseWatchdog+': '+DevInterfaceName[0];
   CameraIndi.Caption:=DevInterfaceName[0];
   CameraAscom.Caption:=DevInterfaceName[1];
+  CameraAscomRest.Caption:=DevInterfaceName[4];
   WheelIndi.Caption:=DevInterfaceName[0];
   WheelAscom.Caption:=DevInterfaceName[1];
+  WheelAscomRest.Caption:=DevInterfaceName[4];
   WheelInCamera.Caption:=DevInterfaceName[2];
   FocuserIndi.Caption:=DevInterfaceName[0];
   FocuserAscom.Caption:=DevInterfaceName[1];
+  FocuserAscomRest.Caption:=DevInterfaceName[4];
   FocuserInMount.Caption:=DevInterfaceName[3];
   RotatorIndi.Caption:=DevInterfaceName[0];
   RotatorAscom.Caption:=DevInterfaceName[1];
+  RotatorAscomRest.Caption:=DevInterfaceName[4];
   MountIndi.Caption:=DevInterfaceName[0];
   MountAscom.Caption:=DevInterfaceName[1];
+  MountAscomRest.Caption:=DevInterfaceName[4];
   DomeIndi.Caption:=DevInterfaceName[0];
   DomeAscom.Caption:=DevInterfaceName[1];
+  DomeAscomRest.Caption:=DevInterfaceName[4];
   WeatherIndi.Caption:=DevInterfaceName[0];
   WeatherAscom.Caption:=DevInterfaceName[1];
+  WeatherAscomRest.Caption:=DevInterfaceName[4];
   SafetyIndi.Caption:=DevInterfaceName[0];
   SafetyAscom.Caption:=DevInterfaceName[1];
+  SafetyAscomRest.Caption:=DevInterfaceName[4];
   WatchdogIndi.Caption:=DevInterfaceName[0];
 end;
 
@@ -563,6 +589,9 @@ CameraARestHost.Text:=conf.GetValue('/ASCOMRestcamera/Host','127.0.0.1');
 CameraARestPort.Value:=conf.GetValue('/ASCOMRestcamera/Port',11111);
 CameraARestDevice.Value:=conf.GetValue('/ASCOMRestcamera/Device',0);
 FlipImage1.Checked:=conf.GetValue('/ASCOMRestcamera/FlipImage',true);
+DefaultARestProtocol.ItemIndex:=CameraARestProtocol.ItemIndex;
+DefaultARestHost.Text:=CameraARestHost.Text;
+DefaultARestPort.Value:=CameraARestPort.Value;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
 if WheelIndiDevice.Items.Count=0 then begin
@@ -682,6 +711,7 @@ DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)
 DeviceDome.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
 
+UseINDI.Checked:=(CameraConnection=INDI)or(WheelConnection=INDI)or(FocuserConnection=INDI)or(RotatorConnection=INDI)or(MountConnection=INDI)or(DomeConnection=INDI)or(WeatherConnection=INDI)or(SafetyConnection=INDI);
 end;
 
 
@@ -901,6 +931,34 @@ begin
 {$endif}
 end;
 
+procedure Tf_setup.ApplyAscomRemoteClick(Sender: TObject);
+begin
+   CameraARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   WheelARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   FocuserARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   RotatorARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   MountARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   DomeARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   WeatherARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   SafetyARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   CameraARestHost.Text:=DefaultARestHost.Text;
+   WheelARestHost.Text:=DefaultARestHost.Text;
+   FocuserARestHost.Text:=DefaultARestHost.Text;
+   RotatorARestHost.Text:=DefaultARestHost.Text;
+   MountARestHost.Text:=DefaultARestHost.Text;
+   DomeARestHost.Text:=DefaultARestHost.Text;
+   WeatherARestHost.Text:=DefaultARestHost.Text;
+   SafetyARestHost.Text:=DefaultARestHost.Text;
+   CameraARestPort.Value:=DefaultARestPort.Value;
+   WheelARestPort.Value:=DefaultARestPort.Value;
+   FocuserARestPort.Value:=DefaultARestPort.Value;
+   RotatorARestPort.Value:=DefaultARestPort.Value;
+   MountARestPort.Value:=DefaultARestPort.Value;
+   DomeARestPort.Value:=DefaultARestPort.Value;
+   WeatherARestPort.Value:=DefaultARestPort.Value;
+   SafetyARestPort.Value:=DefaultARestPort.Value;
+end;
+
 procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
 begin
   CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
@@ -909,7 +967,7 @@ end;
 procedure Tf_setup.FormShow(Sender: TObject);
 begin
   InitialLock:=false;
-  InitTimer.Enabled:=true;
+  if UseINDI.Checked then CheckIndiTimer.Enabled:=true;
 end;
 
 procedure Tf_setup.IndiSensorChange(Sender: TObject);
@@ -930,9 +988,9 @@ begin
  end;
 end;
 
-procedure Tf_setup.InitTimerTimer(Sender: TObject);
+procedure Tf_setup.CheckIndiTimerTimer(Sender: TObject);
 begin
-  InitTimer.Enabled:=false;
+  CheckIndiTimer.Enabled:=false;
   GetIndiDevicesClick(Self);
 end;
 
@@ -1066,6 +1124,7 @@ begin
   for i:=0 to SafetyIndiDevice.Items.Count-1 do
      if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
   LabelIndiDevCount.Caption:=Format(rsFoundDevices, [IntToStr(indiclient.devices.Count)]);
+  if indiclient.devices.Count>0 then UseINDI.Checked:=true;
   indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
   except
@@ -1187,6 +1246,7 @@ begin
     try
     chkconf.Filename:=slash(ConfigDir)+configfile;
     Loadconfig(chkconf);
+    if UseINDI.Checked then CheckIndiTimer.Enabled:=true;
     finally
       chkconf.Free;
     end;
