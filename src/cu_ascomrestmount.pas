@@ -499,7 +499,7 @@ begin
       msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]))
    else
       msg(Format(rsSyncToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
-   V.Put('SyncToCoordinates',['RightAscension',FormatFloat(f6,sra),'Declination'FormatFloat(f6,sde)]);
+   V.Put('SyncToCoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
    result:=true;
    except
      on E: Exception do msg('Sync error: ' + E.Message,0);
