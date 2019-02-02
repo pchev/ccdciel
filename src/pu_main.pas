@@ -79,6 +79,8 @@ type
     MenuDarkFile: TMenuItem;
     MenuDarkClear: TMenuItem;
     MenuItem14: TMenuItem;
+    MenuReset1col: TMenuItem;
+    MenuReset2col: TMenuItem;
     MenuViewDome: TMenuItem;
     MenuViewWeather: TMenuItem;
     MenuViewSafety: TMenuItem;
@@ -825,7 +827,7 @@ var pn: string;
     par: Tpanel;
     opm,npm: Tmenuitem;
 begin
-pn:=config.GetValue('/Tools/'+configname+'/Parent',defaultParent.Name);
+pn:=screenconfig.GetValue('/Tools/'+configname+'/Parent',defaultParent.Name);
 par:=defaultParent;
 for i:=0 to ComponentCount-1 do begin
    if Components[i].Name=pn then begin
@@ -838,10 +840,10 @@ if par.Width>par.Height then begin
 end else begin
    tool.Align:=alTop;
 end;
-tool.Top:=config.GetValue('/Tools/'+widestring(configname)+'/Top',defaultpos);
-tool.Left:=config.GetValue('/Tools/'+widestring(configname)+'/Left',defaultpos);
+tool.Top:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Top',defaultpos);
+tool.Left:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Left',defaultpos);
 tool.Parent:=par;
-tool.Visible:=DeviceSelected and config.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
+tool.Visible:=DeviceSelected and screenconfig.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
 chkmenu.Checked:=tool.Visible;
 tool.Tag:=PtrInt(toolmenu);
 if (toolmenu<>nil)and(par.tag>0) then begin
@@ -1082,6 +1084,7 @@ begin
   end;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
+  screenconfig:=TCCDConfig.Create(self);
   ProfileFromCommandLine:=false;
   if Application.HasOption('c', 'config') then begin
     profile:=Application.GetOptionValue('c', 'config');
@@ -1109,10 +1112,10 @@ begin
   lang:=u_translation.translate(lang);
   SetLang;
 
-  Top:=config.GetValue('/Window/Top',0);
-  Left:=config.GetValue('/Window/Left',0);
-  Width:=config.GetValue('/Window/Width',1024);
-  Height:=config.GetValue('/Window/Height',768);
+  Top:=screenconfig.GetValue('/Window/Top',0);
+  Left:=screenconfig.GetValue('/Window/Left',0);
+  Width:=screenconfig.GetValue('/Window/Width',1024);
+  Height:=screenconfig.GetValue('/Window/Height',768);
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onLogLevelChange:=@LogLevelChange;
@@ -1302,7 +1305,7 @@ begin
   f_visu.hist4.Down:=config.GetValue('/Visu/Hist4',false);
   f_visu.histminmax.AllowAllUp:=false;
 
-  LogLevel:=config.GetValue('/Tools/Messages/LogLevel',LogLevel);
+  LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   f_msg.LogLevel:=LogLevel;
 
   ImaBmp:=TBGRABitmap.Create(1,1);
@@ -1563,6 +1566,8 @@ begin
    MenuViewMessages.Caption := rsMessages;
    MenuViewClock.Caption := rsClock;
    MenuResetTools.Caption := rsResetToDefau;
+   MenuReset1col.Caption:='1 '+rsColumn;
+   MenuReset2col.Caption:='2 '+rsColumn;
    MenuTabConnect.Caption := rsConnect;
    MenuConnection.Caption := rsConnection;
    MenuConnect.Caption := rsConnect;
@@ -1774,7 +1779,7 @@ begin
 
   f_planetariuminfo.planetarium:=planetarium;
 
-  f_script.SetScriptList(config.GetValue('/Tools/Script/ScriptName',''));
+  f_script.SetScriptList(config.GetValue('/Script/ScriptName',''));
 
   LoadFocusStar;
   deepstring:=TStringList.Create;
@@ -1822,7 +1827,7 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-  MenuViewClock.Checked:=config.GetValue('/Tools/Clock/Visible',true);
+  MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
   MenuViewClockClick(nil);
 end;
 
@@ -2017,37 +2022,72 @@ begin
 end;
 
 procedure Tf_main.MenuResetToolsClick(Sender: TObject);
-var i: integer;
+var i,n: integer;
 begin
-  SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
-  SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
+if sender is TMenuItem then begin
+  n:=TMenuItem(sender).Tag;
+  if n=1 then begin
+    // all in the right panel
+    SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
+    SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
-  SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
-  SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview,true);
-  SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
-  SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
-  SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript,true);
-  SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
-  SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
-  SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
+    SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
+    SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview,true);
+    SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+    SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
+    SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript,true);
+    SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
+    SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
+    SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
 
-  SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
-  SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
-  SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
+    SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
+    SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
+    SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
 
-  SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
-  SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters,WantWheel);
-  SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
-  SetTool(f_rotator,'',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
-  SetTool(f_ccdtemp,'',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
-  SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
+    SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
+    SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters,WantWheel);
+    SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
+    SetTool(f_rotator,'',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
+    SetTool(f_ccdtemp,'',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
+    SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
 
-  SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
+    SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
-  SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+  end
+  else if n=2 then begin
+    // use left and right panel
+   SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
+   SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
+   SetTool(f_preview,'',PanelLeft,0,MenuViewPreview,MenuPreview,true);
+   SetTool(f_filterwheel,'',PanelLeft,f_preview.top+1,MenuViewFilters,MenuFilters,WantWheel);
+   SetTool(f_frame,'',PanelLeft,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
+   SetTool(f_rotator,'',PanelLeft,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
+   SetTool(f_ccdtemp,'',PanelLeft,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
+   SetTool(f_mount,'',PanelLeft,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
+   SetTool(f_dome,'',PanelLeft,f_mount.top+1,MenuViewDome,nil,WantDome);
+
+   SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
+   SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+   SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
+   SetTool(f_weather,'',PanelRight1,f_planetarium.top+1,MenuViewWeather,nil,WantWeather);
+   SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
+   SetTool(f_script,'',PanelRight1,f_safety.top+1,MenuViewScript,MenuScript,true);
+
+   SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
+   SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
+   SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
+
+   SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
+
+   SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
+
+   SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+  end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
+end;
 end;
 
 procedure Tf_main.UpdConfig(oldver:string);
@@ -2055,6 +2095,13 @@ var ok:boolean;
     i: integer;
     f: double;
     msg: string;
+procedure movetoolconfig(tool:string; defaultParent: TPanel);
+begin
+  screenconfig.SetValue('/Tools/'+tool+'/Parent',config.GetValue('/Tools/'+tool+'/Parent',defaultParent.name));
+  screenconfig.SetValue('/Tools/'+widestring(tool)+'/Top',config.GetValue('/Tools/'+widestring(tool)+'/Top',0));
+  screenconfig.SetValue('/Tools/'+widestring(tool)+'/Left',config.GetValue('/Tools/'+widestring(tool)+'/Left',0));
+  screenconfig.SetValue('/Tools/'+widestring(tool)+'/Visible',config.GetValue('/Tools/'+widestring(tool)+'/Visible',true));
+end;
 begin
   if trim(oldver)='' then
      exit;
@@ -2127,6 +2174,48 @@ begin
      if f<>NullCoord then
         config.SetValue('/Astrometry/MaxRadius',f)
   end;
+  if (oldver<'0.9.53') then begin
+   // move screen layout to own config
+   if (screenconfig.GetValue('/Configuration/Version','')='')  then begin
+     // copy only the layout of the first opened old config
+     screenconfig.SetValue('/Window/Top',config.GetValue('/Window/Top',0));
+     screenconfig.SetValue('/Window/Left',config.GetValue('/Window/Left',0));
+     screenconfig.SetValue('/Window/Width',config.GetValue('/Window/Width',1024));
+     screenconfig.SetValue('/Window/Height',config.GetValue('/Window/Height',768));
+     screenconfig.SetValue('/Tools/Clock/Visible',config.GetValue('/Tools/Clock/Visible',true));
+     screenconfig.SetValue('/Configuration/Version',ccdcielver);
+     movetoolconfig('Histogram',PanelBottom);
+     movetoolconfig('Messages',PanelBottom);
+     movetoolconfig('Connection',PanelRight1);
+     movetoolconfig('Preview',PanelRight1);
+     movetoolconfig('Autoguider',PanelRight1);
+     movetoolconfig('Planetarium',PanelRight1);
+     movetoolconfig('Script',PanelRight1);
+     movetoolconfig('Dome',PanelRight1);
+     movetoolconfig('Weather',PanelRight1);
+     movetoolconfig('Safety',PanelRight1);
+     movetoolconfig('Focuser',PanelRight2);
+     movetoolconfig('Starprofile',PanelRight2);
+     movetoolconfig('Magnifyer',PanelRight2);
+     movetoolconfig('Capture',PanelRight3);
+     movetoolconfig('Filters',PanelRight3);
+     movetoolconfig('Frame',PanelRight3);
+     movetoolconfig('Rotator',PanelRight3);
+     movetoolconfig('CCDTemp',PanelRight3);
+     movetoolconfig('Mount',PanelRight3);
+     movetoolconfig('Sequence',PanelRight4);
+     movetoolconfig('Video',PanelRight5);
+     screenconfig.Flush;
+   end;
+   config.SetValue('/Script/ScriptName',config.GetValue('/Tools/Script/ScriptName',''));
+   config.SetValue('/Log/LogLevel',config.GetValue('/Tools/Messages/LogLevel',LogLevel));
+   // delete old config path
+   config.DeletePath('/Tools/Script/ScriptName');
+   config.DeletePath('/Tools/Messages/LogLevel');
+   config.DeletePath('/Tools');
+   config.DeletePath('/Window');
+   config.Flush;
+  end
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -2932,111 +3021,117 @@ begin
    // Set current tools value to the config
 
    config.SetValue('/Configuration/Version',ccdcielver);
+   screenconfig.SetValue('/Configuration/Version',ccdcielver);
 
-   config.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
-   config.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
-   config.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
-   config.SetValue('/Tools/Connection/Left',f_devicesconnection.Left);
+   screenconfig.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
+   screenconfig.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
+   screenconfig.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
+   screenconfig.SetValue('/Tools/Connection/Left',f_devicesconnection.Left);
 
-   config.SetValue('/Tools/Histogram/Parent',f_visu.Parent.Name);
-   config.SetValue('/Tools/Histogram/Visible',f_visu.Visible);
-   config.SetValue('/Tools/Histogram/Top',f_visu.Top);
-   config.SetValue('/Tools/Histogram/Left',f_visu.Left);
+   screenconfig.SetValue('/Tools/Histogram/Parent',f_visu.Parent.Name);
+   screenconfig.SetValue('/Tools/Histogram/Visible',f_visu.Visible);
+   screenconfig.SetValue('/Tools/Histogram/Top',f_visu.Top);
+   screenconfig.SetValue('/Tools/Histogram/Left',f_visu.Left);
 
-   config.SetValue('/Tools/Messages/Parent',f_msg.Parent.Name);
-   config.SetValue('/Tools/Messages/Visible',f_msg.Visible);
-   config.SetValue('/Tools/Messages/Top',f_msg.Top);
-   config.SetValue('/Tools/Messages/Left',f_msg.Left);
-   config.SetValue('/Tools/Messages/LogLevel',LogLevel);
+   screenconfig.SetValue('/Tools/Messages/Parent',f_msg.Parent.Name);
+   screenconfig.SetValue('/Tools/Messages/Visible',f_msg.Visible);
+   screenconfig.SetValue('/Tools/Messages/Top',f_msg.Top);
+   screenconfig.SetValue('/Tools/Messages/Left',f_msg.Left);
 
-   config.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
-   config.SetValue('/Tools/Focuser/Visible',f_focuser.Visible or (not WantFocuser));
-   config.SetValue('/Tools/Focuser/Top',f_focuser.Top);
-   config.SetValue('/Tools/Focuser/Left',f_focuser.Left);
+   screenconfig.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
+   screenconfig.SetValue('/Tools/Focuser/Visible',f_focuser.Visible or (not WantFocuser));
+   screenconfig.SetValue('/Tools/Focuser/Top',f_focuser.Top);
+   screenconfig.SetValue('/Tools/Focuser/Left',f_focuser.Left);
 
-   config.SetValue('/Tools/Starprofile/Parent',f_starprofile.Parent.Name);
-   config.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
-   config.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
-   config.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
+   screenconfig.SetValue('/Tools/Starprofile/Parent',f_starprofile.Parent.Name);
+   screenconfig.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
+   screenconfig.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
+   screenconfig.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
 
-   config.SetValue('/Tools/Magnifyer/Parent',f_magnifyer.Parent.Name);
-   config.SetValue('/Tools/Magnifyer/Visible',f_magnifyer.Visible);
-   config.SetValue('/Tools/Magnifyer/Top',f_magnifyer.Top);
-   config.SetValue('/Tools/Magnifyer/Left',f_magnifyer.Left);
+   screenconfig.SetValue('/Tools/Magnifyer/Parent',f_magnifyer.Parent.Name);
+   screenconfig.SetValue('/Tools/Magnifyer/Visible',f_magnifyer.Visible);
+   screenconfig.SetValue('/Tools/Magnifyer/Top',f_magnifyer.Top);
+   screenconfig.SetValue('/Tools/Magnifyer/Left',f_magnifyer.Left);
 
-   config.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
-   config.SetValue('/Tools/Frame/Visible',f_frame.Visible);
-   config.SetValue('/Tools/Frame/Top',f_frame.Top);
-   config.SetValue('/Tools/Frame/Left',f_frame.Left);
+   screenconfig.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
+   screenconfig.SetValue('/Tools/Frame/Visible',f_frame.Visible);
+   screenconfig.SetValue('/Tools/Frame/Top',f_frame.Top);
+   screenconfig.SetValue('/Tools/Frame/Left',f_frame.Left);
 
-   config.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
-   config.SetValue('/Tools/Rotator/Visible',f_rotator.Visible or (not WantRotator));
-   config.SetValue('/Tools/Rotator/Top',f_rotator.Top);
-   config.SetValue('/Tools/Rotator/Left',f_rotator.Left);
+   screenconfig.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
+   screenconfig.SetValue('/Tools/Rotator/Visible',f_rotator.Visible or (not WantRotator));
+   screenconfig.SetValue('/Tools/Rotator/Top',f_rotator.Top);
+   screenconfig.SetValue('/Tools/Rotator/Left',f_rotator.Left);
 
-   config.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
-   config.SetValue('/Tools/Preview/Visible',f_preview.Visible);
-   config.SetValue('/Tools/Preview/Top',f_preview.Top);
-   config.SetValue('/Tools/Preview/Left',f_preview.Left);
+   screenconfig.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
+   screenconfig.SetValue('/Tools/Preview/Visible',f_preview.Visible);
+   screenconfig.SetValue('/Tools/Preview/Top',f_preview.Top);
+   screenconfig.SetValue('/Tools/Preview/Left',f_preview.Left);
 
-   config.SetValue('/Tools/Capture/Parent',f_capture.Parent.Name);
-   config.SetValue('/Tools/Capture/Visible',f_capture.Visible);
-   config.SetValue('/Tools/Capture/Top',f_capture.Top);
-   config.SetValue('/Tools/Capture/Left',f_capture.Left);
+   screenconfig.SetValue('/Tools/Capture/Parent',f_capture.Parent.Name);
+   screenconfig.SetValue('/Tools/Capture/Visible',f_capture.Visible);
+   screenconfig.SetValue('/Tools/Capture/Top',f_capture.Top);
+   screenconfig.SetValue('/Tools/Capture/Left',f_capture.Left);
 
-   config.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
-   config.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible or (not WantWheel));
-   config.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
-   config.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
+   screenconfig.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
+   screenconfig.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
+   screenconfig.SetValue('/Tools/Sequence/Top',f_sequence.Top);
+   screenconfig.SetValue('/Tools/Sequence/Left',f_sequence.Left);
 
-   config.SetValue('/Tools/CCDTemp/Parent',f_ccdtemp.Parent.Name);
-   config.SetValue('/Tools/CCDTemp/Visible',f_ccdtemp.Visible);
-   config.SetValue('/Tools/CCDTemp/Top',f_ccdtemp.Top);
-   config.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
+   screenconfig.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
+   screenconfig.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible or (not WantWheel));
+   screenconfig.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
+   screenconfig.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
 
-   config.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
-   config.SetValue('/Tools/Mount/Visible',f_mount.Visible or (not WantMount));
-   config.SetValue('/Tools/Mount/Top',f_mount.Top);
-   config.SetValue('/Tools/Mount/Left',f_mount.Left);
+   screenconfig.SetValue('/Tools/CCDTemp/Parent',f_ccdtemp.Parent.Name);
+   screenconfig.SetValue('/Tools/CCDTemp/Visible',f_ccdtemp.Visible);
+   screenconfig.SetValue('/Tools/CCDTemp/Top',f_ccdtemp.Top);
+   screenconfig.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
 
-   config.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
-   config.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
-   config.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
-   config.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
+   screenconfig.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
+   screenconfig.SetValue('/Tools/Mount/Visible',f_mount.Visible or (not WantMount));
+   screenconfig.SetValue('/Tools/Mount/Top',f_mount.Top);
+   screenconfig.SetValue('/Tools/Mount/Left',f_mount.Left);
 
-   config.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
-   config.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
-   config.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
-   config.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
+   screenconfig.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
+   screenconfig.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
+   screenconfig.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
+   screenconfig.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
 
-   config.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
-   config.SetValue('/Tools/Script/Visible',f_script.Visible);
-   config.SetValue('/Tools/Script/Top',f_script.Top);
-   config.SetValue('/Tools/Script/Left',f_script.Left);
-   config.SetValue('/Tools/Script/ScriptName',f_script.ComboBoxScript.Text);
+   screenconfig.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
+   screenconfig.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
+   screenconfig.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
+   screenconfig.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
 
-   config.SetValue('/Tools/Weather/Parent',f_weather.Parent.Name);
-   config.SetValue('/Tools/Weather/Visible',f_weather.Visible or (not WantWeather));
-   config.SetValue('/Tools/Weather/Top',f_weather.Top);
-   config.SetValue('/Tools/Weather/Left',f_weather.Left);
+   screenconfig.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
+   screenconfig.SetValue('/Tools/Script/Visible',f_script.Visible);
+   screenconfig.SetValue('/Tools/Script/Top',f_script.Top);
+   screenconfig.SetValue('/Tools/Script/Left',f_script.Left);
 
-   config.SetValue('/Tools/Safety/Parent',f_safety.Parent.Name);
-   config.SetValue('/Tools/Safety/Visible',f_safety.Visible or (not WantSafety));
-   config.SetValue('/Tools/Safety/Top',f_safety.Top);
-   config.SetValue('/Tools/Safety/Left',f_safety.Left);
+   screenconfig.SetValue('/Tools/Weather/Parent',f_weather.Parent.Name);
+   screenconfig.SetValue('/Tools/Weather/Visible',f_weather.Visible or (not WantWeather));
+   screenconfig.SetValue('/Tools/Weather/Top',f_weather.Top);
+   screenconfig.SetValue('/Tools/Weather/Left',f_weather.Left);
 
-   config.SetValue('/Tools/Dome/Parent',f_dome.Parent.Name);
-   config.SetValue('/Tools/Dome/Visible',f_dome.Visible or (not WantDome));
-   config.SetValue('/Tools/Dome/Top',f_dome.Top);
-   config.SetValue('/Tools/Dome/Left',f_dome.Left);
+   screenconfig.SetValue('/Tools/Safety/Parent',f_safety.Parent.Name);
+   screenconfig.SetValue('/Tools/Safety/Visible',f_safety.Visible or (not WantSafety));
+   screenconfig.SetValue('/Tools/Safety/Top',f_safety.Top);
+   screenconfig.SetValue('/Tools/Safety/Left',f_safety.Left);
 
-   config.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
+   screenconfig.SetValue('/Tools/Dome/Parent',f_dome.Parent.Name);
+   screenconfig.SetValue('/Tools/Dome/Visible',f_dome.Visible or (not WantDome));
+   screenconfig.SetValue('/Tools/Dome/Top',f_dome.Top);
+   screenconfig.SetValue('/Tools/Dome/Left',f_dome.Left);
 
-   config.SetValue('/Window/Top',Top);
-   config.SetValue('/Window/Left',Left);
-   config.SetValue('/Window/Width',Width);
-   config.SetValue('/Window/Height',Height);
+   screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
+   screenconfig.SetValue('/Window/Top',Top);
+   screenconfig.SetValue('/Window/Left',Left);
+   screenconfig.SetValue('/Window/Width',Width);
+   screenconfig.SetValue('/Window/Height',Height);
+
+   config.SetValue('/Log/LogLevel',LogLevel);
+   config.SetValue('/Script/ScriptName',f_script.ComboBoxScript.Text);
    config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
    config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
    config.SetValue('/Preview/Binning',f_preview.Binning.Text);
@@ -3052,11 +3147,6 @@ begin
      config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
    else
      config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
-
-   config.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
-   config.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
-   config.SetValue('/Tools/Sequence/Top',f_sequence.Top);
-   config.SetValue('/Tools/Sequence/Left',f_sequence.Left);
 
    config.SetValue('/Sequence/Targets',CurrentSequenceFile);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
@@ -3108,6 +3198,7 @@ end;
 procedure Tf_main.SaveConfig;
 var inif:TIniFile;
 begin
+  screenconfig.Flush;
   config.Flush;
   if not ProfileFromCommandLine then begin
     inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
@@ -3123,6 +3214,7 @@ begin
  NewMessage(Format(rsUsingConfigu, [n]), 3);
  config.Filename:=slash(ConfigDir)+n;
  configver:=config.GetValue('/Configuration/Version','');
+ screenconfig.Filename:=slash(ConfigDir)+'ScreenLayout.cfg';
  UpdConfig(configver);
 end;
 

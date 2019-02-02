@@ -185,7 +185,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.52';
+  ccdcielver = '0.9.53';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 4;
   Maxclient = 100;
@@ -299,7 +299,7 @@ var
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
-  config: TCCDConfig;
+  config,screenconfig: TCCDConfig;
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;

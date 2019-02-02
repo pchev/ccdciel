@@ -1,12 +1,14 @@
 object f_main: Tf_main
   Left = 228
-  Height = 400
+  Height = 600
   Top = 136
   Width = 800
   ActiveControl = PageControlRight
   Caption = 'CCD Ciel'
-  ClientHeight = 400
+  ClientHeight = 600
   ClientWidth = 800
+  Constraints.MinHeight = 600
+  Constraints.MinWidth = 800
   DesignTimePPI = 95
   KeyPreview = True
   Menu = MainMenu1
@@ -19,18 +21,18 @@ object f_main: Tf_main
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
-    Height = 379
+    Height = 579
     Top = 0
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 375
+    ClientHeight = 575
     ClientWidth = 608
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 373
+      Height = 573
       Top = 3
       Width = 3
       Align = alLeft
@@ -69,7 +71,7 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 3
-      Height = 373
+      Height = 573
       Top = 3
       Width = 609
       Align = alClient
@@ -83,7 +85,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 3
-      Top = 376
+      Top = 576
       Width = 612
       Align = alBottom
       AutoSize = True
@@ -104,7 +106,7 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 379
+    Top = 579
     Width = 800
     BorderWidth = 1
     Panels = <    
@@ -131,18 +133,18 @@ object f_main: Tf_main
   end
   object PanelRight: TPanel
     Left = 612
-    Height = 379
+    Height = 579
     Top = 0
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 375
+    ClientHeight = 575
     ClientWidth = 184
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 347
+      Height = 547
       Top = 32
       Width = 188
       ActivePage = PageConnect
@@ -155,13 +157,13 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 343
+        ClientHeight = 543
         ClientWidth = 184
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 343
+          Height = 543
           Top = 0
           Width = 178
           Align = alClient
@@ -179,7 +181,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 343
+        ClientHeight = 543
         ClientWidth = 184
         ImageIndex = 1
         ParentFont = False
@@ -203,7 +205,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 343
+        ClientHeight = 543
         ClientWidth = 184
         ImageIndex = 2
         ParentFont = False
@@ -227,7 +229,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 343
+        ClientHeight = 543
         ClientWidth = 184
         ImageIndex = 3
         ParentFont = False
@@ -251,7 +253,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 343
+        ClientHeight = 543
         ClientWidth = 184
         ImageIndex = 4
         ParentFont = False
@@ -623,7 +625,16 @@ object f_main: Tf_main
       end
       object MenuResetTools: TMenuItem
         Caption = 'Reset to default'
-        OnClick = MenuResetToolsClick
+        object MenuReset1col: TMenuItem
+          Tag = 1
+          Caption = '1 column'
+          OnClick = MenuResetToolsClick
+        end
+        object MenuReset2col: TMenuItem
+          Tag = 2
+          Caption = '2 column'
+          OnClick = MenuResetToolsClick
+        end
       end
     end
     object MenuTabConnect: TMenuItem

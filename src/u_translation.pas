@@ -1036,6 +1036,7 @@ resourcestring
   rsApplyToAllDe = 'Apply to all devices';
   rsRemoteDevice = 'Remote device number';
   rsGet = 'Get';
+  rsColumn = 'column';
 
 
 
