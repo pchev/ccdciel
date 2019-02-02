@@ -1,13 +1,13 @@
 object f_main: Tf_main
   Left = 228
-  Height = 600
+  Height = 580
   Top = 136
   Width = 800
   ActiveControl = PageControlRight
   Caption = 'CCD Ciel'
-  ClientHeight = 600
+  ClientHeight = 580
   ClientWidth = 800
-  Constraints.MinHeight = 600
+  Constraints.MinHeight = 570
   Constraints.MinWidth = 800
   DesignTimePPI = 95
   KeyPreview = True
@@ -19,6 +19,7 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
+  LCLVersion = '2.0.0.3'
   object Panel1: TPanel
     Left = 0
     Height = 579
@@ -26,8 +27,8 @@ object f_main: Tf_main
     Width = 612
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 575
-    ClientWidth = 608
+    ClientHeight = 579
+    ClientWidth = 612
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
@@ -138,8 +139,8 @@ object f_main: Tf_main
     Width = 188
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 575
-    ClientWidth = 184
+    ClientHeight = 579
+    ClientWidth = 188
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
@@ -157,8 +158,8 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 543
-        ClientWidth = 184
+        ClientHeight = 513
+        ClientWidth = 178
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
@@ -181,8 +182,8 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 543
-        ClientWidth = 184
+        ClientHeight = 513
+        ClientWidth = 178
         ImageIndex = 1
         ParentFont = False
         object PanelRight2: TPanel
@@ -205,8 +206,8 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 543
-        ClientWidth = 184
+        ClientHeight = 513
+        ClientWidth = 178
         ImageIndex = 2
         ParentFont = False
         object PanelRight3: TPanel
@@ -229,8 +230,8 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 543
-        ClientWidth = 184
+        ClientHeight = 513
+        ClientWidth = 178
         ImageIndex = 3
         ParentFont = False
         object PanelRight4: TPanel
@@ -253,8 +254,8 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 543
-        ClientWidth = 184
+        ClientHeight = 513
+        ClientWidth = 178
         ImageIndex = 4
         ParentFont = False
         object PanelRight5: TPanel
