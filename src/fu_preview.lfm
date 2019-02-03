@@ -25,20 +25,21 @@ object f_preview: Tf_preview
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 31
+      Height = 28
       Top = 0
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 28
       ClientWidth = 178
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
         Left = 88
-        Height = 31
+        Height = 28
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
+        Constraints.MaxHeight = 28
         ItemHeight = 0
         ItemIndex = 7
         Items.Strings = (
@@ -72,22 +73,23 @@ object f_preview: Tf_preview
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 35
-      Top = 31
+      Height = 32
+      Top = 28
       Width = 178
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 35
+      ClientHeight = 32
       ClientWidth = 178
       ParentFont = False
       TabOrder = 4
       Visible = False
       object ISObox: TComboBox
         Left = 88
-        Height = 35
+        Height = 28
         Hint = 'Exposure time in secondes'
         Top = 0
         Width = 90
+        Constraints.MaxHeight = 28
         ItemHeight = 0
         ParentFont = False
         Style = csDropDownList
@@ -105,9 +107,10 @@ object f_preview: Tf_preview
       end
       object GainEdit: TSpinEdit
         Left = 88
-        Height = 29
+        Height = 28
         Top = 4
         Width = 90
+        Constraints.MaxHeight = 28
         MaxValue = 999999999
         ParentFont = False
         TabOrder = 1
@@ -115,20 +118,21 @@ object f_preview: Tf_preview
     end
     object Panel3: TPanel
       Left = 0
-      Height = 31
-      Top = 66
+      Height = 28
+      Top = 60
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 28
       ClientWidth = 178
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
         Left = 88
-        Height = 31
+        Height = 28
         Hint = 'Camera binning'
         Top = 0
         Width = 90
+        Constraints.MaxHeight = 28
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
@@ -152,7 +156,7 @@ object f_preview: Tf_preview
     object Panel5: TPanel
       Left = 0
       Height = 24
-      Top = 97
+      Top = 88
       Width = 178
       BevelOuter = bvNone
       ClientHeight = 24
@@ -187,7 +191,7 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 23
-      Top = 121
+      Top = 112
       Width = 178
       BevelOuter = bvNone
       ClientHeight = 23

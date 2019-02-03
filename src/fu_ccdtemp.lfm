@@ -51,6 +51,7 @@ object f_ccdtemp: Tf_ccdtemp
         Top = 0
         Width = 40
         AutoSize = False
+        Constraints.MaxHeight = 28
         ParentFont = False
         ReadOnly = True
         TabOrder = 0
@@ -96,9 +97,10 @@ object f_ccdtemp: Tf_ccdtemp
       end
       object Setpoint: TFloatSpinEdit
         Left = 64
-        Height = 29
+        Height = 28
         Top = 0
         Width = 65
+        Constraints.MaxHeight = 28
         MinValue = -100
         ParentFont = False
         TabOrder = 0

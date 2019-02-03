@@ -34,7 +34,7 @@ object f_focuser: Tf_focuser
         Height = 56
         Top = 0
         Width = 178
-        PageIndex = 2
+        PageIndex = 0
         Align = alClient
         TabOrder = 0
         TabStop = True
@@ -70,18 +70,20 @@ object f_focuser: Tf_focuser
             end
             object speed: TSpinEdit
               Left = 56
-              Height = 29
+              Height = 28
               Top = 0
               Width = 80
+              Constraints.MaxHeight = 28
               MaxValue = 999999999
               ParentFont = False
               TabOrder = 0
             end
             object timer: TSpinEdit
               Left = 56
-              Height = 29
+              Height = 28
               Top = 27
               Width = 80
+              Constraints.MaxHeight = 28
               MaxValue = 999999999
               ParentFont = False
               TabOrder = 1
@@ -260,9 +262,10 @@ object f_focuser: Tf_focuser
       Visible = False
       object Temp: TEdit
         Left = 56
-        Height = 31
+        Height = 28
         Top = 1
         Width = 44
+        Constraints.MaxHeight = 28
         ParentFont = False
         ReadOnly = True
         TabStop = False

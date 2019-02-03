@@ -64,6 +64,7 @@ object f_frame: Tf_frame
         Top = 0
         Width = 55
         AutoSize = False
+        Constraints.MaxHeight = 26
         ParentFont = False
         ParentShowHint = False
         TabOrder = 0
@@ -76,6 +77,7 @@ object f_frame: Tf_frame
         Top = 0
         Width = 55
         AutoSize = False
+        Constraints.MaxHeight = 26
         ParentFont = False
         ParentShowHint = False
         TabOrder = 1
@@ -117,6 +119,7 @@ object f_frame: Tf_frame
         Top = 0
         Width = 55
         AutoSize = False
+        Constraints.MaxHeight = 26
         ParentFont = False
         ParentShowHint = False
         TabOrder = 0
@@ -129,6 +132,7 @@ object f_frame: Tf_frame
         Top = 0
         Width = 55
         AutoSize = False
+        Constraints.MaxHeight = 26
         ParentFont = False
         ParentShowHint = False
         TabOrder = 1

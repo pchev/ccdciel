@@ -40,11 +40,11 @@ object f_rotator: Tf_rotator
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 30
+      Height = 29
       Top = 0
       Width = 175
       BevelOuter = bvNone
-      ClientHeight = 30
+      ClientHeight = 29
       ClientWidth = 175
       TabOrder = 0
       object led: TShape
@@ -67,9 +67,10 @@ object f_rotator: Tf_rotator
       end
       object Angle: TFloatSpinEdit
         Left = 48
-        Height = 29
+        Height = 28
         Top = 1
         Width = 64
+        Constraints.MaxHeight = 28
         DecimalPlaces = 1
         MaxValue = 0
         MinValue = 0
@@ -89,7 +90,7 @@ object f_rotator: Tf_rotator
     object Panel3: TPanel
       Left = 0
       Height = 25
-      Top = 30
+      Top = 29
       Width = 175
       BevelOuter = bvNone
       ClientHeight = 25

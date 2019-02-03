@@ -16,7 +16,7 @@ object f_focusercalibration: Tf_focusercalibration
     Height = 375
     Top = 0
     Width = 626
-    PageIndex = 2
+    PageIndex = 0
     Align = alClient
     TabOrder = 0
     object Page1: TPage
@@ -44,9 +44,10 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object Focusdir: TComboBox
         Left = 264
-        Height = 31
+        Height = 28
         Top = 136
         Width = 128
+        Constraints.MaxHeight = 28
         ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
@@ -98,9 +99,10 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object Backlash: TSpinEdit
         Left = 264
-        Height = 29
+        Height = 28
         Top = 296
         Width = 80
+        Constraints.MaxHeight = 28
         MaxValue = 10000
         TabOrder = 2
       end
@@ -156,18 +158,20 @@ object f_focusercalibration: Tf_focusercalibration
       end
       object hfdmax: TSpinEdit
         Left = 264
-        Height = 29
+        Height = 28
         Top = 152
         Width = 80
+        Constraints.MaxHeight = 28
         MinValue = 5
         TabOrder = 1
         Value = 5
       end
       object stepmin: TSpinEdit
         Left = 264
-        Height = 29
+        Height = 28
         Top = 210
         Width = 80
+        Constraints.MaxHeight = 28
         MaxValue = 1000
         MinValue = 1
         TabOrder = 2
@@ -274,14 +278,14 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          110
+          108
         )
       end
       object Label8: TLabel
         Left = 8
         Height = 19
         Top = 344
-        Width = 385
+        Width = 387
         Caption = 'Click Next to save this values to the configuration for this profile.'
         ParentColor = False
       end
@@ -311,7 +315,7 @@ object f_focusercalibration: Tf_focusercalibration
         )
         ColWidths = (
           170
-          110
+          108
         )
       end
     end

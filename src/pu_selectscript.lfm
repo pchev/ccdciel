@@ -1,42 +1,43 @@
 object f_selectscript: Tf_selectscript
   Left = 369
-  Height = 61
+  Height = 54
   Top = 30
   Width = 238
   AutoSize = True
   Caption = 'f_selectscript'
-  ClientHeight = 61
+  ClientHeight = 54
   ClientWidth = 238
   DesignTimePPI = 95
   OnCreate = FormCreate
   object Panel1: TPanel
     Left = 0
-    Height = 61
+    Height = 54
     Top = 0
     Width = 238
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 61
+    ClientHeight = 54
     ClientWidth = 238
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 35
+      Height = 28
       Top = 0
       Width = 237
       BevelOuter = bvNone
-      ClientHeight = 35
+      ClientHeight = 28
       ClientWidth = 237
       TabOrder = 0
       object ComboBoxScript: TComboBox
         Left = 0
-        Height = 35
+        Height = 28
         Top = 0
         Width = 237
         Align = alClient
+        Constraints.MaxHeight = 28
         ItemHeight = 0
         ParentFont = False
         Style = csDropDownList
@@ -46,7 +47,7 @@ object f_selectscript: Tf_selectscript
     object Panel5: TPanel
       Left = 0
       Height = 25
-      Top = 35
+      Top = 28
       Width = 237
       BevelOuter = bvNone
       ClientHeight = 25

@@ -62,6 +62,7 @@ object f_autoguider: Tf_autoguider
         Top = 0
         Width = 136
         AutoSize = False
+        Constraints.MaxHeight = 28
         ParentFont = False
         ReadOnly = True
         TabOrder = 0

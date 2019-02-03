@@ -40,11 +40,11 @@ object f_mount: Tf_mount
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 31
+      Height = 28
       Top = 0
       Width = 181
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 28
       ClientWidth = 181
       TabOrder = 0
       object Label1: TLabel
@@ -57,11 +57,12 @@ object f_mount: Tf_mount
       end
       object RA: TEdit
         Left = 30
-        Height = 31
+        Height = 28
         Hint = 'Current telescope Right Ascension'
         Top = 0
         Width = 85
         Alignment = taRightJustify
+        Constraints.MaxHeight = 28
         ReadOnly = True
         TabOrder = 0
       end
@@ -76,11 +77,11 @@ object f_mount: Tf_mount
     end
     object Panel3: TPanel
       Left = 0
-      Height = 31
-      Top = 31
+      Height = 28
+      Top = 28
       Width = 181
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 28
       ClientWidth = 181
       TabOrder = 1
       object Label2: TLabel
@@ -93,11 +94,12 @@ object f_mount: Tf_mount
       end
       object DE: TEdit
         Left = 30
-        Height = 31
+        Height = 28
         Hint = 'Current telescope declination'
         Top = 0
         Width = 85
         Alignment = taRightJustify
+        Constraints.MaxHeight = 28
         ReadOnly = True
         TabOrder = 0
       end
@@ -112,20 +114,21 @@ object f_mount: Tf_mount
     end
     object Panel4: TPanel
       Left = 0
-      Height = 31
-      Top = 62
+      Height = 28
+      Top = 56
       Width = 181
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 28
       ClientWidth = 181
       TabOrder = 2
       object Pierside: TEdit
         Left = 0
-        Height = 31
+        Height = 28
         Hint = 'Current telescope pier side'
         Top = 0
         Width = 181
         Align = alClient
+        Constraints.MaxHeight = 28
         ReadOnly = True
         TabOrder = 0
         Text = 'Unknow pier side'
@@ -133,11 +136,11 @@ object f_mount: Tf_mount
     end
     object Panel5: TPanel
       Left = 0
-      Height = 31
-      Top = 93
+      Height = 28
+      Top = 84
       Width = 181
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 28
       ClientWidth = 181
       TabOrder = 3
       object LabelMeridian: TLabel
@@ -150,10 +153,11 @@ object f_mount: Tf_mount
       end
       object TimeToMeridian: TEdit
         Left = 96
-        Height = 31
+        Height = 28
         Hint = 'Time from meridian transit (hour angle)'
         Top = 0
         Width = 40
+        Constraints.MaxHeight = 28
         ReadOnly = True
         TabOrder = 0
       end

@@ -25,11 +25,12 @@ object f_filterwheel: Tf_filterwheel
     TabOrder = 0
     object Filters: TComboBox
       Left = 33
-      Height = 30
+      Height = 28
       Hint = 'Filter name'
       Top = 0
       Width = 147
       AutoSize = False
+      Constraints.MaxHeight = 28
       ItemHeight = 0
       OnChange = FiltersChange
       ParentFont = False

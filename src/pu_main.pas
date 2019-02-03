@@ -953,20 +953,10 @@ end;
 
 procedure Tf_main.ScaleMainForm;
 var rl: integer;
-const teststr = 'The Lazy Fox Jumps';
-      designlen = 120;
 begin
   ScreenScaling:=true;
   UScaleDPI.UseScaling:=ScreenScaling;
-  {$ifdef SCALE_BY_DPI_ONLY}
-  UScaleDPI.DesignDPI:=96;
-  UScaleDPI.RunDPI:=Screen.PixelsPerInch;
-  {$else}
-  rl:=Canvas.TextWidth(teststr);
-  if abs(rl-designlen)<20 then rl:=designlen;
-  UScaleDPI.DesignDPI:=designlen;
-  UScaleDPI.RunDPI:=rl;
-  {$endif}
+  UScaleDPI.SetScale(Canvas);
   ScaleDPI(Self);
   ScaleImageList(ImageListDay);
   ScaleImageList(ImageListNight);

@@ -53,29 +53,27 @@ object f_visu: Tf_visu
       end
       object SpinEditMin: TSpinEdit
         Left = 0
-        Height = 29
+        Height = 26
         Top = 0
         Width = 70
-        Color = clBlack
-        Font.Color = clSilver
+        Constraints.MaxHeight = 26
         Increment = 10
         MaxValue = 65536
         OnChange = SpinEditMinChange
-        ParentFont = False
+        ParentColor = True
         TabOrder = 0
         Visible = False
       end
       object SpinEditMax: TSpinEdit
         Left = 186
-        Height = 29
+        Height = 26
         Top = 0
         Width = 70
-        Color = clBlack
-        Font.Color = clSilver
+        Constraints.MaxHeight = 26
         Increment = 10
         MaxValue = 65536
         OnChange = SpinEditMaxChange
-        ParentFont = False
+        ParentColor = True
         TabOrder = 1
         Visible = False
       end
@@ -471,6 +469,7 @@ object f_visu: Tf_visu
         Top = 44
         Width = 60
         AutoSize = False
+        Constraints.MaxHeight = 26
         Increment = 0.1
         MaxValue = 1
         MinValue = 0.1

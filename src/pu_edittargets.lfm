@@ -203,9 +203,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object TDelay: TSpinEdit
               Left = 87
-              Height = 29
+              Height = 26
               Top = 0
               Width = 76
+              Constraints.MaxHeight = 26
               MaxValue = 100000
               OnChange = TargetChange
               ParentFont = False
@@ -213,9 +214,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object PreviewExposure: TFloatSpinEdit
               Left = 130
-              Height = 29
+              Height = 26
               Top = 50
               Width = 62
+              Constraints.MaxHeight = 26
               MaxValue = 60
               MinValue = 0
               OnChange = TargetChange
@@ -585,12 +587,12 @@ object f_EditTargets: Tf_EditTargets
           end
           object SeqStartAt: TMaskEdit
             Left = 80
-            Height = 24
+            Height = 26
             Hint = 'Wait to this time before to start to process the list.'
             Top = 0
             Width = 70
             CharCase = ecNormal
-            Constraints.MaxHeight = 24
+            Constraints.MaxHeight = 26
             MaxLength = 8
             ParentFont = False
             TabOrder = 1
@@ -635,12 +637,12 @@ object f_EditTargets: Tf_EditTargets
           end
           object SeqStopAt: TMaskEdit
             Left = 80
-            Height = 24
+            Height = 26
             Hint = 'Stop at this time even if the processing is not finished.'
             Top = 0
             Width = 70
             CharCase = ecNormal
-            Constraints.MaxHeight = 24
+            Constraints.MaxHeight = 26
             MaxLength = 8
             ParentFont = False
             TabOrder = 1
@@ -695,10 +697,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object RepeatCountList: TSpinEdit
               Left = 175
-              Height = 24
+              Height = 26
               Top = 0
               Width = 56
-              Constraints.MaxHeight = 24
+              Constraints.MaxHeight = 26
               MaxValue = 100000
               MinValue = 1
               OnChange = RepeatCountListChange
@@ -1300,9 +1302,10 @@ object f_EditTargets: Tf_EditTargets
         TabOrder = 0
         object DitherCount: TSpinEdit
           Left = 165
-          Height = 29
+          Height = 26
           Top = 57
           Width = 57
+          Constraints.MaxHeight = 26
           MaxValue = 1000
           MinValue = 1
           OnChange = StepChange
@@ -1386,9 +1389,10 @@ object f_EditTargets: Tf_EditTargets
         end
         object AutofocusCount: TSpinEdit
           Left = 165
-          Height = 29
+          Height = 26
           Top = 26
           Width = 57
+          Constraints.MaxHeight = 26
           MaxValue = 1000
           MinValue = 1
           OnChange = StepChange
