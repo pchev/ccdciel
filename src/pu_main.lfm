@@ -19,21 +19,20 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
-  LCLVersion = '2.0.0.3'
   object Panel1: TPanel
     Left = 0
-    Height = 579
+    Height = 559
     Top = 0
-    Width = 612
+    Width = 602
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 579
-    ClientWidth = 612
+    ClientHeight = 559
+    ClientWidth = 602
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 573
+      Height = 553
       Top = 3
       Width = 3
       Align = alLeft
@@ -54,7 +53,7 @@ object f_main: Tf_main
       Left = 0
       Height = 3
       Top = 0
-      Width = 612
+      Width = 602
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
@@ -72,9 +71,9 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 3
-      Height = 573
+      Height = 553
       Top = 3
-      Width = 609
+      Width = 599
       Align = alClient
       AutoSize = True
       BevelOuter = bvNone
@@ -86,8 +85,8 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 3
-      Top = 576
-      Width = 612
+      Top = 556
+      Width = 602
       Align = alBottom
       AutoSize = True
       BevelOuter = bvNone
@@ -107,7 +106,7 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 579
+    Top = 559
     Width = 800
     BorderWidth = 1
     Panels = <    
@@ -133,21 +132,21 @@ object f_main: Tf_main
     OnResize = StatusBar1Resize
   end
   object PanelRight: TPanel
-    Left = 612
-    Height = 579
+    Left = 602
+    Height = 559
     Top = 0
-    Width = 188
+    Width = 198
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 579
-    ClientWidth = 188
+    ClientHeight = 559
+    ClientWidth = 198
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 547
+      Height = 527
       Top = 32
-      Width = 188
+      Width = 198
       ActivePage = PageConnect
       Align = alClient
       Images = ImageListDay
@@ -158,15 +157,15 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 513
-        ClientWidth = 178
+        ClientHeight = 523
+        ClientWidth = 188
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 543
+          Height = 523
           Top = 0
-          Width = 178
+          Width = 188
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -182,8 +181,8 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 513
-        ClientWidth = 178
+        ClientHeight = 523
+        ClientWidth = 188
         ImageIndex = 1
         ParentFont = False
         object PanelRight2: TPanel
@@ -206,8 +205,8 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 513
-        ClientWidth = 178
+        ClientHeight = 523
+        ClientWidth = 188
         ImageIndex = 2
         ParentFont = False
         object PanelRight3: TPanel
@@ -230,8 +229,8 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 513
-        ClientWidth = 178
+        ClientHeight = 523
+        ClientWidth = 188
         ImageIndex = 3
         ParentFont = False
         object PanelRight4: TPanel
@@ -254,8 +253,8 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 513
-        ClientWidth = 178
+        ClientHeight = 523
+        ClientWidth = 188
         ImageIndex = 4
         ParentFont = False
         object PanelRight5: TPanel
@@ -277,7 +276,7 @@ object f_main: Tf_main
     object TBTabs: TToolBar
       Left = 0
       Top = 0
-      Width = 188
+      Width = 198
       ButtonHeight = 30
       ButtonWidth = 30
       Images = ImageListDay

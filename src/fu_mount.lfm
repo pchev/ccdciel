@@ -2,10 +2,10 @@ object f_mount: Tf_mount
   Left = 0
   Height = 140
   Top = 0
-  Width = 185
+  Width = 188
   AutoSize = True
   ClientHeight = 140
-  ClientWidth = 185
+  ClientWidth = 188
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
@@ -15,7 +15,7 @@ object f_mount: Tf_mount
     Left = 0
     Height = 20
     Top = 0
-    Width = 185
+    Width = 188
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,21 +31,21 @@ object f_mount: Tf_mount
     Left = 0
     Height = 120
     Top = 20
-    Width = 185
+    Width = 188
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 120
-    ClientWidth = 185
+    ClientWidth = 188
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 28
       Top = 0
-      Width = 181
+      Width = 185
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 181
+      ClientWidth = 185
       TabOrder = 0
       object Label1: TLabel
         Left = 0
@@ -70,7 +70,7 @@ object f_mount: Tf_mount
         Left = 115
         Height = 22
         Top = 1
-        Width = 66
+        Width = 70
         Caption = 'Track'
         OnClick = BtnTrackClick
       end
@@ -79,10 +79,10 @@ object f_mount: Tf_mount
       Left = 0
       Height = 28
       Top = 28
-      Width = 181
+      Width = 185
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 181
+      ClientWidth = 185
       TabOrder = 1
       object Label2: TLabel
         Left = 0
@@ -107,7 +107,7 @@ object f_mount: Tf_mount
         Left = 115
         Height = 22
         Top = 1
-        Width = 66
+        Width = 70
         Caption = 'Park'
         OnClick = BtnParkClick
       end
@@ -116,17 +116,17 @@ object f_mount: Tf_mount
       Left = 0
       Height = 28
       Top = 56
-      Width = 181
+      Width = 185
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 181
+      ClientWidth = 185
       TabOrder = 2
       object Pierside: TEdit
         Left = 0
         Height = 28
         Hint = 'Current telescope pier side'
         Top = 0
-        Width = 181
+        Width = 185
         Align = alClient
         Constraints.MaxHeight = 28
         ReadOnly = True
@@ -138,10 +138,10 @@ object f_mount: Tf_mount
       Left = 0
       Height = 28
       Top = 84
-      Width = 181
+      Width = 185
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 181
+      ClientWidth = 185
       TabOrder = 3
       object LabelMeridian: TLabel
         Left = 0
