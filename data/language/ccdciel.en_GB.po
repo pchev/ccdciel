@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-01 21:33+0000\n"
-"PO-Revision-Date: 2018-12-15 15:06+0000\n"
+"POT-Creation-Date: 2019-02-05 10:24+0000\n"
+"PO-Revision-Date: 2019-02-04 13:47+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-02-01 21:44+0000\n"
+"X-Launchpad-Export-Date: 2019-02-05 10:29+0000\n"
 "X-Generator: Launchpad (build 18862)\n"
 "Language: en_GB\n"
 
@@ -39,7 +39,7 @@ msgstr "About"
 
 #: u_translation.rsaction
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -79,11 +79,11 @@ msgstr "Any time"
 
 #: u_translation.rsapplytoall
 msgid "Apply to all"
-msgstr ""
+msgstr "Apply to all"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
-msgstr ""
+msgstr "Apply to all devices"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -103,7 +103,7 @@ msgstr "ASCOM interface is only available on Windows."
 
 #: u_translation.rsascomremote
 msgid "ASCOM Remote"
-msgstr ""
+msgstr "ASCOM Remote"
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
@@ -271,7 +271,7 @@ msgstr "Autoguider not guiding %s seconds after requested to start.%sDo you want
 
 #: u_translation.rsautoguidersh
 msgid "Autoguider shutdown"
-msgstr ""
+msgstr "Autoguider shutdown"
 
 #: u_translation.rsautoguiderst2
 msgid "Autoguider Start"
@@ -307,7 +307,7 @@ msgstr "Automatic flip"
 
 #: u_translation.rsavailable
 msgid "available"
-msgstr ""
+msgstr "available"
 
 #: u_translation.rsback
 msgid "Back"
@@ -319,7 +319,7 @@ msgstr "Backlash compensation"
 
 #: u_translation.rsbad
 msgid "Bad"
-msgstr ""
+msgstr "Bad"
 
 #: u_translation.rsbadpixeldete
 msgid "Bad pixel detection found %s hot pixels."
@@ -383,7 +383,7 @@ msgstr "Calibrate"
 
 #: u_translation.rscalibrateaut
 msgid "Calibrate autoguider after meridian flip"
-msgstr ""
+msgstr "Calibrate autoguider after meridian flip"
 
 #: u_translation.rscalibrated
 msgid "Calibrated"
@@ -395,7 +395,7 @@ msgstr "Calibration %sdelay"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
-msgstr ""
+msgstr "Call external command"
 
 #: u_translation.rscam
 msgid "Cam."
@@ -575,7 +575,7 @@ msgstr "Clear bad pixel map"
 
 #: u_translation.rsclearconditi
 msgid "Clear condition"
-msgstr ""
+msgstr "Clear condition"
 
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
@@ -619,15 +619,19 @@ msgstr "Close"
 
 #: u_translation.rsclosedome
 msgid "Close the Dome shutter"
-msgstr ""
+msgstr "Close the Dome shutter"
 
 #: u_translation.rscloudcover
 msgid "Cloud cover"
-msgstr ""
+msgstr "Cloud cover"
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "Colour preview"
+
+#: u_translation.rscolumn
+msgid "column"
+msgstr ""
 
 #: u_translation.rscommands
 msgid "Commands"
@@ -683,7 +687,7 @@ msgstr "Continue in %s seconds"
 
 #: u_translation.rscontinuesequ
 msgid "Continue sequence execution"
-msgstr ""
+msgstr "Continue sequence execution"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -799,7 +803,7 @@ msgstr "degree"
 
 #: u_translation.rsdegreespermi
 msgid "Degrees %s per minute"
-msgstr ""
+msgstr "Degrees %s per minute"
 
 #: u_translation.rsdelayafterte
 msgid "Delay after telescope slew [seconds] "
@@ -859,7 +863,7 @@ msgstr "Devices Setup%s"
 
 #: u_translation.rsdewpoint
 msgid "Dew point"
-msgstr ""
+msgstr "Dew point"
 
 #: u_translation.rsdirectory
 msgid "Directory"
@@ -915,7 +919,7 @@ msgstr "Dithering"
 
 #: u_translation.rsdome
 msgid "Dome"
-msgstr ""
+msgstr "Dome"
 
 #: u_translation.rsdomepanel
 msgid "Dome/Panel"
@@ -923,11 +927,11 @@ msgstr "Dome/Panel"
 
 #: u_translation.rsdomeshutter
 msgid "Dome shutter: %s"
-msgstr ""
+msgstr "Dome shutter: %s"
 
 #: u_translation.rsdomeslaving
 msgid "Dome slaving: %s"
-msgstr ""
+msgstr "Dome slaving: %s"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1047,7 +1051,7 @@ msgstr "Executing the termination actions."
 
 #: u_translation.rsexitprogram
 msgid "Exit program"
-msgstr ""
+msgstr "Exit program"
 
 #: u_translation.rsexp
 msgid "Exp:"
@@ -1123,7 +1127,7 @@ msgstr "Filter"
 
 #: u_translation.rsfilter0
 msgid "No change"
-msgstr ""
+msgstr "No change"
 
 #: u_translation.rsfiltername
 msgid "Filter name"
@@ -1319,7 +1323,7 @@ msgstr "Gain"
 
 #: u_translation.rsget
 msgid "Get"
-msgstr ""
+msgstr "Get"
 
 #: u_translation.rsgetcurrent
 msgid "Get current"
@@ -1347,7 +1351,7 @@ msgstr "Global focuser parameters.%sSet the focuser direction IN or OUT to the o
 
 #: u_translation.rsgood
 msgid "Good"
-msgstr ""
+msgstr "Good"
 
 #: u_translation.rsgreen
 msgid "green"
@@ -1395,7 +1399,7 @@ msgstr "Horizon profile"
 
 #: u_translation.rshumidity
 msgid "Humidity"
-msgstr ""
+msgstr "Humidity"
 
 #: u_translation.rshyperbolacur
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
@@ -1411,7 +1415,7 @@ msgstr "If your focuser driver do not offer this option, set here the number of 
 
 #: u_translation.rsignoreweathe
 msgid "Ignore weather condition for image type=%s"
-msgstr ""
+msgstr "Ignore weather condition for image type=%s"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -1447,7 +1451,7 @@ msgstr "In"
 
 #: u_translation.rsincamera
 msgid "In camera"
-msgstr ""
+msgstr "In camera"
 
 #: u_translation.rsincr
 msgid "Incr."
@@ -1467,7 +1471,7 @@ msgstr "Initial movement (steps)"
 
 #: u_translation.rsinmount
 msgid "In mount"
-msgstr ""
+msgstr "In mount"
 
 #: u_translation.rsinplaceautof
 msgid "In place autofocus failed!"
@@ -1483,7 +1487,7 @@ msgstr "Interface"
 
 #: u_translation.rsinterfacetyp
 msgid "Interface type"
-msgstr ""
+msgstr "Interface type"
 
 #: u_translation.rsinterval
 msgid "Interval"
@@ -1535,7 +1539,7 @@ msgstr "Learn"
 
 #: u_translation.rslicenseagree
 msgid "License agreement"
-msgstr ""
+msgstr "Licence agreement"
 
 #: u_translation.rslightoff
 msgid "Light OFF"
@@ -1599,7 +1603,7 @@ msgstr "Max:"
 
 #: u_translation.rsmaximum
 msgid "maximum"
-msgstr ""
+msgstr "maximum"
 
 #: u_translation.rsmaximumadu
 msgid "Maximum ADU"
@@ -1699,7 +1703,7 @@ msgstr "Min:"
 
 #: u_translation.rsminimum
 msgid "minimum"
-msgstr ""
+msgstr "minimum"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -1831,7 +1835,7 @@ msgstr "No dawn today"
 
 #: u_translation.rsnodevice
 msgid "No device"
-msgstr ""
+msgstr "No device"
 
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
@@ -1963,7 +1967,7 @@ msgstr "Observer name"
 
 #: u_translation.rsobservingcon
 msgid "Observing condition"
-msgstr ""
+msgstr "Observing condition"
 
 #: u_translation.rsoff
 msgid "Off"
@@ -1991,7 +1995,7 @@ msgstr "On Meridian crossing"
 
 #: u_translation.rsopen
 msgid "Open"
-msgstr ""
+msgstr "Open"
 
 #: u_translation.rsopendarkfile
 msgid "Open Dark file"
@@ -2047,11 +2051,11 @@ msgstr "Park"
 
 #: u_translation.rsparkandclose
 msgid "Park and close the dome"
-msgstr ""
+msgstr "Park and close the dome"
 
 #: u_translation.rsparkdome
 msgid "Park the Dome"
-msgstr ""
+msgstr "Park the Dome"
 
 #: u_translation.rsparked
 msgid "Parked"
@@ -2083,7 +2087,7 @@ msgstr "Pause before meridian flip "
 
 #: u_translation.rspausesequenc
 msgid "Pause sequence when the observing condition are out of the limits"
-msgstr ""
+msgstr "Pause sequence when the observing condition are out of the limits"
 
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
@@ -2127,7 +2131,7 @@ msgstr "Planetarium position"
 
 #: u_translation.rsplanetariums
 msgid "Planetarium shutdown"
-msgstr ""
+msgstr "Planetarium shutdown"
 
 #: u_translation.rsplanetariumt
 msgid "Planetarium target set to %s"
@@ -2231,7 +2235,7 @@ msgstr "Preferences%s"
 
 #: u_translation.rspressure
 msgid "Pressure"
-msgstr ""
+msgstr "Pressure"
 
 #: u_translation.rspreview
 msgid "Preview"
@@ -2259,7 +2263,7 @@ msgstr "Program folder "
 
 #: u_translation.rsprotocol
 msgid "Protocol"
-msgstr ""
+msgstr "Protocol"
 
 #: u_translation.rsquality
 msgid "Quality:"
@@ -2275,7 +2279,7 @@ msgstr "RA"
 
 #: u_translation.rsrainrate
 msgid "Rain rate"
-msgstr ""
+msgstr "Rain rate"
 
 #: u_translation.rsramdisk
 msgid "RAM Disk"
@@ -2307,7 +2311,7 @@ msgstr "Read image"
 
 #: u_translation.rsreadoutmodes
 msgid "Readout modes"
-msgstr ""
+msgstr "Readout modes"
 
 #: u_translation.rsreceiveunkno
 msgid "Receive unknown message: %s"
@@ -2339,7 +2343,7 @@ msgstr "Relative increment for the inward or outward movement"
 
 #: u_translation.rsremotedevice
 msgid "Remote device number"
-msgstr ""
+msgstr "Remote device number"
 
 #: u_translation.rsremoveallbre
 msgid "Remove all breakpoints"
@@ -2463,7 +2467,7 @@ msgstr "Restart after"
 
 #: u_translation.rsrestartafter2
 msgid "Restart after weather is good for"
-msgstr ""
+msgstr "Restart after weather is good for"
 
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
@@ -2523,7 +2527,7 @@ msgstr "Run a script"
 
 #: u_translation.rsrunautofocus
 msgid "Auto-focus if temp. change by more than %s"
-msgstr ""
+msgstr "Auto-focus if temp. change by more than %s"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -2543,15 +2547,15 @@ msgstr "s"
 
 #: u_translation.rssafe
 msgid "Safe"
-msgstr ""
+msgstr "Safe"
 
 #: u_translation.rssafeforopera
 msgid "Safe for operation"
-msgstr ""
+msgstr "Safe for operation"
 
 #: u_translation.rssafetymonito
 msgid "Safety monitor"
-msgstr ""
+msgstr "Safety monitor"
 
 #: u_translation.rssave
 msgid "Save"
@@ -2699,7 +2703,7 @@ msgstr "Sequence %s ignore stop at dawn"
 
 #: u_translation.rssequencepaus
 msgid "Sequence paused for bad weather ..."
-msgstr ""
+msgstr "Sequence paused for bad weather ..."
 
 #: u_translation.rssequencestar
 msgid "Sequence %s start immediatelly"
@@ -2815,7 +2819,7 @@ msgstr "Show preview stack option"
 
 #: u_translation.rsshowprompt
 msgid "Show prompt"
-msgstr ""
+msgstr "Show prompt"
 
 #: u_translation.rssigma
 msgid "sigma"
@@ -2839,7 +2843,7 @@ msgstr "Skip target %s"
 
 #: u_translation.rsskybrightnes
 msgid "Sky brightness"
-msgstr ""
+msgstr "Sky brightness"
 
 #: u_translation.rsskychartonlo
 msgid "Skychart on local computer"
@@ -2859,15 +2863,15 @@ msgstr "Sky is still too dark, waiting for dawn"
 
 #: u_translation.rsskyquality
 msgid "Sky quality"
-msgstr ""
+msgstr "Sky quality"
 
 #: u_translation.rsskytemperatu
 msgid "Sky temperature"
-msgstr ""
+msgstr "Sky temperature"
 
 #: u_translation.rsslaved
 msgid "Slaved"
-msgstr ""
+msgstr "Slaved"
 
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
@@ -2895,7 +2899,7 @@ msgstr "Slew to a near star of magnitude"
 
 #: u_translation.rsslewtoeq
 msgid "Slewing to %s %s/%s"
-msgstr ""
+msgstr "Slewing to %s %s/%s"
 
 #: u_translation.rsslewtofocuss
 msgid "Slew to focus star %s"
@@ -2971,7 +2975,7 @@ msgstr "Star detection window size "
 
 #: u_translation.rsstarfwhm
 msgid "Star FWHM"
-msgstr ""
+msgstr "Star FWHM"
 
 #: u_translation.rsstarlostreco
 msgid "Star lost recovery"
@@ -3119,7 +3123,7 @@ msgstr "Stop capture"
 
 #: u_translation.rsstopdomeslav
 msgid "Stop Dome slaving"
-msgstr ""
+msgstr "Stop Dome slaving"
 
 #: u_translation.rsstopflatcapt
 msgid "Stop flat capture"
@@ -3211,7 +3215,7 @@ msgstr "Summary"
 
 #: u_translation.rssuspenddomes
 msgid "Suspend dome slaving"
-msgstr ""
+msgstr "Suspend dome slaving"
 
 #: u_translation.rssyncto
 msgid "Sync to %s/%s"
@@ -3219,7 +3223,7 @@ msgstr "Sync to %s/%s"
 
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
-msgstr ""
+msgstr "Sync to %s %s/%s"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
@@ -3299,11 +3303,11 @@ msgstr "Temp."
 
 #: u_translation.rstemperature
 msgid "Temperature"
-msgstr ""
+msgstr "Temperature"
 
 #: u_translation.rstemperaturec
 msgid "Temperature coefficient in steps/%s"
-msgstr ""
+msgstr "Temperature coefficient in steps/%s"
 
 #: u_translation.rstemperaturer
 msgid "Temperature ramp requested to stop"
@@ -3315,7 +3319,7 @@ msgstr "Temperature ramp canceled"
 
 #: u_translation.rstemperatures
 msgid "Temperature scale"
-msgstr ""
+msgstr "Temperature scale"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
@@ -3355,7 +3359,7 @@ msgstr "The focuser is now positioned at the best observed HFD position."
 
 #: u_translation.rsthefollowing
 msgid "The following actions are run if the safety monitor report dangerous condition"
-msgstr ""
+msgstr "The following actions are run if the safety monitor report dangerous condition"
 
 #: u_translation.rsthemenufilef
 msgid "The menu \"File/Focuser calibration\" help to fill this values."
@@ -3379,7 +3383,7 @@ msgstr "There is already a dawn flat plan"
 
 #: u_translation.rsthesafetymon
 msgid "The safety monitor report unsafe condition.%sSelect %s to run the safety actions now, or %s to ignore them."
-msgstr ""
+msgstr "The safety monitor report unsafe condition.%sSelect %s to run the safety actions now, or %s to ignore them."
 
 #: u_translation.rsthesequencew
 msgid "The sequence %s will be stopped at %s, in %s seconds."
@@ -3483,11 +3487,11 @@ msgstr "Unable to find resolve data!"
 
 #: u_translation.rsunattendeder
 msgid "Unattended error script"
-msgstr ""
+msgstr "Unattended error script"
 
 #: u_translation.rsunavailable
 msgid "unavailable"
-msgstr ""
+msgstr "unavailable"
 
 #: u_translation.rsuncalibrated
 msgid "Uncalibrated"
@@ -3511,15 +3515,15 @@ msgstr "Unparked"
 
 #: u_translation.rsunsafe
 msgid "Unsafe"
-msgstr ""
+msgstr "Unsafe"
 
 #: u_translation.rsunsafecondit
 msgid "Unsafe condition detected!"
-msgstr ""
+msgstr "Unsafe condition detected!"
 
 #: u_translation.rsunsafecondit2
 msgid "Unsafe condition ignored by user"
-msgstr ""
+msgstr "Unsafe condition ignored by user"
 
 #: u_translation.rsupdateradecf
 msgid "Update RA+Dec from Planetarium"
@@ -3535,7 +3539,7 @@ msgstr "Use custom script"
 
 #: u_translation.rsusedome
 msgid "Use dome"
-msgstr ""
+msgstr "Use dome"
 
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"
@@ -3567,7 +3571,7 @@ msgstr "Use rotator"
 
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
-msgstr ""
+msgstr "Use safety monitor"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -3575,7 +3579,7 @@ msgstr "Use watchdog"
 
 #: u_translation.rsuseweatherst
 msgid "Use weather station"
-msgstr ""
+msgstr "Use weather station"
 
 #: u_translation.rsusingconfigu
 msgid "Using configuration file %s"
@@ -3643,7 +3647,7 @@ msgstr "Waiting for dusk"
 
 #: u_translation.rswaitingformi
 msgid "Waiting for %s minutes of good weather before to restart the sequence"
-msgstr ""
+msgstr "Waiting for %s minutes of good weather before to restart the sequence"
 
 #: u_translation.rswaitingfortw
 msgid "Waiting for twilight at %s"
@@ -3699,19 +3703,19 @@ msgstr "We are probably trying to focus on a hot pixel!"
 
 #: u_translation.rsweathercondi
 msgid "Weather condition are bad, it is best if you stop the running capture now."
-msgstr ""
+msgstr "Weather condition are bad, it is best if you stop the running capture now."
 
 #: u_translation.rsweatherissue
 msgid "Weather issue: %s"
-msgstr ""
+msgstr "Weather issue: %s"
 
 #: u_translation.rsweathermonit
 msgid "Weather monitor report: %s"
-msgstr ""
+msgstr "Weather monitor report: %s"
 
 #: u_translation.rsweatherstati
 msgid "Weather station"
-msgstr ""
+msgstr "Weather station"
 
 #: u_translation.rswest
 msgid "West"
@@ -3727,15 +3731,15 @@ msgstr "Width"
 
 #: u_translation.rswinddirectio
 msgid "Wind direction"
-msgstr ""
+msgstr "Wind direction"
 
 #: u_translation.rswindgust
 msgid "Wind gust"
-msgstr ""
+msgstr "Wind gust"
 
 #: u_translation.rswindspeed
 msgid "Wind speed"
-msgstr ""
+msgstr "Wind speed"
 
 #: u_translation.rsyoucansetthe
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."

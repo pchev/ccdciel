@@ -3730,3 +3730,7 @@ msgstr ""
 msgid "Get"
 msgstr ""
 
+#: u_translation:rscolumn
+msgid "column"
+msgstr ""
+
