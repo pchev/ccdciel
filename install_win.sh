@@ -20,6 +20,7 @@ install -m 755 -d $destdir/data
 install -m 755 -d $destdir/data/stars
 install -d -m 755 $destdir/data/dso
 install -m 755 -d $destdir/data/language
+install -m 755 -d $destdir/data/resources
 install -m 755 -d $destdir/doc
 
 
@@ -55,6 +56,7 @@ install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6
 install -v -m 644 data/stars/focus_star_7   $destdir/data/stars/focus_star_7
 install -v -m 644 data/stars/focus_star_8   $destdir/data/stars/focus_star_8
 install -v -m 644 data/dso/deep_sky.csv  $destdir/data/dso/deep_sky.csv
+install -v -m 644 data/resources/smallcross.cur  $destdir/data/resources/smallcross.cur
 install -v -m 644 data/language/ccdciel.po      $destdir/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.fr.po   $destdir/data/language/ccdciel.fr.po

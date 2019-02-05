@@ -456,6 +456,8 @@ type
     trpOK: boolean;
     AllMsg: TStringList;
     CameraExposureRemain:double;
+    CursorImage1: TCursorImage;
+    crRetic: TCursor;
     procedure CreateDevices;
     procedure SetDevices;
     procedure DestroyDevices;
@@ -742,7 +744,7 @@ begin
         InitLog;
         if not LogFileOpen then exit;
      end;
-     WriteLn(MsgLog,FormatDateTime(dateiso,Now)+blank+UTF8ToSys(buf));
+     if buf>'' then WriteLn(MsgLog,FormatDateTime(dateiso,Now)+blank+UTF8ToSys(buf));
      Flush(MsgLog);
     end;
   except
@@ -762,7 +764,7 @@ begin
         InitDeviceLog;
         if not DeviceLogFileOpen then exit;
      end;
-     WriteLn(MsgDeviceLog,FormatDateTime(dateiso,Now)+'  '+UTF8ToSys(buf));
+     if buf>'' then WriteLn(MsgDeviceLog,FormatDateTime(dateiso,Now)+'  '+UTF8ToSys(buf));
      Flush(MsgDeviceLog);
     end;
   except
@@ -1050,7 +1052,6 @@ begin
   Image1.OnResize := @Image1Resize;
   Image1.OnPaint := @Image1Paint;
   Image1.PopupMenu := ImagePopupMenu;
-  Image1.Cursor:=crCross;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -1312,7 +1313,20 @@ begin
   MenuIndiSettings.Enabled:=true;//(camera.CameraInterface=INDI);
   MenuShowINDIlog.Visible:=true;//(camera.CameraInterface=INDI);
   ObsTimeZone:=-GetLocalTimeOffset/60;
-
+  crRetic:=6;
+  CursorImage1 := TCursorImage.Create;
+  if fileexists(slash(DataDir) + slash('resources') + 'smallcross.cur') then
+  begin
+    try
+      CursorImage1.LoadFromFile(SysToUTF8(slash(DataDir) + slash('resources') + 'smallcross.cur'));
+      Screen.Cursors[crRetic] := CursorImage1.Handle;
+    except
+      crRetic := crCross;
+    end;
+  end
+  else
+    crRetic := crCross;
+  Image1.Cursor:=crRetic;
   NewMessage(SystemInformation,9);
   {$ifdef mswindows}
   NewMessage(AscomVersion,9);
@@ -2262,6 +2276,9 @@ begin
   else NewMessage('Program exit',1);
   CloseLog;
   AllMsg.Free;
+  {$ifndef lclqt}{$ifndef lclqt5}{$ifndef lclcocoa}
+  if CursorImage1 <> nil then CursorImage1.Free;
+  {$endif}{$endif}{$endif}
   except
   end;
 end;
@@ -2905,6 +2922,10 @@ begin
 
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
+  if LogToFile then begin
+    WriteLog('');
+    WriteDeviceLog('');
+  end;
   UseTcpServer:=config.GetValue('/Log/UseTcpServer',false);
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
