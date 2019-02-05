@@ -379,9 +379,7 @@ var ok: boolean;
     nax1,nax2,state: integer;
     pix,piy: double;
     dateobs,ccdname,frname:string;
-    Dims: Integer;
-    p2:array[0..1] of integer;
-    p3:array[0..2] of integer;
+    Dims,x,y: Integer;
     lii: integer;
     ii: smallint;
     b: array[0..2880]of char;
@@ -504,12 +502,12 @@ begin
    if Dims=2 then begin
      for i:=0 to ys-1 do begin
         if FASCOMFlipImage then
-           p2[1]:=ys-1-i
+           y:=ys-1-i
         else
-           p2[1]:=i;
+           y:=i;
         for j:=0 to xs-1 do begin
-          p2[0]:=j;
-          lii:=imgarray.img[0,p2[1],p2[0]];
+          x:=j;
+          lii:=imgarray.img[0,y,x];
           if lii>0 then
              ii:=lii-32768
           else
@@ -521,15 +519,14 @@ begin
    end
    else if Dims=3 then begin
      for k:=0 to 2 do begin
-     p3[2]:=k;
      for i:=0 to ys-1 do begin
         if FASCOMFlipImage then
-           p3[1]:=ys-1-i
+           y:=ys-1-i
         else
-           p3[1]:=i;
+           y:=i;
         for j:=0 to xs-1 do begin
-          p3[0]:=j;
-          lii:=imgarray.img[p3[2],p3[1],p3[0]];
+          x:=j;
+          lii:=imgarray.img[k,y,x];
           if lii>0 then
              ii:=lii-32768
           else

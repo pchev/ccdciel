@@ -355,7 +355,7 @@ end;
 
 function TAscomRest.GetImageArray: TImageArray;
 var J: TAscomResult;
-    i,k,n: integer;
+    x,y,k: integer;
 begin
    J:=Get('ImageArray');
    try
@@ -366,10 +366,10 @@ begin
        Result.width:=Count;
        Result.height:=Arrays[0].Count;
        SetLength(Result.img,1,Result.height,Result.width);
-       for i:=0 to Count-1 do begin
-         with Arrays[i] do begin
-           for k:=0 to Count-1 do begin
-              Result.img[0,k,i]:=Integers[k];
+       for x:=0 to Count-1 do begin
+         with Arrays[x] do begin
+           for y:=0 to Count-1 do begin
+              Result.img[0,y,x]:=Integers[y];
            end;
          end;
        end;
@@ -381,17 +381,17 @@ begin
        Result.width:=Count;
        Result.height:=Arrays[0].Count;
        SetLength(Result.img,3,Result.height,Result.width);
-       for i:=0 to Count-1 do begin
-         with Arrays[i] do begin
-           for k:=0 to Count-1 do begin
-             with Arrays[k] do begin
-               for n:=0 to 2 do begin
-                 Result.img[n,k,i]:=Integers[n];
-               end; //n
+       for x:=0 to Count-1 do begin
+         with Arrays[x] do begin
+           for y:=0 to Count-1 do begin
+             with Arrays[y] do begin
+               for k:=0 to 2 do begin
+                 Result.img[k,y,x]:=Integers[k];
+               end; //k
              end;
-           end; // k
+           end; // y
          end;
-       end; //i
+       end; //x
      end;
    end;
    finally
