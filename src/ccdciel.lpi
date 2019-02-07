@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="93">
+    <Units Count="94">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -776,6 +776,10 @@
         <Filename Value="cu_ascomrestwheel.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit92>
+      <Unit93>
+        <Filename Value="cu_ascomrest.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit93>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
