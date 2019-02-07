@@ -35,6 +35,7 @@ type
   Tf_capture = class(TFrame)
     Binning: TComboBox;
     BtnStart: TButton;
+    CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
     ISObox: TComboBox;
@@ -135,6 +136,7 @@ begin
   Label5.Caption:=rsType;
   CheckBoxDither.Caption:=rsDitherEvery;
   CheckBoxFocus.Caption:=rsFocusEvery;
+  CheckBoxFocusTemp.Caption:=rsFocusOnTempC;
   BtnStart.Caption:=rsStart;
 end;
 

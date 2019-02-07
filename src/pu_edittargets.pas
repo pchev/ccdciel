@@ -59,6 +59,7 @@ type
     cbWarm: TCheckBox;
     cbScript: TCheckBox;
     cbUnattended: TCheckBox;
+    CheckBoxAutofocusTemp: TCheckBox;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
@@ -182,6 +183,7 @@ type
     procedure BtnNewScriptClick(Sender: TObject);
     procedure BtnUnattendedScriptClick(Sender: TObject);
     procedure cbTermOptionClick(Sender: TObject);
+    procedure CheckLightOnlyChange(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -380,6 +382,7 @@ begin
   CheckBoxDither.Caption := rsDitherEvery;
   CheckBoxAutofocusStart.Caption := rsAutofocusBef;
   CheckBoxAutofocus.Caption := rsAutofocusEve;
+  CheckBoxAutofocusTemp.Caption := rsAutofocusWhe;
   LabelGain1.Caption := rsGain;
   BtnDeletePlan.Caption := rsDeletePlan;
   BtnSavePlan.Caption := rsSavePlan;
@@ -1554,6 +1557,7 @@ begin
   p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
   p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
   p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
+  p.autofocustemp:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusTemp',false);
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
@@ -1660,8 +1664,28 @@ begin
   DitherCount.Value:=p.dithercount;
   CheckBoxAutofocusStart.Checked:=p.autofocusstart;
   CheckBoxAutofocus.Checked:=p.autofocus;
+  CheckBoxAutofocusTemp.Checked:=p.autofocustemp;
   AutofocusCount.Value:=p.autofocuscount;
   LockStep:=false;
+end;
+
+procedure Tf_EditTargets.CheckLightOnlyChange(Sender: TObject);
+var n:integer;
+    p: TStep;
+begin
+  if LockStep then exit;
+  if not (sender is TCheckBox) then exit;
+  // is table empty?
+  if StepList.RowCount<=1 then exit;
+  n:=StepList.Row;
+  // is title row?
+  if n < 1 then exit;
+  p:=TStep(StepList.Objects[0,n]);
+  if p=nil then exit;
+  if TCheckBox(Sender).Checked and (p.frtype<>LIGHT) then
+     TCheckBox(Sender).Checked:=false
+  else
+     StepChange(Sender);
 end;
 
 procedure Tf_EditTargets.StepChange(Sender: TObject);
@@ -1725,16 +1749,19 @@ begin
   StepsModified:=StepsModified or (p.count<>j);
   p.count:=j;
   StepsModified:=StepsModified or (p.dither<>CheckBoxDither.Checked);
-  p.dither:=CheckBoxDither.Checked;
+  p.dither:=(p.frtype=LIGHT) and CheckBoxDither.Checked;
   StepsModified:=StepsModified or (p.dithercount<>DitherCount.Value);
   p.dithercount:=DitherCount.Value;
   StepsModified:=StepsModified or (p.autofocusstart<>CheckBoxAutofocusStart.Checked);
-  p.autofocusstart:=CheckBoxAutofocusStart.Checked;
+  p.autofocusstart:=(p.frtype=LIGHT) and CheckBoxAutofocusStart.Checked;
   StepsModified:=StepsModified or (p.autofocus<>CheckBoxAutofocus.Checked);
-  p.autofocus:=CheckBoxAutofocus.Checked;
+  p.autofocus:=(p.frtype=LIGHT) and CheckBoxAutofocus.Checked;
   StepsModified:=StepsModified or (p.autofocuscount<>AutofocusCount.Value);
   p.autofocuscount:=AutofocusCount.Value;
+  StepsModified:=StepsModified or (p.autofocustemp<>CheckBoxAutofocusTemp.Checked);
+  p.autofocustemp:=(p.frtype=LIGHT) and CheckBoxAutofocusTemp.Checked;
   StepList.Cells[1,n]:=p.description;
+  SetStep(n,p);
 end;
 
 procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
@@ -1871,6 +1898,7 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',p.autofocusstart);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Autofocus',p.autofocus);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',p.autofocuscount);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusTemp',p.autofocustemp);
   end;
   pfile.Flush;
   pfile.Free;

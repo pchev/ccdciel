@@ -995,6 +995,7 @@ begin
       fls.autofocusstart:=false;
       fls.autofocus:=false;
       fls.autofocuscount:=10;
+      fls.autofocustemp:=false;
       if flfilter[i]=Filter0 then
          fls.description:=flt.planname+' flat '
       else

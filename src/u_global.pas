@@ -92,6 +92,7 @@ type
               dithercount: integer;
               autofocusstart: boolean;
               autofocus: boolean;
+              autofocustemp: boolean;
               autofocuscount: integer;
               filter: integer;
               binx,biny: integer;
@@ -332,7 +333,7 @@ var
   TemperatureScale: integer;
   TempLabel: string;
   TemperatureSlope: double;
-  FocuserTemp, FocuserLastTemp, FocuserTempCoeff, AutofocusTemp: double;
+  FocuserTemp, FocuserLastTemp, FocuserTempCoeff, AutofocusTempChange: double;
   FocuserPositionMin, FocuserPositionMax: integer;
   Starwindow,Focuswindow: integer;
   AutofocusMode:TAutofocusMode;
@@ -501,6 +502,7 @@ begin
   dithercount:=1;
   autofocusstart:=false;
   autofocus:=false;
+  autofocustemp:=false;
   autofocuscount:=10;
   description:='Step1';
 end;
@@ -518,6 +520,7 @@ begin
   dithercount:=Source.dithercount;
   autofocusstart:=Source.autofocusstart;
   autofocus:=Source.autofocus;
+  autofocustemp:=Source.autofocustemp;
   autofocuscount:=Source.autofocuscount;
   description:=Source.description;
 end;

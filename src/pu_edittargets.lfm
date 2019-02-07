@@ -1303,7 +1303,7 @@ object f_EditTargets: Tf_EditTargets
         object DitherCount: TSpinEdit
           Left = 165
           Height = 26
-          Top = 57
+          Top = 78
           Width = 57
           Constraints.MaxHeight = 26
           MaxValue = 1000
@@ -1316,10 +1316,10 @@ object f_EditTargets: Tf_EditTargets
         object CheckBoxDither: TCheckBox
           Left = 8
           Height = 21
-          Top = 58
+          Top = 80
           Width = 101
           Caption = 'Dither every '
-          OnChange = StepChange
+          OnChange = CheckLightOnlyChange
           ParentFont = False
           TabOrder = 1
         end
@@ -1329,27 +1329,27 @@ object f_EditTargets: Tf_EditTargets
           Top = 2
           Width = 176
           Caption = 'Autofocus before to start'
-          OnChange = StepChange
+          OnChange = CheckLightOnlyChange
           ParentFont = False
           TabOrder = 2
         end
         object CheckBoxAutofocus: TCheckBox
           Left = 8
           Height = 21
-          Top = 30
+          Top = 28
           Width = 122
           Caption = 'Autofocus every'
-          OnChange = StepChange
+          OnChange = CheckLightOnlyChange
           ParentFont = False
           TabOrder = 3
         end
         object PanelGain1: TPanel
-          Left = 26
-          Height = 30
-          Top = 90
+          Left = 24
+          Height = 28
+          Top = 104
           Width = 204
           BevelOuter = bvNone
-          ClientHeight = 30
+          ClientHeight = 28
           ClientWidth = 204
           ParentFont = False
           TabOrder = 4
@@ -1365,9 +1365,10 @@ object f_EditTargets: Tf_EditTargets
           end
           object PGainEdit: TSpinEdit
             Left = 96
-            Height = 29
+            Height = 28
             Top = 0
             Width = 81
+            Constraints.MaxHeight = 28
             MaxValue = 100000
             OnChange = StepChange
             ParentFont = False
@@ -1375,10 +1376,11 @@ object f_EditTargets: Tf_EditTargets
           end
           object PISObox: TComboBox
             Left = 96
-            Height = 35
+            Height = 28
             Hint = 'Exposure time in secondes'
             Top = 0
             Width = 100
+            Constraints.MaxHeight = 28
             ItemHeight = 0
             OnChange = StepChange
             ParentFont = False
@@ -1399,6 +1401,15 @@ object f_EditTargets: Tf_EditTargets
           ParentFont = False
           TabOrder = 5
           Value = 1
+        end
+        object CheckBoxAutofocusTemp: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 55
+          Width = 248
+          Caption = 'Autofocus when temperature change'
+          OnChange = CheckLightOnlyChange
+          TabOrder = 6
         end
       end
     end

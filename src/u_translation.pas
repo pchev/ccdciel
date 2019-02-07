@@ -1037,6 +1037,8 @@ resourcestring
   rsRemoteDevice = 'Remote device number';
   rsGet = 'Get';
   rsColumn = 'column';
+  rsFocusOnTempC = 'Focus on temp. change';
+  rsAutofocusWhe = 'Autofocus when temperature change';
 
 
 

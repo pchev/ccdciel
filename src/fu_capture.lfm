@@ -1,27 +1,29 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 288
+  Height = 300
   Top = 0
   Width = 180
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 288
+  ClientHeight = 300
   ClientWidth = 180
   DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Panel1: TPanel
     Left = 0
-    Height = 268
+    Height = 280
     Top = 20
     Width = 180
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 268
+    ClientHeight = 280
     ClientWidth = 180
     ParentFont = False
     TabOrder = 0
@@ -297,11 +299,11 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 28
+      Height = 47
       Top = 203
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 28
+      ClientHeight = 47
       ClientWidth = 178
       ParentFont = False
       TabOrder = 6
@@ -326,11 +328,19 @@ object f_capture: Tf_capture
         TabOrder = 1
         Value = 1
       end
+      object CheckBoxFocusTemp: TCheckBox
+        Left = 4
+        Height = 21
+        Top = 26
+        Width = 164
+        Caption = 'Focus on temp. change'
+        TabOrder = 2
+      end
     end
     object Panel9: TPanel
       Left = 0
       Height = 22
-      Top = 231
+      Top = 250
       Width = 178
       BevelOuter = bvNone
       ClientHeight = 22

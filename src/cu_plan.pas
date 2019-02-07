@@ -203,6 +203,7 @@ begin
     Fcapture.CheckBoxDither.Checked:=p.dither;
     Fcapture.DitherCount.Value:=p.dithercount;
     Fcapture.CheckBoxFocus.Checked:=p.autofocus;
+    Fcapture.CheckBoxFocusTemp.Checked:=p.autofocustemp;
     Fcapture.FocusCount.Value:=p.autofocuscount;
     if p.autofocusstart then Fcapture.FocusNow:=true;
     Ffilter.Filters.ItemIndex:=p.filter;

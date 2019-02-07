@@ -98,7 +98,7 @@ type
     FhfdList: array of double;
     curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph,FAutofocusRestart: integer;
     focuserdirection,terminated,FirstFrame: boolean;
-    FAutofocusResult: boolean;
+    FAutofocusResult, FAutofocusDone: boolean;
     dyn_v_curve:array of TDouble2;
     aminhfd,amaxhfd:double;
     afmpos,aminpos:integer;
@@ -131,6 +131,7 @@ type
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
     property AutofocusResult: boolean read FAutofocusResult write FAutofocusResult;
+    property AutofocusDone: boolean read FAutofocusDone;
     property preview:Tf_preview read Fpreview write Fpreview;
     property focuser:Tf_focuser read Ffocuser write Ffocuser;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -172,6 +173,7 @@ begin
  emptybmp.SetSize(1,1);
  LastFocusimage:=TBGRABitmap.Create(1,1);
  LastFocusMsg:='Autofocus not run';
+ FAutofocusDone:=false;
  FFindStar:=false;
  curhist:=0;
  maxfwhm:=0;
@@ -742,6 +744,7 @@ begin
     msg(Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),
       FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
     if FAutofocusResult then begin
+      FAutofocusDone:=true;
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
       // adjust slippage offset with current result
       if AutofocusSlippageCorrection and (AutofocusMode=afVcurve) then begin
