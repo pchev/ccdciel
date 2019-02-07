@@ -68,6 +68,7 @@ type
     procedure ExpTimeChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
+    procedure CheckLight(Sender: TObject);
   private
     { private declarations }
     FMount: T_mount;
@@ -209,6 +210,15 @@ begin
          Panel1.ChildSizing.ControlsPerLine:=99;
          Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
      end;
+  end;
+end;
+
+procedure Tf_capture.CheckLight(Sender: TObject);
+begin
+  if FrameType.ItemIndex<>0 then begin
+     CheckBoxDither.Checked:=false;
+     CheckBoxFocus.Checked:=false;
+     CheckBoxFocusTemp.Checked:=false;
   end;
 end;
 

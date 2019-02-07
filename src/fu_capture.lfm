@@ -259,6 +259,7 @@ object f_capture: Tf_capture
           'Dark'
           'Flat'
         )
+        OnChange = CheckLight
         ParentFont = False
         Style = csDropDownList
         TabOrder = 0
@@ -281,6 +282,7 @@ object f_capture: Tf_capture
         Top = 0
         Width = 98
         Caption = 'Dither every'
+        OnClick = CheckLight
         ParentFont = False
         TabOrder = 0
       end
@@ -313,6 +315,7 @@ object f_capture: Tf_capture
         Top = 0
         Width = 95
         Caption = 'Focus every'
+        OnClick = CheckLight
         ParentFont = False
         TabOrder = 0
       end
@@ -334,6 +337,7 @@ object f_capture: Tf_capture
         Top = 26
         Width = 164
         Caption = 'Focus on temp. change'
+        OnClick = CheckLight
         TabOrder = 2
       end
     end
