@@ -244,7 +244,7 @@ begin
     end;
     Fccdname:=Fdevice;
     try
-      Fccdname:=V.Name;
+      Fccdname:=V.Get('Name').AsString;
       Fccdname:=Fccdname+'-'+V.Get('SensorName').AsString;
     except
     end;
