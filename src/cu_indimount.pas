@@ -105,7 +105,7 @@ T_indimount = class(T_mount)
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    Procedure Disconnect; override;
    function FlipMeridian:boolean; override;
    function Slew(sra,sde: double):boolean; override;
@@ -216,7 +216,7 @@ begin
     FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
  end;
 
-Procedure T_indimount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+Procedure T_indimount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
 if not indiclient.Connected then begin

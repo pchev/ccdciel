@@ -117,7 +117,7 @@ T_ascomcamera = class(T_camera)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect;  override;
    Procedure StartExposure(exptime: double); override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
@@ -179,7 +179,7 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
+procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 {$ifdef mswindows}
 var readmodes,roitem: Variant;
     i,n: integer;

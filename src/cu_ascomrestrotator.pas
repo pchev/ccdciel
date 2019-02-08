@@ -50,7 +50,7 @@ T_ascomrestrotator = class(T_rotator)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
    Procedure Halt; override;
 end;
@@ -89,7 +89,7 @@ begin
   end;
 end;
 
-procedure T_ascomrestrotator.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+procedure T_ascomrestrotator.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
   try
   FStatus := devConnecting;
@@ -98,6 +98,8 @@ begin
   V.Host:=cp1;
   V.Port:=cp2;
   V.Protocol:=cp3;
+  V.User:=cp5;
+  V.Password:=cp6;
   Fdevice:=cp4;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;

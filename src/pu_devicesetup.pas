@@ -37,6 +37,26 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    CameraARestPass: TEdit;
+    DefaultARestPass: TEdit;
+    DefaultARestUser: TEdit;
+    Label107: TLabel;
+    Label108: TLabel;
+    WheelARestPass: TEdit;
+    FocuserARestPass: TEdit;
+    RotatorARestPass: TEdit;
+    MountARestPass: TEdit;
+    DomeARestPass: TEdit;
+    WeatherARestPass: TEdit;
+    SafetyARestPass: TEdit;
+    CameraARestUser: TEdit;
+    WheelARestUser: TEdit;
+    FocuserARestUser: TEdit;
+    RotatorARestUser: TEdit;
+    MountARestUser: TEdit;
+    DomeARestUser: TEdit;
+    WeatherARestUser: TEdit;
+    SafetyARestUser: TEdit;
     AscomDome: TEdit;
     AscomWeather: TEdit;
     AscomSafety: TEdit;
@@ -62,6 +82,22 @@ type
     BtnCopyProfile: TButton;
     ApplyAscomRemote: TButton;
     ApplyIndi: TButton;
+    Label100: TLabel;
+    Label101: TLabel;
+    Label102: TLabel;
+    Label103: TLabel;
+    Label104: TLabel;
+    Label105: TLabel;
+    Label106: TLabel;
+    Label91: TLabel;
+    Label92: TLabel;
+    Label93: TLabel;
+    Label94: TLabel;
+    Label95: TLabel;
+    Label96: TLabel;
+    Label97: TLabel;
+    Label98: TLabel;
+    Label99: TLabel;
     WatchdogMsg: TLabel;
     WeatherMsg: TLabel;
     SafetyMsg: TLabel;
@@ -381,12 +417,17 @@ type
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure ApplyAscomRemoteClick(Sender: TObject);
+    procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
+    procedure DefaultARestProtocolChange(Sender: TObject);
+    procedure DomeARestProtocolChange(Sender: TObject);
+    procedure FocuserARestProtocolChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GetIndiClick(Sender: TObject);
     procedure IndiSensorChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
+    procedure MountARestProtocolChange(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
     procedure MountSetObservatoryClick(Sender: TObject);
     procedure PageControlCameraChange(Sender: TObject);
@@ -400,6 +441,10 @@ type
     procedure PageControlWheelChange(Sender: TObject);
     procedure ProfileListChange(Sender: TObject);
     procedure AscomWeatherTypeClick(Sender: TObject);
+    procedure RotatorARestProtocolChange(Sender: TObject);
+    procedure SafetyARestProtocolChange(Sender: TObject);
+    procedure WeatherARestProtocolChange(Sender: TObject);
+    procedure WheelARestProtocolChange(Sender: TObject);
   private
     { private declarations }
     indiclient: TIndiBaseClient;
@@ -426,7 +471,7 @@ type
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
     profile: string;
     procedure LoadProfileList;
-    procedure Loadconfig(conf: TCCDConfig);
+    procedure Loadconfig(conf,credentialconf: TCCDConfig);
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
@@ -680,7 +725,7 @@ finally
 end;
 end;
 
-procedure Tf_setup.Loadconfig(conf: TCCDConfig);
+procedure Tf_setup.Loadconfig(conf,credentialconf: TCCDConfig);
 var defautindiserver, defaultindiport: string;
 begin
 // default value from old config
@@ -858,6 +903,25 @@ DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
 DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceDome.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
+
+CameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/User','')), encryptpwd);
+WheelARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestwheel/User','')), encryptpwd);
+FocuserARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfocuser/User','')), encryptpwd);
+RotatorARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestrotator/User','')), encryptpwd);
+MountARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestmount/User','')), encryptpwd);
+DomeARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestdome/User','')), encryptpwd);
+WeatherARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestweather/User','')), encryptpwd);
+SafetyARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsafety/User','')), encryptpwd);
+CameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/Pass','')), encryptpwd);
+WheelARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestwheel/Pass','')), encryptpwd);
+FocuserARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfocuser/Pass','')), encryptpwd);
+RotatorARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestrotator/Pass','')), encryptpwd);
+MountARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestmount/Pass','')), encryptpwd);
+DomeARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestdome/Pass','')), encryptpwd);
+WeatherARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestweather/Pass','')), encryptpwd);
+SafetyARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsafety/Pass','')), encryptpwd);
+DefaultARestUser.Text:=CameraARestUser.Text;
+DefaultARestPass.Text:=CameraARestPass.Text;
 
 end;
 
@@ -1111,6 +1175,30 @@ begin
    DomeARestPort.Value:=DefaultARestPort.Value;
    WeatherARestPort.Value:=DefaultARestPort.Value;
    SafetyARestPort.Value:=DefaultARestPort.Value;
+   CameraARestUser.Text:=DefaultARestUser.Text;
+   WheelARestUser.Text:=DefaultARestUser.Text;
+   FocuserARestUser.Text:=DefaultARestUser.Text;
+   RotatorARestUser.Text:=DefaultARestUser.Text;
+   MountARestUser.Text:=DefaultARestUser.Text;
+   DomeARestUser.Text:=DefaultARestUser.Text;
+   WeatherARestUser.Text:=DefaultARestUser.Text;
+   SafetyARestUser.Text:=DefaultARestUser.Text;
+   CameraARestPass.Text:=DefaultARestPass.Text;
+   WheelARestPass.Text:=DefaultARestPass.Text;
+   FocuserARestPass.Text:=DefaultARestPass.Text;
+   RotatorARestPass.Text:=DefaultARestPass.Text;
+   MountARestPass.Text:=DefaultARestPass.Text;
+   DomeARestPass.Text:=DefaultARestPass.Text;
+   WeatherARestPass.Text:=DefaultARestPass.Text;
+   SafetyARestPass.Text:=DefaultARestPass.Text;
+end;
+
+procedure Tf_setup.CameraARestProtocolChange(Sender: TObject);
+begin
+  case CameraARestProtocol.ItemIndex of
+    0: CameraARestPort.Value:=11111;
+    1: CameraARestPort.Value:=443;
+  end;
 end;
 
 procedure Tf_setup.ApplyIndiClick(Sender: TObject);
@@ -1138,6 +1226,30 @@ end;
 procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
 begin
   CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
+end;
+
+procedure Tf_setup.DefaultARestProtocolChange(Sender: TObject);
+begin
+  case DefaultARestProtocol.ItemIndex of
+    0: DefaultARestPort.Value:=11111;
+    1: DefaultARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.DomeARestProtocolChange(Sender: TObject);
+begin
+  case DomeARestProtocol.ItemIndex of
+    0: DomeARestPort.Value:=11111;
+    1: DomeARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.FocuserARestProtocolChange(Sender: TObject);
+begin
+  case FocuserARestProtocol.ItemIndex of
+    0: FocuserARestPort.Value:=11111;
+    1: FocuserARestPort.Value:=443;
+  end;
 end;
 
 procedure Tf_setup.FormShow(Sender: TObject);
@@ -1424,6 +1536,14 @@ begin
   end;
 end;
 
+procedure Tf_setup.MountARestProtocolChange(Sender: TObject);
+begin
+  case MountARestProtocol.ItemIndex of
+    0: MountARestPort.Value:=11111;
+    1: MountARestPort.Value:=443;
+  end;
+end;
+
 procedure Tf_setup.MountGetObservatoryClick(Sender: TObject);
 begin
   if MountGetObservatory.Checked then MountSetObservatory.Checked:=false;
@@ -1522,7 +1642,7 @@ begin
 end;
 
 procedure Tf_setup.ProfileListChange(Sender: TObject);
-var chkconf:TCCDconfig;
+var chkconf,chkcred:TCCDconfig;
     configfile:string;
 begin
   if ProfileLock then exit;
@@ -1533,11 +1653,14 @@ begin
     else
        configfile:='ccdciel_'+profile+'.conf';
     chkconf:=TCCDConfig.Create(nil);
+    chkcred:=TCCDConfig.Create(nil);
     try
     chkconf.Filename:=slash(ConfigDir)+configfile;
-    Loadconfig(chkconf);
+    chkcred.Filename:=chkconf.Filename+'.credential';
+    Loadconfig(chkconf,chkcred);
     finally
       chkconf.Free;
+      chkcred.Free;
     end;
   end;
 end;
@@ -1545,6 +1668,38 @@ end;
 procedure Tf_setup.AscomWeatherTypeClick(Sender: TObject);
 begin
   AscomWeather.Text:='';
+end;
+
+procedure Tf_setup.RotatorARestProtocolChange(Sender: TObject);
+begin
+  case RotatorARestProtocol.ItemIndex of
+    0: RotatorARestPort.Value:=11111;
+    1: RotatorARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.SafetyARestProtocolChange(Sender: TObject);
+begin
+  case SafetyARestProtocol.ItemIndex of
+    0: SafetyARestPort.Value:=11111;
+    1: SafetyARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.WeatherARestProtocolChange(Sender: TObject);
+begin
+  case WeatherARestProtocol.ItemIndex of
+    0: WeatherARestPort.Value:=11111;
+    1: WeatherARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.WheelARestProtocolChange(Sender: TObject);
+begin
+  case WheelARestProtocol.ItemIndex of
+    0: WheelARestPort.Value:=11111;
+    1: WheelARestPort.Value:=443;
+  end;
 end;
 
 procedure Tf_setup.BtnCopyProfileClick(Sender: TObject);

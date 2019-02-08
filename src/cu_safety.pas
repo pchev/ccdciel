@@ -45,7 +45,7 @@ T_safety = class(TComponent)
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
-    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
+    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     property DeviceName: string read FDevice;
     property SafetyInterface: TDevInterface read FSafetyInterface;

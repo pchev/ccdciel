@@ -263,6 +263,7 @@ const
   FileNameCount=7;
   MinFrameSize=5;
   SafetyActionNum=15;
+  encryptpwd='m=Nrv"wE+W^RA?$b:]w<!t1v]pcTT>3$B?3";~OG9\7$,n[~8KLaUrfCgvRh$=DnlXK]Vxr^0!.HAA';
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
@@ -300,7 +301,7 @@ var
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
-  config,screenconfig: TCCDConfig;
+  config,screenconfig,credentialconfig: TCCDConfig;
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;

@@ -67,7 +67,7 @@ T_mount = class(TComponent)
     destructor  Destroy; override;
     procedure SlewToSkyFlatPosition;
     procedure SlewToDomeFlatPosition;
-    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); virtual; abstract;
+    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     function Slew(sra,sde: double):boolean; virtual; abstract;
     function SlewAsync(sra,sde: double):boolean; virtual; abstract;

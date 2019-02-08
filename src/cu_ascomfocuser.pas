@@ -73,7 +73,7 @@ T_ascomfocuser = class(T_focuser)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
    procedure FocusIn; override;
    procedure FocusOut; override;
@@ -123,7 +123,7 @@ begin
  {$endif}
 end;
 
-procedure T_ascomfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+procedure T_ascomfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
  {$ifdef mswindows}
   try

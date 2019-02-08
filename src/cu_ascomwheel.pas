@@ -55,7 +55,7 @@ T_ascomwheel = class(T_wheel)
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect; override;
 end;
 
@@ -80,7 +80,7 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascomwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+procedure T_ascomwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
  {$ifdef mswindows}
   try

@@ -120,6 +120,10 @@ procedure sofa_Rz(psi: double; var r: rotmatrix);
 procedure sofa_Ry(theta: double; var r: rotmatrix);
 procedure sofa_Rx(phi: double; var r: rotmatrix);
 function ltp_Ecliptic(epj: double): double;
+function DecryptStr(Str, Pwd: string): string;
+function EncryptStr(Str, Pwd: string; Encode: boolean = True): string;
+function hextostr(str: string): string;
+function strtohex(str: string): string;
 procedure InitCoord;
 procedure nutationme(j: double; var nutl, nuto: double);
 procedure aberrationme(j: double; var abe, abp: double);
@@ -2399,6 +2403,124 @@ begin
   sofa_Cr(w, r);
 end;
 {$WARN 5057 on : Local variable "$1" does not seem to be initialized}
+
+function RotateBits(C: char; Bits: integer): char;
+var
+  SI: word;
+begin
+  Bits := Bits mod 8;
+  // Are we shifting left?
+  if Bits < 0 then
+  begin
+    // Put the data on the right half of a Word (2 bytes)
+    SI := word(C);
+    //      SI := MakeWord(Byte(C),0);
+    // Now shift it left the appropriate number of bits
+    SI := SI shl Abs(Bits);
+  end
+  else
+  begin
+    // Put the data on the left half of a Word (2 bytes)
+    SI := word(C) shl 8;
+    //      SI := MakeWord(0,Byte(C));
+    // Now shift it right the appropriate number of bits
+    SI := SI shr Abs(Bits);
+  end;
+  // Finally, Swap the bytes
+  SI := Swap(SI);
+  // And OR the two halves together
+  SI := Lo(SI) or Hi(SI);
+  Result := Chr(SI);
+end;
+
+function EncryptStr(Str, Pwd: string; Encode: boolean = True): string;
+var
+  a, PwdChk, Direction, ShiftVal, PasswordDigit: integer;
+begin
+  if str='' then begin
+    Result:=str;
+    exit;
+  end;
+
+  if Encode then
+    str := str + '               ';
+
+  PasswordDigit := 1;
+  PwdChk := 0;
+
+  for a := 1 to Length(Pwd) do
+    Inc(PwdChk, Ord(Pwd[a]));
+  Result := Str;
+
+  if Encode then
+    Direction := -1
+  else
+    Direction := 1;
+  for a := 1 to Length(Result) do
+  begin
+    if Length(Pwd) = 0 then
+      ShiftVal := a
+    else
+      ShiftVal := Ord(Pwd[PasswordDigit]);
+
+    if Odd(A) then
+      Result[A] := RotateBits(Result[A], -Direction * (ShiftVal + PwdChk))
+    else
+      Result[A] := RotateBits(Result[A], Direction * (ShiftVal + PwdChk));
+
+    Inc(PasswordDigit);
+
+    if PasswordDigit > Length(Pwd) then
+      PasswordDigit := 1;
+  end;
+end;
+
+function DecryptStr(Str, Pwd: string): string;
+begin
+  Result := trim(EncryptStr(Str, Pwd, False));
+end;
+
+function strtohex(str: string): string;
+var
+  i: integer;
+begin
+
+  Result := '';
+
+  if str = '' then
+    exit;
+
+  for i := 1 to length(str) do
+    Result := Result + inttohex(Ord(str[i]), 2);
+end;
+
+
+function hextostr(str: string): string;
+var
+  i, k: integer;
+begin
+
+  Result := '';
+
+  if str = '' then
+    exit;
+
+  for i := 0 to (length(str) - 1) div 2 do
+  begin
+
+    k := strtointdef('$' + str[2 * i + 1] + str[2 * i + 2], -1);
+
+    if k > 0 then
+      Result := Result + char(k)
+    else
+    begin
+      Result := str;   // if not numeric default to the input string
+      break;
+    end;
+
+  end;
+
+end;
 
 procedure Sort(var list: array of double);
 var sorted: boolean;

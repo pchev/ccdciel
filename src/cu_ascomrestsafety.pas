@@ -45,7 +45,7 @@ T_ascomrestsafety = class(T_safety)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
 end;
 
@@ -82,13 +82,15 @@ begin
   end;
 end;
 
-procedure T_ascomrestsafety.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+procedure T_ascomrestsafety.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
   try
   FStatus := devConnecting;
   V.Host:=cp1;
   V.Port:=cp2;
   V.Protocol:=cp3;
+  V.User:=cp5;
+  V.Password:=cp6;
   Fdevice:=cp4;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;

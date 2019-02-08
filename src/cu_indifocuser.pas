@@ -87,7 +87,7 @@ T_indifocuser = class(T_focuser)
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    Procedure Disconnect; override;
    procedure FocusIn; override;
    procedure FocusOut; override;
@@ -186,7 +186,7 @@ begin
     end;
 end;
 
-Procedure T_indifocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+Procedure T_indifocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
 if not indiclient.Connected then begin

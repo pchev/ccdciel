@@ -210,7 +210,7 @@ private
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    Procedure Disconnect; override;
    Procedure StartExposure(exptime: double); override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
@@ -390,7 +390,7 @@ begin
        end;
 end;
 
-Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
+Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
 if not indiclient.Connected then begin

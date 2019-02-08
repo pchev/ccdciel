@@ -74,7 +74,7 @@ T_indidome = class(T_dome)
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');  override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    Procedure Disconnect; override;
 
 end;
@@ -162,7 +162,7 @@ begin
     end;
 end;
 
-Procedure T_indidome.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+Procedure T_indidome.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
 if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
 if not indiclient.Connected then begin

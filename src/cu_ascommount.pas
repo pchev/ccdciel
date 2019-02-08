@@ -65,7 +65,7 @@ T_ascommount = class(T_mount)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect; override;
    function Slew(sra,sde: double):boolean; override;
    function SlewAsync(sra,sde: double):boolean; override;
@@ -113,7 +113,7 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascommount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+procedure T_ascommount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 {$ifdef mswindows}
 var buf: string;
 {$endif}

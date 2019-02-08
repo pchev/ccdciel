@@ -45,7 +45,7 @@ T_incamerawheel = class(T_wheel)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''); override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    Procedure Disconnect; override;
 end;
 
@@ -79,7 +79,7 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
-Procedure T_incamerawheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
+Procedure T_incamerawheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
 end;
 

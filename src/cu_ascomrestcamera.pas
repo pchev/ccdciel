@@ -113,7 +113,7 @@ T_ascomrestcamera = class(T_camera)
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
-   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''); override;
+   Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect;  override;
    Procedure StartExposure(exptime: double); override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
@@ -175,7 +175,7 @@ begin
  inherited Destroy;
 end;
 
-procedure T_ascomrestcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string='');
+procedure T_ascomrestcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 var rlist: array of string;
     i,n: integer;
 begin
@@ -184,6 +184,8 @@ begin
   V.Host:=cp1;
   V.Port:=cp2;
   V.Protocol:=cp3;
+  V.User:=cp5;
+  V.Password:=cp6;
   Fdevice:=cp4;
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
