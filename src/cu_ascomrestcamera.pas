@@ -189,8 +189,10 @@ begin
   Fdevice:=cp4;
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
+  V.Timeout:=2000;
   V.Put('Connected',true); // try to connect if authorized by server
   if V.Get('Connected').AsBool then begin
+    V.Timeout:=120000;
     try
     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
     except
@@ -325,6 +327,8 @@ procedure T_ascomrestcamera.StatusTimerTimer(sender: TObject);
 var t: double;
     c: boolean;
 begin
+ StatusTimer.Enabled:=false;
+ try
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -347,6 +351,9 @@ begin
      on E: Exception do msg(Format(rsError, [E.Message]),0);
     end;
   end;
+ finally
+  StatusTimer.Enabled:=true;
+ end;
 end;
 
 Procedure T_ascomrestcamera.StartExposure(exptime: double);

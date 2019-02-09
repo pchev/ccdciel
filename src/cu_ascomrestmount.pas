@@ -124,9 +124,10 @@ begin
   Fdevice:=cp4;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
+  V.Timeout:=2000;
   V.Put('Connected',true);
   if V.Get('Connected').AsBool then begin
-     FStatus := devConnected;
+     V.Timeout:=120000;
      try
      msg('Driver version: '+V.Get('DriverVersion').AsString,9);
      except
@@ -149,6 +150,7 @@ begin
      if CanSetTracking then buf:=buf+'CanSetTracking ';
      msg(rsConnected3);
      msg(Format(rsMountCapabil, [buf]));
+     FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
@@ -193,6 +195,8 @@ var x,y: double;
     ps: TPierSide;
     tr: Boolean;
 begin
+ StatusTimer.Enabled:=false;
+ try
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -224,6 +228,9 @@ begin
     except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
+  end;
+  finally
+   StatusTimer.Enabled:=true;
   end;
 end;
 

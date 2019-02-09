@@ -109,8 +109,10 @@ begin
   Fdevice:=cp4;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
+  V.Timeout:=2000;
   V.Put('Connected',true);
   if V.Get('Connected').AsBool then begin
+     V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
      try
        msg('Driver version: '+V.Get('DriverVersion').AsString,9);
@@ -159,6 +161,8 @@ end;
 procedure T_ascomrestweather.StatusTimerTimer(sender: TObject);
 var s: boolean;
 begin
+ StatusTimer.Enabled:=false;
+ try
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -173,6 +177,9 @@ begin
      except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
+  end;
+  finally
+   StatusTimer.Enabled:=true;
   end;
 end;
 

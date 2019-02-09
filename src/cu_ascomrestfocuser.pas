@@ -130,12 +130,14 @@ begin
   Fdevice:=cp4;
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
+  V.Timeout:=2000;
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
     V.Put('Link',true)
   else
     V.Put('Connected',true);
   if Connected then begin
+     V.Timeout:=120000;
      try
      msg('Driver version: '+V.Get('DriverVersion').AsString,9);
      except
@@ -198,6 +200,8 @@ procedure T_ascomrestfocuser.StatusTimerTimer(sender: TObject);
 var t: double;
     p: integer;
 begin
+ StatusTimer.Enabled:=false;
+ try
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -231,6 +235,9 @@ begin
     except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
+  end;
+  finally
+   StatusTimer.Enabled:=true;
   end;
 end;
 
