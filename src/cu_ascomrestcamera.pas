@@ -190,16 +190,16 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Timeout:=2000;
-  V.Put('Connected',true); // try to connect if authorized by server
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true); // try to connect if authorized by server
+  if V.Get('connected').AsBool then begin
     V.Timeout:=120000;
     try
-    msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+    msg('Driver version: '+V.Get('driverversion').AsString,9);
     except
       msg('Error: unknown driver version',9);
     end;
     try
-    FCameraXSize:=V.Get('CameraXSize').AsInt;
+    FCameraXSize:=V.Get('cameraxsize').AsInt;
     except
      on E: Exception do begin
        FCameraXSize:=-1;
@@ -207,7 +207,7 @@ begin
      end;
     end;
     try
-    FCameraYSize:=V.Get('CameraYSize').AsInt;
+    FCameraYSize:=V.Get('cameraysize').AsInt;
     except
      on E: Exception do begin
        FCameraYSize:=-1;
@@ -215,30 +215,30 @@ begin
      end;
     end;
     try
-     FMaxBinX:=V.Get('MaxBinX').AsInt;
+     FMaxBinX:=V.Get('maxbinx').AsInt;
     except
      FMaxBinX:=1;
     end;
     try
-    FMaxBinY:=V.Get('MaxBinY').AsInt;
+    FMaxBinY:=V.Get('maxbiny').AsInt;
     except
      FMaxBinY:=1;
     end;
     try
-     FBinX:=V.Get('BinX').AsInt;
+     FBinX:=V.Get('binx').AsInt;
     except
      FBinX:=1;
     end;
     try
-     FBinY:=V.Get('BinY').AsInt;
+     FBinY:=V.Get('biny').AsInt;
     except
      FBinY:=1;
     end;
     FPixelSizeX:=0;
     FPixelSizeY:=0;
     try
-      FPixelSizeX:=round(V.Get('PixelSizeX').AsFloat*100)/100;
-      FPixelSizeY:=round(V.Get('PixelSizeY').AsFloat*100)/100;
+      FPixelSizeX:=round(V.Get('pixelsizex').AsFloat*100)/100;
+      FPixelSizeY:=round(V.Get('pixelsizey').AsFloat*100)/100;
     except
       on E: Exception do begin
         msg('Error: cannot get pixel size from camera: ' + E.Message,0);
@@ -246,24 +246,24 @@ begin
     end;
     Fccdname:=Fdevice;
     try
-      Fccdname:=V.Get('Name').AsString;
-      Fccdname:=Fccdname+'-'+V.Get('SensorName').AsString;
+      Fccdname:=V.Get('name').AsString;
+      Fccdname:=Fccdname+'-'+V.Get('sensorname').AsString;
     except
     end;
     try
-      FCanSetTemperature:=V.Get('CanSetCCDTemperature').AsBool;
+      FCanSetTemperature:=V.Get('cansetccdtemperature').AsBool;
     except
       FCanSetTemperature:=false;
     end;
     try
-      DummyDouble:=V.Get('CCDTemperature').AsFloat;
+      DummyDouble:=V.Get('ccdtemperature').AsFloat;
       FHasTemperature:=true;
     except
       FHasTemperature:=false;
     end;
     FReadOutList.Clear;
     try
-      FhasFastReadout:=V.Get('CanFastReadout').AsBool;
+      FhasFastReadout:=V.Get('canfastreadout').AsBool;
     except
       FhasFastReadout:=false;
     end;
@@ -274,7 +274,7 @@ begin
     end
     else begin
       try
-        rlist:=V.Get('ReadoutModes').AsStringArray;
+        rlist:=V.Get('readoutmodes').AsStringArray;
         n:=Length(rlist);
         for i:=0 to n-1 do begin
           FReadOutList.Add(rlist[i]);
@@ -306,7 +306,7 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   try
-    V.Put('Connected',false);
+    V.Put('connected',false);
     msg(rsDisconnected3,0);
   except
     on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
@@ -317,7 +317,7 @@ function T_ascomrestcamera.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -367,7 +367,7 @@ begin
   end;
   try
      {$ifdef debug_ascom}msg('start exposure.');{$endif}
-     V.Put('StartExposure',['Duration',formatfloat(f4,exptime),'Light',li]);
+     V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
      Ftimestart:=NowUTC;
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
@@ -400,13 +400,13 @@ begin
  if (now<timedout) then begin
     state:=5;
     try
-      state:=V.Get('CameraState').AsInt;
+      state:=V.Get('camerastate').AsInt;
     except
       msg('Error reading camera state '+inttostr(state),0);
     end;
     ok:=false;
     try
-      if state=0 then ok:=V.Get('ImageReady').AsBool;
+      if state=0 then ok:=V.Get('imageready').AsBool;
     except
       on E: Exception do begin
         msg('Error reading camera image availability: ' + E.Message,0);
@@ -587,8 +587,8 @@ begin
      fny:=trunc(fny*scale);
      newx:=FCameraXSize div sbinX;
      newy:=FCameraYSize div sbinY;
-     V.Put('BinX',sbinX);
-     V.Put('BinY',sbinY);
+     V.Put('binX',sbinX);
+     V.Put('binY',sbinY);
      FBinX:=sbinX;
      FBinY:=sbinY;
      if (fsx=0)and(fsy=0)and((abs(newx-fnx)/fnx)<0.1)and((abs(newy-fny)/fny)<0.1)
@@ -629,10 +629,10 @@ begin
    x:=round(x+0.5);
    y:=round(y+0.5);
    {$ifdef debug_ascom}msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
-   V.Put('StartX',x);
-   V.Put('StartY',y);
-   V.Put('NumX',width);
-   V.Put('NumY',height);
+   V.Put('startx',x);
+   V.Put('starty',y);
+   V.Put('numx',width);
+   V.Put('numy',height);
    Wait(1);
    if Assigned(FonFrameChange) then FonFrameChange(self);
    except
@@ -644,10 +644,10 @@ procedure T_ascomrestcamera.GetFrame(out x,y,width,height: integer);
 var Cx,Cy,Cwidth,Cheight: integer;
 begin
    try
-   x      := V.Get('StartX').AsInt;
-   y      := V.Get('StartY').AsInt;
-   width  := V.Get('NumX').AsInt;
-   height := V.Get('NumY').AsInt;
+   x      := V.Get('startx').AsInt;
+   y      := V.Get('starty').AsInt;
+   width  := V.Get('numx').AsInt;
+   height := V.Get('numy').AsInt;
    // Consistency check for buggy qhy drivers
    Cx:=max(x,0);
    Cy:=max(y,0);
@@ -656,10 +656,10 @@ begin
    if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then  begin
      msg('Correct driver wrong frame size: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),1);
      msg('Set new value : '+inttostr(Cx)+','+inttostr(Cy)+'/'+inttostr(Cwidth)+'x'+inttostr(Cheight),1);
-     V.Put('StartX',Cx);
-     V.Put('StartY',Cy);
-     V.Put('NumX',Cwidth);
-     V.Put('NumY',Cheight);
+     V.Put('startx',Cx);
+     V.Put('starty',Cy);
+     V.Put('numx',Cwidth);
+     V.Put('numy',Cheight);
      x:=Cx;
      y:=Cy;
      width:=Cwidth;
@@ -719,7 +719,7 @@ begin
     msg(rsAbortExposur);
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
-    V.Put('AbortExposure');
+    V.Put('abortexposure');
     if assigned(FonAbortExposure) then FonAbortExposure(self);
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
@@ -768,17 +768,17 @@ function T_ascomrestcamera.GetExposureRange:TNumRange;
 begin
   result:=NullRange;
     try
-    result.max:=V.Get('ExposureMax').AsFloat;
+    result.max:=V.Get('exposuremax').AsFloat;
     except
      result.max:=3600;
     end;
     try
-    result.min:=V.Get('V.ExposureMin').AsFloat;
+    result.min:=V.Get('exposuremin').AsFloat;
     except
     result.min:=0.001;
     end;
     try
-    result.step:=V.Get('V.ExposureResolution').AsFloat;
+    result.step:=V.Get('exposureresolution').AsFloat;
     except
     end;
 end;
@@ -795,7 +795,7 @@ procedure T_ascomrestcamera.SetFilter(num:integer);
 begin
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
-   V.Put('Position',num-1);
+   V.Put('position',num-1);
    Wait(1);
    except
     on E: Exception do msg('Set filter error: ' + E.Message,0);
@@ -806,7 +806,7 @@ function  T_ascomrestcamera.GetFilter:integer;
 begin
  result:=0;
    try
-   result:=V.Get('Position').AsInt+1;
+   result:=V.Get('position').AsInt+1;
    except
     on E: Exception do msg('Get filter error: ' + E.Message,0);
    end;
@@ -830,7 +830,7 @@ begin
  result:=NullCoord;
    try
    if FHasTemperature then
-      result:=V.Get('CCDTemperature').AsFloat
+      result:=V.Get('ccdtemperature').AsFloat
    else
       result:=NullCoord;
    except
@@ -843,7 +843,7 @@ begin
    try
    if FCanSetTemperature then begin
       SetCooler(true);
-      V.Put('SetCCDTemperature',value);
+      V.Put('setccdtemperature',value);
    end;
    except
     on E: Exception do msg('Set temperature error: ' + E.Message,0);
@@ -854,7 +854,7 @@ function  T_ascomrestcamera.GetCooler: boolean;
 begin
  result:=false;
    try
-     result:=V.Get('CoolerOn').AsBool;
+     result:=V.Get('cooleron').AsBool;
    except
      result:=false;
    end;
@@ -863,9 +863,9 @@ end;
 procedure T_ascomrestcamera.SetCooler(value:boolean);
 begin
   try
-  if (V.Get('CoolerOn').AsBool<>value) then begin
+  if (V.Get('cooleron').AsBool<>value) then begin
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
-     V.Put('CoolerOn',value);
+     V.Put('cooleron',value);
   end;
   except
    on E: Exception do msg('Set cooler error: ' + E.Message,0);
@@ -886,7 +886,7 @@ function T_ascomrestcamera.GetMaxADU: double;
 begin
  result:=MAXWORD;
   try
-     result:=V.Get('MaxADU').AsFloat;
+     result:=V.Get('maxadu').AsFloat;
   except
      result:=MAXWORD;
   end;
@@ -931,7 +931,7 @@ function T_ascomrestcamera.GetColor: boolean;
 begin
  result:=false;
    try
-      result:=(V.Get('SensorType').AsInt=1);  // Camera produces color image directly, requiring not Bayer decoding
+      result:=(V.Get('sensortype').AsInt=1);  // Camera produces color image directly, requiring not Bayer decoding
    except
       result:=false;
    end;
@@ -950,11 +950,11 @@ begin
   result:=false;
     try
     // check Gain property
-       i:=V.Get('Gain').AsInt;
+       i:=V.Get('gain').AsInt;
        try
        // check Gain range
-          FGainMin:=V.Get('GainMin').AsInt;
-          FGainMax:=V.Get('GainMax').AsInt;
+          FGainMin:=V.Get('gainmin').AsInt;
+          FGainMax:=V.Get('gainmax').AsInt;
           FhasGain:=true;
        except
        // No Gain range
@@ -962,7 +962,7 @@ begin
        end;
        try
        // Check ISO list
-          gainlist:=V.Get('Gains').AsStringArray;
+          gainlist:=V.Get('gains').AsStringArray;
           n:=Length(gainlist);
           FISOList.Clear;
           for i:=0 to n-1 do begin
@@ -988,7 +988,7 @@ procedure T_ascomrestcamera.SetGain(value: integer);
 begin
  if (FhasGainISO or FhasGain) then begin
    try
-      V.Put('Gain',value);
+      V.Put('gain',value);
    except
    end;
  end;
@@ -999,7 +999,7 @@ begin
  result:=NullInt;
  if (FhasGainISO or FhasGain) then begin
    try
-      result:=V.Get('Gain').AsInt;
+      result:=V.Get('gain').AsInt;
    except
       result:=NullInt;
    end;
@@ -1011,11 +1011,11 @@ begin
  try
  if FhasReadOut then begin
    if FhasFastReadout then begin
-     if value=0 then V.Put('FastReadout',false)
-                else V.Put('FastReadout',true);
+     if value=0 then V.Put('fastreadout',false)
+                else V.Put('fastreadout',true);
    end
    else begin
-     V.Put('ReadoutMode',value);
+     V.Put('readoutmode',value);
    end;
  end;
  except
@@ -1029,11 +1029,11 @@ begin
   try
   if (FhasReadOut) then begin
      if FhasFastReadout then begin
-       if V.Get('FastReadout').AsBool then result:=1
+       if V.Get('fastreadout').AsBool then result:=1
           else result:=0;
      end
      else begin
-       result:=V.Get('ReadoutMode').AsInt;
+       result:=V.Get('readoutmode').AsInt;
      end;
   end;
   except

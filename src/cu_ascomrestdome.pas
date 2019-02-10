@@ -84,7 +84,7 @@ function  T_ascomrestdome.InterfaceVersion: integer;
 begin
  result:=1;
   try
-   result:=V.Get('InterfaceVersion').AsInt;
+   result:=V.Get('interfaceversion').AsInt;
   except
     result:=1;
   end;
@@ -103,27 +103,27 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('Connected',true);
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true);
+  if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
      try
-     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+     msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
      try
-     FhasPark:=V.Get('CanPark').AsBool;
+     FhasPark:=V.Get('canpark').AsBool;
      except
        FhasPark:=false;
      end;
      try
-     FhasSlaving:=V.Get('CanSlave').AsBool;
+     FhasSlaving:=V.Get('canslave').AsBool;
      except
        FhasSlaving:=false;
      end;
      try
-     FhasShutter:=V.Get('CanSetShutter').AsBool;
+     FhasShutter:=V.Get('cansetshutter').AsBool;
      except
        FhasShutter:=false;
      end;
@@ -150,7 +150,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('Connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
@@ -160,7 +160,7 @@ function T_ascomrestdome.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -205,7 +205,7 @@ function T_ascomrestdome.GetPark: boolean;
 begin
  result:=false;
    try
-   if FhasPark then result:=V.Get('AtPark').AsBool;
+   if FhasPark then result:=V.Get('atpark').AsBool;
    except
     result:=false;
    end;
@@ -214,7 +214,7 @@ end;
 procedure T_ascomrestdome.SetPark(value:boolean);
 begin
    try
-   if FhasPark and value then V.Put('Park'); // no ASCOM unpark
+   if FhasPark and value then V.Put('park'); // no ASCOM unpark
    except
     on E: Exception do msg('Park error: ' + E.Message,0);
    end;
@@ -226,7 +226,7 @@ begin
  result:=false;
    try
    if FhasShutter then begin
-     i:=V.Get('ShutterStatus').AsInt;
+     i:=V.Get('shutterstatus').AsInt;
      result:=(i=0);  // open
    end;
    except
@@ -238,8 +238,8 @@ procedure T_ascomrestdome.SetShutter(value:boolean);
 begin
    try
    if FhasShutter then begin
-     if value then V.Put('OpenShutter')
-              else V.Put('CloseShutter');
+     if value then V.Put('openshutter')
+              else V.Put('closeshutter');
    end;
    except
     on E: Exception do msg('Set shutter error: ' + E.Message,0);
@@ -250,7 +250,7 @@ function T_ascomrestdome.GetSlave: boolean;
 begin
  result:=false;
    try
-   if FhasSlaving then result:=V.Get('Slaved').AsBool;
+   if FhasSlaving then result:=V.Get('slaved').AsBool;
    except
     result:=false;
    end;
@@ -259,7 +259,7 @@ end;
 procedure T_ascomrestdome.SetSlave(value:boolean);
 begin
    try
-   if FhasSlaving then V.Put('Slaved',value);
+   if FhasSlaving then V.Put('slaved',value);
    except
     on E: Exception do msg('Slave error: ' + E.Message,0);
    end;

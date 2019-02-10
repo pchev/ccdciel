@@ -83,7 +83,7 @@ function  T_ascomrestrotator.InterfaceVersion: integer;
 begin
  result:=1;
   try
-   result:=V.Get('InterfaceVersion').AsInt;
+   result:=V.Get('interfaceversion').AsInt;
   except
     result:=1;
   end;
@@ -104,12 +104,12 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('Connected',true);
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true);
+  if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
      try
-     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+     msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
@@ -135,7 +135,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('Connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
    end;
@@ -145,7 +145,7 @@ function T_ascomrestrotator.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -183,7 +183,7 @@ begin
  try
    maxcount:=maxtime div waitpoll;
    count:=0;
-   while (V.Get('IsMoving').AsBool)and(count<maxcount) do begin
+   while (V.Get('ismoving').AsBool)and(count<maxcount) do begin
       sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
@@ -198,7 +198,7 @@ procedure T_ascomrestrotator.SetAngle(p:double);
 begin
  try
    //msg('Rotator '+Fdevice+' move to internal '+FormatFloat(f1,p));
-   V.Put('MoveAbsolute',['Position',FormatFloat(f2,p)]);
+   V.Put('moveabsolute',['Position',FormatFloat(f2,p)]);
    WaitRotatorMoving(30000);
 
    except
@@ -210,7 +210,7 @@ function  T_ascomrestrotator.GetAngle:double;
 begin
  result:=0;
  try
-   result:=V.Get('Position').AsInt;
+   result:=V.Get('position').AsInt;
  except
     on E: Exception do msg('Get position error: ' + E.Message,0);
  end;
@@ -220,7 +220,7 @@ function T_ascomrestrotator.GetDriverReverse:boolean;
 begin
  result:=false;
    try
-   if V.Get('CanReverse').AsBool then result:=V.Get('Reverse').AsBool;
+   if V.Get('canreverse').AsBool then result:=V.Get('reverse').AsBool;
    except
     result:=false;
    end;
@@ -229,7 +229,7 @@ end;
 procedure T_ascomrestrotator.SetDriverReverse(value:boolean);
 begin
    try
-   if V.Get('CanReverse').AsBool then V.Put('Reverse',value);
+   if V.Get('canreverse').AsBool then V.Put('reverse',value);
    except
    end;
 end;
@@ -237,7 +237,7 @@ end;
 Procedure T_ascomrestrotator.Halt;
 begin
    try
-    V.Put('Halt');
+    V.Put('halt');
    except
     on E: Exception do msg('Halt error: ' + E.Message,0);
    end;

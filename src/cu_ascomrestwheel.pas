@@ -92,11 +92,11 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('Connected',true);
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true);
+  if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      try
-     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+     msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
@@ -124,7 +124,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('Connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
    end;
@@ -134,7 +134,7 @@ function T_ascomrestwheel.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -192,7 +192,7 @@ begin
  try
    maxcount:=maxtime div waitpoll;
    count:=0;
-   while (V.Get('Position').AsInt<0)and(count<maxcount) do begin
+   while (V.Get('position').AsInt<0)and(count<maxcount) do begin
       sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
@@ -209,7 +209,7 @@ begin
  if (num>0) then begin
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
-   V.Put('Position',num-1);
+   V.Put('position',num-1);
    WaitFilter(60000);
    except
     on E: Exception do msg('Set filter error: ' + E.Message,0);
@@ -221,7 +221,7 @@ function  T_ascomrestwheel.GetFilter:integer;
 begin
  result:=0;
    try
-   result:=V.Get('Position').AsInt+1;
+   result:=V.Get('position').AsInt+1;
    except
     on E: Exception do msg('Get filter error: ' + E.Message,0);
    end;
@@ -249,7 +249,7 @@ begin
  value.Clear;
  n:=0;
    try
-   fnames:=V.Get('Names').AsStringArray;
+   fnames:=V.Get('names').AsStringArray;
    n:=Length(fnames);
    value.Add(Filter0);
    for i:=0 to n-1 do begin

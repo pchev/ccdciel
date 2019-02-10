@@ -110,7 +110,7 @@ function  T_ascomrestfocuser.InterfaceVersion: integer;
 begin
  result:=1;
   try
-   result:=V.Get('InterfaceVersion').AsInt;
+   result:=V.Get('interfaceversion').AsInt;
   {$ifdef debug_ascom}msg('Interface version = '+inttostr(Result));{$endif}
   except
     result:=1;
@@ -133,13 +133,13 @@ begin
   V.Timeout:=2000;
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
-    V.Put('Link',true)
+    V.Put('link',true)
   else
-    V.Put('Connected',true);
+    V.Put('connected',true);
   if Connected then begin
      V.Timeout:=120000;
      try
-     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+     msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
@@ -172,9 +172,9 @@ begin
    try
      msg(rsDisconnected3,0);
      if FInterfaceVersion=1 then
-       V.Put('Link',false)
+       V.Put('link',false)
      else
-       V.Put('Connected',false);
+       V.Put('connected',false);
    except
      on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
@@ -185,9 +185,9 @@ begin
 result:=false;
   try
   if FInterfaceVersion=1 then
-     result:=V.Get('Link').AsBool
+     result:=V.Get('link').AsBool
   else
-     result:=V.Get('Connected').AsBool;
+     result:=V.Get('connected').AsBool;
   except
    on E: Exception do begin
       {$ifdef debug_ascom}msg('Error Connected : '+ E.Message);{$endif}
@@ -249,7 +249,7 @@ begin
    {$ifdef debug_ascom}msg('Wait moving ... ');{$endif}
    maxcount:=maxtime div waitpoll;
    count:=0;
-   while (V.Get('IsMoving').AsBool)and(count<maxcount) do begin
+   while (V.Get('ismoving').AsBool)and(count<maxcount) do begin
       {$ifdef debug_ascom}
       if (count mod 20) = 0 then begin
          msg('Wait moving, IsMoving = '+BoolToStr(V.IsMoving, True));
@@ -292,7 +292,7 @@ begin
    else
      n:=p;
    {$ifdef debug_ascom}msg('Move '+inttostr(p)+' '+inttostr(n));{$endif}
-   V.Put('Move',['Position',IntToStr(n)]);
+   V.Put('move',['Position',IntToStr(n)]);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
    except
@@ -304,7 +304,7 @@ function  T_ascomrestfocuser.GetPosition:integer;
 begin
  result:=0;
    try
-   result:=V.Get('Position').AsInt;
+   result:=V.Get('position').AsInt;
    {$ifdef debug_ascom}
    if FmsgAPos<>Result then begin
      msg('Position = '+inttostr(Result));
@@ -322,7 +322,7 @@ begin
    if FPositionRange=NullRange then begin
      try
      result.min:=0;
-     result.max:=V.Get('MaxStep').AsFloat;
+     result.max:=V.Get('maxstep').AsFloat;
      result.step:=1;
      FPositionRange:=result;
      {$ifdef debug_ascom}msg('Position range = '+FormatFloat(f0,FPositionRange.min)+' '+FormatFloat(f0,FPositionRange.max)+' '+FormatFloat(f0,FPositionRange.step) );{$endif}
@@ -343,7 +343,7 @@ begin
    if FRelPositionRange=NullRange then begin
      try
      result.min:=0;
-     result.max:=V.Get('MaxStep').AsFloat;
+     result.max:=V.Get('maxstep').AsFloat;
      result.step:=1;
      FRelPositionRange:=result;
      {$ifdef debug_ascom}msg('Relative position range = '+FormatFloat(f0,FRelPositionRange.min)+' '+FormatFloat(f0,FRelPositionRange.max)+' '+FormatFloat(f0,FRelPositionRange.step) );{$endif}
@@ -368,7 +368,7 @@ begin
      FRelIncr:=p;
    i:=FFocusdirection*FRelIncr;
    {$ifdef debug_ascom}msg('Relative move '+inttostr(p)+' '+inttostr(i));{$endif}
-   V.Put('Move',['Position',IntToStr(i)]);
+   V.Put('move',['Position',IntToStr(i)]);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
    if FDelay>0 then Wait(FDelay);
@@ -412,7 +412,7 @@ function  T_ascomrestfocuser.GethasAbsolutePositionReal: boolean;
 begin
  result:=False;
    try
-   result:=V.Get('Absolute').AsBool;
+   result:=V.Get('absolute').AsBool;
    {$ifdef debug_ascom}msg('Use AbsolutePosition: '+BoolToStr(result, True));{$endif}
    except
     on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message,0);
@@ -429,7 +429,7 @@ function  T_ascomrestfocuser.GethasRelativePositionReal: boolean;
 begin
  result:=False;
    try
-   result:=not V.Get('Absolute').AsBool;
+   result:=not V.Get('absolute').AsBool;
    {$ifdef debug_ascom}msg('Use RelativePosition: '+BoolToStr(result, True));{$endif}
    except
     on E: Exception do msg('GethasRelativePosition error: ' + E.Message,0);
@@ -460,7 +460,7 @@ var i: integer;
 begin
  result:=0;
    try
-   result:= V.Get('Temperature').AsFloat;
+   result:= V.Get('temperature').AsFloat;
    FhasTemperature:=true;
    {$ifdef debug_ascom}
    i:=round(10*Result);

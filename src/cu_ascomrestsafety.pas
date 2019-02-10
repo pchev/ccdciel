@@ -76,7 +76,7 @@ function  T_ascomrestsafety.InterfaceVersion: integer;
 begin
  result:=1;
   try
-   result:=V.Get('InterfaceVersion').AsInt;
+   result:=V.Get('interfaceversion').AsInt;
   except
     result:=1;
   end;
@@ -95,12 +95,12 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('Connected',true);
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true);
+  if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
      try
-     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+     msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
@@ -126,7 +126,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('Connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
    end;
@@ -136,7 +136,7 @@ function T_ascomrestsafety.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -171,7 +171,7 @@ function  T_ascomrestsafety.Getsafe:boolean;
 begin
  result:=false;
  try
-   result:=V.Get('IsSafe').AsBool;
+   result:=V.Get('issafe').AsBool;
    except
     on E: Exception do msg('Get IsSafe error: ' + E.Message,0);
    end;

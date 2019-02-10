@@ -91,7 +91,7 @@ function  T_ascomrestweather.InterfaceVersion: integer;
 begin
  result:=1;
   try
-   result:=V.Get('InterfaceVersion').AsInt;
+   result:=V.Get('interfaceversion').AsInt;
   except
     result:=1;
   end;
@@ -110,12 +110,12 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('Connected',true);
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true);
+  if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
      try
-       msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+       msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
@@ -142,7 +142,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('Connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
    end;
@@ -152,7 +152,7 @@ function T_ascomrestweather.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -306,85 +306,85 @@ procedure T_ascomrestweather.GetCapabilities;
 begin
  try
    FhasCloudCover:=false;
-   DummyDouble:=V.Get('CloudCover').AsFloat;
+   DummyDouble:=V.Get('cloudcover').AsFloat;
    FhasCloudCover:=true;
  except
  end;
  try
    FhasDewPoint:=false;
-   DummyDouble:=V.Get('DewPoint').AsFloat;
+   DummyDouble:=V.Get('dewpoint').AsFloat;
    FhasDewPoint:=true;
  except
  end;
  try
    FhasHumidity:=false;
-   DummyDouble:=V.Get('Humidity').AsFloat;
+   DummyDouble:=V.Get('humidity').AsFloat;
    FhasHumidity:=true;
  except
  end;
  try
    FhasPressure:=false;
-   DummyDouble:=V.Get('Pressure').AsFloat;
+   DummyDouble:=V.Get('pressure').AsFloat;
    FhasPressure:=true;
  except
  end;
  try
    FhasRainRate:=false;
-   DummyDouble:=V.Get('RainRate').AsFloat;
+   DummyDouble:=V.Get('rainrate').AsFloat;
    FhasRainRate:=true;
  except
  end;
  try
    FhasSkyBrightness:=false;
-   DummyDouble:=V.Get('SkyBrightness').AsFloat;
+   DummyDouble:=V.Get('skybrightness').AsFloat;
    FhasSkyBrightness:=true;
  except
  end;
  try
    FhasSkyQuality:=false;
-   DummyDouble:=V.Get('SkyQuality').AsFloat;
+   DummyDouble:=V.Get('skyquality').AsFloat;
    FhasSkyQuality:=true;
  except
  end;
  try
    FhasSkyTemperature:=false;
-   DummyDouble:=V.Get('SkyTemperature').AsFloat;
+   DummyDouble:=V.Get('skytemperature').AsFloat;
    FhasSkyTemperature:=true;
  except
  end;
  try
    FhasStarFWHM:=false;
-   DummyDouble:=V.Get('StarFWHM').AsFloat;
+   DummyDouble:=V.Get('starfwhm').AsFloat;
    FhasStarFWHM:=true;
  except
  end;
  try
    FhasTemperature:=false;
-   DummyDouble:=V.Get('Temperature').AsFloat;
+   DummyDouble:=V.Get('temperature').AsFloat;
    FhasTemperature:=true;
  except
  end;
  try
    FhasWindDirection:=false;
-   DummyDouble:=V.Get('WindDirection').AsFloat;
+   DummyDouble:=V.Get('winddirection').AsFloat;
    FhasWindDirection:=true;
  except
  end;
  try
    FhasWindGust:=false;
-   DummyDouble:=V.Get('WindGust').AsFloat;
+   DummyDouble:=V.Get('windgust').AsFloat;
    FhasWindGust:=true;
  except
  end;
  try
    FhasWindSpeed:=false;
-   DummyDouble:=V.Get('WindSpeed').AsFloat;
+   DummyDouble:=V.Get('windspeed').AsFloat;
    FhasWindSpeed:=true;
  except
  end;
  try
    FhasStatus:=false;
-   DummyBool:=V.Get('IsSafe').AsBool;
+   DummyBool:=V.Get('issafe').AsBool;
    FhasStatus:=true;
  except
  end;
@@ -395,7 +395,7 @@ begin
  result:=NullCoord;
  try
  if FhasCloudCover then begin
-   result:=V.Get('CloudCover').AsFloat;
+   result:=V.Get('cloudcover').AsFloat;
  end;
  except
  end;
@@ -406,7 +406,7 @@ begin
  result:=NullCoord;
  try
  if FhasDewPoint then begin
-   result:=V.Get('DewPoint').AsFloat;
+   result:=V.Get('dewpoint').AsFloat;
  end;
  except
  end;
@@ -417,7 +417,7 @@ begin
  result:=NullCoord;
  try
  if FhasHumidity then begin
-   result:=V.Get('Humidity').AsFloat;
+   result:=V.Get('humidity').AsFloat;
  end;
  except
  end;
@@ -428,7 +428,7 @@ begin
  result:=NullCoord;
  try
  if FhasPressure then begin
-   result:=V.Get('Pressure').AsFloat;
+   result:=V.Get('pressure').AsFloat;
  end;
  except
  end;
@@ -439,7 +439,7 @@ begin
  result:=NullCoord;
  try
  if FhasRainRate then begin
-   result:=V.Get('RainRate').AsFloat;
+   result:=V.Get('rainrate').AsFloat;
  end;
  except
  end;
@@ -450,7 +450,7 @@ begin
  result:=NullCoord;
  try
  if FhasSkyBrightness then begin
-   result:=V.Get('SkyBrightness').AsFloat;
+   result:=V.Get('skybrightness').AsFloat;
  end;
  except
  end;
@@ -461,7 +461,7 @@ begin
  result:=NullCoord;
  try
  if FhasSkyQuality then begin
-   result:=V.Get('SkyQuality').AsFloat;
+   result:=V.Get('skyquality').AsFloat;
  end;
  except
  end;
@@ -472,7 +472,7 @@ begin
  result:=NullCoord;
  try
  if FhasSkyTemperature then begin
-   result:=V.Get('SkyTemperature').AsFloat;
+   result:=V.Get('skytemperature').AsFloat;
  end;
  except
  end;
@@ -483,7 +483,7 @@ begin
  result:=NullCoord;
  try
  if FhasStarFWHM then begin
-   result:=V.Get('StarFWHM').AsFloat;
+   result:=V.Get('starfwhm').AsFloat;
  end;
  except
  end;
@@ -494,7 +494,7 @@ begin
  result:=NullCoord;
  try
  if FhasTemperature then begin
-   result:=V.Get('Temperature').AsFloat;
+   result:=V.Get('temperature').AsFloat;
  end;
  except
  end;
@@ -505,7 +505,7 @@ begin
  result:=NullCoord;
  try
  if FhasWindDirection then begin
-   result:=V.Get('WindDirection').AsFloat;
+   result:=V.Get('winddirection').AsFloat;
  end;
  except
  end;
@@ -516,7 +516,7 @@ begin
  result:=NullCoord;
  try
  if FhasWindGust then begin
-   result:=V.Get('WindGust').AsFloat;
+   result:=V.Get('windgust').AsFloat;
  end;
  except
  end;
@@ -527,7 +527,7 @@ begin
  result:=NullCoord;
  try
  if FhasWindSpeed then begin
-   result:=V.Get('WindSpeed').AsFloat;
+   result:=V.Get('windspeed').AsFloat;
  end;
  except
  end;
@@ -538,7 +538,7 @@ begin
  result:=false;
  try
  if FhasStatus then begin
-   result:=V.Get('IsSafe').AsBool;
+   result:=V.Get('issafe').AsBool;
  end;
  except
  end;

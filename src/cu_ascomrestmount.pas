@@ -125,21 +125,21 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('Connected',true);
-  if V.Get('Connected').AsBool then begin
+  V.Put('connected',true);
+  if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      try
-     msg('Driver version: '+V.Get('DriverVersion').AsString,9);
+     msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
      CheckEqmod;
-     CanPark:=V.Get('CanPark').AsBool;
-     CanSlew:=V.Get('CanSlew').AsBool;
-     CanSlewAsync:=V.Get('CanSlewAsync').AsBool;
-     CanSetPierSide:=V.Get('CanSetPierSide').AsBool;
-     CanSync:=V.Get('CanSync').AsBool;
-     CanSetTracking:=V.Get('CanSetTracking').AsBool;
+     CanPark:=V.Get('canpark').AsBool;
+     CanSlew:=V.Get('canslew').AsBool;
+     CanSlewAsync:=V.Get('canslewasync').AsBool;
+     CanSetPierSide:=V.Get('cansetpierside').AsBool;
+     CanSync:=V.Get('cansync').AsBool;
+     CanSetTracking:=V.Get('cansettracking').AsBool;
      buf:='';
      if IsEqmod then buf:=buf+'EQmod ';
      if CanPark then buf:=buf+'CanPark ';
@@ -173,7 +173,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('Connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
    end;
@@ -183,7 +183,7 @@ function T_ascomrestmount.Connected: boolean;
 begin
 result:=false;
   try
-  result:=V.Get('Connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    result:=false;
   end;
@@ -240,11 +240,11 @@ begin
    if CanPark then begin
       if value then begin
          msg(rsPark);
-         V.Put('Park');
+         V.Put('park');
          WaitMountPark(120000);
       end else begin
          msg(rsUnpark);
-         V.Put('UnPark');
+         V.Put('unpark');
       end;
    end;
    except
@@ -256,7 +256,7 @@ function  T_ascomrestmount.GetPark:Boolean;
 begin
  result:=false;
    try
-   result:=V.Get('AtPark').AsBool;
+   result:=V.Get('atpark').AsBool;
    except
     result:=false;
    end;
@@ -266,7 +266,7 @@ function  T_ascomrestmount.GetRA:double;
 begin
  result:=NullCoord;
    try
-   result:=V.Get('RightAscension').AsFloat;
+   result:=V.Get('rightascension').AsFloat;
    except
     result:=NullCoord;
    end;
@@ -276,7 +276,7 @@ function  T_ascomrestmount.GetDec:double;
 begin
  result:=NullCoord;
    try
-   result:=V.Get('Declination').AsFloat;
+   result:=V.Get('declination').AsFloat;
    except
     result:=NullCoord;
    end;
@@ -287,7 +287,7 @@ var i: integer;
 begin
  result:=pierUnknown;
    try
-   i:=V.Get('SideOfPier').AsInt;  // pascal enum may have different size
+   i:=V.Get('sideofpier').AsInt;  // pascal enum may have different size
    case i of
      -1: result:=pierUnknown;
       0: result:=pierEast;
@@ -303,7 +303,7 @@ var i: Integer;
 begin
  result:=0;
   try
-  i:=V.Get('EquatorialSystem').AsInt;
+  i:=V.Get('equatorialsystem').AsInt;
   case i of
   0 : result:=0;
   1 : result:=0;
@@ -320,7 +320,7 @@ function  T_ascomrestmount.GetAperture:double;
 begin
  result:=-1;
    try
-   result:=V.Get('ApertureDiameter').AsFloat*1000;
+   result:=V.Get('aperturediameter').AsFloat*1000;
    except
     result:=-1;
    end;
@@ -330,7 +330,7 @@ function  T_ascomrestmount.GetFocaleLength:double;
 begin
  result:=-1;
    try
-   result:=V.Get('FocalLength').AsFloat*1000;
+   result:=V.Get('focallength').AsFloat*1000;
    except
     result:=-1;
    end;
@@ -341,9 +341,9 @@ begin
  result:=false;
  if CanSlew then begin
    try
-   if CanSetTracking and (not V.Get('Tracking').AsBool) then begin
+   if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
-      V.Put('Tracking',true);
+      V.Put('tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
@@ -353,10 +353,10 @@ begin
    else
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
-     V.Put('SlewToCoordinatesAsync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+     V.Put('slewtocoordinatesasync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
    end
    else
-     V.Put('SlewToCoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+     V.Put('slewtocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
    result:=true;
    except
      on E: Exception do msg('Slew error: ' + E.Message,0);
@@ -369,9 +369,9 @@ begin
  result:=false;
  if CanSlew then begin
    try
-   if CanSetTracking and (not V.Get('Tracking').AsBool) then begin
+   if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
-      V.Put('Tracking',true);
+      V.Put('tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
@@ -382,11 +382,11 @@ begin
    else
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
-     V.Put('SlewToCoordinatesAsync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+     V.Put('slewtocoordinatesasync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
      WaitMountSlewing(120000);
    end
    else
-     V.Put('SlewToCoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+     V.Put('slewtocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
    wait(2);
    msg(rsSlewComplete);
    FMountSlewing:=false;
@@ -404,7 +404,7 @@ begin
  try
  islewing:=false;
   if CanSlewAsync then
-    islewing:=V.Get('Slewing').AsBool
+    islewing:=V.Get('slewing').AsBool
   else
     islewing:=false;
   result:=(islewing or FMountSlewing);
@@ -421,7 +421,7 @@ begin
  if CanSlewAsync then begin
    maxcount:=maxtime div waitpoll;
    count:=0;
-   while (V.Get('Slewing').AsBool)and(count<maxcount) do begin
+   while (V.Get('slewing').AsBool)and(count<maxcount) do begin
       sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
@@ -441,7 +441,7 @@ begin
  if CanPark then begin
    maxcount:=maxtime div waitpoll;
    count:=0;
-   while (not V.Get('atPark').AsBool)and(count<maxcount) do begin
+   while (not V.Get('atpark').AsBool)and(count<maxcount) do begin
       sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
@@ -501,7 +501,7 @@ begin
  result:=false;
  if CanSync then begin
    try
-   if CanSetTracking and (not V.Get('Tracking').AsBool) then begin
+   if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      msg(rsCannotSyncWh,0);
      exit;
    end;
@@ -509,7 +509,7 @@ begin
       msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]))
    else
       msg(Format(rsSyncToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
-   V.Put('SyncToCoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
+   V.Put('synctocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
    result:=true;
    except
      on E: Exception do msg('Sync error: ' + E.Message,0);
@@ -521,7 +521,7 @@ function T_ascomrestmount.GetTracking:Boolean;
 begin
  result:=true;
    try
-   result:=V.Get('Tracking').AsBool;
+   result:=V.Get('tracking').AsBool;
    except
    end;
 end;
@@ -530,10 +530,10 @@ function T_ascomrestmount.Track:boolean;
 begin
  result:=false;
    try
-   if CanSetTracking and (not V.Get('Tracking').AsBool) then begin
+   if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
       msg(rsStartTraking);
-      V.Put('Tracking',true);
+      V.Put('tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
@@ -549,8 +549,8 @@ begin
  if CanSlew then begin
    try
    msg(rsStopTelescop);
-   V.Put('AbortSlew');
-   if CanSetTracking  then V.Put('Tracking',false);
+   V.Put('abortslew');
+   if CanSetTracking  then V.Put('tracking',false);
    except
      on E: Exception do msg('Abort motion error: ' + E.Message,0);
    end;
@@ -569,7 +569,7 @@ var buf:string;
 begin
   FIsEqmod:=false;
     try
-    buf:=V.PutR('CommandString',['Command',':MOUNTVER#','Raw','true']).AsString;
+    buf:=V.PutR('commandstring',['Command',':MOUNTVER#','Raw','true']).AsString;
     if length(buf)=8 then FIsEqmod:=true;
     except
      FIsEqmod:=false;
@@ -582,7 +582,7 @@ begin
  result:=alUNSUPPORTED;
  if IsEqmod then begin
    try
-   buf:=V.PutR('CommandString',['Command',':ALIGN_MODE#','Raw','true']).AsString;
+   buf:=V.PutR('commandstring',['Command',':ALIGN_MODE#','Raw','true']).AsString;
    if buf='1#' then result:=alADDPOINT
    else if buf='0#' then result:=alSTDSYNC;
    except
@@ -598,11 +598,11 @@ begin
    try
    if value=alSTDSYNC then begin
      msg('align mode Std Sync');
-     V.Put('CommandString',['Command',':ALIGN_MODE,0#','Raw','true']);
+     V.Put('commandstring',['Command',':ALIGN_MODE,0#','Raw','true']);
    end
    else if value=alADDPOINT then begin
      msg('align mode Add Point');
-     V.Put('CommandString',['Command',':ALIGN_MODE,1#','Raw','true']);
+     V.Put('commandstring',['Command',':ALIGN_MODE,1#','Raw','true']);
    end;
    except
      on E: Exception do msg('Eqmod set sync mode error: ' + E.Message,0);
@@ -616,7 +616,7 @@ begin
  if IsEqmod then begin
    try
    msg('clear alignment');
-   V.Put('CommandString',['Command',':ALIGN_CLEAR_POINTS#','Raw','true']);
+   V.Put('commandstring',['Command',':ALIGN_CLEAR_POINTS#','Raw','true']);
    result:=true;
    except
      on E: Exception do msg('Eqmod clear alignment error: ' + E.Message,0);
@@ -630,7 +630,7 @@ begin
  if IsEqmod then begin
    try
    msg('clear delta sync');
-   V.Put('CommandString',['Command',':ALIGN_CLEAR_SYNC#','Raw','true']);
+   V.Put('commandstring',['Command',':ALIGN_CLEAR_SYNC#','Raw','true']);
    result:=true;
    except
      on E: Exception do msg('Eqmod clear delta error: ' + E.Message,0);
@@ -642,9 +642,9 @@ function T_ascomrestmount.GetSite(var long,lat,elev: double): boolean;
 begin
  result:=false;
    try
-   long:=V.Get('SiteLongitude').AsFloat;
-   lat:=V.Get('SiteLatitude').AsFloat;
-   elev:=V.Get('SiteElevation').AsFloat;
+   long:=V.Get('sitelongitude').AsFloat;
+   lat:=V.Get('sitelatitude').AsFloat;
+   elev:=V.Get('siteelevation').AsFloat;
    result:=true;
    except
      on E: Exception do msg('Cannot get site information: ' + E.Message,0);
@@ -655,9 +655,9 @@ function T_ascomrestmount.SetSite(long,lat,elev: double): boolean;
 begin
  result:=false;
    try
-   V.Put('SiteLongitude',long);
-   V.Put('SiteLatitude',lat);
-   V.Put('SiteElevation',elev);
+   V.Put('sitelongitude',long);
+   V.Put('sitelatitude',lat);
+   V.Put('siteelevation',elev);
    result:=true;
    except
      on E: Exception do msg('Cannot set site information: ' + E.Message,0);
@@ -668,7 +668,7 @@ function T_ascomrestmount.GetDate(var utc,offset: double): boolean;
 begin
  result:=false;
    try
-   utc:=DateIso2DateTime(V.Get('UTCDate').AsString);     //2019-01-30T18:15:23.734
+   utc:=DateIso2DateTime(V.Get('utcdate').AsString);     //2019-01-30T18:15:23.734
    offset:=ObsTimeZone; // No offset in ASCOM telescope interface
    result:=true;
    except
@@ -680,7 +680,7 @@ function T_ascomrestmount.SetDate(utc,offset: double): boolean;
 begin
  result:=false;
    try
-   V.Put('UTCDate',FormatDateTime(dateiso,utc));
+   V.Put('utcdate',FormatDateTime(dateiso,utc));
    result:=true;
    except
      on E: Exception do msg('Cannot set date: ' + E.Message,0);
