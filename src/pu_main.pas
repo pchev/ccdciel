@@ -3468,7 +3468,7 @@ begin
     ASCOMREST: camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestcamera/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestcamera/Protocol',0)],
-                          'Camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0)),
+                          'camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcamera/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcamera/Pass','')), encryptpwd));
   end;
@@ -3719,7 +3719,7 @@ begin
     ASCOMREST: wheel.Connect(config.GetValue('/ASCOMRestwheel/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestwheel/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestwheel/Protocol',0)],
-                          'FilterWheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0)),
+                          'filterwheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestwheel/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestwheel/Pass','')), encryptpwd));
   end;
@@ -3741,7 +3741,7 @@ begin
     ASCOMREST: focuser.Connect(config.GetValue('/ASCOMRestfocuser/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestfocuser/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestfocuser/Protocol',0)],
-                          'Focuser/'+IntToStr(config.GetValue('/ASCOMRestfocuser/Device',0)),
+                          'focuser/'+IntToStr(config.GetValue('/ASCOMRestfocuser/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestfocuser/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestfocuser/Pass','')), encryptpwd));
   end;
@@ -3806,7 +3806,7 @@ begin
     ASCOMREST: rotator.Connect(config.GetValue('/ASCOMRestrotator/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestrotator/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestrotator/Protocol',0)],
-                          'Rotator/'+IntToStr(config.GetValue('/ASCOMRestrotator/Device',0)),
+                          'rotator/'+IntToStr(config.GetValue('/ASCOMRestrotator/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestrotator/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestrotator/Pass','')), encryptpwd));
   end;
@@ -3828,7 +3828,7 @@ begin
     ASCOMREST: mount.Connect(config.GetValue('/ASCOMRestmount/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestmount/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestmount/Protocol',0)],
-                          'Telescope/'+IntToStr(config.GetValue('/ASCOMRestmount/Device',0)),
+                          'telescope/'+IntToStr(config.GetValue('/ASCOMRestmount/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestmount/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestmount/Pass','')), encryptpwd));
   end;
@@ -3850,7 +3850,7 @@ begin
     ASCOMREST: dome.Connect(config.GetValue('/ASCOMRestdome/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestdome/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestdome/Protocol',0)],
-                          'Dome/'+IntToStr(config.GetValue('/ASCOMRestdome/Device',0)),
+                          'dome/'+IntToStr(config.GetValue('/ASCOMRestdome/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestdome/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestdome/Pass','')), encryptpwd));
   end;
@@ -3954,9 +3954,9 @@ begin
     ASCOM: weather.Connect(config.GetValue('/ASCOMweather/Device',''));
     ASCOMREST: begin
                if config.GetValue('/ASCOMRestweather/DeviceType',0)=0 then
-                  WeatherName:='ObservingConditions/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0))
+                  WeatherName:='observingconditions/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0))
                 else
-                  WeatherName:='SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0));
+                  WeatherName:='safetymonitor/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0));
            weather.Connect(config.GetValue('/ASCOMRestweather/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestweather/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestweather/Protocol',0)],
@@ -4019,7 +4019,7 @@ begin
     ASCOMREST: safety.Connect(config.GetValue('/ASCOMRestsafety/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestsafety/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestsafety/Protocol',0)],
-                          'SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0)),
+                          'safetymonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestsafety/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestsafety/Pass','')), encryptpwd));
   end;
