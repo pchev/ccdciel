@@ -133,7 +133,7 @@ begin
   V.Timeout:=2000;
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
-    raise Exception.Create('IFocuser V1 is not supported')
+    raise Exception.Create('IFocuser V1 is not supported');
   V.Put('connected',true);
   if Connected then begin
      V.Timeout:=120000;
@@ -198,6 +198,7 @@ begin
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
+     msg(rsDisconnected3,0);
   end
   else begin
     try
@@ -230,7 +231,7 @@ begin
     end;
   end;
   finally
-   StatusTimer.Enabled:=true;
+   if FStatus=devConnected then StatusTimer.Enabled:=true;
   end;
 end;
 

@@ -159,6 +159,7 @@ begin
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
+     msg(rsDisconnected3,0);
   end
   else begin
     try
@@ -172,7 +173,7 @@ begin
     end;
   end;
   finally
-   StatusTimer.Enabled:=true;
+   if FStatus=devConnected then StatusTimer.Enabled:=true;
   end;
 end;
 
