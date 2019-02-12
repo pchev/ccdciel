@@ -189,6 +189,7 @@ var x: double;
     nullcheck,ok: boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
  try
    nullcheck:=false;
    result:=true;
@@ -305,6 +306,7 @@ end;
 
 procedure T_ascomrestweather.GetCapabilities;
 begin
+ if FStatus<>devConnected then exit;
  try
    FhasCloudCover:=false;
    DummyDouble:=V.Get('cloudcover').AsFloat;
@@ -394,6 +396,7 @@ end;
 function T_ascomrestweather.GetCloudCover: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasCloudCover then begin
    result:=V.Get('cloudcover').AsFloat;
@@ -405,6 +408,7 @@ end;
 function T_ascomrestweather.GetDewPoint: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasDewPoint then begin
    result:=V.Get('dewpoint').AsFloat;
@@ -416,6 +420,7 @@ end;
 function T_ascomrestweather.GetHumidity: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasHumidity then begin
    result:=V.Get('humidity').AsFloat;
@@ -427,6 +432,7 @@ end;
 function T_ascomrestweather.GetPressure: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasPressure then begin
    result:=V.Get('pressure').AsFloat;
@@ -438,6 +444,7 @@ end;
 function T_ascomrestweather.GetRainRate: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasRainRate then begin
    result:=V.Get('rainrate').AsFloat;
@@ -449,6 +456,7 @@ end;
 function T_ascomrestweather.GetSkyBrightness: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasSkyBrightness then begin
    result:=V.Get('skybrightness').AsFloat;
@@ -460,6 +468,7 @@ end;
 function T_ascomrestweather.GetSkyQuality: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasSkyQuality then begin
    result:=V.Get('skyquality').AsFloat;
@@ -471,6 +480,7 @@ end;
 function T_ascomrestweather.GetSkyTemperature: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasSkyTemperature then begin
    result:=V.Get('skytemperature').AsFloat;
@@ -482,6 +492,7 @@ end;
 function T_ascomrestweather.GetStarFWHM: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasStarFWHM then begin
    result:=V.Get('starfwhm').AsFloat;
@@ -493,6 +504,7 @@ end;
 function T_ascomrestweather.GetTemperature: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasTemperature then begin
    result:=V.Get('temperature').AsFloat;
@@ -504,6 +516,7 @@ end;
 function T_ascomrestweather.GetWindDirection: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasWindDirection then begin
    result:=V.Get('winddirection').AsFloat;
@@ -515,6 +528,7 @@ end;
 function T_ascomrestweather.GetWindGust: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasWindGust then begin
    result:=V.Get('windgust').AsFloat;
@@ -526,6 +540,7 @@ end;
 function T_ascomrestweather.GetWindSpeed: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
  try
  if FhasWindSpeed then begin
    result:=V.Get('windspeed').AsFloat;
@@ -537,6 +552,7 @@ end;
 function T_ascomrestweather.GetWeatherStatus: boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
  try
  if FhasStatus then begin
    result:=V.Get('issafe').AsBool;

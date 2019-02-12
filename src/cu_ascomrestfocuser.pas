@@ -239,6 +239,7 @@ function T_ascomrestfocuser.WaitFocuserMoving(maxtime:integer):boolean;
 var count,maxcount:integer;
 begin
  result:=true;
+ if FStatus<>devConnected then exit;
  try
    {$ifdef debug_ascom}msg('Wait moving ... ');{$endif}
    maxcount:=maxtime div waitpoll;
@@ -265,6 +266,7 @@ end;
 
 procedure T_ascomrestfocuser.FocusIn;
 begin
+ if FStatus<>devConnected then exit;
  FFocusdirection:=-1;
  FLastDirection:=FocusDirIn;
  {$ifdef debug_ascom}msg('Set direction IN');{$endif}
@@ -272,6 +274,7 @@ end;
 
 procedure T_ascomrestfocuser.FocusOut;
 begin
+ if FStatus<>devConnected then exit;
  FFocusdirection:=1;
  FLastDirection:=FocusDirOut;
  {$ifdef debug_ascom}msg('Set direction OUT');{$endif}
@@ -280,6 +283,7 @@ end;
 procedure T_ascomrestfocuser.SetPosition(p:integer);
 var n: integer;
 begin
+ if FStatus<>devConnected then exit;
    try
    if FPositionRange<>NullRange then
      n:=max(min(p,round(FPositionRange.max)),round(FPositionRange.min))
@@ -297,6 +301,7 @@ end;
 function  T_ascomrestfocuser.GetPosition:integer;
 begin
  result:=0;
+ if FStatus<>devConnected then exit;
    try
    result:=V.Get('position').AsInt;
    {$ifdef debug_ascom}
@@ -313,6 +318,7 @@ end;
 function  T_ascomrestfocuser.GetPositionRange: TNumRange;
 begin
  result:=NullRange;
+ if FStatus<>devConnected then exit;
    if FPositionRange=NullRange then begin
      try
      result.min:=0;
@@ -334,6 +340,7 @@ end;
 function  T_ascomrestfocuser.GetRelPositionRange: TNumRange;
 begin
  result:=NullRange;
+   if FStatus<>devConnected then exit;
    if FRelPositionRange=NullRange then begin
      try
      result.min:=0;
@@ -355,6 +362,7 @@ end;
 procedure T_ascomrestfocuser.SetRelPosition(p:integer);
 var i: integer;
 begin
+   if FStatus<>devConnected then exit;
    try
    if FRelPositionRange<>NullRange then
      FRelIncr:=max(min(p,round(FRelPositionRange.max)),round(FRelPositionRange.min))
@@ -373,6 +381,7 @@ end;
 
 function  T_ascomrestfocuser.GetRelPosition:integer;
 begin
+ if FStatus<>devConnected then exit;
  result:=FRelIncr;
  if FmsgRPos<>Result then begin
     msg('Relative position = '+inttostr(Result));
@@ -405,6 +414,7 @@ end;
 function  T_ascomrestfocuser.GethasAbsolutePositionReal: boolean;
 begin
  result:=False;
+ if FStatus<>devConnected then exit;
    try
    result:=V.Get('absolute').AsBool;
    {$ifdef debug_ascom}msg('Use AbsolutePosition: '+BoolToStr(result, True));{$endif}
@@ -416,12 +426,14 @@ end;
 function  T_ascomrestfocuser.GethasAbsolutePosition: boolean;
 begin
  result:=False;
+ if FStatus<>devConnected then exit;
  result:=FhasAbsolutePosition;
 end;
 
 function  T_ascomrestfocuser.GethasRelativePositionReal: boolean;
 begin
  result:=False;
+ if FStatus<>devConnected then exit;
    try
    result:=not V.Get('absolute').AsBool;
    {$ifdef debug_ascom}msg('Use RelativePosition: '+BoolToStr(result, True));{$endif}
@@ -433,6 +445,7 @@ end;
 function  T_ascomrestfocuser.GethasRelativePosition: boolean;
 begin
  result:=False;
+ if FStatus<>devConnected then exit;
  result:=FhasRelativePosition;
 end;
 
@@ -453,6 +466,7 @@ var i: integer;
 {$endif}
 begin
  result:=0;
+ if FStatus<>devConnected then exit;
    try
    result:= V.Get('temperature').AsFloat;
    FhasTemperature:=true;

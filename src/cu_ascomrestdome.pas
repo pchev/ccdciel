@@ -205,6 +205,7 @@ end;
 function T_ascomrestdome.GetPark: boolean;
 begin
  result:=false;
+   if FStatus<>devConnected then exit;
    try
    if FhasPark then result:=V.Get('atpark').AsBool;
    except
@@ -214,6 +215,7 @@ end;
 
 procedure T_ascomrestdome.SetPark(value:boolean);
 begin
+   if FStatus<>devConnected then exit;
    try
    if FhasPark and value then V.Put('park'); // no ASCOM unpark
    except
@@ -225,6 +227,7 @@ function T_ascomrestdome.GetShutter: boolean;
 var i: integer;
 begin
  result:=false;
+   if FStatus<>devConnected then exit;
    try
    if FhasShutter then begin
      i:=V.Get('shutterstatus').AsInt;
@@ -237,6 +240,7 @@ end;
 
 procedure T_ascomrestdome.SetShutter(value:boolean);
 begin
+   if FStatus<>devConnected then exit;
    try
    if FhasShutter then begin
      if value then V.Put('openshutter')
@@ -250,6 +254,7 @@ end;
 function T_ascomrestdome.GetSlave: boolean;
 begin
  result:=false;
+   if FStatus<>devConnected then exit;
    try
    if FhasSlaving then result:=V.Get('slaved').AsBool;
    except
@@ -259,6 +264,7 @@ end;
 
 procedure T_ascomrestdome.SetSlave(value:boolean);
 begin
+   if FStatus<>devConnected then exit;
    try
    if FhasSlaving then V.Put('slaved',value);
    except

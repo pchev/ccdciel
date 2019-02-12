@@ -171,6 +171,7 @@ end;
 function  T_ascomrestsafety.Getsafe:boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
  try
    result:=V.Get('issafe').AsBool;
    except

@@ -181,6 +181,7 @@ function T_ascomrestrotator.WaitRotatorMoving(maxtime:integer):boolean;
 var count,maxcount:integer;
 begin
  result:=true;
+ if FStatus<>devConnected then exit;
  try
    maxcount:=maxtime div waitpoll;
    count:=0;
@@ -197,6 +198,7 @@ end;
 
 procedure T_ascomrestrotator.SetAngle(p:double);
 begin
+ if FStatus<>devConnected then exit;
  try
    //msg('Rotator '+Fdevice+' move to internal '+FormatFloat(f1,p));
    V.Put('moveabsolute',['Position',FormatFloat(f2,p)]);
@@ -210,6 +212,7 @@ end;
 function  T_ascomrestrotator.GetAngle:double;
 begin
  result:=0;
+ if FStatus<>devConnected then exit;
  try
    result:=V.Get('position').AsInt;
  except
@@ -220,6 +223,7 @@ end;
 function T_ascomrestrotator.GetDriverReverse:boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
    try
    if V.Get('canreverse').AsBool then result:=V.Get('reverse').AsBool;
    except
@@ -229,6 +233,7 @@ end;
 
 procedure T_ascomrestrotator.SetDriverReverse(value:boolean);
 begin
+ if FStatus<>devConnected then exit;
    try
    if V.Get('canreverse').AsBool then V.Put('reverse',value);
    except
@@ -237,6 +242,7 @@ end;
 
 Procedure T_ascomrestrotator.Halt;
 begin
+ if FStatus<>devConnected then exit;
    try
     V.Put('halt');
    except

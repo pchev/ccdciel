@@ -237,6 +237,7 @@ end;
 
 procedure T_ascomrestmount.SetPark(value:Boolean);
 begin
+   if FStatus<>devConnected then exit;
    try
    if CanPark then begin
       if value then begin
@@ -256,6 +257,7 @@ end;
 function  T_ascomrestmount.GetPark:Boolean;
 begin
  result:=false;
+   if FStatus<>devConnected then exit;
    try
    result:=V.Get('atpark').AsBool;
    except
@@ -266,6 +268,7 @@ end;
 function  T_ascomrestmount.GetRA:double;
 begin
  result:=NullCoord;
+   if FStatus<>devConnected then exit;
    try
    result:=V.Get('rightascension').AsFloat;
    except
@@ -276,6 +279,7 @@ end;
 function  T_ascomrestmount.GetDec:double;
 begin
  result:=NullCoord;
+   if FStatus<>devConnected then exit;
    try
    result:=V.Get('declination').AsFloat;
    except
@@ -287,6 +291,7 @@ function  T_ascomrestmount.GetPierSide:TPierSide;
 var i: integer;
 begin
  result:=pierUnknown;
+   if FStatus<>devConnected then exit;
    try
    i:=V.Get('sideofpier').AsInt;  // pascal enum may have different size
    case i of
@@ -303,6 +308,7 @@ function  T_ascomrestmount.GetEquinox: double;
 var i: Integer;
 begin
  result:=0;
+  if FStatus<>devConnected then exit;
   try
   i:=V.Get('equatorialsystem').AsInt;
   case i of
@@ -320,6 +326,7 @@ end;
 function  T_ascomrestmount.GetAperture:double;
 begin
  result:=-1;
+  if FStatus<>devConnected then exit;
    try
    result:=V.Get('aperturediameter').AsFloat*1000;
    except
@@ -330,6 +337,7 @@ end;
 function  T_ascomrestmount.GetFocaleLength:double;
 begin
  result:=-1;
+  if FStatus<>devConnected then exit;
    try
    result:=V.Get('focallength').AsFloat*1000;
    except
@@ -340,6 +348,7 @@ end;
 function T_ascomrestmount.SlewAsync(sra,sde: double):boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
  if CanSlew then begin
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
@@ -368,6 +377,7 @@ end;
 function T_ascomrestmount.Slew(sra,sde: double):boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
  if CanSlew then begin
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
@@ -402,6 +412,7 @@ function T_ascomrestmount.GetMountSlewing:boolean;
 var islewing: boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
  try
  islewing:=false;
   if CanSlewAsync then
@@ -418,6 +429,7 @@ function T_ascomrestmount.WaitMountSlewing(maxtime:integer):boolean;
 var count,maxcount:integer;
 begin
  result:=true;
+ if FStatus<>devConnected then exit;
  try
  if CanSlewAsync then begin
    maxcount:=maxtime div waitpoll;
@@ -438,6 +450,7 @@ function T_ascomrestmount.WaitMountPark(maxtime:integer):boolean;
 var count,maxcount:integer;
 begin
  result:=true;
+ if FStatus<>devConnected then exit;
  try
  if CanPark then begin
    maxcount:=maxtime div waitpoll;
@@ -459,6 +472,7 @@ var sra,sde,ra1,ra2: double;
     pierside1,pierside2:TPierSide;
 begin
   result:=false;
+ if FStatus<>devConnected then exit;
   if Connected then begin
     sra:=GetRA;
     sde:=GetDec;
@@ -499,7 +513,7 @@ end;
 function T_ascomrestmount.Sync(sra,sde: double):boolean;
 begin
  result:=false;
- result:=false;
+ if FStatus<>devConnected then exit;
  if CanSync then begin
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
@@ -521,6 +535,7 @@ end;
 function T_ascomrestmount.GetTracking:Boolean;
 begin
  result:=true;
+ if FStatus<>devConnected then exit;
    try
    result:=V.Get('tracking').AsBool;
    except
@@ -530,6 +545,7 @@ end;
 function T_ascomrestmount.Track:boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
@@ -547,6 +563,7 @@ end;
 
 procedure T_ascomrestmount.AbortMotion;
 begin
+ if FStatus<>devConnected then exit;
  if CanSlew then begin
    try
    msg(rsStopTelescop);
@@ -642,6 +659,7 @@ end;
 function T_ascomrestmount.GetSite(var long,lat,elev: double): boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
    try
    long:=V.Get('sitelongitude').AsFloat;
    lat:=V.Get('sitelatitude').AsFloat;
@@ -655,6 +673,7 @@ end;
 function T_ascomrestmount.SetSite(long,lat,elev: double): boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
    try
    V.Put('sitelongitude',long);
    V.Put('sitelatitude',lat);
@@ -668,6 +687,7 @@ end;
 function T_ascomrestmount.GetDate(var utc,offset: double): boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
    try
    utc:=DateIso2DateTime(V.Get('utcdate').AsString);     //2019-01-30T18:15:23.734
    offset:=ObsTimeZone; // No offset in ASCOM telescope interface
@@ -680,6 +700,7 @@ end;
 function T_ascomrestmount.SetDate(utc,offset: double): boolean;
 begin
  result:=false;
+ if FStatus<>devConnected then exit;
    try
    V.Put('utcdate',FormatDateTime(dateiso,utc));
    result:=true;

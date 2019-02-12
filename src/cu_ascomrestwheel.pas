@@ -190,6 +190,7 @@ function T_ascomrestwheel.WaitFilter(maxtime:integer):boolean;
 var count,maxcount:integer;
 begin
  result:=true;
+ if FStatus<>devConnected then exit;
  try
    maxcount:=maxtime div waitpoll;
    count:=0;
@@ -207,6 +208,7 @@ end;
 
 procedure T_ascomrestwheel.SetFilter(num:integer);
 begin
+ if FStatus<>devConnected then exit;
  if (num>0) then begin
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
@@ -221,6 +223,7 @@ end;
 function  T_ascomrestwheel.GetFilter:integer;
 begin
  result:=0;
+ if FStatus<>devConnected then exit;
    try
    result:=V.Get('position').AsInt+1;
    except

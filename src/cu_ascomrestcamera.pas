@@ -360,6 +360,7 @@ end;
 Procedure T_ascomrestcamera.StartExposure(exptime: double);
 var li: string;
 begin
+  if FStatus<>devConnected then exit;
   case FFrametype of
     LIGHT: li:='true';
     BIAS : li:='false';
@@ -571,6 +572,7 @@ Procedure T_ascomrestcamera.SetBinning(sbinX,sbinY: integer);
 var oldx,oldy,newx,newy,fsx,fsy,fnx,fny: integer;
     scale:double;
 begin
+   if FStatus<>devConnected then exit;
    try
    {$ifdef debug_ascom}msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));{$endif}
    oldx:=FBinX;
@@ -605,6 +607,7 @@ end;
 procedure T_ascomrestcamera.SetFrame(x,y,width,height: integer);
 var Xmax,Ymax,w,h,bx,by: integer;
 begin
+   if FStatus<>devConnected then exit;
    try
    {$ifdef debug_ascom}msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
    w:=FCameraXSize;
@@ -644,6 +647,7 @@ end;
 procedure T_ascomrestcamera.GetFrame(out x,y,width,height: integer);
 var Cx,Cy,Cwidth,Cheight: integer;
 begin
+   if FStatus<>devConnected then exit;
    try
    x      := V.Get('startx').AsInt;
    y      := V.Get('starty').AsInt;
@@ -675,6 +679,7 @@ end;
 procedure T_ascomrestcamera.GetFrameRange(out xr,yr,widthr,heightr: TNumRange);
 begin
  xr:=NullRange;yr:=NullRange;widthr:=NullRange;heightr:=NullRange;
+   if FStatus<>devConnected then exit;
    try
    xr.min:=0;
    xr.max:=FCameraXSize-1;
@@ -697,6 +702,7 @@ end;
 procedure T_ascomrestcamera.ResetFrame;
 var w,h,bx,by: integer;
 begin
+  if FStatus<>devConnected then exit;
   try
   w:=FCameraXSize;
   h:=FCameraYSize;
@@ -716,6 +722,7 @@ end;
 
 Procedure T_ascomrestcamera.AbortExposure;
 begin
+   if FStatus<>devConnected then exit;
    try
     msg(rsAbortExposur);
     ExposureTimer.Enabled:=false;
@@ -744,6 +751,7 @@ end;
 
 procedure T_ascomrestcamera.SetFrametype(f:TFrameType);
 begin
+  if FStatus<>devConnected then exit;
   msg(Format(rsSetFrameType, [FrameName[ord(f)]]));
   FFrametype:=f;
 end;
@@ -756,18 +764,21 @@ end;
 function T_ascomrestcamera.GetBinXrange:TNumRange;
 begin
    result:=UnitRange;
+  if FStatus<>devConnected then exit;
    result.max:=FMaxBinX;
 end;
 
 function T_ascomrestcamera.GetBinYrange:TNumRange;
 begin
    result:=UnitRange;
+  if FStatus<>devConnected then exit;
    result.max:=FMaxBinY;
 end;
 
 function T_ascomrestcamera.GetExposureRange:TNumRange;
 begin
   result:=NullRange;
+  if FStatus<>devConnected then exit;
     try
     result.max:=V.Get('exposuremax').AsFloat;
     except
@@ -794,6 +805,7 @@ end;
 
 procedure T_ascomrestcamera.SetFilter(num:integer);
 begin
+   if FStatus<>devConnected then exit;
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
    V.Put('position',num-1);
@@ -806,6 +818,7 @@ end;
 function  T_ascomrestcamera.GetFilter:integer;
 begin
  result:=0;
+   if FStatus<>devConnected then exit;
    try
    result:=V.Get('position').AsInt+1;
    except
@@ -816,6 +829,7 @@ end;
 procedure T_ascomrestcamera.SetFilterNames(value:TStringList);
 var i:integer;
 begin
+ if FStatus<>devConnected then exit;
  try
   if (value.Count=nf) then begin
     for i:=0 to value.Count-1 do begin
@@ -829,6 +843,7 @@ end;
 function  T_ascomrestcamera.GetTemperature: double;
 begin
  result:=NullCoord;
+ if FStatus<>devConnected then exit;
    try
    if FHasTemperature then
       result:=V.Get('ccdtemperature').AsFloat
@@ -841,6 +856,7 @@ end;
 
 procedure T_ascomrestcamera.SetTemperature(value:double);
 begin
+   if FStatus<>devConnected then exit;
    try
    if FCanSetTemperature then begin
       SetCooler(true);
@@ -854,6 +870,7 @@ end;
 function  T_ascomrestcamera.GetCooler: boolean;
 begin
  result:=false;
+   if FStatus<>devConnected then exit;
    try
      result:=V.Get('cooleron').AsBool;
    except
@@ -863,6 +880,7 @@ end;
 
 procedure T_ascomrestcamera.SetCooler(value:boolean);
 begin
+  if FStatus<>devConnected then exit;
   try
   if (V.Get('cooleron').AsBool<>value) then begin
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
@@ -875,17 +893,20 @@ end;
 
 function T_ascomrestcamera.GetMaxX: double;
 begin
+  if FStatus<>devConnected then exit;
  result:=FCameraXSize;
 end;
 
 function T_ascomrestcamera.GetMaxY: double;
 begin
+  if FStatus<>devConnected then exit;
  result:=FCameraYSize;
 end;
 
 function T_ascomrestcamera.GetMaxADU: double;
 begin
  result:=MAXWORD;
+  if FStatus<>devConnected then exit;
   try
      result:=V.Get('maxadu').AsFloat;
   except
@@ -896,6 +917,7 @@ end;
 function T_ascomrestcamera.GetPixelSize: double;
 begin
  result:=-1;
+  if FStatus<>devConnected then exit;
   try
      result:=FPixelSizeX;
   except
@@ -906,6 +928,7 @@ end;
 function T_ascomrestcamera.GetPixelSizeX: double;
 begin
  result:=-1;
+  if FStatus<>devConnected then exit;
   try
      result:=FPixelSizeX;
   except
@@ -916,6 +939,7 @@ end;
 function T_ascomrestcamera.GetPixelSizeY: double;
 begin
  result:=-1;
+  if FStatus<>devConnected then exit;
   try
      result:=FPixelSizeY;
   except
@@ -931,6 +955,7 @@ end;
 function T_ascomrestcamera.GetColor: boolean;
 begin
  result:=false;
+  if FStatus<>devConnected then exit;
    try
       result:=(V.Get('sensortype').AsInt=1);  // Camera produces color image directly, requiring not Bayer decoding
    except
@@ -949,6 +974,7 @@ var i,n: integer;
     gainlist: array of string;
 begin
   result:=false;
+  if FStatus<>devConnected then exit;
     try
     // check Gain property
        i:=V.Get('gain').AsInt;
@@ -987,6 +1013,7 @@ end;
 
 procedure T_ascomrestcamera.SetGain(value: integer);
 begin
+ if FStatus<>devConnected then exit;
  if (FhasGainISO or FhasGain) then begin
    try
       V.Put('gain',value);
@@ -998,6 +1025,7 @@ end;
 function T_ascomrestcamera.GetGain: integer;
 begin
  result:=NullInt;
+ if FStatus<>devConnected then exit;
  if (FhasGainISO or FhasGain) then begin
    try
       result:=V.Get('gain').AsInt;
@@ -1009,6 +1037,7 @@ end;
 
 procedure T_ascomrestcamera.SetReadOutMode(value: integer);
 begin
+ if FStatus<>devConnected then exit;
  try
  if FhasReadOut then begin
    if FhasFastReadout then begin
@@ -1027,6 +1056,7 @@ end;
 function T_ascomrestcamera.GetReadOutMode: integer;
 begin
   result:=0;
+ if FStatus<>devConnected then exit;
   try
   if (FhasReadOut) then begin
      if FhasFastReadout then begin
