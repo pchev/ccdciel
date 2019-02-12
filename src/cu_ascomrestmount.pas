@@ -173,7 +173,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     V.Put('connected',false);
+     // the server is responsible for device disconnection
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
    end;
