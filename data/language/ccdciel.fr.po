@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-05 10:24+0000\n"
-"PO-Revision-Date: 2019-02-05 10:26+0000\n"
+"POT-Creation-Date: 2019-02-12 18:39+0000\n"
+"PO-Revision-Date: 2019-02-12 18:42+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-02-05 10:29+0000\n"
-"X-Generator: Launchpad (build 18862)\n"
+"X-Launchpad-Export-Date: 2019-02-12 18:44+0000\n"
+"X-Generator: Launchpad (build 18872)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -255,6 +255,10 @@ msgstr "Autofocus réussi"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "Tolérance de mise au point "
+
+#: u_translation.rsautofocuswhe
+msgid "Autofocus when temperature change"
+msgstr "Autofocus si la température change"
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -1267,6 +1271,10 @@ msgstr "Compensation de la température du focuseur"
 #: u_translation.rsfocusevery
 msgid "Focus every"
 msgstr "Focus tous les"
+
+#: u_translation.rsfocusontempc
+msgid "Focus on temp. change"
+msgstr "Focus si temp. change"
 
 #: u_translation.rsfocuspositio
 msgid "Focus position"

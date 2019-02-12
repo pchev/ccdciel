@@ -3734,3 +3734,11 @@ msgstr ""
 msgid "column"
 msgstr ""
 
+#: u_translation:rsfocusontempc
+msgid "Focus on temp. change"
+msgstr ""
+
+#: u_translation:rsautofocuswhe
+msgid "Autofocus when temperature change"
+msgstr ""
+
