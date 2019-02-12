@@ -133,9 +133,8 @@ begin
   V.Timeout:=2000;
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
-    V.Put('link',true)
-  else
-    V.Put('connected',true);
+    raise Exception.Create('IFocuser V1 is not supported')
+  V.Put('connected',true);
   if Connected then begin
      V.Timeout:=120000;
      try
@@ -171,10 +170,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);
-     if FInterfaceVersion=1 then
-       V.Put('link',false)
-     else
-       V.Put('connected',false);
+     V.Put('connected',false);
    except
      on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
@@ -184,10 +180,7 @@ function T_ascomrestfocuser.Connected: boolean;
 begin
 result:=false;
   try
-  if FInterfaceVersion=1 then
-     result:=V.Get('link').AsBool
-  else
-     result:=V.Get('connected').AsBool;
+  result:=V.Get('connected').AsBool;
   except
    on E: Exception do begin
       {$ifdef debug_ascom}msg('Error Connected : '+ E.Message);{$endif}
