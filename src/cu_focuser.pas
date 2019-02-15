@@ -146,7 +146,7 @@ begin
   end;
   msg(Format(rsFocuserMoveT, [inttostr(p)]));
   SetPosition(p);                 // go to final position
-  if FDelay>0 then Wait(FDelay);
+  Wait(FDelay+1);                 //wait 100ms minimum for correct communication with some focusers
 end;
 
 procedure T_focuser.SetRelPositionInt(p:integer);
