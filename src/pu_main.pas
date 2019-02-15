@@ -10020,6 +10020,23 @@ begin
    result:=result+'<br>'+crlf;
 
    result:=result+'<table style="width: 520px; text-align:left;">'+crlf;
+   if safety.Status=devConnected then begin
+     result:=result+'<tr><td colspan="3" style="vertical-align:top;"><b>'+rsSafetyMonito+': </b>';
+     result:=result+BoolToStr(f_safety.Safe, '<font color="green">'+rsSafe+'</font>', '<font color="red">'+rsUnsafe+'</font>');
+     result:=result+'</td></tr>';
+   end;
+   if weather.Status=devConnected then begin
+     result:=result+'<tr><td colspan="3" style="vertical-align:top;"><b>'+rsWeatherStati+': </b>';
+     result:=result+BoolToStr(f_weather.Clear, '<font color="green">'+rsGood+'</font>', '<font color="red">'+rsBad+'</font>');
+     if not f_weather.Clear then result:=result+blank+weather.WeatherMessage;
+     result:=result+'</td></tr>';
+   end;
+   if dome.Status=devConnected then begin
+     result:=result+'<tr><td style="vertical-align:top;"><b>'+rsDome+': </b></td><td colspan="2" style="vertical-align:top;">';
+     result:=result+Format(rsDomeShutter, [BoolToStr(f_dome.Shutter, rsOpen, '<font color="red">'+rsClose+'</font>')]);
+     if f_dome.CanSlave then result:=result+', '+Format(rsDomeSlaving, [BoolToStr(f_dome.Slave, rsOn, '<font color="red">'+rsOff+'</font>')]);
+     result:=result+'</td></tr>';
+   end;
    if mount.Status=devConnected then begin
      result:=result+'<tr><td style="vertical-align:top;"><b>'+rsMount+': </b></td><td colspan="2" style="vertical-align:top;">';
      if mount.Park then
