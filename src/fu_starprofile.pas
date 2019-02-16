@@ -1032,19 +1032,30 @@ begin
               msg(Format(rsHYPERBOLACur, [FormatFloat(f3, p_hyp), FormatFloat(
                 f4, lowest_error), inttostr(iteration_cycles)]),3 );
               // focus position with last move in focus direction
-              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp));
-              focuser.FocusSpeed:=step+AutofocusDynamicMovement;
-              if AutofocusMoveDir=FocusDirIn then begin
-                onFocusOUT(self);
-                wait(1);
-                focuser.FocusSpeed:=AutofocusDynamicMovement;
-                onFocusIN(self);
+              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp)); //require steps from current position at the end of the curve
+              if focuser.BacklashActive then begin
+                focuser.FocusSpeed:=step;
+                 if AutofocusMoveDir=FocusDirIn then begin
+                   onFocusOUT(self);  // wrong direction but compensated by backlash correction
+                 end
+                 else begin
+                   onFocusIN(self);   // wrong direction but compensated by backlash correction
+                 end;
               end
               else begin
-                onFocusIN(self);
-                wait(1);
-                focuser.FocusSpeed:=AutofocusDynamicMovement;
-                onFocusOUT(self)
+                focuser.FocusSpeed:=step+AutofocusDynamicMovement;  // move a bit more
+                if AutofocusMoveDir=FocusDirIn then begin
+                  onFocusOUT(self);
+                  wait(1);
+                  focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
+                  onFocusIN(self);
+                end
+                else begin
+                  onFocusIN(self);
+                  wait(1);
+                  focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
+                  onFocusOUT(self)
+                end;
               end;
               wait(1);
               terminated:=true;

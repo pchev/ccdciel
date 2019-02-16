@@ -69,6 +69,7 @@ type
   private
     { private declarations }
     FonFocusIN, FonFocusOUT, FonSetAbsPos,FonVcurveLearning: TNotifyEvent;
+    FBacklashActive: boolean;
     procedure SetSpeed(value:integer);
     function GetSpeed:integer;
     procedure SetPosition(value:integer);
@@ -81,6 +82,7 @@ type
     function TempOffset(TempRef,TempNow: double):integer;
     property FocusSpeed: integer read GetSpeed write SetSpeed;
     property FocusPosition: integer read GetPosition write SetPosition;
+    property BacklashActive: boolean read FBacklashActive write FBacklashActive;
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
     property onSetAbsolutePosition: TNotifyEvent read FonSetAbsPos write FonSetAbsPos;

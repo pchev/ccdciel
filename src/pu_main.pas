@@ -2903,6 +2903,7 @@ begin
   focuser.Backlash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
   focuser.BacklashDirection:=config.GetValue('/StarAnalysis/FocuserBacklashDirection',FocusDirIn);
   focuser.BacklashActive:=config.GetValue('/StarAnalysis/FocuserBacklashActive',(focuser.Backlash<>0));
+  f_focuser.BacklashActive:=focuser.BacklashActive;
   FocuserDelay:=config.GetValue('/StarAnalysis/FocuserDelay',0);
   if focuser<>nil then focuser.Delay:=FocuserDelay;
   FocuserTempCoeff:=config.GetValue('/StarAnalysis/FocuserTempCoeff',0.0);
