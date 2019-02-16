@@ -590,8 +590,8 @@ begin
      fny:=trunc(fny*scale);
      newx:=FCameraXSize div sbinX;
      newy:=FCameraYSize div sbinY;
-     V.Put('binX',sbinX);
-     V.Put('binY',sbinY);
+     V.Put('binx',sbinX);
+     V.Put('biny',sbinY);
      FBinX:=sbinX;
      FBinY:=sbinY;
      if (fsx=0)and(fsy=0)and((abs(newx-fnx)/fnx)<0.1)and((abs(newy-fny)/fny)<0.1)

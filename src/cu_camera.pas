@@ -524,6 +524,12 @@ begin
        focal_length:=Fmount.FocaleLength
     else
        focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+    if not config.GetValue('/Astrometry/PixelSizeFromCamera',true) then begin
+      hpix1:=config.GetValue('/Astrometry/PixelSize',5.0);
+      hpix2:=hpix1;
+      if (hbin1>0) then hpix1:=hpix1*hbin1;
+      if (hbin2>0) then hpix2:=hpix2*hbin2;
+    end;
   end;
   if (focal_length<1) then msg(rsErrorUnknowT,0);
   if (focal_length>50000) then msg('Error: Is the telescope focal length really '+FormatFloat(f0,focal_length)+'mm ?',0);
