@@ -521,7 +521,6 @@ begin
   Label22.Caption:=rsPort;
   Label1.Caption:=rsTimeout;
   ApplyIndi.Caption:=rsApplyToAllDe;
-  label62.Caption:=rsASCOMRemote;
   Label70.Caption:=rsProtocol;
   Label71.Caption:=rsServer;
   Label72.Caption:=rsPort;
@@ -901,7 +900,7 @@ DeviceSafety.Caption:=rsUseSafetyMon+': '+DevInterfaceName[ord(FSafetyConnection
 DeviceRotator.Caption:=rsUseRotator+': '+DevInterfaceName[ord(FRotatorConnection)];
 DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
 DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
-DeviceDome.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
+DeviceDome.Caption:=rsUseDome+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
 
 CameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/User','')), encryptpwd);

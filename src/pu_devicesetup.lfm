@@ -218,7 +218,7 @@ object f_setup: Tf_setup
           Height = 19
           Top = 0
           Width = 95
-          Caption = 'ASCOM Remote'
+          Caption = 'ASCOM Alpaca'
           ParentColor = False
         end
         object Label70: TLabel

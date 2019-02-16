@@ -390,7 +390,7 @@ var
   WeatherRestartDelay: integer;
   DummyDouble: double;
   DummyBool: boolean;
-  DevInterfaceName: array[0..4] of string=('INDI','ASCOM','In camera','In mount','ASCOM Remote');
+  DevInterfaceName: array[0..4] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca');
   ProtocolName: array[0..1] of string=('http:','https:');
 
   procedure globalmsg(str:string);
