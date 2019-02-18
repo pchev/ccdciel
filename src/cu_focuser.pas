@@ -135,18 +135,18 @@ begin
     begin
        msg(Format(rsFocuserMoveT, [inttostr(p)])+' + '+inttostr(FBacklash)+' '+rsBacklashComp);
        SetPosition(p+FBacklash);   // backlash IN, go OUT first
-       Wait(1);                    // some focuser need a delay to refresh their position
+       Wait(FDelay+0.1);           // some focuser need a delay to refresh their position
     end
     else
     begin
        msg(Format(rsFocuserMoveT, [inttostr(p)])+' - '+inttostr(FBacklash)+' '+rsBacklashComp);
        SetPosition(p-FBacklash);  // backlash OUT, go IN first
-       Wait(1);                   // some focuser need a delay to refresh their position
+       Wait(FDelay+0.1);          // some focuser need a delay to refresh their position
     end;
   end;
   msg(Format(rsFocuserMoveT, [inttostr(p)]));
   SetPosition(p);                 // go to final position
-  Wait(FDelay+1);                 //wait 100ms minimum for correct communication with some focusers
+  Wait(FDelay+0.1);               //wait 100ms minimum for correct communication with some focusers
 end;
 
 procedure T_focuser.SetRelPositionInt(p:integer);
@@ -155,14 +155,14 @@ begin
     if FBacklashDirection then begin // want to go OUT, backlash IN
        msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)])+', '+rsBacklashComp+' + '+inttostr(FBacklash));
        SetRelPosition(p+FBacklash);  // go more OUT than required
-       Wait(1);                      // some focuser need a delay to refresh their position
+       Wait(FDelay+0.1);             // some focuser need a delay to refresh their position
        FocusIN;                      // go IN by backlash
        SetRelPosition(FBacklash);
     end
     else begin                       // want to go IN, backlash OUT
        msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)])+', '+rsBacklashComp+' - '+inttostr(FBacklash));
        SetRelPosition(p+FBacklash);  // go more IN than required
-       Wait(1);                      // some focuser need a delay to refresh their position
+       Wait(FDelay+0.1);             // some focuser need a delay to refresh their position
        FocusOUT;                     // go OUT by backlash
        SetRelPosition(FBacklash)
     end;

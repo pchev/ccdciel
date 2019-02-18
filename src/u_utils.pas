@@ -63,7 +63,7 @@ Function Str3ToDE(dms : string) : double;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 Function ExecuteFile(const FileName: string): integer;
-procedure Wait(wt:integer=5);
+procedure Wait(wt:single=5);
 function GetCdCPort:string;
 function  Rmod(x,y:Double):Double;
 function IsNumber(n : string) : boolean;
@@ -883,7 +883,7 @@ begin
 end;
 
 
-procedure Wait(wt:integer=5);
+procedure Wait(wt:single=5);
 var endt: TDateTime;
 begin
   endt:=now+wt/secperday;
