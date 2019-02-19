@@ -4556,15 +4556,13 @@ begin
 end;
 
 procedure Tf_main.FocusIN(Sender: TObject);
-var n,p,pos:integer;
+var n,p:integer;
 begin
  n:=0;
  if focuser.hasAbsolutePosition then begin
     val(f_focuser.PosIncr.Text,p,n);
     if n=0 then begin
-       pos:=focuser.Position;
-       wait(0.1);
-       focuser.Position:=pos-p;
+       focuser.Position:=focuser.Position-p;
     end;
  end
  else if focuser.hasRelativePosition then begin
@@ -4585,15 +4583,13 @@ begin
 end;
 
 procedure Tf_main.FocusOUT(Sender: TObject);
-var n,p,pos:integer;
+var n,p:integer;
 begin
  n:=0;
  if focuser.hasAbsolutePosition then begin
     val(f_focuser.PosIncr.Text,p,n);
     if n=0 then begin
-       pos:=focuser.Position;
-       wait(0.1);
-       focuser.Position:=pos+p;
+       focuser.Position:=focuser.Position+p;
     end;
  end
  else if focuser.hasRelativePosition then begin

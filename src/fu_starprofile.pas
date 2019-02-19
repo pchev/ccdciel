@@ -958,7 +958,6 @@ begin
               else begin
                 onFocusIN(self);
               end;
-              Wait(1);
               afmpos:=0;
               aminhfd:=9999;
               amaxhfd:=-1;
@@ -987,7 +986,6 @@ begin
                 onFocusIN(self)
               else
                 onFocusOUT(self);
-              wait(1);
               end;
     afdEnd: begin
               sumpos:=0;
@@ -1046,18 +1044,15 @@ begin
                 focuser.FocusSpeed:=step+AutofocusDynamicMovement;  // move a bit more
                 if AutofocusMoveDir=FocusDirIn then begin
                   onFocusOUT(self);
-                  wait(1);
                   focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
                   onFocusIN(self);
                 end
                 else begin
                   onFocusIN(self);
-                  wait(1);
                   focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
                   onFocusOUT(self)
                 end;
               end;
-              wait(1);
               terminated:=true;
               end;
   end;
