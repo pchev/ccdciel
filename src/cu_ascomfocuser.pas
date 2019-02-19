@@ -295,7 +295,7 @@ end;
 
 procedure T_ascomfocuser.SetPosition(p:integer);
 {$ifdef mswindows}
-var n: integer;
+var n,np: integer;
 {$endif}
 begin
  {$ifdef mswindows}
@@ -309,6 +309,13 @@ begin
    V.Move(n);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
+   // Fix for usb-focus
+   if Fdevice='ASCOM.USB_Focus.Focuser' then begin
+     np:=GetPosition;
+     if (np<>n) then begin
+       msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(n),0);
+     end; {fix for some poor written focuser drivers. The getposition is already sufficient to fix the problem, so message should never occur.}
+   end;
    except
     on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
    end;
