@@ -44,9 +44,11 @@ T_ascomrestfocuser = class(T_focuser)
    FRelIncr: integer;
    FmsgTemp,FmsgAPos,FmsgRPos: integer;
    StatusTimer: TTimer;
+   FDeviceName: string;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
+   function  DeviceName: string;
  protected
    procedure SetPosition(p:integer); override;
    function  GetPosition:integer; override;
@@ -117,6 +119,16 @@ begin
   end;
 end;
 
+function  T_ascomrestfocuser.DeviceName: string;
+begin
+ result:='';
+  try
+   result:=V.Get('name').AsString;
+  except
+    result:='';
+  end;
+end;
+
 procedure T_ascomrestfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
   try
@@ -136,6 +148,7 @@ begin
     raise Exception.Create('IFocuser V1 is not supported');
   V.Put('connected',true);
   if Connected then begin
+     FDeviceName:=DeviceName;
      V.Timeout:=120000;
      try
      msg('Driver version: '+V.Get('driverversion').AsString,9);
@@ -281,7 +294,7 @@ begin
 end;
 
 procedure T_ascomrestfocuser.SetPosition(p:integer);
-var n: integer;
+var n,np: integer;
 begin
  if FStatus<>devConnected then exit;
    try
@@ -293,6 +306,13 @@ begin
    V.Put('move',['Position',IntToStr(n)]);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
+   // Fix for usb-focus
+   if pos('USB_Focus',FDeviceName)>0 then begin
+     np:=GetPosition;
+     if (np<>n) then begin
+       msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(n),0);
+     end; {fix for some poor written focuser drivers. The getposition is already sufficient to fix the problem, so message should never occur.}
+   end;
    except
     on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
    end;
