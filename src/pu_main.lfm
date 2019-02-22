@@ -7,7 +7,7 @@ object f_main: Tf_main
   Caption = 'CCD Ciel'
   ClientHeight = 580
   ClientWidth = 800
-  Constraints.MinHeight = 570
+  Constraints.MinHeight = 450
   Constraints.MinWidth = 800
   DesignTimePPI = 95
   KeyPreview = True
