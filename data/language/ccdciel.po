@@ -3706,10 +3706,6 @@ msgstr ""
 msgid "In mount"
 msgstr ""
 
-#: u_translation:rsascomremote
-msgid "ASCOM Remote"
-msgstr ""
-
 #: u_translation:rsnodevice
 msgid "No device"
 msgstr ""
@@ -3740,5 +3736,13 @@ msgstr ""
 
 #: u_translation:rsautofocuswhe
 msgid "Autofocus when temperature change"
+msgstr ""
+
+#: u_translation:rsusername
+msgid "User name"
+msgstr ""
+
+#: u_translation:rspassword
+msgid "Password"
 msgstr ""
 

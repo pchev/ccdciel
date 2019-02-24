@@ -524,6 +524,8 @@ begin
   Label70.Caption:=rsProtocol;
   Label71.Caption:=rsServer;
   Label72.Caption:=rsPort;
+  Label107.Caption:=rsUserName;
+  Label108.Caption:=rsPassword;
   ApplyAscomRemote.Caption:=rsApplyToAllDe;
   Label2.Caption:=format(rsProfile,['']);
   BtnNewProfile.Caption:=rsNew;
@@ -537,6 +539,8 @@ begin
   Label32.Caption:=rsPort;
   Label33.Caption:=rsRemoteDevice;
   GetIndi.Caption:=rsGet;
+  Label91.Caption:=rsUserName;
+  Label92.Caption:=rsPassword;
   BtnChooseCamera.Caption:=rsChoose;
   BtnSetupCamera.Caption:=rsSetup;
   BtnAboutCamera.Caption:=rsAbout;
@@ -558,10 +562,13 @@ begin
   Label35.Caption:=rsServer;
   Label36.Caption:=rsPort;
   Label37.Caption:=rsRemoteDevice;
+  Label93.Caption:=rsUserName;
+  Label94.Caption:=rsPassword;
   BtnChooseFilter.Caption:=rsChoose;
   BtnAboutCamera1.Caption:=rsAbout;
   BtnSetupCamera1.Caption:=rsSetup;
   FlipImage.Caption:=rsFlipTheImage;
+  FlipImage1.Caption:=rsFlipTheImage;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
   Label7.Caption:=rsPort;
@@ -583,6 +590,8 @@ begin
   Label39.Caption:=rsServer;
   Label40.Caption:=rsPort;
   Label41.Caption:=rsRemoteDevice;
+  Label95.Caption:=rsUserName;
+  Label96.Caption:=rsPassword;
   Rotator.Caption:=rsRotator;
   Label79.Caption:=rsServer;
   Label80.Caption:=rsPort;
@@ -591,6 +600,8 @@ begin
   Label43.Caption:=rsServer;
   Label44.Caption:=rsPort;
   Label45.Caption:=rsRemoteDevice;
+  Label97.Caption:=rsUserName;
+  Label98.Caption:=rsPassword;
   DeviceRotator.Caption:=rsUseRotator;
   BtnChooseRotator.Caption:=rsChoose;
   BtnAboutRotator.Caption:=rsAbout;
@@ -606,6 +617,8 @@ begin
   Label47.Caption:=rsServer;
   Label48.Caption:=rsPort;
   Label49.Caption:=rsRemoteDevice;
+  Label99.Caption:=rsUserName;
+  Label100.Caption:=rsPassword;
   BtnChooseMount.Caption:=rsChoose;
   BtnAboutCamera3.Caption:=rsAbout;
   BtnSetupCamera3.Caption:=rsSetup;
@@ -624,6 +637,8 @@ begin
   Label51.Caption:=rsServer;
   Label52.Caption:=rsPort;
   Label53.Caption:=rsRemoteDevice;
+  Label101.Caption:=rsUserName;
+  Label102.Caption:=rsPassword;
   DeviceDome.Caption:=rsUseDome;
   Label25.Caption:=rsDevices;
   Label23.Caption:=rsPort;
@@ -639,6 +654,8 @@ begin
   Label55.Caption:=rsServer;
   Label56.Caption:=rsPort;
   Label57.Caption:=rsRemoteDevice;
+  Label103.Caption:=rsUserName;
+  Label104.Caption:=rsPassword;
   DeviceWeather.Caption:=rsUseWeatherSt;
   Label21.Caption:=rsDevices;
   WeatherAutoLoadConfig.Caption:=rsLoadConfigur;
@@ -657,6 +674,8 @@ begin
   Label59.Caption:=rsServer;
   Label60.Caption:=rsPort;
   Label61.Caption:=rsRemoteDevice;
+  Label105.Caption:=rsUserName;
+  Label106.Caption:=rsPassword;
   Label24.Caption:=rsDevices;
   SafetyAutoLoadConfig.Caption:=rsLoadConfigur;
   BtnChooseSafety.Caption:=rsChoose;

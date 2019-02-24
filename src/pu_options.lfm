@@ -736,7 +736,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 235
           Columns = 3
           Items.Strings = (
@@ -1669,12 +1669,18 @@ object f_option: Tf_option
           Top = 0
           Width = 454
           Align = alClient
+          AutoFillColumns = True
           ColCount = 3
           DefaultColWidth = 122
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
           ParentFont = False
           RowCount = 21
           TabOrder = 0
+          ColWidths = (
+            122
+            155
+            155
+          )
         end
       end
       object GroupBox16: TGroupBox

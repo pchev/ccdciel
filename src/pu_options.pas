@@ -662,6 +662,7 @@ begin
   Label84.Caption := rsTemperatureC;
   Label119.Caption := rsRunAutoFocus;
   BtnDisableFocuserTemp.Caption := rsDisable;
+  BtnDisableAutofocusTemp.Caption := rsDisable;
   TabSheet3.Caption := rsAutofocus;
   Autofocusmode.Caption := rsAutofocusMet;
   Label49.Caption := rsExposureTime2;

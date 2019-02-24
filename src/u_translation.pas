@@ -1038,6 +1038,8 @@ resourcestring
   rsColumn = 'column';
   rsFocusOnTempC = 'Focus on temp. change';
   rsAutofocusWhe = 'Autofocus when temperature change';
+  rsUserName = 'User name';
+  rsPassword = 'Password';
 
 
 

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-12 18:39+0000\n"
+"POT-Creation-Date: 2019-02-24 11:04+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-02-12 18:44+0000\n"
-"X-Generator: Launchpad (build 18872)\n"
+"X-Launchpad-Export-Date: 2019-02-24 11:08+0000\n"
+"X-Generator: Launchpad (build 18886)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -98,10 +98,6 @@ msgstr ""
 
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
-msgstr ""
-
-#: u_translation.rsascomremote
-msgid "ASCOM Remote"
 msgstr ""
 
 #: u_translation.rsastrometry
@@ -2076,6 +2072,10 @@ msgstr ""
 msgid "Park the telescope"
 msgstr ""
 
+#: u_translation.rspassword
+msgid "Password"
+msgstr ""
+
 #: u_translation.rspause
 msgid "Pause"
 msgstr ""
@@ -3570,6 +3570,10 @@ msgstr ""
 
 #: u_translation.rsusergroup
 msgid "User group"
+msgstr ""
+
+#: u_translation.rsusername
+msgid "User name"
 msgstr ""
 
 #: u_translation.rsuserotator
