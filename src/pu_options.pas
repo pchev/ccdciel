@@ -871,10 +871,6 @@ end;
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
 begin
   MeridianFlipPanel.Visible:=(MeridianOption.ItemIndex=1);
-  if MeridianOption.ItemIndex<>1 then begin
-     MinutesPastMeridian.Text:='0';
-     MinutesPastMeridianMin.Text:='0';
-  end;
 end;
 
 procedure Tf_option.SetLatitude(value:double);

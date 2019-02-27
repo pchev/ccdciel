@@ -470,7 +470,7 @@ begin
       ara:=deg2rad*15*cra;
       ade:=deg2rad*cde;
       J2000ToApparent(ara,ade);
-      NearMeridian:=(abs(CurrentSidTim-ara)<=(2*deg2rad));    // we are pointing within 2 degree of the meridian
+      NearMeridian:=(abs(CurrentSidTim-ara)<=(4*deg2rad));    // we are pointing within 4 degree of the meridian
       J2000ToMount(mount.EquinoxJD,cra,cde);
       ar2:=deg2rad*15*cra;
       de2:=deg2rad*cde;

@@ -2937,8 +2937,8 @@ begin
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
-  MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',0);
-  MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',0);
+  MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
+  MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',10);
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
   MeridianFlipPauseAfter:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
   MeridianFlipPauseTimeout:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
@@ -5631,8 +5631,8 @@ begin
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
-   f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',0);
-   f_option.MinutesPastMeridianMin.Value:=config.GetValue('/Meridian/MinutesPastMin',0);
+   f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',MinutesPastMeridian);
+   f_option.MinutesPastMeridianMin.Value:=config.GetValue('/Meridian/MinutesPastMin',MinutesPastMeridianMin);
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
    f_option.MeridianFlipPauseTimeout.Value:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
@@ -9454,10 +9454,16 @@ begin
     if (f_capture.Running  or f_sequence.Busy) and (nextexposure=0) then exit;
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
-    MeridianDelay1:=MinutesPastMeridianMin-hhmin;
-    if mount.PierSide=pierUnknown
-      then MeridianDelay2:=MeridianDelay1
-      else MeridianDelay2:=MinutesPastMeridian-hhmin;
+    if (MeridianOption=1) then begin
+      MeridianDelay1:=MinutesPastMeridianMin-hhmin;
+      if mount.PierSide=pierUnknown
+        then MeridianDelay2:=MeridianDelay1
+        else MeridianDelay2:=MinutesPastMeridian-hhmin;
+    end
+    else begin
+      MeridianDelay1:=-hhmin;
+      MeridianDelay2:=MeridianDelay1;
+    end;
     NextDelay:=ceil(nextexposure/60);
     if MeridianDelay1>0  then begin // before meridian limit
       if MeridianDelay2>NextDelay then begin // enough time for next exposure or no capture in progress
