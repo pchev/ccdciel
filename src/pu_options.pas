@@ -498,6 +498,8 @@ type
     procedure longChange(Sender: TObject);
     procedure MaxAduFromCameraChange(Sender: TObject);
     procedure MeridianOptionClick(Sender: TObject);
+    procedure MinutesPastMeridianChange(Sender: TObject);
+    procedure MinutesPastMeridianMinChange(Sender: TObject);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
@@ -871,6 +873,16 @@ end;
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
 begin
   MeridianFlipPanel.Visible:=(MeridianOption.ItemIndex=1);
+end;
+
+procedure Tf_option.MinutesPastMeridianChange(Sender: TObject);
+begin
+  MinutesPastMeridianMin.MaxValue:=MinutesPastMeridian.Value-1;
+end;
+
+procedure Tf_option.MinutesPastMeridianMinChange(Sender: TObject);
+begin
+  MinutesPastMeridian.MinValue:=MinutesPastMeridianMin.Value+1;
 end;
 
 procedure Tf_option.SetLatitude(value:double);
