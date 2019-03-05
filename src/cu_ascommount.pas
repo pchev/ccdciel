@@ -522,11 +522,10 @@ begin
        result:=(pierside2<>pierside1);
     end
     else} begin
-      // point one hour to the east
-      ra1:=sra+1;
-      if ra1>=24 then ra1:=ra1-24;
+      // point one hour to the east of meridian
+      ra1:=rmod(24+1+rad2deg*CurrentSidTim/15,24);
       slew(ra1,sde);
-      // point one hour to the west to force the flip
+      // point one hour to the west of target to force the flip
       ra2:=sra-1;
       if ra2<0 then ra2:=ra2+24;
       slew(ra2,sde);
