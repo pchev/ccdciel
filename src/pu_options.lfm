@@ -2755,7 +2755,7 @@ object f_option: Tf_option
               Top = 72
               Width = 104
               Constraints.MaxHeight = 28
-              MaxValue = 90
+              MaxValue = 180
               MinValue = 1
               ParentFont = False
               TabOrder = 0
