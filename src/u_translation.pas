@@ -1040,8 +1040,7 @@ resourcestring
   rsAutofocusWhe = 'Autofocus when temperature change';
   rsUserName = 'User name';
   rsPassword = 'Password';
-
-
+  rsTheMountIndi = 'the mount indicate %s';
 
 
 implementation

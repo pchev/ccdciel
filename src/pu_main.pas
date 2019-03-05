@@ -9541,7 +9541,7 @@ begin
         wait(2);
         if mount.PierSide=pierWest then begin
           f_pause.Caption:=rsPause;
-          f_pause.Text:=rsMeridianFlip6;
+          f_pause.Text:=rsMeridianFlip6+blank+Format(rsTheMountIndi, [rsWestPointing]);
           NewMessage(f_pause.Text,1);
           if not f_pause.Wait(120) then begin
              DoAbort;
