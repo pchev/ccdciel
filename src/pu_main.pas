@@ -562,6 +562,7 @@ type
     procedure cmdAutomaticAutofocus(var ok: boolean);
     procedure cmdAutofocus(var ok: boolean);
     Procedure FocuserStatus(Sender: TObject);
+    procedure FocuserTemperatureCompensation;
     procedure FocuserPositionChange(n:double);
     procedure FocuserSpeedChange(n:double);
     procedure FocuserTimerChange(n:double);
@@ -1281,6 +1282,8 @@ begin
   SetOptions;
   LoadVcurve;
   LoadBPM;
+
+  FocuserLastTemp:=config.GetValue('/StarAnalysis/FocuserLastTemp',NullCoord);
 
   f_ccdtemp.Setpoint.Value:=config.GetValue('/Temperature/Setpoint',0);
   f_preview.ExpTime.Text:=config.GetValue('/Preview/Exposure','1');
@@ -3207,6 +3210,8 @@ begin
 
    config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
    config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
+
+   config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -3393,8 +3398,6 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
   case focuser.Status of
     devConnected: begin
                   inc(upcount);
-                  FocuserConnectTimer.Enabled:=false;
-                  FocuserConnectTimer.Enabled:=true;
                   end;
     devDisconnected: inc(downcount);
     devConnecting: inc(concount);
@@ -3756,10 +3759,10 @@ procedure Tf_main.SetFocusMode;
 var r: TNumRange;
 begin
    FocuserTemp:=focuser.Temperature; // first call to test ascom property
-   FocuserLastTemp:=FocuserTemp;
    if focuser.hasTemperature then begin
       f_focuser.PanelTemp.Visible:=true;
       f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp));
+      if FocuserLastTemp=NullCoord then FocuserLastTemp:=FocuserTemp;
    end
    else
       f_focuser.PanelTemp.Visible:=false;
@@ -3793,6 +3796,7 @@ begin
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=0;
   end;
+  FocuserTemperatureCompensation;
 end;
 
 Procedure Tf_main.ConnectRotator(Sender: TObject);
@@ -4529,6 +4533,8 @@ case focuser.Status of
   devConnected:   begin
                       NewMessage(Format(rsConnected, [rsFocuser]),1);
                       f_devicesconnection.LabelFocuser.Font.Color:=clGreen;
+                      FocuserConnectTimer.Enabled:=false;
+                      FocuserConnectTimer.Enabled:=true;
                    end;
 end;
 CheckConnectionStatus;
@@ -4553,6 +4559,28 @@ procedure Tf_main.FocuserTemperatureChange(n:double);
 begin
   f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,n));
   FocuserTemp:=n;
+end;
+
+
+procedure Tf_main.FocuserTemperatureCompensation;
+var p: integer;
+begin
+  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) then begin
+    // only if temperature change by more than 0.5 C
+    if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
+      p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
+      if focuser.hasAbsolutePosition and (p<>0) then begin
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
+        focuser.Position:=focuser.Position+p;
+      end
+      else if focuser.hasRelativePosition and (p<>0) then begin
+        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
+        if p>0 then focuser.FocusOut else focuser.FocusIn;
+        focuser.RelPosition:=abs(p);
+      end;
+      wait(1);
+    end;
+  end;
 end;
 
 procedure Tf_main.FocusIN(Sender: TObject);
@@ -6316,21 +6344,8 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Down) then begin
-    // only if temperature change by more than 0.5 C
-    if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
-      p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
-      if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
-        focuser.Position:=focuser.Position+p;
-      end
-      else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
-        if p>0 then focuser.FocusOut else focuser.FocusIn;
-        focuser.RelPosition:=abs(p);
-      end;
-      wait(1);
-    end;
+  if (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Down) then begin
+    FocuserTemperatureCompensation;
   end;
   p:=pos('x',f_preview.Binning.Text);
   if p>0 then begin
@@ -6512,21 +6527,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     exit;
   end;
   // check focuser temperature compensation
-  if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) and (camera.FrameType=LIGHT) then begin
-    // only if temperature change by more than 0.5 C
-    if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
-      p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
-      if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel, IntToStr(p)]),2);
-        focuser.Position:=focuser.Position+p;
-      end
-      else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel, IntToStr(p)]),2);
-        if p>0 then focuser.FocusOut else focuser.FocusIn;
-        focuser.RelPosition:=abs(p);
-      end;
-      wait(1);
-    end;
+  if (camera.FrameType=LIGHT) then begin
+    FocuserTemperatureCompensation;
   end;
   // check if refocusing is required
   if f_capture.FocusNow  // start of step
