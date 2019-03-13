@@ -1041,7 +1041,8 @@ resourcestring
   rsUserName = 'User name';
   rsPassword = 'Password';
   rsTheMountIndi = 'the mount indicate %s';
-
+  rsDoNotRunAsAd = 'Do not run %s as %s!';
+  rsAdministrato = 'administrator';
 
 implementation
 

@@ -297,6 +297,7 @@ var
   Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName: string;
   ConfigDarkFile,cdate: string;
+  isAdmin: boolean;
   AllDevicesConnected: boolean;
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
