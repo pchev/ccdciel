@@ -1350,6 +1350,7 @@ begin
   else
     crRetic := crCross;
   Image1.Cursor:=crRetic;
+  if isAdmin then NewMessage(Caption);
   NewMessage(SystemInformation,9);
   {$ifdef mswindows}
   NewMessage(AscomVersion,9);
