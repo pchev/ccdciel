@@ -103,7 +103,7 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('connected',true);
+  V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
@@ -266,7 +266,7 @@ procedure T_ascomrestdome.SetSlave(value:boolean);
 begin
    if FStatus<>devConnected then exit;
    try
-   if FhasSlaving then V.Put('slaved',value);
+   if FhasSlaving then V.Put('Slaved',value);
    except
     on E: Exception do msg('Slave error: ' + E.Message,0);
    end;

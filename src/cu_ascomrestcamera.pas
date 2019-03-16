@@ -190,7 +190,7 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Timeout:=2000;
-  V.Put('connected',true); // try to connect if authorized by server
+  V.Put('Connected',true); // try to connect if authorized by server
   if V.Get('connected').AsBool then begin
     V.Timeout:=120000;
     try
@@ -590,8 +590,8 @@ begin
      fny:=trunc(fny*scale);
      newx:=FCameraXSize div sbinX;
      newy:=FCameraYSize div sbinY;
-     V.Put('binx',sbinX);
-     V.Put('biny',sbinY);
+     V.Put('BinX',sbinX);
+     V.Put('BinY',sbinY);
      FBinX:=sbinX;
      FBinY:=sbinY;
      if (fsx=0)and(fsy=0)and((abs(newx-fnx)/fnx)<0.1)and((abs(newy-fny)/fny)<0.1)
@@ -633,10 +633,10 @@ begin
    x:=round(x+0.5);
    y:=round(y+0.5);
    {$ifdef debug_ascom}msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
-   V.Put('startx',x);
-   V.Put('starty',y);
-   V.Put('numx',width);
-   V.Put('numy',height);
+   V.Put('StartX',x);
+   V.Put('StartY',y);
+   V.Put('NumX',width);
+   V.Put('NumY',height);
    Wait(1);
    if Assigned(FonFrameChange) then FonFrameChange(self);
    except
@@ -661,10 +661,10 @@ begin
    if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then  begin
      msg('Correct driver wrong frame size: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),1);
      msg('Set new value : '+inttostr(Cx)+','+inttostr(Cy)+'/'+inttostr(Cwidth)+'x'+inttostr(Cheight),1);
-     V.Put('startx',Cx);
-     V.Put('starty',Cy);
-     V.Put('numx',Cwidth);
-     V.Put('numy',Cheight);
+     V.Put('StartX',Cx);
+     V.Put('StartY',Cy);
+     V.Put('NumX',Cwidth);
+     V.Put('NumY',Cheight);
      x:=Cx;
      y:=Cy;
      width:=Cwidth;
@@ -808,7 +808,7 @@ begin
    if FStatus<>devConnected then exit;
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
-   V.Put('position',num-1);
+   V.Put('Position',num-1);
    Wait(1);
    except
     on E: Exception do msg('Set filter error: ' + E.Message,0);
@@ -860,7 +860,7 @@ begin
    try
    if FCanSetTemperature then begin
       SetCooler(true);
-      V.Put('setccdtemperature',value);
+      V.Put('SetCCDTemperature',value);
    end;
    except
     on E: Exception do msg('Set temperature error: ' + E.Message,0);
@@ -884,7 +884,7 @@ begin
   try
   if (V.Get('cooleron').AsBool<>value) then begin
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
-     V.Put('cooleron',value);
+     V.Put('CoolerOn',value);
   end;
   except
    on E: Exception do msg('Set cooler error: ' + E.Message,0);
@@ -1016,7 +1016,7 @@ begin
  if FStatus<>devConnected then exit;
  if (FhasGainISO or FhasGain) then begin
    try
-      V.Put('gain',value);
+      V.Put('Gain',value);
    except
    end;
  end;
@@ -1041,11 +1041,11 @@ begin
  try
  if FhasReadOut then begin
    if FhasFastReadout then begin
-     if value=0 then V.Put('fastreadout',false)
-                else V.Put('fastreadout',true);
+     if value=0 then V.Put('FastReadout',false)
+                else V.Put('FastReadout',true);
    end
    else begin
-     V.Put('readoutmode',value);
+     V.Put('ReadoutMode',value);
    end;
  end;
  except

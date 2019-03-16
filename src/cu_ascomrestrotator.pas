@@ -104,7 +104,7 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('connected',true);
+  V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      FInterfaceVersion:=InterfaceVersion;
@@ -235,7 +235,7 @@ procedure T_ascomrestrotator.SetDriverReverse(value:boolean);
 begin
  if FStatus<>devConnected then exit;
    try
-   if V.Get('canreverse').AsBool then V.Put('reverse',value);
+   if V.Get('canreverse').AsBool then V.Put('Reverse',value);
    except
    end;
 end;

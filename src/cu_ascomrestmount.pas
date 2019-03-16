@@ -125,7 +125,7 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('connected',true);
+  V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      try
@@ -353,7 +353,7 @@ begin
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
-      V.Put('tracking',true);
+      V.Put('Tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
@@ -382,7 +382,7 @@ begin
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
-      V.Put('tracking',true);
+      V.Put('Tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
@@ -549,7 +549,7 @@ begin
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
       msg(rsStartTraking);
-      V.Put('tracking',true);
+      V.Put('Tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
      end;
@@ -567,7 +567,7 @@ begin
    try
    msg(rsStopTelescop);
    V.Put('abortslew');
-   if CanSetTracking  then V.Put('tracking',false);
+   if CanSetTracking  then V.Put('Tracking',false);
    except
      on E: Exception do msg('Abort motion error: ' + E.Message,0);
    end;
@@ -674,9 +674,9 @@ begin
  result:=false;
  if FStatus<>devConnected then exit;
    try
-   V.Put('sitelongitude',long);
-   V.Put('sitelatitude',lat);
-   V.Put('siteelevation',elev);
+   V.Put('SiteLongitude',long);
+   V.Put('SiteLatitude',lat);
+   V.Put('SiteElevation',elev);
    result:=true;
    except
      on E: Exception do msg('Cannot set site information: ' + E.Message,0);
@@ -701,7 +701,7 @@ begin
  result:=false;
  if FStatus<>devConnected then exit;
    try
-   V.Put('utcdate',FormatDateTime(dateiso,utc));
+   V.Put('UTCDate',FormatDateTime(dateiso,utc));
    result:=true;
    except
      on E: Exception do msg('Cannot set date: ' + E.Message,0);

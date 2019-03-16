@@ -92,7 +92,7 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=2000;
-  V.Put('connected',true);
+  V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      try
@@ -212,7 +212,7 @@ begin
  if (num>0) then begin
    try
    msg(Format(rsSetFilterPos, [inttostr(num)]));
-   V.Put('position',num-1);
+   V.Put('Position',num-1);
    WaitFilter(60000);
    except
     on E: Exception do msg('Set filter error: ' + E.Message,0);

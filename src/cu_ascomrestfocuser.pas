@@ -146,7 +146,7 @@ begin
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
     raise Exception.Create('IFocuser V1 is not supported');
-  V.Put('connected',true);
+  V.Put('Connected',true);
   if Connected then begin
      FDeviceName:=DeviceName;
      V.Timeout:=120000;
