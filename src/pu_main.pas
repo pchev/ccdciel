@@ -4584,10 +4584,12 @@ end;
 
 procedure Tf_main.FocuserTemperatureCompensation;
 var p: integer;
+    dt: double;
 begin
   if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) then begin
-    // only if temperature change by more than 0.5 C
-    if abs(FocuserLastTemp-FocuserTemp)>0.5 then begin
+    dt:=abs(FocuserLastTemp-FocuserTemp);
+    // only if temperature change by more than 0.5C and less than 50C
+    if (dt>0.5) and (dt<50) then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
         NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
