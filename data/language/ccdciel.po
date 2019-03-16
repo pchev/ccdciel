@@ -3746,3 +3746,15 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: u_translation:rsthemountindi
+msgid "the mount indicate %s"
+msgstr ""
+
+#: u_translation:rsdonotrunasad
+msgid "Do not run %s as %s!"
+msgstr ""
+
+#: u_translation:rsadministrato
+msgid "administrator"
+msgstr ""
+

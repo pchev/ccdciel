@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-24 11:04+0000\n"
+"POT-Creation-Date: 2019-03-16 20:36+0000\n"
 "PO-Revision-Date: 2019-01-22 09:34+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-02-24 11:08+0000\n"
-"X-Generator: Launchpad (build 18886)\n"
+"X-Launchpad-Export-Date: 2019-03-16 20:44+0000\n"
+"X-Generator: Launchpad (build 18905)\n"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -55,6 +55,10 @@ msgstr "Imposta tempo di esposizione Flat a %s e riprova."
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
 msgstr "Imposta alla finestra"
+
+#: u_translation.rsadministrato
+msgid "administrator"
+msgstr ""
 
 #: u_translation.rsaftertelesco
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -934,6 +938,10 @@ msgstr ""
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
+msgstr ""
+
+#: u_translation.rsdonotrunasad
+msgid "Do not run %s as %s!"
 msgstr ""
 
 #: u_translation.rsdosimpleslew
@@ -3371,6 +3379,10 @@ msgstr ""
 #: u_translation.rsthemenufilef
 msgid "The menu \"File/Focuser calibration\" help to fill this values."
 msgstr "L'opzione menu \"File/Calibrazione focheggiatore\" aiuta a impostare questi valori."
+
+#: u_translation.rsthemountindi
+msgid "the mount indicate %s"
+msgstr ""
 
 #: u_translation.rstheplanismod
 msgid "The plan %s is modified. Do you want to save the change ?"

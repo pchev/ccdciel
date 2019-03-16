@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-02-24 11:04+0000\n"
-"PO-Revision-Date: 2019-02-12 19:53+0000\n"
+"POT-Creation-Date: 2019-03-16 20:36+0000\n"
+"PO-Revision-Date: 2019-02-25 09:51+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-02-24 11:08+0000\n"
-"X-Generator: Launchpad (build 18886)\n"
+"X-Launchpad-Export-Date: 2019-03-16 20:44+0000\n"
+"X-Generator: Launchpad (build 18905)\n"
 "Language: en_GB\n"
 
 #: u_translation.rsabort
@@ -56,6 +56,10 @@ msgstr "Adjust flat exposure time to %s and retry."
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
 msgstr "Adjust to window"
+
+#: u_translation.rsadministrato
+msgid "administrator"
+msgstr ""
 
 #: u_translation.rsaftertelesco
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -936,6 +940,10 @@ msgstr "Dome slaving: %s"
 #: u_translation.rsdonothing
 msgid "Do nothing"
 msgstr "Do nothing"
+
+#: u_translation.rsdonotrunasad
+msgid "Do not run %s as %s!"
+msgstr ""
 
 #: u_translation.rsdosimpleslew
 msgid "Do simple slew to %s/%s"
@@ -2075,7 +2083,7 @@ msgstr "Park the telescope"
 
 #: u_translation.rspassword
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: u_translation.rspause
 msgid "Pause"
@@ -3373,6 +3381,10 @@ msgstr "The following actions are run if the safety monitor report dangerous con
 msgid "The menu \"File/Focuser calibration\" help to fill this values."
 msgstr "The menu \"File/Focuser calibration\" help to fill this values."
 
+#: u_translation.rsthemountindi
+msgid "the mount indicate %s"
+msgstr ""
+
 #: u_translation.rstheplanismod
 msgid "The plan %s is modified. Do you want to save the change ?"
 msgstr "The plan %s is modified. Do you want to save the change?"
@@ -3575,7 +3587,7 @@ msgstr "User group"
 
 #: u_translation.rsusername
 msgid "User name"
-msgstr ""
+msgstr "User name"
 
 #: u_translation.rsuserotator
 msgid "Use rotator"
