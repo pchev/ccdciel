@@ -1089,7 +1089,7 @@ end;
 procedure Tf_EditTargets.TargetListValidateEntry(sender: TObject; aCol,
   aRow: Integer; const OldValue: string; var NewValue: String);
 begin
-  if (TargetList.Cells[0,aRow]=SkyFlatTxt)or(TargetList.Cells[0,aRow]=ScriptTxt) then begin
+  if (TargetList.Cells[colname,aRow]=SkyFlatTxt)or(TargetList.Cells[colname,aRow]=ScriptTxt) then begin
      if aCol=coldark then NewValue:='';
      if aCol=colskip then NewValue:='';
   end;
@@ -1176,6 +1176,7 @@ begin
     t.updatecoord:=UpdateCoord.Checked;
     t.inplaceautofocus:=InplaceAutofocus.Checked;
     t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);
+    if t.repeatcount<0 then t.repeatcount:=1;
     GroupBox5.Visible:=t.repeatcount>1;
     t.delay:=TDelay.Value;
     t.previewexposure:=PreviewExposure.Value;
@@ -1190,6 +1191,11 @@ end;
 procedure Tf_EditTargets.TargetListCheckboxToggled(sender: TObject; aCol,
   aRow: Integer; aState: TCheckboxState);
 begin
+if (TargetList.Cells[colname,aRow]=SkyFlatTxt)or(TargetList.Cells[colname,aRow]=ScriptTxt) then begin
+  TargetList.Cells[colskip,aRow]:='';
+  TargetList.Cells[coldark,aRow]:='';
+end
+else begin
   if aCol=coldark then begin
     if TargetList.Cells[coldark,aRow]='1' then
       TargetList.Cells[colskip,aRow]:='1';
@@ -1203,6 +1209,7 @@ begin
       TargetList.Cells[coldark,aRow]:='0';
   end;
   if sender<>nil then TargetChange(Sender);
+end;
 end;
 
 function Tf_EditTargets.CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
@@ -1386,6 +1393,7 @@ begin
                        Cells[Index,i]:=buf;
                        t:=TTarget(Objects[colseq,i]);
                        t.repeatcount:=StrToIntDef(buf,1);
+                       if t.repeatcount<0 then t.repeatcount:=1;
                        t.delay:=TDelay.Value;
                        t.previewexposure:=PreviewExposure.Value;
                        t.preview:=Preview.Checked;

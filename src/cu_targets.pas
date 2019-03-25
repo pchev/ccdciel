@@ -765,6 +765,12 @@ begin
   FWaitStarting:=true;
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
+    if t.repeatcount=0 then begin
+      SkipTarget:=true;
+      result:=false;
+      msg(Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']), 2);
+      exit;
+    end;
     msg(Format(rsInitializeTa, [t.objectname]),1);
     // check weather
     if (not WeatherPauseCapture)and(FWeather.Connected)and(not FWeather.Clear) then begin
