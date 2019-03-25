@@ -7238,8 +7238,8 @@ if fits.HeaderInfo.solved and
   if (polex>0)and(polex<img_Width)and(poley>0)and(poley<img_Height) then begin
     // mark the pole
     Nleng:=6*scale;
-    bmp.DrawLineAntialias(polex-Nleng,poley,polex+Nleng,poley,ColorToBGRA(clRed),scale);
-    bmp.DrawLineAntialias(polex,poley-Nleng,polex,poley+Nleng,ColorToBGRA(clRed),scale);
+    bmp.DrawLineAntialias(polex-Nleng,poley,polex+Nleng,poley,ColorToBGRA(clOrange),scale);
+    bmp.DrawLineAntialias(polex,poley-Nleng,polex,poley+Nleng,ColorToBGRA(clOrange),scale);
   end
   else begin
     // draw arrow to north pole
@@ -7250,13 +7250,13 @@ if fits.HeaderInfo.solved and
 
     sincos(WCSxyNrot,s,c);
     bmp.ArrowEndAsClassic(false,false,3);
-    bmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*s,ypos+Nleng*c,ColorToBGRA(clRed),scale);
+    bmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*s,ypos+Nleng*c,ColorToBGRA(clOrange),scale);
     bmp.ArrowEndAsNone;
     sincos(WCSxyErot,s,c);
-    bmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*s,ypos+Eleng*c,ColorToBGRA(clRed),scale);
+    bmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*s,ypos+Eleng*c,ColorToBGRA(clOrange),scale);
 
     bmp.FontHeight:=round(12*scale);
-    bmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clRed);
+    bmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clOrange);
   end;
  end;
 end;
