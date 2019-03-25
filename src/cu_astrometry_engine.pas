@@ -423,7 +423,7 @@ procedure TAstrometry_engine.Execute;
 const READ_BYTES = 65536;
 var n: LongInt;
     f: file;
-    buf: string;
+    buf,err: string;
     logok: boolean;
     cbuf: array[0..READ_BYTES] of char;
     ft,fl: TextFile;
@@ -432,6 +432,7 @@ var n: LongInt;
     endtime: double;
     mem: TMemoryStream;
 begin
+err:='';
 if FResolver=ResolverAstrometryNet then begin
   cbuf:='';
   if (FLogFile<>'') then begin
@@ -466,6 +467,7 @@ if FResolver=ResolverAstrometryNet then begin
     end;
     if now>endtime then begin
        Stop;
+       err:=rsTimeout+'!';
        if logok then begin
          buf:=rsTimeout+'!';
          cbuf:=buf;
@@ -480,8 +482,8 @@ if FResolver=ResolverAstrometryNet then begin
     n := process.Output.Read(cbuf, READ_BYTES);
     if n>=0 then BlockWrite(f,cbuf,n);
   until (n<=0)or(process.Output=nil);
-  process.Free;
-  process:=TProcessUTF8.Create(nil);
+  if (Fresult<>0)and(err='') then
+     err:=Format(rsErrorResult, [IntToStr(Fresult)]);
   if logok and (Fresult<>0) then begin
      buf:=Format(rsErrorResult, [IntToStr(Fresult)]);
      cbuf:=buf;
@@ -489,12 +491,15 @@ if FResolver=ResolverAstrometryNet then begin
   end;
   except
      Fresult:=1;
+     err:=Format(rsErrorStartin, [Fcmd]);
      if logok then begin
        buf:=Format(rsErrorStartin, [Fcmd]);
        cbuf:=buf;
        BlockWrite(f,cbuf,Length(buf));
      end;
   end;
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
   if logok then CloseFile(f);
   // merge wcs result
   if (Fresult=0)and(not FileExistsUTF8(FOutFile))and(FileExistsUTF8(wcsfile)) then begin
@@ -512,7 +517,7 @@ if FResolver=ResolverAstrometryNet then begin
       mem.Free;
     end;
   end;
-  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
 else if FResolver=ResolverElbrus then begin
   fn:=slash(FElbrusDir)+'elbrus.txt';
@@ -533,6 +538,7 @@ else if FResolver=ResolverElbrus then begin
   repeat
     sleep(500);
   until FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') or (now>endtime);
+  if (now>endtime) then err:=rsTimeout+'!';
   sleep(1000);
   if (FLogFile<>'') then begin
     if FileExistsUTF8(slash(FElbrusDir)+'elbrus.sta') then begin
@@ -576,7 +582,7 @@ else if FResolver=ResolverElbrus then begin
       CloseFile(ft);
     end;
   end;
-  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
 else if FResolver=ResolverPlateSolve then begin
   process.Executable:=Fcmd;
@@ -592,17 +598,17 @@ else if FResolver=ResolverPlateSolve then begin
   process.Execute;
   while process.Running do begin
     if now>endtime then begin
+       err:=rsTimeout+'!';
        Stop;
        break;
     end;
     sleep(100);
   end;
   Fresult:=process.ExitStatus;
-  process.Free;
-  process:=TProcessUTF8.Create(nil);
   except
      on E: Exception do begin
        Fresult:=1;
+       err:='Fail to start Platesolve2:'+E.Message;
        AssignFile(ft,FLogFile);
        Append(ft);
        WriteLn(ft,'Fail to start Platesolve2:');
@@ -610,6 +616,8 @@ else if FResolver=ResolverPlateSolve then begin
        CloseFile(ft);
      end;
   end;
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
   // merge apm result
   if (Fresult=0)and(FileExistsUTF8(apmfile)) then begin
     if (FLogFile<>'') then begin
@@ -641,7 +649,7 @@ else if FResolver=ResolverPlateSolve then begin
       end;
     end;
   end;
-  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
 else if FResolver=ResolverAstap then begin
   cbuf:='';
@@ -662,14 +670,13 @@ else if FResolver=ResolverAstap then begin
   process.Execute;
   while process.Running do begin
     if now>endtime then begin
+       err:=rsTimeout+'!';
        Stop;
        break;
     end;
     sleep(100);
   end;
   Fresult:=process.ExitStatus;
-  process.Free;
-  process:=TProcessUTF8.Create(nil);
   except
      on E: Exception do begin
        Fresult:=1;
@@ -678,8 +685,11 @@ else if FResolver=ResolverAstap then begin
        WriteLn(ft,'Fail to start Astap:');
        WriteLn(ft,E.Message);
        CloseFile(ft);
+       err:='Fail to start Astap:'+E.Message;
      end;
   end;
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
   // merge wcs result
   if (Fresult=0)and(FileExistsUTF8(wcsfile)) then begin
     Ftmpfits:=TFits.Create(nil);
@@ -697,16 +707,17 @@ else if FResolver=ResolverAstap then begin
       mem.Free;
     end;
   end;
-  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
 else if FResolver=ResolverNone then begin
+  err:=rsNoResolverCo;
   if (FLogFile<>'') then begin
     AssignFile(ft,FLogFile);
     rewrite(ft);
     WriteLn(ft,rsNoResolverCo);
     CloseFile(ft);
   end;
-  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, 0);
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end;
 end;
 

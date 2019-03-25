@@ -39,6 +39,7 @@ TAstrometry = class(TComponent)
     FonEndAstrometry: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
+    FLastError: string;
     FLastSlewErr,FInitra,FInitdec,FStartTime: double;
     Fmount: T_mount;
     Fcamera: T_camera;
@@ -61,7 +62,7 @@ TAstrometry = class(TComponent)
     constructor Create(AOwner: TComponent);override;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
     procedure StopAstrometry;
-    procedure AstrometryDone;
+    procedure AstrometryDone(errstr:string);
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
@@ -73,6 +74,7 @@ TAstrometry = class(TComponent)
     property SlewBusy: Boolean read FSlewBusy;
     property LastSlewErr: double read FLastSlewErr;
     property LastResult: Boolean read FLastResult;
+    property LastError: String read FLastError;
     property InitRA: double read Finitra;
     property InitDEC: double read Finitdec;
     property StartTime: double read FStartTime;
@@ -96,6 +98,7 @@ begin
   FBusy:=false;
   FSlewBusy:=false;
   FLastResult:=false;
+  FLastError:='';
   FLastSlewErr:=0;
   AstrometryTimeout:=60;
   TimerAstrometrySolve:=TTimer.Create(self);
@@ -156,6 +159,7 @@ begin
        msg(Format(rsCannotFindAp, [crlf]),2);
    end;
    FLastResult:=false;
+   FLastError:='';
    FInitra:=ra;
    FInitdec:=de;
    FStartTime:=now;
@@ -225,13 +229,14 @@ begin
  end;
 end;
 
-procedure TAstrometry.AstrometryDone;
+procedure TAstrometry.AstrometryDone(errstr:string);
 begin
  if FileExistsUTF8(savefile) and FileExistsUTF8(solvefile) then
    FLastResult:=true
  else
    FLastResult:=false;
  FBusy:=false;
+ FLastError:=errstr;
  if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;

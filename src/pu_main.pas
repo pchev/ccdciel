@@ -8698,7 +8698,7 @@ begin
      end;
      NewMessage(Format(rsResolveSucce, [astrometry.Resolver])+resulttxt,2);
   end else begin
-    NewMessage(Format(rsResolveError, [astrometry.Resolver]),1);
+    NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
   end;
 end;
 
@@ -9424,7 +9424,15 @@ begin
                           autoguider.ErrorDesc:='';
                           NewMessage(buf,1);
                          end;
-    M_AstrometryDone: astrometry.AstrometryDone;
+    M_AstrometryDone: begin
+                      try
+                      buf:=PChar(Message.LParam);
+                      StrDispose(PChar(Message.LParam));
+                      except
+                      buf:='';
+                      end;
+                      astrometry.AstrometryDone(buf);
+                      end
     else
       NewMessage(Format(rsReceiveUnkno, [inttostr(Message.wParam)]),1);
   end;
