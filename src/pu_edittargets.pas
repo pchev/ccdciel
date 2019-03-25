@@ -332,7 +332,7 @@ begin
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
   TargetList.Columns.Items[coldark-1].Title.Caption := Format(rsDarkNight, [crlf]);
-  TargetList.Columns.Items[colskip-1].Title.Caption := rsSkip;
+  TargetList.Columns.Items[colskip-1].Title.Caption := Format(rsDonTSwait+'', [crlf]);
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
   TargetList.Columns.Items[colstart-1].PickList.Clear;
   TargetList.Columns.Items[colstart-1].PickList.Add('');
