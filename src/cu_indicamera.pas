@@ -65,6 +65,7 @@ private
    CCDframe: INumberVectorProperty;
    CCDframeX,CCDframeY,CCDframeWidth,CCDframeHeight: INumber;
    CCDframeReset: ISwitchVectorProperty;
+   FrameReset: ISwitch;
    CCDFrameType: ISwitchVectorProperty;
    FrameLight, FrameBias, FrameDark,FrameFlat: ISwitch;
    CCDCompression: ISwitchVectorProperty;
@@ -577,6 +578,8 @@ begin
   end
   else if (proptype=INDI_SWITCH)and(CCDframeReset=nil)and(propname='CCD_FRAME_RESET') then begin
      CCDframeReset:=indiProp.getSwitch;
+     FrameReset:=IUFindSwitch(CCDframeReset,'RESET');
+     if FrameReset=nil then CCDframeReset:=nil;
   end
   else if (proptype=INDI_SWITCH)and(CCDFrameType=nil)and(propname='CCD_FRAME_TYPE') then begin
      CCDFrameType:=indiProp.getSwitch;
@@ -1159,10 +1162,23 @@ end;
 end;
 
 Procedure T_indicamera.SetBinning(sbinX,sbinY: integer);
+var x,y,width,height: integer;
+    xr,yr,widthr,heightr: TNumRange;
 begin
 msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
 if UseMainSensor then begin
  if CCDbinning<>nil then begin
+    // get current frame
+    GetFrame(x,y,width,height);
+    GetFrameRange(xr,yr,widthr,heightr);
+    // reset frame if the ROI cover more than 90% of the sensor size
+    // this reset any rounding because of previous binning
+    if (CCDframeReset<>nil)and(x=0)and(y=0)and
+       ((abs(widthr.max-width)/widthr.max)<0.1)and
+       ((abs(heightr.max-height)/heightr.max)<0.1) then begin
+       FrameReset.s:=ISS_ON;
+       indiclient.sendNewSwitch(CCDframeReset);
+    end;
     CCDbinX.value:=sbinX;
     CCDbinY.value:=sbinY;
     indiclient.sendNewNumber(CCDbinning);
