@@ -1133,7 +1133,7 @@ begin
     V:=Unassigned;
     ShowMessage(buf);
   except
-    on E: EOleException do ShowMessage('Error : ' + E.Message);
+    on E: Exception do ShowMessage('Error : ' + E.Message);
   end;
 {$endif}
 end;
@@ -1162,7 +1162,7 @@ begin
     V.SetupDialog;
     V:=Unassigned;
   except
-    on E: EOleException do ShowMessage('Error : ' + E.Message);
+    on E: Exception do ShowMessage('Error : ' + E.Message);
   end;
 {$endif}
 end;
