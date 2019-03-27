@@ -2,8 +2,6 @@ unit cu_ascomrestcamera;
 
 {$mode objfpc}{$H+}
 
-//{$define debug_ascom}
-
 {
 Copyright (C) 2019 Patrick Chevalley
 
@@ -368,7 +366,7 @@ begin
     FLAT : li:='true';
   end;
   try
-     {$ifdef debug_ascom}msg('start exposure.');{$endif}
+     if debug_ascom then msg('start exposure.');
      V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
      Ftimestart:=NowUTC;
      Ftimeend:=now+(exptime)/secperday;
@@ -416,7 +414,7 @@ begin
         exit;
       end;
     end;
-    {$ifdef debug_ascom}msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok, rsTrue, rsFalse));{$endif}
+    if debug_ascom then msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok, rsTrue, rsFalse));
     if (not ok) then begin
       // in progress
       if assigned(FonExposureProgress) then
@@ -443,11 +441,11 @@ begin
  if ok then begin
    try
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
-   {$ifdef debug_ascom}msg('clear old image.');{$endif}
+   if debug_ascom then msg('clear old image.');
    FFits.ClearImage;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-   {$ifdef debug_ascom}msg('read image.');{$endif}
+   if debug_ascom then msg('read image.');
    try
    imgarray:=V.GetImageArray;
    except
@@ -465,7 +463,7 @@ begin
    end;
    xs:=imgarray.width;
    ys:=imgarray.height;
-   {$ifdef debug_ascom}msg('width:'+inttostr(xs)+' height:'+inttostr(ys));{$endif}
+   if debug_ascom then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
    nax1:=xs;
    nax2:=ys;
    pix:=FPixelSizeX;
@@ -473,7 +471,7 @@ begin
    ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,Ftimestart);
-   {$ifdef debug_ascom}msg('set fits header');{$endif}
+   if debug_ascom then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
    hdr.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -505,11 +503,11 @@ begin
    FImgStream.Clear;
    FImgStream.position:=0;
    hdrmem.Position:=0;
-   {$ifdef debug_ascom}msg('write header');{$endif}
+   if debug_ascom then msg('write header');
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
    hdr.Free;
-   {$ifdef debug_ascom}msg('write image');{$endif}
+   if debug_ascom then msg('write image');
    if Dims=2 then begin
      for i:=0 to ys-1 do begin
         if FASCOMFlipImage then
@@ -548,14 +546,14 @@ begin
      end;
      end;
    end;
-   {$ifdef debug_ascom}msg('pad fits');{$endif}
+   if debug_ascom then msg('pad fits');
    b:='';
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
-   {$ifdef debug_ascom}msg('release imagearray');{$endif}
+   if debug_ascom then msg('release imagearray');
    imgarray.Free;
-   {$ifdef debug_ascom}msg('display image');{$endif}
+   msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;
@@ -574,14 +572,14 @@ var oldx,oldy,newx,newy,fsx,fsy,fnx,fny: integer;
 begin
    if FStatus<>devConnected then exit;
    try
-   {$ifdef debug_ascom}msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));{$endif}
+   if debug_ascom then msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));
    oldx:=FBinX;
    oldy:=FBinY;
-   {$ifdef debug_ascom}msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));{$endif}
+   if debug_ascom then msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
      GetFrame(fsx,fsy,fnx,fny);
-     {$ifdef debug_ascom}msg('Current frame '+inttostr(fsx)+','+inttostr(fsy)+'/'+inttostr(fnx)+'x'+inttostr(fny));{$endif}
+     if debug_ascom then msg('Current frame '+inttostr(fsx)+','+inttostr(fsy)+'/'+inttostr(fnx)+'x'+inttostr(fny));
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
      fnx:=trunc(fnx*scale);
@@ -609,19 +607,15 @@ var Xmax,Ymax,w,h,bx,by: integer;
 begin
    if FStatus<>devConnected then exit;
    try
-   {$ifdef debug_ascom}msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
+   if debug_ascom then msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    w:=FCameraXSize;
    h:=FCameraYSize;
    bx:=FBinX;
    by:=FBinY;
-   {$ifdef debug_ascom}
-     msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
-   {$endif}
+   if debug_ascom then msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
    Xmax:= w div bx;
    Ymax:= h div by;
-   {$ifdef debug_ascom}
-     msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
-   {$endif}
+   if debug_ascom then msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
    // check range
    if width<MinFrameSize then width:=MinFrameSize;
    if height<MinFrameSize then height:=MinFrameSize;
@@ -632,7 +626,7 @@ begin
    // force even values
    x:=round(x+0.5);
    y:=round(y+0.5);
-   {$ifdef debug_ascom}msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));{$endif}
+   if debug_ascom then msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    V.Put('StartX',x);
    V.Put('StartY',y);
    V.Put('NumX',width);
@@ -693,7 +687,7 @@ begin
    heightr.min:=1;
    heightr.max:=FCameraYSize;
    heightr.step:=1;
-   {$ifdef debug_ascom}msg('Get frame range :'+inttostr(round(widthr.max))+'x'+inttostr(round(heightr.max)));{$endif}
+   if debug_ascom then msg('Get frame range :'+inttostr(round(widthr.max))+'x'+inttostr(round(heightr.max)));
    except
     on E: Exception do msg('Get frame range error: ' + E.Message,0);
    end;
@@ -708,9 +702,7 @@ begin
   h:=FCameraYSize;
   bx:=FBinX;
   by:=FBinY;
-  {$ifdef debug_ascom}
-    msg('ResetFrame: XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
-  {$endif}
+  if debug_ascom then msg('ResetFrame: XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
   w:=w div bx;
   h:=h div by;
   SetFrame(0,0,w,h);

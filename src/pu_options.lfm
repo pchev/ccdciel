@@ -278,6 +278,14 @@ object f_option: Tf_option
         Style = csDropDownList
         TabOrder = 8
       end
+      object Debug_Ascom: TCheckBox
+        Left = 312
+        Height = 23
+        Top = 396
+        Width = 160
+        Caption = 'Verbose ASCOM log'
+        TabOrder = 9
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Observatory'

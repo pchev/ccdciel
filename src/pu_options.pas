@@ -41,6 +41,7 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
+    Debug_Ascom: TCheckBox;
     Label119: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
