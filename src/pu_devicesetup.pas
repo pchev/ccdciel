@@ -1133,7 +1133,12 @@ begin
     V:=Unassigned;
     ShowMessage(buf);
   except
-    on E: Exception do ShowMessage('Error : ' + E.Message);
+    on E: Exception do begin
+       buf:=E.Message;
+       if pos(AscomInvalidArchitecture,buf)>0 then
+          buf:=buf+crlf+rs32bitdriver;
+       ShowMessage('Error : ' + buf);
+    end;
   end;
 {$endif}
 end;
@@ -1143,6 +1148,7 @@ procedure Tf_setup.BtnSetupAscomClick(Sender: TObject);
 var
   V: variant;
   dev: WideString;
+  buf: string;
 {$endif}
 begin
 {$ifdef mswindows}
@@ -1162,7 +1168,12 @@ begin
     V.SetupDialog;
     V:=Unassigned;
   except
-    on E: Exception do ShowMessage('Error : ' + E.Message);
+    on E: Exception do begin
+        buf:=E.Message;
+        if pos(AscomInvalidArchitecture,buf)>0 then
+           buf:=buf+crlf+rs32bitdriver;
+        ShowMessage('Error : ' + buf);
+    end;
   end;
 {$endif}
 end;

@@ -1043,6 +1043,7 @@ resourcestring
   rsDoNotRunAsAd = 'Do not run %s as %s!';
   rsAdministrato = 'administrator';
   rsDonTSwait = 'Don''t%swait';
+  rs32bitdriver = 'This driver work only in 32bit, please install the 32bit version of CCDciel.';
 
 implementation
 

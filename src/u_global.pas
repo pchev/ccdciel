@@ -291,6 +291,7 @@ const
   {$else}
     OpenFileCMD: string = 'xdg-open';   // default FreeDesktop.org
     {$endif}
+  AscomInvalidArchitecture='program with an incorrect format';
 
 var
   onMsgGlobal: TNotifyMsg;
