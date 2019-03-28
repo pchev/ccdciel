@@ -150,6 +150,7 @@ begin
   FCanSlave:=value;
   Label2.Visible:=FCanSlave;
   ledSlaved.Visible:=FCanSlave;
+  BtnSlave.Visible:=FCanSlave;
 end;
 
 procedure Tf_dome.SetSlave(value:boolean);
