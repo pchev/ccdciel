@@ -3943,12 +3943,16 @@ end;
 procedure Tf_main.ParkDome(Sender: TObject);
 begin
 if MessageDlg(rsParkAndClose+'?',mtConfirmation,mbYesNo,0)=mrYes then begin
+ if mount.Park or
+   (MessageDlg(Format(rsMountIsNotPa, [crlf]), mtConfirmation, mbYesNo, 0)=mrYes)
+ then begin
    NewMessage(rsStopDomeSlav,1);
    Dome.Slave:=false;
    NewMessage(rsParkDome,1);
    Dome.Park:=true;
    NewMessage(rsCloseDome,1);
    Dome.Shutter:=false;
+ end;
 end;
 end;
 
