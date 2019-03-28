@@ -44,6 +44,7 @@ T_ascomrestcamera = class(T_camera)
    stCCDtemp : double;
    stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
+   stGain: integer;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
@@ -107,6 +108,7 @@ T_ascomrestcamera = class(T_camera)
    procedure SetVideoPreviewDivisor(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   function GetGainReal: integer;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
 
@@ -159,6 +161,7 @@ begin
  stY:=-1;
  stWidth:=-1;
  stHeight:=-1;
+ stGain:=-1;
  FHasTemperature:=false;
  FCanSetTemperature:=false;
  FCameraInterface:=ASCOMREST;
@@ -292,7 +295,7 @@ begin
     end;
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
-    StatusTimer.Interval:=100;
+    StatusTimer.Interval:=1000;
     StatusTimer.Enabled:=true;
     msg(rsConnected3);
   end
@@ -1050,12 +1053,25 @@ begin
  if (FhasGainISO or FhasGain) then begin
    try
       V.Put('Gain',value);
+      stGain:=value;
    except
    end;
  end;
 end;
 
 function T_ascomrestcamera.GetGain: integer;
+begin
+ if FStatus<>devConnected then
+   result:=NullInt
+ else begin
+   if stGain=-1 then begin
+      stGain:=GetGainReal;
+   end;
+   result:=stGain;
+ end;
+end;
+
+function T_ascomrestcamera.GetGainReal: integer;
 begin
  result:=NullInt;
  if FStatus<>devConnected then exit;

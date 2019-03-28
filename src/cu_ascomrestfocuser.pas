@@ -50,6 +50,7 @@ T_ascomrestfocuser = class(T_focuser)
  protected
    procedure SetPosition(p:integer); override;
    function  GetPosition:integer; override;
+   function  GetPositionReal:integer;
    procedure SetRelPosition(p:integer); override;
    function  GetRelPosition:integer; override;
    procedure SetSpeed(p:integer); override;
@@ -66,6 +67,7 @@ T_ascomrestfocuser = class(T_focuser)
    procedure SetTimeout(num:integer); override;
    function  WaitFocuserMoving(maxtime:integer):boolean;
    function  GetTemperature:double; override;
+   function  GetTemperatureReal:double;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -94,6 +96,8 @@ begin
  FmsgTemp:=9999;
  FmsgAPos:=-1;
  FmsgRPos:=-1;
+ stPosition:=NullInt;
+ stTemperature:=NullCoord;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -153,11 +157,11 @@ begin
      except
        msg('Error: unknown driver version',9);
      end;
+     FStatus := devConnected;
      GetTemperature;
      FhasAbsolutePosition:=GethasAbsolutePositionReal;
      FhasRelativePosition:=GethasRelativePositionReal;
      msg(rsConnected3);
-     FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      CheckTemp:=0;
      StatusTimer.Enabled:=true;
@@ -214,7 +218,7 @@ begin
   else begin
     try
     if hasAbsolutePosition then begin
-      p:=GetPosition;
+      p:=GetPositionReal;
       if p<>stPosition then begin
         stPosition:=p;
         if Assigned(FonPositionChange) then FonPositionChange(p);
@@ -229,7 +233,7 @@ begin
     if hasTemperature then begin
       if (CheckTemp mod 10) = 0 then begin
        CheckTemp:=0;
-       t:=GetTemperature;
+       t:=GetTemperatureReal;
        if abs(t-stTemperature)>0.1 then begin
           stTemperature:=t;
           if Assigned(FonTemperatureChange) then FonTemperatureChange(t);
@@ -304,9 +308,10 @@ begin
    V.Put('move',['Position',IntToStr(n)]);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
+   stPosition:=GetPositionReal;
    // Fix for usb-focus
    if pos('USB_Focus',FDeviceName)>0 then begin
-     np:=GetPosition;
+     np:=stPosition;
      if (np<>n) then begin
        msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(n),0);
      end; {fix for some poor written focuser drivers. The getposition is already sufficient to fix the problem, so message should never occur.}
@@ -317,6 +322,14 @@ begin
 end;
 
 function  T_ascomrestfocuser.GetPosition:integer;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+ if stPosition=NullInt then stPosition:=GetPositionReal;
+ result:=stPosition;
+end;
+
+function  T_ascomrestfocuser.GetPositionReal:integer;
 begin
  result:=0;
  if FStatus<>devConnected then exit;
@@ -479,6 +492,14 @@ begin
 end;
 
 function  T_ascomrestfocuser.GetTemperature:double;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+ if stTemperature=NullCoord then stTemperature:=GetTemperatureReal;
+ result:=stTemperature;
+end;
+
+function  T_ascomrestfocuser.GetTemperatureReal:double;
 var i: integer;
 begin
  result:=0;

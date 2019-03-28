@@ -43,6 +43,7 @@ T_ascomrestwheel = class(T_wheel)
  protected
    procedure SetFilter(num:integer); override;
    function  GetFilter:integer; override;
+   function  GetFilterReal:integer;
    procedure SetFilterNames(value:TStringList); override;
    function  GetFilterNames:TStringList; override;
    procedure SetTimeout(num:integer); override;
@@ -71,6 +72,7 @@ begin
  StatusTimer.Interval:=statusinterval;
  StatusTimer.OnTimer:=@StatusTimerTimer;
  CheckFiltername:=0;
+ stFilter:=-1;
 end;
 
 destructor  T_ascomrestwheel.Destroy;
@@ -105,6 +107,7 @@ begin
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
      CheckFiltername:=0;
+     StatusTimer.Interval:=1000;
      StatusTimer.Enabled:=true;
   end
   else
@@ -147,6 +150,7 @@ var fnum: integer;
     fnchanged:  boolean;
 begin
  StatusTimer.Enabled:=false;
+ StatusTimer.Interval:=statusinterval;
  try
   if not Connected then begin
      FStatus := devDisconnected;
@@ -155,7 +159,7 @@ begin
   end
   else begin
     try
-    fnum:=GetFilter;
+    fnum:=GetFilterReal;
     if fnum<>stFilter then begin
        stFilter:=fnum;
        if Assigned(FonFilterChange) then FonFilterChange(stFilter);
@@ -221,6 +225,14 @@ begin
 end;
 
 function  T_ascomrestwheel.GetFilter:integer;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+ if stFilter=-1 then stFilter:=GetFilterReal;
+ result:=stFilter;
+end;
+
+function  T_ascomrestwheel.GetFilterReal:integer;
 begin
  result:=0;
  if FStatus<>devConnected then exit;
