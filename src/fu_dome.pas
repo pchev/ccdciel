@@ -33,16 +33,22 @@ type
   { Tf_dome }
 
   Tf_dome = class(TFrame)
+    BtnPark: TButton;
+    BtnSlave: TButton;
     Label1: TLabel;
     ledOpen: TShape;
     Panel2: TPanel;
     Label2: TLabel;
     ledSlaved: TShape;
     Panel1: TPanel;
+    Panel3: TPanel;
     Title: TLabel;
+    procedure BtnParkClick(Sender: TObject);
+    procedure BtnSlaveClick(Sender: TObject);
   private
     { private declarations }
     FConnected,FShutter,FSlave,FCanSlave: boolean;
+    FParkDome, FStartSlaving: TNotifyEvent;
     procedure SetConnected(value:boolean);
     procedure SetShutter(value:boolean);
     procedure SetCanSlave(value:boolean);
@@ -57,6 +63,8 @@ type
     property Shutter: boolean read FShutter write SetShutter;
     property CanSlave: boolean read FCanSlave write SetCanSlave;
     property Slave: boolean read FSlave write SetSlave;
+    property onParkDome: TNotifyEvent read FParkDome write FParkDome;
+    property onStartSlaving: TNotifyEvent read FStartSlaving write FStartSlaving;
   end;
 
 implementation
@@ -93,6 +101,8 @@ begin
   Title.Caption:=rsDome;
   Label1.Caption:=rsOpen;
   Label2.Caption:=rsSlaved;
+  BtnPark.Caption:=rsPark;
+  BtnSlave.Caption:=rsSlave;
 end;
 
 procedure Tf_dome.SetLed;
@@ -111,6 +121,16 @@ begin
      ledOpen.Brush.Color:=clGray;
      ledSlaved.Brush.Color:=clGray;
   end;
+end;
+
+procedure Tf_dome.BtnParkClick(Sender: TObject);
+begin
+  if Assigned(FParkDome) then FParkDome(self);
+end;
+
+procedure Tf_dome.BtnSlaveClick(Sender: TObject);
+begin
+  if Assigned(FStartSlaving) then FStartSlaving(self);
 end;
 
 procedure Tf_dome.SetConnected(value:boolean);

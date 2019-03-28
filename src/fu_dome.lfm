@@ -1,12 +1,11 @@
 object f_dome: Tf_dome
   Left = 0
-  Height = 57
+  Height = 73
   Top = 0
-  Width = 175
+  Width = 182
   AutoSize = True
-  ClientHeight = 57
-  ClientWidth = 175
-  DesignTimePPI = 95
+  ClientHeight = 73
+  ClientWidth = 182
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -15,7 +14,7 @@ object f_dome: Tf_dome
     Left = 0
     Height = 20
     Top = 0
-    Width = 175
+    Width = 182
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,29 +28,28 @@ object f_dome: Tf_dome
   end
   object Panel1: TPanel
     Left = 0
-    Height = 24
+    Height = 46
     Top = 20
-    Width = 175
+    Width = 182
     Align = alTop
     AutoSize = True
-    ChildSizing.Layout = cclTopToBottomThenLeftToRight
-    ChildSizing.ControlsPerLine = 99
-    ClientHeight = 24
-    ClientWidth = 175
+    ClientHeight = 46
+    ClientWidth = 182
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
-      Left = 0
-      Height = 23
-      Top = 0
-      Width = 164
+      Left = 1
+      Height = 21
+      Top = 1
+      Width = 180
+      Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 23
-      ClientWidth = 164
+      ClientHeight = 21
+      ClientWidth = 180
       ParentFont = False
       TabOrder = 0
       object ledSlaved: TShape
-        Left = 150
+        Left = 152
         Height = 14
         Top = 4
         Width = 14
@@ -59,30 +57,61 @@ object f_dome: Tf_dome
         Shape = stCircle
       end
       object Label2: TLabel
-        Left = 97
-        Height = 19
+        Left = 98
+        Height = 17
         Top = 4
-        Width = 39
+        Width = 44
         Caption = 'Slaved'
         ParentColor = False
         ParentFont = False
       end
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 33
+        Width = 36
         Caption = 'Open'
         ParentColor = False
         ParentFont = False
       end
       object ledOpen: TShape
-        Left = 64
+        Left = 65
         Height = 14
         Top = 4
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
+      end
+    end
+    object Panel3: TPanel
+      Left = 1
+      Height = 23
+      Top = 22
+      Width = 180
+      Align = alTop
+      AutoSize = True
+      ClientHeight = 23
+      ClientWidth = 180
+      TabOrder = 1
+      object BtnPark: TButton
+        Left = 1
+        Height = 21
+        Top = 1
+        Width = 78
+        Caption = 'BtnPark'
+        Constraints.MaxHeight = 21
+        OnClick = BtnParkClick
+        TabOrder = 0
+      end
+      object BtnSlave: TButton
+        Left = 88
+        Height = 21
+        Top = 1
+        Width = 78
+        Caption = 'BtnSlave'
+        Constraints.MaxHeight = 21
+        OnClick = BtnSlaveClick
+        TabOrder = 1
       end
     end
   end

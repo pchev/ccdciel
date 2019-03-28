@@ -597,6 +597,8 @@ type
     Procedure DomeStatus(Sender: TObject);
     Procedure DomeShutterChange(Sender: TObject);
     Procedure DomeSlaveChange(Sender: TObject);
+    procedure ParkDome(Sender: TObject);
+    procedure StartDomeSlaving(Sender: TObject);
     Procedure WeatherStatus(Sender: TObject);
     Procedure WeatherClearChange(Sender: TObject);
     Procedure SafetyStatus(Sender: TObject);
@@ -1232,6 +1234,8 @@ begin
   f_mount.onTrack:=@SetMountTrack;
 
   f_dome:=Tf_dome.Create(self);
+  f_dome.onParkDome:=@ParkDome;
+  f_dome.onStartSlaving:=@StartDomeSlaving;
 
   f_rotator:=Tf_rotator.Create(self);
   f_rotator.onRotate:=@RotatorRotate;
@@ -3934,6 +3938,23 @@ begin
       f_dome.Slave:=ok;
     end;
   end;
+end;
+
+procedure Tf_main.ParkDome(Sender: TObject);
+begin
+if MessageDlg(rsParkAndClose+'?',mtConfirmation,mbYesNo,0)=mrYes then begin
+   NewMessage(rsStopDomeSlav,1);
+   Dome.Slave:=false;
+   NewMessage(rsParkDome,1);
+   Dome.Park:=true;
+   NewMessage(rsCloseDome,1);
+   Dome.Shutter:=false;
+end;
+end;
+
+procedure Tf_main.StartDomeSlaving(Sender: TObject);
+begin
+  dome.Slave:=true;
 end;
 
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);
