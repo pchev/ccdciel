@@ -43,6 +43,7 @@ T_ascomrestcamera = class(T_camera)
    FHasTemperature, FCanSetTemperature: boolean;
    stCCDtemp : double;
    stCooler : boolean;
+   stX,stY,stWidth,stHeight: integer;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
@@ -62,6 +63,7 @@ T_ascomrestcamera = class(T_camera)
    function  GetFilter:integer; override;
    procedure SetFilterNames(value:TStringList); override;
    function  GetTemperature: double; override;
+   function  GetTemperatureReal: double;
    procedure SetTemperature(value:double); override;
    function  GetCooler: boolean; override;
    procedure SetCooler(value:boolean); override;
@@ -117,6 +119,7 @@ public
    Procedure SetBinning(sbinX,sbinY: integer); override;
    procedure SetFrame(x,y,width,height: integer); override;
    procedure GetFrame(out x,y,width,height: integer); override;
+   procedure GetFrameReal(out x,y,width,height: integer);
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
    function  CheckGain:boolean; override;
@@ -152,6 +155,10 @@ begin
  FMaxBinY:=1;
  FBinX:=1;
  FBinY:=1;
+ stX:=-1;
+ stY:=-1;
+ stWidth:=-1;
+ stHeight:=-1;
  FHasTemperature:=false;
  FCanSetTemperature:=false;
  FCameraInterface:=ASCOMREST;
@@ -285,6 +292,7 @@ begin
     end;
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
+    StatusTimer.Interval:=100;
     StatusTimer.Enabled:=true;
     msg(rsConnected3);
   end
@@ -326,6 +334,7 @@ var t: double;
     c: boolean;
 begin
  StatusTimer.Enabled:=false;
+ StatusTimer.Interval:=statusinterval;
  try
   if not Connected then begin
      FStatus := devDisconnected;
@@ -340,7 +349,7 @@ begin
        if Assigned(FonCoolerChange) then FonCoolerChange(stCooler);
     end;
     if FHasTemperature then begin
-       t:=GetTemperature;
+       t:=GetTemperatureReal;
        if (t<>stCCDtemp) then begin
          stCCDtemp:=t;
          if Assigned(FonTemperatureChange) then FonTemperatureChange(stCCDtemp);
@@ -578,7 +587,7 @@ begin
    if debug_ascom then msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
-     GetFrame(fsx,fsy,fnx,fny);
+     GetFrameReal(fsx,fsy,fnx,fny);
      if debug_ascom then msg('Current frame '+inttostr(fsx)+','+inttostr(fsy)+'/'+inttostr(fnx)+'x'+inttostr(fny));
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
@@ -631,14 +640,34 @@ begin
    V.Put('StartY',y);
    V.Put('NumX',width);
    V.Put('NumY',height);
+   stX      := x;
+   stY      := y;
+   stWidth  := width;
+   stHeight := height;
    Wait(1);
    if Assigned(FonFrameChange) then FonFrameChange(self);
    except
-    on E: Exception do msg('Set frame error: ' + E.Message,0);
+    on E: Exception do begin
+      msg('Set frame error: ' + E.Message,0);
+      stX:=-1;
+    end;
    end;
 end;
 
 procedure T_ascomrestcamera.GetFrame(out x,y,width,height: integer);
+begin
+  if (stX<0)or(stY<0)or(stWidth<0)or(stHeight<0) then begin
+    GetFrameReal(x,y,width,height);
+  end
+  else begin
+    x:=stX;
+    y:=stY;
+    width:=stWidth;
+    height:=stHeight;
+  end;
+end;
+
+procedure T_ascomrestcamera.GetFrameReal(out x,y,width,height: integer);
 var Cx,Cy,Cwidth,Cheight: integer;
 begin
    if FStatus<>devConnected then exit;
@@ -664,6 +693,10 @@ begin
      width:=Cwidth;
      height:=Cheight;
    end;
+   stX      := x;
+   stY      := y;
+   stWidth  := width;
+   stHeight := height;
    //
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
@@ -833,6 +866,14 @@ begin
 end;
 
 function  T_ascomrestcamera.GetTemperature: double;
+begin
+ if FStatus=devConnected then
+    result:=stCCDtemp
+ else
+    result:=NullCoord;
+end;
+
+function  T_ascomrestcamera.GetTemperatureReal: double;
 begin
  result:=NullCoord;
  if FStatus<>devConnected then exit;

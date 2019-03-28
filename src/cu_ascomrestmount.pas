@@ -34,11 +34,12 @@ T_ascomrestmount = class(T_mount)
  private
    V: TAscomRest;
    CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
-   stRA,stDE: double;
+   stRA,stDE,stEquinox,stFocalLength: double;
    stPark:boolean;
    stPierside: TPierSide;
    stTracking: boolean;
    StatusTimer: TTimer;
+   StatusCount: integer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure CheckEqmod;
@@ -58,6 +59,11 @@ T_ascomrestmount = class(T_mount)
    function  GetSyncMode:TEqmodAlign; override;
    procedure SetSyncMode(value:TEqmodAlign); override;
    function GetMountSlewing:boolean; override;
+   function  GetRAReal:double;
+   function  GetDecReal:double;
+   function  GetPierSideReal: TPierSide;
+   function  GetEquinoxReal: double;
+   function  GetFocaleLengthReal:double;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -90,6 +96,8 @@ begin
  FMountInterface:=ASCOMREST;
  stRA:=0;
  stDE:=0;;
+ stEquinox:=0;
+ stFocalLength:=0;
  stPark:=false;
  stPierside:=pierUnknown;
  stTracking:=false;
@@ -154,6 +162,8 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
+     StatusCount:=0;
+     StatusTimer.Interval:=100;
      StatusTimer.Enabled:=true;
   end
   else
@@ -196,6 +206,7 @@ var x,y: double;
     tr: Boolean;
 begin
  StatusTimer.Enabled:=false;
+ StatusTimer.Interval:=statusinterval;
  try
   if not Connected then begin
      FStatus := devDisconnected;
@@ -204,11 +215,17 @@ begin
   end
   else begin
     try
-    x:=GetRA;
-    y:=GetDec;
+    x:=GetRAReal;
+    y:=GetDecReal;
     pk:=GetPark;
-    ps:=GetPierSide;
+    ps:=GetPierSideReal;
     tr:=GetTracking;
+    if (StatusCount mod 20)=0 then begin
+      stFocalLength:=GetFocaleLengthReal;
+      stEquinox:=GetEquinoxReal;
+      StatusCount:=0;
+    end;
+    inc(StatusCount);
     if (x<>stRA)or(y<>stDE) then begin
        stRA:=x;
        stDE:=y;
@@ -265,7 +282,7 @@ begin
    end;
 end;
 
-function  T_ascomrestmount.GetRA:double;
+function  T_ascomrestmount.GetRAReal:double;
 begin
  result:=NullCoord;
    if FStatus<>devConnected then exit;
@@ -276,7 +293,7 @@ begin
    end;
 end;
 
-function  T_ascomrestmount.GetDec:double;
+function  T_ascomrestmount.GetDecReal:double;
 begin
  result:=NullCoord;
    if FStatus<>devConnected then exit;
@@ -287,7 +304,7 @@ begin
    end;
 end;
 
-function  T_ascomrestmount.GetPierSide:TPierSide;
+function  T_ascomrestmount.GetPierSideReal:TPierSide;
 var i: integer;
 begin
  result:=pierUnknown;
@@ -304,7 +321,47 @@ begin
    end;
 end;
 
-function  T_ascomrestmount.GetEquinox: double;
+function  T_ascomrestmount.GetRA:double;
+begin
+ if FStatus=devConnected then
+    result:=stRA
+ else
+    result:=NullCoord;
+end;
+
+function  T_ascomrestmount.GetDec:double;
+begin
+ if FStatus=devConnected then
+    result:=stDE
+ else
+    result:=NullCoord;
+end;
+
+function  T_ascomrestmount.GetPierSide:TPierSide;
+begin
+ if FStatus=devConnected then
+    result:=stPierside
+ else
+    result:=pierUnknown;
+end;
+
+function  T_ascomrestmount.GetEquinox:double;
+begin
+ if FStatus=devConnected then
+    result:=stEquinox
+ else
+    result:=0;
+end;
+
+function  T_ascomrestmount.GetFocaleLength:double;
+begin
+ if FStatus=devConnected then
+    result:=stFocalLength
+ else
+    result:=-1;
+end;
+
+function  T_ascomrestmount.GetEquinoxReal: double;
 var i: Integer;
 begin
  result:=0;
@@ -334,7 +391,7 @@ begin
    end;
 end;
 
-function  T_ascomrestmount.GetFocaleLength:double;
+function  T_ascomrestmount.GetFocaleLengthReal:double;
 begin
  result:=-1;
   if FStatus<>devConnected then exit;
