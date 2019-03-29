@@ -42,7 +42,7 @@ uses
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
-  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_planetarium,
+  cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
   cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel,
@@ -1154,6 +1154,7 @@ begin
     agPHD: autoguider:=T_autoguider_phd.Create;
     agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
     agNONE: autoguider:=T_autoguider_none.Create;
+    agDITHER: autoguider:=T_autoguider_dither.Create;
   end;
   autoguider.onStatusChange:=@AutoguiderStatus;
   autoguider.onConnect:=@AutoguiderConnect;
@@ -1535,6 +1536,9 @@ begin
  if f_script<>nil then begin
    f_script.Camera:=camera;
    f_script.Mount:=mount;
+ end;
+ if autoguider<>nil then begin
+   autoguider.Mount:=mount;
  end;
 end;
 
@@ -5213,7 +5217,9 @@ begin
      agPHD: autoguider:=T_autoguider_phd.Create;
      agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
      agNONE: autoguider:=T_autoguider_none.Create;
+     agDITHER: autoguider:=T_autoguider_dither.Create;
    end;
+   autoguider.Mount:=mount;
    autoguider.onStatusChange:=@AutoguiderStatus;
    autoguider.onConnect:=@AutoguiderConnect;
    autoguider.onDisconnect:=@AutoguiderDisconnect;
@@ -6053,7 +6059,9 @@ begin
          agPHD: autoguider:=T_autoguider_phd.Create;
          agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
          agNONE: autoguider:=T_autoguider_none.Create;
+         agDITHER: autoguider:=T_autoguider_dither.Create;
        end;
+       autoguider.Mount:=mount;
        autoguider.onStatusChange:=@AutoguiderStatus;
        autoguider.onConnect:=@AutoguiderConnect;
        autoguider.onDisconnect:=@AutoguiderDisconnect;

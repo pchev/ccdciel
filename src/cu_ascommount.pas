@@ -62,6 +62,9 @@ T_ascommount = class(T_mount)
    function  GetSyncMode:TEqmodAlign; override;
    procedure SetSyncMode(value:TEqmodAlign); override;
    function GetMountSlewing:boolean; override;
+   function GetGuideRateRa: double; override;
+   function GetGuideRateDe: double; override;
+   function GetPulseGuiding: boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -79,6 +82,7 @@ public
    function SetSite(long,lat,elev: double): boolean; override;
    function GetDate(var utc,offset: double): boolean; override;
    function SetDate(utc,offset: double): boolean; override;
+   function PulseGuide(direction,duration:integer): boolean; override;
 end;
 
 const waitpoll=500;
@@ -758,6 +762,55 @@ begin
    result:=true;
    except
      on E: Exception do msg('Cannot set date: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascommount.GetGuideRateRa: double;
+begin
+ result:=0;
+ {$ifdef mswindows}
+   try
+   result:=V.GuideRateRightAscension;
+   except
+     on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascommount.GetGuideRateDe: double;
+begin
+ result:=0;
+ {$ifdef mswindows}
+   try
+   result:=V.GuideRateDeclination;
+   except
+     on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascommount.PulseGuide(direction,duration:integer): boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+   try
+    V.PulseGuide(direction,duration);
+    result:=true;
+   except
+     on E: Exception do msg('Pulse guide error: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascommount.GetPulseGuiding: boolean;
+begin
+ result:=false;
+ {$ifdef mswindows}
+   try
+   result:=V.IsPulseGuiding;
+   except
+     on E: Exception do msg('Cannot get pulse guide state: ' + E.Message,0);
    end;
  {$endif}
 end;

@@ -43,6 +43,7 @@ type
     AutofocusTemp: TFloatSpinEdit;
     Debug_Ascom: TCheckBox;
     Label119: TLabel;
+    Label120: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -50,6 +51,7 @@ type
     Label116: TLabel;
     Label117: TLabel;
     Label118: TLabel;
+    PageDitherOnly: TPage;
     Panel2: TPanel;
     Panel3: TPanel;
     TemperatureScale: TRadioGroup;
@@ -1056,10 +1058,14 @@ end;
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
 begin
   Notebook3.PageIndex:=AutoguiderBox.ItemIndex;
-  groupbox5.Visible:=(AutoguiderBox.ItemIndex<2);
+  groupbox5.Visible:=(AutoguiderBox.ItemIndex<2)or(AutoguiderBox.ItemIndex=3);
+  if (AutoguiderBox.ItemIndex<2) then
+    Label23.Caption:=rsPixels
+  else
+    Label23.Caption:='Arcseconds';
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
-  DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0);
+  DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0)or(AutoguiderBox.ItemIndex=3);
 end;
 
 procedure Tf_option.BtnDisableDelayClick(Sender: TObject);

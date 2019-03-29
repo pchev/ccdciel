@@ -63,6 +63,9 @@ T_ascomrestmount = class(T_mount)
    function  GetDecReal:double;
    function  GetPierSideReal: TPierSide;
    function  GetFocaleLengthReal:double;
+   function GetGuideRateRa: double; override;
+   function GetGuideRateDe: double; override;
+   function GetPulseGuiding: boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -80,6 +83,7 @@ public
    function SetSite(long,lat,elev: double): boolean; override;
    function GetDate(var utc,offset: double): boolean; override;
    function SetDate(utc,offset: double): boolean; override;
+   function PulseGuide(direction,duration:integer): boolean; override;
 end;
 
 const waitpoll=1000;
@@ -758,6 +762,51 @@ begin
    end;
 end;
 
+
+function T_ascomrestmount.GetGuideRateRa: double;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+   try
+   result:=V.Get('guideraterightascension').AsFloat;
+   except
+     on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
+   end;
+end;
+
+function T_ascomrestmount.GetGuideRateDe: double;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+   try
+   result:=V.Get('guideratedeclination').AsFloat;
+   except
+     on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
+   end;
+end;
+
+function T_ascomrestmount.PulseGuide(direction,duration:integer): boolean;
+begin
+ result:=false;
+ if FStatus<>devConnected then exit;
+   try
+    V.Put('pulseguide',['Direction',inttostr(direction),'Duration',inttostr(duration)]);
+    result:=true;
+   except
+     on E: Exception do msg('Pulse guide error: ' + E.Message,0);
+   end;
+end;
+
+function T_ascomrestmount.GetPulseGuiding: boolean;
+begin
+ result:=false;
+ if FStatus<>devConnected then exit;
+   try
+   result:=V.Get('ispulseguiding').AsBool;
+   except
+     on E: Exception do msg('Cannot get pulse guide state: ' + E.Message,0);
+   end;
+end;
 
 end.
 

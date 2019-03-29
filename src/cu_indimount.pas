@@ -69,6 +69,15 @@ T_indimount = class(T_mount)
    DateTime_Prop: ITextVectorProperty;
    dateutc : IText;
    utcoffset : IText;
+   Guide_NS: INumberVectorProperty;
+   Guide_N:  INumber;
+   Guide_S:  INumber;
+   Guide_WE: INumberVectorProperty;
+   Guide_W:  INumber;
+   Guide_E:  INumber;
+   Guide_Rate: INumberVectorProperty;
+   Guide_Rate_NS:  INumber;
+   Guide_Rate_WE:  INumber;
    Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
@@ -102,6 +111,9 @@ T_indimount = class(T_mount)
    function  GetSyncMode:TEqmodAlign; override;
    procedure SetSyncMode(value:TEqmodAlign); override;
    function GetMountSlewing:boolean; override;
+   function GetGuideRateRa: double; override;
+   function GetGuideRateDe: double; override;
+   function GetPulseGuiding: boolean; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -119,6 +131,7 @@ T_indimount = class(T_mount)
    function SetSite(long,lat,elev: double): boolean; override;
    function GetDate(var utc,offset: double): boolean; override;
    function SetDate(utc,offset: double): boolean; override;
+   function PulseGuide(direction,duration:integer): boolean; override;
 end;
 
 implementation
@@ -192,6 +205,9 @@ begin
     Pier_Side:=nil;
     GeographicCoord_prop:=nil;
     DateTime_Prop:=nil;
+    Guide_NS:=nil;
+    Guide_WE:=nil;
+    Guide_Rate:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
@@ -412,6 +428,24 @@ begin
      dateutc := IUFindText(DateTime_Prop, 'UTC');
      utcoffset := IUFindText(DateTime_Prop, 'OFFSET');
      if (dateutc=nil)or(utcoffset=nil) then DateTime_Prop:=nil;
+   end
+   else if (proptype=INDI_NUMBER)and(Guide_NS=nil)and(propname='TELESCOPE_TIMED_GUIDE_NS') then begin
+      Guide_NS:=indiProp.getNumber;
+      Guide_N:=IUFindNumber(Guide_NS,'TIMED_GUIDE_N');
+      Guide_S:=IUFindNumber(Guide_NS,'TIMED_GUIDE_S');
+      if (Guide_N=nil)or(Guide_S=nil) then Guide_NS:=nil;
+   end
+   else if (proptype=INDI_NUMBER)and(Guide_WE=nil)and(propname='TELESCOPE_TIMED_GUIDE_WE') then begin
+      Guide_WE:=indiProp.getNumber;
+      Guide_W:=IUFindNumber(Guide_WE,'TIMED_GUIDE_W');
+      Guide_E:=IUFindNumber(Guide_WE,'TIMED_GUIDE_E');
+      if (Guide_W=nil)or(Guide_E=nil) then Guide_WE:=nil;
+   end
+   else if (proptype=INDI_NUMBER)and(Guide_Rate=nil)and(propname='GUIDE_RATE') then begin
+      Guide_Rate:=indiProp.getNumber;
+      Guide_Rate_NS:=IUFindNumber(Guide_Rate,'GUIDE_RATE_NS');
+      Guide_Rate_WE:=IUFindNumber(Guide_Rate,'GUIDE_RATE_WE');
+      if (Guide_Rate_NS=nil)or(Guide_Rate_WE=nil) then Guide_Rate:=nil;
    end
    else if (proptype=INDI_SWITCH)and(AlignMode=nil)and(propname='ALIGNMODE') then begin
       AlignMode:=indiProp.getSwitch;
@@ -799,6 +833,71 @@ begin
     indiclient.sendNewText(DateTime_Prop);
     result:=true;
   end;
+end;
+
+
+function T_indimount.GetGuideRateRa: double;
+begin
+  if Guide_Rate<>nil then begin
+    result:=Guide_Rate_WE.value;
+    result:=result*sideralrate/3600; // deg/sec, ascom compatibility
+  end
+  else result:=0;
+end;
+
+function T_indimount.GetGuideRateDe: double;
+begin
+  if Guide_Rate<>nil then begin
+    result:=Guide_Rate_NS.value;
+    result:=result*sideralrate/3600; // deg/sec, ascom compatibility
+  end
+  else result:=0;
+end;
+
+function T_indimount.PulseGuide(direction,duration:integer): boolean;
+begin
+result:=false;
+if Guide_NS<>nil then begin
+  case direction of
+    0: begin
+         Guide_N.Value:=duration;
+         Guide_S.Value:=0;
+         indiclient.sendNewNumber(Guide_NS);
+         result:=true;
+       end;
+    1: begin
+         Guide_N.Value:=0;
+         Guide_S.Value:=duration;
+         indiclient.sendNewNumber(Guide_NS);
+         result:=true;
+       end;
+  end;
+end;
+if Guide_WE<>nil then begin
+  case direction of
+    2: begin
+         Guide_E.Value:=duration;
+         Guide_W.Value:=0;
+         indiclient.sendNewNumber(Guide_WE);
+         result:=true;
+       end;
+    3: begin
+         Guide_E.Value:=0;
+         Guide_W.Value:=duration;
+         indiclient.sendNewNumber(Guide_WE);
+         result:=true;
+       end;
+  end;
+end;
+end;
+
+function T_indimount.GetPulseGuiding: boolean;
+begin
+  result:=false;
+  if Guide_NS<>nil then
+    result:=result or (Guide_NS.s=IPS_BUSY);
+  if Guide_WE<>nil then
+    result:=result or (Guide_WE.s=IPS_BUSY);
 end;
 
 end.

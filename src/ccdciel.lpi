@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="94">
+    <Units Count="95">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -780,6 +780,10 @@
         <Filename Value="cu_ascomrest.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit93>
+      <Unit94>
+        <Filename Value="cu_autoguider_dither.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit94>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

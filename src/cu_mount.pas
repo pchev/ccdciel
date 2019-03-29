@@ -62,6 +62,9 @@ T_mount = class(TComponent)
     procedure SetSyncMode(value:TEqmodAlign); virtual; abstract;
     function GetMountSlewing:boolean; virtual; abstract;
     function GetPierSide: TPierSide; virtual; abstract;
+    function GetGuideRateRa: double; virtual; abstract;
+    function GetGuideRateDe: double; virtual; abstract;
+    function GetPulseGuiding: boolean; virtual; abstract;
  public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -79,6 +82,7 @@ T_mount = class(TComponent)
     function SetSite(long,lat,elev: double): boolean; virtual; abstract;
     function GetDate(var utc,offset: double): boolean; virtual; abstract;
     function SetDate(utc,offset: double): boolean; virtual; abstract;
+    function PulseGuide(direction,duration:integer): boolean; virtual; abstract;
     // Eqmod specific
     function ClearAlignment:boolean; virtual; abstract;
     function ClearDelta:boolean; virtual; abstract;
@@ -98,6 +102,9 @@ T_mount = class(TComponent)
     property EquinoxJD: double read GetEquinoxJD;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
+    property GuideRateRa: double read GetGuideRateRa;
+    property GuideRateDe: double read GetGuideRateDe;
+    property PulseGuiding: boolean read GetPulseGuiding;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, LCLIntf, u_translation,
+uses u_global, LCLIntf, u_translation, cu_mount,
   Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -47,6 +47,7 @@ type
     FonDisconnect: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     StarLostTimer: TTimer;
+    FMount: T_mount;
     procedure StarLostTimerTimer(Sender: TObject);
     procedure StatusChange;
     procedure ProcessDisconnectSyn;
@@ -71,6 +72,7 @@ type
     function WaitDithering(maxwait:integer=5):boolean; virtual; abstract;
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
+    property Mount: T_mount read FMount write FMount;
     property Running: boolean read FRunning;
     property Recovering: boolean read FRecovering;
     property TargetHost : string read FTargetHost;
