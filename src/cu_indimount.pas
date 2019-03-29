@@ -859,7 +859,7 @@ end;
 procedure T_indimount.SetGuideRateRa(value:double);
 begin
   if Guide_Rate<>nil then begin
-    Guide_Rate_WE.value:=value*3600;
+    Guide_Rate_WE.value:=value*3600/siderealrate;
     indiclient.sendNewNumber(Guide_Rate);
   end;
 end;
@@ -867,7 +867,7 @@ end;
 procedure T_indimount.SetGuideRateDe(value:double);
 begin
   if Guide_Rate<>nil then begin
-    Guide_Rate_NS.value:=value*3600;
+    Guide_Rate_NS.value:=value*3600/siderealrate;
     indiclient.sendNewNumber(Guide_Rate);
   end;
 end;
