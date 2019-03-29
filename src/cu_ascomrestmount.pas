@@ -65,6 +65,8 @@ T_ascomrestmount = class(T_mount)
    function  GetFocaleLengthReal:double;
    function GetGuideRateRa: double; override;
    function GetGuideRateDe: double; override;
+   procedure SetGuideRateRa(value:double); override;
+   procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
@@ -783,6 +785,22 @@ begin
    except
      on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
    end;
+end;
+
+procedure T_ascomrestmount.SetGuideRateRa(value:double);
+begin
+ try
+ V.Put('GuideRateRightAscension',value);
+ except
+ end;
+end;
+
+procedure T_ascomrestmount.SetGuideRateDe(value:double);
+begin
+ try
+ V.Put('GuideRateDeclination',value);
+ except
+ end;
 end;
 
 function T_ascomrestmount.PulseGuide(direction,duration:integer): boolean;

@@ -64,6 +64,8 @@ T_ascommount = class(T_mount)
    function GetMountSlewing:boolean; override;
    function GetGuideRateRa: double; override;
    function GetGuideRateDe: double; override;
+   procedure SetGuideRateRa(value:double); override;
+   procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
@@ -786,6 +788,26 @@ begin
    result:=V.GuideRateDeclination;
    except
      on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+procedure T_ascommount.SetGuideRateRa(value:double);
+begin
+ {$ifdef mswindows}
+   try
+   V.GuideRateRightAscension:=value;
+   except
+   end;
+ {$endif}
+end;
+
+procedure T_ascommount.SetGuideRateDe(value:double);
+begin
+ {$ifdef mswindows}
+   try
+   V.GuideRateDeclination:=value;
+   except
    end;
  {$endif}
 end;

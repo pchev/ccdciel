@@ -113,6 +113,8 @@ T_indimount = class(T_mount)
    function GetMountSlewing:boolean; override;
    function GetGuideRateRa: double; override;
    function GetGuideRateDe: double; override;
+   procedure SetGuideRateRa(value:double); override;
+   procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
  public
    constructor Create(AOwner: TComponent);override;
@@ -840,7 +842,7 @@ function T_indimount.GetGuideRateRa: double;
 begin
   if Guide_Rate<>nil then begin
     result:=Guide_Rate_WE.value;
-    result:=result*sideralrate/3600; // deg/sec, ascom compatibility
+    result:=result*siderealrate/3600; // deg/sec, ascom compatibility
   end
   else result:=0;
 end;
@@ -849,9 +851,25 @@ function T_indimount.GetGuideRateDe: double;
 begin
   if Guide_Rate<>nil then begin
     result:=Guide_Rate_NS.value;
-    result:=result*sideralrate/3600; // deg/sec, ascom compatibility
+    result:=result*siderealrate/3600; // deg/sec, ascom compatibility
   end
   else result:=0;
+end;
+
+procedure T_indimount.SetGuideRateRa(value:double);
+begin
+  if Guide_Rate<>nil then begin
+    Guide_Rate_WE.value:=value*3600;
+    indiclient.sendNewNumber(Guide_Rate);
+  end;
+end;
+
+procedure T_indimount.SetGuideRateDe(value:double);
+begin
+  if Guide_Rate<>nil then begin
+    Guide_Rate_NS.value:=value*3600;
+    indiclient.sendNewNumber(Guide_Rate);
+  end;
 end;
 
 function T_indimount.PulseGuide(direction,duration:integer): boolean;

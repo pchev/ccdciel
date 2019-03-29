@@ -65,6 +65,8 @@ T_mount = class(TComponent)
     function GetGuideRateRa: double; virtual; abstract;
     function GetGuideRateDe: double; virtual; abstract;
     function GetPulseGuiding: boolean; virtual; abstract;
+    procedure SetGuideRateRa(value:double); virtual; abstract;
+    procedure SetGuideRateDe(value:double); virtual; abstract;
  public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -102,8 +104,8 @@ T_mount = class(TComponent)
     property EquinoxJD: double read GetEquinoxJD;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
-    property GuideRateRa: double read GetGuideRateRa;
-    property GuideRateDe: double read GetGuideRateDe;
+    property GuideRateRa: double read GetGuideRateRa write SetGuideRateRa;
+    property GuideRateDe: double read GetGuideRateDe write SetGuideRateDe;
     property PulseGuiding: boolean read GetPulseGuiding;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;

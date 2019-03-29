@@ -135,6 +135,8 @@ var speed,dist,timeend: double;
 begin
   // Here the pixel parameter represent the maximum move in arc-seconds.
   if (FMount<>nil)and(FMount.Status=devConnected)and(FMount.Tracking) then begin
+     // Try to set 1x sidereal rate
+     FMount.GuideRateRa:=siderealrate/3600;
      // RA Move
      speed:=abs(FMount.GuideRateRa)*3600;  // arcsec/sec
      if speed>0 then begin
@@ -145,6 +147,8 @@ begin
        Fmount.PulseGuide(direction,duration);
      end;
      if not raonly then begin
+        // Try to set 1x sidereal rate
+        FMount.GuideRateDe:=siderealrate/3600;
         // DEC Move
         speed:=abs(FMount.GuideRateDe)*3600;  // arcsec/sec
         if speed>0 then begin
