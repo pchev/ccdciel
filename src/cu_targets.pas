@@ -754,7 +754,7 @@ function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
-    hr,hs,newra,newde,appra,appde: double;
+    hr,hs,ht,newra,newde,appra,appde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg: string;
 begin
@@ -810,7 +810,16 @@ begin
           t.starttime:=hr/24;
        if t.endset and ObjSet(appra,appde,hs,i) then
           t.endtime:=hs/24;
+       if (t.startmeridian<>NullCoord) and ObjTransit(appra,appde,ht,i) then begin
+          if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
+          t.starttime:=rmod(ht+t.startmeridian+24,24)/24;
+       end;
+       if (t.endmeridian<>NullCoord) and ObjTransit(appra,appde,ht,i) then begin
+          if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
+          t.endtime:=rmod(ht+t.endmeridian+24,24)/24;
+       end;
     end;
+    if t.starttime=t.endtime then t.endtime:=t.endtime+1/minperday;
     intime:=InTimeInterval(frac(now),t.starttime,t.endtime);
     // test if skiped
     if t.skip then begin

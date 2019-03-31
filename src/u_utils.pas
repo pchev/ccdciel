@@ -97,6 +97,7 @@ procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
+function ObjTransit(ra,de: double; out ht:double; out i:integer):boolean;
 function ObjRise(ra,de: double; out hr:double; out i:integer):boolean;
 function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
 procedure Moon(jdn:double; out ra,de,phase,illum:double);
@@ -1697,6 +1698,14 @@ begin
   end;
 end;
 
+function ObjTransit(ra,de: double; out ht:double; out i:integer):boolean;
+var jd0: double;
+begin
+  result:=false;
+  jd0:=DateTimetoJD0(now);
+  TransitTime(jd0,ra*15*deg2rad,de*deg2rad,ht,i);
+  result:=i<2;
+end;
 
 function ObjRise(ra,de: double; out hr: double; out i:integer):boolean;
 var jd0,azr,hhr,hht,a,h,ch,st: double;

@@ -114,7 +114,7 @@ type
   TTarget = Class(TObject)
               public
               objectname, planname, path: shortstring;
-              starttime,endtime,ra,de,pa: double;
+              starttime,endtime,startmeridian,endmeridian,ra,de,pa: double;
               startrise,endset,darknight,skip: boolean;
               repeatcount: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
@@ -224,6 +224,8 @@ const
   f5 = '0.00000';
   f6 = '0.000000';
   e6 = '+0.000000E+00;-0.000000E+00;+0.000000E+00';
+  f1mc= '+0.0h;-0.0h; ';
+  MeridianCrossing='MC';
   b80 ='                                                                                ';
   FocusDirIn=true;
   FocusDirOut=false;
@@ -422,6 +424,8 @@ begin
   path:='';
   starttime:=NullCoord;
   endtime:=NullCoord;
+  startmeridian:=NullCoord;
+  endmeridian:=NullCoord;
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
@@ -457,6 +461,8 @@ begin
   endtime:=Source.endtime;
   startrise:=Source.startrise;
   endset:=Source.endset;
+  startmeridian:=Source.startmeridian;
+  endmeridian:=Source.endmeridian;
   ra:=Source.ra;
   de:=Source.de;
   pa:=Source.pa;

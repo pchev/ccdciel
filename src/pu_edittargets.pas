@@ -232,6 +232,8 @@ type
     procedure CheckPlanModified;
     function  CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
+    procedure SetStartTime(buf: string; var t:TTarget);
+    procedure SetEndTime(buf: string; var t:TTarget);
   public
     { public declarations }
     procedure LoadPlanList;
@@ -337,9 +339,35 @@ begin
   TargetList.Columns.Items[colstart-1].PickList.Clear;
   TargetList.Columns.Items[colstart-1].PickList.Add('');
   TargetList.Columns.Items[colstart-1].PickList.Add(rsRise);
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'-4.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'-3.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'-2.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'-1.5h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'-1.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'-0.5h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing);
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'+0.5h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'+1.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'+1.5h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'+2.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'+3.0h');
+  TargetList.Columns.Items[colstart-1].PickList.Add(MeridianCrossing+'+4.0h');
   TargetList.Columns.Items[colend-1].PickList.Clear;
   TargetList.Columns.Items[colend-1].PickList.Add('');
   TargetList.Columns.Items[colend-1].PickList.Add(rsSet2);
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'-4.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'-3.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'-2.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'-1.5h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'-1.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'-0.5h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing);
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+0.5h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+1.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+1.5h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+2.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+3.0h');
+  TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+4.0h');
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   SeqStart.Caption := rsStartAt;
   SeqStop.Caption := rsStopAt;
@@ -1052,6 +1080,14 @@ begin
       TargetList.Cells[coldec,n]:=DEToStr(t.de);
     if t.startrise then TargetList.Cells[colstart,n]:=rsRise;
     if t.endset then TargetList.Cells[colend,n]:=rsSet2;
+    if t.startmeridian<>NullCoord then begin
+       if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
+       TargetList.Cells[colstart,n]:=MeridianCrossing+formatfloat(f1mc,t.startmeridian);
+    end;
+    if t.endmeridian<>NullCoord then begin
+      if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
+      TargetList.Cells[colend,n]:=MeridianCrossing+formatfloat(f1mc,t.endmeridian);
+    end;
     if t.darknight then
       TargetList.Cells[coldark,n]:='1'
     else
@@ -1092,6 +1128,44 @@ begin
   if (TargetList.Cells[colname,aRow]=SkyFlatTxt)or(TargetList.Cells[colname,aRow]=ScriptTxt) then begin
      if aCol=coldark then NewValue:='';
      if aCol=colskip then NewValue:='';
+  end;
+end;
+
+procedure Tf_EditTargets.SetStartTime(buf: string; var t:TTarget);
+var i,j: integer;
+begin
+  i:=pos(MeridianCrossing,buf);
+  if i=1 then begin
+     Delete(buf,1,length(MeridianCrossing));
+     j:=pos('h',buf);
+     if j>0 then buf:=copy(buf,1,j-1);
+     t.startmeridian:=StrToFloatDef(buf,0);
+     t.starttime:=-1;
+     t.startrise:=false;
+  end
+  else begin
+    t.starttime:=StrToTimeDef(buf,-1);
+    t.startrise:=buf=rsRise;
+    t.startmeridian:=NullCoord;
+  end;
+end;
+
+procedure Tf_EditTargets.SetEndTime(buf: string; var t:TTarget);
+var i,j: integer;
+begin
+  i:=pos(MeridianCrossing,buf);
+  if i=1 then begin
+    Delete(buf,1,length(MeridianCrossing));
+    j:=pos('h',buf);
+    if j>0 then buf:=copy(buf,1,j-1);
+    t.endmeridian:=StrToFloatDef(buf,0);
+    t.endtime:=-1;
+    t.endset:=false;
+  end
+  else begin
+    t.endtime:=StrToTimeDef(buf,-1);
+    t.endset:=buf=rsSet2;
+    t.endmeridian:=NullCoord;
   end;
 end;
 
@@ -1153,8 +1227,8 @@ begin
     t.objectname:=trim(TargetList.Cells[colname,n]);
     planchange:=(t.planname<>TargetList.Cells[colplan,n]);
     t.planname:=TargetList.Cells[colplan,n];
-    t.starttime:=StrToTimeDef(TargetList.Cells[colstart,n],-1);
-    t.endtime:=StrToTimeDef(TargetList.Cells[colend,n],-1);
+    SetStartTime(trim(TargetList.Cells[colstart,n]),t);
+    SetEndTime(trim(TargetList.Cells[colend,n]),t);
     if TargetList.Cells[colra,n]='-' then
       t.ra:=NullCoord
     else
@@ -1163,8 +1237,6 @@ begin
       t.de:=NullCoord
     else
       t.de:=StrToDE(TargetList.Cells[coldec,n]);
-    t.startrise:=TargetList.Cells[colstart,n]=rsRise;
-    t.endset:=TargetList.Cells[colend,n]=rsSet2;
     t.darknight:=(TargetList.Cells[coldark,n]='1');
     t.skip:=(TargetList.Cells[colskip,n]='1');
     if TargetList.Cells[colpa,n]='-' then
@@ -1302,46 +1374,36 @@ begin
                 end;
               end;
     colstart: begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+               buf:=FormEntryCB(self, Columns[Index-1].PickList, Columns[Index-1].Title.Caption, '-');
+               if buf<>'-' then begin
                 for i:=1 to RowCount-1 do
                    if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
-                     if onoff then
-                        Cells[Index,i]:='rise'
-                     else
-                        Cells[Index,i]:='';
+                     Cells[Index,i]:=buf;
                      CheckRiseSet(i,false);
                      TargetListCheckboxToggled(nil,Index,i,cbChecked);
                      t:=TTarget(Objects[colseq,i]);
-                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
-                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
-                     t.startrise:=Cells[colstart,i]=rsRise;
-                     t.endset:=Cells[colend,i]=rsSet2;
+                     SetStartTime(trim(Cells[colstart,i]),t);
+                     SetEndTime(trim(Cells[colend,i]),t);
                      t.darknight:=(Cells[coldark,i]='1');
                      t.skip:=(Cells[colskip,i]='1');
                    end;
+               end;
               end;
     colend:   begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+               buf:=FormEntryCB(self, Columns[Index-1].PickList, Columns[Index-1].Title.Caption, '-');
+               if buf<>'-' then begin
                 for i:=1 to RowCount-1 do
                    if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
-                     if onoff then
-                        Cells[Index,i]:='set'
-                     else
-                        Cells[Index,i]:='';
+                     Cells[Index,i]:=buf;
                      CheckRiseSet(i,false);
                      TargetListCheckboxToggled(nil,Index,i,cbChecked);
                      t:=TTarget(Objects[colseq,i]);
-                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
-                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
-                     t.startrise:=Cells[colstart,i]=rsRise;
-                     t.endset:=Cells[colend,i]=rsSet2;
+                     SetStartTime(trim(Cells[colstart,i]),t);
+                     SetEndTime(trim(Cells[colend,i]),t);
                      t.darknight:=(Cells[coldark,i]='1');
                      t.skip:=(Cells[colskip,i]='1');
                    end;
+               end;
               end;
     coldark:   begin
                 onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
@@ -1356,10 +1418,8 @@ begin
                      CheckRiseSet(i,false);
                      TargetListCheckboxToggled(nil,Index,i,cbChecked);
                      t:=TTarget(Objects[colseq,i]);
-                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
-                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
-                     t.startrise:=Cells[colstart,i]=rsRise;
-                     t.endset:=Cells[colend,i]=rsSet2;
+                     SetStartTime(trim(Cells[colstart,i]),t);
+                     SetEndTime(trim(Cells[colend,i]),t);
                      t.darknight:=(Cells[coldark,i]='1');
                      t.skip:=(Cells[colskip,i]='1');
                    end;
@@ -1377,10 +1437,8 @@ begin
                      CheckRiseSet(i,false);
                      TargetListCheckboxToggled(nil,Index,i,cbChecked);
                      t:=TTarget(Objects[colseq,i]);
-                     t.starttime:=StrToTimeDef(Cells[colstart,i],-1);
-                     t.endtime:=StrToTimeDef(Cells[colend,i],-1);
-                     t.startrise:=Cells[colstart,i]=rsRise;
-                     t.endset:=Cells[colend,i]=rsSet2;
+                     SetStartTime(trim(Cells[colstart,i]),t);
+                     SetEndTime(trim(Cells[colend,i]),t);
                      t.darknight:=(Cells[coldark,i]='1');
                      t.skip:=(Cells[colskip,i]='1');
                    end;

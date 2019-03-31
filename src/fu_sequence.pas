@@ -539,6 +539,8 @@ begin
        end;
        t.startrise:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
        t.endset:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
+       t.startmeridian:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/StartMeridian',NullCoord);
+       t.endmeridian:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/EndMeridian',NullCoord);
        t.darknight:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/DarkNight',false);
        t.skip:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Skip',false);
        x:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
@@ -710,6 +712,8 @@ begin
         tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndTime','');
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartRise',t.startrise);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/StartMeridian',t.startmeridian);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/EndMeridian',t.endmeridian);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/DarkNight',t.darknight);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Skip',t.skip);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
