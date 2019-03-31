@@ -2692,9 +2692,7 @@ begin
   if (begint<0)and(endt<0) then exit;  // interval not set
   if begint<0 then begint:=0.5;        // default to noon
   if endt<0 then endt:=0.5;            // default to noon
-  if (begint<=0.5)and(endt>=0.5) then begin
-    // day interval, no shift
-  end else begin
+  if (begint>0.5)and(endt<0.5) then begin
     // night interval, shift by 12h
     t:=rmod(t-0.5+1,1);
     begint:=rmod(begint-0.5+1,1);
