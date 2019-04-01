@@ -1174,10 +1174,12 @@ if UseMainSensor then begin
     // reset frame if the ROI cover more than 90% of the sensor size
     // this reset any rounding because of previous binning
     if (CCDframeReset<>nil)and(x=0)and(y=0)and
+       ((widthr.max<>width)or(heightr.max<>height))and
        ((abs(widthr.max-width)/widthr.max)<0.1)and
        ((abs(heightr.max-height)/heightr.max)<0.1) then begin
        FrameReset.s:=ISS_ON;
        indiclient.sendNewSwitch(CCDframeReset);
+       indiclient.WaitBusy(CCDframeReset,5000,200);
     end;
     CCDbinX.value:=sbinX;
     CCDbinY.value:=sbinY;
