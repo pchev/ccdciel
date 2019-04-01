@@ -2689,6 +2689,9 @@ function InTimeInterval(t,begint, endt: double; st: double=0.5): integer;
 // t after end    : result = 1
 begin
   result:=0;
+  if (begint<0)and(endt<0) then exit;  // must return 0 when interval is not set
+  if begint<0 then begint:=0.5;        // default to noon
+  if endt<0   then endt:=0.5;          // default to noon
   if t<st then
      t:=t+1;
   if endt<begint then

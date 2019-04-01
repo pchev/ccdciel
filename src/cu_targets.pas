@@ -99,7 +99,7 @@ type
       NumTargets: integer;
       FCurrentTarget: integer;
       FTargetsRepeat: integer;
-      FSeqStartAt,FSeqStopAt: TDateTime;
+      FSeqStartAt,FSeqStopAt,FStartTime: TDateTime;
       FSeqStart,FSeqStop: boolean;
       FSeqStartTwilight,FSeqStopTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
@@ -406,6 +406,7 @@ begin
   finally
     FWaitStarting:=false;
   end;
+  FStartTime:=now;
   NextTarget;
 end;
 
@@ -753,8 +754,8 @@ end;
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
-    stw,i,intime: integer;
-    hr,hs,ht,newra,newde,appra,appde: double;
+    stw,i,intime,ri,si,ti: integer;
+    hr,hs,ht,tt,newra,newde,appra,appde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg: string;
 begin
@@ -804,23 +805,47 @@ begin
        appra:=appra*rad2deg/15;
        appde:=appde*rad2deg;
     end;
-    // adjust rise/set time
+    // adjust start/end from coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-       if t.startrise and ObjRise(appra,appde,hr,i) then
-          t.starttime:=hr/24;
-       if t.endset and ObjSet(appra,appde,hs,i) then
-          t.endtime:=hs/24;
-       if (t.startmeridian<>NullCoord) and ObjTransit(appra,appde,ht,i) then begin
-          if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
-          t.starttime:=rmod(ht+t.startmeridian+24,24)/24;
+       ObjRise(appra,appde,hr,ri);
+       // check object visibility
+       if ri=2 then begin
+          msg(Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2, 2);
+          SkipTarget:=true;
+          result:=false;
+          exit;
        end;
-       if (t.endmeridian<>NullCoord) and ObjTransit(appra,appde,ht,i) then begin
+       ObjSet(appra,appde,hs,si);
+       ObjTransit(appra,appde,ht,ti);
+       // adjust rise/set time
+       // begin at rise
+       if t.startrise and (ri=0) then
+          t.starttime:=hr/24;
+       // end at set
+       if t.endset and (si=0) then
+          t.endtime:=hs/24;
+       // start from meridian
+       if (t.startmeridian<>NullCoord) and (ti<2) then begin
+          if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
+          tt:=rmod(ht+t.startmeridian+24,24);
+          // check elevation
+          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+             t.starttime:=tt/24
+          else
+             t.starttime:=hr/24;
+       end;
+       // end from meridian
+       if (t.endmeridian<>NullCoord) and (ti<2) then begin
           if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
-          t.endtime:=rmod(ht+t.endmeridian+24,24)/24;
+          tt:=rmod(ht+t.endmeridian+24,24);
+          // check elevation
+          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+             t.endtime:=tt/24
+          else
+             t.endtime:=hs/24;
        end;
     end;
-    if t.starttime=t.endtime then t.endtime:=t.endtime+1/minperday;
-    intime:=InTimeInterval(frac(now),t.starttime,t.endtime);
+    intime:=InTimeInterval(frac(now),t.starttime,t.endtime,frac(FStartTime));
     // test if skiped
     if t.skip then begin
       skipmsg:='';

@@ -1301,10 +1301,12 @@ if TargetList.Cells[colstart,n]=rsRise then begin
   end
   else begin
     if not ObjRise(ra,de,h,i) then begin
-      if i=1 then
-        if showmsg then ShowMessage(rsThisObjectIs)
-      else
+      if i=1 then begin
+        if showmsg then ShowMessage(rsThisObjectIs);
+      end
+      else begin
         if showmsg then ShowMessage(rsThisObjectIs2);
+      end;
       TargetList.Cells[colstart,n]:='';
       result:=false;
     end;
@@ -1318,10 +1320,44 @@ if TargetList.Cells[colend,n]=rsSet2 then begin
   end
   else begin
     if not ObjSet(ra,de,h,i) then begin
-      if i=1 then
-        if showmsg then ShowMessage(rsThisObjectIs)
-      else
+      if i=1 then begin
+        if showmsg then ShowMessage(rsThisObjectIs);
+      end
+      else begin
         if showmsg then ShowMessage(rsThisObjectIs2);
+      end;
+      TargetList.Cells[colend,n]:='';
+      result:=false;
+    end;
+  end;
+end;
+if copy(trim(TargetList.Cells[colstart,n]),1,length(MeridianCrossing))=MeridianCrossing then begin
+  if (ra=NullCoord)or(de=NullCoord) then begin
+     if showmsg then ShowMessage(rsCannotComput2+crlf+rsInvalidObjec);
+     TargetList.Cells[colstart,n]:='';
+     result:=false;
+  end
+  else begin
+    if not ObjRise(ra,de,h,i) then begin
+      if i=2 then begin
+        if showmsg then ShowMessage(rsThisObjectIs2);
+      end;
+      TargetList.Cells[colstart,n]:='';
+      result:=false;
+    end;
+  end;
+end;
+if copy(trim(TargetList.Cells[colend,n]),1,length(MeridianCrossing))=MeridianCrossing then begin
+  if (ra=NullCoord)or(de=NullCoord) then begin
+     if showmsg then ShowMessage(rsCannotComput2+crlf+rsInvalidObjec);
+     TargetList.Cells[colend,n]:='';
+     result:=false;
+  end
+  else begin
+    if not ObjRise(ra,de,h,i) then begin
+      if i=2 then begin
+        if showmsg then ShowMessage(rsThisObjectIs2);
+      end;
       TargetList.Cells[colend,n]:='';
       result:=false;
     end;

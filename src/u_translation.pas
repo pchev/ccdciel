@@ -1046,6 +1046,7 @@ resourcestring
   rs32bitdriver = 'This driver work only in 32bit, please install the 32bit version of CCDciel.';
   rsSlave = 'Slave';
   rsMountIsNotPa = 'Mount is not parked.%sPark the dome anyway?';
+  rsCannotComput2 = 'Cannot compute meridian time';
 
 implementation
 
