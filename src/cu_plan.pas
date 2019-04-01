@@ -192,7 +192,7 @@ begin
   StepRunning:=true;
   p:=FSteps[CurrentStep];
   if p<>nil then begin
-    if p.exposure>0 then Fcapture.ExposureTime:=p.exposure;
+    if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
     Fcapture.Binning.Text:=p.binning_str;
     if hasGainISO then
       Fcapture.ISObox.ItemIndex:=p.gain
