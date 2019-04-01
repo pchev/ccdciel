@@ -103,7 +103,7 @@ function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
 procedure Moon(jdn:double; out ra,de,phase,illum:double);
 function  MoonRiseSet(dt:TDateTime; out moonrise,moonset:double):boolean;
 function  DarkNight(t:Tdatetime): boolean;
-function InTimeInterval(t,begint, endt: double): integer;
+function InTimeInterval(t,begint, endt: double; st: double=0.5): integer;
 procedure sofa_PM(p: coordvector; var r: double);
 procedure sofa_S2C(theta, phi: double; var c: coordvector);
 procedure sofa_C2S(p: coordvector; var theta, phi: double);
@@ -2682,25 +2682,25 @@ begin
   result:=result and ((h<0) or (illum<0.15));
 end;
 
-function InTimeInterval(t,begint, endt: double): integer;
-// interval from noon to noon
-// between begin and end : result = 0
-// before begin : result = -1
-// after end    : result = 1
+function InTimeInterval(t,begint, endt: double; st: double=0.5): integer;
+// st=start time = pivot for next day
+// t between begin and end : result = 0
+// t before begin : result = -1
+// t after end    : result = 1
 begin
   result:=0;
-  if (begint<0)and(endt<0) then exit;  // interval not set
-  if begint<0 then begint:=0.5;        // default to noon
-  if endt<0 then endt:=0.5;            // default to noon
-  if (begint>0.5)and(endt<0.5) then begin
-    // night interval, shift by 12h
-    t:=rmod(t-0.5+1,1);
-    begint:=rmod(begint-0.5+1,1);
-    endt:=rmod(endt-0.5+1,1);
+  if t<st then
+     t:=t+1;
+  if endt<begint then
+     endt:=endt+1;
+  if (endt<st) and (begint<st) then begin
+     endt:=endt+1;
+     begint:=begint+1;
   end;
-  // test interval
-  if t<begint then result:=-1;
-  if t>endt   then result:=1;
+  if t<begint then
+     result:=-1;
+  if t>endt   then
+     result:=1;
 end;
 
 {$ifdef mswindows}

@@ -825,7 +825,7 @@ begin
     if t.skip then begin
       skipmsg:='';
       if (intime<0) and (t.starttime>=0) then begin
-        SecondsToWait(t.starttime,false,stw,nd);
+        SecondsToWait(t.starttime,true,stw,nd);
         if (stw>60) then begin
           SkipTarget:=true;
           skipmsg:=skipmsg+', '+Format(rsWaitToStartA, [TimeToStr(t.starttime)]);
