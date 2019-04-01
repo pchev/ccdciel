@@ -617,7 +617,10 @@ begin
      Title3.Caption:=Title3.Caption+' x'+inttostr(Targets.TargetsRepeat);
    for i:=1 to Targets.count do begin
      TargetGrid.Cells[0,i]:=Targets.Targets[i-1].objectname;
-     TargetGrid.Cells[1,i]:=Targets.Targets[i-1].planname;
+     if Targets.Targets[i-1].repeatcount>0 then
+        TargetGrid.Cells[1,i]:=Targets.Targets[i-1].planname
+     else
+        TargetGrid.Cells[1,i]:=format(rsSkipTarget,['']);
      TargetGrid.Cells[2,i]:=TimetoStr(Targets.Targets[i-1].starttime);
      TargetGrid.Cells[3,i]:=TimetoStr(Targets.Targets[i-1].endtime);
      TargetGrid.Cells[4,i]:=RAToStr(Targets.Targets[i-1].ra);
