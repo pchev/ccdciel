@@ -509,6 +509,7 @@ begin
  StopTargetTimer.Enabled:=false;
  WeatherRestartTimer.Enabled:=false;
  InplaceAutofocus:=AutofocusInPlace;
+ FTargetsRepeatCount:=FTargetsRepeat+1;
  if FRunning then begin
    FRunning:=false;
    WeatherPauseCanceled:=true;
@@ -735,6 +736,7 @@ begin
      FRunning:=true;
      msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),
        inttostr(FTargetsRepeat)]),1);
+     wait(1);
      NextTarget;
    end
    else begin
