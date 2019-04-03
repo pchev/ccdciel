@@ -664,33 +664,33 @@ begin
      BtnUnattendedScript.Caption:='...';
 end;
 
-procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);
+procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);{Retrieve position from deepsky database}
 var n: integer;
-    ra0,dec0,length1,width1,pa : double;
+    ra0,dec0,length0,width0,pa : double;
     objname : string;
 begin
   n:=TargetList.Row;
 
   objname:=uppercase(inputbox('Retrieve position from deepsky database','Object:' , ''));
-  if length(objname)>1 then {object name length should be two or longer}
+  if length(objname)>1 then {Object name length should be two or longer}
   begin
-    load_deep;{load the deepsky database once. If already loaded no action}
-    linepos:=0;{set pointer to beginning}
+    load_deep;{Load the deepsky database once. If already loaded, no action}
+    linepos:=0;{Set pointer to the beginning}
     repeat
-      read_deepsky('T' {full search} ,0 {ra},0 {dec},1 {cos(telescope_dec},2*pi{fov},{var} ra0,dec0,length1,width1,pa);{deepsky database search}
-      if ((objname=naam2) or (objname=naam3) or (objname=naam4)) then
+      read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
+      if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then
       begin
-        TargetList.Cells[colra,n]:=RAToStr(12*ra0/pi);{add position}
-        TargetList.Cells[coldec,n]:=DEToStr(180*dec0/pi);
+        TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
+        TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
 
-        if naam3='' then TargetList.Cells[colname,n]:=naam2 {one name only}
+        if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
         else
-        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{add two object names}
+        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{Add two object names}
 
-        linepos:=$FFFFFF; {stop}
+        linepos:=$FFFFFF; {Stop searching}
         TargetChange(nil);
      end;
-    until linepos>=$FFFFFF;{found or end of database}
+    until linepos>=$FFFFFF;{Found object or end of database}
   end;
 end;
 
