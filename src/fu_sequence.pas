@@ -1018,6 +1018,8 @@ const
     trAlerttimeout=1;
 begin
  try
+  try
+  StatusTimer.Enabled:=false;
   TargetRow:=Targets.CurrentTarget+1;
   if Targets.Running then begin
    // show plan status
@@ -1037,6 +1039,7 @@ begin
     PlanGrid.TopRow:=PlanRow;
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;
+    Application.ProcessMessages;
    end;
    // process autoguider problem during sequence
    if AutoguiderAlert then begin
@@ -1091,6 +1094,9 @@ begin
    end;
   end
   else StopSequence;
+  finally
+    StatusTimer.Enabled:=true;
+  end;
 except
   AbortSequence;
 end;

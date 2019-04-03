@@ -608,9 +608,11 @@ begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
   // stop autoguider
-  StopGuider;
+  if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State=GUIDER_GUIDING) then
+     StopGuider;
   // stop mount tracking
-  Mount.AbortMotion;
+  if mount.Tracking or mount.MountSlewing then
+     Mount.AbortMotion;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
   inc(FCurrentTarget);
