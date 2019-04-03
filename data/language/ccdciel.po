@@ -3266,10 +3266,6 @@ msgstr ""
 msgid "The sequence %s will be stopped at %s, in %s seconds."
 msgstr ""
 
-#: u_translation:rsskip
-msgid "Skip"
-msgstr ""
-
 #: u_translation:rsdarknight
 msgid "Dark%snight"
 msgstr ""
@@ -3756,5 +3752,29 @@ msgstr ""
 
 #: u_translation:rsadministrato
 msgid "administrator"
+msgstr ""
+
+#: u_translation:rsdontswait
+msgid "Don't%swait"
+msgstr ""
+
+#: u_translation:rs32bitdriver
+msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
+msgstr ""
+
+#: u_translation:rsslave
+msgid "Slave"
+msgstr ""
+
+#: u_translation:rsmountisnotpa
+msgid "Mount is not parked.%sPark the dome anyway?"
+msgstr ""
+
+#: u_translation:rscannotcomput2
+msgid "Cannot compute meridian time"
+msgstr ""
+
+#: u_translation:rssearch
+msgid "Search"
 msgstr ""
 

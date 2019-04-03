@@ -6,15 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-03-16 20:36+0000\n"
-"PO-Revision-Date: 2019-03-16 20:40+0000\n"
+"POT-Creation-Date: 2019-04-03 16:06+0000\n"
+"PO-Revision-Date: 2019-04-03 16:11+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-03-16 20:44+0000\n"
-"X-Generator: Launchpad (build 18905)\n"
+"X-Launchpad-Export-Date: 2019-04-03 16:12+0000\n"
+"X-Generator: Launchpad (build 18920)\n"
+
+#: u_translation.rs32bitdriver
+msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
+msgstr "Ce pilote ne fonctionne qu'en 32bit, veuillez installer la version 32bit de CCDciel."
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -443,6 +447,10 @@ msgstr "Abandon dans %s secondes"
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
 msgstr "Ne peut pas calculer le lever ou le coucher."
+
+#: u_translation.rscannotcomput2
+msgid "Cannot compute meridian time"
+msgstr "Ne peut pas calculer l'heure du méridien"
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
@@ -943,6 +951,11 @@ msgstr "Ne rien faire"
 #: u_translation.rsdonotrunasad
 msgid "Do not run %s as %s!"
 msgstr "Ne pas executer %s comme %s"
+
+#: u_translation.rsdontswait
+#, fuzzy,badformat
+msgid "Don't%swait"
+msgstr "Ne pas%attendre"
 
 #: u_translation.rsdosimpleslew
 msgid "Do simple slew to %s/%s"
@@ -1747,6 +1760,10 @@ msgstr "Monture"
 #: u_translation.rsmountcapabil
 msgid "Mount capabilities: %s"
 msgstr "Capacités de la monture: %s"
+
+#: u_translation.rsmountisnotpa
+msgid "Mount is not parked.%sPark the dome anyway?"
+msgstr "La monture n'est pas parquée.%sQuand même parquer le dôme?"
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
@@ -2648,6 +2665,10 @@ msgstr "Script %s terminé"
 msgid "Script terminating..."
 msgstr "Terminaison du script..."
 
+#: u_translation.rssearch
+msgid "Search"
+msgstr "Chercher"
+
 #: u_translation.rssec
 msgid "sec."
 msgstr "sec."
@@ -2848,10 +2869,6 @@ msgstr "Lieu envoyé au télescope"
 msgid "Site set from the telescope."
 msgstr "Lieu reçu du télescope"
 
-#: u_translation.rsskip
-msgid "Skip"
-msgstr "Passer"
-
 #: u_translation.rsskiptarget
 msgid "Skip target %s"
 msgstr "Saute l'objet  %s"
@@ -2883,6 +2900,10 @@ msgstr "Qualité du ciel"
 #: u_translation.rsskytemperatu
 msgid "Sky temperature"
 msgstr "Température du ciel"
+
+#: u_translation.rsslave
+msgid "Slave"
+msgstr "Asservir"
 
 #: u_translation.rsslaved
 msgid "Slaved"

@@ -6,16 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-03-16 20:36+0000\n"
-"PO-Revision-Date: 2019-02-25 09:51+0000\n"
+"POT-Creation-Date: 2019-04-03 16:06+0000\n"
+"PO-Revision-Date: 2019-03-29 05:54+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-03-16 20:44+0000\n"
-"X-Generator: Launchpad (build 18905)\n"
+"X-Launchpad-Export-Date: 2019-04-03 16:12+0000\n"
+"X-Generator: Launchpad (build 18920)\n"
 "Language: en_GB\n"
+
+#: u_translation.rs32bitdriver
+msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
+msgstr ""
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -59,7 +63,7 @@ msgstr "Adjust to window"
 
 #: u_translation.rsadministrato
 msgid "administrator"
-msgstr ""
+msgstr "administrator"
 
 #: u_translation.rsaftertelesco
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -444,6 +448,10 @@ msgstr "Cancel in %s seconds."
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
 msgstr "Cannot compute rise or set time."
+
+#: u_translation.rscannotcomput2
+msgid "Cannot compute meridian time"
+msgstr ""
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
@@ -943,6 +951,10 @@ msgstr "Do nothing"
 
 #: u_translation.rsdonotrunasad
 msgid "Do not run %s as %s!"
+msgstr "Do not run %s as %s!"
+
+#: u_translation.rsdontswait
+msgid "Don't%swait"
 msgstr ""
 
 #: u_translation.rsdosimpleslew
@@ -1748,6 +1760,10 @@ msgstr "Mount"
 #: u_translation.rsmountcapabil
 msgid "Mount capabilities: %s"
 msgstr "Mount capabilities: %s"
+
+#: u_translation.rsmountisnotpa
+msgid "Mount is not parked.%sPark the dome anyway?"
+msgstr ""
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
@@ -2649,6 +2665,10 @@ msgstr "Script %s finished"
 msgid "Script terminating..."
 msgstr "Script terminating..."
 
+#: u_translation.rssearch
+msgid "Search"
+msgstr ""
+
 #: u_translation.rssec
 msgid "sec."
 msgstr "sec."
@@ -2849,10 +2869,6 @@ msgstr "Site send to telescope."
 msgid "Site set from the telescope."
 msgstr "Site set from the telescope."
 
-#: u_translation.rsskip
-msgid "Skip"
-msgstr "Skip"
-
 #: u_translation.rsskiptarget
 msgid "Skip target %s"
 msgstr "Skip target %s"
@@ -2884,6 +2900,10 @@ msgstr "Sky quality"
 #: u_translation.rsskytemperatu
 msgid "Sky temperature"
 msgstr "Sky temperature"
+
+#: u_translation.rsslave
+msgid "Slave"
+msgstr ""
 
 #: u_translation.rsslaved
 msgid "Slaved"
@@ -3383,7 +3403,7 @@ msgstr "The menu \"File/Focuser calibration\" help to fill this values."
 
 #: u_translation.rsthemountindi
 msgid "the mount indicate %s"
-msgstr ""
+msgstr "the mount indicate %s"
 
 #: u_translation.rstheplanismod
 msgid "The plan %s is modified. Do you want to save the change ?"

@@ -6,15 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-03-16 20:36+0000\n"
+"POT-Creation-Date: 2019-04-03 16:06+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-03-16 20:44+0000\n"
-"X-Generator: Launchpad (build 18905)\n"
+"X-Launchpad-Export-Date: 2019-04-03 16:12+0000\n"
+"X-Generator: Launchpad (build 18920)\n"
+
+#: u_translation.rs32bitdriver
+msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
+msgstr ""
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -442,6 +446,10 @@ msgstr ""
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
+msgstr ""
+
+#: u_translation.rscannotcomput2
+msgid "Cannot compute meridian time"
 msgstr ""
 
 #: u_translation.rscannotconnec
@@ -942,6 +950,10 @@ msgstr ""
 
 #: u_translation.rsdonotrunasad
 msgid "Do not run %s as %s!"
+msgstr ""
+
+#: u_translation.rsdontswait
+msgid "Don't%swait"
 msgstr ""
 
 #: u_translation.rsdosimpleslew
@@ -1746,6 +1758,10 @@ msgstr ""
 
 #: u_translation.rsmountcapabil
 msgid "Mount capabilities: %s"
+msgstr ""
+
+#: u_translation.rsmountisnotpa
+msgid "Mount is not parked.%sPark the dome anyway?"
 msgstr ""
 
 #: u_translation.rsmountisnotre
@@ -2648,6 +2664,10 @@ msgstr ""
 msgid "Script terminating..."
 msgstr ""
 
+#: u_translation.rssearch
+msgid "Search"
+msgstr ""
+
 #: u_translation.rssec
 msgid "sec."
 msgstr ""
@@ -2848,10 +2868,6 @@ msgstr ""
 msgid "Site set from the telescope."
 msgstr ""
 
-#: u_translation.rsskip
-msgid "Skip"
-msgstr ""
-
 #: u_translation.rsskiptarget
 msgid "Skip target %s"
 msgstr ""
@@ -2882,6 +2898,10 @@ msgstr ""
 
 #: u_translation.rsskytemperatu
 msgid "Sky temperature"
+msgstr ""
+
+#: u_translation.rsslave
+msgid "Slave"
 msgstr ""
 
 #: u_translation.rsslaved
