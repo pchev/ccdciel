@@ -388,6 +388,7 @@ begin
   BtnAnytime.Caption := rsAnyTime;
   BtnCurrentCoord.Caption := rsNoMove;
   BtnCdCCoord.Caption := rsPlanetarium;
+  Btn_coord_internal.Caption:=rsSearch;
   PointAstrometry.Caption := rsUseAstrometr;
   BtnImgCoord.Caption := rsCurrentImage;
   UpdateCoord.Caption := rsUpdateRADecF;
