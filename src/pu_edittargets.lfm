@@ -65,22 +65,22 @@ object f_EditTargets: Tf_EditTargets
             ParentFont = False
             TabOrder = 0
             object BtnCurrentCoord: TButton
-              Left = 137
+              Left = 160
               Height = 23
               Hint = 'Do not move the telescope before to start imaging.'
-              Top = 2
-              Width = 147
+              Top = 0
+              Width = 124
               Caption = 'No move'
               OnClick = BtnCurrentCoordClick
               ParentFont = False
               TabOrder = 0
             end
             object BtnCdCCoord: TButton
-              Left = 8
+              Left = 68
               Height = 23
               Hint = 'Get the coordinates and object name from the planetarium'
-              Top = 2
-              Width = 121
+              Top = 0
+              Width = 89
               Caption = 'Planetarium'
               OnClick = BtnCdCCoordClick
               ParentFont = False
@@ -139,6 +139,17 @@ object f_EditTargets: Tf_EditTargets
               OnClick = BtnApplyToAllClick
               ParentFont = False
               TabOrder = 6
+            end
+            object Btn_coord_internal: TButton
+              Left = 8
+              Height = 23
+              Hint = 'Get the coordinates from annotation database'
+              Top = 0
+              Width = 56
+              Caption = 'Search'
+              OnClick = Btn_coord_internalClick
+              ParentFont = False
+              TabOrder = 7
             end
           end
           object GroupBox5: TGroupBox

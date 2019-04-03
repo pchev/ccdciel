@@ -24,10 +24,11 @@ uses  u_global, u_utils, cu_fits, UScaleDPI,
 
 procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
 procedure load_deep;{load the deepsky database once. If loaded no action}
+procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; out ra2,dec2,length2,width2,pa : double);{deepsky database search}
 
 var
   deepstring       : Tstrings;
-  linepos, mode    : integer;
+  linepos          : integer;
   naam2,naam3,naam4: string;
 
 implementation
@@ -148,10 +149,9 @@ var
   p2,p1: pchar;
 begin
   repeat {until fout is 0}
-
     if linepos>=deepstring.count then
       begin
-        inc(mode);{go to next step}
+        linepos:=$FFFFFF;{mark as completed}
         exit;
       end;
     regel:=deepstring.strings[linepos]; {using regel,is faster then deepstring.strings[linepos]}
@@ -189,14 +189,9 @@ begin
                      dec2:=valint32(data1,fout)*pi*0.5/324000;{60*60*90, so DEC 00:00 01=1}
                      delta_ra:=abs(ra2-telescope_ra); if delta_ra>pi then delta_ra:=pi*2-delta_ra;
 
-                     if ((searchmode<>'T') and {limit area range if magnitude is normal}
-                                                  {If magnitude>1000 then text search in complete database}
-
-                         ( sqr( delta_ra*cos_telescope_dec)  + sqr(dec2-telescope_dec)> sqr(fov)  ) ) {2018}
-
-                         {calculate distance and skip when to far from centre screen }
-                           then  fout:=99; {if true then outside screen,go quick to next line}
-
+                     if ((searchmode<>'T') and                                                        {if searchmode is 'T' then full database search else within FOV}
+                         ( sqr( delta_ra*cos_telescope_dec)  + sqr(dec2-telescope_dec)> sqr(fov)  ) ) {calculate angular distance and skip when outside FOV}
+                           then  fout:=99; {if true then outside screen,go to next line}
                    end;
                 3: begin
                      naam2:='';{for case data1='';}
@@ -229,7 +224,7 @@ begin
        end;
        inc(x);
     until ((z>=6) or (fout<>0));
-  until ((fout=0) or (mode>11));  {when regel is not ok repeat until regel is ok.   }
+  until fout=0;  {repeat until no errors}
 end;
 
 
@@ -329,7 +324,6 @@ begin
     telescope_ra:=ra0+arctan(Dra/delta);
     telescope_dec:=arctan((sin(dec0)+dDec*cos(dec0))/gamma);
 
-    mode:=0;
     cos_telescope_dec:=cos(telescope_dec);
     fov:=1.5*sqrt(sqr(0.5*width2*cdelt1)+sqr(0.5*height2*cdelt2))*pi/180; {field of view with 50% extra}
     linepos:=0;
@@ -374,7 +368,7 @@ begin
          cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
      end;
 
-    until mode<>0;{end of database}
+    until linepos>=$FFFFFF;{end of database}
 
   end;
 end;{plot deep_sky}

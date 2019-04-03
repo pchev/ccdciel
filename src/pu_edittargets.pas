@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
+uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
   pu_scriptengine, cu_astrometry, u_translation, pu_selectscript, Classes,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin,
@@ -45,6 +45,7 @@ type
     Bevel1: TBevel;
     Bevel2: TBevel;
     BtnAddStep: TButton;
+    Btn_coord_internal: TButton;
     BtnUnattendedScript: TButton;
     BtnSaveAs: TButton;
     BtnSavePlan: TButton;
@@ -184,6 +185,7 @@ type
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
     procedure BtnUnattendedScriptClick(Sender: TObject);
+    procedure Btn_coord_internalClick(Sender: TObject);
     procedure cbTermOptionClick(Sender: TObject);
     procedure CheckLightOnlyChange(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
@@ -659,6 +661,36 @@ begin
      BtnUnattendedScript.Caption:='.?.'
   else
      BtnUnattendedScript.Caption:='...';
+end;
+
+procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);
+var n: integer;
+    ra0,dec0,length1,width1,pa : double;
+    objname : string;
+begin
+  n:=TargetList.Row;
+
+  objname:=uppercase(inputbox('Retrieve position from deepsky database','Object:' , ''));
+  if length(objname)>1 then {object name length should be two or longer}
+  begin
+    load_deep;{load the deepsky database once. If already loaded no action}
+    linepos:=0;{set pointer to beginning}
+    repeat
+      read_deepsky('T' {full search} ,0 {ra},0 {dec},1 {cos(telescope_dec},2*pi{fov},{var} ra0,dec0,length1,width1,pa);{deepsky database search}
+      if ((objname=naam2) or (objname=naam3) or (objname=naam4)) then
+      begin
+        TargetList.Cells[colra,n]:=RAToStr(12*ra0/pi);{add position}
+        TargetList.Cells[coldec,n]:=DEToStr(180*dec0/pi);
+
+        if naam3='' then TargetList.Cells[colname,n]:=naam2 {one name only}
+        else
+        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{add two object names}
+
+        linepos:=$FFFFFF; {stop}
+        TargetChange(nil);
+     end;
+    until linepos>=$FFFFFF;{found or end of database}
+  end;
 end;
 
 procedure Tf_EditTargets.cbTermOptionClick(Sender: TObject);
