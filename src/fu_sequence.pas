@@ -1033,6 +1033,8 @@ begin
       PlanChange(p);
     end;
     PlanRow:=p.CurrentStep+1;
+    TargetGrid.TopRow:=TargetRow;
+    PlanGrid.TopRow:=PlanRow;
     TargetGrid.Invalidate;
     PlanGrid.Invalidate;
    end;

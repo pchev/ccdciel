@@ -700,7 +700,6 @@ begin
      end
      else begin
        if SkipTarget then begin
-         wait(1);
          FInitializing:=false;
          if FRunning then NextTarget;
          exit;
