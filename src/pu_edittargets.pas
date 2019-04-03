@@ -26,9 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor,
-  pu_scriptengine, cu_astrometry, u_translation, pu_selectscript,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin;
+  pu_scriptengine, cu_astrometry, u_translation, pu_selectscript, Classes,
+  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin,
+  Buttons;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10;
@@ -123,6 +124,7 @@ type
     PanelGain1: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
+    BtnRepeatInf: TSpeedButton;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     InplaceAutofocus: TCheckBox;
@@ -196,6 +198,7 @@ type
     procedure SeqStartTwilightChange(Sender: TObject);
     procedure SeqStopChange(Sender: TObject);
     procedure SeqStopTwilightChange(Sender: TObject);
+    procedure BtnRepeatInfClick(Sender: TObject);
     procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure StepListEditingDone(Sender: TObject);
@@ -306,6 +309,7 @@ begin
   RepeatCountList.Value:=FTargetsRepeat;
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
+  BtnRepeatInf.Enabled:=CheckBoxRepeatList.Checked;
   if BtnEndScript.Hint='' then
      BtnEndScript.Caption:='.?.'
   else
@@ -1561,6 +1565,7 @@ end;
 procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
 begin
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
+  BtnRepeatInf.Enabled:=CheckBoxRepeatList.Checked;
   if CheckBoxRepeatList.Checked then
     FTargetsRepeat:=RepeatCountList.Value
   else
@@ -1616,6 +1621,11 @@ begin
       SeqStopTwilight.Checked:=false;
     end;
   end;
+end;
+
+procedure Tf_EditTargets.BtnRepeatInfClick(Sender: TObject);
+begin
+  RepeatCountList.Value:=RepeatCountList.MaxValue;
 end;
 
 

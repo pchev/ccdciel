@@ -1903,6 +1903,8 @@ begin
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(10, btn);
+  f_EditTargets.BtnRepeatInf.Glyph.Assign(btn);
   btn.Free;
 end;
 
