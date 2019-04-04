@@ -592,12 +592,12 @@ begin
   end;
   tfile:=TCCDconfig.Create(self);
   tfile.Filename:=CurrentSequenceFile;
+  i:=FCurrentTarget+1;
   // global sequence repeat
   tfile.SetValue('/Targets/RepeatDone',TargetsRepeatCount);
   // target repeat
   tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
   // plan step done
-  i:=FCurrentTarget+1;
   tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
   for j:=0 to Length(t.DoneList)-1 do begin
      tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
@@ -811,6 +811,12 @@ begin
       SkipTarget:=true;
       result:=false;
       msg(Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']), 2);
+      exit;
+    end;
+    if t.repeatdone>=t.repeatcount then begin
+      SkipTarget:=true;
+      result:=false;
+      msg(Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]), 2);
       exit;
     end;
     msg(Format(rsInitializeTa, [t.objectname]),1);
@@ -1339,7 +1345,10 @@ begin
       if not T_Plan(t.plan).Running then begin
         if (t<>nil) then begin
         inc(t.repeatdone);
-        if (not TargetForceNext)and(t.repeatdone<=t.repeatcount) then begin
+        if (TargetForceNext)or(t.repeatdone>=t.repeatcount) then begin
+           NextTarget;
+        end
+        else begin
            tt:=t.delay-(Now-TargetTimeStart)*secperday;
            if tt<1 then tt:=1;
            if tt>1 then msg(Format(rsWaitSecondsB, [FormatFloat(f1, tt),
@@ -1352,9 +1361,6 @@ begin
              Preview.Binning.Text:=Capture.Binning.Text;
              Preview.BtnLoop.Click;
            end;
-        end
-        else begin
-         NextTarget;
         end;
         end
         else begin

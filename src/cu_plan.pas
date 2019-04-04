@@ -158,7 +158,12 @@ begin
 end;
 
 procedure T_Plan.Stop;
+var p: TStep;
 begin
+  p:=FSteps[CurrentStep];
+  if p<>nil then begin
+    p.donecount:=CurrentDoneCount;
+  end;
   FRunning:=false;
   if Capture.Running then Capture.BtnStart.Click;
 end;
