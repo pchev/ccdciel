@@ -120,7 +120,7 @@ private
    CCDfilepath: ITextVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   FhasBlob,Fready,Fconnected,UseMainSensor: boolean;
+   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
@@ -348,6 +348,7 @@ begin
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
+    FWheelReady:=false;
     Fconnected := false;
     FStatus := devDisconnected;
     FWheelStatus:=devDisconnected;
@@ -374,21 +375,28 @@ begin
            LoadConfig;
          end;
          if Assigned(FonStatusChange) then FonStatusChange(self);
-         if (WheelSlot<>nil) and (FilterName<>nil) then begin
-           FWheelStatus:=devConnected;
-           if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-         end;
        end;
+    end;
+    if Fconnected and
+       (WheelSlot<>nil) and
+       (FilterName<>nil)
+    then begin
+      FWheelStatus:=devConnected;
+      if (not FWheelReady) then begin
+        FWheelReady:=true;
+        if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
+      end;
     end;
     if Fconnected and
        (not hasVideo) and
        (CCDVideoStream<>nil) and
        (RecordOptions <>nil) and
        (RecordFile<>nil) and
-       (RecordStream<>nil)then begin
-         FhasVideo:=true;
-         if Assigned(FonStatusChange) then FonStatusChange(self);
-       end;
+       (RecordStream<>nil)
+    then begin
+       FhasVideo:=true;
+       if Assigned(FonStatusChange) then FonStatusChange(self);
+    end;
 end;
 
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -674,12 +682,12 @@ begin
      WheelSlot:=indiProp.getNumber;
      Slot:=IUFindNumber(WheelSlot,'FILTER_SLOT_VALUE');
      if Slot=nil then WheelSlot:=nil;
-  end
+   end
   else if (proptype=INDI_TEXT)and(FilterName=nil)and(propname='FILTER_NAME') then begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
-     for i:=0 to FilterName.ntp-1 do begin
+     for i:=0 to FilterName.ntp-1 do begin  // do not check property name because there is variation
         FFilterNames.Add(FilterName.tp[i].text);
      end;
   end
