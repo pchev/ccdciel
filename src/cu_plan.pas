@@ -192,13 +192,20 @@ begin
   StepRunning:=true;
   p:=FSteps[CurrentStep];
   if p<>nil then begin
+    CurrentStepNum:=CurrentStep;
+    CurrentDoneCount:=p.donecount;
+    if CurrentDoneCount>=p.count then begin
+       // step already complete
+       msg('Step '+p.description+' complete',2);
+       exit;
+    end;
     if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
     Fcapture.Binning.Text:=p.binning_str;
     if hasGainISO then
       Fcapture.ISObox.ItemIndex:=p.gain
     else
       Fcapture.GainEdit.Value:=p.gain;
-    Fcapture.SeqNum.Value:=p.count;
+    Fcapture.SeqNum.Value:=p.count-CurrentDoneCount;
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Fcapture.CheckBoxDither.Checked:=p.dither;
     Fcapture.DitherCount.Value:=p.dithercount;
@@ -226,8 +233,14 @@ end;
 
 
 procedure T_Plan.PlanTimerTimer(Sender: TObject);
+var p: TStep;
 begin
  if FRunning then begin
+   p:=FSteps[CurrentStep];
+   if p<>nil then begin
+     // store image count
+     p.donecount:=CurrentDoneCount;
+   end;
    StepRunning:=Capture.Running;
    if not StepRunning then begin
        NextStep;

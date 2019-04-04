@@ -6979,6 +6979,7 @@ try
  fn:=slash(fd)+fn+'.fits';
  // save the file
  fits.SaveToFile(fn);
+ inc(CurrentDoneCount);
  NewMessage(Format(rsSavedFile, [fn]),1);
  StatusBar1.Panels[2].Text:=Format(rsSaved, [fn])+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[1].Text := '';
