@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
-  pu_scriptengine, cu_astrometry, u_translation, pu_selectscript, Classes,
+  pu_scriptengine, cu_astrometry, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin,
   Buttons;
@@ -213,6 +213,8 @@ type
       aState: TCheckboxState);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
+    procedure TargetListCompareCells(Sender: TObject; ACol, ARow, BCol,
+      BRow: Integer; var Result: integer);
     procedure TargetListEditingDone(Sender: TObject);
     procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
@@ -228,6 +230,7 @@ type
     LockStep, StepsModified: boolean;
     Lockcb: boolean;
     originalFilter: array[0..99] of string;
+    SortDirection: integer;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
@@ -278,6 +281,7 @@ begin
   LockStep:=false;
   StepsModified:=false;
   Lockcb:=false;
+  SortDirection:=-1;
   f_selectscript:=Tf_selectscript.Create(self);
   cbStopTracking.Checked:=true;
   LoadPlanList;
@@ -593,20 +597,17 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
-var txt:string;
-    i,n: integer;
+var i,n: integer;
     t,tt: TTarget;
 begin
   PageControl1.ActivePageIndex:=0;
-  txt:=FormEntry(self, rsObjectName, 'None');
-  if txt=ScriptTxt then txt:='_Script';
   t:=TTarget.Create;
   n:=TargetList.Row;
   if n>=1 then begin
     tt:=TTarget(TargetList.Objects[colseq,n]);
     if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then begin
       t.Assign(tt);
-      t.objectname:=txt;
+      t.objectname:='';
     end;
   end;
   if (t.planname='')and(TargetList.Columns[colplan-1].PickList.Count>0) then
@@ -614,11 +615,12 @@ begin
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[colseq,i]:=IntToStr(i);
-  TargetList.Cells[colname,i]:=txt;
+  TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
+  Btn_coord_internalClick(Sender);
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
@@ -1408,6 +1410,104 @@ begin
   ResetSequences;
 end;
 
+procedure Tf_EditTargets.TargetListCompareCells(Sender: TObject; ACol, ARow,
+  BCol, BRow: Integer; var Result: integer);
+var v1,v2: float;
+    b1, b2, p1, p2, buf, c: string;
+    n1, n2: double;
+    p, i1, i2: integer;
+
+  procedure GetPrefix(str: string; var pref: string; var n: double; var i: integer);
+    var
+      j: integer;
+    begin
+      i := 1;
+      n := 0;
+      pref := '';
+      buf := trim(str);
+      p := pos(' ', buf);   // prefix separated by space
+      if p = 0 then
+      begin  // try to separate the numeric part
+        for j := 1 to Length(buf) do
+        begin
+          c := copy(buf, j, 1);
+          if (c >= '0') and (c <= '9') then
+          begin
+            p := j - 1;
+            break;
+          end;
+        end;
+      end;
+      if p > 0 then
+      begin  // first prefix
+        pref := uppercase(trim(copy(buf, 1, p)));
+        Delete(buf, 1, p);
+        j:=pos(',',buf);
+        if j>0 then buf:=copy(buf,1,j-1);
+        j:=pos('_',buf);
+        if j>0 then buf:=copy(buf,1,j-1);
+        j:=pos('-',buf);
+        if j>0 then buf:=copy(buf,1,j-1);
+        Val(trim(buf), n, i);
+      end;
+    end;
+
+begin
+ with TargetList do begin
+   case ACol of
+     colra: begin
+              v1:=StrToAR(Cells[ACol,ARow]);
+              v2:=StrToAR(Cells[BCol,BRow]);
+              Result:=CompareValue(v1,v2);
+            end;
+     coldec:begin
+              v1:=StrToDE(Cells[ACol,ARow]);
+              v2:=StrToDE(Cells[BCol,BRow]);
+              Result:=CompareValue(v1,v2);
+            end;
+     colname:begin
+              b1:=Cells[ACol,ARow];
+              b2:=Cells[BCol,BRow];
+              Val(trim(b1), n1, i1);
+              Val(trim(b2), n2, i2);
+              if (i1 = 0) and (i2 = 0) then
+              begin
+                // numeric compare
+                if n1 > n2 then
+                  Result := 1
+                else if n1 < n2 then
+                  Result := -1
+                else
+                  Result := 0;
+              end
+              else
+              begin
+                // try prefix + numeric
+                GetPrefix(b1, p1, n1, i1);
+                GetPrefix(b2, p2, n2, i2);
+                if (i1 = 0) and (i2 = 0) and (p1 = p2) then
+                begin
+                  // same prefix, numeric compare
+                  if n1 > n2 then
+                    Result := 1
+                  else if n1 < n2 then
+                    Result := -1
+                  else
+                    Result := 0;
+                end
+                else
+                begin
+                  // case insensitive string compare
+                  Result := CompareText(b1, b2);
+                end;
+              end;
+            end
+     else Result:=CompareText(Cells[ACol,ARow],Cells[BCol,BRow]);
+   end;
+   if SortDirection=-1 then Result:=-Result;
+ end;
+end;
+
 procedure Tf_EditTargets.TargetListEditingDone(Sender: TObject);
 begin
   TargetChange(Sender);
@@ -1432,6 +1532,19 @@ begin
                      end;
                 end;
               end;
+    colname,colra,coldec: begin
+                if SortDirection=0 then SortDirection := 1
+                else SortDirection:=-1*SortDirection;
+                SortColRow(True, Index);
+                ResetSequences;
+                Columns[colname-1].Title.ImageIndex:=-1;
+                Columns[colra-1].Title.ImageIndex:=-1;
+                Columns[coldec-1].Title.ImageIndex:=-1;
+                if SortDirection>0 then
+                  Columns[Index-1].Title.ImageIndex:=3
+                else
+                  Columns[Index-1].Title.ImageIndex:=2;
+             end;
     colpa  : begin
                 buf:=FormEntry(self, Columns[Index-1].Title.Caption, '');
                 if buf<>'' then begin

@@ -101,7 +101,7 @@ type
       NumTargets: integer;
       FCurrentTarget: integer;
       FTargetsRepeat: integer;
-      FSeqStartAt,FSeqStopAt,FStartTime: TDateTime;
+      FSeqStartAt,FSeqStopAt,FSeqStartTime: TDateTime;
       FSeqStart,FSeqStop: boolean;
       FSeqStartTwilight,FSeqStopTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
@@ -413,7 +413,7 @@ begin
   finally
     FWaitStarting:=false;
   end;
-  FStartTime:=now;
+  FSeqStartTime:=now;
   NextTarget;
 end;
 
@@ -848,7 +848,7 @@ function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i,intime,ri,si,ti: integer;
-    hr,hs,ht,tt,newra,newde,appra,appde: double;
+    hr,hs,ht,tt,dt,newra,newde,appra,appde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg: string;
 begin
@@ -926,9 +926,11 @@ begin
        // start from meridian
        if (t.startmeridian<>NullCoord) and (ti<2) then begin
           if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
-          tt:=rmod(ht+t.startmeridian+24,24);
+          if t.startmeridian=0 then dt:=5/60 // 5 minutes after meridian to prevent flip
+                               else dt:=t.startmeridian;
+          tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,tt/24)=0 then
              t.starttime:=tt/24
           else
              t.starttime:=hr/24;
@@ -936,15 +938,17 @@ begin
        // end from meridian
        if (t.endmeridian<>NullCoord) and (ti<2) then begin
           if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
-          tt:=rmod(ht+t.endmeridian+24,24);
+          if t.endmeridian=0 then dt:=-5/60 // 5 minutes before meridian to prevent flip
+                             else dt:=t.endmeridian;
+          tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,tt/24)=0 then
              t.endtime:=tt/24
           else
              t.endtime:=hs/24;
        end;
     end;
-    intime:=InTimeInterval(frac(now),t.starttime,t.endtime,frac(FStartTime));
+    intime:=InTimeInterval(frac(now),t.starttime,t.endtime,frac(FSeqStartTime));
     // test if skiped
     if t.skip then begin
       skipmsg:='';
