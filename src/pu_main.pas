@@ -1253,6 +1253,7 @@ begin
   f_autoguider.onGuide:=@AutoguiderGuideClick;
   f_autoguider.onDither:=@AutoguiderDitherClick;
   f_autoguider.Status.Text:=autoguider.Status;
+  f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
 
   f_sequence:=Tf_sequence.Create(self);
   f_sequence.onMsg:=@NewMessage;
@@ -5228,6 +5229,7 @@ begin
    autoguider.onShowMessage:=@NewMessage;
    f_sequence.Autoguider:=autoguider;
    f_autoguider.Status.Text:=autoguider.Status;
+   f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
    NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),1);
    f_autoguider.BtnConnect.Caption:=rsConnect;
    f_autoguider.BtnGuide.Caption:=rsGuide;
@@ -6070,6 +6072,7 @@ begin
        autoguider.onShowMessage:=@NewMessage;
        f_sequence.Autoguider:=autoguider;
        f_autoguider.Status.Text:=autoguider.Status;
+       f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
        NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),1);
        f_autoguider.BtnConnect.Caption:=rsConnect;
        f_autoguider.BtnGuide.Caption:='Guide';

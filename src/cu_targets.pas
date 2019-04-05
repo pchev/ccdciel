@@ -925,7 +925,7 @@ begin
     FWaitStarting:=false;
 
     if ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
-      if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) then begin
+      if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
         // stop guiding
         if Autoguider.State<>GUIDER_DISCONNECTED then begin
           if not StopGuider then exit;
@@ -963,7 +963,7 @@ begin
     if isCalibrationTarget then mount.AbortMotion
                            else mount.Track;
     // start guiding
-    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
+    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
     if autostartguider then begin
       if not StartGuider then exit;
       Wait;
