@@ -834,7 +834,7 @@ begin
                                else dt:=t.startmeridian;
           tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,tt/24)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
              t.starttime:=tt/24
           else
              t.starttime:=hr/24;
@@ -846,7 +846,7 @@ begin
                              else dt:=t.endmeridian;
           tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,tt/24)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
              t.endtime:=tt/24
           else
              t.endtime:=hs/24;
