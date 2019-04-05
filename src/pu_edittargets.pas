@@ -593,20 +593,17 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
-var txt:string;
-    i,n: integer;
+var i,n: integer;
     t,tt: TTarget;
 begin
   PageControl1.ActivePageIndex:=0;
-  txt:=FormEntry(self, rsObjectName, 'None');
-  if txt=ScriptTxt then txt:='_Script';
   t:=TTarget.Create;
   n:=TargetList.Row;
   if n>=1 then begin
     tt:=TTarget(TargetList.Objects[colseq,n]);
     if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then begin
       t.Assign(tt);
-      t.objectname:=txt;
+      t.objectname:='';
     end;
   end;
   if (t.planname='')and(TargetList.Columns[colplan-1].PickList.Count>0) then
@@ -614,11 +611,12 @@ begin
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[colseq,i]:=IntToStr(i);
-  TargetList.Cells[colname,i]:=txt;
+  TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
+  Btn_coord_internalClick(Sender);
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
