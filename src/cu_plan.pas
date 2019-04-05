@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, u_translation,
+uses u_global, u_utils, u_translation, math,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider,
   ExtCtrls, Classes, SysUtils;
 
@@ -45,6 +45,7 @@ T_Plan = class(TComponent)
     Fmount: T_mount;
     Fcamera: T_camera;
     Fautoguider: T_autoguider;
+    FonStepProgress: TNotifyEvent;
     procedure SetPlanName(val: string);
     procedure NextStep;
     procedure StartStep;
@@ -83,6 +84,7 @@ T_Plan = class(TComponent)
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property DelayMsg: TNotifyMsg read FDelayMsg write FDelayMsg;
     property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
+    property onStepProgress: TNotifyEvent read FonStepProgress write FonStepProgress;
 
 end;
 
@@ -165,7 +167,7 @@ begin
     p.donecount:=CurrentDoneCount;
   end;
   FRunning:=false;
-  if Capture.Running then Capture.BtnStart.Click;
+  if Capture.Running then Capture.BtnStartClick(Self);
 end;
 
 procedure T_Plan.NextStep;
@@ -173,6 +175,7 @@ begin
   PlanTimer.Enabled:=false;
   FlatWaitDusk:=false;
   FlatWaitDawn:=false;
+  if assigned(FonStepProgress) then FonStepProgress(self);
   inc(FCurrentStep);
   if FCurrentStep<NumSteps then begin
     StartStep;
@@ -210,7 +213,8 @@ begin
       Fcapture.ISObox.ItemIndex:=p.gain
     else
       Fcapture.GainEdit.Value:=p.gain;
-    Fcapture.SeqNum.Value:=p.count-CurrentDoneCount;
+    Fcapture.SeqNum.Value:=p.count;
+    Fcapture.SeqCount:=CurrentDoneCount+1;
     Fcapture.FrameType.ItemIndex:=ord(p.frtype);
     Fcapture.CheckBoxDither.Checked:=p.dither;
     Fcapture.DitherCount.Value:=p.dithercount;
@@ -244,7 +248,10 @@ begin
    p:=FSteps[CurrentStep];
    if p<>nil then begin
      // store image count
-     p.donecount:=CurrentDoneCount;
+     if p.donecount<>CurrentDoneCount then begin
+        p.donecount:=CurrentDoneCount;
+        if assigned(FonStepProgress) then FonStepProgress(self);
+     end;
    end;
    StepRunning:=Capture.Running;
    if not StepRunning then begin
@@ -275,7 +282,7 @@ begin
      StartTimer.Enabled:=true;
      exit;
  end;
-  Fcapture.BtnStart.Click;
+  Fcapture.BtnStartClick(nil);
 end;
 
 end.

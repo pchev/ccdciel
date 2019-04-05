@@ -2753,7 +2753,7 @@ end;
 
 procedure Tf_main.MenuCaptureStartClick(Sender: TObject);
 begin
-  f_capture.BtnStart.Click;
+  f_capture.BtnStartClick(Sender);
 end;
 
 procedure Tf_main.MenuCCDtempSetClick(Sender: TObject);
@@ -4150,7 +4150,7 @@ begin
                end
                // stop other capture
                else if f_capture.Running then begin
-                  f_capture.BtnStartClick(nil);
+                  f_capture.BtnStartClick(Sender);
                   wait(5);
                end;
             end;

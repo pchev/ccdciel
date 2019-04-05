@@ -146,7 +146,7 @@ begin
   Frunning:=not Frunning;
   if Frunning then begin
     CancelAutofocus:=false;
-    FSeqCount:=1;
+    if Sender<>nil then FSeqCount:=1; // otherwise set by plan
     FDitherNum:=0;
     FFocusNum:=0;
     if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin

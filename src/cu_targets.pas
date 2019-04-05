@@ -95,6 +95,7 @@ type
       procedure StopTimerTimer(Sender: TObject);
       procedure StopTargetTimerTimer(Sender: TObject);
       procedure WeatherRestartTimerTimer(Sender: TObject);
+      procedure PlanStepChange(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -314,6 +315,7 @@ var p:T_Plan;
 begin
   p:=T_Plan.Create(nil);
   p.onPlanChange:=FPlanChange;
+  p.onStepProgress:=@PlanStepChange;
   p.Preview:=Fpreview;
   p.Capture:=Fcapture;
   p.Mount:=Fmount;
@@ -512,7 +514,6 @@ begin
  StopTargetTimer.Enabled:=false;
  WeatherRestartTimer.Enabled:=false;
  InplaceAutofocus:=AutofocusInPlace;
- SaveDoneCount;
  FTargetsRepeatCount:=FTargetsRepeat+1;
  if FRunning then begin
    FRunning:=false;
@@ -567,6 +568,7 @@ begin
      RunErrorAction;
      ShowDelayMsg('');
    end;
+   SaveDoneCount;
    if assigned(FonEndSequence) then FonEndSequence(nil);
    CurrentTargetName:='';
    CurrentStepName:='';
@@ -577,19 +579,16 @@ end;
 procedure T_Targets.SaveDoneCount;
 var p: T_Plan;
     t: TTarget;
-    i,j,n: integer;
+    i,n: integer;
     tfile: TCCDconfig;
 begin
+ try
   if (FCurrentTarget<0)or(FCurrentTarget>Count) then exit;
   t:=Targets[FCurrentTarget];
   if t=nil then exit;
   p:=t_plan(t.plan);
   if p=nil then exit;
-  n:=p.Count;
-  SetLength(t.DoneList,n);
-  for i:=0 to n-1 do begin
-    t.DoneList[i]:=p.Steps[i].donecount;
-  end;
+  if p.Count<=0 then exit;
   tfile:=TCCDconfig.Create(self);
   tfile.Filename:=CurrentSequenceFile;
   i:=FCurrentTarget+1;
@@ -598,12 +597,24 @@ begin
   // target repeat
   tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
   // plan step done
-  tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
-  for j:=0 to Length(t.DoneList)-1 do begin
-     tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
+  n:=p.CurrentStep;
+  if (n>=0)and(n<p.Count) then begin
+    SetLength(t.DoneList,p.Count);
+    t.DoneList[n]:=p.Steps[n].donecount;
+    tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
+    tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
   end;
+  // save file
   tfile.Flush;
   tfile.Free;
+ except
+   on E: Exception do msg('Error saving sequence state:'+ E.Message,1);
+ end;
+end;
+
+procedure T_Targets.PlanStepChange(Sender: TObject);
+begin
+  SaveDoneCount;
 end;
 
 procedure T_Targets.ForceNextTarget;
@@ -1399,7 +1410,7 @@ begin
       if t.preview and Preview.Running then Preview.BtnLoop.Click;
       p:=T_Plan(t.plan);
       if p<>nil then begin
-        // reset done counts
+        // reset step done counts
         n:=p.Count;
         for i:=0 to n-1 do begin
            p.Steps[i].donecount:=0;
