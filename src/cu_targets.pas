@@ -122,6 +122,8 @@ type
       procedure WeatherRestart;
       procedure ForceNextTarget;
       procedure SaveDoneCount;
+      function  CheckDoneCount:boolean;
+      procedure ClearDoneCount;
       property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
       property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
@@ -574,6 +576,45 @@ begin
    CurrentStepName:='';
  end
  else msg(rsNotRunningNo,1);
+end;
+
+function T_Targets.CheckDoneCount:boolean;
+var i,j: integer;
+    t: TTarget;
+    p: T_Plan;
+begin
+ result:=false;
+ if FTargetsRepeatCount>0 then result:=true;
+ for i:=0 to NumTargets-1 do begin
+    t:=Targets[i];
+    if t=nil then Continue;
+    if t.repeatdone>0 then result:=true;
+    p:=t_plan(t.plan);
+    if p=nil then Continue;
+    if p.Count<=0 then Continue;
+    for j:=0 to p.Count-1 do begin
+      if p.Steps[j].donecount>0 then result:=true;
+    end;
+ end;
+end;
+
+procedure T_Targets.ClearDoneCount;
+var i,j: integer;
+    t: TTarget;
+    p: T_Plan;
+begin
+ FTargetsRepeatCount:=0;
+ for i:=0 to NumTargets-1 do begin
+    t:=Targets[i];
+    if t=nil then Continue;
+    t.repeatdone:=0;
+    p:=t_plan(t.plan);
+    if p=nil then Continue;
+    if p.Count<=0 then Continue;
+    for j:=0 to p.Count-1 do begin
+      p.Steps[j].donecount:=0;
+    end;
+ end;
 end;
 
 procedure T_Targets.SaveDoneCount;

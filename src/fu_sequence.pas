@@ -136,6 +136,7 @@ type
     procedure SetOnShutdown(value:TNotifyEvent);
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
+    procedure ClearRestartHistory;
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -587,6 +588,20 @@ begin
        end;
        Targets.Add(t);
        LoadPlan(T_Plan(t.plan), t.planname, t.DoneList);
+     end;
+   end;
+   tfile.Free;
+end;
+
+procedure Tf_sequence.ClearRestartHistory;
+begin
+   if Targets.CheckDoneCount then begin
+     if MessageDlg('Clear restart information?','This sequence contain restart information.'+crlf+
+                   'Now you can continue after the last checkpoint.'+crlf+crlf+
+                   'Do you want to clear the restart information to restart from the beginning?',
+                   mtConfirmation,mbYesNo,0)=mrYes then begin
+        Targets.ClearDoneCount;
+        SaveTargets(CurrentSequenceFile,'');
      end;
    end;
 end;
