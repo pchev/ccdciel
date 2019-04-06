@@ -758,7 +758,7 @@ function T_Targets.InitTarget:boolean;
 var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i,intime,ri,si,ti: integer;
-    hr,hs,ht,tt,dt,newra,newde,appra,appde: double;
+    hr,hs,ht,tt,dt,st,newra,newde,appra,appde: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg: string;
 begin
@@ -808,6 +808,7 @@ begin
        appra:=appra*rad2deg/15;
        appde:=appde*rad2deg;
     end;
+    st:=frac(FSeqStartTime); // if no coordinates, pivot time is sequence start time
     // adjust start/end from coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
        ObjRise(appra,appde,hr,ri);
@@ -820,6 +821,7 @@ begin
        end;
        ObjSet(appra,appde,hs,si);
        ObjTransit(appra,appde,ht,ti);
+       st:=rmod(ht+12+24,24); // pivot time 12h from transit
        // adjust rise/set time
        // begin at rise
        if t.startrise and (ri=0) then
@@ -834,7 +836,7 @@ begin
                                else dt:=t.startmeridian;
           tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,st/24)=0 then
              t.starttime:=tt/24
           else
              t.starttime:=hr/24;
@@ -846,13 +848,13 @@ begin
                              else dt:=t.endmeridian;
           tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,st/24)=0 then
              t.endtime:=tt/24
           else
              t.endtime:=hs/24;
        end;
     end;
-    intime:=InTimeInterval(frac(now),t.starttime,t.endtime,frac(FSeqStartTime));
+    intime:=InTimeInterval(frac(now),t.starttime,t.endtime,st/24);
     // test if skiped
     if t.skip then begin
       skipmsg:='';
