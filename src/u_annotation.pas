@@ -1,7 +1,7 @@
 unit u_annotation; {deep sky annotation of the image}
 { From ASTAP unit_deepsky with modification for CCDciel environment}
 {$mode delphi}
-{Copyright (C) 2018 by Han Kleijn, www.hnsky.org
+{Copyright (C) 2018,2019 by Han Kleijn, www.hnsky.org
  email: han.k.. at...hnsky.org
 
 {This program is free software: you can redistribute it and/or modify
@@ -275,6 +275,10 @@ begin
 end;
 
 procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
+type
+  textarea = record
+     x1,y1,x2,y2 : integer;
+  end;
 var
   fitsX, fitsY : double;
   dra,ddec,delta,gamma,
@@ -284,6 +288,9 @@ var
   width2, height2,h,sign: integer;
   name: string;
   new_to_old_WCS: boolean;
+  text_dimensions  : array of textarea;
+  i,text_counter,th,tw,x1,y1,x2,y2 : integer;
+  overlap  :boolean;
 begin
   if ((f<>nil) and (f.HeaderInfo.solved)) then
   begin
@@ -337,6 +344,9 @@ begin
     cnv.brush.Style:=bsClear;
     cnv.font.color:=clyellow;
 
+    text_counter:=0;
+    setlength(text_dimensions,200);
+
     repeat
       read_deepsky('S',telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov,{var} ra2,dec2,length1,width1,pa);{deepsky database search}
 
@@ -358,7 +368,68 @@ begin
        else
        name:=naam2+'/'+naam3+'/'+naam4;
 
-       cnv.textout(round(x),round(y),name);
+       {Plot deepsky text labels on an empthy text space.}
+       { 1) If the center of the deepsky object is outside the image then don't plot text}
+       { 2) If the text space is occupied, then move the text down. If the text crosses the bottom then use the original text position.}
+       { 3) If the text crosses the right side of the image then move the text to the left.}
+       { 4) If the text is moved in y then connect the text to the deepsky object with a vertical line.}
+       if ( (round(x)>=0) and (round(x)<=width2) and (round(y)>=0) and (round(y)<=height2) ) then {plot only text if center object is visible}
+       begin
+         {get text dimensions}
+         th:=cnv.textheight(name);
+         tw:=cnv.textwidth(name);
+         x1:=round(x);
+         y1:=round(y);
+         x2:=round(x)+ tw;
+         y2:=round(y)+ th ;
+
+         if ((x1<=width2) and (x2>width2)) then begin x1:=x1-(x2-width2);x2:=width2;end; {if text is beyond right side, move left}
+
+         if text_counter>0 then {find free space in y for text}
+         begin
+           repeat {find free text area}
+             overlap:=false;
+             i:=0;
+             repeat {test overlap}
+               if ( ((x1>=text_dimensions[i].x1) and (x1<=text_dimensions[i].x2) and (y1>=text_dimensions[i].y1) and (y1<=text_dimensions[i].y2)) {left top overlap} or
+                    ((x2>=text_dimensions[i].x1) and (x2<=text_dimensions[i].x2) and (y1>=text_dimensions[i].y1) and (y1<=text_dimensions[i].y2)) {right top overlap} or
+                    ((x1>=text_dimensions[i].x1) and (x1<=text_dimensions[i].x2) and (y2>=text_dimensions[i].y1) and (y2<=text_dimensions[i].y2)) {left bottom overlap} or
+                    ((x2>=text_dimensions[i].x1) and (x2<=text_dimensions[i].x2) and (y2>=text_dimensions[i].y1) and (y2<=text_dimensions[i].y2)) {right bottom overlap} or
+
+                    ((text_dimensions[i].x1>=x1) and (text_dimensions[i].x1<=x2) and (text_dimensions[i].y1>=y1) and (text_dimensions[i].y1<=y2)) {two corners of text_dimensions[i] within text} or
+                    ((text_dimensions[i].x2>=x1) and (text_dimensions[i].x2<=x2) and (text_dimensions[i].y2>=y1) and (text_dimensions[i].y2<=y2)) {two corners of text_dimensions[i] within text}
+                  ) then
+               begin
+                 overlap:=true; {text overlaps an existing text}
+                 y1:=y1+(th div 3);{try to shift text one third of the text height down}
+                 y2:=y2+(th div 3);
+                 if y2>=height2 then {no space left, use original position}
+                     begin
+                       y1:=round(y);
+                       y2:=round(y) +th ;
+                       overlap:=false;{stop searching}
+                       i:=$FFFFFFF;{stop searching}
+                     end;
+               end;
+               inc(i);
+             until ((i>=text_counter) or (overlap) );{until all tested or found overlap}
+           until overlap=false;{continue till no overlap}
+         end;
+
+         text_dimensions[text_counter].x1:=x1;{store text dimensions}
+         text_dimensions[text_counter].y1:=y1;
+         text_dimensions[text_counter].x2:=x2;
+         text_dimensions[text_counter].y2:=y2;
+
+         if y1<>round(y) then {there was textual overlap, draw line down}
+         begin
+           cnv.moveto(round(x),round(y+th/4));
+           cnv.lineto(round(x),y1);
+         end;
+         cnv.textout(x1,y1,name);
+         inc(text_counter);
+         if text_counter>=length(text_dimensions) then setlength(text_dimensions,text_counter+200);{increase size dynamic array}
+       end;{centre object visible}
 
        if width1=0 then begin width1:=length1;pa:=999;end;
        len:=length1/(cdelt2*60*10*2); {Length in pixels}
@@ -367,9 +438,8 @@ begin
        else
          cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
      end;
-
     until linepos>=$FFFFFF;{end of database}
-
+    text_dimensions:=nil;{remove used memory}
   end;
 end;{plot deep_sky}
 
