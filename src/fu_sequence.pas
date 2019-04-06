@@ -844,9 +844,12 @@ begin
    if Targets.Targets[j].objectname=ScriptTxt then continue;
    if Targets.Targets[j].objectname=SkyFlatTxt then continue;
    for i:=0 to T_Plan(Targets.Targets[j].plan).Count-1 do begin
-      if T_Plan(Targets.Targets[j].plan).Steps[i].frtype=LIGHT then
+      if T_Plan(Targets.Targets[j].plan).Steps[i].frtype=LIGHT then begin
          isCalibrationSequence:=false;
+         break;
+      end;
    end;
+   if not isCalibrationSequence then break;
  end;
  if not StartingSequence then exit;
  // check camera cooler
