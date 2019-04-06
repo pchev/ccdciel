@@ -912,12 +912,12 @@ begin
       sleep(100);
       if not StartingSequence then exit;
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(i);
       if (i mod 100) = 0 then begin // every 10 sec.
          temp:=camera.Temperature;
          tempdiff:=abs(ccdtemp-temp);
          msg(rsCCDTemperatu+': '+FormatFloat(f1,TempDisplay(TemperatureScale,temp))+TempLabel,3);
       end;
+      inc(i);
    end;
  end;
  // initialize sequence
@@ -1018,10 +1018,10 @@ const
     trAlerttimeout=1;
 begin
  try
-  try
   StatusTimer.Enabled:=false;
   TargetRow:=Targets.CurrentTarget+1;
   if Targets.Running then begin
+   try
    // show plan status
    if (TargetRow>0) then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
@@ -1092,11 +1092,11 @@ begin
       mount.Track;
     end;
    end;
+   finally
+     StatusTimer.Enabled:=true;
+   end;
   end
   else StopSequence;
-  finally
-    StatusTimer.Enabled:=true;
-  end;
 except
   AbortSequence;
 end;
