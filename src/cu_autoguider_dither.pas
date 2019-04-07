@@ -26,11 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_autoguider, u_global, indiapi, u_utils, math,
-  u_translation, Forms, Classes, SysUtils;
+  u_translation, Forms, ExtCtrls, Classes, SysUtils;
 
 type
 
   T_autoguider_dither = class(T_autoguider)
+  private
+    StatusTimer: TTimer;
+    procedure StatusTimerTimer(sender: TObject);
   protected
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
@@ -46,11 +49,14 @@ type
     procedure Calibrate; override;
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean); override;
-    procedure Dither(pixel:double; raonly:boolean); override;
+    procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
     function WaitDithering(maxwait:integer=5):boolean; override;
   end;
+
+const statusinterval=5000;
+
 
 implementation
 
@@ -60,12 +66,17 @@ begin
   inherited Create;
   FAutoguiderType:=agDITHER;
   FStatus:='Dither only';
-  FState:=GUIDER_IDLE;
+  FState:=GUIDER_DISCONNECTED;
   FRunning:=true;
+  StatusTimer:=TTimer.Create(nil);
+  StatusTimer.Interval:=statusinterval;
+  StatusTimer.OnTimer:=@StatusTimerTimer;
+  StatusTimer.Enabled:=true;
 end;
 
 Destructor T_autoguider_dither.Destroy;
 begin
+  StatusTimer.Free;
   inherited Destroy;
 end;
 
@@ -121,20 +132,44 @@ end;
 
 procedure T_autoguider_dither.Guide(onoff:boolean; recalibrate:boolean=false);
 begin
-  if onoff then FState:=GUIDER_GUIDING
-           else FState:=GUIDER_IDLE;
 end;
 
 procedure T_autoguider_dither.Pause(onoff:boolean);
 begin
 end;
 
-procedure T_autoguider_dither.Dither(pixel:double; raonly:boolean);
-var speed,dist,timeend: double;
-    direction,duration:integer;
+procedure T_autoguider_dither.StatusTimerTimer(sender: TObject);
+var newstate: TAutoguiderState;
 begin
-  // Here the pixel parameter represent the maximum move in arc-seconds.
+try
+  StatusTimer.Enabled:=false;
+  newstate:=FState;
+  if (FMount=nil)or(FMount.Status<>devConnected) then begin
+     newstate:=GUIDER_DISCONNECTED;
+  end
+  else if (FMount.Tracking) then begin
+     newstate:=GUIDER_GUIDING;
+  end
+  else begin
+     newstate:=GUIDER_IDLE;
+  end;
+  if newstate<>FState then begin
+     FState:=newstate;
+     if assigned(FonStatusChange) then FonStatusChange(self);
+  end;
+finally
+  StatusTimer.Enabled:=true;
+end;
+end;
+
+procedure T_autoguider_dither.Dither(pixel:double; raonly:boolean; waittime:double);
+var speed,dist,timeend: double;
+    direction,durationra,durationdec:integer;
+begin
+  // Here the pixel parameter represent the mean move in arc-seconds.
   if (FMount<>nil)and(FMount.Status=devConnected)and(FMount.Tracking) then begin
+     // set as mean value, need max value
+     pixel:=2*pixel;
      // Try to set 1x sidereal rate
      FMount.GuideRateRa:=siderealrate/3600;
      // RA Move
@@ -143,9 +178,11 @@ begin
        dist:=(Random(round(2*pixel*1000))-round(pixel*1000))/1000; // random in +/- pixel arcsec
        if dist>0 then direction:=2  // east
                  else direction:=3; // west
-       duration:=max(50,round(1000*abs(dist)/speed));  // millisecond
-       Fmount.PulseGuide(direction,duration);
-     end;
+       durationra:=max(50,round(1000*abs(dist)/speed));  // millisecond
+       Fmount.PulseGuide(direction,durationra);
+     end
+     else
+       DisplayMessage('Cannot get mount RA guide rate');
      if not raonly then begin
         // Try to set 1x sidereal rate
         FMount.GuideRateDe:=siderealrate/3600;
@@ -155,20 +192,24 @@ begin
           dist:=(Random(round(2*pixel*1000))-round(pixel*1000))/1000; // random in +/- pixel arcsec
           if dist>0 then direction:=0  // north
                     else direction:=1; // south
-          duration:=max(50,round(1000*abs(dist)/speed));  // millisecond
-          Fmount.PulseGuide(direction,duration);
-        end;
+          durationdec:=max(50,round(1000*abs(dist)/speed));  // millisecond
+          Fmount.PulseGuide(direction,durationdec);
+        end
+        else
+          DisplayMessage('Cannot get mount DEC guide rate');
      end;
      // wait for move completed
-     timeend:=now+30/secperday;
+     timeend:=now+((max(durationra,durationdec)+10)/secperday);
      while now<timeend do begin
        sleep(500);
        if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
        if not FMount.PulseGuiding then break;
      end;
-     // wait 5 second more to stabilize
-     Wait(5);
-  end;
+     // wait more to stabilize
+     Wait(waittime);
+  end
+  else
+     DisplayMessage('Mount not ready for pulse guiding');
 end;
 
 procedure T_autoguider_dither.StarLostTimerTimer(Sender: TObject);

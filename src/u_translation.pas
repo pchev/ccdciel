@@ -1048,6 +1048,7 @@ resourcestring
   rsMountIsNotPa = 'Mount is not parked.%sPark the dome anyway?';
   rsCannotComput2 = 'Cannot compute meridian time';
   rsSearch = 'Search';
+  rsWaitTime = 'Wait time';
 
 implementation
 
