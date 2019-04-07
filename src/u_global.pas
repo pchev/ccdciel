@@ -323,7 +323,7 @@ var
   ReadoutModeCapture,ReadoutModePreview,ReadoutModeFocus,ReadoutModeAstrometry: integer;
   compile_time, compile_version, compile_system, lclver: string;
   CurrentSequenceFile: string;
-  DitherPixel, SettlePixel: double;
+  DitherPixel, SettlePixel, DitherWaitTime: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
   MeridianOption,MinutesPastMeridian, MinutesPastMeridianMin, MeridianFlipPauseTimeout: integer;

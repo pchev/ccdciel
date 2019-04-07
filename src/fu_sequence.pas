@@ -878,9 +878,12 @@ begin
    if Targets.Targets[j].objectname=ScriptTxt then continue;
    if Targets.Targets[j].objectname=SkyFlatTxt then continue;
    for i:=0 to T_Plan(Targets.Targets[j].plan).Count-1 do begin
-      if T_Plan(Targets.Targets[j].plan).Steps[i].frtype=LIGHT then
+      if T_Plan(Targets.Targets[j].plan).Steps[i].frtype=LIGHT then begin
          isCalibrationSequence:=false;
+         break;
+      end;
    end;
+   if not isCalibrationSequence then break;
  end;
  if not StartingSequence then exit;
  // check camera cooler
@@ -946,12 +949,12 @@ begin
       sleep(100);
       if not StartingSequence then exit;
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      inc(i);
       if (i mod 100) = 0 then begin // every 10 sec.
          temp:=camera.Temperature;
          tempdiff:=abs(ccdtemp-temp);
          msg(rsCCDTemperatu+': '+FormatFloat(f1,TempDisplay(TemperatureScale,temp))+TempLabel,3);
       end;
+      inc(i);
    end;
  end;
  // initialize sequence
@@ -1052,10 +1055,10 @@ const
     trAlerttimeout=1;
 begin
  try
-  try
   StatusTimer.Enabled:=false;
   TargetRow:=Targets.CurrentTarget+1;
   if Targets.Running then begin
+   try
    // show plan status
    if (TargetRow>0) then begin
     buf1:=Targets.Targets[Targets.CurrentTarget].planname;
@@ -1126,11 +1129,11 @@ begin
       mount.Track;
     end;
    end;
+   finally
+     StatusTimer.Enabled:=true;
+   end;
   end
   else StopSequence;
-  finally
-    StatusTimer.Enabled:=true;
-  end;
 except
   AbortSequence;
 end;

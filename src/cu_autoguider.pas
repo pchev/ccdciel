@@ -66,7 +66,7 @@ type
     procedure Calibrate; virtual; abstract;
     procedure Guide(onoff:boolean; recalibrate:boolean=false); virtual; abstract;
     procedure Pause(onoff:boolean); virtual; abstract;
-    procedure Dither(pixel:double; raonly:boolean); virtual; abstract;
+    procedure Dither(pixel:double; raonly:boolean; waittime:double); virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;
     function WaitDithering(maxwait:integer=5):boolean; virtual; abstract;

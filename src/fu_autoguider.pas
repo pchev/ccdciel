@@ -101,6 +101,13 @@ procedure Tf_autoguider.SetDitherOnly(value:boolean);
 begin
    panel3.Visible:=not value;
    BtnGuide.Visible:=panel3.Visible;
+   if value then begin
+     BtnDither.Left:=0;
+   end
+   else begin
+     BtnDither.Left:=BtnCal.Left;
+   end;
+
 end;
 
 function  Tf_autoguider.GetDitherOnly: boolean;

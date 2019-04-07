@@ -2968,6 +2968,7 @@ begin
   UseTcpServer:=config.GetValue('/Log/UseTcpServer',false);
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
+  DitherWaitTime:=config.GetValue('/Autoguider/Dither/WaitTime',5);
   SettlePixel:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
@@ -5197,7 +5198,7 @@ end;
 
 Procedure Tf_main.AutoguiderDitherClick(Sender: TObject);
 begin
- autoguider.Dither(DitherPixel, DitherRAonly);
+ autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
 end;
 
 Procedure Tf_main.AutoguiderConnect(Sender: TObject);
@@ -5737,6 +5738,7 @@ begin
    f_option.LinGuiderPort.Text:=config.GetValue('/Autoguider/LinGuiderPort','5656');
    f_option.DitherPixel.Value:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
    f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
+   f_option.DitherWaitTime.Value:=config.GetValue('/Autoguider/Dither/WaitTime',5);
    f_option.SettlePixel.Value:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
    f_option.SettleMinTime.Value:=config.GetValue('/Autoguider/Settle/MinTime',5);
    f_option.SettleMaxTime.Value:=config.GetValue('/Autoguider/Settle/MaxTime',30);
@@ -5969,6 +5971,7 @@ begin
      config.SetValue('/Autoguider/LinGuiderPort',f_option.LinGuiderPort.Text);
      config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Value);
      config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
+     config.SetValue('/Autoguider/Dither/WaitTime',f_option.DitherWaitTime.Value);
      config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Value);
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Value);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Value);
@@ -6630,7 +6633,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     if autoguider.State=GUIDER_GUIDING then begin
       NewMessage(rsDithering+ellipsis,1);
       StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
-      autoguider.Dither(DitherPixel, DitherRAonly);
+      autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
       autoguider.WaitDithering(SettleMaxTime);
       Wait(1);
     end else begin

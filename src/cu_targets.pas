@@ -846,9 +846,10 @@ end;
 
 function T_Targets.InitTarget:boolean;
 var t: TTarget;
+    p: T_Plan;
     ok,wtok,nd:boolean;
     stw,i,intime,ri,si,ti: integer;
-    hr,hs,ht,tt,dt,newra,newde,appra,appde: double;
+    hr,hs,ht,tt,dt,st,newra,newde,appra,appde,enddelay,chkendtime: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg: string;
 begin
@@ -859,6 +860,7 @@ begin
   FWaitStarting:=true;
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
+    p:=t_plan(t.plan);
     if t.repeatcount=0 then begin
       SkipTarget:=true;
       result:=false;
@@ -896,6 +898,11 @@ begin
           t.de:=newde;
        end;
     end;
+    if (p<>nil)and (p.Count>0) then
+       enddelay:=(p.Steps[0].exposure+180)/3600/24  // first exposure time + 3 minutes for telescope pointing, in days
+    else
+       enddelay:=0;
+
     // compute apparent coord.
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
        appra:=t.ra*15*deg2rad;
@@ -904,6 +911,7 @@ begin
        appra:=appra*rad2deg/15;
        appde:=appde*rad2deg;
     end;
+    st:=frac(FSeqStartTime); // if no coordinates, pivot time is sequence start time
     // adjust start/end from coordinates
     if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
        ObjRise(appra,appde,hr,ri);
@@ -916,6 +924,7 @@ begin
        end;
        ObjSet(appra,appde,hs,si);
        ObjTransit(appra,appde,ht,ti);
+       st:=rmod(ht+12+24,24); // pivot time 12h from transit
        // adjust rise/set time
        // begin at rise
        if t.startrise and (ri=0) then
@@ -930,7 +939,7 @@ begin
                                else dt:=t.startmeridian;
           tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,st/24)=0 then
              t.starttime:=tt/24
           else
              t.starttime:=hr/24;
@@ -942,13 +951,16 @@ begin
                              else dt:=t.endmeridian;
           tt:=rmod(ht+dt+24,24);
           // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,0.5)=0 then
+          if InTimeInterval(tt/24,hr/24,hs/24,st/24)=0 then
              t.endtime:=tt/24
           else
              t.endtime:=hs/24;
        end;
     end;
-    intime:=InTimeInterval(frac(now),t.starttime,t.endtime,frac(FSeqStartTime));
+    // let time for the first exposure to run
+    chkendtime:=rmod(t.endtime-enddelay+1,1);
+    // test if in time interval
+    intime:=InTimeInterval(frac(now),t.starttime,chkendtime,st/24);
     // test if skiped
     if t.skip then begin
       skipmsg:='';
@@ -960,7 +972,7 @@ begin
         end;
       end;
       if (intime<=0) and (t.endtime>=0) then begin
-        SecondsToWait(t.endtime,true,stw,nd);
+        SecondsToWait(chkendtime,true,stw,nd);
         if stw<60 then begin
           SkipTarget:=true;
           skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
@@ -998,8 +1010,9 @@ begin
       end;
     end;
     if (intime<=0) and (t.endtime>=0) then begin
-       SecondsToWait(t.endtime,true,stw,nd);
+       SecondsToWait(chkendtime,true,stw,nd);
        if stw>60 then begin
+          SecondsToWait(t.endtime,true,stw,nd);
           msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 3);
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
@@ -1010,8 +1023,8 @@ begin
        end;
     end;
     // detect autofocus
-    if (t.plan<>nil)and (T_Plan(t.plan).Count>0) then
-       autofocusstart:=T_Plan(t.plan).Steps[0].autofocusstart
+    if (p<>nil)and (p.Count>0) then
+       autofocusstart:=p.Steps[0].autofocusstart
     else
        autofocusstart:=false;
 
@@ -1051,10 +1064,13 @@ begin
     end;
     // check if the plans contain only calibration
     isCalibrationTarget:=true;
-    for i:=0 to T_Plan(t.plan).Count-1 do begin
-       if T_Plan(t.plan).Steps[i].frtype=LIGHT then
-          isCalibrationTarget:=false;
-    end;
+    if (p<>nil) then
+      for i:=0 to p.Count-1 do begin
+         if p.Steps[i].frtype=LIGHT then begin
+            isCalibrationTarget:=false;
+            break;
+         end;
+      end;
     // start mount tracking
     if isCalibrationTarget then mount.AbortMotion
                            else mount.Track;

@@ -42,8 +42,10 @@ type
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
     Debug_Ascom: TCheckBox;
+    GroupBox11: TGroupBox;
     Label119: TLabel;
     Label120: TLabel;
+    Label121: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -54,6 +56,7 @@ type
     PageDitherOnly: TPage;
     Panel2: TPanel;
     Panel3: TPanel;
+    DitherWaitTime: TSpinEdit;
     TemperatureScale: TRadioGroup;
     ReadOutCapture: TComboBox;
     FloatSpinEditMa10: TFloatSpinEdit;
@@ -748,9 +751,12 @@ begin
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;
   TabSheet5.Caption := rsAutoGuiding;
   AutoguiderBox.Caption := rsSoftware;
+  Label120.Caption:='Set the mean dithering range in arcseconds';
   GroupBox5.Caption := rsDithering;
   Label23.Caption := rsPixels;
   DitherRAonly.Caption := rsRAOnly;
+  GroupBox11.Caption := rsSettleTolera;
+  Label121.Caption:=rsWaitTime;
   GroupBox6.Caption := rsSettleTolera;
   Label20.Caption := rsPixels;
   Label21.Caption := rsMinTime;
@@ -1063,6 +1069,7 @@ begin
     Label23.Caption:=rsPixels
   else
     Label23.Caption:='Arcseconds';
+  GroupBox11.Visible:=(AutoguiderBox.ItemIndex=3);
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
   DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0)or(AutoguiderBox.ItemIndex=3);
