@@ -52,10 +52,13 @@ type
     { private declarations }
     FonConnect,FonCalibrate,FonGuide,FonDither: TNotifyEvent;
     procedure SetLang;
+    procedure SetDitherOnly(value:boolean);
+    function  GetDitherOnly: boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    property DitherOnly: boolean read GetDitherOnly write SetDitherOnly;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onGuide: TNotifyEvent read FonGuide write FonGuide;
@@ -92,6 +95,17 @@ begin
   BtnCal.Caption:=rsCalibrate;
   BtnGuide.Caption:=rsGuide;
   BtnDither.Caption:=rsDither;
+end;
+
+procedure Tf_autoguider.SetDitherOnly(value:boolean);
+begin
+   panel3.Visible:=not value;
+   BtnGuide.Visible:=panel3.Visible;
+end;
+
+function  Tf_autoguider.GetDitherOnly: boolean;
+begin
+  result:=not panel3.Visible;
 end;
 
 procedure Tf_autoguider.BtnConnectClick(Sender: TObject);
