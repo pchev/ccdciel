@@ -1049,6 +1049,7 @@ resourcestring
   rsCannotComput2 = 'Cannot compute meridian time';
   rsSearch = 'Search';
   rsWaitTime = 'Wait time';
+  rsMoving = 'Moving';
 
 implementation
 

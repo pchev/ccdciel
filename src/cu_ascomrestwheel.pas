@@ -196,16 +196,24 @@ begin
  result:=true;
  if FStatus<>devConnected then exit;
  try
+ StatusTimer.Enabled:=false;
+ try
    maxcount:=maxtime div waitpoll;
    count:=0;
+   stFilter:=-1;
+   if Assigned(FonFilterChange) then FonFilterChange(stFilter);
    while (V.Get('position').AsInt<0)and(count<maxcount) do begin
       sleep(waitpoll);
       if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
       inc(count);
    end;
    result:=(count<maxcount);
+   if result and Assigned(FonFilterChange) then FonFilterChange(stFilter);
  except
    result:=false;
+ end;
+ finally
+   StatusTimer.Enabled:=true;
  end;
 end;
 

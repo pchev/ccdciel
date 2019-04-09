@@ -4436,7 +4436,15 @@ end;
 procedure Tf_main.FilterChange(n:double);
 var o,f: integer;
 begin
- f:=round(n);
+f:=round(n);
+if f=-1 then begin
+  // wheel moving
+  f:=0;
+  f_filterwheel.Filters.Items[0]:=rsMoving+'...';
+end
+else begin
+  f_filterwheel.Filters.Items[0]:=Filter0;
+end;
 if (f<0)or(f>f_filterwheel.Filters.Items.Count) then begin
    // receive an invalid value, ignore
    NewMessage('Error, receive filter position: '+inttostr(f),1);
