@@ -3819,7 +3819,7 @@ begin
    f_focuser.Position.ShowHint:=True;
    f_focuser.Position.Hint:=rsCurrentFocus+', '+
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-    f_focuser.PosIncr.ItemIndex:=0;
+    f_focuser.PosIncr.ItemIndex:=2;
   end;
   f_focuser.speed.Value:=focuser.Speed;
   f_focuser.timer.Value:=focuser.Timer;
@@ -3828,7 +3828,7 @@ begin
     f_focuser.RelIncr.ShowHint:=True;
     f_focuser.RelIncr.Hint:=rsRelativeIncr+', '+
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-    f_focuser.RelIncr.ItemIndex:=0;
+    f_focuser.RelIncr.ItemIndex:=2;
   end;
   FocuserTemperatureCompensation;
 end;
