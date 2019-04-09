@@ -208,7 +208,10 @@ begin
       inc(count);
    end;
    result:=(count<maxcount);
-   if result and Assigned(FonFilterChange) then FonFilterChange(stFilter);
+   if result and Assigned(FonFilterChange) then begin
+     stFilter:=GetFilterReal;
+     FonFilterChange(stFilter);
+   end;
  except
    result:=false;
  end;
