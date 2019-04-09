@@ -3342,11 +3342,11 @@ object f_option: Tf_option
           Top = 8
           Width = 80
           Constraints.MaxHeight = 28
-          MaxValue = 1
-          MinValue = 1
+          MaxValue = 99
+          MinValue = 0.1
           ParentFont = False
           TabOrder = 1
-          Value = 0
+          Value = 0.1
         end
       end
       object GroupBox13: TGroupBox
@@ -3421,7 +3421,7 @@ object f_option: Tf_option
         Height = 107
         Top = 77
         Width = 452
-        PageIndex = 0
+        PageIndex = 3
         TabOrder = 4
         object PagePHD: TPage
           object GroupBox3: TGroupBox
@@ -3557,12 +3557,14 @@ object f_option: Tf_option
         object PageDitherOnly: TPage
           object Label120: TLabel
             Left = 16
-            Height = 19
+            Height = 80
             Top = 16
-            Width = 262
-            Caption = 'Set the mean dithering range in arcseconds '
+            Width = 424
+            AutoSize = False
+            Caption = 'Set the mean dithering pulse duration in seconds '
             ParentColor = False
             ParentFont = False
+            WordWrap = True
           end
         end
       end

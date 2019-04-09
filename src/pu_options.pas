@@ -751,7 +751,7 @@ begin
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;
   TabSheet5.Caption := rsAutoGuiding;
   AutoguiderBox.Caption := rsSoftware;
-  Label120.Caption:='Set the mean dithering range in arcseconds';
+  Label120.Caption:=rsSetTheMeanDi;
   GroupBox5.Caption := rsDithering;
   Label23.Caption := rsPixels;
   DitherRAonly.Caption := rsRAOnly;
@@ -1068,7 +1068,7 @@ begin
   if (AutoguiderBox.ItemIndex<2) then
     Label23.Caption:=rsPixels
   else
-    Label23.Caption:='Arcseconds';
+    Label23.Caption:=rsSeconds;
   GroupBox11.Visible:=(AutoguiderBox.ItemIndex=3);
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);

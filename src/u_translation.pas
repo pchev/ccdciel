@@ -1050,6 +1050,7 @@ resourcestring
   rsSearch = 'Search';
   rsWaitTime = 'Wait time';
   rsMoving = 'Moving';
+  rsSetTheMeanDi = 'Set the mean dithering guide pulse duration in seconds that is send to the mount.';
 
 implementation
 
