@@ -163,40 +163,33 @@ end;
 end;
 
 procedure T_autoguider_dither.Dither(pixel:double; raonly:boolean; waittime:double);
-var speed,dist,timeend: double;
+var duration,timeend,maxduration,tde,cosde: double;
     direction,durationra,durationdec:integer;
 begin
-  // Here the pixel parameter represent the mean move in arc-seconds.
+  // Here the pixel parameter represent the mean pulse duration.
   if (FMount<>nil)and(FMount.Status=devConnected)and(FMount.Tracking) then begin
      // set as mean value, need max value
-     pixel:=2*pixel;
-     // Try to set 1x sidereal rate
-     FMount.GuideRateRa:=siderealrate/3600;
-     // RA Move
-     speed:=abs(FMount.GuideRateRa)*3600;  // arcsec/sec
-     if speed>0 then begin
-       dist:=(Random(round(2*pixel*1000))-round(pixel*1000))/1000; // random in +/- pixel arcsec
-       if dist>0 then direction:=2  // east
-                 else direction:=3; // west
-       durationra:=max(50,round(1000*abs(dist)/speed));  // millisecond
-       Fmount.PulseGuide(direction,durationra);
-     end
+     maxduration:=2*pixel;
+     // RA move
+     tde:=FMount.Dec;
+     if abs(tde)<90 then
+        cosde:=cos(deg2rad*tde)
      else
-       DisplayMessage('Cannot get mount RA guide rate');
+        cosde:=1;
+     duration:=(Random(round(2*maxduration*1000))-round(maxduration*1000))/1000; // random in +/- maxduration
+     if duration>0 then direction:=2  // east
+                   else direction:=3; // west
+     if cosde<>0 then
+        duration:=duration/cosde;
+     durationra:=min(30000,max(50,round(1000*abs(duration))));  // millisecond, maximum 30 seconds
+     Fmount.PulseGuide(direction,durationra);
      if not raonly then begin
-        // Try to set 1x sidereal rate
-        FMount.GuideRateDe:=siderealrate/3600;
-        // DEC Move
-        speed:=abs(FMount.GuideRateDe)*3600;  // arcsec/sec
-        if speed>0 then begin
-          dist:=(Random(round(2*pixel*1000))-round(pixel*1000))/1000; // random in +/- pixel arcsec
-          if dist>0 then direction:=0  // north
-                    else direction:=1; // south
-          durationdec:=max(50,round(1000*abs(dist)/speed));  // millisecond
-          Fmount.PulseGuide(direction,durationdec);
-        end
-        else
-          DisplayMessage('Cannot get mount DEC guide rate');
+        // DEC move
+        duration:=(Random(round(2*maxduration*1000))-round(maxduration*1000))/1000; // random in +/- maxduration
+        if duration>0 then direction:=0  // north
+                      else direction:=1; // south
+        durationdec:=min(30000,max(50,round(1000*abs(duration))));  // millisecond
+        Fmount.PulseGuide(direction,durationdec);
      end;
      // wait for move completed
      timeend:=now+((max(durationra,durationdec)+10)/secperday);

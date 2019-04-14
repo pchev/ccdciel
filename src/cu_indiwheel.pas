@@ -312,8 +312,11 @@ end;
 
 procedure T_indiwheel.NewNumber(nvp: INumberVectorProperty);
 begin
-  if nvp=WheelSlot then begin
-     if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
+  if (nvp=WheelSlot) and Assigned(FonFilterChange) then begin
+     if nvp.s=IPS_BUSY then
+       FonFilterChange(-1) // report moving
+     else
+       FonFilterChange(Slot.value);
   end;
 end;
 
@@ -351,16 +354,22 @@ if (WheelSlot<>nil)and(num>0)and(Slot.value<>num) then begin;
   msg(Format(rsSetFilterPos, [inttostr(num)]));
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
+  if Assigned(FonFilterChange) then FonFilterChange(-1);
   indiclient.WaitBusy(WheelSlot);
+  if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
 end;
 end;
 
 function  T_indiwheel.GetFilter:integer;
 begin
 if WheelSlot<>nil then begin;
-  result:=round(Slot.value);
-  if result>Slot.max then result:=round(Slot.max);
-  if result<Slot.min then result:=round(Slot.min);
+  if WheelSlot.s=IPS_BUSY then
+     result:=-1 // report moving
+  else begin
+     result:=round(Slot.value);
+     if result>Slot.max then result:=round(Slot.max);
+     if result<Slot.min then result:=round(Slot.min);
+  end;
 end
 else result:=0;
 end;

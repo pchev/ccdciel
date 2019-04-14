@@ -3819,7 +3819,7 @@ begin
    f_focuser.Position.ShowHint:=True;
    f_focuser.Position.Hint:=rsCurrentFocus+', '+
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-    f_focuser.PosIncr.ItemIndex:=0;
+    f_focuser.PosIncr.ItemIndex:=2;
   end;
   f_focuser.speed.Value:=focuser.Speed;
   f_focuser.timer.Value:=focuser.Timer;
@@ -3828,7 +3828,7 @@ begin
     f_focuser.RelIncr.ShowHint:=True;
     f_focuser.RelIncr.Hint:=rsRelativeIncr+', '+
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
-    f_focuser.RelIncr.ItemIndex:=0;
+    f_focuser.RelIncr.ItemIndex:=2;
   end;
   FocuserTemperatureCompensation;
 end;
@@ -4436,7 +4436,15 @@ end;
 procedure Tf_main.FilterChange(n:double);
 var o,f: integer;
 begin
- f:=round(n);
+f:=round(n);
+if f=-1 then begin
+  // wheel moving
+  f:=0;
+  f_filterwheel.Filters.Items[0]:=rsMoving+'...';
+end
+else begin
+  f_filterwheel.Filters.Items[0]:=Filter0;
+end;
 if (f<0)or(f>f_filterwheel.Filters.Items.Count) then begin
    // receive an invalid value, ignore
    NewMessage('Error, receive filter position: '+inttostr(f),1);
@@ -4941,7 +4949,7 @@ begin
  f_visu.Zoom:=SaveZoom;
  ImgZoom:=f_visu.Zoom;
  f_starprofile.FindStar:=false; {deselect the star so a new run will search for the new star position}
- StartPreviewExposure(nil);
+ StartPreviewExposure(self);
  end;
 end;
 
@@ -6403,6 +6411,10 @@ var e: double;
 begin
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
+  // be sure mount is tracking, but not repeat after every frame
+  if (Sender<>nil) then
+    mount.Track;
+  // check exposure time
   e:=f_preview.Exposure;
   if e<0 then begin
     NewMessage(Format(rsInvalidExpos, [f_preview.ExpTime.Text]),1);
@@ -8082,7 +8094,7 @@ begin
      if not f_preview.Loop then f_preview.Loop:=true;
      if not f_preview.Running then begin
        f_preview.Running:=true;
-       StartPreviewExposure(nil);
+       StartPreviewExposure(self);
      end;
      NewMessage(rsFocusAidStar,1);
   end
@@ -8639,7 +8651,7 @@ begin
   if not f_preview.Loop then f_preview.Loop:=true;
   if not f_preview.Running then begin
      f_preview.Running:=true;
-     StartPreviewExposure(nil);
+     StartPreviewExposure(self);
   end;
   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
   if f_starprofile.PreFocusPos>0 then
