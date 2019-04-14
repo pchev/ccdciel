@@ -3778,3 +3778,19 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+#: u_translation:rswaittime
+msgid "Wait time"
+msgstr ""
+
+#: u_translation:rspulseduratio
+msgid "Pulse duration"
+msgstr ""
+
+#: u_translation:rsnoautoguidin
+msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
+msgstr ""
+
+#: u_translation:rssetthemeandi
+msgid "Set the mean dithering pulse duration in seconds."
+msgstr ""
+

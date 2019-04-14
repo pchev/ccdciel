@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-04-03 16:06+0000\n"
+"POT-Creation-Date: 2019-04-14 10:39+0000\n"
 "PO-Revision-Date: 2019-01-22 09:34+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-04-03 16:12+0000\n"
+"X-Launchpad-Export-Date: 2019-04-14 10:48+0000\n"
 "X-Generator: Launchpad (build 18920)\n"
 
 #: u_translation.rs32bitdriver
@@ -1852,6 +1852,10 @@ msgstr "Nessuna stella di riferimento trovata per effettuare la sommatoria"
 msgid "No astronomical twilight at this location today"
 msgstr ""
 
+#: u_translation.rsnoautoguidin
+msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
+msgstr ""
+
 #: u_translation.rsnobacklash
 msgid "No backlash"
 msgstr "Nessun gioco"
@@ -2294,6 +2298,10 @@ msgstr "Cartella programma "
 
 #: u_translation.rsprotocol
 msgid "Protocol"
+msgstr ""
+
+#: u_translation.rspulseduratio
+msgid "Pulse duration"
 msgstr ""
 
 #: u_translation.rsquality
@@ -2826,6 +2834,10 @@ msgstr ""
 
 #: u_translation.rssettemperatu3
 msgid "Set temperature ramp finished"
+msgstr ""
+
+#: u_translation.rssetthemeandi
+msgid "Set the mean dithering pulse duration in seconds."
 msgstr ""
 
 #: u_translation.rssettletolera
@@ -3714,6 +3726,10 @@ msgstr ""
 
 #: u_translation.rswaitstart
 msgid "Wait start"
+msgstr ""
+
+#: u_translation.rswaittime
+msgid "Wait time"
 msgstr ""
 
 #: u_translation.rswaittostarta

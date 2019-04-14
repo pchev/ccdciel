@@ -1049,7 +1049,6 @@ resourcestring
   rsCannotComput2 = 'Cannot compute meridian time';
   rsSearch = 'Search';
   rsWaitTime = 'Wait time';
-  rsMoving = 'Moving';
   rsPulseDuratio = 'Pulse duration';
   rsNoAutoGuidin = 'No auto-guiding, only dither by sending pulse guide directly to the mount.';
   rsSetTheMeanDi = 'Set the mean dithering pulse duration in seconds.';
