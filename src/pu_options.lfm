@@ -56,11 +56,11 @@ object f_option: Tf_option
     Height = 500
     Top = 0
     Width = 530
-    ActivePage = TabSheet5
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 10
+    TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -80,18 +80,18 @@ object f_option: Tf_option
       end
       object Label1: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 46
-        Width = 99
+        Width = 87
         Caption = 'Capture folder'
         ParentColor = False
         ParentFont = False
       end
       object Logtofile: TCheckBox
         Left = 8
-        Height = 23
+        Height = 21
         Top = 392
-        Width = 184
+        Width = 165
         Caption = 'Log all messages to file '
         ParentFont = False
         ParentShowHint = False
@@ -128,9 +128,9 @@ object f_option: Tf_option
       end
       object Label99: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 76
-        Width = 118
+        Width = 104
         Caption = 'Temporary folder'
         ParentColor = False
         ParentFont = False
@@ -156,8 +156,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 260
-          ClientWidth = 458
+          ClientHeight = 233
+          ClientWidth = 452
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 390
@@ -202,8 +202,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 260
-          ClientWidth = 458
+          ClientHeight = 233
+          ClientWidth = 452
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 390
@@ -249,18 +249,18 @@ object f_option: Tf_option
       end
       object UseTcpServer: TCheckBox
         Left = 8
-        Height = 23
+        Height = 21
         Top = 424
-        Width = 398
+        Width = 356
         Caption = 'Allow to get program status from TCP/IP internal server'
         ParentFont = False
         TabOrder = 7
       end
       object Label18: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 10
-        Width = 64
+        Width = 60
         Caption = 'Language'
         ParentColor = False
         ParentFont = False
@@ -280,9 +280,9 @@ object f_option: Tf_option
       end
       object Debug_Ascom: TCheckBox
         Left = 312
-        Height = 23
+        Height = 21
         Top = 396
-        Width = 160
+        Width = 143
         Caption = 'Verbose ASCOM log'
         ParentFont = False
         TabOrder = 9
@@ -353,7 +353,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 250
         ParentFont = False
         TabOrder = 3
@@ -436,7 +436,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 250
         ParentFont = False
         TabOrder = 4
@@ -745,7 +745,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 23
+          ClientHeight = 41
           ClientWidth = 235
           Columns = 3
           Items.Strings = (
@@ -1012,8 +1012,8 @@ object f_option: Tf_option
             Top = 30
             Width = 328
             BevelOuter = bvNone
-            ClientHeight = 26
-            ClientWidth = 324
+            ClientHeight = 30
+            ClientWidth = 328
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1697,8 +1697,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            164
-            164
+            155
+            155
           )
         end
       end
@@ -3328,7 +3328,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object DitherRAonly: TCheckBox
-          Left = 96
+          Left = 120
           Height = 21
           Top = 45
           Width = 69
@@ -3337,7 +3337,7 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object DitherPixel: TFloatSpinEdit
-          Left = 96
+          Left = 120
           Height = 28
           Top = 8
           Width = 80
@@ -3347,6 +3347,15 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 1
           Value = 0.1
+        end
+        object Label122: TLabel
+          Left = 206
+          Height = 19
+          Top = 11
+          Width = 6
+          Caption = 's'
+          ParentColor = False
+          ParentFont = False
         end
       end
       object GroupBox13: TGroupBox
@@ -3421,7 +3430,7 @@ object f_option: Tf_option
         Height = 107
         Top = 77
         Width = 452
-        PageIndex = 3
+        PageIndex = 0
         TabOrder = 4
         object PagePHD: TPage
           object GroupBox3: TGroupBox

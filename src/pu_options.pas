@@ -46,6 +46,7 @@ type
     Label119: TLabel;
     Label120: TLabel;
     Label121: TLabel;
+    Label122: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -751,9 +752,10 @@ begin
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;
   TabSheet5.Caption := rsAutoGuiding;
   AutoguiderBox.Caption := rsSoftware;
-  Label120.Caption:=rsSetTheMeanDi;
+  Label120.Caption:= rsNoAutoGuidin+crlf+rsSetTheMeanDi;
   GroupBox5.Caption := rsDithering;
   Label23.Caption := rsPixels;
+  Label122.Caption:='';
   DitherRAonly.Caption := rsRAOnly;
   GroupBox11.Caption := rsSettleTolera;
   Label121.Caption:=rsWaitTime;
@@ -1065,10 +1067,14 @@ procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
 begin
   Notebook3.PageIndex:=AutoguiderBox.ItemIndex;
   groupbox5.Visible:=(AutoguiderBox.ItemIndex<2)or(AutoguiderBox.ItemIndex=3);
-  if (AutoguiderBox.ItemIndex<2) then
-    Label23.Caption:=rsPixels
-  else
-    Label23.Caption:=rsSeconds;
+  if (AutoguiderBox.ItemIndex<2) then begin
+    Label23.Caption:=rsPixels;
+    Label122.Caption:='';
+  end
+  else begin
+    Label23.Caption:=rsPulseDuratio;
+    Label122.Caption:=rsS;
+  end;
   GroupBox11.Visible:=(AutoguiderBox.ItemIndex=3);
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
