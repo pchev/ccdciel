@@ -1052,6 +1052,7 @@ resourcestring
   rsPulseDuratio = 'Pulse duration';
   rsNoAutoGuidin = 'No auto-guiding, only dither by sending pulse guide directly to the mount.';
   rsSetTheMeanDi = 'Set the mean dithering pulse duration in seconds.';
+  rsDitherOnly = 'Dither only';
 
 implementation
 

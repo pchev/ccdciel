@@ -801,6 +801,7 @@ begin
   MeridianOption.Items[1]:=rsAutomaticFli;
   MeridianOption.Items[2]:=rsAbort;
   AutoguiderBox.Items[2]:=rsNone2;
+  AutoguiderBox.Items[3]:=rsDitherOnly;
   TabSheet13.Caption := rsWeatherStati;
   Label118.Caption:=rsPauseSequenc;
   Label116.Caption:=rsRestartAfter2;

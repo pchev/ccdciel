@@ -3794,3 +3794,7 @@ msgstr ""
 msgid "Set the mean dithering pulse duration in seconds."
 msgstr ""
 
+#: u_translation:rsditheronly
+msgid "Dither only"
+msgstr ""
+

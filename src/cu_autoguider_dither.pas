@@ -65,7 +65,7 @@ Constructor T_autoguider_dither.Create ;
 begin
   inherited Create;
   FAutoguiderType:=agDITHER;
-  FStatus:='Dither only';
+  FStatus:=rsDitherOnly;
   FState:=GUIDER_DISCONNECTED;
   FRunning:=true;
   StatusTimer:=TTimer.Create(nil);
