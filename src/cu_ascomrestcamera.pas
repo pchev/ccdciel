@@ -222,6 +222,7 @@ begin
        msg('Error: cannot get frame size Y from camera: ' + E.Message,0);
      end;
     end;
+    if debug_ascom then msg('Camera size='+inttostr(FCameraXSize)+'/'+inttostr(FCameraYSize));
     try
      FMaxBinX:=V.Get('maxbinx').AsInt;
     except
@@ -671,7 +672,6 @@ begin
 end;
 
 procedure T_ascomrestcamera.GetFrameReal(out x,y,width,height: integer);
-var Cx,Cy,Cwidth,Cheight: integer;
 begin
    if FStatus<>devConnected then exit;
    try
@@ -679,28 +679,7 @@ begin
    y      := V.Get('starty').AsInt;
    width  := V.Get('numx').AsInt;
    height := V.Get('numy').AsInt;
-   // Consistency check for buggy qhy drivers
-   Cx:=max(x,0);
-   Cy:=max(y,0);
-   Cwidth:=min(width,FCameraXSize div FBinX);
-   Cheight:=min(height,FCameraYSize div FBinY);
-   if (Cx<>x)or(Cy<>y)or(Cwidth<>width)or(Cheight<>height) then  begin
-     msg('Correct driver wrong frame size: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),1);
-     msg('Set new value : '+inttostr(Cx)+','+inttostr(Cy)+'/'+inttostr(Cwidth)+'x'+inttostr(Cheight),1);
-     V.Put('StartX',Cx);
-     V.Put('StartY',Cy);
-     V.Put('NumX',Cwidth);
-     V.Put('NumY',Cheight);
-     x:=Cx;
-     y:=Cy;
-     width:=Cwidth;
-     height:=Cheight;
-   end;
-   stX      := x;
-   stY      := y;
-   stWidth  := width;
-   stHeight := height;
-   //
+   if debug_ascom then msg('Current frame: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),3);
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
    end;

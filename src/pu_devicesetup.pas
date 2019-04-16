@@ -1086,13 +1086,13 @@ begin
     V:=Unassigned;
     case TButton(Sender).Tag of
       1 : AscomCamera.Text:=string(dev);
-      2 : AscomWheel.Text:=string(dev);
-      3 : AscomFocuser.Text:=string(dev);
-      4 : AscomMount.Text:=string(dev);
-      5 : AscomRotator.Text:=string(dev);
-      6 : AscomWeather.Text:=string(dev);
-      7 : AscomSafety.Text:=string(dev);
-      8 : AscomDome.Text:=string(dev);
+      2 : begin AscomWheel.Text:=string(dev); DeviceFilterWheel.Checked:=true; end;
+      3 : begin AscomFocuser.Text:=string(dev); DeviceFocuser.Checked:=true; end;
+      4 : begin AscomMount.Text:=string(dev); DeviceMount.Checked:=true; end;
+      5 : begin AscomRotator.Text:=string(dev); DeviceRotator.Checked:=true; end;
+      6 : begin AscomWeather.Text:=string(dev); DeviceWeather.Checked:=true; end;
+      7 : begin AscomSafety.Text:=string(dev); DeviceSafety.Checked:=true; end;
+      8 : begin AscomDome.Text:=string(dev); DeviceDome.Checked:=true; end;
     end;
   except
     on E: Exception do begin
@@ -1477,8 +1477,10 @@ begin
        if CameraIndiDevice.Items[i]=camsavedev then CameraIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=2) then begin
-    if WheelIndiDevice.Items.Count>0 then
-       WheelIndiDevice.ItemIndex:=0
+    if WheelIndiDevice.Items.Count>0 then begin
+       WheelIndiDevice.ItemIndex:=0;
+       DeviceFilterWheel.Checked:=true;
+    end
     else begin
        WheelIndiDevice.Items.Add(wheelsavedev);
        WheelMsg.Caption:=rsNoDevice;
@@ -1487,8 +1489,10 @@ begin
        if WheelIndiDevice.Items[i]=wheelsavedev then WheelIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=3) then begin
-    if FocuserIndiDevice.Items.Count>0 then
-       FocuserIndiDevice.ItemIndex:=0
+    if FocuserIndiDevice.Items.Count>0 then begin
+       FocuserIndiDevice.ItemIndex:=0;
+       DeviceFocuser.Checked:=true;
+    end
     else begin
        FocuserIndiDevice.Items.Add(focusersavedev);
        FocuserMsg.Caption:=rsNoDevice;
@@ -1497,8 +1501,10 @@ begin
        if FocuserIndiDevice.Items[i]=focusersavedev then FocuserIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=4) then begin
-    if RotatorIndiDevice.Items.Count>0 then
-       RotatorIndiDevice.ItemIndex:=0
+    if RotatorIndiDevice.Items.Count>0 then begin
+       RotatorIndiDevice.ItemIndex:=0;
+       DeviceRotator.Checked:=true;
+    end
     else begin
        RotatorIndiDevice.Items.Add(rotatorsavedev);
        RotatorMsg.Caption:=rsNoDevice;
@@ -1507,8 +1513,10 @@ begin
        if RotatorIndiDevice.Items[i]=rotatorsavedev then RotatorIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=5) then begin
-    if MountIndiDevice.Items.Count>0 then
-       MountIndiDevice.ItemIndex:=0
+    if MountIndiDevice.Items.Count>0 then begin
+       MountIndiDevice.ItemIndex:=0;
+       DeviceMount.Checked:=true;
+    end
     else begin
        MountIndiDevice.Items.Add(mountsavedev);
        MountMsg.Caption:=rsNoDevice;
@@ -1517,8 +1525,10 @@ begin
        if MountIndiDevice.Items[i]=mountsavedev then MountIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=6) then begin
-    if DomeIndiDevice.Items.Count>0 then
-       DomeIndiDevice.ItemIndex:=0
+    if DomeIndiDevice.Items.Count>0 then begin
+       DomeIndiDevice.ItemIndex:=0;
+       DeviceDome.Checked:=true;
+    end
     else begin
        DomeIndiDevice.Items.Add(domesavedev);
        DomeMsg.Caption:=rsNoDevice;
@@ -1527,8 +1537,10 @@ begin
        if DomeIndiDevice.Items[i]=domesavedev then DomeIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=7) then begin
-    if WeatherIndiDevice.Items.Count>0 then
-       WeatherIndiDevice.ItemIndex:=0
+    if WeatherIndiDevice.Items.Count>0 then begin
+       WeatherIndiDevice.ItemIndex:=0;
+       DeviceWeather.Checked:=true;
+    end
     else begin
        WeatherIndiDevice.Items.Add(weathersavedev);
        WeatherMsg.Caption:=rsNoDevice;
@@ -1537,8 +1549,10 @@ begin
        if WeatherIndiDevice.Items[i]=weathersavedev then WeatherIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=8) then begin
-    if SafetyIndiDevice.Items.Count>0 then
-       SafetyIndiDevice.ItemIndex:=0
+    if SafetyIndiDevice.Items.Count>0 then begin
+       SafetyIndiDevice.ItemIndex:=0;
+       DeviceSafety.Checked:=true;
+    end
     else begin
        SafetyIndiDevice.Items.Add(safetysavedev);
        SafetyMsg.Caption:=rsNoDevice;
@@ -1547,8 +1561,10 @@ begin
        if SafetyIndiDevice.Items[i]=safetysavedev then SafetyIndiDevice.ItemIndex:=i;
   end;
   if (GetDeviceType=9) then begin
-    if WatchdogIndiDevice.Items.Count>0 then
-       WatchdogIndiDevice.ItemIndex:=0
+    if WatchdogIndiDevice.Items.Count>0 then begin
+       WatchdogIndiDevice.ItemIndex:=0;
+       DeviceWatchdog.Checked:=true;
+    end
     else begin
        WatchdogIndiDevice.Items.Add(watchdogsavedev);
        WatchdogMsg.Caption:=rsNoDevice;

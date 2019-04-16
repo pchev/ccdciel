@@ -1492,8 +1492,7 @@ begin
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
 
-   aInt:=INDI;
-   if aInt= INDI then begin
+   if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
      watchdog.onMsg:=@NewMessage;
      watchdog.onDeviceMsg:=@DeviceMessage;
@@ -4440,7 +4439,7 @@ f:=round(n);
 if f=-1 then begin
   // wheel moving
   f:=0;
-  f_filterwheel.Filters.Items[0]:=rsMoving+'...';
+  f_filterwheel.Filters.Items[0]:=rsRotate+'...';
 end
 else begin
   f_filterwheel.Filters.Items[0]:=Filter0;
