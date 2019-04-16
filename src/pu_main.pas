@@ -1492,8 +1492,7 @@ begin
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
 
-   aInt:=INDI;
-   if aInt= INDI then begin
+   if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
      watchdog.onMsg:=@NewMessage;
      watchdog.onDeviceMsg:=@DeviceMessage;
