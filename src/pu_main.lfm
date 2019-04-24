@@ -9,6 +9,7 @@ object f_main: Tf_main
   ClientWidth = 808
   Constraints.MinHeight = 455
   Constraints.MinWidth = 808
+  DesignTimePPI = 75
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -20,18 +21,18 @@ object f_main: Tf_main
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
-    Height = 436
+    Height = 440
     Top = 0
     Width = 608
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 436
+    ClientHeight = 440
     ClientWidth = 608
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 430
+      Height = 434
       Top = 3
       Width = 3
       Align = alLeft
@@ -70,7 +71,7 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 3
-      Height = 430
+      Height = 434
       Top = 3
       Width = 605
       Align = alClient
@@ -84,7 +85,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 3
-      Top = 433
+      Top = 437
       Width = 608
       Align = alBottom
       AutoSize = True
@@ -104,8 +105,8 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 19
-    Top = 436
+    Height = 15
+    Top = 440
     Width = 808
     BorderWidth = 1
     Panels = <    
@@ -132,18 +133,18 @@ object f_main: Tf_main
   end
   object PanelRight: TPanel
     Left = 608
-    Height = 436
+    Height = 440
     Top = 0
     Width = 200
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 436
+    ClientHeight = 440
     ClientWidth = 200
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 404
+      Height = 408
       Top = 32
       Width = 200
       ActivePage = PageConnect
@@ -156,13 +157,13 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 400
+        ClientHeight = 404
         ClientWidth = 190
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 400
+          Height = 404
           Top = 0
           Width = 190
           Align = alClient
@@ -180,7 +181,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 400
+        ClientHeight = 404
         ClientWidth = 190
         ImageIndex = 1
         ParentFont = False
@@ -204,7 +205,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 400
+        ClientHeight = 404
         ClientWidth = 190
         ImageIndex = 2
         ParentFont = False
@@ -228,7 +229,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 400
+        ClientHeight = 404
         ClientWidth = 190
         ImageIndex = 3
         ParentFont = False
@@ -252,7 +253,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 400
+        ClientHeight = 404
         ClientWidth = 190
         ImageIndex = 4
         ParentFont = False
@@ -458,12 +459,52 @@ object f_main: Tf_main
       object N4: TMenuItem
         Caption = '-'
       end
-      object MenuViewhdr: TMenuItem
-        Caption = 'View header'
-        OnClick = MenuViewhdrClick
+      object MenuAscomCameraSetup: TMenuItem
+        Tag = 1
+        Caption = 'MenuAscomCameraSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomWheelSetup: TMenuItem
+        Tag = 2
+        Caption = 'MenuAscomWheelSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomFocuserSetup: TMenuItem
+        Tag = 3
+        Caption = 'MenuAscomFocuserSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomMountSetup: TMenuItem
+        Tag = 4
+        Caption = 'MenuAscomMountSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomRotatorSetup: TMenuItem
+        Tag = 5
+        Caption = 'MenuAscomRotatorSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomWeatherSetup: TMenuItem
+        Tag = 6
+        Caption = 'MenuAscomWeatherSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomSafetySetup: TMenuItem
+        Tag = 7
+        Caption = 'MenuAscomSafetySetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomDomeSetup: TMenuItem
+        Tag = 8
+        Caption = 'MenuAscomDomeSetup'
+        OnClick = MenuAscomSetupClick
       end
       object N2: TMenuItem
         Caption = '-'
+      end
+      object MenuViewhdr: TMenuItem
+        Caption = 'View header'
+        OnClick = MenuViewhdrClick
       end
     end
     object MenuItem4: TMenuItem
