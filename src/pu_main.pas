@@ -27,7 +27,7 @@ interface
 
 uses
   {$ifdef mswindows}
-  ShlObj,
+  ShlObj, comobj,
   {$endif}
   {$ifdef unix}
   BaseUnix,
@@ -86,6 +86,14 @@ type
     MenuDarkFile: TMenuItem;
     MenuDarkClear: TMenuItem;
     MenuItem14: TMenuItem;
+    MenuAscomCameraSetup: TMenuItem;
+    MenuAscomWheelSetup: TMenuItem;
+    MenuAscomFocuserSetup: TMenuItem;
+    MenuAscomMountSetup: TMenuItem;
+    MenuAscomRotatorSetup: TMenuItem;
+    MenuAscomWeatherSetup: TMenuItem;
+    MenuAscomSafetySetup: TMenuItem;
+    MenuAscomDomeSetup: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
     MenuViewDome: TMenuItem;
@@ -277,6 +285,7 @@ type
     procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MeasureTimerTimer(Sender: TObject);
     procedure MenuApplyBPMClick(Sender: TObject);
+    procedure MenuAscomSetupClick(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
     procedure MenuAutoguiderConnectClick(Sender: TObject);
     procedure MenuAutoguiderDitherClick(Sender: TObject);
@@ -1580,6 +1589,14 @@ begin
    MenuItem2.Caption := rsEdit;
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
    MenuIndiSettings.Caption := rsINDISettings;
+   MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
+   MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
+   MenuAscomFocuserSetup.Caption:='ASCOM '+rsFocuser+blank+rsSetup;
+   MenuAscomMountSetup.Caption:='ASCOM '+rsMount+blank+rsSetup;
+   MenuAscomRotatorSetup.Caption:='ASCOM '+rsRotator+blank+rsSetup;
+   MenuAscomWeatherSetup.Caption:='ASCOM '+rsWeatherStati+blank+rsSetup;
+   MenuAscomSafetySetup.Caption:='ASCOM '+rsSafetyMonito+blank+rsSetup;
+   MenuAscomDomeSetup.Caption:='ASCOM '+rsDome+blank+rsSetup;
    MenuViewhdr.Caption := rsViewHeader;
    MenuItem4.Caption := rsTools;
    MenuViewConnection.Caption := rsConnection;
@@ -1835,6 +1852,19 @@ begin
   WantWeather:=config.GetValue('/Devices/Weather',false);
   WantSafety:=config.GetValue('/Devices/Safety',false);
   WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
+
+  MenuAscomCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOM);
+  MenuAscomWheelSetup.Visible:=WantWheel and (wheel.WheelInterface=ASCOM);
+  MenuAscomFocuserSetup.Visible:=WantFocuser and (focuser.FocuserInterface=ASCOM);
+  MenuAscomMountSetup.Visible:=WantMount and (mount.MountInterface=ASCOM);
+  MenuAscomRotatorSetup.Visible:=WantRotator and (rotator.RotatorInterface=ASCOM);
+  MenuAscomWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOM);
+  MenuAscomSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOM);
+  MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
+
+  MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
+                             (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
+                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI);
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
@@ -7427,6 +7457,83 @@ begin
   end;
   FormPos(f_indigui,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_indigui.Show;
+end;
+
+procedure Tf_main.MenuAscomSetupClick(Sender: TObject);
+{$ifdef mswindows}
+var
+  n: integer;
+  V: variant;
+  dev: WideString;
+  buf: string;
+  IsConnected: boolean;
+{$endif}
+begin
+{$ifdef mswindows}
+  // check no capture is running
+  if  (f_sequence.Running or f_preview.Running or f_capture.Running or autofocusing or learningvcurve) then begin
+    ShowMessage('Cannot open the device configuration now!');
+    exit;
+  end;
+  // check device
+  n:=TButton(Sender).Tag;
+  NewMessage('config: '+inttostr(n));
+  case n of
+    1 : begin dev:=widestring(config.GetValue('/ASCOMcamera/Device',''));IsConnected:=(camera<>nil)and(camera.Status<>devDisconnected); end;
+    2 : begin dev:=widestring(config.GetValue('/ASCOMwheel/Device',''));IsConnected:=(wheel<>nil)and(wheel.Status<>devDisconnected); end;
+    3 : begin dev:=widestring(config.GetValue('/ASCOMfocuser/Device',''));IsConnected:=(focuser<>nil)and(focuser.Status<>devDisconnected); end;
+    4 : begin dev:=widestring(config.GetValue('/ASCOMmount/Device',''));IsConnected:=(mount<>nil)and(mount.Status<>devDisconnected); end;
+    5 : begin dev:=widestring(config.GetValue('/ASCOMrotator/Device',''));IsConnected:=(rotator<>nil)and(rotator.Status<>devDisconnected); end;
+    6 : begin dev:=widestring(config.GetValue('/ASCOMweather/Device',''));IsConnected:=(weather<>nil)and(weather.Status<>devDisconnected); end;
+    7 : begin dev:=widestring(config.GetValue('/ASCOMsafety/Device',''));IsConnected:=(safety<>nil)and(safety.Status<>devDisconnected); end;
+    8 : begin dev:=widestring(config.GetValue('/ASCOMdome/Device',''));IsConnected:=(dome<>nil)and(dome.Status<>devDisconnected); end;
+    else begin dev:=''; IsConnected:=false; end;
+  end;
+  NewMessage('config: '+dev);
+  if dev='' then exit;
+  // if connect, it need to be disconnected
+  if IsConnected then begin
+    if MessageDlg(Format(rsDeviceIsConn, [dev, crlf]), mtConfirmation, mbYesNo, 0)=mrYes then begin
+      case n of
+        1 : DisConnectCamera(nil);
+        2 : DisConnectWheel(nil);
+        3 : DisConnectFocuser(nil);
+        4 : DisConnectMount(nil);
+        5 : DisConnectRotator(nil);
+        6 : DisConnectWeather(nil);
+        7 : DisConnectSafety(nil);
+        8 : DisConnectDome(nil);
+      end;
+    end
+    else begin
+      exit;
+    end;
+  end;
+  try
+    // Setup dialog
+    V := CreateOleObject(string(dev));
+    V.SetupDialog;
+    V:=Unassigned;
+  except
+    on E: Exception do begin
+        buf:=E.Message;
+        ShowMessage('Setup error : ' + buf+crlf+'Check the device is not connected to another application.');
+    end;
+  end;
+  // reconnect
+  if IsConnected then begin
+    case n of
+      1 : ConnectCamera(nil);
+      2 : ConnectWheel(nil);
+      3 : ConnectFocuser(nil);
+      4 : ConnectMount(nil);
+      5 : ConnectRotator(nil);
+      6 : ConnectWeather(nil);
+      7 : ConnectSafety(nil);
+      8 : ConnectDome(nil);
+    end;
+  end;
+{$endif}
 end;
 
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
