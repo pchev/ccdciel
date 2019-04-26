@@ -489,6 +489,7 @@ begin
  FrameReset.s:=ISS_ON;
  indiclient.sendNewSwitch(CCDframeReset);
  indiclient.WaitBusy(CCDframeReset,5000,200);
+ stWidth:=-1;
  GetFrame(x,y,FCameraXSize,FCameraYSize);
  stX:=x;
  stY:=y;
@@ -1207,8 +1208,6 @@ end;
 end;
 
 Procedure T_indicamera.SetBinning(sbinX,sbinY: integer);
-var x,y,width,height: integer;
-    xr,yr,widthr,heightr: TNumRange;
 begin
 msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
 if UseMainSensor then begin
