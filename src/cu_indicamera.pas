@@ -56,6 +56,7 @@ private
    indiws: TIndiWebSocketClientConnection;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
+   GetCCDSizeTimer: TTimer;
    CCDDevice: Basedevice;
    CCDport: ITextVectorProperty;
    CCDexpose: INumberVectorProperty;
@@ -126,10 +127,12 @@ private
    lockvideostream:boolean;
    timedout: double;
    ExposureTimer: TTimer;
+   stX,stY,stWidth,stHeight: integer;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
+   procedure GetCCDSizeTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -285,6 +288,10 @@ begin
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
+ GetCCDSizeTimer:=TTimer.Create(nil);
+ GetCCDSizeTimer.Enabled:=false;
+ GetCCDSizeTimer.Interval:=100;
+ GetCCDSizeTimer.OnTimer:=@GetCCDSizeTimerTimer;
  CreateIndiClient;
  lockvideostream:=false;
  FVideoMsg:=false;
@@ -356,6 +363,12 @@ begin
     FhasGainISO:=false;
     FhasGain:=false;
     FISOList.Clear;
+    FCameraXSize:=-1;
+    FCameraYSize:=-1;
+    stX:=-1;
+    stY:=-1;
+    stWidth:=-1;
+    stHeight:=-1;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -376,6 +389,15 @@ begin
          end;
          if Assigned(FonStatusChange) then FonStatusChange(self);
        end;
+    end;
+    if Fconnected and
+       (CCDframe<>nil) and
+       (CCDframeReset<>nil) and
+       (FCameraXSize<0) and
+       (FCameraYSize<0) and
+       (not GetCCDSizeTimer.Enabled)
+    then begin
+       GetCCDSizeTimer.Enabled:=true;
     end;
     if Fconnected and
        (WheelSlot<>nil) and
@@ -457,6 +479,21 @@ end;
 procedure T_indicamera.ServerConnected(Sender: TObject);
 begin
    ConnectTimer.Enabled:=True;
+end;
+
+procedure T_indicamera.GetCCDSizeTimerTimer(Sender: TObject);
+var x,y: integer;
+begin
+ GetCCDSizeTimer.Enabled:=false;
+ FCameraXSize:=0;
+ FrameReset.s:=ISS_ON;
+ indiclient.sendNewSwitch(CCDframeReset);
+ indiclient.WaitBusy(CCDframeReset,5000,200);
+ GetFrame(x,y,FCameraXSize,FCameraYSize);
+ stX:=x;
+ stY:=y;
+ stWidth:=FCameraXSize;
+ stHeight:=FCameraYSize;
 end;
 
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
@@ -801,7 +838,7 @@ begin
         end;
   end
   else if nvp=CCDframe then begin
-     if Assigned(FonFrameChange) then FonFrameChange(self);
+    // ignore CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html?start=12#38430
   end
   else if nvp=WheelSlot then begin
      if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
@@ -1176,23 +1213,11 @@ begin
 msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
 if UseMainSensor then begin
  if CCDbinning<>nil then begin
-    // get current frame
-    GetFrame(x,y,width,height);
-    GetFrameRange(xr,yr,widthr,heightr);
-    // reset frame if the ROI cover more than 90% of the sensor size
-    // this reset any rounding because of previous binning
-    if (CCDframeReset<>nil)and(x=0)and(y=0)and
-       ((widthr.max<>width)or(heightr.max<>height))and
-       ((abs(widthr.max-width)/widthr.max)<0.1)and
-       ((abs(heightr.max-height)/heightr.max)<0.1) then begin
-       FrameReset.s:=ISS_ON;
-       indiclient.sendNewSwitch(CCDframeReset);
-       indiclient.WaitBusy(CCDframeReset,5000,200);
-    end;
     CCDbinX.value:=sbinX;
     CCDbinY.value:=sbinY;
     indiclient.sendNewNumber(CCDbinning);
     indiclient.WaitBusy(CCDbinning);
+    if stWidth>0 then SetFrame(stX,stY,stWidth,stHeight);
  end;
 end else begin
  if Guiderbinning<>nil then begin
@@ -1235,8 +1260,8 @@ procedure T_indicamera.SetFrame(x,y,width,height: integer);
 var Xmax,Ymax: integer;
 begin
   if UseMainSensor and (CCDframe<>nil) then begin
-     Xmax:=round(CCDframeWidth.max);
-     Ymax:=round(CCDframeHeight.max);
+     Xmax:=round(FCameraXSize);
+     Ymax:=round(FCameraYSize);
      // check range
      if width<MinFrameSize then width:=MinFrameSize;
      if height<MinFrameSize then height:=MinFrameSize;
@@ -1252,16 +1277,30 @@ begin
      CCDframeWidth.value:=width;
      CCDframeHeight.value:=height;
      indiclient.sendNewNumber(CCDframe);
+     stX:=x;
+     stY:=y;
+     stWidth:=width;
+     stHeight:=height;
+     indiclient.WaitBusy(CCDframe);
+     if assigned(FonFrameChange) then FonFrameChange(self);
   end;
 end;
 
 procedure T_indicamera.GetFrame(out x,y,width,height: integer);
 begin
   if UseMainSensor and (CCDframe<>nil) then begin
-     x      := round(CCDframeX.value);
-     y      := round(CCDframeY.value);
-     width  := round(CCDframeWidth.value);
-     height := round(CCDframeHeight.value);
+     if stWidth>0 then begin
+       x := stX;
+       y := stY;
+       width := stWidth;
+       height := stHeight;
+     end
+     else begin
+       x      := round(CCDframeX.value);
+       y      := round(CCDframeY.value);
+       width  := round(CCDframeWidth.value);
+       height := round(CCDframeHeight.value);
+     end;
   end else begin
      x:= 0;
      y:= 0;
@@ -1274,16 +1313,16 @@ procedure T_indicamera.GetFrameRange(out xr,yr,widthr,heightr: TNumRange);
 begin
   if UseMainSensor and (CCDframe<>nil) then begin
      xr.min:=CCDframeX.min;
-     xr.max:=CCDframeX.max;
+     xr.max:=max(CCDframeX.max,FCameraXSize);
      xr.step:=CCDframeX.step;
      yr.min:=CCDframeY.min;
-     yr.max:=CCDframeY.max;
+     yr.max:=max(CCDframeY.max,FCameraYSize);
      yr.step:=CCDframeY.step;
      widthr.min:=CCDframeWidth.min;
-     widthr.max:=CCDframeWidth.max;
+     widthr.max:=max(CCDframeWidth.max,FCameraXSize);
      widthr.step:=CCDframeWidth.step;
      heightr.min:=CCDframeHeight.min;
-     heightr.max:=CCDframeHeight.max;
+     heightr.max:=max(CCDframeHeight.max,FCameraYSize);
      heightr.step:=CCDframeHeight.step;
   end else begin
      xr:= NullRange;
@@ -1300,9 +1339,15 @@ begin
      if CCDframe<>nil then begin
        CCDframeX.value:=CCDframeX.min;
        CCDframeY.value:=CCDframeY.min;
-       CCDframeWidth.value:=CCDframeWidth.max;
-       CCDframeHeight.value:=CCDframeHeight.max;
+       CCDframeWidth.value:=FCameraXSize;
+       CCDframeHeight.value:=FCameraYSize;
        indiclient.sendNewNumber(CCDframe);
+       stX:=round(CCDframeX.min);
+       stY:=round(CCDframeY.min);
+       stWidth:=FCameraXSize;
+       stHeight:=FCameraYSize;
+       indiclient.WaitBusy(CCDframe);
+       if assigned(FonFrameChange) then FonFrameChange(self);
     end;
   end;
 end;

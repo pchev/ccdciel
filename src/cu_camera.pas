@@ -59,6 +59,7 @@ T_camera = class(TComponent)
     FFilterNames: TStringList;
     FObjectName: string;
     Fdevice: string;
+    FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
     FStackCount: integer;
     FStackAlign: boolean;

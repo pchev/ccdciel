@@ -39,7 +39,7 @@ T_ascomrestcamera = class(T_camera)
    timedout,Fexptime:double;
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
-   FCameraXSize,FCameraYSize,FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
+   FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature, FCanSetTemperature: boolean;
    stCCDtemp : double;
    stCooler : boolean;
