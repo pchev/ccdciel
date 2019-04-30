@@ -338,7 +338,7 @@ begin
 
     h:=cnvheight;
     if h=0 then h:=height2;
-    cnv.Pen.width := round(1+height2/h);{thickness lines}
+    cnv.Pen.width := max(1,round(height2/h));{thickness lines}
     cnv.pen.color:=clyellow;
     cnv.font.size:=round(DoScaleX(10)*height2/h);{adapt font to image dimensions}
     cnv.brush.Style:=bsClear;
