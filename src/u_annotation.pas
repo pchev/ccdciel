@@ -24,6 +24,7 @@ uses  u_global, u_utils, cu_fits, UScaleDPI,
 
 procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
 procedure load_deep;{load the deepsky database once. If loaded no action}
+procedure load_hyperleda;{load the HyperLeda database once. If loaded no action }
 procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; out ra2,dec2,length2,width2,pa : double);{deepsky database search}
 
 var
@@ -35,7 +36,7 @@ implementation
 
 procedure load_deep;{load the deepsky database once. If loaded no action}
 begin
-  if deepstring.count<10 then {load deepsky data base}
+if ((deepstring.count<10) or (deepstring.count>=50000) {hyperleda loaded}) then {load deepsky data base}
   begin
     with deepstring do
     begin
@@ -44,6 +45,22 @@ begin
        except;
          clear;
          globalmsg('Deep sky data base not found. Please try to reinstall the program.');
+         beep;
+       end;
+    end;
+  end;
+end;
+procedure load_hyperleda;{load the HyperLeda database once. If loaded no action}
+begin
+if deepstring.count<50000 then {too small for HyperLeda. Empthy or normal database loaded. Replace by large HyperLeda}
+  begin
+    with deepstring do
+    begin
+       try
+       LoadFromFile(slash(DataDir)+slash('dso')+'hyperleda.csv');{load deep sky data from file }
+       except;
+         clear;
+         globalmsg('HyperLeda database not found. Install HyperLeda according instruction.');
          beep;
        end;
     end;
@@ -284,12 +301,12 @@ var
   dra,ddec,delta,gamma,
   telescope_ra,telescope_dec,cos_telescope_dec,fov,ra2,dec2,
   length1,width1,pa,xx,yy,x,y,len,flipped,
-  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2,crota1,crota2,ra0,dec0 :double;
+  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2,crota1,crota2,ra0,dec0,test :double;
   width2, height2,h,sign: integer;
   name: string;
   new_to_old_WCS: boolean;
   text_dimensions  : array of textarea;
-  i,text_counter,th,tw,x1,y1,x2,y2 : integer;
+  i,text_counter,th,tw,x1,y1,x2,y2,xm,ym : integer;
   overlap  :boolean;
 begin
   if ((f<>nil) and (f.HeaderInfo.solved)) then
@@ -338,9 +355,12 @@ begin
 
     h:=cnvheight;
     if h=0 then h:=height2;
-    cnv.Pen.width := max(1,round(height2/h));{thickness lines}
+    cnv.Pen.width :=1; {thickness lines, fixed} // max(1,round(height2/h));{thickness lines}
     cnv.pen.color:=clyellow;
-    cnv.font.size:=round(DoScaleX(10)*height2/h);{adapt font to image dimensions}
+ //   test:=max(1,(ZoomMin/ImgZoom));
+ //   test:=round(DoScaleX(10)*max(1,(ZoomMin/ImgZoom))*height2/h);
+ //   test:=DoScaleX(10);
+    cnv.font.size:=round(max(10,DoScaleX(10)*(ZoomMin/max(ZoomMin,ImgZoom))*height2/h));{adapt font to image dimension s and zoom factor. Start with font 10 if full image is vissible. If zoomed in use a smaller font down to 10}
     cnv.brush.Style:=bsClear;
     cnv.font.color:=clyellow;
 
@@ -433,10 +453,22 @@ begin
 
        if width1=0 then begin width1:=length1;pa:=999;end;
        len:=length1/(cdelt2*60*10*2); {Length in pixels}
-       if PA<>999 then
+       if len<=2 then {too small to plot an elipse or circle, just plot four dots}
+       begin {tiny object marking}
+         xm:=round(x);
+         ym:=round(y);
+         cnv.pixels[xm-2,ym+2]:=clyellow;
+         cnv.pixels[xm+2,ym+2]:=clyellow;
+         cnv.pixels[xm-2,ym-2]:=clyellow;
+         cnv.pixels[xm+2,ym-2]:=clyellow;
+       end {tiny object marking}
+       else
+       begin {normal plot}
+         if PA<>999 then
          plot_glx(cnv,x,y,len,width1/length1,-(pa*flipped-90+crota2)*pi/180) {draw oval or galaxy}
        else
          cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
+       end;{normal plot}
      end;
     until linepos>=$FFFFFF;{end of database}
     text_dimensions:=nil;{remove used memory}

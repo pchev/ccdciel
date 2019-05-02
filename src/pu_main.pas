@@ -94,6 +94,7 @@ type
     MenuAscomWeatherSetup: TMenuItem;
     MenuAscomSafetySetup: TMenuItem;
     MenuAscomDomeSetup: TMenuItem;
+    MenuResolveHyperLeda: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
     MenuViewDome: TMenuItem;
@@ -652,6 +653,7 @@ type
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
     procedure AstrometryPlotDSO(Sender: TObject);
+    procedure AstrometryPlotHyperleda(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
@@ -9014,25 +9016,48 @@ begin
 end;
 
 procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
+var
+  Save_Cursor:TCursor;
 begin
- if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid then begin
+     Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
+     Screen.Cursor := crHourglass; { Show hourglass cursor }
      if fits.HeaderInfo.solved then begin
-        load_deep;
+        if sender=MenuResolveHyperLeda then
+          load_hyperleda
+        else
+          load_deep;
+        DrawImage; {cleanup to avoid label overlap}
         plot_deepsky(fits,imabmp.Canvas,Image1.Height);
         PlotImage;
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-         astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
+         if sender=MenuResolveHyperLeda then
+           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda)
+         else
+           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
        end;
      end;
- end;
+     Screen.Cursor:=Save_Cursor;
+  end;
 end;
 
 procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_deep;
+  DrawImage;
+  plot_deepsky(fits,imabmp.Canvas,Image1.Height);
+  PlotImage;
+end;
+end;
+
+procedure Tf_main.AstrometryPlotHyperleda(Sender: TObject);
+begin
+if astrometry.LastResult then begin
+  load_hyperleda;
+  DrawImage;
   plot_deepsky(fits,imabmp.Canvas,Image1.Height);
   PlotImage;
 end;
