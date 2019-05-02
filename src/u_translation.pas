@@ -1055,6 +1055,7 @@ resourcestring
   rsDitherOnly = 'Dither only';
   rsDeviceIsConn = 'Device %s is connected.%sDo you want to disconnect now to '
     +'open the setup dialog?';
+  rsSeparator = 'Separator';
 
 implementation
 
