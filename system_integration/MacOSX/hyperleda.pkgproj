@@ -464,7 +464,7 @@
 			<key>FOLLOW_SYMBOLIC_LINKS</key>
 			<false/>
 			<key>IDENTIFIER</key>
-			<string>net.ap-i.pkg.ccdciel</string>
+			<string>net.ap-i.pkg.ccdciel-hyperleda</string>
 			<key>LOCATION</key>
 			<integer>0</integer>
 			<key>NAME</key>
@@ -480,7 +480,7 @@
 			<key>USE_HFS+_COMPRESSION</key>
 			<false/>
 			<key>VERSION</key>
-			<string>ccdciel_version</string>
+			<string>1</string>
 		</dict>
 		<key>PROJECT_COMMENTS</key>
 		<dict>
@@ -666,7 +666,7 @@
 				</dict>
 			</array>
 			<key>NAME</key>
-			<string>Install CCDCiel</string>
+			<string>Install Hyperleda for CCDCiel</string>
 			<key>PAYLOAD_ONLY</key>
 			<false/>
 		</dict>
