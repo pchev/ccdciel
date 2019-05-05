@@ -61,6 +61,7 @@ install -v -m 644 data/dso/deep_sky.csv  $destdir/share/ccdciel/data/dso/deep_sk
 install -v -m 644 data/resources/smallcross.cur  $destdir/share/ccdciel/data/resources/smallcross.cur
 install -v -m 644 data/language/ccdciel.po     $destdir/share/ccdciel/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/share/ccdciel/data/language/ccdciel.en_GB.po
+install -v -m 644 data/language/ccdciel.es.po  $destdir/share/ccdciel/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po  $destdir/share/ccdciel/data/language/ccdciel.fr.po
 install -v -m 644 data/language/ccdciel.it.po  $destdir/share/ccdciel/data/language/ccdciel.it.po
 install -v -m 644 doc/doc_ccdciel_en.pdf $destdir/share/ccdciel/doc/doc_ccdciel_en.pdf

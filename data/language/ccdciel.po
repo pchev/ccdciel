@@ -3798,3 +3798,11 @@ msgstr ""
 msgid "Dither only"
 msgstr ""
 
+#: u_translation:rsdeviceisconn
+msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
+msgstr ""
+
+#: u_translation:rsseparator
+msgid "Separator"
+msgstr ""
+

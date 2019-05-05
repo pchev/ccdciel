@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-04-14 11:33+0000\n"
-"PO-Revision-Date: 2019-04-14 12:32+0000\n"
+"POT-Creation-Date: 2019-05-05 11:18+0000\n"
+"PO-Revision-Date: 2019-05-05 11:23+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-04-14 12:36+0000\n"
-"X-Generator: Launchpad (build 18920)\n"
+"X-Launchpad-Export-Date: 2019-05-05 11:24+0000\n"
+"X-Generator: Launchpad (build 18953)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -859,6 +859,10 @@ msgstr "Détails"
 #: u_translation.rsdetectmultip
 msgid "Detect multiple stars in the image"
 msgstr "Détection de plusieurs étoiles dans l'image"
+
+#: u_translation.rsdeviceisconn
+msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
+msgstr "Le périphérique %s est connecté.%sVoulez-vous le déconnecter pour ouvrir le dialogue de configuration ?"
 
 #: u_translation.rsdevices
 msgid "Device"
@@ -2708,6 +2712,10 @@ msgstr "Capteur"
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
 msgstr "Propriétés du capteur"
+
+#: u_translation.rsseparator
+msgid "Separator"
+msgstr "Séparateur"
 
 #: u_translation.rsseq
 msgid "Seq:"
