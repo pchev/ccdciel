@@ -43,7 +43,7 @@ T_ascomcamera = class(T_camera)
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    {$endif}
-   FCameraXSize,FCameraYSize,FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
+   FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature, FCanSetTemperature: boolean;
    stCCDtemp : double;
    stCooler : boolean;

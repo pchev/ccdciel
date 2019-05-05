@@ -147,7 +147,7 @@ object f_option: Tf_option
       end
       object FileFolderOpt: TPageControl
         Left = 8
-        Height = 264
+        Height = 272
         Top = 106
         Width = 462
         ActivePage = FileOpt
@@ -156,7 +156,7 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 233
+          ClientHeight = 241
           ClientWidth = 452
           ParentFont = False
           object BtnFileDefault: TButton
@@ -171,7 +171,7 @@ object f_option: Tf_option
           end
           object FileOptions: TStringGrid
             Left = 8
-            Height = 216
+            Height = 192
             Top = 8
             Width = 368
             ColCount = 3
@@ -199,10 +199,34 @@ object f_option: Tf_option
               304
             )
           end
+          object Label123: TLabel
+            Left = 8
+            Height = 19
+            Top = 208
+            Width = 59
+            Caption = 'Separator'
+            ParentColor = False
+          end
+          object FilenameSep: TComboBox
+            Left = 88
+            Height = 31
+            Top = 204
+            Width = 99
+            ItemHeight = 0
+            ItemIndex = 0
+            Items.Strings = (
+              '_'
+              '-'
+              '.'
+            )
+            Style = csDropDownList
+            TabOrder = 2
+            Text = '_'
+          end
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 233
+          ClientHeight = 241
           ClientWidth = 452
           ParentFont = False
           object BtnFolderDefault: TButton
@@ -353,7 +377,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 250
         ParentFont = False
         TabOrder = 3
@@ -436,7 +460,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 250
         ParentFont = False
         TabOrder = 4
@@ -745,7 +769,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 41
+          ClientHeight = 23
           ClientWidth = 235
           Columns = 3
           Items.Strings = (
@@ -1012,8 +1036,8 @@ object f_option: Tf_option
             Top = 30
             Width = 328
             BevelOuter = bvNone
-            ClientHeight = 30
-            ClientWidth = 328
+            ClientHeight = 26
+            ClientWidth = 324
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1697,8 +1721,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            155
-            155
+            164
+            164
           )
         end
       end

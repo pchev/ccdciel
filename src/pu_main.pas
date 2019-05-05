@@ -94,6 +94,7 @@ type
     MenuAscomWeatherSetup: TMenuItem;
     MenuAscomSafetySetup: TMenuItem;
     MenuAscomDomeSetup: TMenuItem;
+    MenuResolveHyperLeda: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
     MenuViewDome: TMenuItem;
@@ -652,6 +653,7 @@ type
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
     procedure AstrometryPlotDSO(Sender: TObject);
+    procedure AstrometryPlotHyperleda(Sender: TObject);
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
@@ -3047,6 +3049,7 @@ begin
     FileNameOpt[i]:=TFilenameList(round(config.GetValue('/Files/FileNameOpt'+inttostr(i),i)));
     FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
   end;
+  FilenameSep:=config.GetValue('/Files/FileNameSep','_');
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
@@ -5551,6 +5554,7 @@ begin
      delete(buf,1,8);
      if buf='en' then langname:='English (US)'
      else if buf='en_GB' then langname:='English (GB)'
+     else if buf='es' then langname:='Español'
      else if buf='fr' then langname:='Français'
      else if buf='it' then langname:='Italiano'
      else langname:='';
@@ -5584,6 +5588,12 @@ begin
       f_option.FileOptions.Cells[1,i]:='1'
     else
       f_option.FileOptions.Cells[1,i]:='0'
+   end;
+   f_option.FilenameSep.ItemIndex:=0;
+   for i:=0 to f_option.FilenameSep.Items.Count-1 do begin
+     if f_option.FilenameSep.Items[i]=FilenameSep then begin
+        f_option.FilenameSep.ItemIndex:=i;
+     end;
    end;
    f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
@@ -5872,6 +5882,7 @@ begin
        config.SetValue('/Files/FileNameOpt'+inttostr(i),n);
        config.SetValue('/Files/FileNameActive'+inttostr(i),f_option.FileOptions.Cells[1,i]='1');
      end;
+     config.SetValue('/Files/FileNameSep',f_option.FilenameSep.Text);
      config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
@@ -6981,47 +6992,47 @@ try
    case FileNameOpt[i] of
      fnObj : if FileNameActive[i] then begin
              if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
-                fn:=fn+trim(f_capture.Fname.Text)+'_';
+                fn:=fn+trim(f_capture.Fname.Text)+FilenameSep;
              end
              else
-                fn:=fn+trim(f_capture.FrameType.Text)+'_';
+                fn:=fn+trim(f_capture.FrameType.Text)+FilenameSep;
              end;
      fnFilter: if FileNameActive[i] and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-                fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
+                fn:=fn+trim(wheel.FilterNames[wheel.Filter])+FilenameSep;
 
      fnExp : if FileNameActive[i] then begin
                if FlatAutoExposure and (camera.FrameType=FLAT) then
-                  fn:=fn+'auto_'
+                  fn:=fn+'auto'+FilenameSep
                else
-                  fn:=fn+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s_';
+                  fn:=fn+StringReplace(f_capture.ExpTime.Text,'.',FilenameSep,[])+'s'+FilenameSep;
              end;
-     fnBin : if FileNameActive[i] then fn:=fn+f_capture.Binning.Text+'_';
+     fnBin : if FileNameActive[i] then fn:=fn+f_capture.Binning.Text+FilenameSep;
      fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
-                fn:=fn+formatfloat(f1,ccdtemp)+'C_';
+                fn:=fn+formatfloat(f1,ccdtemp)+'C'+FilenameSep;
      fnDate: if FileNameActive[i] then
-                fn:=fn+FormatDateTime('yyyymmdd_hhnnss',dt)+'_'
+                fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt)+FilenameSep
              else
                 UseFileSequenceNumber:=true;
      fnGain: if FileNameActive[i] and f_capture.PanelGain.Visible then begin
                 if f_capture.ISObox.Visible then
-                  fn:=fn+f_capture.ISObox.Text+'_'
+                  fn:=fn+f_capture.ISObox.Text+FilenameSep
                 else
-                  fn:=fn+f_capture.GainEdit.Text+'_'
+                  fn:=fn+f_capture.GainEdit.Text+FilenameSep
              end;
    end;
  end;
  fn:=StringReplace(fn,' ','',[rfReplaceAll]);
- fn:=StringReplace(fn,'/','_',[rfReplaceAll]);
- fn:=StringReplace(fn,'\','_',[rfReplaceAll]);
- fn:=StringReplace(fn,':','_',[rfReplaceAll]);
+ fn:=StringReplace(fn,'/',FilenameSep,[rfReplaceAll]);
+ fn:=StringReplace(fn,'\',FilenameSep,[rfReplaceAll]);
+ fn:=StringReplace(fn,':',FilenameSep,[rfReplaceAll]);
  if fn<>'' then
     delete(fn,length(fn),1); // remove last _
  // sequence number must always be at the end
  if UseFileSequenceNumber then begin
    fileseqnum:=1;
-   while FileExistsUTF8(slash(fd)+fn+'_'+IntToStr(fileseqnum)+'.fits') do
+   while FileExistsUTF8(slash(fd)+fn+FilenameSep+IntToStr(fileseqnum)+'.fits') do
      inc(fileseqnum);
-   fn:=fn+'_'+IntToStr(fileseqnum);
+   fn:=fn+FilenameSep+IntToStr(fileseqnum);
  end;
  fn:=slash(fd)+fn+'.fits';
  // save the file
@@ -9015,25 +9026,48 @@ begin
 end;
 
 procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
+var
+  Save_Cursor:TCursor;
 begin
- if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid then begin
+     Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
+     Screen.Cursor := crHourglass; { Show hourglass cursor }
      if fits.HeaderInfo.solved then begin
-        load_deep;
+        if sender=MenuResolveHyperLeda then
+          load_hyperleda
+        else
+          load_deep;
+        DrawImage; {cleanup to avoid label overlap}
         plot_deepsky(fits,imabmp.Canvas,Image1.Height);
         PlotImage;
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-         astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
+         if sender=MenuResolveHyperLeda then
+           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda)
+         else
+           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
        end;
      end;
- end;
+     Screen.Cursor:=Save_Cursor;
+  end;
 end;
 
 procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_deep;
+  DrawImage;
+  plot_deepsky(fits,imabmp.Canvas,Image1.Height);
+  PlotImage;
+end;
+end;
+
+procedure Tf_main.AstrometryPlotHyperleda(Sender: TObject);
+begin
+if astrometry.LastResult then begin
+  load_hyperleda;
+  DrawImage;
   plot_deepsky(fits,imabmp.Canvas,Image1.Height);
   PlotImage;
 end;

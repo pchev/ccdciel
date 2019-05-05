@@ -41,12 +41,14 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
+    FilenameSep: TComboBox;
     Debug_Ascom: TCheckBox;
     GroupBox11: TGroupBox;
     Label119: TLabel;
     Label120: TLabel;
     Label121: TLabel;
     Label122: TLabel;
+    Label123: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -591,6 +593,7 @@ begin
   TmpDirDefault.Caption := rsDefault;
   FileOpt.Caption := rsFileNameOpti;
   BtnFileDefault.Caption := rsDefault;
+  label123.Caption := rsSeparator;
   FolderOpt.Caption := rsFolderNameOp;
   BtnFolderDefault.Caption := rsDefault;
   UseTcpServer.Caption := rsAllowToGetPr;
@@ -1100,6 +1103,7 @@ end;
 procedure Tf_option.BtnFileDefaultClick(Sender: TObject);
 var i:integer;
 begin
+  FilenameSep.ItemIndex:=0;
   for i:=0 to FileNameCount-1 do begin
     if i in [0,1,5] then
       FileOptions.Cells[1,i]:='1'

@@ -6,20 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-04-14 11:33+0000\n"
-"PO-Revision-Date: 2019-03-29 05:54+0000\n"
+"POT-Creation-Date: 2019-05-05 11:18+0000\n"
+"PO-Revision-Date: 2019-04-27 07:13+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-04-14 12:36+0000\n"
-"X-Generator: Launchpad (build 18920)\n"
+"X-Launchpad-Export-Date: 2019-05-05 11:24+0000\n"
+"X-Generator: Launchpad (build 18953)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
-msgstr ""
+msgstr "This driver work only in 32bit, please install the 32bit version of CCDciel."
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -451,7 +451,7 @@ msgstr "Cannot compute rise or set time."
 
 #: u_translation.rscannotcomput2
 msgid "Cannot compute meridian time"
-msgstr ""
+msgstr "Cannot compute meridian time"
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
@@ -861,6 +861,10 @@ msgstr "Details"
 msgid "Detect multiple stars in the image"
 msgstr "Detect multiple stars in the image"
 
+#: u_translation.rsdeviceisconn
+msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
+msgstr ""
+
 #: u_translation.rsdevices
 msgid "Device"
 msgstr "Device"
@@ -931,7 +935,7 @@ msgstr "Dithering"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
-msgstr ""
+msgstr "Dither only"
 
 #: u_translation.rsdome
 msgid "Dome"
@@ -958,8 +962,9 @@ msgid "Do not run %s as %s!"
 msgstr "Do not run %s as %s!"
 
 #: u_translation.rsdontswait
+#, fuzzy,badformat
 msgid "Don't%swait"
-msgstr ""
+msgstr "Don't%wait"
 
 #: u_translation.rsdosimpleslew
 msgid "Do simple slew to %s/%s"
@@ -1767,7 +1772,7 @@ msgstr "Mount capabilities: %s"
 
 #: u_translation.rsmountisnotpa
 msgid "Mount is not parked.%sPark the dome anyway?"
-msgstr ""
+msgstr "Mount is not parked.%sPark the dome anyway?"
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
@@ -1859,7 +1864,7 @@ msgstr "No astronomical twilight at this location today"
 
 #: u_translation.rsnoautoguidin
 msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
-msgstr ""
+msgstr "No auto-guiding, only dither by sending pulse guide directly to the mount."
 
 #: u_translation.rsnobacklash
 msgid "No backlash"
@@ -2307,7 +2312,7 @@ msgstr "Protocol"
 
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
-msgstr ""
+msgstr "Pulse duration"
 
 #: u_translation.rsquality
 msgid "Quality:"
@@ -2679,7 +2684,7 @@ msgstr "Script terminating..."
 
 #: u_translation.rssearch
 msgid "Search"
-msgstr ""
+msgstr "Search"
 
 #: u_translation.rssec
 msgid "sec."
@@ -2708,6 +2713,10 @@ msgstr "Sensor"
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
 msgstr "Sensors properties"
+
+#: u_translation.rsseparator
+msgid "Separator"
+msgstr ""
 
 #: u_translation.rsseq
 msgid "Seq:"
@@ -2843,7 +2852,7 @@ msgstr "Set temperature ramp finished"
 
 #: u_translation.rssetthemeandi
 msgid "Set the mean dithering pulse duration in seconds."
-msgstr ""
+msgstr "Set the mean dithering pulse duration in seconds."
 
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
@@ -2919,7 +2928,7 @@ msgstr "Sky temperature"
 
 #: u_translation.rsslave
 msgid "Slave"
-msgstr ""
+msgstr "Slave"
 
 #: u_translation.rsslaved
 msgid "Slaved"
@@ -3735,7 +3744,7 @@ msgstr "Wait start"
 
 #: u_translation.rswaittime
 msgid "Wait time"
-msgstr ""
+msgstr "Wait time"
 
 #: u_translation.rswaittostarta
 msgid "Wait to start at %s"

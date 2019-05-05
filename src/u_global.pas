@@ -190,7 +190,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.55';
+  ccdcielver = '0.9.56';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 4;
   Maxclient = 100;
@@ -389,6 +389,7 @@ var
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
+  FilenameSep: String;
   hasGain, hasGainISO : boolean;
   ISOList: TStringList;
   Gain,GainMin,GainMax: integer;
