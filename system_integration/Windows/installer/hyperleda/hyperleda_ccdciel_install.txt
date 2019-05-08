@@ -1,0 +1,13 @@
+HyperLeda annotations for CCDciel should work now. If it doesn't work please check the destination path:
+
+
+hyperleda.csv should be installed in either:
+
+
+C:\Program Files (x86)\CCDciel\data\dso
+
+or
+
+C:\Program Files\CCDciel\data\dso
+
+
