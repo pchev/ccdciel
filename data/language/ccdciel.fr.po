@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-05 11:18+0000\n"
-"PO-Revision-Date: 2019-05-05 11:23+0000\n"
+"POT-Creation-Date: 2019-05-11 16:45+0000\n"
+"PO-Revision-Date: 2019-05-11 16:53+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-05 11:24+0000\n"
-"X-Generator: Launchpad (build 18953)\n"
+"X-Launchpad-Export-Date: 2019-05-11 16:56+0000\n"
+"X-Generator: Launchpad (build 18962)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1469,6 +1469,10 @@ msgstr "HFD médian de l'image = %s"
 msgid "Images folder Unix path"
 msgstr "Chemin Unix du dossier d'image"
 
+#: u_translation.rsimagestatist
+msgid "Image statistic"
+msgstr "Statistique de l'image"
+
 #: u_translation.rsimagetransfe
 msgid "Image transfer"
 msgstr "Transfert d'image"
@@ -1665,6 +1669,10 @@ msgstr "Changement maximum de température "
 msgid "Max offset"
 msgstr "Décalage max."
 
+#: u_translation.rsmean
+msgid "Mean:"
+msgstr "Moyenne:"
+
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
 msgstr "Mesure %s  hfd:%s pointe:%s snr:%s"
@@ -1760,6 +1768,10 @@ msgstr "minutes"
 #: u_translation.rsmnt
 msgid "Mnt."
 msgstr "Mnt."
+
+#: u_translation.rsmode
+msgid "Mode:"
+msgstr "Mode:"
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -3140,6 +3152,10 @@ msgstr "Reste sur place"
 #: u_translation.rsstayinplacef
 msgid "Stay in place for autofocus"
 msgstr "Reste sur place pour l'autofocus"
+
+#: u_translation.rsstddev
+msgid "Std.Dev:"
+msgstr "Écart type:"
 
 #: u_translation.rsstep
 msgid "Step"

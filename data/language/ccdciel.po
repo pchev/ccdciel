@@ -3806,3 +3806,19 @@ msgstr ""
 msgid "Separator"
 msgstr ""
 
+#: u_translation:rsmean
+msgid "Mean:"
+msgstr ""
+
+#: u_translation:rsstddev
+msgid "Std.Dev:"
+msgstr ""
+
+#: u_translation:rsimagestatist
+msgid "Image statistic"
+msgstr ""
+
+#: u_translation:rsmode
+msgid "Mode:"
+msgstr ""
+
