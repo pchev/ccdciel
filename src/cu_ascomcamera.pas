@@ -1020,6 +1020,7 @@ var i,n: integer;
 begin
   result:=false;
   {$ifdef mswindows}
+    if FStatus<>devConnected then exit;
     try
     // check Gain property
        i:=V.Gain;

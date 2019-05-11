@@ -2921,7 +2921,7 @@ begin
   ok:=(not config.GetValue('/Sensor/GainFromCamera',true));
   if ok<>camera.CanSetGain then begin
     camera.CanSetGain:=ok;
-    SetGainList;
+    Showgain;
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   ClippingOverflow:=min(ClippingOverflow,MaxADU);
