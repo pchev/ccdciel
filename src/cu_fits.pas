@@ -166,6 +166,7 @@ type
      constructor Create(AOwner:TComponent); override;
      destructor  Destroy; override;
      Procedure ViewHeaders;
+     Procedure ShowStatistics;
      Procedure LoadStream;
      procedure GetFitsInfo;
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
@@ -693,6 +694,7 @@ end;
 
 Procedure TFits.ViewHeaders;
 begin
+if FFitsInfo.valid then begin
 f_ViewHeaders:=TForm.create(self);
 f_ViewHeaders.OnClose:=ViewHeadersClose;
 m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
@@ -725,6 +727,7 @@ else
    f_ViewHeaders.Caption:=SysToUTF8(FTitle);
 f_ViewHeaders.Show;
 end;
+end;
 
 Procedure TFits.ViewHeadersBtnClose(Sender: TObject);
 begin
@@ -734,6 +737,47 @@ end;
 Procedure TFits.ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
 begin
 CloseAction:=caFree;
+end;
+
+Procedure TFits.ShowStatistics;
+var txt: string;
+begin
+  if FFitsInfo.valid then begin
+    txt:=rsImageStatist+crlf+crlf;
+    txt:=txt+rsMin2+blank+FormatFloat(f0,FFitsInfo.dmin)+crlf;
+    txt:=txt+rsMax+blank+FormatFloat(f0,FFitsInfo.dmax)+crlf;
+    txt:=txt+rsMean+blank+FormatFloat(f0, Fmean)+crlf;
+    txt:=txt+rsStdDev+blank+FormatFloat(f0, Fsigma)+crlf;
+
+    f_ViewHeaders:=TForm.create(self);
+    f_ViewHeaders.OnClose:=ViewHeadersClose;
+    m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
+    p_ViewHeaders:=TPanel.Create(f_ViewHeaders);
+    b_ViewHeaders:=Tbutton.Create(f_ViewHeaders);
+    f_ViewHeaders.Width:=250;
+    f_ViewHeaders.Height:=200;
+    p_ViewHeaders.Parent:=f_ViewHeaders;
+    p_ViewHeaders.Caption:='';
+    p_ViewHeaders.Height:=b_ViewHeaders.Height+8;
+    p_ViewHeaders.Align:=alBottom;
+    m_ViewHeaders.Parent:=f_ViewHeaders;
+    m_ViewHeaders.Align:=alClient;
+    m_ViewHeaders.font.Name:='courier';
+    m_ViewHeaders.ReadOnly:=true;
+    m_ViewHeaders.WordWrap:=false;
+    m_ViewHeaders.ScrollBars:=ssAutoBoth;
+    b_ViewHeaders.Parent:=p_ViewHeaders;
+    b_ViewHeaders.Caption:=rsClose;
+    b_ViewHeaders.Top:=4;
+    b_ViewHeaders.Left:=40;
+    b_ViewHeaders.Cancel:=true;
+    b_ViewHeaders.Default:=true;
+    b_ViewHeaders.OnClick:=ViewHeadersBtnClose;
+    m_ViewHeaders.Text:=txt;
+    FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
+    f_ViewHeaders.Caption:=rsImageStatist;
+    f_ViewHeaders.Show;
+  end;
 end;
 
 procedure TFits.GetFitsInfo;

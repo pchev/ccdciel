@@ -1056,6 +1056,9 @@ resourcestring
   rsDeviceIsConn = 'Device %s is connected.%sDo you want to disconnect now to '
     +'open the setup dialog?';
   rsSeparator = 'Separator';
+  rsMean = 'Mean:';
+  rsStdDev = 'Std.Dev:';
+  rsImageStatist = 'Image statistic';
 
 implementation
 

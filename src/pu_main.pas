@@ -94,6 +94,7 @@ type
     MenuAscomWeatherSetup: TMenuItem;
     MenuAscomSafetySetup: TMenuItem;
     MenuAscomDomeSetup: TMenuItem;
+    MenuImgStat: TMenuItem;
     MenuResolveHyperLeda: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
@@ -207,7 +208,6 @@ type
     N5: TMenuItem;
     MenuOptions: TMenuItem;
     MenuViewCCDtemp: TMenuItem;
-    N4: TMenuItem;
     MenuResetTools: TMenuItem;
     N3: TMenuItem;
     MenuViewFilters: TMenuItem;
@@ -313,6 +313,7 @@ type
     procedure MenuFrameResetClick(Sender: TObject);
     procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
+    procedure MenuImgStatClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
     procedure MenuResolveDSOClick(Sender: TObject);
@@ -5333,6 +5334,11 @@ end;
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
 begin
   fits.ViewHeaders;
+end;
+
+procedure Tf_main.MenuImgStatClick(Sender: TObject);
+begin
+  fits.ShowStatistics;
 end;
 
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
