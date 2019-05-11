@@ -166,6 +166,7 @@ type
      constructor Create(AOwner:TComponent); override;
      destructor  Destroy; override;
      Procedure ViewHeaders;
+     Procedure ShowStatistics;
      Procedure LoadStream;
      procedure GetFitsInfo;
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
@@ -693,6 +694,7 @@ end;
 
 Procedure TFits.ViewHeaders;
 begin
+if FFitsInfo.valid then begin
 f_ViewHeaders:=TForm.create(self);
 f_ViewHeaders.OnClose:=ViewHeadersClose;
 m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
@@ -725,6 +727,7 @@ else
    f_ViewHeaders.Caption:=SysToUTF8(FTitle);
 f_ViewHeaders.Show;
 end;
+end;
 
 Procedure TFits.ViewHeadersBtnClose(Sender: TObject);
 begin
@@ -734,6 +737,65 @@ end;
 Procedure TFits.ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
 begin
 CloseAction:=caFree;
+end;
+
+Procedure TFits.ShowStatistics;
+var txt,ff: string;
+    x,c: double;
+    i,maxh,maxp:integer;
+begin
+  if FFitsInfo.valid then begin
+    if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
+    txt:=rsImageStatist+crlf+crlf;
+    txt:=txt+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
+    txt:=txt+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
+    maxh:=0;
+    for i:=0 to high(word) do begin
+      if FHistogram[i]>maxh then begin
+          maxh:=FHistogram[i];
+          maxp:=i;
+      end;
+    end;
+    if maxh>0 then begin
+      if Fdmax>Fdmin then
+        c:=MaxWord/(Fdmax-Fdmin)
+      else
+        c:=1;
+      x:=Fdmin+maxp/c;
+      txt:=txt+rsMode+blank+FormatFloat(ff, x)+crlf;
+    end;
+    txt:=txt+rsMean+blank+FormatFloat(ff, Fmean)+crlf;
+    txt:=txt+rsStdDev+blank+FormatFloat(ff, Fsigma)+crlf;
+
+    f_ViewHeaders:=TForm.create(self);
+    f_ViewHeaders.OnClose:=ViewHeadersClose;
+    m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
+    p_ViewHeaders:=TPanel.Create(f_ViewHeaders);
+    b_ViewHeaders:=Tbutton.Create(f_ViewHeaders);
+    f_ViewHeaders.Width:=250;
+    f_ViewHeaders.Height:=200;
+    p_ViewHeaders.Parent:=f_ViewHeaders;
+    p_ViewHeaders.Caption:='';
+    p_ViewHeaders.Height:=b_ViewHeaders.Height+8;
+    p_ViewHeaders.Align:=alBottom;
+    m_ViewHeaders.Parent:=f_ViewHeaders;
+    m_ViewHeaders.Align:=alClient;
+    m_ViewHeaders.font.Name:='courier';
+    m_ViewHeaders.ReadOnly:=true;
+    m_ViewHeaders.WordWrap:=false;
+    m_ViewHeaders.ScrollBars:=ssAutoBoth;
+    b_ViewHeaders.Parent:=p_ViewHeaders;
+    b_ViewHeaders.Caption:=rsClose;
+    b_ViewHeaders.Top:=4;
+    b_ViewHeaders.Left:=40;
+    b_ViewHeaders.Cancel:=true;
+    b_ViewHeaders.Default:=true;
+    b_ViewHeaders.OnClick:=ViewHeadersBtnClose;
+    m_ViewHeaders.Text:=txt;
+    FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
+    f_ViewHeaders.Caption:=rsImageStatist;
+    f_ViewHeaders.Show;
+  end;
 end;
 
 procedure TFits.GetFitsInfo;

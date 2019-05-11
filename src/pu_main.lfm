@@ -26,8 +26,8 @@ object f_main: Tf_main
     Width = 770
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 551
-    ClientWidth = 766
+    ClientHeight = 555
+    ClientWidth = 770
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
@@ -138,8 +138,8 @@ object f_main: Tf_main
     Width = 253
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 551
-    ClientWidth = 249
+    ClientHeight = 555
+    ClientWidth = 253
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
@@ -158,7 +158,7 @@ object f_main: Tf_main
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
         ClientHeight = 510
-        ClientWidth = 249
+        ClientWidth = 243
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
@@ -182,7 +182,7 @@ object f_main: Tf_main
       end
       object PageFocus: TTabSheet
         ClientHeight = 510
-        ClientWidth = 249
+        ClientWidth = 243
         ImageIndex = 1
         ParentFont = False
         object PanelRight2: TPanel
@@ -206,7 +206,7 @@ object f_main: Tf_main
       end
       object PageCapture: TTabSheet
         ClientHeight = 510
-        ClientWidth = 249
+        ClientWidth = 243
         ImageIndex = 2
         ParentFont = False
         object PanelRight3: TPanel
@@ -230,7 +230,7 @@ object f_main: Tf_main
       end
       object PageSequence: TTabSheet
         ClientHeight = 510
-        ClientWidth = 249
+        ClientWidth = 243
         ImageIndex = 3
         ParentFont = False
         object PanelRight4: TPanel
@@ -254,7 +254,7 @@ object f_main: Tf_main
       end
       object PageVideo: TTabSheet
         ClientHeight = 510
-        ClientWidth = 249
+        ClientWidth = 243
         ImageIndex = 4
         ParentFont = False
         object PanelRight5: TPanel
@@ -457,9 +457,6 @@ object f_main: Tf_main
         Caption = 'INDI settings'
         OnClick = MenuIndiSettingsClick
       end
-      object N4: TMenuItem
-        Caption = '-'
-      end
       object MenuAscomCameraSetup: TMenuItem
         Tag = 1
         Caption = 'MenuAscomCameraSetup'
@@ -506,6 +503,10 @@ object f_main: Tf_main
       object MenuViewhdr: TMenuItem
         Caption = 'View header'
         OnClick = MenuViewhdrClick
+      end
+      object MenuImgStat: TMenuItem
+        Caption = 'Image statistics'
+        OnClick = MenuImgStatClick
       end
     end
     object MenuItem4: TMenuItem

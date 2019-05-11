@@ -1020,6 +1020,7 @@ var i,n: integer;
 begin
   result:=false;
   {$ifdef mswindows}
+    if FStatus<>devConnected then exit;
     try
     // check Gain property
        i:=V.Gain;
@@ -1058,7 +1059,7 @@ end;
 procedure T_ascomcamera.SetGain(value: integer);
 begin
  {$ifdef mswindows}
- if (FhasGainISO or FhasGain) then begin
+ if FCanSetGain and (FhasGainISO or FhasGain) then begin
    try
       V.Gain:=value;
    except

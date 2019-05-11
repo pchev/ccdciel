@@ -1029,7 +1029,7 @@ end;
 procedure T_ascomrestcamera.SetGain(value: integer);
 begin
  if FStatus<>devConnected then exit;
- if (FhasGainISO or FhasGain) then begin
+ if FCanSetGain and (FhasGainISO or FhasGain) then begin
    try
       V.Put('Gain',value);
       stGain:=value;

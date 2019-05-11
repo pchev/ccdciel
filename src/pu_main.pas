@@ -94,6 +94,7 @@ type
     MenuAscomWeatherSetup: TMenuItem;
     MenuAscomSafetySetup: TMenuItem;
     MenuAscomDomeSetup: TMenuItem;
+    MenuImgStat: TMenuItem;
     MenuResolveHyperLeda: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
@@ -207,7 +208,6 @@ type
     N5: TMenuItem;
     MenuOptions: TMenuItem;
     MenuViewCCDtemp: TMenuItem;
-    N4: TMenuItem;
     MenuResetTools: TMenuItem;
     N3: TMenuItem;
     MenuViewFilters: TMenuItem;
@@ -313,6 +313,7 @@ type
     procedure MenuFrameResetClick(Sender: TObject);
     procedure MenuFrameSetClick(Sender: TObject);
     procedure MenuHelpAboutClick(Sender: TObject);
+    procedure MenuImgStatClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
     procedure MenuResolveDSOClick(Sender: TObject);
@@ -2285,7 +2286,14 @@ begin
    config.DeletePath('/Tools');
    config.DeletePath('/Window');
    config.Flush;
-  end
+  end;
+  if oldver<'0.9.57' then begin
+     // hide gain if not used
+     i:=StrToIntDef(config.GetValue('/Preview/Gain',''),0);
+     i:=i+StrToIntDef(config.GetValue('/Capture/Gain',''),0);
+     ok:=(i=0);
+     config.SetValue('/Sensor/GainFromCamera',ok);
+  end;
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -2896,6 +2904,7 @@ end;
 procedure Tf_main.SetOptions;
 var i,n: integer;
     buf,v: string;
+    ok: boolean;
 begin
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
@@ -2910,6 +2919,11 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',1.0);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
+  ok:=(not config.GetValue('/Sensor/GainFromCamera',true));
+  if ok<>camera.CanSetGain then begin
+    camera.CanSetGain:=ok;
+    Showgain;
+  end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   ClippingOverflow:=min(ClippingOverflow,MaxADU);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
@@ -3724,7 +3738,7 @@ begin
  gaincapt:=config.GetValue('/Capture/Gain','');
  posprev:=Gain;
  poscapt:=Gain;
- f_capture.PanelGain.Visible:=(hasGain or hasGainISO);
+ f_capture.PanelGain.Visible:=camera.CanSetGain and (hasGain or hasGainISO);
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.PanelGain1.Visible:=f_capture.PanelGain.Visible;
@@ -5322,6 +5336,11 @@ begin
   fits.ViewHeaders;
 end;
 
+procedure Tf_main.MenuImgStatClick(Sender: TObject);
+begin
+  fits.ShowStatistics;
+end;
+
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
 begin
  SaveSettings;
@@ -5711,6 +5730,7 @@ begin
    f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
+   f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
@@ -5967,6 +5987,7 @@ begin
      config.SetValue('/Flat/DomeFlatSetLight',f_option.DomeFlatSetLight.Checked);
      config.SetValue('/Flat/DomeFlatSetLightON',f_option.DomeFlatSetLightON.Text);
      config.SetValue('/Flat/DomeFlatSetLightOFF',f_option.DomeFlatSetLightOFF.Text);
+     config.SetValue('/Sensor/GainFromCamera',f_option.GainFromCamera.Checked);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
@@ -6485,12 +6506,14 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
         camera.SetBinning(binx,biny);
      end;
   end;
-  if camera.hasGainISO then begin
-     if camera.Gain<>f_preview.ISObox.ItemIndex then camera.Gain:=f_preview.ISObox.ItemIndex;
-  end;
-  if camera.hasGain and (not camera.hasGainISO) then begin
-     i:=f_preview.GainEdit.Value;
-     if camera.Gain<>i then camera.Gain:=i;
+  if camera.CanSetGain then begin
+    if camera.hasGainISO then begin
+       if camera.Gain<>f_preview.ISObox.ItemIndex then camera.Gain:=f_preview.ISObox.ItemIndex;
+    end;
+    if camera.hasGain and (not camera.hasGainISO) then begin
+       i:=f_preview.GainEdit.Value;
+       if camera.Gain<>i then camera.Gain:=i;
+    end;
   end;
   if camera.hasReadOut then begin
      camera.readoutmode:=ReadoutModePreview;
@@ -6614,13 +6637,15 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      end;
   end;
   // check and set gain
-   if camera.hasGainISO then begin
-     if camera.Gain<>f_capture.ISObox.ItemIndex then camera.Gain:=f_capture.ISObox.ItemIndex;
-   end;
-   if camera.hasGain and (not camera.hasGainISO) then begin
-     i:=f_capture.GainEdit.Value;
-     if camera.Gain<>i then camera.Gain:=i;
-   end;
+  if camera.CanSetGain then begin
+    if camera.hasGainISO then begin
+      if camera.Gain<>f_capture.ISObox.ItemIndex then camera.Gain:=f_capture.ISObox.ItemIndex;
+    end;
+    if camera.hasGain and (not camera.hasGainISO) then begin
+      i:=f_capture.GainEdit.Value;
+      if camera.Gain<>i then camera.Gain:=i;
+    end;
+  end;
   // check and set frame
   if camera.FrameType<>ftype then camera.FrameType:=ftype;
   if ftype<>LIGHT then begin

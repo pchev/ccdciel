@@ -1580,6 +1580,7 @@ end;
 
 procedure T_indicamera.SetGain(value: integer);
 begin
+if FCanSetGain then begin
   if (CCDIso<>nil) and FhasGainISO then begin
     IUResetSwitch(CCDIso);
     CCDIso.sp[value].s := ISS_ON;
@@ -1589,6 +1590,7 @@ begin
     IGain.value:=value;
     indiclient.sendNewNumber(ImageAdjustments);
   end;
+end;
 end;
 
 function T_indicamera.GetGain: integer;
