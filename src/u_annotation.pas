@@ -353,14 +353,18 @@ begin
     linepos:=0;
     if cdelt1*cdelt2>0 then flipped:=-1 {n-s or e-w flipped} else flipped:=1;
 
-    h:=cnvheight;
-    if h=0 then h:=height2;
     cnv.Pen.width :=1; {thickness lines, fixed} // max(1,round(height2/h));{thickness lines}
     cnv.pen.color:=clyellow;
- //   test:=max(1,(ZoomMin/ImgZoom));
- //   test:=round(DoScaleX(10)*max(1,(ZoomMin/ImgZoom))*height2/h);
- //   test:=DoScaleX(10);
-    cnv.font.size:=round(max(10,DoScaleX(10)*(ZoomMin/max(ZoomMin,ImgZoom))*height2/h));{adapt font to image dimension s and zoom factor. Start with font 10 if full image is vissible. If zoomed in use a smaller font down to 10}
+
+    if  deepstring.count<50000 then {default deep sky database 30.000 objects}
+    begin
+      h:=cnvheight;
+      if h=0 then h:=height2;
+      cnv.font.size:=round(max(10,DoScaleX(10)*(ZoomMin/max(ZoomMin,ImgZoom))*height2/h)); {adapt font to image dimension s and zoom factor. Start with font 10 if full image is vissible. If zoomed in use a smaller font down to 10}
+    end
+    else
+    cnv.font.size:=10;{fixed for HyperLeda, always crowded}
+
     cnv.brush.Style:=bsClear;
     cnv.font.color:=clyellow;
 
@@ -369,107 +373,106 @@ begin
 
     repeat
       read_deepsky('S',telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov,{var} ra2,dec2,length1,width1,pa);{deepsky database search}
+      equatorial_standard(telescope_ra,telescope_dec,ra2,dec2,1, {var} xx,yy); {xx,yy in arc seconds}
+      xx:=xx/(cdelt1*3600);{convert arc seconds to pixels}
+      yy:=yy/(cdelt2*3600);
+      rotate((90-crota2)*pi/180,xx,yy,x,y);{rotate to screen orientation}
 
+      if ((x<=width2/2+500) and (y<=height2/2+500)) then {within image1 with some overlap}
+      begin
 
-     equatorial_standard(telescope_ra,telescope_dec,ra2,dec2,1, {var} xx,yy); {xx,yy in arc seconds}
-     xx:=xx/(cdelt1*3600);{convert arc seconds to pixels}
-     yy:=yy/(cdelt2*3600);
-     rotate((90-crota2)*pi/180,xx,yy,x,y);{rotate to screen orientation}
+        x:=fitsX-x;
+        y:=fitsY-y;
 
-     if ((x<=width2/2+500) and (y<=height2/2+500)) then {within image1 with some overlap}
-     begin
+        if naam3='' then name:=naam2
+        else
+        if naam4='' then name:=naam2+'/'+naam3
+        else
+        name:=naam2+'/'+naam3+'/'+naam4;
 
-       x:=fitsX-x;
-       y:=fitsY-y;
+        {Plot deepsky text labels on an empthy text space.}
+        { 1) If the center of the deepsky object is outside the image then don't plot text}
+        { 2) If the text space is occupied, then move the text down. If the text crosses the bottom then use the original text position.}
+        { 3) If the text crosses the right side of the image then move the text to the left.}
+        { 4) If the text is moved in y then connect the text to the deepsky object with a vertical line.}
+        if ( (round(x)>=0) and (round(x)<=width2) and (round(y)>=0) and (round(y)<=height2) ) then {plot only text if center object is visible}
+        begin
+          {get text dimensions}
+          th:=cnv.textheight(name);
+          tw:=cnv.textwidth(name);
+          x1:=round(x);
+          y1:=round(y);
+          x2:=round(x)+ tw;
+          y2:=round(y)+ th ;
 
-       if naam3='' then name:=naam2
-       else
-       if naam4='' then name:=naam2+'/'+naam3
-       else
-       name:=naam2+'/'+naam3+'/'+naam4;
+          if ((x1<=width2) and (x2>width2)) then begin x1:=x1-(x2-width2);x2:=width2;end; {if text is beyond right side, move left}
 
-       {Plot deepsky text labels on an empthy text space.}
-       { 1) If the center of the deepsky object is outside the image then don't plot text}
-       { 2) If the text space is occupied, then move the text down. If the text crosses the bottom then use the original text position.}
-       { 3) If the text crosses the right side of the image then move the text to the left.}
-       { 4) If the text is moved in y then connect the text to the deepsky object with a vertical line.}
-       if ( (round(x)>=0) and (round(x)<=width2) and (round(y)>=0) and (round(y)<=height2) ) then {plot only text if center object is visible}
-       begin
-         {get text dimensions}
-         th:=cnv.textheight(name);
-         tw:=cnv.textwidth(name);
-         x1:=round(x);
-         y1:=round(y);
-         x2:=round(x)+ tw;
-         y2:=round(y)+ th ;
+          if text_counter>0 then {find free space in y for text}
+          begin
+            repeat {find free text area}
+              overlap:=false;
+              i:=0;
+              repeat {test overlap}
+                if ( ((x1>=text_dimensions[i].x1) and (x1<=text_dimensions[i].x2) and (y1>=text_dimensions[i].y1) and (y1<=text_dimensions[i].y2)) {left top overlap} or
+                     ((x2>=text_dimensions[i].x1) and (x2<=text_dimensions[i].x2) and (y1>=text_dimensions[i].y1) and (y1<=text_dimensions[i].y2)) {right top overlap} or
+                     ((x1>=text_dimensions[i].x1) and (x1<=text_dimensions[i].x2) and (y2>=text_dimensions[i].y1) and (y2<=text_dimensions[i].y2)) {left bottom overlap} or
+                     ((x2>=text_dimensions[i].x1) and (x2<=text_dimensions[i].x2) and (y2>=text_dimensions[i].y1) and (y2<=text_dimensions[i].y2)) {right bottom overlap} or
 
-         if ((x1<=width2) and (x2>width2)) then begin x1:=x1-(x2-width2);x2:=width2;end; {if text is beyond right side, move left}
-
-         if text_counter>0 then {find free space in y for text}
-         begin
-           repeat {find free text area}
-             overlap:=false;
-             i:=0;
-             repeat {test overlap}
-               if ( ((x1>=text_dimensions[i].x1) and (x1<=text_dimensions[i].x2) and (y1>=text_dimensions[i].y1) and (y1<=text_dimensions[i].y2)) {left top overlap} or
-                    ((x2>=text_dimensions[i].x1) and (x2<=text_dimensions[i].x2) and (y1>=text_dimensions[i].y1) and (y1<=text_dimensions[i].y2)) {right top overlap} or
-                    ((x1>=text_dimensions[i].x1) and (x1<=text_dimensions[i].x2) and (y2>=text_dimensions[i].y1) and (y2<=text_dimensions[i].y2)) {left bottom overlap} or
-                    ((x2>=text_dimensions[i].x1) and (x2<=text_dimensions[i].x2) and (y2>=text_dimensions[i].y1) and (y2<=text_dimensions[i].y2)) {right bottom overlap} or
-
-                    ((text_dimensions[i].x1>=x1) and (text_dimensions[i].x1<=x2) and (text_dimensions[i].y1>=y1) and (text_dimensions[i].y1<=y2)) {two corners of text_dimensions[i] within text} or
-                    ((text_dimensions[i].x2>=x1) and (text_dimensions[i].x2<=x2) and (text_dimensions[i].y2>=y1) and (text_dimensions[i].y2<=y2)) {two corners of text_dimensions[i] within text}
-                  ) then
-               begin
-                 overlap:=true; {text overlaps an existing text}
-                 y1:=y1+(th div 3);{try to shift text one third of the text height down}
-                 y2:=y2+(th div 3);
-                 if y2>=height2 then {no space left, use original position}
+                     ((text_dimensions[i].x1>=x1) and (text_dimensions[i].x1<=x2) and (text_dimensions[i].y1>=y1) and (text_dimensions[i].y1<=y2)) {two corners of text_dimensions[i] within text} or
+                     ((text_dimensions[i].x2>=x1) and (text_dimensions[i].x2<=x2) and (text_dimensions[i].y2>=y1) and (text_dimensions[i].y2<=y2)) {two corners of text_dimensions[i] within text}
+                   ) then
+                begin
+                  overlap:=true; {text overlaps an existing text}
+                  y1:=y1+(th div 3);{try to shift text one third of the text height down}
+                  y2:=y2+(th div 3);
+                  if y2>=height2 then {no space left, use original position}
                      begin
                        y1:=round(y);
                        y2:=round(y) +th ;
                        overlap:=false;{stop searching}
                        i:=$FFFFFFF;{stop searching}
                      end;
-               end;
-               inc(i);
-             until ((i>=text_counter) or (overlap) );{until all tested or found overlap}
-           until overlap=false;{continue till no overlap}
-         end;
+                end;
+                inc(i);
+              until ((i>=text_counter) or (overlap) );{until all tested or found overlap}
+            until overlap=false;{continue till no overlap}
+          end;
 
-         text_dimensions[text_counter].x1:=x1;{store text dimensions}
-         text_dimensions[text_counter].y1:=y1;
-         text_dimensions[text_counter].x2:=x2;
-         text_dimensions[text_counter].y2:=y2;
+          text_dimensions[text_counter].x1:=x1;{store text dimensions}
+          text_dimensions[text_counter].y1:=y1;
+          text_dimensions[text_counter].x2:=x2;
+          text_dimensions[text_counter].y2:=y2;
 
-         if y1<>round(y) then {there was textual overlap, draw line down}
-         begin
-           cnv.moveto(round(x),round(y+th/4));
-           cnv.lineto(round(x),y1);
-         end;
-         cnv.textout(x1,y1,name);
-         inc(text_counter);
-         if text_counter>=length(text_dimensions) then setlength(text_dimensions,text_counter+200);{increase size dynamic array}
-       end;{centre object visible}
+          if y1<>round(y) then {there was textual overlap, draw line down}
+          begin
+            cnv.moveto(round(x),round(y+th/4));
+            cnv.lineto(round(x),y1);
+          end;
+          cnv.textout(x1,y1,name);
+          inc(text_counter);
+          if text_counter>=length(text_dimensions) then setlength(text_dimensions,text_counter+200);{increase size dynamic array}
+        end;{centre object visible}
 
-       if width1=0 then begin width1:=length1;pa:=999;end;
-       len:=length1/(cdelt2*60*10*2); {Length in pixels}
-       if len<=2 then {too small to plot an elipse or circle, just plot four dots}
-       begin {tiny object marking}
-         xm:=round(x);
-         ym:=round(y);
-         cnv.pixels[xm-2,ym+2]:=clyellow;
-         cnv.pixels[xm+2,ym+2]:=clyellow;
-         cnv.pixels[xm-2,ym-2]:=clyellow;
-         cnv.pixels[xm+2,ym-2]:=clyellow;
-       end {tiny object marking}
-       else
-       begin {normal plot}
-         if PA<>999 then
-         plot_glx(cnv,x,y,len,width1/length1,-(pa*flipped-90+crota2)*pi/180) {draw oval or galaxy}
-       else
-         cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
-       end;{normal plot}
-     end;
+        if width1=0 then begin width1:=length1;pa:=999;end;
+        len:=length1/(cdelt2*60*10*2); {Length in pixels}
+        if len<=2 then {too small to plot an elipse or circle, just plot four dots}
+        begin {tiny object marking}
+          xm:=round(x);
+          ym:=round(y);
+          cnv.pixels[xm-2,ym+2]:=clyellow;
+          cnv.pixels[xm+2,ym+2]:=clyellow;
+          cnv.pixels[xm-2,ym-2]:=clyellow;
+          cnv.pixels[xm+2,ym-2]:=clyellow;
+        end {tiny object marking}
+        else
+        begin {normal plot}
+          if PA<>999 then
+          plot_glx(cnv,x,y,len,width1/length1,-(pa*flipped-90+crota2)*pi/180) {draw oval or galaxy}
+        else
+          cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
+        end;{normal plot}
+      end;
+
     until linepos>=$FFFFFF;{end of database}
     text_dimensions:=nil;{remove used memory}
   end;
