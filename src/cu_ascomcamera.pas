@@ -1058,7 +1058,7 @@ end;
 procedure T_ascomcamera.SetGain(value: integer);
 begin
  {$ifdef mswindows}
- if (FhasGainISO or FhasGain) then begin
+ if FCanSetGain and (FhasGainISO or FhasGain) then begin
    try
       V.Gain:=value;
    except

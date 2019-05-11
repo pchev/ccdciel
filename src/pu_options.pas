@@ -41,6 +41,7 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
+    GainFromCamera: TCheckBox;
     FilenameSep: TComboBox;
     Debug_Ascom: TCheckBox;
     GroupBox11: TGroupBox;
@@ -49,6 +50,7 @@ type
     Label121: TLabel;
     Label122: TLabel;
     Label123: TLabel;
+    Label124: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -635,6 +637,8 @@ begin
   GroupBox20.Caption:=rsSensorsPrope;
   label19.Caption:=rsMaximumADU;
   MaxAduFromCamera.Caption:=rsFromCameraDr;
+  GainFromCamera.Caption:=rsFromCameraDr;
+  Label124.Caption:=rsGain;
   GroupBoxReadOut.Caption:=rsReadoutModes;
   Label112.Caption:=rsCapture;
   Label113.Caption:=rsPreview;

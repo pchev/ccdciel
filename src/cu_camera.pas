@@ -77,7 +77,7 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
-    FhasGain,FhasGainISO: boolean;
+    FhasGain,FhasGainISO,FCanSetGain: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -229,6 +229,7 @@ T_camera = class(TComponent)
     property IndiTransfert: TIndiTransfert read FIndiTransfert write FIndiTransfert;
     property IndiTransfertDir: string read FIndiTransfertDir write FIndiTransfertDir;
     property Gain: integer read GetGain write SetGain;
+    property CanSetGain: boolean read FCanSetGain write FCanSetGain;
     property hasGain: boolean read FhasGain;
     property GainMin: integer read FGainMin;
     property GainMax: integer read FGainMax;
