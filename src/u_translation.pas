@@ -1059,6 +1059,7 @@ resourcestring
   rsMean = 'Mean:';
   rsStdDev = 'Std.Dev:';
   rsImageStatist = 'Image statistic';
+  rsMode = 'Mode:';
 
 implementation
 

@@ -740,14 +740,32 @@ CloseAction:=caFree;
 end;
 
 Procedure TFits.ShowStatistics;
-var txt: string;
+var txt,ff: string;
+    x,c: double;
+    i,maxh,maxp:integer;
 begin
   if FFitsInfo.valid then begin
+    if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
     txt:=rsImageStatist+crlf+crlf;
-    txt:=txt+rsMin2+blank+FormatFloat(f0,FFitsInfo.dmin)+crlf;
-    txt:=txt+rsMax+blank+FormatFloat(f0,FFitsInfo.dmax)+crlf;
-    txt:=txt+rsMean+blank+FormatFloat(f0, Fmean)+crlf;
-    txt:=txt+rsStdDev+blank+FormatFloat(f0, Fsigma)+crlf;
+    txt:=txt+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
+    txt:=txt+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
+    maxh:=0;
+    for i:=0 to high(word) do begin
+      if FHistogram[i]>maxh then begin
+          maxh:=FHistogram[i];
+          maxp:=i;
+      end;
+    end;
+    if maxh>0 then begin
+      if Fdmax>Fdmin then
+        c:=MaxWord/(Fdmax-Fdmin)
+      else
+        c:=1;
+      x:=Fdmin+maxp/c;
+      txt:=txt+rsMode+blank+FormatFloat(ff, x)+crlf;
+    end;
+    txt:=txt+rsMean+blank+FormatFloat(ff, Fmean)+crlf;
+    txt:=txt+rsStdDev+blank+FormatFloat(ff, Fsigma)+crlf;
 
     f_ViewHeaders:=TForm.create(self);
     f_ViewHeaders.OnClose:=ViewHeadersClose;
