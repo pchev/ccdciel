@@ -61,6 +61,7 @@ type
     cbWarm: TCheckBox;
     cbScript: TCheckBox;
     cbUnattended: TCheckBox;
+    CheckBoxNoRestart: TCheckBox;
     CheckBoxAutofocusTemp: TCheckBox;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;

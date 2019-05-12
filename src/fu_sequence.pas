@@ -410,6 +410,7 @@ begin
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
       // Edit
       f_EditTargets.TargetName.Caption:=Targets.TargetName;
+      f_EditTargets.CheckBoxNoRestart.Checked:=Targets.IgnoreRestart;
       f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
       f_EditTargets.TargetList.RowCount:=Targets.Count+1;
       f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
@@ -438,6 +439,7 @@ begin
       CurrentSequenceFile:='';
       CurrentSeqName:='';
       f_EditTargets.TargetName.Caption:='New targets';
+      f_EditTargets.CheckBoxNoRestart.Checked:=false;
       f_EditTargets.TargetsRepeat:=1;
       f_EditTargets.SeqStart.Checked:=false;
       f_EditTargets.SeqStop.Checked:=false;
@@ -473,7 +475,8 @@ begin
         Targets.Add(t);
         LoadPlan(T_Plan(t.plan), t.planname,t.DoneList);
       end;
-      Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
+      Targets.IgnoreRestart    := f_EditTargets.CheckBoxNoRestart.Checked;
+      Targets.TargetsRepeat    := f_EditTargets.TargetsRepeat;
       Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
       Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
       Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
@@ -510,7 +513,11 @@ begin
    n:=tfile.GetValue('/TargetNum',0);
    Targets.FileVersion      :=tfile.GetValue('/Version',1);
    Targets.TargetsRepeat    :=tfile.GetValue('/RepeatCount',1);
-   Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);
+   Targets.IgnoreRestart    := tfile.GetValue('/Targets/IgnoreRestart',true);
+   if Targets.IgnoreRestart then
+      Targets.TargetsRepeatCount:=0
+   else
+      Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);
    Targets.SeqStart         := tfile.GetValue('/Startup/SeqStart',false);
    Targets.SeqStop          := tfile.GetValue('/Startup/SeqStop',false);
    Targets.SeqStartTwilight := tfile.GetValue('/Startup/SeqStartTwilight',false);
@@ -581,7 +588,10 @@ begin
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
-       t.repeatdone:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0));
+       if Targets.IgnoreRestart then
+          t.repeatdone:=0
+       else
+          t.repeatdone:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0));
        t.delay:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Delay',1.0);
        t.FlatCount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatCount',1));
        t.FlatBinX:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
@@ -591,14 +601,19 @@ begin
        m:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',0));
        SetLength(t.DoneList,m);
        for j:=0 to m-1 do begin
-          t.DoneList[j]:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0));
+          if Targets.IgnoreRestart then
+             t.DoneList[j]:=0
+          else
+             t.DoneList[j]:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0));
        end;
        Targets.Add(t);
        LoadPlan(T_Plan(t.plan), t.planname, t.DoneList);
      end;
    end;
-   if Targets.CheckDoneCount then
-      msg('This sequence contain restart information.',2)
+   if Targets.CheckDoneCount then begin
+      msg(targets.DoneStatus,2);
+      msg('This sequence contain restart information.',2);
+   end
    else
       msg('',2);
    tfile.Free;
@@ -726,7 +741,11 @@ begin
     tfile.SetValue('/ListName',CurrentSeqName);
     tfile.SetValue('/TargetNum',Targets.Count);
     tfile.SetValue('/RepeatCount',Targets.TargetsRepeat);
-    tfile.SetValue('/Targets/RepeatDone',Targets.TargetsRepeatCount);
+    tfile.SetValue('/Targets/IgnoreRestart',Targets.IgnoreRestart);
+    if Targets.IgnoreRestart then
+       tfile.SetValue('/Targets/RepeatDone',0)
+    else
+       tfile.SetValue('/Targets/RepeatDone',Targets.TargetsRepeatCount);
     tfile.SetValue('/Startup/SeqStart',Targets.SeqStart);
     tfile.SetValue('/Startup/SeqStop',Targets.SeqStop);
     tfile.SetValue('/Startup/SeqStartTwilight',Targets.SeqStartTwilight);
@@ -772,7 +791,10 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
-      tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
+      if Targets.IgnoreRestart then
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
+      else
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Delay',t.delay);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatCount',t.FlatCount);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
@@ -781,7 +803,10 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
       for j:=0 to Length(t.DoneList)-1 do begin
-         tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
+        if Targets.IgnoreRestart then
+           tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0)
+        else
+           tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
       end;
     end;
     tfile.Flush;
@@ -876,6 +901,11 @@ begin
  StartingSequence:=true;
  msg(Format(rsStartingSequ,['']),1);
  led.Brush.Color:=clYellow;
+ if Targets.CheckDoneCount then begin
+    msg(targets.DoneStatus,2);
+    msg('This sequence contain restart information',2);
+    msg('Only the missing steps will be done.',2);
+ end;
  if preview.Running then begin
      msg(rsStopPreview,2);
      camera.AbortExposure;
@@ -1051,6 +1081,10 @@ begin
      msg(rsPleaseLoadOr,0);
    end
    else begin
+     if Targets.IgnoreRestart then begin
+       Targets.ClearDoneCount(true);
+       SaveTargets(CurrentSequenceFile,'');
+     end;
      tfile:=TCCDconfig.Create(self);
      tfile.Filename:=CurrentSequenceFile;
      Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);

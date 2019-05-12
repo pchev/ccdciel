@@ -61,12 +61,14 @@ type
       StartPlanTimer: TTimer;
       FTargetCoord: boolean;
       FTargetRA,FTargetDE: double;
+      FIgnoreRestart: boolean;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
       FAtEndPark, FAtEndCloseDome, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
       SkipTarget: boolean;
       TargetForceNext: boolean;
+      FDoneStatus: string;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -127,6 +129,7 @@ type
       property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
       property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
+      property IgnoreRestart: boolean read FIgnoreRestart write FIgnoreRestart;
       property SeqStartAt: TDateTime read FSeqStartAt write FSeqStartAt;
       property SeqStopAt: TDateTime read FSeqStopAt write FSeqStopAt;
       property SeqStart: boolean read FSeqStart write FSeqStart;
@@ -145,6 +148,7 @@ type
       property TargetDE: double read FTargetDE;
       property TargetInitializing: boolean read FTargetInitializing;
       property WaitStarting: boolean read FWaitStarting;
+      property DoneStatus: string read FDoneStatus;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
       property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
@@ -205,6 +209,8 @@ begin
   FAtEndShutdown:=false;
   FAtEndScript:='';
   FOnErrorScript:='';
+  FDoneStatus:='';
+  FIgnoreRestart:=true;
   FInitializing:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
@@ -584,16 +590,27 @@ var i,j: integer;
     p: T_Plan;
 begin
  result:=false;
- if FTargetsRepeatCount>0 then result:=true;
+ FDoneStatus:='';
+ if IgnoreRestart then exit;
+ if FTargetsRepeatCount>0 then begin
+   result:=true;
+   FDoneStatus:='Global repeat: '+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+ end;
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
-    if t.repeatdone>0 then result:=true;
+    if t.repeatdone>0 then begin
+      result:=true;
+      FDoneStatus:=FDoneStatus+crlf+t.objectname+' repeat: '+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+    end;
     p:=t_plan(t.plan);
     if p=nil then Continue;
     if p.Count<=0 then Continue;
     for j:=0 to p.Count-1 do begin
-      if p.Steps[j].donecount>0 then result:=true;
+      if p.Steps[j].donecount>0 then begin
+        result:=true;
+        FDoneStatus:=FDoneStatus+crlf+t.objectname+' step: '+p.Steps[j].description+' done: '+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+      end;
     end;
  end;
 end;
@@ -636,14 +653,23 @@ begin
   tfile.Filename:=CurrentSequenceFile;
   i:=FCurrentTarget+1;
   // global sequence repeat
-  tfile.SetValue('/Targets/RepeatDone',RepeatDone);
+  if FIgnoreRestart then
+     tfile.SetValue('/Targets/RepeatDone',0)
+  else
+     tfile.SetValue('/Targets/RepeatDone',RepeatDone);
   // target repeat
-  tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
+  if FIgnoreRestart then
+     tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
+  else
+     tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
   // plan step done
   n:=p.CurrentStep;
   if (n>=0)and(n<p.Count) then begin
     SetLength(t.DoneList,p.Count);
-    t.DoneList[n]:=p.Steps[n].donecount;
+    if FIgnoreRestart then
+       t.DoneList[n]:=0
+    else
+       t.DoneList[n]:=p.Steps[n].donecount;
     tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
     tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
   end;
