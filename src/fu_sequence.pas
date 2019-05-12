@@ -38,6 +38,7 @@ type
   { Tf_sequence }
 
   Tf_sequence = class(TFrame)
+    BtnReset: TButton;
     BtnEditTargets: TButton;
     BtnStart: TButton;
     BtnStop: TButton;
@@ -65,6 +66,7 @@ type
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnDeleteClick(Sender: TObject);
     procedure BtnEditTargetsClick(Sender: TObject);
+    procedure BtnResetClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
@@ -393,6 +395,11 @@ begin
    end;
 end;
 
+procedure Tf_sequence.BtnResetClick(Sender: TObject);
+begin
+   ClearRestartHistory;
+end;
+
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i,n:integer;
     t:TTarget;
@@ -590,6 +597,10 @@ begin
        LoadPlan(T_Plan(t.plan), t.planname, t.DoneList);
      end;
    end;
+   if Targets.CheckDoneCount then
+      msg('This sequence contain restart information.',2)
+   else
+      msg('',2);
    tfile.Free;
 end;
 
@@ -600,8 +611,9 @@ begin
                    'Now you can continue after the last checkpoint.'+crlf+crlf+
                    'Do you want to clear the restart information to restart from the beginning?',
                    mtConfirmation,mbYesNo,0)=mrYes then begin
-        Targets.ClearDoneCount;
+        Targets.ClearDoneCount(true);
         SaveTargets(CurrentSequenceFile,'');
+        msg('',2);
      end;
    end;
 end;
@@ -769,7 +781,7 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
       for j:=0 to Length(t.DoneList)-1 do begin
-         tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(i)+'/Done',t.DoneList[j]);
+         tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
       end;
     end;
     tfile.Flush;
@@ -1029,6 +1041,7 @@ begin
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
+var tfile:TCCDconfig;
 begin
  if (AllDevicesConnected) then begin
    if Targets.Running or Fcapture.Running then begin
@@ -1038,7 +1051,10 @@ begin
      msg(rsPleaseLoadOr,0);
    end
    else begin
-     AutoguiderStarting:=false;
+     tfile:=TCCDconfig.Create(self);
+     tfile.Filename:=CurrentSequenceFile;
+     Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);
+     tfile.Free;
      StartSequence;
    end;
  end

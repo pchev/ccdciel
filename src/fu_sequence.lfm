@@ -2,20 +2,20 @@ object f_sequence: Tf_sequence
   Left = 0
   Height = 564
   Top = 0
-  Width = 180
+  Width = 210
   AutoSize = True
   ClientHeight = 564
-  ClientWidth = 180
+  ClientWidth = 210
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
+  DesignLeft = -4
+  DesignTop = -4
   object Title1: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 210
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,18 +31,18 @@ object f_sequence: Tf_sequence
     Left = 0
     Height = 276
     Top = 20
-    Width = 180
+    Width = 210
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 272
-    ClientWidth = 176
+    ClientWidth = 206
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
       Height = 138
       Top = 20
-      Width = 180
+      Width = 210
       Align = alClient
       ColCount = 6
       DefaultRowHeight = 18
@@ -58,57 +58,57 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 118
       Top = 158
-      Width = 180
+      Width = 210
       Align = alBottom
       ClientHeight = 114
-      ClientWidth = 176
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 1
       object BtnEditTargets: TButton
-        Left = 122
+        Left = 140
         Height = 25
         Top = 4
-        Width = 58
+        Width = 68
         Caption = 'Edit'
         OnClick = BtnEditTargetsClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnLoadTargets: TButton
-        Left = 0
+        Left = 2
         Height = 25
         Top = 4
-        Width = 58
+        Width = 68
         Caption = 'Load'
         OnClick = BtnLoadTargetsClick
         ParentFont = False
         TabOrder = 1
       end
       object BtnNewTargets: TButton
-        Left = 60
+        Left = 72
         Height = 25
         Top = 4
-        Width = 60
+        Width = 68
         Caption = 'New'
         OnClick = BtnEditTargetsClick
         ParentFont = False
         TabOrder = 2
       end
       object BtnStart: TButton
-        Left = 0
+        Left = 2
         Height = 25
         Top = 58
-        Width = 80
+        Width = 68
         Caption = 'Start'
         OnClick = BtnStartClick
         ParentFont = False
         TabOrder = 3
       end
       object BtnStop: TButton
-        Left = 99
+        Left = 140
         Height = 25
         Top = 58
-        Width = 80
+        Width = 68
         Caption = 'Stop'
         OnClick = BtnStopClick
         ParentFont = False
@@ -127,39 +127,49 @@ object f_sequence: Tf_sequence
         TabOrder = 5
       end
       object BtnCopy: TButton
-        Left = 0
+        Left = 2
         Height = 25
         Top = 32
-        Width = 80
+        Width = 68
         Caption = 'Copy'
         OnClick = BtnCopyClick
         ParentFont = False
         TabOrder = 6
       end
       object BtnDelete: TButton
-        Left = 99
+        Left = 140
         Height = 25
         Top = 32
-        Width = 80
+        Width = 68
         Caption = 'Delete'
         OnClick = BtnDeleteClick
         ParentFont = False
         TabOrder = 7
       end
       object led: TShape
-        Left = 83
+        Left = 96
         Height = 14
-        Top = 62
+        Top = 64
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
+      end
+      object BtnReset: TButton
+        Left = 72
+        Height = 25
+        Top = 32
+        Width = 68
+        Caption = 'Reset'
+        OnClick = BtnResetClick
+        ParentFont = False
+        TabOrder = 8
       end
     end
     object Title3: TLabel
       Left = 0
       Height = 20
       Top = 0
-      Width = 180
+      Width = 210
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -175,18 +185,18 @@ object f_sequence: Tf_sequence
     Left = 0
     Height = 238
     Top = 296
-    Width = 180
+    Width = 210
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 234
-    ClientWidth = 176
+    ClientWidth = 206
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
       Left = 0
       Height = 138
       Top = 20
-      Width = 180
+      Width = 210
       Align = alClient
       DefaultRowHeight = 18
       FixedCols = 0
@@ -200,7 +210,7 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 20
       Top = 0
-      Width = 180
+      Width = 210
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -215,17 +225,17 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 80
       Top = 158
-      Width = 180
+      Width = 210
       Align = alBottom
       ClientHeight = 76
-      ClientWidth = 176
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel
         Left = 1
         Height = 77
         Top = 1
-        Width = 178
+        Width = 208
         Align = alClient
         AutoSize = False
         ParentColor = False
@@ -236,7 +246,7 @@ object f_sequence: Tf_sequence
         Left = 1
         Height = 1
         Top = 78
-        Width = 178
+        Width = 208
         Align = alBottom
         ParentColor = False
         ParentFont = False
