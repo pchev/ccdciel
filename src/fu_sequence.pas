@@ -496,6 +496,7 @@ begin
       // look for modified plan
       LoadTargets(CurrentSequenceFile);
     end;
+    BtnReset.Enabled:=not Targets.IgnoreRestart;
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);
@@ -610,6 +611,7 @@ begin
        LoadPlan(T_Plan(t.plan), t.planname, t.DoneList);
      end;
    end;
+   BtnReset.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
       msg(targets.DoneStatus,2);
       msg('This sequence contain restart information.',2);
