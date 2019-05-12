@@ -38,6 +38,7 @@ type
   { Tf_sequence }
 
   Tf_sequence = class(TFrame)
+    BtnReset: TButton;
     BtnEditTargets: TButton;
     BtnStart: TButton;
     BtnStop: TButton;
@@ -65,6 +66,7 @@ type
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnDeleteClick(Sender: TObject);
     procedure BtnEditTargetsClick(Sender: TObject);
+    procedure BtnResetClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
@@ -123,7 +125,7 @@ type
     procedure StartSequence;
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
-    procedure LoadPlan(p: T_Plan; plan:string);
+    procedure LoadPlan(p: T_Plan; plan:string; donelist:TStepDone);
     procedure msg(txt:string; level: integer);
     procedure ShowDelayMsg(txt:string);
     procedure StopSequence;
@@ -136,6 +138,7 @@ type
     procedure SetOnShutdown(value:TNotifyEvent);
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
+    procedure ClearRestartHistory;
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -392,6 +395,11 @@ begin
    end;
 end;
 
+procedure Tf_sequence.BtnResetClick(Sender: TObject);
+begin
+   ClearRestartHistory;
+end;
+
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i,n:integer;
     t:TTarget;
@@ -402,6 +410,7 @@ begin
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
       // Edit
       f_EditTargets.TargetName.Caption:=Targets.TargetName;
+      f_EditTargets.CheckBoxNoRestart.Checked:=Targets.IgnoreRestart;
       f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
       f_EditTargets.TargetList.RowCount:=Targets.Count+1;
       f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
@@ -430,6 +439,7 @@ begin
       CurrentSequenceFile:='';
       CurrentSeqName:='';
       f_EditTargets.TargetName.Caption:='New targets';
+      f_EditTargets.CheckBoxNoRestart.Checked:=false;
       f_EditTargets.TargetsRepeat:=1;
       f_EditTargets.SeqStart.Checked:=false;
       f_EditTargets.SeqStop.Checked:=false;
@@ -463,9 +473,10 @@ begin
            defaultname:=f_EditTargets.TargetList.Cells[1,i];
         t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
         Targets.Add(t);
-        LoadPlan(T_Plan(t.plan), t.planname);
+        LoadPlan(T_Plan(t.plan), t.planname,t.DoneList);
       end;
-      Targets.TargetsRepeat:=f_EditTargets.TargetsRepeat;
+      Targets.IgnoreRestart    := f_EditTargets.CheckBoxNoRestart.Checked;
+      Targets.TargetsRepeat    := f_EditTargets.TargetsRepeat;
       Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
       Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
       Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
@@ -491,7 +502,7 @@ procedure Tf_sequence.LoadTargets(fn: string);
 var tfile: TCCDconfig;
     t:TTarget;
     x:string;
-    i,n: integer;
+    i,j,m,n: integer;
 begin
    tfile:=TCCDconfig.Create(self);
    tfile.Filename:=fn;
@@ -502,6 +513,11 @@ begin
    n:=tfile.GetValue('/TargetNum',0);
    Targets.FileVersion      :=tfile.GetValue('/Version',1);
    Targets.TargetsRepeat    :=tfile.GetValue('/RepeatCount',1);
+   Targets.IgnoreRestart    := tfile.GetValue('/Targets/IgnoreRestart',true);
+   if Targets.IgnoreRestart then
+      Targets.TargetsRepeatCount:=0
+   else
+      Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);
    Targets.SeqStart         := tfile.GetValue('/Startup/SeqStart',false);
    Targets.SeqStop          := tfile.GetValue('/Startup/SeqStop',false);
    Targets.SeqStartTwilight := tfile.GetValue('/Startup/SeqStartTwilight',false);
@@ -572,21 +588,54 @@ begin
        t.previewexposure:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
+       if Targets.IgnoreRestart then
+          t.repeatdone:=0
+       else
+          t.repeatdone:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0));
        t.delay:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/Delay',1.0);
        t.FlatCount:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatCount',1));
        t.FlatBinX:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
        t.FlatBinY:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',1));
        t.FlatGain:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatGain',0));
        t.FlatFilters:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatFilters','');
+       m:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',0));
+       SetLength(t.DoneList,m);
+       for j:=0 to m-1 do begin
+          if Targets.IgnoreRestart then
+             t.DoneList[j]:=0
+          else
+             t.DoneList[j]:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0));
+       end;
        Targets.Add(t);
-       LoadPlan(T_Plan(t.plan), t.planname);
+       LoadPlan(T_Plan(t.plan), t.planname, t.DoneList);
+     end;
+   end;
+   if Targets.CheckDoneCount then begin
+      msg(targets.DoneStatus,2);
+      msg('This sequence contain restart information.',2);
+   end
+   else
+      msg('',2);
+   tfile.Free;
+end;
+
+procedure Tf_sequence.ClearRestartHistory;
+begin
+   if Targets.CheckDoneCount then begin
+     if MessageDlg('Clear restart information?','This sequence contain restart information.'+crlf+
+                   'Now you can continue after the last checkpoint.'+crlf+crlf+
+                   'Do you want to clear the restart information to restart from the beginning?',
+                   mtConfirmation,mbYesNo,0)=mrYes then begin
+        Targets.ClearDoneCount(true);
+        SaveTargets(CurrentSequenceFile,'');
+        msg('',2);
      end;
    end;
 end;
 
-procedure Tf_sequence.LoadPlan(p: T_plan; plan:string);
+procedure Tf_sequence.LoadPlan(p: T_plan; plan:string; donelist:TStepDone);
 var fn,buf: string;
-    i,n:integer;
+    i,n,m:integer;
     pfile: TCCDconfig;
     s: TStep;
 begin
@@ -597,10 +646,16 @@ begin
      pfile:=TCCDconfig.Create(self);
      pfile.Filename:=fn;
      n:=pfile.GetValue('/StepNum',0);
+     m:=Length(donelist);
+     if n<>m then begin
+       SetLength(donelist,n);
+       for i:=m to n-1 do donelist[i]:=0;
+     end;
      buf:='';
      for i:=1 to n do begin
        s:=TStep.Create;
        f_EditTargets.ReadStep(pfile,i,s,buf);
+       s.donecount:=donelist[i-1];
        p.Add(s);
      end;
      if buf>'' then ShowMessage(buf);
@@ -665,7 +720,7 @@ end;
 procedure Tf_sequence.SaveTargets(fn,defaultname:string);
 var tfile: TCCDconfig;
     t:TTarget;
-    i: integer;
+    i,j: integer;
 begin
  if TargetGrid.RowCount>1 then begin
     if fn='' then begin
@@ -686,6 +741,11 @@ begin
     tfile.SetValue('/ListName',CurrentSeqName);
     tfile.SetValue('/TargetNum',Targets.Count);
     tfile.SetValue('/RepeatCount',Targets.TargetsRepeat);
+    tfile.SetValue('/Targets/IgnoreRestart',Targets.IgnoreRestart);
+    if Targets.IgnoreRestart then
+       tfile.SetValue('/Targets/RepeatDone',0)
+    else
+       tfile.SetValue('/Targets/RepeatDone',Targets.TargetsRepeatCount);
     tfile.SetValue('/Startup/SeqStart',Targets.SeqStart);
     tfile.SetValue('/Startup/SeqStop',Targets.SeqStop);
     tfile.SetValue('/Startup/SeqStartTwilight',Targets.SeqStartTwilight);
@@ -731,12 +791,23 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
+      if Targets.IgnoreRestart then
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
+      else
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/Delay',t.delay);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatCount',t.FlatCount);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',t.FlatBinY);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatGain',t.FlatGain);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
+      for j:=0 to Length(t.DoneList)-1 do begin
+        if Targets.IgnoreRestart then
+           tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0)
+        else
+           tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
+      end;
     end;
     tfile.Flush;
     tfile.Free;
@@ -830,6 +901,11 @@ begin
  StartingSequence:=true;
  msg(Format(rsStartingSequ,['']),1);
  led.Brush.Color:=clYellow;
+ if Targets.CheckDoneCount then begin
+    msg(targets.DoneStatus,2);
+    msg('This sequence contain restart information',2);
+    msg('Only the missing steps will be done.',2);
+ end;
  if preview.Running then begin
      msg(rsStopPreview,2);
      camera.AbortExposure;
@@ -995,6 +1071,7 @@ begin
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
+var tfile:TCCDconfig;
 begin
  if (AllDevicesConnected) then begin
    if Targets.Running or Fcapture.Running then begin
@@ -1004,7 +1081,14 @@ begin
      msg(rsPleaseLoadOr,0);
    end
    else begin
-     AutoguiderStarting:=false;
+     if Targets.IgnoreRestart then begin
+       Targets.ClearDoneCount(true);
+       SaveTargets(CurrentSequenceFile,'');
+     end;
+     tfile:=TCCDconfig.Create(self);
+     tfile.Filename:=CurrentSequenceFile;
+     Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);
+     tfile.Free;
      StartSequence;
    end;
  end

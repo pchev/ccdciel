@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  fu_safety, fu_weather, cu_dome,
+  fu_safety, fu_weather, cu_dome, u_ccdconfig,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -61,11 +61,14 @@ type
       StartPlanTimer: TTimer;
       FTargetCoord: boolean;
       FTargetRA,FTargetDE: double;
+      FIgnoreRestart: boolean;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
       FAtEndPark, FAtEndCloseDome, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
       SkipTarget: boolean;
+      TargetForceNext: boolean;
+      FDoneStatus: string;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -94,6 +97,7 @@ type
       procedure StopTimerTimer(Sender: TObject);
       procedure StopTargetTimerTimer(Sender: TObject);
       procedure WeatherRestartTimerTimer(Sender: TObject);
+      procedure PlanStepChange(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -109,7 +113,6 @@ type
       FName: string;
     public
       FTargetInitializing, FWaitStarting: boolean;
-      TargetRepeatCount, TargetTotalCount: integer;
       constructor Create(AOwner: TComponent); override;
       destructor  Destroy; override;
       procedure Clear;
@@ -120,8 +123,13 @@ type
       procedure WeatherPause;
       procedure WeatherRestart;
       procedure ForceNextTarget;
+      procedure SaveDoneCount(RepeatDone: integer);
+      function  CheckDoneCount:boolean;
+      procedure ClearDoneCount(ClearRepeat: boolean);
       property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
+      property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
+      property IgnoreRestart: boolean read FIgnoreRestart write FIgnoreRestart;
       property SeqStartAt: TDateTime read FSeqStartAt write FSeqStartAt;
       property SeqStopAt: TDateTime read FSeqStopAt write FSeqStopAt;
       property SeqStart: boolean read FSeqStart write FSeqStart;
@@ -140,6 +148,7 @@ type
       property TargetDE: double read FTargetDE;
       property TargetInitializing: boolean read FTargetInitializing;
       property WaitStarting: boolean read FWaitStarting;
+      property DoneStatus: string read FDoneStatus;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
       property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
@@ -183,6 +192,7 @@ begin
   WeatherPauseCanceled:=false;
   WeatherCancelRestart:=false;
   FTargetsRepeat:=1;
+  TargetForceNext:=false;
   Frunning:=false;
   FSeqStartAt:=0;
   FSeqStopAt:=0;
@@ -199,6 +209,8 @@ begin
   FAtEndShutdown:=false;
   FAtEndScript:='';
   FOnErrorScript:='';
+  FDoneStatus:='';
+  FIgnoreRestart:=true;
   FInitializing:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
@@ -311,6 +323,7 @@ var p:T_Plan;
 begin
   p:=T_Plan.Create(nil);
   p.onPlanChange:=FPlanChange;
+  p.onStepProgress:=@PlanStepChange;
   p.Preview:=Fpreview;
   p.Capture:=Fcapture;
   p.Mount:=Fmount;
@@ -333,7 +346,6 @@ var hm,he: double;
 begin
   try
   FWaitStarting:=true;
-  FTargetsRepeatCount:=0;
   FCurrentTarget:=-1;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
@@ -401,8 +413,7 @@ begin
   if FTargetsRepeat=1 then
     msg(Format(rsStartingSequ, [FName]),1)
   else
-    msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),
-      inttostr(FTargetsRepeat)]),1);
+    msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),inttostr(FTargetsRepeat)]),1);
   finally
     FWaitStarting:=false;
   end;
@@ -504,11 +515,13 @@ end;
 
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
+    RepeatDone:integer;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
  WeatherRestartTimer.Enabled:=false;
  InplaceAutofocus:=AutofocusInPlace;
+ RepeatDone:=FTargetsRepeatCount;
  FTargetsRepeatCount:=FTargetsRepeat+1;
  if FRunning then begin
    FRunning:=false;
@@ -563,11 +576,114 @@ begin
      RunErrorAction;
      ShowDelayMsg('');
    end;
+   SaveDoneCount(RepeatDone);
    if assigned(FonEndSequence) then FonEndSequence(nil);
    CurrentTargetName:='';
    CurrentStepName:='';
  end
  else msg(rsNotRunningNo,1);
+end;
+
+function T_Targets.CheckDoneCount:boolean;
+var i,j: integer;
+    t: TTarget;
+    p: T_Plan;
+begin
+ result:=false;
+ FDoneStatus:='';
+ if IgnoreRestart then exit;
+ if FTargetsRepeatCount>0 then begin
+   result:=true;
+   FDoneStatus:='Global repeat: '+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+ end;
+ for i:=0 to NumTargets-1 do begin
+    t:=Targets[i];
+    if t=nil then Continue;
+    if t.repeatdone>0 then begin
+      result:=true;
+      FDoneStatus:=FDoneStatus+crlf+t.objectname+' repeat: '+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+    end;
+    p:=t_plan(t.plan);
+    if p=nil then Continue;
+    if p.Count<=0 then Continue;
+    for j:=0 to p.Count-1 do begin
+      if p.Steps[j].donecount>0 then begin
+        result:=true;
+        FDoneStatus:=FDoneStatus+crlf+t.objectname+' step: '+p.Steps[j].description+' done: '+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+      end;
+    end;
+ end;
+end;
+
+procedure T_Targets.ClearDoneCount(ClearRepeat: boolean);
+var i,j: integer;
+    t: TTarget;
+    p: T_Plan;
+begin
+ if ClearRepeat then FTargetsRepeatCount:=0;
+ for i:=0 to NumTargets-1 do begin
+    t:=Targets[i];
+    if t=nil then Continue;
+    t.repeatdone:=0;
+    p:=t_plan(t.plan);
+    if p=nil then Continue;
+    if p.Count<=0 then Continue;
+    SetLength(t.DoneList,p.Count);
+    for j:=0 to p.Count-1 do begin
+      p.Steps[j].donecount:=0;
+      t.DoneList[j]:=0;
+    end;
+ end;
+end;
+
+procedure T_Targets.SaveDoneCount(RepeatDone: integer);
+var p: T_Plan;
+    t: TTarget;
+    i,n: integer;
+    tfile: TCCDconfig;
+begin
+ try
+  if (FCurrentTarget<0)or(FCurrentTarget>Count) then exit;
+  t:=Targets[FCurrentTarget];
+  if t=nil then exit;
+  p:=t_plan(t.plan);
+  if p=nil then exit;
+  if p.Count<=0 then exit;
+  tfile:=TCCDconfig.Create(self);
+  tfile.Filename:=CurrentSequenceFile;
+  i:=FCurrentTarget+1;
+  // global sequence repeat
+  if FIgnoreRestart then
+     tfile.SetValue('/Targets/RepeatDone',0)
+  else
+     tfile.SetValue('/Targets/RepeatDone',RepeatDone);
+  // target repeat
+  if FIgnoreRestart then
+     tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
+  else
+     tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
+  // plan step done
+  n:=p.CurrentStep;
+  if (n>=0)and(n<p.Count) then begin
+    SetLength(t.DoneList,p.Count);
+    if FIgnoreRestart then
+       t.DoneList[n]:=0
+    else
+       t.DoneList[n]:=p.Steps[n].donecount;
+    tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
+    tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
+  end;
+  // save file
+  tfile.Flush;
+  tfile.Free;
+ except
+   on E: Exception do msg('Error saving sequence state:'+ E.Message,1);
+ end;
+end;
+
+procedure T_Targets.PlanStepChange(Sender: TObject);
+begin
+  SaveDoneCount(FTargetsRepeatCount);
 end;
 
 procedure T_Targets.ForceNextTarget;
@@ -578,7 +694,7 @@ begin
  if FRunning then begin
    t:=Targets[FCurrentTarget];
    p:=t_plan(t.plan);
-   TargetRepeatCount:=t.repeatcount;
+   TargetForceNext:=true;
    if Autofocusing then begin
      CancelAutofocus:=true;
      msg(rsRequestToSto3,1);
@@ -615,11 +731,13 @@ begin
      Mount.AbortMotion;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
+  SaveDoneCount(FTargetsRepeatCount);
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
    CurrentTargetName:=Targets[FCurrentTarget].objectname;
    if Targets[FCurrentTarget].objectname=ScriptTxt then begin
      FInitializing:=false;
+     TargetForceNext:=false;
      Targets[FCurrentTarget].autoguiding:=false;
      FScriptRunning:=true;
      if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
@@ -652,7 +770,7 @@ begin
     then begin
      FInitializing:=true;
      ShowDelayMsg('');
-     TargetRepeatCount:=1;
+     TargetForceNext:=false;
      initok:=InitSkyFlat;
      if not FRunning then begin
        exit;
@@ -692,7 +810,7 @@ begin
    else begin
      FInitializing:=true;
      ShowDelayMsg('');
-     TargetRepeatCount:=1;
+     TargetForceNext:=false;
      initok:=InitTarget;
      if not FRunning then begin
        exit;
@@ -735,9 +853,9 @@ begin
      FTargetCoord:=false;
      FTargetRA:=NullCoord;
      FTargetDE:=NullCoord;
+     ClearDoneCount(false);
      FRunning:=true;
-     msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),
-       inttostr(FTargetsRepeat)]),1);
+     msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),inttostr(FTargetsRepeat)]),1);
      wait(1);
      NextTarget;
    end
@@ -775,6 +893,12 @@ begin
       SkipTarget:=true;
       result:=false;
       msg(Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']), 2);
+      exit;
+    end;
+    if t.repeatdone>=t.repeatcount then begin
+      SkipTarget:=true;
+      result:=false;
+      msg(Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]), 2);
       exit;
     end;
     msg(Format(rsInitializeTa, [t.objectname]),1);
@@ -1319,12 +1443,16 @@ begin
    t:=Targets[FCurrentTarget];
    if not TargetRepeatTimer.Enabled then begin
       if not T_Plan(t.plan).Running then begin
-        inc(TargetRepeatCount);
-        if (t<>nil)and(TargetRepeatCount<=t.repeatcount) then begin
+        if (t<>nil) then begin
+        inc(t.repeatdone);
+        if (TargetForceNext)or(t.repeatdone>=t.repeatcount) then begin
+           NextTarget;
+        end
+        else begin
            tt:=t.delay-(Now-TargetTimeStart)*secperday;
            if tt<1 then tt:=1;
            if tt>1 then msg(Format(rsWaitSecondsB, [FormatFloat(f1, tt),
-             IntToStr(TargetRepeatCount)]),2);
+             IntToStr(t.repeatdone)]),2);
            TargetRepeatTimer.Interval:=trunc(1000*tt);
            TargetRepeatTimer.Enabled:=true;
            TargetDelayEnd:=now+tt/secperday;
@@ -1333,6 +1461,7 @@ begin
              Preview.Binning.Text:=Capture.Binning.Text;
              Preview.BtnLoop.Click;
            end;
+        end;
         end
         else begin
          NextTarget;
@@ -1355,17 +1484,25 @@ end;
 
 procedure T_Targets.TargetRepeatTimerTimer(Sender: TObject);
 var t: TTarget;
+    p: T_Plan;
+    i,n: integer;
 begin
  if FRunning then begin
     TargetRepeatTimer.Enabled:=false;
     ShowDelayMsg('');
     t:=Targets[FCurrentTarget];
     if t<>nil then begin
-      Msg(Format(rsRepeatTarget, [inttostr(TargetRepeatCount),
-        t.repeatcount_str, t.objectname]),1);
-      ShowDelayMsg(Format(rsRepeatTarget, [inttostr(TargetRepeatCount),
-        t.repeatcount_str, t.objectname]));
+      Msg(Format(rsRepeatTarget, [blank+inttostr(t.repeatdone+1),t.repeatcount_str, t.objectname]),1);
+      ShowDelayMsg(Format(rsRepeatTarget, [blank+inttostr(t.repeatdone+1),t.repeatcount_str, t.objectname]));
       if t.preview and Preview.Running then Preview.BtnLoop.Click;
+      p:=T_Plan(t.plan);
+      if p<>nil then begin
+        // reset step done counts
+        n:=p.Count;
+        for i:=0 to n-1 do begin
+           p.Steps[i].donecount:=0;
+        end;
+      end;
       TargetTimeStart:=now;
       StartPlan;
     end

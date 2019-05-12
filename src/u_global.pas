@@ -88,6 +88,7 @@ type
               public
               exposure : double;
               count: integer;
+              donecount: integer;
               dither: boolean;
               dithercount: integer;
               autofocusstart: boolean;
@@ -111,18 +112,21 @@ type
               function autofocuscount_str: string;
             end;
 
+  TStepDone = array of integer;
+
   TTarget = Class(TObject)
               public
               objectname, planname, path: shortstring;
               starttime,endtime,startmeridian,endmeridian,ra,de,pa: double;
               startrise,endset,darknight,skip: boolean;
-              repeatcount: integer;
+              repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain: integer;
               FlatFilters: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
               delay, previewexposure: double;
               plan :TComponent;
+              DoneList: TStepDone;
               constructor Create;
               destructor Destroy; override;
               procedure Assign(Source: TTarget);
@@ -392,6 +396,7 @@ var
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
   CurrentSeqName, CurrentTargetName, CurrentStepName: string;
+  CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
   DummyDouble: double;
@@ -435,11 +440,13 @@ begin
   inplaceautofocus:=AutofocusInPlace;
   autoguiding:=false;
   repeatcount:=1;
+  repeatdone:=0;
   preview:=False;
   delay:=1;
   previewexposure:=1;
   darknight:=false;
   skip:=false;
+  SetLength(DoneList,0);
 end;
 
 destructor TTarget.Destroy;
@@ -448,10 +455,12 @@ begin
   if (plan<>nil) then FreeAndNil(plan);
   except
   end;
+  SetLength(DoneList,0);
   Inherited Destroy;
 end;
 
 procedure TTarget.Assign(Source: TTarget);
+var i: integer;
 begin
   objectname:=Source.objectname;
   planname:=Source.planname;
@@ -470,6 +479,7 @@ begin
   astrometrypointing:=source.astrometrypointing;
   updatecoord:=Source.updatecoord;
   repeatcount:=Source.repeatcount;
+  repeatdone:=Source.repeatdone;
   inplaceautofocus:=Source.inplaceautofocus;
   autoguiding:=Source.autoguiding;
   preview:=Source.preview;
@@ -482,6 +492,8 @@ begin
   FlatFilters:=Source.FlatFilters;
   darknight:=Source.darknight;
   skip:=Source.skip;
+  SetLength(DoneList,Length(Source.DoneList));
+  for i:=0 to Length(Source.DoneList)-1 do DoneList[i]:=Source.DoneList[i];
 end;
 
 function TTarget.previewexposure_str: string;
@@ -505,6 +517,7 @@ constructor TStep.Create;
 begin
   exposure:=1;
   count:=1;
+  donecount:=0;
   filter:=0;
   binx:=1;
   biny:=1;
@@ -522,6 +535,7 @@ procedure TStep.Assign(Source: Tstep);
 begin
   exposure:=Source.exposure;
   count:=Source.count;
+  donecount:=Source.donecount;
   filter:=Source.filter;
   binx:=Source.binx;
   biny:=Source.biny;
