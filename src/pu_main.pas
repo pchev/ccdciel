@@ -1934,6 +1934,8 @@ begin
   f_visu.histminmax.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(11, btn);
+  f_visu.BtnInvert.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
@@ -7245,6 +7247,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.Overflow:=ClippingOverflow;
   fits.Underflow:=ClippingUnderflow;
   fits.MarkOverflow:=f_visu.Clipping;
+  fits.Invert:=f_visu.Invert;
   fits.GetBGRABitmap(ImaBmp);
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin

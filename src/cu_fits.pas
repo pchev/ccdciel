@@ -139,6 +139,7 @@ type
     emptybmp:Tbitmap;
     FMarkOverflow: boolean;
     FMaxADU, FOverflow, FUnderflow: double;
+    FInvert: boolean;
     f_ViewHeaders: TForm;
     m_ViewHeaders: TMemo;
     p_ViewHeaders: TPanel;
@@ -209,6 +210,7 @@ type
      property imageSigma: double read Fsigma;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MaxADU: double read FMaxADU write FMaxADU;
+     property Invert: boolean read FInvert write FInvert;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
      property Overflow: double read FOverflow write FOverflow;
      property Underflow: double read FUnderflow write FUnderflow;
@@ -572,6 +574,7 @@ FMarkOverflow:=false;
 FMaxADU:=MAXWORD;
 FOverflow:=MAXWORD;
 FUnderflow:=0;
+FInvert:=false;
 FFitsInfo.valid:=false;
 FFitsInfo.naxis1:=0;
 FHeader:=TFitsHeader.Create;
@@ -1374,6 +1377,7 @@ begin
   // value is 0..65535
   // result is 0..255
   result:=round(255*gamma_c[trunc(value/2)]);
+  if FInvert then result:=255-result;
 end;
 
 procedure TFits.SetGamma(value: single);

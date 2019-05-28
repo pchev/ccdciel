@@ -34,6 +34,7 @@ type
 
   Tf_visu = class(TFrame)
     BtnClipping: TSpeedButton;
+    BtnInvert: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
     Gamma: TFloatSpinEdit;
@@ -56,6 +57,7 @@ type
     TimerMinMax: TTimer;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnClippingClick(Sender: TObject);
+    procedure BtnInvertClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
@@ -78,7 +80,7 @@ type
   private
     { private declarations }
     FimgMin, FimgMax: double;
-    FBullsEye, LockSpinEdit, FClipping: Boolean;
+    FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
@@ -98,6 +100,7 @@ type
     property ImgMax: double read FimgMax write FimgMax;
     property BullsEye: boolean read FBullsEye;
     property Clipping: boolean read FClipping;
+    property Invert: boolean read FInvert;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
@@ -133,6 +136,8 @@ begin
  ImgMax:=high(word);
  ImgMin:=0;
  FBullsEye:=false;
+ FClipping:=false;
+ FInvert:=false;
  LockSpinEdit:=true;
  with Histogram.Picture.Bitmap do begin
    Width:=Histogram.Width;
@@ -352,6 +357,12 @@ end;
 procedure Tf_visu.BtnClippingClick(Sender: TObject);
 begin
   FClipping:=BtnClipping.Down;
+  TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.BtnInvertClick(Sender: TObject);
+begin
+  FInvert:=BtnInvert.Down;
   TimerRedraw.Enabled:=true;
 end;
 
