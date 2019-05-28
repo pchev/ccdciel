@@ -895,7 +895,7 @@ begin
 end;
 
 procedure Tf_sequence.StartSequence;
-var ccdtemp,tempdiff,temp,endt:double;
+var ccdtemp: double;
     i,j: integer;
     isCalibrationSequence, waitcooling: boolean;
     buf: string;
@@ -985,22 +985,6 @@ begin
    end;
  end;
  if not StartingSequence then exit;
- // wait for camera cooling
- if waitcooling then begin
-   endt:=now+300/secperday; // wait 5 minutes max.
-   tempdiff:=100;  i:=0;
-   while (tempdiff>1)and(now<endt) do begin
-      sleep(100);
-      if not StartingSequence then exit;
-      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      if (i mod 100) = 0 then begin // every 10 sec.
-         temp:=camera.Temperature;
-         tempdiff:=abs(ccdtemp-temp);
-         msg(rsCCDTemperatu+': '+FormatFloat(f1,TempDisplay(TemperatureScale,temp))+TempLabel,3);
-      end;
-      inc(i);
-   end;
- end;
  // initialize sequence
  if not StartingSequence then exit;
  StartingSequence:=false;
