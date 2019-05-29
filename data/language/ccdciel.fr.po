@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-11 16:45+0000\n"
-"PO-Revision-Date: 2019-05-11 16:53+0000\n"
+"POT-Creation-Date: 2019-05-29 12:09+0000\n"
+"PO-Revision-Date: 2019-05-29 12:17+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-11 16:56+0000\n"
-"X-Generator: Launchpad (build 18962)\n"
+"X-Launchpad-Export-Date: 2019-05-29 12:20+0000\n"
+"X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -596,6 +596,10 @@ msgstr "Effacer l'image noire"
 msgid "Clear reference image"
 msgstr "Effacer l'image de référence"
 
+#: u_translation.rsclearthecomp
+msgid "Clear the completion status?"
+msgstr "Effacer l'état d'avancement ?"
+
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
 msgstr "Cliquez sur Continuer lorsque vous êtes prêt."
@@ -951,6 +955,10 @@ msgstr "Ouverture du dôme: %s"
 #: u_translation.rsdomeslaving
 msgid "Dome slaving: %s"
 msgstr "Asservissement du dôme: %s"
+
+#: u_translation.rsdone
+msgid "done"
+msgstr "terminé"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1381,6 +1389,10 @@ msgstr "Reçoit les coord. du lieu de la monture"
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 msgstr "Paramètres globaux du focuser.%sRéglez la direction de mise au point Intérieur ou Extérieur sur celle qui donne le meilleur résultat pour votre configuration. Si vous prévoyez d'utiliser la compensation de température, définissez la direction dans laquelle il doit se déplacer lorsque la température baisse pendant la nuit."
 
+#: u_translation.rsglobalrepeat
+msgid "Global repeat:"
+msgstr "Répétition globale"
+
 #: u_translation.rsgood
 msgid "Good"
 msgstr "Bon"
@@ -1560,6 +1572,14 @@ msgstr "Itératif"
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr "Avec Vcurve il est conseillé d'utiliser une étoile de focalisation"
+
+#: u_translation.rsitwillcontin
+msgid "It will continue after the last checkpoint."
+msgstr "Elle continuera après le dernier point de contrôle."
+
+#: u_translation.rskeepcompleti
+msgid "Keep completion status"
+msgstr "Garde l'état d'avancement"
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -2460,6 +2480,10 @@ msgstr "Demande d'arrêt de l'autofocus"
 #: u_translation.rsreset
 msgid "Reset"
 msgstr "Rétablir"
+
+#: u_translation.rsresetcomplet
+msgid "Reset completion status on repeat"
+msgstr "Réinitialise l'état d'avancement à chaque répétition"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -3484,6 +3508,14 @@ msgstr "Cet objet n'est jamais au dessus de l'élévation demandée"
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
 msgstr "Cette procédure vous aidera à trouver les paramètres de mise au point automatique.%sIl suffit de l'exécuter une seule fois pour régler ces paramètres.%sCentrez une étoile assez haute et faites une mise au point manuelle pour être le plus près possible de la mise au point. Utilisez pour cela l'outil de mise au point manuelle.%sUtilisez l'outil Profil étoile pour vérifier que l'intensité de crête de étoile est environ trois quarts de l'ADU maximum de la caméra, mais pas saturée.%sAprès la mise au point, votre focuser doit être positionné à mi-course de sa course mécanique. Si ce n'est pas le cas, veuillez l'ajuster maintenant.%sLe binning que vous avez défini dans l'Aperçu est maintenant utilisé pour la mise au point automatique. Si vous souhaitez modifier ultérieurement le binning de mise au point, vous devez exécuter à nouveau cette procédure."
+
+#: u_translation.rsthissequence
+msgid "This sequence contain completion status."
+msgstr "Cette séquence contient l'état d'avancement"
+
+#: u_translation.rsthissequence2
+msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
+msgstr "Cette séquence contient des informations sur les étapes déjà effectuées.%sVous pouvez maintenant continuer après le dernier point de contrôle.%sVoulez-vous effacer l'état d'avancement pour redémarrer depuis le début?"
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"

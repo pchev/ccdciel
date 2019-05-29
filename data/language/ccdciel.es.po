@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-11 16:45+0000\n"
+"POT-Creation-Date: 2019-05-29 12:09+0000\n"
 "PO-Revision-Date: 2019-05-06 18:43+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-11 16:56+0000\n"
-"X-Generator: Launchpad (build 18962)\n"
+"X-Launchpad-Export-Date: 2019-05-29 12:20+0000\n"
+"X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -596,6 +596,10 @@ msgstr "Limpiar toma oscura"
 msgid "Clear reference image"
 msgstr "Limpiar imagen de referencia"
 
+#: u_translation.rsclearthecomp
+msgid "Clear the completion status?"
+msgstr ""
+
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
 msgstr "Clic en Continuar cuando esté listo."
@@ -951,6 +955,10 @@ msgstr "Cierre de cúpula: %s"
 #: u_translation.rsdomeslaving
 msgid "Dome slaving: %s"
 msgstr "Esclavitud de cúpula: %s"
+
+#: u_translation.rsdone
+msgid "done"
+msgstr ""
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1381,6 +1389,10 @@ msgstr "Obtener coordenadas lat/lon desde la montura"
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 msgstr "Parámetros del enfocador globales. &sAjuste la dirección del enfocador ADENTRO o AFUERA del que le dé mejores resultados para su configuración. Si planea usar la compensación de temperatura, indique la dirección en la que deberá moverse cuando la temperatura caiga durante la noche."
 
+#: u_translation.rsglobalrepeat
+msgid "Global repeat:"
+msgstr ""
+
 #: u_translation.rsgood
 msgid "Good"
 msgstr "Bueno"
@@ -1560,6 +1572,14 @@ msgstr "Iterativo"
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr "Si se usa la curva V es recomendable apuntar a la estrella de enfoque"
+
+#: u_translation.rsitwillcontin
+msgid "It will continue after the last checkpoint."
+msgstr ""
+
+#: u_translation.rskeepcompleti
+msgid "Keep completion status"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -2460,6 +2480,10 @@ msgstr "Solicitar detención del autoenfoque..."
 #: u_translation.rsreset
 msgid "Reset"
 msgstr "Reiniciar"
+
+#: u_translation.rsresetcomplet
+msgid "Reset completion status on repeat"
+msgstr ""
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -3485,6 +3509,14 @@ msgstr "Este objeto nunca está por encima de la elevación requerida"
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
 msgstr "Este procedimiento le ayudará a encontrar los parámetros del enfocador para el autoenfoque%sSólo necesita ejecutarlo una vez para ajustar estos parámetros.%sCentre una estrella con una alta elevación y realice un enfoque manual tan cerca del foco como sea posible. Use la herramienta de Enfoque manual para eso.%sUse la herramienta de perfil de estrella para comprobar que la intensidad máxima de la estrella está 3/4 del histograma y no está saturada.%sDespués de enfocar, el enfocador debe posicionarse a mitad de camino de su recorrido mecánico. Si no es el caso, por favor, ajústelo ahora.%sEl ajuste de 'binning' que haya indicado en la vista previa se usará ahora para la operación del autoenfoque. Si desea cambiar el 'binning' de enfoque más tarde deberá repetir de nuevo este procedimiento."
+
+#: u_translation.rsthissequence
+msgid "This sequence contain completion status."
+msgstr ""
+
+#: u_translation.rsthissequence2
+msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
+msgstr ""
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"

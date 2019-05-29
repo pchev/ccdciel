@@ -1062,6 +1062,12 @@ resourcestring
   rsMode = 'Mode:';
   rsKeepCompleti = 'Keep completion status';
   rsResetComplet = 'Reset completion status on repeat';
+  rsThisSequence = 'This sequence contain completion status.';
+  rsClearTheComp = 'Clear the completion status?';
+  rsThisSequence2 = 'This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?';
+  rsItWillContin = 'It will continue after the last checkpoint.';
+  rsGlobalRepeat = 'Global repeat:';
+  rsDone = 'done';
 
 implementation
 

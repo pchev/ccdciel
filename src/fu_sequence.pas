@@ -261,7 +261,7 @@ begin
   Unattended.Caption:=rsRunUnattende;
   BtnCopy.Caption:=rsCopy;
   BtnDelete.Caption:=rsDelete;
-
+  BtnReset.Caption:=rsReset;
 end;
 
 procedure Tf_sequence.SetPreview(val: Tf_preview);
@@ -618,7 +618,7 @@ begin
    BtnReset.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
       msg(targets.DoneStatus,2);
-      msg('This sequence contain restart information.',2);
+      msg(rsThisSequence, 2);
    end
    else
       msg('',2);
@@ -628,9 +628,7 @@ end;
 procedure Tf_sequence.ClearRestartHistory;
 begin
    if Targets.CheckDoneCount then begin
-     if MessageDlg('Clear restart information?','This sequence contain restart information.'+crlf+
-                   'Now you can continue after the last checkpoint.'+crlf+crlf+
-                   'Do you want to clear the restart information to restart from the beginning?',
+     if MessageDlg(rsClearTheComp, Format(rsThisSequence2, [crlf, crlf+crlf]),
                    mtConfirmation,mbYesNo,0)=mrYes then begin
         Targets.ClearDoneCount(true);
         SaveTargets(CurrentSequenceFile,'');
@@ -910,8 +908,8 @@ begin
  led.Brush.Color:=clYellow;
  if Targets.CheckDoneCount then begin
     msg(targets.DoneStatus,2);
-    msg('This sequence contain restart information',2);
-    msg('Only the missing steps will be done.',2);
+    msg(rsThisSequence,2);
+    msg(rsItWillContin, 2);
  end;
  if preview.Running then begin
      msg(rsStopPreview,2);

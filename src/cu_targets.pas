@@ -597,14 +597,14 @@ begin
  if IgnoreRestart then exit;
  if FTargetsRepeatCount>0 then begin
    result:=true;
-   FDoneStatus:='Global repeat: '+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+   FDoneStatus:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  end;
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
     if t.repeatdone>0 then begin
       result:=true;
-      FDoneStatus:=FDoneStatus+crlf+t.objectname+' repeat: '+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      FDoneStatus:=FDoneStatus+crlf+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
     end;
     p:=t_plan(t.plan);
     if p=nil then Continue;
@@ -612,7 +612,7 @@ begin
     for j:=0 to p.Count-1 do begin
       if p.Steps[j].donecount>0 then begin
         result:=true;
-        FDoneStatus:=FDoneStatus+crlf+t.objectname+' step: '+p.Steps[j].description+' done: '+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        FDoneStatus:=FDoneStatus+crlf+t.objectname+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
       end;
     end;
  end;

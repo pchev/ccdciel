@@ -3822,3 +3822,35 @@ msgstr ""
 msgid "Mode:"
 msgstr ""
 
+#: u_translation:rskeepcompleti
+msgid "Keep completion status"
+msgstr ""
+
+#: u_translation:rsresetcomplet
+msgid "Reset completion status on repeat"
+msgstr ""
+
+#: u_translation:rsthissequence
+msgid "This sequence contain completion status."
+msgstr ""
+
+#: u_translation:rsclearthecomp
+msgid "Clear the completion status?"
+msgstr ""
+
+#: u_translation:rsthissequence2
+msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
+msgstr ""
+
+#: u_translation:rsitwillcontin
+msgid "It will continue after the last checkpoint."
+msgstr ""
+
+#: u_translation:rsglobalrepeat
+msgid "Global repeat:"
+msgstr ""
+
+#: u_translation:rsdone
+msgid "done"
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-11 16:45+0000\n"
-"PO-Revision-Date: 2019-04-27 07:13+0000\n"
+"POT-Creation-Date: 2019-05-29 12:09+0000\n"
+"PO-Revision-Date: 2019-05-18 07:45+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-11 16:56+0000\n"
-"X-Generator: Launchpad (build 18962)\n"
+"X-Launchpad-Export-Date: 2019-05-29 12:20+0000\n"
+"X-Generator: Launchpad (build 18968)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -597,6 +597,10 @@ msgstr "Clear Dark frame"
 msgid "Clear reference image"
 msgstr "Clear reference image"
 
+#: u_translation.rsclearthecomp
+msgid "Clear the completion status?"
+msgstr ""
+
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
 msgstr "Click Continue when ready."
@@ -863,7 +867,7 @@ msgstr "Detect multiple stars in the image"
 
 #: u_translation.rsdeviceisconn
 msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
-msgstr ""
+msgstr "Device %s is connected.%sDo you want to disconnect now to open the setup dialogue?"
 
 #: u_translation.rsdevices
 msgid "Device"
@@ -952,6 +956,10 @@ msgstr "Dome shutter: %s"
 #: u_translation.rsdomeslaving
 msgid "Dome slaving: %s"
 msgstr "Dome slaving: %s"
+
+#: u_translation.rsdone
+msgid "done"
+msgstr ""
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1382,6 +1390,10 @@ msgstr "Get site long/lat from the mount"
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 msgstr "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 
+#: u_translation.rsglobalrepeat
+msgid "Global repeat:"
+msgstr ""
+
 #: u_translation.rsgood
 msgid "Good"
 msgstr "Good"
@@ -1472,7 +1484,7 @@ msgstr "Images folder Unix path"
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
-msgstr ""
+msgstr "Image statistic"
 
 #: u_translation.rsimagetransfe
 msgid "Image transfer"
@@ -1561,6 +1573,14 @@ msgstr "Iterative"
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
 msgstr "It is suggest to slew to focus star when using Vcurve"
+
+#: u_translation.rsitwillcontin
+msgid "It will continue after the last checkpoint."
+msgstr ""
+
+#: u_translation.rskeepcompleti
+msgid "Keep completion status"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -1672,7 +1692,7 @@ msgstr "Max offset"
 
 #: u_translation.rsmean
 msgid "Mean:"
-msgstr ""
+msgstr "Mean:"
 
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
@@ -1772,7 +1792,7 @@ msgstr "Mnt."
 
 #: u_translation.rsmode
 msgid "Mode:"
-msgstr ""
+msgstr "Mode:"
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -2462,6 +2482,10 @@ msgstr "Request to stop autofocus ..."
 msgid "Reset"
 msgstr "Reset"
 
+#: u_translation.rsresetcomplet
+msgid "Reset completion status on repeat"
+msgstr ""
+
 #: u_translation.rsresettodefau
 msgid "Reset to default"
 msgstr "Reset to default"
@@ -2728,7 +2752,7 @@ msgstr "Sensors properties"
 
 #: u_translation.rsseparator
 msgid "Separator"
-msgstr ""
+msgstr "Separator"
 
 #: u_translation.rsseq
 msgid "Seq:"
@@ -3156,7 +3180,7 @@ msgstr "Stay in place for autofocus"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
-msgstr ""
+msgstr "Std.Dev:"
 
 #: u_translation.rsstep
 msgid "Step"
@@ -3485,6 +3509,14 @@ msgstr "This object is never above the requested elevation"
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
 msgstr "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
+
+#: u_translation.rsthissequence
+msgid "This sequence contain completion status."
+msgstr ""
+
+#: u_translation.rsthissequence2
+msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
+msgstr ""
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"
