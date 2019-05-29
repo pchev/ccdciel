@@ -35,6 +35,8 @@ type
   Tf_visu = class(TFrame)
     BtnClipping: TSpeedButton;
     BtnInvert: TSpeedButton;
+    BtnFlipHorz: TSpeedButton;
+    BtnFlipVert: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
     Gamma: TFloatSpinEdit;
@@ -57,6 +59,8 @@ type
     TimerMinMax: TTimer;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnClippingClick(Sender: TObject);
+    procedure BtnFlipHorzClick(Sender: TObject);
+    procedure BtnFlipVertClick(Sender: TObject);
     procedure BtnInvertClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -80,7 +84,7 @@ type
   private
     { private declarations }
     FimgMin, FimgMax: double;
-    FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
+    FBullsEye, LockSpinEdit, FClipping, FInvert, FFlipVert, FFlipHorz: Boolean;
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
@@ -101,6 +105,8 @@ type
     property BullsEye: boolean read FBullsEye;
     property Clipping: boolean read FClipping;
     property Invert: boolean read FInvert;
+    property FlipHorz: boolean read FFlipHorz;
+    property FlipVert: boolean read FFlipVert;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
@@ -138,6 +144,8 @@ begin
  FBullsEye:=false;
  FClipping:=false;
  FInvert:=false;
+ FFlipVert:=false;
+ FFlipHorz:=false;
  LockSpinEdit:=true;
  with Histogram.Picture.Bitmap do begin
    Width:=Histogram.Width;
@@ -357,6 +365,18 @@ end;
 procedure Tf_visu.BtnClippingClick(Sender: TObject);
 begin
   FClipping:=BtnClipping.Down;
+  TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.BtnFlipHorzClick(Sender: TObject);
+begin
+  FFlipHorz:=BtnFlipHorz.Down;
+  TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.BtnFlipVertClick(Sender: TObject);
+begin
+  FFlipVert:=BtnFlipVert.Down;
   TimerRedraw.Enabled:=true;
 end;
 

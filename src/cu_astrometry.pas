@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, fu_preview, cu_astrometry_engine, cu_mount, cu_camera, cu_wheel, cu_fits, indiapi,
+uses  u_global, u_utils, fu_preview, fu_visu, cu_astrometry_engine, cu_mount, cu_camera, cu_wheel, cu_fits, indiapi,
       u_translation, LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
@@ -34,6 +34,7 @@ TAstrometry = class(TComponent)
   private
     engine: TAstrometry_engine;
     Fpreview:Tf_preview;
+    Fvisu: Tf_visu;
     Fterminatecmd: TNotifyEvent;
     FonStartAstrometry: TNotifyEvent;
     FonEndAstrometry: TNotifyEvent;
@@ -85,6 +86,7 @@ TAstrometry = class(TComponent)
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Fits: TFits read FFits write FFits;
     property preview:Tf_preview read Fpreview write Fpreview;
+    property visu:Tf_visu read Fvisu write Fvisu;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
@@ -384,7 +386,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
    end;
    n:=cdcwcs_getinfo(addr(i),0);
    if (n=0)and(i.secpix<>0) then begin
-     Screen2fits(Xslew,Yslew,xx,yy);
+     Screen2fits(Xslew,Yslew,Fvisu.FlipHorz,Fvisu.FlipVert,xx,yy);
      c.x:=xx;
      c.y:=i.hp-yy;
      m:=cdcwcs_xy2sky(@c,0);

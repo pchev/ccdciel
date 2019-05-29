@@ -1204,6 +1204,7 @@ begin
   f_preview.onMsg:=@NewMessage;
   f_preview.onEndControlExposure:=@EndControlExposure;
   astrometry.preview:=f_preview;
+  astrometry.visu:=f_visu;
 
   f_capture:=Tf_capture.Create(self);
   f_capture.onStartExposure:=@StartCaptureExposure;
@@ -1936,6 +1937,10 @@ begin
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);
   f_visu.BtnInvert.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(12, btn);
+  f_visu.BtnFlipHorz.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(13, btn);
+  f_visu.BtnFlipVert.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
@@ -2381,7 +2386,7 @@ procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y: integer;
 begin
  if fits.HeaderInfo.valid and (not f_starprofile.AutofocusRunning) then begin
-   Screen2fits(Mx,My,x,y);
+   Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x,y);
    f_starprofile.ShowProfile(fits,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
    Image1.Invalidate;
  end;
@@ -2461,8 +2466,8 @@ if MouseFrame and fits.HeaderInfo.valid then begin
   Image1.Canvas.Pen.Mode:=pmCopy;
   EndX:=X;
   EndY:=Y;
-  Screen2CCD(StartX,StartY,camera.VerticalFlip,x1,y1);
-  Screen2CCD(EndX,EndY,camera.VerticalFlip,x2,y2);
+  Screen2CCD(StartX,StartY,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,x1,y1);
+  Screen2CCD(EndX,EndY,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,x2,y2);
   if camera.CameraInterface=INDI then begin
     // INDI frame in unbinned pixel
     x1:=x1*camera.BinX;
@@ -2574,7 +2579,9 @@ end;
 procedure Tf_main.ImageResizeTimerTimer(Sender: TObject);
 begin
   ImageResizeTimer.Enabled:=false;
-  ScrBmp.SetSize(Image1.Width,Image1.Height);
+  ScrWidth:=Image1.Width;
+  ScrHeigth:=Image1.Height;
+  ScrBmp.SetSize(ScrWidth,ScrHeigth);
   ClearImage;
   DrawImage;
 end;
@@ -4950,8 +4957,8 @@ begin
  // set focus frame around the star
  s:=Focuswindow div camera.BinX;
  s2:=s div 2;
- Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
- Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+ Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+ Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
  if camera.CameraInterface=INDI then begin
    // INDI frame in unbinned pixel
    xc:=xc*camera.BinX;
@@ -7343,6 +7350,8 @@ else begin
    str.Free;
    tmpbmp.Free;
 end;
+if f_visu.FlipHorz then ScrBmp.HorizontalFlip;
+if f_visu.FlipVert then ScrBmp.VerticalFlip;
 Image1.Invalidate;
 if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 MagnifyerTimer.Enabled:=true;
@@ -7393,7 +7402,7 @@ var x,y,xxc,yyc,s,r: integer;
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
-     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
+     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      if ImgZoom=0 then begin
        s:=round((Starwindow/fits.HeaderInfo.BinX/2)*ImgScale0);
        r:=round(f_starprofile.HFD*ImgScale0/2);
@@ -7424,7 +7433,7 @@ begin
            InplaceAutofocus and
            (fits.StarList[i].snr<AutofocusMinSNR)  // do not plot stars not used by autofocus
            then continue;
-        Fits2Screen(round(fits.StarList[i].x),round(fits.StarList[i].y),x,y);
+        Fits2Screen(round(fits.StarList[i].x),round(fits.StarList[i].y),f_visu.FlipHorz,f_visu.FlipVert,x,y);
         size:=round(max(ImgZoom,ImgScale0)*5*fits.StarList[i].hfd);
         Image1.Canvas.Rectangle(x-size,y-size, x+size, y+size);
         Image1.Canvas.TextOut(x+size,y+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1));
@@ -7434,36 +7443,36 @@ begin
         Image1.Canvas.pen.Color:=clYellow;
         Image1.Canvas.pen.Width:=DoScaleX(2);
         // x1,y1,x2,y2
-        Fits2Screen(trpx1,trpy1,x,y);
+        Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.MoveTo(x,y);
-        Fits2Screen(trpx2,trpy2,x,y);
+        Fits2Screen(trpx2,trpy2,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // x2,y2,x3,y3
-        Fits2Screen(trpx3,trpy3,x,y);
+        Fits2Screen(trpx3,trpy3,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // x3,y3,x4,y4
-        Fits2Screen(trpx4,trpy4,x,y);
+        Fits2Screen(trpx4,trpy4,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // x4,y4,x1,y1
-        Fits2Screen(trpx1,trpy1,x,y);
+        Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         {draw diagonal}
-        Fits2Screen(img_width div 2,img_height div 2,xxc,yyc);
+        Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
         // xxc,yyc,x1,y1
         Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx1,trpy1,x,y);
+        Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // xxc,yyc,x2,y2
         Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx2,trpy2,x,y);
+        Fits2Screen(trpx2,trpy2,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // xxc,yyc,x3,y3
         Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx3,trpy3,x,y);
+        Fits2Screen(trpx3,trpy3,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // xxc,yyc,x4,y4
         Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx4,trpy4,x,y);
+        Fits2Screen(trpx4,trpy4,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
      end;
      Image1.Canvas.brush.Style:=bsSolid;
@@ -7846,8 +7855,8 @@ begin
      exp:=f_preview.Exposure;
      s:=Focuswindow div camera.BinX;
      s2:=s div 2;
-     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+     Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
      if camera.CameraInterface=INDI then begin
        // INDI frame in unbinned pixel
        xc:=xc*camera.BinX;
@@ -8217,8 +8226,8 @@ begin
   if f_starprofile.FindStar then begin
      s:=Focuswindow div camera.BinX;
      s2:=s div 2;
-     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-     Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+     Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+     Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
      if camera.CameraInterface=INDI then begin
        // INDI frame in unbinned pixel
        xc:=xc*camera.BinX;
@@ -8756,8 +8765,8 @@ begin
        // set focus frame
        s:=Focuswindow div camera.BinX;
        s2:=s div 2;
-       Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),x,y);
-       Screen2CCD(x,y,camera.VerticalFlip,xc,yc);
+       Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+       Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
        if camera.CameraInterface=INDI then begin
          // INDI frame in unbinned pixel
          xc:=xc*camera.BinX;
@@ -8980,7 +8989,7 @@ begin
  if fits.HeaderInfo.valid then begin
    xx:=fits.HeaderInfo.naxis1 div 2;
    yy:=fits.HeaderInfo.naxis2 div 2;
-   Fits2Screen(xx,yy,x,y);
+   Fits2Screen(xx,yy,f_visu.FlipHorz,f_visu.FlipVert,x,y);
    astrometry.SlewScreenXY(x,y);
    if wt then begin
      Timeout:=600;
@@ -10070,7 +10079,7 @@ var xx,yy,px,py: integer;
     tmpbmp,str: TBGRABitmap;
 begin
 if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)and(y>0) then begin
- Screen2fits(x,y,xx,yy);
+ Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  z:=max(2,3*ImgZoom);
  tmpbmp:=TBGRABitmap.Create(round(f_magnifyer.Image1.Width/z),round(f_magnifyer.Image1.Height/z),clDarkBlue);
  try
@@ -10100,7 +10109,7 @@ var xx,yy,n: integer;
     c: TcdcWCScoord;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr: double;
 begin
- Screen2fits(x,y,xx,yy);
+ Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
     if fits.HeaderInfo.naxis=2 then begin
       if fits.HeaderInfo.bitpix>0 then begin

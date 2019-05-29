@@ -86,10 +86,10 @@ Procedure Hz2Eq(A,h : double; out hh,de : double);
 function AirMass(h: double): double;
 Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
 Procedure cmdHz2Eq(a,h : double; var ra,de : double);
-procedure Screen2Fits(x,y: integer; out xx,yy:integer);
-procedure Fits2Screen(x,y: integer; out xx,yy: integer);
-procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
-procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
+procedure Screen2Fits(x,y: integer;  FlipHorz,FlipVert: boolean; out xx,yy:integer);
+procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integer);
+procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
+procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
 procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 procedure Sun(jdn:double; out ra,de,l:double);
@@ -1209,9 +1209,11 @@ begin
   result := 1 / sin(deg2rad * (h + (244 / (165 + 47 * h ** 1.1))));
 end;
 
-procedure Screen2Fits(x,y: integer; out xx,yy:integer);
+procedure Screen2Fits(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy:integer);
 begin
 try
+  if FlipHorz then x:=ScrWidth-x;
+  if FlipVert then y:=ScrHeigth-y;
   if ImgZoom=0  then begin
      xx:=trunc((x/ImgScale0)/ImgPixRatio);
      yy:=trunc(y/ImgScale0);
@@ -1226,7 +1228,7 @@ except
 end;
 end;
 
-procedure Fits2Screen(x,y: integer; out xx,yy: integer);
+procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integer);
 begin
 try
   if ImgZoom=0 then begin
@@ -1237,14 +1239,18 @@ try
     xx:=round(((x+0.5) * ImgPixRatio+OrigX)*ImgZoom);
     yy:=round((y+0.5+OrigY)*ImgZoom);
   end;
+  if FlipHorz then xx:=ScrWidth-xx;
+  if FlipVert then yy:=ScrHeigth-yy;
 except
   xx:=-1;
   yy:=-1;
 end;
 end;
 
-procedure Screen2CCD(x,y: integer; vflip:boolean; out xx,yy:integer);
+procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
 begin
+  if FlipHorz then x:=ScrWidth-x;
+  if FlipVert then y:=ScrHeigth-y;
   if ImgZoom=0 then  begin
     xx:=trunc(x/ImgScale0);
     if vflip then yy:=trunc(img_Height-(y/ImgScale0))
@@ -1259,7 +1265,7 @@ begin
   yy:=yy+ImgFrameY;
 end;
 
-procedure CCD2Screen(x,y: integer; vflip:boolean; out xx,yy:integer);
+procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
 begin
 try
   if ImgZoom=0 then begin
@@ -1272,6 +1278,8 @@ try
     if vflip then yy:=round((img_Height-y+OrigY)*ImgZoom)
              else yy:=round((y+OrigY)*ImgZoom);
   end;
+  if FlipHorz then xx:=ScrWidth-xx;
+  if FlipVert then yy:=ScrHeigth-yy;
 except
   xx:=-1;
   yy:=-1;

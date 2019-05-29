@@ -333,6 +333,7 @@ var
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
   ImgZoom,ZoomMin: double;
+  ScrWidth,ScrHeigth: integer;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
