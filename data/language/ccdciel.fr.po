@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-05-29 12:09+0000\n"
-"PO-Revision-Date: 2019-05-29 12:17+0000\n"
+"PO-Revision-Date: 2019-05-29 12:30+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-29 12:20+0000\n"
+"X-Launchpad-Export-Date: 2019-05-29 12:32+0000\n"
 "X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
@@ -2483,7 +2483,7 @@ msgstr "Rétablir"
 
 #: u_translation.rsresetcomplet
 msgid "Reset completion status on repeat"
-msgstr "Réinitialise l'état d'avancement à chaque répétition"
+msgstr "Réinitialise l'avancement à chaque répétition"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
