@@ -103,6 +103,7 @@ type
       NumTargets: integer;
       FCurrentTarget: integer;
       FTargetsRepeat: integer;
+      FResetRepeat: boolean;
       FSeqStartAt,FSeqStopAt,FSeqStartTime: TDateTime;
       FSeqStart,FSeqStop: boolean;
       FSeqStartTwilight,FSeqStopTwilight: boolean;
@@ -129,6 +130,7 @@ type
       property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
       property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
+      property ResetRepeat: boolean read FResetRepeat write FResetRepeat;
       property IgnoreRestart: boolean read FIgnoreRestart write FIgnoreRestart;
       property SeqStartAt: TDateTime read FSeqStartAt write FSeqStartAt;
       property SeqStopAt: TDateTime read FSeqStopAt write FSeqStopAt;
@@ -211,6 +213,7 @@ begin
   FOnErrorScript:='';
   FDoneStatus:='';
   FIgnoreRestart:=true;
+  FResetRepeat:=true;
   FInitializing:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
@@ -853,7 +856,7 @@ begin
      FTargetCoord:=false;
      FTargetRA:=NullCoord;
      FTargetDE:=NullCoord;
-     ClearDoneCount(false);
+     if FResetRepeat then ClearDoneCount(false);
      FRunning:=true;
      msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),inttostr(FTargetsRepeat)]),1);
      wait(1);

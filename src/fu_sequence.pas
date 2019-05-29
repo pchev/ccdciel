@@ -410,7 +410,8 @@ begin
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
       // Edit
       f_EditTargets.TargetName.Caption:=Targets.TargetName;
-      f_EditTargets.CheckBoxNoRestart.Checked:=Targets.IgnoreRestart;
+      f_EditTargets.CheckBoxRestartStatus.Checked:=not Targets.IgnoreRestart;
+      f_EditTargets.CheckBoxResetRepeat.Checked:=Targets.ResetRepeat;
       f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
       f_EditTargets.TargetList.RowCount:=Targets.Count+1;
       f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
@@ -439,7 +440,8 @@ begin
       CurrentSequenceFile:='';
       CurrentSeqName:='';
       f_EditTargets.TargetName.Caption:='New targets';
-      f_EditTargets.CheckBoxNoRestart.Checked:=false;
+      f_EditTargets.CheckBoxRestartStatus.Checked:=true;
+      f_EditTargets.CheckBoxResetRepeat.Checked:=true;
       f_EditTargets.TargetsRepeat:=1;
       f_EditTargets.SeqStart.Checked:=false;
       f_EditTargets.SeqStop.Checked:=false;
@@ -475,7 +477,8 @@ begin
         Targets.Add(t);
         LoadPlan(T_Plan(t.plan), t.planname,t.DoneList);
       end;
-      Targets.IgnoreRestart    := f_EditTargets.CheckBoxNoRestart.Checked;
+      Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
+      Targets.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
       Targets.TargetsRepeat    := f_EditTargets.TargetsRepeat;
       Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
       Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
@@ -519,6 +522,7 @@ begin
       Targets.TargetsRepeatCount:=0
    else
       Targets.TargetsRepeatCount:=tfile.GetValue('/Targets/RepeatDone',0);
+   Targets.ResetRepeat      := tfile.GetValue('/Targets/ResetRepeat',true);
    Targets.SeqStart         := tfile.GetValue('/Startup/SeqStart',false);
    Targets.SeqStop          := tfile.GetValue('/Startup/SeqStop',false);
    Targets.SeqStartTwilight := tfile.GetValue('/Startup/SeqStartTwilight',false);
@@ -748,6 +752,7 @@ begin
        tfile.SetValue('/Targets/RepeatDone',0)
     else
        tfile.SetValue('/Targets/RepeatDone',Targets.TargetsRepeatCount);
+    tfile.SetValue('/Targets/ResetRepeat',Targets.ResetRepeat);
     tfile.SetValue('/Startup/SeqStart',Targets.SeqStart);
     tfile.SetValue('/Startup/SeqStop',Targets.SeqStop);
     tfile.SetValue('/Startup/SeqStartTwilight',Targets.SeqStartTwilight);

@@ -1060,6 +1060,8 @@ resourcestring
   rsStdDev = 'Std.Dev:';
   rsImageStatist = 'Image statistic';
   rsMode = 'Mode:';
+  rsKeepCompleti = 'Keep completion status';
+  rsResetComplet = 'Reset completion status on repeat';
 
 implementation
 

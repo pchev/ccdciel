@@ -61,7 +61,8 @@ type
     cbWarm: TCheckBox;
     cbScript: TCheckBox;
     cbUnattended: TCheckBox;
-    CheckBoxNoRestart: TCheckBox;
+    CheckBoxResetRepeat: TCheckBox;
+    CheckBoxRestartStatus: TCheckBox;
     CheckBoxAutofocusTemp: TCheckBox;
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
@@ -79,6 +80,7 @@ type
     Panel19: TPanel;
     Panel20: TPanel;
     Panel21: TPanel;
+    Panel22: TPanel;
     Panel3: TPanel;
     Panel8: TPanel;
     PanelSep: TPanel;
@@ -380,6 +382,8 @@ begin
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+3.0h');
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+4.0h');
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
+  CheckBoxRestartStatus.Caption:=rsKeepCompleti;
+  CheckBoxResetRepeat.Caption:=rsResetComplet;
   SeqStart.Caption := rsStartAt;
   SeqStop.Caption := rsStopAt;
   SeqStartTwilight.Caption := rsDusk;
