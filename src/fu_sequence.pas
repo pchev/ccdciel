@@ -138,7 +138,7 @@ type
     procedure SetOnShutdown(value:TNotifyEvent);
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
-    procedure ClearRestartHistory;
+    procedure ClearRestartHistory(Confirm:boolean);
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -378,6 +378,7 @@ begin
     tfile.Flush;
     tfile.Free;
     LoadTargets(fn2);
+    ClearRestartHistory(false);
   end;
 end;
 
@@ -397,11 +398,11 @@ end;
 
 procedure Tf_sequence.BtnResetClick(Sender: TObject);
 begin
-   ClearRestartHistory;
+   ClearRestartHistory(true);
 end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
-var i,n:integer;
+var i,j,n:integer;
     t:TTarget;
     defaultname: string;
 begin
@@ -437,6 +438,7 @@ begin
       end;
     end else begin
       // New
+      Targets.Clear;
       CurrentSequenceFile:='';
       CurrentSeqName:='';
       f_EditTargets.TargetName.Caption:='New targets';
@@ -465,6 +467,7 @@ begin
       f_EditTargets.TargetList.Cells[2,1]:=t.planname;
       f_EditTargets.TargetList.Objects[0,1]:=t;
     end;
+    f_EditTargets.DoneWarning:=Targets.CheckDoneCount;
     FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
     if f_EditTargets.ShowModal=mrOK then begin
       n:=f_EditTargets.TargetList.RowCount;
@@ -474,6 +477,9 @@ begin
         if (f_EditTargets.TargetList.Cells[1,i]<>ScriptTxt) and (f_EditTargets.TargetList.Cells[1,i]<>SkyFlatTxt) then
            defaultname:=f_EditTargets.TargetList.Cells[1,i];
         t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
+        t.repeatdone:=0;
+        for j:=0 to length(t.DoneList)-1 do
+           t.DoneList[j]:=0;
         Targets.Add(t);
         LoadPlan(T_Plan(t.plan), t.planname,t.DoneList);
       end;
@@ -495,6 +501,7 @@ begin
       Targets.AtEndScript       := f_EditTargets.BtnEndScript.Hint;
       Targets.OnErrorScript     := f_EditTargets.BtnUnattendedScript.Hint;
       SaveTargets(CurrentSequenceFile,defaultname);
+      LoadTargets(CurrentSequenceFile);
     end else begin
       // look for modified plan
       LoadTargets(CurrentSequenceFile);
@@ -618,18 +625,19 @@ begin
    BtnReset.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
       msg(targets.DoneStatus,2);
-      msg(rsThisSequence, 2);
+      msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
    end
    else
       msg('',2);
    tfile.Free;
 end;
 
-procedure Tf_sequence.ClearRestartHistory;
+procedure Tf_sequence.ClearRestartHistory(Confirm:boolean);
 begin
    if Targets.CheckDoneCount then begin
-     if MessageDlg(rsClearTheComp, Format(rsThisSequence2, [crlf, crlf+crlf]),
-                   mtConfirmation,mbYesNo,0)=mrYes then begin
+     if (not Confirm) or
+       (MessageDlg(rsClearTheComp, Format(rsThisSequence2, [crlf, crlf+crlf]),mtConfirmation,mbYesNo,0)=mrYes)
+       then begin
         Targets.ClearDoneCount(true);
         SaveTargets(CurrentSequenceFile,'');
         msg('',2);
@@ -908,7 +916,7 @@ begin
  led.Brush.Color:=clYellow;
  if Targets.CheckDoneCount then begin
     msg(targets.DoneStatus,2);
-    msg(rsThisSequence,2);
+    msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']),2);
     msg(rsItWillContin, 2);
  end;
  if preview.Running then begin

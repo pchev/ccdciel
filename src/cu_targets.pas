@@ -314,6 +314,7 @@ end;
 procedure  T_Targets.Clear;
 var i: integer;
 begin
+  ClearDoneCount(true);
   for i:=0 to NumTargets-1 do if FTargets[i]<>nil then FTargets[i].Free;
   SetLength(Ftargets,0);
   NumTargets := 0;
