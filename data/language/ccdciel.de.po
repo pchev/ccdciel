@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-29 12:09+0000\n"
+"POT-Creation-Date: 2019-05-29 13:54+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-29 12:32+0000\n"
+"X-Launchpad-Export-Date: 2019-05-29 14:28+0000\n"
 "X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
@@ -3509,11 +3509,15 @@ msgid "This procedure will help you to  find the focuser parameters for auto-foc
 msgstr ""
 
 #: u_translation.rsthissequence
-msgid "This sequence contain completion status."
+msgid "This sequence %s contain completion status."
 msgstr ""
 
 #: u_translation.rsthissequence2
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
+msgstr ""
+
+#: u_translation.rsthiswillbelo
+msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
 msgstr ""
 
 #: u_translation.rstiltindicati

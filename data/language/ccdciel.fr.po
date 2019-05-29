@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-29 12:09+0000\n"
-"PO-Revision-Date: 2019-05-29 12:30+0000\n"
+"POT-Creation-Date: 2019-05-29 13:54+0000\n"
+"PO-Revision-Date: 2019-05-29 14:25+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-29 12:32+0000\n"
+"X-Launchpad-Export-Date: 2019-05-29 14:28+0000\n"
 "X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
@@ -3510,12 +3510,16 @@ msgid "This procedure will help you to  find the focuser parameters for auto-foc
 msgstr "Cette procédure vous aidera à trouver les paramètres de mise au point automatique.%sIl suffit de l'exécuter une seule fois pour régler ces paramètres.%sCentrez une étoile assez haute et faites une mise au point manuelle pour être le plus près possible de la mise au point. Utilisez pour cela l'outil de mise au point manuelle.%sUtilisez l'outil Profil étoile pour vérifier que l'intensité de crête de étoile est environ trois quarts de l'ADU maximum de la caméra, mais pas saturée.%sAprès la mise au point, votre focuser doit être positionné à mi-course de sa course mécanique. Si ce n'est pas le cas, veuillez l'ajuster maintenant.%sLe binning que vous avez défini dans l'Aperçu est maintenant utilisé pour la mise au point automatique. Si vous souhaitez modifier ultérieurement le binning de mise au point, vous devez exécuter à nouveau cette procédure."
 
 #: u_translation.rsthissequence
-msgid "This sequence contain completion status."
-msgstr "Cette séquence contient l'état d'avancement"
+msgid "This sequence %s contain completion status."
+msgstr "Cette séquence %s contient l'état d'avancement"
 
 #: u_translation.rsthissequence2
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
 msgstr "Cette séquence contient des informations sur les étapes déjà effectuées.%sVous pouvez maintenant continuer après le dernier point de contrôle.%sVoulez-vous effacer l'état d'avancement pour redémarrer depuis le début?"
+
+#: u_translation.rsthiswillbelo
+msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
+msgstr "Cela sera perdu lors de l'enregistrement du nouveau fichier.%sVoulez-vous enregistrer avec un autre nom pour ne pas perdre cette information dans le fichier d'origine?"
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"

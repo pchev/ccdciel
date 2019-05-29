@@ -3831,7 +3831,7 @@ msgid "Reset completion status on repeat"
 msgstr ""
 
 #: u_translation:rsthissequence
-msgid "This sequence contain completion status."
+msgid "This sequence %s contain completion status."
 msgstr ""
 
 #: u_translation:rsclearthecomp
@@ -3852,5 +3852,9 @@ msgstr ""
 
 #: u_translation:rsdone
 msgid "done"
+msgstr ""
+
+#: u_translation:rsthiswillbelo
+msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
 msgstr ""
 
