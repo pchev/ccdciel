@@ -304,8 +304,14 @@ begin
 end;
 
 procedure T_indiweather.NewSwitch(svp: ISwitchVectorProperty);
+var sw: ISwitch;
 begin
-//  writeln('NewSwitch: '+svp.name);
+  if (svp.name='CONNECTION') then begin
+    sw:=IUFindOnSwitch(svp);
+    if (sw<>nil)and(sw.name='DISCONNECT') then begin
+      Disconnect;
+    end;
+  end;
 end;
 
 procedure T_indiweather.NewLight(lvp: ILightVectorProperty);

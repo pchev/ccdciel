@@ -321,7 +321,14 @@ begin
 end;
 
 procedure T_indidome.NewSwitch(svp: ISwitchVectorProperty);
+var sw: ISwitch;
 begin
+  if (svp.name='CONNECTION') then begin
+    sw:=IUFindOnSwitch(svp);
+    if (sw<>nil)and(sw.name='DISCONNECT') then begin
+      Disconnect;
+    end;
+  end;
   if svp=DomeShutterProp then begin
      if Assigned(FonShutterChange) then FonShutterChange(self);
   end;

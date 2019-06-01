@@ -488,8 +488,15 @@ begin
 end;
 
 procedure T_indimount.NewSwitch(svp: ISwitchVectorProperty);
+var sw: ISwitch;
 begin
-  if svp=parkprop then begin
+  if (svp.name='CONNECTION') then begin
+    sw:=IUFindOnSwitch(svp);
+    if (sw<>nil)and(sw.name='DISCONNECT') then begin
+      Disconnect;
+    end;
+  end
+  else if svp=parkprop then begin
      if Assigned(FonParkChange) then FonParkChange(self);
   end
   else if svp=TrackState then begin
