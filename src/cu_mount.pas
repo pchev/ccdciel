@@ -207,7 +207,9 @@ end;
 procedure T_mount.SetParkInterface(value:Boolean);
 var i: integer;
 begin
-  if FSlaveDome and (FDome<>nil) and (FDome.Status=devConnected) then begin
+  if FSlaveDome then begin
+   if FDomeActionWait<1 then FDomeActionWait:=1;
+   if (FDome<>nil) and (FDome.Status=devConnected) then begin
     // Process Dome park options
     if value then begin
       // park requested
@@ -215,13 +217,52 @@ begin
       for i:=0 to DomeCloseActionNum-1 do begin
         case DomeCloseActions[i] of
           dclNothing        : continue;
-          dclStopTelescope  : AbortMotion;
-          dclParkTelescope  : SetPark(true);
-          dclStopDomeSlaving: dome.Slave:=false;
-          dclParkDome       : dome.Park:=true;
-          dclCloseDome      : dome.Shutter:=false;
+          dclStopTelescope  : begin
+                              AbortMotion;
+                              wait(FDomeActionWait);
+                              if GetTracking or GetMountSlewing then begin
+                                msg('Telescope not stopped after request!',0);
+                                msg('Abort mount park',0);
+                                exit;
+                              end;
+                              end;
+          dclParkTelescope  : begin
+                              SetPark(true);
+                              wait(FDomeActionWait);
+                              if not GetPark then begin
+                                msg('Telescope not parked after request!',0);
+                                msg('Abort mount park',0);
+                                exit;
+                              end;
+                              end;
+          dclStopDomeSlaving: begin
+                              dome.Slave:=false;
+                              wait(FDomeActionWait);
+                              if dome.Slave then begin
+                                msg('Dome not unslaved after request!',0);
+                                msg('Abort mount park',0);
+                                exit;
+                              end;
+                              end;
+          dclParkDome       : begin
+                              dome.Park:=true;
+                              wait(FDomeActionWait);
+                              if not dome.Park then begin
+                                msg('Dome not parked after request!',0);
+                                msg('Abort mount park',0);
+                                exit;
+                              end;
+                              end;
+          dclCloseDome      : begin
+                              dome.Shutter:=false;
+                              wait(FDomeActionWait);
+                              if dome.Shutter then begin
+                                msg('Dome shutter not closed after request!',0);
+                                msg('Abort mount park',0);
+                                exit;
+                              end;
+                              end;
         end;
-        if DomeCloseActions[i]<>dclNothing then wait(FDomeActionWait);
       end;
       msg(rsTelescopeAnd, 1);
     end
@@ -231,16 +272,60 @@ begin
       for i:=0 to DomeOpenActionNum-1 do begin
         case DomeOpenActions[i] of
           dopNothing         : continue;
-          dopOpenDome        : dome.Shutter:=true;
-          dopUnparkdome      : dome.Park:=false;
-          dopUnparkTelescope : SetPark(false);
-          dopStartTelescope  : Track;
-          dopStartdomeSlaving: dome.Slave:=true;
+          dopOpenDome        : begin
+                               dome.Shutter:=true;
+                               wait(FDomeActionWait);
+                               if not dome.Shutter then begin
+                                 msg('Dome shutter not opened after request!',0);
+                                 msg('Abort mount unpark',0);
+                                 exit;
+                               end;
+                               end;
+          dopUnparkdome      : begin
+                               dome.Park:=false;
+                               wait(FDomeActionWait);
+                               if dome.Park then begin
+                                 msg('Dome not unparked after request!',0);
+                                 msg('Abort mount unpark',0);
+                                 exit;
+                               end;
+                               end;
+          dopUnparkTelescope : begin
+                               SetPark(false);
+                               wait(FDomeActionWait);
+                               if GetPark then begin
+                                 msg('Telescope not unparked after request!',0);
+                                 msg('Abort mount unpark',0);
+                                 exit;
+                               end;
+                               end;
+          dopStartTelescope  : begin
+                               Track;
+                               wait(FDomeActionWait);
+                               if not GetTracking then begin
+                                 msg('Telescope not tracking after request!',0);
+                                 msg('Abort mount unpark',0);
+                                 exit;
+                               end;
+                               end;
+          dopStartdomeSlaving: begin
+                               dome.Slave:=true;
+                               wait(FDomeActionWait);
+                               if not dome.Slave then begin
+                                 msg('Dome not slaved after request!',0);
+                                 msg('Abort mount unpark',0);
+                                 exit;
+                               end;
+                               end;
         end;
-        if DomeOpenActions[i]<>dopNothing then wait(FDomeActionWait);
       end;
       msg(rsTelescopeAnd2, 1);
     end;
+   end
+   else begin
+     msg(format(rsNotConnected,[rsDome]),0);
+     msg('Abort mount park/unpark',0);
+   end;
   end
   else
     // Process only mount
