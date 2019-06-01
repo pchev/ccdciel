@@ -44,6 +44,8 @@ T_ascomdome = class(T_dome)
    function  Connected: boolean;
    function  InterfaceVersion: integer;
  protected
+   function WaitDomePark(maxtime:integer):boolean;
+   function WaitShutter(onoff:boolean; maxtime:integer):boolean;
    procedure SetTimeout(num:integer); override;
    function GetPark: boolean; override;
    procedure SetPark(value:boolean); override;
@@ -59,6 +61,7 @@ public
 end;
 
 const statusinterval=2000;
+      waitpoll=500;
 
 implementation
 
@@ -219,11 +222,38 @@ begin
  {$endif}
 end;
 
+function T_ascomdome.WaitDomePark(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ try
+ if FhasPark then begin
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (not V.AtPark)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+ {$endif}
+end;
+
 procedure T_ascomdome.SetPark(value:boolean);
 begin
  {$ifdef mswindows}
    try
-   if FhasPark and value then V.Park; // no ASCOM unpark
+   if FhasPark and value then begin  // no ASCOM unpark
+     V.Park;
+     WaitDomePark(60000);
+   end;
    except
     on E: Exception do msg('Park error: ' + E.Message,0);
    end;
@@ -248,6 +278,32 @@ begin
  {$endif}
 end;
 
+function T_ascomdome.WaitShutter(onoff:boolean; maxtime:integer):boolean;
+{$ifdef mswindows}
+var ShutterState,count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ if onoff then ShutterState:=0
+          else ShutterState:=1;
+ try
+ if FhasShutter then begin
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.ShutterStatus<>ShutterState)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+ {$endif}
+end;
+
 procedure T_ascomdome.SetShutter(value:boolean);
 begin
  {$ifdef mswindows}
@@ -255,6 +311,7 @@ begin
    if FhasShutter then begin
      if value then V.OpenShutter
               else V.CloseShutter;
+     WaitShutter(value,60000);
    end;
    except
     on E: Exception do msg('Set shutter error: ' + E.Message,0);

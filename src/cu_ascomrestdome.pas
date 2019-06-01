@@ -40,6 +40,8 @@ T_ascomrestdome = class(T_dome)
    function  Connected: boolean;
    function  InterfaceVersion: integer;
  protected
+   function WaitDomePark(maxtime:integer):boolean;
+   function WaitShutter(onoff:boolean; maxtime:integer):boolean;
    procedure SetTimeout(num:integer); override;
    function GetPark: boolean; override;
    procedure SetPark(value:boolean); override;
@@ -55,6 +57,7 @@ public
 end;
 
 const statusinterval=10000;
+      waitpoll=1000;
 
 implementation
 
@@ -213,6 +216,27 @@ begin
    end;
 end;
 
+function T_ascomrestdome.WaitDomePark(maxtime:integer):boolean;
+var count,maxcount:integer;
+begin
+ result:=true;
+ if FStatus<>devConnected then exit;
+ try
+ if FhasPark then begin
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (not V.Get('atpark').AsBool)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+end;
+
 procedure T_ascomrestdome.SetPark(value:boolean);
 begin
    if FStatus<>devConnected then exit;
@@ -238,6 +262,29 @@ begin
    end;
 end;
 
+function T_ascomrestdome.WaitShutter(onoff:boolean; maxtime:integer):boolean;
+var ShutterState,count,maxcount:integer;
+begin
+ result:=true;
+ if FStatus<>devConnected then exit;
+ if onoff then ShutterState:=0
+          else ShutterState:=1;
+ try
+ if FhasShutter then begin
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Get('shutterstatus').AsInt<>ShutterState)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ end;
+ except
+   result:=false;
+ end;
+end;
+
 procedure T_ascomrestdome.SetShutter(value:boolean);
 begin
    if FStatus<>devConnected then exit;
@@ -245,6 +292,7 @@ begin
    if FhasShutter then begin
      if value then V.Put('openshutter')
               else V.Put('closeshutter');
+     WaitShutter(value,60000);
    end;
    except
     on E: Exception do msg('Set shutter error: ' + E.Message,0);

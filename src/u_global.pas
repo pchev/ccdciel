@@ -29,6 +29,10 @@ interface
 uses u_ccdconfig, dynlibs, LMessages,
   Classes, SysUtils,LCLType;
 
+const
+  DomeOpenActionNum=5;
+  DomeCloseActionNum=5;
+
 type
   TNotifyMsg = procedure(msg:string; level: integer=1) of object;
   TNotifyStr = procedure(msg:string) of object;
@@ -50,6 +54,10 @@ type
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
   TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain);
   TSafetyAction=(safNothing,safShowPrompt,safAbortSequence,safStopTelescope,safParkTelescope,safStopDomeSlaving,safParkDome,safCloseDome,safWarmCamera,safAutoguiderShutdown,safPlanetariumShutdown,safExternalCommand,safExitProgram);
+  TDomeOpenAction=(dopNothing,dopOpenDome,dopUnparkdome,dopUnparkTelescope,dopStartTelescope,dopStartdomeSlaving);
+  TDomeCloseAction=(dclNothing,dclStopTelescope,dclParkTelescope,dclStopDomeSlaving,dclParkDome,dclCloseDome);
+  TDomeOpenActions=array[0..DomeOpenActionNum-1] of TDomeOpenAction;
+  TDomeCloseActions=array[0..DomeCloseActionNum-1] of TDomeCloseAction;
 
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
@@ -243,6 +251,8 @@ const
   ResolverName: array[0..4] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve','ASTAP');
   PlanetariumName: array[0..2] of string =('Cartes du Ciel', 'SAMP', 'HNSKY');
   SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','');
+  DomeOpenActionName: array[0..ord(high(TDomeOpenAction))] of string=('','','','','','');
+  DomeCloseActionName: array[0..ord(high(TDomeCloseAction))] of string=('','','','','','');
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;

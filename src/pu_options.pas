@@ -41,16 +41,22 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
+    DomeSlaveToMount: TCheckBox;
+    DomeCloseActions: TStringGrid;
     GainFromCamera: TCheckBox;
     FilenameSep: TComboBox;
     Debug_Ascom: TCheckBox;
     GroupBox11: TGroupBox;
+    GroupBox18: TGroupBox;
+    GroupBox21: TGroupBox;
     Label119: TLabel;
     Label120: TLabel;
     Label121: TLabel;
     Label122: TLabel;
     Label123: TLabel;
     Label124: TLabel;
+    Label125: TLabel;
+    Label126: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
     Label113: TLabel;
     Label114: TLabel;
@@ -62,6 +68,11 @@ type
     Panel2: TPanel;
     Panel3: TPanel;
     DitherWaitTime: TSpinEdit;
+    Panel4: TPanel;
+    DomeOpenActions: TStringGrid;
+    DomeActionWait: TSpinEdit;
+    Panel5: TPanel;
+    TabSheet15: TTabSheet;
     TemperatureScale: TRadioGroup;
     ReadOutCapture: TComboBox;
     FloatSpinEditMa10: TFloatSpinEdit;
@@ -497,6 +508,7 @@ type
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
+    procedure DomeSlaveToMountChange(Sender: TObject);
     procedure FlatTypeClick(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FileOrFolderOptionsClick(Sender: TObject);
@@ -581,6 +593,7 @@ begin
   FileOrFolderOptionsRenumber(FileOptions);
   ChangeAutofocusInPlace(nil);
   TemperatureScaleClick(nil);
+  panel4.Visible:=DomeSlaveToMount.Checked;
 end;
 
 procedure Tf_option.Setlang;
@@ -609,6 +622,27 @@ begin
   Label108.Caption := rsElevation;
   Label76.Caption := rsHorizonProfi;
   Label77.Caption := rsMinimumObser;
+  DomeSlaveToMount.Caption:=rsAutomaticall;
+  Label125.Caption:=rsWaitTimeBetw;
+  Label126.Caption:=rsSeconds;
+  GroupBox18.Caption:=rsOpenDomeSequ;
+  DomeOpenActions.Columns[0].Title.Caption:=rsAction;
+  DomeOpenActions.Columns[0].PickList.Clear;
+  DomeOpenActions.Columns[0].PickList.Add(DomeOpenActionName[0]);
+  DomeOpenActions.Columns[0].PickList.Add(DomeOpenActionName[1]);
+  DomeOpenActions.Columns[0].PickList.Add(DomeOpenActionName[2]);
+  DomeOpenActions.Columns[0].PickList.Add(DomeOpenActionName[3]);
+  DomeOpenActions.Columns[0].PickList.Add(DomeOpenActionName[4]);
+  DomeOpenActions.Columns[0].PickList.Add(DomeOpenActionName[5]);
+  GroupBox21.Caption:=rsCloseDomeSeq;
+  DomeCloseActions.Columns[0].Title.Caption:=rsAction;
+  DomeCloseActions.Columns[0].PickList.Clear;
+  DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[0]);
+  DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[1]);
+  DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[2]);
+  DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[3]);
+  DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[4]);
+  DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[5]);
   TabSheet8.Caption := rsPreview;
   GroupBox8.Caption := rsColorPreview;
   Label38.Caption := rsBayerMatrixP;
@@ -974,6 +1008,11 @@ begin
   end else begin
     PanelRemoteCdc.Visible:=true;
   end;
+end;
+
+procedure Tf_option.DomeSlaveToMountChange(Sender: TObject);
+begin
+  panel4.Visible:=DomeSlaveToMount.Checked;
 end;
 
 procedure Tf_option.FlatTypeClick(Sender: TObject);

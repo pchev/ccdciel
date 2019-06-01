@@ -25,13 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, indiapi,
+uses u_global, u_utils, indiapi, cu_dome, u_translation,
   Classes, SysUtils;
 
 type
 
 T_mount = class(TComponent)
   protected
+    FDome: T_dome;
     FMountInterface: TDevInterface;
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonCoordChange: TNotifyEvent;
@@ -46,12 +47,15 @@ T_mount = class(TComponent)
     FAutoLoadConfig: boolean;
     FIsEqmod: boolean;
     FEquinox,FEquinoxJD: double;
+    FSlaveDome: boolean;
+    FDomeActionWait: integer;
     procedure msg(txt: string; level:integer=3);
     function  GetEquinoxCache: double;
     function  GetEquinoxJD: double;
     function  GetTracking:Boolean; virtual; abstract;
     function  GetPark:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
+    procedure SetParkInterface(value:Boolean);
     function  GetRA:double; virtual; abstract;
     function  GetDec:double; virtual; abstract;
     function  GetEquinox: double; virtual; abstract;
@@ -68,6 +72,8 @@ T_mount = class(TComponent)
     procedure SetGuideRateRa(value:double); virtual; abstract;
     procedure SetGuideRateDe(value:double); virtual; abstract;
  public
+    DomeOpenActions: TDomeOpenActions;
+    DomeCloseActions: TDomeCloseActions;
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure SlewToSkyFlatPosition;
@@ -95,7 +101,7 @@ T_mount = class(TComponent)
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
     property Tracking: Boolean read GetTracking;
-    property Park: Boolean read GetPark write SetPark;
+    property Park: Boolean read GetPark write SetParkInterface;
     property MountSlewing: boolean read GetMountSlewing;
     property RA: double read GetRA;
     property Dec: double read GetDec;
@@ -109,6 +115,9 @@ T_mount = class(TComponent)
     property PulseGuiding: boolean read GetPulseGuiding;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    property Dome: T_dome read FDome write FDome;
+    property SlaveDome: boolean read FSlaveDome write FSlaveDome;
+    property DomeActionWait: integer read FDomeActionWait write FDomeActionWait;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
@@ -129,6 +138,8 @@ begin
   FTimeOut:=100;
   FEquinox:=NullCoord;
   FEquinoxJD:=NullCoord;
+  FSlaveDome:=false;
+  FDomeActionWait:=1;
 end;
 
 destructor  T_mount.Destroy;
@@ -191,6 +202,49 @@ begin
    Slew(zra,zde);
    // stop tracking
    AbortMotion;
+end;
+
+procedure T_mount.SetParkInterface(value:Boolean);
+var i: integer;
+begin
+  if FSlaveDome and (FDome<>nil) and (FDome.Status=devConnected) then begin
+    // Process Dome park options
+    if value then begin
+      // park requested
+      msg(rsParkTheTeles3, 1);
+      for i:=0 to DomeCloseActionNum-1 do begin
+        case DomeCloseActions[i] of
+          dclNothing        : continue;
+          dclStopTelescope  : AbortMotion;
+          dclParkTelescope  : SetPark(true);
+          dclStopDomeSlaving: dome.Slave:=false;
+          dclParkDome       : dome.Park:=true;
+          dclCloseDome      : dome.Shutter:=false;
+        end;
+        if DomeCloseActions[i]<>dclNothing then wait(FDomeActionWait);
+      end;
+      msg(rsTelescopeAnd, 1);
+    end
+    else begin
+      // unpark requested
+      msg(rsUnparkTheTel2, 1);
+      for i:=0 to DomeOpenActionNum-1 do begin
+        case DomeOpenActions[i] of
+          dopNothing         : continue;
+          dopOpenDome        : dome.Shutter:=true;
+          dopUnparkdome      : dome.Park:=false;
+          dopUnparkTelescope : SetPark(false);
+          dopStartTelescope  : Track;
+          dopStartdomeSlaving: dome.Slave:=true;
+        end;
+        if DomeOpenActions[i]<>dopNothing then wait(FDomeActionWait);
+      end;
+      msg(rsTelescopeAnd2, 1);
+    end;
+  end
+  else
+    // Process only mount
+    SetPark(value);
 end;
 
 end.

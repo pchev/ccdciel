@@ -1477,6 +1477,8 @@ begin
    dome.onShutterChange:=@DomeShutterChange;
    dome.onSlaveChange:=@DomeSlaveChange;
 
+   mount.Dome:=dome;
+
    aInt:=TDevInterface(config.GetValue('/CameraInterface',ord(DefaultInterface)));
    case aInt of
      INDI:  camera:=T_indicamera.Create(nil);
@@ -1741,6 +1743,19 @@ begin
    SafetyActionName[12]:=trim(rsExitProgram);
    DevInterfaceName[2]:=rsInCamera;
    DevInterfaceName[3]:=rsInMount;
+   DomeCloseActionName[0]:='';
+   DomeCloseActionName[1]:=trim(rsStopTelescop2);
+   DomeCloseActionName[2]:=trim(rsParkTheTeles2);
+   DomeCloseActionName[3]:=trim(rsStopDomeSlav);
+   DomeCloseActionName[4]:=trim(rsParkDome);
+   DomeCloseActionName[5]:=trim(rsCloseDome);
+   DomeOpenActionName[0]:='';
+   DomeOpenActionName[1]:=trim(rsOpenTheDomeS);
+   DomeOpenActionName[2]:=trim(rsUnparkTheDom);
+   DomeOpenActionName[3]:=trim(rsUnparkTheTel);
+   DomeOpenActionName[4]:=trim(rsStartTelesco);
+   DomeOpenActionName[5]:=trim(rsSlaveTheDome);
+
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -3119,6 +3134,16 @@ begin
     MenuItemDebayer.Checked:=BayerColor;
     MenuItemDebayerClick(self);
   end;
+  mount.SlaveDome:=config.GetValue('/Dome/SlaveToMount',false);
+  mount.DomeActionWait:=config.GetValue('/Dome/ActionWait',1);
+  for i:=0 to DomeOpenActionNum-1 do begin
+    n:=round(config.GetValue('/Dome/Open/Action'+inttostr(i),0));
+    mount.DomeOpenActions[i]:=TDomeOpenAction(n);
+  end;
+  for i:=0 to DomeCloseActionNum-1 do begin
+    n:=round(config.GetValue('/Dome/Close/Action'+inttostr(i),0));
+    mount.DomeCloseActions[i]:=TDomeCloseAction(n);
+  end;
 end;
 
 procedure Tf_main.SaveSettings;
@@ -4182,8 +4207,7 @@ begin
        // Run actions
        for i:=0 to SafetyActionNum-1 do begin
           n:=round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0));
-          if n<0 then n:=0;
-          if n>ord(high(TSafetyAction)) then n:=ord(high(TSafetyAction));
+          if (n<0)or(n>ord(high(TSafetyAction))) then n:=ord(safNothing);
           param:=trim(config.GetValue('/Safety/Actions/Parameter'+inttostr(i),''));
           try
           case TSafetyAction(n) of
@@ -5886,7 +5910,14 @@ begin
       f_option.SafetyActions.Cells[1,i+1]:=SafetyActionName[round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0))];
       f_option.SafetyActions.Cells[2,i+1]:=config.GetValue('/Safety/Actions/Parameter'+inttostr(i),'');
    end;
-
+   f_option.DomeSlaveToMount.Checked:=config.GetValue('/Dome/SlaveToMount',false);
+   f_option.DomeActionWait.Value:=config.GetValue('/Dome/ActionWait',1);
+   for i:=0 to DomeOpenActionNum-1 do begin
+      f_option.DomeOpenActions.Cells[1,i+1]:=DomeOpenActionName[round(config.GetValue('/Dome/Open/Action'+inttostr(i),0))];
+   end;
+   for i:=0 to DomeCloseActionNum-1 do begin
+      f_option.DomeCloseActions.Cells[1,i+1]:=DomeCloseActionName[round(config.GetValue('/Dome/Close/Action'+inttostr(i),0))];
+   end;
    f_option.LockTemp:=false;
    FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_option.ShowModal;
@@ -6113,6 +6144,30 @@ begin
         if k<0 then k:=0;
         config.SetValue('/Safety/Actions/Action'+inttostr(i),k);
         config.SetValue('/Safety/Actions/Parameter'+inttostr(i),trim(f_option.SafetyActions.Cells[2,i+1]));
+     end;
+     config.SetValue('/Dome/SlaveToMount',f_option.DomeSlaveToMount.Checked);
+     config.SetValue('/Dome/ActionWait',f_option.DomeActionWait.Value);
+     for i:=0 to DomeOpenActionNum-1 do begin
+        k:=-1;
+        for n:=0 to ord(high(TDomeOpenAction)) do begin
+           if DomeOpenActionName[n]=trim(f_option.DomeOpenActions.Cells[1,i+1]) then begin
+             k:=n;
+             break;
+           end;
+        end;
+        if k<0 then k:=0;
+        config.SetValue('/Dome/Open/Action'+inttostr(i),k);
+     end;
+     for i:=0 to DomeCloseActionNum-1 do begin
+        k:=-1;
+        for n:=0 to ord(high(TDomeCloseAction)) do begin
+           if DomeCloseActionName[n]=trim(f_option.DomeCloseActions.Cells[1,i+1]) then begin
+             k:=n;
+             break;
+           end;
+        end;
+        if k<0 then k:=0;
+        config.SetValue('/Dome/Close/Action'+inttostr(i),k);
      end;
 
      SaveConfig;

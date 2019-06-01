@@ -1069,6 +1069,19 @@ resourcestring
   rsGlobalRepeat = 'Global repeat:';
   rsDone = 'done';
   rsThisWillBeLo = 'This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?';
+  rsOpenTheDomeS = 'Open the Dome shutter';
+  rsUnparkTheDom = 'Unpark the Dome';
+  rsUnparkTheTel = 'Unpark the telescope';
+  rsStartTelesco = 'Start Telescope tracking';
+  rsSlaveTheDome = 'Slave the Dome';
+  rsWaitTimeBetw = 'Wait time between actions';
+  rsParkTheTeles3 = 'Park the telescope and the dome';
+  rsTelescopeAnd = 'Telescope and dome are now parked';
+  rsUnparkTheTel2 = 'Unpark the telescope and the dome';
+  rsTelescopeAnd2 = 'Telescope and dome are now unparked';
+  rsAutomaticall = 'Automatically slave "Dome Park" to "Mount Park"';
+  rsOpenDomeSequ = 'Open dome sequence when mount is asked to unpark';
+  rsCloseDomeSeq = 'Close dome sequence when mount is asked to park';
 
 implementation
 

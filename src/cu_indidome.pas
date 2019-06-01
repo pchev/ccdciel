@@ -369,6 +369,7 @@ begin
     else
        DomeUnpark.s:=ISS_ON;
     indiclient.sendNewSwitch(DomeParkProp);
+    indiclient.WaitBusy(DomeParkProp,60000);
  end;
 end;
 
@@ -391,9 +392,11 @@ begin
     else
       DomeShutterClose.s:=ISS_ON;
     indiclient.sendNewSwitch(DomeShutterProp);
+    indiclient.WaitBusy(DomeShutterProp,60000);
  end
- else
+ else begin
     SetPark(not value);
+ end;
 end;
 
 function T_indidome.GetSlave: boolean;
@@ -413,6 +416,7 @@ begin
     else
       DomeAutosyncDisable.s:=ISS_ON;
     indiclient.sendNewSwitch(DomeAutosyncProp);
+    indiclient.WaitBusy(DomeAutosyncProp,60000);
  end;
 end;
 
