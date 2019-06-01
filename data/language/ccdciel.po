@@ -3858,3 +3858,55 @@ msgstr ""
 msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
 msgstr ""
 
+#: u_translation:rsopenthedomes
+msgid "Open the Dome shutter"
+msgstr ""
+
+#: u_translation:rsunparkthedom
+msgid "Unpark the Dome"
+msgstr ""
+
+#: u_translation:rsunparkthetel
+msgid "Unpark the telescope"
+msgstr ""
+
+#: u_translation:rsstarttelesco
+msgid "Start Telescope tracking"
+msgstr ""
+
+#: u_translation:rsslavethedome
+msgid "Slave the Dome"
+msgstr ""
+
+#: u_translation:rswaittimebetw
+msgid "Wait time between actions"
+msgstr ""
+
+#: u_translation:rsparktheteles3
+msgid "Park the telescope and the dome"
+msgstr ""
+
+#: u_translation:rstelescopeand
+msgid "Telescope and dome are now parked"
+msgstr ""
+
+#: u_translation:rsunparkthetel2
+msgid "Unpark the telescope and the dome"
+msgstr ""
+
+#: u_translation:rstelescopeand2
+msgid "Telescope and dome are now unparked"
+msgstr ""
+
+#: u_translation:rsautomaticall
+msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
+msgstr ""
+
+#: u_translation:rsopendomesequ
+msgid "Open dome sequence when mount is asked to unpark"
+msgstr ""
+
+#: u_translation:rsclosedomeseq
+msgid "Close dome sequence when mount is asked to park"
+msgstr ""
+

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-29 13:54+0000\n"
-"PO-Revision-Date: 2019-05-29 14:25+0000\n"
+"POT-Creation-Date: 2019-06-01 15:15+0000\n"
+"PO-Revision-Date: 2019-06-01 15:26+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-29 14:28+0000\n"
+"X-Launchpad-Export-Date: 2019-06-01 15:28+0000\n"
 "X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
@@ -299,6 +299,10 @@ msgstr "L'autoguidage a redémarré"
 #: u_translation.rsautoguidings
 msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
 msgstr "L'autoguidage est arrêter depuis %s minutes, la séquence sera stoppée dans %s minutes."
+
+#: u_translation.rsautomaticall
+msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
+msgstr "Asservir automatiquement \"Parquer le dôme\" à \"Parquer le télescope\""
 
 #: u_translation.rsautomaticcoo
 msgid "Automatic cooling "
@@ -635,6 +639,10 @@ msgstr "Fermer"
 #: u_translation.rsclosedome
 msgid "Close the Dome shutter"
 msgstr "Ferme l'ouverture du dôme"
+
+#: u_translation.rsclosedomeseq
+msgid "Close dome sequence when mount is asked to park"
+msgstr "Séquence de fermeture du dôme quand on veut parquer la monture"
 
 #: u_translation.rscloudcover
 msgid "Cloud cover"
@@ -2073,6 +2081,10 @@ msgstr "Ouvert"
 msgid "Open Dark file"
 msgstr "Ouvrir un fichier Dark"
 
+#: u_translation.rsopendomesequ
+msgid "Open dome sequence when mount is asked to unpark"
+msgstr "Séquence d'ouverture du dôme quand on veut déparquer la monture"
+
 #: u_translation.rsopenfile
 msgid "Open file %s"
 msgstr "Ouvre le fichier %s"
@@ -2088,6 +2100,10 @@ msgstr "Ouvrir une image%s"
 #: u_translation.rsopenreferenc
 msgid "Open reference image"
 msgstr "Ouvrir l'image de référence"
+
+#: u_translation.rsopenthedomes
+msgid "Open the Dome shutter"
+msgstr "Ouvre l'ouverture du dôme"
 
 #: u_translation.rsoptions
 msgid "Options :%s"
@@ -2140,6 +2156,10 @@ msgstr "Parquer le télescope maintenant?"
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
 msgstr "Parquer le télescope"
+
+#: u_translation.rsparktheteles3
+msgid "Park the telescope and the dome"
+msgstr "Parque le télescope et le dôme"
 
 #: u_translation.rspassword
 msgid "Password"
@@ -2969,6 +2989,10 @@ msgstr "Asservir"
 msgid "Slaved"
 msgstr "Asservi"
 
+#: u_translation.rsslavethedome
+msgid "Slave the Dome"
+msgstr "Asservi le dôme"
+
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
 msgstr "Goto abandonné après 3 tentatives!"
@@ -3152,6 +3176,10 @@ msgstr "Prévisualisation"
 #: u_translation.rsstartstep
 msgid "Start step %s"
 msgstr "Début de l'étape %s"
+
+#: u_translation.rsstarttelesco
+msgid "Start Telescope tracking"
+msgstr "Démarrer le suivi du télescope"
 
 #: u_translation.rsstarttime
 msgid "Start time"
@@ -3364,6 +3392,14 @@ msgstr "Le serveur TCP/IP écoute sur le port: %s"
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
 msgstr "Serveur TCP/IP arrêté"
+
+#: u_translation.rstelescopeand
+msgid "Telescope and dome are now parked"
+msgstr "Le télescope et le dôme sont maintenant parqués"
+
+#: u_translation.rstelescopeand2
+msgid "Telescope and dome are now unparked"
+msgstr "Le télescope et le dôme sont maintenant déparqués"
 
 #: u_translation.rstelescopeazi
 msgid "Telescope azimuth"
@@ -3629,6 +3665,18 @@ msgstr "Unpark"
 msgid "Unparked"
 msgstr "Non parqué"
 
+#: u_translation.rsunparkthedom
+msgid "Unpark the Dome"
+msgstr "Déparque le dôme"
+
+#: u_translation.rsunparkthetel
+msgid "Unpark the telescope"
+msgstr "Déparque le télescope"
+
+#: u_translation.rsunparkthetel2
+msgid "Unpark the telescope and the dome"
+msgstr "Déparque le télescope et le dôme"
+
 #: u_translation.rsunsafe
 msgid "Unsafe"
 msgstr "Dangereux"
@@ -3796,6 +3844,10 @@ msgstr "Attente du début"
 #: u_translation.rswaittime
 msgid "Wait time"
 msgstr "Temps d'attente"
+
+#: u_translation.rswaittimebetw
+msgid "Wait time between actions"
+msgstr "Temps d'attente entre actions"
 
 #: u_translation.rswaittostarta
 msgid "Wait to start at %s"

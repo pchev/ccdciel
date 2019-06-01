@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-05-29 13:54+0000\n"
+"POT-Creation-Date: 2019-06-01 15:15+0000\n"
 "PO-Revision-Date: 2019-05-06 18:43+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-05-29 14:28+0000\n"
+"X-Launchpad-Export-Date: 2019-06-01 15:28+0000\n"
 "X-Generator: Launchpad (build 18968)\n"
 
 #: u_translation.rs32bitdriver
@@ -299,6 +299,10 @@ msgstr "Autoguiado reiniciado."
 #: u_translation.rsautoguidings
 msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
 msgstr "El autoguiado se detuvo %s minutos, la secuencia caducará en %s minutos."
+
+#: u_translation.rsautomaticall
+msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
+msgstr ""
 
 #: u_translation.rsautomaticcoo
 msgid "Automatic cooling "
@@ -635,6 +639,10 @@ msgstr "Cerrar"
 #: u_translation.rsclosedome
 msgid "Close the Dome shutter"
 msgstr "Cerrar compuerta de la cúpula"
+
+#: u_translation.rsclosedomeseq
+msgid "Close dome sequence when mount is asked to park"
+msgstr ""
 
 #: u_translation.rscloudcover
 msgid "Cloud cover"
@@ -2073,6 +2081,10 @@ msgstr "Abrir"
 msgid "Open Dark file"
 msgstr "Abrir archivo toma oscura"
 
+#: u_translation.rsopendomesequ
+msgid "Open dome sequence when mount is asked to unpark"
+msgstr ""
+
 #: u_translation.rsopenfile
 msgid "Open file %s"
 msgstr "Abrir archivo %s"
@@ -2088,6 +2100,10 @@ msgstr "Abrir archivo imagen%s"
 #: u_translation.rsopenreferenc
 msgid "Open reference image"
 msgstr "Abrir imagen de referencia"
+
+#: u_translation.rsopenthedomes
+msgid "Open the Dome shutter"
+msgstr ""
 
 #: u_translation.rsoptions
 msgid "Options :%s"
@@ -2140,6 +2156,10 @@ msgstr "¿Aparcar ahora el telescopio?"
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
 msgstr "Aparcar telescopio"
+
+#: u_translation.rsparktheteles3
+msgid "Park the telescope and the dome"
+msgstr ""
 
 #: u_translation.rspassword
 msgid "Password"
@@ -2969,6 +2989,10 @@ msgstr "Esclavo"
 msgid "Slaved"
 msgstr "Esclavizado"
 
+#: u_translation.rsslavethedome
+msgid "Slave the Dome"
+msgstr ""
+
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
 msgstr "¡Apuntado abortado tras 3 intentos!"
@@ -3152,6 +3176,10 @@ msgstr "Comenzar vista previa única"
 #: u_translation.rsstartstep
 msgid "Start step %s"
 msgstr "Comenzar paso %s"
+
+#: u_translation.rsstarttelesco
+msgid "Start Telescope tracking"
+msgstr ""
 
 #: u_translation.rsstarttime
 msgid "Start time"
@@ -3364,6 +3392,14 @@ msgstr "Servidor TCP/IP escucha en puerto: %s"
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
 msgstr "Servidor TCP/IP detenido"
+
+#: u_translation.rstelescopeand
+msgid "Telescope and dome are now parked"
+msgstr ""
+
+#: u_translation.rstelescopeand2
+msgid "Telescope and dome are now unparked"
+msgstr ""
 
 #: u_translation.rstelescopeazi
 msgid "Telescope azimuth"
@@ -3630,6 +3666,18 @@ msgstr "Desaparcar"
 msgid "Unparked"
 msgstr "Desaparcado"
 
+#: u_translation.rsunparkthedom
+msgid "Unpark the Dome"
+msgstr ""
+
+#: u_translation.rsunparkthetel
+msgid "Unpark the telescope"
+msgstr ""
+
+#: u_translation.rsunparkthetel2
+msgid "Unpark the telescope and the dome"
+msgstr ""
+
 #: u_translation.rsunsafe
 msgid "Unsafe"
 msgstr "Inseguro"
@@ -3798,6 +3846,10 @@ msgstr "Comenzar espera"
 #: u_translation.rswaittime
 msgid "Wait time"
 msgstr "Tiempo de espera"
+
+#: u_translation.rswaittimebetw
+msgid "Wait time between actions"
+msgstr ""
 
 #: u_translation.rswaittostarta
 msgid "Wait to start at %s"
