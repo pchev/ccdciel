@@ -46,6 +46,11 @@ grep '<li class="level1"><div class="li"><a href="' $lang/documentation/tools.ht
 sed -i '/\/tools\.html/r./fl1.txt' fl.txt
 rm fl1.txt
 
+# insert INDI link on same row as ASCOM 
+if [ -f "$lang/documentation/indi.html" ]; then
+  sed -i '/\/ascom.html/ a '$lang'\/documentation\/indi.html' fl.txt
+fi
+
 # insert pages not in index 
 if [ -f "$lang/documentation/ccdciel_status.html" ]; then
   sed -i '/\/ccdciel_status.html/ a '$lang'\/documentation\/server.html \n'$lang'\/documentation\/proxy.html' fl.txt
