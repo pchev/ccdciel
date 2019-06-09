@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-01 15:15+0000\n"
-"PO-Revision-Date: 2019-06-01 15:26+0000\n"
+"POT-Creation-Date: 2019-06-09 10:06+0000\n"
+"PO-Revision-Date: 2019-06-09 10:12+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-01 15:28+0000\n"
-"X-Generator: Launchpad (build 18968)\n"
+"X-Launchpad-Export-Date: 2019-06-09 10:16+0000\n"
+"X-Generator: Launchpad (build 18978)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -28,9 +28,17 @@ msgstr "Abandon"
 msgid "Abort after"
 msgstr "Abandon après"
 
+#: u_translation.rsabortdome
+msgid "Abort dome %s"
+msgstr "Abandonne %s le dôme"
+
 #: u_translation.rsabortexposur
 msgid "Abort exposure"
 msgstr "Pose interrompue"
+
+#: u_translation.rsabortmount
+msgid "Abort mount%s"
+msgstr "Abandonne %s la monture"
 
 #: u_translation.rsabortthecurr
 msgid "Abort the current sequence"
@@ -951,6 +959,10 @@ msgstr "Dither seul"
 #: u_translation.rsdome
 msgid "Dome"
 msgstr "Dôme"
+
+#: u_translation.rsdomenotafter
+msgid "Dome not %s after request!"
+msgstr "Le dôme n'est pas %s après la demande!"
 
 #: u_translation.rsdomepanel
 msgid "Dome/Panel"
@@ -3417,6 +3429,10 @@ msgstr "Monture du télescope"
 msgid "Telescope name"
 msgstr "Nom du télescope"
 
+#: u_translation.rstelescopenot
+msgid "Telescope not %s after request!"
+msgstr "Le télescope n'est pas %s après la demande!"
+
 #: u_translation.rstelescopepos
 msgid "Telescope position"
 msgstr "Position du télescope"
@@ -3688,6 +3704,10 @@ msgstr "Condition dangereuse détectée!"
 #: u_translation.rsunsafecondit2
 msgid "Unsafe condition ignored by user"
 msgstr "Condition dangereuse ignorée par l'utilisateur"
+
+#: u_translation.rsunslaved
+msgid "Unslaved"
+msgstr "Non asservi"
 
 #: u_translation.rsupdateradecf
 msgid "Update RA+Dec from Planetarium"

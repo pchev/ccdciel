@@ -103,7 +103,7 @@ begin
   // check weather
   if (not value) and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
      msg(rsUnsafeCondit,0);
-     msg('Abort dome unpark',0);
+     msg(Format(rsAbortDome, [rsUnpark]), 0);
      exit;
   end;
   SetPark(value);
@@ -114,7 +114,7 @@ begin
   // check weather
   if value and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
      msg(rsUnsafeCondit,0);
-     msg('Abort open dome shutter',0);
+     msg(Format(rsAbortDome, [rsOpen]), 0);
      exit;
   end;
   SetShutter(value);

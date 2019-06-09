@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-01 15:15+0000\n"
+"POT-Creation-Date: 2019-06-09 10:06+0000\n"
 "PO-Revision-Date: 2018-05-14 09:39+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-01 15:28+0000\n"
-"X-Generator: Launchpad (build 18968)\n"
+"X-Launchpad-Export-Date: 2019-06-09 10:16+0000\n"
+"X-Generator: Launchpad (build 18978)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -28,8 +28,16 @@ msgstr ""
 msgid "Abort after"
 msgstr ""
 
+#: u_translation.rsabortdome
+msgid "Abort dome %s"
+msgstr ""
+
 #: u_translation.rsabortexposur
 msgid "Abort exposure"
+msgstr ""
+
+#: u_translation.rsabortmount
+msgid "Abort mount%s"
 msgstr ""
 
 #: u_translation.rsabortthecurr
@@ -950,6 +958,10 @@ msgstr ""
 
 #: u_translation.rsdome
 msgid "Dome"
+msgstr ""
+
+#: u_translation.rsdomenotafter
+msgid "Dome not %s after request!"
 msgstr ""
 
 #: u_translation.rsdomepanel
@@ -3416,6 +3428,10 @@ msgstr ""
 msgid "Telescope name"
 msgstr ""
 
+#: u_translation.rstelescopenot
+msgid "Telescope not %s after request!"
+msgstr ""
+
 #: u_translation.rstelescopepos
 msgid "Telescope position"
 msgstr ""
@@ -3686,6 +3702,10 @@ msgstr ""
 
 #: u_translation.rsunsafecondit2
 msgid "Unsafe condition ignored by user"
+msgstr ""
+
+#: u_translation.rsunslaved
+msgid "Unslaved"
 msgstr ""
 
 #: u_translation.rsupdateradecf

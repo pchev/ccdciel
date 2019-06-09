@@ -224,8 +224,8 @@ begin
                               AbortMotion;
                               wait(FDomeActionWait);
                               if GetTracking or GetMountSlewing then begin
-                                msg('Telescope not stopped after request!',0);
-                                msg('Abort mount park',0);
+                                msg(Format(rsTelescopeNot, [rsStop]), 0);
+                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
                                 exit;
                               end;
                               end;
@@ -233,8 +233,8 @@ begin
                               SetPark(true);
                               wait(FDomeActionWait);
                               if not GetPark then begin
-                                msg('Telescope not parked after request!',0);
-                                msg('Abort mount park',0);
+                                msg(Format(rsTelescopeNot, [rsParked]), 0);
+                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
                                 exit;
                               end;
                               end;
@@ -242,8 +242,8 @@ begin
                               dome.Slave:=false;
                               wait(FDomeActionWait);
                               if dome.Slave then begin
-                                msg('Dome not unslaved after request!',0);
-                                msg('Abort mount park',0);
+                                msg(Format(rsDomeNotAfter, [rsUnslaved]), 0);
+                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
                                 exit;
                               end;
                               end;
@@ -251,8 +251,8 @@ begin
                               dome.Park:=true;
                               wait(FDomeActionWait);
                               if not dome.Park then begin
-                                msg('Dome not parked after request!',0);
-                                msg('Abort mount park',0);
+                                msg(Format(rsDomeNotAfter, [rsParked]), 0);
+                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
                                 exit;
                               end;
                               end;
@@ -260,8 +260,8 @@ begin
                               dome.Shutter:=false;
                               wait(FDomeActionWait);
                               if dome.Shutter then begin
-                                msg('Dome shutter not closed after request!',0);
-                                msg('Abort mount park',0);
+                                msg(Format(rsDomeNotAfter, [rsClose]), 0);
+                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
                                 exit;
                               end;
                               end;
@@ -285,8 +285,8 @@ begin
                                dome.Shutter:=true;
                                wait(FDomeActionWait);
                                if not dome.Shutter then begin
-                                 msg('Dome shutter not opened after request!',0);
-                                 msg('Abort mount unpark',0);
+                                 msg(Format(rsDomeNotAfter, [rsOpen]), 0);
+                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
                                  exit;
                                end;
                                end;
@@ -294,8 +294,8 @@ begin
                                dome.Park:=false;
                                wait(FDomeActionWait);
                                if dome.Park then begin
-                                 msg('Dome not unparked after request!',0);
-                                 msg('Abort mount unpark',0);
+                                 msg(Format(rsDomeNotAfter, [rsUnparked]), 0);
+                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
                                  exit;
                                end;
                                end;
@@ -303,8 +303,8 @@ begin
                                SetPark(false);
                                wait(FDomeActionWait);
                                if GetPark then begin
-                                 msg('Telescope not unparked after request!',0);
-                                 msg('Abort mount unpark',0);
+                                 msg(Format(rsTelescopeNot, [rsUnparked]), 0);
+                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
                                  exit;
                                end;
                                end;
@@ -312,8 +312,8 @@ begin
                                Track;
                                wait(FDomeActionWait);
                                if not GetTracking then begin
-                                 msg('Telescope not tracking after request!',0);
-                                 msg('Abort mount unpark',0);
+                                 msg(Format(rsTelescopeNot, [rsTracking]), 0);
+                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
                                  exit;
                                end;
                                end;
@@ -321,8 +321,8 @@ begin
                                dome.Slave:=true;
                                wait(FDomeActionWait);
                                if not dome.Slave then begin
-                                 msg('Dome not slaved after request!',0);
-                                 msg('Abort mount unpark',0);
+                                 msg(Format(rsDomeNotAfter, [rsSlaved]), 0);
+                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
                                  exit;
                                end;
                                end;
@@ -333,7 +333,7 @@ begin
    end
    else begin
      msg(format(rsNotConnected,[rsDome]),0);
-     msg('Abort mount park/unpark',0);
+     msg(Format(rsAbortMount, [blank+rsPark+'/'+rsUnpark]), 0);
    end;
   end
   else

@@ -3910,3 +3910,23 @@ msgstr ""
 msgid "Close dome sequence when mount is asked to park"
 msgstr ""
 
+#: u_translation:rsabortmount
+msgid "Abort mount%s"
+msgstr ""
+
+#: u_translation:rsdomenotafter
+msgid "Dome not %s after request!"
+msgstr ""
+
+#: u_translation:rstelescopenot
+msgid "Telescope not %s after request!"
+msgstr ""
+
+#: u_translation:rsabortdome
+msgid "Abort dome %s"
+msgstr ""
+
+#: u_translation:rsunslaved
+msgid "Unslaved"
+msgstr ""
+

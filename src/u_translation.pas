@@ -1082,6 +1082,11 @@ resourcestring
   rsAutomaticall = 'Automatically slave "Dome Park" to "Mount Park"';
   rsOpenDomeSequ = 'Open dome sequence when mount is asked to unpark';
   rsCloseDomeSeq = 'Close dome sequence when mount is asked to park';
+  rsAbortMount = 'Abort mount%s';
+  rsDomeNotAfter = 'Dome not %s after request!';
+  rsTelescopeNot = 'Telescope not %s after request!';
+  rsAbortDome = 'Abort dome %s';
+  rsUnslaved = 'Unslaved';
 
 implementation
 
