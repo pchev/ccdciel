@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, indiapi, cu_dome, u_translation,
+uses u_global, u_utils, indiapi, cu_dome, fu_safety, u_translation,
   Classes, SysUtils;
 
 type
@@ -33,6 +33,7 @@ type
 T_mount = class(TComponent)
   protected
     FDome: T_dome;
+    Fsafety: Tf_safety;
     FMountInterface: TDevInterface;
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonCoordChange: TNotifyEvent;
@@ -115,6 +116,7 @@ T_mount = class(TComponent)
     property PulseGuiding: boolean read GetPulseGuiding;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    property Safety: Tf_safety read Fsafety write Fsafety;
     property Dome: T_dome read FDome write FDome;
     property SlaveDome: boolean read FSlaveDome write FSlaveDome;
     property DomeActionWait: integer read FDomeActionWait write FDomeActionWait;
@@ -132,6 +134,7 @@ implementation
 constructor T_mount.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  Fsafety:=nil;
   FIsEqmod:=false;
   FMountSlewing:=false;
   FStatus := devDisconnected;
@@ -268,6 +271,12 @@ begin
     end
     else begin
       // unpark requested
+      // check weather
+      if (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+         msg(rsUnsafeCondit,0);
+         msg('Abort mount unpark',0);
+         exit;
+      end;
       msg(rsUnparkTheTel2, 1);
       for i:=0 to DomeOpenActionNum-1 do begin
         case DomeOpenActions[i] of

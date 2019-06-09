@@ -1259,6 +1259,9 @@ begin
   f_weather:=Tf_weather.Create(self);
 
   f_safety:=Tf_safety.Create(self);
+  if mount<>nil then mount.Safety:=f_safety;
+  if dome<>nil then dome.Safety:=f_safety;
+
 
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
@@ -1464,6 +1467,7 @@ begin
    mount.onParkChange:=@MountParkChange;
    mount.onTrackingChange:=@MountTrackingChange;
    mount.onStatusChange:=@MountStatus;
+   mount.Safety:=f_safety;
 
    aInt:=TDevInterface(config.GetValue('/DomeInterface',ord(DefaultInterface)));
    case aInt of
@@ -1476,6 +1480,7 @@ begin
    dome.onStatusChange:=@DomeStatus;
    dome.onShutterChange:=@DomeShutterChange;
    dome.onSlaveChange:=@DomeSlaveChange;
+   dome.Safety:=f_safety;
 
    mount.Dome:=dome;
 

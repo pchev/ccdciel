@@ -25,14 +25,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, indiapi,
+uses u_global, indiapi, fu_safety, u_translation,
   Classes, SysUtils;
 
 type
 
 T_dome = class(TComponent)
  private
+   procedure SetParkInterface(value:boolean);
+   procedure SetShutterInterface(value:boolean);
  protected
+    Fsafety: Tf_safety;
     FDomeInterface: TDevInterface;
     FStatus: TDeviceStatus;
     FonMsg,FonDeviceMsg: TNotifyMsg;
@@ -60,11 +63,12 @@ T_dome = class(TComponent)
     property hasPark: boolean read FhasPark;
     property hasShutter: boolean read FhasShutter;
     property hasSlaving: boolean read FhasSlaving;
-    property Park: boolean read GetPark write SetPark;
-    property Shutter: boolean read GetShutter write SetShutter;
+    property Park: boolean read GetPark write SetParkInterface;
+    property Shutter: boolean read GetShutter write SetShutterInterface;
     property Slave: boolean read GetSlave write SetSlave;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    property Safety: Tf_safety read Fsafety write Fsafety;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -81,6 +85,7 @@ begin
   FhasPark:=false;
   FhasSlaving:=false;
   FhasShutter:=false;
+  Fsafety:=nil;
 end;
 
 destructor  T_dome.Destroy;
@@ -91,6 +96,28 @@ end;
 procedure T_dome.msg(txt: string; level:integer=3);
 begin
   if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
+end;
+
+procedure T_dome.SetParkInterface(value:boolean);
+begin
+  // check weather
+  if (not value) and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+     msg(rsUnsafeCondit,0);
+     msg('Abort dome unpark',0);
+     exit;
+  end;
+  SetPark(value);
+end;
+
+procedure T_dome.SetShutterInterface(value:boolean);
+begin
+  // check weather
+  if value and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+     msg(rsUnsafeCondit,0);
+     msg('Abort open dome shutter',0);
+     exit;
+  end;
+  SetShutter(value);
 end;
 
 end.
