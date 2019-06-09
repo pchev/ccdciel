@@ -41,6 +41,7 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
+    DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
     DomeCloseActions: TStringGrid;
     GainFromCamera: TCheckBox;

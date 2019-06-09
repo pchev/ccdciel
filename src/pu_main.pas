@@ -1075,6 +1075,7 @@ begin
   ReadoutModePreview:=0;
   ReadoutModeFocus:=0;
   ReadoutModeAstrometry:=0;
+  DomeNoSafetyCheck:=false;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
@@ -3139,6 +3140,7 @@ begin
     MenuItemDebayer.Checked:=BayerColor;
     MenuItemDebayerClick(self);
   end;
+  DomeNoSafetyCheck:=config.GetValue('/Dome/NoSafetyCheck',false);
   mount.SlaveDome:=config.GetValue('/Dome/SlaveToMount',false);
   mount.DomeActionWait:=config.GetValue('/Dome/ActionWait',1);
   for i:=0 to DomeOpenActionNum-1 do begin
@@ -5915,6 +5917,7 @@ begin
       f_option.SafetyActions.Cells[1,i+1]:=SafetyActionName[round(config.GetValue('/Safety/Actions/Action'+inttostr(i),0))];
       f_option.SafetyActions.Cells[2,i+1]:=config.GetValue('/Safety/Actions/Parameter'+inttostr(i),'');
    end;
+   f_option.DomeNoSafetyCheck.Checked:=config.GetValue('/Dome/NoSafetyCheck',false);
    f_option.DomeSlaveToMount.Checked:=config.GetValue('/Dome/SlaveToMount',false);
    f_option.DomeActionWait.Value:=config.GetValue('/Dome/ActionWait',1);
    for i:=0 to DomeOpenActionNum-1 do begin
@@ -6150,6 +6153,7 @@ begin
         config.SetValue('/Safety/Actions/Action'+inttostr(i),k);
         config.SetValue('/Safety/Actions/Parameter'+inttostr(i),trim(f_option.SafetyActions.Cells[2,i+1]));
      end;
+     config.SetValue('/Dome/NoSafetyCheck',f_option.DomeNoSafetyCheck.Checked);
      config.SetValue('/Dome/SlaveToMount',f_option.DomeSlaveToMount.Checked);
      config.SetValue('/Dome/ActionWait',f_option.DomeActionWait.Value);
      for i:=0 to DomeOpenActionNum-1 do begin

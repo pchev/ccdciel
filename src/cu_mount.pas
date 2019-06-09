@@ -272,7 +272,7 @@ begin
     else begin
       // unpark requested
       // check weather
-      if (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+      if (not DomeNoSafetyCheck) and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
          msg(rsUnsafeCondit,0);
          msg('Abort mount unpark',0);
          exit;

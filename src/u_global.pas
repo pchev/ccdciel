@@ -396,6 +396,7 @@ var
   FlatLevelMin,FlatLevelMax: integer;
   FlatSlewTime: TDateTime;
   DomeFlatSetLightON,DomeFlatSetLightOFF: string;
+  DomeNoSafetyCheck: boolean;
   SubDirOpt: array[0..SubDirCount-1] of TSubDirList;
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;

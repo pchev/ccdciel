@@ -1077,7 +1077,7 @@ begin
    else if Targets.Count=0 then begin
      msg(rsPleaseLoadOr,0);
    end
-   else if (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+   else if (not DomeNoSafetyCheck) and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
       msg(rsUnsafeCondit,0);
    end
    else begin

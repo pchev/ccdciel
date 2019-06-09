@@ -101,7 +101,7 @@ end;
 procedure T_dome.SetParkInterface(value:boolean);
 begin
   // check weather
-  if (not value) and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+  if (not DomeNoSafetyCheck) and (not value) and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
      msg(rsUnsafeCondit,0);
      msg(Format(rsAbortDome, [rsUnpark]), 0);
      exit;
@@ -112,7 +112,7 @@ end;
 procedure T_dome.SetShutterInterface(value:boolean);
 begin
   // check weather
-  if value and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
+  if (not DomeNoSafetyCheck) and value and (Fsafety<>nil) and Fsafety.Connected and (not Fsafety.Safe) then begin
      msg(rsUnsafeCondit,0);
      msg(Format(rsAbortDome, [rsOpen]), 0);
      exit;
