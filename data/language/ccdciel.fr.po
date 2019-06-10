@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-09 10:06+0000\n"
-"PO-Revision-Date: 2019-06-09 10:12+0000\n"
+"POT-Creation-Date: 2019-06-10 07:12+0000\n"
+"PO-Revision-Date: 2019-06-10 07:19+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-09 10:16+0000\n"
+"X-Launchpad-Export-Date: 2019-06-10 07:20+0000\n"
 "X-Generator: Launchpad (build 18978)\n"
 
 #: u_translation.rs32bitdriver
@@ -83,6 +83,10 @@ msgstr "Étoile d'alignement perdue"
 #: u_translation.rsallowtogetpr
 msgid "Allow to get program status from TCP/IP internal server"
 msgstr "Permet d'obtenir l'état du programme depuis le serveur interne TCP/IP"
+
+#: u_translation.rsallowtoopent
+msgid "Allow to open the dome when safety status is bad or unknown"
+msgstr "Permet d'ouvrir le dôme si le contrôle de sécurité indique un danger"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"

@@ -1087,6 +1087,7 @@ resourcestring
   rsTelescopeNot = 'Telescope not %s after request!';
   rsAbortDome = 'Abort dome %s';
   rsUnslaved = 'Unslaved';
+  rsAllowToOpenT = 'Allow to open the dome when safety status is bad or unknown';
 
 implementation
 

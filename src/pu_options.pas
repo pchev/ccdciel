@@ -623,6 +623,7 @@ begin
   Label108.Caption := rsElevation;
   Label76.Caption := rsHorizonProfi;
   Label77.Caption := rsMinimumObser;
+  DomeNoSafetyCheck.Caption:=rsAllowToOpenT;
   DomeSlaveToMount.Caption:=rsAutomaticall;
   Label125.Caption:=rsWaitTimeBetw;
   Label126.Caption:=rsSeconds;

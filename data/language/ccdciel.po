@@ -3930,3 +3930,7 @@ msgstr ""
 msgid "Unslaved"
 msgstr ""
 
+#: u_translation:rsallowtoopent
+msgid "Allow to open the dome when safety status is bad or unknown"
+msgstr ""
+
