@@ -509,6 +509,7 @@ begin
          Format('= %0:-20s',[val])+
          Format(' / %0:-47s',[comment]);
  end;
+ row:=copy(row,1,80);
  if idx>=0 then begin
     FRows.Insert(idx,row);
     FKeys.Insert(idx,key);

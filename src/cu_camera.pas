@@ -606,7 +606,7 @@ begin
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
   if FStackCount>1 then Ffits.Header.Add('STACKCNT',FStackCount,'Number of stacked frames');
-  if cgain<>NullInt then Ffits.Header.Add('GAIN',cgain,'Video gain');
+  if cgain<>NullInt then Ffits.Header.Add('GAIN',cgain,'Camera gain setting in manufacturer units');
   if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
   if gamma<>NullInt then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
   if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
