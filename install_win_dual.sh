@@ -64,5 +64,10 @@ install -v -m 644 data/language/ccdciel.en_GB.po $destdir/data/language/ccdciel.
 install -v -m 644 data/language/ccdciel.es.po   $destdir/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po   $destdir/data/language/ccdciel.fr.po
 install -v -m 644 data/language/ccdciel.it.po   $destdir/data/language/ccdciel.it.po
+install -v -m 644 data/language/ccdciel_hints.po      $destdir/data/language/ccdciel_hints.en.po
+install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/data/language/ccdciel_hints.en_GB.po
+install -v -m 644 data/language/ccdciel_hints.es.po   $destdir/data/language/ccdciel_hints.es.po
+install -v -m 644 data/language/ccdciel_hints.fr.po   $destdir/data/language/ccdciel_hints.fr.po
+install -v -m 644 data/language/ccdciel_hints.it.po   $destdir/data/language/ccdciel_hints.it.po
 install -v -m 644 doc/doc_ccdciel_en.pdf    $destdir/doc/doc_ccdciel_en.pdf
 

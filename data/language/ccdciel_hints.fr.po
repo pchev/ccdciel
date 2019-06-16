@@ -1,0 +1,22 @@
+# French translation for ccdciel
+# Copyright (c) 2019 Rosetta Contributors and Canonical Ltd 2019
+# This file is distributed under the same license as the ccdciel package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: ccdciel\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2019-06-16 19:12+0000\n"
+"PO-Revision-Date: 2019-06-16 19:14+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
+"Language-Team: French <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2019-06-16 19:20+0000\n"
+"X-Generator: Launchpad (build 18981)\n"
+
+#: u_hints.rsconnectallde
+msgid "Connect all devices"
+msgstr "Connecter tous les périphériques"
+

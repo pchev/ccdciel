@@ -50,7 +50,8 @@ uses
   cu_ascomdome, cu_indidome, fu_dome, fu_safety, pu_about, pu_selectscript,
   cu_ascomrestcamera, cu_ascomrestwheel, cu_ascomrestweather,
   cu_ascomrestsafety, cu_ascomrestrotator, cu_ascomrestmount,
-  cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither;
+  cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither,
+  u_hints;
 
 {$R *.res}
 

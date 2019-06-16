@@ -1,0 +1,4 @@
+#: u_hints:rsconnectallde
+msgid "Connect all devices"
+msgstr ""
+

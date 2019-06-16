@@ -23,6 +23,24 @@ echo '"Plural-Forms: nplurals=2; plural=(n > 1);\n"'>> translation/ccdciel/ccdci
 
 cat ../ccdciel.po >> translation/ccdciel/ccdciel.pot
 
+echo cp ../ccdciel_hints.po translation/ccdciel/ccdciel_hints.pot
+
+echo 'msgid ""'> translation/ccdciel/ccdciel_hints.pot
+echo 'msgstr ""'>> translation/ccdciel/ccdciel_hints.pot
+echo '"PO-Revision-Date: 2018-02-22 16:05+0100\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Last-Translator: Patrick Chevalley <pch@ap-i.net>\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Project-Id-Version: ccdciel_hints.en\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"POT-Creation-Date: \n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Language-Team: French <kde-i18n-doc@kde.org>\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"MIME-Version: 1.0\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Content-Type: text/plain; charset=UTF-8\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Content-Transfer-Encoding: 8bit\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"X-Generator: Lokalize 1.2\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Language: fr\n"'>> translation/ccdciel/ccdciel_hints.pot
+echo '"Plural-Forms: nplurals=2; plural=(n > 1);\n"'>> translation/ccdciel/ccdciel_hints.pot
+
+cat ../ccdciel_hints.po >> translation/ccdciel/ccdciel_hints.pot
+
 cd translation
-tar cvf ../ccdcielpot.tar ccdciel/ccdciel.pot
+tar cvf ../ccdcielpot.tar ccdciel/ccdciel.pot ccdciel/ccdciel_hints.pot
 cd -

@@ -1143,6 +1143,9 @@ begin
   // translate messages
   TranslateUnitResourceStrings('u_translation', systoutf8(
     slash(appdir) + slash('data') + slash('language') + 'ccdciel.%s.po'), Result, '');
+  // translate hints
+  TranslateUnitResourceStrings('u_hints', systoutf8(
+    slash(appdir) + slash('data') + slash('language') + 'ccdciel_hints.%s.po'), Result, '');
   // translate LCL messages
   TranslateUnitResourceStrings('LCLStrConsts', systoutf8(
     slash(appdir) + slash('data') + slash('language') + 'lclstrconsts.%s.po'), Result, '');

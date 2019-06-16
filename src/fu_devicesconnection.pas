@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI, u_translation,
+uses UScaleDPI, u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -92,6 +92,7 @@ procedure Tf_devicesconnection.SetLang;
 begin
   Title.Caption:=rsDevicesConne;
   BtnConnect.Caption:=rsConnect;
+  BtnConnect.Hint:=rsConnectAllDe;
   LabelCamera.Caption:=rsCam;
   LabelWheel.Caption:=rsFil;
   LabelFocuser.Caption:=rsFoc;
