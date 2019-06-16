@@ -43,8 +43,10 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
     LabelCoord: TLabel;
     LabelFWHM: TLabel;
+    LabelSNR: TLabel;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
@@ -184,6 +186,7 @@ begin
  LabelHFD.Caption:='-';
  LabelFWHM.Caption:='-';
  LabelImax.Caption:='-';
+ LabelSNR.Caption:='-';
  ClearGraph;
 end;
 
@@ -404,6 +407,10 @@ if FValMax>1 then
    LabelImax.Caption:=FormatFloat(f0,FValMax)
 else
    LabelImax.Caption:=FormatFloat(f3,FValMax);
+if Fsnr>0 then
+   LabelSNR.Caption:=FormatFloat(f0,Fsnr)
+else
+   LabelSNR.Caption:='-';
 if Ffwhm>0 then begin
   txt:=FormatFloat(f1,Ffwhm);
   if Ffwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,Ffwhmarcsec)+'"';

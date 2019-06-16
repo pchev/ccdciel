@@ -148,7 +148,7 @@ object f_starprofile: Tf_starprofile
           Top = 86
           Width = 7
           Caption = ' '
-          Font.Height = 28
+          Font.Height = 18
           Font.Style = [fsBold]
           ParentColor = False
           ParentFont = False
@@ -159,6 +159,26 @@ object f_starprofile: Tf_starprofile
           Top = 72
           Width = 57
           Caption = 'Intensity:'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label4: TLabel
+          Left = 125
+          Height = 19
+          Top = 72
+          Width = 22
+          Caption = 'SNR'
+          ParentColor = False
+        end
+        object LabelSNR: TLabel
+          Left = 125
+          Height = 22
+          Hint = 'The maximum intensity value'
+          Top = 86
+          Width = 6
+          Caption = ' '
+          Font.Height = 18
+          Font.Style = [fsBold]
           ParentColor = False
           ParentFont = False
         end
