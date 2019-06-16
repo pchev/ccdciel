@@ -173,7 +173,7 @@ object f_starprofile: Tf_starprofile
         object LabelSNR: TLabel
           Left = 125
           Height = 22
-          Hint = 'The maximum intensity value'
+          Hint = 'The Signal/Noise ratio'
           Top = 86
           Width = 6
           Caption = ' '
