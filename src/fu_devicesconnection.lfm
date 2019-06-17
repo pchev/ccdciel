@@ -78,8 +78,6 @@ object f_devicesconnection: Tf_devicesconnection
         Caption = 'Connect'
         OnClick = BtnConnectClick
         ParentFont = False
-        ParentShowHint = False
-        ShowHint = True
         TabOrder = 0
       end
       object led: TShape

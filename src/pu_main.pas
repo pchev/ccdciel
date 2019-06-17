@@ -2069,7 +2069,6 @@ begin
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // set hint
-      statusbar.ShowHint:=True;
       statusbar.Hint:=msg;
     end;
   end;
@@ -3618,7 +3617,6 @@ begin
   if camera.Temperature=NullCoord then f_ccdtemp.Visible:=False;
   f_ccdtemp.Current.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,camera.Temperature));
   buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+'...'+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
-  f_ccdtemp.Setpoint.ShowHint:=True;
   f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;
 end;
 
@@ -3645,8 +3643,6 @@ begin
  r:=camera.ExposureRange;
  buf:=FormatFloat(f0,r.min)+'...'+FormatFloat(f0,r.max);
  buf:=rsExposureTime+crlf+buf;
- f_capture.ExpTime.ShowHint:=True;
- f_preview.ExpTime.ShowHint:=True;
  f_capture.ExpTime.Hint:=buf;
  f_preview.ExpTime.Hint:=buf;
 end;
@@ -3673,10 +3669,6 @@ procedure Tf_main.ShowFrameRange;
 var rx,ry,rw,rh:TNumRange;
 begin
  camera.GetFrameRange(rx,ry,rw,rh);
- f_frame.FX.ShowHint:=True;
- f_frame.FY.ShowHint:=True;
- f_frame.FWidth.ShowHint:=True;
- f_frame.FHeight.ShowHint:=True;
  f_frame.FX.Hint:=FormatFloat(f0,rx.min)+'...'+FormatFloat(f0,rx.max);
  f_frame.FY.Hint:=FormatFloat(f0,ry.min)+'...'+FormatFloat(f0,ry.max);
  f_frame.FWidth.Hint:=FormatFloat(f0,rw.min)+'...'+FormatFloat(f0,rw.max);
@@ -3808,10 +3800,6 @@ begin
  if hasGain and (not hasGainISO) then begin
    f_capture.ISObox.Visible:=false;
    f_capture.GainEdit.Visible:=true;
-   f_capture.GainEdit.ShowHint:=True;
-   f_preview.GainEdit.ShowHint:=True;
-   f_EditTargets.FGainEdit.ShowHint:=True;
-   f_EditTargets.PGainEdit.ShowHint:=True;
    f_capture.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
    f_preview.ISObox.Visible:=false;
    f_preview.GainEdit.Visible:=true;
@@ -3903,7 +3891,6 @@ begin
   if r.step>0 then begin
    FocuserPositionMin:=round(r.min);
    FocuserPositionMax:=round(r.max);
-   f_focuser.Position.ShowHint:=True;
    f_focuser.Position.Hint:=rsCurrentFocus+', '+
                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.PosIncr.ItemIndex:=2;
@@ -3912,7 +3899,6 @@ begin
   f_focuser.timer.Value:=focuser.Timer;
   r:=focuser.RelPositionRange;
   if r.step>0 then begin
-    f_focuser.RelIncr.ShowHint:=True;
     f_focuser.RelIncr.Hint:=rsRelativeIncr+', '+
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=2;
@@ -5656,7 +5642,6 @@ begin
    end;
    f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
-   f_option.Logtofile.ShowHint:=True;
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
    f_option.Debug_Ascom.Checked:=config.GetValue('/Log/Debug_Ascom',debug_ascom);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');

@@ -183,7 +183,6 @@ object f_preview: Tf_preview
         BidiMode = bdRightToLeft
         Caption = 'Stack'
         ParentFont = False
-        ParentShowHint = False
         ParentBidiMode = False
         TabOrder = 1
       end

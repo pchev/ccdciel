@@ -596,8 +596,6 @@ object f_pascaleditor: Tf_pascaleditor
       Caption = 'ToolBar1'
       Images = ImageList1
       ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
       TabOrder = 0
       object ToolButton1: TToolButton
         Left = 9

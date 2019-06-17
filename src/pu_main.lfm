@@ -12,6 +12,7 @@ object f_main: Tf_main
   DesignTimePPI = 95
   KeyPreview = True
   Menu = MainMenu1
+  ShowHint = True
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -125,9 +126,7 @@ object f_main: Tf_main
         Width = 128
       end>
     ParentFont = False
-    ParentShowHint = False
     SimplePanel = False
-    ShowHint = True
     OnDrawPanel = StatusBar1DrawPanel
     OnResize = StatusBar1Resize
   end
@@ -283,8 +282,6 @@ object f_main: Tf_main
       Images = ImageListDay
       ParentColor = False
       ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
       TabOrder = 1
       Wrapable = False
       object TBConnect: TToolButton

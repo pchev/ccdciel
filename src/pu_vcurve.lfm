@@ -21,7 +21,6 @@ object f_vcurve: Tf_vcurve
     Caption = 'Learn'
     OnClick = BtnLearnVcurveClick
     ParentFont = False
-    ParentShowHint = False
     TabOrder = 0
   end
   object VcChart: TChart
@@ -214,7 +213,6 @@ object f_vcurve: Tf_vcurve
     Caption = 'Get current'
     OnClick = GetPosClick
     ParentFont = False
-    ParentShowHint = False
     TabOrder = 2
   end
   object Label2: TLabel
@@ -254,7 +252,6 @@ object f_vcurve: Tf_vcurve
     PageSize = 1
     Position = 0
     ParentFont = False
-    ParentShowHint = False
     TabOrder = 3
   end
   object BtnSave: TButton

@@ -984,8 +984,6 @@ object f_EditTargets: Tf_EditTargets
             Caption = '...'
             OnClick = BtnUnattendedScriptClick
             ParentFont = False
-            ParentShowHint = False
-            ShowHint = True
             TabOrder = 2
           end
           object BtnEndScript: TButton
@@ -997,8 +995,6 @@ object f_EditTargets: Tf_EditTargets
             Caption = '...'
             OnClick = BtnEndScriptClick
             ParentFont = False
-            ParentShowHint = False
-            ShowHint = True
             TabOrder = 3
           end
           object Bevel2: TBevel

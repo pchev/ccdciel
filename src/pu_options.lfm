@@ -94,7 +94,6 @@ object f_option: Tf_option
         Width = 165
         Caption = 'Log all messages to file '
         ParentFont = False
-        ParentShowHint = False
         TabOrder = 1
       end
       object CaptureDir: TEdit
@@ -410,8 +409,6 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 12
           ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 0
           OnChange = latChange
           Value = 0
@@ -429,8 +426,6 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 2
           ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 1
           OnChange = latChange
           Value = 0
@@ -444,8 +439,6 @@ object f_option: Tf_option
           Width = 51
           Constraints.MaxHeight = 28
           ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 2
           OnChange = latChange
           Value = 0
@@ -493,8 +486,6 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 12
           ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 0
           OnChange = longChange
           Value = 0
@@ -512,8 +503,6 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 2
           ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 1
           OnChange = longChange
           Value = 0
@@ -527,8 +516,6 @@ object f_option: Tf_option
           Width = 51
           Constraints.MaxHeight = 28
           ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
           TabOrder = 2
           OnChange = longChange
           Value = 0
@@ -1037,7 +1024,6 @@ object f_option: Tf_option
           Width = 184
           Caption = 'Show preview stack option'
           ParentFont = False
-          ParentShowHint = False
           TabOrder = 0
         end
       end
@@ -1816,7 +1802,6 @@ object f_option: Tf_option
           )
           OnChange = CheckFocuserDirection
           ParentFont = False
-          ParentShowHint = False
           Style = csDropDownList
           TabOrder = 1
           Text = 'IN'
@@ -1830,7 +1815,6 @@ object f_option: Tf_option
           Caption = 'Backlash compensation'
           OnChange = CheckFocuserDirection
           ParentFont = False
-          ParentShowHint = False
           TabOrder = 2
         end
         object FocuserBacklash: TSpinEdit
@@ -1989,7 +1973,6 @@ object f_option: Tf_option
         )
         OnClick = AutofocusmodeClick
         ParentFont = False
-        ParentShowHint = False
         TabOrder = 0
       end
       object PanelAutofocus: TPanel
@@ -2039,7 +2022,6 @@ object f_option: Tf_option
           Checked = True
           OnClick = CheckFocuserDirection
           ParentFont = False
-          ParentShowHint = False
           TabOrder = 1
           TabStop = True
         end
@@ -2052,7 +2034,6 @@ object f_option: Tf_option
           Caption = 'Out'
           OnClick = CheckFocuserDirection
           ParentFont = False
-          ParentShowHint = False
           TabOrder = 0
         end
         object AutofocusNotebook: TNotebook
@@ -2090,7 +2071,6 @@ object f_option: Tf_option
               Width = 142
               Caption = 'Slippage correction '
               ParentFont = False
-              ParentShowHint = False
               TabOrder = 0
             end
             object Label88: TLabel
@@ -2410,7 +2390,6 @@ object f_option: Tf_option
               '8'
             )
             ParentFont = False
-            ParentShowHint = False
             Style = csDropDownList
             TabOrder = 0
             Text = '4'
@@ -2812,7 +2791,6 @@ object f_option: Tf_option
               Width = 192
               Constraints.MaxHeight = 28
               ParentFont = False
-              ParentShowHint = False
               TabOrder = 0
             end
             object Label12: TLabel
@@ -2841,7 +2819,6 @@ object f_option: Tf_option
               Width = 192
               Constraints.MaxHeight = 28
               ParentFont = False
-              ParentShowHint = False
               TabOrder = 1
             end
             object Label15: TLabel

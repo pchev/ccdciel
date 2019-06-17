@@ -475,7 +475,6 @@ object f_visu: Tf_visu
         MinValue = 0.1
         OnChange = GammaChange
         ParentFont = False
-        ParentShowHint = False
         TabOrder = 0
         Value = 1
       end
@@ -581,7 +580,6 @@ object f_visu: Tf_visu
         GroupIndex = 105
         OnClick = BtnInvertClick
         ParentFont = False
-        ParentShowHint = False
       end
       object BtnFlipHorz: TSpeedButton
         Left = 0
@@ -658,7 +656,6 @@ object f_visu: Tf_visu
         GroupIndex = 106
         OnClick = BtnFlipHorzClick
         ParentFont = False
-        ParentShowHint = False
       end
       object BtnFlipVert: TSpeedButton
         Left = 29
@@ -735,7 +732,6 @@ object f_visu: Tf_visu
         GroupIndex = 107
         OnClick = BtnFlipVertClick
         ParentFont = False
-        ParentShowHint = False
       end
     end
   end

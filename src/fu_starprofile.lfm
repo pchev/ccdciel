@@ -308,7 +308,6 @@ object f_starprofile: Tf_starprofile
             Flat = True
             GroupIndex = 1
             ParentFont = False
-            ParentShowHint = False
           end
         end
       end

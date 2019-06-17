@@ -178,7 +178,6 @@ object f_setup: Tf_setup
         Caption = 'New'
         OnClick = BtnNewProfileClick
         ParentFont = False
-        ParentShowHint = False
         TabOrder = 2
       end
       object BtnDeleteProfile: TButton
@@ -190,7 +189,6 @@ object f_setup: Tf_setup
         Caption = 'Delete'
         OnClick = BtnDeleteProfileClick
         ParentFont = False
-        ParentShowHint = False
         TabOrder = 3
       end
       object BtnCopyProfile: TButton
@@ -202,7 +200,6 @@ object f_setup: Tf_setup
         Caption = 'Copy'
         OnClick = BtnCopyProfileClick
         ParentFont = False
-        ParentShowHint = False
         TabOrder = 4
       end
       object Panel10: TPanel
@@ -455,7 +452,6 @@ object f_setup: Tf_setup
               )
               OnClick = CameraIndiTransfertClick
               ParentFont = False
-              ParentShowHint = False
               TabOrder = 4
             end
             object CameraDiskPanel: TPanel
@@ -485,7 +481,6 @@ object f_setup: Tf_setup
                 Width = 251
                 Constraints.MaxHeight = 28
                 ParentFont = False
-                ParentShowHint = False
                 TabOrder = 0
                 Text = '/mnt/ramdisk'
               end
