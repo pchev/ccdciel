@@ -1574,7 +1574,7 @@ object f_EditTargets: Tf_EditTargets
     object BtnSaveAs: TButton
       Left = 860
       Height = 25
-      Hint = 'Save the list and close this window.'
+      Hint = 'Save the list with a new name and close this window.'
       Top = 2
       Width = 128
       Anchors = [akTop, akRight]

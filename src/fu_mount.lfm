@@ -95,7 +95,7 @@ object f_mount: Tf_mount
       object DE: TEdit
         Left = 30
         Height = 28
-        Hint = 'Current telescope declination'
+        Hint = 'Current telescope Declination'
         Top = 0
         Width = 85
         Alignment = taRightJustify

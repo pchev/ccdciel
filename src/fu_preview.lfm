@@ -86,7 +86,7 @@ object f_preview: Tf_preview
       object ISObox: TComboBox
         Left = 88
         Height = 28
-        Hint = 'Exposure time in secondes'
+        Hint = 'Exposure time in seconds'
         Top = 0
         Width = 90
         Constraints.MaxHeight = 28

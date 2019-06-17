@@ -60,7 +60,7 @@ object f_frame: Tf_frame
       object FX: TEdit
         Left = 16
         Height = 22
-        Hint = 'X'
+        Hint = 'Start X'
         Top = 0
         Width = 55
         AutoSize = False
@@ -113,7 +113,7 @@ object f_frame: Tf_frame
       object FY: TEdit
         Left = 16
         Height = 22
-        Hint = 'Y'
+        Hint = 'Start Y'
         Top = 0
         Width = 55
         AutoSize = False

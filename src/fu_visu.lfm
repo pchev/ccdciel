@@ -43,7 +43,7 @@ object f_visu: Tf_visu
       object Histogram: TImage
         Left = 0
         Height = 89
-        Hint = 'Histogram of the current image.'#10'Click and move to adjust the visualisation thresold.'
+        Hint = 'Histogram of the current image.'#10'Click and move to adjust the visualisation threshold.'
         Top = 0
         Width = 256
         Align = alClient
@@ -167,7 +167,7 @@ object f_visu: Tf_visu
       object histminmax: TSpeedButton
         Left = 58
         Height = 22
-        Hint = 'Fix the visualisation treshold to the image data range, 100% of the histogram.'
+        Hint = 'Fix the visualisation threshold to the image data range, 100% of the histogram.'
         Top = 0
         Width = 28
         Color = clDefault
@@ -299,7 +299,7 @@ object f_visu: Tf_visu
         Tag = 1
         Left = 87
         Height = 22
-        Hint = 'Zoom to original scale'
+        Hint = 'Zoom to half size'
         Top = 44
         Width = 28
         Caption = '1:2'
@@ -584,6 +584,7 @@ object f_visu: Tf_visu
       object BtnFlipHorz: TSpeedButton
         Left = 0
         Height = 22
+	Hint = 'Flip the image horizontally'
         Top = 66
         Width = 28
         AllowAllUp = True
@@ -660,6 +661,7 @@ object f_visu: Tf_visu
       object BtnFlipVert: TSpeedButton
         Left = 29
         Height = 22
+	Hint = 'Flip the image vertically'
         Top = 66
         Width = 28
         AllowAllUp = True
