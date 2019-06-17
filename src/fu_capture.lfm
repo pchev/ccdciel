@@ -41,6 +41,7 @@ object f_capture: Tf_capture
       object ExpTime: TComboBox
         Left = 88
         Height = 28
+        Hint = 'Exposure time in seconds'
         Top = 1
         Width = 90
         Constraints.MaxHeight = 28
@@ -96,7 +97,6 @@ object f_capture: Tf_capture
       object ISObox: TComboBox
         Left = 87
         Height = 28
-        Hint = 'Exposure time in secondes'
         Top = 1
         Width = 90
         Constraints.MaxHeight = 28

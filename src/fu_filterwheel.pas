@@ -75,6 +75,7 @@ end;
 procedure Tf_filterwheel.SetLang;
 begin
   Title.Caption:=rsFilter;
+  Filters.Hint:=rsFilterName;
 end;
 
 procedure Tf_filterwheel.FiltersChange(Sender: TObject);

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_translation, cu_mount, u_utils,
+uses u_global, Graphics, UScaleDPI, u_translation, u_hints, cu_mount, u_utils,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -139,6 +139,8 @@ begin
   CheckBoxFocus.Caption:=rsFocusEvery;
   CheckBoxFocusTemp.Caption:=rsFocusOnTempC;
   BtnStart.Caption:=rsStart;
+  ExpTime.Hint:=rsExposureTime;
+  BtnStart.Hint:=rsStartTheCapt
 end;
 
 procedure Tf_capture.BtnStartClick(Sender: TObject);

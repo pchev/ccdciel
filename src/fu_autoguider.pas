@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_translation,
+uses  UScaleDPI, u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -95,6 +95,7 @@ begin
   BtnCal.Caption:=rsCalibrate;
   BtnGuide.Caption:=rsGuide;
   BtnDither.Caption:=rsDither;
+  Status.Hint:=rsAutoguiderSt;
 end;
 
 procedure Tf_autoguider.SetDitherOnly(value:boolean);

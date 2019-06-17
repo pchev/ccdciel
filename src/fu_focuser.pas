@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, u_translation,
+uses  UScaleDPI, u_global, u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
@@ -124,6 +124,12 @@ begin
   BtnSetAbsPos.Caption:=rsSet;
   BtnVcurve.Caption:=rsVLearn;
   label5.Caption:=rsTemp;
+  RelIncr.Hint:=rsRelativeIncr;
+  PosIncr.Hint:=rsIncrementSte;
+  BtnSetAbsPos.Hint:=rsSetAbsoluteF;
+  BtnVcurve.Hint:=rsVCurveLearni;
+  BtnDown.Hint:=rsMoveFocuserI;
+  BtnUp.Hint:=rsMoveFocuserO;
 end;
 
 procedure Tf_focuser.BtnDownClick(Sender: TObject);
