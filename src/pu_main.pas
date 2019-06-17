@@ -2935,6 +2935,7 @@ var i,n: integer;
     buf,v: string;
     ok: boolean;
 begin
+  ShowHint:=screenconfig.GetValue('/Hint/Show',true);;
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
@@ -5616,6 +5617,7 @@ begin
         break;
       end;
    end;
+   f_option.CbShowHints.Checked:=screenconfig.GetValue('/Hint/Show',true);
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
    f_option.FolderOptions.RowCount:=SubDirCount;
@@ -5921,6 +5923,7 @@ begin
      i:=pos(',',buf);
      if i>0 then buf:=copy(buf,1,i-1);
      config.SetValue('/Language',buf);
+     screenconfig.SetValue('/Hint/Show',f_option.CbShowHints.Checked);
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
      for i:=0 to SubDirCount-1 do begin

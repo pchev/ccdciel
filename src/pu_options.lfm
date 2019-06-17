@@ -87,15 +87,6 @@ object f_option: Tf_option
         ParentColor = False
         ParentFont = False
       end
-      object Logtofile: TCheckBox
-        Left = 8
-        Height = 21
-        Top = 392
-        Width = 165
-        Caption = 'Log all messages to file '
-        ParentFont = False
-        TabOrder = 1
-      end
       object CaptureDir: TEdit
         Left = 160
         Height = 28
@@ -270,15 +261,6 @@ object f_option: Tf_option
           end
         end
       end
-      object UseTcpServer: TCheckBox
-        Left = 8
-        Height = 21
-        Top = 424
-        Width = 356
-        Caption = 'Allow to get program status from TCP/IP internal server'
-        ParentFont = False
-        TabOrder = 7
-      end
       object Label18: TLabel
         Left = 8
         Height = 19
@@ -301,14 +283,40 @@ object f_option: Tf_option
         Style = csDropDownList
         TabOrder = 8
       end
+      object Logtofile: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 392
+        Width = 165
+        Caption = 'Log all messages to file '
+        ParentFont = False
+        TabOrder = 1
+      end
       object Debug_Ascom: TCheckBox
         Left = 312
         Height = 21
-        Top = 396
+        Top = 392
         Width = 143
         Caption = 'Verbose ASCOM log'
         ParentFont = False
         TabOrder = 9
+      end
+      object UseTcpServer: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 420
+        Width = 356
+        Caption = 'Allow to get program status from TCP/IP internal server'
+        ParentFont = False
+        TabOrder = 7
+      end
+      object CbShowHints: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 448
+        Width = 82
+        Caption = 'Show hints'
+        TabOrder = 10
       end
     end
     object TabSheet2: TTabSheet
