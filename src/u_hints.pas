@@ -142,6 +142,31 @@ resourcestring
   rsAfterLearnin = 'After learning is completed you can use this cursor to '
     +'better adjust to the linear part of the curve.%sThe fit must be '
     +'particularly good near the horizontal blue line position.';
+  rsTheObjectNam = 'The object name for use in FITS header and file name';
+  rsTheNumberOfI = 'The number of images to take';
+  rsTheTypeOfFra = 'The type of frame';
+  rsTheNumberOfI2 = 'The number of image to take before dither';
+  rsTheNumberOfI3 = 'The number of image to take before autofocus';
+  rsAutofocusIfT = 'Autofocus if the temperature change is greater than the '
+    +'configured value';
+  rsEditTheCurre = 'Edit the current sequence';
+  rsListOfProfil = 'List of profile for every different equipement '
+    +'configuration';
+  rsGlobalINDISe = 'Global INDI server parameters';
+  rsGlobalALPACA = 'Global ALPACA server parameters';
+  rsTheBaseFolde = 'The base folder where the images are recorded';
+  rsATemporaryDi = 'A temporary directory for work files. Be sure it contain '
+    +'only ASCII character and no space';
+  rsSelectTheInf = 'Select the information used to make the image file name';
+  rsSelectTheInf2 = 'Select the information used to make the image directory '
+    +'name';
+  rsTheObserverN = 'The observer name for inclusion in the FITS header';
+  rsTheObservato = 'The observatory name for inclusion in the FITS header';
+  rsTheTelescopeNameForI =
+    'The telescope name for inclusion in the FITS header';
+  rsTheHorizonPr = 'The horizon profile used to compute object visibility. '
+    +'This file is the same as used in Cartes du Ciel';
+  rsTheMinimalOb = 'The minimal object elevation to start or end observing';
 
 implementation
 

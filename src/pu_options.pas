@@ -894,6 +894,17 @@ begin
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
   //Hint
+  CaptureDir.Hint:=rsTheBaseFolde;
+  TempDir.Hint:=rsATemporaryDi;
+  FileOpt.Hint:=rsSelectTheInf;
+  FolderOpt.Hint:=rsSelectTheInf2;
+  ObserverName.Hint:=rsTheObserverN;
+  ObservatoryName.Hint:=rsTheObservato;
+  TelescopeName.Hint:=rsTheTelescopeNameForI;
+  HorizonFile.Hint:=rsTheHorizonPr;
+  ElevationMin.Hint:=rsTheMinimalOb;
+
+
   StackShow.Hint:=Format(rsShowTheOptio, [crlf, crlf]);
   FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);

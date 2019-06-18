@@ -716,9 +716,12 @@ begin
   SafetyAscom.Caption:=DevInterfaceName[1];
   SafetyAscomRest.Caption:=DevInterfaceName[4];
   WatchdogIndi.Caption:=DevInterfaceName[0];
+  ProfileList.Hint:=rsListOfProfil;
   BtnNewProfile.Hint:=Format(rsCreateANewEm, [crlf, crlf]);
   BtnDeleteProfile.Hint:=rsDeleteThisPr;
   BtnCopyProfile.Hint:=Format(rsCopyTheCurre, [crlf]);
+  PanelIndiServer.Hint:=rsGlobalINDISe;
+  Panel10.Hint:=rsGlobalALPACA;
   CameraIndiTransfert.Hint:=Format(rsMakeTestToDe, [crlf]);
   CameraIndiTransfertDir.Hint:=rsTheTemporary;
 end;

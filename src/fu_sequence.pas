@@ -264,6 +264,7 @@ begin
   BtnReset.Caption:=rsReset;
   BtnLoadTargets.Hint:=rsLoadASequenc;
   BtnNewTargets.Hint:=rsCreateANewSe;
+  BtnEditTargets.Hint:=rsEditTheCurre;
   BtnStart.Hint:=rsStartTheSequ;
   BtnStop.Hint:=rsStopTheSeque;
   Unattended.Hint:=rsIfCheckedNoC;

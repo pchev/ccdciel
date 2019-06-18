@@ -140,6 +140,15 @@ begin
   CheckBoxFocusTemp.Caption:=rsFocusOnTempC;
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
+  Binning.Hint:=rsCameraBinnin;
+  ISObox.Hint:=rsCameraISO;
+  GainEdit.Hint:=rsCameraGain;
+  Fname.Hint:=rsTheObjectNam;
+  SeqNum.Hint:=rsTheNumberOfI;
+  FrameType.Hint:=rsTheTypeOfFra;
+  DitherCount.Hint:=rsTheNumberOfI2;
+  FocusCount.Hint:=rsTheNumberOfI3;
+  CheckBoxFocusTemp.Hint:=rsAutofocusIfT;
   BtnStart.Hint:=rsStartTheCapt
 end;
 
