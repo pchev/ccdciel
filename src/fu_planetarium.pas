@@ -84,6 +84,7 @@ begin
   Title.Caption:=rsPlanetarium;
   BtnConnect.Caption:=rsConnect;
   BtnNewTarget.Caption:=rsNewTarget;
+  Status.Hint:=rsPlanetariumS;
 end;
 
 procedure Tf_planetarium.BtnConnectClick(Sender: TObject);

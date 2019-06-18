@@ -70,6 +70,7 @@ begin
  FConnected:=false;
  FSafe:=false;;
  led.Brush.Color:=clGray;
+ led.Hint:=rsUnsafe;
  ScaleDPI(Self);
  SetLang;
 end;
@@ -88,13 +89,19 @@ end;
 procedure Tf_safety.SetLed;
 begin
   if FConnected then begin
-     if FSafe then
-        led.Brush.Color:=clLime
-     else
+     if FSafe then begin
+        led.Brush.Color:=clLime;
+        led.Hint:=rsSafe;
+     end
+     else begin
         led.Brush.Color:=clRed;
+        led.Hint:=rsUnsafe;
+     end;
   end
-  else
+  else begin
      led.Brush.Color:=clGray;
+     led.Hint:=rsDisconnected3;
+  end;
 end;
 
 procedure Tf_safety.SetConnected(value:boolean);

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_translation,
+uses  UScaleDPI, u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, StdCtrls, ExtCtrls;
 
 type
@@ -87,6 +87,10 @@ begin
   Title.Caption:=rsFrame;
   BtnSet.Caption:=rsSet;
   BtnReset.Caption:=rsReset;
+  FX.Hint:=rsStartX;
+  FY.Hint:=rsStartY;
+  FWidth.Hint:=rsWidth;
+  FHeight.Hint:=rsHeight;
 end;
 
 procedure Tf_frame.BtnSetClick(Sender: TObject);

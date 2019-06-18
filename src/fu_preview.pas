@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, u_translation,
+uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -120,6 +120,14 @@ begin
   BtnPreview.Caption:=rsPreview;
   StackPreview.Caption:=rsStack;
   BtnLoop.Caption:=rsLoop;
+  ExpTime.Hint:=rsExposureTime;
+  ISObox.Hint:=rsCameraISO;
+  GainEdit.Hint:=rsCameraGain;
+  Binning.Hint:=rsCameraBinnin;
+  BtnPreview.Hint:=rsStartOnePrev;
+  BtnLoop.Hint:=rsLoopPreviewE;
+  StackPreview.Hint:=Format(rsStackThePrev, [crlf]);
+  led.Hint:='';
 end;
 
 procedure Tf_preview.msg(txt:string; level:integer);

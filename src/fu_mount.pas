@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI,  u_translation,
+uses UScaleDPI,  u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Dialogs, Graphics, Buttons;
 
 type
@@ -97,6 +97,10 @@ begin
   LabelMeridian.Caption:=rsMeridianIn;
   label4.Caption:=rsMin;
   Pierside.Caption:=rsUnknowPierSi;
+  Ra.Hint:=rsCurrentTeles;
+  DE.Hint:=rsCurrentTeles2;
+  Pierside.Hint:=rsCurrentTeles3;
+  TimeToMeridian.Hint:=rsTimeFromMeri;
 end;
 
 procedure Tf_mount.BtnParkClick(Sender: TObject);

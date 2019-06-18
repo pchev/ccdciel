@@ -27,7 +27,7 @@ interface
 
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
-  fu_capture, fu_preview, fu_filterwheel, u_translation,
+  fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -262,6 +262,14 @@ begin
   BtnCopy.Caption:=rsCopy;
   BtnDelete.Caption:=rsDelete;
   BtnReset.Caption:=rsReset;
+  BtnLoadTargets.Hint:=rsLoadASequenc;
+  BtnNewTargets.Hint:=rsCreateANewSe;
+  BtnStart.Hint:=rsStartTheSequ;
+  BtnStop.Hint:=rsStopTheSeque;
+  Unattended.Hint:=rsIfCheckedNoC;
+  BtnCopy.Hint:=rsCopyTheSeque;
+  BtnDelete.Hint:=rsDeleteTheSeq;
+  BtnReset.Hint:=rsClearTheSequ;
 end;
 
 procedure Tf_sequence.SetPreview(val: Tf_preview);
