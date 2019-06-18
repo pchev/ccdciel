@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils, u_translation,
+uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils, u_translation, u_hints,
   FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls,
   Math, Graphics, Dialogs, StdCtrls, ComCtrls, Spin, TACustomSeries, TASeries;
 
@@ -163,7 +163,9 @@ begin
   BtnStopVcurve.Caption:=rsStop;
   BtnLearnVcurve.Caption:=rsLearn;
   BtnSave.Caption:=rsSave;
-
+  BtnLearnVcurve.Hint:=rsStartTheVcur;
+  GetPos.Hint:=rsIfTheImageIs;
+  TrackBar1.Hint:=Format(rsAfterLearnin, [crlf]);
 end;
 
 procedure Tf_vcurve.BtnLearnVcurveClick(Sender: TObject);

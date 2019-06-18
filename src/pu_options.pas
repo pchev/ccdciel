@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI, u_translation,
+uses u_utils, u_global, UScaleDPI, u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, Spin, enhedits;
 
@@ -893,6 +893,18 @@ begin
   label111.Caption:=rsTheFollowing;
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
+  //Hint
+  StackShow.Hint:=Format(rsShowTheOptio, [crlf, crlf]);
+  FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
+  FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);
+  AutofocusMoveDirIn.Hint:=rsThePreferedF;
+  AutofocusMoveDirOut.Hint:=rsThePreferedF;
+  Autofocusmode.Hint:=Format(rsUseVcurveWit, [crlf, crlf]);
+  AutofocusSlippageCorrection.Hint:=Format(rsTryToCorrect, [crlf]);
+  FocusStarMag.Hint:=Format(rsTheMagnitude, [crlf]);
+  ElbrusFolder.Hint:=rsTheElbrusIma;
+  ElbrusUnixpath.Hint:=rsTheUnixPathE;
+
 end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);
