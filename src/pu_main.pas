@@ -2935,7 +2935,11 @@ var i,n: integer;
     buf,v: string;
     ok: boolean;
 begin
-  ShowHint:=screenconfig.GetValue('/Hint/Show',true);;
+  ShowHint:=screenconfig.GetValue('/Hint/Show',true);
+  if f_option<>nil then f_option.ShowHint:=ShowHint;
+  if f_setup<>nil then f_setup.ShowHint:=ShowHint;
+  if f_EditTargets<>nil then f_EditTargets.ShowHint:=ShowHint;
+  if f_vcurve<>nil then f_vcurve.ShowHint:=ShowHint;
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
@@ -4799,6 +4803,7 @@ begin
     f_vcurve.onStopVcurve:=@StopVcurve;
     f_vcurve.onSaveVcurve:=@doSaveVcurve;
   end;
+  f_vcurve.ShowHint:=ShowHint;
   if VcCenterpos<>NullCoord then f_vcurve.FocusPos.Value:=VcCenterpos else f_vcurve.FocusPos.Value:=focuser.Position;
   if VcHalfwidth<>NullCoord then f_vcurve.HalfWidth.Value:=VcHalfwidth else f_vcurve.HalfWidth.Value:=500;
   f_vcurve.Nsteps.Value:=VcNsteps;
@@ -5389,6 +5394,7 @@ begin
     exit;
   end;
   loadopt:=false;
+  f_setup.ShowHint:=ShowHint;
   f_setup.DefaultCameraInterface:=camera.CameraInterface;
   f_setup.DefaultMountInterface:=mount.MountInterface;
   f_setup.DefaultDomeInterface:=dome.DomeInterface;
@@ -5588,6 +5594,7 @@ var ok,PlanetariumChange,AutoguiderChange: boolean;
 begin
    PlanetariumChange:=false;
    AutoguiderChange:=false;
+   f_option.ShowHint:=ShowHint;
    f_option.LockTemp:=true;
    f_option.Caption:=Format(rsOptions, [profile]);
    f_option.onGetPixelSize:=@OptionGetPixelSize;
