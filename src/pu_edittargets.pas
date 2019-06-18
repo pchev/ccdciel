@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
-  pu_scriptengine, cu_astrometry, u_translation, pu_selectscript, Classes, math,
+  pu_scriptengine, cu_astrometry, u_translation, u_hints, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin,
   Buttons;
@@ -451,6 +451,41 @@ begin
   cbWarm.Caption:=rsWarmTheCamer;
   cbScript.Caption:=rsRunAScript;
   Label4.Caption:=rsUnattendedEr;
+  // hint
+  BtnCurrentCoord.Hint:=rsDoNotMoveThe;
+  BtnCdCCoord.Hint:=rsGetTheCoordi;
+  PointAstrometry.Hint:=rsUsePlateSolv;
+  BtnImgCoord.Hint:=rsSolveTheCurr;
+  UpdateCoord.Hint:=Format(rsForMovingObj, [crlf]);
+  InplaceAutofocus.Hint:=Format(rsYouCanAvoidT, [crlf]);
+  BtnApplyToAll.Hint:=rsApplyThisSet;
+  Btn_coord_internal.Hint:=rsGetTheCoordi2;
+  Preview.Hint:=rsStartAPrevie;
+  BtnImgRot.Hint:=rsSolveTheCurr2;
+  BtnAnytime.Hint:=rsClearTimeCon;
+  FISObox.Hint:=rsCameraISO;
+  FGainEdit.Hint:=rsCameraGain;
+  CheckBoxRepeatList.Hint:=rsRepeatTheWho2;
+  BtnRepeatInf.Hint:=rsInfiniteNumb;
+  SeqStart.Hint:=rsActivateTheS;
+  SeqStartAt.Hint:=rsWaitToThisTi;
+  SeqStartTwilight.Hint:=rsSetTheStartT;
+  SeqStop.Hint:=rsActivateTheS2;
+  SeqStopAt.Hint:=rsStopAtThisTi;
+  SeqStopTwilight.Hint:=rsSetTheStopTi;
+  CheckBoxRestartStatus.Hint:=rsThisAllowToR;
+  CheckBoxResetRepeat.Hint:=rsControlHowCo;
+  BtnNewObject.Hint:=rsAddAnObjectT;
+  BtnDeleteObject.Hint:=rsDeleteTheSel;
+  BtnNewScript.Hint:=rsAddAScriptTo;
+  BtnSkyFlat.Hint:=rsAddAFlatSequ;
+  TargetList.Hint:=rsTheListOfTar;
+  PGainEdit.Hint:=rsCameraGain;
+  PISObox.Hint:=rsCameraISO;
+  BtnSave.Hint:=rsSaveTheListA;
+  BtnSaveAs.Hint:=rsSaveTheListW;
+
+
 
 end;
 

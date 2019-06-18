@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_translation,
+uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_translation, u_hints,
   {$ifdef mswindows}
     Variants, comobj, math,
   {$endif}
@@ -567,8 +567,8 @@ begin
   BtnChooseFilter.Caption:=rsChoose;
   BtnAboutCamera1.Caption:=rsAbout;
   BtnSetupCamera1.Caption:=rsSetup;
-  FlipImage.Caption:=rsFlipTheImage;
-  FlipImage1.Caption:=rsFlipTheImage;
+  FlipImage.Caption:=rsFlipTheImageV;
+  FlipImage1.Caption:=rsFlipTheImageV;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
   Label7.Caption:=rsPort;
@@ -716,6 +716,11 @@ begin
   SafetyAscom.Caption:=DevInterfaceName[1];
   SafetyAscomRest.Caption:=DevInterfaceName[4];
   WatchdogIndi.Caption:=DevInterfaceName[0];
+  BtnNewProfile.Hint:=Format(rsCreateANewEm, [crlf, crlf]);
+  BtnDeleteProfile.Hint:=rsDeleteThisPr;
+  BtnCopyProfile.Hint:=Format(rsCopyTheCurre, [crlf]);
+  CameraIndiTransfert.Hint:=Format(rsMakeTestToDe, [crlf]);
+  CameraIndiTransfertDir.Hint:=rsTheTemporary;
 end;
 
 procedure Tf_setup.LoadProfileList;

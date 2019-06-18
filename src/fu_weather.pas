@@ -70,6 +70,7 @@ begin
  FConnected:=false;
  FClear:=false;
  led.Brush.Color:=clGray;
+ led.Hint:=rsDisconnected3;
  ScaleDPI(Self);
  SetLang;
 end;
@@ -88,13 +89,19 @@ end;
 procedure Tf_weather.SetLed;
 begin
   if FConnected then begin
-     if FClear then
-        led.Brush.Color:=clLime
-     else
+     if FClear then begin
+        led.Brush.Color:=clLime;
+        led.Hint:=Format(rsWeatherMonit,[rsGood]);
+     end
+     else begin
         led.Brush.Color:=clRed;
+        led.Hint:=Format(rsWeatherMonit,[rsBad]);
+     end;
   end
-  else
+  else begin
      led.Brush.Color:=clGray;
+     led.Hint:=rsDisconnected3;
+  end;
 end;
 
 procedure Tf_weather.SetConnected(value:boolean);

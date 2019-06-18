@@ -941,7 +941,8 @@ resourcestring
   rsTimeSendToTe = 'Time send to telescope.';
   rsSiteSendToTe = 'Site send to telescope.';
   rsSiteSetFromT = 'Site set from the telescope.';
-  rsFlipTheImage = 'Flip the image vertically';
+  rsFlipTheImageV = 'Flip the image vertically';
+  rsFlipTheImageH = 'Flip the image horizontally';
   rsTracking = 'tracking';
   rsNotTracking = 'not tracking';
   rsOn = 'On';

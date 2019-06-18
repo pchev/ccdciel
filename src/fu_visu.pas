@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, u_translation,
-  Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
+uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, u_translation, u_hints,
+  u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
 
 type
 
@@ -164,6 +164,22 @@ end;
 procedure Tf_visu.SetLang;
 begin
   Title.Caption:=rsVisualisatio;
+  Histogram.Hint:=Format(rsHistogramOfT, [crlf]);
+  BtnZoomAdjust.Hint:=rsZoomToAdjust;
+  histminmax.Hint:=rsFixTheVisual;
+  hist2.Hint:=Format(rsShowOfTheHis, ['90%']);
+  hist1.Hint:=Format(rsShowOfTheHis, ['95%']);
+  hist3.Hint:=Format(rsShowOfTheHis, ['96%']);
+  hist4.Hint:=Format(rsShowOfTheHis, ['98%']);
+  BtnZoom2.Hint:=rsZoomTwoTime;
+  BtnZoom1.Hint:=rsZoomToOrigin;
+  BtnZoom05.Hint:=rsZoomToHalfSi;
+  BtnBullsEye.Hint:=rsShowBullsEye;
+  BtnClipping.Hint:=rsShowHighligh;
+  Gamma.Hint:=rsGammaOfTheIm;
+  BtnInvert.Hint:=rsInvertImageD;
+  BtnFlipHorz.Hint:=rsFlipTheImageH;
+  BtnFlipVert.Hint:=rsFlipTheImageV;
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation,
+uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation, u_hints,
   fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, pu_hyperbola,
   FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
   StdCtrls, ExtCtrls, Buttons, LCLType;
@@ -206,6 +206,16 @@ begin
   BtnMeasureImage.Caption:=rsImageInspect;
   ChkFocus.Caption:=rsManualFocusA;
   ChkAutofocus.Caption:=rsAutofocus;
+  profile.Hint:=rsTheSelectedS;
+  graph.Hint:=rsHistoryOfThe;
+  LabelHFD.Hint:=rsTheHalfFluxD;
+  LabelImax.Hint:=rsTheMaximumIn;
+  LabelSNR.Hint:=rsTheSignalNoi;
+  LabelFWHM.Hint:=rsTheFullWidth;
+  BtnPinGraph.Hint:=rsKeepTheGraph;
+  BtnMeasureImage.Hint:=rsInspectTheRe;
+  ChkFocus.Hint:=rsStartImageLo;
+  ChkAutofocus.Hint:=rsStartTheAuto;
 end;
 
 
