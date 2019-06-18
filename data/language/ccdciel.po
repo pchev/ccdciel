@@ -3350,8 +3350,12 @@ msgstr ""
 msgid "Site set from the telescope."
 msgstr ""
 
-#: u_translation:rsfliptheimage
+#: u_translation:rsfliptheimagev
 msgid "Flip the image vertically"
+msgstr ""
+
+#: u_translation:rsfliptheimageh
+msgid "Flip the image horizontally"
 msgstr ""
 
 #: u_translation:rstracking

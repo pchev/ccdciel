@@ -1237,7 +1237,13 @@ msgstr "Niveau du flat=%s"
 msgid "Flat time"
 msgstr "Moment du flat"
 
-#: u_translation.rsfliptheimage
+#: u_translation.rsfliptheimageh
+msgid "Flip the image horizontally"
+msgstr ""
+
+#: u_translation.rsfliptheimagev
+#, fuzzy
+msgctxt "u_translation.rsfliptheimagev"
 msgid "Flip the image vertically"
 msgstr "Retourner l'image verticalement"
 

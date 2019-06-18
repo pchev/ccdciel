@@ -1236,7 +1236,12 @@ msgstr "Livello Flat=%s"
 msgid "Flat time"
 msgstr "Tempo Flat"
 
-#: u_translation.rsfliptheimage
+#: u_translation.rsfliptheimageh
+msgid "Flip the image horizontally"
+msgstr ""
+
+#: u_translation.rsfliptheimagev
+msgctxt "u_translation.rsfliptheimagev"
 msgid "Flip the image vertically"
 msgstr ""
 

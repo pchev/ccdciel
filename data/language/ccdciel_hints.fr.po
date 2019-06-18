@@ -16,7 +16,387 @@ msgstr ""
 "X-Launchpad-Export-Date: 2019-06-16 19:20+0000\n"
 "X-Generator: Launchpad (build 18981)\n"
 
+#: u_hints.rsactivateback
+msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
+msgstr ""
+
+#: u_hints.rsactivatethes
+msgid "Activate the start time"
+msgstr ""
+
+#: u_hints.rsactivatethes2
+msgid "Activate the stop time"
+msgstr ""
+
+#: u_hints.rsaddaflatsequ
+msgid "Add a flat sequence to the list."
+msgstr ""
+
+#: u_hints.rsaddanobjectt
+msgid "Add an object to the list"
+msgstr ""
+
+#: u_hints.rsaddascriptto
+msgid "Add a script to the list."
+msgstr ""
+
+#: u_hints.rsafterlearnin
+msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particulary good near the horizontal blue line position."
+msgstr ""
+
+#: u_hints.rsapplythisset
+msgid "Apply this setting to all the targets"
+msgstr ""
+
+#: u_hints.rsautoguiderst
+msgid "Autoguider status"
+msgstr ""
+
+#: u_hints.rscamerabinnin
+msgid "Camera binning"
+msgstr ""
+
+#: u_hints.rscameragain
+msgid "Camera gain"
+msgstr ""
+
+#: u_hints.rscameraiso
+msgid "Camera ISO"
+msgstr ""
+
+#: u_hints.rsclearthesequ
+msgid "Clear the sequence completion status"
+msgstr ""
+
+#: u_hints.rscleartimecon
+msgid "Clear time constraint"
+msgstr ""
+
 #: u_hints.rsconnectallde
 msgid "Connect all devices"
 msgstr "Connecter tous les périphériques"
+
+#: u_hints.rscontrolhowco
+msgid "Control how complete target are managed when the whole list is repeated"
+msgstr ""
+
+#: u_hints.rscopythecurre
+msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
+msgstr ""
+
+#: u_hints.rscopytheseque
+msgid "Copy the sequence to a new one. Completion status is reinitialized"
+msgstr ""
+
+#: u_hints.rscreateanewem
+msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipement but keep the program options."
+msgstr ""
+
+#: u_hints.rscreateanewse
+msgid "Create a new sequence"
+msgstr ""
+
+#: u_hints.rscurrentteles
+msgid "Current telescope Right Ascension"
+msgstr ""
+
+#: u_hints.rscurrentteles2
+msgid "Current telescope Declination"
+msgstr ""
+
+#: u_hints.rscurrentteles3
+msgid "Current telescope side of pier"
+msgstr ""
+
+#: u_hints.rsdeletethesel
+msgid "Delete the selected row from the list."
+msgstr ""
+
+#: u_hints.rsdeletetheseq
+msgid "Delete the sequence file"
+msgstr ""
+
+#: u_hints.rsdeletethispr
+msgid "Delete this profile and associated program preference."
+msgstr ""
+
+#: u_hints.rsdonotmovethe
+msgid "Do not move the telescope before to start imaging."
+msgstr ""
+
+#: u_hints.rsexposuretime
+msgid "Exposure time in seconds"
+msgstr ""
+
+#: u_hints.rsfixthevisual
+msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
+msgstr ""
+
+#: u_hints.rsformovingobj
+msgid "For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.%sBe sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here."
+msgstr ""
+
+#: u_hints.rsgammaoftheim
+msgid "Gamma of the image display"
+msgstr ""
+
+#: u_hints.rsgetthecoordi
+msgid "Get the coordinates and object name from the planetarium"
+msgstr ""
+
+#: u_hints.rsgetthecoordi2
+msgid "Get the coordinates from the internal annotation database"
+msgstr ""
+
+#: u_hints.rshistogramoft
+msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
+msgstr ""
+
+#: u_hints.rshistoryofthe
+msgid "History of the last FWHM and Intensity measurement"
+msgstr ""
+
+#: u_hints.rsifcheckednoc
+msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
+msgstr ""
+
+#: u_hints.rsiftheimageis
+msgid "If the image is now focused, click this button to get the current focuser position"
+msgstr ""
+
+#: u_hints.rsincrementste
+msgid "Increment step for the inward or outward movement"
+msgstr ""
+
+#: u_hints.rsinfinitenumb
+msgid "Infinite number of repetition"
+msgstr ""
+
+#: u_hints.rsinspectthere
+msgid "Inspect the repartition of the HFD across the image"
+msgstr ""
+
+#: u_hints.rsinvertimaged
+msgid "Invert image display"
+msgstr ""
+
+#: u_hints.rskeepthegraph
+msgid "Keep the graph visible after autofocus is completed"
+msgstr ""
+
+#: u_hints.rsloadasequenc
+msgid "Load a sequence file"
+msgstr ""
+
+#: u_hints.rslooppreviewe
+msgid "Loop preview exposures"
+msgstr ""
+
+#: u_hints.rsmaketesttode
+msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
+msgstr ""
+
+#: u_hints.rsmovefocuseri
+msgid "Move focuser inward"
+msgstr ""
+
+#: u_hints.rsmovefocusero
+msgid "Move focuser outward"
+msgstr ""
+
+#: u_hints.rsplanetariums
+msgid "Planetarium status"
+msgstr ""
+
+#: u_hints.rsrepeatthewho2
+msgid "Repeat the whole list a number of time."
+msgstr ""
+
+#: u_hints.rssavethelista
+msgid "Save the list and close this window."
+msgstr ""
+
+#: u_hints.rssavethelistw
+msgid "Save the list with a new name and close this window."
+msgstr ""
+
+#: u_hints.rssetabsolutef
+msgid "Set absolute focuser position"
+msgstr ""
+
+#: u_hints.rssetthestartt
+msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
+msgstr ""
+
+#: u_hints.rssetthestopti
+msgid "Set the stop time at astronomical dawn, recomputed for the date you run the sequence."
+msgstr ""
+
+#: u_hints.rsshowbullseye
+msgid "Show bulls eye"
+msgstr ""
+
+#: u_hints.rsshowhighligh
+msgid "Show highlight and shadow clipping"
+msgstr ""
+
+#: u_hints.rsshowofthehis
+msgid "Show %s of the histogram"
+msgstr ""
+
+#: u_hints.rsshowtheoptio
+msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
+msgstr ""
+
+#: u_hints.rssolvethecurr
+msgid "Solve the current image and get the center coordinates"
+msgstr ""
+
+#: u_hints.rssolvethecurr2
+msgid "Solve the current image and get the rotation of the image"
+msgstr ""
+
+#: u_hints.rsstacktheprev
+msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
+msgstr ""
+
+#: u_hints.rsstartaprevie
+msgid "Start a preview loop when waiting for the delay to expire."
+msgstr ""
+
+#: u_hints.rsstartimagelo
+msgid "Start image loop centered on selected star"
+msgstr ""
+
+#: u_hints.rsstartoneprev
+msgid "Start one preview exposure"
+msgstr ""
+
+#: u_hints.rsstarttheauto
+msgid "Start the auto-focus procedure"
+msgstr ""
+
+#: u_hints.rsstartthecapt
+msgid "Start the capture sequence"
+msgstr ""
+
+#: u_hints.rsstartthesequ
+msgid "Start the sequence execution"
+msgstr ""
+
+#: u_hints.rsstartthevcur
+msgid "Start the Vcurve learning process"
+msgstr ""
+
+#: u_hints.rsstartx
+msgid "Start X"
+msgstr ""
+
+#: u_hints.rsstarty
+msgid "Start Y"
+msgstr ""
+
+#: u_hints.rsstopatthisti
+msgid "Stop at this time even if the processing is not finished."
+msgstr ""
+
+#: u_hints.rsstoptheseque
+msgid "Stop the sequence execution"
+msgstr ""
+
+#: u_hints.rsthedirection
+msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
+msgstr ""
+
+#: u_hints.rstheelbrusima
+msgid "The Elbrus Images folder as set in the Elbrus parameters."
+msgstr ""
+
+#: u_hints.rsthefullwidth
+msgid "The Full Width at Half Maximum value in pixels / arc seconds"
+msgstr ""
+
+#: u_hints.rsthehalffluxd
+msgid "The Half Flux Diameter value in pixels"
+msgstr ""
+
+#: u_hints.rsthelistoftar
+msgid "The list of target to process in sequence."
+msgstr ""
+
+#: u_hints.rsthemagnitude
+msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
+msgstr ""
+
+#: u_hints.rsthemaximumin
+msgid "The maximum intensity value"
+msgstr ""
+
+#: u_hints.rsthepreferedf
+msgid "The prefered focuser direction for autofocus."
+msgstr ""
+
+#: u_hints.rstheselecteds
+msgid "The selected star luminosity profile"
+msgstr ""
+
+#: u_hints.rsthesignalnoi
+msgid "The Signal/Noise ratio"
+msgstr ""
+
+#: u_hints.rsthetemporary
+msgid "The temporary RAM disk used to transfert the images from the Indi server"
+msgstr ""
+
+#: u_hints.rstheunixpathe
+msgid "The Unix path equivalent to the Elbrus Images folder."
+msgstr ""
+
+#: u_hints.rsthisallowtor
+msgid "This allow to restart an interupted sequence at the point it was stopped"
+msgstr ""
+
+#: u_hints.rstimefrommeri
+msgid "Time from meridian transit (hour angle)"
+msgstr ""
+
+#: u_hints.rstrytocorrect
+msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
+msgstr ""
+
+#: u_hints.rsuseplatesolv
+msgid "Use plate solving to increase the accuracy of the telescope position."
+msgstr ""
+
+#: u_hints.rsusevcurvewit
+msgid "Use Vcurve with an absolute position focuser, then learn the curve. This is the quickest method.%sUse Dynamic with a relative position focuser, this method require you start with a good approximate focus position.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest method."
+msgstr ""
+
+#: u_hints.rsvcurvelearni
+msgid "V curve learning"
+msgstr ""
+
+#: u_hints.rswaittothisti
+msgid "Wait to this time before to start to process the list."
+msgstr ""
+
+#: u_hints.rsyoucanavoidt
+msgid "You can avoid to move to a focus star if this target field include a suitable star.%sBeware the auto-focus will fail if the star is too faint."
+msgstr ""
+
+#: u_hints.rszoomtoadjust
+msgid "Zoom to adjust in window"
+msgstr ""
+
+#: u_hints.rszoomtohalfsi
+msgid "Zoom to half size"
+msgstr ""
+
+#: u_hints.rszoomtoorigin
+msgid "Zoom to original scale"
+msgstr ""
+
+#: u_hints.rszoomtwotime
+msgid "Zoom two time"
+msgstr ""
 

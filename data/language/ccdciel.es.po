@@ -1236,7 +1236,13 @@ msgstr "Nivel plana=%s"
 msgid "Flat time"
 msgstr "Hora de la toma plana"
 
-#: u_translation.rsfliptheimage
+#: u_translation.rsfliptheimageh
+msgid "Flip the image horizontally"
+msgstr ""
+
+#: u_translation.rsfliptheimagev
+#, fuzzy
+msgctxt "u_translation.rsfliptheimagev"
 msgid "Flip the image vertically"
 msgstr "Reflejar la imagen verticalmente"
 
