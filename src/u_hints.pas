@@ -11,7 +11,6 @@ uses
 resourcestring
   rsConnectAllDe = 'Connect all devices';
   rsAutoguiderSt = 'Autoguider status';
-  rsExposureTime = 'Exposure time in seconds';
   rsStartTheCapt = 'Start the capture sequence';
   rsIncrementSte = 'Increment step for the inward or outward movement';
   rsSetAbsoluteF = 'Set absolute focuser position';
@@ -24,7 +23,7 @@ resourcestring
   rsCurrentTeles2 = 'Current telescope Declination';
   rsCurrentTeles3 = 'Current telescope side of pier';
   rsTimeFromMeri = 'Time from meridian transit (hour angle)';
-  rsPlanetariumS = 'Planetarium status';
+  rsPlanetariumS2 = 'Planetarium status';
   rsCameraISO = 'Camera ISO';
   rsCameraGain = 'Camera gain';
   rsCameraBinnin = 'Camera binning';
@@ -50,7 +49,7 @@ resourcestring
   rsTheFullWidth = 'The Full Width at Half Maximum value in pixels / arc '
     +'seconds';
   rsKeepTheGraph = 'Keep the graph visible after autofocus is completed';
-  rsInspectTheRe = 'Inspect the repartition of the HFD across the image';
+  rsInspectTheRe = 'Inspect the distribution of the HFD across the image';
   rsStartImageLo = 'Start image loop centered on selected star';
   rsStartTheAuto = 'Start the auto-focus procedure';
   rsHistogramOfT = 'Histogram of the current image.%sClick and move to adjust '
@@ -58,7 +57,7 @@ resourcestring
   rsShowOfTheHis = 'Show %s of the histogram';
   rsCreateANewEm = 'Create a new empty profile.%sWarning this also clear every'
     +' program preference for this new profile.%sUse the Copy button if you '
-    +'want to configure a different equipement but keep the program options.';
+    +'want to configure a different equipment but keep the program options.';
   rsZoomToAdjust = 'Zoom to adjust in window';
   rsFixTheVisual = 'Fix the visualisation threshold to the image data range, 1'
     +'00% of the histogram.';
@@ -75,7 +74,7 @@ resourcestring
   rsMakeTestToDe = 'Make test to determine the most performant option '
     +'depending on your computer.%s(Network is mandatory if the camera is '
     +'connected to a remote Indi server)';
-  rsTheTemporary = 'The temporary RAM disk used to transfert the images from '
+  rsTheTemporary = 'The temporary RAM disk used to transfer the images from '
     +'the Indi server';
   rsDoNotMoveThe = 'Do not move the telescope before to start imaging.';
   rsGetTheCoordi = 'Get the coordinates and object name from the planetarium';
@@ -104,7 +103,7 @@ resourcestring
   rsStopAtThisTi = 'Stop at this time even if the processing is not finished.';
   rsSetTheStopTi = 'Set the stop time at astronomical dawn, recomputed for the'
     +' date you run the sequence.';
-  rsThisAllowToR = 'This allow to restart an interupted sequence at the point '
+  rsThisAllowToR = 'This allow to restart an interrupted sequence at the point '
     +'it was stopped';
   rsControlHowCo = 'Control how complete target are managed when the whole '
     +'list is repeated';
@@ -128,7 +127,7 @@ resourcestring
     +'using auto-focus set the same move direction.';
   rsActivateBack = 'Activate backlash compensation.%sLet this disabled if your'
     +' focuser driver include backlash compensation.';
-  rsThePreferedF = 'The prefered focuser direction for autofocus.';
+  rsThePreferedF = 'The preferred focuser direction for autofocus.';
   rsTryToCorrect = 'Try to correct for focuser slippage since the last Vcurve '
     +'learning.%sBeware you must set the focuser temperature correction and '
     +'the filters offset before to use this option.';
@@ -142,7 +141,7 @@ resourcestring
     +'current focuser position';
   rsAfterLearnin = 'After learning is completed you can use this cursor to '
     +'better adjust to the linear part of the curve.%sThe fit must be '
-    +'particulary good near the horizontal blue line position.';
+    +'particularly good near the horizontal blue line position.';
 
 implementation
 

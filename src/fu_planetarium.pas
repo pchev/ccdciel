@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI,  u_translation,
+uses  UScaleDPI,  u_translation, u_hints,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -84,7 +84,7 @@ begin
   Title.Caption:=rsPlanetarium;
   BtnConnect.Caption:=rsConnect;
   BtnNewTarget.Caption:=rsNewTarget;
-  Status.Hint:=rsPlanetariumS;
+  Status.Hint:=rsPlanetariumS2;
 end;
 
 procedure Tf_planetarium.BtnConnectClick(Sender: TObject);
