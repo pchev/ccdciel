@@ -6,10 +6,6 @@ msgstr ""
 msgid "Autoguider status"
 msgstr ""
 
-#: u_hints:rsexposuretime
-msgid "Exposure time in seconds"
-msgstr ""
-
 #: u_hints:rsstartthecapt
 msgid "Start the capture sequence"
 msgstr ""
@@ -58,7 +54,7 @@ msgstr ""
 msgid "Time from meridian transit (hour angle)"
 msgstr ""
 
-#: u_hints:rsplanetariums
+#: u_hints:rsplanetariums2
 msgid "Planetarium status"
 msgstr ""
 
@@ -147,7 +143,7 @@ msgid "Keep the graph visible after autofocus is completed"
 msgstr ""
 
 #: u_hints:rsinspectthere
-msgid "Inspect the repartition of the HFD across the image"
+msgid "Inspect the distribution of the HFD across the image"
 msgstr ""
 
 #: u_hints:rsstartimagelo
@@ -167,7 +163,7 @@ msgid "Show %s of the histogram"
 msgstr ""
 
 #: u_hints:rscreateanewem
-msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipement but keep the program options."
+msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 msgstr ""
 
 #: u_hints:rszoomtoadjust
@@ -219,7 +215,7 @@ msgid "Make test to determine the most performant option depending on your compu
 msgstr ""
 
 #: u_hints:rsthetemporary
-msgid "The temporary RAM disk used to transfert the images from the Indi server"
+msgid "The temporary RAM disk used to transfer the images from the Indi server"
 msgstr ""
 
 #: u_hints:rsdonotmovethe
@@ -299,7 +295,7 @@ msgid "Set the stop time at astronomical dawn, recomputed for the date you run t
 msgstr ""
 
 #: u_hints:rsthisallowtor
-msgid "This allow to restart an interupted sequence at the point it was stopped"
+msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr ""
 
 #: u_hints:rscontrolhowco
@@ -351,7 +347,7 @@ msgid "Activate backlash compensation.%sLet this disabled if your focuser driver
 msgstr ""
 
 #: u_hints:rsthepreferedf
-msgid "The prefered focuser direction for autofocus."
+msgid "The preferred focuser direction for autofocus."
 msgstr ""
 
 #: u_hints:rstrytocorrect
@@ -379,6 +375,82 @@ msgid "If the image is now focused, click this button to get the current focuser
 msgstr ""
 
 #: u_hints:rsafterlearnin
-msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particulary good near the horizontal blue line position."
+msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
+msgstr ""
+
+#: u_hints:rstheobjectnam
+msgid "The object name for use in FITS header and file name"
+msgstr ""
+
+#: u_hints:rsthenumberofi
+msgid "The number of images to take"
+msgstr ""
+
+#: u_hints:rsthetypeoffra
+msgid "The type of frame"
+msgstr ""
+
+#: u_hints:rsthenumberofi2
+msgid "The number of image to take before dither"
+msgstr ""
+
+#: u_hints:rsthenumberofi3
+msgid "The number of image to take before autofocus"
+msgstr ""
+
+#: u_hints:rsautofocusift
+msgid "Autofocus if the temperature change is greater than the configured value"
+msgstr ""
+
+#: u_hints:rseditthecurre
+msgid "Edit the current sequence"
+msgstr ""
+
+#: u_hints:rslistofprofil
+msgid "List of profile for every different equipement configuration"
+msgstr ""
+
+#: u_hints:rsglobalindise
+msgid "Global INDI server parameters"
+msgstr ""
+
+#: u_hints:rsglobalalpaca
+msgid "Global ALPACA server parameters"
+msgstr ""
+
+#: u_hints:rsthebasefolde
+msgid "The base folder where the images are recorded"
+msgstr ""
+
+#: u_hints:rsatemporarydi
+msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
+msgstr ""
+
+#: u_hints:rsselecttheinf
+msgid "Select the information used to make the image file name"
+msgstr ""
+
+#: u_hints:rsselecttheinf2
+msgid "Select the information used to make the image directory name"
+msgstr ""
+
+#: u_hints:rstheobservern
+msgid "The observer name for inclusion in the FITS header"
+msgstr ""
+
+#: u_hints:rstheobservato
+msgid "The observatory name for inclusion in the FITS header"
+msgstr ""
+
+#: u_hints:rsthetelescopenamefori
+msgid "The telescope name for inclusion in the FITS header"
+msgstr ""
+
+#: u_hints:rsthehorizonpr
+msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
+msgstr ""
+
+#: u_hints:rstheminimalob
+msgid "The minimal object elevation to start or end observing"
 msgstr ""
 

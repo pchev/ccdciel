@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-16 19:12+0000\n"
+"POT-Creation-Date: 2019-06-19 20:06+0000\n"
 "PO-Revision-Date: 2019-06-16 19:14+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-16 19:20+0000\n"
-"X-Generator: Launchpad (build 18981)\n"
+"X-Launchpad-Export-Date: 2019-06-19 20:24+0000\n"
+"X-Generator: Launchpad (build 18986)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -41,11 +41,19 @@ msgid "Add a script to the list."
 msgstr ""
 
 #: u_hints.rsafterlearnin
-msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particulary good near the horizontal blue line position."
+msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
 msgstr ""
 
 #: u_hints.rsapplythisset
 msgid "Apply this setting to all the targets"
+msgstr ""
+
+#: u_hints.rsatemporarydi
+msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
+msgstr ""
+
+#: u_hints.rsautofocusift
+msgid "Autofocus if the temperature change is greater than the configured value"
 msgstr ""
 
 #: u_hints.rsautoguiderst
@@ -89,7 +97,7 @@ msgid "Copy the sequence to a new one. Completion status is reinitialized"
 msgstr ""
 
 #: u_hints.rscreateanewem
-msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipement but keep the program options."
+msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 msgstr ""
 
 #: u_hints.rscreateanewse
@@ -124,8 +132,8 @@ msgstr ""
 msgid "Do not move the telescope before to start imaging."
 msgstr ""
 
-#: u_hints.rsexposuretime
-msgid "Exposure time in seconds"
+#: u_hints.rseditthecurre
+msgid "Edit the current sequence"
 msgstr ""
 
 #: u_hints.rsfixthevisual
@@ -146,6 +154,14 @@ msgstr ""
 
 #: u_hints.rsgetthecoordi2
 msgid "Get the coordinates from the internal annotation database"
+msgstr ""
+
+#: u_hints.rsglobalalpaca
+msgid "Global ALPACA server parameters"
+msgstr ""
+
+#: u_hints.rsglobalindise
+msgid "Global INDI server parameters"
 msgstr ""
 
 #: u_hints.rshistogramoft
@@ -173,7 +189,7 @@ msgid "Infinite number of repetition"
 msgstr ""
 
 #: u_hints.rsinspectthere
-msgid "Inspect the repartition of the HFD across the image"
+msgid "Inspect the distribution of the HFD across the image"
 msgstr ""
 
 #: u_hints.rsinvertimaged
@@ -182,6 +198,10 @@ msgstr ""
 
 #: u_hints.rskeepthegraph
 msgid "Keep the graph visible after autofocus is completed"
+msgstr ""
+
+#: u_hints.rslistofprofil
+msgid "List of profile for every different equipement configuration"
 msgstr ""
 
 #: u_hints.rsloadasequenc
@@ -204,7 +224,7 @@ msgstr ""
 msgid "Move focuser outward"
 msgstr ""
 
-#: u_hints.rsplanetariums
+#: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr ""
 
@@ -218,6 +238,14 @@ msgstr ""
 
 #: u_hints.rssavethelistw
 msgid "Save the list with a new name and close this window."
+msgstr ""
+
+#: u_hints.rsselecttheinf
+msgid "Select the information used to make the image file name"
+msgstr ""
+
+#: u_hints.rsselecttheinf2
+msgid "Select the information used to make the image directory name"
 msgstr ""
 
 #: u_hints.rssetabsolutef
@@ -304,6 +332,10 @@ msgstr ""
 msgid "Stop the sequence execution"
 msgstr ""
 
+#: u_hints.rsthebasefolde
+msgid "The base folder where the images are recorded"
+msgstr ""
+
 #: u_hints.rsthedirection
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
 msgstr ""
@@ -320,6 +352,10 @@ msgstr ""
 msgid "The Half Flux Diameter value in pixels"
 msgstr ""
 
+#: u_hints.rsthehorizonpr
+msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
+msgstr ""
+
 #: u_hints.rsthelistoftar
 msgid "The list of target to process in sequence."
 msgstr ""
@@ -332,8 +368,36 @@ msgstr ""
 msgid "The maximum intensity value"
 msgstr ""
 
+#: u_hints.rstheminimalob
+msgid "The minimal object elevation to start or end observing"
+msgstr ""
+
+#: u_hints.rsthenumberofi
+msgid "The number of images to take"
+msgstr ""
+
+#: u_hints.rsthenumberofi2
+msgid "The number of image to take before dither"
+msgstr ""
+
+#: u_hints.rsthenumberofi3
+msgid "The number of image to take before autofocus"
+msgstr ""
+
+#: u_hints.rstheobjectnam
+msgid "The object name for use in FITS header and file name"
+msgstr ""
+
+#: u_hints.rstheobservato
+msgid "The observatory name for inclusion in the FITS header"
+msgstr ""
+
+#: u_hints.rstheobservern
+msgid "The observer name for inclusion in the FITS header"
+msgstr ""
+
 #: u_hints.rsthepreferedf
-msgid "The prefered focuser direction for autofocus."
+msgid "The preferred focuser direction for autofocus."
 msgstr ""
 
 #: u_hints.rstheselecteds
@@ -344,8 +408,16 @@ msgstr ""
 msgid "The Signal/Noise ratio"
 msgstr ""
 
+#: u_hints.rsthetelescopenamefori
+msgid "The telescope name for inclusion in the FITS header"
+msgstr ""
+
 #: u_hints.rsthetemporary
-msgid "The temporary RAM disk used to transfert the images from the Indi server"
+msgid "The temporary RAM disk used to transfer the images from the Indi server"
+msgstr ""
+
+#: u_hints.rsthetypeoffra
+msgid "The type of frame"
 msgstr ""
 
 #: u_hints.rstheunixpathe
@@ -353,7 +425,7 @@ msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr ""
 
 #: u_hints.rsthisallowtor
-msgid "This allow to restart an interupted sequence at the point it was stopped"
+msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr ""
 
 #: u_hints.rstimefrommeri
