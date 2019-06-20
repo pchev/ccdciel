@@ -144,7 +144,7 @@ begin
   Fdevice:=cp4;
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  V.Timeout:=2000;
+  V.Timeout:=5000;
   FInterfaceVersion:=InterfaceVersion;
   if FInterfaceVersion=1 then
     raise Exception.Create('IFocuser V1 is not supported');

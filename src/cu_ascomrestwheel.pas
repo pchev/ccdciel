@@ -93,7 +93,7 @@ begin
   Fdevice:=cp4;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
-  V.Timeout:=2000;
+  V.Timeout:=5000;
   V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;

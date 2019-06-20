@@ -197,7 +197,7 @@ begin
   Fdevice:=cp4;
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  V.Timeout:=2000;
+  V.Timeout:=5000;
   V.Put('Connected',true); // try to connect if authorized by server
   if V.Get('connected').AsBool then begin
     V.Timeout:=120000;
