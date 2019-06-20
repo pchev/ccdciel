@@ -7613,7 +7613,6 @@ begin
   end;
   // check device
   n:=TButton(Sender).Tag;
-  NewMessage('config: '+inttostr(n));
   case n of
     1 : begin dev:=widestring(config.GetValue('/ASCOMcamera/Device',''));IsConnected:=(camera<>nil)and(camera.Status<>devDisconnected); end;
     2 : begin dev:=widestring(config.GetValue('/ASCOMwheel/Device',''));IsConnected:=(wheel<>nil)and(wheel.Status<>devDisconnected); end;
@@ -7625,7 +7624,6 @@ begin
     8 : begin dev:=widestring(config.GetValue('/ASCOMdome/Device',''));IsConnected:=(dome<>nil)and(dome.Status<>devDisconnected); end;
     else begin dev:=''; IsConnected:=false; end;
   end;
-  NewMessage('config: '+dev);
   if dev='' then exit;
   // if connect, it need to be disconnected
   if IsConnected then begin
@@ -7678,7 +7676,6 @@ var n: integer;
 begin
 // check device
 n:=TButton(Sender).Tag;
-NewMessage('config: '+inttostr(n));
 case n of
   0 : begin devt:=''; dev:='server'; end;
   1 : begin devt:='ASCOMRestcamera'; dev:='camera'; end;
@@ -7691,7 +7688,6 @@ case n of
   8 : begin devt:='ASCOMRestdome'; dev:='dome'; end;
   else begin dev:=''; end;
 end;
-NewMessage('config: '+dev);
 if dev='' then exit;
 if devt<>'' then begin
   num:=config.GetValue('/'+devt+'/Device','');
@@ -7711,9 +7707,8 @@ else begin
   if (host='')or(port='')or(protocol='') then exit;
   if protocol='1' then protocol:='https:'
                   else protocol:='http:';
-  url:=protocol+'//'+host+':'+port+'/setup;
+  url:=protocol+'//'+host+':'+port+'/setup';
 end;
-NewMessage('config: '+url);
 ExecuteFile(url);
 end;
 
