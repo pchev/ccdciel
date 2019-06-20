@@ -494,6 +494,11 @@ object f_main: Tf_main
         Caption = 'MenuAscomDomeSetup'
         OnClick = MenuAscomSetupClick
       end
+      object MenuAlpacaServerSetup: TMenuItem
+        Tag = 0
+        Caption = 'MenuAlpacaServerSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
       object MenuAlpacaCameraSetup: TMenuItem
         Tag = 1
         Caption = 'MenuAlpacaCameraSetup'

@@ -94,6 +94,7 @@ type
     MenuAscomWeatherSetup: TMenuItem;
     MenuAscomSafetySetup: TMenuItem;
     MenuAscomDomeSetup: TMenuItem;
+    MenuAlpacaServerSetup: TMenuItem;
     MenuAlpacaCameraSetup: TMenuItem;
     MenuAlpacaWheelSetup: TMenuItem;
     MenuAlpacaFocuserSetup: TMenuItem;
@@ -1618,6 +1619,15 @@ begin
    MenuAscomWeatherSetup.Caption:='ASCOM '+rsWeatherStati+blank+rsSetup;
    MenuAscomSafetySetup.Caption:='ASCOM '+rsSafetyMonito+blank+rsSetup;
    MenuAscomDomeSetup.Caption:='ASCOM '+rsDome+blank+rsSetup;
+   MenuAlpacaServerSetup.Caption:='Alpaca '+rsServer+blank+rsSetup;
+   MenuAlpacaCameraSetup.Caption:='Alpaca '+rsCamera+blank+rsSetup;
+   MenuAlpacaWheelSetup.Caption:='Alpaca '+rsFilterWheel+blank+rsSetup;
+   MenuAlpacaFocuserSetup.Caption:='Alpaca '+rsFocuser+blank+rsSetup;
+   MenuAlpacaMountSetup.Caption:='Alpaca '+rsMount+blank+rsSetup;
+   MenuAlpacaRotatorSetup.Caption:='Alpaca '+rsRotator+blank+rsSetup;
+   MenuAlpacaWeatherSetup.Caption:='Alpaca '+rsWeatherStati+blank+rsSetup;
+   MenuAlpacaSafetySetup.Caption:='Alpaca '+rsSafetyMonito+blank+rsSetup;
+   MenuAlpacaDomeSetup.Caption:='Alpaca '+rsDome+blank+rsSetup;
    MenuViewhdr.Caption := rsViewHeader;
    MenuItem4.Caption := rsTools;
    MenuViewConnection.Caption := rsConnection;
@@ -7663,7 +7673,48 @@ begin
 end;
 
 procedure Tf_main.MenuAlpacaSetupClick(Sender: TObject);
+var n: integer;
+    devt,dev,num,host,port,protocol,url: string;
 begin
+// check device
+n:=TButton(Sender).Tag;
+NewMessage('config: '+inttostr(n));
+case n of
+  0 : begin devt:=''; dev:='server'; end;
+  1 : begin devt:='ASCOMRestcamera'; dev:='camera'; end;
+  2 : begin devt:='ASCOMRestwheel'; dev:='filterwheel'; end;
+  3 : begin devt:='ASCOMRestfocuser'; dev:='focuser'; end;
+  4 : begin devt:='ASCOMRestmount'; dev:='telescope'; end;
+  5 : begin devt:='ASCOMRestrotator'; dev:='rotator'; end;
+  6 : begin devt:='ASCOMRestweather'; dev:='observingconditions'; end;
+  7 : begin devt:='ASCOMRestsafety'; dev:='safetymonitor'; end;
+  8 : begin devt:='ASCOMRestdome'; dev:='dome'; end;
+  else begin dev:=''; end;
+end;
+NewMessage('config: '+dev);
+if dev='' then exit;
+if devt<>'' then begin
+  num:=config.GetValue('/'+devt+'/Device','');
+  host:=config.GetValue('/'+devt+'/Host','');
+  port:=config.GetValue('/'+devt+'/Port','');
+  protocol:=config.GetValue('/'+devt+'/Protocol','');
+  if (num='')or(host='')or(port='')or(protocol='') then exit;
+  if protocol='1' then protocol:='https:'
+                  else protocol:='http:';
+  url:=protocol+'//'+host+':'+port+'/setup/v1/'+dev+'/'+num+'/setup';
+end
+else begin
+  devt:='ASCOMRestcamera';
+  host:=config.GetValue('/'+devt+'/Host','');
+  port:=config.GetValue('/'+devt+'/Port','');
+  protocol:=config.GetValue('/'+devt+'/Protocol','');
+  if (host='')or(port='')or(protocol='') then exit;
+  if protocol='1' then protocol:='https:'
+                  else protocol:='http:';
+  url:=protocol+'//'+host+':'+port+'/setup;
+end;
+NewMessage('config: '+url);
+ExecuteFile(url);
 end;
 
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
