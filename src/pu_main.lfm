@@ -494,6 +494,46 @@ object f_main: Tf_main
         Caption = 'MenuAscomDomeSetup'
         OnClick = MenuAscomSetupClick
       end
+      object MenuAlpacaCameraSetup: TMenuItem
+        Tag = 1
+        Caption = 'MenuAlpacaCameraSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaWheelSetup: TMenuItem
+        Tag = 2
+        Caption = 'MenuAlpacaWheelSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaFocuserSetup: TMenuItem
+        Tag = 3
+        Caption = 'MenuAlpacaFocuserSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaMountSetup: TMenuItem
+        Tag = 4
+        Caption = 'MenuAlpacaMountSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaRotatorSetup: TMenuItem
+        Tag = 5
+        Caption = 'MenuAlpacaRotatorSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaWeatherSetup: TMenuItem
+        Tag = 6
+        Caption = 'MenuAlpacaWeatherSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaSafetySetup: TMenuItem
+        Tag = 7
+        Caption = 'MenuAlpacaSafetySetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaDomeSetup: TMenuItem
+        Tag = 8
+        Caption = 'MenuAlpacaDomeSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
       object N2: TMenuItem
         Caption = '-'
       end

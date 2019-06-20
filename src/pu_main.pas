@@ -94,6 +94,14 @@ type
     MenuAscomWeatherSetup: TMenuItem;
     MenuAscomSafetySetup: TMenuItem;
     MenuAscomDomeSetup: TMenuItem;
+    MenuAlpacaCameraSetup: TMenuItem;
+    MenuAlpacaWheelSetup: TMenuItem;
+    MenuAlpacaFocuserSetup: TMenuItem;
+    MenuAlpacaMountSetup: TMenuItem;
+    MenuAlpacaRotatorSetup: TMenuItem;
+    MenuAlpacaWeatherSetup: TMenuItem;
+    MenuAlpacaSafetySetup: TMenuItem;
+    MenuAlpacaDomeSetup: TMenuItem;
     MenuImgStat: TMenuItem;
     MenuResolveHyperLeda: TMenuItem;
     MenuReset1col: TMenuItem;
@@ -287,6 +295,7 @@ type
     procedure MeasureTimerTimer(Sender: TObject);
     procedure MenuApplyBPMClick(Sender: TObject);
     procedure MenuAscomSetupClick(Sender: TObject);
+    procedure MenuAlpacaSetupClick(Sender: TObject);
     procedure MenuAutoguiderCalibrateClick(Sender: TObject);
     procedure MenuAutoguiderConnectClick(Sender: TObject);
     procedure MenuAutoguiderDitherClick(Sender: TObject);
@@ -1886,6 +1895,15 @@ begin
   MenuAscomWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOM);
   MenuAscomSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOM);
   MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
+
+  MenuAlpacaCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
+  MenuAlpacaWheelSetup.Visible:=WantWheel and (wheel.WheelInterface=ASCOMREST);
+  MenuAlpacaFocuserSetup.Visible:=WantFocuser and (focuser.FocuserInterface=ASCOMREST);
+  MenuAlpacaMountSetup.Visible:=WantMount and (mount.MountInterface=ASCOMREST);
+  MenuAlpacaRotatorSetup.Visible:=WantRotator and (rotator.RotatorInterface=ASCOMREST);
+  MenuAlpacaWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOMREST);
+  MenuAlpacaSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOMREST);
+  MenuAlpacaDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOMREST);
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
@@ -7642,6 +7660,10 @@ begin
     end;
   end;
 {$endif}
+end;
+
+procedure Tf_main.MenuAlpacaSetupClick(Sender: TObject);
+begin
 end;
 
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
