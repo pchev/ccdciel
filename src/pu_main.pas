@@ -1906,6 +1906,7 @@ begin
   MenuAscomSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOM);
   MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
 
+  MenuAlpacaServerSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
   MenuAlpacaCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
   MenuAlpacaWheelSetup.Visible:=WantWheel and (wheel.WheelInterface=ASCOMREST);
   MenuAlpacaFocuserSetup.Visible:=WantFocuser and (focuser.FocuserInterface=ASCOMREST);
