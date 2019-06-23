@@ -247,23 +247,27 @@ begin
                                 exit;
                               end;
                               end;
-          dclParkDome       : begin
-                              dome.Park:=true;
-                              wait(FDomeActionWait);
-                              if not dome.Park then begin
-                                msg(Format(rsDomeNotAfter, [rsParked]), 0);
-                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
-                                exit;
+          dclParkDome       : if dome.Park then
+                                 msg(Format(rsDomeAlready, [rsParked]))
+                              else begin
+                                dome.Park:=true;
+                                wait(FDomeActionWait);
+                                if not dome.Park then begin
+                                  msg(Format(rsDomeNotAfter, [rsParked]), 0);
+                                  msg(Format(rsAbortMount, [blank+rsPark]), 0);
+                                  exit;
+                                end;
                               end;
-                              end;
-          dclCloseDome      : begin
-                              dome.Shutter:=false;
-                              wait(FDomeActionWait);
-                              if dome.Shutter then begin
-                                msg(Format(rsDomeNotAfter, [rsClose]), 0);
-                                msg(Format(rsAbortMount, [blank+rsPark]), 0);
-                                exit;
-                              end;
+          dclCloseDome      : if not dome.Shutter then
+                                msg(Format(rsDomeAlready, [rsClose]))
+                              else begin
+                                dome.Shutter:=false;
+                                wait(FDomeActionWait);
+                                if dome.Shutter then begin
+                                  msg(Format(rsDomeNotAfter, [rsClose]), 0);
+                                  msg(Format(rsAbortMount, [blank+rsPark]), 0);
+                                  exit;
+                                end;
                               end;
         end;
       end;
@@ -281,23 +285,27 @@ begin
       for i:=0 to DomeOpenActionNum-1 do begin
         case DomeOpenActions[i] of
           dopNothing         : continue;
-          dopOpenDome        : begin
-                               dome.Shutter:=true;
-                               wait(FDomeActionWait);
-                               if not dome.Shutter then begin
-                                 msg(Format(rsDomeNotAfter, [rsOpen]), 0);
-                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
-                                 exit;
+          dopOpenDome        : if dome.Shutter then
+                                 msg(Format(rsDomeAlready, [rsOpen]))
+                               else begin
+                                 dome.Shutter:=true;
+                                 wait(FDomeActionWait);
+                                 if not dome.Shutter then begin
+                                   msg(Format(rsDomeNotAfter, [rsOpen]), 0);
+                                   msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
+                                   exit;
+                                 end;
                                end;
-                               end;
-          dopUnparkdome      : begin
-                               dome.Park:=false;
-                               wait(FDomeActionWait);
-                               if dome.Park then begin
-                                 msg(Format(rsDomeNotAfter, [rsUnparked]), 0);
-                                 msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
-                                 exit;
-                               end;
+          dopUnparkdome      : if not dome.Park then
+                                 msg(Format(rsDomeAlready, [rsUnparked]))
+                               else begin
+                                 dome.Park:=false;
+                                 wait(FDomeActionWait);
+                                 if dome.Park then begin
+                                   msg(Format(rsDomeNotAfter, [rsUnparked]), 0);
+                                   msg(Format(rsAbortMount, [blank+rsUnpark]), 0);
+                                   exit;
+                                 end;
                                end;
           dopUnparkTelescope : begin
                                SetPark(false);

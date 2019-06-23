@@ -1089,6 +1089,7 @@ resourcestring
   rsAbortDome = 'Abort dome %s';
   rsUnslaved = 'Unslaved';
   rsAllowToOpenT = 'Allow to open the dome when safety status is bad or unknown';
+  rsDomeAlready = 'Dome already %s';
 
 implementation
 

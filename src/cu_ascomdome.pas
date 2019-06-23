@@ -251,8 +251,10 @@ begin
  {$ifdef mswindows}
    try
    if FhasPark and value then begin  // no ASCOM unpark
-     V.Park;
-     WaitDomePark(60000);
+     if value<>GetPark then begin
+       V.Park;
+       WaitDomePark(60000);
+     end;
    end;
    except
     on E: Exception do msg('Park error: ' + E.Message,0);
@@ -309,9 +311,11 @@ begin
  {$ifdef mswindows}
    try
    if FhasShutter then begin
-     if value then V.OpenShutter
-              else V.CloseShutter;
-     WaitShutter(value,60000);
+     if value<>GetShutter then begin
+       if value then V.OpenShutter
+                else V.CloseShutter;
+       WaitShutter(value,60000);
+     end;
    end;
    except
     on E: Exception do msg('Set shutter error: ' + E.Message,0);
@@ -335,7 +339,11 @@ procedure T_ascomdome.SetSlave(value:boolean);
 begin
  {$ifdef mswindows}
    try
-   if FhasSlaving then V.Slaved:=value;
+   if FhasSlaving then begin
+     if value<>GetSlave then begin
+       V.Slaved:=value;
+     end;
+   end;
    except
     on E: Exception do msg('Slave error: ' + E.Message,0);
    end;

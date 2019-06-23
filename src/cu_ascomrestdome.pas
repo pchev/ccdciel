@@ -241,7 +241,11 @@ procedure T_ascomrestdome.SetPark(value:boolean);
 begin
    if FStatus<>devConnected then exit;
    try
-   if FhasPark and value then V.Put('park'); // no ASCOM unpark
+   if FhasPark and value then begin  // no ASCOM unpark
+     if value<>GetPark then begin
+       V.Put('park');
+     end;
+   end;
    except
     on E: Exception do msg('Park error: ' + E.Message,0);
    end;
@@ -290,9 +294,11 @@ begin
    if FStatus<>devConnected then exit;
    try
    if FhasShutter then begin
-     if value then V.Put('openshutter')
-              else V.Put('closeshutter');
-     WaitShutter(value,60000);
+     if value<>GetShutter then begin
+       if value then V.Put('openshutter')
+                else V.Put('closeshutter');
+       WaitShutter(value,60000);
+     end;
    end;
    except
     on E: Exception do msg('Set shutter error: ' + E.Message,0);
@@ -314,7 +320,11 @@ procedure T_ascomrestdome.SetSlave(value:boolean);
 begin
    if FStatus<>devConnected then exit;
    try
-   if FhasSlaving then V.Put('Slaved',value);
+   if FhasSlaving then begin
+     if value<>GetSlave then begin
+       V.Put('Slaved',value);
+     end;
+   end;
    except
     on E: Exception do msg('Slave error: ' + E.Message,0);
    end;

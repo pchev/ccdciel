@@ -370,13 +370,15 @@ end;
 procedure T_indidome.SetPark(value:boolean);
 begin
  if DomeParkProp<>nil then begin
-    IUResetSwitch(DomeParkProp);
-    if value then
-       DomePark.s:=ISS_ON
-    else
-       DomeUnpark.s:=ISS_ON;
-    indiclient.sendNewSwitch(DomeParkProp);
-    indiclient.WaitBusy(DomeParkProp,60000);
+    if value<>GetPark then begin
+      IUResetSwitch(DomeParkProp);
+      if value then
+         DomePark.s:=ISS_ON
+      else
+         DomeUnpark.s:=ISS_ON;
+      indiclient.sendNewSwitch(DomeParkProp);
+      indiclient.WaitBusy(DomeParkProp,60000);
+    end;
  end;
 end;
 
@@ -393,13 +395,15 @@ end;
 procedure T_indidome.SetShutter(value:boolean);
 begin
  if DomeShutterProp<>nil then begin
-    IUResetSwitch(DomeShutterProp);
-    if value then
-      DomeShutterOpen.s:=ISS_ON
-    else
-      DomeShutterClose.s:=ISS_ON;
-    indiclient.sendNewSwitch(DomeShutterProp);
-    indiclient.WaitBusy(DomeShutterProp,60000);
+    if value<>GetShutter then begin
+      IUResetSwitch(DomeShutterProp);
+      if value then
+        DomeShutterOpen.s:=ISS_ON
+      else
+        DomeShutterClose.s:=ISS_ON;
+      indiclient.sendNewSwitch(DomeShutterProp);
+      indiclient.WaitBusy(DomeShutterProp,60000);
+    end;
  end
  else begin
     SetPark(not value);
@@ -417,13 +421,15 @@ end;
 procedure T_indidome.SetSlave(value:boolean);
 begin
  if DomeAutosyncProp<>nil then begin
-    IUResetSwitch(DomeAutosyncProp);
-    if value then
-      DomeAutosyncEnable.s:=ISS_ON
-    else
-      DomeAutosyncDisable.s:=ISS_ON;
-    indiclient.sendNewSwitch(DomeAutosyncProp);
-    indiclient.WaitBusy(DomeAutosyncProp,60000);
+   if value<>GetSlave then begin
+     IUResetSwitch(DomeAutosyncProp);
+     if value then
+       DomeAutosyncEnable.s:=ISS_ON
+     else
+       DomeAutosyncDisable.s:=ISS_ON;
+     indiclient.sendNewSwitch(DomeAutosyncProp);
+     indiclient.WaitBusy(DomeAutosyncProp,60000);
+   end;
  end;
 end;
 
