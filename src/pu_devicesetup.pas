@@ -781,7 +781,7 @@ end;
 CameraIndiDevice.Text:=conf.GetValue('/INDIcamera/Device','');
 CameraSensor:=conf.GetValue('/INDIcamera/Sensor','CCD1');
 CameraIndiDevPort.Text:=conf.GetValue('/INDIcamera/DevicePort','');
-CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',true);
+CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',false);
 CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork));
 CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir','/tmp');
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
@@ -805,7 +805,7 @@ if WheelIndiDevice.Items.Count=0 then begin
 end;
 WheelIndiDevice.Text:=conf.GetValue('/INDIwheel/Device','');
 WheelIndiDevPort.Text:=conf.GetValue('/INDIwheel/DevicePort','');
-WheelAutoLoadConfig.Checked:=conf.GetValue('/INDIwheel/AutoLoadConfig',true);
+WheelAutoLoadConfig.Checked:=conf.GetValue('/INDIwheel/AutoLoadConfig',false);
 AscomWheel.Text:=conf.GetValue('/ASCOMwheel/Device','');
 WheelARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestwheel/Protocol',0);
 WheelARestHost.Text:=conf.GetValue('/ASCOMRestwheel/Host','127.0.0.1');
@@ -821,7 +821,7 @@ if FocuserIndiDevice.Items.Count=0 then begin
 end;
 FocuserIndiDevice.Text:=conf.GetValue('/INDIfocuser/Device','');
 FocuserIndiDevPort.Text:=conf.GetValue('/INDIfocuser/DevicePort','');
-FocuserAutoLoadConfig.Checked:=conf.GetValue('/INDIfocuser/AutoLoadConfig',true);
+FocuserAutoLoadConfig.Checked:=conf.GetValue('/INDIfocuser/AutoLoadConfig',false);
 AscomFocuser.Text:=conf.GetValue('/ASCOMfocuser/Device','');
 FocuserARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestfocuser/Protocol',0);
 FocuserARestHost.Text:=conf.GetValue('/ASCOMRestfocuser/Host','127.0.0.1');
@@ -837,7 +837,7 @@ if RotatorIndiDevice.Items.Count=0 then begin
 end;
 RotatorIndiDevice.Text:=conf.GetValue('/INDIrotator/Device','');
 RotatorIndiDevPort.Text:=conf.GetValue('/INDIrotator/DevicePort','');
-RotatorAutoLoadConfig.Checked:=conf.GetValue('/INDIrotator/AutoLoadConfig',true);
+RotatorAutoLoadConfig.Checked:=conf.GetValue('/INDIrotator/AutoLoadConfig',false);
 AscomRotator.Text:=conf.GetValue('/ASCOMrotator/Device','');
 RotatorARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestrotator/Protocol',0);
 RotatorARestHost.Text:=conf.GetValue('/ASCOMRestrotator/Host','127.0.0.1');
@@ -853,7 +853,7 @@ if MountIndiDevice.Items.Count=0 then begin
 end;
 MountIndiDevice.Text:=conf.GetValue('/INDImount/Device','');
 MountIndiDevPort.Text:=conf.GetValue('/INDImount/DevicePort','');
-MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',true);
+MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
 AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
 MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
 MountSetObservatory.Checked:=conf.GetValue('/Mount/SetObservatory',false);
@@ -872,7 +872,7 @@ if DomeIndiDevice.Items.Count=0 then begin
 end;
 DomeIndiDevice.Text:=conf.GetValue('/INDIdome/Device','');
 DomeIndiDevPort.Text:=conf.GetValue('/INDIdome/DevicePort','');
-DomeAutoLoadConfig.Checked:=conf.GetValue('/INDIdome/AutoLoadConfig',true);
+DomeAutoLoadConfig.Checked:=conf.GetValue('/INDIdome/AutoLoadConfig',false);
 AscomDome.Text:=conf.GetValue('/ASCOMdome/Device','');
 DomeARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestdome/Protocol',0);
 DomeARestHost.Text:=conf.GetValue('/ASCOMRestdome/Host','127.0.0.1');
@@ -887,7 +887,7 @@ if WeatherIndiDevice.Items.Count=0 then begin
   WeatherIndiDevice.ItemIndex:=0;
 end;
 WeatherIndiDevice.Text:=conf.GetValue('/INDIweather/Device','');
-WeatherAutoLoadConfig.Checked:=conf.GetValue('/INDIweather/AutoLoadConfig',true);
+WeatherAutoLoadConfig.Checked:=conf.GetValue('/INDIweather/AutoLoadConfig',false);
 f_setup.AscomWeatherType.ItemIndex:=config.GetValue('/ASCOMweather/DeviceType',0);
 AscomWeather.Text:=conf.GetValue('/ASCOMweather/Device','');
 WeatherARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestweather/Protocol',0);
@@ -904,7 +904,7 @@ if SafetyIndiDevice.Items.Count=0 then begin
   SafetyIndiDevice.ItemIndex:=0;
 end;
 SafetyIndiDevice.Text:=conf.GetValue('/INDIsafety/Device','');
-SafetyAutoLoadConfig.Checked:=conf.GetValue('/INDIsafety/AutoLoadConfig',true);
+SafetyAutoLoadConfig.Checked:=conf.GetValue('/INDIsafety/AutoLoadConfig',false);
 AscomSafety.Text:=conf.GetValue('/ASCOMsafety/Device','');
 SafetyARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestsafety/Protocol',0);
 SafetyARestHost.Text:=conf.GetValue('/ASCOMRestsafety/Host','127.0.0.1');
@@ -919,7 +919,7 @@ if WatchdogIndiDevice.Items.Count=0 then begin
 end;
 WatchdogIndiDevice.Text:=conf.GetValue('/INDIwatchdog/Device','');
 WatchdogThreshold.Text:=conf.GetValue('/INDIwatchdog/Threshold','10');
-WatchdogAutoLoadConfig.Checked:=conf.GetValue('/INDIwatchdog/AutoLoadConfig',true);
+WatchdogAutoLoadConfig.Checked:=conf.GetValue('/INDIwatchdog/AutoLoadConfig',false);
 
 DeviceFilterWheel.Caption:=rsUseFilterWhe+': '+DevInterfaceName[ord(FWheelConnection)];
 DeviceWeather.Caption:=rsUseWeatherSt+': '+DevInterfaceName[ord(FWeatherConnection)];
