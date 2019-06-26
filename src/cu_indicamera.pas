@@ -379,18 +379,8 @@ begin
        (configprop<>nil) and
        FhasBlob and (
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
-       ((Findisensor<>'CCD2')and(CCDexpose<>nil)) )
-    then begin
-       UseMainSensor:=(Findisensor<>'CCD2');
-       if (not Fready) then begin
-         Fready:=true;
-         if FAutoloadConfig then begin
-           LoadConfig;
-         end;
-         if Assigned(FonStatusChange) then FonStatusChange(self);
-       end;
-    end;
-    if Fconnected and
+       ((Findisensor<>'CCD2')and(CCDexpose<>nil))
+        ) and
        (CCDframe<>nil) and
        (CCDframeReset<>nil) and
        (FCameraXSize<0) and
@@ -398,7 +388,17 @@ begin
        (not GetCCDSizeTimer.Enabled)
     then begin
        GetCCDSizeTimer.Enabled:=true;
+       UseMainSensor:=(Findisensor<>'CCD2');
     end;
+{    if Fconnected and
+       (CCDframe<>nil) and
+       (CCDframeReset<>nil) and
+       (FCameraXSize<0) and
+       (FCameraYSize<0) and
+       (not GetCCDSizeTimer.Enabled)
+    then begin
+       GetCCDSizeTimer.Enabled:=true;
+    end;}
     if Fconnected and
        (WheelSlot<>nil) and
        (FilterName<>nil)
@@ -486,15 +486,25 @@ var x,y: integer;
 begin
  GetCCDSizeTimer.Enabled:=false;
  FCameraXSize:=0;
- FrameReset.s:=ISS_ON;
- indiclient.sendNewSwitch(CCDframeReset);
- indiclient.WaitBusy(CCDframeReset,5000,200);
- stWidth:=-1;
- GetFrame(x,y,FCameraXSize,FCameraYSize);
- stX:=x;
- stY:=y;
- stWidth:=FCameraXSize;
- stHeight:=FCameraYSize;
+ FCameraYSize:=0;
+ if UseMainSensor then begin
+   FrameReset.s:=ISS_ON;
+   indiclient.sendNewSwitch(CCDframeReset);
+   indiclient.WaitBusy(CCDframeReset,5000,200);
+   stWidth:=-1;
+   GetFrame(x,y,FCameraXSize,FCameraYSize);
+   stX:=x;
+   stY:=y;
+   stWidth:=FCameraXSize;
+   stHeight:=FCameraYSize;
+ end;
+ if (not Fready) then begin
+    Fready:=true;
+    if FAutoloadConfig then begin
+      LoadConfig;
+    end;
+    if Assigned(FonStatusChange) then FonStatusChange(self);
+ end;
 end;
 
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
