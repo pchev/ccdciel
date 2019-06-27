@@ -3938,3 +3938,7 @@ msgstr ""
 msgid "Allow to open the dome when safety status is bad or unknown"
 msgstr ""
 
+#: u_translation:rsdomealready
+msgid "Dome already %s"
+msgstr ""
+

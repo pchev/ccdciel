@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-19 20:09+0000\n"
+"POT-Creation-Date: 2019-06-27 07:33+0000\n"
 "PO-Revision-Date: 2019-05-06 18:43+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-19 20:24+0000\n"
-"X-Generator: Launchpad (build 18986)\n"
+"X-Launchpad-Export-Date: 2019-06-27 08:32+0000\n"
+"X-Generator: Launchpad (build 18991)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -963,6 +963,10 @@ msgstr ""
 #: u_translation.rsdome
 msgid "Dome"
 msgstr "Cúpula"
+
+#: u_translation.rsdomealready
+msgid "Dome already %s"
+msgstr ""
 
 #: u_translation.rsdomenotafter
 msgid "Dome not %s after request!"
