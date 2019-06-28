@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_camera, indibaseclient, indibasedevice, indiapi, indicom, ws_websocket2,
+uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2,
      u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
 
 type
@@ -53,6 +53,7 @@ end;
 T_indicamera = class(T_camera)
 private
    indiclient: TIndiBaseClient;
+   indiblob: TIndiBlobClient;
    indiws: TIndiWebSocketClientConnection;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
@@ -135,6 +136,8 @@ private
    procedure GetCCDSizeTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
+   procedure NewBlobProperty(indiProp: IndiProperty);
+   procedure NewBlob(bp: IBLOB);
    procedure NewDevice(dp: Basedevice);
    procedure NewMessage(mp: IMessage);
    procedure NewProperty(indiProp: IndiProperty);
@@ -142,7 +145,6 @@ private
    procedure NewText(tvp: ITextVectorProperty);
    procedure NewSwitch(svp: ISwitchVectorProperty);
    procedure NewLight(lvp: ILightVectorProperty);
-   procedure NewBlob(bp: IBLOB);
    procedure NewImageFile(ft: string; sz,blen:integer; data: TMemoryStream);
    procedure DeleteDevice(dp: Basedevice);
    procedure DeleteProperty(indiProp: IndiProperty);
@@ -251,11 +253,14 @@ if csDestroying in ComponentState then exit;
   indiclient.onNewText:=@NewText;
   indiclient.onNewSwitch:=@NewSwitch;
   indiclient.onNewLight:=@NewLight;
-  indiclient.onNewBlob:=@NewBlob;
   indiclient.onDeleteDevice:=@DeleteDevice;
   indiclient.onDeleteProperty:=@DeleteProperty;
   indiclient.onServerConnected:=@ServerConnected;
   indiclient.onServerDisconnected:=@ServerDisconnected;
+  indiblob:=TIndiBlobClient.Create;
+  indiblob.Timeout:=FTimeOut;
+  indiblob.onNewProperty:=@NewBlobProperty;
+  indiblob.onNewBlob:=@NewBlob;
   {$ifdef camera_debug}
   indiclient.ProtocolTrace:=true;
   indiclient.ProtocolRawFile:='/tmp/ccdciel_indicamera.raw';
@@ -302,11 +307,14 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ExposureTimer.Enabled:=false;
+ GetCCDSizeTimer.Enabled:=false;
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
+ indiblob.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
+ FreeAndNil(GetCCDSizeTimer);
  inherited Destroy;
 end;
 
@@ -390,15 +398,6 @@ begin
        GetCCDSizeTimer.Enabled:=true;
        UseMainSensor:=(Findisensor<>'CCD2');
     end;
-{    if Fconnected and
-       (CCDframe<>nil) and
-       (CCDframeReset<>nil) and
-       (FCameraXSize<0) and
-       (FCameraYSize<0) and
-       (not GetCCDSizeTimer.Enabled)
-    then begin
-       GetCCDSizeTimer.Enabled:=true;
-    end;}
     if Fconnected and
        (WheelSlot<>nil) and
        (FilterName<>nil)
@@ -423,7 +422,7 @@ end;
 
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
-if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+if (indiclient=nil)or(indiclient.Terminated)or(indiblob=nil)or(indiblob.Terminated) then CreateIndiClient;
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -435,6 +434,9 @@ if not indiclient.Connected then begin
   FWheelStatus:=devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
+  indiblob.SetServer(Findiserver,Findiserverport);
+  indiblob.watchDevice(Findidevice);
+  indiblob.ConnectServer;
   indiclient.SetServer(Findiserver,Findiserverport);
   indiclient.watchDevice(Findidevice);
   indiclient.ConnectServer;
@@ -473,6 +475,7 @@ begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
 indiclient.Terminate;
+indiblob.Terminate;
 ClearStatus;
 end;
 
@@ -521,9 +524,9 @@ begin
  indiclient.connectDevice(Findidevice);
  if FhasBlob then begin
    if (Findisensor='CCD1')or(Findisensor='CCD2') then
-       indiclient.setBLOBMode(B_ALSO,Findidevice,Findisensor)
+       indiblob.setBLOBMode(B_ONLY,Findidevice,Findisensor)
    else
-       indiclient.setBLOBMode(B_ALSO,Findidevice);
+       indiblob.setBLOBMode(B_ONLY,Findidevice);
  end;
  if Fready and (FStatus<>devConnected) then begin
    if (CCDWebsocket<>nil)and(CCDWebsocketON.s=ISS_ON) then
@@ -588,10 +591,7 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype = INDI_BLOB) then begin
-     FhasBlob:=true;
-  end
-  else if (proptype=INDI_TEXT)and(CCDport=nil)and(propname='DEVICE_PORT') then begin
+  if (proptype=INDI_TEXT)and(CCDport=nil)and(propname='DEVICE_PORT') then begin
      CCDport:=indiProp.getText;
   end
   else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
@@ -936,6 +936,29 @@ begin
 //  writeln('NewLight: '+lvp.name);
 end;
 
+/// Blob
+
+procedure T_indicamera.NewBlobProperty(indiProp: IndiProperty);
+var proptype: INDI_TYPE;
+begin
+  proptype:=indiProp.getType;
+  if (proptype = INDI_BLOB) then begin
+     FhasBlob:=true;
+     CheckStatus;
+  end
+end;
+
+procedure T_indicamera.NewBlob(bp: IBLOB);
+begin
+ {$ifdef camera_debug}msg('receive blob');{$endif}
+ if bp.bloblen>0 then begin
+   bp.blob.Position:=0;
+   NewImageFile(bp.format,bp.size,bp.bloblen,bp.blob);
+ end;
+end;
+
+///
+
 procedure T_indicamera.NewImageFile(ft: string; sz,blen:integer; data: TMemoryStream);
 var source,dest: array of char;
     sourceLen,destLen:UInt64;
@@ -1027,15 +1050,6 @@ begin
         AbortExposure;
         NewImage;
    end;
- end;
-end;
-
-procedure T_indicamera.NewBlob(bp: IBLOB);
-begin
- {$ifdef camera_debug}msg('receive blob');{$endif}
- if bp.bloblen>0 then begin
-   bp.blob.Position:=0;
-   NewImageFile(bp.format,bp.size,bp.bloblen,bp.blob);
  end;
 end;
 
@@ -1581,6 +1595,7 @@ procedure T_indicamera.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
  indiclient.Timeout:=FTimeOut;
+ indiblob.Timeout:=FTimeOut;
 end;
 
 function T_indicamera.CheckGain:boolean;
