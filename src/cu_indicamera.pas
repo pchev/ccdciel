@@ -129,6 +129,7 @@ private
    timedout: double;
    ExposureTimer: TTimer;
    stX,stY,stWidth,stHeight: integer;
+   FSensorList: TStringList;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -275,6 +276,7 @@ begin
  inherited Create(AOwner);
  FCameraInterface:=INDI;
  FVerticalFlip:=true;
+ FSensorList:=TStringList.Create;
  ClearStatus;
  Findiserver:='localhost';
  Findiserverport:='7624';
@@ -311,6 +313,7 @@ begin
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
  indiblob.Free;
+ FSensorList.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
@@ -377,6 +380,7 @@ begin
     stY:=-1;
     stWidth:=-1;
     stHeight:=-1;
+    FSensorList.Clear;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -511,6 +515,7 @@ begin
 end;
 
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
+var i: integer;
 begin
  ConnectTimer.Enabled:=False;
  if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
@@ -523,10 +528,11 @@ begin
  end;
  indiclient.connectDevice(Findidevice);
  if FhasBlob then begin
-   if (Findisensor='CCD1')or(Findisensor='CCD2') then
-       indiblob.setBLOBMode(B_ONLY,Findidevice,Findisensor)
-   else
-       indiblob.setBLOBMode(B_ONLY,Findidevice);
+   indiblob.setBLOBMode(B_ONLY,Findidevice);
+   for i:=0 to FSensorList.Count-1 do begin
+     if FSensorList[i]<>Findisensor then
+        indiblob.setBLOBMode(B_NEVER,Findidevice,FSensorList[i]);
+   end;
  end;
  if Fready and (FStatus<>devConnected) then begin
    if (CCDWebsocket<>nil)and(CCDWebsocketON.s=ISS_ON) then
@@ -940,10 +946,13 @@ end;
 
 procedure T_indicamera.NewBlobProperty(indiProp: IndiProperty);
 var proptype: INDI_TYPE;
+    propname: string;
 begin
+  propname:=indiProp.getName;
   proptype:=indiProp.getType;
   if (proptype = INDI_BLOB) then begin
-     FhasBlob:=true;
+     FSensorList.Add(propname);
+     if propname=Findisensor then FhasBlob:=true;
      CheckStatus;
   end
 end;
