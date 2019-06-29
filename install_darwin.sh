@@ -56,11 +56,13 @@ install -v -m 644 data/dso/deep_sky.csv  $destdir/data/dso/deep_sky.csv
 install -v -m 644 data/resources/smallcross.cur  $destdir/data/resources/smallcross.cur
 install -v -m 644 data/language/ccdciel.po      $destdir/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/data/language/ccdciel.en_GB.po
+install -v -m 644 data/language/ccdciel.de.po   $destdir/data/language/ccdciel.de.po
 install -v -m 644 data/language/ccdciel.es.po   $destdir/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po   $destdir/data/language/ccdciel.fr.po
 install -v -m 644 data/language/ccdciel.it.po   $destdir/data/language/ccdciel.it.po
 install -v -m 644 data/language/ccdciel_hints.po      $destdir/data/language/ccdciel_hints.en.po
 install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/data/language/ccdciel_hints.en_GB.po
+install -v -m 644 data/language/ccdciel_hints.de.po   $destdir/data/language/ccdciel_hints.de.po
 install -v -m 644 data/language/ccdciel_hints.es.po   $destdir/data/language/ccdciel_hints.es.po
 install -v -m 644 data/language/ccdciel_hints.fr.po   $destdir/data/language/ccdciel_hints.fr.po
 install -v -m 644 data/language/ccdciel_hints.it.po   $destdir/data/language/ccdciel_hints.it.po
