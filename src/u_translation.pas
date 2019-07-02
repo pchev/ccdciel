@@ -1090,6 +1090,7 @@ resourcestring
   rsUnslaved = 'Unslaved';
   rsAllowToOpenT = 'Allow to open the dome when safety status is bad or unknown';
   rsDomeAlready = 'Dome already %s';
+  rsFOV = 'FOV';
 
 implementation
 

@@ -268,6 +268,9 @@ const
   ldeg = 'd';
   lmin = 'm';
   lsec = 's';
+  sdeg = #$C2+#$B0;
+  smin = '''';
+  ssec = '"';
   ellipsis = '...';
   URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';

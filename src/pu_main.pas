@@ -462,7 +462,7 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
-    WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY: double;
+    WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -9013,6 +9013,7 @@ end;
 
 procedure Tf_main.AstrometryEnd(Sender: TObject);
 var resulttxt:string;
+    dist: double;
 begin
   // update Menu
   MenuStopAstrometry.Visible:=false;
@@ -9033,9 +9034,18 @@ begin
      if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord) and
         (astrometry.InitRA<>NullCoord) and (astrometry.InitDEC<>NullCoord)
      then begin
-        resulttxt:=resulttxt+' , '+rsOffset+blank+
-          FormatFloat(f4,rad2deg*AngularDistance(deg2rad*astrometry.InitRA,deg2rad*astrometry.InitDEC,deg2rad*WCScenterRA,deg2rad*WCScenterDEC))+
-          blank+rsdegree;
+        dist:=rad2deg*AngularDistance(deg2rad*astrometry.InitRA,deg2rad*astrometry.InitDEC,deg2rad*WCScenterRA,deg2rad*WCScenterDEC);
+        resulttxt:=resulttxt+' , '+rsOffset+blank;
+        if dist>1 then
+          resulttxt:=resulttxt+FormatFloat(f3,dist)+sdeg
+        else
+          resulttxt:=resulttxt+FormatFloat(f2,60*dist)+smin;
+     end;
+     if (WCSwidth<>NullCoord) and (WCSheight<>NullCoord) then begin
+        if WCSwidth>10 then
+          resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth)+'x'+FormatFloat(f2, WCSheight)+sdeg
+        else
+          resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin;
      end;
      NewMessage(Format(rsResolveSucce, [astrometry.Resolver])+resulttxt,2);
   end else begin
@@ -9561,6 +9571,15 @@ begin
          n:=cdcwcs_xy2sky(@c,0);
          WCScenterRA:=c.ra;
          WCScenterDEC:=c.dec;
+         // FOV
+         if (cdcWCSinfo.secpix>0) then begin
+           WCSwidth:=cdcWCSinfo.wp*cdcWCSinfo.secpix/3600;
+           WCSheight:=cdcWCSinfo.hp*cdcWCSinfo.secpix/3600;
+         end else begin
+           WCSwidth:=NullCoord;
+           WCSheight:=NullCoord;
+         end;
+
          // pole
          c.ra:=0;
          c.dec:=deg2rad*89.99999*Sgn(cdcWCSinfo.cdec);
@@ -9583,6 +9602,8 @@ begin
          WCScenterDEC:=NullCoord;
          WCSpoleX:=NullCoord;
          WCSpoleY:=NullCoord;
+         WCSwidth:=NullCoord;
+         WCSheight:=NullCoord;
        end;
        except
          cdcWCSinfo.secpix:=0;
@@ -9590,6 +9611,8 @@ begin
          WCScenterDEC:=NullCoord;
          WCSpoleX:=NullCoord;
          WCSpoleY:=NullCoord;
+         WCSwidth:=NullCoord;
+         WCSheight:=NullCoord;
        end;
      end
        else begin
@@ -9598,6 +9621,8 @@ begin
         WCScenterDEC:=NullCoord;
         WCSpoleX:=NullCoord;
         WCSpoleY:=NullCoord;
+        WCSwidth:=NullCoord;
+        WCSheight:=NullCoord;
        end;
      if (oldw<>fits.HeaderInfo.naxis1)or(oldh<>fits.HeaderInfo.naxis2) then begin
        ImgCx:=0;
