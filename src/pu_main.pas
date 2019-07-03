@@ -10346,10 +10346,10 @@ begin
    c.y:=cdcWCSinfo.hp-yy;
    n:=cdcwcs_xy2sky(@c,0);
    if n=0 then begin
-     ra:=c.ra;
+     ra:=c.ra/15;
      de:=c.dec;
      J2000ToMount(mount.EquinoxJD,ra,de);
-     StatusBar1.Panels[1].Text:=ARToStr3(ra/15)+' '+DEToStr(de);
+     StatusBar1.Panels[1].Text:=ARToStr3(ra)+' '+DEToStr(de);
    end;
  end;
  yy:=img_Height-yy;
