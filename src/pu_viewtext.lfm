@@ -39,6 +39,7 @@ object f_viewtext: Tf_viewtext
       Top = 4
       Width = 74
       Anchors = [akTop, akRight]
+      Cancel = True
       Caption = 'Close'
       OnClick = Button1Click
       TabOrder = 0
