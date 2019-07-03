@@ -26,8 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
-  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Forms, Dialogs, u_translation,
-  StdCtrls, ExtCtrls, Buttons, IntfGraphics;
+  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
 
@@ -140,16 +139,10 @@ type
     FMarkOverflow: boolean;
     FMaxADU, FOverflow, FUnderflow: double;
     FInvert: boolean;
-    f_ViewHeaders: TForm;
-    m_ViewHeaders: TMemo;
-    p_ViewHeaders: TPanel;
-    b_ViewHeaders: TButton;
     FStarList: TStarList;
     FDark: TFits;
     FDarkOn: boolean;
     FDarkProcess, FBPMProcess: boolean;
-    Procedure ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
-    Procedure ViewHeadersBtnClose(Sender: TObject);
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
     procedure SetVideoStream(value:TMemoryStream);
@@ -166,8 +159,7 @@ type
     { Public declarations }
      constructor Create(AOwner:TComponent); override;
      destructor  Destroy; override;
-     Procedure ViewHeaders;
-     Procedure ShowStatistics;
+     function  GetStatistics: string;
      Procedure LoadStream;
      procedure GetFitsInfo;
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
@@ -696,63 +688,16 @@ else begin
 end;
 end;
 
-Procedure TFits.ViewHeaders;
-begin
-if FFitsInfo.valid then begin
-f_ViewHeaders:=TForm.create(self);
-f_ViewHeaders.OnClose:=ViewHeadersClose;
-m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
-p_ViewHeaders:=TPanel.Create(f_ViewHeaders);
-b_ViewHeaders:=Tbutton.Create(f_ViewHeaders);
-f_ViewHeaders.Width:=650;
-f_ViewHeaders.Height:=450;
-p_ViewHeaders.Parent:=f_ViewHeaders;
-p_ViewHeaders.Caption:='';
-p_ViewHeaders.Height:=b_ViewHeaders.Height+8;
-p_ViewHeaders.Align:=alBottom;
-m_ViewHeaders.Parent:=f_ViewHeaders;
-m_ViewHeaders.Align:=alClient;
-m_ViewHeaders.font.Name:='courier';
-m_ViewHeaders.ReadOnly:=true;
-m_ViewHeaders.WordWrap:=false;
-m_ViewHeaders.ScrollBars:=ssAutoBoth;
-b_ViewHeaders.Parent:=p_ViewHeaders;
-b_ViewHeaders.Caption:=rsClose;
-b_ViewHeaders.Top:=4;
-b_ViewHeaders.Left:=40;
-b_ViewHeaders.Cancel:=true;
-b_ViewHeaders.Default:=true;
-b_ViewHeaders.OnClick:=ViewHeadersBtnClose;
-m_ViewHeaders.Lines:=FHeader.Rows;
-FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
-if trim(FTitle)='' then
-   f_ViewHeaders.Caption:=rsFITSHeader
-else
-   f_ViewHeaders.Caption:=SysToUTF8(FTitle);
-f_ViewHeaders.Show;
-end;
-end;
-
-Procedure TFits.ViewHeadersBtnClose(Sender: TObject);
-begin
-f_ViewHeaders.Close;
-end;
-
-Procedure TFits.ViewHeadersClose(Sender: TObject; var CloseAction:TCloseAction);
-begin
-CloseAction:=caFree;
-end;
-
-Procedure TFits.ShowStatistics;
-var txt,ff: string;
+function TFits.GetStatistics: string;
+var ff: string;
     x,c: double;
     i,maxh,maxp:integer;
 begin
   if FFitsInfo.valid then begin
     if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
-    txt:=rsImageStatist+crlf+crlf;
-    txt:=txt+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
-    txt:=txt+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
+    result:=rsImageStatist+crlf;
+    result:=result+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
+    result:=result+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
     maxh:=0;
     for i:=0 to high(word) do begin
       if FHistogram[i]>maxh then begin
@@ -766,39 +711,10 @@ begin
       else
         c:=1;
       x:=Fdmin+maxp/c;
-      txt:=txt+rsMode+blank+FormatFloat(ff, x)+crlf;
+      result:=result+rsMode+blank+FormatFloat(ff, x)+crlf;
     end;
-    txt:=txt+rsMean+blank+FormatFloat(ff, Fmean)+crlf;
-    txt:=txt+rsStdDev+blank+FormatFloat(ff, Fsigma)+crlf;
-
-    f_ViewHeaders:=TForm.create(self);
-    f_ViewHeaders.OnClose:=ViewHeadersClose;
-    m_ViewHeaders:=Tmemo.create(f_ViewHeaders);
-    p_ViewHeaders:=TPanel.Create(f_ViewHeaders);
-    b_ViewHeaders:=Tbutton.Create(f_ViewHeaders);
-    f_ViewHeaders.Width:=250;
-    f_ViewHeaders.Height:=200;
-    p_ViewHeaders.Parent:=f_ViewHeaders;
-    p_ViewHeaders.Caption:='';
-    p_ViewHeaders.Height:=b_ViewHeaders.Height+8;
-    p_ViewHeaders.Align:=alBottom;
-    m_ViewHeaders.Parent:=f_ViewHeaders;
-    m_ViewHeaders.Align:=alClient;
-    m_ViewHeaders.font.Name:='courier';
-    m_ViewHeaders.ReadOnly:=true;
-    m_ViewHeaders.WordWrap:=false;
-    m_ViewHeaders.ScrollBars:=ssAutoBoth;
-    b_ViewHeaders.Parent:=p_ViewHeaders;
-    b_ViewHeaders.Caption:=rsClose;
-    b_ViewHeaders.Top:=4;
-    b_ViewHeaders.Left:=40;
-    b_ViewHeaders.Cancel:=true;
-    b_ViewHeaders.Default:=true;
-    b_ViewHeaders.OnClick:=ViewHeadersBtnClose;
-    m_ViewHeaders.Text:=txt;
-    FormPos(f_ViewHeaders,mouse.CursorPos.X,mouse.CursorPos.Y);
-    f_ViewHeaders.Caption:=rsImageStatist;
-    f_ViewHeaders.Show;
+    result:=result+rsMean+blank+FormatFloat(ff, Fmean)+crlf;
+    result:=result+rsStdDev+blank+FormatFloat(ff, Fsigma)+crlf;
   end;
 end;
 

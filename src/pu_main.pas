@@ -5393,13 +5393,33 @@ begin
 end;
 
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
+var f: Tf_viewtext;
 begin
-  fits.ViewHeaders;
+ if fits.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.Caption:=rsImageStatist;
+   f.Memo1.Lines:=fits.Header.Rows;
+   if trim(fits.Title)='' then
+      f.Caption:=rsFITSHeader
+   else
+      f.Caption:=SysToUTF8(fits.Title);
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
 end;
 
 procedure Tf_main.MenuImgStatClick(Sender: TObject);
+var f: Tf_viewtext;
 begin
-  fits.ShowStatistics;
+ if fits.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.Width:=DoScaleX(250);
+   f.Height:=DoScaleY(200);
+   f.Caption:=rsImageStatist;
+   f.Memo1.Text:=fits.GetStatistics;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
 end;
 
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
@@ -9099,14 +9119,16 @@ end;
 
 procedure Tf_main.MenuViewAstrometryLogClick(Sender: TObject);
 var logf: string;
+    f: Tf_viewtext;
 begin
   logf:=slash(TmpDir)+'ccdcieltmp.log';
   if FileExistsUTF8(logf) then begin
-    f_viewtext.Caption:=rsAstrometryRe;
-    f_viewtext.Memo1.Clear;
-    f_viewtext.Memo1.Lines.LoadFromFile(logf);
-    FormPos(f_viewtext,mouse.CursorPos.X,mouse.CursorPos.Y);
-    f_viewtext.Show;
+    f:=Tf_viewtext.Create(self);
+    f.Caption:=rsAstrometryRe;
+    f.Memo1.Clear;
+    f.Memo1.Lines.LoadFromFile(logf);
+    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+    f.Show;
   end;
 end;
 

@@ -78,7 +78,6 @@ begin
   Application.CreateForm(Tf_main, f_main);
   Application.CreateForm(Tf_setup, f_setup);
   Application.CreateForm(Tf_option, f_option);
-  Application.CreateForm(Tf_viewtext, f_viewtext);
   Application.CreateForm(Tf_planetariuminfo, f_planetariuminfo);
   Application.CreateForm(Tf_pause, f_pause);
   Application.CreateForm(Tf_focusercalibration, f_focusercalibration);

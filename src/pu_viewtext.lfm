@@ -1,22 +1,47 @@
 object f_viewtext: Tf_viewtext
   Left = 367
-  Height = 421
+  Height = 450
   Top = 127
-  Width = 537
+  Width = 670
   ActiveControl = Memo1
-  Caption = 'View text'
-  ClientHeight = 421
-  ClientWidth = 537
+  ClientHeight = 450
+  ClientWidth = 670
+  DesignTimePPI = 95
+  OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '1.6.0.4'
-  Visible = False
+  LCLVersion = '2.0.2.0'
   object Memo1: TMemo
     Left = 0
-    Height = 421
+    Height = 415
     Top = 0
-    Width = 537
+    Width = 650
     Align = alClient
+    Font.Name = 'Courier'
+    Font.Pitch = fpFixed
+    ParentFont = False
+    ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 0
+    WordWrap = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 35
+    Top = 415
+    Width = 650
+    Align = alBottom
+    ClientHeight = 35
+    ClientWidth = 650
+    TabOrder = 1
+    object Button1: TButton
+      Left = 567
+      Height = 25
+      Top = 4
+      Width = 74
+      Anchors = [akTop, akRight]
+      Caption = 'Close'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
   end
 end

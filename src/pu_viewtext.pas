@@ -25,15 +25,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+uses  UScaleDPI, u_translation,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
 
   { Tf_viewtext }
 
   Tf_viewtext = class(TForm)
+    Button1: TButton;
     Memo1: TMemo;
+    Panel1: TPanel;
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
   private
     { private declarations }
@@ -53,6 +57,17 @@ implementation
 procedure Tf_viewtext.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  Button1.Caption:=rsClose;
+end;
+
+procedure Tf_viewtext.Button1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure Tf_viewtext.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction:=caFree;
 end;
 
 end.
