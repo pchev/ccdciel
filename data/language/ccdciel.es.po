@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-27 07:33+0000\n"
-"PO-Revision-Date: 2019-05-06 18:43+0000\n"
+"POT-Creation-Date: 2019-07-03 19:21+0000\n"
+"PO-Revision-Date: 2019-07-03 10:26+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-29 12:04+0000\n"
-"X-Generator: Launchpad (build 18991)\n"
+"X-Launchpad-Export-Date: 2019-07-03 19:32+0000\n"
+"X-Generator: Launchpad (build 19007)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -502,7 +502,7 @@ msgstr "No se pudo llegar inicio del foco HFD, por favor, incremente la media al
 
 #: u_translation.rscannotruncal
 msgid "Cannot run calibration now, stop capture and retry"
-msgstr ""
+msgstr "No se pudo realizar ahora la calibración, detener captura y reintentar"
 
 #: u_translation.rscannotruncal2
 msgid "Cannot run calibration now, stop preview and retry"
@@ -614,7 +614,7 @@ msgstr "Limpiar imagen de referencia"
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
-msgstr ""
+msgstr "¿Limpiar el estado de completitud?"
 
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
@@ -986,7 +986,7 @@ msgstr "Esclavitud de cúpula: %s"
 
 #: u_translation.rsdone
 msgid "done"
-msgstr ""
+msgstr "hecho"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1242,7 +1242,7 @@ msgstr "Hora de la toma plana"
 
 #: u_translation.rsfliptheimageh
 msgid "Flip the image horizontally"
-msgstr ""
+msgstr "Reflejar la imagen horizontalmente"
 
 #: u_translation.rsfliptheimagev
 msgid "Flip the image vertically"
@@ -1368,6 +1368,10 @@ msgstr "Opciones nombre carpetas"
 msgid "Found %s devices"
 msgstr "Encontrados %s dispositivos"
 
+#: u_translation.rsfov
+msgid "FOV"
+msgstr ""
+
 #: u_translation.rsframe
 msgid "Frame"
 msgstr "Fotograma"
@@ -1375,6 +1379,10 @@ msgstr "Fotograma"
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
 msgstr "Desde el controlador de la cámara"
+
+#: u_translation.rsfromplatesol
+msgid "From plate solving"
+msgstr ""
 
 #: u_translation.rsfromtelescop
 msgid "From telescope driver"
@@ -1423,7 +1431,7 @@ msgstr "Parámetros del enfocador globales. &sAjuste la dirección del enfocador
 
 #: u_translation.rsglobalrepeat
 msgid "Global repeat:"
-msgstr ""
+msgstr "Repetición global:"
 
 #: u_translation.rsgood
 msgid "Good"
@@ -1493,6 +1501,10 @@ msgstr ""
 msgid "Ignore weather condition for image type=%s"
 msgstr "Ignorar condición meteorológica para tipo de imagen=%s"
 
+#: u_translation.rsimage
+msgid "Image"
+msgstr ""
+
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
 msgstr "Limpiado de imagen"
@@ -1509,13 +1521,17 @@ msgstr "Inspección imagen"
 msgid "Image median hfd=%s"
 msgstr "Mediana hfd=%s"
 
+#: u_translation.rsimagescale
+msgid "Image scale"
+msgstr ""
+
 #: u_translation.rsimagesfolder
 msgid "Images folder Unix path"
 msgstr "Ruta Unix a carpetas de imagen"
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
-msgstr ""
+msgstr "Estadísticas de la imagen"
 
 #: u_translation.rsimagetransfe
 msgid "Image transfer"
@@ -1607,11 +1623,11 @@ msgstr "Si se usa la curva V es recomendable apuntar a la estrella de enfoque"
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
-msgstr ""
+msgstr "Continuará después del último punto de comprobación."
 
 #: u_translation.rskeepcompleti
 msgid "Keep completion status"
-msgstr ""
+msgstr "Mantener estado completitud"
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -1723,7 +1739,7 @@ msgstr ""
 
 #: u_translation.rsmean
 msgid "Mean:"
-msgstr ""
+msgstr "Media:"
 
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
@@ -1823,7 +1839,7 @@ msgstr "Mnt."
 
 #: u_translation.rsmode
 msgid "Mode:"
-msgstr ""
+msgstr "Modo:"
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -2127,7 +2143,7 @@ msgstr "Abrir imagen de referencia"
 
 #: u_translation.rsopenthedomes
 msgid "Open the Dome shutter"
-msgstr ""
+msgstr "Abrir la compuerta de la cúpula"
 
 #: u_translation.rsoptions
 msgid "Options :%s"
@@ -2527,7 +2543,7 @@ msgstr "Reiniciar"
 
 #: u_translation.rsresetcomplet
 msgid "Reset completion status on repeat"
-msgstr ""
+msgstr "Reinciar estado completitud al repetir"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -3231,7 +3247,7 @@ msgstr "Mantenerse en el sitio para el autoenfoque"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
-msgstr ""
+msgstr "Dev.Est:"
 
 #: u_translation.rsstep
 msgid "Step"
@@ -3576,15 +3592,15 @@ msgstr "Este procedimiento le ayudará a encontrar los parámetros del enfocador
 
 #: u_translation.rsthissequence
 msgid "This sequence %s contain completion status."
-msgstr ""
+msgstr "Esta secuencia %s contiene estado de completitud."
 
 #: u_translation.rsthissequence2
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
-msgstr ""
+msgstr "Esta secuencia contiene información sobre los pasos ya completados.%sAhora puede continuar tras el último punto de comprobación.%s¿Desea limpiar el estado de completitud para reiniciar desde el comienzo?"
 
 #: u_translation.rsthiswillbelo
 msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
-msgstr ""
+msgstr "Esto se perderá al grabar un archivo nuevo.%s¿Desea guardarlo con un nuevo nombre para no perder la información en el archivo original?"
 
 #: u_translation.rstiltindicati
 msgid "  Tilt indication=%s"
@@ -3696,11 +3712,11 @@ msgstr "Desaparcado"
 
 #: u_translation.rsunparkthedom
 msgid "Unpark the Dome"
-msgstr ""
+msgstr "Desaparcar la cúpula"
 
 #: u_translation.rsunparkthetel
 msgid "Unpark the telescope"
-msgstr ""
+msgstr "Desaparcar el telescopio"
 
 #: u_translation.rsunparkthetel2
 msgid "Unpark the telescope and the dome"

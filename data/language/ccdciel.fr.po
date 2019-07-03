@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-27 07:33+0000\n"
-"PO-Revision-Date: 2019-06-27 07:38+0000\n"
+"POT-Creation-Date: 2019-07-03 19:21+0000\n"
+"PO-Revision-Date: 2019-07-03 19:31+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-29 12:04+0000\n"
-"X-Generator: Launchpad (build 18991)\n"
+"X-Launchpad-Export-Date: 2019-07-03 19:32+0000\n"
+"X-Generator: Launchpad (build 19007)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1369,6 +1369,10 @@ msgstr "Options du nom de dossier"
 msgid "Found %s devices"
 msgstr "%s périphériques trouvés"
 
+#: u_translation.rsfov
+msgid "FOV"
+msgstr "Champ"
+
 #: u_translation.rsframe
 msgid "Frame"
 msgstr "Cadre"
@@ -1376,6 +1380,10 @@ msgstr "Cadre"
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
 msgstr "Du pilote de caméra"
+
+#: u_translation.rsfromplatesol
+msgid "From plate solving"
+msgstr "Depuis la solution astrométrique"
 
 #: u_translation.rsfromtelescop
 msgid "From telescope driver"
@@ -1493,6 +1501,10 @@ msgstr "Si votre pilote de focuser n'offre pas cette option, définissez ici le 
 msgid "Ignore weather condition for image type=%s"
 msgstr "Ignore les conditions météo pour le type d'image %s"
 
+#: u_translation.rsimage
+msgid "Image"
+msgstr "Image"
+
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
 msgstr "Nettoyage de l'image"
@@ -1508,6 +1520,10 @@ msgstr "Inspection de l'image"
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
 msgstr "HFD médian de l'image = %s"
+
+#: u_translation.rsimagescale
+msgid "Image scale"
+msgstr "Echelle de l'image"
 
 #: u_translation.rsimagesfolder
 msgid "Images folder Unix path"

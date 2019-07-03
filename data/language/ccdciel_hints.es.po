@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-27 07:33+0000\n"
-"PO-Revision-Date: 2019-06-27 08:28+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2019-07-03 19:22+0000\n"
+"PO-Revision-Date: 2019-07-02 21:10+0000\n"
+"Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-29 12:04+0000\n"
-"X-Generator: Launchpad (build 18991)\n"
+"X-Launchpad-Export-Date: 2019-07-03 19:32+0000\n"
+"X-Generator: Launchpad (build 19007)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -58,23 +58,23 @@ msgstr ""
 
 #: u_hints.rsautoguiderst
 msgid "Autoguider status"
-msgstr ""
+msgstr "Estado guiado"
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"
-msgstr ""
+msgstr "'Binning' cámara"
 
 #: u_hints.rscameragain
 msgid "Camera gain"
-msgstr ""
+msgstr "Ganancia cámara"
 
 #: u_hints.rscameraiso
 msgid "Camera ISO"
-msgstr ""
+msgstr "ISO cámara"
 
 #: u_hints.rsclearthesequ
 msgid "Clear the sequence completion status"
-msgstr ""
+msgstr "Limpiar el estado de completitud de la secuencia"
 
 #: u_hints.rscleartimecon
 msgid "Clear time constraint"
@@ -82,7 +82,7 @@ msgstr ""
 
 #: u_hints.rsconnectallde
 msgid "Connect all devices"
-msgstr ""
+msgstr "Conectar todos los dispositivos"
 
 #: u_hints.rscontrolhowco
 msgid "Control how complete target are managed when the whole list is repeated"
@@ -94,7 +94,7 @@ msgstr ""
 
 #: u_hints.rscopytheseque
 msgid "Copy the sequence to a new one. Completion status is reinitialized"
-msgstr ""
+msgstr "Copiar la secuencia en una nueva. Se reiniciará el estado de completitud."
 
 #: u_hints.rscreateanewem
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
@@ -102,19 +102,19 @@ msgstr ""
 
 #: u_hints.rscreateanewse
 msgid "Create a new sequence"
-msgstr ""
+msgstr "Crear una nueva secuencia"
 
 #: u_hints.rscurrentteles
 msgid "Current telescope Right Ascension"
-msgstr ""
+msgstr "Ascención Recta actual del telescopio"
 
 #: u_hints.rscurrentteles2
 msgid "Current telescope Declination"
-msgstr ""
+msgstr "Declinación actual del telescopio"
 
 #: u_hints.rscurrentteles3
 msgid "Current telescope side of pier"
-msgstr ""
+msgstr "Lado actual de la columna del telescopio"
 
 #: u_hints.rsdeletethesel
 msgid "Delete the selected row from the list."
@@ -122,7 +122,7 @@ msgstr ""
 
 #: u_hints.rsdeletetheseq
 msgid "Delete the sequence file"
-msgstr ""
+msgstr "Borrar el fichero de secuencia"
 
 #: u_hints.rsdeletethispr
 msgid "Delete this profile and associated program preference."
@@ -174,7 +174,7 @@ msgstr ""
 
 #: u_hints.rsifcheckednoc
 msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
-msgstr ""
+msgstr "Si está activado, no se presentará un diálogo de confirmación y una operación fallida abortará el paso actual."
 
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
@@ -182,7 +182,7 @@ msgstr ""
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
-msgstr ""
+msgstr "Incrementar el paso para el movimiento adentro o afuera"
 
 #: u_hints.rsinfinitenumb
 msgid "Infinite number of repetition"
@@ -206,11 +206,11 @@ msgstr ""
 
 #: u_hints.rsloadasequenc
 msgid "Load a sequence file"
-msgstr ""
+msgstr "Cargar fichero de secuencia"
 
 #: u_hints.rslooppreviewe
 msgid "Loop preview exposures"
-msgstr ""
+msgstr "Bucle exposiciones de previsualización"
 
 #: u_hints.rsmaketesttode
 msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
@@ -218,15 +218,15 @@ msgstr ""
 
 #: u_hints.rsmovefocuseri
 msgid "Move focuser inward"
-msgstr ""
+msgstr "Mover enfocador adentro"
 
 #: u_hints.rsmovefocusero
 msgid "Move focuser outward"
-msgstr ""
+msgstr "Mover enfocador afuera"
 
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
-msgstr ""
+msgstr "Estado planetario"
 
 #: u_hints.rsrepeatthewho2
 msgid "Repeat the whole list a number of time."
@@ -250,7 +250,7 @@ msgstr ""
 
 #: u_hints.rssetabsolutef
 msgid "Set absolute focuser position"
-msgstr ""
+msgstr "Fijar la posición absoluta del enfocador"
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
@@ -286,7 +286,7 @@ msgstr ""
 
 #: u_hints.rsstacktheprev
 msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
-msgstr ""
+msgstr "Apilar las imágenes individuales en una sola imagen.%sSe iniciará un nuevo apilado cuando comienzo un bucle o si desactiva este botón."
 
 #: u_hints.rsstartaprevie
 msgid "Start a preview loop when waiting for the delay to expire."
@@ -298,7 +298,7 @@ msgstr ""
 
 #: u_hints.rsstartoneprev
 msgid "Start one preview exposure"
-msgstr ""
+msgstr "Iniciar una exposición de previsualización"
 
 #: u_hints.rsstarttheauto
 msgid "Start the auto-focus procedure"
@@ -306,11 +306,11 @@ msgstr ""
 
 #: u_hints.rsstartthecapt
 msgid "Start the capture sequence"
-msgstr ""
+msgstr "Comenzar la secuencia de capturas"
 
 #: u_hints.rsstartthesequ
 msgid "Start the sequence execution"
-msgstr ""
+msgstr "Iniciar ejecución secuencia"
 
 #: u_hints.rsstartthevcur
 msgid "Start the Vcurve learning process"
@@ -318,11 +318,11 @@ msgstr ""
 
 #: u_hints.rsstartx
 msgid "Start X"
-msgstr ""
+msgstr "Iniciar X"
 
 #: u_hints.rsstarty
 msgid "Start Y"
-msgstr ""
+msgstr "Iniciar Y"
 
 #: u_hints.rsstopatthisti
 msgid "Stop at this time even if the processing is not finished."
@@ -330,7 +330,7 @@ msgstr ""
 
 #: u_hints.rsstoptheseque
 msgid "Stop the sequence execution"
-msgstr ""
+msgstr "Parar ejecución secuencia"
 
 #: u_hints.rsthebasefolde
 msgid "The base folder where the images are recorded"
@@ -402,7 +402,7 @@ msgstr ""
 
 #: u_hints.rstheselecteds
 msgid "The selected star luminosity profile"
-msgstr ""
+msgstr "Perfil de luminosidad de la estrella seleccionada"
 
 #: u_hints.rsthesignalnoi
 msgid "The Signal/Noise ratio"
@@ -430,7 +430,7 @@ msgstr ""
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"
-msgstr ""
+msgstr "Tiempo al tránsito por meridiano (ángulo horario)"
 
 #: u_hints.rstrytocorrect
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
@@ -446,7 +446,7 @@ msgstr ""
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"
-msgstr ""
+msgstr "Aprendizaje curva V"
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."

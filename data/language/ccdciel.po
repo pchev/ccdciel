@@ -3942,3 +3942,19 @@ msgstr ""
 msgid "Dome already %s"
 msgstr ""
 
+#: u_translation:rsfov
+msgid "FOV"
+msgstr ""
+
+#: u_translation:rsfromplatesol
+msgid "From plate solving"
+msgstr ""
+
+#: u_translation:rsimagescale
+msgid "Image scale"
+msgstr ""
+
+#: u_translation:rsimage
+msgid "Image"
+msgstr ""
+

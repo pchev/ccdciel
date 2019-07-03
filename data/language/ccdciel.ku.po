@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-06-27 07:33+0000\n"
+"POT-Creation-Date: 2019-07-03 19:21+0000\n"
 "PO-Revision-Date: 2018-05-14 09:37+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-06-29 12:04+0000\n"
-"X-Generator: Launchpad (build 18991)\n"
+"X-Launchpad-Export-Date: 2019-07-03 19:32+0000\n"
+"X-Generator: Launchpad (build 19007)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1368,12 +1368,20 @@ msgstr ""
 msgid "Found %s devices"
 msgstr ""
 
+#: u_translation.rsfov
+msgid "FOV"
+msgstr ""
+
 #: u_translation.rsframe
 msgid "Frame"
 msgstr "Çarçove"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
+msgstr ""
+
+#: u_translation.rsfromplatesol
+msgid "From plate solving"
 msgstr ""
 
 #: u_translation.rsfromtelescop
@@ -1492,6 +1500,10 @@ msgstr ""
 msgid "Ignore weather condition for image type=%s"
 msgstr ""
 
+#: u_translation.rsimage
+msgid "Image"
+msgstr ""
+
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
 msgstr ""
@@ -1506,6 +1518,10 @@ msgstr ""
 
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
+msgstr ""
+
+#: u_translation.rsimagescale
+msgid "Image scale"
 msgstr ""
 
 #: u_translation.rsimagesfolder
