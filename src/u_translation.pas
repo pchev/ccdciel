@@ -1091,6 +1091,8 @@ resourcestring
   rsAllowToOpenT = 'Allow to open the dome when safety status is bad or unknown';
   rsDomeAlready = 'Dome already %s';
   rsFOV = 'FOV';
+  rsFromPlateSol = 'From plate solving';
+  rsImageScale = 'Image scale';
 
 implementation
 

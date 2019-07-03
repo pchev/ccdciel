@@ -462,7 +462,7 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
-    WCSxyNrot,WCSxyErot,WCSeq,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
+    WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -5420,15 +5420,18 @@ begin
    txt:=fits.GetStatistics;
    if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord)
    then begin
-     txt:=txt+crlf+'Image is plate solved'+crlf;
-     txt:=txt+rsCenterRA+FormatFloat(f0,WCSeq)+blank+RAToStr(WCScenterRA/15)+crlf;
-     txt:=txt+rsCenterDec+FormatFloat(f0,WCSeq)+blank+DEToStr(WCScenterDEC)+crlf;
-   end;
-   if (WCSwidth<>NullCoord) and (WCSheight<>NullCoord) then begin
-      if WCSwidth>10 then
-        txt:=txt+rsFOV+blank+FormatFloat(f2, WCSwidth)+'x'+FormatFloat(f2, WCSheight)+sdeg+crlf
-      else
-        txt:=txt+rsFOV+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin+crlf;
+     txt:=txt+crlf+rsFromPlateSol+':'+crlf;
+     txt:=txt+rsCenterRA+FormatFloat(f0,cdcWCSinfo.eqout)+':'+blank+RAToStr(WCScenterRA/15)+crlf;
+     txt:=txt+rsCenterDec+FormatFloat(f0,cdcWCSinfo.eqout)+':'+blank+DEToStr(WCScenterDEC)+crlf;
+     if (WCSwidth<>NullCoord) and (WCSheight<>NullCoord) then begin
+        if WCSwidth>10 then
+          txt:=txt+rsFOV+':'+blank+FormatFloat(f2, WCSwidth)+'x'+FormatFloat(f2, WCSheight)+sdeg+crlf
+        else
+          txt:=txt+rsFOV+':'+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin+crlf;
+     end;
+     if cdcWCSinfo.secpix>0 then begin
+       txt:=txt+rsImageScale+':'+blank+FormatFloat(f2, cdcWCSinfo.secpix)+blank+ssec+'/'+rsPixels+crlf;
+     end;
    end;
    f.Memo1.Text:=txt;
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -9607,7 +9610,6 @@ begin
          n:=cdcwcs_xy2sky(@c,0);
          WCScenterRA:=c.ra;
          WCScenterDEC:=c.dec;
-         WCSeq:=cdcWCSinfo.eqout;
          // FOV
          if (cdcWCSinfo.secpix>0) then begin
            WCSwidth:=cdcWCSinfo.wp*cdcWCSinfo.secpix/3600;
