@@ -12,7 +12,6 @@ object f_main: Tf_main
   DesignTimePPI = 95
   KeyPreview = True
   Menu = MainMenu1
-  ShowHint = True
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -20,6 +19,7 @@ object f_main: Tf_main
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
+  ShowHint = True
   object Panel1: TPanel
     Left = 0
     Height = 559
@@ -495,7 +495,6 @@ object f_main: Tf_main
         OnClick = MenuAscomSetupClick
       end
       object MenuAlpacaServerSetup: TMenuItem
-        Tag = 0
         Caption = 'MenuAlpacaServerSetup'
         OnClick = MenuAlpacaSetupClick
       end
@@ -720,6 +719,9 @@ object f_main: Tf_main
           OnClick = MenuResetToolsClick
         end
       end
+    end
+    object MenuImage: TMenuItem
+      Caption = 'Image'
     end
     object MenuTabConnect: TMenuItem
       Caption = 'Connect'

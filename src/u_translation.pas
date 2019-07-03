@@ -1093,6 +1093,7 @@ resourcestring
   rsFOV = 'FOV';
   rsFromPlateSol = 'From plate solving';
   rsImageScale = 'Image scale';
+  rsImage = 'Image';
 
 implementation
 

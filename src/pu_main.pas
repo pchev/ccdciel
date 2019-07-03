@@ -104,6 +104,7 @@ type
     MenuAlpacaSafetySetup: TMenuItem;
     MenuAlpacaDomeSetup: TMenuItem;
     MenuImgStat: TMenuItem;
+    MenuImage: TMenuItem;
     MenuResolveHyperLeda: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
@@ -1008,6 +1009,7 @@ procedure Tf_main.FormCreate(Sender: TObject);
 var inif: TIniFile;
     configfile: string;
     i:integer;
+    mi: TMenuItem;
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
@@ -1154,6 +1156,13 @@ begin
   Left:=screenconfig.GetValue('/Window/Left',0);
   Width:=screenconfig.GetValue('/Window/Width',1024);
   Height:=screenconfig.GetValue('/Window/Height',768);
+
+  // copy image popup menu to main menu
+  for i:=0 to ImagePopupMenu.Items.Count-1 do begin
+    mi:=TMenuItem.Create(self);
+    mi.Assign(ImagePopupMenu.Items[i]);
+    MenuImage.Add(mi);
+  end;
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onLogLevelChange:=@LogLevelChange;
@@ -1629,6 +1638,7 @@ begin
    MenuAlpacaSafetySetup.Caption:='Alpaca '+rsSafetyMonito+blank+rsSetup;
    MenuAlpacaDomeSetup.Caption:='Alpaca '+rsDome+blank+rsSetup;
    MenuViewhdr.Caption := rsViewHeader;
+   MenuImage.Caption:=rsImage;
    MenuItem4.Caption := rsTools;
    MenuViewConnection.Caption := rsConnection;
    MenuViewPreview.Caption := rsPreview;
