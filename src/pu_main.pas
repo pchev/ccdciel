@@ -1865,6 +1865,8 @@ begin
   f_option.ReadOutPreview.Items.Assign(ReadoutList);
   f_option.ReadOutFocus.Items.Assign(ReadoutList);
   f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
+  f_option.onShowHelp:=@MenuPdfHelpClick;
+  f_setup.onShowHelp:=@MenuPdfHelpClick;
 
   hasGain:=config.GetValue('/Gain/hasGain',false);
   hasGainISO:=config.GetValue('/Gain/hasGainISO',false);

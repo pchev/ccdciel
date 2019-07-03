@@ -37,6 +37,7 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    ButtonHelp: TButton;
     CameraARestPass: TEdit;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
@@ -417,6 +418,7 @@ type
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure ApplyAscomRemoteClick(Sender: TObject);
+    procedure ButtonHelpClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
@@ -453,6 +455,7 @@ type
     FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
     IndiTimerCount,GetDeviceType:integer;
     receiveindidevice: boolean;
+    FShowHelp: TNotifyEvent;
     procedure GetIndiDevicesStart;
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
@@ -481,6 +484,7 @@ type
     property DomeConnection: TDevInterface read FDomeConnection write SetDomeConnection;
     property WeatherConnection: TDevInterface read FWeatherConnection write SetWeatherConnection;
     property SafetyConnection: TDevInterface read FSafetyConnection write SetSafetyConnection;
+    property onShowHelp: TNotifyEvent read FShowHelp write FShowHelp;
   end;
 
 var
@@ -517,6 +521,9 @@ end;
 procedure Tf_setup.SetLang;
 begin
   DeviceInterface.Caption:=rsInterface;
+  Button1.Caption:=rsOK;
+  Button3.Caption:=rsCancel;
+  ButtonHelp.Caption:=rsHelp;
   Label18.Caption:=rsServer;
   Label22.Caption:=rsPort;
   Label1.Caption:=rsTimeout;
@@ -1228,6 +1235,11 @@ begin
    DomeARestPass.Text:=DefaultARestPass.Text;
    WeatherARestPass.Text:=DefaultARestPass.Text;
    SafetyARestPass.Text:=DefaultARestPass.Text;
+end;
+
+procedure Tf_setup.ButtonHelpClick(Sender: TObject);
+begin
+  if Assigned(FShowHelp) then FShowHelp(self);
 end;
 
 procedure Tf_setup.CameraARestProtocolChange(Sender: TObject);

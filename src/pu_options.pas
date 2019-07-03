@@ -41,6 +41,7 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEdit;
+    ButtonHelp: TButton;
     CbShowHints: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
@@ -503,6 +504,7 @@ type
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
+    procedure ButtonHelpClick(Sender: TObject);
     procedure ButtonTempDirClick(Sender: TObject);
     procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
@@ -537,7 +539,7 @@ type
     procedure TmpDirDefaultClick(Sender: TObject);
   private
     { private declarations }
-    FGetMaxADU, FGetPixelSize, FGetFocale: TNotifyEvent;
+    FGetMaxADU, FGetPixelSize, FGetFocale, FShowHelp: TNotifyEvent;
     Flatitude, Flongitude: double;
     Lockchange: boolean;
     SaveTemperatureSlope: double;
@@ -560,6 +562,7 @@ type
     property onGetMaxADU : TNotifyEvent read FGetMaxADU write FGetMaxADU;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
+    property onShowHelp: TNotifyEvent read FShowHelp write FShowHelp;
   end;
 
 var
@@ -603,6 +606,7 @@ begin
   Caption := rsOptions2;
   Button1.Caption := rsOK;
   Button2.Caption := rsCancel;
+  ButtonHelp.Caption:=rsHelp;
   TabSheet1.Caption := rsFiles;
   Label1.Caption := rsCaptureFolde;
   Logtofile.Caption := rsLogAllMessag;
@@ -1189,6 +1193,11 @@ begin
     FolderOptions.Cells[1,i]:='0';
     FolderOptions.Cells[2,i]:=SubDirName[i];
   end;
+end;
+
+procedure Tf_option.ButtonHelpClick(Sender: TObject);
+begin
+  if Assigned(FShowHelp) then FShowHelp(self);
 end;
 
 procedure Tf_option.CheckFocusWindow(Sender: TObject);
