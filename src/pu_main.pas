@@ -1160,7 +1160,13 @@ begin
   // copy image popup menu to main menu
   for i:=0 to ImagePopupMenu.Items.Count-1 do begin
     mi:=TMenuItem.Create(self);
-    mi.Assign(ImagePopupMenu.Items[i]);
+    { TODO : Replace individual property by Assign() when Lazarus 1.8 compatibility is no more need. }
+    // mi.Assign(ImagePopupMenu.Items[i]);
+    mi.AutoCheck:=ImagePopupMenu.Items[i].AutoCheck;
+    mi.Caption:=ImagePopupMenu.Items[i].Caption;
+    mi.Visible:=ImagePopupMenu.Items[i].Visible;
+    mi.ShowAlwaysCheckable:=ImagePopupMenu.Items[i].ShowAlwaysCheckable;
+    mi.OnClick:=ImagePopupMenu.Items[i].OnClick;
     MenuImage.Add(mi);
   end;
 
