@@ -106,6 +106,7 @@ type
     MenuImgStat: TMenuItem;
     MenuImage: TMenuItem;
     MenuResolveHyperLeda: TMenuItem;
+    MenuResolveHyperLeda2: TMenuItem;
     MenuReset1col: TMenuItem;
     MenuReset2col: TMenuItem;
     MenuViewDome: TMenuItem;
@@ -115,6 +116,7 @@ type
     MenuStatus: TMenuItem;
     MenuUsergroup: TMenuItem;
     MenuResolveDSO: TMenuItem;
+    MenuResolveDSO2: TMenuItem;
     MenuViewMagnifyer: TMenuItem;
     MenuSaveConfig: TMenuItem;
     MenuItemCleanup: TMenuItem;
@@ -136,9 +138,12 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     MenuResolveRotate: TMenuItem;
+    MenuResolveRotate2: TMenuItem;
     MenuViewClock: TMenuItem;
     MenuResolveSyncRotator: TMenuItem;
+    MenuResolveSyncRotator2: TMenuItem;
     MenuRotatorRotate: TMenuItem;
+    MenuRotatorRotate2: TMenuItem;
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
@@ -199,18 +204,33 @@ type
     MenuPreviewLoop: TMenuItem;
     MenuPreviewStart: TMenuItem;
     MenuResolveSlewCenter: TMenuItem;
+    MenuResolveSlewCenter2: TMenuItem;
     MenuResolve: TMenuItem;
+    MenuResolve2: TMenuItem;
     MenuRefimage: TMenuItem;
     N7: TMenuItem;
     MenuViewScript: TMenuItem;
     MenuViewPlanetarium: TMenuItem;
     MenuResolveSlew: TMenuItem;
+    MenuResolveSlew2: TMenuItem;
     MenuResolveSync: TMenuItem;
+    MenuResolveSync2: TMenuItem;
     MenuViewSequence: TMenuItem;
     MenuViewAutoguider: TMenuItem;
     MenuViewAstrometryLog: TMenuItem;
     MenuStopAstrometry: TMenuItem;
     MenuResolvePlanetarium: TMenuItem;
+    MenuResolvePlanetarium2: TMenuItem;
+    MenuShowCCDFrame2: TMenuItem;
+    MenuViewAstrometryLog2 :TMenuItem;
+    MenuStopAstrometry2: TMenuItem;
+    MenuItemDebayer2: TMenuItem;
+    MenuItemCleanup2: TMenuItem;
+    MenuItem20: TMenuItem;
+    MenuItem21: TMenuItem;
+    MenuItem22: TMenuItem;
+    MenuItem23: TMenuItem;
+    MenuItem24: TMenuItem;
     MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
     N6: TMenuItem;
@@ -1157,19 +1177,6 @@ begin
   Width:=screenconfig.GetValue('/Window/Width',1024);
   Height:=screenconfig.GetValue('/Window/Height',768);
 
-  // copy image popup menu to main menu
-  for i:=0 to ImagePopupMenu.Items.Count-1 do begin
-    mi:=TMenuItem.Create(self);
-    { TODO : Replace individual property by Assign() when Lazarus 1.8 compatibility is no more need. }
-    // mi.Assign(ImagePopupMenu.Items[i]);
-    mi.AutoCheck:=ImagePopupMenu.Items[i].AutoCheck;
-    mi.Caption:=ImagePopupMenu.Items[i].Caption;
-    mi.Visible:=ImagePopupMenu.Items[i].Visible;
-    mi.ShowAlwaysCheckable:=ImagePopupMenu.Items[i].ShowAlwaysCheckable;
-    mi.OnClick:=ImagePopupMenu.Items[i].OnClick;
-    MenuImage.Add(mi);
-  end;
-
   f_msg:=Tf_msg.Create(self);
   f_msg.onLogLevelChange:=@LogLevelChange;
 
@@ -1736,18 +1743,31 @@ begin
    MenuDownload.Caption := rsDownloadLate;
    MenuHelpAbout.Caption := rsAbout;
    MenuResolve.Caption := rsResolve;
+   MenuResolve2.Caption := rsResolve;
    MenuResolveSlewCenter.Caption := rsResolveAndSl;
+   MenuResolveSlewCenter2.Caption := rsResolveAndSl;
    MenuResolveSlew.Caption := rsResolveAndSl2;
+   MenuResolveSlew2.Caption := rsResolveAndSl2;
    MenuResolveSync.Caption := rsResolveAndSy;
+   MenuResolveSync2.Caption := rsResolveAndSy;
    MenuResolveRotate.Caption := rsResolveAndRo;
+   MenuResolveRotate2.Caption := rsResolveAndRo;
    MenuResolveSyncRotator.Caption := rsResolveAndSy2;
+   MenuResolveSyncRotator2.Caption := rsResolveAndSy2;
    MenuResolveDSO.Caption:=rsResolveAndPl;
+   MenuResolveDSO2.Caption:=rsResolveAndPl;
    MenuResolvePlanetarium.Caption := rsResolveAndSh;
+   MenuResolvePlanetarium2.Caption := rsResolveAndSh;
    MenuShowCCDFrame.Caption := rsResolveAndSh2;
+   MenuShowCCDFrame2.Caption := rsResolveAndSh2;
    MenuViewAstrometryLog.Caption := rsViewLastReso;
+   MenuViewAstrometryLog2.Caption := rsViewLastReso;
    MenuStopAstrometry.Caption := rsStopAstromet;
+   MenuStopAstrometry2.Caption := rsStopAstromet;
    MenuItemDebayer.Caption := rsPreviewDebay;
+   MenuItemDebayer2.Caption := rsPreviewDebay;
    MenuItemCleanup.Caption:=rsImageCleanup;
+   MenuItemCleanup2.Caption:=rsImageCleanup;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -3189,7 +3209,8 @@ begin
   weather.MaxWindSpeed:=config.GetValue('/Weather/Max/WindSpeed',0);
   if BayerColor<>MenuItemDebayer.Checked then begin
     MenuItemDebayer.Checked:=BayerColor;
-    MenuItemDebayerClick(self);
+    MenuItemDebayer2.Checked:=BayerColor;
+    MenuItemDebayerClick(MenuItemDebayer);
   end;
   DomeNoSafetyCheck:=config.GetValue('/Dome/NoSafetyCheck',false);
   mount.SlaveDome:=config.GetValue('/Dome/SlaveToMount',false);
@@ -7778,7 +7799,7 @@ end;
 
 procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
 begin
- if MenuItemDebayer.Checked then begin
+ if TMenuItem(Sender).Checked then begin
   BayerColor:=True;
   if fits.HeaderInfo.naxis>0 then begin
     DrawImage;
@@ -7792,6 +7813,8 @@ begin
     NewMessage(rsImageUnDebay,1);
   end;
  end;
+ MenuItemDebayer.Checked:=BayerColor;
+ MenuItemDebayer2.Checked:=BayerColor;
 end;
 
 procedure Tf_main.MenuMountParkClick(Sender: TObject);
@@ -9060,10 +9083,20 @@ begin
   MenuResolveDSO.Enabled:=false;
   MenuResolvePlanetarium.Enabled:=false;
   MenuShowCCDFrame.Enabled:=false;
+  MenuResolve2.Enabled:=false;
+  MenuResolveSlewCenter2.Enabled:=false;
+  MenuResolveSlew2.Enabled:=false;
+  MenuResolveSync2.Enabled:=false;
+  MenuResolveRotate2.Enabled:=false;
+  MenuResolveSyncRotator2.Enabled:=false;
+  MenuResolveDSO2.Enabled:=false;
+  MenuResolvePlanetarium2.Enabled:=false;
+  MenuShowCCDFrame2.Enabled:=false;
   {$ifdef mswindows}
   MenuViewAstrometryLog.Enabled:=false;
   {$endif}
   MenuStopAstrometry.Visible:=true;
+  MenuStopAstrometry2.Visible:=true;
 end;
 
 procedure Tf_main.AstrometryEnd(Sender: TObject);
@@ -9082,6 +9115,17 @@ begin
   MenuResolvePlanetarium.Enabled:=true;
   MenuShowCCDFrame.Enabled:=true;
   MenuViewAstrometryLog.Enabled:=true;
+  MenuStopAstrometry2.Visible:=false;
+  MenuResolve2.Enabled:=true;
+  MenuResolveSlewCenter2.Enabled:=true;
+  MenuResolveSlew2.Enabled:=true;
+  MenuResolveSync2.Enabled:=true;
+  MenuResolveRotate2.Enabled:=true;
+  MenuResolveSyncRotator2.Enabled:=true;
+  MenuResolveDSO2.Enabled:=true;
+  MenuResolvePlanetarium2.Enabled:=true;
+  MenuShowCCDFrame2.Enabled:=true;
+  MenuViewAstrometryLog2.Enabled:=true;
   if astrometry.LastResult then begin
      LoadFitsFile(astrometry.ResultFile);
      resulttxt:=blank;
