@@ -114,11 +114,11 @@ resourcestring
   rsTheListOfTar = 'The list of target to process in sequence.';
   rsSaveTheListA = 'Save the list and close this window.';
   rsSaveTheListW = 'Save the list with a new name and close this window.';
-  rsUseVcurveWit = 'Use Vcurve with an absolute position focuser, then learn '
-    +'the curve. This is the quickest method.%sUse Dynamic with a relative '
-    +'position focuser, this method require you start with a good approximate '
-    +'focus position.%sUse Iterative if the first two options do not work for '
-    +'you or if you start with really bad focus. This is the slowest method.';
+  rsUseVcurveWit = 'Vcurve can only work with an absolute position focuser, it require to learn '
+    +'the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative '
+    +'position focuser, this method require the starting position is near the '
+    +'focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for '
+    +'you or if you start with really bad focus. This is the slowest and less precise method.';
   rsShowTheOptio = 'Show the option to stack the preview frame in real time.%'
     +'sThis feature is normally use for demonstration in public event.%sYou '
     +'can let this option disabled to not risk an unwanted use during your '
@@ -150,8 +150,7 @@ resourcestring
   rsAutofocusIfT = 'Autofocus if the temperature change is greater than the '
     +'configured value';
   rsEditTheCurre = 'Edit the current sequence';
-  rsListOfProfil = 'List of profile for every different equipement '
-    +'configuration';
+  rsListOfProfil = 'List of profile for every different equipment configuration';
   rsGlobalINDISe = 'Global INDI server parameters';
   rsGlobalALPACA = 'Global ALPACA server parameters';
   rsTheBaseFolde = 'The base folder where the images are recorded';
