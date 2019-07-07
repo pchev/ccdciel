@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-07-03 19:22+0000\n"
-"PO-Revision-Date: 2019-07-02 21:10+0000\n"
+"POT-Creation-Date: 2019-07-07 14:51+0000\n"
+"PO-Revision-Date: 2019-07-04 21:50+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-03 19:32+0000\n"
+"X-Launchpad-Export-Date: 2019-07-07 15:00+0000\n"
 "X-Generator: Launchpad (build 19007)\n"
 
 #: u_hints.rsactivateback
@@ -166,7 +166,7 @@ msgstr ""
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr ""
+msgstr "Histograma de la imagen actual.%sHaga clic y mueva para ajustar el umbral de visualización."
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -190,7 +190,7 @@ msgstr ""
 
 #: u_hints.rsinspectthere
 msgid "Inspect the distribution of the HFD across the image"
-msgstr ""
+msgstr "Inspeccionar la distribución del HFD por toda la imagen"
 
 #: u_hints.rsinvertimaged
 msgid "Invert image display"
@@ -198,10 +198,10 @@ msgstr ""
 
 #: u_hints.rskeepthegraph
 msgid "Keep the graph visible after autofocus is completed"
-msgstr ""
+msgstr "Mantener visible la gráfica después de que se haya realizado el autoenfoque"
 
 #: u_hints.rslistofprofil
-msgid "List of profile for every different equipement configuration"
+msgid "List of profile for every different equipment configuration"
 msgstr ""
 
 #: u_hints.rsloadasequenc
@@ -294,7 +294,7 @@ msgstr ""
 
 #: u_hints.rsstartimagelo
 msgid "Start image loop centered on selected star"
-msgstr ""
+msgstr "Comenzar bucle de imágenes centrado en la estrella seleccionada"
 
 #: u_hints.rsstartoneprev
 msgid "Start one preview exposure"
@@ -302,7 +302,7 @@ msgstr "Iniciar una exposición de previsualización"
 
 #: u_hints.rsstarttheauto
 msgid "Start the auto-focus procedure"
-msgstr ""
+msgstr "Comenzar procedimiento de autoenfoque"
 
 #: u_hints.rsstartthecapt
 msgid "Start the capture sequence"
@@ -366,7 +366,7 @@ msgstr ""
 
 #: u_hints.rsthemaximumin
 msgid "The maximum intensity value"
-msgstr ""
+msgstr "El valor máxima intensidad"
 
 #: u_hints.rstheminimalob
 msgid "The minimal object elevation to start or end observing"
@@ -406,7 +406,7 @@ msgstr "Perfil de luminosidad de la estrella seleccionada"
 
 #: u_hints.rsthesignalnoi
 msgid "The Signal/Noise ratio"
-msgstr ""
+msgstr "La relación señal/ruido."
 
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
@@ -441,7 +441,7 @@ msgid "Use plate solving to increase the accuracy of the telescope position."
 msgstr ""
 
 #: u_hints.rsusevcurvewit
-msgid "Use Vcurve with an absolute position focuser, then learn the curve. This is the quickest method.%sUse Dynamic with a relative position focuser, this method require you start with a good approximate focus position.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest method."
+msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
 msgstr ""
 
 #: u_hints.rsvcurvelearni
