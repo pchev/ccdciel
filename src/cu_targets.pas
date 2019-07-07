@@ -1104,8 +1104,10 @@ begin
          end;
       end;
     // start mount tracking
-    if isCalibrationTarget then mount.AbortMotion
-                           else mount.Track;
+    if isCalibrationTarget then
+      mount.AbortMotion
+    else if ((t.ra=NullCoord)or(t.de=NullCoord)) then
+       mount.Track;
     // start guiding
     autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
     if autostartguider then begin

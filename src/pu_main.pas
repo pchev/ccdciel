@@ -5308,6 +5308,7 @@ end;
 
 procedure Tf_main.SetMountTrack(Sender: TObject);
 begin
+ // do not test for mount.tracking here
  mount.Track;
 end;
 
