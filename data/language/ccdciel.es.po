@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-03 10:26+0000\n"
-"Last-Translator: Víctor R. Ruiz <Unknown>\n"
+"PO-Revision-Date: 2019-07-07 16:21+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 15:00+0000\n"
+"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
 "X-Generator: Launchpad (build 19007)\n"
 
 #: u_translation.rs32bitdriver
@@ -1425,9 +1425,8 @@ msgid "Get site long/lat from the mount"
 msgstr "Obtener coordenadas lat/lon desde la montura"
 
 #: u_translation.rsglobalfocuse
-#, fuzzy,badformat
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
-msgstr "Parámetros del enfocador globales. &sAjuste la dirección del enfocador ADENTRO o AFUERA del que le dé mejores resultados para su configuración. Si planea usar la compensación de temperatura, indique la dirección en la que deberá moverse cuando la temperatura caiga durante la noche."
+msgstr "Parámetros del enfocador globales. %sAjuste la dirección del enfocador ADENTRO o AFUERA del que le dé mejores resultados para su configuración. Si planea usar la compensación de temperatura, indique la dirección en la que deberá moverse cuando la temperatura caiga durante la noche."
 
 #: u_translation.rsglobalrepeat
 msgid "Global repeat:"
@@ -3466,9 +3465,8 @@ msgid "Telescope position"
 msgstr "Posición telescopio"
 
 #: u_translation.rstelescopesle
-#, fuzzy,badformat
 msgid "Telescope slew error: %s arcminutes."
-msgstr "Error apuntado telescopio: % arcominutos."
+msgstr "Error apuntado telescopio: %s arcominutos."
 
 #: u_translation.rstelescopesle2
 msgid "Telescope slew"
@@ -3871,9 +3869,8 @@ msgid "Waiting for twilight at %s"
 msgstr "Esperando al crepúsculo a las %s"
 
 #: u_translation.rswaitmeridian
-#, fuzzy,badformat
 msgid "Wait meridian flip for %s minutes"
-msgstr "Esperar cambio de meridiano % minutos"
+msgstr "Esperar cambio de meridiano %s minutos"
 
 #: u_translation.rswaitmeridian2
 msgid "Wait meridian flip"

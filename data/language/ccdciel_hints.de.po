@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-06 11:18+0000\n"
-"Last-Translator: Thomas <email@starhopper.de>\n"
+"PO-Revision-Date: 2019-07-07 16:27+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 15:00+0000\n"
+"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
 "X-Generator: Launchpad (build 19007)\n"
 
 #: u_hints.rsactivateback
@@ -41,9 +41,8 @@ msgid "Add a script to the list."
 msgstr "Füge ein Skript zur Liste hinzu"
 
 #: u_hints.rsafterlearnin
-#, fuzzy,badformat
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
-msgstr "Nach Abschluss des Lernvorgangs können Sie diesen Cursor verwenden,um es besser an den linearen Teil der Kurve anzupassen. Die Passformmuss in der Nähe der horizontalen blauen Linie besonders gut sein."
+msgstr "Nach Abschluss des Lernvorgangs können Sie diesen Cursor verwenden,um es besser an den linearen Teil der Kurve anzupassen.%sDie Passformmuss in der Nähe der horizontalen blauen Linie besonders gut sein."
 
 #: u_hints.rsapplythisset
 msgid "Apply this setting to all the targets"
@@ -142,9 +141,8 @@ msgid "Fix the visualisation threshold to the image data range, 100% of the hist
 msgstr "Visualisierungsschwellwert auf den Bilddatenbereich fixieren, 100% desHistogramms"
 
 #: u_hints.rsformovingobj
-#, fuzzy,badformat
 msgid "For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.%sBe sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here."
-msgstr "Für wandernde Objekte wie Asteroiden oder Kometen können Sie die Koordinatenvor dem Schwenk zum Ziel mittels Planetarium aktualisieren. Stellen Sie sicher,dass das Planetarium verbunden ist und der Systemzeit folgt, und das Objekt auchwie hier einggtippt finden kann."
+msgstr "Für wandernde Objekte wie Asteroiden oder Kometen können Sie die Koordinatenvor dem Schwenk zum Ziel mittels Planetarium aktualisieren. %sStellen Sie sicher,dass das Planetarium verbunden ist und der Systemzeit folgt, und das Objekt auchwie hier einggtippt finden kann."
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
@@ -204,7 +202,7 @@ msgstr "Graph sichtbar lassen nachdem der Autofokus abgeschlossen ist"
 
 #: u_hints.rslistofprofil
 msgid "List of profile for every different equipment configuration"
-msgstr ""
+msgstr "Liste der Profile für jede Gerätekonfiguration"
 
 #: u_hints.rsloadasequenc
 msgid "Load a sequence file"
@@ -275,9 +273,8 @@ msgid "Show %s of the histogram"
 msgstr "Zeige %s des Histgramms"
 
 #: u_hints.rsshowtheoptio
-#, fuzzy,badformat
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
-msgstr "Zeige Option zum automatischen Stacken der Vorschaubilder in Echtzeit.Diese Funktion ist normalerweise zur Verwendung als Demo bei öffentlichen Veranstaltungen gedacht. Sie können diese Option deaktiviert lassenum das Risko einer unerwünschten Verwendung während der Session auszuschließen."
+msgstr "Zeige Option zum automatischen Stacken der Vorschaubilder in Echtzeit.%sDiese Funktion ist normalerweise zur Verwendung als Demo bei öffentlichen Veranstaltungen gedacht. %sSie können diese Option deaktiviert lassenum das Risko einer unerwünschten Verwendung während der Session auszuschließen."
 
 #: u_hints.rssolvethecurr
 msgid "Solve the current image and get the center coordinates"
@@ -364,9 +361,8 @@ msgid "The list of target to process in sequence."
 msgstr "Die Liste der Ziele, die nacheinander abgearbeitet werden sollen"
 
 #: u_hints.rsthemagnitude
-#, fuzzy,badformat
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
-msgstr "Helligkeit des Sterns welcher für Autofokus verwendet wird.%Mit einem schwachenStern wird die Teleskopbewegung minimiert aber bevorzugen sie die Hellsten umProblem mit Nachbarsternen zu vermeiden"
+msgstr "Helligkeit des Sterns welcher für Autofokus verwendet wird.%sMit einem schwachenStern wird die Teleskopbewegung minimiert aber bevorzugen sie die Hellsten umProblem mit Nachbarsternen zu vermeiden"
 
 #: u_hints.rsthemaximumin
 msgid "The maximum intensity value"
@@ -437,9 +433,8 @@ msgid "Time from meridian transit (hour angle)"
 msgstr "Zeit bis Meridiantransit (Stundenwinkel)"
 
 #: u_hints.rstrytocorrect
-#, fuzzy,badformat
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr "Versuchen Sie, das Verrutschen des Fokussierers seit dem letzten Vcurve-Lernenzu korrigieren. Beachten Sie, dass Sie die Fokussiertemperaturkorrektur undden Filteroffset einstellen müssen, bevor Sie diese Option verwenden können."
+msgstr "Versuchen Sie, das Verrutschen des Fokussierers seit dem letzten Vcurve-Lernenzu korrigieren. %sBeachten Sie, dass Sie die Fokussiertemperaturkorrektur undden Filteroffset einstellen müssen, bevor Sie diese Option verwenden können."
 
 #: u_hints.rsuseplatesolv
 msgid "Use plate solving to increase the accuracy of the telescope position."
@@ -447,7 +442,7 @@ msgstr "Benutze Platesolving um die Genauigkeit der Teleskopposition zu erhöhen
 
 #: u_hints.rsusevcurvewit
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
-msgstr ""
+msgstr "V-Curve kann nur mit einem Fokussierer verwendet werden, der absolute Positionierung unterstützt. Es ist erforderlich, die Kurve vorher zu lernen. V-Curve ist die schnellste Fokussiermethode, sie wird empfohlen wenn auf einen Einzelstern fokussiert werden soll.%sDynamic kann mit Fokussierern verwendet werden, die absolute und relative Positionierung unterstützen.  Diese Methode setzt voraus, dass sich die Startposition in der Nähe der Fokusposition befindet. Es funktioniert am besten, wenn alle Sterne im Bild gemessen werden. %sVerwenden Sie Iterativ, wenn die ersten beiden Optionen bei Ihnen nicht funktionieren oder wenn Sie mit einem wirklich schlechten Fokus beginnen. Dies ist die langsamste und ungenaueste Methode."
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"

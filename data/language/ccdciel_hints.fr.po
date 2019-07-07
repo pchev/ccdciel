@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-07 14:57+0000\n"
+"PO-Revision-Date: 2019-07-07 16:29+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 15:00+0000\n"
+"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
 "X-Generator: Launchpad (build 19007)\n"
 
 #: u_hints.rsactivateback
@@ -441,9 +441,8 @@ msgid "Use plate solving to increase the accuracy of the telescope position."
 msgstr "Utiliser la résolution astrométrique pour augmenter la précision de la position du télescope"
 
 #: u_hints.rsusevcurvewit
-#, fuzzy,badformat
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
-msgstr "La Courbe en V ne peut être utilisée qu'avec un focuser à position absolue, il faut ensuite apprendre la courbe. C'est la méthode la plus rapide, recommandée pour la focalisation sur une étoile unique.%Dynamique peut être utilisé avec un focuser à position absolue ou relative, cette méthode exige que vous commenciez avec une bonne position de mise au point. Marche le mieux en mesurant toutes les étoiles de l'image.%sUtiliser Itératif si les deux premières options ne fonctionnent pas pour vous ou si vous commencez avec une très mauvaise focalisation. C'est la méthode la plus lente."
+msgstr "La Courbe en V ne peut être utilisée qu'avec un focuser à position absolue, il faut ensuite apprendre la courbe. C'est la méthode la plus rapide, recommandée pour la focalisation sur une étoile unique.%sDynamique peut être utilisé avec un focuser à position absolue ou relative, cette méthode exige que vous commenciez avec une bonne position de mise au point. Marche le mieux en mesurant toutes les étoiles de l'image.%sUtiliser Itératif si les deux premières options ne fonctionnent pas pour vous ou si vous commencez avec une très mauvaise focalisation. C'est la méthode la plus lente."
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"

@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-04 05:10+0000\n"
-"Last-Translator: Thomas <email@starhopper.de>\n"
+"PO-Revision-Date: 2019-07-07 16:19+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 15:00+0000\n"
+"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
 "X-Generator: Launchpad (build 19007)\n"
 
 #: u_translation.rs32bitdriver
@@ -73,9 +73,8 @@ msgid "administrator"
 msgstr "Administrator"
 
 #: u_translation.rsaftertelesco
-#, fuzzy,badformat
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
-msgstr "Nach abgeschlossenem GOTO ist der Versatz zur angeforderten Position %s BogenminutenMöchten Sie es erneut versuchen?"
+msgstr "Nach abgeschlossenem GOTO ist der Versatz zur angeforderten Position %s Bogenminuten.%sMöchten Sie es erneut versuchen?"
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
@@ -470,9 +469,8 @@ msgid "Cannot compute meridian time"
 msgstr "Meridiandurchgangszeit kann nicht berechnet werden"
 
 #: u_translation.rscannotconnec
-#, fuzzy,badformat
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
-msgstr "Keine Verbindung zum Autoguider möglich, Sequenz wird ohne Guiding laufen!Möchten Sie trotzdem fortfahren?"
+msgstr "Keine Verbindung zum Autoguider möglich, Sequenz wird ohne Guiding laufen! %sMöchten Sie trotzdem fortfahren?"
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
@@ -887,9 +885,8 @@ msgid "Detect multiple stars in the image"
 msgstr "Erkenne mehrere Sterne im Bild"
 
 #: u_translation.rsdeviceisconn
-#, fuzzy,badformat
 msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
-msgstr "Gerät %s ist verbunden. %Möchten Sie jetzt die Verbindung trennen, umden Setup Dialog zu öffnen?"
+msgstr "Gerät %s ist verbunden. %sMöchten Sie jetzt die Verbindung trennen, umden Setup Dialog zu öffnen?"
 
 #: u_translation.rsdevices
 msgid "Device"
@@ -1600,9 +1597,8 @@ msgid "Invalid coordinates"
 msgstr "Ungültige Koordinaten"
 
 #: u_translation.rsinvalidexpos
-#, fuzzy,badformat
 msgid "Invalid exposure time %s"
-msgstr "Ungültige Belichtungszeit"
+msgstr "Ungültige Belichtungszeit %s"
 
 #: u_translation.rsinvalidnumer
 msgid "Invalid numeric value"
@@ -2753,9 +2749,8 @@ msgid "Script %s already exist. Do you want to edit this script?"
 msgstr "Skript %s existiert bereits. Möchten Sie dieses Skript bearbeiten?"
 
 #: u_translation.rsscriptalread3
-#, fuzzy,badformat
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
-msgstr "Skript %s existiert bereits. Möchten Sie dieses benutzerdefinierte Skript durch %s ersetzen?"
+msgstr "Skript %s existiert bereits. Möchten Sie dieses benutzerdefinierte Skript durch ersetzen?"
 
 #: u_translation.rsscripteditor
 msgid "Script editor"
@@ -3066,9 +3061,8 @@ msgid "Slewing to %s %s/%s"
 msgstr "Schwenke zu %s %s/%s"
 
 #: u_translation.rsslewtofocuss
-#, fuzzy,badformat
 msgid "Slew to focus star %s"
-msgstr "Zum Fokussierstern schwenken"
+msgstr "Zum Fokussierstern %s schwenken"
 
 #: u_translation.rsslewtofocuss2
 msgid "Slew to focus star"
