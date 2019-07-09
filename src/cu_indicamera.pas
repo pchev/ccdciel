@@ -394,7 +394,6 @@ begin
        ((Findisensor<>'CCD2')and(CCDexpose<>nil))
         ) and
        (CCDframe<>nil) and
-       (CCDframeReset<>nil) and
        (FCameraXSize<0) and
        (FCameraYSize<0) and
        (not GetCCDSizeTimer.Enabled)
@@ -471,9 +470,7 @@ begin
     else if ((Findisensor<>'CCD2')and(CCDexpose=nil)) then
        msg(Findisensor+' missing property CCD_EXPOSURE',0)
     else if (CCDframe=nil) then
-       msg(Findisensor+' missing property CCD_FRAME',0)
-    else if (CCDframeReset=nil) then
-       msg(Findisensor+' missing property CCD_FRAME_RESET',0);
+       msg(Findisensor+' missing property CCD_FRAME',0);
     Disconnect;
   end;
 end;
@@ -493,21 +490,17 @@ begin
 end;
 
 procedure T_indicamera.GetCCDSizeTimerTimer(Sender: TObject);
-var x,y: integer;
+var xr,yr,widthr,heightr: TNumRange;
 begin
  GetCCDSizeTimer.Enabled:=false;
  FCameraXSize:=0;
  FCameraYSize:=0;
  if UseMainSensor then begin
-   FrameReset.s:=ISS_ON;
-   indiclient.sendNewSwitch(CCDframeReset);
-   indiclient.WaitBusy(CCDframeReset,5000,200);
+   GetFrameRange(xr,yr,widthr,heightr);
+   FCameraXSize:=round(widthr.max);
+   FCameraYSize:=round(heightr.max);
    stWidth:=-1;
-   GetFrame(x,y,FCameraXSize,FCameraYSize);
-   stX:=x;
-   stY:=y;
-   stWidth:=FCameraXSize;
-   stHeight:=FCameraYSize;
+   GetFrame(stX,stY,stWidth,stHeight);
  end;
  if (not Fready) then begin
     Fready:=true;
