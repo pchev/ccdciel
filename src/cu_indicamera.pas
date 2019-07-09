@@ -469,7 +469,11 @@ begin
     else if ((Findisensor='CCD2')and(Guiderexpose=nil)) then
        msg(Findisensor+' missing property GUIDER_EXPOSURE',0)
     else if ((Findisensor<>'CCD2')and(CCDexpose=nil)) then
-       msg(Findisensor+' missing property CCD_EXPOSURE',0);
+       msg(Findisensor+' missing property CCD_EXPOSURE',0)
+    else if (CCDframe=nil) then
+       msg(Findisensor+' missing property CCD_FRAME',0)
+    else if (CCDframeReset=nil) then
+       msg(Findisensor+' missing property CCD_FRAME_RESET',0);
     Disconnect;
   end;
 end;
