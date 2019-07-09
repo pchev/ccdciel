@@ -822,7 +822,7 @@ begin
         FGainMax:=round(IGain.max);
      end;
   end
-  else if (proptype=INDI_SWITCH)and(CCDIso=nil)and(propname='CCD_ISO') then begin
+  else if (proptype=INDI_SWITCH)and(CCDIso=nil)and((propname='CCD_ISO')or(propname='DSLR_ISO')) then begin
      CCDIso:=indiProp.getSwitch;
      FISOList.Clear;
      for i:=0 to CCDIso.nsp-1 do begin
