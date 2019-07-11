@@ -120,7 +120,7 @@ public
    Procedure StartExposure(exptime: double); override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
    procedure SetFrame(x,y,width,height: integer); override;
-   procedure GetFrame(out x,y,width,height: integer); override;
+   procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
    function  CheckGain:boolean; override;
@@ -670,10 +670,11 @@ begin
  {$endif}
 end;
 
-procedure T_ascomcamera.GetFrame(out x,y,width,height: integer);
+procedure T_ascomcamera.GetFrame(out x,y,width,height: integer; refresh:boolean=false);
 begin
  {$ifdef mswindows}
    try
+   // do not cache the value, so ignore the refresh parameter
    x      := V.StartX;
    y      := V.StartY;
    width  := V.NumX;

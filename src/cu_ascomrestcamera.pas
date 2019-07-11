@@ -120,7 +120,7 @@ public
    Procedure StartExposure(exptime: double); override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
    procedure SetFrame(x,y,width,height: integer); override;
-   procedure GetFrame(out x,y,width,height: integer); override;
+   procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameReal(out x,y,width,height: integer);
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
@@ -658,8 +658,9 @@ begin
    end;
 end;
 
-procedure T_ascomrestcamera.GetFrame(out x,y,width,height: integer);
+procedure T_ascomrestcamera.GetFrame(out x,y,width,height: integer; refresh:boolean=false);
 begin
+  // ignore the refresh parameter
   if (stX<0)or(stY<0)or(stWidth<0)or(stHeight<0) then begin
     GetFrameReal(x,y,width,height);
   end

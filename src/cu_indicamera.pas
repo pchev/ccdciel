@@ -222,7 +222,7 @@ private
    Procedure StartExposure(exptime: double); override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
    procedure SetFrame(x,y,width,height: integer); override;
-   procedure GetFrame(out x,y,width,height: integer); override;
+   procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
    function  CheckGain:boolean; override;
@@ -1315,10 +1315,10 @@ begin
   end;
 end;
 
-procedure T_indicamera.GetFrame(out x,y,width,height: integer);
+procedure T_indicamera.GetFrame(out x,y,width,height: integer; refresh:boolean=false);
 begin
   if UseMainSensor and (CCDframe<>nil) then begin
-     if stWidth>0 then begin
+     if (stWidth>0)and(not refresh) then begin
        x := stX;
        y := stY;
        width := stWidth;
@@ -1329,6 +1329,10 @@ begin
        y      := round(CCDframeY.value);
        width  := round(CCDframeWidth.value);
        height := round(CCDframeHeight.value);
+       stX:=x;
+       stY:=y;
+       stWidth:=width;
+       stHeight:=height;
      end;
   end else begin
      x:= 0;

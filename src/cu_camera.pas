@@ -159,7 +159,7 @@ T_camera = class(TComponent)
     Procedure StartExposure(exptime: double); virtual; abstract;
     Procedure AbortExposure; virtual; abstract;
     procedure SetFrame(x,y,width,height: integer); virtual; abstract;
-    procedure GetFrame(out x,y,width,height: integer); virtual; abstract;
+    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); virtual; abstract;
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
     function  CheckGain: boolean; virtual; abstract;

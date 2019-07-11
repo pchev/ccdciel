@@ -6643,7 +6643,7 @@ end;
 Procedure Tf_main.StartPreviewExposure(Sender: TObject);
 var e: double;
     buf: string;
-    p,binx,biny,i: integer;
+    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
@@ -6680,6 +6680,15 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
         NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
         camera.SetBinning(binx,biny);
      end;
+  end;
+  sx:=StrToIntDef(f_frame.FX.Text,-1);
+  sy:=StrToIntDef(f_frame.FY.Text,-1);
+  sw:=StrToIntDef(f_frame.FWidth.Text,-1);
+  sh:=StrToIntDef(f_frame.FHeight.Text,-1);
+  if (sx>=0)and(sy>=0)and(sw>0)and(sh>0) then begin
+    camera.GetFrame(x,y,w,h,true);
+    if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
+      camera.SetFrame(sx,sy,sw,sh);
   end;
   if camera.CanSetGain then begin
     if camera.hasGainISO then begin
@@ -6721,7 +6730,7 @@ end;
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 var e: double;
     buf: string;
-    p,binx,biny,waittime,i: integer;
+    p,binx,biny,waittime,i,x,y,w,h,sx,sy,sw,sh: integer;
     ftype:TFrameType;
 begin
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
@@ -6810,6 +6819,16 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
         NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
         camera.SetBinning(binx,biny);
      end;
+  end;
+  // check and set frame
+  sx:=StrToIntDef(f_frame.FX.Text,-1);
+  sy:=StrToIntDef(f_frame.FY.Text,-1);
+  sw:=StrToIntDef(f_frame.FWidth.Text,-1);
+  sh:=StrToIntDef(f_frame.FHeight.Text,-1);
+  if (sx>=0)and(sy>=0)and(sw>0)and(sh>0) then begin
+    camera.GetFrame(x,y,w,h,true);
+    if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
+      camera.SetFrame(sx,sy,sw,sh);
   end;
   // check and set gain
   if camera.CanSetGain then begin
