@@ -1134,6 +1134,12 @@ begin
     cdcwcs_xy2sky:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_xy2sky'));
     cdcwcs_getinfo:= Tcdcwcs_getinfo(GetProcedureAddress(cdcwcslib,'cdcwcs_getinfo'));
   end;
+  WCScenterRA:=NullCoord;
+  WCScenterDEC:=NullCoord;
+  WCSpoleX:=NullCoord;
+  WCSpoleY:=NullCoord;
+  WCSwidth:=NullCoord;
+  WCSheight:=NullCoord;
   zlibok:=false;
   uncompress:=nil;
   zlib:=LoadLibrary(libz);
