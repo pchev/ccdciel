@@ -70,6 +70,8 @@ private
    FrameReset: ISwitch;
    CCDFrameType: ISwitchVectorProperty;
    FrameLight, FrameBias, FrameDark,FrameFlat: ISwitch;
+   CCDPreview: ISwitchVectorProperty;
+   CCDPreviewDisabled: ISwitch;
    CCDCompression: ISwitchVectorProperty;
    CCDcompress, CCDraw: ISwitch;
    CCDWebsocket: ISwitchVectorProperty;
@@ -330,6 +332,7 @@ begin
     CCDframe:=nil;
     CCDframeReset:=nil;
     CCDFrameType:=nil;
+    CCDPreview:=nil;
     CCDCompression:=nil;
     CCDWebsocket:=nil;
     CCDWebsocketSetting:=nil;
@@ -655,6 +658,11 @@ begin
      CCDraw:=IUFindSwitch(CCDCompression,'CCD_RAW');
      if CCDraw=nil then CCDraw:=IUFindSwitch(CCDCompression,'RAW');
      if (CCDcompress=nil)or(CCDraw=nil) then CCDCompression:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(CCDPreview=nil)and(propname='CCD_PREVIEW') then begin  // Indigo specific
+     CCDPreview:=indiProp.getSwitch;
+     CCDPreviewDisabled:=IUFindSwitch(CCDPreview,'DISABLED');
+     if (CCDPreviewDisabled=nil) then CCDPreview:=nil;
   end
   else if (proptype=INDI_SWITCH)and(CCDAbortExposure=nil)and(propname='CCD_ABORT_EXPOSURE') then begin
      CCDAbortExposure:=indiProp.getSwitch;
@@ -1092,6 +1100,13 @@ if UseMainSensor then begin
     CCDraw.s:=ISS_ON;
     indiclient.sendNewSwitch(CCDCompression);
     indiclient.WaitBusy(CCDCompression);
+  end;
+  if CCDPreview<>nil then begin // Indigo specific
+    if CCDPreviewDisabled.s=ISS_OFF then begin
+      IUResetSwitch(CCDPreview);
+      CCDPreviewDisabled.s:=ISS_OFF;
+      indiclient.sendNewSwitch(CCDPreview);
+    end;
   end;
   if CCDexpose<>nil then begin;
     CCDexposeValue.value:=exptime;
