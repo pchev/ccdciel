@@ -911,12 +911,12 @@ begin
     end;
   end
   else if svp=CCDAbortExposure then begin
-    if UseMainSensor then begin
+    if UseMainSensor and (CCDAbort.s=ISS_ON) then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
   end
   else if svp=GuiderAbortExposure then begin
-    if (not UseMainSensor) then begin
+    if (not UseMainSensor) and (GuiderAbort.s=ISS_ON)  then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
   end
