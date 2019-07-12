@@ -59,6 +59,7 @@ T_camera = class(TComponent)
     FFilterNames: TStringList;
     FObjectName: string;
     Fdevice: string;
+    FImageFormat: string;
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
     FStackCount: integer;
@@ -178,6 +179,7 @@ T_camera = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
     property ImgStream: TMemoryStream read FImgStream;
+    property ImageFormat: string read FImageFormat;
     property AddFrames: boolean read FAddFrames write FAddFrames;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
@@ -299,6 +301,7 @@ begin
   FReadOutList:=TStringList.Create;
   FhasFastReadout:=false;
   FhasReadOut:=false;
+  FImageFormat:='';
 end;
 
 destructor  T_camera.Destroy;
@@ -461,7 +464,7 @@ procedure T_camera.WriteHeaders;
 var origin,observer,telname,objname,siso: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
-    hfilter,hframe,hinstr,hdateobs : string;
+    hfilter,hframe,hinstr,hdateobs,hcomment1 : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
     gamma,offset: integer;
@@ -492,6 +495,7 @@ begin
   if not Ffits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
+  if not Ffits.Header.Valueof('COMMENT',hcomment1) then hcomment1:='';
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
@@ -644,6 +648,7 @@ begin
        Ffits.Header.Add('SECPIX2',pixscale2,'image scale arcseconds per pixel');
     end;
   end;
+  if hcomment1<>'' then Ffits.Header.Add('COMMENT',hcomment1 ,'');
   Ffits.Header.Add('END','','');
   Ffits.GetFitsInfo;
 end;

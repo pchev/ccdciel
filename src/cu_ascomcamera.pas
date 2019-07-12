@@ -457,6 +457,7 @@ begin
 
  if ok then begin
    try
+   FImageFormat:='.fits';
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    if debug_ascom then msg('clear old image.');
    FFits.ClearImage;

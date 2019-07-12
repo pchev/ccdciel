@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2,
-     u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
+     cu_fits, u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
 
 type
 
@@ -141,6 +141,7 @@ private
    procedure CheckStatus;
    procedure NewBlobProperty(indiProp: IndiProperty);
    procedure NewBlob(bp: IBLOB);
+   procedure NewBlobMessage(mp: IMessage);
    procedure NewDevice(dp: Basedevice);
    procedure NewMessage(mp: IMessage);
    procedure NewProperty(indiProp: IndiProperty);
@@ -264,6 +265,7 @@ if csDestroying in ComponentState then exit;
   indiblob.Timeout:=FTimeOut;
   indiblob.onNewProperty:=@NewBlobProperty;
   indiblob.onNewBlob:=@NewBlob;
+  indiblob.onNewMessage:=@NewBlobMessage;
   {$ifdef camera_debug}
   indiclient.ProtocolTrace:=true;
   indiclient.ProtocolRawFile:='/tmp/ccdciel_indicamera.raw';
@@ -971,6 +973,12 @@ begin
  end;
 end;
 
+procedure T_indicamera.NewBlobMessage(mp: IMessage);
+begin
+  // message is processed in main client
+  mp.Free;
+end;
+
 ///
 
 procedure T_indicamera.NewImageFile(ft: string; sz,blen:integer; data: TMemoryStream);
@@ -983,6 +991,7 @@ begin
  if blen>0 then begin
    data.Position:=0;
    if pos('.fits',ft)>0 then begin // receive a FITS file
+     FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      {$ifdef camera_debug}msg('this is a fits file');{$endif}
@@ -1019,11 +1028,30 @@ begin
      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      NewImage;
    end
+   else if (ft='.jpeg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
+     FImageFormat:=ft;
+     if assigned(FonExposureProgress) then FonExposureProgress(-10);
+     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+     {$ifdef camera_debug}msg('this is a '+ft+' file');{$endif}
+     //uncompressed
+     {$ifdef camera_debug}msg('copy '+ft+' stream to fits');{$endif}
+     msg('Warning! '+uppercase(ft)+' image received',1);
+     PictureToFits(data,copy(ft,2,99),FImgStream,false,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+     if FImgStream.Size<2880 then begin
+        msg('Invalid file received '+ft,0);
+        AbortExposure;
+     end;
+     {$ifdef camera_debug}msg('NewImage');{$endif}
+     if assigned(FonExposureProgress) then FonExposureProgress(-11);
+     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+     NewImage;
+   end
    else if pos('.stream',ft)>0 then begin // video stream
      {$ifdef camera_debug}msg('this is a video stream');{$endif}
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
      {$ifdef camera_debug}msg('process this frame');{$endif}
+     FImageFormat:='.stream';
      try
      if pos('.z',ft)>0 then begin //compressed
          {$ifdef camera_debug}msg('uncompress frame');{$endif}
@@ -1060,6 +1088,7 @@ begin
      end;
    end
    else begin
+        FImageFormat:=ft;
         msg('Invalid file format '+ft+', a FITS file is required',0);
         AbortExposure;
         NewImage;

@@ -7046,7 +7046,9 @@ begin
   end
   // process preview
   else if Preview then begin
-    buf:=rsPreview+blank+FormatDateTime('hh:nn:ss', now)+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+    buf:=rsPreview+blank+FormatDateTime('hh:nn:ss', now);
+    if camera.ImageFormat<>'.fits' then buf:=buf+' '+UpperCase(camera.ImageFormat);
+    buf:=buf+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[2].Text:=buf;
     // next exposure
@@ -7264,7 +7266,10 @@ try
  fits.SaveToFile(fn);
  inc(CurrentDoneCount);
  NewMessage(Format(rsSavedFile, [fn]),1);
- StatusBar1.Panels[2].Text:=Format(rsSaved, [fn])+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+ buf:=Format(rsSaved, [fn]);
+ if camera.ImageFormat<>'.fits' then buf:=UpperCase(camera.ImageFormat)+' '+buf;
+ buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+ StatusBar1.Panels[2].Text:=buf;
  StatusBar1.Panels[1].Text := '';
  except
    on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
@@ -9767,150 +9772,34 @@ begin
 end;
 
 procedure Tf_main.LoadPictureFile(fn:string);
-var img:TLazIntfImage;
-    lRawImage: TRawImage;
-    i,j,c,w,h,x,y,naxis: integer;
-    ii: smallint;
-    b: array[0..2880]of char;
-    hdr: TFitsHeader;
-    hdrmem: TMemoryStream;
-    ImgStream, RedStream,GreenStream,BlueStream: TMemoryStream;
-    imgsize: string;
+var PictStream, FitsStream: TMemoryStream;
+    imgsize,ext: string;
 begin
- // define raw image data
- lRawImage.Init;
- with lRawImage.Description do begin
-  // Set format 48bit R16G16B16
-  Format := ricfRGBA;
-  Depth := 48; // used bits per pixel
-  Width := 0;
-  Height := 0;
-  BitOrder := riboBitsInOrder;
-  ByteOrder := riboLSBFirst;
-  LineOrder := riloTopToBottom;
-  BitsPerPixel := 48; // bits per pixel. can be greater than Depth.
-  LineEnd := rileDWordBoundary;
-  RedPrec := 16; // red precision. bits for red
-  RedShift := 0;
-  GreenPrec := 16;
-  GreenShift := 16; // bitshift. Direction: from least to most significant
-  BluePrec := 16;
-  BlueShift:=32;
- end;
  // create resources
- lRawImage.CreateData(false);
- hdr:=TFitsHeader.Create;
- ImgStream:=TMemoryStream.Create;
- img:=TLazIntfImage.Create(0,0);
+ PictStream:=TMemoryStream.Create;
+ FitsStream:=TMemoryStream.Create;
  try
-   // set image data
-   img.SetRawImage(lRawImage);
-   // load image from file, it use the correct reader from fileext
-   img.LoadFromFile(fn);
-   w:=img.Width;
-   h:=img.Height;
-   // detect BW or color
-   naxis:=2;
-   for i:=0 to (h-1)div 10 do begin
-      y:=10*i;
-      for j:=0 to (w-1)div 10 do begin
-        x:=10*j;
-        if (img.Colors[x,y].red <> img.Colors[x,y].green)or(img.Colors[x,y].red <> img.Colors[x,y].blue) then begin
-           naxis:=3;
-           break;
-        end;
-      end;
-      if naxis=3 then break;
-   end;
-   // create fits header
-   hdr.ClearHeader;
-   hdr.Add('SIMPLE',true,'file does conform to FITS standard');
-   hdr.Add('BITPIX',16,'number of bits per data pixel');
-   hdr.Add('NAXIS',naxis,'number of data axes');
-   hdr.Add('NAXIS1',w ,'length of data axis 1');
-   hdr.Add('NAXIS2',h ,'length of data axis 2');
-   if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
-   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
-   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
-   hdr.Add('BSCALE',1,'default scaling factor');
-   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
-   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
-   hdr.Add('COMMENT','Converted from '+ExtractFileName(fn),'');
-   hdr.Add('END','','');
-   hdrmem:=hdr.GetStream;
-   try
-     // put header in stream
-     ImgStream.position:=0;
-     hdrmem.Position:=0;
-     ImgStream.CopyFrom(hdrmem,hdrmem.Size);
-   finally
-     hdrmem.Free;
-   end;
-   // load image
-   if naxis=1 then begin
-     // BW image
-     for i:=0 to h-1 do begin
-        y:=h-1-i;
-        for j:=0 to w-1 do begin
-          ii:=img.Colors[j,y].red-32768;
-          ii:=NtoBE(ii);
-          ImgStream.Write(ii,sizeof(smallint));
-        end;
-     end;
-   end
+   // load picture
+   ext:=copy(ExtractFileExt(fn),2,99);
+   PictStream.LoadFromFile(fn);
+   PictureToFits(PictStream,ext,FitsStream);
+   if FitsStream.size<2880 then
+      NewMessage('Invalid file '+fn,0)
    else begin
-     // Color image
-     // put data in stream by color
-     RedStream:=TMemoryStream.Create;
-     GreenStream:=TMemoryStream.Create;
-     BlueStream:=TMemoryStream.Create;
-     try
-     for i:=0 to h-1 do begin
-        y:=h-1-i;
-        for j:=0 to w-1 do begin
-          ii:=img.Colors[j,y].red-32768;
-          ii:=NtoBE(ii);
-          RedStream.Write(ii,sizeof(smallint));
-          ii:=img.Colors[j,y].green-32768;
-          ii:=NtoBE(ii);
-          GreenStream.Write(ii,sizeof(smallint));
-          ii:=img.Colors[j,y].blue-32768;
-          ii:=NtoBE(ii);
-          BlueStream.Write(ii,sizeof(smallint));
-        end;
-     end;
-     // put the 3 color plane in image stream
-     RedStream.Position:=0;
-     ImgStream.CopyFrom(RedStream,RedStream.Size);
-     GreenStream.Position:=0;
-     ImgStream.CopyFrom(GreenStream,GreenStream.Size);
-     BlueStream.Position:=0;
-     ImgStream.CopyFrom(BlueStream,BlueStream.Size);
-     finally
-       RedStream.Free;
-       GreenStream.Free;
-       BlueStream.Free;
-     end;
+     // assign new image
+     fits.Stream:=FitsStream;
+     fits.LoadStream;
+     // draw new image
+     DrawHistogram(true);
+     DrawImage;
+     imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+     NewMessage(Format(rsOpenFile, [fn]),2);
+     StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
    end;
-   // fill to fits buffer size
-   b:='';
-   c:=2880-(ImgStream.Size mod 2880);
-   FillChar(b,c,0);
-   ImgStream.Write(b,c);
-   // assign new image
-   fits.Stream:=ImgStream;
-   fits.LoadStream;
-   // draw new image
-   DrawHistogram(true);
-   DrawImage;
-   imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
-   NewMessage(Format(rsOpenFile, [fn]),2);
-   StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
  finally
    // Free resources
-   hdr.Free;
-   img.free;
-   ImgStream.Free;
+   PictStream.Free;
+   FitsStream.Free;
  end;
 end;
 

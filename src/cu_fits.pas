@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
+  GraphType,  FPReadJPEG, LazSysUtils,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -213,6 +214,8 @@ type
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
   end;
+
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
 
 implementation
 
@@ -2232,6 +2235,174 @@ begin
   LoadStream;
   GetImage;
   imgshift.Free;
+end;
+
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+var img:TLazIntfImage;
+    lRawImage: TRawImage;
+    i,j,c,w,h,x,y,naxis: integer;
+    ii: smallint;
+    b: array[0..2880]of char;
+    hdr: TFitsHeader;
+    hdrmem: TMemoryStream;
+    RedStream,GreenStream,BlueStream: TMemoryStream;
+    htyp,hext: string;
+    ReaderClass: TFPCustomImageReaderClass;
+   Reader: TFPCustomImageReader;
+begin
+ // define raw image data
+ lRawImage.Init;
+ with lRawImage.Description do begin
+  // Set format 48bit R16G16B16
+  Format := ricfRGBA;
+  Depth := 48; // used bits per pixel
+  Width := 0;
+  Height := 0;
+  BitOrder := riboBitsInOrder;
+  ByteOrder := riboLSBFirst;
+  LineOrder := riloTopToBottom;
+  BitsPerPixel := 48; // bits per pixel. can be greater than Depth.
+  LineEnd := rileDWordBoundary;
+  RedPrec := 16; // red precision. bits for red
+  RedShift := 0;
+  GreenPrec := 16;
+  GreenShift := 16; // bitshift. Direction: from least to most significant
+  BluePrec := 16;
+  BlueShift:=32;
+ end;
+ // create resources
+ lRawImage.CreateData(false);
+ hdr:=TFitsHeader.Create;
+ ImgStream.Clear;
+ ImgStream.Position:=0;
+ img:=TLazIntfImage.Create(0,0);
+ try
+   // set image data
+   img.SetRawImage(lRawImage);
+   // search a reader for the given fileext
+   for i:=0 to ImageHandlers.Count-1 do begin
+     htyp:=ImageHandlers.TypeNames[i];
+     hext:=ImageHandlers.Extensions[htyp];
+     if (pos(ext,hext)>0) then begin
+       // load image from file, it use the correct reader from fileext
+       ReaderClass:=ImageHandlers.ImageReader[htyp];
+       Reader:=ReaderClass.Create;
+       try
+       pict.Position:=0;
+       // load image from file, using the reader
+       img.LoadFromStream(pict,Reader);
+       reader.free;
+       break;
+       except
+         // not the right reader, continue to try another
+         reader.free;
+       end;
+     end;
+   end;
+   w:=img.Width;
+   h:=img.Height;
+   if (h=0)or(w=0) then begin
+     exit;
+   end;
+   // detect BW or color
+   naxis:=2;
+   for i:=0 to (h-1)div 10 do begin
+      y:=10*i;
+      for j:=0 to (w-1)div 10 do begin
+        x:=10*j;
+        if (img.Colors[x,y].red <> img.Colors[x,y].green)or(img.Colors[x,y].red <> img.Colors[x,y].blue) then begin
+           naxis:=3;
+           break;
+        end;
+      end;
+      if naxis=3 then break;
+   end;
+   // create fits header
+   hdr.ClearHeader;
+   hdr.Add('SIMPLE',true,'file does conform to FITS standard');
+   hdr.Add('BITPIX',16,'number of bits per data pixel');
+   hdr.Add('NAXIS',naxis,'number of data axes');
+   hdr.Add('NAXIS1',w ,'length of data axis 1');
+   hdr.Add('NAXIS2',h ,'length of data axis 2');
+   if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
+   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
+   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
+   hdr.Add('BSCALE',1,'default scaling factor');
+   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+   if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
+   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
+   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
+   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
+   hdr.Add('COMMENT','Converted from ',ext);
+   hdr.Add('END','','');
+   hdrmem:=hdr.GetStream;
+   try
+     // put header in stream
+     ImgStream.position:=0;
+     hdrmem.Position:=0;
+     ImgStream.CopyFrom(hdrmem,hdrmem.Size);
+   finally
+     hdrmem.Free;
+   end;
+   // load image
+   if naxis=2 then begin
+     // BW image
+     for i:=0 to h-1 do begin
+        if flip then y:=h-1-i
+                else y:=i;
+        for j:=0 to w-1 do begin
+          ii:=img.Colors[j,y].red-32768;
+          ii:=NtoBE(ii);
+          ImgStream.Write(ii,sizeof(smallint));
+        end;
+     end;
+   end
+   else begin
+     // Color image
+     // put data in stream by color
+     RedStream:=TMemoryStream.Create;
+     GreenStream:=TMemoryStream.Create;
+     BlueStream:=TMemoryStream.Create;
+     try
+     for i:=0 to h-1 do begin
+        if flip then y:=h-1-i
+                else y:=i;
+        for j:=0 to w-1 do begin
+          ii:=img.Colors[j,y].red-32768;
+          ii:=NtoBE(ii);
+          RedStream.Write(ii,sizeof(smallint));
+          ii:=img.Colors[j,y].green-32768;
+          ii:=NtoBE(ii);
+          GreenStream.Write(ii,sizeof(smallint));
+          ii:=img.Colors[j,y].blue-32768;
+          ii:=NtoBE(ii);
+          BlueStream.Write(ii,sizeof(smallint));
+        end;
+     end;
+     // put the 3 color plane in image stream
+     RedStream.Position:=0;
+     ImgStream.CopyFrom(RedStream,RedStream.Size);
+     GreenStream.Position:=0;
+     ImgStream.CopyFrom(GreenStream,GreenStream.Size);
+     BlueStream.Position:=0;
+     ImgStream.CopyFrom(BlueStream,BlueStream.Size);
+     finally
+       RedStream.Free;
+       GreenStream.Free;
+       BlueStream.Free;
+     end;
+   end;
+   // fill to fits buffer size
+   b:='';
+   c:=2880-(ImgStream.Size mod 2880);
+   FillChar(b,c,0);
+   ImgStream.Write(b,c);
+ finally
+   // Free resources
+   hdr.Free;
+   img.free;
+ end;
 end;
 
 end.
