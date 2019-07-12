@@ -114,6 +114,7 @@ T_camera = class(TComponent)
     function GetPixelSizeY: double; virtual; abstract;
     function GetBitperPixel: double; virtual; abstract;
     function GetColor: boolean;  virtual; abstract;
+    function GetImageFormat: string; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetVideoPreviewRunning: boolean;  virtual; abstract;
     function GetMissedFrameCount: cardinal; virtual; abstract;
@@ -179,7 +180,7 @@ T_camera = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property WheelStatus: TDeviceStatus read FWheelStatus;
     property ImgStream: TMemoryStream read FImgStream;
-    property ImageFormat: string read FImageFormat;
+    property ImageFormat: string read GetImageFormat;
     property AddFrames: boolean read FAddFrames write FAddFrames;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
@@ -301,7 +302,7 @@ begin
   FReadOutList:=TStringList.Create;
   FhasFastReadout:=false;
   FhasReadOut:=false;
-  FImageFormat:='';
+  FImageFormat:='.fits';
 end;
 
 destructor  T_camera.Destroy;

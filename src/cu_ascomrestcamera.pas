@@ -75,6 +75,7 @@ T_ascomrestcamera = class(T_camera)
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   function GetImageFormat: string; override;
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
@@ -1285,6 +1286,10 @@ begin
  // todo
 end;
 
+function T_ascomrestcamera.GetImageFormat: string;
+begin
+ result:=FImageFormat;
+end;
 
 end.
 

@@ -936,6 +936,14 @@ begin
      StartTimer.Enabled:=true;
      exit;
  end;
+ // check camera format is FITS
+ buf:=camera.ImageFormat;
+ if buf<>'.fits' then begin
+    msg(rsTheCameraIma+blank+UpperCase(buf), 0);
+    msg(Format(rsPleaseSetThe, ['FITS']), 0);
+    StopSequence;
+    exit;
+ end;
  // check if the sequence contain only calibration
  isCalibrationSequence:=true;
  for j:=0 to Targets.Count-1 do begin

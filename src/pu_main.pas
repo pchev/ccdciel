@@ -6797,6 +6797,15 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   MenuCaptureStart.Caption:=rsStop;
   Preview:=false;
   Capture:=true;
+  // check camera format is FITS
+  buf:=camera.ImageFormat;
+  if buf<>'.fits' then begin
+     NewMessage(rsTheCameraIma+blank+UpperCase(buf), 0);
+     NewMessage(Format(rsPleaseSetThe, ['FITS']), 0);
+     f_capture.Stop;
+     Capture:=false;
+     exit;
+  end;
   // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin

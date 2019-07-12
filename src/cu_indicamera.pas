@@ -74,6 +74,8 @@ private
    CCDPreviewDisabled: ISwitch;
    CCDCompression: ISwitchVectorProperty;
    CCDcompress, CCDraw: ISwitch;
+   CCDimageFormat: ISwitchVectorProperty;
+   CCDimageFits,CCDimageXisf,CCDimageRaw,CCDimageJpeg: ISwitch;
    CCDWebsocket: ISwitchVectorProperty;
    CCDWebsocketON, CCDWebsocketOFF: ISwitch;
    CCDWebsocketSetting: INumberVectorProperty;
@@ -181,6 +183,7 @@ private
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   function GetImageFormat: string; override;
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
@@ -336,6 +339,7 @@ begin
     CCDFrameType:=nil;
     CCDPreview:=nil;
     CCDCompression:=nil;
+    CCDimageFormat:=nil;
     CCDWebsocket:=nil;
     CCDWebsocketSetting:=nil;
     CCDAbortExposure:=nil;
@@ -665,6 +669,14 @@ begin
      CCDPreview:=indiProp.getSwitch;
      CCDPreviewDisabled:=IUFindSwitch(CCDPreview,'DISABLED');
      if (CCDPreviewDisabled=nil) then CCDPreview:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(CCDimageFormat=nil)and(propname='CCD_IMAGE_FORMAT') then begin  // Indigo specific
+     CCDimageFormat:=indiProp.getSwitch;
+     CCDimageFits:=IUFindSwitch(CCDimageFormat,'FITS');
+     CCDimageXisf:=IUFindSwitch(CCDimageFormat,'XISF');
+     CCDimageRaw:=IUFindSwitch(CCDimageFormat,'RAW');
+     CCDimageJpeg:=IUFindSwitch(CCDimageFormat,'JPEG');
+     if (CCDimageFits=nil)or(CCDimageXisf=nil)or(CCDimageRaw=nil)or(CCDimageJpeg=nil) then CCDimageFormat:=nil;
   end
   else if (proptype=INDI_SWITCH)and(CCDAbortExposure=nil)and(propname='CCD_ABORT_EXPOSURE') then begin
      CCDAbortExposure:=indiProp.getSwitch;
@@ -1035,7 +1047,7 @@ begin
      {$ifdef camera_debug}msg('this is a '+ft+' file');{$endif}
      //uncompressed
      {$ifdef camera_debug}msg('copy '+ft+' stream to fits');{$endif}
-     msg('Warning! '+uppercase(ft)+' image received',1);
+     msg(Format(rsWarningImage, [uppercase(ft)]), 1);
      PictureToFits(data,copy(ft,2,99),FImgStream,false,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
      if FImgStream.Size<2880 then begin
         msg('Invalid file received '+ft,0);
@@ -1051,7 +1063,6 @@ begin
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
      {$ifdef camera_debug}msg('process this frame');{$endif}
-     FImageFormat:='.stream';
      try
      if pos('.z',ft)>0 then begin //compressed
          {$ifdef camera_debug}msg('uncompress frame');{$endif}
@@ -1698,6 +1709,20 @@ begin
 result:=0;
 end;
 
+function T_indicamera.GetImageFormat: string;
+var s: ISwitch;
+begin
+ if CCDimageFormat=nil then
+    result:=FImageFormat
+ else begin
+    s:=IUFindOnSwitch(CCDimageFormat);
+    if s=CCDimageFits then result:='.fits'
+    else if s=CCDimageXisf then result:='.xisf'
+    else if s=CCDimageRaw then result:='.raw'
+    else if s=CCDimageJpeg then result:='.jpeg'
+    else result:=FImageFormat;
+ end;
+end;
 
 procedure T_indicamera.LoadConfig;
 begin

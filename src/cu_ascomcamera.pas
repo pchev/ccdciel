@@ -76,6 +76,7 @@ T_ascomcamera = class(T_camera)
    function GetPixelSizeX: double; override;
    function GetPixelSizeY: double; override;
    function GetBitperPixel: double; override;
+   function GetImageFormat: string; override;
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
@@ -1304,6 +1305,11 @@ end;
 procedure T_ascomcamera.SetVideoPreviewDivisor(value:integer);
 begin
  // todo
+end;
+
+function T_ascomcamera.GetImageFormat: string;
+begin
+ result:=FImageFormat;
 end;
 
 initialization
