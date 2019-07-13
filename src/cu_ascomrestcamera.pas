@@ -456,9 +456,6 @@ begin
    try
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    FImageFormat:='.fits';
-   // if possible start next exposure now
-   if EarlyNextExposure and Assigned(FonNewExposure) then
-      FonNewExposure(self);
    if debug_ascom then msg('clear old image.');
    FFits.ClearImage;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
@@ -473,6 +470,9 @@ begin
        exit;
      end;
    end;
+   // if possible start next exposure now
+   if EarlyNextExposure and Assigned(FonNewExposure) then
+      FonNewExposure(self);
    Dims:=imgarray.nplane;
    if (Dims<2)or(Dims>3) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));

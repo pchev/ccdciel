@@ -448,6 +448,9 @@ if FAddFrames then begin  // stack preview frames
   if Assigned(FonNewImage) then FonNewImage(self);
 end
 else begin  // normal capture
+  // if possible start next exposure now
+//  if EarlyNextExposure and Assigned(FonNewExposure) then
+//     FonNewExposure(self);
   FStackCount:=0;
   {$ifdef camera_debug}msg('load stream');{$endif}
   Ffits.Stream:=ImgStream;

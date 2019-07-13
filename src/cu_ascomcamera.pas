@@ -460,9 +460,6 @@ begin
    try
    FImageFormat:='.fits';
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
-   // if possible start next exposure now
-   if NextExposureAsync and Assigned(FonNewExposure) then
-     FonNewExposure(self);
 
    if debug_ascom then msg('clear old image.');
    FFits.ClearImage;
@@ -584,6 +581,9 @@ begin
    if debug_ascom then msg('release imagearray');
    SafeArrayUnaccessData(img);
    SafeArrayDestroyData(img);
+   // if possible start next exposure now
+   if EarlyNextExposure and Assigned(FonNewExposure) then
+     FonNewExposure(self);
    if debug_ascom then msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
