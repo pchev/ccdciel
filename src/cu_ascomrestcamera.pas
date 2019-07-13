@@ -456,6 +456,9 @@ begin
    try
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    FImageFormat:='.fits';
+   // if possible start next exposure now
+   if EarlyNextExposure and Assigned(FonNewExposure) then
+      FonNewExposure(self);
    if debug_ascom then msg('clear old image.');
    FFits.ClearImage;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);

@@ -65,6 +65,12 @@ type
     property PopupMenu;
   end;
 
+  TMessageData = class(TObject)
+    public
+      msgtxt: string;
+      msglevel: integer;
+  end;
+
   { Tf_main }
 
   Tf_main = class(TForm)
@@ -587,6 +593,8 @@ type
     Procedure SetFilterMenu;
     procedure LogLevelChange(Sender: TObject);
     Procedure NewMessage(msg: string; level: integer=1);
+    Procedure NewMessageSafe(msg: string; level: integer=1);
+    Procedure NewMessageAsync(Data: PtrInt);
     Procedure DeviceMessage(msg: string; level: integer=1);
     Procedure WatchdogStatus(Sender: TObject);
     Procedure CameraStatus(Sender: TObject);
@@ -658,6 +666,9 @@ type
     Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
+    procedure CameraNewExposure(Sender: TObject);
+    procedure NextPreviewExposure;
+    procedure NextCaptureExposure;
     procedure CameraSaveNewImage;
     function  CameraNewSkyFlat: boolean;
     function  CameraNewDomeFlat: boolean;
@@ -1108,6 +1119,7 @@ begin
   ReadoutModeFocus:=0;
   ReadoutModeAstrometry:=0;
   DomeNoSafetyCheck:=false;
+  EarlyNextExposure:=false;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
@@ -1541,6 +1553,7 @@ begin
    camera.onTemperatureChange:=@CameraTemperatureChange;
    camera.onCoolerChange:=@CameraCoolerChange;
    camera.onNewImage:=@CameraNewImage;
+   camera.onNewExposure:=@CameraNewExposure;
    camera.onVideoFrame:=@CameraVideoFrame;
    camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
    camera.onVideoSizeChange:=@CameraVideoSizeChange;
@@ -4409,6 +4422,23 @@ begin
  end;
 end;
 
+Procedure Tf_main.NewMessageSafe(msg: string; level: integer=1);
+var m: TMessageData;
+begin
+  m:=TMessageData.Create;
+  m.msgtxt:=msg;
+  m.msglevel:=level;
+  application.QueueAsyncCall(@NewMessageAsync,PtrInt(m));
+end;
+
+Procedure Tf_main.NewMessageAsync(Data: PtrInt);
+var m: TMessageData;
+begin
+  m:=TMessageData(data);
+  NewMessage(m.msgtxt,m.msglevel);
+  m.Free;
+end;
+
 procedure Tf_main.DeviceMessage(msg: string; level: integer=1);
 begin
  if msg<>'' then begin
@@ -4786,11 +4816,11 @@ begin
     if (dt>0.5) and (dt<50) then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
+        NewMessageSafe(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
         focuser.Position:=focuser.Position+p;
       end
       else if focuser.hasRelativePosition and (p<>0) then begin
-        NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
+        NewMessageSafe(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
         if p>0 then focuser.FocusOut else focuser.FocusIn;
         focuser.RelPosition:=abs(p);
       end;
@@ -6651,6 +6681,7 @@ var e: double;
     buf: string;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
+// ! can run out of main thread
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
   Preview:=true;
   // be sure mount is tracking, but not repeat after every frame
@@ -6659,7 +6690,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   // check exposure time
   e:=f_preview.Exposure;
   if e<0 then begin
-    NewMessage(Format(rsInvalidExpos, [f_preview.ExpTime.Text]),1);
+    NewMessageSafe(Format(rsInvalidExpos, [f_preview.ExpTime.Text]),1);
     f_preview.stop;
     Preview:=false;
     exit;
@@ -6677,13 +6708,13 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      if (binx<camera.BinXrange.min)or(biny<camera.BinYrange.min) or
         (binx>camera.BinXrange.max)or(biny>camera.BinYrange.max)
          then begin
-           NewMessage(Format(rsInvalidBinni, [f_preview.Binning.Text]),1);
+           NewMessageSafe(Format(rsInvalidBinni, [f_preview.Binning.Text]),1);
            f_preview.stop;
            Preview:=false;
            exit;
          end;
      if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
-        NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
+        NewMessageSafe(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
         camera.SetBinning(binx,biny);
      end;
   end;
@@ -6718,7 +6749,7 @@ else begin
    f_preview.stop;
    Preview:=false;
    StatusBar1.Panels[1].Text:='';
-   if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
+   if not AllDevicesConnected then NewMessageSafe(rsSomeDefinedD,1);
 end;
 end;
 
@@ -6750,10 +6781,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      if (ftype=LIGHT) then begin
        WeatherCapturePaused:=true;
        f_sequence.StatusMsg.Caption:=rsSequencePaus;
-       NewMessage(f_sequence.StatusMsg.Caption);
+       NewMessageSafe(f_sequence.StatusMsg.Caption);
        // stop guiding and mount tracking now
        if (autoguider<>nil)and(autoguider.Running) then begin
-          NewMessage(rsStopAutoguid,2);
+          NewMessageSafe(rsStopAutoguid,2);
           autoguider.Guide(false);
        end;
        mount.AbortMotion;
@@ -6771,19 +6802,19 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        end;
        except
        end;
-       NewMessage(rsContinueSequ);
+       NewMessageSafe(rsContinueSequ);
      end
      else
-       NewMessage(Format(rsIgnoreWeathe, [FrameName[ord(ftype)]]));
+       NewMessageSafe(Format(rsIgnoreWeathe, [FrameName[ord(ftype)]]));
     end
     else begin
       // capture running without a sequence, just show a message
-      NewMessage(rsWeatherCondi, 1);
+      NewMessageSafe(rsWeatherCondi, 1);
     end;
   end;
   // check if we need to cancel running preview
   if f_preview.Running then begin
-    NewMessage(rsStopPreview,1);
+    NewMessageSafe(rsStopPreview,1);
     StatusBar1.Panels[1].Text:=rsStopPreview;
     camera.AbortExposure;
     f_preview.stop;
@@ -6800,8 +6831,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check camera format is FITS
   buf:=camera.ImageFormat;
   if buf<>'.fits' then begin
-     NewMessage(rsTheCameraIma+blank+UpperCase(buf), 0);
-     NewMessage(Format(rsPleaseSetThe, ['FITS']), 0);
+     NewMessageSafe(rsTheCameraIma+blank+UpperCase(buf), 0);
+     NewMessageSafe(Format(rsPleaseSetThe, ['FITS']), 0);
      f_capture.Stop;
      Capture:=false;
      exit;
@@ -6809,7 +6840,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
-    NewMessage(Format(rsInvalidExpos, [f_capture.ExpTime.Text]),1);
+    NewMessageSafe(Format(rsInvalidExpos, [f_capture.ExpTime.Text]),1);
     f_capture.Stop;
     Capture:=false;
     exit;
@@ -6825,13 +6856,13 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      if (binx<camera.BinXrange.min)or(biny<camera.BinYrange.min) or
         (binx>camera.BinXrange.max)or(biny>camera.BinYrange.max)
         then begin
-          NewMessage(Format(rsInvalidBinni, [f_capture.Binning.Text]),1);
+          NewMessageSafe(Format(rsInvalidBinni, [f_capture.Binning.Text]),1);
           f_capture.Stop;
           Capture:=false;
           exit;
         end;
      if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
-        NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
+        NewMessageSafe(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
         camera.SetBinning(binx,biny);
      end;
   end;
@@ -6866,7 +6897,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   waittime:=CheckMeridianFlip(e);
   if not f_capture.Running then begin
     // stop current capture if meridian flip failed
-    NewMessage(rsMeridianFlip,1);
+    NewMessageSafe(rsMeridianFlip,1);
     f_capture.Stop;
     Capture:=false;
     exit;
@@ -6900,14 +6931,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
          Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
          exit;
        end else begin
-         NewMessage(rsCaptureStopp,1);
+         NewMessageSafe(rsCaptureStopp,1);
          f_capture.Stop;
          Capture:=false;
          exit;
        end;
      end else begin
        // failed, cancel current capture
-       NewMessage(rsAutofocusFai,1);
+       NewMessageSafe(rsAutofocusFai,1);
        f_capture.Stop;
        Capture:=false;
        exit;
@@ -6917,13 +6948,13 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
-      NewMessage(rsDithering+ellipsis,1);
+      NewMessageSafe(rsDithering+ellipsis,1);
       StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
       autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
       autoguider.WaitDithering(SettleMaxTime);
       Wait(1);
     end else begin
-      NewMessage(rsNotAutoguidi,1);
+      NewMessageSafe(rsNotAutoguidi,1);
     end;
   end;
   // set readout mode
@@ -6932,7 +6963,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   end;
   // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
-  NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
+  NewMessageSafe(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
   // disable dark
@@ -6947,7 +6978,7 @@ else begin
    f_capture.Stop;
    Capture:=false;
    StatusBar1.Panels[1].Text := '';
-   if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
+   if not AllDevicesConnected then NewMessageSafe(rsSomeDefinedD,1);
 end;
 end;
 
@@ -7037,20 +7068,23 @@ begin
      end;
      // save file
      CameraSaveNewImage;
-     // prepare for next exposure
-     f_capture.SeqCount:=f_capture.SeqCount+1;
-     f_capture.DitherNum:=f_capture.DitherNum+1;
-     f_capture.FocusNum:=f_capture.FocusNum+1;
-     if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
-        // next exposure
-        if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
-     end else begin
-        // end capture
-        Capture:=false;
-        f_capture.Stop;
-        NewMessage(rsStopCapture,2);
-        StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
-        MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
+     if not EarlyNextExposure then begin
+       // Next exposure delayed after image display
+       // start the exposure now
+       f_capture.SeqCount:=f_capture.SeqCount+1;
+       f_capture.DitherNum:=f_capture.DitherNum+1;
+       f_capture.FocusNum:=f_capture.FocusNum+1;
+       if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
+          // next exposure
+          if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       end else begin
+          // end capture
+          Capture:=false;
+          f_capture.Stop;
+          NewMessage(rsStopCapture,2);
+          StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
+          MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
+       end;
      end;
   end
   // process preview
@@ -7060,9 +7094,52 @@ begin
     buf:=buf+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[2].Text:=buf;
+    if not EarlyNextExposure then begin
+      // Next exposure delayed after image display
+      // start the exposure now
+      if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then
+         Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
+      else begin
+         // end preview
+         f_preview.stop;
+         Preview:=false;
+         NewMessage(rsEndPreview,2);
+         StatusBar1.Panels[1].Text:='';
+      end;
+    end;
+  end;
+end;
+
+procedure Tf_main.CameraNewExposure(Sender: TObject);
+begin
+  // This function is called early when a new image is received
+  // to start the next exposure as soon as possible.
+  // The start capture and preview code must be exactelly the same
+  // as in CameraNewImageAsync.
+  // Only QueueAsyncCall is replaced by RunInThread to not wait on main thread.
+  if Capture then begin
+    // prepare for next exposure
+    f_capture.SeqCount:=f_capture.SeqCount+1;
+    f_capture.DitherNum:=f_capture.DitherNum+1;
+    f_capture.FocusNum:=f_capture.FocusNum+1;
+    if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
+       // next exposure
+       if f_capture.Running then
+         TWorkerThread.RunInThread(@NextCaptureExposure);
+    end else begin
+       // end capture
+       Capture:=false;
+       f_capture.Stop;
+       NewMessage(rsStopCapture,2);
+       StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
+       MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
+    end;
+  end
+  else if Preview then begin
     // next exposure
-    if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then
-       Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
+    if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
+       TWorkerThread.RunInThread(@NextPreviewExposure);
+    end
     else begin
        // end preview
        f_preview.stop;
@@ -7071,6 +7148,16 @@ begin
        StatusBar1.Panels[1].Text:='';
     end;
   end;
+end;
+
+procedure  Tf_main.NextPreviewExposure;
+begin
+ StartPreviewExposure(nil);
+end;
+
+procedure  Tf_main.NextCaptureExposure;
+begin
+ StartCaptureExposure(nil);
 end;
 
 function Tf_main.CameraNewDomeFlat: boolean;

@@ -34,7 +34,14 @@ uses u_global,
      process, Classes, LCLType, FileUtil, ComCtrls,
      Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
-
+type
+   TProcObj =  procedure of Object;
+   TWorkerThread = class(TThread)
+   public
+     proc: TProcObj;
+     procedure Execute; override;
+     class procedure RunInThread(AProc: TProcObj);
+   end;
 
 function InvertF32(X : LongWord) : Single;
 function InvertF64(X : Int64) : Double;
@@ -159,6 +166,23 @@ const
 
 var
   dummy_ext : extended;
+
+//============= TWorkerThread =============
+procedure TWorkerThread.Execute;
+begin
+   proc;
+end;
+
+class procedure TWorkerThread.RunInThread(AProc: TProcObj);
+begin
+  with TWorkerThread.Create(true) do
+  begin
+    FreeOnTerminate := true;
+    proc := AProc;
+    start;
+  end;
+end;
+//============= TWorkerThread =============
 
 function InvertF32(X : LongWord) : Single;
 var  P : PbyteArray;

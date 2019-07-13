@@ -1000,6 +1000,10 @@ var source,dest: array of char;
 begin
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  {$ifdef camera_debug}msg('receive blob');{$endif}
+ // if possible start next exposure now
+ if EarlyNextExposure and Assigned(FonNewExposure) then
+    FonNewExposure(self);
+
  if blen>0 then begin
    data.Position:=0;
    if pos('.fits',ft)>0 then begin // receive a FITS file
@@ -2097,7 +2101,6 @@ end;
 
 procedure TIndiWebSocketClientConnection.SyncBinFrame;
 begin
-  {$ifdef camera_debug}msg('receive ws_blob');{$endif}
   if fFramedStream.Size>0 then begin
     fFramedStream.Position:=0;
     if Assigned(FOnNewfile) then FOnNewfile(self);

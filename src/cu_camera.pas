@@ -49,7 +49,7 @@ T_camera = class(TComponent)
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
-    FonNewImage: TNotifyEvent;
+    FonNewImage, FonNewExposure: TNotifyEvent;
     FonVideoFrame: TNotifyEvent;
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
     FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange: TNotifyEvent;
@@ -252,6 +252,7 @@ T_camera = class(TComponent)
     property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
     property onWheelStatusChange: TNotifyEvent read FonWheelStatusChange write FonWheelStatusChange;
     property onNewImage: TNotifyEvent read FonNewImage write FonNewImage;
+    property onNewExposure: TNotifyEvent read FonNewExposure write FonNewExposure;
     property onVideoFrame: TNotifyEvent read FonVideoFrame write FonVideoFrame;
     property onCameraDisconnected: TNotifyEvent read FonCameraDisconnected write FonCameraDisconnected;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;

@@ -171,16 +171,19 @@ begin
           Mount.SlewToDomeFlatPosition;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
+    EarlyNextExposure:=true;
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
   end else begin
     CancelAutofocus:=true;
+    EarlyNextExposure:=false;
     if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
   if Frunning then begin
     led.Brush.Color:=clLime;
     BtnStart.Caption:=rsStop;
   end else begin
+    EarlyNextExposure:=false;
     led.Brush.Color:=clGray;
     BtnStart.Caption:=rsStart;
     if Assigned(FonMsg) then FonMsg(rsStopCapture,2);
@@ -236,6 +239,7 @@ end;
 procedure Tf_capture.Stop;
 begin
   Frunning:=false;
+  EarlyNextExposure:=false;
   led.Brush.Color:=clGray;
   BtnStart.Caption:=rsStart;
   if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
