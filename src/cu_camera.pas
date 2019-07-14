@@ -466,6 +466,7 @@ end;
 procedure T_camera.TryNextExposure(Data: PtrInt);
 begin
    if CameraProcessingImage then begin
+     sleep(10);
      CheckSynchronize;
      Application.QueueAsyncCall(@TryNextExposure,0);
    end

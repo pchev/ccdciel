@@ -471,8 +471,7 @@ begin
      end;
    end;
    // if possible start next exposure now
-   if EarlyNextExposure and Assigned(FonNewExposure) then
-      FonNewExposure(self);
+   TryNextExposure(0);
    Dims:=imgarray.nplane;
    if (Dims<2)or(Dims>3) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
@@ -571,7 +570,6 @@ begin
    FImgStream.Write(b,c);
    if debug_ascom then msg('release imagearray');
    imgarray.Free;
-   msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;

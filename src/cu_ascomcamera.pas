@@ -582,8 +582,7 @@ begin
    SafeArrayUnaccessData(img);
    SafeArrayDestroyData(img);
    // if possible start next exposure now
-   if EarlyNextExposure and Assigned(FonNewExposure) then
-     FonNewExposure(self);
+   TryNextExposure(0);
    if debug_ascom then msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
