@@ -86,6 +86,7 @@ T_camera = class(TComponent)
     Ftimestart,Ftimeend,FMidExposureTime: double;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
+    procedure TryNextExposure;
     procedure WriteHeaders;
     procedure NewVideoFrame;
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
@@ -448,9 +449,6 @@ if FAddFrames then begin  // stack preview frames
   if Assigned(FonNewImage) then FonNewImage(self);
 end
 else begin  // normal capture
-  // if possible start next exposure now
-//  if EarlyNextExposure and Assigned(FonNewExposure) then
-//     FonNewExposure(self);
   FStackCount:=0;
   {$ifdef camera_debug}msg('load stream');{$endif}
   Ffits.Stream:=ImgStream;
@@ -464,6 +462,23 @@ else begin  // normal capture
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 end;
+
+procedure T_camera.TryNextExposure;
+var endt: TDateTime;
+const maxwait=5;
+begin
+  endt:=now+maxwait/secperday;
+  while CameraProcessingImage and (now<endt) do begin
+    // wait for previous image still processing
+    Sleep(100);
+    if GetCurrentThreadId=MainThreadID then CheckSynchronize;
+  end;
+  CameraProcessingImage:=true;
+  if EarlyNextExposure and Assigned(FonNewExposure) then begin
+    FonNewExposure(self);
+  end;
+end;
+
 
 procedure T_camera.WriteHeaders;
 var origin,observer,telname,objname,siso: string;

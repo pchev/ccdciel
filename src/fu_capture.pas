@@ -240,6 +240,7 @@ procedure Tf_capture.Stop;
 begin
   Frunning:=false;
   EarlyNextExposure:=false;
+  CameraProcessingImage:=false;
   led.Brush.Color:=clGray;
   BtnStart.Caption:=rsStart;
   if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin

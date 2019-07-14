@@ -1083,6 +1083,7 @@ begin
   TemperatureSlope:=0;
   learningvcurve:=false;
   autofocusing:=false;
+  CameraProcessingImage:=false;
   CancelAutofocus:=false;
   InplaceAutofocus:=false;
   AutofocusExposureFact:=1;
@@ -1116,6 +1117,7 @@ begin
   ReadoutModeAstrometry:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
+  CameraProcessingImage:=false;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
@@ -7013,6 +7015,7 @@ end;
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
 begin
+ try
   try
   // draw preview
   StatusBar1.Panels[1].Text:='';
@@ -7023,6 +7026,7 @@ begin
   // draw image
   DrawHistogram(true);
   DrawImage;
+  if (GetCurrentThreadId=MainThreadID) then CheckSynchronize;
   except
     on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
   end;
@@ -7087,14 +7091,16 @@ begin
       end;
     end;
   end;
+
+ finally
+ CameraProcessingImage:=false;
+ end;
 end;
 
 procedure Tf_main.CameraNewExposure(Sender: TObject);
 begin
   // This function is called early when a new image is received
   // to start the next exposure as soon as possible.
-  // The start capture and preview code must be exactelly the same
-  // as in CameraNewImageAsync.
   if Capture then begin
     // prepare for next exposure
     f_capture.SeqCount:=f_capture.SeqCount+1;
@@ -7105,12 +7111,9 @@ begin
        if f_capture.Running then
           Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
     end else begin
-       // end capture
-       Capture:=false;
-       f_capture.Stop;
-       NewMessage(rsStopCapture,2);
-       StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
-       MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
+       // process end capture later in CameraNewImage
+       f_capture.SeqCount:=f_capture.SeqCount-1;
+       EarlyNextExposure:=false;
     end;
   end
   else if Preview then begin
@@ -7119,11 +7122,8 @@ begin
        Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
     end
     else begin
-       // end preview
-       f_preview.stop;
-       Preview:=false;
-       NewMessage(rsEndPreview,2);
-       StatusBar1.Panels[1].Text:='';
+      // process end preview later in CameraNewImage
+      EarlyNextExposure:=false;
     end;
   end;
 end;
