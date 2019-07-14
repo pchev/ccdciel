@@ -86,7 +86,7 @@ T_camera = class(TComponent)
     Ftimestart,Ftimeend,FMidExposureTime: double;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
-    procedure TryNextExposure;
+    procedure TryNextExposure(Data: PtrInt);
     procedure WriteHeaders;
     procedure NewVideoFrame;
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
@@ -463,22 +463,18 @@ else begin  // normal capture
 end;
 end;
 
-procedure T_camera.TryNextExposure;
-var endt: TDateTime;
-const maxwait=5;
+procedure T_camera.TryNextExposure(Data: PtrInt);
 begin
-  endt:=now+maxwait/secperday;
-  while CameraProcessingImage and (now<endt) do begin
-    // wait for previous image still processing
-    Sleep(100);
-    if GetCurrentThreadId=MainThreadID then CheckSynchronize;
-  end;
-  CameraProcessingImage:=true;
-  if EarlyNextExposure and Assigned(FonNewExposure) then begin
-    FonNewExposure(self);
-  end;
+   if CameraProcessingImage then begin
+     CheckSynchronize;
+     Application.QueueAsyncCall(@TryNextExposure,0);
+   end
+   else begin
+     CameraProcessingImage:=true;
+     if EarlyNextExposure and Assigned(FonNewExposure) then
+       FonNewExposure(self);
+   end;
 end;
-
 
 procedure T_camera.WriteHeaders;
 var origin,observer,telname,objname,siso: string;
