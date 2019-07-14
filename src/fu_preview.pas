@@ -140,6 +140,7 @@ begin
   if FLoop then exit;
   Frunning:=not Frunning;
   FLoop:=False;
+  EarlyNextExposure:=false;
   if Frunning then begin
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
@@ -157,6 +158,7 @@ begin
   Frunning:=not Frunning;
   if Frunning then begin
      if StackPreview.Checked and Assigned(FonResetStack) then FonResetStack(self);
+     EarlyNextExposure:=true;
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
         CancelAutofocus:=false;
@@ -166,9 +168,11 @@ begin
         Msg(rsStartPreview,2);
      end else begin
         FLoop:=False;
+        EarlyNextExposure:=false;
         Msg(rsCannotStartP2,0);
      end;
   end else begin
+     EarlyNextExposure:=false;
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
      led.Brush.Color:=clGray;
      BtnLoop.Caption:=rsLoop;
@@ -181,6 +185,7 @@ procedure Tf_preview.Stop;
 begin
   Frunning:=false;
   FLoop:=false;
+  EarlyNextExposure:=false;
   WaitExposure:=false;
   led.Brush.Color:=clGray;
   BtnLoop.Caption:=rsLoop;
