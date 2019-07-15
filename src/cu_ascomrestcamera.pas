@@ -456,8 +456,6 @@ begin
    try
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    FImageFormat:='.fits';
-   if debug_ascom then msg('clear old image.');
-   FFits.ClearImage;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    if debug_ascom then msg('read image.');
@@ -568,7 +566,6 @@ begin
    FImgStream.Write(b,c);
    if debug_ascom then msg('release imagearray');
    imgarray.Free;
-   msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;
