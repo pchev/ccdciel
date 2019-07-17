@@ -895,6 +895,8 @@ procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
 begin
 if tvp=CCDfilepath then begin
+  // if possible start next exposure now
+  TryNextExposure(0);
   FImgStream.Clear;
   FImgStream.Position:=0;
   FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
