@@ -1,7 +1,6 @@
-unit pu_hyperbola; {Hyperbola modeling of telescope focuser. Star disk size as function of focuser position}
-
+unit pu_hyperbola; {Hyperbola modeling of the star disk size in HFD as function of the telescope focuser position. Purpose is finding the best focuser position at the hyperbola minimum.}
 {
-Copyright (C) 2018 Patrick Chevalley & Han Kleijn
+Copyright (C) 2018 Patrick Chevalley & Han Kleijn (author)
 
 http://www.ap-i.net
 h@ap-i.net
@@ -35,12 +34,12 @@ function steps_to_focus(hfd,a,b:double) :double; {calculates focuser steps to pe
 
 var
   iteration_cycles :integer; {how many cycle where used for curve fitting}
-  lowest_error : double; {sum of sqr % HFD error after curve fitting}
+  lowest_error : double; {scaled RMS (square root of the mean square) of the HFD errors after curve fitting}
 
 implementation
 
 function hfd_calc(position,perfectfocusposition,a,b:double) :double; {calculate HFD from position and perfectfocusposition using hyperbola parameters}
-{The HFD (half value diameter) of the imaged star disk as function of the focuser position can be described as hyperbola}
+{The HFD (half flux diameter) of the imaged star disk as function of the focuser position can be described as hyperbola}
 {a,b are the hyperbola parameters, a is the lowest HFD value at focus position, the asymptote y:= +-x*a/b} {rev1}
 {A hyperbola is defined as: }
 {x=b*sinh(t)                }
@@ -56,7 +55,7 @@ begin
 end;
 
 function steps_to_focus(hfd,a,b:double) :double; {calculates focuser steps to perfect focus from HFD and hyperbola parameters}
-{The HFD (half value diameter) of the imaged star disk as function of the focuser position can be described as hyperbola}
+{The HFD (half flux diameter) of the imaged star disk as function of the focuser position can be described as hyperbola}
 {a,b are the hyperbola parameters, a is the lowest HFD value at focus position, the asymptote y:= +-x*a/b} {rev1}
 {A hyperbola is defined as: }
 {x=b*sinh(t)                }
@@ -91,6 +90,8 @@ begin
 end;
 
 procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[1,n]=position,data[2,n]=hfd, output: bestfocusposition=p, a, b of hyperbola}
+{The input data array should contain several focuser positions with there corresponding HFD (star disk size).}
+{The routine will try to find the best hyperbola curve fit. The focuser position p at the hyperbola minimum is the expected best focuser position}
 var
    i,n  :integer;
    error1, old_error, p_range,a_range, b_range, highest_hfd, lowest_hfd,
@@ -165,8 +166,8 @@ begin
     end;{position loop}
     inc(iteration_cycles);
   until (  (old_error-lowest_error<0.0001){lowest error almost reached}
-        or (lowest_error<=0.0001)           {perfect result}
-        or (iteration_cycles>=30));         {most likely convergence problem}
+        or (lowest_error<=0.0001)         {perfect result}
+        or (iteration_cycles>=30));       {most likely convergence problem}
 end;
 
 
