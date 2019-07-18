@@ -379,6 +379,7 @@ begin
      if debug_ascom then msg('start exposure.');
      V.StartExposure(exptime,li);
      Ftimestart:=NowUTC;
+     inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
      Fexptime:=exptime;
@@ -579,7 +580,7 @@ begin
    SafeArrayUnaccessData(img);
    SafeArrayDestroyData(img);
    // if possible start next exposure now
-   TryNextExposure(0);
+   TryNextExposure(FImgNum);
    if debug_ascom then msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;

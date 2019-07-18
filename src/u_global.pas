@@ -380,6 +380,7 @@ var
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   CameraProcessingImage: boolean;
+  CameraProcessingNum: PtrInt;
   Undersampled: boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis: integer;

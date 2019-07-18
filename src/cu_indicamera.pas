@@ -898,7 +898,7 @@ if tvp=CCDfilepath then begin
   FMidExposureTime:=(Ftimestart+NowUTC)/2;
   {$ifdef camera_debug}msg('receive image file');{$endif}
   // if possible start next exposure now
-  TryNextExposure(0);
+  TryNextExposure(FImgNum);
   FImageFormat:=ExtractFileExt(CCDfilepath.tp[0].text);
   if assigned(FonExposureProgress) then FonExposureProgress(-10);
   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
@@ -1011,7 +1011,7 @@ begin
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  {$ifdef camera_debug}msg('receive blob');{$endif}
  // if possible start next exposure now
- TryNextExposure(0);
+ TryNextExposure(FImgNum);
  if blen>0 then begin
    data.Position:=0;
    if pos('.fits',ft)>0 then begin // receive a FITS file
@@ -1177,6 +1177,7 @@ end else begin
   end;
 end;
 Ftimestart:=NowUTC;
+inc(FImgNum);
 timedout:=now+(exptime+CameraTimeout)/secperday;
 ExposureTimer.Enabled:=true;
 end;

@@ -1084,6 +1084,7 @@ begin
   learningvcurve:=false;
   autofocusing:=false;
   CameraProcessingImage:=false;
+  CameraProcessingNum:=0;
   CancelAutofocus:=false;
   InplaceAutofocus:=false;
   AutofocusExposureFact:=1;

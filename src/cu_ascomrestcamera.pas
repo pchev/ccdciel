@@ -383,6 +383,7 @@ begin
      if debug_ascom then msg('start exposure.');
      V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
      Ftimestart:=NowUTC;
+     inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
      Fexptime:=exptime;
@@ -469,7 +470,7 @@ begin
      end;
    end;
    // if possible start next exposure now
-   TryNextExposure(0);
+   TryNextExposure(FImgNum);
    Dims:=imgarray.nplane;
    if (Dims<2)or(Dims>3) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));

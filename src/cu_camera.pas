@@ -84,6 +84,7 @@ T_camera = class(TComponent)
     FhasFastReadout, FhasReadOut: boolean;
     FReadOutList: TStringList;
     Ftimestart,Ftimeend,FMidExposureTime: double;
+    FImgNum:PtrInt;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -278,6 +279,7 @@ LazUTF8SysUtils;
 constructor T_camera.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FImgNum:=0;
   FTimeOut:=100;
   FIndiTransfert:=itNetwork;
   FIndiTransfertDir:=defTransfertPath;
@@ -465,16 +467,18 @@ end;
 
 procedure T_camera.TryNextExposure(Data: PtrInt);
 begin
-   if CameraProcessingImage then begin
-     sleep(10);
+ if EarlyNextExposure and Assigned(FonNewExposure) then begin
+   if CameraProcessingImage and (CameraProcessingNum=FImgNum-1) then begin
+    sleep(10);
      CheckSynchronize;
-     Application.QueueAsyncCall(@TryNextExposure,0);
+     Application.QueueAsyncCall(@TryNextExposure,Data);
    end
    else begin
      CameraProcessingImage:=true;
-     if EarlyNextExposure and Assigned(FonNewExposure) then
-       FonNewExposure(self);
+     CameraProcessingNum:=data;
+     FonNewExposure(self);
    end;
+ end;
 end;
 
 procedure T_camera.WriteHeaders;
