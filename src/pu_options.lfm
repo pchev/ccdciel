@@ -1424,6 +1424,14 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
+        object ExpEarlyStart: TCheckBox
+          Left = 12
+          Height = 21
+          Top = 80
+          Width = 225
+          Caption = 'Start new exposure as early as possible'
+          TabOrder = 4
+        end
       end
     end
     object TabSheet12: TTabSheet

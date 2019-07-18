@@ -1118,6 +1118,7 @@ begin
   ReadoutModeAstrometry:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
+  ConfigExpEarlyStart:=true;
   CameraProcessingImage:=false;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
@@ -3044,6 +3045,7 @@ begin
     Showgain;
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
+  ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
   ClippingOverflow:=min(ClippingOverflow,MaxADU);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
@@ -5892,6 +5894,7 @@ begin
    f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
+   f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
@@ -6158,6 +6161,7 @@ begin
      config.SetValue('/Sensor/GainFromCamera',f_option.GainFromCamera.Checked);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
+     config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);

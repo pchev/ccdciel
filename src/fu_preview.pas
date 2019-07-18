@@ -158,7 +158,7 @@ begin
   Frunning:=not Frunning;
   if Frunning then begin
      if StackPreview.Checked and Assigned(FonResetStack) then FonResetStack(self);
-     EarlyNextExposure:=true;
+     EarlyNextExposure:=ConfigExpEarlyStart;
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
         CancelAutofocus:=false;

@@ -43,6 +43,7 @@ type
     AutofocusTemp: TFloatSpinEdit;
     ButtonHelp: TButton;
     CbShowHints: TCheckBox;
+    ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
     DomeCloseActions: TStringGrid;
