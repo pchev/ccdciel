@@ -1336,7 +1336,7 @@ object f_option: Tf_option
       end
       object GroupBoxReadOut: TGroupBox
         Left = 8
-        Height = 104
+        Height = 130
         Top = 354
         Width = 464
         Caption = 'Readout modes'
