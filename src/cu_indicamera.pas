@@ -895,12 +895,19 @@ procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
 begin
 if tvp=CCDfilepath then begin
+  FMidExposureTime:=(Ftimestart+NowUTC)/2;
+  {$ifdef camera_debug}msg('receive image file');{$endif}
   // if possible start next exposure now
   TryNextExposure(0);
+  FImageFormat:=ExtractFileExt(CCDfilepath.tp[0].text);
+  if assigned(FonExposureProgress) then FonExposureProgress(-10);
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   FImgStream.Clear;
   FImgStream.Position:=0;
   FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
   DeleteFile(CCDfilepath.tp[0].text);
+  if assigned(FonExposureProgress) then FonExposureProgress(-11);
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   NewImage;
 end
 else if tvp=FilterName then begin
@@ -1000,6 +1007,7 @@ var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
 begin
+ // report any change to NewText() in use with RAM disk transfer
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  {$ifdef camera_debug}msg('receive blob');{$endif}
  // if possible start next exposure now
