@@ -467,7 +467,7 @@ end;
 
 procedure T_camera.TryNextExposure(Data: PtrInt);
 begin
- if EarlyNextExposure and Assigned(FonNewExposure) then begin
+ if EarlyNextExposure and Assigned(FonNewExposure) and(not Autofocusing) then begin
    if CameraProcessingImage and (CameraProcessingNum=FImgNum-1) then begin
     sleep(10);
      CheckSynchronize;

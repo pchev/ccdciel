@@ -458,7 +458,6 @@ begin
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    FImageFormat:='.fits';
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
-   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    if debug_ascom then msg('read image.');
    try
    imgarray:=V.GetImageArray;
@@ -570,7 +569,6 @@ begin
    if debug_ascom then msg('release imagearray');
    imgarray.Free;
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
-   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
    NewImage;
    finally
    StatusTimer.Enabled:=true;

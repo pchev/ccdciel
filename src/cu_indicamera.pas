@@ -901,13 +901,11 @@ if tvp=CCDfilepath then begin
   TryNextExposure(FImgNum);
   FImageFormat:=ExtractFileExt(CCDfilepath.tp[0].text);
   if assigned(FonExposureProgress) then FonExposureProgress(-10);
-  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   FImgStream.Clear;
   FImgStream.Position:=0;
   FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
   DeleteFile(CCDfilepath.tp[0].text);
   if assigned(FonExposureProgress) then FonExposureProgress(-11);
-  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   NewImage;
 end
 else if tvp=FilterName then begin
@@ -1017,7 +1015,6 @@ begin
    if pos('.fits',ft)>0 then begin // receive a FITS file
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
-     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      {$ifdef camera_debug}msg('this is a fits file');{$endif}
      if pos('.z',ft)>0 then begin //compressed
          {$ifdef camera_debug}msg('uncompress file');{$endif}
@@ -1049,13 +1046,11 @@ begin
      end;
      {$ifdef camera_debug}msg('NewImage');{$endif}
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
-     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      NewImage;
    end
    else if (ft='.jpeg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
-     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      {$ifdef camera_debug}msg('this is a '+ft+' file');{$endif}
      //uncompressed
      {$ifdef camera_debug}msg('copy '+ft+' stream to fits');{$endif}
@@ -1067,7 +1062,6 @@ begin
      end;
      {$ifdef camera_debug}msg('NewImage');{$endif}
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
-     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
      NewImage;
    end
    else if pos('.stream',ft)>0 then begin // video stream

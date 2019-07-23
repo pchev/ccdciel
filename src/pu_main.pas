@@ -7056,7 +7056,7 @@ begin
      end;
      // save file
      CameraSaveNewImage;
-     if not EarlyNextExposure then begin
+     if (not EarlyNextExposure) or Autofocusing then begin
        // Next exposure delayed after image display
        // start the exposure now
        f_capture.SeqCount:=f_capture.SeqCount+1;
@@ -7082,7 +7082,7 @@ begin
     buf:=buf+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[2].Text:=buf;
-    if not EarlyNextExposure then begin
+    if (not EarlyNextExposure) or Autofocusing then begin
       // Next exposure delayed after image display
       // start the exposure now
       if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then
@@ -7618,7 +7618,6 @@ end;
 if f_visu.FlipHorz then ScrBmp.HorizontalFlip;
 if f_visu.FlipVert then ScrBmp.VerticalFlip;
 Image1.Invalidate;
-if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 MagnifyerTimer.Enabled:=true;
 end;
 
@@ -8704,6 +8703,7 @@ begin
    f_starprofile.ChkAutofocusDown(false);
    exit;
  end;
+ if EarlyNextExposure then Application.ProcessMessages; // save previous image
  NewMessage(rsAutofocusNow,1);
  autofocusing:=true;
  savecapture:=Capture;
