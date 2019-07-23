@@ -171,7 +171,7 @@ begin
           Mount.SlewToDomeFlatPosition;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
-    EarlyNextExposure:=ConfigExpEarlyStart;
+    EarlyNextExposure:=(TFrameType(FrameType.ItemIndex)=LIGHT) and ConfigExpEarlyStart;
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
   end else begin
