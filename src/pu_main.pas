@@ -1118,7 +1118,7 @@ begin
   ReadoutModeAstrometry:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
-  ConfigExpEarlyStart:=true;
+  ConfigExpEarlyStart:=false;
   CameraProcessingImage:=false;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
