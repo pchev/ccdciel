@@ -8674,7 +8674,7 @@ function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
 var tra,tde,teq,tpa,sra,sde,err: double;
     sid: string;
     focusretry,maxretry: integer;
-    tpos,pslew,savecapture,restartguider,pauseguider: boolean;
+    tpos,pslew,savecapture,saveearlystart,restartguider,pauseguider: boolean;
 begin
  maxretry:=3;
  result:=false;
@@ -8707,6 +8707,7 @@ begin
  NewMessage(rsAutofocusNow,1);
  autofocusing:=true;
  savecapture:=Capture;
+ saveearlystart:=EarlyNextExposure;
  f_preview.StackPreview.Checked:=false;
  try
  Capture:=false;
@@ -8889,6 +8890,7 @@ begin
    autofocusing:=false;
    CancelAutofocus:=false;
    Capture:=savecapture;
+   EarlyNextExposure:=saveearlystart;
  end;
 end;
 
