@@ -2097,11 +2097,13 @@ procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=fa
 var i,j,k,ii: integer;
     x,y,dmin,dmax,minoffset : double;
     ni,sum,sum2 : extended;
-
+    m: TMemoryStream;
 begin
  if new or (Fheight=0)or(Fwidth=0)then begin  // first frame, just store the operand
-   SetStream(operand.Stream);
+   m:=operand.Stream;
+   SetStream(m);
    LoadStream;
+   m.free;
  end
  else begin  // do operation
 
@@ -2179,6 +2181,7 @@ end;
 procedure TFits.ShiftInteger(dx,dy: integer);
 var imgshift: TFits;
     i,ii,j,k,x,y: integer;
+    m: TMemoryStream;
 begin
   imgshift:=TFits.Create(nil);
   imgshift.SetStream(FStream);
@@ -2231,10 +2234,12 @@ begin
     end;
   end;
   imgshift.FStreamValid:=false;
-  SetStream(imgshift.Stream);
+  m:=imgshift.Stream;
+  SetStream(m);
   LoadStream;
   GetImage;
   imgshift.Free;
+  m.free;
 end;
 
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
