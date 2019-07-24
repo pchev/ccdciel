@@ -617,7 +617,7 @@ type
     procedure cmdAutomaticAutofocus(var ok: boolean);
     procedure cmdAutofocus(var ok: boolean);
     Procedure FocuserStatus(Sender: TObject);
-    procedure FocuserTemperatureCompensation;
+    function  FocuserTemperatureCompensation(canwait:boolean):boolean;
     procedure FocuserPositionChange(n:double);
     procedure FocuserSpeedChange(n:double);
     procedure FocuserTimerChange(n:double);
@@ -678,8 +678,10 @@ type
     Procedure AbortExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
+    function  PrepareCaptureExposure(canwait:boolean):boolean;
     Procedure StartCaptureExposure(Sender: TObject);
     procedure StartCaptureExposureAsync(Data: PtrInt);
+    Procedure StartCaptureExposureNow;
     Procedure RedrawHistogram(Sender: TObject);
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
@@ -707,7 +709,8 @@ type
     Procedure StartSequence(SeqName: string);
     procedure ScriptExecute(Sender: TObject);
     procedure ScriptAfterExecute(Sender: TObject);
-    function CheckMeridianFlip(nextexposure:double=0):integer;
+    function CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
+    procedure CheckMeridianFlip; overload;
     procedure StartServer;
     procedure StopServer;
     procedure TCPShowError(var msg: string);
@@ -1036,7 +1039,6 @@ procedure Tf_main.FormCreate(Sender: TObject);
 var inif: TIniFile;
     configfile: string;
     i:integer;
-    mi: TMenuItem;
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
@@ -3996,7 +3998,7 @@ begin
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=2;
   end;
-  FocuserTemperatureCompensation;
+  FocuserTemperatureCompensation(true);
 end;
 
 Procedure Tf_main.ConnectRotator(Sender: TObject);
@@ -4790,14 +4792,17 @@ begin
 end;
 
 
-procedure Tf_main.FocuserTemperatureCompensation;
+function Tf_main.FocuserTemperatureCompensation(canwait:boolean):boolean;
 var p: integer;
     dt: double;
 begin
+  result:=false;
   if focuser.hasTemperature and (FocuserTempCoeff<>0.0) and (FocuserLastTemp<>NullCoord) then begin
     dt:=abs(FocuserLastTemp-FocuserTemp);
     // only if temperature change by more than 0.5C and less than 50C
     if (dt>0.5) and (dt<50) then begin
+     result:=true;
+     if canwait then begin
       p:=f_focuser.TempOffset(FocuserLastTemp,FocuserTemp);
       if focuser.hasAbsolutePosition and (p<>0) then begin
         NewMessage(Format(rsFocuserTempe2, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel,IntToStr(p)]),2);
@@ -4809,6 +4814,7 @@ begin
         focuser.RelPosition:=abs(p);
       end;
       wait(1);
+     end;
     end;
   end;
 end;
@@ -6683,7 +6689,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   end;
   // check focuser temperature compensation
   if (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Down) then begin
-    FocuserTemperatureCompensation;
+    FocuserTemperatureCompensation(true);
   end;
   p:=pos('x',f_preview.Binning.Text);
   if p>0 then begin
@@ -6750,12 +6756,18 @@ begin
   StartCaptureExposure(nil);
 end;
 
-Procedure Tf_main.StartCaptureExposure(Sender: TObject);
+function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
 var e: double;
     buf: string;
-    p,binx,biny,waittime,i,x,y,w,h,sx,sy,sw,sh: integer;
+    waittime: integer;
     ftype:TFrameType;
 begin
+// If called with canwait=false this function only check for operation
+// that can prevent an immediate start of the exposure. In this case it
+// return false.
+// Call with canwait=true to really do all the operation need before
+// the exposure is started: auto-focus, dithering, meridian flip, wait for weather.
+result:=false;
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType.ItemIndex)
@@ -6763,6 +6775,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     ftype:=LIGHT;
   // wait if paused
   if WeatherPauseCapture then begin
+    if canwait then begin
     if f_sequence.Running then begin
      if (ftype=LIGHT) then begin
        WeatherCapturePaused:=true;
@@ -6797,9 +6810,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       // capture running without a sequence, just show a message
       NewMessage(rsWeatherCondi, 1);
     end;
+    end
+    else begin
+      exit; // cannot start now
+    end;
   end;
   // check if we need to cancel running preview
   if f_preview.Running then begin
+   if canwait then begin
     NewMessage(rsStopPreview,1);
     StatusBar1.Panels[1].Text:=rsStopPreview;
     camera.AbortExposure;
@@ -6808,21 +6826,139 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     StartCaptureTimer.Interval:=5000;
     StartCaptureTimer.Enabled:=true;
     exit;
+   end
+   else begin
+    exit; // cannot start now
+   end;
   end;
-  f_preview.StackPreview.Checked:=false;
-  f_capture.Running:=true;
-  MenuCaptureStart.Caption:=rsStop;
-  Preview:=false;
-  Capture:=true;
   // check camera format is FITS
   buf:=camera.ImageFormat;
   if buf<>'.fits' then begin
+   if canwait then begin
      NewMessage(rsTheCameraIma+blank+UpperCase(buf), 0);
      NewMessage(Format(rsPleaseSetThe, ['FITS']), 0);
      f_capture.Stop;
      Capture:=false;
      exit;
+   end
+   else begin
+     exit; // cannot start now
+   end;
   end;
+  // check for meridian and do flip now if required
+  e:=StrToFloatDef(f_capture.ExpTime.Text,0);
+  if canwait then begin
+    CheckMeridianFlip(e,true,waittime);
+    if not f_capture.Running then begin
+      // stop current capture if meridian flip failed
+      NewMessage(rsMeridianFlip,1);
+      f_capture.Stop;
+      Capture:=false;
+      exit;
+    end;
+    // check if we need to wait for flip before to continue (time to meridian < exposure time)
+    if waittime>0 then begin
+      f_capture.DitherNum:=0; // no dither after flip
+      // wait meridian
+      StartCaptureTimer.Interval:=waittime*1000;
+      StartCaptureTimer.Enabled:=true;
+      exit;
+    end;
+  end
+  else begin
+    if CheckMeridianFlip(e,false,waittime) then
+       exit;  // cannot start now
+  end;
+  // check focuser temperature compensation
+  if (camera.FrameType=LIGHT) then begin
+    if canwait then begin
+       FocuserTemperatureCompensation(true);
+    end
+    else begin
+       if FocuserTemperatureCompensation(false) then
+          exit; // cannot start now
+    end;
+  end;
+  // check if refocusing is required
+  if f_capture.FocusNow  // start of step
+     or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
+     or (f_capture.CheckBoxFocusTemp.Checked and focuser.hasTemperature and (AutofocusTempChange<>0.0) and
+        (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and (camera.FrameType=LIGHT) and
+        (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))     // temperature change
+     then begin
+    if canwait then begin
+     f_capture.FocusNum:=0;
+     f_capture.FocusNow:=false;
+     // do autofocus
+     if AutoAutofocus then begin
+       if f_capture.Running then begin
+         // ok, restart exposure
+         f_capture.DitherNum:=0; // no dither after focus
+         Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+         exit;
+       end else begin
+         NewMessage(rsCaptureStopp,1);
+         f_capture.Stop;
+         Capture:=false;
+         exit;
+       end;
+     end else begin
+       // failed, cancel current capture
+       NewMessage(rsAutofocusFai,1);
+       f_capture.Stop;
+       Capture:=false;
+       exit;
+     end;
+   end
+   else begin
+    exit; // cannot start now
+   end;
+  end;
+  // check if dithering is required
+  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
+   if canwait then begin
+    f_capture.DitherNum:=0;
+    if autoguider.State=GUIDER_GUIDING then begin
+      NewMessage(rsDithering+ellipsis,1);
+      StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
+      autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
+      autoguider.WaitDithering(SettleMaxTime);
+      Wait(1);
+    end else begin
+      NewMessage(rsNotAutoguidi,1);
+    end;
+   end
+   else begin
+    exit; // cannot start now
+   end;
+  end;
+  // All OK
+  result:=true;
+end;
+end;
+
+Procedure Tf_main.StartCaptureExposure(Sender: TObject);
+begin
+if PrepareCaptureExposure(true) then // do all requirement and check it's OK
+   StartCaptureExposureNow;
+end;
+
+Procedure Tf_main.StartCaptureExposureNow;
+var e: double;
+    buf: string;
+    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
+    ftype:TFrameType;
+begin
+if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
+  if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
+    ftype:=TFrameType(f_capture.FrameType.ItemIndex)
+  else
+    ftype:=LIGHT;
+  f_preview.StackPreview.Checked:=false;
+  f_capture.Running:=true;
+  MenuCaptureStart.Caption:=rsStop;
+  Preview:=false;
+  Capture:=true;
   // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
@@ -6878,70 +7014,6 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      f_capture.CheckBoxDither.Checked:=false;
      f_capture.CheckBoxFocus.Checked:=false;
      f_capture.CheckBoxFocusTemp.Checked:=false;
-  end;
-  // check for meridian and do flip now if required
-  waittime:=CheckMeridianFlip(e);
-  if not f_capture.Running then begin
-    // stop current capture if meridian flip failed
-    NewMessage(rsMeridianFlip,1);
-    f_capture.Stop;
-    Capture:=false;
-    exit;
-  end;
-  // check if we need to wait for flip before to continue (time to meridian < exposure time)
-  if waittime>0 then begin
-    f_capture.DitherNum:=0; // no dither after flip
-    // wait meridian
-    StartCaptureTimer.Interval:=waittime*1000;
-    StartCaptureTimer.Enabled:=true;
-    exit;
-  end;
-  // check focuser temperature compensation
-  if (camera.FrameType=LIGHT) then begin
-    FocuserTemperatureCompensation;
-  end;
-  // check if refocusing is required
-  if f_capture.FocusNow  // start of step
-     or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
-     or (f_capture.CheckBoxFocusTemp.Checked and focuser.hasTemperature and (AutofocusTempChange<>0.0) and
-        (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and (camera.FrameType=LIGHT) and
-        (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))     // temperature change
-     then begin
-     f_capture.FocusNum:=0;
-     f_capture.FocusNow:=false;
-     // do autofocus
-     if AutoAutofocus then begin
-       if f_capture.Running then begin
-         // ok, restart exposure
-         f_capture.DitherNum:=0; // no dither after focus
-         Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
-         exit;
-       end else begin
-         NewMessage(rsCaptureStopp,1);
-         f_capture.Stop;
-         Capture:=false;
-         exit;
-       end;
-     end else begin
-       // failed, cancel current capture
-       NewMessage(rsAutofocusFai,1);
-       f_capture.Stop;
-       Capture:=false;
-       exit;
-     end;
-  end;
-  // check if dithering is required
-  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
-    f_capture.DitherNum:=0;
-    if autoguider.State=GUIDER_GUIDING then begin
-      NewMessage(rsDithering+ellipsis,1);
-      StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
-      autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
-      autoguider.WaitDithering(SettleMaxTime);
-      Wait(1);
-    end else begin
-      NewMessage(rsNotAutoguidi,1);
-    end;
   end;
   // set readout mode
   if camera.hasReadOut then begin
@@ -7056,7 +7128,7 @@ begin
      end;
      // save file
      CameraSaveNewImage;
-     if (not EarlyNextExposure) or Autofocusing then begin
+     if (not EarlyNextExposure) or SkipEarlyExposure then begin
        // Next exposure delayed after image display
        // start the exposure now
        f_capture.SeqCount:=f_capture.SeqCount+1;
@@ -7109,12 +7181,26 @@ begin
   if Capture then begin
     // prepare for next exposure
     f_capture.SeqCount:=f_capture.SeqCount+1;
-    f_capture.DitherNum:=f_capture.DitherNum+1;
-    f_capture.FocusNum:=f_capture.FocusNum+1;
     if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
        // next exposure
-       if f_capture.Running then
-          Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       if f_capture.Running then begin
+         f_capture.DitherNum:=f_capture.DitherNum+1;
+         f_capture.FocusNum:=f_capture.FocusNum+1;
+         // only check if an operation is need before the next exposure
+         if PrepareCaptureExposure(false) then begin
+           // nothing to wait, start now
+           SkipEarlyExposure:=false;
+           StartCaptureExposureNow;
+         end
+         else begin
+           // Some operation is need.
+           // process later in CameraNewImage
+           f_capture.SeqCount:=f_capture.SeqCount-1;
+           f_capture.DitherNum:=f_capture.DitherNum-1;
+           f_capture.FocusNum:=f_capture.FocusNum-1;
+           SkipEarlyExposure:=true;
+         end;
+       end;
     end else begin
        // process end capture later in CameraNewImage
        f_capture.SeqCount:=f_capture.SeqCount-1;
@@ -7618,6 +7704,7 @@ end;
 if f_visu.FlipHorz then ScrBmp.HorizontalFlip;
 if f_visu.FlipVert then ScrBmp.VerticalFlip;
 Image1.Invalidate;
+if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 MagnifyerTimer.Enabled:=true;
 end;
 
@@ -9928,7 +10015,7 @@ begin
    Timestamp.Caption:=TimeToStr(now);
 end;
 
-function Tf_main.CheckMeridianFlip(nextexposure:double=0):integer;
+function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
 var ra,de,hh,a,h,tra,tde,err: double;
     CurSt: double;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
@@ -9942,7 +10029,8 @@ var ra,de,hh,a,h,tra,tde,err: double;
     meridianflipping:=false;
   end;
 begin
-  result:=-1;
+  waittime:=-1;
+  result:=false;
   if (mount.Status=devConnected) and (not mount.MountSlewing) and (mount.Park=false) and (not autofocusing) and ((not meridianflipping)or(nextexposure<>0)) then begin
     CurST:=CurrentSidTim;
     ra:=mount.RA;
@@ -9975,25 +10063,33 @@ begin
     NextDelay:=ceil(nextexposure/60);
     if MeridianDelay1>0  then begin // before meridian limit
       if MeridianDelay2>NextDelay then begin // enough time for next exposure or no capture in progress
-         result:=-1;
+         waittime:=-1;
          exit;
       end else if (NextDelay>0)and(MeridianDelay1>0) then begin // too short for next exposure
+       result:=true;
+       if canwait then begin
         if (MeridianOption=1) then begin   // if autoflip, wait
            wait(2);
            meridianflipping:=true;
            NewMessage(Format(rsWaitMeridian, [inttostr(MeridianDelay1)]),2);
            StatusBar1.Panels[1].Text := rsWaitMeridian2;
-           result:=15+abs(round(rad2deg*3600*hh/15)); // time to wait for meridian
+           waittime:=15+abs(round(rad2deg*3600*hh/15)); // time to wait for meridian
            exit;
         end else begin
-         result:=-1;   // if abort, continue
+         waittime:=-1;   // if abort, continue
          exit;
         end;
+       end
+       else begin
+         // cannot wait now
+         exit;
+       end;
       end;
     end;
-    if ((MeridianDelay1<=0)and(mount.PierSide=pierWest)) or
-       (MeridianDelay1=0)
-      then begin                    // Do meridian action
+    if ((MeridianDelay1<=0)and(mount.PierSide=pierWest)) or (MeridianDelay1=0) then begin
+     result:=true;
+     if canwait then begin
+      // Do meridian action
       if MeridianOption=1 then begin  // Flip
         try
         meridianflipping:=true;
@@ -10165,9 +10261,19 @@ begin
         DoAbort;
       end;
     end;
+    end
+    else begin
+      // cannot wait now
+      exit;
+    end;
   end;
 end;
 
+procedure Tf_main.CheckMeridianFlip;
+var t:integer;
+begin
+ CheckMeridianFlip(0,true,t);
+end;
 
 procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
