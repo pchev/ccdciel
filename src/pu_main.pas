@@ -2437,7 +2437,6 @@ begin
   if astrometry.Busy then begin
     astrometry.StopAstrometry;
   end;
-  if (TCPDaemon<>nil) then StopServer;
   wait(2); // time for other thread to terminate
   astrometry.Free;
   CloseAction:=caFree;
@@ -2674,8 +2673,10 @@ if CanClose then begin
  end;
  if f_sequence.Running then f_sequence.AbortSequence;
  f_script.RunShutdownScript;
+ if (TCPDaemon<>nil) then StopServer;
  NewMessage(rsDisconnectin+blank+ellipsis,1);
  Disconnect(nil);
+ wait(1);
 end;
 end;
 
