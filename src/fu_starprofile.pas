@@ -37,8 +37,8 @@ type
   { Tf_starprofile }
 
   Tf_starprofile = class(TFrame)
-    FitSourceL: TListChartSource;
-    FitSourceR: TListChartSource;
+    FitSourceMeasure: TListChartSource;
+    FitSourceComp: TListChartSource;
     graph: TImage;
     Label1: TLabel;
     Label2: TLabel;
@@ -61,24 +61,25 @@ type
     ChkFocus: TSpeedButton;
     ChkAutofocus: TSpeedButton;
     BtnMeasureImage: TSpeedButton;
-    PtSourceL: TListChartSource;
-    PtSourceR: TListChartSource;
+    PtSourceMeasure: TListChartSource;
+    PtSourceComp: TListChartSource;
     BtnPinGraph: TSpeedButton;
     Title: TLabel;
     TimerHideGraph: TTimer;
     VcChart: TChart;
     VcChartL: TFitSeries;
-    VcChartPtL: TLineSeries;
-    VcChartPtR: TLineSeries;
+    VcChartPtMeasure: TLineSeries;
+    VcChartPtComp: TLineSeries;
     VcChartR: TFitSeries;
-    VcChartRegL: TLineSeries;
-    VcChartRegR: TLineSeries;
+    VcChartRegMeasure: TLineSeries;
+    VcChartRegComp: TLineSeries;
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure graphDblClick(Sender: TObject);
     procedure BtnMeasureImageClick(Sender: TObject);
+    procedure PanelGraphDblClick(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
@@ -103,7 +104,7 @@ type
     FAutofocusResult, FAutofocusDone: boolean;
     dyn_v_curve:array of TDouble2;
     aminhfd,amaxhfd:double;
-    afmpos,aminpos:integer;
+    afmpos,aminpos,DynAbsStartPos,DynAbsStep:integer;
     procedure msg(txt:string; level: integer);
     function  getRunning:boolean;
     procedure PlotProfile(f: TFits; bg: double; s:integer);
@@ -113,6 +114,7 @@ type
     procedure doAutofocusDynamic;
     procedure doAutofocusIterative;
     procedure SetLang;
+    procedure PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
   public
     { public declarations }
     LastFocusimage: TBGRABitmap;
@@ -289,8 +291,10 @@ begin
  FAutofocusResult:=false;
  FPreFocusPos:=focuser.FocusPosition;
  focuserdirection:=AutofocusMoveDir;
- PtSourceL.Clear;
- FitSourceL.Clear;
+ PtSourceMeasure.Clear;
+ FitSourceMeasure.Clear;
+ PtSourceComp.Clear;
+ FitSourceComp.Clear;
  PanelFWHM.Visible:=false;
  PanelGraph.Visible:=true;
  if restart then
@@ -302,7 +306,7 @@ begin
                 // plot curve in graph
                 if AutofocusMode=afVcurve then begin
                   for i:=0 to AutofocusVcNum do begin
-                    FitSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
+                    FitSourceMeasure.Add(AutofocusVc[i,1],AutofocusVc[i,2]);
                   end;
                 end;
                 msg(rsAutofocusSta3,2);
@@ -348,6 +352,29 @@ begin
   if assigned(FonMeasureImage) then FonMeasureImage(self);
 end;
 
+procedure Tf_starprofile.PanelGraphDblClick(Sender: TObject);
+var f: TForm;
+begin
+ if PanelGraph.Parent=Panel6 then begin
+  f:=TForm.Create(self);
+  f.OnClose:=@PanelGraphClose;
+  f.Width:=DoScaleX(400);
+  f.Height:=DoScaleY(300);
+  f.Caption:=rsAutofocusGra;
+  PanelGraph.Parent:=f;
+  PanelGraph.Align:=alClient;
+  FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+  f.Show;
+ end;
+end;
+
+procedure Tf_starprofile.PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction:=caFree;
+  PanelGraph.Align:=alNone;
+  PanelGraph.Parent:=Panel6;
+end;
+
 procedure Tf_starprofile.TimerHideGraphTimer(Sender: TObject);
 begin
  if BtnPinGraph.Down then begin
@@ -355,6 +382,9 @@ begin
  end
  else begin
    TimerHideGraph.Enabled:=false;
+   if (PanelGraph.Parent<>Panel6)and(PanelGraph.Parent is TForm) then begin
+     TForm(PanelGraph.Parent).close;
+   end;
    PanelFWHM.Visible:=true;
    PanelGraph.Visible:=false;
  end;
@@ -739,12 +769,22 @@ begin
   if not FirstFrame then begin
     inc(FnumGraph);
     if AutofocusMode=afVcurve then begin
-      PtSourceL.Add(focuser.FocusPosition,Fhfd,'',clGreen);
+      PtSourceMeasure.Add(focuser.FocusPosition,Fhfd,'',clGreen);
+    end
+    else if AutofocusMode=afDynamic then begin
+    if (not terminated) then begin
+      if DynAbsStartPos>0 then
+        i:=DynAbsStartPos+(FnumGraph-1)*DynAbsStep
+      else
+        i:=FnumGraph;
+      PtSourceMeasure.Add(i,Fhfd,'',clBlue);
+      FitSourceMeasure.Add(i,Fhfd);
+    end;
     end
     else
     if (not terminated) then begin
-      PtSourceL.Add(FnumGraph,Fhfd,'',clGreen);
-      FitSourceL.Add(FnumGraph,Fhfd);
+      PtSourceMeasure.Add(FnumGraph,Fhfd,'',clGreen);
+      FitSourceMeasure.Add(FnumGraph,Fhfd);
     end;
   end;
   // check low snr
@@ -944,7 +984,7 @@ end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
 var i,k,step,sumpos,numpos: integer;
-    p_hyp,a_hyp,b_hyp: double;
+    p_hyp,a_hyp,b_hyp,x: double;
   procedure ResetPos;
   begin
     k:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-aminpos));
@@ -967,13 +1007,18 @@ begin
               if AutofocusDynamicNumPoint<5 then AutofocusDynamicNumPoint:=5;
               SetLength(dyn_v_curve,AutofocusDynamicNumPoint+1);
               // set initial position
+              DynAbsStartPos:=focuser.FocusPosition;  //return -1 for relative focuser
               k:=AutofocusDynamicNumPoint div 2;
               focuser.FocusSpeed:=AutofocusDynamicMovement*k;
               if AutofocusMoveDir=FocusDirIn then begin
                 onFocusOUT(self);
+                if DynAbsStartPos>0 then DynAbsStartPos:=DynAbsStartPos+AutofocusDynamicMovement*k;
+                DynAbsStep:=-AutofocusDynamicMovement;
               end
               else begin
                 onFocusIN(self);
+                if DynAbsStartPos>0 then DynAbsStartPos:=DynAbsStartPos-AutofocusDynamicMovement*k;
+                DynAbsStep:=AutofocusDynamicMovement;
               end;
               afmpos:=0;
               aminhfd:=9999;
@@ -1044,8 +1089,22 @@ begin
               // compute focus
               p_hyp:=0;a_hyp:=0;b_hyp:=0;
               find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
-              msg(Format(rsHYPERBOLACur, [FormatFloat(f3, p_hyp), FormatFloat(
-                f4, lowest_error), inttostr(iteration_cycles)]),3 );
+              if DynAbsStartPos>0 then
+                x:=DynAbsStartPos+(p_hyp-1)*DynAbsStep
+              else
+                x:=p_hyp;
+              msg(Format(rsHYPERBOLACur, [FormatFloat(f3, x), FormatFloat(f4, lowest_error), inttostr(iteration_cycles)]),3 );
+              if DynAbsStartPos>0 then
+                PtSourceComp.Add(DynAbsStartPos+(p_hyp-1)*DynAbsStep,a_hyp,'',clRed)
+              else
+                PtSourceComp.Add(p_hyp,a_hyp,'',clRed);
+              for i:=10 to 10*FnumGraph do begin
+                if DynAbsStartPos>0 then
+                  x:=DynAbsStartPos+((i/10)-1)*DynAbsStep
+                else
+                  x:=i/10;
+                FitSourceComp.Add(x,hfd_calc(i/10,p_hyp,a_hyp,b_hyp));
+              end;
               // focus position with last move in focus direction
               step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp)); //require steps from current position at the end of the curve
               if focuser.BacklashActive then begin

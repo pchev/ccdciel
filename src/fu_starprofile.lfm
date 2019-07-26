@@ -143,10 +143,10 @@ object f_starprofile: Tf_starprofile
         TabOrder = 0
         object LabelImax: TLabel
           Left = 0
-          Height = 39
+          Height = 26
           Hint = 'The maximum intensity value'
           Top = 86
-          Width = 7
+          Width = 5
           Caption = ' '
           Font.Height = 18
           Font.Style = [fsBold]
@@ -166,16 +166,16 @@ object f_starprofile: Tf_starprofile
           Left = 125
           Height = 19
           Top = 72
-          Width = 22
+          Width = 25
           Caption = 'SNR'
           ParentColor = False
         end
         object LabelSNR: TLabel
           Left = 125
-          Height = 22
+          Height = 26
           Hint = 'The Signal/Noise ratio'
           Top = 86
-          Width = 6
+          Width = 5
           Caption = ' '
           Font.Height = 18
           Font.Style = [fsBold]
@@ -215,6 +215,7 @@ object f_starprofile: Tf_starprofile
         ParentFont = False
         TabOrder = 1
         Visible = False
+        OnDblClick = PanelGraphDblClick
         object VcChart: TChart
           Left = 0
           Height = 101
@@ -248,8 +249,9 @@ object f_starprofile: Tf_starprofile
             'TAChart'
           )
           Align = alClient
+          OnDblClick = PanelGraphDblClick
           OnMouseMove = VcChartMouseMove
-          object VcChartPtL: TLineSeries
+          object VcChartPtMeasure: TLineSeries
             LinePen.Color = clNone
             LinePen.Style = psClear
             Pointer.Brush.Style = bsClear
@@ -257,9 +259,9 @@ object f_starprofile: Tf_starprofile
             Pointer.Style = psCircle
             Pointer.Visible = True
             ShowPoints = True
-            Source = PtSourceL
+            Source = PtSourceMeasure
           end
-          object VcChartPtR: TLineSeries
+          object VcChartPtComp: TLineSeries
             LinePen.Color = clNone
             LinePen.Style = psClear
             Pointer.Brush.Style = bsClear
@@ -267,13 +269,15 @@ object f_starprofile: Tf_starprofile
             Pointer.Style = psCircle
             Pointer.Visible = True
             ShowPoints = True
-            Source = PtSourceR
+            Source = PtSourceComp
           end
-          object VcChartRegL: TLineSeries
-            Source = FitSourceL
+          object VcChartRegMeasure: TLineSeries
+            LinePen.Color = clBlue
+            Source = FitSourceMeasure
           end
-          object VcChartRegR: TLineSeries
-            Source = FitSourceR
+          object VcChartRegComp: TLineSeries
+            LinePen.Color = clFuchsia
+            Source = FitSourceComp
           end
         end
         object Panel5: TPanel
@@ -347,19 +351,19 @@ object f_starprofile: Tf_starprofile
       ParentFont = False
     end
   end
-  object PtSourceR: TListChartSource
+  object PtSourceComp: TListChartSource
     left = 88
     top = 424
   end
-  object FitSourceR: TListChartSource
+  object FitSourceComp: TListChartSource
     left = 128
     top = 424
   end
-  object FitSourceL: TListChartSource
+  object FitSourceMeasure: TListChartSource
     left = 8
     top = 424
   end
-  object PtSourceL: TListChartSource
+  object PtSourceMeasure: TListChartSource
     left = 48
     top = 424
   end

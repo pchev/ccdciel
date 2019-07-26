@@ -10697,7 +10697,7 @@ begin
      if focuser.hasAbsolutePosition then result:=result+rsPos+': '+f_focuser.Position.Text+'<br>';
      if focuser.hasTemperature then result:=result+rsTemp+': '+f_focuser.Temp.Text+'<br>';
      result:=result+StringReplace(f_starprofile.LastFocusMsg,crlf,'<br>',[]);
-     if true or (f_starprofile.PtSourceL.Count>0) then begin
+     if true or (f_starprofile.PtSourceMeasure.Count>0) then begin
         result:=result+'</td><td style="vertical-align:top;">';
         result:=result+'<img src="lastfocus.jpg" alt="Last focus graph">';
      end;

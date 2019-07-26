@@ -1097,6 +1097,7 @@ resourcestring
   rsTheCameraIma = 'The camera image format is';
   rsPleaseSetThe = 'Please set the format to %s before to start the sequence.';
   rsWarningImage = 'Warning! %s image received';
+  rsAutofocusGra = 'Autofocus graph';
 
 implementation
 
