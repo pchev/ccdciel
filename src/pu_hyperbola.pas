@@ -72,18 +72,16 @@ begin
   result:=x;{steps to focus}
 end;
 
-function scaled_error_hyperbola(data: array of TDouble2;data_length:integer; perfectfocusposition,a,b: double): double;{calculates total squared error between V-curve array data and hyperbola}
+function scaled_error_hyperbola(data: array of TDouble2;data_length:integer; perfectfocusposition,a,b,seeing_limit: double): double;{calculates total squared error between measured V-curve and hyperbola with hyperbola lowest values clamped against seeing limit}
 var
   n, i: Integer;
   hfd_simulation, total_error : double;
 begin
- // n:=Length(data);
-  n:=data_length;
-
   total_error:=0;
-  for i:=0 to n-1 do
+  for i:=0 to data_length-1 do
   begin
      hfd_simulation:=hfd_calc(data[i,1],perfectfocusposition,a,b);{y or HFD error}
+     if hfd_simulation<seeing_limit then  hfd_simulation:=seeing_limit; {Clamp the hyperbola lowest values against seeing limit = lowest measured HFD value}
      total_error:=total_error+ sqr((hfd_simulation-data[i,2])/data[i,2]); {sqr the SCALED DIFFERENCE}
    end;
   result:=sqrt(total_error);
@@ -149,7 +147,7 @@ begin
         b1:=b0 - b_range;{start value}
         while b1 <= b0 + b_range do {b loop}
         begin
-          error1:=scaled_error_hyperbola(data, data_length,p1,a1,b1);
+          error1:=scaled_error_hyperbola(data, data_length,p1,a1,b1,lowest_hfd); {calculate the curve fit error with these values. The lowest HFD is used to clamp the bottom of the hyperbola tot seeing minimum }
           if error1<lowest_error  then
           begin{better position found}
             old_error:=lowest_error;
