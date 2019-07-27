@@ -230,7 +230,7 @@ type
     FAstrometry: TAstrometry;
     LockTarget: boolean;
     FTargetsRepeat: integer;
-    LockStep, StepsModified: boolean;
+    LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
     originalFilter: array[0..99] of string;
     SortDirection: integer;
@@ -306,6 +306,7 @@ end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
+  ObjectNameChange:=false;
   TargetList.Cells[colseq,0]:='Seq';
   StepList.Cells[0,0]:='Seq';
   if TargetList.RowCount>1 then begin
@@ -1047,8 +1048,20 @@ if CurrentSequenceFile='' then begin
   end;
   SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
 end
-else
-  SaveDialog1.FileName:=CurrentSequenceFile;
+else begin
+  if ObjectNameChange then begin
+    n:=TargetList.RowCount;
+    defaultname:=CurrentSeqName;
+    for i:=1 to n-1 do begin
+      if (TargetList.Cells[1,i]<>ScriptTxt) and (TargetList.Cells[1,i]<>SkyFlatTxt) then
+         defaultname:=TargetList.Cells[1,i];
+    end;
+    SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
+  end
+  else begin
+    SaveDialog1.FileName:=CurrentSequenceFile;
+  end;
+end;
 
 if SaveDialog1.Execute then begin
   CurrentSequenceFile:=SaveDialog1.FileName;
@@ -1311,6 +1324,8 @@ begin
   else begin
     PageControl1.ActivePageIndex:=0;
     CheckRiseSet(n);
+    if (t.objectname=CurrentSeqName)and(trim(TargetList.Cells[colname,n])<>CurrentSeqName) then
+       ObjectNameChange:=true;
     t.objectname:=trim(TargetList.Cells[colname,n]);
     planchange:=(t.planname<>TargetList.Cells[colplan,n]);
     t.planname:=TargetList.Cells[colplan,n];
