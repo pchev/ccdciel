@@ -73,6 +73,7 @@ type
     VcChartR: TFitSeries;
     VcChartRegMeasure: TLineSeries;
     VcChartRegComp: TLineSeries;
+    procedure BtnPinGraphClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -350,6 +351,11 @@ end;
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
 begin
   if assigned(FonMeasureImage) then FonMeasureImage(self);
+end;
+
+procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
+begin
+  if BtnPinGraph.Down then PanelGraphDblClick(Sender);
 end;
 
 procedure Tf_starprofile.PanelGraphDblClick(Sender: TObject);
