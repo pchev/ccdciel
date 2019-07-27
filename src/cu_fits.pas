@@ -2032,6 +2032,9 @@ for i:=0 to Length(list)-1 do
 
    GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);
 
+   // normalize value
+   vmax:=FimageMin+vmax/FimageC;
+
    {check valid hfd, snr}
    if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
     begin

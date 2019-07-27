@@ -357,12 +357,14 @@ var f: TForm;
 begin
  if PanelGraph.Parent=Panel6 then begin
   f:=TForm.Create(self);
+  f.FormStyle:=fsStayOnTop;
   f.OnClose:=@PanelGraphClose;
   f.Width:=DoScaleX(400);
   f.Height:=DoScaleY(300);
   f.Caption:=rsAutofocusGra;
   PanelGraph.Parent:=f;
   PanelGraph.Align:=alClient;
+  BtnPinGraph.Down:=true;
   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
   f.Show;
  end;
@@ -395,12 +397,46 @@ procedure Tf_starprofile.VcChartMouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);
 var pointi: TPoint;
     pointg: TDoublePoint;
+    i: integer;
+    d,dx,dy,r,newx,newy:double;
 begin
   if (x>5)and(x<(VcChart.Width-5))and(y>5)and(y<(VcChart.Height-5)) then begin
   try
+  // mouse position
   pointi.x:=X;
   pointi.y:=Y;
   pointg:=VcChart.ImageToGraph(pointi);
+  // maximum search radius 5 pixel
+  r:=5;
+  newx:=-1;
+  newy:=-1;
+  // search computed focus point
+  if PtSourceComp.Count>0 then begin
+    dx:=X-VcChart.XGraphToImage(PtSourceComp.Item[0]^.X);
+    dy:=Y-VcChart.YGraphToImage(PtSourceComp.Item[0]^.Y);
+    d:=sqrt(dx*dx+dy*dy);
+    if d<r then begin
+      newx:=PtSourceComp.Item[0]^.X;
+      newy:=PtSourceComp.Item[0]^.Y;
+      r:=d;
+    end;
+  end;
+  // search measured point
+  for i:=0 to PtSourceMeasure.Count-1 do begin
+    dx:=X-VcChart.XGraphToImage(PtSourceMeasure.Item[i]^.X);
+    dy:=Y-VcChart.YGraphToImage(PtSourceMeasure.Item[i]^.Y);
+    d:=sqrt(dx*dx+dy*dy);
+    if d<r then begin
+      newx:=PtSourceMeasure.Item[i]^.X;
+      newy:=PtSourceMeasure.Item[i]^.Y;
+      r:=d;
+    end;
+  end;
+  if (newx>0)and(newy>0) then begin
+    pointg.x:=newx;
+    pointg.y:=newy;
+  end;
+  // show position
   LabelCoord.Caption:='Pos:'+IntToStr(trunc(pointg.x))+' HFD:'+FormatFloat(f1,pointg.y);
   except
   end;
@@ -777,7 +813,10 @@ begin
         i:=DynAbsStartPos+(FnumGraph-1)*DynAbsStep
       else
         i:=FnumGraph;
-      PtSourceMeasure.Add(i,Fhfd,'',clBlue);
+      if FValMax<ClippingOverflow then
+         PtSourceMeasure.Add(i,Fhfd,'',clBlue)
+      else
+         PtSourceMeasure.Add(i,Fhfd,'',clRed);
       FitSourceMeasure.Add(i,Fhfd);
     end;
     end
@@ -1095,9 +1134,9 @@ begin
                 x:=p_hyp;
               msg(Format(rsHYPERBOLACur, [FormatFloat(f3, x), FormatFloat(f4, lowest_error), inttostr(iteration_cycles)]),3 );
               if DynAbsStartPos>0 then
-                PtSourceComp.Add(DynAbsStartPos+(p_hyp-1)*DynAbsStep,a_hyp,'',clRed)
+                PtSourceComp.Add(DynAbsStartPos+(p_hyp-1)*DynAbsStep,a_hyp,'',clFuchsia)
               else
-                PtSourceComp.Add(p_hyp,a_hyp,'',clRed);
+                PtSourceComp.Add(p_hyp,a_hyp,'',clFuchsia);
               for i:=10 to 10*FnumGraph do begin
                 if DynAbsStartPos>0 then
                   x:=DynAbsStartPos+((i/10)-1)*DynAbsStep
