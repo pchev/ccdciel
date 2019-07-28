@@ -84,7 +84,7 @@ begin
      if hfd_simulation<seeing_limit then  hfd_simulation:=seeing_limit; {Clamp the hyperbola lowest values against seeing limit = lowest measured HFD value}
      total_error:=total_error+ sqr((hfd_simulation-data[i,2])/data[i,2]); {sqr the SCALED DIFFERENCE}
    end;
-  result:=sqrt(total_error);
+  result:=sqrt(total_error)/data_length;{scale to average error per point}
 end;
 
 procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[1,n]=position,data[2,n]=hfd, output: bestfocusposition=p, a, b of hyperbola}
@@ -96,8 +96,7 @@ var
    highest_position, lowest_position,a1,b1,p1,a0,b0,p0  :double;
 begin
   lowest_error:=1E99;
-  // n:=Length(data);
-  n:=data_length;
+  n:=data_length;// or n:=Length(data);
 
   highest_hfd:=0;
   lowest_hfd:=1E99;
@@ -163,9 +162,9 @@ begin
       p1:=p1 + p_range*0.1;{do 20 steps within range}
     end;{position loop}
     inc(iteration_cycles);
-  until (  (old_error-lowest_error<0.0001){lowest error almost reached}
-        or (lowest_error<=0.0001)         {perfect result}
-        or (iteration_cycles>=30));       {most likely convergence problem}
+  until  ( (old_error-lowest_error<0.00001){lowest error almost reached. Error is expressed in relative error per point}
+        or (lowest_error<=0.00001)         {perfect result}
+        or (iteration_cycles>=30) );       {most likely convergence problem}
 end;
 
 
