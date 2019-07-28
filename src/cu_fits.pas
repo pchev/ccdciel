@@ -46,7 +46,7 @@ type
  TStar = record
          x,y: double;
          hfd, fwhm: double;
-         vmax, snr: double;
+         vmax, snr, bg: double;
          end;
  TStarList = array of TStar;
 
@@ -2001,6 +2001,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
        FStarList[nhfd-1].fwhm:=star_fwhm;
        FStarList[nhfd-1].snr:=snr;
        FStarList[nhfd-1].vmax:=vmax;
+       FStarList[nhfd-1].bg:=bg;
 
        size:=round(2*hfd1);
        for j:=max(0,round(yc)-size) to min(FHeight-1,integer(round(yc))+size) do {mark the whole star area as surveyed}
@@ -2034,6 +2035,7 @@ for i:=0 to Length(list)-1 do
 
    // normalize value
    vmax:=FimageMin+vmax/FimageC;
+   bg:=FimageMin+bg/FimageC;
 
    {check valid hfd, snr}
    if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
@@ -2047,6 +2049,7 @@ for i:=0 to Length(list)-1 do
        FStarList[nhfd-1].fwhm:=star_fwhm;
        FStarList[nhfd-1].snr:=snr;
        FStarList[nhfd-1].vmax:=vmax;
+       FStarList[nhfd-1].bg:=bg;
     end;
  end;
  SetLength(FStarList,nhfd);  {set length to new number of elements}

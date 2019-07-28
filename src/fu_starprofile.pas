@@ -486,9 +486,9 @@ try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
 if FValMax>1 then
-   LabelImax.Caption:=FormatFloat(f0,FValMax)
+   LabelImax.Caption:=FormatFloat(f0,FValMax+bg)
 else
-   LabelImax.Caption:=FormatFloat(f3,FValMax);
+   LabelImax.Caption:=FormatFloat(f3,FValMax+bg);
 if Fsnr>0 then
    LabelSNR.Caption:=FormatFloat(f0,Fsnr)
 else
@@ -685,6 +685,7 @@ begin
    exit;
  end;
 
+ bg:=0;
  if InplaceAutofocus then begin    // measure multiple stars
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
@@ -695,7 +696,10 @@ begin
        Fsnr:=0;
        for i:=0 to ns-1 do begin
          Fsnr:=max(Fsnr,f.StarList[i].snr);
-         FValMax:=max(FValMax,f.StarList[i].vmax);
+         if f.StarList[i].vmax>FValMax then begin
+            FValMax:=f.StarList[i].vmax;
+            bg:=f.StarList[i].bg;
+         end;
          if f.StarList[i].snr>AutofocusMinSNR then begin
             inc(nhfd);
             hfdlist[nhfd-1]:=f.StarList[i].hfd;
@@ -748,7 +752,7 @@ begin
     exit;
   end;
   if (Fhfd<=0)or((not Undersampled)and(Fhfd<0.8)) then begin
-    msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]),3);
+    msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr)]),3);
     msg(rsWeAreProbabl,0);
     msg(rsPleaseCreate,0);
     FAutofocusResult:=false;
@@ -770,7 +774,7 @@ begin
     FminPeak:=min(FminPeak,FValMax);
     inc(FnumHfd);
     msg(Format(rsAutofocusMea, [inttostr(FnumHfd), inttostr(AutofocusNearNum),
-      FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]),3);
+      FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr)]),3);
     if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
       Fhfd:=SMedian(FhfdList);
       FnumHfd:=0;
@@ -788,9 +792,9 @@ begin
   if InplaceAutofocus then begin
     LabelHFD.Caption:=FormatFloat(f1,Fhfd);
     if FValMax>1 then
-       LabelImax.Caption:=FormatFloat(f0,FValMax)
+       LabelImax.Caption:=FormatFloat(f0,FValMax+bg)
     else
-       LabelImax.Caption:=FormatFloat(f3,FValMax);
+       LabelImax.Caption:=FormatFloat(f3,FValMax+bg);
     if Ffwhm>0 then begin
       txt:=FormatFloat(f1,Ffwhm);
       if Ffwhmarcsec>0 then txt:=txt+'/'+FormatFloat(f1,Ffwhmarcsec)+'"';
@@ -819,7 +823,7 @@ begin
         i:=DynAbsStartPos+(FnumGraph-1)*DynAbsStep
       else
         i:=FnumGraph;
-      if FValMax<ClippingOverflow then
+      if (FValMax+bg)<ClippingOverflow then
          PtSourceMeasure.Add(i,Fhfd,'',clBlue)
       else
          PtSourceMeasure.Add(i,Fhfd,'',clRed);
@@ -844,7 +848,7 @@ begin
   if terminated then begin
     if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
     msg(Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),
-      FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+      FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
     if FAutofocusResult then begin
       FAutofocusDone:=true;
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
@@ -872,7 +876,7 @@ begin
     exit;
   end;
   FirstFrame:=false;
-  msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax), FormatFloat(f1, Fsnr)]),3);
+  msg(Format(rsAutofocusRun, [FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr)]),3);
   // do focus and continue
   case AutofocusMode of
     afVcurve   : doAutofocusVcurve;
