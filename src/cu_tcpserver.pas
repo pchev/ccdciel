@@ -105,9 +105,11 @@ var
 {$endif}
 
 constructor TTCPDaemon.Create;
+var i: integer;
 begin
   inherited Create(True);
   FreeOnTerminate := True;
+  for i:=1 to Maxclient do TCPThrd[i]:=nil;
 end;
 
 procedure TTCPDaemon.ShowError;

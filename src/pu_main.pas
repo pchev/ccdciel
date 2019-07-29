@@ -10539,7 +10539,7 @@ begin
     screen.cursor := crHourglass;
     NewMessage(rsTCPIPServerS,1);
     for i := 1 to Maxclient do
-      if (TCPDaemon.TCPThrd[i] <> nil) then
+      if (TCPDaemon.TCPThrd[i] <> nil) and (TCPDaemon.TCPThrd[i].sock <> nil) and (not TCPDaemon.TCPThrd[i].terminated) then
       begin
         TCPDaemon.TCPThrd[i].stoping := True;
       end;
