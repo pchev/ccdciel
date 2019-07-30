@@ -246,6 +246,8 @@ type
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
     procedure SetStartTime(buf: string; var t:TTarget);
     procedure SetEndTime(buf: string; var t:TTarget);
+    function AsDuskFlat:boolean;
+    function AsDawnFlat:boolean;
   public
     { public declarations }
     procedure LoadPlanList;
@@ -1755,6 +1757,7 @@ if LockTarget then exit;
      r2:=1;
      t:=TTarget(TargetList.Objects[colseq,r1]);
      t.planname:=FlatTimeName[0];
+     TargetList.Cells[colplan,r1]:=t.planname;
      TargetList.MoveColRow(false,r1,r2);
      SeqStartTwilight.Checked:=false;
      SeqStart.Checked:=false;
@@ -1763,6 +1766,7 @@ if LockTarget then exit;
     r1:=TargetList.Row;
     t:=TTarget(TargetList.Objects[colseq,r1]);
     t.planname:=FlatTimeName[1];
+    TargetList.Cells[colplan,r1]:=t.planname;
     r2:=TargetList.RowCount-1;
     TargetList.MoveColRow(false,r1,r2);
     SeqStopTwilight.Checked:=false;
@@ -1787,14 +1791,40 @@ begin
     FTargetsRepeat:=RepeatCountList.Value;
 end;
 
+function Tf_EditTargets.AsDuskFlat:boolean;
+var i:integer;
+begin
+result:=false;
+for i:=1 to TargetList.RowCount-1 do
+  if (TargetList.Cells[colname,i]=SkyFlatTxt) and (TargetList.Cells[colplan,i]=FlatTimeName[0])
+    then result:=true;
+end;
+
+function Tf_EditTargets.AsDawnFlat:boolean;
+var i:integer;
+begin
+result:=false;
+for i:=1 to TargetList.RowCount-1 do
+  if (TargetList.Cells[colname,i]=SkyFlatTxt) and (TargetList.Cells[colplan,i]=FlatTimeName[1])
+    then result:=true;
+end;
+
 procedure Tf_EditTargets.SeqStartChange(Sender: TObject);
 begin
+  if SeqStart.Checked and AsDuskFlat then begin
+    ShowMessage(rsCannotChange);
+    SeqStart.Checked:=false;
+  end;
   SeqStartTwilight.Enabled:=SeqStart.Checked;
   SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
 end;
 
 procedure Tf_EditTargets.SeqStopChange(Sender: TObject);
 begin
+  if SeqStop.Checked and AsDawnFlat then begin
+    ShowMessage(rsCannotChange2);
+    SeqStop.Checked:=false;
+  end;
   SeqStopTwilight.Enabled:=SeqStop.Checked;
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
 end;
