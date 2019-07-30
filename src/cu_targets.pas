@@ -357,14 +357,12 @@ begin
   CancelAutofocus:=false;
   WeatherCancelRestart:=false;
   FRunning:=true;
-  if not FSeqStop then begin
-    // look for a dawn sky flat
-    for j:=0 to NumTargets-1 do begin
-      if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
-        // Add stop at dawn
-        FSeqStop:=true;
-        FSeqStopTwilight:=true;
-      end;
+  // look for a dawn sky flat
+  for j:=0 to NumTargets-1 do begin
+    if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
+      // Force stop at dawn
+      FSeqStop:=true;
+      FSeqStopTwilight:=true;
     end;
   end;
   twok:=TwilightAstro(now,hm,he);
