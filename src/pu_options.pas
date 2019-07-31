@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI, u_translation, u_hints,
+uses u_utils, u_global, UScaleDPI, u_hints, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, Spin, enhedits;
 
@@ -43,6 +43,7 @@ type
     AutofocusTemp: TFloatSpinEdit;
     ButtonHelp: TButton;
     CbShowHints: TCheckBox;
+    UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
@@ -76,6 +77,7 @@ type
     DomeOpenActions: TStringGrid;
     DomeActionWait: TSpinEdit;
     Panel5: TPanel;
+    FileSequenceWidth: TSpinEdit;
     TabSheet15: TTabSheet;
     TemperatureScale: TRadioGroup;
     ReadOutCapture: TComboBox;
@@ -538,6 +540,7 @@ type
     procedure TemperatureScaleClick(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
     procedure TmpDirDefaultClick(Sender: TObject);
+    procedure UseFileSequenceWidthClick(Sender: TObject);
   private
     { private declarations }
     FGetMaxADU, FGetPixelSize, FGetFocale, FShowHelp: TNotifyEvent;
@@ -619,6 +622,7 @@ begin
   FolderOpt.Caption := rsFolderNameOp;
   BtnFolderDefault.Caption := rsDefault;
   UseTcpServer.Caption := rsAllowToGetPr;
+  UseFileSequenceWidth.Caption:=rsFixedSequenc;
   Label18.Caption := rsLanguage;
   TabSheet2.Caption := rsObservatory;
   Label5.Caption := rsObserverName;
@@ -1098,6 +1102,11 @@ end;
 procedure Tf_option.TmpDirDefaultClick(Sender: TObject);
 begin
  TempDir.text:=slash(ConfigDir)+'tmp';
+end;
+
+procedure Tf_option.UseFileSequenceWidthClick(Sender: TObject);
+begin
+  FileSequenceWidth.Enabled:=UseFileSequenceWidth.Checked;
 end;
 
 procedure Tf_option.FileOrFolderOptionsClick(Sender: TObject);

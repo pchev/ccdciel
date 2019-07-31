@@ -1100,6 +1100,7 @@ resourcestring
   rsAutofocusGra = 'Autofocus graph';
   rsCannotChange = 'Cannot change start time. Sequence will start in time for the dusk flat.';
   rsCannotChange2 = 'Cannot change stop time. Sequence will stop in time for the dawn flat.';
+  rsFixedSequenc = 'Fixed sequence length';
 
 implementation
 

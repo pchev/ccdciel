@@ -408,6 +408,7 @@ var
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
   FilenameSep: String;
+  FileSequenceWidth: integer;
   hasGain, hasGainISO: boolean;
   ISOList: TStringList;
   Gain,GainMin,GainMax: integer;

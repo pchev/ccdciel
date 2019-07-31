@@ -3188,6 +3188,7 @@ begin
     FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
   end;
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
+  FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
@@ -5783,6 +5784,15 @@ begin
         f_option.FilenameSep.ItemIndex:=i;
      end;
    end;
+   if FileSequenceWidth>0 then begin
+      f_option.UseFileSequenceWidth.Checked:=true;
+      f_option.FileSequenceWidth.Enabled:=true;
+      f_option.FileSequenceWidth.Value:=FileSequenceWidth;
+   end
+   else begin
+      f_option.UseFileSequenceWidth.Checked:=false;
+      f_option.FileSequenceWidth.Enabled:=false;
+   end;
    f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
@@ -6081,6 +6091,10 @@ begin
        config.SetValue('/Files/FileNameActive'+inttostr(i),f_option.FileOptions.Cells[1,i]='1');
      end;
      config.SetValue('/Files/FileNameSep',f_option.FilenameSep.Text);
+     if f_option.UseFileSequenceWidth.Checked then
+        config.SetValue('/Files/FileSequenceWidth',f_option.FileSequenceWidth.Text)
+     else
+        config.SetValue('/Files/FileSequenceWidth',0);
      config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
@@ -7327,7 +7341,7 @@ end;
 
 procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
-    fn,fd,buf: string;
+    fn,fd,buf,fileseqstr: string;
     ccdtemp: double;
     fileseqnum,i: integer;
     UseFileSequenceNumber: boolean;
@@ -7413,9 +7427,14 @@ try
  // sequence number must always be at the end
  if UseFileSequenceNumber then begin
    fileseqnum:=1;
-   while FileExistsUTF8(slash(fd)+fn+FilenameSep+IntToStr(fileseqnum)+'.fits') do
+   fileseqstr:=IntToStr(fileseqnum);
+   if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+   while FileExistsUTF8(slash(fd)+fn+FilenameSep+fileseqstr+'.fits') do begin
      inc(fileseqnum);
-   fn:=fn+FilenameSep+IntToStr(fileseqnum);
+     fileseqstr:=IntToStr(fileseqnum);
+     if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+   end;
+   fn:=fn+FilenameSep+fileseqstr;
  end;
  fn:=slash(fd)+fn+'.fits';
  // save the file
