@@ -7622,7 +7622,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.ImgDmax:=round(f_visu.ImgMax);
   fits.ImgDmin:=round(f_visu.ImgMin);
   fits.MaxADU:=MaxADU;
-  fits.Overflow:=ClippingOverflow;
+  fits.Overflow:= 0.9995*ClippingOverflow;
   fits.Underflow:=ClippingUnderflow;
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;

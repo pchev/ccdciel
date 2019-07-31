@@ -823,7 +823,7 @@ begin
         i:=DynAbsStartPos+(FnumGraph-1)*DynAbsStep
       else
         i:=FnumGraph;
-      if (FValMax+bg)<ClippingOverflow then
+      if (FValMax+bg)< (0.9995*ClippingOverflow) then
          PtSourceMeasure.Add(i,Fhfd,'',clBlue)
       else
          PtSourceMeasure.Add(i,Fhfd,'',clRed);
