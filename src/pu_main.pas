@@ -7418,7 +7418,7 @@ try
              end;
    end;
  end;
- fn:=StringReplace(fn,' ','',[rfReplaceAll]);
+ fn:=StringReplace(fn,' ',FilenameSep,[rfReplaceAll]);
  fn:=StringReplace(fn,'/',FilenameSep,[rfReplaceAll]);
  fn:=StringReplace(fn,'\',FilenameSep,[rfReplaceAll]);
  fn:=StringReplace(fn,':',FilenameSep,[rfReplaceAll]);
