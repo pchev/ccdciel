@@ -43,6 +43,8 @@ T_ascomcamera = class(T_camera)
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    {$endif}
+   FOffsetX, FOffsetY: integer;
+   FCType: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature, FCanSetTemperature: boolean;
    stCCDtemp : double;
@@ -124,6 +126,7 @@ public
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
@@ -157,6 +160,9 @@ begin
  FMaxBinY:=1;
  FBinX:=1;
  FBinY:=1;
+ FOffsetX:=0;
+ FOffsetY:=0;
+ FCType:='';
  FHasTemperature:=false;
  FCanSetTemperature:=false;
  FCameraInterface:=ASCOM;
@@ -286,6 +292,30 @@ begin
       except
         FhasReadOut:=false;
       end;
+    end;
+    FhasCfaInfo:=false;
+    try
+      FOffsetX:=0;
+      FOffsetY:=0;
+      FCType:='';
+      try
+        FOffsetX:=V.BayerOffsetX;
+        FOffsetY:=V.BayerOffsetY;
+        i:=V.SensorType;
+        case i of
+          0: FCType:='';       // Camera produces monochrome array with no Bayer encoding
+          1: FCType:='';       // Camera produces color image directly, requiring not Bayer decoding
+          2: FCType:='RGGB';   // Camera produces RGGB encoded Bayer array images
+          3: FCType:='CMYG';   // Camera produces CMYG encoded Bayer array images
+          4: FCType:='CMYG2';  // Camera produces CMYG2 encoded Bayer array images
+          5: FCType:='LRGB';   // Camera produces Kodak TRUESENSE Bayer LRGB array images
+          else FCType:='';
+        end;
+      except
+      end;
+      if FCType<>'' then FhasCfaInfo:=true;
+    except
+      FhasCfaInfo:=false;
     end;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Enabled:=true;
@@ -731,6 +761,13 @@ begin
    on E: Exception do msg('Reset frame error: ' + E.Message,0);
   end;
 {$endif}
+end;
+
+procedure T_ascomcamera.CfaInfo(out OffsetX, OffsetY: integer; out CType: string);
+begin
+ OffsetX:=FOffsetX;
+ OffsetY:=FOffsetY;
+ CType:=FCType;
 end;
 
 Procedure T_ascomcamera.AbortExposure;

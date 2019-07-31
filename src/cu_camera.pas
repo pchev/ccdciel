@@ -78,7 +78,7 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
-    FhasGain,FhasGainISO,FCanSetGain: boolean;
+    FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -166,6 +166,7 @@ T_camera = class(TComponent)
     procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); virtual; abstract;
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
+    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  virtual; abstract;
     function  CheckGain: boolean; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
     procedure StartVideoPreview; virtual; abstract;
@@ -240,6 +241,7 @@ T_camera = class(TComponent)
     property GainMax: integer read FGainMax;
     property hasGainISO: boolean read FhasGainISO;
     property ISOList: TStringList read FISOList;
+    property hasCfaInfo: boolean read FhasCfaInfo;
     property hasReadOut: boolean read FhasReadOut;
     property ReadOutList: TStringList read FReadOutList;
     property ReadOutMode: integer read GetReadOutMode write SetReadOutMode;
@@ -303,6 +305,7 @@ begin
   FGainMax:=0;
   FhasGain:=false;
   FhasGainISO:=false;
+  FhasCfaInfo:=false;
   FReadOutList:=TStringList.Create;
   FhasFastReadout:=false;
   FhasReadOut:=false;
@@ -482,13 +485,13 @@ begin
 end;
 
 procedure T_camera.WriteHeaders;
-var origin,observer,telname,objname,siso: string;
+var origin,observer,telname,objname,siso,CType: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs,hcomment1 : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
-    gamma,offset: integer;
+    gamma,offset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
 begin
@@ -602,6 +605,11 @@ begin
   except
    hasfocuserpos:=false;
   end;
+  CType:='';
+  try
+   if FhasCfaInfo then CfaInfo(OffsetX,OffsetY,CType);
+  except
+  end;
   // write new header
   Ffits.Header.ClearHeader;
   Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -637,8 +645,15 @@ begin
   if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
   if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
   if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
+  if hpix1>0 then Ffits.Header.Add('PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');
+  if hpix2>0 then Ffits.Header.Add('PIXSIZE2',hpix2 ,'[um] Pixel Size Y, binned');
   if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
   if hbin2>0 then Ffits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
+  if CType<>'' then begin
+     Ffits.Header.Add('XBAYROFF',OffsetX ,'X offset of Bayer array');
+     Ffits.Header.Add('YBAYROFF',OffsetY ,'Y offset of Bayer array');
+     Ffits.Header.Add('BAYERPAT',CType ,'Bayer color pattern');
+  end;
   Ffits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
   if ccdtemp<>NullCoord then Ffits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
   if Frwidth<>0 then begin
@@ -667,6 +682,7 @@ begin
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
        Ffits.Header.Add('SECPIX1',pixscale1,'image scale arcseconds per pixel');
        Ffits.Header.Add('SECPIX2',pixscale2,'image scale arcseconds per pixel');
+       Ffits.Header.Add('SCALE',pixscale1,'image scale arcseconds per pixel');
     end;
   end;
   if hcomment1<>'' then Ffits.Header.Add('COMMENT',hcomment1 ,'');

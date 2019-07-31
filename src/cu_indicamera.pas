@@ -88,6 +88,8 @@ private
    CCDmaxx,CCDmaxy,CCDpixelsize,CCDpixelsizex,CCDpixelsizey,CCDbitperpixel : INumber;
    CCDColorSpace: ISwitchVectorProperty;
    CCDColorGray,CCDColorRGB: ISwitch;
+   CCDCfa: ITextVectorProperty;
+   CfaOffsetX,CfaOffsetY,CfaType: IText;
    CCDVideoStream: ISwitchVectorProperty;
    VideoStreamOn,VideoStreamOff: ISwitch;
    RecordOptions: INumberVectorProperty;
@@ -231,6 +233,7 @@ private
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
@@ -344,6 +347,8 @@ begin
     CCDWebsocketSetting:=nil;
     CCDAbortExposure:=nil;
     CCDColorSpace:=nil;
+    CCDCfa:=nil;
+    FhasCfaInfo:=false;
     CCDVideoStream:=nil;
     RecordOptions:=nil;
     RecordFile:=nil;
@@ -852,6 +857,14 @@ begin
         FISOList.Add(CCDIso.sp[i].lbl);
      end;
      FhasGainISO:=(FISOList.Count>0);
+  end
+  else if (proptype=INDI_TEXT)and(propname='CCD_CFA') then begin
+     CCDCfa:=indiProp.getText();
+     CfaOffsetX:=IUFindText(CCDCfa,'CFA_OFFSET_X');
+     CfaOffsetY:=IUFindText(CCDCfa,'CFA_OFFSET_Y');
+     CfaType:=IUFindText(CCDCfa,'CFA_TYPE');
+     if (CfaOffsetX=nil)or(CfaOffsetY=nil)or(CfaType=nil) then CCDCfa:=nil;
+     FhasCfaInfo:=(CCDCfa<>nil);
   end
   else if (proptype=INDI_TEXT)and(ActiveDevices=nil)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
@@ -1445,6 +1458,20 @@ begin
        if assigned(FonFrameChange) then FonFrameChange(self);
     end;
   end;
+end;
+
+procedure T_indicamera.CfaInfo(out OffsetX, OffsetY: integer; out CType: string);
+begin
+   if CCDCfa<>nil then begin
+      OffsetX:=StrToIntDef(CfaOffsetX.Text,0);
+      OffsetY:=StrToIntDef(CfaOffsetY.Text,0);
+      CType:=CfaType.Text;
+   end
+   else begin
+     OffsetX:=0;
+     OffsetY:=0;
+     CType:='';
+   end;
 end;
 
 function T_indicamera.GetTemperatureRange:TNumRange;

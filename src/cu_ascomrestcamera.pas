@@ -46,6 +46,8 @@ T_ascomrestcamera = class(T_camera)
    stX,stY,stWidth,stHeight: integer;
    stGain: integer;
    FFrametype:TFrameType;
+   FOffsetX, FOffsetY: integer;
+   FCType: string;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
    function Connected: boolean;
@@ -125,6 +127,7 @@ public
    procedure GetFrameReal(out x,y,width,height: integer);
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
@@ -163,6 +166,9 @@ begin
  stWidth:=-1;
  stHeight:=-1;
  stGain:=-1;
+ FOffsetX:=0;
+ FOffsetY:=0;
+ FCType:='';
  FHasTemperature:=false;
  FCanSetTemperature:=false;
  FCameraInterface:=ASCOMREST;
@@ -186,7 +192,8 @@ end;
 
 procedure T_ascomrestcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 var rlist: array of string;
-    i,n: integer;
+    i,n,x,y: integer;
+    buf: string;
 begin
  try
   FStatus := devConnecting;
@@ -294,6 +301,30 @@ begin
       except
         FhasReadOut:=false;
       end;
+    end;
+    FhasCfaInfo:=false;
+    try
+      FOffsetX:=0;
+      FOffsetY:=0;
+      FCType:='';
+      try
+        FOffsetX:=V.Get('bayeroffsetx').AsInt;
+        FOffsetY:=V.Get('bayeroffsety').AsInt;
+        i:=V.Get('SensorType').AsInt;
+        case i of
+          0: FCType:='';       // Camera produces monochrome array with no Bayer encoding
+          1: FCType:='';       // Camera produces color image directly, requiring not Bayer decoding
+          2: FCType:='RGGB';   // Camera produces RGGB encoded Bayer array images
+          3: FCType:='CMYG';   // Camera produces CMYG encoded Bayer array images
+          4: FCType:='CMYG2';  // Camera produces CMYG2 encoded Bayer array images
+          5: FCType:='LRGB';   // Camera produces Kodak TRUESENSE Bayer LRGB array images
+          else FCType:='';
+        end;
+      except
+      end;
+      if FCType<>'' then FhasCfaInfo:=true;
+    except
+      FhasCfaInfo:=false;
     end;
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -1062,6 +1093,13 @@ begin
       result:=NullInt;
    end;
  end;
+end;
+
+procedure T_ascomrestcamera.CfaInfo(out OffsetX, OffsetY: integer; out CType: string);
+begin
+ OffsetX:=FOffsetX;
+ OffsetY:=FOffsetY;
+ CType:=FCType;
 end;
 
 procedure T_ascomrestcamera.SetReadOutMode(value: integer);
