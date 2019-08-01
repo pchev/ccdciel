@@ -7341,7 +7341,7 @@ end;
 
 procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
-    fn,fd,buf,fileseqstr: string;
+    fn,fd,buf,fileseqstr,blankrep: string;
     ccdtemp: double;
     fileseqnum,i: integer;
     UseFileSequenceNumber: boolean;
@@ -7418,10 +7418,14 @@ try
              end;
    end;
  end;
- fn:=StringReplace(fn,' ',FilenameSep,[rfReplaceAll]);
- fn:=StringReplace(fn,'/',FilenameSep,[rfReplaceAll]);
- fn:=StringReplace(fn,'\',FilenameSep,[rfReplaceAll]);
- fn:=StringReplace(fn,':',FilenameSep,[rfReplaceAll]);
+ if FilenameSep='_' then
+    blankrep:='-'
+ else
+    blankrep:='_';
+ fn:=StringReplace(fn,' ',blankrep,[rfReplaceAll]);
+ fn:=StringReplace(fn,'/',blankrep,[rfReplaceAll]);
+ fn:=StringReplace(fn,'\',blankrep,[rfReplaceAll]);
+ fn:=StringReplace(fn,':',blankrep,[rfReplaceAll]);
  if fn<>'' then
     delete(fn,length(fn),1); // remove last _
  // sequence number must always be at the end
