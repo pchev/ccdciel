@@ -3998,3 +3998,7 @@ msgstr ""
 msgid "Verbose device log"
 msgstr ""
 
+#: u_translation:rsresolveandpl2
+msgid "Resolve and plot Hyperleda"
+msgstr ""
+
