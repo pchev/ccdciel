@@ -1049,7 +1049,7 @@ begin
   cdate:={$I %DATE%};
   cdate:=copy(cdate,1,4);
   isAdmin := False;
-  debug_ascom := false;
+  debug_msg := false;
   {$ifdef mswindows}
   Application.{%H-}UpdateFormatSettings := False;
   isAdmin := IsUserAnAdmin;
@@ -1672,6 +1672,7 @@ begin
    MenuAlpacaSafetySetup.Caption:='Alpaca '+rsSafetyMonito+blank+rsSetup;
    MenuAlpacaDomeSetup.Caption:='Alpaca '+rsDome+blank+rsSetup;
    MenuViewhdr.Caption := rsViewHeader;
+   MenuImgStat.Caption:=rsImageStatist;
    MenuImage.Caption:=rsImage;
    MenuItem4.Caption := rsTools;
    MenuViewConnection.Caption := rsConnection;
@@ -1777,6 +1778,8 @@ begin
    MenuResolveSyncRotator2.Caption := rsResolveAndSy2;
    MenuResolveDSO.Caption:=rsResolveAndPl;
    MenuResolveDSO2.Caption:=rsResolveAndPl;
+   MenuResolveHyperLeda.Caption:=rsResolveAndPl2;
+   MenuResolveHyperLeda2.Caption:=rsResolveAndPl2;
    MenuResolvePlanetarium.Caption := rsResolveAndSh;
    MenuResolvePlanetarium2.Caption := rsResolveAndSh;
    MenuShowCCDFrame.Caption := rsResolveAndSh2;
@@ -3133,7 +3136,7 @@ begin
     WriteLog('');
     WriteDeviceLog('');
   end;
-  debug_ascom:=config.GetValue('/Log/Debug_Ascom',false);
+  debug_msg:=config.GetValue('/Log/debug_msg',false);
   UseTcpServer:=config.GetValue('/Log/UseTcpServer',false);
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
@@ -5796,7 +5799,7 @@ begin
    f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
-   f_option.Debug_Ascom.Checked:=config.GetValue('/Log/Debug_Ascom',debug_ascom);
+   f_option.debug_msg.Checked:=config.GetValue('/Log/debug_msg',debug_msg);
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
    f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
    f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
@@ -6135,7 +6138,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
-     config.SetValue('/Log/Debug_Ascom',f_option.Debug_Ascom.Checked);
+     config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
      config.SetValue('/Log/UseTcpServer',f_option.UseTcpServer.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);

@@ -50,7 +50,7 @@ type
     DomeCloseActions: TStringGrid;
     GainFromCamera: TCheckBox;
     FilenameSep: TComboBox;
-    Debug_Ascom: TCheckBox;
+    Debug_msg: TCheckBox;
     GroupBox11: TGroupBox;
     GroupBox18: TGroupBox;
     GroupBox21: TGroupBox;
@@ -625,7 +625,7 @@ begin
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
-  Debug_Ascom.Caption:=rsVerboseDevic;
+  Debug_msg.Caption:=rsVerboseDevic;
   TabSheet2.Caption := rsObservatory;
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;

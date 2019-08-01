@@ -115,7 +115,7 @@ begin
  result:=1;
   try
    result:=V.Get('interfaceversion').AsInt;
-  if debug_ascom then msg('Interface version = '+inttostr(Result));
+  if debug_msg then msg('Interface version = '+inttostr(Result));
   except
     result:=1;
   end;
@@ -135,7 +135,7 @@ procedure T_ascomrestfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; 
 begin
   try
   FStatus := devConnecting;
-  if debug_ascom then msg('Connecting... ');
+  if debug_msg then msg('Connecting... ');
   V.Host:=cp1;
   V.Port:=cp2;
   V.Protocol:=cp3;
@@ -167,7 +167,7 @@ begin
      StatusTimer.Enabled:=true;
   end
   else begin
-     if debug_ascom then msg('Not connected');
+     if debug_msg then msg('Not connected');
      Disconnect;
   end;
   except
@@ -198,7 +198,7 @@ result:=false;
   result:=V.Get('connected').AsBool;
   except
    on E: Exception do begin
-      if debug_ascom then msg('Error Connected : '+ E.Message);
+      if debug_msg then msg('Error Connected : '+ E.Message);
       result:=false;
    end;
   end;
@@ -256,11 +256,11 @@ begin
  result:=true;
  if FStatus<>devConnected then exit;
  try
-   if debug_ascom then msg('Wait moving ... ');
+   if debug_msg then msg('Wait moving ... ');
    maxcount:=maxtime div waitpoll;
    count:=0;
    while (V.Get('ismoving').AsBool)and(count<maxcount) do begin
-      if debug_ascom then begin
+      if debug_msg then begin
       if (count mod 20) = 0 then begin
          msg('Wait moving');
       end;
@@ -270,10 +270,10 @@ begin
       inc(count);
    end;
    result:=(count<maxcount);
-   if debug_ascom then msg('Move completed '+BoolToStr(result, True));
+   if debug_msg then msg('Move completed '+BoolToStr(result, True));
  except
   on E: Exception do begin
-       if debug_ascom then msg('Error IsMoving : '+ E.Message);
+       if debug_msg then msg('Error IsMoving : '+ E.Message);
        result:=false;
     end;
  end;
@@ -284,7 +284,7 @@ begin
  if FStatus<>devConnected then exit;
  FFocusdirection:=-1;
  FLastDirection:=FocusDirIn;
- if debug_ascom then msg('Set direction IN');
+ if debug_msg then msg('Set direction IN');
 end;
 
 procedure T_ascomrestfocuser.FocusOut;
@@ -292,7 +292,7 @@ begin
  if FStatus<>devConnected then exit;
  FFocusdirection:=1;
  FLastDirection:=FocusDirOut;
- if debug_ascom then msg('Set direction OUT');
+ if debug_msg then msg('Set direction OUT');
 end;
 
 procedure T_ascomrestfocuser.SetPosition(p:integer);
@@ -304,7 +304,7 @@ begin
      n:=max(min(p,round(FPositionRange.max)),round(FPositionRange.min))
    else
      n:=p;
-   if debug_ascom then msg('Move '+inttostr(p)+' '+inttostr(n));
+   if debug_msg then msg('Move '+inttostr(p)+' '+inttostr(n));
    V.Put('move',['Position',IntToStr(n)]);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
@@ -335,7 +335,7 @@ begin
  if FStatus<>devConnected then exit;
    try
    result:=V.Get('position').AsInt;
-   if debug_ascom then begin
+   if debug_msg then begin
    if FmsgAPos<>Result then begin
      msg('Position = '+inttostr(Result));
      FmsgAPos:=Result;
@@ -356,10 +356,10 @@ begin
      result.max:=V.Get('maxstep').AsFloat;
      result.step:=1;
      FPositionRange:=result;
-     if debug_ascom then msg('Position range = '+FormatFloat(f0,FPositionRange.min)+' '+FormatFloat(f0,FPositionRange.max)+' '+FormatFloat(f0,FPositionRange.step) );
+     if debug_msg then msg('Position range = '+FormatFloat(f0,FPositionRange.min)+' '+FormatFloat(f0,FPositionRange.max)+' '+FormatFloat(f0,FPositionRange.step) );
      except
        on E: Exception do begin
-          if debug_ascom then msg('Error MaxStep : '+ E.Message);
+          if debug_msg then msg('Error MaxStep : '+ E.Message);
           result:=NullRange;
        end;
      end;
@@ -378,10 +378,10 @@ begin
      result.max:=V.Get('maxstep').AsFloat;
      result.step:=1;
      FRelPositionRange:=result;
-     if debug_ascom then msg('Relative position range = '+FormatFloat(f0,FRelPositionRange.min)+' '+FormatFloat(f0,FRelPositionRange.max)+' '+FormatFloat(f0,FRelPositionRange.step) );
+     if debug_msg then msg('Relative position range = '+FormatFloat(f0,FRelPositionRange.min)+' '+FormatFloat(f0,FRelPositionRange.max)+' '+FormatFloat(f0,FRelPositionRange.step) );
      except
        on E: Exception do begin
-          if debug_ascom then msg('Error MaxStep : '+ E.Message);
+          if debug_msg then msg('Error MaxStep : '+ E.Message);
           result:=NullRange;
        end;
      end;
@@ -400,7 +400,7 @@ begin
    else
      FRelIncr:=p;
    i:=FFocusdirection*FRelIncr;
-   if debug_ascom then msg('Relative move '+inttostr(p)+' '+inttostr(i));
+   if debug_msg then msg('Relative move '+inttostr(p)+' '+inttostr(i));
    V.Put('move',['Position',IntToStr(i)]);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
@@ -448,7 +448,7 @@ begin
  if FStatus<>devConnected then exit;
    try
    result:=V.Get('absolute').AsBool;
-   if debug_ascom then msg('Use AbsolutePosition: '+BoolToStr(result, True));
+   if debug_msg then msg('Use AbsolutePosition: '+BoolToStr(result, True));
    except
     on E: Exception do msg('GethasAbsolutePosition error: ' + E.Message,0);
    end;
@@ -467,7 +467,7 @@ begin
  if FStatus<>devConnected then exit;
    try
    result:=not V.Get('absolute').AsBool;
-   if debug_ascom then msg('Use RelativePosition: '+BoolToStr(result, True));
+   if debug_msg then msg('Use RelativePosition: '+BoolToStr(result, True));
    except
     on E: Exception do msg('GethasRelativePosition error: ' + E.Message,0);
    end;
@@ -488,7 +488,7 @@ end;
 procedure T_ascomrestfocuser.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
- if debug_ascom then msg('Set timeout: '+inttostr(num));
+ if debug_msg then msg('Set timeout: '+inttostr(num));
 end;
 
 function  T_ascomrestfocuser.GetTemperature:double;
@@ -507,7 +507,7 @@ begin
    try
    result:= V.Get('temperature').AsFloat;
    FhasTemperature:=true;
-   if debug_ascom then begin
+   if debug_msg then begin
    i:=round(10*Result);
    if FmsgTemp<>i then begin
       msg('Temperature: '+FormatFloat(f1,result));
@@ -517,7 +517,7 @@ begin
    except
     result:=0;
     FhasTemperature:=false;
-    if debug_ascom then msg('No temperature');
+    if debug_msg then msg('No temperature');
    end;
 end;
 

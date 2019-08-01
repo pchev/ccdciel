@@ -23,8 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-// {$define camera_debug}
-
 interface
 
 uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2,
@@ -273,7 +271,7 @@ if csDestroying in ComponentState then exit;
   indiblob.onNewBlob:=@NewBlob;
   indiblob.onNewMessage:=@NewBlobMessage;
   {$ifdef camera_debug}
-  indiclient.ProtocolTrace:=true;
+  indiclient.ProtocolTrace:=true;  // this traces can be very big, never include that in a release
   indiclient.ProtocolRawFile:='/tmp/ccdciel_indicamera.raw';
   indiclient.ProtocolTraceFile:='/tmp/ccdciel_indicamera.log';
   indiclient.ProtocolErrorFile:='/tmp/ccdciel_indicamera.err';
@@ -853,7 +851,7 @@ begin
      CCDIso:=indiProp.getSwitch;
      FISOList.Clear;
      for i:=0 to CCDIso.nsp-1 do begin
-        {$ifdef camera_debug}msg(CCDIso.sp[i].lbl);{$endif}
+        if debug_msg then msg('Found ISO: '+CCDIso.sp[i].lbl);
         FISOList.Add(CCDIso.sp[i].lbl);
      end;
      FhasGainISO:=(FISOList.Count>0);
@@ -875,7 +873,7 @@ end;
 procedure T_indicamera.NewNumber(nvp: INumberVectorProperty);
 begin
   if (UseMainSensor and (nvp=CCDexpose))or((not UseMainSensor) and (nvp=Guiderexpose)) then begin
-     {$ifdef camera_debug}msg('progress: '+formatfloat(f1,nvp.np[0].value));{$endif}
+     if debug_msg then msg('progress: '+formatfloat(f1,nvp.np[0].value));
      if Assigned(FonExposureProgress) then
         if nvp.np[0].value >0 then
            FonExposureProgress(nvp.np[0].value)
@@ -909,7 +907,7 @@ var i: integer;
 begin
 if tvp=CCDfilepath then begin
   FMidExposureTime:=(Ftimestart+NowUTC)/2;
-  {$ifdef camera_debug}msg('receive image file');{$endif}
+  if debug_msg then msg('receive image file');
   // if possible start next exposure now
   TryNextExposure(FImgNum);
   FImageFormat:=ExtractFileExt(CCDfilepath.tp[0].text);
@@ -998,7 +996,7 @@ end;
 
 procedure T_indicamera.NewBlob(bp: IBLOB);
 begin
- {$ifdef camera_debug}msg('receive blob');{$endif}
+ if debug_msg then msg('receive blob');
  if bp.bloblen>0 then begin
    bp.blob.Position:=0;
    NewImageFile(bp.format,bp.size,bp.bloblen,bp.blob);
@@ -1020,7 +1018,7 @@ var source,dest: array of char;
 begin
  // report any change to NewText() in use with RAM disk transfer
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
- {$ifdef camera_debug}msg('receive blob');{$endif}
+ if debug_msg then msg('receive blob');
  // if possible start next exposure now
  TryNextExposure(FImgNum);
  if blen>0 then begin
@@ -1028,9 +1026,9 @@ begin
    if pos('.fits',ft)>0 then begin // receive a FITS file
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
-     {$ifdef camera_debug}msg('this is a fits file');{$endif}
+     if debug_msg then msg('this is a fits file');
      if pos('.z',ft)>0 then begin //compressed
-         {$ifdef camera_debug}msg('uncompress file');{$endif}
+         if debug_msg then msg('uncompress file');
          FImgStream.Clear;
          FImgStream.Position:=0;
          if zlibok then begin
@@ -1052,39 +1050,39 @@ begin
          end;
      end
      else begin  //uncompressed
-        {$ifdef camera_debug}msg('copy stream');{$endif}
+        if debug_msg then msg('copy stream');
         FImgStream.Clear;
         FImgStream.Position:=0;
         FImgStream.CopyFrom(data,sz);
      end;
-     {$ifdef camera_debug}msg('NewImage');{$endif}
+     if debug_msg then msg('NewImage');
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
    else if (ft='.jpeg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
-     {$ifdef camera_debug}msg('this is a '+ft+' file');{$endif}
+     if debug_msg then msg('this is a '+ft+' file');
      //uncompressed
-     {$ifdef camera_debug}msg('copy '+ft+' stream to fits');{$endif}
+     if debug_msg then msg('copy '+ft+' stream to fits');
      msg(Format(rsWarningImage, [uppercase(ft)]), 1);
      PictureToFits(data,copy(ft,2,99),FImgStream,false,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
      if FImgStream.Size<2880 then begin
         msg('Invalid file received '+ft,0);
         AbortExposure;
      end;
-     {$ifdef camera_debug}msg('NewImage');{$endif}
+     if debug_msg then msg('NewImage');
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
    else if pos('.stream',ft)>0 then begin // video stream
-     {$ifdef camera_debug}msg('this is a video stream');{$endif}
+     if debug_msg then msg('this is a video stream');
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
-     {$ifdef camera_debug}msg('process this frame');{$endif}
+     if debug_msg then msg('process this frame');
      try
      if pos('.z',ft)>0 then begin //compressed
-         {$ifdef camera_debug}msg('uncompress frame');{$endif}
+         if debug_msg then msg('uncompress frame');
          if zlibok then begin
            FVideoStream.Clear;
            FVideoStream.Position:=0;
@@ -1106,12 +1104,12 @@ begin
          end;
      end
      else begin  //uncompressed
-       {$ifdef camera_debug}msg('copy frame');{$endif}
+       if debug_msg then msg('copy frame');
        FVideoStream.Clear;
        FVideoStream.Position:=0;
        FVideoStream.CopyFrom(data,sz);
      end;
-     {$ifdef camera_debug}msg('NewVideoFrame');{$endif}
+     if debug_msg then msg('NewVideoFrame');
      NewVideoFrame;
      finally
        lockvideostream:=false;

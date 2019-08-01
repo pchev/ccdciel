@@ -1104,6 +1104,7 @@ resourcestring
   rsImportCdCObs = 'Import CdC observing list';
   rsShowHints = 'Show hints';
   rsVerboseDevic = 'Verbose device log';
+  rsResolveAndPl2 = 'Resolve and plot Hyperleda';
 
 implementation
 

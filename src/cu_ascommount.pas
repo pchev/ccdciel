@@ -774,7 +774,7 @@ begin
  {$ifdef mswindows}
    try
    result:=V.GuideRateRightAscension;
-   if debug_ascom then msg('GuideRateRightAscension = '+formatfloat(f6,Result));
+   if debug_msg then msg('GuideRateRightAscension = '+formatfloat(f6,Result));
    except
      on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
    end;
@@ -787,7 +787,7 @@ begin
  {$ifdef mswindows}
    try
    result:=V.GuideRateDeclination;
-   if debug_ascom then msg('GuideRateDeclination = '+formatfloat(f6,Result));
+   if debug_msg then msg('GuideRateDeclination = '+formatfloat(f6,Result));
    except
      on E: Exception do msg('Cannot get guide rate: ' + E.Message,0);
    end;
@@ -798,7 +798,7 @@ procedure T_ascommount.SetGuideRateRa(value:double);
 begin
  {$ifdef mswindows}
    try
-   if debug_ascom then msg('Set GuideRateRightAscension = '+formatfloat(f6,value));
+   if debug_msg then msg('Set GuideRateRightAscension = '+formatfloat(f6,value));
    V.GuideRateRightAscension:=value;
    except
    end;
@@ -809,7 +809,7 @@ procedure T_ascommount.SetGuideRateDe(value:double);
 begin
  {$ifdef mswindows}
    try
-   if debug_ascom then msg('Set GuideRateDeclination = '+formatfloat(f6,value));
+   if debug_msg then msg('Set GuideRateDeclination = '+formatfloat(f6,value));
    V.GuideRateDeclination:=value;
    except
    end;
@@ -821,7 +821,7 @@ begin
  result:=false;
  {$ifdef mswindows}
    try
-    if debug_ascom then msg('PulseGuide, Direction='+inttostr(direction)+', Duration='+inttostr(duration));
+    if debug_msg then msg('PulseGuide, Direction='+inttostr(direction)+', Duration='+inttostr(duration));
     V.PulseGuide(direction,duration);
     result:=true;
    except
@@ -836,7 +836,7 @@ begin
  {$ifdef mswindows}
    try
    result:=V.IsPulseGuiding;
-   if debug_ascom then msg('IsPulseGuiding = '+BoolToStr(result, rsTrue, rsFalse));
+   if debug_msg then msg('IsPulseGuiding = '+BoolToStr(result, rsTrue, rsFalse));
    except
      on E: Exception do msg('Cannot get pulse guide state: ' + E.Message,0);
    end;

@@ -221,7 +221,7 @@ begin
        msg('Error: cannot get frame size Y from camera: ' + E.Message,0);
      end;
     end;
-    if debug_ascom then msg('Camera size='+inttostr(FCameraXSize)+'/'+inttostr(FCameraYSize));
+    if debug_msg then msg('Camera size='+inttostr(FCameraXSize)+'/'+inttostr(FCameraYSize));
     try
      FMaxBinX:=V.MaxBinX;
     except
@@ -406,7 +406,7 @@ begin
     FLAT : li:=true;
   end;
   try
-     if debug_ascom then msg('start exposure.');
+     if debug_msg then msg('start exposure.');
      V.StartExposure(exptime,li);
      Ftimestart:=NowUTC;
      inc(FImgNum);
@@ -463,7 +463,7 @@ begin
         exit;
       end;
     end;
-    if debug_ascom then msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok, rsTrue, rsFalse));
+    if debug_msg then msg(' status:'+inttostr(state)+', image ready:'+BoolToStr(ok, rsTrue, rsFalse));
     if (not ok) then begin
       // in progress
       if assigned(FonExposureProgress) then
@@ -492,7 +492,7 @@ begin
    FImageFormat:='.fits';
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
-   if debug_ascom then msg('read image.');
+   if debug_msg then msg('read image.');
    try
    img:=TVariantArg(V.ImageArray).parray;
    except
@@ -520,7 +520,7 @@ begin
    SafeArrayGetLBound(img, 2, LBoundY);
    SafeArrayGetUBound(img, 2, HBoundY);
    ys:=HBoundY-LBoundY+1;
-   if debug_ascom then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
+   if debug_msg then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
    nax1:=xs;
    nax2:=ys;
    pix:=FPixelSizeX;
@@ -528,7 +528,7 @@ begin
    ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,Ftimestart);
-   if debug_ascom then msg('set fits header');
+   if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
    hdr.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -552,11 +552,11 @@ begin
    FImgStream.Clear;
    FImgStream.position:=0;
    hdrmem.Position:=0;
-   if debug_ascom then msg('write header');
+   if debug_msg then msg('write header');
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
    hdr.Free;
-   if debug_ascom then msg('write image');
+   if debug_msg then msg('write image');
    i:=SafeArrayAccessData(img,pimgdata);
    if i<>S_OK then begin
      msg('Error accessing ImageArray data: ' + hexStr(i,10));
@@ -600,17 +600,17 @@ begin
         end;
      end;
    end;
-   if debug_ascom then msg('pad fits');
+   if debug_msg then msg('pad fits');
    b:='';
    c:=2880-(FImgStream.Size mod 2880);
    FillChar(b,c,0);
    FImgStream.Write(b,c);
-   if debug_ascom then msg('release imagearray');
+   if debug_msg then msg('release imagearray');
    SafeArrayUnaccessData(img);
    SafeArrayDestroyData(img);
    // if possible start next exposure now
    TryNextExposure(FImgNum);
-   if debug_ascom then msg('display image');
+   if debug_msg then msg('display image');
    if assigned(FonExposureProgress) then FonExposureProgress(-11);
    NewImage;
    finally
@@ -631,14 +631,14 @@ var oldx,oldy,newx,newy,fsx,fsy,fnx,fny: integer;
 begin
  {$ifdef mswindows}
    try
-   if debug_ascom then msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));
+   if debug_msg then msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));
    oldx:=FBinX;
    oldy:=FBinY;
-   if debug_ascom then msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));
+   if debug_msg then msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
      GetFrame(fsx,fsy,fnx,fny);
-     if debug_ascom then msg('Current frame '+inttostr(fsx)+','+inttostr(fsy)+'/'+inttostr(fnx)+'x'+inttostr(fny));
+     if debug_msg then msg('Current frame '+inttostr(fsx)+','+inttostr(fsy)+'/'+inttostr(fnx)+'x'+inttostr(fny));
      scale:=oldx/sbinX;
      fsx:=trunc(fsx*scale);
      fnx:=trunc(fnx*scale);
@@ -669,15 +669,15 @@ var Xmax,Ymax,w,h,bx,by: integer;
 begin
  {$ifdef mswindows}
    try
-   if debug_ascom then msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
+   if debug_msg then msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    w:=FCameraXSize;
    h:=FCameraYSize;
    bx:=FBinX;
    by:=FBinY;
-   if debug_ascom then msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
+   if debug_msg then msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
    Xmax:= w div bx;
    Ymax:= h div by;
-   if debug_ascom then msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
+   if debug_msg then msg('Xmax='+inttostr(Xmax)+' Ymax='+inttostr(Ymax));
    // check range
    if width<MinFrameSize then width:=MinFrameSize;
    if height<MinFrameSize then height:=MinFrameSize;
@@ -688,7 +688,7 @@ begin
    // force even values
    x:=round(x+0.5);
    y:=round(y+0.5);
-   if debug_ascom then msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
+   if debug_msg then msg('Set frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    V.StartX:=x;
    V.StartY:=y;
    V.NumX:=width;
@@ -710,7 +710,7 @@ begin
    y      := V.StartY;
    width  := V.NumX;
    height := V.NumY;
-   if debug_ascom then msg('Current frame: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),3);
+   if debug_msg then msg('Current frame: '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height),3);
    except
     on E: Exception do msg('Get frame error: ' + E.Message,0);
    end;
@@ -734,7 +734,7 @@ begin
    heightr.min:=1;
    heightr.max:=FCameraYSize;
    heightr.step:=1;
-   if debug_ascom then msg('Get frame range :'+inttostr(round(widthr.max))+'x'+inttostr(round(heightr.max)));
+   if debug_msg then msg('Get frame range :'+inttostr(round(widthr.max))+'x'+inttostr(round(heightr.max)));
    except
     on E: Exception do msg('Get frame range error: ' + E.Message,0);
    end;
@@ -752,7 +752,7 @@ begin
   h:=FCameraYSize;
   bx:=FBinX;
   by:=FBinY;
-  if debug_ascom then   msg('ResetFrame: XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
+  if debug_msg then   msg('ResetFrame: XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
   w:=w div bx;
   h:=h div by;
   SetFrame(0,0,w,h);
