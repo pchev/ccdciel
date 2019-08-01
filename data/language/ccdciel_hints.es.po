@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-04 21:50+0000\n"
+"POT-Creation-Date: 2019-08-01 15:36+0000\n"
+"PO-Revision-Date: 2019-07-23 23:12+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
-"X-Generator: Launchpad (build 19007)\n"
+"X-Launchpad-Export-Date: 2019-08-01 15:48+0000\n"
+"X-Generator: Launchpad (build 19012)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -22,23 +22,23 @@ msgstr ""
 
 #: u_hints.rsactivatethes
 msgid "Activate the start time"
-msgstr ""
+msgstr "Activar la hora de comienzo"
 
 #: u_hints.rsactivatethes2
 msgid "Activate the stop time"
-msgstr ""
+msgstr "Activar la hora de finalización"
 
 #: u_hints.rsaddaflatsequ
 msgid "Add a flat sequence to the list."
-msgstr ""
+msgstr "Añadir una secuencia de tomas planas a la lista."
 
 #: u_hints.rsaddanobjectt
 msgid "Add an object to the list"
-msgstr ""
+msgstr "Añadir un objeto a la lista"
 
 #: u_hints.rsaddascriptto
 msgid "Add a script to the list."
-msgstr ""
+msgstr "Añadir un guión a la lista."
 
 #: u_hints.rsafterlearnin
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
@@ -46,7 +46,7 @@ msgstr ""
 
 #: u_hints.rsapplythisset
 msgid "Apply this setting to all the targets"
-msgstr ""
+msgstr "Aplicar esta configuración a todos los objetivos"
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
@@ -78,7 +78,7 @@ msgstr "Limpiar el estado de completitud de la secuencia"
 
 #: u_hints.rscleartimecon
 msgid "Clear time constraint"
-msgstr ""
+msgstr "Eliminar restricciones de tiempo"
 
 #: u_hints.rsconnectallde
 msgid "Connect all devices"
@@ -86,11 +86,11 @@ msgstr "Conectar todos los dispositivos"
 
 #: u_hints.rscontrolhowco
 msgid "Control how complete target are managed when the whole list is repeated"
-msgstr ""
+msgstr "Controlar cómo se gestionan los objetivos completos cuando se repite la lista completa"
 
 #: u_hints.rscopythecurre
 msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
-msgstr ""
+msgstr "Copiar el actual perfil a uno nuevo.%sEsto también copiará las preferencias del programa al nuevo perfil."
 
 #: u_hints.rscopytheseque
 msgid "Copy the sequence to a new one. Completion status is reinitialized"
@@ -98,7 +98,7 @@ msgstr "Copiar la secuencia en una nueva. Se reiniciará el estado de completitu
 
 #: u_hints.rscreateanewem
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
-msgstr ""
+msgstr "Crear un perfil vacío nuevo.%sAviso: Esto también borra las preferencias de este nuevo perfil.%sUse el botón de Copiar si quiere configurar un equipo diferente pero mantener las opciones del programa."
 
 #: u_hints.rscreateanewse
 msgid "Create a new sequence"
@@ -118,7 +118,7 @@ msgstr "Lado actual de la columna del telescopio"
 
 #: u_hints.rsdeletethesel
 msgid "Delete the selected row from the list."
-msgstr ""
+msgstr "Borrar la fila seleccionada de la lista."
 
 #: u_hints.rsdeletetheseq
 msgid "Delete the sequence file"
@@ -126,11 +126,11 @@ msgstr "Borrar el fichero de secuencia"
 
 #: u_hints.rsdeletethispr
 msgid "Delete this profile and associated program preference."
-msgstr ""
+msgstr "Borrar este perfil y las preferencias del programa asociadas."
 
 #: u_hints.rsdonotmovethe
 msgid "Do not move the telescope before to start imaging."
-msgstr ""
+msgstr "No mover el telescopio antes de comenzar a tomar imágenes."
 
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
@@ -142,19 +142,19 @@ msgstr ""
 
 #: u_hints.rsformovingobj
 msgid "For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.%sBe sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here."
-msgstr ""
+msgstr "Para los objetos en movimiento, asteroides o cometas, puede actualizar las coordenadas desde el planetario antes de mover el telescopio al objetivo.%sAsegúrese de que el planetario está conectado, configurado para seguir la hora del sistema, y puede encontrar el nombre del objeto tal y como está introducido aquí."
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
-msgstr ""
+msgstr "Gamma de la visualización"
 
 #: u_hints.rsgetthecoordi
 msgid "Get the coordinates and object name from the planetarium"
-msgstr ""
+msgstr "Obtener las coordenadas y el nombre del objeto del planetario"
 
 #: u_hints.rsgetthecoordi2
 msgid "Get the coordinates from the internal annotation database"
-msgstr ""
+msgstr "Obtener las coordenadas de la base de datos interna de anotaciones"
 
 #: u_hints.rsglobalalpaca
 msgid "Global ALPACA server parameters"
@@ -186,7 +186,7 @@ msgstr "Incrementar el paso para el movimiento adentro o afuera"
 
 #: u_hints.rsinfinitenumb
 msgid "Infinite number of repetition"
-msgstr ""
+msgstr "Número infinito de repeticiones"
 
 #: u_hints.rsinspectthere
 msgid "Inspect the distribution of the HFD across the image"
@@ -194,7 +194,7 @@ msgstr "Inspeccionar la distribución del HFD por toda la imagen"
 
 #: u_hints.rsinvertimaged
 msgid "Invert image display"
-msgstr ""
+msgstr "Invertir visualización"
 
 #: u_hints.rskeepthegraph
 msgid "Keep the graph visible after autofocus is completed"
@@ -214,7 +214,7 @@ msgstr "Bucle exposiciones de previsualización"
 
 #: u_hints.rsmaketesttode
 msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
-msgstr ""
+msgstr "Hacer prueba para determinar la opción más óptima para su PC.%s(Se necesita conexión de red si la cámara está conectada a un servidor Indi remoto)"
 
 #: u_hints.rsmovefocuseri
 msgid "Move focuser inward"
@@ -230,7 +230,7 @@ msgstr "Estado planetario"
 
 #: u_hints.rsrepeatthewho2
 msgid "Repeat the whole list a number of time."
-msgstr ""
+msgstr "Repetir la lista completa un número de veces."
 
 #: u_hints.rssavethelista
 msgid "Save the list and close this window."
@@ -254,15 +254,15 @@ msgstr "Fijar la posición absoluta del enfocador"
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
-msgstr ""
+msgstr "Fijar la hora de inicio en el crepúsculo astronómico, recalculado para la fecha de ejecución de la secuencia."
 
 #: u_hints.rssetthestopti
 msgid "Set the stop time at astronomical dawn, recomputed for the date you run the sequence."
-msgstr ""
+msgstr "Fijar la hora de finalización en el amanecer astronómico, recalculado para la fecha de ejecución de la secuencia."
 
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
-msgstr ""
+msgstr "Mostrar diana"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
@@ -270,7 +270,7 @@ msgstr ""
 
 #: u_hints.rsshowofthehis
 msgid "Show %s of the histogram"
-msgstr ""
+msgstr "Mostrar %s del histograma"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
@@ -278,11 +278,11 @@ msgstr ""
 
 #: u_hints.rssolvethecurr
 msgid "Solve the current image and get the center coordinates"
-msgstr ""
+msgstr "Resolver la imagen actual y obtener el centro de las coordenadas"
 
 #: u_hints.rssolvethecurr2
 msgid "Solve the current image and get the rotation of the image"
-msgstr ""
+msgstr "Resolver la imagen actual y obtener la rotación de la imagen"
 
 #: u_hints.rsstacktheprev
 msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
@@ -290,7 +290,7 @@ msgstr "Apilar las imágenes individuales en una sola imagen.%sSe iniciará un n
 
 #: u_hints.rsstartaprevie
 msgid "Start a preview loop when waiting for the delay to expire."
-msgstr ""
+msgstr "Comenzar un bucle de previsualización mientras se espera que finalice la pausa."
 
 #: u_hints.rsstartimagelo
 msgid "Start image loop centered on selected star"
@@ -326,7 +326,7 @@ msgstr "Iniciar Y"
 
 #: u_hints.rsstopatthisti
 msgid "Stop at this time even if the processing is not finished."
-msgstr ""
+msgstr "Parar a esta hora incluso si no ha finalizado el proceso."
 
 #: u_hints.rsstoptheseque
 msgid "Stop the sequence execution"
@@ -414,7 +414,7 @@ msgstr ""
 
 #: u_hints.rsthetemporary
 msgid "The temporary RAM disk used to transfer the images from the Indi server"
-msgstr ""
+msgstr "La memoria RAM temporal utilizado para transferir las imágenes desde el servidor Indi"
 
 #: u_hints.rsthetypeoffra
 msgid "The type of frame"
@@ -426,7 +426,7 @@ msgstr ""
 
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
-msgstr ""
+msgstr "Esto le permitirá reiniciar una secuencia interrumpida en el punto donde se detuvo."
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"
@@ -450,7 +450,7 @@ msgstr "Aprendizaje curva V"
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
-msgstr ""
+msgstr "Esperar este tiempo antes de comenzar a procesar la lista."
 
 #: u_hints.rsyoucanavoidt
 msgid "You can avoid to move to a focus star if this target field include a suitable star.%sBeware the auto-focus will fail if the star is too faint."
@@ -458,17 +458,17 @@ msgstr ""
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"
-msgstr ""
+msgstr "Zum para ajustar en la ventana"
 
 #: u_hints.rszoomtohalfsi
 msgid "Zoom to half size"
-msgstr ""
+msgstr "Zum a la mitad del tamaño"
 
 #: u_hints.rszoomtoorigin
 msgid "Zoom to original scale"
-msgstr ""
+msgstr "Zum a la escala original"
 
 #: u_hints.rszoomtwotime
 msgid "Zoom two time"
-msgstr ""
+msgstr "Zum dos veces"
 

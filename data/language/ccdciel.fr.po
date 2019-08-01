@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-07 16:22+0000\n"
+"POT-Creation-Date: 2019-08-01 15:36+0000\n"
+"PO-Revision-Date: 2019-08-01 15:45+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
-"X-Generator: Launchpad (build 19007)\n"
+"X-Launchpad-Export-Date: 2019-08-01 15:48+0000\n"
+"X-Generator: Launchpad (build 19012)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -211,6 +211,10 @@ msgstr "Autofocus, déplacement vers l'intérieur de %s"
 #: u_translation.rsautofocusfoc2
 msgid "Autofocus focus out by %s"
 msgstr "Autofocus, déplacement vers l'extérieur de %s"
+
+#: u_translation.rsautofocusgra
+msgid "Autofocus graph"
+msgstr "Graphique de l'auto-focus"
 
 #: u_translation.rsautofocusmea
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
@@ -459,6 +463,14 @@ msgstr "Annuler"
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
 msgstr "Abandon dans %s secondes"
+
+#: u_translation.rscannotchange
+msgid "Cannot change start time. Sequence will start in time for the dusk flat."
+msgstr "Ne peut pas changer l'heure de début. La séquence démarrera a temps pour le flat du crépuscule."
+
+#: u_translation.rscannotchange2
+msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
+msgstr "Ne peut pas changer l'heure de fin. La séquence s’arrêtera a temps pour le flat de l'aube."
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
@@ -1220,6 +1232,10 @@ msgstr "Ajuster"
 msgid "FITS header"
 msgstr "En-tête FITS"
 
+#: u_translation.rsfixedsequenc
+msgid "Fixed sequence length"
+msgstr "Numéro de longueur fixe"
+
 #: u_translation.rsflat
 msgid "Flat"
 msgstr "Flat"
@@ -1539,6 +1555,10 @@ msgstr "Transfert d'image"
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "Image non Debayerisée"
+
+#: u_translation.rsimportcdcobs
+msgid "Import CdC observing list"
+msgstr "Importe un liste d'observation de CdC"
 
 #: u_translation.rsin
 msgid "In"
@@ -2336,6 +2356,10 @@ msgstr "Veuillez sélectionner un script!"
 msgid "Please select a temporary folder without space in the path name."
 msgstr "Veuillez sélectionner un dossier temporaire sans espace dans le nom du chemin."
 
+#: u_translation.rspleasesetthe
+msgid "Please set the format to %s before to start the sequence."
+msgstr "Veuillez régler le format à %s avant de lancer la séquence."
+
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
 msgstr "Décalage du pointage"
@@ -2964,6 +2988,10 @@ msgstr "ADU des ombres"
 msgid "Show current log"
 msgstr "Afficher le journal courant"
 
+#: u_translation.rsshowhints
+msgid "Show hints"
+msgstr "Afficher les astuces"
+
 #: u_translation.rsshowindilog
 msgid "Show INDI log"
 msgstr "Afficher le journal des messages INDI"
@@ -3512,6 +3540,10 @@ msgstr "Le nom du dossier temporaire ne doit pas contenir de caractère accentu�
 msgid "Termination options"
 msgstr "Options de terminaison"
 
+#: u_translation.rsthecameraima
+msgid "The camera image format is"
+msgstr "Le format d'image de la camera est"
+
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
@@ -3816,6 +3848,10 @@ msgstr "Courbe en V"
 msgid "V curve quality is low. Do you really want to save this curve?"
 msgstr "La qualité de la Vcurve est faible. Voulez-vous vraiment enregistrer cette courbe?"
 
+#: u_translation.rsverbosedevic
+msgid "Verbose device log"
+msgstr "Log détaillé des périphériques"
+
 #: u_translation.rsvideo
 msgid "Video"
 msgstr "Vidéo"
@@ -3907,6 +3943,10 @@ msgstr "Attente du début de la séquence %s à %s"
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
 msgstr "Réchauffe la caméra"
+
+#: u_translation.rswarningimage
+msgid "Warning! %s image received"
+msgstr "Attention! Image %s reçue"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"

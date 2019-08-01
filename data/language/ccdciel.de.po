@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-07-07 14:51+0000\n"
-"PO-Revision-Date: 2019-07-07 16:19+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
+"POT-Creation-Date: 2019-08-01 15:36+0000\n"
+"PO-Revision-Date: 2019-07-18 17:24+0000\n"
+"Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-07-07 16:32+0000\n"
-"X-Generator: Launchpad (build 19007)\n"
+"X-Launchpad-Export-Date: 2019-08-01 15:48+0000\n"
+"X-Generator: Launchpad (build 19012)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -212,6 +212,10 @@ msgstr "Autofokus Fokus nach innen um %s"
 msgid "Autofocus focus out by %s"
 msgstr "Autofokus Fokus nach außen um %s"
 
+#: u_translation.rsautofocusgra
+msgid "Autofocus graph"
+msgstr ""
+
 #: u_translation.rsautofocusmea
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
 msgstr "Autofokus Mittel Bild %s/%s, HFD=%s PEAK:%s SNR:%s"
@@ -338,7 +342,7 @@ msgstr "Zurück"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
-msgstr "Spielausgleich"
+msgstr "Getriebespielausgleich"
 
 #: u_translation.rsbad
 msgid "Bad"
@@ -414,7 +418,7 @@ msgstr "Kalibriert"
 
 #: u_translation.rscalibrationd
 msgid "Calibration %sdelay"
-msgstr "Kalibration %sVerzögerung"
+msgstr "Kalibrierung %sVerzögerung"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
@@ -459,6 +463,14 @@ msgstr "Abbrechen"
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
 msgstr "Abbrechen in %s Sekunden"
+
+#: u_translation.rscannotchange
+msgid "Cannot change start time. Sequence will start in time for the dusk flat."
+msgstr ""
+
+#: u_translation.rscannotchange2
+msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
+msgstr ""
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
@@ -730,7 +742,7 @@ msgstr "Kontrollaufnahme"
 
 #: u_translation.rscooldownwhen
 msgid "Cool down when camera is connected"
-msgstr "Herunterkühlen wenn die Kamera verbunden ist"
+msgstr "Herunterkühlen sobald die Kamera verbunden ist"
 
 #: u_translation.rscooler
 msgid "Cooler"
@@ -1220,6 +1232,10 @@ msgstr "Fit"
 msgid "FITS header"
 msgstr "FITS header"
 
+#: u_translation.rsfixedsequenc
+msgid "Fixed sequence length"
+msgstr ""
+
 #: u_translation.rsflat
 msgid "Flat"
 msgstr "Flat"
@@ -1302,7 +1318,7 @@ msgstr "Fokussiererkalibrierung abgeschlossen, klicken Sie auf Weiter um die Erg
 
 #: u_translation.rsfocusercorre
 msgid "Focuser correction"
-msgstr "Fokusser Korrektur"
+msgstr "Fokussierer Korrektur"
 
 #: u_translation.rsfocusermoveb
 msgid "Focuser move by %s"
@@ -1539,6 +1555,10 @@ msgstr "Bildtransfer"
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "Bild Un-debayered"
+
+#: u_translation.rsimportcdcobs
+msgid "Import CdC observing list"
+msgstr ""
 
 #: u_translation.rsin
 msgid "In"
@@ -2336,6 +2356,10 @@ msgstr "Bitte ein Skript auswählen"
 msgid "Please select a temporary folder without space in the path name."
 msgstr "Bitte wählen Sie einen temporären Ordner ohne Leerzeichen im Pfadnamen."
 
+#: u_translation.rspleasesetthe
+msgid "Please set the format to %s before to start the sequence."
+msgstr ""
+
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
 msgstr "Pointing Offset"
@@ -2350,7 +2374,7 @@ msgstr "Pos."
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
-msgstr "Präzisionsbewegung Optionen"
+msgstr "Optionen Präzisionsbewegung"
 
 #: u_translation.rsprecisionsle2
 msgid "Precision slew finished."
@@ -2964,6 +2988,10 @@ msgstr "ADU für Schwarzwert"
 msgid "Show current log"
 msgstr "Zeige aktuelle Ereignisse"
 
+#: u_translation.rsshowhints
+msgid "Show hints"
+msgstr ""
+
 #: u_translation.rsshowindilog
 msgid "Show INDI log"
 msgstr "INDI Protokoll anzeigen"
@@ -3070,7 +3098,7 @@ msgstr "Schwenke zum Fokusstern"
 
 #: u_translation.rsslewwithapre
 msgid "Slew with a precision of "
-msgstr "Bewege mit der Präzision von "
+msgstr "Schwenke mit der Präzision von "
 
 #: u_translation.rsslewwithoffs
 msgid "Slew with offset %s/%s"
@@ -3266,7 +3294,7 @@ msgstr "Schritt drüber"
 
 #: u_translation.rsstop
 msgid "Stop"
-msgstr "Stopp"
+msgstr "Stop"
 
 #: u_translation.rsstopastromet
 msgid "Stop astrometry resolver"
@@ -3354,7 +3382,7 @@ msgstr "Unterordner nach Datum (UT)"
 
 #: u_translation.rssubfolderbyd2
 msgid "Subfolder by date (local time, change at noon)"
-msgstr "Unterordner nach Zeit (Ortszeit, Änderung Mittags)"
+msgstr "Unterordner nach Zeit (Ortszeit, Wechsel Mittags)"
 
 #: u_translation.rssubfolderbye
 msgid "Subfolder by exposure time"
@@ -3511,6 +3539,10 @@ msgstr "Temporärer Ordner darf nur ASCII Zeichen enthalten"
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Optionen beim Beenden"
+
+#: u_translation.rsthecameraima
+msgid "The camera image format is"
+msgstr ""
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -3682,7 +3714,7 @@ msgstr "Astrometriedaten können nicht gefunden werden!"
 
 #: u_translation.rsunattendeder
 msgid "Unattended error script"
-msgstr "Unbeaufsichtigt Fehler Skript"
+msgstr "Skript bei Fehler im unbeaufsichtigtem Betrieb"
 
 #: u_translation.rsunavailable
 msgid "unavailable"
@@ -3762,7 +3794,7 @@ msgstr "Benutze Filterrad"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
-msgstr "Automatisch Belichtung der Flats benutzen"
+msgstr "Automatisch Belichtung der Flats"
 
 #: u_translation.rsusefocuser
 msgid "Use focuser"
@@ -3815,6 +3847,10 @@ msgstr "V Curve"
 #: u_translation.rsvcurvequalit
 msgid "V curve quality is low. Do you really want to save this curve?"
 msgstr "Die Qualität der V-Kurve ist schlecht. Möchten Sie diese Kurve wirklich speichern?"
+
+#: u_translation.rsverbosedevic
+msgid "Verbose device log"
+msgstr ""
 
 #: u_translation.rsvideo
 msgid "Video"
@@ -3907,6 +3943,10 @@ msgstr "Warte auf den Start der Sequenz %s at %s"
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
 msgstr "Kamera aufwärmen"
+
+#: u_translation.rswarningimage
+msgid "Warning! %s image received"
+msgstr ""
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"

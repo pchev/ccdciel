@@ -3958,3 +3958,43 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
+#: u_translation:rsthecameraima
+msgid "The camera image format is"
+msgstr ""
+
+#: u_translation:rspleasesetthe
+msgid "Please set the format to %s before to start the sequence."
+msgstr ""
+
+#: u_translation:rswarningimage
+msgid "Warning! %s image received"
+msgstr ""
+
+#: u_translation:rsautofocusgra
+msgid "Autofocus graph"
+msgstr ""
+
+#: u_translation:rscannotchange
+msgid "Cannot change start time. Sequence will start in time for the dusk flat."
+msgstr ""
+
+#: u_translation:rscannotchange2
+msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
+msgstr ""
+
+#: u_translation:rsfixedsequenc
+msgid "Fixed sequence length"
+msgstr ""
+
+#: u_translation:rsimportcdcobs
+msgid "Import CdC observing list"
+msgstr ""
+
+#: u_translation:rsshowhints
+msgid "Show hints"
+msgstr ""
+
+#: u_translation:rsverbosedevic
+msgid "Verbose device log"
+msgstr ""
+
