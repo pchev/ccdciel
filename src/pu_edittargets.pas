@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
-  pu_scriptengine, cu_astrometry, u_translation, u_hints, pu_selectscript, Classes, math,
+  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin,
   Buttons;
@@ -344,6 +344,7 @@ begin
   BtnNewScript.Caption := rsNewScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
+  BtnImport.Caption:=rsImportCdCObs;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;

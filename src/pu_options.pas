@@ -624,6 +624,8 @@ begin
   UseTcpServer.Caption := rsAllowToGetPr;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   Label18.Caption := rsLanguage;
+  CbShowHints.Caption:=rsShowHints;
+  Debug_Ascom.Caption:=rsVerboseDevic;
   TabSheet2.Caption := rsObservatory;
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;
@@ -633,6 +635,7 @@ begin
   Label108.Caption := rsElevation;
   Label76.Caption := rsHorizonProfi;
   Label77.Caption := rsMinimumObser;
+  TabSheet15.Caption:=rsDome;
   DomeNoSafetyCheck.Caption:=rsAllowToOpenT;
   DomeSlaveToMount.Caption:=rsAutomaticall;
   Label125.Caption:=rsWaitTimeBetw;

@@ -326,8 +326,8 @@ object f_option: Tf_option
         Left = 312
         Height = 21
         Top = 392
-        Width = 143
-        Caption = 'Verbose ASCOM log'
+        Width = 136
+        Caption = 'Verbose device log'
         ParentFont = False
         TabOrder = 9
       end
@@ -1940,7 +1940,7 @@ object f_option: Tf_option
           Left = 4
           Height = 19
           Top = 4
-          Width = 205
+          Width = 204
           Caption = 'Temperature coefficient in steps/C'
           ParentColor = False
           ParentFont = False
@@ -2406,10 +2406,10 @@ object f_option: Tf_option
         Left = 8
         Height = 144
         Top = 328
-        Width = 464
+        Width = 496
         BevelOuter = bvNone
         ClientHeight = 144
-        ClientWidth = 464
+        ClientWidth = 496
         ParentFont = False
         TabOrder = 2
         object AutofocusSlewStar: TGroupBox
@@ -2494,7 +2494,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object AutofocusSlew: TRadioButton
-          Left = 160
+          Left = 144
           Height = 21
           Top = 6
           Width = 129
@@ -2506,7 +2506,7 @@ object f_option: Tf_option
           TabStop = True
         end
         object AutofocusInPlace: TRadioButton
-          Left = 344
+          Left = 328
           Height = 21
           Top = 6
           Width = 98
@@ -2645,7 +2645,7 @@ object f_option: Tf_option
       end
       object Notebook1: TNotebook
         Left = 8
-        Height = 260
+        Height = 292
         Top = 188
         Width = 467
         PageIndex = 0
@@ -2654,11 +2654,11 @@ object f_option: Tf_option
         object Page1: TPage
           object astrometrynet: TGroupBox
             Left = 8
-            Height = 248
+            Height = 256
             Top = 8
             Width = 451
             Caption = 'Astrometry.Net'
-            ClientHeight = 228
+            ClientHeight = 236
             ClientWidth = 449
             ParentFont = False
             TabOrder = 0
@@ -2721,7 +2721,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object OtherOptions: TEdit
-              Left = 112
+              Left = 123
               Height = 28
               Top = 112
               Width = 305
@@ -2730,9 +2730,9 @@ object f_option: Tf_option
               TabOrder = 1
             end
             object CygwinPanel: TPanel
-              Left = 0
+              Left = 7
               Height = 40
-              Top = 176
+              Top = 184
               Width = 418
               BevelOuter = bvNone
               ClientHeight = 36
@@ -2773,10 +2773,10 @@ object f_option: Tf_option
               TabOrder = 3
             end
             object AstCustScript: TEdit
-              Left = 160
+              Left = 187
               Height = 28
-              Top = 148
-              Width = 257
+              Top = 144
+              Width = 241
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 4
@@ -3409,7 +3409,7 @@ object f_option: Tf_option
       ClientWidth = 520
       ParentFont = False
       object GroupBox6: TGroupBox
-        Left = 248
+        Left = 280
         Height = 198
         Top = 184
         Width = 200
@@ -3501,7 +3501,7 @@ object f_option: Tf_option
         Left = 8
         Height = 64
         Top = 4
-        Width = 440
+        Width = 472
         AutoFill = True
         Caption = 'Software'
         ChildSizing.LeftRightSpacing = 6
@@ -3512,7 +3512,7 @@ object f_option: Tf_option
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
         ClientHeight = 44
-        ClientWidth = 438
+        ClientWidth = 470
         Columns = 4
         ItemIndex = 0
         Items.Strings = (
@@ -3529,10 +3529,10 @@ object f_option: Tf_option
         Left = 8
         Height = 96
         Top = 184
-        Width = 232
+        Width = 264
         Caption = 'Dithering'
         ClientHeight = 76
-        ClientWidth = 230
+        ClientWidth = 262
         ParentFont = False
         TabOrder = 1
         object Label23: TLabel
@@ -3579,10 +3579,10 @@ object f_option: Tf_option
         Left = 8
         Height = 100
         Top = 282
-        Width = 232
+        Width = 264
         Caption = 'Star lost recovery'
         ClientHeight = 80
-        ClientWidth = 230
+        ClientWidth = 262
         ParentFont = False
         TabOrder = 3
         object Label70: TLabel
@@ -3646,7 +3646,7 @@ object f_option: Tf_option
         Left = 4
         Height = 107
         Top = 77
-        Width = 452
+        Width = 484
         PageIndex = 0
         TabOrder = 4
         object PagePHD: TPage
@@ -3654,10 +3654,10 @@ object f_option: Tf_option
             Left = 4
             Height = 96
             Top = 0
-            Width = 444
+            Width = 472
             Caption = 'PHD2'
             ClientHeight = 76
-            ClientWidth = 442
+            ClientWidth = 470
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -3795,7 +3795,7 @@ object f_option: Tf_option
         end
       end
       object GroupBox11: TGroupBox
-        Left = 248
+        Left = 280
         Height = 96
         Top = 184
         Width = 200
