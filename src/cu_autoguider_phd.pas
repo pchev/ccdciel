@@ -448,7 +448,7 @@ try
     if FStopGuiding then break;
     if FState<>GUIDER_BUSY then break;
   end;
-  result:=(FState<>GUIDER_BUSY);
+  result:=(FState<>GUIDER_BUSY) or FStopGuiding;
 except
 end;
 end;
