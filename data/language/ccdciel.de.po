@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-08-01 16:18+0000\n"
-"PO-Revision-Date: 2019-07-18 17:24+0000\n"
+"PO-Revision-Date: 2019-08-02 17:48+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-01 16:24+0000\n"
-"X-Generator: Launchpad (build 19012)\n"
+"X-Launchpad-Export-Date: 2019-08-03 13:08+0000\n"
+"X-Generator: Launchpad (build 19014)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -214,7 +214,7 @@ msgstr "Autofokus Fokus nach außen um %s"
 
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
-msgstr ""
+msgstr "Autofokus-Grafik"
 
 #: u_translation.rsautofocusmea
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
@@ -466,11 +466,11 @@ msgstr "Abbrechen in %s Sekunden"
 
 #: u_translation.rscannotchange
 msgid "Cannot change start time. Sequence will start in time for the dusk flat."
-msgstr ""
+msgstr "Startzeit kann nicht geändert werden. Die Sequenz beginnt pünktlich zur Dämmerung."
 
 #: u_translation.rscannotchange2
 msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
-msgstr ""
+msgstr "Stoppzeit kann nicht geändert werden. Die Sequenz stoppt pünktlich zur Morgendämmerung."
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
@@ -1234,7 +1234,7 @@ msgstr "FITS header"
 
 #: u_translation.rsfixedsequenc
 msgid "Fixed sequence length"
-msgstr ""
+msgstr "Feste Sequenzlänge"
 
 #: u_translation.rsflat
 msgid "Flat"
@@ -1558,7 +1558,7 @@ msgstr "Bild Un-debayered"
 
 #: u_translation.rsimportcdcobs
 msgid "Import CdC observing list"
-msgstr ""
+msgstr "Importiere Beobachtungsliste aus Skycharts"
 
 #: u_translation.rsin
 msgid "In"
@@ -2357,8 +2357,9 @@ msgid "Please select a temporary folder without space in the path name."
 msgstr "Bitte wählen Sie einen temporären Ordner ohne Leerzeichen im Pfadnamen."
 
 #: u_translation.rspleasesetthe
+#, fuzzy,badformat
 msgid "Please set the format to %s before to start the sequence."
-msgstr ""
+msgstr "Bitte stellen Sie das Format auf % s ein, bevor Sie die Sequenz starten."
 
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
@@ -2582,7 +2583,7 @@ msgstr "Platesolving und DSO's anzeigen"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and plot Hyperleda"
-msgstr ""
+msgstr "Platesolve und blende Hyperlada ein"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
@@ -2994,7 +2995,7 @@ msgstr "Zeige aktuelle Ereignisse"
 
 #: u_translation.rsshowhints
 msgid "Show hints"
-msgstr ""
+msgstr "Tipps anzeigen"
 
 #: u_translation.rsshowindilog
 msgid "Show INDI log"
@@ -3546,7 +3547,7 @@ msgstr "Optionen beim Beenden"
 
 #: u_translation.rsthecameraima
 msgid "The camera image format is"
-msgstr ""
+msgstr "Das Bildformat der Kamera ist"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -3854,7 +3855,7 @@ msgstr "Die Qualität der V-Kurve ist schlecht. Möchten Sie diese Kurve wirklic
 
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
-msgstr ""
+msgstr "Ausführliches Geräteprotokoll"
 
 #: u_translation.rsvideo
 msgid "Video"
@@ -3950,7 +3951,7 @@ msgstr "Kamera aufwärmen"
 
 #: u_translation.rswarningimage
 msgid "Warning! %s image received"
-msgstr ""
+msgstr "Warnung! %s Bild empfangen"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
