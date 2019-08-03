@@ -5935,6 +5935,7 @@ begin
    f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','--no-fits2fits');
    f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);
    f_option.AstCustScript.Text:=config.GetValue('/Astrometry/AstCustScript','');
+   f_option.AstCustScript.Visible:=f_option.AstUseScript.Checked;
    f_option.CygwinPath.Text:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
    {$ifdef unix}

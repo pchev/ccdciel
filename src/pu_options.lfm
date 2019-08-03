@@ -10,7 +10,6 @@ object f_option: Tf_option
   DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '2.0.2.0'
   object Panel1: TPanel
     Left = 0
     Height = 58
@@ -75,7 +74,7 @@ object f_option: Tf_option
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object ButtonDir: TButton
@@ -156,7 +155,7 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 238
+          ClientHeight = 241
           ClientWidth = 452
           ParentFont = False
           object BtnFileDefault: TButton
@@ -247,7 +246,7 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 238
+          ClientHeight = 241
           ClientWidth = 452
           ParentFont = False
           object BtnFolderDefault: TButton
@@ -352,7 +351,7 @@ object f_option: Tf_option
     end
     object TabSheet2: TTabSheet
       Caption = 'Observatory'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object Label5: TLabel
@@ -665,7 +664,7 @@ object f_option: Tf_option
     end
     object TabSheet15: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       object Panel4: TPanel
         Left = 4
@@ -736,7 +735,7 @@ object f_option: Tf_option
                 DropDownRows = 15
                 MinSize = 100
                 Title.Caption = 'Action'
-                Width = 454
+                Width = 452
               end>
             DefaultColWidth = 50
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -745,7 +744,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               50
-              454
+              452
             )
           end
         end
@@ -773,7 +772,7 @@ object f_option: Tf_option
                 DropDownRows = 15
                 MinSize = 100
                 Title.Caption = 'Action'
-                Width = 454
+                Width = 452
               end>
             DefaultColWidth = 50
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -782,7 +781,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               50
-              454
+              452
             )
           end
         end
@@ -807,7 +806,7 @@ object f_option: Tf_option
     end
     object TabSheet8: TTabSheet
       Caption = 'Preview'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object GroupBox8: TGroupBox
@@ -1134,7 +1133,7 @@ object f_option: Tf_option
     end
     object TabSheet11: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object GroupBox1: TGroupBox
@@ -1215,8 +1214,8 @@ object f_option: Tf_option
             Top = 30
             Width = 328
             BevelOuter = bvNone
-            ClientHeight = 30
-            ClientWidth = 328
+            ClientHeight = 26
+            ClientWidth = 324
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1457,7 +1456,7 @@ object f_option: Tf_option
     end
     object TabSheet12: TTabSheet
       Caption = 'Flat'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object FlatType: TRadioGroup
@@ -1750,7 +1749,7 @@ object f_option: Tf_option
     end
     object TabSheet10: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object GroupBox2: TGroupBox
@@ -1922,8 +1921,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            166
-            166
+            164
+            164
           )
         end
       end
@@ -2003,7 +2002,7 @@ object f_option: Tf_option
     end
     object TabSheet3: TTabSheet
       Caption = 'Autofocus'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object Autofocusmode: TRadioGroup
@@ -2549,7 +2548,7 @@ object f_option: Tf_option
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object GroupBox4: TGroupBox
@@ -2655,11 +2654,11 @@ object f_option: Tf_option
         object Page1: TPage
           object astrometrynet: TGroupBox
             Left = 8
-            Height = 256
+            Height = 288
             Top = 8
             Width = 451
             Caption = 'Astrometry.Net'
-            ClientHeight = 236
+            ClientHeight = 268
             ClientWidth = 449
             ParentFont = False
             TabOrder = 0
@@ -2733,7 +2732,7 @@ object f_option: Tf_option
             object CygwinPanel: TPanel
               Left = 7
               Height = 40
-              Top = 184
+              Top = 216
               Width = 418
               BevelOuter = bvNone
               ClientHeight = 40
@@ -2770,14 +2769,15 @@ object f_option: Tf_option
               Top = 148
               Width = 131
               Caption = 'Use custom script'
+              OnClick = AstUseScriptClick
               ParentFont = False
               TabOrder = 3
             end
             object AstCustScript: TEdit
-              Left = 187
+              Left = 40
               Height = 28
-              Top = 144
-              Width = 241
+              Top = 176
+              Width = 388
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 4
@@ -3052,7 +3052,7 @@ object f_option: Tf_option
     end
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object GroupBox7: TGroupBox
@@ -3224,7 +3224,7 @@ object f_option: Tf_option
     end
     object TabSheet9: TTabSheet
       Caption = 'Meridian'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object MeridianOption: TRadioGroup
@@ -3406,7 +3406,7 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object GroupBox6: TGroupBox
@@ -3827,7 +3827,7 @@ object f_option: Tf_option
     end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object PlanetariumBox: TRadioGroup
@@ -3943,7 +3943,7 @@ object f_option: Tf_option
     end
     object TabSheet13: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object ScrollBoxWeather: TScrollBox
@@ -4879,7 +4879,7 @@ object f_option: Tf_option
     end
     object TabSheet14: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 485
+      ClientHeight = 488
       ClientWidth = 520
       ParentFont = False
       object SafetyActions: TStringGrid
@@ -4895,12 +4895,12 @@ object f_option: Tf_option
             DropDownRows = 15
             MinSize = 100
             Title.Caption = 'Action'
-            Width = 209
+            Width = 207
           end        
           item
             MinSize = 100
             Title.Caption = 'Parameters'
-            Width = 209
+            Width = 207
           end>
         DefaultColWidth = 50
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4911,8 +4911,8 @@ object f_option: Tf_option
         OnValidateEntry = SafetyActionsValidateEntry
         ColWidths = (
           50
-          209
-          209
+          207
+          207
         )
       end
       object Label111: TLabel

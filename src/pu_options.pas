@@ -500,6 +500,7 @@ type
     Label14: TLabel;
     Panel1: TPanel;
     RefTreshold: TTrackBar;
+    procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
@@ -1151,6 +1152,11 @@ begin
      LabelMultistarWarning.Caption:=rsItIsSuggestT
   else
     LabelMultistarWarning.Caption:='';
+end;
+
+procedure Tf_option.AstUseScriptClick(Sender: TObject);
+begin
+   AstCustScript.Visible:=AstUseScript.Checked;
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
