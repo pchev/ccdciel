@@ -34,6 +34,7 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    AutofocusPauseGuider: TCheckBox;
     BtnDisableDelay: TButton;
     BtnDisableFocuserTemp: TButton;
     BtnFolderDefault: TButton;
@@ -757,6 +758,7 @@ begin
   Label86.Caption := rsArcmin;
   AutofocusMultistar.Caption := rsFocusStarSel;
   label56.Caption := rsDetectMultip;
+  AutofocusPauseGuider.Caption:=rsPauseGuiding;
   Label101.Caption := rsTheMenuFileF;
   TabSheet4.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
@@ -916,8 +918,6 @@ begin
   TelescopeName.Hint:=rsTheTelescopeNameForI;
   HorizonFile.Hint:=rsTheHorizonPr;
   ElevationMin.Hint:=rsTheMinimalOb;
-
-
   StackShow.Hint:=Format(rsShowTheOptio, [crlf, crlf]);
   FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);
@@ -926,6 +926,7 @@ begin
   Autofocusmode.Hint:=Format(rsUseVcurveWit, [crlf, crlf]);
   AutofocusSlippageCorrection.Hint:=Format(rsTryToCorrect, [crlf]);
   FocusStarMag.Hint:=Format(rsTheMagnitude, [crlf]);
+  AutofocusPauseGuider.Hint:=rsBeSureToPaus;
   ElbrusFolder.Hint:=rsTheElbrusIma;
   ElbrusUnixpath.Hint:=rsTheUnixPathE;
 

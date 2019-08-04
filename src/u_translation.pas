@@ -1105,6 +1105,7 @@ resourcestring
   rsShowHints = 'Show hints';
   rsVerboseDevic = 'Verbose device log';
   rsResolveAndPl2 = 'Resolve and plot Hyperleda';
+  rsPauseGuiding = 'Pause guiding during autofocus';
 
 implementation
 

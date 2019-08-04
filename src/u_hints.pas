@@ -166,6 +166,7 @@ resourcestring
   rsTheHorizonPr = 'The horizon profile used to compute object visibility. '
     +'This file is the same as used in Cartes du Ciel';
   rsTheMinimalOb = 'The minimal object elevation to start or end observing';
+  rsBeSureToPaus = 'Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope.';
 
 implementation
 

@@ -375,8 +375,7 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  AutofocusInPlace: boolean;
-  InplaceAutofocus: boolean;
+  AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   CameraProcessingImage: boolean;

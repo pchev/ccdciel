@@ -3119,6 +3119,7 @@ begin
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
+  AutofocusPauseGuider:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',true);
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
   AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',100);
@@ -5909,6 +5910,7 @@ begin
    ok:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
    f_option.AutofocusInPlace.Checked:=ok;
    f_option.AutofocusSlew.Checked:=not ok;
+   f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',true);
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
@@ -6136,6 +6138,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',f_option.AutofocusNearNum.Value);
      config.SetValue('/StarAnalysis/AutofocusInPlace',f_option.AutofocusInPlace.Checked);
+     config.SetValue('/StarAnalysis/AutofocusPauseGuider',f_option.AutofocusPauseGuider.Checked);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
@@ -8833,12 +8836,14 @@ begin
  if InplaceAutofocus then begin
    try
    NewMessage(rsStayAtTheCur,2);
-   // pause autoguider
-   pauseguider:=Autoguider.State=GUIDER_GUIDING;
-   if pauseguider then begin
-     NewMessage(rsPauseAutogui,2);
-     autoguider.Pause(True);
-     Wait(2);
+   if AutofocusPauseGuider then begin
+     // pause autoguider
+     pauseguider:=Autoguider.State=GUIDER_GUIDING;
+     if pauseguider then begin
+       NewMessage(rsPauseAutogui,2);
+       autoguider.Pause(True);
+       Wait(2);
+     end;
    end;
    if CancelAutofocus then exit;
    // do autofocus
@@ -8862,21 +8867,23 @@ begin
       result:=true;
    end;
    finally
-   // restart autoguider, never let in pause in case autofocus is aborted
-   if pauseguider then begin
-     NewMessage(rsResumeAutogu,2);
-     autoguider.Pause(false);
-     Wait(5);
-   end
-   else if restartguider and (not CancelAutofocus)then begin
-     NewMessage(rsRestartAutog,2);
-     autoguider.Guide(false);
-     wait(5);
-     autoguider.Guide(true);
-     autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
-     if autoguider.State<>GUIDER_GUIDING then begin
-        NewMessage(rsFailedToStar,1);
-        result:=false;
+   if AutofocusPauseGuider then begin
+     // restart autoguider, never let in pause in case autofocus is aborted
+     if pauseguider then begin
+       NewMessage(rsResumeAutogu,2);
+       autoguider.Pause(false);
+       Wait(5);
+     end
+     else if restartguider and (not CancelAutofocus)then begin
+       NewMessage(rsRestartAutog,2);
+       autoguider.Guide(false);
+       wait(5);
+       autoguider.Guide(true);
+       autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+       if autoguider.State<>GUIDER_GUIDING then begin
+          NewMessage(rsFailedToStar,1);
+          result:=false;
+       end;
      end;
    end;
    end;
