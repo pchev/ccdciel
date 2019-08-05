@@ -1107,7 +1107,10 @@ begin
     else if ((t.ra=NullCoord)or(t.de=NullCoord)) then
        mount.Track;
     // start guiding
-    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED) and (not autofocusstart) and (not isCalibrationTarget);
+    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
+                     (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
+                     ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
+                     (not isCalibrationTarget);
     if autostartguider then begin
       if not StartGuider then exit;
       Wait;
