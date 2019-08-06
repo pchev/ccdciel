@@ -10072,7 +10072,12 @@ var ra,de,hh,a,h,tra,tde,err: double;
 begin
   waittime:=-1;
   result:=false;
-  if (mount.Status=devConnected) and (not mount.MountSlewing) and (mount.Park=false) and (not autofocusing) and ((not meridianflipping)or(nextexposure<>0)) then begin
+  if (mount.Status=devConnected) and
+  (not mount.MountSlewing) and
+  (mount.Park=false) and
+  (mount.Tracking) and
+  (not autofocusing) and
+  ((not meridianflipping)or(nextexposure<>0)) then begin
     CurST:=CurrentSidTim;
     ra:=mount.RA;
     de:=mount.Dec;
@@ -10132,6 +10137,7 @@ begin
      if canwait then begin
       // Do meridian action
       if MeridianOption=1 then begin  // Flip
+       if abs(MeridianDelay1)<150 then begin // maximum flip time + 30min
         try
         meridianflipping:=true;
         if mount.PierSide=pierUnknown then begin
@@ -10299,14 +10305,18 @@ begin
           meridianflipping:=false;
         end;
       end else begin  // Abort
+        NewMessage('Unexpected time past meridian '+inttostr(hhmin),0);
         DoAbort;
       end;
-    end;
+      end else begin  // Abort
+        DoAbort;
+      end;
     end
     else begin
       // cannot wait now
       exit;
     end;
+  end;
   end;
 end;
 
