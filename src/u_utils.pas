@@ -39,6 +39,7 @@ function InvertF64(X : Int64) : Double;
 Procedure FormPos(form : Tform; x,y : integer);
 Function FormEntry(aOwner:TComponent; lbl,defaultstr:string):string;
 Function FormEntryCB(aOwner:TComponent; val:Tstrings; lbl,defaultstr:string):string;
+function wordspace(str: string): string;
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
 procedure SplitRec(buf,sep:string; var arg: TStringList);
 Procedure SplitCmd(S : String; List : TStringList);
@@ -268,6 +269,26 @@ begin
   else
     result:=defaultstr;
   f.free;
+end;
+
+function wordspace(str: string): string;
+var
+  i: integer;
+  c: char;
+begin
+  c := blank;
+  Result := '';
+  for i := 1 to length(str) do
+  begin
+    if str[i] = blank then
+    begin
+      if c <> blank then
+        Result := Result + str[i];
+    end
+    else
+      Result := Result + str[i];
+    c := str[i];
+  end;
 end;
 
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;

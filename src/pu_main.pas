@@ -7402,7 +7402,7 @@ try
    case FileNameOpt[i] of
      fnObj : if FileNameActive[i] then begin
              if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
-                fn:=fn+trim(f_capture.Fname.Text)+FilenameSep;
+                fn:=fn+wordspace(trim(f_capture.Fname.Text))+FilenameSep;
              end
              else
                 fn:=fn+trim(f_capture.FrameType.Text)+FilenameSep;
