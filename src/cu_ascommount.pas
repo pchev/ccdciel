@@ -125,7 +125,9 @@ var buf: string;
 {$endif}
 begin
  {$ifdef mswindows}
+  debug_msg:=true; { TODO : REMOVE AFTER TESTING! }
   try
+  if debug_msg then msg('Start connection '+cp1);
   FStatus := devConnecting;
   FDevice:=cp1;
   if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -133,18 +135,26 @@ begin
   V:=CreateOleObject(Fdevice);
   V.connected:=true;
   if V.connected then begin
+     if debug_msg then msg('Connect OK');
      FStatus := devConnected;
+     if debug_msg then msg('Get version');
      try
      msg('Driver version: '+V.DriverVersion,9);
      except
        msg('Error: unknown driver version',9);
      end;
      CheckEqmod;
+     if debug_msg then msg('Get park capability');
      CanPark:=V.CanPark;
+     if debug_msg then msg('Get slew capability');
      CanSlew:=V.CanSlew;
+     if debug_msg then msg('Get slewasync capability');
      CanSlewAsync:=V.CanSlewAsync;
+     if debug_msg then msg('Get side of pier');
      CanSetPierSide:=V.CanSetPierSide;
+     if debug_msg then msg('Get sync capability');
      CanSync:=V.CanSync;
+     if debug_msg then msg('Get set tracking capability');
      CanSetTracking:=V.CanSetTracking;
      buf:='';
      if IsEqmod then buf:=buf+'EQmod ';
@@ -161,8 +171,10 @@ begin
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
      StatusTimer.Enabled:=true;
   end
-  else
+  else begin
+     msg('connect failed');
      Disconnect;
+  end;
   except
     on E: Exception do msg('Connection error: ' + E.Message,0);
   end;
@@ -173,6 +185,7 @@ procedure T_ascommount.Disconnect;
 begin
  {$ifdef mswindows}
    StatusTimer.Enabled:=false;
+   if debug_msg then msg('Request to disconnect');
    FStatus := devDisconnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
@@ -211,30 +224,36 @@ var x,y: double;
 begin
  {$ifdef mswindows}
   if not Connected then begin
+     if debug_msg then msg('Status not connected');
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end
   else begin
     try
+    if debug_msg then msg('query status',9);
     x:=GetRA;
     y:=GetDec;
     pk:=GetPark;
     ps:=GetPierSide;
     tr:=GetTracking;
     if (x<>stRA)or(y<>stDE) then begin
+       if debug_msg then msg('coordinate change',9);
        stRA:=x;
        stDE:=y;
        if Assigned(FonCoordChange) then FonCoordChange(self);
     end;
     if pk<>stPark then begin
+       if debug_msg then msg('park change',9);
        stPark:=pk;
        if Assigned(FonParkChange) then FonParkChange(self);
     end;
     if ps<>stPierside then begin
+       if debug_msg then msg('pier side change',9);
        stPierside:=ps;
        if Assigned(FonPiersideChange) then FonPiersideChange(self);
     end;
     if tr<>stTracking then begin
+       if debug_msg then msg('tracking change',9);
        stTracking:=tr;
        if Assigned(FonTrackingChange) then FonTrackingChange(self);
     end;
@@ -250,6 +269,7 @@ begin
  {$ifdef mswindows}
    try
    if CanPark then begin
+      if debug_msg then msg('set park '+BoolToStr(value,true));
       if value then begin
          msg(rsPark);
          V.Park;
@@ -372,9 +392,11 @@ begin
  result:=false;
  {$ifdef mswindows}
  if CanSlew then begin
+   if debug_msg then msg('request to slew async to '+formatfloat(f5,sra)+blank+formatfloat(f5,sde));
    try
    if CanSetTracking and (not V.tracking) then begin
      try
+      if debug_msg then msg('must set tracking');
       V.tracking:=true;
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
@@ -385,10 +407,13 @@ begin
    else
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
+     if debug_msg then msg('slew async');
      V.SlewToCoordinatesAsync(sra,sde);
    end
-   else
+   else begin
+     if debug_msg then msg('slew synchronous');
      V.SlewToCoordinates(sra,sde);
+   end;
    result:=true;
    except
      on E: Exception do msg('Slew error: ' + E.Message,0);
@@ -402,9 +427,11 @@ begin
  result:=false;
  {$ifdef mswindows}
  if CanSlew then begin
+   if debug_msg then msg('request to slew to '+formatfloat(f5,sra)+blank+formatfloat(f5,sde));
    try
    if CanSetTracking and (not V.tracking) then begin
      try
+      if debug_msg then msg('must set tracking');
       V.tracking:=true;
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);
@@ -416,11 +443,15 @@ begin
    else
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
+     if debug_msg then msg('slew async');
      V.SlewToCoordinatesAsync(sra,sde);
      WaitMountSlewing(120000);
+     if debug_msg then msg('slew async complete');
    end
-   else
+   else begin
+     if debug_msg then msg('slew synchronous');
      V.SlewToCoordinates(sra,sde);
+   end;
    wait(2);
    msg(rsSlewComplete);
    FMountSlewing:=false;
@@ -446,6 +477,7 @@ begin
   else
     islewing:=false;
   result:=(islewing or FMountSlewing);
+  if debug_msg then msg('query slewing '+BoolToStr(result,true),9);
   except
     on E: Exception do msg('Get slewing error: ' + E.Message,0);
   end;
@@ -469,6 +501,7 @@ begin
       inc(count);
    end;
    result:=(count<maxcount);
+   if debug_msg then msg('finish to wait for slew '+BoolToStr(result,true),9);
  end;
  except
    result:=false;
@@ -493,6 +526,7 @@ begin
       inc(count);
    end;
    result:=(count<maxcount);
+   if debug_msg then msg('finish to wait for park '+BoolToStr(result,true),9);
  end;
  except
    result:=false;
@@ -552,6 +586,7 @@ begin
  result:=false;
  if CanSync then begin
    try
+   if debug_msg then msg('request to sync to '+formatfloat(f5,sra)+blank+formatfloat(f5,sde));
    if CanSetTracking and (not V.tracking) then begin
      msg(rsCannotSyncWh,0);
      exit;
@@ -630,6 +665,7 @@ begin
   FIsEqmod:=false;
   {$ifdef mswindows}
     try
+    if debug_msg then msg('check if mount driver is eqmod',9);
     buf:=V.CommandString(':MOUNTVER#');
     if length(buf)=8 then FIsEqmod:=true;
     except
@@ -716,6 +752,7 @@ begin
  result:=false;
  {$ifdef mswindows}
    try
+   if debug_msg then msg('get site location');
    long:=V.SiteLongitude;
    lat:=V.SiteLatitude;
    elev:=V.SiteElevation;
@@ -731,6 +768,7 @@ begin
  result:=false;
  {$ifdef mswindows}
    try
+   if debug_msg then msg('set site location');
    V.SiteLongitude := long;
    V.SiteLatitude  := lat;
    V.SiteElevation := elev;
@@ -746,6 +784,7 @@ begin
  result:=false;
  {$ifdef mswindows}
    try
+   if debug_msg then msg('get date');
    utc:=VarToDateTime(V.UTCDate);
    offset:=ObsTimeZone; // No offset in ASCOM telescope interface
    result:=true;
@@ -760,6 +799,7 @@ begin
  result:=false;
  {$ifdef mswindows}
    try
+   if debug_msg then msg('set date');
    V.UTCDate:=VarFromDateTime(utc);
    result:=true;
    except
