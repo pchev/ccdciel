@@ -1943,7 +1943,6 @@ begin
   LoadFocusStar;
   deepstring:=TStringList.Create;
 
-  StatusTimer.Enabled:=true;
   StartupTimer.Enabled:=true;
 end;
 
@@ -4500,6 +4499,7 @@ begin
                       MaxADU:=camera.MaxADU;
                       config.SetValue('/Sensor/MaxADU',MaxADU);
                    end;
+                   if not WantMount then StatusTimer.Enabled:=true;
                    end;
  end;
  CheckConnectionStatus;
@@ -5320,7 +5320,7 @@ begin
    end
    else begin
       f_mount.BtnTrack.Font.Color:=clRed;
-      if (not meridianflipping)and(not mount.MountSlewing)and(not WeatherPauseCapture) then f_sequence.MountTrackingStopped;
+      if (f_sequence.Running)and(not meridianflipping)and(not mount.MountSlewing)and(not WeatherPauseCapture) then f_sequence.MountTrackingStopped;
    end;
 end;
 
@@ -10074,10 +10074,10 @@ begin
   waittime:=-1;
   result:=false;
   if (mount.Status=devConnected) and
-  (not mount.MountSlewing) and
   (mount.Park=false) and
   (mount.Tracking) and
   (not autofocusing) and
+  (not mount.MountSlewing) and
   ((not meridianflipping)or(nextexposure<>0)) then begin
     CurST:=CurrentSidTim;
     ra:=mount.RA;
