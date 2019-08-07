@@ -5290,7 +5290,8 @@ case mount.Status of
                          end;
                       end;
                       MountCoordChange(Sender);
-                      CheckMeridianFlip;
+                      StatusTimer.Enabled:=false; // let time to initialize before to do too much
+                      StatusTimer.Enabled:=true;
                    end;
 end;
 CheckConnectionStatus;
