@@ -664,6 +664,7 @@ var buf:string;
 begin
   FIsEqmod:=false;
   {$ifdef mswindows}
+  if pos('EQMOD',uppercase(FDevice))>0 then begin
     try
     if debug_msg then msg('check if mount driver is eqmod',9);
     buf:=V.CommandString(':MOUNTVER#');
@@ -671,6 +672,7 @@ begin
     except
      FIsEqmod:=false;
     end;
+  end;
   {$endif}
 end;
 

@@ -40,6 +40,7 @@ T_ascomrestmount = class(T_mount)
    stTracking: boolean;
    StatusTimer: TTimer;
    StatusCount: integer;
+   FDeviceName: string;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure CheckEqmod;
@@ -144,6 +145,11 @@ begin
      msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
+     end;
+     try
+     FDeviceName:=V.Get('name').AsString;
+     except
+       FDeviceName:=Fdevice;
      end;
      CheckEqmod;
      CanPark:=V.Get('canpark').AsBool;
@@ -641,12 +647,14 @@ procedure T_ascomrestmount.CheckEqmod;
 var buf:string;
 begin
   FIsEqmod:=false;
+  if pos('EQMOD',uppercase(FDeviceName))>0 then begin
     try
     buf:=V.PutR('commandstring',['Command',':MOUNTVER#','Raw','true']).AsString;
     if length(buf)=8 then FIsEqmod:=true;
     except
      FIsEqmod:=false;
     end;
+  end;
 end;
 
 function  T_ascomrestmount.GetSyncMode:TEqmodAlign;
