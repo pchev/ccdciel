@@ -125,7 +125,6 @@ var buf: string;
 {$endif}
 begin
  {$ifdef mswindows}
-  debug_msg:=true; { TODO : REMOVE AFTER TESTING! }
   try
   if debug_msg then msg('Start connection '+cp1);
   FStatus := devConnecting;
