@@ -454,3 +454,7 @@ msgstr ""
 msgid "The minimal object elevation to start or end observing"
 msgstr ""
 
+#: u_hints:rsbesuretopaus
+msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-01 16:18+0000\n"
-"PO-Revision-Date: 2019-07-07 16:29+0000\n"
+"POT-Creation-Date: 2019-08-08 12:36+0000\n"
+"PO-Revision-Date: 2019-08-08 12:44+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-03 13:08+0000\n"
-"X-Generator: Launchpad (build 19014)\n"
+"X-Launchpad-Export-Date: 2019-08-08 12:48+0000\n"
+"X-Generator: Launchpad (build 19015)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -59,6 +59,10 @@ msgstr "Mise au point automatique si le changement de température est supérieu
 #: u_hints.rsautoguiderst
 msgid "Autoguider status"
 msgstr "Etat de l'autoguidage"
+
+#: u_hints.rsbesuretopaus
+msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
+msgstr "Assurez-vous de suspendre le guidage lorsque vous utilisez un diviseur optique. Vous pouvez continuer à guider si vous utilisez une lunette de guidage séparée."
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"

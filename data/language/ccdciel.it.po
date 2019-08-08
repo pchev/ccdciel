@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-01 16:18+0000\n"
+"POT-Creation-Date: 2019-08-08 12:36+0000\n"
 "PO-Revision-Date: 2019-01-22 09:34+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-03 13:08+0000\n"
-"X-Generator: Launchpad (build 19014)\n"
+"X-Launchpad-Export-Date: 2019-08-08 12:48+0000\n"
+"X-Generator: Launchpad (build 19015)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -334,6 +334,10 @@ msgstr "Inversione automatica"
 
 #: u_translation.rsavailable
 msgid "available"
+msgstr ""
+
+#: u_translation.rsazimuth
+msgid "Azimuth"
 msgstr ""
 
 #: u_translation.rsback
@@ -1452,6 +1456,10 @@ msgstr ""
 msgid "Good"
 msgstr ""
 
+#: u_translation.rsgoto
+msgid "Goto"
+msgstr ""
+
 #: u_translation.rsgreen
 msgid "green"
 msgstr "verde"
@@ -2240,6 +2248,10 @@ msgstr ""
 msgid "Pause before meridian flip "
 msgstr "Pausa prima del passaggio al meridiano "
 
+#: u_translation.rspauseguiding
+msgid "Pause guiding during autofocus"
+msgstr ""
+
 #: u_translation.rspausesequenc
 msgid "Pause sequence when the observing condition are out of the limits"
 msgstr ""
@@ -2646,6 +2658,10 @@ msgstr "Riavvia autoguida"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
+msgstr ""
+
+#: u_translation.rsretrieveposi
+msgid "Retrieve position from deepsky database"
 msgstr ""
 
 #: u_translation.rsreturnthefoc

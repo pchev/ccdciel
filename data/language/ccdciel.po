@@ -4002,3 +4002,19 @@ msgstr ""
 msgid "Resolve and plot Hyperleda"
 msgstr ""
 
+#: u_translation:rspauseguiding
+msgid "Pause guiding during autofocus"
+msgstr ""
+
+#: u_translation:rsgoto
+msgid "Goto"
+msgstr ""
+
+#: u_translation:rsretrieveposi
+msgid "Retrieve position from deepsky database"
+msgstr ""
+
+#: u_translation:rsazimuth
+msgid "Azimuth"
+msgstr ""
+
