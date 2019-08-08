@@ -126,12 +126,20 @@ object f_mount: Tf_mount
         Height = 28
         Hint = 'Current telescope pier side'
         Top = 0
-        Width = 185
-        Align = alClient
+        Width = 128
         Constraints.MaxHeight = 28
         ReadOnly = True
         TabOrder = 0
-        Text = 'Unknow pier side'
+        Text = 'West (Pointing East)'
+      end
+      object BtnGoto: TButton
+        Left = 128
+        Height = 25
+        Top = 0
+        Width = 57
+        Caption = 'Goto'
+        OnClick = BtnGotoClick
+        TabOrder = 1
       end
     end
     object Panel5: TPanel

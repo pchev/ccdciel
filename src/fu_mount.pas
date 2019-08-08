@@ -33,6 +33,7 @@ type
   { Tf_mount }
 
   Tf_mount = class(TFrame)
+    BtnGoto: TButton;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -49,12 +50,14 @@ type
     DE: TEdit;
     Panel1: TPanel;
     Title: TLabel;
+    procedure BtnGotoClick(Sender: TObject);
     procedure BtnParkClick(Sender: TObject);
     procedure BtnTrackClick(Sender: TObject);
   private
     { private declarations }
     FonPark  : TNotifyEvent;
     FonTrack  : TNotifyEvent;
+    FonGoto  : TNotifyEvent;
     procedure SetLang;
   public
     { public declarations }
@@ -62,6 +65,7 @@ type
     destructor  Destroy; override;
     property onPark  : TNotifyEvent read FonPark write FonPark;
     property onTrack  : TNotifyEvent read FonTrack write FonTrack;
+    property onGoto  : TNotifyEvent read FonGoto write FonGoto;
   end;
 
 implementation
@@ -94,6 +98,7 @@ begin
   label2.Caption:=rsDec;
   BtnPark.Caption:=rsPark;
   BtnTrack.Caption:=rsTrack;
+  BtnGoto.Caption:=rsGoto;
   LabelMeridian.Caption:=rsMeridianIn;
   label4.Caption:=rsMin;
   Pierside.Caption:=rsUnknowPierSi;
@@ -109,6 +114,11 @@ begin
      if MessageDlg(rsParkTheTeles, mtConfirmation, mbYesNo, 0)<>mrYes then exit;
   end;
   if assigned(FonPark) then FonPark(self);
+end;
+
+procedure Tf_mount.BtnGotoClick(Sender: TObject);
+begin
+  if assigned(FonGoto) then FonGoto(self);
 end;
 
 procedure Tf_mount.BtnTrackClick(Sender: TObject);

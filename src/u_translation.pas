@@ -1106,6 +1106,9 @@ resourcestring
   rsVerboseDevic = 'Verbose device log';
   rsResolveAndPl2 = 'Resolve and plot Hyperleda';
   rsPauseGuiding = 'Pause guiding during autofocus';
+  rsGoto = 'Goto';
+  rsRetrievePosi = 'Retrieve position from deepsky database';
+  rsAzimuth = 'Azimuth';
 
 implementation
 

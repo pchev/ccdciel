@@ -719,7 +719,7 @@ var n: integer;
 begin
   n:=TargetList.Row;
 
-  objname:=uppercase(inputbox('Retrieve position from deepsky database','Object:' , ''));
+  objname:=uppercase(inputbox(rsRetrievePosi, rsObject+':' , ''));
   if length(objname)>1 then {Object name length should be two or longer}
   begin
     load_deep;{Load the deepsky database once. If already loaded, no action}

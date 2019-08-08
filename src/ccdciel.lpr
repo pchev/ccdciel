@@ -51,7 +51,7 @@ uses
   cu_ascomrestcamera, cu_ascomrestwheel, cu_ascomrestweather,
   cu_ascomrestsafety, cu_ascomrestrotator, cu_ascomrestmount,
   cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither,
-  u_hints;
+  u_hints, pu_goto;
 
 {$R *.res}
 
@@ -83,6 +83,7 @@ begin
   Application.CreateForm(Tf_focusercalibration, f_focusercalibration);
   Application.CreateForm(Tf_about, f_about);
   Application.CreateForm(Tf_selectscript, f_selectscript);
+  Application.CreateForm(Tf_goto, f_goto);
   Application.Run;
 end.
 

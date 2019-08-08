@@ -40,7 +40,7 @@ uses
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -572,6 +572,7 @@ type
     procedure SetCooler(Sender: TObject);
     procedure SetMountPark(Sender: TObject);
     procedure SetMountTrack(Sender: TObject);
+    procedure MountGoto(Sender: TObject);
     procedure SetFocusMode;
     Procedure ConnectWheel(Sender: TObject);
     Procedure DisconnectWheel(Sender: TObject);
@@ -1299,6 +1300,7 @@ begin
   f_mount:=Tf_mount.Create(self);
   f_mount.onPark:=@SetMountPark;
   f_mount.onTrack:=@SetMountTrack;
+  f_mount.onGoto:=@MountGoto;
 
   f_dome:=Tf_dome.Create(self);
   f_dome.onParkDome:=@ParkDome;
@@ -5346,6 +5348,42 @@ procedure Tf_main.SetMountTrack(Sender: TObject);
 begin
  // do not test for mount.tracking here
  mount.Track;
+end;
+
+procedure Tf_main.MountGoto(Sender: TObject);
+var ra,de,err:double;
+    tra,tde,objn: string;
+begin
+ if (AllDevicesConnected) and (mount.Status=devConnected) then begin
+   FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f_goto.ShowModal;
+   if f_goto.ModalResult=mrok then begin
+     if Mount.Park then begin
+        NewMessage(rsTheTelescope);
+        mount.Park:=false;
+     end;
+     tra:= f_goto.Ra.Text;
+     tde:=f_goto.De.Text;
+     objn:=trim(f_goto.Obj.Text);
+     if tra='' then
+       ra:=NullCoord
+     else
+       ra:=StrToAR(tra);
+     if tde='' then
+       de:=NullCoord
+     else
+       de:=StrToDE(tde);
+     if (ra<>NullCoord) and (de<>NullCoord) then begin
+       NewMessage(rsGoto+': '+objn,1);
+       J2000ToMount(mount.EquinoxJD,ra,de);
+       if astrometry.PrecisionSlew(ra,de,err) then begin
+         f_capture.Fname.Text:=objn;
+        end
+       else NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
+     end
+     else NewMessage(rsInvalidCoord,1);
+   end;
+ end;
 end;
 
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);
