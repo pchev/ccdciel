@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
+{$RANGECHECKS OFF} // prevent range check error in VALINT32() for the header rows
+
 interface
 uses  u_global, u_utils, cu_fits, UScaleDPI,
   Classes, SysUtils,strutils, math,graphics;
