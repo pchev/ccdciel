@@ -94,7 +94,9 @@ end;
 procedure Tf_goto.BtnSearchClick(Sender: TObject);
 var ra0,dec0,length0,width0,pa : double;
     objname : string;
+    found: boolean;
 begin
+  found:=false;
   objname:=uppercase(trim(Obj.Text));
   if length(objname)>1 then {Object name length should be two or longer}
   begin
@@ -111,8 +113,13 @@ begin
         else
            Obj.Text:=naam2+'_'+naam3; {Add two object names}
         linepos:=$FFFFFF; {Stop searching}
+        found:=true;
      end;
     until linepos>=$FFFFFF;{Found object or end of database}
+    if not found then begin
+      Ra.Text:='';
+      De.Text:='';
+    end;
   end;
 end;
 
