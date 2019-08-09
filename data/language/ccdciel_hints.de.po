@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-08 12:36+0000\n"
+"POT-Creation-Date: 2019-08-09 20:51+0000\n"
 "PO-Revision-Date: 2019-07-07 16:27+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-08 12:48+0000\n"
-"X-Generator: Launchpad (build 19015)\n"
+"X-Launchpad-Export-Date: 2019-08-09 21:32+0000\n"
+"X-Generator: Launchpad (build 19021)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -43,10 +43,6 @@ msgstr "Füge ein Skript zur Liste hinzu"
 #: u_hints.rsafterlearnin
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
 msgstr "Nach Abschluss des Lernvorgangs können Sie diesen Cursor verwenden,um es besser an den linearen Teil der Kurve anzupassen.%sDie Passformmuss in der Nähe der horizontalen blauen Linie besonders gut sein."
-
-#: u_hints.rsapplythisset
-msgid "Apply this setting to all the targets"
-msgstr "Einstellungen auf alle Ziele anwenden"
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-08 12:36+0000\n"
-"PO-Revision-Date: 2019-07-07 16:14+0000\n"
+"POT-Creation-Date: 2019-08-09 20:51+0000\n"
+"PO-Revision-Date: 2019-08-09 21:02+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-08 12:48+0000\n"
-"X-Generator: Launchpad (build 19015)\n"
+"X-Launchpad-Export-Date: 2019-08-09 21:32+0000\n"
+"X-Generator: Launchpad (build 19021)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -97,10 +97,6 @@ msgstr "Another script is already running"
 msgid "Any time"
 msgstr "Any time"
 
-#: u_translation.rsapplytoall
-msgid "Apply to all"
-msgstr "Apply to all"
-
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Apply to all devices"
@@ -154,8 +150,8 @@ msgid "Autofocus already running."
 msgstr "Autofocus already running."
 
 #: u_translation.rsautofocusbef
-msgid "Autofocus before to start"
-msgstr "Autofocus before to start"
+msgid "Autofocus%sbefore to start"
+msgstr "Autofocus%sbefore to start"
 
 #: u_translation.rsautofocuscan
 msgid "Autofocus cannot find a star!%sPlease adjust your parameters"
@@ -182,8 +178,8 @@ msgid "AutoFocus error"
 msgstr "AutoFocus error"
 
 #: u_translation.rsautofocuseve
-msgid "Autofocus every"
-msgstr "Autofocus every"
+msgid "Autofocus%severy"
+msgstr "Autofocus%severy"
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
@@ -278,8 +274,8 @@ msgid "Autofocus tolerance "
 msgstr "Autofocus tolerance "
 
 #: u_translation.rsautofocuswhe
-msgid "Autofocus when temperature change"
-msgstr "Autofocus when temperature change"
+msgid "Autofocus when%stemperature change"
+msgstr "Autofocus when%stemperature change"
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -968,6 +964,10 @@ msgstr "Dither"
 #: u_translation.rsditherevery
 msgid "Dither every"
 msgstr "Dither every"
+
+#: u_translation.rsditherevery2
+msgid "Dither%severy"
+msgstr "Dither%severy"
 
 #: u_translation.rsdithering
 msgid "Dithering"
@@ -3289,9 +3289,9 @@ msgstr "Stay at the current position for autofocus"
 msgid "Stay in place"
 msgstr "Stay in place"
 
-#: u_translation.rsstayinplacef
-msgid "Stay in place for autofocus"
-msgstr "Stay in place for autofocus"
+#: u_translation.rsstayinplace2
+msgid "Stay in place%sfor autofocus"
+msgstr "Stay in place%sfor autofocus"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
@@ -3789,13 +3789,13 @@ msgstr "Unsafe condition ignored by user"
 msgid "Unslaved"
 msgstr "Unslaved"
 
-#: u_translation.rsupdateradecf
-msgid "Update RA+Dec from Planetarium"
-msgstr "Update RA+Dec from Planetarium"
+#: u_translation.rsupdateradec2
+msgid "Update RA+Dec%sfrom Planetarium"
+msgstr "Update RA+Dec%sfrom Planetarium"
 
-#: u_translation.rsuseastrometr
-msgid "Use astrometry to refine the position"
-msgstr "Use astrometry to refine the position"
+#: u_translation.rsuseastromet2
+msgid "Use astrometry to%srefine the position"
+msgstr "Use astrometry to%srefine the position"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-08 12:36+0000\n"
-"PO-Revision-Date: 2019-08-08 12:47+0000\n"
+"POT-Creation-Date: 2019-08-09 20:51+0000\n"
+"PO-Revision-Date: 2019-08-09 21:07+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-08 12:48+0000\n"
-"X-Generator: Launchpad (build 19015)\n"
+"X-Launchpad-Export-Date: 2019-08-09 21:32+0000\n"
+"X-Generator: Launchpad (build 19021)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -96,10 +96,6 @@ msgstr "Un autre script est déjà en cours"
 msgid "Any time"
 msgstr "N'importe quand"
 
-#: u_translation.rsapplytoall
-msgid "Apply to all"
-msgstr "Appliquer à tous"
-
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Applique à tous les périphériques"
@@ -153,8 +149,8 @@ msgid "Autofocus already running."
 msgstr "La mise au point automatique est déjà lancée"
 
 #: u_translation.rsautofocusbef
-msgid "Autofocus before to start"
-msgstr "Autofocus avant le début"
+msgid "Autofocus%sbefore to start"
+msgstr "Autofocus%savant le début"
 
 #: u_translation.rsautofocuscan
 msgid "Autofocus cannot find a star!%sPlease adjust your parameters"
@@ -181,8 +177,8 @@ msgid "AutoFocus error"
 msgstr "Erreur d'autofocus"
 
 #: u_translation.rsautofocuseve
-msgid "Autofocus every"
-msgstr "Autofocus tous les"
+msgid "Autofocus%severy"
+msgstr "Autofocus%stous les"
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
@@ -277,8 +273,8 @@ msgid "Autofocus tolerance "
 msgstr "Tolérance de mise au point "
 
 #: u_translation.rsautofocuswhe
-msgid "Autofocus when temperature change"
-msgstr "Autofocus si la température change"
+msgid "Autofocus when%stemperature change"
+msgstr "Autofocus si la%stempérature change"
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -967,6 +963,10 @@ msgstr "Dither"
 #: u_translation.rsditherevery
 msgid "Dither every"
 msgstr "Dither tous les"
+
+#: u_translation.rsditherevery2
+msgid "Dither%severy"
+msgstr "Dither%stous les"
 
 #: u_translation.rsdithering
 msgid "Dithering"
@@ -3288,9 +3288,9 @@ msgstr "Reste à la position pour la mise au point"
 msgid "Stay in place"
 msgstr "Reste sur place"
 
-#: u_translation.rsstayinplacef
-msgid "Stay in place for autofocus"
-msgstr "Reste sur place pour l'autofocus"
+#: u_translation.rsstayinplace2
+msgid "Stay in place%sfor autofocus"
+msgstr "Reste sur place%spour l'autofocus"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
@@ -3788,13 +3788,13 @@ msgstr "Condition dangereuse ignorée par l'utilisateur"
 msgid "Unslaved"
 msgstr "Non asservi"
 
-#: u_translation.rsupdateradecf
-msgid "Update RA+Dec from Planetarium"
-msgstr "Mise à jours AD+Déc du planétarium"
+#: u_translation.rsupdateradec2
+msgid "Update RA+Dec%sfrom Planetarium"
+msgstr "Mise à jours AD+Déc%sdu planétarium"
 
-#: u_translation.rsuseastrometr
-msgid "Use astrometry to refine the position"
-msgstr "Utilise l'astrométrie pour affiner la position"
+#: u_translation.rsuseastromet2
+msgid "Use astrometry to%srefine the position"
+msgstr "Astrométrie pour%saffiner la position"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"

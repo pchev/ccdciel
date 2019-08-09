@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-08 12:36+0000\n"
-"PO-Revision-Date: 2019-01-22 09:34+0000\n"
+"POT-Creation-Date: 2019-08-09 20:51+0000\n"
+"PO-Revision-Date: 2019-08-09 21:13+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-08 12:48+0000\n"
-"X-Generator: Launchpad (build 19015)\n"
+"X-Launchpad-Export-Date: 2019-08-09 21:32+0000\n"
+"X-Generator: Launchpad (build 19021)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -96,10 +96,6 @@ msgstr ""
 msgid "Any time"
 msgstr ""
 
-#: u_translation.rsapplytoall
-msgid "Apply to all"
-msgstr ""
-
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr ""
@@ -153,7 +149,7 @@ msgid "Autofocus already running."
 msgstr "Autofocus già attivo."
 
 #: u_translation.rsautofocusbef
-msgid "Autofocus before to start"
+msgid "Autofocus%sbefore to start"
 msgstr ""
 
 #: u_translation.rsautofocuscan
@@ -181,8 +177,8 @@ msgid "AutoFocus error"
 msgstr "Errore autofocus"
 
 #: u_translation.rsautofocuseve
-msgid "Autofocus every"
-msgstr "Autofocus ogni"
+msgid "Autofocus%severy"
+msgstr "Autofocus%sogni"
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
@@ -277,7 +273,7 @@ msgid "Autofocus tolerance "
 msgstr "Tolleranza autofocus "
 
 #: u_translation.rsautofocuswhe
-msgid "Autofocus when temperature change"
+msgid "Autofocus when%stemperature change"
 msgstr ""
 
 #: u_translation.rsautoguider
@@ -967,6 +963,10 @@ msgstr "Retinatura"
 #: u_translation.rsditherevery
 msgid "Dither every"
 msgstr "Retinatura ogni"
+
+#: u_translation.rsditherevery2
+msgid "Dither%severy"
+msgstr "Retinatura%sogni"
 
 #: u_translation.rsdithering
 msgid "Dithering"
@@ -3288,9 +3288,9 @@ msgstr "Rimani alla posizione corrente per l'autofocus"
 msgid "Stay in place"
 msgstr "Rimani sul posto"
 
-#: u_translation.rsstayinplacef
-msgid "Stay in place for autofocus"
-msgstr "Rimani sul posto per l'autofocus"
+#: u_translation.rsstayinplace2
+msgid "Stay in place%sfor autofocus"
+msgstr "Rimani sul posto%sper l'autofocus"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
@@ -3788,12 +3788,12 @@ msgstr ""
 msgid "Unslaved"
 msgstr ""
 
-#: u_translation.rsupdateradecf
-msgid "Update RA+Dec from Planetarium"
+#: u_translation.rsupdateradec2
+msgid "Update RA+Dec%sfrom Planetarium"
 msgstr ""
 
-#: u_translation.rsuseastrometr
-msgid "Use astrometry to refine the position"
+#: u_translation.rsuseastromet2
+msgid "Use astrometry to%srefine the position"
 msgstr ""
 
 #: u_translation.rsusecustomscr

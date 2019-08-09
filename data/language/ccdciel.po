@@ -1010,6 +1010,10 @@ msgstr ""
 msgid "Dither every"
 msgstr ""
 
+#: u_translation:rsditherevery2
+msgid "Dither%severy"
+msgstr ""
+
 #: u_translation:rsfocusevery
 msgid "Focus every"
 msgstr ""
@@ -2290,20 +2294,20 @@ msgstr ""
 msgid "No move"
 msgstr ""
 
-#: u_translation:rsuseastrometr
-msgid "Use astrometry to refine the position"
+#: u_translation:rsuseastromet2
+msgid "Use astrometry to%srefine the position"
 msgstr ""
 
 #: u_translation:rscurrentimage
 msgid "Current image"
 msgstr ""
 
-#: u_translation:rsupdateradecf
-msgid "Update RA+Dec from Planetarium"
+#: u_translation:rsupdateradec2
+msgid "Update RA+Dec%sfrom Planetarium"
 msgstr ""
 
-#: u_translation:rsstayinplacef
-msgid "Stay in place for autofocus"
+#: u_translation:rsstayinplace2
+msgid "Stay in place%sfor autofocus"
 msgstr ""
 
 #: u_translation:rssetrotatoran
@@ -2383,11 +2387,11 @@ msgid "Repeat this step"
 msgstr ""
 
 #: u_translation:rsautofocusbef
-msgid "Autofocus before to start"
+msgid "Autofocus%sbefore to start"
 msgstr ""
 
 #: u_translation:rsautofocuseve
-msgid "Autofocus every"
+msgid "Autofocus%severy"
 msgstr ""
 
 #: u_translation:rsadd
@@ -3670,10 +3674,6 @@ msgstr ""
 msgid "Pause sequence when the observing condition are out of the limits"
 msgstr ""
 
-#: u_translation:rsapplytoall
-msgid "Apply to all"
-msgstr ""
-
 #: u_translation:rsfilter0
 msgid "No change"
 msgstr ""
@@ -3735,7 +3735,7 @@ msgid "Focus on temp. change"
 msgstr ""
 
 #: u_translation:rsautofocuswhe
-msgid "Autofocus when temperature change"
+msgid "Autofocus when%stemperature change"
 msgstr ""
 
 #: u_translation:rsusername

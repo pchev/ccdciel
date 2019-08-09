@@ -242,10 +242,6 @@ msgstr ""
 msgid "You can avoid to move to a focus star if this target field include a suitable star.%sBeware the auto-focus will fail if the star is too faint."
 msgstr ""
 
-#: u_hints:rsapplythisset
-msgid "Apply this setting to all the targets"
-msgstr ""
-
 #: u_hints:rsgetthecoordi2
 msgid "Get the coordinates from the internal annotation database"
 msgstr ""
