@@ -3879,7 +3879,7 @@ begin
  f_capture.PanelGain.Visible:=camera.CanSetGain and (hasGain or hasGainISO);
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
- f_EditTargets.PanelGain1.Visible:=f_capture.PanelGain.Visible;
+ f_EditTargets.StepList.Columns[pcolgain-1].Visible:=f_capture.PanelGain.Visible;
  if hasGainISO then begin
    f_capture.ISObox.Visible:=true;
    f_capture.GainEdit.Visible:=false;
@@ -3890,9 +3890,7 @@ begin
    f_EditTargets.FISObox.Items.Assign(ISOList);
    f_EditTargets.FISObox.Visible:=true;
    f_EditTargets.FGainEdit.Visible:=false;
-   f_EditTargets.PISObox.Items.Assign(ISOList);
-   f_EditTargets.PISObox.Visible:=true;
-   f_EditTargets.PGainEdit.Visible:=false;
+   f_EditTargets.StepList.Columns[pcolgain-1].PickList.Assign(ISOList);
    for i:=0 to ISOList.Count-1 do begin;
       if ISOList[i]=gainprev then posprev:=i;
       if ISOList[i]=gaincapt then poscapt:=i;
@@ -3900,7 +3898,6 @@ begin
    f_capture.ISObox.ItemIndex:=poscapt;
    f_preview.ISObox.ItemIndex:=posprev;
    f_EditTargets.FISObox.ItemIndex:=poscapt;
-   f_EditTargets.PISObox.ItemIndex:=poscapt;
  end;
  if hasGain and (not hasGainISO) then begin
    f_capture.ISObox.Visible:=false;
@@ -3912,15 +3909,11 @@ begin
    f_EditTargets.FISObox.Visible:=false;
    f_EditTargets.FGainEdit.Visible:=true;
    f_EditTargets.FGainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
-   f_EditTargets.PISObox.Visible:=false;
-   f_EditTargets.PGainEdit.Visible:=true;
-   f_EditTargets.PGainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
    posprev:=StrToIntDef(gainprev,gain);
    poscapt:=StrToIntDef(gaincapt,gain);
    f_capture.GainEdit.Value:=poscapt;
    f_preview.GainEdit.Value:=posprev;
    f_EditTargets.FGainEdit.Value:=poscapt;
-   f_EditTargets.PGainEdit.Value:=poscapt;
  end;
 end;
 

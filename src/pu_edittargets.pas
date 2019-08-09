@@ -28,12 +28,11 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, CheckLst, Spin,
-  Buttons;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcolaftemp=9; pcoldither=10; pcolgain=11;
   titleadd=0; titledel=1;
 
 type
@@ -41,7 +40,6 @@ type
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
-    AutofocusCount: TSpinEdit;
     Bevel1: TBevel;
     Bevel2: TBevel;
     BtnAddStep: TButton;
@@ -62,15 +60,10 @@ type
     cbUnattended: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
-    CheckBoxAutofocusTemp: TCheckBox;
-    CheckBoxAutofocus: TCheckBox;
-    CheckBoxAutofocusStart: TCheckBox;
-    CheckBoxDither: TCheckBox;
     FlatFilterList: TCheckGroup;
     GroupBoxTime: TGroupBox;
     GroupBoxPA: TGroupBox;
     GroupBoxCoord: TGroupBox;
-    GroupBoxStep: TGroupBox;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     Label3: TLabel;
@@ -90,7 +83,6 @@ type
     PanelBot1: TPanel;
     Panel8: TPanel;
     PanelSep: TPanel;
-    DitherCount: TSpinEdit;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
     BtnCdCCoord: TButton;
@@ -106,18 +98,14 @@ type
     BtnDeletePlan: TButton;
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
-    PGainEdit: TSpinEdit;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
-    PISObox: TComboBox;
     Label1: TLabel;
     Label2: TLabel;
-    LabelGain1: TLabel;
     Panel1: TPanel;
     Panel10: TPanel;
     PanelBot2: TPanel;
-    Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
     Panel2: TPanel;
@@ -126,7 +114,6 @@ type
     Panel5: TPanel;
     Panel7: TPanel;
     Panel9: TPanel;
-    PanelGain1: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
     BtnRepeatInf: TSpeedButton;
@@ -185,7 +172,6 @@ type
     procedure BtnUnattendedScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
     procedure cbTermOptionClick(Sender: TObject);
-    procedure CheckLightOnlyChange(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatFilterListItemClick(Sender: TObject; Index: integer);
     procedure FlatTimeClick(Sender: TObject);
@@ -200,6 +186,7 @@ type
     procedure SeqStopChange(Sender: TObject);
     procedure SeqStopTwilightChange(Sender: TObject);
     procedure BtnRepeatInfClick(Sender: TObject);
+    procedure StepListCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
     procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure StepListEditingDone(Sender: TObject);
@@ -207,6 +194,7 @@ type
       var Editor: TWinControl);
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
     procedure StepChange(Sender: TObject);
+    procedure StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure TargetChange(Sender: TObject);
     procedure TargetListCheckboxToggled(sender: TObject; aCol, aRow: Integer;
       aState: TCheckboxState);
@@ -278,7 +266,8 @@ begin
   StepList.FixedColor:=clBackground;
   {$endif}
   ScaleDPI(Self);
-  TargetList.RowHeights[0]:=40;
+  TargetList.RowHeights[0]:=DoScaleY(40);
+  StepList.RowHeights[0]:=DoScaleY(40);
   SetLang;
   LockTarget:=false;
   FTargetsRepeat:=1;
@@ -300,7 +289,7 @@ end;
 
 procedure Tf_EditTargets.FormResize(Sender: TObject);
 begin
-  PanelTarget.Height:=(ClientHeight-Panel1.Height) div 2;
+  PanelTarget.Height:=PanelBottom.Height+((ClientHeight-Panel1.Height) div 2);
 end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
@@ -420,12 +409,6 @@ begin
   label2.Caption:=rsSequence;
   GroupBox5.Caption:=rsRepeat;
   // plan
-  GroupBoxStep.Caption:=rsStep;
-  CheckBoxDither.Caption := rsDitherEvery;
-  CheckBoxAutofocusStart.Caption := rsAutofocusBef;
-  CheckBoxAutofocus.Caption := rsAutofocusEve;
-  CheckBoxAutofocusTemp.Caption := rsAutofocusWhe;
-  LabelGain1.Caption := rsGain;
   BtnDeletePlan.Caption := rsDeletePlan;
   BtnSavePlan.Caption := rsSavePlan;
   BtnSavePlanAs.Caption:=rsSavePlanAs;
@@ -437,6 +420,11 @@ begin
   StepList.Columns.Items[pcolbin-1].Title.Caption := rsBinning;
   StepList.Columns.Items[pcolfilter-1].Title.Caption := rsFilter;
   StepList.Columns.Items[pcolcount-1].Title.Caption := rsCount;
+  StepList.Columns.Items[pcolafstart-1].Title.Caption := Format(rsAutofocusBef,[crlf]);
+  StepList.Columns.Items[pcolafevery-1].Title.Caption := Format(rsAutofocusEve,[crlf]);
+  StepList.Columns.Items[pcolaftemp-1].Title.Caption := Format(rsAutofocusWhe,[crlf]);
+  StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
+  StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
   Label1.Caption := rsPlan;
   // termination options
   Label3.Caption:=rsTerminationO;
@@ -472,8 +460,6 @@ begin
   BtnNewScript.Hint:=rsAddAScriptTo;
   BtnSkyFlat.Hint:=rsAddAFlatSequ;
   TargetList.Hint:=rsTheListOfTar;
-  PGainEdit.Hint:=rsCameraGain;
-  PISObox.Hint:=rsCameraISO;
   BtnSave.Hint:=rsSaveTheListA;
   BtnSaveAs.Hint:=rsSaveTheListW;
 end;
@@ -1904,7 +1890,6 @@ begin
   RepeatCountList.Value:=RepeatCountList.MaxValue;
 end;
 
-
 ///////////// Plan /////////////////
 
 procedure Tf_EditTargets.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
@@ -2016,12 +2001,23 @@ begin
     Bias : begin
            StepList.Cells[pcolexp,n]:='0.01';
            StepList.Cells[pcolfilter,n]:=Filter0;
+           StepList.Cells[pcolafstart,n]:='';
+           StepList.Cells[pcolafevery,n]:='0';
+           StepList.Cells[pcolaftemp,n]:='';
+           StepList.Cells[pcoldither,n]:='0';
         end;
     Dark : begin
            StepList.Cells[pcolfilter,n]:=Filter0;
+           StepList.Cells[pcolafstart,n]:='';
+           StepList.Cells[pcolafevery,n]:='0';
+           StepList.Cells[pcolaftemp,n]:='';
+           StepList.Cells[pcoldither,n]:='0';
         end;
     Flat : begin
-
+           StepList.Cells[pcolafstart,n]:='';
+           StepList.Cells[pcolafevery,n]:='0';
+           StepList.Cells[pcolaftemp,n]:='';
+           StepList.Cells[pcoldither,n]:='0';
         end;
   end;
 end;
@@ -2042,38 +2038,22 @@ begin
   StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
   StepList.Cells[pcolbin,n]:=p.binning_str;
   if hasGainISO then
-    PISObox.ItemIndex:=p.gain
+    StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
   else
-    PGainEdit.Value:=p.gain;
+    StepList.Cells[pcolgain,n]:=IntToStr(p.gain);
   StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter];
   StepList.Cells[pcolcount,n]:=IntToStr(p.count);
-  GroupBoxStep.Caption:=rsStep+blank+p.description_str;
-  CheckBoxDither.Checked:=p.dither;
-  DitherCount.Value:=p.dithercount;
-  CheckBoxAutofocusStart.Checked:=p.autofocusstart;
-  CheckBoxAutofocus.Checked:=p.autofocus;
-  CheckBoxAutofocusTemp.Checked:=p.autofocustemp;
-  AutofocusCount.Value:=p.autofocuscount;
-  LockStep:=false;
-end;
-
-procedure Tf_EditTargets.CheckLightOnlyChange(Sender: TObject);
-var n:integer;
-    p: TStep;
-begin
-  if LockStep then exit;
-  if not (sender is TCheckBox) then exit;
-  // is table empty?
-  if StepList.RowCount<=1 then exit;
-  n:=StepList.Row;
-  // is title row?
-  if n < 1 then exit;
-  p:=TStep(StepList.Objects[0,n]);
-  if p=nil then exit;
-  if TCheckBox(Sender).Checked and (p.frtype<>LIGHT) then
-     TCheckBox(Sender).Checked:=false
+  if p.dither then
+    StepList.Cells[pcoldither,n]:=IntToStr(p.dithercount)
   else
-     StepChange(Sender);
+    StepList.Cells[pcoldither,n]:='';
+  StepList.Cells[pcolafstart,n]:=BoolToStr(p.autofocusstart,'1','0');
+  if p.autofocus then
+    StepList.Cells[pcolafevery,n]:=IntToStr(p.autofocuscount)
+  else
+    StepList.Cells[pcolafevery,n]:='';
+  StepList.Cells[pcolaftemp,n]:=BoolToStr(p.autofocustemp,'1','0');
+  LockStep:=false;
 end;
 
 procedure Tf_EditTargets.StepChange(Sender: TObject);
@@ -2081,6 +2061,7 @@ var n,j,i:integer;
     p: TStep;
     x: double;
     str,buf: string;
+    ok:boolean;
 begin
   if LockStep then exit;
   // is table empty?
@@ -2121,12 +2102,17 @@ begin
     p.biny:=1;
   end;
   if hasGainISO then begin
-     StepsModified:=StepsModified or (p.gain<>PISObox.ItemIndex);
-     p.gain:=PISObox.ItemIndex;
+    str:=StepList.Cells[pcolgain,n];
+    j:=StepList.Columns[pcolgain-1].PickList.IndexOf(str);
+    StepsModified:=StepsModified or (p.gain<>j);
+    if j>=0 then p.gain:=j;
   end
   else begin
-     StepsModified:=StepsModified or (p.gain<>PGainEdit.Value);
-     p.gain:=PGainEdit.Value;
+    j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
+    if j>GainMax then begin j:=GainMax; StepList.Cells[pcolgain,n]:=inttostr(j); end;
+    if j<GainMin then begin j:=GainMin; StepList.Cells[pcolgain,n]:=inttostr(j); end;
+    StepsModified:=StepsModified or (p.gain<>j);
+    p.gain:=j;
   end;
   str:=StepList.Cells[pcolfilter,n];
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
@@ -2136,20 +2122,54 @@ begin
   j:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
   StepsModified:=StepsModified or (p.count<>j);
   p.count:=j;
-  StepsModified:=StepsModified or (p.dither<>CheckBoxDither.Checked);
-  p.dither:=(p.frtype=LIGHT) and CheckBoxDither.Checked;
-  StepsModified:=StepsModified or (p.dithercount<>DitherCount.Value);
-  p.dithercount:=DitherCount.Value;
-  StepsModified:=StepsModified or (p.autofocusstart<>CheckBoxAutofocusStart.Checked);
-  p.autofocusstart:=(p.frtype=LIGHT) and CheckBoxAutofocusStart.Checked;
-  StepsModified:=StepsModified or (p.autofocus<>CheckBoxAutofocus.Checked);
-  p.autofocus:=(p.frtype=LIGHT) and CheckBoxAutofocus.Checked;
-  StepsModified:=StepsModified or (p.autofocuscount<>AutofocusCount.Value);
-  p.autofocuscount:=AutofocusCount.Value;
-  StepsModified:=StepsModified or (p.autofocustemp<>CheckBoxAutofocusTemp.Checked);
-  p.autofocustemp:=(p.frtype=LIGHT) and CheckBoxAutofocusTemp.Checked;
+  j:=StrToIntDef(StepList.Cells[pcoldither,n],-1);
+  ok:=j>0;
+  StepsModified:=StepsModified or (p.dither<>ok);
+  p.dither:=(p.frtype=LIGHT) and ok;
+  StepsModified:=StepsModified or (p.dithercount<>j);
+  if ok then
+     p.dithercount:=j
+  else
+    p.dithercount:=0;
+  ok:=StepList.Cells[pcolafstart,n]='1';
+  StepsModified:=StepsModified or (p.autofocusstart<>ok);
+  p.autofocusstart:=(p.frtype=LIGHT) and ok;
+  j:=StrToIntDef(StepList.Cells[pcolafevery,n],-1);
+  ok:=j>0;
+  StepsModified:=StepsModified or (p.autofocus<>ok);
+  p.autofocus:=(p.frtype=LIGHT) and ok;
+  StepsModified:=StepsModified or (p.autofocuscount<>j);
+  if ok then
+     p.autofocuscount:=j
+  else
+     p.autofocuscount:=0;
+
+  ok:=StepList.Cells[pcolaftemp,n]='1';
+  StepsModified:=StepsModified or (p.autofocustemp<>ok);
+  p.autofocustemp:=(p.frtype=LIGHT) and ok;
   StepList.Cells[1,n]:=p.description;
   SetStep(n,p);
+end;
+
+procedure Tf_EditTargets.StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
+begin
+  if (aRow>0)and(StepList.Cells[pcoltype,aRow]<>trim(FrameName[ord(LIGHT)])) then begin
+    StepList.Cells[pcolafstart,aRow]:='';
+    StepList.Cells[pcolafevery,aRow]:='0';
+    StepList.Cells[pcolaftemp,aRow]:='';
+    StepList.Cells[pcoldither,aRow]:='0';
+  end;
+end;
+
+procedure Tf_EditTargets.StepListCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
+begin
+  if (aRow>0)and(StepList.Cells[pcoltype,aRow]<>trim(FrameName[ord(LIGHT)])) then begin
+    StepList.Cells[pcolafstart,aRow]:='';
+    StepList.Cells[pcolafevery,aRow]:='0';
+    StepList.Cells[pcolaftemp,aRow]:='';
+    StepList.Cells[pcoldither,aRow]:='0';
+  end;
+  StepChange(sender);
 end;
 
 procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
@@ -2173,6 +2193,16 @@ begin
      Editor:=StepList.EditorByStyle(cbsPickList) // binning selection
   else if (aCol=pcolfilter) then
      Editor:=StepList.EditorByStyle(cbsPickList) // filter selection
+  else if (aCol=pcolafstart) then
+     Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus at start selection
+  else if (aCol=pcolaftemp) then
+     Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus on temperature selection
+  else if (aCol=pcolgain) then begin
+    if hasGainISO then
+      Editor:=StepList.EditorByStyle(cbsPickList) // ISO list
+    else
+      Editor:=StepList.EditorByStyle(cbsAuto)     // Gain
+  end
   else
      Editor:=StepList.EditorByStyle(cbsAuto);
 end;

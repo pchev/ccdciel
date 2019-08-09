@@ -302,6 +302,7 @@ resourcestring
   rsCount = 'Count';
   rsType = 'Type';
   rsDitherEvery = 'Dither every';
+  rsDitherEvery2 = 'Dither%severy';
   rsFocusEvery = 'Focus every';
   rsStartCapture = 'Start capture';
   rsCannotStartC = 'Cannot start capture now';
@@ -666,8 +667,8 @@ resourcestring
   rsDescription = 'Description';
   rsExposure = 'Exposure';
   rsRepeatThisSt = 'Repeat this step';
-  rsAutofocusBef = 'Autofocus before to start';
-  rsAutofocusEve = 'Autofocus every';
+  rsAutofocusBef = 'Autofocus%sbefore to start';
+  rsAutofocusEve = 'Autofocus%severy';
   rsAdd = 'Add';
   rsResolve = 'Resolve';
   rsResolveAndSl = 'Resolve and Slew to image center';
@@ -1036,7 +1037,7 @@ resourcestring
   rsGet = 'Get';
   rsColumn = 'column';
   rsFocusOnTempC = 'Focus on temp. change';
-  rsAutofocusWhe = 'Autofocus when temperature change';
+  rsAutofocusWhe = 'Autofocus when%stemperature change';
   rsUserName = 'User name';
   rsPassword = 'Password';
   rsTheMountIndi = 'the mount indicate %s';
