@@ -643,10 +643,10 @@ resourcestring
   rsRise = 'rise';
   rsSet2 = 'set';
   rsNoMove = 'No move';
-  rsUseAstrometr = 'Use astrometry to refine the position';
+  rsUseAstromet2 = 'Use astrometry to%srefine the position';
   rsCurrentImage = 'Current image';
-  rsUpdateRADecF = 'Update RA+Dec from Planetarium';
-  rsStayInPlaceF = 'Stay in place for autofocus';
+  rsUpdateRADec2 = 'Update RA+Dec%sfrom Planetarium';
+  rsStayInPlace2 = 'Stay in place%sfor autofocus';
   rsSetRotatorAn = 'Set rotator angle';
   rsRepeatThePla = 'Repeat the plan for this object';
   rsFlatTime = 'Flat time';
@@ -1021,7 +1021,6 @@ resourcestring
   rsReadoutModes = 'Readout modes';
   rsRestartAfter2 = 'Restart after weather is good for';
   rsPauseSequenc = 'Pause sequence when the observing condition are out of the limits';
-  rsApplyToAll = 'Apply to all';
   rsFilter0 = 'No change';
   rsSuspendDomeS = 'Suspend dome slaving';
   rsTemperatureS = 'Temperature scale';

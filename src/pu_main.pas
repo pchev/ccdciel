@@ -1886,7 +1886,7 @@ begin
   f_filterwheel.Filters.ItemIndex:=0;
   f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(FilterList);
   f_EditTargets.FlatFilterList.Items.Assign(FilterList);
-  if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
+  if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
   SetFilterMenu;
 
   n:=config.GetValue('/Binning/Num',0);
@@ -4596,7 +4596,7 @@ case wheel.Status of
                       f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
                       f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(wheel.FilterNames);
                       f_EditTargets.FlatFilterList.Items.Assign(wheel.FilterNames);
-                      if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
+                      if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
                       FilterList.Assign(wheel.FilterNames);
                       SetFilterMenu;
                       if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
@@ -4659,7 +4659,7 @@ begin
 f_filterwheel.Filters.Items.Assign(wheel.FilterNames);
 f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(wheel.FilterNames);
 f_EditTargets.FlatFilterList.Items.Assign(wheel.FilterNames);
-if f_EditTargets.FlatFilterList.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
+if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
 FilterList.Assign(wheel.FilterNames);
 SetFilterMenu;
 if (wheel.Filter>=0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then

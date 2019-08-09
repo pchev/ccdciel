@@ -88,7 +88,6 @@ resourcestring
   rsYouCanAvoidT = 'You can avoid to move to a focus star if this target field'
     +' include a suitable star.%sBeware the auto-focus will fail if the star '
     +'is too faint.';
-  rsApplyThisSet = 'Apply this setting to all the targets';
   rsGetTheCoordi2 = 'Get the coordinates from the internal annotation database';
   rsStartAPrevie = 'Start a preview loop when waiting for the delay to expire.';
   rsSolveTheCurr2 = 'Solve the current image and get the rotation of the image';

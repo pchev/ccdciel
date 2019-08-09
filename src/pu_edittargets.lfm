@@ -21,495 +21,11 @@ object f_EditTargets: Tf_EditTargets
     Top = 0
     Width = 980
     Align = alTop
-    ClientHeight = 390
-    ClientWidth = 980
+    ClientHeight = 386
+    ClientWidth = 976
     Constraints.MinHeight = 390
     ParentFont = False
     TabOrder = 0
-    object Panel11: TPanel
-      Left = 679
-      Height = 341
-      Top = 73
-      Width = 300
-      Align = alRight
-      BevelOuter = bvNone
-      ClientHeight = 341
-      ClientWidth = 300
-      Constraints.MinHeight = 341
-      ParentFont = False
-      TabOrder = 1
-      object PageControl1: TPageControl
-        Left = 0
-        Height = 341
-        Top = 0
-        Width = 300
-        ActivePage = TabSheet1
-        Align = alClient
-        ParentFont = False
-        ShowTabs = False
-        TabIndex = 0
-        TabOrder = 0
-        object TabSheet1: TTabSheet
-          Caption = 'Object'
-          ClientHeight = 337
-          ClientWidth = 290
-          ParentFont = False
-          object GroupBoxTarget: TGroupBox
-            Left = 0
-            Height = 165
-            Top = 0
-            Width = 290
-            Align = alTop
-            Caption = 'Target'
-            ClientHeight = 145
-            ClientWidth = 288
-            ParentFont = False
-            TabOrder = 0
-            object BtnCurrentCoord: TButton
-              Left = 158
-              Height = 23
-              Hint = 'Do not move the telescope before to start imaging.'
-              Top = 0
-              Width = 123
-              Caption = 'No move'
-              OnClick = BtnCurrentCoordClick
-              ParentFont = False
-              TabOrder = 0
-            end
-            object BtnCdCCoord: TButton
-              Left = 67
-              Height = 23
-              Hint = 'Get the coordinates and object name from the planetarium'
-              Top = 0
-              Width = 88
-              Caption = 'Planetarium'
-              OnClick = BtnCdCCoordClick
-              ParentFont = False
-              TabOrder = 1
-            end
-            object PointAstrometry: TCheckBox
-              Left = 8
-              Height = 21
-              Hint = 'Use plate solving to increase the accuracy of the telescope position.'
-              Top = 52
-              Width = 246
-              Caption = 'Use astrometry to refine the position'
-              OnChange = TargetChange
-              ParentFont = False
-              TabOrder = 2
-            end
-            object BtnImgCoord: TButton
-              Left = 8
-              Height = 23
-              Hint = 'Solve the current image and get the center coordinates'
-              Top = 26
-              Width = 273
-              Caption = 'Position from current image'
-              OnClick = BtnImgCoordClick
-              ParentFont = False
-              TabOrder = 3
-            end
-            object UpdateCoord: TCheckBox
-              Left = 8
-              Height = 21
-              Hint = 'For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.'#10'Be sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here.'
-              Top = 96
-              Width = 228
-              Caption = 'Update RA+Dec from Planetarium'
-              OnChange = TargetChange
-              ParentFont = False
-              TabOrder = 4
-            end
-            object InplaceAutofocus: TCheckBox
-              Left = 8
-              Height = 21
-              Hint = 'You can avoid to move to a focus star if this target field include a suitable star.'#10'Beware the auto-focus will fail if the star is too faint.'
-              Top = 74
-              Width = 183
-              Caption = 'Stay in place for autofocus'
-              OnChange = TargetChange
-              ParentFont = False
-              TabOrder = 5
-            end
-            object BtnApplyToAll: TButton
-              Left = 32
-              Height = 23
-              Top = 120
-              Width = 224
-              Caption = 'Apply to all'
-              OnClick = BtnApplyToAllClick
-              ParentFont = False
-              TabOrder = 6
-            end
-            object Btn_coord_internal: TButton
-              Left = 8
-              Height = 23
-              Hint = 'Get the coordinates from annotation database'
-              Top = 0
-              Width = 55
-              Caption = 'Search'
-              OnClick = Btn_coord_internalClick
-              ParentFont = False
-              TabOrder = 7
-            end
-          end
-          object GroupBox5: TGroupBox
-            Left = 0
-            Height = 125
-            Top = 212
-            Width = 290
-            Align = alClient
-            Caption = 'Repeat'
-            ClientHeight = 105
-            ClientWidth = 288
-            ParentFont = False
-            TabOrder = 1
-            object Label9: TLabel
-              Left = 3
-              Height = 19
-              Top = 54
-              Width = 106
-              Caption = 'Preview exposure'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Preview: TCheckBox
-              Left = 3
-              Height = 21
-              Hint = 'Start a preview loop when waiting for the delay to expire.'
-              Top = 27
-              Width = 212
-              Caption = 'Preview when waiting to repeat'
-              OnChange = TargetChange
-              ParentFont = False
-              ParentBidiMode = False
-              TabOrder = 0
-            end
-            object Label13: TLabel
-              Left = 176
-              Height = 19
-              Top = 4
-              Width = 57
-              Caption = '[seconds]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label11: TLabel
-              Left = 3
-              Height = 19
-              Top = 4
-              Width = 46
-              Caption = 'Interval'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label14: TLabel
-              Left = 208
-              Height = 19
-              Top = 54
-              Width = 57
-              Caption = '[seconds]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object TDelay: TSpinEdit
-              Left = 87
-              Height = 26
-              Top = 0
-              Width = 76
-              Constraints.MaxHeight = 26
-              MaxValue = 100000
-              OnChange = TargetChange
-              ParentFont = False
-              TabOrder = 1
-            end
-            object PreviewExposure: TFloatSpinEdit
-              Left = 130
-              Height = 26
-              Top = 50
-              Width = 62
-              Constraints.MaxHeight = 26
-              MaxValue = 60
-              MinValue = 0
-              OnChange = TargetChange
-              ParentFont = False
-              TabOrder = 2
-              Value = 0
-            end
-          end
-          object Panel6: TPanel
-            Left = 0
-            Height = 47
-            Top = 165
-            Width = 290
-            Align = alTop
-            BevelOuter = bvNone
-            ClientHeight = 47
-            ClientWidth = 290
-            ParentFont = False
-            TabOrder = 2
-            object GroupBox3: TGroupBox
-              Left = 0
-              Height = 47
-              Top = 0
-              Width = 151
-              Align = alLeft
-              Caption = 'PA'
-              ClientHeight = 27
-              ClientWidth = 149
-              ParentFont = False
-              TabOrder = 0
-              object BtnImgRot: TButton
-                Left = 4
-                Height = 23
-                Hint = 'Solve the current image and get the rotation of the image'
-                Top = 2
-                Width = 132
-                Caption = 'Current image'
-                OnClick = BtnImgRotClick
-                ParentFont = False
-                TabOrder = 0
-              end
-            end
-            object GroupBox4: TGroupBox
-              Left = 151
-              Height = 47
-              Top = 0
-              Width = 139
-              Align = alClient
-              Caption = 'Begin/End'
-              ClientHeight = 27
-              ClientWidth = 137
-              ParentFont = False
-              TabOrder = 1
-              object BtnAnytime: TButton
-                Left = 4
-                Height = 23
-                Hint = 'Clear time constraint'
-                Top = 2
-                Width = 122
-                Caption = 'Any time'
-                OnClick = BtnAnytimeClick
-                ParentFont = False
-                TabOrder = 0
-              end
-            end
-          end
-        end
-        object TabSheet2: TTabSheet
-          Caption = 'Script'
-          ClientHeight = 337
-          ClientWidth = 290
-          ParentFont = False
-          object Panel14: TPanel
-            Left = 0
-            Height = 108
-            Top = 0
-            Width = 290
-            Align = alTop
-            ClientHeight = 108
-            ClientWidth = 290
-            ParentFont = False
-            TabOrder = 0
-            object Label15: TLabel
-              Left = 16
-              Height = 19
-              Top = 22
-              Width = 34
-              Caption = 'Script'
-              ParentColor = False
-              ParentFont = False
-            end
-            object ScriptList: TComboBox
-              Left = 98
-              Height = 35
-              Top = 16
-              Width = 166
-              ItemHeight = 0
-              OnChange = TargetChange
-              ParentFont = False
-              Style = csDropDownList
-              TabOrder = 0
-            end
-            object BtnEditScript: TButton
-              Left = 98
-              Height = 25
-              Top = 64
-              Width = 70
-              Caption = 'Edit'
-              OnClick = BtnScriptClick
-              ParentFont = False
-              TabOrder = 1
-            end
-            object BtnEditNewScript: TButton
-              Left = 184
-              Height = 25
-              Top = 64
-              Width = 80
-              Caption = 'New'
-              OnClick = BtnScriptClick
-              ParentFont = False
-              TabOrder = 2
-            end
-          end
-        end
-        object TabSheet3: TTabSheet
-          Caption = 'TabSheet3'
-          ClientHeight = 337
-          ClientWidth = 290
-          ParentFont = False
-          object FlatTime: TRadioGroup
-            Left = 0
-            Height = 51
-            Top = 0
-            Width = 290
-            Align = alTop
-            AutoFill = True
-            Caption = 'Flat time'
-            ChildSizing.LeftRightSpacing = 6
-            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-            ChildSizing.EnlargeVertical = crsHomogenousChildResize
-            ChildSizing.ShrinkHorizontal = crsScaleChilds
-            ChildSizing.ShrinkVertical = crsScaleChilds
-            ChildSizing.Layout = cclLeftToRightThenTopToBottom
-            ChildSizing.ControlsPerLine = 2
-            ClientHeight = 31
-            ClientWidth = 288
-            Columns = 2
-            Items.Strings = (
-              'at dusk'
-              'at dawn'
-            )
-            OnClick = FlatTimeClick
-            ParentFont = False
-            TabOrder = 0
-          end
-          object GroupBox6: TGroupBox
-            Left = 0
-            Height = 185
-            Top = 152
-            Width = 290
-            Align = alClient
-            Caption = 'Filters'
-            ClientHeight = 165
-            ClientWidth = 288
-            ParentFont = False
-            TabOrder = 1
-            object FlatFilterList: TCheckListBox
-              Left = 0
-              Height = 165
-              Top = 0
-              Width = 288
-              Align = alClient
-              IntegralHeight = True
-              ItemHeight = 0
-              OnClick = TargetChange
-              ParentFont = False
-              TabOrder = 0
-              TopIndex = -1
-            end
-          end
-          object GroupBox7: TGroupBox
-            Left = 0
-            Height = 101
-            Top = 51
-            Width = 290
-            Align = alTop
-            Caption = 'Exposure'
-            ClientHeight = 81
-            ClientWidth = 288
-            ParentFont = False
-            TabOrder = 2
-            object Label16: TLabel
-              Left = 8
-              Height = 19
-              Top = 44
-              Width = 47
-              Caption = 'Binning'
-              ParentColor = False
-              ParentFont = False
-            end
-            object FlatBinning: TComboBox
-              Left = 72
-              Height = 35
-              Top = 40
-              Width = 84
-              ItemHeight = 0
-              OnChange = TargetChange
-              ParentFont = False
-              Style = csDropDownList
-              TabOrder = 0
-            end
-            object Label18: TLabel
-              Left = 8
-              Height = 19
-              Top = 11
-              Width = 37
-              Caption = 'Count'
-              ParentColor = False
-              ParentFont = False
-            end
-            object PanelGain: TPanel
-              Left = 160
-              Height = 40
-              Top = 39
-              Width = 128
-              BevelOuter = bvNone
-              Caption = ' '
-              ClientHeight = 36
-              ClientWidth = 124
-              ParentFont = False
-              TabOrder = 1
-              Visible = False
-              object FISObox: TComboBox
-                Left = 56
-                Height = 35
-                Hint = 'Exposure time in secondes'
-                Top = 0
-                Width = 64
-                ItemHeight = 0
-                OnChange = TargetChange
-                ParentFont = False
-                Style = csDropDownList
-                TabOrder = 0
-                Visible = False
-              end
-              object LabelGain: TLabel
-                Left = 8
-                Height = 19
-                Top = 4
-                Width = 28
-                Caption = 'Gain'
-                ParentColor = False
-                ParentFont = False
-              end
-              object FGainEdit: TSpinEdit
-                Left = 56
-                Height = 29
-                Top = 0
-                Width = 56
-                MaxValue = 10000
-                OnChange = TargetChange
-                ParentFont = False
-                TabOrder = 1
-              end
-            end
-            object FlatCount: TSpinEdit
-              Left = 72
-              Height = 29
-              Top = 8
-              Width = 56
-              MaxValue = 10000
-              MinValue = 1
-              OnChange = TargetChange
-              ParentFont = False
-              TabOrder = 2
-              Value = 1
-            end
-          end
-        end
-      end
-    end
     object Panel2: TPanel
       Left = 1
       Height = 72
@@ -517,8 +33,8 @@ object f_EditTargets: Tf_EditTargets
       Width = 978
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 72
-      ClientWidth = 978
+      ClientHeight = 68
+      ClientWidth = 974
       ParentFont = False
       TabOrder = 0
       object Panel16: TPanel
@@ -528,8 +44,8 @@ object f_EditTargets: Tf_EditTargets
         Width = 480
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 72
-        ClientWidth = 480
+        ClientHeight = 68
+        ClientWidth = 476
         ParentFont = False
         TabOrder = 0
         object Panel15: TPanel
@@ -539,8 +55,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 480
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 23
-          ClientWidth = 480
+          ClientHeight = 19
+          ClientWidth = 476
           ParentFont = False
           TabOrder = 0
           object Panel3: TPanel
@@ -550,8 +66,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 194
             Align = alLeft
             BevelOuter = bvNone
-            ClientHeight = 23
-            ClientWidth = 194
+            ClientHeight = 19
+            ClientWidth = 190
             ParentFont = False
             TabOrder = 0
             object Label2: TLabel
@@ -581,8 +97,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 286
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 23
-            ClientWidth = 286
+            ClientHeight = 19
+            ClientWidth = 282
             TabOrder = 1
             object CheckBoxRepeatList: TCheckBox
               Left = 4
@@ -681,6 +197,14 @@ object f_EditTargets: Tf_EditTargets
               OnClick = BtnRepeatInfClick
               ParentFont = False
             end
+            object Panel6: TPanel
+              Left = 166
+              Height = 49
+              Top = 22
+              Width = 168
+              Caption = 'Panel6'
+              TabOrder = 2
+            end
           end
         end
         object Panel5: TPanel
@@ -690,8 +214,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 250
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 26
-          ClientWidth = 250
+          ClientHeight = 22
+          ClientWidth = 246
           ParentFont = False
           TabOrder = 1
           object SeqStart: TCheckBox
@@ -740,8 +264,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 232
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 26
-          ClientWidth = 232
+          ClientHeight = 22
+          ClientWidth = 228
           ParentFont = False
           TabOrder = 2
           object SeqStop: TCheckBox
@@ -790,8 +314,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 480
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 23
-          ClientWidth = 480
+          ClientHeight = 19
+          ClientWidth = 476
           ParentFont = False
           TabOrder = 3
           object Panel13: TPanel
@@ -801,8 +325,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 286
             Align = alRight
             BevelOuter = bvNone
-            ClientHeight = 23
-            ClientWidth = 286
+            ClientHeight = 19
+            ClientWidth = 282
             ParentFont = False
             TabOrder = 0
             object CheckBoxResetRepeat: TCheckBox
@@ -834,8 +358,8 @@ object f_EditTargets: Tf_EditTargets
         ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 72
-        ClientWidth = 498
+        ClientHeight = 68
+        ClientWidth = 494
         Constraints.MaxWidth = 900
         ParentFont = False
         TabOrder = 1
@@ -845,8 +369,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 173
           BevelOuter = bvNone
-          ClientHeight = 70
-          ClientWidth = 173
+          ClientHeight = 66
+          ClientWidth = 169
           Constraints.MaxWidth = 300
           Constraints.MinWidth = 170
           ParentFont = False
@@ -895,8 +419,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 173
           BevelOuter = bvNone
-          ClientHeight = 70
-          ClientWidth = 173
+          ClientHeight = 66
+          ClientWidth = 169
           Constraints.MaxWidth = 300
           Constraints.MinWidth = 170
           ParentFont = False
@@ -938,8 +462,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 152
           BevelOuter = bvNone
-          ClientHeight = 70
-          ClientWidth = 152
+          ClientHeight = 66
+          ClientWidth = 148
           Constraints.MaxWidth = 300
           Constraints.MinWidth = 150
           ParentFont = False
@@ -1012,91 +536,35 @@ object f_EditTargets: Tf_EditTargets
       Left = 1
       Height = 316
       Top = 73
-      Width = 678
+      Width = 978
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 316
-      ClientWidth = 678
+      ClientHeight = 312
+      ClientWidth = 974
       ParentFont = False
-      TabOrder = 2
-      object PanelBottom: TPanel
-        Left = 0
-        Height = 30
-        Top = 286
-        Width = 678
-        Align = alBottom
-        BevelOuter = bvNone
-        ClientHeight = 30
-        ClientWidth = 678
-        ParentFont = False
-        TabOrder = 0
-        object BtnNewObject: TButton
-          Left = 8
-          Height = 25
-          Hint = 'Add an object to the list'
-          Top = 2
-          Width = 93
-          Caption = 'New object'
-          OnClick = BtnNewObjectClick
-          ParentFont = False
-          TabOrder = 0
-        end
-        object BtnDeleteObject: TButton
-          Left = 352
-          Height = 25
-          Hint = 'Delete the selected row from the list.'
-          Top = 2
-          Width = 120
-          Caption = 'Remove object'
-          OnClick = BtnDeleteObjectClick
-          ParentFont = False
-          TabOrder = 1
-        end
-        object BtnNewScript: TButton
-          Left = 112
-          Height = 25
-          Hint = 'Add a script to the list.'
-          Top = 2
-          Width = 104
-          Caption = 'New script'
-          OnClick = BtnNewScriptClick
-          ParentFont = False
-          TabOrder = 2
-        end
-        object BtnSkyFlat: TButton
-          Left = 224
-          Height = 25
-          Hint = 'Add a flat sequence to the list.'
-          Top = 2
-          Width = 120
-          Caption = 'Sky Flat'
-          OnClick = BtnSkyFlatClick
-          ParentFont = False
-          TabOrder = 3
-        end
-      end
+      TabOrder = 1
       object TargetList: TStringGrid
         Left = 0
-        Height = 286
+        Height = 224
         Hint = 'The list of target to process in sequence.'
         Top = 0
-        Width = 678
+        Width = 978
         Align = alClient
         AutoFillColumns = True
-        ColCount = 11
+        ColCount = 14
         Columns = <        
           item
             MinSize = 100
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 69
+            Width = 87
           end        
           item
             MinSize = 30
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Plan'
-            Width = 69
+            Width = 87
           end        
           item
             MinSize = 85
@@ -1176,27 +644,49 @@ object f_EditTargets: Tf_EditTargets
             Title.MultiLine = True
             Title.Caption = 'Repeat'
             Width = 66
+          end        
+          item
+            ButtonStyle = cbsCheckboxColumn
+            Title.ImageIndex = 0
+            Title.MultiLine = True
+            Title.Caption = 'Use astrometry to refine the position'
+            Width = 87
+          end        
+          item
+            ButtonStyle = cbsCheckboxColumn
+            Title.ImageIndex = 0
+            Title.MultiLine = True
+            Title.Caption = 'Stay in place for autofocus'
+            Width = 87
+          end        
+          item
+            ButtonStyle = cbsCheckboxColumn
+            Title.ImageIndex = 0
+            Title.MultiLine = True
+            Title.Caption = 'Update RA+Dec from Planetarium'
+            Width = 88
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellEllipsis]
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
         ParentFont = False
         RowCount = 2
         ScrollBars = ssAutoVertical
-        TabOrder = 1
+        TabOrder = 0
         TitleImageList = ImageListDay
         OnCheckboxToggled = TargetListCheckboxToggled
         OnColRowMoved = TargetListColRowMoved
         OnCompareCells = TargetListCompareCells
         OnEditingDone = TargetListEditingDone
+        OnGetCellHint = TargetListGetCellHint
         OnHeaderClick = TargetListHeaderClick
         OnSelectEditor = TargetListSelectEditor
         OnSelection = TargetListSelection
         OnValidateEntry = TargetListValidateEntry
         ColWidths = (
           30
-          69
-          69
+          87
+          87
           85
           87
           40
@@ -1205,7 +695,511 @@ object f_EditTargets: Tf_EditTargets
           50
           50
           66
+          87
+          87
+          88
         )
+      end
+      object PanelBottom: TPanel
+        Left = 0
+        Height = 92
+        Top = 224
+        Width = 978
+        Align = alBottom
+        BevelOuter = bvNone
+        ClientHeight = 88
+        ClientWidth = 974
+        ParentFont = False
+        TabOrder = 1
+        object PanelBot2: TPanel
+          Left = 272
+          Height = 92
+          Top = 0
+          Width = 706
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 88
+          ClientWidth = 702
+          ParentFont = False
+          TabOrder = 0
+          object PageControl1: TPageControl
+            Left = 0
+            Height = 92
+            Top = 0
+            Width = 706
+            ActivePage = TabSheet3
+            Align = alClient
+            ParentFont = False
+            ShowTabs = False
+            TabIndex = 2
+            TabOrder = 0
+            object TabSheet1: TTabSheet
+              Caption = 'Object'
+              ClientHeight = 88
+              ClientWidth = 702
+              ParentFont = False
+              object GroupBoxCoord: TGroupBox
+                Left = 0
+                Height = 88
+                Top = 0
+                Width = 180
+                Align = alLeft
+                Caption = 'Coordinates'
+                ClientHeight = 68
+                ClientWidth = 178
+                TabOrder = 0
+                object Btn_coord_internal: TButton
+                  Left = 4
+                  Height = 23
+                  Hint = 'Get the coordinates from annotation database'
+                  Top = 0
+                  Width = 64
+                  Caption = 'Search'
+                  OnClick = Btn_coord_internalClick
+                  ParentFont = False
+                  TabOrder = 0
+                end
+                object BtnCdCCoord: TButton
+                  Left = 72
+                  Height = 23
+                  Hint = 'Get the coordinates and object name from the planetarium'
+                  Top = 0
+                  Width = 96
+                  Caption = 'Planetarium'
+                  OnClick = BtnCdCCoordClick
+                  ParentFont = False
+                  TabOrder = 1
+                end
+                object BtnCurrentCoord: TButton
+                  Left = 4
+                  Height = 23
+                  Hint = 'Do not move the telescope before to start imaging.'
+                  Top = 26
+                  Width = 64
+                  Caption = 'No move'
+                  OnClick = BtnCurrentCoordClick
+                  ParentFont = False
+                  TabOrder = 2
+                end
+                object BtnImgCoord: TButton
+                  Left = 72
+                  Height = 23
+                  Hint = 'Solve the current image and get the center coordinates'
+                  Top = 26
+                  Width = 97
+                  Caption = 'Current image'
+                  OnClick = BtnImgCoordClick
+                  ParentFont = False
+                  TabOrder = 3
+                end
+              end
+              object GroupBox5: TGroupBox
+                Left = 420
+                Height = 88
+                Top = 0
+                Width = 276
+                Align = alClient
+                Caption = 'Repeat'
+                ClientHeight = 68
+                ClientWidth = 274
+                ParentFont = False
+                TabOrder = 1
+                object Preview: TCheckBox
+                  Left = 64
+                  Height = 21
+                  Hint = 'Start a preview loop when waiting for the delay to expire.'
+                  Top = 0
+                  Width = 212
+                  Caption = 'Preview when waiting to repeat'
+                  OnChange = TargetChange
+                  ParentFont = False
+                  ParentBidiMode = False
+                  TabOrder = 0
+                end
+                object Label11: TLabel
+                  Left = 3
+                  Height = 19
+                  Top = 2
+                  Width = 46
+                  Caption = 'Interval'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object TDelay: TSpinEdit
+                  Left = 3
+                  Height = 26
+                  Top = 24
+                  Width = 53
+                  Constraints.MaxHeight = 26
+                  MaxValue = 100000
+                  OnChange = TargetChange
+                  ParentFont = False
+                  TabOrder = 1
+                end
+                object PreviewExposure: TFloatSpinEdit
+                  Left = 88
+                  Height = 26
+                  Top = 24
+                  Width = 62
+                  Constraints.MaxHeight = 26
+                  MaxValue = 60
+                  MinValue = 0
+                  OnChange = TargetChange
+                  ParentFont = False
+                  TabOrder = 2
+                  Value = 0
+                end
+                object Label13: TLabel
+                  Left = 161
+                  Height = 19
+                  Top = 26
+                  Width = 57
+                  Caption = '[seconds]'
+                  ParentColor = False
+                end
+              end
+              object GroupBoxPA: TGroupBox
+                Left = 300
+                Height = 88
+                Top = 0
+                Width = 120
+                Align = alLeft
+                Caption = 'Rotator'
+                ClientHeight = 68
+                ClientWidth = 118
+                TabOrder = 2
+                object BtnImgRot: TButton
+                  Left = 8
+                  Height = 23
+                  Hint = 'Solve the current image and get the rotation of the image'
+                  Top = 0
+                  Width = 100
+                  Caption = 'Current image'
+                  OnClick = BtnImgRotClick
+                  ParentFont = False
+                  TabOrder = 0
+                end
+              end
+              object GroupBoxTime: TGroupBox
+                Left = 180
+                Height = 88
+                Top = 0
+                Width = 120
+                Align = alLeft
+                Caption = 'Time'
+                ClientHeight = 68
+                ClientWidth = 118
+                TabOrder = 3
+                object BtnAnytime: TButton
+                  Left = 8
+                  Height = 23
+                  Hint = 'Clear time constraint'
+                  Top = 0
+                  Width = 91
+                  Caption = 'Any time'
+                  OnClick = BtnAnytimeClick
+                  ParentFont = False
+                  TabOrder = 0
+                end
+              end
+            end
+            object TabSheet2: TTabSheet
+              Caption = 'Script'
+              ClientHeight = 88
+              ClientWidth = 702
+              ParentFont = False
+              object Panel14: TPanel
+                Left = 0
+                Height = 88
+                Top = 0
+                Width = 696
+                Align = alClient
+                BevelOuter = bvNone
+                ClientHeight = 84
+                ClientWidth = 692
+                ParentFont = False
+                TabOrder = 0
+                object Label15: TLabel
+                  Left = 16
+                  Height = 19
+                  Top = 16
+                  Width = 34
+                  Caption = 'Script'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object ScriptList: TComboBox
+                  Left = 80
+                  Height = 35
+                  Top = 8
+                  Width = 166
+                  ItemHeight = 0
+                  OnChange = TargetChange
+                  ParentFont = False
+                  Style = csDropDownList
+                  TabOrder = 0
+                end
+                object BtnEditScript: TButton
+                  Left = 264
+                  Height = 25
+                  Top = 13
+                  Width = 70
+                  Caption = 'Edit'
+                  OnClick = BtnScriptClick
+                  ParentFont = False
+                  TabOrder = 1
+                end
+                object BtnEditNewScript: TButton
+                  Left = 352
+                  Height = 25
+                  Top = 13
+                  Width = 80
+                  Caption = 'New'
+                  OnClick = BtnScriptClick
+                  ParentFont = False
+                  TabOrder = 2
+                end
+              end
+            end
+            object TabSheet3: TTabSheet
+              Caption = 'Flat'
+              ClientHeight = 88
+              ClientWidth = 702
+              ParentFont = False
+              object FlatTime: TRadioGroup
+                Left = 0
+                Height = 88
+                Top = 0
+                Width = 168
+                Align = alLeft
+                AutoFill = True
+                Caption = 'Flat time'
+                ChildSizing.LeftRightSpacing = 6
+                ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+                ChildSizing.EnlargeVertical = crsHomogenousChildResize
+                ChildSizing.ShrinkHorizontal = crsScaleChilds
+                ChildSizing.ShrinkVertical = crsScaleChilds
+                ChildSizing.Layout = cclLeftToRightThenTopToBottom
+                ChildSizing.ControlsPerLine = 1
+                ClientHeight = 68
+                ClientWidth = 166
+                Items.Strings = (
+                  'at dusk'
+                  'at dawn'
+                )
+                OnClick = FlatTimeClick
+                ParentFont = False
+                TabOrder = 0
+              end
+              object GroupBox6: TGroupBox
+                Left = 424
+                Height = 88
+                Top = 0
+                Width = 264
+                Align = alLeft
+                Caption = 'Filters'
+                ClientHeight = 68
+                ClientWidth = 262
+                ParentFont = False
+                TabOrder = 1
+                object ScrollBox1: TScrollBox
+                  Left = 0
+                  Height = 68
+                  Top = 0
+                  Width = 262
+                  HorzScrollBar.Page = 4
+                  VertScrollBar.Page = 64
+                  Align = alClient
+                  BorderStyle = bsNone
+                  ClientHeight = 68
+                  ClientWidth = 262
+                  TabOrder = 0
+                  object FlatFilterList: TCheckGroup
+                    Left = 0
+                    Height = 64
+                    Top = 0
+                    Width = 262
+                    Align = alTop
+                    AutoFill = True
+                    ChildSizing.LeftRightSpacing = 6
+                    ChildSizing.TopBottomSpacing = 6
+                    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+                    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+                    ChildSizing.ShrinkHorizontal = crsScaleChilds
+                    ChildSizing.ShrinkVertical = crsScaleChilds
+                    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+                    ChildSizing.ControlsPerLine = 2
+                    Columns = 2
+                    OnItemClick = FlatFilterListItemClick
+                    TabOrder = 0
+                  end
+                end
+              end
+              object GroupBox7: TGroupBox
+                Left = 168
+                Height = 88
+                Top = 0
+                Width = 256
+                Align = alLeft
+                Caption = 'Exposure'
+                ClientHeight = 68
+                ClientWidth = 254
+                ParentFont = False
+                TabOrder = 2
+                object PanelGain: TPanel
+                  Left = 136
+                  Height = 33
+                  Top = 0
+                  Width = 114
+                  BevelOuter = bvNone
+                  Caption = ' '
+                  ClientHeight = 29
+                  ClientWidth = 110
+                  ParentFont = False
+                  TabOrder = 1
+                  Visible = False
+                  object FISObox: TComboBox
+                    Left = 50
+                    Height = 26
+                    Hint = 'Exposure time in secondes'
+                    Top = 0
+                    Width = 64
+                    Constraints.MaxHeight = 26
+                    ItemHeight = 0
+                    OnChange = TargetChange
+                    ParentFont = False
+                    Style = csDropDownList
+                    TabOrder = 0
+                    Visible = False
+                  end
+                  object LabelGain: TLabel
+                    Left = 8
+                    Height = 19
+                    Top = 4
+                    Width = 28
+                    Caption = 'Gain'
+                    ParentColor = False
+                    ParentFont = False
+                  end
+                  object FGainEdit: TSpinEdit
+                    Left = 50
+                    Height = 26
+                    Top = 0
+                    Width = 64
+                    Constraints.MaxHeight = 26
+                    MaxValue = 10000
+                    OnChange = TargetChange
+                    ParentFont = False
+                    TabOrder = 1
+                  end
+                end
+                object Label16: TLabel
+                  Left = 8
+                  Height = 19
+                  Top = 40
+                  Width = 47
+                  Caption = 'Binning'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object FlatBinning: TComboBox
+                  Left = 72
+                  Height = 28
+                  Top = 36
+                  Width = 64
+                  Constraints.MaxHeight = 28
+                  ItemHeight = 0
+                  ItemIndex = 0
+                  Items.Strings = (
+                    '4x4'
+                  )
+                  OnChange = TargetChange
+                  ParentFont = False
+                  Style = csDropDownList
+                  TabOrder = 0
+                  Text = '4x4'
+                end
+                object Label18: TLabel
+                  Left = 8
+                  Height = 19
+                  Top = 3
+                  Width = 37
+                  Caption = 'Count'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object FlatCount: TSpinEdit
+                  Left = 72
+                  Height = 28
+                  Top = 0
+                  Width = 64
+                  Constraints.MaxHeight = 28
+                  MaxValue = 10000
+                  MinValue = 1
+                  OnChange = TargetChange
+                  ParentFont = False
+                  TabOrder = 2
+                  Value = 1
+                end
+              end
+            end
+          end
+        end
+        object PanelBot1: TPanel
+          Left = 0
+          Height = 92
+          Top = 0
+          Width = 272
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 88
+          ClientWidth = 268
+          TabOrder = 1
+          object BtnSkyFlat: TButton
+            Left = 136
+            Height = 25
+            Hint = 'Add a flat sequence to the list.'
+            Top = 2
+            Width = 120
+            Caption = 'Sky Flat'
+            OnClick = BtnSkyFlatClick
+            ParentFont = False
+            TabOrder = 0
+          end
+          object BtnNewObject: TButton
+            Left = 4
+            Height = 25
+            Hint = 'Add an object to the list'
+            Top = 2
+            Width = 120
+            Caption = 'New object'
+            OnClick = BtnNewObjectClick
+            ParentFont = False
+            TabOrder = 1
+          end
+          object BtnDeleteObject: TButton
+            Left = 4
+            Height = 25
+            Hint = 'Delete the selected row from the list.'
+            Top = 40
+            Width = 120
+            Caption = 'Remove object'
+            OnClick = BtnDeleteObjectClick
+            ParentFont = False
+            TabOrder = 2
+          end
+          object BtnNewScript: TButton
+            Left = 136
+            Height = 25
+            Hint = 'Add a script to the list.'
+            Top = 40
+            Width = 120
+            Caption = 'New script'
+            OnClick = BtnNewScriptClick
+            ParentFont = False
+            TabOrder = 3
+          end
+        end
       end
     end
   end
@@ -1215,8 +1209,8 @@ object f_EditTargets: Tf_EditTargets
     Top = 394
     Width = 980
     Align = alClient
-    ClientHeight = 156
-    ClientWidth = 980
+    ClientHeight = 152
+    ClientWidth = 976
     Constraints.MinHeight = 156
     ParentFont = False
     TabOrder = 1
@@ -1227,8 +1221,8 @@ object f_EditTargets: Tf_EditTargets
       Width = 678
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 154
-      ClientWidth = 678
+      ClientHeight = 150
+      ClientWidth = 674
       ParentFont = False
       TabOrder = 0
       object StepList: TStringGrid
@@ -1242,7 +1236,7 @@ object f_EditTargets: Tf_EditTargets
         Columns = <        
           item
             Title.Caption = 'Description'
-            Width = 173
+            Width = 172
           end        
           item
             ButtonStyle = cbsPickList
@@ -1278,7 +1272,7 @@ object f_EditTargets: Tf_EditTargets
               'No change'
             )
             Title.Caption = 'Filter'
-            Width = 173
+            Width = 172
           end        
           item
             MinSize = 70
@@ -1299,11 +1293,11 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = StepListSelection
         ColWidths = (
           30
-          173
+          172
           70
           80
           80
-          173
+          172
           70
         )
       end
@@ -1314,8 +1308,8 @@ object f_EditTargets: Tf_EditTargets
         Width = 678
         Align = alTop
         BevelOuter = bvNone
-        ClientHeight = 18
-        ClientWidth = 678
+        ClientHeight = 14
+        ClientWidth = 674
         ParentFont = False
         TabOrder = 1
         object Label1: TLabel
@@ -1345,8 +1339,8 @@ object f_EditTargets: Tf_EditTargets
         Width = 678
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 30
-        ClientWidth = 678
+        ClientHeight = 26
+        ClientWidth = 674
         ParentFont = False
         TabOrder = 2
         object BtnAddStep: TButton
@@ -1408,8 +1402,8 @@ object f_EditTargets: Tf_EditTargets
       Width = 300
       Align = alRight
       BevelOuter = bvNone
-      ClientHeight = 154
-      ClientWidth = 300
+      ClientHeight = 150
+      ClientWidth = 296
       ParentFont = False
       TabOrder = 1
       object GroupBoxStep: TGroupBox
@@ -1472,8 +1466,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 104
           Width = 204
           BevelOuter = bvNone
-          ClientHeight = 28
-          ClientWidth = 204
+          ClientHeight = 24
+          ClientWidth = 200
           ParentFont = False
           TabOrder = 4
           Visible = False
@@ -1544,8 +1538,8 @@ object f_EditTargets: Tf_EditTargets
     Top = 550
     Width = 980
     Align = alBottom
-    ClientHeight = 30
-    ClientWidth = 980
+    ClientHeight = 26
+    ClientWidth = 976
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton

@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_anno
   Buttons;
 
 const
-  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10;
+  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6;
   titleadd=0; titledel=1;
 
@@ -52,7 +52,6 @@ type
     BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
     BtnImport: TButton;
-    BtnApplyToAll: TButton;
     BtnEndScript: TButton;
     cbNone: TCheckBox;
     cbStopTracking: TCheckBox;
@@ -67,11 +66,16 @@ type
     CheckBoxAutofocus: TCheckBox;
     CheckBoxAutofocusStart: TCheckBox;
     CheckBoxDither: TCheckBox;
+    FlatFilterList: TCheckGroup;
+    GroupBoxTime: TGroupBox;
+    GroupBoxPA: TGroupBox;
+    GroupBoxCoord: TGroupBox;
     GroupBoxStep: TGroupBox;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     Label3: TLabel;
     Label4: TLabel;
+    Label13: TLabel;
     OpenDialog1: TOpenDialog;
     Panel15: TPanel;
     Panel16: TPanel;
@@ -82,6 +86,8 @@ type
     Panel21: TPanel;
     Panel22: TPanel;
     Panel3: TPanel;
+    Panel6: TPanel;
+    PanelBot1: TPanel;
     Panel8: TPanel;
     PanelSep: TPanel;
     DitherCount: TSpinEdit;
@@ -100,11 +106,7 @@ type
     BtnDeletePlan: TButton;
     BtnCancel: TButton;
     BtnSkyFlat: TButton;
-    FlatFilterList: TCheckListBox;
     PGainEdit: TSpinEdit;
-    GroupBoxTarget: TGroupBox;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -114,7 +116,7 @@ type
     LabelGain1: TLabel;
     Panel1: TPanel;
     Panel10: TPanel;
-    Panel11: TPanel;
+    PanelBot2: TPanel;
     Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
@@ -122,16 +124,15 @@ type
     PanelPlan: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
-    Panel6: TPanel;
     Panel7: TPanel;
     Panel9: TPanel;
     PanelGain1: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
     BtnRepeatInf: TSpeedButton;
+    ScrollBox1: TScrollBox;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
-    InplaceAutofocus: TCheckBox;
     FISObox: TComboBox;
     Label16: TLabel;
     Label18: TLabel;
@@ -144,7 +145,6 @@ type
     FGainEdit: TSpinEdit;
     StepList: TStringGrid;
     TabSheet3: TTabSheet;
-    UpdateCoord: TCheckBox;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
@@ -152,15 +152,11 @@ type
     SeqStopTwilight: TCheckBox;
     CheckBoxRepeatList: TCheckBox;
     Label11: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
     Label15: TLabel;
-    Label9: TLabel;
     PageControl1: TPageControl;
     PanelBottom: TPanel;
     PanelTarget: TPanel;
     ScriptList: TComboBox;
-    PointAstrometry: TCheckBox;
     Preview: TCheckBox;
     SeqStartAt: TMaskEdit;
     TabSheet1: TTabSheet;
@@ -168,7 +164,6 @@ type
     TargetList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
-    procedure BtnApplyToAllClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnCdCCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
@@ -192,6 +187,7 @@ type
     procedure cbTermOptionClick(Sender: TObject);
     procedure CheckLightOnlyChange(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
+    procedure FlatFilterListItemClick(Sender: TObject; Index: integer);
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -219,6 +215,7 @@ type
     procedure TargetListCompareCells(Sender: TObject; ACol, ARow, BCol,
       BRow: Integer; var Result: integer);
     procedure TargetListEditingDone(Sender: TObject);
+    procedure TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
@@ -324,6 +321,7 @@ begin
   CheckBoxRepeatList.Checked:=(FTargetsRepeat>1);
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
   BtnRepeatInf.Enabled:=CheckBoxRepeatList.Checked;
+  FlatFilterList.ClientHeight:=ceil(FlatFilterList.Items.Count/FlatFilterList.Columns)*DoScaleY(25);
   if BtnEndScript.Hint='' then
      BtnEndScript.Caption:='.?.'
   else
@@ -354,6 +352,9 @@ begin
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
   TargetList.Columns.Items[coldark-1].Title.Caption := Format(rsDarkNight, [crlf]);
   TargetList.Columns.Items[colskip-1].Title.Caption := Format(rsDonTSwait+'', [crlf]);
+  TargetList.Columns.Items[colastrometry-1].Title.Caption := Format(rsUseAstromet2+'', [crlf]);
+  TargetList.Columns.Items[colinplace-1].Title.Caption := Format(rsStayInPlace2+'', [crlf]);
+  TargetList.Columns.Items[colupdcoord-1].Title.Caption := Format(rsUpdateRADec2+'', [crlf]);
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
   TargetList.Columns.Items[colstart-1].PickList.Clear;
   TargetList.Columns.Items[colstart-1].PickList.Add('');
@@ -395,20 +396,14 @@ begin
   SeqStartTwilight.Caption := rsDusk;
   SeqStopTwilight.Caption := rsDawn;
   TabSheet1.Caption := rsObject;
-  Label9.Caption := rsExposureTime2;
   Preview.Caption := rsPreviewWhenW;
   Label13.Caption := rsSeconds2;
   Label11.Caption := rsInterval;
-  Label14.Caption := rsSeconds2;
   BtnAnytime.Caption := rsAnyTime;
   BtnCurrentCoord.Caption := rsNoMove;
   BtnCdCCoord.Caption := rsPlanetarium;
   Btn_coord_internal.Caption:=rsSearch;
-  PointAstrometry.Caption := rsUseAstrometr;
   BtnImgCoord.Caption := rsCurrentImage;
-  UpdateCoord.Caption := rsUpdateRADecF;
-  InplaceAutofocus.Caption := rsStayInPlaceF;
-  BtnApplyToAll.Caption:=rsApplyToAll;
   BtnImgRot.Caption := rsCurrentImage;
   TabSheet2.Caption := rsScript;
   Label15.Caption := rsScript;
@@ -423,9 +418,6 @@ begin
   FlatTime.Items[0]:=rsAtDusk;
   FlatTime.Items[1]:=rsAtDawn;
   label2.Caption:=rsSequence;
-  GroupBoxTarget.Caption:=rsObject;
-  GroupBox3.Caption:=rsPA;
-  GroupBox4.Caption:=rsBegin+'/'+rsEnd;
   GroupBox5.Caption:=rsRepeat;
   // plan
   GroupBoxStep.Caption:=rsStep;
@@ -458,11 +450,7 @@ begin
   // hint
   BtnCurrentCoord.Hint:=rsDoNotMoveThe;
   BtnCdCCoord.Hint:=rsGetTheCoordi;
-  PointAstrometry.Hint:=rsUsePlateSolv;
   BtnImgCoord.Hint:=rsSolveTheCurr;
-  UpdateCoord.Hint:=Format(rsForMovingObj, [crlf]);
-  InplaceAutofocus.Hint:=Format(rsYouCanAvoidT, [crlf]);
-  BtnApplyToAll.Hint:=rsApplyThisSet;
   Btn_coord_internal.Hint:=rsGetTheCoordi2;
   Preview.Hint:=rsStartAPrevie;
   BtnImgRot.Hint:=rsSolveTheCurr2;
@@ -488,9 +476,6 @@ begin
   PISObox.Hint:=rsCameraISO;
   BtnSave.Hint:=rsSaveTheListA;
   BtnSaveAs.Hint:=rsSaveTheListW;
-
-
-
 end;
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
@@ -954,21 +939,6 @@ begin
   TargetChange(nil);
 end;
 
-procedure Tf_EditTargets.BtnApplyToAllClick(Sender: TObject);
-var i: integer;
-    t: TTarget;
-begin
-  with TargetList do begin
-   for i:=1 to RowCount-1 do
-      if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
-        t:=TTarget(Objects[colseq,i]);
-        t.astrometrypointing := (PointAstrometry.Checked and (t.ra<>NullCoord) and (t.de<>NullCoord));
-        t.updatecoord := UpdateCoord.Checked;
-        t.inplaceautofocus := InplaceAutofocus.Checked;
-      end;
-  end;
-end;
-
 procedure Tf_EditTargets.BtnCancelClick(Sender: TObject);
 begin
   CheckPlanModified;
@@ -988,7 +958,7 @@ begin
      TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
      TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
      if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
-     PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
+     TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
      TargetChange(nil);
   end;
 end;
@@ -1009,7 +979,7 @@ try
     de:=rad2deg*de;
     TargetList.Cells[colra,n]:=RAToStr(ra);
     TargetList.Cells[coldec,n]:=DEToStr(de);
-    PointAstrometry.Checked:=(astrometryResolver<>ResolverNone);
+    TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
     TargetChange(nil);
   end;
 finally
@@ -1120,6 +1090,9 @@ begin
     TargetList.Cells[coldark,n]:='';
     TargetList.Cells[colskip,n]:='';
     TargetList.Cells[colrepeat,n]:='';
+    TargetList.Cells[colastrometry,n]:='';
+    TargetList.Cells[colinplace,n]:='';
+    TargetList.Cells[colupdcoord,n]:='';
     PanelPlan.Visible:=false;
     PageControl1.ActivePageIndex:=1;
     SetScriptList(n,t.planname);
@@ -1139,6 +1112,9 @@ begin
     TargetList.Cells[coldark,n]:='';
     TargetList.Cells[colskip,n]:='';
     TargetList.Cells[colrepeat,n]:='';
+    TargetList.Cells[colastrometry,n]:='';
+    TargetList.Cells[colinplace,n]:='';
+    TargetList.Cells[colupdcoord,n]:='';
     FlatCount.Value:=t.FlatCount;
     buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
     j:=FlatBinning.Items.IndexOf(buf);
@@ -1151,7 +1127,7 @@ begin
       FGainEdit.Value:=t.FlatGain;
     filterlst:=TStringList.Create();
     SplitRec(t.FlatFilters,';',filterlst);
-    for i:=0 to FlatFilterList.Count-1 do begin
+    for i:=0 to FlatFilterList.Items.Count-1 do begin
       FlatFilterList.Checked[i]:=false;
       if trim(FlatFilterList.Items[i])<>'' then
        for j:=0 to filterlst.Count-1 do begin
@@ -1191,17 +1167,11 @@ begin
       if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
       TargetList.Cells[colend,n]:=MeridianCrossing+formatfloat(f1mc,t.endmeridian);
     end;
-    if t.darknight then
-      TargetList.Cells[coldark,n]:='1'
-    else
-      TargetList.Cells[coldark,n]:='0';
-    if t.skip then
-      TargetList.Cells[colskip,n]:='1'
-    else
-      TargetList.Cells[colskip,n]:='0';
-    PointAstrometry.Checked:=t.astrometrypointing;
-    UpdateCoord.Checked:=t.updatecoord;
-    InplaceAutofocus.Checked:=t.inplaceautofocus;
+    TargetList.Cells[coldark,n]:=BoolToStr(t.darknight,'1','0');
+    TargetList.Cells[colskip,n]:=BoolToStr(t.skip,'1','0');
+    TargetList.Cells[colastrometry,n]:=BoolToStr(t.astrometrypointing,'1','0');
+    TargetList.Cells[colinplace,n]:=BoolToStr(t.inplaceautofocus,'1','0');
+    TargetList.Cells[colupdcoord,n]:=BoolToStr(t.updatecoord,'1','0');
     if t.pa=NullCoord then
       TargetList.Cells[colpa,n]:='-'
     else
@@ -1222,7 +1192,6 @@ var t: TTarget;
 begin
   t:=TTarget(TargetList.Objects[colseq,aRow]);
   SetTarget(aRow,t);
-  GroupBoxTarget.Caption:=rsObject+blank+TargetList.Cells[1,aRow];
 end;
 
 procedure Tf_EditTargets.TargetListValidateEntry(sender: TObject; aCol,
@@ -1319,7 +1288,7 @@ begin
        t.FlatGain:=FGainEdit.Value;
     end;
     t.FlatFilters:='';
-    for j:=0 to FlatFilterList.Count-1 do begin
+    for j:=0 to FlatFilterList.Items.Count-1 do begin
       if FlatFilterList.Checked[j] then
          t.FlatFilters:=t.FlatFilters+FlatFilterList.Items[j]+';';
     end;
@@ -1348,10 +1317,11 @@ begin
       t.pa:=NullCoord
     else
       t.pa:=StrToFloatDef(TargetList.Cells[colpa,n],t.pa);
-    if PointAstrometry.Checked and ((t.ra=NullCoord)or(t.de=NullCoord)) then PointAstrometry.Checked:=false;
-    t.astrometrypointing:=PointAstrometry.Checked;
-    t.updatecoord:=UpdateCoord.Checked;
-    t.inplaceautofocus:=InplaceAutofocus.Checked;
+    if (TargetList.Cells[colastrometry,n]='1') and ((t.ra=NullCoord)or(t.de=NullCoord)) then TargetList.Cells[colastrometry,n]:='0';
+    t.astrometrypointing:=(TargetList.Cells[colastrometry,n]='1');
+    t.inplaceautofocus:=(TargetList.Cells[colinplace,n]='1');
+    t.updatecoord:=(TargetList.Cells[colupdcoord,n]='1');
+
     t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);
     if t.repeatcount<0 then t.repeatcount:=1;
     GroupBox5.Visible:=t.repeatcount>1;
@@ -1371,6 +1341,9 @@ begin
 if (TargetList.Cells[colname,aRow]=SkyFlatTxt)or(TargetList.Cells[colname,aRow]=ScriptTxt) then begin
   TargetList.Cells[colskip,aRow]:='';
   TargetList.Cells[coldark,aRow]:='';
+  TargetList.Cells[colastrometry,aRow]:='';
+  TargetList.Cells[colinplace,aRow]:='';
+  TargetList.Cells[colupdcoord,aRow]:='';
 end
 else begin
   if aCol=coldark then begin
@@ -1579,6 +1552,20 @@ begin
   TargetChange(Sender);
 end;
 
+procedure Tf_EditTargets.TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
+begin
+if ARow=0 then begin
+  case ACol of
+    colastrometry : HintText:=rsUsePlateSolv;
+    colinplace    : HintText:=Format(rsYouCanAvoidT, [crlf]);
+    colupdcoord   : HintText:=Format(rsForMovingObj, [crlf]);
+    else HintText:=rsTheListOfTar;
+  end;
+end
+else
+  HintText:=rsTheListOfTar;
+end;
+
 procedure Tf_EditTargets.TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
 var i: integer;
     onoff: boolean;
@@ -1710,6 +1697,48 @@ begin
                      end;
                 end;
               end;
+    colastrometry:begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
+                     if onoff then
+                        Cells[Index,i]:='1'
+                     else
+                        Cells[Index,i]:='0';
+                     t:=TTarget(Objects[colseq,i]);
+                     t.astrometrypointing:=(Cells[colastrometry,i]='1');
+                   end;
+              end;
+    colinplace:begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
+                     if onoff then
+                        Cells[Index,i]:='1'
+                     else
+                        Cells[Index,i]:='0';
+                     t:=TTarget(Objects[colseq,i]);
+                     t.inplaceautofocus:=(Cells[colinplace,i]='1');
+                   end;
+              end;
+    colupdcoord:begin
+                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
+                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
+                         else Columns[Index-1].Title.ImageIndex:=titleadd;
+                for i:=1 to RowCount-1 do
+                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
+                     if onoff then
+                        Cells[Index,i]:='1'
+                     else
+                        Cells[Index,i]:='0';
+                     t:=TTarget(Objects[colseq,i]);
+                     t.updatecoord:=(Cells[colupdcoord,i]='1');
+                   end;
+              end;
 
   end;
  end;
@@ -1728,6 +1757,8 @@ begin
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for rise, set
  else if (aCol=coldark)or(aCol=colskip) then
     Editor:=TargetList.EditorByStyle(cbsCheckboxColumn) // dark night and skip
+ else if (aCol=colastrometry)or(aCol=colinplace)or(aCol=colupdcoord) then
+    Editor:=TargetList.EditorByStyle(cbsCheckboxColumn) // replace old checkbox
  else
     Editor:=TargetList.EditorByStyle(cbsAuto);
 end;
@@ -1784,6 +1815,11 @@ begin
     FTargetsRepeat:=RepeatCountList.Value
   else
     FTargetsRepeat:=1;
+end;
+
+procedure Tf_EditTargets.FlatFilterListItemClick(Sender: TObject; Index: integer);
+begin
+  TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.RepeatCountListChange(Sender: TObject);
