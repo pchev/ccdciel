@@ -166,6 +166,22 @@ resourcestring
     +'This file is the same as used in Cartes du Ciel';
   rsTheMinimalOb = 'The minimal object elevation to start or end observing';
   rsBeSureToPaus = 'Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope.';
+  rsDragDropToCh = 'Drag&drop to change order';
+  rsClickToSortB = 'Click to sort by %s';
+  rsClickToSetVa = 'Click to set value for all the targets';
+  rsMoveTheTeles = 'Move the telescope to this position';
+  rsTheInstructi = 'The instruction plan to process this target';
+  rsMoveTheRotat = 'Move the rotator to this angle';
+  rsWaitThisTime = 'Wait this time to start the object (MC=Meridian crossing)';
+  rsStopTheObjec = 'Stop the object at this time (MC=Meridian crossing)';
+  rsWaitForFullD = 'Wait for full dark night without Moon to start this object';
+  rsDonTWaitForT = 'Don''t wait for the start condition, process the next object immediately.%s To be use with whole list repetition';
+  rsADescription = 'A description for this step';
+  rsTheNumberOfI4 = 'The number of image for this step';
+  rsAutofocusAtT = 'Autofocus at the start of this step';
+  rsRedoAutofocu = 'Redo autofocus after this number of images';
+  rsRedoAutofocu2 = 'Redo autofocus when the temperature change';
+  rsDitherAfterT = 'Dither after this number of images';
 
 implementation
 

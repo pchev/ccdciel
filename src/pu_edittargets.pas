@@ -197,6 +197,7 @@ type
     procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure StepListEditingDone(Sender: TObject);
+    procedure StepListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure StepListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
@@ -1557,14 +1558,31 @@ procedure Tf_EditTargets.TargetListGetCellHint(Sender: TObject; ACol, ARow: Inte
 begin
 if ARow=0 then begin
   case ACol of
+    colseq        : HintText:=rsDragDropToCh;
+    colname       : HintText:=Format(rsClickToSortB, [rsObjectName]);
+    colra         : HintText:=Format(rsClickToSortB, [rsRA]);
+    coldec        : HintText:=Format(rsClickToSortB, [rsDec]);
+    else HintText:=rsClickToSetVa;
+  end;
+end
+else
+  case ACol of
+    colseq        : HintText:=rsDragDropToCh;
+    colname       : HintText:=rsTheListOfTar;
+    colplan       : HintText:=rsTheInstructi;
+    colra         : HintText:=rsMoveTheTeles;
+    coldec        : HintText:=rsMoveTheTeles;
+    colpa         : HintText:=rsMoveTheRotat;
+    colstart      : HintText:=rsWaitThisTime;
+    colend        : HintText:=rsStopTheObjec;
+    coldark       : HintText:=rsWaitForFullD;
+    colskip       : HintText:=Format(rsDonTWaitForT, [crlf]);
+    colrepeat     : HintText:=rsRepeatThePla;
     colastrometry : HintText:=rsUsePlateSolv;
     colinplace    : HintText:=Format(rsYouCanAvoidT, [crlf]);
     colupdcoord   : HintText:=Format(rsForMovingObj, [crlf]);
     else HintText:=rsTheListOfTar;
   end;
-end
-else
-  HintText:=rsTheListOfTar;
 end;
 
 procedure Tf_EditTargets.TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
@@ -2210,6 +2228,25 @@ end;
 procedure Tf_EditTargets.StepListEditingDone(Sender: TObject);
 begin
   StepChange(Sender);
+end;
+
+procedure Tf_EditTargets.StepListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
+begin
+  case ACol of
+    pcolseq     : HintText:=rsDragDropToCh;
+    pcoldesc    : HintText:=rsADescription;
+    pcoltype    : HintText:=rsTheTypeOfFra;
+    pcolexp     : HintText:=rsExposureTime;
+    pcolbin     : HintText:=rsCameraBinnin;
+    pcolfilter  : HintText:=rsFilterName;
+    pcolcount   : HintText:=rsTheNumberOfI4;
+    pcolafstart : HintText:=rsAutofocusAtT;
+    pcolafevery : HintText:=rsRedoAutofocu;
+    pcolaftemp  : HintText:=rsRedoAutofocu2;
+    pcoldither  : HintText:=rsDitherAfterT;
+    pcolgain : HintText:=rsCameraGain;
+    else HintText:='';
+  end;
 end;
 
 procedure Tf_EditTargets.StepListSelectEditor(Sender: TObject; aCol,
