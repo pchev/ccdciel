@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-09 20:51+0000\n"
+"POT-Creation-Date: 2019-08-10 13:21+0000\n"
 "PO-Revision-Date: 2019-06-27 08:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-09 21:32+0000\n"
+"X-Launchpad-Export-Date: 2019-08-10 13:48+0000\n"
 "X-Generator: Launchpad (build 19021)\n"
 
 #: u_hints.rsactivateback
@@ -40,12 +40,20 @@ msgstr ""
 msgid "Add a script to the list."
 msgstr ""
 
+#: u_hints.rsadescription
+msgid "A description for this step"
+msgstr ""
+
 #: u_hints.rsafterlearnin
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
 msgstr ""
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
+msgstr ""
+
+#: u_hints.rsautofocusatt
+msgid "Autofocus at the start of this step"
 msgstr ""
 
 #: u_hints.rsautofocusift
@@ -78,6 +86,14 @@ msgstr ""
 
 #: u_hints.rscleartimecon
 msgid "Clear time constraint"
+msgstr ""
+
+#: u_hints.rsclicktosetva
+msgid "Click to set value for all the targets"
+msgstr ""
+
+#: u_hints.rsclicktosortb
+msgid "Click to sort by %s"
 msgstr ""
 
 #: u_hints.rsconnectallde
@@ -128,8 +144,20 @@ msgstr ""
 msgid "Delete this profile and associated program preference."
 msgstr ""
 
+#: u_hints.rsditheraftert
+msgid "Dither after this number of images"
+msgstr ""
+
 #: u_hints.rsdonotmovethe
 msgid "Do not move the telescope before to start imaging."
+msgstr ""
+
+#: u_hints.rsdontwaitfort
+msgid "Don't wait for the start condition, process the next object immediately.%s To be use with whole list repetition"
+msgstr ""
+
+#: u_hints.rsdragdroptoch
+msgid "Drag&drop to change order"
 msgstr ""
 
 #: u_hints.rseditthecurre
@@ -224,8 +252,24 @@ msgstr ""
 msgid "Move focuser outward"
 msgstr ""
 
+#: u_hints.rsmovetherotat
+msgid "Move the rotator to this angle"
+msgstr ""
+
+#: u_hints.rsmovetheteles
+msgid "Move the telescope to this position"
+msgstr ""
+
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
+msgstr ""
+
+#: u_hints.rsredoautofocu
+msgid "Redo autofocus after this number of images"
+msgstr ""
+
+#: u_hints.rsredoautofocu2
+msgid "Redo autofocus when the temperature change"
 msgstr ""
 
 #: u_hints.rsrepeatthewho2
@@ -250,6 +294,10 @@ msgstr ""
 
 #: u_hints.rssetabsolutef
 msgid "Set absolute focuser position"
+msgstr ""
+
+#: u_hints.rssetheretheac
+msgid "Set here the action to take after the sequence is terminated"
 msgstr ""
 
 #: u_hints.rssetthestartt
@@ -328,6 +376,10 @@ msgstr ""
 msgid "Stop at this time even if the processing is not finished."
 msgstr ""
 
+#: u_hints.rsstoptheobjec
+msgid "Stop the object at this time (MC=Meridian crossing)"
+msgstr ""
+
 #: u_hints.rsstoptheseque
 msgid "Stop the sequence execution"
 msgstr ""
@@ -356,6 +408,10 @@ msgstr ""
 msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
 msgstr ""
 
+#: u_hints.rstheinstructi
+msgid "The instruction plan to process this target"
+msgstr ""
+
 #: u_hints.rsthelistoftar
 msgid "The list of target to process in sequence."
 msgstr ""
@@ -382,6 +438,10 @@ msgstr ""
 
 #: u_hints.rsthenumberofi3
 msgid "The number of image to take before autofocus"
+msgstr ""
+
+#: u_hints.rsthenumberofi4
+msgid "The number of image for this step"
 msgstr ""
 
 #: u_hints.rstheobjectnam
@@ -446,6 +506,14 @@ msgstr ""
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"
+msgstr ""
+
+#: u_hints.rswaitforfulld
+msgid "Wait for full dark night without Moon to start this object"
+msgstr ""
+
+#: u_hints.rswaitthistime
+msgid "Wait this time to start the object (MC=Meridian crossing)"
 msgstr ""
 
 #: u_hints.rswaittothisti

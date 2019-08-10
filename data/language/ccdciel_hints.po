@@ -454,3 +454,71 @@ msgstr ""
 msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
 msgstr ""
 
+#: u_hints:rsdragdroptoch
+msgid "Drag&drop to change order"
+msgstr ""
+
+#: u_hints:rsclicktosortb
+msgid "Click to sort by %s"
+msgstr ""
+
+#: u_hints:rsclicktosetva
+msgid "Click to set value for all the targets"
+msgstr ""
+
+#: u_hints:rsmovetheteles
+msgid "Move the telescope to this position"
+msgstr ""
+
+#: u_hints:rstheinstructi
+msgid "The instruction plan to process this target"
+msgstr ""
+
+#: u_hints:rsmovetherotat
+msgid "Move the rotator to this angle"
+msgstr ""
+
+#: u_hints:rswaitthistime
+msgid "Wait this time to start the object (MC=Meridian crossing)"
+msgstr ""
+
+#: u_hints:rsstoptheobjec
+msgid "Stop the object at this time (MC=Meridian crossing)"
+msgstr ""
+
+#: u_hints:rswaitforfulld
+msgid "Wait for full dark night without Moon to start this object"
+msgstr ""
+
+#: u_hints:rsdontwaitfort
+msgid "Don't wait for the start condition, process the next object immediately.%s To be use with whole list repetition"
+msgstr ""
+
+#: u_hints:rsadescription
+msgid "A description for this step"
+msgstr ""
+
+#: u_hints:rsthenumberofi4
+msgid "The number of image for this step"
+msgstr ""
+
+#: u_hints:rsautofocusatt
+msgid "Autofocus at the start of this step"
+msgstr ""
+
+#: u_hints:rsredoautofocu
+msgid "Redo autofocus after this number of images"
+msgstr ""
+
+#: u_hints:rsredoautofocu2
+msgid "Redo autofocus when the temperature change"
+msgstr ""
+
+#: u_hints:rsditheraftert
+msgid "Dither after this number of images"
+msgstr ""
+
+#: u_hints:rssetheretheac
+msgid "Set here the action to take after the sequence is terminated"
+msgstr ""
+
