@@ -34,6 +34,7 @@ const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcolaftemp=9; pcoldither=10; pcolgain=11;
   titleadd=0; titledel=1;
+  pageobject=0; pagescript=1; pageflat=2;
 
 type
 
@@ -70,6 +71,9 @@ type
     Label4: TLabel;
     Label13: TLabel;
     OpenDialog1: TOpenDialog;
+    PageControlPlan: TPageControl;
+    Panel1: TPanel;
+    Panel11: TPanel;
     Panel15: TPanel;
     Panel16: TPanel;
     Panel17: TPanel;
@@ -103,7 +107,7 @@ type
     GroupBox7: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
-    Panel1: TPanel;
+    PanelBtn: TPanel;
     Panel10: TPanel;
     PanelBot2: TPanel;
     Panel13: TPanel;
@@ -118,6 +122,9 @@ type
     SaveDialog1: TSaveDialog;
     BtnRepeatInf: TSpeedButton;
     ScrollBox1: TScrollBox;
+    PlanObject: TTabSheet;
+    PlanScript: TTabSheet;
+    PlanFlat: TTabSheet;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     FISObox: TComboBox;
@@ -131,7 +138,7 @@ type
     FlatCount: TSpinEdit;
     FGainEdit: TSpinEdit;
     StepList: TStringGrid;
-    TabSheet3: TTabSheet;
+    ToolsFlat: TTabSheet;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
@@ -140,14 +147,14 @@ type
     CheckBoxRepeatList: TCheckBox;
     Label11: TLabel;
     Label15: TLabel;
-    PageControl1: TPageControl;
+    PageControlTools: TPageControl;
     PanelBottom: TPanel;
     PanelTarget: TPanel;
     ScriptList: TComboBox;
     Preview: TCheckBox;
     SeqStartAt: TMaskEdit;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
+    ToolsObject: TTabSheet;
+    ToolsScript: TTabSheet;
     TargetList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
@@ -261,7 +268,7 @@ uses LazFileUtils;
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
   {$ifdef lclcocoa}
-  PageControl1.BorderSpacing.Around:=8;
+  PageControlTools.BorderSpacing.Around:=8;
   TargetList.FixedColor:=clBackground;
   StepList.FixedColor:=clBackground;
   {$endif}
@@ -289,7 +296,7 @@ end;
 
 procedure Tf_EditTargets.FormResize(Sender: TObject);
 begin
-  PanelTarget.Height:=PanelBottom.Height+((ClientHeight-Panel1.Height) div 2);
+  PanelTarget.Height:=PanelBottom.Height+((ClientHeight-PanelBtn.Height) div 2);
 end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
@@ -302,7 +309,8 @@ begin
      TargetListSelection(nil,0,1);
   end
   else begin
-    PageControl1.ActivePageIndex:=0;
+    PageControlTools.ActivePageIndex:=pageobject;
+    PageControlPlan.ActivePageIndex:=pageobject;
   end;
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
   SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
@@ -384,7 +392,7 @@ begin
   SeqStop.Caption := rsStopAt;
   SeqStartTwilight.Caption := rsDusk;
   SeqStopTwilight.Caption := rsDawn;
-  TabSheet1.Caption := rsObject;
+  ToolsObject.Caption := rsObject;
   Preview.Caption := rsPreviewWhenW;
   Label13.Caption := rsSeconds2;
   Label11.Caption := rsInterval;
@@ -394,7 +402,7 @@ begin
   Btn_coord_internal.Caption:=rsSearch;
   BtnImgCoord.Caption := rsCurrentImage;
   BtnImgRot.Caption := rsCurrentImage;
-  TabSheet2.Caption := rsScript;
+  ToolsScript.Caption := rsScript;
   Label15.Caption := rsScript;
   BtnEditScript.Caption := rsEdit;
   BtnEditNewScript.Caption := rsNew;
@@ -617,7 +625,8 @@ procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var i,n: integer;
     t,tt: TTarget;
 begin
-  PageControl1.ActivePageIndex:=0;
+  PageControlTools.ActivePageIndex:=pageobject;
+  PageControlPlan.ActivePageIndex:=pageobject;
   t:=TTarget.Create;
   n:=TargetList.Row;
   if n>=1 then begin
@@ -644,7 +653,8 @@ procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
 var i: integer;
     t: TTarget;
 begin
-  PageControl1.ActivePageIndex:=1;
+  PageControlTools.ActivePageIndex:=pagescript;
+  PageControlPlan.ActivePageIndex:=pagescript;
   t:=TTarget.Create;
   t.objectname:=ScriptTxt;
   TargetList.RowCount:=TargetList.RowCount+1;
@@ -787,7 +797,8 @@ begin
     ShowMessage(rsCanOnlyAddOn);
     exit;
   end;
-  PageControl1.ActivePageIndex:=2;
+  PageControlTools.ActivePageIndex:=pageflat;
+  PageControlPlan.ActivePageIndex:=pageflat;
   t:=TTarget.Create;
   t.objectname:=SkyFlatTxt;
   t.planname:=ft;
@@ -1079,13 +1090,13 @@ begin
     TargetList.Cells[colastrometry,n]:='';
     TargetList.Cells[colinplace,n]:='';
     TargetList.Cells[colupdcoord,n]:='';
-    PanelPlan.Visible:=false;
-    PageControl1.ActivePageIndex:=1;
+    PageControlTools.ActivePageIndex:=pagescript;
+    PageControlPlan.ActivePageIndex:=pagescript;
     SetScriptList(n,t.planname);
   end
   else if t.objectname=SkyFlatTxt then begin
-    PanelPlan.Visible:=false;
-    PageControl1.ActivePageIndex:=2;
+    PageControlTools.ActivePageIndex:=pageflat;
+    PageControlPlan.ActivePageIndex:=pageflat;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
        else FlatTime.ItemIndex:=1;
@@ -1124,8 +1135,8 @@ begin
     filterlst.Free;
   end
   else begin
-    PanelPlan.Visible:=true;
-    PageControl1.ActivePageIndex:=0;
+    PageControlTools.ActivePageIndex:=pageobject;
+    PageControlPlan.ActivePageIndex:=pageobject;
     SetPlanList(n,t.planname);
     if t.starttime>=0 then
        TargetList.Cells[colstart,n]:=TimeToStr(t.starttime)
@@ -1243,7 +1254,8 @@ begin
   t:=TTarget(TargetList.Objects[colseq,n]);
   if t=nil then exit;
   if t.objectname=ScriptTxt then begin
-    PageControl1.ActivePageIndex:=1;
+    PageControlTools.ActivePageIndex:=pagescript;
+    PageControlPlan.ActivePageIndex:=pagescript;
     i:=ScriptList.ItemIndex;
     sname:=ScriptList.Items[i];
     TargetList.Cells[colplan,n]:=sname;
@@ -1253,7 +1265,8 @@ begin
                  else t.path:=scdir.path;
   end
   else if t.objectname=SkyFlatTxt then begin
-    PageControl1.ActivePageIndex:=2;
+    PageControlTools.ActivePageIndex:=pageflat;
+    PageControlPlan.ActivePageIndex:=pageflat;
     t.planname:=FlatTimeName[FlatTime.ItemIndex];
     t.FlatCount:=FlatCount.Value;
     str:=FlatBinning.Text;
@@ -1280,7 +1293,8 @@ begin
     end;
   end
   else begin
-    PageControl1.ActivePageIndex:=0;
+    PageControlTools.ActivePageIndex:=pageobject;
+    PageControlPlan.ActivePageIndex:=pageobject;
     CheckRiseSet(n);
     if (t.objectname=CurrentSeqName)and(trim(TargetList.Cells[colname,n])<>CurrentSeqName) then
        ObjectNameChange:=true;
