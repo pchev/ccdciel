@@ -240,6 +240,7 @@ type
     procedure SetEndTime(buf: string; var t:TTarget);
     function AsDuskFlat:boolean;
     function AsDawnFlat:boolean;
+    procedure MoveFlat(Sender: TObject);
   public
     { public declarations }
     procedure LoadPlanList;
@@ -1597,6 +1598,7 @@ begin
                   Columns[Index-1].Title.ImageIndex:=3
                 else
                   Columns[Index-1].Title.ImageIndex:=2;
+                MoveFlat(Sender);
              end;
     colpa  : begin
                 buf:=FormEntry(self, Columns[Index-1].Title.Caption, '');
@@ -1764,8 +1766,7 @@ begin
 end;
 
 procedure Tf_EditTargets.FlatTimeClick(Sender: TObject);
-var r1,r2,i,n: integer;
-    t:TTarget;
+var i,n: integer;
 begin
 if LockTarget then exit;
   n:=0;
@@ -1784,27 +1785,40 @@ if LockTarget then exit;
     LockTarget:=false;
     exit;
   end;
-  if FlatTime.ItemIndex=0 then begin
-     r1:=TargetList.Row;
-     r2:=1;
-     t:=TTarget(TargetList.Objects[colseq,r1]);
-     t.planname:=FlatTimeName[0];
-     TargetList.Cells[colplan,r1]:=t.planname;
-     TargetList.MoveColRow(false,r1,r2);
-     SeqStartTwilight.Checked:=false;
-     SeqStart.Checked:=false;
-  end
-  else begin
-    r1:=TargetList.Row;
-    t:=TTarget(TargetList.Objects[colseq,r1]);
-    t.planname:=FlatTimeName[1];
-    TargetList.Cells[colplan,r1]:=t.planname;
-    r2:=TargetList.RowCount-1;
-    TargetList.MoveColRow(false,r1,r2);
-    SeqStopTwilight.Checked:=false;
-    SeqStop.Checked:=false;
+  MoveFlat(Sender);
+end;
+
+procedure Tf_EditTargets.MoveFlat(Sender: TObject);
+var r1,r2,i,n: integer;
+    t:TTarget;
+begin
+  n:=-1;
+  for i:=1 to TargetList.RowCount-1 do begin
+    if TargetList.Cells[colname,i]=SkyFlatTxt then n:=i;
   end;
-  TargetChange(Sender);
+  if n>=0 then begin
+    if FlatTime.ItemIndex=0 then begin
+       r1:=n;
+       r2:=1;
+       t:=TTarget(TargetList.Objects[colseq,r1]);
+       t.planname:=FlatTimeName[0];
+       TargetList.Cells[colplan,r1]:=t.planname;
+       TargetList.MoveColRow(false,r1,r2);
+       SeqStartTwilight.Checked:=false;
+       SeqStart.Checked:=false;
+    end
+    else begin
+      r1:=n;
+      t:=TTarget(TargetList.Objects[colseq,r1]);
+      t.planname:=FlatTimeName[1];
+      TargetList.Cells[colplan,r1]:=t.planname;
+      r2:=TargetList.RowCount-1;
+      TargetList.MoveColRow(false,r1,r2);
+      SeqStopTwilight.Checked:=false;
+      SeqStop.Checked:=false;
+    end;
+    TargetChange(Sender);
+  end;
 end;
 
 procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
