@@ -124,7 +124,7 @@ function DecryptStr(Str, Pwd: string): string;
 function EncryptStr(Str, Pwd: string; Encode: boolean = True): string;
 function hextostr(str: string): string;
 function strtohex(str: string): string;
-procedure InitCoord;
+procedure InitCoord(jdnow: double=0);
 procedure nutationme(j: double; var nutl, nuto: double);
 procedure aberrationme(j: double; var abe, abp: double);
 procedure apparent_equatorial(var ra, de: double);
@@ -1800,12 +1800,16 @@ begin
   end;
 end;
 
-procedure InitCoord;
+procedure InitCoord(jdnow: double=0);
 var dy,dm,dd: word;
     se,ce,sra,sde: double;
 begin
-  DecodeDate(now,dy,dm,dd);
-  jdtoday:=jd(dy,dm,dd,0);
+  if jdnow=0 then begin
+    DecodeDate(now,dy,dm,dd);
+    jdtoday:=jd(dy,dm,dd,0);
+  end else begin
+    jdtoday:=jdnow;
+  end;
   // nutation
   nutationme(jdtoday,nutl,nuto);
   // Obliquity of the ecliptic

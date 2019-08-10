@@ -15,14 +15,15 @@ object f_EditTargets: Tf_EditTargets
   OnResize = FormResize
   OnShow = FormShow
   Position = poDefaultPosOnly
+  LCLVersion = '2.0.4.0'
   object PanelTarget: TPanel
     Left = 0
     Height = 350
     Top = 0
     Width = 980
     Align = alTop
-    ClientHeight = 350
-    ClientWidth = 980
+    ClientHeight = 346
+    ClientWidth = 976
     Constraints.MinHeight = 350
     ParentFont = False
     TabOrder = 0
@@ -557,14 +558,14 @@ object f_EditTargets: Tf_EditTargets
             MinSize = 100
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 87
+            Width = 88
           end        
           item
             MinSize = 30
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Plan'
-            Width = 87
+            Width = 88
           end        
           item
             MinSize = 85
@@ -650,21 +651,21 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Use astrometry to refine the position'
-            Width = 87
+            Width = 88
           end        
           item
             ButtonStyle = cbsCheckboxColumn
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Stay in place for autofocus'
-            Width = 87
+            Width = 88
           end        
           item
             ButtonStyle = cbsCheckboxColumn
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Update RA+Dec from Planetarium'
-            Width = 90
+            Width = 88
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -685,8 +686,8 @@ object f_EditTargets: Tf_EditTargets
         OnValidateEntry = TargetListValidateEntry
         ColWidths = (
           30
-          87
-          87
+          88
+          88
           85
           87
           40
@@ -695,9 +696,9 @@ object f_EditTargets: Tf_EditTargets
           50
           50
           66
-          87
-          87
-          90
+          88
+          88
+          88
         )
       end
       object PanelBottom: TPanel
@@ -735,7 +736,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 0
             object ToolsObject: TTabSheet
               Caption = 'Object'
-              ClientHeight = 88
+              ClientHeight = 58
               ClientWidth = 696
               ParentFont = False
               object GroupBoxCoord: TGroupBox
@@ -905,7 +906,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object ToolsScript: TTabSheet
               Caption = 'Script'
-              ClientHeight = 88
+              ClientHeight = 58
               ClientWidth = 696
               ParentFont = False
               object Panel14: TPanel
@@ -1049,7 +1050,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
-        ClientHeight = 192
+        ClientHeight = 162
         ClientWidth = 970
         object Panel9: TPanel
           Left = 0
@@ -1150,7 +1151,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 92
+                Width = 94
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1177,7 +1178,7 @@ object f_EditTargets: Tf_EditTargets
               91
               91
               91
-              92
+              94
             )
           end
           object Panel17: TPanel
@@ -1280,7 +1281,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
-        ClientHeight = 192
+        ClientHeight = 162
         ClientWidth = 970
         object Panel1: TPanel
           Left = 0
@@ -1310,8 +1311,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 152
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 29
-              ClientWidth = 148
+              ClientHeight = 33
+              ClientWidth = 152
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -1500,8 +1501,8 @@ object f_EditTargets: Tf_EditTargets
     Top = 550
     Width = 980
     Align = alBottom
-    ClientHeight = 30
-    ClientWidth = 980
+    ClientHeight = 26
+    ClientWidth = 976
     Constraints.MinHeight = 30
     ParentFont = False
     TabOrder = 2
@@ -1540,15 +1541,25 @@ object f_EditTargets: Tf_EditTargets
       ParentFont = False
       TabOrder = 2
     end
-    object BtnImport: TButton
+    object BtnImportObslist: TButton
       Left = 9
       Height = 25
       Top = 2
-      Width = 216
+      Width = 240
       Caption = 'Import CdC observing list'
-      OnClick = BtnImportClick
+      OnClick = BtnImportObslistClick
       ParentFont = False
       TabOrder = 3
+    end
+    object BtnImportMosaic: TButton
+      Left = 256
+      Height = 25
+      Top = 2
+      Width = 240
+      Caption = 'Import CdC mosaic'
+      OnClick = BtnImportMosaicClick
+      ParentFont = False
+      TabOrder = 4
     end
   end
   object SaveDialog1: TSaveDialog

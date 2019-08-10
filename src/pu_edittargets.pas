@@ -44,13 +44,14 @@ type
     Bevel1: TBevel;
     Bevel2: TBevel;
     BtnAddStep: TButton;
+    BtnImportMosaic: TButton;
     Btn_coord_internal: TButton;
     BtnUnattendedScript: TButton;
     BtnSaveAs: TButton;
     BtnSavePlan: TButton;
     BtnRemoveStep: TButton;
     BtnSavePlanAs: TButton;
-    BtnImport: TButton;
+    BtnImportObslist: TButton;
     BtnEndScript: TButton;
     cbNone: TCheckBox;
     cbStopTracking: TCheckBox;
@@ -164,7 +165,8 @@ type
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnEndScriptClick(Sender: TObject);
-    procedure BtnImportClick(Sender: TObject);
+    procedure BtnImportMosaicClick(Sender: TObject);
+    procedure BtnImportObslistClick(Sender: TObject);
     procedure BtnRemoveStepClick(Sender: TObject);
     procedure BtnImgCoordClick(Sender: TObject);
     procedure BtnImgRotClick(Sender: TObject);
@@ -341,7 +343,7 @@ begin
   BtnNewScript.Caption := rsNewScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
-  BtnImport.Caption:=rsImportCdCObs;
+  BtnImportObslist.Caption:=rsImportCdCObs;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
@@ -563,7 +565,7 @@ begin
   end;
 end;
 
-procedure Tf_EditTargets.BtnImportClick(Sender: TObject);
+procedure Tf_EditTargets.BtnImportObslistClick(Sender: TObject);
 var obj:string;
     i,n: integer;
     t,tt: TTarget;
@@ -575,6 +577,7 @@ const
   radecl = 10;
 begin
   // Import Cartes du Ciel observation list
+  OpenDialog1.Filter:='';
   if OpenDialog1.Execute then begin
      AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
      reset(f);
@@ -621,6 +624,79 @@ begin
        SetTarget(i,t);
      end;
      CloseFile(f);
+  end;
+end;
+
+procedure Tf_EditTargets.BtnImportMosaicClick(Sender: TObject);
+var buf,buf2,obj,tra,tde:string;
+    i,n: integer;
+    t,tt: TTarget;
+    f: textfile;
+    eq,ra,de: double;
+    rec: Tstringlist;
+begin
+  // Import Cartes du Ciel observation list
+  OpenDialog1.Filter:='CdC circle file |*.cdcc';
+  if OpenDialog1.Execute then begin
+     AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
+     reset(f);
+     rec:=Tstringlist.Create;
+     eq:=jdtoday;  // old cdc version do not store the equinox but most probably use equinox of date
+     try
+     while not EOF(f) do
+     begin
+       // read object
+       readln(f,buf);
+       if copy(buf,1,8)='EQUINOX='  then begin
+          buf2:=copy(buf,9,99);
+          eq:=StrToFloatDef(buf2,eq);
+          if eq<>jd2000 then InitCoord(eq);
+          continue;
+       end;
+       SplitRec(buf,' ',rec);
+       obj:=StringReplace(rec[0],'Circle_','Mosaic_',[]);
+       tra:=rec[1];
+       tde:=rec[2];
+       if (obj=ScriptTxt)or(obj=SkyFlatTxt) then continue;
+       ra := StrToAR(tra);
+       if ra=NullCoord then continue;
+       de := StrToDE(tde);
+       if de=NullCoord then continue;
+       ra:=deg2rad*15*ra;
+       de:=deg2rad*de;
+       if eq<>jd2000 then ApparentToJ2000(ra,de);
+       ra:=rad2deg*ra/15;
+       de:=rad2deg*de;
+       // create new target
+       t:=TTarget.Create;
+       n:=TargetList.Row;
+       if n>=1 then begin
+         // copy current target
+         tt:=TTarget(TargetList.Objects[colseq,n]);
+         if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+       end;
+       // assign name and coordinates J2000
+       t.objectname:=obj;
+       t.ra:=ra;
+       t.de:=de;
+       // default autofocus and plate solving
+       t.astrometrypointing:=(astrometryResolver<>ResolverNone);
+       t.inplaceautofocus:=AutofocusInPlace;
+       // add target
+       TargetList.RowCount:=TargetList.RowCount+1;
+       i:=TargetList.RowCount-1;
+       TargetList.Cells[colseq,i]:=IntToStr(i);
+       TargetList.Cells[colname,i]:=obj;
+       TargetList.Cells[colplan,i]:=t.planname;
+       TargetList.Objects[colseq,i]:=t;
+       TargetList.Row:=i;
+       SetTarget(i,t);
+     end;
+     finally
+       InitCoord;
+       CloseFile(f);
+       rec.Free;
+     end;
   end;
 end;
 
