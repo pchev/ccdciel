@@ -182,6 +182,7 @@ resourcestring
   rsRedoAutofocu = 'Redo autofocus after this number of images';
   rsRedoAutofocu2 = 'Redo autofocus when the temperature change';
   rsDitherAfterT = 'Dither after this number of images';
+  rsSetHereTheAc = 'Set here the action to take after the sequence is terminated';
 
 implementation
 

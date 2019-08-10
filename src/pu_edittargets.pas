@@ -85,7 +85,7 @@ type
     Panel3: TPanel;
     Panel6: TPanel;
     PanelBot1: TPanel;
-    Panel8: TPanel;
+    PanelTermination: TPanel;
     PanelSep: TPanel;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
@@ -472,6 +472,7 @@ begin
   TargetList.Hint:=rsTheListOfTar;
   BtnSave.Hint:=rsSaveTheListA;
   BtnSaveAs.Hint:=rsSaveTheListW;
+  PanelTermination.Hint:=rsSetHereTheAc;
 end;
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);

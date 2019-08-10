@@ -21,8 +21,8 @@ object f_EditTargets: Tf_EditTargets
     Top = 0
     Width = 980
     Align = alTop
-    ClientHeight = 346
-    ClientWidth = 976
+    ClientHeight = 350
+    ClientWidth = 980
     Constraints.MinHeight = 350
     ParentFont = False
     TabOrder = 0
@@ -33,8 +33,8 @@ object f_EditTargets: Tf_EditTargets
       Width = 978
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 68
-      ClientWidth = 974
+      ClientHeight = 72
+      ClientWidth = 978
       ParentFont = False
       TabOrder = 0
       object Panel16: TPanel
@@ -44,8 +44,8 @@ object f_EditTargets: Tf_EditTargets
         Width = 480
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 68
-        ClientWidth = 476
+        ClientHeight = 72
+        ClientWidth = 480
         ParentFont = False
         TabOrder = 0
         object Panel15: TPanel
@@ -55,8 +55,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 480
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 19
-          ClientWidth = 476
+          ClientHeight = 23
+          ClientWidth = 480
           ParentFont = False
           TabOrder = 0
           object Panel3: TPanel
@@ -66,8 +66,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 194
             Align = alLeft
             BevelOuter = bvNone
-            ClientHeight = 19
-            ClientWidth = 190
+            ClientHeight = 23
+            ClientWidth = 194
             ParentFont = False
             TabOrder = 0
             object Label2: TLabel
@@ -97,8 +97,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 286
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 19
-            ClientWidth = 282
+            ClientHeight = 23
+            ClientWidth = 286
             TabOrder = 1
             object CheckBoxRepeatList: TCheckBox
               Left = 4
@@ -214,8 +214,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 250
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 22
-          ClientWidth = 246
+          ClientHeight = 26
+          ClientWidth = 250
           ParentFont = False
           TabOrder = 1
           object SeqStart: TCheckBox
@@ -264,8 +264,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 232
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 22
-          ClientWidth = 228
+          ClientHeight = 26
+          ClientWidth = 232
           ParentFont = False
           TabOrder = 2
           object SeqStop: TCheckBox
@@ -314,8 +314,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 480
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 19
-          ClientWidth = 476
+          ClientHeight = 23
+          ClientWidth = 480
           ParentFont = False
           TabOrder = 3
           object Panel13: TPanel
@@ -325,8 +325,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 286
             Align = alRight
             BevelOuter = bvNone
-            ClientHeight = 19
-            ClientWidth = 282
+            ClientHeight = 23
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object CheckBoxResetRepeat: TCheckBox
@@ -348,7 +348,7 @@ object f_EditTargets: Tf_EditTargets
           end
         end
       end
-      object Panel8: TPanel
+      object PanelTermination: TPanel
         Left = 480
         Height = 72
         Top = 0
@@ -358,8 +358,8 @@ object f_EditTargets: Tf_EditTargets
         ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 68
-        ClientWidth = 494
+        ClientHeight = 72
+        ClientWidth = 498
         Constraints.MaxWidth = 900
         ParentFont = False
         TabOrder = 1
@@ -369,8 +369,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 173
           BevelOuter = bvNone
-          ClientHeight = 66
-          ClientWidth = 169
+          ClientHeight = 70
+          ClientWidth = 173
           Constraints.MaxWidth = 300
           Constraints.MinWidth = 170
           ParentFont = False
@@ -419,8 +419,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 173
           BevelOuter = bvNone
-          ClientHeight = 66
-          ClientWidth = 169
+          ClientHeight = 70
+          ClientWidth = 173
           Constraints.MaxWidth = 300
           Constraints.MinWidth = 170
           ParentFont = False
@@ -462,8 +462,8 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 152
           BevelOuter = bvNone
-          ClientHeight = 66
-          ClientWidth = 148
+          ClientHeight = 70
+          ClientWidth = 152
           Constraints.MaxWidth = 300
           Constraints.MinWidth = 150
           ParentFont = False
@@ -482,7 +482,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 26
             Height = 44
             Top = 26
-            Width = 104
+            Width = 108
             Anchors = [akTop, akLeft, akRight]
             AutoSize = False
             Caption = 'Unattended error script'
@@ -500,7 +500,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 1
           end
           object BtnUnattendedScript: TButton
-            Left = 126
+            Left = 130
             Height = 21
             Top = 23
             Width = 24
@@ -511,7 +511,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 2
           end
           object BtnEndScript: TButton
-            Left = 126
+            Left = 130
             Height = 21
             Top = 0
             Width = 24
@@ -539,8 +539,8 @@ object f_EditTargets: Tf_EditTargets
       Width = 978
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 272
-      ClientWidth = 974
+      ClientHeight = 276
+      ClientWidth = 978
       ParentFont = False
       TabOrder = 1
       object TargetList: TStringGrid
@@ -664,7 +664,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Update RA+Dec from Planetarium'
-            Width = 88
+            Width = 90
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -697,7 +697,7 @@ object f_EditTargets: Tf_EditTargets
           66
           87
           87
-          88
+          90
         )
       end
       object PanelBottom: TPanel
@@ -707,8 +707,8 @@ object f_EditTargets: Tf_EditTargets
         Width = 978
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 88
-        ClientWidth = 974
+        ClientHeight = 92
+        ClientWidth = 978
         ParentFont = False
         TabOrder = 1
         object PanelBot2: TPanel
@@ -718,8 +718,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 706
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 88
-          ClientWidth = 702
+          ClientHeight = 92
+          ClientWidth = 706
           ParentFont = False
           TabOrder = 0
           object PageControlTools: TPageControl
@@ -736,7 +736,7 @@ object f_EditTargets: Tf_EditTargets
             object ToolsObject: TTabSheet
               Caption = 'Object'
               ClientHeight = 88
-              ClientWidth = 702
+              ClientWidth = 696
               ParentFont = False
               object GroupBoxCoord: TGroupBox
                 Left = 0
@@ -906,7 +906,7 @@ object f_EditTargets: Tf_EditTargets
             object ToolsScript: TTabSheet
               Caption = 'Script'
               ClientHeight = 88
-              ClientWidth = 702
+              ClientWidth = 696
               ParentFont = False
               object Panel14: TPanel
                 Left = 0
@@ -915,8 +915,8 @@ object f_EditTargets: Tf_EditTargets
                 Width = 696
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 84
-                ClientWidth = 692
+                ClientHeight = 88
+                ClientWidth = 696
                 ParentFont = False
                 TabOrder = 0
                 object Label15: TLabel
@@ -974,8 +974,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 272
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 88
-          ClientWidth = 268
+          ClientHeight = 92
+          ClientWidth = 272
           TabOrder = 1
           object BtnSkyFlat: TButton
             Left = 136
@@ -1032,8 +1032,8 @@ object f_EditTargets: Tf_EditTargets
     Width = 980
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 192
-    ClientWidth = 976
+    ClientHeight = 196
+    ClientWidth = 980
     Constraints.MinHeight = 180
     ParentFont = False
     TabOrder = 1
@@ -1050,7 +1050,7 @@ object f_EditTargets: Tf_EditTargets
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
         ClientHeight = 192
-        ClientWidth = 976
+        ClientWidth = 970
         object Panel9: TPanel
           Left = 0
           Height = 192
@@ -1058,8 +1058,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 970
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 188
-          ClientWidth = 966
+          ClientHeight = 192
+          ClientWidth = 970
           ParentFont = False
           TabOrder = 0
           object StepList: TStringGrid
@@ -1074,7 +1074,7 @@ object f_EditTargets: Tf_EditTargets
               item
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 90
+                Width = 91
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1114,7 +1114,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 90
+                Width = 91
               end            
               item
                 MinSize = 70
@@ -1128,29 +1128,29 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 90
+                Width = 91
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 90
+                Width = 91
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus when temperature change'
-                Width = 90
+                Width = 91
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 90
+                Width = 91
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 96
+                Width = 92
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1167,17 +1167,17 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              90
+              91
               70
               80
               80
-              90
+              91
               70
-              90
-              90
-              90
-              90
-              96
+              91
+              91
+              91
+              91
+              92
             )
           end
           object Panel17: TPanel
@@ -1187,8 +1187,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 970
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 14
-            ClientWidth = 966
+            ClientHeight = 18
+            ClientWidth = 970
             ParentFont = False
             TabOrder = 1
             object Label1: TLabel
@@ -1218,8 +1218,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 970
             Align = alBottom
             BevelOuter = bvNone
-            ClientHeight = 26
-            ClientWidth = 966
+            ClientHeight = 30
+            ClientWidth = 970
             ParentFont = False
             TabOrder = 2
             object BtnAddStep: TButton
@@ -1281,7 +1281,7 @@ object f_EditTargets: Tf_EditTargets
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
         ClientHeight = 192
-        ClientWidth = 976
+        ClientWidth = 970
         object Panel1: TPanel
           Left = 0
           Height = 154
@@ -1289,8 +1289,8 @@ object f_EditTargets: Tf_EditTargets
           Width = 970
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 150
-          ClientWidth = 966
+          ClientHeight = 154
+          ClientWidth = 970
           TabOrder = 0
           object GroupBox7: TGroupBox
             Left = 200
@@ -1450,8 +1450,8 @@ object f_EditTargets: Tf_EditTargets
             Width = 200
             Align = alLeft
             BevelOuter = bvNone
-            ClientHeight = 150
-            ClientWidth = 196
+            ClientHeight = 154
+            ClientWidth = 200
             TabOrder = 2
             object FlatTime: TRadioGroup
               Left = 0
@@ -1500,13 +1500,13 @@ object f_EditTargets: Tf_EditTargets
     Top = 550
     Width = 980
     Align = alBottom
-    ClientHeight = 26
-    ClientWidth = 976
+    ClientHeight = 30
+    ClientWidth = 980
     Constraints.MinHeight = 30
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 684
+      Left = 688
       Height = 25
       Top = 2
       Width = 75
@@ -1517,7 +1517,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 780
+      Left = 784
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 2
@@ -1529,7 +1529,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 868
+      Left = 872
       Height = 25
       Hint = 'Save the list with a new name and close this window.'
       Top = 2
