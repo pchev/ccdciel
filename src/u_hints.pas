@@ -163,7 +163,7 @@ resourcestring
   rsClickToSetVa = 'Click to set value for all the targets';
   rsStepPlanFor  = 'Step plan for capturing the images.%sThe step plan details are specified in the list below';
   rsWaitForFullD = 'Wait for a moonless night';
-  rsDonTWaitForT = 'Process the other objects in the list instead of waiting for the start condition.%sTo be use with option "Repeat the whole list"';
+  rsDonTWaitForT = 'Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option "Repeat the whole list"';
   rsADescription = 'A description for this step';
   rsTheNumberOfI4 = 'The number of image for this step';
   rsAutofocusAtT = 'Autofocus at the start of this step';
@@ -179,6 +179,7 @@ resourcestring
   rsStopTimeCapt = 'Stop time capturing (MC=Meridian crossing)';
   rsStayAtTheTar = 'Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star.';
   rsPriorToSlewi = 'Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium.';
+  rsRepeatThePla = 'Repeat the plan for this object.%sSet to zero to not process this target.';
 
 implementation
 

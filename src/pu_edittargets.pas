@@ -1654,7 +1654,7 @@ else
     colend        : HintText:=rsStopTimeCapt;
     coldark       : HintText:=rsWaitForFullD;
     colskip       : HintText:=Format(rsDonTWaitForT, [crlf]);
-    colrepeat     : HintText:=rsRepeatThePla;
+    colrepeat     : HintText:=Format(rsRepeatThePla, [crlf]);
     colastrometry : HintText:=rsUsePlateSolv;
     colinplace    : HintText:=Format(rsStayAtTheTar, [crlf, crlf]);
     colupdcoord   : HintText:=Format(rsPriorToSlewi, [crlf, crlf]);

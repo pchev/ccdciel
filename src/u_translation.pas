@@ -649,7 +649,6 @@ resourcestring
   rsUpdateRADec2 = 'Update RA+Dec%sfrom Planetarium';
   rsStayInPlace2 = 'Stay in place%sfor autofocus';
   rsSetRotatorAn = 'Set rotator angle';
-  rsRepeatThePla = 'Repeat the plan for this object';
   rsFlatTime = 'Flat time';
   rsAtDusk = 'at dusk';
   rsAtDawn = 'at dawn';
