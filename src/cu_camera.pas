@@ -520,6 +520,7 @@ begin
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   if not Ffits.Header.Valueof('COMMENT',hcomment1) then hcomment1:='';
+  if copy(hcomment1,1,14)='FITS (Flexible' then hcomment1:='';
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
