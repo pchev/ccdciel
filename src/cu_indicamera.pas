@@ -1059,7 +1059,7 @@ begin
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
-   else if (ft='.jpeg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
+   else if (ft='.jpeg')or(ft='.jpg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
