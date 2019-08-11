@@ -1710,7 +1710,7 @@ begin  // Get HFD using the aproximation routine assuming that HFD line divides 
         if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{how many pixels are above half maximum for FWHM}
       end;
     end;
-    Sumval:=Sumval+0.00001;{prevent divide by zero}
+    if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
     hfd:=2*SumValR/SumVal;
     hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
     star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
@@ -1883,7 +1883,7 @@ begin
       SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
       if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
     end;
-  Sumval:=Sumval+0.00001;{prevent divide by zero}
+  if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
   hfd:=2*SumValR/SumVal;
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
