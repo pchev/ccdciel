@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-10 13:21+0000\n"
+"POT-Creation-Date: 2019-08-11 13:04+0000\n"
 "PO-Revision-Date: 2019-06-27 08:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-10 13:48+0000\n"
+"X-Launchpad-Export-Date: 2019-08-11 13:40+0000\n"
 "X-Generator: Launchpad (build 19021)\n"
 
 #: u_hints.rsactivateback
@@ -157,7 +157,7 @@ msgid "Do not move the telescope before to start imaging."
 msgstr ""
 
 #: u_hints.rsdontwaitfort
-msgid "Process the other objects in the list instead of waiting for the start condition.%sTo be use with option \"Repeat the whole list\""
+msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
 msgstr ""
 
 #: u_hints.rsdragdroptoch
@@ -270,6 +270,10 @@ msgstr ""
 
 #: u_hints.rsredoautofocu2
 msgid "Redo autofocus when the temperature change"
+msgstr ""
+
+#: u_hints.rsrepeatthepla
+msgid "Repeat the plan for this object.%sSet to zero to not process this target."
 msgstr ""
 
 #: u_hints.rsrepeatthewho2

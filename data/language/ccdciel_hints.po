@@ -467,7 +467,7 @@ msgid "Wait for a moonless night"
 msgstr ""
 
 #: u_hints:rsdontwaitfort
-msgid "Process the other objects in the list instead of waiting for the start condition.%sTo be use with option \"Repeat the whole list\""
+msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
 msgstr ""
 
 #: u_hints:rsadescription
@@ -528,5 +528,9 @@ msgstr ""
 
 #: u_hints:rspriortoslewi
 msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
+msgstr ""
+
+#: u_hints:rsrepeatthepla
+msgid "Repeat the plan for this object.%sSet to zero to not process this target."
 msgstr ""
 

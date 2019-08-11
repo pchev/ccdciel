@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-10 13:21+0000\n"
-"PO-Revision-Date: 2019-08-10 13:45+0000\n"
+"POT-Creation-Date: 2019-08-11 13:04+0000\n"
+"PO-Revision-Date: 2019-08-11 13:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-10 13:48+0000\n"
+"X-Launchpad-Export-Date: 2019-08-11 13:40+0000\n"
 "X-Generator: Launchpad (build 19021)\n"
 
 #: u_hints.rsactivateback
@@ -82,7 +82,7 @@ msgstr "Gain ISO de la caméra"
 
 #: u_hints.rscamerapositi
 msgid "Camera position angle"
-msgstr ""
+msgstr "Angle de position de la caméra"
 
 #: u_hints.rsclearthesequ
 msgid "Clear the sequence completion status"
@@ -149,20 +149,16 @@ msgid "Delete this profile and associated program preference."
 msgstr "Supprimer ce profil et la préférence de programme associée"
 
 #: u_hints.rsditheraftert
-#, fuzzy
-#| msgid "Dither after this number of images"
 msgid "Dither on the specified frame interval"
-msgstr "Dither après ce nombre d'image"
+msgstr "Dither selon l’intervalle spécifié"
 
 #: u_hints.rsdonotmovethe
 msgid "Do not move the telescope before to start imaging."
 msgstr "Ne pas déplacer le télescope avant de commencer l'imagerie"
 
 #: u_hints.rsdontwaitfort
-#, fuzzy
-#| msgid "Don't wait for the start condition, process the next object immediately.%s To be use with whole list repetition"
-msgid "Process the other objects in the list instead of waiting for the start condition.%sTo be use with option \"Repeat the whole list\""
-msgstr "Ne pas attendre le condition de démarrage, mais traiter l'objet suivant immédiatement.%s A utiliser avec la répétition de la liste complète."
+msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
+msgstr "Traiter l'objet suivant dans la liste au lieu d'attendre les conditions de démarrages. A utiliser avec l'option \"Répéter la liste complète\"."
 
 #: u_hints.rsdragdroptoch
 msgid "Drag&drop to change order"
@@ -258,7 +254,7 @@ msgstr "Déplacer le focuseur vers l'extérieur"
 
 #: u_hints.rspixelbinning
 msgid "Pixel binning"
-msgstr ""
+msgstr "Pixel binning"
 
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
@@ -266,17 +262,19 @@ msgstr "Etat du planétarium"
 
 #: u_hints.rspriortoslewi
 msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
-msgstr ""
+msgstr "Obtient les coordonnées actualisée des comètes ou astéroïdes du programme de planétarium avant le centrage de l'objet.%sLe programme de planétarium doit être connecté et suivre l'heure du système.%sIl faut également que le nom de l'objet puisse être trouvé par le planétarium."
 
 #: u_hints.rsredoautofocu
-#, fuzzy
-#| msgid "Redo autofocus after this number of images"
 msgid "Redo autofocus after a number of frames"
-msgstr "Refaire l'autofocus après ce nombre d'image"
+msgstr "Refaire l'autofocus après ce nombre d'images"
 
 #: u_hints.rsredoautofocu2
 msgid "Redo autofocus when the temperature change"
 msgstr "Refaire l'autofocus si la température change"
+
+#: u_hints.rsrepeatthepla
+msgid "Repeat the plan for this object.%sSet to zero to not process this target."
+msgstr "Répéter le plan pour cet objet.%sRégler à zéro pour ne pas traiter cet objet."
 
 #: u_hints.rsrepeatthewho2
 msgid "Repeat the whole list a number of time."
@@ -372,7 +370,7 @@ msgstr "Démarrer le processus d'apprentissage de la courbe en V"
 
 #: u_hints.rsstarttimecap
 msgid "Start time capturing (MC=Meridian crossing)"
-msgstr ""
+msgstr "Heure de début de la capture (MC=passage au méridien)"
 
 #: u_hints.rsstartx
 msgid "Start X"
@@ -384,11 +382,11 @@ msgstr "Début Y"
 
 #: u_hints.rsstayatthetar
 msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
-msgstr ""
+msgstr "Reste a la position de l'objet pour l'autofocus.%sIl faut qu'une étoile modérément brillante soit visible.%sSi non coché, se déplace vers une étoile brillante de la base de donnée."
 
 #: u_hints.rsstepplanfor
 msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
-msgstr ""
+msgstr "Le plan d'instruction pour capturer les images.%sLe détail du plan est donné dans la liste ci-dessous"
 
 #: u_hints.rsstopatthisti
 msgid "Stop at this time even if the processing is not finished."
@@ -400,11 +398,11 @@ msgstr "Arrêter l'exécution de la séquence"
 
 #: u_hints.rsstoptimecapt
 msgid "Stop time capturing (MC=Meridian crossing)"
-msgstr ""
+msgstr "Heure de fin de la capture (MC=passage au méridien)"
 
 #: u_hints.rstargetpositi
 msgid "Target position (J2000)"
-msgstr ""
+msgstr "Position de l'objet (J2000)"
 
 #: u_hints.rsthebasefolde
 msgid "The base folder where the images are recorded"
@@ -488,7 +486,7 @@ msgstr "Le rapport signal/bruit"
 
 #: u_hints.rsthetargetnam
 msgid "The target name to be used for capturing the images"
-msgstr ""
+msgstr "Le nom de l'objet utiliser pour capturer les images"
 
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
@@ -519,8 +517,6 @@ msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBewa
 msgstr "Essaye de corriger le glissement de la mise au point depuis le dernier apprentissage Vcurve.%s Attention, vous devez régler la correction de température de la mise au point et le décalage des filtres avant d'utiliser cette option."
 
 #: u_hints.rsuseplatesolv
-#, fuzzy
-#| msgid "Use plate solving to increase the accuracy of the telescope position."
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr "Utiliser la résolution astrométrique pour augmenter la précision de la position du télescope"
 
@@ -533,10 +529,8 @@ msgid "V curve learning"
 msgstr "Apprentissage de la courbe en V"
 
 #: u_hints.rswaitforfulld
-#, fuzzy
-#| msgid "Wait for full dark night without Moon to start this object"
 msgid "Wait for a moonless night"
-msgstr "Attendre la nuit noire sans Lune pour démarrer cet objet"
+msgstr "Attendre la nuit sans lune"
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."

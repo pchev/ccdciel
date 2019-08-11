@@ -2314,10 +2314,6 @@ msgstr ""
 msgid "Set rotator angle"
 msgstr ""
 
-#: u_translation:rsrepeatthepla
-msgid "Repeat the plan for this object"
-msgstr ""
-
 #: u_translation:rsflattime
 msgid "Flat time"
 msgstr ""

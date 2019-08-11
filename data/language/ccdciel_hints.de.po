@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-10 13:21+0000\n"
+"POT-Creation-Date: 2019-08-11 13:04+0000\n"
 "PO-Revision-Date: 2019-07-07 16:27+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-10 13:48+0000\n"
+"X-Launchpad-Export-Date: 2019-08-11 13:40+0000\n"
 "X-Generator: Launchpad (build 19021)\n"
 
 #: u_hints.rsactivateback
@@ -157,7 +157,7 @@ msgid "Do not move the telescope before to start imaging."
 msgstr "Bewegen Sie das Teleskop nicht, bevor mit den Aufnahmen begonnen wird"
 
 #: u_hints.rsdontwaitfort
-msgid "Process the other objects in the list instead of waiting for the start condition.%sTo be use with option \"Repeat the whole list\""
+msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
 msgstr ""
 
 #: u_hints.rsdragdroptoch
@@ -270,6 +270,10 @@ msgstr ""
 
 #: u_hints.rsredoautofocu2
 msgid "Redo autofocus when the temperature change"
+msgstr ""
+
+#: u_hints.rsrepeatthepla
+msgid "Repeat the plan for this object.%sSet to zero to not process this target."
 msgstr ""
 
 #: u_hints.rsrepeatthewho2
@@ -513,10 +517,8 @@ msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBewa
 msgstr "Versuchen Sie, das Verrutschen des Fokussierers seit dem letzten Vcurve-Lernenzu korrigieren. %sBeachten Sie, dass Sie die Fokussiertemperaturkorrektur undden Filteroffset einstellen müssen, bevor Sie diese Option verwenden können."
 
 #: u_hints.rsuseplatesolv
-#, fuzzy
-#| msgid "Use plate solving to increase the accuracy of the telescope position."
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
-msgstr "Benutze Platesolving um die Genauigkeit der Teleskopposition zu erhöhen"
+msgstr ""
 
 #: u_hints.rsusevcurvewit
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
