@@ -242,7 +242,7 @@ if AllDevicesConnected then begin
   end;
   if camera.FrameType<>frmt then camera.FrameType:=frmt;
   Camera.StartExposure(exp);
-  endt:=now+(exp+30)/secperday;
+  endt:=now+(exp+60)/secperday; // large timeout for DSLR that not support hardware ROI
   while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
     Sleep(100);
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
