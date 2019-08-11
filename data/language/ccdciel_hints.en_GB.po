@@ -80,6 +80,10 @@ msgstr ""
 msgid "Camera ISO"
 msgstr ""
 
+#: u_hints.rscamerapositi
+msgid "Camera position angle"
+msgstr ""
+
 #: u_hints.rsclearthesequ
 msgid "Clear the sequence completion status"
 msgstr ""
@@ -145,7 +149,7 @@ msgid "Delete this profile and associated program preference."
 msgstr ""
 
 #: u_hints.rsditheraftert
-msgid "Dither after this number of images"
+msgid "Dither on the specified frame interval"
 msgstr ""
 
 #: u_hints.rsdonotmovethe
@@ -153,7 +157,7 @@ msgid "Do not move the telescope before to start imaging."
 msgstr ""
 
 #: u_hints.rsdontwaitfort
-msgid "Don't wait for the start condition, process the next object immediately.%s To be use with whole list repetition"
+msgid "Process the other objects in the list instead of waiting for the start condition.%sTo be use with option \"Repeat the whole list\""
 msgstr ""
 
 #: u_hints.rsdragdroptoch
@@ -166,10 +170,6 @@ msgstr ""
 
 #: u_hints.rsfixthevisual
 msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
-msgstr ""
-
-#: u_hints.rsformovingobj
-msgid "For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.%sBe sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here."
 msgstr ""
 
 #: u_hints.rsgammaoftheim
@@ -252,20 +252,20 @@ msgstr ""
 msgid "Move focuser outward"
 msgstr ""
 
-#: u_hints.rsmovetherotat
-msgid "Move the rotator to this angle"
-msgstr ""
-
-#: u_hints.rsmovetheteles
-msgid "Move the telescope to this position"
+#: u_hints.rspixelbinning
+msgid "Pixel binning"
 msgstr ""
 
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr ""
 
+#: u_hints.rspriortoslewi
+msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
+msgstr ""
+
 #: u_hints.rsredoautofocu
-msgid "Redo autofocus after this number of images"
+msgid "Redo autofocus after a number of frames"
 msgstr ""
 
 #: u_hints.rsredoautofocu2
@@ -364,6 +364,10 @@ msgstr ""
 msgid "Start the Vcurve learning process"
 msgstr ""
 
+#: u_hints.rsstarttimecap
+msgid "Start time capturing (MC=Meridian crossing)"
+msgstr ""
+
 #: u_hints.rsstartx
 msgid "Start X"
 msgstr ""
@@ -372,16 +376,28 @@ msgstr ""
 msgid "Start Y"
 msgstr ""
 
+#: u_hints.rsstayatthetar
+msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
+msgstr ""
+
+#: u_hints.rsstepplanfor
+msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
+msgstr ""
+
 #: u_hints.rsstopatthisti
 msgid "Stop at this time even if the processing is not finished."
 msgstr ""
 
-#: u_hints.rsstoptheobjec
-msgid "Stop the object at this time (MC=Meridian crossing)"
-msgstr ""
-
 #: u_hints.rsstoptheseque
 msgid "Stop the sequence execution"
+msgstr ""
+
+#: u_hints.rsstoptimecapt
+msgid "Stop time capturing (MC=Meridian crossing)"
+msgstr ""
+
+#: u_hints.rstargetpositi
+msgid "Target position (J2000)"
 msgstr ""
 
 #: u_hints.rsthebasefolde
@@ -406,10 +422,6 @@ msgstr ""
 
 #: u_hints.rsthehorizonpr
 msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
-msgstr ""
-
-#: u_hints.rstheinstructi
-msgid "The instruction plan to process this target"
 msgstr ""
 
 #: u_hints.rsthelistoftar
@@ -468,6 +480,10 @@ msgstr ""
 msgid "The Signal/Noise ratio"
 msgstr ""
 
+#: u_hints.rsthetargetnam
+msgid "The target name to be used for capturing the images"
+msgstr ""
+
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
 msgstr ""
@@ -497,7 +513,7 @@ msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBewa
 msgstr ""
 
 #: u_hints.rsuseplatesolv
-msgid "Use plate solving to increase the accuracy of the telescope position."
+msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr ""
 
 #: u_hints.rsusevcurvewit
@@ -509,19 +525,11 @@ msgid "V curve learning"
 msgstr ""
 
 #: u_hints.rswaitforfulld
-msgid "Wait for full dark night without Moon to start this object"
-msgstr ""
-
-#: u_hints.rswaitthistime
-msgid "Wait this time to start the object (MC=Meridian crossing)"
+msgid "Wait for a moonless night"
 msgstr ""
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
-msgstr ""
-
-#: u_hints.rsyoucanavoidt
-msgid "You can avoid to move to a focus star if this target field include a suitable star.%sBeware the auto-focus will fail if the star is too faint."
 msgstr ""
 
 #: u_hints.rszoomtoadjust

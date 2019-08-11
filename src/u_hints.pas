@@ -78,16 +78,8 @@ resourcestring
     +'the Indi server';
   rsDoNotMoveThe = 'Do not move the telescope before to start imaging.';
   rsGetTheCoordi = 'Get the coordinates and object name from the planetarium';
-  rsUsePlateSolv = 'Use plate solving to increase the accuracy of the '
-    +'telescope position.';
+  rsUsePlateSolv = 'Use astrometric (plate) solving to improve telescope pointing accuracy';
   rsSolveTheCurr = 'Solve the current image and get the center coordinates';
-  rsForMovingObj = 'For moving objects, asteroids or comets, you can update '
-    +'the coordinates from the planetarium before to slew to the target.%sBe '
-    +'sure the planetarium is connected, configured to follow the system time,'
-    +' and can find the object name as it is typed here.';
-  rsYouCanAvoidT = 'You can avoid to move to a focus star if this target field'
-    +' include a suitable star.%sBeware the auto-focus will fail if the star '
-    +'is too faint.';
   rsGetTheCoordi2 = 'Get the coordinates from the internal annotation database';
   rsStartAPrevie = 'Start a preview loop when waiting for the delay to expire.';
   rsSolveTheCurr2 = 'Solve the current image and get the rotation of the image';
@@ -169,20 +161,24 @@ resourcestring
   rsDragDropToCh = 'Drag&drop to change order';
   rsClickToSortB = 'Click to sort by %s';
   rsClickToSetVa = 'Click to set value for all the targets';
-  rsMoveTheTeles = 'Move the telescope to this position';
-  rsTheInstructi = 'The instruction plan to process this target';
-  rsMoveTheRotat = 'Move the rotator to this angle';
-  rsWaitThisTime = 'Wait this time to start the object (MC=Meridian crossing)';
-  rsStopTheObjec = 'Stop the object at this time (MC=Meridian crossing)';
-  rsWaitForFullD = 'Wait for full dark night without Moon to start this object';
-  rsDonTWaitForT = 'Don''t wait for the start condition, process the next object immediately.%s To be use with whole list repetition';
+  rsStepPlanFor  = 'Step plan for capturing the images.%sThe step plan details are specified in the list below';
+  rsWaitForFullD = 'Wait for a moonless night';
+  rsDonTWaitForT = 'Process the other objects in the list instead of waiting for the start condition.%sTo be use with option "Repeat the whole list"';
   rsADescription = 'A description for this step';
   rsTheNumberOfI4 = 'The number of image for this step';
   rsAutofocusAtT = 'Autofocus at the start of this step';
-  rsRedoAutofocu = 'Redo autofocus after this number of images';
+  rsRedoAutofocu = 'Redo autofocus after a number of frames';
   rsRedoAutofocu2 = 'Redo autofocus when the temperature change';
-  rsDitherAfterT = 'Dither after this number of images';
+  rsDitherAfterT = 'Dither on the specified frame interval';
   rsSetHereTheAc = 'Set here the action to take after the sequence is terminated';
+  rsPixelBinning = 'Pixel binning';
+  rsTheTargetNam = 'The target name to be used for capturing the images';
+  rsTargetPositi = 'Target position (J2000)';
+  rsCameraPositi = 'Camera position angle';
+  rsStartTimeCap = 'Start time capturing (MC=Meridian crossing)';
+  rsStopTimeCapt = 'Stop time capturing (MC=Meridian crossing)';
+  rsStayAtTheTar = 'Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star.';
+  rsPriorToSlewi = 'Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium.';
 
 implementation
 

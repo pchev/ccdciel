@@ -227,19 +227,11 @@ msgid "Get the coordinates and object name from the planetarium"
 msgstr ""
 
 #: u_hints:rsuseplatesolv
-msgid "Use plate solving to increase the accuracy of the telescope position."
+msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr ""
 
 #: u_hints:rssolvethecurr
 msgid "Solve the current image and get the center coordinates"
-msgstr ""
-
-#: u_hints:rsformovingobj
-msgid "For moving objects, asteroids or comets, you can update the coordinates from the planetarium before to slew to the target.%sBe sure the planetarium is connected, configured to follow the system time, and can find the object name as it is typed here."
-msgstr ""
-
-#: u_hints:rsyoucanavoidt
-msgid "You can avoid to move to a focus star if this target field include a suitable star.%sBeware the auto-focus will fail if the star is too faint."
 msgstr ""
 
 #: u_hints:rsgetthecoordi2
@@ -466,32 +458,16 @@ msgstr ""
 msgid "Click to set value for all the targets"
 msgstr ""
 
-#: u_hints:rsmovetheteles
-msgid "Move the telescope to this position"
-msgstr ""
-
-#: u_hints:rstheinstructi
-msgid "The instruction plan to process this target"
-msgstr ""
-
-#: u_hints:rsmovetherotat
-msgid "Move the rotator to this angle"
-msgstr ""
-
-#: u_hints:rswaitthistime
-msgid "Wait this time to start the object (MC=Meridian crossing)"
-msgstr ""
-
-#: u_hints:rsstoptheobjec
-msgid "Stop the object at this time (MC=Meridian crossing)"
+#: u_hints:rsstepplanfor
+msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
 msgstr ""
 
 #: u_hints:rswaitforfulld
-msgid "Wait for full dark night without Moon to start this object"
+msgid "Wait for a moonless night"
 msgstr ""
 
 #: u_hints:rsdontwaitfort
-msgid "Don't wait for the start condition, process the next object immediately.%s To be use with whole list repetition"
+msgid "Process the other objects in the list instead of waiting for the start condition.%sTo be use with option \"Repeat the whole list\""
 msgstr ""
 
 #: u_hints:rsadescription
@@ -507,7 +483,7 @@ msgid "Autofocus at the start of this step"
 msgstr ""
 
 #: u_hints:rsredoautofocu
-msgid "Redo autofocus after this number of images"
+msgid "Redo autofocus after a number of frames"
 msgstr ""
 
 #: u_hints:rsredoautofocu2
@@ -515,10 +491,42 @@ msgid "Redo autofocus when the temperature change"
 msgstr ""
 
 #: u_hints:rsditheraftert
-msgid "Dither after this number of images"
+msgid "Dither on the specified frame interval"
 msgstr ""
 
 #: u_hints:rssetheretheac
 msgid "Set here the action to take after the sequence is terminated"
+msgstr ""
+
+#: u_hints:rspixelbinning
+msgid "Pixel binning"
+msgstr ""
+
+#: u_hints:rsthetargetnam
+msgid "The target name to be used for capturing the images"
+msgstr ""
+
+#: u_hints:rstargetpositi
+msgid "Target position (J2000)"
+msgstr ""
+
+#: u_hints:rscamerapositi
+msgid "Camera position angle"
+msgstr ""
+
+#: u_hints:rsstarttimecap
+msgid "Start time capturing (MC=Meridian crossing)"
+msgstr ""
+
+#: u_hints:rsstoptimecapt
+msgid "Stop time capturing (MC=Meridian crossing)"
+msgstr ""
+
+#: u_hints:rsstayatthetar
+msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
+msgstr ""
+
+#: u_hints:rspriortoslewi
+msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
 msgstr ""
 

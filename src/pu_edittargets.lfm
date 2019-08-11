@@ -15,15 +15,14 @@ object f_EditTargets: Tf_EditTargets
   OnResize = FormResize
   OnShow = FormShow
   Position = poDefaultPosOnly
-  LCLVersion = '2.0.4.0'
   object PanelTarget: TPanel
     Left = 0
     Height = 350
     Top = 0
     Width = 980
     Align = alTop
-    ClientHeight = 346
-    ClientWidth = 976
+    ClientHeight = 350
+    ClientWidth = 980
     Constraints.MinHeight = 350
     ParentFont = False
     TabOrder = 0
@@ -558,14 +557,14 @@ object f_EditTargets: Tf_EditTargets
             MinSize = 100
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 88
+            Width = 87
           end        
           item
             MinSize = 30
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Plan'
-            Width = 88
+            Width = 87
           end        
           item
             MinSize = 85
@@ -651,21 +650,21 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Use astrometry to refine the position'
-            Width = 88
+            Width = 87
           end        
           item
             ButtonStyle = cbsCheckboxColumn
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Stay in place for autofocus'
-            Width = 88
+            Width = 87
           end        
           item
             ButtonStyle = cbsCheckboxColumn
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Update RA+Dec from Planetarium'
-            Width = 88
+            Width = 90
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -686,8 +685,8 @@ object f_EditTargets: Tf_EditTargets
         OnValidateEntry = TargetListValidateEntry
         ColWidths = (
           30
-          88
-          88
+          87
+          87
           85
           87
           40
@@ -696,9 +695,9 @@ object f_EditTargets: Tf_EditTargets
           50
           50
           66
-          88
-          88
-          88
+          87
+          87
+          90
         )
       end
       object PanelBottom: TPanel
@@ -736,7 +735,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 0
             object ToolsObject: TTabSheet
               Caption = 'Object'
-              ClientHeight = 58
+              ClientHeight = 88
               ClientWidth = 696
               ParentFont = False
               object GroupBoxCoord: TGroupBox
@@ -906,7 +905,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object ToolsScript: TTabSheet
               Caption = 'Script'
-              ClientHeight = 58
+              ClientHeight = 88
               ClientWidth = 696
               ParentFont = False
               object Panel14: TPanel
@@ -1050,7 +1049,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
-        ClientHeight = 162
+        ClientHeight = 192
         ClientWidth = 970
         object Panel9: TPanel
           Left = 0
@@ -1151,7 +1150,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 94
+                Width = 92
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1178,7 +1177,7 @@ object f_EditTargets: Tf_EditTargets
               91
               91
               91
-              94
+              92
             )
           end
           object Panel17: TPanel
@@ -1281,7 +1280,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
-        ClientHeight = 162
+        ClientHeight = 192
         ClientWidth = 970
         object Panel1: TPanel
           Left = 0
@@ -1311,8 +1310,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 152
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 33
-              ClientWidth = 152
+              ClientHeight = 29
+              ClientWidth = 148
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -1501,13 +1500,13 @@ object f_EditTargets: Tf_EditTargets
     Top = 550
     Width = 980
     Align = alBottom
-    ClientHeight = 26
-    ClientWidth = 976
+    ClientHeight = 30
+    ClientWidth = 980
     Constraints.MinHeight = 30
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 688
+      Left = 692
       Height = 25
       Top = 2
       Width = 75
@@ -1518,7 +1517,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 784
+      Left = 788
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 2
@@ -1530,7 +1529,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 872
+      Left = 876
       Height = 25
       Hint = 'Save the list with a new name and close this window.'
       Top = 2

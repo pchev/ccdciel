@@ -1645,19 +1645,19 @@ end
 else
   case ACol of
     colseq        : HintText:=rsDragDropToCh;
-    colname       : HintText:=rsTheListOfTar;
-    colplan       : HintText:=rsTheInstructi;
-    colra         : HintText:=rsMoveTheTeles;
-    coldec        : HintText:=rsMoveTheTeles;
-    colpa         : HintText:=rsMoveTheRotat;
-    colstart      : HintText:=rsWaitThisTime;
-    colend        : HintText:=rsStopTheObjec;
+    colname       : HintText:=rsTheTargetNam;
+    colplan       : HintText:=Format(rsStepPlanFor, [crlf]);
+    colra         : HintText:=rsTargetPositi;
+    coldec        : HintText:=rsTargetPositi;
+    colpa         : HintText:=rsCameraPositi;
+    colstart      : HintText:=rsStartTimeCap;
+    colend        : HintText:=rsStopTimeCapt;
     coldark       : HintText:=rsWaitForFullD;
     colskip       : HintText:=Format(rsDonTWaitForT, [crlf]);
     colrepeat     : HintText:=rsRepeatThePla;
     colastrometry : HintText:=rsUsePlateSolv;
-    colinplace    : HintText:=Format(rsYouCanAvoidT, [crlf]);
-    colupdcoord   : HintText:=Format(rsForMovingObj, [crlf]);
+    colinplace    : HintText:=Format(rsStayAtTheTar, [crlf, crlf]);
+    colupdcoord   : HintText:=Format(rsPriorToSlewi, [crlf, crlf]);
     else HintText:=rsTheListOfTar;
   end;
 end;
@@ -2314,7 +2314,7 @@ begin
     pcoldesc    : HintText:=rsADescription;
     pcoltype    : HintText:=rsTheTypeOfFra;
     pcolexp     : HintText:=rsExposureTime;
-    pcolbin     : HintText:=rsCameraBinnin;
+    pcolbin     : HintText:=rsPixelBinning;
     pcolfilter  : HintText:=rsFilterName;
     pcolcount   : HintText:=rsTheNumberOfI4;
     pcolafstart : HintText:=rsAutofocusAtT;
