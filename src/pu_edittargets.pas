@@ -706,6 +706,7 @@ begin
        InitCoord;
        CloseFile(f);
        rec.Free;
+       TargetList.EditorMode := false;
      end;
   end;
 end;
@@ -1428,6 +1429,7 @@ begin
       ShowPlan;
     end;
   end;
+  TargetList.EditorMode := false;
 end;
 
 procedure Tf_EditTargets.TargetListCheckboxToggled(sender: TObject; aCol,
@@ -1649,6 +1651,7 @@ end;
 
 procedure Tf_EditTargets.TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
 begin
+TargetList.EditorMode := false; // mouse move to new cell, auto-close editor
 if ARow=0 then begin
   case ACol of
     colseq        : HintText:=rsDragDropToCh;
@@ -1694,10 +1697,10 @@ begin
                        Cells[Index,i]:=buf;
                        t:=TTarget(Objects[colseq,i]);
                        t.planname:=buf;
+                       PlanName.Caption:=t.planname;
+                       ShowPlan;
                      end;
                 end;
-                PlanName.Caption:=t.planname;
-                ShowPlan;
               end;
     colname,colra,coldec: begin
                 if SortDirection=0 then SortDirection := 1
@@ -1857,6 +1860,7 @@ begin
 
   end;
  end;
+ TargetList.EditorMode := false;
 end;
 
 procedure Tf_EditTargets.TargetListSelectEditor(Sender: TObject; aCol,
@@ -2333,6 +2337,7 @@ end;
 
 procedure Tf_EditTargets.StepListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
 begin
+  StepList.EditorMode := false; // mouse move to new cell, auto-close editor
   case ACol of
     pcolseq     : HintText:=rsDragDropToCh;
     pcoldesc    : HintText:=rsADescription;

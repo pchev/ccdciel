@@ -482,7 +482,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 26
             Height = 44
             Top = 26
-            Width = 108
+            Width = 112
             Anchors = [akTop, akLeft, akRight]
             AutoSize = False
             Caption = 'Unattended error script'
@@ -500,7 +500,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 1
           end
           object BtnUnattendedScript: TButton
-            Left = 130
+            Left = 120
             Height = 21
             Top = 23
             Width = 24
@@ -511,9 +511,9 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 2
           end
           object BtnEndScript: TButton
-            Left = 130
+            Left = 120
             Height = 21
-            Top = 0
+            Top = 2
             Width = 24
             Anchors = [akTop, akRight]
             Caption = '...'
@@ -1045,10 +1045,10 @@ object f_EditTargets: Tf_EditTargets
       Height = 196
       Top = 0
       Width = 980
-      ActivePage = PlanNone
+      ActivePage = PlanObject
       Align = alClient
       ShowTabs = False
-      TabIndex = 3
+      TabIndex = 0
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
@@ -1077,7 +1077,7 @@ object f_EditTargets: Tf_EditTargets
               item
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 90
+                Width = 91
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1117,7 +1117,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 90
+                Width = 91
               end            
               item
                 MinSize = 70
@@ -1131,29 +1131,29 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 90
+                Width = 91
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 90
+                Width = 91
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus when temperature change'
-                Width = 90
+                Width = 91
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 90
+                Width = 91
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 96
+                Width = 92
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1170,17 +1170,17 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              90
+              91
               70
               80
               80
-              90
+              91
               70
-              90
-              90
-              90
-              90
-              96
+              91
+              91
+              91
+              91
+              92
             )
           end
           object Panel17: TPanel
@@ -1523,7 +1523,7 @@ object f_EditTargets: Tf_EditTargets
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 692
+      Left = 672
       Height = 25
       Top = 2
       Width = 75
@@ -1534,7 +1534,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 788
+      Left = 760
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 2
@@ -1546,7 +1546,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 876
+      Left = 848
       Height = 25
       Hint = 'Save the list with a new name and close this window.'
       Top = 2
