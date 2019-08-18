@@ -150,7 +150,7 @@ end;
 procedure T_indiweather.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (WeatherStatusProp<>nil)
     then begin
        FStatus := devConnected;

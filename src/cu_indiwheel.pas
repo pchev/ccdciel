@@ -144,7 +144,7 @@ end;
 procedure T_indiwheel.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (WheelSlot<>nil) and
        (FilterName<>nil)
     then begin

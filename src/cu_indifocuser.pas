@@ -171,7 +171,7 @@ end;
 procedure T_indifocuser.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (FocusMotion<>nil) and
        ((FocusAbsolutePosition<>nil)or(FocusRelativePosition<>nil)or(FocusTimer<>nil))
     then begin

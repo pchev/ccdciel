@@ -400,7 +400,7 @@ end;
 procedure T_indicamera.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        FhasBlob and (
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
        ((Findisensor<>'CCD2')and(CCDexpose<>nil))

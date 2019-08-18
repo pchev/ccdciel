@@ -219,7 +219,7 @@ end;
 procedure T_indimount.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (coord_prop<>nil)
     then begin
        FStatus := devConnected;

@@ -148,7 +148,7 @@ end;
 procedure T_indidome.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        ((DomeShutterProp<>nil)or(DomeParkProp<>nil))  // rolloff define only Park
     then begin
        FStatus := devConnected;

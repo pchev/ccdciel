@@ -135,7 +135,7 @@ end;
 procedure T_indisafety.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (SafetyStatus<>nil)
     then begin
        FStatus := devConnected;

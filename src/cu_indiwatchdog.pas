@@ -143,7 +143,7 @@ end;
 procedure T_indiwatchdog.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (heartbeat<>nil) and
        (heartbeatvalue<>nil)
     then begin

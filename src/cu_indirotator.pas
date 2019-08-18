@@ -147,7 +147,7 @@ end;
 procedure T_indirotator.CheckStatus;
 begin
     if Fconnected and
-       (configprop<>nil) and
+       ((configprop<>nil)or(not FAutoloadConfig)) and
        (RotatorAngle<>nil)
     then begin
        FStatus := devConnected;
