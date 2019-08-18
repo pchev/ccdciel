@@ -467,14 +467,7 @@ begin
       f_EditTargets.cbWarm.Checked:=false;
       f_EditTargets.cbScript.Checked:=false;
       f_EditTargets.cbUnattended.Checked:=false;
-      t:=TTarget.Create;
-      if (t.planname='')and(f_EditTargets.TargetList.Columns[colplan-1].PickList.Count>0) then
-         t.planname:=f_EditTargets.TargetList.Columns[colplan-1].PickList[0];
-      f_EditTargets.TargetList.RowCount:=2;
-      f_EditTargets.TargetList.Cells[0,1]:='1';
-      f_EditTargets.TargetList.Cells[1,1]:=t.objectname;
-      f_EditTargets.TargetList.Cells[2,1]:=t.planname;
-      f_EditTargets.TargetList.Objects[0,1]:=t;
+      f_EditTargets.TargetList.RowCount:=1;
     end;
     f_EditTargets.DoneWarning:=Targets.CheckDoneCount;
     FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);

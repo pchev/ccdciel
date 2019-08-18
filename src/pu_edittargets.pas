@@ -34,7 +34,7 @@ const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcolaftemp=9; pcoldither=10; pcolgain=11;
   titleadd=0; titledel=1;
-  pageobject=0; pagescript=1; pageflat=2;
+  pageobject=0; pagescript=1; pageflat=2; pagenone=3;
 
 type
 
@@ -71,6 +71,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label13: TLabel;
+    Label5: TLabel;
     OpenDialog1: TOpenDialog;
     PageControlPlan: TPageControl;
     Panel1: TPanel;
@@ -126,6 +127,8 @@ type
     PlanObject: TTabSheet;
     PlanScript: TTabSheet;
     PlanFlat: TTabSheet;
+    PlanNone: TTabSheet;
+    ToolsNone: TTabSheet;
     TargetName: TLabel;
     PreviewExposure: TFloatSpinEdit;
     FISObox: TComboBox;
@@ -313,8 +316,8 @@ begin
      TargetListSelection(nil,0,1);
   end
   else begin
-    PageControlTools.ActivePageIndex:=pageobject;
-    PageControlPlan.ActivePageIndex:=pageobject;
+    PageControlTools.ActivePageIndex:=pagenone;
+    PageControlPlan.ActivePageIndex:=pagenone;
   end;
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
   SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
@@ -479,8 +482,6 @@ end;
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
 begin
-//  if ObjStartRise.Checked then ObjStartRiseChange(Sender);
-//  if ObjEndSet.Checked then ObjEndSetChange(Sender);
   TargetChange(Sender);
 end;
 
@@ -1677,7 +1678,7 @@ var i: integer;
     buf: string;
     t: TTarget;
 begin
- if IsColumn then with TargetList do begin
+ if IsColumn and (TargetList.RowCount>1) then with TargetList do begin
   case index of
     colplan : begin
                 buf:=FormEntryCB(self, Columns[Index-1].PickList, Columns[Index-1].Title.Caption, '');
@@ -1689,6 +1690,8 @@ begin
                        t.planname:=buf;
                      end;
                 end;
+                PlanName.Caption:=t.planname;
+                ShowPlan;
               end;
     colname,colra,coldec: begin
                 if SortDirection=0 then SortDirection := 1
@@ -2084,7 +2087,9 @@ var pfile: TCCDconfig;
     StepListSelection(nil,0,1);
   end;
 begin
-  ClearStepList;
+ClearStepList;
+if trim(PlanName.Caption)<>'' then begin
+  PageControlPlan.ActivePageIndex:=pageobject;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   if FileExistsUTF8(fn) then begin
     pfile:=TCCDconfig.Create(self);
@@ -2110,7 +2115,11 @@ begin
     end;
   end else begin
     NewPlan;
-    if PlanName.Caption<>'' then StepsModified:=true;
+    if PlanName.Caption<>'' then SavePlan;
+  end;
+  end
+  else begin
+   PageControlPlan.ActivePageIndex:=pagenone;
   end;
 end;
 
@@ -2439,6 +2448,10 @@ var pfile: TCCDconfig;
     p: TStep;
 begin
 try
+  if trim(PlanName.Caption)='' then begin
+    ShowMessage('No plan selected!');
+    exit;
+  end;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   pfile:=TCCDconfig.Create(self);
   pfile.Filename:=fn;

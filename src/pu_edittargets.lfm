@@ -727,11 +727,11 @@ object f_EditTargets: Tf_EditTargets
             Height = 92
             Top = 0
             Width = 706
-            ActivePage = ToolsFlat
+            ActivePage = ToolsNone
             Align = alClient
             ParentFont = False
             ShowTabs = False
-            TabIndex = 2
+            TabIndex = 3
             TabOrder = 0
             object ToolsObject: TTabSheet
               Caption = 'Object'
@@ -965,6 +965,9 @@ object f_EditTargets: Tf_EditTargets
               Caption = 'Flat'
               ParentFont = False
             end
+            object ToolsNone: TTabSheet
+              Caption = 'ToolsNone'
+            end
           end
         end
         object PanelBot1: TPanel
@@ -1042,10 +1045,10 @@ object f_EditTargets: Tf_EditTargets
       Height = 196
       Top = 0
       Width = 980
-      ActivePage = PlanObject
+      ActivePage = PlanNone
       Align = alClient
       ShowTabs = False
-      TabIndex = 0
+      TabIndex = 3
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
@@ -1074,7 +1077,7 @@ object f_EditTargets: Tf_EditTargets
               item
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 91
+                Width = 90
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1114,7 +1117,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 91
+                Width = 90
               end            
               item
                 MinSize = 70
@@ -1128,29 +1131,29 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 91
+                Width = 90
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 91
+                Width = 90
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus when temperature change'
-                Width = 91
+                Width = 90
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 91
+                Width = 90
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 92
+                Width = 96
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1167,17 +1170,17 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              91
+              90
               70
               80
               80
-              91
+              90
               70
-              91
-              91
-              91
-              91
-              92
+              90
+              90
+              90
+              90
+              96
             )
           end
           object Panel17: TPanel
@@ -1479,6 +1482,20 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
           end
+        end
+      end
+      object PlanNone: TTabSheet
+        Caption = 'PlanNone'
+        ClientHeight = 192
+        ClientWidth = 970
+        object Label5: TLabel
+          Left = 8
+          Height = 19
+          Top = 0
+          Width = 349
+          Caption = 'Please select a plan or type a new name in the Plan column'
+          ParentColor = False
+          ParentFont = False
         end
       end
     end
