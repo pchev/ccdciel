@@ -628,14 +628,14 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnImportMosaicClick(Sender: TObject);
-var buf,buf2,obj,tra,tde:string;
+var buf,buf2,obj,tra,tde,trot:string;
     i,n: integer;
     t,tt: TTarget;
     f: textfile;
     eq,ra,de: double;
     rec: Tstringlist;
 begin
-  // Import Cartes du Ciel observation list
+  // Import Cartes du Ciel mosaic
   OpenDialog1.Filter:='CdC circle file |*.cdcc';
   if OpenDialog1.Execute then begin
      AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
@@ -657,6 +657,10 @@ begin
        obj:=StringReplace(rec[0],'Circle_','Mosaic_',[]);
        tra:=rec[1];
        tde:=rec[2];
+       if rec.Count>3 then
+         trot:=rec[3]
+       else
+         trot:='';
        if (obj=ScriptTxt)or(obj=SkyFlatTxt) then continue;
        ra := StrToAR(tra);
        if ra=NullCoord then continue;
@@ -679,6 +683,11 @@ begin
        t.objectname:=obj;
        t.ra:=ra;
        t.de:=de;
+       // assign rotation angle
+       if trot<>'' then
+         t.pa := StrToFloatDef(trot,NullCoord)
+       else
+         t.pa:=NullCoord;
        // default autofocus and plate solving
        t.astrometrypointing:=(astrometryResolver<>ResolverNone);
        t.inplaceautofocus:=AutofocusInPlace;
