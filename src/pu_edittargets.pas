@@ -725,8 +725,13 @@ begin
       t.objectname:='';
     end;
   end;
-  if (t.planname='')and(TargetList.Columns[colplan-1].PickList.Count>0) then
-     t.planname:=TargetList.Columns[colplan-1].PickList[0];
+  if (t.planname='')then begin
+    if (TargetList.Columns[colplan-1].PickList.Count>0) then
+      t.planname:=TargetList.Columns[colplan-1].PickList[0]
+    else
+      t.planname := 'plan1';
+    PlanName.Caption:=t.planname;
+  end;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[colseq,i]:=IntToStr(i);
@@ -736,6 +741,7 @@ begin
   TargetList.Row:=i;
   TargetChange(nil);
   Btn_coord_internalClick(Sender);
+  ShowPlan;
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
