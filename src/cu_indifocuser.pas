@@ -35,6 +35,7 @@ T_indifocuser = class(T_focuser)
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
+   ReadyTimer: TTimer;
    FocuserDevice: Basedevice;
    Focuserport: ITextVectorProperty;
    FocusMotion: ISwitchVectorProperty;
@@ -49,11 +50,12 @@ T_indifocuser = class(T_focuser)
    FocusTemperature: INumberVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected,FServerReady: boolean;
+   Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
+   procedure ReadyTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -131,6 +133,10 @@ begin
  ConnectTimer.Enabled:=false;
  ConnectTimer.Interval:=3000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
+ ReadyTimer:=TTimer.Create(nil);
+ ReadyTimer.Enabled:=false;
+ ReadyTimer.Interval:=2000;
+ ReadyTimer.OnTimer:=@ReadyTimerTimer;
  CreateIndiClient;
 end;
 
@@ -138,10 +144,12 @@ destructor  T_indifocuser.Destroy;
 begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
+ ReadyTimer.Enabled:=false;
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
+ FreeAndNil(ReadyTimer);
  inherited Destroy;
 end;
 
@@ -164,7 +172,6 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
-    FServerReady:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -172,20 +179,26 @@ end;
 procedure T_indifocuser.CheckStatus;
 begin
     if Fconnected and
-       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (FocusMotion<>nil) and
        ((FocusAbsolutePosition<>nil)or(FocusRelativePosition<>nil)or(FocusTimer<>nil))
     then begin
-       FStatus := devConnected;
-       if (not Fready) then begin
-         Fready:=true;
-         if FAutoloadConfig then begin
-           LoadConfig;
-         end;
-         if Assigned(FonStatusChange) then FonStatusChange(self);
-       end;
+      ReadyTimer.Enabled := false;
+      ReadyTimer.Enabled := true;
     end;
+end;
+
+procedure T_indifocuser.ReadyTimerTimer(Sender: TObject);
+begin
+  ReadyTimer.Enabled := false;
+  FStatus := devConnected;
+  if (not Fready) then begin
+    Fready:=true;
+    if FAutoloadConfig then begin
+      LoadConfig;
+    end;
+    if Assigned(FonStatusChange) then FonStatusChange(self);
+  end;
 end;
 
 Procedure T_indifocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -244,7 +257,6 @@ end;
 procedure T_indifocuser.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  FserverReady:=true;
   if (Focuserport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

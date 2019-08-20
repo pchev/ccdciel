@@ -35,6 +35,7 @@ T_indirotator = class(T_rotator)
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
+   ReadyTimer: TTimer;
    RotatorDevice: Basedevice;
    Rotatorport: ITextVectorProperty;
    RotatorAngle: INumberVectorProperty;
@@ -43,11 +44,12 @@ T_indirotator = class(T_rotator)
    RotatorReverseEnable,RotatorReverseDisable: ISwitch;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected,FServerReady: boolean;
+   Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
+   procedure ReadyTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -114,6 +116,10 @@ begin
  ConnectTimer.Enabled:=false;
  ConnectTimer.Interval:=3000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
+ ReadyTimer:=TTimer.Create(nil);
+ ReadyTimer.Enabled:=false;
+ ReadyTimer.Interval:=2000;
+ ReadyTimer.OnTimer:=@ReadyTimerTimer;
  CreateIndiClient;
 end;
 
@@ -121,10 +127,12 @@ destructor  T_indirotator.Destroy;
 begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
+ ReadyTimer.Enabled:=false;
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
+ FreeAndNil(ReadyTimer);
  inherited Destroy;
 end;
 
@@ -138,7 +146,6 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
-    FServerReady:=false;
     FStatus := devDisconnected;
     FCalibrationAngle:=0;
     FReverse:=False;
@@ -148,19 +155,25 @@ end;
 procedure T_indirotator.CheckStatus;
 begin
     if Fconnected and
-       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (RotatorAngle<>nil)
     then begin
-       FStatus := devConnected;
-       if (not Fready) then begin
-         Fready:=true;
-         if FAutoloadConfig then begin
-           LoadConfig;
-         end;
-         if Assigned(FonStatusChange) then FonStatusChange(self);
-       end;
+      ReadyTimer.Enabled := false;
+      ReadyTimer.Enabled := true;
     end;
+end;
+
+procedure T_indirotator.ReadyTimerTimer(Sender: TObject);
+begin
+  ReadyTimer.Enabled := false;
+  FStatus := devConnected;
+  if (not Fready) then begin
+    Fready:=true;
+    if FAutoloadConfig then begin
+      LoadConfig;
+    end;
+    if Assigned(FonStatusChange) then FonStatusChange(self);
+  end;
 end;
 
 Procedure T_indirotator.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -217,7 +230,6 @@ end;
 procedure T_indirotator.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  FserverReady:=true;
   if (Rotatorport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

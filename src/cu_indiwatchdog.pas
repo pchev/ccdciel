@@ -35,17 +35,19 @@ T_indiwatchdog = class(T_watchdog)
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
+   ReadyTimer: TTimer;
    HeartbeatTimer: TTimer;
    WatchdogDevice: Basedevice;
    heartbeat: INumberVectorProperty;
    heartbeatvalue: INumber;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected,FServerReady: boolean;
+   Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
+   procedure ReadyTimerTimer(Sender: TObject);
    procedure HeartbeatTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
@@ -108,6 +110,10 @@ begin
  ConnectTimer.Enabled:=false;
  ConnectTimer.Interval:=3000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
+ ReadyTimer:=TTimer.Create(nil);
+ ReadyTimer.Enabled:=false;
+ ReadyTimer.Interval:=2000;
+ ReadyTimer.OnTimer:=@ReadyTimerTimer;
  HeartbeatTimer:=TTimer.Create(nil);
  HeartbeatTimer.Enabled:=false;
  HeartbeatTimer.Interval:=60000;
@@ -119,11 +125,13 @@ destructor  T_indiwatchdog.Destroy;
 begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
+ ReadyTimer.Enabled:=false;
  HeartbeatTimer.Enabled:=false;
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
+ FreeAndNil(ReadyTimer);
  FreeAndNil(HeartbeatTimer);
  inherited Destroy;
 end;
@@ -136,7 +144,6 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
-    FServerReady:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -144,22 +151,28 @@ end;
 procedure T_indiwatchdog.CheckStatus;
 begin
     if Fconnected and
-       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (heartbeat<>nil) and
        (heartbeatvalue<>nil)
     then begin
-       FStatus := devConnected;
-       if (not Fready) then begin
-         Fready:=true;
-         if FAutoloadConfig then begin
-           LoadConfig;
-         end;
-         HeartbeatTimer.Enabled:=true;
-         SetHeartbeat(FThreshold);
-         if Assigned(FonStatusChange) then FonStatusChange(self);
-       end;
+      ReadyTimer.Enabled := false;
+      ReadyTimer.Enabled := true;
     end;
+end;
+
+procedure T_indiwatchdog.ReadyTimerTimer(Sender: TObject);
+begin
+  ReadyTimer.Enabled := false;
+  FStatus := devConnected;
+  if (not Fready) then begin
+    Fready:=true;
+    if FAutoloadConfig then begin
+      LoadConfig;
+    end;
+    HeartbeatTimer.Enabled:=true;
+    SetHeartbeat(FThreshold);
+    if Assigned(FonStatusChange) then FonStatusChange(self);
+  end;
 end;
 
 Procedure T_indiwatchdog.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
@@ -219,7 +232,6 @@ end;
 procedure T_indiwatchdog.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  FserverReady:=true;
   indiclient.connectDevice(Findidevice);
 end;
 

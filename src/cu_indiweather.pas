@@ -35,16 +35,18 @@ T_indiweather = class(T_weather)
    indiclient: TIndiBaseClient;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
+   ReadyTimer: TTimer;
    WeatherDevice: Basedevice;
    WeatherStatusProp: ILightVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected,FServerReady: boolean;
+   Fready,Fconnected: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    stClear: boolean;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
+   procedure ReadyTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewDevice(dp: Basedevice);
@@ -121,6 +123,10 @@ begin
  ConnectTimer.Enabled:=false;
  ConnectTimer.Interval:=3000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
+ ReadyTimer:=TTimer.Create(nil);
+ ReadyTimer.Enabled:=false;
+ ReadyTimer.Interval:=2000;
+ ReadyTimer.OnTimer:=@ReadyTimerTimer;
  CreateIndiClient;
 end;
 
@@ -128,10 +134,12 @@ destructor  T_indiweather.Destroy;
 begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
+ ReadyTimer.Enabled:=false;
  indiclient.onServerDisconnected:=nil;
  indiclient.Free;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
+ FreeAndNil(ReadyTimer);
  inherited Destroy;
 end;
 
@@ -142,7 +150,6 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
-    FServerReady:=false;
     FStatus := devDisconnected;
     stClear:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -151,20 +158,26 @@ end;
 procedure T_indiweather.CheckStatus;
 begin
     if Fconnected and
-       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (WeatherStatusProp<>nil)
     then begin
-       FStatus := devConnected;
-       if (not Fready) then begin
-         Fready:=true;
-         if FAutoloadConfig then begin
-           LoadConfig;
-         end;
-         GetCapabilities;
-         if Assigned(FonStatusChange) then FonStatusChange(self);
-       end;
+      ReadyTimer.Enabled := false;
+      ReadyTimer.Enabled := true;
     end;
+end;
+
+procedure T_indiweather.ReadyTimerTimer(Sender: TObject);
+begin
+  ReadyTimer.Enabled := false;
+  FStatus := devConnected;
+  if (not Fready) then begin
+    Fready:=true;
+    if FAutoloadConfig then begin
+      LoadConfig;
+    end;
+    GetCapabilities;
+    if Assigned(FonStatusChange) then FonStatusChange(self);
+  end;
 end;
 
 Procedure T_indiweather.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -220,7 +233,6 @@ end;
 procedure T_indiweather.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  FserverReady:=true;
   if (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

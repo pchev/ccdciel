@@ -126,7 +126,7 @@ private
    CCDfilepath: ITextVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor,FServerReady: boolean;
+   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
@@ -380,7 +380,6 @@ begin
     Fready:=false;
     FWheelReady:=false;
     Fconnected := false;
-    FServerReady:=false;
     FStatus := devDisconnected;
     FWheelStatus:=devDisconnected;
     CCDIso:=nil;
@@ -401,7 +400,6 @@ end;
 procedure T_indicamera.CheckStatus;
 begin
     if Fconnected and
-       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        FhasBlob and (
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
@@ -529,7 +527,6 @@ procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
 var i: integer;
 begin
  ConnectTimer.Enabled:=False;
- FserverReady:=true;
  if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
    ConnectTimer.Enabled:=true;
  end;
