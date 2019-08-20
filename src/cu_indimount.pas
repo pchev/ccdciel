@@ -78,7 +78,7 @@ T_indimount = class(T_mount)
    Guide_Rate: INumberVectorProperty;
    Guide_Rate_NS:  INumber;
    Guide_Rate_WE:  INumber;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FServerReady: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -212,6 +212,7 @@ begin
     Guide_Rate:=nil;
     Fready:=false;
     Fconnected := false;
+    FServerReady:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -219,6 +220,7 @@ end;
 procedure T_indimount.CheckStatus;
 begin
     if Fconnected and
+       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (coord_prop<>nil)
     then begin
@@ -288,6 +290,7 @@ end;
 procedure T_indimount.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
+  FserverReady:=true;
   if (Mountport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

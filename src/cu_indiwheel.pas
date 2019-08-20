@@ -42,7 +42,7 @@ T_indiwheel = class(T_wheel)
    FilterName: ITextVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FServerReady: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -137,6 +137,7 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
+    FServerReady:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -144,6 +145,7 @@ end;
 procedure T_indiwheel.CheckStatus;
 begin
     if Fconnected and
+       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (WheelSlot<>nil) and
        (FilterName<>nil)
@@ -215,6 +217,7 @@ end;
 procedure T_indiwheel.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
+  FserverReady:=true;
   if (Wheelport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

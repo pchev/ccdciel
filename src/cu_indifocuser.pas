@@ -49,7 +49,7 @@ T_indifocuser = class(T_focuser)
    FocusTemperature: INumberVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FServerReady: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -164,6 +164,7 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
+    FServerReady:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -171,6 +172,7 @@ end;
 procedure T_indifocuser.CheckStatus;
 begin
     if Fconnected and
+       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (FocusMotion<>nil) and
        ((FocusAbsolutePosition<>nil)or(FocusRelativePosition<>nil)or(FocusTimer<>nil))
@@ -242,6 +244,7 @@ end;
 procedure T_indifocuser.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
+  FserverReady:=true;
   if (Focuserport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

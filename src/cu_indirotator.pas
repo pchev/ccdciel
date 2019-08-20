@@ -43,7 +43,7 @@ T_indirotator = class(T_rotator)
    RotatorReverseEnable,RotatorReverseDisable: ISwitch;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FServerReady: boolean;
    Findiserver, Findiserverport, Findidevice, Findideviceport: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -138,6 +138,7 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
+    FServerReady:=false;
     FStatus := devDisconnected;
     FCalibrationAngle:=0;
     FReverse:=False;
@@ -147,6 +148,7 @@ end;
 procedure T_indirotator.CheckStatus;
 begin
     if Fconnected and
+       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (RotatorAngle<>nil)
     then begin
@@ -215,6 +217,7 @@ end;
 procedure T_indirotator.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
+  FserverReady:=true;
   if (Rotatorport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

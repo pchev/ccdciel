@@ -44,7 +44,7 @@ T_indidome = class(T_dome)
    DomePark,DomeUnpark: ISwitch;
    DomeAutosyncProp: ISwitchVectorProperty;
    DomeAutosyncEnable,DomeAutosyncDisable: ISwitch;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FServerReady: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -138,6 +138,7 @@ begin
     DomeAutosyncProp:=nil;
     Fready:=false;
     Fconnected := false;
+    FServerReady:=false;
     FhasPark:=false;
     FhasSlaving:=false;
     FhasShutter:=false;
@@ -148,6 +149,7 @@ end;
 procedure T_indidome.CheckStatus;
 begin
     if Fconnected and
+       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        ((DomeShutterProp<>nil)or(DomeParkProp<>nil))  // rolloff define only Park
     then begin
@@ -217,6 +219,7 @@ end;
 procedure T_indidome.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
+  FserverReady:=true;
   if (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;

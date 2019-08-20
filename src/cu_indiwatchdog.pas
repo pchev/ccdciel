@@ -41,7 +41,7 @@ T_indiwatchdog = class(T_watchdog)
    heartbeatvalue: INumber;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FServerReady: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -136,6 +136,7 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
+    FServerReady:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -143,6 +144,7 @@ end;
 procedure T_indiwatchdog.CheckStatus;
 begin
     if Fconnected and
+       FserverReady and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        (heartbeat<>nil) and
        (heartbeatvalue<>nil)
@@ -217,6 +219,7 @@ end;
 procedure T_indiwatchdog.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
+  FserverReady:=true;
   indiclient.connectDevice(Findidevice);
 end;
 
