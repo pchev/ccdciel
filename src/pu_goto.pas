@@ -51,6 +51,7 @@ type
     procedure BtnSearchClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure CenterChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure SetLang;
@@ -84,6 +85,11 @@ begin
   Label3.Caption:=rsObjectName;
   Label4.Caption:=rsAzimuth;
   Label5.Caption:=rsElevation;
+end;
+
+procedure Tf_goto.FormShow(Sender: TObject);
+begin
+  obj.SetFocus;
 end;
 
 procedure Tf_goto.ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -158,7 +164,6 @@ begin
     LabelAlt.Caption:='-';
   end;
 end;
-
 
 end.
 

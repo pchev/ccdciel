@@ -8,7 +8,7 @@ object f_goto: Tf_goto
   ClientWidth = 333
   DesignTimePPI = 95
   OnCreate = FormCreate
-  LCLVersion = '2.0.4.0'
+  OnShow = FormShow
   object BtnSearch: TButton
     Left = 243
     Height = 25
@@ -81,11 +81,11 @@ object f_goto: Tf_goto
     Top = 195
     Width = 333
     Align = alBottom
-    ClientHeight = 45
-    ClientWidth = 329
+    ClientHeight = 49
+    ClientWidth = 333
     TabOrder = 4
     object Button2: TButton
-      Left = 124
+      Left = 128
       Height = 25
       Top = 8
       Width = 75
@@ -96,7 +96,7 @@ object f_goto: Tf_goto
       TabOrder = 0
     end
     object Button1: TButton
-      Left = 244
+      Left = 248
       Height = 25
       Top = 8
       Width = 75
