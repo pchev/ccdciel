@@ -2070,6 +2070,7 @@ try
   wsport:=IUFindNumber(CCDWebsocketSetting,'WS_SETTINGS_PORT');
   if wsport=nil then exit;
   p:=IntToStr(round(wsport.Value));
+  msg('Connect to WebSocket '+h+':'+p,3);
   indiws:=TIndiWebSocketClientConnection.Create(h,p,'/');
   indiws.FreeOnTerminate:=true;
   indiws.OnNewfile:=@WsNewFile;
@@ -2081,6 +2082,7 @@ end;
 procedure T_indicamera.DisconnectWs;
 begin
 try
+  msg('Disconnect from WebSocket,3');
   indiws.Close(wsCloseNormal,'');
 except
 end;
