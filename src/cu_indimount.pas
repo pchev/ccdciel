@@ -611,7 +611,6 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    indiclient.WaitBusy(CoordSet);
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);
@@ -632,7 +631,6 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    indiclient.WaitBusy(CoordSet);
     if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then slewtimeout:=240000 else slewtimeout:=30000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
