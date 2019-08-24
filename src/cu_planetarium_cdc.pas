@@ -200,30 +200,32 @@ begin
 if FRecvData<>'' then begin
   p:=Tstringlist.Create;
   SplitRec(FRecvData,#9,p);
-  if (p.Count>=4)and(p[0]='>') then begin
-    Fra:=StrToAR(p[2]);
-    Fde:=StrToDE(p[3]);
-    if (FplanetariumEquinox<>2000)and(FplanetariumJD>0) then begin
-      if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
-        Fra:=Fra*15*deg2rad;
-        Fde:=Fde*deg2rad;
-        mean_equatorial(Fra,Fde);
-        PrecessionFK5(FplanetariumJD,jd2000,Fra,Fde);
-        Fra:=rad2deg*Fra/15;
-        Fde:=rad2deg*Fde;
+  if p[0]='>' then begin
+    if (p.Count>=4) then begin
+      Fra:=StrToAR(p[2]);
+      Fde:=StrToDE(p[3]);
+      if (FplanetariumEquinox<>2000)and(FplanetariumJD>0) then begin
+        if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
+          Fra:=Fra*15*deg2rad;
+          Fde:=Fde*deg2rad;
+          mean_equatorial(Fra,Fde);
+          PrecessionFK5(FplanetariumJD,jd2000,Fra,Fde);
+          Fra:=rad2deg*Fra/15;
+          Fde:=rad2deg*Fde;
+        end;
       end;
     end;
+    if (p.Count>=6) then begin
+       Fobjname:=trim(p[5]);
+    end;
+    if (p.Count>=8)and(copy(p[7],1,3)='pa:') then begin
+       Fpa:=StrToFloatDef(trim(copy(p[7],4,99)),NullCoord);
+    end
+    else
+       Fpa:=NullCoord;
+    if assigned(FonReceiveData) then FonReceiveData(FRecvData);
   end;
-  if (p.Count>=6)and(p[0]='>') then begin
-     Fobjname:=trim(p[5]);
-  end;
-  if (p.Count>=8)and(p[0]='>')and(copy(p[7],1,3)='pa:') then begin
-     Fpa:=StrToFloatDef(trim(copy(p[7],4,99)),NullCoord);
-  end
-  else
-     Fpa:=NullCoord;
   p.free;
-  if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
 end;
 
