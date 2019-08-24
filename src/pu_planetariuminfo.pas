@@ -120,9 +120,7 @@ begin
   ok:=false;
  if planetarium.Objname<>'' then begin
   Obj.Text:=trim(planetarium.Objname);
- end
- else
-  ok:=false;
+ end;
  if ok and Assigned(FNewTarget) then FNewTarget(self);
 end;
 
