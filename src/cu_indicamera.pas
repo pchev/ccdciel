@@ -1163,7 +1163,7 @@ if UseMainSensor then begin
   if CCDPreview<>nil then begin // Indigo specific
     if CCDPreviewDisabled.s=ISS_OFF then begin
       IUResetSwitch(CCDPreview);
-      CCDPreviewDisabled.s:=ISS_OFF;
+      CCDPreviewDisabled.s:=ISS_ON;
       indiclient.sendNewSwitch(CCDPreview);
     end;
   end;
