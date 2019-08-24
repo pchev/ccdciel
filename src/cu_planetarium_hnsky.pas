@@ -165,7 +165,7 @@ if FRecvData<>'' then begin
     Fde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
     Fpa:=StrToFloatDef(StringReplace(p[3],',','.',[]),NullCoord);
     if Fpa<>NullCoord then begin
-      Fpa:=rad2deg*rmod(Fpa+pi2,pi2);
+      Fpa:=rad2deg*rmod(Fpa-pid2+pi2+pi2,pi2); // HNSKY use 0° for vertical frame, 90° for horizontal
       if Fpa>359.99 then Fpa:=0;
     end;
     if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
