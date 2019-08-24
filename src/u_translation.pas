@@ -1108,6 +1108,7 @@ resourcestring
   rsGoto = 'Goto';
   rsRetrievePosi = 'Retrieve position from deepsky database';
   rsAzimuth = 'Azimuth';
+  rsInsertRows = 'Insert rows';
 
 implementation
 

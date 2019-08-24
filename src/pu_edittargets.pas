@@ -44,7 +44,12 @@ type
     Bevel1: TBevel;
     Bevel2: TBevel;
     BtnAddStep: TButton;
+    BtnDeleteObject: TButton;
     BtnImportMosaic: TButton;
+    BtnInsertPlanetarium: TButton;
+    BtnNewObject: TButton;
+    BtnNewScript: TButton;
+    BtnSkyFlat: TButton;
     Btn_coord_internal: TButton;
     BtnUnattendedScript: TButton;
     BtnSaveAs: TButton;
@@ -86,24 +91,20 @@ type
     Panel22: TPanel;
     Panel3: TPanel;
     Panel6: TPanel;
-    PanelBot1: TPanel;
+    GroupboxInsert: TGroupBox;
     PanelTermination: TPanel;
     PanelSep: TPanel;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
-    BtnCdCCoord: TButton;
+    BtnPlanetariumCoord: TButton;
     BtnImgCoord: TButton;
     BtnCurrentCoord: TButton;
     BtnEditScript: TButton;
     BtnImgRot: TButton;
-    BtnNewObject: TButton;
-    BtnDeleteObject: TButton;
     BtnSave: TButton;
     BtnEditNewScript: TButton;
-    BtnNewScript: TButton;
     BtnDeletePlan: TButton;
     BtnCancel: TButton;
-    BtnSkyFlat: TButton;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -163,7 +164,8 @@ type
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
-    procedure BtnCdCCoordClick(Sender: TObject);
+    procedure BtnInsertPlanetariumClick(Sender: TObject);
+    procedure BtnPlanetariumCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeletePlanClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
@@ -247,6 +249,8 @@ type
     function AsDuskFlat:boolean;
     function AsDawnFlat:boolean;
     procedure MoveFlat(Sender: TObject);
+    procedure NewObject;
+    procedure NewPlanetariumTarget(Sender: TObject);
   public
     { public declarations }
     procedure LoadPlanList;
@@ -341,9 +345,11 @@ begin
   Caption := rsEditTargetLi;
   BtnSave.Caption := rsSave;
   BtnSaveAs.Caption := rsSaveAs;
+  GroupboxInsert.Caption := rsInsertRows;
   BtnNewObject.Caption := rsNewObject;
+  BtnInsertPlanetarium.Caption := rsPlanetarium;
   BtnDeleteObject.Caption := rsRemoveObject;
-  BtnNewScript.Caption := rsNewScript;
+  BtnNewScript.Caption := rsScript;
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
   BtnImportObslist.Caption:=rsImportCdCObs;
@@ -405,7 +411,7 @@ begin
   Label11.Caption := rsInterval;
   BtnAnytime.Caption := rsAnyTime;
   BtnCurrentCoord.Caption := rsNoMove;
-  BtnCdCCoord.Caption := rsPlanetarium;
+  BtnPlanetariumCoord.Caption := rsPlanetarium;
   Btn_coord_internal.Caption:=rsSearch;
   BtnImgCoord.Caption := rsCurrentImage;
   BtnImgRot.Caption := rsCurrentImage;
@@ -452,7 +458,7 @@ begin
   Label4.Caption:=rsUnattendedEr;
   // hint
   BtnCurrentCoord.Hint:=rsDoNotMoveThe;
-  BtnCdCCoord.Hint:=rsGetTheCoordi;
+  BtnPlanetariumCoord.Hint:=rsGetTheCoordi;
   BtnImgCoord.Hint:=rsSolveTheCurr;
   Btn_coord_internal.Hint:=rsGetTheCoordi2;
   Preview.Hint:=rsStartAPrevie;
@@ -712,11 +718,18 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
-var i,n: integer;
-    t,tt: TTarget;
 begin
   PageControlTools.ActivePageIndex:=pageobject;
   PageControlPlan.ActivePageIndex:=pageobject;
+  NewObject;
+  Btn_coord_internalClick(Sender);
+  ShowPlan;
+end;
+
+procedure Tf_EditTargets.NewObject;
+var i,n: integer;
+    t,tt: TTarget;
+begin
   t:=TTarget.Create;
   n:=TargetList.Row;
   if n>=1 then begin
@@ -741,8 +754,6 @@ begin
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
-  Btn_coord_internalClick(Sender);
-  ShowPlan;
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
@@ -1038,22 +1049,47 @@ begin
   ModalResult:=mrCancel;
 end;
 
-procedure Tf_EditTargets.BtnCdCCoordClick(Sender: TObject);
+procedure Tf_EditTargets.BtnPlanetariumCoordClick(Sender: TObject);
 var n: integer;
 begin
   n:=TargetList.Row;
   f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
   f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
   f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
+  f_planetariuminfo.onNewTarget := nil;
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_planetariuminfo.ShowModal;
   if f_planetariuminfo.ModalResult=mrOK then begin
-     TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
-     TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
-     if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
-     TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
-     TargetChange(nil);
+    TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
+    TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
+    if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
+    TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+    TargetChange(nil);
   end;
+end;
+
+procedure Tf_EditTargets.BtnInsertPlanetariumClick(Sender: TObject);
+var n: integer;
+begin
+  n:=TargetList.Row;
+  f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
+  f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
+  f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
+  f_planetariuminfo.onNewTarget := @NewPlanetariumTarget;
+  FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_planetariuminfo.ShowModal;
+end;
+
+procedure Tf_EditTargets.NewPlanetariumTarget(Sender: TObject);
+var n: integer;
+begin
+  NewObject;
+  n:=TargetList.Row;
+  TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
+  TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
+  if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
+  TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+  TargetChange(nil);
 end;
 
 procedure Tf_EditTargets.BtnImgCoordClick(Sender: TObject);

@@ -114,7 +114,7 @@ try
    repeat
      if terminated then break;
      // handle unattended messages (mouseclick...)
-     buf:=tcpclient.RecvPacket;
+     buf:=tcpclient.RecvString;
      if (tcpclient.Sock.LastError<>0)and(tcpclient.Sock.LastError<>WSAETIMEDOUT) then break; // unexpected error
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'') then ProcessData(buf);
@@ -131,7 +131,7 @@ try
         // wait response
         dateto:=now+Fcmdtimeout;
         repeat
-          buf:=tcpclient.RecvPacket;
+          buf:=tcpclient.RecvString;
           if (buf='') then continue;
           //if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
           tcpclient.resultbuffer:=buf;   // set result
@@ -167,11 +167,11 @@ if FRecvData<>'' then begin
       Fra:=rad2deg*Fra/15;
       Fde:=rad2deg*Fde;
       Fobjname:=p[2];
+      if assigned(FonReceiveData) then FonReceiveData(FRecvData);
     end;
   end;
   p.free;
 end;
-if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
 
 function TPlanetarium_hnsky.Cmd(const Value: string):string;

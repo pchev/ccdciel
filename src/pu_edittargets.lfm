@@ -727,11 +727,11 @@ object f_EditTargets: Tf_EditTargets
             Height = 92
             Top = 0
             Width = 706
-            ActivePage = ToolsNone
+            ActivePage = ToolsObject
             Align = alClient
             ParentFont = False
             ShowTabs = False
-            TabIndex = 3
+            TabIndex = 0
             TabOrder = 0
             object ToolsObject: TTabSheet
               Caption = 'Object'
@@ -759,14 +759,14 @@ object f_EditTargets: Tf_EditTargets
                   ParentFont = False
                   TabOrder = 0
                 end
-                object BtnCdCCoord: TButton
+                object BtnPlanetariumCoord: TButton
                   Left = 72
                   Height = 23
                   Hint = 'Get the coordinates and object name from the planetarium'
                   Top = 0
                   Width = 96
                   Caption = 'Planetarium'
-                  OnClick = BtnCdCCoordClick
+                  OnClick = BtnPlanetariumCoordClick
                   ParentFont = False
                   TabOrder = 1
                 end
@@ -970,21 +970,21 @@ object f_EditTargets: Tf_EditTargets
             end
           end
         end
-        object PanelBot1: TPanel
+        object GroupboxInsert: TGroupBox
           Left = 0
           Height = 92
           Top = 0
           Width = 272
           Align = alLeft
-          BevelOuter = bvNone
-          ClientHeight = 92
-          ClientWidth = 272
+          Caption = 'Insert rows'
+          ClientHeight = 72
+          ClientWidth = 270
           TabOrder = 1
           object BtnSkyFlat: TButton
             Left = 136
-            Height = 25
+            Height = 23
             Hint = 'Add a flat sequence to the list.'
-            Top = 2
+            Top = 24
             Width = 120
             Caption = 'Sky Flat'
             OnClick = BtnSkyFlatClick
@@ -993,9 +993,9 @@ object f_EditTargets: Tf_EditTargets
           end
           object BtnNewObject: TButton
             Left = 4
-            Height = 25
+            Height = 23
             Hint = 'Add an object to the list'
-            Top = 2
+            Top = 0
             Width = 120
             Caption = 'New object'
             OnClick = BtnNewObjectClick
@@ -1004,9 +1004,9 @@ object f_EditTargets: Tf_EditTargets
           end
           object BtnDeleteObject: TButton
             Left = 4
-            Height = 25
+            Height = 23
             Hint = 'Delete the selected row from the list.'
-            Top = 40
+            Top = 48
             Width = 120
             Caption = 'Remove object'
             OnClick = BtnDeleteObjectClick
@@ -1015,14 +1015,23 @@ object f_EditTargets: Tf_EditTargets
           end
           object BtnNewScript: TButton
             Left = 136
-            Height = 25
+            Height = 23
             Hint = 'Add a script to the list.'
-            Top = 40
+            Top = 48
             Width = 120
-            Caption = 'New script'
+            Caption = 'Script'
             OnClick = BtnNewScriptClick
             ParentFont = False
             TabOrder = 3
+          end
+          object BtnInsertPlanetarium: TButton
+            Left = 136
+            Height = 23
+            Top = 0
+            Width = 120
+            Caption = 'Planetarium'
+            OnClick = BtnInsertPlanetariumClick
+            TabOrder = 4
           end
         end
       end

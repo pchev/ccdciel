@@ -46,12 +46,15 @@ type
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
+    LastMsg: string;
     FPlanetarium: TPlanetarium;
+    FNewTarget: TNotifyEvent;
     procedure recvdata(msg:string);
     procedure SetLang;
   public
     { public declarations }
     property planetarium: TPlanetarium read FPlanetarium write FPlanetarium;
+    property onNewTarget: TNotifyEvent read FNewTarget write FNewTarget;
   end;
 
 var
@@ -73,6 +76,18 @@ begin
     planetarium.onReceiveData:=@recvdata;
     recvdata('');
   end;
+  if Assigned(FNewTarget) then begin
+    // wait for multiple entries
+    Button1.Caption:=rsClose;
+    Button2.Visible:=False;
+    Label4.Caption:=rsClickTheObje+crlf+'Every click insert a new target';
+  end
+  else begin
+    // keep only last entry, process on exit
+    Button1.Caption:=rsOK;
+    Button2.Visible:=True;
+    Label4.Caption:=rsClickTheObje;
+  end;
 end;
 
 procedure Tf_planetariuminfo.FormCreate(Sender: TObject);
@@ -93,14 +108,22 @@ begin
 end;
 
 procedure Tf_planetariuminfo.recvdata(msg:string);
+var ok: boolean;
 begin
+ ok:=(msg>'')and(msg<>LastMsg);
+ LastMsg:=msg;
  if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
   Ra.Text:=RAToStr(planetarium.RA);
   De.Text:=DEToStr(planetarium.DE);
- end;
+ end
+ else
+  ok:=false;
  if planetarium.Objname<>'' then begin
   Obj.Text:=trim(planetarium.Objname);
- end;
+ end
+ else
+  ok:=false;
+ if ok and Assigned(FNewTarget) then FNewTarget(self);
 end;
 
 end.

@@ -151,7 +151,7 @@ try
    repeat
      if terminated then break;
      // handle unattended messages (mouseclick...)
-     buf:=tcpclient.recvstring;
+     buf:=tcpclient.RecvString;
      if (tcpclient.Sock.LastError<>0)and(tcpclient.Sock.LastError<>WSAETIMEDOUT) then break; // unexpected error
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'')and(buf<>'.') then ProcessData(buf);
@@ -170,7 +170,7 @@ try
         // wait response
         dateto:=now+Fcmdtimeout;
         repeat
-          buf:=tcpclient.recvstring;
+          buf:=tcpclient.RecvString;
           if (buf='')or(buf='.') then continue;  // keepalive
           if copy(buf,1,1)='>' then rbuf:=buf+rbuf // response data
              else tcpclient.resultbuffer:=buf+rbuf;   // set result
@@ -218,8 +218,8 @@ if FRecvData<>'' then begin
      Fobjname:=trim(p[5]);
   end;
   p.free;
+  if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
-if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
 
 

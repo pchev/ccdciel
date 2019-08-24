@@ -1620,6 +1620,7 @@ end;
 
 procedure Tf_main.DestroyDevices;
 begin
+ try
  camera.Free;
  wheel.Free;
  focuser.Free;
@@ -1629,6 +1630,8 @@ begin
  watchdog.Free;
  weather.Free;
  safety.Free;
+ except
+ end;
 end;
 
 procedure Tf_main.SetLang;
@@ -9844,6 +9847,7 @@ begin
     f_planetariuminfo.Ra.Text  := '-';
     f_planetariuminfo.De.Text  := '-';
     f_planetariuminfo.Obj.Text := '';
+    f_planetariuminfo.onNewTarget := nil;
     FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
     f_planetariuminfo.ShowModal;
     if f_planetariuminfo.ModalResult=mrOK then begin
