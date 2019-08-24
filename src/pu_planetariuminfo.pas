@@ -44,6 +44,7 @@ type
     Ra: TEdit;
     De: TEdit;
     Obj: TEdit;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -76,6 +77,7 @@ begin
     ModalResult:=mrAbort;
   end
   else begin
+    LastMsg:='';
     planetarium.onReceiveData:=@recvdata;
     recvdata('');
   end;
@@ -99,6 +101,12 @@ begin
   SetLang;
 end;
 
+procedure Tf_planetariuminfo.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+   planetarium.onReceiveData:=nil;
+   FNewTarget:=nil;
+end;
+
 procedure Tf_planetariuminfo.SetLang;
 begin
   Caption:=rsPlanetariumP;
@@ -115,7 +123,6 @@ procedure Tf_planetariuminfo.SetPlanetarium(value: TPlanetarium);
 begin
   FPlanetarium:=value;
   ModalResult:=mrCancel;
-  Close;
 end;
 
 procedure Tf_planetariuminfo.recvdata(msg:string);

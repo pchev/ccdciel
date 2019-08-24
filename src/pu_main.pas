@@ -9823,6 +9823,7 @@ begin
    f_planetarium.BtnConnect.Caption:=rsConnect;
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    NewMessage(rsPlanetarium+': '+Format(rsDisconnected,[PlanetariumName[ord(planetarium.PlanetariumType)]]),1);
+   wait(1);
    i:=config.GetValue('/Planetarium/Software',0);
    case TPlanetariumType(i) of
      CDC: planetarium:=TPlanetarium_cdc.Create;

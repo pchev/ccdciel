@@ -9,8 +9,10 @@ object f_planetariuminfo: Tf_planetariuminfo
   ClientWidth = 255
   DesignTimePPI = 95
   FormStyle = fsStayOnTop
+  OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
+  LCLVersion = '2.0.4.0'
   object Ra: TEdit
     Left = 139
     Height = 28
