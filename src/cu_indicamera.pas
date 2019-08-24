@@ -906,6 +906,7 @@ procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
 begin
 if tvp=CCDfilepath then begin
+  ExposureTimer.Enabled:=false;
   FMidExposureTime:=(Ftimestart+NowUTC)/2;
   if debug_msg then msg('receive image file');
   // if possible start next exposure now
@@ -1017,6 +1018,7 @@ var source,dest: array of char;
     i: integer;
 begin
  // report any change to NewText() in use with RAM disk transfer
+ ExposureTimer.Enabled:=false;
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  if debug_msg then msg('receive blob');
  // if possible start next exposure now
@@ -1190,13 +1192,6 @@ end;
 procedure T_indicamera.ExposureTimerTimer(sender: TObject);
 begin
  ExposureTimer.Enabled:=false;
- if UseMainSensor then begin
-   if (CCDexpose<>nil)and (CCDexpose.s<>IPS_BUSY) then
-      exit;
- end else begin
-   if (Guiderexpose<>nil)and (Guiderexpose.s<>IPS_BUSY) then
-      exit;
- end;
  if now>timedout then begin
     msg(rsNoResponseFr2, 0);
     if assigned(FonAbortExposure) then FonAbortExposure(self);
