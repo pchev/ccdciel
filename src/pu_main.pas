@@ -9846,6 +9846,7 @@ begin
  if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
     f_planetariuminfo.Ra.Text  := '-';
     f_planetariuminfo.De.Text  := '-';
+    f_planetariuminfo.PA.Text  := '-';
     f_planetariuminfo.Obj.Text := '';
     f_planetariuminfo.onNewTarget := nil;
     FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);

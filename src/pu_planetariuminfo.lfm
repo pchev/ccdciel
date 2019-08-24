@@ -1,13 +1,14 @@
 object f_planetariuminfo: Tf_planetariuminfo
   Left = 387
-  Height = 234
+  Height = 261
   Top = 160
   Width = 255
   ActiveControl = Ra
   Caption = 'Planetarium position'
-  ClientHeight = 234
+  ClientHeight = 261
   ClientWidth = 255
   DesignTimePPI = 95
+  FormStyle = fsStayOnTop
   OnCreate = FormCreate
   OnShow = FormShow
   object Ra: TEdit
@@ -46,7 +47,7 @@ object f_planetariuminfo: Tf_planetariuminfo
   object Button1: TButton
     Left = 139
     Height = 25
-    Top = 188
+    Top = 224
     Width = 75
     Caption = 'OK'
     ModalResult = 1
@@ -83,7 +84,7 @@ object f_planetariuminfo: Tf_planetariuminfo
   object Button2: TButton
     Left = 19
     Height = 25
-    Top = 188
+    Top = 224
     Width = 75
     Caption = 'Cancel'
     ModalResult = 2
@@ -101,5 +102,25 @@ object f_planetariuminfo: Tf_planetariuminfo
     ParentColor = False
     ParentFont = False
     WordWrap = True
+  end
+  object Label5: TLabel
+    Left = 19
+    Height = 19
+    Top = 190
+    Width = 15
+    Caption = 'PA'
+    ParentColor = False
+    ParentFont = False
+  end
+  object PA: TEdit
+    Left = 139
+    Height = 28
+    Top = 184
+    Width = 95
+    Constraints.MaxHeight = 28
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 5
+    Text = 'PA'
   end
 end

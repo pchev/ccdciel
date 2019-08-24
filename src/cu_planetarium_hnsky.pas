@@ -160,9 +160,14 @@ begin
 if FRecvData<>'' then begin
   p:=Tstringlist.Create;
   SplitRec(FRecvData,blank,p);
-  if (p.Count>=3) then begin
+  if (p.Count>=4) then begin
     Fra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
     Fde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
+    Fpa:=StrToFloatDef(StringReplace(p[3],',','.',[]),NullCoord);
+    if Fpa<>NullCoord then begin
+      Fpa:=rad2deg*rmod(Fpa+pi2,pi2);
+      if Fpa>359.99 then Fpa:=0;
+    end;
     if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
       Fra:=rad2deg*Fra/15;
       Fde:=rad2deg*Fde;

@@ -39,6 +39,8 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
+    PA: TEdit;
     Ra: TEdit;
     De: TEdit;
     Obj: TEdit;
@@ -51,9 +53,10 @@ type
     FNewTarget: TNotifyEvent;
     procedure recvdata(msg:string);
     procedure SetLang;
+    procedure SetPlanetarium(value: TPlanetarium);
   public
     { public declarations }
-    property planetarium: TPlanetarium read FPlanetarium write FPlanetarium;
+    property planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
     property onNewTarget: TNotifyEvent read FNewTarget write FNewTarget;
   end;
 
@@ -105,11 +108,23 @@ begin
   Label2.Caption:=rsCenterDec;
   Label3.Caption:=rsObjectName;
   Label4.Caption:=rsClickTheObje;
+  label5.Caption :=rsPA;
+end;
+
+procedure Tf_planetariuminfo.SetPlanetarium(value: TPlanetarium);
+begin
+  FPlanetarium:=value;
+  ModalResult:=mrCancel;
+  Close;
 end;
 
 procedure Tf_planetariuminfo.recvdata(msg:string);
 var ok: boolean;
 begin
+ if (planetarium=nil) or (not planetarium.Connected) then begin
+   Close;
+   Exit;
+ end;
  ok:=(msg>'')and(msg<>LastMsg);
  LastMsg:=msg;
  if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
@@ -118,6 +133,11 @@ begin
  end
  else
   ok:=false;
+ if planetarium.PA<>NullCoord then begin
+  PA.Text:=FormatFloat(f2,planetarium.PA);
+ end
+ else
+  PA.Text:='';
  if planetarium.Objname<>'' then begin
   Obj.Text:=trim(planetarium.Objname);
  end;

@@ -1055,6 +1055,7 @@ begin
   n:=TargetList.Row;
   f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
   f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
+  f_planetariuminfo.PA.Text := TargetList.Cells[colpa,n];
   f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
   f_planetariuminfo.onNewTarget := nil;
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -1062,6 +1063,7 @@ begin
   if f_planetariuminfo.ModalResult=mrOK then begin
     TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
     TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
+    TargetList.Cells[colpa,n]:=f_planetariuminfo.PA.Text;
     if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
     TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
     TargetChange(nil);
@@ -1071,9 +1073,14 @@ end;
 procedure Tf_EditTargets.BtnInsertPlanetariumClick(Sender: TObject);
 var n: integer;
 begin
+  if (f_planetariuminfo.planetarium=nil) or (not f_planetariuminfo.planetarium.Connected) then begin
+    ShowMessage(rsPleaseConnec);
+    exit;
+  end;
   n:=TargetList.Row;
   f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
   f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
+  f_planetariuminfo.PA.Text  := TargetList.Cells[colpa,n];
   f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
   f_planetariuminfo.onNewTarget := @NewPlanetariumTarget;
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -1087,6 +1094,7 @@ begin
   n:=TargetList.Row;
   TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
   TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
+  TargetList.Cells[colpa,n]:=trim(f_planetariuminfo.PA.Text);
   if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
   TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
   TargetChange(nil);

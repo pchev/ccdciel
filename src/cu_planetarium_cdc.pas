@@ -217,6 +217,11 @@ if FRecvData<>'' then begin
   if (p.Count>=6)and(p[0]='>') then begin
      Fobjname:=trim(p[5]);
   end;
+  if (p.Count>=8)and(p[0]='>')and(copy(p[7],1,3)='pa:') then begin
+     Fpa:=StrToFloatDef(trim(copy(p[7],4,99)),NullCoord);
+  end
+  else
+     Fpa:=NullCoord;
   p.free;
   if assigned(FonReceiveData) then FonReceiveData(FRecvData);
 end;
