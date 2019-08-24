@@ -1109,6 +1109,10 @@ resourcestring
   rsRetrievePosi = 'Retrieve position from deepsky database';
   rsAzimuth = 'Azimuth';
   rsInsertRows = 'Insert rows';
+  rsDoYouWantToR2 = 'Do you want to run the termination action now?';
+  rsYes = 'Yes';
+  rsNo = 'No';
+  rsRequestedToN = 'Requested to not run the termination action';
 
 implementation
 

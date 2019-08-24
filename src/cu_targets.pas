@@ -87,7 +87,7 @@ type
       function InitSkyFlat: boolean;
       procedure StartPlan;
       procedure RunErrorAction;
-      procedure RunEndAction;
+      procedure RunEndAction(confirm: boolean=true);
       function StopGuider:boolean;
       function StartGuider:boolean;
       function Slew(ra,de: double; precision,planprecision: boolean):boolean;
@@ -1520,8 +1520,14 @@ end;
 procedure T_Targets.RunErrorAction;
 var path,sname: string;
 begin
+  f_pause.Caption:=rsTerminationO;
+  f_pause.Text := rsDoYouWantToR2;
+  if not f_pause.Wait(20, true, rsYes, rsNo) then begin
+    msg(rsRequestedToN, 1);
+    exit;
+  end;
   msg(rsExecutingThe,1);
-  RunEndAction;
+  RunEndAction(false);
   if OnErrorRunScript then begin
     path:=ScriptDir[1].path;
     sname:=OnErrorScript;
@@ -1531,10 +1537,18 @@ begin
   end;
 end;
 
-procedure T_Targets.RunEndAction;
+procedure T_Targets.RunEndAction(confirm: boolean=true);
 var path,sname: string;
 begin
 if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
+  if confirm then begin
+    f_pause.Caption:=rsTerminationO;
+    f_pause.Text := rsDoYouWantToR2;
+    if not f_pause.Wait(20, true, rsYes, rsNo) then begin
+      msg(rsRequestedToN, 1);
+      exit;
+    end;
+  end;
   msg(rsExecutingThe2,1);
   if AtEndStopTracking then begin
     msg(rsStopTelescop2,1);

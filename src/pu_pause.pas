@@ -53,7 +53,7 @@ type
     procedure setlang;
   public
     { public declarations }
-    function Wait(timeout:integer=0; defaultresult:boolean=true): boolean;
+    function Wait(timeout:integer=0; defaultresult:boolean=true; TextOK:string=''; TextCancel:string=''): boolean;
     property Text: string read GetText write SetText;
   end;
 
@@ -113,7 +113,7 @@ begin
   ScaleDPI(Self);
 end;
 
-function Tf_pause.Wait(timeout:integer=0; defaultresult:boolean=true): boolean;
+function Tf_pause.Wait(timeout:integer=0; defaultresult:boolean=true; TextOK:string=''; TextCancel:string=''): boolean;
 var endt: TDateTime;
     n,t:integer;
 begin
@@ -131,6 +131,14 @@ begin
     label1.Caption:='';
   end;
   Show;
+  if TextOK<>'' then
+     BtnContinue.Caption:=TextOK
+  else
+     BtnContinue.Caption:=rsContinue;
+  if TextCancel<>'' then
+     BtnCancel.Caption:=TextCancel
+  else
+     BtnCancel.Caption:=rsCancel;
   n:=0;
   while (not FContinue) do begin
     if timeout>0 then begin
@@ -152,6 +160,8 @@ begin
     end;
   end;
   result:=Fresult;
+  BtnContinue.Caption:=rsContinue;
+  BtnCancel.Caption:=rsCancel;
   Close;
 end;
 
