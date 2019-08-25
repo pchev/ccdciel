@@ -184,8 +184,8 @@ procedure T_ascommount.Disconnect;
 begin
  {$ifdef mswindows}
    StatusTimer.Enabled:=false;
-   if debug_msg then msg('Request to disconnect');
    FStatus := devDisconnected;
+   if debug_msg then msg('Request to disconnect');
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
@@ -222,6 +222,8 @@ var x,y: double;
   {$endif}
 begin
  {$ifdef mswindows}
+ try
+ StatusTimer.Enabled:=false;
   if not Connected then begin
      if debug_msg then msg('Status not connected');
      FStatus := devDisconnected;
@@ -259,6 +261,9 @@ begin
     except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
+  end;
+  finally
+  if FStatus=devConnected then StatusTimer.Enabled:=true;
   end;
  {$endif}
 end;

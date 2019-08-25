@@ -165,6 +165,8 @@ var p: double;
 {$endif}
 begin
  {$ifdef mswindows}
+ try
+ StatusTimer.Enabled:=false;
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -179,6 +181,9 @@ begin
      except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
+  end;
+  finally
+  if FStatus=devConnected then StatusTimer.Enabled:=true;
   end;
  {$endif}
 end;
