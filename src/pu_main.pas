@@ -1381,6 +1381,7 @@ begin
   LoadBPM;
 
   FocuserLastTemp:=config.GetValue('/StarAnalysis/FocuserLastTemp',NullCoord);
+  AutofocusLastTemp:=FocuserLastTemp;
 
   f_ccdtemp.Setpoint.Value:=config.GetValue('/Temperature/Setpoint',0);
   f_preview.ExpTime.Text:=config.GetValue('/Preview/Exposure','1');

@@ -357,7 +357,7 @@ var
   TemperatureScale: integer;
   TempLabel: string;
   TemperatureSlope: double;
-  FocuserTemp, FocuserLastTemp, FocuserTempCoeff, AutofocusTempChange: double;
+  FocuserTemp, FocuserLastTemp, AutofocusLastTemp, FocuserTempCoeff, AutofocusTempChange: double;
   FocuserPositionMin, FocuserPositionMax: integer;
   Starwindow,Focuswindow: integer;
   AutofocusMode:TAutofocusMode;

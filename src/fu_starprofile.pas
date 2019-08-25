@@ -847,8 +847,17 @@ begin
   // check focus result
   if terminated then begin
     if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
-    msg(Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),
-      FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+    txt:=Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]);
+    if FAutofocusResult then begin
+      if FPreFocusPos>0 then
+         txt:=txt+' POS_DELTA:'+IntToStr(focuser.Position.Value-FPreFocusPos);
+      if AutofocusLastTemp<>NullCoord then
+         txt:=txt+' TEMP_DELTA:'+FormatFloat(f1,FocuserTemp-AutofocusLastTemp);
+      AutofocusLastTemp:=FocuserTemp;
+    end
+    else txt:=txt+' '+rsAutoFocusErr;
+    msg(txt,2);
+
     if FAutofocusResult then begin
       FAutofocusDone:=true;
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
