@@ -411,7 +411,9 @@ begin
        FRunning:=false;
        exit;
      end;
-  end;
+  end
+  else
+     StopTimer.Enabled:=false;
   if FTargetsRepeat=1 then
     msg(Format(rsStartingSequ, [FName]),1)
   else
@@ -864,6 +866,7 @@ begin
    else begin
      FRunning:=false;
      TargetTimer.Enabled:=false;
+     StopTimer.Enabled:=false;
      StopGuider;
      msg(Format(rsSequenceFini, [FName]),1);
      RunEndAction;
@@ -1482,6 +1485,7 @@ begin
  end
  else begin
   TargetTimer.Enabled:=false;
+  StopTimer.Enabled:=false;
   FCurrentTarget:=-1;
   msg(Format(rsSequenceStop2, [FName]),1);
   if assigned(FonEndSequence) then FonEndSequence(nil);
