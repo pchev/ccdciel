@@ -1898,17 +1898,17 @@ object f_option: Tf_option
       end
       object GroupBox12: TGroupBox
         Left = 8
-        Height = 192
-        Top = 282
+        Height = 154
+        Top = 331
         Width = 456
         Caption = 'Filter offset'
-        ClientHeight = 172
+        ClientHeight = 134
         ClientWidth = 454
         ParentFont = False
         TabOrder = 2
         object FilterList: TStringGrid
           Left = 0
-          Height = 172
+          Height = 134
           Top = 0
           Width = 454
           Align = alClient
@@ -1997,6 +1997,41 @@ object f_option: Tf_option
           OnClick = BtnDisableAutofocusTempClick
           ParentFont = False
           TabOrder = 3
+        end
+      end
+      object GroupBox22: TGroupBox
+        Left = 8
+        Height = 50
+        Top = 281
+        Width = 456
+        Caption = 'Periodic auto-focus'
+        ClientHeight = 30
+        ClientWidth = 454
+        TabOrder = 4
+        object Label127: TLabel
+          Left = 5
+          Height = 19
+          Top = 5
+          Width = 216
+          Caption = 'Automatically run auto-focus every  '
+          ParentColor = False
+        end
+        object AutofocusPeriod: TSpinEdit
+          Left = 270
+          Height = 28
+          Top = 0
+          Width = 60
+          Constraints.MaxHeight = 28
+          MaxValue = 1440
+          TabOrder = 0
+        end
+        object Label128: TLabel
+          Left = 344
+          Height = 19
+          Top = 5
+          Width = 49
+          Caption = 'minutes'
+          ParentColor = False
         end
       end
     end
@@ -4936,7 +4971,7 @@ object f_option: Tf_option
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    left = 32
-    top = 504
+    left = 64
+    top = 520
   end
 end

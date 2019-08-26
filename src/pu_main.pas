@@ -1092,6 +1092,7 @@ begin
   InplaceAutofocus:=false;
   AutofocusExposureFact:=1;
   FocuserLastTemp:=NullCoord;
+  AutoFocusLastTime:=0;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
   FlatWaitDusk:=false;
@@ -3121,6 +3122,7 @@ begin
   if abs(FocuserTempCoeff)<0.001 then FocuserTempCoeff:=0;
   AutofocusTempChange:=config.GetValue('/StarAnalysis/AutofocusTemp',0.0);
   if abs(AutofocusTempChange)<0.001 then AutofocusTempChange:=0;
+  AutofocusPeriod:=config.GetValue('/StarAnalysis/AutofocusPeriod',0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
   AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
@@ -5934,6 +5936,7 @@ begin
       f_option.FocuserTempCoeff.Value:=f_option.FocuserTempCoeff.Value*5/9;
       f_option.AutofocusTemp.Value:=f_option.AutofocusTemp.Value*5/9;
    end;
+   f_option.AutofocusPeriod.Value:=config.GetValue('/StarAnalysis/AutofocusPeriod',AutofocusPeriod);
    f_option.AutofocusTolerance.Value:=config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
    f_option.AutofocusMinSNR.Value:=config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
    f_option.AutofocusSlippageCorrection.Checked:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',AutofocusSlippageCorrection);
@@ -6167,6 +6170,7 @@ begin
      x:=f_option.AutofocusTemp.Value;
      if TemperatureScale=1 then x:=x*9/5;
      config.SetValue('/StarAnalysis/AutofocusTemp',x);
+     config.SetValue('/StarAnalysis/AutofocusPeriod',f_option.AutofocusPeriod.Value);
      config.SetValue('/StarAnalysis/AutofocusTolerance',f_option.AutofocusTolerance.Value);
      config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
      config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
@@ -6944,11 +6948,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     end;
   end;
   // check if refocusing is required
-  if f_capture.FocusNow  // start of step
-     or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
-     or ((ftype=LIGHT) and focuser.hasTemperature and (AutofocusTempChange<>0.0) and
+  if (ftype=LIGHT) and ( // only for light frame
+     f_capture.FocusNow  // start of step
+     or (f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
+     or ((AutofocusPeriod>0) and ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))       // every n minutes
+     or (focuser.hasTemperature and (AutofocusTempChange<>0.0) and                             // temperature change
         (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and (camera.FrameType=LIGHT) and
-        (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))     // temperature change
+        (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))
+        )
      then begin
     if canwait then begin
      f_capture.FocusNum:=0;

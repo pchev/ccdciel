@@ -44,6 +44,10 @@ type
     AutofocusTemp: TFloatSpinEdit;
     ButtonHelp: TButton;
     CbShowHints: TCheckBox;
+    GroupBox22: TGroupBox;
+    Label127: TLabel;
+    Label128: TLabel;
+    AutofocusPeriod: TSpinEdit;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -731,6 +735,9 @@ begin
   AutofocusTemp.Hint := rsAutofocusIfT;
   BtnDisableFocuserTemp.Caption := rsDisable;
   BtnDisableAutofocusTemp.Caption := rsDisable;
+  GroupBox22.Caption:=rsPeriodicAuto;
+  Label127.Caption:=rsAutomaticall2;
+  Label128.Caption:=rsMinutes;
   TabSheet3.Caption := rsAutofocus;
   Autofocusmode.Caption := rsAutofocusMet;
   Label49.Caption := rsExposureTime2;

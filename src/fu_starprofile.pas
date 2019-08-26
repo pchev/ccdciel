@@ -857,7 +857,7 @@ begin
     end
     else txt:=txt+' '+rsAutoFocusErr;
     msg(txt,2);
-
+    AutoFocusLastTime:=now;
     if FAutofocusResult then begin
       FAutofocusDone:=true;
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
