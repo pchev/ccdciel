@@ -101,7 +101,6 @@ type
               dithercount: integer;
               autofocusstart: boolean;
               autofocus: boolean;
-              autofocustemp: boolean;
               autofocuscount: integer;
               filter: integer;
               binx,biny: integer;
@@ -544,7 +543,6 @@ begin
   dithercount:=1;
   autofocusstart:=false;
   autofocus:=false;
-  autofocustemp:=false;
   autofocuscount:=10;
   description:='Step1';
 end;
@@ -563,7 +561,6 @@ begin
   dithercount:=Source.dithercount;
   autofocusstart:=Source.autofocusstart;
   autofocus:=Source.autofocus;
-  autofocustemp:=Source.autofocustemp;
   autofocuscount:=Source.autofocuscount;
   description:=Source.description;
 end;

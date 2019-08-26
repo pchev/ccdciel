@@ -35,7 +35,6 @@ type
   Tf_capture = class(TFrame)
     Binning: TComboBox;
     BtnStart: TButton;
-    CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
     ISObox: TComboBox;
@@ -137,7 +136,6 @@ begin
   Label5.Caption:=rsType;
   CheckBoxDither.Caption:=rsDitherEvery;
   CheckBoxFocus.Caption:=rsFocusEvery;
-  CheckBoxFocusTemp.Caption:=rsFocusOnTempC;
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;
@@ -148,7 +146,6 @@ begin
   FrameType.Hint:=rsTheTypeOfFra;
   DitherCount.Hint:=rsTheNumberOfI2;
   FocusCount.Hint:=rsTheNumberOfI3;
-  CheckBoxFocusTemp.Hint:=rsAutofocusIfT;
   BtnStart.Hint:=rsStartTheCapt
 end;
 
@@ -232,7 +229,6 @@ begin
   if FrameType.ItemIndex<>0 then begin
      CheckBoxDither.Checked:=false;
      CheckBoxFocus.Checked:=false;
-     CheckBoxFocusTemp.Checked:=false;
   end;
 end;
 

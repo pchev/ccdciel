@@ -1,29 +1,29 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 300
+  Height = 280
   Top = 0
   Width = 180
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 300
+  ClientHeight = 280
   ClientWidth = 180
   DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
+  DesignLeft = -2
+  DesignTop = -2
   object Panel1: TPanel
     Left = 0
-    Height = 280
+    Height = 260
     Top = 20
     Width = 180
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 280
+    ClientHeight = 260
     ClientWidth = 180
     ParentFont = False
     TabOrder = 0
@@ -301,11 +301,11 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 47
+      Height = 28
       Top = 203
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 47
+      ClientHeight = 28
       ClientWidth = 178
       ParentFont = False
       TabOrder = 6
@@ -331,23 +331,14 @@ object f_capture: Tf_capture
         TabOrder = 1
         Value = 1
       end
-      object CheckBoxFocusTemp: TCheckBox
-        Left = 4
-        Height = 21
-        Top = 26
-        Width = 164
-        Caption = 'Focus on temp. change'
-        OnClick = CheckLight
-        TabOrder = 2
-      end
     end
     object Panel9: TPanel
       Left = 0
-      Height = 22
-      Top = 250
+      Height = 24
+      Top = 231
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 22
+      ClientHeight = 24
       ClientWidth = 178
       ParentFont = False
       TabOrder = 7
@@ -355,7 +346,7 @@ object f_capture: Tf_capture
         Left = 0
         Height = 22
         Hint = 'Start the capture sequence'
-        Top = 0
+        Top = 2
         Width = 120
         Caption = 'Start'
         OnClick = BtnStartClick
@@ -365,7 +356,7 @@ object f_capture: Tf_capture
       object led: TShape
         Left = 148
         Height = 14
-        Top = 2
+        Top = 6
         Width = 14
         Brush.Color = clGray
         Shape = stCircle

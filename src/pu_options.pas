@@ -728,6 +728,7 @@ begin
   GroupBox16.Caption := rsFocuserTempe3;
   Label84.Caption := rsTemperatureC;
   Label119.Caption := rsRunAutoFocus;
+  AutofocusTemp.Hint := rsAutofocusIfT;
   BtnDisableFocuserTemp.Caption := rsDisable;
   BtnDisableAutofocusTemp.Caption := rsDisable;
   TabSheet3.Caption := rsAutofocus;

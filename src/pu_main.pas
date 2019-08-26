@@ -6946,7 +6946,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check if refocusing is required
   if f_capture.FocusNow  // start of step
      or(f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
-     or (f_capture.CheckBoxFocusTemp.Checked and focuser.hasTemperature and (AutofocusTempChange<>0.0) and
+     or ((ftype=LIGHT) and focuser.hasTemperature and (AutofocusTempChange<>0.0) and
         (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and (camera.FrameType=LIGHT) and
         (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))     // temperature change
      then begin
@@ -7077,7 +7077,6 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if ftype<>LIGHT then begin
      f_capture.CheckBoxDither.Checked:=false;
      f_capture.CheckBoxFocus.Checked:=false;
-     f_capture.CheckBoxFocusTemp.Checked:=false;
   end;
   // set readout mode
   if camera.hasReadOut then begin

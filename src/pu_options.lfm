@@ -65,11 +65,11 @@ object f_option: Tf_option
     Height = 519
     Top = 0
     Width = 530
-    ActivePage = TabSheet3
+    ActivePage = TabSheet10
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 7
+    TabIndex = 6
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -1921,8 +1921,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            164
-            164
+            155
+            155
           )
         end
       end

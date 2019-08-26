@@ -20,6 +20,7 @@ object f_main: Tf_main
   OnResize = FormResize
   OnShow = FormShow
   ShowHint = True
+  LCLVersion = '2.0.4.0'
   object Panel1: TPanel
     Left = 0
     Height = 559
@@ -156,7 +157,7 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 484
         ClientWidth = 210
         ImageIndex = 0
         ParentFont = False
@@ -180,7 +181,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 484
         ClientWidth = 210
         ImageIndex = 1
         ParentFont = False
@@ -204,7 +205,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 484
         ClientWidth = 210
         ImageIndex = 2
         ParentFont = False
@@ -228,7 +229,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 484
         ClientWidth = 210
         ImageIndex = 3
         ParentFont = False
@@ -252,7 +253,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 484
         ClientWidth = 210
         ImageIndex = 4
         ParentFont = False

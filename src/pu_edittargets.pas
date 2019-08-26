@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_anno
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcolaftemp=9; pcoldither=10; pcolgain=11;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcoldither=9; pcolgain=10;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3;
 
@@ -443,7 +443,6 @@ begin
   StepList.Columns.Items[pcolcount-1].Title.Caption := rsCount;
   StepList.Columns.Items[pcolafstart-1].Title.Caption := Format(rsAutofocusBef,[crlf]);
   StepList.Columns.Items[pcolafevery-1].Title.Caption := Format(rsAutofocusEve,[crlf]);
-  StepList.Columns.Items[pcolaftemp-1].Title.Caption := Format(rsAutofocusWhe,[crlf]);
   StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
   StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
   Label1.Caption := rsPlan;
@@ -2119,7 +2118,6 @@ begin
   p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
   p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
   p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
-  p.autofocustemp:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusTemp',false);
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
@@ -2198,20 +2196,17 @@ begin
            StepList.Cells[pcolfilter,n]:=Filter0;
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
-           StepList.Cells[pcolaftemp,n]:='';
            StepList.Cells[pcoldither,n]:='0';
         end;
     Dark : begin
            StepList.Cells[pcolfilter,n]:=Filter0;
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
-           StepList.Cells[pcolaftemp,n]:='';
            StepList.Cells[pcoldither,n]:='0';
         end;
     Flat : begin
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
-           StepList.Cells[pcolaftemp,n]:='';
            StepList.Cells[pcoldither,n]:='0';
         end;
   end;
@@ -2247,7 +2242,6 @@ begin
     StepList.Cells[pcolafevery,n]:=IntToStr(p.autofocuscount)
   else
     StepList.Cells[pcolafevery,n]:='';
-  StepList.Cells[pcolaftemp,n]:=BoolToStr(p.autofocustemp,'1','0');
   LockStep:=false;
 end;
 
@@ -2338,10 +2332,6 @@ begin
      p.autofocuscount:=j
   else
      p.autofocuscount:=0;
-
-  ok:=StepList.Cells[pcolaftemp,n]='1';
-  StepsModified:=StepsModified or (p.autofocustemp<>ok);
-  p.autofocustemp:=(p.frtype=LIGHT) and ok;
   StepList.Cells[1,n]:=p.description;
   SetStep(n,p);
 end;
@@ -2351,7 +2341,6 @@ begin
   if (aRow>0)and(StepList.Cells[pcoltype,aRow]<>trim(FrameName[ord(LIGHT)])) then begin
     StepList.Cells[pcolafstart,aRow]:='';
     StepList.Cells[pcolafevery,aRow]:='0';
-    StepList.Cells[pcolaftemp,aRow]:='';
     StepList.Cells[pcoldither,aRow]:='0';
   end;
 end;
@@ -2361,7 +2350,6 @@ begin
   if (aRow>0)and(StepList.Cells[pcoltype,aRow]<>trim(FrameName[ord(LIGHT)])) then begin
     StepList.Cells[pcolafstart,aRow]:='';
     StepList.Cells[pcolafevery,aRow]:='0';
-    StepList.Cells[pcolaftemp,aRow]:='';
     StepList.Cells[pcoldither,aRow]:='0';
   end;
   StepChange(sender);
@@ -2392,7 +2380,6 @@ begin
     pcolcount   : HintText:=rsTheNumberOfI4;
     pcolafstart : HintText:=rsAutofocusAtT;
     pcolafevery : HintText:=rsRedoAutofocu;
-    pcolaftemp  : HintText:=rsRedoAutofocu2;
     pcoldither  : HintText:=rsDitherAfterT;
     pcolgain : HintText:=rsCameraGain;
     else HintText:='';
@@ -2410,8 +2397,6 @@ begin
      Editor:=StepList.EditorByStyle(cbsPickList) // filter selection
   else if (aCol=pcolafstart) then
      Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus at start selection
-  else if (aCol=pcolaftemp) then
-     Editor:=StepList.EditorByStyle(cbsCheckboxColumn) // autofocus on temperature selection
   else if (aCol=pcolgain) then begin
     if hasGainISO then
       Editor:=StepList.EditorByStyle(cbsPickList) // ISO list
@@ -2535,7 +2520,6 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',p.autofocusstart);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Autofocus',p.autofocus);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',p.autofocuscount);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusTemp',p.autofocustemp);
   end;
   pfile.Flush;
   pfile.Free;

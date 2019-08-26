@@ -1081,12 +1081,12 @@ object f_EditTargets: Tf_EditTargets
             Width = 970
             Align = alClient
             AutoFillColumns = True
-            ColCount = 12
+            ColCount = 11
             Columns = <            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 91
+                Width = 106
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1126,7 +1126,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 91
+                Width = 106
               end            
               item
                 MinSize = 70
@@ -1140,29 +1140,23 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsCheckboxColumn
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 91
+                Width = 106
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 91
-              end            
-              item
-                ButtonStyle = cbsCheckboxColumn
-                Title.MultiLine = True
-                Title.Caption = 'Autofocus when temperature change'
-                Width = 91
+                Width = 106
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 91
+                Width = 106
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 92
+                Width = 108
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1179,17 +1173,16 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              91
+              106
               70
               80
               80
-              91
+              106
               70
-              91
-              91
-              91
-              91
-              92
+              106
+              106
+              106
+              108
             )
           end
           object Panel17: TPanel

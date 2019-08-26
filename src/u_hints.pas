@@ -168,7 +168,6 @@ resourcestring
   rsTheNumberOfI4 = 'The number of image for this step';
   rsAutofocusAtT = 'Autofocus at the start of this step';
   rsRedoAutofocu = 'Redo autofocus after a number of frames';
-  rsRedoAutofocu2 = 'Redo autofocus when the temperature change';
   rsDitherAfterT = 'Dither on the specified frame interval';
   rsSetHereTheAc = 'Set here the action to take after the sequence is terminated';
   rsPixelBinning = 'Pixel binning';
