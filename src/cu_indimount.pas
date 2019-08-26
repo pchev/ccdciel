@@ -718,7 +718,7 @@ begin
     result:=true;
   end
   else if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
-    msg(rsStartTraking);
+    msg(rsStartTracking);
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);

@@ -1402,7 +1402,7 @@ end;
 
 procedure Tf_setup.IndiDisconnected(Sender: TObject);
 begin
-   IndiTimer.Interval:=100; // not connect, stop immediatelly
+   IndiTimer.Interval:=100; // not connect, stop immediately
    IndiTimer.Enabled:=false;
    IndiTimer.Enabled:=true;
 end;

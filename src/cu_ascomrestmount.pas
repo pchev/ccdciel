@@ -610,7 +610,7 @@ begin
    try
    if CanSetTracking and (not V.Get('tracking').AsBool) then begin
      try
-      msg(rsStartTraking);
+      msg(rsStartTracking);
       V.Put('Tracking',true);
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);

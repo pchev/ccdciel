@@ -626,7 +626,7 @@ begin
    try
    if CanSetTracking and (not V.tracking) then begin
      try
-      msg(rsStartTraking);
+      msg(rsStartTracking);
       V.tracking:=true;
      except
        on E: Exception do msg('Set tracking error: ' + E.Message,0);

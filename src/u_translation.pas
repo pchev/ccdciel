@@ -785,7 +785,7 @@ resourcestring
   rsSetFilterPos = 'Set filter position %s';
   rsSetCooler = 'Set cooler %s';
   rsCannotSyncWh = 'Cannot Sync when the mount is not tracking';
-  rsStartTraking = 'start traking';
+  rsStartTracking = 'start tracking';
   rsStopTelescop = 'Stop telescope motion.';
   rsError2 = 'Error';
   rsNoResponseFr = 'No response from server';
@@ -798,7 +798,7 @@ resourcestring
   rsSequenceCanc = 'Sequence %s canceled before start';
   rsStopTimeAlre = 'Stop time %s already passed';
   rsNoDuskToday = 'No dusk today';
-  rsSequenceStar = 'Sequence %s start immediatelly';
+  rsSequenceStar = 'Sequence %s start immediately';
   rsSequenceIgno = 'Sequence %s ignore stop at dawn';
   rsNoDawnToday = 'No dawn today';
   rsStartingSequ = 'Starting sequence %s';
