@@ -1092,7 +1092,7 @@ begin
   InplaceAutofocus:=false;
   AutofocusExposureFact:=1;
   FocuserLastTemp:=NullCoord;
-  AutoFocusLastTime:=0;
+  AutoFocusLastTime:=NullCoord;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
   FlatWaitDusk:=false;
@@ -6951,7 +6951,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if (ftype=LIGHT) and ( // only for light frame
      f_capture.FocusNow  // start of step
      or (f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
-     or ((AutofocusPeriod>0) and ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))       // every n minutes
+     or ((AutofocusPeriod>0) and (AutoFocusLastTime<>NullCoord) and                            // every n minutes
+        ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))
      or (focuser.hasTemperature and (AutofocusTempChange<>0.0) and                             // temperature change
         (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and
         (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))
@@ -6987,13 +6988,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   end
   else
    if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or(AutofocusTempChange<>0.0)) then begin
+      // Show message when next autofocus is due
       txt:='';
       if f_capture.CheckBoxFocus.Checked then begin
         i:=f_capture.FocusCount.Value-f_capture.FocusNum;
-        buf:=blank+inttostr(i)+blank+rsImage;
+        buf:=blank+inttostr(i)+blank+LowerCase(rsImage);
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
-      if AutofocusPeriod>0 then begin
+      if (AutofocusPeriod>0)and(AutoFocusLastTime<>NullCoord) then begin
         i:=round(AutofocusPeriod-(minperday*(now-AutoFocusLastTime)));
         buf:=blank+inttostr(i)+blank+rsMinutes;
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
