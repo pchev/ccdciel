@@ -1113,6 +1113,8 @@ resourcestring
   rsRequestedToN = 'Requested to not run the termination action';
   rsPeriodicAuto = 'Periodic auto-focus';
   rsAutomaticall2 = 'Automatically run auto-focus every';
+  rsAutofocusDue = 'Autofocus due in';
+  rsOr = 'or';
 
 implementation
 

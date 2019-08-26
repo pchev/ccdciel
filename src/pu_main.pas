@@ -6825,9 +6825,9 @@ begin
 end;
 
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
-var e: double;
-    buf: string;
-    waittime: integer;
+var e,x: double;
+    buf,txt: string;
+    waittime,i: integer;
     ftype:TFrameType;
 begin
 // If called with canwait=false this function only check for operation
@@ -6953,7 +6953,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      or (f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
      or ((AutofocusPeriod>0) and ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))       // every n minutes
      or (focuser.hasTemperature and (AutofocusTempChange<>0.0) and                             // temperature change
-        (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and (camera.FrameType=LIGHT) and
+        (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and
         (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))
         )
      then begin
@@ -6984,7 +6984,27 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
    else begin
     exit; // cannot start now
    end;
-  end;
+  end
+  else
+   if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or(AutofocusTempChange<>0.0)) then begin
+      txt:='';
+      if f_capture.CheckBoxFocus.Checked then begin
+        i:=f_capture.FocusCount.Value-f_capture.FocusNum;
+        buf:=blank+inttostr(i)+blank+rsImage;
+        if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
+      end;
+      if AutofocusPeriod>0 then begin
+        i:=round(AutofocusPeriod-(minperday*(now-AutoFocusLastTime)));
+        buf:=blank+inttostr(i)+blank+rsMinutes;
+        if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
+      end;
+      if focuser.hasTemperature and(AutofocusTempChange<>0.0)and(FocuserLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
+        x:=AutofocusTempChange-(abs(FocuserLastTemp-FocuserTemp));
+        buf:=blank+FormatFloat(f1,x)+blank+'C';
+        if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
+      end;
+      if txt>'' then NewMessage(rsAutofocusDue+blank+txt,3);
+   end;
   // check if dithering is required
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
    if canwait then begin
