@@ -2754,8 +2754,8 @@ msgstr ""
 msgid "Cannot Sync when the mount is not tracking"
 msgstr ""
 
-#: u_translation:rsstarttraking
-msgid "start traking"
+#: u_translation:rsstarttracking
+msgid "start tracking"
 msgstr ""
 
 #: u_translation:rsstoptelescop
@@ -2807,7 +2807,7 @@ msgid "No dusk today"
 msgstr ""
 
 #: u_translation:rssequencestar
-msgid "Sequence %s start immediatelly"
+msgid "Sequence %s start immediately"
 msgstr ""
 
 #: u_translation:rssequenceigno
@@ -3726,14 +3726,6 @@ msgstr ""
 msgid "column"
 msgstr ""
 
-#: u_translation:rsfocusontempc
-msgid "Focus on temp. change"
-msgstr ""
-
-#: u_translation:rsautofocuswhe
-msgid "Autofocus when%stemperature change"
-msgstr ""
-
 #: u_translation:rsusername
 msgid "User name"
 msgstr ""
@@ -4012,5 +4004,41 @@ msgstr ""
 
 #: u_translation:rsazimuth
 msgid "Azimuth"
+msgstr ""
+
+#: u_translation:rsinsertrows
+msgid "Insert rows"
+msgstr ""
+
+#: u_translation:rsdoyouwanttor2
+msgid "Do you want to run the termination action now?"
+msgstr ""
+
+#: u_translation:rsyes
+msgid "Yes"
+msgstr ""
+
+#: u_translation:rsno
+msgid "No"
+msgstr ""
+
+#: u_translation:rsrequestedton
+msgid "Requested to not run the termination action"
+msgstr ""
+
+#: u_translation:rsperiodicauto
+msgid "Periodic auto-focus"
+msgstr ""
+
+#: u_translation:rsautomaticall2
+msgid "Automatically run auto-focus every"
+msgstr ""
+
+#: u_translation:rsautofocusdue
+msgid "Autofocus due in"
+msgstr ""
+
+#: u_translation:rsor
+msgid "or"
 msgstr ""
 

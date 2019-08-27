@@ -486,10 +486,6 @@ msgstr ""
 msgid "Redo autofocus after a number of frames"
 msgstr ""
 
-#: u_hints:rsredoautofocu2
-msgid "Redo autofocus when the temperature change"
-msgstr ""
-
 #: u_hints:rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr ""

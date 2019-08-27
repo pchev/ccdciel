@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-11 13:03+0000\n"
-"PO-Revision-Date: 2019-08-09 21:07+0000\n"
+"POT-Creation-Date: 2019-08-27 11:12+0000\n"
+"PO-Revision-Date: 2019-08-27 11:29+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-11 13:40+0000\n"
-"X-Generator: Launchpad (build 19021)\n"
+"X-Launchpad-Export-Date: 2019-08-27 11:32+0000\n"
+"X-Generator: Launchpad (build 19034)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -172,6 +172,10 @@ msgstr "L'autofocus est abandonné car le HFD ne peut être mesuré."
 msgid "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
 msgstr "L'autofocus est abandonné à cause d'un SNR trop bas, POS=%s HFD=%s POINTE:%s SNR:%s"
 
+#: u_translation.rsautofocusdue
+msgid "Autofocus due in"
+msgstr "L'autofocus sera refait dans"
+
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
 msgstr "Erreur d'autofocus"
@@ -272,10 +276,6 @@ msgstr "Autofocus réussi"
 msgid "Autofocus tolerance "
 msgstr "Tolérance de mise au point "
 
-#: u_translation.rsautofocuswhe
-msgid "Autofocus when%stemperature change"
-msgstr "Autofocus si la%stempérature change"
-
 #: u_translation.rsautoguider
 msgid "Autoguider"
 msgstr "Auto-guideur"
@@ -315,6 +315,10 @@ msgstr "L'autoguidage est arrêter depuis %s minutes, la séquence sera stoppée
 #: u_translation.rsautomaticall
 msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
 msgstr "Asservir automatiquement \"Parquer le dôme\" à \"Parquer le télescope\""
+
+#: u_translation.rsautomaticall2
+msgid "Automatically run auto-focus every"
+msgstr "Faire l'autofocus automatiquement toute les"
 
 #: u_translation.rsautomaticcoo
 msgid "Automatic cooling "
@@ -1040,6 +1044,10 @@ msgstr "Voulez-vous supprimer le fichier %s ?"
 msgid "Do you want to retry?"
 msgstr "Voulez-vous réessayer?"
 
+#: u_translation.rsdoyouwanttor2
+msgid "Do you want to run the termination action now?"
+msgstr "Voulez-vous exécuter les actions de fin maintenant?"
+
 #: u_translation.rsdusk
 msgid "dusk"
 msgstr "crépuscule"
@@ -1356,10 +1364,6 @@ msgstr "Compensation de la température du focuseur"
 msgid "Focus every"
 msgstr "Focus tous les"
 
-#: u_translation.rsfocusontempc
-msgid "Focus on temp. change"
-msgstr "Focus si temp. change"
-
 #: u_translation.rsfocuspositio
 msgid "Focus position"
 msgstr "Position du focus"
@@ -1599,6 +1603,10 @@ msgstr "Dans la monture"
 #: u_translation.rsinplaceautof
 msgid "In place autofocus failed!"
 msgstr "La mise au point sur place a échoué!"
+
+#: u_translation.rsinsertrows
+msgid "Insert rows"
+msgstr "Insérer des lignes"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -1960,6 +1968,10 @@ msgstr "Nouvelle cible"
 msgid "Next"
 msgstr "Suivant"
 
+#: u_translation.rsno
+msgid "No"
+msgstr "Non"
+
 #: u_translation.rsnoalignments
 msgid "No alignment star found for stacking"
 msgstr "Aucune étoile de référence trouvée pour l'empilement"
@@ -2180,6 +2192,10 @@ msgstr "Options :%s"
 msgid "Options"
 msgstr "Options"
 
+#: u_translation.rsor
+msgid "or"
+msgstr "ou"
+
 #: u_translation.rsotheroptions
 msgid "Other options "
 msgstr "Autres options "
@@ -2259,6 +2275,10 @@ msgstr "Interrompt la séquence quand les conditions sont hors des limites"
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
 msgstr "Documentation PDF"
+
+#: u_translation.rsperiodicauto
+msgid "Periodic auto-focus"
+msgstr "Autofocus périodique"
 
 #: u_translation.rspixels
 msgid "Pixels"
@@ -2555,6 +2575,10 @@ msgstr "Répéter ce plan"
 #: u_translation.rsreportaprobl
 msgid "Report a problem"
 msgstr "Signaler un problème"
+
+#: u_translation.rsrequestedton
+msgid "Requested to not run the termination action"
+msgstr "Demande de ne pas exécuter les actions de fin"
 
 #: u_translation.rsrequesttosto
 msgid "Request to stop focuser calibration"
@@ -2897,7 +2921,7 @@ msgid "Sequence paused for bad weather ..."
 msgstr "Séquence en pause pour mauvais temps ..."
 
 #: u_translation.rssequencestar
-msgid "Sequence %s start immediatelly"
+msgid "Sequence %s start immediately"
 msgstr "La séquence %s démarre immédiatement"
 
 #: u_translation.rssequencestop
@@ -3268,8 +3292,8 @@ msgstr "Démarrer le suivi du télescope"
 msgid "Start time"
 msgstr "Heure de début"
 
-#: u_translation.rsstarttraking
-msgid "start traking"
+#: u_translation.rsstarttracking
+msgid "start tracking"
 msgstr "début du suivi"
 
 #: u_translation.rsstatus
@@ -4019,6 +4043,10 @@ msgstr "Rafale de vent"
 #: u_translation.rswindspeed
 msgid "Wind speed"
 msgstr "Vitesse du vent"
+
+#: u_translation.rsyes
+msgid "Yes"
+msgstr "Oui"
 
 #: u_translation.rsyoucansetthe
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
