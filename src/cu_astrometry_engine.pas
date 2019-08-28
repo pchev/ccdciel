@@ -35,7 +35,7 @@ type
 TAstrometry_engine = class(TThread)
    private
      FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile: string;
-     FPlateSolveFolder,FASTAPFolder: string;
+     FPlateSolveFolder,FASTAPFolder,FAstrometryPath: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fplot: boolean;
@@ -80,6 +80,7 @@ TAstrometry_engine = class(TThread)
      property result: integer read Fresult;
      property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
+     property AstrometryPath: string read FAstrometryPath write FAstrometryPath;
      property CygwinPath: string read FCygwinPath write FCygwinPath;
      property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
      property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
@@ -320,7 +321,11 @@ if FResolver=ResolverAstrometryNet then begin
   buf:=buf+' ""'+fIn+'""'+blank;
   Fparam.Add(buf+'"');
   {$else}
-  Fcmd:='solve-field';
+  if FAstrometryPath='' then
+    Fcmd:='solve-field'
+  else begin
+    Fcmd:=slash(FAstrometryPath)+'solve-field';
+  end;
   Fparam.Add('--overwrite');
   if (Fscalelow>0)and(Fscalehigh>0) then begin
     Fparam.Add('--scale-low');
@@ -447,6 +452,9 @@ if FResolver=ResolverAstrometryNet then begin
   end
   else
     logok:=false;
+  if FAstrometryPath<>'' then begin
+    process.Environment.Add('PATH='+GetEnvironmentVariable('PATH')+':'+FAstrometryPath)
+  end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   if not FUseWSL then process.Options:=[poUsePipes,poStderrToOutPut];

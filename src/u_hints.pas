@@ -179,6 +179,7 @@ resourcestring
   rsStayAtTheTar = 'Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star.';
   rsPriorToSlewi = 'Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium.';
   rsRepeatThePla = 'Repeat the plan for this object.%sSet to zero to not process this target.';
+  rsLetBlankForD = 'Let blank for default system search path';
 
 implementation
 

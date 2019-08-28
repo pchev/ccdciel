@@ -44,10 +44,13 @@ type
     AutofocusTemp: TFloatSpinEdit;
     ButtonHelp: TButton;
     CbShowHints: TCheckBox;
+    AstrometryPathPanel: TPanel;
+    AstrometryPath: TDirectoryEdit;
     GroupBox22: TGroupBox;
     Label127: TLabel;
     Label128: TLabel;
     AutofocusPeriod: TSpinEdit;
+    Label129: TLabel;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -591,6 +594,8 @@ begin
     CygwinPanel.Visible:=true;
     ElbrusUnixpath.Visible:=false;
     Label13.Visible:=false;
+  {$else}
+  AstrometryPathPanel.Visible:=true;
   {$endif}
   ScaleDPI(Self);
   Setlang;
@@ -784,6 +789,7 @@ begin
   Label27.Caption := rsOtherOptions;
   Label34.Caption := rsCygwinPath;
   AstUseScript.Caption := rsUseCustomScr;
+  label129.Caption := rsCommandPath;
   Label12.Caption := rsElbrusImages;
   Label13.Caption := rsImagesFolder;
   Label15.Caption := Format(rsBeforeYouCan, [#10]);
@@ -935,6 +941,7 @@ begin
   AutofocusSlippageCorrection.Hint:=Format(rsTryToCorrect, [crlf]);
   FocusStarMag.Hint:=Format(rsTheMagnitude, [crlf]);
   AutofocusPauseGuider.Hint:=rsBeSureToPaus;
+  AstrometryPath.Hint := rsLetBlankForD;
   ElbrusFolder.Hint:=rsTheElbrusIma;
   ElbrusUnixpath.Hint:=rsTheUnixPathE;
 

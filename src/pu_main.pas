@@ -3168,7 +3168,7 @@ begin
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
-    v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstUseScript',false));
+    v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstrometryPath',''),config.GetValue('/Astrometry/AstUseScript',false));
     if v<>'unknown' then begin
       if v>='0.68' then begin // option --no-fits2fits was removed in version 0.68
          buf:=StringReplace(buf,'--no-fits2fits','',[rfReplaceAll]);
@@ -5981,6 +5981,7 @@ begin
    f_option.AstCustScript.Text:=config.GetValue('/Astrometry/AstCustScript','');
    f_option.AstCustScript.Visible:=f_option.AstUseScript.Checked;
    f_option.CygwinPath.Text:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
+   f_option.AstrometryPath.Text:=config.GetValue('/Astrometry/AstrometryPath','');
    f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
@@ -6250,6 +6251,7 @@ begin
      config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
      config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked);
      config.SetValue('/Astrometry/AstCustScript',f_option.AstCustScript.Text);
+     config.SetValue('/Astrometry/AstrometryPath',trim(f_option.AstrometryPath.Text));
      config.SetValue('/Astrometry/CygwinPath',f_option.CygwinPath.Text);
      config.SetValue('/Astrometry/ElbrusFolder',f_option.ElbrusFolder.Text);
      {$ifdef unix}

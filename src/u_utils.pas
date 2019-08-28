@@ -143,7 +143,7 @@ procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
 function AscomVersion: string;
 function IndiVersion: string;
-function AstrometryVersion(resolver:integer; cygwinpath:string; usescript:boolean):string;
+function AstrometryVersion(resolver:integer; cygwinpath,cmdpath:string; usescript:boolean):string;
 function TempDisplay(cf:integer; t:double):double;
 function TempCelsius(cf:integer; t:double):double;
 
@@ -2924,7 +2924,7 @@ except
 end;
 end;
 
-function AstrometryVersion(resolver:integer; cygwinpath:string; usescript:boolean):string;
+function AstrometryVersion(resolver:integer; cygwinpath,cmdpath:string; usescript:boolean):string;
 var P: TProcess;
     i: integer;
     endtime: double;
@@ -2944,7 +2944,12 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
   buf:=buf+' --help "';
   P.Parameters.Add(buf);
   {$else}
-  P.Executable:='solve-field';
+  if cmdpath='' then
+    P.Executable:='solve-field'
+  else begin
+    P.Executable:=slash(cmdpath)+'solve-field';
+    P.Environment.Add('PATH='+GetEnvironmentVariable('PATH')+':'+cmdpath)
+  end;
   P.Parameters.Add('--help');
   {$endif}
   P.ShowWindow:=swoHIDE;

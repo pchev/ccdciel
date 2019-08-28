@@ -1115,6 +1115,7 @@ resourcestring
   rsAutomaticall2 = 'Automatically run auto-focus every';
   rsAutofocusDue = 'Autofocus due in';
   rsOr = 'or';
+  rsCommandPath = 'Command path';
 
 implementation
 
