@@ -52,6 +52,7 @@ if ((deepstring.count<10) or (deepstring.count>=50000) {hyperleda loaded}) then 
     end;
   end;
 end;
+
 procedure load_hyperleda;{load the HyperLeda database once. If loaded no action}
 begin
 if deepstring.count<50000 then {too small for HyperLeda. Empthy or normal database loaded. Replace by large HyperLeda}
@@ -239,7 +240,7 @@ begin
                    end;
                 6: begin val(data1,pa,fout2);{accept floating points}
                          if fout2<>0 then pa:=999;end;
-                         {orientation 0 komt ook voor daarom if not know=empthy equals 999}
+                         {orientation 0 is possible, therefore unknown=empthy equals 999}
        end;
        inc(x);
     until ((z>=6) or (fout<>0));
@@ -247,7 +248,7 @@ begin
 end;
 
 
-procedure plot_glx(dc:tcanvas;x9,y9,diameter,ratio {ratio width/length},orientation:double); {draw oval or galaxy}
+procedure plot_glx(dc:tcanvas;x9,y9,diameter,ratio {ratio width/length},orientation:double); {draw oval or galaxy. If orientation is zero, galaxy is vertical.}
 var   glx :array[0..127 {nr}+1] of tpoint;
       i,nr           : integer;
       r, sin_ori,cos_ori              : double;
@@ -261,8 +262,8 @@ begin
    begin
      r:=sqrt(sqr(diameter*ratio)/(1.00000000000001-(1-sqr(ratio))*sqr(cos(-pi*i*2/(nr))))); {radius ellips}
       sincos(orientation+pi*i*2/nr, sin_ori, cos_ori);
-     glx[i].x:=round(x9    +r * cos_ori );
-     glx[i].y:=round(y9    +r * sin_ori );
+     glx[i].x:=round(x9    +r * sin_ori );
+     glx[i].y:=round(y9    +r * cos_ori );
    end;
    dc.polygon(glx,nr+1);
 end;
@@ -469,7 +470,7 @@ begin
         else
         begin {normal plot}
           if PA<>999 then
-          plot_glx(cnv,x,y,len,width1/length1,-(pa*flipped-90+crota2)*pi/180) {draw oval or galaxy}
+          plot_glx(cnv,x,y,len,width1/length1,(pa*flipped+crota2)*pi/180) {draw oval or galaxy}
         else
           cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
         end;{normal plot}
