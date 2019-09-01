@@ -693,31 +693,41 @@ end;
 
 function TFits.GetStatistics: string;
 var ff: string;
-    x,c: double;
-    i,maxh,maxp:integer;
+    x: double;
+    i,maxh,maxp,sz,sz2,npx,median:integer;
 begin
   if FFitsInfo.valid then begin
     if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
+    sz:=Fwidth*Fheight;
+    sz2:=sz div 2;
     result:=rsImageStatist+crlf;
+    result:=Format(rsPixelCount, [result, blank+IntToStr(sz)+crlf]);
+    // min, max
     result:=result+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
     result:=result+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
-    maxh:=0;
+    // mode, median
+    median:=0; maxh:=0;  npx:=0;
     for i:=0 to high(word) do begin
+      npx:=npx+FHistogram[i]-1;
+      if (median=0) and (npx>sz2) then
+          median:=i;
       if FHistogram[i]>maxh then begin
           maxh:=FHistogram[i];
           maxp:=i;
       end;
     end;
     if maxh>0 then begin
-      if Fdmax>Fdmin then
-        c:=MaxWord/(Fdmax-Fdmin)
-      else
-        c:=1;
-      x:=Fdmin+maxp/c;
+      x:= FimageMin+maxp/FimageC;
       result:=result+rsMode+blank+FormatFloat(ff, x)+crlf;
     end;
-    result:=result+rsMean+blank+FormatFloat(ff, Fmean)+crlf;
-    result:=result+rsStdDev+blank+FormatFloat(ff, Fsigma)+crlf;
+    if median>0 then begin
+      x:= FimageMin+median/FimageC;
+      result:=Format(rsMedian, [result, blank+FormatFloat(ff, x)+crlf]);
+    end;
+    // mean
+    result:=result+rsMean+blank+FormatFloat(f1, Fmean)+crlf;
+    // sigma
+    result:=result+rsStdDev+blank+FormatFloat(f1, Fsigma)+crlf;
   end;
 end;
 

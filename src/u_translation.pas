@@ -1116,6 +1116,8 @@ resourcestring
   rsAutofocusDue = 'Autofocus due in';
   rsOr = 'or';
   rsCommandPath = 'Command path';
+  rsPixelCount = '%sPixel count:%s';
+  rsMedian = '%sMedian:%s';
 
 implementation
 
