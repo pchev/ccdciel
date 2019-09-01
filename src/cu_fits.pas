@@ -1110,16 +1110,16 @@ case FFitsInfo.bitpix of
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                if n_axis=3 then begin
                  h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
@@ -1135,16 +1135,16 @@ case FFitsInfo.bitpix of
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                if n_axis=3 then begin
                  h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
@@ -1160,16 +1160,16 @@ case FFitsInfo.bitpix of
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                if n_axis=3 then begin
                  h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
@@ -1185,16 +1185,16 @@ case FFitsInfo.bitpix of
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                if n_axis=3 then begin
                  h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
@@ -1210,16 +1210,16 @@ case FFitsInfo.bitpix of
            for i:=0 to Fheight-1 do begin
            for j := 0 to Fwidth-1 do begin
                xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[0,i,j];
-               x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                Fimage[0,i,j]:=x;
                if n_axis=3 then begin
                  h:=x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[1,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[1,i,j]:=x;
                  h:=h+x;
                  xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[2,i,j];
-                 x:=trunc(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                  Fimage[2,i,j]:=x;
                  x:=(h+x) div 3;
                end;
@@ -1340,15 +1340,15 @@ for i:=0 to Fheight-1 do begin
    p := bgra.Scanline[i];
    for j := 0 to Fwidth-1 do begin
        xx:=Fimage[0,i,j];
-       x:=trunc(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+       x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
        if n_axis=3 then begin
          // 3 chanel color image
          p^.red:=GammaCorr(x);
          xxg:=Fimage[1,i,j];
-         x:=trunc(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
+         x:=round(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
          p^.green:=GammaCorr(x);
          xxb:=Fimage[2,i,j];
-         x:=trunc(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
+         x:=round(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
          p^.blue:=GammaCorr(x);
          if FMarkOverflow then begin
            if maxvalue([xx,xxg,xxb])>=overflow then
