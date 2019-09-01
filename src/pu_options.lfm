@@ -1,11 +1,11 @@
 object f_option: Tf_option
   Left = 574
-  Height = 577
+  Height = 595
   Top = 118
   Width = 530
   ActiveControl = PageControl1
   Caption = 'Options'
-  ClientHeight = 577
+  ClientHeight = 595
   ClientWidth = 530
   DesignTimePPI = 95
   OnCreate = FormCreate
@@ -13,7 +13,7 @@ object f_option: Tf_option
   object Panel1: TPanel
     Left = 0
     Height = 58
-    Top = 519
+    Top = 537
     Width = 530
     Align = alBottom
     ClientHeight = 58
@@ -62,7 +62,7 @@ object f_option: Tf_option
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 519
+    Height = 537
     Top = 0
     Width = 530
     ActivePage = TabSheet4
@@ -74,7 +74,7 @@ object f_option: Tf_option
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object ButtonDir: TButton
@@ -351,7 +351,7 @@ object f_option: Tf_option
     end
     object TabSheet2: TTabSheet
       Caption = 'Observatory'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object Label5: TLabel
@@ -664,7 +664,7 @@ object f_option: Tf_option
     end
     object TabSheet15: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       object Panel4: TPanel
         Left = 4
@@ -806,7 +806,7 @@ object f_option: Tf_option
     end
     object TabSheet8: TTabSheet
       Caption = 'Preview'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object GroupBox8: TGroupBox
@@ -1133,7 +1133,7 @@ object f_option: Tf_option
     end
     object TabSheet11: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object GroupBox1: TGroupBox
@@ -1456,7 +1456,7 @@ object f_option: Tf_option
     end
     object TabSheet12: TTabSheet
       Caption = 'Flat'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object FlatType: TRadioGroup
@@ -1749,7 +1749,7 @@ object f_option: Tf_option
     end
     object TabSheet10: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object GroupBox2: TGroupBox
@@ -1921,8 +1921,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            155
-            155
+            164
+            164
           )
         end
       end
@@ -2037,7 +2037,7 @@ object f_option: Tf_option
     end
     object TabSheet3: TTabSheet
       Caption = 'Autofocus'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object Autofocusmode: TRadioGroup
@@ -2591,7 +2591,7 @@ object f_option: Tf_option
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object GroupBox4: TGroupBox
@@ -2696,13 +2696,14 @@ object f_option: Tf_option
         TabStop = True
         object Page1: TPage
           object astrometrynet: TGroupBox
-            Left = 8
-            Height = 288
-            Top = 8
-            Width = 451
+            Left = 0
+            Height = 292
+            Top = 0
+            Width = 467
+            Align = alClient
             Caption = 'Astrometry.Net'
-            ClientHeight = 268
-            ClientWidth = 449
+            ClientHeight = 272
+            ClientWidth = 465
             ParentFont = False
             TabOrder = 0
             object Label6: TLabel
@@ -2717,7 +2718,7 @@ object f_option: Tf_option
               WordWrap = True
             end
             object Label7: TLabel
-              Left = 236
+              Left = 244
               Height = 19
               Top = 10
               Width = 89
@@ -2735,7 +2736,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object Label9: TLabel
-              Left = 236
+              Left = 244
               Height = 40
               Top = 48
               Width = 132
@@ -2767,7 +2768,7 @@ object f_option: Tf_option
               Left = 123
               Height = 28
               Top = 112
-              Width = 305
+              Width = 313
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -2776,15 +2777,15 @@ object f_option: Tf_option
               Left = 7
               Height = 40
               Top = 216
-              Width = 418
+              Width = 449
               BevelOuter = bvNone
               ClientHeight = 40
-              ClientWidth = 418
+              ClientWidth = 449
               ParentFont = False
               TabOrder = 2
               Visible = False
               object Label34: TLabel
-                Left = 14
+                Left = 4
                 Height = 19
                 Top = 12
                 Width = 75
@@ -2796,7 +2797,7 @@ object f_option: Tf_option
                 Left = 112
                 Height = 28
                 Top = 6
-                Width = 302
+                Width = 318
                 ShowHidden = False
                 ButtonWidth = 23
                 Constraints.MaxHeight = 28
@@ -2820,7 +2821,7 @@ object f_option: Tf_option
               Left = 40
               Height = 28
               Top = 176
-              Width = 388
+              Width = 396
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 4
@@ -2829,7 +2830,7 @@ object f_option: Tf_option
               Left = 184
               Height = 28
               Top = 8
-              Width = 49
+              Width = 57
               Constraints.MaxHeight = 28
               DecimalPlaces = 1
               MaxValue = 90
@@ -2839,7 +2840,7 @@ object f_option: Tf_option
               Value = 0
             end
             object Tolerance: TFloatSpinEdit
-              Left = 368
+              Left = 376
               Height = 28
               Top = 8
               Width = 60
@@ -2854,7 +2855,7 @@ object f_option: Tf_option
               Left = 184
               Height = 28
               Top = 46
-              Width = 49
+              Width = 57
               Constraints.MaxHeight = 28
               MaxValue = 10
               MinValue = 1
@@ -2863,10 +2864,10 @@ object f_option: Tf_option
               Value = 1
             end
             object SourcesLimit: TSpinEdit
-              Left = 368
+              Left = 376
               Height = 28
               Top = 46
-              Width = 57
+              Width = 60
               Constraints.MaxHeight = 28
               MaxValue = 1000
               ParentFont = False
@@ -2876,15 +2877,15 @@ object f_option: Tf_option
               Left = 7
               Height = 40
               Top = 216
-              Width = 418
+              Width = 449
               BevelOuter = bvNone
               ClientHeight = 40
-              ClientWidth = 418
+              ClientWidth = 449
               ParentFont = False
               TabOrder = 9
               Visible = False
               object Label129: TLabel
-                Left = 14
+                Left = 4
                 Height = 19
                 Top = 12
                 Width = 92
@@ -2897,7 +2898,7 @@ object f_option: Tf_option
                 Height = 28
                 Hint = 'Let blank for default system search path'
                 Top = 6
-                Width = 302
+                Width = 312
                 ShowHidden = False
                 ButtonWidth = 23
                 Constraints.MaxHeight = 28
@@ -2912,12 +2913,13 @@ object f_option: Tf_option
         object Page2: TPage
           object elbrus: TGroupBox
             Left = 0
-            Height = 232
+            Height = 292
             Top = 0
-            Width = 463
+            Width = 467
+            Align = alClient
             Caption = 'Elbrus Star Locator'
-            ClientHeight = 212
-            ClientWidth = 461
+            ClientHeight = 272
+            ClientWidth = 465
             ParentFont = False
             TabOrder = 0
             object ElbrusFolder: TEdit
@@ -2987,11 +2989,12 @@ object f_option: Tf_option
         object Page4: TPage
           object platesolve: TGroupBox
             Left = 0
-            Height = 208
+            Height = 292
             Top = 0
             Width = 467
+            Align = alClient
             Caption = 'PlateSolve 2'
-            ClientHeight = 188
+            ClientHeight = 272
             ClientWidth = 465
             ParentFont = False
             TabOrder = 0
@@ -3050,11 +3053,12 @@ object f_option: Tf_option
         object Page5: TPage
           object astap: TGroupBox
             Left = 0
-            Height = 208
+            Height = 292
             Top = 0
             Width = 467
+            Align = alClient
             Caption = 'ASTAP'
-            ClientHeight = 188
+            ClientHeight = 272
             ClientWidth = 465
             ParentFont = False
             TabOrder = 0
@@ -3130,7 +3134,7 @@ object f_option: Tf_option
     end
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object GroupBox7: TGroupBox
@@ -3302,7 +3306,7 @@ object f_option: Tf_option
     end
     object TabSheet9: TTabSheet
       Caption = 'Meridian'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object MeridianOption: TRadioGroup
@@ -3484,7 +3488,7 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object GroupBox6: TGroupBox
@@ -3905,7 +3909,7 @@ object f_option: Tf_option
     end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object PlanetariumBox: TRadioGroup
@@ -4021,7 +4025,7 @@ object f_option: Tf_option
     end
     object TabSheet13: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object ScrollBoxWeather: TScrollBox
@@ -4957,7 +4961,7 @@ object f_option: Tf_option
     end
     object TabSheet14: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 488
+      ClientHeight = 506
       ClientWidth = 520
       ParentFont = False
       object SafetyActions: TStringGrid
