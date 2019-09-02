@@ -1990,7 +1990,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);{2018-3-21, calculate HFD}
 
      {scale the result as GetHFD2 work with internal 16 bit values}
-     vmax:=vmax/FimageC+FimageMin;
+     vmax:=vmax/FimageC;
      bg:=bg/FimageC+FimageMin;
      bgdev:=bgdev/FimageC;
 
@@ -2044,8 +2044,9 @@ for i:=0 to Length(list)-1 do
    GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);
 
    // normalize value
-   vmax:=FimageMin+vmax/FimageC;
+   vmax:=vmax/FimageC; // include bg subtraction
    bg:=FimageMin+bg/FimageC;
+
 
    {check valid hfd, snr}
    if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
