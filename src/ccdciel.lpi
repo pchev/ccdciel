@@ -297,7 +297,7 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="97">
+    <Units Count="96">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -663,138 +663,131 @@
         <ResourceBaseClass Value="Frame"/>
       </Unit68>
       <Unit69>
-        <Filename Value="pu_msgtabs.pas"/>
+        <Filename Value="u_annotation.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="f_msgtabs"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
       </Unit69>
       <Unit70>
-        <Filename Value="u_annotation.pas"/>
+        <Filename Value="cu_weather.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit70>
       <Unit71>
-        <Filename Value="cu_weather.pas"/>
+        <Filename Value="cu_safety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit71>
       <Unit72>
-        <Filename Value="cu_safety.pas"/>
+        <Filename Value="cu_ascomsafety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit72>
       <Unit73>
-        <Filename Value="cu_ascomsafety.pas"/>
+        <Filename Value="cu_ascomweather.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit73>
       <Unit74>
-        <Filename Value="cu_ascomweather.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit74>
-      <Unit75>
         <Filename Value="fu_weather.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_weather"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="cu_indiweather.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit75>
       <Unit76>
-        <Filename Value="cu_indiweather.pas"/>
+        <Filename Value="cu_indisafety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit76>
       <Unit77>
-        <Filename Value="cu_indisafety.pas"/>
+        <Filename Value="cu_ascomdome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit77>
       <Unit78>
-        <Filename Value="cu_ascomdome.pas"/>
+        <Filename Value="cu_dome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit78>
       <Unit79>
-        <Filename Value="cu_dome.pas"/>
+        <Filename Value="cu_indidome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit79>
       <Unit80>
-        <Filename Value="cu_indidome.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit80>
-      <Unit81>
         <Filename Value="fu_dome.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_dome"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit81>
-      <Unit82>
+      </Unit80>
+      <Unit81>
         <Filename Value="fu_safety.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_safety"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit82>
-      <Unit83>
+      </Unit81>
+      <Unit82>
         <Filename Value="pu_about.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_about"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit83>
-      <Unit84>
+      </Unit82>
+      <Unit83>
         <Filename Value="pu_selectscript.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_selectscript"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit83>
+      <Unit84>
+        <Filename Value="cu_ascomrestcamera.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit84>
       <Unit85>
-        <Filename Value="cu_ascomrestcamera.pas"/>
+        <Filename Value="cu_ascomrestdome.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit85>
       <Unit86>
-        <Filename Value="cu_ascomrestdome.pas"/>
+        <Filename Value="cu_ascomrestfocuser.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit86>
       <Unit87>
-        <Filename Value="cu_ascomrestfocuser.pas"/>
+        <Filename Value="cu_ascomrestmount.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit87>
       <Unit88>
-        <Filename Value="cu_ascomrestmount.pas"/>
+        <Filename Value="cu_ascomrestrotator.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit88>
       <Unit89>
-        <Filename Value="cu_ascomrestrotator.pas"/>
+        <Filename Value="cu_ascomrestsafety.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit89>
       <Unit90>
-        <Filename Value="cu_ascomrestsafety.pas"/>
+        <Filename Value="cu_ascomrestweather.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit90>
       <Unit91>
-        <Filename Value="cu_ascomrestweather.pas"/>
+        <Filename Value="cu_ascomrestwheel.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit91>
       <Unit92>
-        <Filename Value="cu_ascomrestwheel.pas"/>
+        <Filename Value="cu_ascomrest.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit92>
       <Unit93>
-        <Filename Value="cu_ascomrest.pas"/>
+        <Filename Value="cu_autoguider_dither.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit93>
       <Unit94>
-        <Filename Value="cu_autoguider_dither.pas"/>
+        <Filename Value="u_hints.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit94>
       <Unit95>
-        <Filename Value="u_hints.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit95>
-      <Unit96>
         <Filename Value="pu_goto.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_goto"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit96>
+      </Unit95>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

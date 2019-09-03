@@ -77,12 +77,45 @@ object f_main: Tf_main
       Top = 4
       Width = 776
       Align = alClient
-      AutoSize = True
       BevelOuter = bvNone
+      ClientHeight = 551
+      ClientWidth = 776
       Color = 4197901
       ParentColor = False
       ParentFont = False
       TabOrder = 2
+      object PanelMsgTabs: TPanel
+        Left = 456
+        Height = 28
+        Top = 496
+        Width = 296
+        BevelOuter = bvNone
+        ClientHeight = 28
+        ClientWidth = 296
+        ParentColor = False
+        TabOrder = 0
+        Visible = False
+        OnMouseEnter = PanelMsgTabsMouseEnter
+        OnMouseLeave = PanelMsgTabsMouseLeave
+        object TabMsgLevel: TTabControl
+          Left = 0
+          Height = 28
+          Top = 0
+          Width = 296
+          OnChange = TabMsgLevelChange
+          TabIndex = 0
+          Tabs.Strings = (
+            'Summary'
+            'Commands'
+            'Details'
+          )
+          Align = alClient
+          OnMouseEnter = PanelMsgTabsMouseEnter
+          OnMouseLeave = PanelMsgTabsMouseLeave
+          ParentFont = False
+          TabOrder = 0
+        end
+      end
     end
     object PanelBottom: TPanel
       Left = 0
@@ -187,9 +220,9 @@ object f_main: Tf_main
         ParentFont = False
         object PanelRight2: TPanel
           Left = 0
-          Height = 314
+          Height = 514
           Top = 0
-          Width = 178
+          Width = 210
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -211,9 +244,9 @@ object f_main: Tf_main
         ParentFont = False
         object PanelRight3: TPanel
           Left = 0
-          Height = 343
+          Height = 514
           Top = 0
-          Width = 178
+          Width = 210
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -235,9 +268,9 @@ object f_main: Tf_main
         ParentFont = False
         object PanelRight4: TPanel
           Left = 0
-          Height = 510
+          Height = 514
           Top = 0
-          Width = 190
+          Width = 210
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -259,9 +292,9 @@ object f_main: Tf_main
         ParentFont = False
         object PanelRight5: TPanel
           Left = 0
-          Height = 343
+          Height = 514
           Top = 0
-          Width = 178
+          Width = 210
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone

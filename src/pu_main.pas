@@ -153,11 +153,13 @@ type
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenPictureDialog;
+    PanelMsgTabs: TPanel;
     PanelRight: TPanel;
     MagnifyerTimer: TTimer;
     MeasureTimer: TTimer;
     PlotTimer: TTimer;
     ImageResizeTimer: TTimer;
+    TabMsgLevel: TTabControl;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
@@ -428,6 +430,8 @@ type
     procedure MenuVisuZoomAdjustClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;State: TDragState; var Accept: Boolean);
+    procedure PanelMsgTabsMouseEnter(Sender: TObject);
+    procedure PanelMsgTabsMouseLeave(Sender: TObject);
     procedure PlotTimerTimer(Sender: TObject);
     procedure SelectTab(Sender: TObject);
     procedure StartCaptureTimerTimer(Sender: TObject);
@@ -440,6 +444,7 @@ type
     procedure ButtonDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
+    procedure TabMsgLevelChange(Sender: TObject);
     procedure TBFocusDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure TimerStampTimerTimer(Sender: TObject);
   private
@@ -592,7 +597,7 @@ type
     Procedure DisconnectDome(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
-    procedure LogLevelChange(Sender: TObject);
+    procedure ShowMsgTabs(Sender: TObject);
     Procedure NewMessage(msg: string; level: integer=1);
     Procedure DeviceMessage(msg: string; level: integer=1);
     Procedure WatchdogStatus(Sender: TObject);
@@ -1207,7 +1212,7 @@ begin
   Height:=screenconfig.GetValue('/Window/Height',768);
 
   f_msg:=Tf_msg.Create(self);
-  f_msg.onLogLevelChange:=@LogLevelChange;
+  f_msg.onShowTabs:=@ShowMsgTabs;
 
   fits:=TFits.Create(self);
   if FileExistsUTF8(ConfigDarkFile) then begin
@@ -1407,7 +1412,7 @@ begin
   f_visu.histminmax.AllowAllUp:=false;
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
-  f_msg.LogLevel:=LogLevel;
+  TabMsgLevel.TabIndex:=LogLevel-1;
 
   ImaBmp:=TBGRABitmap.Create(1,1);
   LockTimerPlot:=false;
@@ -1854,6 +1859,9 @@ begin
    DomeOpenActionName[3]:=trim(rsUnparkTheTel);
    DomeOpenActionName[4]:=trim(rsStartTelesco);
    DomeOpenActionName[5]:=trim(rsSlaveTheDome);
+   TabMsgLevel.Tabs[0]:=rsSummary;
+   TabMsgLevel.Tabs[1]:=rsCommands;
+   TabMsgLevel.Tabs[2]:=rsDetails;
 
 end;
 
@@ -4406,18 +4414,69 @@ begin
   end;
 end;
 
-procedure Tf_main.LogLevelChange(Sender: TObject);
-var i: integer;
+procedure Tf_main.TabMsgLevelChange(Sender: TObject);
+ var i: integer;
 begin
-  i:=f_msg.LogLevel;
-  if i<>LogLevel then begin
-    LogLevel:=i;
-    f_msg.msg.Clear;
-    for i:=0 to AllMsg.Count-1 do begin
-       if TIntList(AllMsg.Objects[i]).value<=LogLevel then
-          f_msg.msg.Lines.Add(AllMsg[i]);
+   i:=TabMsgLevel.TabIndex+1;
+   if i<>LogLevel then begin
+     LogLevel:=i;
+     f_msg.msg.Clear;
+     for i:=0 to AllMsg.Count-1 do begin
+        if TIntList(AllMsg.Objects[i]).value<=LogLevel then
+           f_msg.msg.Lines.Add(AllMsg[i]);
+     end;
+   end;
+end;
+
+procedure Tf_main.ShowMsgTabs(Sender: TObject);
+begin
+  if f_msg.ShowTabs then begin
+   case f_msg.Parent.Align of
+    alBottom: begin
+       PanelMsgTabs.Height:=DoScaleY(28);
+       PanelMsgTabs.Width:=min(PanelCenter.Width,f_msg.Width-f_msg.Title.Width);
+       PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
+       PanelMsgTabs.Top:=PanelCenter.Height-PanelMsgTabs.Height;
+       TabMsgLevel.TabPosition:=tpTop;
     end;
+    alTop: begin
+       PanelMsgTabs.Height:=DoScaleY(28);
+       PanelMsgTabs.Width:=min(PanelCenter.Width,f_msg.Width-f_msg.Title.Width);
+       PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
+       PanelMsgTabs.Top:=0;
+       TabMsgLevel.TabPosition:=tpBottom;
+    end;
+    alLeft: begin
+       PanelMsgTabs.Width:=DoScaleY(120);
+       PanelMsgTabs.Height:=DoScaleY(120);
+       PanelMsgTabs.Left:=0;
+       PanelMsgTabs.Top:=min(f_msg.top,PanelCenter.Height-PanelMsgTabs.Height);
+       TabMsgLevel.TabPosition:=tpLeft;
+    end;
+    else begin // right
+       PanelMsgTabs.Width:=DoScaleY(120);
+       PanelMsgTabs.Height:=DoScaleY(120);
+       PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
+       PanelMsgTabs.Top:=min(f_msg.top+TBTabs.Height,PanelCenter.Height-PanelMsgTabs.Height);
+       TabMsgLevel.TabPosition:=tpLeft;
+    end;
+   end;
+
+    PanelMsgTabs.Visible:=true;
+  end
+  else begin
+    PanelMsgTabs.Visible:=false;
   end;
+end;
+
+procedure Tf_main.PanelMsgTabsMouseEnter(Sender: TObject);
+begin
+  f_msg.msgMouseEnter(sender);
+end;
+
+procedure Tf_main.PanelMsgTabsMouseLeave(Sender: TObject);
+begin
+ f_msg.msgMouseLeave(sender);
 end;
 
 procedure Tf_main.NewMessage(msg: string; level: integer=1);

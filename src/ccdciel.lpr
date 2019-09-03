@@ -45,7 +45,7 @@ uses
   cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator, cu_ascomrotator,
   cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog, cu_indiwatchdog,
   pu_focusercalibration, cu_tcpserver, u_translation, pu_hyperbola,
-  fu_magnifyer, pu_msgtabs, u_annotation, cu_safety, cu_weather, cu_ascomsafety,
+  fu_magnifyer, u_annotation, cu_safety, cu_weather, cu_ascomsafety,
   cu_ascomweather, fu_weather, cu_indiweather, cu_indisafety, cu_dome,
   cu_ascomdome, cu_indidome, fu_dome, fu_safety, pu_about, pu_selectscript,
   cu_ascomrestcamera, cu_ascomrestwheel, cu_ascomrestweather,
