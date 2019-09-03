@@ -135,8 +135,9 @@ end;
 
 function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
 var pixsize,pixscale,telescope_focal_length,tolerance,MaxRadius,ra,de: double;
-    n,iwidth,iheight:integer;
+    n,nn,iwidth,iheight:integer;
     info: TcdcWCSinfo;
+    c: TcdcWCScoord;
 begin
  if (not FBusy) then begin
    Fterminatecmd:=terminatecmd;
@@ -149,8 +150,14 @@ begin
    if n=0 then begin
      n:=cdcwcs_getinfo(addr(info),0);
      if n=0 then begin
-       ra:=info.cra;
-       de:=info.cdec;
+       // center
+       c.x:=0.5+info.wp/2;
+       c.y:=0.5+info.hp/2;
+       nn:=cdcwcs_xy2sky(@c,0);
+       if nn=0 then begin
+         ra:=c.ra;
+         de:=c.dec;
+       end;
        iwidth:=info.wp;
        iheight:=info.hp;
        pixscale:=info.secpix;
