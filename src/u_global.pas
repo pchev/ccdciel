@@ -420,6 +420,8 @@ var
   DummyBool: boolean;
   DevInterfaceName: array[0..4] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca');
   ProtocolName: array[0..1] of string=('http:','https:');
+  CheckRecenterTarget,NeedRecenterTarget,RecenteringTarget,CheckRecenterBusy: boolean;
+  AstrometryTimeout,RecenterTargetDistance,SlewPrecision: double;
 
   procedure globalmsg(str:string);
 

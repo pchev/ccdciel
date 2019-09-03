@@ -36,7 +36,7 @@ T_ascomrestcamera = class(T_camera)
  private
    V : TAscomRest;
    nf: integer;
-   timedout,Fexptime:double;
+   timedout:double;
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
@@ -411,13 +411,13 @@ begin
     FLAT : li:='true';
   end;
   try
+     Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
      V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
      Ftimestart:=NowUTC;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
-     Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
      else ExposureTimer.Interval:=500;
      ExposureTimer.Enabled:=true;

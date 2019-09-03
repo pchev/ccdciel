@@ -683,6 +683,7 @@ type
     Procedure StartCaptureExposure(Sender: TObject);
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposureNow;
+    Procedure RecenterTarget;
     Procedure RedrawHistogram(Sender: TObject);
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
@@ -1091,6 +1092,12 @@ begin
   CancelAutofocus:=false;
   InplaceAutofocus:=false;
   AutofocusExposureFact:=1;
+  NeedRecenterTarget:=false;
+  CheckRecenterBusy:=false;
+  CheckRecenterTarget:=false;
+  RecenteringTarget:=false;
+  SlewPrecision:=5;
+  RecenterTargetDistance:=10;
   FocuserLastTemp:=NullCoord;
   AutoFocusLastTime:=NullCoord;
   WaitTillrunning:=false;
@@ -3166,6 +3173,7 @@ begin
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+  AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
     v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstrometryPath',''),config.GetValue('/Astrometry/AstUseScript',false));
@@ -3176,6 +3184,9 @@ begin
       end;
     end;
   end;
+  SlewPrecision:=config.GetValue('/PrecSlew/Precision',5.0);
+  CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
+  RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
@@ -5483,7 +5494,8 @@ begin
                        f_autoguider.led.Brush.Color:=clYellow;
                        f_autoguider.BtnGuide.Caption:=rsGuide;
                        MenuAutoguiderGuide.Caption:=rsGuide;
-                       if (not meridianflipping)and(not autofocusing)and(not WeatherPauseCapture) then f_sequence.AutoguiderIddle;
+                       if (not meridianflipping)and(not autofocusing)and(not WeatherPauseCapture)and(not RecenteringTarget)
+                          then f_sequence.AutoguiderIddle;
                        end;
    GUIDER_GUIDING     :begin
                        f_autoguider.led.Brush.Color:=clLime;
@@ -6013,6 +6025,8 @@ begin
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
    f_option.SlewFilter.Items.Assign(FilterList);
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
+   f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
+   f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
    f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',MinutesPastMeridian);
@@ -6269,6 +6283,8 @@ begin
      config.SetValue('/PrecSlew/Binning',f_option.SlewBin.Value);
      config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
+     config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked);
+     config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',f_option.MinutesPastMeridian.Value);
      config.SetValue('/Meridian/MinutesPastMin',f_option.MinutesPastMeridianMin.Value);
@@ -6826,6 +6842,46 @@ begin
   StartCaptureExposure(nil);
 end;
 
+Procedure Tf_main.RecenterTarget;
+var tra,tde,err: double;
+    savecapture,restartguider : boolean;
+begin
+  savecapture:=Capture;
+  RecenteringTarget:=true;
+  try
+    f_preview.StackPreview.Checked:=false;
+    Capture:=false;
+    if (astrometryResolver<>ResolverNone)and(Mount.Status=devConnected)and(f_sequence.Running)and
+       (f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord)
+    then begin
+      // stop autoguider
+      restartguider:=(autoguider.State=GUIDER_GUIDING);
+      if restartguider then begin
+        NewMessage(rsStopAutoguid,2);
+        autoguider.Guide(false);
+        autoguider.WaitBusy(15);
+      end;
+      // center target
+      tra:=rad2deg*f_sequence.TargetRA/15;
+      tde:=rad2deg*f_sequence.TargetDE;
+      LocalToMount(mount.EquinoxJD,tra,tde);
+      astrometry.PrecisionSlew(tra,tde,err);
+      // restart guider
+      if restartguider then begin
+        NewMessage(rsRestartAutog,2);
+        autoguider.Guide(false);
+        autoguider.WaitBusy(5);
+        autoguider.Guide(true);
+        autoguider.WaitGuiding(SettleMaxTime);
+      end;
+    end;
+  finally
+    Capture:=savecapture;
+    RecenteringTarget:=false;
+  end;
+end;
+
+
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
 var e,x: double;
     buf,txt: string;
@@ -7009,6 +7065,21 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       end;
       if txt>'' then NewMessage(rsAutofocusDue+blank+txt,3);
    end;
+  // check if target need recenter
+  if NeedRecenterTarget then begin
+     if canwait then begin
+       NewMessage(rsRecenterTarg);
+       RecenterTarget;
+       NeedRecenterTarget:=false;
+       Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       exit;
+     end
+     else begin
+       exit; // cannot start now
+     end;
+  end
+  else
+    NeedRecenterTarget:=false;
   // check if dithering is required
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
    if canwait then begin
@@ -7421,7 +7492,7 @@ end;
 procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
     fn,fd,buf,fileseqstr,blankrep: string;
-    ccdtemp: double;
+    ccdtemp,cra,cde,eq,pa,dist: double;
     fileseqnum,i: integer;
     UseFileSequenceNumber: boolean;
 begin
@@ -7529,6 +7600,28 @@ try
  buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[2].Text:=buf;
  StatusBar1.Panels[1].Text := '';
+ // check if target need to be recentered
+ if CheckRecenterTarget and(camera.FrameType=LIGHT)and(camera.LastExposureTime>(AstrometryTimeout+5))and
+    (not NeedRecenterTarget)and(not CheckRecenterBusy)and(not astrometry.Busy)and(astrometryResolver<>ResolverNone)and
+    (f_sequence.Running)and(f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord)
+    then begin
+      try
+      CheckRecenterBusy:=true;
+      astrometry.SolveCurrentImage(true);
+      if (not astrometry.Busy)and astrometry.LastResult then begin
+         if astrometry.CurrentCoord(cra,cde,eq,pa) then begin
+           cra:=cra*15*deg2rad;
+           cde:=cde*deg2rad;
+           J2000ToApparent(cra,cde);
+           dist:=60*rad2deg*rmod(AngularDistance(f_sequence.TargetRA,f_sequence.TargetDE,cra,cde)+pi2,pi2);
+           NeedRecenterTarget:=dist>max(RecenterTargetDistance,2*SlewPrecision);
+           if NeedRecenterTarget then NewMessage(rsTargetWillBe2);
+         end;
+      end;
+      finally
+      CheckRecenterBusy:=false;
+      end;
+ end;
  except
    on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
  end;
@@ -10314,7 +10407,7 @@ begin
           finally
             Capture:=true;
           end;
-          if (astrometry.LastResult)and(astrometry.LastSlewErr>config.GetValue('/PrecSlew/Precision',5.0)/60) then begin
+          if (astrometry.LastResult)and(astrometry.LastSlewErr>(SlewPrecision/60)) then begin
             f_pause.Caption:=rsPause;
             f_pause.Text:=Format(rsRecenterImag, [crlf, FormatFloat(f1, astrometry.LastSlewErr)]);
             NewMessage(f_pause.Text,1);
@@ -10336,7 +10429,7 @@ begin
           finally
             Capture:=true;
           end;
-          if (astrometry.LastResult)and(astrometry.LastSlewErr>config.GetValue('/PrecSlew/Precision',5.0)/60) then begin
+          if (astrometry.LastResult)and(astrometry.LastSlewErr>(SlewPrecision/60)) then begin
             f_pause.Caption:=rsPause;
             f_pause.Text:=Format(rsRecenterImag, [crlf, FormatFloat(f1,astrometry.LastSlewErr)]);
             NewMessage(f_pause.Text,1);

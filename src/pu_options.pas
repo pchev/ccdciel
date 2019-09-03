@@ -46,7 +46,12 @@ type
     CbShowHints: TCheckBox;
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
+    CheckRecenterTarget: TCheckBox;
+    Label130: TLabel;
+    Label131: TLabel;
+    RecenterTargetDistance: TFloatSpinEdit;
     GroupBox22: TGroupBox;
+    GroupBox23: TGroupBox;
     Label127: TLabel;
     Label128: TLabel;
     AutofocusPeriod: TSpinEdit;
@@ -545,6 +550,7 @@ type
     procedure ResolverBoxClick(Sender: TObject);
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
     procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
+    procedure SlewPrecChange(Sender: TObject);
     procedure TempDirChange(Sender: TObject);
     procedure TemperatureScaleClick(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
@@ -810,6 +816,10 @@ begin
   PrecSlewBox.Caption := rsCorrectionMe;
   Label66.Caption := rsFilter;
   Label87.Caption := rsDelayAfterTe;
+  GroupBox23.Caption:=rsRecenterSequ;
+  CheckRecenterTarget.Caption:=rsRunAstrometr;
+  Label130.Caption:=rsRecenterIfTh;
+  Label131.Caption:=rsArcmin;
   TabSheet9.Caption := rsMeridian;
   MeridianOption.Caption := rsOnMeridianCr;
   Label40.Caption := rsCanTrackPast;
@@ -944,7 +954,7 @@ begin
   AstrometryPath.Hint := rsLetBlankForD;
   ElbrusFolder.Hint:=rsTheElbrusIma;
   ElbrusUnixpath.Hint:=rsTheUnixPathE;
-
+  CheckRecenterTarget.Hint:=Format(rsActiveOnlyIf, [crlf]);
 end;
 
 procedure Tf_option.LanguagesChange(Sender: TObject);
@@ -1307,6 +1317,11 @@ begin
    end;
    if not ok then NewValue:=OldValue;
  end;
+end;
+
+procedure Tf_option.SlewPrecChange(Sender: TObject);
+begin
+   RecenterTargetDistance.MinValue:=2*SlewPrec.Value;
 end;
 
 procedure Tf_option.TempDirChange(Sender: TObject);

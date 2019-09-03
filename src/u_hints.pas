@@ -180,6 +180,7 @@ resourcestring
   rsPriorToSlewi = 'Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium.';
   rsRepeatThePla = 'Repeat the plan for this object.%sSet to zero to not process this target.';
   rsLetBlankForD = 'Let blank for default system search path';
+  rsActiveOnlyIf = 'Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout';
 
 implementation
 

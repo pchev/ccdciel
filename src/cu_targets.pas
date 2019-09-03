@@ -733,6 +733,7 @@ begin
   // stop mount tracking
   if mount.Tracking or mount.MountSlewing then
      Mount.AbortMotion;
+  NeedRecenterTarget:=false;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
   SaveDoneCount(FTargetsRepeatCount);
@@ -1378,6 +1379,7 @@ begin
   // Slew to J2000 ra,de
   result:=false;
   FTargetCoord:=false;
+  NeedRecenterTarget:=false;
   if FSlewRetry>3 then begin
      msg(rsSlewAbortedA,0);
      exit;

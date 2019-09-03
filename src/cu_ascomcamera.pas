@@ -39,7 +39,7 @@ T_ascomcamera = class(T_camera)
    {$ifdef mswindows}
    V: variant;
    nf: integer;
-   timedout,Fexptime:double;
+   timedout:double;
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    {$endif}
@@ -406,13 +406,13 @@ begin
     FLAT : li:=true;
   end;
   try
+     Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
      V.StartExposure(exptime,li);
      Ftimestart:=NowUTC;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
-     Fexptime:=exptime;
      if exptime>=10 then ExposureTimer.Interval:=1000
      else ExposureTimer.Interval:=500;
      ExposureTimer.Enabled:=true;

@@ -1183,6 +1183,7 @@ end else begin
     indiclient.sendNewNumber(Guiderexpose);
   end;
 end;
+Fexptime:=exptime;
 Ftimestart:=NowUTC;
 inc(FImgNum);
 timedout:=now+(exptime+CameraTimeout)/secperday;

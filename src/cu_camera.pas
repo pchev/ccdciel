@@ -85,6 +85,7 @@ T_camera = class(TComponent)
     FReadOutList: TStringList;
     Ftimestart,Ftimeend,FMidExposureTime: double;
     FImgNum:PtrInt;
+    Fexptime: double;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -241,6 +242,7 @@ T_camera = class(TComponent)
     property GainMax: integer read FGainMax;
     property hasGainISO: boolean read FhasGainISO;
     property ISOList: TStringList read FISOList;
+    property LastExposureTime:double read Fexptime;
     property hasCfaInfo: boolean read FhasCfaInfo;
     property hasReadOut: boolean read FhasReadOut;
     property ReadOutList: TStringList read FReadOutList;
@@ -310,6 +312,7 @@ begin
   FhasFastReadout:=false;
   FhasReadOut:=false;
   FImageFormat:='.fits';
+  Fexptime:=0;
 end;
 
 destructor  T_camera.Destroy;

@@ -1118,6 +1118,11 @@ resourcestring
   rsCommandPath = 'Command path';
   rsPixelCount = '%sPixel count:%s';
   rsMedian = '%sMedian:%s';
+  rsRecenterSequ = 'Recenter sequence target that drift';
+  rsRunAstrometr = 'Run astrometry on every image to search for drift';
+  rsRecenterIfTh = 'Recenter if the drift is more than';
+  rsTargetWillBe2 = 'Target will be recentered before next image';
+  rsRecenterTarg = 'Recenter target now';
 
 implementation
 
