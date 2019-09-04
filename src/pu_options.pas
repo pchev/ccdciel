@@ -49,6 +49,8 @@ type
     CheckRecenterTarget: TCheckBox;
     Label130: TLabel;
     Label131: TLabel;
+    Label132: TLabel;
+    Label133: TLabel;
     RecenterTargetDistance: TFloatSpinEdit;
     GroupBox22: TGroupBox;
     GroupBox23: TGroupBox;
@@ -783,10 +785,12 @@ begin
   GroupBox4.Caption := rsAstrometryOp;
   FocaleFromTelescope.Caption := rsFromTelescop;
   Label4.Caption := rsFocaleLength;
+  Label132.Caption:='[mm]';
   Label3.Caption := rsPixelSize;
   PixelSizeFromCamera.Caption := rsFromCameraDr;
   ResolverBox.Caption := rsSoftware;
   Label33.Caption := rsTimeout;
+  Label133.Caption:=rsSeconds2;
   Label6.Caption := rsMaximumSearc;
   Label7.Caption := rsScaleToleran;
   Label8.Caption := rsDownsample;

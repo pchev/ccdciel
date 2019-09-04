@@ -65,11 +65,11 @@ object f_option: Tf_option
     Height = 537
     Top = 0
     Width = 530
-    ActivePage = TabSheet4
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 8
+    TabIndex = 0
     TabOrder = 1
     Options = [nboMultiLine]
     object TabSheet1: TTabSheet
@@ -155,8 +155,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 268
-          ClientWidth = 458
+          ClientHeight = 241
+          ClientWidth = 452
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 390
@@ -246,8 +246,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 268
-          ClientWidth = 458
+          ClientHeight = 241
+          ClientWidth = 452
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 390
@@ -414,7 +414,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 250
         ParentFont = False
         TabOrder = 3
@@ -497,7 +497,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 250
         ParentFont = False
         TabOrder = 4
@@ -735,7 +735,7 @@ object f_option: Tf_option
                 DropDownRows = 15
                 MinSize = 100
                 Title.Caption = 'Action'
-                Width = 450
+                Width = 452
               end>
             DefaultColWidth = 50
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -744,7 +744,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               50
-              450
+              452
             )
           end
         end
@@ -772,7 +772,7 @@ object f_option: Tf_option
                 DropDownRows = 15
                 MinSize = 100
                 Title.Caption = 'Action'
-                Width = 450
+                Width = 452
               end>
             DefaultColWidth = 50
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -781,7 +781,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               50
-              450
+              452
             )
           end
         end
@@ -838,10 +838,10 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object BayerMode: TComboBox
-          Left = 168
+          Left = 192
           Height = 28
           Top = 42
-          Width = 80
+          Width = 72
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ItemIndex = 0
@@ -856,7 +856,7 @@ object f_option: Tf_option
           Text = 'GR'
         end
         object RedBalance: TTrackBar
-          Left = 272
+          Left = 300
           Height = 43
           Top = 0
           Width = 100
@@ -866,11 +866,12 @@ object f_option: Tf_option
           Position = 100
           ShowSelRange = False
           TickStyle = tsNone
+          Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 2
         end
         object GreenBalance: TTrackBar
-          Left = 272
+          Left = 300
           Height = 43
           Top = 29
           Width = 100
@@ -880,11 +881,12 @@ object f_option: Tf_option
           Position = 100
           ShowSelRange = False
           TickStyle = tsNone
+          Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 3
         end
         object BlueBalance: TTrackBar
-          Left = 272
+          Left = 300
           Height = 43
           Top = 56
           Width = 100
@@ -894,6 +896,7 @@ object f_option: Tf_option
           Position = 100
           ShowSelRange = False
           TickStyle = tsNone
+          Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 4
         end
@@ -948,7 +951,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 23
+          ClientHeight = 41
           ClientWidth = 235
           Columns = 3
           Items.Strings = (
@@ -1034,7 +1037,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label63: TLabel
-          Left = 262
+          Left = 280
           Height = 19
           Top = 6
           Width = 36
@@ -1043,12 +1046,13 @@ object f_option: Tf_option
           ParentFont = False
         end
         object BPMsigma: TFloatSpinEdit
-          Left = 191
+          Left = 192
           Height = 28
           Top = 0
-          Width = 57
+          Width = 72
           Constraints.MaxHeight = 28
           DecimalPlaces = 1
+          Increment = 0.1
           MaxValue = 8
           MinValue = 1
           ParentFont = False
@@ -1121,7 +1125,7 @@ object f_option: Tf_option
           Left = 392
           Height = 28
           Top = 0
-          Width = 81
+          Width = 84
           Constraints.MaxHeight = 28
           MaxValue = 65535
           MinValue = 0
@@ -1214,8 +1218,8 @@ object f_option: Tf_option
             Top = 30
             Width = 328
             BevelOuter = bvNone
-            ClientHeight = 26
-            ClientWidth = 324
+            ClientHeight = 30
+            ClientWidth = 328
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1233,6 +1237,7 @@ object f_option: Tf_option
               Top = 0
               Width = 72
               Constraints.MaxHeight = 28
+              Increment = 0.1
               MinValue = 0
               ParentFont = False
               TabOrder = 0
@@ -1331,6 +1336,7 @@ object f_option: Tf_option
           Top = 1
           Width = 78
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 99
           MinValue = 0
           ParentFont = False
@@ -1516,7 +1522,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label92: TLabel
-          Left = 304
+          Left = 319
           Height = 19
           Top = 96
           Width = 30
@@ -1552,7 +1558,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label96: TLabel
-          Left = 304
+          Left = 319
           Height = 19
           Top = 133
           Width = 30
@@ -1575,7 +1581,7 @@ object f_option: Tf_option
           Left = 224
           Height = 28
           Top = 91
-          Width = 73
+          Width = 84
           Constraints.MaxHeight = 28
           DecimalPlaces = 3
           MaxValue = 600
@@ -1585,10 +1591,10 @@ object f_option: Tf_option
           Value = 0
         end
         object FlatMaxExp: TFloatSpinEdit
-          Left = 344
+          Left = 359
           Height = 28
           Top = 91
-          Width = 73
+          Width = 84
           Constraints.MaxHeight = 28
           DecimalPlaces = 3
           MaxValue = 600
@@ -1601,7 +1607,7 @@ object f_option: Tf_option
           Left = 224
           Height = 28
           Top = 128
-          Width = 73
+          Width = 84
           Constraints.MaxHeight = 28
           Increment = 1000
           MaxValue = 65535
@@ -1609,10 +1615,10 @@ object f_option: Tf_option
           TabOrder = 3
         end
         object FlatLevelMax: TSpinEdit
-          Left = 344
+          Left = 359
           Height = 28
           Top = 128
-          Width = 73
+          Width = 84
           Constraints.MaxHeight = 28
           Increment = 1000
           MaxValue = 65535
@@ -1704,7 +1710,7 @@ object f_option: Tf_option
           Left = 18
           Height = 21
           Top = 88
-          Width = 310
+          Width = 309
           Caption = 'Use external command to light the panel on/off'
           ParentFont = False
           TabOrder = 3
@@ -1836,7 +1842,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object BtnDisableDelay: TButton
-          Left = 330
+          Left = 350
           Height = 21
           Top = 36
           Width = 75
@@ -1846,7 +1852,7 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object FocuserBacklashDirection: TComboBox
-          Left = 330
+          Left = 350
           Height = 28
           Hint = 'The direction the focuser will always finish to move.'#10'If using auto-focus set the same move direction.'
           Top = 1
@@ -1879,7 +1885,7 @@ object f_option: Tf_option
           Left = 270
           Height = 28
           Top = 1
-          Width = 54
+          Width = 74
           Constraints.MaxHeight = 28
           MaxValue = 10000
           ParentFont = False
@@ -1889,7 +1895,7 @@ object f_option: Tf_option
           Left = 270
           Height = 28
           Top = 32
-          Width = 54
+          Width = 74
           Constraints.MaxHeight = 28
           MaxValue = 30
           ParentFont = False
@@ -1921,8 +1927,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            164
-            164
+            155
+            155
           )
         end
       end
@@ -1946,7 +1952,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object BtnDisableFocuserTemp: TButton
-          Left = 330
+          Left = 350
           Height = 23
           Top = 4
           Width = 75
@@ -1959,8 +1965,9 @@ object f_option: Tf_option
           Left = 270
           Height = 28
           Top = 1
-          Width = 54
+          Width = 74
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 1000
           MinValue = 0
           ParentFont = False
@@ -1980,16 +1987,17 @@ object f_option: Tf_option
           Left = 270
           Height = 28
           Top = 30
-          Width = 54
+          Width = 74
           Constraints.MaxHeight = 28
           DecimalPlaces = 1
+          Increment = 0.1
           MinValue = 0
           ParentFont = False
           TabOrder = 2
           Value = 0
         end
         object BtnDisableAutofocusTemp: TButton
-          Left = 330
+          Left = 350
           Height = 23
           Top = 32
           Width = 75
@@ -2020,13 +2028,13 @@ object f_option: Tf_option
           Left = 270
           Height = 28
           Top = 0
-          Width = 60
+          Width = 74
           Constraints.MaxHeight = 28
           MaxValue = 1440
           TabOrder = 0
         end
         object Label128: TLabel
-          Left = 344
+          Left = 350
           Height = 19
           Top = 5
           Width = 49
@@ -2191,6 +2199,7 @@ object f_option: Tf_option
               Width = 60
               Constraints.MaxHeight = 28
               DecimalPlaces = 1
+              Increment = 0.1
               MaxValue = 99
               MinValue = 1
               OnEditingDone = CheckStartNearHFD
@@ -2205,6 +2214,7 @@ object f_option: Tf_option
               Width = 60
               Constraints.MaxHeight = 28
               DecimalPlaces = 1
+              Increment = 0.1
               MaxValue = 99
               MinValue = 1
               OnEditingDone = CheckStartNearHFD
@@ -2385,6 +2395,7 @@ object f_option: Tf_option
           Width = 60
           Constraints.MaxHeight = 28
           DecimalPlaces = 1
+          Increment = 0.1
           MaxValue = 15
           MinValue = 0
           ParentFont = False
@@ -2409,6 +2420,7 @@ object f_option: Tf_option
           Top = 84
           Width = 60
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 99
           MinValue = 1
           ParentFont = False
@@ -2421,6 +2433,7 @@ object f_option: Tf_option
           Top = 84
           Width = 60
           Constraints.MaxHeight = 28
+          DecimalPlaces = 1
           MaxValue = 99
           MinValue = 1
           ParentFont = False
@@ -2512,6 +2525,7 @@ object f_option: Tf_option
             Width = 60
             Constraints.MaxHeight = 28
             DecimalPlaces = 1
+            Increment = 0.1
             MaxValue = 99
             MinValue = 0
             ParentFont = False
@@ -2667,6 +2681,7 @@ object f_option: Tf_option
           Top = 8
           Width = 77
           Constraints.MaxHeight = 28
+          DecimalPlaces = 1
           MaxValue = 10000
           MinValue = 0
           ParentFont = False
@@ -2684,6 +2699,22 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
           Value = 10
+        end
+        object Label132: TLabel
+          Left = 380
+          Height = 19
+          Top = 13
+          Width = 24
+          Caption = 'mm'
+          ParentColor = False
+        end
+        object Label133: TLabel
+          Left = 192
+          Height = 19
+          Top = 45
+          Width = 57
+          Caption = '[seconds]'
+          ParentColor = False
         end
       end
       object Notebook1: TNotebook
@@ -2845,6 +2876,7 @@ object f_option: Tf_option
               Top = 8
               Width = 60
               Constraints.MaxHeight = 28
+              Increment = 0.01
               MaxValue = 1
               MinValue = 0
               ParentFont = False
@@ -3252,6 +3284,7 @@ object f_option: Tf_option
           Top = 80
           Width = 80
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 60
           MinValue = 0.01
           OnChange = SlewPrecChange
@@ -3275,6 +3308,7 @@ object f_option: Tf_option
           Top = 176
           Width = 80
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 60
           MinValue = 1
           ParentFont = False
@@ -3326,6 +3360,7 @@ object f_option: Tf_option
           Height = 29
           Top = 40
           Width = 73
+          Increment = 0.1
           MinValue = 0
           TabOrder = 1
           Value = 0
@@ -3587,6 +3622,7 @@ object f_option: Tf_option
           Top = 8
           Width = 73
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 99
           MinValue = 0
           ParentFont = False
@@ -3686,6 +3722,7 @@ object f_option: Tf_option
           Top = 8
           Width = 80
           Constraints.MaxHeight = 28
+          Increment = 0.1
           MaxValue = 99
           MinValue = 0.1
           ParentFont = False
@@ -4074,24 +4111,24 @@ object f_option: Tf_option
       ParentFont = False
       object ScrollBoxWeather: TScrollBox
         Left = 0
-        Height = 403
+        Height = 440
         Top = 66
         Width = 520
-        HorzScrollBar.Page = 500
-        VertScrollBar.Page = 403
+        HorzScrollBar.Page = 496
+        VertScrollBar.Page = 429
         Align = alClient
-        ClientHeight = 399
-        ClientWidth = 513
+        ClientHeight = 438
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 0
         object PanelW1: TPanel
           Left = 0
           Height = 33
           Top = 0
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 0
           object LabelMi1: TLabel
@@ -4154,10 +4191,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 33
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 1
           object LabelMi2: TLabel
@@ -4220,10 +4257,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 66
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 2
           object LabelMi3: TLabel
@@ -4286,10 +4323,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 99
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 3
           object LabelMi4: TLabel
@@ -4352,10 +4389,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 132
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 4
           object LabelMi5: TLabel
@@ -4418,10 +4455,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 165
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 5
           object LabelMi6: TLabel
@@ -4484,10 +4521,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 198
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 6
           object LabelMi7: TLabel
@@ -4550,10 +4587,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 231
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 7
           object LabelMi8: TLabel
@@ -4616,10 +4653,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 264
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 8
           object LabelMi9: TLabel
@@ -4682,10 +4719,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 297
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 9
           object LabelMi10: TLabel
@@ -4748,10 +4785,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 330
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 10
           object LabelMi11: TLabel
@@ -4814,10 +4851,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 363
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 11
           object LabelMi12: TLabel
@@ -4864,7 +4901,7 @@ object f_option: Tf_option
             MinValue = 0
             ParentFont = False
             TabOrder = 1
-            Value = 1
+            Value = 0
           end
           object UseW12: TCheckBox
             Left = 8
@@ -4880,10 +4917,10 @@ object f_option: Tf_option
           Left = 0
           Height = 33
           Top = 396
-          Width = 498
+          Width = 518
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 494
+          ClientHeight = 33
+          ClientWidth = 518
           ParentFont = False
           TabOrder = 12
           object LabelMi13: TLabel
@@ -5021,12 +5058,12 @@ object f_option: Tf_option
             DropDownRows = 15
             MinSize = 100
             Title.Caption = 'Action'
-            Width = 207
+            Width = 208
           end        
           item
             MinSize = 100
             Title.Caption = 'Parameters'
-            Width = 207
+            Width = 208
           end>
         DefaultColWidth = 50
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -5037,8 +5074,8 @@ object f_option: Tf_option
         OnValidateEntry = SafetyActionsValidateEntry
         ColWidths = (
           50
-          207
-          207
+          208
+          208
         )
       end
       object Label111: TLabel
