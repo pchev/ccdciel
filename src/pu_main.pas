@@ -6920,11 +6920,14 @@ begin
         autoguider.Guide(false);
         autoguider.WaitBusy(15);
       end;
+      try
       // center target
       tra:=rad2deg*f_sequence.TargetRA/15;
       tde:=rad2deg*f_sequence.TargetDE;
       LocalToMount(mount.EquinoxJD,tra,tde);
       astrometry.PrecisionSlew(tra,tde,err);
+      except
+      end;
       // restart guider
       if restartguider then begin
         NewMessage(rsRestartAutog,2);
@@ -7136,9 +7139,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      else begin
        exit; // cannot start now
      end;
-  end
-  else
-    NeedRecenterTarget:=false;
+  end;
   // check if dithering is required
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
    if canwait then begin
