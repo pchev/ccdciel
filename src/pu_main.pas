@@ -7675,7 +7675,7 @@ try
            J2000ToApparent(cra,cde);
            dist:=60*rad2deg*rmod(AngularDistance(f_sequence.TargetRA,f_sequence.TargetDE,cra,cde)+pi2,pi2);
            NewMessage(Format(rsDistanceToTa, [FormatFloat(f2, dist)]),3);
-           NeedRecenterTarget:=dist>max(RecenterTargetDistance,2*SlewPrecision);
+           NeedRecenterTarget:=dist>max(RecenterTargetDistance,1.5*SlewPrecision);
            if NeedRecenterTarget then NewMessage(rsTargetWillBe2,2);
          end;
       end;

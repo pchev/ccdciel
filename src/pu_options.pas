@@ -1321,7 +1321,7 @@ end;
 
 procedure Tf_option.SlewPrecChange(Sender: TObject);
 begin
-   RecenterTargetDistance.MinValue:=2*SlewPrec.Value;
+   RecenterTargetDistance.MinValue:=1.5*SlewPrec.Value;
 end;
 
 procedure Tf_option.TempDirChange(Sender: TObject);
