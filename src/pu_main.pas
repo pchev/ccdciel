@@ -9596,6 +9596,8 @@ begin
         else
           resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin;
      end;
+     if cdcWCSinfo.secpix>0 then
+        resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+blank+ssec+'/'+rsPixels;
      NewMessage(Format(rsResolveSucce, [astrometry.Resolver])+resulttxt,3);
   end else begin
     NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
