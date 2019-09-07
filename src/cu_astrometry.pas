@@ -188,7 +188,7 @@ begin
    engine.PlateSolveWait:=config.GetValue('/Astrometry/PlatesolveWait',0);
    engine.ASTAPFolder:=config.GetValue('/Astrometry/ASTAPFolder','');
    engine.ASTAPSearchRadius:=config.GetValue('/Astrometry/ASTAPSearchRadius',5);
-   engine.ASTAPdownsample:=config.GetValue('/Astrometry/ASTAPdownsample',1);
+   engine.ASTAPdownsample:=config.GetValue('/Astrometry/ASTAPdownsample',2);
    engine.LogFile:=logfile;
    engine.InFile:=infile;
    engine.OutFile:=outfile;
