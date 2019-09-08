@@ -10767,7 +10767,7 @@ begin
  if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
-     fits.GetHFD(xxc,yyc,rc,bg,bgdev,xc,yc,hfd,fwhm,vmax,snr);
+     fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr);
      if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
         sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
      end;

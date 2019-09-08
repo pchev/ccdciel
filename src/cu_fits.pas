@@ -180,7 +180,6 @@ type
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-     procedure GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
      procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
@@ -1659,79 +1658,6 @@ begin
        vmax:=0;
    end;
  end;
-end;
-
-
-
-procedure TFits.GetHFD(x,y,ri: integer; bg,bg_standard_deviation: double; out xc,yc,hfd,star_fwhm,valmax,snr: double);
-var i,j: integer;
-    SumVal,SumValX,SumValY,SumValR: double;
-    Xg,Yg: double;
-    r:double;
-    val, pixel_counter: double;
-begin
-// x,y must be the star center, ri the radius of interest, bg the mean image value computed by FindStarPos
-hfd:=-1;
-star_fwhm:=-1;
-if ri<=0 then exit;
-
-try
-// Get center of star gravity whithin radius of interest
-SumVal:=0;
-SumValX:=0;
-SumValY:=0;
-valmax:=0;
-for i:=-ri to ri do
- for j:=-ri to ri do begin
-   val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
-   if val>((3*bg_standard_deviation)) then  {3 * sd should be signal }
-   begin
-     if val>valmax then valmax:=val;
-     SumVal:=SumVal+val;
-     SumValX:=SumValX+val*(i);
-     SumValY:=SumValY+val*(j);
-   end;
- end;
-if SumVal=0 then begin snr:=0; exit; end;{no values, abort. star_fwhm is already -1}
-Xg:=SumValX/SumVal;
-Yg:=SumValY/SumVal;
-xc:=x+Xg;
-yc:=y+Yg;
-
-// Get HFD
-SumVal:=0;
-SumValR:=0;
-pixel_counter:=0;
-if valmax>1 then
-   snr:=valmax/sqrt(valmax+2*bg)
-else
-  snr:=valmax*MAXWORD/sqrt(valmax*MAXWORD+2*bg*MAXWORD);
-if snr>3 then
-begin  // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
-  for i:=-ri to ri do  {Make steps of one pixel in the region of interest}
-    for j:=-ri to ri do
-    begin
-      Val:=FimageMin+value_subpixel(xc+i,yc+j)/FimageC-bg; {The calculated center of gravity is a floating point position and can be anyware, so calculate pixel values on sub-pixel level}
-      if val>((3*bg_standard_deviation)) then {3 * sd should be signal}
-      begin
-        r:=sqrt(i*i+j*j);
-        SumVal:=SumVal+Val;
-        SumValR:=SumValR+Val*r;
-        if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{how many pixels are above half maximum for FWHM}
-      end;
-    end;
-    if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
-    hfd:=2*SumValR/SumVal;
-    hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
-    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
-end;
-
-except
-  on E: Exception do begin
-    hfd:=-1;
-    star_fwhm:=-1;
-  end;
-end;
 end;
 
 procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);
