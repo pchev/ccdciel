@@ -2552,8 +2552,14 @@ procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
  MagnifyerTimer.Enabled:=true;
  if MouseMoving and fits.HeaderInfo.valid then begin
-    ImgCx:=ImgCx + (X-Mx) / ImgZoom;
-    ImgCy:=ImgCy + (Y-My) / ImgZoom;
+    if f_visu.FlipHorz then
+      ImgCx:=ImgCx - (X-Mx) / ImgZoom
+    else
+      ImgCx:=ImgCx + (X-Mx) / ImgZoom;
+    if f_visu.FlipVert then
+      ImgCy:=ImgCy - (Y-My) / ImgZoom
+    else
+      ImgCy:=ImgCy + (Y-My) / ImgZoom;
     PlotTimer.Enabled:=true;
  end
  else if MouseFrame then begin
