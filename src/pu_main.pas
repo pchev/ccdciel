@@ -10730,7 +10730,7 @@ var xx,yy,n: integer;
     sval:string;
     ra,de: double;
     c: TcdcWCScoord;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr: double;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux,fluxsnr,mag,magerr: double;
 begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
@@ -10767,9 +10767,15 @@ begin
  if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
-     fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr);
+     fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux,fluxsnr);
      if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
-        sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
+       sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
+       if flux>0 then begin
+         sval:=sval+' flux='+FormatFloat(f0,flux)+' snr='+FormatFloat(f0,fluxsnr);
+         mag:=-2.5*log10(flux);
+         magerr:=2.5*log10(1+1/fluxsnr);
+         sval:=sval+' mag='+FormatFloat(f3,mag)+'+/-'+FormatFloat(f3,magerr);
+       end;
      end;
    end;
  end;

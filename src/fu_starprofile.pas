@@ -628,7 +628,7 @@ end;
 end;
 
 procedure Tf_starprofile.ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
-var bg,bgdev: double;
+var bg,bgdev,flux,fluxsnr: double;
   xg,yg: double;
   xm,ym,ri: integer;
 begin
@@ -642,7 +642,7 @@ begin
  f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
  if FValMax=0 then exit;
 
- f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr);
+ f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux,fluxsnr);
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end
@@ -672,7 +672,7 @@ end;
 
 procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
 var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
-  xg,yg: double;
+  xg,yg,flux,fluxsnr: double;
   xm,ym,ri,ns,i,nhfd: integer;
   hfdlist: array of double;
   txt:string;
@@ -743,7 +743,7 @@ begin
      ChkAutofocusDown(false);
      exit;
   end;
-  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr);
+  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr,flux,fluxsnr);
   // process this measurement
   if (Fhfd<=0) then begin
     msg(rsAutofocusCan4,0);

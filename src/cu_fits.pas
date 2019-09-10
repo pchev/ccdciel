@@ -180,7 +180,7 @@ type
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);{han.k 2018-3-21}
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux,fluxsnr: double);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure ClearStarList;
@@ -1660,7 +1660,7 @@ begin
  end;
 end;
 
-procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr: double);
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux,fluxsnr: double);
 // x,y, s, test location x,y and box size s x s
 // xc,yc, center of gravity
 // bg, background value
@@ -1669,11 +1669,13 @@ procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,s
 // star_fwhm, Full Width Half Maximum of star disk
 // valmax, maximum value of brightest pixel in final test box.
 // SNR, signal noise ratio
+// flux, the total star signal
+// fluxsnr, the signal noise ratio on the total flux
 const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
-    pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
+    pixel_counter,r, val_00,val_01,val_10,val_11,af,bgsnr :double;
     distance_histogram : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
 begin
@@ -1684,6 +1686,8 @@ begin
   valmax:=0;
   hfd:=-1;
   star_fwhm:=-1;
+  flux:=-1;
+  fluxsnr:=-1;
 
   rs:=s div 2;
   if (x-s)<1+4 then x:=s+1+4;
@@ -1823,6 +1827,13 @@ begin
   hfd:=2*SumValR/SumVal;
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+  if SumVal>0.00001 then begin
+    flux:=Sumval/FimageC;
+    fluxsnr:=flux/sqrt(flux+4*ri*ri*(FimageMin+bg/FimageC));
+  end else begin
+    flux:=-1;
+    fluxsnr:=-1;
+  end;
 
 {==========Notes on HFD calculation method=================
   https://en.wikipedia.org/wiki/Half_flux_diameter
@@ -1887,7 +1898,7 @@ end;
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
  fitsX,fitsY,fx,fy,nhfd,i,j,size: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxsnr: double;
  marginx,marginy,overlap: integer;
  img_temp: Timai8;
 begin
@@ -1913,7 +1924,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
    begin
      fitsX:=fx*s;
 
-     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);{2018-3-21, calculate HFD}
+     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,fluxsnr);{2018-3-21, calculate HFD}
 
      {scale the result as GetHFD2 work with internal 16 bit values}
      vmax:=vmax/FimageC;
@@ -1954,7 +1965,7 @@ end;
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
 var
  fitsX,fitsY,nhfd,i: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxsnr: double;
 begin
 
 nhfd:=0;{set counters at zero}
@@ -1967,7 +1978,7 @@ for i:=0 to Length(list)-1 do
    hfd1:=-1;
    star_fwhm:=-1;
 
-   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr);
+   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,fluxsnr);
 
    // normalize value
    vmax:=vmax/FimageC; // include bg subtraction
