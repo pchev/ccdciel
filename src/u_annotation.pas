@@ -268,31 +268,6 @@ begin
    dc.polygon(glx,nr+1);
 end;
 
-procedure rotate(rot,x,y :double;out  x2,y2:double);{rotate a vector point, angle seen from y-axis, counter clockwise}
-var
-  sin_rot, cos_rot :double;
-begin
-  sincos(rot, sin_rot, cos_rot);
-  x2:=x * + sin_rot + y*cos_rot;
-  y2:=x * - cos_rot + y*sin_rot;{SEE PRISMA WIS VADEMECUM page 68}
-end;
-
-
-{ transformation of equatorial coordinates into CCD pixel coordinates for optical projection, rigid method}
-{ ra0,dec0: right ascension and declination of the optical axis}
-{ ra,dec:   right ascension and declination}
-{ xx,yy :   CCD coordinates}
-{ cdelt:    CCD scale in arcsec per pixel}
-procedure equatorial_standard(ra0,dec0,ra,dec, cdelt : double; out xx,yy: double);
-var dv,sin_dec0,cos_dec0,sin_dec ,cos_dec,sin_deltaRA,cos_deltaRA: double;
-begin
-  sincos(dec0  ,sin_dec0 ,cos_dec0);
-  sincos(dec   ,sin_dec  ,cos_dec );
-  sincos(ra-ra0, sin_deltaRA,cos_deltaRA);
-  dv  := (cos_dec0 * cos_dec * cos_deltaRA + sin_dec0 * sin_dec) / (3600*180/pi)*cdelt; {/ (3600*180/pi)*cdelt, factor for conversion standard coordinates to CCD pixels}
-  xx := - cos_dec *sin_deltaRA / dv;{tangent of the angle in RA}
-  yy := -(sin_dec0 * cos_dec * cos_deltaRA - cos_dec0 * sin_dec) / dv;  {tangent of the angle in DEC}
-end;
 
 procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
 type
@@ -300,16 +275,14 @@ type
      x1,y1,x2,y2 : integer;
   end;
 var
-  fitsX, fitsY : double;
-  dra,ddec,delta,gamma,
-  telescope_ra,telescope_dec,cos_telescope_dec,fov,ra2,dec2,
-  length1,width1,pa,xx,yy,x,y,len,flipped,
-  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2,crota1,crota2,ra0,dec0,test :double;
+  fitsX, fitsY, dra,ddec,delta,gamma, telescope_ra,telescope_dec,cos_telescope_dec,fov,ra2,dec2, length1,width1,
+  pa,xx,yy,len,flipped,  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2, crota2,ra0,dec0, delta_ra,det,
+  SIN_dec_ref,COS_dec_ref,SIN_dec_new,COS_dec_new,SIN_delta_ra,COS_delta_ra,hh : double;
   width2, height2,h,sign: integer;
   name: string;
   new_to_old_WCS: boolean;
   text_dimensions  : array of textarea;
-  i,text_counter,th,tw,x1,y1,x2,y2,xm,ym : integer;
+  i,text_counter,th,tw,x1,y1,x2,y2,x,y  : integer;
   overlap  :boolean;
 begin
   if ((f<>nil) and (f.HeaderInfo.solved)) then
@@ -338,14 +311,15 @@ begin
       if (cd1_1*cd2_2-cd1_2*cd2_1)>=0 then sign:=+1 else sign:=-1;
       cdelt1:=sqrt(sqr(cd1_1)+sqr(cd2_1))*sign;
       cdelt2:=sqrt(sqr(cd1_2)+sqr(cd2_2));
-      crota1:= arctan2(sign*cd1_2,cd2_2);
+      //crota1:= arctan2(sign*cd1_2,cd2_2);{not required}
       crota2:= arctan2(sign*cd1_1,cd2_1)-pi/2;
-      crota1:= crota1*180/pi;
+      //crota1:= crota1*180/pi; {not required}
       crota2:= crota2*180/pi;
     end;
 
-    dRa :=(cd1_1*(fitsx-crpix1)+cd1_2*(fitsy-crpix2))*pi/180;
-    dDec:=(cd2_1*(fitsx-crpix1)+cd2_2*(fitsy-crpix2))*pi/180;
+    {6. Passage (x,y) -> (RA,DEC) to find RA0,DEC0 for middle of the image. See http://alain.klotz.free.fr/audela/libtt/astm1-fr.htm}
+    dRa :=(cd1_1*((width2/2)-crpix1)+cd1_2*((height2/2)-crpix2))*pi/180; {also valid for case crpix1,crpix2 is not in the middle}
+    dDec:=(cd2_1*((width2/2)-crpix1)+cd2_2*((height2/2)-crpix2))*pi/180;
     delta:=cos(dec0)-dDec*sin(dec0);
     gamma:=sqrt(dRa*dRa+delta*delta);
     telescope_ra:=ra0+arctan(Dra/delta);
@@ -374,39 +348,48 @@ begin
     text_counter:=0;
     setlength(text_dimensions,200);
 
+    sincos(dec0,SIN_dec_ref,COS_dec_ref);{do this in advance since it is for each pixel the same}
+
     repeat
       read_deepsky('S',telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov,{var} ra2,dec2,length1,width1,pa);{deepsky database search}
-      equatorial_standard(telescope_ra,telescope_dec,ra2,dec2,1, {var} xx,yy); {xx,yy in arc seconds}
-      xx:=xx/(cdelt1*3600);{convert arc seconds to pixels}
-      yy:=yy/(cdelt2*3600);
-      rotate((90-crota2)*pi/180,xx,yy,x,y);{rotate to screen orientation}
 
-      if ((x<=width2/2+500) and (y<=height2/2+500)) then {within image1 with some overlap}
+      {5. Conversion (RA,DEC) -> (x,y). See http://alain.klotz.free.fr/audela/libtt/astm1-fr.htm}
+      sincos(dec2,SIN_dec_new,COS_dec_new);{sincos is faster then seperate sin and cos functions}
+      delta_ra:=ra2-ra0;
+      sincos(delta_ra,SIN_delta_ra,COS_delta_ra);
+      HH := SIN_dec_new*sin_dec_ref + COS_dec_new*COS_dec_ref*COS_delta_ra;
+      dRA := (COS_dec_new*SIN_delta_ra / HH)*180/pi;
+      dDEC:= ((SIN_dec_new*COS_dec_ref - COS_dec_new*SIN_dec_ref*COS_delta_ra ) / HH)*180/pi;
+      det:=CD2_2*CD1_1 - CD1_2*CD2_1;
+      fitsX:= +crpix1 - (CD1_2*dDEC - CD2_2*dRA) / det;{1..width2}
+      fitsY:= +crpix2 + (CD1_1*dDEC - CD2_1*dRA) / det;{1..height2}
+      x:=round(fitsX-1);{0..width2-1}
+      y:=round(fitsY-1);{0..height2-1}
+
+      if ((x>-0.25*width2) and (x<=1.25*width2) and (y>-0.25*height2) and (y<=1.25*height2)) then {within image1 with 25% overlap}
       begin
-
-        x:=fitsX-x;
-        y:=fitsY-y;
-
-        if naam3='' then name:=naam2
-        else
-        if naam4='' then name:=naam2+'/'+naam3
-        else
-        name:=naam2+'/'+naam3+'/'+naam4;
+        y:=(height2-1)-y;
 
         {Plot deepsky text labels on an empthy text space.}
         { 1) If the center of the deepsky object is outside the image then don't plot text}
         { 2) If the text space is occupied, then move the text down. If the text crosses the bottom then use the original text position.}
         { 3) If the text crosses the right side of the image then move the text to the left.}
         { 4) If the text is moved in y then connect the text to the deepsky object with a vertical line.}
-        if ( (round(x)>=0) and (round(x)<=width2) and (round(y)>=0) and (round(y)<=height2) ) then {plot only text if center object is visible}
+        if ( (x>=0) and (x<=width2) and (y>=0) and (y<=height2) ) then {plot only text if center object is visible}
         begin
+          if naam3='' then name:=naam2
+          else
+          if naam4='' then name:=naam2+'/'+naam3
+          else
+          name:=naam2+'/'+naam3+'/'+naam4;
+
           {get text dimensions}
           th:=cnv.textheight(name);
           tw:=cnv.textwidth(name);
-          x1:=round(x);
-          y1:=round(y);
-          x2:=round(x)+ tw;
-          y2:=round(y)+ th ;
+          x1:=x;
+          y1:=y;
+          x2:=x + tw;
+          y2:=y + th ;
 
           if ((x1<=width2) and (x2>width2)) then begin x1:=x1-(x2-width2);x2:=width2;end; {if text is beyond right side, move left}
 
@@ -430,8 +413,8 @@ begin
                   y2:=y2+(th div 3);
                   if y2>=height2 then {no space left, use original position}
                      begin
-                       y1:=round(y);
-                       y2:=round(y) +th ;
+                       y1:=y;
+                       y2:=y +th ;
                        overlap:=false;{stop searching}
                        i:=$FFFFFFF;{stop searching}
                      end;
@@ -446,10 +429,10 @@ begin
           text_dimensions[text_counter].x2:=x2;
           text_dimensions[text_counter].y2:=y2;
 
-          if y1<>round(y) then {there was textual overlap, draw line down}
+          if y1<>y then {there was textual overlap, draw line down}
           begin
-            cnv.moveto(round(x),round(y+th/4));
-            cnv.lineto(round(x),y1);
+            cnv.moveto(x,round(y+th/4));
+            cnv.lineto(x,y1);
           end;
           cnv.textout(x1,y1,name);
           inc(text_counter);
@@ -460,19 +443,17 @@ begin
         len:=length1/(cdelt2*60*10*2); {Length in pixels}
         if len<=2 then {too small to plot an elipse or circle, just plot four dots}
         begin {tiny object marking}
-          xm:=round(x);
-          ym:=round(y);
-          cnv.pixels[xm-2,ym+2]:=clyellow;
-          cnv.pixels[xm+2,ym+2]:=clyellow;
-          cnv.pixels[xm-2,ym-2]:=clyellow;
-          cnv.pixels[xm+2,ym-2]:=clyellow;
+          cnv.pixels[x-2,y+2]:=clyellow;
+          cnv.pixels[x+2,y+2]:=clyellow;
+          cnv.pixels[x-2,y-2]:=clyellow;
+          cnv.pixels[x+2,y-2]:=clyellow;
         end {tiny object marking}
         else
         begin {normal plot}
           if PA<>999 then
           plot_glx(cnv,x,y,len,width1/length1,(pa*flipped+crota2)*pi/180) {draw oval or galaxy}
         else
-          cnv.ellipse(round(x-len),round(y-len),round(x+len),round(y+len));{circel}
+          cnv.ellipse(round(x-len),round(y-len),round(x+1+len),round(y+1+len));{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
         end;{normal plot}
       end;
 
