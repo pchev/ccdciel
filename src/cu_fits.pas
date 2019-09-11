@@ -1675,7 +1675,7 @@ const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
-    pixel_counter,r, val_00,val_01,val_10,val_11,af,bgsnr :double;
+    pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
     distance_histogram : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
 begin
@@ -1827,15 +1827,15 @@ begin
   hfd:=2*SumValR/SumVal;
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
-
   if (SumVal>0.00001)and((round(FimageMin+(bg+valmax)/FimageC))<MaxADU) then begin
     flux:=Sumval/FimageC;
-    fluxsnr:=flux/sqrt(flux+4*ri*ri*(bg_standard_deviation/FimageC)*(bg_standard_deviation/FimageC));
-//    fluxsnr:=flux/sqrt(flux+4*ri*ri*(FimageMin+bg/FimageC));
+    fluxsnr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation)); {For both bright stars (shot-noise limited) or skybackground limited situations
+                                                                     snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
   end else begin
     flux:=-1;
     fluxsnr:=-1;
   end;
+
 
 {==========Notes on HFD calculation method=================
   https://en.wikipedia.org/wiki/Half_flux_diameter
@@ -1985,6 +1985,7 @@ for i:=0 to Length(list)-1 do
    // normalize value
    vmax:=vmax/FimageC; // include bg subtraction
    bg:=FimageMin+bg/FimageC;
+
 
    {check valid hfd, snr}
    if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then

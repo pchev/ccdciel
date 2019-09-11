@@ -10777,7 +10777,7 @@ begin
      if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
        sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
        if flux>0 then begin
-         sval:=sval+' flux='+FormatFloat(f0,flux)+' snr='+FormatFloat(f0,fluxsnr);
+         sval:=sval+' flux='+FormatFloat(f0,flux)+' snr='+FormatFloat(f1,10*log10(fluxsnr))+'dB';
          mag:=-2.5*log10(flux);
          magerr:=2.5*log10(1+1/fluxsnr);
          sval:=sval+' mag='+FormatFloat(f3,mag)+'+/-'+FormatFloat(f3,magerr);
