@@ -180,7 +180,7 @@ type
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux,fluxsnr: double);{han.k 2018-3-21}
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure ClearStarList;
@@ -1660,7 +1660,7 @@ begin
  end;
 end;
 
-procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux,fluxsnr: double);
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double);
 // x,y, s, test location x,y and box size s x s
 // xc,yc, center of gravity
 // bg, background value
@@ -1687,7 +1687,6 @@ begin
   hfd:=-1;
   star_fwhm:=-1;
   flux:=-1;
-  fluxsnr:=-1;
 
   rs:=s div 2;
   if (x-s)<1+4 then x:=s+1+4;
@@ -1812,8 +1811,6 @@ begin
   SumValR:=0;
   pixel_counter:=0;
 
-  snr:=valmax/bg_standard_deviation;{how much times above background noise}
-
   for i:=-ri to ri do {Make steps of one pixel}
     for j:=-ri to ri do
     begin
@@ -1829,11 +1826,11 @@ begin
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
   if (SumVal>0.00001)and((round(FimageMin+(bg+valmax)/FimageC))<MaxADU) then begin
     flux:=Sumval/FimageC;
-    fluxsnr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation)); {For both bright stars (shot-noise limited) or skybackground limited situations
+    snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation)); {For both bright stars (shot-noise limited) or skybackground limited situations
                                                                      snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
   end else begin
     flux:=-1;
-    fluxsnr:=-1;
+    snr:=0;
   end;
 
 
@@ -1900,7 +1897,7 @@ end;
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
  fitsX,fitsY,fx,fy,nhfd,i,j,size: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxsnr: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux: double;
  marginx,marginy,overlap: integer;
  img_temp: Timai8;
 begin
@@ -1926,7 +1923,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
    begin
      fitsX:=fx*s;
 
-     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,fluxsnr);{2018-3-21, calculate HFD}
+     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);{2018-3-21, calculate HFD}
 
      {scale the result as GetHFD2 work with internal 16 bit values}
      vmax:=vmax/FimageC;
@@ -1967,7 +1964,7 @@ end;
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
 var
  fitsX,fitsY,nhfd,i: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxsnr: double;
+ hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux: double;
 begin
 
 nhfd:=0;{set counters at zero}
@@ -1980,7 +1977,7 @@ for i:=0 to Length(list)-1 do
    hfd1:=-1;
    star_fwhm:=-1;
 
-   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,fluxsnr);
+   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);
 
    // normalize value
    vmax:=vmax/FimageC; // include bg subtraction

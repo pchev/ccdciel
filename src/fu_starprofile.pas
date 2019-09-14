@@ -628,7 +628,7 @@ end;
 end;
 
 procedure Tf_starprofile.ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
-var bg,bgdev,flux,fluxsnr: double;
+var bg,bgdev,flux: double;
   xg,yg: double;
   xm,ym,ri: integer;
 begin
@@ -642,7 +642,7 @@ begin
  f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
  if FValMax=0 then exit;
 
- f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux,fluxsnr);
+ f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end
@@ -743,7 +743,7 @@ begin
      ChkAutofocusDown(false);
      exit;
   end;
-  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr,flux,fluxsnr);
+  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr,flux);
   // process this measurement
   if (Fhfd<=0) then begin
     msg(rsAutofocusCan4,0);
