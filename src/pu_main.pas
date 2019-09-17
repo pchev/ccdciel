@@ -317,6 +317,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -2495,6 +2496,18 @@ begin
   {$endif}{$endif}{$endif}
   except
   end;
+end;
+
+procedure Tf_main.FormDropFiles(Sender: TObject;
+  const FileNames: array of String);
+var
+   fext:string;
+begin
+  fext:=uppercase(extractfileext(FileNames[0]));{take the first file name in the drop list}
+  if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS')) then
+     LoadFitsFile(FileNames[0]) {load fits file}
+  else
+     LoadPictureFile(FileNames[0]); {load picture file}
 end;
 
 procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

@@ -4,6 +4,7 @@ object f_main: Tf_main
   Top = 136
   Width = 1000
   ActiveControl = PageControlRight
+  AllowDropFiles = True
   Caption = 'CCD Ciel'
   ClientHeight = 580
   ClientWidth = 1000
@@ -16,6 +17,7 @@ object f_main: Tf_main
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnDropFiles = FormDropFiles
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
