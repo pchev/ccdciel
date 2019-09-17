@@ -442,10 +442,6 @@ object f_main: Tf_main
       object N1: TMenuItem
         Caption = '-'
       end
-      object MenuOpen: TMenuItem
-        Caption = 'Open FITS file...'
-        OnClick = MenuOpenClick
-      end
       object MenuOpenPicture: TMenuItem
         Caption = 'Open picture file...'
         OnClick = MenuOpenPictureClick
@@ -2977,9 +2973,9 @@ object f_main: Tf_main
     left = 542
     top = 318
   end
-  object OpenPictureDialog1: TOpenPictureDialog
+  object OpenPictureDialog1: TOpenDialog
     Title = 'Open picture file'
-    Filter = 'Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All files (*)|*'
+    Filter = 'FITS (*.fits;*.fit;*.fts)|*.fits;*.fit;*.fts|Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All files (*)|*'
     Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
     left = 62
     top = 399

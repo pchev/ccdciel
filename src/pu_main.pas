@@ -152,7 +152,7 @@ type
     MenuRotatorRotate2: TMenuItem;
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
-    OpenPictureDialog1: TOpenPictureDialog;
+    OpenPictureDialog1: TOpenDialog;
     PanelMsgTabs: TPanel;
     PanelRight: TPanel;
     MagnifyerTimer: TTimer;
@@ -239,7 +239,6 @@ type
     MenuItem22: TMenuItem;
     MenuItem23: TMenuItem;
     MenuItem24: TMenuItem;
-    MenuOpen: TMenuItem;
     MenuSave: TMenuItem;
     N6: TMenuItem;
     MenuViewFrame: TMenuItem;
@@ -1665,7 +1664,6 @@ begin
    MenuDarkClear.Caption:=rsClearDarkFra;
    MenuFocuserCalibration.Caption := rsFocuserCalib;
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
-   MenuOpen.Caption := Format(rsOpenFITSFile, [ellipsis]);
    MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
    MenuRefimage.Caption := rsOpenReferenc;
    MenuClearRef.Caption := rsClearReferen;
@@ -8290,9 +8288,14 @@ begin
 end;
 
 procedure Tf_main.MenuOpenPictureClick(Sender: TObject);
+var fext: string;
 begin
   if OpenPictureDialog1.Execute then begin
-     LoadPictureFile(OpenPictureDialog1.FileName);
+   fext:=uppercase(extractfileext(OpenPictureDialog1.FileName));
+   if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS')) then
+      LoadFitsFile(OpenPictureDialog1.FileName) {load fits file}
+   else
+      LoadPictureFile(OpenPictureDialog1.FileName); {load picture file}
   end;
 end;
 
