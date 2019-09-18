@@ -6087,8 +6087,8 @@ begin
         {$endif}
       {$endif}
       );
-   f_option.ASTAPSearchRadius.Value:=config.GetValue('/Astrometry/ASTAPSearchRadius',5);
-   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',2);
+   f_option.ASTAPSearchRadius.Value:=config.GetValue('/Astrometry/ASTAPSearchRadius',30);
+   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',2);{0 is automatic selection but gives an runtime error in old ASTAP versions. Make 0 default after 9/2020}
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
    f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',5.0);
    f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
