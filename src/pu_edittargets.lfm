@@ -1216,6 +1216,14 @@ object f_EditTargets: Tf_EditTargets
               ParentColor = False
               ParentFont = False
             end
+            object LabelMsg: TLabel
+              Left = 276
+              Height = 14
+              Top = 0
+              Width = 58
+              Caption = 'LabelMsg'
+              ParentColor = False
+            end
           end
           object Panel10: TPanel
             Left = 0

@@ -77,6 +77,7 @@ type
     Label4: TLabel;
     Label13: TLabel;
     Label5: TLabel;
+    LabelMsg: TLabel;
     OpenDialog1: TOpenDialog;
     PageControlPlan: TPageControl;
     Panel1: TPanel;
@@ -312,6 +313,7 @@ end;
 
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
+  LabelMsg.Caption:='';
   ObjectNameChange:=false;
   TargetList.Cells[colseq,0]:='Seq';
   StepList.Cells[0,0]:='Seq';
@@ -2223,15 +2225,23 @@ end;
 procedure Tf_EditTargets.SetStep(n: integer; p: TStep);
 begin
   LockStep:=true;
+  LabelMsg.Caption:='';
   StepList.Cells[pcoldesc,n]:=p.description_str;
   StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
   StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
   StepList.Cells[pcolbin,n]:=p.binning_str;
-  if hasGainISO then
-    StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
+  if hasGainISO then begin
+    if (p.gain<StepList.Columns[pcolgain-1].PickList.Count) then
+      StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
+    else
+      LabelMsg.Caption:='Gain setting not compatible!';
+  end
   else
     StepList.Cells[pcolgain,n]:=IntToStr(p.gain);
-  StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter];
+  if p.filter<StepList.Columns[pcolfilter-1].PickList.count then
+    StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter]
+  else
+    LabelMsg.Caption:='Filter setting not compatible!';
   StepList.Cells[pcolcount,n]:=IntToStr(p.count);
   if p.dither then
     StepList.Cells[pcoldither,n]:=IntToStr(p.dithercount)
