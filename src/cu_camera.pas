@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  cu_fits, cu_mount, cu_wheel, cu_focuser, u_global, u_utils,  indiapi, math, u_translation,
-  LCLVersion, Classes, Forms, SysUtils;
+  LCLVersion, Classes, Forms, SysUtils, ExtCtrls;
 
 type
 
@@ -155,6 +155,10 @@ T_camera = class(TComponent)
   private
     lockvideoframe: boolean;
     TempFinal: Double;
+    TempNow,TempRamp: double;
+    Nstep: integer;
+    RampTimer: TTimer;
+    procedure RampTimerTimer(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -313,6 +317,10 @@ begin
   FhasReadOut:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
+  RampTimer:=TTimer.Create(self);
+  RampTimer.Enabled:=false;
+  RampTimer.Interval:=1000;
+  RampTimer.OnTimer:=@RampTimerTimer;
 end;
 
 destructor  T_camera.Destroy;
@@ -344,8 +352,8 @@ begin
 end;
 
 procedure T_camera.SetTemperatureRampAsync(Data: PtrInt);
-var TempStart,TempNow,TempRamp,tsl: double;
-    Nstep,TempStep: integer;
+var TempStart,tsl: double;
+    TempStep: integer;
 begin
   if TemperatureScale=0 then
      tsl:=TemperatureSlope
@@ -359,7 +367,6 @@ begin
      exit;
   end;
   msg(Format(rsSetTemperatu2, [formatfloat(f1, TempDisplay(TemperatureScale,TempFinal))+TempLabel]));
-  try
   FTemperatureRampActive:=true;
   TempStart:=GetTemperature;
   TempNow:=TempStart;
@@ -368,21 +375,32 @@ begin
   else
      TempRamp:=-1.0;
   Nstep:=round(abs(TempStart-TempFinal));
-  while Nstep>0 do begin
-    TempNow:=TempNow+TempRamp;
-    SetTemperature(TempNow);
-    wait(TempStep);
+  TempNow:=TempNow+TempRamp;
+  SetTemperature(TempNow);
+  dec(Nstep);
+  RampTimer.Interval:=TempStep*1000;
+  RampTimer.Enabled:=true;
+end;
+
+procedure T_camera.RampTimerTimer(Sender: TObject);
+begin
+  RampTimer.Enabled:=false;
+  if Nstep>0 then begin
     if FCancelTemperatureRamp then begin
        FCancelTemperatureRamp:=false;
        FTemperatureRampActive:=false;
        msg(rsTemperatureR2,0);
+       if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
        exit;
     end;
+    TempNow:=TempNow+TempRamp;
+    SetTemperature(TempNow);
     dec(Nstep);
-  end;
-  SetTemperature(TempFinal);
-  msg(rsSetTemperatu3);
-  finally
+    RampTimer.Enabled:=true;
+  end
+  else begin
+    SetTemperature(TempFinal);
+    msg(rsSetTemperatu3);
     FTemperatureRampActive:=false;
     if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
   end;
