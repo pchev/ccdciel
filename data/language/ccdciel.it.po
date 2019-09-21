@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-27 11:32+0000\n"
-"X-Generator: Launchpad (build 19034)\n"
+"X-Launchpad-Export-Date: 2019-09-21 18:00+0000\n"
+"X-Generator: Launchpad (build 19048)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -682,6 +682,10 @@ msgstr "Anteprima colore"
 
 #: u_translation.rscolumn
 msgid "column"
+msgstr ""
+
+#: u_translation.rscommandpath
+msgid "Command path"
 msgstr ""
 
 #: u_translation.rscommands
@@ -1784,6 +1788,10 @@ msgstr "Misura hfd di %s:%s picco:%s snr:%s"
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr ""
 
+#: u_translation.rsmedian
+msgid "%sMedian:%s"
+msgstr ""
+
 #: u_translation.rsmeridian
 msgid "Meridian"
 msgstr "Meridiano"
@@ -2280,6 +2288,10 @@ msgstr "Manuale PDF"
 msgid "Periodic auto-focus"
 msgstr ""
 
+#: u_translation.rspixelcount
+msgid "%sPixel count:%s"
+msgstr ""
+
 #: u_translation.rspixels
 msgid "Pixels"
 msgstr ""
@@ -2512,6 +2524,10 @@ msgstr ""
 msgid "Receive unknown message: %s"
 msgstr "Ricevuto messaggio sconosciuto: %s"
 
+#: u_translation.rsrecenterifth
+msgid "Recenter if the drift is more than"
+msgstr ""
+
 #: u_translation.rsrecenterimag
 msgid "Recenter image error!%sdistance: %s"
 msgstr ""
@@ -2522,6 +2538,14 @@ msgstr ""
 
 #: u_translation.rsrecenteronla2
 msgid "Recenter on last image"
+msgstr ""
+
+#: u_translation.rsrecentersequ
+msgid "Recenter sequence target that drift"
+msgstr ""
+
+#: u_translation.rsrecentertarg
+msgid "Recenter target now"
 msgstr ""
 
 #: u_translation.rsred
@@ -2730,6 +2754,10 @@ msgstr "Esegui"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
+msgstr ""
+
+#: u_translation.rsrunastrometr
+msgid "Run astrometry on every image to search for drift"
 msgstr ""
 
 #: u_translation.rsrunautofocus
@@ -3490,6 +3518,10 @@ msgstr "Obiettivi"
 
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
+msgstr ""
+
+#: u_translation.rstargetwillbe2
+msgid "Target will be recentered before next image"
 msgstr ""
 
 #: u_translation.rstcpipserverl

@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-08-27 11:12+0000\n"
-"PO-Revision-Date: 2019-08-09 21:02+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
+"PO-Revision-Date: 2019-09-13 20:22+0000\n"
+"Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-27 11:32+0000\n"
-"X-Generator: Launchpad (build 19034)\n"
+"X-Launchpad-Export-Date: 2019-09-21 18:00+0000\n"
+"X-Generator: Launchpad (build 19048)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -175,7 +175,7 @@ msgstr "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
 
 #: u_translation.rsautofocusdue
 msgid "Autofocus due in"
-msgstr ""
+msgstr "Autofocus due in"
 
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
@@ -215,7 +215,7 @@ msgstr "Autofocus focus out by %s"
 
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
-msgstr ""
+msgstr "Autofocus graph"
 
 #: u_translation.rsautofocusmea
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
@@ -319,7 +319,7 @@ msgstr "Automatically slave \"Dome Park\" to \"Mount Park\""
 
 #: u_translation.rsautomaticall2
 msgid "Automatically run auto-focus every"
-msgstr ""
+msgstr "Automatically run auto-focus every"
 
 #: u_translation.rsautomaticcoo
 msgid "Automatic cooling "
@@ -339,7 +339,7 @@ msgstr "available"
 
 #: u_translation.rsazimuth
 msgid "Azimuth"
-msgstr ""
+msgstr "Azimuth"
 
 #: u_translation.rsback
 msgid "Back"
@@ -471,11 +471,11 @@ msgstr "Cancel in %s seconds."
 
 #: u_translation.rscannotchange
 msgid "Cannot change start time. Sequence will start in time for the dusk flat."
-msgstr ""
+msgstr "Cannot change start time. Sequence will start in time for the dusk flat."
 
 #: u_translation.rscannotchange2
 msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
-msgstr ""
+msgstr "Cannot change stop time. Sequence will stop in time for the dawn flat."
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
@@ -684,6 +684,10 @@ msgstr "Colour preview"
 #: u_translation.rscolumn
 msgid "column"
 msgstr "column"
+
+#: u_translation.rscommandpath
+msgid "Command path"
+msgstr ""
 
 #: u_translation.rscommands
 msgid "Commands"
@@ -1047,7 +1051,7 @@ msgstr "Do you want to retry?"
 
 #: u_translation.rsdoyouwanttor2
 msgid "Do you want to run the termination action now?"
-msgstr ""
+msgstr "Do you want to run the termination action now?"
 
 #: u_translation.rsdusk
 msgid "dusk"
@@ -1247,7 +1251,7 @@ msgstr "FITS header"
 
 #: u_translation.rsfixedsequenc
 msgid "Fixed sequence length"
-msgstr ""
+msgstr "Fixed sequence length"
 
 #: u_translation.rsflat
 msgid "Flat"
@@ -1463,7 +1467,7 @@ msgstr "Good"
 
 #: u_translation.rsgoto
 msgid "Goto"
-msgstr ""
+msgstr "Goto"
 
 #: u_translation.rsgreen
 msgid "green"
@@ -1571,7 +1575,7 @@ msgstr "Image Un-debayered"
 
 #: u_translation.rsimportcdcobs
 msgid "Import CdC observing list"
-msgstr ""
+msgstr "Import CdC observing list"
 
 #: u_translation.rsin
 msgid "In"
@@ -1607,7 +1611,7 @@ msgstr "In place autofocus failed!"
 
 #: u_translation.rsinsertrows
 msgid "Insert rows"
-msgstr ""
+msgstr "Insert rows"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -1784,6 +1788,10 @@ msgstr "Measurement %s hfd:%s peak:%s snr:%s"
 #: u_translation.rsmeasurementp
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+
+#: u_translation.rsmedian
+msgid "%sMedian:%s"
+msgstr ""
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -1971,7 +1979,7 @@ msgstr "Next"
 
 #: u_translation.rsno
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: u_translation.rsnoalignments
 msgid "No alignment star found for stacking"
@@ -2195,7 +2203,7 @@ msgstr "Options"
 
 #: u_translation.rsor
 msgid "or"
-msgstr ""
+msgstr "or"
 
 #: u_translation.rsotheroptions
 msgid "Other options "
@@ -2267,7 +2275,7 @@ msgstr "Pause before meridian flip "
 
 #: u_translation.rspauseguiding
 msgid "Pause guiding during autofocus"
-msgstr ""
+msgstr "Pause guiding during autofocus"
 
 #: u_translation.rspausesequenc
 msgid "Pause sequence when the observing condition are out of the limits"
@@ -2279,6 +2287,10 @@ msgstr "PDF documentation"
 
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
+msgstr "Periodic auto-focus"
+
+#: u_translation.rspixelcount
+msgid "%sPixel count:%s"
 msgstr ""
 
 #: u_translation.rspixels
@@ -2391,7 +2403,7 @@ msgstr "Please select a temporary folder without space in the path name."
 
 #: u_translation.rspleasesetthe
 msgid "Please set the format to %s before to start the sequence."
-msgstr ""
+msgstr "Please set the format to %s before to start the sequence."
 
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
@@ -2513,6 +2525,10 @@ msgstr "Readout modes"
 msgid "Receive unknown message: %s"
 msgstr "Receive unknown message: %s"
 
+#: u_translation.rsrecenterifth
+msgid "Recenter if the drift is more than"
+msgstr ""
+
 #: u_translation.rsrecenterimag
 msgid "Recenter image error!%sdistance: %s"
 msgstr "Recenter image error!%sdistance: %s"
@@ -2524,6 +2540,14 @@ msgstr "Recenter on last position"
 #: u_translation.rsrecenteronla2
 msgid "Recenter on last image"
 msgstr "Recenter on last image"
+
+#: u_translation.rsrecentersequ
+msgid "Recenter sequence target that drift"
+msgstr ""
+
+#: u_translation.rsrecentertarg
+msgid "Recenter target now"
+msgstr ""
 
 #: u_translation.rsred
 msgid "red"
@@ -2579,7 +2603,7 @@ msgstr "Report a problem"
 
 #: u_translation.rsrequestedton
 msgid "Requested to not run the termination action"
-msgstr ""
+msgstr "Requested to not run the termination action"
 
 #: u_translation.rsrequesttosto
 msgid "Request to stop focuser calibration"
@@ -2615,7 +2639,7 @@ msgstr "Resolve and plot DSO"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and plot Hyperleda"
-msgstr ""
+msgstr "Resolve and plot Hyperleda"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
@@ -2683,7 +2707,7 @@ msgstr "Resume autoguider"
 
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
-msgstr ""
+msgstr "Retrieve position from deepsky database"
 
 #: u_translation.rsreturnthefoc
 msgid "Return the focuser to previous position %s"
@@ -2732,6 +2756,10 @@ msgstr "Run"
 #: u_translation.rsrunascript
 msgid "Run a script"
 msgstr "Run a script"
+
+#: u_translation.rsrunastrometr
+msgid "Run astrometry on every image to search for drift"
+msgstr ""
 
 #: u_translation.rsrunautofocus
 msgid "Auto-focus if temp. change by more than %s"
@@ -2923,7 +2951,7 @@ msgstr "Sequence paused for bad weather ..."
 
 #: u_translation.rssequencestar
 msgid "Sequence %s start immediately"
-msgstr ""
+msgstr "Sequence %s start immediately"
 
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
@@ -3031,7 +3059,7 @@ msgstr "Show current log"
 
 #: u_translation.rsshowhints
 msgid "Show hints"
-msgstr ""
+msgstr "Show hints"
 
 #: u_translation.rsshowindilog
 msgid "Show INDI log"
@@ -3295,7 +3323,7 @@ msgstr "Start time"
 
 #: u_translation.rsstarttracking
 msgid "start tracking"
-msgstr ""
+msgstr "start tracking"
 
 #: u_translation.rsstatus
 msgid "%s status"
@@ -3493,6 +3521,10 @@ msgstr "Targets"
 msgid "Target can run until %s, in %s seconds"
 msgstr "Target can run until %s, in %s seconds"
 
+#: u_translation.rstargetwillbe2
+msgid "Target will be recentered before next image"
+msgstr ""
+
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
 msgstr "TCP/IP server listen on port: %s"
@@ -3583,7 +3615,7 @@ msgstr "Termination options"
 
 #: u_translation.rsthecameraima
 msgid "The camera image format is"
-msgstr ""
+msgstr "The camera image format is"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
@@ -3891,7 +3923,7 @@ msgstr "V curve quality is low. Do you really want to save this curve?"
 
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
-msgstr ""
+msgstr "Verbose device log"
 
 #: u_translation.rsvideo
 msgid "Video"
@@ -3987,7 +4019,7 @@ msgstr "Warm the camera"
 
 #: u_translation.rswarningimage
 msgid "Warning! %s image received"
-msgstr ""
+msgstr "Warning! %s image received"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
@@ -4047,7 +4079,7 @@ msgstr "Wind speed"
 
 #: u_translation.rsyes
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: u_translation.rsyoucansetthe
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."

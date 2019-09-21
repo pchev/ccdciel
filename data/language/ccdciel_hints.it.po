@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-27 11:32+0000\n"
-"X-Generator: Launchpad (build 19034)\n"
+"X-Launchpad-Export-Date: 2019-09-21 18:01+0000\n"
+"X-Generator: Launchpad (build 19048)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -26,6 +26,10 @@ msgstr ""
 
 #: u_hints.rsactivatethes2
 msgid "Activate the stop time"
+msgstr ""
+
+#: u_hints.rsactiveonlyif
+msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
 msgstr ""
 
 #: u_hints.rsaddaflatsequ
@@ -226,6 +230,10 @@ msgstr ""
 
 #: u_hints.rskeepthegraph
 msgid "Keep the graph visible after autofocus is completed"
+msgstr ""
+
+#: u_hints.rsletblankford
+msgid "Let blank for default system search path"
 msgstr ""
 
 #: u_hints.rslistofprofil

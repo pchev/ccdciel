@@ -7,18 +7,18 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-08-27 11:12+0000\n"
-"PO-Revision-Date: 2019-07-23 23:12+0000\n"
+"PO-Revision-Date: 2019-08-29 23:05+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-08-27 11:32+0000\n"
-"X-Generator: Launchpad (build 19034)\n"
+"X-Launchpad-Export-Date: 2019-09-21 18:01+0000\n"
+"X-Generator: Launchpad (build 19048)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
-msgstr ""
+msgstr "Activar la compensación por holgura.%sDéjelo deshabilitado si el controlador del enfocador ya incluye compensación por holgura."
 
 #: u_hints.rsactivatethes
 msgid "Activate the start time"
@@ -27,6 +27,10 @@ msgstr "Activar la hora de comienzo"
 #: u_hints.rsactivatethes2
 msgid "Activate the stop time"
 msgstr "Activar la hora de finalización"
+
+#: u_hints.rsactiveonlyif
+msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
+msgstr ""
 
 #: u_hints.rsaddaflatsequ
 msgid "Add a flat sequence to the list."
@@ -46,7 +50,7 @@ msgstr ""
 
 #: u_hints.rsafterlearnin
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
-msgstr ""
+msgstr "Después de que el aprendizaje haya finalizado, puede usar este cursor para ajustar la parte lineal de la curva.%sEl ajuste debe ser especialmente bueno cerca de la posición de la línea azul horizontal."
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
@@ -58,7 +62,7 @@ msgstr ""
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
-msgstr ""
+msgstr "Autoenfocar si el cambio de temperatura es mayor que el valor configurado"
 
 #: u_hints.rsautoguiderst
 msgid "Autoguider status"
@@ -166,7 +170,7 @@ msgstr ""
 
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
-msgstr ""
+msgstr "Editar la secuencia actual"
 
 #: u_hints.rsfixthevisual
 msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
@@ -206,7 +210,7 @@ msgstr "Si está activado, no se presentará un diálogo de confirmación y una 
 
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
-msgstr ""
+msgstr "Si la imagen está ahora enfocada, haga clic en el botón para obtener la posición actual del enfocador"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -228,9 +232,13 @@ msgstr "Invertir visualización"
 msgid "Keep the graph visible after autofocus is completed"
 msgstr "Mantener visible la gráfica después de que se haya realizado el autoenfoque"
 
+#: u_hints.rsletblankford
+msgid "Let blank for default system search path"
+msgstr ""
+
 #: u_hints.rslistofprofil
 msgid "List of profile for every different equipment configuration"
-msgstr ""
+msgstr "Lista de perfiles de cada configuración de equipos diferente"
 
 #: u_hints.rsloadasequenc
 msgid "Load a sequence file"
@@ -322,7 +330,7 @@ msgstr "Mostrar %s del histograma"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
-msgstr ""
+msgstr "Mostrar la opción de apilar la imagen de previsualización en tiempo real.%sEsta característica se usa generalmente para demostraciones en eventos públicos.%sPuede dejar desactivada esta opción para no arriesgar un uso no deseado durante la sesión."
 
 #: u_hints.rssolvethecurr
 msgid "Solve the current image and get the center coordinates"
@@ -362,7 +370,7 @@ msgstr "Iniciar ejecución secuencia"
 
 #: u_hints.rsstartthevcur
 msgid "Start the Vcurve learning process"
-msgstr ""
+msgstr "Iniciar el proceso de aprendizaje de la curva V"
 
 #: u_hints.rsstarttimecap
 msgid "Start time capturing (MC=Meridian crossing)"
@@ -406,11 +414,11 @@ msgstr ""
 
 #: u_hints.rsthedirection
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
-msgstr ""
+msgstr "La dirección en la que finalizará el movimiento del enfocador.%sSi se usa el autoenfoque seleccione el mismo sentido de movimiento."
 
 #: u_hints.rstheelbrusima
 msgid "The Elbrus Images folder as set in the Elbrus parameters."
-msgstr ""
+msgstr "La carpeta de imágenes de Elbrus se indica en los parámetros de Elbrus"
 
 #: u_hints.rsthefullwidth
 msgid "The Full Width at Half Maximum value in pixels / arc seconds"
@@ -430,7 +438,7 @@ msgstr ""
 
 #: u_hints.rsthemagnitude
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
-msgstr ""
+msgstr "La magnitud de la estrella usada para ejecutar el autoenfoque.%sEl uso de una estrella débil puede minimizar el movimiento del telescopio, pero las estrellas brillantes son aconsejables para evitar problemas con estrellas cercanas."
 
 #: u_hints.rsthemaximumin
 msgid "The maximum intensity value"
@@ -442,7 +450,7 @@ msgstr ""
 
 #: u_hints.rsthenumberofi
 msgid "The number of images to take"
-msgstr ""
+msgstr "Número de imágenes a capturar"
 
 #: u_hints.rsthenumberofi2
 msgid "The number of image to take before dither"
@@ -450,7 +458,7 @@ msgstr ""
 
 #: u_hints.rsthenumberofi3
 msgid "The number of image to take before autofocus"
-msgstr ""
+msgstr "Número de imágenes a capturar antes del autoenfoque"
 
 #: u_hints.rsthenumberofi4
 msgid "The number of image for this step"
@@ -458,7 +466,7 @@ msgstr ""
 
 #: u_hints.rstheobjectnam
 msgid "The object name for use in FITS header and file name"
-msgstr ""
+msgstr "El nombre del objeto para usarlo en las cabeceras FITS y en el nombre de los archivos"
 
 #: u_hints.rstheobservato
 msgid "The observatory name for inclusion in the FITS header"
@@ -470,7 +478,7 @@ msgstr ""
 
 #: u_hints.rsthepreferedf
 msgid "The preferred focuser direction for autofocus."
-msgstr ""
+msgstr "La dirección preferida del enfocador para el autoenfoque."
 
 #: u_hints.rstheselecteds
 msgid "The selected star luminosity profile"
@@ -494,11 +502,11 @@ msgstr "La memoria RAM temporal utilizado para transferir las imágenes desde el
 
 #: u_hints.rsthetypeoffra
 msgid "The type of frame"
-msgstr ""
+msgstr "El tipo de fotograma"
 
 #: u_hints.rstheunixpathe
 msgid "The Unix path equivalent to the Elbrus Images folder."
-msgstr ""
+msgstr "La ruta Unix equivalente a la carpeta"
 
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
@@ -510,15 +518,16 @@ msgstr "Tiempo al tránsito por meridiano (ángulo horario)"
 
 #: u_hints.rstrytocorrect
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr ""
+msgstr "Intentar corregir los desplazamientos del enfocador desde el último aprendizaje de curva V.%sTenga en cuenta que debe establecer la corrección por temperatura y el desplazamiento de los filtros antes de usar esta opción."
 
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr ""
 
 #: u_hints.rsusevcurvewit
+#, fuzzy,badformat
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
-msgstr ""
+msgstr "La cur"
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"

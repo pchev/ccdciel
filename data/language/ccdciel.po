@@ -4042,3 +4042,35 @@ msgstr ""
 msgid "or"
 msgstr ""
 
+#: u_translation:rscommandpath
+msgid "Command path"
+msgstr ""
+
+#: u_translation:rspixelcount
+msgid "%sPixel count:%s"
+msgstr ""
+
+#: u_translation:rsmedian
+msgid "%sMedian:%s"
+msgstr ""
+
+#: u_translation:rsrecentersequ
+msgid "Recenter sequence target that drift"
+msgstr ""
+
+#: u_translation:rsrunastrometr
+msgid "Run astrometry on every image to search for drift"
+msgstr ""
+
+#: u_translation:rsrecenterifth
+msgid "Recenter if the drift is more than"
+msgstr ""
+
+#: u_translation:rstargetwillbe2
+msgid "Target will be recentered before next image"
+msgstr ""
+
+#: u_translation:rsrecentertarg
+msgid "Recenter target now"
+msgstr ""
+
