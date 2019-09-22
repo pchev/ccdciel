@@ -67,7 +67,7 @@ started:=false;
 FPlanetariumType:=HNSKY;
 FTargetHost:='localhost';
 FTargetPort:='7700';
-FTimeout:=200;
+FTimeout:=1000;
 FCmdTimeout:=10/86400;
 end;
 
