@@ -115,6 +115,7 @@ try
      if terminated then break;
      // handle unattended messages (mouseclick...)
      buf:=tcpclient.RecvString;
+     if tcpclient.Sock.LastError<>0 then buf:=tcpclient.RecvPacket;{temporary for older HNSKY versions prior to 4.1.5 sending messages without crlf termination. Will receive after timeout FTimeout. Remove in 2021}
      if (tcpclient.Sock.LastError<>0)and(tcpclient.Sock.LastError<>WSAETIMEDOUT) then break; // unexpected error
      if ending and (tcpclient.Sock.LastError<>0) then break; // finish to read data before to exit
      if (buf<>'') then ProcessData(buf);
@@ -132,6 +133,7 @@ try
         dateto:=now+Fcmdtimeout;
         repeat
           buf:=tcpclient.RecvString;
+          if tcpclient.Sock.LastError<>0 then buf:=tcpclient.RecvPacket;{temporary for older HNSKY versions prior to 4.1.5 sending messages without crlf termination. Will receive after timeout FTimeout. Remove in 2021}
           if (buf='') then continue;
           //if copy(buf,1,1)='>' then ProcessData(buf) // mouse click
           tcpclient.resultbuffer:=buf;   // set result
