@@ -1225,6 +1225,7 @@ end;
 
 function AirMass(h: double): double;
 begin
+  // Pickering, 2002
   result := 1 / sin(deg2rad * (h + (244 / (165 + 47 * h ** 1.1))));
 end;
 

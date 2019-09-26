@@ -560,7 +560,7 @@ begin
      Refraction(hal,true);
      haz:=round(100*rad2deg*rmod(haz+pi,pi2))/100;
      hal:=round(100*rad2deg*hal)/100;
-     hairmass:=round(100*AirMass(hal))/100;
+     hairmass:=round(10000*AirMass(hal))/10000;
   end;
   if (hfilter='')and(Fwheel<>nil)and(Fwheel.Status=devConnected) then begin
      hfilter:=Fwheel.FilterNames[Fwheel.Filter];
