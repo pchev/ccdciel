@@ -7182,8 +7182,15 @@ end;
 
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 begin
-if PrepareCaptureExposure(true) then // do all requirement and check it's OK
-   StartCaptureExposureNow;
+  if PrepareCaptureExposure(true) then // do all requirement and check it's OK
+     StartCaptureExposureNow
+  else begin
+     // not ready to start now
+     f_capture.Stop;
+     Capture:=false;
+     StatusBar1.Panels[1].Text := '';
+     if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
+  end;
 end;
 
 Procedure Tf_main.StartCaptureExposureNow;
