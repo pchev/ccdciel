@@ -1142,6 +1142,7 @@ begin
   EarlyNextExposure:=false;
   ConfigExpEarlyStart:=false;
   CameraProcessingImage:=false;
+  MagnitudeCalibration:=NullCoord;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
@@ -3183,7 +3184,7 @@ begin
   else
     AutofocusSlippageOffset:=0;
 
-  MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',NullCoord);
+  MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
