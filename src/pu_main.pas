@@ -40,7 +40,7 @@ uses
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -111,6 +111,10 @@ type
     MenuAlpacaDomeSetup: TMenuItem;
     MenuImgStat: TMenuItem;
     MenuImage: TMenuItem;
+    MenuItemPhotometry2: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuItemPhotometry: TMenuItem;
+    MenuItem16: TMenuItem;
     MenuResolveHyperLeda: TMenuItem;
     MenuResolveHyperLeda2: TMenuItem;
     MenuReset1col: TMenuItem;
@@ -355,6 +359,7 @@ type
     procedure MenuImgStatClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
+    procedure MenuItemPhotometryClick(Sender: TObject);
     procedure MenuResolveDSOClick(Sender: TObject);
     procedure MenuSaveConfigClick(Sender: TObject);
     procedure MenuOpenPictureClick(Sender: TObject);
@@ -726,7 +731,8 @@ type
     procedure TCPgetimage(n: string;  var img: Tmemorystream);
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
-    procedure MeasureAtPos(x,y:integer);
+    procedure MagnitudeCalibrationChange(Sender: TObject);
+    procedure MeasureAtPos(x,y:integer; photometry:boolean);
     procedure ShutdownProgram(Sender: TObject);
   public
     { public declarations }
@@ -1806,6 +1812,8 @@ begin
    MenuViewAstrometryLog2.Caption := rsViewLastReso;
    MenuStopAstrometry.Caption := rsStopAstromet;
    MenuStopAstrometry2.Caption := rsStopAstromet;
+   MenuItemPhotometry.Caption:=rsPhotometry;
+   MenuItemPhotometry2.Caption:=rsPhotometry;
    MenuItemDebayer.Caption := rsPreviewDebay;
    MenuItemDebayer2.Caption := rsPreviewDebay;
    MenuItemCleanup.Caption:=rsImageCleanup;
@@ -1960,6 +1968,8 @@ begin
   f_planetariuminfo.planetarium:=planetarium;
 
   f_script.SetScriptList(config.GetValue('/Script/ScriptName',''));
+
+  f_photometry.onMagnitudeCalibrationChange:=@MagnitudeCalibrationChange;
 
   LoadFocusStar;
   deepstring:=TStringList.Create;
@@ -3173,6 +3183,8 @@ begin
   else
     AutofocusSlippageOffset:=0;
 
+  MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',NullCoord);
+
   LogToFile:=config.GetValue('/Log/Messages',true);
   if LogToFile<>LogFileOpen then CloseLog;
   if LogToFile then begin
@@ -3479,6 +3491,7 @@ begin
    config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
+   config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -8264,6 +8277,19 @@ begin
    DrawImage;
 end;
 
+procedure Tf_main.MenuItemPhotometryClick(Sender: TObject);
+begin
+  f_photometry.Show;
+  MeasureAtPos(MouseDownX,MouseDownY,true);
+end;
+
+procedure Tf_main.MagnitudeCalibrationChange(Sender: TObject);
+begin
+  if (f_photometry<>nil) and f_photometry.Visible then begin
+    MeasureAtPos(MouseDownX,MouseDownY,true);
+  end;
+end;
+
 procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
 begin
  if TMenuItem(Sender).Checked then begin
@@ -10722,7 +10748,7 @@ end;
 procedure Tf_main.MeasureTimerTimer(Sender: TObject);
 begin
   MeasureTimer.Enabled:=false;
-  MeasureAtPos(Mx,My);
+  MeasureAtPos(Mx,My,false);
 end;
 
 Procedure Tf_main.UpdateMagnifyer(x,y:integer);
@@ -10753,7 +10779,7 @@ if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)an
 end;
 end;
 
-procedure Tf_main.MeasureAtPos(x,y:integer);
+procedure Tf_main.MeasureAtPos(x,y:integer; photometry:boolean);
 var xx,yy,n: integer;
     val,xxc,yyc,rc,s:integer;
     sval:string;
@@ -10800,13 +10826,78 @@ begin
      if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
        sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
        if flux>0 then begin
-       // sval:=sval+' flux='+FormatFloat(f0,flux)+' snr='+FormatFloat(f1,10*log10(fluxsnr))+'dB';{should be 20*log10() }
          sval:=sval+' flux='+FormatFloat(f0,flux)+' snr='+FormatFloat(f1,snr);
-         mag:=-2.5*log10(flux);
-         magerr:=2.5*log10(1+1/snr);
-         sval:=sval+' mag='+FormatFloat(f3,mag)+'+/-'+FormatFloat(f3,magerr);
+         if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+           f_photometry.Memo1.Clear;
+           if (fits.HeaderInfo.exptime<>0) and (fits.HeaderInfo.airmass<>0) then begin
+             if MagnitudeCalibration<>NullCoord then begin
+               f_photometry.Memo1.Lines.Add('Simplified photometry taking account for calibration, exposure time and airmass');
+               f_photometry.Memo1.Lines.Add(rsExposureTime2+' : '+FormatFloat(f3,fits.HeaderInfo.exptime)+blank+rsSeconds);
+               f_photometry.Memo1.Lines.Add('Airmass'+' : '+FormatFloat(f4,fits.HeaderInfo.airmass));
+               mag:=MagnitudeCalibration-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
+             end
+             else begin
+               f_photometry.Memo1.Lines.Add('Simplified photometry, uncalibrated');
+               mag:=-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
+             end;
+           end
+           else begin
+             if MagnitudeCalibration<>NullCoord then begin
+               f_photometry.Memo1.Lines.Add('Simplified photometry taking account for only the calibration');
+               mag:=MagnitudeCalibration-2.5*log10(flux);
+             end
+             else begin
+               f_photometry.Memo1.Lines.Add('Simplified photometry, uncalibrated');
+               mag:=-2.5*log10(flux);
+             end;
+           end;
+           f_photometry.mag:=mag;
+           magerr:=2.5*log10(1+1/snr);
+           f_photometry.Memo1.Lines.Add('');
+           f_photometry.Memo1.Lines.Add('Star'+' X/Y'+' : '+FormatFloat(f3,xc)+' / '+FormatFloat(f3,yc));
+           if fits.HeaderInfo.floatingpoint then
+             f_photometry.Memo1.Lines.Add('Maximum intensity'+' : '+FormatFloat(f3,(vmax+bg)/fits.imageC))
+           else
+             f_photometry.Memo1.Lines.Add('Maximum intensity'+' : '+FormatFloat(f0,vmax+bg));
+           f_photometry.Memo1.Lines.Add('Background'+' : '+FormatFloat(f3,bg/fits.imageC+fits.imageMin)+', '+rsStdDev+blank+FormatFloat(f3,bgdev/fits.imageC));
+           if fits.HeaderInfo.floatingpoint then
+             f_photometry.Memo1.Lines.Add('Total flux'+' : '+FormatFloat(f3,flux))
+           else
+             f_photometry.Memo1.Lines.Add('Total flux'+' : '+FormatFloat(f0,flux));
+           f_photometry.Memo1.Lines.Add('SNR'+' : '+FormatFloat(f1,snr)+', '+'+/- '+FormatFloat(f3,magerr)+blank+'magnitude');
+           f_photometry.Memo1.Lines.Add('Magnitude'+' : '+FormatFloat(f3,mag));
+         end;
+       end
+       else begin
+         sval:=sval+blank+rsSaturated;
+         if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+           f_photometry.Memo1.Clear;
+           f_photometry.Memo1.Lines.Add(rsSaturated);
+           f_photometry.mag:=NullCoord;
+         end;
+       end;
+     end
+     else begin
+       if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+         f_photometry.Memo1.Clear;
+         f_photometry.Memo1.Lines.Add(rsNoStarFound);
+         f_photometry.mag:=NullCoord;
        end;
      end;
+   end
+   else begin
+     if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+       f_photometry.Memo1.Clear;
+       f_photometry.Memo1.Lines.Add(rsNoStarFound);
+       f_photometry.mag:=NullCoord;
+     end;
+   end;
+ end
+ else begin
+   if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+     f_photometry.Memo1.Clear;
+     f_photometry.Memo1.Lines.Add(rsNoStarFound);
+     f_photometry.mag:=NullCoord;
    end;
  end;
  if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin

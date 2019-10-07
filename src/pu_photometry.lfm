@@ -1,0 +1,83 @@
+object f_photometry: Tf_photometry
+  Left = 369
+  Height = 366
+  Top = 30
+  Width = 324
+  Caption = 'Photometry'
+  ClientHeight = 366
+  ClientWidth = 324
+  DesignTimePPI = 95
+  FormStyle = fsStayOnTop
+  OnCreate = FormCreate
+  LCLVersion = '2.0.4.0'
+  object GroupBoxMeasurement: TGroupBox
+    Left = 0
+    Height = 268
+    Top = 0
+    Width = 324
+    Align = alClient
+    Caption = 'Measurement'
+    ClientHeight = 248
+    ClientWidth = 322
+    TabOrder = 1
+    object Memo1: TMemo
+      Left = 0
+      Height = 248
+      Top = 0
+      Width = 322
+      Align = alClient
+      ReadOnly = True
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+    end
+  end
+  object GroupBoxRefStar: TGroupBox
+    Left = 0
+    Height = 62
+    Top = 268
+    Width = 324
+    Align = alBottom
+    Caption = 'Use as reference star'
+    ClientHeight = 42
+    ClientWidth = 322
+    TabOrder = 0
+    object RefMag: TFloatSpinEdit
+      Left = 221
+      Height = 29
+      Top = 6
+      Width = 92
+      DecimalPlaces = 3
+      MinValue = -100
+      TabOrder = 0
+      Value = 0
+    end
+    object ButtonSetRefMag: TButton
+      Left = 17
+      Height = 25
+      Top = 8
+      Width = 151
+      Caption = 'Set magnitude'
+      OnClick = ButtonSetRefMagClick
+      TabOrder = 1
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 36
+    Top = 330
+    Width = 324
+    Align = alBottom
+    ClientHeight = 32
+    ClientWidth = 320
+    TabOrder = 2
+    object ButtonClose: TButton
+      Left = 240
+      Height = 25
+      Top = 4
+      Width = 74
+      Caption = 'Close'
+      OnClick = ButtonCloseClick
+      TabOrder = 0
+    end
+  end
+end

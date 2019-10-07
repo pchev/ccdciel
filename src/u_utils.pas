@@ -83,6 +83,7 @@ Procedure Refraction(var h : double; flag:boolean);
 PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 Procedure Hz2Eq(A,h : double; out hh,de : double);
 function AirMass(h: double): double;
+function atmospheric_absorption(airmass: double):double;
 Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
 Procedure cmdHz2Eq(a,h : double; var ra,de : double);
 procedure Screen2Fits(x,y: integer;  FlipHorz,FlipVert: boolean; out xx,yy:integer);
@@ -1227,6 +1228,19 @@ function AirMass(h: double): double;
 begin
   // Pickering, 2002
   result := 1 / sin(deg2rad * (h + (244 / (165 + 47 * h ** 1.1))));
+end;
+
+function atmospheric_absorption(airmass: double):double;{magnitudes}
+{The Extinction, Scattering, Absorption due to the atmosphere expressed in magnitudes.
+ Reference http://www.icq.eps.harvard.edu/ICQExtinct.html
+ see also https://www.skyandtelescope.com/astronomy-resources/transparency-and-atmospheric-extinction/}
+ var
+  a_ozon,a_ray,a_aer : double;
+begin
+  a_ozon:=airmass*0.016; {Schaefer's (1992) value Aoz =0.016 magnitudes per air mass for the small ozone component contributing to atmospheric extinction.}
+  a_ray:=airmass*0.1451; {Rayleigh scattering by air molecules. Expressed in magnitudes}
+  a_aer:=airmass*0.120; {Extinction due to aerosol scattering is due to particulates including dust, water droplets and manmade pollutants. Expressed in magnitudes}
+  result:=a_ozon+a_ray+a_aer;{Total extinction, scattering, absorption due to the atmosphere expressed in magnitudes}
 end;
 
 procedure Screen2Fits(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy:integer);

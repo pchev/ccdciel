@@ -379,6 +379,7 @@ var
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   CameraProcessingImage: boolean;
   CameraProcessingNum: PtrInt;
+  MagnitudeCalibration: double;
   Undersampled: boolean;
   bpm: TBpm;
   bpmNum,bpmX,bpmY,bpmAxis: integer;

@@ -32,12 +32,13 @@ uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapT
 type
 
  TFitsInfo = record
-            valid, solved: boolean;
+            valid, solved, floatingpoint: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
             bzero,bscale,dmax,dmin,blank : double;
             equinox,ra,dec,crval1,crval2: double;
             pixsz1,pixsz2,pixratio,focallen: double;
+            exptime,airmass: double;
             objects,ctype1,ctype2 : string;
             end;
 
@@ -735,10 +736,10 @@ var   i : integer;
       keyword,buf : string;
 begin
 with FFitsInfo do begin
- valid:=false; solved:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
+ valid:=false; solved:=false; floatingpoint:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
  objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
- focallen:=0; BinX:=1; BinY:=1;
+ focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0;
  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
@@ -758,6 +759,7 @@ with FFitsInfo do begin
     if (keyword='THRESL') then dmin:=strtofloat(buf);
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='FOCALLEN') then focallen:=strtofloat(buf);
+    if (keyword='EXPTIME') then exptime:=strtofloat(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
     if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
     if (keyword='XBINNING') then BinX:=round(StrToFloat(buf));
@@ -766,6 +768,7 @@ with FFitsInfo do begin
     if (keyword='FRAMEY') then Fry:=round(StrToFloat(buf));
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
     if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
+    if (keyword='AIRMASS') then airmass:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
     if (keyword='DEC') then dec:=StrToFloatDef(buf,NullCoord);
@@ -781,6 +784,7 @@ with FFitsInfo do begin
  end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
  valid:=valid and (naxis>0); // do not process file without primary array
+ floatingpoint:=bitpix<0;
  // very crude coordinates to help astrometry if telescope is not available
  if ra=NullCoord then begin
    if (copy(ctype1,1,3)='RA-')and(crval1<>NullCoord) then
@@ -1826,7 +1830,7 @@ begin
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
   if (SumVal>0.00001)and((round(FimageMin+(bg+valmax)/FimageC))<MaxADU) then begin
     flux:=Sumval/FimageC;
-    snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation)); {For both bright stars (shot-noise limited) or skybackground limited situations
+    snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation/FimageC)); {For both bright stars (shot-noise limited) or skybackground limited situations
                                                                      snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
   end else begin
     flux:=-1;

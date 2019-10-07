@@ -815,6 +815,13 @@ object f_main: Tf_main
       object MenuItem23: TMenuItem
         Caption = '-'
       end
+      object MenuItemPhotometry2: TMenuItem
+        Caption = 'Photometry'
+        OnClick = MenuItemPhotometryClick
+      end
+      object MenuItem17: TMenuItem
+        Caption = '-'
+      end
       object MenuItemDebayer2: TMenuItem
         AutoCheck = True
         Caption = 'Preview debayer'
@@ -1193,6 +1200,13 @@ object f_main: Tf_main
       OnClick = MenuStopAstrometryClick
     end
     object MenuItem5: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemPhotometry: TMenuItem
+      Caption = 'Photometry'
+      OnClick = MenuItemPhotometryClick
+    end
+    object MenuItem16: TMenuItem
       Caption = '-'
     end
     object MenuItemDebayer: TMenuItem

@@ -1123,6 +1123,12 @@ resourcestring
   rsRecenterIfTh = 'Recenter if the drift is more than';
   rsTargetWillBe2 = 'Target will be recentered before next image';
   rsRecenterTarg = 'Recenter target now';
+  rsSaturated = 'saturated';
+  rsPhotometry = 'Photometry';
+  rsMeasurement = 'Measurement';
+  rsUseAsReferen = 'Use as reference star';
+  rsSetMagnitude = 'Set magnitude';
+  rsNoStarFound = 'No star found';
 
 implementation
 
