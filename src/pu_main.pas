@@ -3610,6 +3610,7 @@ end;
 Procedure Tf_main.Disconnect(Sender: TObject);
 begin
    if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
+     NewMessage(rsDisconnectin,9);
      if camera.Status=devConnected then camera.AbortExposure;
      StartCaptureTimer.Enabled:=false;
      f_preview.stop;
@@ -4550,6 +4551,7 @@ var cool:boolean;
 begin
  case camera.Status of
    devDisconnected:begin
+                   NewMessage(Format(rsDisconnected,[rsCamera]),9);
                    f_preview.stop;
                    f_capture.stop;
                    Capture:=false;
@@ -4626,6 +4628,7 @@ begin
   StartCaptureTimer.Enabled:=false;
   if Capture and f_capture.Running then NewMessage(rsExposureAbor,1);
   if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
+  NewMessage(rsAbort,9);
   f_preview.stop;
   f_capture.stop;
   Capture:=false;
@@ -6987,6 +6990,10 @@ begin
 // Call with canwait=true to really do all the operation need before
 // the exposure is started: auto-focus, dithering, meridian flip, wait for weather.
 result:=false;
+if not f_capture.Running then begin
+  NewMessage(rsCaptureStopp2, 0);
+  exit;
+end;
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType.ItemIndex)
@@ -7034,6 +7041,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       exit; // cannot start now
     end;
   end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
   // check if we need to cancel running preview
   if f_preview.Running then begin
    if canwait then begin
@@ -7064,13 +7075,17 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      exit; // cannot start now
    end;
   end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
   // check for meridian and do flip now if required
   e:=StrToFloatDef(f_capture.ExpTime.Text,0);
   if canwait then begin
     CheckMeridianFlip(e,true,waittime);
     if not f_capture.Running then begin
       // stop current capture if meridian flip failed
-      NewMessage(rsMeridianFlip,1);
+      NewMessage(rsMeridianFlip+', '+rsCannotStartC,1);
       f_capture.Stop;
       Capture:=false;
       exit;
@@ -7088,6 +7103,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     if CheckMeridianFlip(e,false,waittime) then
        exit;  // cannot start now
   end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
   // check focuser temperature compensation
   if (camera.FrameType=LIGHT) then begin
     if canwait then begin
@@ -7097,6 +7116,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        if FocuserTemperatureCompensation(false) then
           exit; // cannot start now
     end;
+  end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
   end;
   // check if refocusing is required
   if (ftype=LIGHT) and ( // only for light frame
@@ -7117,7 +7140,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        if f_capture.Running then begin
          // ok, restart exposure
          f_capture.DitherNum:=0; // no dither after focus
-         Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+         result:=true;
          exit;
        end else begin
          NewMessage(rsCaptureStopp,1);
@@ -7127,7 +7150,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        end;
      end else begin
        // failed, cancel current capture
-       NewMessage(rsAutofocusFai,1);
+       NewMessage(rsAutofocusFai+', '+rsStopCapture,1);
        f_capture.Stop;
        Capture:=false;
        exit;
@@ -7158,18 +7181,26 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       end;
       if txt>'' then NewMessage(rsAutofocusDue+blank+txt,3);
    end;
+   if not f_capture.Running then begin
+     NewMessage(rsCaptureStopp2, 0);
+     exit;
+   end;
   // check if target need recenter
   if NeedRecenterTarget then begin
      if canwait then begin
        NewMessage(rsRecenterTarg);
        RecenterTarget;
        NeedRecenterTarget:=false;
-       Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       result:=true;
        exit;
      end
      else begin
        exit; // cannot start now
      end;
+  end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
   end;
   // check if dithering is required
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
@@ -7189,6 +7220,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     exit; // cannot start now
    end;
   end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
   // All OK
   result:=true;
 end;
@@ -7200,6 +7235,7 @@ begin
      StartCaptureExposureNow
   else begin
      // not ready to start now
+     NewMessage(rsCannotStartC+', '+rsAbort,9);
      f_capture.Stop;
      Capture:=false;
      StatusBar1.Panels[1].Text := '';
@@ -7296,6 +7332,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
 end
 else begin
    // camera not connected
+   NewMessage(rsCannotStartC+', autofocus='+BoolToStr(Autofocusing,True),9);
    f_capture.Stop;
    Capture:=false;
    StatusBar1.Panels[1].Text := '';
@@ -7404,7 +7441,7 @@ begin
           // end capture
           Capture:=false;
           f_capture.Stop;
-          NewMessage(rsStopCapture,2);
+          NewMessage(rsStopCapture+', '+Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]),2);
           StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
           MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
        end;

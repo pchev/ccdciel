@@ -1129,6 +1129,7 @@ resourcestring
   rsUseAsReferen = 'Use as reference star';
   rsSetMagnitude = 'Set magnitude';
   rsNoStarFound = 'No star found';
+  rsCaptureStopp2 = 'Capture stopped unexpectedly';
 
 implementation
 
