@@ -457,7 +457,12 @@ begin
   if not Finitialized then exit;
   dx1:=abs(ImgMin/255-X);
   dx2:=abs(ImgMax/255-X);
-  Updmax:=dx2<dx1;
+  if dx1=dx2 then begin
+    Updmax:=X>=(ImgMax/255);
+  end
+  else begin
+    Updmax:=dx2<dx1;
+  end;
   if Updmax then XP:=round(ImgMax) else XP:=round(ImgMin);
   StartUpd:=true;
 end;
@@ -494,8 +499,14 @@ procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   if not Finitialized then exit;
-  if Updmax then ImgMax:=min(high(word),X*255)
-            else ImgMin:=max(0,X*255);
+  if Updmax then begin
+    ImgMax:=min(high(word),X*255);
+    ImgMax:=max(ImgMax,ImgMin);
+  end
+  else begin
+    ImgMin:=max(0,X*255);
+    ImgMin:=min(ImgMin,ImgMax);
+  end;
   StartUpd:=false;
   histminmax.Down:=true;
   TimerRedraw.Enabled:=true;
@@ -504,12 +515,14 @@ end;
 procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
+  SpinEditMin.maxValue:=min(FimageMax,SpinEditMax.Value);
   TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.SpinEditMinChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
+  SpinEditMax.minValue:=max(FimageMin,SpinEditMin.Value);
   TimerMinMax.Enabled:=true;
 end;
 
