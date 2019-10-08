@@ -21,8 +21,8 @@ object f_visu: Tf_visu
     AutoSize = True
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 92
-    ClientWidth = 371
+    ClientHeight = 88
+    ClientWidth = 367
     ParentFont = False
     TabOrder = 0
     object Panel3: TPanel
@@ -51,30 +51,36 @@ object f_visu: Tf_visu
         OnMouseMove = HistogramMouseMove
         OnMouseUp = HistogramMouseUp
       end
-      object SpinEditMin: TSpinEdit
+      object SpinEditMin: TFloatSpinEdit
         Left = 0
         Height = 26
         Top = 0
         Width = 70
         Constraints.MaxHeight = 26
+        DecimalPlaces = 0
         Increment = 10
         MaxValue = 65536
+        MinValue = 0
         OnChange = SpinEditMinChange
         ParentColor = True
         TabOrder = 0
+        Value = 0
         Visible = False
       end
-      object SpinEditMax: TSpinEdit
+      object SpinEditMax: TFloatSpinEdit
         Left = 186
         Height = 26
         Top = 0
         Width = 70
         Constraints.MaxHeight = 26
+        DecimalPlaces = 0
         Increment = 10
         MaxValue = 65536
+        MinValue = 0
         OnChange = SpinEditMaxChange
         ParentColor = True
         TabOrder = 1
+        Value = 0
         Visible = False
       end
     end
@@ -584,7 +590,7 @@ object f_visu: Tf_visu
       object BtnFlipHorz: TSpeedButton
         Left = 0
         Height = 22
-	Hint = 'Flip the image horizontally'
+        Hint = 'Flip the image horizontally'
         Top = 66
         Width = 28
         AllowAllUp = True
@@ -661,7 +667,7 @@ object f_visu: Tf_visu
       object BtnFlipVert: TSpeedButton
         Left = 29
         Height = 22
-	Hint = 'Flip the image vertically'
+        Hint = 'Flip the image vertically'
         Top = 66
         Width = 28
         AllowAllUp = True

@@ -52,8 +52,8 @@ type
     Panel3: TPanel;
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
-    SpinEditMin: TSpinEdit;
-    SpinEditMax: TSpinEdit;
+    SpinEditMin: TFloatSpinEdit;
+    SpinEditMax: TFloatSpinEdit;
     Title: TLabel;
     TimerRedraw: TTimer;
     TimerMinMax: TTimer;
@@ -83,6 +83,8 @@ type
     procedure TimerRedrawTimer(Sender: TObject);
   private
     { private declarations }
+    FimageC, FimageMin, FimageMax : double;
+    FisFloatingPoint, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FBullsEye, LockSpinEdit, FClipping, FInvert, FFlipVert, FFlipHorz: Boolean;
     FZoom: double;
@@ -92,13 +94,14 @@ type
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
+    FShowHistogramPos: TNotifyStr;
     procedure SetZoom(value: double);
     procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure DrawHistogram(hist:Thistogram; SetLevel: boolean);
+    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;
     property ImgMax: double read FimgMax write FimgMax;
@@ -110,6 +113,7 @@ type
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
+    property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
   end;
 
 implementation
@@ -139,6 +143,7 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ Finitialized:=false;
  ImgMax:=high(word);
  ImgMin:=0;
  FBullsEye:=false;
@@ -182,13 +187,17 @@ begin
   BtnFlipVert.Hint:=rsFlipTheImageV;
 end;
 
-procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel: boolean);
+procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
 var i,j,maxp,maxh,h,hd2,l: integer;
     sum,sl1,sh1,sl2,sh2,sl3,sh3,sl4,sh4,hc: integer;
     sh: double;
 begin
 try
 LockSpinEdit:=true;
+FimageC:=iC;
+FimageMin:=iMin;
+FimageMax:=iMax;
+FisFloatingPoint:=isFloatingPoint;
 maxh:=0;
 sum:=0;
 for i:=0 to high(word) do begin
@@ -240,8 +249,39 @@ if SetLevel then begin
     FImgMax:=h4;
   end;
 end;
-SpinEditMin.Value:=round(FImgMin);
-SpinEditMax.Value:=round(FimgMax);
+// adjust spinedit for data range
+if isFloatingPoint then begin
+  SpinEditMin.DecimalPlaces:=3;
+  SpinEditMax.DecimalPlaces:=3;
+  if abs(FimageMax-FimageMin)<=10 then begin
+    SpinEditMin.Increment:=0.01;
+    SpinEditMax.Increment:=0.01;
+  end
+  else begin
+    SpinEditMin.Increment:=1;
+    SpinEditMax.Increment:=1;
+  end;
+end
+else begin
+  SpinEditMin.DecimalPlaces:=0;
+  SpinEditMax.DecimalPlaces:=0;
+  if abs(FimageMax-FimageMin)<=255 then begin
+    SpinEditMin.Increment:=1;
+    SpinEditMax.Increment:=1;
+  end
+  else begin
+    SpinEditMin.Increment:=10;
+    SpinEditMax.Increment:=10;
+  end;
+end;
+// histogram is always 0-65535, show real pixel value in the spinedit
+SpinEditMin.minValue:=FimageMin;
+SpinEditMin.maxValue:=FimageMax;
+SpinEditMax.minValue:=FimageMin;
+SpinEditMax.maxValue:=FimageMax;
+// scale from 0-65535 to image min-max
+SpinEditMin.Value:=FimageMin+FImgMin/FimageC;
+SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
 Histogram.Picture.Bitmap.Width:=Histogram.Width;
 Histogram.Picture.Bitmap.Height:=Histogram.Height;
 with Histogram.Picture.Bitmap do begin
@@ -274,6 +314,7 @@ with Histogram.Picture.Bitmap do begin
   Canvas.Pen.Color:=clGreen;
   i:=round(ImgMax/255-1);
   Canvas.Line(i,0,i,Height);
+  Finitialized:=true;
 end;
 finally
   if (GetCurrentThreadId=MainThreadID) then Application.ProcessMessages;
@@ -413,6 +454,7 @@ procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var dx1,dx2: double;
 begin
+  if not Finitialized then exit;
   dx1:=abs(ImgMin/255-X);
   dx2:=abs(ImgMax/255-X);
   Updmax:=dx2<dx1;
@@ -422,7 +464,10 @@ end;
 
 procedure Tf_visu.HistogramMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
+var xpos,val: double;
+    txt: string;
 begin
+if not Finitialized then exit;
 if StartUpd then begin
   with Histogram.Picture.Bitmap do begin
     Canvas.Pen.Color:=clWhite;
@@ -430,16 +475,25 @@ if StartUpd then begin
     Canvas.Line(XP,0,XP,Height);
     Canvas.Line(X,0,X,Height);
     XP:=X;
+    if Updmax then xpos:=min(high(word),X*255)
+              else xpos:=max(0,X*255);
+    val:=FimageMin+xpos/FimageC;
+    if FisFloatingPoint then
+      txt:=FormatFloat(f3,val)
+    else
+      txt:=FormatFloat(f0,round(val));
+    if Assigned(FShowHistogramPos) then FShowHistogramPos(txt);
   end;
 end else begin
-  SpinEditMin.Visible:=(y<24)and(x<60);
-  SpinEditMax.Visible:=(y<24)and(x>195);
+  SpinEditMin.Visible:=(y<SpinEditMin.Height)and(x<SpinEditMin.Width);
+  SpinEditMax.Visible:=(y<SpinEditMax.Height)and(x>SpinEditMax.Left);
 end;
 end;
 
 procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+  if not Finitialized then exit;
   if Updmax then ImgMax:=min(high(word),X*255)
             else ImgMin:=max(0,X*255);
   StartUpd:=false;
@@ -463,14 +517,16 @@ procedure Tf_visu.TimerMinMaxTimer(Sender: TObject);
 begin
   TimerMinMax.Enabled:=false;
   histminmax.Down:=true;
-  ImgMax:=SpinEditMax.Value;
-  ImgMin:=SpinEditMin.Value;
+  // scale from image min-max to 0-65535
+  FImgMin:=round(FimageC*(SpinEditMin.Value-FimageMin));
+  FImgMax:=round(FimageC*(SpinEditMax.Value-FimageMin));
   if Assigned(FRedraw) then FRedraw(self);
 end;
 
 procedure Tf_visu.TimerRedrawTimer(Sender: TObject);
 begin
   TimerRedraw.Enabled:=false;
+  if Assigned(FShowHistogramPos) then FShowHistogramPos('');
   if Assigned(FRedraw) then FRedraw(self);
 end;
 

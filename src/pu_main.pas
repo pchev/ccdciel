@@ -695,6 +695,7 @@ type
     Procedure StartCaptureExposureNow;
     Procedure RecenterTarget;
     Procedure RedrawHistogram(Sender: TObject);
+    Procedure ShowHistogramPos(msg:string);
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     Procedure ClearImage;
@@ -1266,6 +1267,7 @@ begin
   f_visu.onRedraw:=@Redraw;
   f_visu.onZoom:=@ZoomImage;
   f_visu.onRedrawHistogram:=@RedrawHistogram;
+  f_visu.onShowHistogramPos:=@ShowHistogramPos;
 
   f_frame:=Tf_frame.Create(self);
   f_frame.onSet:=@SetFrame;
@@ -7778,6 +7780,11 @@ begin
   DrawHistogram(false);
 end;
 
+Procedure Tf_main.ShowHistogramPos(msg:string);
+begin
+  StatusBar1.Panels[0].Text:=msg;
+end;
+
 Procedure Tf_main.Redraw(Sender: TObject);
 begin
   DrawHistogram(false);
@@ -8174,7 +8181,7 @@ end;
 Procedure Tf_main.DrawHistogram(SetLevel: boolean);
 begin
   if fits.HeaderInfo.naxis>0 then begin
-     f_visu.DrawHistogram(fits.Histogram,SetLevel);
+     f_visu.DrawHistogram(fits.Histogram,SetLevel,fits.HeaderInfo.floatingpoint,fits.imageC,fits.imageMin,fits.imageMax);
   end;
 end;
 
