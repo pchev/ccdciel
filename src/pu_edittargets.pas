@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
@@ -132,17 +132,17 @@ type
     PlanNone: TTabSheet;
     ToolsNone: TTabSheet;
     TargetName: TLabel;
-    PreviewExposure: TFloatSpinEdit;
+    PreviewExposure: TFloatSpinEditEx;
     FISObox: TComboBox;
     Label16: TLabel;
     Label18: TLabel;
     LabelGain: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
-    TDelay: TSpinEdit;
-    RepeatCountList: TSpinEdit;
-    FlatCount: TSpinEdit;
-    FGainEdit: TSpinEdit;
+    TDelay: TSpinEditEx;
+    RepeatCountList: TSpinEditEx;
+    FlatCount: TSpinEditEx;
+    FGainEdit: TSpinEditEx;
     StepList: TStringGrid;
     ToolsFlat: TTabSheet;
     SeqStart: TCheckBox;
@@ -1346,7 +1346,7 @@ begin
       TargetList.Cells[colpa,n]:=FormatFloat(f2,t.pa);
     TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
     GroupBox5.Visible:=t.repeatcount>1;
-    TDelay.Value:=t.delay;
+    TDelay.Value:=round(t.delay);
     PreviewExposure.Value:=t.previewexposure;
     Preview.Checked:=t.preview;
     PlanName.Caption:=TargetList.Cells[colplan,n];

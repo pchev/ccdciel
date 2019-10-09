@@ -51,7 +51,7 @@ object f_visu: Tf_visu
         OnMouseMove = HistogramMouseMove
         OnMouseUp = HistogramMouseUp
       end
-      object SpinEditMin: TFloatSpinEdit
+      object SpinEditMin: TFloatSpinEditEx
         Left = 0
         Height = 26
         Top = 0
@@ -67,7 +67,7 @@ object f_visu: Tf_visu
         Value = 0
         Visible = False
       end
-      object SpinEditMax: TFloatSpinEdit
+      object SpinEditMax: TFloatSpinEditEx
         Left = 186
         Height = 26
         Top = 0
@@ -468,7 +468,7 @@ object f_visu: Tf_visu
         OnClick = BtnClippingClick
         ParentFont = False
       end
-      object Gamma: TFloatSpinEdit
+      object Gamma: TFloatSpinEditEx
         Left = 2
         Height = 22
         Hint = 'Gamma'

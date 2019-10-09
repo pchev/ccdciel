@@ -277,7 +277,7 @@ object f_setup: Tf_setup
           Caption = 'IP Port'
           ParentColor = False
         end
-        object DefaultARestPort: TSpinEdit
+        object DefaultARestPort: TSpinEditEx
           Left = 288
           Height = 28
           Top = 46
@@ -697,7 +697,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object CameraARestPort: TSpinEdit
+            object CameraARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -716,7 +716,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object CameraARestDevice: TSpinEdit
+            object CameraARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 104
@@ -1086,7 +1086,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object WheelARestPort: TSpinEdit
+            object WheelARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -1105,7 +1105,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object WheelARestDevice: TSpinEdit
+            object WheelARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 104
@@ -1468,7 +1468,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object FocuserARestPort: TSpinEdit
+            object FocuserARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -1487,7 +1487,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object FocuserARestDevice: TSpinEdit
+            object FocuserARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 104
@@ -1833,7 +1833,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object RotatorARestPort: TSpinEdit
+            object RotatorARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -1852,7 +1852,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object RotatorARestDevice: TSpinEdit
+            object RotatorARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 104
@@ -2216,7 +2216,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object MountARestPort: TSpinEdit
+            object MountARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -2235,7 +2235,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object MountARestDevice: TSpinEdit
+            object MountARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 88
@@ -2578,7 +2578,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object DomeARestPort: TSpinEdit
+            object DomeARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -2597,7 +2597,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object DomeARestDevice: TSpinEdit
+            object DomeARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 104
@@ -2947,7 +2947,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object WeatherARestPort: TSpinEdit
+            object WeatherARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -2966,7 +2966,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object WeatherARestDevice: TSpinEdit
+            object WeatherARestDevice: TSpinEditEx
               Left = 13
               Height = 28
               Top = 104
@@ -3307,7 +3307,7 @@ object f_setup: Tf_setup
               Caption = 'Remote host or IP address'
               ParentColor = False
             end
-            object SafetyARestPort: TSpinEdit
+            object SafetyARestPort: TSpinEditEx
               Left = 288
               Height = 28
               Top = 32
@@ -3326,7 +3326,7 @@ object f_setup: Tf_setup
               Caption = 'IP Port'
               ParentColor = False
             end
-            object SafetyARestDevice: TSpinEdit
+            object SafetyARestDevice: TSpinEditEx
               Left = 92
               Height = 28
               Top = 104

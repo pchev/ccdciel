@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, Graphics, UScaleDPI, u_translation, u_hints, cu_mount, u_utils,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, SpinEx;
 
 type
 
@@ -58,10 +58,10 @@ type
     Panel8: TPanel;
     Panel9: TPanel;
     Fname: TEdit;
-    GainEdit: TSpinEdit;
-    SeqNum: TSpinEdit;
-    DitherCount: TSpinEdit;
-    FocusCount: TSpinEdit;
+    GainEdit: TSpinEditEx;
+    SeqNum: TSpinEditEx;
+    DitherCount: TSpinEditEx;
+    FocusCount: TSpinEditEx;
     Title: TLabel;
     procedure BtnStartClick(Sender: TObject);
     procedure ExpTimeChange(Sender: TObject);

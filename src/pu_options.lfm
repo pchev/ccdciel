@@ -223,7 +223,7 @@ object f_option: Tf_option
             TabOrder = 2
             Text = '_'
           end
-          object FileSequenceWidth: TSpinEdit
+          object FileSequenceWidth: TSpinEditEx
             Left = 376
             Height = 28
             Top = 204
@@ -626,7 +626,7 @@ object f_option: Tf_option
         ParentFont = False
         WordWrap = True
       end
-      object ElevationMin: TFloatSpinEdit
+      object ElevationMin: TFloatSpinEditEx
         Left = 144
         Height = 28
         Top = 360
@@ -639,7 +639,7 @@ object f_option: Tf_option
         TabOrder = 6
         Value = 0
       end
-      object ObsElev: TFloatSpinEdit
+      object ObsElev: TFloatSpinEditEx
         Left = 144
         Height = 28
         Top = 280
@@ -693,7 +693,7 @@ object f_option: Tf_option
             Caption = 'Wait time between actions'
             ParentColor = False
           end
-          object DomeActionWait: TSpinEdit
+          object DomeActionWait: TSpinEditEx
             Left = 230
             Height = 26
             Top = 4
@@ -1004,7 +1004,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object VideoPreviewRate: TSpinEdit
+        object VideoPreviewRate: TSpinEditEx
           Left = 192
           Height = 28
           Top = 0
@@ -1045,7 +1045,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object BPMsigma: TFloatSpinEdit
+        object BPMsigma: TFloatSpinEditEx
           Left = 192
           Height = 28
           Top = 0
@@ -1109,7 +1109,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object ClippingLow: TFloatSpinEdit
+        object ClippingLow: TFloatSpinEditEx
           Left = 142
           Height = 28
           Top = 0
@@ -1121,7 +1121,7 @@ object f_option: Tf_option
           TabOrder = 0
           Value = 0
         end
-        object ClippingHigh: TFloatSpinEdit
+        object ClippingHigh: TFloatSpinEditEx
           Left = 392
           Height = 28
           Top = 0
@@ -1179,7 +1179,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object CameraAutoCoolTemp: TFloatSpinEdit
+          object CameraAutoCoolTemp: TFloatSpinEditEx
             Left = 40
             Height = 28
             Top = 30
@@ -1231,7 +1231,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object TemperatureSlope: TFloatSpinEdit
+            object TemperatureSlope: TFloatSpinEditEx
               Left = 24
               Height = 28
               Top = 0
@@ -1301,7 +1301,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
         end
-        object MaxAdu: TSpinEdit
+        object MaxAdu: TSpinEditEx
           Left = 360
           Height = 28
           Top = 28
@@ -1330,7 +1330,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
         end
-        object PixelSize: TFloatSpinEdit
+        object PixelSize: TFloatSpinEditEx
           Left = 360
           Height = 28
           Top = 1
@@ -1577,7 +1577,7 @@ object f_option: Tf_option
           ParentFont = False
           WordWrap = True
         end
-        object FlatMinExp: TFloatSpinEdit
+        object FlatMinExp: TFloatSpinEditEx
           Left = 224
           Height = 28
           Top = 91
@@ -1590,7 +1590,7 @@ object f_option: Tf_option
           TabOrder = 1
           Value = 0
         end
-        object FlatMaxExp: TFloatSpinEdit
+        object FlatMaxExp: TFloatSpinEditEx
           Left = 359
           Height = 28
           Top = 91
@@ -1603,7 +1603,7 @@ object f_option: Tf_option
           TabOrder = 2
           Value = 0
         end
-        object FlatLevelMin: TSpinEdit
+        object FlatLevelMin: TSpinEditEx
           Left = 224
           Height = 28
           Top = 128
@@ -1614,7 +1614,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
         end
-        object FlatLevelMax: TSpinEdit
+        object FlatLevelMax: TSpinEditEx
           Left = 359
           Height = 28
           Top = 128
@@ -1655,7 +1655,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object DomeFlatTelescopeAz: TFloatSpinEdit
+        object DomeFlatTelescopeAz: TFloatSpinEditEx
           Left = 224
           Height = 28
           Top = 32
@@ -1667,7 +1667,7 @@ object f_option: Tf_option
           TabOrder = 0
           Value = 0
         end
-        object DomeFlatTelescopeAlt: TFloatSpinEdit
+        object DomeFlatTelescopeAlt: TFloatSpinEditEx
           Left = 224
           Height = 28
           Top = 56
@@ -1786,7 +1786,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object StarWindow: TSpinEdit
+        object StarWindow: TSpinEditEx
           Left = 270
           Height = 28
           Top = 1
@@ -1799,7 +1799,7 @@ object f_option: Tf_option
           TabOrder = 0
           Value = 10
         end
-        object FocusWindow: TSpinEdit
+        object FocusWindow: TSpinEditEx
           Left = 270
           Height = 28
           Top = 29
@@ -1881,7 +1881,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
         end
-        object FocuserBacklash: TSpinEdit
+        object FocuserBacklash: TSpinEditEx
           Left = 270
           Height = 28
           Top = 1
@@ -1891,7 +1891,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
         end
-        object FocuserDelay: TSpinEdit
+        object FocuserDelay: TSpinEditEx
           Left = 270
           Height = 28
           Top = 32
@@ -1961,7 +1961,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
         end
-        object FocuserTempCoeff: TFloatSpinEdit
+        object FocuserTempCoeff: TFloatSpinEditEx
           Left = 270
           Height = 28
           Top = 1
@@ -1983,7 +1983,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object AutofocusTemp: TFloatSpinEdit
+        object AutofocusTemp: TFloatSpinEditEx
           Left = 270
           Height = 28
           Top = 30
@@ -2024,7 +2024,7 @@ object f_option: Tf_option
           Caption = 'Automatically run auto-focus every  '
           ParentColor = False
         end
-        object AutofocusPeriod: TSpinEdit
+        object AutofocusPeriod: TSpinEditEx
           Left = 270
           Height = 28
           Top = 0
@@ -2192,7 +2192,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusStartHFD: TFloatSpinEdit
+            object AutofocusStartHFD: TFloatSpinEditEx
               Left = 212
               Height = 28
               Top = 0
@@ -2207,7 +2207,7 @@ object f_option: Tf_option
               TabOrder = 1
               Value = 1
             end
-            object AutofocusNearHFD: TFloatSpinEdit
+            object AutofocusNearHFD: TFloatSpinEditEx
               Left = 352
               Height = 28
               Top = 0
@@ -2222,7 +2222,7 @@ object f_option: Tf_option
               TabOrder = 2
               Value = 1
             end
-            object AutofocusSlippageOffset: TSpinEdit
+            object AutofocusSlippageOffset: TSpinEditEx
               Left = 352
               Height = 28
               Top = 56
@@ -2252,7 +2252,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusDynamicNumPoint: TSpinEdit
+            object AutofocusDynamicNumPoint: TSpinEditEx
               Left = 212
               Height = 29
               Top = 0
@@ -2263,7 +2263,7 @@ object f_option: Tf_option
               TabOrder = 0
               Value = 5
             end
-            object AutofocusDynamicMovement: TSpinEdit
+            object AutofocusDynamicMovement: TSpinEditEx
               Left = 212
               Height = 29
               Top = 32
@@ -2294,7 +2294,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusMaxSpeed: TSpinEdit
+            object AutofocusMaxSpeed: TSpinEditEx
               Left = 212
               Height = 29
               Top = 6
@@ -2305,7 +2305,7 @@ object f_option: Tf_option
               TabOrder = 0
               Value = 10
             end
-            object AutofocusMinSpeed: TSpinEdit
+            object AutofocusMinSpeed: TSpinEditEx
               Left = 212
               Height = 29
               Top = 38
@@ -2339,7 +2339,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusNearNum: TSpinEdit
+          object AutofocusNearNum: TSpinEditEx
             Left = 212
             Height = 28
             Top = 0
@@ -2388,7 +2388,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object AutofocusExposure: TFloatSpinEdit
+        object AutofocusExposure: TFloatSpinEditEx
           Left = 212
           Height = 28
           Top = 0
@@ -2402,7 +2402,7 @@ object f_option: Tf_option
           TabOrder = 4
           Value = 0
         end
-        object AutofocusBinning: TSpinEdit
+        object AutofocusBinning: TSpinEditEx
           Left = 212
           Height = 28
           Top = 28
@@ -2414,7 +2414,7 @@ object f_option: Tf_option
           TabOrder = 5
           Value = 1
         end
-        object AutofocusTolerance: TFloatSpinEdit
+        object AutofocusTolerance: TFloatSpinEditEx
           Left = 212
           Height = 28
           Top = 84
@@ -2427,7 +2427,7 @@ object f_option: Tf_option
           TabOrder = 6
           Value = 1
         end
-        object AutofocusMinSNR: TFloatSpinEdit
+        object AutofocusMinSNR: TFloatSpinEditEx
           Left = 352
           Height = 28
           Top = 84
@@ -2518,7 +2518,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusPrecisionSlew: TFloatSpinEdit
+          object AutofocusPrecisionSlew: TFloatSpinEditEx
             Left = 296
             Height = 28
             Top = 38
@@ -2675,7 +2675,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object Focale: TFloatSpinEdit
+        object Focale: TFloatSpinEditEx
           Left = 289
           Height = 28
           Top = 8
@@ -2688,7 +2688,7 @@ object f_option: Tf_option
           TabOrder = 2
           Value = 0
         end
-        object AstrometryTimeout: TSpinEdit
+        object AstrometryTimeout: TSpinEditEx
           Left = 113
           Height = 28
           Top = 40
@@ -2857,7 +2857,7 @@ object f_option: Tf_option
               ParentFont = False
               TabOrder = 4
             end
-            object MaxRadius: TFloatSpinEdit
+            object MaxRadius: TFloatSpinEditEx
               Left = 184
               Height = 28
               Top = 8
@@ -2870,7 +2870,7 @@ object f_option: Tf_option
               TabOrder = 5
               Value = 0
             end
-            object Tolerance: TFloatSpinEdit
+            object Tolerance: TFloatSpinEditEx
               Left = 376
               Height = 28
               Top = 8
@@ -2883,7 +2883,7 @@ object f_option: Tf_option
               TabOrder = 6
               Value = 0
             end
-            object Downsample: TSpinEdit
+            object Downsample: TSpinEditEx
               Left = 184
               Height = 28
               Top = 46
@@ -2895,7 +2895,7 @@ object f_option: Tf_option
               TabOrder = 7
               Value = 1
             end
-            object SourcesLimit: TSpinEdit
+            object SourcesLimit: TSpinEditEx
               Left = 376
               Height = 28
               Top = 46
@@ -3057,7 +3057,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object PlatesolveWait: TSpinEdit
+            object PlatesolveWait: TSpinEditEx
               Left = 168
               Height = 28
               Top = 76
@@ -3103,7 +3103,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object ASTAPSearchRadius: TSpinEdit
+            object ASTAPSearchRadius: TSpinEditEx
               Left = 176
               Height = 28
               Top = 72
@@ -3148,7 +3148,7 @@ object f_option: Tf_option
               ParentFont = False
               TabOrder = 1
             end
-            object ASTAPdownsample: TSpinEdit
+            object ASTAPdownsample: TSpinEditEx
               Left = 178
               Height = 28
               Top = 120
@@ -3278,7 +3278,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object SlewPrec: TFloatSpinEdit
+        object SlewPrec: TFloatSpinEditEx
           Left = 324
           Height = 28
           Top = 80
@@ -3292,7 +3292,7 @@ object f_option: Tf_option
           TabOrder = 2
           Value = 5
         end
-        object SlewRetry: TSpinEdit
+        object SlewRetry: TSpinEditEx
           Left = 324
           Height = 28
           Top = 112
@@ -3302,7 +3302,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
         end
-        object SlewExp: TFloatSpinEdit
+        object SlewExp: TFloatSpinEditEx
           Left = 324
           Height = 28
           Top = 176
@@ -3315,7 +3315,7 @@ object f_option: Tf_option
           TabOrder = 4
           Value = 1
         end
-        object SlewBin: TSpinEdit
+        object SlewBin: TSpinEditEx
           Left = 324
           Height = 28
           Top = 216
@@ -3327,7 +3327,7 @@ object f_option: Tf_option
           TabOrder = 5
           Value = 1
         end
-        object SlewDelay: TSpinEdit
+        object SlewDelay: TSpinEditEx
           Left = 355
           Height = 28
           Top = 304
@@ -3355,7 +3355,7 @@ object f_option: Tf_option
           Caption = 'Run astrometry on every image to search for drift'
           TabOrder = 0
         end
-        object RecenterTargetDistance: TFloatSpinEdit
+        object RecenterTargetDistance: TFloatSpinEditEx
           Left = 264
           Height = 29
           Top = 40
@@ -3513,7 +3513,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
         end
-        object MinutesPastMeridian: TSpinEdit
+        object MinutesPastMeridian: TSpinEditEx
           Left = 256
           Height = 28
           Top = 10
@@ -3524,7 +3524,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 4
         end
-        object MinutesPastMeridianMin: TSpinEdit
+        object MinutesPastMeridianMin: TSpinEditEx
           Left = 256
           Height = 28
           Top = 44
@@ -3535,7 +3535,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 5
         end
-        object MeridianFlipPauseTimeout: TSpinEdit
+        object MeridianFlipPauseTimeout: TSpinEditEx
           Left = 136
           Height = 28
           Top = 248
@@ -3616,7 +3616,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object SettlePixel: TFloatSpinEdit
+        object SettlePixel: TFloatSpinEditEx
           Left = 112
           Height = 28
           Top = 8
@@ -3629,7 +3629,7 @@ object f_option: Tf_option
           TabOrder = 0
           Value = 0
         end
-        object SettleMinTime: TSpinEdit
+        object SettleMinTime: TSpinEditEx
           Left = 112
           Height = 28
           Top = 48
@@ -3639,7 +3639,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 1
         end
-        object SettleMaxTime: TSpinEdit
+        object SettleMaxTime: TSpinEditEx
           Left = 112
           Height = 28
           Top = 84
@@ -3649,7 +3649,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
         end
-        object CalibrationDelay: TSpinEdit
+        object CalibrationDelay: TSpinEditEx
           Left = 112
           Height = 28
           Top = 120
@@ -3716,7 +3716,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
         end
-        object DitherPixel: TFloatSpinEdit
+        object DitherPixel: TFloatSpinEditEx
           Left = 120
           Height = 28
           Top = 8
@@ -3785,7 +3785,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object StarLostRestart: TSpinEdit
+        object StarLostRestart: TSpinEditEx
           Left = 120
           Height = 28
           Top = 8
@@ -3795,7 +3795,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
         end
-        object StarLostCancel: TSpinEdit
+        object StarLostCancel: TSpinEditEx
           Left = 120
           Height = 28
           Top = 42
@@ -3967,7 +3967,7 @@ object f_option: Tf_option
         ClientHeight = 76
         ClientWidth = 198
         TabOrder = 5
-        object DitherWaitTime: TSpinEdit
+        object DitherWaitTime: TSpinEditEx
           Left = 104
           Height = 28
           Top = 8
@@ -4149,7 +4149,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi1: TFloatSpinEdit
+          object FloatSpinEditMi1: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4163,7 +4163,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa1: TFloatSpinEdit
+          object FloatSpinEditMa1: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4215,7 +4215,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi2: TFloatSpinEdit
+          object FloatSpinEditMi2: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4229,7 +4229,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa2: TFloatSpinEdit
+          object FloatSpinEditMa2: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4281,7 +4281,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi3: TFloatSpinEdit
+          object FloatSpinEditMi3: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4295,7 +4295,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa3: TFloatSpinEdit
+          object FloatSpinEditMa3: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4347,7 +4347,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi4: TFloatSpinEdit
+          object FloatSpinEditMi4: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4361,7 +4361,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa4: TFloatSpinEdit
+          object FloatSpinEditMa4: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4413,7 +4413,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi5: TFloatSpinEdit
+          object FloatSpinEditMi5: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4427,7 +4427,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa5: TFloatSpinEdit
+          object FloatSpinEditMa5: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4479,7 +4479,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi6: TFloatSpinEdit
+          object FloatSpinEditMi6: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4493,7 +4493,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa6: TFloatSpinEdit
+          object FloatSpinEditMa6: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4545,7 +4545,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi7: TFloatSpinEdit
+          object FloatSpinEditMi7: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4559,7 +4559,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa7: TFloatSpinEdit
+          object FloatSpinEditMa7: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4611,7 +4611,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi8: TFloatSpinEdit
+          object FloatSpinEditMi8: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4625,7 +4625,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa8: TFloatSpinEdit
+          object FloatSpinEditMa8: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4677,7 +4677,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi9: TFloatSpinEdit
+          object FloatSpinEditMi9: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4691,7 +4691,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa9: TFloatSpinEdit
+          object FloatSpinEditMa9: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4743,7 +4743,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi10: TFloatSpinEdit
+          object FloatSpinEditMi10: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4757,7 +4757,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa10: TFloatSpinEdit
+          object FloatSpinEditMa10: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4809,7 +4809,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi11: TFloatSpinEdit
+          object FloatSpinEditMi11: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4823,7 +4823,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa11: TFloatSpinEdit
+          object FloatSpinEditMa11: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4875,7 +4875,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi12: TFloatSpinEdit
+          object FloatSpinEditMi12: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 28
@@ -4889,7 +4889,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa12: TFloatSpinEdit
+          object FloatSpinEditMa12: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 28
@@ -4941,7 +4941,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi13: TFloatSpinEdit
+          object FloatSpinEditMi13: TFloatSpinEditEx
             Tag = 1
             Left = 238
             Height = 29
@@ -4954,7 +4954,7 @@ object f_option: Tf_option
             TabOrder = 0
             Value = 0
           end
-          object FloatSpinEditMa13: TFloatSpinEdit
+          object FloatSpinEditMa13: TFloatSpinEditEx
             Tag = 1
             Left = 411
             Height = 29
@@ -4997,7 +4997,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object WeatherRestartDelay: TSpinEdit
+        object WeatherRestartDelay: TSpinEditEx
           Left = 320
           Height = 28
           Top = 1

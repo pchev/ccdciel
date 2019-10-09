@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, u_translation, u_hints,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, SpinEx;
 
 type
 
@@ -39,7 +39,7 @@ type
     LabelGain: TLabel;
     Panel5: TPanel;
     PanelGain: TPanel;
-    GainEdit: TSpinEdit;
+    GainEdit: TSpinEditEx;
     StackPreview: TCheckBox;
     ExpTime: TComboBox;
     Binning: TComboBox;

@@ -97,7 +97,7 @@ object f_focusercalibration: Tf_focusercalibration
         OnClick = BtnNoBacklashClick
         TabOrder = 1
       end
-      object Backlash: TSpinEdit
+      object Backlash: TSpinEditEx
         Left = 264
         Height = 28
         Top = 296
@@ -156,7 +156,7 @@ object f_focusercalibration: Tf_focusercalibration
         OnClick = BtnDefaultClick
         TabOrder = 0
       end
-      object hfdmax: TSpinEdit
+      object hfdmax: TSpinEditEx
         Left = 264
         Height = 28
         Top = 152
@@ -166,7 +166,7 @@ object f_focusercalibration: Tf_focusercalibration
         TabOrder = 1
         Value = 5
       end
-      object stepmin: TSpinEdit
+      object stepmin: TSpinEditEx
         Left = 264
         Height = 28
         Top = 210

@@ -31,7 +31,7 @@ uses
   {$ifdef mswindows}
   windows,
   {$endif}
-  Forms, pascalscript, tachartlazaruspkg, sysutils, pu_main,
+  Forms, pascalscript, tachartlazaruspkg, lazcontrols, sysutils, pu_main,
   fu_devicesconnection, fu_preview, fu_msg, u_utils, fu_visu, cu_indimount,
   fu_capture, pu_devicesetup, cu_ascomfocuser, cu_focuser, u_global,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_script, cu_wheel, cu_mount,

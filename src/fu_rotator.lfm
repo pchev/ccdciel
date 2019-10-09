@@ -65,7 +65,7 @@ object f_rotator: Tf_rotator
         Caption = 'PA'
         ParentColor = False
       end
-      object Angle: TFloatSpinEdit
+      object Angle: TFloatSpinEditEx
         Left = 48
         Height = 28
         Top = 1

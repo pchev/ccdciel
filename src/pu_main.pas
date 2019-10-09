@@ -6027,7 +6027,7 @@ begin
    f_option.AutofocusExposure.Value:=config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure);
    f_option.AutofocusBinning.Value:=config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
-       f_option.AutofocusBinning.MaxValue:=camera.BinXrange.max
+       f_option.AutofocusBinning.MaxValue:=round(camera.BinXrange.max)
    else
        f_option.AutofocusBinning.MaxValue:=max(4,AutofocusBinning);
    f_option.FocuserBacklash.Value:=config.GetValue('/StarAnalysis/FocuserBacklash',focuser.Backlash);
@@ -6071,7 +6071,7 @@ begin
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    if f_option.MaxAduFromCamera.Checked and (camera.Status=devConnected) then
-      f_option.MaxAdu.Value:=camera.MaxAdu;
+      f_option.MaxAdu.Value:=round(camera.MaxAdu);
    if f_option.PixelSizeFromCamera.Checked and (camera.Status=devConnected) and (camera.PixelSizeX>0) then
       f_option.PixelSize.Value:=camera.PixelSizeX;
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
@@ -6079,7 +6079,7 @@ begin
       f_option.Focale.Value:=mount.FocaleLength;
    f_option.Tolerance.Value:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
    f_option.MaxRadius.Value:=config.GetValue('/Astrometry/MaxRadius',15.0);
-   f_option.AstrometryTimeout.Value:=config.GetValue('/Astrometry/Timeout',60.0);
+   f_option.AstrometryTimeout.Value:=round(config.GetValue('/Astrometry/Timeout',60.0));
    f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',4);
    f_option.SourcesLimit.Value:=config.GetValue('/Astrometry/SourcesLimit',150);
    f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
@@ -6114,7 +6114,7 @@ begin
    f_option.SlewExp.Value:=config.GetValue('/PrecSlew/Exposure',10);
    f_option.SlewBin.Value:=config.GetValue('/PrecSlew/Binning',1);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
-       f_option.SlewBin.MaxValue:=camera.BinXrange.max
+       f_option.SlewBin.MaxValue:=round(camera.BinXrange.max)
    else
        f_option.SlewBin.MaxValue:=9;
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);

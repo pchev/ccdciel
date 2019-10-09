@@ -27,7 +27,7 @@ interface
 
 uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils, u_translation, u_hints,
   FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls,
-  Math, Graphics, Dialogs, StdCtrls, ComCtrls, Spin, TACustomSeries, TASeries;
+  Math, Graphics, Dialogs, StdCtrls, ComCtrls, SpinEx, TACustomSeries, TASeries;
 
 type
 
@@ -64,9 +64,9 @@ type
     FitSourceR: TListChartSource;
     PtSourceL: TListChartSource;
     PtSourceR: TListChartSource;
-    FocusPos: TSpinEdit;
-    HalfWidth: TSpinEdit;
-    Nsteps: TSpinEdit;
+    FocusPos: TSpinEditEx;
+    HalfWidth: TSpinEditEx;
+    Nsteps: TSpinEditEx;
     TrackBar1: TTrackBar;
     VcChart: TChart;
     VcChartRef: TLineSeries;
