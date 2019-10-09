@@ -2091,6 +2091,33 @@ begin
   TBTabs.Images.GetBitmap(10, btn);
   f_EditTargets.BtnRepeatInf.Glyph.Assign(btn);
   btn.Free;
+  {$ifdef lclcocoa}
+  if i<128 then begin
+   if f_devicesconnection<>nil then f_devicesconnection.Title.Color:=clBtnShadow;
+   if f_filterwheel<>nil then f_filterwheel.Title.Color:=clBtnShadow;
+   if f_ccdtemp<>nil then f_ccdtemp.Title.Color:=clBtnShadow;
+   if f_frame<>nil then f_frame.Title.Color:=clBtnShadow;
+   if f_preview<>nil then f_preview.Title.Color:=clBtnShadow;
+   if f_capture<>nil then f_capture.Title.Color:=clBtnShadow;
+   if f_video<>nil then f_video.Title.Color:=clBtnShadow;
+   if f_sequence<>nil then f_sequence.Title1.Color:=clBtnShadow;
+   if f_sequence<>nil then f_sequence.Title2.Color:=clBtnShadow;
+   if f_sequence<>nil then f_sequence.Title3.Color:=clBtnShadow;
+   if f_starprofile<>nil then f_starprofile.Title.Color:=clBtnShadow;
+   if f_focuser<>nil then f_focuser.Title.Color:=clBtnShadow;
+   if f_magnifyer<>nil then f_magnifyer.Title.Color:=clBtnShadow;
+   if f_rotator<>nil then f_rotator.Title.Color:=clBtnShadow;
+   if f_mount<>nil then f_mount.Title.Color:=clBtnShadow;
+   if f_dome<>nil then f_dome.Title.Color:=clBtnShadow;
+   if f_weather<>nil then f_weather.Title.Color:=clBtnShadow;
+   if f_safety<>nil then f_safety.Title.Color:=clBtnShadow;
+   if f_autoguider<>nil then f_autoguider.Title.Color:=clBtnShadow;
+   if f_planetarium<>nil then f_planetarium.Title.Color:=clBtnShadow;
+   if f_script<>nil then f_script.Title.Color:=clBtnShadow;
+   if f_visu<>nil then f_visu.Title.Color:=clBtnShadow;
+   if f_msg<>nil then f_msg.Title.Color:=clBtnShadow;
+  end;
+ {$endif}
 end;
 
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
