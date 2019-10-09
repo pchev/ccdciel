@@ -8351,8 +8351,10 @@ end;
 
 procedure Tf_main.MenuItemPhotometryClick(Sender: TObject);
 begin
+if fits.HeaderInfo.valid then begin
   f_photometry.Show;
   MeasureAtPos(MouseDownX,MouseDownY,true);
+end;
 end;
 
 procedure Tf_main.MagnitudeCalibrationChange(Sender: TObject);
