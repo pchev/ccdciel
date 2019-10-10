@@ -7041,6 +7041,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        try
        if f_sequence.Running and (f_sequence.CurrentPlan<>nil) then begin
           f_capture.FocusNow:=f_sequence.CurrentPlan.Steps[f_sequence.CurrentPlan.CurrentStep].autofocusstart;
+          NeedRecenterTarget:=(astrometryResolver<>ResolverNone)and(Mount.Status=devConnected)and(f_sequence.TargetCoord)
+                               and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord);
        end;
        except
        end;

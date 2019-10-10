@@ -83,7 +83,7 @@ type
       procedure StopSequence(abort: boolean);
       procedure NextTargetAsync(Data: PtrInt);
       procedure NextTarget;
-      function InitTarget:boolean;
+      function InitTarget(restart:boolean=false):boolean;
       function InitSkyFlat: boolean;
       procedure StartPlan;
       procedure RunErrorAction;
@@ -497,7 +497,7 @@ begin
   if FRunning then begin
     // try to recenter, restart mount and guiding.
     WeatherPauseCanceled:=false;
-    initok:=InitTarget;
+    initok:=InitTarget(true);
     if (not initok)and(not WeatherCancelRestart) then begin
        WeatherPauseCanceled:=true;
        if FRunning then NextTarget;
@@ -878,7 +878,7 @@ begin
   end;
 end;
 
-function T_Targets.InitTarget:boolean;
+function T_Targets.InitTarget(restart:boolean=false):boolean;
 var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
@@ -1067,60 +1067,62 @@ begin
     FTargetInitializing:=true;
     FWaitStarting:=false;
 
-    if ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
-      if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
-        // stop guiding
-        if Autoguider.State<>GUIDER_DISCONNECTED then begin
-          if not StopGuider then exit;
-          Wait(2);
-          if not FRunning then exit;
-          if WeatherCancelRestart then exit;
+    if (not restart) then begin
+      if  ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
+        if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
+          // stop guiding
+          if Autoguider.State<>GUIDER_DISCONNECTED then begin
+            if not StopGuider then exit;
+            Wait(2);
+            if not FRunning then exit;
+            if WeatherCancelRestart then exit;
+          end;
         end;
+        // set rotator position
+        if (t.pa<>NullCoord)and(Frotaror.Status=devConnected) then begin
+          Frotaror.Angle:=t.pa;
+        end;
+        // set coordinates
+        if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
+          // disable astrometrypointing and autoguiding if first step is to move to focus star
+          astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
+          // must track before to slew
+          mount.Track;
+          // slew to coordinates
+          FSlewRetry:=1;
+          ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
+          if not ok then exit;
+          Wait;
+        end;
+        if not FRunning then exit;
+        if WeatherCancelRestart then exit;
       end;
-      // set rotator position
-      if (t.pa<>NullCoord)and(Frotaror.Status=devConnected) then begin
-        Frotaror.Angle:=t.pa;
-      end;
-      // set coordinates
-      if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
-        // disable astrometrypointing and autoguiding if first step is to move to focus star
-        astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
-        // must track before to slew
-        mount.Track;
-        // slew to coordinates
-        FSlewRetry:=1;
-        ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
-        if not ok then exit;
+      // check if the plans contain only calibration
+      isCalibrationTarget:=true;
+      if (p<>nil) then
+        for i:=0 to p.Count-1 do begin
+           if p.Steps[i].frtype=LIGHT then begin
+              isCalibrationTarget:=false;
+              break;
+           end;
+        end;
+      // start mount tracking
+      if isCalibrationTarget then
+        mount.AbortMotion
+      else if ((t.ra=NullCoord)or(t.de=NullCoord)) then
+         mount.Track;
+      // start guiding
+      autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
+                       (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
+                       ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
+                       (not isCalibrationTarget);
+      if autostartguider then begin
+        if not StartGuider then exit;
         Wait;
+        if not FRunning then exit;
+        if WeatherCancelRestart then exit;
+        t.autoguiding:=true;
       end;
-      if not FRunning then exit;
-      if WeatherCancelRestart then exit;
-    end;
-    // check if the plans contain only calibration
-    isCalibrationTarget:=true;
-    if (p<>nil) then
-      for i:=0 to p.Count-1 do begin
-         if p.Steps[i].frtype=LIGHT then begin
-            isCalibrationTarget:=false;
-            break;
-         end;
-      end;
-    // start mount tracking
-    if isCalibrationTarget then
-      mount.AbortMotion
-    else if ((t.ra=NullCoord)or(t.de=NullCoord)) then
-       mount.Track;
-    // start guiding
-    autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
-                     (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
-                     ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
-                     (not isCalibrationTarget);
-    if autostartguider then begin
-      if not StartGuider then exit;
-      Wait;
-      if not FRunning then exit;
-      if WeatherCancelRestart then exit;
-      t.autoguiding:=true;
     end;
     result:=true;
   end;
