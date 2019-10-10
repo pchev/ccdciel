@@ -1230,13 +1230,6 @@ object f_main: Tf_main
     left = 348
     top = 143
   end
-  object StartCaptureTimer: TTimer
-    Enabled = False
-    Interval = 5000
-    OnTimer = StartCaptureTimerTimer
-    left = 348
-    top = 41
-  end
   object StartupTimer: TTimer
     Enabled = False
     Interval = 500

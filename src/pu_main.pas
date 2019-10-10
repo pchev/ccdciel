@@ -301,7 +301,6 @@ type
     PageCapture: TTabSheet;
     PageSequence: TTabSheet;
     AbortTimer: TTimer;
-    StartCaptureTimer: TTimer;
     StartupTimer: TTimer;
     StartSequenceTimer: TTimer;
     StatusTimer: TTimer;
@@ -439,7 +438,6 @@ type
     procedure PanelMsgTabsMouseLeave(Sender: TObject);
     procedure PlotTimerTimer(Sender: TObject);
     procedure SelectTab(Sender: TObject);
-    procedure StartCaptureTimerTimer(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -3641,7 +3639,6 @@ begin
    if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
      NewMessage(rsDisconnectin,9);
      if camera.Status=devConnected then camera.AbortExposure;
-     StartCaptureTimer.Enabled:=false;
      f_preview.stop;
      f_capture.stop;
      Capture:=false;
@@ -4584,7 +4581,6 @@ begin
                    f_preview.stop;
                    f_capture.stop;
                    Capture:=false;
-                   StartCaptureTimer.Enabled:=false;
                    f_sequence.CameraDisconnected;
                    StatusBar1.Panels[1].Text:='';
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
@@ -4654,7 +4650,6 @@ end;
 procedure Tf_main.AbortTimerTimer(Sender: TObject);
 begin
   AbortTimer.Enabled:=false;
-  StartCaptureTimer.Enabled:=false;
   if Capture and f_capture.Running then NewMessage(rsExposureAbor,1);
   if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
   NewMessage(rsAbort,9);
@@ -6858,7 +6853,6 @@ end;
 
 Procedure Tf_main.AbortExposure(Sender: TObject);
 begin
-  StartCaptureTimer.Enabled:=false;
   camera.AbortExposure;
   Preview:=false;
   Capture:=false;
@@ -6951,12 +6945,6 @@ else begin
    StatusBar1.Panels[1].Text:='';
    if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
 end;
-end;
-
-procedure Tf_main.StartCaptureTimerTimer(Sender: TObject);
-begin
-  StartCaptureTimer.Enabled:=false;
-  StartCaptureExposure(Sender);
 end;
 
 procedure Tf_main.StartCaptureExposureAsync(Data: PtrInt);
@@ -7081,10 +7069,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     StatusBar1.Panels[1].Text:=rsStopPreview;
     camera.AbortExposure;
     f_preview.stop;
-    // retry after 5 sec.
-    StartCaptureTimer.Interval:=5000;
-    StartCaptureTimer.Enabled:=true;
-    exit;
+    // wait 5 sec.
+    wait(5);
    end
    else begin
     exit; // cannot start now
@@ -7111,21 +7097,29 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check for meridian and do flip now if required
   e:=StrToFloatDef(f_capture.ExpTime.Text,0);
   if canwait then begin
-    CheckMeridianFlip(e,true,waittime);
-    if not f_capture.Running then begin
-      // stop current capture if meridian flip failed
-      NewMessage(rsMeridianFlip+', '+rsCannotStartC,1);
-      f_capture.Stop;
-      Capture:=false;
-      exit;
-    end;
-    // check if we need to wait for flip before to continue (time to meridian < exposure time)
-    if waittime>0 then begin
-      f_capture.DitherNum:=0; // no dither after flip
-      // wait meridian
-      StartCaptureTimer.Interval:=waittime*1000;
-      StartCaptureTimer.Enabled:=true;
-      exit;
+    while true do begin
+      CheckMeridianFlip(e,true,waittime);
+      if not f_capture.Running then begin
+        // stop current capture if meridian flip failed
+        NewMessage(rsMeridianFlip+', '+rsCannotStartC,1);
+        f_capture.Stop;
+        Capture:=false;
+        exit;
+      end;
+      // check if we need to wait for flip before to continue (time to meridian < exposure time)
+      if waittime>0 then begin
+        f_capture.DitherNum:=0; // no dither after flip
+        // wait meridian
+        NewMessage(rsWaitMeridian2,1);
+        f_pause.Caption:=rsWaitMeridian2;
+        f_pause.Text:=rsWaitMeridian2;
+        if not f_pause.Wait(waittime,true) then begin
+          NewMessage(rsMeridianFlip3+', '+rsCannotStartC,1);
+          exit;
+        end;
+      end
+      else
+        break;  //  meridian flip done
     end;
   end
   else begin
@@ -7167,10 +7161,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      // do autofocus
      if AutoAutofocus then begin
        if f_capture.Running then begin
-         // ok, restart exposure
+         // ok, continue
          f_capture.DitherNum:=0; // no dither after focus
-         result:=true;
-         exit;
        end else begin
          NewMessage(rsCaptureStopp,1);
          f_capture.Stop;
@@ -7220,8 +7212,6 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
        NewMessage(rsRecenterTarg);
        RecenterTarget;
        NeedRecenterTarget:=false;
-       result:=true;
-       exit;
      end
      else begin
        exit; // cannot start now
