@@ -2584,7 +2584,7 @@ if Shift=[ssLeft] then begin
      MouseMoving:=true;
      screen.Cursor:=crHandPoint;
    end;
- end else if ssShift in Shift then begin
+ end else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running)) then begin
    if EndX>0 then begin
       scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
    end;
