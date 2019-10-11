@@ -28,7 +28,7 @@ uses
   Classes, SysUtils,
   math, u_global;
 
-procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[1,n]=position,data[2,n]=hfd, output: bestfocusposition=p, a, b of hyperbola}
+procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[n,1]=position,data[n,2]=hfd, output: bestfocusposition=p, a, b of hyperbola}
 function hfd_calc(position,perfectfocusposition,a,b:double) :double; {calculate HFD from position and perfectfocusposition using hyperbola parameters}
 function steps_to_focus(hfd,a,b:double) :double; {calculates focuser steps to perfect focus from HFD and hyperbola parameters}
 
@@ -87,7 +87,7 @@ begin
   result:=sqrt(total_error)/data_length;{scale to average error per point}
 end;
 
-procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[1,n]=position,data[2,n]=hfd, output: bestfocusposition=p, a, b of hyperbola}
+procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[n,1]=position,data[n,2]=hfd, output: bestfocusposition=p, a, b of hyperbola}
 {The input data array should contain several focuser positions with there corresponding HFD (star disk size).}
 {The routine will try to find the best hyperbola curve fit. The focuser position p at the hyperbola minimum is the expected best focuser position}
 var
