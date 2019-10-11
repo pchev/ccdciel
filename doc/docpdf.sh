@@ -52,6 +52,9 @@ if [ -f "$lang/documentation/indi.html" ]; then
 fi
 
 # insert pages not in index 
+if [ -f "$lang/documentation/right_click_menu.html" ]; then
+  sed -i '/\/right_click_menu.html/ a '$lang'\/documentation\/photometry.html' fl.txt
+fi
 if [ -f "$lang/documentation/ccdciel_status.html" ]; then
   sed -i '/\/ccdciel_status.html/ a '$lang'\/documentation\/server.html \n'$lang'\/documentation\/proxy.html' fl.txt
 fi
