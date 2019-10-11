@@ -6,10 +6,11 @@ object f_photometry: Tf_photometry
   Caption = 'Photometry'
   ClientHeight = 366
   ClientWidth = 324
+  Constraints.MinHeight = 320
+  Constraints.MinWidth = 320
   DesignTimePPI = 95
   FormStyle = fsStayOnTop
   OnCreate = FormCreate
-  LCLVersion = '2.0.4.0'
   object GroupBoxMeasurement: TGroupBox
     Left = 0
     Height = 268
@@ -43,12 +44,14 @@ object f_photometry: Tf_photometry
     TabOrder = 0
     object RefMag: TFloatSpinEditEx
       Left = 221
-      Height = 29
+      Height = 31
       Top = 6
       Width = 92
+      MaxLength = 0
+      TabOrder = 0
       DecimalPlaces = 3
       MinValue = -100
-      TabOrder = 0
+      NullValue = 0
       Value = 0
     end
     object ButtonSetRefMag: TButton
@@ -67,8 +70,8 @@ object f_photometry: Tf_photometry
     Top = 330
     Width = 324
     Align = alBottom
-    ClientHeight = 32
-    ClientWidth = 320
+    ClientHeight = 36
+    ClientWidth = 324
     TabOrder = 2
     object ButtonClose: TButton
       Left = 240

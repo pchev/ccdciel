@@ -2999,7 +2999,7 @@ msgid "Some defined devices are not connected"
 msgstr ""
 
 #: u_translation:rsopenpicturef
-msgid "Open picture file%s"
+msgid "Open FITS or picture file%s"
 msgstr ""
 
 #: u_translation:rspauseautogui
@@ -4072,5 +4072,69 @@ msgstr ""
 
 #: u_translation:rsrecentertarg
 msgid "Recenter target now"
+msgstr ""
+
+#: u_translation:rssaturated
+msgid "saturated"
+msgstr ""
+
+#: u_translation:rsphotometry
+msgid "Photometry"
+msgstr ""
+
+#: u_translation:rsmeasurement
+msgid "Measurement"
+msgstr ""
+
+#: u_translation:rsuseasreferen
+msgid "Use as reference star"
+msgstr ""
+
+#: u_translation:rssetmagnitude
+msgid "Set magnitude"
+msgstr ""
+
+#: u_translation:rsnostarfound
+msgid "No star found"
+msgstr ""
+
+#: u_translation:rscapturestopp2
+msgid "Capture stopped unexpectedly"
+msgstr ""
+
+#: u_translation:rssimplifiedph
+msgid "Simplified photometry taking account for calibration, exposure time and airmass"
+msgstr ""
+
+#: u_translation:rsairmass
+msgid "Airmass"
+msgstr ""
+
+#: u_translation:rsflux
+msgid "Flux"
+msgstr ""
+
+#: u_translation:rssimplifiedph2
+msgid "Simplified photometry, uncalibrated"
+msgstr ""
+
+#: u_translation:rssimplifiedph3
+msgid "Simplified photometry taking account for only the calibration"
+msgstr ""
+
+#: u_translation:rsstar
+msgid "Star"
+msgstr ""
+
+#: u_translation:rsmaximuminten
+msgid "Maximum intensity"
+msgstr ""
+
+#: u_translation:rsbackground
+msgid "Background"
+msgstr ""
+
+#: u_translation:rsmagnitude
+msgid "Magnitude"
 msgstr ""
 

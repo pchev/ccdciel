@@ -10890,48 +10890,48 @@ begin
    if vmax>0 then begin
      fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
      if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
-       sval:=sval+' hfd='+FormatFloat(f1,hfd)+' fwhm='+FormatFloat(f1,fwhm);
+       sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
        if flux>0 then begin
-         sval:=sval+' flux='+FormatFloat(f0,flux)+' snr='+FormatFloat(f1,snr);
+         sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
          if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
            f_photometry.Memo1.Clear;
            if (fits.HeaderInfo.exptime<>0) and (fits.HeaderInfo.airmass<>0) then begin
              if MagnitudeCalibration<>NullCoord then begin
-               f_photometry.Memo1.Lines.Add('Simplified photometry taking account for calibration, exposure time and airmass');
+               f_photometry.Memo1.Lines.Add(rsSimplifiedPh);
                f_photometry.Memo1.Lines.Add(rsExposureTime2+' : '+FormatFloat(f3,fits.HeaderInfo.exptime)+blank+rsSeconds);
-               f_photometry.Memo1.Lines.Add('Airmass'+' : '+FormatFloat(f4,fits.HeaderInfo.airmass));
+               f_photometry.Memo1.Lines.Add(rsAirmass+' : '+FormatFloat(f4, fits.HeaderInfo.airmass));
                mag:=MagnitudeCalibration-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
              end
              else begin
-               f_photometry.Memo1.Lines.Add('Simplified photometry, uncalibrated');
+               f_photometry.Memo1.Lines.Add(rsSimplifiedPh2);
                mag:=-2.5*log10(flux/fits.HeaderInfo.exptime)-atmospheric_absorption(fits.HeaderInfo.airmass);
              end;
            end
            else begin
              if MagnitudeCalibration<>NullCoord then begin
-               f_photometry.Memo1.Lines.Add('Simplified photometry taking account for only the calibration');
+               f_photometry.Memo1.Lines.Add(rsSimplifiedPh3);
                mag:=MagnitudeCalibration-2.5*log10(flux);
              end
              else begin
-               f_photometry.Memo1.Lines.Add('Simplified photometry, uncalibrated');
+               f_photometry.Memo1.Lines.Add(rsSimplifiedPh2);
                mag:=-2.5*log10(flux);
              end;
            end;
            f_photometry.mag:=mag;
            magerr:=2.5*log10(1+1/snr);
            f_photometry.Memo1.Lines.Add('');
-           f_photometry.Memo1.Lines.Add('Star'+' X/Y'+' : '+FormatFloat(f3,xc)+' / '+FormatFloat(f3,yc));
+           f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, yc));
            if fits.HeaderInfo.floatingpoint then
-             f_photometry.Memo1.Lines.Add('Maximum intensity'+' : '+FormatFloat(f3,(vmax+bg)/fits.imageC))
+             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, (vmax+bg)/fits.imageC))
            else
-             f_photometry.Memo1.Lines.Add('Maximum intensity'+' : '+FormatFloat(f0,vmax+bg));
-           f_photometry.Memo1.Lines.Add('Background'+' : '+FormatFloat(f3,bg/fits.imageC+fits.imageMin)+', '+rsStdDev+blank+FormatFloat(f3,bgdev/fits.imageC));
+             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, vmax+bg));
+           f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, bg/fits.imageC+fits.imageMin)+', '+rsStdDev+blank+FormatFloat(f3, bgdev/fits.imageC));
            if fits.HeaderInfo.floatingpoint then
-             f_photometry.Memo1.Lines.Add('Total flux'+' : '+FormatFloat(f3,flux))
+             f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f3, flux))
            else
-             f_photometry.Memo1.Lines.Add('Total flux'+' : '+FormatFloat(f0,flux));
-           f_photometry.Memo1.Lines.Add('SNR'+' : '+FormatFloat(f1,snr)+', '+'+/- '+FormatFloat(f3,magerr)+blank+'magnitude');
-           f_photometry.Memo1.Lines.Add('Magnitude'+' : '+FormatFloat(f3,mag));
+             f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f0, flux));
+           f_photometry.Memo1.Lines.Add('SNR'+' : '+FormatFloat(f1,snr)+', '+'+/- '+FormatFloat(f3,magerr)+blank+LowerCase(rsMagnitude));
+           f_photometry.Memo1.Lines.Add(rsMagnitude+' : '+FormatFloat(f3, mag));
          end;
        end
        else begin

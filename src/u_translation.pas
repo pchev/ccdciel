@@ -849,7 +849,7 @@ resourcestring
   rsShowINDILog = 'Show INDI log';
   rsNumberOfExpo = 'Number of exposure per point';
   rsSomeDefinedD = 'Some defined devices are not connected';
-  rsOpenPictureF = 'Open picture file%s';
+  rsOpenPictureF = 'Open FITS or picture file%s';
   rsPauseAutogui = 'Pause autoguider';
   rsResumeAutogu = 'Resume autoguider';
   rsMaximumADU = 'Maximum ADU';
@@ -1130,6 +1130,15 @@ resourcestring
   rsSetMagnitude = 'Set magnitude';
   rsNoStarFound = 'No star found';
   rsCaptureStopp2 = 'Capture stopped unexpectedly';
+  rsSimplifiedPh = 'Simplified photometry taking account for calibration, exposure time and airmass';
+  rsAirmass = 'Airmass';
+  rsFlux = 'Flux';
+  rsSimplifiedPh2 = 'Simplified photometry, uncalibrated';
+  rsSimplifiedPh3 = 'Simplified photometry taking account for only the calibration';
+  rsStar = 'Star';
+  rsMaximumInten = 'Maximum intensity';
+  rsBackground = 'Background';
+  rsMagnitude = 'Magnitude';
 
 implementation
 

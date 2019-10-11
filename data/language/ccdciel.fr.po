@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-08-27 11:12+0000\n"
-"PO-Revision-Date: 2019-08-27 11:29+0000\n"
+"POT-Creation-Date: 2019-10-11 14:27+0000\n"
+"PO-Revision-Date: 2019-10-11 14:53+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-09-21 18:00+0000\n"
-"X-Generator: Launchpad (build 19048)\n"
+"X-Launchpad-Export-Date: 2019-10-11 14:56+0000\n"
+"X-Generator: Launchpad (build af2eefe214bd95389a09b7c956720881bab16807)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -75,6 +75,10 @@ msgstr "administrateur"
 #: u_translation.rsaftertelesco
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
 msgstr "Après pointage du télescope vers la cible l'erreur de position est de %s arcmin.%sVoulez-vous réessayer le Goto?"
+
+#: u_translation.rsairmass
+msgid "Airmass"
+msgstr "Masse d'air"
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
@@ -344,6 +348,10 @@ msgstr "Azimut"
 msgid "Back"
 msgstr "Retour"
 
+#: u_translation.rsbackground
+msgid "Background"
+msgstr "Fond de ciel"
+
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
 msgstr "Compensation du jeu"
@@ -584,6 +592,10 @@ msgstr "Dossier d'enregistrement"
 msgid "Capture stopped during autofocus"
 msgstr "Capture arrêtée pendant l'autofocus"
 
+#: u_translation.rscapturestopp2
+msgid "Capture stopped unexpectedly"
+msgstr "La capture s'est arrêtée de manière inattendue"
+
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
 msgstr "Image CCD envoyée au planétarium."
@@ -686,7 +698,7 @@ msgstr "colonne"
 
 #: u_translation.rscommandpath
 msgid "Command path"
-msgstr ""
+msgstr "Chemin de la commande"
 
 #: u_translation.rscommands
 msgid "Commands"
@@ -1280,6 +1292,10 @@ msgstr "Retourner l'image horizontalement"
 msgid "Flip the image vertically"
 msgstr "Retourner l'image verticalement"
 
+#: u_translation.rsflux
+msgid "Flux"
+msgstr "Flux"
+
 #: u_translation.rsfoc
 msgid "Foc."
 msgstr "Foc."
@@ -1728,6 +1744,10 @@ msgstr "Boucle"
 msgid "Magnifier"
 msgstr "Loupe"
 
+#: u_translation.rsmagnitude
+msgid "Magnitude"
+msgstr "Magnitude"
+
 #: u_translation.rsmainsensor
 msgid "Main sensor"
 msgstr "Capteur principal"
@@ -1756,6 +1776,10 @@ msgstr "ADU maximum"
 msgid "Maximum defocused HFD the focuser can safely reach"
 msgstr "HFD maximum que le focuser peut atteindre"
 
+#: u_translation.rsmaximuminten
+msgid "Maximum intensity"
+msgstr "Intensité maximum"
+
 #: u_translation.rsmaximumnumbe
 msgid "Maximum number of retry"
 msgstr "Nombre maximum d'essais"
@@ -1780,6 +1804,10 @@ msgstr "Décalage max."
 msgid "Mean:"
 msgstr "Moyenne:"
 
+#: u_translation.rsmeasurement
+msgid "Measurement"
+msgstr "Mesure"
+
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
 msgstr "Mesure %s  hfd:%s pointe:%s snr:%s"
@@ -1790,7 +1818,7 @@ msgstr "Mesure %s  pos:%s pas:%s hfd:%s pointe:%s snr:%s"
 
 #: u_translation.rsmedian
 msgid "%sMedian:%s"
-msgstr ""
+msgstr "%sMédiane:%s"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -2044,6 +2072,10 @@ msgstr "Aucun script n'est en cours d'exécution."
 msgid "No star detected. Is the image focused and sufficiently exposed?"
 msgstr "Aucune étoile détectée. L'image est-elle focalisée et suffisamment exposée?"
 
+#: u_translation.rsnostarfound
+msgid "No star found"
+msgstr "Aucune étoile trouvée"
+
 #: u_translation.rsnosuitableda
 msgid "No suitable dawn for automatic flat today"
 msgstr "Pas d'aube convenant au flat automatique aujourd'hui"
@@ -2181,8 +2213,8 @@ msgid "Open FITS file%s"
 msgstr "Ouvrir le fichier FITS %s"
 
 #: u_translation.rsopenpicturef
-msgid "Open picture file%s"
-msgstr "Ouvrir une image%s"
+msgid "Open FITS or picture file%s"
+msgstr "Ouvrir un fichier FITS ou une image%s"
 
 #: u_translation.rsopenreferenc
 msgid "Open reference image"
@@ -2288,9 +2320,13 @@ msgstr "Documentation PDF"
 msgid "Periodic auto-focus"
 msgstr "Autofocus périodique"
 
+#: u_translation.rsphotometry
+msgid "Photometry"
+msgstr "Photométrie"
+
 #: u_translation.rspixelcount
 msgid "%sPixel count:%s"
-msgstr ""
+msgstr "%sNombre de pixels:%s"
 
 #: u_translation.rspixels
 msgid "Pixels"
@@ -2526,7 +2562,7 @@ msgstr "Message inconnu reçu: %s"
 
 #: u_translation.rsrecenterifth
 msgid "Recenter if the drift is more than"
-msgstr ""
+msgstr "Recentrer si la dérive est plus que"
 
 #: u_translation.rsrecenterimag
 msgid "Recenter image error!%sdistance: %s"
@@ -2542,11 +2578,11 @@ msgstr "Recentrage sur la dernière image"
 
 #: u_translation.rsrecentersequ
 msgid "Recenter sequence target that drift"
-msgstr ""
+msgstr "Recentrer un objet qui dérive durant la séquence"
 
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
-msgstr ""
+msgstr "Recentre l'objet maintenant"
 
 #: u_translation.rsred
 msgid "red"
@@ -2758,7 +2794,7 @@ msgstr "Exécute un script"
 
 #: u_translation.rsrunastrometr
 msgid "Run astrometry on every image to search for drift"
-msgstr ""
+msgstr "Exécuter l'astrométrie sur chaque image pour rechercher une dérive"
 
 #: u_translation.rsrunautofocus
 msgid "Auto-focus if temp. change by more than %s"
@@ -2791,6 +2827,10 @@ msgstr "Sûr pour l'opération"
 #: u_translation.rssafetymonito
 msgid "Safety monitor"
 msgstr "Contrôle de sécurité"
+
+#: u_translation.rssaturated
+msgid "saturated"
+msgstr "saturé"
 
 #: u_translation.rssave
 msgid "Save"
@@ -3008,6 +3048,10 @@ msgstr "Direction de mise au point vers l'extérieur"
 msgid "Set frame type %s"
 msgstr "Règle le type d'image à %s"
 
+#: u_translation.rssetmagnitude
+msgid "Set magnitude"
+msgstr "Définir la magnitude"
+
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
 msgstr "Envoie les coordonnées de l'observatoire"
@@ -3075,6 +3119,18 @@ msgstr "Demande de confirmation"
 #: u_translation.rssigma
 msgid "sigma"
 msgstr "sigma"
+
+#: u_translation.rssimplifiedph
+msgid "Simplified photometry taking account for calibration, exposure time and airmass"
+msgstr "Photométrie simplifiée prenant en compte l'étalonnage, le temps d'exposition et la masse d'air"
+
+#: u_translation.rssimplifiedph2
+msgid "Simplified photometry, uncalibrated"
+msgstr "Photométrie simplifiée, non calibré"
+
+#: u_translation.rssimplifiedph3
+msgid "Simplified photometry taking account for only the calibration"
+msgstr "Photométrie simplifiée tenant compte seulement de la calibration"
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
@@ -3219,6 +3275,10 @@ msgstr "Empilement avec l'étoile de référence à %s %s"
 #: u_translation.rsstackofframe
 msgid "stack of %s frames"
 msgstr "empilement de %s images"
+
+#: u_translation.rsstar
+msgid "Star"
+msgstr "Étoile"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"
@@ -3522,7 +3582,7 @@ msgstr "La cible peut être suivie jusqu'a %s, dans %s secondes"
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
-msgstr ""
+msgstr "L'objet sera recentré avant la prochaine image"
 
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
@@ -3843,6 +3903,10 @@ msgstr "Non asservi"
 #: u_translation.rsupdateradec2
 msgid "Update RA+Dec%sfrom Planetarium"
 msgstr "Mise à jours AD+Déc%sdu planétarium"
+
+#: u_translation.rsuseasreferen
+msgid "Use as reference star"
+msgstr "Utiliser comme étoile de référence"
 
 #: u_translation.rsuseastromet2
 msgid "Use astrometry to%srefine the position"
