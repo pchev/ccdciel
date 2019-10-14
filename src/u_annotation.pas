@@ -440,7 +440,7 @@ begin
         end;{centre object visible}
 
         if width1=0 then begin width1:=length1;pa:=999;end;
-        len:=length1/(cdelt2*60*10*2); {Length in pixels}
+        len:=length1/(abs(cdelt2)*60*10*2); {Length in pixels}
         if len<=2 then {too small to plot an elipse or circle, just plot four dots}
         begin {tiny object marking}
           cnv.pixels[x-2,y+2]:=clyellow;
