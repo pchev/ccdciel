@@ -34,19 +34,25 @@ type
 
   Tf_goto = class(TForm)
     BtnSearch: TButton;
-    Button1: TButton;
+    ButtonOK: TButton;
     Button2: TButton;
     De: TEdit;
+    Label8: TLabel;
+    msginfo: TLabel;
+    PxSz: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
     LabelAz: TLabel;
     LabelAlt: TLabel;
     Obj: TEdit;
     Panel1: TPanel;
+    PanelAltAz: TPanel;
+    PanelPxSz: TPanel;
     Ra: TEdit;
     procedure BtnSearchClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -78,13 +84,16 @@ end;
 procedure Tf_goto.SetLang;
 begin
   Caption:=rsGoto;
-  Button1.Caption:=rsGoto;
+  ButtonOK.Caption:=rsGoto;
   Button2.Caption:=rsCancel;
   Label1.Caption:=rsCenterRA;
   Label2.Caption:=rsCenterDec;
   Label3.Caption:=rsObjectName;
   Label4.Caption:=rsAzimuth;
   Label5.Caption:=rsElevation;
+  Label7.Caption:=rsImageScale;
+  Label8.Caption:=ssec+'/'+rsPixels;
+  msginfo.Caption:='';
 end;
 
 procedure Tf_goto.FormShow(Sender: TObject);

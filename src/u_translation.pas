@@ -1139,6 +1139,7 @@ resourcestring
   rsMaximumInten = 'Maximum intensity';
   rsBackground = 'Background';
   rsMagnitude = 'Magnitude';
+  rsApproximateC = 'Approximate coordinates and image scale';
 
 implementation
 
