@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
-  GraphType,  FPReadJPEG, LazSysUtils,
+  GraphType,  FPReadJPEG, LazSysUtils, u_libraw,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -216,6 +216,7 @@ type
   end;
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
 
 implementation
 
@@ -2365,6 +2366,82 @@ begin
    hdr.Free;
    img.free;
  end;
+end;
+
+procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+var i,j,n,x,c: integer;
+    xs,ys,xmax,ymax: integer;
+    rawinfo:TRawInfo;
+    buf: array of char;
+    msg: array[0..1024] of char;
+    pmsg: PChar;
+    xx: SmallInt;
+    hdr: TFitsHeader;
+    b: array[0..2880]of char;
+begin
+  if libraw=0 then exit;
+  try
+  i:=raw.Size;
+  SetLength(buf,i+1);
+  raw.Position:=0;
+  raw.Read(buf[0],i);
+  except
+    // ShowMessage('error loading file');
+    exit;
+  end;
+  try
+  n:=LoadRaw(@buf[0],i);
+  if n<>0 then begin
+    pmsg:=@msg;
+    GetRawErrorMsg(n,pmsg);
+    //ShowMessage(msg);
+    exit;
+  end;
+  rawinfo.bitmap:=nil;
+  n:=GetRawInfo(rawinfo);
+  if (n<>0) or (rawinfo.bitmap=nil) then begin
+   exit;
+  end;
+  xs:=rawinfo.leftmargin;
+  ys:=rawinfo.topmargin;
+  xmax:=xs+rawinfo.imgwidth;
+  ymax:=ys+rawinfo.imgheight;
+  if (xmax>rawinfo.rawwidth)or(ymax>rawinfo.rawheight) then begin
+    //ShowMessage('inconsistant size');
+    exit;
+  end;
+  hdr:=TFitsHeader.Create;
+  hdr.ClearHeader;
+  hdr.Add('SIMPLE',true,'file does conform to FITS standard');
+  hdr.Add('BITPIX',16,'number of bits per data pixel');
+  hdr.Add('NAXIS',2,'number of data axes');
+  hdr.Add('NAXIS1',rawinfo.imgwidth ,'length of data axis 1');
+  hdr.Add('NAXIS2',rawinfo.imgheight ,'length of data axis 2');
+  hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
+  hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
+  hdr.Add('BSCALE',1,'default scaling factor');
+  hdr.Add('END','','');
+  ImgStream:=hdr.GetStream;
+  hdr.Free;
+  for i:=ymax downto ys do begin
+    for j:=xs to xmax-1 do begin
+      x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
+      if x>0 then
+         xx:=x-32768
+      else
+         xx:=-32768;
+      xx:=NtoBE(xx);
+      ImgStream.Write(xx,sizeof(smallint));
+    end;
+  end;
+  b:='';
+  c:=2880-(ImgStream.Size mod 2880);
+  FillChar(b,c,0);
+  ImgStream.Write(b,c);
+  CloseRaw();
+  except
+    //ShowMessage('error convert raw file');
+  end;
 end;
 
 end.

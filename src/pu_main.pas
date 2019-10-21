@@ -40,7 +40,7 @@ uses
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -712,6 +712,7 @@ type
     procedure ResolveSyncRotator(Sender: TObject);
     procedure ResolveRotate(Sender: TObject);
     procedure LoadPictureFile(fn:string);
+    procedure LoadRawFile(fn:string);
     procedure LoadFitsFile(fn:string);
     procedure SaveFitsFile(fn:string);
     procedure OpenRefImage(fn:string);
@@ -8399,6 +8400,8 @@ begin
    fext:=uppercase(extractfileext(OpenPictureDialog1.FileName));
    if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS')) then
       LoadFitsFile(OpenPictureDialog1.FileName) {load fits file}
+   else if pos(fext+',',UpperCase(rawext))>0  then
+      LoadRawFile(OpenPictureDialog1.FileName) {load camera raw file}
    else
       LoadPictureFile(OpenPictureDialog1.FileName); {load picture file}
   end;
@@ -10365,6 +10368,37 @@ begin
    else begin
     NewMessage(Format(rsInvalidOrUns, [fn]),1);
    end;
+end;
+
+procedure Tf_main.LoadRawFile(fn:string);
+var RawStream, FitsStream: TMemoryStream;
+    imgsize: string;
+begin
+ // create resources
+ RawStream:=TMemoryStream.Create;
+ FitsStream:=TMemoryStream.Create;
+ try
+   // load picture
+   RawStream.LoadFromFile(fn);
+   RawToFits(RawStream,FitsStream);
+   if FitsStream.size<2880 then
+      NewMessage('Invalid file '+fn,0)
+   else begin
+     // assign new image
+     fits.Stream:=FitsStream;
+     fits.LoadStream;
+     // draw new image
+     DrawHistogram(true);
+     DrawImage;
+     imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+     NewMessage(Format(rsOpenFile, [fn]),2);
+     StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
+   end;
+ finally
+   // Free resources
+   RawStream.Free;
+   FitsStream.Free;
+ end;
 end;
 
 procedure Tf_main.LoadPictureFile(fn:string);
