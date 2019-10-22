@@ -7975,6 +7975,11 @@ for i:=0 to imgH-1 do begin
         end;
       end;
    end;
+   if (pixel.red=255)or(pixel.green=255)or(pixel.blue=255) then begin
+     pixel.red:=(pixel.red+pixel.green+pixel.blue) div 3; // prevent colorization of saturated area
+     pixel.green:=pixel.red;
+     pixel.blue:=pixel.red;
+   end;
    p[j]:=pixel;
 end;
 end;
