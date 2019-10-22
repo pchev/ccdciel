@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2,
+uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2, u_libraw,
      cu_fits, u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
 
 type
@@ -1023,40 +1023,40 @@ begin
  if debug_msg then msg('receive blob');
  // if possible start next exposure now
  TryNextExposure(FImgNum);
+ ft:=trim(ft);
  if blen>0 then begin
    data.Position:=0;
-   if pos('.fits',ft)>0 then begin // receive a FITS file
+   if RightStr(ft,2)='.z' then begin //compressed
+        if zlibok then begin
+          if debug_msg then msg('uncompress file');
+          sourceLen:=blen;
+          if sz>0 then
+             destLen:=sz
+          else if CCDframe<>nil then
+             destLen:=round(CCDframeWidth.value*CCDframeHeight.value*2)+(10*2880)
+          else
+             destLen:=10000*10000*2;
+          SetLength(source,sourceLen);
+          SetLength(dest,destLen);
+          data.Read(source[0],sourceLen);
+          i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
+          if i=0 then begin
+             data.Clear;
+             data.Write(dest[0],destLen);
+          end;
+          SetLength(source,0);
+          SetLength(dest,0);
+          ft:=LeftStr(ft,length(ft)-2);
+        end;
+   end;
+   if ft='.fits' then begin // receive a FITS file
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a fits file');
-     if pos('.z',ft)>0 then begin //compressed
-         if debug_msg then msg('uncompress file');
-         FImgStream.Clear;
-         FImgStream.Position:=0;
-         if zlibok then begin
-           sourceLen:=blen;
-           if sz>0 then
-              destLen:=sz
-           else if CCDframe<>nil then
-              destLen:=round(CCDframeWidth.value*CCDframeHeight.value*2)+(10*2880)
-           else
-              destLen:=10000*10000*2;
-           SetLength(source,sourceLen);
-           SetLength(dest,destLen);
-           data.Read(source[0],sourceLen);
-           i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
-           if i=0 then
-              FImgStream.Write(dest[0],destLen);
-           SetLength(source,0);
-           SetLength(dest,0);
-         end;
-     end
-     else begin  //uncompressed
-        if debug_msg then msg('copy stream');
-        FImgStream.Clear;
-        FImgStream.Position:=0;
-        FImgStream.CopyFrom(data,sz);
-     end;
+     if debug_msg then msg('copy stream');
+     FImgStream.Clear;
+     FImgStream.Position:=0;
+     FImgStream.CopyFrom(data,sz);
      if debug_msg then msg('NewImage');
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
@@ -1065,10 +1065,23 @@ begin
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
-     //uncompressed
      if debug_msg then msg('copy '+ft+' stream to fits');
      msg(Format(rsWarningImage, [uppercase(ft)]), 1);
      PictureToFits(data,copy(ft,2,99),FImgStream,false,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+     if FImgStream.Size<2880 then begin
+        msg('Invalid file received '+ft,0);
+        AbortExposure;
+     end;
+     if debug_msg then msg('NewImage');
+     if assigned(FonExposureProgress) then FonExposureProgress(-11);
+     NewImage;
+   end
+   else if pos(UpperCase(ft)+',',UpperCase(rawext))>0 then begin
+     FImageFormat:=ft;
+     if assigned(FonExposureProgress) then FonExposureProgress(-10);
+     if debug_msg then msg('this is a '+ft+' file');
+     if debug_msg then msg('copy '+ft+' stream to fits');
+     RawToFits(data,FImgStream,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
      if FImgStream.Size<2880 then begin
         msg('Invalid file received '+ft,0);
         AbortExposure;
@@ -1083,36 +1096,12 @@ begin
      lockvideostream:=true;
      if debug_msg then msg('process this frame');
      try
-     if pos('.z',ft)>0 then begin //compressed
-         if debug_msg then msg('uncompress frame');
-         if zlibok then begin
-           FVideoStream.Clear;
-           FVideoStream.Position:=0;
-           sourceLen:=blen;
-           if sz>0 then
-              destLen:=sz
-           else if CCDframe<>nil then
-              destLen:=round(CCDframeWidth.value*CCDframeHeight.value*2)+(1000)
-           else
-              destLen:=10000*10000*2;
-           SetLength(source,sourceLen);
-           SetLength(dest,destLen);
-           data.Read(source[0],sourceLen);
-           i:=uncompress(@dest[0],@destLen,@source[0],sourceLen);
-           if i=0 then
-              FVideoStream.Write(dest[0],destLen);
-           SetLength(source,0);
-           SetLength(dest,0);
-         end;
-     end
-     else begin  //uncompressed
        if debug_msg then msg('copy frame');
        FVideoStream.Clear;
        FVideoStream.Position:=0;
        FVideoStream.CopyFrom(data,sz);
-     end;
-     if debug_msg then msg('NewVideoFrame');
-     NewVideoFrame;
+       if debug_msg then msg('NewVideoFrame');
+       NewVideoFrame;
      finally
        lockvideostream:=false;
      end;
