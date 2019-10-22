@@ -1049,6 +1049,27 @@ begin
   PanelLeft.Constraints.MinWidth:=rl;
 end;
 
+Procedure UppercaseFilter(opendialog:TOpenDialog);
+var i:integer;
+    filst: TStringList;
+    buf,newfilter: string;
+begin
+    filst:=TStringList.Create;
+    SplitRec(opendialog.Filter,'|',filst);
+    newfilter:='';
+    for i:=0 to filst.Count-1 do begin
+      if odd(i) and (filst[i]<>'*.*') then begin
+        buf:=uppercase(filst[i]);
+        newfilter:=newfilter+'|'+filst[i]+';'+buf;
+      end else begin
+        newfilter:=newfilter+'|'+filst[i]
+      end;
+    end;
+    delete(newfilter,1,1);
+    opendialog.Filter:=newfilter;
+    filst.Free;
+end;
+
 procedure Tf_main.FormCreate(Sender: TObject);
 var inif: TIniFile;
     configfile: string;
@@ -1073,6 +1094,9 @@ begin
   {$endif}
   {$ifdef lclgtk2}
     TBTabs.Color:=clBtnShadow;
+    // GTK2 open dialog is case sensitive
+    UppercaseFilter(OpenDialog1);
+    UppercaseFilter(OpenPictureDialog1);
   {$endif}
   {$ifdef darwin}
     TBTabs.Color:=clBtnHighlight; // on Mac highlight is darker...
