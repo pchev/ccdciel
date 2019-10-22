@@ -15,6 +15,7 @@ type
       imgheight: integer;
       topmargin: integer;
       leftmargin: integer;
+      bayerpattern: array [0..3] of Char;
       bitmap: pointer;
     end;
     TRawBitmap = array of smallint;

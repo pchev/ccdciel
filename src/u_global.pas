@@ -350,7 +350,7 @@ var
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
   BayerColor: boolean;
-  BayerMode:TBayerMode;
+  DefaultBayerMode:TBayerMode;
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
   TemperatureScale: integer;

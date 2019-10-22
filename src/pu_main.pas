@@ -3141,7 +3141,7 @@ begin
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
-  BayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',0));
+  DefaultBayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',3));
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
   GreenBalance:=config.GetValue('/Color/GreenBalance',1.0);
   BlueBalance:=config.GetValue('/Color/BlueBalance',1.0);
@@ -6011,7 +6011,7 @@ begin
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
    f_option.ElevationMin.Value:=config.GetValue('/Info/ElevationMin',10.0);
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
-   f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',0);
+   f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',3);
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
@@ -8000,7 +8000,7 @@ if fits.HeaderInfo.naxis>0 then begin
   if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
      if BayerColor then begin
        tmpbmp:=TBGRABitmap.Create;
-       debayer(ImaBmp,BayerMode,tmpbmp);
+       debayer(ImaBmp,fits.BayerMode,tmpbmp);
        ImaBmp.Assign(tmpbmp);
        tmpbmp.Free;
      end;

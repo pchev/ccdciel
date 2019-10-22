@@ -36,6 +36,7 @@ type
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
             bzero,bscale,dmax,dmin,blank : double;
+            bayerpattern: string;
             equinox,ra,dec,crval1,crval2: double;
             pixsz1,pixsz2,pixratio,focallen: double;
             exptime,airmass: double;
@@ -155,6 +156,7 @@ type
     procedure SetImgFullRange(value: boolean);
     function GetHasBPM: boolean;
     procedure SetGamma(value: single);
+    function GetBayerMode: TBayerMode;
   protected
     { Protected declarations }
   public
@@ -201,6 +203,7 @@ type
      property imageMax : double read FimageMax;
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
+     property BayerMode: TBayerMode read GetBayerMode;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MaxADU: double read FMaxADU write FMaxADU;
      property Invert: boolean read FInvert write FInvert;
@@ -738,7 +741,7 @@ var   i : integer;
 begin
 with FFitsInfo do begin
  valid:=false; solved:=false; floatingpoint:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
- bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
+ bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord; bayerpattern:='';
  objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
  focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0;
  for i:=0 to FHeader.Rows.Count-1 do begin
@@ -769,6 +772,7 @@ with FFitsInfo do begin
     if (keyword='FRAMEY') then Fry:=round(StrToFloat(buf));
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
     if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
+    if (keyword='BAYERPAT') then bayerpattern:=trim(buf);
     if (keyword='AIRMASS') then airmass:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
@@ -1324,6 +1328,21 @@ begin
       gamma_c[i]:=power(i/32768.0, gamma);
   end;
 end;
+
+function TFits.GetBayerMode: TBayerMode;
+var buf: string;
+begin
+  buf:=copy(HeaderInfo.bayerpattern,3,2);
+  // use value from header
+  if buf='GR' then result:=bayerGR
+  else if buf='RG' then result:=bayerRG
+  else if buf='BG' then result:=bayerBG
+  else if buf='GB' then result:=bayerGB
+  else
+  // use default configured value
+    result:=DefaultBayerMode;
+end;
+
 
 procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
 var i,j : integer;
@@ -2420,6 +2439,14 @@ begin
   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
   hdr.Add('BSCALE',1,'default scaling factor');
+  hdr.Add('BAYERPAT',rawinfo.bayerpattern,'CFA Bayer pattern');
+  hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
+  if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
+  if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
+  if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
+  hdr.Add('COMMENT','Converted from camera RAW','');
   hdr.Add('END','','');
   ImgStream:=hdr.GetStream;
   hdr.Free;
