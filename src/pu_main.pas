@@ -7919,7 +7919,7 @@ for i:=0 to imgH-1 do begin
            end;
         bayerGB: begin
             pixel.red:=round(RedBalance*pix5);
-            pixel.green:= round(GreenBalance**(pix2+pix4+pix6+pix8)/4);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
             pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
            end;
         end;
