@@ -1,0 +1,18 @@
+# Common flags
+CC=gcc
+CFLAGS    = -O3 -DNODEPS 
+OName     = dcraw
+LIBS      = -lm
+
+.PHONY: clean
+
+# Source files
+SRC :=  dcraw.c
+
+all: $(OName)
+
+$(OName): $(SRC)
+	$(CC) $(CFLAGS) -o $@ $(SRC) $(LIBS)
+
+clean:
+	rm -f *.a *.o $(OName)

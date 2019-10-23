@@ -27,11 +27,13 @@ install -m 755 -d $destdir/doc
 if [ $OS_TARGET = win32 ]; then 
   strip -v -o $destdir/../Prog/ccdciel.exe src/ccdciel.exe 
   strip -v -o $destdir/../Prog/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
+  strip -v -o $destdir/../Prog/dcraw.exe library/dcraw/dcraw.exe
   unzip -d $destdir/../Prog/openssl32/ system_integration/Windows/data/openssl-win32.zip
 fi
 if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/../Prog/ccdciel-x64.exe src/ccdciel.exe 
   strip -v -o $destdir/../Prog/libccdcielwcs-x64.dll library/wcs/libccdcielwcs.dll
+  strip -v -o $destdir/../Prog/dcraw-x64.exe library/dcraw/dcraw.exe
   unzip -d $destdir/../Prog/openssl64/ system_integration/Windows/data/openssl-win64.zip
 fi
 

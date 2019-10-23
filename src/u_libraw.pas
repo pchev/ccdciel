@@ -76,7 +76,7 @@ begin
     end;
     {$endif}
     {$ifdef darwin}
-    DcrawCmd:=slash(Appdir)+'dcraw';
+    DcrawCmd:=slash(ExtractFilePath(ParamStr(0)))+'dcraw';
     if not fileexists(DcrawCmd) then DcrawCmd:='';
     {$endif}
   end;

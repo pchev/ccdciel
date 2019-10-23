@@ -12,16 +12,15 @@ version=0.0
 all:
 ifeq ($(OS_TARGET),win32)
         $(MAKE) -C wcs -f Makefile.win32 all
+        $(MAKE) -C dcraw -f Makefile.win32 all
  else
  ifeq ($(OS_TARGET),win64)
         $(MAKE) -C wcs -f Makefile.win64 all
+        $(MAKE) -C dcraw -f Makefile.win64 all
  else
  ifeq ($(OS_TARGET),darwin)
-   ifeq ($(CPU_TARGET),i386)
-        $(MAKE) -C wcs all arch_flags=-m32
-   else
         $(MAKE) -C wcs all arch_flags=-m64
-   endif
+        $(MAKE) -C dcraw -f Makefile.darwin all
  endif
  endif
 endif
@@ -29,12 +28,15 @@ endif
 clean:
 ifeq ($(OS_TARGET),win32)
         $(MAKE) -C wcs -f Makefile.win32 clean
+        $(MAKE) -C dcraw -f Makefile.win32 clean
 else
 ifeq ($(OS_TARGET),win64)
         $(MAKE) -C wcs -f Makefile.win64 clean
+        $(MAKE) -C dcraw -f Makefile.win64 clean
 else
 ifeq ($(OS_TARGET),darwin)
 	$(MAKE) -C wcs clean
+	$(MAKE) -C dcraw -f Makefile.darwin clean
 endif
 endif
 endif
