@@ -1,0 +1,19 @@
+# See Readme.txt to install libraw 
+
+CXX    = x86_64-w64-mingw32-g++
+
+CFLAGS = -DLIBRAW_NOTHREADS -DLIBRAW_NODLL -O3  -w -fPIC -I$(HOME)/mingw/w64/include
+
+SO_Name       = libpasraw.dll
+LIBFLAGS      = -shared -Wl,-soname,$(SO_Name) 
+LIBS          = $(HOME)/mingw/w64/lib/libraw.a -lws2_32
+
+SRC =	pasraw.cpp 
+
+all: $(SO_Name)
+
+$(SO_Name): $(OBJS)
+	$(CXX) $(CFLAGS) $(LIBFLAGS) -o $@ $(SRC) $(LIBS)
+
+clean:
+	rm -f *.a *.o $(SO_Name)
