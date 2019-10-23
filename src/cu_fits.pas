@@ -218,8 +218,8 @@ type
      property DarkFrame: TFits read FDark write FDark;
   end;
 
-  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
-  procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
+  procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
 
 implementation
 
@@ -2219,7 +2219,7 @@ begin
   m.free;
 end;
 
-procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
 var img:TLazIntfImage;
     lRawImage: TRawImage;
     i,j,c,w,h,x,y,naxis: integer;
@@ -2310,13 +2310,21 @@ begin
    hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
-   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
-   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
    if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
    if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
    if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
    if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
-   hdr.Add('COMMENT','Converted from ',ext);
+   if bayer<>'' then begin
+     hdr.Add('XBAYROFF',0,'X offset of Bayer array');
+     hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
+     hdr.Add('BAYERPAT',bayer,'CFA Bayer pattern');
+   end;
+   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+   if bayer<>'' then
+     hdr.Add('COMMENT','Converted from camera RAW by dcraw','')
+   else
+     hdr.Add('COMMENT','Converted from ',ext);
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
    try
@@ -2387,7 +2395,7 @@ begin
  end;
 end;
 
-procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
 var i,j,n,x,c: integer;
     xs,ys,xmax,ymax: integer;
     rawinfo:TRawInfo;
@@ -2396,24 +2404,29 @@ var i,j,n,x,c: integer;
     pmsg: PChar;
     xx: SmallInt;
     hdr: TFitsHeader;
+    hdrmem: TMemoryStream;
     b: array[0..2880]of char;
+    rawf,tiff,cmdi,cmdu,txt,bayerpattern: string;
+    outr: TStringList;
 begin
-  if libraw=0 then exit;
+rmsg:='';
+if libraw<>0 then begin  // Use libraw directly
   try
   i:=raw.Size;
   SetLength(buf,i+1);
   raw.Position:=0;
   raw.Read(buf[0],i);
   except
-    // ShowMessage('error loading file');
+    rmsg:='Error loading file';
     exit;
   end;
   try
   n:=LoadRaw(@buf[0],i);
+  SetLength(buf,0);
   if n<>0 then begin
     pmsg:=@msg;
     GetRawErrorMsg(n,pmsg);
-    //ShowMessage(msg);
+    rmsg:=msg;
     exit;
   end;
   rawinfo.bitmap:=nil;
@@ -2426,7 +2439,9 @@ begin
   xmax:=xs+rawinfo.imgwidth;
   ymax:=ys+rawinfo.imgheight;
   if (xmax>rawinfo.rawwidth)or(ymax>rawinfo.rawheight) then begin
-    //ShowMessage('inconsistant size');
+    rmsg:='Inconsistant image size: leftmargin='+inttostr(rawinfo.leftmargin)+'topmargin='+inttostr(rawinfo.topmargin)+
+          'imgwidth='+inttostr(rawinfo.imgwidth)+'imgheight='+inttostr(rawinfo.imgheight)+
+          'rawwidth='+inttostr(rawinfo.rawwidth)+'rawheight='+inttostr(rawinfo.rawheight);
     exit;
   end;
   hdr:=TFitsHeader.Create;
@@ -2439,18 +2454,28 @@ begin
   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
   hdr.Add('BSCALE',1,'default scaling factor');
-  hdr.Add('BAYERPAT',rawinfo.bayerpattern,'CFA Bayer pattern');
-  hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
-  hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
   if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
-  hdr.Add('COMMENT','Converted from camera RAW','');
+  hdr.Add('XBAYROFF',0,'X offset of Bayer array');
+  hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
+  hdr.Add('BAYERPAT',rawinfo.bayerpattern,'CFA Bayer pattern');
+  hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  hdr.Add('COMMENT','Converted from camera RAW by libraw','');
   hdr.Add('END','','');
-  ImgStream:=hdr.GetStream;
+  hdrmem:=hdr.GetStream;
+  try
+    // put header in stream
+    ImgStream.position:=0;
+    hdrmem.Position:=0;
+    ImgStream.CopyFrom(hdrmem,hdrmem.Size);
+  finally
+    hdrmem.Free;
+  end;
   hdr.Free;
-  for i:=ymax downto ys do begin
+  for i:=ys to ymax do begin
     for j:=xs to xmax-1 do begin
       x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
       if x>0 then
@@ -2467,8 +2492,45 @@ begin
   ImgStream.Write(b,c);
   CloseRaw();
   except
-    //ShowMessage('error convert raw file');
+    rmsg:='Error converting raw file';
   end;
+end
+else if DcrawCmd<>'' then begin  // try dcraw command line
+  try
+  rawf:=slash(TmpDir)+'tmp.raw';
+  tiff:=slash(TmpDir)+'tmp.tiff';
+  DeleteFile(tiff);
+  cmdi:=DcrawCmd+' -i -t 0 -v '+rawf;
+  cmdu:=DcrawCmd+' -D -4 -t 0 -T '+rawf;
+  raw.Position:=0;
+  raw.SaveToFile(rawf);
+  raw.clear;
+  outr:=TStringList.Create;
+  if ExecProcess(cmdi,outr)<>0 then begin
+    exit;
+  end;
+  for i:=0 to outr.Count-1 do begin
+     if copy(outr[i],1,15)='Filter pattern:' then begin
+       txt:=outr[i];
+       Delete(txt,1,16);
+       txt:=trim(txt);
+       bayerpattern:=copy(txt,1,2)+copy(txt,4,2); // Filter pattern: RG/GB
+       break;
+     end;
+  end;
+  if ExecProcess(cmdu,outr)<>0 then begin
+    exit;
+  end;
+  raw.LoadFromFile(tiff);
+  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern);
+  outr.Free;
+  except
+    rmsg:='Error converting raw file';
+  end;
+end
+else begin
+  rmsg:='No RAW decoder found!';
+end;
 end;
 
 end.

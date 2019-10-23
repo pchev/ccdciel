@@ -1016,6 +1016,7 @@ procedure T_indicamera.NewImageFile(ft: string; sz,blen:integer; data: TMemorySt
 var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
+    rmsg: string;
 begin
  // report any change to NewText() in use with RAM disk transfer
  ExposureTimer.Enabled:=false;
@@ -1081,7 +1082,8 @@ begin
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
      if debug_msg then msg('copy '+ft+' stream to fits');
-     RawToFits(data,FImgStream,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+     RawToFits(data,FImgStream,rmsg,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+     if rmsg<>'' then msg(rmsg,1);
      if FImgStream.Size<2880 then begin
         msg('Invalid file received '+ft,0);
         AbortExposure;

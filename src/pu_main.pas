@@ -1207,6 +1207,7 @@ begin
     uncompress:= Tuncompress(GetProcedureAddress(zlib,'uncompress'));
     if uncompress<>nil then zlibok:=true;
   end;
+  Load_Libraw;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   screenconfig:=TCCDConfig.Create(self);
@@ -10401,7 +10402,7 @@ end;
 
 procedure Tf_main.LoadRawFile(fn:string);
 var RawStream, FitsStream: TMemoryStream;
-    imgsize: string;
+    imgsize, rmsg: string;
 begin
  // create resources
  RawStream:=TMemoryStream.Create;
@@ -10409,7 +10410,8 @@ begin
  try
    // load picture
    RawStream.LoadFromFile(fn);
-   RawToFits(RawStream,FitsStream);
+   RawToFits(RawStream,FitsStream,rmsg);
+   if rmsg<>'' then NewMessage(rmsg,1);
    if FitsStream.size<2880 then
       NewMessage('Invalid file '+fn,0)
    else begin
