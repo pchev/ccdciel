@@ -5,7 +5,7 @@ CXX    = i686-w64-mingw32-g++
 CFLAGS = -DLIBRAW_NOTHREADS -DLIBRAW_NODLL -O3  -w -fPIC -I$(HOME)/mingw/w32/include
 
 SO_Name       = libpasraw.dll
-LIBFLAGS      = -shared -Wl,-soname,$(SO_Name) 
+LIBFLAGS      = -shared -static -static-libgcc -static-libstdc++ -Wl,-soname,$(SO_Name)
 LIBS          = $(HOME)/mingw/w32/lib/libraw.a -lws2_32
 
 SRC =	pasraw.cpp 
