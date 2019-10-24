@@ -116,7 +116,7 @@ begin
   if length(objname)>1 then {Object name length should be two or longer}
   begin
     load_deep;{Load the deepsky database once. If already loaded, no action}
-    linepos:=0;{Set pointer to the beginning}
+    linepos:=2;{Set pointer to the beginning}
     repeat
       read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
       if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then

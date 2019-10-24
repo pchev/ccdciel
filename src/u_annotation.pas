@@ -327,7 +327,7 @@ begin
 
     cos_telescope_dec:=cos(telescope_dec);
     fov:=1.5*sqrt(sqr(0.5*width2*cdelt1)+sqr(0.5*height2*cdelt2))*pi/180; {field of view with 50% extra}
-    linepos:=0;
+    linepos:=2;
     if cdelt1*cdelt2>0 then flipped:=-1 {n-s or e-w flipped} else flipped:=1;
 
     cnv.Pen.width :=1; {thickness lines, fixed} // max(1,round(height2/h));{thickness lines}
