@@ -53,14 +53,22 @@ Procedure Load_Libraw;
 begin
   try
   libraw := LoadLibrary(libname);
+  except
+  end;
+  try
   if libraw <> 0 then  begin
     DcrawCmd := '';
     LoadRaw := TLoadRaw(GetProcAddress(libraw, 'loadraw'));
     CloseRaw := TCloseRaw(GetProcAddress(libraw, 'closeraw'));
     GetRawInfo := TGetRawInfo(GetProcAddress(libraw, 'getinfo'));
     GetRawErrorMsg := TGetRawErrorMsg(GetProcAddress(libraw, 'geterrormsg'));
-  end
-  else begin
+  end;
+  if (LoadRaw=nil)or(GetRawInfo=nil)or(CloseRaw=nil) then
+     libraw:=0;
+  except
+  end;
+  try
+  if libraw=0 then begin
     {$ifdef mswindows}
     DcrawCmd:=slash(Appdir)+'dcraw.exe';
     if not fileexists(DcrawCmd) then DcrawCmd:='';
@@ -76,8 +84,9 @@ begin
     end;
     {$endif}
     {$ifdef darwin}
-    DcrawCmd:=slash(ExtractFilePath(ParamStr(0)))+'dcraw';
-    if not fileexists(DcrawCmd) then DcrawCmd:='';
+    DcrawCmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/dcraw';
+    if not fileexists(DcrawCmd) then
+       DcrawCmd:='';
     {$endif}
   end;
   except
