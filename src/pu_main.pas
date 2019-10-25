@@ -1909,6 +1909,13 @@ begin
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
      NewMessage('Could not load '+libwcs+crlf+'Some astrometry function are not available.',1);
   end;
+  if (libraw=0)and(DcrawCmd='') then begin
+     NewMessage('Could not find '+librawname
+     {$ifdef unix}
+               +', libraw.so'
+     {$endif}
+               +' or '+dcrawname+'. Loading camera raw files is not possible.',1);
+  end;
 
   SetTheme;
 

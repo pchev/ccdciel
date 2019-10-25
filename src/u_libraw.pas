@@ -38,13 +38,16 @@ var libraw: integer;
 const
   rawext='.bay,.bmq,.cr2,.crw,.cs1,.dc2,.dcr,.dng,.erf,.fff,.hdr,.k25,.kdc,.mdc,.mos,.mrw,.nef,.orf,.pef,.pxn,.raf,.raw,.rdc,.sr2,.srf,.x3f,.arw,.3fr,.cine,.ia,.kc2,.mef,.nrw,.qtk,.rw2,.sti,.rwl,.srw,';
   {$ifdef mswindows}
-  libname='libpasraw.dll';
+  librawname='libpasraw.dll';
+  dcrawname='dcraw.exe';
   {$endif}
   {$ifdef linux}
-  libname='libpasraw.so.1';
+  librawname='libpasraw.so.1';
+  dcrawname='dcraw';
   {$endif}
   {$ifdef darwin}
-  libname='libpasraw.dylib';
+  librawname='libpasraw.dylib';
+  dcrawname='dcraw';
   {$endif}
 
 implementation
@@ -52,7 +55,7 @@ implementation
 Procedure Load_Libraw;
 begin
   try
-  libraw := LoadLibrary(libname);
+  libraw := LoadLibrary(librawname);
   except
   end;
   try
@@ -70,21 +73,21 @@ begin
   try
   if libraw=0 then begin
     {$ifdef mswindows}
-    DcrawCmd:=slash(Appdir)+'dcraw.exe';
+    DcrawCmd:=slash(Appdir)+dcrawname;
     if not fileexists(DcrawCmd) then DcrawCmd:='';
     {$endif}
     {$ifdef linux}
-    DcrawCmd:='/usr/bin/dcraw';
+    DcrawCmd:='/usr/bin/'+dcrawname;
     if not fileexists(DcrawCmd) then begin
-       DcrawCmd:='/usr/local/bin/dcraw';
+       DcrawCmd:='/usr/local/bin/'+dcrawname;
        if not fileexists(DcrawCmd) then begin
-          DcrawCmd:=ExpandFileName('~/bin/dcraw');
+          DcrawCmd:=ExpandFileName('~/bin/'+dcrawname);
           if not fileexists(DcrawCmd) then DcrawCmd:='';
        end;
     end;
     {$endif}
     {$ifdef darwin}
-    DcrawCmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/dcraw';
+    DcrawCmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/'+dcrawname;
     if not fileexists(DcrawCmd) then
        DcrawCmd:='';
     {$endif}
