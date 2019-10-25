@@ -16,16 +16,19 @@ The distribution libraw package must be installed at runtime.
 
 MAC:
 ====
-First install the latest libraw from source:
- - wget https://www.libraw.org/data/LibRaw-0.19.5.tar.gz
- - tar xf LibRaw-0.19.5.tar.gz
- - cd LibRaw-0.19.5
- - ./configure CPPFLAGS="-mmacosx-version-min=10.10" 
- - make
- - sudo make install
-
-The Makefile create the library libpasraw.dylib with libraw statically linked.
-No libraw.dylib is required at runtime.
+The following do not work! compilation work fine but the library do not load at run time.
+Fallback to use only dcraw command line on Mac for now.
+//
+//First install the latest libraw from source:
+// - wget https://www.libraw.org/data/LibRaw-0.19.5.tar.gz
+// - tar xf LibRaw-0.19.5.tar.gz
+// - cd LibRaw-0.19.5
+// - ./configure CPPFLAGS="-mmacosx-version-min=10.10" 
+// - make
+// - sudo make install
+//
+//The Makefile create the library libpasraw.dylib with libraw statically linked.
+//No libraw.dylib is required at runtime.
 
 
 WINDOWS:
