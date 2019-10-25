@@ -25,6 +25,8 @@ data/language/launchpad/ccdcielpot.tar
 # ignore binary
 *.o
 library/wcs/libccdcielwcs.*
+library/dcraw/dcraw
+library/dcraw/dcraw.exe
 src/ccdciel
 src/ccdciel.exe
 src/ccdciel.dbg
