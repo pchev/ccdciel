@@ -639,7 +639,7 @@ type
     procedure StopVcurve(Sender: TObject);
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
-    procedure MeasureImage(Sender: TObject);
+    procedure MeasureImage(plot: boolean);
     procedure StarSelection(Sender: TObject);
     Procedure RotatorStatus(Sender: TObject);
     Procedure RotatorAngleChange(Sender: TObject);
@@ -7795,6 +7795,10 @@ try
  buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[2].Text:=buf;
  StatusBar1.Panels[1].Text := '';
+ // measure image but not plot
+ if camera.LastExposureTime>=10 then begin
+   MeasureImage(false);
+ end;
  // check if target need to be recentered
  if CheckRecenterTarget and(camera.FrameType=LIGHT)and(camera.LastExposureTime>(AstrometryTimeout+5))and
     (not NeedRecenterTarget)and(not CheckRecenterBusy)and(not astrometry.Busy)and(astrometryResolver<>ResolverNone)and
@@ -10795,7 +10799,7 @@ begin
  CheckMeridianFlip(0,true,t);
 end;
 
-procedure Tf_main.MeasureImage(Sender: TObject); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
+procedure Tf_main.MeasureImage(plot: boolean); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
  i,rx,ry,s,nhfd,nhfd_center,nhfd_outer_ring,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right : integer;
  hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,med,median_center, median_outer_ring : double;
@@ -10809,7 +10813,7 @@ begin
   Saved_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
 
-  DrawImage; {draw clean image}
+  if plot then DrawImage; {draw clean image}
 
   // first measurement with a big window to find median star diameter
   s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
@@ -10924,7 +10928,11 @@ begin
   SetLength(hfdlist_bottom_left,0);
   SetLength(hfdlist_bottom_right,0);
 
-  PlotImage;
+  if plot then
+    PlotImage
+  else
+    fits.ClearStarList;
+
   Screen.Cursor := saved_cursor;
 end;
 

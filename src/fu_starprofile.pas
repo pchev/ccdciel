@@ -91,7 +91,8 @@ type
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
-    FonMeasureImage, FonStarSelection: TNotifyEvent;
+    FonMeasureImage: TNotifyBoolConst;
+    FonStarSelection: TNotifyEvent;
     FonMsg: TNotifyMsg;
     Fpreview:Tf_preview;
     Ffocuser:Tf_focuser;
@@ -147,7 +148,7 @@ type
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
     property onAbsolutePosition: TNotifyEvent read FonAbsolutePosition write FonAbsolutePosition;
-    property onMeasureImage: TNotifyEvent read FonMeasureImage write FonMeasureImage;
+    property onMeasureImage: TNotifyBoolConst read FonMeasureImage write FonMeasureImage;
     property onStarSelection: TNotifyEvent read FonStarSelection write FonStarSelection;
   end;
 
@@ -350,7 +351,7 @@ end;
 
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
 begin
-  if assigned(FonMeasureImage) then FonMeasureImage(self);
+  if assigned(FonMeasureImage) then FonMeasureImage(true);
 end;
 
 procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
