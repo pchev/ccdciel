@@ -744,7 +744,7 @@ begin
      ChkAutofocusDown(false);
      exit;
   end;
-  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr,flux);
+  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr,flux,false);
   // process this measurement
   if (Fhfd<=0) then begin
     msg(rsAutofocusCan4,0);

@@ -183,7 +183,7 @@ type
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double);{han.k 2018-3-21}
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure ClearStarList;
@@ -1684,7 +1684,7 @@ begin
  end;
 end;
 
-procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double);
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);
 // x,y, s, test location x,y and box size s x s
 // xc,yc, center of gravity
 // bg, background value
@@ -1698,6 +1698,7 @@ procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,s
 const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
+    valsaturation,saturated_counter, max_saturated: integer;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
     pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
     distance_histogram : array [0..max_ri] of integer;
@@ -1711,6 +1712,11 @@ begin
   hfd:=-1;
   star_fwhm:=-1;
   flux:=-1;
+
+  if strict_saturation then
+     max_saturated:=0
+  else
+     max_saturated:=5;
 
   rs:=s div 2;
   if (x-s)<1+4 then x:=s+1+4;
@@ -1755,12 +1761,15 @@ begin
     SumValX:=0;
     SumValY:=0;
     valmax:=0;
+    saturated_counter:=0;
+    valsaturation:=round(FimageC*(MaxADU-FimageMin)-bg);
     for i:=-rs to rs do
     for j:=-rs to rs do
     begin
       val:=Fimage[0,y+j,x+i]-bg;
       if val>(3.5)*bg_standard_deviation then {just above noise level. }
       begin
+        if val>=valsaturation then inc(saturated_counter);
         if val>valmax then valmax:=val;
         SumVal:=SumVal+val;
         SumValX:=SumValX+val*(i);
@@ -1848,7 +1857,7 @@ begin
   hfd:=2*SumValR/SumVal;
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
-  if (SumVal>0.00001)and((round(FimageMin+(bg+valmax)/FimageC))<MaxADU) then begin
+  if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin
     flux:=Sumval/FimageC;
     snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation/FimageC)); {For both bright stars (shot-noise limited) or skybackground limited situations
                                                                      snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
@@ -1947,7 +1956,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
    begin
      fitsX:=fx*s;
 
-     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);{2018-3-21, calculate HFD}
+     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{2018-3-21, calculate HFD}
 
      {scale the result as GetHFD2 work with internal 16 bit values}
      vmax:=vmax/FimageC;
@@ -1958,8 +1967,7 @@ for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs
      if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
         and (hfd1<99)
         and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
-        and (snr>AutofocusMinSNR)  {minimal star detection level}
-        and (vmax<(MaxADU-2*bg))   {new bright star but not saturated}
+        and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
      then
      begin
        inc(nhfd);
@@ -2001,7 +2009,7 @@ for i:=0 to Length(list)-1 do
    hfd1:=-1;
    star_fwhm:=-1;
 
-   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux);
+   GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);
 
    // normalize value
    vmax:=vmax/FimageC; // include bg subtraction
