@@ -27,6 +27,7 @@ data/language/launchpad/ccdcielpot.tar
 library/wcs/libccdcielwcs.*
 library/dcraw/dcraw
 library/dcraw/dcraw.exe
+library/raw/libpasraw.*
 src/ccdciel
 src/ccdciel.exe
 src/ccdciel.dbg
