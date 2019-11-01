@@ -4138,3 +4138,7 @@ msgstr ""
 msgid "Magnitude"
 msgstr ""
 
+#: u_translation:rsapproximatec
+msgid "Approximate coordinates and image scale"
+msgstr ""
+

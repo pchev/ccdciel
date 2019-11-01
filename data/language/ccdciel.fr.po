@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-10-11 14:56+0000\n"
-"X-Generator: Launchpad (build af2eefe214bd95389a09b7c956720881bab16807)\n"
+"X-Launchpad-Export-Date: 2019-11-01 15:24+0000\n"
+"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -107,6 +107,10 @@ msgstr "Applique à tous les périphériques"
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
 msgstr "Appliquer à l'image en cours"
+
+#: u_translation.rsapproximatec
+msgid "Approximate coordinates and image scale"
+msgstr ""
 
 #: u_translation.rsarcmin
 msgid "[arcmin]"

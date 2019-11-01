@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-10-11 14:28+0000\n"
-"PO-Revision-Date: 2019-09-11 09:23+0000\n"
-"Last-Translator: Thomas <email@starhopper.de>\n"
+"PO-Revision-Date: 2019-10-12 10:55+0000\n"
+"Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-10-11 14:56+0000\n"
-"X-Generator: Launchpad (build af2eefe214bd95389a09b7c956720881bab16807)\n"
+"X-Launchpad-Export-Date: 2019-11-01 15:24+0000\n"
+"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -30,7 +30,7 @@ msgstr "Aktiviere Stoppzeit"
 
 #: u_hints.rsactiveonlyif
 msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
-msgstr ""
+msgstr "Nur aktiv, wenn das Ziel die Astrometriepositionierung %s verwendet und die Belichtungszeit länger ist als die Astrometriezeitüberschreitung."
 
 #: u_hints.rsaddaflatsequ
 msgid "Add a flat sequence to the list."
@@ -234,7 +234,7 @@ msgstr "Graph sichtbar lassen nachdem der Autofokus abgeschlossen ist"
 
 #: u_hints.rsletblankford
 msgid "Let blank for default system search path"
-msgstr ""
+msgstr "Leer lassen, um den Standardsuchpfad des Systems zu benutzen"
 
 #: u_hints.rslistofprofil
 msgid "List of profile for every different equipment configuration"
