@@ -1762,7 +1762,7 @@ begin
     SumValY:=0;
     valmax:=0;
     saturated_counter:=0;
-    valsaturation:=round(FimageC*(MaxADU-FimageMin)-bg);
+    valsaturation:=round(FimageC*(MaxADU-1-FimageMin)-bg);
     for i:=-rs to rs do
     for j:=-rs to rs do
     begin
