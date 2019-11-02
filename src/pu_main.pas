@@ -9876,7 +9876,9 @@ begin
         NewMessage(rsStopAstromet2);
         result:=false;
       end;
-    end;
+    end
+    else
+      result:=true;
   end;
 end;
 
