@@ -546,6 +546,7 @@ type
     procedure MeridianOptionClick(Sender: TObject);
     procedure MinutesPastMeridianChange(Sender: TObject);
     procedure MinutesPastMeridianMinChange(Sender: TObject);
+    procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
@@ -1005,6 +1006,12 @@ end;
 procedure Tf_option.MinutesPastMeridianMinChange(Sender: TObject);
 begin
   MinutesPastMeridian.MinValue:=MinutesPastMeridianMin.Value+1;
+end;
+
+procedure Tf_option.PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
+begin
+  // prevent focus error on Gtk2
+  ActiveControl:=Button1;
 end;
 
 procedure Tf_option.SetLatitude(value:double);
