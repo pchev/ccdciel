@@ -134,6 +134,12 @@ begin
     if not found then begin
       Ra.Text:='';
       De.Text:='';
+    end
+    else begin
+      if PanelPxSz.Visible then begin
+         PxSz.SetFocus;
+         PxSz.SelStart := Length(PxSz.Text);
+      end;
     end;
   end;
 end;

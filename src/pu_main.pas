@@ -516,6 +516,7 @@ type
     ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;
+    LastPixelSize: double;
     trpOK: boolean;
     AllMsg: TStringList;
     CameraExposureRemain:double;
@@ -1163,6 +1164,7 @@ begin
   ReadoutModePreview:=0;
   ReadoutModeFocus:=0;
   ReadoutModeAstrometry:=0;
+  LastPixelSize:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
   ConfigExpEarlyStart:=false;
@@ -9842,6 +9844,7 @@ begin
     ra:=fits.HeaderInfo.ra;
     dec:=fits.HeaderInfo.dec;
     px:=fits.HeaderInfo.pixsz1;
+    if px=0 then px:=LastPixelSize;
     if (ra=NullCoord)or(dec=NullCoord)or(px=0) then begin
       FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
       f_goto.Caption:=rsResolve;
@@ -9853,11 +9856,13 @@ begin
       if ra<>NullCoord then f_goto.Ra.Text:=RAToStr(ra/15) else f_goto.Ra.Text:='';
       if dec<>NullCoord then f_goto.De.Text:=DEToStr(dec) else f_goto.De.Text:='';
       if px<>0 then f_goto.PxSz.Text:=FormatFloat(f2,px) else f_goto.PxSz.Text:='';
+      f_goto.ActiveControl:=f_goto.Obj;
       f_goto.ShowModal;
       if f_goto.ModalResult=mrok then begin
         ra:=15*StrToAR(f_goto.Ra.Text);
         dec:=StrToDE(f_goto.De.Text);
         px:=StrToFloatDef(f_goto.PxSz.Text,0);
+        LastPixelSize:=px;
         i:=fits.Header.Indexof('END');
         if i<7 then i:=7;  // skip mandatory keywords
         if i>=fits.Header.Rows.Count then
