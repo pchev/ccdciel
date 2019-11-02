@@ -2483,7 +2483,7 @@ if libraw<>0 then begin  // Use libraw directly
     hdrmem.Free;
   end;
   hdr.Free;
-  for i:=ys to ymax do begin
+  for i:=ys to ymax-1 do begin
     for j:=xs to xmax-1 do begin
       x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
       if x>0 then
