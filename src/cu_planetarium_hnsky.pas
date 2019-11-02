@@ -226,7 +226,7 @@ begin
   buf:='SET_FRAME '+
        formatfloat(f5,frsizeH*deg2rad) + blank +
        formatfloat(f5,frsizeV*deg2rad) + blank +
-       formatfloat(f5,frrot*deg2rad) + blank +
+       formatfloat(f5,rmod((frrot+90)*deg2rad,pi2)) + blank + {HNSKY frames follows the PA convention of deepsky objects. A vertical frame has PA of zero. A frame for capturing M31 has a PA of 35}
        formatfloat(f5,fra_2000) + blank +
        formatfloat(f5,fdec_2000);
   FLastErrorTxt:=Cmd(buf);
