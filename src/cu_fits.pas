@@ -265,7 +265,7 @@ begin
 
 function TFitsHeader.NewWCS(ff:TMemoryStream): boolean;
 var header : THeaderBlock;
-    i,p1,p2,n : integer;
+    i,p1,p2,n,ii : integer;
     eoh : boolean;
     row,keyword,value,comment,buf : string;
     P: PChar;
@@ -329,10 +329,22 @@ begin
          buf:=AnsiExtractQuotedStr(P,'''');
          if buf<>'' then value:=buf;
          if not IsKeywordIn(keyword,excl2) then begin
-           FRows.add(row);
-           FKeys.add(keyword);
-           FValues.add(value);
-           FComments.add(comment);
+           if (keyword<>'')and(keyword<>'COMMENT')and(keyword<>'HISTORY') then
+             ii:=FKeys.IndexOf(keyword)
+           else
+             ii:=-1;
+           if ii<0 then begin
+             FRows.add(row);
+             FKeys.add(keyword);
+             FValues.add(value);
+             FComments.add(comment);
+           end
+           else begin
+             FRows[ii]:=row;
+             FKeys[ii]:=keyword;
+             FValues[ii]:=value;
+             FComments[ii]:=comment;
+           end;
          end;
       end;
       if not Fvalid then begin
@@ -476,6 +488,7 @@ end;
 
 function TFitsHeader.Insert(idx: integer; key,val,comment: string; quotedval:boolean=true): integer;
 var row: string;
+    ii: integer;
 begin
  // The END keyword
  if (trim(key)='END') then begin
@@ -509,13 +522,28 @@ begin
          Format(' / %0:-47s',[comment]);
  end;
  row:=copy(row,1,80);
- if idx>=0 then begin
+ // Search for existing key
+ if (key<>'')and(key<>'COMMENT')and(key<>'HISTORY') then
+   ii:=FKeys.IndexOf(key)
+ else
+   ii:=-1;
+ if ii>=0 then begin
+    // replace existing key
+    FRows[ii]:=row;
+    FKeys[ii]:=key;
+    FValues[ii]:=val;
+    FComments[ii]:=comment;
+    result:=ii;
+ end
+ else if idx>=0 then begin
+    // insert key at position
     FRows.Insert(idx,row);
     FKeys.Insert(idx,key);
     FValues.Insert(idx,val);
     FComments.Insert(idx,comment);
     result:=idx;
  end else begin
+    // add key at end
     result:=FRows.Add(row);
     FKeys.Add(key);
     FValues.Add(val);
