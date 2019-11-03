@@ -66,11 +66,11 @@ object f_option: Tf_option
     Height = 537
     Top = 0
     Width = 530
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 7
     TabOrder = 1
     OnChanging = PageControl1Changing
     Options = [nboMultiLine]
@@ -157,8 +157,8 @@ object f_option: Tf_option
         TabOrder = 6
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 241
-          ClientWidth = 452
+          ClientHeight = 268
+          ClientWidth = 458
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 390
@@ -249,8 +249,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 241
-          ClientWidth = 452
+          ClientHeight = 268
+          ClientWidth = 458
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 390
@@ -1963,8 +1963,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             122
-            155
-            155
+            164
+            164
           )
         end
       end
@@ -2510,38 +2510,75 @@ object f_option: Tf_option
       end
       object PanelFocusStar: TPanel
         Left = 8
-        Height = 144
+        Height = 168
         Top = 328
         Width = 496
         BevelOuter = bvNone
-        ClientHeight = 144
+        ClientHeight = 168
         ClientWidth = 496
         ParentFont = False
         TabOrder = 2
-        object AutofocusSlewStar: TGroupBox
+        object AutofocusMultistar: TGroupBox
           Left = 1
-          Height = 104
+          Height = 120
           Top = 40
           Width = 447
           Caption = 'Focus star selection'
-          ClientHeight = 84
+          ClientHeight = 100
+          ClientWidth = 445
+          ParentFont = False
+          TabOrder = 3
+          object Label56: TLabel
+            Left = 8
+            Height = 19
+            Top = 4
+            Width = 201
+            Caption = 'Detect multiple stars in the image'
+            ParentColor = False
+            ParentFont = False
+          end
+          object LabelMultistarWarning: TLabel
+            Left = 8
+            Height = 19
+            Top = 58
+            Width = 6
+            Caption = '  '
+            ParentColor = False
+            ParentFont = False
+          end
+          object AutofocusPauseGuider: TCheckBox
+            Left = 7
+            Height = 21
+            Top = 28
+            Width = 220
+            Caption = 'Pause guiding during auto-focus'
+            TabOrder = 0
+          end
+        end
+        object AutofocusSlewStar: TGroupBox
+          Left = 1
+          Height = 120
+          Top = 40
+          Width = 447
+          Caption = 'Focus star selection'
+          ClientHeight = 100
           ClientWidth = 445
           ParentFont = False
           TabOrder = 0
           object Label53: TLabel
             Left = 8
             Height = 19
-            Top = 8
+            Top = 4
             Width = 194
             Caption = 'Slew to a near star of magnitude'
             ParentColor = False
             ParentFont = False
           end
           object FocusStarMag: TComboBox
-            Left = 7
+            Left = 8
             Height = 28
             Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
-            Top = 36
+            Top = 28
             Width = 80
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -2561,7 +2598,7 @@ object f_option: Tf_option
           object Label85: TLabel
             Left = 96
             Height = 19
-            Top = 42
+            Top = 32
             Width = 142
             Caption = 'Slew with a precision of '
             ParentColor = False
@@ -2570,7 +2607,7 @@ object f_option: Tf_option
           object Label86: TLabel
             Left = 369
             Height = 19
-            Top = 42
+            Top = 32
             Width = 49
             Caption = '[arcmin]'
             ParentColor = False
@@ -2579,7 +2616,7 @@ object f_option: Tf_option
           object AutofocusPrecisionSlew: TFloatSpinEditEx
             Left = 296
             Height = 28
-            Top = 38
+            Top = 28
             Width = 60
             Constraints.MaxHeight = 28
             MaxLength = 0
@@ -2591,6 +2628,14 @@ object f_option: Tf_option
             MinValue = 0
             NullValue = 0
             Value = 0
+          end
+          object FocusStarMagAdjust: TCheckBox
+            Left = 8
+            Height = 21
+            Top = 63
+            Width = 377
+            Caption = 'Allow to select a brighter star for high filter exposure factor'
+            TabOrder = 2
           end
         end
         object Label52: TLabel
@@ -2623,43 +2668,6 @@ object f_option: Tf_option
           OnClick = ChangeAutofocusInPlace
           ParentFont = False
           TabOrder = 2
-        end
-        object AutofocusMultistar: TGroupBox
-          Left = 1
-          Height = 104
-          Top = 40
-          Width = 447
-          Caption = 'Focus star selection'
-          ClientHeight = 84
-          ClientWidth = 445
-          ParentFont = False
-          TabOrder = 3
-          object Label56: TLabel
-            Left = 8
-            Height = 19
-            Top = 4
-            Width = 201
-            Caption = 'Detect multiple stars in the image'
-            ParentColor = False
-            ParentFont = False
-          end
-          object LabelMultistarWarning: TLabel
-            Left = 8
-            Height = 19
-            Top = 58
-            Width = 6
-            Caption = '  '
-            ParentColor = False
-            ParentFont = False
-          end
-          object AutofocusPauseGuider: TCheckBox
-            Left = 7
-            Height = 21
-            Top = 28
-            Width = 220
-            Caption = 'Pause guiding during auto-focus'
-            TabOrder = 0
-          end
         end
       end
     end

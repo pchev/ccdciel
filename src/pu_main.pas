@@ -621,7 +621,7 @@ type
     Procedure AutoFocusStart(Sender: TObject);
     Procedure AutoFocusStop(Sender: TObject);
     Procedure DoAutoFocus;
-    procedure LoadFocusStar;
+    procedure LoadFocusStar(focusmag:integer);
     function  FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
     function  AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
     procedure cmdAutomaticAutofocus(var ok: boolean);
@@ -1137,6 +1137,7 @@ begin
   RecenterTargetDistance:=10;
   FocuserLastTemp:=NullCoord;
   AutoFocusLastTime:=NullCoord;
+  FocusStarMag:=-1;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
   FlatWaitDusk:=false;
@@ -2008,7 +2009,7 @@ begin
 
   f_photometry.onMagnitudeCalibrationChange:=@MagnitudeCalibrationChange;
 
-  LoadFocusStar;
+  LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   deepstring:=TStringList.Create;
 
   StartupTimer.Enabled:=true;
@@ -3237,6 +3238,8 @@ begin
   else
      AutofocusPauseGuider:=true;
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
+  LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
+  FocusStarMagAdjust:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
   AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',100);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
@@ -6114,6 +6117,7 @@ begin
    FocusStarMagIndex:=config.GetValue('/StarAnalysis/AutofocusStarMag',4)-4;
    if (FocusStarMagIndex<0)or(FocusStarMagIndex>4) then FocusStarMagIndex:=0;
    f_option.FocusStarMag.ItemIndex:=FocusStarMagIndex;
+   f_option.FocusStarMagAdjust.Checked:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
    f_option.AutofocusPrecisionSlew.Value:=config.GetValue('/StarAnalysis/AutofocusPrecisionSlew',2.0);
    ok:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
    f_option.AutofocusMoveDirIn.Checked:=ok;
@@ -6348,8 +6352,8 @@ begin
      config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
      config.SetValue('/StarAnalysis/AutofocusSlippageCorrection',f_option.AutofocusSlippageCorrection.Checked);
      config.SetValue('/StarAnalysis/AutofocusSlippageOffset',f_option.AutofocusSlippageOffset.Value);
+     config.SetValue('/StarAnalysis/FocusStarMagAdjust',f_option.FocusStarMagAdjust.Checked);
      config.SetValue('/StarAnalysis/AutofocusStarMag',f_option.FocusStarMag.ItemIndex+4);
-     if FocusStarMagIndex<>f_option.FocusStarMag.ItemIndex then LoadFocusStar;
      config.SetValue('/StarAnalysis/AutofocusPrecisionSlew',f_option.AutofocusPrecisionSlew.Value);
      config.SetValue('/StarAnalysis/AutofocusMoveDir',f_option.AutofocusMoveDirIn.Checked);
      config.SetValue('/StarAnalysis/AutofocusNearNum',f_option.AutofocusNearNum.Value);
@@ -9100,17 +9104,18 @@ begin
    if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
 end;
 
-procedure Tf_main.LoadFocusStar;
+procedure Tf_main.LoadFocusStar(focusmag:integer);
 var f: textfile;
     buf,fn,id: string;
     ra,de: double;
-    focusmag: integer;
 begin
+ if focusmag=FocusStarMag then exit;
+
  fn:='focus_star_4';
  SetLength(FocusStars,10000);
  NFocusStars:=0;
- focusmag:=config.GetValue('/StarAnalysis/AutofocusStarMag',4);
- if (focusmag<4)or(focusmag>8) then focusmag:=4;
+ if (focusmag<4) then focusmag:=4;
+ if (focusmag>8) then focusmag:=8;
  case focusmag of
   4: fn:='focus_star_4';
   5: fn:='focus_star_5';
@@ -9141,6 +9146,7 @@ begin
  until eof(f);
  CloseFile(f);
  SetLength(FocusStars,NFocusStars+1);
+ FocusStarMag:=focusmag;
  except
    NewMessage('Error loading focus star list '+slash(DataDir)+slash('stars')+fn,1);
  end;
@@ -9192,6 +9198,8 @@ var tra,tde,teq,tpa,sra,sde,err: double;
     sid: string;
     focusretry,maxretry: integer;
     tpos,pslew,savecapture,saveearlystart,restartguider,pauseguider: boolean;
+    configfocusmag,newfocusmag,focusmagdiff: integer;
+    savefilterfact,newfilterfact: double;
 begin
  maxretry:=3;
  result:=false;
@@ -9233,6 +9241,7 @@ begin
  restartguider:=(Autoguider.State<>GUIDER_DISCONNECTED);
  pauseguider:=false;
  if InplaceAutofocus then begin
+   // stay in place for autofocus
    try
    NewMessage(rsStayAtTheCur,2);
    if AutofocusPauseGuider then begin
@@ -9287,10 +9296,11 @@ begin
    end;
    end;
  end
- else   // InplaceAutofocus
+ else
  begin
-   // stop autoguider
+   // move to focus star
    if restartguider and (Autoguider.State=GUIDER_GUIDING) then begin
+     // stop autoguider
      NewMessage(rsStopAutoguid,2);
      autoguider.Guide(false);
      autoguider.WaitBusy(15);
@@ -9333,9 +9343,40 @@ begin
     tpos:=true;
    end;
    if CancelAutofocus then exit;
+   // Adjust star magnitude and exposure factor
+   savefilterfact:=AutofocusExposureFact;
+   newfocusmag:=FocusStarMag;
+   newfilterfact:=AutofocusExposureFact;
+   if FocusStarMagAdjust then begin
+     // find the magnitude difference to apply based on the configured exposure factor
+     // the upper limit is set to 4 * 2.512**diff
+     if AutofocusExposureFact<4 then
+       focusmagdiff:=0
+     else if AutofocusExposureFact<10 then // 4 * 2.512**1
+       focusmagdiff:=1
+     else if AutofocusExposureFact<25 then // 4 * 2.512**2
+       focusmagdiff:=2
+     else if AutofocusExposureFact<63 then // 4 * 2.512**3
+       focusmagdiff:=3
+     else
+       focusmagdiff:=4;
+     configfocusmag:=config.GetValue('/StarAnalysis/AutofocusStarMag',4);
+     // new focus magnitude is limited to 4
+     newfocusmag:=max(4,configfocusmag-focusmagdiff);
+     // real difference
+     focusmagdiff:=configfocusmag-newfocusmag;
+     // new exposure factor
+     if focusmagdiff>0 then begin
+        newfilterfact:=AutofocusExposureFact/(2.512**focusmagdiff);
+        NewMessage(Format(rsAdjustAutofo, [inttostr(newfocusmag), FormatFloat(f2, newfilterfact)]));
+     end;
+   end;
+   // load the new star list, nothing is done if the magnitude do not change
+   LoadFocusStar(newfocusmag);
    // Loop star list until focus success
    focusretry:=0;
    FocusStarsBlacklist:='';
+   try
    repeat
      inc(focusretry);
      // search focus star
@@ -9357,6 +9398,8 @@ begin
      if CancelAutofocus then exit;
      // do autofocus
      if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+     // set the new exposure factor here, because PrecisionSlew can set another filter
+     AutofocusExposureFact:=newfilterfact;
      f_starprofile.ChkAutofocusDown(true);
      while f_starprofile.ChkAutofocus.Down do begin
       sleep(100);
@@ -9373,6 +9416,10 @@ begin
      end;
      if CancelAutofocus then exit;
    until f_starprofile.AutofocusResult or (focusretry>=maxretry);
+   finally
+     // reset exposure factor
+     AutofocusExposureFact := savefilterfact;
+   end;
    if not f_starprofile.AutofocusResult then begin
       NewMessage(Format(rsAutofocusFai3, [inttostr(maxretry)]),1);
    end;

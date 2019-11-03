@@ -387,6 +387,8 @@ var
   BPMsigma: double;
   NFocusStars: integer;
   FocusStars: array of TFocusStar;
+  FocusStarMag: integer;
+  FocusStarMagAdjust: boolean;
   FocusStarsBlacklist: string;
   AutofocusTolerance, AutofocusMinSNR: double;
   WaitTillrunning, cancelWaitTill: boolean;

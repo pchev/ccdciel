@@ -46,6 +46,7 @@ type
     CbShowHints: TCheckBox;
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
+    FocusStarMagAdjust: TCheckBox;
     CheckRecenterTarget: TCheckBox;
     Label130: TLabel;
     Label131: TLabel;
@@ -778,6 +779,7 @@ begin
   Label53.Caption := rsSlewToANearS;
   Label85.Caption := rsSlewWithAPre;
   Label86.Caption := rsArcmin;
+  FocusStarMagAdjust.Caption:=rsAllowToSelec;
   AutofocusMultistar.Caption := rsFocusStarSel;
   label56.Caption := rsDetectMultip;
   AutofocusPauseGuider.Caption:=rsPauseGuiding;

@@ -1140,6 +1140,8 @@ resourcestring
   rsBackground = 'Background';
   rsMagnitude = 'Magnitude';
   rsApproximateC = 'Approximate coordinates and image scale';
+  rsAllowToSelec = 'Allow to select a brighter star for high filter exposure factor';
+  rsAdjustAutofo = 'Adjust autofocus star magnitude:%s, exposure factor:%s';
 
 implementation
 
