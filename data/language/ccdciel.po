@@ -4142,3 +4142,11 @@ msgstr ""
 msgid "Approximate coordinates and image scale"
 msgstr ""
 
+#: u_translation:rsallowtoselec
+msgid "Allow to select a brighter star for high filter exposure factor"
+msgstr ""
+
+#: u_translation:rsadjustautofo
+msgid "Adjust autofocus star magnitude:%s, exposure factor:%s"
+msgstr ""
+
