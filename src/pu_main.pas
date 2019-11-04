@@ -1165,7 +1165,6 @@ begin
   ReadoutModePreview:=0;
   ReadoutModeFocus:=0;
   ReadoutModeAstrometry:=0;
-  LastPixelSize:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
   ConfigExpEarlyStart:=false;
@@ -3278,6 +3277,7 @@ begin
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
+  LastPixelSize:=config.GetValue('/Astrometry/LastPixelSize',1.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
     v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstrometryPath',''),config.GetValue('/Astrometry/AstUseScript',false));
@@ -3559,6 +3559,7 @@ begin
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
+   config.SetValue('/Astrometry/LastPixelSize',LastPixelSize);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -6144,7 +6145,7 @@ begin
    f_option.FocaleFromTelescope.Checked:=config.GetValue('/Astrometry/FocaleFromTelescope',true);
    if f_option.FocaleFromTelescope.Checked then
       f_option.Focale.Value:=mount.FocaleLength;
-   f_option.Tolerance.Value:=config.GetValue('/Astrometry/ScaleTolerance',0.1);
+   f_option.Tolerance.Value:=config.GetValue('/Astrometry/ScaleTolerance',0.5);
    f_option.MaxRadius.Value:=config.GetValue('/Astrometry/MaxRadius',15.0);
    f_option.AstrometryTimeout.Value:=round(config.GetValue('/Astrometry/Timeout',60.0));
    f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',4);
