@@ -487,9 +487,9 @@ try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
 if FValMax>1 then
-   LabelImax.Caption:=FormatFloat(f0,FValMax+bg)
+   LabelImax.Caption:=FormatFloat(f0,f.imageMin+(FValMax+bg)/f.imageC)
 else
-   LabelImax.Caption:=FormatFloat(f3,FValMax+bg);
+   LabelImax.Caption:=FormatFloat(f3,f.imageMin+(FValMax+bg)/f.imageC);
 if Fsnr>0 then
    LabelSNR.Caption:=FormatFloat(f0,Fsnr)
 else
