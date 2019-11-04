@@ -486,12 +486,12 @@ if (FStarX<0)or(FStarY<0)or(s<0) then exit;
 try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
-if FValMax>1 then
-   LabelImax.Caption:=FormatFloat(f0,f.imageMin+(FValMax+bg)/f.imageC)
+if f.HeaderInfo.floatingpoint then
+  LabelImax.Caption:=FormatFloat(f3,f.imageMin+(FValMax+bg)/f.imageC)
 else
-   LabelImax.Caption:=FormatFloat(f3,f.imageMin+(FValMax+bg)/f.imageC);
+  LabelImax.Caption:=FormatFloat(f0,f.imageMin+(FValMax+bg)/f.imageC);
 if Fsnr>0 then
-   LabelSNR.Caption:=FormatFloat(f0,Fsnr)
+   LabelSNR.Caption:=FormatFloat(f1,Fsnr)
 else
    LabelSNR.Caption:='-';
 if Ffwhm>0 then begin

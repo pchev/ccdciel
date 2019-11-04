@@ -1726,7 +1726,8 @@ procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,s
 const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
-    valsaturation,saturated_counter, max_saturated: integer;
+    saturated_counter, max_saturated: integer;
+    valsaturation:LongWord;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
     pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
     distance_histogram : array [0..max_ri] of integer;
@@ -1790,7 +1791,10 @@ begin
     SumValY:=0;
     valmax:=0;
     saturated_counter:=0;
-    valsaturation:=round(FimageC*(MaxADU-1-FimageMin)-bg);
+    if FFitsInfo.floatingpoint then
+      valsaturation:=round(FimageC*(FimageMax-FimageMin)-bg)
+    else
+      valsaturation:=round(FimageC*(MaxADU-1-FimageMin)-bg);
     for i:=-rs to rs do
     for j:=-rs to rs do
     begin
