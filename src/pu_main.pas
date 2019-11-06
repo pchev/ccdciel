@@ -7803,7 +7803,7 @@ try
  StatusBar1.Panels[2].Text:=buf;
  StatusBar1.Panels[1].Text := '';
  // measure image but not plot
- if camera.LastExposureTime>=10 then begin
+ if (camera.FrameType=LIGHT) and EarlyNextExposure and (camera.LastExposureTime>=90) then begin
    MeasureImage(false);
  end;
  // check if target need to be recentered
