@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2019-11-04 16:30+0000\n"
-"PO-Revision-Date: 2019-10-31 18:32+0000\n"
+"PO-Revision-Date: 2019-11-04 18:31+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-11-04 16:40+0000\n"
+"X-Launchpad-Export-Date: 2019-11-06 10:32+0000\n"
 "X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
 
 #: u_translation.rs32bitdriver
@@ -62,7 +62,7 @@ msgstr "Schritt hinzufügen"
 
 #: u_translation.rsadjustautofo
 msgid "Adjust autofocus star magnitude:%s, exposure factor:%s"
-msgstr ""
+msgstr "Passe Autofokus Sternhelligkeit an:%s, Belichtungsfaktor:%s"
 
 #: u_translation.rsadjustflatex
 msgid "Adjust flat exposure time to %s and retry."
@@ -98,7 +98,7 @@ msgstr "Öffnen der Kuppel erlauben auch wenn der Status ungültig oder unbekann
 
 #: u_translation.rsallowtoselec
 msgid "Allow to select a brighter star for high filter exposure factor"
-msgstr ""
+msgstr "Erlaube einen helleren Stern für höhere Filterfaktoren auszuwählen"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
@@ -118,7 +118,7 @@ msgstr "Übernehmen auf das aktuelle Bild"
 
 #: u_translation.rsapproximatec
 msgid "Approximate coordinates and image scale"
-msgstr ""
+msgstr "Ungefähre Koordinaten und Bildmaßstab"
 
 #: u_translation.rsarcmin
 msgid "[arcmin]"
