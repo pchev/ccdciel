@@ -34,6 +34,7 @@ Fallback to use only dcraw command line on Mac for now.
 WINDOWS:
 ========
 We use cross-compilation from Linux using Mingw.
+Install mingw: sudo apt install mingw-w64
 
 First install the latest libraw from source:
  - wget https://www.libraw.org/data/LibRaw-0.19.5.tar.gz
@@ -49,6 +50,7 @@ sed -i 's/-DLIBRAW_NODLL/-DLIBRAW_NODLL -static-libgcc -static-libstdc++/' Makef
 
   Then for Win64:
  - make -f Makefile.mingw-cross clean  
+   Ignore error about del command
  - make -f Makefile.mingw-cross CPP=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar RANLIB=x86_64-w64-mingw32-ranlib
  - mkdir -p $HOME/mingw/w64/include
  - mkdir -p $HOME/mingw/w64/lib
@@ -57,6 +59,7 @@ sed -i 's/-DLIBRAW_NODLL/-DLIBRAW_NODLL -static-libgcc -static-libstdc++/' Makef
  
   For Win32:
  - make -f Makefile.mingw-cross clean  
+   Ignore error about del command
  - make -f Makefile.mingw-cross CPP=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc AR=i686-w64-mingw32-ar RANLIB=i686-w64-mingw32-ranlib
  - mkdir -p $HOME/mingw/w32/include
  - mkdir -p $HOME/mingw/w32/lib
