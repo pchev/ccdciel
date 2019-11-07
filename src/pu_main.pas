@@ -545,6 +545,7 @@ type
     procedure SetConfig;
     procedure SetOptions;
     procedure OpenConfig(n: string);
+    procedure SaveScreenConfig;
     procedure SaveSettings;
     procedure SaveConfig;
     procedure ShowActiveTools;
@@ -1243,8 +1244,15 @@ begin
 
   Top:=screenconfig.GetValue('/Window/Top',0);
   Left:=screenconfig.GetValue('/Window/Left',0);
-  Width:=screenconfig.GetValue('/Window/Width',1024);
-  Height:=screenconfig.GetValue('/Window/Height',768);
+  if Screen.Width<1400 then begin
+    // up to 1366 x 768
+    Width:=screenconfig.GetValue('/Window/Width',Screen.Width);
+    Height:=screenconfig.GetValue('/Window/Height',Screen.Height);
+  end else begin
+    // from 1400 x 1050 or 1440 x 900
+    Width:=screenconfig.GetValue('/Window/Width',1280);
+    Height:=screenconfig.GetValue('/Window/Height',800);
+  end;
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onShowTabs:=@ShowMsgTabs;
@@ -2162,6 +2170,11 @@ begin
   StartupTimer.Enabled:=false;
   if FOpenSetup then begin
      // first setup screen
+     if width<=1024 then
+        MenuReset1col.Click
+     else
+        MenuReset2col.Click;
+     SaveScreenConfig;
      MenuSetup.Click;
   end
     else begin
@@ -3378,120 +3391,124 @@ begin
   end;
 end;
 
+procedure Tf_main.SaveScreenConfig;
+begin
+  // Set current tools value to the config
+ screenconfig.SetValue('/Configuration/Version',ccdcielver);
+
+ screenconfig.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
+ screenconfig.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
+ screenconfig.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
+ screenconfig.SetValue('/Tools/Connection/Left',f_devicesconnection.Left);
+
+ screenconfig.SetValue('/Tools/Histogram/Parent',f_visu.Parent.Name);
+ screenconfig.SetValue('/Tools/Histogram/Visible',f_visu.Visible);
+ screenconfig.SetValue('/Tools/Histogram/Top',f_visu.Top);
+ screenconfig.SetValue('/Tools/Histogram/Left',f_visu.Left);
+
+ screenconfig.SetValue('/Tools/Messages/Parent',f_msg.Parent.Name);
+ screenconfig.SetValue('/Tools/Messages/Visible',f_msg.Visible);
+ screenconfig.SetValue('/Tools/Messages/Top',f_msg.Top);
+ screenconfig.SetValue('/Tools/Messages/Left',f_msg.Left);
+
+ screenconfig.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
+ screenconfig.SetValue('/Tools/Focuser/Visible',f_focuser.Visible or (not WantFocuser));
+ screenconfig.SetValue('/Tools/Focuser/Top',f_focuser.Top);
+ screenconfig.SetValue('/Tools/Focuser/Left',f_focuser.Left);
+
+ screenconfig.SetValue('/Tools/Starprofile/Parent',f_starprofile.Parent.Name);
+ screenconfig.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
+ screenconfig.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
+ screenconfig.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
+
+ screenconfig.SetValue('/Tools/Magnifyer/Parent',f_magnifyer.Parent.Name);
+ screenconfig.SetValue('/Tools/Magnifyer/Visible',f_magnifyer.Visible);
+ screenconfig.SetValue('/Tools/Magnifyer/Top',f_magnifyer.Top);
+ screenconfig.SetValue('/Tools/Magnifyer/Left',f_magnifyer.Left);
+
+ screenconfig.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
+ screenconfig.SetValue('/Tools/Frame/Visible',f_frame.Visible);
+ screenconfig.SetValue('/Tools/Frame/Top',f_frame.Top);
+ screenconfig.SetValue('/Tools/Frame/Left',f_frame.Left);
+
+ screenconfig.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
+ screenconfig.SetValue('/Tools/Rotator/Visible',f_rotator.Visible or (not WantRotator));
+ screenconfig.SetValue('/Tools/Rotator/Top',f_rotator.Top);
+ screenconfig.SetValue('/Tools/Rotator/Left',f_rotator.Left);
+
+ screenconfig.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
+ screenconfig.SetValue('/Tools/Preview/Visible',f_preview.Visible);
+ screenconfig.SetValue('/Tools/Preview/Top',f_preview.Top);
+ screenconfig.SetValue('/Tools/Preview/Left',f_preview.Left);
+
+ screenconfig.SetValue('/Tools/Capture/Parent',f_capture.Parent.Name);
+ screenconfig.SetValue('/Tools/Capture/Visible',f_capture.Visible);
+ screenconfig.SetValue('/Tools/Capture/Top',f_capture.Top);
+ screenconfig.SetValue('/Tools/Capture/Left',f_capture.Left);
+
+ screenconfig.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
+ screenconfig.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
+ screenconfig.SetValue('/Tools/Sequence/Top',f_sequence.Top);
+ screenconfig.SetValue('/Tools/Sequence/Left',f_sequence.Left);
+
+ screenconfig.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
+ screenconfig.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible or (not WantWheel));
+ screenconfig.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
+ screenconfig.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
+
+ screenconfig.SetValue('/Tools/CCDTemp/Parent',f_ccdtemp.Parent.Name);
+ screenconfig.SetValue('/Tools/CCDTemp/Visible',f_ccdtemp.Visible);
+ screenconfig.SetValue('/Tools/CCDTemp/Top',f_ccdtemp.Top);
+ screenconfig.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
+
+ screenconfig.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
+ screenconfig.SetValue('/Tools/Mount/Visible',f_mount.Visible or (not WantMount));
+ screenconfig.SetValue('/Tools/Mount/Top',f_mount.Top);
+ screenconfig.SetValue('/Tools/Mount/Left',f_mount.Left);
+
+ screenconfig.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
+ screenconfig.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
+ screenconfig.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
+ screenconfig.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
+
+ screenconfig.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
+ screenconfig.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
+ screenconfig.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
+ screenconfig.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
+
+ screenconfig.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
+ screenconfig.SetValue('/Tools/Script/Visible',f_script.Visible);
+ screenconfig.SetValue('/Tools/Script/Top',f_script.Top);
+ screenconfig.SetValue('/Tools/Script/Left',f_script.Left);
+
+ screenconfig.SetValue('/Tools/Weather/Parent',f_weather.Parent.Name);
+ screenconfig.SetValue('/Tools/Weather/Visible',f_weather.Visible or (not WantWeather));
+ screenconfig.SetValue('/Tools/Weather/Top',f_weather.Top);
+ screenconfig.SetValue('/Tools/Weather/Left',f_weather.Left);
+
+ screenconfig.SetValue('/Tools/Safety/Parent',f_safety.Parent.Name);
+ screenconfig.SetValue('/Tools/Safety/Visible',f_safety.Visible or (not WantSafety));
+ screenconfig.SetValue('/Tools/Safety/Top',f_safety.Top);
+ screenconfig.SetValue('/Tools/Safety/Left',f_safety.Left);
+
+ screenconfig.SetValue('/Tools/Dome/Parent',f_dome.Parent.Name);
+ screenconfig.SetValue('/Tools/Dome/Visible',f_dome.Visible or (not WantDome));
+ screenconfig.SetValue('/Tools/Dome/Top',f_dome.Top);
+ screenconfig.SetValue('/Tools/Dome/Left',f_dome.Left);
+
+ screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
+
+ screenconfig.SetValue('/Window/Top',Top);
+ screenconfig.SetValue('/Window/Left',Left);
+ screenconfig.SetValue('/Window/Width',Width);
+ screenconfig.SetValue('/Window/Height',Height);
+end;
+
 procedure Tf_main.SaveSettings;
 var i,n: integer;
 begin
-   // Set current tools value to the config
-
+   SaveScreenConfig;
    config.SetValue('/Configuration/Version',ccdcielver);
-   screenconfig.SetValue('/Configuration/Version',ccdcielver);
-
-   screenconfig.SetValue('/Tools/Connection/Parent',f_devicesconnection.Parent.Name);
-   screenconfig.SetValue('/Tools/Connection/Visible',f_devicesconnection.Visible);
-   screenconfig.SetValue('/Tools/Connection/Top',f_devicesconnection.Top);
-   screenconfig.SetValue('/Tools/Connection/Left',f_devicesconnection.Left);
-
-   screenconfig.SetValue('/Tools/Histogram/Parent',f_visu.Parent.Name);
-   screenconfig.SetValue('/Tools/Histogram/Visible',f_visu.Visible);
-   screenconfig.SetValue('/Tools/Histogram/Top',f_visu.Top);
-   screenconfig.SetValue('/Tools/Histogram/Left',f_visu.Left);
-
-   screenconfig.SetValue('/Tools/Messages/Parent',f_msg.Parent.Name);
-   screenconfig.SetValue('/Tools/Messages/Visible',f_msg.Visible);
-   screenconfig.SetValue('/Tools/Messages/Top',f_msg.Top);
-   screenconfig.SetValue('/Tools/Messages/Left',f_msg.Left);
-
-   screenconfig.SetValue('/Tools/Focuser/Parent',f_focuser.Parent.Name);
-   screenconfig.SetValue('/Tools/Focuser/Visible',f_focuser.Visible or (not WantFocuser));
-   screenconfig.SetValue('/Tools/Focuser/Top',f_focuser.Top);
-   screenconfig.SetValue('/Tools/Focuser/Left',f_focuser.Left);
-
-   screenconfig.SetValue('/Tools/Starprofile/Parent',f_starprofile.Parent.Name);
-   screenconfig.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
-   screenconfig.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
-   screenconfig.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
-
-   screenconfig.SetValue('/Tools/Magnifyer/Parent',f_magnifyer.Parent.Name);
-   screenconfig.SetValue('/Tools/Magnifyer/Visible',f_magnifyer.Visible);
-   screenconfig.SetValue('/Tools/Magnifyer/Top',f_magnifyer.Top);
-   screenconfig.SetValue('/Tools/Magnifyer/Left',f_magnifyer.Left);
-
-   screenconfig.SetValue('/Tools/Frame/Parent',f_frame.Parent.Name);
-   screenconfig.SetValue('/Tools/Frame/Visible',f_frame.Visible);
-   screenconfig.SetValue('/Tools/Frame/Top',f_frame.Top);
-   screenconfig.SetValue('/Tools/Frame/Left',f_frame.Left);
-
-   screenconfig.SetValue('/Tools/Rotator/Parent',f_rotator.Parent.Name);
-   screenconfig.SetValue('/Tools/Rotator/Visible',f_rotator.Visible or (not WantRotator));
-   screenconfig.SetValue('/Tools/Rotator/Top',f_rotator.Top);
-   screenconfig.SetValue('/Tools/Rotator/Left',f_rotator.Left);
-
-   screenconfig.SetValue('/Tools/Preview/Parent',f_preview.Parent.Name);
-   screenconfig.SetValue('/Tools/Preview/Visible',f_preview.Visible);
-   screenconfig.SetValue('/Tools/Preview/Top',f_preview.Top);
-   screenconfig.SetValue('/Tools/Preview/Left',f_preview.Left);
-
-   screenconfig.SetValue('/Tools/Capture/Parent',f_capture.Parent.Name);
-   screenconfig.SetValue('/Tools/Capture/Visible',f_capture.Visible);
-   screenconfig.SetValue('/Tools/Capture/Top',f_capture.Top);
-   screenconfig.SetValue('/Tools/Capture/Left',f_capture.Left);
-
-   screenconfig.SetValue('/Tools/Sequence/Parent',f_sequence.Parent.Name);
-   screenconfig.SetValue('/Tools/Sequence/Visible',f_sequence.Visible);
-   screenconfig.SetValue('/Tools/Sequence/Top',f_sequence.Top);
-   screenconfig.SetValue('/Tools/Sequence/Left',f_sequence.Left);
-
-   screenconfig.SetValue('/Tools/Filters/Parent',f_filterwheel.Parent.Name);
-   screenconfig.SetValue('/Tools/Filters/Visible',f_filterwheel.Visible or (not WantWheel));
-   screenconfig.SetValue('/Tools/Filters/Top',f_filterwheel.Top);
-   screenconfig.SetValue('/Tools/Filters/Left',f_filterwheel.Left);
-
-   screenconfig.SetValue('/Tools/CCDTemp/Parent',f_ccdtemp.Parent.Name);
-   screenconfig.SetValue('/Tools/CCDTemp/Visible',f_ccdtemp.Visible);
-   screenconfig.SetValue('/Tools/CCDTemp/Top',f_ccdtemp.Top);
-   screenconfig.SetValue('/Tools/CCDTemp/Left',f_ccdtemp.Left);
-
-   screenconfig.SetValue('/Tools/Mount/Parent',f_mount.Parent.Name);
-   screenconfig.SetValue('/Tools/Mount/Visible',f_mount.Visible or (not WantMount));
-   screenconfig.SetValue('/Tools/Mount/Top',f_mount.Top);
-   screenconfig.SetValue('/Tools/Mount/Left',f_mount.Left);
-
-   screenconfig.SetValue('/Tools/Autoguider/Parent',f_autoguider.Parent.Name);
-   screenconfig.SetValue('/Tools/Autoguider/Visible',f_autoguider.Visible);
-   screenconfig.SetValue('/Tools/Autoguider/Top',f_autoguider.Top);
-   screenconfig.SetValue('/Tools/Autoguider/Left',f_autoguider.Left);
-
-   screenconfig.SetValue('/Tools/Planetarium/Parent',f_planetarium.Parent.Name);
-   screenconfig.SetValue('/Tools/Planetarium/Visible',f_planetarium.Visible);
-   screenconfig.SetValue('/Tools/Planetarium/Top',f_planetarium.Top);
-   screenconfig.SetValue('/Tools/Planetarium/Left',f_planetarium.Left);
-
-   screenconfig.SetValue('/Tools/Script/Parent',f_script.Parent.Name);
-   screenconfig.SetValue('/Tools/Script/Visible',f_script.Visible);
-   screenconfig.SetValue('/Tools/Script/Top',f_script.Top);
-   screenconfig.SetValue('/Tools/Script/Left',f_script.Left);
-
-   screenconfig.SetValue('/Tools/Weather/Parent',f_weather.Parent.Name);
-   screenconfig.SetValue('/Tools/Weather/Visible',f_weather.Visible or (not WantWeather));
-   screenconfig.SetValue('/Tools/Weather/Top',f_weather.Top);
-   screenconfig.SetValue('/Tools/Weather/Left',f_weather.Left);
-
-   screenconfig.SetValue('/Tools/Safety/Parent',f_safety.Parent.Name);
-   screenconfig.SetValue('/Tools/Safety/Visible',f_safety.Visible or (not WantSafety));
-   screenconfig.SetValue('/Tools/Safety/Top',f_safety.Top);
-   screenconfig.SetValue('/Tools/Safety/Left',f_safety.Left);
-
-   screenconfig.SetValue('/Tools/Dome/Parent',f_dome.Parent.Name);
-   screenconfig.SetValue('/Tools/Dome/Visible',f_dome.Visible or (not WantDome));
-   screenconfig.SetValue('/Tools/Dome/Top',f_dome.Top);
-   screenconfig.SetValue('/Tools/Dome/Left',f_dome.Left);
-
-   screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
-
-   screenconfig.SetValue('/Window/Top',Top);
-   screenconfig.SetValue('/Window/Left',Left);
-   screenconfig.SetValue('/Window/Width',Width);
-   screenconfig.SetValue('/Window/Height',Height);
 
    config.SetValue('/Log/LogLevel',LogLevel);
    config.SetValue('/Script/ScriptName',f_script.ComboBoxScript.Text);
@@ -5741,6 +5758,7 @@ end;
 procedure Tf_main.MenuSetupClick(Sender: TObject);
 var configfile: string;
     loadopt: boolean;
+    pt: TPoint;
 begin
   if camera.Status<>devDisconnected then begin
     ShowMessage(rsDisconnectTh);
@@ -5759,7 +5777,10 @@ begin
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config,credentialconfig);
-  FormPos(f_setup,mouse.CursorPos.X,mouse.CursorPos.Y);
+  pt.x:=PanelCenter.Left;
+  pt.y:=PanelCenter.top;
+  pt:=ClientToScreen(pt);
+  FormPos(f_setup,pt.X,pt.Y);
   f_setup.ShowModal;
 
   if f_setup.ModalResult=mrOK then begin
@@ -5944,6 +5965,7 @@ var ok,PlanetariumChange,AutoguiderChange: boolean;
     x:double;
     buf,langname:string;
     fs : TSearchRec;
+    pt: TPoint;
 begin
    PlanetariumChange:=false;
    AutoguiderChange:=false;
@@ -6292,7 +6314,10 @@ begin
       f_option.DomeCloseActions.Cells[1,i+1]:=DomeCloseActionName[round(config.GetValue('/Dome/Close/Action'+inttostr(i),0))];
    end;
    f_option.LockTemp:=false;
-   FormPos(f_option,mouse.CursorPos.X,mouse.CursorPos.Y);
+   pt.x:=PanelCenter.Left;
+   pt.y:=PanelCenter.top;
+   pt:=ClientToScreen(pt);
+   FormPos(f_option,pt.X,pt.Y);
    f_option.ShowModal;
 
    if f_option.ModalResult=mrOK then begin
