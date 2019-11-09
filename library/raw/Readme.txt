@@ -41,17 +41,23 @@ First install the latest libraw from source:
  - tar xf LibRaw-0.19.5.tar.gz
  - cd LibRaw-0.19.5
  - Unfortunatelly the mingw makefile do not support cross-compilation so we have to use this trick:
-cp Makefile.mingw Makefile.mingw-cross
-sed -i 's/g++/\$\(CPP\)/' Makefile.mingw-cross
-sed -i 's/gcc/\$\(CC\)/' Makefile.mingw-cross
-sed -i 's/ar /\$\(AR\) /' Makefile.mingw-cross
-sed -i 's/ranlib/\$\(RANLIB\)/' Makefile.mingw-cross
-sed -i 's/-DLIBRAW_NODLL/-DLIBRAW_NODLL -static-libgcc -static-libstdc++/' Makefile.mingw-cross
+ - for 0.19.5 :
+  cp Makefile.mingw Makefile.mingw-cross
+  sed -i 's/g++/\$\(CXX\)/' Makefile.mingw-cross
+  sed -i 's/gcc/\$\(CC\)/' Makefile.mingw-cross
+  sed -i 's/ar /\$\(AR\) /' Makefile.mingw-cross
+  sed -i 's/ranlib/\$\(RANLIB\)/' Makefile.mingw-cross
+  sed -i 's/-DLIBRAW_NODLL/-DLIBRAW_NODLL -static-libgcc -static-libstdc++/' Makefile.mingw-cross
+ - since 201910 snapshot:
+  cp Makefile.mingw Makefile.mingw-cross
+  sed -i 's/ar /\$\(AR\) /' Makefile.mingw-cross
+  sed -i 's/ranlib/\$\(RANLIB\)/' Makefile.mingw-cross
+  sed -i '/CFLAGS=/ a CFLAGS+=-static-libgcc -static-libstdc++' Makefile.mingw-cross
 
   Then for Win64:
  - make -f Makefile.mingw-cross clean  
    Ignore error about del command
- - make -f Makefile.mingw-cross CPP=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar RANLIB=x86_64-w64-mingw32-ranlib
+ - make -f Makefile.mingw-cross CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar RANLIB=x86_64-w64-mingw32-ranlib
  - mkdir -p $HOME/mingw/w64/include
  - mkdir -p $HOME/mingw/w64/lib
  - cp -R libraw $HOME/mingw/w64/include/
@@ -60,7 +66,7 @@ sed -i 's/-DLIBRAW_NODLL/-DLIBRAW_NODLL -static-libgcc -static-libstdc++/' Makef
   For Win32:
  - make -f Makefile.mingw-cross clean  
    Ignore error about del command
- - make -f Makefile.mingw-cross CPP=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc AR=i686-w64-mingw32-ar RANLIB=i686-w64-mingw32-ranlib
+ - make -f Makefile.mingw-cross CXX=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc AR=i686-w64-mingw32-ar RANLIB=i686-w64-mingw32-ranlib
  - mkdir -p $HOME/mingw/w32/include
  - mkdir -p $HOME/mingw/w32/lib
  - cp -R libraw $HOME/mingw/w32/include/
