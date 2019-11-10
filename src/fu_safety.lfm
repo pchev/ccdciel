@@ -9,8 +9,6 @@ object f_safety: Tf_safety
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -2
-  DesignTop = -2
   object Title: TLabel
     Left = 0
     Height = 20

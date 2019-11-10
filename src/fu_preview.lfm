@@ -9,8 +9,6 @@ object f_preview: Tf_preview
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
   object Panel1: TPanel
     Left = 0
     Height = 144
@@ -111,9 +109,10 @@ object f_preview: Tf_preview
         Top = 4
         Width = 90
         Constraints.MaxHeight = 28
-        MaxValue = 999999999
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 999999999
       end
     end
     object Panel3: TPanel
@@ -168,7 +167,7 @@ object f_preview: Tf_preview
         Height = 23
         Hint = 'Start one preview exposure'
         Top = 1
-        Width = 105
+        Width = 87
         Caption = 'Preview'
         OnClick = BtnPreviewClick
         ParentFont = False
@@ -203,7 +202,7 @@ object f_preview: Tf_preview
         Height = 23
         Hint = 'Loop preview exposures'
         Top = 0
-        Width = 105
+        Width = 87
         Caption = 'Loop'
         OnClick = BtnLoopClick
         ParentFont = False

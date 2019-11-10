@@ -2,27 +2,29 @@ object f_capture: Tf_capture
   Left = 0
   Height = 280
   Top = 0
-  Width = 195
+  Width = 210
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
   ClientHeight = 280
-  ClientWidth = 195
+  ClientWidth = 210
   DesignTimePPI = 95
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Panel1: TPanel
     Left = 0
     Height = 260
     Top = 20
-    Width = 195
+    Width = 210
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 260
-    ClientWidth = 195
+    ClientWidth = 210
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
@@ -119,9 +121,10 @@ object f_capture: Tf_capture
         Top = 4
         Width = 100
         Constraints.MaxHeight = 28
-        MaxValue = 999999999
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 999999999
       end
     end
     object Panel3: TPanel
@@ -217,10 +220,11 @@ object f_capture: Tf_capture
         Top = 0
         Width = 100
         Constraints.MaxHeight = 28
-        MaxValue = 10000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 0
+        MaxValue = 10000
+        MinValue = 1
         Value = 1
       end
     end
@@ -290,10 +294,11 @@ object f_capture: Tf_capture
         Top = 0
         Width = 54
         Constraints.MaxHeight = 28
-        MaxValue = 10000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 10000
+        MinValue = 1
         Value = 1
       end
     end
@@ -323,10 +328,11 @@ object f_capture: Tf_capture
         Top = 0
         Width = 54
         Constraints.MaxHeight = 28
-        MaxValue = 10000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 10000
+        MinValue = 1
         Value = 1
       end
     end
@@ -365,7 +371,7 @@ object f_capture: Tf_capture
     Left = 0
     Height = 20
     Top = 0
-    Width = 195
+    Width = 210
     Align = alTop
     Alignment = taCenter
     AutoSize = False

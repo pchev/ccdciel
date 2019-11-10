@@ -9,8 +9,6 @@ object f_sequence: Tf_sequence
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -4
-  DesignTop = -4
   object Title1: TLabel
     Left = 0
     Height = 20
@@ -29,18 +27,18 @@ object f_sequence: Tf_sequence
   end
   object Panel1: TPanel
     Left = 0
-    Height = 276
+    Height = 316
     Top = 20
     Width = 210
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 276
+    ClientHeight = 316
     ClientWidth = 210
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 138
+      Height = 160
       Top = 20
       Width = 210
       Align = alClient
@@ -57,11 +55,12 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 118
-      Top = 158
+      Height = 136
+      Top = 180
       Width = 210
       Align = alBottom
-      ClientHeight = 118
+      BevelOuter = bvNone
+      ClientHeight = 136
       ClientWidth = 210
       ParentFont = False
       TabOrder = 1
@@ -116,10 +115,10 @@ object f_sequence: Tf_sequence
         TabOrder = 4
       end
       object Unattended: TCheckBox
-        Left = 1
+        Left = 2
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 92
+        Top = 108
         Width = 122
         Caption = 'Run unattended'
         OnChange = UnattendedChange
@@ -193,18 +192,18 @@ object f_sequence: Tf_sequence
   end
   object Panel2: TPanel
     Left = 0
-    Height = 238
-    Top = 296
+    Height = 222
+    Top = 336
     Width = 210
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 238
+    ClientHeight = 222
     ClientWidth = 210
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 138
+      Height = 122
       Top = 20
       Width = 210
       Align = alClient
@@ -235,18 +234,19 @@ object f_sequence: Tf_sequence
     object Panel4: TPanel
       Left = 0
       Height = 80
-      Top = 158
+      Top = 142
       Width = 210
       Align = alBottom
+      BevelOuter = bvNone
       ClientHeight = 80
       ClientWidth = 210
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel
-        Left = 1
-        Height = 77
-        Top = 1
-        Width = 208
+        Left = 0
+        Height = 79
+        Top = 0
+        Width = 210
         Align = alClient
         AutoSize = False
         ParentColor = False
@@ -254,10 +254,10 @@ object f_sequence: Tf_sequence
         WordWrap = True
       end
       object DelayMsg: TLabel
-        Left = 1
+        Left = 0
         Height = 1
-        Top = 78
-        Width = 208
+        Top = 79
+        Width = 210
         Align = alBottom
         ParentColor = False
         ParentFont = False

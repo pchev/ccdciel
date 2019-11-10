@@ -9,8 +9,6 @@ object f_rotator: Tf_rotator
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20

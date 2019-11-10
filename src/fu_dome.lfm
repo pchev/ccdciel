@@ -8,8 +8,6 @@ object f_dome: Tf_dome
   ClientWidth = 182
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20

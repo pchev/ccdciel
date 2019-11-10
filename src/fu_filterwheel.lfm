@@ -9,8 +9,6 @@ object f_filterwheel: Tf_filterwheel
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -2
-  DesignTop = -2
   object Panel1: TPanel
     Left = 0
     Height = 32

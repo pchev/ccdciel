@@ -9,8 +9,6 @@ object f_mount: Tf_mount
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
@@ -69,7 +67,7 @@ object f_mount: Tf_mount
       object btnTrack: TSpeedButton
         Left = 115
         Height = 22
-        Top = 1
+        Top = 2
         Width = 70
         Caption = 'Track'
         OnClick = BtnTrackClick
@@ -106,7 +104,7 @@ object f_mount: Tf_mount
       object BtnPark: TSpeedButton
         Left = 115
         Height = 22
-        Top = 1
+        Top = 2
         Width = 70
         Caption = 'Park'
         OnClick = BtnParkClick
@@ -160,7 +158,7 @@ object f_mount: Tf_mount
         ParentColor = False
       end
       object TimeToMeridian: TEdit
-        Left = 96
+        Left = 88
         Height = 28
         Hint = 'Time from meridian transit (hour angle)'
         Top = 0

@@ -9,8 +9,6 @@ object f_script: Tf_script
   DesignTimePPI = 95
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -2
-  DesignTop = -2
   object Title: TLabel
     Left = 0
     Height = 20
@@ -75,17 +73,17 @@ object f_script: Tf_script
         Left = 2
         Height = 25
         Top = 0
-        Width = 66
+        Width = 60
         Caption = 'Run'
         OnClick = BtnRunClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnStop: TButton
-        Left = 78
+        Left = 65
         Height = 25
         Top = 0
-        Width = 66
+        Width = 60
         Caption = 'Stop'
         OnClick = BtnStopClick
         ParentFont = False
