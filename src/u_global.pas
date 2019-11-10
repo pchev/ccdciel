@@ -420,6 +420,7 @@ var
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
+  PauseSequence: boolean;
   DummyDouble: double;
   DummyBool: boolean;
   DevInterfaceName: array[0..4] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca');

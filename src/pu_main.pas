@@ -1139,6 +1139,7 @@ begin
   FocuserLastTemp:=NullCoord;
   AutoFocusLastTime:=NullCoord;
   FocusStarMag:=-1;
+  PauseSequence:=false;
   WaitTillrunning:=false;
   cancelWaitTill:=false;
   FlatWaitDusk:=false;
@@ -7126,6 +7127,24 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       // capture running without a sequence, just show a message
       NewMessage(rsWeatherCondi, 1);
     end;
+    end
+    else begin
+      exit; // cannot start now
+    end;
+  end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
+  if PauseSequence then begin
+    if canwait then begin
+       f_pause.Caption:=rsPauseSequenc2;
+       f_pause.Text:=rsTheSequenceI+crlf+rsClickContinu+crlf+rsClickCancelT;
+       if not f_pause.Wait then begin
+         f_sequence.BtnStop.Click;
+         wait(1);
+       end;
+       PauseSequence:=false;
     end
     else begin
       exit; // cannot start now

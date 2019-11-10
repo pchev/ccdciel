@@ -164,6 +164,16 @@ object f_sequence: Tf_sequence
         ParentFont = False
         TabOrder = 8
       end
+      object BtnPause: TButton
+        Left = 140
+        Height = 25
+        Top = 86
+        Width = 68
+        Caption = 'Pause'
+        OnClick = BtnPauseClick
+        ParentFont = False
+        TabOrder = 9
+      end
     end
     object Title3: TLabel
       Left = 0

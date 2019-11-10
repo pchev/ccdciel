@@ -1142,6 +1142,11 @@ resourcestring
   rsApproximateC = 'Approximate coordinates and image scale';
   rsAllowToSelec = 'Allow to select a brighter star for high filter exposure factor';
   rsAdjustAutofo = 'Adjust autofocus star magnitude:%s, exposure factor:%s';
+  rsPauseSequenc2 = 'Pause sequence';
+  rsTheSequenceI = 'The sequence is now in pause.';
+  rsClickCancelT = 'Click Cancel to abort the sequence.';
+  rsSequenceWil2 = 'Sequence will be paused after current exposure is complete.';
+  rsPauseSequenc3 = 'Pause sequence request canceled.';
 
 implementation
 

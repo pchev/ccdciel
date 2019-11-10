@@ -46,6 +46,7 @@ type
     BtnLoadTargets: TButton;
     BtnCopy: TButton;
     BtnDelete: TButton;
+    BtnPause: TButton;
     led: TShape;
     StatusTimer: TTimer;
     StartTimer: TTimer;
@@ -66,6 +67,7 @@ type
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnDeleteClick(Sender: TObject);
     procedure BtnEditTargetsClick(Sender: TObject);
+    procedure BtnPauseClick(Sender: TObject);
     procedure BtnResetClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
@@ -262,6 +264,7 @@ begin
   BtnCopy.Caption:=rsCopy;
   BtnDelete.Caption:=rsDelete;
   BtnReset.Caption:=rsReset;
+  BtnPause.Caption:=rsPause;
   BtnLoadTargets.Hint:=rsLoadASequenc;
   BtnNewTargets.Hint:=rsCreateANewSe;
   BtnEditTargets.Hint:=rsEditTheCurre;
@@ -271,6 +274,7 @@ begin
   BtnCopy.Hint:=rsCopyTheSeque;
   BtnDelete.Hint:=rsDeleteTheSeq;
   BtnReset.Hint:=rsClearTheSequ;
+  BtnPause.Hint:=rsPauseTheSequ;
 end;
 
 procedure Tf_sequence.SetPreview(val: Tf_preview);
@@ -1075,6 +1079,15 @@ end;
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
 begin
  StopSequence;
+end;
+
+procedure Tf_sequence.BtnPauseClick(Sender: TObject);
+begin
+  PauseSequence:=not PauseSequence;
+  if PauseSequence then
+     msg(rsSequenceWil2, 1)
+  else
+     msg(rsPauseSequenc3, 1)
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
