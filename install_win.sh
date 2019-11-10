@@ -28,14 +28,12 @@ if [ $OS_TARGET = win32 ]; then
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
   strip -v -o $destdir/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
   strip -v -o $destdir/libpasraw.dll library/raw/libpasraw.dll
-  strip -v -o $destdir/dcraw.exe library/dcraw/dcraw.exe
   unzip -d $destdir system_integration/Windows/data/openssl-win32.zip
 fi
 if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
   strip -v -o $destdir/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
   strip -v -o $destdir/libpasraw.dll library/raw/libpasraw.dll
-  strip -v -o $destdir/dcraw.exe library/dcraw/dcraw.exe
   unzip -d $destdir system_integration/Windows/data/openssl-win64.zip
 fi
 
