@@ -1083,11 +1083,13 @@ end;
 
 procedure Tf_sequence.BtnPauseClick(Sender: TObject);
 begin
+ if Targets.Running then begin
   PauseSequence:=not PauseSequence;
   if PauseSequence then
      msg(rsSequenceWil2, 1)
   else
      msg(rsPauseSequenc3, 1)
+ end;
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
