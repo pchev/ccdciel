@@ -40,33 +40,22 @@ First install the latest libraw from source:
  - wget https://www.libraw.org/data/LibRaw-0.19.5.tar.gz
  - tar xf LibRaw-0.19.5.tar.gz
  - cd LibRaw-0.19.5
- - Unfortunatelly the mingw makefile do not support cross-compilation so we have to use this trick:
- - for 0.19.5 :
-  cp Makefile.mingw Makefile.mingw-cross
-  sed -i 's/g++/\$\(CXX\)/' Makefile.mingw-cross
-  sed -i 's/gcc/\$\(CC\)/' Makefile.mingw-cross
-  sed -i 's/ar /\$\(AR\) /' Makefile.mingw-cross
-  sed -i 's/ranlib/\$\(RANLIB\)/' Makefile.mingw-cross
-  sed -i 's/-DLIBRAW_NODLL/-DLIBRAW_NODLL -static-libgcc -static-libstdc++/' Makefile.mingw-cross
- - since 201910 snapshot:
-  cp Makefile.mingw Makefile.mingw-cross
-  sed -i 's/ar /\$\(AR\) /' Makefile.mingw-cross
-  sed -i 's/ranlib/\$\(RANLIB\)/' Makefile.mingw-cross
-  sed -i '/CFLAGS=/ a CFLAGS+=-static-libgcc -static-libstdc++' Makefile.mingw-cross
+ - Unfortunatelly the mingw makefile in 0.19.5 do not support cross-compilation so we have to use this trick:
+   This is no more necessary since 201910 snapshot.
+   sed -i 's/g++/\$\(CXX\)/' Makefile.mingw
+   sed -i 's/gcc/\$\(CC\)/' Makefile.mingw
 
-  Then for Win64:
- - make -f Makefile.mingw-cross clean  
-   Ignore error about del command
- - make -f Makefile.mingw-cross CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc AR=x86_64-w64-mingw32-ar RANLIB=x86_64-w64-mingw32-ranlib
+Then for Win64:
+ - make -f Makefile.mingw clean
+ - make -f Makefile.mingw CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc library
  - mkdir -p $HOME/mingw/w64/include
  - mkdir -p $HOME/mingw/w64/lib
  - cp -R libraw $HOME/mingw/w64/include/
  - cp lib/libraw.a $HOME/mingw/w64/lib/
  
-  For Win32:
- - make -f Makefile.mingw-cross clean  
-   Ignore error about del command
- - make -f Makefile.mingw-cross CXX=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc AR=i686-w64-mingw32-ar RANLIB=i686-w64-mingw32-ranlib
+For Win32:
+ - make -f Makefile.mingw clean
+ - make -f Makefile.mingw CXX=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc library
  - mkdir -p $HOME/mingw/w32/include
  - mkdir -p $HOME/mingw/w32/lib
  - cp -R libraw $HOME/mingw/w32/include/
