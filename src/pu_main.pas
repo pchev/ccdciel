@@ -4549,14 +4549,14 @@ begin
   if f_msg.ShowTabs then begin
    case f_msg.Parent.Align of
     alBottom: begin
-       PanelMsgTabs.Height:=DoScaleY(28);
+       PanelMsgTabs.Height:=DoScaleY(40);
        PanelMsgTabs.Width:=min(PanelCenter.Width,f_msg.Width-f_msg.Title.Width);
        PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
        PanelMsgTabs.Top:=PanelCenter.Height-PanelMsgTabs.Height;
        TabMsgLevel.TabPosition:=tpTop;
     end;
     alTop: begin
-       PanelMsgTabs.Height:=DoScaleY(28);
+       PanelMsgTabs.Height:=DoScaleY(40);
        PanelMsgTabs.Width:=min(PanelCenter.Width,f_msg.Width-f_msg.Title.Width);
        PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
        PanelMsgTabs.Top:=0;
