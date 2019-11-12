@@ -20,8 +20,7 @@ ifeq ($(OS_TARGET),win32)
  else
  ifeq ($(OS_TARGET),darwin)
         $(MAKE) -C wcs   -f Makefile.darwin all
-#        $(MAKE) -C raw   -f Makefile.darwin all
-        $(MAKE) -C dcraw -f Makefile.darwin all
+        $(MAKE) -C raw   -f Makefile.darwin all
  endif
  endif
 endif
@@ -37,8 +36,7 @@ ifeq ($(OS_TARGET),win64)
 else
 ifeq ($(OS_TARGET),darwin)
 	$(MAKE) -C wcs   -f Makefile.darwin clean
-#	$(MAKE) -C raw   -f Makefile.darwin clean
-	$(MAKE) -C dcraw -f Makefile.darwin clean
+	$(MAKE) -C raw   -f Makefile.darwin clean
 endif
 endif
 endif

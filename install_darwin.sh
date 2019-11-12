@@ -16,12 +16,11 @@ install -d -m 755 $destdir/ccdciel.app/Contents/Resources
 install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Info.plist $destdir/ccdciel.app/Contents/
 install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/PkgInfo $destdir/ccdciel.app/Contents/
 install -v -m 755 -s src/ccdciel  $destdir/ccdciel.app/Contents/MacOS/ccdciel
-install -v -m 755 library/dcraw/dcraw $destdir/ccdciel.app/Contents/MacOS/dcraw
 install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Resources/README.rtf $destdir/ccdciel.app/Contents/Resources/
 install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Resources/ccdciel.icns $destdir/ccdciel.app/Contents/Resources/
 
 install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
-#install -v -m 755 library/raw/libpasraw.dylib  $destdir/libpasraw.dylib
+install -v -m 755 library/raw/libpasraw.dylib  $destdir/libpasraw.dylib
 
 install -d -m 755 $destdir/scripts
 install -m 755 -d $destdir/scripts/siril
