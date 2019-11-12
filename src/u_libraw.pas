@@ -27,7 +27,7 @@ type
 
 Procedure Load_Libraw;
 
-var libraw: integer;
+var libraw: TLibHandle;
     LoadRaw: TLoadRaw;
     CloseRaw: TCloseRaw;
     GetRawInfo: TGetRawInfo;

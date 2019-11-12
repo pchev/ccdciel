@@ -2517,7 +2517,7 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Free;
   for i:=ys to ymax-1 do begin
     for j:=xs to xmax-1 do begin
-      x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
+      {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
       if x>0 then
          xx:=x-32768
       else
