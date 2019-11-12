@@ -52,6 +52,7 @@ TAstrometry_engine = class(TThread)
      procedure Execute; override;
      function Apm2Wcs: boolean;
      procedure AstapWcs;
+     function AstapErr(errnum:integer):string;
    public
      constructor Create;
      destructor Destroy; override;
@@ -684,17 +685,21 @@ else if FResolver=ResolverAstap then begin
     end;
     sleep(100);
   end;
-  Fresult:=process.ExitStatus;
+  Fresult:=process.ExitCode;
+  if (Fresult<>0)and(err='') then begin
+     err:=AstapErr(Fresult);
+  end;
   except
      on E: Exception do begin
-       Fresult:=1;
-       AssignFile(ft,FLogFile);
-       Append(ft);
-       WriteLn(ft,'Fail to start Astap:');
-       WriteLn(ft,E.Message);
-       CloseFile(ft);
+       Fresult:=99;
        err:='Fail to start Astap:'+E.Message;
      end;
+  end;
+  if err<>'' then begin
+    AssignFile(ft,FLogFile);
+    Append(ft);
+    WriteLn(ft,err);
+    CloseFile(ft);
   end;
   process.Free;
   process:=TProcessUTF8.Create(nil);
@@ -882,6 +887,19 @@ begin
     rewrite(ft);
     write(ft,' ');
     CloseFile(ft);
+end;
+
+function TAstrometry_engine.AstapErr(errnum:integer):string;
+begin
+  case errnum of
+     0: result:='No errors';
+     1: result:='No solution';
+     2: result:='Not enough stars detected';
+    16: result:='Error reading image file';
+    32: result:='No star database found';
+    33: result:='Error reading star database';
+    else result:='Unknow error '+inttostr(errnum);
+  end;
 end;
 
 end.
