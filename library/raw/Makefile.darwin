@@ -5,10 +5,10 @@ CFLAGS= -DLIBRAW_NOTHREADS -O3  -w -fPIC $(arch_flags)
 
 CXX           = g++
 
+# on macOS, link libraw statically in a single library
 SO_Name       = libpasraw.dylib
 LIBFLAGS      = -Wl,-single_module -dynamiclib
-# on macOS, link libraw statically in a single library
-LIBS          = /usr/local/lib/libraw.a -mmacosx-version-min=10.10
+LIBS          = -lraw -lm -mmacosx-version-min=10.10
 
 
 SRC =	pasraw.cpp 

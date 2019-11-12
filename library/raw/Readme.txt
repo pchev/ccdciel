@@ -16,19 +16,14 @@ The distribution libraw package must be installed at runtime.
 
 MAC:
 ====
-The following do not work! compilation work fine but the library do not load at run time.
-Fallback to use only dcraw command line on Mac for now.
-//
-//First install the latest libraw from source:
-// - wget https://www.libraw.org/data/LibRaw-0.19.5.tar.gz
-// - tar xf LibRaw-0.19.5.tar.gz
-// - cd LibRaw-0.19.5
-// - ./configure CPPFLAGS="-mmacosx-version-min=10.10" 
-// - make
-// - sudo make install
-//
-//The Makefile create the library libpasraw.dylib with libraw statically linked.
-//No libraw.dylib is required at runtime.
+First install the latest libraw from source:
+ - Install the LibRaw source code, from tar or from git.
+ - cd LibRaw
+ - make -f Makefile.dist
+ - sudo make -f Makefile.dist install
+
+The Makefile.darwin create the library libpasraw.dylib with libraw statically linked.
+No libraw.dylib is required at runtime.
 
 
 WINDOWS:
@@ -37,14 +32,8 @@ We use cross-compilation from Linux using Mingw.
 Install mingw: sudo apt install mingw-w64
 
 First install the latest libraw from source:
- - wget https://www.libraw.org/data/LibRaw-0.19.5.tar.gz
- - tar xf LibRaw-0.19.5.tar.gz
- - cd LibRaw-0.19.5
- - Unfortunatelly the mingw makefile in 0.19.5 do not support cross-compilation so we have to use this trick:
-   This is no more necessary since 201910 snapshot.
-   sed -i 's/g++/\$\(CXX\)/' Makefile.mingw
-   sed -i 's/gcc/\$\(CC\)/' Makefile.mingw
-
+ - Install the LibRaw source code, from tar or from git.
+ - cd LibRaw
 Then for Win64:
  - make -f Makefile.mingw clean
  - make -f Makefile.mingw CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc library
