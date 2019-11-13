@@ -2391,6 +2391,7 @@ procedure Tf_main.UpdConfig(oldver:string);
 var ok:boolean;
     i: integer;
     f: double;
+    bm: TBayerMode;
     msg: string;
 procedure movetoolconfig(tool:string; defaultParent: TPanel);
 begin
@@ -2519,6 +2520,15 @@ begin
      i:=i+StrToIntDef(config.GetValue('/Capture/Gain',''),0);
      ok:=(i=0);
      config.SetValue('/Sensor/GainFromCamera',ok);
+  end;
+  if oldver<'0.9.65' then begin
+     bm:=TBayerMode(config.GetValue('/Color/BayerMode',4));
+     case bm of
+       bayerGR: config.SetValue('/Color/BayerMode',ord(bayerBG));
+       bayerRG: config.SetValue('/Color/BayerMode',ord(bayerGB));
+       bayerBG: config.SetValue('/Color/BayerMode',ord(bayerGR));
+       bayerGB: config.SetValue('/Color/BayerMode',ord(bayerRG));
+     end;
   end;
 end;
 
@@ -3152,6 +3162,7 @@ procedure Tf_main.SetOptions;
 var i,n: integer;
     buf,v: string;
     ok: boolean;
+    oldbayer: TBayerMode;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
   if f_option<>nil then f_option.ShowHint:=ShowHint;
@@ -3165,10 +3176,11 @@ begin
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
   BayerColor:=config.GetValue('/Color/Bayer',false);
-  DefaultBayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',3));
+  oldbayer:=DefaultBayerMode;
+  DefaultBayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',4));
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
-  GreenBalance:=config.GetValue('/Color/GreenBalance',1.0);
-  BlueBalance:=config.GetValue('/Color/BlueBalance',1.0);
+  GreenBalance:=config.GetValue('/Color/GreenBalance',0.7);
+  BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
   ok:=(not config.GetValue('/Sensor/GainFromCamera',true));
@@ -3374,7 +3386,7 @@ begin
   weather.MaxWindDirection:=config.GetValue('/Weather/Max/WindDirection',0);
   weather.MaxWindGust:=config.GetValue('/Weather/Max/WindGust',0);
   weather.MaxWindSpeed:=config.GetValue('/Weather/Max/WindSpeed',0);
-  if BayerColor<>MenuItemDebayer.Checked then begin
+  if (BayerColor<>MenuItemDebayer.Checked)or(oldbayer<>DefaultBayerMode) then begin
     MenuItemDebayer.Checked:=BayerColor;
     MenuItemDebayer2.Checked:=BayerColor;
     MenuItemDebayerClick(MenuItemDebayer);
@@ -6048,10 +6060,10 @@ begin
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
    f_option.ElevationMin.Value:=config.GetValue('/Info/ElevationMin',10.0);
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
-   f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',3);
+   f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',4);
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
-   f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',1.0));
-   f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',1.0));
+   f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',0.7));
+   f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',0.9));
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5);
@@ -7912,7 +7924,7 @@ end;
 
 procedure debayer(raw: TBGRABitmap; t:TBayerMode; var ima:TBGRABitmap) ;
 var
- i,j,k:integer;
+ i,ii,j:integer;
  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:byte;
  p,p1,p2,p3: PBGRAPixel;
  imgW,imgH:Integer;
@@ -7922,121 +7934,121 @@ imgW:=raw.width;
 imgH:=raw.height;
 ima.SetSize(imgW,imgH);
 pixel:=BGRABlack;
-k:=1;
-for i:=0 to imgH-1 do begin
+for i:=imgH-1 downto 0 do begin
+ ii:=imgH-1-i; // image is flipped in fits, count color order from the bottom
  p:=ima.scanline[i];
  p1:=raw.ScanLine[max(i-1,0)];
  p2:=raw.ScanLine[i];
  p3:=raw.ScanLine[min(i+1,imgH-1)];
  for j:=0 to imgW-1 do begin
-   pix1:= p1[max(j-1,0)*k].red;
-   pix2:= p1[j*k].red;
-   pix3:= p1[min(j+1,imgW-1)*k].red;
-   pix4:= p2[max(j-1,0)*k].red;
-   pix5:= p2[j*k].red;
-   pix6:= p2[min(j+1,imgW-1)*k].red;
-   pix7:= p3[max(j-1,0)*k].red;
-   pix8:= p3[j*k].red;
-   pix9:= p3[min(j+1,imgW-1)*k].red;
-   if (i mod 2)>0 then begin //ligne paire
-      if (j mod 2)>0 then begin //colonne paire et ligne paire
+   pix1:= p1[max(j-1,0)].red;
+   pix2:= p1[j].red;
+   pix3:= p1[min(j+1,imgW-1)].red;
+   pix4:= p2[max(j-1,0)].red;
+   pix5:= p2[j].red;
+   pix6:= p2[min(j+1,imgW-1)].red;
+   pix7:= p3[max(j-1,0)].red;
+   pix8:= p3[j].red;
+   pix9:= p3[min(j+1,imgW-1)].red;
+   if not odd(ii) then begin //ligne paire
+      if not odd(j) then begin //colonne paire et ligne paire
         case t of
         bayerGR: begin
-            pixel.red:= round(RedBalance*(pix2+pix8)/2);
-            pixel.green:= round(GreenBalance*pix5);
-            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
+            pixel.red:= round(RedBalance*(pix4+pix6)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix2+pix8)/2);
            end;
         bayerRG: begin
+            pixel.red:=round(RedBalance*pix5);
+            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
+           end;
+        bayerBG: begin
             pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
             pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
             pixel.blue:=round(BlueBalance*pix5);
            end;
-        bayerBG: begin
-            pixel.red:= round(RedBalance*pix5);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
-           end;
         bayerGB: begin
-            pixel.red:= round(RedBalance*(pix4+pix6)/2);
-            pixel.green:= round(GreenBalance*pix5);
-            pixel.blue:= round(BlueBalance*(pix2+pix8)/2);
+            pixel.red:= round(RedBalance*(pix2+pix8)/2);
+            pixel.green:=round(GreenBalance*pix5);
+            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
            end;
         end;
       end
       else begin //colonne impaire et ligne paire
-        case t of
-        bayerGR: begin
-            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=round(BlueBalance*pix5);
-           end;
-        bayerRG: begin
-            pixel.red:= round(RedBalance*(pix2+pix8)/2);
-            pixel.green:=round(GreenBalance*pix5);
-            pixel.blue:=round(BlueBalance*(pix4+pix6)/2);
-           end;
-        bayerBG: begin
-            pixel.red:= round(RedBalance*(pix4+pix6)/2);
-            pixel.green:=round(GreenBalance*pix5);
-            pixel.blue:=round(BlueBalance*(pix2+pix8)/2);
-           end;
-        bayerGB: begin
-            pixel.red:=round(RedBalance*pix5);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
-           end;
-        end;
-      end;
+       case t of
+       bayerGR: begin
+           pixel.red:=round(RedBalance*pix5);
+           pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+           pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
+          end;
+       bayerRG: begin
+           pixel.red:= round(RedBalance*(pix4+pix6)/2);
+           pixel.green:=round(GreenBalance*pix5);
+           pixel.blue:=round(BlueBalance*(pix2+pix8)/2);
+          end;
+       bayerBG: begin
+           pixel.red:=round(RedBalance*(pix2+pix8)/2);
+           pixel.green:=round(GreenBalance*pix5);
+           pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
+          end;
+       bayerGB: begin
+           pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+           pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+           pixel.blue:=round(BlueBalance*pix5);
+          end;
+       end;
+     end;
    end
    else begin //ligne impaire
-      if (j mod 2)>0 then begin //colonne paire et ligne impaire
-        case t of
-        bayerGR: begin
-            pixel.red:=round(RedBalance*pix5);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
-           end;
-        bayerRG: begin
-            pixel.red:= round(RedBalance*(pix4+pix6)/2);
-            pixel.green:=round(GreenBalance*pix5);
-            pixel.blue:=round(BlueBalance*(pix2+pix8)/2);
-           end;
-        bayerBG: begin
-            pixel.red:=round(RedBalance*(pix2+pix8)/2);
-            pixel.green:=round(GreenBalance*pix5);
-            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
-           end;
-        bayerGB: begin
-            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=round(BlueBalance*pix5);
-           end;
-        end;
-      end
-      else begin //colonne impaire et ligne impaire
-        case t of
-        bayerGR: begin
-            pixel.red:= round(RedBalance*(pix4+pix6)/2);
-            pixel.green:=round(GreenBalance*pix5);
-            pixel.blue:= round(BlueBalance*(pix2+pix8)/2);
-           end;
-        bayerRG: begin
-            pixel.red:=round(RedBalance*pix5);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
-           end;
-        bayerBG: begin
-            pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=round(BlueBalance*pix5);
-           end;
-        bayerGB: begin
-            pixel.red:= round(RedBalance*(pix2+pix8)/2);
-            pixel.green:=round(GreenBalance*pix5);
-            pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
-           end;
-        end;
-      end;
+     if not odd(j) then begin //colonne paire et ligne impaire
+       case t of
+       bayerGR: begin
+           pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+           pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+           pixel.blue:=round(BlueBalance*pix5);
+          end;
+       bayerRG: begin
+           pixel.red:= round(RedBalance*(pix2+pix8)/2);
+           pixel.green:=round(GreenBalance*pix5);
+           pixel.blue:=round(BlueBalance*(pix4+pix6)/2);
+          end;
+       bayerBG: begin
+           pixel.red:= round(RedBalance*(pix4+pix6)/2);
+           pixel.green:=round(GreenBalance*pix5);
+           pixel.blue:=round(BlueBalance*(pix2+pix8)/2);
+          end;
+       bayerGB: begin
+           pixel.red:=round(RedBalance*pix5);
+           pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+           pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
+          end;
+       end;
+    end
+    else begin //colonne impaire et ligne impaire
+       case t of
+       bayerGR: begin
+           pixel.red:= round(RedBalance*(pix2+pix8)/2);
+           pixel.green:= round(GreenBalance*pix5);
+           pixel.blue:= round(BlueBalance*(pix4+pix6)/2);
+          end;
+       bayerRG: begin
+           pixel.red:= round(RedBalance*(pix1+pix3+pix7+pix9)/4);
+           pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+           pixel.blue:=round(BlueBalance*pix5);
+          end;
+       bayerBG: begin
+           pixel.red:= round(RedBalance*pix5);
+           pixel.green:= round(GreenBalance*(pix2+pix4+pix6+pix8)/4);
+           pixel.blue:= round(BlueBalance*(pix1+pix3+pix7+pix9)/4);
+          end;
+       bayerGB: begin
+           pixel.red:= round(RedBalance*(pix4+pix6)/2);
+           pixel.green:= round(GreenBalance*pix5);
+           pixel.blue:= round(BlueBalance*(pix2+pix8)/2);
+          end;
+       end;
+     end;
    end;
    if (pixel.red=255)or(pixel.green=255)or(pixel.blue=255) then begin
      pixel.red:=(pixel.red+pixel.green+pixel.blue) div 3; // prevent colorization of saturated area
@@ -8044,7 +8056,7 @@ for i:=0 to imgH-1 do begin
      pixel.blue:=pixel.red;
    end;
    p[j]:=pixel;
-end;
+ end;
 end;
 end;
 

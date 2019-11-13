@@ -1360,15 +1360,20 @@ end;
 function TFits.GetBayerMode: TBayerMode;
 var buf: string;
 begin
-  buf:=copy(HeaderInfo.bayerpattern,3,2);
-  // use value from header
-  if buf='GR' then result:=bayerGR
-  else if buf='RG' then result:=bayerRG
-  else if buf='BG' then result:=bayerBG
-  else if buf='GB' then result:=bayerGB
-  else
-  // use default configured value
+  if DefaultBayerMode=bayerCamera then begin
+    buf:=copy(HeaderInfo.bayerpattern,1,2);
+    // use value from header
+    if buf='GR' then result:=bayerGR
+    else if buf='RG' then result:=bayerRG
+    else if buf='BG' then result:=bayerBG
+    else if buf='GB' then result:=bayerGB
+    else
+      result:=bayerRG;
+  end
+  else begin
+    // use default configured value
     result:=DefaultBayerMode;
+  end;
 end;
 
 

@@ -47,7 +47,7 @@ type
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP, HNSKY);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
-  TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB);
+  TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB,bayerCamera);
   TAutofocusMode=(afVcurve,afDynamic,afIterative,afNone);
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
   TAutofocusDynamicStep=(afdStart,afdMeasure,afdEnd);
@@ -198,7 +198,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.64';
+  ccdcielver = '0.9.65';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 4;
   Maxclient = 100;
