@@ -51,7 +51,7 @@ TAstrometry_engine = class(TThread)
    protected
      procedure Execute; override;
      function Apm2Wcs: boolean;
-     procedure AstapWcs;
+     procedure AstapWcs(out warn: string);
      function AstapErr(errnum:integer):string;
    public
      constructor Create;
@@ -429,7 +429,7 @@ procedure TAstrometry_engine.Execute;
 const READ_BYTES = 65536;
 var n: LongInt;
     f: file;
-    buf,err: string;
+    buf,err,warn: string;
     logok: boolean;
     cbuf: array[0..READ_BYTES] of char;
     ft,fl: TextFile;
@@ -711,7 +711,14 @@ else if FResolver=ResolverAstap then begin
     mem.LoadFromFile(FInFile);
     Ftmpfits.Stream:=mem;
     mem.clear;
-    AstapWcs;
+    AstapWcs(warn);
+    if warn<>'' then begin
+      err:=err+' '+warn;
+      AssignFile(ft,FLogFile);
+      Append(ft);
+      WriteLn(ft,warn);
+      CloseFile(ft);
+    end;
     mem.LoadFromFile(wcsfile);
     Ftmpfits.Header.NewWCS(mem);
     Ftmpfits.SaveToFile(FOutFile);
@@ -856,7 +863,7 @@ begin
   end;
 end;
 
-procedure TAstrometry_engine.AstapWcs;
+procedure TAstrometry_engine.AstapWcs(out warn: string);
 // Process ASTAP .wcs result
 var
   i,n : integer;
@@ -865,6 +872,7 @@ var
   hl:array[1..80] of char;
   buf:string;
 begin
+    warn:='';
     mem:=TMemoryStream.Create;
     AssignFile(ft,wcsfile);
     reset(ft);
@@ -872,6 +880,7 @@ begin
     repeat
       ReadLn(ft,buf);
       hl:=copy(buf+blank80,1,80);
+      if copy(hl,1,9)='WARNING =' then warn:=warn+trim(StringReplace(copy(hl,10,70),'''','',[rfReplaceAll]))+' ';
       mem.Write(hl,80);
       inc(n);
     until eof(ft);
@@ -892,13 +901,13 @@ end;
 function TAstrometry_engine.AstapErr(errnum:integer):string;
 begin
   case errnum of
-     0: result:='No errors';
-     1: result:='No solution';
-     2: result:='Not enough stars detected';
-    16: result:='Error reading image file';
-    32: result:='No star database found';
-    33: result:='Error reading star database';
-    else result:='Unknow error '+inttostr(errnum);
+     0: result:='No errors.';
+     1: result:='No solution.';
+     2: result:='Not enough stars detected.';
+    16: result:='Error reading image file.';
+    32: result:='No star database found.';
+    33: result:='Error reading star database.';
+    else result:='Unknow error: '+inttostr(errnum);
   end;
 end;
 

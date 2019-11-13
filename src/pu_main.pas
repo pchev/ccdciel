@@ -9875,6 +9875,7 @@ begin
      end;
      if cdcWCSinfo.secpix>0 then
         resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+blank+ssec+'/'+rsPixels;
+     if astrometry.LastError>'' then NewMessage(astrometry.Resolver+': '+astrometry.LastError,1);
      NewMessage(Format(rsResolveSucce, [astrometry.Resolver])+resulttxt,3);
   end else begin
     NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);

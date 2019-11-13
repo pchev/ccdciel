@@ -246,7 +246,7 @@ begin
  else
    FLastResult:=false;
  FBusy:=false;
- FLastError:=errstr;
+ FLastError:=trim(errstr);
  if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
