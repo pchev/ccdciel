@@ -486,7 +486,7 @@ if FResolver=ResolverAstrometryNet then begin
     end;
     sleep(100);
   end;
-  Fresult:=process.ExitStatus;
+  Fresult:=process.ExitCode;
   if (logok)and(Fresult<>127)and(process.Output<>nil) then repeat
     n := process.Output.Read(cbuf, READ_BYTES);
     if n>=0 then BlockWrite(f,cbuf,n);
@@ -613,7 +613,7 @@ else if FResolver=ResolverPlateSolve then begin
     end;
     sleep(100);
   end;
-  Fresult:=process.ExitStatus;
+  Fresult:=process.ExitCode;
   except
      on E: Exception do begin
        Fresult:=1;

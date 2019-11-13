@@ -828,7 +828,7 @@ try
       if n > 0 then inc(BytesRead, n);
     end;
   end;
-  result:=P.ExitStatus;
+  result:=P.ExitCode;
   if (output<>nil) and (result<>127)and(P.Output<>nil) then repeat
     M.SetSize(BytesRead + READ_BYTES);
     n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
