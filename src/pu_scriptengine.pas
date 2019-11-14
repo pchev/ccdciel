@@ -552,7 +552,7 @@ try
       if n > 0 then inc(BytesRead, n);
     end;
   end;
-  result:=RunProcess.ExitCode;
+  result:=RunProcess.ExitStatus;
   if (output<>nil) and (result<>127)and(RunProcess.Output<>nil) then repeat
     M.SetSize(BytesRead + READ_BYTES);
     n := RunProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);

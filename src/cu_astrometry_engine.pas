@@ -39,7 +39,7 @@ TAstrometry_engine = class(TThread)
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fplot: boolean;
-     Fresult:integer;
+     Fresult,Fcode:integer;
      FASTAPSearchRadius,FASTAPdownsample: integer;
      Fcmd: string;
      FOtherOptions: string;
@@ -486,7 +486,7 @@ if FResolver=ResolverAstrometryNet then begin
     end;
     sleep(100);
   end;
-  Fresult:=process.ExitCode;
+  Fresult:=process.ExitStatus;
   if (logok)and(Fresult<>127)and(process.Output<>nil) then repeat
     n := process.Output.Read(cbuf, READ_BYTES);
     if n>=0 then BlockWrite(f,cbuf,n);
@@ -613,7 +613,7 @@ else if FResolver=ResolverPlateSolve then begin
     end;
     sleep(100);
   end;
-  Fresult:=process.ExitCode;
+  Fresult:=process.ExitStatus;
   except
      on E: Exception do begin
        Fresult:=1;
@@ -685,9 +685,11 @@ else if FResolver=ResolverAstap then begin
     end;
     sleep(100);
   end;
-  Fresult:=process.ExitCode;
-  if (Fresult<>0)and(err='') then begin
-     err:=AstapErr(Fresult);
+  Fresult:=process.ExitStatus;
+  Fcode:=process.ExitCode;
+  if (Fcode=0)and(Fresult<256) then Fcode:=Fresult;
+  if (Fcode<>0)and(err='') then begin
+     err:=AstapErr(Fcode);
   end;
   except
      on E: Exception do begin
@@ -704,7 +706,7 @@ else if FResolver=ResolverAstap then begin
   process.Free;
   process:=TProcessUTF8.Create(nil);
   // merge wcs result
-  if (Fresult=0)and(FileExistsUTF8(wcsfile)) then begin
+  if (Fcode=0)and(FileExistsUTF8(wcsfile)) then begin
     Ftmpfits:=TFits.Create(nil);
     mem:=TMemoryStream.Create;
     try
