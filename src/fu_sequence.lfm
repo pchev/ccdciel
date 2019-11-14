@@ -32,13 +32,13 @@ object f_sequence: Tf_sequence
     Width = 210
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 316
-    ClientWidth = 210
+    ClientHeight = 312
+    ClientWidth = 206
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 160
+      Height = 152
       Top = 20
       Width = 210
       Align = alClient
@@ -55,13 +55,13 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 136
-      Top = 180
+      Height = 144
+      Top = 172
       Width = 210
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 136
-      ClientWidth = 210
+      ClientHeight = 140
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 1
       object BtnEditTargets: TButton
@@ -105,7 +105,7 @@ object f_sequence: Tf_sequence
         TabOrder = 3
       end
       object BtnStop: TButton
-        Left = 140
+        Left = 72
         Height = 25
         Top = 58
         Width = 68
@@ -115,10 +115,10 @@ object f_sequence: Tf_sequence
         TabOrder = 4
       end
       object Unattended: TCheckBox
-        Left = 2
+        Left = 6
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 108
+        Top = 112
         Width = 122
         Caption = 'Run unattended'
         OnChange = UnattendedChange
@@ -146,9 +146,9 @@ object f_sequence: Tf_sequence
         TabOrder = 7
       end
       object led: TShape
-        Left = 96
+        Left = 8
         Height = 14
-        Top = 64
+        Top = 88
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
@@ -166,12 +166,21 @@ object f_sequence: Tf_sequence
       object BtnPause: TButton
         Left = 140
         Height = 25
-        Top = 86
+        Top = 58
         Width = 68
         Caption = 'Pause'
         OnClick = BtnPauseClick
         ParentFont = False
         TabOrder = 9
+      end
+      object BtnStatus: TButton
+        Left = 140
+        Height = 25
+        Top = 84
+        Width = 68
+        Caption = 'Status'
+        OnClick = BtnStatusClick
+        TabOrder = 10
       end
     end
     object Title3: TLabel
@@ -197,8 +206,8 @@ object f_sequence: Tf_sequence
     Width = 210
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 222
-    ClientWidth = 210
+    ClientHeight = 218
+    ClientWidth = 206
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
@@ -238,8 +247,8 @@ object f_sequence: Tf_sequence
       Width = 210
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 80
-      ClientWidth = 210
+      ClientHeight = 76
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel

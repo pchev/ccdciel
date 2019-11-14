@@ -28,7 +28,7 @@ interface
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
   fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints,
-  cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator,
+  cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Grids;
@@ -47,6 +47,7 @@ type
     BtnCopy: TButton;
     BtnDelete: TButton;
     BtnPause: TButton;
+    BtnStatus: TButton;
     led: TShape;
     StatusTimer: TTimer;
     StartTimer: TTimer;
@@ -72,6 +73,7 @@ type
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
+    procedure BtnStatusClick(Sender: TObject);
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure StartTimerTimer(Sender: TObject);
@@ -270,11 +272,13 @@ begin
   BtnEditTargets.Hint:=rsEditTheCurre;
   BtnStart.Hint:=rsStartTheSequ;
   BtnStop.Hint:=rsStopTheSeque;
+  BtnStatus.Caption:=rsStatus2;
   Unattended.Hint:=rsIfCheckedNoC;
   BtnCopy.Hint:=rsCopyTheSeque;
   BtnDelete.Hint:=rsDeleteTheSeq;
   BtnReset.Hint:=rsClearTheSequ;
   BtnPause.Hint:=rsPauseTheSequ;
+  BtnStatus.Hint:=rsShowCompleti;
 end;
 
 procedure Tf_sequence.SetPreview(val: Tf_preview);
@@ -630,7 +634,7 @@ begin
    end;
    BtnReset.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
-      msg(targets.DoneStatus,2);
+      msg(targets.LastDoneStep,2);
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
    end
    else
@@ -1079,6 +1083,18 @@ end;
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
 begin
  StopSequence;
+end;
+
+procedure Tf_sequence.BtnStatusClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if Targets.CheckDoneCount then begin
+  f:=Tf_viewtext.Create(self);
+  f.Caption:=rsStatus2;
+  f.Memo1.Text:=Format(rsThisSequence,['"'+Targets.TargetName+'"'])+crlf+targets.DoneStatus;
+  FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f.Show;
+ end;
 end;
 
 procedure Tf_sequence.BtnPauseClick(Sender: TObject);

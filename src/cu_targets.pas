@@ -68,7 +68,7 @@ type
       FAtEndScript, FOnErrorScript: string;
       SkipTarget: boolean;
       TargetForceNext: boolean;
-      FDoneStatus: string;
+      FDoneStatus, FLastDoneStep: string;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -151,6 +151,7 @@ type
       property TargetInitializing: boolean read FTargetInitializing;
       property WaitStarting: boolean read FWaitStarting;
       property DoneStatus: string read FDoneStatus;
+      property LastDoneStep: string read FLastDoneStep;
       property Unattended: boolean read FUnattended write FUnattended;
       property onTargetsChange: TNotifyEvent read FTargetsChange write FTargetsChange;
       property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
@@ -212,6 +213,7 @@ begin
   FAtEndScript:='';
   FOnErrorScript:='';
   FDoneStatus:='';
+  FLastDoneStep:='';
   FIgnoreRestart:=true;
   FResetRepeat:=true;
   FInitializing:=false;
@@ -595,17 +597,20 @@ var i,j: integer;
 begin
  result:=false;
  FDoneStatus:='';
+ FLastDoneStep:='';
  if IgnoreRestart then exit;
  if FTargetsRepeatCount>0 then begin
    result:=true;
-   FDoneStatus:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+   FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+   FDoneStatus:=FLastDoneStep;
  end;
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
     if t.repeatdone>0 then begin
       result:=true;
-      FDoneStatus:=FDoneStatus+crlf+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      FLastDoneStep:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
     end;
     p:=t_plan(t.plan);
     if p=nil then Continue;
@@ -613,7 +618,8 @@ begin
     for j:=0 to p.Count-1 do begin
       if p.Steps[j].donecount>0 then begin
         result:=true;
-        FDoneStatus:=FDoneStatus+crlf+t.objectname+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        FLastDoneStep:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
       end;
     end;
  end;

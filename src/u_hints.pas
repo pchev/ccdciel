@@ -182,6 +182,7 @@ resourcestring
   rsLetBlankForD = 'Let blank for default system search path';
   rsActiveOnlyIf = 'Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout';
   rsPauseTheSequ = 'Pause the sequence after the current exposure is complete';
+  rsShowCompleti = 'Show completion status';
 
 implementation
 

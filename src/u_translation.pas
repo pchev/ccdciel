@@ -1148,6 +1148,7 @@ resourcestring
   rsSequenceWil2 = 'Sequence will be paused after current exposure is complete.';
   rsPauseSequenc3 = 'Pause sequence request canceled.';
   rsAutomaticHFD = 'Automatic HFD measurement for every sequence capture';
+  rsStatus2 = 'Status';
 
 implementation
 
