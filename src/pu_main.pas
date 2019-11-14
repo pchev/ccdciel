@@ -3172,6 +3172,7 @@ begin
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
+  MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false);
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
@@ -6047,6 +6048,7 @@ begin
       f_option.UseFileSequenceWidth.Checked:=false;
       f_option.FileSequenceWidth.Enabled:=false;
    end;
+   f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false);
    f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
@@ -6405,6 +6407,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
+     config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
      config.SetValue('/Log/UseTcpServer',f_option.UseTcpServer.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
@@ -7859,7 +7862,7 @@ try
  StatusBar1.Panels[2].Text:=buf;
  StatusBar1.Panels[1].Text := '';
  // measure image but not plot
- if (camera.FrameType=LIGHT) and EarlyNextExposure and (camera.LastExposureTime>=90) then begin
+ if MeasureNewImage and (camera.FrameType=LIGHT) and EarlyNextExposure and (camera.LastExposureTime>=30) then begin
    MeasureImage(false);
  end;
  // check if target need to be recentered

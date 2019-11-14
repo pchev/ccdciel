@@ -420,6 +420,7 @@ var
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
+  MeasureNewImage: boolean;
   PauseSequence: boolean;
   DummyDouble: double;
   DummyBool: boolean;

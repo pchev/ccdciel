@@ -46,6 +46,7 @@ type
     CbShowHints: TCheckBox;
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
+    MeasureNewImage: TCheckBox;
     FocusStarMagAdjust: TCheckBox;
     CheckRecenterTarget: TCheckBox;
     Label130: TLabel;
@@ -647,6 +648,7 @@ begin
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;
+  MeasureNewImage.Caption:=rsAutomaticHFD;
   TabSheet2.Caption := rsObservatory;
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;
