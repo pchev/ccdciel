@@ -470,7 +470,7 @@ procedure Tf_polaralign.DoCompute(Data: PtrInt);
 var bisect1, bisect2, bisect3: TLineDouble;
     rotcenter,rotcenter1,rotcenter2,rotcenter3:TPointDouble;
     parallel1,parallel2,parallel3: boolean;
-    err,errx,erry,poleoffset:Double;
+    err,errx,erry,poleoffset,poleH,poleRefraction: Double;
     txt: string;
     n: integer;
     p: TcdcWCScoord;
@@ -511,13 +511,18 @@ begin
   rotcenter.y:=(rotcenter1.y+rotcenter2.y+rotcenter3.y)/3;
   errx:=maxvalue([abs(rotcenter.x-rotcenter1.x),abs(rotcenter.x-rotcenter2.x),abs(rotcenter.x-rotcenter3.x)]);
   erry:=maxvalue([abs(rotcenter.y-rotcenter1.y),abs(rotcenter.y-rotcenter2.y),abs(rotcenter.y-rotcenter3.y)]);
+  // Position of pole corrected for refraction
+  poleH:=deg2rad*abs(ObsLatitude);        // geometric
+  Refraction(poleH,true);                 // refracted
+  poleH:=rad2deg*poleH;
+  poleRefraction:=poleH-abs(ObsLatitude); // correction
   // the offset in degree
   FOffsetAz:=rotcenter.x;
-  FOffsetH:=rotcenter.y;
+  FOffsetH:=rotcenter.y-poleRefraction;
   poleoffset:=sqrt(FOffsetAz*FOffsetAz+FOffsetH*FOffsetH);
   err:=sqrt(errx*errx+erry*erry);
   // position of rotation axis
-  InvProj(deg2rad*rotcenter.x,deg2rad*rotcenter.y,rotRa,rotDec);
+  InvProj(deg2rad*FOffsetAz,deg2rad*FOffsetH,rotRa,rotDec);
   rotRa:=rad2deg*rotRa/15;
   rotDec:=rad2deg*rotDec;
   // display result
