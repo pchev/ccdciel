@@ -1149,6 +1149,35 @@ resourcestring
   rsPauseSequenc3 = 'Pause sequence request canceled.';
   rsAutomaticHFD = 'Automatic HFD measurement for every sequence capture';
   rsStatus2 = 'Status';
+  rsWhenAskedMov = 'When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time.';
+  rsDoYouWantToC = 'Do you want to cancel the polar alignment?';
+  rsCancelPolarA = 'Cancel polar alignment';
+  rsPleaseWaitUn = 'Please wait until the measurements are complete';
+  rsTheMountDoNo = 'The mount do not move enough!';
+  rsMoveTheMount = 'Move the mount manually, click Continue when ready';
+  rsComputationR = 'Computation result:';
+  rsMountRotatio = 'Mount rotation center';
+  rsTotalPolarEr = 'Total polar error:';
+  rsHorizontalCo = 'Horizontal correction :';
+  rsMoveWestBy = 'move West by ';
+  rsMoveEastBy = 'move East by ';
+  rsVerticalCorr = 'Vertical correction :';
+  rsMoveDownBy = 'move Down by ';
+  rsMoveUpBy = 'move Up by ';
+  rsMoveTheGreen = 'Move the green circle to a star using the mouse.';
+  rsThenAdjustTh = 'Then adjust the mount polar adjustement knob to move the star to the pink circle at the other extremity of the line.';
+  rsYouCanCloseT = 'You can close this window after you finish to move the mount polar axis.';
+  rsPolarAlignme = 'Polar alignment';
+  rsMakeAFirstPo = 'Make a first polar alignment as best as possible.%sPoint the telescope near the pole.%sSelect below if the telescope can already slew automatically or if it must be moved manually.';
+  rsMovingMount = 'Moving mount';
+  rsAutomatic = 'Automatic';
+  rsManual = 'Manual';
+  rsMountRotatio2 = 'Mount rotation direction';
+  rsRotateBy = 'rotate by';
+  rsRotateTelesc = 'rotate the telescope';
+  rsExposureS = 'Exposure %s';
+  rsPlateSolveEx = 'Plate solve exposure %s';
+  rsPolarAlignme2 = 'Polar alignment instruction';
 
 implementation
 

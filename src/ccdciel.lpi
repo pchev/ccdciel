@@ -300,7 +300,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="98">
+    <Units Count="99">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -802,6 +802,13 @@
         <Filename Value="u_libraw.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit97>
+      <Unit98>
+        <Filename Value="pu_polaralign.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_polaralign"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit98>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

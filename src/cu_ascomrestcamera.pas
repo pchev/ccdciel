@@ -763,7 +763,6 @@ Procedure T_ascomrestcamera.AbortExposure;
 begin
    if FStatus<>devConnected then exit;
    try
-    msg(rsAbortExposur);
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
     V.Put('abortexposure');

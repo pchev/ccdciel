@@ -482,6 +482,13 @@ object f_main: Tf_main
       object N5: TMenuItem
         Caption = '-'
       end
+      object MenuPolarAlignment: TMenuItem
+        Caption = 'MenuPolarAlignment'
+        OnClick = MenuPolarAlignmentClick
+      end
+      object MenuItem18: TMenuItem
+        Caption = '-'
+      end
       object MenuIndiSettings: TMenuItem
         Caption = 'INDI settings'
         OnClick = MenuIndiSettingsClick

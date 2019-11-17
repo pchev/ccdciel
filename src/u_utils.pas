@@ -59,6 +59,7 @@ Function ARToStr3(ar: Double) : string;
 Function Str3ToAR(dms : string) : double;
 Function DEToStr3(de: Double) : string;
 Function Str3ToDE(dms : string) : double;
+function DEToStrShort(de: double; digits: integer = 1): string;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 Function ExecuteFile(const FileName: string): integer;
@@ -84,12 +85,13 @@ PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 Procedure Hz2Eq(A,h : double; out hh,de : double);
 function AirMass(h: double): double;
 function atmospheric_absorption(airmass: double):double;
-Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
-Procedure cmdHz2Eq(a,h : double; var ra,de : double);
+Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
+Procedure cmdHz2Eq(a,h : double; out ra,de : double);
 procedure Screen2Fits(x,y: integer;  FlipHorz,FlipVert: boolean; out xx,yy:integer);
 procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
 procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
+procedure CircleIntersect(x0,y0,r,x1,y1: integer; out xr,yr: integer);
 procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 procedure Sun(jdn:double; out ra,de,l:double);
@@ -763,6 +765,51 @@ result:=0;
 end;
 end;
 
+function DEToStrShort(de: double; digits: integer = 1): string;
+var
+  dd, min1, min, sec: double;
+  sg, d, m, s: string;
+begin
+  if de >= 0 then
+    sg := ''
+  else
+    sg := '-';
+  de := abs(de);
+  dd := Int(de);
+  min1 := abs(de - dd) * 60;
+  if min1 >= 59.99166667 then
+  begin
+    dd := dd + sgn(de);
+    min1 := 0.0;
+  end;
+  min := Int(min1);
+  sec := (min1 - min) * 60;
+  if sec >= 59.5 then
+  begin
+    min := min + 1;
+    sec := 0.0;
+  end;
+  str(abs(dd): 2: 0, d);
+  if abs(dd) < 10 then
+    d := '0' + trim(d);
+  if de < 0 then
+    d := '-' + d
+  else
+    d := '+' + d;
+  str(min: 2: 0, m);
+  if abs(min) < 10 then
+    m := '0' + trim(m);
+  str(sec: 2: digits, s);
+  if abs(sec) < 9.5 then
+    s := '0' + trim(s);
+  Result := sg;
+  if dd <> 0 then
+    Result := Result + d + ldeg;
+  if min <> 0 then
+    Result := Result + m + lmin;
+  Result := Result + s + lsec;
+end;
+
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 {$ifdef unix}
 begin
@@ -1205,7 +1252,7 @@ jd0:=jd(Year,Month,Day,0);
 result:=Sidtim(jd0,CurTime-ObsTimeZone,ObsLongitude);
 end;
 
-Procedure cmdEq2Hz(ra,de : double ; var a,h : double);
+Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
 var CurSt: double;
 begin
 CurST:=CurrentSidTim;
@@ -1214,7 +1261,7 @@ a:=rad2deg*rmod(a+pi,pi2);
 h:=rad2deg*h;
 end;
 
-Procedure cmdHz2Eq(a,h : double; var ra,de : double);
+Procedure cmdHz2Eq(a,h : double; out ra,de : double);
 var CurSt: double;
 begin
 CurST:=CurrentSidTim;
@@ -1318,6 +1365,16 @@ except
   xx:=-1;
   yy:=-1;
 end;
+end;
+
+procedure CircleIntersect(x0,y0,r,x1,y1: integer; out xr,yr: integer);
+var m,s,c:double;
+begin
+// intersection of line from (x0,y0), the center of the circle of radius r, to the point (y1,y1)
+  m:=arctan2(y1-y0,x1-x0);
+  sincos(m,s,c);
+  xr:=round(x0+r*c);
+  yr:=round(y0+r*s);
 end;
 
 procedure ResetTrackBar(tb:TTrackBar);

@@ -428,6 +428,8 @@ var
   ProtocolName: array[0..1] of string=('http:','https:');
   CheckRecenterTarget,NeedRecenterTarget,RecenteringTarget,CheckRecenterBusy: boolean;
   AstrometryTimeout,RecenterTargetDistance,SlewPrecision: double;
+  PolarAlignmentOverlay: boolean;
+  PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;
 
   procedure globalmsg(str:string);
 

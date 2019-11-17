@@ -149,6 +149,7 @@ begin
         Msg(rsCannotStartP,0);
      end;
   end else begin
+     msg(rsStopPreview,2);
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
 end;

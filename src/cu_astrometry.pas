@@ -285,9 +285,15 @@ begin
 end;
 
 procedure TAstrometry.SolveCurrentImage(wait: boolean);
+var n: integer;
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
-   if not fits.HeaderInfo.solved then begin
+   if fits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
+     fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),0);
+     FLastResult:=(n=0);
+   end
+   else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
     StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolve);
     if wait then WaitBusy(AstrometryTimeout+30);

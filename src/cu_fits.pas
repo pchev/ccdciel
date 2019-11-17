@@ -1732,7 +1732,7 @@ const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
     saturated_counter, max_saturated: integer;
-    valsaturation:LongWord;
+    valsaturation:Int64;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
     pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
     distance_histogram : array [0..max_ri] of integer;
@@ -2303,13 +2303,14 @@ begin
  ImgStream.Clear;
  ImgStream.Position:=0;
  img:=TLazIntfImage.Create(0,0);
+ ext:=uppercase(ext);
  try
    // set image data
    img.SetRawImage(lRawImage);
    // search a reader for the given fileext
    for i:=0 to ImageHandlers.Count-1 do begin
      htyp:=ImageHandlers.TypeNames[i];
-     hext:=ImageHandlers.Extensions[htyp];
+     hext:=uppercase(ImageHandlers.Extensions[htyp]);
      if (pos(ext,hext)>0) then begin
        // load image from file, it use the correct reader from fileext
        ReaderClass:=ImageHandlers.ImageReader[htyp];

@@ -774,7 +774,6 @@ Procedure T_ascomcamera.AbortExposure;
 begin
  {$ifdef mswindows}
    try
-    msg(rsAbortExposur);
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
     V.AbortExposure;

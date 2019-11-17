@@ -45,7 +45,7 @@ uses
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
   cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount,
-  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel,
+  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
@@ -111,6 +111,8 @@ type
     MenuAlpacaDomeSetup: TMenuItem;
     MenuImgStat: TMenuItem;
     MenuImage: TMenuItem;
+    MenuPolarAlignment: TMenuItem;
+    MenuItem18: TMenuItem;
     MenuItemPhotometry2: TMenuItem;
     MenuItem17: TMenuItem;
     MenuItemPhotometry: TMenuItem;
@@ -357,6 +359,7 @@ type
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuImgStatClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuPolarAlignmentClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
     procedure MenuItemPhotometryClick(Sender: TObject);
     procedure MenuResolveDSOClick(Sender: TObject);
@@ -686,7 +689,7 @@ type
     procedure CameraVideoExposureChange(Sender: TObject);
     procedure CameraFPSChange(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
-    Procedure AbortExposure(Sender: TObject);
+    Procedure StopExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
     function  PrepareCaptureExposure(canwait:boolean):boolean;
@@ -1148,6 +1151,7 @@ begin
   AdjustDomeFlat:=false;
   AdjustFlatLight:=false;
   onMsgGlobal:=@NewMessage;
+  PolarAlignmentOverlay:=false;
   ImgPixRatio:=1;
   Undersampled:=false;
   ZoomMin:=1;
@@ -1312,7 +1316,7 @@ begin
   f_preview:=Tf_preview.Create(self);
   f_preview.onResetStack:=@ResetPreviewStack;
   f_preview.onStartExposure:=@StartPreviewExposure;
-  f_preview.onAbortExposure:=@AbortExposure;
+  f_preview.onAbortExposure:=@StopExposure;
   f_preview.onMsg:=@NewMessage;
   f_preview.onEndControlExposure:=@EndControlExposure;
   astrometry.preview:=f_preview;
@@ -1320,7 +1324,7 @@ begin
 
   f_capture:=Tf_capture.Create(self);
   f_capture.onStartExposure:=@StartCaptureExposure;
-  f_capture.onAbortExposure:=@AbortExposure;
+  f_capture.onAbortExposure:=@StopExposure;
   f_capture.onMsg:=@NewMessage;
 
   f_video:=Tf_video.Create(self);
@@ -1716,6 +1720,7 @@ begin
    MenuQuit.Caption := rsQuit;
    MenuItem2.Caption := rsEdit;
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
+   MenuPolarAlignment.Caption:=rsPolarAlignme;
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
    MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
@@ -2019,6 +2024,12 @@ begin
 
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   deepstring:=TStringList.Create;
+
+  f_polaralign.Fits:=fits;
+  f_polaralign.Preview:=f_preview;
+  f_polaralign.Visu:=f_visu;
+  f_polaralign.Astrometry:=astrometry;
+  f_polaralign.onShowMessage:=@NewMessage;
 
   StartupTimer.Enabled:=true;
 end;
@@ -2638,7 +2649,7 @@ begin
 MouseDownX:=X;
 MouseDownY:=Y;
 if Shift=[ssLeft] then begin
-   if ImgZoom>0 then begin
+   if PolarAlignmentOverlay or (ImgZoom>0) then begin
      Mx:=X;
      My:=y;
      MouseMoving:=true;
@@ -2658,9 +2669,23 @@ end;
 
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
+var dx,dy: integer;
 begin
  MagnifyerTimer.Enabled:=true;
  if MouseMoving and fits.HeaderInfo.valid then begin
+   if PolarAlignmentOverlay then begin
+    Screen2Fits((X-Mx),(Y-My),f_visu.FlipHorz,f_visu.FlipVert,dx,dy);
+    if f_visu.FlipHorz then
+      PolarAlignmentOverlayOffsetX:=PolarAlignmentOverlayOffsetX - dx
+    else
+      PolarAlignmentOverlayOffsetX:=PolarAlignmentOverlayOffsetX + dx;
+    if f_visu.FlipVert then
+      PolarAlignmentOverlayOffsetY:=PolarAlignmentOverlayOffsetY - dy
+    else
+      PolarAlignmentOverlayOffsetY:=PolarAlignmentOverlayOffsetY + dy;
+    Image1.Invalidate;
+   end
+   else begin
     if f_visu.FlipHorz then
       ImgCx:=ImgCx - (X-Mx) / ImgZoom
     else
@@ -2670,6 +2695,7 @@ begin
     else
       ImgCy:=ImgCy + (Y-My) / ImgZoom;
     PlotTimer.Enabled:=true;
+   end;
  end
  else if MouseFrame then begin
     if EndX>0 then begin
@@ -2701,11 +2727,17 @@ procedure Tf_main.Image1MouseUp(Sender: TObject; Button: TMouseButton;
 var xx,x1,y1,x2,y2,w,h: integer;
 begin
 if MouseMoving and fits.HeaderInfo.valid then begin
-  ImgCx:=ImgCx + (X-Mx) / ImgZoom;
-  ImgCy:=ImgCy + (Y-My) / ImgZoom;
-  PlotImage;
-  Mx:=X;
-  My:=Y;
+  if PolarAlignmentOverlay then begin
+    Mx:=X;
+    My:=Y;
+  end
+  else begin
+    ImgCx:=ImgCx + (X-Mx) / ImgZoom;
+    ImgCy:=ImgCy + (Y-My) / ImgZoom;
+    PlotImage;
+    Mx:=X;
+    My:=Y;
+  end;
 end;
 if MouseFrame and fits.HeaderInfo.valid then begin
   Image1.Canvas.Pen.Color:=clBlack;
@@ -2744,7 +2776,7 @@ procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
 var
   zf: double;
 begin
-if fits.HeaderInfo.naxis>0 then begin
+if (fits.HeaderInfo.naxis>0)and(not PolarAlignmentOverlay) then begin
   if LockMouseWheel then
     exit;
   LockMouseWheel := True;
@@ -2805,7 +2837,7 @@ end;
 if CanClose then begin
  TerminateVcurve:=true;
  if f_capture.Running or f_preview.Running then begin
-   AbortExposure(nil);
+   StopExposure(nil);
  end;
  if f_video.Running then begin
   Camera.StopVideoPreview;
@@ -6938,12 +6970,11 @@ begin
 
 end;
 
-Procedure Tf_main.AbortExposure(Sender: TObject);
+Procedure Tf_main.StopExposure(Sender: TObject);
 begin
   camera.AbortExposure;
   Preview:=false;
   Capture:=false;
-  NewMessage(rsAbortExposur,2);
   StatusBar1.Panels[1].Text:=rsStop;
 end;
 
@@ -8131,7 +8162,7 @@ if (img_Height=0)or(img_Width=0) then exit;
 r1:=ScrBmp.Width/imabmp.Width;
 r2:=ScrBmp.Height/imabmp.Height;
 ZoomMin:=min(r1,r2);
-if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01) then ImgZoom:=0;
+if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01)or PolarAlignmentOverlay then ImgZoom:=0;
 ClearImage;
 imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
@@ -8220,10 +8251,27 @@ if fits.HeaderInfo.solved and
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,xxc,yyc,s,r: integer;
+var x,y,x2,y2,xr1,yr1,xr2,yr2,xxc,yyc,s,r: integer;
     i,size: integer;
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
+  if PolarAlignmentOverlay then begin
+     Fits2Screen(round(f_polaralign.StartX+PolarAlignmentOverlayOffsetX),round(f_polaralign.StartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+     Fits2Screen(round(f_polaralign.EndX+PolarAlignmentOverlayOffsetX),round(f_polaralign.EndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+     r:=DoScaleX(2);
+     Image1.Canvas.brush.Style:=bsClear;
+     Image1.Canvas.Pen.Color:=clLime;
+     Image1.Canvas.Pen.Mode:=pmCopy;
+     Image1.Canvas.Pen.Style:=psSolid;
+     Image1.Canvas.Pen.Width:=r;
+     r:=4*r;
+     CircleIntersect(x,y,r,x2,y2,xr1,yr1);
+     CircleIntersect(x2,y2,r,x,y,xr2,yr2);
+     Image1.Canvas.Line(xr1,yr1,xr2,yr2);
+     image1.Canvas.Ellipse(x-r,y-r,x+r,y+r);
+     Image1.Canvas.Pen.Color:=clFuchsia;
+     image1.Canvas.Ellipse(x2-r,y2-r,x2+r,y2+r);
+  end;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      if ImgZoom=0 then begin
@@ -8329,6 +8377,21 @@ begin
   end;
   FormPos(f_indigui,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_indigui.Show;
+end;
+
+procedure Tf_main.MenuPolarAlignmentClick(Sender: TObject);
+var pt: TPoint;
+begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
+  f_polaralign.Mount:=mount;
+  pt.x:=0;
+  pt.y:=PanelCenter.top;
+  pt:=ClientToScreen(pt);
+  FormPos(f_polaralign,pt.X,pt.Y);
+  f_polaralign.Show;
 end;
 
 procedure Tf_main.MenuAscomSetupClick(Sender: TObject);

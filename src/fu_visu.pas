@@ -399,6 +399,7 @@ end;
 
 procedure Tf_visu.BtnZoomClick(Sender: TObject);
 begin
+if PolarAlignmentOverlay then exit;
   case TSpeedButton(sender).tag of
     0: FZoom:=0;
     1: FZoom:=0.5;

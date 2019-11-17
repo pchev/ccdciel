@@ -175,10 +175,10 @@ object f_preview: Tf_preview
       end
       object StackPreview: TCheckBox
         Left = 112
-        Height = 21
+        Height = 23
         Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
         Top = 1
-        Width = 56
+        Width = 58
         BidiMode = bdRightToLeft
         Caption = 'Stack'
         ParentFont = False
