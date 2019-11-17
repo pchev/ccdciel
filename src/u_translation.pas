@@ -1174,7 +1174,7 @@ resourcestring
   rsManual = 'Manual';
   rsMountRotatio2 = 'Mount rotation direction';
   rsRotateBy = 'rotate by';
-  rsRotateTelesc = 'rotate the telescope';
+  rsRotateTelesc = 'Rotate the telescope';
   rsExposureS = 'Exposure %s';
   rsPlateSolveEx = 'Plate solve exposure %s';
   rsPolarAlignme2 = 'Polar alignment instruction';

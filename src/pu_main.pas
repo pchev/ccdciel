@@ -2674,7 +2674,7 @@ begin
  MagnifyerTimer.Enabled:=true;
  if MouseMoving and fits.HeaderInfo.valid then begin
    if PolarAlignmentOverlay then begin
-    Screen2Fits((X-Mx),(Y-My),f_visu.FlipHorz,f_visu.FlipVert,dx,dy);
+    Screen2Fits((X-Mx),(Y-My),false,false,dx,dy);
     if f_visu.FlipHorz then
       PolarAlignmentOverlayOffsetX:=PolarAlignmentOverlayOffsetX - dx
     else

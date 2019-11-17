@@ -474,7 +474,7 @@ var bisect1, bisect2, bisect3: TLineDouble;
     txt: string;
     n: integer;
     p: TcdcWCScoord;
-    rotRa, rotDec: double;
+    rotRa, rotDec, ra, de: double;
 begin
   // Compute the polar offset from the measurement
   PageControl1.ActivePage:=TabSheetCompute;
@@ -534,42 +534,48 @@ begin
   txt:=txt+DEToStrShort(abs(FOffsetAz),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
-  if FOffsetH>0 then txt:=rsMoveDownBy
-                else txt:=rsMoveUpBy;
+  if FOffsetH>0 then txt:=rsMoveUpBy
+                else txt:=rsMoveDownBy;
   txt:=txt+DEToStrShort(abs(FOffsetH),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
   // vector to new position
-  p.ra:=0;
-  p.dec:=90;
+  // From the pole
+  ra:=0;
+  de:=sgn(ObsLatitude)*(pid2-secarc);
+  ApparentToJ2000(ra,de);
+  p.ra:=rad2deg*ra;
+  p.dec:=rad2deg*de;
   n:=cdcwcs_sky2xy(@p,0);
-  if n=1 then begin
-    // is this possible ?
-    txt:='Pole is outside the image coordinates range';
-    msg(txt,1);
-    exit;
-  end;
   Fstartx:=p.x;
-  Fstarty:=p.y;
-  p.ra:=rotRa;
-  p.dec:=rotDec;
-  n:=cdcwcs_sky2xy(@p,0);
+  Fstarty:=FFits.HeaderInfo.naxis2-p.y;
   if n=1 then begin
-    // is this possible ?
-    txt:='mount axis is outside the image coordinates range';
+    txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
     exit;
   end;
+  // to mount axis
+  ra:=deg2rad*rotRa*15;
+  de:=deg2rad*rotDec;
+  ApparentToJ2000(ra,de);
+  p.ra:=rad2deg*ra;
+  p.dec:=rad2deg*de;
+  n:=cdcwcs_sky2xy(@p,0);
   Fendx:=p.x;
-  Fendy:=p.y;
-  // center line origin
+  Fendy:=FFits.HeaderInfo.naxis2-p.y;
+  if n=1 then begin
+    txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
+    msg(txt,1);
+    exit;
+  end;
+  // line origin centered on screen
   PolarAlignmentOverlayOffsetX:=(FFits.HeaderInfo.naxis1 div 2)-Fstartx;
   PolarAlignmentOverlayOffsetY:=(FFits.HeaderInfo.naxis2 div 2)-Fstarty;
   // draw offset overlay
+  PolarAlignmentOverlay:=true;
   Memo1.Lines.Add(rsMoveTheGreen);
   Memo1.Lines.Add(rsThenAdjustTh);
   Memo1.Lines.Add(rsYouCanCloseT);
-  PolarAlignmentOverlay:=true;
   // start image loop
   FVisu.BtnZoomAdjust.Click;
   preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
