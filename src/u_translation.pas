@@ -1168,7 +1168,10 @@ resourcestring
   rsThenAdjustTh = 'Then adjust the mount polar adjustement knob to move the star to the pink circle at the other extremity of the line.';
   rsYouCanCloseT = 'You can close this window after you finish to move the mount polar axis.';
   rsPolarAlignme = 'Polar alignment';
-  rsMakeAFirstPo = 'Make a first polar alignment as best as possible.%sPoint the telescope near the pole.%sSelect below if the telescope can already slew automatically or if it must be moved manually.';
+  rsMakeAFirstPo = 'Adjust the mount RA axis manually to point within a few degree of the pole.%s'+
+                   'Slew the telescope to point near the pole at a declination about 89 degrees with counterweight down.%s'+
+                   'Select below if the telescope can already slew automatically or if it must be moved manually.'+
+                   'If automatic, select the direction and movement step. Beware it will move two time this amount.';
   rsMovingMount = 'Moving mount';
   rsAutomatic = 'Automatic';
   rsManual = 'Manual';

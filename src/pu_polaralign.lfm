@@ -1,10 +1,10 @@
 object f_polaralign: Tf_polaralign
   Left = 369
-  Height = 440
+  Height = 450
   Top = 30
   Width = 350
   Caption = 'f_polaralign'
-  ClientHeight = 440
+  ClientHeight = 450
   ClientWidth = 350
   DesignTimePPI = 95
   FormStyle = fsStayOnTop
@@ -14,7 +14,7 @@ object f_polaralign: Tf_polaralign
   OnShow = FormShow
   object PageControl1: TPageControl
     Left = 0
-    Height = 440
+    Height = 450
     Top = 0
     Width = 350
     ActivePage = TabSheetStart
@@ -24,7 +24,7 @@ object f_polaralign: Tf_polaralign
     TabOrder = 0
     object TabSheetStart: TTabSheet
       Caption = 'TabSheetStart'
-      ClientHeight = 436
+      ClientHeight = 446
       ClientWidth = 340
       object Label5: TLabel
         Left = 0
@@ -38,10 +38,10 @@ object f_polaralign: Tf_polaralign
       end
       object Label1: TLabel
         Left = 0
-        Height = 152
+        Height = 162
         Top = 32
         Width = 340
-        Align = alTop
+        Align = alClient
         AutoSize = False
         Caption = '...'
         ParentColor = False
@@ -50,7 +50,7 @@ object f_polaralign: Tf_polaralign
       object Panel1: TPanel
         Left = 0
         Height = 54
-        Top = 382
+        Top = 392
         Width = 340
         Align = alBottom
         ClientHeight = 54
@@ -77,9 +77,9 @@ object f_polaralign: Tf_polaralign
       object MountSlewing: TRadioGroup
         Left = 0
         Height = 56
-        Top = 184
+        Top = 194
         Width = 340
-        Align = alTop
+        Align = alBottom
         AutoFill = True
         Caption = 'Mount slewing'
         ChildSizing.LeftRightSpacing = 6
@@ -104,9 +104,9 @@ object f_polaralign: Tf_polaralign
       object Panel6: TPanel
         Left = 0
         Height = 142
-        Top = 240
+        Top = 250
         Width = 340
-        Align = alClient
+        Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 142
         ClientWidth = 340
@@ -209,7 +209,7 @@ object f_polaralign: Tf_polaralign
     end
     object TabSheetExpose: TTabSheet
       Caption = 'TabSheetExpose'
-      ClientHeight = 436
+      ClientHeight = 446
       ClientWidth = 340
       object ExposeList: TCheckListBox
         Left = 0
@@ -275,7 +275,7 @@ object f_polaralign: Tf_polaralign
     end
     object TabSheetCompute: TTabSheet
       Caption = 'TabSheetCompute'
-      ClientHeight = 436
+      ClientHeight = 446
       ClientWidth = 340
       object Panel4: TPanel
         Left = 0

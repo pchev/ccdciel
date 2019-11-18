@@ -189,7 +189,7 @@ begin
    BtnClose.Caption:=rsClose;
    BtnContinue.Caption:=rsContinue;
    Label5.Caption:=rsPolarAlignme2;
-   Label1.Caption:=Format(rsMakeAFirstPo, [crlf+crlf, crlf+crlf]);
+   Label1.Caption:=Format(rsMakeAFirstPo, [crlf, crlf]);
    MountSlewing.Caption:=rsMovingMount;
    MountSlewing.Items[0]:=rsAutomatic;
    MountSlewing.Items[1]:=rsManual;
