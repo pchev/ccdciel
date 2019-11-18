@@ -8403,6 +8403,7 @@ begin
     ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
+  if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
   pt.x:=0;
   pt.y:=PanelCenter.top;
