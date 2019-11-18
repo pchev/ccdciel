@@ -539,12 +539,12 @@ begin
   Memo1.Lines.Add(DEToStrShort(poleoffset,0)+' +/- '+DEToStrShort(err,0));
   Memo1.Lines.Add('');
   Memo1.Lines.Add(rsHorizontalCo);
-  if FOffsetAz>0 then txt:=rsMoveWestBy
+  if FOffsetAz<0 then txt:=rsMoveWestBy
                  else txt:=rsMoveEastBy;
   txt:=txt+DEToStrShort(abs(FOffsetAz),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
-  if FOffsetH>0 then txt:=rsMoveUpBy
+  if FOffsetH<0 then txt:=rsMoveUpBy
                 else txt:=rsMoveDownBy;
   txt:=txt+DEToStrShort(abs(FOffsetH),0);
   Memo1.Lines.Add(txt);
