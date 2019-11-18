@@ -280,7 +280,7 @@ object f_polaralign: Tf_polaralign
       object Panel4: TPanel
         Left = 0
         Height = 54
-        Top = 382
+        Top = 392
         Width = 340
         Align = alBottom
         ClientHeight = 54
@@ -303,10 +303,19 @@ object f_polaralign: Tf_polaralign
           Caption = 'LabelMsg3'
           ParentColor = False
         end
+        object BtnLock: TButton
+          Left = 88
+          Height = 25
+          Top = 22
+          Width = 131
+          Caption = 'Lock overlay'
+          OnClick = BtnLockClick
+          TabOrder = 1
+        end
       end
       object Memo1: TMemo
         Left = 0
-        Height = 382
+        Height = 392
         Top = 0
         Width = 340
         Align = alClient

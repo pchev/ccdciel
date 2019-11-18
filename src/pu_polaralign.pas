@@ -37,6 +37,7 @@ type
     BtnStart: TButton;
     BtnCancel: TButton;
     BtnContinue: TButton;
+    BtnLock: TButton;
     ExposeList: TCheckListBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -63,6 +64,7 @@ type
     TabSheetStart: TTabSheet;
     procedure BtnCloseClick(Sender: TObject);
     procedure BtnContinueClick(Sender: TObject);
+    procedure BtnLockClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure ExposeListItemClick(Sender: TObject; Index: integer);
@@ -82,6 +84,7 @@ type
     FInProgress: boolean;
     FTerminate: boolean;
     FonShowMessage: TNotifyMsg;
+    FonClose: TNotifyEvent;
     Fx, Fy: array[1..3] of double;
     FSidtimStart: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
@@ -111,6 +114,7 @@ type
     property EndX: double read Fendx;
     property EndY: double read Fendy;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
+    property onClose: TNotifyEvent read FonClose write FonClose;
 
   end;
 
@@ -230,6 +234,7 @@ procedure Tf_polaralign.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
   PolarAlignmentOverlay:=false;
   if preview.Loop then preview.BtnLoopClick(nil);
+  if Assigned(FonClose) then FonClose(self);
 end;
 
 procedure Tf_polaralign.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -578,6 +583,7 @@ begin
   PolarAlignmentOverlayOffsetY:=(FFits.HeaderInfo.naxis2 div 2)-Fstarty;
   // draw offset overlay
   PolarAlignmentOverlay:=true;
+  PolarAlignmentLock:=false;
   Memo1.Lines.Add(rsMoveTheGreen);
   Memo1.Lines.Add(rsThenAdjustTh);
   Memo1.Lines.Add(rsYouCanCloseT);
@@ -587,6 +593,12 @@ begin
   if not preview.Loop then preview.BtnLoopClick(nil);
   FInProgress:=false;
 end;
+
+procedure Tf_polaralign.BtnLockClick(Sender: TObject);
+begin
+  PolarAlignmentLock:=true;
+end;
+
 
 end.
 

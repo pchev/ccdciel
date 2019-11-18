@@ -502,11 +502,11 @@ type
     cdcWCSinfo: TcdcWCSinfo;
     WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
     SaveFocusZoom,ImgCx, ImgCy: double;
-    Mx, My: integer;
+    Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel: boolean;
+    MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
     Capture,Preview,learningvcurve,UseTcpServer: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -740,6 +740,7 @@ type
     procedure MeasureAtPos(x,y:integer; photometry:boolean);
     procedure ShutdownProgram(Sender: TObject);
     function  CheckImageInfo:boolean;
+    procedure PolaralignClose(Sender: TObject);
   public
     { public declarations }
   end;
@@ -2030,6 +2031,7 @@ begin
   f_polaralign.Visu:=f_visu;
   f_polaralign.Astrometry:=astrometry;
   f_polaralign.onShowMessage:=@NewMessage;
+  f_polaralign.onClose:=@PolaralignClose;
 
   StartupTimer.Enabled:=true;
 end;
@@ -2649,13 +2651,26 @@ begin
 MouseDownX:=X;
 MouseDownY:=Y;
 if Shift=[ssLeft] then begin
-   if PolarAlignmentOverlay or (ImgZoom>0) then begin
+  if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
+     Screen2Fits(X,Y,false,false,Polx,Poly);
+     PolarMoving:=true;
+  end
+  else if (ImgZoom>0) then begin
      Mx:=X;
      My:=y;
      MouseMoving:=true;
      screen.Cursor:=crHandPoint;
-   end;
- end else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running)) then begin
+  end;
+end
+else if (ssCtrl in Shift) then begin
+  if (ImgZoom>0) then begin
+     Mx:=X;
+     My:=y;
+     MouseMoving:=true;
+     screen.Cursor:=crHandPoint;
+  end;
+end
+else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running)) then begin
    if EndX>0 then begin
       scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
    end;
@@ -2669,12 +2684,16 @@ end;
 
 procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
-var dx,dy: integer;
+var px,py,dx,dy: integer;
+    z: double;
 begin
  MagnifyerTimer.Enabled:=true;
- if MouseMoving and fits.HeaderInfo.valid then begin
-   if PolarAlignmentOverlay then begin
-    Screen2Fits((X-Mx),(Y-My),false,false,dx,dy);
+ if PolarMoving  and fits.HeaderInfo.valid then begin
+    Screen2Fits(X,Y,false,false,px,py);
+    dx:=px-PolX;
+    dy:=py-PolY;
+    Polx:=px;
+    Poly:=py;
     if f_visu.FlipHorz then
       PolarAlignmentOverlayOffsetX:=PolarAlignmentOverlayOffsetX - dx
     else
@@ -2684,8 +2703,8 @@ begin
     else
       PolarAlignmentOverlayOffsetY:=PolarAlignmentOverlayOffsetY + dy;
     Image1.Invalidate;
-   end
-   else begin
+ end
+ else if MouseMoving and fits.HeaderInfo.valid then begin
     if f_visu.FlipHorz then
       ImgCx:=ImgCx - (X-Mx) / ImgZoom
     else
@@ -2695,7 +2714,6 @@ begin
     else
       ImgCy:=ImgCy + (Y-My) / ImgZoom;
     PlotTimer.Enabled:=true;
-   end;
  end
  else if MouseFrame then begin
     if EndX>0 then begin
@@ -2726,18 +2744,16 @@ procedure Tf_main.Image1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var xx,x1,y1,x2,y2,w,h: integer;
 begin
-if MouseMoving and fits.HeaderInfo.valid then begin
-  if PolarAlignmentOverlay then begin
+if PolarMoving then begin
     Mx:=X;
     My:=Y;
-  end
-  else begin
+end;
+if MouseMoving and fits.HeaderInfo.valid then begin
     ImgCx:=ImgCx + (X-Mx) / ImgZoom;
     ImgCy:=ImgCy + (Y-My) / ImgZoom;
     PlotImage;
     Mx:=X;
     My:=Y;
-  end;
 end;
 if MouseFrame and fits.HeaderInfo.valid then begin
   Image1.Canvas.Pen.Color:=clBlack;
@@ -2768,6 +2784,7 @@ if MouseFrame and fits.HeaderInfo.valid then begin
 end;
 MouseMoving:=false;
 MouseFrame:=false;
+PolarMoving:=false;
 screen.Cursor:=crDefault;
 end;
 
@@ -2776,7 +2793,7 @@ procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
 var
   zf: double;
 begin
-if (fits.HeaderInfo.naxis>0)and(not PolarAlignmentOverlay) then begin
+if (fits.HeaderInfo.naxis>0) then begin
   if LockMouseWheel then
     exit;
   LockMouseWheel := True;
@@ -8162,7 +8179,7 @@ if (img_Height=0)or(img_Width=0) then exit;
 r1:=ScrBmp.Width/imabmp.Width;
 r2:=ScrBmp.Height/imabmp.Height;
 ZoomMin:=min(r1,r2);
-if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01)or PolarAlignmentOverlay then ImgZoom:=0;
+if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01) then ImgZoom:=0;
 ClearImage;
 imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
@@ -8392,6 +8409,11 @@ begin
   pt:=ClientToScreen(pt);
   FormPos(f_polaralign,pt.X,pt.Y);
   f_polaralign.Show;
+end;
+
+procedure Tf_main.PolaralignClose(Sender: TObject);
+begin
+  image1.Invalidate;
 end;
 
 procedure Tf_main.MenuAscomSetupClick(Sender: TObject);
