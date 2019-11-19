@@ -8268,25 +8268,25 @@ if fits.HeaderInfo.solved and
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,x2,y2,xr1,yr1,xr2,yr2,xxc,yyc,s,r: integer;
+var x,y,x1,y1,x2,y2,xr1,yr1,xr2,yr2,xxc,yyc,s,r: integer;
     i,size: integer;
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
   if PolarAlignmentOverlay then begin
-     Fits2Screen(round(f_polaralign.StartX+PolarAlignmentOverlayOffsetX),round(f_polaralign.StartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+     Fits2Screen(round(f_polaralign.StartX+PolarAlignmentOverlayOffsetX),round(f_polaralign.StartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
      Fits2Screen(round(f_polaralign.EndX+PolarAlignmentOverlayOffsetX),round(f_polaralign.EndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
      r:=DoScaleX(2);
      Image1.Canvas.brush.Style:=bsClear;
-     Image1.Canvas.Pen.Color:=clLime;
+     Image1.Canvas.Pen.Color:=clGreen;
      Image1.Canvas.Pen.Mode:=pmCopy;
      Image1.Canvas.Pen.Style:=psSolid;
      Image1.Canvas.Pen.Width:=r;
      r:=4*r;
-     CircleIntersect(x,y,r,x2,y2,xr1,yr1);
-     CircleIntersect(x2,y2,r,x,y,xr2,yr2);
+     CircleIntersect(x1,y1,r,x2,y2,xr1,yr1);
+     CircleIntersect(x2,y2,r,x1,y1,xr2,yr2);
      Image1.Canvas.Line(xr1,yr1,xr2,yr2);
-     image1.Canvas.Ellipse(x-r,y-r,x+r,y+r);
-     Image1.Canvas.Pen.Color:=clFuchsia;
+     image1.Canvas.Ellipse(x1-r,y1-r,x1+r,y1+r);
+     Image1.Canvas.Pen.Color:=clPurple;
      image1.Canvas.Ellipse(x2-r,y2-r,x2+r,y2+r);
   end;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin

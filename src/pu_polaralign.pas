@@ -86,7 +86,7 @@ type
     FonShowMessage: TNotifyMsg;
     FonClose: TNotifyEvent;
     Fx, Fy: array[1..3] of double;
-    FSidtimStart: double;
+    FSidtimStart,Fac,Fdc: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
     Fstartx,Fstarty,Fendx,Fendy:double;
     procedure msg(txt:string; level: integer);
@@ -94,8 +94,8 @@ type
     procedure AbortAlignment;
     procedure DoStart(Data: PtrInt);
     procedure DoCompute(Data: PtrInt);
-    procedure Proj(ar, de: double; out X, Y: double);
-    procedure InvProj(x, y: double; out ar, de: double);
+    procedure Proj(ar, de, ac, dc: double; out X, Y: double);
+    procedure InvProj(xx, yy, ac, dc: double; out ar, de: double);
     procedure TakeExposure;
     procedure Solve(step: integer);
     procedure Rotate;
@@ -309,7 +309,12 @@ begin
   if FInProgress then exit;
   // Start the measurement
   FInProgress:=true;
+
+  //projection center on the pole
   FSidtimStart:=CurrentSidTim;
+  Fdc:=sgn(ObsLatitude)*(pid2-secarc); // very near the pole
+  Fac:=rmod(FSidtimStart+pi2+pi,pi2);  // inferior meridian
+
   CancelAutofocus:=false;
   memo1.Clear;
   BtnContinue.Visible:=false;
@@ -363,40 +368,31 @@ if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry) then beg
 end;
 end;
 
-procedure Tf_polaralign.Proj(ar, de: double; out X, Y: double);
+procedure Tf_polaralign.Proj(ar, de, ac, dc: double; out X, Y: double);
 var
-  r, hh, ac, dc, s1, s2, s3, c1, c2, c3: extended;
+  r, hh, s1, s2, s3, c1, c2, c3: extended;
 begin
-  //Coordinates projection in plane centered on the pole
-  //X axis is parallel to the horizon at the time the procedure is started
-  // center of the projection in DEC
-  dc:=sgn(ObsLatitude)*(pid2-secarc);
-  // center of the projection in RA
-  ac:=rmod(FSidtimStart+pi,pi2);
-  hh := ar - ac;
+  hh:=ac-ar;
   sincos(dc, s1, c1);
   sincos(de, s2, c2);
   sincos(hh, s3, c3);
-  r := s1 * s2 + c2 * c1 * c3;     // cos the
-  // arc
+  r := s1 * s2 + c1 * c2 * c3;
   if r > 1 then
     r := 1;
   r := arccos(r);
   if r <> 0 then
     r := (r / sin(r));
-  x := -r * c2 * s3;
-  y := r * (s2 * c1 - c2 * s1 * c3);
+  X := r * c2 * s3;
+  Y := r * (s2 * c1 - c2 * s1 * c3);
 end;
 
-procedure Tf_polaralign.InvProj(x, y: double; out ar, de: double);
+
+procedure Tf_polaralign.InvProj(xx, yy, ac, dc: double; out ar, de: double);
 var
-  ac, dc, a, r, hh, s1, c1, s2, c2, s3, c3: extended;
+  a, r, hh, s1, c1, s2, c2, s3, c3, x, y: extended;
 begin
-  //Return ra,dec from the position in projection plane
-  // center of the projection in DEC
-  dc:=sgn(ObsLatitude)*(pid2-secarc);
-  // center of the projection in RA
-  ac:=rmod(FSidtimStart+pi,pi2);
+  x:=xx;
+  y:=-yy;
   r := (pid2 - sqrt(x * x + y * y));
   a := arctan2(x, y);
   sincos(a, s1, c1);
@@ -418,7 +414,10 @@ begin
        cra:=cra*15*deg2rad;
        cde:=cde*deg2rad;
        J2000ToApparent(cra,cde);
-       Proj(cra,cde,x,y);
+       // Coordinates projection in plane centered on the pole
+       // X axis is parallel to the horizon at the time the procedure is started
+       // X positive East, Y positive Up
+       Proj(cra,cde,Fac,Fdc,x,y);
        // store this image result
        Fx[step]:=rad2deg*x;
        Fy[step]:=rad2deg*y;
@@ -526,8 +525,8 @@ begin
   FOffsetH:=rotcenter.y-poleRefraction;
   poleoffset:=sqrt(FOffsetAz*FOffsetAz+FOffsetH*FOffsetH);
   err:=sqrt(errx*errx+erry*erry);
-  // position of rotation axis
-  InvProj(deg2rad*FOffsetAz,deg2rad*FOffsetH,rotRa,rotDec);
+  // position of rotation axis corrected for refraction
+  InvProj(deg2rad*FOffsetAz,deg2rad*FOffsetH,Fac,Fdc,rotRa,rotDec);
   rotRa:=rad2deg*rotRa/15;
   rotDec:=rad2deg*rotDec;
   // display result
@@ -539,42 +538,42 @@ begin
   Memo1.Lines.Add(DEToStrShort(poleoffset,0)+' +/- '+DEToStrShort(err,0));
   Memo1.Lines.Add('');
   Memo1.Lines.Add(rsHorizontalCo);
-  if FOffsetAz<0 then txt:=rsMoveWestBy
+  if FOffsetAz>0 then txt:=rsMoveWestBy
                  else txt:=rsMoveEastBy;
   txt:=txt+DEToStrShort(abs(FOffsetAz),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
-  if FOffsetH<0 then txt:=rsMoveUpBy
-                else txt:=rsMoveDownBy;
+  if FOffsetH>0 then txt:=rsMoveDownBy
+                else txt:=rsMoveUpBy;
   txt:=txt+DEToStrShort(abs(FOffsetH),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
-  // vector to new position
-  // From the pole
-  ra:=0;
-  de:=sgn(ObsLatitude)*(pid2-secarc);
-  ApparentToJ2000(ra,de);
-  p.ra:=rad2deg*ra;
-  p.dec:=rad2deg*de;
-  n:=cdcwcs_sky2xy(@p,0);
-  Fstartx:=p.x;
-  Fstarty:=FFits.HeaderInfo.naxis2-p.y;
-  if n=1 then begin
-    txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
-    msg(txt,1);
-    exit;
-  end;
-  // to mount axis
+  // vector to new position in camera plane
+  // From mount axis
   ra:=deg2rad*rotRa*15;
   de:=deg2rad*rotDec;
   ApparentToJ2000(ra,de);
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
   n:=cdcwcs_sky2xy(@p,0);
-  Fendx:=p.x;
-  Fendy:=FFits.HeaderInfo.naxis2-p.y;
+  Fstartx:=p.x;
+  Fstarty:=fits.HeaderInfo.naxis2-p.y;
   if n=1 then begin
     txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
+    msg(txt,1);
+    exit;
+  end;
+  // To the pole
+  ra:=0;
+  de:=sgn(ObsLatitude)*(pid2-secarc);
+  ApparentToJ2000(ra,de);
+  p.ra:=rad2deg*ra;
+  p.dec:=rad2deg*de;
+  n:=cdcwcs_sky2xy(@p,0);
+  Fendx:=p.x;
+  Fendy:=fits.HeaderInfo.naxis2-p.y;
+  if n=1 then begin
+    txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
     exit;
   end;
