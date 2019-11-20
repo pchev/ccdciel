@@ -73,6 +73,14 @@ object f_polaralign: Tf_polaralign
           Caption = 'LabelMsg1'
           ParentColor = False
         end
+        object SaveImages: TCheckBox
+          Left = 2
+          Height = 21
+          Top = 22
+          Width = 98
+          Caption = 'Save images'
+          TabOrder = 1
+        end
       end
       object MountSlewing: TRadioGroup
         Left = 0
@@ -213,7 +221,7 @@ object f_polaralign: Tf_polaralign
       ClientWidth = 340
       object ExposeList: TCheckListBox
         Left = 0
-        Height = 382
+        Height = 392
         Top = 0
         Width = 340
         Align = alClient
@@ -239,7 +247,7 @@ object f_polaralign: Tf_polaralign
       object Panel3: TPanel
         Left = 0
         Height = 54
-        Top = 382
+        Top = 392
         Width = 340
         Align = alBottom
         ClientHeight = 54

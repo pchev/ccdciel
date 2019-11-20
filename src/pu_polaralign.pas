@@ -38,6 +38,7 @@ type
     BtnCancel: TButton;
     BtnContinue: TButton;
     BtnLock: TButton;
+    SaveImages: TCheckBox;
     ExposeList: TCheckListBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -87,10 +88,11 @@ type
     FonShowMessage: TNotifyMsg;
     FonClose: TNotifyEvent;
     Fx, Fy: array[1..3] of double;
-    FSidtimStart,Fac,Fdc: double;
+    FSidtimStart,Fac,Fdc,FDateStart: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
     Fstartx,Fstarty,Fendx,Fendy:double;
     procedure msg(txt:string; level: integer);
+    procedure tracemsg(txt: string);
     procedure InitAlignment;
     procedure AbortAlignment;
     procedure DoStart(Data: PtrInt);
@@ -235,6 +237,7 @@ end;
 procedure Tf_polaralign.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   PolarAlignmentOverlay:=false;
+  tracemsg('Close polar alignment form');
   if preview.Loop then preview.BtnLoopClick(nil);
   if Assigned(FonClose) then FonClose(self);
 end;
@@ -255,6 +258,11 @@ begin
   end
   else
     CanClose:=true;
+end;
+
+procedure Tf_polaralign.tracemsg(txt: string);
+begin
+  if assigned(FonShowMessage) then FonShowMessage('PolarAlign: '+txt,9);
 end;
 
 procedure Tf_polaralign.msg(txt:string; level: integer);
@@ -311,14 +319,18 @@ begin
   if FInProgress then exit;
   // Start the measurement
   FInProgress:=true;
-
+  tracemsg('Start polar alignment. Slewing='+inttostr(MountSlewing.ItemIndex));
+  if MountSlewing.ItemIndex=0 then tracemsg('Direction='+inttostr(RotDir.ItemIndex)+' Angle='+RotAngle.Text);
   //projection center on the pole
+  FDateStart:=now;
   FSidtimStart:=CurrentSidTim;
   Fdc:=sgn(ObsLatitude)*(pid2-secarc); // very near the pole
   if ObsLatitude>=0 then
     Fac:=rmod(FSidtimStart+pi2+pi,pi2)  // inferior meridian
   else
     Fac:=rmod(FSidtimStart+pi2,pi2);  // superior meridian
+  tracemsg('Sidereal time='+FormatFloat(f6,rad2deg*FSidtimStart/15));
+  tracemsg('Projection center='+FormatFloat(f6,rad2deg*Fac/15)+'/'+FormatFloat(f6,rad2deg*fdc));
 
   CancelAutofocus:=false;
   memo1.Clear;
@@ -330,6 +342,7 @@ begin
   for i:=0 to 7 do begin
     if FTerminate then exit;
     FExposeStep:=i;
+    tracemsg('Start measurement step '+inttostr(FExposeStep));
     ExposeList.Selected[FExposeStep]:=true;
     case FExposeStep of
       0: TakeExposure;
@@ -345,6 +358,7 @@ begin
   end;
   FExposeStep:=8;
   wait(2);
+  tracemsg('Measurement complete');
   Application.QueueAsyncCall(@DoCompute,0);
 end;
 
@@ -361,6 +375,7 @@ end;
 procedure Tf_polaralign.TakeExposure;
 var exp:double;
     bin,filter: integer;
+    fn: string;
 begin
 // Start an exposure
 fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
@@ -371,10 +386,18 @@ filter:=config.GetValue('/PrecSlew/Filter',0);
 if (filter>0)and(Assigned(Fwheel)) then begin
   Fwheel.Filter:=filter;
 end;
+tracemsg('Exposure exptime='+FormatFloat(f3,exp)+' binning='+inttostr(bin)+' filter='+inttostr(filter));
 if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry) then begin
     msg(rsExposureFail,1);
     AbortAlignment;
-end;
+end
+else
+  if SaveImages.Checked then begin
+    fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+    fn:=slash(fn)+'PolarAlign_'+FormatDateTime('hhnnss',FDateStart)+'_'+inttostr(1+(FExposeStep div 3))+'.fits';
+    tracemsg('Save file '+fn);
+    Fits.SaveToFile(fn);
+  end;
 end;
 
 procedure Tf_polaralign.Proj(ar, de, ac, dc: double; out X, Y: double);
@@ -420,9 +443,12 @@ begin
   FAstrometry.SolveCurrentImage(true);
   if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
      if FAstrometry.CurrentCoord(cra,cde,eq,pa) then begin
+       tracemsg('Plate solve successful for image '+inttostr(step));
+       tracemsg('Image center J2000: RA='+FormatFloat(f6,cra)+' DEC='+FormatFloat(f6,cde)+' PA='+FormatFloat(f6,pa));
        cra:=cra*15*deg2rad;
        cde:=cde*deg2rad;
-       J2000ToApparent(cra,cde);
+       PrecessionFK5(jd2000,jdtoday,cra,cde);
+       tracemsg('Image center JNOW: RA='+FormatFloat(f6,rad2deg*cra/15)+' DEC='+FormatFloat(f6,rad2deg*cde));
        // Coordinates projection in plane centered on the pole
        // X axis is parallel to the horizon at the time the procedure is started
        // X positive East, Y positive Up
@@ -430,6 +456,7 @@ begin
        // store this image result
        Fx[step]:=rad2deg*x;
        Fy[step]:=rad2deg*y;
+       tracemsg('In projection plane: X='+FormatFloat(f6,Fx[step])+' Y='+FormatFloat(f6,Fy[step]));
        if step>1 then begin
          dx:=abs(Fx[step]-Fx[step-1]);
          dy:=abs(Fy[step]-Fy[step-1]);
@@ -440,6 +467,10 @@ begin
        end;
        // store position angle
        FCameraRotation:=pa;
+     end
+     else begin
+       msg(rsFailToResolv,1);
+       AbortAlignment;
      end;
   end
   else begin
@@ -460,18 +491,21 @@ begin
     else
       cra:=cra+RotAngle.Value/15;
     cra:=rmod(cra+24,24);
+    tracemsg('Slew mount to RA:'+FormatFloat(f6,cra)+' DEC:='+FormatFloat(f6,cde));
     if not FMount.Slew(cra,cde) then begin
       msg(rsTelescopeSle3,1);
       AbortAlignment;
     end;
   end
   else begin
+    tracemsg('Wait for manual slew');
     LabelMsg2.Caption:=rsMoveTheMount;
     BtnContinue.Visible:=True;
     while BtnContinue.Visible do begin
       Wait(2);
     end;
   end;
+  tracemsg('Slew complete');
 end;
 
 procedure Tf_polaralign.BtnContinueClick(Sender: TObject);
@@ -490,6 +524,7 @@ var bisect1, bisect2, bisect3: TLineDouble;
     rotRa, rotDec, ra, de: double;
 begin
   // Compute the polar offset from the measurement
+  tracemsg('Start computation');
   PageControl1.ActivePage:=TabSheetCompute;
   // bisector of the first and second measurement
   bisect1.origin.x:=(Fx[1]+Fx[2])/2;
@@ -524,20 +559,26 @@ begin
   rotcenter.y:=(rotcenter1.y+rotcenter2.y+rotcenter3.y)/3;
   errx:=maxvalue([abs(rotcenter.x-rotcenter1.x),abs(rotcenter.x-rotcenter2.x),abs(rotcenter.x-rotcenter3.x)]);
   erry:=maxvalue([abs(rotcenter.y-rotcenter1.y),abs(rotcenter.y-rotcenter2.y),abs(rotcenter.y-rotcenter3.y)]);
+  tracemsg('Rotation center in projection plane:  X='+FormatFloat(f6,rotcenter.x)+' Y='+FormatFloat(f6,rotcenter.y));
   // Position of pole corrected for refraction
   poleH:=deg2rad*abs(ObsLatitude);        // geometric
   Refraction(poleH,true);                 // refracted
   poleH:=rad2deg*poleH;
   poleRefraction:=poleH-abs(ObsLatitude); // correction
+  tracemsg('Observatory Latitude: '+FormatFloat(f6,ObsLatitude));
+  tracemsg('Pole refraction: '+FormatFloat(f6,poleRefraction));
   // the offset in degree
   FOffsetAz:=rotcenter.x;
   FOffsetH:=rotcenter.y-poleRefraction;
+  tracemsg('Rotation center corrected for refraction:  X='+FormatFloat(f6,FOffsetAz)+' Y='+FormatFloat(f6,FOffsetH));
   poleoffset:=sqrt(FOffsetAz*FOffsetAz+FOffsetH*FOffsetH);
   err:=sqrt(errx*errx+erry*erry);
+  tracemsg('Total polar error:  '+FormatFloat(f6,poleoffset)+' error='+FormatFloat(f6,err));
   // position of rotation axis corrected for refraction
   InvProj(deg2rad*FOffsetAz,deg2rad*FOffsetH,Fac,Fdc,rotRa,rotDec);
   rotRa:=rad2deg*rotRa/15;
   rotDec:=rad2deg*rotDec;
+  tracemsg('Rotation center JNOW coordinates:  RA='+FormatFloat(f6,rotRa)+' DEC='+FormatFloat(f6,rotDec));
   // display result
   Memo1.Lines.Add(rsComputationR);
   Memo1.Lines.Add('');
@@ -552,6 +593,7 @@ begin
   else
      txt:=rsMoveEastBy;
   txt:=txt+DEToStrShort(abs(FOffsetAz),0);
+  tracemsg(rsHorizontalCo+' '+txt);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
   if FOffsetH>0 then
@@ -559,18 +601,22 @@ begin
   else
      txt:=rsMoveUpBy;
   txt:=txt+DEToStrShort(abs(FOffsetH),0);
+  tracemsg(rsVerticalCorr+' '+txt);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
   // vector to new position in camera plane
   // From mount axis
   ra:=deg2rad*rotRa*15;
   de:=deg2rad*rotDec;
-  ApparentToJ2000(ra,de);
+  PrecessionFK5(jdtoday,jd2000,ra,de);
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
+  tracemsg('Rotation center J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
   n:=cdcwcs_sky2xy(@p,0);
+  tracemsg('Rotation center in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y)+' image height='+IntToStr(fits.HeaderInfo.naxis2));
   Fstartx:=p.x;
   Fstarty:=fits.HeaderInfo.naxis2-p.y;
+  tracemsg('Overlay start X='+FormatFloat(f6,Fstartx)+' Y='+FormatFloat(f6,Fstarty));
   if n=1 then begin
     txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
@@ -578,13 +624,16 @@ begin
   end;
   // To the pole
   ra:=0;
-  de:=sgn(ObsLatitude)*(pid2-secarc);
-  ApparentToJ2000(ra,de);
+  de:=sgn(ObsLatitude)*(pid2);
+  PrecessionFK5(jdtoday,jd2000,ra,de);
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
+  tracemsg('Pole J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
   n:=cdcwcs_sky2xy(@p,0);
+  tracemsg('Pole in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y));
   Fendx:=p.x;
   Fendy:=fits.HeaderInfo.naxis2-p.y;
+  tracemsg('Overlay end X='+FormatFloat(f6,Fendx)+' Y='+FormatFloat(f6,Fendy));
   if n=1 then begin
     txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
@@ -593,6 +642,7 @@ begin
   // line origin centered on screen
   PolarAlignmentOverlayOffsetX:=(FFits.HeaderInfo.naxis1 div 2)-Fstartx;
   PolarAlignmentOverlayOffsetY:=(FFits.HeaderInfo.naxis2 div 2)-Fstarty;
+  tracemsg('Overlay offset X='+FormatFloat(f6,PolarAlignmentOverlayOffsetX)+' Y='+FormatFloat(f6,PolarAlignmentOverlayOffsetY));
   // draw offset overlay
   PolarAlignmentOverlay:=true;
   PolarAlignmentLock:=false;
@@ -604,11 +654,14 @@ begin
   preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
   if not preview.Loop then preview.BtnLoopClick(nil);
   FInProgress:=false;
+  tracemsg('Computation complete');
 end;
 
 procedure Tf_polaralign.BtnLockClick(Sender: TObject);
 begin
   PolarAlignmentLock:=true;
+  tracemsg('Overlay locked');
+  tracemsg('Overlay offset X='+FormatFloat(f6,PolarAlignmentOverlayOffsetX)+' Y='+FormatFloat(f6,PolarAlignmentOverlayOffsetY));
 end;
 
 
