@@ -698,7 +698,7 @@ begin
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
   TabSheet11.Caption := rsCamera;
-  GroupBox1.Caption := rsCCDTemperatu;
+  GroupBox1.Caption := rsSensorTemperatu;
   GroupBox14.Caption := rsAutomaticCoo;
   CameraAutoCool.Caption := rsCoolDownWhen;
   TemperatureScale.Caption:=rsTemperatureS;

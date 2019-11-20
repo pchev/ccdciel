@@ -1756,7 +1756,7 @@ begin
    MenuViewFilters.Caption := rsFilters;
    MenuViewFrame.Caption := rsFrame;
    MenuViewRotator.Caption := rsRotator;
-   MenuViewCCDtemp.Caption := rsCCDTemperatu;
+   MenuViewCCDtemp.Caption := rsSensorTemperatu;
    MenuViewMount.Caption := rsTelescopeMou;
    MenuViewDome.Caption := rsDome;
    MenuViewSequence.Caption := rsSequence;
@@ -1806,7 +1806,7 @@ begin
    MenuFrameReset.Caption := rsReset;
    MenuRotator.Caption := rsRotator;
    MenuRotatorRotate.Caption := rsRotate;
-   MenuCCDtemp.Caption := rsCCDTemperatu;
+   MenuCCDtemp.Caption := rsSensorTemperatu;
    MenuCCDtempSet.Caption := rsSet;
    MenuMount.Caption := rsTelescopeMou;
    MenuMountPark.Caption := rsPark;
@@ -1876,7 +1876,7 @@ begin
    FilenameName[1]:=rsFilter;
    FilenameName[2]:=rsExposureTime2;
    FilenameName[3]:=rsBinning;
-   FilenameName[4]:=rsCCDTemperatu;
+   FilenameName[4]:=rsSensorTemperatu;
    FilenameName[5]:=rsDateUTSequen;
    FilenameName[6]:=rsGain;
    TBConnect.Hint := rsConnect;
@@ -3251,13 +3251,13 @@ begin
   if TemperatureScale<>i then begin
     if TemperatureScale=0 then begin
        TempLabel:='C';
-       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+TempLabel;
+       f_ccdtemp.Title.Caption:=rsSensorTemperatu+blank+TempLabel;
        f_ccdtemp.Setpoint.Value:=TempCelsius(1,f_ccdtemp.Setpoint.Value);
        f_focuser.lblTemp.Caption:=TempLabel;
     end
     else begin
        TempLabel:='F';
-       f_ccdtemp.Title.Caption:=rsCCDTemperatu+blank+TempLabel;
+       f_ccdtemp.Title.Caption:=rsSensorTemperatu+blank+TempLabel;
        f_ccdtemp.Setpoint.Value:=TempDisplay(1,f_ccdtemp.Setpoint.Value);
        f_focuser.lblTemp.Caption:=TempLabel;
     end;
@@ -3923,7 +3923,7 @@ procedure Tf_main.ShowTemperatureRange;
 var buf: string;
 begin
   if camera.Temperature=NullCoord then f_ccdtemp.Visible:=False;
-  f_ccdtemp.Current.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,camera.Temperature));
+  f_ccdtemp.Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,camera.Temperature));
   buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+'...'+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
   f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;
 end;
@@ -4783,7 +4783,7 @@ end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
- f_ccdtemp.Current.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,t));
+ f_ccdtemp.Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,t));
  if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:=rsCancel else f_ccdtemp.BtnSet.Caption:=rsSet;
 end;
 
@@ -5548,16 +5548,16 @@ end;
 
 Procedure Tf_main.MountCoordChange(Sender: TObject);
 begin
- f_mount.RA.Text:=RAToStr(mount.RA);
- f_mount.DE.Text:=DEToStr(mount.Dec);
+ f_mount.RA.Caption:=RAToStr(mount.RA);
+ f_mount.DE.Caption:=DEToStr(mount.Dec);
 end;
 
 Procedure Tf_main.MountPiersideChange(Sender: TObject);
 begin
   case mount.PierSide of
-    pierEast: f_mount.Pierside.Text:=rsEastPointing;
-    pierWest: f_mount.Pierside.Text:=rsWestPointing;
-    pierUnknown: f_mount.Pierside.Text:=rsUnknowPierSi;
+    pierEast: f_mount.Pierside.Caption:=rsEastPointing;
+    pierWest: f_mount.Pierside.Caption:=rsWestPointing;
+    pierUnknown: f_mount.Pierside.Caption:=rsUnknowPierSi;
   end;
 end;
 
@@ -11472,9 +11472,9 @@ begin
        if mount.Tracking then result:=result+', '+rsTracking
           else result:=result+', <font color="red">'+rsNotTracking+'</font>';
        result:=result+', ';
-       result:=result+rsRA+': '+f_mount.RA.Text+' ';
-       result:=result+rsDec+': '+f_mount.DE.Text+'<br>';
-       result:=result+f_mount.Pierside.Text+', '+rsMeridianIn+' '+f_mount.TimeToMeridian.Text+' '+rsMinutes;
+       result:=result+rsRA+': '+f_mount.RA.Caption+' ';
+       result:=result+rsDec+': '+f_mount.DE.Caption+'<br>';
+       result:=result+f_mount.Pierside.Caption+', '+rsMeridianIn+' '+f_mount.TimeToMeridian.Caption+' '+rsMinutes;
        result:=result+'<br>';
      end;
      result:=result+'</td></tr>';
@@ -11484,7 +11484,7 @@ begin
      result:=result+rsBinning+': '+inttostr(camera.BinX)+'x'+inttostr(camera.BinY)+', ';
      camera.GetFrame(frx,fry,frw,frh);
      result:=result+rsFrame+': X='+inttostr(frx)+' Y='+inttostr(fry)+' '+rsWidth+'='+inttostr(frw)+' '+rsHeight+'='+inttostr(frh)+'<br>';
-     result:=result+rsCCDTemperatu+': '+f_ccdtemp.Current.Text+', '+rsCooler+'='+BoolToStr(f_ccdtemp.CCDcooler.Checked, rsOn, '<font color="red">'+rsOff+'</font>')+'<br>';
+     result:=result+rsSensorTemperatu+': '+f_ccdtemp.Current.Caption+', '+rsCooler+'='+BoolToStr(f_ccdtemp.CCDcooler.Checked, rsOn, '<font color="red">'+rsOff+'</font>')+'<br>';
      result:=result+'</td></tr>';
    end;
    if wheel.Status=devConnected then begin

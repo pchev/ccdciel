@@ -59,7 +59,7 @@ resourcestring
   rsFilters = 'Filters';
   rsFrame = 'Frame';
   rsRotator = 'Rotator';
-  rsCCDTemperatu = 'CCD temperature';
+  rsSensorTemperatu = 'Sensor temperature';
   rsTelescopeMou = 'Telescope mount';
   rsSequence = 'Sequence';
   rsVideo = 'Video';

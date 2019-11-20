@@ -35,7 +35,7 @@ type
   Tf_ccdtemp = class(TFrame)
     BtnSet: TButton;
     CCDcooler: TCheckBox;
-    Current: TEdit;
+    Current: TLabel;
     Setpoint: TFloatSpinEditEx;
     Label1: TLabel;
     Label2: TLabel;
@@ -83,7 +83,7 @@ end;
 
 procedure Tf_ccdtemp.SetLang;
 begin
-  Title.Caption:=rsCCDTemperatu+' C';
+  Title.Caption:=rsSensorTemperatu+' C';
   Label1.Caption:=rsCurrent;
   CCDcooler.Caption:=rsCooler;
   Label2.Caption:=rsSetpoint;

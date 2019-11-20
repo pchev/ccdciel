@@ -47,17 +47,6 @@ object f_ccdtemp: Tf_ccdtemp
       ClientWidth = 188
       ParentFont = False
       TabOrder = 0
-      object Current: TEdit
-        Left = 60
-        Height = 26
-        Top = 0
-        Width = 44
-        AutoSize = False
-        Constraints.MaxHeight = 28
-        ParentFont = False
-        ReadOnly = True
-        TabOrder = 0
-      end
       object Label1: TLabel
         Left = 2
         Height = 19
@@ -75,7 +64,17 @@ object f_ccdtemp: Tf_ccdtemp
         Caption = 'Cooler'
         OnClick = CCDcoolerChange
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
+      end
+      object Current: TLabel
+        Left = 60
+        Height = 19
+        Top = 4
+        Width = 20
+        Caption = '0.0'
+        Constraints.MaxHeight = 28
+        ParentColor = False
+        ParentFont = False
       end
     end
     object Panel3: TPanel

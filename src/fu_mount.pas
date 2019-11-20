@@ -34,21 +34,21 @@ type
 
   Tf_mount = class(TFrame)
     BtnGoto: TButton;
+    DE: TLabel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
-    Pierside: TEdit;
     Label4: TLabel;
     btnTrack: TSpeedButton;
     BtnPark: TSpeedButton;
-    TimeToMeridian: TEdit;
+    Pierside: TLabel;
+    RA: TLabel;
     Label1: TLabel;
     Label2: TLabel;
     LabelMeridian: TLabel;
-    RA: TEdit;
-    DE: TEdit;
     Panel1: TPanel;
+    TimeToMeridian: TLabel;
     Title: TLabel;
     procedure BtnGotoClick(Sender: TObject);
     procedure BtnParkClick(Sender: TObject);
