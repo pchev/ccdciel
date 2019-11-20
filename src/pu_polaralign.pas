@@ -313,7 +313,10 @@ begin
   //projection center on the pole
   FSidtimStart:=CurrentSidTim;
   Fdc:=sgn(ObsLatitude)*(pid2-secarc); // very near the pole
-  Fac:=rmod(FSidtimStart+pi2+pi,pi2);  // inferior meridian
+  if ObsLatitude>=0 then
+    Fac:=rmod(FSidtimStart+pi2+pi,pi2)  // inferior meridian
+  else
+    Fac:=rmod(FSidtimStart+pi2,pi2);  // superior meridian
 
   CancelAutofocus:=false;
   memo1.Clear;
@@ -538,13 +541,17 @@ begin
   Memo1.Lines.Add(DEToStrShort(poleoffset,0)+' +/- '+DEToStrShort(err,0));
   Memo1.Lines.Add('');
   Memo1.Lines.Add(rsHorizontalCo);
-  if FOffsetAz>0 then txt:=rsMoveWestBy
-                 else txt:=rsMoveEastBy;
+  if FOffsetAz*sgn(ObsLatitude)>0 then
+     txt:=rsMoveWestBy
+  else
+     txt:=rsMoveEastBy;
   txt:=txt+DEToStrShort(abs(FOffsetAz),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
-  if FOffsetH>0 then txt:=rsMoveDownBy
-                else txt:=rsMoveUpBy;
+  if FOffsetH>0 then
+     txt:=rsMoveDownBy
+  else
+     txt:=rsMoveUpBy;
   txt:=txt+DEToStrShort(abs(FOffsetH),0);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
