@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, fu_visu, indiapi,
+uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_wheel, fu_visu, indiapi,
   math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, Spin;
 
 type
@@ -78,6 +78,7 @@ type
     FFits: TFits;
     Fpreview: Tf_preview;
     Fvisu: Tf_visu;
+    Fwheel: T_wheel;
     FAstrometry: TAstrometry;
     FMount: T_mount;
     FExposeStep:Integer;
@@ -104,6 +105,7 @@ type
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
     property Visu: Tf_visu read Fvisu write Fvisu;
+    property Wheel: T_wheel read Fwheel write Fwheel;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property Mount: T_mount read Fmount write Fmount;
     property OffsetH: double read FOffsetH;
@@ -358,13 +360,17 @@ end;
 
 procedure Tf_polaralign.TakeExposure;
 var exp:double;
-    bin: integer;
+    bin,filter: integer;
 begin
 // Start an exposure
 fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
 fits.DarkOn:=true;
 exp:=config.GetValue('/PrecSlew/Exposure',10.0);
 bin:=config.GetValue('/PrecSlew/Binning',1);
+filter:=config.GetValue('/PrecSlew/Filter',0);
+if (filter>0)and(Assigned(Fwheel)) then begin
+  Fwheel.Filter:=filter;
+end;
 if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry) then begin
     msg(rsExposureFail,1);
     AbortAlignment;

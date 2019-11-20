@@ -8405,6 +8405,7 @@ begin
   end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
+  f_polaralign.Wheel:=wheel;
   pt.x:=0;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
