@@ -324,6 +324,7 @@ begin
   //projection center on the pole
   FDateStart:=now;
   FSidtimStart:=CurrentSidTim;
+
   Fdc:=sgn(ObsLatitude)*(pid2-secarc); // very near the pole
   if ObsLatitude>=0 then
     Fac:=rmod(FSidtimStart+pi2+pi,pi2)  // inferior meridian
@@ -569,7 +570,7 @@ begin
   tracemsg('Pole refraction: '+FormatFloat(f6,poleRefraction));
   // the offset in degree
   FOffsetAz:=rotcenter.x;
-  FOffsetH:=rotcenter.y-poleRefraction;
+  FOffsetH:=rotcenter.y+poleRefraction;
   tracemsg('Rotation center corrected for refraction:  X='+FormatFloat(f6,FOffsetAz)+' Y='+FormatFloat(f6,FOffsetH));
   poleoffset:=sqrt(FOffsetAz*FOffsetAz+FOffsetH*FOffsetH);
   err:=sqrt(errx*errx+erry*erry);
@@ -605,24 +606,7 @@ begin
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
   // vector to new position in camera plane
-  // From mount axis
-  ra:=deg2rad*rotRa*15;
-  de:=deg2rad*rotDec;
-  PrecessionFK5(jdtoday,jd2000,ra,de);
-  p.ra:=rad2deg*ra;
-  p.dec:=rad2deg*de;
-  tracemsg('Rotation center J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
-  n:=cdcwcs_sky2xy(@p,0);
-  tracemsg('Rotation center in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y)+' image height='+IntToStr(fits.HeaderInfo.naxis2));
-  Fstartx:=p.x;
-  Fstarty:=fits.HeaderInfo.naxis2-p.y;
-  tracemsg('Overlay start X='+FormatFloat(f6,Fstartx)+' Y='+FormatFloat(f6,Fstarty));
-  if n=1 then begin
-    txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
-    msg(txt,1);
-    exit;
-  end;
-  // To the pole
+  // From the pole
   ra:=0;
   de:=sgn(ObsLatitude)*(pid2);
   PrecessionFK5(jdtoday,jd2000,ra,de);
@@ -631,11 +615,28 @@ begin
   tracemsg('Pole J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
   n:=cdcwcs_sky2xy(@p,0);
   tracemsg('Pole in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y));
-  Fendx:=p.x;
-  Fendy:=fits.HeaderInfo.naxis2-p.y;
+  Fstartx:=p.x;
+  Fstarty:=fits.HeaderInfo.naxis2-p.y;
   tracemsg('Overlay end X='+FormatFloat(f6,Fendx)+' Y='+FormatFloat(f6,Fendy));
   if n=1 then begin
     txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
+    msg(txt,1);
+    exit;
+  end;
+  // To mount axis
+  ra:=deg2rad*rotRa*15;
+  de:=deg2rad*rotDec;
+  PrecessionFK5(jdtoday,jd2000,ra,de);
+  p.ra:=rad2deg*ra;
+  p.dec:=rad2deg*de;
+  tracemsg('Rotation center J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
+  n:=cdcwcs_sky2xy(@p,0);
+  tracemsg('Rotation center in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y)+' image height='+IntToStr(fits.HeaderInfo.naxis2));
+  Fendx:=p.x;
+  Fendy:=fits.HeaderInfo.naxis2-p.y;
+  tracemsg('Overlay start X='+FormatFloat(f6,Fstartx)+' Y='+FormatFloat(f6,Fstarty));
+  if n=1 then begin
+    txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
     exit;
   end;
