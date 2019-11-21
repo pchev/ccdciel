@@ -1125,7 +1125,7 @@ begin
   MsgHandle:=handle;
   meridianflipping:=false;
   TemperatureScale:=0;
-  TempLabel:='C';
+  TempLabel:=sdeg+'C';
   TemperatureSlope:=0;
   learningvcurve:=false;
   autofocusing:=false;
@@ -3250,13 +3250,13 @@ begin
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
   if TemperatureScale<>i then begin
     if TemperatureScale=0 then begin
-       TempLabel:='C';
+       TempLabel:=sdeg+'C';
        f_ccdtemp.Title.Caption:=rsSensorTemperatu+blank+TempLabel;
        f_ccdtemp.Setpoint.Value:=TempCelsius(1,f_ccdtemp.Setpoint.Value);
        f_focuser.lblTemp.Caption:=TempLabel;
     end
     else begin
-       TempLabel:='F';
+       TempLabel:=sdeg+'F';
        f_ccdtemp.Title.Caption:=rsSensorTemperatu+blank+TempLabel;
        f_ccdtemp.Setpoint.Value:=TempDisplay(1,f_ccdtemp.Setpoint.Value);
        f_focuser.lblTemp.Caption:=TempLabel;

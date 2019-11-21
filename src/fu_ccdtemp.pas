@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_translation,
+uses   UScaleDPI, Dialogs, u_translation, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx;
 
 type
@@ -83,7 +83,7 @@ end;
 
 procedure Tf_ccdtemp.SetLang;
 begin
-  Title.Caption:=rsSensorTemperatu+' C';
+  Title.Caption:=rsSensorTemperatu+blank+sdeg+'C';
   Label1.Caption:=rsCurrent;
   CCDcooler.Caption:=rsCooler;
   Label2.Caption:=rsSetpoint;
