@@ -34,10 +34,10 @@ type
 
   Tf_polaralign = class(TForm)
     BtnClose: TButton;
+    BtnLock: TToggleBox;
     BtnStart: TButton;
     BtnCancel: TButton;
     BtnContinue: TButton;
-    BtnLock: TButton;
     SaveImages: TCheckBox;
     ExposeList: TCheckListBox;
     Label1: TLabel;
@@ -660,11 +660,16 @@ end;
 
 procedure Tf_polaralign.BtnLockClick(Sender: TObject);
 begin
-  PolarAlignmentLock:=true;
-  tracemsg('Overlay locked');
-  tracemsg('Overlay offset X='+FormatFloat(f6,PolarAlignmentOverlayOffsetX)+' Y='+FormatFloat(f6,PolarAlignmentOverlayOffsetY));
-end;
+  PolarAlignmentLock:=BtnLock.Checked;
+  if PolarAlignmentLock then begin
+    tracemsg('Overlay locked');
+    tracemsg('Overlay offset X='+FormatFloat(f6,PolarAlignmentOverlayOffsetX)+' Y='+FormatFloat(f6,PolarAlignmentOverlayOffsetY));
 
+  end
+  else begin
+    tracemsg('Overlay unlocked');
+  end;
+end;
 
 end.
 

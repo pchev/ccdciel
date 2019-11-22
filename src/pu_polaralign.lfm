@@ -311,7 +311,7 @@ object f_polaralign: Tf_polaralign
           Caption = 'LabelMsg3'
           ParentColor = False
         end
-        object BtnLock: TButton
+        object BtnLock: TToggleBox
           Left = 88
           Height = 25
           Top = 22
