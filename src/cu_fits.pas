@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
-  GraphType,  FPReadJPEG, LazSysUtils, u_libraw,
+  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -2475,7 +2475,6 @@ if libraw<>0 then begin  // Use libraw directly
     rmsg:=msg;
     exit;
   end;
-  rawinfo.bitmap:=nil;
   n:=GetRawInfo(rawinfo);
   if (n<>0) or (rawinfo.bitmap=nil) then begin
    exit;
@@ -2504,9 +2503,23 @@ if libraw<>0 then begin  // Use libraw directly
   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
+  if (rawinfo.version>1) then begin
+    txt:=trim(rawinfo.camera);
+    if txt<>'' then hdr.Add('CAMERA', txt ,'Camera model');
+  end;
+  if (rawinfo.version>1) and (rawinfo.focal_len>0) then hdr.Add('FOCALLEN',rawinfo.focal_len ,'Camera focal length');
+  if (rawinfo.version>1) and (rawinfo.aperture>0) then hdr.Add('F_STOP',round(10*rawinfo.aperture)/10 ,'Camera F-stop');
+  if (rawinfo.version>1) and (rawinfo.isospeed>0) then hdr.Add('ISOSPEED',rawinfo.isospeed ,'Camera ISO speed');
+  if (rawinfo.version>1) and (rawinfo.shutter>0) then hdr.Add('SHUTTER',rawinfo.shutter ,'Camera shutter');
+  if (rawinfo.version>1) and (rawinfo.timestamp>0) then hdr.Add('DATE-OBS',FormatDateTime(dateisoshort,UnixToDateTime(rawinfo.timestamp)) ,'Camera timestamp');
   hdr.Add('XBAYROFF',0,'X offset of Bayer array');
   hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
   hdr.Add('BAYERPAT',rawinfo.bayerpattern,'CFA Bayer pattern');
+  if (rawinfo.version>1) and (rawinfo.colors=3) then begin
+    hdr.Add('MULT_R',rawinfo.rmult,'R multiplier');
+    hdr.Add('MULT_G',rawinfo.gmult,'G multiplier');
+    hdr.Add('MULT_B',rawinfo.bmult,'B multiplier');
+  end;
   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
   hdr.Add('COMMENT','Converted from camera RAW by libraw','');

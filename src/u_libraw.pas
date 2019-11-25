@@ -4,7 +4,7 @@ unit u_libraw;
 
 interface
 
-uses   dynlibs, u_global, u_utils,
+uses   dynlibs, u_global,
   Classes, SysUtils;
 
 type
@@ -16,7 +16,18 @@ type
       topmargin: integer;
       leftmargin: integer;
       bayerpattern: array [0..3] of Char;
-      bitmap: pointer;
+      bitmap: pointer;                    // last element for version 1
+      version: integer;                   // start of version 2
+      camera: array [0..79] of Char;
+      timestamp: int64;
+      isospeed: integer;
+      shutter: single;
+      aperture: single;
+      focal_len: single;
+      colors: integer;
+      rmult: single;
+      gmult: single;
+      bmult: single;
     end;
     TRawBitmap = array of smallint;
     TLoadRaw = function(rawinput: Pchar; inputsize: integer):integer;  cdecl;
@@ -26,11 +37,12 @@ type
     TGetRawErrorMsg = procedure(err:integer; msg: Pchar); cdecl;
 
 Procedure Load_Libraw;
+Function GetRawInfo(out info:TRawInfo):integer;
 
 var libraw: TLibHandle;
     LoadRaw: TLoadRaw;
     CloseRaw: TCloseRaw;
-    GetRawInfo: TGetRawInfo;
+    GetRawInfoReal: TGetRawInfo;
     GetRawBitmap: TGetRawBitmap;
     GetRawErrorMsg: TGetRawErrorMsg;
     DcrawCmd: string;
@@ -63,10 +75,10 @@ begin
     DcrawCmd := '';
     LoadRaw := TLoadRaw(GetProcAddress(libraw, 'loadraw'));
     CloseRaw := TCloseRaw(GetProcAddress(libraw, 'closeraw'));
-    GetRawInfo := TGetRawInfo(GetProcAddress(libraw, 'getinfo'));
+    GetRawInfoReal := TGetRawInfo(GetProcAddress(libraw, 'getinfo'));
     GetRawErrorMsg := TGetRawErrorMsg(GetProcAddress(libraw, 'geterrormsg'));
   end;
-  if (LoadRaw=nil)or(GetRawInfo=nil)or(CloseRaw=nil) then
+  if (LoadRaw=nil)or(GetRawInfoReal=nil)or(CloseRaw=nil) then
      libraw:=0;
   except
   end;
@@ -96,6 +108,13 @@ begin
   end;
 end;
 
+Function GetRawInfo(out info:TRawInfo):integer;
+begin
+ info.bitmap:=nil;
+ info.version:=1;
+ result:=GetRawInfoReal(info);
+end;
+
 initialization
   libraw := 0;
 
@@ -103,7 +122,7 @@ finalization
   try
   LoadRaw := nil;
   CloseRaw := nil;
-  GetRawInfo := nil;
+  GetRawInfoReal := nil;
   GetRawErrorMsg := nil;
   if libraw <> 0 then FreeLibrary(libraw);
   except

@@ -19,11 +19,25 @@ struct TImgInfo
    int leftmargin;
    char bayerpattern[4];
    unsigned short *bitmap;
+   int version;
+   char camera[80];
+   time_t timestamp;
+   int isospeed;
+   float shutter;
+   float aperture;
+   float focal_len;
+   int colors;
+   float rmult;
+   float gmult;
+   float bmult;
 };
 
 LibRaw RawProcessor;
-#define S RawProcessor.imgdata.sizes
-#define P RawProcessor.imgdata.idata
+#define S  RawProcessor.imgdata.sizes
+#define P1 RawProcessor.imgdata.idata
+#define P2 RawProcessor.imgdata.other
+#define C  RawProcessor.imgdata.color
+
 
 extern "C" int loadraw(char *rawinput, int inputsize)
 {
@@ -38,7 +52,7 @@ extern "C" int loadraw(char *rawinput, int inputsize)
     }
     ret = RawProcessor.adjust_sizes_info_only();
 
-    if (!(P.filters || P.colors == 1)) 
+    if (!(P1.filters || P1.colors == 1))
     {
       return(-1);
     }
@@ -63,14 +77,31 @@ extern "C" int getinfo(TImgInfo *info)
    info->topmargin = S.top_margin;
    info->leftmargin = S.left_margin;
    info->bitmap = RawProcessor.imgdata.rawdata.raw_image;
-   if (P.filters)
+   if (P1.filters)
    {
-     if (!P.cdesc[3])
-       P.cdesc[3] = 'G';
-     info->bayerpattern[0] = P.cdesc[RawProcessor.COLOR(0, 0)];
-     info->bayerpattern[1] = P.cdesc[RawProcessor.COLOR(0, 1)];
-     info->bayerpattern[2] = P.cdesc[RawProcessor.COLOR(1, 0)];
-     info->bayerpattern[3] = P.cdesc[RawProcessor.COLOR(1, 1)];
+     if (!P1.cdesc[3])
+       P1.cdesc[3] = 'G';
+     info->bayerpattern[0] = P1.cdesc[RawProcessor.COLOR(0, 0)];
+     info->bayerpattern[1] = P1.cdesc[RawProcessor.COLOR(0, 1)];
+     info->bayerpattern[2] = P1.cdesc[RawProcessor.COLOR(1, 0)];
+     info->bayerpattern[3] = P1.cdesc[RawProcessor.COLOR(1, 1)];
+   }
+   info->version = 2;
+   snprintf(info->camera, 80, "%s %s", P1.make, P1.model);
+   info->timestamp = P2.timestamp;
+   info->isospeed = (int)P2.iso_speed;
+   info->shutter = P2.shutter;
+   info->aperture = P2.aperture;
+   info->focal_len = P2.focal_len;
+   info->colors = P1.colors;
+   if (P1.colors == 3) {
+     info->rmult = C.pre_mul[0];
+     info->gmult = C.pre_mul[1];
+     info->bmult = C.pre_mul[2];
+   } else {
+     info->rmult = 1.0;
+     info->gmult = 1.0;
+     info->bmult = 1.0;
    }
    return(0);
 }    
