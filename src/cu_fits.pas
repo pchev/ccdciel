@@ -37,6 +37,7 @@ type
             Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
             bzero,bscale,dmax,dmin,blank : double;
             bayerpattern: string;
+            rmult,gmult,bmult: double;
             equinox,ra,dec,crval1,crval2: double;
             pixsz1,pixsz2,pixratio,focallen: double;
             exptime,airmass: double;
@@ -771,7 +772,7 @@ with FFitsInfo do begin
  valid:=false; solved:=false; floatingpoint:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord; bayerpattern:='';
  objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
- focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0;
+ focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0; rmult:=0; gmult:=0; bmult:=0;
  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
@@ -801,6 +802,9 @@ with FFitsInfo do begin
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
     if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
     if (keyword='BAYERPAT') then bayerpattern:=trim(buf);
+    if (keyword='MULT_R') then rmult:=strtofloat(buf);
+    if (keyword='MULT_G') then gmult:=strtofloat(buf);
+    if (keyword='MULT_B') then bmult:=strtofloat(buf);
     if (keyword='AIRMASS') then airmass:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
     if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
