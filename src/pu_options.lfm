@@ -827,11 +827,11 @@ object f_option: Tf_option
       ParentFont = False
       object GroupBox8: TGroupBox
         Left = 8
-        Height = 104
+        Height = 148
         Top = 4
         Width = 483
         Caption = 'Color preview'
-        ClientHeight = 84
+        ClientHeight = 128
         ClientWidth = 481
         ParentFont = False
         TabOrder = 0
@@ -875,7 +875,7 @@ object f_option: Tf_option
         object RedBalance: TTrackBar
           Left = 300
           Height = 43
-          Top = 0
+          Top = 24
           Width = 100
           Max = 100
           Min = 30
@@ -890,7 +890,7 @@ object f_option: Tf_option
         object GreenBalance: TTrackBar
           Left = 300
           Height = 43
-          Top = 29
+          Top = 53
           Width = 100
           Max = 100
           Min = 30
@@ -905,7 +905,7 @@ object f_option: Tf_option
         object BlueBalance: TTrackBar
           Left = 300
           Height = 43
-          Top = 56
+          Top = 80
           Width = 100
           Max = 100
           Min = 30
@@ -920,7 +920,7 @@ object f_option: Tf_option
         object Label67: TLabel
           Left = 417
           Height = 19
-          Top = 11
+          Top = 40
           Width = 8
           Caption = 'R'
           ParentColor = False
@@ -929,7 +929,7 @@ object f_option: Tf_option
         object Label68: TLabel
           Left = 416
           Height = 19
-          Top = 40
+          Top = 69
           Width = 10
           Caption = 'G'
           ParentColor = False
@@ -938,17 +938,26 @@ object f_option: Tf_option
         object Label69: TLabel
           Left = 416
           Height = 19
-          Top = 65
+          Top = 94
           Width = 9
           Caption = 'B'
           ParentColor = False
           ParentFont = False
         end
+        object BalanceFromCamera: TCheckBox
+          Left = 300
+          Height = 21
+          Top = 8
+          Width = 151
+          Caption = 'Balance from camera'
+          OnChange = BalanceFromCameraChange
+          TabOrder = 5
+        end
       end
       object GroupBox9: TGroupBox
         Left = 8
         Height = 68
-        Top = 112
+        Top = 152
         Width = 483
         Caption = 'Reference image'
         ClientHeight = 48
@@ -957,7 +966,7 @@ object f_option: Tf_option
         TabOrder = 1
         object RefColor: TRadioGroup
           Left = 232
-          Height = 43
+          Height = 42
           Top = 4
           Width = 237
           AutoFill = True
@@ -968,7 +977,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 23
+          ClientHeight = 40
           ClientWidth = 235
           Columns = 3
           Items.Strings = (
@@ -1005,7 +1014,7 @@ object f_option: Tf_option
       object VideoGroup: TGroupBox
         Left = 8
         Height = 54
-        Top = 368
+        Top = 400
         Width = 483
         Caption = 'Video'
         ClientHeight = 34
@@ -1038,7 +1047,7 @@ object f_option: Tf_option
       object GroupBox10: TGroupBox
         Left = 8
         Height = 54
-        Top = 240
+        Top = 280
         Width = 483
         Caption = 'Bad pixels detection'
         ClientHeight = 34
@@ -1083,7 +1092,7 @@ object f_option: Tf_option
       object StackGroup: TGroupBox
         Left = 8
         Height = 64
-        Top = 296
+        Top = 336
         Width = 483
         Caption = 'Preview stacking'
         ClientHeight = 44
@@ -1104,7 +1113,7 @@ object f_option: Tf_option
       object GroupBox19: TGroupBox
         Left = 8
         Height = 56
-        Top = 184
+        Top = 224
         Width = 483
         Caption = 'Clipping indicator'
         ClientHeight = 36
@@ -1147,7 +1156,7 @@ object f_option: Tf_option
           Left = 392
           Height = 28
           Top = 0
-          Width = 84
+          Width = 88
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False

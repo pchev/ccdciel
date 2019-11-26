@@ -1735,7 +1735,7 @@ var i,j,ii,i1,i2,i3,j1,j2,j3 : integer;
 begin
 rmult:=0; gmult:=0; bmult:=0; ii:=0; i1:=0; i2:=0; i3:=0; t:=bayerRG;
 if debayer then begin
-   if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+   if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
      mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
      rmult:=FFitsInfo.rmult/mx;
      gmult:=FFitsInfo.gmult/mx;

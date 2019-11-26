@@ -1181,6 +1181,7 @@ resourcestring
   rsExposureS = 'Exposure %s';
   rsPlateSolveEx = 'Plate solve exposure %s';
   rsPolarAlignme2 = 'Polar alignment instruction';
+  rsBalanceFromC = 'Balance from camera';
 
 implementation
 
