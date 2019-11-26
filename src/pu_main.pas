@@ -1494,6 +1494,7 @@ begin
   else
     crRetic := crCross;
   Image1.Cursor:=crRetic;
+  MaxThreadCount := GetThreadCount;
   if isAdmin then NewMessage(Caption);
   NewMessage(SystemInformation,9);
   {$ifdef mswindows}

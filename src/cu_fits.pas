@@ -102,6 +102,7 @@ type
 const    maxl = 20000;
 
 type
+
   TFits = class(TComponent)
   private
     // Original Fits file
@@ -222,6 +223,37 @@ type
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
   end;
+
+  TGetBgraThread = class(TThread)
+    public
+      working: boolean;
+      num, id: integer;
+      fits: TFits;
+      bgra: TBGRABitmap;
+      HighOverflow,LowOverflow: TBGRAPixel;
+      c,overflow,underflow: double;
+      rmult,gmult,bmult,mx: double;
+      debayer: boolean;
+      t: TBayerMode;
+      FImgDmin: word;
+      procedure Execute; override;
+      constructor Create(CreateSuspended: boolean);
+    end;
+
+   TGetExpThread = class(TThread)
+    public
+      working: boolean;
+      num, id: integer;
+      fits: TFits;
+      bgra: TExpandedBitmap;
+      rmult,gmult,bmult,mx: double;
+      debayer: boolean;
+      t: TBayerMode;
+      procedure Execute; override;
+      constructor Create(CreateSuspended: boolean);
+    end;
+
+
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
   procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
@@ -587,6 +619,175 @@ begin
   FComments.Delete(idx);
 end;
 
+//////////////////// TGetBgraThread /////////////////////////
+
+constructor TGetBgraThread.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := True;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TGetBgraThread.Execute;
+var
+  i, j, startline, endline, xs,ys: integer;
+  ii,i1,i2,i3,j1,j2,j3 : integer;
+  x : word;
+  xx,xxg,xxb: extended;
+  p: PBGRAPixel;
+  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
+
+begin
+xs:= fits.Fwidth;
+ys:= fits.FHeight;
+i := ys div num;
+startline := id * i;
+if id = (num - 1) then
+  endline := ys - 1
+else
+  endline := (id + 1) * i - 1;
+// process the rows range for this thread
+for i:=startline to endline do begin
+   if debayer then begin
+     ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
+     i1:=max(i-1,0);
+     i2:=i;
+     i3:= min(i+1,ys-1);
+   end;
+   p := bgra.Scanline[i];
+   for j := 0 to xs-1 do begin
+       if fits.HeaderInfo.naxis=3 then begin
+         // 3 chanel color image
+         xx:=fits.image[0,i,j];
+         x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+         p^.red:=fits.GammaCorr(x);
+         xxg:=fits.image[1,i,j];
+         x:=round(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
+         p^.green:=fits.GammaCorr(x);
+         xxb:=fits.image[2,i,j];
+         x:=round(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
+         p^.blue:=fits.GammaCorr(x);
+         if fits.MarkOverflow then begin
+           if maxvalue([xx,xxg,xxb])>=overflow then
+             p^:=HighOverflow
+           else if minvalue([xx,xxg,xxb])<=underflow then
+             p^:=LowOverflow;
+         end;
+       end else begin
+         if debayer then begin
+           j1:=max(j-1,0);
+           j2:=j;
+           j3:=min(j+1,xs-1);
+           pix1:=round((fits.image[0,i1,j1]-FImgDmin) * c );
+           pix2:=round((fits.image[0,i1,j2]-FImgDmin) * c );
+           pix3:=round((fits.image[0,i1,j3]-FImgDmin) * c );
+           pix4:=round((fits.image[0,i2,j1]-FImgDmin) * c );
+           pix5:=round((fits.image[0,i2,j2]-FImgDmin) * c );
+           pix6:=round((fits.image[0,i2,j3]-FImgDmin) * c );
+           pix7:=round((fits.image[0,i3,j1]-FImgDmin) * c );
+           pix8:=round((fits.image[0,i3,j2]-FImgDmin) * c );
+           pix9:=round((fits.image[0,i3,j3]-FImgDmin) * c );
+           p^:=fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
+         end else begin
+           // B/W image
+           xx:=fits.image[0,i,j];
+           x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+           p^.red:=fits.GammaCorr(x);
+           p^.green:=p^.red;
+           p^.blue:=p^.red;
+           if fits.MarkOverflow then begin
+             if xx>=overflow then
+               p^:=HighOverflow
+             else if xx<=underflow then
+               p^:=LowOverflow;
+           end;
+         end;
+       end;
+       p^.alpha:=255;
+       inc(p);
+   end;
+end;
+working := False;
+end;
+
+//////////////////// TGetExpThread /////////////////////////
+
+constructor TGetExpThread.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := True;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TGetExpThread.Execute;
+var
+  i, j, startline, endline, xs,ys: integer;
+  ii,i1,i2,i3,j1,j2,j3 : integer;
+  x : word;
+  xx,xxg,xxb: extended;
+  p: PExpandedPixel;
+  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
+
+begin
+xs:= fits.Fwidth;
+ys:= fits.FHeight;
+i := ys div num;
+startline := id * i;
+if id = (num - 1) then
+  endline := ys - 1
+else
+  endline := (id + 1) * i - 1;
+// process the rows range for this thread
+for i:=startline to endline do begin
+   if debayer then begin
+     ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
+     i1:=max(i-1,0);
+     i2:=i;
+     i3:= min(i+1,ys-1);
+   end;
+   p := bgra.Scanline[i];
+   for j := 0 to xs-1 do begin
+       if fits.HeaderInfo.naxis=3 then begin
+         // 3 chanel color image
+         xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
+         x:=round(max(0,min(MaxWord,xx)) );
+         p^.red:=x;
+         xxg:=fits.imageMin+fits.image[1,i,j]/fits.imageC;
+         x:=round(max(0,min(MaxWord,xxg)) );
+         p^.green:=x;
+         xxb:=fits.imageMin+fits.image[2,i,j]/fits.imageC;
+         x:=round(max(0,min(MaxWord,xxb)) );
+         p^.blue:=x;
+       end else begin
+         if debayer then begin
+           j1:=max(j-1,0);
+           j2:=j;
+           j3:=min(j+1,xs-1);
+           pix1:=round(fits.imageMin+fits.image[0,i1,j1]/fits.imageC);
+           pix2:=round(fits.imageMin+fits.image[0,i1,j2]/fits.imageC);
+           pix3:=round(fits.imageMin+fits.image[0,i1,j3]/fits.imageC);
+           pix4:=round(fits.imageMin+fits.image[0,i2,j1]/fits.imageC);
+           pix5:=round(fits.imageMin+fits.image[0,i2,j2]/fits.imageC);
+           pix6:=round(fits.imageMin+fits.image[0,i2,j3]/fits.imageC);
+           pix7:=round(fits.imageMin+fits.image[0,i3,j1]/fits.imageC);
+           pix8:=round(fits.imageMin+fits.image[0,i3,j2]/fits.imageC);
+           pix9:=round(fits.imageMin+fits.image[0,i3,j3]/fits.imageC);
+           p^:=fits.BayerInterpolationExp(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
+         end else begin
+           // B/W image
+           xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
+           x:=round(max(0,min(MaxWord,xx)));
+           p^.red:=x;
+           p^.green:=x;
+           p^.blue:=x;
+         end;
+       end;
+       p^.alpha:=65535;
+       inc(p);
+   end;
+end;
+working := False;
+end;
 
 //////////////////// TFits /////////////////////////
 
@@ -1639,15 +1840,16 @@ begin
 end;
 
 procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
-var i,j,ii,i1,i2,i3,j1,j2,j3 : integer;
-    x : word;
-    xx,xxg,xxb: Extended;
-    p: PExpandedPixel;
-    pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
+// get linear 16bit bitmap
+var i: integer;
     rmult,gmult,bmult,mx: double;
     t:TBayerMode;
+    working, timingout: boolean;
+    timelimit: TDateTime;
+    thread: array[0..15] of TGetExpThread;
+    tc,timeout: integer;
 begin
-rmult:=0; gmult:=0; bmult:=0; ii:=0; i1:=0; i2:=0; i3:=0; t:=bayerRG;
+rmult:=0; gmult:=0; bmult:=0; t:=bayerRG;
 if debayer then begin
   if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
      mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
@@ -1662,55 +1864,107 @@ if debayer then begin
   t:=BayerMode;
 end;
 bgra.SetSize(Fwidth,Fheight);
-for i:=0 to Fheight-1 do begin
-   if debayer then begin
-     ii:=Fheight-1-i; // image is flipped in fits, count color order from the bottom
-     i1:=max(i-1,0);
-     i2:=i;
-     i3:= min(i+1,Fheight-1);
-   end;
-   p := bgra.Scanline[i];
-   for j := 0 to Fwidth-1 do begin
-       if n_axis=3 then begin
-         // 3 chanel color image
-         xx:=FimageMin+Fimage[0,i,j]/FimageC;
-         x:=round(max(0,min(MaxWord,xx)) );
-         p^.red:=x;
-         xxg:=Fimage[1,i,j];
-         x:=round(max(0,min(MaxWord,xxg)) );
-         p^.green:=x;
-         xxb:=Fimage[2,i,j];
-         x:=round(max(0,min(MaxWord,xxb)) );
-         p^.blue:=x;
-       end else begin
-         if debayer then begin
-           j1:=max(j-1,0);
-           j2:=j;
-           j3:=min(j+1,Fwidth-1);
-           pix1:=round(FimageMin+Fimage[0,i1,j1]/FimageC);
-           pix2:=round(FimageMin+Fimage[0,i1,j2]/FimageC);
-           pix3:=round(FimageMin+Fimage[0,i1,j3]/FimageC);
-           pix4:=round(FimageMin+Fimage[0,i2,j1]/FimageC);
-           pix5:=round(FimageMin+Fimage[0,i2,j2]/FimageC);
-           pix6:=round(FimageMin+Fimage[0,i2,j3]/FimageC);
-           pix7:=round(FimageMin+Fimage[0,i3,j1]/FimageC);
-           pix8:=round(FimageMin+Fimage[0,i3,j2]/FimageC);
-           pix9:=round(FimageMin+Fimage[0,i3,j3]/FimageC);
-           p^:=BayerInterpolationExp(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
-         end else begin
-           // B/W image
-           xx:=FimageMin+Fimage[0,i,j]/FimageC;
-           x:=round(max(0,min(MaxWord,xx)));
-           p^.red:=x;
-           p^.green:=x;
-           p^.blue:=x;
-         end;
-       end;
-       p^.alpha:=65535;
-       inc(p);
-   end;
+// number of thread
+ tc := max(1,min(16, MaxThreadCount)); // based on number of core
+ tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
+// start thread
+for i := 0 to tc - 1 do
+begin
+  thread[i] := TGetExpThread.Create(True);
+  thread[i].fits := self;
+  thread[i].num := tc;
+  thread[i].id := i;
+  thread[i].debayer := debayer;
+  thread[i].rmult := rmult;
+  thread[i].gmult := gmult;
+  thread[i].bmult := bmult;
+  thread[i].t := t;
+  thread[i].bgra := bgra;
+  thread[i].Start;
 end;
+// wait complete
+timeout:=60;
+timelimit := now + timeout / secperday;
+repeat
+  sleep(100);
+  working := False;
+  for i := 0 to tc - 1 do
+    working := working or thread[i].working;
+  timingout := (now > timelimit);
+until (not working) or timingout;
+// refresh image
 bgra.InvalidateBitmap;
+end;
+
+procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+// get stretched 8bit bitmap
+var i : integer;
+    HighOverflow,LowOverflow: TBGRAPixel;
+    c,overflow,underflow: double;
+    rmult,gmult,bmult,mx: double;
+    t: TBayerMode;
+    working, timingout: boolean;
+    timelimit: TDateTime;
+    thread: array[0..15] of TGetBgraThread;
+    tc,timeout: integer;
+begin
+  rmult:=0; gmult:=0; bmult:=0; t:=bayerRG;
+  if debayer then begin
+     if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+       mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
+       rmult:=FFitsInfo.rmult/mx;
+       gmult:=FFitsInfo.gmult/mx;
+       bmult:=FFitsInfo.bmult/mx;
+     end else begin
+       rmult:=RedBalance;
+       gmult:=GreenBalance;
+       bmult:=BlueBalance;
+     end;
+     t:=BayerMode;
+  end;
+  HighOverflow:=ColorToBGRA(clFuchsia);
+  LowOverflow:=ColorToBGRA(clYellow);
+  overflow:=(FOverflow-FimageMin)*FimageC;
+  underflow:=(FUnderflow-FimageMin)*FimageC;
+  bgra.SetSize(Fwidth,Fheight);
+  if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
+  c:=MaxWord/(FImgDmax-FImgDmin);
+  // number of thread
+   tc := max(1,min(16, MaxThreadCount)); // based on number of core
+   tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
+  // start thread
+  for i := 0 to tc - 1 do
+  begin
+    thread[i] := TGetBgraThread.Create(True);
+    thread[i].fits := self;
+    thread[i].num := tc;
+    thread[i].id := i;
+    thread[i].debayer := debayer;
+    thread[i].rmult := rmult;
+    thread[i].gmult := gmult;
+    thread[i].bmult := bmult;
+    thread[i].t := t;
+    thread[i].HighOverflow := HighOverflow;
+    thread[i].LowOverflow := LowOverflow;
+    thread[i].overflow := overflow;
+    thread[i].underflow := underflow;
+    thread[i].bgra := bgra;
+    thread[i].FImgDmin := FImgDmin;
+    thread[i].c := c;
+    thread[i].Start;
+  end;
+  // wait complete
+  timeout:=60;
+  timelimit := now + timeout / secperday;
+  repeat
+    sleep(100);
+    working := False;
+    for i := 0 to tc - 1 do
+      working := working or thread[i].working;
+    timingout := (now > timelimit);
+  until (not working) or timingout;
+  // refresh image
+  bgra.InvalidateBitmap;
 end;
 
 procedure TFits.SaveToBitmap(fn: string);
@@ -1733,101 +1987,6 @@ begin
     bgra.SaveToFile(fn);
     bgra.Free;
   end;
-end;
-
-procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
-var i,j,ii,i1,i2,i3,j1,j2,j3 : integer;
-    x : word;
-    xx,xxg,xxb: extended;
-    c,overflow,underflow: double;
-    p: PBGRAPixel;
-    HighOverflow,LowOverflow: TBGRAPixel;
-    pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
-    rmult,gmult,bmult,mx: double;
-    t: TBayerMode;
-begin
-rmult:=0; gmult:=0; bmult:=0; ii:=0; i1:=0; i2:=0; i3:=0; t:=bayerRG;
-if debayer then begin
-   if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-     mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
-     rmult:=FFitsInfo.rmult/mx;
-     gmult:=FFitsInfo.gmult/mx;
-     bmult:=FFitsInfo.bmult/mx;
-   end else begin
-     rmult:=RedBalance;
-     gmult:=GreenBalance;
-     bmult:=BlueBalance;
-   end;
-   t:=BayerMode;
-end;
-HighOverflow:=ColorToBGRA(clFuchsia);
-LowOverflow:=ColorToBGRA(clYellow);
-overflow:=(FOverflow-FimageMin)*FimageC;
-underflow:=(FUnderflow-FimageMin)*FimageC;
-bgra.SetSize(Fwidth,Fheight);
-if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
-c:=MaxWord/(FImgDmax-FImgDmin);
-for i:=0 to Fheight-1 do begin
-   if debayer then begin
-     ii:=Fheight-1-i; // image is flipped in fits, count color order from the bottom
-     i1:=max(i-1,0);
-     i2:=i;
-     i3:= min(i+1,Fheight-1);
-   end;
-   p := bgra.Scanline[i];
-   for j := 0 to Fwidth-1 do begin
-       if n_axis=3 then begin
-         // 3 chanel color image
-         xx:=Fimage[0,i,j];
-         x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
-         p^.red:=GammaCorr(x);
-         xxg:=Fimage[1,i,j];
-         x:=round(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
-         p^.green:=GammaCorr(x);
-         xxb:=Fimage[2,i,j];
-         x:=round(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
-         p^.blue:=GammaCorr(x);
-         if FMarkOverflow then begin
-           if maxvalue([xx,xxg,xxb])>=overflow then
-             p^:=HighOverflow
-           else if minvalue([xx,xxg,xxb])<=underflow then
-             p^:=LowOverflow;
-         end;
-       end else begin
-         if debayer then begin
-           j1:=max(j-1,0);
-           j2:=j;
-           j3:=min(j+1,Fwidth-1);
-           pix1:=round((Fimage[0,i1,j1]-FImgDmin) * c );
-           pix2:=round((Fimage[0,i1,j2]-FImgDmin) * c );
-           pix3:=round((Fimage[0,i1,j3]-FImgDmin) * c );
-           pix4:=round((Fimage[0,i2,j1]-FImgDmin) * c );
-           pix5:=round((Fimage[0,i2,j2]-FImgDmin) * c );
-           pix6:=round((Fimage[0,i2,j3]-FImgDmin) * c );
-           pix7:=round((Fimage[0,i3,j1]-FImgDmin) * c );
-           pix8:=round((Fimage[0,i3,j2]-FImgDmin) * c );
-           pix9:=round((Fimage[0,i3,j3]-FImgDmin) * c );
-           p^:=BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
-         end else begin
-           // B/W image
-           xx:=Fimage[0,i,j];
-           x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
-           p^.red:=GammaCorr(x);
-           p^.green:=p^.red;
-           p^.blue:=p^.red;
-           if FMarkOverflow then begin
-             if xx>=overflow then
-               p^:=HighOverflow
-             else if xx<=underflow then
-               p^:=LowOverflow;
-           end;
-         end;
-       end;
-       p^.alpha:=255;
-       inc(p);
-   end;
-end;
-bgra.InvalidateBitmap;
 end;
 
 procedure TFits.ClearImage;

@@ -31,7 +31,7 @@ uses u_global,
      {$ifdef unix}
        unix,baseunix,
      {$endif}
-     process, Classes, LCLType, FileUtil, ComCtrls,
+     process, Classes, LCLType, FileUtil, ComCtrls, MTPCPU,
      Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
 function InvertF32(X : LongWord) : Single;
@@ -149,6 +149,7 @@ function IndiVersion: string;
 function AstrometryVersion(resolver:integer; cygwinpath,cmdpath:string; usescript:boolean):string;
 function TempDisplay(cf:integer; t:double):double;
 function TempCelsius(cf:integer; t:double):double;
+function GetThreadCount: integer;
 
 
 implementation
@@ -3047,6 +3048,11 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
 end;
 except
 end;
+end;
+
+function GetThreadCount: integer;
+begin
+  Result := GetSystemThreadCount;
 end;
 
 end.

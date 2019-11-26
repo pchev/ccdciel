@@ -423,6 +423,7 @@ var
   WeatherRestartDelay: integer;
   MeasureNewImage,SaveBitmap: boolean;
   SaveBitmapFormat:integer;
+  MaxThreadCount: integer;
   PauseSequence: boolean;
   DummyDouble: double;
   DummyBool: boolean;
