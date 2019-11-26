@@ -96,6 +96,8 @@ type
     FRedrawHistogram: TNotifyEvent;
     FShowHistogramPos: TNotifyStr;
     procedure SetZoom(value: double);
+    procedure SetFlipHorz(value:boolean);
+    procedure SetFlipVert(value:boolean);
     procedure SetLang;
   public
     { public declarations }
@@ -108,8 +110,8 @@ type
     property BullsEye: boolean read FBullsEye;
     property Clipping: boolean read FClipping;
     property Invert: boolean read FInvert;
-    property FlipHorz: boolean read FFlipHorz;
-    property FlipVert: boolean read FFlipVert;
+    property FlipHorz: boolean read FFlipHorz write SetFlipHorz;
+    property FlipVert: boolean read FFlipVert write SetFlipVert;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
@@ -423,6 +425,18 @@ procedure Tf_visu.BtnClippingClick(Sender: TObject);
 begin
   FClipping:=BtnClipping.Down;
   TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.SetFlipHorz(value:boolean);
+begin
+  FFlipHorz:=value;
+  BtnFlipHorz.Down:=value;
+end;
+
+procedure Tf_visu.SetFlipVert(value:boolean);
+begin
+  FFlipVert:=value;
+  BtnFlipVert.Down:=value;
 end;
 
 procedure Tf_visu.BtnFlipHorzClick(Sender: TObject);

@@ -1459,6 +1459,8 @@ begin
   f_visu.hist2.Down:=config.GetValue('/Visu/Hist2',false);
   f_visu.hist3.Down:=config.GetValue('/Visu/Hist3',false);
   f_visu.hist4.Down:=config.GetValue('/Visu/Hist4',false);
+  f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
+  f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
   f_visu.histminmax.AllowAllUp:=false;
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
@@ -3611,6 +3613,8 @@ begin
    config.SetValue('/Visu/Hist2',f_visu.hist2.Down);
    config.SetValue('/Visu/Hist3',f_visu.hist3.Down);
    config.SetValue('/Visu/Hist4',f_visu.hist4.Down);
+   config.SetValue('/Visu/FlipHorz',f_visu.FlipHorz);
+   config.SetValue('/Visu/FlipVert',f_visu.FlipVert);
 
    n:=FilterList.Count-1;
    config.SetValue('/Filters/Num',n);
