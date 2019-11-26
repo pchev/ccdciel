@@ -1073,8 +1073,10 @@ else begin
   cur_axis:=trunc(min(cur_axis,FFitsInfo.naxis3));
   cur_axis:=trunc(max(cur_axis,1));
 end;
-Fheight:=trunc(min(maxl,FFitsInfo.naxis2));
-Fwidth:=trunc(min(maxl,FFitsInfo.naxis1));
+if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
+  raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
+Fheight:=FFitsInfo.naxis2;
+Fwidth :=FFitsInfo.naxis1;
 FStream.Position:=0;
 case FFitsInfo.bitpix of
   -64 : begin
@@ -1113,7 +1115,7 @@ case FFitsInfo.bitpix of
            inc(npix);
            x:=InvertF64(d64[npix]);
            if x=FFitsInfo.blank then x:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imar64[k,ii,j] := x ;
+           imar64[k,ii,j] := x ;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
@@ -1134,7 +1136,7 @@ case FFitsInfo.bitpix of
            inc(npix);
            x:=InvertF32(d32[npix]);
            if x=FFitsInfo.blank then x:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imar32[k,ii,j] := x ;
+           imar32[k,ii,j] := x ;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
@@ -1156,7 +1158,7 @@ case FFitsInfo.bitpix of
            inc(npix);
            x8:=d8[npix];
            if x8=b8 then x8:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imai8[k,ii,j] := x8;
+           imai8[k,ii,j] := x8;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
@@ -1184,7 +1186,7 @@ case FFitsInfo.bitpix of
              if km<0 then continue; // skip A
              x8:=d8[npix];
              if x8=b8 then x8:=0;
-             if (ii<=maxl-1) and (j<=maxl-1) then imai8[km,ii,j] := x8;
+             imai8[km,ii,j] := x8;
              x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
              dmin:=min(x,dmin);
              dmax:=max(x,dmax);
@@ -1208,7 +1210,7 @@ case FFitsInfo.bitpix of
            inc(npix);
            x16:=BEtoN(d16[npix]);
            if x16=b16 then x16:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imai16[k,ii,j] := x16;
+           imai16[k,ii,j] := x16;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
@@ -1229,7 +1231,7 @@ case FFitsInfo.bitpix of
            inc(npix);
            x:=BEtoN(LongInt(d32[npix]));
            if x=FFitsInfo.blank then x:=0;
-           if (ii<=maxl-1) and (j<=maxl-1) then imai32[k,ii,j] := round(x);
+           imai32[k,ii,j] := round(x);
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
