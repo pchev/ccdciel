@@ -5,6 +5,12 @@ unit u_libraw;
 interface
 
 uses   dynlibs, u_global,
+  {$ifdef mswindows}
+  u_utils,
+  {$endif}
+  {$ifdef darwin}
+  u_utils,
+  {$endif}
   Classes, SysUtils;
 
 type
