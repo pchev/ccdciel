@@ -47,6 +47,8 @@ type
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
+    SaveBitmapFormat: TComboBox;
+    SaveBitmap: TCheckBox;
     MeasureNewImage: TCheckBox;
     FocusStarMagAdjust: TCheckBox;
     CheckRecenterTarget: TCheckBox;
@@ -61,6 +63,7 @@ type
     Label128: TLabel;
     AutofocusPeriod: TSpinEditEx;
     Label129: TLabel;
+    TabSheet16: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -651,6 +654,7 @@ begin
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;
   MeasureNewImage.Caption:=rsAutomaticHFD;
+  SaveBitmap.Caption:=rsSaveAPNGFile;
   TabSheet2.Caption := rsObservatory;
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;

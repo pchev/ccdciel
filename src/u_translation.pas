@@ -1182,6 +1182,7 @@ resourcestring
   rsPlateSolveEx = 'Plate solve exposure %s';
   rsPolarAlignme2 = 'Polar alignment instruction';
   rsBalanceFromC = 'Balance from camera';
+  rsSaveAPNGFile = 'Save a bitmap file additionally to the standard FITS file';
 
 implementation
 

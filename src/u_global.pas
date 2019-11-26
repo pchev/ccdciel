@@ -421,7 +421,8 @@ var
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
-  MeasureNewImage: boolean;
+  MeasureNewImage,SaveBitmap: boolean;
+  SaveBitmapFormat:integer;
   PauseSequence: boolean;
   DummyDouble: double;
   DummyBool: boolean;

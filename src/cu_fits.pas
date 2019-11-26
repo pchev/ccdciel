@@ -1715,11 +1715,24 @@ end;
 
 procedure TFits.SaveToBitmap(fn: string);
 var expbmp: TExpandedBitmap;
+    bgra: TBGRABitmap;
+    ext: string;
 begin
-  expbmp:=TExpandedBitmap.Create;
-  GetExpBitmap(expbmp,FFitsInfo.bayerpattern<>'');
-  expbmp.SaveToFile(fn);
-  expbmp.Free;
+  ext:=uppercase(ExtractFileExt(fn));
+  if (ext='.PNG')or(ext='.TIF')or(ext='.TIFF') then begin
+    // save 16 bit linear image
+    expbmp:=TExpandedBitmap.Create;
+    GetExpBitmap(expbmp,FFitsInfo.bayerpattern<>'');
+    expbmp.SaveToFile(fn);
+    expbmp.Free;
+  end
+  else begin
+    //save 8 bit stretched image
+    bgra:=TBGRABitmap.Create;
+    GetBGRABitmap(bgra,FFitsInfo.bayerpattern<>'');
+    bgra.SaveToFile(fn);
+    bgra.Free;
+  end;
 end;
 
 procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
