@@ -704,7 +704,6 @@ type
     Procedure ClearImage;
     Procedure DrawImage;
     Procedure PlotImage;
-    procedure Debayer(raw: TBGRABitmap; t:TBayerMode; var ima:TBGRABitmap) ;
     procedure plot_north(bmp:TBGRABitmap);
     Procedure DrawHistogram(SetLevel: boolean);
     procedure AstrometryStart(Sender: TObject);
@@ -7974,155 +7973,6 @@ begin
   PlotImage;
 end;
 
-procedure Tf_main.Debayer(raw: TBGRABitmap; t:TBayerMode; var ima:TBGRABitmap) ;
-var
- i,ii,j:integer;
- pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:byte;
- p,p1,p2,p3: PBGRAPixel;
- imgW,imgH:Integer;
- pixel:TBGRAPixel;
- rmult,gmult,bmult,x: double;
-begin
-if (fits.HeaderInfo.rmult>0)and(fits.HeaderInfo.gmult>0)and(fits.HeaderInfo.bmult>0) then begin
-  x:=maxvalue([fits.HeaderInfo.rmult,fits.HeaderInfo.gmult,fits.HeaderInfo.bmult]);
-  rmult:=fits.HeaderInfo.rmult/x;
-  gmult:=fits.HeaderInfo.gmult/x;
-  bmult:=fits.HeaderInfo.bmult/x;
-end else begin
-  rmult:=RedBalance;
-  gmult:=GreenBalance;
-  bmult:=BlueBalance;
-end;
-imgW:=raw.width;
-imgH:=raw.height;
-ima.SetSize(imgW,imgH);
-pixel:=BGRABlack;
-for i:=imgH-1 downto 0 do begin
- ii:=imgH-1-i; // image is flipped in fits, count color order from the bottom
- p:=ima.scanline[i];
- p1:=raw.ScanLine[max(i-1,0)];
- p2:=raw.ScanLine[i];
- p3:=raw.ScanLine[min(i+1,imgH-1)];
- for j:=0 to imgW-1 do begin
-   pix1:= p1[max(j-1,0)].red;
-   pix2:= p1[j].red;
-   pix3:= p1[min(j+1,imgW-1)].red;
-   pix4:= p2[max(j-1,0)].red;
-   pix5:= p2[j].red;
-   pix6:= p2[min(j+1,imgW-1)].red;
-   pix7:= p3[max(j-1,0)].red;
-   pix8:= p3[j].red;
-   pix9:= p3[min(j+1,imgW-1)].red;
-   if not odd(ii) then begin //ligne paire
-      if not odd(j) then begin //colonne paire et ligne paire
-        case t of
-        bayerGR: begin
-            pixel.red:= round(rmult*(pix4+pix6)/2);
-            pixel.green:=round(gmult*pix5);
-            pixel.blue:= round(bmult*(pix2+pix8)/2);
-           end;
-        bayerRG: begin
-            pixel.red:=round(rmult*pix5);
-            pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-           end;
-        bayerBG: begin
-            pixel.red:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-            pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            pixel.blue:=round(bmult*pix5);
-           end;
-        bayerGB: begin
-            pixel.red:= round(rmult*(pix2+pix8)/2);
-            pixel.green:=round(gmult*pix5);
-            pixel.blue:= round(bmult*(pix4+pix6)/2);
-           end;
-        end;
-      end
-      else begin //colonne impaire et ligne paire
-       case t of
-       bayerGR: begin
-           pixel.red:=round(rmult*pix5);
-           pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           pixel.blue:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       bayerRG: begin
-           pixel.red:= round(rmult*(pix4+pix6)/2);
-           pixel.green:=round(gmult*pix5);
-           pixel.blue:=round(bmult*(pix2+pix8)/2);
-          end;
-       bayerBG: begin
-           pixel.red:=round(rmult*(pix2+pix8)/2);
-           pixel.green:=round(gmult*pix5);
-           pixel.blue:= round(bmult*(pix4+pix6)/2);
-          end;
-       bayerGB: begin
-           pixel.red:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           pixel.blue:=round(bmult*pix5);
-          end;
-       end;
-     end;
-   end
-   else begin //ligne impaire
-     if not odd(j) then begin //colonne paire et ligne impaire
-       case t of
-       bayerGR: begin
-           pixel.red:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           pixel.blue:=round(bmult*pix5);
-          end;
-       bayerRG: begin
-           pixel.red:= round(rmult*(pix2+pix8)/2);
-           pixel.green:=round(gmult*pix5);
-           pixel.blue:=round(bmult*(pix4+pix6)/2);
-          end;
-       bayerBG: begin
-           pixel.red:= round(rmult*(pix4+pix6)/2);
-           pixel.green:=round(gmult*pix5);
-           pixel.blue:=round(bmult*(pix2+pix8)/2);
-          end;
-       bayerGB: begin
-           pixel.red:=round(rmult*pix5);
-           pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           pixel.blue:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       end;
-    end
-    else begin //colonne impaire et ligne impaire
-       case t of
-       bayerGR: begin
-           pixel.red:= round(rmult*(pix2+pix8)/2);
-           pixel.green:= round(gmult*pix5);
-           pixel.blue:= round(bmult*(pix4+pix6)/2);
-          end;
-       bayerRG: begin
-           pixel.red:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           pixel.blue:=round(bmult*pix5);
-          end;
-       bayerBG: begin
-           pixel.red:= round(rmult*pix5);
-           pixel.green:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           pixel.blue:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       bayerGB: begin
-           pixel.red:= round(rmult*(pix4+pix6)/2);
-           pixel.green:= round(gmult*pix5);
-           pixel.blue:= round(bmult*(pix2+pix8)/2);
-          end;
-       end;
-     end;
-   end;
-   if (pixel.red=255)or(pixel.green=255)or(pixel.blue=255) then begin
-     pixel.red:=(pixel.red+pixel.green+pixel.blue) div 3; // prevent colorization of saturated area
-     pixel.green:=pixel.red;
-     pixel.blue:=pixel.red;
-   end;
-   p[j]:=pixel;
- end;
-end;
-end;
-
 Procedure Tf_main.DrawImage;
 var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
@@ -8138,21 +7988,13 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.Underflow:=ClippingUnderflow;
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;
-  fits.GetBGRABitmap(ImaBmp);
+  fits.GetBGRABitmap(ImaBmp,BayerColor);
   ImgPixRatio:=fits.HeaderInfo.pixratio;
-  if BayerColor or (fits.HeaderInfo.pixratio<>1) then begin
-     if BayerColor then begin
-       tmpbmp:=TBGRABitmap.Create;
-       debayer(ImaBmp,fits.BayerMode,tmpbmp);
-       ImaBmp.Assign(tmpbmp);
-       tmpbmp.Free;
-     end;
-     if (fits.HeaderInfo.pixratio<>1) then begin
-       tmpbmp:=TBGRABitmap.Create(ImaBmp);
-       ImaBmp.SetSize(round(fits.HeaderInfo.pixratio*ImaBmp.Width),ImaBmp.Height);
-       ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
-       tmpbmp.Free;
-     end;
+  if (fits.HeaderInfo.pixratio<>1) then begin
+    tmpbmp:=TBGRABitmap.Create(ImaBmp);
+    ImaBmp.SetSize(round(fits.HeaderInfo.pixratio*ImaBmp.Width),ImaBmp.Height);
+    ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
+    tmpbmp.Free;
   end;
   if refmask then begin
     ImaBmp.StretchPutImage(rect(0,0,ImaBmp.Width,ImaBmp.Height),refbmp,dmLinearBlend);
@@ -8652,7 +8494,7 @@ if refmask then begin
     f.Gamma:=f_visu.Gamma.Value;
     f.ImgDmax:=round(f_visu.ImgMax);
     f.ImgDmin:=round(f_visu.ImgMin);
-    f.GetBGRABitmap(refbmp);
+    f.GetBGRABitmap(refbmp,false);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
      p[i].alpha:=128;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes,
+uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
   GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
@@ -167,7 +167,11 @@ type
      function  GetStatistics: string;
      Procedure LoadStream;
      procedure GetFitsInfo;
-     procedure GetBGRABitmap(var bgra: TBGRABitmap);
+     function  BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
+     function  BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
+     procedure GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
+     procedure GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+     procedure SaveToBitmap(fn: string);
      procedure SaveToFile(fn: string);
      procedure LoadFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
@@ -739,7 +743,7 @@ begin
     result:=result+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
     result:=result+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
     // mode, median
-    median:=0; maxh:=0;  npx:=0;
+    median:=0; maxh:=0;  npx:=0; maxp:=0;
     for i:=0 to high(word) do begin
       npx:=npx+FHistogram[i]-1;
       if (median=0) and (npx>sz2) then
@@ -761,7 +765,9 @@ begin
     result:=result+rsMean+blank+FormatFloat(f1, Fmean)+crlf;
     // sigma
     result:=result+rsStdDev+blank+FormatFloat(f1, Fsigma)+crlf;
-  end;
+  end
+  else
+    result:='';
 end;
 
 procedure TFits.GetFitsInfo;
@@ -1267,6 +1273,7 @@ case FFitsInfo.bitpix of
            end;
            end;
            end;
+      else c:=1;
       end;
 FimageC:=c;
 
@@ -1380,15 +1387,366 @@ begin
   end;
 end;
 
+function TFits.BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
+var r,g,b: integer;
+    l,lg: word;
+begin
+   if not odd(row) then begin //ligne paire
+      if not odd(col) then begin //colonne paire et ligne paire
+        case t of
+        bayerGR: begin
+            r:= round(rmult*(pix4+pix6)/2);
+            g:=round(gmult*pix5);
+            b:= round(bmult*(pix2+pix8)/2);
+           end;
+        bayerRG: begin
+            r:=round(rmult*pix5);
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+            b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           end;
+        bayerBG: begin
+            r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+            b:=round(bmult*pix5);
+           end;
+        bayerGB: begin
+            r:= round(rmult*(pix2+pix8)/2);
+            g:=round(gmult*pix5);
+            b:= round(bmult*(pix4+pix6)/2);
+           end;
+        else begin
+            r:=0; g:=0; b:=0;
+           end;
+        end;
+      end
+      else begin //colonne impaire et ligne paire
+       case t of
+       bayerGR: begin
+           r:=round(rmult*pix5);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+          end;
+       bayerRG: begin
+           r:= round(rmult*(pix4+pix6)/2);
+           g:=round(gmult*pix5);
+           b:=round(bmult*(pix2+pix8)/2);
+          end;
+       bayerBG: begin
+           r:=round(rmult*(pix2+pix8)/2);
+           g:=round(gmult*pix5);
+           b:= round(bmult*(pix4+pix6)/2);
+          end;
+       bayerGB: begin
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:=round(bmult*pix5);
+          end;
+       else begin
+           r:=0; g:=0; b:=0;
+          end;
+       end;
+     end;
+   end
+   else begin //ligne impaire
+     if not odd(col) then begin //colonne paire et ligne impaire
+       case t of
+       bayerGR: begin
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:=round(bmult*pix5);
+          end;
+       bayerRG: begin
+           r:= round(rmult*(pix2+pix8)/2);
+           g:=round(gmult*pix5);
+           b:=round(bmult*(pix4+pix6)/2);
+          end;
+       bayerBG: begin
+           r:= round(rmult*(pix4+pix6)/2);
+           g:=round(gmult*pix5);
+           b:=round(bmult*(pix2+pix8)/2);
+          end;
+       bayerGB: begin
+           r:=round(rmult*pix5);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+          end;
+       else begin
+           r:=0; g:=0; b:=0;
+          end;
+       end;
+    end
+    else begin //colonne impaire et ligne impaire
+       case t of
+       bayerGR: begin
+           r:= round(rmult*(pix2+pix8)/2);
+           g:= round(gmult*pix5);
+           b:= round(bmult*(pix4+pix6)/2);
+          end;
+       bayerRG: begin
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:=round(bmult*pix5);
+          end;
+       bayerBG: begin
+           r:= round(rmult*pix5);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+          end;
+       bayerGB: begin
+           r:= round(rmult*(pix4+pix6)/2);
+           g:= round(gmult*pix5);
+           b:= round(bmult*(pix2+pix8)/2);
+          end;
+       else begin
+           r:=0; g:=0; b:=0;
+          end;
+       end;
+     end;
+   end;
+   result.red:=max(0,min(MAXWORD,r));
+   result.green:=max(0,min(MAXWORD,g));
+   result.blue:= max(0,min(MAXWORD,b));
+end;
 
-procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
-var i,j : integer;
+function TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
+var r,g,b: integer;
+    l,lg: word;
+begin
+   if not odd(row) then begin //ligne paire
+      if not odd(col) then begin //colonne paire et ligne paire
+        case t of
+        bayerGR: begin
+            r:= round(rmult*(pix4+pix6)/2);
+            g:=round(gmult*pix5);
+            b:= round(bmult*(pix2+pix8)/2);
+           end;
+        bayerRG: begin
+            r:=round(rmult*pix5);
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+            b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           end;
+        bayerBG: begin
+            r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+            b:=round(bmult*pix5);
+           end;
+        bayerGB: begin
+            r:= round(rmult*(pix2+pix8)/2);
+            g:=round(gmult*pix5);
+            b:= round(bmult*(pix4+pix6)/2);
+           end;
+        else begin
+            r:=0; g:=0; b:=0;
+           end;
+        end;
+      end
+      else begin //colonne impaire et ligne paire
+       case t of
+       bayerGR: begin
+           r:=round(rmult*pix5);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+          end;
+       bayerRG: begin
+           r:= round(rmult*(pix4+pix6)/2);
+           g:=round(gmult*pix5);
+           b:=round(bmult*(pix2+pix8)/2);
+          end;
+       bayerBG: begin
+           r:=round(rmult*(pix2+pix8)/2);
+           g:=round(gmult*pix5);
+           b:= round(bmult*(pix4+pix6)/2);
+          end;
+       bayerGB: begin
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:=round(bmult*pix5);
+          end;
+       else begin
+           r:=0; g:=0; b:=0;
+          end;
+       end;
+     end;
+   end
+   else begin //ligne impaire
+     if not odd(col) then begin //colonne paire et ligne impaire
+       case t of
+       bayerGR: begin
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:=round(bmult*pix5);
+          end;
+       bayerRG: begin
+           r:= round(rmult*(pix2+pix8)/2);
+           g:=round(gmult*pix5);
+           b:=round(bmult*(pix4+pix6)/2);
+          end;
+       bayerBG: begin
+           r:= round(rmult*(pix4+pix6)/2);
+           g:=round(gmult*pix5);
+           b:=round(bmult*(pix2+pix8)/2);
+          end;
+       bayerGB: begin
+           r:=round(rmult*pix5);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+          end;
+       else begin
+           r:=0; g:=0; b:=0;
+          end;
+       end;
+    end
+    else begin //colonne impaire et ligne impaire
+       case t of
+       bayerGR: begin
+           r:= round(rmult*(pix2+pix8)/2);
+           g:= round(gmult*pix5);
+           b:= round(bmult*(pix4+pix6)/2);
+          end;
+       bayerRG: begin
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:=round(bmult*pix5);
+          end;
+       bayerBG: begin
+           r:= round(rmult*pix5);
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+          end;
+       bayerGB: begin
+           r:= round(rmult*(pix4+pix6)/2);
+           g:= round(gmult*pix5);
+           b:= round(bmult*(pix2+pix8)/2);
+          end;
+       else begin
+           r:=0; g:=0; b:=0;
+          end;
+       end;
+     end;
+   end;
+   l:=max(0,min(MAXWORD,maxvalue([r,b,g])));
+   if l>0 then begin
+     lg:=GammaCorr(l);
+     result.red:=max(0,min(MAXBYTE,round(r*lg/l)));
+     result.green:=max(0,min(MAXBYTE,round(g*lg/l)));
+     result.blue:= max(0,min(MAXBYTE,round(b*lg/l)));
+   end
+   else begin
+     result.red:=0;
+     result.green:=0;
+     result.blue:= 0;
+   end;
+end;
+
+procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
+var i,j,ii,i1,i2,i3,j1,j2,j3 : integer;
+    x : word;
+    xx,xxg,xxb: Extended;
+    p: PExpandedPixel;
+    pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
+    rmult,gmult,bmult,mx: double;
+    t:TBayerMode;
+begin
+rmult:=0; gmult:=0; bmult:=0; ii:=0; i1:=0; i2:=0; i3:=0; t:=bayerRG;
+if debayer then begin
+  if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+     mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
+     rmult:=FFitsInfo.rmult/mx;
+     gmult:=FFitsInfo.gmult/mx;
+     bmult:=FFitsInfo.bmult/mx;
+  end else begin
+     rmult:=RedBalance;
+     gmult:=GreenBalance;
+     bmult:=BlueBalance;
+  end;
+  t:=BayerMode;
+end;
+bgra.SetSize(Fwidth,Fheight);
+for i:=0 to Fheight-1 do begin
+   if debayer then begin
+     ii:=Fheight-1-i; // image is flipped in fits, count color order from the bottom
+     i1:=max(i-1,0);
+     i2:=i;
+     i3:= min(i+1,Fheight-1);
+   end;
+   p := bgra.Scanline[i];
+   for j := 0 to Fwidth-1 do begin
+       if n_axis=3 then begin
+         // 3 chanel color image
+         xx:=FimageMin+Fimage[0,i,j]/FimageC;
+         x:=round(max(0,min(MaxWord,xx)) );
+         p^.red:=x;
+         xxg:=Fimage[1,i,j];
+         x:=round(max(0,min(MaxWord,xxg)) );
+         p^.green:=x;
+         xxb:=Fimage[2,i,j];
+         x:=round(max(0,min(MaxWord,xxb)) );
+         p^.blue:=x;
+       end else begin
+         if debayer then begin
+           j1:=max(j-1,0);
+           j2:=j;
+           j3:=min(j+1,Fwidth-1);
+           pix1:=round(FimageMin+Fimage[0,i1,j1]/FimageC);
+           pix2:=round(FimageMin+Fimage[0,i1,j2]/FimageC);
+           pix3:=round(FimageMin+Fimage[0,i1,j3]/FimageC);
+           pix4:=round(FimageMin+Fimage[0,i2,j1]/FimageC);
+           pix5:=round(FimageMin+Fimage[0,i2,j2]/FimageC);
+           pix6:=round(FimageMin+Fimage[0,i2,j3]/FimageC);
+           pix7:=round(FimageMin+Fimage[0,i3,j1]/FimageC);
+           pix8:=round(FimageMin+Fimage[0,i3,j2]/FimageC);
+           pix9:=round(FimageMin+Fimage[0,i3,j3]/FimageC);
+           p^:=BayerInterpolationExp(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
+         end else begin
+           // B/W image
+           xx:=FimageMin+Fimage[0,i,j]/FimageC;
+           x:=round(max(0,min(MaxWord,xx)));
+           p^.red:=x;
+           p^.green:=x;
+           p^.blue:=x;
+         end;
+       end;
+       p^.alpha:=65535;
+       inc(p);
+   end;
+end;
+bgra.InvalidateBitmap;
+end;
+
+procedure TFits.SaveToBitmap(fn: string);
+var expbmp: TExpandedBitmap;
+begin
+  expbmp:=TExpandedBitmap.Create;
+  GetExpBitmap(expbmp,FFitsInfo.bayerpattern<>'');
+  expbmp.SaveToFile(fn);
+  expbmp.Free;
+end;
+
+procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+var i,j,ii,i1,i2,i3,j1,j2,j3 : integer;
     x : word;
     xx,xxg,xxb: extended;
     c,overflow,underflow: double;
     p: PBGRAPixel;
     HighOverflow,LowOverflow: TBGRAPixel;
+    pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
+    rmult,gmult,bmult,mx: double;
+    t: TBayerMode;
 begin
+rmult:=0; gmult:=0; bmult:=0; ii:=0; i1:=0; i2:=0; i3:=0; t:=bayerRG;
+if debayer then begin
+   if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+     mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
+     rmult:=FFitsInfo.rmult/mx;
+     gmult:=FFitsInfo.gmult/mx;
+     bmult:=FFitsInfo.bmult/mx;
+   end else begin
+     rmult:=RedBalance;
+     gmult:=GreenBalance;
+     bmult:=BlueBalance;
+   end;
+   t:=BayerMode;
+end;
 HighOverflow:=ColorToBGRA(clFuchsia);
 LowOverflow:=ColorToBGRA(clYellow);
 overflow:=(FOverflow-FimageMin)*FimageC;
@@ -1397,12 +1755,18 @@ bgra.SetSize(Fwidth,Fheight);
 if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
 c:=MaxWord/(FImgDmax-FImgDmin);
 for i:=0 to Fheight-1 do begin
+   if debayer then begin
+     ii:=Fheight-1-i; // image is flipped in fits, count color order from the bottom
+     i1:=max(i-1,0);
+     i2:=i;
+     i3:= min(i+1,Fheight-1);
+   end;
    p := bgra.Scanline[i];
    for j := 0 to Fwidth-1 do begin
-       xx:=Fimage[0,i,j];
-       x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
        if n_axis=3 then begin
          // 3 chanel color image
+         xx:=Fimage[0,i,j];
+         x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
          p^.red:=GammaCorr(x);
          xxg:=Fimage[1,i,j];
          x:=round(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
@@ -1417,15 +1781,33 @@ for i:=0 to Fheight-1 do begin
              p^:=LowOverflow;
          end;
        end else begin
-         // B/W image
-         p^.red:=GammaCorr(x);
-         p^.green:=p^.red;
-         p^.blue:=p^.red;
-         if FMarkOverflow then begin
-           if xx>=overflow then
-             p^:=HighOverflow
-           else if xx<=underflow then
-             p^:=LowOverflow;
+         if debayer then begin
+           j1:=max(j-1,0);
+           j2:=j;
+           j3:=min(j+1,Fwidth-1);
+           pix1:=round((Fimage[0,i1,j1]-FImgDmin) * c );
+           pix2:=round((Fimage[0,i1,j2]-FImgDmin) * c );
+           pix3:=round((Fimage[0,i1,j3]-FImgDmin) * c );
+           pix4:=round((Fimage[0,i2,j1]-FImgDmin) * c );
+           pix5:=round((Fimage[0,i2,j2]-FImgDmin) * c );
+           pix6:=round((Fimage[0,i2,j3]-FImgDmin) * c );
+           pix7:=round((Fimage[0,i3,j1]-FImgDmin) * c );
+           pix8:=round((Fimage[0,i3,j2]-FImgDmin) * c );
+           pix9:=round((Fimage[0,i3,j3]-FImgDmin) * c );
+           p^:=BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
+         end else begin
+           // B/W image
+           xx:=Fimage[0,i,j];
+           x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+           p^.red:=GammaCorr(x);
+           p^.green:=p^.red;
+           p^.blue:=p^.red;
+           if FMarkOverflow then begin
+             if xx>=overflow then
+               p^:=HighOverflow
+             else if xx<=underflow then
+               p^:=LowOverflow;
+           end;
          end;
        end;
        p^.alpha:=255;
@@ -2162,6 +2544,7 @@ begin
                 x:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[k,ii,j];
                 y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai32[k,ii,j];
                 end;
+           else begin x:=0; y:=0; end;
          end;
          case MathOperator of
            moAdd: x:=x+y;
