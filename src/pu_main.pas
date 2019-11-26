@@ -1495,6 +1495,7 @@ begin
     crRetic := crCross;
   Image1.Cursor:=crRetic;
   MaxThreadCount := GetThreadCount;
+  NewMessage(Format('Using a maximum of %d parallel processor',[MaxThreadCount]),9);
   if isAdmin then NewMessage(Caption);
   NewMessage(SystemInformation,9);
   {$ifdef mswindows}
