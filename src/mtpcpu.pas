@@ -16,6 +16,7 @@ unit MTPCPU;
 
 {$mode objfpc}{$H+}
 {$inline on}
+{$optimization off}
 
 interface
 
