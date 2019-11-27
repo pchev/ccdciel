@@ -11079,6 +11079,8 @@ if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)an
    py:=min(0,max(py,tmpbmp.Height-fits.HeaderInfo.naxis2));
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
    str:=tmpbmp.Resample(f_magnifyer.Image1.Width,f_magnifyer.Image1.Height,rmSimpleStretch) as TBGRABitmap;
+   if f_visu.FlipHorz then Str.HorizontalFlip;
+   if f_visu.FlipVert then Str.VerticalFlip;
    try
      f_magnifyer.Image1.Picture.Assign(str);
    finally

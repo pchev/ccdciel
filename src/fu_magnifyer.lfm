@@ -24,9 +24,10 @@ object f_magnifyer: Tf_magnifyer
     TabOrder = 0
     object Image1: TImage
       Left = 1
-      Height = 178
+      Height = 181
       Top = 1
       Width = 178
+      Align = alClient
     end
   end
   object Title: TLabel
