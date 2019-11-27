@@ -82,7 +82,7 @@ begin
   {$ELSE}
   fpsysctl(pchar(@mib), 2, @t, @len, Nil, 0);
   {$ENDIF}
-  Result:=t;
+  Result:=integer(t);
 end;
 {$ELSEIF defined(linux)}
   begin
