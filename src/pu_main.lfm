@@ -395,6 +395,10 @@ object f_main: Tf_main
         Caption = 'Save FITS file...'
         OnClick = MenuSaveClick
       end
+      object MenuSavePicture: TMenuItem
+        Caption = 'Save picture ...'
+        OnClick = MenuSavePictureClick
+      end
       object N6: TMenuItem
         Caption = '-'
       end
@@ -1142,18 +1146,18 @@ object f_main: Tf_main
   end
   object OpenDialog1: TOpenDialog
     Filter = 'Fits file|*.fits;*.fit;*.fts|All|*.*'
-    left = 62
-    top = 225
+    left = 48
+    top = 236
   end
-  object SaveDialog1: TSaveDialog
+  object SaveDialogFits: TSaveDialog
     DefaultExt = '.fits'
     Filter = 'Fits file|*.fits|All|*.*'
-    left = 62
-    top = 308
+    left = 51
+    top = 318
   end
   object ImagePopupMenu: TPopupMenu
-    left = 51
-    top = 143
+    left = 344
+    top = 41
     object MenuResolve: TMenuItem
       Caption = 'Resolve'
       OnClick = MenuResolveClick
@@ -2997,8 +3001,8 @@ object f_main: Tf_main
     Title = 'Open picture file'
     Filter = 'All supported files|*.fits;*.fit;*.fts;*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw;*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|FITS (*.fits;*.fit;*.fts)|*.fits;*.fit;*.fts|Camera RAW (*.arw;*.cr3;*.cr2;*.crw;*.dng;*.nef;...)|*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw|Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All (*.*)|*.*'
     Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
-    left = 62
-    top = 399
+    left = 56
+    top = 143
   end
   object MagnifyerTimer: TTimer
     Enabled = False
@@ -3027,5 +3031,11 @@ object f_main: Tf_main
     OnTimer = ImageResizeTimerTimer
     left = 358
     top = 391
+  end
+  object SaveDialogPicture: TSaveDialog
+    DefaultExt = '.png'
+    Filter = 'Picture files (*.png;*.tif;*.tiff;*.jpg;*.bmp)|*.png;*.tif;*.tiff;*.jpg;*.bmp'
+    left = 54
+    top = 404
   end
 end

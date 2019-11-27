@@ -1183,6 +1183,7 @@ resourcestring
   rsPolarAlignme2 = 'Polar alignment instruction';
   rsBalanceFromC = 'Balance from camera';
   rsSaveAPNGFile = 'Save a bitmap file additionally to the standard FITS file';
+  rsSavePictureS = 'Save picture%s';
 
 implementation
 

@@ -113,6 +113,7 @@ type
     MenuImage: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem19: TMenuItem;
+    MenuSavePicture: TMenuItem;
     MenuPolarAlignment: TMenuItem;
     MenuItem18: TMenuItem;
     MenuItemPhotometry2: TMenuItem;
@@ -167,6 +168,7 @@ type
     MeasureTimer: TTimer;
     PlotTimer: TTimer;
     ImageResizeTimer: TTimer;
+    SaveDialogPicture: TSaveDialog;
     TabMsgLevel: TTabControl;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
@@ -296,7 +298,7 @@ type
     PanelTop: TPanel;
     ImagePopupMenu: TPopupMenu;
     PanelBottom: TPanel;
-    SaveDialog1: TSaveDialog;
+    SaveDialogFits: TSaveDialog;
     StatusBar1: TStatusBar;
     ConnectTimer: TTimer;
     StatusbarTimer: TTimer;
@@ -389,6 +391,7 @@ type
     procedure MenuRotatorRotateClick(Sender: TObject);
     procedure MenuSaveClick(Sender: TObject);
     procedure MenuResolvePlanetariumClick(Sender: TObject);
+    procedure MenuSavePictureClick(Sender: TObject);
     procedure MenuScriptEditClick(Sender: TObject);
     procedure MenuScriptNewClick(Sender: TObject);
     procedure MenuScriptRunClick(Sender: TObject);
@@ -1721,6 +1724,7 @@ begin
    MenuFocuserCalibration.Caption := rsFocuserCalib;
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
    MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
+   MenuSavePicture.Caption := Format(rsSavePictureS, [ellipsis]);
    MenuRefimage.Caption := rsOpenReferenc;
    MenuClearRef.Caption := rsClearReferen;
    MenuSaveConfig.Caption := rsSaveConfigur;
@@ -8508,9 +8512,20 @@ procedure Tf_main.MenuSaveClick(Sender: TObject);
 var fn: string;
 begin
 if fits.HeaderInfo.naxis>0 then begin
-   if SaveDialog1.Execute then begin
-      fn:=SaveDialog1.FileName;
+   if SaveDialogFits.Execute then begin
+      fn:=SaveDialogFits.FileName;
       SaveFitsFile(fn);
+   end;
+end;
+end;
+
+procedure Tf_main.MenuSavePictureClick(Sender: TObject);
+var fn: string;
+begin
+if fits.HeaderInfo.naxis>0 then begin
+   if SaveDialogPicture.Execute then begin
+      fn:=SaveDialogPicture.FileName;
+      fits.SaveToBitmap(fn);
    end;
 end;
 end;
