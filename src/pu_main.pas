@@ -111,6 +111,8 @@ type
     MenuAlpacaDomeSetup: TMenuItem;
     MenuImgStat: TMenuItem;
     MenuImage: TMenuItem;
+    MenuItem15: TMenuItem;
+    MenuItem19: TMenuItem;
     MenuPolarAlignment: TMenuItem;
     MenuItem18: TMenuItem;
     MenuItemPhotometry2: TMenuItem;
@@ -1747,7 +1749,8 @@ begin
    MenuViewhdr.Caption := rsViewHeader;
    MenuImgStat.Caption:=rsImageStatist;
    MenuImage.Caption:=rsImage;
-   MenuItem4.Caption := rsTools;
+   MenuItem15.Caption := rsTools;
+   MenuItem4.Caption := rsDisplay;
    MenuViewConnection.Caption := rsConnection;
    MenuViewPreview.Caption := rsPreview;
    MenuViewAutoguider.Caption := rsAutoguider;

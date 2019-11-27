@@ -387,9 +387,16 @@ object f_main: Tf_main
     top = 41
     object MenuItem1: TMenuItem
       Caption = 'File'
-      object MenuSetup: TMenuItem
-        Caption = 'Devices Setup...'
-        OnClick = MenuSetupClick
+      object MenuOpenPicture: TMenuItem
+        Caption = 'Open picture file...'
+        OnClick = MenuOpenPictureClick
+      end
+      object MenuSave: TMenuItem
+        Caption = 'Save FITS file...'
+        OnClick = MenuSaveClick
+      end
+      object N6: TMenuItem
+        Caption = '-'
       end
       object MenuItemBPM: TMenuItem
         Caption = 'Bad pixel map'
@@ -435,22 +442,7 @@ object f_main: Tf_main
           OnClick = MenuDarkClearClick
         end
       end
-      object MenuFocuserCalibration: TMenuItem
-        Caption = 'Focuser calibration'
-        OnClick = MenuFocuserCalibrationClick
-      end
       object N1: TMenuItem
-        Caption = '-'
-      end
-      object MenuOpenPicture: TMenuItem
-        Caption = 'Open picture file...'
-        OnClick = MenuOpenPictureClick
-      end
-      object MenuSave: TMenuItem
-        Caption = 'Save FITS file...'
-        OnClick = MenuSaveClick
-      end
-      object N6: TMenuItem
         Caption = '-'
       end
       object MenuRefimage: TMenuItem
@@ -475,16 +467,13 @@ object f_main: Tf_main
     end
     object MenuItem2: TMenuItem
       Caption = 'Edit'
+      object MenuSetup: TMenuItem
+        Caption = 'Devices Setup...'
+        OnClick = MenuSetupClick
+      end
       object MenuOptions: TMenuItem
         Caption = 'Preferences...'
         OnClick = MenuOptionsClick
-      end
-      object N5: TMenuItem
-        Caption = '-'
-      end
-      object MenuPolarAlignment: TMenuItem
-        Caption = 'MenuPolarAlignment'
-        OnClick = MenuPolarAlignmentClick
       end
       object MenuItem18: TMenuItem
         Caption = '-'
@@ -580,6 +569,9 @@ object f_main: Tf_main
       object N2: TMenuItem
         Caption = '-'
       end
+    end
+    object MenuItem15: TMenuItem
+      Caption = 'Tools'
       object MenuViewhdr: TMenuItem
         Caption = 'View header'
         OnClick = MenuViewhdrClick
@@ -588,9 +580,107 @@ object f_main: Tf_main
         Caption = 'Image statistics'
         OnClick = MenuImgStatClick
       end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object MenuPolarAlignment: TMenuItem
+        Caption = 'MenuPolarAlignment'
+        OnClick = MenuPolarAlignmentClick
+      end
+      object MenuItem19: TMenuItem
+        Caption = '-'
+      end
+      object MenuFocuserCalibration: TMenuItem
+        Caption = 'Focuser calibration'
+        OnClick = MenuFocuserCalibrationClick
+      end
+    end
+    object MenuImage: TMenuItem
+      Caption = 'Image'
+      object MenuResolve2: TMenuItem
+        Caption = 'Resolve'
+        OnClick = MenuResolveClick
+      end
+      object MenuResolveSlewCenter2: TMenuItem
+        Caption = 'Resolve and Slew to image center'
+        OnClick = MenuResolveSlewCenterClick
+      end
+      object MenuResolveSlew2: TMenuItem
+        Caption = 'Resolve and Slew to cursor'
+        OnClick = MenuResolveSlewClick
+      end
+      object MenuResolveSync2: TMenuItem
+        Caption = 'Resolve and Sync the mount'
+        OnClick = MenuResolveSyncClick
+      end
+      object MenuItem20: TMenuItem
+        Caption = '-'
+      end
+      object MenuResolveRotate2: TMenuItem
+        Caption = 'Resolve and Rotate'
+        OnClick = MenuResolveRotateClick
+      end
+      object MenuResolveSyncRotator2: TMenuItem
+        Caption = 'Resolve and Sync the rotator'
+        OnClick = MenuResolveSyncRotatorClick
+      end
+      object MenuItem21: TMenuItem
+        Caption = '-'
+      end
+      object MenuResolveDSO2: TMenuItem
+        Caption = 'Resolve and plot DSO'
+        OnClick = MenuResolveDSOClick
+      end
+      object MenuResolveHyperLeda2: TMenuItem
+        Caption = 'Resolve and plot HyperLeda'
+        OnClick = MenuResolveDSOClick
+      end
+      object MenuResolvePlanetarium2: TMenuItem
+        Caption = 'Resolve and show image in planetarium'
+        OnClick = MenuResolvePlanetariumClick
+      end
+      object MenuShowCCDFrame2: TMenuItem
+        Caption = 'Resolve and show image frame in planetarium'
+        OnClick = MenuShowCCDFrameClick
+      end
+      object MenuItem22: TMenuItem
+        Caption = '-'
+      end
+      object MenuViewAstrometryLog2: TMenuItem
+        Caption = 'View last resolver log'
+        OnClick = MenuViewAstrometryLogClick
+      end
+      object MenuStopAstrometry2: TMenuItem
+        Caption = 'Stop astrometry resolver'
+        Visible = False
+        OnClick = MenuStopAstrometryClick
+      end
+      object MenuItem23: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemPhotometry2: TMenuItem
+        Caption = 'Photometry'
+        OnClick = MenuItemPhotometryClick
+      end
+      object MenuItem17: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemDebayer2: TMenuItem
+        AutoCheck = True
+        Caption = 'Preview debayer'
+        ShowAlwaysCheckable = True
+        OnClick = MenuItemDebayerClick
+      end
+      object MenuItem24: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemCleanup2: TMenuItem
+        Caption = 'Image cleanup'
+        OnClick = MenuItemCleanupClick
+      end
     end
     object MenuItem4: TMenuItem
-      Caption = 'Tools'
+      Caption = 'Display'
       object MenuViewConnection: TMenuItem
         AutoCheck = True
         Caption = 'Connection'
@@ -757,90 +847,6 @@ object f_main: Tf_main
           Caption = '2 column'
           OnClick = MenuResetToolsClick
         end
-      end
-    end
-    object MenuImage: TMenuItem
-      Caption = 'Image'
-      object MenuResolve2: TMenuItem
-        Caption = 'Resolve'
-        OnClick = MenuResolveClick
-      end
-      object MenuResolveSlewCenter2: TMenuItem
-        Caption = 'Resolve and Slew to image center'
-        OnClick = MenuResolveSlewCenterClick
-      end
-      object MenuResolveSlew2: TMenuItem
-        Caption = 'Resolve and Slew to cursor'
-        OnClick = MenuResolveSlewClick
-      end
-      object MenuResolveSync2: TMenuItem
-        Caption = 'Resolve and Sync the mount'
-        OnClick = MenuResolveSyncClick
-      end
-      object MenuItem20: TMenuItem
-        Caption = '-'
-      end
-      object MenuResolveRotate2: TMenuItem
-        Caption = 'Resolve and Rotate'
-        OnClick = MenuResolveRotateClick
-      end
-      object MenuResolveSyncRotator2: TMenuItem
-        Caption = 'Resolve and Sync the rotator'
-        OnClick = MenuResolveSyncRotatorClick
-      end
-      object MenuItem21: TMenuItem
-        Caption = '-'
-      end
-      object MenuResolveDSO2: TMenuItem
-        Caption = 'Resolve and plot DSO'
-        OnClick = MenuResolveDSOClick
-      end
-      object MenuResolveHyperLeda2: TMenuItem
-        Caption = 'Resolve and plot HyperLeda'
-        OnClick = MenuResolveDSOClick
-      end
-      object MenuResolvePlanetarium2: TMenuItem
-        Caption = 'Resolve and show image in planetarium'
-        OnClick = MenuResolvePlanetariumClick
-      end
-      object MenuShowCCDFrame2: TMenuItem
-        Caption = 'Resolve and show image frame in planetarium'
-        OnClick = MenuShowCCDFrameClick
-      end
-      object MenuItem22: TMenuItem
-        Caption = '-'
-      end
-      object MenuViewAstrometryLog2: TMenuItem
-        Caption = 'View last resolver log'
-        OnClick = MenuViewAstrometryLogClick
-      end
-      object MenuStopAstrometry2: TMenuItem
-        Caption = 'Stop astrometry resolver'
-        Visible = False
-        OnClick = MenuStopAstrometryClick
-      end
-      object MenuItem23: TMenuItem
-        Caption = '-'
-      end
-      object MenuItemPhotometry2: TMenuItem
-        Caption = 'Photometry'
-        OnClick = MenuItemPhotometryClick
-      end
-      object MenuItem17: TMenuItem
-        Caption = '-'
-      end
-      object MenuItemDebayer2: TMenuItem
-        AutoCheck = True
-        Caption = 'Preview debayer'
-        ShowAlwaysCheckable = True
-        OnClick = MenuItemDebayerClick
-      end
-      object MenuItem24: TMenuItem
-        Caption = '-'
-      end
-      object MenuItemCleanup2: TMenuItem
-        Caption = 'Image cleanup'
-        OnClick = MenuItemCleanupClick
       end
     end
     object MenuTabConnect: TMenuItem
