@@ -253,6 +253,18 @@ type
       constructor Create(CreateSuspended: boolean);
     end;
 
+    TGetStarList = class(TThread)
+    public
+      working: boolean;
+      num, id: integer;
+      fits: TFits;
+      StarList: TStarList;
+      rx,ry,overlap,s: integer;
+      img_temp: Timai8;
+      procedure Execute; override;
+      constructor Create(CreateSuspended: boolean);
+    end;
+
 
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
@@ -787,6 +799,80 @@ for i:=startline to endline do begin
    end;
 end;
 working := False;
+end;
+
+//////////////////// TGetStarList /////////////////////////
+
+constructor TGetStarList.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := false;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TGetStarList.Execute;
+var
+  i, j, starty, endy, ss, xs,ys: integer;
+  fitsX,fitsY,fx,fy,nhfd,size,marginx,marginy: integer;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux: double;
+begin
+  xs:= fits.Fwidth;
+  ys:= fits.FHeight;
+  // step size
+  ss := ry div num div s;
+  marginx:=(xs-rx)div 2 div s;
+  marginy:=(ys-ry)div 2 div s;
+  // range for current thread
+  starty := marginy + id * ss;
+  if id=(num-1) then
+    endy := ((ys) div s)-marginy
+  else
+    endy := starty + ss;
+
+  nhfd:=0;{set counters at zero}
+  SetLength(StarList,1000);{allocate initial size}
+  // process the rows range for this thread
+  for fy:=starty to endy do { move test box with stepsize rs around}
+   begin
+     fitsY:=fy*s;
+     for fx:=marginx to ((xs) div s)-marginx do
+     begin
+       fitsX:=fx*s;
+
+       fits.GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{2018-3-21, calculate HFD}
+
+       {scale the result as GetHFD2 work with internal 16 bit values}
+       vmax:=vmax/fits.imageC;
+       bg:=bg/fits.imageC+fits.FimageMin;
+       bgdev:=bgdev/fits.imageC;
+
+       {check valid hfd }
+       if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
+          and (hfd1<99)
+          and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
+          and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
+       then
+       begin
+         inc(nhfd);
+         if nhfd>=Length(StarList) then
+            SetLength(StarList,nhfd+1000);  {get more space to store values}
+         StarList[nhfd-1].x:=xc;
+         StarList[nhfd-1].y:=yc;
+         StarList[nhfd-1].hfd:=hfd1;
+         StarList[nhfd-1].fwhm:=star_fwhm;
+         StarList[nhfd-1].snr:=snr;
+         StarList[nhfd-1].vmax:=vmax;
+         StarList[nhfd-1].bg:=bg;
+         size:=round(2*hfd1);
+         for j:=max(0,round(yc)-size) to min(ys-1,integer(round(yc))+size) do {mark the whole star area as surveyed}
+            for i:=max(0,round(xc)-size) to min(xs-1,integer(round(xc))+size) do
+               img_temp[0,i,j]:=1;
+
+      end;
+     end;
+   end;
+   SetLength(StarList,nhfd);  {set length to new number of elements}
+   working:=false;
 end;
 
 //////////////////// TFits /////////////////////////
@@ -2526,68 +2612,63 @@ end;
 
 procedure TFits.GetStarList(rx,ry,s: integer);
 var
- fitsX,fitsY,fx,fy,nhfd,i,j,size: integer;
- hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux: double;
- marginx,marginy,overlap: integer;
+ i,j,n,nhfd: integer;
+ overlap: integer;
  img_temp: Timai8;
+ working, timingout: boolean;
+ timelimit: TDateTime;
+ thread: array[0..15] of TGetStarList;
+ tc,timeout: integer;
 begin
-
-overlap:=round(s/3); // large overlap to have more chance to measure a big dot as a single piece
-s:=round(2*s/3);     // keep original window size after adding overlap
-
-nhfd:=0;{set counters at zero}
-SetLength(FStarList,1000);{allocate initial size}
-
-marginx:=(FWidth-rx)div 2 div s;
-marginy:=(Fheight-ry)div 2 div s;
-
-SetLength(img_temp,1,FWidth,FHeight); {array to check for duplicate}
-for j:=0 to Fheight-1 do
-   for i:=0 to FWidth-1 do
-      img_temp[0,i,j]:=0;  {mark as not surveyed}
-
-for fy:=marginy to ((FHeight) div s)-marginy do { move test box with stepsize rs around}
- begin
-   fitsY:=fy*s;
-   for fx:=marginx to ((FWidth) div s)-marginx do
-   begin
-     fitsX:=fx*s;
-
-     GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{2018-3-21, calculate HFD}
-
-     {scale the result as GetHFD2 work with internal 16 bit values}
-     vmax:=vmax/FimageC;
-     bg:=bg/FimageC+FimageMin;
-     bgdev:=bgdev/FimageC;
-
-     {check valid hfd }
-     if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
-        and (hfd1<99)
-        and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
-        and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
-     then
-     begin
-       inc(nhfd);
-       if nhfd>=Length(FStarList) then
-          SetLength(FStarList,nhfd+1000);  {get more space to store values}
-       FStarList[nhfd-1].x:=xc;
-       FStarList[nhfd-1].y:=yc;
-       FStarList[nhfd-1].hfd:=hfd1;
-       FStarList[nhfd-1].fwhm:=star_fwhm;
-       FStarList[nhfd-1].snr:=snr;
-       FStarList[nhfd-1].vmax:=vmax;
-       FStarList[nhfd-1].bg:=bg;
-
-       size:=round(2*hfd1);
-       for j:=max(0,round(yc)-size) to min(FHeight-1,integer(round(yc))+size) do {mark the whole star area as surveyed}
-          for i:=max(0,round(xc)-size) to min(Fwidth-1,integer(round(xc))+size) do
-             img_temp[0,i,j]:=1;
-
-     end;
-   end;
- end;
- SetLength(FStarList,nhfd);  {set length to new number of elements}
- SetLength(img_temp,0,0,0);
+  overlap:=round(s/3); // large overlap to have more chance to measure a big dot as a single piece
+  s:=round(2*s/3);     // keep original window size after adding overlap
+  SetLength(img_temp,1,FWidth,FHeight); {array to check for duplicate}
+  for j:=0 to Fheight-1 do
+     for i:=0 to FWidth-1 do
+        img_temp[0,i,j]:=0;  {mark as not surveyed}
+  // number of thread
+   tc := max(1,min(16, MaxThreadCount)); // based on number of core
+   tc := max(1,min(tc,Fheight div (100+2*s))); // do not split the image too much
+  // start thread
+  for i := 0 to tc - 1 do
+  begin
+    thread[i] := TGetStarList.Create(true);
+    thread[i].fits := self;
+    thread[i].num := tc;
+    thread[i].id := i;
+    thread[i].rx := rx;
+    thread[i].ry := ry;
+    thread[i].overlap := overlap;
+    thread[i].s := s;
+    thread[i].img_temp := img_temp;
+    thread[i].Start;
+  end;
+  // wait complete
+  timeout:=60;
+  timelimit := now + timeout / secperday;
+  repeat
+    sleep(100);
+    working := False;
+    for i := 0 to tc - 1 do
+      working := working or thread[i].working;
+    timingout := (now > timelimit);
+  until (not working) or timingout;
+  SetLength(img_temp,0,0,0);
+  // copy result
+  nhfd:=0;
+  for i:=0 to tc - 1 do
+    nhfd:=nhfd+Length(thread[i].StarList);
+  SetLength(FStarList,nhfd);
+  n:=0;
+  for i:=0 to tc - 1 do begin
+    for j:=0 to Length(thread[i].StarList)-1 do begin
+       FStarList[n]:=thread[i].StarList[j];
+       inc(n);
+    end;
+  end;
+  // cleanup
+  for i:=0 to tc - 1 do SetLength(thread[i].StarList,0);
+  for i := 0 to tc - 1 do thread[i].Free;
 end;
 
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
