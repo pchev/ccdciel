@@ -265,43 +265,40 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <RequiredPackages Count="12">
+    <RequiredPackages Count="11">
       <Item1>
-        <PackageName Value="multithreadprocslaz"/>
+        <PackageName Value="LazControls"/>
       </Item1>
       <Item2>
-        <PackageName Value="LazControls"/>
+        <PackageName Value="BGRABitmapPack_nogl"/>
       </Item2>
       <Item3>
-        <PackageName Value="BGRABitmapPack_nogl"/>
+        <PackageName Value="TAChartLazarusPkg"/>
       </Item3>
       <Item4>
-        <PackageName Value="TAChartLazarusPkg"/>
+        <PackageName Value="enhedit"/>
       </Item4>
       <Item5>
-        <PackageName Value="enhedit"/>
+        <PackageName Value="pascalscript"/>
       </Item5>
       <Item6>
-        <PackageName Value="pascalscript"/>
+        <PackageName Value="SynEdit"/>
       </Item6>
       <Item7>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="vosamp"/>
       </Item7>
       <Item8>
-        <PackageName Value="vosamp"/>
+        <PackageName Value="LazUtils"/>
       </Item8>
       <Item9>
-        <PackageName Value="LazUtils"/>
+        <PackageName Value="FCL"/>
       </Item9>
       <Item10>
-        <PackageName Value="FCL"/>
+        <PackageName Value="indiclient"/>
       </Item10>
       <Item11>
-        <PackageName Value="indiclient"/>
-      </Item11>
-      <Item12>
         <PackageName Value="LCL"/>
-      </Item12>
+      </Item11>
     </RequiredPackages>
     <Units Count="99">
       <Unit0>
