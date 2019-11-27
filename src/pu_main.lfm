@@ -471,13 +471,13 @@ object f_main: Tf_main
     end
     object MenuItem2: TMenuItem
       Caption = 'Edit'
-      object MenuSetup: TMenuItem
-        Caption = 'Devices Setup...'
-        OnClick = MenuSetupClick
-      end
       object MenuOptions: TMenuItem
         Caption = 'Preferences...'
         OnClick = MenuOptionsClick
+      end
+      object MenuSetup: TMenuItem
+        Caption = 'Devices Setup...'
+        OnClick = MenuSetupClick
       end
       object MenuItem18: TMenuItem
         Caption = '-'
