@@ -224,6 +224,17 @@ type
      property DarkFrame: TFits read FDark write FDark;
   end;
 
+  TGetImage = class(TThread)
+  public
+    working: boolean;
+    num, id: integer;
+    fits: TFits;
+    hist: THistogram;
+    Fdmin,c: double;
+    procedure Execute; override;
+    constructor Create(CreateSuspended: boolean);
+  end;
+
   TGetBgraThread = class(TThread)
     public
       working: boolean;
@@ -631,6 +642,143 @@ begin
   FComments.Delete(idx);
 end;
 
+//////////////////// TGetImage /////////////////////////
+
+constructor TGetImage.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := False;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TGetImage.Execute;
+var
+  i, j, startline, endline, xs,ys: integer;
+  x : word;
+  h: integer;
+  xx: extended;
+begin
+xs:= fits.Fwidth;
+ys:= fits.FHeight;
+i := ys div num;
+startline := id * i;
+if id = (num - 1) then
+  endline := ys - 1
+else
+  endline := (id + 1) * i - 1;
+FillByte(hist,sizeof(THistogram),0);
+// process the rows range for this thread
+case fits.FFitsInfo.bitpix of
+   -64 : begin
+         for i:=startline to endline do begin
+         for j := 0 to xs-1 do begin
+             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[0,i,j];
+             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+             fits.Fimage[0,i,j]:=x;
+             if fits.n_axis=3 then begin
+               h:=x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[1,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[1,i,j]:=x;
+               h:=h+x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[2,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[2,i,j]:=x;
+               x:=(h+x) div 3;
+             end;
+             inc(hist[x]);
+         end;
+         end;
+         end;
+   -32 : begin
+         for i:=startline to endline do begin
+         for j := 0 to xs-1 do begin
+             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[0,i,j];
+             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+             fits.Fimage[0,i,j]:=x;
+             if fits.n_axis=3 then begin
+               h:=x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[1,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[1,i,j]:=x;
+               h:=h+x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[2,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[2,i,j]:=x;
+               x:=(h+x) div 3;
+             end;
+             inc(hist[x]);
+         end;
+         end;
+         end;
+     8 : begin
+         for i:=startline to endline do begin
+         for j := 0 to xs-1 do begin
+             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i,j];
+             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+             fits.Fimage[0,i,j]:=x;
+             if fits.n_axis=3 then begin
+               h:=x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[1,i,j]:=x;
+               h:=h+x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[2,i,j]:=x;
+               x:=(h+x) div 3;
+             end;
+             inc(hist[x]);
+         end;
+         end;
+         end;
+    16 : begin
+         for i:=startline to endline do begin
+         for j := 0 to xs-1 do begin
+             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i,j];
+             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+             fits.Fimage[0,i,j]:=x;
+             if fits.n_axis=3 then begin
+               h:=x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[1,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[1,i,j]:=x;
+               h:=h+x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[2,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[2,i,j]:=x;
+               x:=(h+x) div 3;
+             end;
+             inc(hist[x]);
+         end;
+         end;
+         end;
+    32 : begin
+         for i:=startline to endline do begin
+         for j := 0 to xs-1 do begin
+             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[0,i,j];
+             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+             fits.Fimage[0,i,j]:=x;
+             if fits.n_axis=3 then begin
+               h:=x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[1,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[1,i,j]:=x;
+               h:=h+x;
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[2,i,j];
+               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+               fits.Fimage[2,i,j]:=x;
+               x:=(h+x) div 3;
+             end;
+             inc(hist[x]);
+         end;
+         end;
+         end;
+    end;
+
+working := False;
+end;
+
 //////////////////// TGetBgraThread /////////////////////////
 
 constructor TGetBgraThread.Create(CreateSuspended: boolean);
@@ -658,6 +806,7 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
+ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
    if debayer then begin
@@ -749,6 +898,7 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
+ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
    if debayer then begin
@@ -1419,156 +1569,66 @@ end;
 
 procedure TFits.GetImage;
 var i,j: integer;
-    x : word;
-    h: integer;
-    xx: extended;
     c: double;
+    working, timingout: boolean;
+    timelimit: TDateTime;
+    thread: array[0..15] of TGetImage;
+    tc,timeout: integer;
 begin
-if FImgFullRange then begin
-  Fdmin:=0;
-  if FFitsInfo.bitpix=8 then
-    Fdmax:=MaxByte
-  else
-    Fdmax:=MaxWord;
-end else begin
-  Fdmin:=FFitsInfo.dmin;
-  Fdmax:=FFitsInfo.dmax;
-end;
-setlength(Fimage,n_axis,Fheight,Fwidth);
-for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
-case FFitsInfo.bitpix of
-     -64 : begin
-           if Fdmax>Fdmin then
-             c:=MaxWord/(Fdmax-Fdmin)
-           else
-             c:=1;
-           for i:=0 to Fheight-1 do begin
-           for j := 0 to Fwidth-1 do begin
-               xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[0,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               Fimage[0,i,j]:=x;
-               if n_axis=3 then begin
-                 h:=x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[1,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[1,i,j]:=x;
-                 h:=h+x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[2,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[2,i,j]:=x;
-                 x:=(h+x) div 3;
-               end;
-               inc(FHistogram[x]);
-           end;
-           end;
-           end;
-     -32 : begin
-           if Fdmax>Fdmin then
-             c:=MaxWord/(Fdmax-Fdmin)
-           else
-             c:=1;
-           for i:=0 to Fheight-1 do begin
-           for j := 0 to Fwidth-1 do begin
-               xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[0,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               Fimage[0,i,j]:=x;
-               if n_axis=3 then begin
-                 h:=x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[1,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[1,i,j]:=x;
-                 h:=h+x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[2,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[2,i,j]:=x;
-                 x:=(h+x) div 3;
-               end;
-               inc(FHistogram[x]);
-           end;
-           end;
-           end;
-       8 : begin
-           if Fdmax>Fdmin then
-             c:=MaxWord/(Fdmax-Fdmin)
-           else
-             c:=1;
-           for i:=0 to Fheight-1 do begin
-           for j := 0 to Fwidth-1 do begin
-               xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               Fimage[0,i,j]:=x;
-               if n_axis=3 then begin
-                 h:=x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[1,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[1,i,j]:=x;
-                 h:=h+x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[2,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[2,i,j]:=x;
-                 x:=(h+x) div 3;
-               end;
-               inc(FHistogram[x]);
-           end;
-           end;
-           end;
-      16 : begin
-           if Fdmax>Fdmin then
-              c:=MaxWord/(Fdmax-Fdmin)
-           else
-              c:=1;
-           for i:=0 to Fheight-1 do begin
-           for j := 0 to Fwidth-1 do begin
-               xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               Fimage[0,i,j]:=x;
-               if n_axis=3 then begin
-                 h:=x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[1,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[1,i,j]:=x;
-                 h:=h+x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[2,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[2,i,j]:=x;
-                 x:=(h+x) div 3;
-               end;
-               inc(FHistogram[x]);
-           end;
-           end;
-           end;
-      32 : begin
-           if Fdmax>Fdmin then
-             c:=MaxWord/(Fdmax-Fdmin)
-           else
-             c:=1;
-           for i:=0 to Fheight-1 do begin
-           for j := 0 to Fwidth-1 do begin
-               xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[0,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               Fimage[0,i,j]:=x;
-               if n_axis=3 then begin
-                 h:=x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[1,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[1,i,j]:=x;
-                 h:=h+x;
-                 xx:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[2,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 Fimage[2,i,j]:=x;
-                 x:=(h+x) div 3;
-               end;
-               inc(FHistogram[x]);
-           end;
-           end;
-           end;
-      else c:=1;
-      end;
-FimageC:=c;
+  if FImgFullRange then begin
+    Fdmin:=0;
+    if FFitsInfo.bitpix=8 then
+      Fdmax:=MaxByte
+    else
+      Fdmax:=MaxWord;
+  end else begin
+    Fdmin:=FFitsInfo.dmin;
+    Fdmax:=FFitsInfo.dmax;
+  end;
+  setlength(Fimage,n_axis,Fheight,Fwidth);
+  for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
 
-FimageMin:=Fdmin;
-FimageMax:=Fdmax;
-if FimageMin<0 then FimageMin:=0;
+  if Fdmax>Fdmin then
+    c:=MaxWord/(Fdmax-Fdmin)
+  else
+    c:=1;
+  FimageC:=c;
+  FimageMin:=Fdmin;
+  FimageMax:=Fdmax;
+  if FimageMin<0 then FimageMin:=0;
+  thread[0]:=nil;
+  // number of thread
+   tc := max(1,min(16, MaxThreadCount)); // based on number of core
+   tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
+  // start thread
+  for i := 0 to tc - 1 do
+  begin
+    thread[i] := TGetImage.Create(True);
+    thread[i].fits := self;
+    thread[i].num := tc;
+    thread[i].id := i;
+    thread[i].c := c;
+    thread[i].Fdmin := Fdmin;
+    thread[i].Start;
+  end;
+  // wait complete
+  timeout:=60;
+  timelimit := now + timeout / secperday;
+  repeat
+    sleep(100);
+    working := False;
+    for i := 0 to tc - 1 do
+      working := working or thread[i].working;
+    timingout := (now > timelimit);
+  until (not working) or timingout;
+  // total histogram
+  for i:=0 to tc - 1 do begin
+    for j:=0 to high(word) do begin
+       FHistogram[j]:=FHistogram[j]+thread[i].hist[j];
+    end;
+  end;
+  // cleanup
+  for i := 0 to tc - 1 do thread[i].Free;
 end;
 
 procedure TFits.FreeDark;
@@ -1678,7 +1738,6 @@ end;
 
 function TFits.BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
 var r,g,b: integer;
-    l,lg: word;
 begin
    if not odd(row) then begin //ligne paire
       if not odd(col) then begin //colonne paire et ligne paire
@@ -1952,6 +2011,7 @@ if debayer then begin
   t:=BayerMode;
 end;
 bgra.SetSize(Fwidth,Fheight);
+thread[0]:=nil;
 // number of thread
  tc := max(1,min(16, MaxThreadCount)); // based on number of core
  tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
@@ -2017,6 +2077,7 @@ begin
   bgra.SetSize(Fwidth,Fheight);
   if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
   c:=MaxWord/(FImgDmax-FImgDmin);
+  thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
    tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
@@ -2626,6 +2687,7 @@ begin
   for j:=0 to Fheight-1 do
      for i:=0 to FWidth-1 do
         img_temp[0,i,j]:=0;  {mark as not surveyed}
+  thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
    tc := max(1,min(tc,Fheight div (100+2*s))); // do not split the image too much
