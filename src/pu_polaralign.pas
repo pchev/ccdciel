@@ -590,9 +590,9 @@ begin
   Memo1.Lines.Add('');
   Memo1.Lines.Add(rsHorizontalCo);
   if FOffsetAz*sgn(ObsLatitude)>0 then
-     txt:=rsMoveWestBy
+     txt:=rsMoveEastBy
   else
-     txt:=rsMoveEastBy;
+     txt:=rsMoveWestBy;
   txt:=txt+DEToStrShort(abs(FOffsetAz),0);
   tracemsg(rsHorizontalCo+' '+txt);
   Memo1.Lines.Add(txt);
