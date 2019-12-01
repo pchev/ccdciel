@@ -82,7 +82,6 @@ begin
   Application.CreateForm(Tf_pause, f_pause);
   Application.CreateForm(Tf_focusercalibration, f_focusercalibration);
   Application.CreateForm(Tf_about, f_about);
-  Application.CreateForm(Tf_selectscript, f_selectscript);
   Application.CreateForm(Tf_goto, f_goto);
   Application.CreateForm(Tf_photometry, f_photometry);
   Application.CreateForm(Tf_polaralign, f_polaralign);
