@@ -20,30 +20,60 @@ for lang in $langs; do
 echo $lang
 
 # main index order
-grep '<li class="level."><div class="li"> <a href="' $lang/documentation/start.html \
-     | sed 's/<li class="level."><div class="li"> <a href="//'| cut -d\" -f1 \
-     | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl.txt
-
-# remove external links
-sed -i '/http:/ d' fl.txt
-sed -i '/https:/ d' fl.txt
+cat <<EOF > fl.txt
+$lang/documentation/the_program_screen.html
+$lang/documentation/connecting_the_equipment.html
+$lang/documentation/global_configuration.html
+$lang/documentation/focusing.html
+$lang/documentation/simple_capture.html
+$lang/documentation/plate_solving.html
+$lang/documentation/automated_sequence.html
+$lang/documentation/video_tutorial.html
+$lang/documentation/faq.html
+$lang/documentation/edit.html
+$lang/documentation/display.html
+$lang/documentation/tools.html
+$lang/documentation/right_click_menu.html
+$lang/documentation/file.html
+$lang/documentation/help.html
+$lang/documentation/status_bar.html
+$lang/documentation/ccdciel_status.html
+$lang/documentation/ccdscript.html
+$lang/documentation/cmdline.html
+$lang/documentation/image_preprocessing.html
+$lang/documentation/installation_on_ubuntu.html
+$lang/documentation/installation_on_linux.html
+$lang/documentation/installation_on_windows.html
+$lang/documentation/installation_on_mac_os_x.html
+$lang/documentation/hyperleda_database.html
+$lang/documentation/ascom.html
+$lang/documentation/astap.html
+$lang/documentation/astrometry.net.html
+$lang/documentation/star_locator_elbrus.html
+$lang/documentation/platesolve_2.html
+EOF
 
 # insert title, first page and doc index
 sed -i '1 i '$lang'\/documentation\/00_title.html\n'$lang'\/start.html\n'$lang'\/features.html\n'$lang'\/documentation\/start.html' fl.txt
-
-# insert pages in File menu
-grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/file.html      | sed 's/<li class="level1"><div class="li"> <a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
-sed -i '/\/file\.html/r./fl1.txt' fl.txt
-rm fl1.txt
 
 # insert pages in Edit menu
 grep '<li class="level1"><div class="li"><a href="' $lang/documentation/edit.html      | sed 's/<li class="level1"><div class="li"><a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
 sed -i '/\/edit\.html/r./fl1.txt' fl.txt
 rm fl1.txt
 
+# insert pages in Display menu
+grep '<li class="level1"><div class="li"><a href="' $lang/documentation/display.html      | sed 's/<li class="level1"><div class="li"><a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
+sed -i '/\/display\.html/r./fl1.txt' fl.txt
+rm fl1.txt
+
 # insert pages in Tools menu
 grep '<li class="level1"><div class="li"><a href="' $lang/documentation/tools.html      | sed 's/<li class="level1"><div class="li"><a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
 sed -i '/\/tools\.html/r./fl1.txt' fl.txt
+rm fl1.txt
+
+# insert pages in File menu
+grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/file.html      | sed 's/<li class="level1"><div class="li"> <a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
+sed -i '/\/file\.html/r./fl1.txt' fl.txt
 rm fl1.txt
 
 # insert INDI link on same row as ASCOM 
