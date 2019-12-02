@@ -197,7 +197,7 @@ begin
    BtnClose.Caption:=rsClose;
    BtnContinue.Caption:=rsContinue;
    Label5.Caption:=rsPolarAlignme2;
-   Label1.Caption:=Format(rsMakeAFirstPo, [crlf, crlf]);
+   Label1.Caption:=Format(rsMakeAFirstPo, [crlf, crlf, crlf]);
    MountSlewing.Caption:=rsMovingMount;
    MountSlewing.Items[0]:=rsAutomatic;
    MountSlewing.Items[1]:=rsManual;
@@ -617,7 +617,7 @@ begin
   tracemsg('Pole in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y));
   Fstartx:=p.x;
   Fstarty:=fits.HeaderInfo.naxis2-p.y;
-  tracemsg('Overlay end X='+FormatFloat(f6,Fendx)+' Y='+FormatFloat(f6,Fendy));
+  tracemsg('Overlay start X='+FormatFloat(f6,Fstartx)+' Y='+FormatFloat(f6,Fstarty));
   if n=1 then begin
     txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
@@ -634,7 +634,7 @@ begin
   tracemsg('Rotation center in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y)+' image height='+IntToStr(fits.HeaderInfo.naxis2));
   Fendx:=p.x;
   Fendy:=fits.HeaderInfo.naxis2-p.y;
-  tracemsg('Overlay start X='+FormatFloat(f6,Fstartx)+' Y='+FormatFloat(f6,Fstarty));
+  tracemsg('Overlay end X='+FormatFloat(f6,Fendx)+' Y='+FormatFloat(f6,Fendy));
   if n=1 then begin
     txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);

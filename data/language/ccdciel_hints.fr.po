@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-11-04 16:31+0000\n"
-"PO-Revision-Date: 2019-10-11 14:34+0000\n"
+"POT-Creation-Date: 2019-12-02 13:38+0000\n"
+"PO-Revision-Date: 2019-12-02 13:05+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-11-06 10:32+0000\n"
-"X-Generator: Launchpad (build 469f241f4e73cc0bdffa4e30654052a2af068e06)\n"
+"X-Launchpad-Export-Date: 2019-12-02 13:44+0000\n"
+"X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -260,6 +260,10 @@ msgstr "Déplacer le focuseur vers l'intérieur"
 msgid "Move focuser outward"
 msgstr "Déplacer le focuseur vers l'extérieur"
 
+#: u_hints.rspausethesequ
+msgid "Pause the sequence after the current exposure is complete"
+msgstr "Suspendre la séquence une fois l'exposition en cours terminée"
+
 #: u_hints.rspixelbinning
 msgid "Pixel binning"
 msgstr "Pixel binning"
@@ -319,6 +323,10 @@ msgstr "Réglez l'heure d'arrêt à l'aube astronomique, recalculée pour la dat
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
 msgstr "Affiche la mire"
+
+#: u_hints.rsshowcompleti
+msgid "Show completion status"
+msgstr "Affiche le statut d'achèvement"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"

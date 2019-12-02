@@ -1154,7 +1154,7 @@ resourcestring
   rsCancelPolarA = 'Cancel polar alignment';
   rsPleaseWaitUn = 'Please wait until the measurements are complete';
   rsTheMountDoNo = 'The mount do not move enough!';
-  rsMoveTheMount = 'Move the mount manually, click Continue when ready';
+  rsMoveTheMount = 'Move the mount manually in RA, click Continue when ready';
   rsComputationR = 'Computation result:';
   rsMountRotatio = 'Mount rotation center';
   rsTotalPolarEr = 'Total polar error:';
@@ -1165,12 +1165,12 @@ resourcestring
   rsMoveDownBy = 'move Down by ';
   rsMoveUpBy = 'move Up by ';
   rsMoveTheGreen = 'Move the green circle to a star using the mouse.';
-  rsThenAdjustTh = 'Then adjust the mount polar adjustement knob to move the star to the pink circle at the other extremity of the line.';
+  rsThenAdjustTh = 'Then adjust the mount polar adjustment knob to move the star to the pink circle at the other extremity of the line.';
   rsYouCanCloseT = 'You can close this window after you finish to move the mount polar axis.';
   rsPolarAlignme = 'Polar alignment';
-  rsMakeAFirstPo = 'Adjust the mount RA axis manually to point within a few degree of the pole.%s'+
-                   'Slew the telescope to point near the pole at a declination about 89 degrees with counterweight down.%s'+
-                   'Select below if the telescope can already slew automatically or if it must be moved manually.'+
+  rsMakeAFirstPo = 'Adjust the mount RA axis manually to point to the pole the best as possible.%s'+
+                   'Slew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%s'+
+                   'Select below if the telescope can already slew automatically or if it must be moved manually.%s'+
                    'If automatic, select the direction and movement step. Beware it will move two time this amount.';
   rsMovingMount = 'Moving mount';
   rsAutomatic = 'Automatic';

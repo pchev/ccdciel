@@ -538,3 +538,11 @@ msgstr ""
 msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
 msgstr ""
 
+#: u_hints:rspausethesequ
+msgid "Pause the sequence after the current exposure is complete"
+msgstr ""
+
+#: u_hints:rsshowcompleti
+msgid "Show completion status"
+msgstr ""
+
