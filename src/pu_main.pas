@@ -746,6 +746,7 @@ type
     procedure ShutdownProgram(Sender: TObject);
     function  CheckImageInfo:boolean;
     procedure PolaralignClose(Sender: TObject);
+    procedure PhotometryClose(Sender: TObject);
   public
     { public declarations }
   end;
@@ -2033,6 +2034,7 @@ begin
   f_script.SetScriptList(config.GetValue('/Script/ScriptName',''));
 
   f_photometry.onMagnitudeCalibrationChange:=@MagnitudeCalibrationChange;
+  f_photometry.onClosePhotometry:=@PhotometryClose;
 
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   deepstring:=TStringList.Create;
@@ -8204,6 +8206,14 @@ begin
         brush.Style:=bsSolid;
      end;
   end;
+  if (f_photometry<>nil) and f_photometry.Visible then begin
+     Fits2Screen(round(f_photometry.StarX),round(f_photometry.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+     s:=max(3,round(max(ImgZoom,ImgScale0)*2.5*f_photometry.hfd));
+     with Image1.Canvas do begin
+        Pen.Color:=clTeal;
+        Frame(x-s,y-s,x+s,y+s);
+     end;
+  end;
   if Length(fits.StarList)>0 then begin
      // draw all star boxes
      Image1.Canvas.pen.Color:=clRed;
@@ -8219,7 +8229,7 @@ begin
            (fits.StarList[i].snr<AutofocusMinSNR)  // do not plot stars not used by autofocus
            then continue;
         Fits2Screen(round(fits.StarList[i].x),round(fits.StarList[i].y),f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        size:=round(max(ImgZoom,ImgScale0)*5*fits.StarList[i].hfd);
+        size:=max(3,round(max(ImgZoom,ImgScale0)*2.5*fits.StarList[i].hfd));
         Image1.Canvas.Rectangle(x-size,y-size, x+size, y+size);
         Image1.Canvas.TextOut(x+size,y+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1));
      end;
@@ -8311,6 +8321,11 @@ begin
 end;
 
 procedure Tf_main.PolaralignClose(Sender: TObject);
+begin
+  image1.Invalidate;
+end;
+
+procedure Tf_main.PhotometryClose(Sender: TObject);
 begin
   image1.Invalidate;
 end;
@@ -8444,6 +8459,7 @@ begin
 if fits.HeaderInfo.valid then begin
   f_photometry.Show;
   MeasureAtPos(MouseDownX,MouseDownY,true);
+  Image1.Invalidate;
 end;
 end;
 
@@ -11142,6 +11158,9 @@ begin
        if flux>0 then begin
          sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
          if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+           f_photometry.StarX:=xc;
+           f_photometry.StarY:=yc;
+           f_photometry.hfd:=hfd;
            f_photometry.Memo1.Clear;
            if (fits.HeaderInfo.exptime<>0) and (fits.HeaderInfo.airmass<>0) then begin
              if MagnitudeCalibration<>NullCoord then begin

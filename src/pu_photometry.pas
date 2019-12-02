@@ -42,15 +42,18 @@ type
     Panel1: TPanel;
     procedure ButtonCloseClick(Sender: TObject);
     procedure ButtonSetRefMagClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
   private
     Fmag: double;
-    FMagnitudeCalibrationChange: TNotifyEvent;
+    FMagnitudeCalibrationChange, FClosePhotometry: TNotifyEvent;
     procedure SetLang;
     procedure SetMag(value:double);
   public
+    StarX, StarY, hfd: double;
     property mag: double read Fmag write SetMag;
     property onMagnitudeCalibrationChange: TNotifyEvent read FMagnitudeCalibrationChange write FMagnitudeCalibrationChange;
+    property onClosePhotometry : TNotifyEvent read FClosePhotometry write FClosePhotometry;
   end;
 
 var
@@ -97,6 +100,11 @@ begin
        MagnitudeCalibration:=RefMag.Value-Fmag+MagnitudeCalibration;
     if Assigned(FMagnitudeCalibrationChange) then FMagnitudeCalibrationChange(Self);
   end;
+end;
+
+procedure Tf_photometry.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+ if Assigned(FClosePhotometry) then FClosePhotometry(Self);
 end;
 
 end.
