@@ -196,6 +196,7 @@ begin
    BtnCancel.Caption:=rsCancel;
    BtnClose.Caption:=rsClose;
    BtnContinue.Caption:=rsContinue;
+   BtnLock.Caption:=rsLockOverlay;
    Label5.Caption:=rsPolarAlignme2;
    Label1.Caption:=Format(rsMakeAFirstPo, [crlf, crlf, crlf]);
    MountSlewing.Caption:=rsMovingMount;

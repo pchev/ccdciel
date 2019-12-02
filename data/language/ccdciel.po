@@ -4306,3 +4306,7 @@ msgstr ""
 msgid "Save picture%s"
 msgstr ""
 
+#: u_translation:rslockoverlay
+msgid "Lock overlay"
+msgstr ""
+

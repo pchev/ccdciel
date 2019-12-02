@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-02 13:40+0000\n"
+"POT-Creation-Date: 2019-12-02 14:17+0000\n"
 "PO-Revision-Date: 2019-11-22 18:26+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-02 13:44+0000\n"
+"X-Launchpad-Export-Date: 2019-12-02 14:24+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 "Language: en_GB\n"
 
@@ -1768,6 +1768,10 @@ msgstr "Load configuration on startup"
 #: u_translation.rsloaddarkfile
 msgid "Load dark file"
 msgstr "Load dark file"
+
+#: u_translation.rslockoverlay
+msgid "Lock overlay"
+msgstr ""
 
 #: u_translation.rslogallmessag
 msgid "Log all messages to file "

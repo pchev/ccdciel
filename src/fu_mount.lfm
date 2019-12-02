@@ -163,7 +163,7 @@ object f_mount: Tf_mount
         ParentColor = False
       end
       object TimeToMeridian: TLabel
-        Left = 96
+        Left = 112
         Height = 19
         Hint = 'Time from meridian transit (hour angle)'
         Top = 4
