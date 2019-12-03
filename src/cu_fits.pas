@@ -3213,7 +3213,7 @@ if libraw<>0 then begin  // Use libraw directly
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
   if (rawinfo2.version>1) then begin
-    txt:=trim(rawinfo2.camera);
+    txt:=copy(trim(rawinfo2.camera),1,40);
     if txt<>'' then hdr.Add('CAMERA', txt ,'Camera model');
   end;
   if (rawinfo2.version>1) and (rawinfo2.focal_len>0) then hdr.Add('FOCALLEN',rawinfo2.focal_len ,'Camera focal length');
