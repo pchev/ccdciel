@@ -2652,8 +2652,13 @@ procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y: integer;
 begin
  if fits.HeaderInfo.valid and (not f_starprofile.AutofocusRunning) then begin
-   Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x,y);
-   f_starprofile.ShowProfile(fits,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+   if f_photometry.Visible then begin
+      MeasureAtPos(Mx,My,true);
+   end
+   else begin
+      Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      f_starprofile.ShowProfile(fits,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+   end;
    Image1.Invalidate;
  end;
 end;
@@ -8206,7 +8211,7 @@ begin
         brush.Style:=bsSolid;
      end;
   end;
-  if (f_photometry<>nil) and f_photometry.Visible then begin
+  if (f_photometry<>nil) and f_photometry.Visible and (f_photometry.hfd>0) then begin
      Fits2Screen(round(f_photometry.StarX),round(f_photometry.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      s:=max(3,round(max(ImgZoom,ImgScale0)*2.5*f_photometry.hfd));
      with Image1.Canvas do begin
@@ -11204,6 +11209,7 @@ begin
        else begin
          sval:=sval+blank+rsSaturated;
          if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+           f_photometry.hfd:=-1;
            f_photometry.Memo1.Clear;
            f_photometry.Memo1.Lines.Add(rsSaturated);
            f_photometry.mag:=NullCoord;
@@ -11212,6 +11218,7 @@ begin
      end
      else begin
        if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+         f_photometry.hfd:=-1;
          f_photometry.Memo1.Clear;
          f_photometry.Memo1.Lines.Add(rsNoStarFound);
          f_photometry.mag:=NullCoord;
@@ -11220,6 +11227,7 @@ begin
    end
    else begin
      if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+       f_photometry.hfd:=-1;
        f_photometry.Memo1.Clear;
        f_photometry.Memo1.Lines.Add(rsNoStarFound);
        f_photometry.mag:=NullCoord;
@@ -11228,6 +11236,7 @@ begin
  end
  else begin
    if photometry and (f_photometry<>nil) and f_photometry.Visible then begin
+     f_photometry.hfd:=-1;
      f_photometry.Memo1.Clear;
      f_photometry.Memo1.Lines.Add(rsNoStarFound);
      f_photometry.mag:=NullCoord;

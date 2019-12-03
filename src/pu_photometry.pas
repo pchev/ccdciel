@@ -69,6 +69,7 @@ procedure Tf_photometry.FormCreate(Sender: TObject);
 begin
    SetLang;
    Fmag:=NullCoord;
+   hfd:=-1;
 end;
 
 procedure Tf_photometry.SetLang;
