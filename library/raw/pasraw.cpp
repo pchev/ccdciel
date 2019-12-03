@@ -19,6 +19,10 @@ struct TImgInfo
    int leftmargin;
    char bayerpattern[4];
    unsigned short *bitmap;
+};
+
+struct TImgInfo2
+{
    int version;
    char camera[80];
    time_t timestamp;
@@ -63,7 +67,7 @@ extern "C" int closeraw()
 {
     RawProcessor.recycle(); 
     return(0);
-}    
+}
 
 extern "C" int getinfo(TImgInfo *info)
 {
@@ -86,6 +90,14 @@ extern "C" int getinfo(TImgInfo *info)
      info->bayerpattern[2] = P1.cdesc[RawProcessor.COLOR(1, 0)];
      info->bayerpattern[3] = P1.cdesc[RawProcessor.COLOR(1, 1)];
    }
+   return(0);
+}
+
+extern "C" int getinfo2(TImgInfo2 *info)
+{
+   if ((!S.raw_width)&&(!S.raw_height)) {
+     return(1);
+   }
    info->version = 2;
    snprintf(info->camera, 80, "%s %s", P1.make, P1.model);
    info->timestamp = P2.timestamp;
@@ -104,7 +116,7 @@ extern "C" int getinfo(TImgInfo *info)
      info->bmult = 1.0;
    }
    return(0);
-}    
+}
 
 extern "C"  void geterrormsg(int ret, char *msg)
 {
