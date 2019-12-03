@@ -1999,14 +1999,14 @@ begin
 rmult:=0; gmult:=0; bmult:=0; t:=bayerRG;
 if debayer then begin
   if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-     mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
-     rmult:=FFitsInfo.rmult/mx;
-     gmult:=FFitsInfo.gmult/mx;
-     bmult:=FFitsInfo.bmult/mx;
+     rmult:=FFitsInfo.rmult;
+     gmult:=FFitsInfo.gmult;
+     bmult:=FFitsInfo.bmult;
   end else begin
-     rmult:=RedBalance;
-     gmult:=GreenBalance;
-     bmult:=BlueBalance;
+     mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
+     rmult:=RedBalance/mx;
+     gmult:=GreenBalance/mx;
+     bmult:=BlueBalance/mx;
   end;
   t:=BayerMode;
 end;
@@ -2059,14 +2059,14 @@ begin
   rmult:=0; gmult:=0; bmult:=0; t:=bayerRG;
   if debayer then begin
      if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-       mx:=maxvalue([FFitsInfo.rmult,FFitsInfo.gmult,FFitsInfo.bmult]);
-       rmult:=FFitsInfo.rmult/mx;
-       gmult:=FFitsInfo.gmult/mx;
-       bmult:=FFitsInfo.bmult/mx;
+       rmult:=FFitsInfo.rmult;
+       gmult:=FFitsInfo.gmult;
+       bmult:=FFitsInfo.bmult;
      end else begin
-       rmult:=RedBalance;
-       gmult:=GreenBalance;
-       bmult:=BlueBalance;
+       mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
+       rmult:=RedBalance/mx;
+       gmult:=GreenBalance/mx;
+       bmult:=BlueBalance/mx;
      end;
      t:=BayerMode;
   end;
