@@ -169,6 +169,7 @@ type
     PlotTimer: TTimer;
     ImageResizeTimer: TTimer;
     SaveDialogPicture: TSaveDialog;
+    Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
     TimerStampTimer: TTimer;
     Timestamp: TMenuItem;
@@ -446,6 +447,7 @@ type
     procedure PanelMsgTabsMouseLeave(Sender: TObject);
     procedure PlotTimerTimer(Sender: TObject);
     procedure SelectTab(Sender: TObject);
+    procedure Splitter1Moved(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -1265,6 +1267,7 @@ begin
     Width:=screenconfig.GetValue('/Window/Width',1280);
     Height:=screenconfig.GetValue('/Window/Height',800);
   end;
+  PanelRight.Width:=screenconfig.GetValue('/Window/PanelRight',PanelRight.Width);
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onShowTabs:=@ShowMsgTabs;
@@ -3594,6 +3597,7 @@ begin
  screenconfig.SetValue('/Window/Left',Left);
  screenconfig.SetValue('/Window/Width',Width);
  screenconfig.SetValue('/Window/Height',Height);
+ screenconfig.SetValue('/Window/PanelRight',PanelRight.Width);
 end;
 
 procedure Tf_main.SaveSettings;
@@ -9928,6 +9932,11 @@ begin
   TToolButton(sender).Down:=true;
   i:=TToolButton(sender).tag;
   PageControlRight.ActivePageIndex:=i;
+end;
+
+procedure Tf_main.Splitter1Moved(Sender: TObject);
+begin
+  FormResize(Sender);
 end;
 
 procedure Tf_main.MenuVideoPreviewClick(Sender: TObject);

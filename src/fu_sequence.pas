@@ -27,7 +27,7 @@ interface
 
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
-  fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints,
+  fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -49,6 +49,7 @@ type
     BtnPause: TButton;
     BtnStatus: TButton;
     led: TShape;
+    Panel5: TPanel;
     StatusTimer: TTimer;
     StartTimer: TTimer;
     Unattended: TCheckBox;
@@ -74,6 +75,7 @@ type
     procedure BtnLoadTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
     procedure BtnStatusClick(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure StartTimerTimer(Sender: TObject);
@@ -1095,6 +1097,19 @@ begin
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
   f.Show;
  end;
+end;
+
+procedure Tf_sequence.FrameResize(Sender: TObject);
+var minw: integer;
+begin
+ minw:=DoScaleX(60);
+ TargetGrid.DefaultColWidth:=max(minw,TargetGrid.ClientWidth div 4);
+ TargetGrid.ColWidths[2]:=0;
+ TargetGrid.ColWidths[3]:=0;
+ TargetGrid.Invalidate;
+ minw:=DoScaleX(50);
+ PlanGrid.DefaultColWidth:=max(minw,PlanGrid.ClientWidth div 5);
+ PlanGrid.Invalidate;
 end;
 
 procedure Tf_sequence.BtnPauseClick(Sender: TObject);

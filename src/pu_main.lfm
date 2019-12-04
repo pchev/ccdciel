@@ -26,11 +26,11 @@ object f_main: Tf_main
     Left = 0
     Height = 559
     Top = 0
-    Width = 780
+    Width = 775
     Align = alClient
     BevelOuter = bvNone
     ClientHeight = 559
-    ClientWidth = 780
+    ClientWidth = 775
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
@@ -56,7 +56,7 @@ object f_main: Tf_main
       Left = 0
       Height = 4
       Top = 0
-      Width = 780
+      Width = 775
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
@@ -76,11 +76,11 @@ object f_main: Tf_main
       Left = 4
       Height = 551
       Top = 4
-      Width = 776
+      Width = 771
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 551
-      ClientWidth = 776
+      ClientWidth = 771
       Color = 4197901
       ParentColor = False
       ParentFont = False
@@ -123,7 +123,7 @@ object f_main: Tf_main
       Left = 0
       Height = 4
       Top = 555
-      Width = 780
+      Width = 775
       Align = alBottom
       AutoSize = True
       BevelOuter = bvNone
@@ -140,31 +140,14 @@ object f_main: Tf_main
       OnDragOver = PanelDragOver
     end
   end
-  object StatusBar1: TStatusBar
-    Left = 0
-    Height = 21
-    Top = 559
-    Width = 1000
-    BorderWidth = 1
-    Panels = <    
-      item
-        Width = 400
-      end    
-      item
-        Width = 256
-      end    
-      item
-        Width = 320
-      end    
-      item
-        Alignment = taRightJustify
-        Style = psOwnerDraw
-        Width = 128
-      end>
-    ParentFont = False
-    SimplePanel = False
-    OnDrawPanel = StatusBar1DrawPanel
-    OnResize = StatusBar1Resize
+  object Splitter1: TSplitter
+    Left = 775
+    Height = 559
+    Top = 0
+    Width = 5
+    Align = alRight
+    OnMoved = Splitter1Moved
+    ResizeAnchor = akRight
   end
   object PanelRight: TPanel
     Left = 780
@@ -175,6 +158,7 @@ object f_main: Tf_main
     BevelOuter = bvNone
     ClientHeight = 559
     ClientWidth = 220
+    Constraints.MinWidth = 220
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
@@ -380,6 +364,32 @@ object f_main: Tf_main
         Visible = False
       end
     end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 21
+    Top = 559
+    Width = 1000
+    BorderWidth = 1
+    Panels = <    
+      item
+        Width = 400
+      end    
+      item
+        Width = 256
+      end    
+      item
+        Width = 320
+      end    
+      item
+        Alignment = taRightJustify
+        Style = psOwnerDraw
+        Width = 128
+      end>
+    ParentFont = False
+    SimplePanel = False
+    OnDrawPanel = StatusBar1DrawPanel
+    OnResize = StatusBar1Resize
   end
   object MainMenu1: TMainMenu
     Images = ImageListDay

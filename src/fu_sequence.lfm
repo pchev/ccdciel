@@ -7,8 +7,11 @@ object f_sequence: Tf_sequence
   ClientHeight = 564
   ClientWidth = 210
   DesignTimePPI = 95
+  OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title1: TLabel
     Left = 0
     Height = 20
@@ -32,8 +35,8 @@ object f_sequence: Tf_sequence
     Width = 210
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 312
-    ClientWidth = 206
+    ClientHeight = 316
+    ClientWidth = 210
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
@@ -42,6 +45,7 @@ object f_sequence: Tf_sequence
       Top = 20
       Width = 210
       Align = alClient
+      BorderStyle = bsNone
       ColCount = 6
       DefaultRowHeight = 18
       FixedCols = 0
@@ -52,6 +56,14 @@ object f_sequence: Tf_sequence
       TabOrder = 0
       OnDrawCell = TargetGridDrawCell
       OnSelection = TargetGridSelection
+      ColWidths = (
+        34
+        34
+        34
+        34
+        34
+        39
+      )
     end
     object Panel3: TPanel
       Left = 0
@@ -60,62 +72,12 @@ object f_sequence: Tf_sequence
       Width = 210
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 140
-      ClientWidth = 206
+      ClientHeight = 144
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 1
-      object BtnEditTargets: TButton
-        Left = 140
-        Height = 25
-        Top = 4
-        Width = 68
-        Caption = 'Edit'
-        OnClick = BtnEditTargetsClick
-        ParentFont = False
-        TabOrder = 0
-      end
-      object BtnLoadTargets: TButton
-        Left = 2
-        Height = 25
-        Top = 4
-        Width = 68
-        Caption = 'Load'
-        OnClick = BtnLoadTargetsClick
-        ParentFont = False
-        TabOrder = 1
-      end
-      object BtnNewTargets: TButton
-        Left = 72
-        Height = 25
-        Top = 4
-        Width = 68
-        Caption = 'New'
-        OnClick = BtnEditTargetsClick
-        ParentFont = False
-        TabOrder = 2
-      end
-      object BtnStart: TButton
-        Left = 2
-        Height = 25
-        Top = 58
-        Width = 68
-        Caption = 'Start'
-        OnClick = BtnStartClick
-        ParentFont = False
-        TabOrder = 3
-      end
-      object BtnStop: TButton
-        Left = 72
-        Height = 25
-        Top = 58
-        Width = 68
-        Caption = 'Stop'
-        OnClick = BtnStopClick
-        ParentFont = False
-        TabOrder = 4
-      end
       object Unattended: TCheckBox
-        Left = 6
+        Left = 56
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
         Top = 112
@@ -123,64 +85,131 @@ object f_sequence: Tf_sequence
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 0
       end
-      object BtnCopy: TButton
-        Left = 2
-        Height = 25
-        Top = 32
-        Width = 68
-        Caption = 'Copy'
-        OnClick = BtnCopyClick
-        ParentFont = False
-        TabOrder = 6
-      end
-      object BtnDelete: TButton
-        Left = 140
-        Height = 25
-        Top = 32
-        Width = 68
-        Caption = 'Delete'
-        OnClick = BtnDeleteClick
-        ParentFont = False
-        TabOrder = 7
+      object Panel5: TPanel
+        Left = 0
+        Height = 108
+        Top = 0
+        Width = 210
+        Align = alTop
+        BevelOuter = bvNone
+        ChildSizing.EnlargeHorizontal = crsScaleChilds
+        ChildSizing.EnlargeVertical = crsScaleChilds
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 3
+        ClientHeight = 108
+        ClientWidth = 210
+        TabOrder = 1
+        object BtnLoadTargets: TButton
+          Left = 0
+          Height = 27
+          Top = 0
+          Width = 72
+          Caption = 'Load'
+          OnClick = BtnLoadTargetsClick
+          ParentFont = False
+          TabOrder = 0
+        end
+        object BtnNewTargets: TButton
+          Left = 72
+          Height = 27
+          Top = 0
+          Width = 65
+          Caption = 'New'
+          OnClick = BtnEditTargetsClick
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BtnEditTargets: TButton
+          Left = 137
+          Height = 27
+          Top = 0
+          Width = 73
+          Caption = 'Edit'
+          OnClick = BtnEditTargetsClick
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BtnCopy: TButton
+          Left = 0
+          Height = 27
+          Top = 27
+          Width = 72
+          Caption = 'Copy'
+          OnClick = BtnCopyClick
+          ParentFont = False
+          TabOrder = 3
+        end
+        object BtnReset: TButton
+          Left = 72
+          Height = 27
+          Top = 27
+          Width = 65
+          Caption = 'Reset'
+          OnClick = BtnResetClick
+          ParentFont = False
+          TabOrder = 4
+        end
+        object BtnDelete: TButton
+          Left = 137
+          Height = 27
+          Top = 27
+          Width = 73
+          Caption = 'Delete'
+          OnClick = BtnDeleteClick
+          ParentFont = False
+          TabOrder = 5
+        end
+        object BtnStart: TButton
+          Left = 0
+          Height = 27
+          Top = 54
+          Width = 72
+          Caption = 'Start'
+          OnClick = BtnStartClick
+          ParentFont = False
+          TabOrder = 6
+        end
+        object BtnStop: TButton
+          Left = 72
+          Height = 27
+          Top = 54
+          Width = 65
+          Caption = 'Stop'
+          OnClick = BtnStopClick
+          ParentFont = False
+          TabOrder = 7
+        end
+        object BtnPause: TButton
+          Left = 137
+          Height = 27
+          Top = 54
+          Width = 73
+          Caption = 'Pause'
+          OnClick = BtnPauseClick
+          ParentFont = False
+          TabOrder = 8
+        end
+        object BtnStatus: TButton
+          Left = 0
+          Height = 27
+          Top = 81
+          Width = 72
+          Caption = 'Status'
+          OnClick = BtnStatusClick
+          TabOrder = 9
+        end
       end
       object led: TShape
         Left = 8
         Height = 14
-        Top = 88
+        Top = 115
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
-      end
-      object BtnReset: TButton
-        Left = 72
-        Height = 25
-        Top = 32
-        Width = 68
-        Caption = 'Reset'
-        OnClick = BtnResetClick
-        ParentFont = False
-        TabOrder = 8
-      end
-      object BtnPause: TButton
-        Left = 140
-        Height = 25
-        Top = 58
-        Width = 68
-        Caption = 'Pause'
-        OnClick = BtnPauseClick
-        ParentFont = False
-        TabOrder = 9
-      end
-      object BtnStatus: TButton
-        Left = 140
-        Height = 25
-        Top = 84
-        Width = 68
-        Caption = 'Status'
-        OnClick = BtnStatusClick
-        TabOrder = 10
       end
     end
     object Title3: TLabel
@@ -206,8 +235,8 @@ object f_sequence: Tf_sequence
     Width = 210
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 218
-    ClientWidth = 206
+    ClientHeight = 222
+    ClientWidth = 210
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
@@ -216,6 +245,7 @@ object f_sequence: Tf_sequence
       Top = 20
       Width = 210
       Align = alClient
+      BorderStyle = bsNone
       DefaultRowHeight = 18
       FixedCols = 0
       Flat = True
@@ -224,6 +254,13 @@ object f_sequence: Tf_sequence
       RowCount = 1
       TabOrder = 0
       OnDrawCell = PlanGridDrawCell
+      ColWidths = (
+        41
+        41
+        41
+        41
+        45
+      )
     end
     object Title2: TLabel
       Left = 0
@@ -247,8 +284,8 @@ object f_sequence: Tf_sequence
       Width = 210
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 76
-      ClientWidth = 206
+      ClientHeight = 80
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel
