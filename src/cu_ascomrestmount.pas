@@ -765,7 +765,7 @@ begin
  result:=false;
  if FStatus<>devConnected then exit;
    try
-   V.Put('UTCDate',FormatDateTime(dateiso,utc));
+   V.Put('UTCDate',FormatDateTime(dateiso,utc)+'Z');
    result:=true;
    except
      on E: Exception do msg('Cannot set date: ' + E.Message,0);
