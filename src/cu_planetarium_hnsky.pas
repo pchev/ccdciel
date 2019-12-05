@@ -157,26 +157,29 @@ end;
 procedure TPlanetarium_hnsky.ProcessDataSyn;
 var p:Tstringlist;
 begin
-if FRecvData<>'' then begin
-  p:=Tstringlist.Create;
-  SplitRec(FRecvData,blank,p);
-  if (p.Count>=4) then begin
-    Fra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
-    Fde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
-    Fpa:=StrToFloatDef(StringReplace(p[3],',','.',[]),NullCoord);
-    if Fpa<>NullCoord then begin
-      Fpa:=rad2deg*rmod(Fpa-pid2+pi2+pi2,pi2); // HNSKY use 0° for vertical frame, 90° for horizontal
-      if Fpa>359.99 then Fpa:=0;
+  if FRecvData<>'' then begin
+    p:=Tstringlist.Create;
+    SplitRec(FRecvData,blank,p);
+    if (p.Count>=3) then begin
+      Fra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
+      Fde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
+      if (p.Count>=4) then begin {in mouse position is send, no angle will be specified}
+        Fpa:=StrToFloatDef(StringReplace(p[3],',','.',[]),NullCoord);
+        if Fpa<>NullCoord then begin
+          Fpa:=rad2deg*rmod(Fpa-pid2+pi2+pi2,pi2); // HNSKY use 0° for vertical frame, 90° for horizontal
+          if Fpa>359.99 then Fpa:=0;
+        end;
+      end
+      else Fpa:=0;{no angle specified}
+      if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
+        Fra:=rad2deg*Fra/15;
+        Fde:=rad2deg*Fde;
+        Fobjname:=p[2];
+        if assigned(FonReceiveData) then FonReceiveData(FRecvData);
+      end;
     end;
-    if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
-      Fra:=rad2deg*Fra/15;
-      Fde:=rad2deg*Fde;
-      Fobjname:=p[2];
-      if assigned(FonReceiveData) then FonReceiveData(FRecvData);
-    end;
+    p.free;
   end;
-  p.free;
-end;
 end;
 
 function TPlanetarium_hnsky.Cmd(const Value: string):string;
