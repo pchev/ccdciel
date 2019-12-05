@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation,
+uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons;
@@ -288,6 +288,7 @@ begin
   TargetList.RowHeights[0]:=DoScaleY(40);
   StepList.RowHeights[0]:=DoScaleY(40);
   SetLang;
+  keyboard1:=Tkeyboard1.Create(self);
   LockTarget:=false;
   FTargetsRepeat:=1;
   LockStep:=false;
@@ -728,7 +729,11 @@ begin
   PageControlPlan.ActivePageIndex:=pageobject;
   NewObject;
   n:=TargetList.Row;
-  obj:=inputbox(rsNewObject, rsObject+':' , '');
+  keyboard_caption:=rsNewObject;
+  keyboard_question:=rsObject;
+  keyboard1.Edit1.Text:='';
+  keyboard1.showmodal;
+  obj:=keyboard_text;
   objname:=uppercase(obj);
   foundok:=false;
   if length(objname)>1 then {Object name length should be two or longer}
@@ -838,7 +843,11 @@ var n: integer;
 begin
   n:=TargetList.Row;
 
-  objname:=uppercase(inputbox(rsRetrievePosi, rsObject+':' , ''));
+  keyboard_caption:=rsRetrievePosi;
+  keyboard_question:=rsObject;
+  keyboard1.Edit1.Text:='';
+  keyboard1.showmodal;
+  objname:=uppercase(keyboard_text);
   if length(objname)>1 then {Object name length should be two or longer}
   begin
     load_deep;{Load the deepsky database once. If already loaded, no action}

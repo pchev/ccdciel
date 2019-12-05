@@ -300,7 +300,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="99">
+    <Units Count="100">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -809,6 +809,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit98>
+      <Unit99>
+        <Filename Value="pu_keyboard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="keyboard1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit99>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

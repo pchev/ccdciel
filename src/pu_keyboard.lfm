@@ -1,0 +1,256 @@
+object keyboard1: Tkeyboard1
+  Left = 294
+  Height = 225
+  Top = 313
+  Width = 342
+  AutoSize = True
+  BorderWidth = 5
+  Caption = 'keyboard'
+  ClientHeight = 225
+  ClientWidth = 342
+  DesignTimePPI = 95
+  KeyPreview = True
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poOwnerFormCenter
+  object num7: TButton
+    Left = 118
+    Height = 33
+    Top = 68
+    Width = 20
+    AutoSize = True
+    Caption = '7'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 10
+  end
+  object num4: TButton
+    Left = 118
+    Height = 33
+    Top = 108
+    Width = 20
+    AutoSize = True
+    Caption = '4'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 7
+  end
+  object num8: TButton
+    Left = 165
+    Height = 33
+    Top = 68
+    Width = 20
+    AutoSize = True
+    Caption = '8'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 11
+  end
+  object num9: TButton
+    Left = 213
+    Height = 33
+    Top = 68
+    Width = 20
+    AutoSize = True
+    Caption = '9'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 12
+  end
+  object num5: TButton
+    Left = 165
+    Height = 33
+    Top = 110
+    Width = 20
+    AutoSize = True
+    Caption = '5'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 8
+  end
+  object num6: TButton
+    Left = 213
+    Height = 33
+    Top = 108
+    Width = 20
+    AutoSize = True
+    Caption = '6'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 9
+  end
+  object num1: TButton
+    Left = 118
+    Height = 33
+    Top = 147
+    Width = 20
+    AutoSize = True
+    Caption = '1'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 4
+  end
+  object num2: TButton
+    Left = 165
+    Height = 33
+    Top = 147
+    Width = 20
+    AutoSize = True
+    Caption = '2'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 5
+  end
+  object num3: TButton
+    Left = 213
+    Height = 33
+    Top = 147
+    Width = 20
+    AutoSize = True
+    Caption = '3'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 6
+  end
+  object Edit1: TEdit
+    Left = 5
+    Height = 31
+    Top = 29
+    Width = 332
+    ParentFont = False
+    TabOrder = 0
+  end
+  object clear1: TButton
+    Left = 300
+    Height = 33
+    Hint = 'clear'
+    Top = 68
+    Width = 20
+    AutoSize = True
+    Caption = 'C'
+    OnClick = clear1Click
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 15
+  end
+  object prefix1: TComboBox
+    Left = 7
+    Height = 31
+    Hint = 'prefix'
+    Top = 70
+    Width = 71
+    ItemHeight = 0
+    ItemIndex = 2
+    Items.Strings = (
+      'ic'
+      'm'
+      'ngc'
+      'pgc'
+      'pk'
+      'sh2-'
+    )
+    OnChange = prefix1Change
+    OnDblClick = prefix1Change
+    ParentFont = False
+    Sorted = True
+    TabOrder = 1
+    Text = 'ngc'
+  end
+  object letter1: TComboBox
+    Left = 7
+    Height = 31
+    Hint = 'letters'
+    Top = 110
+    Width = 71
+    DropDownCount = 30
+    ItemHeight = 0
+    ItemIndex = 3
+    Items.Strings = (
+      '-'
+      '.'
+      '+'
+      'a'
+      'b'
+      'c'
+      'd'
+      'e'
+      'f'
+      'g'
+      'h'
+      'i'
+      'j'
+      'k'
+      'l'
+      'm'
+      'n'
+      'o'
+      'p'
+      'q'
+      'r'
+      's'
+      't'
+      'u'
+      'v'
+      'w'
+      'x'
+      'y'
+      'z'
+    )
+    OnChange = letter1Change
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 2
+    Text = 'a'
+  end
+  object enter1: TButton
+    Left = 300
+    Height = 36
+    Hint = 'enter'
+    Top = 147
+    Width = 26
+    AutoSize = True
+    Caption = '⏎'
+    Default = True
+    OnClick = enter1Click
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 13
+  end
+  object backspace1: TButton
+    Left = 300
+    Height = 38
+    Hint = 'backspace'
+    Top = 108
+    Width = 31
+    AutoSize = True
+    Caption = '⌫ '
+    OnClick = backspace1Click
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 14
+  end
+  object num0: TButton
+    Left = 118
+    Height = 33
+    Top = 187
+    Width = 20
+    AutoSize = True
+    Caption = '0'
+    OnClick = num7Click
+    ParentFont = False
+    TabOrder = 3
+  end
+  object keyboard_question1: TLabel
+    Left = 5
+    Height = 19
+    Top = 5
+    Width = 120
+    Caption = 'keyboard_question:'
+    ParentColor = False
+    ParentFont = False
+  end
+end
