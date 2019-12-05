@@ -1185,6 +1185,8 @@ resourcestring
   rsSaveAPNGFile = 'Save a bitmap file additionally to the standard FITS file';
   rsSavePictureS = 'Save picture%s';
   rsLockOverlay = 'Lock overlay';
+  rsAz = 'Az';
+  rsAlt = 'Alt';
 
 implementation
 

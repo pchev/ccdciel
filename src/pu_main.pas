@@ -5582,9 +5582,15 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.MountCoordChange(Sender: TObject);
+var ra,de,a,h: double;
 begin
- f_mount.RA.Caption:=RAToStr(mount.RA);
- f_mount.DE.Caption:=DEToStr(mount.Dec);
+ ra:=mount.RA;
+ de:=mount.Dec;
+ cmdEq2Hz(ra,de,a,h);
+ f_mount.RA.Caption:=RAToStr(ra);
+ f_mount.DE.Caption:=DEToStr(de);
+ f_mount.AZ.Caption:=FormatFloat(f2,a);
+ f_mount.ALT.Caption:=FormatFloat(f2,h);
 end;
 
 Procedure Tf_main.MountPiersideChange(Sender: TObject);

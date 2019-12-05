@@ -35,6 +35,10 @@ type
   Tf_mount = class(TFrame)
     BtnGoto: TButton;
     DE: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    ALT: TLabel;
+    AZ: TLabel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -42,6 +46,7 @@ type
     Label4: TLabel;
     btnTrack: TSpeedButton;
     BtnPark: TSpeedButton;
+    Panel6: TPanel;
     Pierside: TLabel;
     RA: TLabel;
     Label1: TLabel;
@@ -94,8 +99,10 @@ end;
 procedure Tf_mount.SetLang;
 begin
   Title.Caption:=rsTelescopePos;
-  label1.Caption:=rsRA;
-  label2.Caption:=rsDec;
+  label1.Caption:=rsRA+':';
+  label2.Caption:=rsDec+':';
+  label3.Caption:=rsAz+':';
+  label5.Caption:=rsAlt+':';
   BtnPark.Caption:=rsPark;
   BtnTrack.Caption:=rsTrack;
   BtnGoto.Caption:=rsGoto;
