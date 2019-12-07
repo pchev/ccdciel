@@ -522,6 +522,7 @@ end;
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
     RepeatDone:integer;
+    r: string;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
@@ -562,6 +563,11 @@ begin
        msg(rsSequenceStop,1);
      end;
      ShowDelayMsg('');
+     if EmailEndSequence then begin
+       r:=email(Format(rsSequenceStop2, [FName]),Format(rsSequenceStop2, [FName]));
+       if r='' then r:=rsEmailSentSuc;
+       msg(r,9);
+     end;
    end
    else begin
      if (p<>nil) and p.Running then p.Stop;
@@ -581,6 +587,11 @@ begin
      msg(rsSequenceAbor,0);
      RunErrorAction;
      ShowDelayMsg('');
+     if EmailAbortSequence or EmailEndSequence then begin
+       r:=email(rsSequenceAbor,rsSequenceAbor+crlf+FName);
+       if r='' then r:=rsEmailSentSuc;
+       msg(r,9);
+     end;
    end;
    SaveDoneCount(RepeatDone);
    if assigned(FonEndSequence) then FonEndSequence(nil);
@@ -730,6 +741,7 @@ end;
 
 procedure T_Targets.NextTargetAsync(Data: PtrInt);
 var initok: boolean;
+    r: string;
 begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
@@ -879,6 +891,11 @@ begin
      RunEndAction;
      ShowDelayMsg('');
      FCurrentTarget:=-1;
+     if EmailEndSequence then begin
+       r:=email(Format(rsSequenceFini, [FName]),Format(rsSequenceFini, [FName]));
+       if r='' then r:=rsEmailSentSuc;
+       msg(r,9);
+     end;
      if assigned(FonEndSequence) then FonEndSequence(nil);
    end;
   end;
@@ -1456,6 +1473,7 @@ end;
 procedure T_Targets.TargetTimerTimer(Sender: TObject);
 var tt: double;
     t: TTarget;
+    r: string;
 begin
  if FRunning then begin
    FInitializing:=false;
@@ -1499,6 +1517,11 @@ begin
   msg(Format(rsSequenceStop2, [FName]),1);
   if assigned(FonEndSequence) then FonEndSequence(nil);
   ShowDelayMsg('');
+  if EmailEndSequence then begin
+    r:=email(Format(rsSequenceStop2, [FName]),Format(rsSequenceStop2, [FName]));
+    if r='' then r:=rsEmailSentSuc;
+    msg(r,9);
+  end;
  end;
 end;
 

@@ -323,7 +323,7 @@ var
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
-  config,screenconfig,credentialconfig: TCCDConfig;
+  config,screenconfig,credentialconfig,emailconfig: TCCDConfig;
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;
@@ -434,6 +434,7 @@ var
   PolarAlignmentOverlay, PolarAlignmentLock: boolean;
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;
   MailTo,MailFrom,SMTPHost,SMTPPort,SMTPUser,SMTPPasswd : String;
+  EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip: boolean;
 
   procedure globalmsg(str:string);
 

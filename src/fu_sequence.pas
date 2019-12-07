@@ -368,7 +368,7 @@ end;
 
 procedure Tf_sequence.msg(txt:string; level: integer);
 begin
-  StatusMsg.Caption:=txt;
+  if level<9 then StatusMsg.Caption:=txt;
   if Assigned(FonMsg) then FonMsg(txt, level);
 end;
 
@@ -1152,7 +1152,7 @@ begin
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
-var buf1,buf2:string;
+var buf1,buf2,r:string;
     i:integer;
     p: T_Plan;
     agAlerttime, trAlerttime, msgtime: integer;
@@ -1206,6 +1206,11 @@ begin
            // autoguider connected but not guiding, try next target
            msg(Format(rsAutoguiderWa, [IntToStr(agAlerttime)]),1);
            msg(rsTryNextTarge,1);
+           if EmailAutoguider then begin
+             r:=email(rsAutoguiderEr, Format(rsAutoguiderWa, [IntToStr(agAlerttime)])+crlf+rsTryNextTarge);
+             if r='' then r:=rsEmailSentSuc;
+             msg(r,9);
+           end;
            Targets.ForceNextTarget;
            AutoguiderAlert:=false;
         end;
@@ -1247,6 +1252,7 @@ end;
 
 
 procedure Tf_sequence.AutoguiderDisconnected;
+var r: string;
 begin
   if Autoguider.AutoguiderType=agNONE then exit;
   if Targets.Running and
@@ -1258,11 +1264,17 @@ begin
      AutoguiderAlert:=true;
      AutoguiderAlertTime:=now;
      AutoguiderMsgTime:=0;
+     if EmailAutoguider then begin
+       r:=email(rsAutoguiderEr, rsAutoguiderSt+blank+rsDisconnected3);
+       if r='' then r:=rsEmailSentSuc;
+       msg(r,9);
+     end;
     end;
   end;
 end;
 
 procedure Tf_sequence.AutoguiderIddle;
+var r: string;
 begin
   if Autoguider.AutoguiderType=agNONE then exit;
   if Targets.Running and
@@ -1275,6 +1287,11 @@ begin
       AutoguiderAlert:=true;
       AutoguiderAlertTime:=now;
       AutoguiderMsgTime:=0;
+      if EmailAutoguider then begin
+        r:=email(rsAutoguiderEr, rsAutoguiderSt+blank+rsIdle);
+        if r='' then r:=rsEmailSentSuc;
+        msg(r,9);
+      end;
     end;
   end;
 end;

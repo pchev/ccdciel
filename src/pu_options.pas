@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, SpinEx, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, SpinEx, enhedits;
 
 type
 
@@ -42,11 +42,30 @@ type
     AutofocusMultistar: TGroupBox;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEditEx;
+    ButtonTestEmail: TButton;
+    ButtonNotificationAll: TButton;
+    ButtonNotificationNone: TButton;
     ButtonHelp: TButton;
     CbShowHints: TCheckBox;
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
+    EmailCondition: TCheckListBox;
+    GroupBox25: TGroupBox;
+    Panel6: TPanel;
+    smtp_host: TEdit;
+    smtp_port: TEdit;
+    smtp_user: TEdit;
+    smtp_pass: TEdit;
+    mail_from: TEdit;
+    mail_to: TEdit;
+    GroupBox24: TGroupBox;
+    Label134: TLabel;
+    Label135: TLabel;
+    Label136: TLabel;
+    Label137: TLabel;
+    Label138: TLabel;
+    Label139: TLabel;
     SaveBitmapFormat: TComboBox;
     SaveBitmap: TCheckBox;
     MeasureNewImage: TCheckBox;
@@ -63,7 +82,9 @@ type
     Label128: TLabel;
     AutofocusPeriod: TSpinEditEx;
     Label129: TLabel;
+    BtnShowPass: TSpeedButton;
     TabSheet16: TTabSheet;
+    TabSheet17: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -530,8 +551,11 @@ type
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
+    procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
+    procedure ButtonNotificationNoneClick(Sender: TObject);
     procedure ButtonTempDirClick(Sender: TObject);
+    procedure ButtonTestEmailClick(Sender: TObject);
     procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
     procedure CheckFocusWindow(Sender: TObject);
@@ -561,6 +585,7 @@ type
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
     procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure SlewPrecChange(Sender: TObject);
+    procedure BtnShowPassClick(Sender: TObject);
     procedure TempDirChange(Sender: TObject);
     procedure TemperatureScaleClick(Sender: TObject);
     procedure TemperatureSlopeActiveClick(Sender: TObject);
@@ -1123,6 +1148,38 @@ SelectDirectoryDialog1.FileName:=TempDir.text;
 if SelectDirectoryDialog1.Execute then TempDir.text:=SelectDirectoryDialog1.FileName;
 end;
 
+procedure Tf_option.ButtonTestEmailClick(Sender: TObject);
+var subject,txt,r: string;
+    savehost,saveport,saveuser,savepass,savefrom,saveto: string;
+begin
+ savehost := SMTPHost;
+ saveport := SMTPPort;
+ saveuser := SMTPUser;
+ savepass := SMTPPasswd;
+ savefrom := MailFrom;
+ saveto   := MailTo;
+ try
+ SMTPHost := smtp_host.Text;
+ SMTPPort := smtp_port.Text;
+ SMTPUser := smtp_user.Text;
+ SMTPPasswd:= smtp_pass.Text;
+ MailFrom := mail_from.Text;
+ MailTo   := mail_to.Text;
+ subject:=rsTestEmailFro;
+ txt:=rsTestEmailFro+CRLF+rsThisMessageC;
+ r:=email(Subject,txt);
+ if r='' then r:=rsEmailSentSuc;
+ ShowMessage(r);
+ finally
+   SMTPHost   := savehost;
+   SMTPPort   := saveport;
+   SMTPUser   := saveuser;
+   SMTPPasswd := savepass;
+   MailFrom   := savefrom;
+   MailTo     := saveto;
+ end;
+end;
+
 procedure Tf_option.ChangeAutofocusInPlace(Sender: TObject);
 begin
   AutofocusMultistar.Visible:=AutofocusInPlace.Checked;
@@ -1353,6 +1410,14 @@ begin
    RecenterTargetDistance.MinValue:=1.5*SlewPrec.Value;
 end;
 
+procedure Tf_option.BtnShowPassClick(Sender: TObject);
+begin
+  if BtnShowPass.Down then
+   smtp_pass.PasswordChar:=#0
+  else
+   smtp_pass.PasswordChar:='*';
+end;
+
 procedure Tf_option.TempDirChange(Sender: TObject);
 {$ifdef mswindows}var c: char;{$endif}
 begin
@@ -1431,6 +1496,23 @@ begin
    end;
 {$endif}
 end;
+
+procedure Tf_option.ButtonNotificationNoneClick(Sender: TObject);
+var i: integer;
+begin
+  for i:=0 to EmailCondition.Count-1 do begin
+    EmailCondition.Checked[i]:=false;
+  end;
+end;
+
+procedure Tf_option.ButtonNotificationAllClick(Sender: TObject);
+var i: integer;
+begin
+  for i:=0 to EmailCondition.Count-1 do begin
+    EmailCondition.Checked[i]:=true;
+  end;
+end;
+
 
 end.
 

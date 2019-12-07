@@ -1187,6 +1187,10 @@ resourcestring
   rsLockOverlay = 'Lock overlay';
   rsAz = 'Az';
   rsAlt = 'Alt';
+  rsAutoguiderEr = 'Autoguider error';
+  rsTestEmailFro = 'Test email from CCDciel';
+  rsThisMessageC = 'This message confirm the email configuration is working.';
+  rsEmailSentSuc = 'Email sent successfully, please check your inbox';
 
 implementation
 

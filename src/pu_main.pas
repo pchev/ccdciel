@@ -1229,6 +1229,7 @@ begin
   config:=TCCDConfig.Create(self);
   screenconfig:=TCCDConfig.Create(self);
   credentialconfig:=TCCDConfig.Create(self);
+  emailconfig:=TCCDConfig.Create(self);
   ProfileFromCommandLine:=false;
   if Application.HasOption('c', 'config') then begin
     profile:=Application.GetOptionValue('c', 'config');
@@ -2602,6 +2603,7 @@ begin
   config.Free;
   screenconfig.Free;
   credentialconfig.Free;
+  emailconfig.Free;
   ScrBmp.Free;
   FilterList.Free;
   BinningList.Free;
@@ -3484,6 +3486,17 @@ begin
     n:=round(config.GetValue('/Dome/Close/Action'+inttostr(i),0));
     mount.DomeCloseActions[i]:=TDomeCloseAction(n);
   end;
+  SMTPHost:=emailconfig.GetValue('/SMTP/Host','');
+  SMTPPort:=emailconfig.GetValue('/SMTP/Port','');
+  SMTPUser:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/User','')), encryptpwd);
+  SMTPPasswd:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/Passwd','')), encryptpwd);
+  MailFrom:=emailconfig.GetValue('/Mail/From','');
+  MailTo:=emailconfig.GetValue('/Mail/To','');
+  EmailEndSequence:=config.GetValue('/Mail/EndSequence',false);
+  EmailAbortSequence:=config.GetValue('/Mail/AbortSequence',false);
+  EmailAutoguider:=config.GetValue('/Mail/Autoguider',false);
+  EmailAufofocus:=config.GetValue('/Mail/Aufofocus',false);
+  EmailMeridianFlip:=config.GetValue('/Mail/MeridianFlip',false);
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -3683,6 +3696,7 @@ begin
   screenconfig.Flush;
   config.Flush;
   credentialconfig.Flush;
+  emailconfig.Flush;
   if not ProfileFromCommandLine then begin
     inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
     inif.WriteString('main','profile',profile);
@@ -3699,6 +3713,7 @@ begin
  configver:=config.GetValue('/Configuration/Version','');
  screenconfig.Filename:=slash(ConfigDir)+'ScreenLayout.cfg';
  credentialconfig.Filename:=config.Filename+'.credential';
+ emailconfig.Filename:=slash(ConfigDir)+'email.cfg';
  UpdConfig(configver);
 end;
 
@@ -6423,6 +6438,18 @@ begin
    for i:=0 to DomeCloseActionNum-1 do begin
       f_option.DomeCloseActions.Cells[1,i+1]:=DomeCloseActionName[round(config.GetValue('/Dome/Close/Action'+inttostr(i),0))];
    end;
+   f_option.smtp_host.Text:=emailconfig.GetValue('/SMTP/Host','');
+   f_option.smtp_port.Text:=emailconfig.GetValue('/SMTP/Port','');
+   f_option.smtp_user.Text:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/User','')), encryptpwd);
+   f_option.smtp_pass.Text:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/Passwd','')), encryptpwd);
+   f_option.mail_from.Text:=emailconfig.GetValue('/Mail/From','');
+   f_option.mail_to.Text:=emailconfig.GetValue('/Mail/To','');
+   f_option.EmailCondition.Checked[0]:=config.GetValue('/Mail/EndSequence',false);
+   f_option.EmailCondition.Checked[1]:=config.GetValue('/Mail/AbortSequence',false);
+   f_option.EmailCondition.Checked[2]:=config.GetValue('/Mail/Autoguider',false);
+   f_option.EmailCondition.Checked[3]:=config.GetValue('/Mail/Aufofocus',false);
+   f_option.EmailCondition.Checked[4]:=config.GetValue('/Mail/MeridianFlip',false);
+
    f_option.LockTemp:=false;
    pt.x:=PanelCenter.Left;
    pt.y:=PanelCenter.top;
@@ -6696,6 +6723,17 @@ begin
         if k<0 then k:=0;
         config.SetValue('/Dome/Close/Action'+inttostr(i),k);
      end;
+     emailconfig.SetValue('/SMTP/Host',f_option.smtp_host.Text);
+     emailconfig.SetValue('/SMTP/Port',f_option.smtp_port.Text);
+     emailconfig.SetValue('/SMTP/User',strtohex(encryptStr(f_option.smtp_user.Text, encryptpwd)));
+     emailconfig.SetValue('/SMTP/Passwd',strtohex(encryptStr(f_option.smtp_pass.Text, encryptpwd)));
+     emailconfig.SetValue('/Mail/From',f_option.mail_from.Text);
+     emailconfig.SetValue('/Mail/To',f_option.mail_to.Text);
+     config.SetValue('/Mail/EndSequence',f_option.EmailCondition.Checked[0]);
+     config.SetValue('/Mail/AbortSequence',f_option.EmailCondition.Checked[1]);
+     config.SetValue('/Mail/Autoguider',f_option.EmailCondition.Checked[2]);
+     config.SetValue('/Mail/Aufofocus',f_option.EmailCondition.Checked[3]);
+     config.SetValue('/Mail/MeridianFlip',f_option.EmailCondition.Checked[4]);
 
      SaveConfig;
 
@@ -7181,7 +7219,7 @@ end;
 
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
 var e,x: double;
-    buf,txt: string;
+    buf,txt,r: string;
     waittime,i: integer;
     ftype:TFrameType;
 begin
@@ -7308,6 +7346,11 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
         NewMessage(rsMeridianFlip+', '+rsCannotStartC,1);
         f_capture.Stop;
         Capture:=false;
+        if EmailMeridianFlip then begin
+          r:=email(rsMeridianFlip,rsMeridianFlip+', '+rsCannotStartC);
+          if r='' then r:=rsEmailSentSuc;
+          NewMessage(r,9);
+        end;
         exit;
       end;
       // check if we need to wait for flip before to continue (time to meridian < exposure time)
@@ -9281,7 +9324,7 @@ end;
 
 function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
 var tra,tde,teq,tpa,sra,sde,err: double;
-    sid: string;
+    sid,r: string;
     focusretry,maxretry: integer;
     tpos,pslew,savecapture,saveearlystart,restartguider,pauseguider: boolean;
     configfocusmag,newfocusmag,focusmagdiff: integer;
@@ -9359,6 +9402,11 @@ begin
       NewMessage(rsInPlaceAutof,1);
       NewMessage(rsSequenceWill,1);
       result:=true;
+      if EmailAufofocus then begin
+        r:=email(rsInPlaceAutof, rsInPlaceAutof+', '+rsSequenceWill);
+        if r='' then r:=rsEmailSentSuc;
+        NewMessage(r,9);
+      end;
    end;
    finally
    if AutofocusPauseGuider then begin
@@ -9508,6 +9556,11 @@ begin
    end;
    if not f_starprofile.AutofocusResult then begin
       NewMessage(Format(rsAutofocusFai3, [inttostr(maxretry)]),1);
+      if EmailAufofocus then begin
+        r:=email(rsAutofocusFai, rsAutofocusFai+crlf+Format(rsAutofocusFai3, [inttostr(maxretry)]));
+        if r='' then r:=rsEmailSentSuc;
+        NewMessage(r,9);
+      end;
    end;
    if CancelAutofocus then exit;
    if ReturnToTarget then begin

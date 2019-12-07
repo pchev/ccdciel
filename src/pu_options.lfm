@@ -5293,6 +5293,197 @@ object f_option: Tf_option
         WordWrap = True
       end
     end
+    object TabSheet17: TTabSheet
+      Caption = 'Notifications'
+      ClientHeight = 506
+      ClientWidth = 520
+      object GroupBox24: TGroupBox
+        Left = 0
+        Height = 232
+        Top = 0
+        Width = 520
+        Align = alTop
+        Caption = 'Email configuration'
+        ClientHeight = 212
+        ClientWidth = 518
+        TabOrder = 0
+        object Label134: TLabel
+          Left = 8
+          Height = 19
+          Top = 5
+          Width = 124
+          Caption = 'SMTP server address'
+          ParentColor = False
+        end
+        object Label135: TLabel
+          Left = 8
+          Height = 19
+          Top = 35
+          Width = 103
+          Caption = 'SMTP server port'
+          ParentColor = False
+        end
+        object Label136: TLabel
+          Left = 8
+          Height = 19
+          Top = 65
+          Width = 65
+          Caption = 'User name'
+          ParentColor = False
+        end
+        object Label137: TLabel
+          Left = 8
+          Height = 19
+          Top = 95
+          Width = 58
+          Caption = 'Password'
+          ParentColor = False
+        end
+        object Label138: TLabel
+          Left = 8
+          Height = 19
+          Top = 125
+          Width = 117
+          Caption = 'From email address'
+          ParentColor = False
+        end
+        object Label139: TLabel
+          Left = 8
+          Height = 19
+          Top = 155
+          Width = 155
+          Caption = 'Destination email address'
+          ParentColor = False
+        end
+        object smtp_host: TEdit
+          Left = 224
+          Height = 28
+          Top = 0
+          Width = 248
+          Constraints.MaxHeight = 28
+          TabOrder = 0
+        end
+        object smtp_port: TEdit
+          Left = 224
+          Height = 28
+          Top = 30
+          Width = 248
+          Constraints.MaxHeight = 28
+          TabOrder = 1
+        end
+        object smtp_user: TEdit
+          Left = 224
+          Height = 28
+          Top = 60
+          Width = 248
+          Constraints.MaxHeight = 28
+          TabOrder = 2
+        end
+        object smtp_pass: TEdit
+          Left = 224
+          Height = 28
+          Top = 90
+          Width = 248
+          Constraints.MaxHeight = 28
+          EchoMode = emPassword
+          PasswordChar = '*'
+          TabOrder = 3
+        end
+        object mail_from: TEdit
+          Left = 224
+          Height = 28
+          Top = 120
+          Width = 248
+          Constraints.MaxHeight = 28
+          TabOrder = 4
+        end
+        object mail_to: TEdit
+          Left = 224
+          Height = 28
+          Top = 150
+          Width = 248
+          Constraints.MaxHeight = 28
+          TabOrder = 5
+        end
+        object ButtonTestEmail: TButton
+          Left = 224
+          Height = 25
+          Top = 182
+          Width = 153
+          Caption = 'Send test email'
+          OnClick = ButtonTestEmailClick
+          TabOrder = 6
+        end
+        object BtnShowPass: TSpeedButton
+          Left = 474
+          Height = 22
+          Top = 92
+          Width = 23
+          AllowAllUp = True
+          GroupIndex = 678
+          OnClick = BtnShowPassClick
+        end
+      end
+      object GroupBox25: TGroupBox
+        Left = 0
+        Height = 274
+        Top = 232
+        Width = 520
+        Align = alClient
+        Caption = 'Email on :'
+        ClientHeight = 254
+        ClientWidth = 518
+        TabOrder = 1
+        object EmailCondition: TCheckListBox
+          Left = 0
+          Height = 213
+          Top = 0
+          Width = 518
+          Align = alClient
+          Items.Strings = (
+            'Sequence normal end'
+            'Sequence abnormal end'
+            'Autoguider error'
+            'Autofocus error'
+            'Meridian flip error'
+          )
+          ItemHeight = 0
+          TabOrder = 0
+          TopIndex = -1
+          Data = {
+            050000000000000000
+          }
+        end
+        object Panel6: TPanel
+          Left = 0
+          Height = 41
+          Top = 213
+          Width = 518
+          Align = alBottom
+          ClientHeight = 37
+          ClientWidth = 514
+          TabOrder = 1
+          object ButtonNotificationAll: TButton
+            Left = 8
+            Height = 25
+            Top = 8
+            Width = 74
+            Caption = 'All'
+            OnClick = ButtonNotificationAllClick
+            TabOrder = 0
+          end
+          object ButtonNotificationNone: TButton
+            Left = 115
+            Height = 25
+            Top = 8
+            Width = 74
+            Caption = 'None'
+            OnClick = ButtonNotificationNoneClick
+            TabOrder = 1
+          end
+        end
+      end
+    end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     left = 64
