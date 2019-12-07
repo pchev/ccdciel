@@ -433,6 +433,7 @@ var
   AstrometryTimeout,RecenterTargetDistance,SlewPrecision: double;
   PolarAlignmentOverlay, PolarAlignmentLock: boolean;
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;
+  MailTo,MailFrom,SMTPHost,SMTPPort,SMTPUser,SMTPPasswd : String;
 
   procedure globalmsg(str:string);
 

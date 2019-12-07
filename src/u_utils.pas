@@ -31,6 +31,7 @@ uses u_global,
      {$ifdef unix}
        unix,baseunix,
      {$endif}
+     smtpsend, synautil,
      process, Classes, LCLType, FileUtil, ComCtrls, MTPCPU,
      Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
@@ -150,7 +151,7 @@ function AstrometryVersion(resolver:integer; cygwinpath,cmdpath:string; usescrip
 function TempDisplay(cf:integer; t:double):double;
 function TempCelsius(cf:integer; t:double):double;
 function GetThreadCount: integer;
-
+function email(Subject,Msg:string):string;
 
 implementation
 
@@ -3053,6 +3054,68 @@ end;
 function GetThreadCount: integer;
 begin
   Result := GetSystemThreadCount;
+end;
+
+
+function email(Subject,Msg:string):string;
+var MailData: TStringList;
+    SMTP: TSMTPSend;
+    s, t, error: string;
+    ok: boolean;
+begin
+error:='';
+SMTP:=TSMTPSend.Create;
+MailData:=TStringList.Create;
+try
+  MailData.Add('From: ' + MailFrom);
+  MailData.Add('To: ' + MailTo);
+  MailData.Add('Date: ' + Rfc822DateTime(now));
+  MailData.Add('Subject: ' + Subject);
+  MailData.Add('X-mailer: CCDciel');
+  MailData.Add('');
+  MailData.Add(Msg);
+  MailData.Add('');
+  SMTP.UserName:=SMTPUser;
+  SMTP.Password:=SMTPPasswd;
+  SMTP.TargetHost:=SMTPHost;
+  SMTP.TargetPort:=SMTPPort;
+  SMTP.AutoTLS:=true;
+  if Trim(SMTPPort)<>'25' then SMTP.FullSSL:=true;
+  SMTP.Sock.ConnectionTimeout:=10000;
+  SMTP.Timeout:=10000;
+  if SMTP.Login then
+  begin
+    if SMTP.MailFrom(GetEmailAddr(MailFrom), Length(MailData.Text)) then
+    begin
+      s := MailTo;
+      repeat
+        t := GetEmailAddr(Trim(FetchEx(s, ',', '"')));
+        if t <> '' then
+          OK := SMTP.MailTo(t);
+        if not OK then begin
+          error:='SMTP MailTo error: '+smtp.ResultString;
+          Break;
+        end;
+      until s = '';
+      if OK then begin
+        OK := SMTP.MailData(MailData);
+        if not OK then
+          error:='SMTP MailData error: '+smtp.ResultString;
+      end;
+    end
+    else begin
+      error:='SMTP MailFrom error: '+smtp.ResultString;
+    end;
+    SMTP.Logout;
+  end
+  else begin
+    error:='SMTP login error: '+smtp.ResultString+'; '+smtp.Sock.LastErrorDesc;
+  end;
+finally
+  SMTP.Free;
+  MailData.Free;
+  result:=error;
+end;
 end;
 
 end.
