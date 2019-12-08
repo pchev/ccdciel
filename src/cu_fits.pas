@@ -1277,6 +1277,13 @@ with FFitsInfo do begin
    if (copy(ctype2,1,4)='DEC-')and(crval2<>NullCoord) then
       dec:=crval2;
  end;
+ // remove unsupported ASCOM SensorType for debayering. Correct SensorType is still written in header for further processing
+ if (bayerpattern='CMYG') or
+    (bayerpattern='CMYG2') or
+    (bayerpattern='LRGB')
+    then
+      bayerpattern:='UNSUPPORTED';
+ // set color image type
  colormode:=1;
  if (naxis=3)and(naxis1=3) then begin // contiguous color RGB
   naxis1:=naxis2;
@@ -1730,6 +1737,7 @@ begin
     else if buf='RG' then result:=bayerRG
     else if buf='BG' then result:=bayerBG
     else if buf='GB' then result:=bayerGB
+    else if buf='UN' then result:=bayerUnsupported
     else
       result:=bayerRG;
   end
@@ -1999,7 +2007,9 @@ var i: integer;
     thread: array[0..15] of TGetExpThread;
     tc,timeout: integer;
 begin
-rmult:=0; gmult:=0; bmult:=0; t:=bayerRG;
+rmult:=0; gmult:=0; bmult:=0;
+t:=GetBayerMode;
+if t=bayerUnsupported then debayer:=false;
 if debayer then begin
   if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
      rmult:=FFitsInfo.rmult;
@@ -2011,7 +2021,6 @@ if debayer then begin
      gmult:=GreenBalance/mx;
      bmult:=BlueBalance/mx;
   end;
-  t:=BayerMode;
   if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
     case t of
       bayerGR: t:=bayerRG;
@@ -2075,7 +2084,9 @@ var i : integer;
     thread: array[0..15] of TGetBgraThread;
     tc,timeout: integer;
 begin
-  rmult:=0; gmult:=0; bmult:=0; t:=bayerRG;
+  rmult:=0; gmult:=0; bmult:=0;
+  t:=GetBayerMode;
+  if t=bayerUnsupported then debayer:=false;
   if debayer then begin
      if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
        rmult:=FFitsInfo.rmult;
@@ -2087,7 +2098,6 @@ begin
        gmult:=GreenBalance/mx;
        bmult:=BlueBalance/mx;
      end;
-     t:=BayerMode;
      if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
        case t of
          bayerGR: t:=bayerRG;

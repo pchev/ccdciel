@@ -47,7 +47,7 @@ type
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP, HNSKY);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
-  TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB,bayerCamera);
+  TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB,bayerCamera,bayerUnsupported);
   TAutofocusMode=(afVcurve,afDynamic,afIterative,afNone);
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
   TAutofocusDynamicStep=(afdStart,afdMeasure,afdEnd);
