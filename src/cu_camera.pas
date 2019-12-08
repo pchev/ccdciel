@@ -293,7 +293,7 @@ begin
   FIndiTransfertDir:=defTransfertPath;
   FIndiTransfertPrefix:='ccdciel_tmp';
   FVerticalFlip:=false;
-  FASCOMFlipImage:=true;
+  FASCOMFlipImage:=false;
   FStatus := devDisconnected;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
@@ -629,7 +629,11 @@ begin
   end;
   CType:='';
   try
-   if FhasCfaInfo then CfaInfo(OffsetX,OffsetY,CType);
+   if FhasCfaInfo then begin
+     CfaInfo(OffsetX,OffsetY,CType);
+     if FASCOMFlipImage and (not odd(FCameraYSize)) then
+        OffsetY:=(OffsetY+1) mod 2;
+   end;
   except
   end;
   // write new header
