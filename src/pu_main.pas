@@ -11345,7 +11345,7 @@ procedure Tf_main.StopServer;
 var
   i: integer;
 begin
-  if TCPDaemon = nil then
+  if (TCPDaemon = nil)or TCPDaemon.Finished then
     exit;
   try
     screen.cursor := crHourglass;
