@@ -3070,7 +3070,7 @@ try
   MailData.Add('From: ' + MailFrom);
   MailData.Add('To: ' + MailTo);
   MailData.Add('Date: ' + Rfc822DateTime(now));
-  MailData.Add('Subject: ' + Subject);
+  MailData.Add('Subject: [CCDciel] ' + Subject);
   MailData.Add('X-mailer: CCDciel');
   MailData.Add('');
   MailData.Add(Msg);
