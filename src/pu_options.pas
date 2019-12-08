@@ -716,6 +716,7 @@ begin
   GroupBox8.Caption := rsColorPreview;
   Label38.Caption := rsBayerMatrixP;
   DebayerPreview.Caption := rsDebayerThePr;
+  BayerMode.Items[4]:=rsAutomatic;
   BalanceFromCamera.Caption:=rsBalanceFromC;
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;

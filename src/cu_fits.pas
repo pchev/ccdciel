@@ -1735,11 +1735,13 @@ begin
     // use value from header
     if buf='GR' then result:=bayerGR
     else if buf='RG' then result:=bayerRG
+    else if buf='T'  then result:=bayerRG  //some software can use a boolean to indicate a bayered image
+    else if buf=''   then result:=bayerRG  //this is the most probable case if a user request auto debayer with a camera that not report it's sensor type
     else if buf='BG' then result:=bayerBG
     else if buf='GB' then result:=bayerGB
     else if buf='UN' then result:=bayerUnsupported
     else
-      result:=bayerRG;
+      result:=bayerUnsupported;
   end
   else begin
     // use default configured value
