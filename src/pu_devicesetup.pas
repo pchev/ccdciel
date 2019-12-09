@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_translation, u_hints,
+  cu_alpacamanagement,
   {$ifdef mswindows}
     Variants, comobj, math,
   {$endif}
@@ -37,8 +38,18 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    AlpacaWheelList: TComboBox;
+    AlpacaFocuserList: TComboBox;
+    AlpacaRotatorList: TComboBox;
+    AlpacaMountList: TComboBox;
+    AlpacaDomeList: TComboBox;
+    AlpacaWeatherList: TComboBox;
+    AlpacaSafetyList: TComboBox;
+    BtnDiscover: TButton;
     ButtonHelp: TButton;
     CameraARestPass: TEdit;
+    AlpacaServers: TComboBox;
+    AlpacaCameraList: TComboBox;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
     Label107: TLabel;
@@ -410,11 +421,21 @@ type
     IndiTimer: TTimer;
     Camera: TTabSheet;
     Filterwheel: TTabSheet;
+    procedure AlpacaCameraListChange(Sender: TObject);
+    procedure AlpacaDomeListChange(Sender: TObject);
+    procedure AlpacaFocuserListChange(Sender: TObject);
+    procedure AlpacaMountListChange(Sender: TObject);
+    procedure AlpacaRotatorListChange(Sender: TObject);
+    procedure AlpacaSafetyListChange(Sender: TObject);
+    procedure AlpacaServersChange(Sender: TObject);
+    procedure AlpacaWeatherListChange(Sender: TObject);
+    procedure AlpacaWheelListChange(Sender: TObject);
     procedure ApplyIndiClick(Sender: TObject);
     procedure BtnAboutAscomClick(Sender: TObject);
     procedure BtnChooseClick(Sender: TObject);
     procedure BtnCopyProfileClick(Sender: TObject);
     procedure BtnDeleteProfileClick(Sender: TObject);
+    procedure BtnDiscoverClick(Sender: TObject);
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure ApplyAscomRemoteClick(Sender: TObject);
@@ -456,6 +477,7 @@ type
     IndiTimerCount,GetDeviceType:integer;
     receiveindidevice: boolean;
     FShowHelp: TNotifyEvent;
+    AlpacaServerList: TAlpacaServerList;
     procedure GetIndiDevicesStart;
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
@@ -1826,6 +1848,212 @@ begin
      n:=ProfileList.Items.IndexOf('default');
      ProfileList.ItemIndex:=n;
      ProfileListChange(Sender);
+  end;
+end;
+
+procedure Tf_setup.BtnDiscoverClick(Sender: TObject);
+var i,j,n:integer;
+    devtype: string;
+begin
+  AlpacaServerList:=AlpacaDiscover;
+  n:=length(AlpacaServerList);
+  if n>0 then begin
+    AlpacaServers.Clear;
+    AlpacaCameraList.Clear;
+    AlpacaCameraList.Items.Add('Discovered camera...');
+    AlpacaWheelList.Clear;
+    AlpacaWheelList.Items.Add('Discovered filter wheel...');
+    AlpacaFocuserList.Clear;
+    AlpacaFocuserList.Items.Add('Discovered focuser...');
+    AlpacaRotatorList.Clear;
+    AlpacaRotatorList.Items.Add('Discovered rotator...');
+    AlpacaMountList.Clear;
+    AlpacaMountList.Items.Add('Discovered telescope...');
+    AlpacaDomeList.Clear;
+    AlpacaDomeList.Items.Add('Discovered dome...');
+    AlpacaWeatherList.Clear;
+    AlpacaWeatherList.Items.Add('Discovered weather monitor...');
+    AlpacaSafetyList.Clear;
+    AlpacaSafetyList.Items.Add('Discovered safety monitor...');
+    AlpacaServers.Items.Add('Found '+inttostr(n)+' servers');
+    for i:=0 to length(AlpacaServerList)-1 do begin
+      AlpacaServers.Items.Add(AlpacaServerList[i].servername+', '+AlpacaServerList[i].location+', '+AlpacaServerList[i].ip+':'+AlpacaServerList[i].port);
+      for j:=0 to AlpacaServerList[i].devicecount-1 do begin
+        devtype:=UpperCase(AlpacaServerList[i].devices[j].DeviceType);
+        if devtype='CAMERA' then begin
+           AlpacaCameraList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='FILTERWHEEL' then begin
+          AlpacaWheelList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='FOCUSER' then begin
+          AlpacaFocuserList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='ROTATOR' then begin
+          AlpacaRotatorList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='TELESCOPE' then begin
+          AlpacaMountList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='DOME' then begin
+          AlpacaDomeList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='OBSERVINGCONDITIONS' then begin
+          AlpacaWeatherList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='SAFETYMONITOR' then begin
+          AlpacaSafetyList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end;
+      end;
+    end;
+    AlpacaServers.ItemIndex:=0;
+  end;
+end;
+
+procedure Tf_setup.AlpacaServersChange(Sender: TObject);
+var i: integer;
+begin
+  i:=AlpacaServers.ItemIndex-1;
+  if (i>=0)and(i<Length(AlpacaServerList)) then begin
+    DefaultARestHost.Text:=AlpacaServerList[i].ip;
+    DefaultARestPort.Text:=AlpacaServerList[i].port;
+    DefaultARestProtocol.ItemIndex:=0;
+  end;
+end;
+
+procedure Tf_setup.AlpacaCameraListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaCameraList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaCameraList.Items[i],tab,lst);
+    CameraARestHost.Text:=lst[1];
+    CameraARestPort.Text:=lst[2];
+    CameraARestDevice.Value:=StrToInt(lst[3]);
+    CameraARestProtocol.ItemIndex:=0;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaWheelListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaWheelList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaWheelList.Items[i],tab,lst);
+    WheelARestHost.Text:=lst[1];
+    WheelARestPort.Text:=lst[2];
+    WheelARestDevice.Value:=StrToInt(lst[3]);
+    WheelARestProtocol.ItemIndex:=0;
+    DeviceFilterWheel.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaFocuserListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaFocuserList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaFocuserList.Items[i],tab,lst);
+    FocuserARestHost.Text:=lst[1];
+    FocuserARestPort.Text:=lst[2];
+    FocuserARestDevice.Value:=StrToInt(lst[3]);
+    FocuserARestProtocol.ItemIndex:=0;
+    DeviceFocuser.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaRotatorListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaRotatorList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaRotatorList.Items[i],tab,lst);
+    RotatorARestHost.Text:=lst[1];
+    RotatorARestPort.Text:=lst[2];
+    RotatorARestDevice.Value:=StrToInt(lst[3]);
+    RotatorARestProtocol.ItemIndex:=0;
+    DeviceRotator.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaMountListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaMountList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaMountList.Items[i],tab,lst);
+    MountARestHost.Text:=lst[1];
+    MountARestPort.Text:=lst[2];
+    MountARestDevice.Value:=StrToInt(lst[3]);
+    MountARestProtocol.ItemIndex:=0;
+    DeviceMount.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaDomeListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaDomeList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaDomeList.Items[i],tab,lst);
+    DomeARestHost.Text:=lst[1];
+    DomeARestPort.Text:=lst[2];
+    DomeARestDevice.Value:=StrToInt(lst[3]);
+    DomeARestProtocol.ItemIndex:=0;
+    DeviceDome.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaWeatherListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaWeatherList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaWeatherList.Items[i],tab,lst);
+    WeatherARestHost.Text:=lst[1];
+    WeatherARestPort.Text:=lst[2];
+    WeatherARestDevice.Value:=StrToInt(lst[3]);
+    WeatherARestProtocol.ItemIndex:=0;
+    DeviceWeather.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+
+procedure Tf_setup.AlpacaSafetyListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaSafetyList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaSafetyList.Items[i],tab,lst);
+    SafetyARestHost.Text:=lst[1];
+    SafetyARestPort.Text:=lst[2];
+    SafetyARestDevice.Value:=StrToInt(lst[3]);
+    SafetyARestProtocol.ItemIndex:=0;
+    DeviceSafety.Checked:=true;
+    lst.Free;
   end;
 end;
 
