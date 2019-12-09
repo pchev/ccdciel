@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2, u_libraw,
-     cu_fits, u_global, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
+     cu_fits, u_global, u_utils, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
 
 type
 
@@ -1016,7 +1016,7 @@ procedure T_indicamera.NewImageFile(ft: string; sz,blen:integer; data: TMemorySt
 var source,dest: array of char;
     sourceLen,destLen:UInt64;
     i: integer;
-    rmsg: string;
+    tmpf,rmsg: string;
 begin
  // report any change to NewText() in use with RAM disk transfer
  ExposureTimer.Enabled:=false;
@@ -1050,7 +1050,26 @@ begin
           ft:=LeftStr(ft,length(ft)-2);
         end;
    end;
-   if ft='.fits' then begin // receive a FITS file
+   if ft='.fits.fz' then begin // receive a packed FITS file
+     FImageFormat:='.fits';
+     if assigned(FonExposureProgress) then FonExposureProgress(-10);
+     if debug_msg then msg('this is a packed fits file');
+     if debug_msg then msg('run funpack');
+     tmpf:=slash(TmpDir)+'ccdcieltmp.fits.fz';
+     data.SaveToFile(tmpf);
+     FImgStream.Clear;
+     i:=ExecProcessMem(funpackcmd+' -S '+tmpf,FImgStream,rmsg);
+     if i<>0 then begin
+        msg('funpack error '+inttostr(i)+': '+rmsg,0);
+        if assigned(FonAbortExposure) then FonAbortExposure(self);
+        exit;
+     end;
+     DeleteFile(tmpf);
+     if debug_msg then msg('NewImage');
+     if assigned(FonExposureProgress) then FonExposureProgress(-11);
+     NewImage;
+   end
+   else if ft='.fits' then begin // receive a FITS file
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a fits file');

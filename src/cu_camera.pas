@@ -476,6 +476,7 @@ if FAddFrames then begin  // stack preview frames
 end
 else begin  // normal capture
   FStackCount:=0;
+  if ImgStream.Size>0 then begin
   {$ifdef camera_debug}msg('load stream');{$endif}
   Ffits.Stream:=ImgStream;
   Ffits.LoadStream;
@@ -484,6 +485,7 @@ else begin  // normal capture
   {$ifdef camera_debug}msg('apply correction');{$endif}
   FFits.ApplyDark;
   FFits.ApplyBPM;
+  end;
   {$ifdef camera_debug}msg('display image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
 end;

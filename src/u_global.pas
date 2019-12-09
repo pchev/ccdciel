@@ -291,6 +291,7 @@ const
     defTransfertPath='/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
+    funpackcmd = 'funpack';
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
@@ -298,6 +299,7 @@ const
     defTransfertPath='/tmp';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
+    funpackcmd = 'funpack';
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
@@ -305,6 +307,7 @@ const
     defTransfertPath='C:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
+    funpackcmd = 'funpack.exe';
   {$endif}
   {$ifdef darwin}
     OpenFileCMD: string = 'open';

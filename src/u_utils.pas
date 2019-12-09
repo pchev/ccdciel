@@ -63,6 +63,7 @@ Function Str3ToDE(dms : string) : double;
 function DEToStrShort(de: double; digits: integer = 1): string;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
+Function ExecProcessMem(cmd: string; output: TMemoryStream; out err: string; ShowConsole:boolean=false): integer;
 Function ExecuteFile(const FileName: string): integer;
 procedure Wait(wt:single=5);
 function GetCdCPort:string;
@@ -840,6 +841,74 @@ begin
     end;
 end;
 {$endif}
+
+Function ExecProcessMem(cmd: string; output: TMemoryStream; out err: string; ShowConsole:boolean=false): integer;
+const READ_BYTES = 2048;
+var
+  P: TProcess;
+  param: TStringList;
+  n,i: LongInt;
+  BytesRead: LongInt;
+  cerr: array[0..1024]of char;
+begin
+P := TProcess.Create(nil);
+param:=TStringList.Create;
+result:=1;
+err:='';
+cerr:='';
+try
+  BytesRead := 0;
+  SplitCmd(cmd,param);
+  cmd:= param[0];
+  param.Delete(0);
+  P.Executable:=cmd;
+  P.Parameters:=param;
+  if ShowConsole then begin
+     P.ShowWindow:=swoShowNormal;
+     P.StartupOptions:=[suoUseShowWindow];
+  end else begin
+     P.ShowWindow:=swoHIDE;
+  end;
+  if output<>nil then P.Options := [poUsePipes];
+  P.Execute;
+  while P.Running do begin
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+    if (output<>nil) and (P.Output<>nil) then begin
+      output.SetSize(BytesRead + READ_BYTES);
+      n := P.Output.Read((output.Memory + BytesRead)^, READ_BYTES);
+      if n > 0 then inc(BytesRead, n);
+    end;
+    if (P.Stderr<>nil)and(P.Stderr.NumBytesAvailable>0) then begin
+      i:=min(1024, P.Stderr.NumBytesAvailable);
+      n:=P.Stderr.Read(cerr, i);
+      err:=err+trim(cerr);
+    end;
+  end;
+  result:=P.ExitStatus;
+  if (output<>nil) and (result<>127)and(P.Output<>nil) then repeat
+    output.SetSize(BytesRead + READ_BYTES);
+    n := P.Output.Read((output.Memory + BytesRead)^, READ_BYTES);
+    if n > 0
+    then begin
+      Inc(BytesRead, n);
+    end;
+  until (n<=0)or(P.Output=nil);
+  if (P.Stderr<>nil)and(P.Stderr.NumBytesAvailable>0) then begin
+    i:=min(1024, P.Stderr.NumBytesAvailable);
+    n:=P.Stderr.Read(cerr, i);
+    err:=err+trim(cerr);
+  end;
+  P.Free;
+  param.Free;
+except
+  on E: Exception do begin
+    result:=-1;
+    err:=err+E.Message;
+    P.Free;
+    param.Free;
+  end;
+end;
+end;
 
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 const READ_BYTES = 2048;
