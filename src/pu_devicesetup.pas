@@ -1881,28 +1881,28 @@ begin
       for j:=0 to AlpacaServerList[i].devicecount-1 do begin
         devtype:=UpperCase(AlpacaServerList[i].devices[j].DeviceType);
         if devtype='CAMERA' then begin
-           AlpacaCameraList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+           AlpacaCameraList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'camera/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='FILTERWHEEL' then begin
-          AlpacaWheelList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaWheelList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'filterwheel/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='FOCUSER' then begin
-          AlpacaFocuserList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaFocuserList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'focuser/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='ROTATOR' then begin
-          AlpacaRotatorList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaRotatorList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'rotator/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='TELESCOPE' then begin
-          AlpacaMountList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaMountList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'telescope/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='DOME' then begin
-          AlpacaDomeList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaDomeList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'dome/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='OBSERVINGCONDITIONS' then begin
-          AlpacaWeatherList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaWeatherList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'observingconditions/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='SAFETYMONITOR' then begin
-          AlpacaSafetyList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+          AlpacaSafetyList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'safetymonitor/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end;
       end;
     end;
@@ -1931,7 +1931,7 @@ begin
     SplitRec(AlpacaCameraList.Items[i],tab,lst);
     CameraARestHost.Text:=lst[1];
     CameraARestPort.Text:=lst[2];
-    CameraARestDevice.Value:=StrToInt(lst[3]);
+    CameraARestDevice.Value:=StrToInt(lst[4]);
     CameraARestProtocol.ItemIndex:=0;
     lst.Free;
   end;
@@ -1947,7 +1947,7 @@ begin
     SplitRec(AlpacaWheelList.Items[i],tab,lst);
     WheelARestHost.Text:=lst[1];
     WheelARestPort.Text:=lst[2];
-    WheelARestDevice.Value:=StrToInt(lst[3]);
+    WheelARestDevice.Value:=StrToInt(lst[4]);
     WheelARestProtocol.ItemIndex:=0;
     DeviceFilterWheel.Checked:=true;
     lst.Free;
@@ -1964,7 +1964,7 @@ begin
     SplitRec(AlpacaFocuserList.Items[i],tab,lst);
     FocuserARestHost.Text:=lst[1];
     FocuserARestPort.Text:=lst[2];
-    FocuserARestDevice.Value:=StrToInt(lst[3]);
+    FocuserARestDevice.Value:=StrToInt(lst[4]);
     FocuserARestProtocol.ItemIndex:=0;
     DeviceFocuser.Checked:=true;
     lst.Free;
@@ -1981,7 +1981,7 @@ begin
     SplitRec(AlpacaRotatorList.Items[i],tab,lst);
     RotatorARestHost.Text:=lst[1];
     RotatorARestPort.Text:=lst[2];
-    RotatorARestDevice.Value:=StrToInt(lst[3]);
+    RotatorARestDevice.Value:=StrToInt(lst[4]);
     RotatorARestProtocol.ItemIndex:=0;
     DeviceRotator.Checked:=true;
     lst.Free;
@@ -1998,7 +1998,7 @@ begin
     SplitRec(AlpacaMountList.Items[i],tab,lst);
     MountARestHost.Text:=lst[1];
     MountARestPort.Text:=lst[2];
-    MountARestDevice.Value:=StrToInt(lst[3]);
+    MountARestDevice.Value:=StrToInt(lst[4]);
     MountARestProtocol.ItemIndex:=0;
     DeviceMount.Checked:=true;
     lst.Free;
@@ -2015,7 +2015,7 @@ begin
     SplitRec(AlpacaDomeList.Items[i],tab,lst);
     DomeARestHost.Text:=lst[1];
     DomeARestPort.Text:=lst[2];
-    DomeARestDevice.Value:=StrToInt(lst[3]);
+    DomeARestDevice.Value:=StrToInt(lst[4]);
     DomeARestProtocol.ItemIndex:=0;
     DeviceDome.Checked:=true;
     lst.Free;
@@ -2032,7 +2032,7 @@ begin
     SplitRec(AlpacaWeatherList.Items[i],tab,lst);
     WeatherARestHost.Text:=lst[1];
     WeatherARestPort.Text:=lst[2];
-    WeatherARestDevice.Value:=StrToInt(lst[3]);
+    WeatherARestDevice.Value:=StrToInt(lst[4]);
     WeatherARestProtocol.ItemIndex:=0;
     DeviceWeather.Checked:=true;
     lst.Free;
@@ -2050,7 +2050,7 @@ begin
     SplitRec(AlpacaSafetyList.Items[i],tab,lst);
     SafetyARestHost.Text:=lst[1];
     SafetyARestPort.Text:=lst[2];
-    SafetyARestDevice.Value:=StrToInt(lst[3]);
+    SafetyARestDevice.Value:=StrToInt(lst[4]);
     SafetyARestProtocol.ItemIndex:=0;
     DeviceSafety.Checked:=true;
     lst.Free;
