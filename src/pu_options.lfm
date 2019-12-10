@@ -288,9 +288,9 @@ object f_option: Tf_option
             Text = '_'
           end
           object FileSequenceWidth: TSpinEditEx
-            Left = 184
+            Left = 384
             Height = 28
-            Top = 240
+            Top = 204
             Width = 57
             Constraints.MaxHeight = 28
             MaxLength = 0
@@ -300,13 +300,21 @@ object f_option: Tf_option
             Value = 3
           end
           object UseFileSequenceWidth: TCheckBox
-            Left = 8
+            Left = 208
             Height = 21
-            Top = 244
+            Top = 208
             Width = 158
             Caption = 'Fixed sequence length'
             OnClick = UseFileSequenceWidthClick
             TabOrder = 4
+          end
+          object FilePack: TCheckBox
+            Left = 8
+            Height = 21
+            Top = 240
+            Width = 227
+            Caption = 'Compress the FITS files with fpack'
+            TabOrder = 5
           end
         end
         object FolderOpt: TTabSheet
@@ -357,7 +365,7 @@ object f_option: Tf_option
         end
       end
       object MeasureNewImage: TCheckBox
-        Left = 23
+        Left = 20
         Height = 21
         Top = 384
         Width = 369
@@ -365,7 +373,7 @@ object f_option: Tf_option
         TabOrder = 3
       end
       object SaveBitmap: TCheckBox
-        Left = 24
+        Left = 20
         Height = 21
         Top = 416
         Width = 347
@@ -455,7 +463,7 @@ object f_option: Tf_option
         Top = 178
         Width = 252
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 250
         ParentFont = False
         TabOrder = 3
@@ -538,7 +546,7 @@ object f_option: Tf_option
         Top = 230
         Width = 252
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 250
         ParentFont = False
         TabOrder = 4
@@ -1008,7 +1016,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 40
+          ClientHeight = 22
           ClientWidth = 235
           Columns = 3
           Items.Strings = (
@@ -1284,8 +1292,8 @@ object f_option: Tf_option
             Top = 30
             Width = 328
             BevelOuter = bvNone
-            ClientHeight = 30
-            ClientWidth = 328
+            ClientHeight = 26
+            ClientWidth = 324
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel

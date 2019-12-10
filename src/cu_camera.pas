@@ -415,6 +415,7 @@ begin
 if FAddFrames then begin  // stack preview frames
   // load temporary image
   f:=TFits.Create(nil);
+  f.onMsg:=onMsg;
   f.Stream:=ImgStream;
   f.LoadStream;
   // convert 8bit to 16bit to avoid quick overflow

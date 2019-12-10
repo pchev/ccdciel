@@ -149,6 +149,8 @@ type
     FDark: TFits;
     FDarkOn: boolean;
     FDarkProcess, FBPMProcess: boolean;
+    FonMsg: TNotifyMsg;
+    procedure msg(txt: string; level:integer=3);
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
     procedure SetVideoStream(value:TMemoryStream);
@@ -174,7 +176,7 @@ type
      procedure GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
      procedure GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
      procedure SaveToBitmap(fn: string);
-     procedure SaveToFile(fn: string);
+     procedure SaveToFile(fn: string; pack: boolean=false);
      procedure LoadFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure ApplyBPM;
@@ -223,6 +225,7 @@ type
      property DarkProcess: boolean read FDarkProcess;
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
+     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
   TGetImage = class(TThread)
@@ -281,6 +284,7 @@ type
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
   procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
 
 implementation
@@ -1077,6 +1081,11 @@ except
 end;
 end;
 
+procedure TFits.msg(txt: string; level:integer=3);
+begin
+ if Assigned(FonMsg) then FonMsg('FITS: '+txt,level);
+end;
+
 procedure TFits.SetVideoStream(value:TMemoryStream);
 begin
 // other header previously set by caller
@@ -1138,21 +1147,48 @@ begin
   result.CopyFrom(FStream,FStream.Size-Fhdr_end);
 end;
 
-procedure TFits.SaveToFile(fn: string);
+procedure TFits.SaveToFile(fn: string; pack: boolean=false);
 var mem: TMemoryStream;
+    tmpf,rmsg: string;
+    i: integer;
 begin
   mem:=GetStream;
-  mem.SaveToFile(fn);
+  if pack then begin
+    tmpf:=slash(TmpDir)+'tmppack.fits';
+    mem.SaveToFile(tmpf);
+    i:=PackFits(tmpf,fn+'.fz',rmsg);
+    if i<>0 then begin
+      msg('fpack error '+inttostr(i)+': '+rmsg,1);
+      msg('Saving file without compression',1);
+      mem.SaveToFile(fn);
+    end;
+  end
+  else begin
+    mem.SaveToFile(fn);
+  end;
   mem.Free;
 end;
 
 procedure TFits.LoadFromFile(fn:string);
 var mem: TMemoryStream;
+    pack: boolean;
+    rmsg: string;
+    i: integer;
 begin
 if FileExistsUTF8(fn) then begin
  mem:=TMemoryStream.Create;
+ pack:=uppercase(ExtractFileExt(fn))='.FZ';
  try
-   mem.LoadFromFile(fn);
+   if pack then begin
+     i:=UnpackFits(fn,mem,rmsg);
+     if i<>0 then begin
+       ClearImage;
+       msg('funpack error '+inttostr(i)+': '+rmsg,1);
+       exit;
+     end;
+   end
+   else
+     mem.LoadFromFile(fn);
    SetBPM(bpm,0,0,0,0);
    FDarkOn:=false;
    SetStream(mem);
@@ -1163,7 +1199,7 @@ if FileExistsUTF8(fn) then begin
 end
 else begin
  ClearImage;
- ShowMessage(Format(rsFileNotFound, [fn]));
+ msg(Format(rsFileNotFound, [fn]),1);
 end;
 end;
 
@@ -2959,6 +2995,7 @@ var imgshift: TFits;
     m: TMemoryStream;
 begin
   imgshift:=TFits.Create(nil);
+  imgshift.onMsg:=onMsg;
   imgshift.SetStream(FStream);
   imgshift.LoadStream;
   for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
@@ -3348,6 +3385,27 @@ end
 else begin
   rmsg:='No RAW decoder found!';
 end;
+end;
+
+function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
+var
+  j: integer;
+  outstr:Tstringlist;
+begin
+ try
+   outstr:=TStringList.Create;
+   rmsg:='';
+   result:=ExecProcess(fpackcmd+' -O '+packedfilename+' -D -Y '+unpackedfilename,outstr);
+   if result<>0 then begin
+     for j:=0 to outstr.Count-1 do rmsg:=rmsg+crlf+outstr[j];
+   end;
+   outstr.Free;
+ except
+   on E: Exception do begin
+     result:=-1;
+     rmsg:=E.Message;
+   end;
+ end;
 end;
 
 function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;

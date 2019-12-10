@@ -50,6 +50,7 @@ type
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
+    FilePack: TCheckBox;
     EmailCondition: TCheckListBox;
     GroupBox25: TGroupBox;
     Panel6: TPanel;

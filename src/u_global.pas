@@ -291,6 +291,7 @@ const
     defTransfertPath='/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
+    fpackcmd = 'fpack';
     funpackcmd = 'funpack';
   {$endif}
   {$ifdef darwin}
@@ -299,6 +300,7 @@ const
     defTransfertPath='/tmp';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
+    fpackcmd = 'fpack';
     funpackcmd = 'funpack';
   {$endif}
   {$ifdef mswindows}
@@ -307,6 +309,7 @@ const
     defTransfertPath='C:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
+    fpackcmd = 'fpack.exe';
     funpackcmd = 'funpack.exe';
   {$endif}
   {$ifdef darwin}
@@ -414,6 +417,7 @@ var
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
   FilenameSep: String;
+  FilePack: boolean;
   FileSequenceWidth: integer;
   hasGain, hasGainISO: boolean;
   ISOList: TStringList;

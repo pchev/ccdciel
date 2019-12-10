@@ -1274,8 +1274,10 @@ begin
   f_msg.onShowTabs:=@ShowMsgTabs;
 
   fits:=TFits.Create(self);
+  fits.onMsg:=@NewMessage;
   if FileExistsUTF8(ConfigDarkFile) then begin
      fits.DarkFrame:=TFits.Create(nil);
+     fits.DarkFrame.onMsg:=@NewMessage;
      fits.DarkFrame.LoadFromFile(ConfigDarkFile);
   end;
 
@@ -2631,7 +2633,7 @@ var
    fext:string;
 begin
   fext:=uppercase(extractfileext(FileNames[0]));{take the first file name in the drop list}
-  if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS')) then
+  if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS') or (fext='.FZ')) then
      LoadFitsFile(FileNames[0]) {load fits file}
   else
      LoadPictureFile(FileNames[0]); {load picture file}
@@ -3081,7 +3083,10 @@ begin
    fits.DarkOn:=false;
    if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture) then begin
      fits.SaveToFile(ConfigDarkFile);
-     if fits.DarkFrame=nil then fits.DarkFrame:=TFits.Create(nil);
+     if fits.DarkFrame=nil then begin
+        fits.DarkFrame:=TFits.Create(nil);
+        fits.DarkFrame.onMsg:=@NewMessage;
+     end;
      fits.DarkFrame.LoadFromFile(ConfigDarkFile);
    end
    else
@@ -3103,7 +3108,10 @@ begin
     fn:=OpenDialog1.FileName;
     fits.SetBPM(bpm,0,0,0,0);
     fits.DarkOn:=false;
-    if fits.DarkFrame=nil then fits.DarkFrame:=TFits.Create(nil);
+    if fits.DarkFrame=nil then begin
+       fits.DarkFrame:=TFits.Create(nil);
+       fits.DarkFrame.onMsg:=@NewMessage;
+    end;
     fits.DarkFrame.LoadFromFile(fn);
     if fits.DarkFrame.HeaderInfo.valid then begin
       fits.DarkFrame.SaveToFile(ConfigDarkFile);
@@ -3426,6 +3434,7 @@ begin
   end;
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
+  FilePack:=config.GetValue('/Files/Pack',false);
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
@@ -5915,7 +5924,10 @@ begin
       f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);
       ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
       if FileExistsUTF8(ConfigDarkFile) then begin
-        if fits.DarkFrame=nil then fits.DarkFrame:=TFits.Create(nil);
+        if fits.DarkFrame=nil then begin
+           fits.DarkFrame:=TFits.Create(nil);
+           fits.DarkFrame.onMsg:=@NewMessage;
+        end;
         fits.DarkFrame.LoadFromFile(ConfigDarkFile);
       end
       else begin
@@ -6155,6 +6167,7 @@ begin
       f_option.UseFileSequenceWidth.Checked:=false;
       f_option.FileSequenceWidth.Enabled:=false;
    end;
+   f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
    f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
    f_option.SaveBitmapFormat.ItemIndex:=config.GetValue('/Files/SaveBitmapFormat',0);
@@ -6483,6 +6496,7 @@ begin
         config.SetValue('/Files/FileSequenceWidth',f_option.FileSequenceWidth.Text)
      else
         config.SetValue('/Files/FileSequenceWidth',0);
+     config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
@@ -7892,7 +7906,7 @@ end;
 
 procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
-    fn,fd,buf,fileseqstr,blankrep: string;
+    fn,fd,buf,fileseqstr,fileseqext,blankrep: string;
     ccdtemp,cra,cde,eq,pa,dist: double;
     fileseqnum,i: integer;
     UseFileSequenceNumber: boolean;
@@ -7983,8 +7997,12 @@ try
  if UseFileSequenceNumber then begin
    fileseqnum:=1;
    fileseqstr:=IntToStr(fileseqnum);
+   if FilePack then
+     fileseqext:='.fits.fz'
+   else
+     fileseqext:='.fits';
    if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
-   while FileExistsUTF8(slash(fd)+fn+FilenameSep+fileseqstr+'.fits') do begin
+   while FileExistsUTF8(slash(fd)+fn+FilenameSep+fileseqstr+fileseqext) do begin
      inc(fileseqnum);
      fileseqstr:=IntToStr(fileseqnum);
      if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
@@ -7993,10 +8011,16 @@ try
  end;
  fn:=slash(fd)+fn+'.fits';
  // save the file
- fits.SaveToFile(fn);
+ fits.SaveToFile(fn,FilePack);
  inc(CurrentDoneCount);
- NewMessage(Format(rsSavedFile, [fn]),1);
- buf:=Format(rsSaved, [fn]);
+ if FilePack then begin
+   NewMessage(Format(rsSavedFile, [fn+'.fz']),1);
+   buf:=Format(rsSaved, [fn+'.fz']);
+ end
+ else begin
+   NewMessage(Format(rsSavedFile, [fn]),1);
+   buf:=Format(rsSaved, [fn]);
+ end;
  if camera.ImageFormat<>'.fits' then buf:=UpperCase(camera.ImageFormat)+' '+buf;
  buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[2].Text:=buf;
@@ -8563,7 +8587,7 @@ var fext: string;
 begin
   if OpenPictureDialog1.Execute then begin
    fext:=uppercase(extractfileext(OpenPictureDialog1.FileName));
-   if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS')) then
+   if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS') or (fext='.FZ')) then
       LoadFitsFile(OpenPictureDialog1.FileName) {load fits file}
    else if pos(fext+',',UpperCase(rawext))>0  then
       LoadRawFile(OpenPictureDialog1.FileName) {load camera raw file}
@@ -8614,6 +8638,7 @@ if refmask then begin
   refmask:=false;
   mem:=TMemoryStream.Create;
   f:=TFits.Create(nil);
+  f.onMsg:=@NewMessage;
   try
   mem.LoadFromFile(reffile);
   f.Stream:=mem;
@@ -10495,9 +10520,15 @@ begin
 end;
 
 procedure Tf_main.SaveFitsFile(fn:string);
+var fext:string;
+    pack: boolean;
 begin
-  if fits.HeaderInfo.valid then
-     fits.SaveToFile(fn);
+  if fits.HeaderInfo.valid then begin
+     fext:=uppercase(extractfileext(fn));
+     pack:= (fext='.FZ');
+     if pack then fn:=copy(fn,1,length(fn)-3);
+     fits.SaveToFile(fn,pack);
+  end;
 end;
 
 procedure Tf_main.LoadFitsFile(fn:string);
