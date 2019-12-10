@@ -281,6 +281,7 @@ type
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
   procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
 
 implementation
 
@@ -3347,6 +3348,41 @@ end
 else begin
   rmsg:='No RAW decoder found!';
 end;
+end;
+
+function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
+{$ifdef mswindows}
+var
+  j: integer;
+  tmpfo: string;
+  outstr:Tstringlist;
+{$endif}
+begin
+ try
+   ImgStream.Clear;
+   {$ifdef mswindows}
+   // funpack -S do not work correctly on Windows
+   tmpfo:=slash(TmpDir)+'tmpunpack.fits';
+   outstr:=TStringList.Create;
+   rmsg:='';
+   result:=ExecProcess(funpackcmd+' -O '+tmpfo+' -D '+packedfilename,outstr);
+   if result=0 then begin
+     ImgStream.LoadFromFile(tmpfo);
+     DeleteFile(tmpfo);
+   end
+   else begin
+     for j:=0 to outstr.Count-1 do rmsg:=rmsg+crlf+outstr[j];
+   end;
+   outstr.Free;
+   {$else}
+   result:=ExecProcessMem(funpackcmd+' -S '+packedfilename,ImgStream,rmsg);
+   {$endif}
+ except
+   on E: Exception do begin
+     result:=-1;
+     rmsg:=E.Message;
+   end;
+ end;
 end;
 
 end.
