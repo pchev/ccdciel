@@ -1,0 +1,16 @@
+cfitsio windows:
+
+- using VS2013
+- unzip source code
+- edit fitsio.h : after "#include <stdio.h>" add "#define snprintf _snprintf" 
+- create directory cfitsio.build
+- open VS2013 command prompt
+- cd cfitsio.build
+- cmake -G "Visual Studio 12 2013" ..\cfitsio-3.47
+- cmake --build . --config Release
+- copy 32bit binary FPack.exe Funpack.exe cfitsio.dll from Release\
+- create directory cfitsio.build64
+- cd cfitsio.build64
+- cmake -G "Visual Studio 12 2013 Win64" ..\cfitsio-3.47
+- cmake --build . --config Release
+- copy 64bit binary FPack.exe Funpack.exe cfitsio.dll from Release\

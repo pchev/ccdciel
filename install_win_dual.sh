@@ -28,13 +28,18 @@ if [ $OS_TARGET = win32 ]; then
   strip -v -o $destdir/../Prog/ccdciel.exe src/ccdciel.exe 
   strip -v -o $destdir/../Prog/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
   strip -v -o $destdir/../Prog/libpasraw.dll library/raw/libpasraw.dll
-  unzip -d $destdir/../Prog/openssl32/ system_integration/Windows/data/openssl-win32.zip
+  unzip -d $destdir/../Prog/lib32/ system_integration/Windows/data/openssl-win32.zip
+  unzip -d $destdir/../Prog/lib32/ system_integration/Windows/data/zlib-win32.zip
+  unzip -d $destdir/../Prog/lib32/ system_integration/Windows/data/cfitsio-win32.zip
+
 fi
 if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/../Prog/ccdciel-x64.exe src/ccdciel.exe 
   strip -v -o $destdir/../Prog/libccdcielwcs-x64.dll library/wcs/libccdcielwcs.dll
   strip -v -o $destdir/../Prog/libpasraw-64.dll library/raw/libpasraw.dll
-  unzip -d $destdir/../Prog/openssl64/ system_integration/Windows/data/openssl-win64.zip
+  unzip -d $destdir/../Prog/lib64/ system_integration/Windows/data/openssl-win64.zip
+  unzip -d $destdir/../Prog/lib64/ system_integration/Windows/data/zlib-win64.zip
+  unzip -d $destdir/../Prog/lib64/ system_integration/Windows/data/cfitsio-win32.zip
 fi
 
 install -v -m 644 scripts/scope_park.script  $destdir/scripts/scope_park.script

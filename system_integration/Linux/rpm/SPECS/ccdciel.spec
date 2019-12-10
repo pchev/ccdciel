@@ -9,7 +9,7 @@ Packager: Patrick Chevalley
 BuildRoot: %_topdir/%{name}
 BuildArch: i386
 Provides: ccdciel
-Requires: libpasastro gtk2 glib2 pango libjpeg libpng
+Requires: libpasastro gtk2 glib2 pango libjpeg libpng fpack
 AutoReqProv: no
 
 %description

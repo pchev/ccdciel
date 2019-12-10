@@ -1,0 +1,9 @@
+cfitsio Mac:
+
+- tar x source code
+- edit CMakeLists.txt, comment all the block about CURL because there is no option to force curl off. This avoid the only external dependency.
+- create directory cfitsio.build
+- cd cfitsio.build
+- cmake  ../cfitsio-3.47
+- cmake --build . --config Release
+- copy binary FPack Funpack libcfitsio.3.dylib
