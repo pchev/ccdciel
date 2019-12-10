@@ -873,9 +873,10 @@ try
   P.Execute;
   while P.Running do begin
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-    if (output<>nil) and (P.Output<>nil) then begin
-      output.SetSize(BytesRead + READ_BYTES);
-      n := P.Output.Read((output.Memory + BytesRead)^, READ_BYTES);
+    if (output<>nil) and (P.Output<>nil)and(P.Output.NumBytesAvailable>0) then begin
+      i:=min(READ_BYTES, P.Output.NumBytesAvailable);
+      output.SetSize(BytesRead + i);
+      n := P.Output.Read((output.Memory + BytesRead)^, i);
       if n > 0 then inc(BytesRead, n);
     end;
     if (P.Stderr<>nil)and(P.Stderr.NumBytesAvailable>0) then begin
@@ -885,13 +886,11 @@ try
     end;
   end;
   result:=P.ExitStatus;
-  if (output<>nil) and (result<>127)and(P.Output<>nil) then repeat
-    output.SetSize(BytesRead + READ_BYTES);
-    n := P.Output.Read((output.Memory + BytesRead)^, READ_BYTES);
-    if n > 0
-    then begin
-      Inc(BytesRead, n);
-    end;
+  if (output<>nil) and (result<>127)and(P.Output<>nil)and(P.Output.NumBytesAvailable>0) then repeat
+    i:=min(READ_BYTES, P.Output.NumBytesAvailable);
+    output.SetSize(BytesRead + i);
+    n := P.Output.Read((output.Memory + BytesRead)^, i);
+    if n > 0 then inc(BytesRead, n);
   until (n<=0)or(P.Output=nil);
   if (P.Stderr<>nil)and(P.Stderr.NumBytesAvailable>0) then begin
     i:=min(1024, P.Stderr.NumBytesAvailable);
