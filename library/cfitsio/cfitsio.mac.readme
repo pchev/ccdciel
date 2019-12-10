@@ -8,5 +8,5 @@ cfitsio Mac:
 - cmake --build . --config Release
 - cd Release
 - install_name_tool -change  @rpath/libcfitsio.3.dylib @executable_path/libcfitsio.3.dylib Funpack
-- install_name_tool -change  @rpath/libcfitsio.3.dylib @executable_path/libcfitsio.3.dylib FPpack
+- install_name_tool -change  @rpath/libcfitsio.3.dylib @executable_path/libcfitsio.3.dylib FPack
 - copy binary FPack Funpack libcfitsio.3.dylib
