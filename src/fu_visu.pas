@@ -222,7 +222,7 @@ sh4:=round(0.980*sum); h4:=0;
 sum:=0;
 for i:=0 to high(word) do begin
   sum:=sum+hist[i];
-  if i>maxp then begin
+  if i>(0.7*maxp) then begin
     if (l1=0) and (sum>=sl1) then l1:=i;
     if (l2=0) and (sum>=sl2) then l2:=i;
     if (l3=0) and (sum>=sl3) then l3:=i;
