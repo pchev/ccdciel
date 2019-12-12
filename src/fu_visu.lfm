@@ -1,12 +1,11 @@
 object f_visu: Tf_visu
   Left = 0
-  Height = 112
+  Height = 113
   Top = 0
-  Width = 371
+  Width = 375
   AutoSize = True
-  ClientHeight = 112
-  ClientWidth = 371
-  DesignTimePPI = 95
+  ClientHeight = 113
+  ClientWidth = 375
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
@@ -14,38 +13,38 @@ object f_visu: Tf_visu
   DesignTop = 23
   object Panel1: TPanel
     Left = 0
-    Height = 92
+    Height = 93
     Top = 20
-    Width = 371
+    Width = 375
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 92
-    ClientWidth = 371
+    ClientHeight = 93
+    ClientWidth = 375
     ParentFont = False
     TabOrder = 0
     object Panel3: TPanel
       Left = 0
-      Height = 89
+      Height = 90
       Top = 0
-      Width = 256
+      Width = 259
       BevelOuter = bvNone
-      ClientHeight = 89
-      ClientWidth = 256
+      ClientHeight = 90
+      ClientWidth = 259
       Color = clBlack
-      Constraints.MaxWidth = 256
-      Constraints.MinWidth = 256
+      Constraints.MaxWidth = 259
+      Constraints.MinWidth = 259
       Font.Color = clSilver
       ParentColor = False
       ParentFont = False
       TabOrder = 1
       object Histogram: TImage
         Left = 0
-        Height = 89
+        Height = 90
         Hint = 'Histogram of the current image.'#10'Click and move to adjust the visualisation threshold.'
         Top = 0
-        Width = 256
+        Width = 259
         Align = alClient
         OnMouseDown = HistogramMouseDown
         OnMouseMove = HistogramMouseMove
@@ -55,9 +54,11 @@ object f_visu: Tf_visu
         Left = 0
         Height = 26
         Top = 0
-        Width = 70
+        Width = 71
         Constraints.MaxHeight = 26
+        Font.Color = clSilver
         MaxLength = 0
+        ParentFont = False
         TabOrder = 0
         Visible = False
         OnChange = SpinEditMinChange
@@ -69,12 +70,14 @@ object f_visu: Tf_visu
         Value = 0
       end
       object SpinEditMax: TFloatSpinEditEx
-        Left = 186
+        Left = 188
         Height = 26
         Top = 0
-        Width = 70
+        Width = 71
         Constraints.MaxHeight = 26
+        Font.Color = clSilver
         MaxLength = 0
+        ParentFont = False
         TabOrder = 1
         Visible = False
         OnChange = SpinEditMaxChange
@@ -87,20 +90,20 @@ object f_visu: Tf_visu
       end
     end
     object Panel2: TPanel
-      Left = 256
-      Height = 89
+      Left = 259
+      Height = 90
       Top = 0
-      Width = 115
+      Width = 116
       BevelOuter = bvNone
-      ClientHeight = 89
-      ClientWidth = 115
+      ClientHeight = 90
+      ClientWidth = 116
       ParentFont = False
       TabOrder = 0
       object BtnZoomAdjust: TSpeedButton
-        Left = 87
+        Left = 88
         Height = 22
         Hint = 'Zoom to adjust in window'
-        Top = 66
+        Top = 67
         Width = 28
         Color = clDefault
         Glyph.Data = {
@@ -173,7 +176,7 @@ object f_visu: Tf_visu
         ParentFont = False
       end
       object histminmax: TSpeedButton
-        Left = 58
+        Left = 59
         Height = 22
         Hint = 'Fix the visualisation threshold to the image data range, 100% of the histogram.'
         Top = 0
@@ -279,7 +282,7 @@ object f_visu: Tf_visu
       end
       object BtnZoom2: TSpeedButton
         Tag = 3
-        Left = 87
+        Left = 88
         Height = 22
         Hint = 'Zoom two time'
         Top = 0
@@ -292,7 +295,7 @@ object f_visu: Tf_visu
       end
       object BtnZoom1: TSpeedButton
         Tag = 2
-        Left = 87
+        Left = 88
         Height = 22
         Hint = 'Zoom to original scale'
         Top = 22
@@ -305,7 +308,7 @@ object f_visu: Tf_visu
       end
       object BtnZoom05: TSpeedButton
         Tag = 1
-        Left = 87
+        Left = 88
         Height = 22
         Hint = 'Zoom to half size'
         Top = 44
@@ -317,7 +320,7 @@ object f_visu: Tf_visu
         ParentFont = False
       end
       object BtnBullsEye: TSpeedButton
-        Left = 58
+        Left = 59
         Height = 22
         Hint = 'Show bulls eye'
         Top = 22
@@ -394,7 +397,7 @@ object f_visu: Tf_visu
         ParentFont = False
       end
       object BtnClipping: TSpeedButton
-        Left = 58
+        Left = 59
         Height = 22
         Hint = 'Show highlight and shadow clipping'
         Top = 44
@@ -475,7 +478,7 @@ object f_visu: Tf_visu
         Height = 22
         Hint = 'Gamma'
         Top = 44
-        Width = 56
+        Width = 57
         AutoSize = False
         Constraints.MaxHeight = 26
         MaxLength = 0
@@ -515,10 +518,10 @@ object f_visu: Tf_visu
         ParentFont = False
       end
       object BtnInvert: TSpeedButton
-        Left = 58
+        Left = 59
         Height = 22
         Hint = 'Invert image display'
-        Top = 66
+        Top = 67
         Width = 28
         AllowAllUp = True
         Color = clDefault
@@ -595,7 +598,7 @@ object f_visu: Tf_visu
         Left = 0
         Height = 22
         Hint = 'Flip the image horizontally'
-        Top = 66
+        Top = 67
         Width = 28
         AllowAllUp = True
         Color = clDefault
@@ -672,7 +675,7 @@ object f_visu: Tf_visu
         Left = 29
         Height = 22
         Hint = 'Flip the image vertically'
-        Top = 66
+        Top = 67
         Width = 28
         AllowAllUp = True
         Color = clDefault
@@ -751,7 +754,7 @@ object f_visu: Tf_visu
     Left = 0
     Height = 20
     Top = 0
-    Width = 371
+    Width = 375
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -768,13 +771,13 @@ object f_visu: Tf_visu
     Interval = 250
     OnTimer = TimerMinMaxTimer
     left = 40
-    top = 48
+    top = 49
   end
   object TimerRedraw: TTimer
     Enabled = False
     Interval = 250
     OnTimer = TimerRedrawTimer
-    left = 149
-    top = 48
+    left = 151
+    top = 49
   end
 end

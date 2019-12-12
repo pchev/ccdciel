@@ -1,12 +1,11 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 564
+  Height = 570
   Top = 0
-  Width = 210
+  Width = 212
   AutoSize = True
-  ClientHeight = 564
-  ClientWidth = 210
-  DesignTimePPI = 95
+  ClientHeight = 570
+  ClientWidth = 212
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
@@ -16,7 +15,7 @@ object f_sequence: Tf_sequence
     Left = 0
     Height = 20
     Top = 0
-    Width = 210
+    Width = 212
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -30,20 +29,20 @@ object f_sequence: Tf_sequence
   end
   object Panel1: TPanel
     Left = 0
-    Height = 316
+    Height = 319
     Top = 20
-    Width = 210
+    Width = 212
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 316
-    ClientWidth = 210
+    ClientHeight = 319
+    ClientWidth = 212
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 152
+      Height = 153
       Top = 20
-      Width = 210
+      Width = 212
       Align = alClient
       BorderStyle = bsNone
       ColCount = 6
@@ -67,21 +66,21 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 144
-      Top = 172
-      Width = 210
+      Height = 146
+      Top = 173
+      Width = 212
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 144
-      ClientWidth = 210
+      ClientHeight = 146
+      ClientWidth = 212
       ParentFont = False
       TabOrder = 1
       object Unattended: TCheckBox
-        Left = 56
+        Left = 57
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 112
-        Width = 122
+        Top = 113
+        Width = 125
         Caption = 'Run unattended'
         OnChange = UnattendedChange
         ParentFont = False
@@ -89,9 +88,9 @@ object f_sequence: Tf_sequence
       end
       object Panel5: TPanel
         Left = 0
-        Height = 108
+        Height = 109
         Top = 0
-        Width = 210
+        Width = 212
         Align = alTop
         BevelOuter = bvNone
         ChildSizing.EnlargeHorizontal = crsScaleChilds
@@ -100,24 +99,25 @@ object f_sequence: Tf_sequence
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 108
-        ClientWidth = 210
+        ClientHeight = 109
+        ClientWidth = 212
+        ParentFont = False
         TabOrder = 1
         object BtnLoadTargets: TButton
           Left = 0
           Height = 27
           Top = 0
-          Width = 72
+          Width = 71
           Caption = 'Load'
           OnClick = BtnLoadTargetsClick
           ParentFont = False
           TabOrder = 0
         end
         object BtnNewTargets: TButton
-          Left = 72
+          Left = 71
           Height = 27
           Top = 0
-          Width = 65
+          Width = 66
           Caption = 'New'
           OnClick = BtnEditTargetsClick
           ParentFont = False
@@ -127,7 +127,7 @@ object f_sequence: Tf_sequence
           Left = 137
           Height = 27
           Top = 0
-          Width = 73
+          Width = 75
           Caption = 'Edit'
           OnClick = BtnEditTargetsClick
           ParentFont = False
@@ -137,17 +137,17 @@ object f_sequence: Tf_sequence
           Left = 0
           Height = 27
           Top = 27
-          Width = 72
+          Width = 71
           Caption = 'Copy'
           OnClick = BtnCopyClick
           ParentFont = False
           TabOrder = 3
         end
         object BtnReset: TButton
-          Left = 72
+          Left = 71
           Height = 27
           Top = 27
-          Width = 65
+          Width = 66
           Caption = 'Reset'
           OnClick = BtnResetClick
           ParentFont = False
@@ -157,7 +157,7 @@ object f_sequence: Tf_sequence
           Left = 137
           Height = 27
           Top = 27
-          Width = 73
+          Width = 75
           Caption = 'Delete'
           OnClick = BtnDeleteClick
           ParentFont = False
@@ -167,17 +167,17 @@ object f_sequence: Tf_sequence
           Left = 0
           Height = 27
           Top = 54
-          Width = 72
+          Width = 71
           Caption = 'Start'
           OnClick = BtnStartClick
           ParentFont = False
           TabOrder = 6
         end
         object BtnStop: TButton
-          Left = 72
+          Left = 71
           Height = 27
           Top = 54
-          Width = 65
+          Width = 66
           Caption = 'Stop'
           OnClick = BtnStopClick
           ParentFont = False
@@ -187,7 +187,7 @@ object f_sequence: Tf_sequence
           Left = 137
           Height = 27
           Top = 54
-          Width = 73
+          Width = 75
           Caption = 'Pause'
           OnClick = BtnPauseClick
           ParentFont = False
@@ -195,18 +195,19 @@ object f_sequence: Tf_sequence
         end
         object BtnStatus: TButton
           Left = 0
-          Height = 27
+          Height = 28
           Top = 81
-          Width = 72
+          Width = 71
           Caption = 'Status'
           OnClick = BtnStatusClick
+          ParentFont = False
           TabOrder = 9
         end
       end
       object led: TShape
         Left = 8
         Height = 14
-        Top = 115
+        Top = 116
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
@@ -216,7 +217,7 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 20
       Top = 0
-      Width = 210
+      Width = 212
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -230,20 +231,20 @@ object f_sequence: Tf_sequence
   end
   object Panel2: TPanel
     Left = 0
-    Height = 222
-    Top = 336
-    Width = 210
+    Height = 224
+    Top = 339
+    Width = 212
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 222
-    ClientWidth = 210
+    ClientHeight = 224
+    ClientWidth = 212
     ParentFont = False
     TabOrder = 0
     object PlanGrid: TStringGrid
       Left = 0
-      Height = 122
+      Height = 123
       Top = 20
-      Width = 210
+      Width = 212
       Align = alClient
       BorderStyle = bsNone
       DefaultRowHeight = 18
@@ -266,7 +267,7 @@ object f_sequence: Tf_sequence
       Left = 0
       Height = 20
       Top = 0
-      Width = 210
+      Width = 212
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -279,20 +280,20 @@ object f_sequence: Tf_sequence
     end
     object Panel4: TPanel
       Left = 0
-      Height = 80
-      Top = 142
-      Width = 210
+      Height = 81
+      Top = 143
+      Width = 212
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 80
-      ClientWidth = 210
+      ClientHeight = 81
+      ClientWidth = 212
       ParentFont = False
       TabOrder = 1
       object StatusMsg: TLabel
         Left = 0
-        Height = 79
+        Height = 80
         Top = 0
-        Width = 210
+        Width = 212
         Align = alClient
         AutoSize = False
         ParentColor = False
@@ -302,8 +303,8 @@ object f_sequence: Tf_sequence
       object DelayMsg: TLabel
         Left = 0
         Height = 1
-        Top = 79
-        Width = 210
+        Top = 80
+        Width = 212
         Align = alBottom
         ParentColor = False
         ParentFont = False
@@ -315,27 +316,27 @@ object f_sequence: Tf_sequence
     DefaultExt = '.targets'
     Filter = 'targets|*.targets'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    left = 64
-    top = 64
+    left = 65
+    top = 65
   end
   object SaveDialog1: TSaveDialog
     Title = 'Save target list as'
     DefaultExt = '.targets'
     Filter = 'targets|*.targets'
-    left = 144
-    top = 64
+    left = 146
+    top = 65
   end
   object StatusTimer: TTimer
     Enabled = False
     OnTimer = StatusTimerTimer
     left = 8
-    top = 64
+    top = 65
   end
   object StartTimer: TTimer
     Enabled = False
     Interval = 5000
     OnTimer = StartTimerTimer
-    left = 112
-    top = 64
+    left = 113
+    top = 65
   end
 end

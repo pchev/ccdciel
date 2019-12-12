@@ -1,22 +1,21 @@
 object keyboard1: Tkeyboard1
   Left = 294
-  Height = 225
+  Height = 227
   Top = 313
-  Width = 342
+  Width = 345
   AutoSize = True
   BorderWidth = 5
   Caption = 'keyboard'
-  ClientHeight = 225
-  ClientWidth = 342
-  DesignTimePPI = 95
+  ClientHeight = 227
+  ClientWidth = 345
   KeyPreview = True
   OnClose = FormClose
   OnShow = FormShow
   Position = poOwnerFormCenter
   object num7: TButton
-    Left = 118
+    Left = 119
     Height = 33
-    Top = 68
+    Top = 69
     Width = 20
     AutoSize = True
     Caption = '7'
@@ -25,9 +24,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 10
   end
   object num4: TButton
-    Left = 118
+    Left = 119
     Height = 33
-    Top = 108
+    Top = 109
     Width = 20
     AutoSize = True
     Caption = '4'
@@ -36,9 +35,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 7
   end
   object num8: TButton
-    Left = 165
+    Left = 167
     Height = 33
-    Top = 68
+    Top = 69
     Width = 20
     AutoSize = True
     Caption = '8'
@@ -47,9 +46,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 11
   end
   object num9: TButton
-    Left = 213
+    Left = 215
     Height = 33
-    Top = 68
+    Top = 69
     Width = 20
     AutoSize = True
     Caption = '9'
@@ -58,9 +57,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 12
   end
   object num5: TButton
-    Left = 165
+    Left = 167
     Height = 33
-    Top = 110
+    Top = 111
     Width = 20
     AutoSize = True
     Caption = '5'
@@ -69,9 +68,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 8
   end
   object num6: TButton
-    Left = 213
+    Left = 215
     Height = 33
-    Top = 108
+    Top = 109
     Width = 20
     AutoSize = True
     Caption = '6'
@@ -80,9 +79,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 9
   end
   object num1: TButton
-    Left = 118
+    Left = 119
     Height = 33
-    Top = 147
+    Top = 149
     Width = 20
     AutoSize = True
     Caption = '1'
@@ -91,9 +90,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 4
   end
   object num2: TButton
-    Left = 165
+    Left = 167
     Height = 33
-    Top = 147
+    Top = 149
     Width = 20
     AutoSize = True
     Caption = '2'
@@ -102,9 +101,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 5
   end
   object num3: TButton
-    Left = 213
+    Left = 215
     Height = 33
-    Top = 147
+    Top = 149
     Width = 20
     AutoSize = True
     Caption = '3'
@@ -116,15 +115,15 @@ object keyboard1: Tkeyboard1
     Left = 5
     Height = 31
     Top = 29
-    Width = 332
+    Width = 335
     ParentFont = False
     TabOrder = 0
   end
   object clear1: TButton
-    Left = 300
+    Left = 303
     Height = 33
     Hint = 'clear'
-    Top = 68
+    Top = 69
     Width = 20
     AutoSize = True
     Caption = 'C'
@@ -138,8 +137,8 @@ object keyboard1: Tkeyboard1
     Left = 7
     Height = 31
     Hint = 'prefix'
-    Top = 70
-    Width = 71
+    Top = 71
+    Width = 72
     ItemHeight = 0
     ItemIndex = 2
     Items.Strings = (
@@ -161,8 +160,8 @@ object keyboard1: Tkeyboard1
     Left = 7
     Height = 31
     Hint = 'letters'
-    Top = 110
-    Width = 71
+    Top = 111
+    Width = 72
     DropDownCount = 30
     ItemHeight = 0
     ItemIndex = 3
@@ -205,10 +204,10 @@ object keyboard1: Tkeyboard1
     Text = 'a'
   end
   object enter1: TButton
-    Left = 300
+    Left = 303
     Height = 36
     Hint = 'enter'
-    Top = 147
+    Top = 149
     Width = 26
     AutoSize = True
     Caption = '⏎'
@@ -220,10 +219,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 13
   end
   object backspace1: TButton
-    Left = 300
+    Left = 303
     Height = 38
     Hint = 'backspace'
-    Top = 108
+    Top = 109
     Width = 31
     AutoSize = True
     Caption = '⌫ '
@@ -234,9 +233,9 @@ object keyboard1: Tkeyboard1
     TabOrder = 14
   end
   object num0: TButton
-    Left = 118
+    Left = 119
     Height = 33
-    Top = 187
+    Top = 189
     Width = 20
     AutoSize = True
     Caption = '0'
@@ -248,7 +247,7 @@ object keyboard1: Tkeyboard1
     Left = 5
     Height = 19
     Top = 5
-    Width = 120
+    Width = 124
     Caption = 'keyboard_question:'
     ParentColor = False
     ParentFont = False

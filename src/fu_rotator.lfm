@@ -1,19 +1,18 @@
 object f_rotator: Tf_rotator
   Left = 0
-  Height = 80
+  Height = 81
   Top = 0
-  Width = 177
+  Width = 179
   AutoSize = True
-  ClientHeight = 80
-  ClientWidth = 177
-  DesignTimePPI = 95
+  ClientHeight = 81
+  ClientWidth = 179
   ParentFont = False
   TabOrder = 0
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 177
+    Width = 179
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -27,23 +26,25 @@ object f_rotator: Tf_rotator
   end
   object Panel1: TPanel
     Left = 0
-    Height = 58
+    Height = 59
     Top = 20
-    Width = 177
+    Width = 179
     Align = alTop
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 58
-    ClientWidth = 177
+    ClientHeight = 59
+    ClientWidth = 179
+    ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 29
       Top = 0
-      Width = 175
+      Width = 177
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 175
+      ClientWidth = 177
+      ParentFont = False
       TabOrder = 0
       object led: TShape
         Left = 4
@@ -62,26 +63,31 @@ object f_rotator: Tf_rotator
         AutoSize = False
         Caption = 'PA'
         ParentColor = False
+        ParentFont = False
       end
       object Angle: TFloatSpinEditEx
-        Left = 48
+        Left = 49
         Height = 28
         Top = 1
-        Width = 64
+        Width = 65
         Constraints.MaxHeight = 28
+        MaxLength = 0
+        ParentFont = False
+        TabOrder = 0
         DecimalPlaces = 1
         MaxValue = 0
         MinValue = 0
-        TabOrder = 0
+        NullValue = 0
         Value = 0
       end
       object BtnRotate: TButton
-        Left = 115
+        Left = 116
         Height = 25
         Top = 1
-        Width = 60
+        Width = 61
         Caption = 'Rotate'
         OnClick = BtnRotateClick
+        ParentFont = False
         TabOrder = 1
       end
     end
@@ -89,28 +95,31 @@ object f_rotator: Tf_rotator
       Left = 0
       Height = 25
       Top = 29
-      Width = 175
+      Width = 177
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 175
+      ClientWidth = 177
+      ParentFont = False
       TabOrder = 1
       object Reverse: TCheckBox
         Left = 4
         Height = 21
         Top = 0
-        Width = 108
+        Width = 109
         AutoSize = False
         Caption = 'Reverse'
         OnChange = ReverseChange
+        ParentFont = False
         TabOrder = 0
       end
       object BtnHalt: TButton
-        Left = 115
+        Left = 116
         Height = 25
         Top = 0
-        Width = 60
+        Width = 61
         Caption = 'Halt'
         OnClick = BtnHaltClick
+        ParentFont = False
         TabOrder = 1
       end
     end

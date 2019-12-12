@@ -1,32 +1,31 @@
 object f_magnifyer: Tf_magnifyer
   Left = 0
-  Height = 203
+  Height = 205
   Top = 0
-  Width = 180
+  Width = 182
   AutoSize = True
-  ClientHeight = 203
-  ClientWidth = 180
-  DesignTimePPI = 95
+  ClientHeight = 205
+  ClientWidth = 182
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 183
+    Height = 185
     Top = 20
-    Width = 180
+    Width = 182
     Align = alClient
     AutoSize = True
-    ClientHeight = 183
-    ClientWidth = 180
+    ClientHeight = 185
+    ClientWidth = 182
     Color = clBlack
     ParentColor = False
     ParentFont = False
     TabOrder = 0
     object Image1: TImage
       Left = 1
-      Height = 181
+      Height = 183
       Top = 1
-      Width = 178
+      Width = 180
       Align = alClient
     end
   end
@@ -34,7 +33,7 @@ object f_magnifyer: Tf_magnifyer
     Left = 0
     Height = 20
     Top = 0
-    Width = 180
+    Width = 182
     Align = alTop
     Alignment = taCenter
     AutoSize = False

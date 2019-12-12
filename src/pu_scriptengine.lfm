@@ -1,13 +1,11 @@
 object f_scriptengine: Tf_scriptengine
   Left = 0
-  Height = 317
+  Height = 314
   Top = 0
-  Width = 409
+  Width = 404
   Caption = 'f_scriptengine'
-  DesignTimePPI = 95
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '2.0.0.2'
   object TplPSScript: TPSScript
     CompilerOptions = []
     OnLine = TplPSScriptLine
@@ -31,42 +29,42 @@ object f_scriptengine: Tf_scriptengine
         Plugin = PSImport_StdCtrls1
       end>
     UsePreProcessor = False
-    left = 48
+    left = 49
     top = 29
   end
   object PSImport_Classes1: TPSImport_Classes
     EnableStreams = True
     EnableClasses = True
-    left = 56
-    top = 104
+    left = 57
+    top = 105
   end
   object PSImport_DateUtils1: TPSImport_DateUtils
-    left = 56
-    top = 176
+    left = 57
+    top = 178
   end
   object PSImport_Forms1: TPSImport_Forms
     EnableForms = True
     EnableMenus = True
-    left = 56
-    top = 240
+    left = 57
+    top = 243
   end
   object PSImport_Controls1: TPSImport_Controls
     EnableStreams = True
     EnableGraphics = True
     EnableControls = True
-    left = 224
-    top = 104
+    left = 226
+    top = 105
   end
   object PSImport_StdCtrls1: TPSImport_StdCtrls
     EnableExtCtrls = True
     EnableButtons = True
-    left = 224
-    top = 176
+    left = 226
+    top = 178
   end
   object ShutdownTimer: TTimer
     Enabled = False
     OnTimer = ShutdownTimerTimer
-    left = 209
+    left = 211
     top = 37
   end
 end

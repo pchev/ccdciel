@@ -1,33 +1,32 @@
 object f_photometry: Tf_photometry
   Left = 369
-  Height = 366
+  Height = 370
   Top = 30
-  Width = 324
+  Width = 327
   Caption = 'Photometry'
-  ClientHeight = 366
-  ClientWidth = 324
-  Constraints.MinHeight = 320
-  Constraints.MinWidth = 320
-  DesignTimePPI = 95
+  ClientHeight = 370
+  ClientWidth = 327
+  Constraints.MinHeight = 323
+  Constraints.MinWidth = 323
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   object GroupBoxMeasurement: TGroupBox
     Left = 0
-    Height = 268
+    Height = 271
     Top = 0
-    Width = 324
+    Width = 327
     Align = alClient
     Caption = 'Measurement'
-    ClientHeight = 248
-    ClientWidth = 322
+    ClientHeight = 251
+    ClientWidth = 325
     ParentFont = False
     TabOrder = 1
     object Memo1: TMemo
       Left = 0
-      Height = 248
+      Height = 251
       Top = 0
-      Width = 322
+      Width = 325
       Align = alClient
       Color = clWindow
       Font.Color = clWindowText
@@ -39,20 +38,20 @@ object f_photometry: Tf_photometry
   end
   object GroupBoxRefStar: TGroupBox
     Left = 0
-    Height = 62
-    Top = 268
-    Width = 324
+    Height = 63
+    Top = 271
+    Width = 327
     Align = alBottom
     Caption = 'Use as reference star'
-    ClientHeight = 42
-    ClientWidth = 322
+    ClientHeight = 43
+    ClientWidth = 325
     ParentFont = False
     TabOrder = 0
     object RefMag: TFloatSpinEditEx
-      Left = 221
+      Left = 223
       Height = 31
       Top = 6
-      Width = 92
+      Width = 93
       MaxLength = 0
       ParentFont = False
       TabOrder = 0
@@ -65,7 +64,7 @@ object f_photometry: Tf_photometry
       Left = 17
       Height = 25
       Top = 8
-      Width = 151
+      Width = 153
       Caption = 'Set magnitude'
       OnClick = ButtonSetRefMagClick
       ParentFont = False
@@ -75,18 +74,18 @@ object f_photometry: Tf_photometry
   object Panel1: TPanel
     Left = 0
     Height = 36
-    Top = 330
-    Width = 324
+    Top = 334
+    Width = 327
     Align = alBottom
     ClientHeight = 36
-    ClientWidth = 324
+    ClientWidth = 327
     ParentFont = False
     TabOrder = 2
     object ButtonClose: TButton
-      Left = 240
+      Left = 243
       Height = 25
       Top = 4
-      Width = 74
+      Width = 75
       Caption = 'Close'
       OnClick = ButtonCloseClick
       ParentFont = False

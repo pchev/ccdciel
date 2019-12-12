@@ -1,12 +1,11 @@
 object f_ccdtemp: Tf_ccdtemp
   Left = 0
-  Height = 81
+  Height = 82
   Top = 0
-  Width = 190
+  Width = 192
   AutoSize = True
-  ClientHeight = 81
-  ClientWidth = 190
-  DesignTimePPI = 95
+  ClientHeight = 82
+  ClientWidth = 192
   ParentFont = False
   TabOrder = 0
   DesignLeft = -2
@@ -15,7 +14,7 @@ object f_ccdtemp: Tf_ccdtemp
     Left = 0
     Height = 20
     Top = 0
-    Width = 190
+    Width = 192
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,45 +28,45 @@ object f_ccdtemp: Tf_ccdtemp
   end
   object Panel1: TPanel
     Left = 0
-    Height = 61
+    Height = 62
     Top = 20
-    Width = 190
+    Width = 192
     Align = alClient
-    ClientHeight = 61
-    ClientWidth = 190
+    ClientHeight = 62
+    ClientWidth = 192
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 27
       Top = 0
-      Width = 188
+      Width = 190
       BevelOuter = bvNone
       ClientHeight = 27
-      ClientWidth = 188
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
         Left = 2
         Height = 19
         Top = 4
-        Width = 46
+        Width = 49
         Caption = 'Current'
         ParentColor = False
         ParentFont = False
       end
       object CCDcooler: TCheckBox
-        Left = 112
+        Left = 113
         Height = 21
         Top = 2
-        Width = 63
+        Width = 65
         Caption = 'Cooler'
         OnClick = CCDcoolerChange
         ParentFont = False
         TabOrder = 0
       end
       object Current: TLabel
-        Left = 60
+        Left = 61
         Height = 19
         Top = 4
         Width = 20
@@ -81,26 +80,26 @@ object f_ccdtemp: Tf_ccdtemp
       Left = 0
       Height = 33
       Top = 29
-      Width = 188
+      Width = 190
       BevelOuter = bvNone
       ClientHeight = 33
-      ClientWidth = 188
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
         Left = 2
         Height = 19
         Top = 5
-        Width = 51
+        Width = 52
         Caption = 'Setpoint'
         ParentColor = False
         ParentFont = False
       end
       object Setpoint: TFloatSpinEditEx
-        Left = 60
+        Left = 61
         Height = 28
         Top = 2
-        Width = 70
+        Width = 71
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
@@ -110,10 +109,10 @@ object f_ccdtemp: Tf_ccdtemp
         Value = 0
       end
       object BtnSet: TButton
-        Left = 134
+        Left = 135
         Height = 24
         Top = 2
-        Width = 50
+        Width = 51
         Caption = 'Set'
         OnClick = BtnSetClick
         ParentFont = False

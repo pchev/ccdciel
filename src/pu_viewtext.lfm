@@ -8,7 +8,6 @@ object f_viewtext: Tf_viewtext
   ClientWidth = 677
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '2.0.6.0'
   object Memo1: TMemo
     Left = 0
     Height = 420
@@ -19,7 +18,6 @@ object f_viewtext: Tf_viewtext
     Font.Color = clWindowText
     Font.Name = 'Courier'
     Font.Pitch = fpFixed
-    Lines.Strings = (    )
     ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoBoth

@@ -1,12 +1,11 @@
 object f_polaralign: Tf_polaralign
   Left = 369
-  Height = 450
+  Height = 455
   Top = 30
-  Width = 350
+  Width = 354
   Caption = 'f_polaralign'
-  ClientHeight = 450
-  ClientWidth = 350
-  DesignTimePPI = 95
+  ClientHeight = 455
+  ClientWidth = 354
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
@@ -14,79 +13,87 @@ object f_polaralign: Tf_polaralign
   OnShow = FormShow
   object PageControl1: TPageControl
     Left = 0
-    Height = 450
+    Height = 455
     Top = 0
-    Width = 350
+    Width = 354
     ActivePage = TabSheetStart
     Align = alClient
+    ParentFont = False
     ShowTabs = False
     TabIndex = 0
     TabOrder = 0
     object TabSheetStart: TTabSheet
       Caption = 'TabSheetStart'
-      ClientHeight = 446
-      ClientWidth = 340
+      ClientHeight = 451
+      ClientWidth = 344
+      ParentFont = False
       object Label5: TLabel
         Left = 0
         Height = 32
         Top = 0
-        Width = 340
+        Width = 344
         Align = alTop
         AutoSize = False
         Caption = 'Polar alignment instruction'
         ParentColor = False
+        ParentFont = False
       end
       object Label1: TLabel
         Left = 0
-        Height = 162
+        Height = 164
         Top = 32
-        Width = 340
+        Width = 344
         Align = alClient
         AutoSize = False
         Caption = '...'
         ParentColor = False
+        ParentFont = False
         WordWrap = True
       end
       object Panel1: TPanel
         Left = 0
-        Height = 54
-        Top = 392
-        Width = 340
+        Height = 55
+        Top = 396
+        Width = 344
         Align = alBottom
-        ClientHeight = 54
-        ClientWidth = 340
+        ClientHeight = 55
+        ClientWidth = 344
+        ParentFont = False
         TabOrder = 0
         object BtnStart: TButton
-          Left = 138
+          Left = 139
           Height = 25
           Top = 22
-          Width = 74
+          Width = 75
           Caption = 'Start'
           OnClick = BtnStartClick
+          ParentFont = False
           TabOrder = 0
         end
         object LabelMsg1: TLabel
           Left = 2
           Height = 19
           Top = 0
-          Width = 66
+          Width = 68
           Caption = 'LabelMsg1'
           ParentColor = False
+          ParentFont = False
         end
         object SaveImages: TCheckBox
           Left = 2
           Height = 21
           Top = 22
-          Width = 98
+          Width = 102
           Caption = 'Save images'
+          ParentFont = False
           TabOrder = 1
         end
       end
       object MountSlewing: TRadioGroup
         Left = 0
-        Height = 56
-        Top = 194
-        Width = 340
+        Height = 57
+        Top = 196
+        Width = 344
         Align = alBottom
         AutoFill = True
         Caption = 'Mount slewing'
@@ -98,8 +105,8 @@ object f_polaralign: Tf_polaralign
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 36
-        ClientWidth = 338
+        ClientHeight = 37
+        ClientWidth = 342
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -107,53 +114,58 @@ object f_polaralign: Tf_polaralign
           'Manual'
         )
         OnClick = MountSlewingClick
+        ParentFont = False
         TabOrder = 1
       end
       object Panel6: TPanel
         Left = 0
-        Height = 142
-        Top = 250
-        Width = 340
+        Height = 143
+        Top = 253
+        Width = 344
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 142
-        ClientWidth = 340
+        ClientHeight = 143
+        ClientWidth = 344
+        ParentFont = False
         TabOrder = 2
         object PanelManualSlew: TPanel
           Left = 0
-          Height = 142
+          Height = 143
           Top = 0
-          Width = 340
+          Width = 344
           Align = alClient
-          ClientHeight = 142
-          ClientWidth = 340
+          ClientHeight = 143
+          ClientWidth = 344
+          ParentFont = False
           TabOrder = 1
           object Label3: TLabel
             Left = 1
-            Height = 140
+            Height = 141
             Top = 1
-            Width = 338
+            Width = 342
             Align = alClient
             AutoSize = False
             ParentColor = False
+            ParentFont = False
             WordWrap = True
           end
         end
         object PanelAutoSlew: TPanel
           Left = 0
-          Height = 142
+          Height = 143
           Top = 0
-          Width = 340
+          Width = 344
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 142
-          ClientWidth = 340
+          ClientHeight = 143
+          ClientWidth = 344
+          ParentFont = False
           TabOrder = 0
           object RotDir: TRadioGroup
             Left = 0
-            Height = 72
+            Height = 73
             Top = 0
-            Width = 340
+            Width = 344
             Align = alTop
             AutoFill = True
             Caption = 'Rotation direction'
@@ -164,34 +176,37 @@ object f_polaralign: Tf_polaralign
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 52
-            ClientWidth = 338
+            ClientHeight = 53
+            ClientWidth = 342
             Columns = 2
             ItemIndex = 0
             Items.Strings = (
               'West'
               'East'
             )
+            ParentFont = False
             TabOrder = 0
           end
           object Panel2: TPanel
             Left = 0
             Height = 70
-            Top = 72
-            Width = 340
+            Top = 73
+            Width = 344
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 70
-            ClientWidth = 340
+            ClientWidth = 344
+            ParentFont = False
             TabOrder = 1
             object RotAngle: TSpinEdit
-              Left = 128
+              Left = 129
               Height = 28
               Top = 8
-              Width = 88
+              Width = 89
               Constraints.MaxHeight = 28
               MaxValue = 45
               MinValue = 5
+              ParentFont = False
               TabOrder = 0
               Value = 20
             end
@@ -199,17 +214,19 @@ object f_polaralign: Tf_polaralign
               Left = 20
               Height = 19
               Top = 13
-              Width = 61
+              Width = 63
               Caption = 'Rotate by '
               ParentColor = False
+              ParentFont = False
             end
             object Label4: TLabel
-              Left = 232
+              Left = 234
               Height = 19
               Top = 13
-              Width = 40
+              Width = 42
               Caption = 'Label4'
               ParentColor = False
+              ParentFont = False
             end
           end
         end
@@ -217,8 +234,9 @@ object f_polaralign: Tf_polaralign
     end
     object TabSheetExpose: TTabSheet
       Caption = 'TabSheetExpose'
-      ClientHeight = 446
-      ClientWidth = 340
+      ClientHeight = 451
+      ClientWidth = 344
+      ParentFont = False
       object ExposeList: TCheckListBox
         Left = 0
         Height = 392
@@ -238,6 +256,7 @@ object f_polaralign: Tf_polaralign
         ItemHeight = 0
         OnItemClick = ExposeListItemClick
         OnSelectionChange = ExposeListSelectionChange
+        ParentFont = False
         TabOrder = 0
         TopIndex = -1
         Data = {
@@ -246,20 +265,22 @@ object f_polaralign: Tf_polaralign
       end
       object Panel3: TPanel
         Left = 0
-        Height = 54
-        Top = 392
+        Height = 55
+        Top = 391
         Width = 340
         Align = alBottom
-        ClientHeight = 54
+        ClientHeight = 55
         ClientWidth = 340
+        ParentFont = False
         TabOrder = 1
         object BtnCancel: TButton
-          Left = 250
+          Left = 253
           Height = 25
           Top = 22
-          Width = 74
+          Width = 75
           Caption = 'Cancel'
           OnClick = BtnCancelClick
+          ParentFont = False
           TabOrder = 0
         end
         object LabelMsg2: TLabel
@@ -269,38 +290,43 @@ object f_polaralign: Tf_polaralign
           Width = 66
           Caption = 'LabelMsg2'
           ParentColor = False
+          ParentFont = False
         end
         object BtnContinue: TButton
-          Left = 120
+          Left = 121
           Height = 25
           Top = 22
-          Width = 90
+          Width = 91
           Caption = 'Continue'
           OnClick = BtnContinueClick
+          ParentFont = False
           TabOrder = 1
         end
       end
     end
     object TabSheetCompute: TTabSheet
       Caption = 'TabSheetCompute'
-      ClientHeight = 446
-      ClientWidth = 340
+      ClientHeight = 451
+      ClientWidth = 344
+      ParentFont = False
       object Panel4: TPanel
         Left = 0
-        Height = 54
-        Top = 392
+        Height = 55
+        Top = 391
         Width = 340
         Align = alBottom
-        ClientHeight = 54
+        ClientHeight = 55
         ClientWidth = 340
+        ParentFont = False
         TabOrder = 0
         object BtnClose: TButton
-          Left = 250
+          Left = 253
           Height = 25
           Top = 22
-          Width = 74
+          Width = 75
           Caption = 'Close'
           OnClick = BtnCloseClick
+          ParentFont = False
           TabOrder = 0
         end
         object LabelMsg3: TLabel
@@ -310,14 +336,16 @@ object f_polaralign: Tf_polaralign
           Width = 66
           Caption = 'LabelMsg3'
           ParentColor = False
+          ParentFont = False
         end
         object BtnLock: TToggleBox
-          Left = 88
+          Left = 89
           Height = 25
           Top = 22
-          Width = 131
+          Width = 132
           Caption = 'Lock overlay'
           OnClick = BtnLockClick
+          ParentFont = False
           TabOrder = 1
         end
       end

@@ -1,41 +1,40 @@
 object f_option: Tf_option
   Left = 574
-  Height = 595
+  Height = 601
   Top = 118
-  Width = 530
+  Width = 536
   ActiveControl = PageControl1
   Caption = 'Options'
-  ClientHeight = 595
-  ClientWidth = 530
-  DesignTimePPI = 95
+  ClientHeight = 601
+  ClientWidth = 536
   Font.Height = 13
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
-    Height = 58
-    Top = 537
-    Width = 530
+    Height = 59
+    Top = 542
+    Width = 536
     Align = alBottom
-    ClientHeight = 58
-    ClientWidth = 530
+    ClientHeight = 59
+    ClientWidth = 536
     ParentFont = False
     TabOrder = 0
     object Button1: TButton
-      Left = 432
+      Left = 437
       Height = 25
       Top = 24
-      Width = 75
+      Width = 76
       Caption = 'OK'
       ModalResult = 1
       ParentFont = False
       TabOrder = 0
     end
     object Button2: TButton
-      Left = 304
+      Left = 307
       Height = 25
       Top = 24
-      Width = 75
+      Width = 76
       Caption = 'Cancel'
       ModalResult = 2
       ParentFont = False
@@ -45,27 +44,28 @@ object f_option: Tf_option
       Left = 16
       Height = 19
       Top = 4
-      Width = 448
+      Width = 453
       AutoSize = False
       Caption = '   '
       ParentColor = False
       ParentFont = False
     end
     object ButtonHelp: TButton
-      Left = 176
+      Left = 178
       Height = 25
       Top = 24
-      Width = 74
+      Width = 75
       Caption = 'Help'
       OnClick = ButtonHelpClick
+      ParentFont = False
       TabOrder = 2
     end
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 537
+    Height = 542
     Top = 0
-    Width = 530
+    Width = 536
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
@@ -76,8 +76,9 @@ object f_option: Tf_option
     Options = [nboMultiLine]
     object TabSheet16: TTabSheet
       Caption = 'Preferences'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
+      ParentFont = False
       object Label18: TLabel
         Left = 8
         Height = 19
@@ -88,10 +89,10 @@ object f_option: Tf_option
         ParentFont = False
       end
       object Languages: TComboBox
-        Left = 160
+        Left = 162
         Height = 28
         Top = 24
-        Width = 200
+        Width = 202
         Constraints.MaxHeight = 28
         ItemHeight = 0
         OnChange = LanguagesChange
@@ -103,26 +104,26 @@ object f_option: Tf_option
       object Label99: TLabel
         Left = 8
         Height = 19
-        Top = 219
+        Top = 221
         Width = 104
         Caption = 'Temporary folder'
         ParentColor = False
         ParentFont = False
       end
       object TempDir: TEdit
-        Left = 160
+        Left = 162
         Height = 28
-        Top = 216
-        Width = 200
+        Top = 218
+        Width = 202
         Constraints.MaxHeight = 28
         OnChange = TempDirChange
         ParentFont = False
         TabOrder = 1
       end
       object ButtonTempDir: TButton
-        Left = 365
+        Left = 369
         Height = 25
-        Top = 219
+        Top = 221
         Width = 27
         Caption = '...'
         OnClick = ButtonTempDirClick
@@ -130,10 +131,10 @@ object f_option: Tf_option
         TabOrder = 2
       end
       object TmpDirDefault: TButton
-        Left = 400
+        Left = 404
         Height = 25
-        Top = 219
-        Width = 60
+        Top = 221
+        Width = 61
         Caption = 'Default'
         OnClick = TmpDirDefaultClick
         ParentFont = False
@@ -142,7 +143,7 @@ object f_option: Tf_option
       object Logtofile: TCheckBox
         Left = 8
         Height = 21
-        Top = 80
+        Top = 81
         Width = 165
         Caption = 'Log all messages to file '
         ParentFont = False
@@ -151,7 +152,7 @@ object f_option: Tf_option
       object Debug_msg: TCheckBox
         Left = 8
         Height = 21
-        Top = 108
+        Top = 109
         Width = 136
         Caption = 'Verbose device log'
         ParentFont = False
@@ -160,7 +161,7 @@ object f_option: Tf_option
       object UseTcpServer: TCheckBox
         Left = 8
         Height = 21
-        Top = 136
+        Top = 137
         Width = 356
         Caption = 'Allow to get program status from TCP/IP internal server'
         ParentFont = False
@@ -169,19 +170,20 @@ object f_option: Tf_option
       object CbShowHints: TCheckBox
         Left = 8
         Height = 21
-        Top = 164
+        Top = 166
         Width = 90
         Caption = 'Show hints'
+        ParentFont = False
         TabOrder = 7
       end
     end
     object TabSheet1: TTabSheet
       Caption = 'Files'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object ButtonDir: TButton
-        Left = 365
+        Left = 369
         Height = 25
         Top = 19
         Width = 27
@@ -194,39 +196,39 @@ object f_option: Tf_option
         Left = 8
         Height = 19
         Top = 21
-        Width = 87
+        Width = 92
         Caption = 'Capture folder'
         ParentColor = False
         ParentFont = False
       end
       object CaptureDir: TEdit
-        Left = 160
+        Left = 162
         Height = 28
         Top = 16
-        Width = 200
+        Width = 202
         Constraints.MaxHeight = 28
         ParentFont = False
         TabOrder = 1
       end
       object FileFolderOpt: TPageControl
         Left = 8
-        Height = 304
-        Top = 64
-        Width = 462
+        Height = 307
+        Top = 65
+        Width = 467
         ActivePage = FileOpt
         ParentFont = False
         TabIndex = 0
         TabOrder = 2
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 273
-          ClientWidth = 452
+          ClientHeight = 276
+          ClientWidth = 457
           ParentFont = False
           object BtnFileDefault: TButton
-            Left = 390
+            Left = 394
             Height = 25
             Top = 8
-            Width = 60
+            Width = 61
             Caption = 'Default'
             OnClick = BtnFileDefaultClick
             ParentFont = False
@@ -234,19 +236,21 @@ object f_option: Tf_option
           end
           object FileOptions: TStringGrid
             Left = 8
-            Height = 192
+            Height = 194
             Top = 8
-            Width = 368
+            Width = 372
             ColCount = 3
             Columns = <            
               item
                 ButtonStyle = cbsCheckboxColumn
+                MaxSize = 202
                 Title.Caption = 'Title'
                 Width = 30
               end            
               item
+                MaxSize = 202
                 Title.Caption = 'Title'
-                Width = 304
+                Width = 307
               end>
             FixedRows = 0
             Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
@@ -259,22 +263,23 @@ object f_option: Tf_option
             ColWidths = (
               30
               30
-              304
+              307
             )
           end
           object Label123: TLabel
             Left = 8
             Height = 19
-            Top = 208
-            Width = 59
+            Top = 210
+            Width = 64
             Caption = 'Separator'
             ParentColor = False
+            ParentFont = False
           end
           object FilenameSep: TComboBox
-            Left = 88
+            Left = 89
             Height = 28
-            Top = 204
-            Width = 99
+            Top = 206
+            Width = 100
             Constraints.MaxHeight = 28
             ItemHeight = 0
             ItemIndex = 0
@@ -283,50 +288,54 @@ object f_option: Tf_option
               '-'
               '.'
             )
+            ParentFont = False
             Style = csDropDownList
             TabOrder = 2
             Text = '_'
           end
           object FileSequenceWidth: TSpinEditEx
-            Left = 384
+            Left = 388
             Height = 28
-            Top = 204
-            Width = 57
+            Top = 206
+            Width = 58
             Constraints.MaxHeight = 28
             MaxLength = 0
+            ParentFont = False
             TabOrder = 3
             MaxValue = 5
             MinValue = 3
             Value = 3
           end
           object UseFileSequenceWidth: TCheckBox
-            Left = 208
+            Left = 210
             Height = 21
-            Top = 208
-            Width = 158
+            Top = 210
+            Width = 163
             Caption = 'Fixed sequence length'
             OnClick = UseFileSequenceWidthClick
+            ParentFont = False
             TabOrder = 4
           end
           object FilePack: TCheckBox
             Left = 8
             Height = 21
-            Top = 240
-            Width = 227
+            Top = 243
+            Width = 234
             Caption = 'Compress the FITS files with fpack'
+            ParentFont = False
             TabOrder = 5
           end
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 273
-          ClientWidth = 452
+          ClientHeight = 276
+          ClientWidth = 457
           ParentFont = False
           object BtnFolderDefault: TButton
-            Left = 390
+            Left = 394
             Height = 25
             Top = 8
-            Width = 60
+            Width = 61
             Caption = 'Default'
             OnClick = BtnFolderDefaultClick
             ParentFont = False
@@ -334,19 +343,21 @@ object f_option: Tf_option
           end
           object FolderOptions: TStringGrid
             Left = 8
-            Height = 216
+            Height = 218
             Top = 8
-            Width = 368
+            Width = 372
             ColCount = 3
             Columns = <            
               item
                 ButtonStyle = cbsCheckboxColumn
+                MaxSize = 202
                 Title.Caption = 'Title'
                 Width = 30
               end            
               item
+                MaxSize = 202
                 Title.Caption = 'Title'
-                Width = 304
+                Width = 307
               end>
             FixedRows = 0
             Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
@@ -359,7 +370,7 @@ object f_option: Tf_option
             ColWidths = (
               30
               30
-              304
+              307
             )
           end
         end
@@ -367,24 +378,26 @@ object f_option: Tf_option
       object MeasureNewImage: TCheckBox
         Left = 20
         Height = 21
-        Top = 384
-        Width = 369
+        Top = 388
+        Width = 386
         Caption = 'Automatic HFD measurement for every sequence capture'
+        ParentFont = False
         TabOrder = 3
       end
       object SaveBitmap: TCheckBox
         Left = 20
         Height = 21
-        Top = 416
-        Width = 347
+        Top = 420
+        Width = 360
         Caption = 'Save a bitmap file additionally to the standard FITS file'
+        ParentFont = False
         TabOrder = 4
       end
       object SaveBitmapFormat: TComboBox
-        Left = 384
+        Left = 388
         Height = 30
-        Top = 412
-        Width = 104
+        Top = 416
+        Width = 105
         Constraints.MaxHeight = 30
         ItemHeight = 0
         ItemIndex = 0
@@ -394,6 +407,7 @@ object f_option: Tf_option
           'JPG 8bit'
           'BMP 8bit'
         )
+        ParentFont = False
         Style = csDropDownList
         TabOrder = 5
         Text = 'PNG 16bit'
@@ -401,8 +415,8 @@ object f_option: Tf_option
     end
     object TabSheet2: TTabSheet
       Caption = 'Observatory'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object Label5: TLabel
         Left = 8
@@ -414,10 +428,10 @@ object f_option: Tf_option
         ParentFont = False
       end
       object ObserverName: TEdit
-        Left = 144
+        Left = 146
         Height = 28
         Top = 24
-        Width = 218
+        Width = 220
         Constraints.MaxHeight = 28
         ParentFont = False
         TabOrder = 0
@@ -425,17 +439,17 @@ object f_option: Tf_option
       object Label10: TLabel
         Left = 8
         Height = 19
-        Top = 75
+        Top = 76
         Width = 112
         Caption = 'Observatory name'
         ParentColor = False
         ParentFont = False
       end
       object ObservatoryName: TEdit
-        Left = 144
+        Left = 146
         Height = 28
-        Top = 72
-        Width = 218
+        Top = 73
+        Width = 220
         Constraints.MaxHeight = 28
         ParentFont = False
         TabOrder = 1
@@ -443,25 +457,25 @@ object f_option: Tf_option
       object Label11: TLabel
         Left = 8
         Height = 19
-        Top = 123
+        Top = 124
         Width = 95
         Caption = 'Telescope name'
         ParentColor = False
         ParentFont = False
       end
       object TelescopeName: TEdit
-        Left = 144
+        Left = 146
         Height = 28
-        Top = 120
-        Width = 218
+        Top = 121
+        Width = 220
         Constraints.MaxHeight = 28
         ParentFont = False
         TabOrder = 2
       end
       object LatitudeGroup: TGroupBox
-        Left = 144
+        Left = 146
         Height = 30
-        Top = 178
+        Top = 180
         Width = 252
         AutoSize = True
         ClientHeight = 10
@@ -469,10 +483,10 @@ object f_option: Tf_option
         ParentFont = False
         TabOrder = 3
         object hemis: TComboBox
-          Left = 160
+          Left = 162
           Height = 28
           Top = 0
-          Width = 90
+          Width = 91
           AutoCompleteText = [cbactSearchAscending]
           AutoSize = False
           Constraints.MaxHeight = 28
@@ -493,7 +507,7 @@ object f_option: Tf_option
           Height = 28
           Hint = '0..90'
           Top = 0
-          Width = 51
+          Width = 52
           Constraints.MaxHeight = 28
           MaxLength = 12
           ParentFont = False
@@ -508,11 +522,11 @@ object f_option: Tf_option
           NumericType = ntFixed
         end
         object latmin: TLongEdit
-          Left = 54
+          Left = 55
           Height = 28
           Hint = '0..59'
           Top = 0
-          Width = 51
+          Width = 52
           Constraints.MaxHeight = 28
           MaxLength = 2
           ParentFont = False
@@ -524,11 +538,11 @@ object f_option: Tf_option
           MaxValue = 59
         end
         object latsec: TFloatEdit
-          Left = 108
+          Left = 109
           Height = 28
           Hint = '0..59.99'
           Top = 0
-          Width = 51
+          Width = 52
           Constraints.MaxHeight = 28
           ParentFont = False
           ParentShowHint = False
@@ -542,9 +556,9 @@ object f_option: Tf_option
         end
       end
       object LongitudeGroup: TGroupBox
-        Left = 144
+        Left = 146
         Height = 30
-        Top = 230
+        Top = 232
         Width = 252
         AutoSize = True
         ClientHeight = 10
@@ -552,10 +566,10 @@ object f_option: Tf_option
         ParentFont = False
         TabOrder = 4
         object long: TComboBox
-          Left = 160
+          Left = 162
           Height = 28
           Top = 0
-          Width = 90
+          Width = 91
           AutoCompleteText = [cbactSearchAscending]
           AutoSize = False
           Constraints.MaxHeight = 28
@@ -576,7 +590,7 @@ object f_option: Tf_option
           Height = 28
           Hint = '0..180'
           Top = 0
-          Width = 51
+          Width = 52
           Constraints.MaxHeight = 28
           MaxLength = 12
           ParentFont = False
@@ -591,11 +605,11 @@ object f_option: Tf_option
           NumericType = ntFixed
         end
         object longmin: TLongEdit
-          Left = 54
+          Left = 55
           Height = 28
           Hint = '0..59'
           Top = 0
-          Width = 51
+          Width = 52
           Constraints.MaxHeight = 28
           MaxLength = 2
           ParentFont = False
@@ -607,11 +621,11 @@ object f_option: Tf_option
           MaxValue = 59
         end
         object longsec: TFloatEdit
-          Left = 108
+          Left = 109
           Height = 28
           Hint = '0..59.99'
           Top = 0
-          Width = 51
+          Width = 52
           Constraints.MaxHeight = 28
           ParentFont = False
           ParentShowHint = False
@@ -627,7 +641,7 @@ object f_option: Tf_option
       object Label35: TLabel
         Left = 8
         Height = 19
-        Top = 184
+        Top = 186
         Width = 50
         Caption = 'Latitude'
         ParentColor = False
@@ -636,17 +650,17 @@ object f_option: Tf_option
       object Label36: TLabel
         Left = 8
         Height = 19
-        Top = 240
+        Top = 243
         Width = 62
         Caption = 'Longitude'
         ParentColor = False
         ParentFont = False
       end
       object HorizonFile: TFileNameEdit
-        Left = 144
+        Left = 146
         Height = 28
-        Top = 320
-        Width = 252
+        Top = 323
+        Width = 255
         FilterIndex = 0
         HideDirectories = False
         ButtonWidth = 23
@@ -659,7 +673,7 @@ object f_option: Tf_option
       object Label76: TLabel
         Left = 8
         Height = 19
-        Top = 323
+        Top = 326
         Width = 90
         Caption = 'Horizon profile'
         ParentColor = False
@@ -667,9 +681,9 @@ object f_option: Tf_option
       end
       object Label77: TLabel
         Left = 8
-        Height = 58
-        Top = 357
-        Width = 126
+        Height = 59
+        Top = 361
+        Width = 127
         AutoSize = False
         Caption = 'Minimum observing elevation '
         ParentColor = False
@@ -677,10 +691,10 @@ object f_option: Tf_option
         WordWrap = True
       end
       object ElevationMin: TFloatSpinEditEx
-        Left = 144
+        Left = 146
         Height = 28
-        Top = 360
-        Width = 81
+        Top = 364
+        Width = 82
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
@@ -692,10 +706,10 @@ object f_option: Tf_option
         Value = 0
       end
       object ObsElev: TFloatSpinEditEx
-        Left = 144
+        Left = 146
         Height = 28
-        Top = 280
-        Width = 104
+        Top = 283
+        Width = 105
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
@@ -709,7 +723,7 @@ object f_option: Tf_option
       object Label108: TLabel
         Left = 10
         Height = 19
-        Top = 285
+        Top = 288
         Width = 55
         Caption = 'Elevation'
         ParentColor = False
@@ -718,16 +732,18 @@ object f_option: Tf_option
     end
     object TabSheet15: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
+      ParentFont = False
       object Panel4: TPanel
         Left = 4
-        Height = 400
-        Top = 66
-        Width = 506
+        Height = 404
+        Top = 67
+        Width = 511
         BevelOuter = bvNone
-        ClientHeight = 400
-        ClientWidth = 506
+        ClientHeight = 404
+        ClientWidth = 511
+        ParentFont = False
         TabOrder = 0
         object Panel5: TPanel
           Left = 0
@@ -738,6 +754,7 @@ object f_option: Tf_option
           BevelOuter = bvNone
           ClientHeight = 38
           ClientWidth = 506
+          ParentFont = False
           TabOrder = 2
           object Label125: TLabel
             Left = 34
@@ -746,35 +763,39 @@ object f_option: Tf_option
             Width = 158
             Caption = 'Wait time between actions'
             ParentColor = False
+            ParentFont = False
           end
           object DomeActionWait: TSpinEditEx
-            Left = 230
+            Left = 232
             Height = 26
             Top = 4
-            Width = 56
+            Width = 57
             Constraints.MaxHeight = 26
             MaxLength = 0
+            ParentFont = False
             TabOrder = 0
             Value = 1
           end
           object Label126: TLabel
-            Left = 300
+            Left = 303
             Height = 19
             Top = 8
             Width = 49
             Caption = 'seconds'
             ParentColor = False
+            ParentFont = False
           end
         end
         object GroupBox18: TGroupBox
           Left = 0
-          Height = 180
+          Height = 182
           Top = 38
           Width = 506
           Align = alTop
           Caption = 'Open dome sequence when mount is asked to unpark'
-          ClientHeight = 160
+          ClientHeight = 162
           ClientWidth = 504
+          ParentFont = False
           TabOrder = 0
           object DomeOpenActions: TStringGrid
             Left = 0
@@ -788,18 +809,19 @@ object f_option: Tf_option
               item
                 ButtonStyle = cbsPickList
                 DropDownRows = 15
-                MinSize = 100
+                MinSize = 101
+                MaxSize = 202
                 Title.Caption = 'Action'
-                Width = 450
+                Width = 449
               end>
-            DefaultColWidth = 50
+            DefaultColWidth = 51
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
             ParentFont = False
             RowCount = 6
             TabOrder = 0
             ColWidths = (
-              50
-              450
+              51
+              449
             )
           end
         end
@@ -812,6 +834,7 @@ object f_option: Tf_option
           Caption = 'Close dome sequence when mount is asked to park'
           ClientHeight = 162
           ClientWidth = 504
+          ParentFont = False
           TabOrder = 1
           object DomeCloseActions: TStringGrid
             Left = 0
@@ -825,18 +848,19 @@ object f_option: Tf_option
               item
                 ButtonStyle = cbsPickList
                 DropDownRows = 15
-                MinSize = 100
+                MinSize = 101
+                MaxSize = 202
                 Title.Caption = 'Action'
-                Width = 450
+                Width = 449
               end>
-            DefaultColWidth = 50
+            DefaultColWidth = 51
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
             ParentFont = False
             RowCount = 6
             TabOrder = 0
             ColWidths = (
-              50
-              450
+              51
+              449
             )
           end
         end
@@ -848,6 +872,7 @@ object f_option: Tf_option
         Width = 322
         Caption = 'Automatically slave "Dome Park" to "Mount Park" '
         OnChange = DomeSlaveToMountChange
+        ParentFont = False
         TabOrder = 1
       end
       object DomeNoSafetyCheck: TCheckBox
@@ -856,22 +881,23 @@ object f_option: Tf_option
         Top = 8
         Width = 389
         Caption = 'Allow to open the dome when safety status is bad or unknow'
+        ParentFont = False
         TabOrder = 2
       end
     end
     object TabSheet8: TTabSheet
       Caption = 'Preview'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object GroupBox8: TGroupBox
         Left = 8
-        Height = 148
+        Height = 150
         Top = 4
-        Width = 483
+        Width = 488
         Caption = 'Color preview'
-        ClientHeight = 128
-        ClientWidth = 481
+        ClientHeight = 130
+        ClientWidth = 486
         ParentFont = False
         TabOrder = 0
         object Label38: TLabel
@@ -893,10 +919,10 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object BayerMode: TComboBox
-          Left = 176
+          Left = 178
           Height = 28
           Top = 42
-          Width = 110
+          Width = 111
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ItemIndex = 1
@@ -913,10 +939,10 @@ object f_option: Tf_option
           Text = 'RGGB'
         end
         object RedBalance: TTrackBar
-          Left = 300
-          Height = 43
+          Left = 303
+          Height = 28
           Top = 24
-          Width = 100
+          Width = 101
           Max = 100
           Min = 30
           PageSize = 10
@@ -928,10 +954,10 @@ object f_option: Tf_option
           TabOrder = 2
         end
         object GreenBalance: TTrackBar
-          Left = 300
-          Height = 43
-          Top = 53
-          Width = 100
+          Left = 303
+          Height = 28
+          Top = 54
+          Width = 101
           Max = 100
           Min = 30
           PageSize = 10
@@ -943,10 +969,10 @@ object f_option: Tf_option
           TabOrder = 3
         end
         object BlueBalance: TTrackBar
-          Left = 300
-          Height = 43
-          Top = 80
-          Width = 100
+          Left = 303
+          Height = 28
+          Top = 81
+          Width = 101
           Max = 100
           Min = 30
           PageSize = 10
@@ -958,7 +984,7 @@ object f_option: Tf_option
           TabOrder = 4
         end
         object Label67: TLabel
-          Left = 417
+          Left = 421
           Height = 19
           Top = 35
           Width = 8
@@ -967,48 +993,49 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label68: TLabel
-          Left = 416
+          Left = 420
           Height = 19
-          Top = 64
+          Top = 65
           Width = 10
           Caption = 'G'
           ParentColor = False
           ParentFont = False
         end
         object Label69: TLabel
-          Left = 416
+          Left = 420
           Height = 19
-          Top = 91
+          Top = 92
           Width = 9
           Caption = 'B'
           ParentColor = False
           ParentFont = False
         end
         object BalanceFromCamera: TCheckBox
-          Left = 300
+          Left = 303
           Height = 21
           Top = 8
           Width = 151
           Caption = 'Balance from camera'
           OnChange = BalanceFromCameraChange
+          ParentFont = False
           TabOrder = 5
         end
       end
       object GroupBox9: TGroupBox
         Left = 8
-        Height = 68
-        Top = 152
-        Width = 483
+        Height = 69
+        Top = 154
+        Width = 488
         Caption = 'Reference image'
-        ClientHeight = 48
-        ClientWidth = 481
+        ClientHeight = 49
+        ClientWidth = 486
         ParentFont = False
         TabOrder = 1
         object RefColor: TRadioGroup
-          Left = 232
+          Left = 234
           Height = 42
           Top = 4
-          Width = 237
+          Width = 239
           AutoFill = True
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -1018,7 +1045,7 @@ object f_option: Tf_option
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
           ClientHeight = 22
-          ClientWidth = 235
+          ClientWidth = 237
           Columns = 3
           Items.Strings = (
             'red'
@@ -1038,10 +1065,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object RefTreshold: TTrackBar
-          Left = 104
+          Left = 105
           Height = 43
           Top = 4
-          Width = 104
+          Width = 105
           Max = 254
           Min = 1
           PageSize = 20
@@ -1053,12 +1080,12 @@ object f_option: Tf_option
       end
       object VideoGroup: TGroupBox
         Left = 8
-        Height = 54
-        Top = 400
-        Width = 483
+        Height = 55
+        Top = 404
+        Width = 488
         Caption = 'Video'
-        ClientHeight = 34
-        ClientWidth = 481
+        ClientHeight = 35
+        ClientWidth = 486
         ParentFont = False
         TabOrder = 2
         object Label45: TLabel
@@ -1071,10 +1098,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object VideoPreviewRate: TSpinEditEx
-          Left = 192
+          Left = 194
           Height = 28
           Top = 0
-          Width = 72
+          Width = 73
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1086,12 +1113,12 @@ object f_option: Tf_option
       end
       object GroupBox10: TGroupBox
         Left = 8
-        Height = 54
-        Top = 280
-        Width = 483
+        Height = 55
+        Top = 283
+        Width = 488
         Caption = 'Bad pixels detection'
-        ClientHeight = 34
-        ClientWidth = 481
+        ClientHeight = 35
+        ClientWidth = 486
         ParentFont = False
         TabOrder = 3
         object Label62: TLabel
@@ -1104,7 +1131,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label63: TLabel
-          Left = 280
+          Left = 283
           Height = 19
           Top = 6
           Width = 36
@@ -1113,10 +1140,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object BPMsigma: TFloatSpinEditEx
-          Left = 192
+          Left = 194
           Height = 28
           Top = 0
-          Width = 72
+          Width = 73
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1131,12 +1158,12 @@ object f_option: Tf_option
       end
       object StackGroup: TGroupBox
         Left = 8
-        Height = 64
-        Top = 336
-        Width = 483
+        Height = 65
+        Top = 340
+        Width = 488
         Caption = 'Preview stacking'
-        ClientHeight = 44
-        ClientWidth = 481
+        ClientHeight = 45
+        ClientWidth = 486
         ParentFont = False
         TabOrder = 4
         object StackShow: TCheckBox
@@ -1152,12 +1179,12 @@ object f_option: Tf_option
       end
       object GroupBox19: TGroupBox
         Left = 8
-        Height = 56
-        Top = 224
-        Width = 483
+        Height = 57
+        Top = 226
+        Width = 488
         Caption = 'Clipping indicator'
-        ClientHeight = 36
-        ClientWidth = 481
+        ClientHeight = 37
+        ClientWidth = 486
         ParentFont = False
         TabOrder = 5
         object Label37: TLabel
@@ -1170,7 +1197,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label100: TLabel
-          Left = 240
+          Left = 243
           Height = 19
           Top = 4
           Width = 117
@@ -1179,10 +1206,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object ClippingLow: TFloatSpinEditEx
-          Left = 142
+          Left = 143
           Height = 28
           Top = 0
-          Width = 84
+          Width = 85
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1193,10 +1220,10 @@ object f_option: Tf_option
           Value = 0
         end
         object ClippingHigh: TFloatSpinEditEx
-          Left = 392
+          Left = 396
           Height = 28
           Top = 0
-          Width = 88
+          Width = 89
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1210,27 +1237,27 @@ object f_option: Tf_option
     end
     object TabSheet11: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object GroupBox1: TGroupBox
         Left = 8
-        Height = 232
+        Height = 234
         Top = 8
-        Width = 464
+        Width = 469
         Caption = 'CCD temperature'
-        ClientHeight = 212
-        ClientWidth = 462
+        ClientHeight = 214
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 0
         object GroupBox14: TGroupBox
           Left = 0
-          Height = 82
+          Height = 83
           Top = 130
           Width = 462
           Align = alTop
           Caption = 'Automatic cooling '
-          ClientHeight = 62
+          ClientHeight = 63
           ClientWidth = 460
           ParentFont = False
           TabOrder = 0
@@ -1244,7 +1271,7 @@ object f_option: Tf_option
             TabOrder = 0
           end
           object Label75: TLabel
-            Left = 128
+            Left = 129
             Height = 19
             Top = 34
             Width = 42
@@ -1256,7 +1283,7 @@ object f_option: Tf_option
             Left = 40
             Height = 28
             Top = 30
-            Width = 72
+            Width = 73
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -1268,12 +1295,12 @@ object f_option: Tf_option
         end
         object GroupBox15: TGroupBox
           Left = 0
-          Height = 82
+          Height = 83
           Top = 48
           Width = 462
           Align = alTop
           Caption = 'Maximum temperature change '
-          ClientHeight = 62
+          ClientHeight = 63
           ClientWidth = 460
           ParentFont = False
           TabOrder = 1
@@ -1291,14 +1318,14 @@ object f_option: Tf_option
             Left = 16
             Height = 30
             Top = 30
-            Width = 328
+            Width = 331
             BevelOuter = bvNone
             ClientHeight = 26
-            ClientWidth = 324
+            ClientWidth = 327
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
-              Left = 112
+              Left = 113
               Height = 19
               Top = 4
               Width = 119
@@ -1310,7 +1337,7 @@ object f_option: Tf_option
               Left = 24
               Height = 28
               Top = 0
-              Width = 72
+              Width = 73
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -1324,7 +1351,7 @@ object f_option: Tf_option
         end
         object TemperatureScale: TRadioGroup
           Left = 0
-          Height = 48
+          Height = 49
           Top = 0
           Width = 462
           Align = alTop
@@ -1337,7 +1364,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 28
+          ClientHeight = 29
           ClientWidth = 460
           Columns = 2
           Items.Strings = (
@@ -1351,12 +1378,12 @@ object f_option: Tf_option
       end
       object GroupBox20: TGroupBox
         Left = 8
-        Height = 104
-        Top = 244
-        Width = 464
+        Height = 105
+        Top = 247
+        Width = 469
         Caption = 'Sensors properties'
-        ClientHeight = 84
-        ClientWidth = 462
+        ClientHeight = 85
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 1
         object Label19: TLabel
@@ -1369,7 +1396,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object MaxAduFromCamera: TCheckBox
-          Left = 168
+          Left = 170
           Height = 21
           Top = 31
           Width = 144
@@ -1379,10 +1406,10 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object MaxAdu: TSpinEditEx
-          Left = 360
+          Left = 364
           Height = 28
           Top = 28
-          Width = 78
+          Width = 79
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1399,7 +1426,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object PixelSizeFromCamera: TCheckBox
-          Left = 168
+          Left = 170
           Height = 21
           Top = 4
           Width = 141
@@ -1409,10 +1436,10 @@ object f_option: Tf_option
           TabOrder = 2
         end
         object PixelSize: TFloatSpinEditEx
-          Left = 360
+          Left = 364
           Height = 28
           Top = 1
-          Width = 78
+          Width = 79
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1426,28 +1453,30 @@ object f_option: Tf_option
         object Label124: TLabel
           Left = 8
           Height = 19
-          Top = 60
+          Top = 61
           Width = 28
           Caption = 'Gain'
           ParentColor = False
+          ParentFont = False
         end
         object GainFromCamera: TCheckBox
-          Left = 168
+          Left = 170
           Height = 21
-          Top = 60
+          Top = 61
           Width = 141
           Caption = 'From camera driver'
+          ParentFont = False
           TabOrder = 4
         end
       end
       object GroupBoxReadOut: TGroupBox
         Left = 8
-        Height = 130
-        Top = 354
-        Width = 464
+        Height = 131
+        Top = 358
+        Width = 469
         Caption = 'Readout modes'
-        ClientHeight = 110
-        ClientWidth = 462
+        ClientHeight = 111
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 2
         object Label112: TLabel
@@ -1460,10 +1489,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object ReadOutCapture: TComboBox
-          Left = 96
+          Left = 97
           Height = 28
           Top = 4
-          Width = 120
+          Width = 121
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ParentFont = False
@@ -1471,10 +1500,10 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object ReadOutPreview: TComboBox
-          Left = 328
+          Left = 331
           Height = 28
           Top = 4
-          Width = 120
+          Width = 121
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ParentFont = False
@@ -1482,7 +1511,7 @@ object f_option: Tf_option
           TabOrder = 1
         end
         object Label113: TLabel
-          Left = 232
+          Left = 234
           Height = 19
           Top = 10
           Width = 47
@@ -1491,10 +1520,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object ReadOutFocus: TComboBox
-          Left = 96
+          Left = 97
           Height = 28
           Top = 40
-          Width = 120
+          Width = 121
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ParentFont = False
@@ -1511,10 +1540,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object ReadOutAstrometry: TComboBox
-          Left = 328
+          Left = 331
           Height = 28
           Top = 40
-          Width = 120
+          Width = 121
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ParentFont = False
@@ -1522,7 +1551,7 @@ object f_option: Tf_option
           TabOrder = 3
         end
         object Label115: TLabel
-          Left = 232
+          Left = 234
           Height = 19
           Top = 46
           Width = 68
@@ -1533,23 +1562,24 @@ object f_option: Tf_option
         object ExpEarlyStart: TCheckBox
           Left = 12
           Height = 21
-          Top = 74
+          Top = 75
           Width = 256
           Caption = 'Start new exposure as early as possible'
+          ParentFont = False
           TabOrder = 4
         end
       end
     end
     object TabSheet12: TTabSheet
       Caption = 'Flat'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object FlatType: TRadioGroup
         Left = 8
-        Height = 65
+        Height = 66
         Top = 16
-        Width = 464
+        Width = 469
         AutoFill = True
         Caption = 'Sequence automatic flat'
         ChildSizing.LeftRightSpacing = 6
@@ -1559,8 +1589,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 45
-        ClientWidth = 462
+        ClientHeight = 46
+        ClientWidth = 467
         Columns = 3
         ItemIndex = 0
         Items.Strings = (
@@ -1574,19 +1604,19 @@ object f_option: Tf_option
       end
       object FlatExposureBox: TGroupBox
         Left = 8
-        Height = 189
-        Top = 88
-        Width = 464
+        Height = 191
+        Top = 89
+        Width = 469
         Caption = 'Flat auto-exposure'
-        ClientHeight = 169
-        ClientWidth = 462
+        ClientHeight = 171
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 1
         Visible = False
         object FlatAutoExposure: TCheckBox
           Left = 8
           Height = 21
-          Top = 56
+          Top = 57
           Width = 193
           Caption = 'Use flat automatic exposure'
           ParentFont = False
@@ -1595,25 +1625,25 @@ object f_option: Tf_option
         object Label91: TLabel
           Left = 8
           Height = 19
-          Top = 96
+          Top = 97
           Width = 86
           Caption = 'Exposure time'
           ParentColor = False
           ParentFont = False
         end
         object Label92: TLabel
-          Left = 319
+          Left = 322
           Height = 19
-          Top = 96
+          Top = 97
           Width = 30
           Caption = 'Max:'
           ParentColor = False
           ParentFont = False
         end
         object Label93: TLabel
-          Left = 184
+          Left = 186
           Height = 19
-          Top = 96
+          Top = 97
           Width = 27
           Caption = 'Min:'
           ParentColor = False
@@ -1622,25 +1652,25 @@ object f_option: Tf_option
         object Label94: TLabel
           Left = 8
           Height = 19
-          Top = 133
+          Top = 134
           Width = 129
           Caption = 'Flat image mean level'
           ParentColor = False
           ParentFont = False
         end
         object Label95: TLabel
-          Left = 184
+          Left = 186
           Height = 19
-          Top = 133
+          Top = 134
           Width = 27
           Caption = 'Min:'
           ParentColor = False
           ParentFont = False
         end
         object Label96: TLabel
-          Left = 319
+          Left = 322
           Height = 19
-          Top = 133
+          Top = 134
           Width = 30
           Caption = 'Max:'
           ParentColor = False
@@ -1650,7 +1680,7 @@ object f_option: Tf_option
           Left = 8
           Height = 40
           Top = 8
-          Width = 360
+          Width = 364
           AutoSize = False
           Caption = 'Automatic flat exposure is required fot the twilight flat.'
           ParentColor = False
@@ -1658,10 +1688,10 @@ object f_option: Tf_option
           WordWrap = True
         end
         object FlatMinExp: TFloatSpinEditEx
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 91
-          Width = 84
+          Top = 92
+          Width = 85
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1673,10 +1703,10 @@ object f_option: Tf_option
           Value = 0
         end
         object FlatMaxExp: TFloatSpinEditEx
-          Left = 359
+          Left = 363
           Height = 28
-          Top = 91
-          Width = 84
+          Top = 92
+          Width = 85
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1688,10 +1718,10 @@ object f_option: Tf_option
           Value = 0
         end
         object FlatLevelMin: TSpinEditEx
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 128
-          Width = 84
+          Top = 129
+          Width = 85
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1700,10 +1730,10 @@ object f_option: Tf_option
           MaxValue = 65535
         end
         object FlatLevelMax: TSpinEditEx
-          Left = 359
+          Left = 363
           Height = 28
-          Top = 128
-          Width = 84
+          Top = 129
+          Width = 85
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1714,12 +1744,12 @@ object f_option: Tf_option
       end
       object DomeBox: TGroupBox
         Left = 8
-        Height = 192
-        Top = 285
-        Width = 464
+        Height = 194
+        Top = 288
+        Width = 469
         Caption = 'Dome/Panel'
-        ClientHeight = 172
-        ClientWidth = 462
+        ClientHeight = 174
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 2
         Visible = False
@@ -1735,17 +1765,17 @@ object f_option: Tf_option
         object Label102: TLabel
           Left = 18
           Height = 19
-          Top = 60
+          Top = 61
           Width = 116
           Caption = 'Telescope elevation'
           ParentColor = False
           ParentFont = False
         end
         object DomeFlatTelescopeAz: TFloatSpinEditEx
-          Left = 224
+          Left = 226
           Height = 28
           Top = 32
-          Width = 81
+          Width = 82
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1756,10 +1786,10 @@ object f_option: Tf_option
           Value = 0
         end
         object DomeFlatTelescopeAlt: TFloatSpinEditEx
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 56
-          Width = 81
+          Top = 57
+          Width = 82
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1770,7 +1800,7 @@ object f_option: Tf_option
           Value = 0
         end
         object Label103: TLabel
-          Left = 319
+          Left = 322
           Height = 19
           Top = 36
           Width = 48
@@ -1779,9 +1809,9 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label104: TLabel
-          Left = 319
+          Left = 322
           Height = 19
-          Top = 60
+          Top = 61
           Width = 48
           Caption = 'degrees'
           ParentColor = False
@@ -1799,7 +1829,7 @@ object f_option: Tf_option
         object DomeFlatSetLight: TCheckBox
           Left = 18
           Height = 21
-          Top = 88
+          Top = 89
           Width = 309
           Caption = 'Use external command to light the panel on/off'
           ParentFont = False
@@ -1808,7 +1838,7 @@ object f_option: Tf_option
         object Label106: TLabel
           Left = 18
           Height = 19
-          Top = 117
+          Top = 118
           Width = 54
           Caption = 'Light ON'
           ParentColor = False
@@ -1817,26 +1847,26 @@ object f_option: Tf_option
         object Label110: TLabel
           Left = 18
           Height = 19
-          Top = 141
+          Top = 142
           Width = 58
           Caption = 'Light OFF'
           ParentColor = False
           ParentFont = False
         end
         object DomeFlatSetLightON: TEdit
-          Left = 184
+          Left = 186
           Height = 28
-          Top = 112
-          Width = 199
+          Top = 113
+          Width = 201
           Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 4
         end
         object DomeFlatSetLightOFF: TEdit
-          Left = 184
+          Left = 186
           Height = 28
-          Top = 136
-          Width = 199
+          Top = 137
+          Width = 201
           Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 5
@@ -1845,17 +1875,17 @@ object f_option: Tf_option
     end
     object TabSheet10: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object GroupBox2: TGroupBox
         Left = 8
-        Height = 104
+        Height = 105
         Top = 4
-        Width = 456
+        Width = 461
         Caption = 'Star profile'
-        ClientHeight = 84
-        ClientWidth = 454
+        ClientHeight = 85
+        ClientWidth = 459
         ParentFont = False
         TabOrder = 0
         object Label14: TLabel
@@ -1877,10 +1907,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object StarWindow: TSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 1
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1891,10 +1921,10 @@ object f_option: Tf_option
           Value = 10
         end
         object FocusWindow: TSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 29
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1907,7 +1937,7 @@ object f_option: Tf_option
         object Undersampled: TCheckBox
           Left = 8
           Height = 21
-          Top = 58
+          Top = 59
           Width = 287
           Caption = 'System is undersampled, accept 1 pixel star.'
           ParentFont = False
@@ -1916,12 +1946,12 @@ object f_option: Tf_option
       end
       object GroupCorrection: TGroupBox
         Left = 8
-        Height = 86
-        Top = 110
-        Width = 456
+        Height = 87
+        Top = 111
+        Width = 461
         Caption = 'Focuser correction'
-        ClientHeight = 66
-        ClientWidth = 454
+        ClientHeight = 67
+        ClientWidth = 459
         ParentFont = False
         TabOrder = 1
         object Label98: TLabel
@@ -1934,21 +1964,21 @@ object f_option: Tf_option
           ParentFont = False
         end
         object BtnDisableDelay: TButton
-          Left = 350
+          Left = 354
           Height = 21
           Top = 36
-          Width = 75
+          Width = 76
           Caption = 'Disable'
           OnClick = BtnDisableDelayClick
           ParentFont = False
           TabOrder = 0
         end
         object FocuserBacklashDirection: TComboBox
-          Left = 350
+          Left = 354
           Height = 28
           Hint = 'The direction the focuser will always finish to move.'#10'If using auto-focus set the same move direction.'
           Top = 1
-          Width = 80
+          Width = 81
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ItemIndex = 0
@@ -1974,10 +2004,10 @@ object f_option: Tf_option
           TabOrder = 2
         end
         object FocuserBacklash: TSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 1
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1985,10 +2015,10 @@ object f_option: Tf_option
           MaxValue = 10000
         end
         object FocuserDelay: TSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 32
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -1998,12 +2028,12 @@ object f_option: Tf_option
       end
       object GroupBox12: TGroupBox
         Left = 8
-        Height = 154
-        Top = 331
-        Width = 456
+        Height = 156
+        Top = 334
+        Width = 461
         Caption = 'Filter offset'
-        ClientHeight = 134
-        ClientWidth = 454
+        ClientHeight = 136
+        ClientWidth = 459
         ParentFont = False
         TabOrder = 2
         object FilterList: TStringGrid
@@ -2014,26 +2044,26 @@ object f_option: Tf_option
           Align = alClient
           AutoFillColumns = True
           ColCount = 3
-          DefaultColWidth = 122
+          DefaultColWidth = 123
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
           ParentFont = False
           RowCount = 21
           TabOrder = 0
           ColWidths = (
-            122
-            164
+            123
+            163
             164
           )
         end
       end
       object GroupBox16: TGroupBox
         Left = 8
-        Height = 80
-        Top = 200
-        Width = 456
+        Height = 81
+        Top = 202
+        Width = 461
         Caption = 'Focuser temperature compensation'
-        ClientHeight = 60
-        ClientWidth = 454
+        ClientHeight = 61
+        ClientWidth = 459
         ParentFont = False
         TabOrder = 3
         object Label84: TLabel
@@ -2046,20 +2076,20 @@ object f_option: Tf_option
           ParentFont = False
         end
         object BtnDisableFocuserTemp: TButton
-          Left = 350
+          Left = 354
           Height = 23
           Top = 4
-          Width = 75
+          Width = 76
           Caption = 'Disable'
           OnClick = BtnDisableFocuserTempClick
           ParentFont = False
           TabOrder = 0
         end
         object FocuserTempCoeff: TFloatSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 1
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2080,10 +2110,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object AutofocusTemp: TFloatSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 30
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2095,10 +2125,10 @@ object f_option: Tf_option
           Value = 0
         end
         object BtnDisableAutofocusTemp: TButton
-          Left = 350
+          Left = 354
           Height = 23
           Top = 32
-          Width = 75
+          Width = 76
           Caption = 'Disable'
           OnClick = BtnDisableAutofocusTempClick
           ParentFont = False
@@ -2107,12 +2137,13 @@ object f_option: Tf_option
       end
       object GroupBox22: TGroupBox
         Left = 8
-        Height = 50
-        Top = 281
-        Width = 456
+        Height = 51
+        Top = 284
+        Width = 461
         Caption = 'Periodic auto-focus'
-        ClientHeight = 30
-        ClientWidth = 454
+        ClientHeight = 31
+        ClientWidth = 459
+        ParentFont = False
         TabOrder = 4
         object Label127: TLabel
           Left = 5
@@ -2121,38 +2152,41 @@ object f_option: Tf_option
           Width = 216
           Caption = 'Automatically run auto-focus every  '
           ParentColor = False
+          ParentFont = False
         end
         object AutofocusPeriod: TSpinEditEx
-          Left = 270
+          Left = 273
           Height = 28
           Top = 0
-          Width = 74
+          Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
+          ParentFont = False
           TabOrder = 0
           MaxValue = 1440
         end
         object Label128: TLabel
-          Left = 350
+          Left = 354
           Height = 19
           Top = 5
           Width = 49
           Caption = 'minutes'
           ParentColor = False
+          ParentFont = False
         end
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'Autofocus'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object Autofocusmode: TRadioGroup
         Left = 8
-        Height = 52
+        Height = 53
         Hint = 'Use Vcurve with an absolute position focuser, then learn the curve. This is the quickest method.'#10'Use Dynamic with a relative position focuser, this method require you start with a good approximate focus position.'#10'Use Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest method.'
         Top = 4
-        Width = 448
+        Width = 453
         AutoFill = True
         Caption = 'Autofocus method'
         ChildSizing.LeftRightSpacing = 6
@@ -2162,8 +2196,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
-        ClientHeight = 32
-        ClientWidth = 446
+        ClientHeight = 33
+        ClientWidth = 451
         Columns = 4
         Items.Strings = (
           'V curve'
@@ -2177,12 +2211,12 @@ object f_option: Tf_option
       end
       object PanelAutofocus: TPanel
         Left = 8
-        Height = 240
-        Top = 86
-        Width = 432
+        Height = 243
+        Top = 87
+        Width = 437
         BevelOuter = bvNone
-        ClientHeight = 240
-        ClientWidth = 432
+        ClientHeight = 243
+        ClientWidth = 437
         ParentFont = False
         TabOrder = 1
         object Label49: TLabel
@@ -2195,7 +2229,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label51: TLabel
-          Left = 280
+          Left = 283
           Height = 19
           Top = 4
           Width = 49
@@ -2206,17 +2240,17 @@ object f_option: Tf_option
         object Label58: TLabel
           Left = 8
           Height = 19
-          Top = 60
+          Top = 61
           Width = 90
           Caption = 'Move direction'
           ParentColor = False
           ParentFont = False
         end
         object AutofocusMoveDirIn: TRadioButton
-          Left = 212
+          Left = 214
           Height = 23
           Hint = 'The prefered focuser direction for autofocus.'
-          Top = 58
+          Top = 59
           Width = 38
           Caption = 'In'
           Checked = True
@@ -2226,10 +2260,10 @@ object f_option: Tf_option
           TabStop = True
         end
         object AutofocusMoveDirOut: TRadioButton
-          Left = 352
+          Left = 356
           Height = 23
           Hint = 'The prefered focuser direction for autofocus.'
-          Top = 56
+          Top = 57
           Width = 49
           Caption = 'Out'
           OnClick = CheckFocuserDirection
@@ -2238,9 +2272,9 @@ object f_option: Tf_option
         end
         object AutofocusNotebook: TNotebook
           Left = 0
-          Height = 90
-          Top = 150
-          Width = 440
+          Height = 91
+          Top = 152
+          Width = 445
           PageIndex = 0
           TabOrder = 2
           TabStop = True
@@ -2255,7 +2289,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object Label83: TLabel
-              Left = 176
+              Left = 178
               Height = 19
               Top = 4
               Width = 27
@@ -2276,14 +2310,14 @@ object f_option: Tf_option
             object Label88: TLabel
               Left = 8
               Height = 19
-              Top = 64
+              Top = 65
               Width = 222
               Caption = 'Estimated slippage since last learning'
               ParentColor = False
               ParentFont = False
             end
             object Label48: TLabel
-              Left = 280
+              Left = 283
               Height = 19
               Top = 4
               Width = 65
@@ -2292,10 +2326,10 @@ object f_option: Tf_option
               ParentFont = False
             end
             object AutofocusStartHFD: TFloatSpinEditEx
-              Left = 212
+              Left = 214
               Height = 28
               Top = 0
-              Width = 60
+              Width = 61
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -2309,10 +2343,10 @@ object f_option: Tf_option
               Value = 1
             end
             object AutofocusNearHFD: TFloatSpinEditEx
-              Left = 352
+              Left = 356
               Height = 28
               Top = 0
-              Width = 60
+              Width = 61
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -2326,10 +2360,10 @@ object f_option: Tf_option
               Value = 1
             end
             object AutofocusSlippageOffset: TSpinEditEx
-              Left = 352
+              Left = 356
               Height = 28
-              Top = 56
-              Width = 60
+              Top = 57
+              Width = 61
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -2357,10 +2391,10 @@ object f_option: Tf_option
               ParentFont = False
             end
             object AutofocusDynamicNumPoint: TSpinEditEx
-              Left = 212
+              Left = 214
               Height = 31
               Top = 0
-              Width = 60
+              Width = 61
               MaxLength = 0
               ParentFont = False
               TabOrder = 0
@@ -2369,10 +2403,10 @@ object f_option: Tf_option
               Value = 5
             end
             object AutofocusDynamicMovement: TSpinEditEx
-              Left = 212
+              Left = 214
               Height = 31
               Top = 32
-              Width = 60
+              Width = 61
               MaxLength = 0
               ParentFont = False
               TabOrder = 1
@@ -2401,10 +2435,10 @@ object f_option: Tf_option
               ParentFont = False
             end
             object AutofocusMaxSpeed: TSpinEditEx
-              Left = 212
+              Left = 214
               Height = 29
               Top = 6
-              Width = 60
+              Width = 61
               MaxLength = 0
               ParentFont = False
               TabOrder = 0
@@ -2413,10 +2447,10 @@ object f_option: Tf_option
               Value = 10
             end
             object AutofocusMinSpeed: TSpinEditEx
-              Left = 212
+              Left = 214
               Height = 29
               Top = 38
-              Width = 60
+              Width = 61
               MaxLength = 0
               ParentFont = False
               TabOrder = 1
@@ -2431,11 +2465,11 @@ object f_option: Tf_option
         object PanelNearFocus: TPanel
           Left = 1
           Height = 31
-          Top = 118
-          Width = 408
+          Top = 119
+          Width = 412
           BevelOuter = bvNone
           ClientHeight = 31
-          ClientWidth = 408
+          ClientWidth = 412
           ParentFont = False
           TabOrder = 3
           object Label57: TLabel
@@ -2448,10 +2482,10 @@ object f_option: Tf_option
             ParentFont = False
           end
           object AutofocusNearNum: TSpinEditEx
-            Left = 212
+            Left = 214
             Height = 28
             Top = 0
-            Width = 60
+            Width = 61
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -2473,35 +2507,35 @@ object f_option: Tf_option
         object Label54: TLabel
           Left = 8
           Height = 19
-          Top = 88
+          Top = 89
           Width = 124
           Caption = 'Autofocus tolerance '
           ParentColor = False
           ParentFont = False
         end
         object Label55: TLabel
-          Left = 176
+          Left = 178
           Height = 19
-          Top = 88
+          Top = 89
           Width = 27
           Caption = 'HFD'
           ParentColor = False
           ParentFont = False
         end
         object Label81: TLabel
-          Left = 280
+          Left = 283
           Height = 19
-          Top = 88
+          Top = 89
           Width = 52
           Caption = 'min.SNR'
           ParentColor = False
           ParentFont = False
         end
         object AutofocusExposure: TFloatSpinEditEx
-          Left = 212
+          Left = 214
           Height = 28
           Top = 0
-          Width = 60
+          Width = 61
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2514,10 +2548,10 @@ object f_option: Tf_option
           Value = 0
         end
         object AutofocusBinning: TSpinEditEx
-          Left = 212
+          Left = 214
           Height = 28
           Top = 28
-          Width = 60
+          Width = 61
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2527,10 +2561,10 @@ object f_option: Tf_option
           Value = 1
         end
         object AutofocusTolerance: TFloatSpinEditEx
-          Left = 212
+          Left = 214
           Height = 28
-          Top = 84
-          Width = 60
+          Top = 85
+          Width = 61
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2542,10 +2576,10 @@ object f_option: Tf_option
           Value = 1
         end
         object AutofocusMinSNR: TFloatSpinEditEx
-          Left = 352
+          Left = 356
           Height = 28
-          Top = 84
-          Width = 60
+          Top = 85
+          Width = 61
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2560,7 +2594,7 @@ object f_option: Tf_option
       object Label101: TLabel
         Left = 16
         Height = 19
-        Top = 60
+        Top = 61
         Width = 349
         Caption = 'The menu "File / Focuser calibration" help to fill this values.'
         ParentColor = False
@@ -2568,22 +2602,22 @@ object f_option: Tf_option
       end
       object PanelFocusStar: TPanel
         Left = 8
-        Height = 168
-        Top = 328
-        Width = 496
+        Height = 170
+        Top = 331
+        Width = 501
         BevelOuter = bvNone
-        ClientHeight = 168
-        ClientWidth = 496
+        ClientHeight = 170
+        ClientWidth = 501
         ParentFont = False
         TabOrder = 2
         object AutofocusMultistar: TGroupBox
           Left = 1
-          Height = 120
+          Height = 121
           Top = 40
-          Width = 447
+          Width = 452
           Caption = 'Focus star selection'
-          ClientHeight = 100
-          ClientWidth = 445
+          ClientHeight = 101
+          ClientWidth = 450
           ParentFont = False
           TabOrder = 3
           object Label56: TLabel
@@ -2598,7 +2632,7 @@ object f_option: Tf_option
           object LabelMultistarWarning: TLabel
             Left = 8
             Height = 19
-            Top = 58
+            Top = 59
             Width = 6
             Caption = '  '
             ParentColor = False
@@ -2610,17 +2644,18 @@ object f_option: Tf_option
             Top = 28
             Width = 222
             Caption = 'Pause guiding during auto-focus'
+            ParentFont = False
             TabOrder = 0
           end
         end
         object AutofocusSlewStar: TGroupBox
           Left = 1
-          Height = 120
+          Height = 121
           Top = 40
-          Width = 487
+          Width = 492
           Caption = 'Focus star selection'
-          ClientHeight = 100
-          ClientWidth = 485
+          ClientHeight = 101
+          ClientWidth = 490
           ParentFont = False
           TabOrder = 0
           object Label53: TLabel
@@ -2637,7 +2672,7 @@ object f_option: Tf_option
             Height = 28
             Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
             Top = 28
-            Width = 80
+            Width = 81
             Constraints.MaxHeight = 28
             ItemHeight = 0
             ItemIndex = 0
@@ -2654,7 +2689,7 @@ object f_option: Tf_option
             Text = '4'
           end
           object Label85: TLabel
-            Left = 96
+            Left = 97
             Height = 19
             Top = 32
             Width = 142
@@ -2663,7 +2698,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object Label86: TLabel
-            Left = 369
+            Left = 373
             Height = 19
             Top = 32
             Width = 49
@@ -2672,10 +2707,10 @@ object f_option: Tf_option
             ParentFont = False
           end
           object AutofocusPrecisionSlew: TFloatSpinEditEx
-            Left = 296
+            Left = 299
             Height = 28
             Top = 28
-            Width = 60
+            Width = 61
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -2690,9 +2725,10 @@ object f_option: Tf_option
           object FocusStarMagAdjust: TCheckBox
             Left = 8
             Height = 23
-            Top = 63
+            Top = 64
             Width = 379
             Caption = 'Allow to select a brighter star for high filter exposure factor'
+            ParentFont = False
             TabOrder = 2
           end
         end
@@ -2706,7 +2742,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object AutofocusSlew: TRadioButton
-          Left = 168
+          Left = 170
           Height = 23
           Top = 6
           Width = 131
@@ -2718,7 +2754,7 @@ object f_option: Tf_option
           TabStop = True
         end
         object AutofocusInPlace: TRadioButton
-          Left = 352
+          Left = 356
           Height = 23
           Top = 6
           Width = 100
@@ -2731,21 +2767,21 @@ object f_option: Tf_option
     end
     object TabSheet4: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object GroupBox4: TGroupBox
         Left = 8
-        Height = 180
+        Height = 182
         Top = 4
-        Width = 467
+        Width = 472
         Caption = 'Astrometry options'
-        ClientHeight = 160
-        ClientWidth = 465
+        ClientHeight = 162
+        ClientWidth = 470
         ParentFont = False
         TabOrder = 0
         object FocaleFromTelescope: TCheckBox
-          Left = 113
+          Left = 114
           Height = 23
           Top = 12
           Width = 156
@@ -2765,9 +2801,9 @@ object f_option: Tf_option
         end
         object ResolverBox: TRadioGroup
           Left = 0
-          Height = 74
-          Top = 78
-          Width = 416
+          Height = 75
+          Top = 79
+          Width = 420
           AutoFill = True
           Caption = 'Software'
           ChildSizing.LeftRightSpacing = 6
@@ -2777,8 +2813,8 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 54
-          ClientWidth = 414
+          ClientHeight = 55
+          ClientWidth = 418
           Columns = 3
           ItemIndex = 0
           Items.Strings = (
@@ -2802,10 +2838,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Focale: TFloatSpinEditEx
-          Left = 289
+          Left = 292
           Height = 28
           Top = 8
-          Width = 77
+          Width = 78
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2817,10 +2853,10 @@ object f_option: Tf_option
           Value = 0
         end
         object AstrometryTimeout: TSpinEditEx
-          Left = 113
+          Left = 114
           Height = 28
           Top = 40
-          Width = 64
+          Width = 65
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -2830,27 +2866,29 @@ object f_option: Tf_option
           Value = 10
         end
         object Label132: TLabel
-          Left = 380
+          Left = 384
           Height = 19
           Top = 13
           Width = 24
           Caption = 'mm'
           ParentColor = False
+          ParentFont = False
         end
         object Label133: TLabel
-          Left = 192
+          Left = 194
           Height = 19
           Top = 45
           Width = 57
           Caption = '[seconds]'
           ParentColor = False
+          ParentFont = False
         end
       end
       object Notebook1: TNotebook
         Left = 8
-        Height = 292
-        Top = 188
-        Width = 467
+        Height = 295
+        Top = 190
+        Width = 472
         PageIndex = 0
         TabOrder = 1
         TabStop = True
@@ -2870,7 +2908,7 @@ object f_option: Tf_option
               Left = 12
               Height = 38
               Top = 10
-              Width = 165
+              Width = 167
               AutoSize = False
               Caption = 'Maximum search radius'
               ParentColor = False
@@ -2878,7 +2916,7 @@ object f_option: Tf_option
               WordWrap = True
             end
             object Label7: TLabel
-              Left = 244
+              Left = 247
               Height = 19
               Top = 10
               Width = 89
@@ -2889,17 +2927,17 @@ object f_option: Tf_option
             object Label8: TLabel
               Left = 12
               Height = 19
-              Top = 48
+              Top = 49
               Width = 79
               Caption = 'Downsample'
               ParentColor = False
               ParentFont = False
             end
             object Label9: TLabel
-              Left = 244
+              Left = 247
               Height = 40
-              Top = 48
-              Width = 132
+              Top = 49
+              Width = 133
               AutoSize = False
               Caption = 'Maximum sources'
               ParentColor = False
@@ -2909,7 +2947,7 @@ object f_option: Tf_option
             object Plot: TCheckBox
               Left = 12
               Height = 23
-              Top = 88
+              Top = 89
               Width = 168
               Caption = 'Create plot of the result'
               ParentFont = False
@@ -2918,17 +2956,17 @@ object f_option: Tf_option
             object Label27: TLabel
               Left = 12
               Height = 19
-              Top = 116
+              Top = 117
               Width = 87
               Caption = 'Other options '
               ParentColor = False
               ParentFont = False
             end
             object OtherOptions: TEdit
-              Left = 123
+              Left = 124
               Height = 28
-              Top = 112
-              Width = 313
+              Top = 113
+              Width = 316
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -2936,11 +2974,11 @@ object f_option: Tf_option
             object CygwinPanel: TPanel
               Left = 7
               Height = 40
-              Top = 216
-              Width = 449
+              Top = 218
+              Width = 454
               BevelOuter = bvNone
               ClientHeight = 36
-              ClientWidth = 445
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 2
               Visible = False
@@ -2954,10 +2992,10 @@ object f_option: Tf_option
                 ParentFont = False
               end
               object CygwinPath: TDirectoryEdit
-                Left = 112
+                Left = 113
                 Height = 28
                 Top = 6
-                Width = 318
+                Width = 321
                 ShowHidden = False
                 ButtonWidth = 23
                 Constraints.MaxHeight = 28
@@ -2970,7 +3008,7 @@ object f_option: Tf_option
             object AstUseScript: TCheckBox
               Left = 12
               Height = 23
-              Top = 148
+              Top = 150
               Width = 133
               Caption = 'Use custom script'
               OnClick = AstUseScriptClick
@@ -2980,17 +3018,17 @@ object f_option: Tf_option
             object AstCustScript: TEdit
               Left = 40
               Height = 28
-              Top = 176
-              Width = 396
+              Top = 178
+              Width = 400
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 4
             end
             object MaxRadius: TFloatSpinEditEx
-              Left = 184
+              Left = 186
               Height = 28
               Top = 8
-              Width = 57
+              Width = 58
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3002,10 +3040,10 @@ object f_option: Tf_option
               Value = 0
             end
             object Tolerance: TFloatSpinEditEx
-              Left = 376
+              Left = 380
               Height = 28
               Top = 8
-              Width = 60
+              Width = 61
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3017,10 +3055,10 @@ object f_option: Tf_option
               Value = 0
             end
             object Downsample: TSpinEditEx
-              Left = 184
+              Left = 186
               Height = 28
               Top = 46
-              Width = 57
+              Width = 58
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3030,10 +3068,10 @@ object f_option: Tf_option
               Value = 1
             end
             object SourcesLimit: TSpinEditEx
-              Left = 376
+              Left = 380
               Height = 28
               Top = 46
-              Width = 60
+              Width = 61
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3043,11 +3081,11 @@ object f_option: Tf_option
             object AstrometryPathPanel: TPanel
               Left = 7
               Height = 40
-              Top = 216
-              Width = 449
+              Top = 218
+              Width = 454
               BevelOuter = bvNone
               ClientHeight = 36
-              ClientWidth = 445
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 9
               Visible = False
@@ -3061,11 +3099,11 @@ object f_option: Tf_option
                 ParentFont = False
               end
               object AstrometryPath: TDirectoryEdit
-                Left = 112
+                Left = 113
                 Height = 28
                 Hint = 'Let blank for default system search path'
                 Top = 6
-                Width = 312
+                Width = 315
                 ShowHidden = False
                 ButtonWidth = 23
                 Constraints.MaxHeight = 28
@@ -3090,11 +3128,11 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
             object ElbrusFolder: TEdit
-              Left = 208
+              Left = 210
               Height = 28
               Hint = 'The Elbrus Images folder as set in the Elbrus parameters.'
               Top = 10
-              Width = 192
+              Width = 194
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 0
@@ -3118,20 +3156,20 @@ object f_option: Tf_option
               ParentFont = False
             end
             object ElbrusUnixpath: TEdit
-              Left = 208
+              Left = 210
               Height = 28
               Hint = 'The Unix path equivalent to the Elbrus Images folder.'
               Top = 43
-              Width = 192
+              Width = 194
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object Label15: TLabel
               Left = 10
-              Height = 112
-              Top = 96
-              Width = 398
+              Height = 113
+              Top = 97
+              Width = 402
               AutoSize = False
               Caption = 'Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.'#10'Also be sure to set the parameter: "Add the WCS in the FITS header".'
               ParentColor = False
@@ -3143,9 +3181,9 @@ object f_option: Tf_option
         object Page3: TPage
           object Label44: TLabel
             Left = 16
-            Height = 97
+            Height = 98
             Top = 8
-            Width = 384
+            Width = 388
             AutoSize = False
             Caption = 'Many functions will not work reliably without an astrometry software.'
             ParentColor = False
@@ -3177,26 +3215,26 @@ object f_option: Tf_option
             object Label79: TLabel
               Left = 16
               Height = 19
-              Top = 80
+              Top = 81
               Width = 93
               Caption = 'Wait after solve'
               ParentColor = False
               ParentFont = False
             end
             object Label80: TLabel
-              Left = 224
+              Left = 226
               Height = 19
-              Top = 80
+              Top = 81
               Width = 49
               Caption = 'seconds'
               ParentColor = False
               ParentFont = False
             end
             object PlatesolveWait: TSpinEditEx
-              Left = 168
+              Left = 170
               Height = 28
-              Top = 76
-              Width = 49
+              Top = 77
+              Width = 50
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3204,10 +3242,10 @@ object f_option: Tf_option
               MaxValue = 60
             end
             object PlatesolveFolder: TDirectoryEdit
-              Left = 168
+              Left = 170
               Height = 28
               Top = 24
-              Width = 246
+              Width = 249
               ShowHidden = False
               ButtonWidth = 23
               Constraints.MaxHeight = 28
@@ -3240,10 +3278,10 @@ object f_option: Tf_option
               ParentFont = False
             end
             object ASTAPSearchRadius: TSpinEditEx
-              Left = 176
+              Left = 178
               Height = 28
-              Top = 72
-              Width = 104
+              Top = 73
+              Width = 105
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3255,7 +3293,7 @@ object f_option: Tf_option
             object Label107: TLabel
               Left = 8
               Height = 19
-              Top = 125
+              Top = 126
               Width = 79
               Caption = 'Downsample'
               ParentColor = False
@@ -3264,8 +3302,8 @@ object f_option: Tf_option
             object Label109: TLabel
               Left = 8
               Height = 38
-              Top = 77
-              Width = 165
+              Top = 78
+              Width = 167
               AutoSize = False
               Caption = 'Maximum search radius'
               ParentColor = False
@@ -3273,10 +3311,10 @@ object f_option: Tf_option
               WordWrap = True
             end
             object ASTAPFolder: TDirectoryEdit
-              Left = 178
+              Left = 180
               Height = 28
               Top = 24
-              Width = 238
+              Width = 241
               ShowHidden = False
               ButtonWidth = 23
               Constraints.MaxHeight = 28
@@ -3286,10 +3324,10 @@ object f_option: Tf_option
               TabOrder = 1
             end
             object ASTAPdownsample: TSpinEditEx
-              Left = 178
+              Left = 180
               Height = 28
-              Top = 120
-              Width = 102
+              Top = 121
+              Width = 103
               Constraints.MaxHeight = 28
               MaxLength = 0
               ParentFont = False
@@ -3303,23 +3341,23 @@ object f_option: Tf_option
     end
     object TabSheet7: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object GroupBox7: TGroupBox
         Left = 8
-        Height = 364
+        Height = 368
         Top = 4
-        Width = 441
+        Width = 446
         Caption = 'Precision slewing options'
-        ClientHeight = 344
-        ClientWidth = 439
+        ClientHeight = 348
+        ClientWidth = 444
         ParentFont = False
         TabOrder = 0
         object Label28: TLabel
           Left = 16
           Height = 19
-          Top = 80
+          Top = 81
           Width = 150
           Caption = 'Target precision [arcmin] '
           ParentColor = False
@@ -3328,7 +3366,7 @@ object f_option: Tf_option
         object Label29: TLabel
           Left = 16
           Height = 19
-          Top = 112
+          Top = 113
           Width = 160
           Caption = 'Maximum number of retry'
           ParentColor = False
@@ -3337,7 +3375,7 @@ object f_option: Tf_option
         object Label30: TLabel
           Left = 16
           Height = 19
-          Top = 180
+          Top = 182
           Width = 146
           Caption = 'Exposure time [seconds]'
           ParentColor = False
@@ -3346,7 +3384,7 @@ object f_option: Tf_option
         object Label31: TLabel
           Left = 16
           Height = 19
-          Top = 220
+          Top = 222
           Width = 47
           Caption = 'Binning'
           ParentColor = False
@@ -3355,7 +3393,7 @@ object f_option: Tf_option
         object Label32: TLabel
           Left = 16
           Height = 19
-          Top = 152
+          Top = 154
           Width = 104
           Caption = 'Control exposure'
           ParentColor = False
@@ -3363,9 +3401,9 @@ object f_option: Tf_option
         end
         object PrecSlewBox: TRadioGroup
           Left = 16
-          Height = 57
+          Height = 58
           Top = 8
-          Width = 408
+          Width = 412
           AutoFill = True
           Caption = 'Correction method'
           ChildSizing.LeftRightSpacing = 6
@@ -3375,8 +3413,8 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 37
-          ClientWidth = 406
+          ClientHeight = 38
+          ClientWidth = 410
           Columns = 2
           Items.Strings = (
             'Mount sync'
@@ -3388,17 +3426,17 @@ object f_option: Tf_option
         object Label66: TLabel
           Left = 16
           Height = 19
-          Top = 260
+          Top = 263
           Width = 30
           Caption = 'Filter'
           ParentColor = False
           ParentFont = False
         end
         object SlewFilter: TComboBox
-          Left = 248
+          Left = 251
           Height = 28
-          Top = 256
-          Width = 156
+          Top = 259
+          Width = 158
           AutoSize = False
           Constraints.MaxHeight = 28
           ItemHeight = 0
@@ -3409,17 +3447,17 @@ object f_option: Tf_option
         object Label87: TLabel
           Left = 16
           Height = 19
-          Top = 307
+          Top = 310
           Width = 218
           Caption = 'Delay after telescope slew [seconds] '
           ParentColor = False
           ParentFont = False
         end
         object SlewPrec: TFloatSpinEditEx
-          Left = 324
+          Left = 327
           Height = 28
-          Top = 80
-          Width = 80
+          Top = 81
+          Width = 81
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3432,10 +3470,10 @@ object f_option: Tf_option
           Value = 5
         end
         object SlewRetry: TSpinEditEx
-          Left = 324
+          Left = 327
           Height = 28
-          Top = 112
-          Width = 80
+          Top = 113
+          Width = 81
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3443,10 +3481,10 @@ object f_option: Tf_option
           MaxValue = 10
         end
         object SlewExp: TFloatSpinEditEx
-          Left = 324
+          Left = 327
           Height = 28
-          Top = 176
-          Width = 80
+          Top = 178
+          Width = 81
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3458,10 +3496,10 @@ object f_option: Tf_option
           Value = 1
         end
         object SlewBin: TSpinEditEx
-          Left = 324
+          Left = 327
           Height = 28
-          Top = 216
-          Width = 80
+          Top = 218
+          Width = 81
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3471,10 +3509,10 @@ object f_option: Tf_option
           Value = 1
         end
         object SlewDelay: TSpinEditEx
-          Left = 355
+          Left = 359
           Height = 28
-          Top = 304
-          Width = 49
+          Top = 307
+          Width = 50
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3484,12 +3522,13 @@ object f_option: Tf_option
       end
       object GroupBox23: TGroupBox
         Left = 8
-        Height = 104
-        Top = 376
-        Width = 441
+        Height = 105
+        Top = 380
+        Width = 446
         Caption = 'Recenter sequence target that drift'
-        ClientHeight = 84
-        ClientWidth = 439
+        ClientHeight = 85
+        ClientWidth = 444
+        ParentFont = False
         TabOrder = 1
         object CheckRecenterTarget: TCheckBox
           Left = 16
@@ -3497,14 +3536,16 @@ object f_option: Tf_option
           Top = 8
           Width = 321
           Caption = 'Run astrometry on every image to search for drift'
+          ParentFont = False
           TabOrder = 0
         end
         object RecenterTargetDistance: TFloatSpinEditEx
-          Left = 264
+          Left = 267
           Height = 31
           Top = 40
-          Width = 73
+          Width = 74
           MaxLength = 0
+          ParentFont = False
           TabOrder = 1
           Increment = 0.1
           MinValue = 0
@@ -3518,27 +3559,29 @@ object f_option: Tf_option
           Width = 194
           Caption = 'Recenter if the drift is more than'
           ParentColor = False
+          ParentFont = False
         end
         object Label131: TLabel
-          Left = 350
+          Left = 354
           Height = 19
           Top = 45
           Width = 49
           Caption = 'minutes'
           ParentColor = False
+          ParentFont = False
         end
       end
     end
     object TabSheet9: TTabSheet
       Caption = 'Meridian'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object MeridianOption: TRadioGroup
         Left = 8
-        Height = 57
+        Height = 58
         Top = 4
-        Width = 440
+        Width = 445
         AutoFill = True
         Caption = 'On Meridian crossing'
         ChildSizing.LeftRightSpacing = 6
@@ -3548,8 +3591,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 37
-        ClientWidth = 438
+        ClientHeight = 38
+        ClientWidth = 443
         Columns = 3
         Items.Strings = (
           'Do nothing'
@@ -3562,11 +3605,11 @@ object f_option: Tf_option
       end
       object MeridianFlipPanel: TPanel
         Left = 8
-        Height = 304
-        Top = 88
-        Width = 440
-        ClientHeight = 304
-        ClientWidth = 440
+        Height = 307
+        Top = 89
+        Width = 445
+        ClientHeight = 307
+        ClientWidth = 445
         ParentFont = False
         TabOrder = 1
         object Label40: TLabel
@@ -3579,7 +3622,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label41: TLabel
-          Left = 312
+          Left = 315
           Height = 19
           Top = 12
           Width = 49
@@ -3590,7 +3633,7 @@ object f_option: Tf_option
         object MeridianFlipPauseBefore: TCheckBox
           Left = 8
           Height = 21
-          Top = 184
+          Top = 186
           Width = 184
           Caption = 'Pause before meridian flip '
           ParentFont = False
@@ -3599,25 +3642,25 @@ object f_option: Tf_option
         object MeridianFlipPauseAfter: TCheckBox
           Left = 8
           Height = 21
-          Top = 216
+          Top = 218
           Width = 173
           Caption = 'Pause after meridian flip '
           ParentFont = False
           TabOrder = 1
         end
         object Label42: TLabel
-          Left = 48
+          Left = 49
           Height = 19
-          Top = 252
+          Top = 255
           Width = 50
           Caption = 'Timeout'
           ParentColor = False
           ParentFont = False
         end
         object Label43: TLabel
-          Left = 197
+          Left = 199
           Height = 19
-          Top = 252
+          Top = 255
           Width = 49
           Caption = 'minutes'
           ParentColor = False
@@ -3626,16 +3669,16 @@ object f_option: Tf_option
         object Label59: TLabel
           Left = 8
           Height = 19
-          Top = 48
+          Top = 49
           Width = 176
           Caption = 'No flip until past meridian for'
           ParentColor = False
           ParentFont = False
         end
         object Label60: TLabel
-          Left = 312
+          Left = 315
           Height = 19
-          Top = 48
+          Top = 49
           Width = 49
           Caption = 'minutes'
           ParentColor = False
@@ -3644,7 +3687,7 @@ object f_option: Tf_option
         object MeridianFlipAutofocus: TCheckBox
           Left = 8
           Height = 21
-          Top = 120
+          Top = 121
           Width = 196
           Caption = 'Autofocus after meridian flip'
           ParentFont = False
@@ -3653,17 +3696,17 @@ object f_option: Tf_option
         object MeridianFlipCalibrate: TCheckBox
           Left = 8
           Height = 21
-          Top = 152
+          Top = 154
           Width = 260
           Caption = 'Calibrate autoguider after medidian flip'
           ParentFont = False
           TabOrder = 3
         end
         object MinutesPastMeridian: TSpinEditEx
-          Left = 240
+          Left = 243
           Height = 28
           Top = 10
-          Width = 65
+          Width = 66
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3672,10 +3715,10 @@ object f_option: Tf_option
           MaxValue = 120
         end
         object MinutesPastMeridianMin: TSpinEditEx
-          Left = 240
+          Left = 243
           Height = 28
           Top = 44
-          Width = 65
+          Width = 66
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3684,10 +3727,10 @@ object f_option: Tf_option
           MaxValue = 110
         end
         object MeridianFlipPauseTimeout: TSpinEditEx
-          Left = 128
+          Left = 129
           Height = 28
-          Top = 248
-          Width = 57
+          Top = 251
+          Width = 58
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3697,7 +3740,7 @@ object f_option: Tf_option
         object MeridianFlipStopSlaving: TCheckBox
           Left = 8
           Height = 21
-          Top = 88
+          Top = 89
           Width = 159
           Caption = 'Suspend dome slaving'
           ParentFont = False
@@ -3707,7 +3750,7 @@ object f_option: Tf_option
       object MeridianWarning: TLabel
         Left = 4
         Height = 19
-        Top = 64
+        Top = 65
         Width = 132
         Caption = '                                            '
         ParentColor = False
@@ -3716,17 +3759,17 @@ object f_option: Tf_option
     end
     object TabSheet5: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object GroupBox6: TGroupBox
-        Left = 280
-        Height = 198
-        Top = 184
-        Width = 200
+        Left = 283
+        Height = 200
+        Top = 186
+        Width = 202
         Caption = 'Settle tolerance'
-        ClientHeight = 178
-        ClientWidth = 198
+        ClientHeight = 180
+        ClientWidth = 200
         ParentFont = False
         TabOrder = 2
         object Label20: TLabel
@@ -3741,7 +3784,7 @@ object f_option: Tf_option
         object Label21: TLabel
           Left = 17
           Height = 19
-          Top = 53
+          Top = 54
           Width = 57
           Caption = 'Min. time'
           ParentColor = False
@@ -3750,7 +3793,7 @@ object f_option: Tf_option
         object Label22: TLabel
           Left = 16
           Height = 19
-          Top = 89
+          Top = 90
           Width = 50
           Caption = 'Timeout'
           ParentColor = False
@@ -3759,17 +3802,17 @@ object f_option: Tf_option
         object Label26: TLabel
           Left = 16
           Height = 38
-          Top = 116
+          Top = 117
           Width = 68
           Caption = 'Calibration '#10'delay'
           ParentColor = False
           ParentFont = False
         end
         object SettlePixel: TFloatSpinEditEx
-          Left = 112
+          Left = 113
           Height = 28
           Top = 8
-          Width = 73
+          Width = 74
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3781,10 +3824,10 @@ object f_option: Tf_option
           Value = 0
         end
         object SettleMinTime: TSpinEditEx
-          Left = 112
+          Left = 113
           Height = 28
-          Top = 48
-          Width = 73
+          Top = 49
+          Width = 74
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3792,10 +3835,10 @@ object f_option: Tf_option
           MaxValue = 99
         end
         object SettleMaxTime: TSpinEditEx
-          Left = 112
+          Left = 113
           Height = 28
-          Top = 84
-          Width = 73
+          Top = 85
+          Width = 74
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3803,10 +3846,10 @@ object f_option: Tf_option
           MaxValue = 120
         end
         object CalibrationDelay: TSpinEditEx
-          Left = 112
+          Left = 113
           Height = 28
-          Top = 120
-          Width = 73
+          Top = 121
+          Width = 74
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3816,9 +3859,9 @@ object f_option: Tf_option
       end
       object AutoguiderBox: TRadioGroup
         Left = 8
-        Height = 64
+        Height = 65
         Top = 4
-        Width = 472
+        Width = 477
         AutoFill = True
         Caption = 'Software'
         ChildSizing.LeftRightSpacing = 6
@@ -3828,8 +3871,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
-        ClientHeight = 44
-        ClientWidth = 470
+        ClientHeight = 45
+        ClientWidth = 475
         Columns = 4
         ItemIndex = 0
         Items.Strings = (
@@ -3844,12 +3887,12 @@ object f_option: Tf_option
       end
       object GroupBox5: TGroupBox
         Left = 8
-        Height = 96
-        Top = 184
-        Width = 264
+        Height = 97
+        Top = 186
+        Width = 267
         Caption = 'Dithering'
-        ClientHeight = 76
-        ClientWidth = 262
+        ClientHeight = 77
+        ClientWidth = 265
         ParentFont = False
         TabOrder = 1
         object Label23: TLabel
@@ -3862,7 +3905,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object DitherRAonly: TCheckBox
-          Left = 120
+          Left = 121
           Height = 21
           Top = 45
           Width = 69
@@ -3871,10 +3914,10 @@ object f_option: Tf_option
           TabOrder = 0
         end
         object DitherPixel: TFloatSpinEditEx
-          Left = 120
+          Left = 121
           Height = 28
           Top = 8
-          Width = 80
+          Width = 81
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3886,7 +3929,7 @@ object f_option: Tf_option
           Value = 0.1
         end
         object Label122: TLabel
-          Left = 206
+          Left = 208
           Height = 19
           Top = 11
           Width = 6
@@ -3897,16 +3940,16 @@ object f_option: Tf_option
       end
       object GroupBox13: TGroupBox
         Left = 8
-        Height = 100
-        Top = 282
-        Width = 264
+        Height = 101
+        Top = 285
+        Width = 267
         Caption = 'Star lost recovery'
-        ClientHeight = 80
-        ClientWidth = 262
+        ClientHeight = 81
+        ClientWidth = 265
         ParentFont = False
         TabOrder = 3
         object Label70: TLabel
-          Left = 192
+          Left = 194
           Height = 19
           Top = 10
           Width = 6
@@ -3924,7 +3967,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label72: TLabel
-          Left = 192
+          Left = 194
           Height = 19
           Top = 45
           Width = 6
@@ -3942,10 +3985,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object StarLostRestart: TSpinEditEx
-          Left = 120
+          Left = 121
           Height = 28
           Top = 8
-          Width = 64
+          Width = 65
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3953,10 +3996,10 @@ object f_option: Tf_option
           MaxValue = 3600
         end
         object StarLostCancel: TSpinEditEx
-          Left = 120
+          Left = 121
           Height = 28
           Top = 42
-          Width = 64
+          Width = 65
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -3966,20 +4009,20 @@ object f_option: Tf_option
       end
       object Notebook3: TNotebook
         Left = 4
-        Height = 107
-        Top = 77
-        Width = 484
+        Height = 108
+        Top = 78
+        Width = 489
         PageIndex = 0
         TabOrder = 4
         object PagePHD: TPage
           object GroupBox3: TGroupBox
             Left = 4
-            Height = 96
+            Height = 97
             Top = 0
-            Width = 472
+            Width = 477
             Caption = 'PHD2'
-            ClientHeight = 76
-            ClientWidth = 470
+            ClientHeight = 77
+            ClientWidth = 475
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -4001,19 +4044,19 @@ object f_option: Tf_option
               ParentFont = False
             end
             object PHDhostname: TEdit
-              Left = 124
+              Left = 125
               Height = 28
               Top = 8
-              Width = 186
+              Width = 188
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 0
             end
             object PHDport: TEdit
-              Left = 124
+              Left = 125
               Height = 28
               Top = 42
-              Width = 186
+              Width = 188
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -4023,55 +4066,55 @@ object f_option: Tf_option
         object PageLinGuider: TPage
           object GroupBox17: TGroupBox
             Left = 4
-            Height = 104
+            Height = 105
             Top = 0
-            Width = 444
+            Width = 449
             Caption = 'Lin_Guider'
-            ClientHeight = 84
-            ClientWidth = 442
+            ClientHeight = 85
+            ClientWidth = 447
             ParentFont = False
             TabOrder = 0
             object LinGuiderSocket: TEdit
-              Left = 160
+              Left = 162
               Height = 28
               Top = 8
-              Width = 186
+              Width = 188
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 0
             end
             object LinGuiderHostname: TEdit
-              Left = 160
+              Left = 162
               Height = 28
-              Top = 48
-              Width = 94
+              Top = 49
+              Width = 95
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object Label89: TLabel
-              Left = 80
+              Left = 81
               Height = 17
-              Top = 51
+              Top = 52
               Width = 69
               Caption = 'Hostname'
               ParentColor = False
               ParentFont = False
             end
             object Label90: TLabel
-              Left = 264
+              Left = 267
               Height = 17
-              Top = 51
+              Top = 52
               Width = 30
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object LinGuiderPort: TEdit
-              Left = 320
+              Left = 323
               Height = 28
-              Top = 48
-              Width = 68
+              Top = 49
+              Width = 69
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 2
@@ -4091,7 +4134,7 @@ object f_option: Tf_option
             object rbLinTCP: TRadioButton
               Left = 8
               Height = 23
-              Top = 50
+              Top = 51
               Width = 52
               Caption = 'TCP'
               OnClick = rbLinSocketChange
@@ -4105,9 +4148,9 @@ object f_option: Tf_option
         object PageDitherOnly: TPage
           object Label120: TLabel
             Left = 16
-            Height = 80
+            Height = 81
             Top = 16
-            Width = 424
+            Width = 428
             AutoSize = False
             Caption = 'Set the mean dithering pulse duration in seconds '
             ParentColor = False
@@ -4117,19 +4160,20 @@ object f_option: Tf_option
         end
       end
       object GroupBox11: TGroupBox
-        Left = 280
-        Height = 96
-        Top = 184
-        Width = 200
+        Left = 283
+        Height = 97
+        Top = 186
+        Width = 202
         Caption = 'Settle tolerance'
-        ClientHeight = 76
-        ClientWidth = 198
+        ClientHeight = 77
+        ClientWidth = 200
+        ParentFont = False
         TabOrder = 5
         object DitherWaitTime: TSpinEditEx
-          Left = 104
+          Left = 105
           Height = 28
           Top = 8
-          Width = 73
+          Width = 74
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -4149,14 +4193,14 @@ object f_option: Tf_option
     end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object PlanetariumBox: TRadioGroup
         Left = 4
-        Height = 80
+        Height = 81
         Top = 4
-        Width = 432
+        Width = 437
         AutoFill = True
         Caption = 'Software'
         ChildSizing.LeftRightSpacing = 6
@@ -4166,8 +4210,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 60
-        ClientWidth = 430
+        ClientHeight = 61
+        ClientWidth = 435
         Columns = 3
         ItemIndex = 0
         Items.Strings = (
@@ -4181,9 +4225,9 @@ object f_option: Tf_option
       end
       object Notebook2: TNotebook
         Left = 4
-        Height = 248
-        Top = 96
-        Width = 436
+        Height = 251
+        Top = 97
+        Width = 441
         PageIndex = 0
         TabOrder = 1
         TabStop = True
@@ -4211,18 +4255,18 @@ object f_option: Tf_option
             end
             object PanelRemoteCdc: TPanel
               Left = 24
-              Height = 80
-              Top = 48
-              Width = 333
-              ClientHeight = 76
-              ClientWidth = 329
+              Height = 81
+              Top = 49
+              Width = 337
+              ClientHeight = 77
+              ClientWidth = 333
               ParentFont = False
               TabOrder = 1
               object CdCport: TEdit
-                Left = 124
+                Left = 125
                 Height = 28
                 Top = 42
-                Width = 186
+                Width = 188
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
@@ -4246,10 +4290,10 @@ object f_option: Tf_option
                 ParentFont = False
               end
               object CdChostname: TEdit
-                Left = 124
+                Left = 125
                 Height = 28
                 Top = 8
-                Width = 186
+                Width = 188
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -4265,15 +4309,15 @@ object f_option: Tf_option
     end
     object TabSheet13: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object ScrollBoxWeather: TScrollBox
         Left = 0
         Height = 440
         Top = 66
         Width = 520
-        HorzScrollBar.Page = 500
+        HorzScrollBar.Page = 505
         VertScrollBar.Page = 429
         Align = alClient
         ClientHeight = 436
@@ -4291,7 +4335,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
           object LabelMi1: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4300,7 +4344,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa1: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4310,10 +4354,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi1: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4326,10 +4370,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa1: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4361,7 +4405,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 1
           object LabelMi2: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4370,7 +4414,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa2: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4380,10 +4424,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi2: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4396,10 +4440,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa2: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4431,7 +4475,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
           object LabelMi3: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4440,7 +4484,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa3: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4450,10 +4494,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi3: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4466,10 +4510,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa3: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4501,7 +4545,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
           object LabelMi4: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4510,7 +4554,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa4: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4520,10 +4564,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi4: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4536,10 +4580,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa4: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4571,7 +4615,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 4
           object LabelMi5: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4580,7 +4624,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa5: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4590,10 +4634,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi5: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4606,10 +4650,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa5: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4641,7 +4685,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 5
           object LabelMi6: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4650,7 +4694,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa6: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4660,10 +4704,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi6: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4676,10 +4720,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa6: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4711,7 +4755,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 6
           object LabelMi7: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4720,7 +4764,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa7: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4730,10 +4774,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi7: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4746,10 +4790,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa7: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4781,7 +4825,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 7
           object LabelMi8: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4790,7 +4834,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa8: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4800,10 +4844,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi8: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4816,10 +4860,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa8: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4851,7 +4895,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 8
           object LabelMi9: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4860,7 +4904,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa9: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4870,10 +4914,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi9: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4886,10 +4930,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa9: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4921,7 +4965,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 9
           object LabelMi10: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -4930,7 +4974,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa10: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -4940,10 +4984,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi10: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4956,10 +5000,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa10: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -4991,7 +5035,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 10
           object LabelMi11: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -5000,7 +5044,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa11: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -5010,10 +5054,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi11: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -5026,10 +5070,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa11: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -5061,7 +5105,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 11
           object LabelMi12: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -5070,7 +5114,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa12: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -5080,10 +5124,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi12: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -5096,10 +5140,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa12: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -5131,7 +5175,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 12
           object LabelMi13: TLabel
-            Left = 170
+            Left = 172
             Height = 19
             Top = 8
             Width = 58
@@ -5140,7 +5184,7 @@ object f_option: Tf_option
             ParentFont = False
           end
           object LabelMa13: TLabel
-            Left = 337
+            Left = 341
             Height = 19
             Top = 8
             Width = 61
@@ -5150,10 +5194,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMi13: TFloatSpinEditEx
             Tag = 1
-            Left = 238
+            Left = 241
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -5166,10 +5210,10 @@ object f_option: Tf_option
           end
           object FloatSpinEditMa13: TFloatSpinEditEx
             Tag = 1
-            Left = 411
+            Left = 415
             Height = 28
             Top = 4
-            Width = 84
+            Width = 85
             Constraints.MaxHeight = 28
             MaxLength = 0
             ParentFont = False
@@ -5211,10 +5255,10 @@ object f_option: Tf_option
           ParentFont = False
         end
         object WeatherRestartDelay: TSpinEditEx
-          Left = 320
+          Left = 323
           Height = 28
           Top = 1
-          Width = 80
+          Width = 81
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
@@ -5224,7 +5268,7 @@ object f_option: Tf_option
           Value = 1
         end
         object Label117: TLabel
-          Left = 416
+          Left = 420
           Height = 19
           Top = 7
           Width = 49
@@ -5256,30 +5300,32 @@ object f_option: Tf_option
     end
     object TabSheet14: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
       ParentFont = False
       object SafetyActions: TStringGrid
         Left = 8
-        Height = 424
+        Height = 428
         Top = 40
-        Width = 468
+        Width = 473
         AutoFillColumns = True
         ColCount = 3
         Columns = <        
           item
             ButtonStyle = cbsPickList
             DropDownRows = 15
-            MinSize = 100
+            MinSize = 101
+            MaxSize = 202
             Title.Caption = 'Action'
-            Width = 207
+            Width = 209
           end        
           item
-            MinSize = 100
+            MinSize = 101
+            MaxSize = 202
             Title.Caption = 'Parameters'
-            Width = 207
+            Width = 209
           end>
-        DefaultColWidth = 50
+        DefaultColWidth = 51
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
         ParentFont = False
         RowCount = 16
@@ -5287,9 +5333,9 @@ object f_option: Tf_option
         OnSelectEditor = SafetyActionsSelectEditor
         OnValidateEntry = SafetyActionsValidateEntry
         ColWidths = (
-          50
-          207
-          207
+          51
+          209
+          209
         )
       end
       object Label111: TLabel
@@ -5305,17 +5351,19 @@ object f_option: Tf_option
     end
     object TabSheet17: TTabSheet
       Caption = 'Notifications'
-      ClientHeight = 506
-      ClientWidth = 520
+      ClientHeight = 511
+      ClientWidth = 526
+      ParentFont = False
       object GroupBox24: TGroupBox
         Left = 0
-        Height = 232
+        Height = 234
         Top = 0
         Width = 520
         Align = alTop
         Caption = 'Email configuration'
-        ClientHeight = 212
+        ClientHeight = 214
         ClientWidth = 518
+        ParentFont = False
         TabOrder = 0
         object Label134: TLabel
           Left = 8
@@ -5324,6 +5372,7 @@ object f_option: Tf_option
           Width = 124
           Caption = 'SMTP server address'
           ParentColor = False
+          ParentFont = False
         end
         object Label135: TLabel
           Left = 8
@@ -5332,106 +5381,119 @@ object f_option: Tf_option
           Width = 103
           Caption = 'SMTP server port'
           ParentColor = False
+          ParentFont = False
         end
         object Label136: TLabel
           Left = 8
           Height = 19
-          Top = 65
+          Top = 66
           Width = 65
           Caption = 'User name'
           ParentColor = False
+          ParentFont = False
         end
         object Label137: TLabel
           Left = 8
           Height = 19
-          Top = 95
+          Top = 96
           Width = 58
           Caption = 'Password'
           ParentColor = False
+          ParentFont = False
         end
         object Label138: TLabel
           Left = 8
           Height = 19
-          Top = 125
+          Top = 126
           Width = 117
           Caption = 'From email address'
           ParentColor = False
+          ParentFont = False
         end
         object Label139: TLabel
           Left = 8
           Height = 19
-          Top = 155
+          Top = 157
           Width = 155
           Caption = 'Destination email address'
           ParentColor = False
+          ParentFont = False
         end
         object smtp_host: TEdit
-          Left = 224
+          Left = 226
           Height = 28
           Top = 0
-          Width = 248
+          Width = 251
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 0
         end
         object smtp_port: TEdit
-          Left = 224
+          Left = 226
           Height = 28
           Top = 30
-          Width = 248
+          Width = 251
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 1
         end
         object smtp_user: TEdit
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 60
-          Width = 248
+          Top = 61
+          Width = 251
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 2
         end
         object smtp_pass: TEdit
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 90
-          Width = 248
+          Top = 91
+          Width = 251
           Constraints.MaxHeight = 28
           EchoMode = emPassword
+          ParentFont = False
           PasswordChar = '*'
           TabOrder = 3
         end
         object mail_from: TEdit
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 120
-          Width = 248
+          Top = 121
+          Width = 251
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 4
         end
         object mail_to: TEdit
-          Left = 224
+          Left = 226
           Height = 28
-          Top = 150
-          Width = 248
+          Top = 152
+          Width = 251
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 5
         end
         object ButtonTestEmail: TButton
-          Left = 224
+          Left = 226
           Height = 25
-          Top = 182
-          Width = 153
+          Top = 184
+          Width = 155
           Caption = 'Send test email'
           OnClick = ButtonTestEmailClick
+          ParentFont = False
           TabOrder = 6
         end
         object BtnShowPass: TSpeedButton
-          Left = 474
+          Left = 479
           Height = 22
-          Top = 92
+          Top = 93
           Width = 23
           AllowAllUp = True
           GroupIndex = 678
           OnClick = BtnShowPassClick
+          ParentFont = False
         end
       end
       object GroupBox25: TGroupBox
@@ -5443,6 +5505,7 @@ object f_option: Tf_option
         Caption = 'Email on :'
         ClientHeight = 254
         ClientWidth = 518
+        ParentFont = False
         TabOrder = 1
         object EmailCondition: TCheckListBox
           Left = 0
@@ -5458,6 +5521,7 @@ object f_option: Tf_option
             'Meridian flip error'
           )
           ItemHeight = 0
+          ParentFont = False
           TabOrder = 0
           TopIndex = -1
           Data = {
@@ -5472,23 +5536,26 @@ object f_option: Tf_option
           Align = alBottom
           ClientHeight = 37
           ClientWidth = 514
+          ParentFont = False
           TabOrder = 1
           object ButtonNotificationAll: TButton
             Left = 8
             Height = 25
             Top = 8
-            Width = 74
+            Width = 75
             Caption = 'All'
             OnClick = ButtonNotificationAllClick
+            ParentFont = False
             TabOrder = 0
           end
           object ButtonNotificationNone: TButton
-            Left = 115
+            Left = 116
             Height = 25
             Top = 8
-            Width = 74
+            Width = 75
             Caption = 'None'
             OnClick = ButtonNotificationNoneClick
+            ParentFont = False
             TabOrder = 1
           end
         end
@@ -5496,7 +5563,7 @@ object f_option: Tf_option
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    left = 64
-    top = 520
+    left = 65
+    top = 525
   end
 end

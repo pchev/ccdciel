@@ -28,7 +28,6 @@ object f_msg: Tf_msg
       Align = alClient
       Color = clWindow
       Font.Color = clWindowText
-      Lines.Strings = (      )
       OnMouseEnter = msgMouseEnter
       OnMouseLeave = msgMouseLeave
       ParentFont = False
@@ -55,7 +54,7 @@ object f_msg: Tf_msg
     Enabled = False
     Interval = 500
     OnTimer = Timer1Timer
-    Left = 49
-    Top = 8
+    left = 49
+    top = 8
   end
 end

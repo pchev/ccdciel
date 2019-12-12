@@ -1,40 +1,39 @@
 object f_setup: Tf_setup
   Left = 116
-  Height = 493
+  Height = 498
   Top = 125
-  Width = 497
+  Width = 502
   ActiveControl = Button1
   Caption = 'Devices setup'
-  ClientHeight = 493
-  ClientWidth = 497
-  DesignTimePPI = 95
+  ClientHeight = 498
+  ClientWidth = 502
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
     Height = 40
-    Top = 453
-    Width = 497
+    Top = 458
+    Width = 502
     Align = alBottom
     ClientHeight = 40
-    ClientWidth = 497
+    ClientWidth = 502
     ParentFont = False
     TabOrder = 0
     object Button1: TButton
-      Left = 376
+      Left = 380
       Height = 25
       Top = 8
-      Width = 75
+      Width = 76
       Caption = 'OK'
       ModalResult = 1
       ParentFont = False
       TabOrder = 0
     end
     object Button3: TButton
-      Left = 256
+      Left = 259
       Height = 25
       Top = 8
-      Width = 75
+      Width = 76
       Cancel = True
       Caption = 'Cancel'
       ModalResult = 2
@@ -42,20 +41,21 @@ object f_setup: Tf_setup
       TabOrder = 1
     end
     object ButtonHelp: TButton
-      Left = 128
+      Left = 129
       Height = 25
       Top = 8
-      Width = 74
+      Width = 75
       Caption = 'Help'
       OnClick = ButtonHelpClick
+      ParentFont = False
       TabOrder = 2
     end
   end
   object Pagecontrol1: TPageControl
     Left = 0
-    Height = 453
+    Height = 458
     Top = 0
-    Width = 497
+    Width = 502
     ActivePage = Filterwheel
     Align = alClient
     MultiLine = True
@@ -65,33 +65,33 @@ object f_setup: Tf_setup
     Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object PanelIndiServer: TPanel
         Left = 24
-        Height = 126
-        Top = 50
-        Width = 423
-        ClientHeight = 126
-        ClientWidth = 423
+        Height = 127
+        Top = 51
+        Width = 427
+        ClientHeight = 127
+        ClientWidth = 427
         ParentFont = False
         TabOrder = 0
         object IndiServer: TEdit
           Left = 8
           Height = 28
           Top = 43
-          Width = 120
+          Width = 121
           Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 0
           Text = 'localhost'
         end
         object IndiPort: TEdit
-          Left = 136
+          Left = 137
           Height = 28
           Top = 43
-          Width = 80
+          Width = 81
           Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 1
@@ -107,7 +107,7 @@ object f_setup: Tf_setup
           ParentFont = False
         end
         object Label22: TLabel
-          Left = 143
+          Left = 145
           Height = 19
           Top = 24
           Width = 26
@@ -116,7 +116,7 @@ object f_setup: Tf_setup
           ParentFont = False
         end
         object Label1: TLabel
-          Left = 224
+          Left = 226
           Height = 19
           Top = 24
           Width = 50
@@ -125,10 +125,10 @@ object f_setup: Tf_setup
           ParentFont = False
         end
         object IndiTimeout: TEdit
-          Left = 224
+          Left = 226
           Height = 28
           Top = 43
-          Width = 48
+          Width = 49
           Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 2
@@ -140,22 +140,24 @@ object f_setup: Tf_setup
           Width = 69
           Caption = 'INDI Server'
           ParentColor = False
+          ParentFont = False
         end
         object ApplyIndi: TButton
           Left = 8
           Height = 25
-          Top = 83
-          Width = 258
+          Top = 84
+          Width = 261
           Caption = 'Apply to all devices'
           OnClick = ApplyIndiClick
+          ParentFont = False
           TabOrder = 3
         end
       end
       object ProfileList: TComboBox
-        Left = 96
+        Left = 97
         Height = 28
         Top = 8
-        Width = 128
+        Width = 129
         Constraints.MaxHeight = 28
         ItemHeight = 0
         ItemIndex = 0
@@ -179,33 +181,33 @@ object f_setup: Tf_setup
         ParentFont = False
       end
       object BtnNewProfile: TButton
-        Left = 296
+        Left = 299
         Height = 25
         Hint = 'Create a new empty profile.'#10'Warning this also clear every program preference for this new profile. '#10'Use the Copy button if you want to configure a different equipement but keep the program options.'
         Top = 8
-        Width = 70
+        Width = 71
         Caption = 'New'
         OnClick = BtnNewProfileClick
         ParentFont = False
         TabOrder = 2
       end
       object BtnDeleteProfile: TButton
-        Left = 376
+        Left = 380
         Height = 25
         Hint = 'Delete this profile and associated program preference.'
         Top = 8
-        Width = 70
+        Width = 71
         Caption = 'Delete'
         OnClick = BtnDeleteProfileClick
         ParentFont = False
         TabOrder = 3
       end
       object BtnCopyProfile: TButton
-        Left = 228
+        Left = 230
         Height = 25
         Hint = 'Copy the current profile to a new one.'#10'This also copy every program preference to the new profile.'
         Top = 8
-        Width = 59
+        Width = 60
         Caption = 'Copy'
         OnClick = BtnCopyProfileClick
         ParentFont = False
@@ -213,11 +215,12 @@ object f_setup: Tf_setup
       end
       object Panel10: TPanel
         Left = 24
-        Height = 216
-        Top = 184
-        Width = 422
-        ClientHeight = 216
-        ClientWidth = 422
+        Height = 218
+        Top = 186
+        Width = 426
+        ClientHeight = 218
+        ClientWidth = 426
+        ParentFont = False
         TabOrder = 5
         object Label62: TLabel
           Left = 13
@@ -226,20 +229,22 @@ object f_setup: Tf_setup
           Width = 87
           Caption = 'ASCOM Alpaca'
           ParentColor = False
+          ParentFont = False
         end
         object Label70: TLabel
           Left = 13
           Height = 19
-          Top = 72
+          Top = 73
           Width = 51
           Caption = 'Protocol'
           ParentColor = False
+          ParentFont = False
         end
         object DefaultARestProtocol: TComboBox
           Left = 8
           Height = 28
-          Top = 92
-          Width = 74
+          Top = 93
+          Width = 75
           Constraints.MaxHeight = 28
           ItemHeight = 0
           ItemIndex = 0
@@ -248,42 +253,47 @@ object f_setup: Tf_setup
             'https:'
           )
           OnChange = DefaultARestProtocolChange
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 0
           Text = 'http:'
         end
         object Label71: TLabel
-          Left = 92
+          Left = 93
           Height = 19
-          Top = 72
+          Top = 73
           Width = 158
           Caption = 'Remote host or IP address'
           ParentColor = False
+          ParentFont = False
         end
         object DefaultARestHost: TEdit
-          Left = 92
+          Left = 93
           Height = 28
-          Top = 92
-          Width = 192
+          Top = 93
+          Width = 194
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 1
           Text = 'localhost'
         end
         object Label72: TLabel
-          Left = 295
+          Left = 298
           Height = 19
-          Top = 72
+          Top = 73
           Width = 41
           Caption = 'IP Port'
           ParentColor = False
+          ParentFont = False
         end
         object DefaultARestPort: TSpinEditEx
-          Left = 295
+          Left = 298
           Height = 28
-          Top = 92
-          Width = 81
+          Top = 93
+          Width = 82
           Constraints.MaxHeight = 28
           MaxLength = 0
+          ParentFont = False
           TabOrder = 2
           MaxValue = 65535
           MinValue = 1
@@ -292,45 +302,50 @@ object f_setup: Tf_setup
         object ApplyAscomRemote: TButton
           Left = 8
           Height = 25
-          Top = 172
-          Width = 276
+          Top = 174
+          Width = 279
           Caption = 'Apply to all devices'
           OnClick = ApplyAscomRemoteClick
+          ParentFont = False
           TabOrder = 3
         end
         object Label107: TLabel
           Left = 8
           Height = 19
-          Top = 124
+          Top = 125
           Width = 65
           Caption = 'User name'
           ParentColor = False
+          ParentFont = False
         end
         object Label108: TLabel
-          Left = 154
+          Left = 156
           Height = 19
-          Top = 124
+          Top = 125
           Width = 58
           Caption = 'Password'
           ParentColor = False
+          ParentFont = False
         end
         object DefaultARestUser: TEdit
           Left = 8
           Height = 28
-          Top = 140
-          Width = 130
+          Top = 141
+          Width = 131
           AutoSelect = False
           Constraints.MaxHeight = 28
+          ParentFont = False
           TabOrder = 4
         end
         object DefaultARestPass: TEdit
-          Left = 154
+          Left = 156
           Height = 28
-          Top = 140
-          Width = 130
+          Top = 141
+          Width = 131
           AutoSelect = False
           Constraints.MaxHeight = 28
           EchoMode = emPassword
+          ParentFont = False
           PasswordChar = '*'
           TabOrder = 5
         end
@@ -338,42 +353,46 @@ object f_setup: Tf_setup
           Left = 8
           Height = 28
           Top = 24
-          Width = 276
+          Width = 279
           Constraints.MaxHeight = 28
           ItemHeight = 0
           OnChange = AlpacaServersChange
+          ParentFont = False
           Style = csDropDownList
           TabOrder = 6
         end
         object BtnDiscover: TButton
-          Left = 295
+          Left = 298
           Height = 25
           Top = 26
-          Width = 81
+          Width = 82
           Caption = 'Discover'
           OnClick = BtnDiscoverClick
+          ParentFont = False
           TabOrder = 7
         end
       end
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object PageControlCamera: TPageControl
         Left = 16
-        Height = 320
+        Height = 323
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = CameraAscomRest
+        ParentFont = False
         TabIndex = 2
         TabOrder = 0
         OnChange = PageControlCameraChange
         object CameraIndi: TTabSheet
           Caption = 'CameraIndi'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object PanelCameraIndi: TPanel
             Left = 0
             Height = 257
@@ -386,10 +405,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object CameraIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -397,10 +416,10 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object CameraIndiDevPort: TEdit
-              Left = 95
+              Left = 96
               Height = 23
-              Top = 116
-              Width = 168
+              Top = 117
+              Width = 170
               BorderStyle = bsNone
               Constraints.MaxHeight = 28
               ParentFont = False
@@ -409,7 +428,7 @@ object f_setup: Tf_setup
             object Label3: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -418,7 +437,7 @@ object f_setup: Tf_setup
             object Label4: TLabel
               Left = 9
               Height = 19
-              Top = 118
+              Top = 119
               Width = 26
               Caption = 'Port'
               ParentColor = False
@@ -427,17 +446,17 @@ object f_setup: Tf_setup
             object Label15: TLabel
               Left = 8
               Height = 19
-              Top = 86
+              Top = 87
               Width = 41
               Caption = 'Sensor'
               ParentColor = False
               ParentFont = False
             end
             object IndiSensor: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 82
-              Width = 168
+              Top = 83
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               Items.Strings = (
@@ -452,7 +471,7 @@ object f_setup: Tf_setup
             object CameraAutoLoadConfig: TCheckBox
               Left = 9
               Height = 21
-              Top = 152
+              Top = 154
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -462,8 +481,8 @@ object f_setup: Tf_setup
               Left = 8
               Height = 45
               Hint = 'Make test to determine the most performant '#10'option depending on your computer '#10'(Network is mandatory if the camera is '#10'connected to a remote Indi server)'
-              Top = 178
-              Width = 336
+              Top = 180
+              Width = 340
               AutoFill = True
               Caption = 'Image transfert'
               ChildSizing.LeftRightSpacing = 6
@@ -474,7 +493,7 @@ object f_setup: Tf_setup
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 2
               ClientHeight = 25
-              ClientWidth = 334
+              ClientWidth = 338
               Columns = 2
               Items.Strings = (
                 'Network'
@@ -487,11 +506,11 @@ object f_setup: Tf_setup
             object CameraDiskPanel: TPanel
               Left = 0
               Height = 34
-              Top = 223
-              Width = 352
+              Top = 225
+              Width = 356
               BevelOuter = bvNone
               ClientHeight = 30
-              ClientWidth = 348
+              ClientWidth = 352
               ParentFont = False
               TabOrder = 5
               object Label5: TLabel
@@ -504,11 +523,11 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object CameraIndiTransfertDir: TEdit
-                Left = 95
+                Left = 96
                 Height = 28
                 Hint = 'The temporary RAM disk used to transfert the images '#10'from the Indi server'
                 Top = 2
-                Width = 251
+                Width = 254
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
@@ -519,10 +538,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 6
               object Label73: TLabel
                 Left = 8
@@ -534,17 +554,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object CameraIndiServer: TEdit
-                Left = 95
+                Left = 96
                 Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label74: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -553,10 +573,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object CameraIndiPort: TEdit
-                Left = 272
+                Left = 275
                 Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -565,19 +585,20 @@ object f_setup: Tf_setup
             end
             object GetIndi: TButton
               Tag = 1
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 7
             end
             object CameraMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -588,24 +609,25 @@ object f_setup: Tf_setup
         end
         object CameraAscom: TTabSheet
           Caption = 'CameraAscom'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object PanelCameraAscom: TPanel
             Left = 16
-            Height = 176
+            Height = 178
             Top = 16
-            Width = 344
+            Width = 348
             BevelOuter = bvNone
-            ClientHeight = 172
-            ClientWidth = 340
+            ClientHeight = 174
+            ClientWidth = 344
             ParentFont = False
             TabOrder = 0
             object BtnChooseCamera: TButton
               Tag = 1
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -615,17 +637,17 @@ object f_setup: Tf_setup
               Left = 14
               Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnSetupCamera: TButton
               Tag = 1
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -633,10 +655,10 @@ object f_setup: Tf_setup
             end
             object BtnAboutCamera: TButton
               Tag = 1
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -645,7 +667,7 @@ object f_setup: Tf_setup
             object FlipImage: TCheckBox
               Left = 13
               Height = 21
-              Top = 124
+              Top = 125
               Width = 167
               Caption = 'Flip the image vertically '
               ParentFont = False
@@ -655,8 +677,9 @@ object f_setup: Tf_setup
         end
         object CameraAscomRest: TTabSheet
           Caption = 'CameraAscomRest'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object Panel2: TPanel
             Left = 0
             Height = 289
@@ -666,11 +689,12 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 285
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object FlipImage1: TCheckBox
               Left = 16
               Height = 21
-              Top = 240
+              Top = 243
               Width = 167
               Caption = 'Flip the image vertically '
               ParentFont = False
@@ -679,8 +703,8 @@ object f_setup: Tf_setup
             object CameraARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -689,6 +713,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = CameraARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 1
               Text = 'http:'
@@ -700,103 +725,115 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object CameraARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 2
               Text = '127.0.0.1'
             end
             object Label31: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object CameraARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label32: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object CameraARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 4
               MaxValue = 65535
             end
             object Label33: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 112
+              Top = 113
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label64: TLabel
               Left = 16
               Height = 19
-              Top = 140
+              Top = 141
               Width = 51
               Caption = 'Camera/'
               ParentColor = False
+              ParentFont = False
             end
             object Label92: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 168
+              Top = 170
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object Label91: TLabel
               Left = 16
               Height = 19
-              Top = 168
+              Top = 170
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object CameraARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 5
             end
             object CameraARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 6
             end
@@ -804,10 +841,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaCameraListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 7
             end
@@ -821,35 +859,38 @@ object f_setup: Tf_setup
         Width = 86
         Caption = 'DeviceCamera'
         ParentColor = False
+        ParentFont = False
       end
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceFilterWheel: TCheckBox
         Left = 16
         Height = 21
         Top = 8
-        Width = 116
+        Width = 122
         Caption = 'Use filter wheel'
         ParentFont = False
         TabOrder = 0
       end
       object PageControlWheel: TPageControl
         Left = 16
-        Height = 320
+        Height = 323
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = WheelAscomRest
+        ParentFont = False
         TabIndex = 3
         TabOrder = 1
         OnChange = PageControlWheelChange
         object WheelIndi: TTabSheet
           Caption = 'WheelIndi'
-          ClientHeight = 289
-          ClientWidth = 410
+          ClientHeight = 292
+          ClientWidth = 414
+          ParentFont = False
           object PanelWheelIndi: TPanel
             Left = 0
             Height = 257
@@ -862,10 +903,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object WheelIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -873,10 +914,10 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object WheelIndiDevPort: TEdit
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 88
-              Width = 168
+              Top = 89
+              Width = 170
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -884,7 +925,7 @@ object f_setup: Tf_setup
             object Label6: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -893,7 +934,7 @@ object f_setup: Tf_setup
             object Label7: TLabel
               Left = 8
               Height = 19
-              Top = 94
+              Top = 95
               Width = 26
               Caption = 'Port'
               ParentColor = False
@@ -902,7 +943,7 @@ object f_setup: Tf_setup
             object WheelAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 152
+              Top = 154
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -912,10 +953,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 38
-              ClientWidth = 408
+              ClientWidth = 412
+              ParentFont = False
               TabOrder = 3
               object Label75: TLabel
                 Left = 8
@@ -927,17 +969,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object WheelIndiServer: TEdit
-                Left = 95
+                Left = 96
                 Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label76: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -946,10 +988,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object WheelIndiPort: TEdit
-                Left = 272
+                Left = 275
                 Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -958,19 +1000,20 @@ object f_setup: Tf_setup
             end
             object GetIndi1: TButton
               Tag = 2
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 4
             end
             object WheelMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -981,24 +1024,25 @@ object f_setup: Tf_setup
         end
         object WheelAscom: TTabSheet
           Caption = 'WheelAscom'
-          ClientHeight = 289
-          ClientWidth = 410
+          ClientHeight = 292
+          ClientWidth = 414
+          ParentFont = False
           object PanelWheelAscom: TPanel
             Left = 16
-            Height = 112
+            Height = 113
             Top = 16
-            Width = 287
+            Width = 290
             BevelOuter = bvNone
-            ClientHeight = 112
-            ClientWidth = 287
+            ClientHeight = 113
+            ClientWidth = 290
             ParentFont = False
             TabOrder = 0
             object BtnChooseFilter: TButton
               Tag = 2
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -1006,19 +1050,19 @@ object f_setup: Tf_setup
             end
             object AscomWheel: TEdit
               Left = 14
-              Height = 31
+              Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutCamera1: TButton
               Tag = 2
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -1026,10 +1070,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupCamera1: TButton
               Tag = 2
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -1039,23 +1083,24 @@ object f_setup: Tf_setup
         end
         object WheelInCamera: TTabSheet
           Caption = 'WheelInCamera'
-          ClientHeight = 289
-          ClientWidth = 410
+          ClientHeight = 292
+          ClientWidth = 414
+          ParentFont = False
           object PanelWheelIncamera: TPanel
             Left = 16
-            Height = 200
+            Height = 202
             Top = 32
-            Width = 400
+            Width = 404
             BevelOuter = bvNone
-            ClientHeight = 200
-            ClientWidth = 400
+            ClientHeight = 202
+            ClientWidth = 404
             ParentFont = False
             TabOrder = 0
             object Label17: TLabel
               Left = 14
-              Height = 107
+              Height = 108
               Top = 32
-              Width = 370
+              Width = 374
               AutoSize = False
               Caption = 'Be sure to configure the camera connection.'
               ParentColor = False
@@ -1066,23 +1111,25 @@ object f_setup: Tf_setup
         end
         object WheelAscomRest: TTabSheet
           Caption = 'WheelAscomRest'
-          ClientHeight = 289
-          ClientWidth = 410
+          ClientHeight = 292
+          ClientWidth = 414
+          ParentFont = False
           object Panel3: TPanel
             Left = 0
-            Height = 289
+            Height = 292
             Top = 0
-            Width = 410
+            Width = 414
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 289
-            ClientWidth = 410
+            ClientHeight = 292
+            ClientWidth = 414
+            ParentFont = False
             TabOrder = 0
             object WheelARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -1091,6 +1138,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = WheelARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -1099,106 +1147,118 @@ object f_setup: Tf_setup
               Left = 13
               Height = 19
               Top = 40
-              Width = 51
+              Width = 52
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object WheelARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label35: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
-              Width = 158
+              Width = 165
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object WheelARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label36: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
-              Width = 41
+              Width = 43
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object WheelARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label37: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 112
-              Width = 139
+              Top = 113
+              Width = 145
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label63: TLabel
               Left = 16
               Height = 19
-              Top = 140
-              Width = 72
+              Top = 141
+              Width = 76
               Caption = 'FilterWheel/'
               ParentColor = False
+              ParentFont = False
             end
             object Label93: TLabel
               Left = 16
               Height = 19
-              Top = 168
-              Width = 65
+              Top = 170
+              Width = 69
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label94: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 168
-              Width = 58
+              Top = 170
+              Width = 61
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object WheelARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 4
             end
             object WheelARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 5
             end
@@ -1206,10 +1266,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaWheelListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 6
             end
@@ -1219,8 +1280,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceFocuser: TCheckBox
         Left = 16
@@ -1233,17 +1294,19 @@ object f_setup: Tf_setup
       end
       object PageControlFocuser: TPageControl
         Left = 16
-        Height = 320
+        Height = 323
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = FocuserAscomRest
+        ParentFont = False
         TabIndex = 3
         TabOrder = 1
         OnChange = PageControlFocuserChange
         object FocuserIndi: TTabSheet
           Caption = 'FocuserIndi'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object PanelFocuserIndi: TPanel
             Left = 0
             Height = 257
@@ -1256,10 +1319,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object FocuserIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -1267,10 +1330,10 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object FocuserIndiDevPort: TEdit
-              Left = 95
-              Height = 31
-              Top = 88
-              Width = 168
+              Left = 96
+              Height = 28
+              Top = 89
+              Width = 170
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -1278,7 +1341,7 @@ object f_setup: Tf_setup
             object Label9: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -1287,7 +1350,7 @@ object f_setup: Tf_setup
             object Label10: TLabel
               Left = 8
               Height = 19
-              Top = 94
+              Top = 95
               Width = 26
               Caption = 'Port'
               ParentColor = False
@@ -1296,7 +1359,7 @@ object f_setup: Tf_setup
             object FocuserAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 151
+              Top = 153
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -1306,10 +1369,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 3
               object Label77: TLabel
                 Left = 8
@@ -1321,17 +1385,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object FocuserIndiServer: TEdit
-                Left = 95
-                Height = 31
+                Left = 96
+                Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label78: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -1340,10 +1404,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object FocuserIndiPort: TEdit
-                Left = 272
-                Height = 31
+                Left = 275
+                Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -1352,19 +1416,20 @@ object f_setup: Tf_setup
             end
             object GetIndi2: TButton
               Tag = 3
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 4
             end
             object FocuserMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -1375,24 +1440,25 @@ object f_setup: Tf_setup
         end
         object FocuserAscom: TTabSheet
           Caption = 'FocuserAscom'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object PanelFocuserAscom: TPanel
             Left = 16
-            Height = 112
+            Height = 113
             Top = 16
-            Width = 287
+            Width = 290
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 109
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object BtnChooseFocuser: TButton
               Tag = 3
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -1402,17 +1468,17 @@ object f_setup: Tf_setup
               Left = 14
               Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutCamera2: TButton
               Tag = 3
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -1420,10 +1486,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupCamera2: TButton
               Tag = 3
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -1433,17 +1499,18 @@ object f_setup: Tf_setup
         end
         object FocuserInMount: TTabSheet
           Caption = 'FocuserInMount'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           TabVisible = False
           object PanelFocuserInMount: TPanel
             Left = 18
-            Height = 112
+            Height = 113
             Top = 32
-            Width = 286
+            Width = 289
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 282
+            ClientHeight = 109
+            ClientWidth = 285
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -1461,8 +1528,9 @@ object f_setup: Tf_setup
         end
         object FocuserAscomRest: TTabSheet
           Caption = 'FocuserAscomRest'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object Panel4: TPanel
             Left = 0
             Height = 289
@@ -1472,12 +1540,13 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 285
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object FocuserARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -1486,6 +1555,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = FocuserARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -1497,103 +1567,115 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object FocuserARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label39: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object FocuserARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label40: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object FocuserARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label41: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 112
+              Top = 113
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label65: TLabel
               Left = 16
               Height = 19
-              Top = 140
+              Top = 141
               Width = 52
               Caption = 'Focuser/'
               ParentColor = False
+              ParentFont = False
             end
             object Label95: TLabel
               Left = 16
               Height = 19
-              Top = 168
+              Top = 170
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label96: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 168
+              Top = 170
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object FocuserARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 4
             end
             object FocuserARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 5
             end
@@ -1601,10 +1683,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaFocuserListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 6
             end
@@ -1614,8 +1697,8 @@ object f_setup: Tf_setup
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceRotator: TCheckBox
         Left = 16
@@ -1628,17 +1711,19 @@ object f_setup: Tf_setup
       end
       object PageControlRotator: TPageControl
         Left = 16
-        Height = 320
+        Height = 323
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = RotatorAscomRest
+        ParentFont = False
         TabIndex = 2
         TabOrder = 1
         OnChange = PageControlRotatorChange
         object RotatorIndi: TTabSheet
           Caption = 'RotatorIndi'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object PanelRotatorIndi: TPanel
             Left = 0
             Height = 257
@@ -1651,10 +1736,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object RotatorIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -1662,10 +1747,10 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object RotatorIndiDevPort: TEdit
-              Left = 95
-              Height = 31
-              Top = 88
-              Width = 168
+              Left = 96
+              Height = 28
+              Top = 89
+              Width = 170
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -1673,7 +1758,7 @@ object f_setup: Tf_setup
             object Label11: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -1682,7 +1767,7 @@ object f_setup: Tf_setup
             object Label14: TLabel
               Left = 8
               Height = 19
-              Top = 94
+              Top = 95
               Width = 26
               Caption = 'Port'
               ParentColor = False
@@ -1691,7 +1776,7 @@ object f_setup: Tf_setup
             object RotatorAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 165
+              Top = 167
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -1700,8 +1785,8 @@ object f_setup: Tf_setup
             object Label8: TLabel
               Left = 8
               Height = 44
-              Top = 192
-              Width = 323
+              Top = 194
+              Width = 326
               AutoSize = False
               Caption = 'Warning! INDI rotator is totally untested, please send me your result via the bug tracker.'
               ParentColor = False
@@ -1712,10 +1797,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 3
               object Label79: TLabel
                 Left = 8
@@ -1727,17 +1813,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object RotatorIndiServer: TEdit
-                Left = 95
-                Height = 31
+                Left = 96
+                Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label80: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -1746,10 +1832,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object RotatorIndiPort: TEdit
-                Left = 272
-                Height = 31
+                Left = 275
+                Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -1758,19 +1844,20 @@ object f_setup: Tf_setup
             end
             object GetIndi3: TButton
               Tag = 4
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 4
             end
             object RotatorMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -1781,24 +1868,25 @@ object f_setup: Tf_setup
         end
         object RotatorAscom: TTabSheet
           Caption = 'RotatorAscom'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object PanelRotatorAscom: TPanel
             Left = 16
-            Height = 112
+            Height = 113
             Top = 16
-            Width = 287
+            Width = 290
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 109
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object BtnChooseRotator: TButton
               Tag = 5
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -1806,19 +1894,19 @@ object f_setup: Tf_setup
             end
             object AscomRotator: TEdit
               Left = 14
-              Height = 31
+              Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutRotator: TButton
               Tag = 5
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -1826,10 +1914,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupRotator: TButton
               Tag = 5
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -1839,8 +1927,9 @@ object f_setup: Tf_setup
         end
         object RotatorAscomRest: TTabSheet
           Caption = 'RotatorAscomRest'
-          ClientHeight = 316
-          ClientWidth = 416
+          ClientHeight = 319
+          ClientWidth = 420
+          ParentFont = False
           object Panel5: TPanel
             Left = 0
             Height = 289
@@ -1850,12 +1939,13 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 285
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object RotatorARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -1864,6 +1954,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = RotatorARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -1875,103 +1966,115 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object RotatorARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label43: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object RotatorARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label44: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object RotatorARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label45: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 112
+              Top = 113
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label66: TLabel
               Left = 16
               Height = 19
-              Top = 140
+              Top = 141
               Width = 51
               Caption = 'Rotator/'
               ParentColor = False
+              ParentFont = False
             end
             object Label97: TLabel
               Left = 16
               Height = 19
-              Top = 168
+              Top = 170
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label98: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 168
+              Top = 170
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object RotatorARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 4
             end
             object RotatorARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 5
             end
@@ -1979,10 +2082,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaRotatorListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 6
             end
@@ -1992,8 +2096,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceMount: TCheckBox
         Left = 16
@@ -2007,7 +2111,7 @@ object f_setup: Tf_setup
       object MountSetDateTime: TCheckBox
         Left = 24
         Height = 21
-        Top = 304
+        Top = 307
         Width = 212
         Caption = 'Set mount date from computer'
         ParentFont = False
@@ -2016,7 +2120,7 @@ object f_setup: Tf_setup
       object MountSetObservatory: TCheckBox
         Left = 24
         Height = 21
-        Top = 333
+        Top = 337
         Width = 279
         Caption = 'Set mount site long/lat from configuration'
         OnClick = MountSetObservatoryClick
@@ -2026,7 +2130,7 @@ object f_setup: Tf_setup
       object MountGetObservatory: TCheckBox
         Left = 24
         Height = 21
-        Top = 361
+        Top = 365
         Width = 220
         Caption = 'Get site long/lat from the mount'
         OnClick = MountGetObservatoryClick
@@ -2035,17 +2139,19 @@ object f_setup: Tf_setup
       end
       object PageControlMount: TPageControl
         Left = 16
-        Height = 246
+        Height = 249
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = MountAscomRest
+        ParentFont = False
         TabIndex = 2
         TabOrder = 4
         OnChange = PageControlMountChange
         object MountIndi: TTabSheet
           Caption = 'MountIndi'
-          ClientHeight = 242
-          ClientWidth = 416
+          ClientHeight = 245
+          ClientWidth = 420
+          ParentFont = False
           object PanelMountIndi: TPanel
             Left = 0
             Height = 165
@@ -2058,10 +2164,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object MountIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -2069,10 +2175,10 @@ object f_setup: Tf_setup
               TabOrder = 0
             end
             object MountIndiDevPort: TEdit
-              Left = 95
-              Height = 31
-              Top = 88
-              Width = 168
+              Left = 96
+              Height = 28
+              Top = 89
+              Width = 170
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
@@ -2080,7 +2186,7 @@ object f_setup: Tf_setup
             object Label12: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -2089,7 +2195,7 @@ object f_setup: Tf_setup
             object Label13: TLabel
               Left = 8
               Height = 19
-              Top = 94
+              Top = 95
               Width = 26
               Caption = 'Port'
               ParentColor = False
@@ -2098,7 +2204,7 @@ object f_setup: Tf_setup
             object MountAutoLoadConfig: TCheckBox
               Left = 11
               Height = 21
-              Top = 128
+              Top = 129
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -2108,10 +2214,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 3
               object Label81: TLabel
                 Left = 8
@@ -2123,17 +2230,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object MountIndiServer: TEdit
-                Left = 95
-                Height = 31
+                Left = 96
+                Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label82: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -2142,10 +2249,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object MountIndiPort: TEdit
-                Left = 272
-                Height = 31
+                Left = 275
+                Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -2154,19 +2261,20 @@ object f_setup: Tf_setup
             end
             object GetIndi4: TButton
               Tag = 5
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 4
             end
             object MountMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -2177,24 +2285,25 @@ object f_setup: Tf_setup
         end
         object MountAscom: TTabSheet
           Caption = 'MountAscom'
-          ClientHeight = 242
-          ClientWidth = 416
+          ClientHeight = 245
+          ClientWidth = 420
+          ParentFont = False
           object PanelMountAscom: TPanel
             Left = 16
-            Height = 136
+            Height = 137
             Top = 16
-            Width = 287
+            Width = 290
             BevelOuter = bvNone
-            ClientHeight = 132
-            ClientWidth = 283
+            ClientHeight = 133
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object BtnChooseMount: TButton
               Tag = 4
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -2202,19 +2311,19 @@ object f_setup: Tf_setup
             end
             object AscomMount: TEdit
               Left = 14
-              Height = 31
+              Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutCamera3: TButton
               Tag = 4
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -2222,10 +2331,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupCamera3: TButton
               Tag = 4
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -2235,8 +2344,9 @@ object f_setup: Tf_setup
         end
         object MountAscomRest: TTabSheet
           Caption = 'MountAscomRest'
-          ClientHeight = 242
-          ClientWidth = 416
+          ClientHeight = 245
+          ClientWidth = 420
+          ParentFont = False
           object Panel6: TPanel
             Left = 0
             Height = 215
@@ -2246,12 +2356,13 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 211
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object MountARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -2260,6 +2371,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = MountARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -2271,103 +2383,115 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object MountARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label47: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object MountARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label48: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object MountARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 120
-              Width = 81
+              Top = 121
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label49: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 96
+              Top = 97
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label67: TLabel
               Left = 16
               Height = 19
-              Top = 124
+              Top = 125
               Width = 63
               Caption = 'Telescope/'
               ParentColor = False
+              ParentFont = False
             end
             object Label99: TLabel
               Left = 13
               Height = 19
-              Top = 152
+              Top = 154
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label100: TLabel
-              Left = 208
+              Left = 210
               Height = 19
-              Top = 152
+              Top = 154
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object MountARestUser: TEdit
               Left = 13
               Height = 28
-              Top = 168
-              Width = 130
+              Top = 170
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 4
             end
             object MountARestPass: TEdit
-              Left = 208
+              Left = 210
               Height = 28
-              Top = 168
-              Width = 130
+              Top = 170
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 5
             end
@@ -2375,10 +2499,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaMountListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 6
             end
@@ -2388,8 +2513,8 @@ object f_setup: Tf_setup
     end
     object Dome: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceDome: TCheckBox
         Left = 16
@@ -2403,24 +2528,27 @@ object f_setup: Tf_setup
       object Label26: TLabel
         Left = 16
         Height = 19
-        Top = 344
+        Top = 348
         Width = 344
         Caption = 'Experimental! Please read the documentation before use.'
         ParentColor = False
+        ParentFont = False
       end
       object PageControlDome: TPageControl
         Left = 16
-        Height = 284
+        Height = 287
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = DomeAscomRest
+        ParentFont = False
         TabIndex = 2
         TabOrder = 1
         OnChange = PageControlDomeChange
         object DomeIndi: TTabSheet
           Caption = 'DomeIndi'
-          ClientHeight = 280
-          ClientWidth = 416
+          ClientHeight = 283
+          ClientWidth = 420
+          ParentFont = False
           object PanelDomeIndi: TPanel
             Left = 0
             Height = 217
@@ -2433,10 +2561,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object DomeIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -2446,7 +2574,7 @@ object f_setup: Tf_setup
             object Label25: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -2455,7 +2583,7 @@ object f_setup: Tf_setup
             object DomeAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 151
+              Top = 153
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -2464,17 +2592,17 @@ object f_setup: Tf_setup
             object Label23: TLabel
               Left = 8
               Height = 19
-              Top = 93
+              Top = 94
               Width = 26
               Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object DomeIndiDevPort: TEdit
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 87
-              Width = 168
+              Top = 88
+              Width = 170
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 2
@@ -2483,10 +2611,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 3
               object Label83: TLabel
                 Left = 8
@@ -2498,17 +2627,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object DomeIndiServer: TEdit
-                Left = 95
+                Left = 96
                 Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label84: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -2517,10 +2646,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object DomeIndiPort: TEdit
-                Left = 272
+                Left = 275
                 Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -2529,19 +2658,20 @@ object f_setup: Tf_setup
             end
             object GetIndi5: TButton
               Tag = 6
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 4
             end
             object DomeMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -2552,24 +2682,25 @@ object f_setup: Tf_setup
         end
         object DomeAscom: TTabSheet
           Caption = 'DomeAscom'
-          ClientHeight = 280
-          ClientWidth = 416
+          ClientHeight = 283
+          ClientWidth = 420
+          ParentFont = False
           object PanelDomeAscom: TPanel
             Left = 16
-            Height = 112
+            Height = 113
             Top = 16
-            Width = 287
+            Width = 290
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 109
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object BtnChooseDome: TButton
               Tag = 8
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -2577,19 +2708,19 @@ object f_setup: Tf_setup
             end
             object AscomDome: TEdit
               Left = 14
-              Height = 31
+              Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutDome: TButton
               Tag = 8
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -2597,10 +2728,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupDome: TButton
               Tag = 8
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -2610,8 +2741,9 @@ object f_setup: Tf_setup
         end
         object DomeAscomRest: TTabSheet
           Caption = 'DomeAscomRest'
-          ClientHeight = 280
-          ClientWidth = 416
+          ClientHeight = 283
+          ClientWidth = 420
+          ParentFont = False
           object Panel7: TPanel
             Left = 0
             Height = 253
@@ -2621,12 +2753,13 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 249
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object DomeARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -2635,6 +2768,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = DomeARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -2646,103 +2780,115 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object DomeARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label51: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object DomeARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label52: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object DomeARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label53: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 112
+              Top = 113
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label68: TLabel
               Left = 16
               Height = 19
-              Top = 140
+              Top = 141
               Width = 42
               Caption = 'Dome/'
               ParentColor = False
+              ParentFont = False
             end
             object Label101: TLabel
               Left = 16
               Height = 19
-              Top = 168
+              Top = 170
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label102: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 168
+              Top = 170
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object DomeARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 4
             end
             object DomeARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 5
             end
@@ -2750,10 +2896,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaDomeListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 6
             end
@@ -2763,8 +2910,8 @@ object f_setup: Tf_setup
     end
     object Weather: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceWeather: TCheckBox
         Left = 16
@@ -2778,24 +2925,27 @@ object f_setup: Tf_setup
       object Label27: TLabel
         Left = 16
         Height = 19
-        Top = 352
+        Top = 356
         Width = 344
         Caption = 'Experimental! Please read the documentation before use.'
         ParentColor = False
+        ParentFont = False
       end
       object PageControlWeather: TPageControl
         Left = 16
-        Height = 292
+        Height = 295
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = WeatherAscomRest
+        ParentFont = False
         TabIndex = 2
         TabOrder = 1
         OnChange = PageControlWeatherChange
         object WeatherIndi: TTabSheet
           Caption = 'WeatherIndi'
-          ClientHeight = 288
-          ClientWidth = 416
+          ClientHeight = 291
+          ClientWidth = 420
+          ParentFont = False
           object PanelWeatherIndi: TPanel
             Left = 0
             Height = 217
@@ -2808,10 +2958,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object WeatherIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -2821,7 +2971,7 @@ object f_setup: Tf_setup
             object Label21: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -2830,7 +2980,7 @@ object f_setup: Tf_setup
             object WeatherAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 151
+              Top = 153
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -2840,10 +2990,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 2
               object Label85: TLabel
                 Left = 8
@@ -2855,17 +3006,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object WeatherIndiServer: TEdit
-                Left = 95
-                Height = 31
+                Left = 96
+                Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label86: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -2874,10 +3025,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object WeatherIndiPort: TEdit
-                Left = 272
-                Height = 31
+                Left = 275
+                Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -2886,19 +3037,20 @@ object f_setup: Tf_setup
             end
             object GetIndi6: TButton
               Tag = 7
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 3
             end
             object WeatherMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -2909,24 +3061,25 @@ object f_setup: Tf_setup
         end
         object WeatherAscom: TTabSheet
           Caption = 'WeatherAscom'
-          ClientHeight = 288
-          ClientWidth = 416
+          ClientHeight = 291
+          ClientWidth = 420
+          ParentFont = False
           object PanelWeatherAscom: TPanel
             Left = 16
-            Height = 160
+            Height = 162
             Top = 16
-            Width = 344
+            Width = 348
             BevelOuter = bvNone
-            ClientHeight = 156
-            ClientWidth = 340
+            ClientHeight = 158
+            ClientWidth = 344
             ParentFont = False
             TabOrder = 0
             object BtnChooseWeather: TButton
               Tag = 6
-              Left = 224
+              Left = 226
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -2934,19 +3087,19 @@ object f_setup: Tf_setup
             end
             object AscomWeather: TEdit
               Left = 11
-              Height = 31
+              Height = 28
               Top = 17
-              Width = 141
+              Width = 142
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutWeather: TButton
               Tag = 6
-              Left = 226
+              Left = 228
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -2954,10 +3107,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupWeather: TButton
               Tag = 6
-              Left = 224
+              Left = 226
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -2965,9 +3118,9 @@ object f_setup: Tf_setup
             end
             object AscomWeatherType: TRadioGroup
               Left = 8
-              Height = 87
-              Top = 72
-              Width = 208
+              Height = 88
+              Top = 73
+              Width = 210
               AutoFill = True
               Caption = 'Interface type'
               ChildSizing.LeftRightSpacing = 6
@@ -2977,8 +3130,8 @@ object f_setup: Tf_setup
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
-              ClientHeight = 67
-              ClientWidth = 206
+              ClientHeight = 68
+              ClientWidth = 208
               ItemIndex = 0
               Items.Strings = (
                 'Observing condition'
@@ -2992,8 +3145,9 @@ object f_setup: Tf_setup
         end
         object WeatherAscomRest: TTabSheet
           Caption = 'WeatherAscomRest'
-          ClientHeight = 288
-          ClientWidth = 416
+          ClientHeight = 291
+          ClientWidth = 420
+          ParentFont = False
           object Panel8: TPanel
             Left = 0
             Height = 261
@@ -3003,12 +3157,13 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 257
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object WeatherARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -3017,6 +3172,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = WeatherARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -3028,67 +3184,74 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object WeatherARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label55: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object WeatherARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label56: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object WeatherARestDevice: TSpinEditEx
               Left = 13
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label57: TLabel
               Left = 13
               Height = 19
-              Top = 112
+              Top = 113
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object AscomRestWeatherType: TRadioGroup
-              Left = 208
-              Height = 87
-              Top = 112
-              Width = 168
+              Left = 210
+              Height = 88
+              Top = 113
+              Width = 170
               AutoFill = True
               Caption = 'Interface type'
               ChildSizing.LeftRightSpacing = 6
@@ -3098,8 +3261,8 @@ object f_setup: Tf_setup
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
-              ClientHeight = 67
-              ClientWidth = 166
+              ClientHeight = 68
+              ClientWidth = 168
               ItemIndex = 0
               Items.Strings = (
                 'Observing condition'
@@ -3111,36 +3274,40 @@ object f_setup: Tf_setup
             object Label103: TLabel
               Left = 16
               Height = 19
-              Top = 200
+              Top = 202
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label104: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 200
+              Top = 202
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object WeatherARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 220
-              Width = 130
+              Top = 222
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 5
             end
             object WeatherARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 220
-              Width = 130
+              Top = 222
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 6
             end
@@ -3148,10 +3315,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaWeatherListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 7
             end
@@ -3161,8 +3329,8 @@ object f_setup: Tf_setup
     end
     object Safety: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceSafety: TCheckBox
         Left = 16
@@ -3176,24 +3344,27 @@ object f_setup: Tf_setup
       object Label28: TLabel
         Left = 16
         Height = 19
-        Top = 352
+        Top = 356
         Width = 344
         Caption = 'Experimental! Please read the documentation before use.'
         ParentColor = False
+        ParentFont = False
       end
       object PageControlSafety: TPageControl
         Left = 16
-        Height = 300
+        Height = 303
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = SafetyAscomRest
+        ParentFont = False
         TabIndex = 2
         TabOrder = 1
         OnChange = PageControlSafetyChange
         object SafetyIndi: TTabSheet
           Caption = 'SafetyIndi'
-          ClientHeight = 296
-          ClientWidth = 416
+          ClientHeight = 299
+          ClientWidth = 420
+          ParentFont = False
           object PanelSafetyIndi: TPanel
             Left = 0
             Height = 217
@@ -3206,10 +3377,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object SafetyIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -3219,7 +3390,7 @@ object f_setup: Tf_setup
             object Label24: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -3228,7 +3399,7 @@ object f_setup: Tf_setup
             object SafetyAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 151
+              Top = 153
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -3238,10 +3409,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 2
               object Label87: TLabel
                 Left = 8
@@ -3253,17 +3425,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object SafetyIndiServer: TEdit
-                Left = 95
+                Left = 96
                 Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label88: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -3272,10 +3444,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object SafetyIndiPort: TEdit
-                Left = 272
+                Left = 275
                 Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -3284,19 +3456,20 @@ object f_setup: Tf_setup
             end
             object GetIndi7: TButton
               Tag = 8
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 3
             end
             object SafetyMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -3307,24 +3480,25 @@ object f_setup: Tf_setup
         end
         object SafetyAscom: TTabSheet
           Caption = 'SafetyAscom'
-          ClientHeight = 296
-          ClientWidth = 416
+          ClientHeight = 299
+          ClientWidth = 420
+          ParentFont = False
           object PanelSafetyAscom: TPanel
             Left = 16
-            Height = 112
+            Height = 113
             Top = 16
-            Width = 287
+            Width = 290
             BevelOuter = bvNone
-            ClientHeight = 108
-            ClientWidth = 283
+            ClientHeight = 109
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object BtnChooseSafety: TButton
               Tag = 7
-              Left = 166
+              Left = 168
               Height = 25
               Top = 16
-              Width = 107
+              Width = 108
               Caption = 'Choose'
               OnClick = BtnChooseClick
               ParentFont = False
@@ -3332,19 +3506,19 @@ object f_setup: Tf_setup
             end
             object AscomSafety: TEdit
               Left = 14
-              Height = 31
+              Height = 28
               Top = 17
-              Width = 138
+              Width = 139
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 1
             end
             object BtnAboutSafety: TButton
               Tag = 7
-              Left = 168
+              Left = 170
               Height = 25
-              Top = 80
-              Width = 107
+              Top = 81
+              Width = 108
               Caption = 'About'
               OnClick = BtnAboutAscomClick
               ParentFont = False
@@ -3352,10 +3526,10 @@ object f_setup: Tf_setup
             end
             object BtnSetupSafety: TButton
               Tag = 7
-              Left = 166
+              Left = 168
               Height = 25
-              Top = 48
-              Width = 107
+              Top = 49
+              Width = 108
               Caption = 'Setup'
               OnClick = BtnSetupAscomClick
               ParentFont = False
@@ -3365,8 +3539,9 @@ object f_setup: Tf_setup
         end
         object SafetyAscomRest: TTabSheet
           Caption = 'SafetyAscomRest'
-          ClientHeight = 296
-          ClientWidth = 416
+          ClientHeight = 299
+          ClientWidth = 420
+          ParentFont = False
           object Panel9: TPanel
             Left = 0
             Height = 269
@@ -3376,12 +3551,13 @@ object f_setup: Tf_setup
             BevelOuter = bvNone
             ClientHeight = 265
             ClientWidth = 406
+            ParentFont = False
             TabOrder = 0
             object SafetyARestProtocol: TComboBox
               Left = 13
               Height = 28
-              Top = 64
-              Width = 74
+              Top = 65
+              Width = 75
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -3390,6 +3566,7 @@ object f_setup: Tf_setup
                 'https:'
               )
               OnChange = SafetyARestProtocolChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 0
               Text = 'http:'
@@ -3401,103 +3578,115 @@ object f_setup: Tf_setup
               Width = 51
               Caption = 'Protocol'
               ParentColor = False
+              ParentFont = False
             end
             object SafetyARestHost: TEdit
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 64
-              Width = 192
+              Top = 65
+              Width = 194
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 1
               Text = '127.0.0.1'
             end
             object Label59: TLabel
-              Left = 92
+              Left = 93
               Height = 19
               Top = 40
               Width = 158
               Caption = 'Remote host or IP address'
               ParentColor = False
+              ParentFont = False
             end
             object SafetyARestPort: TSpinEditEx
-              Left = 288
+              Left = 291
               Height = 28
-              Top = 64
-              Width = 81
+              Top = 65
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 2
               MaxValue = 65535
               MinValue = 1
               Value = 11111
             end
             object Label60: TLabel
-              Left = 288
+              Left = 291
               Height = 19
               Top = 40
               Width = 41
               Caption = 'IP Port'
               ParentColor = False
+              ParentFont = False
             end
             object SafetyARestDevice: TSpinEditEx
-              Left = 92
+              Left = 93
               Height = 28
-              Top = 136
-              Width = 81
+              Top = 137
+              Width = 82
               Constraints.MaxHeight = 28
               MaxLength = 0
+              ParentFont = False
               TabOrder = 3
               MaxValue = 65535
             end
             object Label61: TLabel
-              Left = 92
+              Left = 93
               Height = 19
-              Top = 112
+              Top = 113
               Width = 139
               Caption = 'Remote device number'
               ParentColor = False
+              ParentFont = False
             end
             object Label69: TLabel
               Left = 16
               Height = 19
-              Top = 140
+              Top = 141
               Width = 43
               Caption = 'Safety/'
               ParentColor = False
+              ParentFont = False
             end
             object Label105: TLabel
               Left = 16
               Height = 19
-              Top = 168
+              Top = 170
               Width = 65
               Caption = 'User name'
               ParentColor = False
+              ParentFont = False
             end
             object Label106: TLabel
-              Left = 157
+              Left = 159
               Height = 19
-              Top = 168
+              Top = 170
               Width = 58
               Caption = 'Password'
               ParentColor = False
+              ParentFont = False
             end
             object SafetyARestUser: TEdit
               Left = 16
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
+              ParentFont = False
               TabOrder = 4
             end
             object SafetyARestPass: TEdit
-              Left = 157
+              Left = 159
               Height = 28
-              Top = 188
-              Width = 130
+              Top = 190
+              Width = 131
               AutoSelect = False
               Constraints.MaxHeight = 28
               EchoMode = emPassword
+              ParentFont = False
               PasswordChar = '*'
               TabOrder = 5
             end
@@ -3505,10 +3694,11 @@ object f_setup: Tf_setup
               Left = 13
               Height = 28
               Top = 5
-              Width = 356
+              Width = 360
               Constraints.MaxHeight = 28
               ItemHeight = 0
               OnChange = AlpacaSafetyListChange
+              ParentFont = False
               Style = csDropDownList
               TabOrder = 6
             end
@@ -3518,8 +3708,8 @@ object f_setup: Tf_setup
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 422
-      ClientWidth = 487
+      ClientHeight = 427
+      ClientWidth = 492
       ParentFont = False
       object DeviceWatchdog: TCheckBox
         Left = 16
@@ -3532,17 +3722,19 @@ object f_setup: Tf_setup
       end
       object PageControlWatchdog: TPageControl
         Left = 16
-        Height = 288
+        Height = 291
         Top = 36
-        Width = 420
+        Width = 424
         ActivePage = WatchdogIndi
+        ParentFont = False
         TabIndex = 0
         TabOrder = 1
         OnChange = PageControlWatchdogChange
         object WatchdogIndi: TTabSheet
           Caption = 'WatchdogIndi'
-          ClientHeight = 284
-          ClientWidth = 416
+          ClientHeight = 287
+          ClientWidth = 420
+          ParentFont = False
           object PanelWatchdogIndi: TPanel
             Left = 0
             Height = 257
@@ -3555,10 +3747,10 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 0
             object WatchdogIndiDevice: TComboBox
-              Left = 95
+              Left = 96
               Height = 28
-              Top = 48
-              Width = 168
+              Top = 49
+              Width = 170
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ParentFont = False
@@ -3568,7 +3760,7 @@ object f_setup: Tf_setup
             object Label19: TLabel
               Left = 8
               Height = 19
-              Top = 56
+              Top = 57
               Width = 40
               Caption = 'Device'
               ParentColor = False
@@ -3577,7 +3769,7 @@ object f_setup: Tf_setup
             object WatchdogAutoLoadConfig: TCheckBox
               Left = 8
               Height = 21
-              Top = 152
+              Top = 154
               Width = 205
               Caption = 'Load configuration on startup'
               ParentFont = False
@@ -3586,17 +3778,17 @@ object f_setup: Tf_setup
             object Label20: TLabel
               Left = 8
               Height = 19
-              Top = 107
+              Top = 108
               Width = 185
               Caption = 'Heart beat threshold [minutes]'
               ParentColor = False
               ParentFont = False
             end
             object WatchdogThreshold: TEdit
-              Left = 213
+              Left = 215
               Height = 28
-              Top = 102
-              Width = 50
+              Top = 103
+              Width = 51
               Constraints.MaxHeight = 28
               ParentFont = False
               TabOrder = 2
@@ -3605,10 +3797,11 @@ object f_setup: Tf_setup
               Left = 0
               Height = 38
               Top = 8
-              Width = 408
+              Width = 412
               BevelOuter = bvNone
               ClientHeight = 34
-              ClientWidth = 404
+              ClientWidth = 408
+              ParentFont = False
               TabOrder = 3
               object Label89: TLabel
                 Left = 8
@@ -3620,17 +3813,17 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object WatchdogIndiServer: TEdit
-                Left = 95
+                Left = 96
                 Height = 28
                 Top = 0
-                Width = 120
+                Width = 121
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 0
                 Text = 'localhost'
               end
               object Label90: TLabel
-                Left = 232
+                Left = 234
                 Height = 19
                 Top = 6
                 Width = 26
@@ -3639,10 +3832,10 @@ object f_setup: Tf_setup
                 ParentFont = False
               end
               object WatchdogIndiPort: TEdit
-                Left = 272
+                Left = 275
                 Height = 28
                 Top = 0
-                Width = 80
+                Width = 81
                 Constraints.MaxHeight = 28
                 ParentFont = False
                 TabOrder = 1
@@ -3651,19 +3844,20 @@ object f_setup: Tf_setup
             end
             object GetIndi8: TButton
               Tag = 9
-              Left = 272
+              Left = 275
               Height = 25
-              Top = 50
-              Width = 74
+              Top = 51
+              Width = 75
               Caption = 'Get'
               OnClick = GetIndiClick
+              ParentFont = False
               TabOrder = 4
             end
             object WatchdogMsg: TLabel
-              Left = 272
-              Height = 53
-              Top = 86
-              Width = 131
+              Left = 275
+              Height = 54
+              Top = 87
+              Width = 132
               AutoSize = False
               Caption = '   '
               ParentColor = False
@@ -3680,6 +3874,6 @@ object f_setup: Tf_setup
     Interval = 5000
     OnTimer = IndiTimerTimer
     left = 16
-    top = 424
+    top = 428
   end
 end
