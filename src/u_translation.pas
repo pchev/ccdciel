@@ -1192,6 +1192,21 @@ resourcestring
   rsEmailSentSuc = 'Email sent successfully, please check your inbox';
   rsUseDSLRColor = 'Use DSLR color balance';
   rsColorBalance = 'Color balance';
+  rsCompressTheF = 'Compress the FITS files with fpack';
+  rsStartNewExpo = 'Start new exposure as early as possible';
+  rsNotification = 'Notifications';
+  rsEmailConfigu = 'Email configuration';
+  rsSMTPServerAd = 'SMTP server address';
+  rsSMTPServerPo = 'SMTP server port';
+  rsFromEmailAdd = 'From email address';
+  rsDestinationE = 'Destination email address';
+  rsSendTestEmai = 'Send test email';
+  rsSequenceNorm = 'Sequence normal end';
+  rsSequenceAbno = 'Sequence abnormal end';
+  rsAutofocusErr2 = 'Autofocus error';
+  rsMeridianFlip8 = 'Meridian flip error';
+  rsAll = 'All';
+  rsEmailOn = 'Email on :';
 
 implementation
 

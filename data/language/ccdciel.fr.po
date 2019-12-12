@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-02 14:17+0000\n"
-"PO-Revision-Date: 2019-12-02 14:19+0000\n"
+"POT-Creation-Date: 2019-12-12 21:24+0000\n"
+"PO-Revision-Date: 2019-12-12 21:30+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-02 14:24+0000\n"
+"X-Launchpad-Export-Date: 2019-12-12 21:32+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_translation.rs32bitdriver
@@ -88,6 +88,10 @@ msgstr "Masse d'air"
 msgid "Alignment star lost"
 msgstr "Étoile d'alignement perdue"
 
+#: u_translation.rsall
+msgid "All"
+msgstr "Tout"
+
 #: u_translation.rsallowtogetpr
 msgid "Allow to get program status from TCP/IP internal server"
 msgstr "Permet d'obtenir l'état du programme depuis le serveur interne TCP/IP"
@@ -99,6 +103,10 @@ msgstr "Permet d'ouvrir le dôme si le contrôle de sécurité indique un danger
 #: u_translation.rsallowtoselec
 msgid "Allow to select a brighter star for high filter exposure factor"
 msgstr "Permet de choisir une étoile plus brillante pour un facteur de filtre élevé"
+
+#: u_translation.rsalt
+msgid "Alt"
+msgstr "Alt"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
@@ -194,6 +202,10 @@ msgstr "L'autofocus sera refait dans"
 
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
+msgstr "Erreur d'autofocus"
+
+#: u_translation.rsautofocuserr2
+msgid "Autofocus error"
 msgstr "Erreur d'autofocus"
 
 #: u_translation.rsautofocuseve
@@ -296,6 +308,10 @@ msgstr "Tolérance de mise au point "
 msgid "Autoguider"
 msgstr "Auto-guideur"
 
+#: u_translation.rsautoguiderer
+msgid "Autoguider error"
+msgstr "Erreur d'autoguidage"
+
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
 msgstr "Autoguideur non connecté"
@@ -360,6 +376,10 @@ msgstr "Mesure automatique du HFD pour chaque capture d'une séquence"
 msgid "available"
 msgstr "disponible"
 
+#: u_translation.rsaz
+msgid "Az"
+msgstr "Az"
+
 #: u_translation.rsazimuth
 msgid "Azimuth"
 msgstr "Azimut"
@@ -399,10 +419,6 @@ msgstr "Détection des pixels défectueux"
 #: u_translation.rsbadpixelthre
 msgid "Bad pixel threshold"
 msgstr "Seuil de détection"
-
-#: u_translation.rsbalancefromc
-msgid "Balance from camera"
-msgstr "Balance dela caméra"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
@@ -716,6 +732,10 @@ msgstr "Séquence de fermeture du dôme quand on veut parquer la monture"
 msgid "Cloud cover"
 msgstr "Couverture nuageuse"
 
+#: u_translation.rscolorbalance
+msgid "Color balance"
+msgstr "Balance de couleur"
+
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "Aperçu en couleur"
@@ -739,6 +759,10 @@ msgstr "Erreur de compilation: %s"
 #: u_translation.rscompiledwith
 msgid "Compiled with"
 msgstr "Compilé avec"
+
+#: u_translation.rscompressthef
+msgid "Compress the FITS files with fpack"
+msgstr "Compresser les fichiers FITS avec fpack"
 
 #: u_translation.rscomputationr
 msgid "Computation result:"
@@ -935,6 +959,10 @@ msgstr "Description"
 #: u_translation.rsdesiredtempe
 msgid "Desired temperature"
 msgstr "Température désirée"
+
+#: u_translation.rsdestinatione
+msgid "Destination email address"
+msgstr "Adresse de destination"
 
 #: u_translation.rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
@@ -1135,6 +1163,18 @@ msgstr "Dossier d'image d'Elbrus "
 #: u_translation.rselevation
 msgid "Elevation"
 msgstr "Altitude"
+
+#: u_translation.rsemailconfigu
+msgid "Email configuration"
+msgstr "Configuration des emails"
+
+#: u_translation.rsemailon
+msgid "Email on :"
+msgstr "Email en cas de :"
+
+#: u_translation.rsemailsentsuc
+msgid "Email sent successfully, please check your inbox"
+msgstr "Le message a été envoyé, veuillez regarder votre boîte de réception"
 
 #: u_translation.rsend
 msgid "End"
@@ -1463,6 +1503,10 @@ msgstr "Cadre"
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
 msgstr "Du pilote de caméra"
+
+#: u_translation.rsfromemailadd
+msgid "From email address"
+msgstr "Adresse de l'expéditeur"
 
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
@@ -1912,6 +1956,10 @@ msgstr "Erreur du retournement méridien"
 msgid "Meridian flip done"
 msgstr "Le retournement méridien est terminé"
 
+#: u_translation.rsmeridianflip8
+msgid "Meridian flip error"
+msgstr "Erreur du retournement méridien"
+
 #: u_translation.rsmeridianflip9
 msgid "Meridian flip canceled after flip"
 msgstr "Le retournement méridien est annulé après le retournement"
@@ -2203,6 +2251,10 @@ msgstr "Pas assez de points avant ou après la position de mise au point, fait u
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
 msgstr "Aucune action de fin n'est configurée."
+
+#: u_translation.rsnotification
+msgid "Notifications"
+msgstr "Notifications"
 
 #: u_translation.rsnotimplement
 msgid "Not implemented!"
@@ -3064,6 +3116,10 @@ msgstr "Choisir d'abord une étoile!"
 msgid "Send image to planetarium"
 msgstr "Afficher l'image dans le planétarium"
 
+#: u_translation.rssendtestemai
+msgid "Send test email"
+msgstr "Envoyer un email de test"
+
 #: u_translation.rssensor
 msgid "Sensor"
 msgstr "Capteur"
@@ -3092,6 +3148,10 @@ msgstr "Séq: %s Terminée"
 msgid "Sequence"
 msgstr "Séquence"
 
+#: u_translation.rssequenceabno
+msgid "Sequence abnormal end"
+msgstr "Fin anormale de la séquence"
+
 #: u_translation.rssequenceabor
 msgid "Sequence aborted."
 msgstr "Séquence annulée."
@@ -3119,6 +3179,10 @@ msgstr "La séquence %s est terminée."
 #: u_translation.rssequenceigno
 msgid "Sequence %s ignore stop at dawn"
 msgstr "La séquence %s ignore l'arrêt à l'aube"
+
+#: u_translation.rssequencenorm
+msgid "Sequence normal end"
+msgstr "Fin normale de la séquence"
 
 #: u_translation.rssequencepaus
 msgid "Sequence paused for bad weather ..."
@@ -3376,6 +3440,14 @@ msgstr "Correction du glissement "
 msgid "Slope"
 msgstr "Pente"
 
+#: u_translation.rssmtpserverad
+msgid "SMTP server address"
+msgstr "Adresse du serveur SMTP"
+
+#: u_translation.rssmtpserverpo
+msgid "SMTP server port"
+msgstr "Port du serveur SMTP"
+
 #: u_translation.rssocketerrors
 msgid "Socket error %s.  %s"
 msgstr "Erreur de socket %s. %s"
@@ -3483,6 +3555,10 @@ msgstr "Démarrage de la séquence %s, répétition %s/%s"
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
 msgstr "Début de l'apprentissage de la courbe en V"
+
+#: u_translation.rsstartnewexpo
+msgid "Start new exposure as early as possible"
+msgstr "Commencer la prochaine pose le plus tôt possible"
 
 #: u_translation.rsstartnewlog
 msgid "Start new log"
@@ -3816,6 +3892,10 @@ msgstr "Le nom du dossier temporaire ne doit pas contenir de caractère accentu�
 msgid "Termination options"
 msgstr "Options de terminaison"
 
+#: u_translation.rstestemailfro
+msgid "Test email from CCDciel"
+msgstr "Email de test de CCDCiel"
+
 #: u_translation.rsthecameraima
 msgid "The camera image format is"
 msgstr "Le format d'image de la camera est"
@@ -3895,6 +3975,10 @@ msgstr "La séquence %s sera arrêtée à %s, dans %s secondes."
 #: u_translation.rsthetelescope
 msgid "The telescope is parked, unpark now"
 msgstr "Le télescope est parqué, déparque maintenant"
+
+#: u_translation.rsthismessagec
+msgid "This message confirm the email configuration is working."
+msgstr "Ce message confirme que la configuration des email fonctionne."
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
@@ -4079,6 +4163,10 @@ msgstr "Utiliser un script"
 #: u_translation.rsusedome
 msgid "Use dome"
 msgstr "Utilise le dôme"
+
+#: u_translation.rsusedslrcolor
+msgid "Use DSLR color balance"
+msgstr "Utilise la balance de couleur de l'APN"
 
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"

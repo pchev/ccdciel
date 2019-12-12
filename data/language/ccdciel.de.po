@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-02 14:17+0000\n"
-"PO-Revision-Date: 2019-11-27 20:10+0000\n"
+"POT-Creation-Date: 2019-12-12 21:24+0000\n"
+"PO-Revision-Date: 2019-12-08 17:26+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-02 14:24+0000\n"
+"X-Launchpad-Export-Date: 2019-12-12 21:32+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_translation.rs32bitdriver
@@ -88,6 +88,10 @@ msgstr "Luftmasse"
 msgid "Alignment star lost"
 msgstr "Stern zur Ausrichtung verloren"
 
+#: u_translation.rsall
+msgid "All"
+msgstr ""
+
 #: u_translation.rsallowtogetpr
 msgid "Allow to get program status from TCP/IP internal server"
 msgstr "Ermögliche das Abrufen des Programmstatus vom internen TCP/IP-Server"
@@ -99,6 +103,10 @@ msgstr "Öffnen der Kuppel erlauben auch wenn der Status ungültig oder unbekann
 #: u_translation.rsallowtoselec
 msgid "Allow to select a brighter star for high filter exposure factor"
 msgstr "Erlaube einen helleren Stern für höhere Filterfaktoren auszuwählen"
+
+#: u_translation.rsalt
+msgid "Alt"
+msgstr ""
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
@@ -195,6 +203,10 @@ msgstr "Autofokus in"
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
 msgstr "Autofokus Fehler"
+
+#: u_translation.rsautofocuserr2
+msgid "Autofocus error"
+msgstr ""
 
 #: u_translation.rsautofocuseve
 msgid "Autofocus%severy"
@@ -296,6 +308,10 @@ msgstr "Autofokus Toleranz "
 msgid "Autoguider"
 msgstr "Autoguider"
 
+#: u_translation.rsautoguiderer
+msgid "Autoguider error"
+msgstr ""
+
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
 msgstr "Autoguider nicht verbunden"
@@ -330,7 +346,7 @@ msgstr "Autoguiding seit %s Minuten gestoppt, Sequenzunterbrechung in %s Minuten
 
 #: u_translation.rsautomatic
 msgid "Automatic"
-msgstr ""
+msgstr "Automatisch"
 
 #: u_translation.rsautomaticall
 msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
@@ -354,11 +370,15 @@ msgstr "Automatischer Meridianflip"
 
 #: u_translation.rsautomatichfd
 msgid "Automatic HFD measurement for every sequence capture"
-msgstr ""
+msgstr "Automatische HFD-Messung für jede Aufnahmesequenz"
 
 #: u_translation.rsavailable
 msgid "available"
 msgstr "verfügbar"
+
+#: u_translation.rsaz
+msgid "Az"
+msgstr ""
 
 #: u_translation.rsazimuth
 msgid "Azimuth"
@@ -399,10 +419,6 @@ msgstr "Erkennung fehlerhafter Pixel"
 #: u_translation.rsbadpixelthre
 msgid "Bad pixel threshold"
 msgstr "Schwellwert fehlerhafter Pixel"
-
-#: u_translation.rsbalancefromc
-msgid "Balance from camera"
-msgstr ""
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
@@ -502,7 +518,7 @@ msgstr "Abbrechen in %s Sekunden"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
-msgstr ""
+msgstr "Polar Alignment abbrechen"
 
 #: u_translation.rscannotchange
 msgid "Cannot change start time. Sequence will start in time for the dusk flat."
@@ -670,7 +686,7 @@ msgstr "Status der Sequenz löschen?"
 
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
-msgstr ""
+msgstr "Auf Abbrechen klicken, um die Sequenz abzubrechen."
 
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
@@ -716,6 +732,10 @@ msgstr "Kuppelspalt Schließsequenz ausführen wenn Montierung zum parken aufgef
 msgid "Cloud cover"
 msgstr "Wolkenbedeckung"
 
+#: u_translation.rscolorbalance
+msgid "Color balance"
+msgstr ""
+
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "Farbvorschau"
@@ -740,9 +760,13 @@ msgstr "Compilation Fehler: %s"
 msgid "Compiled with"
 msgstr "Compiliert mit"
 
+#: u_translation.rscompressthef
+msgid "Compress the FITS files with fpack"
+msgstr ""
+
 #: u_translation.rscomputationr
 msgid "Computation result:"
-msgstr ""
+msgstr "Berechungsergebnis:"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
@@ -936,6 +960,10 @@ msgstr "Beschreibung"
 msgid "Desired temperature"
 msgstr "Gewünschte Temperatur"
 
+#: u_translation.rsdestinatione
+msgid "Destination email address"
+msgstr ""
+
 #: u_translation.rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
 msgstr "Alle Daten zu fehlerhaften Pixeln löschen?"
@@ -1086,7 +1114,7 @@ msgstr "Downsample"
 
 #: u_translation.rsdoyouwanttoc
 msgid "Do you want to cancel the polar alignment?"
-msgstr ""
+msgstr "Das Polar Alignment abbrechen"
 
 #: u_translation.rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
@@ -1135,6 +1163,18 @@ msgstr "Elbrus Bild Ordner "
 #: u_translation.rselevation
 msgid "Elevation"
 msgstr "Höhe"
+
+#: u_translation.rsemailconfigu
+msgid "Email configuration"
+msgstr ""
+
+#: u_translation.rsemailon
+msgid "Email on :"
+msgstr ""
+
+#: u_translation.rsemailsentsuc
+msgid "Email sent successfully, please check your inbox"
+msgstr ""
 
 #: u_translation.rsend
 msgid "End"
@@ -1218,7 +1258,7 @@ msgstr "Belichtung fehlgeschlagen"
 
 #: u_translation.rsexposures
 msgid "Exposure %s"
-msgstr ""
+msgstr "Belichtung %s"
 
 #: u_translation.rsexposuretime
 msgid "Exposure time in secondes"
@@ -1464,6 +1504,10 @@ msgstr "Bild"
 msgid "From camera driver"
 msgstr "Vom Kameratreiber"
 
+#: u_translation.rsfromemailadd
+msgid "From email address"
+msgstr ""
+
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Ergebnisse Platesolving"
@@ -1570,7 +1614,7 @@ msgstr "Horizontprofil"
 
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
-msgstr ""
+msgstr "Horizontale Korrektur:"
 
 #: u_translation.rshumidity
 msgid "Humidity"
@@ -1770,7 +1814,7 @@ msgstr "Lade Dunkelbild"
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
-msgstr ""
+msgstr "Overlay sperren"
 
 #: u_translation.rslogallmessag
 msgid "Log all messages to file "
@@ -1801,12 +1845,13 @@ msgid "Main sensor"
 msgstr "Hauptsensor"
 
 #: u_translation.rsmakeafirstpo
+#, fuzzy,badformat
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr ""
+msgstr "Die Montierung vorher so gut wie möglich auf den Pol ausrichten. Das Teleskop anschließend auf einen Punkt nahe des Himmelspols zwischen 89-90 Grad Deklination fahren, die Gegengewichtsstange soll dabei nach unten zeigen.%sWählen Sie \"automatisch\" aus wenn das Teleskop bereits vom Programm aus geschwenkt werden kann, ansonsten muss es manuell bewegt werden.%sBei \"automatisch\" kann noch Drehrichtung und Drehwinkel eingestellt werden . Bitte aufpassen, dass kein Hindernis im weg ist, dass Teleskop dreht sich zweimal um den eingestellten Betrag."
 
 #: u_translation.rsmanual
 msgid "Manual"
-msgstr ""
+msgstr "Benutzerhandbuch"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
@@ -1912,6 +1957,10 @@ msgstr "Meridianflip Fehler!"
 msgid "Meridian flip done"
 msgstr "Meridianflip ausgeführt"
 
+#: u_translation.rsmeridianflip8
+msgid "Meridian flip error"
+msgstr ""
+
 #: u_translation.rsmeridianflip9
 msgid "Meridian flip canceled after flip"
 msgstr "Meridianflip abgebrochen nach dem Umsetzen"
@@ -1986,11 +2035,11 @@ msgstr "Montierung meldet nicht auf welcher Seite sich das Teleskop befindet, Me
 
 #: u_translation.rsmountrotatio
 msgid "Mount rotation center"
-msgstr ""
+msgstr "Drehmittelpunkt der Montierung"
 
 #: u_translation.rsmountrotatio2
 msgid "Mount rotation direction"
-msgstr ""
+msgstr "Drehrichtung der Montierung"
 
 #: u_translation.rsmountsync
 msgid "Mount sync"
@@ -2014,11 +2063,11 @@ msgstr "Bewegungsrichtung"
 
 #: u_translation.rsmovedownby
 msgid "move Down by "
-msgstr ""
+msgstr "nach unten bewegen um "
 
 #: u_translation.rsmoveeastby
 msgid "move East by "
-msgstr ""
+msgstr "nach Osten bewegen um "
 
 #: u_translation.rsmoveinward
 msgid "Move inward"
@@ -2034,11 +2083,11 @@ msgstr "Bewegung nach außen"
 
 #: u_translation.rsmovethegreen
 msgid "Move the green circle to a star using the mouse."
-msgstr ""
+msgstr "Den grünen Kreis mit der Maus zu einem Stern bewegen"
 
 #: u_translation.rsmovethemount
 msgid "Move the mount manually in RA, click Continue when ready"
-msgstr ""
+msgstr "Die Montierung manuell in RA bewegen, danach auf Fortsetzen klicken"
 
 #: u_translation.rsmovetonewpla
 msgid "Move to new planetarium object %s"
@@ -2046,15 +2095,15 @@ msgstr "Schwenke zu neuem Planetarium Objekt %s"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
-msgstr ""
+msgstr "nach oben bewegen um "
 
 #: u_translation.rsmovewestby
 msgid "move West by "
-msgstr ""
+msgstr "nach Western bewegen um "
 
 #: u_translation.rsmovingmount
 msgid "Moving mount"
-msgstr ""
+msgstr "Bewege Montierung"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
@@ -2203,6 +2252,10 @@ msgstr "Nicht genug Punkte innerhalb oder außerhalb der Fokusposition, versuche
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
 msgstr "Keine Aktionen für das Beenden konfiguriert"
+
+#: u_translation.rsnotification
+msgid "Notifications"
+msgstr ""
 
 #: u_translation.rsnotimplement
 msgid "Not implemented!"
@@ -2406,11 +2459,11 @@ msgstr "Sequenz anhalten, wenn die Beobachtungsbedingung außerhalb der Grenzen 
 
 #: u_translation.rspausesequenc2
 msgid "Pause sequence"
-msgstr ""
+msgstr "Sequenz unterbrechen"
 
 #: u_translation.rspausesequenc3
 msgid "Pause sequence request canceled."
-msgstr ""
+msgstr "Angehaltene Sequenz abgebrochen"
 
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
@@ -2486,7 +2539,7 @@ msgstr "Plan %s gestoppt."
 
 #: u_translation.rsplatesolveex
 msgid "Plate solve exposure %s"
-msgstr ""
+msgstr "Platesolving der Aufnahme %s"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -2547,7 +2600,7 @@ msgstr "Bitte stellen Sie das Format auf % s ein, bevor Sie die Sequenz starten.
 
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
-msgstr ""
+msgstr "Bitte warten bis die Messungen abgeschlossen sind"
 
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
@@ -2555,11 +2608,11 @@ msgstr "Pointing Offset"
 
 #: u_translation.rspolaralignme
 msgid "Polar alignment"
-msgstr ""
+msgstr "Polausrichtung"
 
 #: u_translation.rspolaralignme2
 msgid "Polar alignment instruction"
-msgstr ""
+msgstr "Anleitung zur Polarausrichtung"
 
 #: u_translation.rsport
 msgid "Port"
@@ -2887,11 +2940,11 @@ msgstr "Rotieren"
 
 #: u_translation.rsrotateby
 msgid "rotate by"
-msgstr ""
+msgstr "rotieren um"
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
-msgstr ""
+msgstr "Drehe das Teleskop"
 
 #: u_translation.rsrotator
 msgid "Rotator"
@@ -2963,7 +3016,7 @@ msgstr "Speichern"
 
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
-msgstr ""
+msgstr "Speichere Bitmap zusätzlich zur Standard FITS Datei"
 
 #: u_translation.rssaveas
 msgid "Save as..."
@@ -2987,7 +3040,7 @@ msgstr "FITS Datei Speichern%s"
 
 #: u_translation.rssavepictures
 msgid "Save picture%s"
-msgstr ""
+msgstr "Speichere Bild%s"
 
 #: u_translation.rssaveplan
 msgid "Save plan"
@@ -3065,6 +3118,10 @@ msgstr "Wählen Sie zuerst einen Stern aus"
 msgid "Send image to planetarium"
 msgstr "Bild an Planetarium senden"
 
+#: u_translation.rssendtestemai
+msgid "Send test email"
+msgstr ""
+
 #: u_translation.rssensor
 msgid "Sensor"
 msgstr "Sensor"
@@ -3075,7 +3132,7 @@ msgstr "Sensoreigenschaften"
 
 #: u_translation.rssensortemperatu
 msgid "Sensor temperature"
-msgstr ""
+msgstr "Sensortemperatur"
 
 #: u_translation.rsseparator
 msgid "Separator"
@@ -3092,6 +3149,10 @@ msgstr "Seq: %s fertig"
 #: u_translation.rssequence
 msgid "Sequence"
 msgstr "Sequenz"
+
+#: u_translation.rssequenceabno
+msgid "Sequence abnormal end"
+msgstr ""
 
 #: u_translation.rssequenceabor
 msgid "Sequence aborted."
@@ -3121,6 +3182,10 @@ msgstr "Sequenz %s fertig."
 msgid "Sequence %s ignore stop at dawn"
 msgstr "Sequenz %s ignoriere Stopp in der Morgendämmerung"
 
+#: u_translation.rssequencenorm
+msgid "Sequence normal end"
+msgstr ""
+
 #: u_translation.rssequencepaus
 msgid "Sequence paused for bad weather ..."
 msgstr "Sequenz wegen schlechtem Wetter unterbrochen ..."
@@ -3139,7 +3204,7 @@ msgstr "Sequenz %s gestoppt"
 
 #: u_translation.rssequencewil2
 msgid "Sequence will be paused after current exposure is complete."
-msgstr ""
+msgstr "Sequenz wird angehalten, nachdem die aktuelle Belichtung abgeschlossen ist."
 
 #: u_translation.rssequencewill
 msgid "Sequence will continue with the current focuser position."
@@ -3377,6 +3442,14 @@ msgstr "Schlupfkorrektur "
 msgid "Slope"
 msgstr "Steigung"
 
+#: u_translation.rssmtpserverad
+msgid "SMTP server address"
+msgstr ""
+
+#: u_translation.rssmtpserverpo
+msgid "SMTP server port"
+msgstr ""
+
 #: u_translation.rssocketerrors
 msgid "Socket error %s.  %s"
 msgstr "Socket error %s.  %s"
@@ -3485,6 +3558,10 @@ msgstr "Starte Sequenz %s wiederhole %s/%s"
 msgid "Start learning V curve"
 msgstr "Beginne mit dem Lernen der V-Kurve"
 
+#: u_translation.rsstartnewexpo
+msgid "Start new exposure as early as possible"
+msgstr ""
+
 #: u_translation.rsstartnewlog
 msgid "Start new log"
 msgstr "Starte neues Protokoll"
@@ -3531,7 +3608,7 @@ msgstr "%s Status"
 
 #: u_translation.rsstatus2
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: u_translation.rsstayatthecur
 msgid "Stay at the current position for autofocus"
@@ -3817,6 +3894,10 @@ msgstr "Temporärer Ordner darf nur ASCII Zeichen enthalten"
 msgid "Termination options"
 msgstr "Optionen beim Beenden"
 
+#: u_translation.rstestemailfro
+msgid "Test email from CCDciel"
+msgstr ""
+
 #: u_translation.rsthecameraima
 msgid "The camera image format is"
 msgstr "Das Bildformat der Kamera ist"
@@ -3855,7 +3936,7 @@ msgstr "Das Menu \"Datei/Fokussierer Kalibrierung\" hilft diese Werte zu füllen
 
 #: u_translation.rsthemountdono
 msgid "The mount do not move enough!"
-msgstr ""
+msgstr "Die Montierung bewegt sich nicht ausreichend!"
 
 #: u_translation.rsthemountindi
 msgid "the mount indicate %s"
@@ -3863,7 +3944,7 @@ msgstr "Die Montierung zeigt %s"
 
 #: u_translation.rsthenadjustth
 msgid "Then adjust the mount polar adjustment knob to move the star to the pink circle at the other extremity of the line."
-msgstr ""
+msgstr "Mit der Polhöheneinstellung der Montierung den Stern auf den rosafarbenen Kreis am anderen Ende der Linie einstellen."
 
 #: u_translation.rstheplanismod
 msgid "The plan %s is modified. Do you want to save the change ?"
@@ -3887,7 +3968,7 @@ msgstr "Der Sicherheitsmonitor meldet einen unsicheren Zustand. %sWählen Sie %s
 
 #: u_translation.rsthesequencei
 msgid "The sequence is now in pause."
-msgstr ""
+msgstr "Sequenz ist jetzt unterbrochen"
 
 #: u_translation.rsthesequencew
 msgid "The sequence %s will be stopped at %s, in %s seconds."
@@ -3896,6 +3977,10 @@ msgstr "Die Sequenz %s wird um %s gestoppt, in %s Sekunden."
 #: u_translation.rsthetelescope
 msgid "The telescope is parked, unpark now"
 msgstr "Das Teleskop ist geparkt, starte jetzt"
+
+#: u_translation.rsthismessagec
+msgid "This message confirm the email configuration is working."
+msgstr ""
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
@@ -3963,7 +4048,7 @@ msgstr "Zu kleine HFD Differenz"
 
 #: u_translation.rstotalpolarer
 msgid "Total polar error:"
-msgstr ""
+msgstr "Gesamtfehler der Polausrichtung"
 
 #: u_translation.rstrack
 msgid "Track"
@@ -4081,6 +4166,10 @@ msgstr "Ein benutzerdefiniertes Skript verwenden"
 msgid "Use dome"
 msgstr "Kuppel verwenden"
 
+#: u_translation.rsusedslrcolor
+msgid "Use DSLR color balance"
+msgstr ""
+
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"
 msgstr "Benutze externes Kommando um das Panel ein/auszuschalten"
@@ -4151,7 +4240,7 @@ msgstr "Ausführliches Geräteprotokoll"
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"
-msgstr ""
+msgstr "Vertikale Korrektur:"
 
 #: u_translation.rsvideo
 msgid "Video"
@@ -4291,7 +4380,7 @@ msgstr "West (zeigt nach ost)"
 
 #: u_translation.rswhenaskedmov
 msgid "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
-msgstr ""
+msgstr "Bei Aufforderung, die Montierung manuell nur entlang der RA-Achse bewegen, immer in die gleiche Richtung, und zwar um jeweils etwa 15 bis 45 Grad."
 
 #: u_translation.rswidth
 msgid "Width"
@@ -4315,7 +4404,7 @@ msgstr "Ja"
 
 #: u_translation.rsyoucancloset
 msgid "You can close this window after you finish to move the mount polar axis."
-msgstr ""
+msgstr "Sie können dieses Fenster schließen, nachdem Sie die Polachse bewegt haben."
 
 #: u_translation.rsyoucansetthe
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."

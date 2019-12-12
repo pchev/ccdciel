@@ -4294,10 +4294,6 @@ msgstr ""
 msgid "Polar alignment instruction"
 msgstr ""
 
-#: u_translation:rsbalancefromc
-msgid "Balance from camera"
-msgstr ""
-
 #: u_translation:rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
 msgstr ""
@@ -4308,5 +4304,97 @@ msgstr ""
 
 #: u_translation:rslockoverlay
 msgid "Lock overlay"
+msgstr ""
+
+#: u_translation:rsaz
+msgid "Az"
+msgstr ""
+
+#: u_translation:rsalt
+msgid "Alt"
+msgstr ""
+
+#: u_translation:rsautoguiderer
+msgid "Autoguider error"
+msgstr ""
+
+#: u_translation:rstestemailfro
+msgid "Test email from CCDciel"
+msgstr ""
+
+#: u_translation:rsthismessagec
+msgid "This message confirm the email configuration is working."
+msgstr ""
+
+#: u_translation:rsemailsentsuc
+msgid "Email sent successfully, please check your inbox"
+msgstr ""
+
+#: u_translation:rsusedslrcolor
+msgid "Use DSLR color balance"
+msgstr ""
+
+#: u_translation:rscolorbalance
+msgid "Color balance"
+msgstr ""
+
+#: u_translation:rscompressthef
+msgid "Compress the FITS files with fpack"
+msgstr ""
+
+#: u_translation:rsstartnewexpo
+msgid "Start new exposure as early as possible"
+msgstr ""
+
+#: u_translation:rsnotification
+msgid "Notifications"
+msgstr ""
+
+#: u_translation:rsemailconfigu
+msgid "Email configuration"
+msgstr ""
+
+#: u_translation:rssmtpserverad
+msgid "SMTP server address"
+msgstr ""
+
+#: u_translation:rssmtpserverpo
+msgid "SMTP server port"
+msgstr ""
+
+#: u_translation:rsfromemailadd
+msgid "From email address"
+msgstr ""
+
+#: u_translation:rsdestinatione
+msgid "Destination email address"
+msgstr ""
+
+#: u_translation:rssendtestemai
+msgid "Send test email"
+msgstr ""
+
+#: u_translation:rssequencenorm
+msgid "Sequence normal end"
+msgstr ""
+
+#: u_translation:rssequenceabno
+msgid "Sequence abnormal end"
+msgstr ""
+
+#: u_translation:rsautofocuserr2
+msgid "Autofocus error"
+msgstr ""
+
+#: u_translation:rsmeridianflip8
+msgid "Meridian flip error"
+msgstr ""
+
+#: u_translation:rsall
+msgid "All"
+msgstr ""
+
+#: u_translation:rsemailon
+msgid "Email on :"
 msgstr ""
 

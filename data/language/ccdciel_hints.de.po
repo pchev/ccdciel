@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-02 14:14+0000\n"
-"PO-Revision-Date: 2019-10-12 10:55+0000\n"
-"Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
+"POT-Creation-Date: 2019-12-12 21:24+0000\n"
+"PO-Revision-Date: 2019-12-08 11:54+0000\n"
+"Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-02 14:24+0000\n"
+"X-Launchpad-Export-Date: 2019-12-12 21:32+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_hints.rsactivateback
@@ -262,7 +262,7 @@ msgstr "Bewege Fokussierer nach außen"
 
 #: u_hints.rspausethesequ
 msgid "Pause the sequence after the current exposure is complete"
-msgstr ""
+msgstr "Sequenz anhalten nachdem die aktuelle Belichtung abgeschlossen ist"
 
 #: u_hints.rspixelbinning
 msgid "Pixel binning"
@@ -327,7 +327,7 @@ msgstr "Zeige Fadenkreuz"
 
 #: u_hints.rsshowcompleti
 msgid "Show completion status"
-msgstr ""
+msgstr "Fertigstellungsstatus anzeigen"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"

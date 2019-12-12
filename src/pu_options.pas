@@ -676,6 +676,7 @@ begin
   BtnFolderDefault.Caption := rsDefault;
   UseTcpServer.Caption := rsAllowToGetPr;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
+  FilePack.Caption:=rsCompressTheF;
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;
@@ -751,6 +752,7 @@ begin
   Label113.Caption:=rsPreview;
   Label114.Caption:=rsFocus;
   Label115.Caption:=rsAstrometry;
+  ExpEarlyStart.Caption:=rsStartNewExpo;
   TabSheet12.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
   FlatExposureBox.Caption := rsFlatAutoExpo;
@@ -976,6 +978,23 @@ begin
   label111.Caption:=rsTheFollowing;
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
+  TabSheet17.Caption := rsNotification;
+  GroupBox24.Caption:=rsEmailConfigu;
+  Label134.Caption:=rsSMTPServerAd;
+  Label135.Caption:=rsSMTPServerPo;
+  Label136.Caption:=rsUserName;
+  Label137.Caption:=rsPassword;
+  Label138.Caption:=rsFromEmailAdd;
+  Label139.Caption:=rsDestinationE;
+  ButtonTestEmail.Caption:=rsSendTestEmai;
+  GroupBox25.Caption:=rsEmailOn;
+  EmailCondition.Items[0]:=rsSequenceNorm;
+  EmailCondition.Items[1]:=rsSequenceAbno;
+  EmailCondition.Items[2]:=rsAutoguiderEr;
+  EmailCondition.Items[3]:=rsAutofocusErr2;
+  EmailCondition.Items[4]:=rsMeridianFlip8;
+  ButtonNotificationAll.Caption:=rsAll;
+  ButtonNotificationNone.Caption:=rsNone2;
   //Hint
   CaptureDir.Hint:=rsTheBaseFolde;
   TempDir.Hint:=rsATemporaryDi;
