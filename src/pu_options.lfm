@@ -390,6 +390,7 @@ object f_option: Tf_option
         ItemIndex = 0
         Items.Strings = (
           'PNG 16bit'
+          'TIFF 16bit'
           'JPG 8bit'
           'BMP 8bit'
         )

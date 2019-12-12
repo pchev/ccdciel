@@ -2428,7 +2428,7 @@ var ok:boolean;
     i: integer;
     f: double;
     bm: TBayerMode;
-    msg: string;
+    msg,buf: string;
 procedure movetoolconfig(tool:string; defaultParent: TPanel);
 begin
   screenconfig.SetValue('/Tools/'+tool+'/Parent',config.GetValue('/Tools/'+tool+'/Parent',defaultParent.name));
@@ -2565,6 +2565,19 @@ begin
        bayerBG: config.SetValue('/Color/BayerMode',ord(bayerGR));
        bayerGB: config.SetValue('/Color/BayerMode',ord(bayerRG));
      end;
+  end;
+  if oldver<'0.9.66' then begin
+   buf:=config.GetValue('/Files/SaveBitmapFormat','png');
+   if TryStrToInt(buf,i) then begin
+     // convert old numeric format
+     case i of
+       0: buf:='png';
+       1: buf:='jpg';
+       2: buf:='bmp';
+       else buf:='png';
+     end;
+     config.SetValue('/Files/SaveBitmapFormat',buf);
+   end;
   end;
 end;
 
@@ -3260,7 +3273,7 @@ begin
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false);
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
-  SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat',0);
+  SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
@@ -6204,7 +6217,12 @@ begin
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
    f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
-   f_option.SaveBitmapFormat.ItemIndex:=config.GetValue('/Files/SaveBitmapFormat',0);
+   buf:=config.GetValue('/Files/SaveBitmapFormat','png');
+   if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
+   else if buf='tif' then f_option.SaveBitmapFormat.ItemIndex:=1
+   else if buf='jpg' then f_option.SaveBitmapFormat.ItemIndex:=2
+   else if buf='bmp' then f_option.SaveBitmapFormat.ItemIndex:=3
+   else f_option.SaveBitmapFormat.ItemIndex:=0;
    f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
@@ -6579,7 +6597,14 @@ begin
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
      config.SetValue('/Files/SaveBitmap',f_option.SaveBitmap.Checked);
-     config.SetValue('/Files/SaveBitmapFormat',f_option.SaveBitmapFormat.ItemIndex);
+     case f_option.SaveBitmapFormat.ItemIndex of
+       0: buf:='png';
+       1: buf:='tif';
+       2: buf:='jpg';
+       3: buf:='bmp';
+       else buf:='png';
+     end;
+     config.SetValue('/Files/SaveBitmapFormat',buf);
      config.SetValue('/Log/UseTcpServer',f_option.UseTcpServer.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
@@ -8061,12 +8086,7 @@ try
  StatusBar1.Panels[1].Text := '';
  // save as bitmap
  if SaveBitmap and (camera.FrameType=LIGHT) then begin
-   case SaveBitmapFormat of
-    0: fn:=ChangeFileExt(fn,'.png');
-    1: fn:=ChangeFileExt(fn,'.jpg');
-    2: fn:=ChangeFileExt(fn,'.bmp');
-    else fn:=ChangeFileExt(fn,'.png');
-   end;
+   fn:=ChangeFileExt(fn,'.'+SaveBitmapFormat);
    fits.SaveToBitmap(fn);
    NewMessage(Format(rsSavedFile, [fn]),1);
  end;
