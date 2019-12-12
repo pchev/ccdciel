@@ -123,9 +123,23 @@ begin
 end;
 
 procedure Tf_devicesconnection.DeviceMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var txt:string;
 begin
  if Sender is TLabel then begin
    SelectedDevice:=TLabel(Sender).tag;
+   case SelectedDevice of
+      1:  txt:=rsCamera;
+      2:  txt:=rsFilterWheel;
+      3:  txt:=rsFocuser;
+      4:  txt:=rsRotator;
+      5:  txt:=rsMount;
+      6:  txt:=rsDome;
+      7:  txt:=rsWatchdog;
+      8:  txt:=rsWeatherStati;
+      9:  txt:=rsSafetyMonito;
+   end;
+   MenuConnectDevice.Caption:=rsConnect+': '+txt;
+   MenuDisconnectDevice.Caption:=rsDisconnect+': '+txt;
    PopupMenu1.PopUp;
  end;
 end;
