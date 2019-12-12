@@ -1181,7 +1181,6 @@ resourcestring
   rsExposureS = 'Exposure %s';
   rsPlateSolveEx = 'Plate solve exposure %s';
   rsPolarAlignme2 = 'Polar alignment instruction';
-  rsBalanceFromC = 'Balance from camera';
   rsSaveAPNGFile = 'Save a bitmap file additionally to the standard FITS file';
   rsSavePictureS = 'Save picture%s';
   rsLockOverlay = 'Lock overlay';
@@ -1191,6 +1190,8 @@ resourcestring
   rsTestEmailFro = 'Test email from CCDciel';
   rsThisMessageC = 'This message confirm the email configuration is working.';
   rsEmailSentSuc = 'Email sent successfully, please check your inbox';
+  rsUseDSLRColor = 'Use DSLR color balance';
+  rsColorBalance = 'Color balance';
 
 implementation
 

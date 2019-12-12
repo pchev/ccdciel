@@ -53,6 +53,7 @@ type
     FilePack: TCheckBox;
     EmailCondition: TCheckListBox;
     GroupBox25: TGroupBox;
+    GroupBox26: TGroupBox;
     Panel6: TPanel;
     smtp_host: TEdit;
     smtp_port: TEdit;
@@ -546,7 +547,6 @@ type
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
-    procedure BalanceFromCameraChange(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
@@ -718,7 +718,8 @@ begin
   Label38.Caption := rsBayerMatrixP;
   DebayerPreview.Caption := rsDebayerThePr;
   BayerMode.Items[4]:=rsAutomatic;
-  BalanceFromCamera.Caption:=rsBalanceFromC;
+  BalanceFromCamera.Caption:=rsUseDSLRColor;
+  GroupBox26.Caption:=rsColorBalance;
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;
   VideoGroup.Caption := rsVideo;
@@ -1282,13 +1283,6 @@ begin
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
   DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0)or(AutoguiderBox.ItemIndex=3);
-end;
-
-procedure Tf_option.BalanceFromCameraChange(Sender: TObject);
-begin
-   RedBalance.Enabled:=not BalanceFromCamera.Checked;
-   BlueBalance.Enabled:=RedBalance.Enabled;
-   GreenBalance.Enabled:=RedBalance.Enabled;
 end;
 
 procedure Tf_option.BtnDisableDelayClick(Sender: TObject);

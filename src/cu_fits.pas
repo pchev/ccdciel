@@ -2051,7 +2051,7 @@ rmult:=0; gmult:=0; bmult:=0;
 t:=GetBayerMode;
 if t=bayerUnsupported then debayer:=false;
 if debayer then begin
-  if (FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+  if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
      rmult:=FFitsInfo.rmult;
      gmult:=FFitsInfo.gmult;
      bmult:=FFitsInfo.bmult;
