@@ -33,8 +33,8 @@ object f_devicesconnection: Tf_devicesconnection
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 103
-    ClientWidth = 238
+    ClientHeight = 107
+    ClientWidth = 242
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
@@ -43,8 +43,8 @@ object f_devicesconnection: Tf_devicesconnection
       Top = 0
       Width = 204
       BevelOuter = bvNone
-      ClientHeight = 15
-      ClientWidth = 200
+      ClientHeight = 19
+      ClientWidth = 204
       ParentFont = False
       TabOrder = 0
       object ProfileLabel: TLabel
@@ -63,8 +63,8 @@ object f_devicesconnection: Tf_devicesconnection
       Top = 19
       Width = 204
       BevelOuter = bvNone
-      ClientHeight = 21
-      ClientWidth = 200
+      ClientHeight = 25
+      ClientWidth = 204
       ParentFont = False
       TabOrder = 1
       object BtnConnect: TButton
@@ -99,8 +99,8 @@ object f_devicesconnection: Tf_devicesconnection
       ChildSizing.VerticalSpacing = 4
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 6
-      ClientHeight = 42
-      ClientWidth = 200
+      ClientHeight = 46
+      ClientWidth = 204
       ParentFont = False
       TabOrder = 2
       Visible = False
@@ -114,7 +114,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelWheel: TLabel
         Tag = 2
@@ -126,7 +126,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelFocuser: TLabel
         Tag = 3
@@ -138,7 +138,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelRotator: TLabel
         Tag = 4
@@ -150,7 +150,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelMount: TLabel
         Tag = 5
@@ -162,7 +162,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelDome: TLabel
         Tag = 6
@@ -174,7 +174,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelWatchdog: TLabel
         Tag = 7
@@ -186,7 +186,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelWeather: TLabel
         Tag = 8
@@ -198,7 +198,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
       object LabelSafety: TLabel
         Tag = 9
@@ -210,7 +210,7 @@ object f_devicesconnection: Tf_devicesconnection
         Font.Color = clRed
         ParentColor = False
         ParentFont = False
-        OnClick = DeviceClick
+        OnMouseDown = DeviceMouseDown
       end
     end
   end

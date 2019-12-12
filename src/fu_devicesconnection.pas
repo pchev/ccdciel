@@ -54,7 +54,7 @@ type
     PanelDev: TPanel;
     Title: TLabel;
     procedure BtnConnectClick(Sender: TObject);
-    procedure DeviceClick(Sender: TObject);
+    procedure DeviceMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure MenuConnectDeviceClick(Sender: TObject);
     procedure MenuDisconnectDeviceClick(Sender: TObject);
   private
@@ -122,7 +122,7 @@ begin
   end;
 end;
 
-procedure Tf_devicesconnection.DeviceClick(Sender: TObject);
+procedure Tf_devicesconnection.DeviceMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
  if Sender is TLabel then begin
    SelectedDevice:=TLabel(Sender).tag;
