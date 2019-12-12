@@ -105,6 +105,7 @@ end;
 procedure Tf_devicesconnection.SetLang;
 begin
   Title.Caption:=rsDevicesConne;
+  BtnProfile.Caption:=trim(format(rsProfile,['']));
   BtnConnect.Caption:=rsConnect;
   BtnConnect.Hint:=rsConnectAllDe;
   LabelCamera.Caption:=rsCam;
