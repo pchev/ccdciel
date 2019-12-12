@@ -573,6 +573,8 @@ type
     procedure GUIdestroy(Sender: TObject);
     Procedure Connect(Sender: TObject);
     Procedure Disconnect(Sender: TObject);
+    Procedure ConnectDevice(num: double);
+    Procedure DisconnectDevice(num: double);
     Procedure CheckConnectionStatus;
     Procedure ConnectCamera(Sender: TObject);
     Procedure DisconnectCamera(Sender: TObject);
@@ -1314,6 +1316,8 @@ begin
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onConnect:=@Connect;
   f_devicesconnection.onDisconnect:=@Disconnect;
+  f_devicesconnection.onConnectDevice:=@ConnectDevice;
+  f_devicesconnection.onDisconnectDevice:=@DisconnectDevice;
   f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);;
 
   f_visu:=Tf_visu.Create(self);
@@ -3832,6 +3836,36 @@ begin
      DisconnectSafety(Sender);
      DisconnectWatchdog(Sender);
    end;
+end;
+
+Procedure Tf_main.ConnectDevice(num: double);
+begin
+  case round(num) of
+     1:  if WantCamera  then ConnectCamera(nil);
+     2:  if WantWheel   then ConnectWheel(nil);
+     3:  if WantFocuser then ConnectFocuser(nil);
+     4:  if WantRotator then ConnectRotator(nil);
+     5:  if WantMount   then ConnectMount(nil);
+     6:  if WantDome    then ConnectDome(nil);
+     7:  if WantWatchdog then ConnectWatchdog(nil);
+     8:  if WantWeather then ConnectWeather(nil);
+     9:  if WantSafety  then ConnectSafety(nil);
+  end;
+end;
+
+Procedure Tf_main.DisconnectDevice(num: double);
+begin
+ case round(num) of
+    1:  DisconnectCamera(nil);
+    2:  DisconnectWheel(nil);
+    3:  DisconnectFocuser(nil);
+    4:  DisconnectRotator(nil);
+    5:  DisconnectMount(nil);
+    6:  DisconnectDome(nil);
+    7:  DisconnectWatchdog(nil);
+    8:  DisconnectWeather(nil);
+    9:  DisconnectSafety(nil);
+ end;
 end;
 
 Procedure Tf_main.CheckConnectionStatus;

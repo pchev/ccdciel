@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI, u_translation, u_hints,
-  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
+uses UScaleDPI, u_translation, u_hints, u_global,
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Menus;
 
 type
 
@@ -39,8 +39,11 @@ type
     LabelWeather: TLabel;
     LabelWatchdog: TLabel;
     LabelRotator: TLabel;
+    MenuConnectDevice: TMenuItem;
+    MenuDisconnectDevice: TMenuItem;
     Panel2: TPanel;
     Panel3: TPanel;
+    PopupMenu1: TPopupMenu;
     ProfileLabel: TLabel;
     LabelCamera: TLabel;
     LabelWheel: TLabel;
@@ -51,9 +54,14 @@ type
     PanelDev: TPanel;
     Title: TLabel;
     procedure BtnConnectClick(Sender: TObject);
+    procedure DeviceClick(Sender: TObject);
+    procedure MenuConnectDeviceClick(Sender: TObject);
+    procedure MenuDisconnectDeviceClick(Sender: TObject);
   private
     { private declarations }
     FonConnect,FonDisconnect: TNotifyEvent;
+    FonConnectDevice,FonDisconnectDevice: TNotifyNum;
+    SelectedDevice: integer;
     procedure SetLang;
   public
     { public declarations }
@@ -63,6 +71,8 @@ type
     procedure Disconnect(confirm:boolean);
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onDisconnect: TNotifyEvent read FonDisconnect write FonDisconnect;
+    property onConnectDevice: TNotifyNum read FonConnectDevice write FonConnectDevice;
+    property onDisconnectDevice: TNotifyNum read FonDisconnectDevice write FonDisconnectDevice;
   end;
 
 implementation
@@ -81,6 +91,7 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ SelectedDevice:=0;
 end;
 
 destructor  Tf_devicesconnection.Destroy;
@@ -109,6 +120,24 @@ begin
     BtnConnect.Caption:=rsDisconnect;
     Connect;
   end;
+end;
+
+procedure Tf_devicesconnection.DeviceClick(Sender: TObject);
+begin
+ if Sender is TLabel then begin
+   SelectedDevice:=TLabel(Sender).tag;
+   PopupMenu1.PopUp;
+ end;
+end;
+
+procedure Tf_devicesconnection.MenuConnectDeviceClick(Sender: TObject);
+begin
+ if Assigned(FonConnectDevice) then FonConnectDevice(SelectedDevice);
+end;
+
+procedure Tf_devicesconnection.MenuDisconnectDeviceClick(Sender: TObject);
+begin
+ if Assigned(FonDisconnectDevice) then FonDisconnectDevice(SelectedDevice);
 end;
 
 procedure Tf_devicesconnection.Connect;
