@@ -34,6 +34,7 @@ type
 
   Tf_devicesconnection = class(TFrame)
     BtnConnect: TButton;
+    BtnProfile: TButton;
     LabelDome: TLabel;
     LabelSafety: TLabel;
     LabelWeather: TLabel;
@@ -54,12 +55,13 @@ type
     PanelDev: TPanel;
     Title: TLabel;
     procedure BtnConnectClick(Sender: TObject);
+    procedure BtnProfileClick(Sender: TObject);
     procedure DeviceMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure MenuConnectDeviceClick(Sender: TObject);
     procedure MenuDisconnectDeviceClick(Sender: TObject);
   private
     { private declarations }
-    FonConnect,FonDisconnect: TNotifyEvent;
+    FonSelectProfile,FonConnect,FonDisconnect: TNotifyEvent;
     FonConnectDevice,FonDisconnectDevice: TNotifyNum;
     SelectedDevice: integer;
     procedure SetLang;
@@ -69,6 +71,7 @@ type
     destructor  Destroy; override;
     procedure Connect;
     procedure Disconnect(confirm:boolean);
+    property onSelectProfile: TNotifyEvent read FonSelectProfile write FonSelectProfile;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onDisconnect: TNotifyEvent read FonDisconnect write FonDisconnect;
     property onConnectDevice: TNotifyNum read FonConnectDevice write FonConnectDevice;
@@ -110,6 +113,11 @@ begin
   LabelRotator.Caption:=rsRot;
   LabelMount.Caption:=rsMnt;
   LabelWatchdog.Caption:=rsWch;
+end;
+
+procedure Tf_devicesconnection.BtnProfileClick(Sender: TObject);
+begin
+  if Assigned(FonSelectProfile) then FonSelectProfile(Self);
 end;
 
 procedure Tf_devicesconnection.BtnConnectClick(Sender: TObject);

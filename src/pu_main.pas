@@ -1314,11 +1314,12 @@ begin
   planetarium.onShowMessage:=@NewMessage;
 
   f_devicesconnection:=Tf_devicesconnection.Create(self);
+  f_devicesconnection.onSelectProfile:=@MenuSetupClick;
   f_devicesconnection.onConnect:=@Connect;
   f_devicesconnection.onDisconnect:=@Disconnect;
   f_devicesconnection.onConnectDevice:=@ConnectDevice;
   f_devicesconnection.onDisconnectDevice:=@DisconnectDevice;
-  f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);;
+  f_devicesconnection.ProfileLabel.Caption:=profile;
 
   f_visu:=Tf_visu.Create(self);
   f_visu.onRedraw:=@Redraw;
@@ -3887,6 +3888,7 @@ procedure SetDisconnected;
 begin
  AllDevicesConnected:=false;
  f_devicesconnection.led.Brush.Color:=clRed;
+ f_devicesconnection.BtnProfile.Enabled:=True;
  f_devicesconnection.BtnConnect.Caption:=rsConnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
@@ -3894,6 +3896,7 @@ procedure SetConnected;
 begin
  AllDevicesConnected:=true;
  f_devicesconnection.led.Brush.Color:=clLime;
+ f_devicesconnection.BtnProfile.Enabled:=False;
  f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
@@ -3901,6 +3904,7 @@ procedure SetConnecting;
 begin
  AllDevicesConnected:=false;
  f_devicesconnection.led.Brush.Color:=clYellow;
+ f_devicesconnection.BtnProfile.Enabled:=False;
  f_devicesconnection.BtnConnect.Caption:=rsDisconnect;
  MenuConnect.Caption:=f_devicesconnection.BtnConnect.Caption;
 end;
@@ -5952,6 +5956,9 @@ begin
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config,credentialconfig);
+  if sender is Tf_devicesconnection then begin
+    f_setup.Pagecontrol1.ActivePageIndex:=0;
+  end;
   pt.x:=PanelCenter.Left;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -5968,7 +5975,7 @@ begin
          configfile:='ccdciel_'+profile+'.conf';
       loadopt:=FileExistsUTF8(slash(ConfigDir)+configfile);
       OpenConfig(configfile);
-      f_devicesconnection.ProfileLabel.Caption:=Format(rsProfile, [profile]);
+      f_devicesconnection.ProfileLabel.Caption:=profile;
       ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
       if FileExistsUTF8(ConfigDarkFile) then begin
         if fits.DarkFrame=nil then begin
