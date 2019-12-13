@@ -36,7 +36,7 @@ uses cu_ascomrest, u_utils,
 const AlpacaCurrentVersion = 1;
       AlpacaDiscStr = 'alpaca discovery';
       AlpacaDiscPort = '32227';
-      DiscoverTimeout = 1000;
+      DiscoverTimeout = 3000;
 
 Type
   TAlpacaDevice = record
@@ -81,7 +81,7 @@ begin
     try
     apiversions:=AlpacaApiVersions(result[i].ip,result[i].port);
     for j:=0 to Length(apiversions) do begin
-      if apiversions[i]=AlpacaCurrentVersion then result[i].apiversion:=AlpacaCurrentVersion;
+      if apiversions[j]=AlpacaCurrentVersion then result[i].apiversion:=AlpacaCurrentVersion;
     end;
     except
       result[i].apiversion:=1;
@@ -114,6 +114,7 @@ begin
   Result:=TStringList.Create;
   sl:=TStringList.Create();
   {$IFDEF WINDOWS}
+  Result.Add('127.0.0.1'); // local loopback not listed by ipconfig
   AProcess:=TProcess.Create(nil);
   AProcess.Executable := 'ipconfig.exe';
   AProcess.Options := AProcess.Options + [poUsePipes, poNoConsole];
@@ -126,7 +127,7 @@ begin
   end;
   hasIP:=false;
   hasMask:=false;
-  for i:=0 to sl.Count-1 do
+  for i:=0 to sl.Count-1 do //!response text are localized!
   begin
     if (Pos('IPv4', sl[i])>0) or (Pos('IP-', sl[i])>0) or (Pos('IP Address', sl[i])>0) then begin
       s:=sl[i];
@@ -134,7 +135,7 @@ begin
       if Pos(':', ip)>0 then Continue; // TODO: IPv6
       hasIP:=true;
     end;
-    if (Pos('Mask', sl[i])>0) then begin
+    if (Pos('Mask', sl[i])>0) or (Pos(': 255', sl[i])>0) then begin
       s:=sl[i];
       mask:=Trim(Copy(s, Pos(':', s)+1, 999));
       if Pos(':', mask)>0 then Continue; // TODO: IPv6
@@ -192,7 +193,7 @@ end;
 
 function AlpacaDiscoverServer: TAlpacaServerList;
 var sock : TUDPBlockSocket;
-    ip,port,id:string;
+    brip,ip,port,id:string;
     data: array[0..1024] of char;
     p: pointer;
     i,n,k: integer;
@@ -206,14 +207,16 @@ begin
   setlength(result,0);
   k:=0;
   for n:=0 to blist.Count-1 do begin
-    sock.Connect(blist[n], AlpacaDiscPort);
+    brip:=blist[n];
+    sock.Connect(brip, AlpacaDiscPort);
     data:=AlpacaDiscStr;
     p:=@data;
     sock.SendBuffer(p,length(AlpacaDiscStr));
     repeat
       ok:=sock.CanRead(DiscoverTimeout);
       if ok then begin
-        sock.RecvBuffer(p,1024);
+        i:=sock.RecvBuffer(p,1024);
+        if i<=0 then Continue;
         ip:=''; port:=''; id:=''; duplicate:=false;
         {$IFDEF WINDOWS}
         for i:=0 to 3 do   // TODO: synapse or rtl bug?

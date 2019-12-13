@@ -1855,6 +1855,8 @@ procedure Tf_setup.BtnDiscoverClick(Sender: TObject);
 var i,j,n:integer;
     devtype: string;
 begin
+try
+  Screen.Cursor:=crHourGlass;
   AlpacaServerList:=AlpacaDiscover;
   n:=length(AlpacaServerList);
   if n>0 then begin
@@ -1907,7 +1909,14 @@ begin
       end;
     end;
     AlpacaServers.ItemIndex:=0;
+  end else begin
+    AlpacaServers.Clear;
+    AlpacaServers.Items.Add('No Alpaca server found');
+    AlpacaServers.ItemIndex:=0;
   end;
+finally
+  Screen.Cursor:=crDefault;
+end;
 end;
 
 procedure Tf_setup.AlpacaServersChange(Sender: TObject);
