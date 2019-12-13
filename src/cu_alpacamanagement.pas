@@ -80,7 +80,7 @@ begin
     SetLength(apiversions,0);
     try
     apiversions:=AlpacaApiVersions(result[i].ip,result[i].port);
-    for j:=0 to Length(apiversions) do begin
+    for j:=0 to Length(apiversions)-1 do begin
       if apiversions[j]=AlpacaCurrentVersion then result[i].apiversion:=AlpacaCurrentVersion;
     end;
     except
