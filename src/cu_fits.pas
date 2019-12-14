@@ -282,7 +282,7 @@ type
 
 
 
-  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='');
   procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
@@ -3054,7 +3054,7 @@ begin
   m.free;
 end;
 
-procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='');
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='');
 var img:TLazIntfImage;
     lRawImage: TRawImage;
     i,j,c,w,h,x,y,naxis: integer;
@@ -3154,11 +3154,16 @@ begin
      hdr.Add('XBAYROFF',0,'X offset of Bayer array');
      hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
      hdr.Add('BAYERPAT',bayer,'CFA Bayer pattern');
+     if rmult<>'' then hdr.Add('MULT_R',rmult,'R multiplier');
+     if gmult<>'' then hdr.Add('MULT_G',gmult,'G multiplier');
+     if bmult<>'' then hdr.Add('MULT_B',bmult,'B multiplier');
    end;
    hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
    hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
-   if bayer<>'' then
-     hdr.Add('COMMENT','Converted from camera RAW by dcraw','')
+   if bayer<>'' then begin
+     if rmult='' then hdr.Add('COMMENT','Converted from camera RAW by dcraw','')
+                 else hdr.Add('COMMENT','Converted from camera RAW by libraw tools','');
+   end
    else
      hdr.Add('COMMENT','Converted from ',ext);
    hdr.Add('END','','');
@@ -3245,6 +3250,7 @@ var i,j,n,x,c: integer;
     b: array[0..2880]of char;
     rawf,tiff,cmdi,cmdu,txt,bayerpattern: string;
     outr: TStringList;
+    rmult,gmult,bmult: string;
 begin
 rmsg:='';
 if libraw<>0 then begin  // Use libraw directly
@@ -3349,6 +3355,45 @@ if libraw<>0 then begin  // Use libraw directly
     rmsg:='Error converting raw file';
   end;
 end
+else if RawUnpCmd<>'' then begin  // try libraw tools
+ try
+ rawf:=slash(TmpDir)+'tmp.raw';
+ tiff:=slash(TmpDir)+'tmp.raw.tiff';
+ DeleteFile(tiff);
+ cmdi:=RawIdCmd+' -v '+rawf;
+ cmdu:=RawUnpCmd+' -T '+rawf;
+ raw.Position:=0;
+ raw.SaveToFile(rawf);
+ raw.clear;
+ outr:=TStringList.Create;
+ if ExecProcess(cmdi,outr)<>0 then begin
+   exit;
+ end;
+ for i:=0 to outr.Count-1 do begin
+    if copy(outr[i],1,15)='Filter pattern:' then begin
+      txt:=outr[i];
+      Delete(txt,1,16);
+      txt:=trim(txt);
+      bayerpattern:=copy(txt,1,4); // Filter pattern: RGGBRGGBRGGBRGGB
+    end;
+    if copy(outr[i],1,24)='Derived D65 multipliers:' then begin
+      txt:=outr[i];
+      Delete(txt,1,25);
+      txt:=trim(txt);
+      rmult:=words(txt,' ',1,1);
+      gmult:=words(txt,' ',2,1);
+      bmult:=words(txt,' ',3,1);
+    end;
+ end;
+ if ExecProcess(cmdu,outr)<>0 then begin
+   exit;
+ end;
+ raw.LoadFromFile(tiff);
+ PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult);
+ outr.Free;
+ except
+   rmsg:='Error converting raw file';
+ end; end
 else if DcrawCmd<>'' then begin  // try dcraw command line
   try
   rawf:=slash(TmpDir)+'tmp.raw';

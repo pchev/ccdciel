@@ -56,27 +56,34 @@ var libraw: TLibHandle;
     GetRawInfo2: TGetRawInfo2;
     GetRawBitmap: TGetRawBitmap;
     GetRawErrorMsg: TGetRawErrorMsg;
-    DcrawCmd: string;
+    DcrawCmd, RawIdCmd, RawUnpCmd: string;
 
 const
   rawext='.bay,.bmq,.cr3,.cr2,.crw,.cs1,.dc2,.dcr,.dng,.erf,.fff,.hdr,.k25,.kdc,.mdc,.mos,.mrw,.nef,.orf,.pef,.pxn,.raf,.raw,.rdc,.sr2,.srf,.x3f,.arw,.3fr,.cine,.ia,.kc2,.mef,.nrw,.qtk,.rw2,.sti,.rwl,.srw,';
   {$ifdef mswindows}
   librawname='libpasraw.dll';
   dcrawname='dcraw.exe';
+  RawIdName='raw-identify.exe';
+  RawUnpName='unprocessed_raw.exe';
   {$endif}
   {$ifdef linux}
   librawname='libpasraw.so.1';
   dcrawname='dcraw';
+  RawIdName='raw-identify';
+  RawUnpName='unprocessed_raw';
   {$endif}
   {$ifdef darwin}
   librawname='libpasraw.dylib';
   dcrawname='dcraw';
+  RawIdName='raw-identify';
+  RawUnpName='unprocessed_raw';
   {$endif}
 
 implementation
 
 Procedure Load_Libraw;
 begin
+  // try libraw
   try
   libraw := LoadLibrary(librawname);
   except
@@ -84,6 +91,8 @@ begin
   try
   if libraw <> 0 then  begin
     DcrawCmd := '';
+    RawIdCmd := '';
+    RawUnpCmd:= '';
     LoadRaw := TLoadRaw(GetProcAddress(libraw, 'loadraw'));
     CloseRaw := TCloseRaw(GetProcAddress(libraw, 'closeraw'));
     GetRawInfo := TGetRawInfo(GetProcAddress(libraw, 'getinfo'));
@@ -95,7 +104,52 @@ begin
   except
   end;
   try
+  // try libraw tools
   if libraw=0 then begin
+    {$ifdef mswindows}
+    RawIdCmd:=slash(Appdir)+RawIdName;
+    if not fileexists(RawIdCmd) then RawIdCmd:='';
+    RawUnpCmd:=slash(Appdir)+RawUnpName;
+    if not fileexists(RawUnpCmd) then RawUnpCmd:='';
+    {$endif}
+    {$ifdef linux}
+    RawIdCmd:='/usr/bin/'+RawIdName;
+    if not fileexists(RawIdCmd) then begin
+      RawIdCmd:='/usr/lib/libraw/'+RawIdName;
+      if not fileexists(RawIdCmd) then begin
+         RawIdCmd:='/usr/local/bin/'+RawIdName;
+         if not fileexists(RawIdCmd) then begin
+            RawIdCmd:=ExpandFileName('~/bin/'+RawIdName);
+            if not fileexists(RawIdCmd) then RawIdCmd:='';
+         end;
+      end;
+    end;
+    RawUnpCmd:='/usr/bin/'+RawUnpName;
+    if not fileexists(RawUnpCmd) then begin
+      RawUnpCmd:='/usr/lib/libraw/'+RawUnpName;
+      if not fileexists(RawUnpCmd) then begin
+         RawUnpCmd:='/usr/local/bin/'+RawUnpName;
+         if not fileexists(RawUnpCmd) then begin
+            RawUnpCmd:=ExpandFileName('~/bin/'+RawUnpName);
+            if not fileexists(RawUnpCmd) then RawIdCmd:='';
+         end;
+      end;
+    end;
+    {$endif}
+    {$ifdef darwin}
+    RawIdCmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/'+RawIdName;
+    if not fileexists(RawIdCmd) then RawIdCmd:='';
+    RawUnpCmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/'+RawUnpName;
+    if not fileexists(RawUnpCmd) then RawUnpCmd:='';
+    {$endif}
+    if RawUnpCmd='' then RawIdCmd:='';
+    if RawIdCmd='' then RawUnpCmd:='';
+  end;
+  except
+  end;
+  // try dcraw
+  try
+  if (RawUnpCmd='')or(RawIdCmd='') then begin
     {$ifdef mswindows}
     DcrawCmd:=slash(Appdir)+dcrawname;
     if not fileexists(DcrawCmd) then DcrawCmd:='';
