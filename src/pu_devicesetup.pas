@@ -1909,6 +1909,14 @@ try
       end;
     end;
     AlpacaServers.ItemIndex:=0;
+    AlpacaCameraList.ItemIndex:=0;
+    AlpacaWheelList.ItemIndex:=0;
+    AlpacaFocuserList.ItemIndex:=0;
+    AlpacaRotatorList.ItemIndex:=0;
+    AlpacaMountList.ItemIndex:=0;
+    AlpacaDomeList.ItemIndex:=0;
+    AlpacaWeatherList.ItemIndex:=0;
+    AlpacaSafetyList.ItemIndex:=0;
   end else begin
     AlpacaServers.Clear;
     AlpacaServers.Items.Add('No Alpaca server found');
