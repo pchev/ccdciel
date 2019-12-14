@@ -1207,6 +1207,7 @@ resourcestring
   rsMeridianFlip8 = 'Meridian flip error';
   rsAll = 'All';
   rsEmailOn = 'Email on :';
+  rsPleaseSeeThe = 'Please see the documentation for important security information';
 
 implementation
 

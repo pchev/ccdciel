@@ -54,6 +54,7 @@ type
     EmailCondition: TCheckListBox;
     GroupBox25: TGroupBox;
     GroupBox26: TGroupBox;
+    Label140: TLabel;
     Panel6: TPanel;
     smtp_host: TEdit;
     smtp_port: TEdit;
@@ -979,6 +980,7 @@ begin
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
   TabSheet17.Caption := rsNotification;
+  Label140.Caption:=rsPleaseSeeThe;
   GroupBox24.Caption:=rsEmailConfigu;
   Label134.Caption:=rsSMTPServerAd;
   Label135.Caption:=rsSMTPServerPo;
