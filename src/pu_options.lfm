@@ -478,7 +478,7 @@ object f_option: Tf_option
         Top = 180
         Width = 255
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 253
         ParentFont = False
         TabOrder = 3
@@ -561,7 +561,7 @@ object f_option: Tf_option
         Top = 232
         Width = 255
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 253
         ParentFont = False
         TabOrder = 4
@@ -2195,7 +2195,6 @@ object f_option: Tf_option
       object Autofocusmode: TRadioGroup
         Left = 8
         Height = 53
-        Hint = 'Use Vcurve with an absolute position focuser, then learn the curve. This is the quickest method.'#10'Use Dynamic with a relative position focuser, this method require you start with a good approximate focus position.'#10'Use Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest method.'
         Top = 4
         Width = 453
         AutoFill = True
@@ -2211,8 +2210,8 @@ object f_option: Tf_option
         ClientWidth = 451
         Columns = 4
         Items.Strings = (
-          'V curve'
           'Dynamic'
+          'V curve'
           'Iterative'
           'None'
         )
@@ -2289,6 +2288,50 @@ object f_option: Tf_option
           PageIndex = 0
           TabOrder = 2
           TabStop = True
+          object PageDynamic: TPage
+            object Label64: TLabel
+              Left = 8
+              Height = 19
+              Top = 6
+              Width = 164
+              Caption = 'Number of dynamic points'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label65: TLabel
+              Left = 8
+              Height = 19
+              Top = 38
+              Width = 168
+              Caption = 'Movement between points'
+              ParentColor = False
+              ParentFont = False
+            end
+            object AutofocusDynamicNumPoint: TSpinEditEx
+              Left = 214
+              Height = 31
+              Top = 0
+              Width = 61
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 0
+              MaxValue = 30
+              MinValue = 5
+              Value = 5
+            end
+            object AutofocusDynamicMovement: TSpinEditEx
+              Left = 214
+              Height = 31
+              Top = 32
+              Width = 61
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 1
+              MaxValue = 10000
+              MinValue = 1
+              Value = 1
+            end
+          end
           object PageVcurve: TPage
             object Label82: TLabel
               Left = 8
@@ -2382,56 +2425,12 @@ object f_option: Tf_option
               MaxValue = 10000
             end
           end
-          object PageDynamic: TPage
-            object Label64: TLabel
-              Left = 8
-              Height = 19
-              Top = 6
-              Width = 161
-              Caption = 'Number of dynamic points'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label65: TLabel
-              Left = 8
-              Height = 19
-              Top = 38
-              Width = 162
-              Caption = 'Movement between points'
-              ParentColor = False
-              ParentFont = False
-            end
-            object AutofocusDynamicNumPoint: TSpinEditEx
-              Left = 214
-              Height = 31
-              Top = 0
-              Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
-              MaxValue = 30
-              MinValue = 5
-              Value = 5
-            end
-            object AutofocusDynamicMovement: TSpinEditEx
-              Left = 214
-              Height = 31
-              Top = 32
-              Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
-              MaxValue = 10000
-              MinValue = 1
-              Value = 1
-            end
-          end
           object PageIterative: TPage
             object Label46: TLabel
               Left = 8
               Height = 19
               Top = 8
-              Width = 145
+              Width = 150
               Caption = 'Initial movement (steps)'
               ParentColor = False
               ParentFont = False
@@ -2440,14 +2439,14 @@ object f_option: Tf_option
               Left = 8
               Height = 19
               Top = 42
-              Width = 140
+              Width = 144
               Caption = 'Final movement (steps)'
               ParentColor = False
               ParentFont = False
             end
             object AutofocusMaxSpeed: TSpinEditEx
               Left = 214
-              Height = 29
+              Height = 31
               Top = 6
               Width = 61
               MaxLength = 0
@@ -2459,7 +2458,7 @@ object f_option: Tf_option
             end
             object AutofocusMinSpeed: TSpinEditEx
               Left = 214
-              Height = 29
+              Height = 31
               Top = 38
               Width = 61
               MaxLength = 0
@@ -5540,9 +5539,10 @@ object f_option: Tf_option
             'Autofocus error'
             'Meridian flip error'
           )
-          ItemHeight = 23
+          ItemHeight = 0
           ParentFont = False
           TabOrder = 0
+          TopIndex = -1
           Data = {
             050000000000000000
           }
@@ -5553,8 +5553,8 @@ object f_option: Tf_option
           Top = 192
           Width = 524
           Align = alBottom
-          ClientHeight = 41
-          ClientWidth = 524
+          ClientHeight = 37
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 1
           object ButtonNotificationAll: TButton

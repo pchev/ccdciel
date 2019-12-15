@@ -6305,7 +6305,7 @@ begin
    end;
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
-   f_option.Autofocusmode.ItemIndex:=config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode));
+   f_option.SetAutofocusmode(TAutofocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode))));
    f_option.AutofocusMinSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
    f_option.AutofocusMaxSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
    f_option.AutofocusStartHFD.Value:=config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
@@ -6566,7 +6566,7 @@ begin
         config.SetValue('/Filters/Offset'+IntToStr(i),StrToIntDef(trim(f_option.FilterList.Cells[1,i]),0));
         config.SetValue('/Filters/ExpFact'+IntToStr(i),StrToFloatDef(trim(f_option.FilterList.Cells[2,i]),1.0));
      end;
-     config.SetValue('/StarAnalysis/AutoFocusMode',f_option.Autofocusmode.ItemIndex);
+     config.SetValue('/StarAnalysis/AutoFocusMode',ord(f_option.GetAutofocusMode));
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',f_option.AutofocusMaxSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusStartHFD',f_option.AutofocusStartHFD.Value);

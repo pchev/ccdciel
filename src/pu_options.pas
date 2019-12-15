@@ -611,6 +611,8 @@ type
   public
     { public declarations }
     LockTemp: Boolean;
+    procedure SetAutofocusMode(value: TAutofocusMode);
+    function  GetAutofocusMode: TAutofocusMode;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
@@ -920,8 +922,8 @@ begin
   FlatType.Items[0]:=rsNone2;
   FlatType.Items[1]:=rsTwilightSkyF;
   FlatType.Items[2]:=rsDomePanel;
-  Autofocusmode.items[0]:=rsVCurve;
-  Autofocusmode.items[1]:=rsDynamic;
+  Autofocusmode.items[0]:=rsDynamic;
+  Autofocusmode.items[1]:=rsVCurve;
   Autofocusmode.items[2]:=rsIterative;
   Autofocusmode.items[3]:=rsNone2;
   ResolverBox.Items[2]:=rsNone2;
@@ -1012,7 +1014,7 @@ begin
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);
   AutofocusMoveDirIn.Hint:=rsThePreferedF;
   AutofocusMoveDirOut.Hint:=rsThePreferedF;
-  Autofocusmode.Hint:=Format(rsUseVcurveWit, [crlf, crlf]);
+  Autofocusmode.Hint:='- '+Format(rsUseDynamic2,[crlf+blank,crlf+blank])+crlf+'- '+rsUseVcurveWi2+crlf+'- '+Format(rsUseIterati2,[crlf+blank]);
   AutofocusSlippageCorrection.Hint:=Format(rsTryToCorrect, [crlf]);
   FocusStarMag.Hint:=Format(rsTheMagnitude, [crlf]);
   AutofocusPauseGuider.Hint:=rsBeSureToPaus;
@@ -1208,7 +1210,7 @@ procedure Tf_option.ChangeAutofocusInPlace(Sender: TObject);
 begin
   AutofocusMultistar.Visible:=AutofocusInPlace.Checked;
   AutofocusSlewStar.Visible:=not AutofocusMultistar.Visible;
-  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=0) then
+  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
      LabelMultistarWarning.Caption:=rsItIsSuggestT
   else
     LabelMultistarWarning.Caption:='';
@@ -1270,6 +1272,27 @@ begin
   FileOrFolderOptionsRenumber(TStringGrid(Sender));
 end;
 
+procedure Tf_option.SetAutofocusMode(value: TAutofocusMode);
+begin
+  case value of
+  afVcurve    : Autofocusmode.ItemIndex:=1;
+  afDynamic   : Autofocusmode.ItemIndex:=0;
+  afIterative : Autofocusmode.ItemIndex:=2;
+  afNone      : Autofocusmode.ItemIndex:=3;
+  end;
+end;
+
+function  Tf_option.GetAutofocusMode: TAutofocusMode;
+begin
+ case Autofocusmode.ItemIndex of
+   0 : result:=afDynamic;
+   1 : result:=afVcurve;
+   2 : result:=afIterative;
+   3 : result:=afNone;
+ end;
+
+end;
+
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
@@ -1277,7 +1300,7 @@ begin
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
-  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=0) then
+  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
      LabelMultistarWarning.Caption:=rsItIsSuggestT
   else
     LabelMultistarWarning.Caption:='';
