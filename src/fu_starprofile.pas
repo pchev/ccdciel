@@ -87,7 +87,7 @@ type
   private
     { private declarations }
     FFindStar: boolean;
-    FStarX,FStarY,FValMax: double;
+    FStarX,FStarY,FValMax,FValMaxCalibrated: double;
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
@@ -133,6 +133,7 @@ type
     property HFD:double read Fhfd;
     property SNR:double read Fsnr;
     property ValMax: double read FValMax;
+    property ValMaxCalibrated: double read FValMaxCalibrated;
     property PreFocusPos: integer read FPreFocusPos write FPreFocusPos;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
@@ -487,9 +488,9 @@ try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
 if f.HeaderInfo.floatingpoint then
-  LabelImax.Caption:=FormatFloat(f3,f.imageMin+(FValMax+bg)/f.imageC)
+  LabelImax.Caption:=FormatFloat(f3,f.imageMin+FValMaxCalibrated)
 else
-  LabelImax.Caption:=FormatFloat(f0,f.imageMin+(FValMax+bg)/f.imageC);
+  LabelImax.Caption:=FormatFloat(f0,f.imageMin+FValMaxCalibrated);
 if Fsnr>0 then
    LabelSNR.Caption:=FormatFloat(f1,Fsnr)
 else
@@ -641,9 +642,11 @@ begin
  if s>=(f.HeaderInfo.naxis2 div 2) then s:=f.HeaderInfo.naxis2 div 2;
 
  f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
+ FValMaxCalibrated:=(FValMax+bg)/f.imageC;
  if FValMax=0 then exit;
 
  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);
+ FValMaxCalibrated:=(FValMax+bg)/f.imageC;
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end

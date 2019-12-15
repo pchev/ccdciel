@@ -139,7 +139,7 @@ begin
   ValueListEditor2.TitleCaptions[0] := rsParameter;
   ValueListEditor2.TitleCaptions[1] := rsValue;
   Label8.Caption := rsClickNextToS2;
-  Label9.Caption := Format(rsTheDataAreNo, [#10#10, #10, #10#10, #10]);
+  Label9.Caption := Format(rsTheDataAre2, [#10#10, #10]);
   BtnCancel.Caption := rsCancel;
   BtnNext.Caption := rsNext;
   BtnBack.Caption := rsBack;
@@ -284,6 +284,7 @@ begin
   config.SetValue('/StarAnalysis/Window',Starwindow);
   config.SetValue('/StarAnalysis/Focus',Focuswindow);
   config.SetValue('/StarAnalysis/AutoFocusMode',ord(AutofocusMode));
+  config.SetValue('/StarAnalysis/AutofocusInPlace',AutofocusInPlace);
   config.SetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
   config.SetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
   config.SetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD);

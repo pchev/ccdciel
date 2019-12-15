@@ -721,11 +721,8 @@ resourcestring
   rsValue = 'Value';
   rsClickNextToS2 = 'Click Next to save this values to the configuration for '
     +'this profile.';
-  rsTheDataAreNo = 'The data are now recorded in the profile.%sYou can review '
-    +'the other auto-focus options using the menu %sEdit / Preferences / '
-    +'Autofocus.%sIf the Vcurve method is active, you need to learn the curve '
-    +'using the next window that will open after you close this one.%sYou can '
-    +'also do this learning later using the button V-learn in the focuser tool.';
+  rsTheDataAre2 = 'The data are now recorded in the profile.%sYou can review '
+    +'the other auto-focus options using the menu %sEdit / Preferences / Autofocus';
   rsStartPositio = 'Start position  pos:%s hfd:%s peak:%s snr:%s';
   rsMeasurementP = 'Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s';
   rsRunScript2 = 'Run script %s';
@@ -854,8 +851,7 @@ resourcestring
   rsResumeAutogu = 'Resume autoguider';
   rsMaximumADU = 'Maximum ADU';
   rsSensorsPrope = 'Sensors properties';
-  rsTheMenuFileF = 'The menu "File/Focuser calibration" help to fill this '
-    +'values.';
+  rsTheMenuFileF = 'The menu "Tools/Focuser calibration" help to fill this values.';
   rsSlewToANearS = 'Slew to a near star of magnitude';
   rsFocusStarSel = 'Focus star selection';
   rsDefaultBehav = 'Default behavior';

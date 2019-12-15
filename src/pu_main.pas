@@ -3345,7 +3345,7 @@ begin
   end;
   CurrentFilterOffset:=0;
   if (wheel.Status=devConnected) then AutofocusExposureFact:=FilterExpFact[wheel.Filter];
-  AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3));
+  AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3)); // default to no autofocus
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
   AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
@@ -3365,7 +3365,7 @@ begin
   AutofocusPeriod:=config.GetValue('/StarAnalysis/AutofocusPeriod',0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
-  AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
+  AutofocusInPlace:=config.GetValue('/StarAnalysis/AutofocusInPlace',true);
   if AutofocusInPlace then
      AutofocusPauseGuider:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',true)
   else
@@ -6343,7 +6343,7 @@ begin
    f_option.AutofocusMoveDirIn.Checked:=ok;
    f_option.AutofocusMoveDirOut.Checked:=not ok;
    f_option.AutofocusNearNum.Value:=config.GetValue('/StarAnalysis/AutofocusNearNum',AutofocusNearNum);
-   ok:=config.GetValue('/StarAnalysis/AutofocusInPlace',false);
+   ok:=config.GetValue('/StarAnalysis/AutofocusInPlace',true);
    f_option.AutofocusInPlace.Checked:=ok;
    f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',AutofocusPauseGuider);
@@ -8865,10 +8865,9 @@ begin
     exit;
   end;
   if  f_preview.Running  then begin
-    buf:=rsCannotRunCal2;
-    NewMessage(buf,1);
-    f_focusercalibration.CalibrationCancel(buf);
-    exit;
+    f_preview.Loop:=false;
+    f_preview.BtnPreviewClick(nil);
+    wait(1);
   end;
   OutOfRange:=false;
   if FocAbsolute then
@@ -8946,22 +8945,22 @@ begin
          if FocAbsolute then
            NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
              FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
-             f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]),2)
+             f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2)
          else
            NewMessage(Format(rsStartPositio, [IntToStr(savepos), FormatFloat(
-             f1, f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMax),
+             f1, f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMaxCalibrated),
              FormatFloat(f1, f_starprofile.SNR)]),2);
        end
        else begin
          if FocAbsolute then
            NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(
              focuser.Position), IntToStr(step), FormatFloat(f1,
-             f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMax),
+             f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMaxCalibrated),
              FormatFloat(f1, f_starprofile.SNR)]),2)
          else
            NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(savepos),
              IntToStr(step), FormatFloat(f1, f_starprofile.hfd), FormatFloat(
-             f1, f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]),2);
+             f1, f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2);
        end;
        if FocAbsolute then
           hfd1[j,1]:=focuser.Position
@@ -9066,22 +9065,22 @@ begin
         if FocAbsolute then
           NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
             FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
-            f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]),2)
+            f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2)
         else
           NewMessage(Format(rsStartPositio, [IntToStr(savepos), FormatFloat(f1,
-            f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMax),
+            f_starprofile.hfd), FormatFloat(f1, f_starprofile.ValMaxCalibrated),
             FormatFloat(f1, f_starprofile.SNR)]),2);
       end
       else begin
         if FocAbsolute then
           NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(
             focuser.Position), IntToStr(step), FormatFloat(f1, f_starprofile.hfd
-            ), FormatFloat(f1, f_starprofile.ValMax), FormatFloat(f1,
+            ), FormatFloat(f1, f_starprofile.ValMaxCalibrated), FormatFloat(f1,
             f_starprofile.SNR)]),2)
         else
           NewMessage(Format(rsMeasurementP, [inttostr(j), IntToStr(savepos),
             IntToStr(step), FormatFloat(f1, f_starprofile.hfd), FormatFloat(f1,
-            f_starprofile.ValMax), FormatFloat(f1, f_starprofile.SNR)]),2);
+            f_starprofile.ValMaxCalibrated), FormatFloat(f1, f_starprofile.SNR)]),2);
       end;
       if FocAbsolute then
          hfd2[j,1]:=focuser.Position
@@ -9169,12 +9168,14 @@ begin
     AutofocusNearNum:=3;
     AutofocusTolerance:=2*hfd1[0,2];
     AutofocusMinSNR:=3;
-    // vcurve
+    AutofocusInPlace:=True;
+    // vcurve parameters
     if FocAbsolute then begin
+      // dynamic is more easy for new user, just store vcurve parameters for future use
       VcCenterpos:=cc;
       VcHalfwidth:=round(abs((hfdmax-b1)/a1-cc));
       VcNsteps:=15;
-      AutoFocusMode:=afVcurve;
+      AutoFocusMode:=afDynamic;
     end
     else
       AutoFocusMode:=afDynamic;
@@ -9209,6 +9210,7 @@ begin
        f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsVCurve,true)
     else
        f_focusercalibration.ValueListEditor2.InsertRow(rsAutofocusMet,rsDynamic,true);
+    f_focusercalibration.ValueListEditor2.InsertRow(rsStayInPlace,BoolToStr(AutofocusInPlace,rsTrue, rsFalse),true);
     if FocAbsolute then begin
       f_focusercalibration.ValueListEditor2.InsertRow(rsFocusPositio,inttostr(VcCenterpos),true);
       f_focusercalibration.ValueListEditor2.InsertRow(rsMaxOffset,inttostr(VcHalfwidth),true);
@@ -9244,7 +9246,6 @@ end;
 Procedure Tf_main.FocuserCalibrationClose(Sender: TObject);
 begin
  SetOptions;
- if AutofocusMode=afVcurve then FocusVcurveLearning(Sender);
 end;
 
 Procedure Tf_main.FocusStart(Sender: TObject);
