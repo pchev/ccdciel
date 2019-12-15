@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-12 21:24+0000\n"
-"PO-Revision-Date: 2019-12-12 21:30+0000\n"
+"POT-Creation-Date: 2019-12-15 11:48+0000\n"
+"PO-Revision-Date: 2019-12-15 11:51+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-12 21:32+0000\n"
+"X-Launchpad-Export-Date: 2019-12-15 13:00+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_translation.rs32bitdriver
@@ -2584,6 +2584,10 @@ msgstr "Veuillez d'abord exécuter la procédure de calibration du focuser"
 msgid "Please run Vcurve learning for binning %s"
 msgstr "Veuillez faire l'apprentissage la Vcurve pour le binning %s"
 
+#: u_translation.rspleaseseethe
+msgid "Please see the documentation for important security information"
+msgstr "Consulter la documentation pour des informations de sécurité importantes"
+
 #: u_translation.rspleaseselect
 msgid "Please select a script!"
 msgstr "Veuillez sélectionner un script!"
@@ -3904,9 +3908,9 @@ msgstr "Le format d'image de la camera est"
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
 
-#: u_translation.rsthedataareno
-msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
-msgstr "Les données sont maintenant enregistrées dans le profil. %sVous pouvez revoir les autres options de mise au point automatique à l'aide du menu %sModifier / Préférences / Autofocus. %sSi la méthode Vcurve est active, vous devez faire l'apprentissage de la courbe en utilisant la fenêtre qui s'ouvrira après la fermeture de celle-ci. %sVous pouvez également faire cet apprentissage plus tard en utilisant le bouton Apprendre dans l'outil de mise au point."
+#: u_translation.rsthedataare2
+msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
+msgstr "Les données sont maintenant enregistrées dans le profil. %sVous pouvez revoir les autres options de mise au point automatique à l'aide du menu %sModifier / Préférences / Autofocus"
 
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
@@ -3929,8 +3933,8 @@ msgid "The following actions are run if the safety monitor report dangerous cond
 msgstr "Ces actions sont exécutée quand le contrôle de sécurité indique un danger"
 
 #: u_translation.rsthemenufilef
-msgid "The menu \"File/Focuser calibration\" help to fill this values."
-msgstr "Le menu \"Fichier/Calibration du focuser\" aide à remplir ces valeurs."
+msgid "The menu \"Tools/Focuser calibration\" help to fill this values."
+msgstr "Le menu \"Outils/Calibration du focuser\" aide à remplir ces valeurs."
 
 #: u_translation.rsthemountdono
 msgid "The mount do not move enough!"

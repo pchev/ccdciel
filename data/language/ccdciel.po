@@ -2522,8 +2522,8 @@ msgstr ""
 msgid "Click Next to save this values to the configuration for this profile."
 msgstr ""
 
-#: u_translation:rsthedataareno
-msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
+#: u_translation:rsthedataare2
+msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
 msgstr ""
 
 #: u_translation:rsstartpositio
@@ -3019,7 +3019,7 @@ msgid "Sensors properties"
 msgstr ""
 
 #: u_translation:rsthemenufilef
-msgid "The menu \"File/Focuser calibration\" help to fill this values."
+msgid "The menu \"Tools/Focuser calibration\" help to fill this values."
 msgstr ""
 
 #: u_translation:rsslewtoanears
@@ -4396,5 +4396,9 @@ msgstr ""
 
 #: u_translation:rsemailon
 msgid "Email on :"
+msgstr ""
+
+#: u_translation:rspleaseseethe
+msgid "Please see the documentation for important security information"
 msgstr ""
 

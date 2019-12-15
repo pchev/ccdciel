@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-12 21:24+0000\n"
-"PO-Revision-Date: 2019-12-08 17:26+0000\n"
-"Last-Translator: Thomas <email@starhopper.de>\n"
+"POT-Creation-Date: 2019-12-15 11:48+0000\n"
+"PO-Revision-Date: 2019-12-15 11:53+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-12 21:32+0000\n"
+"X-Launchpad-Export-Date: 2019-12-15 13:00+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_translation.rs32bitdriver
@@ -90,7 +90,7 @@ msgstr "Stern zur Ausrichtung verloren"
 
 #: u_translation.rsall
 msgid "All"
-msgstr ""
+msgstr "Alles"
 
 #: u_translation.rsallowtogetpr
 msgid "Allow to get program status from TCP/IP internal server"
@@ -106,7 +106,7 @@ msgstr "Erlaube einen helleren Stern für höhere Filterfaktoren auszuwählen"
 
 #: u_translation.rsalt
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
@@ -206,7 +206,7 @@ msgstr "Autofokus Fehler"
 
 #: u_translation.rsautofocuserr2
 msgid "Autofocus error"
-msgstr ""
+msgstr "Autofokus Fehler"
 
 #: u_translation.rsautofocuseve
 msgid "Autofocus%severy"
@@ -310,7 +310,7 @@ msgstr "Autoguider"
 
 #: u_translation.rsautoguiderer
 msgid "Autoguider error"
-msgstr ""
+msgstr "Autoguider Fehler"
 
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
@@ -378,7 +378,7 @@ msgstr "verfügbar"
 
 #: u_translation.rsaz
 msgid "Az"
-msgstr ""
+msgstr "Az"
 
 #: u_translation.rsazimuth
 msgid "Azimuth"
@@ -734,7 +734,7 @@ msgstr "Wolkenbedeckung"
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
-msgstr ""
+msgstr "Weißabgleich"
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
@@ -762,7 +762,7 @@ msgstr "Compiliert mit"
 
 #: u_translation.rscompressthef
 msgid "Compress the FITS files with fpack"
-msgstr ""
+msgstr "Komprimiere die FITS-Dateien mit fpack"
 
 #: u_translation.rscomputationr
 msgid "Computation result:"
@@ -962,7 +962,7 @@ msgstr "Gewünschte Temperatur"
 
 #: u_translation.rsdestinatione
 msgid "Destination email address"
-msgstr ""
+msgstr "Empfänger E-Mail Adresse"
 
 #: u_translation.rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
@@ -1166,15 +1166,15 @@ msgstr "Höhe"
 
 #: u_translation.rsemailconfigu
 msgid "Email configuration"
-msgstr ""
+msgstr "e-Mail Konfiguration"
 
 #: u_translation.rsemailon
 msgid "Email on :"
-msgstr ""
+msgstr "E-Mail an:"
 
 #: u_translation.rsemailsentsuc
 msgid "Email sent successfully, please check your inbox"
-msgstr ""
+msgstr "E-Mail erfolgreich versendet, bitte Postfach überprüfen"
 
 #: u_translation.rsend
 msgid "End"
@@ -1506,7 +1506,7 @@ msgstr "Vom Kameratreiber"
 
 #: u_translation.rsfromemailadd
 msgid "From email address"
-msgstr ""
+msgstr "Absender E-Mail Adresse"
 
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
@@ -1959,7 +1959,7 @@ msgstr "Meridianflip ausgeführt"
 
 #: u_translation.rsmeridianflip8
 msgid "Meridian flip error"
-msgstr ""
+msgstr "Merdian Flip Fehler"
 
 #: u_translation.rsmeridianflip9
 msgid "Meridian flip canceled after flip"
@@ -2255,7 +2255,7 @@ msgstr "Keine Aktionen für das Beenden konfiguriert"
 
 #: u_translation.rsnotification
 msgid "Notifications"
-msgstr ""
+msgstr "Benachrichtigungen"
 
 #: u_translation.rsnotimplement
 msgid "Not implemented!"
@@ -2584,6 +2584,10 @@ msgstr "Bitte zuerst die Fokussierer Kalibrierung ausführen"
 #: u_translation.rspleaserunvcu
 msgid "Please run Vcurve learning for binning %s"
 msgstr "Bitte V-Curve Kalibierung für Binning %s ausführen"
+
+#: u_translation.rspleaseseethe
+msgid "Please see the documentation for important security information"
+msgstr "Bitte lesen Sie die Dokumentation für wichtige Sicherheitsinformationen"
 
 #: u_translation.rspleaseselect
 msgid "Please select a script!"
@@ -3120,7 +3124,7 @@ msgstr "Bild an Planetarium senden"
 
 #: u_translation.rssendtestemai
 msgid "Send test email"
-msgstr ""
+msgstr "Test E-Mail senden"
 
 #: u_translation.rssensor
 msgid "Sensor"
@@ -3152,7 +3156,7 @@ msgstr "Sequenz"
 
 #: u_translation.rssequenceabno
 msgid "Sequence abnormal end"
-msgstr ""
+msgstr "Sequenz nicht normal beendet"
 
 #: u_translation.rssequenceabor
 msgid "Sequence aborted."
@@ -3184,7 +3188,7 @@ msgstr "Sequenz %s ignoriere Stopp in der Morgendämmerung"
 
 #: u_translation.rssequencenorm
 msgid "Sequence normal end"
-msgstr ""
+msgstr "Sequenz normal beendet"
 
 #: u_translation.rssequencepaus
 msgid "Sequence paused for bad weather ..."
@@ -3444,11 +3448,11 @@ msgstr "Steigung"
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
-msgstr ""
+msgstr "SMTP Server Adresse"
 
 #: u_translation.rssmtpserverpo
 msgid "SMTP server port"
-msgstr ""
+msgstr "SMTP Server Port"
 
 #: u_translation.rssocketerrors
 msgid "Socket error %s.  %s"
@@ -3560,7 +3564,7 @@ msgstr "Beginne mit dem Lernen der V-Kurve"
 
 #: u_translation.rsstartnewexpo
 msgid "Start new exposure as early as possible"
-msgstr ""
+msgstr "Starte neue Aufnahme sobald wie möglich"
 
 #: u_translation.rsstartnewlog
 msgid "Start new log"
@@ -3896,7 +3900,7 @@ msgstr "Optionen beim Beenden"
 
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
-msgstr ""
+msgstr "Test e-Mail von CCDciel"
 
 #: u_translation.rsthecameraima
 msgid "The camera image format is"
@@ -3906,9 +3910,9 @@ msgstr "Das Bildformat der Kamera ist"
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "Die Kamera ist verbunden. Möchten Sie das Programm verlassen"
 
-#: u_translation.rsthedataareno
-msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus.%sIf the Vcurve method is active, you need to learn the curve using the next window that will open after you close this one.%sYou can also do this learning later using the button V-learn in the focuser tool."
-msgstr "Die Werte sind nun im Profil aufgezeichnet.%sSie können die anderen Autofokus-optionen über das Menü %sBearbeiten / Einstellungen /Autofokus erreichen.%sWenn die V-Curve Methode aktiv ist, so muss anschließend noch die V-Curveermittelt werden. Das entprechende Dialogfenster öffnet sich automatisch wennSie dieses schließen. %sSie können dies auch später erledigen indem sie denV-lernen Schalter im Fokussierwerkzeug drücken"
+#: u_translation.rsthedataare2
+msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
+msgstr "Die Werte sind nun im Profil aufgezeichnet.%sSie können die anderen Autofokus-optionen über das Menü %sBearbeiten / Einstellungen /Autofokus erreichen"
 
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
@@ -3931,8 +3935,8 @@ msgid "The following actions are run if the safety monitor report dangerous cond
 msgstr "Die folgenden Aktionen werden ausgeführt, wenn der Sicherheitsmonitor einen gefährlichen Zustand meldet"
 
 #: u_translation.rsthemenufilef
-msgid "The menu \"File/Focuser calibration\" help to fill this values."
-msgstr "Das Menu \"Datei/Fokussierer Kalibrierung\" hilft diese Werte zu füllen"
+msgid "The menu \"Tools/Focuser calibration\" help to fill this values."
+msgstr "Das Menu \"Werkzeuge/Fokussierer Kalibrierung\" hilft diese Werte zu füllen"
 
 #: u_translation.rsthemountdono
 msgid "The mount do not move enough!"
@@ -3980,7 +3984,7 @@ msgstr "Das Teleskop ist geparkt, starte jetzt"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."
-msgstr ""
+msgstr "Diese Nachricht bestätigt, dass die E-Mail-Konfiguration funktioniert."
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
@@ -4168,7 +4172,7 @@ msgstr "Kuppel verwenden"
 
 #: u_translation.rsusedslrcolor
 msgid "Use DSLR color balance"
-msgstr ""
+msgstr "Verwende Kamera Weißabgleich"
 
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"
