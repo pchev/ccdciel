@@ -198,7 +198,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.65';
+  ccdcielver = '0.9.66';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 4;
   Maxclient = 100;
