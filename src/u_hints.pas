@@ -105,7 +105,7 @@ resourcestring
   rsTheListOfTar = 'The list of target to process in sequence.';
   rsSaveTheListA = 'Save the list and close this window.';
   rsSaveTheListW = 'Save the list with a new name and close this window.';
-  rsUseDynamic2 = 'Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the prefered method.';
+  rsUseDynamic2 = 'Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method.';
   rsUseVcurveWi2 = 'Vcurve can only work with an absolute position focuser, it require to learn the curve.';
   rsUseIterati2 = 'Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method.';
   rsShowTheOptio = 'Show the option to stack the preview frame in real time.%'

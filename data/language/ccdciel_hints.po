@@ -318,8 +318,16 @@ msgstr ""
 msgid "Save the list with a new name and close this window."
 msgstr ""
 
-#: u_hints:rsusevcurvewit
-msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
+#: u_hints:rsusedynamic2
+msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
+msgstr ""
+
+#: u_hints:rsusevcurvewi2
+msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
+msgstr ""
+
+#: u_hints:rsuseiterati2
+msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
 msgstr ""
 
 #: u_hints:rsshowtheoptio

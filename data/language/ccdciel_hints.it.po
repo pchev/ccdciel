@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-15 11:48+0000\n"
+"POT-Creation-Date: 2019-12-15 14:00+0000\n"
 "PO-Revision-Date: 2019-12-15 12:59+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-15 13:00+0000\n"
+"X-Launchpad-Export-Date: 2019-12-15 14:16+0000\n"
 "X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
 
 #: u_hints.rsactivateback
@@ -528,12 +528,20 @@ msgstr ""
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
 msgstr ""
 
+#: u_hints.rsusedynamic2
+msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
+msgstr ""
+
+#: u_hints.rsuseiterati2
+msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
+msgstr ""
+
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr ""
 
-#: u_hints.rsusevcurvewit
-msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve, but this is the quickest method, recommended when focusing on a single star.%sDynamic can be use with an absolute or relative position focuser, this method require the starting position is near the focus position. It work best when measuring all the stars in the image.%sUse Iterative if the first two options do not work for you or if you start with really bad focus. This is the slowest and less precise method."
+#: u_hints.rsusevcurvewi2
+msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
 msgstr ""
 
 #: u_hints.rsvcurvelearni
