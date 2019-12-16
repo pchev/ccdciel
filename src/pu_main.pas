@@ -8251,8 +8251,8 @@ begin
 if (img_Height=0)or(img_Width=0) then exit;
 r1:=ScrBmp.Width/imabmp.Width;
 r2:=ScrBmp.Height/imabmp.Height;
-ZoomMin:=min(r1,r2);
-if (ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01) then ImgZoom:=0;
+ZoomMin:=minvalue([1.0,r1,r2]);
+if (ZoomMin<1)and((ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01)) then ImgZoom:=0;
 ClearImage;
 imabmp.ResampleFilter:=rfBestQuality;
 if ImgZoom=0 then begin
