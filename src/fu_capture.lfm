@@ -163,13 +163,57 @@ object f_capture: Tf_capture
         ParentFont = False
       end
     end
-    object Panel4: TPanel
+    object PanelFnumber: TPanel
       Left = 0
       Height = 28
       Top = 90
       Width = 190
       BevelOuter = bvNone
-      Caption = ' '
+      ClientHeight = 28
+      ClientWidth = 190
+      ParentFont = False
+      TabOrder = 9
+      Visible = False
+      object Label6: TLabel
+        Left = 0
+        Height = 19
+        Top = 4
+        Width = 38
+        Caption = 'F-stop'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Fnumber: TComboBox
+        Left = 89
+        Height = 28
+        Top = 0
+        Width = 101
+        Constraints.MaxHeight = 28
+        ItemHeight = 0
+        Items.Strings = (
+          '1'
+          '1.2'
+          '1.4'
+          '1.8'
+          '2'
+          '2.8'
+          '4'
+          '5.6'
+          '8'
+          '11'
+          '16'
+          '22'
+        )
+        ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 28
+      Top = 118
+      Width = 190
+      BevelOuter = bvNone
       ClientHeight = 28
       ClientWidth = 190
       ParentFont = False
@@ -196,7 +240,7 @@ object f_capture: Tf_capture
     object Panel5: TPanel
       Left = 0
       Height = 28
-      Top = 118
+      Top = 146
       Width = 190
       BevelOuter = bvNone
       Caption = ' '
@@ -230,7 +274,7 @@ object f_capture: Tf_capture
     object Panel6: TPanel
       Left = 0
       Height = 29
-      Top = 146
+      Top = 174
       Width = 190
       BevelOuter = bvNone
       ClientHeight = 29
@@ -270,7 +314,7 @@ object f_capture: Tf_capture
     object Panel7: TPanel
       Left = 0
       Height = 28
-      Top = 175
+      Top = 203
       Width = 190
       BevelOuter = bvNone
       ClientHeight = 28
@@ -304,7 +348,7 @@ object f_capture: Tf_capture
     object Panel8: TPanel
       Left = 0
       Height = 28
-      Top = 203
+      Top = 231
       Width = 190
       BevelOuter = bvNone
       ClientHeight = 28
@@ -338,7 +382,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 0
       Height = 24
-      Top = 231
+      Top = 259
       Width = 190
       BevelOuter = bvNone
       ClientHeight = 24

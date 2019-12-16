@@ -228,6 +228,9 @@ const
   Binning0 = '1x1';
   dateiso = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss.zzz';
   dateisoshort = 'yyyy"-"mm"-"dd"T"hh":"nn":"ss';
+  roundf1=10;
+  roundf2=100;
+  roundf3=1000;
   f0 = '0';
   f1 = '0.0';
   f2 = '0.00';

@@ -46,6 +46,7 @@ T_camera = class(TComponent)
     FonFrameChange: TNotifyEvent;
     FonTemperatureChange: TNotifyNum;
     FonCoolerChange: TNotifyBool;
+    FonFnumberChange: TNotifyNum;
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
@@ -78,7 +79,7 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
-    FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo: boolean;
+    FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -152,6 +153,8 @@ T_camera = class(TComponent)
     function GetGain: integer; virtual; abstract;
     procedure SetReadOutMode(value: integer); virtual; abstract;
     function GetReadOutMode: integer; virtual; abstract;
+    procedure SetFnumber(value: double); virtual; abstract;
+    function GetFnumber: double; virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -251,11 +254,14 @@ T_camera = class(TComponent)
     property hasReadOut: boolean read FhasReadOut;
     property ReadOutList: TStringList read FReadOutList;
     property ReadOutMode: integer read GetReadOutMode write SetReadOutMode;
+    property hasFnumber: boolean read FhasFnumber;
+    property Fnumber: double read GetFnumber write SetFnumber;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
     property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
     property onCoolerChange: TNotifyBool read FonCoolerChange write FonCoolerChange;
+    property onFnumberChange: TNotifyNum read FonFnumberChange write FonFnumberChange;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
     property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
@@ -315,6 +321,7 @@ begin
   FReadOutList:=TStringList.Create;
   FhasFastReadout:=false;
   FhasReadOut:=false;
+  FhasFnumber:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
   RampTimer:=TTimer.Create(self);

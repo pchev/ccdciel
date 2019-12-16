@@ -114,6 +114,8 @@ T_ascomrestcamera = class(T_camera)
    function GetGainReal: integer;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
+   procedure SetFnumber(value: double); override;
+   function GetFnumber: double; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -1136,6 +1138,17 @@ begin
   except
      on E: Exception do msg('Get ReadOut: '+E.Message,0);
   end;
+end;
+
+procedure T_ascomrestcamera.SetFnumber(value: double);
+begin
+  //unsupported
+end;
+
+function T_ascomrestcamera.GetFnumber: double;
+begin
+  result:=0;
+  //unsupported
 end;
 
 procedure T_ascomrestcamera.StartVideoPreview;

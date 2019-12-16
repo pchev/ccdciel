@@ -37,6 +37,7 @@ type
     BtnStart: TButton;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
+    Fnumber: TComboBox;
     ISObox: TComboBox;
     FrameType: TComboBox;
     ExpTime: TComboBox;
@@ -45,9 +46,11 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
     LabelGain: TLabel;
     led: TShape;
     Panel1: TPanel;
+    PanelFnumber: TPanel;
     PanelGain: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
@@ -131,6 +134,7 @@ begin
   Label1.Caption:=rsExposure;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBinning;
+  Label6.Caption:=rsFStop;
   Label3.Caption:=rsObject;
   Label4.Caption:=rsCount;
   Label5.Caption:=rsType;

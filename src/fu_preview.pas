@@ -35,9 +35,12 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    Fnumber: TComboBox;
     ISObox: TComboBox;
+    Label3: TLabel;
     LabelGain: TLabel;
     Panel5: TPanel;
+    PanelFnumber: TPanel;
     PanelGain: TPanel;
     GainEdit: TSpinEditEx;
     StackPreview: TCheckBox;
@@ -117,6 +120,7 @@ begin
   Label1.Caption:=rsExposure;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBinning;
+  Label3.Caption:=rsFStop;
   BtnPreview.Caption:=rsPreview;
   StackPreview.Caption:=rsStack;
   BtnLoop.Caption:=rsLoop;

@@ -1204,6 +1204,8 @@ resourcestring
   rsAll = 'All';
   rsEmailOn = 'Email on :';
   rsPleaseSeeThe = 'Please see the documentation for important security information';
+  rsInvalid = 'Invalid';
+  rsFStop = 'F-stop';
 
 implementation
 

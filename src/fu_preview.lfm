@@ -1,22 +1,22 @@
 object f_preview: Tf_preview
   Left = 0
-  Height = 166
+  Height = 195
   Top = 0
   Width = 182
   AutoSize = True
-  ClientHeight = 166
+  ClientHeight = 195
   ClientWidth = 182
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
     Left = 0
-    Height = 146
+    Height = 175
     Top = 20
     Width = 182
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 146
+    ClientHeight = 175
     ClientWidth = 182
     ParentFont = False
     TabOrder = 0
@@ -74,7 +74,6 @@ object f_preview: Tf_preview
       Top = 28
       Width = 180
       BevelOuter = bvNone
-      Caption = ' '
       ClientHeight = 32
       ClientWidth = 180
       ParentFont = False
@@ -151,10 +150,55 @@ object f_preview: Tf_preview
         ParentFont = False
       end
     end
+    object PanelFnumber: TPanel
+      Left = 0
+      Height = 28
+      Top = 88
+      Width = 180
+      BevelOuter = bvNone
+      ClientHeight = 28
+      ClientWidth = 180
+      ParentFont = False
+      TabOrder = 5
+      Visible = False
+      object Label3: TLabel
+        Left = 0
+        Height = 19
+        Top = 4
+        Width = 38
+        Caption = 'F-stop'
+        ParentColor = False
+        ParentFont = False
+      end
+      object Fnumber: TComboBox
+        Left = 89
+        Height = 28
+        Top = 0
+        Width = 91
+        Constraints.MaxHeight = 28
+        ItemHeight = 0
+        Items.Strings = (
+          '1'
+          '1.2'
+          '1.4'
+          '1.8'
+          '2'
+          '2.8'
+          '4'
+          '5.6'
+          '8'
+          '11'
+          '16'
+          '22'
+        )
+        ParentFont = False
+        TabOrder = 0
+      end
+    end
     object Panel5: TPanel
       Left = 0
       Height = 24
-      Top = 88
+      Top = 116
       Width = 180
       BevelOuter = bvNone
       ClientHeight = 24
@@ -188,7 +232,7 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 23
-      Top = 112
+      Top = 140
       Width = 180
       BevelOuter = bvNone
       ClientHeight = 23

@@ -126,6 +126,8 @@ private
    CCDfilepath: ITextVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
+   CameraFnumber: INumberVectorProperty;
+   CameraFnumberValue: INumber;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
@@ -219,6 +221,8 @@ private
    function GetGain: integer; override;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
+   procedure SetFnumber(value: double); override;
+   function GetFnumber: double; override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -375,6 +379,8 @@ begin
     UploadSettings:=nil;
     CCDfilepath:=nil;
     configprop:=nil;
+    CameraFnumber:=nil;
+    FhasFnumber:=false;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -864,6 +870,12 @@ begin
      if (CfaOffsetX=nil)or(CfaOffsetY=nil)or(CfaType=nil) then CCDCfa:=nil;
      FhasCfaInfo:=(CCDCfa<>nil);
   end
+  else if (proptype=INDI_NUMBER)and(propname='f-number') then begin
+    CameraFnumber:=indiProp.getNumber();
+    CameraFnumberValue:=IUFindNumber(CameraFnumber,'f-number');
+    if CameraFnumberValue=nil then CameraFnumber:=nil;
+    FhasFnumber:=(CameraFnumber<>nil);
+  end
   else if (proptype=INDI_TEXT)and(ActiveDevices=nil)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
   end;
@@ -892,6 +904,9 @@ begin
   end
   else if nvp=CCDTemperature then begin
      if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
+  end
+  else if nvp=CameraFnumber then begin
+     if Assigned(FonFnumberChange) then FonFnumberChange(RoundFloat(CameraFnumberValue.value,roundf2));
   end
   else if nvp=VideoFPS then begin
      if Assigned(FonFPSChange) then FonFPSChange(self);
@@ -1744,6 +1759,22 @@ end;
 function T_indicamera.GetReadOutMode: integer;
 begin
 result:=0;
+end;
+
+procedure T_indicamera.SetFnumber(value: double);
+begin
+  if CameraFnumber<>nil then begin
+    CameraFnumberValue.value:=RoundFloat(value,roundf2);
+    indiclient.sendNewNumber(CameraFnumber);
+  end;
+end;
+
+function T_indicamera.GetFnumber: double;
+begin
+  if CameraFnumber<>nil then
+    result:=RoundFloat(CameraFnumberValue.value,roundf2)
+  else
+    result:=0;
 end;
 
 function T_indicamera.GetImageFormat: string;

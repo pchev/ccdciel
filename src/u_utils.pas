@@ -68,6 +68,7 @@ Function ExecuteFile(const FileName: string): integer;
 procedure Wait(wt:single=5);
 function GetCdCPort:string;
 function  Rmod(x,y:Double):Double;
+function  RoundFloat(x:Double;prec:integer):Double;
 function IsNumber(n : string) : boolean;
 Function PadZeros(x : string ; l :integer) : string;
 function DateTimetoJD(date: Tdatetime): double;
@@ -1069,6 +1070,11 @@ function  Rmod(x,y:Double):Double;
 BEGIN
     Rmod := x - Int(x/y) * y ;
 END  ;
+
+function RoundFloat(x:Double;prec:integer):Double;
+begin
+  result:=round(x*prec)/prec;
+end;
 
 function IsNumber(n : string) : boolean;
 begin

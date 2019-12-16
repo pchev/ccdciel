@@ -583,6 +583,7 @@ type
     procedure ShowBinningRange;
     procedure SetGainList;
     procedure ShowGain;
+    procedure ShowFnumber;
     procedure ShowFrameRange;
     procedure ShowFrame;
     procedure SetFrame(Sender: TObject);
@@ -624,6 +625,7 @@ type
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
     procedure CameraCoolerChange(var v:boolean);
+    procedure CameraFnumberChange(f:double);
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
@@ -1641,6 +1643,7 @@ begin
    camera.onFrameChange:=@FrameChange;
    camera.onTemperatureChange:=@CameraTemperatureChange;
    camera.onCoolerChange:=@CameraCoolerChange;
+   camera.onFnumberChange:=@CameraFnumberChange;
    camera.onNewImage:=@CameraNewImage;
    camera.onNewExposure:=@CameraNewExposure;
    camera.onVideoFrame:=@CameraVideoFrame;
@@ -2876,6 +2879,7 @@ begin
     ShowBinningRange;
     ShowGain;
     ShowFrameRange;
+    ShowFnumber;
   end;
 end;
 
@@ -4230,6 +4234,20 @@ begin
  end;
 end;
 
+procedure Tf_main.ShowFnumber;
+begin
+ if camera.hasFnumber then begin
+  f_capture.PanelFnumber.Visible:=true;
+  f_preview.PanelFnumber.Visible:=true;
+  f_capture.Fnumber.Text:=FloatToStr(camera.Fnumber);
+  f_preview.Fnumber.Text:=FloatToStr(camera.Fnumber);
+ end
+ else begin
+  f_capture.PanelFnumber.Visible:=false;
+  f_preview.PanelFnumber.Visible:=false;
+ end;
+end;
+
 Procedure Tf_main.ConnectWheel(Sender: TObject);
 begin
   case wheel.WheelInterface of
@@ -4889,6 +4907,12 @@ begin
   Preview:=false;
   StatusBar1.Panels[1].Text:=rsStop;
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
+end;
+
+procedure  Tf_main.CameraFnumberChange(f:double);
+begin
+ f_preview.Fnumber.Text:=FloatToStr(f);
+ f_capture.Fnumber.Text:=FloatToStr(f);
 end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
@@ -7173,7 +7197,7 @@ begin
 end;
 
 Procedure Tf_main.StartPreviewExposure(Sender: TObject);
-var e: double;
+var e,f: double;
     buf: string;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
@@ -7223,6 +7247,16 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
       camera.SetFrame(sx,sy,sw,sh);
   end;
+  if camera.hasFnumber then begin
+    f:=RoundFloat(StrToFloatDef(f_preview.Fnumber.Text,-1),roundf2);
+    if (camera.Fnumber<>f) then begin
+      if (f>0) then begin
+       NewMessage(rsSet+blank+rsFStop+'='+FloatToStr(f),2);
+       camera.Fnumber:=f;
+      end
+      else NewMessage(rsInvalid+blank+rsFStop+blank+f_preview.Fnumber.Text, 0);
+    end;
+  end;
   if camera.CanSetGain then begin
     if camera.hasGainISO then begin
        if camera.Gain<>f_preview.ISObox.ItemIndex then camera.Gain:=f_preview.ISObox.ItemIndex;
@@ -7236,7 +7270,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      camera.readoutmode:=ReadoutModePreview;
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
-  camera.ObjectName:=f_capture.Fname.Text;
+  camera.ObjectName:=rsPreview;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   camera.AddFrames:=f_preview.StackPreview.Checked;
   camera.StartExposure(e);
@@ -7396,20 +7430,6 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
    end
    else begin
     exit; // cannot start now
-   end;
-  end;
-  // check camera format is FITS
-  buf:=camera.ImageFormat;
-  if buf<>'.fits' then begin
-   if canwait then begin
-     NewMessage(rsTheCameraIma+blank+UpperCase(buf), 0);
-     NewMessage(Format(rsPleaseSetThe, ['FITS']), 0);
-     f_capture.Stop;
-     Capture:=false;
-     exit;
-   end
-   else begin
-     exit; // cannot start now
    end;
   end;
   if not f_capture.Running then begin
@@ -7590,7 +7610,7 @@ begin
 end;
 
 Procedure Tf_main.StartCaptureExposureNow;
-var e: double;
+var e,f: double;
     buf: string;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
     ftype:TFrameType;
@@ -7643,6 +7663,17 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     camera.GetFrame(x,y,w,h,true);
     if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
       camera.SetFrame(sx,sy,sw,sh);
+  end;
+  // check and set f-stop
+  if camera.hasFnumber then begin
+    f:=RoundFloat(StrToFloatDef(f_capture.Fnumber.Text,-1),roundf2);
+    if (camera.Fnumber<>f) then begin
+      if (f>0) then begin
+       NewMessage('Set F-Stop '+FloatToStr(f),2);
+       camera.Fnumber:=f;
+      end
+      else NewMessage('Invalid F-Stop '+f_capture.Fnumber.Text,0);
+    end;
   end;
   // check and set gain
   if camera.CanSetGain then begin
