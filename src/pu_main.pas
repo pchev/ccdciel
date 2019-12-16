@@ -1096,7 +1096,7 @@ begin
   lclver:=lcl_version;
   compile_time:={$I %DATE%}+' '+{$I %TIME%};
   compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
-  compile_system:={$I %FPCTARGETOS%};
+  compile_system:={$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%};
   cdate:={$I %DATE%};
   cdate:=copy(cdate,1,4);
   isAdmin := False;

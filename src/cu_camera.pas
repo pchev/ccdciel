@@ -510,7 +510,7 @@ end;
 
 procedure T_camera.WriteHeaders;
 var origin,observer,telname,objname,siso,CType: string;
-    focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de: double;
+    focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs,hcomment1 : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
@@ -519,7 +519,7 @@ var origin,observer,telname,objname,siso,CType: string;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
 begin
-  // get header values from camera (set by INDI driver)
+  // get header values from camera (set by INDI driver or libraw)
   if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
   if not Ffits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=Ffits.HeaderInfo.naxis;
   if not Ffits.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=Ffits.HeaderInfo.naxis1;
@@ -527,7 +527,7 @@ begin
   if not Ffits.Header.Valueof('NAXIS3',hnaxis3) then hnaxis3:=Ffits.HeaderInfo.naxis3;
   if not Ffits.Header.Valueof('BZERO',hbzero)   then hbzero:=Ffits.HeaderInfo.bzero;
   if not Ffits.Header.Valueof('BSCALE',hbscale) then hbscale:=Ffits.HeaderInfo.bscale;
-  if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=-1;
+  if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=Fexptime;
   if not Ffits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
   if not Ffits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
   if not Ffits.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
@@ -540,7 +540,17 @@ begin
   if not Ffits.Header.Valueof('FILTER',hfilter) then hfilter:='';
   if not Ffits.Header.Valueof('DATAMIN',hdmin)  then hdmin:=Ffits.HeaderInfo.dmin;
   if not Ffits.Header.Valueof('DATAMAX',hdmax)  then hdmax:=Ffits.HeaderInfo.dmax;
-  if not Ffits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
+  if not Ffits.Header.Valueof('CAMERA',hinstr) then if not Ffits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
+  if not Ffits.Header.Valueof('FOCALLEN',focal_length)  then focal_length:=-1;
+  if not Ffits.Header.Valueof('ISOSPEED',siso)  then siso:='';
+  if not Ffits.Header.Valueof('F_STOP',fstop)  then fstop:=-1;
+  if not Ffits.Header.Valueof('SHUTTER',shutter)  then shutter:=-1;
+  if not Ffits.Header.Valueof('BAYERPAT',CType)  then CType:='';
+  if not Ffits.Header.Valueof('XBAYROFF',OffsetX)  then OffsetX:=-1;
+  if not Ffits.Header.Valueof('YBAYROFF',OffsetY)  then OffsetY:=-1;
+  if not Ffits.Header.Valueof('MULT_R',multr)  then multr:=-1;
+  if not Ffits.Header.Valueof('MULT_G',multg)  then multg:=-1;
+  if not Ffits.Header.Valueof('MULT_B',multb)  then multb:=-1;
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   if not Ffits.Header.Valueof('COMMENT',hcomment1) then hcomment1:='';
@@ -575,8 +585,9 @@ begin
     observer:=config.GetValue('/Info/ObserverName','');
     telname:=config.GetValue('/Info/TelescopeName','');
     if config.GetValue('/Astrometry/FocaleFromTelescope',true)
-    then
-       focal_length:=Fmount.FocaleLength
+    then begin
+       if focal_length<0 then focal_length:=Fmount.FocaleLength
+    end
     else
        focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
     if not config.GetValue('/Astrometry/PixelSizeFromCamera',true) then begin
@@ -607,8 +618,7 @@ begin
    cgain:=NullInt;
   end;
   try
-   siso:='';
-   if FhasGainISO then siso:=FISOList[GetGain];
+   if FhasGainISO and (siso='') then siso:=FISOList[GetGain];
   except
    siso:='';
   end;
@@ -630,14 +640,15 @@ begin
   except
    hasfocuserpos:=false;
   end;
-  CType:='';
-  try
-   if FhasCfaInfo and (hbin1<=1) and (hbin2<=1)  then begin
-     CfaInfo(OffsetX,OffsetY,CType);
-     if FASCOMFlipImage and (not odd(FCameraYSize)) then
-        OffsetY:=(OffsetY+1) mod 2;
-   end;
-  except
+  if CType='' then begin
+    try
+     if FhasCfaInfo and (hbin1<=1) and (hbin2<=1)  then begin
+       CfaInfo(OffsetX,OffsetY,CType);
+       if FASCOMFlipImage and (not odd(FCameraYSize)) then
+          OffsetY:=(OffsetY+1) mod 2;
+     end;
+    except
+    end;
   end;
   // write new header
   Ffits.Header.ClearHeader;
@@ -662,7 +673,7 @@ begin
   if telname<>'' then Ffits.Header.Add('TELESCOP',telname,'Telescope used for acquisition');
   if hinstr<>'' then Ffits.Header.Add('INSTRUME',hinstr,'Instrument used for acquisition');
   if hfilter<>'' then Ffits.Header.Add('FILTER',hfilter,'Filter');
-  Ffits.Header.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  Ffits.Header.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then Ffits.Header.Add('OBJECT',objname,'Observed object name');
   Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
@@ -672,6 +683,8 @@ begin
   if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
   if gamma<>NullInt then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
   if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
+  if fstop>0 then Ffits.Header.Add('F_STOP',fstop ,'Camera F-stop');
+  if shutter>0 then Ffits.Header.Add('SHUTTER',shutter ,'Camera shutter');
   if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
   if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
   if hpix1>0 then Ffits.Header.Add('PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');
@@ -679,9 +692,12 @@ begin
   if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
   if hbin2>0 then Ffits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
   if CType<>'' then begin
-     Ffits.Header.Add('XBAYROFF',OffsetX ,'X offset of Bayer array');
-     Ffits.Header.Add('YBAYROFF',OffsetY ,'Y offset of Bayer array');
+     if OffsetX>=0 then Ffits.Header.Add('XBAYROFF',OffsetX ,'X offset of Bayer array');
+     if OffsetY>=0 then Ffits.Header.Add('YBAYROFF',OffsetY ,'Y offset of Bayer array');
      Ffits.Header.Add('BAYERPAT',CType ,'Bayer color pattern');
+     if multr>0 then Ffits.Header.Add('MULT_R',multr ,'R multiplier');
+     if multg>0 then Ffits.Header.Add('MULT_G',multg ,'G multiplier');
+     if multb>0 then Ffits.Header.Add('MULT_B',multb ,'B multiplier');
   end;
   Ffits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
   if ccdtemp<>NullCoord then Ffits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
