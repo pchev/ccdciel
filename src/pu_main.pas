@@ -2853,6 +2853,10 @@ if (fits.HeaderInfo.naxis>0) then begin
     ImgZoom:=ImgZoom*zf;
     if ImgZoom>ZoomMax then ImgZoom:=ZoomMax;
     if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
+    f_visu.BtnZoomAdjust.Down:=false;
+    f_visu.BtnZoom05.Down:=false;
+    f_visu.BtnZoom1.Down:=false;
+    f_visu.BtnZoom2.Down:=false;
     PlotImage;
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
   finally

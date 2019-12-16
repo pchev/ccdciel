@@ -105,6 +105,7 @@ object f_visu: Tf_visu
         Hint = 'Zoom to adjust in window'
         Top = 67
         Width = 28
+        AllowAllUp = True
         Color = clDefault
         Glyph.Data = {
           C6070000424DC607000000000000360000002800000016000000160000000100
@@ -287,6 +288,7 @@ object f_visu: Tf_visu
         Hint = 'Zoom two time'
         Top = 0
         Width = 28
+        AllowAllUp = True
         Caption = '2:1'
         Color = clDefault
         GroupIndex = 102
@@ -300,6 +302,7 @@ object f_visu: Tf_visu
         Hint = 'Zoom to original scale'
         Top = 22
         Width = 28
+        AllowAllUp = True
         Caption = '1:1'
         Color = clDefault
         GroupIndex = 102
@@ -313,6 +316,7 @@ object f_visu: Tf_visu
         Hint = 'Zoom to half size'
         Top = 44
         Width = 28
+        AllowAllUp = True
         Caption = '1:2'
         Color = clDefault
         GroupIndex = 102
