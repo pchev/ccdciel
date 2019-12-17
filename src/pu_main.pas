@@ -3014,6 +3014,7 @@ begin
        NewMessage(rsPleaseIncrea,1);
     end;
     bpmconfig.DeletePath('/BadPixelMap/');
+    bpmconfig.DeletePath('/BadPixelData/');
     bpmconfig.SetValue('/BadPixelMap/Count',bpmNum);
     bpmconfig.SetValue('/BadPixelMap/CCDWidth',bpmX);
     bpmconfig.SetValue('/BadPixelMap/CCDHeight',bpmY);
@@ -3075,6 +3076,7 @@ begin
     NewMessage(rsBadPixelMapC,1);
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     bpmconfig.DeletePath('/BadPixelMap/');
+    bpmconfig.DeletePath('/BadPixelData/');
     bpmconfig.SetValue('/BadPixelMap/Count',bpmNum);
     bpmconfig.SetValue('/BadPixelMap/CCDWidth',bpmX);
     bpmconfig.SetValue('/BadPixelMap/CCDHeight',bpmY);
