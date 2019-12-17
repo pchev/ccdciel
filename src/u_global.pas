@@ -32,6 +32,7 @@ uses u_ccdconfig, dynlibs, LMessages,
 const
   DomeOpenActionNum=5;
   DomeCloseActionNum=5;
+  BPMMax=30000;
 
 type
   TNotifyMsg = procedure(msg:string; level: integer=1) of object;
@@ -63,7 +64,7 @@ type
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
 
-  TBpm=array[1..1000]of array[1..2] of integer;
+  TBpm=array[1..BPMMax]of array[1..2] of integer;
 
   TDouble2 = array[1..2] of double;
   TArrayDouble2 = array of TDouble2;
@@ -198,7 +199,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.66';
+  ccdcielver = '0.9.67';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 4;
   Maxclient = 100;
@@ -332,7 +333,7 @@ var
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
-  config,screenconfig,credentialconfig,emailconfig: TCCDConfig;
+  config,screenconfig,credentialconfig,emailconfig,bpmconfig: TCCDConfig;
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;

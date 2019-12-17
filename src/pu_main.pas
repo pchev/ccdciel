@@ -1235,6 +1235,7 @@ begin
   screenconfig:=TCCDConfig.Create(self);
   credentialconfig:=TCCDConfig.Create(self);
   emailconfig:=TCCDConfig.Create(self);
+  bpmconfig:=TCCDconfig.Create(self);
   ProfileFromCommandLine:=false;
   if Application.HasOption('c', 'config') then begin
     profile:=Application.GetOptionValue('c', 'config');
@@ -2584,6 +2585,29 @@ begin
      config.SetValue('/Files/SaveBitmapFormat',buf);
    end;
   end;
+  if oldver<'0.9.67' then begin
+     // Move BPM to own file
+     bpmNum:=config.GetValue('/BadPixelMap/Count',0);
+     bpmX:=config.GetValue('/BadPixelMap/CCDWidth',0);
+     bpmY:=config.GetValue('/BadPixelMap/CCDHeight',0);
+     bpmAxis:=config.GetValue('/BadPixelMap/CCDAxis',0);
+     for i:=1 to bpmnum do begin
+       bpm[i,1]:=round(config.GetValue('/BadPixelMap/BPMX'+IntToStr(i),0));
+       bpm[i,2]:=round(config.GetValue('/BadPixelMap/BPMY'+IntToStr(i),0));
+     end;
+     bpmconfig.DeletePath('/BadPixelMap/');
+     bpmconfig.SetValue('/BadPixelMap/Count',bpmNum);
+     bpmconfig.SetValue('/BadPixelMap/CCDWidth',bpmX);
+     bpmconfig.SetValue('/BadPixelMap/CCDHeight',bpmY);
+     bpmconfig.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
+     for i:=1 to bpmNum do begin
+       bpmconfig.SetValue('/BadPixelData/BPMX'+IntToStr(i),bpm[i,1]);
+       bpmconfig.SetValue('/BadPixelData/BPMY'+IntToStr(i),bpm[i,2]);
+     end;
+     config.DeletePath('/BadPixelMap/');
+  end;
+  if oldver<'0.9.67' then
+     SaveConfig;
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -2628,6 +2652,7 @@ begin
   screenconfig.Free;
   credentialconfig.Free;
   emailconfig.Free;
+  bpmconfig.Free;
   ScrBmp.Free;
   FilterList.Free;
   BinningList.Free;
@@ -2974,7 +2999,7 @@ begin
             val:=maxvalue([val,val1,val2]);
           end;
           if val>lb then begin
-             if bpmnum<1000 then begin
+             if bpmnum<BPMMax then begin
                inc(bpmNum);
                bpm[bpmnum,1]:=x;
                bpm[bpmnum,2]:=y;
@@ -2982,20 +3007,20 @@ begin
           end;
        end;
     end;
-    if bpmnum<1000 then
+    if bpmnum<BPMMax then
        NewMessage(Format(rsBadPixelDete, [inttostr(bpmNum)]),1)
     else begin
        NewMessage(rsTooManyHotPi,1);
        NewMessage(rsPleaseIncrea,1);
     end;
-    config.DeletePath('/BadPixelMap/');
-    config.SetValue('/BadPixelMap/Count',bpmNum);
-    config.SetValue('/BadPixelMap/CCDWidth',bpmX);
-    config.SetValue('/BadPixelMap/CCDHeight',bpmY);
-    config.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
+    bpmconfig.DeletePath('/BadPixelMap/');
+    bpmconfig.SetValue('/BadPixelMap/Count',bpmNum);
+    bpmconfig.SetValue('/BadPixelMap/CCDWidth',bpmX);
+    bpmconfig.SetValue('/BadPixelMap/CCDHeight',bpmY);
+    bpmconfig.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
     for i:=1 to bpmnum do begin
-      config.SetValue('/BadPixelMap/BPMX'+IntToStr(i),bpm[i,1]);
-      config.SetValue('/BadPixelMap/BPMY'+IntToStr(i),bpm[i,2]);
+      bpmconfig.SetValue('/BadPixelData/BPMX'+IntToStr(i),bpm[i,1]);
+      bpmconfig.SetValue('/BadPixelData/BPMY'+IntToStr(i),bpm[i,2]);
     end;
     SaveConfig;
 end;
@@ -3049,26 +3074,25 @@ begin
     bpmAxis:=0;
     NewMessage(rsBadPixelMapC,1);
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-    config.DeletePath('/BadPixelMap/');
-    config.SetValue('/BadPixelMap/Count',bpmNum);
-    config.SetValue('/BadPixelMap/CCDWidth',bpmX);
-    config.SetValue('/BadPixelMap/CCDHeight',bpmY);
-    config.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
+    bpmconfig.DeletePath('/BadPixelMap/');
+    bpmconfig.SetValue('/BadPixelMap/Count',bpmNum);
+    bpmconfig.SetValue('/BadPixelMap/CCDWidth',bpmX);
+    bpmconfig.SetValue('/BadPixelMap/CCDHeight',bpmY);
+    bpmconfig.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
     SaveConfig;
   end;
 end;
 
-
 procedure Tf_main.LoadBPM;
 var i:integer;
 begin
- bpmNum:=config.GetValue('/BadPixelMap/Count',0);
- bpmX:=config.GetValue('/BadPixelMap/CCDWidth',0);
- bpmY:=config.GetValue('/BadPixelMap/CCDHeight',0);
- bpmAxis:=config.GetValue('/BadPixelMap/CCDAxis',0);
+ bpmNum:=bpmconfig.GetValue('/BadPixelMap/Count',0);
+ bpmX:=bpmconfig.GetValue('/BadPixelMap/CCDWidth',0);
+ bpmY:=bpmconfig.GetValue('/BadPixelMap/CCDHeight',0);
+ bpmAxis:=bpmconfig.GetValue('/BadPixelMap/CCDAxis',0);
  for i:=1 to bpmnum do begin
-   bpm[i,1]:=round(config.GetValue('/BadPixelMap/BPMX'+IntToStr(i),0));
-   bpm[i,2]:=round(config.GetValue('/BadPixelMap/BPMY'+IntToStr(i),0));
+   bpm[i,1]:=round(bpmconfig.GetValue('/BadPixelData/BPMX'+IntToStr(i),0));
+   bpm[i,2]:=round(bpmconfig.GetValue('/BadPixelData/BPMY'+IntToStr(i),0));
  end;
 end;
 
@@ -3733,6 +3757,7 @@ begin
   config.Flush;
   credentialconfig.Flush;
   emailconfig.Flush;
+  bpmconfig.Flush;
   if not ProfileFromCommandLine then begin
     inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
     inif.WriteString('main','profile',profile);
@@ -3750,6 +3775,7 @@ begin
  screenconfig.Filename:=slash(ConfigDir)+'ScreenLayout.cfg';
  credentialconfig.Filename:=config.Filename+'.credential';
  emailconfig.Filename:=slash(ConfigDir)+'email.cfg';
+ bpmconfig.Filename:=config.Filename+'.bpm';
  UpdConfig(configver);
 end;
 
