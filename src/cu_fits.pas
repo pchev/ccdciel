@@ -2682,6 +2682,7 @@ begin
       SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
       if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
     end;
+  if (not Undersampled) and (pixel_counter<=1) then exit; // reject hot pixel in noisy environment
   if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
   hfd:=2*SumValR/SumVal;
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
