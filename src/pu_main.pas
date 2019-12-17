@@ -656,6 +656,7 @@ type
     procedure doSaveVcurve(Sender: TObject);
     function doVcurve(centerp,hw,n,nsum: integer;exp:double;bin:integer):boolean;
     procedure MeasureImage(plot: boolean);
+    procedure PrintStarList;
     procedure StarSelection(Sender: TObject);
     Procedure RotatorStatus(Sender: TObject);
     Procedure RotatorAngleChange(Sender: TObject);
@@ -11169,6 +11170,9 @@ begin
 
   fits.GetStarList(rx,ry,s); {search stars in fits image}
 
+//  Uncomment to help star detection debugging
+//  PrintStarList;
+
   nhfd:=Length(fits.StarList);{number of stars detected for HFD statistics}
   SetLength(hfdlist,nhfd);
 
@@ -11266,6 +11270,26 @@ begin
     fits.ClearStarList;
 
   Screen.Cursor := saved_cursor;
+end;
+
+procedure Tf_main.PrintStarList;
+var f: Tf_viewtext;
+    i: integer;
+begin
+ if Length(fits.StarList)>0 then begin
+   f:=Tf_viewtext.Create(self);
+   f.Width:=DoScaleX(700);
+   f.Height:=DoScaleY(400);
+   f.Caption:='Star list';
+   f.Memo1.Clear;
+   f.Memo1.Lines.Add(Format('%5s %10s %10s %10s %10s %6s %6s %10s ',['num','x','y','hfd','fwhm','max','bg','snr']));
+   for i:=0 to Length(fits.StarList)-1 do
+      f.Memo1.Lines.Add(Format('%5d %10.3f %10.3f %10.3f %10.3f %6d %6d %10.3f ',
+         [i+1,fits.StarList[i].x,img_Height-fits.StarList[i].y,fits.StarList[i].hfd,fits.StarList[i].fwhm,
+         round(fits.StarList[i].vmax+fits.StarList[i].bg),round(fits.StarList[i].bg),fits.StarList[i].snr]));
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
 end;
 
 procedure Tf_main.MagnifyerTimerTimer(Sender: TObject);
