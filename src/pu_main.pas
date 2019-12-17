@@ -11388,7 +11388,7 @@ begin
            f_photometry.mag:=mag;
            magerr:=2.5*log10(1+1/snr);
            f_photometry.Memo1.Lines.Add('');
-           f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, yc));
+           f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, img_Height-yc));
            if fits.HeaderInfo.floatingpoint then
              f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, fits.imageMin+(vmax+bg)/fits.imageC))
            else
