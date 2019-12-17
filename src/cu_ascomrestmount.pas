@@ -126,6 +126,7 @@ end;
 
 procedure T_ascomrestmount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 var buf: string;
+    j: double;
 begin
   try
   FStatus := devConnecting;
@@ -166,6 +167,10 @@ begin
      if CanSetPierSide then buf:=buf+'CanSetPierSide ';
      if CanSync then buf:=buf+'CanSync ';
      if CanSetTracking then buf:=buf+'CanSetTracking ';
+     FEquinox:=NullCoord;
+     j:=GetEquinox;
+     if j=0 then buf:=buf+'EquatorialSystem: Local '
+            else buf:=buf+'EquatorialSystem: '+FormatFloat(f0,j)+' ';
      msg(rsConnected3);
      msg(Format(rsMountCapabil, [buf]));
      FStatus := devConnected;
