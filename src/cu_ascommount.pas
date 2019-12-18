@@ -165,6 +165,7 @@ begin
      if CanSync then buf:=buf+'CanSync ';
      if CanSetTracking then buf:=buf+'CanSetTracking ';
      FEquinox:=NullCoord;
+     FEquinoxJD:=NullCoord;
      j:=GetEquinox;
      if j=0 then buf:=buf+'EquatorialSystem: Local '
             else buf:=buf+'EquatorialSystem: '+FormatFloat(f0,j)+' ';
