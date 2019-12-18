@@ -457,6 +457,7 @@ begin
       Guide_W:=IUFindNumber(Guide_WE,'TIMED_GUIDE_W');
       Guide_E:=IUFindNumber(Guide_WE,'TIMED_GUIDE_E');
       if (Guide_W=nil)or(Guide_E=nil) then Guide_WE:=nil;
+      FCanPulseGuide:=(Guide_WE<>nil); //at least guide ra is available
    end
    else if (proptype=INDI_NUMBER)and(Guide_Rate=nil)and(propname='GUIDE_RATE') then begin
       Guide_Rate:=indiProp.getNumber;

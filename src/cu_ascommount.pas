@@ -156,6 +156,8 @@ begin
      CanSync:=V.CanSync;
      if debug_msg then msg('Get set tracking capability');
      CanSetTracking:=V.CanSetTracking;
+     if debug_msg then msg('Get pulse guiding capability');
+     FCanPulseGuide:=V.CanPulseGuide;
      buf:='';
      if IsEqmod then buf:=buf+'EQmod ';
      if CanPark then buf:=buf+'CanPark ';

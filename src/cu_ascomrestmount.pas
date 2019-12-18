@@ -159,6 +159,7 @@ begin
      CanSetPierSide:=V.Get('cansetpierside').AsBool;
      CanSync:=V.Get('cansync').AsBool;
      CanSetTracking:=V.Get('cansettracking').AsBool;
+     FCanPulseGuide:=V.Get('canpulseguide').AsBool;
      buf:='';
      if IsEqmod then buf:=buf+'EQmod ';
      if CanPark then buf:=buf+'CanPark ';

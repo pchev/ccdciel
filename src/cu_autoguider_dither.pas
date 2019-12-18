@@ -140,25 +140,35 @@ end;
 
 procedure T_autoguider_dither.StatusTimerTimer(sender: TObject);
 var newstate: TAutoguiderState;
+    restarttimer: boolean;
 begin
 try
+  restarttimer:=true;
   StatusTimer.Enabled:=false;
   newstate:=FState;
   if (FMount=nil)or(FMount.Status<>devConnected) then begin
      newstate:=GUIDER_DISCONNECTED;
   end
-  else if (FMount.Tracking) then begin
-     newstate:=GUIDER_GUIDING;
-  end
-  else begin
-     newstate:=GUIDER_IDLE;
-  end;
+  else
+   if FMount.CanPulseGuide then begin
+      if (FMount.Tracking) then begin
+         newstate:=GUIDER_GUIDING;
+      end
+      else begin
+         newstate:=GUIDER_IDLE;
+      end;
+    end
+    else begin
+       newstate:=GUIDER_ALERT;
+       restarttimer:=false;
+       DisplayMessage('Mount do not support pulse guiding');
+   end;
   if newstate<>FState then begin
      FState:=newstate;
      if assigned(FonStatusChange) then FonStatusChange(self);
   end;
 finally
-  StatusTimer.Enabled:=true;
+  StatusTimer.Enabled:=restarttimer;
 end;
 end;
 
@@ -166,6 +176,7 @@ procedure T_autoguider_dither.Dither(pixel:double; raonly:boolean; waittime:doub
 var duration,timeend,maxduration,tde,cosde: double;
     direction,durationra,durationdec:integer;
 begin
+if (FMount<>nil)and(FMount.CanPulseGuide) then begin
   // Here the pixel parameter represent the mean pulse duration.
   if (FMount<>nil)and(FMount.Status=devConnected)and(FMount.Tracking) then begin
      // set as mean value, need max value
@@ -203,6 +214,7 @@ begin
   end
   else
      DisplayMessage('Mount not ready for pulse guiding');
+end;
 end;
 
 procedure T_autoguider_dither.StarLostTimerTimer(Sender: TObject);

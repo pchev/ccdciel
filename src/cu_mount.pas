@@ -50,6 +50,7 @@ T_mount = class(TComponent)
     FEquinox,FEquinoxJD: double;
     FSlaveDome: boolean;
     FDomeActionWait: integer;
+    FCanPulseGuide: boolean;
     procedure msg(txt: string; level:integer=3);
     function  GetEquinoxCache: double;
     function  GetEquinoxJD: double;
@@ -113,6 +114,7 @@ T_mount = class(TComponent)
     property FocaleLength: double read GetFocaleLength;
     property GuideRateRa: double read GetGuideRateRa write SetGuideRateRa;
     property GuideRateDe: double read GetGuideRateDe write SetGuideRateDe;
+    property CanPulseGuide: boolean read FCanPulseGuide;
     property PulseGuiding: boolean read GetPulseGuiding;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
@@ -143,6 +145,7 @@ begin
   FEquinoxJD:=NullCoord;
   FSlaveDome:=false;
   FDomeActionWait:=1;
+  FCanPulseGuide:=false;
 end;
 
 destructor  T_mount.Destroy;
