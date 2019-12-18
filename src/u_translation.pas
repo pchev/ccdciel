@@ -745,7 +745,6 @@ resourcestring
   rsCenterAppare = 'Center, apparent coord. RA=%s DEC=%s PA=%s';
   rsNoResolverCo = 'No resolver configured!';
   rsDoSimpleSlew = 'Do simple slew to %s/%s';
-  rsSlewTo = 'Slewing to %s/%s';
   rsSlewToEQ = 'Slewing to %s %s/%s';
   rsSlewComplete = 'Slew is complete';
   rsResolveContr = 'Resolve control exposure';

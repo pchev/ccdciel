@@ -605,7 +605,7 @@ begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
     if Equinox=0 then
-       msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+       msg(Format(rsSlewToEQ, ['Local', ARToStr3(sra), DEToStr(sde)]))
     else
        msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
     IUResetSwitch(CoordSet);
@@ -624,7 +624,7 @@ begin
   result:=false;
   if (CoordSet<>nil) and (CoordSetTrack<>nil) and (coord_prop<>nil) then begin
     if Equinox=0 then
-       msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+       msg(Format(rsSlewToEQ, ['Local', ARToStr3(sra), DEToStr(sde)]))
     else
        msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
     FMountSlewing:=true;

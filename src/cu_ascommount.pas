@@ -412,7 +412,7 @@ begin
      end;
    end;
    if Equinox=0 then
-      msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+      msg(Format(rsSlewToEQ, ['Local', ARToStr3(sra), DEToStr(sde)]))
    else
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
@@ -448,7 +448,7 @@ begin
    end;
    FMountSlewing:=true;
    if Equinox=0 then
-      msg(Format(rsSlewTo, [ARToStr3(sra), DEToStr(sde)]))
+      msg(Format(rsSlewToEQ, ['Local', ARToStr3(sra), DEToStr(sde)]))
    else
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
