@@ -50,6 +50,7 @@ type
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
+    smtp_ssltls: TCheckBox;
     FilePack: TCheckBox;
     EmailCondition: TCheckListBox;
     GroupBox25: TGroupBox;
@@ -990,6 +991,7 @@ begin
   Label137.Caption:=rsPassword;
   Label138.Caption:=rsFromEmailAdd;
   Label139.Caption:=rsDestinationE;
+  smtp_ssltls.Caption:=rsSecureSSLTLS;
   ButtonTestEmail.Caption:=rsSendTestEmai;
   GroupBox25.Caption:=rsEmailOn;
   EmailCondition.Items[0]:=rsSequenceNorm;
@@ -1177,6 +1179,7 @@ end;
 procedure Tf_option.ButtonTestEmailClick(Sender: TObject);
 var subject,txt,r: string;
     savehost,saveport,saveuser,savepass,savefrom,saveto: string;
+    savessltls: boolean;
 begin
  savehost := SMTPHost;
  saveport := SMTPPort;
@@ -1184,6 +1187,7 @@ begin
  savepass := SMTPPasswd;
  savefrom := MailFrom;
  saveto   := MailTo;
+ savessltls:=SMTPSSLTLS;
  try
  SMTPHost := smtp_host.Text;
  SMTPPort := smtp_port.Text;
@@ -1191,10 +1195,12 @@ begin
  SMTPPasswd:= smtp_pass.Text;
  MailFrom := mail_from.Text;
  MailTo   := mail_to.Text;
+ SMTPSSLTLS:=smtp_ssltls.Checked;
  subject:=rsTestEmailFro;
  txt:=rsTestEmailFro+CRLF+rsThisMessageC;
  r:=email(Subject,txt);
  if r='' then r:=rsEmailSentSuc;
+ if pos('ssl3_get_record:wrong version number', r)>0 then r:=rsSSLTLSNotSup+crlf+r;
  ShowMessage(r);
  finally
    SMTPHost   := savehost;
@@ -1203,6 +1209,7 @@ begin
    SMTPPasswd := savepass;
    MailFrom   := savefrom;
    MailTo     := saveto;
+   SMTPSSLTLS := savessltls;
  end;
 end;
 

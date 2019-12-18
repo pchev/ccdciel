@@ -3552,6 +3552,7 @@ begin
   SMTPPort:=emailconfig.GetValue('/SMTP/Port','');
   SMTPUser:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/User','')), encryptpwd);
   SMTPPasswd:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/Passwd','')), encryptpwd);
+  SMTPSSLTLS:=emailconfig.GetValue('/SMTP/SSLTLS',true);
   MailFrom:=emailconfig.GetValue('/Mail/From','');
   MailTo:=emailconfig.GetValue('/Mail/To','');
   EmailEndSequence:=config.GetValue('/Mail/EndSequence',false);
@@ -6573,6 +6574,7 @@ begin
    f_option.smtp_pass.Text:=DecryptStr(hextostr(emailconfig.GetValue('/SMTP/Passwd','')), encryptpwd);
    f_option.mail_from.Text:=emailconfig.GetValue('/Mail/From','');
    f_option.mail_to.Text:=emailconfig.GetValue('/Mail/To','');
+   f_option.smtp_ssltls.checked:=emailconfig.GetValue('/SMTP/SSLTLS',true);
    f_option.EmailCondition.Checked[0]:=config.GetValue('/Mail/EndSequence',false);
    f_option.EmailCondition.Checked[1]:=config.GetValue('/Mail/AbortSequence',false);
    f_option.EmailCondition.Checked[2]:=config.GetValue('/Mail/Autoguider',false);
@@ -6866,6 +6868,7 @@ begin
      emailconfig.SetValue('/SMTP/Passwd',strtohex(encryptStr(f_option.smtp_pass.Text, encryptpwd)));
      emailconfig.SetValue('/Mail/From',f_option.mail_from.Text);
      emailconfig.SetValue('/Mail/To',f_option.mail_to.Text);
+     emailconfig.SetValue('/SMTP/SSLTLS',f_option.smtp_ssltls.checked);
      config.SetValue('/Mail/EndSequence',f_option.EmailCondition.Checked[0]);
      config.SetValue('/Mail/AbortSequence',f_option.EmailCondition.Checked[1]);
      config.SetValue('/Mail/Autoguider',f_option.EmailCondition.Checked[2]);

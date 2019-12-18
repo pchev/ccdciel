@@ -3154,7 +3154,7 @@ try
   SMTP.TargetHost:=SMTPHost;
   SMTP.TargetPort:=SMTPPort;
   SMTP.AutoTLS:=true;
-  if Trim(SMTPPort)<>'25' then SMTP.FullSSL:=true;
+  SMTP.FullSSL:=SMTPSSLTLS;
   SMTP.Sock.ConnectionTimeout:=10000;
   SMTP.Timeout:=10000;
   if SMTP.Login then

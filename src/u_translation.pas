@@ -1204,6 +1204,8 @@ resourcestring
   rsPleaseSeeThe = 'Please see the documentation for important security information';
   rsInvalid = 'Invalid';
   rsFStop = 'F-stop';
+  rsSecureSSLTLS = 'Secure SSL/TLS connection';
+  rsSSLTLSNotSup = 'SSL/TLS not supported, try to uncheck the corresponding box.';
 
 implementation
 
