@@ -587,7 +587,7 @@ begin
      exit;
    end;
    if Equinox=0 then
-      msg(Format(rsSyncTo, [ARToStr3(sra), DEToStr(sde)]))
+      msg(Format(rsSyncToEQ, ['Local', ARToStr3(sra), DEToStr(sde)]))
    else
       msg(Format(rsSyncToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    V.Put('synctocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
