@@ -544,7 +544,6 @@ resourcestring
   rsScaleToleran = 'Scale tolerance';
   rsDownsample = 'Downsample';
   rsMaximumSourc = 'Maximum sources';
-  rsCreatePlotOf = 'Create plot of the result';
   rsOtherOptions = 'Other options ';
   rsCygwinPath = 'Cygwin path';
   rsUseCustomScr = 'Use custom script';
@@ -1206,6 +1205,8 @@ resourcestring
   rsFStop = 'F-stop';
   rsSecureSSLTLS = 'Secure SSL/TLS connection';
   rsSSLTLSNotSup = 'SSL/TLS not supported, try to uncheck the corresponding box.';
+  rsUseAsFallbac = 'Use as fallback if other software fail';
+  rsRetryWithAst = 'Retry with astrometry.net';
 
 implementation
 

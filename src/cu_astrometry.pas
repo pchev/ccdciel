@@ -180,6 +180,7 @@ begin
    engine:=TAstrometry_engine.Create;
    engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
    FResolverName:=ResolverName[engine.Resolver];
+   engine.Fallback:=config.GetValue('/Astrometry/Fallback',false);
    engine.AstrometryPath:=config.GetValue('/Astrometry/AstrometryPath','');
    engine.CygwinPath:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    engine.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
@@ -216,7 +217,6 @@ begin
    end;
    engine.downsample:=config.GetValue('/Astrometry/DownSample',4);
    engine.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
-   engine.plot:=config.GetValue('/Astrometry/Plot',false);
    engine.OtherOptions:=config.GetValue('/Astrometry/OtherOptions','');
    engine.UseScript:=config.GetValue('/Astrometry/AstUseScript',false);
    engine.CustomScript:=config.GetValue('/Astrometry/AstCustScript','');

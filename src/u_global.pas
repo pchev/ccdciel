@@ -261,6 +261,7 @@ const
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;
   M_AstrometryDone=1100;
+  M_AstrometryMsg=1101;
   MaxCmdArg = 10;
   MaxScriptDir=2;
   MaxMenulevel=10;

@@ -6427,13 +6427,13 @@ begin
    f_option.AstrometryTimeout.Value:=round(config.GetValue('/Astrometry/Timeout',60.0));
    f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',4);
    f_option.SourcesLimit.Value:=config.GetValue('/Astrometry/SourcesLimit',150);
-   f_option.Plot.Checked:=config.GetValue('/Astrometry/Plot',false);
    f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','--no-fits2fits');
    f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);
    f_option.AstCustScript.Text:=config.GetValue('/Astrometry/AstCustScript','');
    f_option.AstCustScript.Visible:=f_option.AstUseScript.Checked;
    f_option.CygwinPath.Text:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    f_option.AstrometryPath.Text:=config.GetValue('/Astrometry/AstrometryPath','');
+   f_option.AstrometryFallback.Checked:=config.GetValue('/Astrometry/Fallback',false);
    f_option.ElbrusFolder.Text:=config.GetValue('/Astrometry/ElbrusFolder','C:\Elbrus\Images');
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
@@ -6729,12 +6729,12 @@ begin
      config.SetValue('/Astrometry/Timeout',f_option.AstrometryTimeout.Value);
      config.SetValue('/Astrometry/DownSample',f_option.Downsample.Value);
      config.SetValue('/Astrometry/SourcesLimit',f_option.SourcesLimit.Value);
-     config.SetValue('/Astrometry/Plot',f_option.Plot.Checked);
      config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
      config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked);
      config.SetValue('/Astrometry/AstCustScript',f_option.AstCustScript.Text);
      config.SetValue('/Astrometry/AstrometryPath',trim(f_option.AstrometryPath.Text));
      config.SetValue('/Astrometry/CygwinPath',f_option.CygwinPath.Text);
+     config.SetValue('/Astrometry/Fallback',f_option.AstrometryFallback.Checked);
      config.SetValue('/Astrometry/ElbrusFolder',f_option.ElbrusFolder.Text);
      {$ifdef unix}
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
@@ -10112,7 +10112,7 @@ begin
      if cdcWCSinfo.secpix>0 then
         resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+blank+ssec+'/'+rsPixels;
      if astrometry.LastError>'' then NewMessage(astrometry.Resolver+': '+astrometry.LastError,1);
-     NewMessage(Format(rsResolveSucce, [astrometry.Resolver])+resulttxt,3);
+     NewMessage(Format(rsResolveSucce, [rsAstrometry])+resulttxt,3);
   end else begin
     NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
   end;
@@ -10873,7 +10873,16 @@ begin
                       buf:='';
                       end;
                       astrometry.AstrometryDone(buf);
-                      end
+                      end;
+    M_AstrometryMsg: begin
+                      try
+                      buf:=PChar(Message.LParam);
+                      StrDispose(PChar(Message.LParam));
+                      except
+                      buf:='';
+                      end;
+                      if buf<>'' then NewMessage(buf,1);
+                      end;
     else
       NewMessage(Format(rsReceiveUnkno, [inttostr(Message.wParam)]),1);
   end;

@@ -38,7 +38,6 @@ TAstrometry_engine = class(TThread)
      FPlateSolveFolder,FASTAPFolder,FAstrometryPath: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
-     Fplot: boolean;
      Fresult,Fcode:integer;
      FASTAPSearchRadius,FASTAPdownsample: integer;
      Fcmd: string;
@@ -48,6 +47,7 @@ TAstrometry_engine = class(TThread)
      Fparam: TStringList;
      process: TProcessUTF8;
      Ftmpfits: TFits;
+     FFallback,Fretry: boolean;
    protected
      procedure Execute; override;
      function Apm2Wcs: boolean;
@@ -56,6 +56,7 @@ TAstrometry_engine = class(TThread)
    public
      constructor Create;
      destructor Destroy; override;
+     procedure Assign(Source: TAstrometry_engine);
      procedure Resolve;
      procedure Stop;
      property Resolver: integer read FResolver write FResolver;
@@ -74,12 +75,10 @@ TAstrometry_engine = class(TThread)
      property timeout: double read FTimeout write FTimeout;
      property objs: integer read FObjs write FObjs;
      property downsample: integer read FDown write FDown;
-     property plot: boolean read Fplot write Fplot;
      property OtherOptions: string read FOtherOptions write FOtherOptions;
      property UseScript: boolean read FUseScript write FUseScript;
      property CustomScript: string read FCustomScript write FCustomScript;
      property result: integer read Fresult;
-     property cmd: string read Fcmd write Fcmd;
      property param: TStringList read Fparam write Fparam;
      property AstrometryPath: string read FAstrometryPath write FAstrometryPath;
      property CygwinPath: string read FCygwinPath write FCygwinPath;
@@ -90,6 +89,7 @@ TAstrometry_engine = class(TThread)
      property ASTAPFolder: string read FASTAPFolder write FASTAPFolder;
      property ASTAPSearchRadius: integer read FASTAPSearchRadius write FASTAPSearchRadius;
      property ASTAPdownsample: Integer read FASTAPdownsample write FASTAPdownsample;
+     property Fallback: boolean read FFallback write FFallback;
 end;
 
 implementation
@@ -101,7 +101,6 @@ begin
   FInFile:='';
   FOutFile:='';
   Fcmd:='';
-  Fplot:=false;
   FOtherOptions:='';
   FUseScript:=false;
   FCustomScript:='';
@@ -114,6 +113,8 @@ begin
   Fscalelow:=0;
   Fscalehigh:=0;
   FPlateSolveWait:=0;
+  FFallback:=false;
+  Fretry:=false;
   Fparam:=TStringList.Create;
   process:=TProcessUTF8.Create(nil);
   FreeOnTerminate:=true;
@@ -124,6 +125,39 @@ begin
   process.Free;
   Fparam.Free;
   inherited Destroy;
+end;
+
+procedure TAstrometry_engine.Assign(Source: TAstrometry_engine);
+begin
+Resolver:=Source.Resolver ;
+AstrometryPath:=Source.AstrometryPath ;
+CygwinPath:=Source.CygwinPath ;
+ElbrusFolder:=Source.ElbrusFolder ;
+ElbrusUnixpath:=Source.ElbrusUnixpath ;
+PlateSolveFolder:=Source.PlateSolveFolder ;
+PlateSolveWait:=Source.PlateSolveWait ;
+ASTAPFolder:=Source.ASTAPFolder ;
+ASTAPSearchRadius:=Source.ASTAPSearchRadius ;
+ASTAPdownsample:=Source.ASTAPdownsample ;
+LogFile:=Source.LogFile ;
+InFile:=Source.InFile ;
+OutFile:=Source.OutFile ;
+scalelow:=Source.scalelow ;
+scalehigh:=Source.scalehigh ;
+downsample:=Source.downsample ;
+objs:=Source.objs ;
+OtherOptions:=Source.OtherOptions ;
+UseScript:= Source.UseScript ;
+CustomScript:=Source.CustomScript ;
+ra:=Source.ra ;
+de:=Source.de ;
+radius:=Source.radius ;
+Xsize:=Source.Xsize ;
+Ysize:=Source.Ysize ;
+iwidth:=Source.iwidth ;
+iheight:=Source.iheight ;
+timeout:=Source.timeout ;
+Fallback:=source.Fallback;
 end;
 
 procedure TAstrometry_engine.Stop;
@@ -219,7 +253,7 @@ var str: TStringList;
     fIn,fDrive: string;
     {$endif}
 begin
-if FResolver=ResolverAstrometryNet then begin
+if (FResolver=ResolverAstrometryNet)or Fretry then begin
  wcsfile:=ChangeFileExt(FInFile,'.wcs');
  DeleteFileUTF8(wcsfile);
  if FUseScript then begin
@@ -249,9 +283,7 @@ if FResolver=ResolverAstrometryNet then begin
      buf:=buf+' --downsample';
      buf:=buf+blank+inttostr(FDown);
    end;
-   if not Fplot then begin
-      buf:=buf+' --no-plots';
-   end;
+   buf:=buf+' --no-plots';
    if FOtherOptions<>'' then begin
      str:=TStringList.Create;
      SplitRec(FOtherOptions,' ',str);
@@ -304,9 +336,7 @@ if FResolver=ResolverAstrometryNet then begin
     buf:=buf+' --downsample ';
     buf:=buf+inttostr(FDown);
   end;
-  if not Fplot then begin
-     buf:=buf+' --no-plots ';
-  end;
+  buf:=buf+' --no-plots ';
   if FOtherOptions<>'' then begin
     str:=TStringList.Create;
     SplitRec(FOtherOptions,' ',str);
@@ -352,9 +382,7 @@ if FResolver=ResolverAstrometryNet then begin
     Fparam.Add('--downsample');
     Fparam.Add(inttostr(FDown));
   end;
-  if not Fplot then begin
-     Fparam.Add('--no-plots');
-  end;
+  Fparam.Add('--no-plots');
   if FOtherOptions<>'' then begin
     str:=TStringList.Create;
     SplitRec(FOtherOptions,' ',str);
@@ -437,9 +465,10 @@ var n: LongInt;
     i,nside,available: integer;
     endtime: double;
     mem: TMemoryStream;
+    newengine:TAstrometry_engine;
 begin
 err:='';
-if FResolver=ResolverAstrometryNet then begin
+if (FResolver=ResolverAstrometryNet)or Fretry then begin
   cbuf:='';
   if (FLogFile<>'') then begin
     AssignFile(f,FLogFile);
@@ -656,6 +685,20 @@ else if FResolver=ResolverPlateSolve then begin
         Ftmpfits.Free;
         mem.Free;
       end;
+    end
+    else begin
+      if FFallback and (not Fretry) then begin
+        PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryMsg, PtrInt( strnew(PChar(err+crlf+rsRetryWithAst))));
+        newengine:=TAstrometry_engine.Create;
+        newengine.Assign(self);
+        newengine.Fallback:=false;
+        newengine.Fretry:=true;
+        newengine.Resolve;
+        repeat
+          sleep(100);
+        until newengine.Finished;
+        exit;
+      end;
     end;
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
@@ -728,6 +771,20 @@ else if FResolver=ResolverAstap then begin
       Ftmpfits.Free;
       mem.Free;
     end;
+  end
+  else begin
+    if FFallback and (not Fretry) then begin
+      PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryMsg, PtrInt( strnew(PChar(err+crlf+rsRetryWithAst))));
+      newengine:=TAstrometry_engine.Create;
+      newengine.Assign(self);
+      newengine.Fallback:=false;
+      newengine.Fretry:=true;
+      newengine.Resolve;
+      repeat
+        sleep(100);
+      until newengine.Finished;
+      exit;
+    end;
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
@@ -758,7 +815,7 @@ var
 
 begin
   result:=false;
-  assign(f,apmfile);
+  AssignFile(f,apmfile);
   // Reopen the file for reading
   Reset(f);
   while not Eof(f) do
@@ -848,7 +905,7 @@ begin
     hdr[17] :='END'+blank80;
 
     // write wcs file
-    assign(fwcs,wcsfile);
+    AssignFile(fwcs,wcsfile);
     Rewrite(fwcs,1);
     BlockWrite(fwcs,hdr,sizeof(THeaderBlock));
     CloseFile(fwcs);

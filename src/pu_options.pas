@@ -50,6 +50,7 @@ type
     AstrometryPathPanel: TPanel;
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
+    AstrometryFallback: TCheckBox;
     smtp_ssltls: TCheckBox;
     FilePack: TCheckBox;
     EmailCondition: TCheckListBox;
@@ -526,7 +527,6 @@ type
     Label11: TLabel;
     Label5: TLabel;
     PageControl1: TPageControl;
-    Plot: TCheckBox;
     ResolverBox: TRadioGroup;
     Label8: TLabel;
     Label9: TLabel;
@@ -841,11 +841,11 @@ begin
   Label7.Caption := rsScaleToleran;
   Label8.Caption := rsDownsample;
   Label9.Caption := rsMaximumSourc;
-  Plot.Caption := rsCreatePlotOf;
   Label27.Caption := rsOtherOptions;
   Label34.Caption := rsCygwinPath;
   AstUseScript.Caption := rsUseCustomScr;
   label129.Caption := rsCommandPath;
+  AstrometryFallback.Caption:=rsUseAsFallbac;
   Label12.Caption := rsElbrusImages;
   Label13.Caption := rsImagesFolder;
   Label15.Caption := Format(rsBeforeYouCan, [#10]);
