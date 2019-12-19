@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-15 14:00+0000\n"
-"PO-Revision-Date: 2019-12-15 11:51+0000\n"
+"POT-Creation-Date: 2019-12-18 21:48+0000\n"
+"PO-Revision-Date: 2019-12-18 21:57+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-15 14:16+0000\n"
-"X-Generator: Launchpad (build c597c3229eb023b1e626162d5947141bf7befb13)\n"
+"X-Launchpad-Export-Date: 2019-12-19 17:24+0000\n"
+"X-Generator: Launchpad (build bceb5ef013b87ef7aafe0755545ceb689ca7ac60)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -860,10 +860,6 @@ msgstr "Créer à partir d'un fichier Dark"
 msgid "Create new empty profile"
 msgstr "Créer un nouveau profile vide"
 
-#: u_translation.rscreateplotof
-msgid "Create plot of the result"
-msgstr "Faire des graphique du résultat"
-
 #: u_translation.rscurrent
 msgid "Current"
 msgstr "Actuel"
@@ -1520,6 +1516,10 @@ msgstr "Du pilote de télescope"
 msgid "From: %s to %s by %s"
 msgstr "De: %s à %s par %s"
 
+#: u_translation.rsfstop
+msgid "F-stop"
+msgstr "Ouverture"
+
 #: u_translation.rsfwhm
 msgid "FWHM"
 msgstr "FWHM"
@@ -1731,6 +1731,10 @@ msgstr "Type d'interface"
 #: u_translation.rsinterval
 msgid "Interval"
 msgstr "Intervalle"
+
+#: u_translation.rsinvalid
+msgid "Invalid"
+msgstr "Incorrect"
 
 #: u_translation.rsinvalidbinni
 msgid "Invalid binning %s"
@@ -2916,6 +2920,10 @@ msgstr "Reprend l'autoguidage"
 msgid "Retrieve position from deepsky database"
 msgstr "Trouve la position dans la base de données"
 
+#: u_translation.rsretrywithast
+msgid "Retry with astrometry.net"
+msgstr ""
+
 #: u_translation.rsreturnthefoc
 msgid "Return the focuser to previous position %s"
 msgstr "Retourne le focuser à la position précédente %s"
@@ -3111,6 +3119,10 @@ msgstr "secondes"
 #: u_translation.rsseconds2
 msgid "[seconds]"
 msgstr "[secondes]"
+
+#: u_translation.rssecuressltls
+msgid "Secure SSL/TLS connection"
+msgstr "Connection sécurisée SSL/TLS"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -3408,10 +3420,6 @@ msgstr "Goto"
 msgid "Slew telescope to flat panel position"
 msgstr "Déplace le télescope à la position du panneau"
 
-#: u_translation.rsslewto
-msgid "Slewing to %s/%s"
-msgstr "Déplacement vers %s/%s"
-
 #: u_translation.rsslewtoanears
 msgid "Slew to a near star of magnitude"
 msgstr "Goto vers une étoile de magnitude"
@@ -3475,6 +3483,10 @@ msgstr "Sud"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Vitesse"
+
+#: u_translation.rsssltlsnotsup
+msgid "SSL/TLS not supported, try to uncheck the corresponding box."
+msgstr "SSL/TLS n'est pas supporté, essayez de décocher la case correspondante"
 
 #: u_translation.rsstabilizatio
 msgid "Stabilization delay after move"
@@ -3763,10 +3775,6 @@ msgstr "Résumé"
 #: u_translation.rssuspenddomes
 msgid "Suspend dome slaving"
 msgstr "Suspendre l'asservissement du dôme"
-
-#: u_translation.rssyncto
-msgid "Sync to %s/%s"
-msgstr "Sync à %s %s"
 
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
@@ -4151,6 +4159,10 @@ msgstr "Non asservi"
 #: u_translation.rsupdateradec2
 msgid "Update RA+Dec%sfrom Planetarium"
 msgstr "Mise à jours AD+Déc%sdu planétarium"
+
+#: u_translation.rsuseasfallbac
+msgid "Use as fallback if other software fail"
+msgstr ""
 
 #: u_translation.rsuseasreferen
 msgid "Use as reference star"

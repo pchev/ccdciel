@@ -1914,10 +1914,6 @@ msgstr ""
 msgid "Maximum sources"
 msgstr ""
 
-#: u_translation:rscreateplotof
-msgid "Create plot of the result"
-msgstr ""
-
 #: u_translation:rsotheroptions
 msgid "Other options "
 msgstr ""
@@ -2610,10 +2606,6 @@ msgstr ""
 msgid "Do simple slew to %s/%s"
 msgstr ""
 
-#: u_translation:rsslewto
-msgid "Slewing to %s/%s"
-msgstr ""
-
 #: u_translation:rsslewtoeq
 msgid "Slewing to %s %s/%s"
 msgstr ""
@@ -2632,10 +2624,6 @@ msgstr ""
 
 #: u_translation:rsdistancetota
 msgid "Distance to target: %s arcmin"
-msgstr ""
-
-#: u_translation:rssyncto
-msgid "Sync to %s/%s"
 msgstr ""
 
 #: u_translation:rssynctoeq
@@ -4400,5 +4388,29 @@ msgstr ""
 
 #: u_translation:rspleaseseethe
 msgid "Please see the documentation for important security information"
+msgstr ""
+
+#: u_translation:rsinvalid
+msgid "Invalid"
+msgstr ""
+
+#: u_translation:rsfstop
+msgid "F-stop"
+msgstr ""
+
+#: u_translation:rssecuressltls
+msgid "Secure SSL/TLS connection"
+msgstr ""
+
+#: u_translation:rsssltlsnotsup
+msgid "SSL/TLS not supported, try to uncheck the corresponding box."
+msgstr ""
+
+#: u_translation:rsuseasfallbac
+msgid "Use as fallback if other software fail"
+msgstr ""
+
+#: u_translation:rsretrywithast
+msgid "Retry with astrometry.net"
 msgstr ""
 
