@@ -12,11 +12,12 @@ object keyboard1: Tkeyboard1
   OnClose = FormClose
   OnShow = FormShow
   Position = poOwnerFormCenter
+  LCLVersion = '2.0.6.0'
   object num7: TButton
     Left = 119
-    Height = 33
+    Height = 25
     Top = 69
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '7'
     OnClick = num7Click
@@ -25,9 +26,9 @@ object keyboard1: Tkeyboard1
   end
   object num4: TButton
     Left = 119
-    Height = 33
+    Height = 25
     Top = 109
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '4'
     OnClick = num7Click
@@ -36,9 +37,9 @@ object keyboard1: Tkeyboard1
   end
   object num8: TButton
     Left = 167
-    Height = 33
+    Height = 25
     Top = 69
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '8'
     OnClick = num7Click
@@ -47,9 +48,9 @@ object keyboard1: Tkeyboard1
   end
   object num9: TButton
     Left = 215
-    Height = 33
+    Height = 25
     Top = 69
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '9'
     OnClick = num7Click
@@ -58,9 +59,9 @@ object keyboard1: Tkeyboard1
   end
   object num5: TButton
     Left = 167
-    Height = 33
+    Height = 25
     Top = 111
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '5'
     OnClick = num7Click
@@ -69,9 +70,9 @@ object keyboard1: Tkeyboard1
   end
   object num6: TButton
     Left = 215
-    Height = 33
+    Height = 25
     Top = 109
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '6'
     OnClick = num7Click
@@ -80,9 +81,9 @@ object keyboard1: Tkeyboard1
   end
   object num1: TButton
     Left = 119
-    Height = 33
+    Height = 25
     Top = 149
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '1'
     OnClick = num7Click
@@ -91,9 +92,9 @@ object keyboard1: Tkeyboard1
   end
   object num2: TButton
     Left = 167
-    Height = 33
+    Height = 25
     Top = 149
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '2'
     OnClick = num7Click
@@ -102,9 +103,9 @@ object keyboard1: Tkeyboard1
   end
   object num3: TButton
     Left = 215
-    Height = 33
+    Height = 25
     Top = 149
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '3'
     OnClick = num7Click
@@ -113,7 +114,7 @@ object keyboard1: Tkeyboard1
   end
   object Edit1: TEdit
     Left = 5
-    Height = 31
+    Height = 23
     Top = 29
     Width = 335
     ParentFont = False
@@ -121,10 +122,10 @@ object keyboard1: Tkeyboard1
   end
   object clear1: TButton
     Left = 303
-    Height = 33
+    Height = 25
     Hint = 'clear'
     Top = 69
-    Width = 20
+    Width = 34
     AutoSize = True
     Caption = 'C'
     OnClick = clear1Click
@@ -135,80 +136,82 @@ object keyboard1: Tkeyboard1
   end
   object prefix1: TComboBox
     Left = 7
-    Height = 31
+    Height = 23
     Hint = 'prefix'
     Top = 71
     Width = 72
-    ItemHeight = 0
-    ItemIndex = 2
+    ItemHeight = 15
+    ItemIndex = 4
     Items.Strings = (
-      'ic'
-      'm'
-      'ngc'
-      'pgc'
-      'pk'
-      'sh2-'
+      'B'
+      'HGC'
+      'IC'
+      'M'
+      'NGC'
+      'PGC'
+      'PK'
+      'Sh2-'
     )
     OnChange = prefix1Change
     OnDblClick = prefix1Change
     ParentFont = False
     Sorted = True
     TabOrder = 1
-    Text = 'ngc'
+    Text = 'NGC'
   end
   object letter1: TComboBox
     Left = 7
-    Height = 31
+    Height = 23
     Hint = 'letters'
     Top = 111
     Width = 72
     DropDownCount = 30
-    ItemHeight = 0
+    ItemHeight = 15
     ItemIndex = 3
     Items.Strings = (
       '-'
       '.'
       '+'
-      'a'
-      'b'
-      'c'
-      'd'
-      'e'
-      'f'
-      'g'
-      'h'
-      'i'
-      'j'
-      'k'
-      'l'
-      'm'
-      'n'
-      'o'
-      'p'
-      'q'
-      'r'
-      's'
-      't'
-      'u'
-      'v'
-      'w'
-      'x'
-      'y'
-      'z'
+      'A'
+      'B'
+      'C'
+      'D'
+      'E'
+      'F'
+      'G'
+      'H'
+      'I'
+      'J'
+      'K'
+      'L'
+      'M'
+      'N'
+      'O'
+      'P'
+      'Q'
+      'R'
+      'S'
+      'T'
+      'U'
+      'V'
+      'W'
+      'X'
+      'Y'
+      'Z'
     )
     OnChange = letter1Change
     ParentFont = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
-    Text = 'a'
+    Text = 'A'
   end
   object enter1: TButton
     Left = 303
-    Height = 36
+    Height = 25
     Hint = 'enter'
     Top = 149
-    Width = 26
+    Width = 38
     AutoSize = True
     Caption = '⏎'
     Default = True
@@ -220,10 +223,10 @@ object keyboard1: Tkeyboard1
   end
   object backspace1: TButton
     Left = 303
-    Height = 38
+    Height = 25
     Hint = 'backspace'
     Top = 109
-    Width = 31
+    Width = 41
     AutoSize = True
     Caption = '⌫ '
     OnClick = backspace1Click
@@ -234,9 +237,9 @@ object keyboard1: Tkeyboard1
   end
   object num0: TButton
     Left = 119
-    Height = 33
+    Height = 25
     Top = 189
-    Width = 20
+    Width = 32
     AutoSize = True
     Caption = '0'
     OnClick = num7Click
@@ -245,9 +248,9 @@ object keyboard1: Tkeyboard1
   end
   object keyboard_question1: TLabel
     Left = 5
-    Height = 19
+    Height = 15
     Top = 5
-    Width = 124
+    Width = 103
     Caption = 'keyboard_question:'
     ParentColor = False
     ParentFont = False

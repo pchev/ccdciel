@@ -70,8 +70,13 @@ begin
 end;
 
 procedure Tkeyboard1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var
+  dummy : double;
+  error2: integer;
 begin
   keyboard_text:=edit1.text;
+  val(keyboard_text,dummy,error2);{test if this is a number or a full object name}
+  if error2=0 then keyboard_text:=prefix1.text+keyboard_text; {add missing prefix}
 end;
 
 procedure Tkeyboard1.FormShow(Sender: TObject);
