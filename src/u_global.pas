@@ -220,6 +220,7 @@ const
   secarc = deg2rad / 3600;
   musec = deg2rad / 3600 / 1000000; // 1 microarcsec for rounding test
   siderealrate = 15.041067178669; // arcsec/second
+  j2000 = ' (J2000)';
   jd2000 = 2451545.0;
   abek = secarc * 20.49552;  // aberration constant
   UnitRange:TNumRange = (min:1;max:1;step:1);

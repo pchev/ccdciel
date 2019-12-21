@@ -112,8 +112,8 @@ begin
   Caption:=rsPlanetariumP;
   Button1.Caption:=rsOK;
   Button2.Caption:=rsCancel;
-  Label1.Caption:=rsCenterRA;
-  Label2.Caption:=rsCenterDec;
+  Label1.Caption:=rsCenterRA+j2000;
+  Label2.Caption:=rsCenterDec+j2000;
   Label3.Caption:=rsObjectName;
   Label4.Caption:=rsClickTheObje;
   label5.Caption :=rsPA;

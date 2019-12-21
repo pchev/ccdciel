@@ -358,8 +358,8 @@ begin
   BtnImportObslist.Caption:=rsImportCdCObs;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
-  TargetList.Columns.Items[colra-1].Title.Caption := rsRA;
-  TargetList.Columns.Items[coldec-1].Title.Caption := rsDec;
+  TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
+  TargetList.Columns.Items[coldec-1].Title.Caption := rsDec+j2000;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;

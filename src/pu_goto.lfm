@@ -201,6 +201,15 @@ object f_goto: Tf_goto
     ParentColor = False
     ParentFont = False
   end
+  object Label16: TLabel
+    Left = 246
+    Height = 19
+    Top = 109
+    Width = 36
+    Caption = 'J2000'
+    ParentColor = False
+    ParentFont = False
+  end
   object msginfo: TLabel
     Left = 19
     Height = 19

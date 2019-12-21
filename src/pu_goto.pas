@@ -44,9 +44,10 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
     Label6: TLabel;
+    Label5: TLabel;
     Label7: TLabel;
+    Label16: TLabel;
     LabelAz: TLabel;
     LabelAlt: TLabel;
     Obj: TEdit;
@@ -87,7 +88,9 @@ begin
   ButtonOK.Caption:=rsGoto;
   Button2.Caption:=rsCancel;
   Label1.Caption:=rsCenterRA;
+  Label6.Caption:=j2000;
   Label2.Caption:=rsCenterDec;
+  Label16.Caption:=j2000;
   Label3.Caption:=rsObjectName;
   Label4.Caption:=rsAzimuth;
   Label5.Caption:=rsElevation;
