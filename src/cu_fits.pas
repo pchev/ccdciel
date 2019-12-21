@@ -2522,12 +2522,11 @@ procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,s
 // fluxsnr, the signal noise ratio on the total flux
 const
     max_ri=100;
-var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels: integer;
-    saturated_counter, max_saturated: integer;
+var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated: integer;
     valsaturation:Int64;
-    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average,
-    pixel_counter,r, val_00,val_01,val_10,val_11,af :double;
-    distance_histogram : array [0..max_ri] of integer;
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,r, val_00,val_01,val_10,val_11,af,
+    faintA,faintB, brightA,brightB,faintest,brightest : double;
+    distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
 begin
 
@@ -2629,12 +2628,12 @@ begin
     af:=0.30; {## asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
               {0.30 make focusing to work with bad seeing}
 
-    asymmetry:=( (val_00<af*val_11) or (val_00>val_11/af) or {diagonal asymmetry} {has asymmetry, ovals are NO LONGER accepted}
-                 (val_01<af*val_10) or (val_01>val_10/af) or {diagonal asymmetry}
-                 (val_00<af*val_10) or (val_00>val_10/af) or {east west asymmetry1}
-                 (val_01<af*val_11) or (val_01>val_11/af) or {east west asymmetry2}
-                 (val_00<af*val_01) or (val_00>val_01/af) or {north south asymmetry1}
-                 (val_10<af*val_11) or (val_10>val_11/af));  {north south asymmetry2}
+    {check for asymmetry of detected star using the four quadrants}
+    if val_00<val_01  then begin faintA:=val_00; brightA:=val_01; end else begin faintA:=val_01; brightA:=val_00; end;
+    if val_10<val_11  then begin faintB:=val_10; brightB:=val_11; end else begin faintB:=val_11; brightB:=val_10; end;
+    if faintA<faintB  then faintest:=faintA else faintest:=faintB;{find faintest quadrant}
+    if brightA>brightB  then brightest:=brightA else brightest:=brightB;{find brightest quadrant}
+    asymmetry:=(brightest*af>=faintest); {if true then detected star has asymmetry, ovals/galaxies or double stars will not be accepted}
 
     if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
