@@ -2607,7 +2607,7 @@ begin
      config.DeletePath('/BadPixelMap/');
      // new ssl/tls option
      buf:=trim(emailconfig.GetValue('/SMTP/Port',''));
-     emailconfig.SetValue('/SMTP/SSLTLS',(buf<>'25');
+     emailconfig.SetValue('/SMTP/SSLTLS',(buf<>'25'));
   end;
   if oldver<'0.9.67' then
      SaveConfig;
