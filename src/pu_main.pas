@@ -8162,7 +8162,7 @@ try
  StatusBar1.Panels[2].Text:=buf;
  StatusBar1.Panels[1].Text := '';
  // save as bitmap
- if SaveBitmap and (camera.FrameType=LIGHT) then begin
+ if SaveBitmap then begin
    fn:=ChangeFileExt(fn,'.'+SaveBitmapFormat);
    fits.SaveToBitmap(fn);
    NewMessage(Format(rsSavedFile, [fn]),1);
