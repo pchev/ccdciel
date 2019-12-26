@@ -46,7 +46,7 @@ T_camera = class(TComponent)
     FonFrameChange: TNotifyEvent;
     FonTemperatureChange: TNotifyNum;
     FonCoolerChange: TNotifyBool;
-    FonFnumberChange: TNotifyNum;
+    FonFnumberChange: TNotifyStr;
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
@@ -75,7 +75,7 @@ T_camera = class(TComponent)
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
     FAddFrames: boolean;
-    FVideoSizes, FVideoRates:TStringList;
+    FVideoSizes, FVideoRates,FFNumberList:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
@@ -153,8 +153,8 @@ T_camera = class(TComponent)
     function GetGain: integer; virtual; abstract;
     procedure SetReadOutMode(value: integer); virtual; abstract;
     function GetReadOutMode: integer; virtual; abstract;
-    procedure SetFnumber(value: double); virtual; abstract;
-    function GetFnumber: double; virtual; abstract;
+    procedure SetFnumber(value: string); virtual; abstract;
+    function GetFnumber: string; virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -249,19 +249,20 @@ T_camera = class(TComponent)
     property GainMax: integer read FGainMax;
     property hasGainISO: boolean read FhasGainISO;
     property ISOList: TStringList read FISOList;
+    property FnumberList: TstringList read FFNumberList;
     property LastExposureTime:double read Fexptime;
     property hasCfaInfo: boolean read FhasCfaInfo;
     property hasReadOut: boolean read FhasReadOut;
     property ReadOutList: TStringList read FReadOutList;
     property ReadOutMode: integer read GetReadOutMode write SetReadOutMode;
     property hasFnumber: boolean read FhasFnumber;
-    property Fnumber: double read GetFnumber write SetFnumber;
+    property Fnumber: string read GetFnumber write SetFnumber;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
     property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
     property onCoolerChange: TNotifyBool read FonCoolerChange write FonCoolerChange;
-    property onFnumberChange: TNotifyNum read FonFnumberChange write FonFnumberChange;
+    property onFnumberChange: TNotifyStr read FonFnumberChange write FonFnumberChange;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
     property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
@@ -309,6 +310,7 @@ begin
   lockvideoframe:=false;
   FVideoSizes:=TStringList.Create;
   FVideoRates:=TStringList.Create;
+  FFNumberList:=TStringList.Create;
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
   FStackCount:=0;
@@ -337,6 +339,7 @@ begin
   FVideoStream.Free;
   FVideoSizes.Free;
   FVideoRates.Free;
+  FFNumberList.Free;
   FISOList.Free;
   FReadOutList.Free;
   inherited Destroy;
@@ -646,6 +649,9 @@ begin
   end;
   except
    hasfocuserpos:=false;
+  end;
+  if hasFnumber and (fstop<0) then begin
+    fstop:=StrToFloatDef(GetFnumber,-1);
   end;
   if CType='' then begin
     try

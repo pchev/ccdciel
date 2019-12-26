@@ -625,7 +625,7 @@ type
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
     procedure CameraCoolerChange(var v:boolean);
-    procedure CameraFnumberChange(f:double);
+    procedure CameraFnumberChange(f:string);
     Procedure WheelStatus(Sender: TObject);
     procedure FilterChange(n:double);
     procedure FilterNameChange(Sender: TObject);
@@ -4276,8 +4276,10 @@ begin
  if camera.hasFnumber then begin
   f_capture.PanelFnumber.Visible:=true;
   f_preview.PanelFnumber.Visible:=true;
-  f_capture.Fnumber.Text:=FloatToStr(camera.Fnumber);
-  f_preview.Fnumber.Text:=FloatToStr(camera.Fnumber);
+  f_capture.Fnumber.Items.Assign(camera.FnumberList);
+  f_preview.Fnumber.Items.Assign(camera.FnumberList);
+  f_capture.Fnumber.Text:=camera.Fnumber;
+  f_preview.Fnumber.Text:=camera.Fnumber;
  end
  else begin
   f_capture.PanelFnumber.Visible:=false;
@@ -4946,10 +4948,10 @@ begin
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
 end;
 
-procedure  Tf_main.CameraFnumberChange(f:double);
+procedure  Tf_main.CameraFnumberChange(f:string);
 begin
- f_preview.Fnumber.Text:=FloatToStr(f);
- f_capture.Fnumber.Text:=FloatToStr(f);
+ f_preview.Fnumber.Text:=f;
+ f_capture.Fnumber.Text:=f;
 end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
@@ -7236,8 +7238,8 @@ begin
 end;
 
 Procedure Tf_main.StartPreviewExposure(Sender: TObject);
-var e,f: double;
-    buf: string;
+var e: double;
+    buf,f: string;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
 // ! can run out of main thread
@@ -7287,10 +7289,10 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
       camera.SetFrame(sx,sy,sw,sh);
   end;
   if camera.hasFnumber then begin
-    f:=RoundFloat(StrToFloatDef(f_preview.Fnumber.Text,-1),roundf2);
+    f:=f_preview.Fnumber.Text;
     if (camera.Fnumber<>f) then begin
-      if (f>0) then begin
-       NewMessage(rsSet+blank+rsFStop+'='+FloatToStr(f),2);
+      if (f>'') then begin
+       NewMessage(rsSet+blank+rsFStop+'='+f,2);
        camera.Fnumber:=f;
       end
       else NewMessage(rsInvalid+blank+rsFStop+blank+f_preview.Fnumber.Text, 0);
@@ -7649,8 +7651,8 @@ begin
 end;
 
 Procedure Tf_main.StartCaptureExposureNow;
-var e,f: double;
-    buf: string;
+var e: double;
+    buf,f: string;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
     ftype:TFrameType;
 begin
@@ -7705,10 +7707,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   end;
   // check and set f-stop
   if camera.hasFnumber then begin
-    f:=RoundFloat(StrToFloatDef(f_capture.Fnumber.Text,-1),roundf2);
+    f:=f_capture.Fnumber.Text;
     if (camera.Fnumber<>f) then begin
-      if (f>0) then begin
-       NewMessage('Set F-Stop '+FloatToStr(f),2);
+      if (f>'') then begin
+       NewMessage('Set F-Stop '+f,2);
        camera.Fnumber:=f;
       end
       else NewMessage('Invalid F-Stop '+f_capture.Fnumber.Text,0);

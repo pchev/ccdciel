@@ -128,6 +128,7 @@ private
    configload,configsave: ISwitch;
    CameraFnumber: INumberVectorProperty;
    CameraFnumberValue: INumber;
+   CameraAperture: ISwitchVectorProperty;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
@@ -221,8 +222,8 @@ private
    function GetGain: integer; override;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
-   procedure SetFnumber(value: double); override;
-   function GetFnumber: double; override;
+   procedure SetFnumber(value: string); override;
+   function GetFnumber: string; override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -381,6 +382,7 @@ begin
     configprop:=nil;
     CameraFnumber:=nil;
     FhasFnumber:=false;
+    CameraAperture:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -607,7 +609,7 @@ var propname: string;
     TxtProp: ITextVectorProperty;
     Txt: IText;
     buf: string;
-    i: integer;
+    i,fmin,fmax: integer;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
@@ -875,6 +877,20 @@ begin
     CameraFnumberValue:=IUFindNumber(CameraFnumber,'f-number');
     if CameraFnumberValue=nil then CameraFnumber:=nil;
     FhasFnumber:=(CameraFnumber<>nil);
+    FFNumberList.Clear;
+    if FhasFnumber then
+      for i:=0 to DefaultFNlistcount-1 do begin
+        FFNumberList.Add(DefaultFNlist[i]);
+    end;
+  end
+  else if (proptype=INDI_SWITCH)and(propname='aperture') then begin
+    CameraAperture:=indiProp.getSwitch();
+    FFNumberList.Clear;
+    for i:=0 to CameraAperture.nsp-1 do begin
+      msg('aperture: '+CameraAperture.sp[i].Name+blank+CameraAperture.sp[i].lbl);
+      FFNumberList.Add(CameraAperture.sp[i].lbl);
+    end;
+    FhasFnumber:=(FFNumberList.Count>0);
   end
   else if (proptype=INDI_TEXT)and(ActiveDevices=nil)and(propname='ACTIVE_DEVICES') then begin
      ActiveDevices:=indiProp.getText;
@@ -906,7 +922,7 @@ begin
      if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
   end
   else if nvp=CameraFnumber then begin
-     if Assigned(FonFnumberChange) then FonFnumberChange(RoundFloat(CameraFnumberValue.value,roundf2));
+     if Assigned(FonFnumberChange) then FonFnumberChange(FormatFloat(f1,CameraFnumberValue.value));
   end
   else if nvp=VideoFPS then begin
      if Assigned(FonFPSChange) then FonFPSChange(self);
@@ -971,6 +987,10 @@ begin
   else if svp=CCDCooler then begin
       cool:=GetCooler;
       if Assigned(FonCoolerChange) then FonCoolerChange(cool);
+  end
+  else if svp=CameraAperture then begin
+     sw:=IUFindOnSwitch(CameraAperture);
+     if Assigned(FonFnumberChange) then FonFnumberChange(sw.lbl);
   end
   else if svp=CCDVideoStream then begin
       if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);
@@ -1761,20 +1781,44 @@ begin
 result:=0;
 end;
 
-procedure T_indicamera.SetFnumber(value: double);
+procedure T_indicamera.SetFnumber(value: string);
+var x: double;
+    i:integer;
+    s:ISwitch;
 begin
+msg('Set aperture '+value);
   if CameraFnumber<>nil then begin
-    CameraFnumberValue.value:=RoundFloat(value,roundf2);
-    indiclient.sendNewNumber(CameraFnumber);
+    x:=StrToFloatDef(value,0);
+    if x>0 then begin
+      CameraFnumberValue.value:=RoundFloat(x,roundf2);
+      indiclient.sendNewNumber(CameraFnumber);
+    end;
+  end
+  else if CameraAperture<>nil then begin
+    IUResetSwitch(CameraAperture);
+    for i:=0 to CameraAperture.nsp-1 do begin
+      if CameraAperture.sp[i].lbl=value then begin
+         CameraAperture.sp[i].s:=ISS_ON;
+         break;
+      end;
+    end;
+    s:=IUFindOnSwitch(CameraAperture);
+    if s<>nil then indiclient.sendNewSwitch(CameraAperture);
   end;
 end;
 
-function T_indicamera.GetFnumber: double;
+function T_indicamera.GetFnumber: string;
+var s: ISwitch;
 begin
   if CameraFnumber<>nil then
-    result:=RoundFloat(CameraFnumberValue.value,roundf2)
+    result:=FormatFloat(f1,CameraFnumberValue.value)
+  else if CameraAperture<>nil then begin
+    s:=IUFindOnSwitch(CameraAperture);
+    result:=trim(s.lbl);
+  end
   else
-    result:=0;
+    result:='';
+msg('Get aperture '+Result);
 end;
 
 function T_indicamera.GetImageFormat: string;

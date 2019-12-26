@@ -258,6 +258,8 @@ const
   SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','');
   DomeOpenActionName: array[0..ord(high(TDomeOpenAction))] of string=('','','','','','');
   DomeCloseActionName: array[0..ord(high(TDomeCloseAction))] of string=('','','','','','');
+  DefaultFNlistcount=12;
+  DefaultFNlist: array[0..DefaultFNlistcount-1] of string=('1','1.2','1.4','1.8','2','2.8','4','5.6','8','11','16','22');
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;

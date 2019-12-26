@@ -114,8 +114,8 @@ T_ascomcamera = class(T_camera)
    function GetGain: integer; override;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
-   procedure SetFnumber(value: double); override;
-   function GetFnumber: double; override;
+   procedure SetFnumber(value: string); override;
+   function GetFnumber: string; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -1161,14 +1161,14 @@ begin
   {$endif}
 end;
 
-procedure T_ascomcamera.SetFnumber(value: double);
+procedure T_ascomcamera.SetFnumber(value: string);
 begin
   //unsupported
 end;
 
-function T_ascomcamera.GetFnumber: double;
+function T_ascomcamera.GetFnumber: string;
 begin
-  result:=0;
+  result:='';
   //unsupported
 end;
 

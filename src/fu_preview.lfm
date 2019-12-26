@@ -177,20 +177,6 @@ object f_preview: Tf_preview
         Width = 91
         Constraints.MaxHeight = 28
         ItemHeight = 0
-        Items.Strings = (
-          '1'
-          '1.2'
-          '1.4'
-          '1.8'
-          '2'
-          '2.8'
-          '4'
-          '5.6'
-          '8'
-          '11'
-          '16'
-          '22'
-        )
         ParentFont = False
         TabOrder = 0
       end
