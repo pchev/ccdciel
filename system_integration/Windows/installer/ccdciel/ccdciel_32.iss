@@ -8,7 +8,7 @@ AppVerName=CCDciel V3
 AppPublisherURL=http://sourceforge.net/projects/ccdciel
 AppSupportURL=http://sourceforge.net/projects/ccdciel
 AppUpdatesURL=http://sourceforge.net/projects/ccdciel
-DefaultDirName={pf32}\CCDciel
+DefaultDirName={commonpf32}\CCDciel
 UsePreviousAppDir=false
 DefaultGroupName=CCDciel
 AllowNoIcons=true
@@ -21,6 +21,7 @@ Uninstallable=true
 UninstallLogMode=append
 DirExistsWarning=no
 ShowLanguageDialog=yes
+WizardStyle=modern
 AppID={{6570df38-f18f-11e4-9532-fb2d36b55e00}
 
 [Tasks]
@@ -32,7 +33,7 @@ Source: Data\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsub
 
 [Icons]
 Name: {group}\CCDciel; Filename: {app}\ccdciel.exe; WorkingDir: {app}
-Name: {userdesktop}\CCDciel; Filename: {app}\ccdciel.exe; WorkingDir: {app}; Tasks: desktopicon
+Name: {commondesktop}\CCDciel; Filename: {app}\ccdciel.exe; WorkingDir: {app}; Tasks: desktopicon
  
 [Code]
 {Uninstall previous version to avoid 32bit/64bit mismatch}
