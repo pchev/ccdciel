@@ -49,6 +49,7 @@ $lang/documentation/hyperleda_database.html
 $lang/documentation/ascom.html
 $lang/documentation/astap.html
 $lang/documentation/astrometry.net.html
+$lang/documentation/windows_subsystem_for_linux.html
 $lang/documentation/star_locator_elbrus.html
 $lang/documentation/platesolve_2.html
 EOF
