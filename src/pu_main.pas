@@ -1043,6 +1043,10 @@ begin
  end;
  DataDir:=slash(Appdir)+slash('data');
  ConfigDir:=GetAppConfigDirUTF8(false,true);
+ if Application.HasOption('b', 'basedir') then begin
+   buf:=Application.GetOptionValue('b', 'basedir');
+   if buf<>'' then ConfigDir:=ExpandFileNameUTF8(buf);
+ end;
  TmpDir:=slash(ConfigDir)+'tmp';
  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
  LogDir:=slash(ConfigDir)+'Log';
