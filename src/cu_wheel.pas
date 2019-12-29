@@ -101,8 +101,10 @@ begin
   i:=GetFilter;
   if (i>=0)and(i<FFilterNames.Count) then
      result:=FFilterNames[i]
-  else
+  else begin
      result:='Unknown';
+     msg('Current filter not in list: '+inttostr(i)+', list size: '+inttostr(FFilterNames.Count));
+  end;
 end;
 
 end.
