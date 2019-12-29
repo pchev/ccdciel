@@ -49,6 +49,7 @@ T_wheel = class(TComponent)
     function  GetFilter:integer; virtual; abstract;
     procedure SetFilterNames(value:TStringList); virtual; abstract;
     function  GetFilterNames:TStringList; virtual; abstract;
+    function  GetCurrentFilterName:String;
     procedure SetTimeout(num:integer); virtual; abstract;
     procedure SetCamera(value: TObject);virtual; abstract;
   public
@@ -61,6 +62,7 @@ T_wheel = class(TComponent)
     property Camera: TObject read Fcameraobj write SetCamera;
     property Status: TDeviceStatus read GetStatus;
     property Filter: integer read GetFilter write SetFilter;
+    property CurrentFilterName: String read GetCurrentFilterName;
     property FilterNames: TStringList read GetFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
@@ -93,6 +95,15 @@ begin
  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
 end;
 
+function  T_wheel.GetCurrentFilterName:String;
+var i: integer;
+begin
+  i:=GetFilter;
+  if (i>=0)and(i<FFilterNames.Count) then
+     result:=FFilterNames[i]
+  else
+     result:='Unknown';
+end;
 
 end.
 

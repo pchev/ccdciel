@@ -8107,7 +8107,7 @@ try
                 fn:=fn+trim(f_capture.FrameType.Text)+FilenameSep;
              end;
      fnFilter: if FileNameActive[i] and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-                fn:=fn+trim(wheel.FilterNames[wheel.Filter])+FilenameSep;
+                fn:=fn+trim(wheel.CurrentFilterName)+FilenameSep;
 
      fnExp : if FileNameActive[i] then begin
                if FlatAutoExposure and (camera.FrameType=FLAT) then

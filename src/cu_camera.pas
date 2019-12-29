@@ -586,7 +586,7 @@ begin
      hairmass:=round(10000*AirMass(hal))/10000;
   end;
   if (hfilter='')and(Fwheel<>nil)and(Fwheel.Status=devConnected) then begin
-     hfilter:=Fwheel.FilterNames[Fwheel.Filter];
+     hfilter:=Fwheel.CurrentFilterName;
   end;
   ccdtemp:=Temperature;
   objname:=FObjectName;

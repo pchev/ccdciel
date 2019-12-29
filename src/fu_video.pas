@@ -300,7 +300,7 @@ begin
      fn:=fn+trim(ObjectName.Text)+'_'
   end;
   if fnfilter and (wheel.Status=devConnected) then
-      fn:=fn+trim(wheel.FilterNames[wheel.Filter])+'_';
+      fn:=fn+trim(wheel.CurrentFilterName)+'_';
   fn:=fn+'_T_.ser';  // let INDI increment the time
   camera.VideoRecordDir:=fd;
   camera.VideoRecordFile:=fn;
