@@ -3308,7 +3308,11 @@ begin
   if f_EditTargets<>nil then f_EditTargets.ShowHint:=ShowHint;
   if f_vcurve<>nil then f_vcurve.ShowHint:=ShowHint;
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
-  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
+  if copy(TmpDir,1,1)='.' then TmpDir:=ExpandFileName(slash(Appdir)+TmpDir);
+  if not DirectoryExistsUTF8(TmpDir) then begin
+    ok:=CreateDirUTF8(TmpDir);
+    if not ok then NewMessage('Cannot create directory '+TmpDir,1);
+  end;
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false);
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
@@ -8054,6 +8058,7 @@ try
  dn:=now-0.5;
  // construct path
  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+ if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
  for i:=0 to SubDirCount-1 do begin
    case SubDirOpt[i] of
      sdSeq : if SubDirActive[i] and f_sequence.Running then fd:=slash(fd+trim(CurrentSeqName));

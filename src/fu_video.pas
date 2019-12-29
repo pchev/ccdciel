@@ -289,6 +289,7 @@ begin
   subfrt:=config.GetValue('/Files/SubfolderFrametype',false);
   subobj:=config.GetValue('/Files/SubfolderObjname',false);
   fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+  if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
   if subfrt then fd:=slash(fd+'Video');
   if subobj then fd:=slash(fd+trim(ObjectName.Text));
   ForceDirectoriesUTF8(fd);
