@@ -194,6 +194,8 @@ var readmodes,roitem: Variant;
 begin
 {$ifdef mswindows}
  try
+ stCooler:=false;
+ stCCDtemp:=NullCoord;
  FStatus := devConnecting;
  Fdevice:=cp1;
  if Assigned(FonStatusChange) then FonStatusChange(self);

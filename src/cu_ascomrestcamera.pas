@@ -198,6 +198,8 @@ var rlist: array of string;
     buf: string;
 begin
  try
+  stCooler:=false;
+  stCCDtemp:=NullCoord;
   FStatus := devConnecting;
   V.Host:=cp1;
   V.Port:=cp2;
