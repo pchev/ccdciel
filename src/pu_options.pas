@@ -1221,8 +1221,13 @@ end;
 
 procedure Tf_option.ChangeAutofocusInPlace(Sender: TObject);
 begin
+  if (Autofocusmode.ItemIndex=3) then begin
+    AutofocusInPlace.Checked:=true;
+    AutofocusSlew.Checked:=false;
+  end;
   AutofocusMultistar.Visible:=AutofocusInPlace.Checked;
   AutofocusSlewStar.Visible:=not AutofocusMultistar.Visible;
+  PanelNearFocus.Visible:=AutofocusSlewStar.Visible;
   if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
      LabelMultistarWarning.Caption:=rsItIsSuggestT
   else if AutofocusSlew.Checked and (Autofocusmode.ItemIndex=3) then
@@ -1317,12 +1322,7 @@ begin
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
-  if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
-     LabelMultistarWarning.Caption:=rsItIsSuggestT
-  else if AutofocusSlew.Checked and (Autofocusmode.ItemIndex=3) then
-     LabelMultistarWarning.Caption:=rsItIsSuggeste
-  else
-    LabelMultistarWarning.Caption:='';
+  ChangeAutofocusInPlace(Sender);
 end;
 
 procedure Tf_option.AstUseScriptClick(Sender: TObject);
