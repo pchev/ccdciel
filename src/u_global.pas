@@ -49,9 +49,10 @@ type
   TPlanetariumType=(CDC, SAMP, HNSKY);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB,bayerCamera,bayerUnsupported);
-  TAutofocusMode=(afVcurve,afDynamic,afIterative,afNone);
+  TAutofocusMode=(afVcurve,afDynamic,afIterative,afNone,afPlanet);
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
   TAutofocusDynamicStep=(afdStart,afdMeasure,afdEnd);
+  TAutofocusPlanetStep=(afpStart,afpMeasure,afpEnd);
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
   TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain);
@@ -387,6 +388,8 @@ var
   AutofocusVcStep:TAutofocusVcurveStep;
   AutofocusDynamicMovement,AutofocusDynamicNumPoint,AutofocusVcFilterOffset,AutofocusSlippageOffset: integer;
   AutofocusDynamicStep:TAutofocusDynamicStep;
+  AutofocusPlanetMovement,AutofocusPlanetNumPoint: integer;
+  AutofocusPlanetStep:TAutofocusPlanetStep;
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;

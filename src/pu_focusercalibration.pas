@@ -299,6 +299,8 @@ begin
   end;
   config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
   config.SetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
+  config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
+  config.SetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusPlanetMovement);
   config.SetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
   config.SetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
   config.SetValue('/StarAnalysis/FocuserBacklash',Ffocuser.Backlash);

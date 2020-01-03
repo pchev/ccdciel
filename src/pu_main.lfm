@@ -162,7 +162,7 @@ object f_main: Tf_main
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 518
+      Height = 493
       Top = 41
       Width = 222
       ActivePage = PageConnect
@@ -175,13 +175,13 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 489
         ClientWidth = 212
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 514
+          Height = 489
           Top = 0
           Width = 212
           Align = alClient
@@ -199,7 +199,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 489
         ClientWidth = 212
         ImageIndex = 1
         ParentFont = False
@@ -223,7 +223,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 489
         ClientWidth = 212
         ImageIndex = 2
         ParentFont = False
@@ -247,7 +247,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 489
         ClientWidth = 212
         ImageIndex = 3
         ParentFont = False
@@ -271,7 +271,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 489
         ClientWidth = 212
         ImageIndex = 4
         ParentFont = False
@@ -362,6 +362,16 @@ object f_main: Tf_main
         Style = tbsCheck
         Visible = False
       end
+    end
+    object Button1: TButton
+      Left = 0
+      Height = 25
+      Top = 534
+      Width = 222
+      Align = alBottom
+      Caption = 'Sharpness'
+      OnClick = Button1Click
+      TabOrder = 2
     end
   end
   object StatusBar1: TStatusBar

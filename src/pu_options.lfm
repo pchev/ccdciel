@@ -478,7 +478,7 @@ object f_option: Tf_option
         Top = 180
         Width = 255
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 253
         ParentFont = False
         TabOrder = 3
@@ -561,7 +561,7 @@ object f_option: Tf_option
         Top = 232
         Width = 255
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 253
         ParentFont = False
         TabOrder = 4
@@ -2196,7 +2196,7 @@ object f_option: Tf_option
         Left = 8
         Height = 53
         Top = 4
-        Width = 453
+        Width = 504
         AutoFill = True
         Caption = 'Autofocus method'
         ChildSizing.LeftRightSpacing = 6
@@ -2205,19 +2205,29 @@ object f_option: Tf_option
         ChildSizing.ShrinkHorizontal = crsScaleChilds
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 4
+        ChildSizing.ControlsPerLine = 5
         ClientHeight = 33
-        ClientWidth = 451
-        Columns = 4
+        ClientWidth = 502
+        Columns = 5
         Items.Strings = (
           'Dynamic'
           'V curve'
           'Iterative'
+          'Planet'
           'None'
         )
         OnClick = AutofocusmodeClick
         ParentFont = False
         TabOrder = 0
+      end
+      object Label101: TLabel
+        Left = 16
+        Height = 19
+        Top = 61
+        Width = 360
+        Caption = 'The menu "File / Focuser calibration" help to fill this values.'
+        ParentColor = False
+        ParentFont = False
       end
       object PanelAutofocus: TPanel
         Left = 8
@@ -2279,6 +2289,134 @@ object f_option: Tf_option
           OnClick = CheckFocuserDirection
           ParentFont = False
           TabOrder = 0
+        end
+        object PanelNearFocus: TPanel
+          Left = 1
+          Height = 31
+          Top = 119
+          Width = 412
+          BevelOuter = bvNone
+          ClientHeight = 31
+          ClientWidth = 412
+          ParentFont = False
+          TabOrder = 3
+          object Label57: TLabel
+            Left = 8
+            Height = 19
+            Top = 4
+            Width = 183
+            Caption = 'Number of exposure by point'
+            ParentColor = False
+            ParentFont = False
+          end
+          object AutofocusNearNum: TSpinEditEx
+            Left = 214
+            Height = 28
+            Top = 0
+            Width = 61
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 0
+            MaxValue = 10
+            MinValue = 1
+            Value = 1
+          end
+        end
+        object Label50: TLabel
+          Left = 8
+          Height = 19
+          Top = 32
+          Width = 47
+          Caption = 'Binning'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label54: TLabel
+          Left = 8
+          Height = 19
+          Top = 89
+          Width = 129
+          Caption = 'Autofocus tolerance '
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label55: TLabel
+          Left = 178
+          Height = 19
+          Top = 89
+          Width = 27
+          Caption = 'HFD'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label81: TLabel
+          Left = 283
+          Height = 19
+          Top = 89
+          Width = 52
+          Caption = 'min.SNR'
+          ParentColor = False
+          ParentFont = False
+        end
+        object AutofocusExposure: TFloatSpinEditEx
+          Left = 214
+          Height = 28
+          Top = 0
+          Width = 61
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 4
+          DecimalPlaces = 1
+          Increment = 0.1
+          MaxValue = 60
+          MinValue = 0
+          NullValue = 0
+          Value = 0
+        end
+        object AutofocusBinning: TSpinEditEx
+          Left = 214
+          Height = 28
+          Top = 28
+          Width = 61
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 5
+          MaxValue = 8
+          MinValue = 1
+          Value = 1
+        end
+        object AutofocusTolerance: TFloatSpinEditEx
+          Left = 214
+          Height = 28
+          Top = 85
+          Width = 61
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 6
+          Increment = 0.1
+          MaxValue = 99
+          MinValue = 1
+          NullValue = 0
+          Value = 1
+        end
+        object AutofocusMinSNR: TFloatSpinEditEx
+          Left = 356
+          Height = 28
+          Top = 85
+          Width = 61
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 7
+          DecimalPlaces = 1
+          MaxValue = 99
+          MinValue = 1
+          NullValue = 0
+          Value = 1
         end
         object AutofocusNotebook: TNotebook
           Left = 0
@@ -2429,7 +2567,7 @@ object f_option: Tf_option
             object Label46: TLabel
               Left = 8
               Height = 19
-              Top = 8
+              Top = 4
               Width = 150
               Caption = 'Initial movement (steps)'
               ParentColor = False
@@ -2438,7 +2576,7 @@ object f_option: Tf_option
             object Label47: TLabel
               Left = 8
               Height = 19
-              Top = 42
+              Top = 38
               Width = 144
               Caption = 'Final movement (steps)'
               ParentColor = False
@@ -2447,7 +2585,7 @@ object f_option: Tf_option
             object AutofocusMaxSpeed: TSpinEditEx
               Left = 214
               Height = 31
-              Top = 6
+              Top = 0
               Width = 61
               MaxLength = 0
               ParentFont = False
@@ -2459,7 +2597,7 @@ object f_option: Tf_option
             object AutofocusMinSpeed: TSpinEditEx
               Left = 214
               Height = 31
-              Top = 38
+              Top = 32
               Width = 61
               MaxLength = 0
               ParentFont = False
@@ -2469,146 +2607,53 @@ object f_option: Tf_option
               Value = 2
             end
           end
+          object PagePlanet: TPage
+            object Label141: TLabel
+              Left = 8
+              Height = 19
+              Top = 6
+              Width = 109
+              Caption = 'Number of points'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label142: TLabel
+              Left = 8
+              Height = 19
+              Top = 38
+              Width = 168
+              Caption = 'Movement between points'
+              ParentColor = False
+              ParentFont = False
+            end
+            object AutofocusPlanetNumPoint: TSpinEditEx
+              Left = 214
+              Height = 31
+              Top = 0
+              Width = 61
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 0
+              MaxValue = 30
+              MinValue = 5
+              Value = 5
+            end
+            object AutofocusPlanetMovement: TSpinEditEx
+              Left = 214
+              Height = 31
+              Top = 32
+              Width = 61
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 1
+              MaxValue = 10000
+              MinValue = 1
+              Value = 1
+            end
+          end
           object PageNone: TPage
           end
         end
-        object PanelNearFocus: TPanel
-          Left = 1
-          Height = 31
-          Top = 119
-          Width = 412
-          BevelOuter = bvNone
-          ClientHeight = 31
-          ClientWidth = 412
-          ParentFont = False
-          TabOrder = 3
-          object Label57: TLabel
-            Left = 8
-            Height = 19
-            Top = 4
-            Width = 183
-            Caption = 'Number of exposure by point'
-            ParentColor = False
-            ParentFont = False
-          end
-          object AutofocusNearNum: TSpinEditEx
-            Left = 214
-            Height = 28
-            Top = 0
-            Width = 61
-            Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
-            MaxValue = 10
-            MinValue = 1
-            Value = 1
-          end
-        end
-        object Label50: TLabel
-          Left = 8
-          Height = 19
-          Top = 32
-          Width = 47
-          Caption = 'Binning'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label54: TLabel
-          Left = 8
-          Height = 19
-          Top = 89
-          Width = 129
-          Caption = 'Autofocus tolerance '
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label55: TLabel
-          Left = 178
-          Height = 19
-          Top = 89
-          Width = 27
-          Caption = 'HFD'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label81: TLabel
-          Left = 283
-          Height = 19
-          Top = 89
-          Width = 52
-          Caption = 'min.SNR'
-          ParentColor = False
-          ParentFont = False
-        end
-        object AutofocusExposure: TFloatSpinEditEx
-          Left = 214
-          Height = 28
-          Top = 0
-          Width = 61
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 4
-          DecimalPlaces = 1
-          Increment = 0.1
-          MaxValue = 60
-          MinValue = 0
-          NullValue = 0
-          Value = 0
-        end
-        object AutofocusBinning: TSpinEditEx
-          Left = 214
-          Height = 28
-          Top = 28
-          Width = 61
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 5
-          MaxValue = 8
-          MinValue = 1
-          Value = 1
-        end
-        object AutofocusTolerance: TFloatSpinEditEx
-          Left = 214
-          Height = 28
-          Top = 85
-          Width = 61
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 6
-          Increment = 0.1
-          MaxValue = 99
-          MinValue = 1
-          NullValue = 0
-          Value = 1
-        end
-        object AutofocusMinSNR: TFloatSpinEditEx
-          Left = 356
-          Height = 28
-          Top = 85
-          Width = 61
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 7
-          DecimalPlaces = 1
-          MaxValue = 99
-          MinValue = 1
-          NullValue = 0
-          Value = 1
-        end
-      end
-      object Label101: TLabel
-        Left = 16
-        Height = 19
-        Top = 61
-        Width = 360
-        Caption = 'The menu "File / Focuser calibration" help to fill this values.'
-        ParentColor = False
-        ParentFont = False
       end
       object PanelFocusStar: TPanel
         Left = 8
@@ -2622,12 +2667,12 @@ object f_option: Tf_option
         TabOrder = 2
         object AutofocusMultistar: TGroupBox
           Left = 1
-          Height = 121
-          Top = 40
-          Width = 452
+          Height = 110
+          Top = 54
+          Width = 491
           Caption = 'Focus star selection'
-          ClientHeight = 101
-          ClientWidth = 450
+          ClientHeight = 90
+          ClientWidth = 489
           ParentFont = False
           TabOrder = 3
           object Label56: TLabel
@@ -2636,15 +2681,6 @@ object f_option: Tf_option
             Top = 4
             Width = 209
             Caption = 'Detect multiple stars in the image'
-            ParentColor = False
-            ParentFont = False
-          end
-          object LabelMultistarWarning: TLabel
-            Left = 8
-            Height = 19
-            Top = 59
-            Width = 6
-            Caption = '  '
             ParentColor = False
             ParentFont = False
           end
@@ -2658,13 +2694,44 @@ object f_option: Tf_option
             TabOrder = 0
           end
         end
-        object AutofocusSlewStar: TGroupBox
+        object Label52: TLabel
           Left = 1
-          Height = 121
-          Top = 40
+          Height = 19
+          Top = 7
+          Width = 106
+          Caption = 'Default behavior'
+          ParentColor = False
+          ParentFont = False
+        end
+        object AutofocusSlew: TRadioButton
+          Left = 170
+          Height = 21
+          Top = 6
+          Width = 133
+          Caption = 'Slew to focus star'
+          Checked = True
+          OnClick = ChangeAutofocusInPlace
+          ParentFont = False
+          TabOrder = 1
+          TabStop = True
+        end
+        object AutofocusInPlace: TRadioButton
+          Left = 356
+          Height = 21
+          Top = 6
+          Width = 101
+          Caption = 'Stay in place'
+          OnClick = ChangeAutofocusInPlace
+          ParentFont = False
+          TabOrder = 2
+        end
+        object AutofocusSlewStar: TGroupBox
+          Left = 0
+          Height = 110
+          Top = 54
           Width = 492
           Caption = 'Focus star selection'
-          ClientHeight = 101
+          ClientHeight = 90
           ClientWidth = 490
           ParentFont = False
           TabOrder = 0
@@ -2733,7 +2800,7 @@ object f_option: Tf_option
             Value = 0
           end
           object FocusStarMagAdjust: TCheckBox
-            Left = 8
+            Left = 7
             Height = 21
             Top = 64
             Width = 395
@@ -2742,36 +2809,14 @@ object f_option: Tf_option
             TabOrder = 2
           end
         end
-        object Label52: TLabel
-          Left = 1
+        object LabelMultistarWarning: TLabel
+          Left = 4
           Height = 19
-          Top = 7
-          Width = 106
-          Caption = 'Default behavior'
+          Top = 30
+          Width = 6
+          Caption = '  '
           ParentColor = False
           ParentFont = False
-        end
-        object AutofocusSlew: TRadioButton
-          Left = 170
-          Height = 21
-          Top = 6
-          Width = 133
-          Caption = 'Slew to focus star'
-          Checked = True
-          OnClick = ChangeAutofocusInPlace
-          ParentFont = False
-          TabOrder = 1
-          TabStop = True
-        end
-        object AutofocusInPlace: TRadioButton
-          Left = 356
-          Height = 21
-          Top = 6
-          Width = 101
-          Caption = 'Stay in place'
-          OnClick = ChangeAutofocusInPlace
-          ParentFont = False
-          TabOrder = 2
         end
       end
     end
@@ -2978,8 +3023,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 454
+              ClientHeight = 36
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -3085,8 +3130,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 454
+              ClientHeight = 36
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 8
               Visible = False

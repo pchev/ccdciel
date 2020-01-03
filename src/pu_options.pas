@@ -34,6 +34,8 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    AutofocusPlanetMovement: TSpinEditEx;
+    AutofocusPlanetNumPoint: TSpinEditEx;
     AutofocusPauseGuider: TCheckBox;
     BtnDisableDelay: TButton;
     BtnDisableFocuserTemp: TButton;
@@ -51,6 +53,9 @@ type
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
     AstrometryFallback: TCheckBox;
+    Label141: TLabel;
+    Label142: TLabel;
+    PagePlanet: TPage;
     smtp_ssltls: TCheckBox;
     FilePack: TCheckBox;
     EmailCondition: TCheckListBox;
@@ -926,7 +931,8 @@ begin
   Autofocusmode.items[0]:=rsDynamic;
   Autofocusmode.items[1]:=rsVCurve;
   Autofocusmode.items[2]:=rsIterative;
-  Autofocusmode.items[3]:=rsNone2;
+  Autofocusmode.items[3]:=rsPlanet;
+  Autofocusmode.items[4]:=rsNone2;
   ResolverBox.Items[2]:=rsNone2;
   PrecSlewBox.Items[0]:=rsMountSync;
   PrecSlewBox.Items[1]:=rsPointingOffs;
@@ -1219,6 +1225,8 @@ begin
   AutofocusSlewStar.Visible:=not AutofocusMultistar.Visible;
   if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
      LabelMultistarWarning.Caption:=rsItIsSuggestT
+  else if AutofocusSlew.Checked and (Autofocusmode.ItemIndex=3) then
+     LabelMultistarWarning.Caption:=rsItIsSuggeste
   else
     LabelMultistarWarning.Caption:='';
 end;
@@ -1285,7 +1293,8 @@ begin
   afVcurve    : Autofocusmode.ItemIndex:=1;
   afDynamic   : Autofocusmode.ItemIndex:=0;
   afIterative : Autofocusmode.ItemIndex:=2;
-  afNone      : Autofocusmode.ItemIndex:=3;
+  afNone      : Autofocusmode.ItemIndex:=4;
+  afPlanet    : Autofocusmode.ItemIndex:=3;
   end;
 end;
 
@@ -1295,7 +1304,8 @@ begin
    0 : result:=afDynamic;
    1 : result:=afVcurve;
    2 : result:=afIterative;
-   3 : result:=afNone;
+   3 : result:=afPlanet;
+   4 : result:=afNone;
  end;
 
 end;
@@ -1303,12 +1313,14 @@ end;
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
-  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<3);
+  PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<4);
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
   if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
      LabelMultistarWarning.Caption:=rsItIsSuggestT
+  else if AutofocusSlew.Checked and (Autofocusmode.ItemIndex=3) then
+     LabelMultistarWarning.Caption:=rsItIsSuggeste
   else
     LabelMultistarWarning.Caption:='';
 end;

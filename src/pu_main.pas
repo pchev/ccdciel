@@ -40,7 +40,7 @@ uses
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -74,6 +74,7 @@ type
   { Tf_main }
 
   Tf_main = class(TForm)
+    Button1: TButton;
     FocuserConnectTimer: TTimer;
     CameraConnectTimer: TTimer;
     ImageListNight: TImageList;
@@ -319,6 +320,7 @@ type
     TBSequence: TToolButton;
     TBVideo: TToolButton;
     procedure AbortTimerTimer(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FocuserConnectTimerTimer(Sender: TObject);
@@ -3421,6 +3423,8 @@ begin
   FocusStarMagAdjust:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
   AutofocusDynamicMovement:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',100);
+  AutofocusPlanetNumPoint:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusDynamicNumPoint);
+  AutofocusPlanetMovement:=config.GetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusDynamicMovement);
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',3.0);
   AutofocusSlippageCorrection:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',false);
@@ -4956,6 +4960,13 @@ begin
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
 end;
 
+procedure Tf_main.Button1Click(Sender: TObject);
+var x: double;
+begin
+  x:=image_sharpness(fits.image,fits.HeaderInfo.bayerpattern<>'');
+  NewMessage(FormatFloat(f3,x),3);
+end;
+
 procedure  Tf_main.CameraFnumberChange(f:string);
 begin
  f_preview.Fnumber.Text:=f;
@@ -6420,6 +6431,8 @@ begin
    f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',AutofocusPauseGuider);
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
+   f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
+   f_option.AutofocusPlanetMovement.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusPlanetMovement);
    f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
@@ -6672,6 +6685,8 @@ begin
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',true);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
+     config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
+     config.SetValue('/StarAnalysis/AutofocusPlanetMovement',f_option.AutofocusPlanetMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
@@ -9264,6 +9279,8 @@ begin
     hfddyn:=min(AutofocusNearHFD,2.5*hfdmin);
     AutofocusDynamicNumPoint:=7;
     AutofocusDynamicMovement:=round(abs(((hfddyn-b1)/a1-cc)/3));
+    AutofocusPlanetNumPoint:=AutofocusDynamicNumPoint;
+    AutofocusPlanetMovement:=AutofocusDynamicMovement;
     // iterative
     AutofocusMaxSpeed:=step;
     for i:=1 to numhfd1 do begin

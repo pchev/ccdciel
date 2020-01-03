@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation, u_hints,
-  fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, pu_hyperbola,
+  fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, pu_hyperbola, pu_image_sharpness,
   FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
   StdCtrls, ExtCtrls, Buttons, LCLType;
 
@@ -115,6 +115,7 @@ type
     procedure doAutofocusVcurve;
     procedure doAutofocusDynamic;
     procedure doAutofocusIterative;
+    procedure doAutofocusPlanet;
     procedure SetLang;
     procedure PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
   public
@@ -326,6 +327,10 @@ begin
                 msg(rsAutofocusSta5,2);
                 FfocuserSpeed:=AutofocusMaxSpeed;
                 focuser.FocusSpeed:=FfocuserSpeed;
+                end;
+   afPlanet   : begin
+                msg(rsAutofocusSta6,2);
+                AutofocusPlanetStep:=afpStart;
                 end;
  end;
 end;
@@ -676,7 +681,7 @@ end;
 
 procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
 var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
-  xg,yg,flux,fluxsnr: double;
+  xg,yg,flux: double;
   xm,ym,ri,ns,i,nhfd: integer;
   hfdlist: array of double;
   txt:string;
@@ -690,7 +695,15 @@ begin
  end;
 
  bg:=0;
- if InplaceAutofocus then begin    // measure multiple stars
+ if InplaceAutofocus then begin           // in place
+   if AutofocusMode=afPlanet then begin   // Planet contrast
+    Fhfd:=image_sharpness(f.image,f.HeaderInfo.bayerpattern<>'');
+    FValMax:=f.imageMax;
+    bg:=0;
+    Fsnr:=100;
+    Ffwhm:=-1
+   end
+   else begin                             // measure multiple stars
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
     if ns>0 then begin
@@ -731,6 +744,7 @@ begin
        end;
        exit;
     end;
+   end;
  end
  else begin                      // measure one star
    // Canceling autofocus if no star position given
@@ -821,7 +835,7 @@ begin
     if AutofocusMode=afVcurve then begin
       PtSourceMeasure.Add(focuser.FocusPosition,Fhfd,'',clGreen);
     end
-    else if AutofocusMode=afDynamic then begin
+    else if (AutofocusMode=afDynamic)or(AutofocusMode=afPlanet) then begin
     if (not terminated) then begin
       if DynAbsStartPos>0 then
         i:=DynAbsStartPos+(FnumGraph-1)*DynAbsStep
@@ -895,6 +909,7 @@ begin
     afVcurve   : doAutofocusVcurve;
     afDynamic  : doAutofocusDynamic;
     afIterative: doAutofocusIterative;
+    afPlanet   : doAutofocusPlanet;
   end;
 end;
 
@@ -1188,6 +1203,158 @@ begin
                 else begin
                   onFocusIN(self);
                   focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
+                  onFocusOUT(self)
+                end;
+              end;
+              terminated:=true;
+              end;
+  end;
+end;
+
+procedure Tf_starprofile.doAutofocusPlanet;
+var i,k,step,sumpos,numpos: integer;
+    p_hyp,a_hyp,b_hyp,x: double;
+  procedure ResetPos;
+  begin
+    k:=round(AutofocusPlanetMovement*(AutofocusPlanetNumPoint-aminpos));
+    if k>0 then begin
+      focuser.FocusSpeed:=k;
+      if AutofocusMoveDir=FocusDirIn then begin
+        onFocusOUT(self);
+      end
+      else begin
+        onFocusIN(self);
+      end;
+      Wait(1);
+    end;
+  end;
+begin
+  case AutofocusPlanetStep of
+    afpStart: begin
+              if not odd(AutofocusPlanetNumPoint) then
+                inc(AutofocusPlanetNumPoint);
+              if AutofocusPlanetNumPoint<5 then AutofocusPlanetNumPoint:=5;
+              SetLength(dyn_v_curve,AutofocusPlanetNumPoint+1);
+              // set initial position
+              DynAbsStartPos:=focuser.FocusPosition;  //return -1 for relative focuser
+              k:=AutofocusPlanetNumPoint div 2;
+              focuser.FocusSpeed:=AutofocusPlanetMovement*k;
+              if AutofocusMoveDir=FocusDirIn then begin
+                onFocusOUT(self);
+                if DynAbsStartPos>0 then DynAbsStartPos:=DynAbsStartPos+AutofocusPlanetMovement*k;
+                DynAbsStep:=-AutofocusPlanetMovement;
+              end
+              else begin
+                onFocusIN(self);
+                if DynAbsStartPos>0 then DynAbsStartPos:=DynAbsStartPos-AutofocusPlanetMovement*k;
+                DynAbsStep:=AutofocusPlanetMovement;
+              end;
+              afmpos:=0;
+              aminhfd:=9999;
+              amaxhfd:=-1;
+              focuser.FocusSpeed:=AutofocusPlanetMovement;
+              AutofocusPlanetStep:=afpMeasure;
+              end;
+    afpMeasure: begin
+              // store hfd
+              inc(afmpos);
+              dyn_v_curve[afmpos-1,1]:=afmpos; // measurement number, to work with relative position focuser
+              dyn_v_curve[afmpos-1,2]:=Fhfd;
+              if Fhfd<aminhfd then begin
+                aminhfd:=Fhfd;
+              end;
+              if Fhfd>amaxhfd then begin
+                amaxhfd:=Fhfd;
+              end;
+              if afmpos=(AutofocusPlanetNumPoint) then begin
+                // last point, process measurements
+                AutofocusPlanetStep:=afpEnd;
+                doAutofocusPlanet;
+                exit
+              end;
+              // increment position
+              if AutofocusMoveDir=FocusDirIn then
+                onFocusIN(self)
+              else
+                onFocusOUT(self);
+              end;
+    afpEnd: begin
+              sumpos:=0;
+              numpos:=0;
+              // find position with minimum measured HFD
+              for i:=0 to AutofocusPlanetNumPoint-1 do begin
+                if abs(aminhfd-dyn_v_curve[i,2])<(0.1*aminhfd) then begin
+                 inc(numpos);
+                 sumpos:=sumpos+i+1;
+                end;
+              end;
+              aminpos:=round(sumpos/numpos);
+              // check measure validity
+              if (aminpos<2)or((AutofocusPlanetNumPoint-aminpos)<2) then begin
+                 // not enough point on one side
+                 ResetPos;
+                 if FAutofocusRestart>0 then begin
+                   // we already retry, abort now
+                   msg(rsNotEnoughPoi,0);
+                   msg(rsTheFocuserIs,1);
+                   terminated:=true;
+                 end
+                 else begin
+                   // retry using new position
+                   msg(rsNotEnoughPoi2,2);
+                   InitAutofocus(true);
+                   AutofocusDynamicStep:=afdStart;
+                 end;
+                 exit;
+              end;
+              if (amaxhfd<(1.1*aminhfd)) then begin
+                 // not enough difference between min and max HFD, abort
+                 msg(rsTooSmallHFDD,0);
+                 msg(rsTheFocuserIs,1);
+                 ResetPos;
+                 terminated:=true;
+                 exit;
+              end;
+              // compute focus
+              p_hyp:=0;a_hyp:=0;b_hyp:=0;
+              find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}
+              if DynAbsStartPos>0 then
+                x:=DynAbsStartPos+(p_hyp-1)*DynAbsStep
+              else
+                x:=p_hyp;
+              msg(Format(rsHYPERBOLACur, [FormatFloat(f3, x), FormatFloat(f4, lowest_error), inttostr(iteration_cycles)]),3 );
+              if DynAbsStartPos>0 then
+                PtSourceComp.Add(DynAbsStartPos+(p_hyp-1)*DynAbsStep,a_hyp,'',clFuchsia)
+              else
+                PtSourceComp.Add(p_hyp,a_hyp,'',clFuchsia);
+              for i:=10 to 10*FnumGraph do begin
+                if DynAbsStartPos>0 then
+                  x:=DynAbsStartPos+((i/10)-1)*DynAbsStep
+                else
+                  x:=i/10;
+                FitSourceComp.Add(x,hfd_calc(i/10,p_hyp,a_hyp,b_hyp));
+              end;
+              // focus position with last move in focus direction
+              step:=round(AutofocusPlanetMovement*(AutofocusPlanetNumPoint-p_hyp)); //require steps from current position at the end of the curve
+              if focuser.BacklashActive then begin
+                focuser.FocusSpeed:=step;
+                 if AutofocusMoveDir=FocusDirIn then begin
+                   onFocusOUT(self);  // wrong direction but compensated by backlash correction
+                 end
+                 else begin
+                   onFocusIN(self);   // wrong direction but compensated by backlash correction
+                 end;
+              end
+              else begin
+                focuser.FocusSpeed:=step+AutofocusPlanetMovement;  // move a bit more
+                if AutofocusMoveDir=FocusDirIn then begin
+                  onFocusOUT(self);
+                  focuser.FocusSpeed:=AutofocusPlanetMovement;     // got to position in right direction
+                  onFocusIN(self);
+                end
+                else begin
+                  onFocusIN(self);
+                  focuser.FocusSpeed:=AutofocusPlanetMovement;     // got to position in right direction
                   onFocusOUT(self)
                 end;
               end;
