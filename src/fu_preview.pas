@@ -233,7 +233,10 @@ var SaveonNewImage: TNotifyEvent;
 begin
 result:=false;
 if AllDevicesConnected then begin
-  msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3);
+  if exp>=1 then
+    msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3)
+  else
+    msg(Format(rsTakeControlE, [FormatFloat(f4, exp)]),3);
   SaveonNewImage:=Camera.onNewImage;
   savebinx:=Camera.BinX;
   savebiny:=Camera.BinY;

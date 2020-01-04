@@ -9877,7 +9877,7 @@ begin
     exit;
   end;
   if InplaceAutofocus then begin  // use multiple stars
-
+    if AutofocusMode<>afPlanet then begin
      // first measurement with a big window to find median star diameter
      s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
      rx:=img_Width-6*s; {search area}
@@ -9951,6 +9951,7 @@ begin
         end;
         exit;
      end;
+   end
   end
   else begin // single star
     x:=fits.HeaderInfo.naxis1 div 2;
