@@ -902,15 +902,16 @@ procedure T_indicamera.NewNumber(nvp: INumberVectorProperty);
 begin
   if (UseMainSensor and (nvp=CCDexpose))or((not UseMainSensor) and (nvp=Guiderexpose)) then begin
      if debug_msg then msg('progress: '+formatfloat(f1,nvp.np[0].value));
-     if Assigned(FonExposureProgress) then
+     if nvp.s=IPS_ALERT then begin
+        msg(rsError2, 0);
+        if assigned(FonAbortExposure) then FonAbortExposure(self);
+     end
+     else if Assigned(FonExposureProgress) then begin
         if nvp.np[0].value >0 then
            FonExposureProgress(nvp.np[0].value)
-        else  begin
-           if nvp.s=IPS_ALERT then
-              AbortExposure
-           else
-              FonExposureProgress(-4);
-        end;
+        else
+           FonExposureProgress(-4);
+     end;
   end
   else if nvp=CCDframe then begin
     // ignore CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html?start=12#38430
