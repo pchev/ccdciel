@@ -4970,7 +4970,7 @@ end;
 procedure Tf_main.Button1Click(Sender: TObject);
 var x: double;
 begin
-  x:=image_sharpness(fits.image,true);
+  x:=image_sharpness(fits.image);
   NewMessage(FormatFloat(f3,x),3);
 end;
 

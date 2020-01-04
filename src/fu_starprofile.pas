@@ -697,7 +697,7 @@ begin
  bg:=0;
  if InplaceAutofocus then begin           // in place
    if AutofocusMode=afPlanet then begin   // Planet contrast
-    Fhfd:=image_sharpness(f.image,true);
+    Fhfd:=image_sharpness(f.image);
     FValMax:=f.imageMax;
     bg:=0;
     Fsnr:=100;
