@@ -585,6 +585,7 @@ type
     procedure ShowBinningRange;
     procedure SetGainList;
     procedure ShowGain;
+    procedure GainStatus(Sender: TObject);
     procedure ShowFnumber;
     procedure ShowFrameRange;
     procedure ShowFrame;
@@ -1663,6 +1664,7 @@ begin
    camera.onStatusChange:=@CameraStatus;
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
+   camera.onGainStatus:=@GainStatus;
 
    if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
@@ -4220,6 +4222,11 @@ begin
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_EditTargets.FlatBinning.ItemIndex:=0;
+end;
+
+procedure Tf_main.GainStatus(Sender: TObject);
+begin
+  ShowGain;
 end;
 
 procedure Tf_main.ShowGain;

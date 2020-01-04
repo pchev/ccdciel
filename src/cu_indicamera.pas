@@ -853,6 +853,7 @@ begin
      if FhasGain then begin
         FGainMin:=round(IGain.min);
         FGainMax:=round(IGain.max);
+        if assigned(FonGainStatus) then FonGainStatus(self);
      end;
   end
   else if (proptype=INDI_SWITCH)and(CCDIso=nil)and((propname='CCD_ISO')or(propname='DSLR_ISO')) then begin
@@ -863,6 +864,7 @@ begin
         FISOList.Add(CCDIso.sp[i].lbl);
      end;
      FhasGainISO:=(FISOList.Count>0);
+     if assigned(FonGainStatus) then FonGainStatus(self);
   end
   else if (proptype=INDI_TEXT)and(propname='CCD_CFA') then begin
      CCDCfa:=indiProp.getText();

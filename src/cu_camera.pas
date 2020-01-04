@@ -47,6 +47,7 @@ T_camera = class(TComponent)
     FonTemperatureChange: TNotifyNum;
     FonCoolerChange: TNotifyBool;
     FonFnumberChange: TNotifyStr;
+    FonGainStatus: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FonFilterNameChange: TNotifyEvent;
     FonWheelStatusChange: TNotifyEvent;
@@ -265,6 +266,7 @@ T_camera = class(TComponent)
     property onFnumberChange: TNotifyStr read FonFnumberChange write FonFnumberChange;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
+    property onGainStatus: TNotifyEvent read FonGainStatus write FonGainStatus;
     property onFrameChange: TNotifyEvent read FonFrameChange write FonFrameChange;
     property onFilterNameChange: TNotifyEvent read FonFilterNameChange write FonFilterNameChange;
     property onWheelStatusChange: TNotifyEvent read FonWheelStatusChange write FonWheelStatusChange;
