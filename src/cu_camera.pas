@@ -424,6 +424,11 @@ var f:TFits;
     xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
     alok: boolean;
 begin
+while CameraProcessingImage do begin
+  sleep(10);
+  if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+end;
+CameraProcessingImage:=true;
 if FAddFrames then begin  // stack preview frames
   // load temporary image
   f:=TFits.Create(nil);
@@ -513,7 +518,6 @@ begin
      Application.QueueAsyncCall(@TryNextExposure,Data);
    end
    else begin
-     CameraProcessingImage:=true;
      CameraProcessingNum:=data;
      FonNewExposure(self);
    end;
