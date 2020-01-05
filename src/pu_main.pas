@@ -9838,9 +9838,9 @@ begin
     exit;
   end;
   if  f_preview.Running then begin
-   NewMessage(rsCannotStartA,1);
-   f_starprofile.ChkAutofocusDown(false);
-   exit;
+   f_preview.Loop:=false;
+   f_preview.BtnPreviewClick(nil);
+   wait(1);
   end;
   if  astrometry.Busy then begin
    NewMessage(rsCannotStartA2,1);

@@ -229,7 +229,6 @@ resourcestring
   rsPause = 'Pause';
   rsFailedToStar = 'Failed to start guiding!';
   rsCameraOrFocu = 'Camera or focuser are not connected';
-  rsCannotStartA = 'Cannot start autofocus now, stop preview and retry';
   rsCannotStartA2 = 'Cannot start autofocus now, astrometry is running';
   rsCannotStartA3 = 'Cannot start autofocus now, stop capture and retry';
   rsAutoFocusSta = 'AutoFocus started, initial position: %s';
