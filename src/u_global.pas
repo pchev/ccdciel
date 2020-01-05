@@ -454,7 +454,7 @@ var
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;
   MailTo,MailFrom,SMTPHost,SMTPPort,SMTPUser,SMTPPasswd : String;
   SMTPSSLTLS: boolean;
-  EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip: boolean;
+  EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip,EmailTargetInitialisation: boolean;
 
   procedure globalmsg(str:string);
 

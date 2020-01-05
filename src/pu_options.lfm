@@ -5590,13 +5590,13 @@ object f_option: Tf_option
             'Autoguider error'
             'Autofocus error'
             'Meridian flip error'
+            'Target initialisation'
           )
-          ItemHeight = 0
+          ItemHeight = 23
           ParentFont = False
           TabOrder = 0
-          TopIndex = -1
           Data = {
-            050000000000000000
+            06000000000000000000
           }
         end
         object Panel6: TPanel
@@ -5605,8 +5605,8 @@ object f_option: Tf_option
           Top = 166
           Width = 524
           Align = alBottom
-          ClientHeight = 37
-          ClientWidth = 520
+          ClientHeight = 41
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 1
           object ButtonNotificationAll: TButton

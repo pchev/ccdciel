@@ -850,6 +850,7 @@ begin
        end
        else begin
          msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
+         if EmailTargetInitialisation then email(rsTargetInitia,Targets[FCurrentTarget].objectname+', '+rsTargetInitia);
          if FUnattended then begin
            FInitializing:=false;
            NextTarget;

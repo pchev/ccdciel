@@ -1005,6 +1005,7 @@ begin
   EmailCondition.Items[2]:=rsAutoguiderEr;
   EmailCondition.Items[3]:=rsAutofocusErr2;
   EmailCondition.Items[4]:=rsMeridianFlip8;
+  EmailCondition.Items[5]:=rsTargetInitia2;
   ButtonNotificationAll.Caption:=rsAll;
   ButtonNotificationNone.Caption:=rsNone2;
   //Hint

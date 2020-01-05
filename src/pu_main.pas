@@ -3577,6 +3577,7 @@ begin
   EmailAutoguider:=config.GetValue('/Mail/Autoguider',false);
   EmailAufofocus:=config.GetValue('/Mail/Aufofocus',false);
   EmailMeridianFlip:=config.GetValue('/Mail/MeridianFlip',false);
+  EmailTargetInitialisation:=config.GetValue('/Mail/TargetInitialisation',false);
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -6613,6 +6614,7 @@ begin
    f_option.EmailCondition.Checked[2]:=config.GetValue('/Mail/Autoguider',false);
    f_option.EmailCondition.Checked[3]:=config.GetValue('/Mail/Aufofocus',false);
    f_option.EmailCondition.Checked[4]:=config.GetValue('/Mail/MeridianFlip',false);
+   f_option.EmailCondition.Checked[5]:=config.GetValue('/Mail/TargetInitialisation',false);
 
    f_option.LockTemp:=false;
    pt.x:=PanelCenter.Left;
@@ -6909,6 +6911,7 @@ begin
      config.SetValue('/Mail/Autoguider',f_option.EmailCondition.Checked[2]);
      config.SetValue('/Mail/Aufofocus',f_option.EmailCondition.Checked[3]);
      config.SetValue('/Mail/MeridianFlip',f_option.EmailCondition.Checked[4]);
+     config.SetValue('/Mail/TargetInitialisation',f_option.EmailCondition.Checked[5]);
 
      SaveConfig;
 
