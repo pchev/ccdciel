@@ -2249,7 +2249,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label51: TLabel
-          Left = 304
+          Left = 312
           Height = 19
           Top = 4
           Width = 50
@@ -2359,22 +2359,6 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object AutofocusExposure: TFloatSpinEditEx
-          Left = 214
-          Height = 28
-          Top = 0
-          Width = 82
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 4
-          DecimalPlaces = 4
-          Increment = 0.1
-          MaxValue = 60
-          MinValue = 0.0001
-          NullValue = 0
-          Value = 1
-        end
         object AutofocusBinning: TSpinEditEx
           Left = 214
           Height = 28
@@ -2383,7 +2367,7 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 4
           MaxValue = 8
           MinValue = 1
           Value = 1
@@ -2396,7 +2380,7 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
-          TabOrder = 6
+          TabOrder = 5
           Increment = 0.1
           MaxValue = 99
           MinValue = 1
@@ -2411,7 +2395,7 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 6
           DecimalPlaces = 1
           MaxValue = 99
           MinValue = 1
@@ -2653,6 +2637,31 @@ object f_option: Tf_option
           end
           object PageNone: TPage
           end
+        end
+        object AutofocusExpTime: TComboBox
+          Left = 214
+          Height = 28
+          Top = 0
+          Width = 90
+          Constraints.MaxHeight = 28
+          ItemHeight = 0
+          Items.Strings = (
+            '0.001'
+            '0.005'
+            '0.01'
+            '0.05'
+            '0.1'
+            '0.2'
+            '0.5'
+            '1'
+            '2'
+            '5'
+            '10'
+          )
+          OnChange = AutofocusExpTimeChange
+          ParentFont = False
+          TabOrder = 7
+          Text = '1'
         end
       end
       object PanelFocusStar: TPanel
@@ -5592,9 +5601,10 @@ object f_option: Tf_option
             'Meridian flip error'
             'Target initialisation'
           )
-          ItemHeight = 23
+          ItemHeight = 0
           ParentFont = False
           TabOrder = 0
+          TopIndex = -1
           Data = {
             06000000000000000000
           }
@@ -5605,8 +5615,8 @@ object f_option: Tf_option
           Top = 166
           Width = 524
           Align = alBottom
-          ClientHeight = 41
-          ClientWidth = 524
+          ClientHeight = 37
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 1
           object ButtonNotificationAll: TButton

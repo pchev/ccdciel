@@ -53,6 +53,7 @@ type
     AstrometryPath: TDirectoryEdit;
     BalanceFromCamera: TCheckBox;
     AstrometryFallback: TCheckBox;
+    AutofocusExpTime: TComboBox;
     Label141: TLabel;
     Label142: TLabel;
     PagePlanet: TPage;
@@ -243,7 +244,6 @@ type
     FlatMaxExp: TFloatSpinEditEx;
     FlatLevelMin: TSpinEditEx;
     FlatLevelMax: TSpinEditEx;
-    AutofocusExposure: TFloatSpinEditEx;
     AutofocusTolerance: TFloatSpinEditEx;
     AutofocusMinSNR: TFloatSpinEditEx;
     AutofocusStartHFD: TFloatSpinEditEx;
@@ -552,6 +552,7 @@ type
     Panel1: TPanel;
     RefTreshold: TTrackBar;
     procedure AstUseScriptClick(Sender: TObject);
+    procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
@@ -603,6 +604,7 @@ type
     { private declarations }
     FGetMaxADU, FGetPixelSize, FGetFocale, FShowHelp: TNotifyEvent;
     Flatitude, Flongitude: double;
+    FAutofocusExposure: double;
     Lockchange: boolean;
     SaveTemperatureSlope: double;
     procedure msg(txt:string);
@@ -613,12 +615,14 @@ type
     procedure SetLinGuiderUseUnixSocket(value: boolean);
     function  GetLinGuiderUseUnixSocket: boolean;
     procedure FileOrFolderOptionsRenumber(G: TStringGrid);
+    procedure SetAutofocusExpTime(val: double);
     procedure Setlang;
   public
     { public declarations }
     LockTemp: Boolean;
     procedure SetAutofocusMode(value: TAutofocusMode);
     function  GetAutofocusMode: TAutofocusMode;
+    property AutofocusExp: double read FAutofocusExposure write SetAutofocusExpTime;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
@@ -1329,6 +1333,19 @@ end;
 procedure Tf_option.AstUseScriptClick(Sender: TObject);
 begin
    AstCustScript.Visible:=AstUseScript.Checked;
+end;
+
+procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);
+var x: double;
+begin
+  x:=StrToFloatDef(AutofocusExpTime.Text,-1);
+  if x>0 then FAutofocusExposure:=x;
+end;
+
+procedure Tf_option.SetAutofocusExpTime(val: double);
+begin
+  FAutofocusExposure:=val;
+  AutofocusExpTime.Text:=FormatFloat('0.####',val);
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);

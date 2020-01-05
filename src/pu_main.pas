@@ -6400,7 +6400,7 @@ begin
    f_option.AutofocusMaxSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
    f_option.AutofocusStartHFD.Value:=config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
    f_option.AutofocusNearHFD.Value:=config.GetValue('/StarAnalysis/AutofocusNearHFD',AutofocusNearHFD);
-   f_option.AutofocusExposure.Value:=config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure);
+   f_option.AutofocusExp:=config.GetValue('/StarAnalysis/AutofocusExposure',AutofocusExposure);
    f_option.AutofocusBinning.Value:=config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
        f_option.AutofocusBinning.MaxValue:=round(camera.BinXrange.max)
@@ -6665,7 +6665,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',f_option.AutofocusMaxSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusStartHFD',f_option.AutofocusStartHFD.Value);
      config.SetValue('/StarAnalysis/AutofocusNearHFD',f_option.AutofocusNearHFD.Value);
-     config.SetValue('/StarAnalysis/AutofocusExposure',f_option.AutofocusExposure.Value);
+     config.SetValue('/StarAnalysis/AutofocusExposure',f_option.AutofocusExp);
      config.SetValue('/StarAnalysis/AutofocusBinning',f_option.AutofocusBinning.Value);
      config.SetValue('/StarAnalysis/FocuserBacklash',f_option.FocuserBacklash.Value);
      config.SetValue('/StarAnalysis/FocuserBacklashActive',f_option.FocuserBacklashActive.checked);
