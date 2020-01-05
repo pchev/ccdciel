@@ -864,7 +864,7 @@ begin
   end;
   // check focus result
   if terminated then begin
-    if Fhfd<=AutofocusTolerance then FAutofocusResult:=true;
+    if (Fhfd<=AutofocusTolerance) or (AutofocusMode=afPlanet) then FAutofocusResult:=true;
     txt:=Format(rsAutofocusFin, [focuser.Position.Text, FormatFloat(f1, Fhfd),FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr), FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]);
     if FAutofocusResult then begin
       if FPreFocusPos>0 then
