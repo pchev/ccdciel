@@ -621,6 +621,7 @@ begin
        t.FlatBinX:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
        t.FlatBinY:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',1));
        t.FlatGain:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatGain',0));
+       t.FlatFstop:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatFstop','');
        t.FlatFilters:=tfile.GetValue('/Targets/Target'+inttostr(i)+'/FlatFilters','');
        m:=trunc(tfile.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',0));
        SetLength(t.DoneList,m);
@@ -825,6 +826,7 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',t.FlatBinY);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatGain',t.FlatGain);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFstop',t.FlatFstop);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
       for j:=0 to Length(t.DoneList)-1 do begin

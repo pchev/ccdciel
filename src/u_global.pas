@@ -109,6 +109,7 @@ type
               binx,biny: integer;
               gain: integer;
               frtype: TFrameType;
+              fstop: string;
               description: string;
               constructor Create;
               procedure Assign(Source: Tstep);
@@ -133,6 +134,7 @@ type
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain: integer;
               FlatFilters: shortstring;
+              FlatFstop: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
               delay, previewexposure: double;
               plan :TComponent;
@@ -542,6 +544,7 @@ begin
   FlatBinY:=Source.FlatBinY;
   FlatGain:=Source.FlatGain;
   FlatFilters:=Source.FlatFilters;
+  FlatFstop:=Source.FlatFstop;
   darknight:=Source.darknight;
   skip:=Source.skip;
   SetLength(DoneList,Length(Source.DoneList));
@@ -579,6 +582,7 @@ begin
   autofocusstart:=false;
   autofocus:=false;
   autofocuscount:=10;
+  fstop:='';
   description:='Step1';
 end;
 
@@ -597,6 +601,7 @@ begin
   autofocusstart:=Source.autofocusstart;
   autofocus:=Source.autofocus;
   autofocuscount:=Source.autofocuscount;
+  fstop:=Source.fstop;
   description:=Source.description;
 end;
 

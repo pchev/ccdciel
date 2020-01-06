@@ -2045,6 +2045,7 @@ begin
      ISOList.Add(str);
   end;
   SetGainList;
+  ShowFnumber;
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -4299,10 +4300,16 @@ begin
   f_preview.Fnumber.Items.Assign(camera.FnumberList);
   f_capture.Fnumber.Text:=camera.Fnumber;
   f_preview.Fnumber.Text:=camera.Fnumber;
+  f_EditTargets.PanelFstop.Visible:=true;
+  f_EditTargets.StepList.Columns[pcolfstop-1].Visible:=true;
+  f_EditTargets.StepList.Columns[pcolfstop-1].PickList.Assign(camera.FnumberList);
+  f_EditTargets.FFstopbox.Items.Assign(camera.FnumberList);
  end
  else begin
   f_capture.PanelFnumber.Visible:=false;
   f_preview.PanelFnumber.Visible:=false;
+  f_EditTargets.PanelFstop.Visible:=false;
+  f_EditTargets.StepList.Columns[pcolfstop-1].Visible:=false;
  end;
 end;
 
