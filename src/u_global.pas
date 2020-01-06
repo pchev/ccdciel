@@ -272,7 +272,7 @@ const
   MaxFilter=20;
   WaitResponseTime=120;
   ZoomMax=15;
-  MinEarlyExposure=2.0;
+  MinEarlyExposure=0.0;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
   ldeg = 'd';

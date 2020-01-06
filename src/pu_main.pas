@@ -695,6 +695,7 @@ type
     procedure CameraNewImageAsync(Data: PtrInt);
     procedure CameraNewExposure(Sender: TObject);
     procedure CameraSaveNewImage;
+    procedure CameraMeasureNewImage;
     function  CameraNewSkyFlat: boolean;
     function  CameraNewDomeFlat: boolean;
     procedure CameraVideoFrame(Sender: TObject);
@@ -7844,6 +7845,10 @@ procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
 begin
  try
+  if Capture then begin
+    // save file first
+    CameraSaveNewImage;
+  end;
   try
   // draw preview
   StatusBar1.Panels[1].Text:='';
@@ -7877,8 +7882,8 @@ begin
                  end;
        end;
      end;
-     // save file
-     CameraSaveNewImage;
+     // image measurement
+     CameraMeasureNewImage;
      if (not EarlyNextExposure) or SkipEarlyExposure then begin
        // Next exposure delayed after image display
        // start the exposure now
@@ -8078,7 +8083,7 @@ end;
 procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
     fn,fd,buf,fileseqstr,fileseqext,blankrep: string;
-    ccdtemp,cra,cde,eq,pa,dist: double;
+    ccdtemp: double;
     fileseqnum,i: integer;
     UseFileSequenceNumber: boolean;
 begin
@@ -8207,6 +8212,15 @@ try
    fits.SaveToBitmap(fn);
    NewMessage(Format(rsSavedFile, [fn]),1);
  end;
+ except
+   on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
+ end;
+end;
+
+procedure Tf_main.CameraMeasureNewImage;
+var cra,cde,eq,pa,dist: double;
+begin
+try
  // measure image but not plot
  if MeasureNewImage and (camera.FrameType=LIGHT) and EarlyNextExposure and (camera.LastExposureTime>=30) then begin
    MeasureImage(false);
@@ -8235,7 +8249,7 @@ try
       end;
  end;
  except
-   on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
+   on E: Exception do NewMessage('CameraMeasureNewImage :'+ E.Message,1);
  end;
 end;
 
@@ -8376,7 +8390,6 @@ end;
 if f_visu.FlipHorz then ScrBmp.HorizontalFlip;
 if f_visu.FlipVert then ScrBmp.VerticalFlip;
 Image1.Invalidate;
-if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 MagnifyerTimer.Enabled:=true;
 end;
 

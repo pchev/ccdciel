@@ -319,7 +319,6 @@ with Histogram.Picture.Bitmap do begin
   Finitialized:=true;
 end;
 finally
-  if (GetCurrentThreadId=MainThreadID) then Application.ProcessMessages;
   LockSpinEdit:=false;
 end;
 end;
