@@ -1209,7 +1209,7 @@ resourcestring
   rsItIsSuggeste = 'It is suggested to stay in place for planet autofocus';
   rsPlanet = 'Planet';
   rsAutofocusSta6 = 'Autofocus start Planet focus';
-  rsTargetInitia2 = 'Target initialisation';
+  rsTargetInitia2 = 'Target initialisation error';
 
 implementation
 

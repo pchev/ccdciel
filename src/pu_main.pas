@@ -40,7 +40,7 @@ uses
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -74,7 +74,6 @@ type
   { Tf_main }
 
   Tf_main = class(TForm)
-    Button1: TButton;
     FocuserConnectTimer: TTimer;
     CameraConnectTimer: TTimer;
     ImageListNight: TImageList;
@@ -320,7 +319,6 @@ type
     TBSequence: TToolButton;
     TBVideo: TToolButton;
     procedure AbortTimerTimer(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FocuserConnectTimerTimer(Sender: TObject);
@@ -4967,13 +4965,6 @@ begin
   Preview:=false;
   StatusBar1.Panels[1].Text:=rsStop;
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
-end;
-
-procedure Tf_main.Button1Click(Sender: TObject);
-var x: double;
-begin
-  x:=image_sharpness(fits.image);
-  NewMessage(FormatFloat(f3,x),3);
 end;
 
 procedure  Tf_main.CameraFnumberChange(f:string);
