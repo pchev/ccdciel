@@ -690,6 +690,7 @@ type
     Procedure PlanetariumDisconnect(Sender: TObject);
     Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
+    procedure CameraNewImageAsync(Data: PtrInt);
     procedure CameraNewExposure(Sender: TObject);
     procedure CameraSaveNewImage;
     procedure CameraMeasureNewImage;
@@ -7834,13 +7835,18 @@ begin
 end;
 
 procedure Tf_main.CameraNewImage(Sender: TObject);
-var buf: string;
 begin
- try
   if Capture then begin
     // save file first
     CameraSaveNewImage;
   end;
+  Application.QueueAsyncCall(@CameraNewImageAsync,0);
+end;
+
+procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
+var buf: string;
+begin
+ try
   try
   // draw preview
   StatusBar1.Panels[1].Text:='';
