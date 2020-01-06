@@ -1192,7 +1192,6 @@ object f_EditTargets: Tf_EditTargets
               end            
               item
                 ButtonStyle = cbsPickList
-                SizePriority = 1
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
                 Width = 92
@@ -1364,20 +1363,19 @@ object f_EditTargets: Tf_EditTargets
               Left = 0
               Height = 29
               Top = 68
-              Width = 170
+              Width = 186
               BevelOuter = bvNone
               Caption = ' '
               ClientHeight = 29
-              ClientWidth = 170
+              ClientWidth = 186
               ParentFont = False
               TabOrder = 1
               Visible = False
               object FISObox: TComboBox
                 Left = 91
                 Height = 26
-                Hint = 'Exposure time in secondes'
                 Top = 0
-                Width = 65
+                Width = 93
                 Constraints.MaxHeight = 26
                 ItemHeight = 0
                 OnChange = TargetChange
@@ -1459,12 +1457,12 @@ object f_EditTargets: Tf_EditTargets
             end
             object PanelFstop: TPanel
               Left = 0
-              Height = 29
+              Height = 32
               Top = 100
-              Width = 170
+              Width = 186
               BevelOuter = bvNone
-              ClientHeight = 29
-              ClientWidth = 170
+              ClientHeight = 32
+              ClientWidth = 186
               TabOrder = 3
               Visible = False
               object Label6: TLabel
@@ -1478,15 +1476,13 @@ object f_EditTargets: Tf_EditTargets
               object FFstopbox: TComboBox
                 Left = 91
                 Height = 26
-                Hint = 'Exposure time in secondes'
                 Top = 0
-                Width = 81
+                Width = 93
                 Constraints.MaxHeight = 26
                 ItemHeight = 0
                 OnChange = TargetChange
                 ParentFont = False
                 TabOrder = 0
-                Visible = False
               end
             end
           end
