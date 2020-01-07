@@ -738,10 +738,6 @@ msgstr ""
 msgid "Camera or focuser are not connected"
 msgstr ""
 
-#: u_translation:rscannotstarta
-msgid "Cannot start autofocus now, stop preview and retry"
-msgstr ""
-
 #: u_translation:rscannotstarta2
 msgid "Cannot start autofocus now, astrometry is running"
 msgstr ""
@@ -4412,5 +4408,17 @@ msgstr ""
 
 #: u_translation:rsretrywithast
 msgid "Retry with astrometry.net"
+msgstr ""
+
+#: u_translation:rsplanet
+msgid "Planet"
+msgstr ""
+
+#: u_translation:rsautofocussta6
+msgid "Autofocus start Planet focus"
+msgstr ""
+
+#: u_translation:rstargetinitia2
+msgid "Target initialisation error"
 msgstr ""
 

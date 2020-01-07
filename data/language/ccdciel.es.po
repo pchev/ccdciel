@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2019-12-18 21:48+0000\n"
+"POT-Creation-Date: 2020-01-07 13:54+0000\n"
 "PO-Revision-Date: 2019-12-15 12:50+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2019-12-19 17:24+0000\n"
+"X-Launchpad-Export-Date: 2020-01-07 13:56+0000\n"
 "X-Generator: Launchpad (build bceb5ef013b87ef7aafe0755545ceb689ca7ac60)\n"
 
 #: u_translation.rs32bitdriver
@@ -295,6 +295,10 @@ msgstr "Autoenfoque inicia curva dinámica"
 #: u_translation.rsautofocussta5
 msgid "Autofocus start Iterative focus"
 msgstr "Autoenfoque inicia enfoque iterativo"
+
+#: u_translation.rsautofocussta6
+msgid "Autofocus start Planet focus"
+msgstr ""
 
 #: u_translation.rsautofocussuc
 msgid "AutoFocus successful"
@@ -579,10 +583,6 @@ msgstr "No se pudo realizar la calibración ahora, detener la vista previa y rei
 #: u_translation.rscannotsolvec
 msgid "Cannot solve current image."
 msgstr "No se pudo resolver la imagen actual."
-
-#: u_translation.rscannotstarta
-msgid "Cannot start autofocus now, stop preview and retry"
-msgstr "No se pudo comenzar el autoenfoque, detener vista previa y reintentar"
 
 #: u_translation.rscannotstarta2
 msgid "Cannot start autofocus now, astrometry is running"
@@ -2504,6 +2504,10 @@ msgstr "Plan %s ya existe. ¿Quiere reemplazar este archivo?"
 msgid "Plan %s already exist. Do you want to edit this plan?"
 msgstr "Plan %s ya existe. ¿Quiere editar este archivo?"
 
+#: u_translation.rsplanet
+msgid "Planet"
+msgstr ""
+
 #: u_translation.rsplanetarium
 msgid "Planetarium"
 msgstr "Planetario"
@@ -3795,6 +3799,10 @@ msgstr "Objetivo %s cancelado antes de iniciar"
 #: u_translation.rstargetinitia
 msgid "Target initialisation failed!"
 msgstr "¡Falló la inicialización del objetivo!"
+
+#: u_translation.rstargetinitia2
+msgid "Target initialisation error"
+msgstr ""
 
 #: u_translation.rstargetname
 msgid "Target%sname"
