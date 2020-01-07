@@ -1235,8 +1235,6 @@ begin
   PanelNearFocus.Visible:=AutofocusSlewStar.Visible;
   if AutofocusInPlace.Checked and (Autofocusmode.ItemIndex=1) then
      LabelMultistarWarning.Caption:=rsItIsSuggestT
-  else if AutofocusSlew.Checked and (Autofocusmode.ItemIndex=3) then
-     LabelMultistarWarning.Caption:=rsItIsSuggeste
   else
     LabelMultistarWarning.Caption:='';
 end;

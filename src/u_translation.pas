@@ -1206,7 +1206,6 @@ resourcestring
   rsSSLTLSNotSup = 'SSL/TLS not supported, try to uncheck the corresponding box.';
   rsUseAsFallbac = 'Use as fallback if other software fail';
   rsRetryWithAst = 'Retry with astrometry.net';
-  rsItIsSuggeste = 'It is suggested to stay in place for planet autofocus';
   rsPlanet = 'Planet';
   rsAutofocusSta6 = 'Autofocus start Planet focus';
   rsTargetInitia2 = 'Target initialisation error';
