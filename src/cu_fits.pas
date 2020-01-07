@@ -40,7 +40,7 @@ type
             bayeroffsetx, bayeroffsety: integer;
             rmult,gmult,bmult: double;
             equinox,ra,dec,crval1,crval2: double;
-            pixsz1,pixsz2,pixratio,focallen: double;
+            pixsz1,pixsz2,pixratio,focallen,scale: double;
             exptime,airmass: double;
             objects,ctype1,ctype2 : string;
             end;
@@ -1252,7 +1252,7 @@ begin
 with FFitsInfo do begin
  valid:=false; solved:=false; floatingpoint:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
  bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord; bayerpattern:='';
- objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
+ objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; scale:=0; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
  focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0; rmult:=0; gmult:=0; bmult:=0; bayeroffsetx:=0; bayeroffsety:=0;
  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
@@ -1297,6 +1297,8 @@ with FFitsInfo do begin
     if (keyword='CTYPE2') then ctype2:=buf;
     if (keyword='CRVAL1') then crval1:=strtofloat(buf);
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
+    if (keyword='SCALE')  then scale:=strtofloat(buf);
+    if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
     if (keyword='A_ORDER') or
        (keyword='AMDX1') or
        (keyword='CD1_1')

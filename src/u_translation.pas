@@ -1209,6 +1209,7 @@ resourcestring
   rsPlanet = 'Planet';
   rsAutofocusSta6 = 'Autofocus start Planet focus';
   rsTargetInitia2 = 'Target initialisation error';
+  rsCompute = 'Compute';
 
 implementation
 

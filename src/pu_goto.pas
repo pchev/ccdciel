@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI, u_translation, u_annotation, LCLType,
+uses u_utils, u_global, UScaleDPI, u_translation, u_annotation, LCLType, pu_compute,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
@@ -34,6 +34,7 @@ type
 
   Tf_goto = class(TForm)
     BtnSearch: TButton;
+    BtnCompute: TButton;
     ButtonOK: TButton;
     Button2: TButton;
     De: TEdit;
@@ -56,6 +57,7 @@ type
     PanelPxSz: TPanel;
     Ra: TEdit;
     procedure BtnSearchClick(Sender: TObject);
+    procedure BtnComputeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure CenterChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -64,7 +66,7 @@ type
     procedure SetLang;
 
   public
-
+    focallength,pixelsize: double;
   end;
 
 var
@@ -97,6 +99,7 @@ begin
   Label7.Caption:=rsImageScale;
   Label8.Caption:=ssec+'/'+rsPixels;
   msginfo.Caption:='';
+  BtnCompute.Caption:=rsCompute;
 end;
 
 procedure Tf_goto.FormShow(Sender: TObject);
@@ -180,6 +183,18 @@ begin
   except
     LabelAz.Caption:='-';
     LabelAlt.Caption:='-';
+  end;
+end;
+
+procedure Tf_goto.BtnComputeClick(Sender: TObject);
+begin
+  FormPos(f_compute,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_compute.PageControl1.ActivePage:=f_compute.ImageScale;
+  if focallength>0 then f_compute.ImgScaleFocal.Text:=FormatFloat(f1,focallength);
+  if pixelsize>0 then f_compute.ImgScalePx.Text:=FormatFloat(f2,pixelsize);
+  f_compute.showmodal;
+  if f_compute.ModalResult=mrOK then begin
+    pxsz.Text:=f_compute.ImgScale.Text;
   end;
 end;
 

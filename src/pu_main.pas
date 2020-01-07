@@ -10241,13 +10241,15 @@ begin
 end;
 
 function Tf_main.CheckImageInfo: boolean;
-var ra,dec,px: double;
+var ra,dec,px,p,fl: double;
     i: integer;
 begin
   if fits.HeaderInfo.valid then begin
     ra:=fits.HeaderInfo.ra;
     dec:=fits.HeaderInfo.dec;
-    px:=fits.HeaderInfo.pixsz1;
+    px:=fits.HeaderInfo.scale;
+    p:=fits.HeaderInfo.pixsz1;
+    fl:=fits.HeaderInfo.focallen;
     if px=0 then px:=LastPixelSize;
     if (ra=NullCoord)or(dec=NullCoord)or(px=0) then begin
       FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -10257,6 +10259,8 @@ begin
       f_goto.ButtonOK.Caption:=rsResolve;
       f_goto.msginfo.Caption:=rsApproximateC;
       f_goto.Obj.Text:='';
+      f_goto.focallength:=fl;
+      f_goto.pixelsize:=p;
       if ra<>NullCoord then f_goto.Ra.Text:=RAToStr(ra/15) else f_goto.Ra.Text:='';
       if dec<>NullCoord then f_goto.De.Text:=DEToStr(dec) else f_goto.De.Text:='';
       if px<>0 then f_goto.PxSz.Text:=FormatFloat(f2,px) else f_goto.PxSz.Text:='';

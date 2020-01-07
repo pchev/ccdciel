@@ -66,9 +66,9 @@ object f_goto: Tf_goto
     ParentFont = False
     TabOrder = 6
     object PxSz: TEdit
-      Left = 121
+      Left = 120
       Height = 31
-      Top = 4
+      Top = 8
       Width = 111
       ParentFont = False
       TabOrder = 0
@@ -83,13 +83,22 @@ object f_goto: Tf_goto
       ParentFont = False
     end
     object Label8: TLabel
-      Left = 246
+      Left = 19
       Height = 19
-      Top = 11
+      Top = 32
       Width = 60
       Caption = 'arcsec/px'
       ParentColor = False
       ParentFont = False
+    end
+    object BtnCompute: TButton
+      Left = 251
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Compute'
+      OnClick = BtnComputeClick
+      TabOrder = 1
     end
   end
   object BtnSearch: TButton
