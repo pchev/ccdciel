@@ -65,12 +65,14 @@ install -v -m 644 data/language/ccdciel.de.po  $destdir/share/ccdciel/data/langu
 install -v -m 644 data/language/ccdciel.es.po  $destdir/share/ccdciel/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po  $destdir/share/ccdciel/data/language/ccdciel.fr.po
 install -v -m 644 data/language/ccdciel.it.po  $destdir/share/ccdciel/data/language/ccdciel.it.po
+install -v -m 644 data/language/ccdciel.ru.po  $destdir/share/ccdciel/data/language/ccdciel.ru.po
 install -v -m 644 data/language/ccdciel_hints.po     $destdir/share/ccdciel/data/language/ccdciel_hints.en.po
 install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/share/ccdciel/data/language/ccdciel_hints.en_GB.po
 install -v -m 644 data/language/ccdciel_hints.de.po  $destdir/share/ccdciel/data/language/ccdciel_hints.de.po
 install -v -m 644 data/language/ccdciel_hints.es.po  $destdir/share/ccdciel/data/language/ccdciel_hints.es.po
 install -v -m 644 data/language/ccdciel_hints.fr.po  $destdir/share/ccdciel/data/language/ccdciel_hints.fr.po
 install -v -m 644 data/language/ccdciel_hints.it.po  $destdir/share/ccdciel/data/language/ccdciel_hints.it.po
+install -v -m 644 data/language/ccdciel_hints.ru.po  $destdir/share/ccdciel/data/language/ccdciel_hints.ru.po
 install -v -m 644 doc/doc_ccdciel_en.pdf $destdir/share/ccdciel/doc/doc_ccdciel_en.pdf
 install -v -m 644 system_integration/Linux/share/applications/ccdciel.desktop $destdir/share/applications/ccdciel.desktop
 install -v -m 644 system_integration/Linux/share/metainfo/ccdciel.appdata.xml $destdir/share/metainfo/ccdciel.appdata.xml

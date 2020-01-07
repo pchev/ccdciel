@@ -6262,6 +6262,7 @@ begin
      else if buf='es' then langname:='Español'
      else if buf='fr' then langname:='Français'
      else if buf='it' then langname:='Italiano'
+     else if buf='ru' then langname:='русский Russian'
      else langname:='';
      f_option.Languages.Items.Add(buf+', '+langname);
      i:=FindNextUTF8(fs);

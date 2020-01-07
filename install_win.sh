@@ -71,11 +71,13 @@ install -v -m 644 data/language/ccdciel.de.po   $destdir/data/language/ccdciel.d
 install -v -m 644 data/language/ccdciel.es.po   $destdir/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po   $destdir/data/language/ccdciel.fr.po
 install -v -m 644 data/language/ccdciel.it.po   $destdir/data/language/ccdciel.it.po
+install -v -m 644 data/language/ccdciel.ru.po   $destdir/data/language/ccdciel.ru.po
 install -v -m 644 data/language/ccdciel_hints.po      $destdir/data/language/ccdciel_hints.en.po
 install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/data/language/ccdciel_hints.en_GB.po
 install -v -m 644 data/language/ccdciel_hints.de.po   $destdir/data/language/ccdciel_hints.de.po
 install -v -m 644 data/language/ccdciel_hints.es.po   $destdir/data/language/ccdciel_hints.es.po
 install -v -m 644 data/language/ccdciel_hints.fr.po   $destdir/data/language/ccdciel_hints.fr.po
 install -v -m 644 data/language/ccdciel_hints.it.po   $destdir/data/language/ccdciel_hints.it.po
+install -v -m 644 data/language/ccdciel_hints.ru.po   $destdir/data/language/ccdciel_hints.ru.po
 install -v -m 644 doc/doc_ccdciel_en.pdf    $destdir/doc/doc_ccdciel_en.pdf
 
