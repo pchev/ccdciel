@@ -319,7 +319,7 @@ begin
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
      for i:=0 to FilterName.ntp-1 do begin
-        msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
+        if debug_msg then msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
         FFilterNames.Add(FilterName.tp[i].text);
      end;
   end;

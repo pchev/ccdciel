@@ -972,6 +972,7 @@ procedure T_indicamera.NewSwitch(svp: ISwitchVectorProperty);
 var propname: string;
     sw: ISwitch;
     cool: boolean;
+    i: integer;
 begin
   //  writeln('NewSwitch: '+svp.name);
   propname:=svp.name;
@@ -1018,6 +1019,15 @@ begin
          ConnectWs
       else if (CCDWebsocketOFF.s=ISS_ON) then
          DisconnectWs;
+  end
+  else if svp=CCDIso then begin
+     FISOList.Clear;
+     for i:=0 to CCDIso.nsp-1 do begin
+        if debug_msg then msg('Found ISO: '+CCDIso.sp[i].lbl);
+        FISOList.Add(CCDIso.sp[i].lbl);
+     end;
+     FhasGainISO:=(FISOList.Count>0);
+     if assigned(FonGainStatus) then FonGainStatus(self);
   end
   ;
 end;
