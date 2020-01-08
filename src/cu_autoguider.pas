@@ -40,6 +40,8 @@ type
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
     FStarLostTimeoutRestart,FStarLostTimeoutCancel: integer;
+    FMaxGuideDrift : double;
+    FCancelExposure : boolean;
     FStarLostTime: double;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
@@ -55,6 +57,7 @@ type
     procedure DisplayMessage(msg:string);
     procedure ProcessEvent(txt:string); virtual; abstract;
     procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
+    procedure CancelExposure;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -114,6 +117,8 @@ StarLostTimer.Interval:=10000;
 StarLostTimer.OnTimer:=@StarLostTimerTimer;
 FStarLostTimeoutRestart:=0;
 FStarLostTimeoutCancel:=1800;
+FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',99.0);
+FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
 FStarLostTime:=0;
 end;
 
@@ -147,6 +152,10 @@ begin
  if assigned(FonDisconnect) then FonDisconnect(self);
 end;
 
+procedure T_autoguider.CancelExposure;
+begin
+ PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderCancelExposure, 0);
+end;
 
 end.
 

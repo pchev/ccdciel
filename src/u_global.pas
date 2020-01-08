@@ -266,6 +266,7 @@ const
   LM_CCDCIEL=LM_USER + 1;
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;
+  M_AutoguiderCancelExposure=1002;
   M_AstrometryDone=1100;
   M_AstrometryMsg=1101;
   MaxCmdArg = 10;

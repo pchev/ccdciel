@@ -478,7 +478,7 @@ object f_option: Tf_option
         Top = 180
         Width = 255
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 253
         ParentFont = False
         TabOrder = 3
@@ -561,7 +561,7 @@ object f_option: Tf_option
         Top = 232
         Width = 255
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 253
         ParentFont = False
         TabOrder = 4
@@ -2645,6 +2645,7 @@ object f_option: Tf_option
           Width = 90
           Constraints.MaxHeight = 28
           ItemHeight = 0
+          ItemIndex = 7
           Items.Strings = (
             '0.001'
             '0.005'
@@ -4231,7 +4232,7 @@ object f_option: Tf_option
         ClientHeight = 77
         ClientWidth = 200
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 6
         object DitherWaitTime: TSpinEditEx
           Left = 105
           Height = 28
@@ -4251,6 +4252,59 @@ object f_option: Tf_option
           Caption = 'Wait time'
           ParentColor = False
           ParentFont = False
+        end
+      end
+      object GroupBoxDrift: TGroupBox
+        Left = 8
+        Height = 95
+        Top = 392
+        Width = 267
+        Caption = 'Guiding drift control'
+        ClientHeight = 75
+        ClientWidth = 265
+        ParentFont = False
+        TabOrder = 5
+        object Label1119: TLabel
+          Left = 208
+          Height = 19
+          Top = 10
+          Width = 15
+          Caption = 'px'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label920: TLabel
+          Left = 4
+          Height = 19
+          Top = 10
+          Width = 95
+          Caption = 'Max guide drift'
+          ParentColor = False
+          ParentFont = False
+        end
+        object MaxGuideDrift: TFloatSpinEditEx
+          Left = 121
+          Height = 28
+          Top = 8
+          Width = 81
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 0
+          Increment = 0.1
+          MaxValue = 99
+          MinValue = 0
+          NullValue = 0
+          Value = 0
+        end
+        object CancelExposure: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 48
+          Width = 127
+          Caption = 'Cancel exposure'
+          ParentFont = False
+          TabOrder = 1
         end
       end
     end

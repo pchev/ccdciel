@@ -215,7 +215,8 @@ end;
 procedure T_autoguider_phd.ProcessEventAsync(Data: PtrInt);
 var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
-    p,i,s,k:integer;
+    p,q,i,s,k:integer;
+    radiff, decdiff:string;
 begin
 try
 attrib:=Tstringlist.Create;
@@ -243,6 +244,28 @@ if p>=0 then begin
          else FLastError:='';
        end;
      end;
+     if (not FDithering) then
+         begin
+           p:=attrib.IndexOf('RADistanceGuide');
+           q:=attrib.IndexOf('DecDistanceGuide');
+           if (p>=0) and (q>=0) then
+               begin
+                 radiff:=value[p];
+                 decdiff:=value[q];
+
+                 if Sqrt(Sqr(Abs(StrToFloat(radiff)))+Sqr(Abs(StrToFloat(decdiff))))>FMaxGuideDrift then
+                     begin
+                          FStatus:='Drift ('+radiff+'/'+decdiff+')';
+                          if (FCancelExposure) then
+                              begin
+                                   FStatus:=FStatus+'. Cancelling exposure';
+                                   // Cancel the exposure and start a new one
+                                   CancelExposure;
+                              end;
+                     end;
+               end;
+         end;
+
    end
    else if eventname='StartGuiding' then FStatus:='Start Guiding'
    else if eventname='GuidingStopped' then FStatus:='Stopped'
@@ -408,6 +431,7 @@ begin
   else if FStatus='Guiding Dithered' then FState:=GUIDER_BUSY
   else if FStatus='Lock Position Lost' then FState:=FState
   else if FStatus='Alert' then FState:=GUIDER_ALERT
+  else if copy(FStatus,1,5)='Drift' then FState:=GUIDER_ALERT
   else if copy(FStatus,1,6)='Error:' then FState:=GUIDER_ALERT;
 end;
 
@@ -520,6 +544,8 @@ try
     wait(1);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
     FStarLostTimeoutCancel:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
+    FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',99.0);
+    FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
     buf:='{"method": "loop","id":2004}';
     FState:=GUIDER_BUSY;
     Send(buf);

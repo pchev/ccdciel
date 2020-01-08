@@ -42,8 +42,13 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
+    CancelExposure: TCheckBox;
+    MaxGuideDrift: TFloatSpinEditEx;
+    GroupBoxDrift: TGroupBox;
+    Label920: TLabel;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEditEx;
+    Label1119: TLabel;
     ButtonTestEmail: TButton;
     ButtonNotificationAll: TButton;
     ButtonNotificationNone: TButton;

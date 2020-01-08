@@ -6528,6 +6528,8 @@ begin
    f_option.CalibrationDelay.Value:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
    f_option.StarLostRestart.Value:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
    f_option.StarLostCancel.Value:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
+   f_option.MaxGuideDrift.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',99.0);
+   f_option.CancelExposure.Checked:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
@@ -6816,6 +6818,8 @@ begin
      config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Value);
      config.SetValue('/Autoguider/Recovery/RestartTimeout',f_option.StarLostRestart.Value);
      config.SetValue('/Autoguider/Recovery/CancelTimeout',f_option.StarLostCancel.Value);
+     config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.MaxGuideDrift.Value);
+     config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.CancelExposure.Checked);
      PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',0));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
@@ -10926,6 +10930,13 @@ begin
                           buf:=autoguider.ErrorDesc;
                           autoguider.ErrorDesc:='';
                           NewMessage(buf,1);
+                         end;
+    M_AutoguiderCancelExposure: begin
+                         if f_capture.Running then begin
+                           camera.AbortExposureButNotSequence;
+                           wait(1);
+                           camera.RestartExposure;
+                         end;
                          end;
     M_AstrometryDone: begin
                       try

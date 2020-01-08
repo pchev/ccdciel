@@ -137,6 +137,7 @@ private
    ExposureTimer: TTimer;
    stX,stY,stWidth,stHeight: integer;
    FSensorList: TStringList;
+   FNotAbortSequence: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -231,6 +232,7 @@ private
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    Procedure Disconnect; override;
    Procedure StartExposure(exptime: double); override;
+   procedure RestartExposure; override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
    procedure SetFrame(x,y,width,height: integer); override;
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
@@ -239,6 +241,7 @@ private
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
+   procedure AbortExposureButNotSequence; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
@@ -401,6 +404,7 @@ begin
     stWidth:=-1;
     stHeight:=-1;
     FSensorList.Clear;
+    FNotAbortSequence:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -978,12 +982,17 @@ begin
     end;
   end
   else if svp=CCDAbortExposure then begin
-    if UseMainSensor and (CCDAbort.s=ISS_ON) then begin
+   if FNotAbortSequence then begin
+    FNotAbortSequence:=false;
+   end
+   else begin
+    if UseMainSensor then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
+   end;
   end
   else if svp=GuiderAbortExposure then begin
-    if (not UseMainSensor) and (GuiderAbort.s=ISS_ON)  then begin
+    if (not UseMainSensor) then begin
       if Assigned(FonAbortExposure) then FonAbortExposure(self);
     end;
   end
@@ -1175,6 +1184,7 @@ end;
 
 Procedure T_indicamera.StartExposure(exptime: double);
 begin
+FNotAbortSequence:=false;
 if FIndiTransfert=itDisk then begin
    if (UploadSettings=nil)or(UploadMode=nil) then
       FIndiTransfert:=itNetwork;
@@ -1237,6 +1247,14 @@ timedout:=now+(exptime+CameraTimeout)/secperday;
 ExposureTimer.Enabled:=true;
 end;
 
+procedure T_indicamera.RestartExposure;
+begin
+if (Fexptime>0)   then
+   StartExposure(Fexptime)
+else
+   if assigned(FonAbortExposure) then FonAbortExposure(self);
+end;
+
 procedure T_indicamera.ExposureTimerTimer(sender: TObject);
 begin
  ExposureTimer.Enabled:=false;
@@ -1265,6 +1283,12 @@ end else begin
    end
    else result:=NullRange;
 end;
+end;
+
+Procedure T_indicamera.AbortExposureButNotSequence;
+begin
+  FNotAbortSequence:=true;
+  AbortExposure;
 end;
 
 Procedure T_indicamera.AbortExposure;

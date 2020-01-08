@@ -123,6 +123,7 @@ public
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect;  override;
    Procedure StartExposure(exptime: double); override;
+   procedure RestartExposure; override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
    procedure SetFrame(x,y,width,height: integer); override;
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
@@ -132,6 +133,7 @@ public
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
+   procedure AbortExposureButNotSequence; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
    procedure StartVideoPreview; override;
    procedure StopVideoPreview; override;
@@ -402,6 +404,14 @@ begin
  finally
   if FStatus=devConnected then StatusTimer.Enabled:=true;
  end;
+end;
+
+procedure T_ascomrestcamera.RestartExposure;
+begin
+     if (Fexptime>0)   then
+        StartExposure(Fexptime)
+     else
+        if assigned(FonAbortExposure) then FonAbortExposure(self);
 end;
 
 Procedure T_ascomrestcamera.StartExposure(exptime: double);
@@ -761,6 +771,18 @@ begin
   except
    on E: Exception do msg('Reset frame error: ' + E.Message,0);
   end;
+end;
+
+Procedure T_ascomrestcamera.AbortExposureButNotSequence;
+begin
+   if FStatus<>devConnected then exit;
+   try
+    ExposureTimer.Enabled:=false;
+    StatusTimer.Enabled:=true;
+    V.Put('abortexposure');
+   except
+    on E: Exception do msg('Abort exposure error: ' + E.Message,0);
+   end;
 end;
 
 Procedure T_ascomrestcamera.AbortExposure;

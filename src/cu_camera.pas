@@ -170,7 +170,9 @@ T_camera = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     Procedure SetBinning(binX,binY: integer); virtual; abstract;
     Procedure StartExposure(exptime: double); virtual; abstract;
+    procedure RestartExposure; virtual; abstract;
     Procedure AbortExposure; virtual; abstract;
+    procedure AbortExposureButNotSequence; virtual; abstract;
     procedure SetFrame(x,y,width,height: integer); virtual; abstract;
     procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); virtual; abstract;
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
