@@ -4422,3 +4422,7 @@ msgstr ""
 msgid "Target initialisation error"
 msgstr ""
 
+#: u_translation:rscompute
+msgid "Compute"
+msgstr ""
+

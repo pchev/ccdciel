@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-01-07 13:54+0000\n"
-"PO-Revision-Date: 2020-01-06 18:49+0000\n"
+"POT-Creation-Date: 2020-01-08 10:37+0000\n"
+"PO-Revision-Date: 2020-01-07 17:38+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-01-07 13:56+0000\n"
+"X-Launchpad-Export-Date: 2020-01-08 10:56+0000\n"
 "X-Generator: Launchpad (build bceb5ef013b87ef7aafe0755545ceb689ca7ac60)\n"
 
 #: u_translation.rs32bitdriver
@@ -374,7 +374,7 @@ msgstr "Автоматическое переключение"
 
 #: u_translation.rsautomatichfd
 msgid "Automatic HFD measurement for every sequence capture"
-msgstr ""
+msgstr "Автоматическое измерение HFD для каждого снимка последовательности"
 
 #: u_translation.rsavailable
 msgid "available"
@@ -767,6 +767,10 @@ msgstr "Сжатие файлов FITS с помощью fpack"
 #: u_translation.rscomputationr
 msgid "Computation result:"
 msgstr "Результат вычисления:"
+
+#: u_translation.rscompute
+msgid "Compute"
+msgstr ""
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
@@ -2507,7 +2511,7 @@ msgstr "План %s уже существует. Хотите редактиро
 
 #: u_translation.rsplanet
 msgid "Planet"
-msgstr ""
+msgstr "Планета"
 
 #: u_translation.rsplanetarium
 msgid "Planetarium"
@@ -2927,7 +2931,7 @@ msgstr "Получить позицию из базы данных"
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
-msgstr ""
+msgstr "Повтор с использованием astrometry.net"
 
 #: u_translation.rsreturnthefoc
 msgid "Return the focuser to previous position %s"
