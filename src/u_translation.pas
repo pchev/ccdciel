@@ -1210,6 +1210,9 @@ resourcestring
   rsAutofocusSta6 = 'Autofocus start Planet focus';
   rsTargetInitia2 = 'Target initialisation error';
   rsCompute = 'Compute';
+  rsWaitingDSeco = 'Waiting %d seconds before to restart the exposure';
+  rsCancelExposu = 'Cancel exposure';
+  rsRestartExpos = 'Restart exposure';
 
 implementation
 

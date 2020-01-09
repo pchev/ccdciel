@@ -244,7 +244,7 @@ if p>=0 then begin
          else FLastError:='';
        end;
      end;
-     if (not FDithering) then
+     if (not FDithering)and(FMaxGuideDrift<=99) then
          begin
            p:=attrib.IndexOf('RADistanceGuide');
            q:=attrib.IndexOf('DecDistanceGuide');
@@ -258,8 +258,7 @@ if p>=0 then begin
                           FStatus:='Drift ('+radiff+'/'+decdiff+')';
                           if (FCancelExposure) then
                               begin
-                                   FStatus:=FStatus+'. Cancelling exposure';
-                                   // Cancel the exposure and start a new one
+                                    // Cancel the exposure and start a new one
                                    CancelExposure;
                               end;
                      end;
@@ -544,8 +543,9 @@ try
     wait(1);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
     FStarLostTimeoutCancel:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
-    FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',99.0);
+    FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
     FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
+    FRestartDelay:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
     buf:='{"method": "loop","id":2004}';
     FState:=GUIDER_BUSY;
     Send(buf);

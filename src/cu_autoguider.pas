@@ -42,6 +42,7 @@ type
     FStarLostTimeoutRestart,FStarLostTimeoutCancel: integer;
     FMaxGuideDrift : double;
     FCancelExposure : boolean;
+    FRestartDelay : integer;
     FStarLostTime: double;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
@@ -85,6 +86,7 @@ type
     property ErrorDesc : string read FErrorDesc write FErrorDesc;
     property Status : string read FStatus;
     property State : TAutoguiderState read FState;
+    property RestartDelay : integer read FRestartDelay;
     property onConnect: TNotifyEvent read FonConnect  write FonConnect;
     property onConnectError: TNotifyEvent read FonConnectError  write FonConnectError;
     property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
@@ -117,8 +119,9 @@ StarLostTimer.Interval:=10000;
 StarLostTimer.OnTimer:=@StarLostTimerTimer;
 FStarLostTimeoutRestart:=0;
 FStarLostTimeoutCancel:=1800;
-FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',99.0);
+FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
 FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
+FRestartDelay:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
 FStarLostTime:=0;
 end;
 

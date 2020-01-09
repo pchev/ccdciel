@@ -4258,10 +4258,10 @@ object f_option: Tf_option
         Left = 8
         Height = 95
         Top = 392
-        Width = 267
+        Width = 477
         Caption = 'Guiding drift control'
         ClientHeight = 75
-        ClientWidth = 265
+        ClientWidth = 475
         ParentFont = False
         TabOrder = 5
         object Label1119: TLabel
@@ -4282,7 +4282,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object MaxGuideDrift: TFloatSpinEditEx
+        object GuideDriftMax: TFloatSpinEditEx
           Left = 121
           Height = 28
           Top = 8
@@ -4292,19 +4292,54 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
           Increment = 0.1
-          MaxValue = 99
           MinValue = 0
           NullValue = 0
           Value = 0
         end
-        object CancelExposure: TCheckBox
+        object GuideDriftCancelExposure: TCheckBox
           Left = 8
           Height = 21
-          Top = 48
-          Width = 127
-          Caption = 'Cancel exposure'
+          Top = 47
+          Width = 201
+          Caption = 'Cancel and restart exposure'
           ParentFont = False
           TabOrder = 1
+        end
+        object Label143: TLabel
+          Left = 253
+          Height = 19
+          Top = 48
+          Width = 83
+          Caption = 'Restart delay'
+          ParentColor = False
+        end
+        object Label144: TLabel
+          Left = 449
+          Height = 19
+          Top = 43
+          Width = 6
+          Caption = 's'
+          ParentColor = False
+          ParentFont = False
+        end
+        object GuideDriftRestartDelay: TSpinEditEx
+          Left = 360
+          Height = 28
+          Top = 44
+          Width = 79
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          TabOrder = 2
+          MaxValue = 600
+        end
+        object BtnMaxDriftDisable: TButton
+          Left = 248
+          Height = 25
+          Top = 11
+          Width = 75
+          Caption = 'Disable'
+          OnClick = BtnMaxDriftDisableClick
+          TabOrder = 3
         end
       end
     end

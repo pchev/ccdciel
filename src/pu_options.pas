@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, SpinEx, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits;
 
 type
 
@@ -42,8 +42,12 @@ type
     BtnFolderDefault: TButton;
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
-    CancelExposure: TCheckBox;
-    MaxGuideDrift: TFloatSpinEditEx;
+    BtnMaxDriftDisable: TButton;
+    GuideDriftCancelExposure: TCheckBox;
+    GuideDriftRestartDelay: TSpinEditEx;
+    Label143: TLabel;
+    Label144: TLabel;
+    GuideDriftMax: TFloatSpinEditEx;
     GroupBoxDrift: TGroupBox;
     Label920: TLabel;
     BtnDisableAutofocusTemp: TButton;
@@ -565,6 +569,7 @@ type
     procedure BtnDisableFocuserTempClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
+    procedure BtnMaxDriftDisableClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
     procedure ButtonNotificationNoneClick(Sender: TObject);
@@ -1404,6 +1409,11 @@ begin
     FolderOptions.Cells[1,i]:='0';
     FolderOptions.Cells[2,i]:=SubDirName[i];
   end;
+end;
+
+procedure Tf_option.BtnMaxDriftDisableClick(Sender: TObject);
+begin
+  GuideDriftMax.Value:=100;
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);

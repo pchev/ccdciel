@@ -513,7 +513,7 @@ type
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
+    MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel, LockRestartExposure, PolarMoving: boolean;
     Capture,Preview,learningvcurve,UseTcpServer: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -710,6 +710,7 @@ type
     Procedure StartCaptureExposure(Sender: TObject);
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposureNow;
+    procedure CancelRestartExposure(delay: integer);
     Procedure RecenterTarget;
     Procedure RedrawHistogram(Sender: TObject);
     Procedure ShowHistogramPos(msg:string);
@@ -1496,6 +1497,7 @@ begin
   ImaBmp:=TBGRABitmap.Create(1,1);
   LockTimerPlot:=false;
   LockMouseWheel:=false;
+  LockRestartExposure:=false;
   ImgCx:=0;
   ImgCy:=0;
   StartX:=0;
@@ -6528,8 +6530,9 @@ begin
    f_option.CalibrationDelay.Value:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
    f_option.StarLostRestart.Value:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
    f_option.StarLostCancel.Value:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
-   f_option.MaxGuideDrift.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',99.0);
-   f_option.CancelExposure.Checked:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
+   f_option.GuideDriftMax.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
+   f_option.GuideDriftCancelExposure.Checked:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
+   f_option.GuideDriftRestartDelay.Value:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
@@ -6818,8 +6821,9 @@ begin
      config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Value);
      config.SetValue('/Autoguider/Recovery/RestartTimeout',f_option.StarLostRestart.Value);
      config.SetValue('/Autoguider/Recovery/CancelTimeout',f_option.StarLostCancel.Value);
-     config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.MaxGuideDrift.Value);
-     config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.CancelExposure.Checked);
+     config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.GuideDriftMax.Value);
+     config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.GuideDriftCancelExposure.Checked);
+     config.SetValue('/Autoguider/Recovery/RestartDelay',f_option.GuideDriftRestartDelay.Value);
      PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',0));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
@@ -7700,6 +7704,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     ftype:=LIGHT;
   f_preview.StackPreview.Checked:=false;
   f_capture.Running:=true;
+  LockRestartExposure:=false;
   MenuCaptureStart.Caption:=rsStop;
   Preview:=false;
   Capture:=true;
@@ -10920,7 +10925,25 @@ begin
    DrawImage;
 end;
 
-procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
+procedure Tf_main.CancelRestartExposure(delay: integer);
+begin
+if f_capture.Running and (not LockRestartExposure) then begin
+  try
+  LockRestartExposure:=true;
+  NewMessage(rsCancelExposu, 3);
+  camera.AbortExposureButNotSequence;
+  if delay<=0 then delay:=1;
+  NewMessage(format(rsWaitingDSeco, [delay]),3);
+  wait(delay);
+  NewMessage(rsRestartExpos, 3);
+  camera.RestartExposure;
+  finally
+  LockRestartExposure:=false;
+  end;
+end;
+end;
+
+ procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
 var buf:string;
 begin
   if AppClose then exit;
@@ -10932,11 +10955,7 @@ begin
                           NewMessage(buf,1);
                          end;
     M_AutoguiderCancelExposure: begin
-                         if f_capture.Running then begin
-                           camera.AbortExposureButNotSequence;
-                           wait(1);
-                           camera.RestartExposure;
-                         end;
+                          CancelRestartExposure(autoguider.RestartDelay);
                          end;
     M_AstrometryDone: begin
                       try
