@@ -269,6 +269,7 @@ const
   M_AutoguiderCancelExposure=1002;
   M_AstrometryDone=1100;
   M_AstrometryMsg=1101;
+  StarLostStatus='Star lost';
   MaxCmdArg = 10;
   MaxScriptDir=2;
   MaxMenulevel=10;

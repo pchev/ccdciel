@@ -39,10 +39,11 @@ type
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
-    FStarLostTimeoutRestart,FStarLostTimeoutCancel: integer;
+    FStarLostCancelExposure, FStarLostTimeoutRestart,FStarLostTimeoutCancel: integer;
     FMaxGuideDrift : double;
     FCancelExposure : boolean;
     FRestartDelay : integer;
+    FStarLostCount: integer;
     FStarLostTime: double;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
@@ -117,12 +118,14 @@ StarLostTimer:=TTimer.Create(nil);
 StarLostTimer.Enabled:=false;
 StarLostTimer.Interval:=10000;
 StarLostTimer.OnTimer:=@StarLostTimerTimer;
+FStarLostCancelExposure:=0;
 FStarLostTimeoutRestart:=0;
 FStarLostTimeoutCancel:=1800;
 FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
 FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
 FRestartDelay:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
 FStarLostTime:=0;
+FStarLostCount:=0;
 end;
 
 Destructor T_autoguider.Destroy;

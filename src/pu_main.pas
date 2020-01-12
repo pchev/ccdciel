@@ -6528,6 +6528,7 @@ begin
    f_option.SettleMinTime.Value:=config.GetValue('/Autoguider/Settle/MinTime',5);
    f_option.SettleMaxTime.Value:=config.GetValue('/Autoguider/Settle/MaxTime',30);
    f_option.CalibrationDelay.Value:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
+   f_option.StarLostCancelExposure.Value:=config.GetValue('/Autoguider/Recovery/StarLostCancelExposure',0);
    f_option.StarLostRestart.Value:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
    f_option.StarLostCancel.Value:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
    f_option.GuideDriftMax.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
@@ -6819,6 +6820,7 @@ begin
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Value);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Value);
      config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Value);
+     config.SetValue('/Autoguider/Recovery/StarLostCancelExposure',f_option.StarLostCancelExposure.Value);
      config.SetValue('/Autoguider/Recovery/RestartTimeout',f_option.StarLostRestart.Value);
      config.SetValue('/Autoguider/Recovery/CancelTimeout',f_option.StarLostCancel.Value);
      config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.GuideDriftMax.Value);

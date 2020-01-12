@@ -43,12 +43,15 @@ type
     BtnFileDefault: TButton;
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
+    BtnDisableStarLost: TButton;
     GuideDriftCancelExposure: TCheckBox;
     GuideDriftRestartDelay: TSpinEditEx;
     Label143: TLabel;
     Label144: TLabel;
     GuideDriftMax: TFloatSpinEditEx;
     GroupBoxDrift: TGroupBox;
+    Label145: TLabel;
+    Label146: TLabel;
     Label920: TLabel;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEditEx;
@@ -103,6 +106,7 @@ type
     AutofocusPeriod: TSpinEditEx;
     Label129: TLabel;
     BtnShowPass: TSpeedButton;
+    StarLostCancelExposure: TSpinEditEx;
     TabSheet16: TTabSheet;
     TabSheet17: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
@@ -567,6 +571,7 @@ type
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
+    procedure BtnDisableStarLostClick(Sender: TObject);
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure BtnMaxDriftDisableClick(Sender: TObject);
@@ -1383,6 +1388,13 @@ end;
 procedure Tf_option.BtnDisableFocuserTempClick(Sender: TObject);
 begin
   FocuserTempCoeff.Value:=0.0;
+end;
+
+procedure Tf_option.BtnDisableStarLostClick(Sender: TObject);
+begin
+  StarLostCancel.Value:=0;
+  StarLostRestart.Value:=0;
+  StarLostCancelExposure.Value:=0;
 end;
 
 procedure Tf_option.BtnDisableAutofocusTempClick(Sender: TObject);

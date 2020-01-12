@@ -272,11 +272,15 @@ if p>=0 then begin
    else if eventname='StarLost' then begin
       i:=attrib.IndexOf('Status');
       if i>=0 then FLastError:='StarLost '+value[i];
-      if (FStatus='Guiding')and(not StarLostTimer.Enabled) then begin
+      if (FStatus='Guiding') and(not StarLostTimer.Enabled) then begin
         FStarLostTime:=now;
+        FStarLostCount:=1;
         StarLostTimer.Enabled:=true;
+      end
+      else if (FStatus=StarLostStatus)and(StarLostTimer.Enabled) then begin
+        inc(FStarLostCount);
       end;
-      FStatus:='Star lost';
+      FStatus:=StarLostStatus;
    end
    else if eventname='Paused' then FStatus:='Paused'
    else if eventname='Resumed' then FStatus:='Resumed'
@@ -414,7 +418,7 @@ begin
   else if FStatus='Start Guiding' then FState:=GUIDER_BUSY
   else if FStatus='Stopped' then FState:=GUIDER_IDLE
   else if FStatus='Star Selected' then FState:=GUIDER_IDLE
-  else if FStatus='Star lost' then FState:=GUIDER_ALERT
+  else if FStatus=StarLostStatus then FState:=GUIDER_ALERT
   else if FStatus='Paused' then FState:=GUIDER_IDLE
   else if FStatus='Resumed' then FState:=GUIDER_GUIDING
   else if FStatus='Lock Position Set' then FState:=FState
@@ -541,11 +545,13 @@ try
     end;
     Pause(false);
     wait(1);
+    FStarLostCancelExposure:=config.GetValue('/Autoguider/Recovery/StarLostCancelExposure',0);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
     FStarLostTimeoutCancel:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
     FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
     FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
     FRestartDelay:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
+    FStarLostCount:=0;
     buf:='{"method": "loop","id":2004}';
     FState:=GUIDER_BUSY;
     Send(buf);
@@ -620,12 +626,18 @@ begin
  if FState=GUIDER_GUIDING then begin
     if assigned(FonShowMessage) then FonShowMessage('Guiding recovered from star lost');
     StarLostTimer.Enabled:=false;
+    FStarLostCount:=0;
     FRecovering:=false;
  end
  else begin
     losttime:=round(secperday*(now-FStarLostTime));
     FonShowMessage('Star lost for '+inttostr(losttime)+' seconds...');
-    if losttime>FStarLostTimeoutCancel then begin
+    if (FStarLostCancelExposure>0)and(FStarLostCount>FStarLostCancelExposure) then begin
+      if assigned(FonShowMessage) then FonShowMessage('Cancel exposure after '+inttostr(FStarLostCount)+' frames without guide star');
+      FStarLostCount:=0;
+      CancelExposure;
+    end;
+    if (FStarLostTimeoutCancel>0)and(losttime>FStarLostTimeoutCancel) then begin
        if assigned(FonShowMessage) then FonShowMessage('Cannot recover from star lost. Stop guiding now.');
        StarLostTimer.Enabled:=false;
        FRecovering:=false;

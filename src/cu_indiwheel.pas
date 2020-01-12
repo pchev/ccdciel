@@ -346,7 +346,7 @@ begin
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
      for i:=0 to tvp.ntp-1 do begin
-        msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
+        if debug_msg then msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
         FFilterNames.Add(tvp.tp[i].text);
      end;
      if Assigned(FonFilterNameChange) then FonFilterNameChange(self);
