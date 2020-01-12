@@ -679,6 +679,7 @@ begin
   ChangeAutofocusInPlace(nil);
   TemperatureScaleClick(nil);
   panel4.Visible:=DomeSlaveToMount.Checked;
+  AutoguiderBoxClick(nil);
 end;
 
 procedure Tf_option.Setlang;
