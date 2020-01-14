@@ -79,6 +79,7 @@ type
     Label13: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    TargetMsg: TLabel;
     LabelMsg: TLabel;
     OpenDialog1: TOpenDialog;
     PageControlPlan: TPageControl;
@@ -95,6 +96,7 @@ type
     Panel3: TPanel;
     Panel6: TPanel;
     GroupboxInsert: TGroupBox;
+    Panel8: TPanel;
     PanelFstop: TPanel;
     PanelTermination: TPanel;
     PanelSep: TPanel;
@@ -750,6 +752,8 @@ begin
       begin
         TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
         TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
+        TargetList.Cells[colstart,n]:=rsRise;
+        TargetList.Cells[colend,n]:=rsSet2;
 
         if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
         else
@@ -760,8 +764,9 @@ begin
      end;
     until linepos>=$FFFFFF;{Found object or end of database}
   end;
-  if not foundok then
+  if not foundok then begin
     TargetList.Cells[colname,n]:=obj;
+  end;
   TargetChange(nil);
   ShowPlan;
 end;
@@ -1555,23 +1560,28 @@ var ra,de,h: double;
     i:integer;
 begin
 result:=true;
-if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(TargetList.Cells[coldark,n]='0') then
-   TargetList.Cells[colskip,n]:='0';
+targetmsg.Caption:='';
 ra:=StrToAR(TargetList.Cells[colra,n]);
 de:=StrToDE(TargetList.Cells[coldec,n]);
+if (ra<>NullCoord)and(de<>NullCoord) then begin
+  if (TargetList.Cells[colstart,n]='') then TargetList.Cells[colstart,n]:=rsRise;
+  if (TargetList.Cells[colend,n]='') then TargetList.Cells[colend,n]:=rsSet2;
+end;
+if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(TargetList.Cells[coldark,n]='0') then
+   TargetList.Cells[colskip,n]:='0';
 if TargetList.Cells[colstart,n]=rsRise then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
-     if showmsg then ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
+     if showmsg then targetmsg.Caption:=(rsCannotComput+crlf+rsInvalidObjec);
      TargetList.Cells[colstart,n]:='';
      result:=false;
   end
   else begin
     if not ObjRise(ra,de,h,i) then begin
       if i=1 then begin
-        if showmsg then ShowMessage(rsThisObjectIs);
+        if showmsg then targetmsg.Caption:=(rsThisObjectIs);
       end
       else begin
-        if showmsg then ShowMessage(rsThisObjectIs2);
+        if showmsg then targetmsg.Caption:=(rsThisObjectIs2);
       end;
       TargetList.Cells[colstart,n]:='';
       result:=false;
@@ -1580,17 +1590,17 @@ if TargetList.Cells[colstart,n]=rsRise then begin
 end;
 if TargetList.Cells[colend,n]=rsSet2 then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
-     if showmsg then ShowMessage(rsCannotComput+crlf+rsInvalidObjec);
+     if showmsg then targetmsg.Caption:=(rsCannotComput+crlf+rsInvalidObjec);
      TargetList.Cells[colend,n]:='';
      result:=false;
   end
   else begin
     if not ObjSet(ra,de,h,i) then begin
       if i=1 then begin
-        if showmsg then ShowMessage(rsThisObjectIs);
+        if showmsg then targetmsg.Caption:=(rsThisObjectIs);
       end
       else begin
-        if showmsg then ShowMessage(rsThisObjectIs2);
+        if showmsg then targetmsg.Caption:=(rsThisObjectIs2);
       end;
       TargetList.Cells[colend,n]:='';
       result:=false;
@@ -1599,14 +1609,14 @@ if TargetList.Cells[colend,n]=rsSet2 then begin
 end;
 if copy(trim(TargetList.Cells[colstart,n]),1,length(MeridianCrossing))=MeridianCrossing then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
-     if showmsg then ShowMessage(rsCannotComput2+crlf+rsInvalidObjec);
+     if showmsg then targetmsg.Caption:=(rsCannotComput2+crlf+rsInvalidObjec);
      TargetList.Cells[colstart,n]:='';
      result:=false;
   end
   else begin
     if not ObjRise(ra,de,h,i) then begin
       if i=2 then begin
-        if showmsg then ShowMessage(rsThisObjectIs2);
+        if showmsg then targetmsg.Caption:=(rsThisObjectIs2);
       end;
       TargetList.Cells[colstart,n]:='';
       result:=false;
@@ -1615,14 +1625,14 @@ if copy(trim(TargetList.Cells[colstart,n]),1,length(MeridianCrossing))=MeridianC
 end;
 if copy(trim(TargetList.Cells[colend,n]),1,length(MeridianCrossing))=MeridianCrossing then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
-     if showmsg then ShowMessage(rsCannotComput2+crlf+rsInvalidObjec);
+     if showmsg then targetmsg.Caption:=(rsCannotComput2+crlf+rsInvalidObjec);
      TargetList.Cells[colend,n]:='';
      result:=false;
   end
   else begin
     if not ObjRise(ra,de,h,i) then begin
       if i=2 then begin
-        if showmsg then ShowMessage(rsThisObjectIs2);
+        if showmsg then targetmsg.Caption:=(rsThisObjectIs2);
       end;
       TargetList.Cells[colend,n]:='';
       result:=false;

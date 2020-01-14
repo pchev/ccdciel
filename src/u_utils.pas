@@ -654,7 +654,8 @@ if p=0 then
   result:=StrToFloatDef(dms,NullCoord)
 else begin
 t:=copy(dms,1,p-1); delete(dms,1,p+d1);
-result:=StrToIntDef(t,0);
+result:=StrToIntDef(t,NullInt);
+if result=NullCoord then exit;
 p:=pos(sep[2],dms);
 t:=copy(dms,1,p-1); delete(dms,1,p);
 result:=result+ s * StrToIntDef(t,0) / 60;

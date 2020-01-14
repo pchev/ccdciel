@@ -806,14 +806,14 @@ object f_EditTargets: Tf_EditTargets
                 end
               end
               object GroupBox5: TGroupBox
-                Left = 424
+                Left = 422
                 Height = 89
                 Top = 0
-                Width = 279
+                Width = 281
                 Align = alClient
                 Caption = 'Repeat'
                 ClientHeight = 69
-                ClientWidth = 277
+                ClientWidth = 279
                 ParentFont = False
                 TabOrder = 1
                 object Preview: TCheckBox
@@ -875,50 +875,68 @@ object f_EditTargets: Tf_EditTargets
                   ParentFont = False
                 end
               end
-              object GroupBoxPA: TGroupBox
-                Left = 303
-                Height = 89
-                Top = 0
-                Width = 121
-                Align = alLeft
-                Caption = 'Rotator'
-                ClientHeight = 69
-                ClientWidth = 119
-                ParentFont = False
-                TabOrder = 2
-                object BtnImgRot: TButton
-                  Left = 8
-                  Height = 23
-                  Hint = 'Solve the current image and get the rotation of the image'
-                  Top = 0
-                  Width = 101
-                  Caption = 'Current image'
-                  OnClick = BtnImgRotClick
-                  ParentFont = False
-                  TabOrder = 0
-                end
-              end
-              object GroupBoxTime: TGroupBox
+              object Panel8: TPanel
                 Left = 182
                 Height = 89
                 Top = 0
-                Width = 121
+                Width = 240
                 Align = alLeft
-                Caption = 'Time'
-                ClientHeight = 69
-                ClientWidth = 119
-                ParentFont = False
-                TabOrder = 3
-                object BtnAnytime: TButton
-                  Left = 8
-                  Height = 23
-                  Hint = 'Clear time constraint'
+                ClientHeight = 89
+                ClientWidth = 240
+                TabOrder = 2
+                object GroupBoxTime: TGroupBox
+                  Left = 0
+                  Height = 49
                   Top = 0
-                  Width = 92
-                  Caption = 'Any time'
-                  OnClick = BtnAnytimeClick
+                  Width = 113
+                  Caption = 'Time'
+                  ClientHeight = 29
+                  ClientWidth = 111
                   ParentFont = False
                   TabOrder = 0
+                  object BtnAnytime: TButton
+                    Left = 8
+                    Height = 23
+                    Hint = 'Clear time constraint'
+                    Top = 0
+                    Width = 92
+                    Caption = 'Any time'
+                    OnClick = BtnAnytimeClick
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object GroupBoxPA: TGroupBox
+                  Left = 116
+                  Height = 49
+                  Top = 0
+                  Width = 118
+                  Caption = 'Rotator'
+                  ClientHeight = 29
+                  ClientWidth = 116
+                  ParentFont = False
+                  TabOrder = 1
+                  object BtnImgRot: TButton
+                    Left = 8
+                    Height = 23
+                    Hint = 'Solve the current image and get the rotation of the image'
+                    Top = 0
+                    Width = 101
+                    Caption = 'Current image'
+                    OnClick = BtnImgRotClick
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object TargetMsg: TLabel
+                  Left = 4
+                  Height = 38
+                  Top = 50
+                  Width = 230
+                  AutoSize = False
+                  Caption = 'TargetMsg'
+                  ParentColor = False
+                  WordWrap = True
                 end
               end
             end
@@ -1366,8 +1384,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 186
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 29
-              ClientWidth = 186
+              ClientHeight = 25
+              ClientWidth = 182
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -1461,8 +1479,8 @@ object f_EditTargets: Tf_EditTargets
               Top = 100
               Width = 186
               BevelOuter = bvNone
-              ClientHeight = 32
-              ClientWidth = 186
+              ClientHeight = 28
+              ClientWidth = 182
               TabOrder = 3
               Visible = False
               object Label6: TLabel
