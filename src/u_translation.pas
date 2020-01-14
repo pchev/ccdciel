@@ -1213,6 +1213,8 @@ resourcestring
   rsWaitingDSeco = 'Waiting %d seconds before to restart the exposure';
   rsCancelExposu = 'Cancel exposure';
   rsRestartExpos = 'Restart exposure';
+  rsImageSharpne = 'Image sharpness %s';
+  rsSharpness = 'Sharpness';
 
 implementation
 

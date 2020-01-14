@@ -40,7 +40,7 @@ uses
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
-  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw,
+  cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
@@ -3398,6 +3398,18 @@ begin
   CurrentFilterOffset:=0;
   if (wheel.Status=devConnected) then AutofocusExposureFact:=FilterExpFact[wheel.Filter];
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3)); // default to no autofocus
+  if AutofocusMode=afPlanet then begin
+    f_starprofile.label1.Caption:=rsSharpness+':';
+    f_starprofile.Label2.Caption:=rsIntensity+':';
+    f_starprofile.Label3.Caption:='';
+    f_starprofile.Label4.Caption:='';
+  end
+  else begin
+    f_starprofile.label1.Caption:=rsHFD+':';
+    f_starprofile.Label2.Caption:=rsIntensity+':';
+    f_starprofile.Label3.Caption:=rsFWHM+':';
+    f_starprofile.Label4.Caption:='SNR:';
+  end;
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
   AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
@@ -8228,12 +8240,18 @@ try
 end;
 
 procedure Tf_main.CameraMeasureNewImage;
-var cra,cde,eq,pa,dist: double;
+var cra,cde,eq,pa,dist,sharp: double;
 begin
 try
  // measure image but not plot
- if MeasureNewImage and (camera.FrameType=LIGHT) and EarlyNextExposure and (camera.LastExposureTime>=30) then begin
-   MeasureImage(false);
+ if MeasureNewImage and (camera.FrameType=LIGHT) then begin
+   if AutofocusMode=afPlanet then begin
+     sharp:=image_sharpness(fits.image);
+     NewMessage(Format(rsImageSharpne, [formatfloat(f2, sharp)]));
+   end
+   else if EarlyNextExposure and (camera.LastExposureTime>=30) then begin
+     MeasureImage(false);
+   end;
  end;
  // check if target need to be recentered
  if CheckRecenterTarget and(camera.FrameType=LIGHT)and(camera.LastExposureTime>(AstrometryTimeout+5))and
@@ -9387,11 +9405,22 @@ Procedure Tf_main.FocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2,s3,s4: integer;
     vmax:double;
 begin
-  if  f_capture.Running  then begin
-    NewMessage(rsCannotStartM,1);
-    f_starprofile.ChkFocusDown(false);
-    exit;
+if  f_capture.Running  then begin
+  NewMessage(rsCannotStartM,1);
+  f_starprofile.ChkFocusDown(false);
+  exit;
+ end;
+if AutofocusMode=afPlanet then begin
+  SaveFocusZoom:=f_visu.Zoom;
+  f_preview.StackPreview.Checked:=false;
+  if not f_preview.Loop then f_preview.Loop:=true;
+  if not f_preview.Running then begin
+    f_preview.Running:=true;
+    StartPreviewExposure(self);
   end;
+  NewMessage(rsFocusAidStar,1);
+end
+else begin
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
@@ -9434,6 +9463,7 @@ begin
     f_starprofile.ChkFocusDown(false);
     NewMessage(rsSelectAStarF,1);
   end;
+end;
 end;
 
 Procedure Tf_main.FocusStop(Sender: TObject);
@@ -10092,6 +10122,8 @@ if Preview or Capture then begin // not on control exposure
   if f_starprofile.AutofocusRunning then
     // process autofocus
     f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
+  else if (AutofocusMode=afPlanet) and (f_starprofile.ChkFocus.Down) then
+    f_starprofile.ShowSharpness(fits)
   else if f_starprofile.FindStar or f_starprofile.ChkFocus.Down then
     // only refresh star profile
     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);

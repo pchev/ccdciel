@@ -125,6 +125,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
+    procedure ShowSharpness(f: TFits);
     procedure Autofocus(f: TFits; x,y,s: integer);
     procedure InitAutofocus(restart: boolean);
     procedure ChkFocusDown(value:boolean);
@@ -632,6 +633,16 @@ except
     msg('PlotHistory :'+ E.Message,0);
   end;
 end;
+end;
+
+procedure Tf_starprofile.ShowSharpness(f: TFits);
+begin
+  Fhfd:=image_sharpness(f.image);
+  FValMax:=f.imageMax;
+  PlotHistory;
+  LabelHFD.Caption:=FormatFloat(f2,Fhfd);
+  LabelImax.Caption:=FormatFloat(f0,FValMax);
+  LabelFWHM.Caption:='-';
 end;
 
 procedure Tf_starprofile.ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
