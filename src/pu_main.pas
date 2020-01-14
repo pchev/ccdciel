@@ -3399,12 +3399,14 @@ begin
   if (wheel.Status=devConnected) then AutofocusExposureFact:=FilterExpFact[wheel.Filter];
   AutoFocusMode:=TAutoFocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',3)); // default to no autofocus
   if AutofocusMode=afPlanet then begin
+    f_starprofile.Title.Caption:=Format(rsImageSharpne,['']);
     f_starprofile.label1.Caption:=rsSharpness+':';
     f_starprofile.Label2.Caption:=rsIntensity+':';
     f_starprofile.Label3.Caption:='';
     f_starprofile.Label4.Caption:='';
   end
   else begin
+    f_starprofile.Title.Caption:=rsStarProfile;
     f_starprofile.label1.Caption:=rsHFD+':';
     f_starprofile.Label2.Caption:=rsIntensity+':';
     f_starprofile.Label3.Caption:=rsFWHM+':';
