@@ -944,6 +944,7 @@ procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
 begin
 if tvp=CCDfilepath then begin
+  if tvp.s=IPS_OK then begin // ignore extra messages from Indigo
   ExposureTimer.Enabled:=false;
   FMidExposureTime:=(Ftimestart+NowUTC)/2;
   if debug_msg then msg('receive image file');
@@ -957,6 +958,7 @@ if tvp=CCDfilepath then begin
   DeleteFile(CCDfilepath.tp[0].text);
   if assigned(FonExposureProgress) then FonExposureProgress(-11);
   NewImage;
+  end;
 end
 else if tvp=FilterName then begin
     FFilterNames.Clear;
