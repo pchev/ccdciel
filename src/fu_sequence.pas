@@ -593,6 +593,13 @@ begin
          t.de:=NullCoord
        else
          t.de:=StrToDE(x);
+       // default to rise/set if nothing indicated but valid coordinates
+       if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+          if (t.starttime=-1)and(t.startrise=false)and(t.startmeridian=NullCoord) then
+            t.startrise:=true;
+          if (t.endtime=-1)and(t.endset=false)and(t.endmeridian=NullCoord) then
+            t.endset:=true;
+       end;
        if (Targets.FileVersion<4)and(t.ra<>NullCoord)and(t.de<>NullCoord) then begin
          // previous version, up to 3, store apparent coordinates
          t.ra:=t.ra*15*deg2rad;
