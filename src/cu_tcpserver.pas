@@ -167,7 +167,7 @@ begin
         Synchronize(@ShowError);
       MaxLineLength := 1024;
       //writetrace('setlinger');
-      setLinger(True, 0);
+      setLinger(True, 15000);
       if lasterror <> 0 then
         Synchronize(@ShowError);
       //writetrace('bind to '+fipaddr+' '+fipport);
