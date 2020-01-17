@@ -280,8 +280,8 @@ resourcestring
   rsRecenterImag = 'Recenter image error!%sdistance: %s';
   rsRecenterOnLa2 = 'Recenter on last image';
   rsMeridianFlip10 = 'Meridian flip completed';
-  rsCurvatureInd = '  Curvature=%s';
-  rsTiltIndicati = '  Tilt indication=%s';
+  rsCurvatureInd = '  Off-axis aberration[hfd]=%s'; {was curvature}
+  rsTiltIndicati = '  Tilt indication[hfd]=%s'; {was Tilt indication}
   rsImageMedianH = 'Image median hfd=%s';
   rsNoStarDetect = 'No star detected. Is the image focused and sufficiently '
     +'exposed?';

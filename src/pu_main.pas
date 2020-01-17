@@ -525,7 +525,10 @@ type
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
-    trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;
+
+    trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;{for image inspection}
+    median_center,median_top_left, median_top_right,median_bottom_left,median_bottom_right : double;{for image inspection}
+
     LastPixelSize: double;
     trpOK: boolean;
     AllMsg: TStringList;
@@ -8533,23 +8536,31 @@ begin
         {draw trapezium}
         Image1.Canvas.pen.Color:=clYellow;
         Image1.Canvas.pen.Width:=DoScaleX(2);
+        Image1.Canvas.Font.Size:=DoScaleX(30);
         // x1,y1,x2,y2
         Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        image1.Canvas.textout(x,y,floattostrF(median_bottom_left, ffgeneral, 3,2));
         Image1.Canvas.MoveTo(x,y);
         Fits2Screen(trpx2,trpy2,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
         // x2,y2,x3,y3
         Fits2Screen(trpx3,trpy3,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median_top_right, ffgeneral, 3,2));
+        Image1.Canvas.MoveTo(x,y);
         // x3,y3,x4,y4
         Fits2Screen(trpx4,trpy4,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median_top_left, ffgeneral, 3,2));
+        Image1.Canvas.MoveTo(x,y);
         // x4,y4,x1,y1
         Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
+
         {draw diagonal}
         Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
         // xxc,yyc,x1,y1
+        image1.Canvas.textout(xxc,yyc,floattostrF(median_center, ffgeneral, 3,2));
         Image1.Canvas.MoveTo(xxc,yyc);
         Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
@@ -8557,6 +8568,7 @@ begin
         Image1.Canvas.MoveTo(xxc,yyc);
         Fits2Screen(trpx2,trpy2,f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median_bottom_right, ffgeneral, 3,2));
         // xxc,yyc,x3,y3
         Image1.Canvas.MoveTo(xxc,yyc);
         Fits2Screen(trpx3,trpy3,f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -11303,7 +11315,7 @@ end;
 procedure Tf_main.MeasureImage(plot: boolean); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
  i,rx,ry,s,nhfd,nhfd_center,nhfd_outer_ring,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right : integer;
- hfd1,xc,yc, median_top_left, median_top_right,median_bottom_left,median_bottom_right,median_worst,median_best,scale_factor,med,median_center, median_outer_ring : double;
+ hfd1,xc,yc, median_worst,median_best,scale_factor,med, median_outer_ring : double;
  hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right, hfdlist_center,hfdlist_outer_ring :array of double;
  Saved_Cursor : TCursor;
  mess1,mess2 : string;
@@ -11388,7 +11400,7 @@ begin
     begin
       median_center:=SMedian(hfdlist_center);
       median_outer_ring:=SMedian(hfdlist_outer_ring);
-      mess1:=Format(rsCurvatureInd, [inttostr(round(100*(median_outer_ring/(median_center)-1)))])+'%';
+      mess1:=Format(rsCurvatureInd, [floattostrF(median_outer_ring-median_center,ffgeneral,3,2)]);{off-axis aberration measured in delta HFD. Works also for defocussed images}
     end
     else
     mess1:='';
@@ -11411,13 +11423,15 @@ begin
       trpx4:=round(-median_top_left*scale_factor+img_width/2);trpy4:=round(+median_top_left*scale_factor+img_height/2);
       trpOK:=true;
 
-      mess2:=Format(rsTiltIndicati, [inttostr(round(100*((median_worst/median_best)-1)))])+'%'; {estimate tilt value}
+      mess2:=Format(rsTiltIndicati, [floattostrF(median_worst-median_best,ffgeneral,3,2)]); {estimate tilt value in delta HFD}
     end
     else begin
       trpOK:=false;
       mess2:='';
     end;
-    NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2+mess1]),1); {median HFD and tilt indication}
+
+
+    NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2+mess1]),1); {Report median HFD, tilt and off-axis aberration (was curvature}
   end
   else
     NewMessage(rsNoStarDetect,1);
