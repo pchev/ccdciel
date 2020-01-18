@@ -25,13 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, indiapi, u_translation,
+uses u_global, u_utils, indiapi, u_translation, cu_weather,
   Classes, SysUtils;
 
 type
 
 T_focuser = class(TComponent)
   private
+    Fweather: T_weather;
     procedure SetPositionInt(p:integer);
     procedure SetRelPositionInt(p:integer);
   protected
@@ -52,6 +53,7 @@ T_focuser = class(TComponent)
     FFocusdirection: integer;
     FBacklashDirection,FBacklashActive: boolean;
     FBacklash: integer;
+    FUseExternalTemperature: boolean;
     procedure msg(txt: string; level:integer=3);
     function  GetPosition:integer; virtual; abstract;
     procedure SetPosition(p:integer); virtual; abstract;
@@ -68,6 +70,7 @@ T_focuser = class(TComponent)
     function  GethasTimerSpeed: boolean; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
     function  GetTemperature:double; virtual; abstract;
+    function  GetTemperatureInt:double;
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -84,7 +87,7 @@ T_focuser = class(TComponent)
     property hasRelativePosition: boolean read GethasRelativePosition;
     property hasTimerSpeed: boolean read GethasTimerSpeed;
     property hasTemperature: boolean read FhasTemperature;
-    property Temperature: double read GetTemperature;
+    property Temperature: double read GetTemperatureInt;
     property Position: integer read GetPosition write SetPositionInt;
     property RelPosition: integer read GetRelPosition write SetRelPositionInt;
     property PositionRange: TNumRange read GetPositionRange;
@@ -96,6 +99,8 @@ T_focuser = class(TComponent)
     property BacklashDirection: boolean read FBacklashDirection write FBacklashDirection;
     property BacklashActive: boolean read FBacklashActive write FBacklashActive;
     property Backlash: integer read FBacklash write FBacklash;
+    property UseExternalTemperature: boolean read FUseExternalTemperature write FUseExternalTemperature;
+    property weather: T_weather read Fweather write Fweather;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onPositionChange: TNotifyNum read FonPositionChange write FonPositionChange;
@@ -116,6 +121,7 @@ begin
   FFocusdirection:=1;
   FBacklashActive:=false;
   FhasTemperature:=false;
+  FUseExternalTemperature:=false;
 end;
 
 destructor  T_focuser.Destroy;
@@ -166,6 +172,17 @@ begin
   else begin
     msg(Format(rsFocuserMoveB, [inttostr(FFocusdirection*p)]));
     SetRelPosition(p);
+  end;
+end;
+
+function T_focuser.GetTemperatureInt:double;
+begin
+  if FUseExternalTemperature and (Fweather<>nil) then begin
+    FhasTemperature:=true;
+    result:=Fweather.Temperature;
+  end
+  else begin
+    result:=GetTemperature;
   end;
 end;
 

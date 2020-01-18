@@ -142,7 +142,7 @@ begin
      except
        msg('Error: unknown driver version',9);
      end;
-     GetTemperature;
+     GetTemperatureInt;
      FhasAbsolutePosition:=GethasAbsolutePositionReal;
      FhasRelativePosition:=GethasRelativePositionReal;
      msg(rsConnected3);
@@ -230,7 +230,7 @@ begin
       end;
     end;
     if hasTemperature then begin
-       t:=GetTemperature;
+       t:=GetTemperatureInt;
        if abs(t-stTemperature)>0.1 then begin
           stTemperature:=t;
           if Assigned(FonTemperatureChange) then FonTemperatureChange(t);

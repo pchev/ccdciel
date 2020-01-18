@@ -1598,6 +1598,8 @@ begin
    weather.onStatusChange:=@WeatherStatus;
    weather.onClearChange:=@WeatherClearChange;
 
+   focuser.weather:=weather;
+
    aInt:=TDevInterface(config.GetValue('/SafetyInterface',ord(DefaultInterface)));
    case aInt of
      INDI:  safety:=T_indisafety.Create(nil);
@@ -4357,6 +4359,7 @@ end;
 
 Procedure Tf_main.ConnectFocuser(Sender: TObject);
 begin
+  focuser.UseExternalTemperature:=config.GetValue('/Focuser/ExternalTemperature',false);
   case focuser.FocuserInterface of
     INDI : focuser.Connect(config.GetValue('/INDIfocuser/Server',''),
                           config.GetValue('/INDIfocuser/ServerPort',''),
@@ -4383,7 +4386,7 @@ begin
    FocuserTemp:=focuser.Temperature; // first call to test ascom property
    if focuser.hasTemperature then begin
       f_focuser.PanelTemp.Visible:=true;
-      f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp));
+      if FocuserTemp<>NullCoord then f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,FocuserTemp));
       if FocuserLastTemp=NullCoord then FocuserLastTemp:=FocuserTemp;
    end
    else
@@ -5263,8 +5266,10 @@ end;
 
 procedure Tf_main.FocuserTemperatureChange(n:double);
 begin
+if n<>NullCoord then begin
   f_focuser.Temp.Text:=FormatFloat(f1,TempDisplay(TemperatureScale,n));
   FocuserTemp:=n;
+end;
 end;
 
 
@@ -6148,6 +6153,7 @@ begin
     config.SetValue('/ASCOMRestfocuser/Host',f_setup.FocuserARestHost.Text);
     config.SetValue('/ASCOMRestfocuser/Port',f_setup.FocuserARestPort.Value);
     config.SetValue('/ASCOMRestfocuser/Device',f_setup.FocuserARestDevice.Value);
+    config.SetValue('/Focuser/ExternalTemperature',f_setup.FocuserExternalTemperature.Visible and f_setup.FocuserExternalTemperature.Checked);
 
     config.SetValue('/RotatorInterface',ord(f_setup.RotatorConnection));
     config.SetValue('/INDIrotator/Server',f_setup.RotatorIndiServer.Text);

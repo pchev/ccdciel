@@ -50,6 +50,7 @@ type
     CameraARestPass: TEdit;
     AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
+    FocuserExternalTemperature: TCheckBox;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
     Label107: TLabel;
@@ -453,6 +454,7 @@ type
     procedure MountARestProtocolChange(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
     procedure MountSetObservatoryClick(Sender: TObject);
+    procedure Pagecontrol1Change(Sender: TObject);
     procedure PageControlCameraChange(Sender: TObject);
     procedure PageControlDomeChange(Sender: TObject);
     procedure PageControlFocuserChange(Sender: TObject);
@@ -612,6 +614,7 @@ begin
   Label10.Caption:=rsPort;
   FocuserAutoLoadConfig.Caption:=rsLoadConfigur;
   DeviceFocuser.Caption:=rsUseFocuser;
+  FocuserExternalTemperature.Caption:=rsTemperatureF;
   Label77.Caption:=rsServer;
   Label78.Caption:=rsPort;
   GetIndi2.Caption:=rsGet;
@@ -856,6 +859,7 @@ FocuserARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestfocuser/Protocol',0);
 FocuserARestHost.Text:=conf.GetValue('/ASCOMRestfocuser/Host','127.0.0.1');
 FocuserARestPort.Value:=conf.GetValue('/ASCOMRestfocuser/Port',11111);
 FocuserARestDevice.Value:=conf.GetValue('/ASCOMRestfocuser/Device',0);
+FocuserExternalTemperature.Checked:=conf.GetValue('/Focuser/ExternalTemperature',false);
 
 RotatorConnection:=TDevInterface(conf.GetValue('/RotatorInterface',ord(DefaultRotatorInterface)));
 RotatorIndiServer.Text:=conf.GetValue('/INDIrotator/Server',defautindiserver);
@@ -1641,6 +1645,12 @@ begin
   if MountSetObservatory.Checked then MountGetObservatory.Checked:=false;
 end;
 
+procedure Tf_setup.Pagecontrol1Change(Sender: TObject);
+begin
+   // depend on setting on other pages
+   FocuserExternalTemperature.Visible:=DeviceWeather.Checked and (FocuserConnection<>INDI)and((WeatherConnection<>INDI));
+end;
+
 procedure Tf_setup.PageControlCameraChange(Sender: TObject);
 begin
   case PageControlCamera.ActivePageIndex of
@@ -1670,6 +1680,7 @@ begin
     3: FocuserConnection:=ASCOMREST;
   end;
   DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
+  FocuserExternalTemperature.Visible:=DeviceWeather.Checked and (FocuserConnection<>INDI)and((WeatherConnection<>INDI));
 end;
 
 procedure Tf_setup.PageControlMountChange(Sender: TObject);

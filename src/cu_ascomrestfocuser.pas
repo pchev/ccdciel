@@ -158,7 +158,7 @@ begin
        msg('Error: unknown driver version',9);
      end;
      FStatus := devConnected;
-     GetTemperature;
+     GetTemperatureInt;
      FhasAbsolutePosition:=GethasAbsolutePositionReal;
      FhasRelativePosition:=GethasRelativePositionReal;
      msg(rsConnected3);
@@ -205,7 +205,7 @@ result:=false;
 end;
 
 procedure T_ascomrestfocuser.StatusTimerTimer(sender: TObject);
-var t: double;
+var t,oldtemp: double;
     p: integer;
 begin
  StatusTimer.Enabled:=false;
@@ -233,7 +233,10 @@ begin
     if hasTemperature then begin
       if (CheckTemp mod 10) = 0 then begin
        CheckTemp:=0;
-       t:=GetTemperatureReal;
+       oldtemp:=stTemperature;
+       stTemperature:=NullCoord;
+       t:=GetTemperatureInt;
+       stTemperature:=oldtemp;
        if abs(t-stTemperature)>0.1 then begin
           stTemperature:=t;
           if Assigned(FonTemperatureChange) then FonTemperatureChange(t);

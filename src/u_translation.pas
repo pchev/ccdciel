@@ -1215,6 +1215,7 @@ resourcestring
   rsRestartExpos = 'Restart exposure';
   rsImageSharpne = 'Image sharpness %s';
   rsSharpness = 'Sharpness';
+  rsTemperatureF = 'Temperature from weather station';
 
 implementation
 
