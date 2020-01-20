@@ -2107,7 +2107,7 @@ object f_option: Tf_option
           TabOrder = 1
           Increment = 0.1
           MaxValue = 1000
-          MinValue = 0
+          MinValue = -1000
           NullValue = 0
           Value = 0
         end
