@@ -8260,32 +8260,46 @@ try
      sharp:=image_sharpness(fits.image);
      NewMessage(Format(rsImageSharpne, [formatfloat(f2, sharp)]));
    end
-   else if EarlyNextExposure and (camera.LastExposureTime>=30) then begin
-     MeasureImage(false);
+   else begin
+     if EarlyNextExposure then begin
+       if camera.LastExposureTime>=30 then begin
+          MeasureImage(false);
+       end
+       else NewMessage('Exposure time too short for measurement',3);
+     end
+     else NewMessage('No measurement, early start exposure not set',3);
    end;
  end;
  // check if target need to be recentered
- if CheckRecenterTarget and(camera.FrameType=LIGHT)and(camera.LastExposureTime>(AstrometryTimeout+5))and
-    (not NeedRecenterTarget)and(not CheckRecenterBusy)and(not astrometry.Busy)and(astrometryResolver<>ResolverNone)and
-    (f_sequence.Running)and(f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord)
+ if CheckRecenterTarget and(camera.FrameType=LIGHT)and
+    (not NeedRecenterTarget)and(not CheckRecenterBusy)and(not astrometry.Busy)
     then begin
-      try
-      CheckRecenterBusy:=true;
-      astrometry.SolveCurrentImage(true);
-      if (not astrometry.Busy)and astrometry.LastResult then begin
-         if astrometry.CurrentCoord(cra,cde,eq,pa) then begin
-           cra:=cra*15*deg2rad;
-           cde:=cde*deg2rad;
-           J2000ToApparent(cra,cde);
-           dist:=60*rad2deg*rmod(AngularDistance(f_sequence.TargetRA,f_sequence.TargetDE,cra,cde)+pi2,pi2);
-           NewMessage(Format(rsDistanceToTa, [FormatFloat(f2, dist)]),3);
-           NeedRecenterTarget:=dist>max(RecenterTargetDistance,1.5*SlewPrecision);
-           if NeedRecenterTarget then NewMessage(rsTargetWillBe2,2);
-         end;
-      end;
-      finally
-      CheckRecenterBusy:=false;
-      end;
+      if (astrometryResolver<>ResolverNone) then begin
+        if (f_sequence.Running)and(f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
+          if (camera.LastExposureTime>(AstrometryTimeout+5)) then begin
+            try
+            CheckRecenterBusy:=true;
+            astrometry.SolveCurrentImage(true);
+            if (not astrometry.Busy)and astrometry.LastResult then begin
+               if astrometry.CurrentCoord(cra,cde,eq,pa) then begin
+                 cra:=cra*15*deg2rad;
+                 cde:=cde*deg2rad;
+                 J2000ToApparent(cra,cde);
+                 dist:=60*rad2deg*rmod(AngularDistance(f_sequence.TargetRA,f_sequence.TargetDE,cra,cde)+pi2,pi2);
+                 NewMessage(Format(rsDistanceToTa, [FormatFloat(f2, dist)]),3);
+                 NeedRecenterTarget:=dist>max(RecenterTargetDistance,1.5*SlewPrecision);
+                 if NeedRecenterTarget then NewMessage(rsTargetWillBe2,2);
+               end;
+            end;
+            finally
+            CheckRecenterBusy:=false;
+            end;
+          end
+          else NewMessage('No recenter measurement, exposure time shorter than astrometry timeout',3);
+        end
+        else NewMessage('No recenter measurement, sequence target coordinates not defined',3);
+      end
+      else NewMessage('No recenter measurement, astrometry not configured',3);
  end;
  except
    on E: Exception do NewMessage('CameraMeasureNewImage :'+ E.Message,1);
