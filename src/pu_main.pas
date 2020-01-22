@@ -8265,9 +8265,9 @@ try
        if camera.LastExposureTime>=30 then begin
           MeasureImage(false);
        end
-       else NewMessage('Exposure time too short for measurement',3);
+       else NewMessage(format(rsExposureTime4, [30]), 3);
      end
-     else NewMessage('No measurement, early start exposure not set',3);
+     else NewMessage(rsNoMeasuremen, 3);
    end;
  end;
  // check if target need to be recentered
@@ -8295,11 +8295,11 @@ try
             CheckRecenterBusy:=false;
             end;
           end
-          else NewMessage('No recenter measurement, exposure time shorter than astrometry timeout',3);
+          else NewMessage(rsNoCenteringM, 3);
         end
-        else NewMessage('No recenter measurement, sequence target coordinates not defined',3);
+        else NewMessage(rsNoCenteringM2, 3);
       end
-      else NewMessage('No recenter measurement, astrometry not configured',3);
+      else NewMessage(rsNoCenteringM3, 3);
  end;
  except
    on E: Exception do NewMessage('CameraMeasureNewImage :'+ E.Message,1);
