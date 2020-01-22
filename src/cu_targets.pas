@@ -749,7 +749,7 @@ begin
   if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State=GUIDER_GUIDING) then
      StopGuider;
   // stop mount tracking
-  if mount.Tracking or mount.MountSlewing then
+  if mount.MountSlewing then
      Mount.AbortMotion;
   NeedRecenterTarget:=false;
   InplaceAutofocus:=AutofocusInPlace;
@@ -794,6 +794,7 @@ begin
      FInitializing:=true;
      ShowDelayMsg('');
      TargetForceNext:=false;
+     Mount.AbortMotion;
      initok:=InitSkyFlat;
      if not FRunning then begin
        exit;
@@ -1059,6 +1060,7 @@ begin
       exit;
     end;
     if (intime<0) and (t.starttime>=0) then begin
+      Mount.AbortMotion;
       msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);
       wtok:=WaitTill(TimeToStr(t.starttime),true);
       if not wtok then begin
