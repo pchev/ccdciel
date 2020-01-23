@@ -7605,8 +7605,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
      or ((AutofocusPeriod>0) and (AutoFocusLastTime<>NullCoord) and                            // every n minutes
         ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))
      or (focuser.hasTemperature and (AutofocusTempChange<>0.0) and                             // temperature change
-        (FocuserLastTemp<>NullCoord)and (f_starprofile.AutofocusDone) and
-        (abs(FocuserLastTemp-FocuserTemp)>=AutofocusTempChange))
+        (AutofocusLastTemp<>NullCoord) and (f_starprofile.AutofocusDone) and
+        (abs(AutofocusLastTemp-FocuserTemp)>=AutofocusTempChange))
         )
      then begin
     if canwait then begin
@@ -7649,8 +7649,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
         buf:=blank+inttostr(i)+blank+rsMinutes;
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
-      if focuser.hasTemperature and(AutofocusTempChange<>0.0)and(FocuserLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
-        x:=AutofocusTempChange-(abs(FocuserLastTemp-FocuserTemp));
+      if focuser.hasTemperature and (AutofocusTempChange<>0.0)and(AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
+        x:=AutofocusTempChange-(abs(AutofocusLastTemp-FocuserTemp));
         buf:=blank+FormatFloat(f1,x)+blank+'C';
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
