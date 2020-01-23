@@ -375,28 +375,19 @@ object f_option: Tf_option
           end
         end
       end
-      object MeasureNewImage: TCheckBox
-        Left = 20
-        Height = 21
-        Top = 388
-        Width = 386
-        Caption = 'Automatic HFD measurement for every sequence capture'
-        ParentFont = False
-        TabOrder = 3
-      end
       object SaveBitmap: TCheckBox
         Left = 20
         Height = 21
-        Top = 420
+        Top = 396
         Width = 360
         Caption = 'Save a bitmap file additionally to the standard FITS file'
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 3
       end
       object SaveBitmapFormat: TComboBox
         Left = 388
         Height = 30
-        Top = 416
+        Top = 392
         Width = 105
         Constraints.MaxHeight = 30
         ItemHeight = 0
@@ -409,7 +400,7 @@ object f_option: Tf_option
         )
         ParentFont = False
         Style = csDropDownList
-        TabOrder = 5
+        TabOrder = 4
         Text = 'PNG 16bit'
       end
     end
@@ -728,6 +719,249 @@ object f_option: Tf_option
         Caption = 'Elevation'
         ParentColor = False
         ParentFont = False
+      end
+    end
+    object TabSheet18: TTabSheet
+      Caption = 'Sequence'
+      ClientHeight = 511
+      ClientWidth = 526
+      object ExpEarlyStart: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 48
+        Width = 269
+        Caption = 'Start new exposure as early as possible'
+        OnClick = ExpEarlyStartClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Label147: TLabel
+        Left = 8
+        Height = 19
+        Top = 6
+        Width = 263
+        Caption = 'Global actions when a sequence is running'
+        ParentColor = False
+      end
+      object GroupBoxMeasurement: TGroupBox
+        Left = 8
+        Height = 169
+        Top = 80
+        Width = 464
+        Caption = 'Measurement on new images'
+        ClientHeight = 149
+        ClientWidth = 462
+        TabOrder = 1
+        object MeasureNewImage: TCheckBox
+          Left = 16
+          Height = 21
+          Top = 8
+          Width = 386
+          Caption = 'Automatic HFD measurement for every sequence capture'
+          ParentFont = False
+          TabOrder = 0
+        end
+        object GroupBox23: TGroupBox
+          Left = 0
+          Height = 112
+          Top = 37
+          Width = 462
+          Align = alBottom
+          Caption = 'Recenter sequence target that drift'
+          ClientHeight = 92
+          ClientWidth = 460
+          ParentFont = False
+          TabOrder = 1
+          object CheckRecenterTarget: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 8
+            Width = 335
+            Caption = 'Run astrometry on every image to search for drift'
+            ParentFont = False
+            TabOrder = 0
+          end
+          object RecenterTargetDistance: TFloatSpinEditEx
+            Left = 289
+            Height = 31
+            Top = 40
+            Width = 74
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 1
+            Increment = 0.1
+            MinValue = 0
+            NullValue = 0
+            Value = 0
+          end
+          object Label130: TLabel
+            Left = 16
+            Height = 19
+            Top = 45
+            Width = 203
+            Caption = 'Recenter if the drift is more than'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label131: TLabel
+            Left = 370
+            Height = 19
+            Top = 45
+            Width = 50
+            Caption = 'minutes'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label149: TLabel
+            Left = 16
+            Height = 19
+            Top = 64
+            Width = 210
+            Caption = '(limited to 1.5x the slew precision)'
+            ParentColor = False
+          end
+        end
+      end
+      object GroupBoxFocus: TGroupBox
+        Left = 8
+        Height = 216
+        Top = 256
+        Width = 464
+        Caption = 'Periodic autofocus'
+        ClientHeight = 196
+        ClientWidth = 462
+        TabOrder = 2
+        object GroupBox16: TGroupBox
+          Left = 0
+          Height = 88
+          Top = 49
+          Width = 462
+          Align = alBottom
+          Caption = 'Focuser temperature compensation'
+          ClientHeight = 68
+          ClientWidth = 460
+          ParentFont = False
+          TabOrder = 0
+          object Label84: TLabel
+            Left = 4
+            Height = 19
+            Top = 7
+            Width = 214
+            Caption = 'Temperature coefficient in steps/C'
+            ParentColor = False
+            ParentFont = False
+          end
+          object BtnDisableFocuserTemp: TButton
+            Left = 370
+            Height = 23
+            Top = 3
+            Width = 76
+            Caption = 'Disable'
+            OnClick = BtnDisableFocuserTempClick
+            ParentFont = False
+            TabOrder = 0
+          end
+          object FocuserTempCoeff: TFloatSpinEditEx
+            Left = 289
+            Height = 28
+            Top = 3
+            Width = 75
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 1
+            Increment = 0.1
+            MaxValue = 1000
+            MinValue = -1000
+            NullValue = 0
+            Value = 0
+          end
+          object Label119: TLabel
+            Left = 4
+            Height = 19
+            Top = 35
+            Width = 248
+            Caption = 'Run auto-focus if change is more than  C'
+            ParentColor = False
+            ParentFont = False
+          end
+          object AutofocusTemp: TFloatSpinEditEx
+            Left = 289
+            Height = 28
+            Top = 31
+            Width = 75
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 2
+            DecimalPlaces = 1
+            Increment = 0.1
+            MinValue = 0
+            NullValue = 0
+            Value = 0
+          end
+          object BtnDisableAutofocusTemp: TButton
+            Left = 370
+            Height = 23
+            Top = 31
+            Width = 76
+            Caption = 'Disable'
+            OnClick = BtnDisableAutofocusTempClick
+            ParentFont = False
+            TabOrder = 3
+          end
+        end
+        object GroupBox22: TGroupBox
+          Left = 0
+          Height = 59
+          Top = 137
+          Width = 462
+          Align = alBottom
+          Caption = 'Periodic auto-focus'
+          ClientHeight = 39
+          ClientWidth = 460
+          ParentFont = False
+          TabOrder = 1
+          object Label127: TLabel
+            Left = 5
+            Height = 19
+            Top = 5
+            Width = 224
+            Caption = 'Automatically run auto-focus every  '
+            ParentColor = False
+            ParentFont = False
+          end
+          object AutofocusPeriod: TSpinEditEx
+            Left = 289
+            Height = 28
+            Top = 0
+            Width = 75
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 0
+            MaxValue = 1440
+          end
+          object Label128: TLabel
+            Left = 370
+            Height = 19
+            Top = 5
+            Width = 50
+            Caption = 'minutes'
+            ParentColor = False
+            ParentFont = False
+          end
+        end
+        object Label148: TLabel
+          Left = 4
+          Height = 40
+          Top = 6
+          Width = 400
+          AutoSize = False
+          Caption = 'This options are in addition to the autofocus frequency available in the Plan definition'
+          ParentColor = False
+          WordWrap = True
+        end
       end
     end
     object TabSheet15: TTabSheet
@@ -1482,11 +1716,11 @@ object f_option: Tf_option
       end
       object GroupBoxReadOut: TGroupBox
         Left = 8
-        Height = 131
+        Height = 106
         Top = 358
         Width = 469
         Caption = 'Readout modes'
-        ClientHeight = 111
+        ClientHeight = 86
         ClientWidth = 467
         ParentFont = False
         TabOrder = 2
@@ -1569,15 +1803,6 @@ object f_option: Tf_option
           Caption = 'Astrometry'
           ParentColor = False
           ParentFont = False
-        end
-        object ExpEarlyStart: TCheckBox
-          Left = 12
-          Height = 21
-          Top = 75
-          Width = 269
-          Caption = 'Start new exposure as early as possible'
-          ParentFont = False
-          TabOrder = 4
         end
       end
     end
@@ -2039,17 +2264,17 @@ object f_option: Tf_option
       end
       object GroupBox12: TGroupBox
         Left = 8
-        Height = 156
-        Top = 334
+        Height = 282
+        Top = 208
         Width = 461
         Caption = 'Filter offset'
-        ClientHeight = 136
+        ClientHeight = 262
         ClientWidth = 459
         ParentFont = False
         TabOrder = 2
         object FilterList: TStringGrid
           Left = 0
-          Height = 136
+          Height = 262
           Top = 0
           Width = 459
           Align = alClient
@@ -2065,125 +2290,6 @@ object f_option: Tf_option
             166
             166
           )
-        end
-      end
-      object GroupBox16: TGroupBox
-        Left = 8
-        Height = 81
-        Top = 202
-        Width = 461
-        Caption = 'Focuser temperature compensation'
-        ClientHeight = 61
-        ClientWidth = 459
-        ParentFont = False
-        TabOrder = 3
-        object Label84: TLabel
-          Left = 4
-          Height = 19
-          Top = 7
-          Width = 214
-          Caption = 'Temperature coefficient in steps/C'
-          ParentColor = False
-          ParentFont = False
-        end
-        object BtnDisableFocuserTemp: TButton
-          Left = 354
-          Height = 23
-          Top = 3
-          Width = 76
-          Caption = 'Disable'
-          OnClick = BtnDisableFocuserTempClick
-          ParentFont = False
-          TabOrder = 0
-        end
-        object FocuserTempCoeff: TFloatSpinEditEx
-          Left = 273
-          Height = 28
-          Top = 3
-          Width = 75
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
-          Increment = 0.1
-          MaxValue = 1000
-          MinValue = -1000
-          NullValue = 0
-          Value = 0
-        end
-        object Label119: TLabel
-          Left = 4
-          Height = 19
-          Top = 35
-          Width = 248
-          Caption = 'Run auto-focus if change is more than  C'
-          ParentColor = False
-          ParentFont = False
-        end
-        object AutofocusTemp: TFloatSpinEditEx
-          Left = 273
-          Height = 28
-          Top = 31
-          Width = 75
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 2
-          DecimalPlaces = 1
-          Increment = 0.1
-          MinValue = 0
-          NullValue = 0
-          Value = 0
-        end
-        object BtnDisableAutofocusTemp: TButton
-          Left = 354
-          Height = 23
-          Top = 31
-          Width = 76
-          Caption = 'Disable'
-          OnClick = BtnDisableAutofocusTempClick
-          ParentFont = False
-          TabOrder = 3
-        end
-      end
-      object GroupBox22: TGroupBox
-        Left = 8
-        Height = 51
-        Top = 284
-        Width = 461
-        Caption = 'Periodic auto-focus'
-        ClientHeight = 31
-        ClientWidth = 459
-        ParentFont = False
-        TabOrder = 4
-        object Label127: TLabel
-          Left = 5
-          Height = 19
-          Top = 5
-          Width = 224
-          Caption = 'Automatically run auto-focus every  '
-          ParentColor = False
-          ParentFont = False
-        end
-        object AutofocusPeriod: TSpinEditEx
-          Left = 273
-          Height = 28
-          Top = 0
-          Width = 75
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
-          MaxValue = 1440
-        end
-        object Label128: TLabel
-          Left = 354
-          Height = 19
-          Top = 5
-          Width = 50
-          Caption = 'minutes'
-          ParentColor = False
-          ParentFont = False
         end
       end
     end
@@ -3582,57 +3688,6 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 6
           MaxValue = 60
-        end
-      end
-      object GroupBox23: TGroupBox
-        Left = 8
-        Height = 105
-        Top = 380
-        Width = 446
-        Caption = 'Recenter sequence target that drift'
-        ClientHeight = 85
-        ClientWidth = 444
-        ParentFont = False
-        TabOrder = 1
-        object CheckRecenterTarget: TCheckBox
-          Left = 16
-          Height = 21
-          Top = 8
-          Width = 335
-          Caption = 'Run astrometry on every image to search for drift'
-          ParentFont = False
-          TabOrder = 0
-        end
-        object RecenterTargetDistance: TFloatSpinEditEx
-          Left = 267
-          Height = 31
-          Top = 40
-          Width = 74
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
-          Increment = 0.1
-          MinValue = 0
-          NullValue = 0
-          Value = 0
-        end
-        object Label130: TLabel
-          Left = 16
-          Height = 19
-          Top = 45
-          Width = 203
-          Caption = 'Recenter if the drift is more than'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label131: TLabel
-          Left = 354
-          Height = 19
-          Top = 45
-          Width = 50
-          Caption = 'minutes'
-          ParentColor = False
-          ParentFont = False
         end
       end
     end

@@ -3329,7 +3329,6 @@ begin
     if not ok then NewMessage('Cannot create directory '+TmpDir,1);
   end;
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
-  MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false);
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
@@ -3355,6 +3354,8 @@ begin
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
+  MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false) and ConfigExpEarlyStart;
+  CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and ConfigExpEarlyStart;
   ClippingOverflow:=min(ClippingOverflow,MaxADU);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
@@ -3496,7 +3497,6 @@ begin
     end;
   end;
   SlewPrecision:=config.GetValue('/PrecSlew/Precision',5.0);
-  CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
   RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
@@ -6337,7 +6337,6 @@ begin
       f_option.FileSequenceWidth.Enabled:=false;
    end;
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
-   f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
    if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
@@ -6470,6 +6469,8 @@ begin
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
+   f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false) and f_option.ExpEarlyStart.Checked;
+   f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and f_option.ExpEarlyStart.Checked;
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
@@ -6524,7 +6525,6 @@ begin
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
    f_option.SlewFilter.Items.Assign(FilterList);
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
-   f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
@@ -6727,7 +6727,6 @@ begin
      config.SetValue('/StarAnalysis/AutofocusPlanetMovement',f_option.AutofocusPlanetMovement.Value);
      config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
-     config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
      config.SetValue('/Files/SaveBitmap',f_option.SaveBitmap.Checked);
      case f_option.SaveBitmapFormat.ItemIndex of
        0: buf:='png';
@@ -6785,6 +6784,8 @@ begin
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
+     config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked and f_option.ExpEarlyStart.Checked);
+     config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
@@ -6817,7 +6818,6 @@ begin
      config.SetValue('/PrecSlew/Binning',f_option.SlewBin.Value);
      config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
-     config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked);
      config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',f_option.MinutesPastMeridian.Value);

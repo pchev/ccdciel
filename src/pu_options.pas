@@ -44,6 +44,8 @@ type
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
+    GroupBoxFocus: TGroupBox;
+    GroupBoxMeasurement: TGroupBox;
     GuideDriftCancelExposure: TCheckBox;
     GuideDriftRestartDelay: TSpinEditEx;
     Label143: TLabel;
@@ -52,6 +54,9 @@ type
     GroupBoxDrift: TGroupBox;
     Label145: TLabel;
     Label146: TLabel;
+    Label147: TLabel;
+    Label148: TLabel;
+    Label149: TLabel;
     Label920: TLabel;
     BtnDisableAutofocusTemp: TButton;
     AutofocusTemp: TFloatSpinEditEx;
@@ -109,6 +114,7 @@ type
     StarLostCancelExposure: TSpinEditEx;
     TabSheet16: TTabSheet;
     TabSheet17: TTabSheet;
+    TabSheet18: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -587,6 +593,7 @@ type
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
     procedure DomeSlaveToMountChange(Sender: TObject);
+    procedure ExpEarlyStartClick(Sender: TObject);
     procedure FlatTypeClick(Sender: TObject);
     procedure FocaleFromTelescopeChange(Sender: TObject);
     procedure FileOrFolderOptionsClick(Sender: TObject);
@@ -685,6 +692,7 @@ begin
   TemperatureScaleClick(nil);
   panel4.Visible:=DomeSlaveToMount.Checked;
   AutoguiderBoxClick(nil);
+  ExpEarlyStartClick(nil);
 end;
 
 procedure Tf_option.Setlang;
@@ -1180,6 +1188,11 @@ end;
 procedure Tf_option.DomeSlaveToMountChange(Sender: TObject);
 begin
   panel4.Visible:=DomeSlaveToMount.Checked;
+end;
+
+procedure Tf_option.ExpEarlyStartClick(Sender: TObject);
+begin
+   GroupBoxMeasurement.Enabled:=ExpEarlyStart.Checked;
 end;
 
 procedure Tf_option.FlatTypeClick(Sender: TObject);
