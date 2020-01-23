@@ -11399,13 +11399,16 @@ begin
      xc:=fits.StarList[i].x;
      yc:=fits.StarList[i].y;
 
-     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))<sqr(0.25)*(sqr(img_width div 2)+sqr(img_height div 2))  then begin inc(nhfd_center); if nhfd_center>=length( hfdlist_center) then  SetLength( hfdlist_center,nhfd_center+100);  hfdlist_center[nhfd_center-1]:=hfd1;end;{store center(<25% diameter) HFD values}
-     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))>sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2))  then begin inc(nhfd_outer_ring); if nhfd_outer_ring>=length(hfdlist_outer_ring) then  SetLength(hfdlist_outer_ring,nhfd_outer_ring+100);  hfdlist_outer_ring[nhfd_outer_ring-1]:=hfd1;end;{store out ring (>75% diameter) HFD values}
+     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))<sqr(0.25)*(sqr(img_width div 2)+sqr(img_height div 2)) then begin hfdlist_center[nhfd_center]:=hfd1; inc(nhfd_center); end {store center(<25% diameter) HFD values}
+     else
+     begin
+       if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))>sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2)) then begin hfdlist_outer_ring[nhfd_outer_ring]:=hfd1; inc(nhfd_outer_ring);  end;{store out ring (>75% diameter) HFD values}
 
-     if ( (xc<(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_left);  hfdlist_bottom_left[nhfd_bottom_left-1]:=hfd1;end;{store corner HFD values}
-     if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin inc(nhfd_bottom_right); hfdlist_bottom_right[nhfd_bottom_right-1]:=hfd1;end;
-     if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_left); hfdlist_top_left[nhfd_top_left-1]:=hfd1;end;
-     if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin inc(nhfd_top_right); hfdlist_top_right[nhfd_top_right-1]:=hfd1;end;
+       if ( (xc<(img_width div 2)) and (yc<(img_height div 2)) ) then begin hfdlist_bottom_left[nhfd_bottom_left]:=hfd1;   inc(nhfd_bottom_left); end;{store corner HFD values}
+       if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin hfdlist_bottom_right[nhfd_bottom_right]:=hfd1; inc(nhfd_bottom_right);end;
+       if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin hfdlist_top_left[nhfd_top_left]:=hfd1;         inc(nhfd_top_left);    end;
+       if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin hfdlist_top_right[nhfd_top_right]:=hfd1;       inc(nhfd_top_right);   end;
+     end;
   end;
   SetLength(hfdlist_center,nhfd_center);
   SetLength(hfdlist_outer_ring,nhfd_outer_ring);
