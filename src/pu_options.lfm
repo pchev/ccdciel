@@ -104,7 +104,7 @@ object f_option: Tf_option
       object Label99: TLabel
         Left = 8
         Height = 19
-        Top = 225
+        Top = 272
         Width = 110
         Caption = 'Temporary folder'
         ParentColor = False
@@ -113,7 +113,7 @@ object f_option: Tf_option
       object TempDir: TEdit
         Left = 162
         Height = 28
-        Top = 221
+        Top = 268
         Width = 202
         Constraints.MaxHeight = 28
         OnChange = TempDirChange
@@ -123,7 +123,7 @@ object f_option: Tf_option
       object ButtonTempDir: TButton
         Left = 369
         Height = 25
-        Top = 220
+        Top = 267
         Width = 27
         Caption = '...'
         OnClick = ButtonTempDirClick
@@ -133,7 +133,7 @@ object f_option: Tf_option
       object TmpDirDefault: TButton
         Left = 404
         Height = 25
-        Top = 220
+        Top = 267
         Width = 61
         Caption = 'Default'
         OnClick = TmpDirDefaultClick
@@ -143,7 +143,7 @@ object f_option: Tf_option
       object Logtofile: TCheckBox
         Left = 8
         Height = 21
-        Top = 81
+        Top = 128
         Width = 170
         Caption = 'Log all messages to file '
         ParentFont = False
@@ -152,7 +152,7 @@ object f_option: Tf_option
       object Debug_msg: TCheckBox
         Left = 8
         Height = 21
-        Top = 109
+        Top = 156
         Width = 141
         Caption = 'Verbose device log'
         ParentFont = False
@@ -161,7 +161,7 @@ object f_option: Tf_option
       object UseTcpServer: TCheckBox
         Left = 8
         Height = 21
-        Top = 137
+        Top = 184
         Width = 372
         Caption = 'Allow to get program status from TCP/IP internal server'
         ParentFont = False
@@ -170,11 +170,36 @@ object f_option: Tf_option
       object CbShowHints: TCheckBox
         Left = 8
         Height = 21
-        Top = 166
+        Top = 213
         Width = 91
         Caption = 'Show hints'
         ParentFont = False
         TabOrder = 7
+      end
+      object TemperatureScale: TRadioGroup
+        Left = 4
+        Height = 49
+        Top = 64
+        Width = 360
+        AutoFill = True
+        Caption = 'Temperature scale'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 2
+        ClientHeight = 29
+        ClientWidth = 358
+        Columns = 2
+        Items.Strings = (
+          'Celsius'
+          'Fahrenheit'
+        )
+        OnClick = TemperatureScaleClick
+        ParentFont = False
+        TabOrder = 8
       end
     end
     object TabSheet1: TTabSheet
@@ -469,7 +494,7 @@ object f_option: Tf_option
         Top = 180
         Width = 255
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 253
         ParentFont = False
         TabOrder = 3
@@ -552,7 +577,7 @@ object f_option: Tf_option
         Top = 232
         Width = 255
         AutoSize = True
-        ClientHeight = 10
+        ClientHeight = 28
         ClientWidth = 253
         ParentFont = False
         TabOrder = 4
@@ -1444,7 +1469,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 22
+          ClientHeight = 40
           ClientWidth = 237
           Columns = 3
           Items.Strings = (
@@ -1487,18 +1512,18 @@ object f_option: Tf_option
       ParentFont = False
       object GroupBox1: TGroupBox
         Left = 8
-        Height = 234
+        Height = 194
         Top = 8
         Width = 469
         Caption = 'CCD temperature'
-        ClientHeight = 214
+        ClientHeight = 174
         ClientWidth = 467
         ParentFont = False
         TabOrder = 0
         object GroupBox14: TGroupBox
           Left = 0
           Height = 83
-          Top = 132
+          Top = 83
           Width = 467
           Align = alTop
           Caption = 'Automatic cooling '
@@ -1541,7 +1566,7 @@ object f_option: Tf_option
         object GroupBox15: TGroupBox
           Left = 0
           Height = 83
-          Top = 49
+          Top = 0
           Width = 467
           Align = alTop
           Caption = 'Maximum temperature change '
@@ -1565,8 +1590,8 @@ object f_option: Tf_option
             Top = 30
             Width = 331
             BevelOuter = bvNone
-            ClientHeight = 26
-            ClientWidth = 327
+            ClientHeight = 30
+            ClientWidth = 331
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1594,37 +1619,11 @@ object f_option: Tf_option
             end
           end
         end
-        object TemperatureScale: TRadioGroup
-          Left = 0
-          Height = 49
-          Top = 0
-          Width = 467
-          Align = alTop
-          AutoFill = True
-          Caption = 'Temperature scale'
-          ChildSizing.LeftRightSpacing = 6
-          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-          ChildSizing.EnlargeVertical = crsHomogenousChildResize
-          ChildSizing.ShrinkHorizontal = crsScaleChilds
-          ChildSizing.ShrinkVertical = crsScaleChilds
-          ChildSizing.Layout = cclLeftToRightThenTopToBottom
-          ChildSizing.ControlsPerLine = 2
-          ClientHeight = 29
-          ClientWidth = 465
-          Columns = 2
-          Items.Strings = (
-            'Celsius'
-            'Fahrenheit'
-          )
-          OnClick = TemperatureScaleClick
-          ParentFont = False
-          TabOrder = 2
-        end
       end
       object GroupBox20: TGroupBox
         Left = 8
         Height = 105
-        Top = 247
+        Top = 208
         Width = 469
         Caption = 'Sensors properties'
         ClientHeight = 85
@@ -1717,7 +1716,7 @@ object f_option: Tf_option
       object GroupBoxReadOut: TGroupBox
         Left = 8
         Height = 106
-        Top = 358
+        Top = 320
         Width = 469
         Caption = 'Readout modes'
         ClientHeight = 86
@@ -2287,8 +2286,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             123
-            166
-            166
+            157
+            157
           )
         end
       end
@@ -3604,7 +3603,7 @@ object f_option: Tf_option
         end
         object SlewFilter: TComboBox
           Left = 251
-          Height = 23
+          Height = 28
           Top = 259
           Width = 158
           AutoSize = False
