@@ -1221,6 +1221,10 @@ resourcestring
   rsNoCenteringM = 'No centering measurement, exposure time shorter than astrometry timeout.';
   rsNoCenteringM2 = 'No centering measurement, no sequence or target not using precision slew.';
   rsNoCenteringM3 = 'No centering measurement, astrometry not configured.';
+  rsGlobalAction = 'Global actions when a sequence is running';
+  rsMeasurementO = 'Measurement on new images';
+  rsLimitedTo15x = '(limited to 1.5x the slew precision)';
+  rsThisOptionsA = 'This options are in addition to the autofocus frequency available in the Plan definition';
 
 implementation
 
