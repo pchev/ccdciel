@@ -11423,7 +11423,7 @@ begin
     begin
       median_center:=SMedian(hfdlist_center);
       median_outer_ring:=SMedian(hfdlist_outer_ring);
-      mess1:=Format(rsCurvatureInd, [floattostrF(median_outer_ring-median_center,ffgeneral,3,2)]);{off-axis aberration measured in delta HFD. Works also for defocussed images}
+      mess1:='  '+Format(rsOffAxisAberr, [floattostrF(median_outer_ring-median_center, ffgeneral, 3, 2)]); {off-axis aberration measured in delta HFD. Works also for defocussed images}
     end
     else
     mess1:='';
@@ -11446,7 +11446,7 @@ begin
       trpx4:=round(-median_top_left*scale_factor+img_width/2);trpy4:=round(+median_top_left*scale_factor+img_height/2);
       trpOK:=true;
 
-      mess2:=Format(rsTiltIndicati, [floattostrF(median_worst-median_best,ffgeneral,3,2)]); {estimate tilt value in delta HFD}
+      mess2:='  '+Format(rsTiltIndicati2, [floattostrF(median_worst-median_best,ffgeneral,3,2)]); {estimate tilt value in delta HFD}
     end
     else begin
       trpOK:=false;

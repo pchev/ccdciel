@@ -280,8 +280,7 @@ resourcestring
   rsRecenterImag = 'Recenter image error!%sdistance: %s';
   rsRecenterOnLa2 = 'Recenter on last image';
   rsMeridianFlip10 = 'Meridian flip completed';
-  rsCurvatureInd = '  Off-axis aberration[hfd]=%s'; {was curvature}
-  rsTiltIndicati = '  Tilt indication[hfd]=%s'; {was Tilt indication}
+  rsTiltIndicati2 = 'Tilt indication[hfd]=%s';
   rsImageMedianH = 'Image median hfd=%s';
   rsNoStarDetect = 'No star detected. Is the image focused and sufficiently '
     +'exposed?';
@@ -1225,6 +1224,7 @@ resourcestring
   rsMeasurementO = 'Measurement on new images';
   rsLimitedTo15x = '(limited to 1.5x the slew precision)';
   rsThisOptionsA = 'This options are in addition to the autofocus frequency available in the Plan definition';
+  rsOffAxisAberr = 'Off-axis aberration[hfd]=%s';
 
 implementation
 
