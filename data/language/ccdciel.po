@@ -926,12 +926,8 @@ msgstr ""
 msgid "Meridian flip completed"
 msgstr ""
 
-#: u_translation:rscurvatureind
-msgid "  Curvature=%s"
-msgstr ""
-
-#: u_translation:rstiltindicati
-msgid "  Tilt indication=%s"
+#: u_translation:rstiltindicati2
+msgid "Tilt indication[hfd]=%s"
 msgstr ""
 
 #: u_translation:rsimagemedianh
@@ -4424,5 +4420,69 @@ msgstr ""
 
 #: u_translation:rscompute
 msgid "Compute"
+msgstr ""
+
+#: u_translation:rswaitingdseco
+msgid "Waiting %d seconds before to restart the exposure"
+msgstr ""
+
+#: u_translation:rscancelexposu
+msgid "Cancel exposure"
+msgstr ""
+
+#: u_translation:rsrestartexpos
+msgid "Restart exposure"
+msgstr ""
+
+#: u_translation:rsimagesharpne
+msgid "Image sharpness %s"
+msgstr ""
+
+#: u_translation:rssharpness
+msgid "Sharpness"
+msgstr ""
+
+#: u_translation:rstemperaturef
+msgid "Temperature from weather station"
+msgstr ""
+
+#: u_translation:rsexposuretime4
+msgid "Exposure time too short for measurement, need %d seconds."
+msgstr ""
+
+#: u_translation:rsnomeasuremen
+msgid "No measurement, early start exposure not set."
+msgstr ""
+
+#: u_translation:rsnocenteringm
+msgid "No centering measurement, exposure time shorter than astrometry timeout."
+msgstr ""
+
+#: u_translation:rsnocenteringm2
+msgid "No centering measurement, no sequence or target not using precision slew."
+msgstr ""
+
+#: u_translation:rsnocenteringm3
+msgid "No centering measurement, astrometry not configured."
+msgstr ""
+
+#: u_translation:rsglobalaction
+msgid "Global actions when a sequence is running"
+msgstr ""
+
+#: u_translation:rsmeasuremento
+msgid "Measurement on new images"
+msgstr ""
+
+#: u_translation:rslimitedto15x
+msgid "(limited to 1.5x the slew precision)"
+msgstr ""
+
+#: u_translation:rsthisoptionsa
+msgid "This options are in addition to the autofocus frequency available in the Plan definition"
+msgstr ""
+
+#: u_translation:rsoffaxisaberr
+msgid "Off-axis aberration[hfd]=%s"
 msgstr ""
 

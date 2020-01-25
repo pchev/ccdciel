@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-01-08 10:37+0000\n"
+"POT-Creation-Date: 2020-01-25 16:36+0000\n"
 "PO-Revision-Date: 2020-01-06 12:35+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-01-08 10:56+0000\n"
-"X-Generator: Launchpad (build bceb5ef013b87ef7aafe0755545ceb689ca7ac60)\n"
+"X-Launchpad-Export-Date: 2020-01-25 16:52+0000\n"
+"X-Generator: Launchpad (build b8d1327fd820d6bf500589d6da587d5037c7d88e)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -517,6 +517,10 @@ msgstr "Camera or focuser are not connected"
 msgid "Cancel"
 msgstr "Cancel"
 
+#: u_translation.rscancelexposu
+msgid "Cancel exposure"
+msgstr ""
+
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
 msgstr "Cancel in %s seconds."
@@ -880,10 +884,6 @@ msgstr "Current image"
 #: u_translation.rscurrentplan
 msgid "Current plan"
 msgstr "Current plan"
-
-#: u_translation.rscurvatureind
-msgid "  Curvature=%s"
-msgstr "  Curvature=%s"
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
@@ -1273,6 +1273,10 @@ msgstr "Exposure time"
 msgid "Exposure time [seconds]"
 msgstr "Exposure time [seconds]"
 
+#: u_translation.rsexposuretime4
+msgid "Exposure time too short for measurement, need %d seconds."
+msgstr ""
+
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
 msgstr "Failed to start guiding!"
@@ -1557,6 +1561,10 @@ msgstr "Get current position from telescope"
 msgid "Get site long/lat from the mount"
 msgstr "Get site long/lat from the mount"
 
+#: u_translation.rsglobalaction
+msgid "Global actions when a sequence is running"
+msgstr ""
+
 #: u_translation.rsglobalfocuse
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
 msgstr "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
@@ -1668,6 +1676,10 @@ msgstr "Image scale"
 #: u_translation.rsimagesfolder
 msgid "Images folder Unix path"
 msgstr "Images folder Unix path"
+
+#: u_translation.rsimagesharpne
+msgid "Image sharpness %s"
+msgstr ""
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
@@ -1805,6 +1817,10 @@ msgstr "Light OFF"
 msgid "Light ON"
 msgstr "Light ON"
 
+#: u_translation.rslimitedto15x
+msgid "(limited to 1.5x the slew precision)"
+msgstr ""
+
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
 msgstr "Limit temperature change"
@@ -1920,6 +1936,10 @@ msgstr "Measurement"
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
 msgstr "Measurement %s hfd:%s peak:%s snr:%s"
+
+#: u_translation.rsmeasuremento
+msgid "Measurement on new images"
+msgstr ""
 
 #: u_translation.rsmeasurementp
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
@@ -2173,6 +2193,18 @@ msgstr "No auto-guiding, only dither by sending pulse guide directly to the moun
 msgid "No backlash"
 msgstr "No backlash"
 
+#: u_translation.rsnocenteringm
+msgid "No centering measurement, exposure time shorter than astrometry timeout."
+msgstr ""
+
+#: u_translation.rsnocenteringm2
+msgid "No centering measurement, no sequence or target not using precision slew."
+msgstr ""
+
+#: u_translation.rsnocenteringm3
+msgid "No centering measurement, astrometry not configured."
+msgstr ""
+
 #: u_translation.rsnodawntoday
 msgid "No dawn today"
 msgstr "No dawn today"
@@ -2188,6 +2220,10 @@ msgstr "No dusk today"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "No flip until past meridian for"
+
+#: u_translation.rsnomeasuremen
+msgid "No measurement, early start exposure not set."
+msgstr ""
 
 #: u_translation.rsnomove
 msgid "No move"
@@ -2324,6 +2360,10 @@ msgstr "Observing condition"
 #: u_translation.rsoff
 msgid "Off"
 msgstr "Off"
+
+#: u_translation.rsoffaxisaberr
+msgid "Off-axis aberration[hfd]=%s"
+msgstr ""
 
 #: u_translation.rsoffset
 msgid "offset"
@@ -2921,6 +2961,10 @@ msgstr "Restart after weather is good for"
 msgid "Restart autoguider"
 msgstr "Restart autoguider"
 
+#: u_translation.rsrestartexpos
+msgid "Restart exposure"
+msgstr ""
+
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
 msgstr "Resume autoguider"
@@ -3324,6 +3368,10 @@ msgstr "Setup"
 #: u_translation.rsshadowadu
 msgid "Shadow ADU"
 msgstr "Shadow ADU"
+
+#: u_translation.rssharpness
+msgid "Sharpness"
+msgstr ""
 
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
@@ -3893,6 +3941,10 @@ msgstr "Temperature"
 msgid "Temperature coefficient in steps/%s"
 msgstr "Temperature coefficient in steps/%s"
 
+#: u_translation.rstemperaturef
+msgid "Temperature from weather station"
+msgstr ""
+
 #: u_translation.rstemperaturer
 msgid "Temperature ramp requested to stop"
 msgstr "Temperature ramp requested to stop"
@@ -4013,6 +4065,10 @@ msgstr "This object is never below the requested elevation"
 msgid "This object is never above the requested elevation"
 msgstr "This object is never above the requested elevation"
 
+#: u_translation.rsthisoptionsa
+msgid "This options are in addition to the autofocus frequency available in the Plan definition"
+msgstr ""
+
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
 msgstr "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
@@ -4029,9 +4085,9 @@ msgstr "This sequence contain information about the steps already completed.%sNo
 msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
 msgstr "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
 
-#: u_translation.rstiltindicati
-msgid "  Tilt indication=%s"
-msgstr "  Tilt indication=%s"
+#: u_translation.rstiltindicati2
+msgid "Tilt indication[hfd]=%s"
+msgstr ""
 
 #: u_translation.rstimealreadyp
 msgid "Time already passed %s"
@@ -4300,6 +4356,10 @@ msgstr "Wait 1 minute ..."
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
 msgstr "Wait after solve"
+
+#: u_translation.rswaitingdseco
+msgid "Waiting %d seconds before to restart the exposure"
+msgstr ""
 
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
