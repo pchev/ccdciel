@@ -4253,6 +4253,7 @@ end;
 
 procedure Tf_main.ShowGain;
 begin
+ camera.CanSetGain:=(not config.GetValue('/Sensor/GainFromCamera',true));
  camera.CheckGain;
  hasGain:=camera.hasGain;
  hasGainISO:=camera.hasGainISO;
@@ -4267,10 +4268,12 @@ procedure Tf_main.SetGainList;
 var gainprev,gaincapt:string;
     i,posprev,poscapt:integer;
 begin
+ if debug_msg then NewMessage('Camera gain:'+BoolToStr(hasGain,rsTrue,rsFalse)+' iso:'+BoolToStr(hasGainISO,rsTrue,rsFalse));
  gainprev:=config.GetValue('/Preview/Gain','');
  gaincapt:=config.GetValue('/Capture/Gain','');
  posprev:=Gain;
  poscapt:=Gain;
+ if debug_msg then NewMessage('Want camera gain control: '+BoolToStr(camera.CanSetGain,rsTrue,rsFalse));
  f_capture.PanelGain.Visible:=camera.CanSetGain and (hasGain or hasGainISO);
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;

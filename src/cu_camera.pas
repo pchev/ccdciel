@@ -330,6 +330,7 @@ begin
   FhasFnumber:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
+  FCanSetGain:=false;
   RampTimer:=TTimer.Create(self);
   RampTimer.Enabled:=false;
   RampTimer.Interval:=1000;

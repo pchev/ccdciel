@@ -1087,19 +1087,26 @@ begin
   {$ifdef mswindows}
     if FStatus<>devConnected then exit;
     try
+    if debug_msg then msg('Check camera gain');
     // check Gain property
        i:=V.Gain;
+       if debug_msg then msg('Gain='+inttostr(i));
        try
        // check Gain range
           FGainMin:=V.GainMin;
           FGainMax:=V.GainMax;
           FhasGain:=true;
+          if debug_msg then msg('GainMin='+IntToStr(FGainMin)+' GainMax='+inttostr(FGainMax));
        except
        // No Gain range
-          FhasGain:=false;
+          on E: Exception do begin
+              FhasGain:=false;
+              if debug_msg then msg('Camera GainMin or GainMax exception: '+E.Message);
+          end;
        end;
        try
        // Check ISO list
+          if debug_msg then msg('Check camera gains list');
           n:=V.Gains.Count;
           FISOList.Clear;
           for i:=0 to n-1 do begin
@@ -1107,15 +1114,22 @@ begin
             FISOList.Add(isol);
           end;
           FhasGainISO:=FISOList.Count>0;
+          if debug_msg then msg('Found '+IntToStr(FISOList.Count)+' gains');
        except
        // No ISO list
-          FhasGainISO:=false;
-          FISOList.Clear;
+          on E: Exception do begin
+             FhasGainISO:=false;
+             FISOList.Clear;
+             if debug_msg then msg('Camera Gains list exception: '+E.Message);
+          end;
        end;
     except
     // No Gain property at all
-       FhasGain:=false;
-       FhasGainISO:=false;
+       on E: Exception do begin
+          FhasGain:=false;
+          FhasGainISO:=false;
+          if debug_msg then msg('Camera Gain exception: '+E.Message);
+       end;
     end;
     result:=(FhasGainISO or FhasGain);
   {$endif}
