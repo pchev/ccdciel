@@ -846,11 +846,12 @@ begin
      StreamRate:=IUFindNumber(StreamOptions,'STREAM_RATE');
      if (StreamRate=nil) then StreamOptions:=nil;
   end
-  else if (proptype=INDI_NUMBER)and(ImageAdjustments=nil)and((propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
+  else if (proptype=INDI_NUMBER)and(ImageAdjustments=nil)and((propname='CCD_GAIN')or(propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
      IBrightness:=IUFindNumber(ImageAdjustments,'Brightness');
      IGamma:=IUFindNumber(ImageAdjustments,'Gamma');
      IGain:=IUFindNumber(ImageAdjustments,'Gain');
+     if IGain=nil then IGain:=IUFindNumber(ImageAdjustments,'GAIN');
      IExposure:=IUFindNumber(ImageAdjustments,'Exposure');
      if IExposure=nil then IExposure:=IUFindNumber(ImageAdjustments,'Exposure (Absolute)');
      FhasGain:=(IGain<>nil);
