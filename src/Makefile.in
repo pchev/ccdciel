@@ -31,8 +31,11 @@ PREFIX=%PREFIX%
 LAZDIR=%LAZDIR%
 # Compiler options
 ifndef fpcopts 
-#fpcopts=-O1 -g -gl -Ci -Cr -Co -Ct  // debug
-fpcopts=-O3 -CX -XX -Xs -Cs8388608
+ifeq ($(CPU_TARGET),aarch64)
+fpcopts=-O-  -CX -XX -Xs -Cs8388608
+else
+fpcopts=-O3  -CX -XX -Xs -Cs8388608 
+endif
 endif
 # LCL Platform
 ifndef LCL_PLATFORM
