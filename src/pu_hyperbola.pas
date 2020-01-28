@@ -1,6 +1,6 @@
 unit pu_hyperbola; {Hyperbola modeling of the star disk size in HFD as function of the telescope focuser position. Purpose is finding the best focuser position at the hyperbola minimum.}
 {
-Copyright (C) 2018 Patrick Chevalley & Han Kleijn (author)
+Copyright (C) 2018, 2020 Patrick Chevalley & Han Kleijn (author)
 
 http://www.ap-i.net
 h@ap-i.net
@@ -33,8 +33,8 @@ function hfd_calc(position,perfectfocusposition,a,b:double) :double; {calculate 
 function steps_to_focus(hfd,a,b:double) :double; {calculates focuser steps to perfect focus from HFD and hyperbola parameters}
 
 var
-  iteration_cycles :integer; {how many cycle where used for curve fitting}
-  lowest_error : double; {scaled RMS (square root of the mean square) of the HFD errors after curve fitting}
+  iteration_cycles :integer; {how many cycles where used for curve fitting}
+  lowest_error : double; {mean HFD error after curve fitting}
 
 implementation
 
@@ -72,22 +72,28 @@ begin
   result:=x;{steps to focus}
 end;
 
-function scaled_error_hyperbola(data: array of TDouble2;data_length:integer; perfectfocusposition,a,b,seeing_limit: double): double;{calculates total squared error between measured V-curve and hyperbola with hyperbola lowest values clamped against seeing limit}
+function mean_error_hyperbola(data: array of TDouble2 {pos, hfd};data_length:integer; perfectfocusposition,a,b : double): double;{calculates total averaged error between measured V-curve and hyperbola}
 var
-  n, i: Integer;
-  hfd_simulation, total_error : double;
+  i : integer;
+  hfd_simulation, total_error,error : double;
 begin
   total_error:=0;
   for i:=0 to data_length-1 do
   begin
      hfd_simulation:=hfd_calc(data[i,1],perfectfocusposition,a,b);{y or HFD error}
-     if hfd_simulation<seeing_limit then  hfd_simulation:=seeing_limit; {Clamp the hyperbola lowest values against seeing limit = lowest measured HFD value}
-     total_error:=total_error+ sqr((hfd_simulation-data[i,2])/data[i,2]); {sqr the SCALED DIFFERENCE}
+
+     {smart error calculation which limits error for outliers}
+     error:=hfd_simulation - data[i,2] ;{hfd error in simulation}
+     if error < 0 then
+       total_error:=total_error - error/data[i,2] {if data[i,2] is large positive outlier then limit error to data[i,2]/data[i,2]=1 maximum}
+       else
+       total_error:=total_error + error/hfd_simulation; {if data[i,2] is large negative outlier then limit error to hfd_simulation/hfd_simulation=1 maximum}
    end;
-  result:=sqrt(total_error)/data_length;{scale to average error per point}
+  result:=(total_error)/data_length;{scale to average error per point}
 end;
 
-procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[n,1]=position,data[n,2]=hfd, output: bestfocusposition=p, a, b of hyperbola}
+
+procedure find_best_hyperbola_fit(data: array of TDouble2 {pos, hfd};data_length:integer;var p,a,b: double); {input data[n,1]=position,data[n,2]=hfd, output: bestfocusposition=p, a, b of hyperbola}
 {The input data array should contain several focuser positions with there corresponding HFD (star disk size).}
 {The routine will try to find the best hyperbola curve fit. The focuser position p at the hyperbola minimum is the expected best focuser position}
 var
@@ -107,7 +113,7 @@ begin
       highest_hfd:=data[i,2];
       highest_position:=data[i,1];
     end;
-    if ((data[i,2]<lowest_hfd) and (data[i,2]>0.1){avoid zero's}{rev1}) then
+    if ((data[i,2]<lowest_hfd) and (data[i,2]>0.1){avoid zero's}) then
     begin
      lowest_hfd:=data[i,2];
      lowest_position:=data[i,1];
@@ -146,7 +152,7 @@ begin
         b1:=b0 - b_range;{start value}
         while b1 <= b0 + b_range do {b loop}
         begin
-          error1:=scaled_error_hyperbola(data, data_length,p1,a1,b1,lowest_hfd); {calculate the curve fit error with these values. The lowest HFD is used to clamp the bottom of the hyperbola tot seeing minimum }
+          error1:=mean_error_hyperbola(data, data_length,p1,a1,b1); {calculate the curve fit error with these values.}
           if error1<lowest_error  then
           begin{better position found}
             old_error:=lowest_error;
@@ -162,9 +168,9 @@ begin
       p1:=p1 + p_range*0.1;{do 20 steps within range}
     end;{position loop}
     inc(iteration_cycles);
-  until  ( (old_error-lowest_error<0.00001){lowest error almost reached. Error is expressed in relative error per point}
-        or (lowest_error<=0.00001)         {perfect result}
-        or (iteration_cycles>=30) );       {most likely convergence problem}
+    until  ( (old_error-lowest_error<1E-5)   {lowest error almost reached. Error is expressed in relative error per point}
+          or (lowest_error<=1E-5 {0.00001})  {perfect result}
+          or (iteration_cycles>=30) );       {most likely convergence problem}
 end;
 
 
