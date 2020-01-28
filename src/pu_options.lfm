@@ -66,11 +66,11 @@ object f_option: Tf_option
     Height = 542
     Top = 0
     Width = 536
-    ActivePage = TabSheet1
+    ActivePage = TabSheet16
     Align = alClient
     MultiLine = True
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 1
     OnChanging = PageControl1Changing
     Options = [nboMultiLine]
@@ -494,7 +494,7 @@ object f_option: Tf_option
         Top = 180
         Width = 255
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 253
         ParentFont = False
         TabOrder = 3
@@ -577,7 +577,7 @@ object f_option: Tf_option
         Top = 232
         Width = 255
         AutoSize = True
-        ClientHeight = 28
+        ClientHeight = 10
         ClientWidth = 253
         ParentFont = False
         TabOrder = 4
@@ -746,402 +746,304 @@ object f_option: Tf_option
         ParentFont = False
       end
     end
-    object TabSheet18: TTabSheet
-      Caption = 'Sequence'
-      ClientHeight = 511
-      ClientWidth = 526
-      object ExpEarlyStart: TCheckBox
-        Left = 8
-        Height = 21
-        Top = 48
-        Width = 269
-        Caption = 'Start new exposure as early as possible'
-        OnClick = ExpEarlyStartClick
-        ParentFont = False
-        TabOrder = 0
-      end
-      object Label147: TLabel
-        Left = 8
-        Height = 19
-        Top = 6
-        Width = 263
-        Caption = 'Global actions when a sequence is running'
-        ParentColor = False
-      end
-      object GroupBoxMeasurement: TGroupBox
-        Left = 8
-        Height = 169
-        Top = 80
-        Width = 464
-        Caption = 'Measurement on new images'
-        ClientHeight = 149
-        ClientWidth = 462
-        TabOrder = 1
-        object MeasureNewImage: TCheckBox
-          Left = 16
-          Height = 21
-          Top = 8
-          Width = 386
-          Caption = 'Automatic HFD measurement for every sequence capture'
-          ParentFont = False
-          TabOrder = 0
-        end
-        object GroupBox23: TGroupBox
-          Left = 0
-          Height = 112
-          Top = 37
-          Width = 462
-          Align = alBottom
-          Caption = 'Recenter sequence target that drift'
-          ClientHeight = 92
-          ClientWidth = 460
-          ParentFont = False
-          TabOrder = 1
-          object CheckRecenterTarget: TCheckBox
-            Left = 16
-            Height = 21
-            Top = 8
-            Width = 335
-            Caption = 'Run astrometry on every image to search for drift'
-            ParentFont = False
-            TabOrder = 0
-          end
-          object RecenterTargetDistance: TFloatSpinEditEx
-            Left = 289
-            Height = 31
-            Top = 40
-            Width = 74
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
-            Increment = 0.1
-            MinValue = 0
-            NullValue = 0
-            Value = 0
-          end
-          object Label130: TLabel
-            Left = 16
-            Height = 19
-            Top = 45
-            Width = 203
-            Caption = 'Recenter if the drift is more than'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label131: TLabel
-            Left = 370
-            Height = 19
-            Top = 45
-            Width = 50
-            Caption = 'minutes'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label149: TLabel
-            Left = 16
-            Height = 19
-            Top = 64
-            Width = 210
-            Caption = '(limited to 1.5x the slew precision)'
-            ParentColor = False
-          end
-        end
-      end
-      object GroupBoxFocus: TGroupBox
-        Left = 8
-        Height = 216
-        Top = 256
-        Width = 464
-        Caption = 'Periodic autofocus'
-        ClientHeight = 196
-        ClientWidth = 462
-        TabOrder = 2
-        object GroupBox16: TGroupBox
-          Left = 0
-          Height = 88
-          Top = 49
-          Width = 462
-          Align = alBottom
-          Caption = 'Focuser temperature compensation'
-          ClientHeight = 68
-          ClientWidth = 460
-          ParentFont = False
-          TabOrder = 0
-          object Label84: TLabel
-            Left = 4
-            Height = 19
-            Top = 7
-            Width = 214
-            Caption = 'Temperature coefficient in steps/C'
-            ParentColor = False
-            ParentFont = False
-          end
-          object BtnDisableFocuserTemp: TButton
-            Left = 370
-            Height = 23
-            Top = 3
-            Width = 76
-            Caption = 'Disable'
-            OnClick = BtnDisableFocuserTempClick
-            ParentFont = False
-            TabOrder = 0
-          end
-          object FocuserTempCoeff: TFloatSpinEditEx
-            Left = 289
-            Height = 28
-            Top = 3
-            Width = 75
-            Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
-            Increment = 0.1
-            MaxValue = 1000
-            MinValue = -1000
-            NullValue = 0
-            Value = 0
-          end
-          object Label119: TLabel
-            Left = 4
-            Height = 19
-            Top = 35
-            Width = 248
-            Caption = 'Run auto-focus if change is more than  C'
-            ParentColor = False
-            ParentFont = False
-          end
-          object AutofocusTemp: TFloatSpinEditEx
-            Left = 289
-            Height = 28
-            Top = 31
-            Width = 75
-            Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 2
-            DecimalPlaces = 1
-            Increment = 0.1
-            MinValue = 0
-            NullValue = 0
-            Value = 0
-          end
-          object BtnDisableAutofocusTemp: TButton
-            Left = 370
-            Height = 23
-            Top = 31
-            Width = 76
-            Caption = 'Disable'
-            OnClick = BtnDisableAutofocusTempClick
-            ParentFont = False
-            TabOrder = 3
-          end
-        end
-        object GroupBox22: TGroupBox
-          Left = 0
-          Height = 59
-          Top = 137
-          Width = 462
-          Align = alBottom
-          Caption = 'Periodic auto-focus'
-          ClientHeight = 39
-          ClientWidth = 460
-          ParentFont = False
-          TabOrder = 1
-          object Label127: TLabel
-            Left = 5
-            Height = 19
-            Top = 5
-            Width = 224
-            Caption = 'Automatically run auto-focus every  '
-            ParentColor = False
-            ParentFont = False
-          end
-          object AutofocusPeriod: TSpinEditEx
-            Left = 289
-            Height = 28
-            Top = 0
-            Width = 75
-            Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
-            MaxValue = 1440
-          end
-          object Label128: TLabel
-            Left = 370
-            Height = 19
-            Top = 5
-            Width = 50
-            Caption = 'minutes'
-            ParentColor = False
-            ParentFont = False
-          end
-        end
-        object Label148: TLabel
-          Left = 4
-          Height = 40
-          Top = 6
-          Width = 400
-          AutoSize = False
-          Caption = 'This options are in addition to the autofocus frequency available in the Plan definition'
-          ParentColor = False
-          WordWrap = True
-        end
-      end
-    end
-    object TabSheet15: TTabSheet
-      Caption = 'Dome'
+    object TabSheet11: TTabSheet
+      Caption = 'Camera'
       ClientHeight = 511
       ClientWidth = 526
       ParentFont = False
-      object Panel4: TPanel
-        Left = 4
-        Height = 404
-        Top = 67
-        Width = 511
-        BevelOuter = bvNone
-        ClientHeight = 404
-        ClientWidth = 511
+      object GroupBox1: TGroupBox
+        Left = 8
+        Height = 194
+        Top = 8
+        Width = 469
+        Caption = 'CCD temperature'
+        ClientHeight = 174
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 0
-        object Panel5: TPanel
+        object GroupBox14: TGroupBox
           Left = 0
-          Height = 38
-          Top = 0
-          Width = 511
+          Height = 83
+          Top = 83
+          Width = 467
           Align = alTop
-          BevelOuter = bvNone
-          ClientHeight = 38
-          ClientWidth = 511
-          ParentFont = False
-          TabOrder = 2
-          object Label125: TLabel
-            Left = 34
-            Height = 19
-            Top = 8
-            Width = 165
-            Caption = 'Wait time between actions'
-            ParentColor = False
-            ParentFont = False
-          end
-          object DomeActionWait: TSpinEditEx
-            Left = 232
-            Height = 26
-            Top = 4
-            Width = 57
-            Constraints.MaxHeight = 26
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
-            Value = 1
-          end
-          object Label126: TLabel
-            Left = 303
-            Height = 19
-            Top = 8
-            Width = 50
-            Caption = 'seconds'
-            ParentColor = False
-            ParentFont = False
-          end
-        end
-        object GroupBox18: TGroupBox
-          Left = 0
-          Height = 182
-          Top = 38
-          Width = 511
-          Align = alTop
-          Caption = 'Open dome sequence when mount is asked to unpark'
-          ClientHeight = 162
-          ClientWidth = 509
+          Caption = 'Automatic cooling '
+          ClientHeight = 63
+          ClientWidth = 465
           ParentFont = False
           TabOrder = 0
-          object DomeOpenActions: TStringGrid
-            Left = 0
-            Height = 162
-            Top = 0
-            Width = 509
-            Align = alClient
-            AutoFillColumns = True
-            ColCount = 2
-            Columns = <            
-              item
-                ButtonStyle = cbsPickList
-                DropDownRows = 15
-                MinSize = 101
-                MaxSize = 202
-                Title.Caption = 'Action'
-                Width = 454
-              end>
-            DefaultColWidth = 51
-            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
+          object CameraAutoCool: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 2
+            Width = 258
+            Caption = 'Cool down when camera is connected'
             ParentFont = False
-            RowCount = 6
             TabOrder = 0
-            ColWidths = (
-              51
-              454
-            )
+          end
+          object Label75: TLabel
+            Left = 129
+            Height = 19
+            Top = 34
+            Width = 46
+            Caption = 'degree'
+            ParentColor = False
+            ParentFont = False
+          end
+          object CameraAutoCoolTemp: TFloatSpinEditEx
+            Left = 40
+            Height = 28
+            Top = 30
+            Width = 73
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 1
+            MinValue = -100
+            NullValue = 0
+            Value = 0
           end
         end
-        object GroupBox21: TGroupBox
+        object GroupBox15: TGroupBox
           Left = 0
-          Height = 184
-          Top = 220
-          Width = 511
-          Align = alClient
-          Caption = 'Close dome sequence when mount is asked to park'
-          ClientHeight = 164
-          ClientWidth = 509
+          Height = 83
+          Top = 0
+          Width = 467
+          Align = alTop
+          Caption = 'Maximum temperature change '
+          ClientHeight = 63
+          ClientWidth = 465
           ParentFont = False
           TabOrder = 1
-          object DomeCloseActions: TStringGrid
-            Left = 0
-            Height = 164
-            Top = 0
-            Width = 509
-            Align = alClient
-            AutoFillColumns = True
-            ColCount = 2
-            Columns = <            
-              item
-                ButtonStyle = cbsPickList
-                DropDownRows = 15
-                MinSize = 101
-                MaxSize = 202
-                Title.Caption = 'Action'
-                Width = 454
-              end>
-            DefaultColWidth = 51
-            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
+          object TemperatureSlopeActive: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 2
+            Width = 188
+            Caption = 'Limit temperature change'
+            OnClick = TemperatureSlopeActiveClick
             ParentFont = False
-            RowCount = 6
             TabOrder = 0
-            ColWidths = (
-              51
-              454
-            )
+          end
+          object PanelTemperatureSlope: TPanel
+            Left = 16
+            Height = 30
+            Top = 30
+            Width = 331
+            BevelOuter = bvNone
+            ClientHeight = 30
+            ClientWidth = 331
+            ParentFont = False
+            TabOrder = 1
+            object Label74: TLabel
+              Left = 113
+              Height = 19
+              Top = 4
+              Width = 126
+              Caption = 'Degrees per minute'
+              ParentColor = False
+              ParentFont = False
+            end
+            object TemperatureSlope: TFloatSpinEditEx
+              Left = 24
+              Height = 28
+              Top = 0
+              Width = 73
+              Constraints.MaxHeight = 28
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 0
+              Increment = 0.1
+              MinValue = 0
+              NullValue = 0
+              Value = 0
+            end
           end
         end
       end
-      object DomeSlaveToMount: TCheckBox
-        Left = 16
-        Height = 21
-        Top = 40
-        Width = 332
-        Caption = 'Automatically slave "Dome Park" to "Mount Park" '
-        OnChange = DomeSlaveToMountChange
+      object GroupBox20: TGroupBox
+        Left = 8
+        Height = 105
+        Top = 208
+        Width = 469
+        Caption = 'Sensors properties'
+        ClientHeight = 85
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 1
+        object Label19: TLabel
+          Left = 8
+          Height = 19
+          Top = 34
+          Width = 97
+          Caption = 'Maximum ADU '
+          ParentColor = False
+          ParentFont = False
+        end
+        object MaxAduFromCamera: TCheckBox
+          Left = 170
+          Height = 21
+          Top = 33
+          Width = 152
+          Caption = 'From camera driver '
+          OnChange = MaxAduFromCameraChange
+          ParentFont = False
+          TabOrder = 0
+        end
+        object MaxAdu: TSpinEditEx
+          Left = 364
+          Height = 28
+          Top = 30
+          Width = 79
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 1
+          MaxValue = 99999
+        end
+        object Label3: TLabel
+          Left = 8
+          Height = 19
+          Top = 5
+          Width = 55
+          Caption = 'Pixel size'
+          ParentColor = False
+          ParentFont = False
+        end
+        object PixelSizeFromCamera: TCheckBox
+          Left = 170
+          Height = 21
+          Top = 3
+          Width = 149
+          Caption = 'From camera driver'
+          OnChange = PixelSizeFromCameraChange
+          ParentFont = False
+          TabOrder = 2
+        end
+        object PixelSize: TFloatSpinEditEx
+          Left = 364
+          Height = 28
+          Top = 1
+          Width = 79
+          Constraints.MaxHeight = 28
+          MaxLength = 0
+          ParentFont = False
+          TabOrder = 3
+          Increment = 0.1
+          MaxValue = 99
+          MinValue = 0
+          NullValue = 0
+          Value = 0
+        end
+        object Label124: TLabel
+          Left = 8
+          Height = 19
+          Top = 61
+          Width = 29
+          Caption = 'Gain'
+          ParentColor = False
+          ParentFont = False
+        end
+        object GainFromCamera: TCheckBox
+          Left = 170
+          Height = 21
+          Top = 61
+          Width = 149
+          Caption = 'From camera driver'
+          ParentFont = False
+          TabOrder = 4
+        end
       end
-      object DomeNoSafetyCheck: TCheckBox
-        Left = 16
-        Height = 21
-        Top = 8
-        Width = 402
-        Caption = 'Allow to open the dome when safety status is bad or unknow'
+      object GroupBoxReadOut: TGroupBox
+        Left = 8
+        Height = 106
+        Top = 320
+        Width = 469
+        Caption = 'Readout modes'
+        ClientHeight = 86
+        ClientWidth = 467
         ParentFont = False
         TabOrder = 2
+        object Label112: TLabel
+          Left = 8
+          Height = 19
+          Top = 10
+          Width = 51
+          Caption = 'Capture'
+          ParentColor = False
+          ParentFont = False
+        end
+        object ReadOutCapture: TComboBox
+          Left = 97
+          Height = 28
+          Top = 4
+          Width = 121
+          Constraints.MaxHeight = 28
+          ItemHeight = 0
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object ReadOutPreview: TComboBox
+          Left = 331
+          Height = 28
+          Top = 4
+          Width = 121
+          Constraints.MaxHeight = 28
+          ItemHeight = 0
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 1
+        end
+        object Label113: TLabel
+          Left = 234
+          Height = 19
+          Top = 10
+          Width = 51
+          Caption = 'Preview'
+          ParentColor = False
+          ParentFont = False
+        end
+        object ReadOutFocus: TComboBox
+          Left = 97
+          Height = 28
+          Top = 40
+          Width = 121
+          Constraints.MaxHeight = 28
+          ItemHeight = 0
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 2
+        end
+        object Label114: TLabel
+          Left = 8
+          Height = 19
+          Top = 46
+          Width = 35
+          Caption = 'Focus'
+          ParentColor = False
+          ParentFont = False
+        end
+        object ReadOutAstrometry: TComboBox
+          Left = 331
+          Height = 28
+          Top = 40
+          Width = 121
+          Constraints.MaxHeight = 28
+          ItemHeight = 0
+          ParentFont = False
+          Style = csDropDownList
+          TabOrder = 3
+        end
+        object Label115: TLabel
+          Left = 234
+          Height = 19
+          Top = 46
+          Width = 72
+          Caption = 'Astrometry'
+          ParentColor = False
+          ParentFont = False
+        end
       end
     end
     object TabSheet8: TTabSheet
@@ -1502,306 +1404,6 @@ object f_option: Tf_option
           Constraints.MaxHeight = 28
           ParentFont = False
           TabOrder = 1
-        end
-      end
-    end
-    object TabSheet11: TTabSheet
-      Caption = 'Camera'
-      ClientHeight = 511
-      ClientWidth = 526
-      ParentFont = False
-      object GroupBox1: TGroupBox
-        Left = 8
-        Height = 194
-        Top = 8
-        Width = 469
-        Caption = 'CCD temperature'
-        ClientHeight = 174
-        ClientWidth = 467
-        ParentFont = False
-        TabOrder = 0
-        object GroupBox14: TGroupBox
-          Left = 0
-          Height = 83
-          Top = 83
-          Width = 467
-          Align = alTop
-          Caption = 'Automatic cooling '
-          ClientHeight = 63
-          ClientWidth = 465
-          ParentFont = False
-          TabOrder = 0
-          object CameraAutoCool: TCheckBox
-            Left = 16
-            Height = 21
-            Top = 2
-            Width = 258
-            Caption = 'Cool down when camera is connected'
-            ParentFont = False
-            TabOrder = 0
-          end
-          object Label75: TLabel
-            Left = 129
-            Height = 19
-            Top = 34
-            Width = 46
-            Caption = 'degree'
-            ParentColor = False
-            ParentFont = False
-          end
-          object CameraAutoCoolTemp: TFloatSpinEditEx
-            Left = 40
-            Height = 28
-            Top = 30
-            Width = 73
-            Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
-            MinValue = -100
-            NullValue = 0
-            Value = 0
-          end
-        end
-        object GroupBox15: TGroupBox
-          Left = 0
-          Height = 83
-          Top = 0
-          Width = 467
-          Align = alTop
-          Caption = 'Maximum temperature change '
-          ClientHeight = 63
-          ClientWidth = 465
-          ParentFont = False
-          TabOrder = 1
-          object TemperatureSlopeActive: TCheckBox
-            Left = 16
-            Height = 21
-            Top = 2
-            Width = 188
-            Caption = 'Limit temperature change'
-            OnClick = TemperatureSlopeActiveClick
-            ParentFont = False
-            TabOrder = 0
-          end
-          object PanelTemperatureSlope: TPanel
-            Left = 16
-            Height = 30
-            Top = 30
-            Width = 331
-            BevelOuter = bvNone
-            ClientHeight = 30
-            ClientWidth = 331
-            ParentFont = False
-            TabOrder = 1
-            object Label74: TLabel
-              Left = 113
-              Height = 19
-              Top = 4
-              Width = 126
-              Caption = 'Degrees per minute'
-              ParentColor = False
-              ParentFont = False
-            end
-            object TemperatureSlope: TFloatSpinEditEx
-              Left = 24
-              Height = 28
-              Top = 0
-              Width = 73
-              Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
-              Increment = 0.1
-              MinValue = 0
-              NullValue = 0
-              Value = 0
-            end
-          end
-        end
-      end
-      object GroupBox20: TGroupBox
-        Left = 8
-        Height = 105
-        Top = 208
-        Width = 469
-        Caption = 'Sensors properties'
-        ClientHeight = 85
-        ClientWidth = 467
-        ParentFont = False
-        TabOrder = 1
-        object Label19: TLabel
-          Left = 8
-          Height = 19
-          Top = 34
-          Width = 97
-          Caption = 'Maximum ADU '
-          ParentColor = False
-          ParentFont = False
-        end
-        object MaxAduFromCamera: TCheckBox
-          Left = 170
-          Height = 21
-          Top = 33
-          Width = 152
-          Caption = 'From camera driver '
-          OnChange = MaxAduFromCameraChange
-          ParentFont = False
-          TabOrder = 0
-        end
-        object MaxAdu: TSpinEditEx
-          Left = 364
-          Height = 28
-          Top = 30
-          Width = 79
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
-          MaxValue = 99999
-        end
-        object Label3: TLabel
-          Left = 8
-          Height = 19
-          Top = 5
-          Width = 55
-          Caption = 'Pixel size'
-          ParentColor = False
-          ParentFont = False
-        end
-        object PixelSizeFromCamera: TCheckBox
-          Left = 170
-          Height = 21
-          Top = 3
-          Width = 149
-          Caption = 'From camera driver'
-          OnChange = PixelSizeFromCameraChange
-          ParentFont = False
-          TabOrder = 2
-        end
-        object PixelSize: TFloatSpinEditEx
-          Left = 364
-          Height = 28
-          Top = 1
-          Width = 79
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 3
-          Increment = 0.1
-          MaxValue = 99
-          MinValue = 0
-          NullValue = 0
-          Value = 0
-        end
-        object Label124: TLabel
-          Left = 8
-          Height = 19
-          Top = 61
-          Width = 29
-          Caption = 'Gain'
-          ParentColor = False
-          ParentFont = False
-        end
-        object GainFromCamera: TCheckBox
-          Left = 170
-          Height = 21
-          Top = 61
-          Width = 149
-          Caption = 'From camera driver'
-          ParentFont = False
-          TabOrder = 4
-        end
-      end
-      object GroupBoxReadOut: TGroupBox
-        Left = 8
-        Height = 106
-        Top = 320
-        Width = 469
-        Caption = 'Readout modes'
-        ClientHeight = 86
-        ClientWidth = 467
-        ParentFont = False
-        TabOrder = 2
-        object Label112: TLabel
-          Left = 8
-          Height = 19
-          Top = 10
-          Width = 51
-          Caption = 'Capture'
-          ParentColor = False
-          ParentFont = False
-        end
-        object ReadOutCapture: TComboBox
-          Left = 97
-          Height = 28
-          Top = 4
-          Width = 121
-          Constraints.MaxHeight = 28
-          ItemHeight = 0
-          ParentFont = False
-          Style = csDropDownList
-          TabOrder = 0
-        end
-        object ReadOutPreview: TComboBox
-          Left = 331
-          Height = 28
-          Top = 4
-          Width = 121
-          Constraints.MaxHeight = 28
-          ItemHeight = 0
-          ParentFont = False
-          Style = csDropDownList
-          TabOrder = 1
-        end
-        object Label113: TLabel
-          Left = 234
-          Height = 19
-          Top = 10
-          Width = 51
-          Caption = 'Preview'
-          ParentColor = False
-          ParentFont = False
-        end
-        object ReadOutFocus: TComboBox
-          Left = 97
-          Height = 28
-          Top = 40
-          Width = 121
-          Constraints.MaxHeight = 28
-          ItemHeight = 0
-          ParentFont = False
-          Style = csDropDownList
-          TabOrder = 2
-        end
-        object Label114: TLabel
-          Left = 8
-          Height = 19
-          Top = 46
-          Width = 35
-          Caption = 'Focus'
-          ParentColor = False
-          ParentFont = False
-        end
-        object ReadOutAstrometry: TComboBox
-          Left = 331
-          Height = 28
-          Top = 40
-          Width = 121
-          Constraints.MaxHeight = 28
-          ItemHeight = 0
-          ParentFont = False
-          Style = csDropDownList
-          TabOrder = 3
-        end
-        object Label115: TLabel
-          Left = 234
-          Height = 19
-          Top = 46
-          Width = 72
-          Caption = 'Astrometry'
-          ParentColor = False
-          ParentFont = False
         end
       end
     end
@@ -4436,6 +4038,161 @@ object f_option: Tf_option
         end
       end
     end
+    object TabSheet15: TTabSheet
+      Caption = 'Dome'
+      ClientHeight = 511
+      ClientWidth = 526
+      ParentFont = False
+      object Panel4: TPanel
+        Left = 4
+        Height = 404
+        Top = 67
+        Width = 511
+        BevelOuter = bvNone
+        ClientHeight = 404
+        ClientWidth = 511
+        ParentFont = False
+        TabOrder = 0
+        object Panel5: TPanel
+          Left = 0
+          Height = 38
+          Top = 0
+          Width = 511
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 38
+          ClientWidth = 511
+          ParentFont = False
+          TabOrder = 2
+          object Label125: TLabel
+            Left = 34
+            Height = 19
+            Top = 8
+            Width = 165
+            Caption = 'Wait time between actions'
+            ParentColor = False
+            ParentFont = False
+          end
+          object DomeActionWait: TSpinEditEx
+            Left = 232
+            Height = 26
+            Top = 4
+            Width = 57
+            Constraints.MaxHeight = 26
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 0
+            Value = 1
+          end
+          object Label126: TLabel
+            Left = 303
+            Height = 19
+            Top = 8
+            Width = 50
+            Caption = 'seconds'
+            ParentColor = False
+            ParentFont = False
+          end
+        end
+        object GroupBox18: TGroupBox
+          Left = 0
+          Height = 182
+          Top = 38
+          Width = 511
+          Align = alTop
+          Caption = 'Open dome sequence when mount is asked to unpark'
+          ClientHeight = 162
+          ClientWidth = 509
+          ParentFont = False
+          TabOrder = 0
+          object DomeOpenActions: TStringGrid
+            Left = 0
+            Height = 162
+            Top = 0
+            Width = 509
+            Align = alClient
+            AutoFillColumns = True
+            ColCount = 2
+            Columns = <            
+              item
+                ButtonStyle = cbsPickList
+                DropDownRows = 15
+                MinSize = 101
+                MaxSize = 202
+                Title.Caption = 'Action'
+                Width = 456
+              end>
+            DefaultColWidth = 51
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
+            ParentFont = False
+            RowCount = 6
+            TabOrder = 0
+            ColWidths = (
+              51
+              456
+            )
+          end
+        end
+        object GroupBox21: TGroupBox
+          Left = 0
+          Height = 184
+          Top = 220
+          Width = 511
+          Align = alClient
+          Caption = 'Close dome sequence when mount is asked to park'
+          ClientHeight = 164
+          ClientWidth = 509
+          ParentFont = False
+          TabOrder = 1
+          object DomeCloseActions: TStringGrid
+            Left = 0
+            Height = 164
+            Top = 0
+            Width = 509
+            Align = alClient
+            AutoFillColumns = True
+            ColCount = 2
+            Columns = <            
+              item
+                ButtonStyle = cbsPickList
+                DropDownRows = 15
+                MinSize = 101
+                MaxSize = 202
+                Title.Caption = 'Action'
+                Width = 456
+              end>
+            DefaultColWidth = 51
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
+            ParentFont = False
+            RowCount = 6
+            TabOrder = 0
+            ColWidths = (
+              51
+              456
+            )
+          end
+        end
+      end
+      object DomeSlaveToMount: TCheckBox
+        Left = 16
+        Height = 21
+        Top = 40
+        Width = 332
+        Caption = 'Automatically slave "Dome Park" to "Mount Park" '
+        OnChange = DomeSlaveToMountChange
+        ParentFont = False
+        TabOrder = 1
+      end
+      object DomeNoSafetyCheck: TCheckBox
+        Left = 16
+        Height = 21
+        Top = 8
+        Width = 402
+        Caption = 'Allow to open the dome when safety status is bad or unknow'
+        ParentFont = False
+        TabOrder = 2
+      end
+    end
     object TabSheet6: TTabSheet
       Caption = 'Planetarium'
       ClientHeight = 511
@@ -4503,8 +4260,8 @@ object f_option: Tf_option
               Height = 81
               Top = 49
               Width = 337
-              ClientHeight = 77
-              ClientWidth = 333
+              ClientHeight = 81
+              ClientWidth = 337
               ParentFont = False
               TabOrder = 1
               object CdCport: TEdit
@@ -4562,11 +4319,11 @@ object f_option: Tf_option
         Height = 445
         Top = 66
         Width = 526
-        HorzScrollBar.Page = 505
+        HorzScrollBar.Page = 501
         VertScrollBar.Page = 429
         Align = alClient
-        ClientHeight = 441
-        ClientWidth = 522
+        ClientHeight = 443
+        ClientWidth = 524
         ParentFont = False
         TabOrder = 0
         object PanelW1: TPanel
@@ -4575,8 +4332,8 @@ object f_option: Tf_option
           Top = 0
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 0
           object LabelMi1: TLabel
@@ -4645,8 +4402,8 @@ object f_option: Tf_option
           Top = 33
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 1
           object LabelMi2: TLabel
@@ -4715,8 +4472,8 @@ object f_option: Tf_option
           Top = 66
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 2
           object LabelMi3: TLabel
@@ -4785,8 +4542,8 @@ object f_option: Tf_option
           Top = 99
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 3
           object LabelMi4: TLabel
@@ -4855,8 +4612,8 @@ object f_option: Tf_option
           Top = 132
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 4
           object LabelMi5: TLabel
@@ -4925,8 +4682,8 @@ object f_option: Tf_option
           Top = 165
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 5
           object LabelMi6: TLabel
@@ -4995,8 +4752,8 @@ object f_option: Tf_option
           Top = 198
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 6
           object LabelMi7: TLabel
@@ -5065,8 +4822,8 @@ object f_option: Tf_option
           Top = 231
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 7
           object LabelMi8: TLabel
@@ -5135,8 +4892,8 @@ object f_option: Tf_option
           Top = 264
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 8
           object LabelMi9: TLabel
@@ -5205,8 +4962,8 @@ object f_option: Tf_option
           Top = 297
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 9
           object LabelMi10: TLabel
@@ -5275,8 +5032,8 @@ object f_option: Tf_option
           Top = 330
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 10
           object LabelMi11: TLabel
@@ -5345,8 +5102,8 @@ object f_option: Tf_option
           Top = 363
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 11
           object LabelMi12: TLabel
@@ -5415,8 +5172,8 @@ object f_option: Tf_option
           Top = 396
           Width = 524
           Align = alTop
-          ClientHeight = 29
-          ClientWidth = 520
+          ClientHeight = 33
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 12
           object LabelMi13: TLabel
@@ -5562,13 +5319,13 @@ object f_option: Tf_option
             MinSize = 101
             MaxSize = 202
             Title.Caption = 'Action'
-            Width = 209
+            Width = 210
           end        
           item
             MinSize = 101
             MaxSize = 202
             Title.Caption = 'Parameters'
-            Width = 209
+            Width = 210
           end>
         DefaultColWidth = 51
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -5579,8 +5336,8 @@ object f_option: Tf_option
         OnValidateEntry = SafetyActionsValidateEntry
         ColWidths = (
           51
-          209
-          209
+          210
+          210
         )
       end
       object Label111: TLabel
@@ -5592,6 +5349,249 @@ object f_option: Tf_option
         ParentColor = False
         ParentFont = False
         WordWrap = True
+      end
+    end
+    object TabSheet18: TTabSheet
+      Caption = 'Sequence'
+      ClientHeight = 511
+      ClientWidth = 526
+      object ExpEarlyStart: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 48
+        Width = 269
+        Caption = 'Start new exposure as early as possible'
+        OnClick = ExpEarlyStartClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Label147: TLabel
+        Left = 8
+        Height = 19
+        Top = 6
+        Width = 263
+        Caption = 'Global actions when a sequence is running'
+        ParentColor = False
+      end
+      object GroupBoxMeasurement: TGroupBox
+        Left = 8
+        Height = 169
+        Top = 80
+        Width = 464
+        Caption = 'Measurement on new images'
+        ClientHeight = 149
+        ClientWidth = 462
+        TabOrder = 1
+        object MeasureNewImage: TCheckBox
+          Left = 16
+          Height = 21
+          Top = 8
+          Width = 386
+          Caption = 'Automatic HFD measurement for every sequence capture'
+          ParentFont = False
+          TabOrder = 0
+        end
+        object GroupBox23: TGroupBox
+          Left = 0
+          Height = 112
+          Top = 37
+          Width = 462
+          Align = alBottom
+          Caption = 'Recenter sequence target that drift'
+          ClientHeight = 92
+          ClientWidth = 460
+          ParentFont = False
+          TabOrder = 1
+          object CheckRecenterTarget: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 8
+            Width = 335
+            Caption = 'Run astrometry on every image to search for drift'
+            ParentFont = False
+            TabOrder = 0
+          end
+          object RecenterTargetDistance: TFloatSpinEditEx
+            Left = 289
+            Height = 31
+            Top = 40
+            Width = 74
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 1
+            Increment = 0.1
+            MinValue = 0
+            NullValue = 0
+            Value = 0
+          end
+          object Label130: TLabel
+            Left = 16
+            Height = 19
+            Top = 45
+            Width = 203
+            Caption = 'Recenter if the drift is more than'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label131: TLabel
+            Left = 370
+            Height = 19
+            Top = 45
+            Width = 50
+            Caption = 'minutes'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label149: TLabel
+            Left = 16
+            Height = 19
+            Top = 64
+            Width = 210
+            Caption = '(limited to 1.5x the slew precision)'
+            ParentColor = False
+          end
+        end
+      end
+      object GroupBoxFocus: TGroupBox
+        Left = 8
+        Height = 216
+        Top = 256
+        Width = 464
+        Caption = 'Periodic autofocus'
+        ClientHeight = 196
+        ClientWidth = 462
+        TabOrder = 2
+        object GroupBox16: TGroupBox
+          Left = 0
+          Height = 88
+          Top = 49
+          Width = 462
+          Align = alBottom
+          Caption = 'Focuser temperature compensation'
+          ClientHeight = 68
+          ClientWidth = 460
+          ParentFont = False
+          TabOrder = 0
+          object Label84: TLabel
+            Left = 4
+            Height = 19
+            Top = 7
+            Width = 214
+            Caption = 'Temperature coefficient in steps/C'
+            ParentColor = False
+            ParentFont = False
+          end
+          object BtnDisableFocuserTemp: TButton
+            Left = 370
+            Height = 23
+            Top = 3
+            Width = 76
+            Caption = 'Disable'
+            OnClick = BtnDisableFocuserTempClick
+            ParentFont = False
+            TabOrder = 0
+          end
+          object FocuserTempCoeff: TFloatSpinEditEx
+            Left = 289
+            Height = 28
+            Top = 3
+            Width = 75
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 1
+            Increment = 0.1
+            MaxValue = 1000
+            MinValue = -1000
+            NullValue = 0
+            Value = 0
+          end
+          object Label119: TLabel
+            Left = 4
+            Height = 19
+            Top = 35
+            Width = 248
+            Caption = 'Run auto-focus if change is more than  C'
+            ParentColor = False
+            ParentFont = False
+          end
+          object AutofocusTemp: TFloatSpinEditEx
+            Left = 289
+            Height = 28
+            Top = 31
+            Width = 75
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 2
+            DecimalPlaces = 1
+            Increment = 0.1
+            MinValue = 0
+            NullValue = 0
+            Value = 0
+          end
+          object BtnDisableAutofocusTemp: TButton
+            Left = 370
+            Height = 23
+            Top = 31
+            Width = 76
+            Caption = 'Disable'
+            OnClick = BtnDisableAutofocusTempClick
+            ParentFont = False
+            TabOrder = 3
+          end
+        end
+        object GroupBox22: TGroupBox
+          Left = 0
+          Height = 59
+          Top = 137
+          Width = 462
+          Align = alBottom
+          Caption = 'Periodic auto-focus'
+          ClientHeight = 39
+          ClientWidth = 460
+          ParentFont = False
+          TabOrder = 1
+          object Label127: TLabel
+            Left = 5
+            Height = 19
+            Top = 5
+            Width = 224
+            Caption = 'Automatically run auto-focus every  '
+            ParentColor = False
+            ParentFont = False
+          end
+          object AutofocusPeriod: TSpinEditEx
+            Left = 289
+            Height = 28
+            Top = 0
+            Width = 75
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            ParentFont = False
+            TabOrder = 0
+            MaxValue = 1440
+          end
+          object Label128: TLabel
+            Left = 370
+            Height = 19
+            Top = 5
+            Width = 50
+            Caption = 'minutes'
+            ParentColor = False
+            ParentFont = False
+          end
+        end
+        object Label148: TLabel
+          Left = 4
+          Height = 40
+          Top = 6
+          Width = 400
+          AutoSize = False
+          Caption = 'This options are in addition to the autofocus frequency available in the Plan definition'
+          ParentColor = False
+          WordWrap = True
+        end
       end
     end
     object TabSheet17: TTabSheet
@@ -5783,10 +5783,9 @@ object f_option: Tf_option
             'Meridian flip error'
             'Target initialisation'
           )
-          ItemHeight = 0
+          ItemHeight = 23
           ParentFont = False
           TabOrder = 0
-          TopIndex = -1
           Data = {
             06000000000000000000
           }
@@ -5797,8 +5796,8 @@ object f_option: Tf_option
           Top = 166
           Width = 524
           Align = alBottom
-          ClientHeight = 37
-          ClientWidth = 520
+          ClientHeight = 41
+          ClientWidth = 524
           ParentFont = False
           TabOrder = 1
           object ButtonNotificationAll: TButton
