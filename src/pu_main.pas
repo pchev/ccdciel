@@ -5834,6 +5834,19 @@ var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if (AllDevicesConnected) and (mount.Status=devConnected) then begin
+   if  f_preview.Running then begin
+     f_preview.Loop:=false;
+     f_preview.BtnPreviewClick(nil);
+     wait(1);
+   end;
+   if  astrometry.Busy then begin
+     NewMessage(rsResolverAlre,1);
+     exit;
+   end;
+   if (f_capture.Running or f_sequence.Running) then begin
+      NewMessage(rsCannotStartW, 1);
+      exit;
+   end;
    FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_goto.Caption:=rsGoto;
    f_goto.msginfo.Caption:='';
@@ -5846,6 +5859,7 @@ begin
         NewMessage(rsTheTelescope);
         mount.Park:=false;
      end;
+     CancelAutofocus:=false;
      tra:= f_goto.Ra.Text;
      tde:=f_goto.De.Text;
      objn:=trim(f_goto.Obj.Text);
@@ -10748,6 +10762,19 @@ var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+    if  f_preview.Running then begin
+     f_preview.Loop:=false;
+     f_preview.BtnPreviewClick(nil);
+     wait(1);
+    end;
+    if  astrometry.Busy then begin
+     NewMessage(rsResolverAlre,1);
+     exit;
+    end;
+    if (f_capture.Running or f_sequence.Running) then begin
+      NewMessage(rsCannotStartW, 1);
+      exit;
+    end;
     f_planetariuminfo.Ra.Text  := '-';
     f_planetariuminfo.De.Text  := '-';
     f_planetariuminfo.PA.Text  := '-';
@@ -10760,6 +10787,7 @@ begin
          NewMessage(rsTheTelescope);
          mount.Park:=false;
       end;
+      CancelAutofocus:=false;
       tra:= f_planetariuminfo.Ra.Text;
       tde:=f_planetariuminfo.De.Text;
       objn:=trim(f_planetariuminfo.Obj.Text);

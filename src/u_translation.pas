@@ -1225,6 +1225,7 @@ resourcestring
   rsLimitedTo15x = '(limited to 1.5x the slew precision)';
   rsThisOptionsA = 'This options are in addition to the autofocus frequency available in the Plan definition';
   rsOffAxisAberr = 'Off-axis aberration[hfd]=%s';
+  rsCannotStartW = 'Cannot start when capture is running';
 
 implementation
 
