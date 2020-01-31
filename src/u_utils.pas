@@ -600,23 +600,36 @@ begin
 end;
 
 Function StrToAR(dms : string) : double;
+type tseplist=array[1..3] of string;
 var s,p : integer;
     t : string;
+    sep: tseplist;
+const
+    sep1: tseplist = ('h','m','s');
+    sep2: tseplist = (':',':',':');
 begin
 try
 dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
 if copy(dms,1,1)='-' then s:=-1 else s:=1;
-p:=pos('h',dms);
+sep:=sep1;
+p:=pos(sep[1],dms);
+if p=0 then begin
+  sep:=sep2;
+  p:=pos(sep[1],dms);
+end;
 if p=0 then
   result:=StrToFloatDef(dms,NullCoord)
 else begin
   t:=copy(dms,1,p-1); delete(dms,1,p);
   result:=StrToIntDef(t,0);
-  p:=pos('m',dms);
+  p:=pos(sep[2],dms);
   t:=copy(dms,1,p-1); delete(dms,1,p);
   result:=result+ s * StrToIntDef(t,0) / 60;
-  p:=pos('s',dms);
-  t:=copy(dms,1,p-1);
+  p:=pos(sep[3],dms);
+  if p=0 then
+    t:=dms
+  else
+    t:=copy(dms,1,p-1);
   result:=result+ s * StrToFloatDef(t,0) / 3600;
 end;
 except
@@ -633,6 +646,7 @@ const
     sep1: tseplist = ('d','m','s');
     sep2: tseplist = ('°','''','"');
     sep3: tseplist = (#176,'''','"');
+    sep4: tseplist = (':',':',':');
 begin
 try
 dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
@@ -650,6 +664,11 @@ if p=0 then begin
   d1:=length(sep[1])-1;
   p:=pos(sep[1],dms);
 end;
+if p=0 then begin
+  sep:=sep4;
+  d1:=length(sep[1])-1;
+  p:=pos(sep[1],dms);
+end;
 if p=0 then
   result:=StrToFloatDef(dms,NullCoord)
 else begin
@@ -660,7 +679,10 @@ p:=pos(sep[2],dms);
 t:=copy(dms,1,p-1); delete(dms,1,p);
 result:=result+ s * StrToIntDef(t,0) / 60;
 p:=pos(sep[3],dms);
-t:=copy(dms,1,p-1);
+if p=0 then
+  t:=dms
+else
+  t:=copy(dms,1,p-1);
 result:=result+ s * StrToFloatDef(t,0) / 3600;
 end;
 except
