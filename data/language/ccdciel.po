@@ -4486,3 +4486,7 @@ msgstr ""
 msgid "Off-axis aberration[hfd]=%s"
 msgstr ""
 
+#: u_translation:rscannotstartw
+msgid "Cannot start when capture is running"
+msgstr ""
+

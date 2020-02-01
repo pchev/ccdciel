@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-01-25 16:36+0000\n"
-"PO-Revision-Date: 2020-01-16 21:04+0000\n"
+"POT-Creation-Date: 2020-02-01 11:00+0000\n"
+"PO-Revision-Date: 2020-01-29 19:18+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-01-25 16:52+0000\n"
-"X-Generator: Launchpad (build b8d1327fd820d6bf500589d6da587d5037c7d88e)\n"
+"X-Launchpad-Export-Date: 2020-02-01 11:08+0000\n"
+"X-Generator: Launchpad (build 0a62c17273454a1313f81a74a2198ec30b44c7b6)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -518,7 +518,7 @@ msgstr "Abbrechen"
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
-msgstr ""
+msgstr "Belichtung abbrechen"
 
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
@@ -611,6 +611,10 @@ msgstr "Vorschau kann jetzt nicht gestartet werden"
 #: u_translation.rscannotstartp2
 msgid "Cannot start preview loop now"
 msgstr "Vorschau Schleife kann jetzt nicht gestartet werden"
+
+#: u_translation.rscannotstartw
+msgid "Cannot start when capture is running"
+msgstr ""
 
 #: u_translation.rscannotsyncwh
 msgid "Cannot Sync when the mount is not tracking"
@@ -1274,7 +1278,7 @@ msgstr "Belichtungszeit [Sekunden]"
 
 #: u_translation.rsexposuretime4
 msgid "Exposure time too short for measurement, need %d seconds."
-msgstr ""
+msgstr "Die Belichtungszeit ist zu kurz für die Messung, benötigt werden %d Sekunden."
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
@@ -1562,7 +1566,7 @@ msgstr "Übernehme Standort (Länge-/Breitengrad) von der Montierung"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
-msgstr ""
+msgstr "Globale Aktionen, wenn eine Sequenz ausgeführt wird"
 
 #: u_translation.rsglobalfocuse
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
@@ -1678,7 +1682,7 @@ msgstr "Unix Pfad des Bilderordners"
 
 #: u_translation.rsimagesharpne
 msgid "Image sharpness %s"
-msgstr ""
+msgstr "Bildschärfe %s"
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
@@ -1818,7 +1822,7 @@ msgstr "Licht AN"
 
 #: u_translation.rslimitedto15x
 msgid "(limited to 1.5x the slew precision)"
-msgstr ""
+msgstr "(Begrenzt auf das 1,5-fache der Schwenkgenauigkeit)"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -1939,7 +1943,7 @@ msgstr "Messung %s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsmeasuremento
 msgid "Measurement on new images"
-msgstr ""
+msgstr "Messungen bei neuen Bildern"
 
 #: u_translation.rsmeasurementp
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
@@ -2195,15 +2199,15 @@ msgstr "Kein Getriebespiel"
 
 #: u_translation.rsnocenteringm
 msgid "No centering measurement, exposure time shorter than astrometry timeout."
-msgstr ""
+msgstr "Keine Zentriermessung, Belichtungszeit kürzer als der Astrometrie Timeout."
 
 #: u_translation.rsnocenteringm2
 msgid "No centering measurement, no sequence or target not using precision slew."
-msgstr ""
+msgstr "Keine Zentrierung, kein Ziel oder keine Sequenz nutzt präzises Schwenken"
 
 #: u_translation.rsnocenteringm3
 msgid "No centering measurement, astrometry not configured."
-msgstr ""
+msgstr "Keine Zentierung, Astrometrie ist nicht konfiguriert"
 
 #: u_translation.rsnodawntoday
 msgid "No dawn today"
@@ -2223,7 +2227,7 @@ msgstr "Kein Flip bis nach dem Meridian für"
 
 #: u_translation.rsnomeasuremen
 msgid "No measurement, early start exposure not set."
-msgstr ""
+msgstr "Keine Messung, früher Start der Belichtung nicht gesetzt"
 
 #: u_translation.rsnomove
 msgid "No move"
@@ -2363,7 +2367,7 @@ msgstr "Aus"
 
 #: u_translation.rsoffaxisaberr
 msgid "Off-axis aberration[hfd]=%s"
-msgstr ""
+msgstr "Off-axis Abberation [hfg]=%s"
 
 #: u_translation.rsoffset
 msgid "offset"
@@ -2964,7 +2968,7 @@ msgstr "Autoguider neu starten"
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"
-msgstr ""
+msgstr "Belichtung neu starten"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
@@ -3372,7 +3376,7 @@ msgstr "ADU für Schwarzwert"
 
 #: u_translation.rssharpness
 msgid "Sharpness"
-msgstr ""
+msgstr "Schärfe"
 
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
@@ -3944,7 +3948,7 @@ msgstr "Temperaturkoeffizient in Schritten/%s"
 
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
-msgstr ""
+msgstr "Temperatur von der Wetterstation"
 
 #: u_translation.rstemperaturer
 msgid "Temperature ramp requested to stop"
@@ -4068,7 +4072,7 @@ msgstr "Dieses Objekt ist niemals über der gewünschten Höhe"
 
 #: u_translation.rsthisoptionsa
 msgid "This options are in addition to the autofocus frequency available in the Plan definition"
-msgstr ""
+msgstr "Diese Optionen gelten zusätzlich zu der Autofokushäufigkeit die im Plan definiert ist"
 
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
@@ -4088,7 +4092,7 @@ msgstr "Dies geht beim Speichern der neuen Datei verloren.%sMöchten Sie mit ein
 
 #: u_translation.rstiltindicati2
 msgid "Tilt indication[hfd]=%s"
-msgstr ""
+msgstr "Bildverkippung [hfd]=%s"
 
 #: u_translation.rstimealreadyp
 msgid "Time already passed %s"
@@ -4360,7 +4364,7 @@ msgstr "Warten nach erfolgreicher Astrometrie"
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"
-msgstr ""
+msgstr "Warte %d Sekunden, bevor die Belichtung neu gestartet wird"
 
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
