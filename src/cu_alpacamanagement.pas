@@ -34,7 +34,7 @@ uses cu_ascomrest, u_utils,
   process, Forms, Dialogs, Classes, SysUtils;
 
 const AlpacaCurrentVersion = 1;
-      AlpacaDiscStr = 'alpaca discovery';
+      AlpacaDiscStr = 'alpacadiscovery';
       AlpacaDiscPort = '32227';
       DiscoverTimeout = 3000;
 
