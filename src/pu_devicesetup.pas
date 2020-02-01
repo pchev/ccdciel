@@ -55,6 +55,18 @@ type
     DefaultARestUser: TEdit;
     Label107: TLabel;
     Label108: TLabel;
+    Panel20: TPanel;
+    Panel21: TPanel;
+    Panel22: TPanel;
+    Panel23: TPanel;
+    Panel24: TPanel;
+    Panel25: TPanel;
+    Panel26: TPanel;
+    Panel27: TPanel;
+    Panel28: TPanel;
+    Panel29: TPanel;
+    Panel30: TPanel;
+    Panel31: TPanel;
     WheelARestPass: TEdit;
     FocuserARestPass: TEdit;
     RotatorARestPass: TEdit;
@@ -245,9 +257,6 @@ type
     Label23: TLabel;
     Label25: TLabel;
     DomeIndiDevPort: TEdit;
-    Label26: TLabel;
-    Label27: TLabel;
-    Label28: TLabel;
     Label29: TLabel;
     DeviceCamera: TLabel;
     Label30: TLabel;
@@ -355,7 +364,6 @@ type
     WatchdogThreshold: TEdit;
     Label19: TLabel;
     Label20: TLabel;
-    Label8: TLabel;
     WatchdogAutoLoadConfig: TCheckBox;
     WatchdogIndiDevice: TComboBox;
     PanelWatchdogIndi: TPanel;
