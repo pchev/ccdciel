@@ -4490,3 +4490,15 @@ msgstr ""
 msgid "Cannot start when capture is running"
 msgstr ""
 
+#: u_translation:rscoordinates
+msgid "Coordinates"
+msgstr ""
+
+#: u_translation:rsrisesetcondi
+msgid "Rise/Set condition"
+msgstr ""
+
+#: u_translation:rsinformation
+msgid "Information"
+msgstr ""
+
