@@ -6543,7 +6543,14 @@ begin
    f_option.SlewFilter.Items.Assign(FilterList);
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
-   if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.' else f_option.MeridianWarning.caption:='';
+   if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then begin
+      f_option.Panel13.Visible:=true;
+      f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.'
+   end
+   else begin
+      f_option.MeridianWarning.caption:='';
+      f_option.Panel13.Visible:=false;
+   end;
    f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
    f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',MinutesPastMeridian);
    f_option.MinutesPastMeridianMin.Value:=config.GetValue('/Meridian/MinutesPastMin',MinutesPastMeridianMin);

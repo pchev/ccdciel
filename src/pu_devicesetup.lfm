@@ -177,7 +177,7 @@ object f_setup: Tf_setup
         object Label70: TLabel
           Left = 13
           Height = 19
-          Top = 73
+          Top = 64
           Width = 52
           Caption = 'Protocol'
           ParentColor = False
@@ -186,7 +186,7 @@ object f_setup: Tf_setup
         object DefaultARestProtocol: TComboBox
           Left = 8
           Height = 28
-          Top = 93
+          Top = 84
           Width = 75
           Constraints.MaxHeight = 28
           ItemHeight = 0
@@ -204,7 +204,7 @@ object f_setup: Tf_setup
         object Label71: TLabel
           Left = 93
           Height = 19
-          Top = 73
+          Top = 64
           Width = 165
           Caption = 'Remote host or IP address'
           ParentColor = False
@@ -213,7 +213,7 @@ object f_setup: Tf_setup
         object DefaultARestHost: TEdit
           Left = 93
           Height = 28
-          Top = 93
+          Top = 84
           Width = 194
           Constraints.MaxHeight = 28
           ParentFont = False
@@ -223,7 +223,7 @@ object f_setup: Tf_setup
         object Label72: TLabel
           Left = 298
           Height = 19
-          Top = 73
+          Top = 64
           Width = 43
           Caption = 'IP Port'
           ParentColor = False
@@ -232,7 +232,7 @@ object f_setup: Tf_setup
         object DefaultARestPort: TSpinEditEx
           Left = 298
           Height = 28
-          Top = 93
+          Top = 84
           Width = 82
           Constraints.MaxHeight = 28
           MaxLength = 0
@@ -245,7 +245,7 @@ object f_setup: Tf_setup
         object ApplyAscomRemote: TButton
           Left = 8
           Height = 25
-          Top = 174
+          Top = 165
           Width = 279
           Caption = 'Apply to all devices'
           OnClick = ApplyAscomRemoteClick
@@ -255,7 +255,7 @@ object f_setup: Tf_setup
         object Label107: TLabel
           Left = 8
           Height = 19
-          Top = 125
+          Top = 116
           Width = 69
           Caption = 'User name'
           ParentColor = False
@@ -264,7 +264,7 @@ object f_setup: Tf_setup
         object Label108: TLabel
           Left = 156
           Height = 19
-          Top = 125
+          Top = 116
           Width = 61
           Caption = 'Password'
           ParentColor = False
@@ -273,7 +273,7 @@ object f_setup: Tf_setup
         object DefaultARestUser: TEdit
           Left = 8
           Height = 28
-          Top = 141
+          Top = 132
           Width = 131
           AutoSelect = False
           Constraints.MaxHeight = 28
@@ -283,7 +283,7 @@ object f_setup: Tf_setup
         object DefaultARestPass: TEdit
           Left = 156
           Height = 28
-          Top = 141
+          Top = 132
           Width = 131
           AutoSelect = False
           Constraints.MaxHeight = 28
@@ -1780,8 +1780,8 @@ object f_setup: Tf_setup
         OnChange = PageControlRotatorChange
         object RotatorIndi: TTabSheet
           Caption = 'RotatorIndi'
-          ClientHeight = 356
-          ClientWidth = 482
+          ClientHeight = 383
+          ClientWidth = 488
           ParentFont = False
           object PanelRotatorIndi: TPanel
             Left = 0
@@ -1790,8 +1790,8 @@ object f_setup: Tf_setup
             Width = 482
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 356
-            ClientWidth = 482
+            ClientHeight = 352
+            ClientWidth = 478
             ParentFont = False
             TabOrder = 0
             object RotatorIndiDevice: TComboBox
@@ -1847,8 +1847,8 @@ object f_setup: Tf_setup
               Top = 8
               Width = 412
               BevelOuter = bvNone
-              ClientHeight = 38
-              ClientWidth = 412
+              ClientHeight = 34
+              ClientWidth = 408
               ParentFont = False
               TabOrder = 3
               object Label79: TLabel
@@ -1916,8 +1916,8 @@ object f_setup: Tf_setup
         end
         object RotatorAscom: TTabSheet
           Caption = 'RotatorAscom'
-          ClientHeight = 356
-          ClientWidth = 482
+          ClientHeight = 383
+          ClientWidth = 488
           ParentFont = False
           object PanelRotatorAscom: TPanel
             Left = 16
@@ -1925,8 +1925,8 @@ object f_setup: Tf_setup
             Top = 16
             Width = 290
             BevelOuter = bvNone
-            ClientHeight = 113
-            ClientWidth = 290
+            ClientHeight = 109
+            ClientWidth = 286
             ParentFont = False
             TabOrder = 0
             object BtnChooseRotator: TButton
@@ -1975,8 +1975,8 @@ object f_setup: Tf_setup
         end
         object RotatorAscomRest: TTabSheet
           Caption = 'RotatorAscomRest'
-          ClientHeight = 356
-          ClientWidth = 482
+          ClientHeight = 383
+          ClientWidth = 488
           ParentFont = False
           object Panel5: TPanel
             Left = 0
@@ -1985,8 +1985,8 @@ object f_setup: Tf_setup
             Width = 482
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 356
-            ClientWidth = 482
+            ClientHeight = 352
+            ClientWidth = 478
             ParentFont = False
             TabOrder = 0
             object RotatorARestProtocol: TComboBox
@@ -3985,6 +3985,6 @@ object f_setup: Tf_setup
     Interval = 5000
     OnTimer = IndiTimerTimer
     left = 16
-    top = 428
+    top = 464
   end
 end

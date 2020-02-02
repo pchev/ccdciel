@@ -1226,6 +1226,9 @@ resourcestring
   rsThisOptionsA = 'This options are in addition to the autofocus frequency available in the Plan definition';
   rsOffAxisAberr = 'Off-axis aberration[hfd]=%s';
   rsCannotStartW = 'Cannot start when capture is running';
+  rsCoordinates = 'Coordinates';
+  rsRiseSetCondi = 'Rise/Set condition';
+  rsInformation = 'Information';
 
 implementation
 

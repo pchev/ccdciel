@@ -44,6 +44,9 @@ type
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
+    GroupBox27: TGroupBox;
+    GroupBox28: TGroupBox;
+    GroupBox29: TGroupBox;
     GroupBoxFocus: TGroupBox;
     GroupBoxMeasurement: TGroupBox;
     GuideDriftCancelExposure: TCheckBox;
@@ -74,6 +77,19 @@ type
     Label141: TLabel;
     Label142: TLabel;
     PagePlanet: TPage;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    Panel18: TPanel;
+    Panel19: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel9: TPanel;
     smtp_ssltls: TCheckBox;
     FilePack: TCheckBox;
     EmailCondition: TCheckListBox;
@@ -112,9 +128,9 @@ type
     Label129: TLabel;
     BtnShowPass: TSpeedButton;
     StarLostCancelExposure: TSpinEditEx;
-    TabSheet16: TTabSheet;
-    TabSheet17: TTabSheet;
-    TabSheet18: TTabSheet;
+    PagePref: TTabSheet;
+    PageNotification: TTabSheet;
+    PageSequence: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -150,7 +166,7 @@ type
     DomeActionWait: TSpinEditEx;
     Panel5: TPanel;
     FileSequenceWidth: TSpinEditEx;
-    TabSheet15: TTabSheet;
+    PageDome: TTabSheet;
     TemperatureScale: TRadioGroup;
     ReadOutCapture: TComboBox;
     FloatSpinEditMa10: TFloatSpinEditEx;
@@ -192,7 +208,7 @@ type
     SafetyActions: TStringGrid;
     ScrollBoxWeather: TScrollBox;
     WeatherRestartDelay: TSpinEditEx;
-    TabSheet14: TTabSheet;
+    PageSafety: TTabSheet;
     UseW1: TCheckBox;
     DomeFlatSetLight: TCheckBox;
     CygwinPath: TDirectoryEdit;
@@ -301,7 +317,7 @@ type
     ASTAPdownsample: TSpinEditEx;
     StarLostCancel: TSpinEditEx;
     StarLostRestart: TSpinEditEx;
-    TabSheet13: TTabSheet;
+    PageWeather: TTabSheet;
     Tolerance: TFloatSpinEditEx;
     MaxRadius: TFloatSpinEditEx;
     Focale: TFloatSpinEditEx;
@@ -402,7 +418,7 @@ type
     rbLinUnixSocket: TRadioButton;
     rbLinTCP: TRadioButton;
     FolderOptions: TStringGrid;
-    TabSheet12: TTabSheet;
+    PageFlat: TTabSheet;
     TemperatureSlopeActive: TCheckBox;
     GroupBox14: TGroupBox;
     GroupBox15: TGroupBox;
@@ -451,11 +467,11 @@ type
     AutofocusMoveDirIn: TRadioButton;
     AutofocusMoveDirOut: TRadioButton;
     FilterList: TStringGrid;
-    TabSheet10: TTabSheet;
+    PageFocus: TTabSheet;
     RedBalance: TTrackBar;
     GreenBalance: TTrackBar;
     BlueBalance: TTrackBar;
-    TabSheet11: TTabSheet;
+    PageCamera: TTabSheet;
     StackGroup: TGroupBox;
     VideoGroup: TGroupBox;
     Label44: TLabel;
@@ -539,11 +555,11 @@ type
     Page1: TPage;
     Page2: TPage;
     AutoguiderBox: TRadioGroup;
-    TabSheet5: TTabSheet;
-    TabSheet6: TTabSheet;
-    TabSheet7: TTabSheet;
-    TabSheet8: TTabSheet;
-    TabSheet9: TTabSheet;
+    PageGuide: TTabSheet;
+    PagePlanetarium: TTabSheet;
+    PageSlew: TTabSheet;
+    PagePreview: TTabSheet;
+    PageMeridian: TTabSheet;
     TelescopeName: TEdit;
     GroupBox4: TGroupBox;
     elbrus: TGroupBox;
@@ -554,10 +570,10 @@ type
     ResolverBox: TRadioGroup;
     Label8: TLabel;
     Label9: TLabel;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    TabSheet3: TTabSheet;
-    TabSheet4: TTabSheet;
+    PageFile: TTabSheet;
+    PageObs: TTabSheet;
+    PageAutofocus: TTabSheet;
+    PageAstrometry: TTabSheet;
     Label7: TLabel;
     Label6: TLabel;
     FocaleFromTelescope: TCheckBox;
@@ -701,7 +717,7 @@ begin
   Button1.Caption := rsOK;
   Button2.Caption := rsCancel;
   ButtonHelp.Caption:=rsHelp;
-  TabSheet1.Caption := rsFiles;
+  PageFile.Caption := rsFiles;
   Label1.Caption := rsCaptureFolde;
   Logtofile.Caption := rsLogAllMessag;
   Label99.Caption := rsTemporaryFol;
@@ -718,7 +734,10 @@ begin
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;
   SaveBitmap.Caption:=rsSaveAPNGFile;
-  TabSheet2.Caption := rsObservatory;
+  PageObs.Caption := rsObservatory;
+  GroupBox27.Caption:=rsInformation;
+  GroupBox28.Caption:=rsCoordinates;
+  GroupBox29.Caption:=rsRiseSetCondi;
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;
   Label11.Caption := rsTelescopeNam;
@@ -727,7 +746,7 @@ begin
   Label108.Caption := rsElevation;
   Label76.Caption := rsHorizonProfi;
   Label77.Caption := rsMinimumObser;
-  TabSheet15.Caption:=rsDome;
+  PageDome.Caption:=rsDome;
   DomeNoSafetyCheck.Caption:=rsAllowToOpenT;
   DomeSlaveToMount.Caption:=rsAutomaticall;
   Label125.Caption:=rsWaitTimeBetw;
@@ -750,7 +769,7 @@ begin
   DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[3]);
   DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[4]);
   DomeCloseActions.Columns[0].PickList.Add(DomeCloseActionName[5]);
-  TabSheet8.Caption := rsPreview;
+  PagePreview.Caption := rsPreview;
   GroupBox8.Caption := rsColorPreview;
   Label38.Caption := rsBayerMatrixP;
   DebayerPreview.Caption := rsDebayerThePr;
@@ -769,7 +788,7 @@ begin
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
-  TabSheet11.Caption := rsCamera;
+  PageCamera.Caption := rsCamera;
   GroupBox1.Caption := rsSensorTemperatu;
   GroupBox14.Caption := rsAutomaticCoo;
   CameraAutoCool.Caption := rsCoolDownWhen;
@@ -788,7 +807,7 @@ begin
   Label113.Caption:=rsPreview;
   Label114.Caption:=rsFocus;
   Label115.Caption:=rsAstrometry;
-  TabSheet18.Caption:=rsSequence;
+  PageSequence.Caption:=rsSequence;
   ExpEarlyStart.Caption:=rsStartNewExpo;
   Label147.Caption:=rsGlobalAction;
   GroupBoxMeasurement.Caption:=rsMeasurementO;
@@ -809,7 +828,7 @@ begin
   GroupBox22.Caption:=rsPeriodicAuto;
   Label127.Caption:=rsAutomaticall2;
   Label128.Caption:=rsMinutes;
-  TabSheet12.Caption := rsFlat;
+  PageFlat.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
   FlatExposureBox.Caption := rsFlatAutoExpo;
   FlatAutoExposure.Caption := rsUseFlatAutom;
@@ -829,7 +848,7 @@ begin
   DomeFlatSetLight.Caption:=rsUseExternalC;
   Label106.Caption:=rsLightON;
   Label110.Caption:=rsLightOFF;
-  TabSheet10.Caption := rsFocus;
+  PageFocus.Caption := rsFocus;
   GroupBox2.Caption := rsStarProfile;
   Label14.Caption := rsStarDetectio;
   Label2.Caption := rsFocusWindowS;
@@ -839,7 +858,7 @@ begin
   BtnDisableDelay.Caption := rsDisable;
   FocuserBacklashActive.Caption := rsBacklashComp;
   GroupBox12.Caption := rsFilterOffset;
-  TabSheet3.Caption := rsAutofocus;
+  PageAutofocus.Caption := rsAutofocus;
   Autofocusmode.Caption := rsAutofocusMet;
   Label49.Caption := rsExposureTime2;
   Label51.Caption := rsSeconds;
@@ -870,7 +889,7 @@ begin
   label56.Caption := rsDetectMultip;
   AutofocusPauseGuider.Caption:=rsPauseGuiding;
   Label101.Caption := rsTheMenuFileF;
-  TabSheet4.Caption := rsAstrometry;
+  PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
   FocaleFromTelescope.Caption := rsFromTelescop;
   Label4.Caption := rsFocaleLength;
@@ -899,7 +918,7 @@ begin
   Label105.Caption := rsProgramFolde;
   Label109.Caption := rsMaximumSearc;
   Label107.Caption := rsDownsample;
-  TabSheet7.Caption := rsSlewing;
+  PageSlew.Caption := rsSlewing;
   GroupBox7.Caption := rsPrecisionSle;
   Label28.Caption := rsTargetPrecis;
   Label29.Caption := rsMaximumNumbe;
@@ -909,7 +928,7 @@ begin
   PrecSlewBox.Caption := rsCorrectionMe;
   Label66.Caption := rsFilter;
   Label87.Caption := rsDelayAfterTe;
-  TabSheet9.Caption := rsMeridian;
+  PageMeridian.Caption := rsMeridian;
   MeridianOption.Caption := rsOnMeridianCr;
   Label40.Caption := rsCanTrackPast;
   Label41.Caption := rsMinutes;
@@ -922,7 +941,7 @@ begin
   MeridianFlipAutofocus.Caption := rsAutofocusAft;
   MeridianFlipCalibrate.Caption := rsCalibrateAut;
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;
-  TabSheet5.Caption := rsAutoGuiding;
+  PageGuide.Caption := rsAutoGuiding;
   AutoguiderBox.Caption := rsSoftware;
   Label120.Caption:= rsNoAutoGuidin+crlf+rsSetTheMeanDi;
   GroupBox5.Caption := rsDithering;
@@ -945,7 +964,7 @@ begin
   Label17.Caption := rsPort;
   Label89.Caption := rsServer;
   Label90.Caption := rsPort;
-  TabSheet6.Caption := rsPlanetarium;
+  PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
   Label25.Caption := rsPort;
@@ -975,7 +994,7 @@ begin
   MeridianOption.Items[2]:=rsAbort;
   AutoguiderBox.Items[2]:=rsNone2;
   AutoguiderBox.Items[3]:=rsDitherOnly;
-  TabSheet13.Caption := rsWeatherStati;
+  PageWeather.Caption := rsWeatherStati;
   Label118.Caption:=rsPauseSequenc;
   Label116.Caption:=rsRestartAfter2;
   Label117.Caption:=rsMinutes;
@@ -1018,11 +1037,11 @@ begin
   LabelMa11.Caption:=rsMaximum;
   LabelMa12.Caption:=rsMaximum;
   LabelMa13.Caption:=rsMaximum;
-  TabSheet14.Caption := rsSafetyMonito;
+  PageSafety.Caption := rsSafetyMonito;
   label111.Caption:=rsTheFollowing;
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
-  TabSheet17.Caption := rsNotification;
+  PageNotification.Caption := rsNotification;
   Label140.Caption:=rsPleaseSeeThe;
   GroupBox24.Caption:=rsEmailConfigu;
   Label134.Caption:=rsSMTPServerAd;
@@ -1393,9 +1412,11 @@ begin
     Label23.Caption:=rsPulseDuratio;
     Label122.Caption:=rsS;
   end;
+  panel14.Visible:=(AutoguiderBox.ItemIndex<>2);
   GroupBox11.Visible:=(AutoguiderBox.ItemIndex=3);
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
+  GroupBoxDrift.Visible:=(AutoguiderBox.ItemIndex=0);
   DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0)or(AutoguiderBox.ItemIndex=3);
 end;
 
