@@ -93,7 +93,7 @@ object f_script: Tf_script
         TabOrder = 1
       end
       object led: TShape
-        Left = 152
+        Left = 164
         Height = 14
         Top = 4
         Width = 14

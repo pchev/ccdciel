@@ -92,7 +92,7 @@ object f_devicesconnection: Tf_devicesconnection
         TabOrder = 0
       end
       object led: TShape
-        Left = 130
+        Left = 164
         Height = 14
         Top = 6
         Width = 14
