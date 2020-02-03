@@ -40,10 +40,10 @@ object f_frame: Tf_frame
       Left = 0
       Height = 22
       Top = 0
-      Width = 192
+      Width = 194
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 192
+      ClientWidth = 194
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
@@ -80,7 +80,7 @@ object f_frame: Tf_frame
         Text = ' '
       end
       object BtnSet: TButton
-        Left = 126
+        Left = 128
         Height = 22
         Top = 0
         Width = 66
@@ -94,10 +94,10 @@ object f_frame: Tf_frame
       Left = 0
       Height = 22
       Top = 22
-      Width = 192
+      Width = 194
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 192
+      ClientWidth = 194
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
@@ -134,7 +134,7 @@ object f_frame: Tf_frame
         Text = ' '
       end
       object BtnReset: TButton
-        Left = 126
+        Left = 128
         Height = 22
         Top = 0
         Width = 66
