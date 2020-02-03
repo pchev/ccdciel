@@ -233,6 +233,7 @@ object f_preview: Tf_preview
         Hint = 'Uncalibrated'
         Top = 4
         Width = 14
+        BorderSpacing.Around = 4
         Brush.Color = clGray
         Shape = stCircle
       end
