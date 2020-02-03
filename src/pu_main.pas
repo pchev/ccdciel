@@ -11135,6 +11135,8 @@ begin
     if hh<-pi then hh:=hh+pi2;
     hhmin:=round(rad2deg*60*hh/15);
     f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
+    f_mount.AZ.Caption:=FormatFloat(f2,a);
+    f_mount.ALT.Caption:=FormatFloat(f2,h);
     if hhmin<=0 then f_mount.LabelMeridian.Caption:=rsMeridianIn
                 else f_mount.LabelMeridian.Caption:=rsMeridianSinc;
     if (f_capture.Running  or f_sequence.Busy) and (nextexposure=0) then exit;
