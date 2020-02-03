@@ -1,28 +1,28 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 283
+  Height = 315
   Top = 0
   Width = 194
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 283
+  ClientHeight = 315
   ClientWidth = 194
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -2
-  DesignTop = -2
+  DesignLeft = -3
+  DesignTop = -3
   object Panel1: TPanel
     Left = 0
-    Height = 263
+    Height = 295
     Top = 20
     Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 263
+    ClientHeight = 295
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -387,7 +387,7 @@ object f_capture: Tf_capture
         TabOrder = 0
       end
       object led: TShape
-        Left = 150
+        Left = 164
         Height = 14
         Top = 6
         Width = 14

@@ -2119,10 +2119,10 @@ begin
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
   SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection,MenuConnection,true);
-  SetTool(f_preview,'Preview',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview,true);
-  SetTool(f_autoguider,'Autoguider',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+  SetTool(f_autoguider,'Autoguider',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
-  SetTool(f_script,'Script',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript,true);
+  SetTool(f_preview,'Preview',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
+  SetTool(f_script,'Script',PanelRight1,f_preview.top+1,MenuViewScript,MenuScript,true);
   SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
   SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
   SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
@@ -2132,11 +2132,11 @@ begin
   SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
 
   SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture,true);
-  SetTool(f_filterwheel,'Filters',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters,WantWheel);
+  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_capture.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
+  SetTool(f_filterwheel,'Filters',PanelRight3,f_ccdtemp.top+1,MenuViewFilters,MenuFilters,WantWheel);
   SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
   SetTool(f_rotator,'Rotator',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
-  SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
-  SetTool(f_mount,'Mount',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
+  SetTool(f_mount,'Mount',PanelRight3,f_rotator.top+1,MenuViewMount,MenuMount,WantMount);
 
   SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
@@ -2386,10 +2386,10 @@ if sender is TMenuItem then begin
     SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
     SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
-    SetTool(f_preview,'',PanelRight1,f_devicesconnection.top+1,MenuViewPreview,MenuPreview,true);
-    SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+    SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
     SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
-    SetTool(f_script,'',PanelRight1,f_planetarium.top+1,MenuViewScript,MenuScript,true);
+    SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
+    SetTool(f_script,'',PanelRight1,f_preview.top+1,MenuViewScript,MenuScript,true);
     SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
     SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
     SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
@@ -2399,11 +2399,11 @@ if sender is TMenuItem then begin
     SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
 
     SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
-    SetTool(f_filterwheel,'',PanelRight3,f_capture.top+1,MenuViewFilters,MenuFilters,WantWheel);
+    SetTool(f_ccdtemp,'',PanelRight3,f_capture.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
+    SetTool(f_filterwheel,'',PanelRight3,f_ccdtemp.top+1,MenuViewFilters,MenuFilters,WantWheel);
     SetTool(f_frame,'',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
     SetTool(f_rotator,'',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
-    SetTool(f_ccdtemp,'',PanelRight3,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
-    SetTool(f_mount,'',PanelRight3,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
+    SetTool(f_mount,'',PanelRight3,f_rotator.top+1,MenuViewMount,MenuMount,WantMount);
 
     SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
@@ -2414,26 +2414,26 @@ if sender is TMenuItem then begin
    SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
    SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
-   SetTool(f_preview,'',PanelLeft,0,MenuViewPreview,MenuPreview,true);
-   SetTool(f_filterwheel,'',PanelLeft,f_preview.top+1,MenuViewFilters,MenuFilters,WantWheel);
+   SetTool(f_ccdtemp,'',PanelLeft,0,MenuViewCCDtemp,MenuCCDtemp,true);
+   SetTool(f_filterwheel,'',PanelLeft,f_ccdtemp.top+1,MenuViewFilters,MenuFilters,WantWheel);
    SetTool(f_frame,'',PanelLeft,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
    SetTool(f_rotator,'',PanelLeft,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
-   SetTool(f_ccdtemp,'',PanelLeft,f_rotator.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
-   SetTool(f_mount,'',PanelLeft,f_ccdtemp.top+1,MenuViewMount,MenuMount,WantMount);
+   SetTool(f_focuser,'',PanelLeft,f_rotator.top+1,MenuViewFocuser,MenuFocuser,WantFocuser);
+   SetTool(f_mount,'',PanelLeft,f_focuser.top+1,MenuViewMount,MenuMount,WantMount);
    SetTool(f_dome,'',PanelLeft,f_mount.top+1,MenuViewDome,nil,WantDome);
 
    SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
-   SetTool(f_autoguider,'',PanelRight1,f_preview.top+1,MenuViewAutoguider,MenuAutoguider,true);
+   SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
    SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
-   SetTool(f_weather,'',PanelRight1,f_planetarium.top+1,MenuViewWeather,nil,WantWeather);
+   SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
+   SetTool(f_weather,'',PanelRight1,f_preview.top+1,MenuViewWeather,nil,WantWeather);
    SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
-   SetTool(f_script,'',PanelRight1,f_safety.top+1,MenuViewScript,MenuScript,true);
 
-   SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
-   SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
+   SetTool(f_starprofile,'',PanelRight2,0,MenuViewStarProfile,MenuStarProfile,true);
    SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
 
    SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
+   SetTool(f_script,'',PanelRight3,f_capture.top+1,MenuViewScript,MenuScript,true);
 
    SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 

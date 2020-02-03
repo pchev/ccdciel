@@ -228,7 +228,7 @@ object f_preview: Tf_preview
       ParentFont = False
       TabOrder = 2
       object led: TShape
-        Left = 136
+        Left = 164
         Height = 14
         Hint = 'Uncalibrated'
         Top = 4
