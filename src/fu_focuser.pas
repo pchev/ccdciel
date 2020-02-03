@@ -103,7 +103,7 @@ begin
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
- Notebook1.PageIndex:=1;
+ Notebook1.PageIndex:=2;
  ScaleDPI(Self);
  SetLang;
 end;

@@ -2,17 +2,19 @@ object f_rotator: Tf_rotator
   Left = 0
   Height = 81
   Top = 0
-  Width = 179
+  Width = 194
   AutoSize = True
   ClientHeight = 81
-  ClientWidth = 179
+  ClientWidth = 194
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 179
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,22 +30,22 @@ object f_rotator: Tf_rotator
     Left = 0
     Height = 59
     Top = 20
-    Width = 179
+    Width = 194
     Align = alTop
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 59
-    ClientWidth = 179
+    ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 29
       Top = 0
-      Width = 177
+      Width = 190
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 177
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 0
       object led: TShape
@@ -69,7 +71,7 @@ object f_rotator: Tf_rotator
         Left = 49
         Height = 28
         Top = 1
-        Width = 65
+        Width = 66
         Constraints.MaxHeight = 28
         MaxLength = 0
         ParentFont = False
@@ -81,10 +83,10 @@ object f_rotator: Tf_rotator
         Value = 0
       end
       object BtnRotate: TButton
-        Left = 116
+        Left = 120
         Height = 25
         Top = 1
-        Width = 61
+        Width = 70
         Caption = 'Rotate'
         OnClick = BtnRotateClick
         ParentFont = False
@@ -95,10 +97,10 @@ object f_rotator: Tf_rotator
       Left = 0
       Height = 25
       Top = 29
-      Width = 177
+      Width = 190
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 177
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 1
       object Reverse: TCheckBox
@@ -113,10 +115,10 @@ object f_rotator: Tf_rotator
         TabOrder = 0
       end
       object BtnHalt: TButton
-        Left = 116
+        Left = 120
         Height = 25
         Top = 0
-        Width = 61
+        Width = 70
         Caption = 'Halt'
         OnClick = BtnHaltClick
         ParentFont = False

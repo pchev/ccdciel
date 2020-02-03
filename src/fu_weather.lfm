@@ -2,17 +2,19 @@ object f_weather: Tf_weather
   Left = 0
   Height = 45
   Top = 0
-  Width = 179
+  Width = 194
   AutoSize = True
   ClientHeight = 45
-  ClientWidth = 179
+  ClientWidth = 194
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 179
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,13 +30,13 @@ object f_weather: Tf_weather
     Left = 0
     Height = 24
     Top = 20
-    Width = 179
+    Width = 194
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 24
-    ClientWidth = 179
+    ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel

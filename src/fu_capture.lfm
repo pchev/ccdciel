@@ -2,28 +2,28 @@ object f_capture: Tf_capture
   Left = 0
   Height = 283
   Top = 0
-  Width = 212
+  Width = 194
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
   ClientHeight = 283
-  ClientWidth = 212
+  ClientWidth = 194
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
+  DesignLeft = -2
+  DesignTop = -2
   object Panel1: TPanel
     Left = 0
     Height = 263
     Top = 20
-    Width = 212
+    Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 263
-    ClientWidth = 212
+    ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
@@ -400,7 +400,7 @@ object f_capture: Tf_capture
     Left = 0
     Height = 20
     Top = 0
-    Width = 212
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False

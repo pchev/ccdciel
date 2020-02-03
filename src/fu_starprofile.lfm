@@ -2,19 +2,21 @@ object f_starprofile: Tf_starprofile
   Left = 0
   Height = 504
   Top = 0
-  Width = 178
+  Width = 194
   AutoSize = True
   ClientHeight = 504
-  ClientWidth = 178
+  ClientWidth = 194
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 178
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -30,12 +32,12 @@ object f_starprofile: Tf_starprofile
     Left = 0
     Height = 484
     Top = 20
-    Width = 178
+    Width = 194
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 484
-    ClientWidth = 178
+    ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
@@ -54,12 +56,13 @@ object f_starprofile: Tf_starprofile
       ParentFont = False
       TabOrder = 0
       object profile: TImage
-        Left = 0
+        Left = 10
         Height = 81
         Hint = 'The selected star luminosity profile'
         Top = 0
-        Width = 172
+        Width = 162
         Align = alClient
+        BorderSpacing.Left = 10
       end
     end
     object Panel3: TPanel
@@ -77,12 +80,13 @@ object f_starprofile: Tf_starprofile
       ParentFont = False
       TabOrder = 1
       object graph: TImage
-        Left = 0
+        Left = 10
         Height = 40
         Hint = 'History of the last FWHM and Intensity measurement'
         Top = 0
-        Width = 172
+        Width = 162
         Align = alClient
+        BorderSpacing.Left = 10
         OnDblClick = graphDblClick
       end
     end
@@ -90,15 +94,15 @@ object f_starprofile: Tf_starprofile
       Left = 0
       Height = 66
       Top = 121
-      Width = 172
+      Width = 190
       BevelOuter = bvNone
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 66
-      ClientWidth = 172
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 2
       object LabelHFD: TLabel
-        Left = 1
+        Left = 8
         Height = 50
         Hint = 'The Half Flux Diameter value in pixels'
         Top = 16
@@ -110,7 +114,7 @@ object f_starprofile: Tf_starprofile
         ParentFont = False
       end
       object Label1: TLabel
-        Left = 1
+        Left = 8
         Height = 19
         Top = 0
         Width = 31
@@ -123,25 +127,25 @@ object f_starprofile: Tf_starprofile
       Left = 0
       Height = 121
       Top = 187
-      Width = 172
+      Width = 190
       BevelOuter = bvNone
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 121
-      ClientWidth = 172
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 3
       object PanelFWHM: TPanel
         Left = 0
         Height = 121
         Top = 0
-        Width = 172
+        Width = 188
         BevelOuter = bvNone
         ClientHeight = 121
-        ClientWidth = 172
+        ClientWidth = 188
         ParentFont = False
         TabOrder = 0
         object LabelImax: TLabel
-          Left = 0
+          Left = 8
           Height = 26
           Hint = 'The maximum intensity value'
           Top = 87
@@ -153,7 +157,7 @@ object f_starprofile: Tf_starprofile
           ParentFont = False
         end
         object Label2: TLabel
-          Left = 0
+          Left = 8
           Height = 19
           Top = 73
           Width = 59
@@ -183,7 +187,7 @@ object f_starprofile: Tf_starprofile
           ParentFont = False
         end
         object Label3: TLabel
-          Left = 1
+          Left = 8
           Height = 19
           Top = 0
           Width = 45
@@ -192,7 +196,7 @@ object f_starprofile: Tf_starprofile
           ParentFont = False
         end
         object LabelFWHM: TLabel
-          Left = 1
+          Left = 8
           Height = 50
           Hint = 'The Full Width at Half Maximum value in pixels / arc seconds'
           Top = 16
@@ -208,10 +212,10 @@ object f_starprofile: Tf_starprofile
         Left = 0
         Height = 121
         Top = 0
-        Width = 172
+        Width = 190
         BevelOuter = bvNone
         ClientHeight = 121
-        ClientWidth = 172
+        ClientWidth = 190
         ParentFont = False
         TabOrder = 1
         Visible = False
@@ -220,7 +224,7 @@ object f_starprofile: Tf_starprofile
           Left = 0
           Height = 102
           Top = 0
-          Width = 172
+          Width = 190
           AntialiasingMode = amOn
           AxisList = <          
             item
@@ -284,25 +288,25 @@ object f_starprofile: Tf_starprofile
           Left = 0
           Height = 19
           Top = 102
-          Width = 172
+          Width = 190
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 19
-          ClientWidth = 172
+          ClientWidth = 190
           ParentFont = False
           TabOrder = 1
           object LabelCoord: TLabel
             Left = 0
             Height = 19
             Top = 0
-            Width = 153
+            Width = 171
             Align = alClient
             AutoSize = False
             ParentColor = False
             ParentFont = False
           end
           object BtnPinGraph: TSpeedButton
-            Left = 153
+            Left = 171
             Height = 19
             Hint = 'Keep graph visible after autofocus is completed'
             Top = 0
@@ -322,7 +326,7 @@ object f_starprofile: Tf_starprofile
       Height = 23
       Hint = 'Inspect the repartition of the HFD across the image'
       Top = 308
-      Width = 172
+      Width = 190
       Caption = 'Image inspection'
       OnClick = BtnMeasureImageClick
       ParentFont = False
@@ -332,7 +336,7 @@ object f_starprofile: Tf_starprofile
       Height = 23
       Hint = 'Start image loop centered on selected star'
       Top = 331
-      Width = 172
+      Width = 190
       AllowAllUp = True
       Caption = 'Manual focus aid'
       GroupIndex = 500
@@ -344,7 +348,7 @@ object f_starprofile: Tf_starprofile
       Height = 23
       Hint = 'Start the auto-focus procedure'
       Top = 354
-      Width = 172
+      Width = 190
       AllowAllUp = True
       Caption = 'Autofocus'
       GroupIndex = 501

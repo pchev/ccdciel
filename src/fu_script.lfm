@@ -2,17 +2,19 @@ object f_script: Tf_script
   Left = 0
   Height = 104
   Top = 0
-  Width = 191
+  Width = 194
   AutoSize = True
   ClientHeight = 104
-  ClientWidth = 191
+  ClientWidth = 194
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 191
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,30 +30,30 @@ object f_script: Tf_script
     Left = 0
     Height = 84
     Top = 20
-    Width = 191
+    Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 84
-    ClientWidth = 191
+    ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 28
       Top = 0
-      Width = 190
+      Width = 193
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 193
       ParentFont = False
       TabOrder = 0
       object ComboBoxScript: TComboBox
         Left = 0
         Height = 28
         Top = 0
-        Width = 190
+        Width = 193
         Align = alClient
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -64,10 +66,10 @@ object f_script: Tf_script
       Left = 0
       Height = 25
       Top = 28
-      Width = 190
+      Width = 193
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 190
+      ClientWidth = 193
       ParentFont = False
       TabOrder = 1
       object BtnRun: TButton
@@ -81,7 +83,7 @@ object f_script: Tf_script
         TabOrder = 0
       end
       object BtnStop: TButton
-        Left = 66
+        Left = 68
         Height = 25
         Top = 0
         Width = 61
@@ -103,10 +105,10 @@ object f_script: Tf_script
       Left = 0
       Height = 25
       Top = 53
-      Width = 190
+      Width = 193
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 190
+      ClientWidth = 193
       ParentFont = False
       TabOrder = 2
       object BtnEdit: TButton
@@ -120,7 +122,7 @@ object f_script: Tf_script
         TabOrder = 0
       end
       object BtnNew: TButton
-        Left = 66
+        Left = 68
         Height = 25
         Top = 0
         Width = 61
@@ -130,7 +132,7 @@ object f_script: Tf_script
         TabOrder = 1
       end
       object BtnCopy: TButton
-        Left = 129
+        Left = 132
         Height = 25
         Top = 0
         Width = 61

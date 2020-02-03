@@ -2,21 +2,23 @@ object f_magnifyer: Tf_magnifyer
   Left = 0
   Height = 205
   Top = 0
-  Width = 182
+  Width = 194
   AutoSize = True
   ClientHeight = 205
-  ClientWidth = 182
+  ClientWidth = 194
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Panel1: TPanel
     Left = 0
     Height = 185
     Top = 20
-    Width = 182
+    Width = 194
     Align = alClient
     AutoSize = True
     ClientHeight = 185
-    ClientWidth = 182
+    ClientWidth = 194
     Color = clBlack
     ParentColor = False
     ParentFont = False
@@ -25,7 +27,7 @@ object f_magnifyer: Tf_magnifyer
       Left = 1
       Height = 183
       Top = 1
-      Width = 180
+      Width = 192
       Align = alClient
     end
   end
@@ -33,7 +35,7 @@ object f_magnifyer: Tf_magnifyer
     Left = 0
     Height = 20
     Top = 0
-    Width = 182
+    Width = 194
     Align = alTop
     Alignment = taCenter
     AutoSize = False

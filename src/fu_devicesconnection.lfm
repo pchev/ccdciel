@@ -2,17 +2,19 @@ object f_devicesconnection: Tf_devicesconnection
   Left = 0
   Height = 133
   Top = 0
-  Width = 245
+  Width = 205
   AutoSize = True
   ClientHeight = 133
-  ClientWidth = 245
+  ClientWidth = 205
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -7
+  DesignTop = -7
   object Title: TLabel
     Left = 0
     Height = 25
     Top = 0
-    Width = 245
+    Width = 205
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,24 +30,24 @@ object f_devicesconnection: Tf_devicesconnection
     Left = 0
     Height = 108
     Top = 25
-    Width = 245
+    Width = 205
     Align = alClient
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 108
-    ClientWidth = 245
+    ClientWidth = 205
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 27
       Top = 0
-      Width = 245
+      Width = 206
       BevelOuter = bvNone
       BorderWidth = 2
       ClientHeight = 27
-      ClientWidth = 245
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 0
       object ProfileLabel: TLabel
@@ -71,11 +73,11 @@ object f_devicesconnection: Tf_devicesconnection
       Left = 0
       Height = 27
       Top = 27
-      Width = 245
+      Width = 206
       BevelOuter = bvNone
       BorderWidth = 2
       ClientHeight = 27
-      ClientWidth = 245
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 1
       object BtnConnect: TButton
@@ -102,7 +104,7 @@ object f_devicesconnection: Tf_devicesconnection
       Left = 0
       Height = 46
       Top = 54
-      Width = 245
+      Width = 206
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 4
       ChildSizing.TopBottomSpacing = 2
@@ -111,7 +113,7 @@ object f_devicesconnection: Tf_devicesconnection
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 6
       ClientHeight = 46
-      ClientWidth = 245
+      ClientWidth = 206
       ParentFont = False
       TabOrder = 2
       Visible = False
@@ -226,7 +228,7 @@ object f_devicesconnection: Tf_devicesconnection
     end
   end
   object PopupMenu1: TPopupMenu
-    left = 202
+    left = 112
     top = 101
     object MenuConnectDevice: TMenuItem
       Caption = 'Connect'
