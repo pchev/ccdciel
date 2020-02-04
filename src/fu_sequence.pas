@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi, cu_sequencefile,
   fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
@@ -214,6 +214,7 @@ begin
  CurrentTargetName:='';
  CurrentStepName:='';
  StartingSequence:=false;
+ SequenceFile:=T_SequenceFile.Create(nil);
  Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
@@ -251,6 +252,7 @@ begin
  f_EditTargets.Free;
  ClearTargetGrid;
  ClearPlanGrid;
+ SequenceFile.Free;
  inherited Destroy;
 end;
 

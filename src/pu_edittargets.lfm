@@ -14,6 +14,7 @@ object f_EditTargets: Tf_EditTargets
   OnResize = FormResize
   OnShow = FormShow
   Position = poDefaultPosOnly
+  LCLVersion = '2.0.6.0'
   object PanelTarget: TPanel
     Left = 0
     Height = 354
@@ -675,7 +676,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Update RA+Dec from Planetarium'
-            Width = 89
+            Width = 91
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -708,7 +709,7 @@ object f_EditTargets: Tf_EditTargets
           67
           88
           88
-          89
+          91
         )
       end
       object PanelBottom: TPanel
@@ -746,7 +747,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 0
             object ToolsObject: TTabSheet
               Caption = 'Object'
-              ClientHeight = 89
+              ClientHeight = 59
               ClientWidth = 703
               ParentFont = False
               object GroupBoxCoord: TGroupBox
@@ -942,7 +943,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object ToolsScript: TTabSheet
               Caption = 'Script'
-              ClientHeight = 89
+              ClientHeight = 59
               ClientWidth = 703
               ParentFont = False
               object Panel14: TPanel
@@ -1102,7 +1103,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
-        ClientHeight = 194
+        ClientHeight = 164
         ClientWidth = 980
         ParentFont = False
         object Panel9: TPanel
@@ -1212,7 +1213,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 92
+                Width = 94
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1239,7 +1240,7 @@ object f_EditTargets: Tf_EditTargets
               92
               92
               92
-              92
+              94
             )
           end
           object Panel17: TPanel
@@ -1352,7 +1353,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
-        ClientHeight = 194
+        ClientHeight = 164
         ClientWidth = 980
         ParentFont = False
         object Panel1: TPanel
@@ -1384,8 +1385,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 186
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 25
-              ClientWidth = 182
+              ClientHeight = 29
+              ClientWidth = 186
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -1479,8 +1480,8 @@ object f_EditTargets: Tf_EditTargets
               Top = 100
               Width = 186
               BevelOuter = bvNone
-              ClientHeight = 28
-              ClientWidth = 182
+              ClientHeight = 32
+              ClientWidth = 186
               TabOrder = 3
               Visible = False
               object Label6: TLabel
@@ -1591,7 +1592,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanNone: TTabSheet
         Caption = 'PlanNone'
-        ClientHeight = 194
+        ClientHeight = 164
         ClientWidth = 980
         ParentFont = False
         object Label5: TLabel

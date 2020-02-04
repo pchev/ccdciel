@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, u_translation, math,
+uses u_global, u_utils, u_translation, math, cu_sequencefile,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider,
   ExtCtrls, Classes, SysUtils;
 
