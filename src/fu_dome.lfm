@@ -49,7 +49,7 @@ object f_dome: Tf_dome
       ParentFont = False
       TabOrder = 0
       object ledSlaved: TShape
-        Left = 158
+        Left = 164
         Height = 14
         Top = 4
         Width = 14

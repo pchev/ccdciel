@@ -43,14 +43,14 @@ object f_weather: Tf_weather
       Left = 0
       Height = 23
       Top = 0
-      Width = 166
+      Width = 178
       BevelOuter = bvNone
       ClientHeight = 23
-      ClientWidth = 166
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 0
       object led: TShape
-        Left = 152
+        Left = 164
         Height = 14
         Hint = 'Uncalibrated'
         Top = 4

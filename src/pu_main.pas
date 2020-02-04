@@ -2420,7 +2420,6 @@ if sender is TMenuItem then begin
    SetTool(f_rotator,'',PanelLeft,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
    SetTool(f_focuser,'',PanelLeft,f_rotator.top+1,MenuViewFocuser,MenuFocuser,WantFocuser);
    SetTool(f_mount,'',PanelLeft,f_focuser.top+1,MenuViewMount,MenuMount,WantMount);
-   SetTool(f_dome,'',PanelLeft,f_mount.top+1,MenuViewDome,nil,WantDome);
 
    SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
    SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
@@ -2428,6 +2427,7 @@ if sender is TMenuItem then begin
    SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
    SetTool(f_weather,'',PanelRight1,f_preview.top+1,MenuViewWeather,nil,WantWeather);
    SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
+   SetTool(f_dome,'',PanelRight1,f_safety.top+1,MenuViewDome,nil,WantDome);
 
    SetTool(f_starprofile,'',PanelRight2,0,MenuViewStarProfile,MenuStarProfile,true);
    SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
