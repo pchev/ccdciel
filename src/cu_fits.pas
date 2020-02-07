@@ -2531,7 +2531,6 @@ var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturate
     distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
 begin
-
   valmax:=0;
   bg:=0;
   snr:=0;
@@ -2546,6 +2545,8 @@ begin
      max_saturated:=5;
 
   rs:=s div 2;
+  if rs>max_ri then rs:=max_ri; {protection against run time error}
+
   if (x-s)<1+4 then x:=s+1+4;
   if (x+s)>(Fwidth-1-4) then x:=Fwidth-s-1-4;
   if (y-s)<1+4 then y:=s+1+4;
@@ -2617,7 +2618,6 @@ begin
 
    // Check for asymmetry. Are we testing a group of stars or a defocused star?
     val_00:=0;val_01:=0;val_10:=0;val_11:=0;
-    for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram}
 
     for i:=-rs to 0 do begin
       for j:=-rs to 0 do begin
@@ -2641,31 +2641,33 @@ begin
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
   until asymmetry=false; {loop and reduce box size until asymmetry is gone or exit if box is too small}
 
- // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
- for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
- for i:=-rs to rs do begin
-   for j:=-rs to rs do begin
-     Val:=value_subpixel(xc+i,yc+j)-bg;{##}
-     if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
-     begin
-       distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
-       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
-     end;
-   end;
+  // Get diameter of star above the noise level.
+  for i:=0 to rs do distance_histogram[i]:=0;{clear histogram of pixel distances}
+
+  for i:=-rs to rs do begin
+    for j:=-rs to rs do begin
+      distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
+      if distance<=rs then {build histogram for circel with radius rs}
+      begin
+        Val:=value_subpixel(xc+i,yc+j)-bg;
+        if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
+          distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+      end;
+    end;
   end;
 
- ri:=-1; {will start from distance 0}
- distance_top_value:=0;
- HistStart:=false;
- illuminated_pixels:=0;
- repeat
+  ri:=-1; {will start from distance 0}
+  distance_top_value:=0;
+  HistStart:=false;
+  illuminated_pixels:=0;
+  repeat
     inc(ri);
     illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
     if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
     if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
-  until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+  until ((ri>=rs) or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
-  if ri>=rs then {star is larger then box, abort} exit; {hfd:=-1}
+  if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
   if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
   if ri<3 then ri:=3; {Minimum 6+1 x 6+1 pixel box}
 
@@ -2743,14 +2745,12 @@ begin
       5)	Use the pixel count as area and calculate the diameter of that area  as diameter:=2 *sqrt(count/pi).}
 
 
- except
-   on E: Exception do begin
-     hfd:=-1;
-     star_fwhm:=-1;
-   end;
- end;
-
-
+  except
+    on E: Exception do begin
+      hfd:=-1;
+      star_fwhm:=-1;
+    end;
+  end;
 end;{gethfd2}
 
 procedure TFits.ClearStarList;
