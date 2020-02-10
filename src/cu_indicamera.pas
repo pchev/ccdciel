@@ -951,13 +951,16 @@ if tvp=CCDfilepath then begin
   ExposureTimer.Enabled:=false;
   FMidExposureTime:=(Ftimestart+NowUTC)/2;
   if debug_msg then msg('receive image file');
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive new file path '+CCDfilepath.tp[0].text );{$endif}
   // if possible start next exposure now
   TryNextExposure(FImgNum);
   FImageFormat:=ExtractFileExt(CCDfilepath.tp[0].text);
   if assigned(FonExposureProgress) then FonExposureProgress(-10);
   FImgStream.Clear;
   FImgStream.Position:=0;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load from file');{$endif}
   FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete file');{$endif}
   DeleteFile(CCDfilepath.tp[0].text);
   if assigned(FonExposureProgress) then FonExposureProgress(-11);
   NewImage;
