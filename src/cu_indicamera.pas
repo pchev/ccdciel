@@ -1262,6 +1262,7 @@ end else begin
     indiclient.sendNewNumber(Guiderexpose);
   end;
 end;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Start Exposure'+blank+formatfloat(f3,exptime));{$endif}
 Fexptime:=exptime;
 Ftimestart:=NowUTC;
 inc(FImgNum);

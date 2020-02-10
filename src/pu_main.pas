@@ -8149,6 +8149,7 @@ begin
 try
  dt:=NowUTC;
  dn:=now-0.5;
+ {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
  // construct path
  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
  if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
@@ -8267,10 +8268,12 @@ try
  StatusBar1.Panels[1].Text := '';
  // save as bitmap
  if SaveBitmap then begin
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Save bitmap');{$endif}
    fn:=ChangeFileExt(fn,'.'+SaveBitmapFormat);
    fits.SaveToBitmap(fn);
    NewMessage(Format(rsSavedFile, [fn]),1);
  end;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Image saved');{$endif}
  except
    on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
  end;
