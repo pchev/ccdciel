@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 {$mode delphi}{$H+}
 
+//{$define debug_raw}
+
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
@@ -1348,6 +1350,7 @@ var i,ii,j,npix,k,km,kk : integer;
     x16,b16:smallint;
     x8,b8:byte;
 begin
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
 if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
 FBPMProcess:=false;
@@ -1542,7 +1545,9 @@ if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
   FFitsInfo.dmax:=dmax;
 end;
 SetLength(FStarList,0); {reset object list}
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
 GetImage;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
 end;
 
 Procedure TFits.WriteFitsImage;
@@ -3257,6 +3262,7 @@ begin
 rmsg:='';
 if libraw<>0 then begin  // Use libraw directly
   try
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy raw buffer');{$endif}
   i:=raw.Size;
   SetLength(buf,i+1);
   raw.Position:=0;
@@ -3266,6 +3272,7 @@ if libraw<>0 then begin  // Use libraw directly
     exit;
   end;
   try
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'libraw LoadRaw');{$endif}
   n:=LoadRaw(@buf[0],i);
   SetLength(buf,0);
   if n<>0 then begin
@@ -3274,6 +3281,7 @@ if libraw<>0 then begin  // Use libraw directly
     rmsg:=msg;
     exit;
   end;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetRawInfo');{$endif}
   rawinfo.bitmap:=nil;
   n:=GetRawInfo(rawinfo);
   if (n<>0) or (rawinfo.bitmap=nil) then begin
@@ -3292,6 +3300,7 @@ if libraw<>0 then begin  // Use libraw directly
           'rawwidth='+inttostr(rawinfo.rawwidth)+'rawheight='+inttostr(rawinfo.rawheight);
     exit;
   end;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Create FITS header');{$endif}
   hdr:=TFitsHeader.Create;
   hdr.ClearHeader;
   hdr.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -3337,6 +3346,7 @@ if libraw<>0 then begin  // Use libraw directly
     hdrmem.Free;
   end;
   hdr.Free;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy data to FITS');{$endif}
   for i:=ys to ymax-1 do begin
     for j:=xs to xmax-1 do begin
       {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
@@ -3353,6 +3363,7 @@ if libraw<>0 then begin  // Use libraw directly
   FillChar(b,c,0);
   ImgStream.Write(b,c);
   CloseRaw();
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFITS end');{$endif}
   except
     rmsg:='Error converting raw file';
   end;
