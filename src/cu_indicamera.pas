@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define debug_raw}
+
 interface
 
 uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2, u_libraw,
@@ -1079,6 +1081,7 @@ var source,dest: array of char;
     tmpf,rmsg: string;
 begin
  // report any change to NewText() in use with RAM disk transfer
+ {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive blob');{$endif}
  ExposureTimer.Enabled:=false;
  FMidExposureTime:=(Ftimestart+NowUTC)/2;
  if debug_msg then msg('receive blob');
@@ -1089,6 +1092,7 @@ begin
    data.Position:=0;
    if RightStr(ft,2)='.z' then begin //compressed
         if zlibok then begin
+          {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'uncompress file');{$endif}
           if debug_msg then msg('uncompress file');
           sourceLen:=blen;
           if sz>0 then
@@ -1111,6 +1115,7 @@ begin
         end;
    end;
    if ft='.fits.fz' then begin // receive a packed FITS file
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'funpack');{$endif}
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a packed fits file');
@@ -1129,10 +1134,12 @@ begin
      NewImage;
    end
    else if ft='.fits' then begin // receive a FITS file
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'received fits file');{$endif}
      FImageFormat:='.fits';
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a fits file');
      if debug_msg then msg('copy stream');
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'copy blob stream');{$endif}
      FImgStream.Clear;
      FImgStream.Position:=0;
      FImgStream.CopyFrom(data,sz);
@@ -1141,6 +1148,7 @@ begin
      NewImage;
    end
    else if (ft='.jpeg')or(ft='.jpg')or(ft='.tiff')or(ft='.png') then begin // receive an image file
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'received '+ft+' file');{$endif}
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
@@ -1156,6 +1164,7 @@ begin
      NewImage;
    end
    else if pos(UpperCase(ft)+',',UpperCase(rawext))>0 then begin
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'received '+ft+' raw file');{$endif}
      FImageFormat:=ft;
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');

@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-// {$define camera_debug}
+//{$define debug_raw}
 
 
 interface
@@ -427,6 +427,7 @@ var f:TFits;
     xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
     alok: boolean;
 begin
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
 if FAddFrames then begin  // stack preview frames
   // load temporary image
   f:=TFits.Create(nil);
@@ -493,16 +494,16 @@ end
 else begin  // normal capture
   FStackCount:=0;
   if ImgStream.Size>0 then begin
-  {$ifdef camera_debug}msg('load stream');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'load stream');{$endif}
   Ffits.Stream:=ImgStream;
   Ffits.LoadStream;
-  {$ifdef camera_debug}msg('write headers');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
   WriteHeaders;
-  {$ifdef camera_debug}msg('apply correction');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply correction');{$endif}
   FFits.ApplyDark;
   FFits.ApplyBPM;
   end;
-  {$ifdef camera_debug}msg('display image');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'display image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 end;
