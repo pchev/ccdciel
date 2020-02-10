@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 {$mode delphi}{$H+}
 
+//{$define debug_raw}
+
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
@@ -1348,6 +1350,7 @@ var i,ii,j,npix,k,km,kk : integer;
     x16,b16:smallint;
     x8,b8:byte;
 begin
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
 if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
 FBPMProcess:=false;
@@ -1542,7 +1545,9 @@ if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
   FFitsInfo.dmax:=dmax;
 end;
 SetLength(FStarList,0); {reset object list}
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
 GetImage;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
 end;
 
 Procedure TFits.WriteFitsImage;
@@ -2531,7 +2536,6 @@ var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturate
     distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
 begin
-
   valmax:=0;
   bg:=0;
   snr:=0;
@@ -2546,6 +2550,8 @@ begin
      max_saturated:=5;
 
   rs:=s div 2;
+  if rs>max_ri then rs:=max_ri; {protection against run time error}
+
   if (x-s)<1+4 then x:=s+1+4;
   if (x+s)>(Fwidth-1-4) then x:=Fwidth-s-1-4;
   if (y-s)<1+4 then y:=s+1+4;
@@ -2617,7 +2623,6 @@ begin
 
    // Check for asymmetry. Are we testing a group of stars or a defocused star?
     val_00:=0;val_01:=0;val_10:=0;val_11:=0;
-    for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram}
 
     for i:=-rs to 0 do begin
       for j:=-rs to 0 do begin
@@ -2641,31 +2646,33 @@ begin
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
   until asymmetry=false; {loop and reduce box size until asymmetry is gone or exit if box is too small}
 
- // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
- for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
- for i:=-rs to rs do begin
-   for j:=-rs to rs do begin
-     Val:=value_subpixel(xc+i,yc+j)-bg;{##}
-     if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
-     begin
-       distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
-       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
-     end;
-   end;
+  // Get diameter of star above the noise level.
+  for i:=0 to rs do distance_histogram[i]:=0;{clear histogram of pixel distances}
+
+  for i:=-rs to rs do begin
+    for j:=-rs to rs do begin
+      distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
+      if distance<=rs then {build histogram for circel with radius rs}
+      begin
+        Val:=value_subpixel(xc+i,yc+j)-bg;
+        if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
+          distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+      end;
+    end;
   end;
 
- ri:=-1; {will start from distance 0}
- distance_top_value:=0;
- HistStart:=false;
- illuminated_pixels:=0;
- repeat
+  ri:=-1; {will start from distance 0}
+  distance_top_value:=0;
+  HistStart:=false;
+  illuminated_pixels:=0;
+  repeat
     inc(ri);
     illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
     if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
     if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
-  until ((ri>=max_ri) or (ri>=rs){##} or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {##drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+  until ((ri>=rs) or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
-  if ri>=rs then {star is larger then box, abort} exit; {hfd:=-1}
+  if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
   if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
   if ri<3 then ri:=3; {Minimum 6+1 x 6+1 pixel box}
 
@@ -2743,14 +2750,12 @@ begin
       5)	Use the pixel count as area and calculate the diameter of that area  as diameter:=2 *sqrt(count/pi).}
 
 
- except
-   on E: Exception do begin
-     hfd:=-1;
-     star_fwhm:=-1;
-   end;
- end;
-
-
+  except
+    on E: Exception do begin
+      hfd:=-1;
+      star_fwhm:=-1;
+    end;
+  end;
 end;{gethfd2}
 
 procedure TFits.ClearStarList;
@@ -3257,6 +3262,7 @@ begin
 rmsg:='';
 if libraw<>0 then begin  // Use libraw directly
   try
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy raw buffer');{$endif}
   i:=raw.Size;
   SetLength(buf,i+1);
   raw.Position:=0;
@@ -3266,6 +3272,7 @@ if libraw<>0 then begin  // Use libraw directly
     exit;
   end;
   try
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'libraw LoadRaw');{$endif}
   n:=LoadRaw(@buf[0],i);
   SetLength(buf,0);
   if n<>0 then begin
@@ -3274,6 +3281,7 @@ if libraw<>0 then begin  // Use libraw directly
     rmsg:=msg;
     exit;
   end;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetRawInfo');{$endif}
   rawinfo.bitmap:=nil;
   n:=GetRawInfo(rawinfo);
   if (n<>0) or (rawinfo.bitmap=nil) then begin
@@ -3292,6 +3300,7 @@ if libraw<>0 then begin  // Use libraw directly
           'rawwidth='+inttostr(rawinfo.rawwidth)+'rawheight='+inttostr(rawinfo.rawheight);
     exit;
   end;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Create FITS header');{$endif}
   hdr:=TFitsHeader.Create;
   hdr.ClearHeader;
   hdr.Add('SIMPLE',true,'file does conform to FITS standard');
@@ -3337,6 +3346,7 @@ if libraw<>0 then begin  // Use libraw directly
     hdrmem.Free;
   end;
   hdr.Free;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy data to FITS');{$endif}
   for i:=ys to ymax-1 do begin
     for j:=xs to xmax-1 do begin
       {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
@@ -3353,6 +3363,7 @@ if libraw<>0 then begin  // Use libraw directly
   FillChar(b,c,0);
   ImgStream.Write(b,c);
   CloseRaw();
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFITS end');{$endif}
   except
     rmsg:='Error converting raw file';
   end;

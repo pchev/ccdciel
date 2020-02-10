@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define debug_raw}
+
 interface
 
 uses
@@ -8147,6 +8149,7 @@ begin
 try
  dt:=NowUTC;
  dn:=now-0.5;
+ {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
  // construct path
  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
  if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
@@ -8265,10 +8268,12 @@ try
  StatusBar1.Panels[1].Text := '';
  // save as bitmap
  if SaveBitmap then begin
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Save bitmap');{$endif}
    fn:=ChangeFileExt(fn,'.'+SaveBitmapFormat);
    fits.SaveToBitmap(fn);
    NewMessage(Format(rsSavedFile, [fn]),1);
  end;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Image saved');{$endif}
  except
    on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
  end;
@@ -8377,20 +8382,25 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.Underflow:=ClippingUnderflow;
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
   fits.GetBGRABitmap(ImaBmp,BayerColor);
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if (fits.HeaderInfo.pixratio<>1) then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Fix pixelratio');{$endif}
     tmpbmp:=TBGRABitmap.Create(ImaBmp);
     ImaBmp.SetSize(round(fits.HeaderInfo.pixratio*ImaBmp.Width),ImaBmp.Height);
     ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
     tmpbmp.Free;
   end;
   if refmask then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Put ref image mask');{$endif}
     ImaBmp.StretchPutImage(rect(0,0,ImaBmp.Width,ImaBmp.Height),refbmp,dmLinearBlend);
   end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
   if f_visu.BullsEye then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
     co:=ColorToBGRA(clRed);
     cx:=img_Width div 2;
     cy:=img_Height div 2;
@@ -8403,7 +8413,9 @@ if fits.HeaderInfo.naxis>0 then begin
 
   end;
   if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then plot_north(imabmp);
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
 end;
 
@@ -8417,14 +8429,22 @@ Procedure Tf_main.PlotImage;
 var r1,r2: double;
     w,h,px,py: integer;
     tmpbmp,str: TBGRABitmap;
+    rmode: TResampleMode;
 begin
 if (img_Height=0)or(img_Width=0) then exit;
 r1:=ScrBmp.Width/imabmp.Width;
 r2:=ScrBmp.Height/imabmp.Height;
 ZoomMin:=minvalue([1.0,r1,r2]);
 if (ZoomMin<1)and((ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01)) then ImgZoom:=0;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ClearImage');{$endif}
 ClearImage;
-imabmp.ResampleFilter:=rfBestQuality;
+{$ifdef cpuarm}
+  imabmp.ResampleFilter:=rfBox;
+  rmode:=rmSimpleStretch;
+{$else}
+  imabmp.ResampleFilter:=rfBestQuality;
+  rmode:=rmFineResample;
+{$endif}
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
@@ -8438,7 +8458,9 @@ if ImgZoom=0 then begin
     w:=trunc(h*r1);
     ImgScale0:=w/img_Width;
   end;
-  str:=ImaBmp.Resample(w,h) as TBGRABitmap;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
+  str:=ImaBmp.Resample(w,h,rmode) as TBGRABitmap;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
   ScrBmp.PutImage(0,0,str,dmSet);
   str.Free;
 end
@@ -8448,6 +8470,7 @@ else if ImgZoom=1 then begin
    py:=round(ImgCy)-((img_Height-ScrBmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
    ScrBmp.PutImage(px,py,imabmp,dmSet);
 end
 else begin
@@ -8458,16 +8481,21 @@ else begin
    py:=round(ImgCy)-((img_Height-tmpbmp.Height) div 2);
    OrigX:=px;
    OrigY:=py;
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
    tmpbmp.PutImage(px,py,ImaBmp,dmSet);
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
    str:=tmpbmp.Resample(ScrBmp.Width,ScrBmp.Height,rmSimpleStretch) as TBGRABitmap;
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
    ScrBmp.PutImage(0,0,str,dmSet);
    str.Free;
    tmpbmp.Free;
 end;
-if f_visu.FlipHorz then ScrBmp.HorizontalFlip;
-if f_visu.FlipVert then ScrBmp.VerticalFlip;
+
+if f_visu.FlipHorz then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'HorizontalFlip');{$endif}ScrBmp.HorizontalFlip;{$ifdef debug_raw}end;{$endif}
+if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'VerticalFlip');{$endif}ScrBmp.VerticalFlip;{$ifdef debug_raw}end;{$endif}
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
 
 procedure Tf_main.plot_north(bmp:TBGRABitmap);
@@ -10956,23 +10984,31 @@ procedure Tf_main.LoadRawFile(fn:string);
 var RawStream, FitsStream: TMemoryStream;
     imgsize, rmsg: string;
 begin
+ {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile'+blank+fn);{$endif}
  // create resources
  RawStream:=TMemoryStream.Create;
  FitsStream:=TMemoryStream.Create;
  try
    // load picture
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadFromFile');{$endif}
    RawStream.LoadFromFile(fn);
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFits');{$endif}
    RawToFits(RawStream,FitsStream,rmsg);
    if rmsg<>'' then NewMessage(rmsg,1);
    if FitsStream.size<2880 then
       NewMessage('Invalid file '+fn,0)
    else begin
      // assign new image
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy FITS stream');{$endif}
      fits.Stream:=FitsStream;
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load FITS stream');{$endif}
      fits.LoadStream;
      // draw new image
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
      DrawHistogram(true);
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
      DrawImage;
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
      StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
@@ -10982,6 +11018,7 @@ begin
    RawStream.Free;
    FitsStream.Free;
  end;
+ {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile end');{$endif}
 end;
 
 procedure Tf_main.LoadPictureFile(fn:string);

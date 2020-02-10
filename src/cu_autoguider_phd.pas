@@ -420,7 +420,7 @@ begin
   else if FStatus='Star Selected' then FState:=GUIDER_IDLE
   else if FStatus=StarLostStatus then FState:=GUIDER_ALERT
   else if FStatus='Paused' then FState:=GUIDER_IDLE
-  else if FStatus='Resumed' then FState:=GUIDER_GUIDING
+  else if FStatus='Resumed' then FState:=FState
   else if FStatus='Lock Position Set' then FState:=FState
   else if FStatus='Calibration Complete' then FState:=GUIDER_IDLE
   else if FStatus='Star Selected' then FState:=FState
