@@ -7899,7 +7899,8 @@ procedure Tf_main.CameraNewImage(Sender: TObject);
 begin
   if Capture then begin
     // save file first
-    CameraSaveNewImage;
+    if not (FlatAutoExposure and (camera.FrameType=FLAT)) then
+      CameraSaveNewImage;
   end;
   Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
@@ -7940,6 +7941,7 @@ begin
                  if not CameraNewDomeFlat then exit;
                  end;
        end;
+       CameraSaveNewImage;
      end;
      // image measurement
      CameraMeasureNewImage;
