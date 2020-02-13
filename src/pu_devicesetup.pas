@@ -746,6 +746,7 @@ begin
   WheelAscom.Caption:=DevInterfaceName[1];
   WheelAscomRest.Caption:=DevInterfaceName[4];
   WheelInCamera.Caption:=DevInterfaceName[2];
+  WheelManual.Caption:=DevInterfaceName[5];
   FocuserIndi.Caption:=DevInterfaceName[0];
   FocuserAscom.Caption:=DevInterfaceName[1];
   FocuserAscomRest.Caption:=DevInterfaceName[4];
